@@ -155,7 +155,7 @@ export function decideNativeRiderAction(profile,{
   integer(rawXNative,'rawXNative',-128,127);integer(rawYNative,'rawYNative',-128,127);
   bounded(frameSpeedNative,'frameSpeedNative',0,Infinity);integer(wetCount,'wetCount',0,12);
   integer(tick,'tick',0,0xffffffff);integer(override,'override',0,0xffff);
-  integer(noWetNoContactFrames,'noWetNoContactFrames',0,0x7fffffff);
+  integer(noWetNoContactFrames,'noWetNoContactFrames',-0x80000000,0x7fffffff);
   integer(diveWetFrames,'diveWetFrames',0,0x7ffffffe);integer(actorState,'actorState',-1,255);
   if(!gestureTicks||typeof gestureTicks!=='object')throw new TypeError('gestureTicks must be an object');
   for(const name of ['negativeX','positiveX','negativeY','positiveY']){

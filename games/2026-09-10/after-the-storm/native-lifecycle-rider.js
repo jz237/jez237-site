@@ -4,8 +4,9 @@ import {stepNativeRiderAnchors} from './native-rider-anchors.js';
 import {prepareNativeRiderWipeoutPose} from './native-rider-wipeout-pose.js';
 import {prepareNativeRiderStumblePose} from './native-rider-stumble-pose.js';
 import {createAuthoredNativeRecoveryPose} from './authored-native-recovery-pose.js';
+import {createAuthoredNativeActionPoses} from './authored-native-action-poses.js';
 
-// Source actor timing/effects with explicitly authored anatomy and remount art.
+// Source actor timing/effects with explicitly authored anatomy/action/remount art.
 // Each current/pending pose is evaluated separately without stepping physics.
 // Imported25-point blending is an authored adaptation of the source pose-block
 // interpolation, not bit-exact source animation. One auxiliary solve follows
@@ -25,6 +26,7 @@ function blend(a,b,t,scale){
 export function createNativeLifecycleRider({initialHull,geometryProvider=modernRiderPose}={}){
  const base=createAuthoredNativeRider({initialHull,geometryProvider}),{articulatedRider:rider,anchorState,anchorRig,restTargets}=base;
  const scale=initialHull.scale,restTargetsLocal=restTargets.map(p=>local(p,initialHull));
+ const actions=createAuthoredNativeActionPoses({scale,restTargetsLocal});
  let remount=null,expectedSolves=0,previousFrame=-1;
  let yawForward={x:initialHull.frame.forward.x,z:initialHull.frame.forward.z};
  const yawLength=Math.hypot(yawForward.x,yawForward.z);
@@ -45,6 +47,14 @@ export function createNativeLifecycleRider({initialHull,geometryProvider=modernR
   if(actor===7){
    remount??=createAuthoredNativeRecoveryPose({scale,restTargetsLocal});
    const p=remount.evaluate({animationFrame,hull,entryPositions:physical.positions});
+   return {...p,auxiliaryTargets:authoredNativeRiderAuxiliaryTargets(p.targets,{yaw:0},hull,anchorRig)};
+  }
+  if([8,9,10,17,25].includes(actor)){
+   const supplied=context.actionPoseState,retained=context.recoveryState?.alternateStumble;
+   if(actor===25&&supplied?.alternate16cc!==undefined&&retained!==undefined&&supplied.alternate16cc!==retained)
+    throw new Error('Action pose alternate16cc must match the actual lifecycle owner');
+   const p=actions.evaluate({actorState:actor,animationFrame,hull,idleChoice16c4:supplied?.idleChoice16c4,
+    alternate16cc:supplied?.alternate16cc??retained});
    return {...p,auxiliaryTargets:authoredNativeRiderAuxiliaryTargets(p.targets,{yaw:0},hull,anchorRig)};
   }
   throw new RangeError(`Native lifecycle actor ${actor} needs its equivalent physical pose`);
@@ -68,12 +78,22 @@ export function createNativeLifecycleRider({initialHull,geometryProvider=modernR
    resolveAnchors({mode}={}){
     if(resolved)throw new Error('Resolve native lifecycle auxiliary anchors once');
     if(!Number.isInteger(mode))throw new TypeError('Use the final lifecycle physical mode');
-    stepNativeRiderAnchors(anchorState,{targets:auxiliary,historyTargets:auxiliaryHistory,up:hull.frame.up,mode});resolved=true;
+    // Source actor9 can exchange the two physical grip bindings post-pose.
+    // The modern authored role map keeps anatomical handA/handB stable. Order
+    // the authored auxiliary grip goals by the FINAL actual type2/3 bindings,
+    // after completion effects, rather than crossing its two forearm chains.
+    // This is a geometry adapter, not the original pose-block target order.
+    const anchorTargets=auxiliary.map(copy);
+    if(rider.points[6].type===3&&rider.points[14].type===2)
+     [anchorTargets[3],anchorTargets[4]]=[anchorTargets[4],anchorTargets[3]];
+    stepNativeRiderAnchors(anchorState,{targets:anchorTargets,historyTargets:auxiliaryHistory,up:hull.frame.up,mode});resolved=true;
     return {2:copy(anchorState.anchors[2]),3:copy(anchorState.anchors[3])};
    }};
  };
  return {...base,riderPose,provenance:Object.freeze({...base.provenance,
   lifecycle:'source decision/pose-completion timing and physical effect order',
   recoveryGeometry:'authored actor7; reconstructed procedural23/24; authored rest/circle/history compatibility policy',
+  actionGeometry:actions.provenance,
+  gripGeometry:'authored auxiliary grip order follows final actual type2/3 anatomical bindings',
   targetBlend:'authored imported-point interpolation; not original normalized pose-block interpolation'})};
 }

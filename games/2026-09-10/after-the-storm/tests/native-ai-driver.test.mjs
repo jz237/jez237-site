@@ -8,6 +8,7 @@ import {sampleNativeControls,createNativeControlState} from '../native-controls.
 import {getCourse} from '../courses.js';
 import {createNativeHull} from '../native-hull.js';
 import {createAuthoredNativeRider} from '../authored-native-rider.js';
+import {createNativeLifecycleRider} from '../native-lifecycle-rider.js';
 import {createNativeRaceAdapter} from '../native-race-adapter.js';
 import {createNativeRaceWorld,stepNativeRaceWorld,nativeRaceWorldSnapshot} from '../native-race-world.js';
 import {createRaceWater,captureRaceWater} from '../race-water.js';
@@ -90,6 +91,26 @@ test('previous-navigation is an explicit shared word passed through successive s
  const second=prepareNativeAIDriver(table,state(),{...q,globals:{...q.globals,...first.globalWrites}});
  assert.equal(second.action16f4,0);assert.equal(second.globalWrites.previousNavigationGlobal,7);
  assert.equal(q.globals.previousNavigationGlobal,6);
+});
+
+test('an actual AI tail request reaches the shared adapter word and real pending action pose',()=>{
+ const q=input();q.globals.mode620=11;q.globals.previousNavigationGlobal=6;q.racers[0].record.navigationSourceRow=7;
+ const produced=prepareNativeAIDriver(table,state(),q);assert.equal(produced.action16f4,2);
+ const initialHull=createNativeHull({rider:2}),bundle=createNativeLifecycleRider({initialHull});
+ const a=createNativeRaceAdapter({riderIndex:2,controlOrigin:'ai',...bundle,riderRecovery:{courseDatumNative:0},
+  sourceState:{simulationState:3,sourceTick:5000},
+  riderActions:{inputHistory:{gestureTick15f0:4000,flag1600:1,sequence15f8:0,sequence15fa:0,lastPressedDirections15fc:0,quietFrames15fe:0},
+   idleFramesC6c:0,idleChoice16c4:0,source:{state650:3,gestureWindowNative:3,idleThresholdNative:1000,
+    poseCompletion:{finished2c2c:0,record2c24:0,racerIndex:0,primaryRacerIndex:0,gameMode648:4}}}});
+ // The producer's action is explicitly transported alongside its raw controls;
+ // the actor is chosen only after the completed physical hull frame.
+ const water=createRaceWater({crafts:[{x:0,z:0,heading:0}],baseAmplitudeNative:0,seed:17});
+ const world=createNativeRaceWorld({adapters:[a],water});
+ stepNativeRaceWorld(world,.05,[{...produced.controls,action16f4:produced.action16f4}]);
+ assert.equal(a.actionState.override,0);assert.equal(a.riderLifecycle.state.pendingActor,9);
+ assert.equal(a.lastFrame.controlActorState,22);assert.equal(a.lastControls.powerFactor,produced.controls.basePowerFactor);
+ assert.equal(a.articulatedRider.logicalFrames,1);assert.equal(world.frames,1);
+ assert.ok(a.articulatedRider.points.some(p=>Math.abs(p.storedDelta.x)+Math.abs(p.storedDelta.y)+Math.abs(p.storedDelta.z)>0));
 });
 test('driver failures preserve source state and reject unselected tables or missing source fields',()=>{
  const s=state(),q=input(),before=structuredClone({s,globals:q.globals,racers:q.racers,geometry:q.geometry});

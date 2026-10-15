@@ -143,10 +143,10 @@ test('actor7 consumes explicit evaluator frames, restores saved damping only56..
 });
 
 test('actor7 queues .15 then six later equivalent blend evaluations install22; holds and initializer state persist',()=>{
- const d=decideNativeActorAfterHull(initial({actorState:7,holdFrame:1,actorAuxState:19,stumbleCounter:13,recoveryInputLock:1}),hull());
+ const d=decideNativeActorAfterHull(initial({actorState:7,holdFrame:1,stumbleCounter:13,recoveryInputLock:1}),hull());
  let state=pose(d.state,{nextAnimationFrame:77}).state;
  assert.equal(state.actorState,7);assert.equal(state.pendingActor,22);assert.equal(state.blendProgress,F(.15));
- assert.equal(state.actorAuxState,0);assert.equal(state.holdFrame,0);
+ assert.equal('actorAuxState' in state,false);assert.equal(state.holdFrame,0);
  const expected=[F(.3),F(.45000001788139343),F(.6000000238418579),F(.75),F(.8999999761581421),0];
  for(let i=0;i<6;i++){
   const decision=decideNativeActorAfterHull(state,hull());
@@ -277,15 +277,17 @@ test('strict inputs never substitute a pose clock, fake joint, unknown initializ
  assert.throws(()=>finishNativeActorPose(d.state,{nextAnimationFrame:1,releasedButtons:0}),/pressedButtons/);
  const p=decideNativeActorAfterHull(initial({actorState:23}),hull());
  assert.throws(()=>pose(p.state,{nextAnimationFrame:1}),/return0/);
- const unsupported=decideNativeActorAfterHull(initial({actorState:8}),hull());
- assert.equal(unsupported.poseRequest.actorSpecificCompletionSupported,false);
- assert.throws(()=>pose(unsupported.state),/separate source post-pose/);
+ const action=decideNativeActorAfterHull(initial({actorState:8}),hull());
+ assert.equal(action.poseRequest.actorSpecificCompletionSupported,true);
+ assert.throws(()=>pose(action.state),/physicalMode/);
  const selected=decideNativeActorAfterHull(initial({selectedActor:8,selectionCountdown:0}),hull());
  const blend=pose(selected.state,{pendingNextAnimationFrame:2});assert.equal(blend.state.actorState,22);
  const last=initial({...blend.state,blendProgress:F(.9)});
  const done=pose(decideNativeActorAfterHull(last,hull()).state,{pendingNextAnimationFrame:3});
- assert.equal(done.effects[0].requiresEquivalentInitializer,true);
- assert.throws(()=>nativeRecoveryEffectValues(done.effects[0]),/equivalent source initializer/);
+ assert.equal(done.effects[0].requiresEquivalentInitializer,false);
+ assert.equal(nativeRecoveryEffectValues(done.effects[0]).riderPhysicalMode,0);
+ const unsupported={kind:'initializeRiderActor',requiresEquivalentInitializer:true};
+ assert.throws(()=>nativeRecoveryEffectValues(unsupported),/equivalent source initializer/);
  assert.throws(()=>nativeRecoveryEffectValues({kind:'unknown'}),/Unknown recovery effect/);
  const entry=decideNativeActorAfterHull(initial(),hull({impacts:{shoreImpactNative:100}}));
  assert.throws(()=>nativeRecoveryEffectValues(entry.effects[0],{hullVelocitiesNative:Array.from({length:12},()=>vec(0,3.4e38,0))}),/finite float32/);

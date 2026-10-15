@@ -1329,3 +1329,97 @@ absence is not a reachability proof. Unsupported actions must be implemented
 before admission. Other native modes/venues, course geometry/sign-offs, the
 eleven existing failures and hardware checks remain open. No original bytes
 or art are published, no money was spent, and production remains unchanged.
+
+## Physical action lifecycle integration — October 15, 2026
+
+The additional action path now composes with the actual five-tick hull and
+nineteen-point rider adapter. It is explicitly enabled with retained
+`riderActions` history, idle fields and scene/RNG context. The playable host
+keeps its existing admission while complete source setup and shared scheduling
+are assembled; this does not establish a complete original-AI race.
+
+The input latch has one owner for direction mask15f6 and six separate retained
+gesture words. It captures raw/pre-curve input, actual engine mask and source
+context once before any racer prepares forces. An explicit latch survives a
+failed preparation without polling again; an implicit failed preparation
+commits neither history. Rendering, paused calls and snapshot reads cannot
+advance it. Optional `sourceState.sourceTick` supplies the actual shared
+unsigned clock, including a retained nonzero epoch. Omitting it retains the
+declared preview logical-frame clock; no epoch is inferred from old history.
+
+An AI producer's unsigned `action16f4` can now travel beside its raw controls
+through the same word consumed by manipulation and post-hull actor selection.
+Conflicting explicit writes reject before latching. Preparation counts actual
+hull-up sign transitions, applies the source new-arc resets, and preserves an
+already-active arc. Completed dry/no-contact frames now wrap signed32 rather
+than saturating; wet contact does not clear that counter. A real driver-tail
+request2 reaches an actual pending actor9 pose in the integrated test.
+
+`native-rider-action-pose-lifecycle.js` provides the numeric completion rules
+for actors8/9/17/10/25: evaluator-frame holds/jumps, ordered grip changes,
+physical-mode changes and ordinary-return requests. Actor10 preserves the
+49-frame idle wrapper and its four actual choices; actor25 evaluates its fixed
+sample and stores frame0. All **5,273** prepared original/public leaf cases
+agree. A further **104** prepared integration cases execute the actual common
+request and initializer consumers, checking eligibility/priority, request
+clearing before scene rejection, same-pending no-ops and completion returns.
+These are bounded source executions, not observed full gameplay replays.
+
+The source common request clears C6c on every successful immediate or pending
+request. The adapter now owns that single idle counter, committing decision
+and completion resets; the old reset-only recovery alias is removed. Recovery
+snapshots use schema v2 and reject the old duplicate-field representation.
+Restoring any active blend or actor17 requires its actual physical mode beside
+already-restored physical points/types. A peer review caught and fixed an
+actor8 exit-blend restore that otherwise inferred the wrong auxiliary mode.
+
+`authored-native-action-poses.js` supplies new, length-preserving anatomical
+paths for the five actors using the high-resolution rig's rest dimensions and
+actual hull frame. It preserves the recovered evaluator bounds, including
+actor17's next38 stop, idle restarts and actor25's alternate fixed4/8 samples.
+Current and pending targets evaluate independently. Holds, grip changes and
+initialization remain lifecycle-owned, followed by one auxiliary solve, rider
+preprocessing and one nineteen-point solve. Actor9's authored auxiliary grip
+ordering follows the final actual point types after source completion writes.
+Geometry, imported-point blend and that grip adaptation are explicitly authored;
+they do not prove original animation-target geometry parity.
+
+Physical tests cover handstand hold/release and crash/remount, backwards hold
+and skip, standing normal/fast release, all four idle choices/cancellation,
+both dive branches, current/pending action blending and retained-clock history.
+Four actual action riders produce identical hull, rider and water state at
+30/60/144 Hz, retaining descending input/completion and conditional shared-RNG
+order. No fixed joint, ordinary-pose fallback or suppressed request is used.
+
+Feedback cue recipes remain visible effects. The bounded synchronous cue
+callgraph consumes zero shared game-PRNG draws; its separate audio selector
+and downstream audio thread are not reconstructed by this milestone. No
+invented game-RNG draw is added for a cue.
+
+The final complete suite is **1,592/1,603 in 122.21 s** (private
+`full-tests-native-rider-actions-final.tap`). All **59** added tests pass; the
+eleven failure names match the preceding 1,544-test baseline exactly. Three
+independent reviews cover numeric leaves, adapter ownership/order and physical
+pose integration. The active-blend restore finding is included in this final
+run. All **225** module versions are regenerated in the three HTML import maps.
+
+High-resolution browser review rendered twelve actual solved action samples
+using the unchanged detailed Blender craft and rider (47 meshes / 347,340
+vertices per rider), with no collapsed presentation segments or console
+warnings/errors. The temporary review page is private and removed from the
+served tree. Fresh native two-player windows remain High 1280×720 at the same
+11.05 s contact: tick 1105, frame 221, both C40 impacts 1.861451268196106, matching
+positions/HUD and all 49,152 water heights/hash 2879715165. Both visible riders
+use solved physical poses. The child console is clear; the parent has only
+the existing favicon 404. These checks preserve presentation and the admitted
+host preview; they do not enable the additional path with invented scene/RNG
+defaults.
+
+Remaining integration includes earlier primary lap/finish/timing and record
+effects; full source setup/retained history/shared-RNG scheduling; actual native
+camera/circle/object producers; feedback/audio and stunt scoring; then a full
+native Sunny opponent race. Other native modes/venues, course geometry and
+sign-offs, the eleven existing course failures and hardware checks remain
+open. Default gameplay remains modern, and native admission remains Sunny
+time trials and two-player races. No original bytes/art are published, no
+money was spent, and this milestone is not pushed or deployed.

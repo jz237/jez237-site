@@ -2,7 +2,11 @@
 // completed 10ms hull ticks; pose completion follows an ORIGINAL/EQUIVALENT
 // target evaluator. Native impact velocity and completed-frame speed have
 // different units. This module advances neither hulls nor animation clocks.
-const F=Math.fround,axes=['x','y','z'],SCHEMA='native-rider-recovery-v1';
+import {createNativeRiderActionDispatchState,dispatchNativeRiderActionRequest,
+ nativeRiderActionNeedsRandom,prepareNativeRiderDiveReturn} from './native-rider-action-dispatch.js';
+import {nativeRiderActionPoseInitialization,prepareNativeRiderActionPoseCompletion} from './native-rider-action-pose-lifecycle.js';
+
+const F=Math.fround,axes=['x','y','z'],SCHEMA='native-rider-recovery-v2';
 const impactFields=['primaryBuoyImpactNative','fixedSphereImpactNative','racerImpactNative',
  'shoreImpactNative','boxImpactNative','floorImpactNative','objectImpactNative'];
 const severeTables=[[10,10.5,9.5,10],[9.5,10,9,8],[9.5,10,9,8],
@@ -12,11 +16,11 @@ const moderateTables={fixedSphereImpactNative:[4,4,3,3.3],racerImpactNative:[5,6
  objectImpactNative:[5,6,5.9,5.5]};
 const severeTilt=[.38,.43,.43,.4].map(F),mildTilt=[.48,.53,.53,.5].map(F);
 const moderatePrimary=[5,6,5.9,5.5].map(F),speedGate=F(22.22222328186035);
-const poseActors=new Set([7,22,23,24]);
+const actionActors=new Set([8,9,10,17,25]),poseActors=new Set([7,8,9,10,17,22,23,24,25]);
 const stateFields=new Set(['schema','riderIndex','actorState','animationFrame','pendingActor','pendingAnimationFrame',
  'holdFrame','blendProgress','blendStep','crashCountdown','crashDampingLatch','contactMode','stumbleCountdown',
  'recoveryCounter','secondaryCounter','stumbleCounter','recoveryInputLock','alternateStumble','selectedActor',
- 'selectionCountdown','actorAuxState','lifecycleFrame','phase','pose','hullDamping']);
+ 'selectionCountdown','lifecycleFrame','phase','pose','hullDamping']);
 function freeze(value){if(value&&typeof value==='object'){Object.values(value).forEach(freeze);Object.freeze(value);}return value;}
 function integer(value,name,min=-2147483648,max=2147483647){
  if(!Number.isInteger(value)||value<min||value>max)throw new RangeError(`${name} is outside its native integer range`);
@@ -44,7 +48,7 @@ function stateCopy(value,phase){
  integer(s.animationFrame,'animationFrame',0);integer(s.pendingActor,'pendingActor',-1,25);
  integer(s.pendingAnimationFrame,'pendingAnimationFrame',0);integer(s.holdFrame,'holdFrame',0,65535);
  for(const k of ['crashCountdown','stumbleCountdown','contactMode','alternateStumble'])integer(s[k],k,0,65535);
- for(const k of ['recoveryCounter','secondaryCounter','stumbleCounter','recoveryInputLock','selectedActor','actorAuxState'])integer(s[k],k);
+ for(const k of ['recoveryCounter','secondaryCounter','stumbleCounter','recoveryInputLock','selectedActor'])integer(s[k],k);
  integer(s.selectionCountdown,'selectionCountdown',-32768,32767);
  integer(s.lifecycleFrame,'lifecycleFrame',0,Number.MAX_SAFE_INTEGER-1);
  boolean(s.crashDampingLatch,'crashDampingLatch');
@@ -66,12 +70,17 @@ export function createNativeRiderRecovery(options={}){
   pendingAnimationFrame:0,holdFrame:0,blendProgress:0,blendStep:0,crashCountdown:0,
   crashDampingLatch:false,contactMode:0,stumbleCountdown:0,recoveryCounter:-1,
   secondaryCounter:-1,stumbleCounter:0,recoveryInputLock:0,alternateStumble:0,
-  selectedActor:-1,selectionCountdown:-1,actorAuxState:0,lifecycleFrame:0,phase:'ready',pose:null,...options};
+  selectedActor:-1,selectionCountdown:-1,lifecycleFrame:0,phase:'ready',pose:null,...options};
  if(state.phase!=='ready'&&state.phase!=='pose')throw new RangeError('Unknown recovery phase');
  return freeze(stateCopy(state,state.phase));
 }
 
 function initialization(s,actor){
+ if(actionActors.has(actor)){
+  const values=nativeRiderActionPoseInitialization({actorState:actor,alternate16cc:s.alternateStumble});
+  return {kind:'initializeRiderActor',actorState:actor,physicalMode:values.physicalMode,
+   jointTypes:[...values.riderJointTypes],requiresEquivalentInitializer:false};
+ }
  const types=Array(19).fill(actor===23||actor===24?0:1);
  if(actor===7)for(const i of [0,1,2,6,7,8,9,10,14,15,16,17,18])types[i]=0;
  if(actor===22){
@@ -87,24 +96,57 @@ function request(s,effects,actor,frame,rate,hold){
  const blend=F(rate);
  if(blend===1){
   if(s.actorState===actor)return null;
-  s.actorState=actor;s.animationFrame=frame;s.pendingActor=-1;s.blendProgress=0;s.actorAuxState=0;
+  s.actorState=actor;s.animationFrame=frame;s.pendingActor=-1;s.blendProgress=0;
   // Source immediate requests retain C64 and the old blend increment.
   effects.push(initialization(s,actor));
  }else{
   if(s.pendingActor===actor)return null;
-  s.pendingActor=actor;s.pendingAnimationFrame=frame;s.blendProgress=blend;s.blendStep=blend;s.holdFrame=hold;s.actorAuxState=0;
+  s.pendingActor=actor;s.pendingAnimationFrame=frame;s.blendProgress=blend;s.blendStep=blend;s.holdFrame=hold;
   effects.push(initialization(s,-1));
  }
  return {actorState:actor,animationFrame:frame,blend,holdFrame:hold};
 }
-function result(s,effects,actorRequest,phase,skipped=false){
+function result(s,effects,actorRequest,phase,skipped=false,actionContext=null){
  s.phase=phase;s.pose=phase==='pose'?{blendAtEvaluation:s.blendProgress>0}:null;
  const poseRequest=phase==='pose'?{actorState:s.actorState,animationFrame:s.animationFrame,
   pending:s.pendingActor>=0?{actorState:s.pendingActor,animationFrame:s.pendingAnimationFrame,holdFrame:s.holdFrame}:null,
   blendProgress:s.blendProgress,requiresEquivalentTargets:true,
   actorSpecificCompletionSupported:poseActors.has(s.actorState)}:null;
  return freeze({state:s,effects:effects.map((effect,i)=>({...effect,effectId:`${s.lifecycleFrame}:${phase==='pose'?'decision':'completion'}:${i}`})),
-  actorRequest,poseRequest,skipped});
+  actorRequest,poseRequest,skipped,...(actionContext?{actionWrites:actionContext.state,
+   actionDispatch:actionContext.diagnostics}:{})});
+}
+
+// The adapter owns these retained words/history. Validate and detach even if
+// a higher-priority source branch skips their consumer. No duplicate lifecycle
+// counter or RNG is initialized here. state650 is the actual race phase, not
+// the separate simulationState argument of this completed-frame lifecycle.
+function actionInputs(value){
+ if(value===undefined)return null;
+ if(!value||typeof value!=='object'||Array.isArray(value))throw new TypeError('actionDispatch must be an explicit record');
+ const state=createNativeRiderActionDispatchState(value.state),history=value.history;
+ if(!history||typeof history!=='object'||Array.isArray(history))throw new TypeError('actionDispatch.history is required');
+ const fields={tick:integer(value.tick,'actionDispatch.tick',0,0xffffffff),
+  gestureTick15f0:integer(history.gestureTick15f0,'gestureTick15f0',0,0xffffffff),
+  gestureWindowNative:integer(value.gestureWindowNative,'gestureWindowNative',0,0xffffffff),
+  state650:integer(value.state650,'state650'),idleThresholdNative:integer(value.idleThresholdNative,'idleThresholdNative'),
+  rawYNative:integer(value.rawYNative,'rawYNative',-128,127),
+  workingXNative:integer(value.workingXNative,'workingXNative',-128,127),
+  workingYNative:integer(value.workingYNative,'workingYNative',-128,127),
+  heldButtonsB56:integer(value.heldButtonsB56,'heldButtonsB56',0,65535),
+  ...Object.fromEntries(['flag1600','sequence15f8','sequence15fa'].map(k=>[k,integer(history[k],k,0,65535)]))};
+ if(value.randomUnsigned32!==undefined&&typeof value.randomUnsigned32!=='function')throw new TypeError('randomUnsigned32 must be the explicit shared source provider');
+ return {state,fields,randomUnsigned32:value.randomUnsigned32,diagnostics:{eligible:false,requestCleared:false,randomRead:false}};
+}
+function dispatchAction(s,q,a,effects){
+ const snapshot={...a.fields,actorState:s.actorState,alternate16cc:s.alternateStumble,
+  manipulationAction:q.manipulationAction,frameSpeedNative:q.frameSpeedNative,bodyUpY:q.upY};
+ const needsRandom=nativeRiderActionNeedsRandom(a.state,snapshot);
+ if(needsRandom&&!a.randomUnsigned32)throw new TypeError('This eligible idle branch needs the actual shared randomUnsigned32 provider');
+ const prepared=dispatchNativeRiderActionRequest(a.state,snapshot,needsRandom?{randomUnsigned32:a.randomUnsigned32()}:{});
+ a.state=prepared.state;a.diagnostics={eligible:true,requestCleared:prepared.requestCleared,randomRead:prepared.randomRead};
+ const r=prepared.actorRequest;
+ return r?request(s,effects,r.actorState,r.animationFrame,r.blend,r.holdFrame):null;
 }
 function inputs(snapshot){
  if(!snapshot||typeof snapshot!=='object')throw new TypeError('A completed native hull snapshot is required');
@@ -133,8 +175,8 @@ function deltaEffect(upY,subtractForwardNative=null){
  * requires actual engineEnabled; entering24 requires actual frameForwardNative.
  * Normal selectedActor/selectionCountdown are explicit source state fields. */
 export function decideNativeActorAfterHull(state,snapshot){
- const s=stateCopy(state,'ready'),q=inputs(snapshot),effects=[];
- if(q.simulationState===0)return result(s,effects,null,'ready',true);
+ const s=stateCopy(state,'ready'),q=inputs(snapshot),a=actionInputs(snapshot.actionDispatch),effects=[];
+ if(q.simulationState===0)return result(s,effects,null,'ready',true,a);
  s.lifecycleFrame++;let actorRequest=null;
  const i=s.riderIndex,impact=q.impacts,fast=q.frameSpeedNative>speedGate&&!q.raceFinished;
  if(s.crashCountdown){
@@ -175,7 +217,7 @@ export function decideNativeActorAfterHull(state,snapshot){
     if(moderate)s.stumbleCountdown=1;
     else if(fast&&impact.primaryBuoyImpactNative>moderatePrimary[i]||q.wetCount>0&&q.upY<mildTilt[i]){
      s.stumbleCountdown=26;if(s.contactMode===0)s.contactMode=2;
-    }
+    }else if(a)actorRequest=dispatchAction(s,q,a,effects);
    }
   }else if(s.actorState===24){
    const engineEnabled=boolean(snapshot.engineEnabled,'engineEnabled');
@@ -199,28 +241,38 @@ export function decideNativeActorAfterHull(state,snapshot){
      if(s.contactMode)s.contactMode=0;
     }
    }
+  }else if(s.actorState===25){
+   const prepared=prepareNativeRiderDiveReturn({actorState:25,manipulationAction:q.manipulationAction,secondaryCounterC70:s.secondaryCounter});
+   s.secondaryCounter=prepared.secondaryCounterC70;
+   const r=prepared.actorRequest;
+   if(r)actorRequest=request(s,effects,r.actorState,r.animationFrame,r.blend,r.holdFrame);
   }
  }
- return result(s,effects,actorRequest,'pose');
+ // Successful53eac clears C6c regardless of which eligibility branch made
+ // the request. The adapter owns that counter; a same-current/pending no-op
+ // never returns actorRequest and must not produce this reset.
+ if(a&&actorRequest)a.state={...a.state,idleFramesC6c:0};
+ return result(s,effects,actorRequest,'pose',false,a);
 }
 
 /** Complete exactly one original/equivalent target evaluation. Explicit sampled
  * edges, not held buttons, accelerate7. Active blends need BOTH evaluator
  * outcomes, even when holdFrame prevents storing the pending frame. Other
- * numeric actors have additional source post-pose branches and are rejected
- * here rather than silently approximated. Procedural23/24 return exactly0. */
-export function finishNativeActorPose(state,outcome){
+ * action actors require their actual physicalMode and explicit source snapshot
+ * through options. Active blends skip every actor-specific consumer. Targets
+ * remain external; procedural23/24/25 return exactly0. */
+export function finishNativeActorPose(state,outcome,{physicalMode,poseCompletion}={}){
  const s=stateCopy(state,'pose'),effects=[];
  if(!outcome||typeof outcome!=='object')throw new TypeError('An equivalent pose evaluator outcome is required');
  if(!poseActors.has(s.actorState))throw new RangeError(`Actor ${s.actorState} requires its separate source post-pose consumer`);
  const next=integer(outcome.nextAnimationFrame,'nextAnimationFrame',-1);
  const pressed=integer(outcome.pressedButtons,'pressedButtons',0,65535),released=integer(outcome.releasedButtons,'releasedButtons',0,65535);
  if(outcome.heldButtons!==undefined)integer(outcome.heldButtons,'heldButtons',0,65535);
- if((s.actorState===23||s.actorState===24)&&next!==0)throw new RangeError('Procedural actor23/24 must supply its evaluator return0');
+ if([23,24,25].includes(s.actorState)&&next!==0)throw new RangeError('Procedural actor23/24/25 must supply its evaluator return0');
  let actorRequest=null;
  if(s.pose.blendAtEvaluation){
   const pendingNext=integer(outcome.pendingNextAnimationFrame,'pendingNextAnimationFrame',-1);
-  if((s.pendingActor===23||s.pendingActor===24)&&pendingNext!==0)throw new RangeError('Pending procedural actor23/24 must supply its evaluator return0');
+  if([23,24,25].includes(s.pendingActor)&&pendingNext!==0)throw new RangeError('Pending procedural actor23/24/25 must supply its evaluator return0');
   if(next>=0)s.animationFrame=next;
   if(pendingNext>=0&&s.holdFrame===0)s.pendingAnimationFrame=pendingNext;
   s.blendProgress=F(s.blendProgress+s.blendStep);
@@ -228,6 +280,15 @@ export function finishNativeActorPose(state,outcome){
    s.actorState=s.pendingActor;s.animationFrame=s.pendingAnimationFrame;s.pendingActor=-1;s.blendProgress=0;
    effects.push(initialization(s,s.actorState));
   }
+ }else if(actionActors.has(s.actorState)){
+  const mode=integer(physicalMode,'physicalMode',0,1),prepared=prepareNativeRiderActionPoseCompletion(
+   {actorState:s.actorState,animationFrame:s.animationFrame,physicalMode:mode},{nextAnimationFrame:next},poseCompletion);
+  s.animationFrame=prepared.animationFrame;
+  if(prepared.jointTypeWrites.length||prepared.physicalMode!==mode)effects.push({kind:'updateRiderPhysicalState',
+   jointTypeWrites:prepared.jointTypeWrites.map(q=>({...q})),physicalMode:prepared.physicalMode});
+  effects.push(...prepared.effects);
+  const r=prepared.actorRequest;
+  if(r)actorRequest=request(s,effects,r.actorState,r.animationFrame,r.blend,r.holdFrame);
  }else if(next<0){
   actorRequest=request(s,effects,22,0,.15,0);
  }else if(s.actorState===7){
@@ -238,7 +299,8 @@ export function finishNativeActorPose(state,outcome){
   }
   s.animationFrame=next+(s.recoveryInputLock===0&&((pressed|released)&0xa000)!==0?1:0);
  }else s.animationFrame=next;
- return result(s,effects,actorRequest,'ready');
+ const completed=result(s,effects,actorRequest,'ready');
+ return poseCompletion===undefined?completed:freeze({...completed,actionWrites:actorRequest?{idleFramesC6c:0}:{}});
 }
 
 /** Detached values for an effect recipe; the integration layer applies them
@@ -268,6 +330,17 @@ export function nativeRecoveryEffectValues(effect,{hullVelocitiesNative,riderDel
   if(effect.requiresEquivalentInitializer)throw new RangeError('This actor needs its equivalent source initializer');
   return freeze({riderJointTypes:array(effect.jointTypes,19,'effect.jointTypes',(v,name)=>integer(v,name,0,5)),
    riderPhysicalMode:integer(effect.physicalMode,'effect.physicalMode',0,1)});
+ }
+ if(effect.kind==='updateRiderPhysicalState'){
+  if(!Array.isArray(effect.jointTypeWrites))throw new TypeError('jointTypeWrites must be an ordered array');
+  return freeze({riderJointTypeWrites:effect.jointTypeWrites.map(q=>({jointIndex:integer(q.jointIndex,'jointIndex',0,18),type:integer(q.type,'joint type',0,5)})),
+   riderPhysicalMode:integer(effect.physicalMode,'physicalMode',0,1)});
+ }
+ if(effect.kind==='actionPoseCue'){
+  if(![8,9,17].includes(effect.actorState))throw new RangeError('Unknown action pose cue');
+  // This retained event is not an audio/RNG implementation. The integration
+  // may consume it explicitly; applying physical recipes advances neither.
+  return freeze({});
  }
  throw new RangeError('Unknown recovery effect');
 }
