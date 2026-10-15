@@ -2,18 +2,20 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import * as T from '../vendor/three.module.js';
-import {updateCraftLOD} from '../mesh-lod.js';
 
 // Exercise the production rig/loader with its real binary assets, without
 // WebGL or a second browser stealing focus from the game playtest.
 const originalFetch=globalThis.fetch;
-let makeBlenderRider;
+let makeBlenderRider,updateCraftLOD;
 try{
  globalThis.fetch=async url=>{
   const path=new URL(url);
   assert.equal(path.protocol,'file:');assert.ok(path.pathname.includes('/after-the-storm/assets/'));
   try{return new Response(await readFile(path));}catch{return new Response('',{status:404});}
  };
+ // mesh-lod imports asset-store, which captures fetch when its singleton is
+ // created. Import the entire asset-loading graph inside this file fixture.
+ ({updateCraftLOD}=await import('../mesh-lod.js'));
  ({makeBlenderRider}=await import('../blender-rider.js'));
 }finally{globalThis.fetch=originalFetch;}
 

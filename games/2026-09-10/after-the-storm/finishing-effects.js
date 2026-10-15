@@ -6,6 +6,7 @@ export function landingEnvelope(impact,speed){
 
  return {energy,height:.3+energy*1.8,radius:1.3+energy*2.7,life:.55+energy*.4,spray:energy*clamp(speed/16,0,1)};
 }
+export function lensViewport(view,width,height){return {left:view.x/width*100,top:(height-view.y-view.height)/height*100,width:view.width/width*100,height:view.height/height*100};}
 // Expanding, falling water sheets retain the craft's forward momentum. This is
 // a visual splash; the shared height field still determines the landing force.
 export function makeFinishingEffects(scene){
@@ -20,13 +21,16 @@ export function makeFinishingEffects(scene){
  const geometry=new T.BufferGeometry();geometry.setAttribute('position',new T.BufferAttribute(xyz,3));geometry.setAttribute('alpha',new T.BufferAttribute(alphas,1));geometry.setAttribute('size',new T.BufferAttribute(sizes,1));
  const material=new T.ShaderMaterial({transparent:true,depthWrite:false,vertexShader:`attribute float alpha,size;varying float a;void main(){a=alpha;vec4 p=modelViewMatrix*vec4(position,1.);gl_Position=projectionMatrix*p;gl_PointSize=clamp(size*370./max(1.,-p.z),1.,24.);}`,fragmentShader:`varying float a;void main(){float r=length(gl_PointCoord-.5)*2.;if(r>1.)discard;gl_FragColor=vec4(.78,.87,.86,a*(1.-smoothstep(.1,1.,r)));}`});
  const cloud=new T.Points(geometry,material);cloud.frustumCulled=false;cloud.userData.skipRefraction=true;scene.add(cloud);
- const lens=document.createElement('div');lens.setAttribute('aria-hidden','true');Object.assign(lens.style,{position:'fixed',inset:'0',pointerEvents:'none',zIndex:4,overflow:'hidden'});document.body.append(lens);let lensDrops=[];
- function wetLens(amount,side=0){if(lensDrops.length>14)return;  for(let i=0;i<Math.ceil(amount*8);i++){const d=document.createElement('i'),x=(side?side<0?Math.random()*48:52+Math.random()*48:Math.random()*100),y=25+Math.random()*66,size=7+Math.random()*22;
-   Object.assign(d.style,{position:'absolute',left:x+'%',top:y+'%',width:size+'px',height:size*1.25+'px',borderRadius:'48% 50% 55% 45%',background:'radial-gradient(ellipse at 33% 24%,#e0ffff66 0%,#b5dbdf16 30%,#16364433 62%,#ddffff55 79%,transparent 84%)',boxShadow:'inset 0 1px 2px #e3ffff55',opacity:'0'});lens.append(d);lensDrops.push({d,y,age:0,life:.65+Math.random()*.85});
+ const lens=document.createElement('div');lens.setAttribute('aria-hidden','true');Object.assign(lens.style,{position:'fixed',inset:'0',pointerEvents:'none',zIndex:4,overflow:'hidden'});document.body.append(lens);let lensDrops=[],splitLens=false;
+ const playerLens=Array.from({length:2},()=>{const clip=document.createElement('div');Object.assign(clip.style,{position:'absolute',overflow:'hidden',pointerEvents:'none'});lens.append(clip);return clip;});
+ function wetLens(amount,side=0){if(lensDrops.length>14)return;const clipped=splitLens&&side,layer=clipped?playerLens[side<0?0:1]:lens;
+  for(let i=0;i<Math.ceil(amount*8);i++){const d=document.createElement('i'),x=clipped?4+Math.random()*92:Math.random()*100,y=25+Math.random()*66,size=7+Math.random()*22;
+   Object.assign(d.style,{position:'absolute',left:x+'%',top:y+'%',width:size+'px',height:size*1.25+'px',borderRadius:'48% 50% 55% 45%',background:'radial-gradient(ellipse at 33% 24%,#e0ffff66 0%,#b5dbdf16 30%,#16364433 62%,#ddffff55 79%,transparent 84%)',boxShadow:'inset 0 1px 2px #e3ffff55',opacity:'0'});layer.append(d);lensDrops.push({d,y,age:0,life:.65+Math.random()*.85});
   }
  }
  return {
- reset(course){sites=(course.rocks||[]).filter(p=>!p.type||p.type==='rock').slice(0,32).map(p=>({...p,last:null,cooldown:0}));for(const r of rings)r.mesh.visible=false;for(const p of drops)p.life=0;previousTime=null;lens.replaceChildren();lensDrops=[];},
+ setViews(views=null,width=1,height=1){splitLens=!!views;playerLens.forEach((clip,i)=>{clip.hidden=!views;if(views)for(const [key,value] of Object.entries(lensViewport(views[i],width,height)))clip.style[key]=value+'%';});},
+ reset(course){sites=(course.rocks||[]).filter(p=>!p.type||p.type==='rock').slice(0,32).map(p=>({...p,last:null,cooldown:0}));for(const r of rings)r.mesh.visible=false;for(const p of drops)p.life=0;previousTime=null;for(const clip of playerLens)clip.replaceChildren();lens.replaceChildren(...playerLens);lensDrops=[];},
  sprayHit(amount,side=0){if(amount>.08)wetLens(Math.min(1,amount),side);},
  landing(r,camera,side=0){const e=landingEnvelope(r.hydro.impact,r.speed);if(e.energy<.02)return;
   const ring=rings[ringCursor++%rings.length];Object.assign(ring,e,{age:0,x:r.x,z:r.z,vx:r.vx*.22,vz:r.vz*.22,heading:r.heading});ring.mesh.visible=true;
