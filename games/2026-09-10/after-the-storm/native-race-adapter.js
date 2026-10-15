@@ -161,6 +161,7 @@ function sourceSettings(value={}){
   integer(result.contactMode,'contactMode',0,65535);
   if(typeof result.crash!=='boolean')throw new TypeError('crash must be boolean');
   return {...result,...(value.actionState===undefined?{}:{actionState:value.actionState}),
+    ...(Object.hasOwn(value,'phase650')?{phase650:integer(value.phase650,'phase650',-0x80000000,0x7fffffff)}:{}),
     ...(Object.hasOwn(value,'sourceTick')?{sourceTick:integer(value.sourceTick,'sourceTick',0,0xffffffff)}:{})};
 }
 
@@ -213,6 +214,10 @@ export function applyNativeRaceContact(hull,{kind,pointIndex,normal,penetration=
  * can supply its current value for all selected racers, including a retained
  * nonzero epoch. Omission uses the preview's logical-frame clock; no epoch is
  * inferred from restored gesture history or advanced by snapshot/render calls.
+ * Active unblended actor15 requires signed sourceState.phase650, captured with
+ * the controls for its completion after tick5. The existing riderActions
+ * source.state650 can supply that same word; two explicit writers must agree.
+ * Source simulation648 is independent and is never a phase650 fallback.
  * controlOrigin is the default caller-owned INPUT DISPATCH, separate from the
  * human identity and computer physics profile. Trusted frame options may
  * explicitly change it for a source takeover without resetting input history.
@@ -335,7 +340,15 @@ function sampleFrameControls(adapter,input,options){
     const provider=adapter.riderActions.source;
     capturedActionSource=actionSource(typeof provider==='function'?provider(hull,frameContext):provider);
   }
-  return {hullTick:hull.ticks,previousContacts,frameContext,source,oldAction,sampled,actionHistory,capturedActionSource};
+  // Ordinary665B0 completes every rider before79528/F03E0 and the i1 stage
+  // can change650. Capture its actual input word with this frame's controls;
+  // never reread a later scene phase or derive it from simulation648.
+  if(source.phase650!==undefined&&capturedActionSource&&source.phase650!==capturedActionSource.state650)
+    throw new Error('sourceState.phase650 and riderActions.source.state650 must share the actual scene owner');
+  const phase650=source.phase650??capturedActionSource?.state650;
+  if(adapter.riderLifecycle&&source.actorState===15&&source.simulationState!==0&&adapter.riderLifecycle.state.blendProgress===0)
+    integer(phase650,'active actor15 phase650',-0x80000000,0x7fffffff);
+  return {hullTick:hull.ticks,previousContacts,frameContext,source,oldAction,sampled,actionHistory,capturedActionSource,phase650};
 }
 
 function beginFrame(adapter,input,options){
@@ -344,7 +357,7 @@ function beginFrame(adapter,input,options){
   if(latched&&latched.hullTick!==hull.ticks)throw new Error('Native controls must share their sampled hull boundary');
   if(latched&&options.controlOrigin!==undefined&&options.controlOrigin!==latched.sampled.controlOrigin)
     throw new Error('Native controlOrigin is already latched for this frame');
-  const {previousContacts,frameContext,source,oldAction,sampled,actionHistory,capturedActionSource}=latched??sampleFrameControls(adapter,input,options);
+  const {previousContacts,frameContext,source,oldAction,sampled,actionHistory,capturedActionSource,phase650}=latched??sampleFrameControls(adapter,input,options);
   const physicalControls=prepareNativeRiderControls(adapter.riderControlState,{heldButtons:sampled.heldButtons,
     pressedButtons:sampled.pressedButtons,actorState:source.actorState,riderIndex:adapter.rider.riderIndex,
     wet:water.anyWet,contactMode:source.contactMode});
@@ -384,7 +397,7 @@ function beginFrame(adapter,input,options){
   adapter.frame={startCenter:copy(hull.center),startReference:referencePoint(hull),prepared,
     controls:forceControls,physicalControls,previousContacts,action:decision,actorState:source.actorState,
     simulationState:source.simulationState,animationFrame:source.animationFrame,riderPose:poseProvider,
-    actionHistory,actionSource:capturedActionSource};
+    actionHistory,actionSource:capturedActionSource,phase650};
   resetNativeImpacts(adapter.impacts,{simulationState:source.simulationState});
   if(source.simulationState!==0)adapter.contactWindow=contactsZero();
 }
@@ -430,7 +443,7 @@ function endFrame(adapter){
       action:frame.action,completedFrame:adapter.lastFrame});
     if(adapter.riderLifecycle){
       if(!pose.animationOutcome)throw new TypeError('Recovery requires an explicit equivalent pose evaluator outcome');
-      const completion=finishNativeRiderLifecycle(adapter.riderLifecycle,pose.animationOutcome,frame.controls,actionSource?.poseCompletion);
+      const completion=finishNativeRiderLifecycle(adapter.riderLifecycle,pose.animationOutcome,frame.controls,actionSource?.poseCompletion,{phase650:frame.phase650});
       if(actions&&completion.actionWrites?.idleFramesC6c!==undefined)actions.idleFramesC6c=completion.actionWrites.idleFramesC6c;
     }
     // A lifecycle-aware provider evaluates both poses purely, then resolves

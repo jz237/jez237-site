@@ -5,6 +5,8 @@ import {prepareNativeRiderWipeoutPose} from './native-rider-wipeout-pose.js';
 import {prepareNativeRiderStumblePose} from './native-rider-stumble-pose.js';
 import {createAuthoredNativeRecoveryPose} from './authored-native-recovery-pose.js';
 import {createAuthoredNativeActionPoses} from './authored-native-action-poses.js';
+import {prepareNativeRiderStartSeed} from './native-rider-start-provider.js';
+import {createNativeRiderRecovery} from './native-rider-recovery.js';
 
 // Source actor timing/effects with explicitly authored anatomy/action/remount art.
 // Each current/pending pose is evaluated separately without stepping physics.
@@ -23,8 +25,18 @@ function blend(a,b,t,scale){
  return a.map((p,i)=>Object.fromEntries(axes.map(k=>[k,F(F(p[k]/scale)*F(1-t)+F(b[i][k]/scale)*t)*scale])));
 }
 
-export function createNativeLifecycleRider({initialHull,geometryProvider=modernRiderPose}={}){
- const base=createAuthoredNativeRider({initialHull,geometryProvider}),{articulatedRider:rider,anchorState,anchorRig,restTargets}=base;
+/** startPoseProvider is an explicit selected-record provider. initializeStart
+ * seeds its actual25 positions/types at construction, without consuming a
+ * logical frame or fitting rest mechanics from the launch pose. The returned
+ * initialRiderRecovery must be supplied to the adapter along with its own
+ * courseDatumNative/raceFinished inputs. The default host still starts22. */
+export function createNativeLifecycleRider({initialHull,geometryProvider=modernRiderPose,anchorRig:providedAnchorRig,
+ startPoseProvider,initializeStart=false}={}){
+ if(typeof initializeStart!=='boolean')throw new TypeError('initializeStart must be boolean');
+ if(startPoseProvider!==undefined&&typeof startPoseProvider?.evaluate!=='function')throw new TypeError('startPoseProvider must be an explicit selected-record provider');
+ // Validate/evaluate the whole seed before allocating or changing any owner.
+ const seed=initializeStart?prepareNativeRiderStartSeed(startPoseProvider,{hull:initialHull}):null;
+ const base=createAuthoredNativeRider({initialHull,geometryProvider,anchorRig:providedAnchorRig}),{articulatedRider:rider,anchorState,anchorRig,restTargets}=base;
  const scale=initialHull.scale,restTargetsLocal=restTargets.map(p=>local(p,initialHull));
  const actions=createAuthoredNativeActionPoses({scale,restTargetsLocal});
  let remount=null,expectedSolves=0,previousFrame=-1;
@@ -32,7 +44,21 @@ export function createNativeLifecycleRider({initialHull,geometryProvider=modernR
  const yawLength=Math.hypot(yawForward.x,yawForward.z);
  if(!yawLength)throw new RangeError('Initial lifecycle rig requires an explicit horizontal heading');
  yawForward={x:F(yawForward.x/yawLength),z:F(yawForward.z/yawLength)};
+ let initialRiderRecovery;
+ if(seed){
+  rider.points=seed.positions.map((position,i)=>({position:copy(position),storedDelta:{x:0,y:0,z:0},type:seed.types[i]}));
+  rider.jointWorld=copy(rider.points[2].position);
+  anchorState.points=seed.auxiliaryPositions.map(position=>({position:copy(position),storedDelta:{x:0,y:0,z:0}}));
+  anchorState.anchors={2:copy(anchorState.points[3].position),3:copy(anchorState.points[4].position)};
+  anchorState.mode=seed.physicalMode;
+  initialRiderRecovery=Object.freeze({state:createNativeRiderRecovery({riderIndex:initialHull.rider,
+   hullDamping:initialHull.points.map(p=>p.damping),actorState:seed.actorState,animationFrame:seed.animationFrame}),physicalMode:seed.physicalMode});
+ }
  function evaluate(actor,animationFrame,hull,context){
+  if(actor===15){
+   if(!startPoseProvider)throw new RangeError('Native lifecycle actor15 needs its explicit selected-record physical pose');
+   return startPoseProvider.evaluate({animationFrame,hull,context});
+  }
   if(actor===22){
    const x=context.controls.conditionedXNative??context.controls.workingXNative??0,turn=Math.max(-1,Math.min(1,-x/70));
    const p=geometryProvider('',context.time,turn,{speed:Math.hypot(...axes.map(k=>hull.velocity[k])),steering:turn*.3});
@@ -90,10 +116,12 @@ export function createNativeLifecycleRider({initialHull,geometryProvider=modernR
     return {2:copy(anchorState.anchors[2]),3:copy(anchorState.anchors[3])};
    }};
  };
- return {...base,riderPose,provenance:Object.freeze({...base.provenance,
+ return {...base,riderPose,...(initialRiderRecovery?{initialRiderRecovery}:{}),provenance:Object.freeze({...base.provenance,
   lifecycle:'source decision/pose-completion timing and physical effect order',
   recoveryGeometry:'authored actor7; reconstructed procedural23/24; authored rest/circle/history compatibility policy',
   actionGeometry:actions.provenance,
+  startGeometry:startPoseProvider?.provenance??'explicit selected-record provider required; no default start artwork',
+  startInitialization:seed?'actor15/frame56 physical25-point/type seed; independent authored rest/circle; not full retained-body startup':'ordinary actor22 host initialization',
   gripGeometry:'authored auxiliary grip order follows final actual type2/3 anatomical bindings',
   targetBlend:'authored imported-point interpolation; not original normalized pose-block interpolation'})};
 }

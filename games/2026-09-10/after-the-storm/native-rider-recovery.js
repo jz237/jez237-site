@@ -5,6 +5,7 @@
 import {createNativeRiderActionDispatchState,dispatchNativeRiderActionRequest,
  nativeRiderActionNeedsRandom,prepareNativeRiderDiveReturn} from './native-rider-action-dispatch.js';
 import {nativeRiderActionPoseInitialization,prepareNativeRiderActionPoseCompletion} from './native-rider-action-pose-lifecycle.js';
+import {NATIVE_RIDER_START_TYPES} from './native-rider-start-provider.js';
 
 const F=Math.fround,axes=['x','y','z'],SCHEMA='native-rider-recovery-v2';
 const impactFields=['primaryBuoyImpactNative','fixedSphereImpactNative','racerImpactNative',
@@ -83,7 +84,7 @@ function initialization(s,actor){
  }
  const types=Array(19).fill(actor===23||actor===24?0:1);
  if(actor===7)for(const i of [0,1,2,6,7,8,9,10,14,15,16,17,18])types[i]=0;
- if(actor===15){for(const i of [2,7,8,15,16])types[i]=0;types[6]=2;types[14]=3;}
+ if(actor===15)types.splice(0,19,...NATIVE_RIDER_START_TYPES);
  if(actor===22){
   if(s.alternateStumble)for(const i of [2,6,7,14,15])types[i]=0;
   else{for(const i of [9,10,17,18])types[i]=4;types[6]=2;types[14]=3;}

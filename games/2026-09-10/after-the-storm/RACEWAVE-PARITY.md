@@ -1961,3 +1961,75 @@ High1280x720 checks remain the graphics evidence. This does not establish
 arbitrary WAN/NAT connectivity, physical-controller support or complete original
 gameplay parity. Only favicon404s appeared in the valid desktop browser flows;
 no original executable bytes/artwork were added and no money was spent.
+
+## Source launch phase coupling — October 15, 2026 (integration in progress)
+
+The physical adapter now accepts the actual signed launch phase650 separately
+from simulation648. It captures that word with each five-tick control frame and
+passes it to rider pose completion. The existing action-source phase can supply
+the same value; conflicting writers reject before controls or physics change.
+An active unblended starting actor15 requires this explicit phase. Simulation1
+can run hull physics with muted engine input while phase0/1 holds the animation;
+phase2/3 releases its advancement. No browser phase is substituted.
+
+The actual ordinary outer caller completes the physical riders before the
+launch controller and the later i1 race-status update. A read-only Ghidra query
+on Evo X2 matches5,426 instruction words in five existing scheduling functions,
+with all nine project files unchanged. Its analyzed program lacks a function
+at the requested9345C entry; that omission was recorded without creating or
+reanalyzing it. Separate original-instruction checks cover3,072 prepared
+physical-scheduling cases and eight prepared launch sequences for four modes
+with one/two players. Controller, individual hull/pose, primary progress,
+graphics, camera/audio/OS and other overlay entries remain explicit boundaries.
+
+The existing canonical countdown and status implementations match all3,375
+retained words/scene fields across890 recorded frames, including launch-power
+writes and cue order, with zero differences. All eight new phase tests and all
+84 affected checks pass, including shared two-rider completion and exact
+30/60/144Hz comparisons. The full suite checks2,069 tests:2,058 pass, with the
+same eleven existing calibration failures. No assertion was relaxed.
+
+This is local integration work. The normal native preview still begins with
+actor22 after its browser countdown. Installing equivalent high-resolution
+starting artwork and connecting the verified sequence to the live shared race
+owner remain pending; these checks do not establish complete startup or
+gameplay parity.
+
+## Physical starting-pose provider — October 15, 2026 (local integration)
+
+The lifecycle can now evaluate actor15 through the reconstructed numeric
+evaluator using eighteen explicitly supplied selected records. The bridge
+reads the current physical hull and four separately supplied retained yaw
+words, selects the requested descriptor7 frame, and converts its nineteen
+body plus six auxiliary goals to world units once. It owns no animation clock,
+frame cache or source scene. It does not resize the selected anatomy.
+
+Optional startup seeds the actual25 physical positions from evaluated frame56,
+clears their stored deltas, and installs actor15/frame56, its exact19 point
+types and physical mode1. Initialization runs no auxiliary or body solve.
+Independent rest lengths and circle radius remain their existing inputs;
+they are not inferred from the launch pose. Subsequent pose completion and
+the outgoing ordinary-riding blend use the existing lifecycle and once-per-
+frame physical solvers. This is the pose/type portion of startup, not the
+whole original retained-body initializer.
+
+Private read-only ROM sampling now covers all85 actual descriptor7 frames
+both level and tilted:170 cases,27,540 pose words and12,750 mapped point
+words match the numeric implementation exactly. The bridge's12,750 converted
+world values also match. Original animation records and derived samples stay
+private; none are included in the public provider or its authored fixtures.
+
+All eleven new provider/physical tests and118 affected checks pass, covering
+held/advancing phases, the real outgoing blend, zero initialization solves,
+independent rest mechanics, two riders and exact30/60/144Hz physical outcomes.
+The full suite checks2,080 tests:2,069 pass, with the same eleven existing
+calibration failures and no relaxed assertions. Equivalent high-resolution
+start artwork and live shared countdown ownership remain pending. The normal
+native host still starts22; this local checkpoint is not a new live release.
+
+The refreshed261-module browser build renders at High1280x720 in the ordinary
+game and optional native preview. Its existing native recovery inspection
+reaches5.8s/hull tick580 with116 body and116 auxiliary solves and the detailed
+physical rider visible. Only a favicon404 appears; no game exception was
+observed. This checks the current presentation after integration, not new
+high-resolution actor15 artwork or original-ROM gameplay equivalence.
