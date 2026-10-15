@@ -3,10 +3,11 @@ import * as T from 'three';
 import type {createCountyCourse} from './county-course';
 
 type Course=ReturnType<typeof createCountyCourse>;
-export type SceneryTheme='park'|'dunes'|'canal'|'pass'|'coast'|'forest'|'farm'|'port';
+export type SceneryTheme='park'|'dunes'|'canal'|'pass'|'coast'|'forest'|'farm'|'port'|'reservoir';
 type Shape='box'|'round'|'cone'|'rock'|'leaf'|'gable';
 type Finish='bark'|'leaf'|'pine'|'stone'|'sand'|'wood'|'metal'|'white'|'red'|'ochre'|'glass'|'rubber';
 const palettes={
+ reservoir:{ground:'#687457',patch:'#879477',rock:0x8b8d7a,leaf:0x5b7147,pine:0x405d46,hill:0x617455,accent:'#387a84',title:'BRAMBLEBROOK RESERVOIR',subtitle:'HIGH WATER / LOW RESALE VALUE'},
  port:{ground:'#85877d',patch:'#a6a392',rock:0x888b7c,leaf:0x637252,pine:0x455b42,hill:0x7b8470,accent:'#d09239',title:'SALTMARSH PORT RALLYCROSS',subtitle:'IMPORTS / EXPORTS / WRITE-OFFS'},
  farm:{ground:'#7c8050',patch:'#a7a16c',rock:0x918573,leaf:0x62723e,pine:0x455c35,hill:0x758352,accent:'#a84e31',title:'DUNMERE FARM CIRCUIT',subtitle:'FRESH DENTS / LOCALLY GROWN'},
  coast:{ground:'#a19e75',patch:'#bcb48d',rock:0x938c79,leaf:0x69764b,pine:0x48614e,hill:0x7e886b,accent:'#377886',title:'SEABROOK COAST CIRCUIT',subtitle:'SEA AIR / BENT BODYWORK'},
@@ -53,7 +54,7 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
  const box=(f:Finish,x:number,y:number,z:number,w:number,h:number,d:number,yaw=0)=>add('box',f,x,y,z,w,h,d,yaw);
  function clear(x:number,z:number,r:number,kind:string){
   if(course.distance(x,z)<23+r)return false;
-  if(theme==='coast'&&z+r>172)return false;
+  if((theme==='coast'||theme==='reservoir')&&z+r>172)return false;
   // Keep the canal's water, lock gates and towpath unobstructed.
   if(theme==='canal'&&Math.abs(x)<78+r&&z>-23-r&&z<15+r)return false;
   placements.push({x,z,radius:r,kind});return true;
@@ -63,17 +64,17 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
   placements.push({x,z,radius:0,kind,halfWidth:w/2,halfDepth:d/2});return true;
  }
  function scenicHeight(x:number,z:number){
-  if(theme!=='coast'&&theme!=='forest'&&theme!=='farm'&&theme!=='port'&&theme!=='park'&&theme!=='dunes'&&theme!=='pass')return course.height(x,z);
+  if(theme!=='coast'&&theme!=='forest'&&theme!=='farm'&&theme!=='port'&&theme!=='park'&&theme!=='dunes'&&theme!=='pass'&&theme!=='reservoir')return course.height(x,z);
   if(Math.abs(x)<=220&&Math.abs(z)<=180)return course.height(x,z);
   const a=Math.atan2(z,x),dx=Math.cos(a),dz=Math.sin(a),edge=1/Math.max(Math.abs(dx)/220,Math.abs(dz)/180),ring=(Math.hypot(x,z)-edge)/56;
-  const height=(r:number)=>{const zz=dz*(edge+r*56),ridge=(theme==='pass'?60:theme==='dunes'?24:19)*(1+.35*Math.sin(a*5)+.2*Math.cos(a*9));let y=r===0?course.height(dx*edge,dz*edge)-.12:course.height(dx*edge,dz*edge)+Math.sin(Math.min(1,r/5)*Math.PI*.62)*ridge+Math.sin(a*11+r)*2;if((theme==='coast'||theme==='port')&&zz>170)y=Math.min(y,Math.max(-6,-.12-(zz-180)*.18));return y;};
+  const height=(r:number)=>{const zz=dz*(edge+r*56),ridge=(theme==='pass'?60:theme==='dunes'?24:19)*(1+.35*Math.sin(a*5)+.2*Math.cos(a*9));let y=r===0?course.height(dx*edge,dz*edge)-.12:course.height(dx*edge,dz*edge)+Math.sin(Math.min(1,r/5)*Math.PI*.62)*ridge+Math.sin(a*11+r)*2;if((theme==='coast'||theme==='port'||theme==='reservoir')&&zz>170)y=Math.min(y,Math.max(-6,-.12-(zz-180)*.18));return y;};
   return T.MathUtils.lerp(height(Math.floor(ring)),height(Math.ceil(ring)),ring%1)-.2;
  }
  function tree(x:number,z:number,size:number,pine:boolean){
   if(theme==='port'&&(z>160||(Math.abs(x)<225&&Math.abs(z)<180)))return;
   const r=size*(pine?.3:.48);if(!clear(x,z,r,'tree'))return;
   const y=scenicHeight(x,z),yaw=random()*6.28;
-  if(typeof document!=='undefined'&&(theme==='coast'||theme==='forest'||theme==='farm'||theme==='park'||course.distance(x,z)>40)){treeCards.push({x,y,z,size,kind:pine?(treeCards.length%2?'pine':'spruce'):'maple'});return;}
+  if(typeof document!=='undefined'&&(theme==='coast'||theme==='forest'||theme==='farm'||theme==='park'||theme==='reservoir'||course.distance(x,z)>40)){treeCards.push({x,y,z,size,kind:pine?(treeCards.length%2?'pine':'spruce'):'maple'});return;}
   add('round','bark',x,y+size*.36,z,.3+size*.04,size*.72,.3+size*.04);
   if(pine){for(let tier=0;tier<3;tier++)add('cone','pine',x,y+size*(.45+tier*.19),z,size*(.68-tier*.13),size*.52,size*(.68-tier*.13),yaw+tier);}
   else{for(let lobe=0;lobe<4;lobe++){const a=yaw+lobe*2.2,offset=lobe?size*.2:0;add('leaf',lobe%2?'leaf':'pine',x+Math.cos(a)*offset,y+size*(lobe?.72:.94),z+Math.sin(a)*offset,size*.67,size*(lobe?.61:.57),size*.6,a);}}
@@ -330,6 +331,33 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
     for(const end of [-1,1]){const cut=new T.Matrix4().makeRotationX(Math.PI/2);cut.setPosition(xx,yy,z+end*4.01);cut.scale(new T.Vector3(1.02,.04,1.02));const k='round_sand',bb=batches.get(k)??{shape:'round' as const,finish:'sand' as const,matrices:[],colors:[]};bb.matrices.push(cut);bb.colors.push(new T.Color(.95,.9,.8));batches.set(k,bb);}
    }
   }
+ }else if(theme==='reservoir'){
+  building(90,-163,45,15,8,'stone');stand(-105,-158);canopy(-48,-159,'red');canopy(-27,-159,'white');serviceTruck(136,-159,'ochre');
+  // Dam control house and maintenance yard are set back from the start straight.
+  if(clearRectangle(90,-163,49,19,'dam-control')){
+   const y=course.height(90,-163);
+   box('glass',90,y+6,-155.3,35,2.1,.18);
+   for(let x=74;x<=106;x+=4)box('white',x,y+6,-155.1,.15,2.4,.2);
+   for(const x of [77,102]){box('metal',x,y+2.3,-155.2,8,4.4,.15);for(let yy=.5;yy<4.5;yy+=.5)box('white',x,y+yy,-155,7.7,.07,.1);}
+   box('white',90,y+10,-163,18,4,10);box('glass',90,y+10,-157.9,16,2.4,.15);box('metal',90,y+12.3,-163,20,.5,12);
+   box('metal',99,y+15,-165,.18,6,.18);add('round','white',99,y+17,-165,2,.5,2);
+  }
+  // Intake machinery, a shoreline service pier and dam railings make the water legible.
+  for(const x of [-110,0,110]){
+   if(!clearRectangle(x,198,15,27,'water-intake'))continue;
+   box('stone',x,4,198,10,8,12);box('metal',x,8.3,198,12,.6,14);
+   box('glass',x,6,191.9,7,2,.15);box('white',x,10,198,.4,3,.4);box('red',x,11.5,198,.8,.6,.8);
+   box('metal',x,3.3,184,3,.4,17);
+   for(const side of [-1,1]){box('metal',x+side*1.4,4.3,184,.1,.1,17);for(let z=177;z<=192;z+=3)box('metal',x+side*1.4,3.8,z,.1,1,.1);}
+  }
+  for(let x=-208;x<=208;x+=4){box('metal',x,4.1,173,.1,2,.1);}
+  for(const h of [3.7,4.9])box('metal',0,h,173,420,.1,.1);
+  if(clearRectangle(-40,-45,27,16,'reservoir-picnic')){
+   const y=course.height(-40,-45);
+   for(const x of [-49,-31]){box('wood',x,y+1,-45,5,.2,1.8);for(const side of [-1,1]){box('wood',x,y+.55,-45+side*1.5,5,.2,.6);for(const dx of [-1.8,1.8])box('metal',x+dx,y+.5,-45+side*.5,.15,1,.15);}}
+   for(const x of [-52,-28]){box('white',x,y+2,-50,.18,4,.18);}box('red',-40,y+4.2,-50,26,.5,4);
+  }
+  for(let i=0;i<20;i++){const x=-210+i*22,z=165;if(clear(x,z,2,'shore-rock')){add('rock','stone',x,course.height(x,z)+.5,z,3,1.7,2.5,i);}}
  }else{
   building(65,-166,38,16,5,'wood');stand(-88,-155);canopy(-28,-157,'red');canopy(-8,-157,'white');serviceTruck(112,-157,'red');
   for(const x of [-241,245])for(const z of [-60,35,125])rock(x,z,18+random()*17);
@@ -384,8 +412,8 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
   const outline=new T.Shape();outline.moveTo(-68,-13);outline.lineTo(52,-13);outline.lineTo(74,0);outline.lineTo(52,13);outline.lineTo(-68,13);outline.closePath();
   const hullGeometry=new T.ExtrudeGeometry(outline,{depth:6,bevelEnabled:false,steps:1});hullGeometry.rotateX(-Math.PI/2);const hullMaterial=new T.MeshStandardMaterial({color:0x4d5555,roughness:.8,metalness:.25});const hull=new T.Mesh(hullGeometry,hullMaterial);hull.name=course.id+'_cargo_hull';hull.position.set(0,-.4,245);hull.castShadow=hull.receiveShadow=true;root.add(hull);ownedGeometries.push(hullGeometry);ownedMaterials.push(hullMaterial);
  }
- if(theme==='coast'||theme==='port'){
-  const waterGeometry=new T.PlaneGeometry(2600,1600);waterGeometry.rotateX(-Math.PI/2);
+ if(theme==='coast'||theme==='port'||theme==='reservoir'){
+  const waterGeometry=new T.PlaneGeometry(theme==='reservoir'?620:2600,theme==='reservoir'?460:1600);waterGeometry.rotateX(-Math.PI/2);
   const waterMaterial=new T.MeshStandardMaterial({color:0x537f82,roughness:.38,metalness:.12});
   // Static world-space ripples remain stable in demo and driving cameras.
   waterMaterial.onBeforeCompile=shader=>{shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 coastPosition;').replace('#include <begin_vertex>','#include <begin_vertex>\ncoastPosition=(modelMatrix*vec4(position,1.0)).xyz;');shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 coastPosition;').replace('#include <color_fragment>',`#include <color_fragment>
@@ -394,7 +422,7 @@ diffuseColor.rgb*=.87+.13*ripple;
 float foam=(1.0-smoothstep(183.0,209.0,coastPosition.z))*(.35+.65*pow(abs(sin(coastPosition.z*.7+sin(coastPosition.x*.07)*2.0)),8.0));
 diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.73,.8,.74),foam*.65);`);};
   waterMaterial.customProgramCacheKey=()=> 'seabrook-water-v1';
-  const sea=new T.Mesh(waterGeometry,waterMaterial);sea.name=course.id+'_sea';sea.position.set(0,-1.2,982);root.add(sea);ownedGeometries.push(waterGeometry);ownedMaterials.push(waterMaterial);
+  const sea=new T.Mesh(waterGeometry,waterMaterial);sea.name=course.id+'_sea';sea.position.set(0,theme==='reservoir'?-.22:-1.2,theme==='reservoir'?410:982);root.add(sea);ownedGeometries.push(waterGeometry);ownedMaterials.push(waterMaterial);
  }
 
  // A continuous low-cost landscape joins the exact edge height and rises beyond it.
@@ -404,7 +432,7 @@ diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.73,.8,.74),foam*.65);`);};
   const ridge=(theme==='pass'?60:theme==='dunes'?24:19)*(1+.35*Math.sin(a*5)+.2*Math.cos(a*9));
   let y=ring===0?course.height(x,z)-.12:course.height(dx*edge,dz*edge)+Math.sin(Math.min(1,ring/5)*Math.PI*.62)*ridge+(Math.sin(a*11+ring)*2);
   // Northern headland slopes into the sea; never close the coast with a mountain wall.
-  if((theme==='coast'||theme==='port')&&z>170)y=Math.min(y,Math.max(-6,-.12-(z-180)*.18));
+  if((theme==='coast'||theme==='port'||theme==='reservoir')&&z>170)y=Math.min(y,Math.max(-6,-.12-(z-180)*.18));
   positions.push(x,y,z);const color=new T.Color(p.hill).multiplyScalar(.86+.12*Math.sin(a*3+ring*.4));colorsOut.push(color.r,color.g,color.b);
   if(ring<rings-1&&i<segments){const n=ring*(segments+1)+i;indices.push(n,n+segments+1,n+1,n+1,n+segments+1,n+segments+2);}
  }
