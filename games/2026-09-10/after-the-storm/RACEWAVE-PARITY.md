@@ -1498,3 +1498,96 @@ geometry/sign-offs, the eleven existing failures and hardware checks also
 remain. The live preview admission and high-resolution rendering are unchanged.
 No original executable bytes or artwork are published, no money was spent,
 and this milestone is not pushed or deployed.
+
+## Race startup and canonical shared state — October 15, 2026
+
+The new prepared startup path composes selective reset75310 and its complete
+EED70/EE9C0 terminal, source prestart stages, countdown/launch boost and the
+ordinary numeric race update. Additional ordinary consumers now implement
+status counters, native speed display and its separate16-bit random sequence,
+wrong-way warnings, missed-buoy power feedback and both retirement paths.
+These are verified source consumers and canonical adapters; complete original
+initialization and a live source opponent race remain open.
+
+`native-race-state.js` retains one1693-word race window1f94..3a04 and one
+1442-word HUD window7788..8e0c. All four222-word records, persistent course
+tables, setup order26c0, ranking3990, per-slot projection39a0, shared scratch
+and HUD byte latches derive from those owners. The optional168-word i1 and
+50-word profile spans retain their own memory. ProfileB338 supplies difficulty
+when present; a duplicate scene difficulty is rejected. Signed reset and
+unsigned progress views share the same reverse halfword. The old phase DTO
+exists only as a detached compatibility view and is committed back immediately.
+Missing raw words reject rather than becoming guessed zero state.
+
+Reset retains unwritten timing/history, inactive slots, setup/rank arrays and
+unselected course records. It uses reference+24/+28 rather than moving buoy
+centers, exact A0/A4/B4 links and source search-budget exhaustion. Cold reset
+touches the actual course9..11 table tails only. The terminal reads prior HUD
+palette history before clearing it, preserves opaque supplied presentation
+words, and writes only active latch bytes. No original palettes/artwork are
+embedded in these modules.
+
+The prestart counter advances on source display-stage calls, after the CPU
+update: ten ordinary solo calls, fifty other solo calls or forty-six two-player
+calls. Phase650 and simulation648 remain distinct. Countdown retraction precedes
+charge decrement, and launch power uses actual pressedB58 edges and independent
+latch bytes. The new charge15 transition opens the clock after that frame's
+earlier timing pass; the following pass adds50ms. No high-resolution render
+callback advances these numeric producers.
+
+Prepared original-instruction comparisons for the new consumers:
+
+| Consumer | Exact cases |
+| --- | ---: |
+| Selective reset75310 before its terminal | 126 |
+| Complete EED70 terminal and EE9C0 palette | 870 |
+| Original i1 initializer, dispatcher and complete status body | 6,970 |
+| Countdown/start-boost F03E0 | 6,976 |
+| Status/timer prelude FC39C | 196 |
+| Speed display F23A0 and separate Math_Rand ED304 | 561 |
+| Direction/wrong-way EF504 | 6,196, plus1,834 readonly helper cases |
+| Missed-buoy/power F0E7C with real retirement | 880 |
+| Separate adjacent palette counter block | 210 |
+| Allowed-area warning F1CFC with real retirement | 860 |
+
+The ordinary79528 adapter additionally matches135 complete prepared executions
+over all1693 race and1442 HUD words, including previously untyped retained
+history. The canonical prestart adapters reproduce the same6,970 original
+stage fixtures over23,370,410 owner words; these reuse the stage evidence,
+not additional unique source cases. Nine original reset→terminal→countdown
+sequences cover1,080 repeated source calls with complete state hashes and
+ordered operations. Initial phase1 is an explicit prepared input in that
+sequence proof, not a claim that main initialization has been reconstructed.
+An independent30-case ownership/table-offset/halfword/roundtrip review found
+no further concrete defect.
+
+F1CFC's actual eligibility halfword is missesEnabled72e, not configuredLaps728.
+Its counter1 reaches0 before retirement on the next call; source actors23/7
+freeze an existing warning. F0E7C animates allowed misses through the configured
+limit and can retire after its actual17-call feedback delay. It also preserves
+the separate power1 interruption and power0 expiration. EF504 reads prior2c60
+before its later wrong-way increment/audio. Its exact512-word readonly angle
+table remains an explicit input, without an acos/atan2 replacement. F23A0
+updates canonical2c00/2c04 and carries its own16-bit seed6f00 in racer order;
+it does not consume the32-bit AI initialization RNG.
+
+All144 added tests pass. The complete suite is1,822/1,833 in117.97s, with the
+same eleven failure names as the preceding completed run. All241 module
+versions are regenerated in the three HTML import maps. Browser imports
+reproduce a prepared120-call startup sequence, ending with phase3, clock open
+and independently timed powers[5,4,1,0]. The retained native two-player preview
+is still High1280×720 at11.05s, tick1105/frame221, with matching positions,
+both contact impacts and all49,152 water heights (hash2879715165). Detailed
+physical riders, water and shoreline remain visible; the child console is
+clear and the parent retains only its existing favicon404.
+
+The new leaves are connected through canonical prepared-state adapters, not
+enabled as a complete live startup. Required source-stage transition recipes,
+remaining retained placement/indicator consumers, original main/update
+initialization, physical grid/start actor15, source camera/current-object
+producers and shared32-bit RNG/AI scheduling remain open. The adjacent palette
+helper covers its numeric counter block only, not original drawing. Mode11
+stunt scoring, all venue/mode sign-offs, the eleven existing course failures
+and hardware checks also remain. The modern high-resolution renderer and
+existing native preview admission are unchanged. No original executable bytes
+or artwork are published, no money was spent, and this checkpoint is local.
