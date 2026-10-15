@@ -1,15 +1,14 @@
-const TAU=Math.PI*2;
+import {stepRiderTricks} from './stunts.js';
 export function demoFlipInput(r,input){
  const h=r.hydro,s=r.stunt;
  const ready=r.raceTime>(s.nextDemoFlip??(12+r.id*4));
  const clearance=Math.max(0,h.y-h.waterHeight),flight=(h.vy+Math.sqrt(h.vy*h.vy+19.62*clearance))/9.81;
  // A dropping trough can leave enough airtime even after upward speed fades.
- const safe=ready&&h.airborne&&h.vy>0&&clearance>.5&&flight>.98&&h.airTime<.35;
+ const safe=ready&&h.airborne&&h.vy>0&&clearance>.5&&flight>1.15&&h.airTime<.35;
  if(safe&&!s.trick)s.nextDemoFlip=r.raceTime+30+r.id*4;
- return safe||s.trick?{...input,trick:'flip'}:input;
+ return safe||s.trick&&Math.abs(s.angle)<6.2?{...input,trick:'flip'}:input;
 }
-// One optional rotation per jump. Incomplete rotations lose speed on landing.
-export function stepRaceFlip(r,input,dt){const s=r.stunt,h=r.hydro;
- if(h.airborne){s.airDuration+=dt;if(!s.trick&&!s.flipUsed&&input.trick==='flip'){s.trick='flip';s.angle=0;s.flipUsed=true;}if(s.trick)s.angle=Math.min(TAU,s.angle+dt*8.5);}
- if(h.landingId!==s.lastLanding){s.lastLanding=h.landingId;if(s.trick){if(s.angle>=TAU-.08){s.tricks++;s.completedTricks.flip=true;r.event='CLEAN WAVE FLIP';}else{r.vx*=.65;r.vz*=.65;r.recover=.45;s.crashes++;r.event='ROUGH FLIP LANDING';}r.eventTime=r.raceTime;s.trick=null;s.angle=0;}s.flipUsed=false;s.airDuration=0;}
+export function stepRaceFlip(r,input,dt){const s=r.stunt,eventId=s.eventId;
+ stepRiderTricks(s,r,input,dt,{scoring:false});
+ if(s.eventId!==eventId){r.event=s.event;r.eventTime=r.raceTime;}
 }
