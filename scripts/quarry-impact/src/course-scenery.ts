@@ -80,15 +80,15 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
  }
  // Build excluded decoration normally, then discard only its geometry. This
  // preserves the random sequence and all distant scenery placements.
- function decorateDunes(x:number,z:number,r:number,build:()=>void){
-  const excluded=theme==='dunes'&&[[-249.5,-91.5,34.5,19.5],[-247,-59,9,23]].some(([cx,cz,w,d])=>Math.abs(x-cx)<w+r*1.2&&Math.abs(z-cz)<d+r*1.2);
+ function decorateLandmarks(x:number,z:number,r:number,build:()=>void){
+  const excluded=(theme==='dunes'?[[-249.5,-91.5,34.5,19.5],[-247,-59,9,23]]:theme==='canal'?[[0,26,27,14],[-27,12,8,13],[10,10,13,6]]:[]).some(([cx,cz,w,d])=>Math.abs(x-cx)<w+r*1.2&&Math.abs(z-cz)<d+r*1.2);
   if(!excluded){build();return;}
   const lengths=new Map([...batches].map(([key,b])=>[key,b.matrices.length])),placed=placements.length,cards=treeCards.length;
   build();placements.length=placed;treeCards.length=cards;
   for(const[key,b]of batches){const length=lengths.get(key);if(length===undefined)batches.delete(key);else{b.matrices.length=length;b.colors.length=length;}}
  }
- function tree(x:number,z:number,size:number,pine:boolean){decorateDunes(x,z,size*(pine?.3:.48),()=>treeShape(x,z,size,pine));}
- function rock(x:number,z:number,size:number){decorateDunes(x,z,size*.75,()=>rockShape(x,z,size));}
+ function tree(x:number,z:number,size:number,pine:boolean){decorateLandmarks(x,z,size*(pine?.3:.48),()=>treeShape(x,z,size,pine));}
+ function rock(x:number,z:number,size:number){decorateLandmarks(x,z,size*.75,()=>rockShape(x,z,size));}
  function treeShape(x:number,z:number,size:number,pine:boolean){
   if(theme==='port'&&(z>160||(Math.abs(x)<225&&Math.abs(z)<180)))return;
   const r=size*(pine?.3:.48);

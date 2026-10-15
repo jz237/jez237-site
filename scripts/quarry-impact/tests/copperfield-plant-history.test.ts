@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readCopperfieldPlantPrevious,restoreCopperfieldPlantBytes,verifyCopperfieldPlantRevision} from './copperfield-plant-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreMillbrookMillBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('CopperfieldPlant preserves every prior fixture, vehicle asset, control and camera input',verifyCopperfieldPlantRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/copperfield-plant/revision.json').toString());
@@ -10,3 +10,5 @@ test('the successor bridge restores full predecessors and does not conceal later
  }
  const unknown=Buffer.from('unknown');assert.deepEqual(restoreCopperfieldPlantBytes('src/unknown.ts',unknown),unknown);
 });
+
+import {restoreMillbrookMillBytes} from './millbrook-mill-invariants';
