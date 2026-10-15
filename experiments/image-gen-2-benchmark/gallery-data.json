@@ -21148,5 +21148,110 @@
       "imageSha256": "ff318919f57dd89f8ed63ab69d5c14021c41c57b05b4b781fa2d9666c4fcd969",
       "imageDHash": "15099e322b3d59f7"
     }
+  },
+  {
+    "id": "2026-10-15-factual-infographic-factual-infographic-appendicitis-the-in",
+    "title": "Factual infographic: Appendicitis — The Inflamed Cul-de-sac",
+    "tests": "factual_subtype: medical-health-infographic; claim-level NIDDK/NHS evidence; organic anatomical composition; no non-Monday subjective review; archive_slot=2026-10-15T02:20; concept=appendicitis-inflamed-appendix-abdominal-pain; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=high, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished, artwork-led medical infographic, directly on the canvas, not a photographed poster or book, no frames or props. Title: “APPENDICITIS”. Subtitle: “When the appendix becomes inflamed”. A refined contemporary anatomical atlas in translucent watercolor, luminous gouache and hairline technical ink on a very pale cool ivory ground. Organic asymmetric composition, generous breathing room, outstandingly detailed but non-gory clinical illustration. Palette: muted blue-gray surrounding bowel, warm rose healthy tissue, focused vermilion inflammation, deep navy typography, restrained amber urgency. No boxed dashboard, uniform grid, detached fact cards, decorative molecules, invented microscopic structures, bibliography, URLs, logos or watermark. The art carries the explanation.\n\nMake a large, sculpturally shaded ileocecal anatomical cutaway the dominant central-to-right subject: show the bowel's first pouch and attached small blind-ended appendix, connected anatomically rather than floating. Render delicate translucent tissue, gently folded outer contours, a clear cut face and the appendix's narrow internal channel, with believable soft directional light. Show the appendix inflamed and swollen, visibly redder than adjacent muted bowel. An open curved enlargement follows its silhouette, revealing the narrowed lumen and inflamed wall. Label only “Appendix”, “Inflamed wall”, “Narrow channel”. Nearby a short caption reads “A blockage can contribute; the cause is often unclear.” Do not depict blockage as a universal cause, inevitable rupture, a literal explosion, or unsupported stages of infection. An unobtrusive stippled connector links this hero to an anterior torso study at upper left. Ensure patient-right is viewer-left in the front-facing torso, clearly labeled “Your right”; the appendix must sit on that side, not a mirrored location. The torso is a neutral adult anatomical silhouette, dignified and not sexualized. A soft curved amber-to-red arrow goes from the navel to the patient's lower-right abdomen, explicitly labeled “Pain may move here”. Adjacent open text: “Often starts near the belly button, then moves lower right.” and “May worsen over hours, with movement or coughing.” A compact readable note beneath: “Symptoms and pain location can vary.” Treat this as a possible symptom path, not an anatomical migration of the appendix.\n\nWeave three concise symptom phrases into open negative space near the pain arc: “Loss of appetite”, “Nausea or vomiting”, “Fever”. No mandatory fever, no diagnostic certainty. Below the main anatomy, the flowing leader-line path opens into restrained clinical care text rather than another panel: heading “Assess urgently”; text “Examination, blood and urine tests; ultrasound or CT may help.” Follow with “No single test always confirms it. Other conditions can cause similar pain.” Then heading “Treatment in hospital”; text “Usually appendix removal + antibiotics.” Smaller but clearly legible supporting line: “Selected mild cases may use antibiotics alone under medical supervision.” No prescription doses or self-treatment advice, no claim antibiotics always cure it.\n\nUse the lowest sweep of the composition for a visually prominent but elegant vermilion open rule and urgent warning, readable at a glance: “Suspect appendicitis? Get medical care immediately.” Below: “Severe belly pain, confusion or trouble breathing: seek emergency care.” Connect a fine red leader to the hero with a brief qualified consequence: “A burst appendix can cause serious infection.” This is risk context, not a guaranteed time course. Finish with a small readable footer: “General education — not a diagnosis.” Use exquisite accurate anatomical contours, subtle watercolor blooms around tissue margins, nuanced shading and exceptionally crisp well-spaced type. Keep all listed essential clinical text clear. If space is tight, omit ornamental flourishes rather than clinical warnings. This should feel like a striking anatomical artwork that teaches, not a wall of paragraphs. No statistics, age-risk claims, treatments, labels or biological mechanisms beyond those specified. Portrait-oriented visual flow if natural, with canvas size chosen automatically.",
+    "image": "images/2026-10-15-factual-infographic-factual-infographic-appendicitis-the-in.jpg",
+    "thumb": "thumbs/2026-10-15-factual-infographic-factual-infographic-appendicitis-the-in.webp",
+    "color": "#ddd1cb",
+    "date": "2026-10-15",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "appendicitis-inflamed-appendix-abdominal-pain",
+      "imageSha256": "eb0e6713712ff94d135545f9750bfd5879557ea469aa3ac11b44b14ef47098df",
+      "imageDHash": "d89c94bcdc8c869a"
+    },
+    "factualInfographic": {
+      "topic": "How appendicitis inflames the appendix, produces evolving abdominal pain, and requires urgent evaluation and treatment",
+      "description": "An artwork-led anatomical explanation of appendicitis, variable symptoms, urgent assessment and evidence-based treatment.",
+      "sourceNote": "NIDDK symptoms/causes: https://www.niddk.nih.gov/health-information/digestive-diseases/appendicitis/symptoms-causes ; NHS appendicitis guidance: https://www.nhs.uk/conditions/appendicitis/ ; NIDDK treatment: https://www.niddk.nih.gov/health-information/digestive-diseases/appendicitis/treatment . Verified appendix anatomy, possible causes, variable symptoms, complications, urgent escalation, diagnostic limits and treatment options.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-15T06:21:03.968701+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Diabetes and Digestive and Kidney Diseases",
+            "title": "Symptoms & Causes of Appendicitis",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/digestive-diseases/appendicitis/symptoms-causes"
+          },
+          {
+            "id": "S2",
+            "publisher": "National Health Service",
+            "title": "Appendicitis",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/appendicitis/"
+          },
+          {
+            "id": "S3",
+            "publisher": "National Institute of Diabetes and Digestive and Kidney Diseases",
+            "title": "Treatment for Appendicitis",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/digestive-diseases/appendicitis/treatment"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The appendix is a small pouch attached to the bowel in the lower right abdomen; appendicitis means an infected, swollen appendix.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Blockage by hardened stool or enlarged tissue in the appendix wall are possible causes; in many cases the cause is unclear.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Abdominal pain may start around the belly button, move to the lower right, worsen over hours and worsen with movement or coughing.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Loss of appetite, nausea or vomiting and fever may occur; not everyone has typical symptoms or pain location.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Untreated appendicitis can lead to a burst appendix, peritonitis, abscess or sepsis; these are possible complications, not inevitable outcomes.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Suspected appendicitis requires immediate medical assessment; severe abdominal pain, confusion or difficulty breathing require emergency care.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Diagnosis uses clinical assessment and may include blood and urine tests, ultrasound or CT; no single test always identifies appendicitis and other conditions can cause similar pain.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Usual treatment is surgical removal of the appendix (appendectomy), with antibiotics; selected mild cases may be treated with antibiotics alone under medical supervision, but surgery remains standard care.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
