@@ -10,7 +10,7 @@ export function makeFoamField(renderer,common,uniforms){
  const material=new T.ShaderMaterial({uniforms:u,depthTest:false,depthWrite:false,vertexShader:'varying vec2 uvP;void main(){uvP=uv;gl_Position=vec4(position.xy,0.,1.);}',fragmentShader:common+wetSandGLSL+foamLifeGLSL+`
  uniform sampler2D previousFoam,terrainMap;uniform vec2 foamCenter,previousCenter;uniform float historyByte,historyFrame,foamSpan,previousSpan,foamDt,foamReady,customTerrain,terrainSpan;varying vec2 uvP;
  float floorDepth(vec2 p){vec2 rg=texture2D(terrainMap,clamp(p/terrainSpan+.5,vec2(0.),vec2(1.))).rg;return -16.+dot(rg,vec2(256.,1.))/257.*100.;}
- void main(){vec2 p=(uvP-.5)*foamSpan+foamCenter;vec3 movingSurface=waveSurface(p);float bed=floorDepth(p);
+ void main(){vec2 p=(uvP-.5)*foamSpan+foamCenter;vec3 movingSurface=oceanSurface(p);float bed=floorDepth(p);
  vec2 terrainSlope=vec2(floorDepth(p+vec2(1.,0.))-floorDepth(p-vec2(1.,0.)),floorDepth(p+vec2(0.,1.))-floorDepth(p-vec2(0.,1.)))*.5;
  float shallow=1.-smoothstep(.25,2.,seaLevel+movingSurface.x-bed);
  vec2 drift=gustAt(p,time,storm).xy*.05-movingSurface.yz*(.55+.35*smoothstep(.1,1.4,movingSurface.x))-terrainSlope*shallow*.9;
@@ -20,15 +20,15 @@ export function makeFoamField(renderer,common,uniforms){
  vec2 beachUV=(p-previousCenter)/previousSpan+.5;
  float beachInside=step(0.,beachUV.x)*step(beachUV.x,1.)*step(0.,beachUV.y)*step(beachUV.y,1.);
  vec2 oldBeach=texture2D(previousFoam,beachUV).ba*beachInside*foamReady;
- vec2 q=swellInverse(p);float h;vec2 shift,grad;mat2 J;swellAt(q,h,shift,grad,J);float compression=1.-(J[0][0]*J[1][1]-J[0][1]*J[1][0]);
+ float compression=0.;if(nativeWaterActive==0){vec2 q=swellInverse(p);float legacyHeight;vec2 shift,grad;mat2 J;swellAt(q,legacyHeight,shift,grad,J);compression=1.-(J[0][0]*J[1][1]-J[0][1]*J[1][0]);}
  // Include the same variable surf sets that lift the hulls and rendered water.
- vec3 surface=waveSurface(p);h=surface.x;
+ vec3 surface=oceanSurface(p);float h=surface.x;
  vec2 direction=normalize(surface.yz+vec2(.001));
- float curvature=h*2.-waveSurface(p+direction*1.5).x-waveSurface(p-direction*1.5).x;
+ float curvature=h*2.-oceanSurface(p+direction*1.5).x-oceanSurface(p-direction*1.5).x;
  float crest=smoothstep(.018,.13,curvature)*smoothstep(.25,1.15,h)
   *smoothstep(.10,.32,length(surface.yz));
  // Whitecaps from compressed wind-sea crests leave short-lived patches downwind.
- float whitecap=smoothstep(.2,.32,compression)*smoothstep(-.1,.3,h);
+ float whitecap=(nativeWaterActive!=0?0.:1.)*smoothstep(.2,.32,compression)*smoothstep(-.1,.3,h);
  float bottom=floorDepth(p),depth=height(p)-bottom;
  float breaker=customTerrain*(1.-smoothstep(.3,2.1,depth))*smoothstep(.01,.18,depth)
   *(.28+.72*smoothstep(-.1,.7,h));

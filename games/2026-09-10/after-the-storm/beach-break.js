@@ -6,6 +6,8 @@ import {SURF_BANDS,surfStrength} from './surf-waves.js';
 import {cloudGLSL} from './weather-light.js';
 import {panoramaGLSL} from './sky-panorama.js';
 import {sprayUniforms,sprayVertex,sprayFragment} from './spray-light.js';
+import {currentRaceWater} from './race-water.js';
+import {nativeWaterSurfaceGLSL} from './native-water-surface.js';
 // Visual beach break. Crests of the shared swell that reach a beach's break line
 // steepen, throw a lip, plunge and run up the sand as whitewater, then drain back.
 // Nothing here feeds hulls, buoyancy or race rules: the water surface is unchanged.
@@ -22,6 +24,27 @@ export function boreFront(up,slope,H,tb){if(tb<0)return Infinity;const h0=boreDe
 export const boreTime=(up,slope,H)=>2*(Math.sqrt(slope*up+boreDepth(H))-Math.sqrt(boreDepth(H)))/(slope*Math.sqrt(G));
 export const runup=(H,slope)=>clamp(.55*H/slope,1.2,12);
 export const swashTime=H=>2.2+.9*H;
+
+// Native water is a mutable current field, not an analytic function of query
+// time. Learn only observations that really existed, once per field revision.
+// Twelve seconds at the source20Hz rate fit in241 entries. No solver/RNG state
+// is read or advanced, and repeated/paused render frames supply no new samples.
+export function createBeachWaterHistory(){return {samples:[],sum:0,mean:0,env:.05,lastTime:null,lastRevision:null,pending:null};}
+export function recordBeachWater(history,time,eta,revision){
+ if(!Number.isFinite(time)||!Number.isFinite(eta)||!Number.isSafeInteger(revision)||revision<0)throw new TypeError('Invalid observed beach water sample');
+ if(history.lastTime!==null&&(time<history.lastTime||revision<history.lastRevision))Object.assign(history,createBeachWaterHistory());
+ if(time===history.lastTime||revision===history.lastRevision)return history;
+ const samples=history.samples,previous=samples.at(-1),before=samples.at(-2),elapsed=previous?time-previous[0]:0;
+ if(previous&&revision!==previous[2]+1)history.pending=null;
+ samples.push([time,eta,revision]);history.sum+=eta;
+ while(samples.length>241||samples[0][0]<time-12)history.sum-=samples.shift()[1];
+ history.mean=history.sum/samples.length;history.env=Math.max(.05,eta-history.mean,history.env*Math.exp(-elapsed/14));
+ if(before&&previous[2]===before[2]+1&&revision===previous[2]+1&&previous[1]>before[1]&&previous[1]>=eta){
+  const peak={time:previous[0],crest:previous[1]-history.mean,env:history.env};
+  if(!history.pending||peak.crest>history.pending.crest)history.pending=peak;
+ }
+ history.lastTime=time;history.lastRevision=revision;return history;
+}
 
 // Waterline crossings on a 2 m grid, kept about 6 m apart. Each point carries its
 // landward normal and nearshore slope; walls, cliffs, rocks and enclosed pans are skipped.
@@ -59,6 +82,13 @@ vec2 breakerSection(float v,float c,float h){
 }`;
 const vertexCommon=`uniform float time,storm,seaLevel;
 ${swellGLSL}
+${nativeWaterSurfaceGLSL}
+float beachWaterHeight(vec2 p){
+ float resultHeight=seaLevel;
+ if(nativeWaterActive!=0)resultHeight=nativeWaterSurface(p).x;
+ else resultHeight+=waveSurface(p).x;
+ return resultHeight;
+}
 uniform float t0,H,tc,life;
 attribute vec4 colA,colB;
 varying vec3 vWorld;varying float vAlpha,vTau;`;
@@ -84,7 +114,7 @@ void main(){
  vec2 base=S-n*uc;
  vec2 sec=breakerSection(rowV,c,h)+vec2(k*.5*H,0.),a=breakerSection(max(0.,rowV-.012),c,h),b=breakerSection(min(1.,rowV+.012),c,h);
  vec2 d=normalize(b-a+vec2(1e-5,0.)),nn=vec2(d.y,-d.x);
- vWorld=vec3(base.x+n.x*sec.x,seaLevel+waveSurface(base).x+sec.y-.05,base.y+n.y*sec.x);
+ vWorld=vec3(base.x+n.x*sec.x,beachWaterHeight(base)+sec.y-.05,base.y+n.y*sec.x);
  vNormal=normalize(vec3(n.x*nn.x,nn.y,n.y*nn.x));
  vV=rowV;vC=c;vK=k;vTau=tau;vHeight=sec.y/max(H*edge,.05);
  // Small lagoon waves spill without a visible curl; the curl fades in and out in time.
@@ -133,7 +163,7 @@ void main(){
  float front=tb<0.?1e4:(pow(max(d0-k*tb,sqrt(h0)),2.)-h0)/slope,tShore=(d0-sqrt(h0))/k,ts=tb-tShore,tsw=2.2+.9*H;
  float reach=ts>0.?clamp(.55*H/slope,1.2,12.)*sin(3.14159265*clamp(ts/tsw,0.,1.)):0.;
  vec2 p=S-n*rowU;
- float water=seaLevel+waveSurface(p).x;
+ float water=beachWaterHeight(p);
  float fade=exp(-max(tb,0.)*.2);
  float roller=(.42*H+.3*H*exp(-tb*1.5))*fade*exp(-pow((rowU-front)/(.7+.4*H),2.))*step(0.,tb)*step(0.,rowU);
  float swash=rowU<0.?step(-reach,rowU)*(.03+.05*H*(1.-clamp(-rowU/max(reach,.1),0.,1.))):0.;
@@ -200,15 +230,22 @@ function makeRibbon(scene,shared){
 }
 
 export function makeBeachBreak(scene,ocean,{count=12}={}){
- const shared=ocean?.mat?.uniforms||{},ribbons=Array.from({length:count},()=>makeRibbon(scene,shared)),tiles=new Map();
+ const shared={nativeWaterActive:{value:0},nativeWaterHeights:{value:null},nativeWaterScale:{value:.025},nativeWaterInverseScale:{value:40},nativeWaterDatumNative:{value:0},...ocean?.mat?.uniforms},ribbons=Array.from({length:count},()=>makeRibbon(scene,shared)),tiles=new Map();
  // Plunge spray: pooled droplets shaded like the hull spray.
  const dropCount=1600,xyz=new Float32Array(dropCount*3),alpha=new Float32Array(dropCount),size=new Float32Array(dropCount),drops=Array.from({length:dropCount},()=>({life:0,max:1,vx:0,vy:0,vz:0,size:0}));
  const dropGeo=new T.BufferGeometry();dropGeo.setAttribute('position',new T.BufferAttribute(xyz,3));dropGeo.setAttribute('alpha',new T.BufferAttribute(alpha,1));dropGeo.setAttribute('size',new T.BufferAttribute(size,1));
  const spray=new T.Points(dropGeo,new T.ShaderMaterial({uniforms:sprayUniforms,vertexShader:sprayVertex,fragmentShader:sprayFragment,transparent:true,depthWrite:false}));
  spray.frustumCulled=false;spray.userData.skipRefraction=spray.userData.skipReflection=true;scene.add(spray);
  let ground=null,rocks=[],enabled=false,previous=null,scan=0,seed=1,dropIndex=0,limit=count;
+ let waterContext=null,nativePoints=[],lastNativeRevision=null;
  const random=()=>(seed=(Math.imul(seed,1664525)+1013904223)>>>0)/4294967296;
  const stats={shorePoints:0,emitted:0,active:0,tiles:0,lastHeight:0};
+ function clearWaterHistory(){for(const tile of tiles.values())for(const p of tile.points){delete p.nativeHistory;p.seen=false;}nativePoints=[];lastNativeRevision=null;}
+ function observeNative(p,t,storm,source){
+  const u=clamp(.9/p.slope,3,24),bx=p.x-p.nx*u,bz=p.z-p.nz*u,field=source.field??source;
+  const eta=wave(bx,bz,t,storm)-field.datumNative*source.scale;
+  recordBeachWater(p.nativeHistory??=createBeachWaterHistory(),t,eta,source.revision);
+ }
  function tileAt(tx,tz,build){
   const key=tx+','+tz,level=waterLevel.value;let tile=tiles.get(key);
   if((!tile||Math.abs(tile.level-level)>.12)&&build){tile={level,points:scanShoreTile(ground,level,tx,tz,rocks)};tiles.set(key,tile);stats.tiles=tiles.size;return {tile,built:true};}
@@ -289,28 +326,35 @@ export function makeBeachBreak(scene,ocean,{count=12}={}){
  return {
   stats,ribbons,spray,
   reset(course){
-   tiles.clear();ground=course.renderGround||course.ground;rocks=(course.rocks||[]).filter(r=>!r.type||r.type==='rock');enabled=!NO_BEACH.includes(course.theme);previous=null;scan=0;seed=7;
+   tiles.clear();ground=course.renderGround||course.ground;rocks=(course.rocks||[]).filter(r=>!r.type||r.type==='rock');enabled=!NO_BEACH.includes(course.theme);previous=null;scan=0;seed=7;waterContext=null;nativePoints=[];lastNativeRevision=null;
    for(const r of ribbons){r.curl.visible=r.carpet.visible=false;r.t0=-1e4;r.sprays.length=0;}
    for(const d of drops)d.life=0;alpha.fill(0);dropGeo.attributes.alpha.needsUpdate=true;
    Object.assign(stats,{shorePoints:0,emitted:0,active:0,tiles:0,lastHeight:0});
   },
   update(t,storm,camera,quality='high',forward=null){
    if(!ground)return;
+   const source=currentRaceWater(),context=source?.field??(source?'presentation':null),rewind=previous!==null&&t<previous;
+   if(context!==waterContext||rewind||source&&lastNativeRevision!==null&&source.revision<lastNativeRevision){clearWaterHistory();waterContext=context;}
+   if(rewind){scan=0;for(const r of ribbons){r.curl.visible=r.carpet.visible=false;r.sprays.length=0;}for(const d of drops)d.life=0;}
    const dt=previous===null?0:clamp(t-previous,0,.2);previous=t;limit=Math.min(count,quality==='low'?4:quality==='medium'?8:12);
+   if(source&&dt>0&&source.revision!==lastNativeRevision){for(const p of nativePoints)observeNative(p,t,storm,source);lastNativeRevision=source.revision;}
    for(const r of ribbons)if((r.curl.visible||r.carpet.visible)&&t-r.t0>r.life){r.curl.visible=r.carpet.visible=false;r.sprays.length=0;}
-   if(enabled&&(scan+=dt)>=.1){
+   if(enabled&&dt>0&&(scan+=dt)>=.1){
     // Bounded work per scan: a few newly visible points learn their swell, one breaker spawns.
     // A frame that scanned a new shoreline tile leaves the crest scan to the next frame.
     const points=nearby(camera,forward);
     if(points){const step=scan;scan=0;let learned=0,spawned=0;
+    if(source){nativePoints=points;for(const p of points)observeNative(p,t,storm,source);}
     for(const p of points){
-     const u=clamp(.9/p.slope,3,24),bx=p.x-p.nx*u,bz=p.z-p.nz*u,eta=wave(bx,bz,t,storm)-waterLevel.value;
+     const u=clamp(.9/p.slope,3,24),bx=p.x-p.nx*u,bz=p.z-p.nz*u;let crest,peak,envelope;
+     if(source){const observed=p.nativeHistory.pending;p.nativeHistory.pending=null;if(!observed)continue;crest=observed.crest;peak=true;envelope=observed.env;}
+     else{const eta=wave(bx,bz,t,storm)-waterLevel.value;
      // A point entering view learns its local swell from the previous 12 s, so the
      // first breaker is a real set crest rather than a capillary ripple.
      if(!p.seen){if(learned++>=4)continue;p.seen=true;let sum=0,top=-Infinity;for(let k=1;k<=24;k++){const e=wave(bx,bz,t-k*.5,storm)-waterLevel.value;sum+=e;top=Math.max(top,e);}p.mean=sum/24;p.env=Math.max(.05,top-p.mean);p.eta=[eta,eta];continue;}
      p.mean+=(eta-p.mean)*(1-Math.exp(-step/10));p.env=Math.max(eta-p.mean,p.env*Math.exp(-step/14));
-     const crest=p.eta[0]-p.mean,peak=p.eta[0]>p.eta[1]&&p.eta[0]>=eta;p.eta=[eta,p.eta[0]];
-     if(spawned||!peak||crest<.04||crest<.45*p.env||t<p.next)continue;
+     crest=p.eta[0]-p.mean;peak=p.eta[0]>p.eta[1]&&p.eta[0]>=eta;p.eta=[eta,p.eta[0]];envelope=p.env;}
+     if(spawned||!peak||crest<.04||crest<.45*envelope||t<p.next)continue;
      const active=ribbons.filter((r,i)=>i<limit&&r.curl.visible);
      if(active.some(r=>Math.hypot(r.x-p.x,r.z-p.z)<18&&t-r.t0<r.uniforms.tc.value+1.2))continue;
      const free=ribbons.find((r,i)=>i<limit&&!r.curl.visible&&!r.carpet.visible);if(!free)break;
