@@ -83,6 +83,7 @@ conversion, obstacle contact and ordinary-input traversal still need calibration
 | Best complete time-trial ghost | Measured hull position/heading/attitude at 20 Hz, bounded compressed storage, interpolation, compatible course revision/class/laps/rider/tuning/sea/seed, best total-time retention. Visual only: no physics, wakes, collision or progress. Matching starts reuse the recorded wave seed. |
 | Ghost persistence and visibility | Portable saves include a bounded library of nine setups, visibility preference, erase/undo. Old saves gain defaults; malformed imports are rejected before replacement. |
 | Horizontal and vertical two-player display | Exact physical-pixel partitions, matching cameras/refraction/HUD/pointer orbit and independently clipped lens effects. No graphics quality reduction is forced by the layout. |
+| Separate player windows | One authoritative host, full-resolution Player 2 presentation and controls, shared pause/restart, bounded snapshot delivery, reconnect and safe paused split fallback. Actual OS minimization and physical controllers remain unverified. |
 | Two-player Dolphin Park | Untimed exploration with normal water/stunt physics, both riders, same-rider alternate livery, independent cameras, pause/restart. No racing gate/DQ/lap-finish logic. |
 | Independent Player 2 stunts and dive | Gamepad modifier controls and numpad 1–7 / apostrophe defaults; both riders can use the same mechanics. |
 | Remappable controls | Bounded per-player keyboard/button/axis settings, inversion, 0–35% deadzone with 5% default, conflict checks, safe key capture and defaults reset. Touch actions remain independent of physical-key rebinding. |
@@ -132,16 +133,19 @@ Local browser verification at High graphics confirmed:
    Faster steering-driver probes alone cannot traverse the current City geometry
    within the original schedule while retaining all rings. Do not conceal that
    mismatch with longer timers or simply make the route impossible.
-2. Finish Southern's source-based geography and stunt replacement. Glacier now
-   uses the recovered floors, shores, fixed hazards and fourteen-ring layout;
-   exact handling, full-ring mastery and visual sign-off remain outstanding.
+2. Complete source-course comparison after the integrated Southern and Glacier
+   replacements. Both now use recovered geometry and source Stunt schedules;
+   exact handling and visual sign-off remain outstanding, as does Glacier
+   full-ring mastery.
 3. Calibrate exact scoring/penalties and motion against the recovered control
    transitions, training lesson progression, dolphin unlock timing,
    race conditions, course hazards, opponent behavior and handling against the
    recovered code and actual reference play. Existing broad coverage is not proof
    of exact parity.
-4. Implement and verify the native separate-player-window equivalent and any
-   remaining relevant installed enhancements. Account-backed achievements need
+4. Assess any remaining relevant installed enhancements and physical-controller
+   verification. Separate-window suspension has controlled-visibility and real
+   event-loop-stall coverage; OS minimization controls are unavailable here.
+   Account-backed achievements need
    separate scope/access assessment; no credentials or paid service are assumed.
 5. Complete all-class ordinary-input course comparison, full regression checks,
    browser save/reload/control/ghost flows and hardware verification where
@@ -317,14 +321,13 @@ an arcade mean near 32 m/s² before water and damping; it must not silently be
 replaced with an assumed 9.81 calibration in the future source-physics port.
 The logical clock has not yet been compared to measured reference wall time.
 
-Southern's numeric reconstruction is prepared separately in
-`source-southern-course.js`, with integration explicitly disabled pending
-navigation and ramp-profile validation. The source selector previously called
-race/stunt in intermediate private notes is **player count**. Southern has two
-additional fixed mast-base spheres in single player, including Stunt, absent
-in two player; its 26 hidden XZ spheres follow the water datum in both layouts.
-The ordinary Reverse class retains the ordinary pier ramp. The current live
-Southern ship and generic Stunt route still require replacement.
+Southern's numeric reconstruction is now integrated; the October 15 section below
+supersedes the earlier disabled module and illustrated geography. The source
+selector previously called race/stunt in intermediate private notes is **player
+count**. Southern has two additional fixed mast-base spheres in single player,
+including Stunt, absent in two player; its 26 hidden XZ spheres follow the water
+datum in both layouts. Reverse retains the ordinary pier ramp.
+
 
 
 Independent review also corrected the interim contact response's conversion
@@ -345,3 +348,116 @@ progression, original-allowance Glacier inspection, breakable shared/replay
 state, source geometry, prepared hull/water components and Southern numeric
 fixtures. Source parity and production publication remain pending the remaining
 items above; these tests do not establish original runtime equivalence.
+
+
+## Southern source integration and player windows — October 15, 2026
+
+The live Southern course uses the unrotated conditional .025 scale for every
+source center, direction, plane, fixed volume and Stunt item. It replaces the
+illustrated-map shoreline, floating above-water ship box, authored 4.2 m BOAT JUMP
+and generic 38-second Stunt route. Layout revision 2 separates its records and
+ghosts. No original rendered assets, raw executable or recovered pseudocode
+are distributed.
+
+All 59 finite shoreline edges were independently matched to their raw source
+rows and outward normals. Their consumer is height-independent: XZ hull points
+collide even while airborne. They are separate from sea datum and rendering.
+The long 45-edge ribbon is a narrow raised structure at observed top Y=50, with
+small island accents. Modern vegetation,
+materials, distant scenery and detailed riders remain in use.
+
+All 305 source planes remain: 287 upward faces and 18 side/downward bow faces.
+A further 17 fixed runtime projection volumes supply the submerged ship hull,
+full deck, pier sections and finish posts. This corrects the earlier inference
+that no grid plane beneath ring3 meant no deck collision. The deck volume spans
+native X=125..450, Z=-5150..-4550, Y=-700..-50. The visible deck is fixed at Y=-50;
+it does not follow the tide. Independent modern hull/cabin/mast artwork uses
+these measured bounds without copying the original display list.
+
+The ordinary ramp has three finite projection volumes and keeps raw heading 45
+in every class including Reverse. Stunt uses the source 33/308-degree pair.
+The source axes are slightly nonorthogonal; dual-coordinate intersections
+preserve all interval tests instead of assuming a perfect rotation matrix.
+The three source upper-point side-contact exclusions are retained. Flagged
+ramp/reef contacts retain physical response while reporting 40% impact strength.
+The live impulse remains an explicitly interim rigid-craft response; native
+pointwise projection, including outgoing velocity in volumes, is not claimed.
+
+Source tide starts at zero and follows a shared **human** completed-lap latch:
+first lap completion lowers toward -100, second toward -150, in discrete one-unit
+outer updates. AI laps cannot trigger it; either human can in two player. Stunt
+retains initial water. The browser maps the outer update to its conditional 20 Hz
+logical-clock policy; reference wall-time calibration remains outstanding.
+Source mainstate 0x66/67 initializes -150 for a special post-race four-rider
+Southern presentation, not ordinary Time Trial. It must not alter Time Trial's
+initial datum. Recovery rejects source shores, shallow floors and solid volumes
+without deleting earned race/Stunt progress.
+
+The Southern Stunt layout has ten source rings at absolute Y=0/60, four actual
+checkpoint rows 1/2/5/0 and 20/15/20/15-second allowances. Raw type 8 guides are
+unscored. Authored steering targets only issue helm inputs. A default-grid,
+rider 0/seed 17/course-sea run physically collected all ten rings and four
+checkpoints in 54.716667 s. Section times 13.616667/12.233333/16.250000/12.616667 s
+remain below their allowances, with no overtime, crash or DQ. Ring 6/9 navigation
+lines shift along the actual apertures; physical ring centers and radii do not
+move. Independent raw-floor/volume checks cover all 47 route targets.
+
+The same run was rendered at High, 1280x720, approximately 923k triangles and 55 FPS
+in the final measurement window. The partly submerged deck/masts were also
+inspected at 18.583 s after four actual rings, with zero collision. No gameplay
+console errors occurred; the existing favicon 404 remains. Later modern artwork
+changes require the normal final asset/browser refresh.
+
+`native-rider-forces.js` is an isolated preparation for native handling: explicit
+previous-frame joint trim, auxiliary yaw, roll/flip point impulses and held-action
+decisions, with raw arithmetic comparisons. It does not fabricate a physical
+joint or connect itself to live racing. A future adapter must interleave these
+stages with jet, gravity, water and contact in the observed order; appending the
+whole helper after a water pass is not equivalent. Full rider constraints,
+wave-cell data/input conditioning and source action/scoring integration remain.
+
+Separate player windows now keep one authoritative race in the main window and
+give Player 2 its own full-resolution camera, water rendering, HUD and input.
+The child receives bounded presentation snapshots through a checked same-origin
+MessagePort; it cannot step physics or write records. Closing or reloading the
+child pauses the race and restores the split display. Reopening preserves the
+same race, while restarting creates a fresh presentation generation. Replay
+temporarily shows a standby screen in Player 2 and restores its live state.
+
+Browser checks verified two 1280x720 High canvases, independent throttle,
+pause/resume, close/reload, reconnect, restart and replay. A real 1.1-second
+host event-loop stall paused without advancing simulation time or position.
+Controlled visibility tests covered visible-child pumping and suspension when
+both windows are hidden. Actual OS minimization and physical gamepad/rumble
+hardware remain unverified because those controls are unavailable here. Idle
+menu/replay connections now remain healthy beyond the former 20-second timeout;
+fake-clock tests also cover finite loading timeouts and stale-child recovery.
+
+The isolated `native-stunt-scoring.js` state machine reproduces observed pose
+entry/hold/release values, checkpoint-local repeat flags, standing-to-somersault
+transition, landing arc coefficients, ring streaks, checkpoint time rounding
+and delayed finish settlement. Its 26 focused tests and 1,513 private numeric
+comparisons passed. It emits queued awards rather than claiming native popup
+display timing. It is not yet connected to live Stunt scoring: the required
+articulated motion, landing and arc inputs must be supplied first.
+
+The final Southern race pilot passed all four solo classes, all four four-rider
+classes, and the boosted rider 2 Normal championship fixture. Each human
+completed three laps with every gate, zero misses and no DQ. The pilot only
+chooses throttle, steering, braking, trim and damping; choosing inputs leaves
+position, velocity and progress unchanged. Source floor contact and racer
+contact remain active during these checks.
+
+The refreshed browser Stunt run retained all ten rings and four checkpoints in
+54.716667 seconds, with 3,500 points, no crash/DQ/overtime and 2.383333 seconds
+remaining. High 1280x720 reported about 60 FPS and 926k triangles in the final
+window. The ordinary-race tide inspection reached datum -2.5 at 78.4 seconds,
+after the human entered lap 2 with zero misses. The earlier deck/mast inspection
+was repeated after the artwork refresh. No gameplay console errors occurred.
+
+Complete regression initially passed 631/632: the source-route dispatch skipped
+the shared exhibition traffic controller, so Southern's demo pack crowded.
+Restoring the common control-only traffic/flip wrapper fixed that existing
+regression. The targeted demo passed, followed by **632/632 tests in 294.00
+seconds**. This is a checked implementation milestone, not full reference parity
+or a production deployment.

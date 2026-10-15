@@ -177,6 +177,9 @@ float farFade=1.-smoothstep(foliageDistance,foliageDistance+45.,length(cameraPos
    points[kind].push({...anchor,x,y:y-.1,z,angle:random()*6.283,scale:.4+random()*.7,stretch:.8+random()*.4,tint:random()});
   }
  }
+ // Explicit modern botanical accents can occupy a low source island without
+ // changing its collision height or the procedural dry-bank placement policy.
+ for(const p of course.sceneryTrees||[])if(points[p.kind]&&[p.x,p.y,p.z,p.scale].every(Number.isFinite))points[p.kind].push({...p});
  // Keep a finite scenery budget; prioritize groves visible from the course.
  const nearest=Object.entries(points).flatMap(([kind,rows])=>rows.map(p=>({kind,p,d:routeDistance(course,p.x,p.z)}))).sort((a,b)=>a.d-b.d).slice(0,600);
  for(const kind of Object.keys(points))points[kind]=nearest.filter(row=>row.kind===kind).map(row=>row.p);

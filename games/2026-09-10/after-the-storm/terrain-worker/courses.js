@@ -1,6 +1,6 @@
-import {CLASSIC_COURSES,polygonDistance} from './classic-courses.js?v=f81aed9108c0';
-import {configurePassage,passageDistance} from './course-passages.js?v=f81aed9108c0';
-import {tideLevel} from './course-environment.js?v=f81aed9108c0';
+import {CLASSIC_COURSES,polygonDistance} from './classic-courses.js?v=f718aac8f24a';
+import {configurePassage,passageDistance} from './course-passages.js?v=f718aac8f24a';
+import {tideLevel} from './course-environment.js?v=f718aac8f24a';
 // Course geometry is shared by navigation, collision, terrain and presentation.
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const definitions=[

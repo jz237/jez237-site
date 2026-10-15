@@ -2,6 +2,7 @@
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 export function tideLevel(course,time){
  if(course.id!=='tempest')return 0;
+ if(course.sourceWaterDatum)return course.sourceWaterDatum.initial;
  // An intentionally compressed ebb over one race, continuous at lap crossings.
  const u=clamp((time-20)/140,0,1);
  return .35-1.4*u*u*(3-2*u);

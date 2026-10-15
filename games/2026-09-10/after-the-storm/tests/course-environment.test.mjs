@@ -6,29 +6,23 @@ import {getCourse} from '../courses.js';
 import {createRace,stepRace} from '../race-core.js';
 import {createHydro,stepHydro} from '../hydrodynamics.js';
 
-test('ebb changes navigable depth smoothly without a step at lap boundaries',()=>{
- const c=getCourse('tempest'),bottom=c.ground(107.2,100);
- assert.ok(tideLevel(c,0)-bottom>.4);
- assert.ok(tideLevel(c,160)<bottom);
- let previous=tideLevel(c,0);
- for(let t=1;t<=220;t++){const level=tideLevel(c,t);assert.ok(level<=previous);assert.ok(previous-level<.016);previous=level;}
+test('source Southern tide starts at zero and elapsed time alone does not lower it',()=>{
+ const c=getCourse('tempest');for(const t of [0,20,160,600])assert.equal(tideLevel(c,t),0);
+ const s=createRace({mode:'time',course:c}),r=s.racers[0];s.phase='running';s.time=160;
+ for(let i=0;i<60;i++)stepRace(s,{},1/60);
+ assert.equal(s.courseDatum.value,0);assert.equal(r.lap,1);
  assert.equal(tideLevel(getCourse('reed'),160),0);
 });
-test('hull settles on the changing wave datum and restarting restores high water',()=>{
- const c=getCourse('tempest'),s=createRace({course:c}),h=createHydro(),craft={x:0,z:0,heading:0};
+test('hull settles on a shared changing datum and restarting restores source initial water',()=>{
+ const c=getCourse('tempest'),h=createHydro(),craft={x:0,z:0,heading:0};
  for(let i=0;i<10000;i++){
-  const t=i/60;waterLevel.value=tideLevel(c,t);
+  const t=i/60;waterLevel.value=-Math.min(3.75,t*.05);
   stepHydro(h,craft,t,1/60,()=>waterLevel.value);
  }
- assert.ok(Math.abs(h.y-(tideLevel(c,10000/60)+.025))<.001);
+ assert.ok(Math.abs(h.y-(waterLevel.value+.025))<.001);
  const old=wave(12,8,3);waterLevel.value+=1.4;assert.ok(Math.abs(wave(12,8,3)-old-1.4)<1e-10);
- createRace({course:c});assert.equal(waterLevel.value,.35);
+ createRace({course:c});assert.equal(waterLevel.value,0);
  createState();assert.equal(waterLevel.value,0);
-});
-test('the same reef can be crossed at high water but stops a hull at low water',()=>{
- function crossing(time){const s=createRace({mode:'practice',course:getCourse('tempest')});s.phase='running';s.time=time;const r=s.racers[0];r.x=107.2;r.z=100;r.vz=3;stepRace(s,{},1/60);return r;}
- assert.equal(crossing(0).collision,0);
- assert.ok(crossing(160).collision>0);
 });
 test('fixed Glacier spheres retain their world XYZ and race collision through changing water and time',()=>{
  const c=getCourse('glacier'),q=c.rocks.find(q=>q.breakable),position={x:q.x,z:q.z},height=q.y;

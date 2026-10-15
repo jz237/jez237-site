@@ -34,6 +34,11 @@ function contactMass(r,normal,offset){
  return {torque,angular,k:1+dot(torque,angular)};
 }
 
+export function solidContactVelocity(r,normal,offset){
+ const omega=worldAngularVelocity(r),torque={x:offset.y*normal.z-offset.z*normal.y,y:offset.z*normal.x-offset.x*normal.z,z:offset.x*normal.y-offset.y*normal.x};
+ return r.vx*normal.x+r.hydro.vy*normal.y+r.vz*normal.z+dot(omega,torque);
+}
+
 export function projectSolidContact(r,normal,offset,penetration){
  const h=r.hydro,m=contactMass(r,normal,offset),j=Math.max(0,penetration)/m.k;
  const omega=worldAngularVelocity(r),inward=r.vx*normal.x+h.vy*normal.y+r.vz*normal.z+dot(omega,m.torque);

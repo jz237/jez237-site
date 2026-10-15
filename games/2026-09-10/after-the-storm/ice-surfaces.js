@@ -5,9 +5,9 @@ import {HULL_PROBES,hullProbeOffset,wetHullProbes} from './hull-probes.js';
 import {projectSolidContact} from './solid-contact.js';
 // Shared contact geometry supports the source's inclined coasts as well as
 // flat floes. A submerged slope does not suspend water propulsion prematurely.
-export function iceSurfaceAt(course,x,z){return (course.iceSheets||[]).find(p=>p.heightAt?p.heightAt(x,z)!==null:polygonDistance(p.outline,x,z)<=0)||null;}
+export function iceSurfaceAt(course,x,z){return (course.staticSurfaces||course.iceSheets||[]).find(p=>p.heightAt?p.heightAt(x,z)!==null:polygonDistance(p.outline,x,z)<=0)||null;}
 export function iceContact(course,r){
- const previous=(course.iceSheets||[]).find(p=>p.triangles&&p.id===r.staticFloorId);
+ const previous=(course.staticSurfaces||course.iceSheets||[]).find(p=>p.triangles&&p.id===r.staticFloorId);
  if(previous)return r.staticFloorExposed?previous:null;
  const p=iceSurfaceAt(course,r.x,r.z);if(!p)return null;
  if(p.triangles)return null; // Facets use swept, distributed hull contact below.
@@ -39,7 +39,7 @@ export function supportOnIce(r,p,dt,surface){
 // extending infinitely upward. A crossing may enter the .4m native contact
 // band between ticks, but a hull already far beneath a plane is never snapped.
 export function constrainIceFloors(course,r,oldX,oldZ,oldY,oldPose=null,surface=null){
- const floors=(course.iceSheets||[]).filter(p=>p.triangles),h=r.hydro;
+ const floors=(course.staticSurfaces||course.iceSheets||[]).filter(p=>p.triangles),h=r.hydro;
  if(!floors.length)return null;
  const wasAirborne=h.airborne,previous=oldPose||{pitch:h.pitch,roll:h.roll,heading:r.heading};
  let supporting=null,impact=0;

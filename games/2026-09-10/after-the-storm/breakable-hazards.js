@@ -86,6 +86,33 @@ export function hazardBroken(state,hazard){
  return !!store&&key!==null&&store.broken.has(key);
 }
 
+// Explicit cross-window presentation data. Opaque live/replay tokens cannot
+// survive structured cloning. Imported tokens are always read-only and cannot
+// create gameplay impacts, even if passed accidentally to hitBreakable.
+export function exportBreakablePresentation(state,time){
+ const store=stores.get(state);if(!store||!validTime(time))return null;
+ return {version:1,time,brokenKeys:[...store.broken],events:breakableEvents(state,time).slice(-MAX_FRAGMENT_EVENTS)};
+}
+export function importBreakablePresentation(value){
+ if(!value||value.version!==1||!validTime(value.time)||!Array.isArray(value.brokenKeys)||value.brokenKeys.length>MAX_BROKEN_HAZARDS||!Array.isArray(value.events)||value.events.length>MAX_FRAGMENT_EVENTS)return null;
+ const keys=value.brokenKeys;
+ if(keys.some(k=>typeof k!=='string'||k.length>162||!(k.startsWith('s:')&&k.length>2||/^n:-?\d+$/.test(k)&&Number.isSafeInteger(Number(k.slice(2)))))||new Set(keys).size!==keys.length)return null;
+ const copyVector=(v,limit)=>v&&[v.x,v.y,v.z].every(n=>finite(n)&&Math.abs(n)<=limit)?vector(v.x,v.y,v.z):null,events=[];
+ for(const e of value.events){
+  const key=hazardKey({id:e?.hazardId});
+  if(!key||!keys.includes(key)||e.id!=='break:'+key||!validTime(e.time)||e.time>value.time||!finite(e.lifetime)||e.lifetime<=0||e.lifetime>MAX_FRAGMENT_LIFETIME||value.time>=e.time+e.lifetime||!finite(e.threshold)||e.threshold<=0||e.threshold>1000||!finite(e.normalSpeed)||e.normalSpeed<e.threshold||e.normalSpeed>1e4||e.riderIndex!==null&&(!Number.isInteger(e.riderIndex)||e.riderIndex<0||e.riderIndex>63)||!Array.isArray(e.fragments)||e.fragments.length!==8)return null;
+  const center=copyVector(e.center,1e6),fragments=[];if(!center)return null;
+  for(let i=0;i<8;i++){
+   const p=e.fragments[i],offset=copyVector(p?.offset,1000),velocity=copyVector(p?.velocity,100),rotation=copyVector(p?.rotation,100),angularVelocity=copyVector(p?.angularVelocity,100);
+   if(!p||p.id!==i||!offset||!velocity||!rotation||!angularVelocity||!finite(p.scale)||p.scale<=0||p.scale>1000||!finite(p.lifetime)||p.lifetime<=0||p.lifetime>e.lifetime)return null;
+   fragments.push(Object.freeze({id:i,offset,velocity,rotation,angularVelocity,scale:p.scale,lifetime:p.lifetime}));
+  }
+  const event=Object.freeze({id:e.id,hazardId:e.hazardId,riderIndex:e.riderIndex,time:e.time,center,threshold:e.threshold,normalSpeed:e.normalSpeed,fragments:Object.freeze(fragments),lifetime:e.lifetime});
+  issuedEvents.add(event);events.push(event);
+ }
+ const token=Object.freeze({});stores.set(token,Object.freeze({broken:new Set(keys),events:Object.freeze(events),time:value.time,readOnly:true}));return token;
+}
+
 function randomFor(seed){
  let word=2166136261;
  for(let i=0;i<seed.length;i++){word^=seed.charCodeAt(i);word=Math.imul(word,16777619);}

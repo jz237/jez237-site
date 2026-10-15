@@ -75,7 +75,7 @@ export function stepRiderTricks(s,r,input,dt,{scoring=true}={}){
  }else if(s.pose){s.pose=null;s.poseTime=0;}
  if(r.hydro.diveRemaining>0&&r.hydro.y<r.hydro.waterHeight-.6)s.completedTricks.dive=true;s.lastCommand=command;
 }
-export function applyRamp(r,ramps,oldX,oldZ,lean=0,time=0,storm=0){let contact=false;for(const ramp of ramps||[]){const along=(r.x-ramp.x)*ramp.tx+(r.z-ramp.z)*ramp.tz,across=-(r.x-ramp.x)*ramp.tz+(r.z-ramp.z)*ramp.tx;const previous=(oldX-ramp.x)*ramp.tx+(oldZ-ramp.z)*ramp.tz,back=ramp.length/2+.65;
+export function applyRamp(r,ramps,oldX,oldZ,lean=0,time=0,storm=0){let contact=!!r.sourceRampContact;for(const ramp of ramps||[]){if(ramp.sourceVolumeProfile)continue;const along=(r.x-ramp.x)*ramp.tx+(r.z-ramp.z)*ramp.tz,across=-(r.x-ramp.x)*ramp.tz+(r.z-ramp.z)*ramp.tx;const previous=(oldX-ramp.x)*ramp.tx+(oldZ-ramp.z)*ramp.tz,back=ramp.length/2+.65;
   // Authored ramps keep their world orientation in Reverse. Their raised rear
   // is a solid obstacle, but a hull flying above the deck clears it.
   if(ramp.solidBack&&Math.abs(across)<ramp.width/2+.65&&previous>=back&&along<back&&r.hydro.y<rampWaterOffset(ramp,time,storm)+ramp.height+.3){

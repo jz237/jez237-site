@@ -954,6 +954,30 @@ Faceted contact preserves mixed water contact and constrains actual hull probes.
 An independent source point-hull kernel is tested but is not yet the live water
 engine. Current hull pressure, angular response, waves and source runtime unit
 calibration still need comparison before this course can receive a parity
-sign-off. The prepared Southern source module remains unintegrated while its
-boat, tide-sensitive terrain, hidden hazards and ramp profiles are validated.
+sign-off. Southern's subsequent integration is documented below.
 See RACEWAVE-PARITY.md for evidence boundaries and the remaining feature work.
+
+
+### Southern source geometry replacement — October 15, 2026
+
+The current Southern course supersedes the earlier illustrated-map boat/pier
+traversal entries above. All source centers and headings use unrotated native
+coordinates times the shared conditional .025 scale. Its 59 height-independent shore
+edges, 305 finite collision planes and 17 additional fixed solid volumes replace
+the old broad terrain/rising boat approximation. The full submerged deck does
+have runtime collision support even though it has no source-grid floor plane.
+One ordinary source ramp remains fixed at heading 45; Stunt uses the 33/308 pair
+and ten absolute-height rings with 20/15/20/15-second checkpoint limits.
+
+The tide begins at zero and lowers only after a human completes a lap, toward
+native -100 then -150; elapsed time and AI laps alone do not trigger it. Stunt water
+stays at zero. Rendering retains independently authored detailed craft, water,
+scenery and modern ship artwork. The live pressure/contact response is still an
+approximation; these geometry facts do not establish native handling parity.
+
+The shared ordinary Stunt helm physically crossed all ten hoops and four finite
+checkpoints in 54.716667 s, without overtime/crash/DQ or credited skips. Browser
+High 1280x720 measurement reported about 55 FPS and 923k triangles; boat/mast passage
+was inspected at 18.583 s with four actual rings and no collision. Full original
+runtime/visual comparison and production publication remain pending. See
+RACEWAVE-PARITY.md for source evidence boundaries and current remaining work.

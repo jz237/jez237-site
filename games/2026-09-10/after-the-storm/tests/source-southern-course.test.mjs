@@ -80,7 +80,7 @@ test('ground shares exact source floors and keeps authored background explicit',
  assert.equal(c.authoredBackground.seabedHeight,-8);assert.ok(c.authoredBackground.status.includes('Authored'));
  assert.equal(c.ground(1000,1000),-8);assert.equal(c.landGround(1000,1000),-8);
  assert.equal(c.ground(318*S,-4966*S),-8,'low boat deck is a separate visual descriptor');
- assert.ok(c.landGround(0,0)>0);
+ assert.equal(c.landGround(0,0),-8,'height-independent shores are not fabricated terrain collisions');assert.equal(c.renderGround(0,0),1.25);
 });
 
 test('26 tide-following hidden spheres exist in both players with two extra fixed1P mast bases',()=>{
@@ -126,9 +126,9 @@ test('all ordinary classes and players retain the pier ramp; Stunt adds the raw3
  }
  assert.deepEqual(c.stuntLayout.ramps.map(q=>q.nativeRow),[[-592,3592,0,0,33],[-1185,-3695,0,0,308]]);
  for(const r of [...c.raceRamps,...c.stuntLayout.ramps]){
-  assert.equal(r.y,0);assert.equal(r.floating,false);assert.equal(r.profileValidated,false);assert.equal(r.localCollisionRecords.length,3);
+  assert.equal(r.y,0);assert.equal(r.floating,false);assert.equal(r.profileValidated,true);assert.equal(r.localCollisionRecords.length,3);
   assert.ok(r.localCollisionRecords.every(q=>q.flags===1));
-  assert.equal(r.length,undefined,'no guessed launch profile');assert.equal(r.height,undefined);
+  assert.equal(r.sourceVolumeProfile,true);assert.equal(r.contactVolumes.length,3,'finite source volumes supply launch contact');
  }
  const northwest=c.stuntLayout.ramps[1],[tx,tz]=direction(308);close(northwest.tx,tx);close(northwest.tz,tz);
  assert.deepEqual(northwest.localCollisionRecords[1].origin,[-150*S,100*S,-305*S]);
@@ -149,17 +149,17 @@ test('ship descriptor retains submerged deck and independent narrow collision pa
  const c=course(),boat=c.boat;
  assert.equal(boat.style,'independently-authored');assert.equal(boat.followsWaterDatum,false);
  assert.deepEqual(boat.measuredBounds,{min:[115*S,-200*S,-5475*S],max:[460*S,450*S,-4200*S]});
- assert.equal(boat.decks[0].y,-1.25);assert.equal(boat.decks[0].staticSupport,false);
+ assert.equal(boat.decks[0].y,-1.25);assert.equal(boat.decks[0].staticSupport,true);
  assert.deepEqual(boat.masts.map(m=>[m.x,m.z,m.minY,m.maxY]),[[7.25,-126.5,-1.25,5],[7.25,-119,-1.25,11.25]]);
  assert.deepEqual(boat.cabin.roofYRange,[1.875,3.75]);assert.equal(boat.cabin.shoreCollision,true);
  assert.deepEqual(c.sourceWaterDatum.lapTargets,[0,-2.5,-3.75]);assert.equal(c.sourceWaterDatum.perSecondRateValidated,false);
 });
 
-test('unvalidated navigation is unusable and factories do not share mutable state',()=>{
- const a=course(),b=course();assert.equal(a.integrationReady,false);assert.equal(a.navigation.usable,false);assert.equal(a.navigation.validated,false);
- assert.deepEqual(a.anchors,[]);assert.ok(a.anchorsByClass.every(q=>q.length===0));assert.deepEqual(a.stuntLayout.anchors,[]);assert.deepEqual(a.stuntLayout.verificationTargets,[]);
- assert.equal(a.stuntLayout.navigation.usable,false);assert.equal(a.sourceMetadata.sourceNavRowsAreDrivingAnchors,false);
- a.boundary[0][0]=999;a.obstacles[0].y=999;a.sourceRouteRowsByClass[0][0][0]=999;a.buoysByClass[0][0].x=999;
- assert.notEqual(b.boundary[0][0],999);assert.notEqual(b.obstacles[0].y,999);assert.equal(b.sourceRouteRowsByClass[0][0][0],4000);assert.equal(b.buoysByClass[0][0].x,100);
+test('authored source-geometry navigation is isolated from checkpoint progress and mutable factories',()=>{
+ const a=course(),b=course();assert.equal(a.integrationReady,true);assert.equal(a.navigation.usable,true);assert.equal(a.navigation.validated,false);
+ assert.ok(a.anchorsByClass.every(q=>q.length>40));assert.ok(a.stuntLayout.anchors.length>20);assert.ok(a.stuntLayout.verificationTargets.length>40);
+ assert.equal(a.stuntLayout.driver,'source-layout');assert.equal(a.sourceMetadata.sourceNavRowsAreDrivingAnchors,false);
+ a.boundary[0][0]=999;a.obstacles[0].y=999;a.sourceRouteRowsByClass[0][0][0]=999;a.buoysByClass[0][0].x=999;a.anchors[0][0]=999;
+ assert.notEqual(b.boundary[0][0],999);assert.notEqual(b.obstacles[0].y,999);assert.equal(b.sourceRouteRowsByClass[0][0][0],4000);assert.equal(b.buoysByClass[0][0].x,100);assert.notEqual(b.anchors[0][0],999);
  assert.throws(()=>createSourceSouthernCourse(),TypeError);
 });

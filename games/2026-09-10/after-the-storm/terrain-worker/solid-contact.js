@@ -1,4 +1,4 @@
-import {HULL_PROBES,hullProbeOffset} from './hull-probes.js?v=f81aed9108c0';
+import {HULL_PROBES,hullProbeOffset} from './hull-probes.js?v=f718aac8f24a';
 
 // Unit-mass rigid-body approximation of the reference's distributed hull.
 // A nose contact rotates the craft as well as moving its centre. Applying the
@@ -32,6 +32,11 @@ function contactMass(r,normal,offset){
  const pitch=dot(torque,right),yaw=dot(torque,up),roll=dot(torque,forward);
  const angular={x:right.x*pitch/HULL_INERTIA.pitch+up.x*yaw/HULL_INERTIA.yaw+forward.x*roll/HULL_INERTIA.roll,y:right.y*pitch/HULL_INERTIA.pitch+up.y*yaw/HULL_INERTIA.yaw+forward.y*roll/HULL_INERTIA.roll,z:right.z*pitch/HULL_INERTIA.pitch+up.z*yaw/HULL_INERTIA.yaw+forward.z*roll/HULL_INERTIA.roll};
  return {torque,angular,k:1+dot(torque,angular)};
+}
+
+export function solidContactVelocity(r,normal,offset){
+ const omega=worldAngularVelocity(r),torque={x:offset.y*normal.z-offset.z*normal.y,y:offset.z*normal.x-offset.x*normal.z,z:offset.x*normal.y-offset.y*normal.x};
+ return r.vx*normal.x+r.hydro.vy*normal.y+r.vz*normal.z+dot(omega,torque);
 }
 
 export function projectSolidContact(r,normal,offset,penetration){

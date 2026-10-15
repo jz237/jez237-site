@@ -5,9 +5,17 @@ import {ground,waterLevel} from './simulation.js';
 import {obstaclePosition} from './course-environment.js';
 import {passageCollision} from './course-passages.js';
 import {createHydro} from './hydrodynamics.js';
+import {polygonDistance} from './classic-courses.js';
+import {volumeContact} from './clipped-volumes.js';
+import {HULL_PROBES} from './hull-probes.js';
 
 function safeWater(s,x,z){
- if(iceSurfaceAt(s.course,x,z))return false;
+ if(s.course.iceSheets&&iceSurfaceAt(s.course,x,z))return false;
+ if(s.course.sourceShores?.some(q=>q.sourceClosed!==false&&polygonDistance(q.outline,x,z)<1.2))return false;
+ if(s.course.contactVolumes)for(const p of HULL_PROBES)for(const [dx,dz] of [[p.x,p.z],[p.z,-p.x]]){
+  const point={x:x+dx,y:waterLevel.value+.025+p.y,z:z+dz};
+  if(s.course.contactVolumes.query(point).some(q=>volumeContact(q,point)))return false;
+ }
  const floor=s.course.ground||ground;
  for(const [dx,dz] of [[0,0],[1.5,0],[-1.5,0],[0,1.5],[0,-1.5]])
   if(floor(x+dx,z+dz)>waterLevel.value-1.2)return false;
@@ -29,7 +37,7 @@ export function recoverToWater(s,r){
  if(!target)return false;
  const heading=Math.atan2(target.x-r.x,target.z-r.z);
  Object.assign(r,{x:target.x,z:target.z,heading:Number.isFinite(heading)?heading:target.heading,
-  vx:0,vz:0,speed:0,turn:0,throttle:0,recover:0,collision:0,out:0,groundedTime:0,wipeout:null,staticFloorId:'',staticFloorExposed:false,onIce:'',hydro:createHydro()});
+  vx:0,vz:0,speed:0,turn:0,throttle:0,recover:0,collision:0,out:0,groundedTime:0,wipeout:null,staticFloorId:'',staticFloorExposed:false,onIce:'',sourceRampContact:null,hydro:createHydro()});
  if(r.stunt)Object.assign(r.stunt,{trick:null,angle:0,airDuration:0,pose:null,poseTime:0,poseAward:0,lastCommand:'',lastLanding:r.hydro.landingId});
  return true;
 }

@@ -46,6 +46,7 @@ test('world reuse follows authored mode and difficulty, independent of rider or 
   assert.equal(key('practice'),key('practice',0,2));
   assert.equal(key('race'),key('time'));
   if(id==='practice'){assert.equal(key('practice'),key('versus'));assert.notEqual(key('race'),key('versus'));}
+  else if(id==='tempest')assert.notEqual(key('race'),key('versus'),'Southern selects distinct one/two-player source hazard families');
   else assert.equal(key('race'),key('versus'));
   assert.notEqual(key('practice'),key('race'));assert.notEqual(key('practice'),key('stunt'));
   assert.notEqual(key('stunt'),key('race'));

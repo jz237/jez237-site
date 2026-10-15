@@ -61,7 +61,39 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
  function building(x,z,w,d,h,m=stone){const y=course.ground(x,z);if(y<1)return;if(night){if(!facadeMaterials.has(m)){const facade=dressMaterial(m.clone(),'facade');materials.push(facade);facadeMaterials.set(m,facade);}m=facadeMaterials.get(m);}box(x,y+h/2,z,w,h,d,m);box(x,y+h+.2,z,w+.6,.4,d+.6,steel);return y;}
  function rock(x,z,r=5,ice=false){let y=course.ground(x,z);for(let j=0;j<8;j++){const a=j*Math.PI/4;y=Math.min(y,course.ground(x+Math.cos(a)*r*.55,z+Math.sin(a)*r*.55));}const geo=ice?new T.IcosahedronGeometry(r,2):new T.SphereGeometry(r,24,16),p=geo.attributes.position;for(let i=0;i<p.count;i++){const scale=.93+.11*Math.sin(p.getX(i)*.17+p.getZ(i)*.23)+.045*Math.sin(p.getY(i)*.7+p.getX(i)*.4);p.setXYZ(i,p.getX(i)*scale,p.getY(i)*scale*.65,p.getZ(i)*scale);}geo.computeVertexNormals();return add(geo,ice?iceMat:naturalRock,x,y+r*.15,z);}
  const sheetMat=dressMaterial(mat(0xc7e6ee,.28,.04),'ice');
- if(course.contactWalls){const geometry=new T.BufferGeometry(),positions=surfaceMeshPositions(course.contactWalls.triangles);geometry.setAttribute('position',new T.BufferAttribute(positions,3));geometry.setAttribute('uv',new T.Float32BufferAttribute(Array.from({length:positions.length/3},(_,i)=>[positions[i*3]*.1,(positions[i*3+1]+positions[i*3+2])*.1]).flat(),2));geometry.computeVertexNormals();add(geometry,sheetMat);}
+ // Exact source reef facets retain the existing high-resolution water/terrain.
+ for(const surface of course.staticSurfaces||[]){const geometry=new T.BufferGeometry(),positions=surfaceMeshPositions(surface.triangles);geometry.setAttribute('position',new T.BufferAttribute(positions,3));geometry.setAttribute('uv',new T.Float32BufferAttribute(Array.from({length:positions.length/3},(_,i)=>[positions[i*3]*.12,positions[i*3+2]*.12]).flat(),2));geometry.computeVertexNormals();add(geometry,surface.kind==='ship'?steel:naturalRock);}
+ for(const volume of course.contactVolumes?.volumes||[]){
+  if(volume.kind==='ship')continue; // Independently authored continuous hull below.
+  const geometry=new T.BufferGeometry(),positions=surfaceMeshPositions(volume.triangles);geometry.setAttribute('position',new T.BufferAttribute(positions,3));geometry.setAttribute('uv',new T.Float32BufferAttribute(Array.from({length:positions.length/3},(_,i)=>[positions[i*3]*.2,(positions[i*3+1]+positions[i*3+2])*.2]).flat(),2));geometry.computeVertexNormals();add(geometry,volume.kind==='reef'?naturalRock:volume.kind==='finish'?steel:wood);
+ }
+ if(course.sourceShores){
+  for(const shore of course.sourceShores){
+   if(shore.kind==='ship')continue;
+   const shape=new T.Shape();shore.outline.forEach(([x,z],i)=>i?shape.lineTo(x,-z):shape.moveTo(x,-z));shape.closePath();
+   const deck=new T.ExtrudeGeometry(shape,{depth:.42,steps:1,bevelEnabled:true,bevelThickness:.025,bevelSize:.025,bevelSegments:2});deck.rotateX(-Math.PI/2);add(deck,wood,0,.83,0);
+   // Under-deck supports stay within the measured height-independent blocker.
+   for(let i=0;i<shore.outline.length;i++){const a=shore.outline[i],b=shore.outline[(i+1)%shore.outline.length],n=Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])/8);for(let j=0;j<n;j++){const t=j/n;cylinder(a[0]+(b[0]-a[0])*t,-1.5,a[1]+(b[1]-a[1])*t,.15,4.65,wood);}}
+  }
+ }
+ if(course.sceneryTrees)for(const [x,z] of [[62.5,125],[62.5,-137.5],[-62.5,-24.5]]){const island=add(new T.CircleGeometry(4.0,64),sand,x,1.274,z);island.rotation.x=-Math.PI/2;}
+ if(course.boat){
+  const boat=course.boat,shape=new T.Shape();boat.hull.outline.forEach(([x,z],i)=>i?shape.lineTo(x,-z):shape.moveTo(x,-z));shape.closePath();
+  const hullMaterial=mat(0x23505b,.46,.42),deckMaterial=mat(0xa48c6c,.86),glassMaterial=mat(0x193f4b,.24,.38);
+  const hull=new T.ExtrudeGeometry(shape,{depth:boat.hull.upperY-boat.hull.lowerY,bevelEnabled:true,bevelSize:.12,bevelThickness:.08,bevelSegments:4,steps:2});hull.rotateX(-Math.PI/2);add(hull,hullMaterial,0,boat.hull.lowerY,0);
+  const deck=new T.ShapeGeometry(shape,8);deck.rotateX(-Math.PI/2);add(deck,deckMaterial,0,boat.hull.upperY+.012,0);
+  const cabin=new T.Shape();boat.cabin.outline.forEach(([x,z],i)=>i?cabin.lineTo(x,-z):cabin.moveTo(x,-z));cabin.closePath();
+  const cabinHeight=boat.cabin.roofYRange[1]-boat.hull.upperY,body=new T.ExtrudeGeometry(cabin,{depth:cabinHeight,bevelEnabled:true,bevelSize:.08,bevelThickness:.08,bevelSegments:3});body.rotateX(-Math.PI/2);add(body,white,0,boat.hull.upperY,0);
+  for(const mast of boat.masts){cylinder(mast.x,(mast.minY+mast.maxY)/2,mast.z,mast.width/2,mast.maxY-mast.minY,steel);rod([mast.x,mast.maxY-.1,mast.z],[boat.hull.outline[0][0],boat.hull.upperY+.25,boat.hull.outline[0][1]],.025,steel);}
+  box(7.2,2.0,-113.82,6.5,1.15,.08,glassMaterial);box(7.2,2.35,-105.05,5.0,1.0,.08,glassMaterial);
+  for(const x of [4.1,6.2,8.3,10.4])box(x,2.0,-113.87,.08,1.25,.04,white);
+  for(const x of [3.1,11.27]){box(x,1.3,-109.4,.08,1.15,5.4,glassMaterial);for(const z of [-111.6,-109.4,-107.2])box(x,1.3,z,.11,1.25,.08,white);}
+  box(7.2,3.78,-110.4,8.3,.12,6.8,steel);box(7.2,-1.2,-122,7.0,.05,14,deckMaterial);
+  for(let z=-128.5;z<-114;z+=.5)box(7.2,-1.164,z,7.1,.018,.018,wood);
+  for(let i=0;i<boat.hull.outline.length;i++){const a=boat.hull.outline[i],b=boat.hull.outline[(i+1)%boat.hull.outline.length];rod([a[0],-.83,a[1]],[b[0],-.83,b[1]],.035,steel);}
+
+ }
+ if(course.contactWalls){const geometry=new T.BufferGeometry(),positions=surfaceMeshPositions(course.contactWalls.triangles);geometry.setAttribute('position',new T.BufferAttribute(positions,3));geometry.setAttribute('uv',new T.Float32BufferAttribute(Array.from({length:positions.length/3},(_,i)=>[positions[i*3]*.1,(positions[i*3+1]+positions[i*3+2])*.1]).flat(),2));geometry.computeVertexNormals();add(geometry,cold?sheetMat:steel);}
  for(const p of course.iceSheets||[]){if(p.triangles){const geometry=new T.BufferGeometry(),positions=surfaceMeshPositions(p.triangles);geometry.setAttribute('position',new T.BufferAttribute(positions,3));geometry.setAttribute('uv',new T.Float32BufferAttribute(Array.from({length:positions.length/3},(_,i)=>[positions[i*3]*.1,positions[i*3+2]*.1]).flat(),2));geometry.computeVertexNormals();add(geometry,sheetMat);continue;}const shape=new T.Shape();p.outline.forEach(([x,z],i)=>i?shape.lineTo(x,z):shape.moveTo(x,z));shape.closePath();const mesh=add(new T.ExtrudeGeometry(shape,{depth:.7,bevelEnabled:false,steps:1}),sheetMat,0,p.height,0);mesh.rotation.x=Math.PI/2;}
  const iceMat=dressMaterial(mat(0x9fd2e2,.35,.05),'ice');
  const iceFragments=course.rocks.some(q=>q.breakable)?Array.from({length:16},()=>{const m=iceMat.clone();materials.push(m);m.transparent=true;const o=add(new T.IcosahedronGeometry(1,1),m);o.userData.dynamic=true;o.visible=false;return o;}):[];
@@ -95,6 +127,7 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
  const parkDeck=authoredStunts?mat(0xb99562,.87):null,plankSeam=authoredStunts?mat(0x70563b,.95):null;
  const rampMeshes=[],deckMat=mat(0x24535a,.82),ringGlow=mat(0xffca57,.32,.2,0x684012),waterRingMat=mat(0x6de5cf,.34,.12,0x164e45);
  for(const ramp of course.ramps||[]){
+  if(ramp.sourceVolumeProfile)continue;
   const g=new T.Group();g.userData.dynamic=true;g.position.set(ramp.x,0,ramp.z);g.rotation.y=Math.atan2(ramp.tx,ramp.tz);root.add(g);rampMeshes.push({g,ramp});
   const angle=-Math.atan2(ramp.height,ramp.length),length=Math.hypot(ramp.length,ramp.height),rampMaterial=parkDeck||deckMat;
   box(0,ramp.height/2+.08,0,ramp.width,.24,length,rampMaterial,g).rotation.x=angle;
