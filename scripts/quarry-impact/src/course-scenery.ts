@@ -3,10 +3,11 @@ import * as T from 'three';
 import type {createCountyCourse} from './county-course';
 
 type Course=ReturnType<typeof createCountyCourse>;
-export type SceneryTheme='park'|'dunes'|'canal'|'pass'|'coast'|'forest'|'farm'|'port'|'reservoir'|'club'|'ridge'|'fair'|'heath';
+export type SceneryTheme='park'|'dunes'|'canal'|'pass'|'coast'|'forest'|'farm'|'port'|'reservoir'|'club'|'ridge'|'fair'|'heath'|'canyon';
 type Shape='box'|'round'|'cone'|'rock'|'leaf'|'gable'|'ring';
 type Finish='bark'|'leaf'|'pine'|'stone'|'sand'|'wood'|'metal'|'white'|'red'|'ochre'|'glass'|'rubber';
 const palettes={
+ canyon:{ground:'#a28c67',patch:'#bea27a',rock:0xa88b69,leaf:0x79805a,pine:0x626c48,hill:0x9b8766,accent:'#aa4f32',title:'SABLE CANYON CONTACT RALLY',subtitle:'GEOLOGY ROCKS / SUSPENSION KNOCKS'},
  heath:{ground:'#747952',patch:'#9b9673',rock:0x8c8879,leaf:0x64754c,pine:0x4c6246,hill:0x727c56,accent:'#775a7c',title:'WILLOWBANK HEATH MOTOR FAIR',subtitle:'NATURAL BEAUTY / UNNATURAL BODYWORK'},
  fair:{ground:'#80794e',patch:'#a29a68',rock:0x918573,leaf:0x647343,pine:0x455b3c,hill:0x748052,accent:'#af4934',title:'COUNTY FAIR CONTACT SPORTS',subtitle:'ALL THE FUN / NONE OF THE REFUNDS'},
  ridge:{ground:'#7c7959',patch:'#9e986e',rock:0x8e8878,leaf:0x6d7447,pine:0x4c603f,hill:0x777951,accent:'#a65c30',title:'HARROWSTONE RIDGE RUN',subtitle:'HIGH GROUND / LOW EXPECTATIONS'},
@@ -58,6 +59,7 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
  const box=(f:Finish,x:number,y:number,z:number,w:number,h:number,d:number,yaw=0)=>add('box',f,x,y,z,w,h,d,yaw);
  function clear(x:number,z:number,r:number,kind:string){
   if(course.distance(x,z)<23+r)return false;
+  if(theme==='canyon'&&[[-45,-5,23,16],[65,30,12,10]].some(([cx,cz,w,d])=>Math.abs(x-cx)<w+r&&Math.abs(z-cz)<d+r))return false;
   if((theme==='coast'||theme==='reservoir')&&z+r>172)return false;
   // Keep the canal's water, lock gates and towpath unobstructed.
   if(theme==='canal'&&Math.abs(x)<78+r&&z>-23-r&&z<15+r)return false;
@@ -68,10 +70,10 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
   placements.push({x,z,radius:0,kind,halfWidth:w/2,halfDepth:d/2});return true;
  }
  function scenicHeight(x:number,z:number){
-  if(theme!=='coast'&&theme!=='forest'&&theme!=='farm'&&theme!=='port'&&theme!=='park'&&theme!=='dunes'&&theme!=='pass'&&theme!=='reservoir'&&theme!=='club'&&theme!=='ridge'&&theme!=='fair'&&theme!=='heath')return course.height(x,z);
+  if(theme!=='coast'&&theme!=='forest'&&theme!=='farm'&&theme!=='port'&&theme!=='park'&&theme!=='dunes'&&theme!=='pass'&&theme!=='reservoir'&&theme!=='club'&&theme!=='ridge'&&theme!=='fair'&&theme!=='heath'&&theme!=='canyon')return course.height(x,z);
   if(Math.abs(x)<=220&&Math.abs(z)<=180)return course.height(x,z);
   const a=Math.atan2(z,x),dx=Math.cos(a),dz=Math.sin(a),edge=1/Math.max(Math.abs(dx)/220,Math.abs(dz)/180),ring=(Math.hypot(x,z)-edge)/56;
-  const height=(r:number)=>{const zz=dz*(edge+r*56),ridge=(theme==='pass'?60:theme==='ridge'?38:theme==='dunes'?24:19)*(1+.35*Math.sin(a*5)+.2*Math.cos(a*9));let y=r===0?course.height(dx*edge,dz*edge)-.12:course.height(dx*edge,dz*edge)+Math.sin(Math.min(1,r/5)*Math.PI*.62)*ridge+Math.sin(a*11+r)*2;if((theme==='coast'||theme==='port'||theme==='reservoir')&&zz>170)y=Math.min(y,Math.max(-6,-.12-(zz-180)*.18));return y;};
+  const height=(r:number)=>{const zz=dz*(edge+r*56),ridge=(theme==='pass'?60:theme==='ridge'?38:theme==='canyon'?48:theme==='dunes'?24:19)*(1+.35*Math.sin(a*5)+.2*Math.cos(a*9));let y=r===0?course.height(dx*edge,dz*edge)-.12:course.height(dx*edge,dz*edge)+Math.sin(Math.min(1,r/5)*Math.PI*.62)*ridge+Math.sin(a*11+r)*2;if((theme==='coast'||theme==='port'||theme==='reservoir')&&zz>170)y=Math.min(y,Math.max(-6,-.12-(zz-180)*.18));return y;};
   return T.MathUtils.lerp(height(Math.floor(ring)),height(Math.ceil(ring)),ring%1)-.2;
  }
  function tree(x:number,z:number,size:number,pine:boolean){
@@ -92,7 +94,8 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
  // Naturally staggered clusters, with a clear paddock on the southern side.
  for(let i=0;i<(theme==='port'?0:theme==='forest'?650:theme==='farm'?100:theme==='heath'?150:theme==='ridge'?125:theme==='dunes'?180:240);i++){
   const x=(random()-.5)*420,z=-85+random()*257;
-  if(theme==='dunes'){
+  if(theme==='canyon'){if(i%5===0)tree(x,z,5+random()*4,false);else rock(x,z,3+random()*8);
+  }else if(theme==='dunes'){
    if(i%4===0)rock(x,z,1.5+random()*3.5);
    else if(clear(x,z,1.9,'scrub')){const y=course.height(x,z);add('leaf','leaf',x,y+.55,z,2.5,.9,2,random()*6.28);add('round','bark',x,y+.3,z,.13,.6,.13);}
   }else if(theme==='coast'&&i%3===0)rock(x,z,2+random()*5);
@@ -101,7 +104,7 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
   else tree(x,z,theme==='pass'?10+random()*9:7+random()*8,theme==='pass'||theme==='ridge'||(theme==='forest'?i%4!==0:i%7===0));
  }
  // Distant tree lines hide the rectangular terrain edge, with no physics cost.
- for(let i=0;i<130;i++){const a=i/130*Math.PI*2,x=Math.cos(a)*(242+random()*80),z=Math.sin(a)*(210+random()*70);if(theme==='dunes'){if(i%3===0)rock(x,z,6+random()*10);}else tree(x,z,11+random()*11,theme==='pass'||theme==='forest'||theme==='ridge');}
+ for(let i=0;i<130;i++){const a=i/130*Math.PI*2,x=Math.cos(a)*(242+random()*80),z=Math.sin(a)*(210+random()*70);if(theme==='dunes'||theme==='canyon'){if(i%3===0)rock(x,z,6+random()*10);}else tree(x,z,11+random()*11,theme==='pass'||theme==='forest'||theme==='ridge');}
 
  function building(x:number,z:number,w:number,d:number,h:number,finish:Finish){
   if(!clearRectangle(x,z,w+2,d+2,'building'))return;const y=course.height(x,z);
@@ -131,7 +134,26 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
   for(const dx of [-1.4,1.4])for(const dz of [-2.6,2.7])add('round','rubber',x+dx,y+.65,z+dz,.8,1.1,.8);
  }
  // Venue-specific southern paddocks are visible from the grid and race cameras.
- if(theme==='heath'){
+ if(theme==='canyon'){
+  building(65,-160,44,18,5,'ochre');stand(-95,-157);canopy(-40,-160,'red');canopy(-20,-160,'white');serviceTruck(121,-160,'ochre');
+  for(const x of [-248,248])for(const z of [-75,0,75,145]){
+   if(!clearRectangle(x,z,38,32,'canyon-buttress'))continue;const y=scenicHeight(x,z);
+   add('rock','stone',x,y-3,z,37,25,31,.2);
+   for(let tier=1;tier<4;tier++)add('rock','stone',x+Math.sin(tier+x)*2,y+5+tier*5,z+Math.cos(tier)*2,32-tier*5,12,27-tier*4,tier*.18);
+  }
+  if(clearRectangle(-45,-5,46,32,'canyon-arch')){
+   const y=course.height(-45,-5);
+   for(const x of [-60,-30]){add('rock','stone',x,y+5,-5,12,18,16,.1);add('rock','stone',x,y+14,-5,10,12,13,.3);}
+   add('rock','stone',-45,y+20,-5,43,10,15,.1);
+  }
+  if(clearRectangle(65,30,24,20,'canyon-survey-camp')){
+   const y=course.height(65,30);box('white',65,y+2,30,15,4,8);box('metal',65,y+4.2,30,16,.4,9);
+   for(const x of [60,65,70])box('glass',x,y+2.5,25.9,3,1.5,.1);
+   for(const x of [61,69])add('round','rubber',x,y+.6,30,1.5,1.2,1.5);
+   box('metal',72,y+7,30,.15,6,.15);box('red',74,y+9,30,4,1.2,.1);
+   for(let i=0;i<4;i++)box('wood',59+i*3,y+.5,35,2,1,2);
+  }
+ }else if(theme==='heath'){
   building(65,-160,44,18,5,'wood');stand(-90,-158);canopy(-35,-160,'white');canopy(-15,-160,'ochre');serviceTruck(120,-160,'white');
   if(clearRectangle(-45,-10,40,28,'heath-ranger-lodge')){
    const y=course.height(-45,-10);box('wood',-45,y+2.5,-10,28,5,17);add('cone','metal',-45,y+7.5,-10,40,5,30,Math.PI/4);
@@ -544,7 +566,7 @@ diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.73,.8,.74),foam*.65);`);};
  const horizon=new T.BufferGeometry(),positions:number[]=[],colorsOut:number[]=[],indices:number[]=[],segments=128,rings=9;
  for(let ring=0;ring<rings;ring++)for(let i=0;i<=segments;i++){
   const a=i/segments*Math.PI*2,dx=Math.cos(a),dz=Math.sin(a),edge=1/Math.max(Math.abs(dx)/220,Math.abs(dz)/180),r=edge+ring*56,x=dx*r,z=dz*r;
-  const ridge=(theme==='pass'?60:theme==='ridge'?38:theme==='dunes'?24:19)*(1+.35*Math.sin(a*5)+.2*Math.cos(a*9));
+  const ridge=(theme==='pass'?60:theme==='ridge'?38:theme==='canyon'?48:theme==='dunes'?24:19)*(1+.35*Math.sin(a*5)+.2*Math.cos(a*9));
   let y=ring===0?course.height(x,z)-.12:course.height(dx*edge,dz*edge)+Math.sin(Math.min(1,ring/5)*Math.PI*.62)*ridge+(Math.sin(a*11+ring)*2);
   // Northern headland slopes into the sea; never close the coast with a mountain wall.
   if((theme==='coast'||theme==='port'||theme==='reservoir')&&z>170)y=Math.min(y,Math.max(-6,-.12-(z-180)*.18));
