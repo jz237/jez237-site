@@ -1,0 +1,5 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {raceScore,scoreWeek,scoreName} from '../src/global-score';
+test('placement, larger grids and condition earn bounded points',()=>{assert.equal(raceScore({rank:1,field:24,condition:100}),1340);assert.equal(raceScore({rank:24,field:24,condition:0}),240);assert.ok(raceScore({rank:1,field:24,condition:50})>raceScore({rank:2,field:24,condition:50}));for(const rank of [0,25,NaN,1.5])assert.throws(()=>raceScore({rank,field:24,condition:100}));assert.throws(()=>raceScore({rank:1,field:1,condition:100}));assert.throws(()=>raceScore({rank:1,field:24,condition:Infinity}));});
+test('weekly reset uses Monday UTC, including year boundary',()=>{assert.equal(scoreWeek(Date.parse('2026-10-18T23:59:59Z')),'2026-10-12');assert.equal(scoreWeek(Date.parse('2026-10-19T00:00:00Z')),'2026-10-19');assert.equal(scoreWeek(Date.parse('2027-01-01T00:00:00Z')),'2026-12-28');});
+test('nicknames cannot contain markup or control characters',()=>{assert.equal(scoreName('  Dent King  '),'Dent King');for(const s of ['<script>','a','x'.repeat(19),null])assert.throws(()=>scoreName(s));});
