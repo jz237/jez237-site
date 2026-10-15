@@ -15,7 +15,7 @@ button{padding:9px 13px}a{color:#ecdec1}canvas{display:block;width:100%;height:c
 <canvas id="view" aria-label="Traffic on a generated square block"></canvas>
 <script type="module">
 import * as THREE from '../vendor/three.module.min.js';
-import {createCityStreets} from '../src/city-streets.js';
+import {createCityStreets,CAR_PARTS} from '../src/city-streets.js';
 import {createCityUniforms} from '../src/city-lighting.js';
 const documentData={roads:[{id:1,oneway:1,width:10,
   points:[[1,0,0],[2,100,0],[3,100,100],[4,0,100],[1,0,0]]}]};
@@ -51,20 +51,20 @@ function render(dt=0){
   // Close inspection removes foreground furniture so both lamp pairs remain visible.
   streets.group.children[0].visible=streets.group.children[1].visible=selected<0;
   const vehicles=streets.group.children[2];let signalling=0;
-  for(let i=0;i<vehicles.count;i+=10){
+  for(let i=0;i<vehicles.count;i+=CAR_PARTS){
     vehicles.getColorAt(i+6,tint);const first=tint.g>1.7&&tint.g<1.9;
     vehicles.getColorAt(i+7,tint);if(first||tint.g>1.7&&tint.g<1.9)signalling++;
   }
   if(selected>=0&&selected<vehicles.count){vehicles.getMatrixAt(selected,matrix);point.setFromMatrixPosition(matrix);
     camera.position.copy(point).add(new THREE.Vector3(14,13,18));camera.lookAt(point);}
   renderer.render(scene,camera);
-  status.textContent=`${elapsed.toFixed(1)} s · ${vehicles.count/10} cars · ${signalling} amber signals · ${renderer.info.render.calls} draw calls`;
+  status.textContent=`${elapsed.toFixed(1)} s · ${vehicles.count/CAR_PARTS} cars · ${signalling} amber signals · ${renderer.info.render.calls} draw calls`;
 }
 document.querySelector('#play').onclick=event=>{running=!running;event.target.textContent=running?'Pause':'Play';};
 document.querySelector('#step').onclick=()=>render(.1);
 document.querySelector('#focus').onclick=()=>{
   const vehicles=streets.group.children[2];selected=0;
-  for(let i=0;i<vehicles.count;i+=10){
+  for(let i=0;i<vehicles.count;i+=CAR_PARTS){
     vehicles.getColorAt(i+6,tint);const first=tint.g>1.7&&tint.g<1.9;
     vehicles.getColorAt(i+7,tint);if(first||tint.g>1.7&&tint.g<1.9){selected=i;break;}
   }
