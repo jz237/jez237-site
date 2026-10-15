@@ -81,6 +81,7 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
  function tree(x:number,z:number,size:number,pine:boolean){
   if(theme==='port'&&(z>160||(Math.abs(x)<225&&Math.abs(z)<180)))return;
   const r=size*(pine?.3:.48);
+  if(theme==='park'&&Math.abs(x)<33+r&&Math.abs(z+211)<13+r)return;
   if(theme==='heath'&&[[-45,-10,20,14],[65,20,13,11],[65,-160,24,12]].some(([cx,cz,w,d])=>Math.abs(x-cx)<w+r&&Math.abs(z-cz)<d+r))return;
   if(theme==='fair'&&[[-40,0,24,34],[55,0,31,32],[0,142,22,9],[-105,-150,25,13],[65,-150,30,13]].some(([cx,cz,w,d])=>Math.abs(x-cx)<w+r&&Math.abs(z-cz)<d+r))return;
   if(theme==='ridge'&&[[-55,-24,12,11],[80,-160,22,11],[75,45,9,8]].some(([cx,cz,w,d])=>Math.abs(x-cx)<w+r&&Math.abs(z-cz)<d+r))return;
