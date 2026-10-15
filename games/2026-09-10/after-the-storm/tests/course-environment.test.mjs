@@ -14,7 +14,7 @@ test('source Southern tide starts at zero and elapsed time alone does not lower 
  assert.equal(tideLevel(getCourse('reed'),160),0);
 });
 test('hull settles on a shared changing datum and restarting restores source initial water',()=>{
- const c=getCourse('tempest'),h=createHydro(),craft={x:0,z:0,heading:0};
+ createState();const c=getCourse('tempest'),h=createHydro(),craft={x:0,z:0,heading:0};
  for(let i=0;i<10000;i++){
   const t=i/60;waterLevel.value=-Math.min(3.75,t*.05);
   stepHydro(h,craft,t,1/60,()=>waterLevel.value);

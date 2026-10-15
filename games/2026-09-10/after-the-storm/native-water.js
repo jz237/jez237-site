@@ -1,14 +1,16 @@
 import {NATIVE_HULL_STEP} from './native-hull.js';
+import {queryNativeWaterField} from './native-water-field.js';
 
 // Independent numeric reconstruction for the ordinary one-player point hull.
 // Call applyNativeWaterForces from stepNativeHull's beforeIntegrate callback,
 // then discover/apply contacts. This module does not advance hull positions.
 //
-// Conversion assumption: .025 metres/native unit and five 10ms physics ticks
-// per 50ms logical frame. Native point velocity is displacement per physics
+// World-scale choice: .025 metres/native unit. Source timers establish five
+// 10ms GAME-time physics ticks per50ms logical frame, independently of exact
+// hardware refresh or browser wall-time catch-up. Native point velocity is displacement per physics
 // tick; native HUD/frame speed is displacement across ALL FIVE ticks. A native
 // point-velocity increment becomes increment*hull.scale/.01 metres/second.
-// These logical-clock/SI assumptions do not establish full native equivalence.
+// The world conversion and incomplete actor/geometry ports do not establish full native equivalence.
 //
 // Included: ordinary profile, jet, gravity, roll balance, dry-motion correction,
 // buoyancy, grouped water drag and five-tick input/wet-count preparation.
@@ -98,6 +100,23 @@ export function nativeWaveCellImpulse({h00,slopeU,slopeV,offsetU,offsetV,pointY,
     velocity:vec(magnitude*(a-.5*b),magnitude*c,magnitude*.8660253882408142*b)};
 }
 
+/**
+ * Explicit raw-cell surface for native-race-adapter's existing surface input.
+ * It reads the supplied live field but never steps, forces or reseeds it.
+ * The hull force path converts point WORLD XZ into native XZ before calling
+ * cellAtNative, and adds its rider/frame height adjustment separately. Leave
+ * datumNative unspecified to read field.datumNative on every query; an explicit
+ * override stays fixed. This exposes .cell only, never the normalized scalar
+ * query or rendered interpolation as an interchangeable physical height.
+ */
+export function createNativeWaterCellSurface(field,{datumNative}={}){
+  const queryOptions=datumNative===undefined?undefined:{datumNative};
+  queryNativeWaterField(field,0,0,queryOptions); // Validate before the hull uses it.
+  return Object.freeze({cellAtNative(xNative,zNative){
+    return queryNativeWaterField(field,xNative,zNative,queryOptions).cell;
+  }});
+}
+
 /** One separate state per hull; profiles may be shared. */
 export function createNativeWaterState(profile=createNativeWaterProfile()){
   return {
@@ -140,8 +159,11 @@ function prepareFrame(hull,state,input){
   state.referenceOffsetWorld=scale*(state.profile.referenceHeightOffsetNative+3*Math.min(horizontal/(100/3),1));
 }
 
-function sampleSurface(surface,x,z,time){
+function sampleSurface(surface,x,z,time,scale,nativeCellSampler){
+  if(nativeCellSampler)return {waveCell:nativeCellSampler(x,z,time)};
+  if(typeof surface?.cellAtNative==='function')return {waveCell:surface.cellAtNative(x/scale,z/scale,time)};
   const sample=typeof surface==='function'?surface(x,z,time):surface;
+  if(sample&&typeof sample==='object'&&Object.hasOwn(sample,'waveCell'))return {waveCell:sample.waveCell};
   if(typeof sample==='number')return {height:finite(sample,'surface height'),dx:0,dz:0};
   if(!sample)throw new TypeError('surface must return a height or {height, gradient:{x,z}}');
   return {height:finite(sample.height,'surface height'),
@@ -167,7 +189,16 @@ function dragGroup(hull,indices,applyHorizontal,lateral,vertical){
  * surface is a world height, function(x,z,time), or sampled object with gradient.
  * A supplied gradient uses normalized modern-surface pressure as an explicit
  * approximation; numeric/zero-gradient surfaces use the exact flat-water rule.
- * Source wave-cell math above is separate from this modern height sampler.
+ * For source field pressure, explicitly supply one of:
+ * - nativeCellSampler(xWorld,zWorld,time) returning a raw native wave cell;
+ * - surface.cellAtNative(xNative,zNative,time), e.g. createNativeWaterCellSurface;
+ * - a surface sampler/object returning {waveCell: rawNativeCell}.
+ * nativeCellSampler takes precedence. The cell carries h00,slopeU,slopeV,
+ * offsetU,offsetV and optional referenceHeight (all native units); source
+ * whole-height samples/datum must not be replaced by render gradients or the
+ * normalized plane query. The force path adds referenceOffsetWorld/scale and
+ * supplies pointY/max pair length in native units, then converts its impulse
+ * to SI velocity before the unchanged grouped drag and wet-count latching.
  * stickX/Y are normalized signed native B5e/B5f inputs. Positive stickX pushes
  * the REAR toward body-right; an adapter must choose its browser steering sign.
  * staticContact/contactFactor are the caller's current contact accumulator;
@@ -182,9 +213,18 @@ export function applyNativeWaterForces(hull,state,options={}){
   if(hull.points.length!==12||!Number.isFinite(hull.scale)||hull.scale<=0)throw new TypeError('Expected a twelve-point native hull with positive scale');
   if(state.profile.riderIndex!==hull.rider)throw new RangeError('Water riderIndex must match hull rider');
   const input=controls(options),surface=options.surface??0,contactFactor=options.contactFactor??1;
+  const nativeCellSampler=options.nativeCellSampler??null;
+  if(nativeCellSampler!==null&&typeof nativeCellSampler!=='function')throw new TypeError('nativeCellSampler must be a function');
+  if(surface?.cellAtNative!==undefined&&typeof surface.cellAtNative!=='function')throw new TypeError('surface.cellAtNative must be a function');
   range(contactFactor,'contactFactor',0,1);
   const suppressDryCorrection=options.suppressDryCorrection??false,kOverride=options.buoyancyKOverride??null;
+  const gravityOverride=options.gravityNativeOverride??null,lateralOverride=options.waterLateralRetentionOverride??null,
+    rollOverride=options.rollBalanceOverride??null,clearEngine=options.clearEngine??false;
   if(typeof suppressDryCorrection!=='boolean')throw new TypeError('suppressDryCorrection must be boolean');
+  if(typeof clearEngine!=='boolean')throw new TypeError('clearEngine must be boolean');
+  if(gravityOverride!==null)finite(gravityOverride,'gravityNativeOverride');
+  if(lateralOverride!==null)range(lateralOverride,'waterLateralRetentionOverride',0,1);
+  if(rollOverride!==null)range(rollOverride,'rollBalanceOverride',0,1);
   if(kOverride!==null)range(kOverride,'buoyancyKOverride',0,.03);
   for(const name of ['afterJet','afterGravity'])if(options[name]!==undefined&&typeof options[name]!=='function')throw new TypeError(`${name} must be a function`);
   if(state.boundHull&&state.boundHull!==hull)throw new Error('A water state belongs to one hull');
@@ -200,7 +240,7 @@ export function applyNativeWaterForces(hull,state,options={}){
     powerSteps:c.powerSteps,powerFactor:c.powerFactor*(state.wetCount===12?.45:1),
     staticContact:!!options.staticContact,contactFactor
   });
-  state.forceNative=c.throttle?target:Math.max(0,state.forceNative-.005);
+  state.forceNative=clearEngine?0:c.throttle?target:Math.max(0,state.forceNative-.005);
   const slow=state.frameSpeedNative<p.steeringSlowFrameSpeed?
     1+(1-state.frameSpeedNative/p.steeringSlowFrameSpeed)*p.steeringSlowGain:1;
   const rawStick=Math.trunc(c.stickX*70);
@@ -217,8 +257,10 @@ export function applyNativeWaterForces(hull,state,options={}){
   state.lastJet={magnitudeNative:state.forceNative,angleIndex,angleRadians:angle,velocity:jet};
   if(options.afterJet)options.afterJet(hull,state);
 
-  const gravity=p.gravityNative*(state.anyWet?1:p.dryGravityMultiplier);
-  const balance=p.rollBalance*dot(r,state.referenceDisplacementNative);
+  // A frame adapter may supply FINAL selected source gravity (including dry
+  // rider/actor/B modifiers); applying the dry multiplier again is incorrect.
+  const gravity=gravityOverride??p.gravityNative*(state.anyWet?1:p.dryGravityMultiplier);
+  const balance=(rollOverride??p.rollBalance)*dot(r,state.referenceDisplacementNative);
   for(const index of LOWER)hull.points[index].velocity.y+=(gravity+(RIGHT_LOWER.has(index)?balance:-balance))*toVelocity;
   state.lastGravityNative=gravity;
   if(options.afterGravity)options.afterGravity(hull,state);
@@ -238,18 +280,31 @@ export function applyNativeWaterForces(hull,state,options={}){
   const cap=p.buoyancyCapLengthFactor*Math.max(...hull.restLengths)*state.buoyancyK/STEP;
   state.lastBuoyancy=[];
   for(let i=0;i<12;i++){
-    const point=hull.points[i],water=sampleSurface(surface,point.position.x,point.position.z,hull.simulationTime);
-    const denominator=Math.hypot(water.dx,1,water.dz),normal=vec(-water.dx/denominator,1/denominator,-water.dz/denominator);
-    const immersion=(water.height+state.referenceOffsetWorld-point.position.y)*normal.y;
-    state.wet[i]=immersion>=0;
-    const impulse=state.wet[i]?Math.min(immersion*state.buoyancyK/STEP,cap):0;
-    const velocity=vec(normal.x*impulse,normal.y*impulse,normal.z*impulse);
+    const point=hull.points[i],water=sampleSurface(surface,point.position.x,point.position.z,hull.simulationTime,scale,nativeCellSampler);
+    let velocity;
+    if(Object.hasOwn(water,'waveCell')){
+      const cell=water.waveCell;
+      if(!cell||typeof cell!=='object')throw new TypeError('A native wave cell sampler must return a raw cell object');
+      const referenceHeight=cell.referenceHeight===undefined?0:finite(cell.referenceHeight,'cell referenceHeight');
+      const response=nativeWaveCellImpulse({...cell,pointY:point.position.y/scale,
+        referenceHeight:referenceHeight+state.referenceOffsetWorld/scale,
+        k:state.buoyancyK,maxPairLengthNative:Math.max(...hull.restLengths)/scale});
+      state.wet[i]=response.wet;
+      velocity=vec(response.velocity.x*toVelocity,response.velocity.y*toVelocity,response.velocity.z*toVelocity);
+    }else{
+      const denominator=Math.hypot(water.dx,1,water.dz),normal=vec(-water.dx/denominator,1/denominator,-water.dz/denominator);
+      const immersion=(water.height+state.referenceOffsetWorld-point.position.y)*normal.y;
+      state.wet[i]=immersion>=0;
+      const impulse=state.wet[i]?Math.min(immersion*state.buoyancyK/STEP,cap):0;
+      velocity=vec(normal.x*impulse,normal.y*impulse,normal.z*impulse);
+    }
     point.velocity.x+=velocity.x;point.velocity.y+=velocity.y;point.velocity.z+=velocity.z;
     state.lastBuoyancy.push(velocity);
   }
-  for(const index of UPPER)if(state.wet[index])dragGroup(hull,[index],true,p.waterLateralRetention,state.verticalDamping);
-  for(const pair of DRAG_PAIRS)if(state.wet[pair[0]]||state.wet[pair[1]])dragGroup(hull,pair,true,p.waterLateralRetention,state.verticalDamping);
-  if(state.wet[0]||state.wet[2])dragGroup(hull,[0,2],false,p.waterLateralRetention,state.verticalDamping);
+  const lateralRetention=lateralOverride??p.waterLateralRetention;
+  for(const index of UPPER)if(state.wet[index])dragGroup(hull,[index],true,lateralRetention,state.verticalDamping);
+  for(const pair of DRAG_PAIRS)if(state.wet[pair[0]]||state.wet[pair[1]])dragGroup(hull,pair,true,lateralRetention,state.verticalDamping);
+  if(state.wet[0]||state.wet[2])dragGroup(hull,[0,2],false,lateralRetention,state.verticalDamping);
   const stickY=Math.trunc(c.stickY*70)/70;
   state.verticalDamping=stickY<0?.85+(.91-.85)*stickY*stickY:
     .85+(.745-.85)*stickY*(state.buoyancyK-.004)/(.03-.004);

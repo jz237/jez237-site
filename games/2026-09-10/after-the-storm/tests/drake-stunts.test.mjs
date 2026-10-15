@@ -7,7 +7,7 @@ import {verificationInput} from '../race-verification.js';
 
 test('Drake source layout preserves sixteen rings and three consecutive jumps on a wet route',()=>{
  const base=getCourse('reed'),c=stuntCourse(base);
- assert.equal(base.layoutRevision,4);assert.equal(base.ramps.length,0);assert.equal(c.rings.length,16);assert.equal(c.ramps.length,3);assert.equal(c.checkpoints.length,4);
+ assert.equal(base.layoutRevision,5);assert.equal(base.ramps.length,0);assert.equal(c.rings.length,16);assert.equal(c.ramps.length,3);assert.equal(c.checkpoints.length,4);
  for(const p of sampleRoute(c.anchors,384))assert.ok(c.ground(p.x,p.z)<-.8,JSON.stringify(p));
  assert.ok(c.ramps.every(r=>r.tx===0&&r.tz===1));assert.ok(c.ramps[0].z<c.ramps[1].z&&c.ramps[1].z<c.ramps[2].z);
  assert.equal(c.rocks.length,13);assert.ok(c.rocks.every(r=>r.type==='post'));assert.equal(c.resistance.length,3);

@@ -1,9 +1,12 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import * as T from '../vendor/three.module.js';
-import {makeBeachBreak,scanShoreTile,beachBreakShaders,boreFront,boreTime,runup,NO_BEACH} from '../beach-break.js';
+import {makeBeachBreak,scanShoreTile,beachBreakShaders,boreFront,boreTime,runup,NO_BEACH,createBeachWaterHistory,recordBeachWater} from '../beach-break.js';
 import {createRace,stepRace,aiInput,raceWeather} from '../race-core.js';
 import {getCourse} from '../courses.js';
 import {waterLevel} from '../simulation.js';
+import {captureRaceWater,setRaceWater} from '../race-water.js';
+import {createNativeWaterSurface,nativeWaterSurfaceGLSL} from '../native-water-surface.js';
+import {createNativeWaterField} from '../native-water-field.js';
 
 const ride=(venue,seaState,seconds,quality='high',beach=true)=>{
  const s=createRace({course:getCourse(venue),seaState}),r=s.racers[0],b=beach?makeBeachBreak(new T.Scene(),{mat:{uniforms:{}}}):null,heights=[];let peak=0;
@@ -45,10 +48,55 @@ test('breakers sit on the waterline and quality bounds how many are active',()=>
 });
 
 test('the beach break is visual only: racing is identical with or without it',()=>{
- const a=ride('greyhaven','surf',12,'high',true),b=ride('greyhaven','surf',12,'high',false);
+ for(const sea of ['course','surf']){const a=ride('greyhaven',sea,12,'high',true),b=ride('greyhaven',sea,12,'high',false);
  assert.deepEqual(a.s.racers.map(r=>[r.x,r.z,r.vx,r.vz,r.lap,r.misses]),b.s.racers.map(r=>[r.x,r.z,r.vx,r.vz,r.lap,r.misses]));
+ if(sea==='course'){assert.deepEqual(captureRaceWater(a.s.raceWater),captureRaceWater(b.s.raceWater));assert.deepEqual(a.s.raceWater.field.velocityQ,b.s.raceWater.field.velocityQ);assert.equal(a.s.raceWater.field.phaseCounter,b.s.raceWater.field.phaseCounter);}}
 });
 
 test('generated beach shaders never juxtapose a sign with a negative constant',()=>{
  for(const source of Object.values(beachBreakShaders))assert.equal(source.match(/--\d|\+\+\d|[-+*\/]\s*-\d/),null);
+});
+
+test('native crest learning uses consecutive observed revisions and never invents past samples',()=>{
+ const h=createBeachWaterHistory();recordBeachWater(h,0,0,0);recordBeachWater(h,.05,.3,1);recordBeachWater(h,.1,0,2);
+ assert.equal(h.samples.length,3);assert.ok(Math.abs(h.mean-.1)<1e-12);assert.ok(Math.abs(h.pending.crest-.2)<1e-12);assert.equal(h.pending.time,.05);
+ const paused=structuredClone(h);recordBeachWater(h,.1,10,3);assert.deepEqual(h,paused,'the same physical time cannot supply another crest sample');
+ recordBeachWater(h,.2,10,2);assert.deepEqual(h,paused,'a held field revision cannot manufacture time history');
+ const gap=createBeachWaterHistory();recordBeachWater(gap,0,0,0);recordBeachWater(gap,.05,.3,1);recordBeachWater(gap,.15,0,3);
+ assert.equal(gap.pending,null,'unobserved intermediate source revisions cannot establish a local peak');
+});
+
+test('native history is bounded and a rewind discards old crest evidence',()=>{
+ const h=createBeachWaterHistory();for(let i=0;i<=500;i++)recordBeachWater(h,i*.05,.12,i);
+ assert.ok(h.samples.length<=241);assert.ok(h.samples[0][0]>=13);assert.equal(h.pending,null,'a static field has no crest');
+ recordBeachWater(h,2,.8,4);assert.equal(h.samples.length,1);assert.equal(h.mean,.8);assert.equal(h.pending,null);
+ recordBeachWater(h,2.05,.1,3);assert.equal(h.samples.length,1);assert.equal(h.mean,.1);assert.equal(h.pending,null,'a revision reset also clears the history');
+});
+
+test('paused or static native presentation snapshots do not emit breakers or advance their source',()=>{
+ const s=createRace({course:getCourse('greyhaven'),seaState:'course'}),dto=captureRaceWater(s.raceWater),before=structuredClone(dto),field=structuredClone(s.raceWater.field);
+ const b=makeBeachBreak(new T.Scene(),{mat:{uniforms:{}}});b.reset(s.course);setRaceWater(dto);
+ try{
+  const camera={x:0,y:1,z:0};for(let i=0;i<1200;i++)b.update(i/60,0,camera);
+  const emitted=b.stats.emitted;for(let i=0;i<60;i++)b.update(1199/60,0,camera);
+  assert.equal(emitted,0);assert.equal(b.stats.emitted,0);assert.equal(b.stats.active,0);
+  b.update(1,0,camera);b.update(1.05,0,camera);assert.equal(b.stats.emitted,0);
+  assert.deepEqual(dto,before);assert.deepEqual(s.raceWater.field,field);
+ }finally{setRaceWater(null);}
+});
+
+test('curl and whitewater share the ocean native height uniforms with an explicit inactive fallback',()=>{
+ const native=createNativeWaterSurface();native.sync(createNativeWaterField({datumNative:-150}));native.setEnabled(true);
+ const uniforms={...native.uniforms},b=makeBeachBreak(new T.Scene(),{mat:{uniforms}}, {count:1});
+ for(const material of [b.ribbons[0].curl.material,b.ribbons[0].carpet.material]){
+  for(const name of ['nativeWaterActive','nativeWaterHeights','nativeWaterScale','nativeWaterInverseScale','nativeWaterDatumNative'])assert.equal(material.uniforms[name],uniforms[name]);
+  // The actual program is compiled in the browser; shared sampling must not
+  // depend on whether the helper uses early returns or an initialized result.
+  assert.ok(material.vertexShader.includes(nativeWaterSurfaceGLSL));
+  assert.ok(material.vertexShader.includes('beachWaterHeight('));
+ }
+ const fallback=makeBeachBreak(new T.Scene(),{mat:{uniforms:{}}},{count:1});
+ assert.equal(fallback.ribbons[0].uniforms.nativeWaterActive.value,0);assert.equal(fallback.ribbons[0].uniforms.nativeWaterHeights.value,null);
+ assert.equal(fallback.ribbons[0].uniforms.nativeWaterScale.value,.025);assert.equal(fallback.ribbons[0].uniforms.nativeWaterInverseScale.value,40);
+ native.dispose();
 });

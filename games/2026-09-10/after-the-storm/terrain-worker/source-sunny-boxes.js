@@ -1,4 +1,4 @@
-import {clippedVolume,clippedVolumes} from './clipped-volumes.js?v=75cb6c906e6b';
+import {clippedVolume,clippedVolumes} from './clipped-volumes.js?v=9267cf1551ef';
 
 // Independent numeric reconstruction of finite collision intervals. No source
 // artwork or executable code. .025 metres/native remains conditional on the

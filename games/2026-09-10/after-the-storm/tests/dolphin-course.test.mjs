@@ -5,7 +5,7 @@ import {stuntCourse} from '../stunts.js';
 import {barrierCollision,barrierPiles} from '../course-barriers.js';
 const point=(x,z)=>[(x-420)*.5,(z-310)*.5];
 test('Dolphin Park preserves its curved island, wet inner basin and separate eastern islets',()=>{
- const c=getCourse('practice');assert.equal(c.name,'Dolphin Park');assert.equal(c.layoutRevision,1);
+ const c=getCourse('practice');assert.equal(c.name,'Dolphin Park');assert.equal(c.layoutRevision,2);
  for(const p of [[235,310],[345,167],[332,447],[689,395]])assert.ok(c.ground(...point(...p))>2,JSON.stringify(p));
  for(const p of [[380,310],[450,390],[580,310],[109,378],[359,540]])assert.ok(c.ground(...point(...p))<-3,JSON.stringify(p));
  for(const p of sampleRoute(c.anchors,384))assert.ok(c.ground(p.x,p.z)<-2,JSON.stringify(p));

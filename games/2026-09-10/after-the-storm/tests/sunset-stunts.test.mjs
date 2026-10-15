@@ -6,7 +6,7 @@ import {createRace,stepRace} from '../race-core.js';
 import {verificationInput} from '../race-verification.js';
 import {barrierCollision} from '../course-barriers.js';
 test('Sunset stunt layout has nine rings, two jumps, pier stations and a separate boundary',()=>{
- const base=getCourse('amber'),c=stuntCourse(base);assert.equal(base.layoutRevision,5);assert.equal(c.rings.length,9);assert.equal(c.ramps.length,2);assert.equal(c.checkpoints.length,4);assert.notDeepEqual(c.boundary,base.boundary);assert.equal(base.ramps.length,1);
+ const base=getCourse('amber'),c=stuntCourse(base);assert.equal(base.layoutRevision,6);assert.equal(c.rings.length,9);assert.equal(c.ramps.length,2);assert.equal(c.checkpoints.length,4);assert.notDeepEqual(c.boundary,base.boundary);assert.equal(base.ramps.length,1);
  assert.ok(c.ramps[0].z>c.crossbars[0].z&&c.ramps[0].z<c.crossbars[1].z);assert.ok(c.ramps[0].tz>.99);assert.ok(c.ramps[1].tx>.99);
  assert.ok(c.rings[4].z>c.ramps[0].z);assert.ok(c.rings[5].z<c.crossbars[1].z);
  for(const p of sampleRoute(c.anchors,384))assert.ok(c.ground(p.x,p.z)<-.8,JSON.stringify(p));

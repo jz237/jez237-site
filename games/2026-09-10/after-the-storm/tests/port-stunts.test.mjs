@@ -8,7 +8,7 @@ import {passageCollision,passageDistance} from '../course-passages.js';
 
 test('Port stunt conversion rebuilds forward tunnel and floor without changing race restrictions',()=>{
  const normal=getCourse('port'),expert=getCourse('port',2),c=stuntCourse(expert),x=(260-220)*.8,z=(85-285)*.8;
- assert.equal(c.layoutRevision,4);assert.equal(c.rings.length,16);assert.equal(c.ramps.length,3);assert.equal(c.checkpoints.length,4);assert.equal(c.passage.enabled,true);assert.equal(c.reverse,false);assert.equal(c.closedAreas.length,0);
+ assert.equal(c.layoutRevision,5);assert.equal(c.rings.length,16);assert.equal(c.ramps.length,3);assert.equal(c.checkpoints.length,4);assert.equal(c.passage.enabled,true);assert.equal(c.reverse,false);assert.equal(c.closedAreas.length,0);
  for(const ring of c.rings.slice(10,13))assert.ok(passageDistance({path:c.passage.structurePath},ring.x,ring.z)>c.passage.width+ring.radius);
  assert.ok(expert.ground(x,z)>0);assert.ok(c.ground(x,z)<-1);assert.equal(normal.passage.enabled,false);assert.equal(stuntCourse(normal).passage.enabled,true);assert.equal(normal.passage.enabled,false);
  for(const p of sampleRoute(c.anchors,384))assert.ok(c.ground(p.x,p.z)<-.8,JSON.stringify(p));

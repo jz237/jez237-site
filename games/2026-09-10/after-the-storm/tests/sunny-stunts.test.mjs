@@ -5,7 +5,7 @@ import {stuntCourse} from '../stunts.js';
 import {createRace,stepRace} from '../race-core.js';
 import {verificationInput} from '../race-verification.js';
 test('Sunny Beach stunt layout has one ramp, twelve water rings and a distinct source route',()=>{
- const base=getCourse('greyhaven'),c=stuntCourse(base);assert.equal(base.layoutRevision,6);assert.equal(c.ramps.length,1);assert.equal(c.rings.length,12);assert.equal(c.checkpoints.length,4);assert.notDeepEqual(c.anchors,base.anchors);assert.equal(base.ramps.length,0);
+ const base=getCourse('greyhaven'),c=stuntCourse(base);assert.equal(base.layoutRevision,8);assert.equal(base.waterModelRevision,1);assert.equal(c.ramps.length,1);assert.equal(c.rings.length,12);assert.equal(c.checkpoints.length,4);assert.notDeepEqual(c.anchors,base.anchors);assert.equal(base.ramps.length,0);
  assert.ok(c.rings.every(r=>r.type==='water'&&r.absoluteY&&r.y===1.5));
  assert.ok(c.ramps[0].tx<-.99);assert.equal(c.ramps[0].x,-619*.025);assert.equal(c.ramps[0].z,-1065*.025);
  assert.equal(c.ramps[0].sourceVolumeProfile,true);assert.deepEqual(c.checkpoints.map(q=>q.limit),[15,15,15,10]);
@@ -14,7 +14,7 @@ test('Sunny Beach stunt layout has one ramp, twelve water rings and a distinct s
 });
 test('every class selection keeps Sunny stunt geometry forward and selects its actual hazard family',()=>{
  const expected=stuntCourse(getCourse('greyhaven'));
- for(let d=0;d<4;d++){const c=stuntCourse(getCourse('greyhaven',d));assert.equal(c.reverse,false);assert.equal(c.rocks.length,8);assert.equal(c.rocks.filter(o=>!o.hidden).length,4);assert.deepEqual(c.rocks,expected.rocks);assert.deepEqual(c.gates,expected.gates);assert.deepEqual(c.ramps,expected.ramps);}
+ for(let d=0;d<4;d++){const c=stuntCourse(getCourse('greyhaven',d));assert.equal(c.reverse,false);assert.equal(c.rocks.length,47);assert.equal(c.rocks.filter(o=>!o.hidden).length,4);assert.equal(c.rocks.filter(o=>o.sourceBoundaryMarker).length,39);assert.equal(c.rocks.filter(o=>o.runtimeTag===5).length,4);assert.deepEqual(c.rocks,expected.rocks);assert.deepEqual(c.gates,expected.gates);assert.deepEqual(c.ramps,expected.ramps);}
  const free=stuntCourse(getCourse('greyhaven'),{freeRide:true});assert.equal(free.ramps.length,4);assert.equal(free.stuntLayout,undefined);assert.equal(free.checkpoints.length,0);
 });
 test('ordinary controls collect all twelve Sunny rings and land the single jump in all class selections',()=>{

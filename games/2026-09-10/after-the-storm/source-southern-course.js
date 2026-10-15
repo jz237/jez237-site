@@ -3,6 +3,7 @@ import {southernContactVolumes,southernRampVolumes} from './source-southern-boxe
 import {shoreLines} from './shore-contact.js';
 import {triangleWalls} from './triangle-walls.js';
 import {facetedSurface} from './faceted-surfaces.js';
+import {sourceBoundarySpheres,orderSourceFixedSpheres} from './source-boundary-spheres.js';
 // Independent numeric reconstruction from the user's USA Rev1 reference.
 // No original graphics, display lists, textures or executable code are included.
 // .025 metres/native remains conditional on the native HUD/clock calibration.
@@ -71,7 +72,9 @@ export function createSourceSouthernCourse(polygonDistance){
  function hazardsForPlayers(playerCount=1,waterDatum=0){
   if(playerCount!==1&&playerCount!==2)throw new RangeError('Player count must be 1 or 2.');
   if(!Number.isFinite(waterDatum))throw new TypeError('Water datum must be finite.');
-  return [...tideFollowingSpheres,...(playerCount===1?fixedMastSpheres:[])].map(q=>({...q,y:q.followsWaterDatum?waterDatum:q.y}));
+  const tide=tideFollowingSpheres.map(q=>({...q,y:waterDatum}));
+  const markers=sourceBoundarySpheres(boundaryMarkers,{idPrefix:'southern-marker-',waterDatum,tideFollowing:true});
+  return orderSourceFixedSpheres(tide,markers,playerCount===1?fixedMastSpheres:[]);
  }
  const raceRamps=ordinaryRampData.map((q,i)=>sourceRamp(q,i,'race'));
  const rings=ringData.map(([x,y,z,variant,order,heading])=>({x:x*SCALE,y:y*SCALE,z:z*SCALE,...direction(heading),variant,order,radius:2.8,depth:.8,probeHeight:.2,type:'water',floating:false,absoluteY:true}));
@@ -81,19 +84,20 @@ export function createSourceSouthernCourse(polygonDistance){
  const stuntLayout={anchors:southernStuntNavigation.anchorsWorld.map(p=>[...p]),navigation:{...navigation},routeInterpolation:'linear',driver:'source-layout',verificationOnePass:true,startGate:{...checkpoints[3],side:0,offset:0},boundary:boundary.map(p=>[...p]),
   rocks:hazardsForPlayers(1),ramps:stuntRamps,rings,checkpoints,verificationTargets:southernStuntNavigation.verificationTargets.map(q=>({...q})),
   sourceRouteRows:clone(stuntRouteData),sourceGuideRows:[3,4],timerSeconds:[20,15,20,15]};
- return {name:'Southern Island',theme:'island',description:'Source shorelines, tidal shallows and a partly submerged ship surround an open-water course.',layoutRevision:3,tag:'08 / SOUTHERN ISLAND',
+ return {name:'Southern Island',theme:'island',description:'Source shorelines, tidal shallows and a partly submerged ship surround an open-water course.',layoutRevision:4,tag:'08 / SOUTHERN ISLAND',
   integrationReady:true,navigation,navigationDriver:'source-layout',pilotAnchorsByClass:southernPilotAnchors.map(a=>[...a]),anchors:southernAnchors[0].map(p=>[...p]),anchorsByClass:southernAnchors.map(a=>a.map(p=>[...p])),directedAnchorsByClass:true,routeInterpolation:'linear',
   sourceMetadata:{nativeCourseIndex:7,referenceRevision:'USA Rev1',nativeScale:SCALE,scaleStatus:'conditional',
    sourceCollisionPlaneCount:305,fixedSolidVolumeCount:17,placedRampVolumeCount:3,upwardCollisionPlaneCount:287,orientedAdditionalPlaneCount:18,
    noFiniteColoredBuoySpan:true,sourceNavRowsAreDrivingAnchors:false},
   sceneryTrees:[[61.1,123.7,.75],[63.9,126.0,.68],[62.5,-138.8,.72],[61.0,-136.4,.64],[-63.8,-24.5,.7],[-61.1,-23.7,.63]].map(([x,z,scale],i)=>({kind:'palm',x,y:1.27,z,scale,angle:i*2.399,stretch:1,tint:.8})),
   sourceShores,shoreContacts:shoreLines(sourceShores),staticSurfaces,orientedContactPlanes,contactWalls:triangleWalls(orientedContactPlanes),contactVolumesForRamps:southernContactVolumes,sourceFloor,landGround,ground,renderGround,authoredBackground,
-  boundary,boundaryMarkers,boundaryMetadata:{cyclicOrderInferred:true,sourceOrderIsPolygon:false,sourceIndices:[...boundaryOrder],nativeCourseOutRuleRecovered:false},
+  boundary,boundaryMarkers,sourceMarkerSpheres:sourceBoundarySpheres(boundaryMarkers,{idPrefix:'southern-marker-',tideFollowing:true}),boundaryMetadata:{cyclicOrderInferred:true,sourceOrderIsPolygon:false,sourceIndices:[...boundaryOrder],nativeCourseOutRuleRecovered:false},
   buoysByClass:buoyData.map(rows=>rows.map(buoy)),finishGatesByClass:[finish(180),finish(180),finish(180),finish(360)],
   sourceRouteRowsByClass:clone(routeData),
   tideFollowingSpheres,fixedMastSpheres,hazardsForPlayers,obstacles:hazardsForPlayers(1),
   obstaclesByPlayerCount:{1:hazardsForPlayers(1),2:hazardsForPlayers(2)},
-  sourceObjectSelection:{selector:'player-count',singlePlayerIncludesStunt:true,tideFollowingTag4Counts:[26,26],fixedXYZTag5Counts:[2,0],genericFiveShortCounts:[0,0]},
+  sourceObjectSelection:{selector:'player-count',singlePlayerIncludesStunt:true,tideFollowingTag4Counts:[26,26],markerSphereCounts:[79,79],fixedXYZTag5Counts:[2,0],
+   fixedSphereCountsByPlayer:[107,105],fixedSphereOrder:'genericXZ, markers, hiddenXYZ',markerYPolicy:'current course datum',genericFiveShortCounts:[0,0]},
   raceRamps,raceRampsByClass:Array.from({length:4},()=>ordinaryRampData.map((q,i)=>sourceRamp(q,i,'race'))),
   raceRampsByPlayerCount:{1:ordinaryRampData.map((q,i)=>sourceRamp(q,i,'race')),2:ordinaryRampData.map((q,i)=>sourceRamp(q,i,'race'))},
   stuntLayout,boat:boatDescriptor(sourceShores.find(q=>q.id==='boat-stern-cabin').outline),

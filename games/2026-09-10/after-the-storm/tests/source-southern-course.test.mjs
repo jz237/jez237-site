@@ -83,14 +83,16 @@ test('ground shares exact source floors and keeps authored background explicit',
  assert.equal(c.landGround(0,0),-8,'height-independent shores are not fabricated terrain collisions');assert.equal(c.renderGround(0,0),1.25);
 });
 
-test('26 tide-following hidden spheres exist in both players with two extra fixed1P mast bases',()=>{
+test('26 tide spheres,79 tide marker spheres and two1P fixed mast bases retain source family order',()=>{
  const c=course(),one=c.hazardsForPlayers(1,-2.5),two=c.hazardsForPlayers(2,-2.5);
- assert.equal(one.length,28);assert.equal(two.length,26);assert.equal(new Set(one.map(q=>q.id)).size,28);
- assert.equal(c.obstaclesByPlayerCount[1].length,28);assert.equal(c.obstaclesByPlayerCount[2].length,26);
+ assert.equal(one.length,107);assert.equal(two.length,105);assert.equal(new Set(one.map(q=>q.id)).size,107);
+ assert.equal(c.obstaclesByPlayerCount[1].length,107);assert.equal(c.obstaclesByPlayerCount[2].length,105);
  assert.deepEqual(c.sourceObjectSelection.tideFollowingTag4Counts,[26,26]);
  assert.deepEqual(c.sourceObjectSelection.fixedXYZTag5Counts,[2,0]);assert.equal(c.sourceObjectSelection.singlePlayerIncludesStunt,true);
- for(const sphere of one){assert.equal(sphere.hidden,true);assert.equal(sphere.fixedSphere,true);assert.equal(sphere.r,.625);assert.equal(sphere.probeRadius,.3);}
- assert.ok(two.every(q=>q.runtimeTag===4&&q.followsWaterDatum&&q.y===-2.5));
+ for(const sphere of one){assert.equal(sphere.hidden,true);assert.equal(sphere.fixedSphere,true);assert.equal(sphere.sourceFixedSphere,true);assert.equal(sphere.r,.625);close(sphere.probeRadius,.3);}
+ assert.ok(two.every(q=>[1,4].includes(q.runtimeTag)&&q.followsWaterDatum&&q.y===-2.5));
+ assert.ok(two.slice(0,26).every(q=>q.runtimeTag===4));assert.ok(two.slice(26).every(q=>q.runtimeTag===1&&q.sourceBoundaryMarker));assert.ok(one.slice(-2).every(q=>q.runtimeTag===5));
+ assert.deepEqual(two.slice(26).map(q=>[q.x,q.z]),c.boundaryMarkers);assert.equal(c.sourceMarkerSpheres.length,79);assert.ok(c.sourceMarkerSpheres.every(q=>q.y===0));
  const fixed=one.filter(q=>q.runtimeTag===5);assert.deepEqual(fixed.map(q=>[q.x,q.y,q.z]),[[290,-50,-5060],[290,-50,-4760]].map(p=>p.map(v=>v*S)));
  assert.ok(fixed.every(q=>!q.followsWaterDatum));
  assert.deepEqual([two[0].x,two[0].z],[-455*S,4962*S]);assert.deepEqual([two[25].x,two[25].z],[-1990*S,1400*S]);

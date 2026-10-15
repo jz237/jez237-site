@@ -1,5 +1,6 @@
 import {facetedSurface} from './faceted-surfaces.js';
 import {triangleWalls} from './triangle-walls.js';
+import {sourceBoundarySpheres,orderSourceFixedSpheres} from './source-boundary-spheres.js';
 // Reimplemented from numeric collision and object-layout observations of the
 // user's USA Rev1 reference. No original graphics, textures or display lists.
 // Every object family shares this unrotated .025 scale; its SI interpretation
@@ -49,12 +50,19 @@ export function createGlacierCourse(polygonDistance){
  const iceSheets=floorTriangles.map((triangles,i)=>facetedSurface(names[i],triangles.map(map),{kind:'ice'}));
  // Source stability rows are deliberately assigned to the four synthetic
  // avatar slots; original named-rider correspondence remains unverified.
- const ice=iceCenters.map(([x,y,z],i)=>({id:'glacier-ice-'+i,x:x*SCALE,y:y*SCALE,z:z*SCALE,r:50*SCALE,probeRadius:12*SCALE,type:'ice',fixed:true,fixedSphere:true,breakable:{sourceIndexByRider:[0,1,2,3],nativeVelocityScale:.5}}));
- const hidden=hiddenCenters.map(([x,y,z],i)=>({id:'glacier-boundary-'+i,x:x*SCALE,y:y*SCALE,z:z*SCALE,r:25*SCALE,probeRadius:12*SCALE,type:'boundary',hidden:true,fixed:true,fixedSphere:true}));
+ const ice=iceCenters.map(([x,y,z],i)=>({id:'glacier-ice-'+i,x:x*SCALE,y:y*SCALE,z:z*SCALE,r:50*SCALE,probeRadius:12*SCALE,type:'ice',fixed:true,fixedSphere:true,sourceFixedSphere:false,sourceGenericSphere:true,runtimeKind:10,breakable:{sourceIndexByRider:[0,1,2,3],nativeVelocityScale:.5}}));
+ const hidden=hiddenCenters.map(([x,y,z],i)=>({id:'glacier-boundary-'+i,x:x*SCALE,y:y*SCALE,z:z*SCALE,r:25*SCALE,probeRadius:12*SCALE,type:'boundary',hidden:true,fixed:true,fixedSphere:true,runtimeTag:5}));
+ const markers=sourceBoundarySpheres(boundary,{idPrefix:'glacier-marker-'}),fixedSpheres=orderSourceFixedSpheres([],markers,hidden);
  const landHeight=(x,z)=>Math.max(-10,Math.min(38,Math.max(...lands.map(p=>-polygonDistance(p,x,z)))*.85));
- const rocks=[...ice,...hidden],anchors=map(forwardPath),reverseAnchors=map(reversePath);
- return {name:'Glacier Coast',description:'Narrow ice-walled water gives way to sloped shelves, frozen coasts and breakable ice blocks.',layoutRevision:3,routeInterpolation:'catmull',directedAnchorsByClass:true,
-  boundary,boundaryMarkers:boundary,buoysByClass:[buoys(forwardBuoys),buoys(forwardBuoys),buoys(forwardBuoys),buoys(reverseBuoys)],
+ const rocks=[...ice,...fixedSpheres],anchors=map(forwardPath),reverseAnchors=map(reversePath);
+ function hazardsForPlayers(playerCount=1,waterDatum=0){
+  if(playerCount!==1&&playerCount!==2)throw new RangeError('Player count must be 1 or 2');
+  if(!Number.isFinite(waterDatum))throw new TypeError('Water datum must be finite');return rocks.map(q=>({...q}));
+ }
+ return {name:'Glacier Coast',description:'Narrow ice-walled water gives way to sloped shelves, frozen coasts and breakable ice blocks.',layoutRevision:4,routeInterpolation:'catmull',directedAnchorsByClass:true,
+  boundary,boundaryMarkers:boundary,sourceMarkerSpheres:markers,sourceFixedSpheres:fixedSpheres,hazardsForPlayers,
+  sourceObjectSelection:{sameActivePlayerFamilies:true,markerSphereCounts:[90,90],fixedXYZCounts:[18,18],genericBreakableCounts:[12,12],fixedSphereCounts:[108,108],fixedSphereOrder:'markers, hiddenXYZ',duplicateCentersMerged:false},
+  buoysByClass:[buoys(forwardBuoys),buoys(forwardBuoys),buoys(forwardBuoys),buoys(reverseBuoys)],
   finishGatesByClass:[finish(180),finish(180),finish(180),finish(360)],anchors,anchorsByClass:[anchors,anchors,anchors,reverseAnchors],
   // The northern closure joins two distant source endpoints. Heights and
   // submerged seabed below are independently authored, outside contact floors.

@@ -1,5 +1,6 @@
 import {shoreLines} from './shore-contact.js';
 import {PORT_NATIVE_SCALE,portRampVolumes,portContactVolumes} from './source-port-boxes.js';
+import {sourceBoundarySpheres,orderSourceFixedSpheres} from './source-boundary-spheres.js';
 
 // Independent numeric reconstruction. Original graphics, meshes, textures and
 // executable code are not included. Port has no active 3D grid floor: only its
@@ -89,13 +90,14 @@ export function createSourcePortCourse(polygonDistance,{anchorsByClass,pilotAnch
   type:'water',radius:2.8,depth:.8,probeHeight:.2,floating:false,absoluteY:true}));
  const checkpoints=[1,4,5,0].map((sourceRow,section)=>({...sourceGate(PORT_NATIVE_GEOMETRY.stuntRoute[sourceRow],sourceRow),section,limit:PORT_NATIVE_GEOMETRY.timerSeconds[section]}));
  const stuntLayout={...clone(stuntNavigation),anchors:stuntAnchors,navigation:{...nav,usable:stuntAnchors.length>=3},routeInterpolation:'linear',driver:'source-layout',
-  startGate:{...checkpoints[3]},boundary:boundary?.map(p=>[...p]),rocks:[],ramps:portRampsForSelection({mode:'stunt'}),rings,checkpoints,
+  startGate:{...checkpoints[3]},boundary:boundary?.map(p=>[...p]),rocks:orderSourceFixedSpheres([],sourceBoundarySpheres(points(PORT_NATIVE_GEOMETRY.boundaryMarkers),{idPrefix:'port-marker-'}),[]),ramps:portRampsForSelection({mode:'stunt'}),rings,checkpoints,
   verificationTargets:clone(stuntNavigation.verificationTargets??[]),sourceRouteRows:clone(PORT_NATIVE_GEOMETRY.stuntRoute),
   sourceNonCheckpointRows:[2,3],timerSeconds:[...PORT_NATIVE_GEOMETRY.timerSeconds],sourceNativeClass:0};
  const raceRampsByClass=Array.from({length:4},(_,difficulty)=>portRampsForSelection({difficulty}));
  function hazardsForPlayers(playerCount=1,waterDatum=0,selection={}){
   if(!Number.isFinite(waterDatum))throw new TypeError('Water datum must be finite');
-  portSourceSelection({difficulty:this?.difficulty??0,mode:this?.stunt?'stunt':'race',...selection,playerCount});return [];
+  portSourceSelection({difficulty:this?.difficulty??0,mode:this?.stunt?'stunt':'race',...selection,playerCount});
+  return orderSourceFixedSpheres([],sourceBoundarySpheres(points(PORT_NATIVE_GEOMETRY.boundaryMarkers),{idPrefix:'port-marker-'}),[]);
  }
  function dynamicObjectsForPlayers(playerCount=1,selection={}){
   return portDynamicObjectsForSelection({difficulty:this?.difficulty??0,mode:this?.stunt?'stunt':'race',...selection,playerCount});
@@ -104,7 +106,7 @@ export function createSourcePortCourse(polygonDistance,{anchorsByClass,pilotAnch
   const first=ramps.find(q=>q.sourceCourseIndex===5),stunt=first?.sourceFamily==='stunt'||!!this?.stunt;
   return portContactVolumes(ramps,{nativeClass:first?.sourceNativeClass??(stunt?0:Math.min(this?.difficulty??0,2)),stunt});
  }
- return {name:'Port Blue',theme:'port',tag:'05 / PORT BLUE',description:'Source port shore contacts and class-selected finite jumps; buoyant-object integration remains pending.',layoutRevision:5,
+ return {name:'Port Blue',theme:'port',tag:'05 / PORT BLUE',description:'Source port shore contacts and class-selected finite jumps; buoyant-object integration remains pending.',layoutRevision:6,
   integrationReady:false,sourceDynamicsReady:false,navigation:nav,navigationDriver:'source-layout',anchors:anchors[0].map(p=>[...p]),anchorsByClass:anchors,pilotAnchorsByClass:pilot,directedAnchorsByClass:true,routeInterpolation:'linear',
   sourceMetadata:{nativeCourseIndex:5,referenceRevision:'USA Rev1',nativeScale:S,scaleStatus:'conditional',modernRigidCraftApproximation:true,
    sourceCollisionPlaneCount:0,upwardCollisionPlaneCount:0,activeGrid3DByPlayerCount:[0,0],sourceShoreSegmentCount:117,sourceShoreSegmentCounts:[117,109],
@@ -112,16 +114,16 @@ export function createSourcePortCourse(polygonDistance,{anchorsByClass,pilotAnch
    sourceNavRowsAreDrivingAnchors:false,noFiniteColoredBuoySpan:true,sourceGeometrySelectorRequired:true},
   sourceObjectSelection:{selector:'player-count-class-mode',singlePlayerIncludesStunt:true,samePlayerCountRawObjectRows:true,
    nativeClassByDifficulty:[0,1,2,2],stuntNativeClass:0,staticGeometryDiffersByPlayerCount:true,
-   fixedXYZCounts:[0,0],genericXZCounts:[0,0],genericFiveShortCounts:[12,12],buoyantSphereCounts:[12,12],boundaryMarkerCounts:[51,51]},
+   fixedXYZCounts:[0,0],genericXZCounts:[0,0],genericFiveShortCounts:[12,12],buoyantSphereCounts:[12,12],boundaryMarkerCounts:[51,51],markerSphereCounts:[51,51],fixedSphereOrder:'markers'},
   sourceSelectionFor:portSourceSelection,rampsForSelection:portRampsForSelection,hazardsForPlayers,dynamicObjectsForPlayers,
   recordMetadataByClass:Array.from({length:4},(_,difficulty)=>portSourceSelection({difficulty})),recordMetadataForSelection:portSourceSelection,
   ...ordinaryGeometry,geometryForPlayers,sourceShoresByPlayerCount,shoreContactsByPlayerCount,authoredBackground,
-  contactVolumesForRamps,boundary,boundaryMarkers:points(PORT_NATIVE_GEOMETRY.boundaryMarkers),
+  contactVolumesForRamps,boundary,boundaryMarkers:points(PORT_NATIVE_GEOMETRY.boundaryMarkers),sourceMarkerSpheres:sourceBoundarySpheres(points(PORT_NATIVE_GEOMETRY.boundaryMarkers),{idPrefix:'port-marker-'}),
   boundaryMetadata:{sourceOrderIsPolygon:false,sourceMarkerSetClosed:false,cyclicOrderInferred:false,browserEnvelopeProvided:!!boundary,provisional:true,nativeCourseOutRuleRecovered:false,
    reason:'The 51 marker centers retain storage order. The 29-edge coast stays open; no synthetic closing contacts or filled source boundary are inferred.'},
   buoysByClass,finishGatesByClass,sourceRouteRowsByClass,sourceSecondaryRouteRowsByClass,
   sourceOrdinaryProgress:clone(PORT_NATIVE_GEOMETRY.sourceOrdinaryProgress),
-  obstacles:[],obstaclesByClass:[[],[],[],[]],obstaclesByPlayerCount:{1:[],2:[]},
+  obstacles:hazardsForPlayers(1),obstaclesByClass:Array.from({length:4},(_,difficulty)=>hazardsForPlayers(1,0,{difficulty})),obstaclesByPlayerCount:{1:hazardsForPlayers(1),2:hazardsForPlayers(2)},
   sourceDynamicObjects:portDynamicObjectsForSelection(),
   sourceBuoyancy:{nativeUnits:true,consumer:'8007dbc0',horizontalDamping:.9,anchorSpring:.001,verticalDamping:.8,gravityPerUpdate:4,depthLift:.3,liftDepthCapNative:30,
    positionIntegration:'Position+=velocity after each native object update. Motion and collision recoil are not integrated by this static course module.'},

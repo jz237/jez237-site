@@ -1,3 +1,4 @@
+import {readRaceWater} from './race-water.js';
 import {exportBreakablePresentation,importBreakablePresentation} from './breakable-hazards.js';
 // Intentionally excludes solver scratch buffers, rider references in wakes,
 // course methods, live tokens, records, saves and input/controller objects.
@@ -28,18 +29,19 @@ function numericRows(rows,keys,max){
 export function captureWindowWater(water,local,includeLocal=true){
  return {wake:numericRows(water.wake,['x','z','time','heading','power'],96),impacts:numericRows(water.impacts,['x','z','time','amplitude'],12),
   craft:numericRows(water.craft.map(c=>({...c,turn:c.turn??0,bowWet:c.bowWet??1,sternWet:c.sternWet??1})),['x','z','heading','turn','bowWet','sternWet','power'],4),level:water.level,
-  local:includeLocal&&local&&Number.isFinite(local.x)?{size:local.size,cell:local.cell,x:local.x,z:local.z,version:local.version,h:local.h.slice(),mask:local.mask.slice()}:null};
+  native:readRaceWater(water.native),local:includeLocal&&local&&Number.isFinite(local.x)?{size:local.size,cell:local.cell,x:local.x,z:local.z,version:local.version,h:local.h.slice(),mask:local.mask.slice()}:null};
 }
 export function validateWindowWater(w){
  if(!plain(w)||!finite(w.level))return null;
  const wake=numericRows(w.wake,['x','z','time','heading','power'],96),impacts=numericRows(w.impacts,['x','z','time','amplitude'],12),craft=numericRows(w.craft,['x','z','heading','turn','bowWet','sternWet','power'],4);
  if(!wake||!impacts||!craft)return null;
+ const native=readRaceWater(w.native);if(native===false)return null;
  let local=null;const f=w.local;
  if(f!==null&&f!==undefined){
   if(!plain(f)||!Number.isInteger(f.size)||f.size<2||f.size>128||!finite(f.cell)||f.cell<=0||f.cell>20||![f.x,f.z,f.version].every(finite)||!(f.h instanceof Float32Array)||!(f.mask instanceof Uint8Array)||f.h.length!==f.size*f.size||f.mask.length!==f.h.length||f.h.some(n=>!finite(n)||Math.abs(n)>2)||f.mask.some(n=>n>1))return null;
   local={size:f.size,cell:f.cell,x:f.x,z:f.z,version:f.version,h:f.h.slice(),mask:f.mask.slice()};
  }
- return {wake,impacts,craft,level:w.level,local};
+ return {wake,impacts,craft,level:w.level,local,native};
 }
 export function captureWindowFrame(state,water,{includeLocal=true}={}){
  return {time:state.time,phase:state.phase,countdown:state.countdown,freeRide:!!state.freeRide,passageOpenedAt:Number.isFinite(state.passageOpenedAt)?state.passageOpenedAt:null,

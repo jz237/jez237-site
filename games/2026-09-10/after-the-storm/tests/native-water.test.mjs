@@ -2,7 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createNativeHull,stepNativeHull} from '../native-hull.js';
 import {createNativeWaterProfile,createNativeWaterState,applyNativeWaterForces,
-  nativeJetMagnitude,nativeWaveCellImpulse} from '../native-water.js';
+  nativeJetMagnitude,nativeWaveCellImpulse,createNativeWaterCellSurface} from '../native-water.js';
+import {createNativeWaterField,queryNativeWaterField} from '../native-water-field.js';
+import {createNativeRaceAdapter,stepNativeRaceAdapter} from '../native-race-adapter.js';
 
 const close=(a,b,e=1e-10)=>assert.ok(Math.abs(a-b)<=e,`${a} ≠ ${b}`);
 const vecClose=(a,b,e=1e-10)=>{for(const axis of ['x','y','z'])close(a[axis],b[axis],e);};
@@ -233,9 +235,152 @@ test('current action suppresses only the dry correction, without suppressing gra
 });
 
 test('invalid staged options reject before binding or changing velocities',()=>{
-  for(const options of [{afterJet:3},{afterGravity:3},{jetStraight:1},{suppressDryCorrection:1},{buoyancyKOverride:-.1}]){
+  for(const options of [{afterJet:3},{afterGravity:3},{jetStraight:1},{suppressDryCorrection:1},{buoyancyKOverride:-.1},
+    {nativeCellSampler:3},{surface:{cellAtNative:3}}]){
     const hull=createNativeHull(),water=createNativeWaterState(),before=structuredClone(hull);
     assert.throws(()=>applyNativeWaterForces(hull,water,options));
     assert.deepEqual(hull,before);assert.equal(water.boundHull,null);
   }
+});
+
+test('explicit raw field flat-water pressure preserves the independently derived equilibrium',()=>{
+  const field=createNativeWaterField(),surface=createNativeWaterCellSurface(field);
+  const modern={hull:createNativeHull({position:{x:0,y:.015,z:0}}),water:createNativeWaterState()};
+  const source={hull:createNativeHull({position:{x:0,y:.015,z:0}}),water:createNativeWaterState()};
+  for(let i=0;i<200;i++){
+    stepNativeHull(modern.hull,.01,{beforeIntegrate:before(modern.water,{surface:0})});
+    stepNativeHull(source.hull,.01,{beforeIntegrate:before(source.water,{surface})});
+  }
+  vecClose(source.hull.center,{x:0,y:.015,z:0},1e-9);vecClose(source.hull.velocity,{x:0,y:0,z:0},1e-9);
+  vecClose(source.hull.center,modern.hull.center,1e-9);vecClose(source.hull.velocity,modern.hull.velocity,1e-9);
+  assert.deepEqual(source.water.wet,modern.water.wet);assert.equal(source.water.wetCount,8);
+  assert.equal(field.patchUpdates,0);assert.equal(field.forcingCalls,0);
+});
+
+test('raw slopes keep source non-unit impulse direction and bypass generic height pressure',()=>{
+  const hull=createNativeHull(),water=createNativeWaterState();
+  const cell={h00:24,slopeU:-64,slopeV:32,offsetU:-20,offsetV:-30,referenceHeight:5};
+  applyNativeWaterForces(hull,water,{surface:()=>({height:1e6,gradient:{x:100,z:100},waveCell:cell})});
+  // Denominator6144, a=-1/96,b=1/192,c=2/3. At upper point8,Y14,
+  // immersion=15*(2/3)+20/96-30/192=965/96; magnitude=965/3200.
+  const magnitude=965/3200,toVelocity=.025/.01;
+  vecClose(water.lastBuoyancy[8],{x:magnitude*(-5/384)*toVelocity,
+    y:magnitude*(2/3)*toVelocity,z:magnitude*.8660253882408142/192*toVelocity});
+  assert.equal(water.wet[8],true);
+  assert.ok(Math.hypot(...Object.values(water.lastBuoyancy[8]))<1,'must not normalize and reuse render height');
+});
+
+test('native cell method receives each point in native XZ and runs after staged rider forces',()=>{
+  const hull=createNativeHull({position:{x:-3,y:0,z:2},scale:.05}),water=createNativeWaterState(),calls=[];
+  hull.simulationTime=7.5;
+  const surface={cellAtNative(x,z,time){
+    const i=calls.filter(c=>c.kind==='cell').length;
+    calls.push({kind:'cell',x,z,time});
+    close(x,hull.points[i].position.x/.05);close(z,hull.points[i].position.z/.05);close(time,7.5);
+    return {h00:0,slopeU:0,slopeV:0,offsetU:0,offsetV:0};
+  }};
+  applyNativeWaterForces(hull,water,{surface,
+    afterJet:()=>calls.push({kind:'jet'}),afterGravity:()=>calls.push({kind:'gravity'})});
+  assert.deepEqual(calls.map(c=>c.kind),['jet','gravity',...Array(12).fill('cell')]);
+  close(water.lastBuoyancy[0].y,7*.03*.05/.01);
+});
+
+test('world nativeCellSampler takes precedence and retains the world-point/time contract',()=>{
+  const hull=createNativeHull({position:{x:2,y:0,z:-3}}),water=createNativeWaterState();
+  const seen=[];
+  applyNativeWaterForces(hull,water,{surface:()=>{throw new Error('unused modern surface was called');},
+    nativeCellSampler:(x,z,time)=>{
+      const point=hull.points[seen.length].position;close(x,point.x);close(z,point.z);close(time,hull.simulationTime);
+      seen.push([x,z,time]);return {h00:0,slopeU:0,slopeV:0,offsetU:0,offsetV:0};
+    }});
+  assert.equal(seen.length,12);close(water.lastBuoyancy[0].y,7*.03*.025/.01);
+});
+
+test('rider and horizontal-frame height adjustment adds to raw datum in native units',()=>{
+  const hull=createNativeHull({rider:1}),water=createNativeWaterState(createNativeWaterProfile({riderIndex:1}));
+  // Rider1 offset-5 plus speed lift3 gives-2native. Raw datum20 then
+  // yields4native immersion at upper pointY14, not6 or1native.
+  water.frameDisplacementNative={x:100/3,y:0,z:0};
+  const field=createNativeWaterField({datumNative:20});
+  applyNativeWaterForces(hull,water,{surface:createNativeWaterCellSurface(field)});
+  close(water.referenceOffsetWorld,-2*.025);close(water.lastBuoyancy[8].y,4*.03*.025/.01);
+});
+
+test('raw pressure uses current dive K and native pair-length cap before SI conversion',()=>{
+  for(const scale of [.025,.05]){
+    const hull=createNativeHull({scale}),water=createNativeWaterState();
+    applyNativeWaterForces(hull,water,{surface:{waveCell:{h00:1000,slopeU:0,slopeV:0,offsetU:0,offsetV:0}},
+      buoyancyKOverride:.003});
+    const maximumPairNative=Math.sqrt(12*12+21*21+72*72);
+    close(water.lastBuoyancy[8].y,.8*maximumPairNative*.003*scale/.01);
+    assert.ok(water.wet.every(Boolean));assert.equal(water.buoyancyK,.003);
+  }
+});
+
+test('raw-cell wet bits preserve grouped drag and fifth-tick aggregate latching',()=>{
+  const hull=createNativeHull(),water=createNativeWaterState(),wet=new Set([0,3,8]);let n=0;
+  for(let i=0;i<12;i++)hull.points[i].velocity={x:3,y:2+([1,4,8,11].includes(i)?0:.48),z:4};
+  applyNativeWaterForces(hull,water,{nativeCellSampler:()=>{
+    const i=n++,pointY=hull.points[i].position.y/.025;
+    return {h00:pointY-(wet.has(i)?0:1),slopeU:0,slopeV:0,offsetU:0,offsetV:0};
+  }});
+  assert.deepEqual(water.wet.map((w,i)=>w?i:-1).filter(i=>i>=0),[0,3,8]);
+  vecClose(hull.points[0].velocity,{x:3,y:1.7,z:4});vecClose(hull.points[2].velocity,{x:3,y:1.7,z:4});
+  for(const i of [3,5,8])vecClose(hull.points[i].velocity,{x:2.76,y:1.7,z:4});
+  assert.equal(water.wetCount,0);assert.equal(water.anyWet,false);
+  const allHull=createNativeHull({position:{x:0,y:-1,z:0}}),allWater=createNativeWaterState();
+  const allSurface=createNativeWaterCellSurface(createNativeWaterField());
+  for(let i=0;i<5;i++){
+    stepNativeHull(allHull,.01,{beforeIntegrate:before(allWater,{surface:allSurface})});
+    assert.ok(allWater.wet.every(Boolean));assert.equal(allWater.wetCount,i===4?12:0);
+    assert.equal(allWater.anyWet,i===4);
+  }
+});
+
+test('field cell surface reads live datum without using renderer signed-height wrap',()=>{
+  const field=createNativeWaterField({datumNative:4});field.heightQ.fill(-1);
+  const live=createNativeWaterCellSurface(field),fixed=createNativeWaterCellSurface(field,{datumNative:9});
+  assert.deepEqual(live.cellAtNative(0,0),{h00:-1,slopeU:0,slopeV:0,offsetU:0,offsetV:0,referenceHeight:4});
+  field.datumNative=-32768;
+  assert.equal(live.cellAtNative(0,0).referenceHeight,-32768);assert.equal(fixed.cellAtNative(0,0).referenceHeight,9);
+  // Rendered vertices wrap to+32767 here, but raw physical datum+height is
+  // -32769. Treating the rendered height as physical would wrongly wet all12.
+  assert.equal(queryNativeWaterField(field,0,0).renderHeightNative,32767);
+  const hull=createNativeHull(),water=createNativeWaterState();applyNativeWaterForces(hull,water,{surface:live});
+  assert.ok(water.wet.every(x=>!x));assert.ok(water.lastBuoyancy.every(v=>v.x===0&&v.y===0&&v.z===0));
+  assert.equal(field.patchUpdates,0);assert.equal(field.forcingCalls,0);
+});
+
+test('existing race adapter accepts raw native field surface without new adapter options',()=>{
+  const source=createNativeRaceAdapter({surface:createNativeWaterCellSurface(createNativeWaterField())});
+  const modern=createNativeRaceAdapter({surface:0});
+  for(let i=0;i<20;i++){
+    stepNativeRaceAdapter(source,.05,{throttle:true});stepNativeRaceAdapter(modern,.05,{throttle:true});
+  }
+  vecClose(source.hull.center,modern.hull.center,1e-9);vecClose(source.hull.velocity,modern.hull.velocity,1e-9);
+  assert.deepEqual(source.water.wet,modern.water.wet);assert.equal(source.lastFrame.hudSpeed,modern.lastFrame.hudSpeed);
+});
+
+test('nonflat raw-field force sampling is independent of render cadence',()=>{
+  const field=createNativeWaterField();for(let i=0;i<field.heightQ.length;i++)field.heightQ[i]=(i*317)%1024-512;
+  const make=()=>({hull:createNativeHull({position:{x:0,y:.015,z:0}}),water:createNativeWaterState()});
+  const a=make(),b=make(),options={surface:createNativeWaterCellSurface(field),throttle:true,stickX:.2,stickY:.3};
+  for(let i=0;i<60;i++)stepNativeHull(a.hull,1/60,{beforeIntegrate:before(a.water,options)});
+  for(let i=0;i<120;i++)stepNativeHull(b.hull,1/120,{beforeIntegrate:before(b.water,options)});
+  vecClose(a.hull.center,b.hull.center);vecClose(a.hull.velocity,b.hull.velocity);
+  assert.deepEqual(a.water.wet,b.water.wet);assert.equal(a.hull.ticks,100);assert.equal(b.hull.ticks,100);
+  assert.equal(field.patchUpdates,0);assert.equal(field.forcingCalls,0);
+});
+
+test('invalid explicit cell results fail instead of silently falling back to modern pressure',()=>{
+  for(const result of [null,undefined,3,{},
+    {h00:0,slopeU:NaN,slopeV:0,offsetU:0,offsetV:0},
+    {h00:0,slopeU:0,slopeV:0,offsetU:0,offsetV:0,referenceHeight:null}]){
+    for(const surface of [{cellAtNative:()=>result},()=>({waveCell:result})]){
+      assert.throws(()=>applyNativeWaterForces(createNativeHull(),createNativeWaterState(),{surface}),TypeError);
+    }
+    assert.throws(()=>applyNativeWaterForces(createNativeHull(),createNativeWaterState(),{nativeCellSampler:()=>result}),TypeError);
+  }
+  assert.throws(()=>createNativeWaterCellSurface({}),TypeError);
+  assert.throws(()=>createNativeWaterCellSurface(createNativeWaterField(),{datumNative:32768}),RangeError);
 });

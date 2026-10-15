@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {NATIVE_RIDER_ROLES,NATIVE_RIDER_LINKS,NATIVE_RIDER_ORDINARY_TYPES,
   nativeRiderTargetsFromPose,prepareNativeRiderRest,projectNativeRiderTargets,solveNativeRiderLinks,
   createNativeArticulatedRider,stepNativeArticulatedRider} from '../native-articulated-rider.js';
+import {createNativeRiderControlState,prepareNativeRiderControls,finishNativeRiderControls} from '../native-rider-controls.js';
 
 const vec=(x=0,y=0,z=0)=>({x,y,z});
 const copy=p=>({...p});
@@ -47,6 +48,30 @@ test('only a negative stored-up displacement contributes the separate sixty perc
   close(actual[2].y,p[2].y-.12);vectorClose(actual[3],p[3]);vectorClose(actual[4],p[4]);
 });
 
+test('manipulation adds to history before the negative-up test, matching the raw joint consumer',()=>{
+  const p=authored(),goal=p.map(copy),history=zeros(),manipulation=zeros();
+  p[2]=vec(5,40,7);goal[2]=vec(5,45.01806640625,7);
+  history[2].y=.5;manipulation[2].y=Math.fround(-1.1);
+  // B changes old-up+.5 to approximately−.6 BEFORE the sign test. The raw
+  // binary32 result is41.64722442626953 native; the world kernel uses JS math.
+  const result=project({positions:p,targets:goal,storedDeltas:history,manipulationDeltas:manipulation,scale:1});
+  close(result[2].y,40+.4*(45.01806640625-40)+.6*(.5+Math.fround(-1.1)));
+  close(result[2].y,41.64722442626953,2**-18); // One binary32 ULP at this native magnitude.
+  const without=project({positions:p,targets:goal,storedDeltas:history,scale:1});
+  assert.ok(Math.abs(result[2].y-(without[2].y+.6*manipulation[2].y))>.2,
+    'adding a post-projection impulse would bypass the source sign test');
+  assert.equal(history[2].y,.5);assert.equal(manipulation[2].y,Math.fround(-1.1));
+});
+
+test('distance clipping precedes the manipulation/history projection and foot minimum follows it',()=>{
+  const p=authored(),goal=p.map(copy),history=zeros(),manipulation=zeros(),types=[...allFree];
+  p[2]=vec(5,0,7);goal[2]=vec(5,200,7);history[2].y=.5;manipulation[2].y=Math.fround(-1.1);
+  types[9]=4;goal[9].y=-20;manipulation[9].y=-100;
+  const result=project({positions:p,targets:goal,storedDeltas:history,manipulationDeltas:manipulation,types,scale:1});
+  close(result[2].y,169.63999938964844,2e-6);
+  close(result[9].y,.107405);
+});
+
 test('fifty native unit cap bounds retained vertical lag instead of limiting target travel',()=>{
   const p=authored(),goal=translated(p,vec(0,10,0));
   const actual=project({targets:goal});
@@ -62,6 +87,9 @@ test('fixed targets and two physical anchor types remain distinct from animated 
   vectorClose(actual[0],goal[0]);vectorClose(actual[6],grips[2]);vectorClose(actual[14],grips[3]);
   assert.notDeepEqual(actual[6],goal[6]);
   assert.throws(()=>project({types}),/anchors\[2\]/);
+  const manipulation=Array.from({length:19},()=>vec(100,-100,100));
+  const withManipulation=project({targets:goal,types,anchors:grips,manipulationDeltas:manipulation});
+  for(const i of [0,6,14])vectorClose(withManipulation[i],actual[i]);
 });
 
 test('foot projection has two hull-relative minimum heights, without the target distance cap',()=>{
@@ -126,6 +154,27 @@ test('physical joint2 output differs from the visual target and history remains 
   state.jointWorld.y=999;assert.notEqual(state.points[2].position.y,999);
 });
 
+test('post-hull B preprocessing enters the physical solve, then manipulation is replaced by solved-minus-history',()=>{
+  const p=authored(),state=createNativeArticulatedRider({restTargets:p}),other=createNativeArticulatedRider({restTargets:p});
+  const controls=createNativeRiderControlState({baseLateralRetention:.85,baseRollBalance:.03});
+  const prepared=prepareNativeRiderControls(controls,{heldButtons:0x4000,pressedButtons:0x4000});
+  const modified=finishNativeRiderControls(prepared.state,{targets:p,center,up});
+  const args={targets:modified.targets,historyTargets:p,center,up,anchors:anchors(p)};
+  stepNativeArticulatedRider(state,{...args,manipulationDeltas:modified.manipulationDeltas});
+  stepNativeArticulatedRider(other,args);
+  assert.ok(state.jointWorld.y<other.jointWorld.y-.001,
+    'the extra negative-up term must affect the physical torso rather than just its target');
+  for(let i=0;i<19;i++)vectorClose(state.points[i].storedDelta,vec(state.points[i].position.x-p[i].x,
+    state.points[i].position.y-p[i].y,state.points[i].position.z-p[i].z));
+  const before=structuredClone(state),expected=structuredClone(state);
+  const next={targets:p,historyTargets:p,center,up,anchors:anchors(p)};
+  const projected=projectNativeRiderTargets({positions:before.points.map(q=>q.position),targets:p,
+    storedDeltas:before.points.map(q=>q.storedDelta),types:NATIVE_RIDER_ORDINARY_TYPES,center,up,anchors:anchors(p)});
+  const solved=solveNativeRiderLinks(projected,state.restLengths);
+  stepNativeArticulatedRider(expected,next);
+  for(let i=0;i<19;i++)vectorClose(expected.points[i].position,solved[i]);
+});
+
 test('invalid authored inputs and collapsed links fail before mutating the rider',()=>{
   const p=authored(),state=createNativeArticulatedRider({restTargets:p}),before=structuredClone(state);
   assert.throws(()=>stepNativeArticulatedRider(state,{targets:p,center,up,anchors:anchors(p)}),/historyTargets/);
@@ -136,4 +185,9 @@ test('invalid authored inputs and collapsed links fail before mutating the rider
   assert.throws(()=>createNativeArticulatedRider({restTargets:p,restLengths:Array(22).fill(1)}),/not both/);
   assert.throws(()=>createNativeArticulatedRider({restLengths:Array(22).fill(0),positions:p}),/positive/);
   assert.throws(()=>project({types:Array(19).fill(6)}),/integers/);
+  assert.throws(()=>stepNativeArticulatedRider(state,{targets:p,historyTargets:p,center,up,
+    anchors:anchors(p),manipulationDeltas:zeros().slice(1)}),/manipulationDeltas/);
+  const invalid=zeros();invalid[18].z=NaN;
+  assert.throws(()=>project({manipulationDeltas:invalid}),/finite/);
+  assert.deepEqual(state,before);
 });

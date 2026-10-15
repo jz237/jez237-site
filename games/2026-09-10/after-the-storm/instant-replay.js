@@ -1,4 +1,5 @@
 import {captureBreakableState} from './breakable-hazards.js';
+import {capturePrimaryBuoyPresentation,samplePrimaryBuoyPresentation} from './primary-buoy-presentation.js';
 // A bounded in-memory recording. Replays read snapshots; they never integrate
 // physics, consume inputs, submit records, or advance championship state.
 const clone=x=>structuredClone(x),mix=(a,b,t)=>a+(b-a)*t;
@@ -17,6 +18,7 @@ export function recordMoment(rec,state,water,beads=[]){
  });
  const f=state.localWater,local=f&&Number.isFinite(f.x)?{h:f.h.slice(),mask:f.mask.slice(),x:f.x,z:f.z,cell:f.cell,size:f.size,version:f.version}:null;
  const frame={time:state.time,racers:clone(racers),weather:clone(state.weather),passageOpenedAt:state.passageOpenedAt,water:clone(typeof water==='function'?water():water),localWater:local,beads:clone(typeof beads==='function'?beads():beads),breakables:captureBreakableState(state.breakables,state.time)};
+ if(state.primaryBuoys)frame.primaryBuoys=capturePrimaryBuoyPresentation(state.primaryBuoys);
  rec.frames.push(frame);rec.last=state.time;rec.previous=frame;
  while(rec.frames.length>201||rec.frames[0].time<state.time-10)rec.frames.shift();
 }
@@ -35,6 +37,7 @@ export function replaySample(clip,time){
   for(const k of ['y','vy','pitch','roll','pitchVelocity','rollVelocity','compression','wet','waterHeight'])if(Number.isFinite(r.hydro[k])&&Number.isFinite(q.hydro[k]))r.hydro[k]=mix(r.hydro[k],q.hydro[k],t);
   if(r.stunt.trick===q.stunt.trick)r.stunt.angle=mix(r.stunt.angle,q.stunt.angle,t);
  });
+ if(a.primaryBuoys||b.primaryBuoys)frame.primaryBuoys=samplePrimaryBuoyPresentation(a.primaryBuoys,b.primaryBuoys,t);
  // World-aligned samples survive patch recentering without moving the waves.
  if(a.localWater&&b.localWater){const f=a.localWater,g=b.localWater,h=f.h.slice(),dx=Math.round((f.x-g.x)/f.cell),dz=Math.round((f.z-g.z)/f.cell);for(let j=0;j<f.size;j++)for(let k=0;k<f.size;k++){const x=k+dx,z=j+dz;if(x>=0&&z>=0&&x<g.size&&z<g.size)h[j*f.size+k]=mix(h[j*f.size+k],g.h[z*g.size+x],t);}frame.localWater={...f,h,version:time};}
  return frame;

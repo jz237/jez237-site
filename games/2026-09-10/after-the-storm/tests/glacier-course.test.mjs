@@ -26,12 +26,16 @@ test('all four source classes retain sixteen visible buoys and the recovered Rev
  assert.equal(c.gates.some(g=>Math.abs(g.bx-(-3350*S))<1e-9&&Math.abs(g.bz-(-3850*S))<1e-9),false,'raw4 suppressed guide is not a mandatory buoy');
 });
 
-test('the shared object layout contains twelve fixed breakable blocks and eighteen hidden fixed spheres',()=>{
+test('twelve breakables,90 physical markers and18 distinct hidden spheres retain source families',()=>{
  for(const difficulty of [0,1,2,3]){
-  const c=getCourse('glacier',difficulty),blocks=c.rocks.filter(q=>q.breakable),hidden=c.rocks.filter(q=>q.hidden);
-  assert.equal(c.rocks.length,30);assert.equal(blocks.length,12);assert.equal(hidden.length,18);assert.equal(new Set(c.rocks.map(q=>q.id)).size,30);
+  const c=getCourse('glacier',difficulty),blocks=c.rocks.filter(q=>q.breakable),hidden=c.rocks.filter(q=>q.runtimeTag===5),markers=c.rocks.filter(q=>q.sourceBoundaryMarker);
+  assert.equal(c.layoutRevision,5);assert.equal(c.waterModelRevision,1);
+  assert.equal(c.rocks.length,120);assert.equal(blocks.length,12);assert.equal(hidden.length,18);assert.equal(markers.length,90);assert.equal(new Set(c.rocks.map(q=>q.id)).size,120);
   for(const q of blocks){assert.equal(q.type,'ice');assert.equal(q.fixed,true);assert.equal(q.fixedSphere,true);close(q.r,50*S);close(q.probeRadius,12*S);assert.equal(q.y,0);}
   for(const q of hidden){assert.equal(q.fixed,true);assert.equal(q.fixedSphere,true);assert.equal(q.breakable,undefined);close(q.r,25*S);close(q.probeRadius,12*S);assert.equal(q.y,0);}
+  assert.ok(blocks.every(q=>q.sourceFixedSphere===false&&q.sourceGenericSphere));assert.ok(markers.every(q=>q.sourceFixedSphere&&q.hidden&&q.runtimeTag===1&&q.y===0));
+  assert.deepEqual(markers.map(q=>[q.x,q.z]),c.boundaryMarkers);assert.deepEqual(c.rocks.filter(q=>q.sourceFixedSphere).map(q=>q.runtimeTag),[...Array(90).fill(1),...Array(18).fill(5)]);
+  assert.ok(hidden.every(q=>!markers.some(m=>m.x===q.x&&m.z===q.z)),'the18 hidden centers are not marker duplicates');
   assert.deepEqual([blocks[0].x,blocks[0].y,blocks[0].z],[1800*S,0,-1350*S]);assert.deepEqual([blocks[11].x,blocks[11].y,blocks[11].z],[-4588*S,0,34*S]);
   assert.deepEqual([hidden[0].x,hidden[0].z],[-4220*S,7157*S]);assert.deepEqual([hidden[17].x,hidden[17].z],[3995*S,-2280*S]);
   assert.equal(c.ramps.length,0,'source has no separate Glacier ramp-object rows');

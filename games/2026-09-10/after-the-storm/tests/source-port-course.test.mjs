@@ -154,9 +154,10 @@ test('twelve buoyant objects stay dynamic definitions rather than frozen sphere 
    assert.equal(q.nativeHeading,heading);assert.equal(q.sourceType,type);assert.equal(q.runtimeKind,9);assert.equal(q.sourcePhysicsFlag,4);assert.equal(q.sourceCollisionKind,2);
    assert.equal(q.sourcePlayerCount,players);assert.equal(q.radius,.625);assert.equal(q.probeRadius,.3);assert.ok(q.requiresNativeMotion&&q.floating&&!q.fixed&&!q.fixedSphere&&!q.followsWaterDatum);
   });
-  assert.deepEqual(c.hazardsForPlayers(players,10,{mode,difficulty:3}),[]);
+  const markers=c.hazardsForPlayers(players,10,{mode,difficulty:3});assert.equal(markers.length,51);assert.ok(markers.every(q=>q.sourceBoundaryMarker&&q.sourceFixedSphere&&q.hidden&&q.runtimeTag===1&&q.y===0));
+  assert.deepEqual(markers.map(q=>[q.x,q.z]),c.boundaryMarkers);
  }
- assert.deepEqual(c.obstaclesByClass,[[],[],[],[]]);assert.equal(c.sourceDynamicsReady,false);
+ assert.deepEqual(c.obstaclesByClass.map(q=>q.length),[51,51,51,51]);assert.ok(c.obstacles.every(q=>q.sourceBoundaryMarker));assert.equal(c.sourceDynamicsReady,false);
  const b=c.sourceBuoyancy;assert.deepEqual([b.horizontalDamping,b.anchorSpring,b.verticalDamping,b.gravityPerUpdate,b.depthLift,b.liftDepthCapNative],[.9,.001,.8,4,.3,30]);assert.equal(b.nativeUnits,true);
  assert.deepEqual(c.sourceState8Override,{ramps:[],spheres:[[4802,-3656,2]]},'the special-state sphere is not silently activated in ordinary or Stunt selections');
 });

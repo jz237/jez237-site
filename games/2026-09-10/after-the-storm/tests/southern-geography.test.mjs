@@ -10,6 +10,7 @@ import {waterLevel} from '../simulation.js';
 test('Southern shares59 finite shore edges,305 static planes and17 fixed solid volumes',()=>{
  const c=getCourse('tempest'),s=createRace({mode:'time',course:c});
  assert.equal(c.name,'Southern Island');assert.equal(c.shoreContacts.edges.length,59);
+ assert.equal(c.layoutRevision,5);assert.equal(c.waterModelRevision,1);
  assert.equal(c.staticSurfaces.reduce((n,q)=>n+q.triangles.length,0),287);assert.equal(c.contactWalls.triangles.length,18);
  assert.equal(s.course.contactVolumes.volumes.length,20);assert.equal(c.crossbars,undefined);
  assert.equal(c.ground(0,0),-8);assert.equal(c.renderGround(0,0),1.25,'raised ribbon is separate from water depth');
@@ -29,7 +30,9 @@ test('source ship remains fixed, partly submerged and independently supported by
 });
 test('one-player and two-player select the correct distinct source mast hazards',()=>{
  const c=getCourse('tempest'),one=createRace({mode:'time',course:c}),two=createRace({mode:'versus',course:c});
- assert.equal(one.course.rocks.length,28);assert.equal(two.course.rocks.length,26);
+ assert.equal(one.course.rocks.length,107);assert.equal(two.course.rocks.length,105);
+ for(const course of [one.course,two.course]){assert.equal(course.rocks.filter(q=>q.runtimeTag===4).length,26);assert.equal(course.rocks.filter(q=>q.sourceBoundaryMarker).length,79);}
+ assert.equal(one.course.rocks.filter(q=>q.runtimeTag===5).length,2);assert.equal(two.course.rocks.filter(q=>q.runtimeTag===5).length,0);
  assert.equal(one.course.contactVolumes.volumes.length,20);assert.equal(two.course.contactVolumes.volumes.length,20);
  assert.equal(one.course.playerCount,1);assert.equal(two.course.playerCount,2);assert.notEqual(one.course.rocks,two.course.rocks);
  assert.equal(one.course.rocks.filter(q=>!q.followsWaterDatum).length,2);assert.ok(two.course.rocks.every(q=>q.followsWaterDatum));

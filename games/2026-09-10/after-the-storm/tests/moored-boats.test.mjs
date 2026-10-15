@@ -7,7 +7,7 @@ test('Sunset launches occupy the two mapped pier ends in every class',()=>{
  }
 });
 test('moored hull and cabin contacts follow the same finite wave pose',()=>{
- const c=getCourse('amber');createRace({course:c});const b=c.mooredBoats[0],p=mooredBoatPose(b,10,.22),q=mooredBoatPose(b,15,.22);assert.ok(Math.abs(p.y-q.y)>.01);assert.ok(Number.isFinite(p.pitch)&&Number.isFinite(p.roll));
+ const c=getCourse('amber');createRace({course:c,seaState:'chop'});const b=c.mooredBoats[0],p=mooredBoatPose(b,10,.22),q=mooredBoatPose(b,15,.22);assert.ok(Math.abs(p.y-q.y)>.01);assert.ok(Number.isFinite(p.pitch)&&Number.isFinite(p.roll));
  assert.equal(mooredBoatCollision([b],b.x,p.y,b.z,10,.22),true);assert.equal(mooredBoatCollision([b],b.x,p.y+1.2,b.z,10,.22),true);
  assert.equal(mooredBoatCollision([b],b.x,p.y+5,b.z,10,.22),false);assert.equal(mooredBoatCollision([b],b.x,p.y-5,b.z,10,.22),false);assert.equal(mooredBoatCollision([b],b.x+8,p.y,b.z,10,.22),false);
 });

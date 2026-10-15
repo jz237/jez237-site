@@ -1,7 +1,8 @@
-import {createSourceBuoyLayout} from './source-buoy-progress.js?v=75cb6c906e6b';
-import {CLASSIC_COURSES,polygonDistance} from './classic-courses.js?v=75cb6c906e6b';
-import {configurePassage,passageDistance} from './course-passages.js?v=75cb6c906e6b';
-import {tideLevel} from './course-environment.js?v=75cb6c906e6b';
+import {sourceWaterConditions} from './source-water-conditions.js?v=9267cf1551ef';
+import {createSourceBuoyLayout} from './source-buoy-progress.js?v=9267cf1551ef';
+import {CLASSIC_COURSES,polygonDistance} from './classic-courses.js?v=9267cf1551ef';
+import {configurePassage,passageDistance} from './course-passages.js?v=9267cf1551ef';
+import {tideLevel} from './course-environment.js?v=9267cf1551ef';
 // Course geometry is shared by navigation, collision, terrain and presentation.
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const definitions=[
@@ -45,7 +46,7 @@ export function terrainHeight(course,x,z){if(CLASSIC_COURSES[course.id])return C
  const erosion=(coastNoise(x*.075,z*.075)-.5)*3.8+(coastNoise(x*.21,z*.21)-.5)*1.2;
  return Math.min(theme==='ice'?65:theme==='lake'?45:22,h)+erosion*clamp((d-45)/24,0,1);
 }
-export const COURSES=definitions.map(original=>{const d={...original,...CLASSIC_COURSES[original.id]};return {...d,gates:buildGates(sampleRoute(d.anchors)),rocks:[],laps:3};});
+export const COURSES=definitions.map(original=>{const d={...original,...CLASSIC_COURSES[original.id]};return {...d,sourceWaterCourseIndex:sourceWaterConditions({courseId:d.id}).courseIndex,waterModelRevision:1,layoutRevision:(d.layoutRevision??0)+1,gates:buildGates(sampleRoute(d.anchors)),rocks:[],laps:3};});
 export function getCourse(id='greyhaven',difficulty=0){const base=COURSES.find(c=>c.id===id)||COURSES[0],reverse=difficulty===3,level=Math.min(2,difficulty),anchors=base.anchorsByClass?.[difficulty]||(level===2&&base.expertAnchors?base.expertAnchors:base.anchors),sample=base.routeInterpolation==='linear'?samplePolyline:sampleRoute;let points=sample(anchors,24+level*4);if(reverse&&!base.directedAnchorsByClass)points=[points[0],...points.slice(1).reverse()];
  let route=sample(anchors,384);if(reverse&&!base.directedAnchorsByClass)route=[route[0],...route.slice(1).reverse()];const course={...base,anchors,resistance:base.resistanceByClass?.[difficulty]||base.resistance||[],closedAreas:level===2?base.expertClosedAreas||[]:[],requiredPassage:level===2&&!!base.expertAnchors,difficulty,reverse,route,gates:buildGates(points,level),rocks:(base.obstaclesByClass?.[difficulty]||[...(base.obstacles||[]),...(level?(base.extraObstacles||[]).slice(0,level===1?4:99):[])]).map(o=>({...o})),ramps:(base.raceRampsByClass?.[difficulty]||base.raceRamps||[]).map(r=>({...r,solidBack:true}))};
  if(base.buoysByClass?.[difficulty]){

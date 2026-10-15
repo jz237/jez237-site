@@ -10,7 +10,7 @@ test('Sunny Beach uses the horizontal source sandbar, finite shallows and separa
  for(const x of [-120,-60,0,60,120])assert.equal(c.ground(x,0),.5);
  assert.equal(c.ground(0,25),-1.25);assert.equal(c.ground(0,-30),-1.25);
  assert.equal(c.ground(-180,-70),-8);assert.equal(c.sourceShores[1].sourceClosed,false);assert.equal(c.shoreContacts.edges.length,49);
- for(let d=0;d<4;d++){const v=getCourse('greyhaven',d);assert.equal(v.rocks.filter(q=>!q.hidden).length,[0,3,5,5][d]);assert.equal(v.rocks.filter(q=>q.hidden).length,4);assert.equal(v.ramps.length,0);}
+ for(let d=0;d<4;d++){const v=getCourse('greyhaven',d);assert.equal(v.rocks.filter(q=>!q.hidden).length,[0,3,5,5][d]);assert.equal(v.rocks.filter(q=>q.hidden&&!q.sourceBoundaryMarker).length,4);assert.equal(v.ramps.length,0);}
 });
 test('Sunset Bay has distinct L-shaped geography and a race-mode ramp with a wet bypass',()=>{
  const c=getCourse('amber');assert.equal(c.name,'Sunset Bay');assert.ok(c.ground(-34,40)>0);assert.ok(c.ground(90,127)>0);assert.ok(c.ground(65,30)<-4);

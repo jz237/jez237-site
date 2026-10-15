@@ -1,4 +1,5 @@
 import {sourceStuntInput} from './source-stunt-pilot.js';
+import {createNativeRacePilot} from './native-race-pilot.js';
 import {wave} from './simulation.js';
 import {aiInput,angleDelta,clamp} from './race-core.js';
 // A full park routine using only helm, throttle, trim and stunt inputs.
@@ -26,7 +27,15 @@ export function parkMasteryInput(state,r){
 }
 // Verification issues the same inputs available to a rider. It does not move
 // craft, award scores, or mark objectives complete.
+const nativeVerificationPilots=new WeakMap();
 export function verificationInput(state,r){
+ if(state.nativeHost){
+  let pilots=nativeVerificationPilots.get(state);
+  if(!pilots){pilots=new WeakMap();nativeVerificationPilots.set(state,pilots);}
+  let pilot=pilots.get(r);
+  if(!pilot){pilot=createNativeRacePilot({course:state.course});pilots.set(r,pilot);}
+  return pilot.input(state,r);
+ }
  if(state.verifyFortressRidge&&state.course.id==='citadel'&&!state.course.reverse&&r.lap===1){
   const z=r.z/.8+300;
   if(z<195&&!r.fortressRidge)r.fortressRidge={waitAt:null,done:false};
@@ -112,7 +121,7 @@ function authoredStuntInput(state,r){
  // Keep the aim beyond velocity anticipation until the target plane is crossed.
  // A fixed 1.3 m lookahead fell behind a moving ski and induced a last-metre
  // brake/steer oscillation, particularly across closely spaced dive rings.
- const aim=q.kind==='ramp'?q.length/2+4:city?Math.max(3.4,r.speed*.18):1.3,error=angleDelta(Math.atan2(q.x+q.tx*aim-r.x-r.vx*.12,q.z+q.tz*aim-r.z-r.vz*.12)-r.heading);
+ const aim=q.kind==='ramp'?q.length/2+4:city?Math.max(3.4,r.speed*.18):state.course.id==='port'?2.5:1.3,error=angleDelta(Math.atan2(q.x+q.tx*aim-r.x-r.vx*.12,q.z+q.tz*aim-r.z-r.vz*.12)-r.heading);
  // Settle heading and yaw while still on water: a steering correction after
  // leaving a ramp cannot redirect the airborne hull onto the next ring.
  const rampMisaligned=q.kind==='ramp'&&!h.onRamp&&!h.airborne&&(Math.abs(angleDelta(Math.atan2(q.tx,q.tz)-r.heading))>(city?.07:.2)||Math.abs(r.yawVelocity||0)>(city?.16:.4));

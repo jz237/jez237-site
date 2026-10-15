@@ -94,18 +94,21 @@ test('231 finite upward sand faces match independent source grid samples',()=>{
 });
 
 test('class-visible spheres and four fixed XYZ spheres use exact player and Stunt families',()=>{
- const c=course();assert.deepEqual(c.obstaclesByClass.map(q=>q.length),[4,7,9,9]);
+ const c=course();assert.deepEqual(c.obstaclesByClass.map(q=>q.length),[43,46,48,48]);
  for(let d=0;d<4;d++){
   const one=c.hazardsForPlayers(1,-3,{difficulty:d}),two=c.hazardsForPlayers(2,4,{difficulty:d});
   assert.deepEqual(one,two);assert.equal(one.filter(q=>!q.hidden).length,[0,3,5,5][d]);
-  assert.ok(one.every(q=>q.fixedSphere&&q.fixed&&!q.followsWaterDatum&&q.r===.625&&q.probeRadius===.3));
+  assert.ok(one.every(q=>q.sourceFixedSphere&&q.fixedSphere&&q.fixed&&!q.followsWaterDatum&&q.r===.625));one.forEach(q=>close(q.probeRadius,.3));
+  const markers=one.filter(q=>q.sourceBoundaryMarker);assert.equal(markers.length,39);assert.deepEqual(markers.map(q=>[q.x,q.z]),c.boundaryMarkers);
+  assert.ok(markers.every(q=>q.hidden&&q.runtimeTag===1&&q.absoluteY&&q.y===0));
+  assert.ok(one.slice([0,3,5,5][d],[0,3,5,5][d]+39).every(q=>q.sourceBoundaryMarker));assert.ok(one.slice(-4).every(q=>q.runtimeTag===5));
  }
- const fixed=c.obstacles.filter(q=>q.hidden);assert.deepEqual(fixed.map(q=>[q.x,q.y,q.z]),[[7582,23,292],[7483,18,659],[-7136,20,779],[-7272,13,424]].map(q=>q.map(v=>v*S)));
+ const fixed=c.obstacles.filter(q=>q.runtimeTag===5);assert.deepEqual(fixed.map(q=>[q.x,q.y,q.z]),[[7582,23,292],[7483,18,659],[-7136,20,779],[-7272,13,424]].map(q=>q.map(v=>v*S)));
  assert.ok(fixed.every(q=>q.runtimeTag===5));
  assert.deepEqual(c.obstaclesByClass[1].filter(q=>!q.hidden).map(q=>[q.x,q.z]),[[-2332,-1648],[-2332,-1136],[-2332,-613]].map(q=>q.map(v=>v*S)));
  assert.equal(c.obstaclesByClass[3].filter(q=>q.runtimeTag===3).length,2,'City-specific Reverse exclusion does not affect Sunny');
  const stunt=c.hazardsForPlayers.call({...c,difficulty:0,stunt:true},1);
- assert.equal(stunt.length,8);assert.equal(stunt.filter(q=>!q.hidden).length,4);assert.ok(stunt.filter(q=>!q.hidden).every(q=>q.runtimeTag===3));
+ assert.equal(stunt.length,47);assert.equal(stunt.filter(q=>!q.hidden).length,4);assert.ok(stunt.filter(q=>!q.hidden).every(q=>q.runtimeTag===3));assert.equal(stunt.filter(q=>q.sourceBoundaryMarker).length,39);
  assert.deepEqual(stunt.slice(0,4).map(q=>[q.x,q.z]),[[-3060,-1415],[-3379,-897],[-3385,-1434],[-3080,-904]].map(q=>q.map(v=>v*S)));
  assert.equal(c.sourceObjectSelection.movingSphereCount,0);
 });

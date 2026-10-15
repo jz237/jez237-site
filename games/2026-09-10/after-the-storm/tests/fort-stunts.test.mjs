@@ -7,7 +7,7 @@ import {verificationInput} from '../race-verification.js';
 import {barrierCollision} from '../course-barriers.js';
 
 test('Fortress stunt route has fifteen rings and two forward jumps on navigable water',()=>{
- const base=getCourse('citadel'),c=stuntCourse(base);assert.equal(base.layoutRevision,7);assert.equal(base.ramps.length,0);assert.equal(c.rings.length,15);assert.equal(c.ramps.length,2);assert.equal(c.checkpoints.length,4);
+ const base=getCourse('citadel'),c=stuntCourse(base);assert.equal(base.layoutRevision,8);assert.equal(base.ramps.length,0);assert.equal(c.rings.length,15);assert.equal(c.ramps.length,2);assert.equal(c.checkpoints.length,4);
  for(const p of sampleRoute(c.anchors,384))assert.ok(c.ground(p.x,p.z)<-.8,JSON.stringify(p));
  assert.ok(c.ramps[0].tx>0&&c.ramps[0].tz>0);assert.ok(c.ramps[1].tz<-.99);
 });

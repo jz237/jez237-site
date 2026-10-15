@@ -1,6 +1,7 @@
-import {shoreLines} from './shore-contact.js?v=75cb6c906e6b';
-import {facetedSurface} from './faceted-surfaces.js?v=75cb6c906e6b';
-import {SUNNY_NATIVE_SCALE,sunnyRampVolumes,sunnyContactVolumes} from './source-sunny-boxes.js?v=75cb6c906e6b';
+import {shoreLines} from './shore-contact.js?v=9267cf1551ef';
+import {facetedSurface} from './faceted-surfaces.js?v=9267cf1551ef';
+import {SUNNY_NATIVE_SCALE,sunnyRampVolumes,sunnyContactVolumes} from './source-sunny-boxes.js?v=9267cf1551ef';
+import {sourceBoundarySpheres,orderSourceFixedSpheres} from './source-boundary-spheres.js?v=9267cf1551ef';
 
 // Independently reconstructed source numbers. No original graphics, meshes,
 // display lists or executable code. Source route rows describe source metadata;
@@ -56,7 +57,8 @@ export function sunnyHazardsForSelection(options={}){
   hidden:true,fixed:true,fixedSphere:true,floating:false,absoluteY:true,followsWaterDatum:false,
   sourceRenderClassification:'hidden-tag5',sourceNativeXYZ:[x,y,z]
  }));
- return [...visible,...fixed];
+ const markers=sourceBoundarySpheres(points(SUNNY_NATIVE_GEOMETRY.boundaryMarkers),{idPrefix:'sunny-marker-'});
+ return orderSourceFixedSpheres(visible,markers,fixed);
 }
 
 export function sunnyDecorationsForSelection(options={}){
@@ -123,7 +125,7 @@ export function createSourceSunnyCourse(polygonDistance,{anchorsByClass,pilotAnc
  function decorationsForPlayers(playerCount=1,selection={}){
   return sunnyDecorationsForSelection({difficulty:this?.difficulty??0,mode:this?.stunt?'stunt':'race',...selection,playerCount});
  }
- return {name:'Sunny Beach',theme:'beach',tag:'01 / SUNNY BEACH',layoutRevision:6,
+ return {name:'Sunny Beach',theme:'beach',tag:'01 / SUNNY BEACH',layoutRevision:7,
   description:'Source shallow sandbar, beach shore edges and a fixed Stunt jump.',
   integrationReady:false,navigation:nav,navigationDriver:'source-layout',anchors:anchors[0].map(p=>[...p]),anchorsByClass:anchors,pilotAnchorsByClass:pilot,directedAnchorsByClass:true,routeInterpolation:'linear',
   sourceMetadata:{nativeCourseIndex:1,referenceRevision:'USA Rev1',nativeScale:S,scaleStatus:'conditional',modernRigidCraftApproximation:true,
@@ -131,11 +133,12 @@ export function createSourceSunnyCourse(polygonDistance,{anchorsByClass,pilotAnc
    sourceNativeClassByDifficulty:[0,1,2,2],sourceStuntNativeClass:2,sourceNavRowsAreDrivingAnchors:false,noFiniteColoredBuoySpan:true},
   sourceObjectSelection:{selector:'player-count-class-mode',singlePlayerIncludesStunt:true,samePlayerCountRawTables:true,
    nativeClassByDifficulty:[0,1,2,2],stuntNativeClass:2,ordinaryVisibleSphereCountsByDifficulty:[0,3,5,5],stuntVisibleSphereCount:4,
-   fixedXYZCounts:[4,4],genericFiveShortCounts:[16,16],activeRenderOnlyCounts:[16,0],boundaryMarkerCounts:[39,39],movingSphereCount:0},
+   fixedXYZCounts:[4,4],genericFiveShortCounts:[16,16],activeRenderOnlyCounts:[16,0],boundaryMarkerCounts:[39,39],markerSphereCounts:[39,39],
+   fixedSphereOrder:'genericXZ, markers, hiddenXYZ',ordinaryFixedSphereCountsByDifficulty:[43,46,48,48],stuntFixedSphereCount:47,movingSphereCount:0},
   sourceSelectionFor:sunnySourceSelection,rampsForSelection:sunnyRampsForSelection,hazardsForPlayers,decorationsForPlayers,
   recordMetadataByClass:Array.from({length:4},(_,difficulty)=>sunnySourceSelection({difficulty})),recordMetadataForSelection:sunnySourceSelection,
   sourceShores,shoreContacts:shoreLines(sourceShores),staticSurfaces,sourceFloor,landGround,ground,renderGround,authoredBackground,
-  contactVolumesForRamps:sunnyContactVolumes,boundary,boundaryMarkers,
+  contactVolumesForRamps:sunnyContactVolumes,boundary,boundaryMarkers,sourceMarkerSpheres:sourceBoundarySpheres(boundaryMarkers,{idPrefix:'sunny-marker-'}),
   boundaryMetadata:{sourceClosed:false,sourceOrderIsPolygon:false,cyclicOrderInferred:false,sourceMarkerChainClosed:false,
    browserEnvelopeProvided:!!boundary,provisional:true,nativeCourseOutRuleRecovered:false,
    status:boundary?'authored-browser-envelope-unvalidated':'browser-envelope-pending',

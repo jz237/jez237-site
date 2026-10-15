@@ -102,7 +102,7 @@ test('trim participates in the same water damping before contacts',()=>{
 
 test('water precedes ordered geometry hooks on every fixed tick',()=>{
   const calls=[],contacts={};
-  for(const phase of ['shore','floor','boxes','dynamicPlanes','fixedSpheres','primarySpheres']){
+  for(const phase of ['shore','floor','boxes','dynamicPlanes','racingBuoys','fixedSpheres','primarySpheres']){
     contacts[phase]=(h,c)=>{
       assert.equal(c.water.lastBuoyancy.length,12);
       assert.equal(c.water.lastHullTick,h.ticks);
@@ -110,7 +110,7 @@ test('water precedes ordered geometry hooks on every fixed tick',()=>{
     };
   }
   const a=createNativeRaceAdapter({contacts});stepNativeRaceAdapter(a,.02,{throttle:true});
-  assert.deepEqual(calls,[0,1].flatMap(i=>['shore','floor','boxes','dynamicPlanes','fixedSpheres','primarySpheres'].map(p=>`${i}:${p}`)));
+  assert.deepEqual(calls,[0,1].flatMap(i=>['shore','floor','boxes','dynamicPlanes','racingBuoys','fixedSpheres','primarySpheres'].map(p=>`${i}:${p}`)));
 });
 
 test('floor engine override uses current-window contact and resets before the first tick of each frame',()=>{
@@ -219,7 +219,9 @@ test('held source roll mutes working steering after preparation and applies poin
   close(captured.points[0].velocity.x,(.14+.72)*2.5);
   close(captured.points[1].velocity.x,(.14-.72)*2.5);
   close(captured.points[3].velocity.x,-.14*2.5);
-  close(captured.points[0].velocity.y,-.24);close(captured.points[1].velocity.y,-.24);
+  // The adapter now selects source binary32 gravity before manipulation.
+  const halfGravity=Math.fround(-.192)*2.5*.5;
+  close(captured.points[0].velocity.y,halfGravity);close(captured.points[1].velocity.y,halfGravity);
   assert.equal(captured.action.suppressDryCorrection,true);
 });
 

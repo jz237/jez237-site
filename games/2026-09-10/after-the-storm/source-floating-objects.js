@@ -6,9 +6,9 @@
 // Positions/radii are world units, velocities are world units per second.
 // Native object velocity is displacement per LOGICAL FRAME, whereas craft
 // point velocity is displacement per PHYSICS SUBSTEP. With the conditional
-// .025 metres/native and .05s frame / .01s substep assumptions, their conversion
+// .025 metres/native world scale and recovered .05s frame / .01s substep GAME time, their conversion
 // factors are .5 and 2.5 respectively. These are separate physical clocks.
-// Source logical ordering is observed; its wall-clock/SI mapping is conditional.
+// Source timers prove game cadence; exact wall-clock/SI mapping is conditional.
 // Math uses clean double precision, without claiming bit-exact native floats.
 
 export const SOURCE_FLOATING_FRAME_STEP=.05;

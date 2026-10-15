@@ -8,8 +8,9 @@
 // solvedPosition-historyTarget, NOT a velocity or an inferred finite difference.
 // historyTargets must therefore come from the caller's prior rendered pose.
 //
-// The separate auxiliary handlebar/seat solver, target animation, crouch target
-// preprocessing, pose-specific point types and rider collision are not ported.
+// The separate auxiliary handlebar/seat solver, target animation, pose-specific
+// point types and rider collision are not ported. A separate controls helper may
+// preprocess crouch targets and supply its explicit manipulation deltas below.
 // Type2/3 grip anchors must be supplied explicitly. Anatomical names describe
 // the recovered chain topology; A/B deliberately leaves handedness to the rig.
 
@@ -68,11 +69,15 @@ export function prepareNativeRiderRest(restTargets){
  * scale converts the 50-unit target limit and two minimum-up thresholds to
  * world units. anchors[2]/anchors[3] are actual physical auxiliary outputs,
  * independent of targets[6]/targets[14]. This helper does not invent them.
+ * Optional manipulationDeltas add to the prior stored deltas before testing
+ * the sign of their up projection. They are world displacements, not forces or
+ * a post-solve velocity. Source crouch writes this same channel before clipping.
  */
-export function projectNativeRiderTargets({positions,targets,storedDeltas,
+export function projectNativeRiderTargets({positions,targets,storedDeltas,manipulationDeltas,
   types=NATIVE_RIDER_ORDINARY_TYPES,center,up,anchors={},scale=.025}={}){
   const current=vectors(positions,'positions'),goal=vectors(targets,'targets');
   const history=vectors(storedDeltas,'storedDeltas'),kinds=pointTypes(types);
+  const manipulation=manipulationDeltas===undefined?null:vectors(manipulationDeltas,'manipulationDeltas');
   vector(center,'center');vector(up,'up');scaleValue(scale);
   if(Math.abs(length(up)-1)>1e-6)throw new RangeError('up must be a unit hull axis');
   if(!anchors||typeof anchors!=='object')throw new TypeError('anchors must be an object');
@@ -87,7 +92,9 @@ export function projectNativeRiderTargets({positions,targets,storedDeltas,
       const t=limit/distance;d=vec(d.x*t,d.y*t,d.z*t);
       p=subtract(goal[i],d);
     }
-    const oldUp=dot(history[i],up);
+    const delta=manipulation?vec(history[i].x+manipulation[i].x,
+      history[i].y+manipulation[i].y,history[i].z+manipulation[i].z):history[i];
+    const oldUp=dot(delta,up);
     const adjustment=(oldUp<0?.6*oldUp:0)-.6*dot(d,up);
     p=vec(p.x+d.x+adjustment*up.x,p.y+d.y+adjustment*up.y,p.z+d.z+adjustment*up.z);
     if(kind===4||kind===5){
@@ -149,15 +156,17 @@ export function createNativeArticulatedRider({restTargets,restLengths,positions=
  * One logical-frame solve. targets/historyTargets/anchors are explicit world
  * values from the authored pose provider; historyTargets are intentionally
  * mandatory. Source target clipping occurs once BEFORE the eight link passes,
- * so links may move a foot below that projection's minimum afterwards.
+ * so links may move a foot below that projection's minimum afterwards. Optional
+ * manipulationDeltas apply only during this frame's projection. Stored deltas
+ * are then replaced by solvedPosition-historyTarget, as in the source consumer.
  * Validation/solving completes before any state mutation on failure.
  */
-export function stepNativeArticulatedRider(state,{targets,historyTargets,center,up,anchors,
+export function stepNativeArticulatedRider(state,{targets,historyTargets,center,up,anchors,manipulationDeltas,
   types=state?.points?.map(p=>p.type)}={}){
   if(!state||state.points?.length!==COUNT)throw new TypeError('Expected a nineteen-point articulated rider');
   const history=vectors(historyTargets,'historyTargets'),kinds=pointTypes(types);
   const projected=projectNativeRiderTargets({positions:state.points.map(p=>p.position),targets,
-    storedDeltas:state.points.map(p=>p.storedDelta),types:kinds,center,up,anchors,scale:state.scale});
+    storedDeltas:state.points.map(p=>p.storedDelta),manipulationDeltas,types:kinds,center,up,anchors,scale:state.scale});
   const solved=solveNativeRiderLinks(projected,state.restLengths,{types:kinds});
   state.points=solved.map((position,i)=>({position,storedDelta:subtract(position,history[i]),type:kinds[i]}));
   state.jointWorld=copy(solved[2]);state.logicalFrames++;

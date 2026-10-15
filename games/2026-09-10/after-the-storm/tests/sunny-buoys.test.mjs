@@ -15,10 +15,11 @@ test('Sunny Beach preserves source buoy counts, colors and forward progression',
 });
 test('Sunny Beach metal barriers match each class and remain separate from buoy progress',()=>{
  for(let d=0;d<4;d++){
-  const c=getCourse('greyhaven',d),visible=c.rocks.filter(o=>!o.hidden),fixed=c.rocks.filter(o=>o.hidden);
-  assert.equal(visible.length,[0,3,5,5][d]);assert.equal(fixed.length,4);
+  const c=getCourse('greyhaven',d),visible=c.rocks.filter(o=>!o.hidden),fixed=c.rocks.filter(o=>o.runtimeTag===5),markers=c.rocks.filter(o=>o.sourceBoundaryMarker);
+  assert.equal(visible.length,[0,3,5,5][d]);assert.equal(fixed.length,4);assert.equal(markers.length,39);assert.equal(c.rocks.length,[43,46,48,48][d]);
   assert.ok(visible.every(o=>o.type==='ball'&&o.fixedSphere&&Math.abs(o.x+58.3)<.001));
   assert.deepEqual(fixed.map(o=>o.sourceNativeXYZ),[[7582,23,292],[7483,18,659],[-7136,20,779],[-7272,13,424]]);
+  assert.deepEqual(markers.map(o=>[o.x,o.z]),c.boundaryMarkers);assert.ok(markers.every(o=>o.hidden&&o.sourceFixedSphere&&o.runtimeTag===1&&o.y===0));
  }
 });
 test('all Sunny Beach class races finish the original slalom without missed buoys',()=>{
@@ -31,11 +32,13 @@ test('all Sunny Beach class races finish the original slalom without missed buoy
 
 test('starting each Sunny mode selects the source collision and render families independently',()=>{
  const n=getCourse('greyhaven',0),stunt=createRace({mode:'stunt',course:n}),race=createRace({mode:'race',course:n}),two=createRace({mode:'versus',course:n});
- assert.equal(race.course.rocks.length,4);assert.equal(stunt.course.rocks.length,8);assert.equal(two.course.rocks.length,4);
+ assert.equal(race.course.rocks.length,43);assert.equal(stunt.course.rocks.length,47);assert.equal(two.course.rocks.length,43);
  assert.equal(stunt.course.rocks.filter(q=>!q.hidden).length,4);
  assert.equal(race.course.sourceDecorations.length,16);assert.equal(stunt.course.sourceDecorations.length,16);assert.equal(two.course.sourceDecorations.length,0);
  assert.equal(stunt.course.contactVolumes.volumes.length,6);assert.equal(race.course.contactVolumes.volumes.length,0);assert.equal(two.course.contactVolumes.volumes.length,0);
- assert.deepEqual(stunt.course.rocks.filter(q=>q.hidden),race.course.rocks);
- assert.equal(n.layoutRevision,6);assert.equal(n.integrationReady,true);assert.equal(n.navigation.validated,true);
+ const withoutColliderIndex=({sourceColliderIndex,...q})=>q;
+ assert.deepEqual(stunt.course.rocks.filter(q=>q.hidden).map(withoutColliderIndex),race.course.rocks.map(withoutColliderIndex));
+ assert.deepEqual(stunt.course.rocks.map(q=>q.sourceColliderIndex),Array.from({length:47},(_,i)=>i));
+ assert.equal(n.layoutRevision,8);assert.equal(n.waterModelRevision,1);assert.equal(n.integrationReady,true);assert.equal(n.navigation.validated,true);
  assert.equal(n.boundaryMetadata.nativeCourseOutRuleRecovered,false);
 });

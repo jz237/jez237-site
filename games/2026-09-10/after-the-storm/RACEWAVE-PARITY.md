@@ -566,3 +566,306 @@ to the 19-point rider solve. Twenty-two new focused tests passed. The default
 geometry comes from the existing modern rider rig; it does not claim original
 pose/radius equivalence. Actor animation, special crouch and live integration
 remain pending. These preparations do not replace the live handling model.
+
+
+## Source water and boundary collision integration — October 15, 2026 (in progress)
+
+The live venue sea now uses the reconstructed signed Q8.8 triangular field,
+with source noise, sine forcing and finite camera-selected hex updates. Shared
+ordinary gameplay selects variant 0, including Stunt. Course slots 0..8 use
+1P amplitudes 20/20/20/40/10/30/20/25/25 and forward 2P amplitudes
+15/15/15/35/5/20/15/20/20. Reverse and Stunt use the 1P table. These are
+initialization/forcing amplitudes, never global height limits. Private raw
+checks cover 288 gameplay setup combinations, 62 amplitude cases, eight mode
+cases, three initialization-camera cases and 80 PRNG steps.
+
+The source random primitive is a 32-bit LCG, multiplier 0x41c64e6d and increment
+0x3039. Water consumes its low 15 bits. Browser initialization uses the normalized
+stored wave seed with that algorithm; it does not reproduce the original shared
+global PRNG history. The browser resets forcing phase for reproducible seeded
+ghosts. The original field initializer does not reset global phase, so original
+cross-course phase history remains unimplemented. Restart/ghost metadata and
+field initialization now use the same normalized seed, including API values
+outside the UI's seed range.
+
+Field setup performs two noise passes, clears previous patch centers to zero,
+and does not stamp/update a patch. Initial source camera basis comes from eye
+[1,1,1], target [0,0,0], FOV75, up [0,1,0], near10, offsets [0,3]. The first
+post-hull frame solves the ordinary virtual follow camera. Subsequent forcing
+uses the previous snapped center and camera orientation; patches select the
+updated camera, P2 before P1, including double evolution in overlap. The virtual
+source camera selects water independently of the high-resolution modern camera.
+The source camera obstacle correction and scripted per-racer scene modes remain
+unimplemented. The explicit host logical clock remains 20 Hz pending wall-time
+calibration against actual reference play.
+
+A host-owned water state now feeds CPU height queries and the existing High mesh,
+reflections, refraction and detailed materials. Render interpolation uses source
+triangles and signed whole-height/datum wrapping. It does not add modern swell
+or impose original low-resolution image/mesh output. Actual Radeon GLES3 vertex
+and fragment shaders each passed 2,084 numeric fixtures, including negative
+coordinates, torus seams, non-flat gradients and extreme datums. Maximum observed
+error was 0.0000366 world units at the extreme datum fixtures. Explicit reciprocal
+multiplication/float rounding removes real GPU seam mismatches found in the
+first implementation. Modern custom sea choices remain separate enhancements.
+
+Replays and player-window packets carry bounded copies of the rendered height
+field, datum and revision. They do not contain field velocity, forcing phase,
+RNG or source camera history, and cannot step the host water. Pause/replay,
+independent races, source phase, P2/P1 ordering, seed reconstruction and snapshot
+bounds have dedicated checks. The separate native handling adapter can now
+consume raw cell impulses through createNativeWaterCellSurface(field), preserving
+the distinction between the source plane query and rendered surface height.
+The live craft still uses the modern pressure/rigid-body solver; this is an
+incomplete integration, not native handling parity. Extra wave airborne/landing
+events expose that dependency. Native pointwise course contact hooks and a shared
+100 Hz hull/20 Hz water host are the next integration requirement.
+
+Boundary markers are now recovered physical fixed spheres: radius25 plus probe12
+native, stored absolute Y0 except Southern's non-tag5 tide overwrite. Sunny has
+39 markers, Southern79 and Glacier90. Glacier's18 hidden XYZ spheres are a
+distinct family with no marker-center duplicates. Port51 and Sunset81 are also
+prepared. Loaded source order is visible XZ, markers, hidden XYZ; contacts query
+the native 4x4 grid, visit candidates descending, and stop at the first overlap
+for each latched +27/−9 probe. Full penetration shifts all12 hull points and
+kicks three velocities even for separating motion, without sphere recoil. The
+exact isolated kernel has raw fixtures. Its live bridge currently retains the
+translation and mean kick in the modern rigid craft; native pointwise constraint
+response remains separate. Marker artwork now shares its fixed/tidal datum rather
+than bobbing on modern waves. Their spheres do not establish a course-out rule.
+
+The modern steering bridge now permits jet yaw at low speed, so a wet craft can
+turn while thrust presses against a shore. This fixes the Southern Reverse solo
+stall without moving course geometry or awarding progress. The older City
+Normal shortcut requires pullback lean like Hard to clear its actual finite
+crossbar under the new water; ordinary input alone completes 81 gates with no
+misses. Port's older Stunt controller uses a 2.5m lookahead and physically clears
+all16 rings/four checkpoints/three ramps. Its extra wave landings remain an
+unresolved native-hull dependency; the existing exact three-landings test has not
+been weakened.
+
+Sunny's jump/ring steering speed was recalibrated through controls only. A fresh
+browser run using the source seed primitive finished in45.366667 seconds with
+12/12 rings, chain12, all4 checkpoints, 4,370 points and no misses/DQ/crash/overtime.
+The final allowance was0.933333 seconds. High1280x720 remained near60FPS. A held
+apex at26.95 seconds had hull clearance4.651159m, all of the rider in frame,
+1.086 million triangles and near60FPS. These results supersede the earlier
+45.60-second run using the interim RNG. The browser console had only the existing
+favicon404. This browser evidence does not establish all-course/full-native parity.
+
+All standard record/ghost layout revisions advance for the new water. Marker
+changes additionally advance Sunny/Southern/Glacier's geometry revisions. Existing
+saved records remain archived in their prior scopes. Identical Glacier1P/2P
+object families retain the same GPU-world cache key.
+
+The first integrated regression was924/953. After source-seed, camera, marker,
+controller and factual-fixture corrections, a second checkpoint was960/980.
+That checkpoint still had20 failures: some stale revision assertions and actual
+legacy-course/native-water/modern-hull traversal failures. Subsequent focused
+checks pass Sunny12-ring traversal in all four class selections, source sphere
+integration, source water/window/replay, and cache behavior. Full parity and
+production deployment remain pending. No failed dynamic assertion, physical
+ring, source timer or wave amplitude has been relaxed to hide these gaps.
+
+
+The source-water browser replay returned to the held26.95s apex with live
+racer/time fingerprint unchanged; host water remained frame539/phase19. A real
+separate-window Sunny check used two1280x720 High canvases. At paused44.816667s,
+both49,152-sample fields had revision896, datum0 and full-array hash4144679575;
+three world-space queries also matched exactly. The child held display-only
+storage while the host retained its solver. No child console errors occurred.
+
+
+The latest complete released-feature regression is **974/985 in56.68 seconds**
+(private full-tests-native-water-after-controls.tap). Eleven failures remain:
+beach-break frequency under the new field; two City dive/ring checks; Port Hard
+ordinary traversal and the aggregate course/cup checks it blocks; Fortress ridge
+and aggregate Stunt traversal; Southern boosted-pilot placing; Glacier timed
+Stunt navigation; and Port's extra wave landings. Port now collects all16 rings
+and four checkpoints in80.983333s, but the unchanged three-landings assertion
+correctly reports27. These are unresolved integration gaps, not a green milestone.
+No new commit, push or deployment is being claimed for this work in progress.
+
+## Native ordinary handling preview — October 15, 2026 (in progress)
+
+The source point solver now has a runnable integration preview. Explicit
+`createRace({physics:'native',mode:'time',course:getCourse('greyhaven')})`
+attaches the twelve-point hull, physical auxiliary anchors, nineteen-point
+rider, source cell water impulses, finite shore/floor/box responses and fixed
+sphere contacts. It bypasses the modern pressure solver, rigid contacts,
+kinematic ramp launches, rescue and rider-collision mutation. The default game
+continues to use the existing physics while the native integration is incomplete.
+The preview is currently restricted to Sunny Beach source-water time trials;
+it is marked unranked and cannot replace existing time-trial ghosts or records.
+The local verification page can select it with `verify&nativePhysics`.
+
+`native-race-world.js` owns one clock for up to four adapters: prepare ALL
+riders, then five hull ticks visiting racers in descending order on each tick,
+then complete ALL physical rider solves, then advance shared water and any
+floating objects. Input, physical coefficients and water options are sampled
+once per outer frame. Independent render-rate accumulators cannot move water
+between opponents' hull passes. Source cameras receive the hull's actual XZ
+forward components including pitch, rather than a normalized heading vector.
+Pause preserves the fractional tick. Failed hooks fault the owner explicitly
+instead of continuing with unequal racer clocks. The .025 world scale and
+browser wall-time accumulation remain explicit host choices; the later timer
+audit below establishes10ms/50ms of source game time.
+
+The pure `native-racer-presentation.js` bridge copies physical pose/velocity,
+point wet flags and separate integer source HUD telemetry. Its wet fractions
+and rate estimates are display policy. It does not infer native landing,
+wipeout, ramp, trick or scoring decisions from those display values. The
+physical rider retains independently authored modern anatomy and steering
+supports; the original animation/actor machine has not been reconstructed.
+Collision candidate bins and derived clipping normals retain the explicit
+precision/order limitations exported by `source-native-contacts.js`.
+
+Recovered B/R controls are now in the adapter. B starts only on its qualified
+fresh edge, changes final selected gravity before all five hull ticks, then
+compresses the nineteen physical rider targets and adds its manipulation delta
+before the negative-up projection. The factor recovers across eleven binary32
+updates; release still affects its current frame before resetting. R raises
+lateral velocity retention, preserves the prior roll-balance value while held,
+and slews back by .01 per logical frame on release. Actor23 cuts an existing
+engine immediately. The source A/Z accelerator is digital; the browser brake
+releases it and coasts. No reverse thrust was invented. Native tuning defaults
+are explicit5/5/5 from the recovered human profile; the modern tuning sliders
+have not been silently remapped to mechanically coupled native fields.
+The private bounded B/R/control audit covers1,845 raw instruction cases.
+
+`native-floating-world.js` also connects the existing runtime-kind9 object
+kernel to the shared clock and actual field. Its after-water motion samples
+the source4d30c normalized plane expression, not the rendered triangle height.
+Contacts retain per-hull, per-frame impact maxima and object recoil without
+inventing a floor contact or activating contact-drive. Twelve Port definitions
+produce identical shared two-player object/water histories at30/60/144Hz.
+This is a host integration component; Port's source scene and native gameplay
+are still pending and are not enabled by this preview.
+
+The first complete regression after the ordinary native bridge and B/R
+integration is **1,057/1,068 in56.58s** (private
+`full-tests-native-world-preview.tap`). The same eleven integration failures
+remain. The subsequent floating-object and beach-presentation changes still
+require a new complete regression. The beach shaders now share native water
+heights, and crest history records actual field revisions rather than querying
+an analytic past that the field does not contain. Its unchanged frequency test
+still fails at12 course /34 surf breakers; thresholds and waves were retained.
+
+In the browser, the native preview rendered High1280x720 at about60FPS with
+roughly1.14 million triangles. At111.48s, hull tick11148 and water frame2229 were
+consistent with a partial outer frame. Actual keyboard B produced gravity
+−.3360000550746918 and factor.8999999761581421; held R produced retention
+.974081814289093 with the default rider0 profile. Ghost recording remained
+disabled. Replay returned to paused221.25s with hull tick22125 and water
+frame4425 unchanged. Only the existing favicon404 was reported. Full-course
+native handling, starts, recovery, named gestures/tricks, native AI and native
+racer contacts remain required before parity or production publication.
+
+The subsequent cadence audit confirms source game time: shared race setup
+requests three video interrupts per logical update; the rider loop performs
+five hull passes; active ordinary/Stunt timers increment50, and the actual HUD
+divides that counter by1000 and60. Thus20 outer updates and100 hull passes
+equal one displayed source second. Forty-eight bounded raw scheduler/timer
+fixtures pass. The original update queue holds one message and drops excess
+sends under load, so this does not assert exact20Hz hardware wall time or the
+browser accumulator's catch-up policy as original behavior.
+
+Review also caught a control-facing derivative bug: refreshing presentation
+history on both outer frames and render calls gave yaw-feedback controllers
+different rates at different host refresh rates. History now updates only on
+the world's physical tick callback. Native human input providers are sampled
+inside frame preparation, and terminal race results stop on the outer boundary
+without consuming a render-dependent extra hull tick. Fixed-time closed-loop
+hull, source progression and complete water states now match exactly across
+30/60/144Hz. The authored verification driver is separate from original AI.
+
+The completed driver check covers all sixteen Sunny rider/class combinations;
+fourteen are clean. Jonas retains one actual miss in Hard (raw row47) and one
+in Expert (raw row46). The balanced rider clears all four classes cleanly with
+identical physical/progression/water/driver histories at30/60/144Hz, both at a
+common40s sample and at the final result. Seed17 balanced finish times are
+108.329,106.577,107.092 and107.446s for Normal/Hard/Expert/Reverse. These are
+authored steering/throttle runs through the unchanged source human judge,
+not original AI, teleports, alternate gate admission or modified navigation.
+
+The final browser run used source seed783 and completed three Normal laps
+with zero misses/DQ at outer frame2207 /hull tick11035 /game time110.35s.
+High1280x720 remained around60FPS, with unranked ghost recording disabled.
+The49,152 field heights had revision2207, phase7, datum0 and Int16LE FNV1a
+hash3294072020. Both native beach programs compiled during actual rendering;
+after explicit helper-result initialization only the existing favicon404
+remained in that browser navigation's console.
+
+The latest complete regression is **1,102/1,113 in58.23s** (private
+`full-tests-native-world-final-verified.tap`), retaining the same eleven
+integration failures listed above. A later83-check focused pass verifies the
+new empty `racingBuoys` hook and established handling/contact/world behavior.
+Raw contact order is primary route7e8c8, hidden/boundary fixed7ef80, then generic
+objects7ecbc. The legacy `primarySpheres` API name denotes that final GENERIC
+phase; racing-route contacts have their own earlier hook. That route-buoy
+kernel and original wipeout/recovery state remain active reconstruction work.
+No production deployment or full-parity completion is claimed.
+
+The subsequent native-preview milestone implements primary racing buoy contacts
+and shared motion. All selected primary rows retain their source array order,
+with descending first-overlap searches for the two cached hull probes. Movable
+buoys use the checked binary32 30/70 penetration split; fixed checkpoint/finish
+endpoints retain full craft separation and their distinct radii. Point velocity
+uses the10ms hull clock while buoy recoil velocity uses the50ms object clock.
+The kernel matches80 private prepared contact fixtures and63 motion steps.
+Coincident centers remain explicit unresolved contacts rather than invented
+normals. Initial loaderY0/zero velocity, separate physics/render flags and the
+absence of original countdown/route-activation history are documented limits.
+
+The host now orders completed hulls, shared water, current-center adjudication,
+then one ascending buoy-motion pass. Buoyancy uses the recovered normalized
+source plane query, including its datum exactly once. The immutable admission
+layout accepts the current node position for heading/side/region decisions;
+checkpoint spans continue to use their fixed endpoint geometry. A prepared
+Sunny core regression produces an actual collision where a static judge would
+award power but the displaced-center source judge correctly records a miss.
+All riders share one mutable primary array; there are no per-rider buoy copies.
+
+Seven independently accumulated native impact channels and a shared normal
+are now connected to the native adapter. The normal follows each family's own
+strict maximum increase in traversal order, including fixed/primary endpoints
+and generic floaters. Equal impacts preserve it; simulation0 preparation
+preserves all channels/normal/box latch. Marked boxes attenuate only their
+recorded impact by source float32(.4), retaining their full physical response.
+The legacy three-field contact-drive report remains separate and cannot supply
+a missing normal. Completed snapshots and browser telemetry copy all channels.
+
+Existing high-resolution buoy bodies follow these physical positions, with an
+authored submerged lower body to meet the waterline without snapping physics
+to a rendered surface. Fixed endpoint bodies are native-preview-only display
+objects. Bounded replay snapshots contain copied positions/endpoints/visibility,
+without velocities or simulation ownership; replay interpolates those display
+values and never advances native motion. The browser replay check held hull
+tick10820, water frame2164 and buoy motion2164 while viewing recorded103.10s,
+then returned to live result108.20s with all three clocks unchanged.
+
+One High1280x720 browser run completed three Sunny Normal laps in107.70s with
+zero misses/DQ, hull tick10770, water/buoy frame2154. A normal-speed run completed
+in108.10s with zero misses, holding about60FPS during active play; both runs
+remained unranked with saved ghost recording disabled. Their differing browser
+seeds are not a same-seed determinism comparison. Native time-trial scope and
+the authored verification driver remain distinct from original AI and full
+ordinary race integration.
+
+Two additional isolated modules reconstruct the post-hull recovery lifecycle
+and procedural actor23 falling pose. Recovery matches892 applicable private
+prepared instruction fixtures, including severe/stumble thresholds, five-frame
+staging, joint2-versus-datum recognition, recovery input edges and deferred
+actor blending. The procedural pose/history helpers match260 producer and240
+history comparisons using independently authored prepared rigs. Their fixed
+native dimensions do not establish original artwork or arbitrary modern-rig
+equivalence. They are not yet bound into the playable host: actor7 needs an
+independently authored85-frame recovery provider, compatible rig/history
+integration and actual physical rider presentation before that lifecycle can
+be enabled. No source animation records are published.
+
+The complete regression after this milestone is **1,176/1,187 in58.60s**
+(`full-tests-native-primary-final.tap` privately). The same eleven integration
+failures remain; all74 newly added checks since the preceding1,113-test run
+pass. Full native course/actor/stunt/AI/racer-contact integration and production
+publication remain outstanding.

@@ -11,7 +11,11 @@
 // caller's clock by <10ms. Forces are sampled when a full tick is integrated.
 // At each tick, native displacement-style velocities are represented by v*.01;
 // reconstruction divides the final displacement by .01. This unit conversion
-// and the fixed-clock scheduling are explicit assumptions of this kernel.
+// uses the recovered source game clock: timer+50 per outer update and five
+// hull passes, hence10ms of GAME time per pass. Original dispatch requests
+// three VI events and drops excess pending updates under load. Browser render
+// accumulation/long-gap handling and the .025 world scale are host choices;
+// this does not claim exactly100 hull passes per physical wall second.
 
 export const NATIVE_HULL_STEP = .01;
 const INTEGRATION_GAIN = .992;

@@ -11,7 +11,7 @@ test('Southern Stunt selects ten fixed rings, two source ramps and four native t
   assert.equal(c.rings.length,10);assert.equal(c.ramps.length,2);assert.equal(c.contactVolumes.volumes.length,23);
   assert.deepEqual(c.checkpoints.map(q=>q.limit),[20,15,20,15]);assert.equal(s.racers[0].stunt.remaining,20);
   assert.deepEqual(c.ramps.map(q=>q.nativeRow),[[-592,3592,0,0,33],[-1185,-3695,0,0,308]]);
-  assert.equal(c.rocks.length,28);assert.equal(c.stuntLayout.driver,'source-layout');
+  assert.equal(c.rocks.length,107);assert.equal(c.rocks.filter(q=>q.sourceBoundaryMarker).length,79);assert.equal(c.stuntLayout.driver,'source-layout');
   for(const datum of [0,-2.5,-3.75]){waterLevel.value=datum;assert.deepEqual(c.rings.map(q=>ringHeight(q,c,100,.8)),[0,0,0,1.5,1.5,1.5,1.5,1.5,1.5,1.5]);}
  }
  waterLevel.value=0;

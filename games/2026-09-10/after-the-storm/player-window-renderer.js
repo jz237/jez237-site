@@ -1,3 +1,4 @@
+import {setRaceWater} from './race-water.js';
 // Presentation only. This module never creates/steps a race or writes saves.
 import * as T from './vendor/three.module.js';
 import {makeSky,makeOcean,shared,skyColors} from './ocean.js';
@@ -71,13 +72,13 @@ export function createPlayerWindowRenderer(canvas){
   descriptor=value;course=getCourse(value.course,value.difficulty);if(course.id!==value.course)throw new Error('Unknown player view course.');if(value.freeRide)course=stuntCourse(course,{freeRide:true});
   if(course.sourceObjectSelection)course={...course,playerCount:2,rocks:course.hazardsForPlayers(2)};
   if(course.contactVolumesForRamps)course={...course,contactVolumes:course.contactVolumesForRamps(course.ramps)};
-  setWaterCharacter(course);setCourseWaveTrain(course.waveTrain);surfSeed.value=value.waveSeed;surfStrength.value=value.seaState==='surf'?1:0;windSea.value=['chop','storm'].includes(value.seaState)?1:0;frontEnabled.value=['surf','storm'].includes(value.seaState)?1:0;
+  setRaceWater(null);setWaterCharacter(course);setCourseWaveTrain(course.waveTrain);surfSeed.value=value.waveSeed;surfStrength.value=value.seaState==='surf'?1:0;windSea.value=['chop','storm'].includes(value.seaState)?1:0;frontEnabled.value=['surf','storm'].includes(value.seaState)?1:0;
   world?.dispose();world=makeCourseWorld(scene,course,ocean,{freeRide:!!value.freeRide});ocean.setVenue(course);chase={};tracking={};lastTime=null;localWater=null;orbit=0;cameraMode=0;environmentTime=-Infinity;clearEffects();
  }
  function spawn(r,kind,side){const i=cursor++%count,p=particles[i],q=sprayLaunch(r,kind,side);xyz.set([q.x,q.y,q.z],i*3);Object.assign(p,{mist:q.mist,atomize:q.atomize,initialSize:q.size,vx:q.vx,vy:q.vy,vz:q.vz,size:q.size,life:q.life,max:q.life});}
  function draw(frame){
   if(!world||!frame)return;const time=frame.time,dt=lastTime===null||frame.phase==='paused'||frame.phase==='results'?0:Math.max(0,Math.min(.1,time-lastTime)),first=lastTime===null;lastTime=time;
-  const w=frame.water;if(w.local)localWater=w.local;setLocalWater(localWater);waterLevel.value=w.level;
+  const w=frame.water;setRaceWater(w.native??null);if(w.local)localWater=w.local;setLocalWater(localWater);waterLevel.value=w.level;
   wakeTrail.forEach((p,i)=>Object.assign(p,w.wake[i]??{power:0,time:-100}));impactWaves.forEach((p,i)=>Object.assign(p,w.impacts[i]??{amplitude:0,time:-100}));craftFields.forEach((p,i)=>Object.assign(p,w.craft[i]??{power:0}));
   const r=frame.racers[1],weather=frame.weather,storm=weather.storm,front=frontAt(camera.position.x,camera.position.z,time);
   shared.time.value=time;shared.storm.value=storm;shared.seaLevel.value=w.level;weatherUniforms.weatherTime.value=time;weatherUniforms.weatherStorm.value=storm;weatherUniforms.weatherSun.value.copy(skyColors.skySun.value);

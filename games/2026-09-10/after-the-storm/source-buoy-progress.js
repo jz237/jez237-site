@@ -126,8 +126,8 @@ export function sourceBuoyRegions(layout,p){return pairRegions(prepared(layout).
  */
 export function sourceBuoyVisibleRow(layout,sourceRow){const data=prepared(layout);if(!data.byRow.has(sourceRow))throw new RangeError('Unknown source row');return data.visibleRow(sourceRow);}
 
-function measure(layout,data,node,p){
- const {tx,tz,x,z,classification,halfWidthNative:h}=node,tangentX=tz,tangentZ=-tx;
+function measure(layout,data,node,p,center=node){
+ const {tx,tz,classification,halfWidthNative:h}=node,{x,z}=center,tangentX=tz,tangentZ=-tx;
  const sideSign=classification===0?-1:classification===1?1:0;
  const ax=layout.mode==='race'?F(x-F(F(F(sideSign*tangentX)*50)*.5)):x;
  const az=layout.mode==='race'?F(z-F(F(F(sideSign*tangentZ)*50)*.5)):z;
@@ -137,10 +137,11 @@ function measure(layout,data,node,p){
  const currentPlaneDistanceNative=dot(F(p.x-x),F(p.z-z),tx,tz);
  let spanCoordinateNative=null,spanPass=true;
  if(node.checkpoint){
-  const bx=F(x-F(tangentX*h)),bz=F(z-F(tangentZ*h));
+  // Checkpoint span uses the fixed endpoint pair, not the moving center.
+  const bx=F(node.x-F(tangentX*h)),bz=F(node.z-F(tangentZ*h));
   let sx=tangentX,sz=tangentZ;
   if(layout.mode==='race'){
-   sx=F(F(x+F(tangentX*h))-bx);sz=F(F(z+F(tangentZ*h))-bz);
+   sx=F(F(node.x+F(tangentX*h))-bx);sz=F(F(node.z+F(tangentZ*h))-bz);
    const spanLength=F(Math.sqrt(F(F(sx*sx)+F(sz*sz))));
    if(spanLength>0){sx=F(sx/spanLength);sz=F(sz/spanLength);}
   }
@@ -148,7 +149,7 @@ function measure(layout,data,node,p){
   spanPass=layout.mode==='stunt'?0<=spanCoordinateNative&&spanCoordinateNative<=F(h+h):
    layout.checkpointSide===0?spanCoordinateNative<=F(F(h*2)+layout.checkpointSlackNative):-layout.checkpointSlackNative<=spanCoordinateNative;
  }
- const riderRegions=pairRegions(data.regions,p),nodeRegions=pairRegions(data.regions,node),sharedRegion=regionsMatch(riderRegions,nodeRegions);
+ const riderRegions=pairRegions(data.regions,p),nodeRegions=pairRegions(data.regions,center),sharedRegion=regionsMatch(riderRegions,nodeRegions);
  return {headingDot,sideDeterminant,currentPlaneDistanceNative,spanCoordinateNative,spanPass,riderRegions,nodeRegions,sharedRegion};
 }
 
@@ -166,17 +167,22 @@ function measure(layout,data,node,p){
  * Stunt has symmetric CP bounds, no side shift/region/lap-legal admission,
  * no buoy power/miss awards. Course3's sluice/lap/alternate-route effects are
  * explicitly left to the host; this leaf reports admission only.
+ * `currentNodePosition`, when supplied, is the current WORLD X/Z of this one
+ * source row after hull contacts and before buoy motion. Heading/side origin,
+ * plane diagnostics and region admission use it. Authored axes, fixed span
+ * endpoints, immutable links and enabled flags remain separate metadata.
  */
 export function stepSourceBuoyProgress(layout,state,{position:p,previousPosition,active=true,lap=0,lapLegalCounter=lap,
- human=true,missesEnabled=true,mainState=layout?.mainState??1,missLimit=5,finished=false,disqualified=false}={}){
+ human=true,missesEnabled=true,mainState=layout?.mainState??1,missLimit=5,finished=false,disqualified=false,currentNodePosition}={}){
  const data=prepared(layout),next=copyState(state),node=data.byRow.get(next.nextSourceRow);
  if(!node)throw new RangeError('Unknown state source row');
  for(const [name,value] of Object.entries({active,human,missesEnabled,finished,disqualified}))boolean(value,name);
  integer(lap,'lap',-50,MAX);integer(lapLegalCounter,'lapLegalCounter',-50,MAX);integer(mainState,'mainState',0,255);integer(missLimit,'missLimit');
  if(!active)return {state:next,event:null,diagnostic:null};
- const current=position(p,layout.scale),diagnostic=measure(layout,data,node,current);
+ const center=currentNodePosition===undefined?node:position(currentNodePosition,layout.scale);
+ const current=position(p,layout.scale),diagnostic=measure(layout,data,node,current,center);
  const previous=previousPosition===undefined?null:position(previousPosition,layout.scale);
- diagnostic.previousPlaneDistanceNative=previous===null?null:dot(F(previous.x-node.x),F(previous.z-node.z),node.tx,node.tz);
+ diagnostic.previousPlaneDistanceNative=previous===null?null:dot(F(previous.x-center.x),F(previous.z-center.z),node.tx,node.tz);
  next.logicalTicks=integer(next.logicalTicks+1,'logicalTicks');
  if(next.side===-1&&diagnostic.headingDot>0)next.side=diagnostic.sideDeterminant>=0?1:0;
  else if(diagnostic.headingDot<=0)next.side=-1;
