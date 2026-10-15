@@ -68,8 +68,8 @@ export class Nav {
       }
       // A ground route must clear the whole stance around the end of a log.
       // A centre line can fit underneath while a thigh still strikes its side.
-      if(kind===SurfaceKind.Ground)for(let a=0;a<12&&Number.isFinite(c);a++){
-        const angle=a*Math.PI/6,px=x+Math.cos(angle)*.075,pz=z+Math.sin(angle)*.075;
+      if(kind===SurfaceKind.Ground)for(let a=0;a<24&&Number.isFinite(c);a++){
+        const angle=a*Math.PI/12,px=x+Math.cos(angle)*.105,pz=z+Math.sin(angle)*.105;
         if(surface.kindAt(px,pz)===SurfaceKind.Wood && surface.heightAt(px,pz)>y+.03)c=Infinity;
       }
       // The sand in front of the steps is a walking corridor. Keep the whole
@@ -206,11 +206,19 @@ export class Nav {
 
   lineClear(ax: number, az: number, bx: number, bz: number, maxCost = 2.3) {
     const n = Math.max(1, Math.ceil(Math.hypot(bx - ax, bz - az) / (this.cell * 0.5)));
+    let previous=-1;
     for (let i = 0; i <= n; i++) {
       const t = i / n;
       const k = this.idx(ax + (bx - ax) * t, az + (bz - az) * t);
       if (k < 0 || !Number.isFinite(this.cost[k]) || this.cost[k] > maxCost) return false;
+      if(previous>=0){
+        const px=previous%this.nx,pz=Math.floor(previous/this.nx),x=k%this.nx,z=Math.floor(k/this.nx);
+        // Match A*'s corner rule. Point samples can otherwise jump diagonally
+        // across a blocked cell between samples and approve an impossible aim.
+        if(x!==px && z!==pz && (!Number.isFinite(this.cost[pz*this.nx+x]) || !Number.isFinite(this.cost[z*this.nx+px])))return false;
+      }
       if (i > 0 && !this.canTraverse(ax + (bx - ax) * (i - 1) / n, az + (bz - az) * (i - 1) / n, ax + (bx - ax) * t, az + (bz - az) * t)) return false;
+      previous=k;
     }
     return true;
   }
@@ -236,8 +244,8 @@ export class Nav {
     if(lowA&&highB&&ax<-.38)gates.unshift([-.38,.355],[-.04,.355]);
     const caveA=Math.abs(ax-.475)<.11 && az<.11 && this.surface.heightAt(ax,az)<.12;
     const caveB=Math.abs(bx-.475)<.11 && bz<.11 && this.surface.heightAt(bx,bz)<.12;
-    if(caveA&&!caveB)gates.unshift([.485,.18]);
-    if(caveB&&!caveA)gates.push([.485,.18]);
+    if(caveA&&!caveB)gates.unshift([.485,.28]);
+    if(caveB&&!caveA)gates.push([.485,.28]);
     if(ax>.45&&ax<.52&&az>=.11&&az<.23&&bx<.45)gates.unshift([.36,.29]);
     if(gates.length){
       const points:[number,number][]=[[ax,az],...gates,[bx,bz]], route:[number,number][]=[];
@@ -245,9 +253,19 @@ export class Nav {
         const part=this.directPath(...points[i-1],...points[i]);if(!part)return null;
         route.push(...(i===1?part:part.slice(1)));
       }
-      return route;
+      return this.connectStart(route,ax,az);
     }
-    return this.directPath(ax,az,bx,bz);
+    const route=this.directPath(ax,az,bx,bz);
+    return route ? this.connectStart(route,ax,az) : null;
+  }
+
+  private connectStart(route:[number,number][],ax:number,az:number){
+    // Preserve the connector from the real position to its grid cell only
+    // when skipping it would cut an occupied corner. Internal gateways are
+    // already connected grid points and must not introduce a backwards step.
+    if(route.length>1 && !this.lineClear(ax,az,...route[1],Infinity))route.unshift([ax,az]);
+    else route[0]=[ax,az];
+    return route;
   }
 
   private directPath(ax: number, az: number, bx: number, bz: number): [number, number][] | null {

@@ -15,7 +15,7 @@ export class Footholds {
   }
 
   find(wanted: THREE.Vector3, shoulder: THREE.Vector3, reach: number, heading: number,
-    side: number, from?: THREE.Vector3, footprint: THREE.Vector3[] = [], fromHeading=heading, maximumHeight=Infinity, footHeading=heading, usable?:(hold:Foothold)=>boolean): Foothold | null {
+    side: number, from?: THREE.Vector3, footprint: THREE.Vector3[] = [], fromHeading=heading, maximumHeight=Infinity, footHeading=heading, usable?:(hold:Foothold)=>boolean, maximumLift=.025): Foothold | null {
     const f = new THREE.Vector3(Math.cos(heading), 0, -Math.sin(heading));
     const right = new THREE.Vector3(-f.z, 0, f.x);
     let best: Foothold | null = null, score = Infinity;
@@ -78,13 +78,18 @@ export class Footholds {
               top=Math.max(top,this.support(p.x+dx,p.z+dz,Math.max(from.y,point.y)+.055).y);
             }
           }
-          if (top > Math.max(from.y, point.y) + .025) continue;
+          if (top > Math.max(from.y, point.y) + maximumLift) continue;
         }
         const hold={point,normal,top};
         if (s < score && (!usable||usable(hold))) {score = s; best = hold;}
       }
       if (best && radius >= .016) break;
     }
+    // Prefer a low, clear stride. If none exists, a toe may need to lift over
+    // a rock corner even when both soles are on sand. Size that lift to this
+    // limb; the rig still checks reach and collision throughout the transfer.
+    const higherLift=Math.min(.045,reach*.65);
+    if(!best && from && maximumLift<higherLift)return this.find(wanted,shoulder,reach,heading,side,from,footprint,fromHeading,maximumHeight,footHeading,usable,higherLift);
     return best;
   }
 }

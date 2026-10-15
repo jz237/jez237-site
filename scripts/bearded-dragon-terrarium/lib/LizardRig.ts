@@ -329,7 +329,7 @@ export class LizardRig {
     const narrowPerch=(kind===1||kind===2)&&sideHeight<floor-.025;
     const nearGlass=Math.min(TANK.w/2-Math.abs(I.x),TANK.d/2-Math.abs(I.z))<.12;
     const inHide=!!this.ground.kindAt&&Math.abs(I.x-.475)<.11&&I.z<.18&&floor<.12;
-    const width=nearGlass||inHide||narrowPerch ? .55 : besideFace ? .70 : 1;
+    const width=nearGlass||inHide||narrowPerch ? .55 : besideFace ? .70 : 1-.15*this.walkExtension;
     out.copy(this.bodyFwd).multiplyScalar((h.x - this.rootX) * K + ahead)
       .addScaledVector(this.bodyRight, h.z * K * width * (1 - this.walkExtension * .045));
     out.x += this.inputs.x; out.z += this.inputs.z;
@@ -448,6 +448,22 @@ export class LizardRig {
         for(const sign of [-1,1]) {
           const candidate={...best,[key]:clamp(best[key]+sign*rate*this.poseDt,old[key]-rate*this.poseDt,old[key]+rate*this.poseDt)};
           set(candidate); const e=errorAt(error-1e-7);
+          if(e<error-1e-7){error=e;best=candidate;}
+        }
+        set(best);
+      }
+      if(error>.0001 && this.moving){
+        // At a ledge, raising the hips and changing pitch must happen
+        // together: either adjustment alone can worsen another planted leg.
+        // Search coupled weight shifts only after the cheap axial fit fails.
+        const base={...best};
+        for(const dy of [-1,0,1])for(const dp of [-1,0,1])for(const dr of [-1,0,1]){
+          if(Number(dy!==0)+Number(dp!==0)+Number(dr!==0)<2)continue;
+          const candidate={...base,
+            y:clamp(base.y+dy*.085*this.poseDt,old.y-.085*this.poseDt,old.y+.085*this.poseDt),
+            pitch:clamp(base.pitch+dp*.9*this.poseDt,old.pitch-.9*this.poseDt,old.pitch+.9*this.poseDt),
+            roll:clamp(base.roll+dr*.65*this.poseDt,old.roll-.65*this.poseDt,old.roll+.65*this.poseDt)};
+          set(candidate);const e=errorAt(error-1e-7);
           if(e<error-1e-7){error=e;best=candidate;}
         }
         set(best);
@@ -858,7 +874,10 @@ export class LizardRig {
         const drift = home.distanceTo(leg.planted), yawErr = Math.abs(wrapAngle(footYaw - leg.plantedYaw));
         const wrist = leg.planted.clone().addScaledVector(leg.normal, (.12 + leg.wristAbove) * K);
         const extension=this.shoulder(leg).distanceTo(wrist)/leg.reach;
-        const strained = extension > (this.climbing ? .90 : .955) || extension<.40 || yawErr > (this.climbing ? .32 : .65);
+        // Reposition before a limb reaches the hard support limit. Waiting
+        // until it is nearly straight can leave no room to lift over an edge
+        // or to reverse direction after backing into the hide.
+        const strained = extension > (this.climbing ? (this.moving ? .86 : .90) : .955) || extension<.40 || yawErr > (this.climbing ? .32 : .65);
         if (!this.moving || this.climbing) leg.stepDue = false;
         else if (ph >= duty && leg.lastPhase < duty) leg.stepDue = true;
         const settle = !this.moving && (drift > .016 || yawErr > .35) && !this.legs.some(l => l.swing);
@@ -881,7 +900,8 @@ export class LizardRig {
             // A clear sole is insufficient when the shin or elbow would be
             // buried at touchdown. Leave this support planted and try another
             // patch (or another leg) before beginning that impossible transfer.
-            return this.limbObstruction(leg,predicted,W,plane,.0015)<.0015;
+            const clearance=this.moving?.0008:.0015;
+            return this.limbObstruction(leg,predicted,W,plane,clearance)<clearance;
           });
           if (hold && (hold.point.distanceTo(leg.planted) > (this.climbing ? .009 : .004) || yawErr > .2)) {
             const climbing = Math.abs(hold.point.y - leg.planted.y) > .008 || hold.top > Math.min(hold.point.y, leg.planted.y) + .008;

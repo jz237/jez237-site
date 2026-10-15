@@ -69,16 +69,19 @@ export class LizardBrain {
   private pushedT = 0;
   private retreatLeft = 0;
   private retreatT = 0;
+  private retreatSign = -1;
   private turnStallT = 0;
   private caveApproach = false;
   private caveBacking = false;
   private caveExit = 0;
   private bowlExit: {x:number;z:number;heading:number;time:number}|null=null;
+  private backOutLeft=0;
   /** Closest it has come to the end of the current route, and how long since it got closer. */
   private nearPath: [number, number][] | null = null;
   private nearBest = Infinity;
   private nearT = 0;
   private stallRef = new THREE.Vector2();
+  private stallHeading = 0;
   private leadT = 0;
   private lickT = 0;
   private tmp2: [number, number] = [0, 0];
@@ -219,9 +222,14 @@ export class LizardBrain {
       ? (Math.sin(I.heading)>0 ? -1 : 1) : 0;
     this.bowlExit=I.x>.43&&I.x<.52&&I.z>.30&&x<.40
       ? {x:I.x-Math.cos(I.heading)*.075,z:I.z+Math.sin(I.heading)*.075,heading:I.heading,time:0} : null;
+    // Leave the greens dish along the approach corridor before attempting a
+    // half-turn between its rim, the steps and the front glass.
+    this.backOutLeft=I.x>-.5&&I.x<-.34&&I.z>.29&&Math.cos(I.heading)<-.25
+      && (x>-.35||this.surface.heightAt(x,z)>.15) ? .09 : 0;
     this.replans = 0;
     this.blockedT = 0;
     this.stallT = 0;
+    this.pushedT = 0;
     this.stallRef.set(I.x, I.z);
     this.after = then;
     this.hurry = false;
@@ -786,17 +794,12 @@ export class LizardBrain {
     // The hide's straight entry is narrower than the grid's turning margin.
     // Its aligned forward/backward motion is still checked by actual body and
     // foot contacts; an inflated navigation cell must not stop it in the doorway.
-    const alignedHide=(this.caveBacking||this.caveExit!==0)&&Math.abs(nx-.485)<.025&&nz>-.10&&nz<.21&&this.surface.heightAt(nx,nz)<.12;
+    const alignedHide=(this.caveBacking||this.caveExit!==0)&&Math.abs(nx-.485)<.025&&nz>-.10&&nz<.31&&this.surface.heightAt(nx,nz)<.12;
     if (Math.abs(this.speed) < 1e-4 || ((this.nav.walkable(nx, nz)||alignedHide) && this.nav.canTraverse(I.x, I.z, nx, nz)) || !this.nav.walkable(I.x, I.z)) {I.x = nx; I.z = nz; this.blockedT = 0;}
     else {this.speed *= 0.5; this.blockedT += dt;}
     // The gait follows actual progress; an obstacle cannot make it paddle in place.
     I.speed = Math.sign(this.speed) * Math.hypot(I.x - oldX, I.z - oldZ) / Math.max(dt, 1e-6);
     const movedX = I.x, movedZ = I.z;
-    // stall watchdog: trying to travel but getting nowhere
-    if ((this.mode === 'travel' || this.mode === 'startle' || (this.mode === 'hunt' && this.huntPhase === 'approach')) && this.pauseT <= 0 && this.leadT <= 0) {
-      if (!this.rig.placingFoot && Math.abs(this.turn) < .3) this.stallT += dt;
-      if (Math.hypot(I.x - this.stallRef.x, I.z - this.stallRef.y) > 0.02) {this.stallT = 0; this.stallRef.set(I.x, I.z);}
-    } else {this.stallT = 0; this.stallRef.set(I.x, I.z);}
     // Pose eases toward its goal.
     const p = this.pose, g = this.poseGoal;
     p.clearance = damp(p.clearance, g.clearance, 4, dt);
@@ -810,9 +813,22 @@ export class LizardBrain {
     I.lid = p.lid;
     I.breath = p.breath;
     this.rig.update(dt);
+    // Measure accepted motion, including turns. A stuck airborne foot must
+    // not disable recovery indefinitely, and a healthy pivot is progress.
+    const travelling=this.mode==='travel'||this.mode==='startle'||(this.mode==='hunt'&&this.huntPhase==='approach');
+    // Direct cave/bowl approaches run before the route's pause/head-lead
+    // timers. Those dormant timers must not suppress their stall detection.
+    const directApproach=this.caveExit!==0||this.caveBacking||this.bowlExit!==null;
+    if(travelling && (directApproach||(this.pauseT<=0&&this.leadT<=0)) && this.retreatT<=0){
+      this.stallT+=dt;
+      if(Math.hypot(I.x-this.stallRef.x,I.z-this.stallRef.y)>.004 || Math.abs(wrap(I.heading-this.stallHeading))>.06){
+        this.stallT=0;this.stallRef.set(I.x,I.z);this.stallHeading=I.heading;
+      }
+    }else{this.stallT=0;this.stallRef.set(I.x,I.z);this.stallHeading=I.heading;}
     const turningBlocked=Math.abs(this.turn)>.3 && !this.rig.placingFoot && Math.abs(wrap(I.heading-oldHeading))<.0001;
     this.turnStallT=turningBlocked ? this.turnStallT+dt : Math.max(0,this.turnStallT-dt);
-    if(this.retreatLeft>0 && this.speed<0)this.retreatLeft=Math.max(0,this.retreatLeft-Math.hypot(I.x-oldX,I.z-oldZ));
+    if(this.retreatLeft>0 && this.speed*this.retreatSign>0)this.retreatLeft=Math.max(0,this.retreatLeft-Math.hypot(I.x-oldX,I.z-oldZ));
+    if(this.backOutLeft>0 && this.speed<0 && this.retreatT<=0)this.backOutLeft=Math.max(0,this.backOutLeft-Math.hypot(I.x-oldX,I.z-oldZ));
     // Walking on the spot: the rig shoved the body back off the glass or a stone
     // it was walking into (see travel)
     const back = -((I.x - movedX) * Math.cos(I.heading) - (I.z - movedZ) * Math.sin(I.heading));
@@ -936,6 +952,18 @@ export class LizardBrain {
    */
   private travel(dt: number) {
     const I = this.rig.inputs;
+    if(this.stallT>1.5 && this.retreatT<=0){
+      this.retreatSign=-Math.sign(this.speed||1);this.retreatLeft=.025;this.retreatT=2;
+      this.stallT=0;this.pushedT=0;this.turnStallT=0;
+    }
+    if(this.retreatT>0){
+      this.retreatT-=dt;
+      if(this.retreatLeft>.003 && this.retreatT>0)return {speed:.025*this.retreatSign,turn:0};
+      this.retreatT=0;this.retreatLeft=0;this.stallT=0;this.pushedT=0;this.turnStallT=0;
+      // A contact recovery preserves the destination and allows the other
+      // supports to take their next step before trying the approach again.
+      this.blockedT=0;
+    }
     if(this.bowlExit){
       const exit=this.bowlExit;exit.time+=dt;
       // Withdraw into open sand before turning away from the water. Pivoting
@@ -949,7 +977,7 @@ export class LizardBrain {
     }
     // The hide is wide enough to rest in, but not to turn the full animal
     // sideways. Turn on the open sand, then back in with the head facing out.
-    if(this.caveApproach && (this.caveBacking || (I.z<.22 && Math.abs(I.x-.485)<.02))){
+    if(this.caveApproach && (this.caveBacking || Math.hypot(I.x-.485,I.z-.28)<.025)){
       this.caveBacking=true;
       const dz=I.z-this.goal![1];
       if(dz<.014){this.caveApproach=false;this.faceHeading=-Math.PI/2;this.arrive();return {speed:0,turn:0};}
@@ -959,21 +987,11 @@ export class LizardBrain {
       return {speed:Math.abs(err)<.25 ? -.035 : 0,turn:clamp(err*3,-.8,.8)};
     }
     if(this.caveExit){
-      if(I.z<.20){
-        const want=Math.atan2(-(.24-I.z),.485-I.x)+(this.caveExit<0?Math.PI:0),err=wrap(want-I.heading);
+      if(I.z<.28){
+        const want=Math.atan2(-(.32-I.z),.485-I.x)+(this.caveExit<0?Math.PI:0),err=wrap(want-I.heading);
         return {speed:Math.abs(err)<.35 ? .035*this.caveExit : 0,turn:clamp(err*3,-.6,.6)};
       }
       this.caveExit=0;this.replan();
-    }
-    if(this.retreatT>0){
-      this.retreatT-=dt;
-      if(this.retreatLeft>.003 && this.retreatT>0)return {speed:-.025,turn:0};
-      this.retreatT=0;this.retreatLeft=0;this.stallT=0;this.pushedT=0;
-      this.turnStallT=0;
-      if(!this.replan()){
-        this.path=[];this.faceHeading=null;this.caveApproach=false;this.caveExit=0;
-        this.setMode('idle','Watching');return {speed:0,turn:0};
-      }
     }
     if (!this.path.length || this.pathI >= this.path.length) {this.arrive(); return {speed: 0, turn: 0};}
     // Blocked or stalled: plan again from here, and give up if that keeps failing.
@@ -982,7 +1000,7 @@ export class LizardBrain {
     if (this.blockedT > 0.8 || this.stallT > 8 || this.turnStallT>2 || (this.pushedT > 3 && this.remaining() > 0.06)) {
       if (this.pushedT > 3 || this.stallT > 8 || this.turnStallT>2) {
         this.nav.avoidApproach(I.x, I.z, I.heading);
-        this.retreatLeft=.045;this.retreatT=6;this.stallT=0;this.pushedT=0;this.turnStallT=0;
+        this.retreatSign=-1;this.retreatLeft=.025;this.retreatT=2;this.stallT=0;this.pushedT=0;this.turnStallT=0;
         this.status='Finding a firmer foothold';
         return {speed:-.025,turn:0};
       }
@@ -1043,7 +1061,8 @@ export class LizardBrain {
       if (this.nav.lineClear(I.x, I.z, aim[0], aim[1], Infinity)) break;
       aim = this.pathPoint(Math.min(ahead, remaining), this.tmp2);
     }
-    const want = Math.atan2(-(aim[1] - I.z), aim[0] - I.x);
+    const backing=this.backOutLeft>0;
+    const want = Math.atan2(-(aim[1] - I.z), aim[0] - I.x)+(backing?Math.PI:0);
     const err = wrap(want - I.heading);
     if (this.leadT > 0) {
       this.leadT -= dt;
@@ -1055,12 +1074,12 @@ export class LizardBrain {
     if (this.path !== this.nearPath) {this.nearPath = this.path; this.nearBest = Infinity; this.nearT = 0;}
     if (remaining < this.nearBest - 0.005) {this.nearBest = remaining; this.nearT = 0;}
     else this.nearT += dt;
-    if (remaining < 0.06 && ((remaining < 0.035 && Math.abs(err) > 1.0) || this.nearT > 1.5 || this.pushedT > 0.25)) {
+    if (remaining < 0.035 && (Math.abs(err) > 1.0 || this.nearT > 1.5 || this.pushedT > 0.25)) {
       this.pushedT = 0;
       this.arrive();
       return {speed: 0, turn: 0};
     }
-    let speed = this.cruise * Math.max(0, Math.cos(err)) ** 2;
+    let speed = (backing?Math.min(this.cruise,.05):this.cruise) * Math.max(0, Math.cos(err)) ** 2;
     // Too far off course: pivot on the spot with short steps, as lizards do.
     if (Math.abs(err) > 1.25) speed = 0;
     // ease off on the final approach and through the water
@@ -1074,7 +1093,7 @@ export class LizardBrain {
     if (this.burstLeft <= 0 && this.mode !== 'startle' && !this.hurry && remaining > 0.08) {
       this.pauseT = rnd() < 0.25 ? 1.2 + rnd() * 2.5 : 0.25 + rnd() * 0.7;
     }
-    return {speed, turn};
+    return {speed:backing?-speed:speed, turn};
   }
 
   private hunt(dt: number) {
