@@ -5,7 +5,7 @@ import { createStreetGraph,createTraffic,trafficPose,trafficSignal,trafficIndica
 import { roofDetails,insideRoof } from '../src/roof-details.js';
 import { buildLandmarkModels } from '../src/landmark-models.js';
 import * as THREE from '../vendor/three.module.min.js';
-import { createCityStreets } from '../src/city-streets.js';
+import { createCityStreets,STREET_CAR_COUNT,CAR_PARTS } from '../src/city-streets.js';
 import { createCityUniforms } from '../src/city-lighting.js';
 import { extrudeBuildings } from '../src/structures-data.js';
 
@@ -130,7 +130,7 @@ test('street graph honors both one-way directions and retains shared intersectio
 test('real Philadelphia simulation remains finite and stays on directed streets over ten minutes',async()=>{
   const doc=JSON.parse(await readFile(new URL('../data/city-streets.json',import.meta.url)));
   const p={lonToX:x=>(x+75.17)*85000,latToZ:z=>(39.95-z)*111000};
-  const graph=createStreetGraph(doc,p,()=>10),sim=createTraffic(graph,620);
+  const graph=createStreetGraph(doc,p,()=>10),sim=createTraffic(graph,STREET_CAR_COUNT);
   const initial=sim.cars.map(c=>trafficPose(c));
   let lastMinute;
   for(let i=0;i<12000;i++){
@@ -240,11 +240,11 @@ test('unchanged street furniture is retained, while a new view radius rebuilds i
     streets.update(params);await new Promise(resolve=>setImmediate(resolve));streets.update(params);
     const furniture=streets.group.children[0],vehicles=streets.group.children[2];
     assert.ok(furniture.count>0);
-    assert.ok(vehicles.instanceMatrix.count>=620*10,'complete vehicles fit the simulation budget');
-    assert.equal(vehicles.count%10,0,'cars include wheels, headlamps and tail lamps');
+    assert.ok(vehicles.instanceMatrix.count>=STREET_CAR_COUNT*CAR_PARTS,'complete vehicles fit the simulation budget');
+    assert.equal(vehicles.count%CAR_PARTS,0,'cars include wheels, headlamps and tail lamps');
     const matrix=new THREE.Matrix4(),position=new THREE.Vector3(),scale=new THREE.Vector3();
     const rotation=new THREE.Quaternion();
-    for(let car=0;car<vehicles.count;car+=10)for(let wheel=2;wheel<6;wheel++){
+    for(let car=0;car<vehicles.count;car+=CAR_PARTS)for(let wheel=2;wheel<6;wheel++){
       vehicles.getMatrixAt(car+wheel,matrix);matrix.decompose(position,rotation,scale);
       const bottom=position.y-scale.y/2;
       assert.ok(bottom>=4&&bottom<4.05,'tires contact the sampled road surface');
@@ -369,7 +369,7 @@ test('street curbs follow sloping and curved terrain instead of hovering at the 
     assert.ok(furniture.count<furniture.instanceMatrix.count);
     const vehicles=streets.group.children[2];
     assert.ok(vehicles.count>0);
-    for(let car=0;car<vehicles.count;car+=10)for(let wheel=2;wheel<6;wheel++){
+    for(let car=0;car<vehicles.count;car+=CAR_PARTS)for(let wheel=2;wheel<6;wheel++){
       vehicles.getMatrixAt(car+wheel,matrix);
       const bottom=new THREE.Vector3(0,-.5,0).applyMatrix4(matrix);
       assert.ok(Math.abs(bottom.y-sample(bottom.x,bottom.z)*2)<.09,

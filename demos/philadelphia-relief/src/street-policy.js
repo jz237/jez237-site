@@ -16,6 +16,7 @@ export function streetStatus(state,pose,stats,{photo=false,archive=false,reduced
     &&state.animationSpeed>0?'Traffic paused by reduced motion. Choose Play to animate it.'
     :'Traffic animation is paused. Choose Play to resume.';
   if(!stats.cars)return 'No simulated cars in this view. Show moving traffic in Center City.';
-  return `${stats.moving?'Traffic moving':'Traffic waiting at signals'} · ${stats.cars} cars nearby`
-    +' · simulated';
+  const area=stats.radius?`within ${Math.round(stats.radius)} m`:'in the surrounding streets';
+  return `Simulated traffic · ${stats.moving||0} moving / ${stats.cars-(stats.moving||0)} waiting`
+    +` ${area}. Includes off-screen streets and cars hidden by buildings.`;
 }

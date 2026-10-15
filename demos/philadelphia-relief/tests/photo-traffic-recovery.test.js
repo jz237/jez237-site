@@ -32,7 +32,8 @@ test('traffic status explains captured photo cars, paused animation and unavaila
   const state=defaults(),pose={dist:350},stats={cars:12,moving:3};
   assert.match(streetStatus(state,pose,stats,{photo:true}),/captured imagery/);
   assert.match(streetStatus(state,pose,stats,{reducedMotion:true}),/paused by reduced motion/);
-  assert.match(streetStatus(state,pose,stats),/Traffic moving · 12 cars/);
+  assert.match(streetStatus(state,pose,{...stats,radius:650}),/3 moving \/ 9 waiting within 650 m/);
+  assert.match(streetStatus(state,pose,stats),/Includes off-screen streets/);
   assert.match(streetStatus(state,pose,{cars:0}),/No simulated cars/);
   assert.match(streetStatus(state,pose,{failed:true}),/could not load/);
 });

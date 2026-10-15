@@ -1296,3 +1296,9 @@ Chrome checks cover the traffic controls and actual Cesium failure/retry using
 the local synthetic fixture; production photographic loading must still be
 verified after each guarded release. The reported immediate failure on another
 computer could not be reproduced locally.
+
+Traffic density follow-up: 1,800 simulated vehicles now populate the street graph
+(previously 620). Painted cabin roofs improve visibility from above. The status
+separates moving and waiting cars, states the neighborhood radius, and explicitly
+includes off-screen streets and building occlusion rather than implying all cars
+are visible. The ten-minute real-street endurance check runs at the new population.
