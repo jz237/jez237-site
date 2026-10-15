@@ -59,8 +59,9 @@ function run(command, args) {
 const git = (...args) => run('git', args).trim();
 async function verifyRelease(url) {
   // A newly uploaded Pages Worker may lag its static assets briefly. Keep all
-  // checks fail-closed, but allow 30 seconds of bounded readiness backoff.
-  for (let attempt = 0; attempt < 6; attempt++) {
+  // checks fail-closed, but allow 90 seconds of bounded readiness backoff.
+  // A later service may still be warming when Philadelphia first becomes ready.
+  for (let attempt = 0; attempt < 10; attempt++) {
     try {
       await checkPhillyLive(url, fetch, { requireAircraft, requireOutages, expectedBuild });
       await checkHiddenReefImages(url);
@@ -69,7 +70,7 @@ async function verifyRelease(url) {
       return;
     }
     catch (error) {
-      if (attempt === 5) throw error;
+      if (attempt === 9) throw error;
       console.log(`${error.message} Retrying the newly deployed service.`);
       await new Promise(resolve => setTimeout(resolve, 2000 * (attempt + 1)));
     }
