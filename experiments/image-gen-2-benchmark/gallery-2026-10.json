@@ -1,5 +1,109 @@
 [
   {
+    "id": "2026-10-15-factual-infographic-factual-infographic-type-1-diabetes-the",
+    "title": "Factual infographic: Type 1 Diabetes — The Missing Insulin Signal",
+    "tests": "factual_subtype: medical-health-infographic; claim-level NIDDK/NHS evidence; artwork-led organic anatomy; no non-Monday subjective review; archive_slot=2026-10-15T05:20; concept=type-one-diabetes-pancreatic-beta-cell-insulin-loss; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=high, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished, artwork-led medical educational infographic, directly on the canvas, with the title “TYPE 1 DIABETES” and subtitle “The missing insulin signal”. A luminous anatomical gouache and fine copperplate-ink composition on a cool ivory ground, accented by deep petrol teal, muted coral and warm amber. Portrait-oriented visual journey with a large, beautifully shaded pancreas sweeping diagonally through the upper-middle canvas; finely lobulated glandular surface and translucent local cutaway, not an isolated organ icon pasted on a grid. An organic enlargement emerges from its edge into a pancreatic cellular study showing insulin-producing beta cells and stylized immune activity. Fine curved leader lines connect the pancreas to this schematic enlargement. Do not imply that every pancreatic cell is a beta cell; label “Insulin-producing beta cells” only at the appropriate enlarged cell cluster. Render the tiny cellular study with textured cytoplasm and restrained cellular detail, not invented named molecular anatomy. Small annotation: “Immune activity destroys beta cells”. Nearby: “Little or no insulin”.\n\nA graceful broad ribbon of blood vessel curves downward and across the illustration, with convincing translucent vessel wall and softly lit red blood cells for visual context, carrying amber glucose symbols. Beside the vessel, a small schematic body-cell membrane study uses restrained dotted arrows to explain reduced glucose uptake when insulin is insufficient. Do not show a literal physical key, lock, blocked pipe, or claim all cell types require insulin for glucose entry. Labels: “Insulin helps glucose enter cells for energy” and “Too little insulin → blood glucose rises”. A discreet note says “Cellular studies schematic; not to scale”. Keep all scales clearly separate through fine connecting lines rather than fake contiguous anatomy. The composition's luminous stream and changing scale are the main visual interest; artwork occupies most of the canvas, with generous negative space supporting readable text.\n\nIn open spaces along the vessel curve, place short symptom annotations with tiny restrained line drawings that do not add unsupported mechanisms: “Thirst • frequent urination”, “Fatigue • unexplained weight loss”, “Blurred vision”. A quiet upper-margin note: “Can develop at any age; family history raises risk”. No causal blame, no sugar-food imagery, no assertion that lifestyle caused this autoimmune disease.\n\nBelow the main anatomical sweep, seamlessly integrate one elegant small insulin pen study, a compact insulin pump study and a generic glucose-monitoring device, unbranded, as a care pathway sitting in open whitespace. Brief accompanying text: “Insulin is essential” and “Pens or pumps + regular glucose monitoring + a diabetes team”. Then “Healthy eating and activity support care; they do not replace insulin”. A tiny supporting note: “Too much insulin can cause low glucose—follow an individual care plan”. No doses, numerical targets, fictional readings, promises of cure or suggestion to adjust treatment independently. Keep devices subordinate to the anatomy.\n\nA warm rust-colored flowing warning annotation at the lower edge, not a boxed dashboard card: heading “DKA: a medical emergency”. Concise explanatory line: “Without enough insulin, fat breakdown can produce dangerous ketone buildup”. Readable warning line: “Vomiting or abdominal pain • fast, deep breathing • fruity breath • sleepiness or confusion”. Then an unmistakable action line: “Seek emergency care immediately”. Near the ordinary symptoms: “Suspected type 1 diabetes needs urgent medical assessment”. A compact diagnostic annotation, if space permits without crowding: “Blood glucose tests diagnose diabetes; autoantibodies help identify type 1”. The footer states “General education—not a diagnosis or personal treatment plan”.\n\nPrioritize essential mechanism, key symptoms, insulin-based management, urgent assessment and DKA emergency guidance. Omit the optional diagnostic annotation and risk-factor note before reducing legibility or crowding the composition. All substantive statements above are source-verified; add no other claims, statistics, labels or dramatic complications. Beautifully controlled clinical illustration with believable tissue translucency, stippled ink shadows, minute tissue fibers, shaded membranes and intentionally flowing typography; not gore, a sparse title poster, a rigid boxed grid, identical cards, a textbook page photographed on a desk, a screen mockup or museum room. No URLs, bibliography, tiny source citations, logos or watermarks. Elegant hierarchy, concise fully legible lettering, ample breathing room; rich art integrated with the explanation.",
+    "image": "images/2026-10-15-factual-infographic-factual-infographic-type-1-diabetes-the.jpg",
+    "thumb": "thumbs/2026-10-15-factual-infographic-factual-infographic-type-1-diabetes-the.webp",
+    "color": "#c8aea2",
+    "date": "2026-10-15",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "type-one-diabetes-pancreatic-beta-cell-insulin-loss",
+      "imageSha256": "672774f5b314a7272adfcebac311051728ce79a8ce02a259eaf849cdc74d3682",
+      "imageDHash": "e6f262703aad2403"
+    },
+    "factualInfographic": {
+      "topic": "type 1 diabetes",
+      "description": "How autoimmune beta-cell destruction reduces insulin, raises blood glucose, produces symptoms and requires insulin-based care, with urgent assessment and DKA warning signs.",
+      "sourceNote": "NIDDK: https://www.niddk.nih.gov/health-information/diabetes/overview/what-is-diabetes/type-1-diabetes ; NHS: https://www.nhs.uk/conditions/type-1-diabetes/symptoms/ . Verified autoimmune beta-cell mechanism, symptoms, testing, insulin and monitoring, and emergency DKA context.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-15T09:21:20.460040+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Diabetes and Digestive and Kidney Diseases",
+            "title": "Type 1 Diabetes",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/diabetes/overview/what-is-diabetes/type-1-diabetes"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Symptoms of type 1 diabetes and how it’s diagnosed",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/type-1-diabetes/symptoms/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Type 1 diabetes is an autoimmune disease: immune activity destroys insulin-producing beta cells in the pancreas, causing little or no insulin.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Insulin helps glucose enter body cells for energy; insufficient insulin causes blood glucose to rise. The tissue and glucose symbols are schematic and not to scale.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Type 1 diabetes can develop at any age; family history raises risk.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Common symptoms include frequent urination, thirst, fatigue, unexplained weight loss and blurred vision.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Suspected type 1 diabetes needs urgent medical assessment; diagnosis uses blood glucose tests, with autoantibody tests helping establish the type.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Insulin treatment is essential; insulin pens or pumps and regular glucose monitoring support individualized care with a diabetes team. Healthy eating and activity support management but do not replace insulin.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Too much insulin can cause low blood glucose, so treatment and monitoring require an individualized care plan.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Without enough insulin, fat breakdown produces ketones that can accumulate and cause diabetic ketoacidosis (DKA), a medical emergency.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Vomiting or abdominal pain, fast deep breathing, fruity breath, sleepiness or confusion may signal DKA; seek emergency care immediately, especially with thirst and frequent urination.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-10-15-factual-infographic-factual-infographic-appendicitis-the-in",
     "title": "Factual infographic: Appendicitis — The Inflamed Cul-de-sac",
     "tests": "factual_subtype: medical-health-infographic; claim-level NIDDK/NHS evidence; organic anatomical composition; no non-Monday subjective review; archive_slot=2026-10-15T02:20; concept=appendicitis-inflamed-appendix-abdominal-pain; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=high, size=auto; factual_subtype: medical-health-infographic",
