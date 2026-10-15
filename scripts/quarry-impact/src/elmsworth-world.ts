@@ -1,3 +1,4 @@
+import {createSpeedwaySpectators} from './elmsworth-spectators';
 import {createSpeedwayArchitecture} from './elmsworth-architecture';
 import {addCourseGroundDetail} from './course-materials';
 import * as T from 'three';
@@ -46,7 +47,7 @@ export function createElmsworthWorld(){
  box(-70,7,8,1.2,14,1.2,'steel');box(-70,13,8,18,8,1,'steel');
  for(let row=0;row<4;row++)for(let col=0;col<5;col++)box(-77+col*3.5,10.2+row*1.6,8.6,2.2,.65,.2,'stripe');
  for(const [finish,matrices]of batches){const mesh=new T.InstancedMesh(boxGeometry,materials[finish],matrices.length);matrices.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.name=id+'_'+finish;mesh.castShadow=mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
- const architecture=createSpeedwayArchitecture();root.add(architecture.root);
+ const architecture=createSpeedwayArchitecture(),spectators=createSpeedwaySpectators();root.add(architecture.root,spectators.root);
  root.userData.solidRecords=course.solids;freezeSceneryTransforms(root);
- let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;architecture.dispose();surfaceDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
+ let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;spectators.dispose();architecture.dispose();surfaceDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
 }

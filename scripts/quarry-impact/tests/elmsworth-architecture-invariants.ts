@@ -10,15 +10,18 @@ export function readElmsworthArchitecturePrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreElmsworthArchitectureBytes(file:string,bytes:Buffer):Buffer{
+ bytes=restoreElmsworthSpectatorsBytes(file,bytes);
  const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readElmsworthArchitecturePrevious(file);
 }
 export function verifyElmsworthArchitectureRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'d1a76103a4a294fbce4988a2f95a921db18bd98c');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreElmsworthSpectatorsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreElmsworthArchitectureBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the ElmsworthArchitecture release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreElmsworthSpectatorsBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the ElmsworthArchitecture release');
  assert.equal(manifest.previousFixtureCount,2289);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,2289);
 }
+
+import {restoreElmsworthSpectatorsBytes} from './elmsworth-spectators-invariants';
