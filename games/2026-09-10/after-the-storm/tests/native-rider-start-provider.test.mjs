@@ -164,10 +164,10 @@ test('two physical starting riders finish a shared phase before post-water scene
  assert.deepEqual(adapters.map(a=>a.articulatedRider.logicalFrames),[2,2]);assert.equal(water.frames,2);
 });
 
-test('ordinary lifecycle construction stays ordinary and missing startup artwork is rejected explicitly',()=>{
+test('ordinary lifecycle construction stays ordinary and missing actual startup yaw rejects explicitly',()=>{
  const hull=createNativeHull(),before=structuredClone(hull),bundle=createNativeLifecycleRider({initialHull:hull});
  assert.equal(bundle.initialRiderRecovery,undefined);assert.equal(bundle.articulatedRider.logicalFrames,0);
- assert.throws(()=>createNativeLifecycleRider({initialHull:hull,initializeStart:true}),/selected-record start provider/);
+ assert.throws(()=>createNativeLifecycleRider({initialHull:hull,initializeStart:true}),/retained yawFrame/);
  assert.throws(()=>createNativeLifecycleRider({initialHull:hull,initializeStart:'yes'}),/initializeStart/);
  assert.throws(()=>createNativeLifecycleRider({initialHull:hull,startPoseProvider:{}}),/startPoseProvider/);
  assert.deepEqual(hull,before);

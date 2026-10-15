@@ -5,7 +5,8 @@ import {prepareNativeRiderWipeoutPose} from './native-rider-wipeout-pose.js';
 import {prepareNativeRiderStumblePose} from './native-rider-stumble-pose.js';
 import {createAuthoredNativeRecoveryPose} from './authored-native-recovery-pose.js';
 import {createAuthoredNativeActionPoses} from './authored-native-action-poses.js';
-import {prepareNativeRiderStartSeed} from './native-rider-start-provider.js';
+import {createNativeRiderStartPoseProvider,prepareNativeRiderStartSeed} from './native-rider-start-provider.js';
+import {createAuthoredNativeStartRecords} from './authored-native-start-records.js';
 import {createNativeRiderRecovery} from './native-rider-recovery.js';
 
 // Source actor timing/effects with explicitly authored anatomy/action/remount art.
@@ -25,7 +26,10 @@ function blend(a,b,t,scale){
  return a.map((p,i)=>Object.fromEntries(axes.map(k=>[k,F(F(p[k]/scale)*F(1-t)+F(b[i][k]/scale)*t)*scale])));
 }
 
-/** startPoseProvider is an explicit selected-record provider. initializeStart
+/** startPoseProvider may override the authored detailed-rider records and
+ * explicit modern dimensions. The default reads the physical hull's actual
+ * retained yawFrame; a source-prepared hull is required for starting poses.
+ * initializeStart
  * seeds its actual25 positions/types at construction, without consuming a
  * logical frame or fitting rest mechanics from the launch pose. The returned
  * initialRiderRecovery must be supplied to the adapter along with its own
@@ -34,16 +38,28 @@ export function createNativeLifecycleRider({initialHull,geometryProvider=modernR
  startPoseProvider,initializeStart=false}={}){
  if(typeof initializeStart!=='boolean')throw new TypeError('initializeStart must be boolean');
  if(startPoseProvider!==undefined&&typeof startPoseProvider?.evaluate!=='function')throw new TypeError('startPoseProvider must be an explicit selected-record provider');
- // Validate/evaluate the whole seed before allocating or changing any owner.
- const seed=initializeStart?prepareNativeRiderStartSeed(startPoseProvider,{hull:initialHull}):null;
  const base=createAuthoredNativeRider({initialHull,geometryProvider,anchorRig:providedAnchorRig}),{articulatedRider:rider,anchorState,anchorRig,restTargets}=base;
  const scale=initialHull.scale,restTargetsLocal=restTargets.map(p=>local(p,initialHull));
  const actions=createAuthoredNativeActionPoses({scale,restTargetsLocal});
  let remount=null,expectedSolves=0,previousFrame=-1;
  let yawForward={x:initialHull.frame.forward.x,z:initialHull.frame.forward.z};
  const yawLength=Math.hypot(yawForward.x,yawForward.z);
- if(!yawLength)throw new RangeError('Initial lifecycle rig requires an explicit horizontal heading');
- yawForward={x:F(yawForward.x/yawLength),z:F(yawForward.z/yawLength)};
+ if(yawLength)yawForward={x:F(yawForward.x/yawLength),z:F(yawForward.z/yawLength)};
+ else{
+  const x=initialHull.yawFrame?.field1434,z=initialHull.yawFrame?.field1438;
+  if(!Number.isFinite(x)||!Number.isFinite(z)||Math.hypot(x,z)===0)throw new RangeError('Initial lifecycle rig requires an explicit horizontal heading');
+  yawForward={x:F(x),z:F(z)};
+ }
+ let activeStart=startPoseProvider,authoredStart;
+ function startProvider(){
+  if(!activeStart){
+   authoredStart=createAuthoredNativeStartRecords({scale,restTargetsLocal,anchorRig});
+   activeStart=createNativeRiderStartPoseProvider({scale,...authoredStart,readYawFrame:hull=>hull.yawFrame});
+  }
+  return activeStart;
+ }
+ // Prepare every selected goal before installing anything into physical state.
+ const seed=initializeStart?prepareNativeRiderStartSeed(startProvider(),{hull:initialHull}):null;
  let initialRiderRecovery;
  if(seed){
   rider.points=seed.positions.map((position,i)=>({position:copy(position),storedDelta:{x:0,y:0,z:0},type:seed.types[i]}));
@@ -56,8 +72,7 @@ export function createNativeLifecycleRider({initialHull,geometryProvider=modernR
  }
  function evaluate(actor,animationFrame,hull,context){
   if(actor===15){
-   if(!startPoseProvider)throw new RangeError('Native lifecycle actor15 needs its explicit selected-record physical pose');
-   return startPoseProvider.evaluate({animationFrame,hull,context});
+   return startProvider().evaluate({animationFrame,hull,context});
   }
   if(actor===22){
    const x=context.controls.conditionedXNative??context.controls.workingXNative??0,turn=Math.max(-1,Math.min(1,-x/70));
@@ -120,7 +135,8 @@ export function createNativeLifecycleRider({initialHull,geometryProvider=modernR
   lifecycle:'source decision/pose-completion timing and physical effect order',
   recoveryGeometry:'authored actor7; reconstructed procedural23/24; authored rest/circle/history compatibility policy',
   actionGeometry:actions.provenance,
-  startGeometry:startPoseProvider?.provenance??'explicit selected-record provider required; no default start artwork',
+  startGeometry:activeStart?.provenance??'authored detailed-rider selected records and explicit modern anatomy, prepared when requested',
+  ...(authoredStart?{startArtwork:authoredStart.provenance}:{}),
   startInitialization:seed?'actor15/frame56 physical25-point/type seed; independent authored rest/circle; not full retained-body startup':'ordinary actor22 host initialization',
   gripGeometry:'authored auxiliary grip order follows final actual type2/3 anatomical bindings',
   targetBlend:'authored imported-point interpolation; not original normalized pose-block interpolation'})};

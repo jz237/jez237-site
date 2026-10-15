@@ -2033,3 +2033,41 @@ reaches5.8s/hull tick580 with116 body and116 auxiliary solves and the detailed
 physical rider visible. Only a favicon404 appears; no game exception was
 observed. This checks the current presentation after integration, not new
 high-resolution actor15 artwork or original-ROM gameplay equivalence.
+
+## Detailed rider launch geometry — October 15, 2026 (local integration)
+
+The physical lifecycle can now create newly authored boarding records for
+ordinary starting frames56..84 from the detailed rider's neutral anatomy and
+steering supports. It reads the actual prepared hull's retained yaw owner.
+The recovered hybrid placement, three shoulder passes, arm IK and point
+mapping evaluate those records with twelve explicit modern anatomical
+dimensions. The original fixed-dimension mode remains the default numeric
+API and still matches both170 original-record and130 synthetic comparisons.
+The adapted mode does not assert original pose-coordinate or body-force
+calibration equality.
+
+The authored rider boards from the rear, lifts its legs clear of the larger
+modern saddle/foot decks, and settles into normal riding. The final target
+pose matches the neutral model within5mm in the tested level scene. A rendered
+inspection exposed seat intersection in the initial authored path; that path
+was corrected before the final checks. No original animation records or mesh
+assets were included. Record generation owns no private frame clock, phase,
+input processing or blend. The separate physical rest lengths, grip-circle
+radius and histories keep their existing owners.
+
+All eleven new detailed-launch checks and129 affected checks pass. Real
+physical holds, advancement and the outgoing ordinary blend agree exactly
+across30/60/144Hz for all four numeric rider profiles; two starting riders
+observe the same phase until the after-water boundary. The full suite checks
+2,091 tests:2,080 pass, with the same eleven existing calibration failures.
+The original calibration assertions were not relaxed.
+
+An isolated local1280x720 inspection uses the actual detailed craft/rider,
+physical points and renderer:198,068 triangles, nine sampled physical frames,
+equal body/auxiliary solve counts, and a completed actor15-to22 blend, with
+no console errors or warnings. Its prepared phase inputs are a test fixture;
+it is not a live race/countdown claim. The temporary inspection page/helper
+were moved out of the public source after checking. The normal native host
+still begins22 after its browser countdown; connecting the verified canonical
+race/HUD/i1 sequence and migrating live power ownership remain the next work.
+This checkpoint is local, not a new live release.
