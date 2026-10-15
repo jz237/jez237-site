@@ -265,7 +265,9 @@ export function stepRace(s,input,dt){if(s.phase==='paused'||s.phase==='results')
   s.time=s.nativeHost.world.ticks*.01;
   s.primaryBuoys=capturePrimaryBuoyPresentation(s.nativeHost.primary?.snapshot());
   for(const r of s.racers)r.raceTime=s.time;
-  if(s.phase!=='results')finishRaceStep(s,dt);return;
+   // The completed50ms native callback owns result and finish-wait updates.
+   // Advancing them here as well would count render time a second time.
+   return;
  }
  frontEnabled.value=s.seaState==='surf'||s.seaState==='storm'?1:0;setWaterCharacter(s.course);setLocalWater(s.localWater);s.time+=dt;if(s.course.passage?.enabled&&s.racers.some(r=>r.lap>1)&&s.passageOpenedAt===Infinity){s.passageOpenedAt=s.time;if(s.course.passage.kind==='gate')s.racers.forEach(r=>announce(r,s,'SLUICE OPENING · INNER CHANNEL AVAILABLE'));}stepCourseDatum(s,dt);s.weather=raceWeather(s);for(const q of s.course.rocks||[])if(q.followsWaterDatum)q.y=s.weather.seaLevel;surfSeed.value=s.waveSeed;surfStrength.value=s.seaState==='surf'?1:0;windSea.value=s.seaState==='chop'||s.seaState==='storm'?1:0;setCourseWaveTrain(s.course.waveTrain);setBoundaryWaves(s.course);waterLevel.value=s.weather.seaLevel;
  craftFields.forEach((c,i)=>{const r=s.racers[i];Object.assign(c,r?{x:r.x,z:r.z,heading:r.heading,turn:r.turn,bowWet:r.hydro.bowWet,sternWet:r.hydro.sternWet,power:Math.min(1,r.speed/18)*r.hydro.wet}:{power:0});});

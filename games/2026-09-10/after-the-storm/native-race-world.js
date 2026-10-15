@@ -1,5 +1,5 @@
 import {NATIVE_HULL_STEP} from './native-hull.js';
-import {stepNativeRaceAdapter,nativeRaceSnapshot,prepareNativeRaceAdapterFrame,completeNativeRaceAdapterFrame} from './native-race-adapter.js';
+import {stepNativeRaceAdapter,nativeRaceSnapshot,latchNativeRaceAdapterControls,prepareNativeRaceAdapterFrame,completeNativeRaceAdapterFrame} from './native-race-adapter.js';
 import {createNativeWaterCellSurface} from './native-water.js';
 import {isHostRaceWater,advanceRaceWaterFrame} from './race-water.js';
 import {createNativeCraftContactStates,refreshNativeCraftContactState,applyNativeCraftContacts,nativeCraftContactSnapshot} from './native-craft-contact.js';
@@ -50,6 +50,9 @@ function optionsAt(value,time,frame,index){
  * tune fields, actor state and contact hooks must be chosen explicitly before
  * attachment. No synthetic joint or inferred actor is constructed here.
  * humanIndices is P1/P2 order, independent of descending hull visitation.
+ * beforeFrame(world,context) runs before ALL descending input samples. It is
+ * the explicit owner hook for ascending navigation/global source updates;
+ * rendering, inactive calls and fractional intervals cannot invoke it.
  * afterFrame(world,context), when supplied, runs AFTER water exactly once per
  * completed frame; it is the caller's slot for native floating-object updates.
  * afterTick(world,context) runs once per physical tick, after any completed
@@ -57,20 +60,21 @@ function optionsAt(value,time,frame,index){
  * Returning false from afterFrame ends this step at that frame and discards
  * unused elapsed time; it supports terminal race results, not a pause timer.
  */
-export function createNativeRaceWorld({adapters,water,humanIndices=[0],afterFrame=null,afterTick=null,craftContacts=true}={}){
+export function createNativeRaceWorld({adapters,water,humanIndices=[0],beforeFrame=null,afterFrame=null,afterTick=null,craftContacts=true}={}){
  if(!Array.isArray(adapters)||adapters.length<1||adapters.length>4||new Set(adapters).size!==adapters.length)
   throw new TypeError('Expected one to four distinct native race adapters');
  if(!isHostRaceWater(water))throw new TypeError('Native world requires host water, not a presentation snapshot');
  if(waterOwners.has(water))throw new Error('Water already belongs to a native world');
  if(!Array.isArray(humanIndices)||humanIndices.length!==water.players||new Set(humanIndices).size!==humanIndices.length||
   humanIndices.some(i=>!Number.isInteger(i)||i<0||i>=adapters.length))throw new RangeError('Human indices must match the water cameras');
+ if(beforeFrame!==null&&typeof beforeFrame!=='function')throw new TypeError('beforeFrame must be a function');
  if(afterFrame!==null&&typeof afterFrame!=='function')throw new TypeError('afterFrame must be a function');
  if(afterTick!==null&&typeof afterTick!=='function')throw new TypeError('afterTick must be a function');
  if(typeof craftContacts!=='boolean')throw new TypeError('craftContacts must be an explicit boolean');
  const ticks=water.frames*TICKS_PER_FRAME;
  for(const a of adapters){
   if(!a?.hull||a.hull.points?.length!==12||a.hull.scale!==water.scale||a.hull.ticks!==ticks||
-   a.logicalFrames!==water.frames||a.remainder!==0||a.pendingFrameCompletion||a.preparedHullTick===ticks)
+   a.logicalFrames!==water.frames||a.remainder!==0||a.pendingFrameCompletion||a.preparedHullTick===ticks||a.sampledHullTick!==null)
    throw new RangeError('Adapters must match the water scale and completed-frame clock');
   if(adapterOwners.has(a))throw new Error('Adapter already belongs to a native world');
  }
@@ -78,7 +82,7 @@ export function createNativeRaceWorld({adapters,water,humanIndices=[0],afterFram
  const surface=createNativeWaterCellSurface(water.field);
  const craftContactStates=createNativeCraftContactStates(adapters.map(a=>a.hull));
  const world={adapters:adapters.slice(),water,
-  humanIndices:humanIndices.slice(),surface,afterFrame,afterTick,ticks,frames:water.frames,remainder:0,
+  humanIndices:humanIndices.slice(),surface,beforeFrame,afterFrame,afterTick,ticks,frames:water.frames,remainder:0,
   craftContacts,craftContactStates,craftContactPasses:0,craftContactCount:0,frameCraftContacts:[],
   stepsLast:0,framesLast:0,frame:null,busy:false,fault:null};
  for(const a of adapters){a.surface=surface;adapterOwners.set(a,world);}
@@ -113,6 +117,8 @@ export function stepNativeRaceWorld(world,dt,inputs,{active=true,adapterOptions=
     const nextWater=typeof waterOptions==='function'?waterOptions(time,frame):waterOptions;
     if(!nextWater||typeof nextWater!=='object'||Array.isArray(nextWater))throw new TypeError('Expected water frame options');
     world.frame={perRacer,water:{...nextWater}};
+    if(world.beforeFrame)world.beforeFrame(world,{logicalFrame:frame,time,step:H*TICKS_PER_FRAME});
+    for(let i=world.adapters.length-1;i>=0;i--)latchNativeRaceAdapterControls(world.adapters[i],inputs[i],perRacer[i]);
     for(let i=world.adapters.length-1;i>=0;i--)prepareNativeRaceAdapterFrame(world.adapters[i],inputs[i],perRacer[i]);
     const scene=world.adapters[0].frame.simulationState;
     if(world.adapters.some(a=>a.frame.simulationState!==scene))throw new Error('Native simulation state is shared by the whole scene');

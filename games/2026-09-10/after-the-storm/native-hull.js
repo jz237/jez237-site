@@ -33,6 +33,8 @@ const PAIRS = Object.freeze(LOCAL_POINTS.flatMap((_,a)=>
 // These coefficients are not point masses or inverse constraint weights.
 const DAMPING_INNER = [.67,.59,.70,.63];
 const DAMPING_OUTER = [.57,.49,.60,.71];
+const COMPUTER_DAMPING_INNER = [.67,.59,.70,.58];
+const COMPUTER_DAMPING_OUTER = [.57,.49,.60,.61];
 
 const vec = (x=0,y=0,z=0)=>({x,y,z});
 const copy = p=>vec(p.x,p.y,p.z);
@@ -78,11 +80,16 @@ function fitFrame(points,previous){
   return {forward,right,up:cross(forward,right)};
 }
 
-/** Create independent mutable points; rider is a numeric index from 0 to 3. */
-export function createNativeHull({position=ZERO,velocity=ZERO,heading=0,pitch=0,roll=0,rider=0,scale=.025}={}){
+/** Create independent mutable points; rider is a numeric index from 0 to 3.
+ * computerProfile selects the recovered16ce coefficient branch. It is separate
+ * from the input caller: a human-profile craft may later receive AI controls.
+ */
+export function createNativeHull({position=ZERO,velocity=ZERO,heading=0,pitch=0,roll=0,rider=0,scale=.025,computerProfile=false}={}){
   finiteVector(position,'position');finiteVector(velocity,'velocity');
   if(![heading,pitch,roll,scale].every(Number.isFinite)||scale<=0)throw new RangeError('Pose must be finite and scale positive');
   if(!Number.isInteger(rider)||rider<0||rider>3)throw new RangeError('rider must be an index from 0 to 3');
+  if(typeof computerProfile!=='boolean')throw new TypeError('computerProfile must be boolean');
+  const inner=(computerProfile?COMPUTER_DAMPING_INNER:DAMPING_INNER)[rider],outer=(computerProfile?COMPUTER_DAMPING_OUTER:DAMPING_OUTER)[rider];
   const maxRadius=Math.max(...LOCAL_POINTS.map(p=>Math.hypot(...p)));
   const points=LOCAL_POINTS.map(local=>{
     const offset=rotatedLocal(local.map(v=>v*scale),heading,pitch,roll);
@@ -90,14 +97,14 @@ export function createNativeHull({position=ZERO,velocity=ZERO,heading=0,pitch=0,
     return {
       position:vec(position.x+offset.x,position.y+offset.y,position.z+offset.z),
       velocity:copy(velocity),
-      damping:DAMPING_INNER[rider]+(DAMPING_OUTER[rider]-DAMPING_INNER[rider])*ratio
+      damping:inner+(outer-inner)*ratio
     };
   });
   const restLengths=PAIRS.map(([a,b])=>length(difference(points[b].position,points[a].position)));
   const frame={forward:rotatedLocal([0,0,1],heading,pitch,roll),
     up:rotatedLocal([0,1,0],heading,pitch,roll),right:rotatedLocal([1,0,0],heading,pitch,roll)};
   return {
-    points,restLengths,frame,scale,rider,
+    points,restLengths,frame,scale,rider,computerProfile,
     center:mean(points,'position'),velocity:copy(velocity),
     motionVelocity:copy(velocity),motionDirection:normalized(velocity)||vec(),
     remainder:0,ticks:0,simulationTime:0,stepsLast:0

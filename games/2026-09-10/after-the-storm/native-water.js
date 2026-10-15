@@ -19,7 +19,9 @@ import {queryNativeWaterField} from './native-water-field.js';
 // the prepared physical joint/action; this module does not infer either.
 // jetStraight is latched with frame input; suppressDryCorrection and the optional
 // buoyancyKOverride describe the current action. Default ordinary math is kept.
-// Wipeout recovery, AI, two-player catch-up and pose/power overrides are absent.
+// The explicit computerProfile selects source16ce coefficients; the current
+// input caller does not select that profile. AI navigation, original scene
+// dispatch and two-player catch-up remain separately owned integration work.
 
 export const NATIVE_WATER_SCALE = .025;
 const STEP=NATIVE_HULL_STEP,FRAME_TICKS=5,LOWER=[0,2,3,5,6,7,9,10],UPPER=[1,4,8,11];
@@ -35,6 +37,11 @@ const PARAMS=[
   {steering:[33,27],slowSpeed:27.8,slowGain:.05,lowRatio:[.7,.4],highRatio:[.95,1],pivot:30,
     engine:[.575,.545],bonus:.11,lateral:[.91,.8],roll:[.009,.019],height:0,dryGravity:1}
 ];
+const F=Math.fround;
+const COMPUTER=Object.freeze({
+  steering:[30,27.455,29.273,30],lowRatio:[.6,.28,1.2,.7],highRatio:[.95,.94,.95,.95],
+  engine:[.5,.605,.4827,.545],bonus:[.1,.1,.09,.11],lateral:[.72,.75,.5627,.75],roll:[.027,.03,.0431,.019]
+});
 const vec=(x=0,y=0,z=0)=>({x,y,z});
 const copy=p=>vec(p.x,p.y,p.z);
 const dot=(a,b)=>a.x*b.x+a.y*b.y+a.z*b.z;
@@ -45,14 +52,28 @@ const lerp=(pair,t)=>pair[0]+(pair[1]-pair[0])*t/11;
 
 function finite(value,name){if(!Number.isFinite(value))throw new TypeError(`${name} must be finite`);return value;}
 function range(value,name,min,max){finite(value,name);if(value<min||value>max)throw new RangeError(`${name} must be from ${min} to ${max}`);return value;}
+function validPowerFactor(value){range(value,'powerFactor',0,Infinity);if(!Number.isFinite(F(value)))throw new RangeError('powerFactor must fit finite binary32');}
 
 /** Numeric native rider order is explicit; no browser character-name mapping. */
-export function createNativeWaterProfile({riderIndex=0,tuneB6c=0,tuneB70=0,tuneB74=0}={}){
+export function createNativeWaterProfile({riderIndex=0,tuneB6c=0,tuneB70=0,tuneB74=0,computerProfile=false}={}){
   if(!Number.isInteger(riderIndex)||riderIndex<0||riderIndex>3)throw new RangeError('riderIndex must be from 0 to 3');
+  if(typeof computerProfile!=='boolean')throw new TypeError('computerProfile must be boolean');
   for(const [name,value]of Object.entries({tuneB6c,tuneB70,tuneB74}))range(value,name,0,11);
   const p=PARAMS[riderIndex],engine=lerp(p.engine,tuneB74);
+  if(computerProfile){
+    if(![tuneB6c,tuneB70,tuneB74].every(Number.isInteger))throw new RangeError('Computer tune fields must be integers');
+    const value=key=>F(COMPUTER[key][riderIndex]),hud=F(1.8),pivot=F(p.pivot);
+    return Object.freeze({riderIndex,tuneB6c,tuneB70,tuneB74,computerProfile,
+      steeringDegrees:value('steering'),steeringSlowFrameSpeed:F(p.slowSpeed),steeringSlowGain:F(p.slowGain),
+      lowSpeedForceRatio:value('lowRatio'),highSpeedForceRatio:value('highRatio'),
+      pivotSpeedNative:F(F(F(pivot/hud)/5)+F(F(F(F(100-pivot)/hud)/5)*F(tuneB70/11))),
+      upperCurveSpeedNative:F(F(100/hud)/5),peakForceNative:value('engine'),powerBonusNative:value('bonus'),
+      contactForceNative:F(value('engine')+value('bonus')),waterLateralRetention:value('lateral'),rollBalance:value('roll'),
+      referenceHeightOffsetNative:p.height,dryGravityMultiplier:p.dryGravity,
+      gravityNative:-.192,buoyancyCapLengthFactor:.8});
+  }
   return Object.freeze({
-    riderIndex,tuneB6c,tuneB70,tuneB74,
+    riderIndex,tuneB6c,tuneB70,tuneB74,computerProfile,
     steeringDegrees:lerp(p.steering,tuneB6c),steeringSlowFrameSpeed:p.slowSpeed,steeringSlowGain:p.slowGain,
     lowSpeedForceRatio:lerp(p.lowRatio,tuneB70),highSpeedForceRatio:lerp(p.highRatio,tuneB70),
     // /1.8 converts HUD/frame speed; /5 converts frame displacement to substep.
@@ -68,7 +89,7 @@ export function createNativeWaterProfile({riderIndex=0,tuneB6c=0,tuneB70=0,tuneB
 /** Target force is a native point-velocity increment, applied to TWO rear points. */
 export function nativeJetMagnitude(profile,{speedNative=0,forwardY=0,rearWet=false,powerSteps=5,powerFactor=1,staticContact=false,contactFactor=1}={}){
   range(speedNative,'speedNative',0,Infinity);range(forwardY,'forwardY',-1,1);
-  range(powerSteps,'powerSteps',0,5);range(powerFactor,'powerFactor',0,1);range(contactFactor,'contactFactor',0,1);
+  range(powerSteps,'powerSteps',0,5);validPowerFactor(powerFactor);range(contactFactor,'contactFactor',0,1);
   if(staticContact)return profile.contactForceNative*contactFactor;
   const pivot=profile.pivotSpeedNative,upper=profile.upperCurveSpeedNative;
   let ratio;
@@ -132,7 +153,7 @@ function controls(options){
   const result={throttle:!!options.throttle,stickX:options.stickX??0,stickY:options.stickY??0,
     powerSteps:options.powerSteps??5,powerFactor:options.powerFactor??1,jetStraight:options.jetStraight??false};
   range(result.stickX,'stickX',-1,1);range(result.stickY,'stickY',-1,1);
-  range(result.powerSteps,'powerSteps',0,5);range(result.powerFactor,'powerFactor',0,1);
+  range(result.powerSteps,'powerSteps',0,5);validPowerFactor(result.powerFactor);
   if(typeof result.jetStraight!=='boolean')throw new TypeError('jetStraight must be boolean');
   return result;
 }

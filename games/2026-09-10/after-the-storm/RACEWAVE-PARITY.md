@@ -1026,3 +1026,89 @@ to the preceding full run. No source ROM, original art or raw disassembly is
 published. Remaining native actors/tricks, original AI, course geometry and
 mode integration, the existing failures and full course sign-offs still block
 parity and production publication. The ongoing goal remains active.
+
+## Original AI foundations and input phases — October 15, 2026
+
+Three isolated original-opponent kernels are now reconstructed. They are
+prerequisites for a complete native AI controller; ordinary race/championship
+AI is still outside native admission.
+
+`native-ai-route.js` compiles the separate four-avatar navigation graphs and
+advances their persistent navigation index using the recovered binary32 plane
+tests. Branch selection follows selected avatar B68, independently of grid
+slot and physical profile. These links differ from the primary buoy judge's
+links and award no power, laps or finishes. Current movable node centers can
+be supplied explicitly. Detached graph/state snapshots permit an explicit
+caller-selected table change without inventing course-family policy. The
+private comparison covers 54 nonempty compatible 1P table/class records,
+2,681 nodes, 21,448 forward/backward links, 48 plane decisions and 24 initial
+windows. This does not establish menu reachability or the distinct 2P loader.
+
+`native-ai-steering.js` reproduces the bounded steering/trim calculation with
+explicit target, body axes, predicted motion, turn budget and recovery state.
+Its binary32 thresholds, asymmetric recovery clearing, two-stage 35-unit
+steering update, wrong-way flag, sharp-turn trim and stuck override match all
+595 prepared raw-source cases. The upstream target/correction producers remain
+external inputs; the initial route target is not a substitute for final aim.
+
+`native-ai-power.js` reproduces the power selector before shared actor factors.
+All 3,664 prepared raw/public cases agree, including difficulty/role tables,
+relative slot-zero progress, strict steering thresholds, marked contact,
+counter and course overrides, retained prior values, and the final 0.5–1.2
+clamp. Unknown state semantics retain explicit native field names. Reverse
+class is not guessed to be another difficulty index. These leaves consume
+caller-supplied producer state and do not fabricate ranking or flags.
+
+The adapter now separates human identity, input dispatch and computer physical
+profile. Trusted frame options can apply source AI takeover to a human craft
+without changing its physical coefficients or resetting button history. Raw AI
+input requires its explicit power baseline and bypasses only the human stick
+curve. The recovered shared button edges, slew, gesture thresholds, actor
+factors and mute behavior remain in place. Private comparison covers 1,664 AI
+shared-input cases, 441 human curve cases and 48 human gate cases. Original
+circle/stunt history fields and their stunt consumers remain unported; this
+is not a complete 61184 or native stunt implementation.
+
+The independently selected computer profile uses the recovered four families
+of steering, engine, contact, lateral, roll and pivot coefficients and hull
+damping. Its tuning dependencies differ from human interpolation. All 108
+prepared computer-profile cases and 1,296 public numeric field comparisons
+agree. The source 1.2 baseline reaches the actual jet without an invented cap
+of 1. The surrounding hull retains its documented SI/double fitting; exact
+whole-craft trajectories and the other 16ce consumers are not established.
+
+The multi-craft world now offers a pre-frame hook, then samples ALL inputs in
+descending order before preparing ANY craft's forces. Captured source/action
+state and controller history are consumed once. An explicit sample survives a
+failed force preparation without polling again; implicit standalone preparation
+still validates before committing. Adapter re-entry during sampling, force
+preparation, hull stepping or deferred body completion rejects without a second
+history update or solve. An independent review reproduced and verified those
+boundaries. No navigation hook is yet installed in the playable native host.
+
+Native result/finish-wait updates now belong solely to completed 50 ms frames.
+The render-facing step previously advanced finish-wait a second time. A prepared
+two-game-second fixture now advances it by exactly two seconds at 30/60/144 Hz;
+this check does not admit native championship. Mixed computer/human physical
+profiles also retain identical source histories across those render rates.
+
+The final complete regression is **1,358/1,369 in 69.26 s** (private
+`full-tests-native-ai-foundation-final.tap`). All 74 additions since 1,295 pass.
+The same eleven failure names match both preceding full runs exactly. Final
+High 1280×720 browser checks retain the 11.05 s contact at hull tick 1105,
+source frame 221 and C40 1.861451268196106 on both craft. Separate windows
+match all 49,152 water heights (Int16LE FNV1a 2879715165), sampled water values,
+native HUD and coordinates. Pausing from P2 preserves the entire exposed
+physical/water/racer state. Continuing completes the Normal match with the
+expected Player 1 win at 109.648 s, 42/39 passes and zero misses/DQ. The child
+console is clear; the parent retains one resource 404. Detailed riders and full
+resolution remain in both views. Verification pilots remain authored controls.
+
+Remaining original AI work includes lookahead/final aim, body-motion prediction,
+course/obstacle/floor/proximity corrections, water trim, throttle/actors,
+initialization and RNG history, shared primary judgment, ranking and finishes.
+These must be composed with explicit source ownership before native race or
+championship admission. The existing course/mode failures, remaining actors and
+tricks, other native venues, full course sign-offs and hardware verification
+also remain open. ROM bytes, raw disassembly and recovered art stay private.
+The goal is active; this local milestone is not production publication.

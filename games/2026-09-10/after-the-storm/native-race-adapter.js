@@ -39,6 +39,12 @@ import {createNativeRiderLifecycle,nativeRiderLifecycleSource,decideNativeRiderL
 
 const H=NATIVE_HULL_STEP,FRAME_TICKS=5;
 const articulatedOwners=new WeakMap();
+const latchedControlFrames=new WeakMap();
+const busyAdapters=new WeakSet();
+function adapterOperation(adapter,operation){
+  if(busyAdapters.has(adapter))throw new Error('Native adapter operation is not reentrant');
+  busyAdapters.add(adapter);try{return operation();}finally{busyAdapters.delete(adapter);}
+}
 const CONTACT_DRIVE_SPEED=Math.fround(5/Math.fround(1.8));
 const contactPhases=['shore','floor','boxes','dynamicPlanes','racingBuoys','fixedSpheres','primarySpheres'];
 const vec=(x=0,y=0,z=0)=>({x,y,z});
@@ -148,14 +154,25 @@ export function applyNativeRaceContact(hull,{kind,pointIndex,normal,penetration=
  * actorState/animationFrame/simulationState/crash and optional actionState. An
  * object actionState at construction is initial state only; a provider or step
  * override may explicitly restore it on a later frame. No pose is chosen here.
+ * controlOrigin is the default caller-owned INPUT DISPATCH, separate from the
+ * human identity and computer physics profile. Trusted frame options may
+ * explicitly change it for a source takeover without resetting input history.
+ * AI samples require raw controls and a supplied binary32 basePowerFactor,
+ * skipping only the final human stick curve. Input payloads/sourceState/pose
+ * hooks cannot select a different origin implicitly. This prerequisite does
+ * not implement an AI producer or navigation. computerProfile selects the
+ * separate recovered physical coefficient branch; input takeover never
+ * changes that constructor choice.
  */
 export function createNativeRaceAdapter({riderIndex=0,tuneB6c=0,tuneB70=0,tuneB74=0,
   position,velocity,heading=0,pitch=0,roll=0,scale=.025,surface=0,contacts={},jointWorld,
-  contactFactor=1,powerSteps=5,sourceState={},articulatedRider,riderPose,riderRecovery}={}){
+  contactFactor=1,powerSteps=5,sourceState={},articulatedRider,riderPose,riderRecovery,controlOrigin='human',computerProfile=false}={}){
+  if(controlOrigin!=='human'&&controlOrigin!=='ai')throw new RangeError('controlOrigin must be human or ai');
+  if(typeof computerProfile!=='boolean')throw new TypeError('computerProfile must be boolean');
   range(contactFactor,'contactFactor',0,1);range(powerSteps,'powerSteps',0,5);hookSet(contacts);
   if(jointWorld!==undefined&&typeof jointWorld!=='function')vector(jointWorld,'jointWorld');
-  const hull=createNativeHull({position,velocity,heading,pitch,roll,scale,rider:riderIndex});
-  const profile=createNativeWaterProfile({riderIndex,tuneB6c,tuneB70,tuneB74});
+  const hull=createNativeHull({position,velocity,heading,pitch,roll,scale,rider:riderIndex,computerProfile});
+  const profile=createNativeWaterProfile({riderIndex,tuneB6c,tuneB70,tuneB74,computerProfile});
   const water=createNativeWaterState(profile),rider=createNativeRiderProfile({riderIndex}),impacts=createNativeImpactState();
   const riderControlState=createNativeRiderControlState({baseLateralRetention:profile.waterLateralRetention,baseRollBalance:profile.rollBalance});
   const source=typeof sourceState==='function'?{}:sourceSettings(sourceState),action=actionState(source.actionState);
@@ -173,7 +190,7 @@ export function createNativeRaceAdapter({riderIndex=0,tuneB6c=0,tuneB70=0,tuneB7
   // The source reset seeds aggregate wet state to8/true before later water
   // samples establish point bits. Rear wet flags remain independently false.
   water.wetCount=8;water.anyWet=true;
-  return {hull,water,rider,riderControlState,impacts,controlState:createNativeControlState(),surface,contacts,jointWorld,
+  const adapter={hull,water,rider,riderControlState,impacts,controlState:createNativeControlState(),surface,contacts,jointWorld,
     sourceState:typeof sourceState==='function'?sourceState:{...(lifecycle?sourceState:source),actionState:undefined},
     actionState:action,articulatedRider,riderPose,riderLifecycle:lifecycle,
     contactFactor,powerSteps,remainder:0,logicalFrames:0,stepsLast:0,frame:null,
@@ -184,24 +201,30 @@ export function createNativeRaceAdapter({riderIndex=0,tuneB6c=0,tuneB70=0,tuneB7
       wetCount:8,anyWet:true,contacts:contactsZero(),impacts:nativeImpactSnapshot(impacts),actorState:lifecycle?.state.actorState??source.actorState??22,
       animationFrame:lifecycle?.state.animationFrame??source.animationFrame??0,actionState:{...action},jointWorld:articulatedRider?copy(articulatedRider.jointWorld):null,
       ...(lifecycle?{recovery:nativeRiderLifecycleSnapshot(lifecycle)}:{})}};
+  Object.defineProperties(adapter,{controlOrigin:{value:controlOrigin,enumerable:true},computerProfile:{value:computerProfile,enumerable:true},
+    sampledHullTick:{get:()=>latchedControlFrames.get(adapter)?.hullTick??null,enumerable:true}});return adapter;
 }
 
-function nativeInput(input){
+function nativeInput(input,origin){
   if(!input||typeof input!=='object')throw new TypeError('Expected race controls');
+  if(origin!=='human'&&origin!=='ai')throw new RangeError('controlOrigin must be human or ai');
+  if(input.controlOrigin!==undefined&&input.controlOrigin!==origin)throw new RangeError('Input controlOrigin must match its adapter');
   const raw=['rawXNative','rawYNative','heldButtons'].some(k=>input[k]!==undefined);
+  if(origin==='ai'&&!raw)throw new TypeError('AI adapters require raw native controls and basePowerFactor');
+  const role={controlOrigin:origin,...(input.basePowerFactor===undefined?{}:{basePowerFactor:input.basePowerFactor})};
   if(raw){
     if(['steer','trim','throttle'].some(k=>input[k]!==undefined))throw new TypeError('Use either normalized race controls or raw native controls');
-    return {rawXNative:input.rawXNative??0,rawYNative:input.rawYNative??0,heldButtons:input.heldButtons??0};
+    return {...role,rawXNative:input.rawXNative??0,rawYNative:input.rawYNative??0,heldButtons:input.heldButtons??0};
   }
   const steer=range(input.steer??0,'steer',-1,1),trim=range(input.trim??0,'trim',-1,1);
   const throttle=input.throttle??false;
   if(typeof throttle!=='boolean')range(throttle,'throttle',0,1);
-  return {rawXNative:-Math.trunc(70*steer)||0,rawYNative:Math.trunc(70*trim)||0,
+  return {...role,rawXNative:-Math.trunc(70*steer)||0,rawYNative:Math.trunc(70*trim)||0,
     heldButtons:throttle>0?0x8000:0};
 }
 
-function beginFrame(adapter,input,options){
-  const {hull,water,lastFrame,logicalFrames}=adapter;
+function sampleFrameControls(adapter,input,options){
+  const {hull,lastFrame,logicalFrames}=adapter;
   const requested=typeof input==='function'?input(hull.simulationTime,logicalFrames):input;
   const previousContacts={...lastFrame.contacts};
   const frameContext={logicalFrame:logicalFrames,time:hull.simulationTime,
@@ -217,11 +240,22 @@ function beginFrame(adapter,input,options){
   }
   const source=lifecycleSource?{...suppliedSource,...lifecycleSource}:suppliedSource;
   const oldAction=actionState(source.actionState,adapter.actionState);
-  const sampled=sampleNativeControls(adapter.controlState,{...nativeInput(requested),tick:logicalFrames>>>0,...source});
+  const origin=options.controlOrigin===undefined?adapter.controlOrigin:options.controlOrigin;
+  const sampled=sampleNativeControls(adapter.controlState,{...nativeInput(requested,origin),tick:logicalFrames>>>0,...source});
+  frameContext.controls=sampled;frameContext.actorState=source.actorState;
+  return {hullTick:hull.ticks,previousContacts,frameContext,source,oldAction,sampled};
+}
+
+function beginFrame(adapter,input,options){
+  const {hull,water,lastFrame,logicalFrames}=adapter;
+  const latched=latchedControlFrames.get(adapter);
+  if(latched&&latched.hullTick!==hull.ticks)throw new Error('Native controls must share their sampled hull boundary');
+  if(latched&&options.controlOrigin!==undefined&&options.controlOrigin!==latched.sampled.controlOrigin)
+    throw new Error('Native controlOrigin is already latched for this frame');
+  const {previousContacts,frameContext,source,oldAction,sampled}=latched??sampleFrameControls(adapter,input,options);
   const physicalControls=prepareNativeRiderControls(adapter.riderControlState,{heldButtons:sampled.heldButtons,
     pressedButtons:sampled.pressedButtons,actorState:source.actorState,riderIndex:adapter.rider.riderIndex,
     wet:water.anyWet,contactMode:source.contactMode});
-  frameContext.controls=sampled;frameContext.actorState=source.actorState;
   if(adapter.articulatedRider&&options.jointWorld!==undefined)throw new TypeError('articulatedRider owns the physical jointWorld');
   const provider=options.jointWorld??adapter.jointWorld;
   const joint=adapter.articulatedRider?adapter.articulatedRider.jointWorld:typeof provider==='function'?provider(hull,frameContext):provider;
@@ -250,6 +284,7 @@ function beginFrame(adapter,input,options){
     workingXNative:decision.muteSteering?0:sampled.workingXNative,workingYNative:decision.muteTrim?0:sampled.workingYNative};
   // Everything that may reject missing trim input precedes these mutations.
   adapter.controlState=sampled.state;adapter.lastControls=forceControls;adapter.actionState=nextAction;
+  latchedControlFrames.delete(adapter);
   adapter.riderControlState=physicalControls.state;
   adapter.frame={startCenter:copy(hull.center),startReference:referencePoint(hull),prepared,
     controls:forceControls,physicalControls,previousContacts,action:decision,actorState:source.actorState,
@@ -318,11 +353,34 @@ function endFrame(adapter){
   }
 }
 
-/** Prepare without moving points. A multi-craft world prepares ALL riders
- * before its first hull tick. Single-adapter stepping calls this automatically.
+/** Source input/61184 phase, before any rider's63c88 force preparation. The
+ * explicit call consumes input history once, without touching physical forces,
+ * impacts, actions, hull points or rider solves. A failed later preparation
+ * retains that sample; it must not poll the controller again. Standalone
+ * prepare still validates its entire implicit preparation before committing.
+ */
+export function latchNativeRaceAdapterControls(adapter,input={},options={}){
+  return adapterOperation(adapter,()=>latchControls(adapter,input,options));
+}
+function latchControls(adapter,input,options){
+  if(!adapter?.hull||adapter.hull.ticks%FRAME_TICKS!==0||adapter.pendingFrameCompletion)
+    throw new Error('Native control sampling requires a completed outer boundary');
+  if(adapter.preparedHullTick===adapter.hull.ticks||latchedControlFrames.has(adapter))throw new Error('Native controls are already sampled or prepared');
+  const value=sampleFrameControls(adapter,input,options);
+  latchedControlFrames.set(adapter,value);adapter.controlState=value.sampled.state;
+  adapter.lastControls={...value.sampled,conditionedXNative:value.sampled.workingXNative,conditionedYNative:value.sampled.workingYNative};
+  return adapter;
+}
+
+/** Prepare without moving points. A multi-craft world samples ALL controls,
+ * then prepares ALL riders before its first hull tick. Standalone stepping
+ * samples implicitly unless the caller explicitly latched its input already.
  * Repeated preparation would consume input/history twice and is rejected.
  */
 export function prepareNativeRaceAdapterFrame(adapter,input={},options={}){
+  return adapterOperation(adapter,()=>prepareFrame(adapter,input,options));
+}
+function prepareFrame(adapter,input,options){
  if(!adapter?.hull||adapter.hull.ticks%FRAME_TICKS!==0||adapter.pendingFrameCompletion)
   throw new Error('Native frame preparation requires a completed outer boundary');
  if(adapter.preparedHullTick===adapter.hull.ticks)throw new Error('Native frame is already prepared');
@@ -333,6 +391,9 @@ export function prepareNativeRaceAdapterFrame(adapter,input={},options={}){
  * nineteen-point rider solve before water/cameras/floating objects advance.
  */
 export function completeNativeRaceAdapterFrame(adapter){
+  return adapterOperation(adapter,()=>completeFrame(adapter));
+}
+function completeFrame(adapter){
  if(!adapter?.pendingFrameCompletion||adapter.hull.ticks%FRAME_TICKS!==0)
   throw new Error('No deferred native frame completion');
  endFrame(adapter);adapter.pendingFrameCompletion=false;return adapter;
@@ -356,6 +417,9 @@ export function completeNativeRaceAdapterFrame(adapter){
  * cannot supply the shared source impact normal or replace recordImpact().
  */
 export function stepNativeRaceAdapter(adapter,dt,input={},options={}){
+  return adapterOperation(adapter,()=>stepAdapter(adapter,dt,input,options));
+}
+function stepAdapter(adapter,dt,input,options){
   range(dt,'dt',0,1);
   if(adapter.pendingFrameCompletion)throw new Error('Complete the deferred native rider frame before stepping');
   if(options.deferFrameCompletion!==undefined&&typeof options.deferFrameCompletion!=='boolean')throw new TypeError('deferFrameCompletion must be boolean');
@@ -370,7 +434,7 @@ export function stepNativeRaceAdapter(adapter,dt,input={},options={}){
   }
   try{
     for(let i=0;i<steps;i++){
-      if(adapter.hull.ticks%FRAME_TICKS===0&&adapter.preparedHullTick!==adapter.hull.ticks)prepareNativeRaceAdapterFrame(adapter,input,options);
+      if(adapter.hull.ticks%FRAME_TICKS===0&&adapter.preparedHullTick!==adapter.hull.ticks)prepareFrame(adapter,input,options);
       if(adapter.pendingFrameCompletion)throw new Error('Deferred completion permits no next-frame hull tick');
       stepNativeHull(adapter.hull,H,{beforeIntegrate:hull=>{
         const {frame,water,contactWindow}=adapter,c=frame.controls;
