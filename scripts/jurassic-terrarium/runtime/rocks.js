@@ -5,7 +5,8 @@
 // are obstacles for the route finder.
 import {
   Group, InstancedMesh, IcosahedronGeometry, BufferAttribute, MeshStandardMaterial, Matrix4, Quaternion, Vector3,
-  Euler, Color, PointLight, Mesh, SphereGeometry, MeshBasicMaterial, AdditiveBlending,
+  Euler, Color, PointLight, Mesh, SphereGeometry, MeshBasicMaterial, AdditiveBlending, Points, BufferGeometry,
+  ShaderMaterial,
 } from 'three';
 import { guardMaterial } from './safety.js';
 import { mergeVertices } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
@@ -135,19 +136,53 @@ export class Rocks {
       this.group.add(im);
     }
     ctx.scene.add(this.group);
-    // the warm glow inside the cave: glow-fungus clusters on the walls and a soft amber light
+    // the warm glow inside the cave: a soft amber light, and cave fireflies drifting about in the dark
+    // of it, each on its own slow wandering course, bobbing and blinking; they swirl up when the T. rex
+    // comes and goes
     if (this.glowAt) {
       this.light = new PointLight(0xffa04a, 0, 1.6, 2);
       this.light.position.copy(this.glowAt);
       this.group.add(this.light);
-      const gm = new MeshBasicMaterial({ color: new Color(1.0, 0.62, 0.25), toneMapped: false, transparent: true, blending: AdditiveBlending, depthWrite: false });
-      guardMaterial(gm);
-      this.glowMat = gm;
-      for (let i = 0; i < 22; i++) {
-        const s = new Mesh(new SphereGeometry(0.008 + rand() * 0.01, 6, 4), gm);
-        s.position.set(this.glowAt.x + (rand() - 0.5) * 0.9, this.glowAt.y - 0.1 + rand() * 0.5, this.glowAt.z + (rand() - 0.5) * 0.4);
-        this.group.add(s);
+      const n = 26, pos = new Float32Array(n * 3), seed = new Float32Array(n * 4);
+      for (let i = 0; i < n; i++) {
+        pos.set([this.glowAt.x + (rand() - 0.5) * 0.8, this.glowAt.y + rand() * 0.42, this.glowAt.z + (rand() - 0.5) * 0.36], i * 3);
+        seed.set([rand(), rand(), rand(), rand()], i * 4);
       }
+      const g = new BufferGeometry();
+      g.setAttribute('position', new BufferAttribute(pos, 3));
+      g.setAttribute('aSeed', new BufferAttribute(seed, 4));
+      const m = new ShaderMaterial({
+        uniforms: { uTime: { value: 0 }, uAmount: { value: 0 }, uScale: { value: 1 }, uStir: { value: 0 } },
+        vertexShader: `
+uniform float uTime; uniform float uScale; uniform float uStir; attribute vec4 aSeed; varying float vA;
+void main() {
+  // each wanders on its own slow course (sums of slow sines), wider and quicker when stirred up
+  float t = uTime * (0.22 + aSeed.x * 0.2) * (1.0 + 2.5 * uStir), s1 = aSeed.y * 40.0, s2 = aSeed.z * 40.0;
+  float r = 1.0 + 0.8 * uStir;
+  vec3 p = position + vec3(sin(t + s1) * 0.16 + sin(t * 2.3 + s2) * 0.05, sin(t * 1.3 + s2) * 0.07 + sin(t * 3.1 + s1) * 0.02, cos(t * 0.9 + s2) * 0.09 + sin(t * 1.9 + s1) * 0.03) * r;
+  vec4 mv = viewMatrix * vec4(p, 1.0);
+  gl_Position = projectionMatrix * mv;
+  gl_PointSize = clamp(uScale * (0.9 + aSeed.w * 0.6) / -mv.z, 1.5, 7.0);
+  // a slow glow and fade, each in its own time; now and then a brighter flash
+  float b = fract(uTime * (0.12 + aSeed.w * 0.1) + aSeed.x * 7.0);
+  vA = 0.35 + 0.65 * smoothstep(0.0, 0.25, b) * smoothstep(0.85, 0.45, b) + 0.6 * smoothstep(0.97, 1.0, sin(uTime * 0.7 + s1) * 0.5 + 0.5);
+}`,
+        fragmentShader: `
+uniform float uAmount; varying float vA;
+void main() {
+  vec2 d = gl_PointCoord - 0.5;
+  float r = length(d);
+  float a = (smoothstep(0.5, 0.0, r) * 0.55 + smoothstep(0.16, 0.0, r)) * vA * uAmount;
+  gl_FragColor = vec4(vec3(1.0, 0.68, 0.3) * a * 2.4, 1.0);
+}`,
+        transparent: true, depthWrite: false, blending: AdditiveBlending,
+      });
+      guardMaterial(m);
+      this.flies = new Points(g, m);
+      this.flies.name = 'cave-fireflies';
+      this.flies.frustumCulled = false;
+      this.group.add(this.flies);
+      this.glowMat = { opacity: 0 }; // (the old fungus beads' material; kept for anything that reads it)
     }
     this.t = 0;
   }
@@ -160,5 +195,15 @@ export class Rocks {
     const fl = 0.85 + 0.15 * Math.sin(this.t * 2.3) * Math.sin(this.t * 0.7 + 1);
     this.light.intensity = (0.6 + 2.2 * dark) * fl;
     this.glowMat.opacity = (0.45 + 0.55 * dark) * fl;
+    if (this.flies) {
+      const U = this.flies.material.uniforms;
+      U.uTime.value = this.t;
+      U.uAmount.value = 0.5 + 0.6 * dark;
+      U.uScale.value = (this.ctx.renderer?.domElement?.height || 900) * 0.045;
+      // stirred up by the T. rex moving in the den (and settling again)
+      const rex = this.ctx.modules.dinosaurs?.predator, g = this.glowAt;
+      const stir = rex && rex.speed > 0.03 && Math.hypot(rex.pos.x - g.x, rex.pos.z - g.z) < 1.3 ? 1 : 0;
+      U.uStir.value += (stir - U.uStir.value) * Math.min(1, dt * (stir ? 2 : 0.4));
+    }
   }
 }

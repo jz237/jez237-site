@@ -324,3 +324,7 @@ v1.40.1: animals no longer walk through each other:
 - **Bodies kept apart:** each animal's body is a capsule along its length, as wide as its body. Where two overlap they are pushed apart along the line between them, the lighter one giving way more.
 - **Walking round:** an animal whose way is blocked by another (standing, or coming towards it) veers round it and slows, instead of walking into it. One going the same way still queues behind.
 - **Measured over 10 simulated minutes:** frames with two bodies deeply overlapping dropped from 77% to about 3%. What's left is intended: calves head-butting in play, and calves walking under the Brachiosaurus.
+
+v1.40.2: calmer herds; cave fireflies:
+- **No more skittering:** a plant-eater near the T. rex used to flip between fleeing and walking many times a second. Now it doesn't run from a sleeping T. rex and gives one lying in the stream less room. After running off, it settles a few seconds before bolting again (unless charged or very close), and its wandering keeps it out of an awake T. rex's way. Over 20 simulated minutes each Triceratops now bolts 3–8 times instead of up to hundreds of re-starts.
+- **Cave fireflies:** the little lights in the den were glow-fungus beads hanging still in mid-air. They're now cave fireflies drifting about in the dark on their own slow courses, bobbing and glowing and fading at their own pace, brighter at dusk and night. They swirl up when the T. rex moves through the den.

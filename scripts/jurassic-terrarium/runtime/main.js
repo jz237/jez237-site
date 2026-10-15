@@ -806,6 +806,10 @@ class Dino {
       const p = mod.predator.pos;
       const dd = Math.hypot(p.x - this.pos.x, p.z - this.pos.z);
       const charging = mod.predator.state === 'hunt' && mod.predator.prey === this;
+      // a sleeping predator is left alone; one lying in the stream is given less room; and after running
+      // off, an animal settles a few seconds before it bolts again (unless charged, or very close)
+      const asleep = mod.predator.state === 'sleep', lying = mod.predator.state === 'soak';
+      const settled = (this._fledAt ?? -99) < (mod.clock || 0) - 5;
       if (this.sp.tooBig) {
         // too big to be prey: it doesn't run, it turns its head to watch (lookTarget follows the predator)
         const awake = mod.predator.state !== 'sleep' && mod.predator.speed > 0.03;
@@ -813,7 +817,7 @@ class Dino {
           this.watchT = performance.now() + 20000;
           this.oneShot('alert');
         }
-      } else if ((dd < 1.6 || (charging && dd < 2.6)) && !night) {
+      } else if (!asleep && ((dd < (lying ? 1.0 : 1.6) && (settled || dd < 0.9)) || (charging && dd < 2.6)) && !night) {
         if (charging && this.sp.standsGround && this.actions.threat && rand() < this.sp.standsGround) {
           // face the predator and present the horns: a standoff (see Dinosaurs.standoff)
           this.heading = Math.atan2(p.x - this.pos.x, p.z - this.pos.z);
@@ -823,7 +827,7 @@ class Dino {
         const ax = this.pos.x - p.x, az = this.pos.z - p.z;
         const k = 2.5 / Math.max(dd, 0.01);
         const t = this.layer.nearestOpen(this.pos.x + ax * k, this.pos.z + az * k);
-        if (t && this.goTo(t.x, t.z, null, 'run')) this.state = 'flee';
+        if (t && this.goTo(t.x, t.z, null, 'run')) (this.state = 'flee'), (this._fledAt = mod.clock || 0);
       } else if (dd < 3 && this.state === 'idle' && this.actions.alert && rand() < dt * 0.3) this.oneShot('alert');
     }
     switch (this.state) {
@@ -1493,7 +1497,8 @@ class Dino {
         const mates = mod.dinos.filter((d) => d.sp.id === this.sp.id && !d.parent);
         const cx = mates.reduce((a, d) => a + d.pos.x, 0) / mates.length;
         const cz = mates.reduce((a, d) => a + d.pos.z, 0) / mates.length;
-        const t = this.layer.randomOpen(rand, (x, z) => this.clearOfGlass(x, z) && Math.hypot(x - cx, z - cz) < 1.6 + rand() * 1.5);
+        const rex = mod.predator, wary = rex && !this.sp.predator && rex.state !== 'sleep';
+        const t = this.layer.randomOpen(rand, (x, z) => this.clearOfGlass(x, z) && Math.hypot(x - cx, z - cz) < 1.6 + rand() * 1.5 && !(wary && Math.hypot(x - rex.pos.x, z - rex.pos.z) < 2.2));
         (tx = t.x), (tz = t.z);
       } else {
         const t = this.layer.randomOpen(rand, (x, z) => {
