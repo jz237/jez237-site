@@ -25,7 +25,7 @@ still require their own source comparison before they can be signed off.
 
 | Course | Distinctive requirements | State |
 | --- | --- | --- |
-| Sunny Beach | Long sandbar, parallel straights, tight ends, open sea and mainland, difficulty-specific slalom | Rebuilt sandbar and class buoy maps; original twelve-ring, single-ramp stunt route implemented and driven; final shoreline/visual/timing sign-off pending |
+| Sunny Beach | Long sandbar, parallel straights, tight ends, open sea and mainland, difficulty-specific slalom | Source 49 shore edges/231 floor faces, all-class buoys, human primary gate rules and player/class-specific objects integrated; original 12 rings/one fixed Stunt ramp/15-15-15-10 timers driven and rendered High; native handling, AI/course-out rules and final sign-off pending |
 | Sunset Bay | L-shaped landmass, orange water, race jump, piers and bypass choices | Rebuilt island/ramp, original class buoy sequences, Expert slalom, steel balls and physical piers; all-class under-pier traversal, penalized final-lap bypass, shared three-wave field and moored launches verified; original nine-ring/two-ramp stunt route implemented; source calibration and visual sign-off pending |
 | Drake Lake | Irregular square loop, small island, fog clearing, posts, slowing weeds | Rebuilt banks/island, posts and wet-hull weed resistance; all four original buoy sequences transcribed and race-tested; complete 13-post layout and clean all-class approaches verified; class-specific weed beds and both island channels mapped and tested; sixteen-ring/three-jump stunt reconstruction implemented; shortcut time advantage and final visual checks pending |
 | Marine Fortress | Storm, fortress-shaped shoreline, crates, lap-dependent gate | Mapped original class buoys, boundary, finish, crates/timber, southern stone arches and lap-two gate; northern wave-assisted ridge and safe detour tested; fifteen-ring/two-jump stunt reconstruction implemented; source height/timing calibration and final visual comparison pending |
@@ -981,3 +981,14 @@ High 1280x720 measurement reported about 55 FPS and 923k triangles; boat/mast pa
 was inspected at 18.583 s with four actual rings and no collision. Full original
 runtime/visual comparison and production publication remain pending. See
 RACEWAVE-PARITY.md for source evidence boundaries and current remaining work.
+
+
+## Sunny numeric source milestone — October 15, 2026
+
+Slot1 source geometry now replaces the illustrated Sunny layout. See
+RACEWAVE-PARITY.md for source/static counts, explicit authored-envelope limits,
+all-class traversal evidence, the full Normal cup fixture and the rendered
+12-ring/4-checkpoint 43.733333 s Stunt result. Native AI gate adjudication and water
+field integration remain active work. Port/Sunset are now known to have distinct
+2P companion structures; their numeric data must be selected by player count.
+No course or complete-game parity sign-off is implied.

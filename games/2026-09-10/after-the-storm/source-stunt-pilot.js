@@ -6,14 +6,14 @@ const angleDelta=a=>Math.atan2(Math.sin(a),Math.cos(a));
 
 export function sourceStuntInput(state,r){
  if(state.phase==='countdown')return {};
- const targets=state.course.stuntLayout.verificationTargets,v=r.authoredStuntDriver??={index:0},s=r.stunt;
+ const targets=state.course.stuntLayout.verificationTargets,control=state.course.stuntLayout.pilotControl??{},v=r.authoredStuntDriver??={index:0},s=r.stunt;
  const pos=q=>({x:q.navX??q.x,z:q.navZ??q.z});
  let q=targets[Math.min(v.index,targets.length-1)],p=pos(q);
  const distance=Math.hypot(p.x-r.x,p.z-r.z),ringForward=q.kind==='ring'?(r.x-q.x)*q.tx+(r.z-q.z)*q.tz:0;
  const previous=pos(targets[Math.max(0,v.index-1)]),dx=p.x-previous.x,dz=p.z-previous.z,length=Math.hypot(dx,dz)||1,ux=dx/length,uz=dz/length;
  const along=(r.x-p.x)*ux+(r.z-p.z)*uz,cross=(r.x-p.x)*uz-(r.z-p.z)*ux;
  const missed=state.course.stuntLayout.verificationOnePass&&q.kind==='ring'&&v.activeIndex===v.index&&v.ringForward*ringForward<0&&s.ringStatus[q.ringIndex]==='miss';
- const guideDone=distance<(q.radius??3)||along>0&&Math.abs(cross)<8;
+ const guideDone=distance<(q.radius??3)||along>0&&Math.abs(cross)<(control.guideWidth??8);
  const done=q.kind==='ring'?s.ringStatus[q.ringIndex]==='hit'||missed:q.kind==='checkpoint'?s.nextCheckpoint>q.checkpointIndex:guideDone;
  if(done&&v.index<targets.length-1){q=targets[++v.index];p=pos(q);v.recovery=false;}
  else if(q.kind==='waypoint'&&along>0&&!guideDone)v.recovery=true;
@@ -28,5 +28,8 @@ export function sourceStuntInput(state,r){
   desiredHeading=Math.atan2((ux*(1-blend)+nx/nLength*blend)*forward+uz*correction,(uz*(1-blend)+nz/nLength*blend)*forward-ux*correction);
  }else if(v.recovery)desiredHeading=Math.atan2(p.x-r.x-r.vx*.10,p.z-r.z-r.vz*.10);
  const error=angleDelta(desiredHeading-r.heading),desired=v.recovery?Math.min(q.speed??18,10):q.speed??18;
- return {throttle:clamp(.53+(desired-r.speed)*.16,0,1),steer:clamp(error*2.3-(r.yawVelocity||0)*.24,-1,1),brake:!r.onIce&&(Math.abs(error)>1.1||r.speed>desired+2),dampen:true};
+ const controls={throttle:clamp(.53+(desired-r.speed)*.16,0,1),steer:clamp(error*(control.steeringGain??2.3)-(r.yawVelocity||0)*(control.yawDamping??.24),-1,1),brake:!r.onIce&&(Math.abs(error)>1.1||r.speed>desired+2),dampen:q.dampen??true};
+ if(q.dive)controls.dive=q.dive==='descending'?r.hydro.diveRemaining>0||r.hydro.airborne&&r.hydro.vy<0&&r.hydro.y-r.hydro.waterHeight>.8:true;
+ if(Number.isFinite(q.lean))controls.lean=clamp(q.lean,-1,1);
+ return controls;
 }

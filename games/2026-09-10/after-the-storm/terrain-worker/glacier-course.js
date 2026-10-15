@@ -1,5 +1,5 @@
-import {facetedSurface} from './faceted-surfaces.js?v=f718aac8f24a';
-import {triangleWalls} from './triangle-walls.js?v=f718aac8f24a';
+import {facetedSurface} from './faceted-surfaces.js?v=75cb6c906e6b';
+import {triangleWalls} from './triangle-walls.js?v=75cb6c906e6b';
 // Reimplemented from numeric collision and object-layout observations of the
 // user's USA Rev1 reference. No original graphics, textures or display lists.
 // Every object family shares this unrotated .025 scale; its SI interpretation

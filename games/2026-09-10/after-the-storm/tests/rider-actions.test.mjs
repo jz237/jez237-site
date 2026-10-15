@@ -1,3 +1,4 @@
+import {openWaterCourse} from './support/open-water-course.mjs';
 import test from 'node:test';import assert from 'node:assert/strict';
 import {createRace,stepRace} from '../race-core.js';
 import {quickTurn,beginWipeout,stepWipeout,wipeoutPose,collideRiders} from '../rider-actions.js';
@@ -7,7 +8,7 @@ test('rocket start rewards a fresh throttle press at green, not holding it throu
 });
 test('rearward trim tightens a powered turn only with water contact',()=>{
  assert.equal(quickTurn({steer:.8,lean:1},15,1),0);assert.equal(quickTurn({steer:.8,lean:-1},15,0),0);assert.equal(quickTurn({steer:0,lean:-1},15,1),0);assert.equal(quickTurn({steer:.8,lean:-1},15,1),1);
- const run=lean=>{const s=createRace({mode:'practice'});s.phase='running';const r=s.racers[0];r.x=0;r.z=0;r.heading=0;r.vz=14;s.course={...s.course,ground:()=>-20,rocks:[],ramps:[]};for(let i=0;i<30;i++)stepRace(s,{throttle:1,steer:.8,lean},1/60);return r.heading;};assert.ok(run(-1)>run(0)*1.25);
+ const run=lean=>{const s=createRace({mode:'practice',course:openWaterCourse()});s.phase='running';const r=s.racers[0];r.x=0;r.z=0;r.heading=0;r.vz=14;s.course={...s.course,ground:()=>-20,rocks:[],ramps:[]};for(let i=0;i<30;i++)stepRace(s,{throttle:1,steer:.8,lean},1/60);return r.heading;};assert.ok(run(-1)>run(0)*1.25);
 });
 test('wipeout has continuous fall and remount, taps recover faster, holding does not',()=>{
  const run=tap=>{const r=createRace().racers[0];beginWipeout(r,0,18);let elapsed=0,maxOffset=0;while(r.wipeout&&elapsed<4){stepWipeout(r,{throttle:tap&&Math.floor(elapsed*10)%2?1:0},.01,elapsed);maxOffset=Math.max(maxOffset,Math.abs(wipeoutPose(r.wipeout).x));elapsed+=.01;}assert.ok(maxOffset>1);assert.deepEqual(wipeoutPose(r.wipeout),{x:0,y:0,z:0,roll:0,pitch:0});assert.equal(r.recover,0);return elapsed;};assert.ok(run(true)<run(false)-.5);
@@ -19,4 +20,4 @@ test('rider collision conserves momentum, respects mass and separates coincident
  a.x=b.x=0;a.z=b.z=0;collideRiders(a,b);assert.ok(Math.hypot(a.x-b.x,a.z-b.z)>1.7);
 });
 
-test('a fast shoreline collision actually ejects the rider through the race loop',()=>{const s=createRace({mode:'practice'}),r=s.racers[0];s.phase='running';s.course={...s.course,ground:(x,z)=>z>1?5:-10,rocks:[],ramps:[]};r.x=r.z=0;r.heading=0;r.vz=22;for(let i=0;i<10;i++)stepRace(s,{throttle:1},1/60);assert.ok(r.wipeout);assert.equal(r.wipeoutId,1);assert.equal(r.throttle,0);assert.ok(r.recover>2);});
+test('a fast shoreline collision actually ejects the rider through the race loop',()=>{const s=createRace({mode:'practice',course:openWaterCourse()}),r=s.racers[0];s.phase='running';s.course={...s.course,ground:(x,z)=>z>1?5:-10,rocks:[],ramps:[]};r.x=r.z=0;r.heading=0;r.vz=22;for(let i=0;i<10;i++)stepRace(s,{throttle:1},1/60);assert.ok(r.wipeout);assert.equal(r.wipeoutId,1);assert.equal(r.throttle,0);assert.ok(r.recover>2);});

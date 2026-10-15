@@ -1,3 +1,4 @@
+import {createSourceBuoyProgress,stepSourceBuoyProgress} from './source-buoy-progress.js';
 import {sourceRaceInput} from './source-race-pilot.js';
 import {createCourseDatum,stepCourseDatum} from './course-datum.js';
 import {constrainShoreLines} from './shore-contact.js';
@@ -56,10 +57,15 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
  if(['race','championship'].includes(mode))course=racingStuntCourse(course);
  frontEnabled.value=seaState==='surf'||seaState==='storm'?1:0;setWaterCharacter(course);surfSeed.value=Math.floor(waveSeed)%997;surfStrength.value=seaState==='surf'?1:0;windSea.value=seaState==='chop'||seaState==='storm'?1:0;setCourseWaveTrain(course.waveTrain);setBoundaryWaves(course);clearImpacts();clearWakeTrail();waterLevel.value=conditions(course,0).seaLevel;
  if(mode==='stunt'||freeRide)course=stuntCourse(course,{freeRide});
- if(course.sourceObjectSelection)course={...course,playerCount:mode==='versus'?2:1,rocks:course.hazardsForPlayers(mode==='versus'?2:1)};
+ if(course.sourceObjectSelection){const playerCount=mode==='versus'?2:1;course={...course,playerCount,rocks:course.hazardsForPlayers(playerCount),sourceDecorations:course.decorationsForPlayers?course.decorationsForPlayers(playerCount):course.sourceDecorations};}
  if(course.contactVolumesForRamps)course={...course,contactVolumes:course.contactVolumesForRamps(course.ramps)};
  const ids=mode==='versus'?[rider,secondRider]:[rider,...RIDERS.map((_,i)=>i).filter(i=>i!==rider)],g=course.gates[0];
  const racers=ids.slice(0,mode==='versus'?2:['race','championship'].includes(mode)?4:1).map((id,i)=>{const grid=mode==='versus'?i:gridOrder?gridOrder.indexOf(id):i===0?3:i-1,lateral=(grid%2?1:-1)*2.4,back=7+Math.floor(grid/2)*5;return {id,grid,human:i===0||mode==='versus',player:i===0?0:mode==='versus'?1:null,stats:settings(id,i===0?tune:mode==='versus'?secondTune:{}),x:g.x-g.tx*back+g.tz*lateral,z:g.z-g.tz*back-g.tx*lateral,heading:Math.atan2(g.tx,g.tz),vx:0,vz:0,speed:0,turn:0,throttle:0,power:freeRide||mode==='stunt'?5:0,misses:0,next:1,passed:0,lap:1,lapStart:0,lapTimes:[],finishTime:null,dq:'',out:0,collision:0,recover:0,event:'',eventTime:0,previousWave:0,hydro:createHydro(),stunt:createStunt(course),raceTime:0};});
+ if(course.sourceBuoyLayout&&!freeRide&&mode!=='stunt')for(const r of racers)if(r.human){
+  const finish=course.sourceBuoyLayout.nodes.find(n=>n.sourceRow===course.sourceBuoyLayout.finishSourceRow);
+  r.sourceBuoys=createSourceBuoyProgress(course.sourceBuoyLayout,{nextSourceRow:finish.nextSourceRow,power:r.power});
+  r.sourceBuoyElapsed=0;r.sourceBuoyPrevious={x:r.x,z:r.z};
+ }
  const obstacles=[...(course.rocks||[]).filter(o=>!o.type||o.type==='rock'),...(course.crossbars||[]).flatMap(barrierPiles).filter(p=>p.bottom<.2).map(p=>({...p,r:p.radius}))];
  const localWater=createLocalWater((x,z)=>course.ground(x,z)>-.3||obstacles.some(o=>Math.hypot(x-o.x,z-o.z)<o.r+.22));setLocalWater(localWater);
  return {courseDatum:createCourseDatum(course),breakables:createBreakableState(),localWater,waterObstacles:obstacles,fixedPiles:(course.crossbars||[]).flatMap(barrierPiles),waveSeed:surfSeed.value,swapColours:!!swapColours,passageOpenedAt:Infinity,mode,freeRide,seaState,handicap:!!handicap,phase:freeRide?'running':'countdown',countdown:freeRide?0:3,time:0,course,racers,laps:mode==='stunt'?1:clamp(laps,3,9),difficulty,events:[],result:null,weather:conditions(course,0),finishWait:0};
@@ -86,6 +92,32 @@ export function adjudicateGate(s,r,ox,oz){
  else{missBuoy(s,r);}
  if(p&&r.next===p.first&&r.passageRoute!=='outer')r.passageRoute=passageOpening(p,s.time,s.passageOpenedAt)>.98?'open':'outer';if(p&&r.next===p.last)r.passageRoute=null;r.passed++;r.next=(r.next+1)%s.course.gates.length;
  if(r.next===1){const lap=s.time-r.lapStart;r.lapDelta=lapComparison(r.lapTimes,lap,r.referenceLap);r.lapDeltaTime=s.time;r.lapTimes.push(lap);r.lapStart=s.time;r.lap++;announce(r,s,'Lap '+(r.lap-1)+' · '+lap.toFixed(3)+' s');if(r.lap>s.laps&&!r.dq&&s.mode!=='stunt'){r.finishTime=s.time;announce(r,s,'FINISHED');}}
+ return true;
+}
+// Source primary progression runs on actual50ms samples. Raw unscored guide
+// planes retain their own state; UI/visible passed counts remain independent.
+// AI still uses its existing browser controller/admission until its secondary
+// route consumer is reconstructed. Host lap legality and five-miss DQ remain
+// explicit policies; the leaf supplies no fabricated native counter.
+function adjudicateSourceGate(s,r,dt){
+ r.sourceBuoyElapsed+=dt;if(r.sourceBuoyElapsed<.05-1e-9)return false;r.sourceBuoyElapsed-=.05;
+ const result=stepSourceBuoyProgress(s.course.sourceBuoyLayout,{...r.sourceBuoys,power:r.power,totalMisses:r.misses},{
+  position:{x:r.x,z:r.z},previousPosition:r.sourceBuoyPrevious,lap:r.lap,human:true,
+  finished:r.finishTime!==null,disqualified:!!r.dq});
+ r.sourceBuoys=result.state;r.sourceBuoyPrevious={x:r.x,z:r.z};
+ const e=result.event;if(!e?.advanced)return false;
+ if(e.nativeEventCode===1){r.power=r.sourceBuoys.power;announce(r,s,r.power===5?'MAX POWER':'Clean buoy · power '+r.power);}
+ else if(e.nativeEventCode===2)missBuoy(s,r);
+ r.sourceBuoys.power=r.power;
+ if(e.enabled)r.passed++;
+ const next=s.course.sourceVisibleGateIndices[e.nextVisibleSourceRow];if(next!==undefined)r.next=next;
+ if(e.kind==='finish'&&e.enabled){
+  const time=s.time-(e.crossingOffsetNative??0)/1000,lap=time-r.lapStart;
+  r.lapDelta=lapComparison(r.lapTimes,lap,r.referenceLap);r.lapDeltaTime=s.time;r.lapTimes.push(lap);r.lapStart=time;r.lap++;
+  r.sourceBuoys.lapMisses=0;
+  announce(r,s,'Lap '+(r.lap-1)+' · '+lap.toFixed(3)+' s');
+  if(r.lap>s.laps&&!r.dq){r.finishTime=time;announce(r,s,'FINISHED');}
+ }
  return true;
 }
 export function courseDistance(course,x,z){let best=Infinity;for(let i=0;i<course.gates.length;i++){const a=course.gates[i],b=course.gates[(i+1)%course.gates.length],dx=b.x-a.x,dz=b.z-a.z,t=clamp(((x-a.x)*dx+(z-a.z)*dz)/(dx*dx+dz*dz),0,1);best=Math.min(best,Math.hypot(x-a.x-dx*t,z-a.z-dz*t));}return best;}
@@ -235,7 +267,7 @@ export function stepRace(s,input,dt){if(s.phase==='paused'||s.phase==='results')
  if(s.mode!=='stunt'&&!s.freeRide)stepRaceFlip(r,c,dt);
  if(s.mode==='stunt'||s.freeRide){stepStunt(r.stunt,r,s.course,c,dt,ox,oz,oldY,s.weather.storm);if(r.stunt.eventId!==r.stuntEventId){r.stuntEventId=r.stunt.eventId;if(r.stunt.event){r.event=r.stunt.event;r.eventTime=s.time;}}}
  if(r.stunt.crashes>(r.lastCrashes||0)){r.lastCrashes=r.stunt.crashes;beginWipeout(r,s.time,12);}
- if(!s.freeRide){adjudicateGate(s,r,ox,oz);const p=s.course.passage,insidePassage=p&&passageOpening(p,s.time,s.passageOpenedAt)>.98&&passageDistance(p,r.x,r.z)<p.width;r.out=outsideCourse(s.course,r.x,r.z)&&!insidePassage?r.out+dt:0;if(r.out>=5){r.dq='Outside course for five seconds';announce(r,s,'DISQUALIFIED');}}
+ if(!s.freeRide){if(r.sourceBuoys)adjudicateSourceGate(s,r,dt);else adjudicateGate(s,r,ox,oz);const p=s.course.passage,insidePassage=p&&passageOpening(p,s.time,s.passageOpenedAt)>.98&&passageDistance(p,r.x,r.z)<p.width;r.out=outsideCourse(s.course,r.x,r.z)&&!insidePassage?r.out+dt:0;if(r.out>=5){r.dq='Outside course for five seconds';announce(r,s,'DISQUALIFIED');}}
  }
  if(s.localWater){driveLocalWater(s.localWater,s.racers,dt);if(s.seaState==='surf')obstacleSurge(s.localWater,s.waterObstacles,s.time,dt,(x,z,t)=>wave(x,z,t,s.weather.storm));}
  stepSprayField(s.sprayField??(s.sprayField=createSprayField()),s.racers,dt,s.weather.storm);

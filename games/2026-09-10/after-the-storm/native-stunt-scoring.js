@@ -192,14 +192,14 @@ export function stepNativeStuntScoring(state,{move,arcNative,active=true,checkpo
   return result(next,awards);
 }
 
-/** Award a newly contacted source ring ordinal, preserving object order. */
-export function collectNativeStuntRing(state,{ringIndex,active=true}={}){
-  integer(ringIndex,'ringIndex',0,65535); boolean(active,'active');
+/** Award a unique object hit using its separately authored chain order. */
+export function collectNativeStuntRing(state,{ringIndex,chainOrder=ringIndex,active=true}={}){
+  integer(ringIndex,'ringIndex',0,65535); integer(chainOrder,'chainOrder',0,65535); boolean(active,'active');
   const next=cloneState(state);
   if(!active||next.finished||next.collectedRings.includes(ringIndex))return result(next);
   next.collectedRings.push(ringIndex);
-  next.ringStreak=ringIndex===next.nextRingIndex?next.ringStreak+1:1;
-  next.nextRingIndex=ringIndex+1;
+  next.ringStreak=chainOrder===next.nextRingIndex?next.ringStreak+1:1;
+  next.nextRingIndex=chainOrder+1;
   next.ringCount++;
   return result(next,[award('ring',50*next.ringStreak)]);
 }

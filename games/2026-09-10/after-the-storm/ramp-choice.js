@@ -5,7 +5,7 @@ const angle=x=>Math.atan2(Math.sin(x),Math.cos(x));
 // One seeded draw per racer, ramp and lap, never per animation frame.
 export const RAMP_USE_PROBABILITY=.60;
 export function racingStuntCourse(course){
- if(course.reverse||course.ramps?.length||!course.stuntLayout?.ramps?.length||!['greyhaven'].includes(course.id))return course;
+ if(course.sourceMetadata||course.reverse||course.ramps?.length||!course.stuntLayout?.ramps?.length||!['greyhaven'].includes(course.id))return course;
  // Bring the venue's authored stunt ramp into otherwise ramp-free racing.
  // Use one clear platform, keeping room to choose the adjacent water line.
  const ramp=course.stuntLayout.ramps.find(q=>{

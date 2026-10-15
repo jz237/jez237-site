@@ -1,3 +1,4 @@
+import {openWaterCourse} from './support/open-water-course.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createRace,stepRace,COVE} from '../race-core.js';
@@ -23,7 +24,7 @@ test('full-power launch retains its initial response and reaches the doubled spe
 
 test('full throttle reaches 60 km/h promptly and sustains the higher speed across sea states',()=>{
  for(const seaState of ['calm','chop','storm']){
-  const s=createRace({mode:'practice',seaState,course:{...COVE,ground:()=>-20,rocks:[],ramps:[],passage:null}});
+  const s=createRace({mode:'practice',seaState,course:{...openWaterCourse(),ground:()=>-20,rocks:[],ramps:[],passage:null}});
   s.phase='running';const r=s.racers[0];r.x=0;r.z=0;r.heading=0;
   let time60=null,cruise=0;
   for(let i=0;i<1800;i++){
@@ -42,7 +43,7 @@ test('full throttle reaches 60 km/h promptly and sustains the higher speed acros
 
 // More available speed must not become a compulsory cruise speed.
 test('part throttle can hold a lower cruise with the doubled top end available',()=>{
- const s=createRace({mode:'practice',seaState:'calm',course:{...COVE,ground:()=>-20,rocks:[],ramps:[],crossbars:[],passage:null}}),r=s.racers[0];s.phase='running';r.x=r.z=r.heading=0;
+ const s=createRace({mode:'practice',seaState:'calm',course:{...openWaterCourse(),ground:()=>-20,rocks:[],ramps:[],crossbars:[],passage:null}}),r=s.racers[0];s.phase='running';r.x=r.z=r.heading=0;
  for(let i=0;i<900;i++)stepRace(s,{throttle:.65,dampen:true},1/60);
  assert.ok(r.speed*3.6>65&&r.speed*3.6<100,'partial throttle remains a usable cruising range');
  for(let i=0;i<900;i++)stepRace(s,{throttle:1,dampen:true},1/60);

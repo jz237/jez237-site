@@ -12,10 +12,12 @@ import {NATIVE_HULL_STEP} from './native-hull.js';
 //
 // Included: ordinary profile, jet, gravity, roll balance, dry-motion correction,
 // buoyancy, grouped water drag and five-tick input/wet-count preparation.
-// Excluded: fore/aft rider-joint moments, auxiliary low-speed/shore yaw force,
-// special manipulation/stunt states, wipeout recovery, AI, two-player catch-up
-// and other pose/power overrides.
-// stickY affects vertical water drag here; its rider-joint force is unported.
+// Optional staged callbacks let an adapter insert separately recovered rider
+// forces: afterJet(hull,state), then afterGravity(hull,state). Their caller owns
+// the prepared physical joint/action; this module does not infer either.
+// jetStraight is latched with frame input; suppressDryCorrection and the optional
+// buoyancyKOverride describe the current action. Default ordinary math is kept.
+// Wipeout recovery, AI, two-player catch-up and pose/power overrides are absent.
 
 export const NATIVE_WATER_SCALE = .025;
 const STEP=NATIVE_HULL_STEP,FRAME_TICKS=5,LOWER=[0,2,3,5,6,7,9,10],UPPER=[1,4,8,11];
@@ -109,9 +111,10 @@ export function createNativeWaterState(profile=createNativeWaterProfile()){
 
 function controls(options){
   const result={throttle:!!options.throttle,stickX:options.stickX??0,stickY:options.stickY??0,
-    powerSteps:options.powerSteps??5,powerFactor:options.powerFactor??1};
+    powerSteps:options.powerSteps??5,powerFactor:options.powerFactor??1,jetStraight:options.jetStraight??false};
   range(result.stickX,'stickX',-1,1);range(result.stickY,'stickY',-1,1);
   range(result.powerSteps,'powerSteps',0,5);range(result.powerFactor,'powerFactor',0,1);
+  if(typeof result.jetStraight!=='boolean')throw new TypeError('jetStraight must be boolean');
   return result;
 }
 
@@ -169,12 +172,21 @@ function dragGroup(hull,indices,applyHorizontal,lateral,vertical){
  * the REAR toward body-right; an adapter must choose its browser steering sign.
  * staticContact/contactFactor are the caller's current contact accumulator;
  * this module does not discover, reset or latch geometry contacts.
+ * afterJet/afterGravity may add point velocity only; neither should move hull
+ * positions or change its frame during this pass. Current-action options are
+ * suppressDryCorrection:boolean and buoyancyKOverride:null or 0 through .03. Source
+ * dive uses .003, skipping ordinary K recovery while held. Muted working Y
+ * must be supplied as stickY to prepare the next vertical drag coefficient.
  */
 export function applyNativeWaterForces(hull,state,options={}){
   if(hull.points.length!==12||!Number.isFinite(hull.scale)||hull.scale<=0)throw new TypeError('Expected a twelve-point native hull with positive scale');
   if(state.profile.riderIndex!==hull.rider)throw new RangeError('Water riderIndex must match hull rider');
   const input=controls(options),surface=options.surface??0,contactFactor=options.contactFactor??1;
   range(contactFactor,'contactFactor',0,1);
+  const suppressDryCorrection=options.suppressDryCorrection??false,kOverride=options.buoyancyKOverride??null;
+  if(typeof suppressDryCorrection!=='boolean')throw new TypeError('suppressDryCorrection must be boolean');
+  if(kOverride!==null)range(kOverride,'buoyancyKOverride',0,.03);
+  for(const name of ['afterJet','afterGravity'])if(options[name]!==undefined&&typeof options[name]!=='function')throw new TypeError(`${name} must be a function`);
   if(state.boundHull&&state.boundHull!==hull)throw new Error('A water state belongs to one hull');
   if(state.lastHullTick!==null&&hull.ticks!==state.lastHullTick+1)throw new Error('Apply water forces once for each consecutive hull tick');
   state.boundHull=hull;state.lastHullTick=hull.ticks;
@@ -192,7 +204,7 @@ export function applyNativeWaterForces(hull,state,options={}){
   const slow=state.frameSpeedNative<p.steeringSlowFrameSpeed?
     1+(1-state.frameSpeedNative/p.steeringSlowFrameSpeed)*p.steeringSlowGain:1;
   const rawStick=Math.trunc(c.stickX*70);
-  const angleIndex=Math.trunc(rawStick*p.steeringDegrees*slow/70*4096/360);
+  const angleIndex=c.jetStraight?0:Math.trunc(rawStick*p.steeringDegrees*slow/70*4096/360);
   // Regenerate trigonometry at the observed 4096-step angle, without shipping
   // the original runtime lookup table or claiming bit-identical float results.
   const angle=angleIndex*Math.PI*2/4096,cos=Math.cos(angle),sin=Math.sin(angle);
@@ -203,12 +215,14 @@ export function applyNativeWaterForces(hull,state,options={}){
     const v=hull.points[index].velocity;v.x+=jet.x;v.y+=jet.y;v.z+=jet.z;
   }
   state.lastJet={magnitudeNative:state.forceNative,angleIndex,angleRadians:angle,velocity:jet};
+  if(options.afterJet)options.afterJet(hull,state);
 
   const gravity=p.gravityNative*(state.anyWet?1:p.dryGravityMultiplier);
   const balance=p.rollBalance*dot(r,state.referenceDisplacementNative);
   for(const index of LOWER)hull.points[index].velocity.y+=(gravity+(RIGHT_LOWER.has(index)?balance:-balance))*toVelocity;
   state.lastGravityNative=gravity;
-  if(state.wetCount===0){
+  if(options.afterGravity)options.afterGravity(hull,state);
+  if(state.wetCount===0&&!suppressDryCorrection){
     const a=-.0045*(bodyDelta.x*u.x+bodyDelta.z*u.z);
     for(const point of hull.points){
       point.velocity.x+=.1*u.x*a*toVelocity;
@@ -216,8 +230,11 @@ export function applyNativeWaterForces(hull,state,options={}){
       point.velocity.z+=.1*u.z*a*toVelocity;
     }
   }
-  const pressure=-.3*f.y*dot(bodyDelta,f),targetK=.03+(.004-.03)*clamp(pressure,0,1);
-  state.buoyancyK=state.buoyancyK<.004?state.buoyancyK+.001:targetK;
+  if(kOverride!==null)state.buoyancyK=kOverride;
+  else{
+    const pressure=-.3*f.y*dot(bodyDelta,f),targetK=.03+(.004-.03)*clamp(pressure,0,1);
+    state.buoyancyK=state.buoyancyK<.004?state.buoyancyK+.001:targetK;
+  }
   const cap=p.buoyancyCapLengthFactor*Math.max(...hull.restLengths)*state.buoyancyK/STEP;
   state.lastBuoyancy=[];
   for(let i=0;i<12;i++){

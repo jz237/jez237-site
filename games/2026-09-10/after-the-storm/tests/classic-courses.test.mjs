@@ -5,10 +5,12 @@ import {courseResistance} from '../classic-courses.js';
 import {createRace,stepRace,adjudicateGate,aiInput,outsideCourse} from '../race-core.js';
 import {passageTarget} from '../course-passages.js';
 
-test('Sunny Beach has a long dry sandbar, two wet straights and open water beyond its western boundary',()=>{
+test('Sunny Beach uses the horizontal source sandbar, finite shallows and separate open coast',()=>{
  const c=getCourse('greyhaven');assert.equal(c.name,'Sunny Beach');
- for(const z of [-120,-60,0,60,120]){assert.ok(c.ground(0,z)>2);assert.ok(c.ground(-36,z)<-3);assert.ok(c.ground(39,z)<-3);assert.ok(c.ground(110,z)>2);assert.ok(c.ground(-180,z)<-5);}
- for(let d=0;d<4;d++){const v=getCourse('greyhaven',d);assert.equal(v.rocks.length,[0,3,5,5][d]);assert.equal(v.ramps.length,0);}
+ for(const x of [-120,-60,0,60,120])assert.equal(c.ground(x,0),.5);
+ assert.equal(c.ground(0,25),-1.25);assert.equal(c.ground(0,-30),-1.25);
+ assert.equal(c.ground(-180,-70),-8);assert.equal(c.sourceShores[1].sourceClosed,false);assert.equal(c.shoreContacts.edges.length,49);
+ for(let d=0;d<4;d++){const v=getCourse('greyhaven',d);assert.equal(v.rocks.filter(q=>!q.hidden).length,[0,3,5,5][d]);assert.equal(v.rocks.filter(q=>q.hidden).length,4);assert.equal(v.ramps.length,0);}
 });
 test('Sunset Bay has distinct L-shaped geography and a race-mode ramp with a wet bypass',()=>{
  const c=getCourse('amber');assert.equal(c.name,'Sunset Bay');assert.ok(c.ground(-34,40)>0);assert.ok(c.ground(90,127)>0);assert.ok(c.ground(65,30)<-4);
@@ -46,7 +48,7 @@ test('curved shortcut progress requires crossing each actual checkpoint plane',(
  r.x=g.x+g.tx*2;r.z=g.z+g.tz*2;assert.equal(adjudicateGate(s,r,g.x-g.tx*2,g.z-g.tz*2),true);assert.equal(r.passed,1);
 });
 test('an airborne hull clears a low breakwater but contacts it when it descends',()=>{
- const c=getCourse('greyhaven'),s=createRace({mode:'time',course:{...c,ground:()=>1,rocks:[]}}),r=s.racers[0];s.phase='running';r.hydro.initialized=true;r.hydro.y=8;r.hydro.vy=0;
+ const c=getCourse('amber'),s=createRace({mode:'time',course:{...c,ground:()=>1,rocks:[]}}),r=s.racers[0];s.phase='running';r.hydro.initialized=true;r.hydro.y=8;r.hydro.vy=0;
  stepRace(s,{},1/60);assert.equal(r.collision,0);assert.ok(r.hydro.y>7);
  r.hydro.y=.9;r.hydro.vy=-2;stepRace(s,{},1/60);assert.ok(r.collision>0);
 });

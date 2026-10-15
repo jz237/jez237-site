@@ -11,7 +11,12 @@ import {HULL_PROBES} from './hull-probes.js';
 
 function safeWater(s,x,z){
  if(s.course.iceSheets&&iceSurfaceAt(s.course,x,z))return false;
- if(s.course.sourceShores?.some(q=>q.sourceClosed!==false&&polygonDistance(q.outline,x,z)<1.2))return false;
+ if(s.course.sourceShores?.some(q=>{
+  if(q.sourceClosed!==false){const d=polygonDistance(q.outline,x,z);return q.waterInside?d> -1.2:d<1.2;}
+  // An open coast has no invented closing edge or filled interior. Keep a
+  // rescue hull away from its actual finite segments on either side.
+  return q.outline.slice(1).some((b,i)=>{const a=q.outline[i],dx=b[0]-a[0],dz=b[1]-a[1],n=dx*dx+dz*dz,t=n?Math.max(0,Math.min(1,((x-a[0])*dx+(z-a[1])*dz)/n)):0;return Math.hypot(x-a[0]-dx*t,z-a[1]-dz*t)<1.2;});
+ }))return false;
  if(s.course.contactVolumes)for(const p of HULL_PROBES)for(const [dx,dz] of [[p.x,p.z],[p.z,-p.x]]){
   const point={x:x+dx,y:waterLevel.value+.025+p.y,z:z+dz};
   if(s.course.contactVolumes.query(point).some(q=>volumeContact(q,point)))return false;

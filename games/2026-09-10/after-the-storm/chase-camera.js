@@ -21,7 +21,9 @@ export function chaseFrame(memory, rider, dt, { orbit = 0, zoom = 8, pitch = .22
   memory.rate += clamp(rate - memory.rate, -5 * dt, 5 * dt);
   memory.heading = angle(memory.heading + memory.rate * dt);
   memory.water += (water - memory.water) * (1 - Math.exp(-dt * 2.2));
-  const lift = clamp((h.y || 0) - water - .3, 0, 5) * .32;
+  // Tall fixed source ramps need enough suspended lift to retain the rider
+  // inside the frame. Water chop and pitch/roll still leave the horizon level.
+  const lift = clamp((h.y || 0) - water - .3, 0, 12) * .58;
   memory.lift += (lift - memory.lift) * (1 - Math.exp(-dt * 3));
   const heading = memory.heading + orbit, fx = Math.sin(heading), fz = Math.cos(heading);
   const distance = clamp(zoom, 6, 25);

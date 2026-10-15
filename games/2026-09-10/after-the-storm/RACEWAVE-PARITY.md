@@ -461,3 +461,108 @@ Restoring the common control-only traffic/flip wrapper fixed that existing
 regression. The targeted demo passed, followed by **632/632 tests in 294.00
 seconds**. This is a checked implementation milestone, not full reference parity
 or a production deployment.
+
+
+## Sunny source geometry and handling preparation — October 15, 2026
+
+Sunny Beach now uses slot 1's four source buoy tables and quantized headings,
+20 closed sandbar edges plus 29 open outer-coast edges, 231 finite upward floor
+faces and 39 open-chain boundary markers. The outer coast receives no invented
+closing contact edge. The small source sandbar is horizontal in the shared
+world frame. Four hidden fixed XYZ spheres remain in every player/class family;
+visible static balls number 0/3/5/5 in ordinary classes and 4 in Stunt. All remain
+physical. Sixteen single-player render-only placements select independently
+authored beach furniture; their original identities/artwork are not claimed.
+Two-player selection omits those decorations while retaining its source solids.
+
+The fixed Stunt ramp uses six finite projection volumes at native Y−24. No
+scripted takeoff impulse is added. Twelve absolute-Y rings retain the source
+112-unit radius, 32-unit depth and 8-unit probe offset. Checkpoints 5/10/16/0 use
+the original 15/15/15/10-second limits. Layout revision 6 separates new records
+from the earlier geometry and admission rules. Sunny ordinary races have no
+ramp: the older helper that inserted a displaced Stunt ramp is disabled for
+source venues. The browser course-out envelope remains authored; the native
+course-out rule is unresolved.
+
+Authored ordinary-input paths passed all four solo classes, all four four-rider
+classes and the boosted rider 2 Normal fixture at seed 17/60 Hz. The refreshed
+Normal championship fixture won 39 points and unlocked Hard. Its Sunny round
+finished second by 0.400667 seconds, with zero human misses and no ordinary ramp.
+Source navigation remains a browser controller; the Surf profile permits faster
+exhibition inputs without changing the source venue-condition path. Tests also
+retain the opening exhibition's speed and completion checks for seeds 23/619.
+These are bounded checks, not all-seed or native-handling guarantees.
+
+Browser High 1280×720 collected all 12 rings and 4 checkpoints in 43.733333 s,
+scoring 4,450 points with no crash/DQ/overtime and 1.433333 s remaining. Calm
+finished in 43.466667 s in simulation. An apex inspection at 26.783333 s showed
+six collected rings and a hull 6.216760 m above water. Camera suspension now
+keeps the tall-launch rider fully in frame; framing checks cover 30/60/144 Hz.
+The final held apex frame reported about 60 FPS and 1.143 million triangles.
+High-resolution craft, rider, water, reflections and scenery remain active.
+
+A refreshed browser time trial using the source human admission rules finished
+three laps in 202.415 s with 42 visible passes, no misses/DQ and no ramp landings.
+The final High 1280×720 window reported about 60 FPS and 1.365 million triangles.
+The only browser console error in the checks was the existing favicon 404.
+
+Human admission on Sunny and Southern now follows the recovered primary source
+graph at 20 Hz, including real unscored guide planes. Colored buoys have the
+25-native-unit wrong-side tolerance and coarse region admission, with current
+sample/armed/side history rather than a local swept-width rule. Ordinary finish
+admission preserves the source one-sided bound and course slack. Source crossing
+offsets provide millisecond lap adjustment. Visible passed counts remain separate
+from raw node progress. AI admission remains the browser swept rule; host lap
+legality and five-miss DQ are explicit policies. Southern record revision is now
+3. All four classes on both live source venues still finish with zero human
+misses. The source leaf passes 61 tests, including 51 raw-backed fixture cases;
+four additional live tests cover scheduling, pause, ownership and remote planes.
+
+The native handling adapter now conditions raw controls, interleaves trim,
+gravity, yaw, manipulation and water in observed order, and supports explicit
+source actor/action states. Its optional 19-point articulated rider uses 22 links
+and eight constraint passes, latching physical torsoRoot/joint 2 after tick 5 for
+the next logical frame. Caller-authored pose/rest/history and actual auxiliary
+grip anchors remain mandatory. No constant joint or visual-bone substitute is
+fabricated. Ninety-seven focused handling tests pass; 2,780 captured default-water
+numeric values remain unchanged. This adapter is separate from live race-core.
+
+The isolated triangular water field reproduces signed Q8.8 storage, finite hex
+patch updates, field queries and sine-line forcing. Twenty-one focused tests
+pass; private raw checks match 1,655 prepared kernel vertices exactly. Amplitude
+20 scales forcing (conditionally ±0.5 m), without a global height cap. Original
+camera selection, phase/RNG history and special wakes remain separate work;
+the live browser still uses its modern water/pressure model.
+
+The ring scoring preparation now distinguishes object identity from chain order:
+City's repeated 3/4/5 orders can each score once as separate objects. The existing
+live ring loop already retains separate object status. Native score popup
+settlement and articulated arc inputs remain to be connected to live scoring.
+
+Port static preparation includes its genuinely different 1P/2P companion data:
+117/109 shore edges, an open 29-edge coast, no active 3D grid floors, source ramp
+volumes and the 16-ring Stunt layout. Twelve objects are defined as dynamic,
+never falsely frozen as source solids. The isolated floating-object kernel has
+15 focused tests for springs, buoyancy, contact order and craft/object recoil.
+Neither Port module is live yet. Recovered source evidence stays private.
+
+The first full regression found 19 failures: synthetic open-water/ice fixtures
+inherited Sunny's new source solids, the old ramp helper inserted a race ramp,
+and the conservative source pilot reduced Surf exhibition pace. Independent
+synthetic fixtures now isolate those physics checks; the optional-ramp traversal
+check uses an explicit authored circuit, source races retain their real ramp
+selection, and the Surf controller keeps the existing speed checks. Corrected
+focused checks pass. Final complete regression is recorded below when finished.
+
+
+The completed regression passed **842/842 tests in 312.12 seconds**. The exact
+Normal cup and refreshed source-gate browser run were checked after removing
+the spurious ordinary Sunny ramp. Independent physics fixtures preserve their
+original assertions without inheriting live venue collision data.
+
+Auxiliary rider anchors and a modern anatomy provider are also prepared. The
+recovered pivot/history/semicircle mechanics supply actual physical grip outputs
+to the 19-point rider solve. Twenty-two new focused tests passed. The default
+geometry comes from the existing modern rider rig; it does not claim original
+pose/radius equivalence. Actor animation, special crouch and live integration
+remain pending. These preparations do not replace the live handling model.

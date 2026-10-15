@@ -1,8 +1,8 @@
-import {southernAnchors,southernPilotAnchors,southernStuntNavigation} from './source-southern-navigation.js?v=f718aac8f24a';
-import {southernContactVolumes,southernRampVolumes} from './source-southern-boxes.js?v=f718aac8f24a';
-import {shoreLines} from './shore-contact.js?v=f718aac8f24a';
-import {triangleWalls} from './triangle-walls.js?v=f718aac8f24a';
-import {facetedSurface} from './faceted-surfaces.js?v=f718aac8f24a';
+import {southernAnchors,southernPilotAnchors,southernStuntNavigation} from './source-southern-navigation.js?v=75cb6c906e6b';
+import {southernContactVolumes,southernRampVolumes} from './source-southern-boxes.js?v=75cb6c906e6b';
+import {shoreLines} from './shore-contact.js?v=75cb6c906e6b';
+import {triangleWalls} from './triangle-walls.js?v=75cb6c906e6b';
+import {facetedSurface} from './faceted-surfaces.js?v=75cb6c906e6b';
 // Independent numeric reconstruction from the user's USA Rev1 reference.
 // No original graphics, display lists, textures or executable code are included.
 // .025 metres/native remains conditional on the native HUD/clock calibration.
@@ -81,7 +81,7 @@ export function createSourceSouthernCourse(polygonDistance){
  const stuntLayout={anchors:southernStuntNavigation.anchorsWorld.map(p=>[...p]),navigation:{...navigation},routeInterpolation:'linear',driver:'source-layout',verificationOnePass:true,startGate:{...checkpoints[3],side:0,offset:0},boundary:boundary.map(p=>[...p]),
   rocks:hazardsForPlayers(1),ramps:stuntRamps,rings,checkpoints,verificationTargets:southernStuntNavigation.verificationTargets.map(q=>({...q})),
   sourceRouteRows:clone(stuntRouteData),sourceGuideRows:[3,4],timerSeconds:[20,15,20,15]};
- return {name:'Southern Island',theme:'island',description:'Source shorelines, tidal shallows and a partly submerged ship surround an open-water course.',layoutRevision:2,tag:'08 / SOUTHERN ISLAND',
+ return {name:'Southern Island',theme:'island',description:'Source shorelines, tidal shallows and a partly submerged ship surround an open-water course.',layoutRevision:3,tag:'08 / SOUTHERN ISLAND',
   integrationReady:true,navigation,navigationDriver:'source-layout',pilotAnchorsByClass:southernPilotAnchors.map(a=>[...a]),anchors:southernAnchors[0].map(p=>[...p]),anchorsByClass:southernAnchors.map(a=>a.map(p=>[...p])),directedAnchorsByClass:true,routeInterpolation:'linear',
   sourceMetadata:{nativeCourseIndex:7,referenceRevision:'USA Rev1',nativeScale:SCALE,scaleStatus:'conditional',
    sourceCollisionPlaneCount:305,fixedSolidVolumeCount:17,placedRampVolumeCount:3,upwardCollisionPlaneCount:287,orientedAdditionalPlaneCount:18,

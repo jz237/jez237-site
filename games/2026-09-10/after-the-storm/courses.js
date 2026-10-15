@@ -1,3 +1,4 @@
+import {createSourceBuoyLayout} from './source-buoy-progress.js';
 import {CLASSIC_COURSES,polygonDistance} from './classic-courses.js';
 import {configurePassage,passageDistance} from './course-passages.js';
 import {tideLevel} from './course-environment.js';
@@ -57,9 +58,16 @@ export function getCourse(id='greyhaven',difficulty=0){const base=COURSES.find(c
  if(finishLine){const g=course.gates[0],[a,b]=finishLine,dx=b[0]-a[0],dz=b[1]-a[1],length=Math.hypot(dx,dz),direction=reverse?-1:1;g.tx=dz/length*direction;g.tz=-dx/length*direction;g.z=a[1];const sides=[a,b].map(p=>-(p[0]-g.x)*g.tz+(p[1]-g.z)*g.tx);g.spanMin=Math.min(...sides);g.spanMax=Math.max(...sides);course.finishBypass=reverse?0:base.finishBypass;}
  // Navigation obstacles grow with difficulty, but keep a safe central racing line.
  for(let i=3;!CLASSIC_COURSES[id]&&i<course.gates.length;i+=level===2?3:5){const g=course.gates[i],side=i%2?1:-1;course.rocks.push({x:g.x+g.tz*side*(15-level),z:g.z-g.tx*side*(15-level),r:level?1.6:1.1,type:base.theme==='ice'?'ice':base.theme==='lake'?'post':'float'});}
+ if(base.sourceRouteRowsByClass&&base.sourceMetadata){
+  course.sourceBuoyLayout=createSourceBuoyLayout({rows:base.sourceRouteRowsByClass[difficulty],courseIndex:base.sourceMetadata.nativeCourseIndex,scale:base.sourceMetadata.nativeScale,reverse});
+  course.sourceVisibleGateIndices=Object.fromEntries(course.sourceBuoyLayout.nodes.filter(n=>n.enabled).map(n=>{
+   const index=course.gates.findIndex((g,i)=>n.classification===3?i===0:g.side&&Math.abs(g.bx-n.x)<1e-6&&Math.abs(g.bz-n.z)<1e-6);
+   if(index<0)throw new Error('Source scored node has no display gate: '+id+'/'+difficulty+'/'+n.sourceRow);
+   return [n.sourceRow,index];
+  }));
+  course.sourceBuoyPolicy={human:'source-primary-50ms',ai:'browser-swept',finish:'source-one-sided',lapLegality:'host-lap-counter',missDQ:'host-five-miss'};
+ }
  configurePassage(course);const passageFloor=(x,z)=>course.passage&&course.passage.kind!=='jump-dive'?-5.8+Math.max(0,passageDistance(course.passage,x,z)-course.passage.width-2)*.8:Infinity;const closure=(x,z)=>course.closedAreas.some(area=>polygonDistance(area,x,z)<0)?6:-Infinity;course.ground=(x,z)=>Math.max(closure(x,z),Math.min(terrainHeight(course,x,z),passageFloor(x,z)));if(base.renderGround)course.renderGround=(x,z)=>Math.min(base.renderGround(x,z),passageFloor(x,z));return course;
 }
 export function conditions(course,time,lap=1){const rising=course.id==='tempest'?Math.min(.5,(lap-1)*.20+time*.0005):Math.sin(time*.018)*.035;return {seaLevel:tideLevel(course,time),storm:clamp(course.storm+rising,0,1),fog:course.theme==='lake'?Math.max(.003,.017-time*.00011):course.theme==='ice'?.0035:course.theme==='city'?.002:.0018,night:course.theme==='city'};}
 export const CIRCUITS=[['greyhaven','amber','reed','citadel','port','tempest'],['greyhaven','amber','reed','citadel','port','neon','tempest'],['greyhaven','amber','reed','citadel','port','neon','glacier','tempest']];
-
-

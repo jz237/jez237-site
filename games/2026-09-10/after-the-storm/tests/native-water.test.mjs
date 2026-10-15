@@ -175,3 +175,67 @@ test('water states remain independent and reject repeated or cross-hull force ap
   assert.throws(()=>applyNativeWaterForces(b,wb,{stickX:2}),RangeError);
   assert.throws(()=>applyNativeWaterForces(b,createNativeWaterState(createNativeWaterProfile({riderIndex:1}))),/match hull rider/);
 });
+
+test('staged rider callbacks run after jet and after gravity, before water sampling and drag',()=>{
+  const hull=createNativeHull({position:{x:0,y:-1,z:0}}),water=createNativeWaterState(),calls=[];
+  applyNativeWaterForces(hull,water,{throttle:true,surface:()=>{calls.push('water');return 0;},
+    afterJet:(h,w)=>{
+      calls.push('jet');assert.ok(w.lastJet.magnitudeNative>0);
+      close(h.points[0].velocity.y,0);close(h.points[3].velocity.y,0);
+      h.points[0].velocity.y+=2;
+    },
+    afterGravity:(h,w)=>{
+      calls.push('gravity');close(w.lastGravityNative,-.192);
+      close(h.points[0].velocity.y,1.52);close(h.points[3].velocity.y,-.48);
+      h.points[3].velocity.x+=3;h.points[3].velocity.y+=2;
+    }});
+  assert.deepEqual(calls,['jet','gravity',...Array(12).fill('water')]);
+  const pressure=1.175*.03/.01;
+  close(hull.points[0].velocity.y,(2-.48+pressure)*.85);
+  close(hull.points[3].velocity.y,(2-.48+pressure)*.85);
+  close(hull.points[3].velocity.x,3*.92);
+});
+
+test('prepared straight jet is latched for five ticks independently of current working steering',()=>{
+  const hull=createNativeHull({position:{x:0,y:3,z:0}}),water=createNativeWaterState();
+  for(let i=0;i<5;i++){
+    stepNativeHull(hull,.01,{beforeIntegrate:before(water,{surface:0,throttle:true,stickX:1,jetStraight:i===0})});
+    assert.equal(water.lastJet.angleIndex,0);
+  }
+  stepNativeHull(hull,.01,{beforeIntegrate:before(water,{surface:0,throttle:true,stickX:1})});
+  assert.ok(water.lastJet.angleIndex>0);
+});
+
+test('held dive fixes pressure K before buoyancy and ordinary recovery resumes only on release',()=>{
+  const hull=createNativeHull({position:{x:0,y:-1,z:0}}),water=createNativeWaterState();
+  for(let i=0;i<5;i++){
+    stepNativeHull(hull,.01,{beforeIntegrate:before(water,{surface:0,stickY:1,
+      suppressDryCorrection:true,buoyancyKOverride:.003})});
+    close(water.buoyancyK,.003);
+    close(water.verticalDamping,.85+(.745-.85)*(.003-.004)/(.03-.004));
+  }
+  stepNativeHull(hull,.01,{beforeIntegrate:before(water,{surface:0,stickY:0})});
+  close(water.buoyancyK,.004);close(water.verticalDamping,.85);
+});
+
+test('current action suppresses only the dry correction, without suppressing gravity or engine',()=>{
+  const make=()=>({hull:createNativeHull({pitch:.3,position:{x:0,y:3,z:0},velocity:{x:0,y:0,z:10}}),water:createNativeWaterState()});
+  const plain=make(),action=make();
+  applyNativeWaterForces(plain.hull,plain.water,{surface:0,throttle:true});
+  applyNativeWaterForces(action.hull,action.water,{surface:0,throttle:true,suppressDryCorrection:true});
+  const u=plain.hull.frame.up,a=-.0045*(10*.01/.025*u.z),conversion=.025/.01;
+  for(let i=0;i<12;i++){
+    close(plain.hull.points[i].velocity.y-action.hull.points[i].velocity.y,u.y*a*conversion);
+    close(plain.hull.points[i].velocity.z-action.hull.points[i].velocity.z,.1*u.z*a*conversion);
+  }
+  assert.deepEqual(plain.water.lastJet,action.water.lastJet);
+  close(plain.water.lastGravityNative,action.water.lastGravityNative);
+});
+
+test('invalid staged options reject before binding or changing velocities',()=>{
+  for(const options of [{afterJet:3},{afterGravity:3},{jetStraight:1},{suppressDryCorrection:1},{buoyancyKOverride:-.1}]){
+    const hull=createNativeHull(),water=createNativeWaterState(),before=structuredClone(hull);
+    assert.throws(()=>applyNativeWaterForces(hull,water,options));
+    assert.deepEqual(hull,before);assert.equal(water.boundHull,null);
+  }
+});

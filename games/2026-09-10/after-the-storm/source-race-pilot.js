@@ -3,6 +3,7 @@
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const angle=a=>Math.atan2(Math.sin(a),Math.cos(a));
 export function sourceRaceInput(state,r){
+ const profile=state.course.navigation?.controlBySeaState?.[state.seaState]??{},straightSpeed=profile.straightSpeed??20,gateSpeed=profile.gateSpeed??12;
  const anchors=state.course.anchors,v=r.sourceRaceDriver??={index:0,lap:1,start:[r.x,r.z]};
  const roles=state.course.pilotAnchorsByClass?.[state.course.difficulty];
  let q=anchors[v.index],previous=v.index?anchors[v.index-1]:v.lap===1?v.start:anchors.at(-1);
@@ -26,7 +27,7 @@ export function sourceRaceInput(state,r){
  const recovering=remaining< -1.5&&Math.abs(cross)>(gateAnchor?1.7:4);
  if(recovering)heading=Math.atan2(q[0]-r.x-r.vx*.12,q[1]-r.z-r.vz*.12);
  const error=angle(heading-r.heading),corner=remaining<Math.max(10,r.speed*.7)?bend:0;
- let desired=recovering?7:Math.min(gateAnchor?12:20,clamp(20/(1+corner*1.7),7,20));
+ let desired=recovering?7:Math.min(gateAnchor?gateSpeed:straightSpeed,clamp(straightSpeed/(1+corner*1.7),7,straightSpeed));
  // At low tide the narrow buoy corridor can sit over the fixed reef. Settle
  // into it before intermittent floor contact removes lateral water grip.
  let shallowGate=false;

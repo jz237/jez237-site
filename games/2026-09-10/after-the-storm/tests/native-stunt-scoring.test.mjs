@@ -205,6 +205,18 @@ test('ring chains follow newly collected source ordinals and reset on out-of-ord
   assert.deepEqual(collectNativeStuntRing(state,{ringIndex:6,active:false}).awards,[]);
 });
 
+test('City branch rings deduplicate objects separately from their repeated chain orders',()=>{
+  let state=createNativeStuntScoring();const points=[];
+  for(const [ringIndex,chainOrder] of [[3,3],[4,4],[5,5],[6,3],[7,4],[8,5]]){
+    const next=collectNativeStuntRing(state,{ringIndex,chainOrder});state=next.state;points.push(...next.awards.map(a=>a.points));
+  }
+  assert.deepEqual(points,[50,100,150,50,100,150]);
+  assert.equal(state.ringCount,6);assert.equal(state.ringStreak,3);assert.equal(state.nextRingIndex,6);
+  assert.deepEqual(state.collectedRings,[3,4,5,6,7,8]);
+  assert.deepEqual(collectNativeStuntRing(state,{ringIndex:6,chainOrder:3}).awards,[]);
+  assert.throws(()=>collectNativeStuntRing(state,{ringIndex:9,chainOrder:-1}));
+});
+
 test('checkpoint-time interpolation uses absolute signed distances and integer half-offset rounding',()=>{
   assert.deepEqual(nativeStuntCheckpointTime({currentPlaneDistance:-3,previousPlaneDistance:7,remainingClockNative:991}),
     {crossingOffsetNative:15,points:45});

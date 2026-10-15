@@ -1,7 +1,8 @@
+import {openWaterCourse} from './support/open-water-course.mjs';
 import test from 'node:test';import assert from 'node:assert/strict';
 import {createRace,stepRace} from '../race-core.js';import {getCourse} from '../courses.js';
 import {iceSurfaceAt,supportOnIce} from '../ice-surfaces.js';
-function run(steer=0){const course=getCourse('greyhaven',0);course.iceSheets=[{id:'test-sheet',height:.45,outline:[[-100,-100],[100,-100],[100,100],[-100,100]]}];course.ground=()=>-10;course.rocks=[];course.ramps=[];const s=createRace({mode:'practice',course}),r=s.racers[0];s.phase='running';r.x=0;r.z=0;r.vx=0;r.vz=12;r.speed=12;r.heading=0;r.hydro.initialized=true;r.hydro.y=.67;for(let i=0;i<60;i++)stepRace(s,{throttle:1,steer},1/60);return {s,r};}
+function run(steer=0){const course=openWaterCourse();course.iceSheets=[{id:'test-sheet',height:.45,outline:[[-100,-100],[100,-100],[100,100],[-100,100]]}];course.ground=()=>-10;course.rocks=[];course.ramps=[];const s=createRace({mode:'practice',course}),r=s.racers[0];s.phase='running';r.x=0;r.z=0;r.vx=0;r.vz=12;r.speed=12;r.heading=0;r.hydro.initialized=true;r.hydro.y=.67;for(let i=0;i<60;i++)stepRace(s,{throttle:1,steer},1/60);return {s,r};}
 test('ice carries momentum without water propulsion or lateral steering grip',()=>{const a=run(0).r,b=run(1).r;assert.ok(a.speed>10&&a.speed<12);assert.ok(Math.abs(b.x-a.x)<.2);assert.ok(Math.abs(b.heading)<.05);assert.equal(a.hydro.wet,0);assert.equal(a.hydro.intake,0);assert.equal(a.hydro.y,.67);});
 test('leaving a sheet resumes the wave solver and water contact',()=>{const {s,r}=run();s.course.iceSheets=[];for(let i=0;i<120;i++)stepRace(s,{throttle:1},1/60);assert.equal(r.onIce,'');assert.ok(r.hydro.wet>.1);assert.ok(r.hydro.intake>0);});
 test('faceted Glacier support is finite and stays within the recovered contact footprints',()=>{
