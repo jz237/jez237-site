@@ -84,6 +84,7 @@ conversion, obstacle contact and ordinary-input traversal still need calibration
 | Ghost persistence and visibility | Portable saves include a bounded library of nine setups, visibility preference, erase/undo. Old saves gain defaults; malformed imports are rejected before replacement. |
 | Horizontal and vertical two-player display | Exact physical-pixel partitions, matching cameras/refraction/HUD/pointer orbit and independently clipped lens effects. No graphics quality reduction is forced by the layout. |
 | Separate player windows | One authoritative host, full-resolution Player 2 presentation and controls, shared pause/restart, bounded snapshot delivery, reconnect and safe paused split fallback. Actual OS minimization and physical controllers remain unverified. |
+| Online two-player extension | Private WebRTC invite link/return code, one host simulation, independent full-resolution views and local controls, shared pause/restart, stale-input release and paused recovery. Free STUN without a paid relay; restrictive-network support and physical controller hardware remain unverified. See [ONLINE-MULTIPLAYER.md](ONLINE-MULTIPLAYER.md). |
 | Two-player Dolphin Park | Untimed exploration with normal water/stunt physics, both riders, same-rider alternate livery, independent cameras, pause/restart. No racing gate/DQ/lap-finish logic. |
 | Independent Player 2 stunts and dive | Gamepad modifier controls and numpad 1–7 / apostrophe defaults; both riders can use the same mechanics. |
 | Remappable controls | Bounded per-player keyboard/button/axis settings, inversion, 0–35% deadzone with 5% default, conflict checks, safe key capture and defaults reset. Touch actions remain independent of physical-key rebinding. |
@@ -1906,3 +1907,57 @@ in the three HTML maps. High-resolution craft, riders, water and scenery remain
 the existing presentation. Complete parity and physical-controller/OS-window
 sign-off remain open; no original executable bytes/artwork are published and
 no money was spent.
+
+## Online two-player extension — October 15, 2026
+
+Version2.20.0 adds private online racing beyond the reference game's local
+multiplayer. A host invite link and guest return code establish genuine WebRTC
+data channels using free STUN. No paid relay, Worker, database or billing resource
+was added. Networks requiring TURN remain unsupported; this is private invitation
+play. Joining instructions and the connection limitations are documented in
+[ONLINE-MULTIPLAYER.md](ONLINE-MULTIPLAYER.md).
+
+The existing host simulation owns both riders, collisions, source water, buoy
+judging, laps and results. The guest supplies bounded Player2 controls only and
+renders its own detailed scene with local camera, graphics, audio, rumble and
+keyboard/gamepad/touch preferences. It has no race/physics owner. The existing
+versus rules exclude online results from solo worldwide scores, records, ghosts
+and championship unlocks. Local layouts remain available.
+
+The wire codec preserves detached signed16 source-water and Float32 surface/pose
+arrays exactly, with bounded gzip, fragments, reassembly and validation. Active
+snapshots are limited to20Hz with one in-flight capture; paused/results views
+use1Hz. Input goes neutral after250ms. Missing heartbeat, loading failure or a
+stopped peer pauses the host. Reconnection retains the actual paused state and
+requires explicit resume; fresh invitations request a current descriptor.
+
+All12 new online tests pass: exact modern/native snapshots and array detachment,
+fragment ordering/duplicates/expiry, decompression limits, signal expiry/build/
+session validation, Player2-only authority, descriptor/capability bounds, stale
+input/generation rejection, paused traffic pacing, interruption state retention
+and role-specific data channels. The full suite checks2,061 tests:2,050 pass,
+with the same eleven existing gameplay calibration failures. The260 root module
+hashes are refreshed across four HTML import maps.
+
+Two isolated browser contexts established three real data channels. High graphics
+rendered both full1280x720 views. Normal keyboard input moved only its assigned
+rider. Both pause/resume controls agreed at21.016666666666755s, with identical
+positions and all49,152 source-water heights (hash2881229044). A new invitation
+retained that race in generation2; Restart created generation3. Online Dolphin
+Park Free Ride loaded in a390px phone viewport, and its normal Auto throttle
+control moved Player2. This is emulation, not physical-phone certification.
+
+The optional native Sunny preview also rendered both physical riders and the
+59-node source buoy presentation, with exact host/guest positions and source
+water at1.03s, hull tick103/water frame20 (hash2102279823). Evo X2's installed
+Chrome155 and Node24 then provided a real second-computer peer on the same LAN.
+It received that physical scene and drove Player2 through normal controls;
+both views paused at57.91s/water frame1158 with matching positions and source
+water (hash2900909254). Suspending only that guest tab paused the host at73s.
+Two subsequent host samples retained the same positions, time and water
+(hash4144957531); reactivation restored readiness while preserving the pause.
+Evo's headless software renderer required Low for responsive input; the separate
+High1280x720 checks remain the graphics evidence. This does not establish
+arbitrary WAN/NAT connectivity, physical-controller support or complete original
+gameplay parity. Only favicon404s appeared in the valid desktop browser flows;
+no original executable bytes/artwork were added and no money was spent.

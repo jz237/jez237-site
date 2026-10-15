@@ -114,3 +114,5 @@ header:before{content:"";position:fixed;inset:0 0 auto;height:250px;background:l
 #replayBar button{padding:7px 10px;font-size:12px}.replaying header,.replaying #demoPanel,.replaying #demoToggle,.replaying #racehud,.replaying #splitHud{display:none!important}
 #replayBar[hidden],#watchReplay[hidden]{display:none}#verifyReplay{position:fixed;left:8px;bottom:2px;font:10px monospace;color:white;z-index:91;pointer-events:none}
 @media(max-width:900px){#watchReplay{top:max(12px,env(safe-area-inset-top));right:max(15px,env(safe-area-inset-right));padding:6px 10px}.mobile-riding:not(.demo-active) #watchReplay{top:64px}#replayBar{gap:6px;max-width:94vw;font-size:11px}#replayBar button{padding:6px;font-size:11px}}
+
+.online-race-link{display:inline-block;color:#edc78f;margin:8px 0 15px;padding:10px 15px;border:1px solid #edc78f88;border-radius:6px;text-decoration:none;font-size:14px}
