@@ -1,9 +1,12 @@
-import {createCourseScenery,paintCourseGround} from './course-scenery';
+import {createSableLandscape} from './sable-landscape';
+import {createSableLandmarks} from './sable-landmarks';
+import {createSablePaddock} from './sable-paddock';
+import {paintCourseGround} from './course-scenery';
 import {addCourseGroundDetail} from './course-materials';
 import * as T from 'three';
 import {SABLE} from './sable-course';
 import {freezeSceneryTransforms} from './render-work';
-export function createSableWorld(){
+export function createSableWorld(onSceneryReady:()=>void=()=>{}){
  const id='sable-canyon-v1',dock=false,course=SABLE,root=new T.Group();root.name=id;
  const materials={concrete:new T.MeshStandardMaterial({color:dock?0xc9c3ac:0x977154,roughness:.95}),stripe:new T.MeshStandardMaterial({color:dock?0xd99033:0x9b3e38,roughness:.9}),steel:new T.MeshStandardMaterial({color:0x344553,roughness:.7,metalness:.4}),grass:new T.MeshStandardMaterial({color:0x687858,roughness:1}),seat:new T.MeshStandardMaterial({color:0xc29a71,roughness:.8}),blue:new T.MeshStandardMaterial({color:0x3e6c81,roughness:.85}),red:new T.MeshStandardMaterial({color:0x9f4b3e,roughness:.9})};
  const floorMaterial=new T.MeshStandardMaterial({color:dock?0x777771:0x9f7658,roughness:.98}),groundGeometry=new T.BufferGeometry(),boxGeometry=new T.BoxGeometry(1,1,1),textures:T.Texture[]=[];
@@ -37,7 +40,8 @@ export function createSableWorld(){
  for(const s of course.solids)box(s.x,s.y,s.z,s.half[0]*2,s.half[1]*2,s.half[2]*2,s.material,s.yaw);
  for(const x of [-192,192]){box(x,7,-85,.6,14,.6,'steel');box(x,14,-85,5,.8,1,'seat');}
  for(const [finish,matrices]of batches){const mesh=new T.InstancedMesh(boxGeometry,materials[finish],matrices.length);matrices.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.name=id+'_'+finish;mesh.castShadow=mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
- const scenery=createCourseScenery(course,'canyon');root.add(scenery.root);
+ const landscape=createSableLandscape(),landmarks=createSableLandmarks(),paddock=createSablePaddock();root.add(landscape.root,landmarks.root,paddock.root);
+ const scenery={dispose(){landscape.dispose();landmarks.dispose();paddock.dispose();}};
  root.userData.solidRecords=course.solids;freezeSceneryTransforms(root);
- let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;scenery.dispose();surfaceDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
+ let disposed=false;const ready=paddock.ready.then(()=>{if(disposed)return;freezeSceneryTransforms(paddock.root);onSceneryReady();}).catch(error=>{if(!disposed){root.userData.sceneryLoadError=String(error);console.warn('Sable parked scenery unavailable',error);}});return{root,ready,dispose(){if(disposed)return;disposed=true;scenery.dispose();surfaceDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
 }
