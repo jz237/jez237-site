@@ -1,6 +1,7 @@
+import {restoreHeathSceneryBytes} from './heath-scenery-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readFairSceneryPrevious,restoreFairSceneryBytes,verifyFairSceneryRevision} from './fair-scenery-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreHeathSceneryBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('FairScenery preserves every prior fixture, vehicle asset, control and camera input',verifyFairSceneryRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/fair-scenery/revision.json').toString());

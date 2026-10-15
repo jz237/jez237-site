@@ -3,10 +3,11 @@ import * as T from 'three';
 import type {createCountyCourse} from './county-course';
 
 type Course=ReturnType<typeof createCountyCourse>;
-export type SceneryTheme='park'|'dunes'|'canal'|'pass'|'coast'|'forest'|'farm'|'port'|'reservoir'|'club'|'ridge'|'fair';
+export type SceneryTheme='park'|'dunes'|'canal'|'pass'|'coast'|'forest'|'farm'|'port'|'reservoir'|'club'|'ridge'|'fair'|'heath';
 type Shape='box'|'round'|'cone'|'rock'|'leaf'|'gable'|'ring';
 type Finish='bark'|'leaf'|'pine'|'stone'|'sand'|'wood'|'metal'|'white'|'red'|'ochre'|'glass'|'rubber';
 const palettes={
+ heath:{ground:'#747952',patch:'#9b9673',rock:0x8c8879,leaf:0x64754c,pine:0x4c6246,hill:0x727c56,accent:'#775a7c',title:'WILLOWBANK HEATH MOTOR FAIR',subtitle:'NATURAL BEAUTY / UNNATURAL BODYWORK'},
  fair:{ground:'#80794e',patch:'#a29a68',rock:0x918573,leaf:0x647343,pine:0x455b3c,hill:0x748052,accent:'#af4934',title:'COUNTY FAIR CONTACT SPORTS',subtitle:'ALL THE FUN / NONE OF THE REFUNDS'},
  ridge:{ground:'#7c7959',patch:'#9e986e',rock:0x8e8878,leaf:0x6d7447,pine:0x4c603f,hill:0x777951,accent:'#a65c30',title:'HARROWSTONE RIDGE RUN',subtitle:'HIGH GROUND / LOW EXPECTATIONS'},
  club:{ground:'#647454',patch:'#8a9470',rock:0x8c8b7c,leaf:0x5f7441,pine:0x415b36,hill:0x637850,accent:'#904535',title:'WESTMERE MOTOR CLUB',subtitle:'MEMBERS ONLY / BUMPERS NEGOTIABLE'},
@@ -67,7 +68,7 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
   placements.push({x,z,radius:0,kind,halfWidth:w/2,halfDepth:d/2});return true;
  }
  function scenicHeight(x:number,z:number){
-  if(theme!=='coast'&&theme!=='forest'&&theme!=='farm'&&theme!=='port'&&theme!=='park'&&theme!=='dunes'&&theme!=='pass'&&theme!=='reservoir'&&theme!=='club'&&theme!=='ridge'&&theme!=='fair')return course.height(x,z);
+  if(theme!=='coast'&&theme!=='forest'&&theme!=='farm'&&theme!=='port'&&theme!=='park'&&theme!=='dunes'&&theme!=='pass'&&theme!=='reservoir'&&theme!=='club'&&theme!=='ridge'&&theme!=='fair'&&theme!=='heath')return course.height(x,z);
   if(Math.abs(x)<=220&&Math.abs(z)<=180)return course.height(x,z);
   const a=Math.atan2(z,x),dx=Math.cos(a),dz=Math.sin(a),edge=1/Math.max(Math.abs(dx)/220,Math.abs(dz)/180),ring=(Math.hypot(x,z)-edge)/56;
   const height=(r:number)=>{const zz=dz*(edge+r*56),ridge=(theme==='pass'?60:theme==='ridge'?38:theme==='dunes'?24:19)*(1+.35*Math.sin(a*5)+.2*Math.cos(a*9));let y=r===0?course.height(dx*edge,dz*edge)-.12:course.height(dx*edge,dz*edge)+Math.sin(Math.min(1,r/5)*Math.PI*.62)*ridge+Math.sin(a*11+r)*2;if((theme==='coast'||theme==='port'||theme==='reservoir')&&zz>170)y=Math.min(y,Math.max(-6,-.12-(zz-180)*.18));return y;};
@@ -76,19 +77,20 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
  function tree(x:number,z:number,size:number,pine:boolean){
   if(theme==='port'&&(z>160||(Math.abs(x)<225&&Math.abs(z)<180)))return;
   const r=size*(pine?.3:.48);
+  if(theme==='heath'&&[[-45,-10,20,14],[65,20,13,11],[65,-160,24,12]].some(([cx,cz,w,d])=>Math.abs(x-cx)<w+r&&Math.abs(z-cz)<d+r))return;
   if(theme==='fair'&&[[-40,0,23,18],[55,0,16,16],[0,142,22,9],[-105,-150,25,13],[65,-150,30,13]].some(([cx,cz,w,d])=>Math.abs(x-cx)<w+r&&Math.abs(z-cz)<d+r))return;
   if(theme==='ridge'&&[[-55,-24,12,11],[80,-160,22,11],[75,45,9,8]].some(([cx,cz,w,d])=>Math.abs(x-cx)<w+r&&Math.abs(z-cz)<d+r))return;
   if(theme==='club'&&[[-35,-30,16,13],[62,-160,36,12],[-72,-35,10,6],[15,-28,10,6],[40,56,10,6]].some(([cx,cz,w,d])=>Math.abs(x-cx)<w+r&&Math.abs(z-cz)<d+r))return;
   if(!clear(x,z,r,'tree'))return;
   const y=scenicHeight(x,z),yaw=random()*6.28;
-  if(typeof document!=='undefined'&&(theme==='coast'||theme==='forest'||theme==='farm'||theme==='park'||theme==='reservoir'||theme==='club'||course.distance(x,z)>40)){treeCards.push({x,y,z,size,kind:pine?(treeCards.length%2?'pine':'spruce'):'maple'});return;}
+  if(typeof document!=='undefined'&&(theme==='coast'||theme==='forest'||theme==='farm'||theme==='park'||theme==='reservoir'||theme==='club'||theme==='heath'||course.distance(x,z)>40)){treeCards.push({x,y,z,size,kind:pine?(treeCards.length%2?'pine':'spruce'):'maple'});return;}
   add('round','bark',x,y+size*.36,z,.3+size*.04,size*.72,.3+size*.04);
   if(pine){for(let tier=0;tier<3;tier++)add('cone','pine',x,y+size*(.45+tier*.19),z,size*(.68-tier*.13),size*.52,size*(.68-tier*.13),yaw+tier);}
   else{for(let lobe=0;lobe<4;lobe++){const a=yaw+lobe*2.2,offset=lobe?size*.2:0;add('leaf',lobe%2?'leaf':'pine',x+Math.cos(a)*offset,y+size*(lobe?.72:.94),z+Math.sin(a)*offset,size*.67,size*(lobe?.61:.57),size*.6,a);}}
  }
  function rock(x:number,z:number,size:number){if(!clear(x,z,size*.75,'rock'))return;const y=scenicHeight(x,z);add('rock','stone',x,y+size*.27,z,size*1.4,size*.8,size,random()*6.28);if(size>5)add('rock','stone',x+size*.36,y+size*.12,z-size*.25,size*.8,size*.5,size*.9,random()*6.28);}
  // Naturally staggered clusters, with a clear paddock on the southern side.
- for(let i=0;i<(theme==='port'?0:theme==='forest'?650:theme==='farm'?100:theme==='ridge'?125:theme==='dunes'?180:240);i++){
+ for(let i=0;i<(theme==='port'?0:theme==='forest'?650:theme==='farm'?100:theme==='heath'?150:theme==='ridge'?125:theme==='dunes'?180:240);i++){
   const x=(random()-.5)*420,z=-85+random()*257;
   if(theme==='dunes'){
    if(i%4===0)rock(x,z,1.5+random()*3.5);
@@ -129,7 +131,29 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
   for(const dx of [-1.4,1.4])for(const dz of [-2.6,2.7])add('round','rubber',x+dx,y+.65,z+dz,.8,1.1,.8);
  }
  // Venue-specific southern paddocks are visible from the grid and race cameras.
- if(theme==='fair'){
+ if(theme==='heath'){
+  building(65,-160,44,18,5,'wood');stand(-90,-158);canopy(-35,-160,'white');canopy(-15,-160,'ochre');serviceTruck(120,-160,'white');
+  if(clearRectangle(-45,-10,40,28,'heath-ranger-lodge')){
+   const y=course.height(-45,-10);box('wood',-45,y+2.5,-10,28,5,17);add('cone','metal',-45,y+7.5,-10,40,5,30,Math.PI/4);
+   box('wood',-45,y+.4,1,34,.8,7);for(const x of [-58,-32])box('wood',x,y+2,3,.2,3.2,.2);
+   box('wood',-45,y+3.5,3,26,.2,.2);for(const x of [-54,-45,-36])box('glass',x,y+2.8,-1.4,5,2,.15);
+   box('stone',-35,y+7,-12,2,7,2);
+  }
+  if(clearRectangle(65,20,26,22,'heath-bird-hide')){
+   const y=course.height(65,20);for(const x of [60,70])for(const z of [16,24])box('wood',x,y+1.5,z,.4,3,.4);
+   box('wood',65,y+3.2,20,12,.4,10);box('wood',65,y+5,24.8,12,3.2,.3);box('pine',65,y+7,20,14,.5,12);
+   for(const x of [61,65,69])box('glass',x,y+5.7,25,2,.6,.1);
+   for(let i=0;i<6;i++)box('wood',65,y+.3+i*.5,9+i,4,.3,1.2);
+  }
+  for(let i=0;i<100;i++){
+   const x=-205+(i*61.1%410),z=-80+(i*43.7%245);if(!clear(x,z,2.2,'heath-scrub'))continue;
+   if([[-45,-10,25,19],[65,20,18,16]].some(([cx,cz,w,d])=>Math.abs(x-cx)<w&&Math.abs(z-cz)<d))continue;
+   const y=course.height(x,z);add('leaf','pine',x,y+.5,z,3.8,1.2,3, i*.7);add('leaf','ochre',x+.7,y+.8,z,1.2,.4,1.3);
+  }
+  if(clearRectangle(-90,155,40,10,'heath-trail-fence')){
+   for(let x=-108;x<=-72;x+=6){const y=course.height(x,155);box('wood',x,y+.9,155,.2,1.8,.2);if(x< -72)for(const h of [.5,1.3])box('wood',x+3,y+h,155,6,.15,.15);}
+  }
+ }else if(theme==='fair'){
   stand(-35,-120);stand(35,-120);building(110,-150,30,18,5,'red');serviceTruck(143,-150,'ochre');
   for(const x of [-120,-100,-80,40,60,80])canopy(x,-150,x<0?'red':'ochre');
   if(clearRectangle(-40,0,46,36,'fair-wheel')){
