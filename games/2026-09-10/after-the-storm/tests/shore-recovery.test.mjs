@@ -32,6 +32,15 @@ test('recovery rejects a newly exposed safe point and searches current water dep
  Object.assign(r,{x:0,z:1,lastWater:{x:0,z:-2,heading:0}});
  assert.ok(recoverToWater(s,r));assert.ok(r.z<-5.5);assert.equal(r.hydro.initialized,false);
 });
+
+test('shore recovery cancels unfinished moves while preserving earned stunt and race progress',()=>{
+ const s=shore(),r=s.racers[0];Object.assign(r,{z:3,lastWater:{x:0,z:-5,heading:0},next:7,passed:6,lap:2});
+ Object.assign(r.stunt,{trick:'left',angle:2,airDuration:1,pose:'handstand',poseTime:2,score:1250,rings:3,lastLanding:4,completedTricks:{flip:true}});
+ assert.ok(recoverToWater(s,r));
+ assert.equal(r.stunt.trick,null);assert.equal(r.stunt.angle,0);assert.equal(r.stunt.pose,null);assert.equal(r.stunt.airDuration,0);assert.equal(r.stunt.lastLanding,r.hydro.landingId);
+ assert.equal(r.stunt.score,1250);assert.equal(r.stunt.rings,3);assert.equal(r.stunt.completedTricks.flip,true);assert.equal(r.next,7);assert.equal(r.lap,2);
+ stepRace(s,{},1/60);assert.equal(r.stunt.trick,null);assert.equal(r.stunt.crashes,0);
+});
 test('keyboard turns are softened for both players while analogue steering stays precise',()=>{
  assert.equal(playerInput({KeyA:true}).steer,.8);
  assert.equal(playerInput({ArrowRight:true}).steer,-.8);

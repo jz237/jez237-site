@@ -134,8 +134,8 @@ Local browser verification at High graphics confirmed:
    mismatch with longer timers or simply make the route impossible.
 2. Replace the generic Glacier and Southern stunt placeholders. In particular,
    Glacier's source has no authored stunt ramps; its ice geography matters.
-3. Verify racing-mode stunt availability, exact scoring/penalties, submarine
-   release/resurface behavior, training lesson progression, dolphin unlock timing,
+3. Calibrate exact scoring/penalties and motion against the recovered control
+   transitions, training lesson progression, dolphin unlock timing,
    race conditions, course hazards, opponent behavior and handling against the
    recovered code and actual reference play. Existing broad coverage is not proof
    of exact parity.
@@ -148,3 +148,98 @@ Local browser verification at High graphics confirmed:
 
 Keep the ongoing goal active until those requirements have concrete evidence.
 No purchases or new paid services are authorized.
+
+## ROM motion and buoy pass — October 14, 2026
+
+The same private ROM now supplies all nine single-player race marker tables,
+with separate class, multiplayer and alternate route groups. Marker centers
+are the authored x/z fields; a derived 142-unit offset controls orientation,
+not the physical buoy position. Suppressed raw types and alternate branches
+were distinguished before comparing them to the browser maps.
+
+Marine Fortress Hard and Expert each omitted a red marker present in their
+native tables at `[3244,887]` (ROM `0x2b7f50` and `0x2b82c0`). The already
+authored Normal marker at world `(120,-24.8)` matches its fitted position.
+Both classes now retain it before the final red, restoring seven colored
+markers. Fortress layout revision is 7, separating older times and ghosts.
+Glacier Reverse still has an unresolved 16-versus-15 marker discrepancy; Port's
+ordered markers and Twilight Normal's empty original table need consumer
+interpretation before further changes.
+
+`FUN_80063c88`, `FUN_80064c0c` and `FUN_80065c18` establish submarine entry,
+hold, release, wet contact and buoyancy suppression. The flat-body native
+coefficient changes from 0.03 to 0.003. Entry requires accelerator, sufficient
+speed and an airborne stick gesture; continued holding has a 30-update wet
+contact allowance. Releasing ends the action. The speed HUD multiplies native
+speed by 1.8; the browser expresses the entry threshold as 60 km/h. Dedicated
+trick keys represent the source stick gesture. The 60 Hz distributed-pressure
+solver remains a reconstruction: its damping and resurfacing trajectory are
+not a port of the native solver.
+
+The browser now suppresses support while dive is held, counts immersed time,
+and restores buoyancy on release or allowance exhaustion. It preserves actual
+position and momentum through the return to the surface. Existing Twilight
+and Southern verification drivers hold and release the same input a player
+uses. Their ramp approaches were adjusted for the speed requirement; no ring
+completion or hull position is injected.
+
+`FUN_800783ac` leaves an expired stunt timer at zero while momentum lasts;
+`FUN_80063c88` cuts thrust. A valid next checkpoint resets both allowance and
+coast counter. The browser now permits that rescue and ends the coast below
+10 km/h or after approximately ten seconds. Previous immediate retirement
+was incorrect.
+
+Native move recognition is not restricted to stunt mode; scoring dispatch is.
+All racing modes now share the held flips, left/right rolls, standing,
+handstand, backwards and rider-somersault transitions. Regular races show
+the movement and landing result without stunt points. Demo riders release a
+rotation before landing instead of receiving an automatic completed flip.
+Ring contact accepts either side, missed timed rings remain available, and
+only consecutive ring numbers extend the timed score chain. Free ride retains
+its existing returning-ring scoring. Swept contact now includes the thin
+aperture volume, including vertical entry, using the source 32/112 ratio of
+slab half-depth to radius. Existing ring dimensions, probe height, floating
+offsets and exact scoring/pose timings still need calibration. Shore recovery
+cancels unfinished rotations and poses while preserving earned progress.
+
+The original Glacier/Southern stencil cannot yet replace the generic layouts
+without shared geography work. Glacier's northern crossing intersects over
+71 metres of the current solid floor, outside its ice support. Southern's
+ring 3 intersects the current ship. Fits against independently authored buoys
+have RMS residuals of roughly 4.4/6.0 metres, so they locate discrepancies but
+do not prove exact terrain. The source has twelve stationary breakable Glacier
+spheres; the browser's ten drifting ice obstacles still need replacement.
+Do not lengthen the original section schedules to conceal these mismatches.
+
+Private decoding recovered Glacier's 165 collision planes and 127 shoreline
+segments. All 124 upward-triangle interior checks agreed with the native
+spatial grid; reconstructed vertices were within 0.0131 native units of integer
+coordinates. The north has an open western water channel followed by an
+eastern ice shelf at native Y=30, with submerged slopes to Y=-60. The narrowest
+measured water cross-section is 267.204 native units. This establishes the
+required kind of shoreline correction; native material/friction behavior and
+the final browser coordinate mapping remain separate work.
+
+The initial complete motion run passed 482/485. Its three dive regressions
+were repaired: the city driver now enters fast enough with forward trim and
+holds the input, the park driver maintains accelerator through the submarine,
+and the two-player fixture supplies the required speed/accelerator. The city
+test retains actual under-wall clearance and verifies a real dive on each lap;
+the wet allowance may expire before a still-submerged hull crosses the wall.
+All 43 affected integration checks then passed. The final complete regression
+run passed **487/487 in 442.55 seconds**. Independent review found no remaining
+issue in the contact/recovery fixes; 4,000 deterministic ring segments matched
+a separate finite-cylinder intersection check.
+
+High-quality browser verification completed the corrected Twilight inner
+routine with all 14 selected rings, four checkpoints, no crash or DQ and a
+final 60 FPS reading. Dolphin mastery completed all ten rings and eight moves
+in 53.717 seconds, scoring 10,277 without a crash. A manual time-trial
+handstand retained zero stunt points and the detailed rider/craft. Vertical
+two-player racing showed an independent P1 handstand and P2 standing ride,
+both at zero stunt points, using two 640×720 High views. This is functional
+rendering evidence, not a claim of constant 60 FPS in every split-screen scene.
+Mode switching exposed a stale cached rank display, which now uses the same
+HUD cache in stunt and race modes. Shore recovery also cancels unfinished
+rotations and poses while retaining earned progress. No gameplay/runtime
+console errors were observed; the existing missing favicon request remains.

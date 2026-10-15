@@ -34,7 +34,7 @@ No build, npm install, API key, account or paid service is required. This folder
 | Instant replay | Replay button; Space pauses playback, Escape returns | Shared replay view |
 | Pause | Escape or Enter in two-player mode | Escape or Enter |
 | Stunt commands | 1–7 | Numpad 1–7 |
-| Submarine dive | F during descent | Apostrophe during descent |
+| Submarine dive | Hold F through a descending entry | Hold apostrophe through a descending entry |
 
 A fresh throttle press as GO appears gives maximum power. Hold rearward trim while steering for a quick turn. Hard collisions and bad stunt landings can eject the rider; tap throttle to remount faster.
 
@@ -42,9 +42,11 @@ Keyboard steering is 20% gentler; analogue steering has a continuous dead zone a
 
 In solo modes, arrow keys also drive. Drag to orbit and scroll to zoom; each split-screen half controls its own camera. Forward ramp trim gives a lower, shorter jump; rearward trim gives a higher, longer jump.
 
-Free ride includes four floating ramps and twelve air, surface and dive rings in each venue. The first ramp is ahead of the start; the HUD points toward the nearest ramp. There is no stunt timer. Collected rings return after ten seconds, and missed rings can be retried after two seconds. Long swells are 2.1 times taller and longer, with unchanged fine ripples; rendering, buoyancy and floating ramp contact use the same surface model.
+Free ride offers four floating ramps and twelve air, surface and dive rings at the racing venues. Dolphin Park uses its distinct ten-ring/four-ramp layout. The HUD points toward the nearest ramp. There is no stunt timer. Collected rings return after ten seconds, and missed rings can be retried after two seconds. Long swells are 2.1 times taller and longer, with unchanged fine ripples; rendering, buoyancy and floating ramp contact use the same surface model.
 
-Stunts: hold 1 for a flip, 2/3 for barrel rolls, then release before landing. 4/5/6 select standing, handstand and backward poses; 7 somersaults from standing; F dives during descent.
+Riding moves work in every mode: hold 1 for a flip, 2/3 for barrel rolls, then release before landing. Rotation stops when released; land upright. 4/5/6 select standing, handstand and backward poses; 7 somersaults from standing. Competitive races do not award stunt points.
+
+For a submarine, keep the accelerator held above 60 km/h and hold F while descending from a jump. Release F to restore buoyancy and surface. The hold has a limited immersed duration. P2 uses apostrophe; gamepads use LB + LT. Stunt time reaching zero cuts engine power; momentum can carry the ski through the next checkpoint to regain its allowance. A slow ski or an exhausted coast ends the run. Timed rings can be collected from either side and retried after a miss; hitting consecutive ring numbers builds the score chain.
 
 Standard gamepads: left stick steering/trim, right trigger throttle, left trigger brake, right shoulder slide, bottom face button absorb, top face button camera, Start pause. For stunts, hold left shoulder with the top face button for flip, left/right face buttons for rolls, D-pad up/right/down for poses, bottom face button for somersault, and left trigger for dive. Physical gamepad hardware has not been tested.
 
@@ -58,7 +60,7 @@ Phone controls provide a proportional steering pad, independent GO / Brake / Abs
 - **Stunts:** four timed checkpoints, chained rings, air rotations and rider poses. Choose routes through the mandatory checkpoint gates.
 - **Two players:** horizontal or vertical split screen, independent riders and tuning, same-rider matches, optional catch-up, and swappable liveries for different riders. Dolphin Park provides untimed two-player free ride.
 
-Citadel Sound raises its sluice from lap two on Hard and above. Port Meridian opens a shorter, narrow service tunnel from the start on higher classes. The outer channels remain valid alternatives. Structures have solid walls, gates and roof clearance, and the chase cameras avoid them. Tempest Island's ebb exposes a coral shoal beside the main channel. Glacier ice drifts at the same locations used for collisions.
+Marine Fortress raises its sluice from lap two on Hard and above. Port Blue opens a narrow service tunnel on higher classes; Hard retains the outer choice, while Expert and Reverse require the inner route. Structures have solid walls, gates and roof clearance, and the chase cameras avoid them. Southern Island's ebb exposes shoals beside the main channel. Glacier's displayed ice and collision share their positions; its original static, breakable hazards remain part of the active reconstruction.
 
 ## Salvage voyage
 
@@ -68,7 +70,7 @@ Capacity is three units; the objectives weigh 1/2/2. More cargo reduces accelera
 
 ## Records, sound and saves
 
-Pelican Park has a swimming dolphin guide. Complete its timed run through all twelve rings, with a flip, both rolls, standing, handstand, backwards ride, somersault and submarine dive, to unlock **Ride the dolphin** in Pelican Park Free ride. The bonus survives reload and portable saves. The dolphin has an animated flexible body, fins and flukes, and no engine sound.
+Dolphin Park has a swimming dolphin guide. Complete its timed run through all ten rings, with a flip, both rolls, standing, handstand, backwards ride, somersault and submarine dive, to unlock **Ride the dolphin** in Dolphin Park Free ride. The bonus survives reload and portable saves. The dolphin has an animated flexible body, fins and flukes, and no engine sound.
 
 Eight local ElevenLabs clips provide idle/load engines, water rush, wind, splash, hull impact, race cues and an optional instrumental loop. Pitch and mix respond to throttle, speed and water contact. Split-screen engines are independent. No announcer or narration is used. Generation consumed 868 existing credits with no purchase; playing requires no account or service call. A synthesized fallback handles missing files.
 

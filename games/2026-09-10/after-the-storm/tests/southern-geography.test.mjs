@@ -94,7 +94,7 @@ test('a late dive clears the high-water southern deck while a surface landing hi
   s.phase='running';r.x=a.x-a.tx*15;r.z=a.z-a.tz*15;r.heading=Math.atan2(a.tx,a.tz)-.08;r.vx=Math.sin(r.heading)*20;r.vz=Math.cos(r.heading)*20;r.speed=20;r.power=5;
   let hit=false,contact=false,under=0;
   for(let i=0;i<400;i++){
-   const h=r.hydro;stepRace(s,{throttle:1,dampen:true,dive:dive&&h.airborne&&h.vy<0&&h.y-h.waterHeight<.6},1/60);
+   const h=r.hydro;stepRace(s,{throttle:1,dampen:true,dive:dive&&(h.diveRemaining>0||h.airborne&&h.vy<0&&h.y-h.waterHeight<1.2)},1/60);
    hit ||=r.collision>0;contact ||=h.onRamp;
    if(r.z>map(0,521)[1]&&r.z<map(0,531)[1]&&h.y+1.1<.65)under++;
    if(r.z>map(0,533)[1])break;

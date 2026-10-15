@@ -6,9 +6,39 @@ test('ramp trim trades a lower shorter jump against a higher longer jump',()=>{
 });
 test('all nine venues complete four timed stunt checkpoints through real helm input',()=>{for(const base of COURSES){const race=createRace({mode:'stunt',course:getCourse(base.id)});for(let i=0;i<12000&&race.phase!=='results';i++)stepRace(race,aiInput(race,race.racers[0]),1/60);assert.equal(race.result.dq,'',base.id);assert.equal(race.racers[0].stunt.nextCheckpoint,4);assert.ok(race.racers[0].stunt.score>0);}});
 test('a complete stunt routine performs real air rotations and rider poses',()=>{const race=createRace({mode:'stunt',course:getCourse('practice')});for(let i=0;i<12000&&race.phase!=='results';i++)stepRace(race,verificationInput(race,race.racers[0]),1/60);assert.equal(race.result.dq,'');assert.equal(race.racers[0].stunt.nextCheckpoint,4);assert.ok(race.racers[0].stunt.tricks>=2,JSON.stringify(race.racers[0].stunt));});
-test('ring chains award 50 then 100, and a missed ring resets the chain',()=>{const r=createRace().racers[0],s=createStunt();r.hydro.y=.15;const course={rings:[{x:0,z:0,y:1,tx:0,tz:1,radius:2},{x:0,z:10,y:1,tx:0,tz:1,radius:2},{x:0,z:20,y:1,tx:0,tz:1,radius:2}],checkpoints:[]};for(const z of [0,10]){r.x=0;r.z=z+1;stepStunt(s,r,course,{},.016,0,z-1,.15);}assert.equal(s.score,150);assert.equal(s.chain,2);r.x=8;r.z=21;stepStunt(s,r,course,{},.016,8,19,.15);assert.equal(s.chain,0);assert.equal(s.rings,2);});
-test('checkpoint timer requires the gate; timeout cannot be undone by crossing late',()=>{const s=createStunt(),r=createRace().racers[0],course={rings:[],checkpoints:[{x:0,z:0,tx:0,tz:1,width:10}]};r.x=20;r.z=1;stepStunt(s,r,course,{},.016,20,-1,0);assert.equal(s.nextCheckpoint,0);s.remaining=.005;r.x=0;r.z=1;stepStunt(s,r,course,{},.016,0,-1,0);assert.equal(s.nextCheckpoint,0);assert.match(r.dq,/time expired/);});
-test('a ramp gives lift from forward speed and a dive must begin during descent',()=>{const r=createRace().racers[0];r.x=0;r.z=0;r.vx=0;r.vz=15;r.speed=15;applyRamp(r,[{x:0,z:0,tx:0,tz:1,width:7,length:10,height:2.3}],0,-1);assert.ok(r.hydro.vy>3&&r.hydro.y>1);const h=createHydro(),craft={...r,turn:0,heading:0};stepHydro(h,craft,0,1/60,()=>0,{dive:true});assert.equal(h.diveRemaining,0);h.y=2;h.vy=-2;h.airborne=true;stepHydro(h,craft,1,1/60,()=>0,{dive:true});assert.ok(h.diveRemaining>1);let deepest=0;for(let i=0;i<200;i++){stepHydro(h,craft,1+i/60,1/60,()=>0,{dive:false});deepest=Math.min(deepest,h.y);}assert.ok(deepest<-.45);assert.ok(h.y>-.1);});
+test('ordered ring hits award 50 then 100 and skipping an order restarts the next award',()=>{const r=createRace().racers[0],s=createStunt();r.hydro.y=.15;const course={rings:[0,10,20,30].map(z=>({x:0,z,y:1,tx:0,tz:1,radius:2})),checkpoints:[]};for(const z of [0,10]){r.x=0;r.z=z+1;stepStunt(s,r,course,{},.016,0,z-1,.15);}assert.equal(s.score,150);assert.equal(s.chain,2);r.x=8;r.z=21;stepStunt(s,r,course,{},.016,8,19,.15);assert.equal(s.rings,2);r.x=0;r.z=31;stepStunt(s,r,course,{},.016,0,29,.15);assert.equal(s.chain,1);assert.equal(s.score,200);});
+
+test('missed rings remain collectable from either direction and cannot score twice',()=>{
+ const r=createRace().racers[0],s=createStunt(),course={rings:[{x:0,z:0,y:1,tx:0,tz:1,radius:2}],checkpoints:[]};r.hydro.y=.15;r.x=8;r.z=1;
+ stepStunt(s,r,course,{},.016,8,-1,.15);assert.equal(s.ringStatus[0],'miss');assert.equal(s.score,0);
+ r.x=0;r.z=-1;stepStunt(s,r,course,{},.016,0,1,.15);assert.equal(s.ringStatus[0],'hit');assert.equal(s.rings,1);assert.equal(s.score,50);
+ r.z=1;stepStunt(s,r,course,{},.016,0,-1,.15);assert.equal(s.score,50);assert.equal(s.rings,1);
+});
+
+test('a hull can enter a ring vertically within the contact slab without crossing its plane',()=>{
+ const course={rings:[{x:0,z:0,y:1,tx:0,tz:1,radius:2.8}],checkpoints:[]},r=createRace().racers[0],s=createStunt();
+ r.x=0;r.z=.3;r.hydro.y=.15;stepStunt(s,r,course,{},1/60,0,.3,-4);
+ assert.equal(s.ringStatus[0],'hit');assert.equal(s.score,50);
+ const outside=createStunt();r.z=1;stepStunt(outside,r,course,{},1/60,0,1,-4);assert.equal(outside.rings,0);
+});
+test('checkpoint timer requires the gate and a stopped craft retires when time expires',()=>{const s=createStunt(),r=createRace().racers[0],course={rings:[],checkpoints:[{x:0,z:0,tx:0,tz:1,width:10}]};r.x=20;r.z=1;stepStunt(s,r,course,{},.016,20,-1,0);assert.equal(s.nextCheckpoint,0);s.remaining=.005;r.x=0;r.z=1;stepStunt(s,r,course,{},.016,0,-1,0);assert.equal(s.nextCheckpoint,0);assert.match(r.dq,/time expired/);});
+
+test('a moving craft can coast through a late stunt checkpoint and regain the next allowance',()=>{
+ const course={rings:[],checkpoints:[{x:0,z:0,tx:0,tz:1,width:10,limit:20},{x:0,z:100,tx:0,tz:1,width:10,limit:15}]},s=createStunt(course),r=createRace().racers[0];
+ s.remaining=.005;r.speed=12;r.x=0;r.z=-1;stepStunt(s,r,course,{},.016,0,-2,0);
+ assert.equal(s.remaining,0);assert.equal(r.dq,'');assert.ok(s.overtime>0);
+ r.z=1;stepStunt(s,r,course,{},.016,0,-1,0);
+ assert.equal(s.nextCheckpoint,1);assert.equal(s.remaining,15);assert.equal(s.overtime,0);assert.equal(s.score,0);assert.equal(r.dq,'');
+});
+
+test('stunt overtime cuts engine power and ends after the coast allowance',()=>{
+ const s=createRace({mode:'stunt',course:getCourse('greyhaven')}),r=s.racers[0];s.phase='running';r.stunt.remaining=0;r.vx=0;r.vz=-12;r.speed=12;
+ stepRace(s,{throttle:1},1/60);assert.equal(r.throttle,0);assert.equal(r.dq,'');assert.ok(r.speed<12);
+ const stunt=createStunt(),craft=createRace().racers[0],course={rings:[],checkpoints:[]};stunt.remaining=0;craft.speed=15;
+ for(let i=0;i<610&&!craft.dq;i++)stepStunt(stunt,craft,course,{},1/60,craft.x,craft.z,0);
+ assert.match(craft.dq,/time expired/);assert.ok(stunt.overtime>10&&stunt.overtime<10.02);
+});
+test('a ramp gives lift from forward speed and a held dive must begin during descent',()=>{const r=createRace().racers[0];r.x=0;r.z=0;r.vx=0;r.vz=20;r.speed=20;r.throttle=1;applyRamp(r,[{x:0,z:0,tx:0,tz:1,width:7,length:10,height:2.3}],0,-1);assert.ok(r.hydro.vy>3&&r.hydro.y>1);const h=createHydro(),craft={...r,turn:0,heading:0};stepHydro(h,craft,0,1/60,()=>0,{dive:true});assert.equal(h.diveRemaining,0);h.y=2;h.vy=-2;h.airborne=true;stepHydro(h,craft,1,1/60,()=>0,{dive:true});assert.ok(h.diveRemaining>1);let deepest=0;for(let i=0;i<240;i++){stepHydro(h,craft,1+i/60,1/60,()=>0,{dive:i<100});deepest=Math.min(deepest,h.y);}assert.ok(deepest<-.8);assert.ok(h.y>-.1);});
 
 test('a fixed race ramp blocks a backward approach without granting lift, but allows an airborne clearance',()=>{
  const ramp={x:0,z:0,tx:0,tz:1,width:12,length:17,height:2.1,solidBack:true};

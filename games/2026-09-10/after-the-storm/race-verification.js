@@ -13,7 +13,7 @@ export function parkMasteryInput(state,r){
  else{const p=state.course.checkpoints[section];target={x:p.x+p.tx*5,z:p.z+p.tz*5};desiredSpeed=12;}
  const error=angleDelta(Math.atan2(target.x-r.x-r.vx*.25,target.z-r.z-r.vz*.25)-r.heading);
  const input={throttle:clamp(.53+(desiredSpeed-r.speed)*.12,0,1),steer:clamp(error*2.4-(r.yawVelocity||0)*.12,-1,1),brake:Math.abs(error)>1.15,dampen:true};
- if(h.airborne&&h.vy<0)input.dive=true;
+ if(h.diveRemaining>0||h.airborne&&h.vy<0)input.dive=true;
  const kind=['flip','left','right','flip'][section];if(h.airborne&&(h.y-h.waterHeight>1.5||s.trick)&&Math.abs(s.angle)<6.2)input.trick=s.trick||kind;
  if(!h.airborne&&h.wet>.5&&(s.ringStatus[diveIndex]||along< -22)){
   const done=s.completedTricks;
@@ -81,7 +81,7 @@ export function verificationInput(state,r){
    const target=path[stage];if(Math.hypot(target.x-r.x,target.z-r.z)<(stage===0?3:6)){r.pierDiveStage++;if(r.pierDiveStage===5)return aiInput(state,r);}
    const error=angleDelta(Math.atan2(target.x-r.x-r.vx*.15,target.z-r.z-r.vz*.15)-r.heading);
    const desiredSpeed=stage===0?12:stage===1?24:25;
-   return {throttle:clamp(.53+(desiredSpeed-r.speed)*.16,0,1),steer:clamp(error*2.4-(r.yawVelocity||0)*.12,-1,1),brake:Math.abs(error)>1.1||r.speed>desiredSpeed+2,dampen:true,dive:stage===1&&h.airborne&&h.vy<0&&h.y-h.waterHeight<.6};
+   return {throttle:clamp(.53+(desiredSpeed-r.speed)*.16,0,1),steer:clamp(error*2.4-(r.yawVelocity||0)*.12,-1,1),brake:Math.abs(error)>1.1||r.speed>desiredSpeed+2,dampen:true,dive:stage===1&&(h.diveRemaining>0||h.airborne&&h.vy<0&&h.y-h.waterHeight<1.2)};
   }
  }
 
@@ -135,9 +135,10 @@ function authoredParkInput(state,r){
  const along=(r.x-q.x)*q.tx+(r.z-q.z)*q.tz;
  if(q.kind==='ramp'&&along> -10&&along<8)driver.activeRamp=q.rampIndex;
  if(along>(q.kind==='ramp'?q.length/2:1)&&driver.index<targets.length-1){driver.index++;q=targets[driver.index];}
- const aim=q.kind==='ramp'?q.length/2+5:5,error=angleDelta(Math.atan2(q.x+q.tx*aim-r.x-r.vx*.15,q.z+q.tz*aim-r.z-r.vz*.15)-r.heading),desired=q.kind==='ramp'?12:13;
+ const aim=q.kind==='ramp'?q.length/2+5:5,error=angleDelta(Math.atan2(q.x+q.tx*aim-r.x-r.vx*.15,q.z+q.tz*aim-r.z-r.vz*.15)-r.heading),desired=q.kind==='ramp'?(q.rampIndex===3?18:12):driver.activeRamp===3&&(h.airborne||h.diveRemaining>0)?18:13;
  const input={throttle:clamp(.53+(desired-r.speed)*.15,0,1),steer:clamp(error*2.5-(r.yawVelocity||0)*.15,-1,1),brake:Math.abs(error)>1.2,dampen:true,lean:q.kind==='ramp'?-1:0};
  if(h.airborne&&driver.activeRamp>=0){const kind=['flip','left','right','flip'][driver.activeRamp];if(h.y-h.waterHeight>1.2||s.trick){if(Math.abs(s.angle)<6.2)input.trick=s.trick||kind;}if(driver.activeRamp===3&&h.vy<0)input.dive=true;}
+ if(driver.activeRamp===3&&h.diveRemaining>0)input.dive=true;
  if(!h.airborne&&h.wet>.5){const done=s.completedTricks;if(!done.somersault)input.trick=s.pose==='stand'&&s.poseTime>1?'somersault':s.pose==='somersault'?'':'stand';else if(!done.handstand)input.trick=s.pose==='handstand'&&s.poseTime>2?'':'handstand';else if(!done.backwards)input.trick=s.pose==='backwards'&&s.poseTime>2?'':'backwards';}
  return input;
 }
@@ -161,8 +162,9 @@ function authoredStuntInput(state,r){
  // leaving a ramp cannot redirect the airborne hull onto the next ring.
  const rampMisaligned=q.kind==='ramp'&&!h.onRamp&&!h.airborne&&(Math.abs(angleDelta(Math.atan2(q.tx,q.tz)-r.heading))>(city?.07:.2)||Math.abs(r.yawVelocity||0)>(city?.16:.4));
  const desired=rampMisaligned?Math.min(q.speed??13,7):q.speed??13;
- const input={throttle:clamp(.53+(desired-r.speed)*.16,0,1),steer:clamp(error*(city?2.2:2.5)-(r.yawVelocity||0)*(city?.55:.15),-1,1),brake:Math.abs(error)>(city?.85:1.1)||r.speed>desired+2,dampen:true,lean:q.kind==='ramp'?-1:0};
- if(v.diveJump&&h.airborne&&h.vy<0&&h.y-h.waterHeight<.45)input.dive=true;
+ const input={throttle:clamp(.53+(desired-r.speed)*.16,0,1),steer:clamp(error*(city?2.2:2.5)-(r.yawVelocity||0)*(city?.55:.15),-1,1),brake:Math.abs(error)>(city?.85:1.1)||r.speed>desired+2,dampen:true,lean:q.kind==='ramp'?(q.diveJump?1:-1):0};
+ if(v.diveJump&&h.airborne&&h.vy<0&&h.y-h.waterHeight<1.2){input.dive=true;v.holdingDive=true;}
+ if(v.holdingDive&&h.diveRemaining>0&&q.kind==='dive')input.dive=true;else if(!input.dive)v.holdingDive=false;
  const flightRemaining=(h.vy+Math.sqrt(h.vy*h.vy+19.62*Math.max(0,h.y-h.waterHeight)))/9.81;
  if(v.rampJump&&!v.diveJump&&h.airborne&&(!city||s.trick||flightRemaining>1.15)&&(h.y-h.waterHeight>1.2||s.trick)&&Math.abs(s.angle)<6.2)input.trick=s.trick||'flip';
  else if(!h.airborne&&h.wet>.5&&q.kind!=='ramp')input.trick=s.pose==='handstand'&&s.poseTime>2?'':'handstand';

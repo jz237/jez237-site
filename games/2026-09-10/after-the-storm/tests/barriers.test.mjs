@@ -9,9 +9,11 @@ test('the raised shortcut wall is an actual hull collision in the race solver',(
 });
 
 test('Hard jumps above the city wall and Expert dives below it on every actual race lap',()=>{
- for(const difficulty of [1,2]){const s=createRace({course:getCourse('neon',difficulty),difficulty}),r=s.racers[0],b=s.course.crossbars[0],crossings=[];let hits=0;
-  for(let i=0;i<20000&&s.phase!=='results';i++){const z=r.z;stepRace(s,aiInput(s,r),1/60);if(Math.abs(r.z-b.z)<3&&Math.abs(r.x-b.x)<10&&r.collision>0)hits++;if(z>b.z&&r.z<=b.z&&Math.abs(r.x-b.x)<8)crossings.push({y:r.hydro.y,dive:r.hydro.diveRemaining});}
-  assert.equal(s.phase,'results');assert.equal(r.misses,0);assert.equal(hits,0);assert.equal(crossings.length,3);assert.ok(crossings.every(q=>difficulty===1?q.y>b.top:q.y+1.1<b.bottom&&q.dive>0));
+ for(const difficulty of [1,2]){const s=createRace({course:getCourse('neon',difficulty),difficulty}),r=s.racers[0],b=s.course.crossbars[0],crossings=[],dives=new Set();let hits=0;
+  for(let i=0;i<20000&&s.phase!=='results';i++){const z=r.z;stepRace(s,aiInput(s,r),1/60);if(r.hydro.diveRemaining>0)dives.add(r.lap);if(Math.abs(r.z-b.z)<3&&Math.abs(r.x-b.x)<10&&r.collision>0)hits++;if(z>b.z&&r.z<=b.z&&Math.abs(r.x-b.x)<8)crossings.push({y:r.hydro.y,dived:dives.has(r.lap)});}
+  // The immersed allowance can end while momentum still carries a submerged
+  // hull under the wall. Require the actual dive and physical clearance.
+  assert.equal(s.phase,'results');assert.equal(r.misses,0);assert.equal(hits,0);assert.equal(crossings.length,3);assert.ok(crossings.every(q=>difficulty===1?q.y>b.top:q.y+1.1<b.bottom&&q.dived));
  }
 });
 test('the city outer route remains available without a jump or dive shortcut',()=>{

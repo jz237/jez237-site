@@ -29,6 +29,7 @@ export function recoverToWater(s,r){
  const heading=Math.atan2(target.x-r.x,target.z-r.z);
  Object.assign(r,{x:target.x,z:target.z,heading:Number.isFinite(heading)?heading:target.heading,
   vx:0,vz:0,speed:0,turn:0,throttle:0,recover:0,collision:0,out:0,groundedTime:0,wipeout:null,hydro:createHydro()});
+ if(r.stunt)Object.assign(r.stunt,{trick:null,angle:0,airDuration:0,pose:null,poseTime:0,poseAward:0,lastCommand:'',lastLanding:r.hydro.landingId});
  return true;
 }
 

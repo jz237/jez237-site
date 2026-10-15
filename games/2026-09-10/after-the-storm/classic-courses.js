@@ -104,8 +104,9 @@ const fortExpertObjects=[[263,173],[326,179,'timber'],[245,181,'timber'],[273,18
 
 const fortBuoys=rows=>rows.map(([x,z,side])=>({x:(x-210)*.8,z:(z-300)*.8,side}));
 const fortNormalBuoys=fortBuoys([[69,203,1],[160,64,1],[170,94,1],[155,138,-1],[201,156,1],[350,174,1],[360,269,1],[306,267,1]]);
-const fortHardBuoys=fortBuoys([[69,203,1],[158,90,1],[155,138,-1],[192,157,1],[350,174,1],[295,260,1]]);
-const fortExpertBuoys=fortBuoys([[69,203,1],[158,90,1],[155,138,-1],[192,157,1],[350,168,1],[295,260,1]]);
+// The original Hard/Expert tables retain Normal's eastern return red marker.
+const fortHardBuoys=fortBuoys([[69,203,1],[158,90,1],[155,138,-1],[192,157,1],[350,174,1],[360,269,1],[295,260,1]]);
+const fortExpertBuoys=fortBuoys([[69,203,1],[158,90,1],[155,138,-1],[192,157,1],[350,168,1],[360,269,1],[295,260,1]]);
 const fortReverseBuoys=fortBuoys([[176,320,1],[118,382,1],[274,394,1],[311,425,-1],[309,463,1],[399,362,1]].map(([x,z,side])=>[465-x,564-z,side]));
 fortReverseBuoys[3].approach={x:(169-210)*.8,z:(160-300)*.8,throttle:.4,radius:3};
 fortReverseBuoys[5].approach={x:(58-210)*.8,z:(183-300)*.8,throttle:.4,radius:3,range:30};
@@ -113,7 +114,7 @@ const fortArchSpans=[[[120,494],[120,560],25],[[159,493],[170,553],26],[[192,484
 const fortArches=fortArchSpans.flatMap(([a,b,width],arch)=>{const [[ax,az],[bx,bz]]=fortMap([a,b]),length=Math.hypot(bx-ax,bz-az),tx=(bx-ax)/length,tz=(bz-az)/length,n=16;return Array.from({length:n},(_,i)=>{const f=(i+.5)/n,u=2*f-1;return {kind:'stone-arch',arch,x:ax+(bx-ax)*f,z:az+(bz-az)*f,tx,tz,length:length/n+.02,depth:width*.8,bottom:i===0||i===n-1?-10:7.5*Math.sqrt(1-u*u)-.7,top:11,material:'stone'};});});
 for(const b of fortArches){const parts=fortArches.filter(p=>p.arch===b.arch),i=parts.indexOf(b);b.soffitBefore=parts[Math.max(0,i-1)].bottom;b.soffitAfter=parts[Math.min(parts.length-1,i+1)].bottom;}
 const fort={
- name:'Marine Fortress',theme:'fortress',tag:'04 / MARINE FORTRESS',layoutRevision:6,stuntLayout:fortStuntLayout(),
+ name:'Marine Fortress',theme:'fortress',tag:'04 / MARINE FORTRESS',layoutRevision:7,stuntLayout:fortStuntLayout(),
  finishLine:fortMap([[9,272],[108,272]]),crossbars:fortArches,
  boundary:fortMap([[39,42],[173,42],[182,45],[188,62],[189,117],[192,126],[200,133],[218,142],[228,144],[302,149],[322,153],[341,161],[352,163],[389,181],[397,187],[402,196],[405,206],[405,252],[312,340],[312,429],[310,440],[291,468],[270,493],[231,523],[188,544],[150,554],[40,554],[20,549],[12,543],[8,534],[9,265],[13,213],[13,163],[18,70],[22,51],[29,43]]),
  // Only the southern outer route needs neutral checks; the north permits a ridge jump.

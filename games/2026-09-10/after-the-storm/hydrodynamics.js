@@ -4,22 +4,28 @@ import {landingResponse,airTrim} from './landing-response.js';
 // the hull toward the water when separated from it.
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 export const HULL_PATCHES=[-1.2,-.4,.4,1.2].flatMap(z=>[-1,0,1].map(side=>({x:side*(Math.abs(z)>1?.36:.48),z,weight:(side===0?.4:.3)/4})));
-export function createHydro(){return {initialized:false,y:0,vy:0,pitch:0,roll:0,pitchVelocity:0,rollVelocity:0,waterHeight:0,waterVelocity:0,wet:1,bowWet:1,sternWet:1,portWet:1,starboardWet:1,intake:1,load:1,airborne:false,launched:false,airTime:0,impact:0,landingId:0,previousSpeed:0,diveRemaining:0,diveUsed:false,onRamp:false,patches:HULL_PATCHES.map(()=>({water:0,force:0,wet:0})),compression:0,compressionVelocity:0,drag:0};}
+export function createHydro(){return {initialized:false,y:0,vy:0,pitch:0,roll:0,pitchVelocity:0,rollVelocity:0,waterHeight:0,waterVelocity:0,wet:1,bowWet:1,sternWet:1,portWet:1,starboardWet:1,intake:1,load:1,airborne:false,launched:false,airTime:0,impact:0,landingId:0,previousSpeed:0,diveRemaining:0,diveUsed:false,diveRecovery:false,onRamp:false,patches:HULL_PATCHES.map(()=>({water:0,force:0,wet:0})),compression:0,compressionVelocity:0,drag:0};}
 export function stepHydro(h,craft,time,dt,surface,{dampen=false,lean=0,dive=false}={}){
  const fx=Math.sin(craft.heading),fz=Math.cos(craft.heading),rx=fz,rz=-fx,speed=Math.hypot(craft.vx||0,craft.vz||0)||Math.abs(craft.speed||0),planing=clamp((speed-3)/17,0,1);
- if(dive&&h.airborne&&h.vy<0&&!h.diveUsed){h.diveRemaining=1.5;h.diveUsed=true;}h.diveRemaining=Math.max(0,h.diveRemaining-dt);if(!dive&&!h.airborne&&h.diveRemaining===0)h.diveUsed=false;
+ // A submarine is held through a descending entry. Its allowance counts
+ // immersed time; releasing restores support immediately, with a physical
+ // return to the surface rather than a position reset.
+ if(dive&&craft.throttle>0&&speed>60/3.6&&h.airborne&&h.vy<0&&!h.diveUsed){h.diveRemaining=1.5;h.diveUsed=true;h.diveRecovery=true;}
+ if(!dive)h.diveRemaining=0;
+ else if(h.patches.reduce((count,p)=>count+(p.wet>0),0)>=8)h.diveRemaining=Math.max(0,h.diveRemaining-dt);
+ if(!dive&&!h.airborne&&h.diveRemaining===0&&h.y>h.waterHeight-.3)h.diveUsed=false;
  let water=0;const heights=HULL_PATCHES.map(p=>{const v=surface(craft.x+fx*p.z+rx*p.x,craft.z+fz*p.z+rz*p.x,time);water+=v*p.weight;return v;});
  if(!h.initialized){h.initialized=true;h.y=water+.025;h.waterHeight=water;h.previousSpeed=speed;heights.forEach((w,i)=>h.patches[i].water=w);}
  const waterVelocity=clamp((water-h.waterHeight)/Math.max(dt,.001),-12,12);h.waterVelocity+=(waterVelocity-h.waterVelocity)*(1-Math.exp(-dt*12));h.waterHeight=water;
  let support=0,pitchMoment=0,rollMoment=0,wet=0,bow=0,stern=0,port=0,starboard=0,relativeSum=0,slamming=0;
- const draft=.245-(h.diveRemaining>0?2:0),damping=dampen?10:7.2;
+ const draft=.245,diveSupport=h.diveRemaining>0?.1:1,damping=(dampen?10:7.2)*Math.sqrt(diveSupport);
  for(let i=0;i<HULL_PATCHES.length;i++){
   const p=HULL_PATCHES[i],q=h.patches[i],pointY=h.y-h.pitch*p.z+h.roll*p.x-draft,depth=heights[i]-pointY;
   const localVelocity=h.vy-h.pitchVelocity*p.z+h.rollVelocity*p.x,wv=clamp((heights[i]-q.water)/dt,-14,14),relative=wv-localVelocity;
   q.water=heights[i];q.wet=clamp(depth/.16,0,1);const immersion=clamp(depth/.22,0,2.6);
   const attack=clamp(.12-h.pitch+lean*.04,0,.5),lift=planing*(2.0+attack*7)*(1+p.z*.45)*q.wet;
   // The immersed patch's relative approach speed controls pressure and slamming.
-  q.force=depth>0?clamp(9.81*immersion+relative*damping*q.wet+lift,0,85)*p.weight:0;
+  q.force=depth>0?clamp((9.81*immersion+lift)*diveSupport+relative*damping*q.wet,0,85)*p.weight:0;
   support+=q.force;pitchMoment-=q.force*p.z;rollMoment+=q.force*p.x;
   wet+=q.wet*p.weight;relativeSum+=Math.max(0,relative)*q.wet*p.weight;slamming+=Math.max(0,relative-3)**2*q.wet*p.weight;
   if(p.z>0)bow+=q.wet*p.weight*2;else stern+=q.wet*p.weight*2;
@@ -46,7 +52,8 @@ export function stepHydro(h,craft,time,dt,surface,{dampen=false,lean=0,dive=fals
  const clearance=h.y+h.vy*look-4.905*look*look-ahead;
  const incoming=clamp((ahead-water)*.7,0,1)*planing;
  h.anticipation=Math.max(incoming,h.airborne?clamp((.65-clearance)/.8,0,1)*clamp(-h.vy/4,0,1):h.onRamp?.55:0);
- if(h.y<water-.6&&h.diveRemaining===0){h.y=water-.6;h.vy=Math.max(h.vy,h.waterVelocity*.25);}
+ if(h.diveRecovery&&h.diveRemaining===0&&h.y>water-.3)h.diveRecovery=false;
+ if(h.y<water-.6&&h.diveRemaining===0&&!h.diveRecovery){h.y=water-.6;h.vy=Math.max(h.vy,h.waterVelocity*.25);}
  if(landing){h.entry=landingResponse(h,craft,{bowSlope:-(forwardWater-aftWater)/2.4,sideSlope:(starWater-portWater)/.84,dampen});h.pitchVelocity+=h.entry.kick;h.landingStyle=h.entry.style;}
  h.drag=slamming*.007+wet*planing*.035;h.previousSpeed=speed;
  const compressTarget=clamp((h.load-1)*.14+h.impact*.045,0,.38);

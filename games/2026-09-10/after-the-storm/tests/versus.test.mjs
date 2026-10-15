@@ -77,7 +77,8 @@ test('separate keyboard and gamepad stunt streams reach independent Dolphin Park
  const pad=()=>({axes:[0,0],buttons:Array.from({length:16},()=>({pressed:false,value:0}))}),pads=[pad(),pad()];pads[1].buttons[4].pressed=true;pads[1].buttons[3].pressed=true;pads[1].buttons[6].pressed=true;
  pair=sampler({}, {},pads,true);assert.equal(pair[0].trick,'');assert.equal(pair[0].dive,false);assert.equal(pair[1].trick,'flip');assert.equal(pair[1].dive,true);
  const s=createRace({mode:'versus',course:getCourse('practice'),seaState:'calm'});stepRace(s,[{},{}],1/60);
- for(const r of s.racers)Object.assign(r.hydro,{initialized:true,y:8,vy:-2,airborne:true,wet:0,intake:0});
+ // Both independent riders meet the native submarine speed/accelerator entry.
+ for(const r of s.racers){Object.assign(r,{speed:20,vx:Math.sin(r.heading)*20,vz:Math.cos(r.heading)*20});Object.assign(r.hydro,{initialized:true,y:8,vy:-2,airborne:true,wet:0,intake:0});}pads.forEach(p=>{p.buttons[7].pressed=true;p.buttons[7].value=1;});pair=sampler({}, {},pads,true);
  stepRace(s,pair,1/60);assert.equal(s.racers[0].stunt.trick,null);assert.equal(s.racers[0].hydro.diveRemaining,0);assert.equal(s.racers[1].stunt.trick,'flip');assert.ok(s.racers[1].hydro.diveRemaining>1);
  pads[1].buttons[3].pressed=false;pads[1].buttons[6].pressed=false;pads[0].buttons[4].pressed=true;pads[0].buttons[2].pressed=true;pads[0].buttons[6].pressed=true;
  const secondAngle=s.racers[1].stunt.angle;stepRace(s,sampler({}, {},pads,true),1/60);assert.equal(s.racers[0].stunt.trick,'left');assert.ok(s.racers[0].hydro.diveRemaining>1);assert.equal(s.racers[1].stunt.angle,secondAngle);
