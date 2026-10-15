@@ -94,9 +94,11 @@ export function prepareNativeRiderControls(state,{heldButtons=0,pressedButtons=0
  * State is plain serializable data; a copied replay state can resume normally.
  */
 export function finishNativeRiderControls(state,{heldButtons=state?.heldButtons,targets,
-  center,up,scale=.025}={}){
+  center,up,scale=.025,active=true}={}){
   stateValue(state,'prepared');integer(heldButtons,'heldButtons',0,0xffff);
   if(heldButtons!==state.heldButtons)throw new RangeError('Keep the frame-sampled held buttons through the post-hull phase');
+  if(typeof active!=='boolean')throw new TypeError('Post-pose activity must be boolean');
+  if(!active&&targets!==undefined)throw new Error('An inactive post-pose phase cannot transform targets');
   let output=null,manipulationDeltas=null;
   if(targets!==undefined){
     if(!Array.isArray(targets)||targets.length!==COUNT)throw new TypeError('targets must contain nineteen world vectors');
@@ -121,6 +123,6 @@ export function finishNativeRiderControls(state,{heldButtons=state?.heldButtons,
       }
     }
   }
-  const crouchFactor=state.crouchFactor<1?(heldButtons&B?Math.min(1,F(state.crouchFactor+CROUCH_STEP)):1):1;
+  const crouchFactor=active&&state.crouchFactor<1?(heldButtons&B?Math.min(1,F(state.crouchFactor+CROUCH_STEP)):1):state.crouchFactor;
   return {state:frozen({...state,phase:'ready',crouchFactor}),targets:output,manipulationDeltas};
 }

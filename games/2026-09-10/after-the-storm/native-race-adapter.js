@@ -6,11 +6,12 @@ import {createNativeControlState,sampleNativeControls} from './native-controls.j
 import {stepNativeArticulatedRider} from './native-articulated-rider.js';
 import {createNativeRiderControlState,prepareNativeRiderControls,finishNativeRiderControls} from './native-rider-controls.js';
 import {createNativeImpactState,resetNativeImpacts,recordNativeImpact,nativeImpactSnapshot} from './native-impact-state.js';
+import {createNativeRiderLifecycle,nativeRiderLifecycleSource,decideNativeRiderLifecycle,finishNativeRiderLifecycle,nativeRiderLifecycleSnapshot} from './native-rider-lifecycle.js';
 
-// Ordinary force-profile adapter, used by the explicit native race preview. Source
-// actor/action inputs and recovered dive/roll/flip decisions are explicit. Input
-// actor gates are supported, but other actors' full physical/animation overrides,
-// wipeout recovery, scoring, AI and two-player catch-up are not implemented.
+// Force-profile adapter used by the explicit native race preview. Optional
+// riderRecovery owns recovered22/23/24/7 decision and completion phases, using
+// explicit equivalent physical pose providers. Other actors, stunt scoring,
+// original AI and two-player catch-up still require their separate integration.
 // A nonzero source trim, including its nose-up solid-contact override, needs
 // the caller's previous-frame physical jointWorld. No substitute joint is made.
 // Roll reference and its frame displacement are derived from the hull alone.
@@ -18,8 +19,9 @@ import {createNativeImpactState,resetNativeImpacts,recordNativeImpact,nativeImpa
 // Each tick interleaves jet → prepared trim → gravity/roll balance → prepared
 // auxiliary yaw → current manipulation → action-gated dry correction → dive K
 // override/ordinary K → buoyancy/drag → contacts → point-hull integration.
-// Once per five ticks, the optional articulated provider supplies authored pose
-// targets/history/anchors. Its physical joint2 output feeds the NEXT frame.
+// Once per five ticks, recovery decides from the completed hull and prior
+// solved joint2, then the optional articulated provider supplies physical pose
+// targets/history/anchors. Its new joint2 output feeds the NEXT frame.
 // The modern height/gradient water branch retains native-water's documented
 // pressure approximation; an explicit cellAtNative surface instead reads the
 // host's recovered raw field. The adapter never animates the shared field.
@@ -149,7 +151,7 @@ export function applyNativeRaceContact(hull,{kind,pointIndex,normal,penetration=
  */
 export function createNativeRaceAdapter({riderIndex=0,tuneB6c=0,tuneB70=0,tuneB74=0,
   position,velocity,heading=0,pitch=0,roll=0,scale=.025,surface=0,contacts={},jointWorld,
-  contactFactor=1,powerSteps=5,sourceState={},articulatedRider,riderPose}={}){
+  contactFactor=1,powerSteps=5,sourceState={},articulatedRider,riderPose,riderRecovery}={}){
   range(contactFactor,'contactFactor',0,1);range(powerSteps,'powerSteps',0,5);hookSet(contacts);
   if(jointWorld!==undefined&&typeof jointWorld!=='function')vector(jointWorld,'jointWorld');
   const hull=createNativeHull({position,velocity,heading,pitch,roll,scale,rider:riderIndex});
@@ -163,21 +165,25 @@ export function createNativeRaceAdapter({riderIndex=0,tuneB6c=0,tuneB70=0,tuneB7
     if(typeof riderPose!=='function')throw new TypeError('articulatedRider requires a riderPose provider');
     if(jointWorld!==undefined)throw new TypeError('Use articulatedRider or explicit jointWorld, not both');
     if(articulatedOwners.has(articulatedRider))throw new Error('An articulated rider belongs to one adapter');
-    articulatedOwners.set(articulatedRider,hull);
   }else if(riderPose!==undefined)throw new TypeError('riderPose requires an articulatedRider');
+  if(riderRecovery!==undefined&&(!articulatedRider||!riderRecovery||typeof riderRecovery!=='object'))throw new TypeError('riderRecovery requires a physical rider and explicit course settings');
+  if(riderRecovery)for(const key of Object.keys(riderRecovery))if(!['courseDatumNative','raceFinished','state'].includes(key))throw new TypeError(`Unsupported riderRecovery.${key}`);
+  const lifecycle=riderRecovery===undefined?null:createNativeRiderLifecycle({...riderRecovery,hull,rider:articulatedRider});
+  if(articulatedRider)articulatedOwners.set(articulatedRider,hull);
   // The source reset seeds aggregate wet state to8/true before later water
   // samples establish point bits. Rear wet flags remain independently false.
   water.wetCount=8;water.anyWet=true;
   return {hull,water,rider,riderControlState,impacts,controlState:createNativeControlState(),surface,contacts,jointWorld,
-    sourceState:typeof sourceState==='function'?sourceState:{...source,actionState:undefined},
-    actionState:action,articulatedRider,riderPose,
+    sourceState:typeof sourceState==='function'?sourceState:{...(lifecycle?sourceState:source),actionState:undefined},
+    actionState:action,articulatedRider,riderPose,riderLifecycle:lifecycle,
     contactFactor,powerSteps,remainder:0,logicalFrames:0,stepsLast:0,frame:null,
     preparedHullTick:null,pendingFrameCompletion:false,
     contactWindow:contactsZero(),contactDriveFrames:0,lastControls:null,
     lastFrame:{logicalFrame:0,clockUnits:0,frameDisplacementNative:vec(),frameSpeedNative:0,
       hudSpeed:0,referenceDisplacementNative:vec(),referenceChangeNative:vec(),
-      wetCount:8,anyWet:true,contacts:contactsZero(),impacts:nativeImpactSnapshot(impacts),actorState:source.actorState??22,
-      actionState:{...action},jointWorld:articulatedRider?copy(articulatedRider.jointWorld):null}};
+      wetCount:8,anyWet:true,contacts:contactsZero(),impacts:nativeImpactSnapshot(impacts),actorState:lifecycle?.state.actorState??source.actorState??22,
+      animationFrame:lifecycle?.state.animationFrame??source.animationFrame??0,actionState:{...action},jointWorld:articulatedRider?copy(articulatedRider.jointWorld):null,
+      ...(lifecycle?{recovery:nativeRiderLifecycleSnapshot(lifecycle)}:{})}};
 }
 
 function nativeInput(input){
@@ -201,7 +207,15 @@ function beginFrame(adapter,input,options){
   const frameContext={logicalFrame:logicalFrames,time:hull.simulationTime,
     previousContacts,previousFrame:lastFrame,previousAction:{...adapter.actionState}};
   const sourceProvider=options.sourceState??adapter.sourceState;
-  const source=sourceSettings(typeof sourceProvider==='function'?sourceProvider(hull,frameContext):sourceProvider);
+  const requestedSource=typeof sourceProvider==='function'?sourceProvider(hull,frameContext):sourceProvider;
+  const suppliedSource=sourceSettings(requestedSource);
+  // The lifecycle's preceding completed actor controls all FIVE current hull
+  // ticks. A later collision decision never rewrites this sampled force frame.
+  const lifecycleSource=adapter.riderLifecycle?nativeRiderLifecycleSource(adapter.riderLifecycle):null;
+  if(lifecycleSource)for(const key of ['actorState','animationFrame','crash','contactMode']){
+    if(Object.hasOwn(requestedSource,key)&&requestedSource[key]!==lifecycleSource[key])throw new Error(`The rider lifecycle owns sourceState.${key}`);
+  }
+  const source=lifecycleSource?{...suppliedSource,...lifecycleSource}:suppliedSource;
   const oldAction=actionState(source.actionState,adapter.actionState);
   const sampled=sampleNativeControls(adapter.controlState,{...nativeInput(requested),tick:logicalFrames>>>0,...source});
   const physicalControls=prepareNativeRiderControls(adapter.riderControlState,{heldButtons:sampled.heldButtons,
@@ -239,7 +253,7 @@ function beginFrame(adapter,input,options){
   adapter.riderControlState=physicalControls.state;
   adapter.frame={startCenter:copy(hull.center),startReference:referencePoint(hull),prepared,
     controls:forceControls,physicalControls,previousContacts,action:decision,actorState:source.actorState,
-    simulationState:source.simulationState,riderPose:poseProvider};
+    simulationState:source.simulationState,animationFrame:source.animationFrame,riderPose:poseProvider};
   resetNativeImpacts(adapter.impacts,{simulationState:source.simulationState});
   if(source.simulationState!==0)adapter.contactWindow=contactsZero();
 }
@@ -263,11 +277,22 @@ function endFrame(adapter){
     hudSpeed:Math.trunc(Math.fround(Math.trunc(Math.fround(speed))*Math.fround(1.8))),
     referenceDisplacementNative:referenceDisplacement,referenceChangeNative:referenceChange,
     wetCount:water.wetCount,anyWet:water.anyWet,contacts:{...contactWindow},impacts:nativeImpactSnapshot(adapter.impacts),
-    actorState:frame.actorState,actionState:{...adapter.actionState},jointWorld:frame.prepared.jointWorld?copy(frame.prepared.jointWorld):null};
+    actorState:frame.actorState,animationFrame:frame.animationFrame,actionState:{...adapter.actionState},jointWorld:frame.prepared.jointWorld?copy(frame.prepared.jointWorld):null};
+  const decision=adapter.riderLifecycle?decideNativeRiderLifecycle(adapter.riderLifecycle,{completedFrame:adapter.lastFrame,
+    simulationState:frame.simulationState,controls:frame.controls,manipulationAction:adapter.actionState.action}):null;
   let postControls;
-  if(adapter.articulatedRider){
+  if(adapter.articulatedRider&&!decision?.skipped){
     const pose=frame.riderPose(hull,{logicalFrame:adapter.logicalFrames-1,time:hull.simulationTime,
-      controls:frame.controls,actorState:frame.actorState,action:frame.action,completedFrame:adapter.lastFrame});
+      controls:frame.controls,actorState:decision?.state.actorState??frame.actorState,
+      animationFrame:decision?.state.animationFrame??frame.animationFrame,
+      poseRequest:decision?.poseRequest??null,recoveryState:decision?.state??null,action:frame.action,completedFrame:adapter.lastFrame});
+    if(adapter.riderLifecycle){
+      if(!pose.animationOutcome)throw new TypeError('Recovery requires an explicit equivalent pose evaluator outcome');
+      finishNativeRiderLifecycle(adapter.riderLifecycle,pose.animationOutcome,frame.controls);
+    }
+    // A lifecycle-aware provider evaluates both poses purely, then resolves
+    // auxiliary anchors ONCE after the completion/initializer effects.
+    const anchors=pose.resolveAnchors?pose.resolveAnchors({mode:adapter.riderLifecycle?.physicalMode}):pose.anchors;
     postControls=finishNativeRiderControls(adapter.riderControlState,{targets:pose.targets,center:hull.center,up:hull.frame.up,scale:s});
     let manipulationDeltas=postControls.manipulationDeltas;
     if(pose.manipulationDeltas!==undefined){
@@ -276,13 +301,21 @@ function endFrame(adapter){
         const q=vector(pose.manipulationDeltas[i],`manipulationDeltas[${i}]`);return vec(p.x+q.x,p.y+q.y,p.z+q.z);
       });
     }
-    stepNativeArticulatedRider(adapter.articulatedRider,{...pose,targets:postControls.targets,manipulationDeltas,center:hull.center,up:hull.frame.up});
+    stepNativeArticulatedRider(adapter.articulatedRider,{...pose,anchors,
+      ...(adapter.riderLifecycle?{types:adapter.articulatedRider.points.map(p=>p.type)}:{}),
+      targets:postControls.targets,manipulationDeltas,center:hull.center,up:hull.frame.up});
     adapter.lastFrame.jointWorld=copy(adapter.articulatedRider.jointWorld);
-  }else postControls=finishNativeRiderControls(adapter.riderControlState);
+  }else postControls=finishNativeRiderControls(adapter.riderControlState,{active:!decision?.skipped});
   adapter.riderControlState=postControls.state;
   const c=frame.physicalControls;
   adapter.lastFrame.physicalControls={gravityNative:c.gravityNative,lateralRetention:c.lateralRetention,rollBalance:c.rollBalance,
     crouchFactor:c.crouchFactor,enteredCrouch:c.enteredCrouch,nextCrouchFactor:postControls.state.crouchFactor};
+  if(adapter.riderLifecycle){
+    const final=adapter.riderLifecycle.state;
+    adapter.lastFrame.controlActorState=frame.actorState;adapter.lastFrame.controlAnimationFrame=frame.animationFrame;
+    adapter.lastFrame.actorState=final.actorState;adapter.lastFrame.animationFrame=final.animationFrame;
+    adapter.lastFrame.recovery=nativeRiderLifecycleSnapshot(adapter.riderLifecycle);
+  }
 }
 
 /** Prepare without moving points. A multi-craft world prepares ALL riders
@@ -395,6 +428,7 @@ export function nativeRaceSnapshot(adapter){
       referenceDisplacementNative:copy(lastFrame.referenceDisplacementNative),
       referenceChangeNative:copy(lastFrame.referenceChangeNative),contacts:{...lastFrame.contacts},
       impacts:{...lastFrame.impacts,normal:copy(lastFrame.impacts.normal)},
+      ...(lastFrame.recovery?{recovery:structuredClone(lastFrame.recovery)}:{}),
       ...(lastFrame.physicalControls?{physicalControls:{...lastFrame.physicalControls}}:{}),
       actionState:{...lastFrame.actionState},jointWorld:lastFrame.jointWorld?copy(lastFrame.jointWorld):null},
     simulationTime:hull.simulationTime,remainder:adapter.remainder};

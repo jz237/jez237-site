@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import {createRace,stepRace} from '../race-core.js';
 import {getCourse} from '../courses.js';
 import {createNativeHull} from '../native-hull.js';
-import {createAuthoredNativeRider} from '../authored-native-rider.js';
+import {createNativeLifecycleRider} from '../native-lifecycle-rider.js';
+import {createNativeRiderLifecycle} from '../native-rider-lifecycle.js';
 import {createSourceBuoyLayout,createSourceBuoyProgress,stepSourceBuoyProgress} from '../source-buoy-progress.js';
 
 const near=(a,b,e=1e-9)=>assert.ok(Math.abs(a-b)<=e,`${a} != ${b}`);
@@ -21,8 +22,13 @@ test('race core judges actual primary recoil before the one50ms buoy-motion pass
  // side. Both craft and articulated rider start in this same physical pose.
  const initial={x:51.1,y:0,z:30.7};
  const hull=createNativeHull({position:initial,velocity:{x:-10,y:0,z:0},heading:Math.PI/2,rider:0,scale:.025});
- const bundle=createAuthoredNativeRider({initialHull:hull});
- Object.assign(a,bundle,{hull});host.bundles[0]=bundle;
+ const bundle=createNativeLifecycleRider({initialHull:hull});
+ // Replace the complete prepared tick0 physical bundle, including its owner
+ // of recovery effects. Keeping the old lifecycle would target another hull
+ // and nineteen-point rider after this intentional fixture initialization.
+ const riderLifecycle=createNativeRiderLifecycle({hull,rider:bundle.articulatedRider,
+  courseDatumNative:()=>s.raceWater.field.datumNative,raceFinished:()=>r.finishTime!==null});
+ Object.assign(a,bundle,{hull,riderLifecycle});host.bundles[0]=bundle;
  r.sourceBuoys.armed=true;r.sourceBuoys.side=-1;r.sourceBuoyPrevious={x:initial.x,z:initial.z};
  assert.equal(hull.ticks,0);assert.equal(host.world.frames,0);assert.equal(host.primary.state.motionFrames,0);
  nearPoint(host.primary.positionForSourceRow(2),{x:50.8,y:0,z:30.5});

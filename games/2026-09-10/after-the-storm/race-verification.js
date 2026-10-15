@@ -1,5 +1,6 @@
 import {sourceStuntInput} from './source-stunt-pilot.js';
 import {createNativeRacePilot} from './native-race-pilot.js';
+import {nativeRecoveryVerificationInput} from './native-recovery-verification.js';
 import {wave} from './simulation.js';
 import {aiInput,angleDelta,clamp} from './race-core.js';
 // A full park routine using only helm, throttle, trim and stunt inputs.
@@ -30,6 +31,7 @@ export function parkMasteryInput(state,r){
 const nativeVerificationPilots=new WeakMap();
 export function verificationInput(state,r){
  if(state.nativeHost){
+  if(state.verifyNativeRecovery)return nativeRecoveryVerificationInput(state,r);
   let pilots=nativeVerificationPilots.get(state);
   if(!pilots){pilots=new WeakMap();nativeVerificationPilots.set(state,pilots);}
   let pilot=pilots.get(r);

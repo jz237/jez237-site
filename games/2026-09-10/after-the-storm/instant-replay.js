@@ -1,5 +1,6 @@
 import {captureBreakableState} from './breakable-hazards.js';
 import {capturePrimaryBuoyPresentation,samplePrimaryBuoyPresentation} from './primary-buoy-presentation.js';
+import {RIDER_TARGET_BONES,prepareRiderTargetPose} from './rider-target-pose.js';
 // A bounded in-memory recording. Replays read snapshots; they never integrate
 // physics, consume inputs, submit records, or advance championship state.
 const clone=x=>structuredClone(x),mix=(a,b,t)=>a+(b-a)*t;
@@ -30,12 +31,35 @@ export function replayClip(rec){
  const frames=rec.frames.filter(f=>f.time>=from-.051&&f.time<=to+.051);
  return {frames,start:frames[0].time,end:frames.at(-1).time,index:highlight?event.index:0,label:highlight?event.label:'Last run'};
 }
+// Presentation interpolation only. A physical pose is compatible when the
+// rider identity and optional recorded source/coordinate-space tags match.
+// Only endpoint XYZ blends; root/head yaw and ALL diagnostics, including the
+// solved source frame, remain recorded discrete provenance. No IK or solver
+// creates a fractional physical frame. Exact boundaries preserve exact DTOs.
+// At native/modern/null/missing/incompatible boundaries hold the earlier
+// recorded property until the next exact sample, then select the later one.
+function sampleNativeRiderPose(first,last,t,fromTime,toTime){
+ const chosen=t<1?first:last;
+ if(!Object.hasOwn(chosen,'nativeRiderPose'))return {present:false};
+ const pose=chosen.nativeRiderPose,a=first.nativeRiderPose,b=last.nativeRiderPose;
+ const compatible=a&&b&&first.id===last.id&&a.diagnostics?.source===b.diagnostics?.source&&
+  a.diagnostics?.coordinateSpace===b.diagnostics?.coordinateSpace;
+ if(t<=0||t>=1||!compatible)return {present:true,pose:clone(pose)};
+ const start=prepareRiderTargetPose(a),end=prepareRiderTargetPose(b);
+ return {present:true,pose:{...clone(pose),targets:Object.fromEntries(RIDER_TARGET_BONES.map(name=>[name,
+  start.targets[name].map((point,i)=>point.map((n,k)=>mix(n,end.targets[name][i][k],t)))])),
+  replayPresentation:{policy:'display-endpoints-only',targetsInterpolated:true,fromRecordedTime:fromTime,toRecordedTime:toTime,blend:t}}};
+}
 export function replaySample(clip,time){
  const fs=clip.frames;let i=0;while(i<fs.length-2&&fs[i+1].time<time)i++;
  const a=fs[i],b=fs[Math.min(fs.length-1,i+1)],t=Math.max(0,Math.min(1,(time-a.time)/Math.max(.001,b.time-a.time))),frame={...a,time:mix(a.time,b.time,t),racers:clone(a.racers)};
  frame.racers.forEach((r,j)=>{const q=b.racers[j];for(const k of ['x','z','speed','turn','vx','vz'])r[k]=mix(r[k],q[k],t);r.heading+=Math.atan2(Math.sin(q.heading-r.heading),Math.cos(q.heading-r.heading))*t;
   for(const k of ['y','vy','pitch','roll','pitchVelocity','rollVelocity','compression','wet','waterHeight'])if(Number.isFinite(r.hydro[k])&&Number.isFinite(q.hydro[k]))r.hydro[k]=mix(r.hydro[k],q.hydro[k],t);
   if(r.stunt.trick===q.stunt.trick)r.stunt.angle=mix(r.stunt.angle,q.stunt.angle,t);
+  if(Object.hasOwn(r,'nativeRiderPose')||Object.hasOwn(q,'nativeRiderPose')){
+   const pose=sampleNativeRiderPose(a.racers[j],q,t,a.time,b.time);
+   if(pose.present)r.nativeRiderPose=pose.pose;else delete r.nativeRiderPose;
+  }
  });
  if(a.primaryBuoys||b.primaryBuoys)frame.primaryBuoys=samplePrimaryBuoyPresentation(a.primaryBuoys,b.primaryBuoys,t);
  // World-aligned samples survive patch recentering without moving the waves.

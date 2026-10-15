@@ -1,4 +1,5 @@
 import {installBlenderRider} from './blender-rider.js';
+import {installFallbackRider} from './fallback-rider.js';
 import {installBlenderJetSki} from './blender-jetski.js';
 import * as T from './vendor/three.module.js';
 const metal=new T.MeshStandardMaterial({color:0x687b7e,metalness:.8,roughness:.28});
@@ -46,14 +47,16 @@ const prop=new T.Group();prop.position.set(0,-.10,-1.87);body.add(prop);const no
 const cargo=new T.Group();body.add(cargo);for(let i=0;i<3;i++){const c=new T.Group();c.position.set((i-1)*.29,.60,-1.52);body.add(c);cargo.add(c);const m=deck(c,.25,.27,.42,0,0,0,dark);for(const z of[-.13,.13])deck(c,.265,.285,.027,0,0,z,rubber);deck(c,.12,.025,.028,0,.15,0,metal);c.visible=false;}
 // Seated rider with articulated limbs, a rescue vest, helmet and visor.
 const rider=new T.Group();body.add(rider);const suit=new T.MeshStandardMaterial({color:0x263b45,roughness:.90}),vest=new T.MeshStandardMaterial({color:0xb9542d,roughness:.86}),reflective=new T.MeshStandardMaterial({color:0xd6d2aa,roughness:.50});
-ellipsoid(rider,0,.98,-.40,.23,.18,.24,suit);const torso=ellipsoid(rider,0,1.38,-.14,.275,.40,.18,suit);torso.rotation.x=.25;const vestBody=ellipsoid(rider,0,1.43,-.17,.30,.31,.205,vest);vestBody.rotation.x=.25;
-for(const side of[-1,1]){rod(rider,[side*.13,.99,-.42],[side*.43,.70,.04],.115,suit);ellipsoid(rider,side*.43,.70,.04,.12,.13,.13,rubber);rod(rider,[side*.43,.70,.04],[side*.50,.40,-.35],.082,suit);ellipsoid(rider,side*.5,.42,-.30,.105,.074,.22,rubber);
-rod(rider,[side*.26,1.62,-.035],[side*.36,1.30,.32],.086,suit);ellipsoid(rider,side*.36,1.30,.32,.09,.09,.09,suit);rod(rider,[side*.36,1.30,.32],[side*.44,1.13,.73],.068,suit);ellipsoid(rider,side*.44,1.13,.73,.071,.065,.085,rubber);
-deck(rider,.057,.34,.027,side*.17,1.47,-.355,reflective);deck(rider,.058,.29,.027,side*.17,1.45,.053,reflective);}
-deck(rider,.48,.044,.03,0,1.32,-.355,rubber);deck(rider,.07,.07,.034,0,1.32,-.38,metal);
-rod(rider,[0,1.71,.015],[0,1.84,.07],.08,suit);const head=ellipsoid(rider,0,1.99,.13,.19,.225,.216,shell);head.rotation.x=.12;ellipsoid(rider,0,1.96,.276,.16,.105,.093,new T.MeshPhysicalMaterial({color:0x132a34,metalness:.55,roughness:.16,clearcoat:1}));tube(rider,[[-.16,1.92,.10],[-.12,1.80,.24],[.12,1.80,.24],[.16,1.92,.10]],.021,rubber);tube(rider,[[0,2.19,.06],[0,2.20,.16],[0,2.12,.29]],.025,orange);
-graphic(rider,'RESCUE',0,1.48,-.388,.37).rotation.y=Math.PI;
+const riderBindings=[],bind=(bone,mesh)=>{riderBindings.push({bone,mesh});return mesh;};
+bind('pelvis',ellipsoid(rider,0,.98,-.40,.23,.18,.24,suit));const torso=bind('torso',ellipsoid(rider,0,1.38,-.14,.275,.40,.18,suit));torso.rotation.x=.25;const vestBody=bind('torso',ellipsoid(rider,0,1.43,-.17,.30,.31,.205,vest));vestBody.rotation.x=.25;
+for(const side of[-1,1]){const sideName=side<0?'L':'R';bind('thigh'+sideName,rod(rider,[side*.13,.99,-.42],[side*.43,.70,.04],.115,suit));bind('shin'+sideName,ellipsoid(rider,side*.43,.70,.04,.12,.13,.13,rubber));bind('shin'+sideName,rod(rider,[side*.43,.70,.04],[side*.50,.40,-.35],.082,suit));bind('foot'+sideName,ellipsoid(rider,side*.5,.42,-.30,.105,.074,.22,rubber));
+bind('upperArm'+sideName,rod(rider,[side*.26,1.62,-.035],[side*.36,1.30,.32],.086,suit));bind('forearm'+sideName,ellipsoid(rider,side*.36,1.30,.32,.09,.09,.09,suit));bind('forearm'+sideName,rod(rider,[side*.36,1.30,.32],[side*.44,1.13,.73],.068,suit));bind('hand'+sideName,ellipsoid(rider,side*.44,1.13,.73,.071,.065,.085,rubber));
+bind('torso',deck(rider,.057,.34,.027,side*.17,1.47,-.355,reflective));bind('torso',deck(rider,.058,.29,.027,side*.17,1.45,.053,reflective));}
+bind('torso',deck(rider,.48,.044,.03,0,1.32,-.355,rubber));bind('torso',deck(rider,.07,.07,.034,0,1.32,-.38,metal));
+bind('head',rod(rider,[0,1.71,.015],[0,1.84,.07],.08,suit));const head=bind('head',ellipsoid(rider,0,1.99,.13,.19,.225,.216,shell));head.rotation.x=.12;bind('head',ellipsoid(rider,0,1.96,.276,.16,.105,.093,new T.MeshPhysicalMaterial({color:0x132a34,metalness:.55,roughness:.16,clearcoat:1})));bind('head',tube(rider,[[-.16,1.92,.10],[-.12,1.80,.24],[.12,1.80,.24],[.16,1.92,.10]],.021,rubber));bind('head',tube(rider,[[0,2.19,.06],[0,2.20,.16],[0,2.12,.29]],.025,orange));
+bind('torso',graphic(rider,'RESCUE',0,1.48,-.388,.37)).rotation.y=Math.PI;
 const vessel={boat,body,prop,cargo,winch,handlebars,rider,updateDash};
+installFallbackRider(vessel,{bindings:riderBindings});
 installBlenderJetSki(vessel,{screen,rack,winchArm,salvage});
 installBlenderRider(vessel,{riderIndex});
 return vessel;

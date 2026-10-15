@@ -24,6 +24,9 @@ function craftPose(craft,scale){
  const h=craft.hydro;
  const position={x:craft.x/scale,y:(h?.y??craft.y??0)/scale,z:craft.z/scale};
  if(!tuple(position))throw new TypeError('Water camera needs finite craft XYZ');
+ const sourcePoseState=craft.sourcePoseState??0,sourcePoseTimer=craft.sourcePoseTimer??0;
+ if(!Number.isInteger(sourcePoseState)||sourcePoseState<0||sourcePoseState>255||
+  !Number.isInteger(sourcePoseTimer)||sourcePoseTimer<0||sourcePoseTimer>0x7fffffff)throw new RangeError('Invalid source water pose state/timer');
  // The point hull supplies its actual body+6c/+74 forward components. Their
  // horizontal magnitude includes pitch; normalizing them or rebuilding them
  // from heading changes the source camera lag and consequently the water.
@@ -31,10 +34,10 @@ function craftPose(craft,scale){
  if(forward!==undefined){
   if(!Array.isArray(forward)||forward.length!==2||!forward.every(finite)||Math.hypot(...forward)===0)
    throw new TypeError('sourceForwardXZ must be finite and nonzero');
-  return {position,forward:forward.slice()};
+  return {position,forward:forward.slice(),sourcePoseState,sourcePoseTimer};
  }
  if(!finite(craft.heading))throw new TypeError('Water camera needs heading or sourceForwardXZ');
- return {position,forward:[Math.sin(craft.heading),Math.cos(craft.heading)]};
+ return {position,forward:[Math.sin(craft.heading),Math.cos(craft.heading)],sourcePoseState,sourcePoseTimer};
 }
 export const isHostRaceWater=state=>known.has(state);
 export function createRaceWaterRandom(seed){
@@ -92,7 +95,7 @@ export function advanceRaceWaterFrame(state,crafts,{datumNative=state?.field.dat
  const updates=poses.map((p,i)=>stepNativeWaterFollowCamera(state.follows[i],{
   positionNative:Object.values(p.position),forwardXZ:p.forward,
   velocityXZ:[p.position.x-state.previousPositions[i].x,p.position.z-state.previousPositions[i].z],
-  datumNative,zoomIndex}));
+  datumNative,zoomIndex,sourcePoseState:p.sourcePoseState,sourcePoseTimer:p.sourcePoseTimer}));
  const cameras=updates.map((q,i)=>state.cameraProvider?state.cameraProvider(crafts[i],q.camera,{playerIndex:i,frame:state.frames+1}):q.camera);
  const plan=planNativeWaterFrame({variant:state.variant,players:state.players,
   camerasBeforeUpdate:state.cameras,camerasAfterUpdate:cameras,

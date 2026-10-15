@@ -27,7 +27,8 @@ function aligned(world){
 function cameraCraft(adapter){
  const {hull}=adapter;
  return {x:hull.center.x,y:hull.center.y,z:hull.center.z,
-  sourceForwardXZ:[hull.frame.forward.x,hull.frame.forward.z]};
+  sourceForwardXZ:[hull.frame.forward.x,hull.frame.forward.z],
+  sourcePoseState:Math.max(0,adapter.lastFrame.actorState),sourcePoseTimer:adapter.lastFrame.animationFrame??0};
 }
 function optionsAt(value,time,frame,index){
  const options=typeof value==='function'?value(time,frame,index):value;

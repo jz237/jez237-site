@@ -4,6 +4,7 @@ import {loadCraftLOD,craftGeometryLOD} from './mesh-lod.js';
 import * as T from './vendor/three.module.js';
 import {riderPose} from './rider-pose.js';
 import {riderMotion} from './rider-motion.js';
+import {prepareRiderTargetPose} from './rider-target-pose.js';
 import {craftSurface,craftUV} from './craft-materials.js';
 let asset=null;
 const lodPromise=loadCraftLOD('coastal-rider');
@@ -35,12 +36,22 @@ export function makeBlenderRider(parent,{color=null,riderIndex=0}={}){
  for(const [partIndex,part] of asset.meshes.entries()){const m=new T.Mesh(part.geometry,materials[part.material]);craftGeometryLOD(m,lodGeometry?.[partIndex]);m.castShadow=true;m.receiveShadow=true;groups[part.bone].add(m);}
  const start=new T.Vector3(),end=new T.Vector3(),direction=new T.Vector3(),motionMemory={};
  function update(pose='',time=0,turn=0,motion={}){
-  // Body weight eases into a turn, but palms must follow the actual bars.
-  // Stunt callers do not supply a separate steering angle.
-  const movement=riderMotion(motionMemory,time,turn,{...motion,steering:motion.steering??turn*.3});
-  const p=riderPose(pose,time,movement.turn,movement);root.rotation.y=p.yaw;
-  root.userData.riderMotion={lean:movement.turn,compression:movement.compression,forward:movement.forwardShift,wetness:movement.wetness,steering:movement.steering};
-  for(const name of ['Skin','Neoprene','Stretch panels','Impact foam'])if(materials[name])materials[name].roughness=materials[name].userData.dryRoughness-movement.wetness*.21;
+  let p;
+  if(motion.targetPose!==undefined&&motion.targetPose!==null){
+   // Physical endpoints are already solved. Validation precedes mesh writes;
+   // no modern spring, IK, pose animation, root offset or extra bank runs here.
+   p=prepareRiderTargetPose(motion.targetPose);
+   const wetness=root.userData.riderMotion?.wetness??0;
+   root.position.set(0,0,0);root.rotation.set(0,p.yaw,0);root.userData.nativePhysical=true;
+   root.userData.riderMotion={nativePhysical:true,lean:0,compression:0,forward:0,wetness,steering:p.steering};
+  }else{
+   // Body weight eases into a turn, but palms must follow the actual bars.
+   // Stunt callers do not supply a separate steering angle.
+   const movement=riderMotion(motionMemory,time,turn,{...motion,steering:motion.steering??turn*.3});
+   p=riderPose(pose,time,movement.turn,movement);root.rotation.y=p.yaw;root.userData.nativePhysical=false;
+   root.userData.riderMotion={nativePhysical:false,lean:movement.turn,compression:movement.compression,forward:movement.forwardShift,wetness:movement.wetness,steering:movement.steering};
+   for(const name of ['Skin','Neoprene','Stretch panels','Impact foam'])if(materials[name])materials[name].roughness=materials[name].userData.dryRoughness-movement.wetness*.21;
+  }
   for(const [name,[a,b]] of Object.entries(p.targets)){
    const g=groups[name];start.fromArray(a);end.fromArray(b);direction.subVectors(end,start);const length=direction.length();
    g.position.copy(start);g.quaternion.setFromUnitVectors(up,direction.normalize());g.scale.set(1,length/asset.meta.bones[name].length,1);
@@ -51,7 +62,7 @@ export function makeBlenderRider(parent,{color=null,riderIndex=0}={}){
 }
 export function installBlenderRider(v,{riderIndex=0}={}){
  const rider=makeBlenderRider(v.body,{riderIndex});if(!rider)return false;
- v.body.remove(v.rider);v.rider.traverse(o=>o.geometry?.dispose());v.rider=rider.root;
+ v.body.remove(v.rider);const oldGeometry=new Set();v.rider.traverse(o=>{if(o.geometry)oldGeometry.add(o.geometry);});for(const g of oldGeometry)g.dispose();v.rider=rider.root;
  v.updateRider=({time=0,turn=0,...motion}={})=>rider.update('',time,turn,motion);
  return true;
 }

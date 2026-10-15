@@ -121,7 +121,7 @@ function rigData(rig){
   for(const name of ['center','supportA','supportB'])vector(rig?.[name],`anchorRig.${name}`);
   positive(rig?.radiusWorld,'anchorRig.radiusWorld');return rig;
 }
-function auxiliaryTargets(body,pose,hull,rig){
+export function authoredNativeRiderAuxiliaryTargets(body,pose,hull,rig){
   if(pose.anchorTargetsWorld!==undefined){
     if(!Array.isArray(pose.anchorTargetsWorld)||pose.anchorTargetsWorld.length!==6)throw new TypeError('anchorTargetsWorld must contain six world vectors');
     return pose.anchorTargetsWorld.map((p,i)=>copy(vector(p,`anchorTargetsWorld[${i}]`)));
@@ -151,7 +151,7 @@ export function createAuthoredNativeRider({initialHull,geometryProvider=modernRi
     radiusWorld:suppliedRig.radiusWorld,center:Object.freeze(copy(suppliedRig.center)),
     supportA:Object.freeze(copy(suppliedRig.supportA)),supportB:Object.freeze(copy(suppliedRig.supportB))});
   const restPose=geometryProvider('',0,0,{steering:0}),restTargets=authoredNativeRiderTargets(restPose,initialHull);
-  const restAux=auxiliaryTargets(restTargets,restPose,initialHull,rig);
+  const restAux=authoredNativeRiderAuxiliaryTargets(restTargets,restPose,initialHull,rig);
   const anchorState=createNativeRiderAnchors({restTargets:restAux,radiusWorld:rig.radiusWorld});
   const articulatedRider=createNativeArticulatedRider({restTargets,types:defaultTypes,scale:initialHull.scale});
   const scale=initialHull.scale;let nextFrame=initialLogicalFrame,lastFrame=-1,cached=null;
@@ -174,7 +174,7 @@ export function createAuthoredNativeRider({initialHull,geometryProvider=modernRi
     const pose=sample(hull,context),targets=authoredNativeRiderTargets(pose,hull);
     const currentTypes=pointTypes(pose.pointTypes??defaultTypes);
     const historyTargets=authoredNativeRiderHistory(articulatedRider.points.map(p=>p.position),restTargets);
-    const auxTargets=auxiliaryTargets(targets,pose,hull,rig);
+    const auxTargets=authoredNativeRiderAuxiliaryTargets(targets,pose,hull,rig);
     const auxHistory=anchorState.points.map(p=>copy(p.position));
     const mode=pose.anchorMode??nativeRiderAnchorMode(context.actorState??22);
     stepNativeRiderAnchors(anchorState,{targets:auxTargets,historyTargets:auxHistory,up:hull.frame.up,mode});

@@ -869,3 +869,73 @@ The complete regression after this milestone is **1,176/1,187 in58.60s**
 failures remain; all74 newly added checks since the preceding1,113-test run
 pass. Full native course/actor/stunt/AI/racer-contact integration and production
 publication remain outstanding.
+
+## Native physical rider and recovery — October 15, 2026
+
+The Sunny native preview now binds the recovered post-hull lifecycle to the
+actual twelve-point hull and nineteen-point rider. Completed impacts decide
+after all five hull ticks. The preceding actor/countdown still controls those
+ticks; input muting and actor23 engine clearing apply on their proper later
+frames. Crash effects change actual velocities/damping once, retain the twelve
+saved float32 coefficients, and restore them through actor7's recovered gates.
+The recovery datum test reads the previous solved physical joint2, never a pose
+target. Persistent actor joint types, auxiliary mode, B completion and body/link
+solves follow the recovered decision/evaluation/completion ordering. Scene0
+skips physical pose work without inventing missed animation updates. The water
+follow camera receives the completed actor/frame after these solves.
+
+Procedural actor23 falling and the common actor24 stumble now supply physical
+targets. Actor24 uses the actual previous auxiliary pivot/history and retained
+yaw-only basis; its numeric producer matches18 private whole-source fixtures at
+both native and host scales,36 exact comparisons. The alternate record-dependent
+actor24 branch explicitly rejects instead of silently selecting the common
+geometry. Actor7 uses new authored water/stern/climb/seated poses with recovered
+85-frame playback,56 damping restoration and77 ordinary-return timing. It captures
+the actual fallen entry pose once. Current and pending providers evaluate without
+stepping physics; exactly one auxiliary and one body solve follow each active
+frame, including blends.
+
+This retains the declared authored rest anatomy, steering-circle radius,
+endpoint-history lengths and imported-target blend. Those choices and the new
+remount art are not original pose-record or geometry parity. Original normalized
+pose-block blending, the alternate stumble records and the remaining actors
+still require equivalent integration. No source animation, mesh or texture data
+is published.
+
+The detailed rider now follows all15 anatomical segments derived from actual
+solved world points. The complete hull basis transforms them once; modern extra
+bank, stunt rotations and wipeout root offsets are bypassed for this path. Mesh
+geometry, materials, shadows and LOD stay intact. If detailed assets fail, the
+existing built-in rider meshes receive the same explicit targets. Repeated
+rendering cannot run modern rider springs/IK or pump physical history. Replay
+copies and interpolates endpoint positions only, keeping solved-frame provenance
+discrete; incompatible/native-modern boundaries select recorded states.
+
+A repeatable development inspector drives from Sunny's ordinary grid into the
+real first enabled colored buoy using accelerator/steering only, then releases
+controls. With wave seed17 it records C38=10.117209434509277 at5.55s, enters23
+at5.80s,7 at7.15s, restores damping at9.90s and returns22 at11.25s. It changes
+no spawn, collision flag, physical point, actor, timer or progress. The collision
+correctly retains its actual missed buoy. Complete collision/recovery/hull/rider/
+water/buoy histories match at30/60/144Hz. Separate prepared qualified-impact
+traces cover severe entry for all four ordinals, moderate24 recovery, prior-joint
+datum admission, a scene0 gap and independent rider ownership.
+
+High1280x720 browser checks held the real fall at hull tick580/body and auxiliary
+solve116/water frame116, climbed at920/184/184, and returned to ordinary at
+1125/225/225. A separate full three-lap run completed in108.85s with no misses/DQ,
+tick10885/frame2177 and physical detailed-rider rendering enabled. These are
+functional browser checks, not source full-game trajectory or artwork sign-off.
+Paused replay held recorded7.3833s while live time11.25s, hull tick1125,
+water/body/auxiliary frame225 and buoy-motion225 remained fixed. Returning to
+the held inspection restored the exact live pose/progress/telemetry/water
+fingerprint. The console contained only the existing favicon404.
+
+The complete regression is **1,237/1,248 in61.68s** (private
+`full-tests-native-recovery-final.tap`). All61 additions since the preceding
+1,187-test run pass. The same eleven previously listed integration failures
+remain. One older primary-contact fixture was updated to replace its complete
+prepared physical bundle, including the recovery owner; its literal contact,
+current-center judge and motion assertions remain unchanged. Native racing
+outside Sunny time-trial preview, remaining actors/stunts, original AI, racer
+contacts, course sign-offs and production publication are still outstanding.
