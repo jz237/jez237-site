@@ -133,6 +133,15 @@ test('helm follows the visible marker displacement without editing its route or 
  assert.equal(JSON.stringify(f.state),before);assert.deepEqual(moving,{x:0,z:1});
  assert.deepEqual(d.target,[0,7]);assert.deepEqual(d.buoyTracking,{sourceRow:5,lateralShiftWorld:-1,weight:1});
  assert.equal(controls.slide,false);assert.equal(controls.lean,0);
+ const near=fixture({x:-4,z:0,heading:Math.PI/2}),late={x:0,z:1};
+ near.course.sourceVisibleGateIndices={5:1};near.racer.next=1;
+ near.state.nativeHost.primary={positionForSourceRow:()=>({...late})};
+ const following=createNativeRacePilot({course:near.course,policy:{buoyClearanceWorld:0}});
+ following.input(near.state);const target=following.diagnostics().last.target;
+ late.z=2;near.state.nativeHost.world.frames=1;following.input(near.state);
+ assert.deepEqual(following.diagnostics().last.target,[target[0],target[1]+1]);
+ assert.deepEqual(near.course.anchors,[[0,0],[0,50],[50,50],[50,0]]);
+ assert.equal(near.racer.passed,0);assert.equal(near.racer.misses,0);
 });
 
 test('invalid geometry, policy, backend, class and backward clock are rejected',()=>{
@@ -149,7 +158,7 @@ test('invalid geometry, policy, backend, class and backward clock are rejected',
 
 function drive(difficulty,rider,hz){
  const course=getCourse('greyhaven',difficulty),s=createRace({course,difficulty,rider,mode:'time',physics:'native'}),r=s.racers[0];
- const anchors=JSON.stringify(s.course.anchors),pilot=createNativeRacePilot({course:s.course});s.phase='running';
+ const anchors=JSON.stringify(s.course.anchors),pilot=createNativeRacePilot({course:s.course});
  for(let i=0;i<180*hz&&s.phase!=='results';i++)stepRace(s,()=>pilot.input(s,r),1/hz);
  // Capture the final judge observation; inactive input performs no simulation.
  assert.deepEqual(pilot.input(s,r),neutral);const d=pilot.diagnostics();
@@ -167,10 +176,11 @@ function drive(difficulty,rider,hz){
 for(let rider=0;rider<4;rider++)for(let difficulty=0;difficulty<4;difficulty++){
  test(`native Sunny class${difficulty}, rider${rider}: three genuine laps through the human source judge`,()=>{
   const {r,d}=drive(difficulty,rider,60);
-  // The heavy profile's Hard/Expert margin remains observable. Its genuine
-  // misses are not forgiven or bypassed; all other rider/class cases are clean.
+  // The heavy profile's Hard/Expert margin remains observable. With the live
+  // source countdown/water phase its genuine Hard miss is at row29, rather
+  // than the old browser-start row47; Expert remains row46. No miss is forgiven.
   assert.ok(r.misses<=(rider===1&&[1,2].includes(difficulty)?1:0));
-  if(r.misses)assert.equal(d.transitions.find(t=>t.missDelta).fromSourceRow,difficulty===1?47:46);
+  if(r.misses)assert.equal(d.transitions.find(t=>t.missDelta).fromSourceRow,difficulty===1?29:46);
  });
 }
 for(let difficulty=0;difficulty<4;difficulty++){
@@ -192,7 +202,7 @@ test('closed-loop physical pose, human progress and water history are exactly in
   let reference=null;
   for(const hz of [60,30,144]){
    const s=createRace({course:getCourse('greyhaven',difficulty),difficulty,mode:'time',physics:'native'}),r=s.racers[0];
-   const pilot=createNativeRacePilot({course:s.course});s.phase='running';
+   const pilot=createNativeRacePilot({course:s.course});
    for(let i=0;i<40*hz;i++)stepRace(s,()=>pilot.input(s,r),1/hz);
    assert.equal(s.nativeHost.world.ticks,4000);assert.equal(s.nativeHost.world.frames,800);assert.equal(s.phase,'running');
    const sample={native:nativeRaceSnapshot(s.nativeHost.world.adapters[0]),progress:structuredClone(r.sourceBuoys),

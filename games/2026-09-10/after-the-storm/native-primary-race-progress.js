@@ -4,6 +4,7 @@
 // no reset, HUD lap, race-clock epoch, audio playback or source RNG is inferred.
 import {createNativePrimaryGateState,prepareNativePrimaryGateJudge} from './native-primary-gate-judge.js';
 import {createNativePrimaryStandingsLayout,createNativePrimaryStandingsState,prepareNativePrimaryStandings} from './native-primary-standings.js';
+import {prepareNativePrimaryRaceClock} from './native-primary-race-clock.js';
 
 const F=Math.fround,layouts=new WeakSet(),I0=-2147483648,I1=2147483647;
 function record(v,n){if(!v||typeof v!=='object'||Array.isArray(v))throw new TypeError(`Expected ${n}`);return v;}
@@ -116,11 +117,13 @@ export function prepareNativePrimaryRaceProgress(layout,state,input){
  if(g.event628===1&&racer===g.primaryHumanIndex||g.players===2&&g.event628===2&&racer===g.secondaryHumanIndex){
   if(s.record2c24===0)dq(s,g);diagnostic.earlyReturn='selected-racer-event';return finishResult(s,g,effects,original,diagnostic);
  }
- if(g.state638===1&&s.finished2c2c===0&&s.record2c24===0&&g.clockStopped817c===0&&g.flag1fd4===0){
-  timing(s,1,sum(s.timingWords2a9c[1],50));if(s.timingWords2a9c[1]>599998)timing(s,1,599999);
-  timing(s,14,sum(s.timingWords2a9c[14],50));
-  if(s.timingWords2a9c[14]>599998){timing(s,14,599999);if(g.courseIndex!==0){dq(s,g);diagnostic.earlyReturn='total-time-limit';return finishResult(s,g,effects,original,diagnostic);}}
-  timing(s,2,g.ambientD4b00&65535);
+ const clock=prepareNativePrimaryRaceClock({main638:g.state638,finished2c2c:s.finished2c2c,record2c24:s.record2c24,
+  clockStopped817c:g.clockStopped817c,flag1fd4:g.flag1fd4,courseIndex:g.courseIndex,
+  lapMs:s.timingWords2a9c[1],totalMs:s.timingWords2a9c[14],ambientWord:s.timingWords2a9c[2],ambientD4b00:g.ambientD4b00});
+ if(clock.advanced){
+  timing(s,1,clock.lapMs);timing(s,14,clock.totalMs);
+  if(clock.totalLimit){dq(s,g);diagnostic.earlyReturn='total-time-limit';return finishResult(s,g,effects,original,diagnostic);}
+  timing(s,2,clock.ambientWord);
  }
  const nodes=currentNodes(layout,input.nodePositionsNative),row=integer(s.nextPrimary2944,'nextPrimary2944',0,nodes.length-1),node=nodes[row];
  const p=point(input.positionNativeXZ,'actual scratch position3780/3788'),q={...input,positionNativeXZ:p};

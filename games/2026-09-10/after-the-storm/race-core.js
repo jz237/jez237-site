@@ -1,5 +1,6 @@
 import {createSourceFixedSphereGrid} from './source-boundary-spheres.js';
 import {createNativeRaceHost,stepNativeRaceHost} from './native-race-host.js';
+import {createNativeRaceLaunchRuntime} from './native-race-launch-runtime.js';
 import {capturePrimaryBuoyPresentation} from './primary-buoy-presentation.js';
 import {constrainSourceSphereRace} from './source-sphere-race.js';
 import {createRaceWater,stepRaceWater,setRaceWater} from './race-water.js';
@@ -93,18 +94,33 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
  if(physics==='native'){
   // Preview histories must not compete with saved modern-physics records.
   state.nativePreview=true;state.demoRun=true;
-  state.nativeHost=createNativeRaceHost({racers,water:raceWater,course,fixedSphereGrid:sourceSphereGrid,tunes:nativeTunes,
+  state.nativeLaunch=createNativeRaceLaunchRuntime({racers,courseIndex:course.sourceWaterCourseIndex,players:mode==='versus'?2:1});
+  state.nativeLaunchLabel=state.nativeLaunch.view().label;state.nativeCountdownCue=null;
+  let launchCueSequence=0;
+  state.nativeHost=createNativeRaceHost({racers,water:raceWater,course,fixedSphereGrid:sourceSphereGrid,tunes:nativeTunes,raceRuntime:state.nativeLaunch,
+  onLaunchFrame:(host,context,launch)=>{
+   state.countdown=launch.view.countdown;state.nativeLaunchLabel=launch.view.label;
+   if(state.phase==='countdown'&&launch.view.phase650>=2)state.phase='running';
+   for(const cue of launch.effects)if(cue.kind==='audioEntry'&&[0x22,0x23].includes(cue.arguments[0])){
+    const number=cue.arguments[0]===0x23?0:cue.arguments[1];state.nativeCountdownCue={sequence:++launchCueSequence,number};
+    if(number===0)racers.forEach(r=>announce(r,state,'GO'));
+   }
+   for(const op of launch.operations)if(op.kind==='recordWordWrite'&&op.wordIndex===75){
+    const r=racers[op.racerIndex];announce(r,state,r.power===5?'ROCKET START · MAX POWER':'START BOOST · POWER '+r.power);
+   }
+  },
   onFrame:(host,context)=>{
    state.time=context.time;
    for(const r of racers){
-    r.raceTime=state.time;if(r.finishTime!==null||r.dq)continue;
+    if(state.phase==='countdown'){r.nativePrevious={x:r.x,z:r.z};r.sourceBuoyPrevious={x:r.x,z:r.z};continue;}
+    if(r.finishTime!==null||r.dq)continue;
     if(r.sourceBuoys)adjudicateSourceGate(state,r,.05,host.primary?.positionForSourceRow(r.sourceBuoys.nextSourceRow));
     else adjudicateGate(state,r,r.nativePrevious?.x??r.x,r.nativePrevious?.z??r.z);
     r.nativePrevious={x:r.x,z:r.z};
     r.out=outsideCourse(course,r.x,r.z)?r.out+.05:0;
     if(r.out>=5){r.dq='Outside course for five seconds';announce(r,state,'DISQUALIFIED');}
    }
-   finishRaceStep(state,.05);return state.phase!=='results';
+   if(state.phase!=='countdown')finishRaceStep(state,.05);return state.phase!=='results';
   }});
   state.primaryBuoys=capturePrimaryBuoyPresentation(state.nativeHost.primary?.snapshot());
  }
@@ -112,7 +128,7 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
 }
 export function gateCoordinates(g,x,z){return {forward:(x-g.x)*g.tx+(z-g.z)*g.tz,lateral:-(x-g.x)*g.tz+(z-g.z)*g.tx};}
 function announce(r,s,text){r.event=text;r.eventTime=s.time;s.events.push({rider:r.id,text,time:s.time});if(s.events.length>20)s.events.shift();}
-function missBuoy(s,r){r.misses++;r.power=0;announce(r,s,'MISSED BUOY · '+r.misses+'/5');if(r.misses>=5)r.dq='Five missed buoys';}
+function missBuoy(s,r,alreadyCounted=false){if(!alreadyCounted)r.misses++;r.power=0;announce(r,s,'MISSED BUOY · '+r.misses+'/5');if(r.misses>=5)r.dq='Five missed buoys';}
 function inGateSpan(g,side){return side>(g.spanMin??-g.width)&&side<(g.spanMax??g.width);}
 export function adjudicateGate(s,r,ox,oz){
  if(s.freeRide)return false;
@@ -153,12 +169,12 @@ function adjudicateSourceGate(s,r,dt,currentNodePosition){
  r.sourceBuoyObservation={sourceRow:e.sourceRow,logicalTick:result.state.logicalTicks,position:{x:r.x,z:r.z},
   center:{x:center.x,z:center.z},side:e.side,correct:e.correct};
  if(e.nativeEventCode===1){r.power=r.sourceBuoys.power;announce(r,s,r.power===5?'MAX POWER':'Clean buoy · power '+r.power);}
- else if(e.nativeEventCode===2)missBuoy(s,r);
+ else if(e.nativeEventCode===2)missBuoy(s,r,!!s.nativeLaunch);
  r.sourceBuoys.power=r.power;
  if(e.enabled)r.passed++;
  const next=s.course.sourceVisibleGateIndices[e.nextVisibleSourceRow];if(next!==undefined)r.next=next;
  if(e.kind==='finish'&&e.enabled){
-  const time=s.time-(e.crossingOffsetNative??0)/1000,lap=time-r.lapStart;
+  const time=(s.nativeLaunch?r.raceTime:s.time)-(e.crossingOffsetNative??0)/1000,lap=time-r.lapStart;
   r.lapDelta=lapComparison(r.lapTimes,lap,r.referenceLap);r.lapDeltaTime=s.time;r.lapTimes.push(lap);r.lapStart=time;r.lap++;
   r.sourceBuoys.lapMisses=0;
   announce(r,s,'Lap '+(r.lap-1)+' · '+lap.toFixed(3)+' s');
@@ -263,14 +279,13 @@ export function handicapBoost(s,r){if(s.mode!=='versus'||s.freeRide||!s.handicap
 export function raceWeather(s,time=s.time){const w=conditions(s.course,time,s.racers[0].lap);if(s.courseDatum)w.seaLevel=s.courseDatum.value;if(s.seaState!=='course')w.storm=({calm:0,chop:.45,storm:.95})[s.seaState]??w.storm;return w;}
 export function stepRace(s,input,dt){if(s.phase==='paused'||s.phase==='results')return;dt=clamp(dt,0,1/30);
  setRaceWater(s.raceWater??null);
- if(s.phase==='countdown'){for(const r of s.racers)if(r.human&&!s.nativeHost){const c=Array.isArray(input)?input[r.player]||{}:input||{};rocketStart(r,c.throttle||0,-s.countdown);}s.countdown-=dt;if(s.countdown<=0){s.phase='running';s.racers.forEach(r=>announce(r,s,'GO'));}return;}
+ if(s.phase==='countdown'&&!s.nativeHost){for(const r of s.racers)if(r.human){const c=Array.isArray(input)?input[r.player]||{}:input||{};rocketStart(r,c.throttle||0,-s.countdown);}s.countdown-=dt;if(s.countdown<=0){s.phase='running';s.racers.forEach(r=>announce(r,s,'GO'));}return;}
  if(s.nativeHost){
   s.weather=raceWeather(s);waterLevel.value=s.weather.seaLevel;
    stepNativeRaceHost(s.nativeHost,dt,s.racers.map(r=>r.human?(typeof input==='function'?(r.player===0?input:{}):Array.isArray(input)?input[r.player]||{}:r.player===0?input||{}:{}):()=>aiInput(s,r)),
    {waterOptions:{datumNative:Math.round(s.weather.seaLevel/s.raceWater.scale)}});
   s.time=s.nativeHost.world.ticks*.01;
   s.primaryBuoys=capturePrimaryBuoyPresentation(s.nativeHost.primary?.snapshot());
-  for(const r of s.racers)r.raceTime=s.time;
    // The completed50ms native callback owns result and finish-wait updates.
    // Advancing them here as well would count render time a second time.
    return;
@@ -338,7 +353,7 @@ function finishRaceStep(s,dt){
  if(s.freeRide)return;
  if(s.mode==='versus'){
   const finished=s.racers.filter(r=>r.finishTime!==null),disqualified=s.racers.filter(r=>r.dq);
-  if(finished.length||disqualified.length){const winner=finished.length?finished.sort((a,b)=>a.finishTime-b.finishTime)[0]:s.racers.find(r=>!r.dq);s.phase='results';s.result={winner:winner?.player??null,position:winner?.player===0?1:2,time:winner?.finishTime??s.time,dq:disqualified.map(r=>'P'+(r.player+1)+': '+r.dq).join(' / '),lapTimes:[],players:s.racers.map(r=>({player:r.player,id:r.id,time:r.finishTime,misses:r.misses,passed:r.passed,dq:r.dq}))};}return;
+  if(finished.length||disqualified.length){const winner=finished.length?finished.sort((a,b)=>a.finishTime-b.finishTime)[0]:s.racers.find(r=>!r.dq);s.phase='results';s.result={winner:winner?.player??null,position:winner?.player===0?1:2,time:winner?.finishTime??(s.nativeLaunch?(winner??s.racers[0]).raceTime:s.time),dq:disqualified.map(r=>'P'+(r.player+1)+': '+r.dq).join(' / '),lapTimes:[],players:s.racers.map(r=>({player:r.player,id:r.id,time:r.finishTime,misses:r.misses,passed:r.passed,dq:r.dq}))};}return;
  }
  const human=s.racers[0];if(human.dq||human.finishTime!==null){if(s.mode==='championship'&&s.racers.some(r=>!r.dq&&r.finishTime===null)){s.finishWait+=dt;if(s.finishWait<40)return;for(const r of s.racers)if(r.finishTime===null&&!r.dq)r.dq='Race time limit';}s.phase='results';s.result={position:raceOrder(s).indexOf(human)+1,time:human.finishTime,dq:human.dq,lapTimes:[...human.lapTimes]};}
 }

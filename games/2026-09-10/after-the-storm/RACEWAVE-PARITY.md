@@ -2071,3 +2071,70 @@ were moved out of the public source after checking. The normal native host
 still begins22 after its browser countdown; connecting the verified canonical
 race/HUD/i1 sequence and migrating live power ownership remain the next work.
 This checkpoint is local, not a new live release.
+
+## Live shared native start — October 15, 2026 (v2.21.0)
+
+This supersedes the earlier pending live-start notes. The opt-in native Sunny
+Beach Time trial/Two-player host now initializes actor15/frame56 and one
+canonical race/HUD/i1 owner. The actual physical adapter reads that owner's
+simulation648 and phase650. Each logical frame completes five hull/rider ticks,
+water, primary judging, and the primary/floating object pass before countdown
+and prestart-status operations run. The normal simulation1 prestart evolves
+water and physical history with muted engine input. The source phase2 release
+opens the record clocks; its following physical frame advances the starting
+pose. There is no independent browser countdown epoch for this path.
+
+Power, misses and the overlapping source-judge fields are read/write views of
+that canonical owner. A source boost write therefore reaches the actual next
+physical control frame, and a genuine wrong-side crossing increments the miss
+counter once. Per-racer lap/total milliseconds use the factored original clock
+block; the HUD, online view, lap/finish times and versus DQ result read those
+record clocks. Physical/presentation time continues to drive waves and scenery.
+Finished/DQ records stop independently; pause stops both physical and canonical
+owners. Separate windows and online snapshots carry bounded labels/cues and
+display values, with no simulation owner transferred.
+
+The live runtime entry matches all3,375 retained words/scene fields and ordered
+cues against eight prepared original-instruction sequences,890 total frames.
+Factoring the clock preserves the existing full primary-progress comparison:
+5,568 cases/1,236,096 record words and17 independent review cases/3,774 words.
+These are bounded prepared comparisons; physics, original graphics/audio/OS,
+other overlay calls and several enclosing handlers remain declared boundaries.
+
+Thirteen new live-start checks cover actual start-edge sampling, per-player
+boosts/clocks, one-count misses, independent finish/DQ, pause, exact30/60/144Hz
+state and online codec/interpolation. The final focused start/online selection
+passes25 checks. The inspection helm waits until the boost window closes and
+continues following a buoy's actual displacement near its crossing plane.
+Its sixteen real three-lap rider/class cases retain their existing zero/one
+miss limits. The heavy Hard diagnostic moves from old browser-start row47 to
+row29 under actual prestart water phasing; Expert remains row46. Both are
+genuine wrong-side observations, not forgiven passes or a parity sign-off.
+The final full suite checks2,104 tests:2,093 pass with exactly the same eleven
+existing course-calibration failures. The new DQ display check uses an explicit
+prepared record flag; it is not presented as an ordinary-input DQ playthrough.
+
+An ordinary local keyboard start renders High1280x720, holds the stopwatch at
+zero before GO and earns maximum power from a timed fresh throttle edge. Two
+isolated local browsers then complete a real WebRTC start/restart. Both show
+READY/3/2/1/GO, source boarding/riding poses and independent keyboard input.
+Their differently timed edges produce power5 and3. Shared pause holds each
+record at3.000s with exact host/guest positions and source water
+(frame168/hash560161409); both views render High1280x720. Only favicon404s
+appear. This adds local two-browser evidence; the earlier Evo X2 second-PC
+check applies to v2.20.0, and arbitrary WAN/NAT/hardware coverage remains open.
+
+Fresh browser memory still uses an explicit zero-word policy before the actual
+startup writes, plus existing browser grid/progress initialization. It is not
+proof of a cold-ROM memory image. Full primary reset/navigation/progress/result
+integration, prestart judging, original AI, special outer states, remaining
+venues/modes, source force calibration with modern anatomy, and the eleven
+existing course-calibration failures remain unfinished. Default modern play,
+worldwide solo scoring and the high-resolution artwork stay available. The
+native inspection remains opt-in and excluded from competitive records.
+
+To inspect the current native path, open `race.html?verify=1&nativePhysics=1`
+and choose Sunny Beach, Venue conditions, Time trial or Two players. The
+equivalent online host entry is `online.html?verify=1&nativePhysics=1`; its guest
+needs only the normal invite flow. These remain reconstruction inspection
+entries while the full objective is unfinished.

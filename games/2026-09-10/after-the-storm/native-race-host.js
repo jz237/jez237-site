@@ -52,7 +52,9 @@ function present(host){
    impacts:{...snapshot.source.impacts,normal:{...snapshot.source.impacts.normal}},
    physicalControls:snapshot.source.physicalControls?{...snapshot.source.physicalControls}:null,
    contactWindow:{...snapshot.source.contacts},derived:{...view.derived}};
-  if(a.lastControls){r.turn=-a.lastControls.conditionedXNative/70;r.riderLean=a.lastControls.conditionedYNative/70;r.throttle=Number(a.lastControls.throttle);}
+  // Neutral DISPLAY steering has one zero representation; source words and
+  // all physical numeric arrays remain untouched in their actual owners.
+  if(a.lastControls){r.turn=(-a.lastControls.conditionedXNative/70)||0;r.riderLean=a.lastControls.conditionedYNative/70;r.throttle=Number(a.lastControls.throttle);}
   return view;
  });
 }
@@ -63,10 +65,14 @@ function present(host){
  * Custom source actor/pose providers require explicit recovery:false.
  */
 export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,tunes=[],sourceStates=[],poseProviders=[],onFrame=null,
+ raceRuntime=null,onLaunchFrame=null,
  floatingDefinitions,floatingActive=true,primaryActive=true,recovery=true,craftContacts=true}={}){
  if(!Array.isArray(racers)||racers.length<1||racers.some(r=>!r?.hydro||!Number.isInteger(r.id)||r.id<0||r.id>3))throw new TypeError('Expected initialized browser racers');
  if(!water?.field||!finite(water.scale))throw new TypeError('Expected host source water');
  if(onFrame!==null&&typeof onFrame!=='function')throw new TypeError('onFrame must be a function');
+ if(onLaunchFrame!==null&&typeof onLaunchFrame!=='function')throw new TypeError('onLaunchFrame must be a function');
+ if(raceRuntime&&(!recovery||sourceStates.length||poseProviders.length||['scene','advanceClock','advanceLaunch'].some(k=>typeof raceRuntime[k]!=='function')))
+  throw new TypeError('Canonical launch requires recovered riders and its single scene owner');
  if(typeof floatingActive!=='boolean')throw new TypeError('floatingActive must be boolean');
  if(typeof primaryActive!=='boolean')throw new TypeError('primaryActive must be boolean');
  if(typeof recovery!=='boolean')throw new TypeError('recovery must be boolean');
@@ -85,13 +91,13 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
   const adapterOptions={...initial,riderIndex:r.id,...NATIVE_HOST_DEFAULT_TUNE,...tunes[i]},computerProfile=adapterOptions.computerProfile??false;
   const hullStart=prepareNativeHullStartFromPose({...initial,rider:adapterOptions.riderIndex,computerProfile});
   const initialHull=createNativeHullFromStart({prepared:hullStart,rider:adapterOptions.riderIndex,scale:water.scale,computerProfile});
-  const bundle=recovery?createNativeLifecycleRider({initialHull}):
+  const bundle=recovery?createNativeLifecycleRider({initialHull,initializeStart:!!raceRuntime}):
    createAuthoredNativeRider({initialHull,poseProvider:poseProviders[i]});bundles.push(bundle);
   return createNativeRaceAdapter({...adapterOptions,
-   hullStart,contacts,powerSteps:r.power,sourceState:sourceStates[i]??(recovery?{simulationState:3}:{actorState:22,simulationState:3}),...bundle,
-   ...(recovery?{riderRecovery:{courseDatumNative:()=>water.field.datumNative,raceFinished:()=>r.finishTime!==null}}:{})});
+   hullStart,contacts,powerSteps:r.power,sourceState:raceRuntime?()=>raceRuntime.scene():sourceStates[i]??(recovery?{simulationState:3}:{actorState:22,simulationState:3}),...bundle,
+   ...(recovery?{riderRecovery:{courseDatumNative:()=>water.field.datumNative,raceFinished:()=>r.finishTime!==null,...bundle.initialRiderRecovery}}:{})});
  });
- const host={racers,bundles,contacts,primary,primaryActive,floating,floatingActive,presentations:[],onFrame,world:null,
+ const host={racers,bundles,contacts,primary,primaryActive,floating,floatingActive,presentations:[],onFrame,raceRuntime,onLaunchFrame,world:null,
   provenance:Object.freeze({status:'ordinary-source-solver-integration-preview',riderGeometry:'authored-modern-anatomy',
    initialHeight:'course-datum',tuning:'explicit-native-indices; default5/5/5',
    hullStartup:'decoded packed16.16 transform; source point/frame/rest/damping recipe with authored local shape',
@@ -103,11 +109,16 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
   if(context.tick%5!==0)present(host);
  },afterFrame:(_,context)=>{
   present(host);
+  if(raceRuntime)raceRuntime.advanceClock();
   // Adjudication observes contact-displaced current centers BEFORE the source
   // primary array's one motion pass. All craft share that mutable array.
   const keepRunning=host.onFrame?host.onFrame(host,context):undefined;
   if(primary)primary.afterFrame(host.world,context,{active:host.primaryActive});
   if(floating)floating.afterFrame(host.world,context,{active:host.floatingActive});
+  if(raceRuntime){
+   const launch=raceRuntime.advanceLaunch(host.world.adapters.map(a=>a.lastControls.pressedButtons));
+   if(onLaunchFrame)onLaunchFrame(host,context,launch);
+  }
   return keepRunning;
  }});
  present(host);return host;

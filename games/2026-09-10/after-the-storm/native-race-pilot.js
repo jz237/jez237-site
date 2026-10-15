@@ -110,7 +110,10 @@ export function createNativeRacePilot({course,policy={},traceLimit=256}={}){
 
  function input(state,racer=state?.racers?.[0]){
   const r=pose(state,racer);observe(state,racer,r);
-  if(state.phase!=='running'||racer.finishTime!==null||racer.dq)return neutral();
+  // The inspection helm lets the start-boost window close before accelerating.
+  // Human input remains available throughout the actual source GO window.
+  const launch=state.nativeLaunch?.view();
+  if(state.phase!=='running'||launch?.clockStopped||launch&&launch.phase650<3||racer.finishTime!==null||racer.dq)return neutral();
   const frame=state.nativeHost.world.frames;
   if(!Number.isSafeInteger(frame)||frame<0)throw new TypeError('Expected a native logical-frame counter');
   if(frame<stamp)throw new RangeError('Reset the native pilot after seeking backwards');
@@ -156,11 +159,12 @@ export function createNativeRacePilot({course,policy={},traceLimit=256}={}){
       const crossing=lateral+fraction*(rayX*marker.tz-rayZ*marker.tx),sign=marker.classification===1?1:-1;
       if(fraction<=2.5)shift+=sign*Math.max(0,config.buoyClearanceWorld-sign*crossing)/fraction;
      }
-     markerShift={sourceRow:marker.sourceRow,shift:clamp(shift,-config.maxBuoyShiftWorld,config.maxBuoyShiftWorld)};
+     markerShift={sourceRow:marker.sourceRow,clearance:shift-displacement};
     }
-    // Hold the established correction through the last metres instead of
-    // amplifying a late plane-crossing prediction into an abrupt steering loop.
-    const shift=markerShift.shift;
+    // Hold the clearance prediction through the last metres, while continuing
+    // to follow the actual moving buoy. Freezing its earlier displacement can
+    // steer the craft toward a position the contact solver has already moved.
+    const shift=clamp(displacement+markerShift.clearance,-config.maxBuoyShiftWorld,config.maxBuoyShiftWorld);
     const weight=clamp((config.buoyTrackingWorld-ahead)/Math.max(1,config.buoyTrackingWorld-look),0,1);
     target=[target[0]+marker.tz*shift*weight,target[1]-marker.tx*shift*weight];
     buoyTracking={sourceRow:marker.sourceRow,lateralShiftWorld:shift,weight};

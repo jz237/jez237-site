@@ -7,7 +7,7 @@ import {nativeRaceSnapshot} from '../native-race-adapter.js';
 import {captureRaceWater} from '../race-water.js';
 
 function drive(hz){
- const state=createRace({mode:'time',course:getCourse('greyhaven'),physics:'native',waveSeed:17});state.phase='running';
+ const state=createRace({mode:'time',course:getCourse('greyhaven'),physics:'native',waveSeed:17});
  const host=state.nativeHost,a=host.world.adapters[0],bundle=host.bundles[0],layout=structuredClone(state.course.sourceBuoyLayout);
  const saved=a.hull.points.map(p=>p.damping),events=[],contacts=[];let previous='',stamp=-1;
  const actualContact=a.contacts.racingBuoys;
@@ -24,7 +24,7 @@ function drive(hz){
  assert.ok(contacts.some(c=>c.sourceRow===2&&c.channel==='primaryBuoy'),'the actual primary kernel finds the buoy from the ordinary grid drive');
  const trigger=events.find(e=>e.state.crashCountdown===5);assert.ok(trigger&&trigger.impact>10,'actual incoming contact exceeds the severe threshold');
  const fall=events.find(e=>e.state.actorState===23);assert.equal(fall.frame-trigger.frame,5);
- assert.deepEqual(events.filter(e=>e.state.pendingActor<0).map(e=>e.state.actorState).filter((v,i,all)=>i===0||v!==all[i-1]),[22,23,7,22]);
+ assert.deepEqual(events.filter(e=>e.state.pendingActor<0).map(e=>e.state.actorState).filter((v,i,all)=>i===0||v!==all[i-1]),[15,22,23,7,22]);
  const restore=events.find(e=>e.state.actorState===7&&!e.state.crashDampingLatch);assert.equal(restore.state.animationFrame,56);
  assert.equal(a.lastFrame.actorState,22);assert.equal(a.riderLifecycle.state.pendingActor,-1);assert.equal(a.riderLifecycle.state.crashDampingLatch,false);
  assert.deepEqual(a.hull.points.map(p=>p.damping),saved);assert.deepEqual(nativeRecoveryVerificationInput(state),{throttle:0,steer:0});

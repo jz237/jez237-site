@@ -53,12 +53,16 @@ function vessel(){
 }
 
 test('actual two-player native capture keeps independent physical targets/HUD values and excludes simulation ownership',()=>{
- const s=nativeState();s.phase='running';for(let i=0;i<3;i++)stepRace(s,[{throttle:1,steer:.2},{throttle:0,steer:-.4,dampen:true}],1/60);
+ const s=nativeState();let startup=0;
+ while((s.phase==='countdown'||s.nativeHost.world.adapters.some(a=>a.riderLifecycle.state.actorState===15))&&startup++<900)stepRace(s,[{},{}],1/60);
+ assert.ok(startup<900,'both source starting riders complete through normal stepping');
+ const ticks=s.nativeHost.world.ticks,frames=s.raceWater.frames;
+ for(let i=0;i<3;i++)stepRace(s,[{throttle:1,steer:.2},{throttle:0,steer:-.4,dampen:true}],1/60);
  const wire=captureWindowFrame(s,water(s)),read=readWindowFrame(structuredClone(wire));assert.ok(read);
- assert.equal(read.racers.length,2);assert.equal(s.nativeHost.world.ticks,5);assert.equal(s.raceWater.frames,1);
+ assert.equal(read.racers.length,2);assert.equal(s.nativeHost.world.ticks,ticks+5);assert.equal(s.raceWater.frames,frames+1);
  for(const [i,r]of read.racers.entries()){
   assert.equal(r.player,i);assert.deepEqual(r.nativeRiderPose,s.racers[i].nativeRiderPose);
-  assert.equal(r.nativeTelemetry.hudSpeed,s.racers[i].nativeTelemetry.hudSpeed);assert.equal(r.nativeTelemetry.actorState,22);assert.equal(r.nativeTelemetry.logicalFrame,1);
+  assert.equal(r.nativeTelemetry.hudSpeed,s.racers[i].nativeTelemetry.hudSpeed);assert.equal(r.nativeTelemetry.actorState,22);assert.equal(r.nativeTelemetry.logicalFrame,frames+1);
   assert.equal(Object.keys(r.nativeRiderPose.targets).length,15);assert.equal(r.nativeTelemetry.impacts,undefined);assert.equal(r.nativeTelemetry.physicalControls,undefined);
   assert.equal(r.nativeTelemetry.recovery,undefined);assert.equal(r.nativeTelemetry.derived,undefined);assert.equal(r.sourceBuoys,undefined);
  }

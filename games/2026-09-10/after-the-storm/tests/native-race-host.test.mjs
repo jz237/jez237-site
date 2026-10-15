@@ -121,18 +121,23 @@ test('closed-loop yaw feedback consumes fixed physical samples and has identical
 test('native actor state remains explicit while all four numeric rider profiles can drive and trim',()=>{
  const results=[];
  for(let rider=0;rider<4;rider++){
-  const s=create({rider});s.phase='running';for(let i=0;i<120;i++)stepRace(s,{throttle:1,lean:.1},1/60);
+  const s=create({rider});let startup=0;
+  while((s.phase==='countdown'||s.nativeHost.world.adapters[0].riderLifecycle.state.actorState===15)&&startup++<600)stepRace(s,{},1/60);
+  assert.ok(startup<600,'the actual countdown and starting pose complete');
+  for(let i=0;i<120;i++)stepRace(s,{throttle:1,lean:.1},1/60);
   const a=s.nativeHost.world.adapters[0];assert.equal(a.rider.riderIndex,rider);assert.equal(a.lastFrame.actorState,22);
   assert.ok(s.racers[0].speed>10);assert.ok(Object.values(a.articulatedRider.jointWorld).every(Number.isFinite));results.push(s.racers[0].speed);
  }
  assert.equal(new Set(results).size,4);
 });
 
-test('paused/countdown/result calls cannot pump source hull or camera history',()=>{
+test('source countdown evolves physical history with a stopped clock; pause/results preserve both owners',()=>{
  const s=create(),a=s.nativeHost.world.adapters[0],initial=captureRaceWater(s.raceWater);
- stepRace(s,{throttle:1},1/60);assert.equal(a.hull.ticks,0);assert.deepEqual(captureRaceWater(s.raceWater),initial);
- s.phase='running';stepRace(s,{throttle:1},1/60);const q=nativeRaceSnapshot(a),field=captureRaceWater(s.raceWater),remaining=s.nativeHost.world.remainder;
- for(const phase of ['paused','results']){s.phase=phase;stepRace(s,{throttle:1},1/60);assert.deepEqual(nativeRaceSnapshot(a),q);assert.deepEqual(captureRaceWater(s.raceWater),field);assert.equal(s.nativeHost.world.remainder,remaining);}
+ for(let i=0;i<3;i++)stepRace(s,{throttle:1},1/60);
+ assert.equal(a.hull.ticks,5);assert.equal(s.raceWater.frames,1);assert.notDeepEqual(captureRaceWater(s.raceWater),initial);
+ assert.equal(a.lastControls.throttle,false);assert.equal(a.lastFrame.actorState,15);assert.equal(s.racers[0].raceTime,0);
+ const q=nativeRaceSnapshot(a),field=captureRaceWater(s.raceWater),remaining=s.nativeHost.world.remainder,owner=s.nativeLaunch.snapshot();
+ for(const phase of ['paused','results']){s.phase=phase;stepRace(s,{throttle:1},1/60);assert.deepEqual(nativeRaceSnapshot(a),q);assert.deepEqual(captureRaceWater(s.raceWater),field);assert.equal(s.nativeHost.world.remainder,remaining);assert.deepEqual(s.nativeLaunch.snapshot(),owner);}
 });
 
 test('display mutation cannot move the source hull or feed a modern rescue/force pass',()=>{

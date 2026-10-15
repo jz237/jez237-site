@@ -11,6 +11,10 @@ import {beginGhostRace} from '../time-trial-ghost.js';
 const create=(options={})=>createRace({mode:'versus',course:getCourse('greyhaven'),physics:'native',waveSeed:17,
  rider:0,secondRider:2,...options});
 const input=s=>s.racers.map(r=>()=>verificationInput(s,r));
+function completeLaunch(s){let steps=0;
+ while((s.phase==='countdown'||s.nativeHost.world.adapters.some(a=>a.riderLifecycle.state.actorState===15))&&steps++<900)stepRace(s,[{},{}],1/60);
+ assert.ok(steps<900,'both physical riders complete the real source launch');
+}
 
 test('native two-player setup uses both physical riders, the selected class objects and two-camera source water',()=>{
  for(let difficulty=0;difficulty<4;difficulty++){
@@ -41,19 +45,19 @@ test('native two-player setup uses both physical riders, the selected class obje
 });
 
 test('the two normal control streams independently reach their own native accelerator, B, R and trim samples',()=>{
- const s=create({rider:0,secondRider:0});s.phase='running';
+ const s=create({rider:0,secondRider:0});completeLaunch(s);const beforeTicks=s.nativeHost.world.ticks,beforeFrames=s.raceWater.frames;
  for(let i=0;i<120;i++)stepRace(s,[{throttle:1,dampen:true,lean:.1},{throttle:0,slide:true}],1/60);
  const [a,b]=s.nativeHost.world.adapters;
  assert.ok(s.racers[0].speed>s.racers[1].speed+5);
  assert.equal(a.lastControls.heldButtons,0xc000);assert.equal(a.lastControls.rawYNative,7);
  assert.equal(b.lastControls.heldButtons,0x10);assert.equal(b.lastControls.throttle,false);
- assert.equal(a.hull.ticks,200);assert.equal(b.hull.ticks,200);assert.equal(s.raceWater.frames,40);
+ assert.equal(a.hull.ticks,beforeTicks+200);assert.equal(b.hull.ticks,beforeTicks+200);assert.equal(s.raceWater.frames,beforeFrames+40);
  assert.ok(s.racers.every(r=>r.stunt.score===0&&r.hydro.landingId===0));
 });
 
 test('single-player input objects and logical-frame providers leave the other human neutral',()=>{
  for(const controls of [{throttle:1},()=>({throttle:1})]){
-  const s=create();s.phase='running';
+  const s=create();completeLaunch(s);
   for(let i=0;i<4;i++)stepRace(s,controls,1/60);
   assert.deepEqual(s.nativeHost.world.adapters.map(a=>a.lastControls.throttle),[true,false]);
   assert.deepEqual(s.nativeHost.world.adapters.map(a=>a.lastControls.heldButtons),[0x8000,0]);
@@ -61,7 +65,7 @@ test('single-player input objects and logical-frame providers leave the other hu
 });
 
 for(let difficulty=0;difficulty<4;difficulty++)test(`native two-player class${difficulty} completes a real three-lap match with shared craft contacts`,()=>{
- const s=create({course:getCourse('greyhaven',difficulty),difficulty});s.phase='running';const controls=input(s);
+ const s=create({course:getCourse('greyhaven',difficulty),difficulty});const controls=input(s);
  for(let i=0;i<180*60&&s.phase!=='results';i++)stepRace(s,controls,1/60);
  assert.equal(s.phase,'results');assert.equal(s.result.dq,'');assert.ok([0,1].includes(s.result.winner));
  const winner=s.racers[s.result.winner],other=s.racers[1-s.result.winner],w=s.nativeHost.world;
@@ -78,7 +82,7 @@ for(let difficulty=0;difficulty<4;difficulty++)test(`native two-player class${di
 test('two independent logical-frame helm providers give identical physical match finishes at30/60/144Hz',()=>{
  let reference=null;
  for(const hz of [30,60,144]){
-  const s=create();s.phase='running';const controls=input(s);
+  const s=create();const controls=input(s);
   for(let i=0;i<180*hz&&s.phase!=='results';i++)stepRace(s,controls,1/hz);
   assert.equal(s.phase,'results');
   const value={world:nativeRaceWorldSnapshot(s.nativeHost.world),water:captureRaceWater(s.raceWater),

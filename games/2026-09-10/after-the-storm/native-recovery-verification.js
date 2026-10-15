@@ -10,7 +10,7 @@ export function nativeRecoveryVerificationInput(state,racer=state?.racers?.[0]){
   throw new TypeError('Recovery inspection requires the native Sunny Normal preview');
  const index=state.racers.indexOf(racer),host=state.nativeHost,a=host?.world.adapters[index],p=host?.presentations[index]?.racer;
  if(index<0||!a?.riderLifecycle||!p)throw new TypeError('Recovery inspection requires its actual physical rider');
- if(state.phase!=='running'||racer.finishTime!==null||racer.dq)return neutral();
+ if(state.phase!=='running'||state.nativeLaunch?.view().clockStopped||racer.finishTime!==null||racer.dq)return neutral();
  let riders=guides.get(state);if(!riders){riders=new WeakMap();guides.set(state,riders);}
  let guide=riders.get(racer);
  if(!guide){
@@ -23,7 +23,7 @@ export function nativeRecoveryVerificationInput(state,racer=state?.racers?.[0]){
  if(frame===guide.frame)return {...guide.held};
  guide.frame=frame;
  const recovery=a.lastFrame.recovery.state;
- guide.triggered||=recovery.crashCountdown!==0||recovery.stumbleCountdown!==0||recovery.actorState!==22;
+ guide.triggered||=recovery.crashCountdown!==0||recovery.stumbleCountdown!==0||[7,23,24].includes(recovery.actorState);
  if(guide.triggered)guide.held=neutral();
  else{
   const error=angle(Math.atan2(guide.target.x-p.x,guide.target.z-p.z)-p.heading);

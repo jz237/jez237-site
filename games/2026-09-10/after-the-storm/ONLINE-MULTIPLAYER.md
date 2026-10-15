@@ -1,4 +1,4 @@
-# Two-player online racing · v2.20.0
+# Two-player online racing · v2.21.0
 
 Choose **Race online · 2 players** from the racing menu, or open
 [the online lobby](https://jez237.com/games/2026-09-10/after-the-storm/online.html).
@@ -56,3 +56,10 @@ eligible solo events.
 Validation and remaining compatibility observations are recorded in
 [RACEWAVE-PARITY.md](RACEWAVE-PARITY.md). Online play is an additional feature;
 it does not establish full original-game gameplay parity.
+
+The optional native Sunny Beach preview also shares its reconstructed start
+sequence: boarding riders, READY/3/2/1/GO, independently timed start boosts and
+each rider's source race clock. Physical water/hull updates run before GO while
+the race clocks remain stopped. Its ordinary keyboard controls, clock values
+and source water were checked between two local browsers at High1280x720.
+The wider original-game reconstruction remains in progress.
