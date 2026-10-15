@@ -1423,3 +1423,78 @@ sign-offs, the eleven existing course failures and hardware checks remain
 open. Default gameplay remains modern, and native admission remains Sunny
 time trials and two-player races. No original bytes/art are published, no
 money was spent, and this milestone is not pushed or deployed.
+
+## Ordinary race update composition — October 15, 2026
+
+The primary judge now has the preceding source scratch/nearest-node producer,
+complete ordinary lap/timing/finish routine, and following result bookkeeping.
+These remain prepared numeric consumers; a complete source-initialized race is
+not admitted by this milestone.
+
+`native-primary-gate-judge.js` preserves the actual source side history,
+checkpoint endpoint projection, directional one-sided bound and first/last
+coarse-region sharing. Its **2,688** raw/public cases agree. The complete
+`native-primary-scratch-context.js` then matches **2,337** original executions,
+including **518,814** retained record words. It selects actual body or alternate
+XYZ, compares only previous/current/next with source tie priority, updates the
+separate retained 2c48 row, and produces Drake weeds and Port/City region cues.
+No AI navigation cursor or broad nearest-route search is substituted.
+
+`native-primary-race-progress.js` matches **5,568** complete prepared source
+executions, including **1,236,096** record words, scoped shared globals and
+ordered audio entry arguments. It covers 50 ms signed timers and saturation,
+side awards, human misses/DQ, fractional checkpoint timing, nine-slot rolling
+lap/miss history, best-lap flags, finish allocation and course-family changes.
+Crossing interpolation consumes the actual previous body center (+BE4/BEC),
+whose producer stores the center before the five hull ticks. Timing words
+2a9c..2c20 have one 98-word owner, stopping before status 2c24. An independent
+17-case source review found no concrete defect.
+
+`native-race-finalization.js` matches **327** prepared original ordinary result
+updates. Record saving precedes ranking; split feedback, versus final-time
+place overrides, primary-route gap and finish-wait counting follow it. Full
+five-word record rows shift while four replacement words retain the fifth.
+Versus places may differ from the independently sorted order3990. External
+overlays remain ordered recipes, and their continuation reads fresh flags
+after the three prelude calls rather than caching their eligibility.
+
+`native-primary-race-phase.js` composes the actual ascending scratch→judge pairs,
+finish-metric reconciliation, record saving, old-place capture, one rank pass
+and finalization. Its canonical state retains all 222 unsigned bit-pattern
+words per racer, including untouched navigation/unknown fields. Typed leaf
+views are temporary; finish-time reconciliation writes back into timing[14]
+before records run. Projection39a0 is the separate per-slot source array.
+Comparison splits, reverse bits, player count and difficulty metadata share
+their original owners. Zero active count retains scratch XYZ, and invalid
+prepared input rejects atomically. All **135** prepared original outer numeric
+updates agree, including **116,328** record words and all scoped globals,
+tables, scratch, order and effects. This executes the actual paired numeric
+callees, not completed-tail stubs.
+
+`native-ai-perception.js` matches **354** prepared comparisons for procedural
+water-mesh XZ/snap/selection-circle arithmetic, the literal current-object
+prefix and retained graphics-buffer corner selection. It preserves the
+radius16 center-index quirk and stored signed16 vertices. Active AI reads the
+preceding circle; camera/water patch production happens after the hull phase.
+The actual camera-corner XZ writer remains unknown after bounded resident,
+common-overlay and nineteen scene-overlay searches. Nine original buffer-toggle
+executions establish its selector lifetime, not its missing producer. No
+modern frustum, assumed zero corners or player-index buffer choice is supplied.
+
+All **86** added tests pass. The complete suite is **1,678/1,689 in 94.63 s**
+(private `full-tests-native-primary-phase-private.tap`), with the same eleven
+failure names as the preceding completed run. All **231** module versions are
+regenerated in the three HTML import maps. Fresh browser imports reproduce
+the prepared four-racer phase's 888 words and ordered effects. The existing
+native two-player preview remains High 1280×720 at 11.05 s, tick1105/frame221,
+with matching positions, both contact impacts and all 49,152 water heights
+(hash2879715165). Detailed physical riders, water and shoreline remain visible;
+the child console is clear and the parent retains only its favicon404.
+
+Source reset/startup, coherent shared RNG scheduling, native camera/patch and
+current-object producers, overlay/audio consumers, mode11 stunt scoring and a
+full source opponent race remain open. Other native venues/modes, course
+geometry/sign-offs, the eleven existing failures and hardware checks also
+remain. The live preview admission and high-resolution rendering are unchanged.
+No original executable bytes or artwork are published, no money was spent,
+and this milestone is not pushed or deployed.
