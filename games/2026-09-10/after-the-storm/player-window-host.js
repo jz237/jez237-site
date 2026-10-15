@@ -7,6 +7,12 @@ export function createPlayerWindowHost({window:win=globalThis.window,now=()=>per
  const flush=()=>{if(!ready||inFlight||!pending)return;const frame=pending;pending=null;inFlight=true;post('frame',{sequence:++frameSequence,frame});};
  function clearLink(){port?.close();port=null;ready=false;focused=false;visible=false;inFlight=false;pending=null;mailbox.reset();}
  function fallback(reason){if(!child&&!port)return;clearLink();child=null;status=reason;onFallback(reason);onChange();}
+ function requestHandshake(){
+  // window.open can return the still-open named view after a stale-link
+  // fallback. That document does not reload or repeat its initial hello.
+  try{child?.postMessage({type:'player-window-reconnect',version:PLAYER_WINDOW_VERSION,session,capability},win.location.origin);}
+  catch{fallback('Player 2 connection ended.');}
+ }
  function init(){if(descriptor){ready=false;inFlight=false;pending=null;mailbox.reset();commandSequence=-1;post('init',{descriptor});}else post('standby',{label:'Choose a two-player course on Player 1.'});}
  function receive(message){
   if(!validEnvelope(message,session,generation))return;
@@ -35,11 +41,11 @@ export function createPlayerWindowHost({window:win=globalThis.window,now=()=>per
  return {
   // Only call from a real in-product click/keyboard activation.
   open(){
-   if(child&&!child.closed){child.focus();return true;}
+   if(child&&!child.closed){child.focus();if(!port||!ready)requestHandshake();return !!child;}
    const url=new URL('./player-window.html',win.location.href);url.hash=new URLSearchParams({session,capability}).toString();
    try{child=win.open(url.href,'after-storm-p2-'+session,'popup,width=1280,height=720');}catch{child=null;}
    if(!child){status='Player 2 window was blocked. Allow it, then use Open Player 2.';onChange();return false;}
-   openedAt=now();lastPing=openedAt;status='Preparing Player 2…';onChange();return true;
+   openedAt=now();lastPing=openedAt;status='Preparing Player 2…';onChange();requestHandshake();return !!child;
   },
   begin(value){generation++;descriptor=value;ready=false;lastPing=now();openedAt=now();init();onChange();},
   standby(label='Menus are on Player 1.'){descriptor=null;ready=false;focused=false;pending=null;inFlight=false;mailbox.reset();post('standby',{label});},

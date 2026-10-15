@@ -1,4 +1,4 @@
-import {createNativeHull} from './native-hull.js';
+import {createNativeHullFromStart,prepareNativeHullStartFromPose} from './native-hull.js';
 import {createNativeRaceAdapter,nativeRaceSnapshot} from './native-race-adapter.js';
 import {createAuthoredNativeRider} from './authored-native-rider.js';
 import {createNativeLifecycleRider} from './native-lifecycle-rider.js';
@@ -82,15 +82,19 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
  const bundles=[],adapters=racers.map((r,i)=>{
   const initial={position:{x:r.x,y:water.field.datumNative*water.scale,z:r.z},heading:r.heading,
    rider:r.id,scale:water.scale};
-  const bundle=recovery?createNativeLifecycleRider({initialHull:createNativeHull(initial)}):
-   createAuthoredNativeRider({initialHull:createNativeHull(initial),poseProvider:poseProviders[i]});bundles.push(bundle);
-  return createNativeRaceAdapter({...initial,riderIndex:r.id,...NATIVE_HOST_DEFAULT_TUNE,...tunes[i],
-   contacts,powerSteps:r.power,sourceState:sourceStates[i]??(recovery?{simulationState:3}:{actorState:22,simulationState:3}),...bundle,
+  const adapterOptions={...initial,riderIndex:r.id,...NATIVE_HOST_DEFAULT_TUNE,...tunes[i]},computerProfile=adapterOptions.computerProfile??false;
+  const hullStart=prepareNativeHullStartFromPose({...initial,rider:adapterOptions.riderIndex,computerProfile});
+  const initialHull=createNativeHullFromStart({prepared:hullStart,rider:adapterOptions.riderIndex,scale:water.scale,computerProfile});
+  const bundle=recovery?createNativeLifecycleRider({initialHull}):
+   createAuthoredNativeRider({initialHull,poseProvider:poseProviders[i]});bundles.push(bundle);
+  return createNativeRaceAdapter({...adapterOptions,
+   hullStart,contacts,powerSteps:r.power,sourceState:sourceStates[i]??(recovery?{simulationState:3}:{actorState:22,simulationState:3}),...bundle,
    ...(recovery?{riderRecovery:{courseDatumNative:()=>water.field.datumNative,raceFinished:()=>r.finishTime!==null}}:{})});
  });
  const host={racers,bundles,contacts,primary,primaryActive,floating,floatingActive,presentations:[],onFrame,world:null,
   provenance:Object.freeze({status:'ordinary-source-solver-integration-preview',riderGeometry:'authored-modern-anatomy',
    initialHeight:'course-datum',tuning:'explicit-native-indices; default5/5/5',
+   hullStartup:'decoded packed16.16 transform; source point/frame/rest/damping recipe with authored local shape',
    clock:'five10ms hull ticks then one water update',controls:'digital-accelerator; brake-coasts; B-crouch; R-slide',
    actorRecoveryAndTricks:false,riderRecovery:recovery,physicalRiderPresentation:true,
    recoveryGeometry:'authored anatomy/remount; reconstructed procedural fall/stumble; explicit authored rest/circle/history policy',

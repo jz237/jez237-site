@@ -89,6 +89,7 @@ conversion, obstacle contact and ordinary-input traversal still need calibration
 | Remappable controls | Bounded per-player keyboard/button/axis settings, inversion, 0–35% deadzone with 5% default, conflict checks, safe key capture and defaults reset. Touch actions remain independent of physical-key rebinding. |
 | Per-player rumble | Actual collision, landing and hull-load transitions; 25% default, independent strengths, throttled calls and cancellation. Fake actuators cover failure handling; physical hardware remains unverified. |
 | Stunt water conditions | Stunts consistently use venue conditions and permit their normal score saving; ordinary race/free-ride sea preferences are retained. |
+| Global scoring | Published worldwide race-time and stunt-score boards, separated by event, course, class, laps, sea state, tuning category and layout revision. Explicit posting, local records retained, previews/demos/free ride/versus/DQ excluded. See [GLOBAL-SCORING.md](GLOBAL-SCORING.md). |
 
 The initial integrated full run checked **471 tests: 467 passed, four failed**.
 One cache test needed its mode expectations updated for two-player Dolphin
@@ -1847,3 +1848,61 @@ tick1105/frame221, with matching racer positions and49,152 water heights
 This is another local checkpoint, with no original executable bytes/artwork
 published and no money spent. Complete live startup and the other listed
 gameplay, venue and hardware gaps remain open.
+
+## Physical hull startup and separate-window recovery — October 15, 2026
+
+The native Sunny Beach preview now prepares its twelve physical points from
+the decoded packed16.16 starting transform. The source transforms its descending
+local centroid separately, then refits the hull axes and horizontal yaw frame.
+The new recipe preserves that order, source Float32 rounding, all66 pair rests
+and coefficients, radius-dependent damping, extrema and four proxy centers.
+A vertical forward requires the actual retained yaw values. Caller-owned local
+shape and selected damping values remain explicit; unsupported degenerate
+arithmetic rejects before installation.
+
+The existing live hull owner receives the prepared points, center, frame,
+rests, damping and cleared velocities. The initial physical rider is seeded
+from the same prepared start. No packed matrix, raw body buffer or second set
+of physical points is retained. Browser pose conversion and independently
+authored hull geometry are adaptation choices. The subsequent hull solver is
+not claimed to be bit-identical to all original simulation ticks, and actor,
+target, resource and scene initialization remain separate integration work.
+
+The authored verification helm now reads the HUD's next visible buoy and its
+current physical center. Its steering target follows bounded lateral movement
+and allows contact clearance; route geometry, physical buoys, controls mapping,
+source judging and progress remain unchanged. It holds its established steering
+correction through the final approach. This is driving policy, not the original
+AI. A detached observation records the judge's actual sampled center before
+the subsequent buoy-motion pass, so diagnostics no longer compare a preceding
+decision against a later or static center.
+
+Twenty recorded original-instruction executions match4,440 exact Float32
+words, plus2,120 existing-owner world-unit conversion checks, with zero errors.
+All66 focused hull/start/host/helm tests pass, including sixteen rider/class
+finishes and exact30/60/144Hz comparisons. Additional ordinary-input probes
+finish heavy Expert/Reverse time trials and Normal/Reverse two-player races
+without misses or disqualification. These checks do not establish parity on
+other venues or admit original AI/main startup into the live preview.
+
+A browser rendering stall exposed a separate-window recovery gap: reopening
+the surviving named Player2 document does not reload it, so its initial hello
+was not repeated. Explicit reopening now requests an authenticated handshake
+from that same document and rebuilds the private channel. A healthy view keeps
+its port; stale controls and old generations remain rejected. The existing
+finite loading timeout and paused fallback are retained. All20 focused window
+transport and physical-presentation tests pass, including this reproduction.
+
+The local browser reproduces that stale-link pause and reconnects the same
+document without navigation, at the unchanged11.05s, hull tick1105 and water
+frame221. The new channel advances from generation1 to2 and returns both views
+to High1280x720. The physical rider poses and craft positions agree in both
+windows, with zero misses and no console errors. The four recorded craft
+contacts and both impact values remain the same across recovery.
+
+The full suite checks2,049 tests:2,038 pass, with the same eleven existing
+course/wave/competition calibration failures. All255 module hashes are refreshed
+in the three HTML maps. High-resolution craft, riders, water and scenery remain
+the existing presentation. Complete parity and physical-controller/OS-window
+sign-off remain open; no original executable bytes/artwork are published and
+no money was spent.

@@ -1,6 +1,6 @@
 # After the Storm
 
-**v2.19.0 · WORLDWIDE** — October 15, 2026. Global leaderboards now share race times and stunt points across devices. Open **Global leaderboard** from the menu, or finish a solo event and choose **Post worldwide**. Course records continue to save on your device. See [GLOBAL-SCORING.md](GLOBAL-SCORING.md) for categories and validation. Previous water releases: [BEACH-BREAK-2.18.md](BEACH-BREAK-2.18.md) and [WAVE-REALISM-2.17.md](WAVE-REALISM-2.17.md).
+**v2.19.1 · WORLDWIDE** — October 15, 2026. Global leaderboards share race times and stunt points across devices. Open **Global leaderboard** from the menu, or finish a solo event and choose **Post worldwide**. Course records continue to save on your device. This patch integrates the reconstructed physical hull-start recipe into the optional Sunny Beach native-physics preview, improves its automated helm around moving buoys, and restores Player 2 reconnection after a stale-link pause. See [GLOBAL-SCORING.md](GLOBAL-SCORING.md) for scoring and [RACEWAVE-PARITY.md](RACEWAVE-PARITY.md) for reconstruction evidence and remaining work. Previous water releases: [BEACH-BREAK-2.18.md](BEACH-BREAK-2.18.md) and [WAVE-REALISM-2.17.md](WAVE-REALISM-2.17.md).
 
 The shared wave/buoyancy simulation, adaptive graphics and gameplay remain active. Earlier land and water notes are in [LAND-2.10.md](LAND-2.10.md) and [GRAPHICS-2.9.md](GRAPHICS-2.9.md).
 

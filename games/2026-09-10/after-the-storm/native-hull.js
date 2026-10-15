@@ -17,6 +17,9 @@
 // accumulation/long-gap handling and the .025 world scale are host choices;
 // this does not claim exactly100 hull passes per physical wall second.
 
+import {prepareNativeRaceStartTransform} from './native-race-start-transform.js';
+import {prepareNativeHullStart} from './native-hull-start.js';
+
 export const NATIVE_HULL_STEP = .01;
 const INTEGRATION_GAIN = .992;
 const CONSTRAINT_GAIN = .1;
@@ -111,6 +114,53 @@ export function createNativeHull({position=ZERO,velocity=ZERO,heading=0,pitch=0,
   };
 }
 
+/** Browser spawn adaptation: its authored shape and world pose are explicit
+ * policy. The physical recipe consumes the packed/decoded native transform,
+ * rather than carrying these unquantized Euler axes into the solver. A vertical
+ * spawn needs the caller's retained yaw; no default heading is invented there.
+ */
+export function prepareNativeHullStartFromPose({position=ZERO,heading=0,pitch=0,roll=0,rider=0,scale=.025,computerProfile=false,retainedYawFrame}={}){
+  finiteVector(position,'position');
+  if(![heading,pitch,roll,scale].every(Number.isFinite)||scale<=0)throw new RangeError('Pose must be finite and scale positive');
+  if(!Number.isInteger(rider)||rider<0||rider>3)throw new RangeError('rider must be an index from0 to3');
+  if(typeof computerProfile!=='boolean')throw new TypeError('computerProfile must be boolean');
+  const packed=prepareNativeRaceStartTransform({positionNative:vec(position.x/scale,position.y/scale,position.z/scale),
+    forwardNative:rotatedLocal([0,0,1],heading,pitch,roll),upNative:rotatedLocal([0,1,0],heading,pitch,roll)});
+  if(!packed.complete)throw new RangeError('Native hull startup requires a complete nondegenerate transform');
+  return prepareNativeHullStart({matrixWords:packed.matrixWords,localPointsNative:LOCAL_POINTS.map(([x,y,z])=>vec(x,y,z)),
+    dampingInner:(computerProfile?COMPUTER_DAMPING_INNER:DAMPING_INNER)[rider],
+    // Descriptor20=.4 gives the ordinary .5/(.4*10+1) pair gain.
+    dampingOuter:(computerProfile?COMPUTER_DAMPING_OUTER:DAMPING_OUTER)[rider],constraint20:.4,retainedYawFrame});
+}
+
+/** Install one prepared physical start into the existing hull fields. No
+ * packed matrix, parallel raw body or second physical point owner is retained.
+ * Native initialization clears velocities; speed is not supplied as spawn art.
+ */
+export function createNativeHullFromStart({prepared,rider=0,scale=.025,computerProfile=false}={}){
+  if(!Number.isFinite(scale)||scale<=0)throw new RangeError('scale must be positive');
+  if(!Number.isInteger(rider)||rider<0||rider>3)throw new RangeError('rider must be an index from0 to3');
+  if(typeof computerProfile!=='boolean')throw new TypeError('computerProfile must be boolean');
+  if(!prepared||!Array.isArray(prepared.pointsNative)||prepared.pointsNative.length!==12||
+    !Array.isArray(prepared.restLengthsNative)||prepared.restLengthsNative.length!==66||
+    !Array.isArray(prepared.damping)||prepared.damping.length!==12)throw new TypeError('Expected a prepared twelve-point native start');
+  const world=(p,name)=>{finiteVector(p,name);return finiteVector(vec(p.x*scale,p.y*scale,p.z*scale),name+' world');};
+  const points=Array.from(prepared.pointsNative,(p,i)=>{
+    const damping=prepared.damping[i];if(!Number.isFinite(damping))throw new RangeError('Point damping must be finite');
+    return {position:world(p,'point'+i),velocity:vec(),damping};
+  });
+  const restLengths=Array.from(prepared.restLengthsNative,n=>{if(!Number.isFinite(n)||n<0||!Number.isFinite(n*scale))throw new RangeError('Native pair rest must be finite and nonnegative');return n*scale;});
+  const frame=Object.fromEntries(['forward','up','right'].map(k=>[k,copy(finiteVector(prepared.frameNative?.[k],'prepared '+k))]));
+  const center=world(prepared.centerNative,'prepared center'),yawFrame={};
+  for(const k of ['field1434','field1438','field143c','field1440']){
+    const value=prepared.yawFrame?.[k];if(!Number.isFinite(value))throw new TypeError('Expected the prepared horizontal frame');yawFrame[k]=value;
+  }
+  return {points,restLengths,frame,center,yawFrame,scale,rider,computerProfile,velocity:vec(),motionVelocity:vec(),motionDirection:vec(),
+    remainder:0,ticks:0,simulationTime:0,stepsLast:0,
+    initialization:Object.freeze({geometry:'caller-owned local shape',transform:'packed16.16 decode and physical refit',
+      source:'physical hull startup only; no actor/target/scene reset claim'})};
+}
+
 /**
  * Apply an already discovered point/plane contact; return removed normal speed.
  * Caller owns triangle clipping and the bounded penetration/candidate query.
@@ -183,6 +233,11 @@ function integrateTick(hull,acceleration,beforeIntegrate){
   hull.center=center;
   hull.velocity=mean(points,'velocity');
   hull.frame=fitFrame(points,hull.frame);
+  if(hull.yawFrame){
+    const F=Math.fround,f=hull.frame.forward,horizontal=F(F(F(f.x)*F(f.x))+F(F(f.z)*F(f.z)));
+    if(horizontal!==0){const reciprocal=F(1/F(Math.sqrt(horizontal))),x=F(F(f.x)*reciprocal),z=F(F(f.z)*reciprocal);
+      Object.assign(hull.yawFrame,{field1434:x,field1438:z,field143c:z,field1440:-x});}
+  }
   hull.ticks++;
   hull.simulationTime=hull.ticks*h;
 }

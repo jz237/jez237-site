@@ -34,9 +34,12 @@ function receive(m){
  if(m.type==='host-closed'){hold('Primary window closed.');dispose();}
 }
 function bind(e){
- const m=e.data;if(e.origin!==location.origin||e.source!==window.opener||m?.type!=='player-window-bind'||m.version!==PLAYER_WINDOW_VERSION||m.session!==session||m.capability!==capability||!e.ports[0])return;
+ const m=e.data;if(e.origin!==location.origin||e.source!==window.opener||m?.version!==PLAYER_WINDOW_VERSION||m.session!==session||m.capability!==capability)return;
+ if(m.type==='player-window-reconnect'){hello();return;}
+ if(m.type!=='player-window-bind'||!e.ports[0])return;
  port?.close();port=e.ports[0];port.onmessage=e=>receive(e.data);port.start();heartbeat();
 }
+function hello(){window.opener.postMessage({type:'player-window-hello',version:PLAYER_WINDOW_VERSION,session,capability},location.origin);}
 window.addEventListener('message',bind);
 function dispose(){if(disposed)return;disposed=true;send('closed');clearInput();port?.close();viewer?.dispose();window.removeEventListener('message',bind);}
 window.addEventListener('pagehide',dispose);
@@ -68,6 +71,6 @@ function frame(now){
  updateGamepadRumble(haptics,focused?{mode:'versus',phase:f.phase,time:f.time,racers:f.racers}:null,pads,descriptor.rumble,now);
 }
 if(!/^[a-f0-9]{32}$/.test(session??'')||!/^[a-f0-9]{32}$/.test(capability??'')||!window.opener)hold('Open Player 2 from the two-player display menu.');
-else{window.opener.postMessage({type:'player-window-hello',version:PLAYER_WINDOW_VERSION,session,capability},location.origin);requestAnimationFrame(frame);}
+else{hello();requestAnimationFrame(frame);}
 // Read-only telemetry in this presentation page; no input/progress shortcuts.
 Object.defineProperty(window,'__stormPlayerQA',{value:Object.freeze({snapshot:()=>({generation,standby,sequence:frames.at(-1)?.sequence??0,time:frames.at(-1)?.frame.time??0,phase:frames.at(-1)?.frame.phase??'standby',focused:document.hasFocus(),visible:document.visibilityState,renderer:viewer?.details,racers:frames.at(-1)?.frame.racers.map(r=>({player:r.player,x:r.x,z:r.z,throttle:r.throttle,speed:r.speed,hudSpeed:windowRacerHudSpeed(r),nativeRiderPose:!!r.nativeRiderPose,actorState:r.nativeTelemetry?.actorState??null,sourceLogicalFrame:r.nativeTelemetry?.logicalFrame??null}))})})});

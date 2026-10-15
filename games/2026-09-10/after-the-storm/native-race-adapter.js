@@ -1,4 +1,4 @@
-import {createNativeHull,stepNativeHull,NATIVE_HULL_STEP} from './native-hull.js';
+import {createNativeHull,createNativeHullFromStart,stepNativeHull,NATIVE_HULL_STEP} from './native-hull.js';
 import {createNativeWaterProfile,createNativeWaterState,applyNativeWaterForces} from './native-water.js';
 import {createNativeRiderProfile,prepareNativeRiderFrame,applyNativeTrimForces,
   applyNativeAuxiliaryYawForces,decideNativeRiderAction,applyNativeManipulationForces} from './native-rider-forces.js';
@@ -232,12 +232,14 @@ export function applyNativeRaceContact(hull,{kind,pointIndex,normal,penetration=
  */
 export function createNativeRaceAdapter({riderIndex=0,tuneB6c=0,tuneB70=0,tuneB74=0,
   position,velocity,heading=0,pitch=0,roll=0,scale=.025,surface=0,contacts={},jointWorld,
-  contactFactor=1,powerSteps=5,sourceState={},articulatedRider,riderPose,riderRecovery,riderActions,controlOrigin='human',computerProfile=false}={}){
+  contactFactor=1,powerSteps=5,sourceState={},articulatedRider,riderPose,riderRecovery,riderActions,controlOrigin='human',computerProfile=false,hullStart}={}){
   if(controlOrigin!=='human'&&controlOrigin!=='ai')throw new RangeError('controlOrigin must be human or ai');
   if(typeof computerProfile!=='boolean')throw new TypeError('computerProfile must be boolean');
   range(contactFactor,'contactFactor',0,1);range(powerSteps,'powerSteps',0,5);hookSet(contacts);
   if(jointWorld!==undefined&&typeof jointWorld!=='function')vector(jointWorld,'jointWorld');
-  const hull=createNativeHull({position,velocity,heading,pitch,roll,scale,rider:riderIndex,computerProfile});
+  if(hullStart!==undefined&&velocity&&[velocity.x,velocity.y,velocity.z].some(v=>v!==0))throw new RangeError('Prepared native startup clears velocity');
+  const hull=hullStart!==undefined?createNativeHullFromStart({prepared:hullStart,scale,rider:riderIndex,computerProfile}):
+    createNativeHull({position,velocity,heading,pitch,roll,scale,rider:riderIndex,computerProfile});
   const profile=createNativeWaterProfile({riderIndex,tuneB6c,tuneB70,tuneB74,computerProfile});
   const water=createNativeWaterState(profile),rider=createNativeRiderProfile({riderIndex}),impacts=createNativeImpactState();
   const riderControlState=createNativeRiderControlState({baseLateralRetention:profile.waterLateralRetention,baseRollBalance:profile.rollBalance});

@@ -1,4 +1,4 @@
-// Authored helm policy for the opt-in Sunny Beach native time-trial preview.
+// Authored helm policy for opt-in Sunny Beach native time trials and versus.
 // This is not the original AI. It reads the actual native presentation pose
 // and the existing navigation anchors; it never changes a physical point,
 // course, timer, buoy state, power, miss counter or lap. Use one pilot per race
@@ -16,14 +16,15 @@ export const NATIVE_RACE_PILOT_POLICY=Object.freeze({
  headingGain:6,yawDamping:1.5,
  cornerDistanceWorld:25,cornerSlowdown:1.5,
  speedHysteresisWorld:.25,waypointRadiusWorld:.8,
- steeringEngineThreshold:.6,steeringEngineMaxSpeedWorld:24
+ steeringEngineThreshold:.6,steeringEngineMaxSpeedWorld:24,
+ buoyTrackingWorld:32,maxBuoyShiftWorld:2,buoyClearanceWorld:2
 });
 
 const ranges={straightSpeedWorld:[1,80],cornerSpeedWorld:[1,80],
  minLookaheadWorld:[.1,100],lookaheadSeconds:[0,4],velocityPredictionSeconds:[0,2],
  headingGain:[0,30],yawDamping:[0,10],cornerDistanceWorld:[.1,150],cornerSlowdown:[0,10],
  speedHysteresisWorld:[0,5],waypointRadiusWorld:[.01,5],
- steeringEngineThreshold:[0,1],steeringEngineMaxSpeedWorld:[1,80]};
+ steeringEngineThreshold:[0,1],steeringEngineMaxSpeedWorld:[1,80],buoyTrackingWorld:[1,100],maxBuoyShiftWorld:[0,20],buoyClearanceWorld:[0,10]};
 function drivingPolicy(overrides){
  if(!overrides||typeof overrides!=='object'||Array.isArray(overrides))throw new TypeError('Expected a driving-policy object');
  for(const key of Object.keys(overrides))if(!Object.hasOwn(ranges,key))throw new TypeError(`Unknown native pilot policy ${key}`);
@@ -46,7 +47,10 @@ function drivingPolicy(overrides){
  * feedback averages the actual heading change over the previous logical
  * control interval; a single10ms water-impact rate is too noisy for this helm.
  *
- * The carrot follows the unchanged polyline with speed-based lookahead.
+ * The carrot follows the unchanged polyline with speed-based lookahead. Near
+ * the HUD's next visible marker, it follows that buoy's lateral displacement
+ * from its authored position and allows bounded clearance for contact with it.
+ * It never changes the route or the physical buoy.
  * Passing a waypoint's perpendicular plane advances only the private steering
  * cursor, even after an overshoot. It awards no course progress. Source buoy
  * observations below are diagnostics only and never influence the controls.
@@ -64,8 +68,9 @@ export function createNativeRacePilot({course,policy={},traceLimit=256}={}){
  });
  if(!Number.isInteger(traceLimit)||traceLimit<0||traceLimit>4096)throw new RangeError('traceLimit must be from0 to4096');
  const config=drivingPolicy(policy),sourceNodes=new Map((course.sourceBuoyLayout?.nodes??[]).map(n=>[n.sourceRow,n]));
+ const visibleNodes=new Map(Object.entries(course.sourceVisibleGateIndices??{}).map(([row,index])=>[index,sourceNodes.get(Number(row))]));
  let binding=null,index=0,circuits=1,start=null,stamp=-1,held=neutral(),throttle=true,last=null,previousProgress=null;
- let samples=0,coastFrames=0,reserveFrames=0,transitions=[];
+ let samples=0,coastFrames=0,reserveFrames=0,transitions=[],markerShift=null;
 
  function pose(state,racer){
   if(state?.physics!=='native'||!state.nativeHost?.world||!Array.isArray(state.racers))throw new TypeError('Expected an opt-in native race');
@@ -82,16 +87,20 @@ export function createNativeRacePilot({course,policy={},traceLimit=256}={}){
   const now={row:racer.sourceBuoys.nextSourceRow,misses:racer.misses,passed:racer.passed,lap:racer.lap,
    logicalTick:racer.sourceBuoys.logicalTicks};
   if(previousProgress&&(now.row!==previousProgress.row||now.misses!==previousProgress.misses||now.lap!==previousProgress.lap)){
-   const n=sourceNodes.get(previousProgress.row),position=racer.sourceBuoyPrevious??p;
-   const lateral=n?n.tz*(position.x-n.x)-n.tx*(position.z-n.z):null;
+   const n=sourceNodes.get(previousProgress.row),observed=racer.sourceBuoyObservation;
+   const judged=observed?.sourceRow===previousProgress.row&&observed.logicalTick===now.logicalTick?observed:null;
+   const position=judged?.position??racer.sourceBuoyPrevious??p,center=judged?.center??n;
+   const lateral=n?n.tz*(position.x-center.x)-n.tx*(position.z-center.z):null;
    const margin=n?.classification===0?25*(course.sourceBuoyLayout.scale??.025)-lateral:
     n?.classification===1?lateral+25*(course.sourceBuoyLayout.scale??.025):null;
    if(traceLimit){
     transitions.push({time:now.logicalTick*.05,fromSourceRow:previousProgress.row,toSourceRow:now.row,
      lap:now.lap,passed:now.passed,misses:now.misses,missDelta:now.misses-previousProgress.misses,
      sourcePosition:{x:position.x,z:position.z},classification:n?.classification??null,enabled:!!n?.enabled,
-     buoyDistanceWorld:n?Math.hypot(position.x-n.x,position.z-n.z):null,
-     sideMarginWorld:margin,sourceHeadingErrorAtObservation:n?angle(p.heading-Math.atan2(n.tx,n.tz)):null,
+     buoyDistanceWorld:n?Math.hypot(position.x-center.x,position.z-center.z):null,
+     sideMarginWorld:margin,buoyCenterWorld:center?{x:center.x,z:center.z}:null,
+     judgeSide:judged?.side??null,judgeCorrect:judged?.correct??null,
+     sourceHeadingErrorAtObservation:n?angle(p.heading-Math.atan2(n.tx,n.tz)):null,
      navigation:last?{index:last.index,target:[...last.target],headingError:last.headingError,speedWorld:last.speedWorld}:null});
     if(transitions.length>traceLimit)transitions.shift();
    }
@@ -130,6 +139,33 @@ export function createNativeRacePilot({course,policy={},traceLimit=256}={}){
     spare-=distance;from=to;
    }
   }
+  let buoyTracking=null;
+  const marker=visibleNodes.get(racer.next),primary=state.nativeHost.primary;
+  if(markerShift?.sourceRow!==marker?.sourceRow)markerShift=null;
+  if(marker?.enabled&&!marker.checkpoint&&[0,1].includes(marker.classification)&&typeof primary?.positionForSourceRow==='function'){
+   const ahead=(marker.x-r.x)*marker.tx+(marker.z-r.z)*marker.tz;
+   if(ahead>=-look*.5&&ahead<config.buoyTrackingWorld){
+    const current=primary.positionForSourceRow(marker.sourceRow);
+    const displacement=marker.tz*(current.x-marker.x)-marker.tx*(current.z-marker.z);
+    if(ahead>=look*.4||!markerShift){
+     let shift=displacement;
+     const rayX=target[0]+marker.tz*shift-r.x,rayZ=target[1]-marker.tx*shift-r.z;
+     const travel=rayX*marker.tx+rayZ*marker.tz,planeAhead=(current.x-r.x)*marker.tx+(current.z-r.z)*marker.tz;
+     if(config.buoyClearanceWorld>0&&travel>0&&planeAhead>look*.4){
+      const fraction=planeAhead/travel,lateral=marker.tz*(r.x-current.x)-marker.tx*(r.z-current.z);
+      const crossing=lateral+fraction*(rayX*marker.tz-rayZ*marker.tx),sign=marker.classification===1?1:-1;
+      if(fraction<=2.5)shift+=sign*Math.max(0,config.buoyClearanceWorld-sign*crossing)/fraction;
+     }
+     markerShift={sourceRow:marker.sourceRow,shift:clamp(shift,-config.maxBuoyShiftWorld,config.maxBuoyShiftWorld)};
+    }
+    // Hold the established correction through the last metres instead of
+    // amplifying a late plane-crossing prediction into an abrupt steering loop.
+    const shift=markerShift.shift;
+    const weight=clamp((config.buoyTrackingWorld-ahead)/Math.max(1,config.buoyTrackingWorld-look),0,1);
+    target=[target[0]+marker.tz*shift*weight,target[1]-marker.tx*shift*weight];
+    buoyTracking={sourceRow:marker.sourceRow,lateralShiftWorld:shift,weight};
+   }
+  }
   const desiredHeading=Math.atan2(target[0]-r.x-r.vx*config.velocityPredictionSeconds,target[1]-r.z-r.vz*config.velocityPredictionSeconds);
   const error=angle(desiredHeading-r.heading);
   let bend=0,distance=Math.max(0,remaining),from=previous,to=q;
@@ -149,12 +185,13 @@ export function createNativeRacePilot({course,policy={},traceLimit=256}={}){
   last={logicalFrame:frame,index,circuits,x:r.x,z:r.z,speedWorld:r.speed,heading:r.heading,yawVelocity:r.yawVelocity,controlYawVelocity:controlYaw,
    headingError:error,crossWorld:cross,remainingWorld:remaining,lookaheadWorld:look,target:[...target],
    desiredSpeedWorld:desiredSpeed,bendRadians:bend,steeringEngineReserve:reserve,controls:{...held}};
+  last.buoyTracking=buoyTracking;
   return {...held};
  }
 
  function reset(){
   binding=null;index=0;circuits=1;start=null;stamp=-1;held=neutral();throttle=true;last=null;previousProgress=null;
-  samples=coastFrames=reserveFrames=0;transitions=[];
+  samples=coastFrames=reserveFrames=0;transitions=[];markerShift=null;
  }
  return {input,reset,diagnostics:()=>copy({policy:config,navigation:{index,circuits},samples,coastFrames,reserveFrames,last,transitions})};
 }

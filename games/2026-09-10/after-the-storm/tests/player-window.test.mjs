@@ -107,3 +107,36 @@ test('an unbound window and a preparing course retain the finite loader timeout'
   }finally{host.dispose();win.child.port?.close();}
  }
 });
+
+test('explicit reopen reconnects the same surviving named document without a reload or stale input',async()=>{
+ let now=0,fallbacks=0,requests=0;const win=fakeWindow(),child=win.child,ports=[];
+ const originalPost=child.postMessage.bind(child);
+ child.postMessage=(message,origin,transfers)=>{
+  originalPost(message,origin,transfers);
+  if(transfers?.[0])ports.push(transfers[0]);
+  if(message.type==='player-window-reconnect'){
+   requests++;assert.equal(origin,win.location.origin);
+   // The surviving view answers the explicit request, just as its message
+   // listener does. There is no simulated navigation or manual second hello.
+   queueMicrotask(()=>win.fire({source:child,origin,data:{...message,type:'player-window-hello'}}));
+  }
+ };
+ const host=createPlayerWindowHost({window:win,now:()=>now,onFallback:()=>fallbacks++});
+ try{
+  assert.ok(host.open());host.begin({course:'greyhaven'});await settle();
+  const firstPort=child.port,firstGeneration=host.generation;
+  firstPort.postMessage(envelope(host.session,firstGeneration,'ready'));
+  firstPort.postMessage(envelope(host.session,firstGeneration,'heartbeat',{focused:true,visible:true}));
+  firstPort.postMessage(envelope(host.session,firstGeneration,'input',{sequence:50,controls:[{throttle:1,steer:0},{throttle:1,steer:0}]}));
+  await settle();assert.equal(host.ready,true);assert.equal(host.remoteControls()[1].throttle,1);
+  const healthyRequests=requests;assert.ok(host.open());assert.equal(requests,healthyRequests,'focusing a healthy view keeps its port');
+  now=2000;host.poll();assert.equal(fallbacks,1);assert.equal(host.attached,false);assert.equal(child.closed,false);
+  assert.ok(host.open());host.begin({course:'greyhaven',time:11.05});await settle();
+  assert.equal(win.child,child);assert.notEqual(child.port,firstPort);assert.equal(host.generation,firstGeneration+1);
+  assert.equal(requests,healthyRequests+1);assert.ok(host.remoteControls().every(c=>!c.throttle));
+  child.port.postMessage(envelope(host.session,firstGeneration,'ready'));await settle();assert.equal(host.ready,false);
+  child.port.postMessage(envelope(host.session,host.generation,'ready'));await settle();assert.equal(host.ready,true);
+  host.publish({time:11.05,phase:'paused'});await settle();
+  assert.deepEqual(child.messages.at(-1).frame,{time:11.05,phase:'paused'});assert.equal(fallbacks,1);
+ }finally{host.dispose();for(const port of ports)port.close();}
+});

@@ -23,6 +23,10 @@ test('native preview creates actual point/rider solvers and explicit recovered t
  const s=create(),host=s.nativeHost,a=host.world.adapters[0];
  assert.ok(s.nativePreview&&s.demoRun);assert.equal(beginGhostRace(s),null);
  assert.equal(a.hull.points.length,12);assert.equal(a.articulatedRider.points.length,19);
+ assert.equal(a.hull.initialization.transform,'packed16.16 decode and physical refit');
+ assert.equal(host.provenance.hullStartup,'decoded packed16.16 transform; source point/frame/rest/damping recipe with authored local shape');
+ assert.ok(a.hull.points.every(p=>Object.values(p.velocity).every(v=>v===0)));
+ assert.ok(a.hull.yawFrame);assert.equal(a.hull.matrixWords,undefined);assert.equal(a.hull.prepared,undefined);
  for(const [key,value]of Object.entries(NATIVE_HOST_DEFAULT_TUNE))assert.equal(a.water.profile[key],value);
  assert.equal(host.contacts.geometry.shore.length,49);assert.equal(host.contacts.geometry.floor.length,231);
  assert.equal(host.provenance.actorRecoveryAndTricks,false);assert.equal(host.provenance.nativeRacerCollision,true);
@@ -50,6 +54,23 @@ test('native preview is restricted to its verified integration boundary',()=>{
  assert.throws(()=>create({mode:'versus',handicap:true}),/catch-up/);
  assert.throws(()=>createRace({physics:'other'}),/physics/);
  const ordinary=createRace({mode:'time'});assert.equal(ordinary.physics,'modern');assert.equal(ordinary.nativeHost,null);
+});
+
+test('source judge observation records the pre-motion primary center without owning that buoy',()=>{
+ const s=create(),host=s.nativeHost,r=s.racers[0],original=host.onFrame,observations=[];
+ host.onFrame=(h,c)=>{
+  const row=r.sourceBuoys.nextSourceRow,center=h.primary.positionForSourceRow(row);
+  const result=original(h,c),observation=r.sourceBuoyObservation;
+  if(observation?.logicalTick===r.sourceBuoys.logicalTicks&&observation.sourceRow===row){
+   assert.equal(h.primary.state.motionFrames,c.logicalFrame-1);
+   assert.deepEqual(observation.center,{x:center.x,z:center.z});
+   assert.deepEqual(observation.position,r.sourceBuoyPrevious);observations.push(structuredClone(observation));
+  }
+  return result;
+ };
+ s.phase='running';for(let i=0;i<1800&&observations.length<3;i++)stepRace(s,()=>verificationInput(s,r),1/60);
+ assert.ok(observations.length>=3);const before=host.primary.snapshot();r.sourceBuoyObservation.center.x=999;
+ assert.deepEqual(host.primary.snapshot(),before);
 });
 
 test('actual point snapshots drive display pose without running the rigid solver or double-stepping water',()=>{

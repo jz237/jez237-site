@@ -110,6 +110,31 @@ test('pause, finish and reset do not continue private navigation or leak acceler
  assert.equal(pilot.input(other.state).throttle,1);
 });
 
+test('judge diagnostics use the sampled moving center while helm decisions stay independent of that record',()=>{
+ const f=fixture(),pilot=createNativeRacePilot({course:f.course});pilot.input(f.state);
+ Object.assign(f.racer,{misses:1,passed:1,sourceBuoyPrevious:{x:.01,z:.2},sourceBuoyObservation:{
+  sourceRow:5,logicalTick:1,position:{x:.01,z:.2},center:{x:0,z:-1},side:0,correct:false}});
+ Object.assign(f.racer.sourceBuoys,{nextSourceRow:6,logicalTicks:1});f.state.nativeHost.world.frames=1;
+ const before=structuredClone(f.state);pilot.input(f.state);assert.deepEqual(f.state,before);
+ const row=pilot.diagnostics().transitions[0];
+ assert.deepEqual(row.buoyCenterWorld,{x:0,z:-1});assert.ok(Math.abs(row.sideMarginWorld+.575)<1e-12);
+ assert.equal(row.judgeSide,0);assert.equal(row.judgeCorrect,false);
+ const a=fixture({heading:-.2}),b=fixture({heading:-.2});
+ b.racer.sourceBuoyObservation={sourceRow:999,logicalTick:0,position:{x:999,z:999},center:{x:999,z:999},side:0,correct:false};
+ assert.deepEqual(createNativeRacePilot({course:a.course}).input(a.state),createNativeRacePilot({course:b.course}).input(b.state));
+});
+
+test('helm follows the visible marker displacement without editing its route or buoy',()=>{
+ const f=fixture({x:-10,z:0,heading:Math.PI/2}),moving={x:0,z:1};
+ f.course.sourceVisibleGateIndices={5:1};f.racer.next=1;
+ f.state.nativeHost.primary={positionForSourceRow:()=>({...moving})};
+ const pilot=createNativeRacePilot({course:f.course,policy:{buoyClearanceWorld:0}}),before=JSON.stringify(f.state);deepFreeze(f.state);
+ const controls=pilot.input(f.state),d=pilot.diagnostics().last;
+ assert.equal(JSON.stringify(f.state),before);assert.deepEqual(moving,{x:0,z:1});
+ assert.deepEqual(d.target,[0,7]);assert.deepEqual(d.buoyTracking,{sourceRow:5,lateralShiftWorld:-1,weight:1});
+ assert.equal(controls.slide,false);assert.equal(controls.lean,0);
+});
+
 test('invalid geometry, policy, backend, class and backward clock are rejected',()=>{
  const f=fixture();
  for(const options of [{course:{}},{course:{...f.course,anchors:[[0,0],[1,1],[NaN,2]]}},

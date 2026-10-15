@@ -146,6 +146,12 @@ function adjudicateSourceGate(s,r,dt,currentNodePosition){
   finished:r.finishTime!==null,disqualified:!!r.dq});
  r.sourceBuoys=result.state;r.sourceBuoyPrevious={x:r.x,z:r.z};
  const e=result.event;if(!e?.advanced)return false;
+ // One detached diagnostic of the exact judge sample. The shared primary
+ // array moves immediately after this callback, so its later rendered center
+ // (and the static course marker) cannot explain a preceding side decision.
+ const node=s.course.sourceBuoyLayout.nodes.find(n=>n.sourceRow===e.sourceRow),center=currentNodePosition??node;
+ r.sourceBuoyObservation={sourceRow:e.sourceRow,logicalTick:result.state.logicalTicks,position:{x:r.x,z:r.z},
+  center:{x:center.x,z:center.z},side:e.side,correct:e.correct};
  if(e.nativeEventCode===1){r.power=r.sourceBuoys.power;announce(r,s,r.power===5?'MAX POWER':'Clean buoy · power '+r.power);}
  else if(e.nativeEventCode===2)missBuoy(s,r);
  r.sourceBuoys.power=r.power;
