@@ -224,6 +224,103 @@
     }
   },
   {
+    "id": "2026-10-15-factual-infographic-factual-infographic-gout-crystals-in-th",
+    "title": "Factual infographic: Gout — Crystals in the Joint",
+    "tests": "factual_subtype: medical-health-infographic; claim-level NIAMS/NHS evidence; artwork-led anatomical composition; no non-Monday subjective review; archive_slot=2026-10-15T17:20; concept=gout-urate-crystals-inflamed-toe-joint; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=high, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished, artwork-led medical infographic, directly on the canvas, titled “GOUT” with the subtitle “Crystals in the joint”. A sophisticated anatomical ink-and-gouache illustration on a luminous cool ivory ground, graphite-blue bone shading, translucent sea-glass joint tissues, and focused warm coral inflammation. Confident readable editorial typography, generous margins, asymmetrical organic visual journey, no rigid boxes, grid, detached cards, photographed poster, book, frame, logo or watermark. Request high quality, auto size, opaque background.\n\nThe dominant illustration is a beautifully modeled oblique adult forefoot, with a precise local cutaway at the base of the big toe, not the tip. Surrounding skin subtly fades to expose the joint while retaining the coherent outline of the foot. Carefully observed bone contours, softly layered tissue, fine ink hatching, restrained vascular suggestions and luminous watercolor transitions, not gore. Emphasize the swollen big-toe joint with a localized warm coral wash. Small open leader label: “A common site: the big-toe joint”. Do not imply that gout is confined to this site. A gracefully curved enlargement emerges from that joint into a large scientifically schematic study of fine needle-shaped urate crystals within joint fluid. Crystals are delicate, slender and clearly marked “Microscopic view • enlarged, not to scale”; they must not appear as giant shards penetrating the actual foot. Label “Urate crystals” and “Crystals trigger inflammation”. Let a few finely drawn crystal needles and a restrained inflammatory color wash explain the mechanism without inventing cell-level biology.\n\nAcross the airy upper-left space, an open flowing three-stage annotation reads “Purines break down → Urate in blood → Crystals may form in joints”. Beneath the first two stages, concise supporting text: “Purines come from body tissues and foods. Urate normally leaves in urine.” Then “Too much made or too little removed can raise urate.” Add the essential nuance “High urate does not always mean gout.” Do not draw a deterministic arrow implying that every high level produces disease. A small handwritten-style marginal note says “Risk also involves genes, kidneys, alcohol and some medicines—not food alone.” Do not illustrate indulgent food as the cause or use shame-based imagery.\n\nNear the warm affected joint, readable symptom lines follow the foot contour: “Sudden severe pain”, “Warmth and swelling”, “Redness may be less visible on darker skin”. Adjacent concise line: “Other joints can be affected.” Leave substantial breathing room around the anatomy.\n\nIn the lower open space, flowing typographic annotations with delicate understated connecting lines distinguish two care goals, without medicine-brand imagery or pill doses. “CALM A FLARE” followed by “Clinician-selected anti-inflammatory treatment, such as NSAIDs or steroids. Rest, elevate and use a wrapped cold pack.” Then “PREVENT FUTURE FLARES” followed by “Urate-lowering medicine may be needed. Take it regularly, even between attacks. Healthy habits support care; they do not replace needed medicine.” A small elegant diagnostic annotation beside a simple abstract joint-fluid droplet says “First episode? Get assessed. Blood urate and sometimes joint-fluid testing help clarify the diagnosis.” Do not depict an unsafe self-procedure.\n\nRetain a prominent but tasteful coral open rule at the lower-right, with readable urgent text, not a tiny footnote: “URGENT: A suddenly painful, swollen joint with worsening pain, fever or chills, or feeling sick needs prompt medical assessment. Joint infection is possible.” Bottom line: “General education—not a diagnosis or an individual treatment plan.” Keep all main text dark and legible, supported by spacious visual hierarchy. No statistics, cure claims, prescription doses, extra symptoms, invented anatomy, bibliography, URLs or tiny citations. The joint anatomy and crystal enlargement should remain visually dominant; supporting prose is concise and integrated into the artwork, never a wall of text.",
+    "image": "images/2026-10-15-factual-infographic-factual-infographic-gout-crystals-in-th.jpg",
+    "thumb": "thumbs/2026-10-15-factual-infographic-factual-infographic-gout-crystals-in-th.webp",
+    "color": "#ded6cd",
+    "date": "2026-10-15",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "gout-urate-crystals-inflamed-toe-joint",
+      "imageSha256": "8d76bf5f58a8ab182c3303bfc398f85d84bfd88721116138fd6d03e65f009f4d",
+      "imageDHash": "8c1af4e890e49a92"
+    },
+    "factualInfographic": {
+      "topic": "How gout arises from urate crystals in joints, causes inflammatory flares, and is evaluated and managed",
+      "description": "Artwork-led big-toe joint cutaway and enlarged urate crystals, with symptoms, clinical evaluation, flare relief, prevention and joint-infection warning signs.",
+      "sourceNote": "NIAMS https://www.niams.nih.gov/health-topics/gout and NHS https://www.nhs.uk/conditions/gout/; verified urate mechanism, symptoms, clinical evaluation, management and urgent infection differential.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-15T21:21:16.010499+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Arthritis and Musculoskeletal and Skin Diseases (NIAMS)",
+            "title": "Gout: Symptoms and Causes",
+            "sourceType": "government-agency",
+            "url": "https://www.niams.nih.gov/health-topics/gout"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Gout",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/gout/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Gout is inflammatory arthritis; urate can accumulate and form needle-shaped crystals in joints, triggering painful inflammation.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Urate comes from purine breakdown in body tissues and foods; it normally leaves in urine. Too much production or too little removal can raise blood urate. Not everyone with high urate develops gout.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Gout commonly affects the big toe joint but can affect other joints; a flare causes sudden severe pain, warmth and swelling, sometimes redness that may be harder to see on darker skin.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Genes, kidney disease, alcohol and some medicines can increase gout risk; gout is not simply a consequence of food choices.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "First-time symptoms need medical evaluation. Blood urate testing and sometimes joint-fluid crystal testing help evaluate gout.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Clinicians treat flares with anti-inflammatory medicines such as NSAIDs or steroids, selected for individual safety; rest, elevation and a wrapped cold pack can help.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Urate-lowering medicine may be needed for recurrent attacks or high uric acid; take it regularly even when symptom-free. Healthy habits support prevention but do not replace needed medicines.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "A suddenly painful swollen joint with worsening pain, fever or chills, or feeling sick needs urgent assessment because joint infection is possible.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-10-15-factual-infographic-factual-infographic-appendicitis-the-in",
     "title": "Factual infographic: Appendicitis — The Inflamed Cul-de-sac",
     "tests": "factual_subtype: medical-health-infographic; claim-level NIDDK/NHS evidence; organic anatomical composition; no non-Monday subjective review; archive_slot=2026-10-15T02:20; concept=appendicitis-inflamed-appendix-abdominal-pain; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=high, size=auto; factual_subtype: medical-health-infographic",
