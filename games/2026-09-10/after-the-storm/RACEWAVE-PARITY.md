@@ -1671,3 +1671,62 @@ Mode11 scoring, venue/mode sign-offs, eleven existing course failures and
 hardware checks remain. High-resolution rendering and live preview admission
 are unchanged. No original executable bytes/artwork are published, no money was
 spent, and this checkpoint is local.
+
+## Course-zero sequence and packed starting transforms — October 15, 2026
+
+The prepared i1 update now composes its first-update initializer with the
+course-zero sequence in the actual source order. The initializer retains the
+one-shot latch until the following logical display. Sequence setup copies the
+retained template, keeps noncompacted sentinel slots, accumulates signed widths
+and emits its audio entry before advancing the row. The display expansion
+preserves shared style writes, paused movement, strict expiry and the final
+glyph before clearing the active flag. Its new high-resolution draw recipes
+use logical screen coordinates and do not replay the original numeric routine.
+
+The sequence leaf matches856 original prepared initializer/update/display
+executions. The canonical outer update additionally matches162 complete5800
+cases, checking543,186 owner words and129 ordered operations. A separate full
+5AE4/5DF4 comparison expands actual6BD8 and its three reached drawing helpers:
+554/554 cases match1,857,562 complete owner words and9,902 ordered operations.
+This includes396 source-derived graphics-head advancements,38 first-display
+early returns and118 paused displays whose later continuation restores
+activity. Earlier graphics/resource/result entries retain their explicit
+prepared-return or pending-effect boundaries. No original images or text are
+embedded in the new recipes, and their modern presentation remains separate.
+
+Grid placement can now continue through the complete numeric matrix
+constructor, signed16.16 packing and actual physical decoder. The transient
+decoded axes retain quantization; physics must not substitute the pre-pack
+floats. All source arithmetic and write order are retained, including the
+signed32-to-float rounding before decoding fixed-point elements. Degenerate
+constructors return only their reached scratch writes, without inventing a
+prior packed destination. The adapter leaves decoded output null on those
+bounded partial paths; this does not claim the original physical initializer
+skips decoding its own retained matrix.
+
+Constructor/packer and decoder match952 original-instruction cases over22,080
+whole scratch/packed words and27,506 ordered writes. A further128 combined
+6AC84→constructor→packer→decoder executions match the canonical grid adapter,
+including ordinary, reverse, two-player, secondary-row, demo, training and
+degenerate branches. These check4,096 scratch/packed words,2,016 decoded words
+and401,280 unchanged canonical owner words. These are transient numeric views;
+they do not create a second physical matrix owner or initialize a hull/rider.
+
+All41 added tests pass. The full suite is1,925/1,936 in109.23s, with the same
+eleven existing failure names. All248 module versions are refreshed in the
+three HTML maps. Browser and Node agree on400 prepared update/display steps
+for each of one-player and two-player mode, plus packed-grid/training/partial
+matrix checks. The retained live preview remains High1280×720 at11.05s,
+tick1105/frame221, with matching racer positions and all49,152 water heights
+(hash2879715165). Detailed riders, water and shoreline remain visible; child
+console is clear and parent retains its existing favicon404.
+
+Complete live source startup still requires main configuration, physical
+6390C/62E50 ownership and actor15/frame56 pose evaluation. The source transforms
+its local centroid separately before its points and refits its final hull
+axes; existing preview initialization is not that bootstrap. Camera/current-
+object producers, complete shared RNG history, result transitions, mode11
+scoring, venue/hardware sign-offs and the eleven course failures remain open.
+High-resolution rendering and live preview admission are unchanged. This
+checkpoint is local, no original executable bytes/artwork are published, and
+no money was spent.

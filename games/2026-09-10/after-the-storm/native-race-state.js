@@ -16,6 +16,8 @@ import {prepareNativeRacePlacementFeedback} from './native-race-placement-feedba
 import {prepareNativeRaceRivalIndicators} from './native-race-rival-indicators.js';
 import {prepareNativeRaceWaveSelection} from './native-race-wave-selection.js';
 import {prepareNativeRaceGridPlacement,selectNativeRaceComputerProfile} from './native-race-grid-placement.js';
+import {prepareNativeRaceCourseZeroSequenceUpdate,prepareNativeRaceCourseZeroSequenceDisplay} from './native-race-coursezero-sequence.js';
+import {prepareNativeRaceStartTransform,decodeNativeRaceStartTransform} from './native-race-start-transform.js';
 
 const MIN=-2147483648,MAX=2147483647,RACE_BASE=0x1f94,RACE_WORDS=1693,HUD_BASE=0x7788,HUD_WORDS=1442;
 const floatBits=new DataView(new ArrayBuffer(4));
@@ -29,11 +31,11 @@ const hudInts={recordFlag8a98:0x8a98,placeChanged8a9c:0x8a9c};
 const sceneRanges={primaryHumanIndex:[0,3],secondaryHumanIndex:[0,3],players:[1,2],courseIndex:[0,11],
  racerCount:[0,4],primaryCount:[0,64],finishSourceRow:[0,63],activity624:[-32768,32767],event628:[-32768,32767],
  pendingPlayers60c:[-32768,32767],participantCount60e:[-32768,32767],result6f0:[-32768,32767],specialAb64:[-32768,32767],ready6fc:[-32768,32767],field4964:[0,65535],
- reverseDab68:[0,65535],missesEnabled72e:[0,65535],seed6f00:[0,65535],rngState4640:[0,0xffffffff]};
+ reverseDab68:[0,65535],missesEnabled72e:[0,65535],seed6f00:[0,65535],rngState4640:[0,0xffffffff],style6e28:[0,65535]};
 const sceneWords=new Set(['cold8224','clockStopped817c','phase650','simulation648','main638','mode620','state600',
  'missLimit8174','noFinish8178','configuredLaps728','difficulty','directionFlag1f90','ambientD4b00','fortressD8240',
- 'metadataD9b0','metadataCb32c','restart6f8','initLatch63c','gameStateAb24','mode608','returnState630','forceFirst8228','demoOffset5438','rngState4640']);
-const sceneHalves=new Set(['activity624','event628','pendingPlayers60c','participantCount60e','result6f0','specialAb64','ready6fc','reverseDab68','missesEnabled72e','seed6f00','field4964']);
+ 'metadataD9b0','metadataCb32c','restart6f8','initLatch63c','gameStateAb24','mode608','returnState630','forceFirst8228','demoOffset5438','rngState4640','style6e2c']);
+const sceneHalves=new Set(['activity624','event628','pendingPlayers60c','participantCount60e','result6f0','specialAb64','ready6fc','reverseDab68','missesEnabled72e','seed6f00','field4964','style6e28']);
 function record(v,n){if(!v||typeof v!=='object'||Array.isArray(v))throw new TypeError(`Expected ${n}`);return v;}
 function integer(v,n,min=MIN,max=MAX){if(!Number.isInteger(v)||v<min||v>max)throw new RangeError(`Invalid ${n}`);return v||0;}
 function words(v,n,count){if(!Array.isArray(v)||v.length!==count)throw new RangeError(`${n} requires${count} unsigned words`);
@@ -166,6 +168,19 @@ export function nativeRaceGridPlacementView(state,input){
  return prepareNativeRaceGridPlacement({...s.scene,racerIndex,primaryNodes:input.primaryNodes,secondaryNodes:input.secondaryNodes,
   trainingAnchorsNative:input.trainingAnchorsNative,order26c0:s.raceWords1f94.slice(ri(0x26c0),ri(0x26c0)+4).map(v=>v|0),
   training2c70:s.raceWords1f94[ri(0x2c70)+racerIndex*222]|0});
+}
+/** Transient grid-to-physical matrix view: evaluate the actual constructor,
+ * pack its16.16 destination, then decode that quantized destination as62E50
+ * does. Never substitute the pre-pack axes for decoded.frameNative. Partial
+ * constructor outcomes retain their scratch writes and leave decoded null;
+ * the existing packed destination has not been supplied or overwritten.
+ * This prepares no hull/rider, point histories, centroid, actor or camera and
+ * writes no canonical state. The physical initializer remains a separate call.
+ */
+export function nativeRaceGridTransformView(state,input){
+ const placement=nativeRaceGridPlacementView(state,input),transform=prepareNativeRaceStartTransform(placement),
+  decoded=transform.complete?decodeNativeRaceStartTransform(transform):null;
+ return freeze({placement,transform,decoded});
 }
 /** The separate16ce physics selector reads actual canonical scene half4964;
  * no control-origin or inferred human/AI identity replaces it. */
@@ -327,6 +342,59 @@ export function prepareNativeRacePrestartStatusUpdate(state){
 export function prepareNativeRacePrestartStageUpdate(state,input={}){
  const next=copy(state),prepared=prepareNativeRacePrestartStage({...next,externalReturns:input.externalReturns}),effects=apply(next,prepared.operations);
  return freeze({...prepared,state:next,effects});
+}
+
+/** Complete5800 numeric i1 update. The first-update587C initializer precedes
+ * the independent course0/pendingmode4/special0 sequence gate. It retains the
+ * one-shot latch for the later display stage; neither players nor activity
+ * adds a gate here. Loaded table/template words remain in canonical i1 state.
+ */
+export function prepareNativeRaceI1Update(state,input={}){
+ const next=copy(state),operations=[],effects=[],diagnostic={initializationCalled:false,sequenceCalled:false,sequence:null};
+ function commit(prepared){operations.push(...prepared.operations);effects.push(...apply(next,prepared.operations));}
+ if(sceneValue(next,'initLatch63c')!==0&&sceneValue(next,'gameStateAb24')===40){
+  commit(prepareNativeRacePrestartInitialization(next));diagnostic.initializationCalled=true;
+ }
+ if(sceneValue(next,'courseIndex')===0&&sceneValue(next,'mode608')===4&&sceneValue(next,'specialAb64')===0){
+  const sequence=prepareNativeRaceCourseZeroSequenceUpdate({...next,descriptorLengthWords6894:input.descriptorLengthWords6894});
+  commit(sequence);diagnostic.sequenceCalled=true;diagnostic.sequence=sequence.diagnostic;
+ }
+ return freeze({state:next,operations,effects,diagnostic});
+}
+
+/** A single admitted6BD8 numeric display call, including style0 shared writes.
+ * Named draw recipes are logical screen-space work for the high-resolution
+ * renderer; they contain no original image or display-list payload. Do not
+ * replay the original6BD8 after applying these already-prepared numeric writes.
+ */
+export function prepareNativeRaceCourseZeroSequenceDisplayUpdate(state){
+ const next=copy(state),prepared=prepareNativeRaceCourseZeroSequenceDisplay(next),effects=apply(next,prepared.operations);
+ return freeze({...prepared,state:next,effects});
+}
+
+/** Prepared5AE4 stage with6BD8 numeric/draw recipes expanded at its actual
+ * call site. The older PrestartStageUpdate retains its explicit opaque6BD8
+ * contract. This entry removes that original call, preserving the once-only
+ * movement, style stores and final glyph before expiry. Other stage helpers
+ * remain ordered pending recipes under the existing explicit-return contract.
+ *
+ * externalReturns still supplies actual consumed graphics-head values. The
+ * replaced6BD8 input/return are retained in diagnostics; no synthetic head is
+ * produced by a high-resolution drawing recipe. Its retained writes are
+ * disjoint from the subsequent5DF4 predicates, so that existing dispatcher
+ * can prepare those predicates before this ordered local expansion.
+ */
+export function prepareNativeRaceI1DisplayUpdate(state,input={}){
+ const next=copy(state),stage=prepareNativeRacePrestartStage({...next,externalReturns:input.externalReturns}),
+  operations=[],effects=[],sequenceCalls=[];
+ for(const op of stage.operations){
+  if(op.kind==='externalCall'&&op.consumer==='802c6bd8'){
+   const sequence=prepareNativeRaceCourseZeroSequenceDisplay(next);
+   operations.push(...sequence.operations);effects.push(...apply(next,sequence.operations));
+   sequenceCalls.push({sourceHead:op.arguments[0],sourceReturnWord:op.returnWord,diagnostic:sequence.diagnostic});
+  }else{operations.push(op);effects.push(...apply(next,[op]));}
+ }
+ return freeze({state:next,operations,effects,displayListHead:stage.displayListHead,diagnostic:{sequenceCalls}});
 }
 
 function currentPrimaryNodes(layout,primary){
