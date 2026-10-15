@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readFairgroundMidwayPrevious,restoreFairgroundMidwayBytes,verifyFairgroundMidwayRevision} from './fairground-midway-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreElmsworthArchitectureBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('FairgroundMidway preserves every prior fixture, vehicle asset, control and camera input',verifyFairgroundMidwayRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/fairground-midway/revision.json').toString());
@@ -10,3 +10,5 @@ test('the successor bridge restores full predecessors and does not conceal later
  }
  const unknown=Buffer.from('unknown');assert.deepEqual(restoreFairgroundMidwayBytes('src/unknown.ts',unknown),unknown);
 });
+
+import {restoreElmsworthArchitectureBytes} from './elmsworth-architecture-invariants';
