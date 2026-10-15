@@ -7,7 +7,7 @@ export function tideLevel(course,time){
  return .35-1.4*u*u*(3-2*u);
 }
 export function obstaclePosition(obstacle,time){
- if(obstacle.type!=='ice')return {x:obstacle.x,z:obstacle.z};
+ if(obstacle.fixed||obstacle.type!=='ice')return {x:obstacle.x,z:obstacle.z};
  const phase=obstacle.x*.031+obstacle.z*.017;
  return {x:obstacle.x+Math.sin(time*.023+phase)*2.4,z:obstacle.z+Math.sin(time*.017+phase*1.3)*1.8};
 }

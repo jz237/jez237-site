@@ -1,4 +1,4 @@
-import {buildGates,sampleRoute,getCourse} from './courses.js';
+import {buildGates,sampleRoute,samplePolyline,getCourse} from './courses.js';
 import {wave,waterLevel} from './simulation.js';
 const TAU=Math.PI*2,clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 export const TRICKS={flip:'Backflip',left:'Left barrel roll',right:'Right barrel roll',stand:'Standing ride',handstand:'Handstand',backwards:'Backwards ride',somersault:'Rider somersault'};
@@ -21,7 +21,7 @@ export function stuntCourse(base,{freeRide=false}={}){
  // Rebuild the forward collision floor before copying it: race closures are captured
  // by getCourse's ground function and cannot be removed from a shallow copy.
  if(!freeRide&&base.stuntLayout?.forwardPassage){const difficulty=base.difficulty,forward=getCourse(base.id,0);base={...forward,difficulty,passage:{...forward.passage,enabled:true}};}
- if(base.stuntLayout&&(!freeRide||base.id==='practice')){const layout=base.stuntLayout,anchors=layout.anchors||base.anchors;return {...base,anchors,boundary:layout.boundary||base.boundary,rocks:(layout.rocks||[]).map(o=>({...o})),resistance:layout.resistance||base.resistance,reverse:false,gates:buildGates(sampleRoute(anchors,24)),route:sampleRoute(anchors,384),stunt:!freeRide,freeStunts:freeRide,ramps:layout.ramps.map(r=>({...r})),rings:layout.rings.map(r=>({...r})),checkpoints:freeRide?[]:layout.checkpoints.map(c=>({...c}))};}
+ if(base.stuntLayout&&(!freeRide||base.id==='practice')){const layout=base.stuntLayout,anchors=layout.anchors||base.anchors,sample=layout.routeInterpolation==='linear'?samplePolyline:sampleRoute,gates=buildGates(sample(anchors,24));if(layout.startGate)Object.assign(gates[0],layout.startGate);return {...base,anchors,boundary:layout.boundary||base.boundary,rocks:(layout.rocks||[]).map(o=>({...o})),resistance:layout.resistance||base.resistance,reverse:false,gates,route:sample(anchors,384),stunt:!freeRide,freeStunts:freeRide,ramps:layout.ramps.map(r=>({...r})),rings:layout.rings.map(r=>({...r})),checkpoints:freeRide?[]:layout.checkpoints.map(c=>({...c}))};}
  if(base.buoysByClass){let points=sampleRoute(base.anchors,24);if(base.reverse)points=[points[0],...points.slice(1).reverse()];base={...base,gates:buildGates(points)};}
  const course={...base,stuntLayout:undefined,stunt:!freeRide,freeStunts:freeRide,ramps:[],rings:[],checkpoints:[]},n=base.gates.length;
  for(let section=0;section<4;section++){
@@ -49,17 +49,17 @@ function ringContact(g,ox,oz,x,z,oldY,newY,centerY){
  let lo=0,hi=1;
  if(Math.abs(d)<1e-9){if(Math.abs(a)>depth)return ringCrossing(g,ox,oz,x,z);}
  else{const enter=(-depth-a)/d,exit=(depth-a)/d;lo=Math.max(0,Math.min(enter,exit));hi=Math.min(1,Math.max(enter,exit));if(lo>hi)return null;}
- const u=-(ox-g.x)*g.tz+(oz-g.z)*g.tx,v=oldY+.85-centerY,du=-(x-ox)*g.tz+(z-oz)*g.tx,dv=newY-oldY,length=du*du+dv*dv;
+ const u=-(ox-g.x)*g.tz+(oz-g.z)*g.tx,v=oldY+(g.probeHeight??.85)-centerY,du=-(x-ox)*g.tz+(z-oz)*g.tx,dv=newY-oldY,length=du*du+dv*dv;
  const f=clamp(length>1e-12?-(u*du+v*dv)/length:hi,lo,hi),lateral=u+du*f;
  return Math.hypot(lateral,v+dv*f)<g.radius?{f,lateral,volume:true}:ringCrossing(g,ox,oz,x,z);
 }
 export function stepStunt(s,r,course,input,dt,ox,oz,oldY,storm=0){if(s.complete)return;const free=!!course.freeStunts;
  if(!free){s.remaining=Math.max(0,s.remaining-dt);if(s.remaining===0){if(!s.overtime)event(s,'TIME UP · COAST TO CHECKPOINT');s.overtime+=dt;if(r.speed*3.6<10||s.overtime>10){r.dq='Stunt checkpoint time expired';event(s,'TIME UP');return;}}}
  stepRiderTricks(s,r,input,dt);
- for(let i=0;i<course.rings.length;i++){if(free&&s.ringStatus[i]&&r.raceTime>=(s.ringCooldown[i]||0))s.ringStatus[i]=null;if(s.ringStatus[i]==='hit'||free&&s.ringStatus[i]==='miss')continue;const ring=course.rings[i],centerY=ringHeight(ring,course,r.raceTime,storm),hit=ringContact(ring,ox,oz,r.x,r.z,oldY,r.hydro.y,centerY);if(!hit||Math.abs(hit.lateral)>25)continue;const y=oldY+(r.hydro.y-oldY)*hit.f+.85,through=Math.hypot(hit.lateral,y-centerY)<ring.radius&&(ring.type!=='dive'||r.hydro.y<r.hydro.waterHeight-.45);if(hit.volume&&!through)continue;
+ for(let i=0;i<course.rings.length;i++){if(free&&s.ringStatus[i]&&r.raceTime>=(s.ringCooldown[i]||0))s.ringStatus[i]=null;if(s.ringStatus[i]==='hit'||free&&s.ringStatus[i]==='miss')continue;const ring=course.rings[i],centerY=ringHeight(ring,course,r.raceTime,storm),hit=ringContact(ring,ox,oz,r.x,r.z,oldY,r.hydro.y,centerY);if(!hit||Math.abs(hit.lateral)>25)continue;const y=oldY+(r.hydro.y-oldY)*hit.f+(ring.probeHeight??.85),through=Math.hypot(hit.lateral,y-centerY)<ring.radius&&(ring.type!=='dive'||r.hydro.y<r.hydro.waterHeight-.45);if(hit.volume&&!through)continue;
   s.ringStatus[i]=through?'hit':'miss';if(free)s.ringCooldown[i]=r.raceTime+(through?10:2);if(through){const order=ring.order??i;s.chain=free?s.chain+1:s.lastRing===order-1?s.chain+1:1;s.lastRing=order;s.rings++;const points=50*s.chain;s.score+=points;event(s,'Ring '+s.chain+' +'+points);}else{if(free)s.chain=0;event(s,free?'Ring missed · chain reset':'Ring missed · try again');}
  }
- const cp=course.checkpoints[s.nextCheckpoint];if(cp){const hit=crossing(cp,ox,oz,r.x,r.z);if(hit&&Math.abs(hit.lateral)<cp.width){const bonus=Math.floor(Math.max(0,s.remaining)*10)*5;s.score+=bonus;s.nextCheckpoint++;s.used={};event(s,'Checkpoint '+s.nextCheckpoint+'/4 · time bonus +'+bonus);s.remaining=course.checkpoints[s.nextCheckpoint]?.limit??38;s.overtime=0;if(s.nextCheckpoint===4){s.complete=true;r.finishTime=r.raceTime;}}}
+ const cp=course.checkpoints[s.nextCheckpoint];if(cp){const hit=crossing(cp,ox,oz,r.x,r.z);if(hit&&Math.abs(hit.lateral)<cp.width){const bonus=Math.floor(Math.max(0,s.remaining)*10)*5;s.score+=bonus;s.nextCheckpoint++;s.used={};event(s,'Checkpoint '+s.nextCheckpoint+'/4 · time bonus +'+bonus);s.overtime=0;if(s.nextCheckpoint===4){s.complete=true;r.finishTime=r.raceTime;}else s.remaining=course.checkpoints[s.nextCheckpoint]?.limit??38;}}
 }
 // Riding moves share the same held rotation and landing rules in every mode.
 // Competitive races display the move without awarding stunt-mode points.

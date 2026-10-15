@@ -1,3 +1,4 @@
+import {sourceStuntInput} from './source-stunt-pilot.js';
 import {wave} from './simulation.js';
 import {aiInput,angleDelta,clamp} from './race-core.js';
 // A full park routine using only helm, throttle, trim and stunt inputs.
@@ -145,6 +146,7 @@ function authoredParkInput(state,r){
 
 // Authored stunt routes have different object counts and spacing per venue.
 function authoredStuntInput(state,r){
+ if(state.course.stuntLayout.driver==='source-layout')return sourceStuntInput(state,r);
  if(state.phase==='countdown')return {};
  const targets=state.verifyStuntOuter?state.course.stuntLayout.outerVerificationTargets:state.course.stuntLayout.verificationTargets,v=r.authoredStuntDriver||={index:0},h=r.hydro,s=r.stunt;
  if(h.onRamp){v.rampJump=true;v.rampLanding=h.landingId;v.diveJump=!!state.course.ramps.find(a=>a.diveJump&&Math.hypot(a.x-r.x,a.z-r.z)<a.length)?.diveJump;}else if(h.landingId>v.rampLanding)v.rampJump=v.diveJump=false;

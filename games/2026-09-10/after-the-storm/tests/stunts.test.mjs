@@ -38,6 +38,13 @@ test('stunt overtime cuts engine power and ends after the coast allowance',()=>{
  for(let i=0;i<610&&!craft.dq;i++)stepStunt(stunt,craft,course,{},1/60,craft.x,craft.z,0);
  assert.match(craft.dq,/time expired/);assert.ok(stunt.overtime>10&&stunt.overtime<10.02);
 });
+
+test('the final stunt checkpoint retains the scored time instead of starting a nonexistent section',()=>{
+ const course={rings:[],checkpoints:[0,10,20,30].map(z=>({x:0,z,tx:0,tz:1,width:10,limit:20}))},s=createStunt(course),r=createRace().racers[0];
+ r.speed=12;r.hydro.y=.1;r.raceTime=50;
+ for(let i=0;i<4;i++){s.remaining=5.1;r.x=0;r.z=i*10+1;stepStunt(s,r,course,{},.1,0,i*10-1,.1);if(i<3)assert.equal(s.remaining,20);}
+ assert.equal(s.nextCheckpoint,4);assert.equal(s.complete,true);assert.equal(r.finishTime,50);assert.equal(s.remaining,5);assert.equal(s.score,1000);
+});
 test('a ramp gives lift from forward speed and a held dive must begin during descent',()=>{const r=createRace().racers[0];r.x=0;r.z=0;r.vx=0;r.vz=20;r.speed=20;r.throttle=1;applyRamp(r,[{x:0,z:0,tx:0,tz:1,width:7,length:10,height:2.3}],0,-1);assert.ok(r.hydro.vy>3&&r.hydro.y>1);const h=createHydro(),craft={...r,turn:0,heading:0};stepHydro(h,craft,0,1/60,()=>0,{dive:true});assert.equal(h.diveRemaining,0);h.y=2;h.vy=-2;h.airborne=true;stepHydro(h,craft,1,1/60,()=>0,{dive:true});assert.ok(h.diveRemaining>1);let deepest=0;for(let i=0;i<240;i++){stepHydro(h,craft,1+i/60,1/60,()=>0,{dive:i<100});deepest=Math.min(deepest,h.y);}assert.ok(deepest<-.8);assert.ok(h.y>-.1);});
 
 test('a fixed race ramp blocks a backward approach without granting lift, but allows an airborne clearance',()=>{

@@ -31,7 +31,7 @@ still require their own source comparison before they can be signed off.
 | Marine Fortress | Storm, fortress-shaped shoreline, crates, lap-dependent gate | Mapped original class buoys, boundary, finish, crates/timber, southern stone arches and lap-two gate; northern wave-assisted ridge and safe detour tested; fifteen-ring/two-jump stunt reconstruction implemented; source height/timing calibration and final visual comparison pending |
 | Port Blue | Tanker, working dock, winding narrow tunnel, Hard route choice, Expert/Reverse outer closures, class-specific jump | Rebuilt geography/tunnel, required Expert/Reverse inner route and class-specific bow jumps; all four original buoy patterns and moved Reverse finish mapped and race-tested; preliminary sixteen-ring/three-jump stunt route with independent forward tunnel implemented; final boundary/visual/scale matching pending |
 | Twilight City | Angular urban channel, jump-or-dive wall, low sand point, four race ramps and metal balls | Rebuilt channel/quays, mapped Hard/Expert/Reverse buoy patterns and Reverse route, four ramps, class-specific metal props and jump/dive wall; final source precision and visual matching pending |
-| Glacier Coast | Constricted coast, ice ramps/sliding, breakable ice hazards | Reconstructed peninsula, original Expert/Reverse buoys, four fixed ramps, rideable ice and balance wipeouts; final source/visual sign-off pending |
+| Glacier Coast | Constricted coast, integral ice launches/sliding, breakable ice hazards | Rebuilt from 127 source shores, 165 collision planes, all-class sixteen-marker layouts, fixed breakable ice and original fourteen-ring Stunt; four source 20-second checkpoints traversed; native handling/full-ring mastery/final visual sign-off pending |
 | Southern Island | Connected islands/piers, dropping water, exposed ship and changing routes | Reconstructed islands, physical piers/ship, all four buoy maps and two ramps; grid-start ship jump, forward first-lap dives and all-class later-lap passages verified; final source/visual sign-off pending |
 | Dolphin Park | Curved island, jetties, tunnel; distinct warm-up and stunt props | Mapped island, islets, jetty, arch and ten-ring/four-ramp stunt route implemented; full mastery run verified; warm-up layout and original timing/visual calibration pending |
 
@@ -929,3 +929,31 @@ Persistent wake packets now broaden and increase from 0.12 to 0.32 height gain a
 An initial unconditional wake increase regressed several slow passages and was replaced by the power-dependent blend. The subsequent full regression was 250/256: the five previously known course/stunt failures plus a new two-ski fixture whose source had not yet reached racing speed. Corrected that fixture to allow 60 metres of ordinary acceleration before the crossing, retained a separate gentle-launch-wake no-jump case, and strengthened the fast-crossing airtime/height assertions. Final focused release checks 19/19 pass, including all demo scenes, speed calibration and three wake-crossing tests. Production physics was unchanged after that full run; only the fixture/test coverage changed. No aggregate full-suite rerun with the additional test is claimed.
 
 Isolated wake train: 3 m/s crossing stays in contact; 26 m/s crossing reaches about 0.68 m hull clearance. Two actual moving skis with ordinary throttle controls: the racing-speed wake crossing reaches about 0.71 m and 0.23 s airborne, while the same crossing without the leading ski remains on the water. These are deterministic fixtures, not a fluid-dynamics calibration. Phone title and landscape racing visuals were inspected without browser errors. Original-course fidelity and the five existing specialized failures remain open.
+
+
+## Source collision reconstruction — October 15, 2026
+
+Glacier supersedes the earlier illustrated-map fit and four separately authored
+ramps. Numeric source collision now supplies ten faceted floors, 41 finite side
+faces, the open western/northern water channel and low eastern ice shelf. The
+same unrotated scale is applied to shores, fixed hazards, buoys and Stunt items.
+Modern high-resolution scenery is independently tessellated from those planes;
+background land heights remain authored. No original rendered assets are used.
+
+All four classes retain sixteen colored buoys; Reverse's omitted western point
+is restored. Twelve source-fixed ice blocks can break once for all racers;
+eighteen source-fixed hidden spheres remain. Live and replay share bounded
+break/debris state without rewinding live collisions. The source Stunt layout
+has fourteen fixed-height rings, no separate ramp-object rows, four actual
+checkpoints and twenty seconds per section. A one-pass ordinary-input inspection
+completed four checkpoints in 58.650 seconds with nine rings, no wipeout and no
+DQ; missed optional rings were not credited. Three laps in all four classes
+passed 51 gates without misses or DQ. Full-ring mastery remains outstanding.
+
+Faceted contact preserves mixed water contact and constrains actual hull probes.
+An independent source point-hull kernel is tested but is not yet the live water
+engine. Current hull pressure, angular response, waves and source runtime unit
+calibration still need comparison before this course can receive a parity
+sign-off. The prepared Southern source module remains unintegrated while its
+boat, tide-sensitive terrain, hidden hazards and ramp profiles are validated.
+See RACEWAVE-PARITY.md for evidence boundaries and the remaining feature work.

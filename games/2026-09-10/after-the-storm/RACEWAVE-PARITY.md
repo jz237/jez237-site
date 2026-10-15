@@ -132,8 +132,9 @@ Local browser verification at High graphics confirmed:
    Faster steering-driver probes alone cannot traverse the current City geometry
    within the original schedule while retaining all rings. Do not conceal that
    mismatch with longer timers or simply make the route impossible.
-2. Replace the generic Glacier and Southern stunt placeholders. In particular,
-   Glacier's source has no authored stunt ramps; its ice geography matters.
+2. Finish Southern's source-based geography and stunt replacement. Glacier now
+   uses the recovered floors, shores, fixed hazards and fourteen-ring layout;
+   exact handling, full-ring mastery and visual sign-off remain outstanding.
 3. Calibrate exact scoring/penalties and motion against the recovered control
    transitions, training lesson progression, dolphin unlock timing,
    race conditions, course hazards, opponent behavior and handling against the
@@ -162,8 +163,8 @@ native tables at `[3244,887]` (ROM `0x2b7f50` and `0x2b82c0`). The already
 authored Normal marker at world `(120,-24.8)` matches its fitted position.
 Both classes now retain it before the final red, restoring seven colored
 markers. Fortress layout revision is 7, separating older times and ghosts.
-Glacier Reverse still has an unresolved 16-versus-15 marker discrepancy; Port's
-ordered markers and Twilight Normal's empty original table need consumer
+The later Glacier collision pass resolves its 16-versus-15 Reverse marker
+discrepancy. Port's ordered markers and Twilight Normal's empty original table need consumer
 interpretation before further changes.
 
 `FUN_80063c88`, `FUN_80064c0c` and `FUN_80065c18` establish submarine entry,
@@ -202,13 +203,12 @@ slab half-depth to radius. Existing ring dimensions, probe height, floating
 offsets and exact scoring/pose timings still need calibration. Shore recovery
 cancels unfinished rotations and poses while preserving earned progress.
 
-The original Glacier/Southern stencil cannot yet replace the generic layouts
-without shared geography work. Glacier's northern crossing intersects over
-71 metres of the current solid floor, outside its ice support. Southern's
-ring 3 intersects the current ship. Fits against independently authored buoys
+The initial source-layout fit exposed shared geography errors: Glacier's
+northern crossing intersected over 71 metres of the former solid floor, outside
+its ice support. Southern's ring 3 intersects the current ship. Fits against independently authored buoys
 have RMS residuals of roughly 4.4/6.0 metres, so they locate discrepancies but
-do not prove exact terrain. The source has twelve stationary breakable Glacier
-spheres; the browser's ten drifting ice obstacles still need replacement.
+do not prove exact terrain. That audit also identified twelve stationary breakable Glacier spheres,
+replacing the former ten drifting obstacles in the collision pass below.
 Do not lengthen the original section schedules to conceal these mismatches.
 
 Private decoding recovered Glacier's 165 collision planes and 127 shoreline
@@ -217,8 +217,8 @@ spatial grid; reconstructed vertices were within 0.0131 native units of integer
 coordinates. The north has an open western water channel followed by an
 eastern ice shelf at native Y=30, with submerged slopes to Y=-60. The narrowest
 measured water cross-section is 267.204 native units. This establishes the
-required kind of shoreline correction; native material/friction behavior and
-the final browser coordinate mapping remain separate work.
+required kind of shoreline correction. The collision pass below applies one
+shared unrotated coordinate convention; native handling remains separate work.
 
 The initial complete motion run passed 482/485. Its three dive regressions
 were repaired: the city driver now enters fast enough with forward trim and
@@ -243,3 +243,105 @@ Mode switching exposed a stale cached rank display, which now uses the same
 HUD cache in stunt and race modes. Shore recovery also cancels unfinished
 rotations and poses while retaining earned progress. No gameplay/runtime
 console errors were observed; the existing missing favicon request remains.
+
+## Glacier collision and breakable-ice pass — October 15, 2026
+
+Glacier now uses a single unrotated `.025` scale for the recovered numeric
+object and collision families, rather than fitting each family to the earlier
+illustrated-map reconstruction. Relative geometry is source-derived; the SI
+interpretation remains conditional on the logical-clock and HUD calibration.
+No original rendered meshes, textures, ROM segments or decompiler output are
+shipped. Independently tessellated modern scenery follows the recovered planes.
+
+The two shoreline chains contain 127 segments. Their peninsula is closed;
+the distant northern mainland endpoints use an explicitly inferred closure.
+The contact mesh has 124 upward triangles in ten components and 41 finite
+vertical side/rear faces. Submerged skirts remain submerged; the western water
+channel is open, followed by the eastern Y=30 ice shelf. There are no separate
+Glacier ramp objects: the three western launches and central wedge are static
+floor geometry. Backside wall contacts cannot grant ramp lift, and a swept
+crossing above the finite wall stays clear. Background land heights and distant
+scenery are still independently authored.
+
+All four classes now retain sixteen visible markers. The first three share
+the same source rows; Reverse restores the omitted `[-3518,-132]` marker.
+Source headings use the 4096-step angular conversion, and the finish half-span
+is 500 native units. Existing steering offsets and colored-buoy finite spans
+remain reconstruction choices, not proven native scoring rules. Glacier layout
+revision 3 separates these records and ghosts from the former course.
+
+Twelve ice blocks use fixed XYZ positions and radius 50 native units. Eighteen
+hidden boundary spheres retain fixed XYZ and radius 25. Fixed-sphere contact
+uses the two source-derived hull-axis probes with radius 12; static floors and
+walls use the twelve observed hull points. Fast swept contact prevents tunneling.
+Breakage uses approach normal speed, explicit numeric rider-slot stability and
+stance factors. Breaking contact still resolves; every later racer sees the
+same broken obstacle. Eight varied procedural fragments per impact are bounded
+to two recent events. Replay captures preserve intact/broken state and analytic
+fragments across clock rewind without changing live collision state.
+
+Glacier Stunt now has fourteen source rings at absolute Y=60, half-depth 32,
+radius 112 and probe offset 8, with four actual checkpoint limits of 20 seconds.
+Raw type-8 navigation guides award no checkpoint. The ordinary-input inspection
+controller may leave a missed optional ring behind and recover an overshot
+steering guide; it cannot move craft, grant objective progress, or extend time.
+The inspected run crossed four finite checkpoint planes at 12.850, 29.983,
+45.483 and 58.650 seconds, collecting nine actual rings with no wipeout or DQ.
+This proves a traversable course under the source limits, not all-ring mastery.
+All four race classes also completed three laps with 51 gate passes, zero
+misses and no DQ using ordinary helm inputs.
+
+The live water solver remains the modern pressure reconstruction. Faceted
+contact preserves its actual wet samples, including mixed water/floor contact;
+it does not globally disable water because the center lies over an ice polygon.
+The interim solid response distributes translation and rotation using the
+observed equal-point geometry; it is not the original point-constraint engine.
+The former arbitrary sustained-steering ice timer is unused by source facets.
+The new independent `native-hull.js` kernel reproduces the twelve equal-weight
+points, 66 pair constraints, one Jacobi pass, radius-dependent point damping,
+and source frame fit. The separate `native-water.js` component implements
+ordinary numeric rider profiles, the two rear jets, lower-point gravity,
+flat-water buoyancy, wet-group drag, and five-substep state timing. Modern
+wave-gradient pressure is explicitly approximate; source stunt/joint/recovery
+forces are not yet ported. Neither component is connected to live racing.
+The kernel tests distinguish a one-point velocity projection
+from a whole-hull positional correction. Live force/control integration remains
+required before claiming native handling.
+
+The native HUD reads **whole logical-frame displacement**, accumulated across
+five body substeps. It does not read a point velocity or the final substep's
+speed. Conditional on km/h and 50 ms logical frames, `.025` units/mapping and
+100 Hz substeps agree with HUD factor 1.8. The observed integration gain is
+`.992` without a division by five. Source lower-point gravity corresponds to
+an arcade mean near 32 m/s² before water and damping; it must not silently be
+replaced with an assumed 9.81 calibration in the future source-physics port.
+The logical clock has not yet been compared to measured reference wall time.
+
+Southern's numeric reconstruction is prepared separately in
+`source-southern-course.js`, with integration explicitly disabled pending
+navigation and ramp-profile validation. The source selector previously called
+race/stunt in intermediate private notes is **player count**. Southern has two
+additional fixed mast-base spheres in single player, including Stunt, absent
+in two player; its 26 hidden XZ spheres follow the water datum in both layouts.
+The ordinary Reverse class retains the ordinary pier ramp. The current live
+Southern ship and generic Stunt route still require replacement.
+
+
+Independent review also corrected the interim contact response's conversion
+between body angular impulses and the rendered hull's Y-X-Z Euler rates.
+Finite-difference probes verify that a banked contact actually stops entering
+the plane without adding kinetic energy. The final Stunt checkpoint now keeps
+its scored remaining time instead of resetting an absent fifth section to the
+old generic 38-second default, consistent with the source finish exception.
+The current High-quality browser run finished in 58.650 seconds with nine rings,
+2,605 points, four checkpoints, zero crashes or DQ, and 6.833 seconds remaining.
+Its final measurement window reported approximately 60 FPS and 884,000 triangles.
+No gameplay console errors occurred; the existing favicon 404 remains.
+
+
+Final complete regression after the contact and finish-timer review: **567/567
+passed in 294.72 seconds**. This includes all nine venues/classes, championship
+progression, original-allowance Glacier inspection, breakable shared/replay
+state, source geometry, prepared hull/water components and Southern numeric
+fixtures. Source parity and production publication remain pending the remaining
+items above; these tests do not establish original runtime equivalence.

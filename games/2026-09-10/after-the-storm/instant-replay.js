@@ -1,3 +1,4 @@
+import {captureBreakableState} from './breakable-hazards.js';
 // A bounded in-memory recording. Replays read snapshots; they never integrate
 // physics, consume inputs, submit records, or advance championship state.
 const clone=x=>structuredClone(x),mix=(a,b,t)=>a+(b-a)*t;
@@ -15,7 +16,7 @@ export function recordMoment(rec,state,water,beads=[]){
   }
  });
  const f=state.localWater,local=f&&Number.isFinite(f.x)?{h:f.h.slice(),mask:f.mask.slice(),x:f.x,z:f.z,cell:f.cell,size:f.size,version:f.version}:null;
- const frame={time:state.time,racers:clone(racers),weather:clone(state.weather),passageOpenedAt:state.passageOpenedAt,water:clone(typeof water==='function'?water():water),localWater:local,beads:clone(typeof beads==='function'?beads():beads)};
+ const frame={time:state.time,racers:clone(racers),weather:clone(state.weather),passageOpenedAt:state.passageOpenedAt,water:clone(typeof water==='function'?water():water),localWater:local,beads:clone(typeof beads==='function'?beads():beads),breakables:captureBreakableState(state.breakables,state.time)};
  rec.frames.push(frame);rec.last=state.time;rec.previous=frame;
  while(rec.frames.length>201||rec.frames[0].time<state.time-10)rec.frames.shift();
 }

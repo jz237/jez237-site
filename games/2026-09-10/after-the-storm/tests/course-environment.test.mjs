@@ -30,12 +30,16 @@ test('the same reef can be crossed at high water but stops a hull at low water',
  assert.equal(crossing(0).collision,0);
  assert.ok(crossing(160).collision>0);
 });
-test('drifting ice collision follows its rendered location',()=>{
- const c=getCourse('glacier'),q=c.rocks[0],p=obstaclePosition(q,95),s=createRace({mode:'practice',course:c});
- assert.ok(Math.hypot(p.x-q.x,p.z-q.z)>.5);
- assert.ok(Math.hypot(p.x-q.x,p.z-q.z)<3.1);
- s.phase='running';s.time=95;const r=s.racers[0];r.x=p.x;r.z=p.z;r.vz=3;
- stepRace(s,{},1/60);assert.ok(r.collision>0);
+test('fixed Glacier spheres retain their world XYZ and race collision through changing water and time',()=>{
+ const c=getCourse('glacier'),q=c.rocks.find(q=>q.breakable),position={x:q.x,z:q.z},height=q.y;
+ assert.equal(q.fixed,true);
+ for(const level of [-1.4,0,1.4])for(const time of [0,95,220]){
+  waterLevel.value=level;assert.deepEqual(obstaclePosition(q,time),position);assert.equal(q.y,height);
+ }
+ const s=createRace({mode:'time',seaState:'calm',course:c});s.phase='running';s.time=95;
+ const r=s.racers[0];Object.assign(r,{x:q.x,z:q.z-2.2,heading:0,vx:0,vz:3,speed:3});
+ Object.assign(r.hydro,{initialized:true,y:q.y,vy:0});
+ stepRace(s,{},1/60);assert.ok(r.collision>0);assert.deepEqual(obstaclePosition(q,s.time),position);assert.equal(q.y,height);
 });
 test('floating props use actual wave slope and height in any heading',()=>{
  const surface=(x,z)=>2+x*.12-z*.18;
