@@ -10,6 +10,8 @@ import {queryNativeWaterField} from './native-water-field.js';
 import {NATIVE_RIDER_TUNE_DEFAULTS} from './native-rider-controls.js';
 import {createNativeFloatingWorld} from './native-floating-world.js';
 import {createNativePrimaryBuoyWorld} from './native-primary-buoy-world.js';
+import {bindRaceWaterCameraStorage} from './race-water.js';
+import {nativeRaceBodyFields} from './native-race-body-fields.js';
 
 // Runnable host bridge for the recovered hull and rider recovery. This remains
 // an integration preview: other actors/tricks and original AI are incomplete.
@@ -105,19 +107,28 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
    actorRecoveryAndTricks:false,riderRecovery:recovery,physicalRiderPresentation:true,
    recoveryGeometry:'authored anatomy/remount; reconstructed procedural fall/stumble; explicit authored rest/circle/history policy',
    nativeRacerCollision:craftContacts,sourcePrimaryBuoyContacts:!!primary})};
+ if(raceRuntime?.ordinary)bindRaceWaterCameraStorage(water,raceRuntime.cameraStorage);
  host.world=createNativeRaceWorld({adapters,water,humanIndices,craftContacts,afterTick:(_,context)=>{
   if(context.tick%5!==0)present(host);
  },afterFrame:(_,context)=>{
   present(host);
-  if(raceRuntime)raceRuntime.advanceClock();
+  let ordinary=null;
+  if(raceRuntime?.ordinary)ordinary=raceRuntime.advanceOrdinary({
+   bodiesBySlot:host.world.adapters.map(nativeRaceBodyFields),
+   nodePositionsNative:primary.state.nodes.map(n=>({sourceRow:n.sourceRow,x:n.positionNative.x,z:n.positionNative.z})),
+   pressedButtonsB58BySlot:host.world.adapters.map(a=>a.lastControls.pressedButtons)});
+  else if(raceRuntime)raceRuntime.advanceClock();
   // Adjudication observes contact-displaced current centers BEFORE the source
   // primary array's one motion pass. All craft share that mutable array.
-  const keepRunning=host.onFrame?host.onFrame(host,context):undefined;
+  host.lastOrdinary=ordinary;
+  const keepRunning=host.onFrame?host.onFrame(host,context,ordinary):undefined;
   if(primary)primary.afterFrame(host.world,context,{active:host.primaryActive});
   if(floating)floating.afterFrame(host.world,context,{active:host.floatingActive});
   if(raceRuntime){
-   const launch=raceRuntime.advanceLaunch(host.world.adapters.map(a=>a.lastControls.pressedButtons));
-   if(onLaunchFrame)onLaunchFrame(host,context,launch);
+   const status=raceRuntime.ordinary?raceRuntime.advanceStatus():null;
+   const launch=status?{...ordinary,effects:[...ordinary.effects,...status.effects],view:status.view}:
+    raceRuntime.advanceLaunch(host.world.adapters.map(a=>a.lastControls.pressedButtons));
+   if(onLaunchFrame&&onLaunchFrame(host,context,launch)===false)return false;
   }
   return keepRunning;
  }});

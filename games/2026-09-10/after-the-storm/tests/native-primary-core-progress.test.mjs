@@ -12,7 +12,13 @@ const near=(a,b,e=1e-9)=>assert.ok(Math.abs(a-b)<=e,`${a} != ${b}`);
 const nearPoint=(a,b)=>{for(const k of ['x','y','z'])near(a[k],b[k]);};
 
 test('race core judges actual primary recoil before the one50ms buoy-motion pass',()=>{
- const s=createRace({mode:'time',course:getCourse('greyhaven'),physics:'native'});
+ const options={mode:'time',course:getCourse('greyhaven'),physics:'native'},prepared=createRace(options).nativeLaunch.snapshot();
+ const recordBase=(0x2938-0x1f94)/4;
+ // Complete prepared numeric owner: this case starts on lap1 at source row2,
+ // rather than overriding the source reset's genuine lap0/initial finish.
+ for(const [word,value]of [[0,1],[3,2],[7,-1],[8,1],[196,2],[200,1]])prepared.raceWords1f94[recordBase+word]=value>>>0;
+ Object.assign(prepared.scene,{phase650:3,simulation648:3,clockStopped817c:0});prepared.i1Words9440[0]=0xffffffff;
+ const s=createRace({...options,nativeInitialRaceState:prepared});
  const host=s.nativeHost,a=host.world.adapters[0],r=s.racers[0],layout=s.course.sourceBuoyLayout;
  const authored=layout.nodes.find(n=>n.sourceRow===2),primary=host.primary.state.nodes.find(n=>n.sourceRow===2);
  assert.equal(r.sourceBuoys.nextSourceRow,2);assert.equal(authored.classification,1);
@@ -32,6 +38,7 @@ test('race core judges actual primary recoil before the one50ms buoy-motion pass
  Object.assign(a,bundle,{hull,riderLifecycle});host.bundles[0]=bundle;
  host.world.craftContactStates[0]=createNativeCraftContactState(hull);
  r.sourceBuoys.armed=true;r.sourceBuoys.side=-1;r.sourceBuoyPrevious={x:initial.x,z:initial.z};
+ const initialProgress=structuredClone(r.sourceBuoys);
  assert.equal(hull.ticks,0);assert.equal(host.world.frames,0);assert.equal(host.primary.state.motionFrames,0);
  nearPoint(host.primary.positionForSourceRow(2),{x:50.8,y:0,z:30.5});
 
@@ -42,12 +49,12 @@ test('race core judges actual primary recoil before the one50ms buoy-motion pass
  }};
  let judgeCalls=0,observed;
  const coreJudge=host.onFrame;
- host.onFrame=(h,c)=>{
+ host.onFrame=(h,c,ordinary)=>{
   judgeCalls++;assert.equal(c.logicalFrame,1);assert.equal(a.hull.ticks,5);assert.equal(s.raceWater.frames,1);
   assert.equal(h.primary.state.motionFrames,0);
   const before=h.primary.positionForSourceRow(2),sample={position:{x:r.x,z:r.z},previousPosition:r.sourceBuoyPrevious,lap:1,human:true};
-  const fixed=stepSourceBuoyProgress(layout,r.sourceBuoys,sample);
-  const moving=stepSourceBuoyProgress(layout,r.sourceBuoys,{...sample,currentNodePosition:before});
+  const fixed=stepSourceBuoyProgress(layout,initialProgress,sample);
+  const moving=stepSourceBuoyProgress(layout,initialProgress,{...sample,currentNodePosition:before});
   // Literal outcomes make a missing current-center override fail this test.
   assert.equal(fixed.event.nativeEventCode,1);assert.equal(fixed.event.correct,true);
   assert.equal(moving.event.nativeEventCode,2);assert.equal(moving.event.correct,false);
@@ -56,7 +63,7 @@ test('race core judges actual primary recoil before the one50ms buoy-motion pass
   near(a.lastFrame.impacts.primaryBuoyImpactNative,3.913475751876831,1e-12);
   for(const channel of ['fixedSphere','shore','floor','box','object'])assert.equal(a.lastFrame.impacts[channel+'ImpactNative'],0);
 
-  const keepRunning=coreJudge(h,c);
+  const keepRunning=coreJudge(h,c,ordinary);
   assert.equal(r.misses,1);assert.equal(r.power,0);assert.equal(r.sourceBuoys.totalMisses,1);
   assert.equal(r.sourceBuoys.nextSourceRow,4);assert.equal(r.sourceBuoys.logicalTicks,1);assert.equal(r.passed,1);
   assert.equal(r.event,'MISSED BUOY · 1/5');assert.equal(r.dq,'');

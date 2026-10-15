@@ -69,7 +69,7 @@ for(let difficulty=0;difficulty<4;difficulty++)test(`native two-player class${di
  for(let i=0;i<180*60&&s.phase!=='results';i++)stepRace(s,controls,1/60);
  assert.equal(s.phase,'results');assert.equal(s.result.dq,'');assert.ok([0,1].includes(s.result.winner));
  const winner=s.racers[s.result.winner],other=s.racers[1-s.result.winner],w=s.nativeHost.world;
- assert.equal(winner.lap,4);assert.equal(winner.passed,s.course.gates.length*3);assert.equal(winner.misses,0);
+ assert.equal(winner.lap,3);assert.equal(winner.lapTimes.length,3);assert.equal(winner.passed,s.course.gates.length*3);assert.equal(winner.misses,0);
  assert.ok(other.passed>30);assert.ok(s.racers.every(r=>r.misses===0&&r.dq===''));
  assert.ok(w.craftContactCount>0,'the match retains actual shared pair contacts');
  assert.equal(w.craftContactPasses,w.ticks);assert.equal(w.ticks,w.frames*5);assert.equal(w.remainder,0);

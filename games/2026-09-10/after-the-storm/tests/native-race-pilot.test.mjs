@@ -163,10 +163,11 @@ function drive(difficulty,rider,hz){
  // Capture the final judge observation; inactive input performs no simulation.
  assert.deepEqual(pilot.input(s,r),neutral);const d=pilot.diagnostics();
  assert.equal(s.phase,'results',`unfinished class${difficulty} rider${rider} at${hz}Hz`);
- assert.equal(r.dq,'',`DQ class${difficulty} rider${rider}: ${r.dq}`);assert.equal(r.lap,4);
+ assert.equal(r.dq,'',`DQ class${difficulty} rider${rider}: ${r.dq}`);assert.equal(r.lap,3);assert.equal(r.lapTimes.length,3);
  assert.ok(r.finishTime>60&&r.finishTime<180);assert.equal(r.passed,s.course.gates.length*3);
  assert.equal(JSON.stringify(s.course.anchors),anchors);
- assert.equal(d.transitions.filter(t=>t.enabled).length,r.passed);
+ assert.equal(d.transitions.filter(t=>t.enabled&&!t.initialStartLine).length,r.passed);
+ assert.equal(d.transitions.filter(t=>t.initialStartLine).length,1);
  assert.equal(d.transitions.reduce((n,t)=>n+t.missDelta,0),r.misses);
  assert.ok(d.coastFrames>0&&d.reserveFrames>0);
  for(const t of d.transitions.filter(t=>t.missDelta))assert.ok(t.sideMarginWorld<0,JSON.stringify(t));

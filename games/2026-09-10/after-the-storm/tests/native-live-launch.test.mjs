@@ -78,12 +78,13 @@ test('power, misses and source judge fields are live canonical views with no per
 });
 
 test('a genuine wrong-side crossing counts one miss through the canonical judge view',()=>{
- const s=create('time'),r=s.racers[0];let frames=0;
- while(r.misses===0&&frames++<15*60)stepRace(s,{throttle:1},1/60);
- assert.ok(frames<15*60,'ordinary helm input reaches a real missed buoy');
+ const s=create('time'),r=s.racers[0];let renderedFrames=0;
+ while(r.misses===0&&renderedFrames++<15*60)stepRace(s,{throttle:1},1/60);
+ assert.ok(renderedFrames<15*60,'ordinary helm input reaches a real missed buoy');
  assert.equal(r.sourceBuoyObservation.correct,false);assert.equal(r.misses,1);assert.equal(r.sourceBuoys.totalMisses,1);
- assert.equal(record(s,0,77),1);assert.equal(r.power,0);assert.equal(r.sourceBuoys.power,0);assert.equal(record(s,0,75),0);
+ assert.equal(record(s,0,77),1);assert.equal(r.power,1,'source missed-buoy feedback delays its power cut');assert.equal(r.sourceBuoys.power,1);
  assert.equal(r.event,'MISSED BUOY · 1/5');
+ frames(s,16,{throttle:1});assert.equal(r.power,0);assert.equal(r.sourceBuoys.power,0);assert.equal(record(s,0,75),0);
 });
 
 test('each record clock stops independently on finish/DQ and lap starts use the same timing words',()=>{

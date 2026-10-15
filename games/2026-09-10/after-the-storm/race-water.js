@@ -40,6 +40,17 @@ function craftPose(craft,scale){
  return {position,forward:[Math.sin(craft.heading),Math.cos(craft.heading)],sourcePoseState,sourcePoseTimer};
 }
 export const isHostRaceWater=state=>known.has(state);
+const boundCameraStores=new WeakSet();
+/** Transfer the admitted numeric camera fields to the canonical HUD owner.
+ * Water subsequently reads/writes that store directly. No retained second
+ * eye/direction/target array is synchronized once per presentation frame. */
+export function bindRaceWaterCameraStorage(state,store){
+ if(!known.has(state)||state.frames!==0||boundCameraStores.has(state)||typeof store?.read!=='function'||typeof store?.write!=='function')
+  throw new TypeError('Camera storage binds once, before the first source water frame');
+ store.write(state.cameras);
+ Object.defineProperty(state,'cameras',{enumerable:true,configurable:false,get:()=>store.read(),set:value=>store.write(value)});
+ boundCameraStores.add(state);return state;
+}
 export function createRaceWaterRandom(seed){
  // Separate from scenery, physics and driver RNG. Captured initialization
  // therefore survives restart without consuming another subsystem's history.

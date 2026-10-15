@@ -7,6 +7,7 @@ import {stepNativeArticulatedRider} from './native-articulated-rider.js';
 import {createNativeRiderControlState,prepareNativeRiderControls,finishNativeRiderControls} from './native-rider-controls.js';
 import {createNativeImpactState,resetNativeImpacts,recordNativeImpact,nativeImpactSnapshot} from './native-impact-state.js';
 import {createNativeRiderLifecycle,nativeRiderLifecycleSource,decideNativeRiderLifecycle,finishNativeRiderLifecycle,nativeRiderLifecycleSnapshot} from './native-rider-lifecycle.js';
+import {nextNativeDryContactFrames} from './native-race-body-fields.js';
 import {createNativeRiderActionInputHistory,stepNativeRiderActionInputHistory,
   prepareNativeRiderInversion,finishNativeRiderArcState} from './native-rider-action-dispatch.js';
 
@@ -269,7 +270,7 @@ export function createNativeRaceAdapter({riderIndex=0,tuneB6c=0,tuneB70=0,tuneB7
     actionState:action,articulatedRider,riderPose,riderLifecycle:lifecycle,riderActions:actions,
     contactFactor,powerSteps,remainder:0,logicalFrames:0,stepsLast:0,frame:null,
     preparedHullTick:null,pendingFrameCompletion:false,
-    contactWindow:contactsZero(),contactDriveFrames:0,lastControls:null,
+    contactWindow:contactsZero(),contactDriveFrames:0,dryContactFrames16d0:0,lastControls:null,
     lastFrame:{logicalFrame:0,clockUnits:0,frameDisplacementNative:vec(),frameSpeedNative:0,
       hudSpeed:0,referenceDisplacementNative:vec(),referenceChangeNative:vec(),
       wetCount:8,anyWet:true,contacts:contactsZero(),impacts:nativeImpactSnapshot(impacts),actorState:lifecycle?.state.actorState??source.actorState??22,
@@ -404,6 +405,7 @@ function beginFrame(adapter,input,options){
 
 function endFrame(adapter){
   const {hull,water,frame,lastFrame,contactWindow}=adapter,s=hull.scale;
+  adapter.dryContactFrames16d0=nextNativeDryContactFrames(adapter.dryContactFrames16d0,{anyWet:water.anyWet,impacts:adapter.impacts});
   const movement=difference(hull.center,frame.startCenter),reference=difference(referencePoint(hull),frame.startReference);
   const displacement=vec(movement.x/s,movement.y/s,movement.z/s),speed=magnitude(displacement);
   const referenceDisplacement=vec(reference.x/s,reference.y/s,reference.z/s);

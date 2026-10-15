@@ -2138,3 +2138,77 @@ and choose Sunny Beach, Venue conditions, Time trial or Two players. The
 equivalent online host entry is `online.html?verify=1&nativePhysics=1`; its guest
 needs only the normal invite flow. These remain reconstruction inspection
 entries while the full objective is unfinished.
+
+## Live source lap and race rules — October 15, 2026 (v2.22.0)
+
+This replaces the v2.21 browser progress/lap initialization and its split
+clock/judge/countdown schedule. The admitted Sunny Beach Time trial and
+Two-player preview now loads the selected raw primary rows through the recovered
+numeric initializer, runs the complete numeric race reset and startup HUD, then
+calls the complete ordinary primary race update and all eight numeric HUD
+consumers. The order is five physical hull/rider ticks, source camera/water,
+primary scratch/progress/ranking/records and the ordered HUD consumers
+(including countdown), primary/floating object motion, then numeric i1 status.
+Prestart judging is active. There is no second browser lap judge or clock.
+
+The initial finish crossing moves source lap0 to lap1 without awarding a
+completed lap. The final completed race retains lap3 and three saved lap times;
+its finish flag and reconciled record time own completion. Legal-lap/checkpoint
+counters, delayed missed-buoy power loss/retirement, allowed-region warnings,
+wrong-direction counters, versus order/gaps and numeric record saving share the
+same canonical race/HUD owner. Source results/menu transition callees are still
+pending dependencies; the high-resolution host consumes the resulting finish
+or DQ status and stops the race. In-memory numeric record insertion is covered;
+native record-book persistence is not implemented.
+
+Water and HUD consumers now read the same canonical camera eye, target and
+basis fields. Only projection metadata remains outside those admitted fields.
+The ordinary body view reads the actual hull center, its pre-hull retained
+center, completed actor/mode and impacts. The source dry-contact counter16D0 is
+separate from the airborne/no-contact counter16DC. The field named B98 by the
+speed overlay receives applied jet force, not displacement speed. High-resolution
+boundary countdown and wrong-way text use the source fields, including in
+Player2's online/separate view. Equal simultaneous source finishes display a tie.
+
+New source evidence includes the EVO X2 read-only Ghidra query of six existing
+functions: 3,834 instruction words match the supplied ROM and all nine project
+files remain unchanged. The complete original sine initialization matches all
+4,096 output words; using ordinary Math.sin would differ at 413 stores.
+Row loading plus primary initialization match 32 bounded cases/58,890 words,
+including preserved unused words and all source types. This found and corrected
+the Dolphin Park type26 route group. The dry-contact/posture helpers match
+1,944/33 isolated original-instruction cases.
+
+Fifty-two actual browser-host physical/camera/object samples, spanning starts,
+passes, a miss, lap changes and finishes, match the original whole ordinary
+race routine and all eight numeric overlays: 163,020 final canonical words,
+ordered effects and overlay stores agree. This compares bounded numeric calls
+on supplied physical inputs, not original-game trajectories or full boot.
+
+The full suite checks 2,117 tests: 2,106 pass, with the same eleven existing
+course-calibration failures. All sixteen native rider/class three-lap runs and
+four native two-player class matches retain their previous zero/one-miss limits;
+the heavy profile's Hard/Expert diagnostic rows remain29/46. The prepared recoil
+test now supplies a complete lap1/row2 numeric state; its exact physical contact,
+moving-versus-static side decision and buoy-motion assertions are preserved.
+Online scalar display values canonicalize signed zero at serialization; physical
+float words, hull/rider arrays and source water data are unchanged.
+
+A fresh ordinary keyboard browser run shows source lap0 then lap1, zero
+pre-GO record time, a timed start boost, one genuine miss with delayed power
+loss, and a paused 8.200-second record at source frame220. Its 204 observed
+frames render High1280x720. Two isolated local browsers establish actual WebRTC,
+start with independent controls, enter lap1 and pause with identical positions,
+speeds, 4.600-second record clocks and source water frame200/hash2595691067.
+Both views render High1280x720. This is local two-browser evidence; it does not
+extend the earlier v2.20 second-PC result to arbitrary WAN/NAT or hardware.
+
+Fresh web memory is an explicit policy: zero unwritten words, three confirmed
+readonly numeric HUD constants and empty selected-course record times, followed
+by the actual reset/startup writes. Physical grid placement still uses the
+browser's prepared grid; this is not a source cold-boot/EEPROM claim. Original
+AI, remaining venues/modes, result/menu transitions, record persistence, shared
+RNG/camera special branches, source force calibration with modern anatomy and
+the eleven existing calibration failures remain unfinished. Default modern
+play, global solo scoring and the high-resolution assets remain available.
+The native preview stays opt-in and excluded from competitive records.

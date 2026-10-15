@@ -96,6 +96,7 @@ export function createNativeRacePilot({course,policy={},traceLimit=256}={}){
    if(traceLimit){
     transitions.push({time:now.logicalTick*.05,fromSourceRow:previousProgress.row,toSourceRow:now.row,
      lap:now.lap,passed:now.passed,misses:now.misses,missDelta:now.misses-previousProgress.misses,
+     initialStartLine:judged?.initialStartLine??false,
      sourcePosition:{x:position.x,z:position.z},classification:n?.classification??null,enabled:!!n?.enabled,
      buoyDistanceWorld:n?Math.hypot(position.x-center.x,position.z-center.z):null,
      sideMarginWorld:margin,buoyCenterWorld:center?{x:center.x,z:center.z}:null,

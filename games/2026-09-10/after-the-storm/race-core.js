@@ -1,6 +1,7 @@
 import {createSourceFixedSphereGrid} from './source-boundary-spheres.js';
 import {createNativeRaceHost,stepNativeRaceHost} from './native-race-host.js';
 import {createNativeRaceLaunchRuntime} from './native-race-launch-runtime.js';
+import {createNativeRaceCourseRuntime} from './native-race-course-runtime.js';
 import {capturePrimaryBuoyPresentation} from './primary-buoy-presentation.js';
 import {constrainSourceSphereRace} from './source-sphere-race.js';
 import {createRaceWater,stepRaceWater,setRaceWater} from './race-water.js';
@@ -59,7 +60,7 @@ export const angleDelta=a=>Math.atan2(Math.sin(a),Math.cos(a));
 export function makeCoveCourse(){return getCourse('greyhaven');}
 export const COVE=makeCoveCourse();
 export function settings(rider=0,tune={}){const r=RIDERS[rider];const engine=clamp(Number(tune.engine)||0,-1,1),grip=clamp(Number(tune.grip)||0,-1,1),handling=clamp(Number(tune.handling)||0,-1,1);return {...r,speed:r.speed+engine*1.4-grip*.7,accel:r.accel-engine*.8,grip:r.grip+grip*1.4,handling:r.handling+handling*.35};}
-export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,difficulty=0,course=COVE,gridOrder=null,seaState='course',secondRider=1,secondTune={},handicap=false,swapColours=false,physics='modern',nativeTunes=[]}={}){
+export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,difficulty=0,course=COVE,gridOrder=null,seaState='course',secondRider=1,secondTune={},handicap=false,swapColours=false,physics='modern',nativeTunes=[],nativeInitialRaceState}={}){
  if(!['modern','native'].includes(physics))throw new RangeError('Unknown race physics');
  if(physics==='native'&&(!['time','versus'].includes(mode)||seaState!=='course'||course.sourceWaterCourseIndex!==1))
   throw new RangeError('Native integration preview requires Sunny Beach source-water Time trial or Two-player race');
@@ -71,6 +72,8 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
  if(mode==='stunt'||freeRide)course=stuntCourse(course,{freeRide});
  if(course.sourceObjectSelection){const playerCount=mode==='versus'?2:1;course={...course,playerCount,rocks:course.hazardsForPlayers(playerCount),sourceDecorations:course.decorationsForPlayers?course.decorationsForPlayers(playerCount):course.sourceDecorations};}
  if(course.contactVolumesForRamps)course={...course,contactVolumes:course.contactVolumesForRamps(course.ramps)};
+ const nativeCourseRuntime=physics==='native'?createNativeRaceCourseRuntime({course,difficulty,players:mode==='versus'?2:1}):null;
+ if(nativeCourseRuntime)course={...course,sourceBuoyLayout:nativeCourseRuntime.sourceBuoyLayout};
  const ids=mode==='versus'?[rider,secondRider]:[rider,...RIDERS.map((_,i)=>i).filter(i=>i!==rider)],g=course.gates[0];
  const racers=ids.slice(0,mode==='versus'?2:['race','championship'].includes(mode)?4:1).map((id,i)=>{const grid=mode==='versus'?i:gridOrder?gridOrder.indexOf(id):i===0?3:i-1,lateral=(grid%2?1:-1)*2.4,back=7+Math.floor(grid/2)*5;return {id,grid,human:i===0||mode==='versus',player:i===0?0:mode==='versus'?1:null,stats:settings(id,i===0?tune:mode==='versus'?secondTune:{}),x:g.x-g.tx*back+g.tz*lateral,z:g.z-g.tz*back-g.tx*lateral,heading:Math.atan2(g.tx,g.tz),vx:0,vz:0,speed:0,turn:0,throttle:0,power:freeRide||mode==='stunt'?5:0,misses:0,next:1,passed:0,lap:1,lapStart:0,lapTimes:[],finishTime:null,dq:'',out:0,collision:0,recover:0,event:'',eventTime:0,previousWave:0,hydro:createHydro(),stunt:createStunt(course),raceTime:0};});
  if(course.sourceBuoyLayout&&!freeRide&&mode!=='stunt')for(const r of racers)if(r.human){
@@ -94,7 +97,11 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
  if(physics==='native'){
   // Preview histories must not compete with saved modern-physics records.
   state.nativePreview=true;state.demoRun=true;
-  state.nativeLaunch=createNativeRaceLaunchRuntime({racers,courseIndex:course.sourceWaterCourseIndex,players:mode==='versus'?2:1});
+  state.nativeLaunch=createNativeRaceLaunchRuntime({racers,courseIndex:course.sourceWaterCourseIndex,players:mode==='versus'?2:1,
+   courseRuntime:nativeCourseRuntime,course,laps:state.laps,reverse:!!course.reverse,
+   // Explicit prepared numeric state for bounded diagnostics. Physical/water
+   // histories still start fresh; this is not a complete saved-race restore.
+   initialState:nativeInitialRaceState});
   state.nativeLaunchLabel=state.nativeLaunch.view().label;state.nativeCountdownCue=null;
   let launchCueSequence=0;
   state.nativeHost=createNativeRaceHost({racers,water:raceWater,course,fixedSphereGrid:sourceSphereGrid,tunes:nativeTunes,raceRuntime:state.nativeLaunch,
@@ -106,11 +113,22 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
     if(number===0)racers.forEach(r=>announce(r,state,'GO'));
    }
    for(const op of launch.operations)if(op.kind==='recordWordWrite'&&op.wordIndex===75){
-    const r=racers[op.racerIndex];announce(r,state,r.power===5?'ROCKET START · MAX POWER':'START BOOST · POWER '+r.power);
+    // Ordinary tail also owns missed-buoy power decay; only actual boost
+    // writes from the countdown are starting announcements.
+    if(launch.view.phase650===2&&op.value>0){
+     const r=racers[op.racerIndex];announce(r,state,r.power===5?'ROCKET START · MAX POWER':'START BOOST · POWER '+r.power);
+    }
    }
+   if(state.nativeLaunch.ordinary&&state.phase!=='countdown')finishRaceStep(state,.05);
+   return state.phase!=='results';
   },
-  onFrame:(host,context)=>{
+  onFrame:(host,context,ordinary)=>{
    state.time=context.time;
+   ordinary??=host.lastOrdinary;
+   if(state.nativeLaunch.ordinary){
+    observeNativeRace(state,host,ordinary);
+    return true;
+   }
    for(const r of racers){
     if(state.phase==='countdown'){r.nativePrevious={x:r.x,z:r.z};r.sourceBuoyPrevious={x:r.x,z:r.z};continue;}
     if(r.finishTime!==null||r.dq)continue;
@@ -127,6 +145,30 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
  return state;
 }
 export function gateCoordinates(g,x,z){return {forward:(x-g.x)*g.tx+(z-g.z)*g.tz,lateral:-(x-g.x)*g.tz+(z-g.z)*g.tx};}
+// Read-only high-resolution adaptation of the just-completed full source
+// phase. Source lap0 includes its initial start line, and a finished race
+// retains lap==configuredLaps; no browser lap/miss/DQ rule runs on this path.
+function observeNativeRace(state,host,ordinary){
+ const raw=state.nativeLaunch.snapshot().raceWords1f94,base=(0x2938-0x1f94)/4,scale=host.world.water.scale;
+ for(let slot=0;slot<state.racers.length;slot++){
+  const r=state.racers[slot],before=ordinary.before[slot],at=base+slot*222,w=i=>raw[at+i]|0;
+  r.sourceBuoyPrevious={x:r.x,z:r.z};r.nativePrevious={x:r.x,z:r.z};r.sourceBuoyElapsed=0;
+  if(w(3)!==before.row){
+   const node=host.primary.state.nodes[before.row],gate=ordinary.diagnostic.primary.racers[slot].progress.gate;
+   r.sourceBuoyObservation={sourceRow:before.row,logicalTick:r.sourceBuoys.logicalTicks,position:{x:r.x,z:r.z},
+    center:{x:node.positionNative.x*scale,z:node.positionNative.z*scale},side:gate?.state.side2954??-1,
+    correct:w(10)!==2,initialStartLine:before.lap===0&&node.classification===3};
+   if(w(10)===1)announce(r,state,r.power===5?'MAX POWER':'Clean buoy · power '+r.power);
+   else if(w(10)===2)announce(r,state,'MISSED BUOY · '+r.misses+'/5');
+  }
+  if(r.lap!==before.lap&&before.lap>0||w(189)!==0&&before.finished===0){
+   const lap=r.lapTimes.at(-1);r.lapDelta=lapComparison(r.lapTimes.slice(0,-1),lap,r.referenceLap);r.lapDeltaTime=state.time;
+   announce(r,state,'Lap '+r.lapTimes.length+' · '+lap.toFixed(3)+' s');
+  }
+  if(w(189)!==0&&before.finished===0)announce(r,state,'FINISHED');
+  if(w(187)!==0&&before.dq===0)announce(r,state,'DISQUALIFIED');
+ }
+}
 function announce(r,s,text){r.event=text;r.eventTime=s.time;s.events.push({rider:r.id,text,time:s.time});if(s.events.length>20)s.events.shift();}
 function missBuoy(s,r,alreadyCounted=false){if(!alreadyCounted)r.misses++;r.power=0;announce(r,s,'MISSED BUOY · '+r.misses+'/5');if(r.misses>=5)r.dq='Five missed buoys';}
 function inGateSpan(g,side){return side>(g.spanMin??-g.width)&&side<(g.spanMax??g.width);}
@@ -270,7 +312,10 @@ function courseInput(s,r){
  const train=s.course.waveTrain,rollers=train&&Math.abs(r.x-train[0])<28&&r.z>train[1]-15&&r.z<train[1]+train[2]*2+18;
  return {lean:rollers?1:0,throttle:avoidingObstacle?Math.min(.28,cruise*.53):shortcut?Math.max(.95,cruise*.53):raceThrottle*(rollers?.8:1),dive:!!(shortcut&&s.difficulty>=2&&(r.hydro.diveRemaining>0||r.hydro.airborne&&r.hydro.vy<0&&r.hydro.y-r.hydro.waterHeight<1.2)),steer:clamp(error*2.4-(r.yawVelocity||0)*.12,r.onIce&&!s.course.landGround?-.34:-1,r.onIce&&!s.course.landGround?.34:1),brake:Math.abs(error)>1.1||avoidingObstacle&&r.speed>9||demoPace&&r.speed>targetSpeed+2,dampen:true};
 }
-export function raceOrder(s){return [...s.racers].sort((a,b)=>{if(s.phase==='countdown'||s.time===0)return a.grid-b.grid;if(Boolean(a.dq)!==Boolean(b.dq))return a.dq?1:-1;if(a.finishTime!==null||b.finishTime!==null)return (a.finishTime??Infinity)-(b.finishTime??Infinity);if(a.passed!==b.passed)return b.passed-a.passed;const ga=s.course.gates[a.next],gb=s.course.gates[b.next];return Math.hypot(a.x-ga.x,a.z-ga.z)-Math.hypot(b.x-gb.x,b.z-gb.z);});}
+export function raceOrder(s){
+ if(s.nativeLaunch?.ordinary)return [...s.racers].sort((a,b)=>a.nativePlace-b.nativePlace);
+ return [...s.racers].sort((a,b)=>{if(s.phase==='countdown'||s.time===0)return a.grid-b.grid;if(Boolean(a.dq)!==Boolean(b.dq))return a.dq?1:-1;if(a.finishTime!==null||b.finishTime!==null)return (a.finishTime??Infinity)-(b.finishTime??Infinity);if(a.passed!==b.passed)return b.passed-a.passed;const ga=s.course.gates[a.next],gb=s.course.gates[b.next];return Math.hypot(a.x-ga.x,a.z-ga.z)-Math.hypot(b.x-gb.x,b.z-gb.z);});
+}
 // Catch-up assistance changes available power, never position or buoy progress.
 export function handicapBoost(s,r){if(s.mode!=='versus'||s.freeRide||!s.handicap)return 0;
  const progress=q=>{const g=s.course.gates[q.next],prev=s.course.gates[(q.next+s.course.gates.length-1)%s.course.gates.length];return q.passed-Math.hypot(g.x-q.x,g.z-q.z)/Math.max(1,Math.hypot(g.x-prev.x,g.z-prev.z));};
@@ -353,6 +398,13 @@ function finishRaceStep(s,dt){
  if(s.freeRide)return;
  if(s.mode==='versus'){
   const finished=s.racers.filter(r=>r.finishTime!==null),disqualified=s.racers.filter(r=>r.dq);
+  if(s.nativeLaunch?.ordinary&&(finished.length||disqualified.length)){
+   const result=s.nativeLaunch.snapshot().scene.result6f0,winner=result===1?s.racers[1]:result===2?s.racers[0]:null;
+   s.phase='results';s.result={winner:winner?.player??null,position:winner?winner.player===0?1:2:null,
+    time:winner?.finishTime??(winner??s.racers[0]).raceTime,dq:disqualified.map(r=>'P'+(r.player+1)+': '+r.dq).join(' / '),
+    lapTimes:[],players:s.racers.map(r=>({player:r.player,id:r.id,time:r.finishTime,misses:r.misses,passed:r.passed,dq:r.dq}))};
+   return;
+  }
   if(finished.length||disqualified.length){const winner=finished.length?finished.sort((a,b)=>a.finishTime-b.finishTime)[0]:s.racers.find(r=>!r.dq);s.phase='results';s.result={winner:winner?.player??null,position:winner?.player===0?1:2,time:winner?.finishTime??(s.nativeLaunch?(winner??s.racers[0]).raceTime:s.time),dq:disqualified.map(r=>'P'+(r.player+1)+': '+r.dq).join(' / '),lapTimes:[],players:s.racers.map(r=>({player:r.player,id:r.id,time:r.finishTime,misses:r.misses,passed:r.passed,dq:r.dq}))};}return;
  }
  const human=s.racers[0];if(human.dq||human.finishTime!==null){if(s.mode==='championship'&&s.racers.some(r=>!r.dq&&r.finishTime===null)){s.finishWait+=dt;if(s.finishWait<40)return;for(const r of s.racers)if(r.finishTime===null&&!r.dq)r.dq='Race time limit';}s.phase='results';s.result={position:raceOrder(s).indexOf(human)+1,time:human.finishTime,dq:human.dq,lapTimes:[...human.lapTimes]};}

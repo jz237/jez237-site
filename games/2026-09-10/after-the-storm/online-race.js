@@ -1,6 +1,7 @@
 import {createOnlinePeer} from './online-peer.js';
 import {onlineToken,onlineGuestSetup,onlinePlayerInput,validateOnlineDescriptor} from './online-race-protocol.js';
 import {readWindowFrame,interpolateWindowFrame,windowRacerHudSpeed} from './player-window-presentation.js';
+import {nativeRaceNotice,nativeRaceDisplayWinner} from './native-race-notice.js';
 import {createInputSampler} from './player-input.js';
 import {gameplayKey} from './control-bindings.js';
 import {fullPlayerViewport} from './player-window-protocol.js';
@@ -128,9 +129,10 @@ function frame(now){
  viewer.draw(f);$('onlineRiderTitle').textContent='P2 · '+(descriptor.names[r.id]||'Rider '+(r.id+1))+(f.freeRide?' · FREE RIDE':' · LAP '+Math.min(r.lap,descriptor.laps)+'/'+descriptor.laps);
  $('onlineProgress').textContent=f.freeRide?r.stunt.rings+' rings · '+r.stunt.score+' points':'POWER '+r.power+'/5 · MISSES '+r.misses+'/5';
  const rival=f.racers[0];$('onlineSession').textContent=f.freeRide?'P1 · '+rival.stunt.rings+' rings · '+rival.stunt.score+' points':'TIME '+time(r.nativeTelemetry?r.raceTime:f.time)+' · P1 '+(rival.dq?'DISQUALIFIED':rival.finishTime!==null?'FINISHED '+time(rival.finishTime):'LAP '+Math.min(rival.lap,descriptor.laps)+'/'+descriptor.laps);
- $('onlineNotice').textContent=f.nativeLaunchLabel|| (f.phase==='countdown'?String(Math.max(1,Math.ceil(f.countdown))):r.wipeout?'WIPEOUT · TAP THROTTLE TO REMOUNT':f.time-r.eventTime<2?r.event:'');$('onlineSpeed').textContent=windowRacerHudSpeed(r)+' km/h';
+ $('onlineNotice').textContent=f.nativeLaunchLabel|| (f.phase==='countdown'?String(Math.max(1,Math.ceil(f.countdown))):r.wipeout?'WIPEOUT · TAP THROTTLE TO REMOUNT':nativeRaceNotice(r)|| (f.time-r.eventTime<2?r.event:''));$('onlineSpeed').textContent=windowRacerHudSpeed(r)+' km/h';
  if(f.phase==='paused')hold('Race paused','Either player can resume when both are ready.',true);else if(f.phase==='results'){
-  const finished=f.racers.filter(q=>q.finishTime!==null&&!q.dq).sort((x,y)=>x.finishTime-y.finishTime),remaining=f.racers.filter(q=>!q.dq),winner=finished[0]??(remaining.length===1?remaining[0]:null);
+  const finished=f.racers.filter(q=>q.finishTime!==null&&!q.dq).sort((x,y)=>x.finishTime-y.finishTime),remaining=f.racers.filter(q=>!q.dq),
+   winner=r.nativePlace!==undefined?nativeRaceDisplayWinner(f.racers):finished[0]??(remaining.length===1?remaining[0]:null);
   hold(winner?'Player '+(winner.player+1)+' wins':'Race finished',f.racers.map(q=>'P'+(q.player+1)+' · '+(q.dq||time(q.finishTime))).join(' · ')+'. The host can restart or choose another course.');
  }else $('onlineHold').hidden=true;
  const paused=f.phase!=='running'||!visible;audio.update(r.speed*.45,f.weather.storm,false,paused,f.time,r.hydro.wet,null,r.throttle,r.mount==='dolphin');audio.updateRide(r,Math.max(0,f.water.level-course.ground(r.x,r.z)),f.time,paused);audio.updateRivals(r,f.racers,paused);

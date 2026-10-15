@@ -1,5 +1,6 @@
 import {PLAYER_WINDOW_VERSION,envelope,validEnvelope,normalizeWindowControls} from './player-window-protocol.js';
 import {readWindowFrame,interpolateWindowFrame,windowRacerHudSpeed} from './player-window-presentation.js';
+import {nativeRaceNotice} from './native-race-notice.js';
 import {createInputSampler} from './player-input.js';
 import {gameplayKey} from './control-bindings.js';
 import {createGamepadRumble,updateGamepadRumble,resetGamepadRumble} from './gamepad-rumble.js';
@@ -66,7 +67,7 @@ function frame(now){
  if(f.phase==='results'){hold('Race finished. Results and the next course are on Player 1.');return;}
  $('standby').hidden=true;$('hud').hidden=false;const r=f.racers[1];
  $('title').textContent='P2 · '+(descriptor.names?.[r.id]||'Rider '+(r.id+1))+(f.freeRide?' · FREE RIDE':' · LAP '+Math.min(r.lap,descriptor.laps)+'/'+descriptor.laps);
- $('status').textContent=r.wipeout?'WIPEOUT · TAP THROTTLE TO REMOUNT':f.time-r.eventTime<2?r.event:'';
+ $('status').textContent=r.wipeout?'WIPEOUT · TAP THROTTLE TO REMOUNT':nativeRaceNotice(r)|| (f.time-r.eventTime<2?r.event:'');
  $('power').textContent=f.freeRide?r.stunt.score+' pts · '+r.stunt.rings+' rings':'POWER '+r.power+'/5 · MISSES '+r.misses+'/5';$('speed').textContent=windowRacerHudSpeed(r)+' km/h';$('notice').textContent=f.phase==='paused'?'RACE PAUSED':f.nativeLaunchLabel??(f.phase==='countdown'?String(Math.ceil(f.countdown)):'');$('pause').textContent=f.phase==='paused'?'Resume both':'Pause both';
  updateGamepadRumble(haptics,focused?{mode:'versus',phase:f.phase,time:f.time,racers:f.racers}:null,pads,descriptor.rumble,now);
 }

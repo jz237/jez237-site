@@ -56,6 +56,9 @@ function primaryBuoys(value){
  return rows;
 }
 function copyNativeRacer(from,to={...from}){
+ if(own(from,'nativeBoundaryFrames')&&!integer(from.nativeBoundaryFrames,-1,65535))throw new RangeError('Invalid source boundary display');
+ if(own(from,'nativeWrongWay')&&typeof from.nativeWrongWay!=='boolean')throw new TypeError('Invalid source direction display');
+ if(own(from,'nativePlace')&&!integer(from.nativePlace,0,3))throw new RangeError('Invalid source place display');
  if(own(from,'nativeRiderPose'))to.nativeRiderPose=nativeRiderPose(from.nativeRiderPose);
  if(own(from,'nativeTelemetry'))to.nativeTelemetry=nativeTelemetry(from.nativeTelemetry);
  return to;
@@ -67,11 +70,13 @@ function fields(value,max=96){
  if(!plain(value)||Object.keys(value).length>max)return null;
  const out={};for(const [key,v] of Object.entries(value)){
   if(!/^[a-zA-Z][a-zA-Z0-9_]{0,39}$/.test(key))return null;
-  if(finite(v)||typeof v==='boolean'||v===null||typeof v==='string'&&v.length<=240)out[key]=v;
+  // Scalar DISPLAY values cross JSON, which has only one zero. Physical
+  // buffers/float words never pass through this scalar presentation helper.
+  if(finite(v)||typeof v==='boolean'||v===null||typeof v==='string'&&v.length<=240)out[key]=typeof v==='number'&&v===0?0:v;
  }
  return out;
 }
-const racerKeys=['id','player','human','x','z','vx','vz','heading','speed','turn','throttle','yawVelocity','riderLean','sprayExposure','collision','recover','onIce','iceBalance','power','misses','next','passed','lap','out','event','eventTime','finishTime','dq','mount','raceTime'];
+const racerKeys=['id','player','human','x','z','vx','vz','heading','speed','turn','throttle','yawVelocity','riderLean','sprayExposure','collision','recover','onIce','iceBalance','power','misses','next','passed','lap','out','event','eventTime','finishTime','dq','mount','raceTime','nativeBoundaryFrames','nativeWrongWay','nativePlace'];
 function rider(r){
  if(!plain(r))return null;
  const q=fields(Object.fromEntries(racerKeys.filter(k=>r[k]!==undefined).map(k=>[k,r[k]])));

@@ -58,9 +58,9 @@ test('native preview is restricted to its verified integration boundary',()=>{
 
 test('source judge observation records the pre-motion primary center without owning that buoy',()=>{
  const s=create(),host=s.nativeHost,r=s.racers[0],original=host.onFrame,observations=[];
- host.onFrame=(h,c)=>{
-  const row=r.sourceBuoys.nextSourceRow,center=h.primary.positionForSourceRow(row);
-  const result=original(h,c),observation=r.sourceBuoyObservation;
+ host.onFrame=(h,c,ordinary)=>{
+  const row=ordinary.before[0].row,center=h.primary.positionForSourceRow(row);
+  const result=original(h,c,ordinary),observation=r.sourceBuoyObservation;
   if(observation?.logicalTick===r.sourceBuoys.logicalTicks&&observation.sourceRow===row){
    assert.equal(h.primary.state.motionFrames,c.logicalFrame-1);
    assert.deepEqual(observation.center,{x:center.x,z:center.z});
@@ -150,7 +150,8 @@ test('display mutation cannot move the source hull or feed a modern rescue/force
 test('local verification uses the authored native helm through normal frame-sampled controls',()=>{
  const s=create();s.phase='running';const r=s.racers[0];
  for(let i=0;i<180*60&&s.phase!=='results';i++)stepRace(s,()=>verificationInput(s,r),1/60);
- assert.equal(s.phase,'results');assert.equal(r.dq,'');assert.equal(r.misses,0);assert.equal(r.lap,4);
+ assert.equal(s.phase,'results');assert.equal(r.dq,'');assert.equal(r.misses,0);assert.equal(r.lap,3);
+ assert.equal(r.lapTimes.length,3);assert.ok(r.finishTime>0);
  assert.equal(r.passed,42);assert.equal(s.nativeHost.world.remainder,0);
  assert.equal(s.nativeHost.world.adapters[0].lastControls.heldButtons&0x4010,0);
  assert.equal(r.hydro.landingId,0);assert.equal(r.stunt.score,0);
