@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-10-15",
+      "historicDate": "1985-01-21",
+      "displayDate": "Week of January 21-27, 1985",
+      "edition": "Issue 130 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Apple unveils LaserWriter and AppleTalk; the personal-computer contest gathers pace.",
+      "leadHeadline": "Apple puts a shared laser printer at the center of the Macintosh Office",
+      "storyHeadlines": [
+        "Atari promises Macintosh-style computing without Macintosh prices",
+        "Commodore 128 promises three computers in one",
+        "Games invite players to build the tracks, creatures and adventures"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-01-21.jpg",
+      "thumb": "media/thumbs/1985-01-21.webp",
+      "milestone": true
+    },
+    {
       "currentDate": "2026-10-14",
       "historicDate": "1985-01-14",
       "displayDate": "Week of January 14-20, 1985",

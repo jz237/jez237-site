@@ -10,6 +10,438 @@
         "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
       },
       "visualProfile": {
+        "tone": "Macintosh Office milestone edition",
+        "motifs": [
+          "LaserWriter",
+          "AppleTalk",
+          "game construction kits"
+        ],
+        "layout": "Dense warm newsprint with red and blue headers"
+      },
+      "layoutPlan": {
+        "leadPlacement": "LaserWriter and Macintosh Office milestone lead; game-construction feature with a substantial halftone block",
+        "secondaryRail": "Atari ST, Commodore 128, game construction, modem economics, rock and cinema",
+        "archiveNavigation": "Weekly archive and previous/next controls"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Issue 130 - Weekly 1985 Computer & Culture Chronicle",
+        "dateline": "Week of January 21-27, 1985",
+        "price": "75 cents"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1985-01-21.jpg",
+        "alt": "GPT Image 2 Computer Chronicle newspaper for January 21–27, 1985",
+        "caption": "Newspaper-style front page generated from structured Computer Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical",
+        "generation": {
+          "requestedModel": "openai/gpt-image-2",
+          "requestedQuality": "high",
+          "requestedSize": "auto",
+          "imageModelVerification": "unverified",
+          "backendImageModel": null,
+          "reportedQuality": null,
+          "width": 1024,
+          "height": 1536,
+          "sha256": "a6db7c7b861df94ba9da7b5592ec941758a1437d39d37db8f9e49ac78d45b61e",
+          "format": "jpeg",
+          "resized": false
+        }
+      },
+      "currentDate": "2026-10-15",
+      "historicDate": "1985-01-21",
+      "displayDate": "Week of January 21-27, 1985",
+      "edition": "Issue 130 - Weekly 1985 Computer & Culture Chronicle",
+      "sources": [
+        {
+          "title": "Donald Woutat: Apple’s Computer Will Soon Talk With IBM’s, Los Angeles Times",
+          "url": "https://www.latimes.com/archives/la-xpm-1985-01-24-fi-11417-story.html",
+          "date": "1985-01-24"
+        },
+        {
+          "title": "Pamela Pfiffner: How the Mac transformed publishing, Macworld; historical account first published January 2004",
+          "url": "https://www.macworld.com/article/669216/how-the-mac-transformed-publishing.html",
+          "date": "2014-01-23"
+        },
+        {
+          "title": "Hartley Charlton: Apple Introduced the LaserWriter 40 Years Ago Today, MacRumors",
+          "url": "https://www.macrumors.com/2025/01/23/laserwriter-introduced-40-years-ago-today/",
+          "date": "2025-01-23"
+        },
+        {
+          "title": "Tom R. Halfhill: The Next Generation, COMPUTE! issue 59, page 25",
+          "url": "https://www.atarimagazines.com/compute/issue59/next_generation.php",
+          "date": "1985-04"
+        },
+        {
+          "title": "David H. Ahl: 1985 Winter Consumer Electronic Show, Creative Computing volume 11 number 4, page 50",
+          "url": "https://www.atarimagazines.com/creative/v11n4/50_1985_Winter_Consumer_Elec.php",
+          "date": "1985-04"
+        },
+        {
+          "title": "Arlan R. Levitan: Smokey & The Modem—Part 8086, COMPUTE! issue 56, page 160",
+          "url": "https://www.atarimagazines.com/compute/issue56/159_1_TELECOMPUTING_TODAY.php",
+          "date": "1985-01"
+        },
+        {
+          "title": "Billboard Top Rock Tracks / Mainstream Rock Airplay archive; first five entries verified from chart HTML",
+          "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-01-26/",
+          "date": "1985-01-26"
+        },
+        {
+          "title": "The Numbers: Weekend Domestic Box Office",
+          "url": "https://www.the-numbers.com/box-office-chart/weekend/1985/01/25",
+          "date": "1985-01-25"
+        },
+        {
+          "title": "NASA STS-51C mission facts",
+          "url": "https://www.nasa.gov/mission/sts-51c/",
+          "date": "1985-01-24/1985-01-27"
+        },
+        {
+          "title": "Ronald Reagan White House diary",
+          "url": "https://www.reaganfoundation.org/ronald-reagan/white-house-diaries/diary-entry-01211985",
+          "date": "1985-01-21"
+        }
+      ],
+      "milestone": {
+        "title": "LaserWriter and AppleTalk unveiled, January 23, 1985",
+        "note": "Networked PostScript printing became a foundational component of the desktop-publishing revolution."
+      },
+      "editorNote": "A shared printer, a new office ambition, and games that hand the tools to their players.",
+      "morningLine": "Apple unveils LaserWriter and AppleTalk; the personal-computer contest gathers pace.",
+      "lead": {
+        "headline": "Apple puts a shared laser printer at the center of the Macintosh Office",
+        "dek": "January 23 unveiling pairs a $6,995 printer with a network; March availability is promised.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0,
+          1,
+          2
+        ],
+        "body": [
+          "Apple has placed a shared laser printer at the center of its new Macintosh Office strategy. At its January 23 shareholders meeting in Cupertino, the company presented a system intended to make the Macintosh a stronger contender for office work, with AppleTalk linking desks to a common printing resource.",
+          "The LaserWriter carries a $6,995 price tag, rounded to $7,000 in the contemporary newspaper account. AppleTalk connection equipment costs $50; that is a connection-device price, not a quotation for an entire office installation. Apple describes a network of up to 32 computers, or a printer shared by up to 31 Macintoshes.",
+          "Printer and networking equipment are scheduled for March, rather than being on sale this week. Links to IBM PCs are promised for the fall. The printer uses Adobe PostScript, putting sophisticated page description into the office-printing proposition.",
+          "Software remains a test of the plan. Lotus Jazz, previously expected in January, has slipped to March according to the January 24 report. Apple reports 275,000 Macintosh sales in the preceding year and hopes to sell 10,000 Macintosh Office bundles in 1985; turning that ambition into routine office use will require the applications as well as the wires."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Atari promises Macintosh-style computing without Macintosh prices",
+          "body": [
+            "Atari’s January CES prototypes put a new price challenge before the personal-computer buyer. The announced 520ST combines 512K of memory and an 8 MHz Motorola 68000 with a $599 show price; the 128K 130ST is announced at $399. These are preliminary promises, not machines established as available at the shop counter this week.",
+            "Digital Research GEM supplies the familiar vocabulary of icons, windows, menus and a mouse. Announced display choices range from 320 by 200 in 16 colors to 640 by 400 monochrome. MIDI, serial, parallel and disk connections suggest uses stretching from music and games to desk work.",
+            "The company promises second-quarter availability, while operating-system and language decisions remain unfinished in the show account. Alongside the ST, the eight-bit XE family seeks existing home-computer buyers: the 64K 65XE is priced at $99 and the 128K 130XE at about $150."
+          ],
+          "sourceRefs": [
+            3
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "Commodore 128 promises three computers in one",
+          "body": [
+            "Commodore’s January CES proposal is three operating personalities in one machine. The 128 offers Commodore 64 compatibility, a native 128K environment using an 8502 processor, and a Z80A route into CP/M 3.0.",
+            "Native mode adds 40- or 80-column text and BASIC 7.0; C64 operation retains BASIC 2.0 and its 40-column display. COMPUTE! staff ran SpeedScript 3.0 in C64 mode at the show, a useful demonstration rather than an exhaustive compatibility verdict.",
+            "Price remains unsettled. COMPUTE! records no firm Commodore price announcement, while suggesting under $300 and an April or May introduction. Buyers should treat estimates from the show floor as estimates, not a confirmed retail ticket."
+          ],
+          "sourceRefs": [
+            3,
+            4
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "Games invite players to build the tracks, creatures and adventures",
+          "body": [
+            "January’s CES game displays invite players to become designers. Electronic Arts showed Racing Destruction Set, with tracks to construct and cars to race, and Adventure Construction Set, extending the construction-kit idea into adventures. No exact-week release or price is established by the show report.",
+            "Creature construction also enters the combat arena in the product the report calls Mail Order Monster. The attraction is not simply another opponent: it is the ability to design a creature and send it into competition. The report describes three levels of combat.",
+            "Creative Software brings a different kind of player performance. Trolls and Tribulations sends trolls through dangerous caverns in search of treasure, while Break Street draws on consultation with Seattle’s DeRoxy Crew breakdancers. The home-computer shelf is making room for creation as well as reflexes."
+          ],
+          "sourceRefs": [
+            4
+          ],
+          "confidence": "same-month"
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "LaserWriter and AppleTalk",
+          "summary": "January 23 unveiling; March market availability promised. Printer $6,995; networking connection device $50.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "title": "Atari ST and XE prototypes",
+          "summary": "New January CES line with inexpensive 68000-based ST and compatible eight-bit XE families; announced prices are preliminary.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "title": "Commodore 128",
+          "summary": "C64, native 128K and CP/M modes; spring introduction expected, no firm price at CES in COMPUTE!’s account.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Lotus Jazz delayed",
+          "detail": "Contemporary January 24 report says the Macintosh business suite moved from an expected January date to March.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "name": "SkiWriter II",
+          "detail": "Ken Skier demonstrated the word processor at CES; built-in telecommunications could bring online material into documents. Listed platforms C64, PC, PCjr and Apple; $69.95.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "name": "The Print Shop Graphics Library",
+          "detail": "Ahl reports Cathy Carlston describing strong Print Shop sales and an add-on library of enhancements and fonts; no numerical sales claimed.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games — editorial CES selections, not a sales chart",
+          "items": [
+            "Racing Destruction Set — build tracks and race cars.",
+            "Adventure Construction Set — tools for making adventures.",
+            "Trolls and Tribulations — cavern treasure action.",
+            "Break Street — breakdancing with DeRoxy Crew consultation.",
+            "F-15 Strike Eagle — MicroProse flight title shown at CES."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "label": "Top 5 Movies — January 25–27 weekend domestic box office",
+          "items": [
+            "1. Beverly Hills Cop",
+            "2. The Falcon and the Snowman",
+            "3. A Passage to India",
+            "4. Micki + Maude",
+            "5. The Flamingo Kid"
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            7
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "LaserWriter",
+          "price": "$6,995",
+          "note": "Announced; March availability promised",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "item": "AppleTalk connection equipment",
+          "price": "$50",
+          "note": "Per connection equipment, not whole network",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "SkiWriter II",
+          "price": "$69.95",
+          "note": "CES word processor demonstration",
+          "confidence": "same-month",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "item": "2400 bps modem",
+          "price": "$800–$1,500",
+          "note": "January COMPUTE! price range",
+          "confidence": "same-month",
+          "sourceRefs": [
+            5
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "The Old Man Down The Road",
+          "artist": "John Fogerty",
+          "chart": "Billboard Top Rock Tracks (archive now labeled Mainstream Rock Airplay)",
+          "chartDate": "1985-01-26",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-01-26/"
+          ]
+        },
+        {
+          "rank": 2,
+          "title": "I Want To Know What Love Is",
+          "artist": "Foreigner",
+          "chart": "Billboard Top Rock Tracks (archive now labeled Mainstream Rock Airplay)",
+          "chartDate": "1985-01-26",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-01-26/"
+          ]
+        },
+        {
+          "rank": 3,
+          "title": "Call to the heart",
+          "artist": "Giuffria",
+          "chart": "Billboard Top Rock Tracks (archive now labeled Mainstream Rock Airplay)",
+          "chartDate": "1985-01-26",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-01-26/"
+          ]
+        },
+        {
+          "rank": 4,
+          "title": "The Boys Of Summer",
+          "artist": "Don Henley",
+          "chart": "Billboard Top Rock Tracks (archive now labeled Mainstream Rock Airplay)",
+          "chartDate": "1985-01-26",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-01-26/"
+          ]
+        },
+        {
+          "rank": 5,
+          "title": "Easy Lover",
+          "artist": "Philip Bailey With Phil Collins",
+          "chart": "Billboard Top Rock Tracks (archive now labeled Mainstream Rock Airplay)",
+          "chartDate": "1985-01-26",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-01-26/"
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Macintosh Office must wait for IBM links",
+          "summary": "Apple said office-network connections to IBM PCs would not be available until fall; do not present interoperability as already delivered.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "headline": "Online college credit at home",
+          "summary": "CES report describes Telelearning courses for Apple, IBM and C64 users: course disks and instructor access by modem, $35–$200, with proctored exams required for final credit.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "worldAnchor": {
+        "headline": "Cold moves Reagan’s public inauguration indoors",
+        "summary": "January 21 diary records moving the ceremony to the Capitol rotunda and canceling the outdoor parade because of below-zero cold; distinguish the public ceremony from January 20 constitutional swearing-in.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          9
+        ]
+      },
+      "bbsNote": {
+        "headline": "2400 bps is tempting—but the bulletin boards may get there first",
+        "summary": "Arlan R. Levitan’s January 1985 COMPUTE! column compares modem economics and reports prospective manufacturer support for selected BBS sysops. A January CES report supplies C64 online-game service details.",
+        "posts": [
+          {
+            "topic": "Speed versus price",
+            "platform": "COMPUTE! Telecomputing Today, January 1985",
+            "text": "300 bps modems cost $50–$280; Anchor Automation and Qubie had broken the $300 barrier for 300/1200 bps units; 2400 bps equipment still cost $800–$1,500."
+          },
+          {
+            "topic": "Online-service limits",
+            "platform": "CompuServe / The Source / Delphi / Dow Jones News-Retrieval",
+            "text": "Levitan reports none of the commercial information services then offered 2400 bps service. His Just Folks example and hourly charges are hypothetical, not real tariff evidence."
+          },
+          {
+            "topic": "Sysop seed programs",
+            "platform": "Hobbyist BBS systems",
+            "text": "The columnist reports several modem manufacturers working with selected popular-board operators on discounted 2400 bps seed programs. No manufacturers or board identities are specified; do not invent names or completed deployments."
+          },
+          {
+            "topic": "Modem games",
+            "platform": "PlayNet for Commodore 64",
+            "text": "Ahl’s January CES report lists email, CB chat, program transfer and online games including backgammon, checkers, chess, bridge and go; $40 initial fee and $6 monthly charge."
+          }
+        ],
+        "sourceRefs": [
+          5,
+          4
+        ]
+      },
+      "curiosity": {
+        "headline": "Infocom turns its CES party into a live murder mystery",
+        "summary": "Adventure-game culture stepped away from the keyboard at January CES.",
+        "detail": "David H. Ahl reports that New York’s Murder-To-Go troupe staged a participatory mystery for Infocom guests, who examined the scene and police reports. Nine guests solved it; the top winner received a trip to Bermuda. This is a CES party anecdote, not a game release.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          4
+        ]
+      },
+      "periodAd": {
+        "headline": "SkiWriter II brings telecommunications to the document",
+        "summary": "Ken Skier’s CES demonstration combines word processing with built-in telecommunications. Listed for C64, PC, PCjr and Apple at $69.95.",
+        "tagline": "Software-shelf spotlight",
+        "sourceRefs": [
+          4
+        ]
+      },
+      "market": {
+        "headline": "Faster modems need somewhere to call",
+        "summary": "January COMPUTE! places 300 bps modems at $50–$280 and 2400 bps units at $800–$1,500. Its survey reports no 2400 bps access yet at the major commercial information services; selected BBS sysops are the subject of manufacturer seed-program discussions.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          5
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "LaserWriter and AppleTalk unveiled January 23; March availability promised, not shipping this week.",
+          "CES items are same-month follow-ups supported by retrospective April magazine accounts.",
+          "Games are editorial selections, not ranked sales; movies use January 25–27 grosses.",
+          "No PageMaker January release claimed; Lotus Jazz delayed to March.",
+          "No verified underground or gadget item added."
+        ]
+      }
+    },
+    {
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+      },
+      "visualProfile": {
         "tone": "Winter CES home-computing newspaper",
         "motifs": [
           "Nintendo Advanced Video System",
