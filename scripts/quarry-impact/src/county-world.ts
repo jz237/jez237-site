@@ -1,3 +1,4 @@
+import {createCourseScenery,paintCourseGround} from './course-scenery';
 import {addCourseGroundDetail} from './course-materials';
 import * as T from 'three';
 import {DOCKSIDE,FAIRGROUND} from './county-courses';
@@ -12,6 +13,7 @@ export function createCountyWorld(id:'dockside-loop-v1'|'fairground-scramble-v1'
   if(ctx){
    ctx.fillStyle=dock?'#777771':'#888054';ctx.fillRect(0,0,canvas.width,canvas.height);let seed=dock?438:842;
    for(let i=0;i<32000;i++){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const x=seed%canvas.width;seed=(Math.imul(seed,1664525)+1013904223)>>>0;ctx.fillStyle=dock?(i%2?'#84817a':'#6b6e69'):(i%2?'#918857':'#76804e');ctx.fillRect(x,seed%canvas.height,3,3);}
+   if(!dock)paintCourseGround(ctx,canvas.width,canvas.height,'fair');
    const scale=canvas.width/spanX,x=(v:number)=>(v+spanX/2)*scale,z=(v:number)=>(spanZ/2-v)*canvas.height/spanZ;
    const route=()=>{ctx.beginPath();course.samples.forEach((p,i)=>i?ctx.lineTo(x(p.x),z(p.z)):ctx.moveTo(x(p.x),z(p.z)));ctx.closePath();};
    ctx.lineJoin='round';route();ctx.strokeStyle=dock?'#90918c':'#b09266';ctx.lineWidth=31*scale;ctx.stroke();
@@ -36,13 +38,9 @@ export function createCountyWorld(id:'dockside-loop-v1'|'fairground-scramble-v1'
   box(0,2.8,0,64,5.6,34,'blue');box(0,5.8,0,66,.4,36,'steel');for(let x=-26;x<=26;x+=13)box(x,2,17.1,9,4,.15,'seat');
   // Canal backdrop remains behind the outer safety wall.
   box(0,-.08,168,430,.08,18,'blue');
- }else{
-  for(let row=0;row<5;row++){const z=-114-row*2,h=.6+row*.6;box(0,h/2,z,160,h,2,'concrete');for(let x=-75;x<=75;x+=3)box(x,h+.2,z,2.2,.2,.65,'seat');}
-  for(const x of [-100,-55,-10,35,80]){const z=-150;box(x,1.8,z,24,3.6,13,'red');box(x,3.8,z,27,.5,16,'seat');for(const dx of [-8,0,8])box(x+dx,1.6,z+6.6,5,2.8,.15,'blue');}
-  for(const x of [-190,185])for(let z=-120;z<=140;z+=22){const y=course.height(x,z);box(x,y+2,z,.5,4,.5,'steel');box(x,y+5,z,5,6,5,'grass');}
-  for(const [x,z]of [[-45,0],[35,0],[0,135]]){const y=course.height(x,z);box(x,y+2,z,20,4,12,'red');box(x,y+4.3,z,23,.5,15,'seat');}
  }
  for(const [finish,matrices]of batches){const mesh=new T.InstancedMesh(boxGeometry,materials[finish],matrices.length);matrices.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.name=id+'_'+finish;mesh.castShadow=mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
+ const scenery=dock?null:createCourseScenery(course,'fair');if(scenery)root.add(scenery.root);
  root.userData.solidRecords=course.solids;freezeSceneryTransforms(root);
- let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;surfaceDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
+ let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;scenery?.dispose();surfaceDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
 }

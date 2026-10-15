@@ -1,6 +1,7 @@
+import {restoreFairSceneryBytes} from './fair-scenery-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readRidgeSceneryPrevious,restoreRidgeSceneryBytes,verifyRidgeSceneryRevision} from './ridge-scenery-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreFairSceneryBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('RidgeScenery preserves every prior fixture, vehicle asset, control and camera input',verifyRidgeSceneryRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/ridge-scenery/revision.json').toString());
