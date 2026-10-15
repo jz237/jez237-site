@@ -3,10 +3,11 @@ import * as T from 'three';
 import type {createCountyCourse} from './county-course';
 
 type Course=ReturnType<typeof createCountyCourse>;
-export type SceneryTheme='park'|'dunes'|'canal'|'pass'|'coast'|'forest'|'farm'|'port'|'reservoir';
+export type SceneryTheme='park'|'dunes'|'canal'|'pass'|'coast'|'forest'|'farm'|'port'|'reservoir'|'club';
 type Shape='box'|'round'|'cone'|'rock'|'leaf'|'gable';
 type Finish='bark'|'leaf'|'pine'|'stone'|'sand'|'wood'|'metal'|'white'|'red'|'ochre'|'glass'|'rubber';
 const palettes={
+ club:{ground:'#647454',patch:'#8a9470',rock:0x8c8b7c,leaf:0x5f7441,pine:0x415b36,hill:0x637850,accent:'#904535',title:'WESTMERE MOTOR CLUB',subtitle:'MEMBERS ONLY / BUMPERS NEGOTIABLE'},
  reservoir:{ground:'#687457',patch:'#879477',rock:0x8b8d7a,leaf:0x5b7147,pine:0x405d46,hill:0x617455,accent:'#387a84',title:'BRAMBLEBROOK RESERVOIR',subtitle:'HIGH WATER / LOW RESALE VALUE'},
  port:{ground:'#85877d',patch:'#a6a392',rock:0x888b7c,leaf:0x637252,pine:0x455b42,hill:0x7b8470,accent:'#d09239',title:'SALTMARSH PORT RALLYCROSS',subtitle:'IMPORTS / EXPORTS / WRITE-OFFS'},
  farm:{ground:'#7c8050',patch:'#a7a16c',rock:0x918573,leaf:0x62723e,pine:0x455c35,hill:0x758352,accent:'#a84e31',title:'DUNMERE FARM CIRCUIT',subtitle:'FRESH DENTS / LOCALLY GROWN'},
@@ -64,7 +65,7 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
   placements.push({x,z,radius:0,kind,halfWidth:w/2,halfDepth:d/2});return true;
  }
  function scenicHeight(x:number,z:number){
-  if(theme!=='coast'&&theme!=='forest'&&theme!=='farm'&&theme!=='port'&&theme!=='park'&&theme!=='dunes'&&theme!=='pass'&&theme!=='reservoir')return course.height(x,z);
+  if(theme!=='coast'&&theme!=='forest'&&theme!=='farm'&&theme!=='port'&&theme!=='park'&&theme!=='dunes'&&theme!=='pass'&&theme!=='reservoir'&&theme!=='club')return course.height(x,z);
   if(Math.abs(x)<=220&&Math.abs(z)<=180)return course.height(x,z);
   const a=Math.atan2(z,x),dx=Math.cos(a),dz=Math.sin(a),edge=1/Math.max(Math.abs(dx)/220,Math.abs(dz)/180),ring=(Math.hypot(x,z)-edge)/56;
   const height=(r:number)=>{const zz=dz*(edge+r*56),ridge=(theme==='pass'?60:theme==='dunes'?24:19)*(1+.35*Math.sin(a*5)+.2*Math.cos(a*9));let y=r===0?course.height(dx*edge,dz*edge)-.12:course.height(dx*edge,dz*edge)+Math.sin(Math.min(1,r/5)*Math.PI*.62)*ridge+Math.sin(a*11+r)*2;if((theme==='coast'||theme==='port'||theme==='reservoir')&&zz>170)y=Math.min(y,Math.max(-6,-.12-(zz-180)*.18));return y;};
@@ -72,9 +73,11 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
  }
  function tree(x:number,z:number,size:number,pine:boolean){
   if(theme==='port'&&(z>160||(Math.abs(x)<225&&Math.abs(z)<180)))return;
-  const r=size*(pine?.3:.48);if(!clear(x,z,r,'tree'))return;
+  const r=size*(pine?.3:.48);
+  if(theme==='club'&&[[-35,-30,16,13],[62,-160,36,12],[-72,-35,10,6],[15,-28,10,6],[40,56,10,6]].some(([cx,cz,w,d])=>Math.abs(x-cx)<w+r&&Math.abs(z-cz)<d+r))return;
+  if(!clear(x,z,r,'tree'))return;
   const y=scenicHeight(x,z),yaw=random()*6.28;
-  if(typeof document!=='undefined'&&(theme==='coast'||theme==='forest'||theme==='farm'||theme==='park'||theme==='reservoir'||course.distance(x,z)>40)){treeCards.push({x,y,z,size,kind:pine?(treeCards.length%2?'pine':'spruce'):'maple'});return;}
+  if(typeof document!=='undefined'&&(theme==='coast'||theme==='forest'||theme==='farm'||theme==='park'||theme==='reservoir'||theme==='club'||course.distance(x,z)>40)){treeCards.push({x,y,z,size,kind:pine?(treeCards.length%2?'pine':'spruce'):'maple'});return;}
   add('round','bark',x,y+size*.36,z,.3+size*.04,size*.72,.3+size*.04);
   if(pine){for(let tier=0;tier<3;tier++)add('cone','pine',x,y+size*(.45+tier*.19),z,size*(.68-tier*.13),size*.52,size*(.68-tier*.13),yaw+tier);}
   else{for(let lobe=0;lobe<4;lobe++){const a=yaw+lobe*2.2,offset=lobe?size*.2:0;add('leaf',lobe%2?'leaf':'pine',x+Math.cos(a)*offset,y+size*(lobe?.72:.94),z+Math.sin(a)*offset,size*.67,size*(lobe?.61:.57),size*.6,a);}}
@@ -121,7 +124,34 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
   for(const dx of [-1.4,1.4])for(const dz of [-2.6,2.7])add('round','rubber',x+dx,y+.65,z+dz,.8,1.1,.8);
  }
  // Venue-specific southern paddocks are visible from the grid and race cameras.
- if(theme==='park'){
+ if(theme==='club'){
+  building(62,-160,68,20,5.5,'white');stand(-97,-156);canopy(-42,-159,'red');canopy(-22,-159,'white');serviceTruck(119,-158,'red');
+  if(clearRectangle(62,-160,72,24,'club-pits')){
+   for(let x=37;x<=87;x+=10){box('metal',x,2.4,-149.8,7.5,4.6,.16);for(let y=.4;y<4.6;y+=.4)box('white',x,y,-149.65,7.3,.07,.12);box('red',x,5,-149.5,8.2,.65,.2);box('white',x,.1,-148,7.5,.15,.2);}
+   box('red',62,7.7,-159,24,4,15);box('glass',62,8,-151.3,22,2.1,.15);box('white',62,10,-159,26,.5,17);
+   for(let x=52;x<=72;x+=4)box('white',x,8,-151.1,.15,2.5,.2);
+   box('metal',72,12,-160,.18,4,.18);box('ochre',74,13,-160,4,1.5,.1);
+  }
+  // The infield clubhouse overlooks the technical bends, safely behind barriers.
+  if(clearRectangle(-35,-30,32,26,'clubhouse')){
+   const y=course.height(-35,-30);box('wood',-35,y+3,-30,28,6,20);
+   for(const side of [-1,1]){
+    const roof=new T.Matrix4().makeRotationX(side*.32);roof.setPosition(-35,y+7.5,-30+side*5);roof.scale(new T.Vector3(31,.4,11));
+    const batch=batches.get('box_red')??{shape:'box' as const,finish:'red' as const,matrices:[],colors:[]};batch.matrices.push(roof);batch.colors.push(new T.Color(.92,.92,.92));batches.set('box_red',batch);
+    add('gable','wood',-35+side*14.1,y+6,-30,20,3.3,1,side*Math.PI/2);
+   }
+   for(const x of [-44,-35,-26]){box('glass',x,y+3.4,-19.9,5,2.3,.15);box('white',x,y+4.7,-19.7,5.5,.2,.2);}
+   box('wood',-35,y+.6,-18.8,30,.3,2.2);box('stone',-25,y+7,-34,2.2,8,2.2);
+  }
+  for(const [x,z]of [[-72,-35],[15,-28],[40,56]]){
+   if(!clearRectangle(x,z,20,12,'club-terrace'))continue;const y=course.height(x,z);
+   for(let tier=0;tier<3;tier++){box('wood',x,y+.6+tier*.65,z+tier*2,18,.3,1.7);for(const dx of [-7,7])box('metal',x+dx,y+.3+tier*.33,z+tier*2,.2,.6+tier*.65,1.7);}
+   for(const side of [-1,1]){box('metal',x+side*9,y+1.5,z+3,.15,3,.15);box('metal',x+side*9,y+3,z+3,.15,.15,9);}
+  }
+  for(const x of [-137,145])if(clearRectangle(x,-163,9,10,'club-entry')){
+   box('stone',x,2.3,-163,6,4.6,7);box('glass',x,3,-159.4,4,1.7,.15);box('red',x,4.9,-163,8,.6,9);box('white',x,6,-163,.15,2,.15);box('ochre',x+1.3,6.5,-163,2.6,.9,.1);
+  }
+ }else if(theme==='park'){
   building(38,-158,55,17,6,'white');stand(-85,-155);canopy(-30,-157,'red');canopy(-12,-157,'ochre');serviceTruck(99,-157,'red');
   // Club pits face the grid, with roller doors, bays and an elevated timing room.
   for(const x of [18,28,38,48,58]){
