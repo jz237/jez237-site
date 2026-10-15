@@ -1730,3 +1730,68 @@ scoring, venue/hardware sign-offs and the eleven course failures remain open.
 High-resolution rendering and live preview admission are unchanged. This
 checkpoint is local, no original executable bytes/artwork are published, and
 no money was spent.
+
+## Main configuration, startup fades and rider start-pose math — October 15, 2026
+
+The prepared main configuration now preserves the original order of wave
+selection, class changes, lap retention, player counts, rider traits and both
+camera mode words. Stunt can consume a random wave before its fixed override;
+Reverse changes the class after the earlier wave choice. The mode4 profile
+view extends its existing owner from50 to52 words for the four adjacent rider
+flags, while bounded older paths continue to accept50 words. No overlapping
+flag or physical-body owner is added. Activity, event and the misses switch
+retain their actual earlier values.
+
+The shared-state adapter expands both reached fade initializers at their call
+positions. Mixed byte, halfword and word stores return to the existing HUD
+owner. All five fade slots copy the supplied retained template; supported
+properties retain their source store order and distinctions between fade types.
+The required resource descriptor, body-tune and final audio effects remain
+ordered pending consumers. Their later effects are not silently omitted from a
+complete-startup claim. Invalid late dependencies leave every supplied owner
+unchanged, including RNG, HUD and profile flags.
+
+Direct configuration matches1,880 original prepared executions. An independent
+complete main/fade composition matches another1,350 actual-source cases over
+4,598,526 canonical owner values and155,043 ordered operations. The proof
+separately replays356,839 actual resource stores at their source positions;
+the resulting complete-before-audio state is intentionally distinct from the
+adapter's resource-pending state. Standalone fades match396 original cases,
+checking571,032 complete HUD words and6,744 ordered stores. These checks do not
+replace the remaining resource consumers with neutral results.
+
+The new start-pose kernel selects descriptor7's85-frame range and evaluates
+the supplied18 signed bone records through the reached body transforms,
+shoulder passes, arm IK and nineteen plus six physical targets. Full hull axes
+and retained yaw remain independent inputs. Frame84 returns the source's
+terminal result; later requests evaluate84. All130 original-instruction cases
+match30,810 pose/target words, including bent-arm and fallback branches,
+noncardinal yaw, tilted hulls and guarded zero directions. Frame records must
+be supplied as original private views or independently authored compatible
+data; no original animation/rest table is embedded in public code. The live
+actor15 initializer, phase completion, histories and physical bootstrap remain
+separate integration work.
+
+All49 new tests pass. The full suite is1,974/1,985 in94.71s, with the same eleven
+existing failure names. All251 module versions are regenerated in the three
+HTML maps. Browser and Node agree on the new configuration/fade/pose cases in
+both windows, and the400-step one-player/two-player sequence regression still
+matches. The retained preview remains High1280×720 at11.05s, tick1105/frame221,
+with four craft contacts, matching racer positions and49,152 matching water
+heights (hash2879715165). Detailed riders, water and shoreline remain visible;
+the child console is clear and the parent retains its existing favicon404.
+
+A fresh read-only query used EVO X2's installed Ghidra12.1.4 and existing
+analysis project. All2,113 exported instruction words across42 functions match
+the private normalized ROM; the project's nine files remain byte-identical.
+The inspected audio call graph has no direct shared-LCG call, but startup
+audio reaches blocking message queues and scheduler resumption. This static
+finding does not close asynchronous audio/scheduling effects or justify a
+no-op replacement. No software was installed or purchased.
+
+Complete live main/update and physical startup, resource consumers, actor15
+admission, camera/current-object producers, full RNG/AI scheduling, result
+transitions, mode11 scoring, venue/hardware checks and the eleven existing
+course failures remain open. High-resolution presentation is retained. This
+checkpoint is local; no original executable bytes/artwork are published and no
+money was spent.

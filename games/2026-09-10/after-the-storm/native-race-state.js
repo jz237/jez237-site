@@ -18,6 +18,8 @@ import {prepareNativeRaceWaveSelection} from './native-race-wave-selection.js';
 import {prepareNativeRaceGridPlacement,selectNativeRaceComputerProfile} from './native-race-grid-placement.js';
 import {prepareNativeRaceCourseZeroSequenceUpdate,prepareNativeRaceCourseZeroSequenceDisplay} from './native-race-coursezero-sequence.js';
 import {prepareNativeRaceStartTransform,decodeNativeRaceStartTransform} from './native-race-start-transform.js';
+import {prepareNativeRaceFadePropertiesInitialization,prepareNativeRaceFadeSlotsReset} from './native-race-fade-initialization.js';
+import {prepareNativeRaceMainConfiguration} from './native-race-main-configuration.js';
 
 const MIN=-2147483648,MAX=2147483647,RACE_BASE=0x1f94,RACE_WORDS=1693,HUD_BASE=0x7788,HUD_WORDS=1442;
 const floatBits=new DataView(new ArrayBuffer(4));
@@ -31,11 +33,14 @@ const hudInts={recordFlag8a98:0x8a98,placeChanged8a9c:0x8a9c};
 const sceneRanges={primaryHumanIndex:[0,3],secondaryHumanIndex:[0,3],players:[1,2],courseIndex:[0,11],
  racerCount:[0,4],primaryCount:[0,64],finishSourceRow:[0,63],activity624:[-32768,32767],event628:[-32768,32767],
  pendingPlayers60c:[-32768,32767],participantCount60e:[-32768,32767],result6f0:[-32768,32767],specialAb64:[-32768,32767],ready6fc:[-32768,32767],field4964:[0,65535],
- reverseDab68:[0,65535],missesEnabled72e:[0,65535],seed6f00:[0,65535],rngState4640:[0,0xffffffff],style6e28:[0,65535]};
+ reverseDab68:[0,65535],missesEnabled72e:[0,65535],seed6f00:[0,65535],rngState4640:[0,0xffffffff],style6e28:[0,65535],
+ field4970:[0,65535],field72c:[0,65535],fieldA9ac:[0,65535],variant6f4:[-32768,32767],variant6f6:[-32768,32767]};
 const sceneWords=new Set(['cold8224','clockStopped817c','phase650','simulation648','main638','mode620','state600',
  'missLimit8174','noFinish8178','configuredLaps728','difficulty','directionFlag1f90','ambientD4b00','fortressD8240',
- 'metadataD9b0','metadataCb32c','restart6f8','initLatch63c','gameStateAb24','mode608','returnState630','forceFirst8228','demoOffset5438','rngState4640','style6e2c']);
-const sceneHalves=new Set(['activity624','event628','pendingPlayers60c','participantCount60e','result6f0','specialAb64','ready6fc','reverseDab68','missesEnabled72e','seed6f00','field4964','style6e28']);
+ 'metadataD9b0','metadataCb32c','restart6f8','initLatch63c','gameStateAb24','mode608','returnState630','forceFirst8228','demoOffset5438','rngState4640','style6e2c',
+ 'previousGameState634','field640','field644','fieldAb1c','field461c','wave610','missLimit614','lapCount618','field61c','wave49b0','field64c','players','racerCount']);
+const sceneHalves=new Set(['activity624','event628','pendingPlayers60c','participantCount60e','result6f0','specialAb64','ready6fc','reverseDab68','missesEnabled72e','seed6f00','field4964','style6e28',
+ 'field4970','field72c','fieldA9ac','variant6f4','variant6f6']);
 function record(v,n){if(!v||typeof v!=='object'||Array.isArray(v))throw new TypeError(`Expected ${n}`);return v;}
 function integer(v,n,min=MIN,max=MAX){if(!Number.isInteger(v)||v<min||v>max)throw new RangeError(`Invalid ${n}`);return v||0;}
 function words(v,n,count){if(!Array.isArray(v)||v.length!==count)throw new RangeError(`${n} requires${count} unsigned words`);
@@ -51,6 +56,7 @@ function sceneValue(s,k){
 }
 function copy(value){
  record(value,'canonical native race state');record(value.scene,'external scene words');const scene={};
+ if(Object.hasOwn(value,'riderFlagsB3f8'))throw new RangeError('riderFlagsB3f8 overlaps the extended profileWordsB330 owner');
  for(const [k,v]of Object.entries(value.scene)){
   if(!sceneWords.has(k)&&!Object.hasOwn(sceneRanges,k))throw new RangeError(`Unknown or overlapping scene field ${k}`);
   scene[k]=integer(v,`scene.${k}`,...(sceneRanges[k]??[MIN,MAX]));
@@ -60,7 +66,9 @@ function copy(value){
  if(value.i1Words9440!==undefined)s.i1Words9440=words(value.i1Words9440,'i1Words9440',168);
  if(value.profileWordsB330!==undefined){
   if(Object.hasOwn(scene,'difficulty'))throw new RangeError('difficulty overlaps profileWordsB330');
-  s.profileWordsB330=words(value.profileWordsB330,'profileWordsB330',50);
+  const count=value.profileWordsB330?.length;
+  if(count!==50&&count!==52)throw new RangeError('profileWordsB330 requires50 or52 unsigned words');
+  s.profileWordsB330=words(value.profileWordsB330,'profileWordsB330',count);
  }
  return s;
 }
@@ -73,7 +81,9 @@ function copy(value){
  * halfwords. Pending signed-halfword players60c is distinct from active players.
  * Partial scene samples are allowed; each entry point requires its real reads.
  * Optional i1Words9440 retains that overlay's separate168-word data/BSS span.
- * Optional profileWordsB330[50] owns the cup/results/points windowB330..B3F4;
+ * Optional profileWordsB330[50 or52] owns B330..B3F8 or B330..B400 exclusive.
+ * The extended view includes the four adjacent B3F8..B3FE rider halfwords;
+ * no second flag owner is accepted. Older bounded leaves retain50-word input.
  * when supplied, difficulty comes from itsB338 word, never scene.difficulty.
  */
 export function createNativeRaceState(value){return freeze(copy(value));}
@@ -81,10 +91,11 @@ export function nativeRaceStateSnapshot(value){return copy(value);}
 
 function patchHud(s,op){
  const width=integer(op.width,'HUD width',1,4),offset=integer(op.byteOffset,'HUD byteOffset',0,HUD_WORDS*4-width);
- if(width!==1&&width!==4||width===4&&offset%4)throw new RangeError('Invalid HUD patch width/alignment');
- const value=integer(op.value,'HUD patch bits',0,width===1?255:0xffffffff),i=offset>>>2;
+ if(![1,2,4].includes(width)||offset%width)throw new RangeError('Invalid HUD patch width/alignment');
+ const value=integer(op.value,'HUD patch bits',0,width===1?255:width===2?65535:0xffffffff),i=offset>>>2;
  if(width===4)s.hudWords7788[i]=value;
- else{const shift=24-(offset&3)*8;s.hudWords7788[i]=((s.hudWords7788[i]&~(255<<shift))|(value<<shift))>>>0;}
+ else{const shift=(4-width-(offset&3))*8,mask=width===1?255:65535;
+  s.hudWords7788[i]=((s.hudWords7788[i]&~(mask<<shift))|(value<<shift))>>>0;}
 }
 function apply(s,operations){
  if(!Array.isArray(operations))throw new TypeError('Expected ordered native operations');const effects=[];
@@ -99,17 +110,25 @@ function apply(s,operations){
    if(!sceneWords.has(op.field))throw new RangeError(`Unsupported external source word ${op.field}`);
    const bits=integer(op.value,'source word bits',0,0xffffffff);
    if(op.field==='difficulty'&&s.profileWordsB330!==undefined)s.profileWordsB330[2]=bits;
-   else s.scene[op.field]=op.field==='rngState4640'?bits:bits|0;
+   else{const value=op.field==='rngState4640'?bits:bits|0;
+    s.scene[op.field]=integer(value,`source word ${op.field}`,...(sceneRanges[op.field]??[MIN,MAX]));}
   }else if(op.kind==='sourceHalfwordWrite'){
    if(!sceneHalves.has(op.field))throw new RangeError(`Unsupported external source halfword ${op.field}`);
    const bits=integer(op.value,'source halfword bits',0,65535);
    s.scene[op.field]=sceneRanges[op.field][0]<0?bits<<16>>16:bits;
   }else if(op.kind==='i1Write'||op.kind==='profileWrite'){
-   const key=op.kind==='i1Write'?'i1Words9440':'profileWordsB330',count=op.kind==='i1Write'?168:50;
+   const key=op.kind==='i1Write'?'i1Words9440':'profileWordsB330';
    if(!s[key])throw new TypeError(`Supply retained ${key} before applying its writes`);
-   const offset=integer(op.byteOffset,`${key} byteOffset`,0,count*4-4);
-   if(op.width!==4||offset%4)throw new RangeError(`Invalid ${key} word alignment`);
-   s[key][offset/4]=integer(op.value,`${key} bits`,0,0xffffffff);
+   const width=op.width,count=s[key].length;
+   if(width!==4&&(op.kind!=='profileWrite'||width!==2))throw new RangeError(`Invalid ${key} patch width`);
+   const offset=integer(op.byteOffset,`${key} byteOffset`,0,count*4-width);
+   if(offset%width)throw new RangeError(`Invalid ${key} word alignment`);
+   const value=integer(op.value,`${key} bits`,0,width===2?65535:0xffffffff),index=offset>>>2;
+   if(width===4)s[key][index]=value;
+   else{const shift=offset&2?0:16;s[key][index]=((s[key][index]&~(65535<<shift))|(value<<shift))>>>0;}
+  }else if(op.kind==='bodyTuneWordWrite'){
+   integer(op.racerIndex,'body tune racerIndex',0,3);integer(op.wordIndex,'body tune wordIndex',0,3);
+   integer(op.value,'body tune raw word',0,0xffffffff);effects.push(structuredClone(op));
   }else if(op.kind==='presentationBufferWrite'){
    integer(op.bufferIndex,'presentation bufferIndex',0,1);integer(op.byteOffset,'presentation byteOffset',0,252);
    if(op.width!==4||op.byteOffset%4)throw new RangeError('Invalid presentation buffer word');
@@ -131,6 +150,54 @@ function apply(s,operations){
  */
 export function prepareNativeRaceStateOperations(state,operations){
  const next=copy(state),effects=apply(next,operations);return freeze({state:next,effects});
+}
+
+/** Source fade initialization writes the existing shared HUD owner. Advancing
+ * or drawing the fade is separate; these preparations neither execute an
+ * original initializer again nor create a parallel decoded fade state.
+ */
+export function prepareNativeRaceFadePropertiesUpdate(state,input){
+ const next=copy(state),prepared=prepareNativeRaceFadePropertiesInitialization(input),effects=apply(next,prepared.operations);
+ return freeze({...prepared,state:next,effects});
+}
+export function prepareNativeRaceFadeSlotsResetUpdate(state,input){
+ const next=copy(state),prepared=prepareNativeRaceFadeSlotsReset(input),effects=apply(next,prepared.operations);
+ return freeze({...prepared,state:next,effects});
+}
+
+/** Direct9345C configuration and its two reached fade initializers, with one
+ * canonical profile/HUD/scene owner. The source's resource96960/9684C writes,
+ * physical body-tune writes and finalC21F4 audio entry remain ordered REQUIRED
+ * pending effects. They must be resolved at their call positions before this
+ * preparation can become a complete live main bootstrap. No callback runs or
+ * resource descriptor is fabricated here. Earlier resource writes do not
+ * overlap the later direct caller predicates/fade spans in this bounded path.
+ *
+ * sourceViews supplies the main leaf's readonly data and actual raw9/11-word
+ * fade templates. The replaced fade entries never remain pending for replay.
+ * Mode4 requires52 profile words; other branches retain50-word compatibility.
+ * Canonical players/racerCount remain bounded even when the standalone direct
+ * leaf can describe wider signed-halfword transport. Invalid late input leaves
+ * every supplied owner unchanged, including the profile's flag tail and RNG.
+ */
+export function prepareNativeRaceMainConfigurationUpdate(state,sourceViews={}){
+ const next=copy(state),prepared=prepareNativeRaceMainConfiguration(next,sourceViews),operations=[],effects=[],expandedFadeConsumers=[];
+ for(const operation of prepared.operations){
+  let batch=[operation];
+  if(operation.kind==='externalCall'&&operation.consumer==='801e6fb0'){
+   const [type,rate,selector]=operation.arguments;
+   batch=prepareNativeRaceFadePropertiesInitialization({fadeTemplateWords6cc0:sourceViews.fadeTemplateWords6cc0,
+    type:type|0,rate:rate|0,selector:selector|0}).operations;
+   expandedFadeConsumers.push(operation.consumer);
+  }else if(operation.kind==='externalCall'&&operation.consumer==='801e6a4c'){
+   if(operation.arguments[0]!==0||operation.arguments[1]!==0)throw new RangeError('Unreconstructed main fade slot arguments');
+   batch=prepareNativeRaceFadeSlotsReset({slotTemplateWords6c50:sourceViews.slotTemplateWords6c50}).operations;
+   expandedFadeConsumers.push(operation.consumer);
+  }
+  operations.push(...batch);effects.push(...apply(next,batch));
+ }
+ return freeze({state:next,operations,effects,diagnostic:{sourceMain:prepared.diagnostic,expandedFadeConsumers,
+  pendingResourceConsumers:['80096960','8009684c'],finalAudioPending:true,physicalInitialization:false}});
 }
 
 /** Complete numeric water-noise initialization from the canonical shared RNG.

@@ -14,7 +14,8 @@ function context(value){record(value,'prestart source sample');record(value.scen
  return {value,scene:{...value.scene},spans:{},operations:[]};}
 function span(c,key){
  if(!c.spans[key]){const n=SPANS[key][1],v=c.value[key];
-  if(!Array.isArray(v)||v.length!==n)throw new RangeError(`${key} requires${n} retained unsigned words`);
+  if(!Array.isArray(v)||(key==='profileWordsB330'?v.length!==50&&v.length!==52:v.length!==n))
+   throw new RangeError(`${key} requires${key==='profileWordsB330'?'50 or52':n} retained unsigned words`);
   c.spans[key]=Array.from(v,x=>integer(x,`${key} word`,0,0xffffffff));}
  return c.spans[key];
 }
@@ -182,7 +183,8 @@ export function prepareNativeRacePrestartStatus(value){const c=context(value);st
  * canonical state span. Other original callees remain ordered externalCall
  * recipes. displayListHead is null on the93c44 initialization early return.
  *
- * i1Words9440[168] is802C9440..96E0; profileWordsB330[50] is801CB330..B3F8,
+ * i1Words9440[168] is802C9440..96E0; profileWordsB330[50 or52] is801CB330
+ * through B3F8 or B400,
  * end exclusive. HUD[1442] and race[1693] share the existing canonical owners.
  * Inputs are branch-lazy, copied and never mutated. The original CPU update
  * (including79528/F03E0) precedes this display-stage call; a renderer must not
