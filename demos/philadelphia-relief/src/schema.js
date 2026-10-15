@@ -86,6 +86,11 @@ export const CONTROLS = {
     k: 'stl', kind: 'enum', values: [1,0], def: 1, group: 'atmosphere', label: 'Street life',
     hint: 'Simulated cars, sidewalk walkers, trees and crossings in central Philadelphia.',
   },
+  streetMotion: {
+    k: 'stm', kind: 'enum', values: ['system','on','off'], def: 'system', group: 'atmosphere',
+    label: 'Traffic motion',
+    hint: 'Follow the computer’s reduced-motion preference, or explicitly play or pause traffic.',
+  },
   cityShadows: {
     k: 'csh', kind: 'enum', values: [1,0], def: 1, group: 'light', label: 'Building shadows',
     hint: 'Nearby buildings cast soft shadows onto streets and neighboring façades.',
@@ -341,5 +346,5 @@ export const CHEAP_KEYS = new Set([
   'structureDetail', 'structureHeight', 'floodMode', 'seaLevelRise',
   'timeMode', 'dayOfYear', 'clockHour', 'weather', 'era',
   'imageryDetail', 'compareMode', 'comparePosition', 'photoMode', 'cloudCoverage', 'cityShadows',
-  'streetLife',
+  'streetLife', 'streetMotion',
 ]);

@@ -26,7 +26,7 @@
 <link rel="preload" as="image" href="data/heightmap.webp" fetchpriority="high" />
 <link rel="preload" as="fetch" href="data/terrain.json" crossorigin />
 <link rel="preload" as="image" href="data/imagery.webp?v=aligned2" />
-<link rel="modulepreload" href="load/app-4AJQWOR2.js" />
+<link rel="modulepreload" href="load/app-2JXAGBN5.js" />
 <link rel="modulepreload" href="load/chunk-AEXPLQJR.js" />
 <link rel="modulepreload" href="load/chunk-WOT6VMZA.js" />
 </head>
@@ -223,7 +223,13 @@
   </div>
   <p id="photoStatus" role="status">Diorama · zoom in for photographic 3D</p>
   <button id="photoRetry" type="button" aria-label="Retry photographic detail" hidden>Retry</button>
-  <p class="photo-note">Captured imagery · use Diorama for styled lighting and map overlays.</p>
+  <p class="photo-note">Photographic cars are part of the captured imagery. Moving traffic is simulated in Diorama.</p>
+  <button id="showTraffic" class="camera-card-open" type="button">Show moving traffic · Center City</button>
+  <div class="photo-choice">
+  <label for="streetMotion">Traffic motion</label>
+  <select id="streetMotion"><option value="system">Follow computer setting</option><option value="on">Play</option><option value="off">Pause</option></select>
+  </div>
+  <p id="streetStatus" class="power-status" role="status">Zoom into central Philadelphia for simulated traffic.</p>
   <label class="power-saving"><input id="lightweightMode" type="checkbox"> Lighter graphics</label>
   <p class="power-status">Keeps aerial detail and overlays; simplifies buildings and decorative effects.</p>
   <label class="power-saving"><input id="powerSaving" type="checkbox"> Save power when idle</label>
@@ -839,7 +845,7 @@
 
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="load/app-4AJQWOR2.js"></script>
+<script type="module" src="load/app-2JXAGBN5.js"></script>
 <noscript>
   <div class="noscript">
     This map is a WebGL application and needs JavaScript. The elevation data it

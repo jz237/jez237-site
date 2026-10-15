@@ -57,6 +57,7 @@ import { createCameraRig } from './camera.js?v=philly-2026092121';
 import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026092122';
 import { createStructures } from './structures.js?v=philly-2026092121';
 import { createCityStreets } from './city-streets.js?v=philly-2026100901';
+import { streetStatus } from './street-policy.js?v=philly-2026101501';
 import {
   TIER_PLAN, shouldActivateZone, distanceToBox, tierAssetPath,
 } from './structures-data.js?v=philly-2026092121';
@@ -524,6 +525,21 @@ async function boot() {
   });
 
   const motion = createMotion(store, projection);
+  const streetMotion=$('streetMotion'),streetMessage=$('streetStatus');
+  streetMotion.value=store.value('streetMotion');
+  streetMotion.onchange=()=>store.set({streetMotion:streetMotion.value,
+    ...(streetMotion.value==='on'&&store.value('animationSpeed')===0?{animationSpeed:1}:{})},
+  {source:'traffic-motion'});
+  store.subscribe(state=>{streetMotion.value=state.streetMotion;});
+  $('showTraffic').onclick=()=>{
+    explore?.close();cityFeatures?.close();bathymetry?.disable();
+    store.set({photoMode:'relief',era:'present',compareMode:'off',lightweight:0,
+      streetLife:1,streetMotion:'on',animationSpeed:1,exaggeration:1,fov:42,
+      layers:{structures:true,terrain:true,imagery:true,flood:false,contours:false}},
+    {source:'show-traffic'});
+    motion.flyTo({lon:-75.164,lat:39.9502,camDist:350,camPitch:35,camBearing:0},
+      {label:'Center City moving traffic'});
+  };
   const ui = wireInterface({ store, motion, data, projection, rig, structures });
   const disposeNotes=wireFieldNotes($('toggleNotes'));
   const disposeLooks = wireLooks($('lookChoices'), store, () => motion.stop());
@@ -988,7 +1004,7 @@ async function boot() {
   const wakeState = store.subscribe(wake);
   window.addEventListener('resize', wake);
 
-  function renderFrame(dt) {
+  function renderFrame(dt,streetDt=dt) {
     motion.update(dt);
     const aircraftAltitude = aircraftLayer.beforeFrame();
     const state = store.get();
@@ -1005,6 +1021,8 @@ async function boot() {
     orientation.update(now, viewW / viewH, dt); navigation.update(now);
     bathymetry.update();
     if (photographic.update(now, state, viewW, viewH)) {
+      const text=streetStatus(state,now,streetLife.stats(),{photo:true});
+      if(streetMessage.textContent!==text)streetMessage.textContent=text;
       explore?.update(camera, 1);
       mapLayers.update(camera, { pose: now, width: viewW, height: viewH, exaggeration: 1 });
       aircraftLayer.update(camera, { pose: now, width: viewW, height: viewH, exaggeration: 1 });
@@ -1154,8 +1172,11 @@ async function boot() {
       focusX:projection.lonToX(now.lon),focusZ:projection.latToZ(now.lat),
       ground:sampleElevation(now.lon,now.lat),exaggeration,sunDir,distance:now.dist,
       state,quality:effectiveQuality,dt,time:REDUCED_MOTION?0:elapsed,miniature});
-    streetLife.update({camera,pose:now,state,exaggeration,sunDir,dt,reducedMotion:REDUCED_MOTION,
+    streetLife.update({camera,pose:now,state,exaggeration,sunDir,dt:streetDt,reducedMotion:REDUCED_MOTION,
       archive:mapLayers.archiveActive,quality:effectiveQuality});
+    const trafficText=streetStatus(state,now,streetLife.stats(),{photo:photographic.active,
+      archive:mapLayers.archiveActive,reducedMotion:REDUCED_MOTION});
+    if(streetMessage.textContent!==trafficText)streetMessage.textContent=trafficText;
     renderer.setRenderTarget(postfx.renderTarget);
     renderer.clear();
     overlayRoot.visible = !mapLayers.archiveActive;
@@ -1218,7 +1239,7 @@ async function boot() {
       fpsFrames = 0;
     }
 
-    renderFrame(dt);
+    renderFrame(dt,Math.min(.5,Math.max(0,rawDt)));
     if (!firstFrameAt) firstFrameAt = performance.now();
     renderedFrames++;
 

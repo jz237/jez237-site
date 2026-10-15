@@ -18,7 +18,7 @@ class Signal{
 }
 const pose={lon:-75.1655,lat:39.9505,dist:650,pitch:55,bearing:25,fov:40};
 const flush=()=>new Promise(resolve=>setImmediate(resolve));
-function fixture(t){
+function fixture(t,options={}){
   const oldDocument=globalThis.document,oldWindow=globalThis.window;
   const nodes=new Map(),viewers=[],tileRequests=[];
   const doc=new EventTarget();doc.hidden=false;doc.body=new Element();
@@ -31,7 +31,8 @@ function fixture(t){
     entities={values:[]};
     scene={screenSpaceCameraController:{},postProcessStages:{fxaa:{}},
       requestRender(){},primitives:{add:tiles=>{this.tiles=tiles;}},renderError:new Signal()};
-    constructor(){viewers.push(this);}
+    constructor(_host,settings){if(options.graphicsError)throw options.graphicsError;
+      this.settings=settings;viewers.push(this);}
     resize(){}
     isDestroyed(){return this.destroyed;}
     destroy(){
@@ -51,7 +52,7 @@ function fixture(t){
   globalThis.document=doc;globalThis.window={Cesium:C,devicePixelRatio:1};
   const store=createStore({photoMode:'photo'}),stage=new Element();
   const photo=createPhotographic({stage,store,sampleElevation:()=>4,
-    resources:async()=>[C,{ionToken:'test-fixture'}]});
+    resources:async()=>{if(options.resourceError)throw options.resourceError;return [C,{ionToken:'test-fixture'}];}});
   const update=()=>photo.update(pose,store.get(),1200,800);
   const makeTiles=()=>({tileVisible:new Signal(),loadProgress:new Signal(),tilesLoaded:true,
     destroyed:0,destroy(){this.destroyed++;}});
@@ -60,7 +61,7 @@ function fixture(t){
     await flush();update();assert.equal(photo.active,true);return tiles;
   };
   t.after(()=>{photo.dispose();globalThis.document=oldDocument;globalThis.window=oldWindow;});
-  return {photo,viewers,tileRequests,nodes,update,ready,makeTiles,stage};
+  return {photo,viewers,tileRequests,nodes,update,ready,makeTiles,stage,doc};
 }
 test('photo render errors fall back immediately and release the viewer after rendering returns',async t=>{
   const f=fixture(t),tiles=await f.ready(),viewer=f.viewers[0];
@@ -70,9 +71,37 @@ test('photo render errors fall back immediately and release the viewer after ren
   assert.equal(viewer.destroyed,false,'cleanup waits until the render call has returned');
   await flush();assert.equal(viewer.destroyCount,1);assert.equal(tiles.destroyed,1);
   assert.equal(f.nodes.get('photoRetry').hidden,false);
-  assert.match(f.nodes.get('photoStatus').textContent,/diorama still works/);
+  assert.match(f.nodes.get('photoStatus').textContent,/Diorama still works/);
   assert.equal(f.nodes.get('photoStatus').dataset.visibleTiles,undefined);
   f.update();assert.equal(f.viewers.length,1,'failure must not trigger an endless automatic retry');
+});
+
+test('immediate engine and graphics failures are distinguishable without exposing error contents',async t=>{
+  const f=fixture(t,{resourceError:new Error('https://provider.invalid/?access_token=secret')});
+  f.update();await flush();
+  const message=f.nodes.get('photoStatus').textContent;
+  assert.match(message,/engine or configuration/);assert.doesNotMatch(message,/secret|provider.invalid/);
+  assert.equal(f.viewers.length,0);
+});
+
+test('graphics initialization failure offers a lower-memory retry',async t=>{
+  const options={graphicsError:new Error('context creation failed')},f=fixture(t,options);
+  f.update();await flush();assert.match(f.nodes.get('photoStatus').textContent,/Photo graphics/);
+  options.graphicsError=null;f.nodes.get('photoRetry').onclick();await f.ready();
+  assert.equal(f.viewers[0].settings.msaaSamples,1);
+  assert.equal(f.photo.aircraftViewer.tiles.cacheBytes,96*1024*1024);
+  assert.equal(f.photo.aircraftViewer.tiles.maximumScreenSpaceError,16);
+  // The first 180 ms retain the existing in-motion threshold before settling.
+  f.update();assert.equal(f.photo.aircraftViewer.tiles.maximumScreenSpaceError,12);
+});
+
+test('switching away during engine loading does not spend its foreground timeout',async t=>{
+  t.mock.timers.enable({apis:['setTimeout']});
+  const f=fixture(t);f.doc.hidden=true;f.update();await flush();
+  t.mock.timers.tick(50000);await flush();assert.equal(f.photo.stats().failed,false);
+  f.doc.hidden=false;f.doc.dispatchEvent(new Event('visibilitychange'));
+  t.mock.timers.tick(45000);await flush();assert.equal(f.photo.stats().failed,true);
+  assert.match(f.nodes.get('photoStatus').textContent,/timed out/);
 });
 test('retry cannot be destroyed by an earlier failed-render cleanup',async t=>{
   const f=fixture(t);await f.ready();const old=f.viewers[0];old.failRender=true;

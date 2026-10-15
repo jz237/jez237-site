@@ -1,19 +1,22 @@
 import { photoAllowed, photoWanted, photoCamera, photoReady, photoTileReady,
-  photoLandmarkVisible, PHOTO_PRELOAD }
+  photoLandmarkVisible, photoBudget, photoFailure, PHOTO_PRELOAD }
   from './photo-policy.js?v=philly-2026092121';
 import { createVisibleTimeout } from './visible-timeout.js?v=philly-2026101001';
 
-const CDN = 'https://cdn.jsdelivr.net/npm/cesium@1.145.0/Build/Cesium/';
+// Serve the pinned engine and its workers from the same origin as the map.
+// This also works when an extension or network blocks third-party script CDNs.
+const ENGINE = '/demos/philadelphia-relief/vendor/cesium-1.145.0/';
 let enginePromise;
 function loadEngine() {
   if (window.Cesium) return Promise.resolve(window.Cesium);
   if (enginePromise) return enginePromise;
   enginePromise = new Promise((resolve, reject) => {
     const css = document.createElement('link');
-    css.rel = 'stylesheet'; css.href = `${CDN}Widgets/widgets.css`;
+    css.rel = 'stylesheet'; css.href = `${ENGINE}Widgets/widgets.css`;
     document.head.append(css);
     const script = document.createElement('script');
-    script.src = `${CDN}Cesium.js`;
+    window.CESIUM_BASE_URL=ENGINE;
+    script.src = `${ENGINE}Cesium.js`;
     script.onload = () => window.Cesium ? resolve(window.Cesium) : reject(new Error('engine'));
     script.onerror = () => reject(new Error('network'));
     document.head.append(script);
@@ -38,8 +41,9 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
   let active = false, wanted = false, firstViewReady = false, visibleTiles = 0;
   let pending = 0, lastPoseKey = '', lastMotion = 0, lastStatus = '';
   let lastPose, width = 1, height = 1, detailTiles = 0, bestError = Infinity, generation = 0;
-  let resourceTimer, press, exhibitBounds;
-  const firstViewDeadline=createVisibleTimeout(document,unavailable,90000);
+  let press, exhibitBounds, conservative=false,budget;
+  const resourceDeadline=createVisibleTimeout(document,()=>unavailable(null,'timeout'),45000);
+  const firstViewDeadline=createVisibleTimeout(document,()=>unavailable(null,'timeout'),90000);
   let resizedWidth = 0, resizedHeight = 0;
 
   function report(text) {
@@ -52,13 +56,13 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     document.body.classList.toggle('photographic-view', on);
     credits.hidden = !on;
   }
-  function unavailable() {
+  function unavailable(error,phase='render') {
     if(disposed||failed)return;
     const ticket=++generation;
     failed = true; loading = false; present(false);
-    firstViewDeadline.cancel(); clearTimeout(resourceTimer);
+    firstViewDeadline.cancel(); resourceDeadline.cancel();
     retry.hidden = false;
-    report('Photo detail unavailable · diorama still works');
+    report(`${photoFailure(error,phase)} Diorama still works.`);
     // renderError can fire inside Cesium's render traversal. Free the failed
     // viewer and its tile cache after that call returns, without touching a
     // renderer created by a subsequent retry.
@@ -111,34 +115,39 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     if (loading || viewer || failed || disposed) return;
     const ticket = ++generation;
     loading = true; report('Preparing photographic detail…');
-    resourceTimer = setTimeout(unavailable, 45000);
+    resourceDeadline.start();
+    let phase='resources';
     try {
       const [C, config] = await resources();
       if (disposed || failed || ticket !== generation) return;
       C.Ion.defaultAccessToken = config.ionToken;
+      phase='graphics';
+      budget=photoBudget(width,height,window.devicePixelRatio,store.value('quality'),conservative);
       viewer = new C.Viewer(host, {
         globe: false, baseLayer: false, geocoder: false, baseLayerPicker: false,
         animation: false, timeline: false, homeButton: false, sceneModePicker: false,
         navigationHelpButton: false, fullscreenButton: false, infoBox: false,
         selectionIndicator: false, skyBox: false, skyAtmosphere: false, scene3DOnly: true,
         requestRenderMode: true, maximumRenderTimeChange: Infinity, useDefaultRenderLoop: false,
+        msaaSamples:1,contextOptions:{webgl:{antialias:false}},
         creditContainer: credits, creditViewport: document.body,
       });
       viewer.scene.screenSpaceCameraController.enableInputs = false;
       // The relief rig owns the camera. Tile collision data is used only to
       // anchor labels to their actual roofs, not to move that shared camera.
       viewer.scene.screenSpaceCameraController.enableCollisionDetection = false;
-      viewer.resolutionScale = Math.min(window.devicePixelRatio || 1, 2);
+      viewer.resolutionScale = budget.scale;
       viewer.scene.backgroundColor = C.Color.fromCssColorString('#203b43');
       viewer.scene.postProcessStages.fxaa.enabled = true;
       viewer.resize(); setCamera(lastPose, width, height);
       resizedWidth = width; resizedHeight = height;
       // Local curated place lookup uses no external geocoding service.
       const googleOptions = { onlyUsingWithGoogleGeocoder: true };
+      phase='tiles';
       const loadedTiles = await C.createGooglePhotorealistic3DTileset(googleOptions, {
         maximumScreenSpaceError: 16, dynamicScreenSpaceError: false,
         enableCollision: true,
-        cacheBytes: 384 * 1024 * 1024, maximumCacheOverflowBytes: 128 * 1024 * 1024,
+        cacheBytes: budget.cacheBytes, maximumCacheOverflowBytes: budget.overflowBytes,
         preloadFlightDestinations: false, showCreditsOnScreen: true,
       });
       if (disposed || failed || ticket !== generation) { loadedTiles.destroy(); return; }
@@ -153,7 +162,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       tileset.loadProgress.addEventListener((requests, processing) => {
         pending = requests + processing;
       });
-      viewer.scene.renderError.addEventListener(unavailable);
+      viewer.scene.renderError.addEventListener((_scene,error)=>unavailable(error,'render'));
       for (const place of landmarks?.landmarks || []) {
         if (place.r > 1 && !/Bauder|Hidden Reef/.test(place.n)) continue;
         const entity = viewer.entities.add({
@@ -172,10 +181,10 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
         entity.reliefPlace = place;
       }
       applyExhibit();
-      loading = false; clearTimeout(resourceTimer);
-    } catch {
+      loading = false; resourceDeadline.cancel();
+    } catch (error) {
       // Provider resource URLs can contain credentials: never log raw errors.
-      if (!disposed && ticket === generation) unavailable();
+      if (!disposed && ticket === generation) unavailable(error,phase);
     }
   }
   const unsubscribe = store.subscribe(state => { select.value = state.photoMode; });
@@ -191,12 +200,13 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     delete message.dataset.visibleTiles;delete message.dataset.detailTiles;delete message.dataset.bestError;
   }
   function release() {
-    generation++; firstViewDeadline.cancel(); clearTimeout(resourceTimer);
+    generation++; firstViewDeadline.cancel(); resourceDeadline.cancel();
     destroyRenderer();failed=false;loading=false;
     present(false);
     retry.hidden = true;
   }
   retry.onclick = () => {
+    conservative=true;
     release(); enginePromise = undefined;
     if (store.value('lightweight')) return;
     void start();
@@ -264,6 +274,10 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
         return false;
       }
       if (!viewer || !tileset || loading) return false;
+      const nextBudget=photoBudget(w,h,window.devicePixelRatio,state.quality,conservative);
+      if(viewer.resolutionScale!==nextBudget.scale){viewer.resolutionScale=nextBudget.scale;viewer.resize();}
+      budget=nextBudget;tileset.cacheBytes=budget.cacheBytes;
+      tileset.maximumCacheOverflowBytes=budget.overflowBytes;
       // Warm the engine near the boundary without requesting a second,
       // regional photographic scene while the miniature is still in use.
       if (!wanted) {
@@ -283,14 +297,14 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
         setCamera(pose, w, h);
       }
       // Establish complete neighborhood coverage before requesting the finest
-      // level. Final stationary detail remains the same two-pixel threshold.
-      const detail = !firstViewReady ? 16 : performance.now() - lastMotion < 180 ? 12 : 2;
+      // level. Stationary detail follows the current device/retry budget.
+      const detail = !firstViewReady ? 16 : performance.now() - lastMotion < 180 ? 12 : budget.detail;
       if (tileset.maximumScreenSpaceError !== detail) {
         tileset.maximumScreenSpaceError = detail; viewer.scene.requestRender();
       }
       viewer.entities.show = state.layers.landmarks;
       visibleTiles = 0; detailTiles = 0; bestError = Infinity;
-      try { viewer.render(); } catch { unavailable(); return false; }
+      try { viewer.render(); } catch(error) { unavailable(error,'render'); return false; }
       if(failed||disposed)return false;
       if (visibleTiles) {
         message.dataset.visibleTiles = String(visibleTiles);
@@ -332,7 +346,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       return canvas;
     },
     dispose() {
-      disposed = true; clearTimeout(resourceTimer); firstViewDeadline.dispose(); unsubscribe();
+      disposed = true; resourceDeadline.dispose(); firstViewDeadline.dispose(); unsubscribe();
       stage.removeEventListener('pointerdown', down); stage.removeEventListener('pointerup', up);
       destroyRenderer();present(false);host.remove();select.onchange=null;retry.onclick=null;
     },

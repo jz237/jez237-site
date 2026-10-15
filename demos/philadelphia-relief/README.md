@@ -1268,7 +1268,7 @@ the deeper idle cadence; photographic views do not wake for hidden street geomet
 `tools/street-startup.html` compares the complete preparation sequence with
 continuous browser animation on the real Philadelphia street graph.
 
-Validation: 493 automated checks, including ten simulated minutes on the real
+Validation: 503 automated checks, including ten simulated minutes on the real
 street graph, multi-node junction separation, continuous U-turns, offscreen-only
 replenishment, tyre and curb elevation checks, and saturated scenery buffers.
 Browser checks cover diorama day/night views, sloped streets, mobile controls,
@@ -1279,3 +1279,20 @@ preview and live domain. A healthy service response cannot hide an older build.
 The wrapper waits for recent automatic production builds before uploading, then
 rechecks main so a slower build cannot normally replace the release with an older
 snapshot. `--publish-before=<ISO timestamp>` stops uploads at a requested cutoff.
+
+October 15 photo and traffic recovery: the pinned Cesium 1.145.0 runtime is
+served locally, including workers, styles, assets, and license notices. Photo
+rendering bounds framebuffer and tile memory; Retry uses a smaller budget.
+Failure messages distinguish engine loading, graphics, provider access, and
+timeouts without exposing provider URLs or credentials. Resource-loading timeouts
+count foreground time, matching the first-view timeout.
+
+View & layers provides a Center City traffic shortcut and explicit Play/Pause
+controls. Follow computer respects reduced-motion preferences; Play overrides
+that preference for street traffic. Status text explains inactive traffic and
+that photographic cars are captured imagery. Street motion consumes bounded
+real frame time separately from camera smoothing, verified at 2 FPS and 20 FPS.
+Chrome checks cover the traffic controls and actual Cesium failure/retry using
+the local synthetic fixture; production photographic loading must still be
+verified after each guarded release. The reported immediate failure on another
+computer could not be reproduced locally.
