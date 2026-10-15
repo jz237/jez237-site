@@ -20,8 +20,10 @@ import {prepareNativeRaceCourseZeroSequenceUpdate,prepareNativeRaceCourseZeroSeq
 import {prepareNativeRaceStartTransform,decodeNativeRaceStartTransform} from './native-race-start-transform.js';
 import {prepareNativeRaceFadePropertiesInitialization,prepareNativeRaceFadeSlotsReset} from './native-race-fade-initialization.js';
 import {prepareNativeRaceMainConfiguration} from './native-race-main-configuration.js';
+import {prepareNativeRaceRiderResourceConfiguration,prepareNativeRaceCourseResourceConfiguration} from './native-race-resource-configuration.js';
 
 const MIN=-2147483648,MAX=2147483647,RACE_BASE=0x1f94,RACE_WORDS=1693,HUD_BASE=0x7788,HUD_WORDS=1442;
+const resourceOwnerWords={resourceWordsB330:20,resourceWordsB538:8,resourceWordsE73c:43};
 const floatBits=new DataView(new ArrayBuffer(4));
 const raceInts={fortressFlag1fc8:0x1fc8,southernLap1fcc:0x1fcc,drakeFog1fd0:0x1fd0,flag1fc4:0x1fc4,
  flag1fd4:0x1fd4,flag1fd8:0x1fd8,bestTime1fe0:0x1fe0,bestLapFlag2658:0x2658,finishWait1fdc:0x1fdc,
@@ -70,6 +72,7 @@ function copy(value){
   if(count!==50&&count!==52)throw new RangeError('profileWordsB330 requires50 or52 unsigned words');
   s.profileWordsB330=words(value.profileWordsB330,'profileWordsB330',count);
  }
+ for(const [key,count]of Object.entries(resourceOwnerWords))if(value[key]!==undefined)s[key]=words(value[key],key,count);
  return s;
 }
 
@@ -85,6 +88,10 @@ function copy(value){
  * The extended view includes the four adjacent B3F8..B3FE rider halfwords;
  * no second flag owner is accepted. Older bounded leaves retain50-word input.
  * when supplied, difficulty comes from itsB338 word, never scene.difficulty.
+ * Optional resourceWordsB330[20] owns800DB330..B380, distinct from profile
+ * 801CB330. resourceWordsB538[8] owns800DB538..B558; resourceWordsE73c[43]
+ * owns801CE73C..E7E8. These raw descriptors/selectors retain source data;
+ * they do not imply loaded resources or duplicate named scene slot fields.
  */
 export function createNativeRaceState(value){return freeze(copy(value));}
 export function nativeRaceStateSnapshot(value){return copy(value);}
@@ -129,6 +136,16 @@ function apply(s,operations){
   }else if(op.kind==='bodyTuneWordWrite'){
    integer(op.racerIndex,'body tune racerIndex',0,3);integer(op.wordIndex,'body tune wordIndex',0,3);
    integer(op.value,'body tune raw word',0,0xffffffff);effects.push(structuredClone(op));
+  }else if(op.kind==='resourceWrite'){
+   const key=op.owner,count=resourceOwnerWords[key];
+   if(!Object.hasOwn(resourceOwnerWords,key))throw new RangeError('Unknown resource owner');
+   if(!s[key])throw new TypeError(`Supply retained ${key} before applying its writes`);
+   const width=op.width;if(width!==2&&width!==4)throw new RangeError('Invalid resource patch width');
+   const offset=integer(op.byteOffset,'resource byteOffset',0,count*4-width);
+   if(offset%width)throw new RangeError('Invalid resource patch alignment');
+   const value=integer(op.value,'resource bits',0,width===2?65535:0xffffffff),index=offset>>>2;
+   if(width===4)s[key][index]=value;
+   else{const shift=offset&2?0:16;s[key][index]=((s[key][index]&~(65535<<shift))|(value<<shift))>>>0;}
   }else if(op.kind==='presentationBufferWrite'){
    integer(op.bufferIndex,'presentation bufferIndex',0,1);integer(op.byteOffset,'presentation byteOffset',0,252);
    if(op.width!==4||op.byteOffset%4)throw new RangeError('Invalid presentation buffer word');
@@ -165,10 +182,23 @@ export function prepareNativeRaceFadeSlotsResetUpdate(state,input){
  return freeze({...prepared,state:next,effects});
 }
 
+/** Numeric descriptor/selector preparation only. Both helpers write the
+ * retained resource spans and, for riders, the existing HUD owner. No DMA,
+ * decompression, relocation of loaded assets, queue or RNG executes here.
+ */
+export function prepareNativeRaceRiderResourceConfigurationUpdate(state,input,sourceViews={}){
+ const next=copy(state),prepared=prepareNativeRaceRiderResourceConfiguration(next,input,sourceViews),effects=apply(next,prepared.operations);
+ return freeze({...prepared,state:next,effects});
+}
+export function prepareNativeRaceCourseResourceConfigurationUpdate(state,input,sourceViews={}){
+ const next=copy(state),prepared=prepareNativeRaceCourseResourceConfiguration(next,input,sourceViews),effects=apply(next,prepared.operations);
+ return freeze({...prepared,state:next,effects});
+}
+
 /** Direct9345C configuration and its two reached fade initializers, with one
  * canonical profile/HUD/scene owner. The source's resource96960/9684C writes,
  * physical body-tune writes and finalC21F4 audio entry remain ordered REQUIRED
- * pending effects. They must be resolved at their call positions before this
+ * pending effects by default. They must be resolved at their call positions before this
  * preparation can become a complete live main bootstrap. No callback runs or
  * resource descriptor is fabricated here. Earlier resource writes do not
  * overlap the later direct caller predicates/fade spans in this bounded path.
@@ -176,15 +206,29 @@ export function prepareNativeRaceFadeSlotsResetUpdate(state,input){
  * sourceViews supplies the main leaf's readonly data and actual raw9/11-word
  * fade templates. The replaced fade entries never remain pending for replay.
  * Mode4 requires52 profile words; other branches retain50-word compatibility.
+ * With explicit options.expandResourceInitializers=true, both resource
+ * descriptor helpers expand into this same owner at their exact call positions.
+ * All three retained resource spans and selected readonly table views must then
+ * be supplied. Their replaced entries never remain pending for a second replay.
+ * Later95050 resource loading, physical tunes and final audio remain separate.
  * Canonical players/racerCount remain bounded even when the standalone direct
  * leaf can describe wider signed-halfword transport. Invalid late input leaves
  * every supplied owner unchanged, including the profile's flag tail and RNG.
  */
-export function prepareNativeRaceMainConfigurationUpdate(state,sourceViews={}){
- const next=copy(state),prepared=prepareNativeRaceMainConfiguration(next,sourceViews),operations=[],effects=[],expandedFadeConsumers=[];
+export function prepareNativeRaceMainConfigurationUpdate(state,sourceViews={}, {expandResourceInitializers=false}={}){
+ if(typeof expandResourceInitializers!=='boolean')throw new TypeError('expandResourceInitializers must be boolean');
+ const next=copy(state),prepared=prepareNativeRaceMainConfiguration(next,sourceViews),operations=[],effects=[],expandedFadeConsumers=[],expandedResourceConsumers=[];
  for(const operation of prepared.operations){
   let batch=[operation];
-  if(operation.kind==='externalCall'&&operation.consumer==='801e6fb0'){
+  if(expandResourceInitializers&&operation.kind==='externalCall'&&operation.consumer==='80096960'){
+   const [kind,...avatarIndices]=operation.arguments;
+   batch=prepareNativeRaceRiderResourceConfiguration(next,{kind:kind|0,avatarIndices:avatarIndices.map(v=>v|0)},sourceViews).operations;
+   expandedResourceConsumers.push(operation.consumer);
+  }else if(expandResourceInitializers&&operation.kind==='externalCall'&&operation.consumer==='8009684c'){
+   const [baseWord,...indices]=operation.arguments;
+   batch=prepareNativeRaceCourseResourceConfiguration(next,{baseWord,resourceIndices:indices.map(v=>v|0)},sourceViews).operations;
+   expandedResourceConsumers.push(operation.consumer);
+  }else if(operation.kind==='externalCall'&&operation.consumer==='801e6fb0'){
    const [type,rate,selector]=operation.arguments;
    batch=prepareNativeRaceFadePropertiesInitialization({fadeTemplateWords6cc0:sourceViews.fadeTemplateWords6cc0,
     type:type|0,rate:rate|0,selector:selector|0}).operations;
@@ -196,8 +240,9 @@ export function prepareNativeRaceMainConfigurationUpdate(state,sourceViews={}){
   }
   operations.push(...batch);effects.push(...apply(next,batch));
  }
- return freeze({state:next,operations,effects,diagnostic:{sourceMain:prepared.diagnostic,expandedFadeConsumers,
-  pendingResourceConsumers:['80096960','8009684c'],finalAudioPending:true,physicalInitialization:false}});
+ return freeze({state:next,operations,effects,diagnostic:{sourceMain:prepared.diagnostic,expandedFadeConsumers,expandedResourceConsumers,
+  pendingResourceConsumers:['80096960','8009684c'].filter(v=>!expandedResourceConsumers.includes(v)),resourceLoadingPerformed:false,
+  finalAudioPending:true,physicalInitialization:false}});
 }
 
 /** Complete numeric water-noise initialization from the canonical shared RNG.

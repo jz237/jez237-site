@@ -1795,3 +1795,55 @@ transitions, mode11 scoring, venue/hardware checks and the eleven existing
 course failures remain open. High-resolution presentation is retained. This
 checkpoint is local; no original executable bytes/artwork are published and no
 money was spent.
+
+## Resource descriptor setup and actor15 completion — October 15, 2026
+
+The two resource initializers reached by main configuration can now expand at
+their source call positions. Their descriptor and selector writes use three
+disjoint retained owners, alongside the existing HUD. Resource800DB330 is
+distinct from profile801CB330; logical avatar IDs remain separate from the
+shifted descriptor-template indices. Duplicate special IDs retain the last
+matching selector, and lookup relocation preserves every repeated store and
+unsigned overflow. Course sentinels retain descriptor prefixes, while present
+entries preserve full cursor words separately from low24 descriptor addresses.
+Duplicate course IDs update their slot map twice in order.
+
+Expansion is explicit through expandResourceInitializers. The previous default
+contract still returns required pending resource entries and needs no new
+descriptor owners/tables. When expanded, neither initializer remains pending
+for replay. These helpers perform no transfer, queue operation or RNG draw.
+Later loading/decompression, post-load HUD fixups, physical body tune consumers
+and final audio remain separate startup work. No loaded-resource count, return
+value or original table is invented.
+
+The complete reached resource leaves match2,308 original-instruction cases,
+293,660 ordered operations and3,492,004 complete owner words. A fresh complete
+main execution additionally seeds all three resource spans before each of1,350
+actual runs. Both adapter options match2,700 complete canonical states over
+9,388,752 owner values and664,225 ordered operations. Actual356,839 resource
+stores and98,550 fade stores remain at their original call positions. Nine
+unsupported count cases reject under both options; seven late-dependency
+checks confirm atomicity, and default no-owner/no-table compatibility passes.
+
+Actor15 now has its exact type/mode initializer and its own post-pose completion
+branch. A nonnegative result advances the stored frame only in actual phase2
+or3; other phases hold the frame. A negative result still queues the earlier
+ordinary22 blend, while active blends bypass the actor-specific phase branch.
+Phase650 is transient caller context, separate from simulation648 and action
+completion records. Restoring an actor label does not reinitialize physical
+points. The existing lifecycle's fourth argument is preserved, with phase in
+the fifth context argument. Source comparisons match48 supported post-pose
+records and two initializer type/mode recipes. This does not claim complete
+immediate actor requests, pose blending, physical bootstrap or live admission;
+the explicit frame/yaw provider and canonical phase latch still need wiring.
+
+All38 added tests pass. The full suite is2,012/2,023 in97.87s with the same
+eleven existing failure names. All252 module versions are refreshed in the
+three HTML maps. Both browser windows match Node on prepared resource and
+actor15 completion cases, and the400-step sequence regression still matches
+for one and two players. The retained preview remains High1280×720 at11.05s,
+tick1105/frame221, with matching racer positions and49,152 water heights
+(hash2879715165). The child console is clear; the parent retains its favicon404.
+This is another local checkpoint, with no original executable bytes/artwork
+published and no money spent. Complete live startup and the other listed
+gameplay, venue and hardware gaps remain open.

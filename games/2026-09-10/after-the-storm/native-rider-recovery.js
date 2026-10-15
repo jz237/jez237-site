@@ -16,7 +16,7 @@ const moderateTables={fixedSphereImpactNative:[4,4,3,3.3],racerImpactNative:[5,6
  objectImpactNative:[5,6,5.9,5.5]};
 const severeTilt=[.38,.43,.43,.4].map(F),mildTilt=[.48,.53,.53,.5].map(F);
 const moderatePrimary=[5,6,5.9,5.5].map(F),speedGate=F(22.22222328186035);
-const actionActors=new Set([8,9,10,17,25]),poseActors=new Set([7,8,9,10,17,22,23,24,25]);
+const actionActors=new Set([8,9,10,17,25]),poseActors=new Set([7,8,9,10,15,17,22,23,24,25]);
 const stateFields=new Set(['schema','riderIndex','actorState','animationFrame','pendingActor','pendingAnimationFrame',
  'holdFrame','blendProgress','blendStep','crashCountdown','crashDampingLatch','contactMode','stumbleCountdown',
  'recoveryCounter','secondaryCounter','stumbleCounter','recoveryInputLock','alternateStumble','selectedActor',
@@ -83,6 +83,7 @@ function initialization(s,actor){
  }
  const types=Array(19).fill(actor===23||actor===24?0:1);
  if(actor===7)for(const i of [0,1,2,6,7,8,9,10,14,15,16,17,18])types[i]=0;
+ if(actor===15){for(const i of [2,7,8,15,16])types[i]=0;types[6]=2;types[14]=3;}
  if(actor===22){
   if(s.alternateStumble)for(const i of [2,6,7,14,15])types[i]=0;
   else{for(const i of [9,10,17,18])types[i]=4;types[6]=2;types[14]=3;}
@@ -260,8 +261,10 @@ export function decideNativeActorAfterHull(state,snapshot){
  * outcomes, even when holdFrame prevents storing the pending frame. Other
  * action actors require their actual physicalMode and explicit source snapshot
  * through options. Active blends skip every actor-specific consumer. Targets
- * remain external; procedural23/24/25 return exactly0. */
-export function finishNativeActorPose(state,outcome,{physicalMode,poseCompletion}={}){
+ * remain external; procedural23/24/25 return exactly0. Actor15's nonnegative
+ * inactive-blend outcome requires the actual transient phase650. This is
+ * distinct from simulation648 and is not retained as another phase owner. */
+export function finishNativeActorPose(state,outcome,{physicalMode,poseCompletion,phase650}={}){
  const s=stateCopy(state,'pose'),effects=[];
  if(!outcome||typeof outcome!=='object')throw new TypeError('An equivalent pose evaluator outcome is required');
  if(!poseActors.has(s.actorState))throw new RangeError(`Actor ${s.actorState} requires its separate source post-pose consumer`);
@@ -291,6 +294,9 @@ export function finishNativeActorPose(state,outcome,{physicalMode,poseCompletion
   if(r)actorRequest=request(s,effects,r.actorState,r.animationFrame,r.blend,r.holdFrame);
  }else if(next<0){
   actorRequest=request(s,effects,22,0,.15,0);
+ }else if(s.actorState===15){
+  const phase=integer(phase650,'phase650');
+  if(phase===2||phase===3)s.animationFrame=next;
  }else if(s.actorState===7){
   // The>=77 branch skips the source56 damping-restoration branch entirely.
   if(next>=77)actorRequest=request(s,effects,22,0,.15,0);

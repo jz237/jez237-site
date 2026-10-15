@@ -105,13 +105,15 @@ export function decideNativeRiderLifecycle(lifecycle,{completedFrame,simulationS
  lifecycle.lastEffects=decision.effects.map(q=>structuredClone(q));return decision;
 }
 
-/** Complete the explicitly evaluated pose before B/point projection/link solve. */
-export function finishNativeRiderLifecycle(lifecycle,outcome,controls,poseCompletion){
+/** Complete the explicitly evaluated pose before B/point projection/link solve.
+ * The fifth argument supplies transient source phase650 for actor15 without
+ * changing the fourth action-record API or inferring phase from simulation648. */
+export function finishNativeRiderLifecycle(lifecycle,outcome,controls,poseCompletion,{phase650}={}){
  owner(lifecycle);
  if(lifecycle.lastDecision?.skipped)return null;
  const context=completionInputs(controls,poseCompletion);
  const result=finishNativeActorPose(lifecycle.state,{...outcome,pressedButtons:controls.pressedButtons,releasedButtons:controls.releasedButtons,
-  heldButtons:controls.heldButtons},{physicalMode:lifecycle.physicalMode,poseCompletion:context});
+  heldButtons:controls.heldButtons},{physicalMode:lifecycle.physicalMode,poseCompletion:context,phase650});
  apply(lifecycle,result.effects);lifecycle.state=result.state;
  lifecycle.lastEffects.push(...result.effects.map(q=>structuredClone(q)));return result;
 }
