@@ -11246,5 +11246,125 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-15-factual-infographic-factual-infographic-pneumonia-when-air-",
+    "title": "Factual infographic: Pneumonia — When Air Sacs Fill",
+    "tests": "factual_subtype: medical-health-infographic; claim-level NHLBI/NHS evidence; artwork-led flowing anatomical cutaway; no non-Monday subjective review; archive_slot=2026-10-15T14:20; concept=pneumonia-infection-fluid-filled-lung-alveoli; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=high, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished, artistic medical infographic directly on the canvas, not a photographed page, presentation, or mockup. Title: \"PNEUMONIA\" with the graceful subtitle \"When air sacs fill\". This is a richly detailed anatomical illustration with concise, medically accurate educational text, visually led by the lung rather than a grid of information boxes. Prefer a tall, naturally balanced composition; let the renderer choose the exact size.\n\nART AND COMPOSITION: luminous gouache and finely shaded anatomical colored pencil with precise ink leaders on a soft cool ivory ground, subtle paper tooth, midnight-teal typography, dusty rose healthy tissue and restrained ochre/coral accents for affected air spaces. Build a sweeping asymmetrical lung-and-airway silhouette across the center, slightly left of center: trachea descends into branching bronchi and bronchioles, with the lung's delicate lobular texture becoming a generous enlarged alveolar cutaway on the lower right. Keep anatomically credible branching and delicate wall contours, not fantasy blossoms. Illustrate a localized affected region, not inevitable destruction of the entire organ. A fine leader connects it to enlarged alveoli: a small open healthy air sac beside a larger cluster with visible fluid/pus occupying the internal air spaces. Use translucent wash and delicate stipple for the contents; no sensational gore. Labels \"Alveoli = air sacs\", \"Healthy air space\", \"Fluid or pus in affected air sacs\" are placed directly beside the structures, with delicate non-crossing leaders. The enlargement is schematic, not to scale. Do not depict specific microbes or invent pathogen anatomy. No oxygen-flow claims or unexplained numeric measurements.\n\nThe upper right has one breathing open annotation connected to the lung: \"An infection of one or both lungs\" and beneath it \"Often bacterial or viral; sometimes fungal.\" Sweep the symptoms along the outside contour of the lung in a readable short open list headed \"What you may notice\": \"Cough • fever or chills\", \"Shortness of breath\", \"Chest pain • tiredness\". Small, delicate line marks and clear typographic spacing, no detached equal-sized cards. State \"Symptoms vary; assessment matters.\" A slender unobtrusive margin note reads \"Higher risk: young children, older adults, weakened immunity or chronic lung disease.\" Do not let this optional note crowd the central illustration.\n\nCARE PATHWAY: integrate a fine curved ink route beneath the anatomical study, with three open text stations of differing widths, generous breathing room, and no enclosing boxes. \"Get assessed\" — \"A clinician may use examination, chest X-ray and blood tests.\" Then \"Treat the cause\" — \"Antibiotics usually treat bacterial pneumonia; treatment depends on cause and severity.\" Then \"Support recovery\" — \"Rest and fluids; severe illness may need hospital care and oxygen.\" These are clinical management ideas, not a self-diagnosis or a universal prescription. Do not show drug names, doses or guarantees.\n\nURGENT CONTEXT: a clearly readable warm terracotta line near the bottom anchors a distinct open warning area, with the heading \"Emergency signs\" and exact concise content \"Severe trouble breathing • blue or pale lips/skin • sudden confusion • coughing blood\" followed by \"Seek emergency care.\" On a separate short line: \"Worsening symptoms need prompt medical assessment.\" This must be readable, not miniature footer text, and not visually confused with the ordinary symptom list. No country-specific emergency telephone number.\n\nA quiet footer says \"Lower risk: recommended vaccines, handwashing, no smoking.\" and \"General education — not a diagnosis.\" Vaccines prevent some causes, not all pneumonia; make this distinction with the small sentence \"Vaccines protect against some causes.\" Preserve the mechanism, key symptoms, treatment distinctions, and emergency signs above everything else. If room is tight, omit only the optional higher-risk margin note; do not cram in extra panels. No statistics, bibliography, URLs, citations, invented claims, branding or watermark. Elegant large title, readable sans-serif clinical labels, finely handled tonal detail in the lung, clear hierarchy and generous negative space. Produce only the finished infographic artwork.",
+    "image": "images/2026-10-15-factual-infographic-factual-infographic-pneumonia-when-air-.jpg",
+    "thumb": "thumbs/2026-10-15-factual-infographic-factual-infographic-pneumonia-when-air-.webp",
+    "color": "#ddd2c9",
+    "date": "2026-10-15",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "pneumonia-infection-fluid-filled-lung-alveoli",
+      "imageSha256": "ae79a9ea2214ae35c15f7ce6e0bc2cbded7f1f2f71af6a041bde3f7e4a3662f7",
+      "imageDHash": "e832f8c89c3cb249"
+    },
+    "factualInfographic": {
+      "topic": "pneumonia",
+      "description": "How pneumonia affects lung air sacs, its common causes and symptoms, clinical assessment, cause-specific care, risk reduction and emergency warning signs.",
+      "sourceNote": "NHLBI/NIH https://www.nhlbi.nih.gov/health/pneumonia ; NHS https://www.nhs.uk/conditions/pneumonia/ ; NHLBI risk factors https://www.nhlbi.nih.gov/health/pneumonia/causes — read and verified claim-level anatomy, infectious causes, symptoms, care, prevention and urgent escalation.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-15T18:21:35.786383+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Heart, Lung, and Blood Institute (NIH)",
+            "title": "Pneumonia — What Is Pneumonia?",
+            "sourceType": "government-agency",
+            "url": "https://www.nhlbi.nih.gov/health/pneumonia"
+          },
+          {
+            "id": "S2",
+            "publisher": "National Health Service (NHS)",
+            "title": "Pneumonia",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/pneumonia/"
+          },
+          {
+            "id": "S3",
+            "publisher": "National Heart, Lung, and Blood Institute (NIH)",
+            "title": "Pneumonia — Causes and Risk Factors",
+            "sourceType": "government-agency",
+            "url": "https://www.nhlbi.nih.gov/health/pneumonia/causes"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Pneumonia is an infection of one or both lungs; alveoli are air sacs that can fill with fluid or pus.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Bacteria and viruses commonly cause pneumonia; fungi can also cause it.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Symptoms may include cough, fever, chills, shortness of breath, chest pain and tiredness; symptoms vary.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Clinical assessment may include a chest examination, chest X-ray and blood tests; symptoms alone do not establish the diagnosis.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Bacterial pneumonia is usually treated with antibiotics; treatment depends on cause and severity, so antibiotics are not a universal treatment.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Rest and fluids support recovery; severe illness may require hospital care and oxygen.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Severe trouble breathing, blue or pale lips or skin, sudden confusion, or coughing blood require emergency care.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Worsening symptoms need prompt medical assessment.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Recommended vaccines can prevent some infections that cause pneumonia; handwashing and not smoking help reduce risk.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Young children, older adults and people with weakened immunity or chronic lung disease have higher risk.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
