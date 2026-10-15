@@ -1,3 +1,4 @@
+import {createStadiumScenery} from './stadium-scenery';
 import {addCourseGroundDetail} from './course-materials';
 import * as T from 'three';
 import {HOLLOWAY,BRAMBLEBROOK} from './stadium-reservoir-courses';
@@ -45,7 +46,7 @@ export function createStadiumReservoirWorld(id:'holloway-stadium-v1'|'bramblebro
   }
   for(const x of [-197,197])for(let tier=0;tier<4;tier++)box(x+Math.sign(x)*tier*3,1+tier*1.2,-25,3,2+tier*2.4,85,tier%2?'blue':'concrete');
   box(0,8,-5,34,15,1.5,'steel');box(0,8,-6,31,11,.2,'blue');
-  for(let i=0;i<5;i++)box(-11+i*5.5,8,-6.2,3.5,6,.2,'stripe');
+
   for(const x of [-184,184])for(const z of [-119,92]){box(x,17,z,1,34,1,'steel');box(x,34,z,9,2,2,'concrete');}
  }else{
   // A visible reservoir beyond the north shore and a dam spillway below the access road.
@@ -60,6 +61,7 @@ export function createStadiumReservoirWorld(id:'holloway-stadium-v1'|'bramblebro
   for(const x of [-75,-30]){box(x,2,-162,30,4,15,'red');box(x,4.4,-162,32,.8,17,'steel');}
  }
  for(const [finish,matrices]of batches){const mesh=new T.InstancedMesh(boxGeometry,materials[finish],matrices.length);matrices.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.name=id+'_'+finish;mesh.castShadow=mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
+ const venue=paved?createStadiumScenery():null;if(venue)root.add(venue.root);
  root.userData.solidRecords=course.solids;freezeSceneryTransforms(root);
- let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;surfaceDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
+ let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;venue?.dispose();surfaceDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
 }
