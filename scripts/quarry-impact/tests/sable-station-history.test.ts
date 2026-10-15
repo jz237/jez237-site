@@ -1,6 +1,7 @@
+import {restoreWillowbankDetailBytes} from './willowbank-detail-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readSableStationPrevious,restoreSableStationBytes,verifySableStationRevision} from './sable-station-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreWillowbankDetailBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('SableStation preserves every prior fixture, vehicle asset, control and camera input',verifySableStationRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/sable-station/revision.json').toString());

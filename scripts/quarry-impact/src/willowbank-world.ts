@@ -1,3 +1,5 @@
+import {createHeathVegetation,improveHeathGround,improveHeathHorizon} from './willowbank-heath-detail';
+import {createVisitorLodge,hideOldLodge} from './willowbank-visitor-lodge';
 import {createCourseScenery,paintCourseGround} from './course-scenery';
 import {addCourseGroundDetail} from './course-materials';
 import * as T from 'three';
@@ -34,6 +36,9 @@ export function createWillowbankWorld(){
  for(const x of [-192,192]){box(x,7,-85,.6,14,.6,'steel');box(x,14,-85,5,.8,1,'seat');}
  for(const [finish,matrices]of batches){const mesh=new T.InstancedMesh(boxGeometry,materials[finish],matrices.length);matrices.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.name=id+'_'+finish;mesh.castShadow=mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
  const scenery=createCourseScenery(course,'heath');root.add(scenery.root);
+ const plants=createHeathVegetation(),lodge=createVisitorLodge(),restoreLodge=hideOldLodge(root),restoreGround=improveHeathGround(root),restoreHorizon=improveHeathHorizon(root);
+ for(const name of ['willowbank-heath-v1_dressing_leaf_pine','willowbank-heath-v1_dressing_leaf_ochre']){const old=root.getObjectByName(name);if(old)old.visible=false;}
+ root.add(plants.root,lodge.root);
  root.userData.solidRecords=course.solids;freezeSceneryTransforms(root);
- let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;scenery.dispose();surfaceDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
+ let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;restoreLodge();restoreGround();restoreHorizon();plants.dispose();lodge.dispose();scenery.dispose();surfaceDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
 }
