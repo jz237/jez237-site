@@ -1,3 +1,4 @@
+import {createFairWheel} from './fairground-wheel';
 import {addCourseRockDetail} from './course-materials';
 import * as T from 'three';
 import type {createCountyCourse} from './county-course';
@@ -80,12 +81,12 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
   if(theme==='port'&&(z>160||(Math.abs(x)<225&&Math.abs(z)<180)))return;
   const r=size*(pine?.3:.48);
   if(theme==='heath'&&[[-45,-10,20,14],[65,20,13,11],[65,-160,24,12]].some(([cx,cz,w,d])=>Math.abs(x-cx)<w+r&&Math.abs(z-cz)<d+r))return;
-  if(theme==='fair'&&[[-40,0,23,18],[55,0,16,16],[0,142,22,9],[-105,-150,25,13],[65,-150,30,13]].some(([cx,cz,w,d])=>Math.abs(x-cx)<w+r&&Math.abs(z-cz)<d+r))return;
+  if(theme==='fair'&&[[-40,0,24,34],[55,0,16,16],[0,142,22,9],[-105,-150,25,13],[65,-150,30,13]].some(([cx,cz,w,d])=>Math.abs(x-cx)<w+r&&Math.abs(z-cz)<d+r))return;
   if(theme==='ridge'&&[[-55,-24,12,11],[80,-160,22,11],[75,45,9,8]].some(([cx,cz,w,d])=>Math.abs(x-cx)<w+r&&Math.abs(z-cz)<d+r))return;
   if(theme==='club'&&[[-35,-30,16,13],[62,-160,36,12],[-72,-35,10,6],[15,-28,10,6],[40,56,10,6]].some(([cx,cz,w,d])=>Math.abs(x-cx)<w+r&&Math.abs(z-cz)<d+r))return;
   if(!clear(x,z,r,'tree'))return;
   const y=scenicHeight(x,z),yaw=random()*6.28;
-  if(typeof document!=='undefined'&&(theme==='coast'||theme==='forest'||theme==='farm'||theme==='park'||theme==='reservoir'||theme==='club'||theme==='heath'||course.distance(x,z)>40)){treeCards.push({x,y,z,size,kind:pine?(treeCards.length%2?'pine':'spruce'):'maple'});return;}
+  if(typeof document!=='undefined'&&(theme==='coast'||theme==='forest'||theme==='farm'||theme==='park'||theme==='reservoir'||theme==='club'||theme==='heath'||theme==='fair'||course.distance(x,z)>40)){treeCards.push({x,y,z,size,kind:pine?(treeCards.length%2?'pine':'spruce'):'maple'});return;}
   add('round','bark',x,y+size*.36,z,.3+size*.04,size*.72,.3+size*.04);
   if(pine){for(let tier=0;tier<3;tier++)add('cone','pine',x,y+size*(.45+tier*.19),z,size*(.68-tier*.13),size*.52,size*(.68-tier*.13),yaw+tier);}
   else{for(let lobe=0;lobe<4;lobe++){const a=yaw+lobe*2.2,offset=lobe?size*.2:0;add('leaf',lobe%2?'leaf':'pine',x+Math.cos(a)*offset,y+size*(lobe?.72:.94),z+Math.sin(a)*offset,size*.67,size*(lobe?.61:.57),size*.6,a);}}
@@ -178,17 +179,7 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
  }else if(theme==='fair'){
   stand(-35,-120);stand(35,-120);building(110,-150,30,18,5,'red');serviceTruck(143,-150,'ochre');
   for(const x of [-120,-100,-80,40,60,80])canopy(x,-150,x<0?'red':'ochre');
-  if(clearRectangle(-40,0,46,36,'fair-wheel')){
-   const y=course.height(-40,0);
-   // Static fairground landmark, kept outside the race and recovery envelope.
-   add('ring','white',-40,y+15,0,28,28,28);
-   box('ochre',-40,y+15,0,26,.35,.4);box('ochre',-40,y+15,0,.35,26,.4);
-   for(const dx of [-5,5])for(const dz of [-3,3])box('metal',-40+dx,y+7.5,dz,.6,15,.6);
-   box('red',-40,y+.3,0,18,.6,12);
-   for(let i=0;i<12;i++){const a=i*Math.PI/6,x=-40+Math.cos(a)*12.8,z=0,h=y+15+Math.sin(a)*12.8;
-    box('metal',x,h-1,z,.13,2,.13);box(i%2?'red':'ochre',x,h-2,z,2.6,1.4,2.2);box('white',x,h-.8,z,2.8,.18,2.4);
-   }
-  }
+  clearRectangle(-40,0,52,38,'fair-wheel');
   if(clearRectangle(55,0,32,32,'fair-marquee')){
    const y=course.height(55,0);add('round','white',55,y+2.4,0,26,4.8,26);add('cone','red',55,y+7,0,31,7,31);
    box('metal',55,y+12,0,.2,5,.2);box('ochre',57,y+13,0,4,1.8,.1);
@@ -605,6 +596,7 @@ reflectedLight.directDiffuse *= .5;reflectedLight.directSpecular *= .5;`);
   }
  }
  for(const [key,b]of batches){const mesh=new T.InstancedMesh(geometries[b.shape],materials[b.finish],b.matrices.length);b.matrices.forEach((m,i)=>{mesh.setMatrixAt(i,m);mesh.setColorAt(i,b.colors[i]);});mesh.name=course.id+'_dressing_'+key;mesh.castShadow=b.shape==='box'||b.finish==='bark';mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
+ const fairWheel=theme==='fair'?createFairWheel():null;if(fairWheel)root.add(fairWheel.root);
  root.userData.placements=placements;root.userData.theme=theme;
- let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;stoneDetail.dispose();ridgeDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});Object.values(geometries).forEach(g=>g.dispose());Object.values(materials).forEach(m=>m.dispose());ownedGeometries.forEach(g=>g.dispose());ownedMaterials.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());foliageTextures.forEach(t=>t.dispose());root.clear();}};
+ let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;fairWheel?.dispose();stoneDetail.dispose();ridgeDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});Object.values(geometries).forEach(g=>g.dispose());Object.values(materials).forEach(m=>m.dispose());ownedGeometries.forEach(g=>g.dispose());ownedMaterials.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());foliageTextures.forEach(t=>t.dispose());root.clear();}};
 }
