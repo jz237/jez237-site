@@ -1112,3 +1112,112 @@ championship admission. The existing course/mode failures, remaining actors and
 tricks, other native venues, full course sign-offs and hardware verification
 also remain open. ROM bytes, raw disassembly and recovered art stay private.
 The goal is active; this local milestone is not production publication.
+
+## Original AI input producer — October 15, 2026
+
+The selected-racer AI input producer is now composed as an isolated numeric
+module, `native-ai-driver.js`. Prepared source state passes through motion
+prediction, two-pass lookahead and final aim, course/floor/player corrections,
+steering, two actual triangular-plane water queries, water trim, conditional
+traffic/button selection, power, and the final action-request tail, in source
+order. Source phase 650 selects the full driving routine only at 3; other
+phases run the separate start-input routine and preserve AI history, actions
+and prior power. This is ready for prepared-state use. Initialization,
+ranking, geometry producers and action consumers still block playable native
+race/championship AI admission.
+
+`native-ai-target.js` keeps the four-avatar navigation window separate from
+temporary lookahead. It recomputes metrics between both target advances, then
+selects near aim and the final segment. Current buoy centers can move while
+their initialized gate endpoints stay fixed. The recovered finite-line side
+test's degenerate arithmetic, previous-color fallback, division versus rounded
+reciprocal normalization and Southern Island lap-dependent skips are retained.
+An all-skipped invalid cycle rejects atomically. The private raw/public
+comparison passes all 1,467 fixtures, including 501 full target pipelines,
+78,183 exact binary32 fields, 11,169 segments and 32,523 integer/window fields.
+All 53 inventoried conditional branches take both outcomes in that audit.
+
+`native-ai-motion.js` predicts from the preceding actual normalized body
+movement, tracks source recovery phases and signed slow/dry/behind counters,
+and evaluates proximity and the selected water circle. Proximity scans the
+first explicit count of the raw generic-object table. Its supported capacity
+of 64 is corroborated by three original loader bounds, independently of the
+consumer. Nearby-object flag 98, circle flag A4, dry-contact latch 9c and
+retained flag 94 remain distinct. Human identity and source slot zero are also
+distinct selectors. All 1,094 bounded raw/public cases agree. The downstream
+steering input now accepts negative signed-counter overflow, matching the
+source's signed comparison instead of treating it as a stuck override.
+
+`native-ai-corrections.js` implements all 65 ordinary and 36 Reverse escape
+rectangles, including open boundaries, later-overlap precedence, lap/height
+gates and signed counters. The delayed floor correction and primary-human
+avoidance follow afterward. Course/floor overrides change direction without
+inventing a new point or distance; actual player avoidance replaces the point
+and rebuilds the segment. All 10,221 isolated cases and 404 composed correction
+plus steering cases match the original execution. Every one of the 101
+independently inventoried positive region-store locations is dynamically
+covered. Source escape vectors are not silently normalized, and player
+avoidance has no added distance gate.
+
+`native-ai-actions.js` preserves center/512-forward native water sampling,
+datum-aware raw plane heights, actor-specific button handling, source camera
+quad degeneracies, strict traffic-speed comparisons, training triggers and
+the final course-specific action requests. Its 8,464 prepared raw/public cases
+agree. Power reads the pre-tail steering value; a later action may change the
+returned axes. The last-steering AI field retains the pre-tail value. The
+previous-navigation word is one shared global passed between selected racers
+in actual input order. An action request is returned explicitly for its real
+consumer; it is not a completed actor or substitute animation. The independent
+start leaf passes all 1,470 prepared cases and leaves retained AI/power fields
+untouched.
+
+The assembled producer agrees on all 253 prepared executions of the original
+driving/start routines and their numeric callees: 205 driving and 48 start
+cases, with 14,364 compared output fields. These executions include the actual
+water-query instructions against the same prepared lattice. Only square root
+is intercepted with a host result rounded to binary32. An independently
+reviewed moved-center execution adds a persisted regression for fixed
+endpoints, persistent navigation 0 versus temporary target 2, full corrected
+segment and exact controls. Three independent integration reviews found no
+concrete composition defects. These are bounded prepared-field comparisons,
+not a complete original-game trajectory or R4300 floating-point-environment
+proof.
+
+A separate integration fixture sends four prepared AI streams through the
+real mixed human/computer physical profiles, hull solvers, articulated rider
+solvers, navigation and common input path. All-racer navigation precedes
+descending input sampling. Twenty outer frames produce 100 hull ticks and
+exactly 80 AI samples, with identical complete control/state/physical/water
+histories at 30/60/144 Hz. Pause and snapshots consume no samples. Starts,
+rank records, camera/circle geometry and retained state are explicit fixture
+inputs; this does not establish the native grid, rank producer or a completed
+original-opponent race.
+
+The complete regression run passes **1,455/1,466 in 89.68 s** (private
+`full-tests-native-ai-driver-final.tap`). All 97 additions in that run pass;
+the eleven failure names match the preceding foundation run exactly. The
+subsequently added moved-center regression also passes in the **11/11** driver
+test run, bringing this milestone's additions to 98 without further runtime
+changes. All 218 module versions are present in the three HTML import maps.
+
+The updated browser build loads and executes the assembled producer against
+an isolated prepared input without changing the playable world. High
+1280×720 separate player views retain the 11.05 s contact at hull tick 1105,
+source frame 221 and C40 1.861451268196106 on both craft. They agree on racer
+coordinates, native HUD, all 49,152 water heights (Int16LE FNV1a 2879715165)
+and sampled heights. Pausing from P2 preserves the exposed complete
+physical/water/racer fingerprint. The authored verification controls finish
+the Normal match with the expected Player 1 win at 109.648 s, 42/39 passes,
+zero misses/DQ and 13 contacts. The child console is clear. This parent run
+records two favicon 404s and the existing foam shader's compiler warning about
+potentially uninitialized fragment variables; no AI module request fails.
+
+Remaining live integration includes original cold/reset/retained-state and
+role/RNG initialization, course-family/context selection, all-racer legal-lap
+progress and ranking/finishes, native camera/circle/raw-object producers, and
+the actual action/actor consumers. Complete frontend scheduling, remaining
+native actors/tricks, other native modes/venues, existing course failures,
+course sign-offs and hardware checks remain open. ROM bytes, disassembly and
+original art stay private. Default gameplay remains modern; native admission
+remains Sunny Beach time trials and two-player races. No production release
+or spending occurred. The goal remains active.
