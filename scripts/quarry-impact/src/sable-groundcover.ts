@@ -2,7 +2,7 @@ import * as T from 'three';
 import {SABLE} from './sable-course';
 const hash=(n:number)=>{const v=Math.sin(n*127.13+31.7)*43758.5453;return v-Math.floor(v);};
 /** Low desert scrub and gravel fans, grouped into patches rather than a uniform grid. */
-export function createSableGroundcover(){
+export function createSableGroundcover(reserved:(x:number,z:number,radius:number)=>boolean=()=>false){
  const root=new T.Group();root.name='sable-groundcover';
  const positions:number[]=[],colors:number[]=[];
  // Each shrub has a branching silhouette with narrow, tapered leaf clusters.
@@ -20,7 +20,7 @@ export function createSableGroundcover(){
  for(let c=0;c<115;c++){
   const x=(hash(c*7+101)-.5)*420,z=-83+hash(c*7+102)*246;
   const radius=3+hash(c*7+103)*7;
-  if(SABLE.distance(x,z)<24+radius)continue;
+  if(SABLE.distance(x,z)<24+radius||reserved(x,z,radius+1.6))continue;
   // Keep the centre of the bowl open, with denser cover on its slopes and northern banks.
   if(Math.abs(x)<55&&z<35&&hash(c+177)<.8)continue;
   const base=patchPositions.length/3;patchPositions.push(x,SABLE.height(x,z)+.025,z);patchColors.push(.28,.25,.17);
