@@ -321,6 +321,142 @@
     }
   },
   {
+    "id": "2026-10-15-factual-infographic-factual-infographic-diverticulitis-when",
+    "title": "Factual infographic: Diverticulitis — When a Bowel Pouch Becomes Inflamed",
+    "tests": "factual_subtype: medical-health-infographic; explicit owner-requested extra 1 of 2; request=1560426532525309982; clinical sources reviewed before generation; archive_slot=2026-10-15T18:57:56; concept=diverticulitis-colon-pouch-inflammation; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=high, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished, artwork-led medical infographic directly on the canvas. Title “DIVERTICULITIS” and subtitle “When a bowel pouch becomes inflamed”. Match the refined, rich medical-atlas quality of the recent gout and diabetes charts: meticulous anatomical ink and gouache, softly translucent tissue, sculptural shaded forms, sophisticated editorial typography, and a flowing visual narrative. Use warm ivory with muted indigo and sage; localized vermilion communicates inflammation. The artwork dominates. Generous breathing room, elegant varied-scale annotations, no rigid grid, cards or boxes. Finished flat composition, not a photographed page, book, frame, room or mockup. High quality, automatic size, opaque background.\n\nMake a sweeping, anatomically credible sigmoid-colon segment the large hero, its natural curve guiding the eye diagonally through the composition. Show a few small outward pouches continuous with the bowel wall. One pouch has a carefully localized swollen coral wall and warm surrounding wash; the rest are pale and quiet. A gentle cutaway exposes the bowel lumen and the pouch’s connection without gore. Fine ink hatching, nuanced layered wall textures and delicate surface shading should reward inspection. Keep the pouch physically continuous with the bowel, not floating beside it. Label only the core structures “Colon”, “Bowel wall”, “Diverticulum (pouch)” and “Inflamed pouch”. A small unobtrusive front-view torso locator gives context in the person’s lower-left abdomen; keep anatomical left correct, not the viewer’s left. Label “Often the sigmoid colon”.\n\nAn open curved enlargement beside the hero compares a quiet pouch with an inflamed pouch. Concise labels: “DIVERTICULOSIS: pouches are present” and “DIVERTICULITIS: a pouch becomes inflamed”. Add the essential line “Most people with pouches never develop symptoms.” Use a conditional visual relationship, not a sequence implying inevitable disease. The magnified tissue study is visibly marked “Schematic enlargement • not to scale”. Do not draw seeds, nuts, stones or food plugs as a proven cause. Do not add fabricated cell biology, parasites, statistics or percentages.\n\nFollow the anatomy with short, readable symptom callouts: “Persistent abdominal pain—often lower left”, “Fever”, “Symptoms need medical assessment”. A calm open diagnostic annotation says “Assessment may include blood tests and CT imaging.” Avoid implying that everyone needs a scan or that an image can diagnose abdominal pain.\n\nIn the airy lower space, a gently curved care pathway uses dark, legible text, sparse naturalistic clinical study accents and no pill brands or doses. “CARE DEPENDS ON SEVERITY” followed by “Uncomplicated cases may be managed at home with clinician guidance.” “Pain relief and temporary diet changes may help; antibiotics are not needed for everyone.” Then distinguish “COMPLICATIONS MAY NEED HOSPITAL CARE” with “An abscess may need drainage; a perforation or other severe problem may need surgery.” A tiny, clearly separate schematic complication study may illustrate an abscess adjacent to a pouch, explicitly labeled “Possible complication—not every case”, but omit it if it would crowd the hero.\n\nRetain a prominent but tasteful coral warning rule: “URGENT: worsening pain, fever or inability to keep fluids down.” Beneath it, “EMERGENCY: severe pain with vomiting, a swollen abdomen, or inability to pass stool or gas.” This text must remain comfortably readable, not a tiny legal footer. A small lower-priority prevention line may say “After recovery, discuss fiber, activity and not smoking with your clinician.” Keep acute-phase diet changes distinct from longer-term fiber advice. Bottom line: “General education—not a diagnosis or an individual treatment plan.”\n\nThe main title and hero anatomy must remain the visual anchors; supporting explanations should be concise, organically woven into open space, with graceful fine leader lines. Do not sacrifice the artwork to include every optional study. No bibliography, source URLs, watermark, logos, extra unsupported claims, generic icon dashboard or wall of text.",
+    "image": "images/2026-10-15-factual-infographic-factual-infographic-diverticulitis-when.jpg",
+    "thumb": "thumbs/2026-10-15-factual-infographic-factual-infographic-diverticulitis-when.webp",
+    "color": "#e4d1c1",
+    "date": "2026-10-15",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "diverticulitis-colon-pouch-inflammation",
+      "imageSha256": "89929578af31045f63beaf1b0c1f93374f56dbe5b11e558e1b658be6016fd64a",
+      "imageDHash": "8686e5c5aa36b4a8"
+    },
+    "factualInfographic": {
+      "topic": "diverticulitis",
+      "description": "An artwork-led anatomical guide to inflamed colon diverticula, the distinction from diverticulosis, symptoms, care and urgent warning signs.",
+      "sourceNote": "Verified against NIDDK definitions and treatment guidance and NHS clinical guidance: https://www.niddk.nih.gov/health-information/digestive-diseases/diverticulosis-diverticulitis/definition-facts https://www.niddk.nih.gov/health-information/digestive-diseases/diverticulosis-diverticulitis/treatment https://www.nhs.uk/conditions/diverticular-disease-and-diverticulitis/ Scope: colon pouches, inflammation, clinical assessment, severity-based care and warning signs.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-15T23:03:30Z",
+        "sources": [
+          {
+            "id": "D1",
+            "publisher": "National Institute of Diabetes and Digestive and Kidney Diseases (NIDDK)",
+            "title": "Definition & Facts for Diverticular Disease",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/digestive-diseases/diverticulosis-diverticulitis/definition-facts"
+          },
+          {
+            "id": "D2",
+            "publisher": "National Institute of Diabetes and Digestive and Kidney Diseases (NIDDK)",
+            "title": "Treatment for Diverticular Disease",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/digestive-diseases/diverticulosis-diverticulitis/treatment"
+          },
+          {
+            "id": "D3",
+            "publisher": "National Health Service (NHS)",
+            "title": "Diverticular disease and diverticulitis",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/diverticular-disease-and-diverticulitis/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Diverticula are pouches that push outward through weak spots in the colon wall, most often in the sigmoid colon.",
+            "sourceIds": [
+              "D1"
+            ]
+          },
+          {
+            "claim": "Diverticulosis means pouches are present; most people with diverticula do not develop symptoms or problems.",
+            "sourceIds": [
+              "D1",
+              "D3"
+            ]
+          },
+          {
+            "claim": "Diverticulitis means diverticula become inflamed; this is not an inevitable progression of diverticulosis.",
+            "sourceIds": [
+              "D1"
+            ]
+          },
+          {
+            "claim": "Symptoms can include severe constant abdominal pain, often in the lower left abdomen, and fever; the location is not universal.",
+            "sourceIds": [
+              "D3"
+            ]
+          },
+          {
+            "claim": "Assessment may include blood tests and CT imaging to clarify the diagnosis and distinguish other causes of symptoms.",
+            "sourceIds": [
+              "D3"
+            ]
+          },
+          {
+            "claim": "Uncomplicated diverticulitis may be managed at home under clinician guidance; treatment depends on severity and patient factors.",
+            "sourceIds": [
+              "D2"
+            ]
+          },
+          {
+            "claim": "Treatment may include clinician-selected pain relief and temporary dietary changes; antibiotics are not needed for every person.",
+            "sourceIds": [
+              "D2"
+            ]
+          },
+          {
+            "claim": "Severe disease or complications may need hospital treatment; abscess drainage or surgery can be necessary in selected cases.",
+            "sourceIds": [
+              "D1",
+              "D2",
+              "D3"
+            ]
+          },
+          {
+            "claim": "A colon-wall perforation or abscess is a possible complication, not the normal appearance of every case.",
+            "sourceIds": [
+              "D1",
+              "D3"
+            ]
+          },
+          {
+            "claim": "Worsening persistent pain, fever or vomiting that prevents keeping fluids down warrants prompt medical assessment.",
+            "sourceIds": [
+              "D3"
+            ]
+          },
+          {
+            "claim": "Severe abdominal pain with vomiting, a swollen abdomen or inability to pass stool or gas warrants emergency care.",
+            "sourceIds": [
+              "D3"
+            ]
+          },
+          {
+            "claim": "After the acute episode, clinician-advised fiber intake, physical activity and not smoking may lower future risk; no guaranteed prevention is claimed.",
+            "sourceIds": [
+              "D2"
+            ]
+          },
+          {
+            "claim": "This infographic provides general education, not a diagnosis or an individualized treatment plan.",
+            "sourceIds": [
+              "D2",
+              "D3"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-10-15-factual-infographic-factual-infographic-appendicitis-the-in",
     "title": "Factual infographic: Appendicitis — The Inflamed Cul-de-sac",
     "tests": "factual_subtype: medical-health-infographic; claim-level NIDDK/NHS evidence; organic anatomical composition; no non-Monday subjective review; archive_slot=2026-10-15T02:20; concept=appendicitis-inflamed-appendix-abdominal-pain; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=high, size=auto; factual_subtype: medical-health-infographic",
