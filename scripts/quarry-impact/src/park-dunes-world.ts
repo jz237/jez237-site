@@ -1,3 +1,4 @@
+import {createCopperfieldPlant} from './copperfield-plant';
 import {createKingswellClubhouse} from './kingswell-clubhouse';
 import {addCourseGroundDetail} from './course-materials';
 import {createCourseScenery,paintCourseGround} from './course-scenery';
@@ -43,7 +44,8 @@ export function createParkDunesWorld(id:'kingswell-park-v1'|'copperfield-dunes-v
  const scenery=createCourseScenery(course,paved?'park':'dunes');root.add(scenery.root);
 
  for(const [finish,matrices]of batches){const mesh=new T.InstancedMesh(boxGeometry,materials[finish],matrices.length);matrices.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.name=id+'_'+finish;mesh.castShadow=mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
+ const plant=paved?null:createCopperfieldPlant();if(plant)root.add(plant.root);
  const clubhouse=paved?createKingswellClubhouse():null;if(clubhouse)root.add(clubhouse.root);
  root.userData.solidRecords=course.solids;freezeSceneryTransforms(root);
- let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;clubhouse?.dispose();surfaceDetail.dispose();scenery.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
+ let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;plant?.dispose();clubhouse?.dispose();surfaceDetail.dispose();scenery.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
 }

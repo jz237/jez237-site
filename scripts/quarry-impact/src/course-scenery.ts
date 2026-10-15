@@ -78,7 +78,18 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
   const height=(r:number)=>{const zz=dz*(edge+r*56),ridge=(theme==='pass'?60:theme==='ridge'?38:theme==='canyon'?48:theme==='dunes'?24:19)*(1+.35*Math.sin(a*5)+.2*Math.cos(a*9));let y=r===0?course.height(dx*edge,dz*edge)-.12:course.height(dx*edge,dz*edge)+Math.sin(Math.min(1,r/5)*Math.PI*.62)*ridge+Math.sin(a*11+r)*2;if((theme==='coast'||theme==='port'||theme==='reservoir')&&zz>170)y=Math.min(y,Math.max(-6,-.12-(zz-180)*.18));return y;};
   return T.MathUtils.lerp(height(Math.floor(ring)),height(Math.ceil(ring)),ring%1)-.2;
  }
- function tree(x:number,z:number,size:number,pine:boolean){
+ // Build excluded decoration normally, then discard only its geometry. This
+ // preserves the random sequence and all distant scenery placements.
+ function decorateDunes(x:number,z:number,r:number,build:()=>void){
+  const excluded=theme==='dunes'&&[[-249.5,-91.5,34.5,19.5],[-247,-59,9,23]].some(([cx,cz,w,d])=>Math.abs(x-cx)<w+r*1.2&&Math.abs(z-cz)<d+r*1.2);
+  if(!excluded){build();return;}
+  const lengths=new Map([...batches].map(([key,b])=>[key,b.matrices.length])),placed=placements.length,cards=treeCards.length;
+  build();placements.length=placed;treeCards.length=cards;
+  for(const[key,b]of batches){const length=lengths.get(key);if(length===undefined)batches.delete(key);else{b.matrices.length=length;b.colors.length=length;}}
+ }
+ function tree(x:number,z:number,size:number,pine:boolean){decorateDunes(x,z,size*(pine?.3:.48),()=>treeShape(x,z,size,pine));}
+ function rock(x:number,z:number,size:number){decorateDunes(x,z,size*.75,()=>rockShape(x,z,size));}
+ function treeShape(x:number,z:number,size:number,pine:boolean){
   if(theme==='port'&&(z>160||(Math.abs(x)<225&&Math.abs(z)<180)))return;
   const r=size*(pine?.3:.48);
   if(theme==='park'&&Math.abs(x)<33+r&&Math.abs(z+211)<13+r)return;
@@ -93,7 +104,7 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
   if(pine){for(let tier=0;tier<3;tier++)add('cone','pine',x,y+size*(.45+tier*.19),z,size*(.68-tier*.13),size*.52,size*(.68-tier*.13),yaw+tier);}
   else{for(let lobe=0;lobe<4;lobe++){const a=yaw+lobe*2.2,offset=lobe?size*.2:0;add('leaf',lobe%2?'leaf':'pine',x+Math.cos(a)*offset,y+size*(lobe?.72:.94),z+Math.sin(a)*offset,size*.67,size*(lobe?.61:.57),size*.6,a);}}
  }
- function rock(x:number,z:number,size:number){if(!clear(x,z,size*.75,'rock'))return;const y=scenicHeight(x,z);add('rock','stone',x,y+size*.27,z,size*1.4,size*.8,size,random()*6.28);if(size>5)add('rock','stone',x+size*.36,y+size*.12,z-size*.25,size*.8,size*.5,size*.9,random()*6.28);}
+ function rockShape(x:number,z:number,size:number){if(!clear(x,z,size*.75,'rock'))return;const y=scenicHeight(x,z);add('rock','stone',x,y+size*.27,z,size*1.4,size*.8,size,random()*6.28);if(size>5)add('rock','stone',x+size*.36,y+size*.12,z-size*.25,size*.8,size*.5,size*.9,random()*6.28);}
  // Naturally staggered clusters, with a clear paddock on the southern side.
  for(let i=0;i<(theme==='port'?0:theme==='forest'?650:theme==='farm'?100:theme==='heath'?150:theme==='ridge'?125:theme==='dunes'?180:240);i++){
   const x=(random()-.5)*420,z=-85+random()*257;
