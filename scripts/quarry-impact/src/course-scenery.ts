@@ -14,7 +14,7 @@ const palettes={
  park:{ground:'#596847',patch:'#78805b',rock:0x858475,leaf:0x526337,pine:0x354b30,hill:0x546344,accent:'#bf4d30',title:'KINGSWELL MOTOR CLUB',subtitle:'GENTLEMEN START YOUR INSURANCE CLAIMS'},
  dunes:{ground:'#b59a67',patch:'#c9b17e',rock:0xaa9270,leaf:0x7b7950,pine:0x777449,hill:0xb09a72,accent:'#c46b27',title:'COPPERFIELD DIRT WEEKEND',subtitle:'AGGREGATE RESULTS / CRUSHING DISAPPOINTMENT'},
  canal:{ground:'#647156',patch:'#859077',rock:0x8b877a,leaf:0x596e40,pine:0x3b5336,hill:0x596950,accent:'#376e80',title:'MILLBROOK LOCKSIDE',subtitle:'LOCKS OPEN / BUMPERS OPTIONAL'},
- pass:{ground:'#6c7563',patch:'#89907a',rock:0x8b8b80,leaf:0x526545,pine:0x354b3b,hill:0x657262,accent:'#a85336',title:'GRANITE PASS RALLY',subtitle:'HIGH COUNTRY / MOTOR CLUB'},
+ pass:{ground:'#6c7563',patch:'#89907a',rock:0x8b8b80,leaf:0x526545,pine:0x354b3b,hill:0x657262,accent:'#a85336',title:'GRANITE PASS RALLY',subtitle:'ALTITUDE / ATTITUDE / RECOVERY FEES'},
 };
 /** Large, irregular ground patches and fine aggregate. Road paint is applied afterwards. */
 export function paintCourseGround(ctx:CanvasRenderingContext2D,width:number,height:number,theme:SceneryTheme){
@@ -63,10 +63,10 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
   placements.push({x,z,radius:0,kind,halfWidth:w/2,halfDepth:d/2});return true;
  }
  function scenicHeight(x:number,z:number){
-  if(theme!=='coast'&&theme!=='forest'&&theme!=='farm'&&theme!=='port'&&theme!=='park'&&theme!=='dunes')return course.height(x,z);
+  if(theme!=='coast'&&theme!=='forest'&&theme!=='farm'&&theme!=='port'&&theme!=='park'&&theme!=='dunes'&&theme!=='pass')return course.height(x,z);
   if(Math.abs(x)<=220&&Math.abs(z)<=180)return course.height(x,z);
   const a=Math.atan2(z,x),dx=Math.cos(a),dz=Math.sin(a),edge=1/Math.max(Math.abs(dx)/220,Math.abs(dz)/180),ring=(Math.hypot(x,z)-edge)/56;
-  const height=(r:number)=>{const zz=dz*(edge+r*56),ridge=(theme==='dunes'?24:19)*(1+.35*Math.sin(a*5)+.2*Math.cos(a*9));let y=r===0?course.height(dx*edge,dz*edge)-.12:course.height(dx*edge,dz*edge)+Math.sin(Math.min(1,r/5)*Math.PI*.62)*ridge+Math.sin(a*11+r)*2;if((theme==='coast'||theme==='port')&&zz>170)y=Math.min(y,Math.max(-6,-.12-(zz-180)*.18));return y;};
+  const height=(r:number)=>{const zz=dz*(edge+r*56),ridge=(theme==='pass'?60:theme==='dunes'?24:19)*(1+.35*Math.sin(a*5)+.2*Math.cos(a*9));let y=r===0?course.height(dx*edge,dz*edge)-.12:course.height(dx*edge,dz*edge)+Math.sin(Math.min(1,r/5)*Math.PI*.62)*ridge+Math.sin(a*11+r)*2;if((theme==='coast'||theme==='port')&&zz>170)y=Math.min(y,Math.max(-6,-.12-(zz-180)*.18));return y;};
   return T.MathUtils.lerp(height(Math.floor(ring)),height(Math.ceil(ring)),ring%1)-.2;
  }
  function tree(x:number,z:number,size:number,pine:boolean){
@@ -331,8 +331,46 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
    }
   }
  }else{
-  building(65,-158,38,16,5,'wood');stand(-88,-155);canopy(-28,-157,'red');canopy(-8,-157,'white');serviceTruck(112,-157,'red');
+  building(65,-166,38,16,5,'wood');stand(-88,-155);canopy(-28,-157,'red');canopy(-8,-157,'white');serviceTruck(112,-157,'red');
   for(const x of [-241,245])for(const z of [-60,35,125])rock(x,z,18+random()*17);
+  // Alpine rescue lodge: pitched roof, timber balcony and recovery garage.
+  if(clearRectangle(65,-166,42,22,'rescue-lodge')){
+   const y=course.height(65,-166);
+   for(const side of [-1,1]){
+    const roof=new T.Matrix4().makeRotationX(side*.38);roof.setPosition(65,y+7,-166+side*4.5);roof.scale(new T.Vector3(41,.45,10));
+    const batch=batches.get('box_metal')!;batch.matrices.push(roof);batch.colors.push(new T.Color(.9,.9,.9));
+   }
+   for(const side of [-1,1])add('gable','wood',65+side*19.1,y+5,-166,16,3.8,1,side*Math.PI/2);
+   box('stone',78,y+6,-168,2.2,7,2.2);
+   box('wood',65,y+1,-155.8,38,.35,3.5);
+   for(let x=47;x<=83;x+=3){box('wood',x,y+1.8,-154.3,.16,1.5,.16);}
+   box('wood',65,y+2.5,-154.3,38,.14,.14);
+   for(const x of [52,65,78]){box('metal',x,y+2.5,-157.8,7,3,.15);for(let yy=1.3;yy<=3.8;yy+=.5)box('white',x,y+yy,-157.7,6.8,.06,.08);}
+   box('white',65,y+4.5,-157.65,3.2,1.1,.12);box('red',65,y+4.5,-157.55,.25,.85,.1);box('red',65,y+4.5,-157.5,.85,.25,.1);
+  }
+  // Two small overlooks provide landmarks without narrowing racing/recovery space.
+  for(const [x,z]of [[-5,-30],[75,35]]){
+   if(!clearRectangle(x,z,16,12,'mountain-overlook'))continue;const y=course.height(x,z);
+   for(const dx of [-6,6])for(const dz of [-4,4])box('stone',x+dx,y+1.8,z+dz,1,3.6,1);
+   box('wood',x,y+3.6,z,14,.35,10);
+   for(const side of [-1,1]){
+    box('wood',x,y+4.8,z+side*4.8,14,.16,.16);
+    for(let dx=-6;dx<=6;dx+=3)box('wood',x+dx,y+4.2,z+side*4.8,.16,1.2,.16);
+    box('wood',x+side*6.8,y+4.8,z,.16,.16,10);
+   }
+   // Climbing steps stay inside the reserved footprint.
+   for(let i=0;i<6;i++)box('wood',x-5,y+.3+i*.6,z-4+i*1.2,2,.6,1.2);
+   box('metal',x+3,y+4.2,z, .2,1.2,.2);add('round','metal',x+3,y+4.9,z,.8,.25,.8);
+  }
+  // Snow poles, grit bins and a weather mast give the maintenance yard a purpose.
+  if(clearRectangle(-52,-158,22,16,'pass-maintenance')){
+   const y=course.height(-52,-158);
+   for(const x of [-60,-55,-50]){box('ochre',x,y+.8,-158,3,1.6,2.2);box('metal',x,y+1.7,-158,3.2,.2,2.4);}
+   for(let i=0;i<7;i++){box('red',-61+i*1.4,y+2,-164,.14,4,.14);box('white',-61+i*1.4,y+3,-164,.17,.7,.17);}
+   box('metal',-44,y+6,-160,.25,12,.25);box('white',-44,y+9,-160,2.2,.5,1.2);box('metal',-44,y+12,-160,3,.1,.1);
+   for(const dx of [-1.4,1.4])add('round','white',-44+dx,y+12.2,-160,.5,.4,.5);
+  }
+
  }
  // Fences and marshal huts sit beyond the existing collision barriers.
  for(let i=0;i<course.samples.length;i+=3){
