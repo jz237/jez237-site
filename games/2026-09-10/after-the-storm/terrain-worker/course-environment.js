@@ -2,12 +2,13 @@
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 export function tideLevel(course,time){
  if(course.id!=='tempest')return 0;
+ if(course.sourceWaterDatum)return course.sourceWaterDatum.initial;
  // An intentionally compressed ebb over one race, continuous at lap crossings.
  const u=clamp((time-20)/140,0,1);
  return .35-1.4*u*u*(3-2*u);
 }
 export function obstaclePosition(obstacle,time){
- if(obstacle.type!=='ice')return {x:obstacle.x,z:obstacle.z};
+ if(obstacle.fixed||obstacle.type!=='ice')return {x:obstacle.x,z:obstacle.z};
  const phase=obstacle.x*.031+obstacle.z*.017;
  return {x:obstacle.x+Math.sin(time*.023+phase)*2.4,z:obstacle.z+Math.sin(time*.017+phase*1.3)*1.8};
 }
