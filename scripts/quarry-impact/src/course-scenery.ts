@@ -3,15 +3,17 @@ import * as T from 'three';
 import type {createCountyCourse} from './county-course';
 
 type Course=ReturnType<typeof createCountyCourse>;
-export type SceneryTheme='park'|'dunes'|'canal'|'pass'|'coast'|'forest';
-type Shape='box'|'round'|'cone'|'rock'|'leaf';
+export type SceneryTheme='park'|'dunes'|'canal'|'pass'|'coast'|'forest'|'farm'|'port';
+type Shape='box'|'round'|'cone'|'rock'|'leaf'|'gable';
 type Finish='bark'|'leaf'|'pine'|'stone'|'sand'|'wood'|'metal'|'white'|'red'|'ochre'|'glass'|'rubber';
 const palettes={
+ port:{ground:'#85877d',patch:'#a6a392',rock:0x888b7c,leaf:0x637252,pine:0x455b42,hill:0x7b8470,accent:'#d09239',title:'SALTMARSH PORT RALLYCROSS',subtitle:'IMPORTS / EXPORTS / WRITE-OFFS'},
+ farm:{ground:'#7c8050',patch:'#a7a16c',rock:0x918573,leaf:0x62723e,pine:0x455c35,hill:0x758352,accent:'#a84e31',title:'DUNMERE FARM CIRCUIT',subtitle:'FRESH DENTS / LOCALLY GROWN'},
  coast:{ground:'#a19e75',patch:'#bcb48d',rock:0x938c79,leaf:0x69764b,pine:0x48614e,hill:0x7e886b,accent:'#377886',title:'SEABROOK COAST CIRCUIT',subtitle:'SEA AIR / BENT BODYWORK'},
  forest:{ground:'#596c48',patch:'#7b895d',rock:0x827b6b,leaf:0x536836,pine:0x3b5138,hill:0x51674b,accent:'#bd833a',title:'HAZELWOOD FOREST RALLY',subtitle:'LOGGING MILES / LOSING MIRRORS'},
- park:{ground:'#596847',patch:'#78805b',rock:0x858475,leaf:0x526337,pine:0x354b30,hill:0x546344,accent:'#bf4d30',title:'KINGSWELL MOTOR CLUB',subtitle:'PARK CIRCUIT / EST. 1978'},
- dunes:{ground:'#b59a67',patch:'#c9b17e',rock:0xaa9270,leaf:0x7b7950,pine:0x777449,hill:0xb09a72,accent:'#c46b27',title:'COPPERFIELD DIRT WEEKEND',subtitle:'DUNES RALLY / FULL CONTACT'},
- canal:{ground:'#647156',patch:'#859077',rock:0x8b877a,leaf:0x596e40,pine:0x3b5336,hill:0x596950,accent:'#376e80',title:'MILLBROOK LOCKSIDE',subtitle:'CANAL CIRCUIT / MOTOR FESTIVAL'},
+ park:{ground:'#596847',patch:'#78805b',rock:0x858475,leaf:0x526337,pine:0x354b30,hill:0x546344,accent:'#bf4d30',title:'KINGSWELL MOTOR CLUB',subtitle:'GENTLEMEN START YOUR INSURANCE CLAIMS'},
+ dunes:{ground:'#b59a67',patch:'#c9b17e',rock:0xaa9270,leaf:0x7b7950,pine:0x777449,hill:0xb09a72,accent:'#c46b27',title:'COPPERFIELD DIRT WEEKEND',subtitle:'AGGREGATE RESULTS / CRUSHING DISAPPOINTMENT'},
+ canal:{ground:'#647156',patch:'#859077',rock:0x8b877a,leaf:0x596e40,pine:0x3b5336,hill:0x596950,accent:'#376e80',title:'MILLBROOK LOCKSIDE',subtitle:'LOCKS OPEN / BUMPERS OPTIONAL'},
  pass:{ground:'#6c7563',patch:'#89907a',rock:0x8b8b80,leaf:0x526545,pine:0x354b3b,hill:0x657262,accent:'#a85336',title:'GRANITE PASS RALLY',subtitle:'HIGH COUNTRY / MOTOR CLUB'},
 };
 /** Large, irregular ground patches and fine aggregate. Road paint is applied afterwards. */
@@ -30,7 +32,8 @@ export function paintCourseGround(ctx:CanvasRenderingContext2D,width:number,heig
 export function createCourseScenery(course:Course,theme:SceneryTheme){
  const root=new T.Group();root.name=course.id+'_scenery';const p=palettes[theme];
  let seed=8713+theme.length*659;const random=()=>((seed=(Math.imul(seed,1664525)+1013904223)>>>0)/4294967296);
- const geometries:Record<Shape,T.BufferGeometry>={box:new T.BoxGeometry(1,1,1),round:new T.CylinderGeometry(.5,.5,1,8),cone:new T.ConeGeometry(.5,1,9),rock:new T.IcosahedronGeometry(.5,1),leaf:new T.IcosahedronGeometry(.5,2)};
+ const geometries:Record<Shape,T.BufferGeometry>={gable:new T.BufferGeometry().setAttribute('position',new T.Float32BufferAttribute([-.5,0,0,.5,0,0,0,1,0],3)),box:new T.BoxGeometry(1,1,1),round:new T.CylinderGeometry(.5,.5,1,8),cone:new T.ConeGeometry(.5,1,9),rock:new T.IcosahedronGeometry(.5,1),leaf:new T.IcosahedronGeometry(.5,2)};
+ geometries.gable.computeVertexNormals();
  // Uneven silhouettes avoid identical smooth balls and regularly stacked cubes.
  for(const shape of ['rock','leaf']as const){const attr=geometries[shape].getAttribute('position');for(let i=0;i<attr.count;i++){const x=attr.getX(i),y=attr.getY(i),z=attr.getZ(i),r=1+.12*Math.sin(x*31+y*17+z*23);attr.setXYZ(i,x*r,y*r,z*r);}geometries[shape].computeVertexNormals();if(shape==='leaf'){const n=geometries[shape].getAttribute('normal');for(let i=0;i<n.count;i++){const v=new T.Vector3(attr.getX(i),attr.getY(i),attr.getZ(i)).normalize();n.setXYZ(i,v.x,v.y,v.z);}}}
  const colors:Record<Finish,number>={bark:0x66513d,leaf:p.leaf,pine:p.pine,stone:p.rock,sand:0xc8b482,wood:0x8b7558,metal:0x505d60,white:0xcfc7ac,red:0x984636,ochre:0xc59242,glass:0x354b53,rubber:0x2a302e};
@@ -60,23 +63,24 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
   placements.push({x,z,radius:0,kind,halfWidth:w/2,halfDepth:d/2});return true;
  }
  function scenicHeight(x:number,z:number){
-  if(theme!=='coast'&&theme!=='forest')return course.height(x,z);
+  if(theme!=='coast'&&theme!=='forest'&&theme!=='farm'&&theme!=='port'&&theme!=='park'&&theme!=='dunes')return course.height(x,z);
   if(Math.abs(x)<=220&&Math.abs(z)<=180)return course.height(x,z);
   const a=Math.atan2(z,x),dx=Math.cos(a),dz=Math.sin(a),edge=1/Math.max(Math.abs(dx)/220,Math.abs(dz)/180),ring=(Math.hypot(x,z)-edge)/56;
-  const height=(r:number)=>{const zz=dz*(edge+r*56),ridge=19*(1+.35*Math.sin(a*5)+.2*Math.cos(a*9));let y=r===0?course.height(dx*edge,dz*edge)-.12:course.height(dx*edge,dz*edge)+Math.sin(Math.min(1,r/5)*Math.PI*.62)*ridge+Math.sin(a*11+r)*2;if(theme==='coast'&&zz>170)y=Math.min(y,Math.max(-6,-.12-(zz-180)*.18));return y;};
+  const height=(r:number)=>{const zz=dz*(edge+r*56),ridge=(theme==='dunes'?24:19)*(1+.35*Math.sin(a*5)+.2*Math.cos(a*9));let y=r===0?course.height(dx*edge,dz*edge)-.12:course.height(dx*edge,dz*edge)+Math.sin(Math.min(1,r/5)*Math.PI*.62)*ridge+Math.sin(a*11+r)*2;if((theme==='coast'||theme==='port')&&zz>170)y=Math.min(y,Math.max(-6,-.12-(zz-180)*.18));return y;};
   return T.MathUtils.lerp(height(Math.floor(ring)),height(Math.ceil(ring)),ring%1)-.2;
  }
  function tree(x:number,z:number,size:number,pine:boolean){
+  if(theme==='port'&&(z>160||(Math.abs(x)<225&&Math.abs(z)<180)))return;
   const r=size*(pine?.3:.48);if(!clear(x,z,r,'tree'))return;
   const y=scenicHeight(x,z),yaw=random()*6.28;
-  if(typeof document!=='undefined'&&(theme==='coast'||theme==='forest'||course.distance(x,z)>40)){treeCards.push({x,y,z,size,kind:pine?(treeCards.length%2?'pine':'spruce'):'maple'});return;}
+  if(typeof document!=='undefined'&&(theme==='coast'||theme==='forest'||theme==='farm'||theme==='park'||course.distance(x,z)>40)){treeCards.push({x,y,z,size,kind:pine?(treeCards.length%2?'pine':'spruce'):'maple'});return;}
   add('round','bark',x,y+size*.36,z,.3+size*.04,size*.72,.3+size*.04);
   if(pine){for(let tier=0;tier<3;tier++)add('cone','pine',x,y+size*(.45+tier*.19),z,size*(.68-tier*.13),size*.52,size*(.68-tier*.13),yaw+tier);}
   else{for(let lobe=0;lobe<4;lobe++){const a=yaw+lobe*2.2,offset=lobe?size*.2:0;add('leaf',lobe%2?'leaf':'pine',x+Math.cos(a)*offset,y+size*(lobe?.72:.94),z+Math.sin(a)*offset,size*.67,size*(lobe?.61:.57),size*.6,a);}}
  }
  function rock(x:number,z:number,size:number){if(!clear(x,z,size*.75,'rock'))return;const y=scenicHeight(x,z);add('rock','stone',x,y+size*.27,z,size*1.4,size*.8,size,random()*6.28);if(size>5)add('rock','stone',x+size*.36,y+size*.12,z-size*.25,size*.8,size*.5,size*.9,random()*6.28);}
  // Naturally staggered clusters, with a clear paddock on the southern side.
- for(let i=0;i<(theme==='forest'?650:theme==='dunes'?180:240);i++){
+ for(let i=0;i<(theme==='port'?0:theme==='forest'?650:theme==='farm'?100:theme==='dunes'?180:240);i++){
   const x=(random()-.5)*420,z=-85+random()*257;
   if(theme==='dunes'){
    if(i%4===0)rock(x,z,1.5+random()*3.5);
@@ -118,10 +122,86 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
  // Venue-specific southern paddocks are visible from the grid and race cameras.
  if(theme==='park'){
   building(38,-158,55,17,6,'white');stand(-85,-155);canopy(-30,-157,'red');canopy(-12,-157,'ochre');serviceTruck(99,-157,'red');
+  // Club pits face the grid, with roller doors, bays and an elevated timing room.
+  for(const x of [18,28,38,48,58]){
+   box('metal',x,2.2,-149.42,7.4,4.2,.15);
+   for(let h=.5;h<4.2;h+=.4)box('white',x,h,-149.3,7.2,.07,.12);
+   box('red',x,4.7,-149.2,8,.55,.2);
+   box('white',x,1,-146.9,7.5,.15,.2);
+  }
+  if(clearRectangle(38,-158,18,13,'timing-tower')){
+   box('white',38,8,-158,17,4,12);box('glass',38,8.4,-151.9,15,2.1,.12);
+   for(const x of [30,34,38,42,46])box('white',x,8.4,-151.7,.16,2.4,.2);
+   box('red',38,10.2,-158,19,.45,14);
+   box('metal',38,12,-158,.18,3.2,.18);box('ochre',39.7,13,-158,3.4,1.3,.08);
+  }
+  // An old park bandstand and picnic terraces turn the infield into a venue.
+  for(const [x,z]of [[0,-30],[-80,-45],[78,0]]){
+   if(!clear(x,z,10,'park-pavilion'))continue;const y=course.height(x,z);
+   add('round','stone',x,y+.35,z,17,.7,17);
+   for(let i=0;i<8;i++){const a=i*Math.PI/4;box('white',x+Math.cos(a)*6,y+2.8,z+Math.sin(a)*6,.28,5,.28);}
+   add('cone','red',x,y+6.1,z,19,3.2,19,Math.PI/8);
+   add('round','white',x,y+4.9,z,17,.4,17);
+   box('white',x,y+8.2,z,.18,2,.18);
+  }
+  for(const [x,z]of [[-36,-35],[-18,-35],[37,-35],[55,-35],[-220,70],[220,50]]){
+   if(!clearRectangle(x,z,9,7,'picnic-area'))continue;const y=scenicHeight(x,z);
+   box('wood',x,y+1,z,5,.18,1.6);
+   for(const side of [-1,1]){
+    box('wood',x,y+.55,z+side*1.45,5,.16,.55);
+    for(const dx of [-1.7,1.7]){box('metal',x+dx,y+.5,z+side*.5,.12,1,.12);box('metal',x+dx,y+.25,z+side*1.45,.12,.5,.12);}
+   }
+  }
+  for(const x of [-112,125]){
+   const z=-162;if(!clear(x,z,5,'club-clock'))continue;const y=course.height(x,z);
+   box('stone',x,y+2,z,3.6,4,3.6);box('white',x,y+5.3,z,4.4,2.6,4.4);
+   box('metal',x,y+5.3,z+2.23,3.7,2.1,.12);
+   box('white',x,y+5.6,z+2.31,.09,.65,.08);box('white',x+.5,y+5.3,z+2.31,1,.09,.08);
+   add('cone','red',x,y+7.4,z,6,2,6,Math.PI/4);
+  }
+
  }else if(theme==='dunes'){
   building(70,-158,34,14,4.5,'wood');stand(-95,-155);for(const x of [-40,-20,0])canopy(x,-156,x===-20?'red':'ochre');serviceTruck(110,-157,'ochre');
-  // Open-pit machinery beyond the eastern perimeter.
-  const x=243,z=-48,y=course.height(x,z);box('rubber',x,y+.7,z,9,1.4,5);box('ochre',x,y+2,z,7,2,4);box('glass',x-2,y+3.7,z,2.8,2.4,3);box('ochre',x+4,y+5,z,1,7,1);box('metal',x+8,y+8,z,9,.8,1.3);box('rubber',x+12,y+5,z,1,5,1);box('ochre',x+12,y+2,z,3,2,4);
+  // Industrial landmarks use shared batches and stay beyond the racing corridor.
+  function beam(finish:Finish,a:T.Vector3,b:T.Vector3,width:number,depth=width){
+   const direction=b.clone().sub(a),rotation=new T.Quaternion().setFromUnitVectors(new T.Vector3(0,1,0),direction.clone().normalize());
+   const m=new T.Matrix4().compose(a.clone().add(b).multiplyScalar(.5),rotation,new T.Vector3(width,direction.length(),depth));
+   const key='box_'+finish,batch=batches.get(key)??{shape:'box' as const,finish,matrices:[],colors:[]};batch.matrices.push(m);batch.colors.push(new T.Color(.94,.94,.94));batches.set(key,batch);
+  }
+  const x=230,z=-48,y=scenicHeight(x,z);
+  if(clearRectangle(x+4,z,28,12,'excavator')){
+   // Separate crawler tracks, cab, counterweight, jointed boom and toothed bucket.
+   for(const side of [-1,1]){
+    box('rubber',x,y+.8,z+side*2.2,10,1.6,1.5);
+    for(let dx=-4.5;dx<=4.5;dx+=.65)box('metal',x+dx,y+1.65,z+side*2.2,.25,.16,1.6);
+   }
+   add('round','metal',x,y+1.8,z,4,.8,4);box('ochre',x-1.5,y+2.8,z,7,2,4.7);
+   box('ochre',x-2,y+4.4,z-1,3.4,2.4,2.2);box('glass',x-1.9,y+4.6,z-2.13,2.7,1.6,.1);
+   box('glass',x-.24,y+4.6,z-1,.1,1.6,1.8);box('metal',x-2,y+5.7,z-1,3.6,.22,2.5);
+   const pivot=new T.Vector3(x+1,y+3.2,z+1),elbow=new T.Vector3(x+7,y+11,z+1),tip=new T.Vector3(x+12,y+3,z+1);
+   beam('ochre',pivot,elbow,1.4,1.6);beam('ochre',elbow,tip,1,1.3);
+   beam('metal',new T.Vector3(x+2,y+3,z+.1),new T.Vector3(x+6,y+8.5,z+.1),.32);
+   beam('metal',new T.Vector3(x+7.5,y+10,z+.1),new T.Vector3(x+11,y+5,z+.1),.25);
+   box('metal',x+12,y+2.2,z+1,3.8,1.5,3.8);for(const dz of [-.4,.5,1.4,2.3])box('metal',x+14,y+1.6,z+dz,1.2,.25,.35);
+   box('metal',x-3.5,y+4.2,z+1.4,.25,2,.25);
+  }
+  const cx=-239,cz=12,cy=scenicHeight(cx,cz);
+  if(clearRectangle(cx,cz,20,65,'aggregate-conveyor')){
+   // Raised feed hopper, steel supports and a sloping conveyor to the stockpile.
+   for(const dx of [-6,6])for(const dz of [-5,5])box('metal',cx+dx,cy+5,cz-20+dz,.5,10,.5);
+   box('red',cx,cy+10,cz-20,15,3,13);box('metal',cx,cy+11.6,cz-20,13,.2,11);
+   for(const side of [-1,1]){
+    beam('ochre',new T.Vector3(cx+side*2.5,cy+8,cz-16),new T.Vector3(cx+side*2.5,cy+15,cz+24),.4);
+    for(let dz=-12;dz<=24;dz+=9){const h=8+(dz+16)*7/40;box('metal',cx+side*2.5,cy+h/2,cz+dz,.3,h,.3);}
+   }
+   beam('rubber',new T.Vector3(cx,cy+8,cz-16),new T.Vector3(cx,cy+15,cz+24),4.4,.35);
+   for(let dz=-12;dz<=24;dz+=4){const h=8+(dz+16)*7/40;box('metal',cx,cy+h,cz+dz,5,.15,.25);}
+  }
+  for(const [px,pz,size]of [[-239,57,20],[239,63,18],[-40,-35,11],[40,-35,13]]){
+   if(!clear(px,pz,size,'aggregate-pile'))continue;const py=scenicHeight(px,pz);
+   add('cone','sand',px,py+size*.27,pz,size*1.8,size*.65,size*1.7,Math.PI/7);
+   for(let i=0;i<7;i++){const angle=i*Math.PI*2/7;add('rock','stone',px+Math.cos(angle)*size*.68,py+.6,pz+Math.sin(angle)*size*.62,2.5,1.4,2.2,angle);}
+  }
  }else if(theme==='canal'){
   building(-77,-158,48,16,7,'red');building(65,-158,48,16,6,'red');stand(-10,-155);canopy(22,-157,'ochre');serviceTruck(112,-157,'white');
   // Quayside cranes, bollards, warehouse tanks and a towpath footbridge.
@@ -129,6 +209,105 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
   for(let x=-60;x<=60;x+=12)for(const z of [-17,7])add('round','metal',x,1.1,z,.45,.85,.45);
   box('wood',-18,3.8,-5,4,.5,26);for(const x of [-20, -16]){box('metal',x,4.8,-5,.13,.13,26);for(let z=-18;z<=8;z+=3)box('metal',x,4.3,z,.12,1,.12);}
   for(const x of [-105,105]){add('round','white',x,4.5,-50,10,9,10);add('cone','metal',x,9.3,-50,10,1.6,10);}
+  // Moored narrowboats share the canal's existing hulls and leave the race route clear.
+  for(const x of [-38,10,42]){
+   clearRectangle(x,-5,22,8,'narrowboat');
+   box('wood',x,1.55,-5,19,.18,5.6);box('white',x+3,2.82,-5,9,.2,5.4);
+   for(const side of [-1,1]){
+    for(const dx of [0,2.3,4.6])box('glass',x+dx,2.15,-5+side*2.53,1.5,.7,.08);
+    box('white',x,1.1,-5+side*3.03,18,.18,.08);
+    for(const dx of [-8,8])add('round','rubber',x+dx,1,-5+side*3.15,.65,1.1,.65);
+    box('metal',x-6,2.1,-5+side*2.5,6,.1,.1);
+    for(const dx of [-9,-3])box('metal',x+dx,1.85,-5+side*2.5,.1,.6,.1);
+   }
+   box('metal',x+4,3.35,-5,.35,1,.35);add('round','red',x-6,1.85,-5,1.3,.45,1.3);
+  }
+  // Lock gates carry timber panels, steel straps, balance beams and winding pedestals.
+  for(const x of [-62,62]){
+   clearRectangle(x,-5,8,28,'lock-gate');
+   for(const side of [-1,1]){
+    const z=-5+side*5;
+    box('wood',x,1.2,z,.7,2.4,9.7);for(const y of [.5,1.8])box('metal',x+.4,y,z,.15,.2,9.7);
+    box('white',x,2.6,-5+side*12,.7,.6,5);
+    box('metal',x+2,1.8,-5+side*12,.35,2,.35);box('ochre',x+2,2.8,-5+side*12,1.4,.18,.25);
+   }
+  }
+  // Glazed lock keeper's office overlooks the towpath.
+  if(clearRectangle(0,-39,16,12,'lock-office')){
+   const y=course.height(0,-39);box('red',0,y+2.5,-39,14,5,10);box('metal',0,y+5.2,-39,16,.5,12);
+   for(const x of [-4,4]){box('white',x,y+3,-33.94,3,2,.12);box('glass',x,y+3,-33.84,2.6,1.6,.12);}
+   box('wood',0,y+1.6,-33.9,1.6,3.2,.15);box('white',0,y+4.4,-33.8,9,.45,.15);
+  }
+ }else if(theme==='port'){
+  building(62,-158,48,18,8,'metal');stand(-88,-155);canopy(-30,-157,'ochre');canopy(-10,-157,'white');serviceTruck(112,-157,'red');
+  function container(x:number,z:number,y:number,finish:Finish){
+   box(finish,x,y+1.5,z,22,3,8);
+   for(const side of [-1,1]){
+    for(let rib=-10;rib<=10;rib+=1.5)box('metal',x+rib,y+1.5,z+side*4.03,.11,2.8,.1);
+    box('white',x+side*10.96,y+1.5,z,.1,2.8,7.7);
+    for(const dz of [-2,2])box('metal',x+side*11.03,y+1.5,z+dz,.13,2.7,.12);
+   }
+   for(const zside of [-4,4])box('metal',x,y+.15,z+zside,22,.18,.12);
+  }
+  // Containers leave generous recovery lanes between the dockside esses.
+  for(const [x,z]of [[-65,-40],[-35,-40],[-65,-5],[-35,-5],[25,-42],[55,-42],[20,12],[50,12],[-212,15],[212,50]]){
+   if(!clearRectangle(x,z,24,10,'container-stack'))continue;
+   container(x,z,0,'red');container(x,z,3,'ochre');
+  }
+  // Gantries over the quay, with open frames, diagonal bracing and suspended spreaders.
+  for(const x of [-120,110]){
+   const z=191;if(!clearRectangle(x,z,36,60,'dock-crane'))continue;
+   for(const dx of [-14,14])for(const dz of [-22,22]){box('ochre',x+dx,16,z+dz,1.5,32,1.5);box('metal',x+dx,1,z+dz,3,2,5);}
+   for(const dx of [-14,14])box('ochre',x+dx,33,z,1.8,2,60);
+   for(const dz of [-28,28])box('ochre',x,33,z+dz,30,2,1.8);
+   for(const dz of [-26,26])box('ochre',x,23,z+dz,30,1,1.2);
+   for(const dx of [-14,14])box('metal',x+dx,35,z,.3,.3,60);
+   box('white',x-10,29,z-15,5,4,5);box('glass',x-10,29.5,z-17.6,4,2,.15);
+   for(const dx of [-8,8])box('metal',x+dx,22,z+22,.1,20,.1);
+   box('ochre',x,11.5,z+22,20,1,6);
+   for(const side of [-1,1]){add('box','metal',x,16,z+side*22,1,1,1);const b=batches.get('box_metal')!;const tilt=new T.Quaternion().setFromAxisAngle(new T.Vector3(0,0,1),side*.72);b.matrices[b.matrices.length-1].compose(new T.Vector3(x,16,z+side*22),tilt,new T.Vector3(.5,39,.5));}
+  }
+  box('stone',0,-.1,177,440,.6,9);
+  for(let x=-210;x<=210;x+=15){add('round','metal',x,.7,176,.7,1.4,.7);box('metal',x,.9,176,1.4,.2,.3);}
+  // Cargo ship with a tapered hull, bridge windows, masts and loaded deck.
+  clearRectangle(0,245,150,32,'cargo-ship');
+  box('metal',0,5.6,245,124,.5,25);
+  for(const x of [-22,4,30])for(const z of [239,251]){container(x,z,5.9,'red');container(x,z,8.9,'ochre');}
+  for(let deck=0;deck<3;deck++){box('white',-47,7.5+deck*3,245,18,3,22);box('glass',-37.9,8+deck*3,245,.12,1.4,19);for(const side of [-1,1])box('glass',-47,8+deck*3,245+side*11.05,16,1.4,.12);}
+  box('metal',-47,16,245,21,.5,25);box('ochre',-57,18,245,4,7,5);box('metal',-57,21.8,245,4.4,.6,5.4);box('metal',-43,20,245,.4,8,.4);box('white',-43,22,245,9,.3,.3);
+  for(const side of [-1,1]){box('white',0,6.7,245+side*13,130,.12,.12);for(let x=-65;x<=65;x+=5)box('white',x,6.1,245+side*13,.12,1.2,.12);}
+  // Fuel tanks and pipes beyond the western fence, visible on the return straight.
+  for(const z of [-54,-28]){if(!clear(-244,z,12,'fuel-tank'))continue;add('round','white',-244,7,z,20,14,20);add('cone','metal',-244,14.7,z,20,1.4,20);for(const y of [2,12])add('round','metal',-244,y,z,20.2,.16,20.2);box('ochre',-232,2,z,6,.4,.4);}
+ }else if(theme==='farm'){
+  building(62,-158,42,17,6,'red');stand(-88,-155);canopy(-30,-157,'ochre');canopy(-10,-157,'white');serviceTruck(112,-157,'white');
+  // Gabled barns with timber doors and white framing, viewed from both long sides.
+  for(const [x,z,w,d]of [[-205,0,18,28],[205,0,18,28],[62,-158,42,17]]){
+   if(x!==62){if(!clearRectangle(x,z,w+3,d+3,'barn'))continue;const y=course.height(x,z);box('red',x,y+3,z,w,6,d);}
+   const y=course.height(x,z);
+   for(const side of [-1,1]){
+    const roof=new T.Matrix4().makeRotationZ(-side*.46);roof.setPosition(x+side*w*.25,y+6+w*.29*Math.sin(.46),z);roof.scale(new T.Vector3(w*.58,.35,d+2));const k='box_metal',b=batches.get(k)!;b.matrices.push(roof);b.colors.push(new T.Color(.92,.92,.92));
+    add('gable','red',x,y+6,z+side*(d/2+.02),w,w*.5*Math.tan(.46),1,side===1?0:Math.PI);
+    box('wood',x,y+2.3,z+side*(d/2+.08),6,4.6,.16);
+    for(const dx of [-3.1,0,3.1])box('white',x+dx,y+2.4,z+side*(d/2+.2),.16,4.8,.18);
+    box('white',x,y+4.8,z+side*(d/2+.2),6.4,.2,.18);
+    for(const dx of [-w/2,w/2])box('white',x+dx,y+3,z+side*d/2,.25,6,.25);
+   }
+  }
+  // Grain silos use cylindrical shells, conical caps, rings and an access ladder.
+  for(const x of [-42, -24]){const z=-166;if(!clear(x,z,6,'grain-silo'))continue;const y=course.height(x,z);add('round','white',x,y+6,z,9,12,9);add('cone','metal',x,y+13.2,z,10,2.4,10);
+   for(let ring=1;ring<12;ring+=2)add('round','metal',x,y+ring,z,9.15,.12,9.15);
+   for(const dx of [-.55,.55])box('metal',x+dx,y+6,z+4.6,.09,12,.09);for(let h=.4;h<12;h+=.45)box('metal',x,y+h,z+4.64,1.2,.08,.08);
+  }
+  // Round straw bales and cut ends face the circuit rather than appearing as crates.
+  const cylinder=(finish:Finish,x:number,y:number,z:number,w:number,length:number)=>{
+   const m=new T.Matrix4().makeRotationX(Math.PI/2);m.setPosition(x,y,z);m.scale(new T.Vector3(w,length,w));const key='round_'+finish,b=batches.get(key)??{shape:'round' as const,finish,matrices:[],colors:[]};b.matrices.push(m);b.colors.push(new T.Color(.95,.91,.8));batches.set(key,b);
+  };
+  for(let i=0;i<32;i++){const x=-190+i*12,z=150+Math.sin(i*.7)*8;if(!clear(x,z,2,'hay-bale'))continue;const y=course.height(x,z);cylinder('ochre',x,y+1.25,z,2.5,2.3);for(const end of [-1,1])cylinder('sand',x,y+1.25,z+end*1.17,2.22,.05);}
+  // A parked tractor and open hay trailer sit in a checked off-road clearing.
+  const tx=60,tz=14;if(clear(tx,tz,10,'tractor')){const y=course.height(tx,tz);box('red',tx,y+1.4,tz,2.2,1.3,4.8);box('red',tx,y+2.1,tz+1.5,1.8,1.4,2.2);box('glass',tx,y+3,tz-1,1.9,2.2,2);box('white',tx,y+4.2,tz-1,2.4,.2,2.6);box('metal',tx+.7,y+3.2,tz+2,.16,2,.16);
+   for(const side of [-1,1])for(const [dz,r]of [[-1.7,1.4],[1.8,.85]]){const m=new T.Matrix4().makeRotationZ(Math.PI/2);m.setPosition(tx+side*1.4,y+r,tz+dz);m.scale(new T.Vector3(r*2,.75,r*2));const key='round_rubber',b=batches.get(key)??{shape:'round' as const,finish:'rubber' as const,matrices:[],colors:[]};b.matrices.push(m);b.colors.push(new T.Color(.8,.8,.8));batches.set(key,b);}
+   box('metal',tx,y+1,tz-5.8,.25,.25,4);box('wood',tx,y+1.5,tz-8,3.2,.4,5);for(const side of [-1,1])box('wood',tx+side*1.6,y+2,tz-8,.15,1,5);for(const x of [-.8,.8])cylinder('ochre',tx+x,y+2.3,tz-8,1.5,3.8);
+  }
  }else if(theme==='coast'){
   building(52,-158,48,16,5,'white');stand(-85,-155);canopy(-28,-157,'red');canopy(-8,-157,'white');serviceTruck(105,-157,'white');
   // A round, banded lighthouse and wraparound lantern replace the old stack of boxes.
@@ -163,7 +342,11 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
  for(const t of [.12,.38,.64,.86]){const a=course.point(t),b=course.point(t+.001),yaw=Math.atan2(b.x-a.x,b.z-a.z),x=a.x+Math.cos(yaw)*29,z=a.z-Math.sin(yaw)*29;if(clear(x,z,2.5,'marshal')){const y=course.height(x,z);box('white',x,y+1.5,z,3,3,3,yaw);box('ochre',x,y+3.2,z,3.5,.4,3.5,yaw);box('glass',x,y+2,z+1.51,2,1,.1,yaw);}}
 
  const ownedGeometries:T.BufferGeometry[]=[],ownedMaterials:T.Material[]=[],textures:T.Texture[]=[];
- if(theme==='coast'){
+ if(theme==='port'){
+  const outline=new T.Shape();outline.moveTo(-68,-13);outline.lineTo(52,-13);outline.lineTo(74,0);outline.lineTo(52,13);outline.lineTo(-68,13);outline.closePath();
+  const hullGeometry=new T.ExtrudeGeometry(outline,{depth:6,bevelEnabled:false,steps:1});hullGeometry.rotateX(-Math.PI/2);const hullMaterial=new T.MeshStandardMaterial({color:0x4d5555,roughness:.8,metalness:.25});const hull=new T.Mesh(hullGeometry,hullMaterial);hull.name=course.id+'_cargo_hull';hull.position.set(0,-.4,245);hull.castShadow=hull.receiveShadow=true;root.add(hull);ownedGeometries.push(hullGeometry);ownedMaterials.push(hullMaterial);
+ }
+ if(theme==='coast'||theme==='port'){
   const waterGeometry=new T.PlaneGeometry(2600,1600);waterGeometry.rotateX(-Math.PI/2);
   const waterMaterial=new T.MeshStandardMaterial({color:0x537f82,roughness:.38,metalness:.12});
   // Static world-space ripples remain stable in demo and driving cameras.
@@ -183,7 +366,7 @@ diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.73,.8,.74),foam*.65);`);};
   const ridge=(theme==='pass'?60:theme==='dunes'?24:19)*(1+.35*Math.sin(a*5)+.2*Math.cos(a*9));
   let y=ring===0?course.height(x,z)-.12:course.height(dx*edge,dz*edge)+Math.sin(Math.min(1,ring/5)*Math.PI*.62)*ridge+(Math.sin(a*11+ring)*2);
   // Northern headland slopes into the sea; never close the coast with a mountain wall.
-  if(theme==='coast'&&z>170)y=Math.min(y,Math.max(-6,-.12-(z-180)*.18));
+  if((theme==='coast'||theme==='port')&&z>170)y=Math.min(y,Math.max(-6,-.12-(z-180)*.18));
   positions.push(x,y,z);const color=new T.Color(p.hill).multiplyScalar(.86+.12*Math.sin(a*3+ring*.4));colorsOut.push(color.r,color.g,color.b);
   if(ring<rings-1&&i<segments){const n=ring*(segments+1)+i;indices.push(n,n+segments+1,n+1,n+1,n+segments+1,n+segments+2);}
  }
