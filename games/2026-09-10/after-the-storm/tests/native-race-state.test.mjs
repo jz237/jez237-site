@@ -226,9 +226,11 @@ test('the separate admitted display counter advances once and keeps drawing expl
 test('wrong-way counter audio and next-call warning share the canonical timing history',()=>{
  const c=fixture();let s=prepareNativeRaceStartup(c.reset,c.state).state;
  s=prepareNativeRaceStateOperations(s,[{kind:'recordWordWrite',racerIndex:0,wordIndex:(0x2c60-0x2938)/4,value:39},
-  {kind:'sourceWordWrite',field:'phase650',value:3}]).state;
+  {kind:'sourceWordWrite',field:'phase650',value:3},
+  ...[[0x7ccc,0],[0x7cd4,0xc4fa0000],[0x7ce4,0],[0x7cec,0x3f800000]].map(([address,value])=>
+   ({kind:'hudWrite',byteOffset:address-0x7788,width:4,value}))]).state;
  const input={bodiesBySlot:[{positionNativeXZ:{x:0,z:-1000},forwardXZ:{x:0,z:-1},speedB90Native:20}],
-  cameraIndicesByView:[0],camerasByIndex:[{positionNativeXZ:{x:0,z:-2000},directionXZ:{x:0,z:1}}],
+  cameraIndicesByView:[0],
   primaryNodesBySourceRow:c.primary.nodes,warningSuppressionRegionsNative:[],
   // Authored endpoint-only input: cosine+/-1 reads word511=0 degrees.
   // A real admitted source view must supply its actual readonly lookup table.
@@ -241,6 +243,7 @@ test('wrong-way counter audio and next-call warning share the canonical timing h
  assert.equal(second.state.raceWords1f94[ri(0x2c60)],41);assert.equal(second.state.raceWords1f94[ri(0x2c10)],1);
  assert.equal(second.diagnostic.racers[0].priorWrongDirection2c60,40);assert.equal(second.effects.length,0);
  assert.equal(s.raceWords1f94[ri(0x2c10)],0);
+ assert.throws(()=>prepareNativeRaceDirectionWarningUpdate(s,{...input,camerasByIndex:[]}),/overlaps canonical/);
 });
 
 test('the canonical owner rejects overlapping scalar aliases and applies no partial failed patch',()=>{

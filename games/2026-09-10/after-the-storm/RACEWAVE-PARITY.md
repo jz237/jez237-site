@@ -1591,3 +1591,83 @@ stunt scoring, all venue/mode sign-offs, the eleven existing course failures
 and hardware checks also remain. The modern high-resolution renderer and
 existing native preview admission are unchanged. No original executable bytes
 or artwork are published, no money was spent, and this checkpoint is local.
+
+## Shared water initialization, grid placement and ordinary HUD composition — October 15, 2026
+
+The prepared ordinary race update now expands all eight numeric HUD consumers
+in their original order: status, direction, speed, conditional countdown,
+placement, rivals, missed-buoy feedback and boundary warnings. The conditional
+countdown gate reads fresh canonical status after the first three consumers.
+Each consumer's writes reach the following consumer immediately. A later
+failure cannot partially commit earlier state. Physical updates and the i1
+update/display stages remain separate source-frame calls.
+
+The combined coordinator matches63 complete prepared original79528 executions
+with all eight numeric bodies expanded. Checks include473 source consumers'
+entry/exit states,4,526 ordered tail operations, complete final race/HUD words and
+2,965,710 intermediate owner words. The actual selected angle table is supplied
+privately; sine samples remain explicit prepared RAM data. Audio entry and
+profiling calls retain their stated boundaries. These are prepared numeric
+composition checks, without source startup or complete-race admission.
+
+Placement feedback includes source row easing, actual body15c0 offsets,
+proximity pulses and the1→2→3→0 place-change animation. Rival indicators
+retain the original signed-place filter, inclusive1024-unit/135-degree bounds,
+unnormalized cameraF0/F4 axis and supplied angle/sine lookups. The complete
+placement/rival bodies match4,540 original prepared cases and564 additional
+ED154 helper cases, covering all32+5 store sites and complete race/HUD words.
+Original sine-table generation is not established by these prepared lookups.
+
+Both native camera records are inside the1442-word HUD owner. Direction and
+rival adapters derive temporary views from its current7c80+index*10c records;
+a duplicate caller camera view is rejected. Direction uses64/6c, whereas
+rivals use rawF0/F4. The reached rival corner coefficient7a50 also comes from
+the canonical HUD word, without assuming its usual2/3 value. Independent review
+found and resolved an additional duplicate camera view in the Fortress gate
+cue: primary judging now derives the same selected HUD coordinates. Near,
+far and swapped-camera regressions produce cue counts1/0/1 and reject a
+conflicting caller view.
+
+The new complete water-noise preparation returns all49,152 height/velocity
+pairs and the next unsigned32-bit RNG word together. Four complete original
+4F790 executions compare every cell and final RNG state, including amplitude0,
+1,20 and127. Each executes98,316 actual47E50 calls and98,304 actual rounding
+helpers: zero amplitude still advances the stream. The shared800D4640 owner
+is distinct from the speed display's16-bit6f00 seed. This closes4F790 only;
+the surrounding field-template setup, boot seed and intervening RNG consumers
+remain explicit initialization dependencies.
+
+The bounded948DC wave selector matches803 actual cases, including its genuine
+shared RNG call. Pending player half60c is separate from active playersDab28.
+Complete6AC84 placement selection matches2,459 prepared original cases over
+22,131 packedF32 matrix arguments, including ordinary, demo and training
+branches. The separate67E40 computer-profile selector matches2,052 bounded
+flag-loop cases. These include the prior accepted32 wave/168 placement cases.
+The grid adapter reads canonical26c0 rather than ranking3990 and returns the
+actual matrix-constructor arguments. It does not yet evaluate48854, initialize
+the physical hull/rider, select the actor15 launch pose or copy camera history.
+
+All62 added tests pass. The full suite is1,884/1,895 in103.52s, with the same
+eleven existing failure names. All246 module versions are regenerated in the
+three HTML maps. Browser and Node agree on an authored47-call full ordinary
+sequence, ending phase2, clock open, next-frame time50 and launch power5, plus
+the complete water initializer. This is prepared numeric execution, not a
+complete live source startup. The retained native two-player preview remains
+High1280×720 at11.05s, tick1105/frame221, with matching racer positions and all
+49,152 water heights (hash2879715165). Detailed riders, water and shoreline
+remain visible; child console is clear, parent retains its favicon404.
+
+The isolated offline original-ROM CPU host now builds and completes one
+neutral30-second boot. It records1,157 original87134 reader calls; every sampled
+corner X/Z remains zero. Its graphics-free runtime cannot identify the missing
+coordinate producer or establish an ordinary controller-driven race. No
+installed executable/profile was changed. This runtime observation is separate
+from the prepared original-instruction proofs and is not console/GPU timing.
+
+Full main/update initialization, actor15/rest-pose and physical bootstrap,
+course0 sequence progression, camera/current-object producers, all shared RNG
+callers, result-stage transitions and a live source opponent race remain open.
+Mode11 scoring, venue/mode sign-offs, eleven existing course failures and
+hardware checks remain. High-resolution rendering and live preview admission
+are unchanged. No original executable bytes/artwork are published, no money was
+spent, and this checkpoint is local.
