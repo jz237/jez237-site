@@ -25,7 +25,7 @@ test('native preview creates actual point/rider solvers and explicit recovered t
  assert.equal(a.hull.points.length,12);assert.equal(a.articulatedRider.points.length,19);
  for(const [key,value]of Object.entries(NATIVE_HOST_DEFAULT_TUNE))assert.equal(a.water.profile[key],value);
  assert.equal(host.contacts.geometry.shore.length,49);assert.equal(host.contacts.geometry.floor.length,231);
- assert.equal(host.provenance.actorRecoveryAndTricks,false);assert.equal(host.provenance.nativeRacerCollision,false);
+ assert.equal(host.provenance.actorRecoveryAndTricks,false);assert.equal(host.provenance.nativeRacerCollision,true);
  assert.equal(host.provenance.sourcePrimaryBuoyContacts,true);assert.equal(host.primary.snapshot().length,s.course.sourceBuoyLayout.nodes.length);
  assert.equal(a.surface,host.world.surface);assert.ok(a.surface.cellAtNative);
 });
@@ -45,7 +45,9 @@ test('host adjudication reads current buoy centers before their once-per-frame m
 });
 
 test('native preview is restricted to its verified integration boundary',()=>{
- for(const options of [{mode:'stunt'},{mode:'versus'},{mode:'race'},{seaState:'surf'},{course:getCourse('neon')}])assert.throws(()=>create(options),/Sunny Beach/);
+ for(const options of [{mode:'stunt'},{mode:'race'},{seaState:'surf'},{course:getCourse('neon')}])assert.throws(()=>create(options),/Sunny Beach/);
+ assert.equal(create({mode:'versus'}).racers.length,2);
+ assert.throws(()=>create({mode:'versus',handicap:true}),/catch-up/);
  assert.throws(()=>createRace({physics:'other'}),/physics/);
  const ordinary=createRace({mode:'time'});assert.equal(ordinary.physics,'modern');assert.equal(ordinary.nativeHost,null);
 });

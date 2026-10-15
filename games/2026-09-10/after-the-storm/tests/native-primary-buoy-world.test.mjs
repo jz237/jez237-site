@@ -17,7 +17,10 @@ function make({count=1,selected=layout(),afterJudge=()=>{},active=()=>true}={}){
  const water=createRaceWater({crafts:adapters.slice(0,2).map(camera),baseAmplitudeNative:20});
  const primary=createNativePrimaryBuoyWorld({layout:selected,water});
  for(const a of adapters)a.contacts={racingBuoys:primary.contact};
- const world=createNativeRaceWorld({adapters,water,humanIndices:adapters.slice(0,2).map((_,i)=>i),afterFrame:(w,c)=>{
+ // This kernel fixture deliberately places craft at the exact same pose to
+ // inspect shared buoy recoil. Disable the independent craft-pair routine;
+ // its zero-distance source exception is not the subject of these tests.
+ const world=createNativeRaceWorld({adapters,water,craftContacts:false,humanIndices:adapters.slice(0,2).map((_,i)=>i),afterFrame:(w,c)=>{
   afterJudge(w,c,primary);primary.afterFrame(w,c,{active:active()});
  }});
  return {adapters,water,primary,world,selected};

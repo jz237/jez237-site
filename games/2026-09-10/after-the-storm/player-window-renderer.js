@@ -5,7 +5,6 @@ import {makeSky,makeOcean,shared,skyColors} from './ocean.js';
 import {makeCourseWorld} from './course-world.js';
 import {getCourse} from './courses.js';
 import {stuntCourse,rampCameraHeight} from './stunts.js';
-import {RIDERS} from './race-core.js';
 import {makeJetSki} from './jetski.js';
 import {makeStuntRider} from './stunt-rider.js';
 import {makeCraftBeads} from './water-beads.js';
@@ -40,6 +39,28 @@ import {advanceSpray} from './spray-physics.js';
 import {createWakeSampler} from './wake-sampler.js';
 import {validDisplaySize} from './player-window-protocol.js';
 
+// Display palette only. Importing race-core merely for these colors would
+// load the simulation host and native solvers into this presentation window.
+const riderColors=[0xe69344,0x4eb9da,0xe96479,0xb4d56b];
+
+// Kept separate from WebGL so the actual high-resolution rider and complete
+// parent transform can be checked without creating a second simulation. The
+// physical DTO is already in craft-local WORLD units: apply yaw on boat and
+// actual pitch/roll on body once, without modern bank, stunt or fall offsets.
+export function updatePlayerWindowCraft(v,q,{time=0,dt=0}={}){
+ const h=q.hydro,physical=!!q.nativeRiderPose,attitude=physical?{pitch:h.pitch,roll:h.roll}:ridingAttitude(v.ridingMotion,h,q.turn,q.speed,dt);
+ v.boat.visible=true;v.boat.position.set(q.x,h.y,q.z);
+ if(physical){v.boat.rotation.set(0,q.heading,0);v.body.rotation.set(attitude.pitch,0,attitude.roll);}
+ else{v.boat.rotation.y=q.heading;v.body.rotation.x=attitude.pitch;v.body.rotation.z=attitude.roll;
+  if(q.stunt.trick==='flip')v.body.rotation.x-=q.stunt.angle;else if(q.stunt.trick)v.body.rotation.z+=q.stunt.angle;}
+ const movement={targetPose:q.nativeRiderPose,time,speed:q.speed,turn:q.turn,yawVelocity:q.yawVelocity,impact:h.impact,sprayExposure:q.sprayExposure||0,anticipation:h.anticipation,compression:h.compression,load:h.load,lean:q.riderLean||0,airborne:h.airborne,airTime:h.airTime,verticalSpeed:h.vy,pitch:h.pitch,roll:h.roll,rollVelocity:h.rollVelocity,pitchVelocity:h.pitchVelocity,waveLook:q.waveReading?.offset||0,wet:h.wet,dt,steering:q.turn*.3,wipeoutAmount:physical?0:Math.abs(wipeoutPose(q.wipeout).x)/1.65};
+ v.stuntRig.update(physical?'':q.stunt.pose,q.stunt.poseTime,q.turn,movement);v.rider.visible=physical||!q.stunt.pose;v.updateRider?.(movement);
+ v.handlebars.rotation.y=v.rider.userData.riderMotion?.steering??q.turn*.3;v.prop.rotation.y=-q.turn*.4;
+ const fallen=physical?{x:0,y:0,z:0,pitch:0,roll:0}:wipeoutPose(q.wipeout);
+ v.rider.position.set(fallen.x,fallen.y,fallen.z);v.rider.rotation.set(fallen.pitch,0,fallen.roll);
+ return movement;
+}
+
 export function createPlayerWindowRenderer(canvas){
  const renderer=new T.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});
  renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;renderer.shadowMap.autoUpdate=false;
@@ -57,7 +78,7 @@ export function createPlayerWindowRenderer(canvas){
  let descriptor=null,course=null,world=null,environment=null,environmentTime=-Infinity,environmentStorm=-1,quality='high',lastTime=null,localWater=null,chase={},tracking={},renderCount=0,orbit=0,pitch=.22,zoom=8,cameraMode=0;
  function vessel(r){
   const key=riderColourIndex(r,descriptor.swapColours,descriptor.roster[0]===descriptor.roster[1]);if(vessels.has(key))return vessels.get(key);
-  const index=key%4,color=key>=4?new T.Color(RIDERS[index].color).offsetHSL(.5,0,0).getHex():RIDERS[index].color,v=makeJetSki(scene,{salvage:false,riderIndex:index});v.cargo.visible=false;v.winch.visible=false;
+  const index=key%4,color=key>=4?new T.Color(riderColors[index]).offsetHSL(.5,0,0).getHex():riderColors[index],v=makeJetSki(scene,{salvage:false,riderIndex:index});v.cargo.visible=false;v.winch.visible=false;
   const materials=new Map();v.boat.traverse(o=>{if(o.isMesh&&o.material.color&&[0xd95b24,0xb9542d].includes(o.material.color.getHex())){if(!materials.has(o.material)){const m=o.material.clone();m.color.setHex(color);materials.set(o.material,m);}o.material=materials.get(o.material);}});
   v.stuntRig=makeStuntRider(v.body,color,index);v.beads=makeCraftBeads(v.boat);v.ridingMotion={};v.landingId=null;vessels.set(key,v);return v;
  }
@@ -70,7 +91,7 @@ export function createPlayerWindowRenderer(canvas){
  function init(value){
   if(!value||!['course','surf','calm','chop','storm'].includes(value.seaState)||!Array.isArray(value.roster)||value.roster.length!==2||value.roster.some(i=>!Number.isInteger(i)||i<0||i>3)||!Number.isInteger(value.difficulty)||value.difficulty<0||value.difficulty>3||!graphics(value.graphics))throw new Error('Invalid player view setup.');
   descriptor=value;course=getCourse(value.course,value.difficulty);if(course.id!==value.course)throw new Error('Unknown player view course.');if(value.freeRide)course=stuntCourse(course,{freeRide:true});
-  if(course.sourceObjectSelection)course={...course,playerCount:2,rocks:course.hazardsForPlayers(2)};
+  if(course.sourceObjectSelection)course={...course,playerCount:2,rocks:course.hazardsForPlayers(2),sourceDecorations:course.decorationsForPlayers?course.decorationsForPlayers(2):course.sourceDecorations};
   if(course.contactVolumesForRamps)course={...course,contactVolumes:course.contactVolumesForRamps(course.ramps)};
   setRaceWater(null);setWaterCharacter(course);setCourseWaveTrain(course.waveTrain);surfSeed.value=value.waveSeed;surfStrength.value=value.seaState==='surf'?1:0;windSea.value=['chop','storm'].includes(value.seaState)?1:0;frontEnabled.value=['surf','storm'].includes(value.seaState)?1:0;
   world?.dispose();world=makeCourseWorld(scene,course,ocean,{freeRide:!!value.freeRide});ocean.setVenue(course);chase={};tracking={};lastTime=null;localWater=null;orbit=0;cameraMode=0;environmentTime=-Infinity;clearEffects();
@@ -86,11 +107,7 @@ export function createPlayerWindowRenderer(canvas){
   if(!environment||Math.abs(storm-environmentStorm)>.12||time-environmentTime>45){environment?.dispose();environment=pmrem.fromScene(envScene,.04,.1,2000);scene.environment=environment.texture;environmentTime=time;environmentStorm=storm;}
   for(const v of vessels.values())v.boat.visible=false;
   for(const q of frame.racers){
-   const v=vessel(q),h=q.hydro,attitude=ridingAttitude(v.ridingMotion,h,q.turn,q.speed,dt);v.boat.visible=true;v.boat.position.set(q.x,h.y,q.z);v.boat.rotation.y=q.heading;v.body.rotation.x=attitude.pitch;v.body.rotation.z=attitude.roll;
-   if(q.stunt.trick==='flip')v.body.rotation.x-=q.stunt.angle;else if(q.stunt.trick)v.body.rotation.z+=q.stunt.angle;
-   const movement={time,speed:q.speed,turn:q.turn,yawVelocity:q.yawVelocity,impact:h.impact,sprayExposure:q.sprayExposure||0,anticipation:h.anticipation,compression:h.compression,load:h.load,lean:q.riderLean||0,airborne:h.airborne,airTime:h.airTime,verticalSpeed:h.vy,pitch:h.pitch,roll:h.roll,rollVelocity:h.rollVelocity,pitchVelocity:h.pitchVelocity,waveLook:q.waveReading?.offset||0,wet:h.wet,dt,steering:q.turn*.3,wipeoutAmount:Math.abs(wipeoutPose(q.wipeout).x)/1.65};
-   v.stuntRig.update(q.stunt.pose,q.stunt.poseTime,q.turn,movement);v.rider.visible=!q.stunt.pose;v.updateRider?.(movement);v.beads.update(q,storm,dt);v.updateDash(q.speed,100);v.handlebars.rotation.y=v.rider.userData.riderMotion?.steering??q.turn*.3;v.prop.rotation.y=-q.turn*.4;
-   const fallen=wipeoutPose(q.wipeout);v.rider.position.set(fallen.x,fallen.y,fallen.z);v.rider.rotation.set(fallen.pitch,0,fallen.roll);
+   const v=vessel(q),h=q.hydro;updatePlayerWindowCraft(v,q,{time,dt});v.beads.update(q,storm,dt);v.updateDash(q.speed,100);
    updateCraftLOD(v.boat,Math.hypot(camera.position.x-q.x,camera.position.y-h.y,camera.position.z-q.z),quality);
    if(v.landingId!==null&&v.landingId!==h.landingId&&dt>0){for(let i=0;i<Math.min(180,h.impact*22);i++)spawn(q,i%3===0?'landingMist':'impact',Math.random()<.5?-1:1);finishing.landing(q,camera.position,0);}v.landingId=h.landingId;
    if(dt>0&&q.speed>2&&frame.phase==='running'&&h.wet>.1){const n=Math.min(quality==='low'?18:40,Math.ceil(dt*q.speed*(quality==='low'?20:30)*h.wet));for(let i=0;i<n;i++){const jet=i%3===0;if(jet&&h.intake<.1)continue;spawn(q,jet?'jet':i%5===0?'mist':'chine',Math.random()<.5?-1:1);}}
@@ -99,7 +116,7 @@ export function createPlayerWindowRenderer(canvas){
   translateFollow(tracking,r,camera.position,look);const cf=chaseFrame(chase,r,dt,{orbit,zoom:cameraMode===1?6:cameraMode===2?19:zoom,pitch});goal.set(cf.position.x,cf.position.y,cf.position.z);target.set(cf.target.x,cf.target.y,cf.target.z);camera.position.lerp(goal,first?1:1-Math.exp(-dt*4));look.lerp(target,first?1:1-Math.exp(-dt*5));camera.fov+=(cf.fov-camera.fov)*(first?1:1-Math.exp(-dt*2.5));camera.updateProjectionMatrix();
   camera.position.y=Math.max(camera.position.y,wave(camera.position.x,camera.position.z,time,storm)+.85,rampCameraHeight(camera.position,course,time,storm));camera.position.copy(barrierCamera(course.crossbars,{x:r.x,y:r.hydro.y+.15,z:r.z},passageCamera(course.passage,look,camera.position,time,frame.passageOpenedAt)));camera.position.copy(mooredBoatCamera(course.mooredBoats,{x:r.x,y:r.hydro.y+.15,z:r.z},camera.position,time,storm));camera.lookAt(look);
   sky.position.copy(camera.position);sun.position.set(r.x+skyColors.skySun.value.x*260,skyColors.skySun.value.y*260,r.z+skyColors.skySun.value.z*260);sun.target.position.set(r.x,0,r.z);renderer.shadowMap.needsUpdate=shadowDue(renderCount,quality);
-  world.update(time,storm,null,frame.passageOpenedAt,frame.racers,[1,camera.position,null],frame.breakables);
+  world.update(time,storm,null,frame.passageOpenedAt,frame.racers,[1,camera.position,null],frame.breakables,frame.primaryBuoys??null);
   finishing.update(time,storm,camera.position,quality);shoreWash.update(time,storm,camera.position,quality);crestSpray.update(time,storm,camera.position,quality);breakers.update(time,storm,camera.position,quality);beachBreak.update(time,storm,camera.position,quality,camera.getWorldDirection(forward));sheets.forEach((sheet,i)=>sheet.update(frame.racers[i],time,storm));
   if(renderCount%60===0)cloudScene(scene);rain.position.set(camera.position.x,0,camera.position.z);const rainFactor=Math.max(0,(storm-.45)/.55,front*.85);rainMat.opacity=rainFactor*.3;rainGeo.setDrawRange(0,Math.floor(rainCount*rainFactor)*2);
   for(let i=0;i<rainCount;i++){const k=i*6;rainPositions[k]-=dt*(4+storm*8);rainPositions[k+1]-=dt*25;rainPositions[k+2]+=dt*3;if(rainPositions[k+1]<0){rainPositions[k]=(Math.random()-.5)*65;rainPositions[k+1]=35;rainPositions[k+2]=(Math.random()-.5)*65;}rainPositions[k+3]=rainPositions[k]-.18;rainPositions[k+4]=rainPositions[k+1]+.45;rainPositions[k+5]=rainPositions[k+2]+.07;}rainGeo.attributes.position.needsUpdate=true;
@@ -107,6 +124,7 @@ export function createPlayerWindowRenderer(canvas){
   ocean.syncWake();ocean.updateFoam(dt,r.x,r.z);ocean.mat.uniforms.craft.value.set(r.x,r.z,r.heading,Math.min(1,r.speed/18)*r.hydro.wet);sprayUniforms.sprayProjection.value=canvas.height/(2*Math.tan(camera.fov*Math.PI/360));ocean.render();renderCount++;
  }
  return {init,graphics,draw,reset:clearEffects,camera(){cameraMode=(cameraMode+1)%3;orbit=0;},orbit(dx,dy){orbit-=dx*.005;pitch=Math.max(.08,Math.min(.9,pitch+dy*.003));},zoom(delta){zoom=Math.max(6,Math.min(25,zoom+delta*.01));},
-  get details(){return {width:canvas.width,height:canvas.height,quality,course:course?.id,camera:camera.position.toArray(),drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles};},
+  get details(){return {width:canvas.width,height:canvas.height,quality,course:course?.id,camera:camera.position.toArray(),drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,
+   primaryBuoys:world?.root.userData.primaryBuoys??null,riders:[...vessels.entries()].filter(([,v])=>v.boat.visible).map(([color,v])=>({color,nativePhysical:!!v.rider.userData.nativePhysical}))};},
   dispose(){world?.dispose();finishing.dispose();ocean.dispose();environment?.dispose();pmrem.dispose();scene.traverse(o=>{o.geometry?.dispose();if(o.material){for(const m of Array.isArray(o.material)?o.material:[o.material])m.dispose?.();}});renderer.dispose();}};
 }

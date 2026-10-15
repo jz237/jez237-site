@@ -26,3 +26,16 @@ export function prepareRiderTargetPose(pose){
  const steering=Math.hypot(dx,dz)>1e-12?Math.atan2(-dz,dx):0;
  return {targets,yaw,headYaw,steering};
 }
+
+// Blend only compatible, already selected physical display poses. Identity and
+// native/modern boundary policy belong to the caller. Root/head yaw and all
+// source diagnostics stay at the earlier recorded sample until t reaches1;
+// no fractional source frame, animation, IK or constraint solve is produced.
+// Even held endpoints return detached data, including recorded diagnostics.
+export function interpolateRiderTargetPose(first,last,t){
+ if(!Number.isFinite(t)||t<0||t>1)throw new RangeError('Target interpolation must be from0 to1');
+ if(t===0||t===1)return structuredClone(t===1?last:first);
+ const a=prepareRiderTargetPose(first),b=prepareRiderTargetPose(last);
+ return {...structuredClone(first),targets:Object.fromEntries(RIDER_TARGET_BONES.map(name=>[name,
+  a.targets[name].map((point,i)=>point.map((n,k)=>n+(b.targets[name][i][k]-n)*t))]))};
+}

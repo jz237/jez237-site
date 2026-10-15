@@ -63,13 +63,14 @@ function present(host){
  * Custom source actor/pose providers require explicit recovery:false.
  */
 export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,tunes=[],sourceStates=[],poseProviders=[],onFrame=null,
- floatingDefinitions,floatingActive=true,primaryActive=true,recovery=true}={}){
+ floatingDefinitions,floatingActive=true,primaryActive=true,recovery=true,craftContacts=true}={}){
  if(!Array.isArray(racers)||racers.length<1||racers.some(r=>!r?.hydro||!Number.isInteger(r.id)||r.id<0||r.id>3))throw new TypeError('Expected initialized browser racers');
  if(!water?.field||!finite(water.scale))throw new TypeError('Expected host source water');
  if(onFrame!==null&&typeof onFrame!=='function')throw new TypeError('onFrame must be a function');
  if(typeof floatingActive!=='boolean')throw new TypeError('floatingActive must be boolean');
  if(typeof primaryActive!=='boolean')throw new TypeError('primaryActive must be boolean');
  if(typeof recovery!=='boolean')throw new TypeError('recovery must be boolean');
+ if(typeof craftContacts!=='boolean')throw new TypeError('craftContacts must be boolean');
  if(recovery&&(sourceStates.length||poseProviders.length))throw new TypeError('Custom actor/pose providers require explicit recovery:false');
  const humanIndices=racers.map((r,i)=>r.human?i:-1).filter(i=>i>=0);
  const definitions=floatingDefinitions??course.dynamicObjectsForPlayers?.(humanIndices.length)??[];
@@ -93,8 +94,8 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
    clock:'five10ms hull ticks then one water update',controls:'digital-accelerator; brake-coasts; B-crouch; R-slide',
    actorRecoveryAndTricks:false,riderRecovery:recovery,physicalRiderPresentation:true,
    recoveryGeometry:'authored anatomy/remount; reconstructed procedural fall/stumble; explicit authored rest/circle/history policy',
-   nativeRacerCollision:false,sourcePrimaryBuoyContacts:!!primary})};
- host.world=createNativeRaceWorld({adapters,water,humanIndices,afterTick:(_,context)=>{
+   nativeRacerCollision:craftContacts,sourcePrimaryBuoyContacts:!!primary})};
+ host.world=createNativeRaceWorld({adapters,water,humanIndices,craftContacts,afterTick:(_,context)=>{
   if(context.tick%5!==0)present(host);
  },afterFrame:(_,context)=>{
   present(host);

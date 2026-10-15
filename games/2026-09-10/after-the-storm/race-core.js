@@ -60,8 +60,9 @@ export const COVE=makeCoveCourse();
 export function settings(rider=0,tune={}){const r=RIDERS[rider];const engine=clamp(Number(tune.engine)||0,-1,1),grip=clamp(Number(tune.grip)||0,-1,1),handling=clamp(Number(tune.handling)||0,-1,1);return {...r,speed:r.speed+engine*1.4-grip*.7,accel:r.accel-engine*.8,grip:r.grip+grip*1.4,handling:r.handling+handling*.35};}
 export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,difficulty=0,course=COVE,gridOrder=null,seaState='course',secondRider=1,secondTune={},handicap=false,swapColours=false,physics='modern',nativeTunes=[]}={}){
  if(!['modern','native'].includes(physics))throw new RangeError('Unknown race physics');
- if(physics==='native'&&(mode!=='time'||seaState!=='course'||course.sourceWaterCourseIndex!==1))
-  throw new RangeError('Native integration preview currently requires a Sunny Beach source-water time trial');
+ if(physics==='native'&&(!['time','versus'].includes(mode)||seaState!=='course'||course.sourceWaterCourseIndex!==1))
+  throw new RangeError('Native integration preview requires Sunny Beach source-water Time trial or Two-player race');
+ if(physics==='native'&&mode==='versus'&&handicap)throw new RangeError('Native two-player catch-up still requires its source integration');
  setRaceWater(null);
  const freeRide=mode==='practice'||mode==='versus'&&course.id==='practice';
  if(['race','championship'].includes(mode))course=racingStuntCourse(course);
@@ -259,7 +260,7 @@ export function stepRace(s,input,dt){if(s.phase==='paused'||s.phase==='results')
  if(s.phase==='countdown'){for(const r of s.racers)if(r.human&&!s.nativeHost){const c=Array.isArray(input)?input[r.player]||{}:input||{};rocketStart(r,c.throttle||0,-s.countdown);}s.countdown-=dt;if(s.countdown<=0){s.phase='running';s.racers.forEach(r=>announce(r,s,'GO'));}return;}
  if(s.nativeHost){
   s.weather=raceWeather(s);waterLevel.value=s.weather.seaLevel;
-  stepNativeRaceHost(s.nativeHost,dt,s.racers.map(r=>r.human?(typeof input==='function'?input:Array.isArray(input)?input[r.player]||{}:input||{}):()=>aiInput(s,r)),
+   stepNativeRaceHost(s.nativeHost,dt,s.racers.map(r=>r.human?(typeof input==='function'?(r.player===0?input:{}):Array.isArray(input)?input[r.player]||{}:r.player===0?input||{}:{}):()=>aiInput(s,r)),
    {waterOptions:{datumNative:Math.round(s.weather.seaLevel/s.raceWater.scale)}});
   s.time=s.nativeHost.world.ticks*.01;
   s.primaryBuoys=capturePrimaryBuoyPresentation(s.nativeHost.primary?.snapshot());

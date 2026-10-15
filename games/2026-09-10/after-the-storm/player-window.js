@@ -1,5 +1,5 @@
 import {PLAYER_WINDOW_VERSION,envelope,validEnvelope,normalizeWindowControls} from './player-window-protocol.js';
-import {readWindowFrame,interpolateWindowFrame} from './player-window-presentation.js';
+import {readWindowFrame,interpolateWindowFrame,windowRacerHudSpeed} from './player-window-presentation.js';
 import {createInputSampler} from './player-input.js';
 import {gameplayKey} from './control-bindings.js';
 import {createGamepadRumble,updateGamepadRumble,resetGamepadRumble} from './gamepad-rumble.js';
@@ -64,10 +64,10 @@ function frame(now){
  $('standby').hidden=true;$('hud').hidden=false;const r=f.racers[1];
  $('title').textContent='P2 · '+(descriptor.names?.[r.id]||'Rider '+(r.id+1))+(f.freeRide?' · FREE RIDE':' · LAP '+Math.min(r.lap,descriptor.laps)+'/'+descriptor.laps);
  $('status').textContent=r.wipeout?'WIPEOUT · TAP THROTTLE TO REMOUNT':f.time-r.eventTime<2?r.event:'';
- $('power').textContent=f.freeRide?r.stunt.score+' pts · '+r.stunt.rings+' rings':'POWER '+r.power+'/5 · MISSES '+r.misses+'/5';$('speed').textContent=Math.round(r.speed*3.6)+' km/h';$('notice').textContent=f.phase==='paused'?'RACE PAUSED':f.phase==='countdown'?String(Math.ceil(f.countdown)):'';$('pause').textContent=f.phase==='paused'?'Resume both':'Pause both';
+ $('power').textContent=f.freeRide?r.stunt.score+' pts · '+r.stunt.rings+' rings':'POWER '+r.power+'/5 · MISSES '+r.misses+'/5';$('speed').textContent=windowRacerHudSpeed(r)+' km/h';$('notice').textContent=f.phase==='paused'?'RACE PAUSED':f.phase==='countdown'?String(Math.ceil(f.countdown)):'';$('pause').textContent=f.phase==='paused'?'Resume both':'Pause both';
  updateGamepadRumble(haptics,focused?{mode:'versus',phase:f.phase,time:f.time,racers:f.racers}:null,pads,descriptor.rumble,now);
 }
 if(!/^[a-f0-9]{32}$/.test(session??'')||!/^[a-f0-9]{32}$/.test(capability??'')||!window.opener)hold('Open Player 2 from the two-player display menu.');
 else{window.opener.postMessage({type:'player-window-hello',version:PLAYER_WINDOW_VERSION,session,capability},location.origin);requestAnimationFrame(frame);}
 // Read-only telemetry in this presentation page; no input/progress shortcuts.
-Object.defineProperty(window,'__stormPlayerQA',{value:Object.freeze({snapshot:()=>({generation,standby,sequence:frames.at(-1)?.sequence??0,time:frames.at(-1)?.frame.time??0,phase:frames.at(-1)?.frame.phase??'standby',focused:document.hasFocus(),visible:document.visibilityState,renderer:viewer?.details,racers:frames.at(-1)?.frame.racers.map(r=>({player:r.player,x:r.x,z:r.z,throttle:r.throttle,speed:r.speed}))})})});
+Object.defineProperty(window,'__stormPlayerQA',{value:Object.freeze({snapshot:()=>({generation,standby,sequence:frames.at(-1)?.sequence??0,time:frames.at(-1)?.frame.time??0,phase:frames.at(-1)?.frame.phase??'standby',focused:document.hasFocus(),visible:document.visibilityState,renderer:viewer?.details,racers:frames.at(-1)?.frame.racers.map(r=>({player:r.player,x:r.x,z:r.z,throttle:r.throttle,speed:r.speed,hudSpeed:windowRacerHudSpeed(r),nativeRiderPose:!!r.nativeRiderPose,actorState:r.nativeTelemetry?.actorState??null,sourceLogicalFrame:r.nativeTelemetry?.logicalFrame??null}))})})});

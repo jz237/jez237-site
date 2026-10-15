@@ -1,12 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createNativeRaceAdapter,stepNativeRaceAdapter,nativeRaceSnapshot} from '../native-race-adapter.js';
+import {createNativeRaceAdapter,stepNativeRaceAdapter,nativeRaceSnapshot,prepareNativeRaceAdapterFrame} from '../native-race-adapter.js';
 import {createNativeRaceWorld,stepNativeRaceWorld,nativeRaceWorldSnapshot} from '../native-race-world.js';
 import {createRaceWater,advanceRaceWaterFrame,captureRaceWater} from '../race-water.js';
 import {createNativeWaterCellSurface} from '../native-water.js';
 import {createNativeWaterFollowCamera,stepNativeWaterFollowCamera} from '../native-water-schedule.js';
 import {createNativeHull} from '../native-hull.js';
 import {createAuthoredNativeRider} from '../authored-native-rider.js';
+import {applyNativeCraftContacts,refreshNativeCraftContactState} from '../native-craft-contact.js';
 
 const v=(x=0,y=0,z=0)=>({x,y,z});
 const camera=a=>({x:a.hull.center.x,y:a.hull.center.y,z:a.hull.center.z,
@@ -32,8 +33,8 @@ test('all four hulls interleave descending on each tick before one water and obj
 test('ALL preparations precede any hull tick and ALL physical rider solves follow the fifth tick',()=>{
  const calls=[],adapters=[];
  for(let i=0;i<4;i++){
-  const bundle=createAuthoredNativeRider({initialHull:createNativeHull()}),provider=bundle.riderPose;
-  adapters.push(createNativeRaceAdapter({...bundle,riderPose:(h,c)=>{
+  const position=v(i*3),bundle=createAuthoredNativeRider({initialHull:createNativeHull({position})}),provider=bundle.riderPose;
+  adapters.push(createNativeRaceAdapter({position,...bundle,riderPose:(h,c)=>{
    assert.ok(adapters.every(a=>a.hull.ticks===5));calls.push(`rider:${i}`);return provider(h,c);
   },sourceState:()=>{assert.ok(adapters.every(a=>a.hull.ticks===0));calls.push(`prepare:${i}`);return {actorState:22};},
   contacts:{primarySpheres:h=>{calls.push(`tick:${h.ticks}:${i}`);}}}));
@@ -66,7 +67,11 @@ test('manual interleaving of the same adapters and raw-cell field is numerically
  const surface=createNativeWaterCellSurface(manual.water.field),inputs=[{throttle:true,steer:.4},{throttle:true,steer:-.3}];
  for(let i=0;i<60;i++){
   stepNativeRaceWorld(w,.01,inputs);
-  for(let r=1;r>=0;r--)stepNativeRaceAdapter(manual.adapters[r],.01,inputs[r],{surface});
+  // Source preparation clears impacts before the global contact pass. Then
+  // each completed hull refit refreshes its cache before the next pass.
+  if(i%5===0)for(let r=1;r>=0;r--)prepareNativeRaceAdapterFrame(manual.adapters[r],inputs[r]);
+  applyNativeCraftContacts(manual.adapters.map((a,r)=>({hull:a.hull,contactState:manual.craftContactStates[r],impacts:a.impacts})));
+  for(let r=1;r>=0;r--){stepNativeRaceAdapter(manual.adapters[r],.01,inputs[r],{surface});refreshNativeCraftContactState(manual.craftContactStates[r],manual.adapters[r].hull);}
   if((i+1)%5===0)advanceRaceWaterFrame(manual.water,[camera(manual.adapters[1]),camera(manual.adapters[0])]);
  }
  assert.deepEqual(w.adapters.map(nativeRaceSnapshot),manual.adapters.map(nativeRaceSnapshot));

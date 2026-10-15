@@ -939,3 +939,90 @@ prepared physical bundle, including the recovery owner; its literal contact,
 current-center judge and motion assertions remain unchanged. Native racing
 outside Sunny time-trial preview, remaining actors/stunts, original AI, racer
 contacts, course sign-offs and production publication are still outstanding.
+
+## Native craft contacts and two-player races — October 15, 2026
+
+`native-craft-contact.js` now reconstructs the global craft-pair kernel. Four
+cached probes per craft retain binary32 positions and previous-refit deltas.
+All total craft participate, independently of the human-camera count. Ascending
+craft pairs and probe pairs use the recovered 78-unit center admission and strict
+24-unit probe overlap. Centers/probes remain frozen for the complete pass;
+every overlap translates all twelve hull points and changes the proper three
+point velocities. Zero or separating incoming motion still receives physical
+separation, while only a strict positive family maximum replaces C40 and the
+shared impact normal. Native work arrays retain float32 accumulation across
+all overlaps before conversion back to world units.
+
+The world prepares every racer, runs one global contact pass before each of
+the five descending hull groups, and refreshes each individual craft's probes
+immediately after its actual hull refit. Reset seeds zero deltas; ordinary
+refresh and recovered world-wrap history remain distinct. Proxy ownership is
+atomic across construction failures, including a later preowned hull or an
+invalid water surface. Snapshots, rendering, pause and result display cannot
+consume a pass or advance its history. Actual closing hulls now produce C40
+and enter actors 23, 7 and 22 through the existing recovery lifecycle without synthetic
+impact injection. Coincident admitted probe centers remain explicitly
+unsupported: the leaf rejects the entire pass before contact mutation rather
+than guessing source exception behavior or a normal.
+
+The private comparison checks **2,007 exact prepared-source comparisons**,
+including 1,251 consumer responses with 10,953 ordered contacts and independent
+cold/reset/refit producers. This establishes the declared leaf arithmetic,
+not complete-game bit-identical trajectories: the surrounding host hull still
+uses its documented SI/double fitting and authored rig choices.
+
+A separate bounded 27-case source audit confirms that the contact flag defaults
+to 1 and that no human-count condition surrounds its observed reader. The
+global scene words gate the entire five-hull loop. Simulation0 still has input,
+retained-pose, camera and water-selection work outside that loop; it is not a
+complete original pause contract. Main-state21 can admit water with no hull
+ticks. These frontend schedules remain unported. The ordinary world therefore
+requires a shared nonzero simulation state; browser pause uses its explicit
+inactive-host policy. Numeric setups distinguish total craft from human count,
+including 4/1, 1/1 and 2/2. The direct-reference scan does not exclude every
+unidentified indirect writer or prove a time-trial frontend count.
+
+The opt-in native preview now admits Sunny Beach **two-player races** alongside
+time trials, with both independently controlled physical riders, the 2P source
+water amplitudes, selected class object families and actual shared contacts.
+Normal/Hard/Expert/Reverse have 43/46/48/48 fixed-sphere definitions in the checked
+source-family order and no 2P decorative colliders. Seed 17 riders 0/2 complete
+all four three-lap matches cleanly at 109.65/106.75/107.60/108.20 game seconds;
+their actual contact counts are 13/115/115/48. Complete physical/progress/water
+finish histories match at 30/60/144 Hz. These steering providers are authored
+verification controls, not original AI. Single input objects or logical-frame
+providers apply only to P1; arrays supply independent player streams.
+
+Native versus uses the normal winner/result display and stays unranked.
+Unsupported native catch-up assistance is disabled with an explanation, while
+its saved modern preference is retained. Ordinary race/championship AI, native
+Free Ride/Stunt, other native venues and source starts remain outside admission.
+
+Separate player windows now transport bounded physical 15-segment target poses,
+integer HUD/actor/frame telemetry and primary-buoy display rows. They carry no
+solver ownership or mutable physics buffers. Recorded endpoints interpolate;
+native actor/frame metadata and fixed spans remain discrete. Detailed and
+fallback meshes use the actual full hull transform once, bypassing modern
+extra bank/stunt/wipeout offsets. The child no longer imports race-core merely
+to obtain display colors.
+
+High 1280×720 browser verification completed the Normal match with 42/39 actual
+passes, zero misses/DQ and the correct Player 1 winner at 109.648 s. Separate
+High 1280×720 views held the first genuine contact at 11.05 s, hull tick 1105 and
+water/body/auxiliary frame 221. Both windows agreed on racer coordinates, native
+HUD values, source frames, 59 primary rows and all 49,152 water heights
+(Int16LE FNV1a 2879715165), including identical sampled heights. Pausing from P2
+left the complete exposed physical/water fingerprint unchanged. Browser keyboard
+events in P2 drove only that rider:4.2s of accelerator moved it about 78 m while
+P1 remained neutral. The saved enabled assistance preference also survived
+normal native Start, reload and the contact inspector. Parent console had only
+the existing favicon 404; the child console was clear. OS minimization and
+physical-controller verification remain outstanding.
+
+The final complete regression is **1,284/1,295 in 69.09 s** (private
+`full-tests-native-craft-contact-final.tap`). All 47 additions since 1,248 pass;
+the same eleven integration failures remain, with their names compared exactly
+to the preceding full run. No source ROM, original art or raw disassembly is
+published. Remaining native actors/tricks, original AI, course geometry and
+mode integration, the existing failures and full course sign-offs still block
+parity and production publication. The ongoing goal remains active.

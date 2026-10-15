@@ -1,6 +1,6 @@
 import {captureBreakableState} from './breakable-hazards.js';
 import {capturePrimaryBuoyPresentation,samplePrimaryBuoyPresentation} from './primary-buoy-presentation.js';
-import {RIDER_TARGET_BONES,prepareRiderTargetPose} from './rider-target-pose.js';
+import {interpolateRiderTargetPose} from './rider-target-pose.js';
 // A bounded in-memory recording. Replays read snapshots; they never integrate
 // physics, consume inputs, submit records, or advance championship state.
 const clone=x=>structuredClone(x),mix=(a,b,t)=>a+(b-a)*t;
@@ -45,9 +45,7 @@ function sampleNativeRiderPose(first,last,t,fromTime,toTime){
  const compatible=a&&b&&first.id===last.id&&a.diagnostics?.source===b.diagnostics?.source&&
   a.diagnostics?.coordinateSpace===b.diagnostics?.coordinateSpace;
  if(t<=0||t>=1||!compatible)return {present:true,pose:clone(pose)};
- const start=prepareRiderTargetPose(a),end=prepareRiderTargetPose(b);
- return {present:true,pose:{...clone(pose),targets:Object.fromEntries(RIDER_TARGET_BONES.map(name=>[name,
-  start.targets[name].map((point,i)=>point.map((n,k)=>mix(n,end.targets[name][i][k],t)))])),
+ return {present:true,pose:{...interpolateRiderTargetPose(a,b,t),
   replayPresentation:{policy:'display-endpoints-only',targetsInterpolated:true,fromRecordedTime:fromTime,toRecordedTime:toTime,blend:t}}};
 }
 export function replaySample(clip,time){

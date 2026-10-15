@@ -1,9 +1,68 @@
 import {readRaceWater} from './race-water.js';
 import {exportBreakablePresentation,importBreakablePresentation} from './breakable-hazards.js';
+import {RIDER_TARGET_BONES,prepareRiderTargetPose,interpolateRiderTargetPose} from './rider-target-pose.js';
+import {capturePrimaryBuoyPresentation,samplePrimaryBuoyPresentation} from './primary-buoy-presentation.js';
 // Intentionally excludes solver scratch buffers, rider references in wakes,
 // course methods, live tokens, records, saves and input/controller objects.
 const finite=n=>typeof n==='number'&&Number.isFinite(n)&&Math.abs(n)<=1e9;
 const plain=o=>o!==null&&typeof o==='object'&&!Array.isArray(o);
+const integer=(n,min=0,max=1e9)=>Number.isSafeInteger(n)&&n>=min&&n<=max;
+const own=(o,k)=>Object.hasOwn(o,k);
+const boneNames=new Set(RIDER_TARGET_BONES);
+function nativeRiderPose(value){
+ if(value===null)return null;
+ if(!plain(value)||Object.keys(value).length>8)throw new TypeError('Invalid physical rider display');
+ const {targets,yaw,headYaw}=prepareRiderTargetPose(value);
+ // A generous local-coordinate envelope bounds untrusted display messages;
+ // it does not clamp physical points or impose a solver travel restriction.
+ if(Math.abs(yaw)>1e4||Math.abs(headYaw)>1e4||Object.values(targets).some(pair=>pair.some(p=>p.some(n=>Math.abs(n)>1e4))))
+  throw new RangeError('Physical rider display is out of bounds');
+ const d=value.diagnostics;
+ if(!plain(d)||Object.keys(d).length>20||d.presentationOnly!==true||d.source!=='solved-19-world-points'||d.coordinateSpace!=='craft-local-world-units'||
+  d.sourceLogicalFrame!==null&&!integer(d.sourceLogicalFrame))throw new TypeError('Invalid physical rider provenance');
+ const diagnostics={presentationOnly:true,source:d.source,coordinateSpace:d.coordinateSpace,sourceLogicalFrame:d.sourceLogicalFrame};
+ if(own(d,'pelvisLengthWorld')){
+  if(!finite(d.pelvisLengthWorld)||d.pelvisLengthWorld<=0||d.pelvisLengthWorld>10)throw new RangeError('Invalid pelvis display length');
+  diagnostics.pelvisLengthWorld=d.pelvisLengthWorld;
+ }
+ for(const key of ['pelvisAxis','torsoEndpoint','axialTwist'])if(own(d,key)){
+  if(typeof d[key]!=='string'||d[key].length>240)throw new TypeError('Invalid physical rider diagnostic');diagnostics[key]=d[key];
+ }
+ if(own(d,'collapsedSegments')){
+  if(!Array.isArray(d.collapsedSegments)||d.collapsedSegments.length>15||new Set(d.collapsedSegments).size!==d.collapsedSegments.length||d.collapsedSegments.some(name=>!boneNames.has(name)))
+   throw new TypeError('Invalid collapsed display segments');
+  diagnostics.collapsedSegments=[...d.collapsedSegments];
+ }
+ return {targets,yaw,headYaw,diagnostics};
+}
+function nativeTelemetry(value){
+ if(value===null)return null;
+ if(!plain(value)||Object.keys(value).length>40||!integer(value.hudSpeed)||!integer(value.actorState,0,65535)||!integer(value.logicalFrame))
+  throw new TypeError('Invalid native display telemetry');
+ const result={hudSpeed:value.hudSpeed,actorState:value.actorState,logicalFrame:value.logicalFrame};
+ for(const [key,max]of [['clockUnits',1e9],['animationFrame',1e9],['controlActorState',65535],['wetCount',12]])if(own(value,key)){
+  if(!integer(value[key],0,max))throw new RangeError('Invalid native '+key);result[key]=value[key];
+ }
+ if(own(value,'frameSpeedNative')){
+  if(!finite(value.frameSpeedNative)||value.frameSpeedNative<0)throw new RangeError('Invalid native frame speed');result.frameSpeedNative=value.frameSpeedNative;
+ }
+ if(own(value,'anyWet')){if(typeof value.anyWet!=='boolean')throw new TypeError('Invalid native wet flag');result.anyWet=value.anyWet;}
+ return result;
+}
+function primaryBuoys(value){
+ if(value===undefined)throw new TypeError('Primary display data must be an array or null');
+ const rows=capturePrimaryBuoyPresentation(value);
+ if(rows?.some(row=>[row.position,...row.endpoints].some(p=>!['x','y','z'].every(k=>finite(p[k])))))throw new RangeError('Primary display position is out of bounds');
+ return rows;
+}
+function copyNativeRacer(from,to={...from}){
+ if(own(from,'nativeRiderPose'))to.nativeRiderPose=nativeRiderPose(from.nativeRiderPose);
+ if(own(from,'nativeTelemetry'))to.nativeTelemetry=nativeTelemetry(from.nativeTelemetry);
+ return to;
+}
+function copyNativeFrame(frame){
+ return {...frame,racers:frame.racers.map(q=>copyNativeRacer(q)),...(own(frame,'primaryBuoys')?{primaryBuoys:primaryBuoys(frame.primaryBuoys)}:{})};
+}
 function fields(value,max=96){
  if(!plain(value)||Object.keys(value).length>max)return null;
  const out={};for(const [key,v] of Object.entries(value)){
@@ -19,7 +78,7 @@ function rider(r){
  if(!q||![q.x,q.z,q.heading,q.speed].every(finite)||!Number.isInteger(q.id)||q.id<0||q.id>3||![0,1].includes(q.player))return null;
  q.hydro=fields(r.hydro);q.stunt=fields(r.stunt);q.wipeout=r.wipeout?fields(r.wipeout,20):null;q.waveReading=r.waveReading?fields(r.waveReading,24):null;
  if(!q.hydro||!q.stunt||![q.hydro.y,q.hydro.pitch,q.hydro.roll].every(finite))return null;
- return q;
+ try{return copyNativeRacer(r,q);}catch{return null;}
 }
 function numericRows(rows,keys,max){
  if(!Array.isArray(rows)||rows.length>max)return null;
@@ -45,23 +104,43 @@ export function validateWindowWater(w){
 }
 export function captureWindowFrame(state,water,{includeLocal=true}={}){
  return {time:state.time,phase:state.phase,countdown:state.countdown,freeRide:!!state.freeRide,passageOpenedAt:Number.isFinite(state.passageOpenedAt)?state.passageOpenedAt:null,
-  racers:state.racers.map(rider),weather:fields(state.weather,30),water:captureWindowWater(water,state.localWater,includeLocal),breakables:exportBreakablePresentation(state.breakables,state.time)};
+  racers:state.racers.map(rider),weather:fields(state.weather,30),water:captureWindowWater(water,state.localWater,includeLocal),breakables:exportBreakablePresentation(state.breakables,state.time),
+  ...(own(state,'primaryBuoys')?{primaryBuoys:primaryBuoys(state.primaryBuoys)}:{})};
 }
 export function readWindowFrame(value){
  if(!plain(value)||!finite(value.time)||value.time<0||!finite(value.countdown)||!['countdown','running','paused','results'].includes(value.phase)||!Array.isArray(value.racers)||value.racers.length!==2)return null;
  const racers=value.racers.map(rider),water=validateWindowWater(value.water),weather=fields(value.weather,30),breakables=importBreakablePresentation(value.breakables);
  if(racers.some(r=>!r)||racers[0].player!==0||racers[1].player!==1||!water||!weather||!breakables)return null;
  if(value.passageOpenedAt!==null&&!finite(value.passageOpenedAt))return null;
- return {time:value.time,phase:value.phase,countdown:value.countdown,freeRide:!!value.freeRide,passageOpenedAt:value.passageOpenedAt??Infinity,racers,weather,water,breakables};
+ let primary;try{if(own(value,'primaryBuoys'))primary=primaryBuoys(value.primaryBuoys);}catch{return null;}
+ return {time:value.time,phase:value.phase,countdown:value.countdown,freeRide:!!value.freeRide,passageOpenedAt:value.passageOpenedAt??Infinity,racers,weather,water,breakables,
+  ...(own(value,'primaryBuoys')?{primaryBuoys:primary}:{})};
 }
 export function interpolateWindowFrame(a,b,time){
- if(!a||a.time>=b.time||a.phase!==b.phase)return b;
+ if(!a||a.time>=b.time||a.phase!==b.phase)return copyNativeFrame(b);
  const t=Math.max(0,Math.min(1,(time-a.time)/(b.time-a.time))),mix=(x,y)=>x+(y-x)*t;
  // Discrete visibility/events remain at the previous physical tick until b.
  const f={...(t<1?a:b),time:mix(a.time,b.time),racers:a.racers.map((r,i)=>{
-  const q=b.racers[i],p={...(t<1?r:q),hydro:{...(t<1?r.hydro:q.hydro)}};
+  const q=b.racers[i],chosen=t<1?r:q,p=copyNativeRacer(chosen,{...chosen,hydro:{...chosen.hydro}});
   for(const key of ['x','z','vx','vz','speed','turn'])p[key]=mix(r[key]??0,q[key]??0);
   p.heading=r.heading+Math.atan2(Math.sin(q.heading-r.heading),Math.cos(q.heading-r.heading))*t;
-  for(const key of ['y','vy','pitch','roll','pitchVelocity','rollVelocity','compression','wet','waterHeight'])if(finite(r.hydro[key])&&finite(q.hydro[key]))p.hydro[key]=mix(r.hydro[key],q.hydro[key]);return p;
- })};return f;
+  for(const key of ['y','vy','pitch','roll','pitchVelocity','rollVelocity','compression','wet','waterHeight'])if(finite(r.hydro[key])&&finite(q.hydro[key]))p.hydro[key]=mix(r.hydro[key],q.hydro[key]);
+  // Endpoint interpolation is display only. Native/modern, missing/null pose,
+  // rider identity and provenance boundaries hold the earlier recorded value
+  // until b. Source frame/actor/HUD telemetry never becomes fractional.
+  if(t>0&&t<1&&r.nativeRiderPose&&q.nativeRiderPose&&r.id===q.id&&r.player===q.player&&
+   r.nativeRiderPose.diagnostics.source===q.nativeRiderPose.diagnostics.source&&r.nativeRiderPose.diagnostics.coordinateSpace===q.nativeRiderPose.diagnostics.coordinateSpace){
+   p.nativeRiderPose={...interpolateRiderTargetPose(r.nativeRiderPose,q.nativeRiderPose,t),
+    windowPresentation:{policy:'display-endpoints-only',targetsInterpolated:true,fromRecordedTime:a.time,toRecordedTime:b.time,blend:t}};
+  }
+  return p;
+ })};
+ const chosen=t<1?a:b;
+ if(own(chosen,'primaryBuoys')){
+  const first=a.primaryBuoys,last=b.primaryBuoys,compatible=first&&last&&first.length===last.length&&first.every((q,i)=>q.sourceRow===last[i].sourceRow&&q.classification===last[i].classification&&q.fixed===last[i].fixed);
+  f.primaryBuoys=compatible?samplePrimaryBuoyPresentation(first,last,t):primaryBuoys(chosen.primaryBuoys);
+ }
+ return f;
 }
+
+export const windowRacerHudSpeed=r=>r.nativeTelemetry?.hudSpeed??Math.round(r.speed*3.6);

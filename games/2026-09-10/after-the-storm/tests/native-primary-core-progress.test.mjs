@@ -5,6 +5,7 @@ import {getCourse} from '../courses.js';
 import {createNativeHull} from '../native-hull.js';
 import {createNativeLifecycleRider} from '../native-lifecycle-rider.js';
 import {createNativeRiderLifecycle} from '../native-rider-lifecycle.js';
+import {createNativeCraftContactState} from '../native-craft-contact.js';
 import {createSourceBuoyLayout,createSourceBuoyProgress,stepSourceBuoyProgress} from '../source-buoy-progress.js';
 
 const near=(a,b,e=1e-9)=>assert.ok(Math.abs(a-b)<=e,`${a} != ${b}`);
@@ -29,6 +30,7 @@ test('race core judges actual primary recoil before the one50ms buoy-motion pass
  const riderLifecycle=createNativeRiderLifecycle({hull,rider:bundle.articulatedRider,
   courseDatumNative:()=>s.raceWater.field.datumNative,raceFinished:()=>r.finishTime!==null});
  Object.assign(a,bundle,{hull,riderLifecycle});host.bundles[0]=bundle;
+ host.world.craftContactStates[0]=createNativeCraftContactState(hull);
  r.sourceBuoys.armed=true;r.sourceBuoys.side=-1;r.sourceBuoyPrevious={x:initial.x,z:initial.z};
  assert.equal(hull.ticks,0);assert.equal(host.world.frames,0);assert.equal(host.primary.state.motionFrames,0);
  nearPoint(host.primary.positionForSourceRow(2),{x:50.8,y:0,z:30.5});
