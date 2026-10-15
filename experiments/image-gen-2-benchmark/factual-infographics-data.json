@@ -11599,5 +11599,147 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-15-factual-infographic-factual-infographic-peptic-ulcers-a-bre",
+    "title": "Factual infographic: Peptic Ulcers — A Break in the Digestive Lining",
+    "tests": "factual_subtype: medical-health-infographic; explicit owner-requested extra 2 of 2; request=1560426532525309982; clinical sources reviewed before generation; archive_slot=2026-10-15T18:57:57; concept=peptic-ulcers-stomach-duodenal-lining; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=high, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished, richly artistic medical infographic directly on the canvas. Title “PEPTIC ULCERS” and subtitle “A break in the digestive lining”. Give it the same premium, detailed anatomical-atlas character as the recent gout and diabetes infographics, but with its own flowing composition: exquisite anatomical gouache, translucent watercolor and fine technical ink, a quiet cool-ivory ground, deep blue-gray shadows, soft dusty rose tissue and focused copper-red injury. Confident, readable editorial lettering. The large anatomical illustration should feel beautiful and precise before explanatory text is added. No boxed grid, repeating cards, dashboard, photographed poster, book, frame, table, room, branding or watermark. High quality, auto size, opaque background.\n\nA dominant, finely modeled cutaway stomach curves across the upper-middle canvas and continues naturally into the beginning of the small intestine, the duodenum. Render believable folds, soft wall layers and subtle microtexture without gore. At one localized area in the stomach lining, show a small surface ulcer: a discrete break in the lining, not a gaping hole through the entire organ. Fine open leader labels identify “Stomach”, “Lining” and “Ulcer”. Label the continuation “Duodenum”. A secondary, smaller nearby location sketch uses a lightly marked duodenal site and the text “Ulcers can also occur here”; it must not imply that every person has ulcers in both locations.\n\nLet a graceful curved magnification flow out of the stomach wall into a close study comparing an intact surface with a localized ulcerated surface. Label “Intact lining” and “Break in the lining”. Mark this “Schematic enlargement • not to scale”. Do not portray routine ulcers as perforations. Make the tissue relief and gentle color transitions richly detailed while keeping the comparison readable.\n\nTwo open causal annotations converge toward the lining study without becoming a rigid flowchart. First: “H. pylori infection” with a restrained, obviously schematic bacterial motif and small text “A common cause”. Second: “NSAID medicines” with a neutral unbranded tablet study and text “Can make the lining more vulnerable”. Avoid claiming all ulcers arise from one cause or that everyone taking these medicines develops an ulcer. Do not depict spicy food or ordinary emotional stress as the primary cause, and do not show self-prescribing or drug doses.\n\nReadable symptoms follow the stomach’s outer curve: “Upper-abdominal burning or discomfort”, “Early fullness”, “Nausea or bloating”. Include the essential qualifier “Some ulcers cause no symptoms.” A compact note says “Meal-related pain varies—symptoms alone do not confirm an ulcer.” Keep the prose sparse and dark enough to read when zoomed.\n\nAcross the lower open space, weave a calm care pathway into the artwork. Heading “FIND AND TREAT THE CAUSE”. Concise lines: “H. pylori breath or stool testing; sometimes endoscopy.” “Antibiotics treat H. pylori infection.” “Acid-reducing medicines help healing.” “Review NSAID use with your clinician; do not change prescribed medicines on your own.” “Follow-up testing may be needed.” Do not imply antibiotics are appropriate for every ulcer. A small subtle note may read “Food triggers can worsen symptoms; diet alone does not replace treating the cause.” Prioritize the core anatomy and care over optional secondary drawings.\n\nA prominent lower-right copper-red open rule carries the essential warning in clearly readable text: “EMERGENCY: vomiting blood or coffee-ground material, black tarry stools, sudden severe persistent abdominal pain, or fainting.” Add a restrained line “Bleeding or perforation can be serious complications.” Do not render graphic bleeding. Bottom line: “General education—not a diagnosis or an individual treatment plan.”\n\nUse asymmetry, clear visual hierarchy, generous margins and thin curved leader lines. Facts must feel integrated into the anatomical artwork, never a dense wall of prose or evenly divided panel grid. Omit a minor decorative or secondary item if space is needed, but preserve the mechanism, main symptoms, evidence-based care and warning signs. No fabricated statistics, cures, extra clinical claims, bibliography, source URLs or tiny citations.",
+    "image": "images/2026-10-15-factual-infographic-factual-infographic-peptic-ulcers-a-bre.jpg",
+    "thumb": "thumbs/2026-10-15-factual-infographic-factual-infographic-peptic-ulcers-a-bre.webp",
+    "color": "#e3d4cc",
+    "date": "2026-10-15",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "peptic-ulcers-stomach-duodenal-lining",
+      "imageSha256": "c28289fee54b454b5583bf6ee3456e0b7a67f80475add73df7bd0c127f76d5a2",
+      "imageDHash": "98f8e0a8fcf48c88"
+    },
+    "factualInfographic": {
+      "topic": "peptic ulcers",
+      "description": "An artistic cutaway atlas of stomach and duodenal ulcers, H. pylori and NSAID causes, diagnostic evaluation, treatment and emergency warning signs.",
+      "sourceNote": "Verified against NIDDK peptic-ulcer guidance and NHS stomach-ulcer guidance: https://www.niddk.nih.gov/health-information/digestive-diseases/peptic-ulcers-stomach-ulcers https://www.niddk.nih.gov/health-information/digestive-diseases/peptic-ulcers-stomach-ulcers/symptoms-causes https://www.nhs.uk/conditions/stomach-ulcer/ Scope: ulcer anatomy, common causes, symptoms, evaluation, treatment and warning signs.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-15T23:03:30Z",
+        "sources": [
+          {
+            "id": "U1",
+            "publisher": "National Institute of Diabetes and Digestive and Kidney Diseases (NIDDK)",
+            "title": "Peptic Ulcers (Stomach or Duodenal Ulcers)",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/digestive-diseases/peptic-ulcers-stomach-ulcers"
+          },
+          {
+            "id": "U2",
+            "publisher": "National Institute of Diabetes and Digestive and Kidney Diseases (NIDDK)",
+            "title": "Symptoms & Causes of Peptic Ulcers",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/digestive-diseases/peptic-ulcers-stomach-ulcers/symptoms-causes"
+          },
+          {
+            "id": "U3",
+            "publisher": "National Health Service (NHS)",
+            "title": "Stomach ulcer",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/stomach-ulcer/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "A peptic ulcer is a sore in the lining of the stomach or duodenum; the two locations are alternatives, not necessarily simultaneous.",
+            "sourceIds": [
+              "U1",
+              "U3"
+            ]
+          },
+          {
+            "claim": "Helicobacter pylori infection and NSAID medicines are the most common causes of peptic ulcers.",
+            "sourceIds": [
+              "U1",
+              "U2",
+              "U3"
+            ]
+          },
+          {
+            "claim": "NSAIDs such as ibuprofen can make the stomach lining more prone to damage and ulcers; this is a risk, not a universal outcome.",
+            "sourceIds": [
+              "U2"
+            ]
+          },
+          {
+            "claim": "Symptoms can include upper abdominal burning or discomfort, feeling full early, nausea and bloating; some people have no symptoms.",
+            "sourceIds": [
+              "U1",
+              "U2",
+              "U3"
+            ]
+          },
+          {
+            "claim": "Food can relieve pain briefly in some people and worsen it in others; meal timing cannot diagnose an ulcer.",
+            "sourceIds": [
+              "U2"
+            ]
+          },
+          {
+            "claim": "Evaluation may use H. pylori breath or stool tests and sometimes upper gastrointestinal endoscopy.",
+            "sourceIds": [
+              "U1",
+              "U3"
+            ]
+          },
+          {
+            "claim": "Treatment targets the cause, including antibiotics for H. pylori infection and acid-reducing medicines such as proton pump inhibitors.",
+            "sourceIds": [
+              "U3"
+            ]
+          },
+          {
+            "claim": "A clinician may review or change NSAID medicines; an infographic should not direct independent changes to prescribed medicines.",
+            "sourceIds": [
+              "U1",
+              "U3"
+            ]
+          },
+          {
+            "claim": "Follow-up tests may be needed to confirm treatment has worked.",
+            "sourceIds": [
+              "U3"
+            ]
+          },
+          {
+            "claim": "Ulcers may cause bleeding or perforation; these are possible complications, not present in every ulcer.",
+            "sourceIds": [
+              "U1",
+              "U3"
+            ]
+          },
+          {
+            "claim": "Vomiting blood or coffee-ground material, black tarry stool, sudden severe persistent abdominal pain or fainting needs urgent or emergency assessment.",
+            "sourceIds": [
+              "U2",
+              "U3"
+            ]
+          },
+          {
+            "claim": "Diet is not considered an important primary cause or treatment for peptic ulcers; foods may worsen symptoms for some people and do not replace treating H. pylori or medication causes.",
+            "sourceIds": [
+              "U1",
+              "U3"
+            ]
+          },
+          {
+            "claim": "This infographic provides general education, not a diagnosis or an individualized treatment plan.",
+            "sourceIds": [
+              "U1",
+              "U3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
