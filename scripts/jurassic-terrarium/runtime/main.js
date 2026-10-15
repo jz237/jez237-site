@@ -1937,7 +1937,7 @@ class Dino {
         const k = (1 - Math.abs(side) / clear) * (1 - Math.max(0, ahead - this.length * 0.3) / reach);
         const turn = (side > 0 ? -1 : 1) * 0.9 * k; // steer away from the side it is on
         if (Math.abs(turn) > Math.abs(avoid)) avoid = turn;
-        slow = Math.min(slow, 1 - 0.5 * k);
+        if (this.state !== 'flee') slow = Math.min(slow, 1 - 0.5 * k); // (running for it: no slowing down)
       }
     }
     want += avoid;
