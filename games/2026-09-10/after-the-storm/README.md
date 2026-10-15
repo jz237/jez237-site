@@ -10,6 +10,8 @@ A browser jet-ski game built around shared waves, hull response and modern water
 
 ## Play
 
+RaceWave46 parity work is active. The current local feature pass adds saved time-trial ghosts, horizontal/vertical two-player views, untimed two-player Dolphin Park, independent Player 2 stunt/dive controls, remappable keyboard/gamepad controls, and per-player rumble preferences. Original stunt geometry and timing still require calibration against the recovered ROM data. See [the current evidence and remaining work](RACEWAVE-PARITY.md); broad gameplay coverage does not establish complete original-game parity.
+
 On Windows, double-click **Play After the Storm.cmd**. It opens the racing/free-riding game. Node.js is required and is already installed on the creation machine.
 
 Alternatively, run `npm start` from this folder, then open:
@@ -31,6 +33,8 @@ No build, npm install, API key, account or paid service is required. This folder
 | Camera | C | / |
 | Instant replay | Replay button; Space pauses playback, Escape returns | Shared replay view |
 | Pause | Escape or Enter in two-player mode | Escape or Enter |
+| Stunt commands | 1–7 | Numpad 1–7 |
+| Submarine dive | F during descent | Apostrophe during descent |
 
 A fresh throttle press as GO appears gives maximum power. Hold rearward trim while steering for a quick turn. Hard collisions and bad stunt landings can eject the rider; tap throttle to remount faster.
 
@@ -52,7 +56,7 @@ Phone controls provide a proportional steering pad, independent GO / Brake / Abs
 - **Championship:** four riders, six/seven/eight-round circuits, Normal/Hard/Expert and Reverse, qualification points, previous-result starting grids and class unlocks. Normal begins with an optional warm-up; pause to begin the circuit. Restart replays the current round with its original points and grid.
 - **Single race / time trial:** three laps by default, adjustable to 4/5/6/9. Pass red buoys on the right and yellow on the left. Correct passes build five power levels; a miss resets power. Five misses or five seconds outside the course disqualify. Time trials compare completed laps against the best lap, including a saved record.
 - **Stunts:** four timed checkpoints, chained rings, air rotations and rider poses. Choose routes through the mandatory checkpoint gates.
-- **Two players:** horizontal split screen, independent riders and tuning, same-rider matches, optional catch-up, and swappable liveries for different riders.
+- **Two players:** horizontal or vertical split screen, independent riders and tuning, same-rider matches, optional catch-up, and swappable liveries for different riders. Dolphin Park provides untimed two-player free ride.
 
 Citadel Sound raises its sluice from lap two on Hard and above. Port Meridian opens a shorter, narrow service tunnel from the start on higher classes. The outer channels remain valid alternatives. Structures have solid walls, gates and roof clearance, and the chase cameras avoid them. Tempest Island's ebb exposes a coral shoal beside the main channel. Glacier ice drifts at the same locations used for collisions.
 
@@ -69,6 +73,10 @@ Pelican Park has a swimming dolphin guide. Complete its timed run through all tw
 Eight local ElevenLabs clips provide idle/load engines, water rush, wind, splash, hull impact, race cues and an optional instrumental loop. Pitch and mix respond to throttle, speed and water contact. Split-screen engines are independent. No announcer or narration is used. Generation consumed 868 existing credits with no purchase; playing requires no account or service call. A synthesized fallback handles missing files.
 
 Options & saves manages rider names, tuning, graphics, sea preferences, stereo/mono/headphones, volume and original optional music. Sound begins only after starting. Solo results support initials, top-three times, best laps and stunt scores; custom sea states are unranked. Reached-course and class restrictions follow championship progress.
+
+Time trials automatically retain a compressed ghost of the best complete run for a matching setup. Course revision, class, laps, rider, tuning, sea state and wave seed must match; a subsequent trial reuses the ghost's wave seed. Ghosts are display-only and have no collisions, wakes or scoring effects. Options controls visibility and erase/undo; portable saves include up to nine bounded ghost setups.
+
+Options also supports independent keyboard and gamepad bindings, axis inversion, a 0–35% joystick deadzone (5% initially), and per-player rumble strength (25% initially). Escape remains an emergency pause. Key capture consumes the key release and clears held inputs. Touch controls keep their logical actions when physical keys are rebound. Actual gamepad hardware still needs verification.
 
 Export portable JSON by downloading or copying the displayed text. Import through a file picker or paste, review the validation summary, then replace the save. Erasing/importing/resetting offers session Undo. Invalid data is rejected before changing progress. Browser storage retains progress; the export is the durable backup.
 

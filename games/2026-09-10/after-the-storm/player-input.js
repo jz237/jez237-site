@@ -1,29 +1,48 @@
 import {steeringAxis} from './riding-controls.js';
-export function playerInput(keys,pad,player=0,split=false,out={}){
- const second=player===1,up=second?'ArrowUp':'KeyW',left=second?'ArrowLeft':'KeyA',right=second?'ArrowRight':'KeyD',down=second?'ArrowDown':'KeyS';
- const arrows=!split&&!second,modifier=!!pad?.buttons[4]?.pressed;const padTrick=!modifier?'':pad?.buttons[3]?.pressed?'flip':pad?.buttons[2]?.pressed?'left':pad?.buttons[1]?.pressed?'right':pad?.buttons[12]?.pressed?'stand':pad?.buttons[15]?.pressed?'handstand':pad?.buttons[13]?.pressed?'backwards':pad?.buttons[0]?.pressed?'somersault':'';
- const axis=pad?steeringAxis(-(pad.axes[0]||0),.12):0;
- out.throttle=Math.max(keys[up]||arrows&&keys.ArrowUp?1:0,pad?.buttons[7]?.value||0);
- out.steer=axis||.8*((keys[left]||arrows&&keys.ArrowLeft?1:0)-(keys[right]||arrows&&keys.ArrowRight?1:0));
- out.brake=!!(keys[down]||keys[second?'ControlRight':'Space']||arrows&&keys.ArrowDown||pad?.buttons[6]?.pressed);
- out.rescue=!!keys[second?'Backspace':'KeyR'];
- out.slide=!!(keys[second?'ShiftRight':'ShiftLeft']||pad?.buttons[5]?.pressed);
- out.dampen=!!(keys[second?'Period':'KeyB']||!modifier&&pad?.buttons[0]?.pressed);
- out.lean=((keys[second?'BracketLeft':'KeyQ']?1:0)-(keys[second?'BracketRight':'KeyE']?1:0))||(pad&&Math.abs(pad.axes[1]||0)>.12?-(pad.axes[1]||0):0);
- out.dive=!second&&!!(keys.KeyF||modifier&&pad?.buttons[6]?.pressed);
- out.trick=second?'':keys.Digit1?'flip':keys.Digit2?'left':keys.Digit3?'right':keys.Digit4?'stand':keys.Digit5?'handstand':keys.Digit6?'backwards':keys.Digit7?'somersault':padTrick;return out;
+import {keyboardActions,mappedGamepad,playerControls} from './control-bindings.js';
+export function playerInput(keys,pad,player=0,split=false,out={},prefs=null,touchKeys=null){
+ const key=keyboardActions(keys,prefs,player,split);
+ // Touch buttons express fixed riding actions independently of keyboard rebinding.
+ if(touchKeys&&player===0){const touch=keyboardActions(touchKeys,null,0,true);for(const action of Object.keys(key))key[action]||=touch[action];}
+ const mapped=mappedGamepad(pad,prefs),buttons=mapped?.actions,modifier=!!buttons?.modifier.pressed;
+ const trickList=[['flip','flip'],['rollLeft','left'],['rollRight','right'],['stand','stand'],['handstand','handstand'],['backwards','backwards'],['somersault','somersault']];
+ const padTrick=modifier?trickList.find(([action])=>buttons[action].pressed)?.[1]??'':'';
+ const axis=mapped?steeringAxis(-mapped.axes[0],mapped.deadzone):0;
+ out.throttle=Math.max(key.throttle?1:0,buttons?.throttle.value||0);
+ out.steer=axis||.8*(Number(key.steerLeft)-Number(key.steerRight));
+ out.brake=!!(key.brakeReverse||key.brake||buttons?.brake.pressed);
+ out.rescue=!!(key.rescue||buttons?.rescue.pressed);
+ out.slide=!!(key.slide||buttons?.slide.pressed);
+ out.dampen=!!(key.dampen||!modifier&&buttons?.dampen.pressed);
+ out.lean=Number(key.leanForward)-Number(key.leanBackward)||(mapped&&Math.abs(mapped.axes[1])>mapped.deadzone?-mapped.axes[1]:0);
+ out.dive=!!(key.dive||modifier&&buttons?.dive.pressed);
+ out.trick=trickList.find(([action])=>key[action])?.[1]??padTrick;
+ out.camera=!!(key.camera||!modifier&&buttons?.camera.pressed);out.pause=!!(key.pause||buttons?.pause.pressed);return out;
 }
 // Three.js viewports have their origin at the bottom left. The DOM HUD uses top left.
-export function splitViewports(width,height){const lower=Math.floor(height/2);return [{x:0,y:lower,width,height:height-lower},{x:0,y:0,width,height:lower}];}
+// Split physical canvas pixels before converting to renderer units. Each pixel
+// belongs to exactly one view, including odd dimensions at fractional DPI.
+export function splitViewports(width,height,layout='horizontal'){
+ if(layout==='vertical'){const left=Math.floor(width/2);return [{x:0,y:0,width:left,height},{x:left,y:0,width:width-left,height}];}
+ const lower=Math.floor(height/2);return [{x:0,y:lower,width,height:height-lower},{x:0,y:0,width,height:lower}];
+}
+export function splitPlayerAt(width,height,x,y,layout='horizontal'){
+ const [first]=splitViewports(width,height,layout);
+ return layout==='vertical'?(x<first.width?0:1):(y<first.height?0:1);
+}
+export function splitRenderViewports(width,height,layout='horizontal',pixelRatio=1){
+ // Three rounds these units to physical pixels; the water shader floors them.
+ // A tiny subpixel bias keeps both conversions at the authored integer edge.
+ return splitViewports(width,height,layout).map(view=>Object.fromEntries(Object.entries(view).map(([key,value])=>[key,value/pixelRatio+1e-7])));
+}
 
 // The same mutable records are consumed synchronously by the fixed-step loop.
-export function createInputSampler(){
- const combined={},first={},second={},pair=[first,second];
+export function createInputSampler(getControls=()=>null){
+ const first={},second={},pair=[first,second];
  return (keys,touchKeys,pads,split=false)=>{
-  for(const key in combined)delete combined[key];
-  Object.assign(combined,keys,touchKeys);
-  playerInput(combined,pads[0],0,split,first);
+  const controls=getControls();
+  playerInput(keys,pads[0],0,split,first,playerControls(controls,0),touchKeys);
   if(!split)return first;
-  playerInput(keys,pads[1],1,true,second);return pair;
+  playerInput(keys,pads[1],1,true,second,playerControls(controls,1));return pair;
  };
 }

@@ -1,6 +1,8 @@
 import {COURSES} from './courses.js';
+import {validateGhostLibrary} from './ghost-library.js';
+import {initialControls,validateControls} from './control-bindings.js';
 const KEY='after-the-storm-racing-v1';
-export const initialSave=()=>({version:1,dolphin:false,records:{},scores:{},settings:{},names:[],unlocked:0,reached:['greyhaven','practice'],audio:{mode:'stereo',music:false,volume:.8,enabled:true},preferences:{graphics:'auto',laps:3,seaState:'surf'}});
+export const initialSave=()=>({version:1,dolphin:false,records:{},scores:{},ghosts:[],controls:initialControls(),settings:{},names:[],unlocked:0,reached:['greyhaven','practice'],audio:{mode:'stereo',music:false,volume:.8,enabled:true},rumble:{enabled:true,strength:[.25,.25]},preferences:{graphics:'auto',laps:3,seaState:'surf',ghost:true}});
 export const MAX_SAVE_BYTES=2000000;
 const layoutSuffix=({course,layoutRevision})=>{const revision=layoutRevision??COURSES.find(c=>c.id===course)?.layoutRevision??0;return revision?'/layout-'+revision:'';};
 export const recordKey=(entry)=>`${entry.course}/${entry.difficulty??0}/${entry.laps??3}${layoutSuffix(entry)}`;
@@ -26,15 +28,18 @@ function recordParts(key,count){const p=key.split('/');if((p.length!==count&&!(p
 export function validateSave(value){
  if(!object(value)||value.version!==1||!object(value.records))fail('This is not a supported After the Storm save.');
  const out=initialSave();if(value.dolphin!==undefined&&typeof value.dolphin!=='boolean')fail('Invalid park bonus.');out.dolphin=!!value.dolphin;if(!integer(value.unlocked??0,0,3))fail('Invalid championship unlock.');out.unlocked=value.unlocked??0;
+ if(value.ghosts!==undefined)out.ghosts=validateGhostLibrary(value.ghosts);
+ out.controls=validateControls(value.controls);
+ if(value.rumble!==undefined){const r=value.rumble;if(!object(r)||typeof r.enabled!=='boolean'||!Array.isArray(r.strength)||r.strength.length!==2||r.strength.some(v=>!number(v,0,1)))fail('Invalid controller feedback.');out.rumble={enabled:r.enabled,strength:[...r.strength]};}
  if(value.reached!==undefined){if(!Array.isArray(value.reached)||value.reached.length>9||value.reached.some(id=>!courseIds.has(id)))fail('Invalid reached courses.');out.reached=[...new Set(['greyhaven','practice',...value.reached])];}
  if(Object.keys(value.records).length>1800)fail('Too many course records.');
  for(const [key,entry] of Object.entries(value.records)){recordParts(key,3);if(!object(entry)||!Array.isArray(entry.times)||entry.times.length>3)fail('Invalid leaderboard.');out.records[key]={times:entry.times.map(timeRow).sort((a,b)=>a.time-b.time),lap:entry.lap?timeRow(entry.lap):null};if(out.records[key].times.length&&!out.records[key].lap)fail('Missing best lap.');}
  if(value.scores!==undefined){if(!object(value.scores)||Object.keys(value.scores).length>360)fail('Invalid score table.');for(const [key,rows] of Object.entries(value.scores)){recordParts(key,2);if(!Array.isArray(rows)||rows.length>3)fail('Invalid score list.');out.scores[key]=rows.map(r=>{if(!object(r)||!integer(r.rider,0,3)||!integer(r.score,0,1e8)||typeof r.initials!=='string')fail('Invalid stunt score.');return {initials:cleanInitials(r.initials),score:r.score,rider:r.rider};}).sort((a,b)=>b.score-a.score);}}
  if(value.settings!==undefined){if(!object(value.settings))fail('Invalid settings.');for(const [id,tune] of Object.entries(value.settings)){if(!['0','1','2','3'].includes(id))fail('Unknown rider.');out.settings[id]=tuning(tune);}}
  if(value.names!==undefined){if(!Array.isArray(value.names)||value.names.length>4||value.names.some(n=>typeof n!=='string'))fail('Invalid rider names.');out.names=value.names.map(cleanName);}
- if(value.versus!==undefined){const v=value.versus;if(!object(v)||!integer(v.rider,0,3))fail('Invalid second player.');out.versus={rider:v.rider,tune:tuning(v.tune??{}),handicap:!!v.handicap};if(v.swapColours!==undefined){if(typeof v.swapColours!=='boolean')fail('Invalid colour choice.');out.versus.swapColours=v.swapColours;}}
+ if(value.versus!==undefined){const v=value.versus;if(!object(v)||!integer(v.rider,0,3))fail('Invalid second player.');out.versus={rider:v.rider,tune:tuning(v.tune??{}),handicap:!!v.handicap};if(v.swapColours!==undefined){if(typeof v.swapColours!=='boolean')fail('Invalid colour choice.');out.versus.swapColours=v.swapColours;}if(v.layout!==undefined){if(!['horizontal','vertical'].includes(v.layout))fail('Invalid two-player display.');out.versus.layout=v.layout;}}
  if(value.audio!==undefined){const a=value.audio;if(!object(a)||!['stereo','mono','headphones'].includes(a.mode)||!number(a.volume,0,1)||typeof a.music!=='boolean'||typeof a.enabled!=='boolean')fail('Invalid audio options.');out.audio={mode:a.mode,music:a.music,volume:a.volume,enabled:a.enabled};}
- if(value.preferences!==undefined){const p=value.preferences;if(!object(p)||!['auto','high','medium','low'].includes(p.graphics)||![3,4,5,6,9].includes(p.laps)||!['surf','course','calm','chop','storm'].includes(p.seaState))fail('Invalid display or sea preferences.');out.preferences={graphics:p.graphics,laps:p.laps,seaState:p.seaState};}
+ if(value.preferences!==undefined){const p=value.preferences;if(!object(p)||!['auto','high','medium','low'].includes(p.graphics)||![3,4,5,6,9].includes(p.laps)||!['surf','course','calm','chop','storm'].includes(p.seaState)||p.ghost!==undefined&&typeof p.ghost!=='boolean')fail('Invalid display or sea preferences.');out.preferences={graphics:p.graphics,laps:p.laps,seaState:p.seaState,ghost:p.ghost??true};}
  return out;
 }
 export function exportSave(save){return JSON.stringify({format:'after-the-storm-save',version:1,data:validateSave(save)},null,2);}

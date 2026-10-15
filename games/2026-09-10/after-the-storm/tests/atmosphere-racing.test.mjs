@@ -37,7 +37,15 @@ test('turning water sheets inherit world velocity, broaden with age and reset sa
  for(let i=0;i<30;i++){r.z=i*.5;sheet.update(r,i/30,.2);}assert.ok(sheet.mesh.visible);const positions=sheet.mesh.geometry.attributes.position.array.slice();sheet.update(r,29/30,.2);assert.deepEqual(sheet.mesh.geometry.attributes.position.array,positions);sheet.update(r,0,.2);assert.ok(sheet.mesh.visible);assert.ok(sheet.mesh.geometry.attributes.position.array.every(Number.isFinite));sheet.dispose();
 });
 test('head and shoulder reactions remain smooth while hands and boots keep their anchors',()=>{
- const m={};riderMotion(m,0,.8,{speed:25});let motion;for(let i=1;i<=60;i++)motion=riderMotion(m,i/60,.8,{speed:25,pitchVelocity:1,rollVelocity:1,waveLook:2.6});
+ // Steering alone moves the bars; actual yaw and wet contact supply the
+ // lateral acceleration that makes the rider lean into a carving turn.
+ const m={};riderMotion(m,0,.8,{speed:25});let motion;for(let i=1;i<=60;i++)motion=riderMotion(m,i/60,.8,{speed:25,yawVelocity:.8,wet:1,pitchVelocity:1,rollVelocity:1,waveLook:2.6});
  assert.ok(motion.cornerLean>.03);assert.ok(motion.headPitch<-.04);assert.ok(motion.headLook>.15);assert.ok(motion.shoulderLag<-.02);
  const ordinary=riderPose('',1,.8,{speed:25,steering:motion.steering}),active=riderPose('',1,.8,motion);for(const side of ['L','R']){assert.deepEqual(active.targets['hand'+side],ordinary.targets['hand'+side]);assert.deepEqual(active.targets['foot'+side],ordinary.targets['foot'+side]);}assert.ok(active.headYaw>ordinary.headYaw+.1);
+});
+
+test('cornering weight transfer requires measured yaw and water contact',()=>{
+ const settle=signals=>{const memory={};let motion;for(let tick=0;tick<=60;tick++)motion=riderMotion(memory,tick/60,.8,{speed:25,...signals});return motion.cornerLean;};
+ assert.ok(settle({yawVelocity:.8,wet:1})>.03);assert.ok(settle({yawVelocity:-.8,wet:1})<-.03);
+ assert.equal(settle({yawVelocity:0,wet:1}),0);assert.equal(settle({yawVelocity:.8,wet:0}),0);assert.equal(settle({yawVelocity:.8,wet:1,airborne:true}),0);
 });
