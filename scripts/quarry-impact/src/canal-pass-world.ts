@@ -1,3 +1,4 @@
+import {createGraniteViaduct} from './granite-viaduct';
 import {createMillbrookMill} from './millbrook-mill';
 import {addCourseGroundDetail} from './course-materials';
 import {createCourseScenery,paintCourseGround} from './course-scenery';
@@ -46,10 +47,11 @@ export function createCanalPassWorld(id:'millbrook-canal-v1'|'granite-pass-v1'){
   for(const x of [-62,62]){box(x,1,-5,2,2,20,'steel');box(x,2.4,-5,3,.5,23,'stripe');}
   for(const x of [-38,10,42]){box(x,.8,-5,20,1.4,6,'red');box(x+3,2,-5,8,1.5,5,'seat');}
  }
+ const viaduct=paved?null:createGraniteViaduct();if(viaduct)root.add(viaduct.root);
  const mill=paved?createMillbrookMill():null;if(mill)root.add(mill.root);
  const scenery=createCourseScenery(course,paved?'canal':'pass');root.add(scenery.root);
 
  for(const [finish,matrices]of batches){const mesh=new T.InstancedMesh(boxGeometry,materials[finish],matrices.length);matrices.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.name=id+'_'+finish;mesh.castShadow=mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
  root.userData.solidRecords=course.solids;freezeSceneryTransforms(root);
- let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;surfaceDetail.dispose();mill?.dispose();scenery.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
+ let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;surfaceDetail.dispose();viaduct?.dispose();mill?.dispose();scenery.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
 }
