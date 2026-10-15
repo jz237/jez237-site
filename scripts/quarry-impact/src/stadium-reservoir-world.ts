@@ -1,3 +1,5 @@
+import {createReservoirIntake} from './reservoir-intake';
+import {createReservoirShore} from './reservoir-shore';
 import {createCourseScenery,paintCourseGround} from './course-scenery';
 import {createStadiumScenery} from './stadium-scenery';
 import {addCourseGroundDetail} from './course-materials';
@@ -57,7 +59,8 @@ export function createStadiumReservoirWorld(id:'holloway-stadium-v1'|'bramblebro
 
  }
  for(const [finish,matrices]of batches){const mesh=new T.InstancedMesh(boxGeometry,materials[finish],matrices.length);matrices.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.name=id+'_'+finish;mesh.castShadow=mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
+ const intake=paved?null:createReservoirIntake(),shore=paved?null:createReservoirShore();if(intake)root.add(intake.root);if(shore)root.add(shore.root);
  const venue=paved?createStadiumScenery():createCourseScenery(course,'reservoir');if(venue)root.add(venue.root);
  root.userData.solidRecords=course.solids;freezeSceneryTransforms(root);
- let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;venue?.dispose();surfaceDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
+ let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;intake?.dispose();shore?.dispose();venue?.dispose();surfaceDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
 }

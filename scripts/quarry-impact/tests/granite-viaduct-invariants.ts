@@ -10,15 +10,18 @@ export function readGraniteViaductPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreGraniteViaductBytes(file:string,bytes:Buffer):Buffer{
+ bytes=restoreReservoirIntakeBytes(file,bytes);
  const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readGraniteViaductPrevious(file);
 }
 export function verifyGraniteViaductRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'18738df8a7c6d73946251c06f5d9a0ebd5317b98');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreReservoirIntakeBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreGraniteViaductBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the GraniteViaduct release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreReservoirIntakeBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the GraniteViaduct release');
  assert.equal(manifest.previousFixtureCount,2337);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,2337);
 }
+
+import {restoreReservoirIntakeBytes} from './reservoir-intake-invariants';
