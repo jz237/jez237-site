@@ -319,3 +319,8 @@ v1.40: hot days, jostling at the food, colours through the year:
   - calves dart in for a stolen mouthful and scamper back to their mother;
   - when the T. rex comes for its meat, every plant-eater near it scatters.
 - **Colours through the year:** in spring the frills, plates and crests flush bright red-orange for the breeding season (stronger on the males). In winter the hide goes duller, greyer and dustier. Calves are mottled and dappled, with pale broken bands across the back, fading as they grow up.
+
+v1.40.1: animals no longer walk through each other:
+- **Bodies kept apart:** each animal's body is a capsule along its length, as wide as its body. Where two overlap they are pushed apart along the line between them, the lighter one giving way more.
+- **Walking round:** an animal whose way is blocked by another (standing, or coming towards it) veers round it and slows, instead of walking into it. One going the same way still queues behind.
+- **Measured over 10 simulated minutes:** frames with two bodies deeply overlapping dropped from 77% to about 3%. What's left is intended: calves head-butting in play, and calves walking under the Brachiosaurus.

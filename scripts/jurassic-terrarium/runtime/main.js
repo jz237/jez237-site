@@ -55,6 +55,19 @@ function faceEyes(o, dt, { shut = 0 } = {}) {
   e.y += (g[1] - e.y) * k;
 }
 
+// the closest points of two 2D segments [ax, az, bx, bz]: [px, pz on the first, qx, qz on the second]
+function closestSegSeg(s1, s2) {
+  const [ax, az, bx, bz] = s1, [cx, cz, dx2, dz2] = s2;
+  const ux = bx - ax, uz = bz - az, vx = dx2 - cx, vz = dz2 - cz, wx = ax - cx, wz = az - cz;
+  const a = ux * ux + uz * uz, b = ux * vx + uz * vz, c = vx * vx + vz * vz, d = ux * wx + uz * wz, e = vx * wx + vz * wz;
+  const D = a * c - b * b;
+  let s = D > 1e-9 ? Math.max(0, Math.min(1, (b * e - c * d) / D)) : 0;
+  let t = c > 1e-9 ? (b * s + e) / c : 0;
+  if (t < 0) (t = 0), (s = a > 1e-9 ? Math.max(0, Math.min(1, -d / a)) : 0);
+  else if (t > 1) (t = 1), (s = a > 1e-9 ? Math.max(0, Math.min(1, (b - d) / a)) : 0);
+  return [ax + ux * s, az + uz * s, cx + vx * t, cz + vz * t];
+}
+
 // distance in plan from (px, pz) to the segment a-b
 function segDist2D(px, pz, ax, az, bx, bz) {
   const ex = bx - ax, ez = bz - az, L = ex * ex + ez * ez;
@@ -1845,6 +1858,11 @@ class Dino {
     }
   }
 
+  // half the body's width, in the case's units (for keeping bodies apart)
+  bodyRadius() {
+    return (this.sp.bodyR ?? 0.12) * (this.k || 1) * 1.25 * Math.min(1, this.grow ?? 1);
+  }
+
   // the point `dist` further along the route from where the animal stands
   carrot(dist) {
     let px = this.pos.x, pz = this.pos.z, left = dist;
@@ -1903,7 +1921,26 @@ class Dino {
     }
     if (pr.t === 0 && d < 0.1) pr.tries = 0;
     const c = this.carrot(look);
-    const want = Math.atan2(c.x - this.pos.x, c.z - this.pos.z);
+    let want = Math.atan2(c.x - this.pos.x, c.z - this.pos.z);
+    // another animal in the way (standing, or coming the other way): veer round it, slowing a little,
+    // rather than walking into it (bodies are also kept apart, Dinosaurs.separate)
+    let avoid = 0, slow = 1;
+    if (!hunting) {
+      const fx = Math.sin(want), fz = Math.cos(want), me = this.bodyRadius(), reach = this.length * 1.1 + 0.2;
+      for (const o of this.mod.walkers) {
+        if (o === this || !o.root.visible || o.sp.flyer || o === this.parent || o.parent === this) continue;
+        const dx = o.pos.x - this.pos.x, dz = o.pos.z - this.pos.z, ahead = dx * fx + dz * fz;
+        if (ahead <= 0 || ahead > reach + o.length * 0.4) continue;
+        const side = dx * fz - dz * fx, clear = me + o.bodyRadius() + o.length * 0.18 + 0.04;
+        if (Math.abs(side) > clear) continue;
+        if (o.speed > 0.03 && Math.cos(o.heading - this.heading) > 0.5) continue; // going the same way: the queue handles it
+        const k = (1 - Math.abs(side) / clear) * (1 - Math.max(0, ahead - this.length * 0.3) / reach);
+        const turn = (side > 0 ? -1 : 1) * 0.9 * k; // steer away from the side it is on
+        if (Math.abs(turn) > Math.abs(avoid)) avoid = turn;
+        slow = Math.min(slow, 1 - 0.5 * k);
+      }
+    }
+    want += avoid;
     let dh = want - this.heading;
     dh = Math.atan2(Math.sin(dh), Math.cos(dh));
     const turnRate = (gait === 'run' ? 1.4 : 0.9) * Math.min(2, 1.2 / Math.max(this.length, 0.4));
@@ -1927,7 +1964,7 @@ class Dino {
         room = Math.min(room, MathUtils.clamp(gap / 0.35, 0, 1));
       }
     }
-    this.speed += (v * align * room - this.speed) * Math.min(1, dt * 1.5);
+    this.speed += (v * align * room * slow - this.speed) * Math.min(1, dt * 1.5);
     this.pos.x += Math.sin(this.heading) * this.speed * dt;
     this.pos.z += Math.cos(this.heading) * this.speed * dt;
     this.play(gait, 0.5);
@@ -2928,8 +2965,38 @@ class Dinosaurs {
     return { night, storm: life?.storm || 0, rain: life?.rain || 0, wet: life?.wet || this.ctx.world.groundWetness || 0 };
   }
 
+  // Bodies keep apart: each grounded animal is a capsule along its length (hips to chest), as wide as
+  // its body; where two overlap they are pushed apart along the line between them, the lighter one
+  // moving more. (Head-butting calves and a mother with her calf at her flank are let a little closer.)
+  separate(dt) {
+    const W = (this.walkers || []).filter((d) => d.root.visible && !d.sp.flyer && !d.swimming);
+    const seg = (d) => {
+      const h = d.length * 0.3, fx = Math.sin(d.heading) * h, fz = Math.cos(d.heading) * h;
+      return [d.pos.x - fx, d.pos.z - fz, d.pos.x + fx * 1.2, d.pos.z + fz * 1.2];
+    };
+    const S = W.map(seg);
+    for (let i = 0; i < W.length; i++)
+      for (let j = i + 1; j < W.length; j++) {
+        const a = W[i], b = W[j];
+        const close = (a.parent === b || b.parent === a || (a.soc && a.soc === b.soc)) ? 0.6 : 1;
+        const ra = a.bodyRadius(), rb = b.bodyRadius(), lim = (ra + rb) * close;
+        if (Math.abs(a.pos.x - b.pos.x) > a.length + b.length + lim || Math.abs(a.pos.z - b.pos.z) > a.length + b.length + lim) continue;
+        const [px, pz, qx, qz] = closestSegSeg(S[i], S[j]);
+        let dx = qx - px, dz = qz - pz, d = Math.hypot(dx, dz);
+        if (d >= lim) continue;
+        if (d < 1e-4) (dx = b.pos.x - a.pos.x || 1e-3), (dz = b.pos.z - a.pos.z), (d = Math.hypot(dx, dz) || 1e-3);
+        const over = Math.min(lim - d, 0.04 + dt * 0.6), ma = a.length ** 3, mb = b.length ** 3;
+        const ka = mb / (ma + mb), kb = ma / (ma + mb), ux = dx / d, uz = dz / d;
+        a.pos.x -= ux * over * ka;
+        a.pos.z -= uz * over * ka;
+        b.pos.x += ux * over * kb;
+        b.pos.z += uz * over * kb;
+      }
+  }
+
   update(dt) {
     if (!this.ready) return;
+    this.separate(dt);
     const env = this.env();
     if (!this.flora._hand && this.flora.plants?.length) (this.flora.mod = this), this.flora.installHand();
     this.flora.update(dt);
