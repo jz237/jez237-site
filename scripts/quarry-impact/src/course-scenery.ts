@@ -3,10 +3,11 @@ import * as T from 'three';
 import type {createCountyCourse} from './county-course';
 
 type Course=ReturnType<typeof createCountyCourse>;
-export type SceneryTheme='park'|'dunes'|'canal'|'pass'|'coast'|'forest'|'farm'|'port'|'reservoir'|'club';
+export type SceneryTheme='park'|'dunes'|'canal'|'pass'|'coast'|'forest'|'farm'|'port'|'reservoir'|'club'|'ridge';
 type Shape='box'|'round'|'cone'|'rock'|'leaf'|'gable';
 type Finish='bark'|'leaf'|'pine'|'stone'|'sand'|'wood'|'metal'|'white'|'red'|'ochre'|'glass'|'rubber';
 const palettes={
+ ridge:{ground:'#7c7959',patch:'#9e986e',rock:0x8e8878,leaf:0x6d7447,pine:0x4c603f,hill:0x777951,accent:'#a65c30',title:'HARROWSTONE RIDGE RUN',subtitle:'HIGH GROUND / LOW EXPECTATIONS'},
  club:{ground:'#647454',patch:'#8a9470',rock:0x8c8b7c,leaf:0x5f7441,pine:0x415b36,hill:0x637850,accent:'#904535',title:'WESTMERE MOTOR CLUB',subtitle:'MEMBERS ONLY / BUMPERS NEGOTIABLE'},
  reservoir:{ground:'#687457',patch:'#879477',rock:0x8b8d7a,leaf:0x5b7147,pine:0x405d46,hill:0x617455,accent:'#387a84',title:'BRAMBLEBROOK RESERVOIR',subtitle:'HIGH WATER / LOW RESALE VALUE'},
  port:{ground:'#85877d',patch:'#a6a392',rock:0x888b7c,leaf:0x637252,pine:0x455b42,hill:0x7b8470,accent:'#d09239',title:'SALTMARSH PORT RALLYCROSS',subtitle:'IMPORTS / EXPORTS / WRITE-OFFS'},
@@ -65,15 +66,16 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
   placements.push({x,z,radius:0,kind,halfWidth:w/2,halfDepth:d/2});return true;
  }
  function scenicHeight(x:number,z:number){
-  if(theme!=='coast'&&theme!=='forest'&&theme!=='farm'&&theme!=='port'&&theme!=='park'&&theme!=='dunes'&&theme!=='pass'&&theme!=='reservoir'&&theme!=='club')return course.height(x,z);
+  if(theme!=='coast'&&theme!=='forest'&&theme!=='farm'&&theme!=='port'&&theme!=='park'&&theme!=='dunes'&&theme!=='pass'&&theme!=='reservoir'&&theme!=='club'&&theme!=='ridge')return course.height(x,z);
   if(Math.abs(x)<=220&&Math.abs(z)<=180)return course.height(x,z);
   const a=Math.atan2(z,x),dx=Math.cos(a),dz=Math.sin(a),edge=1/Math.max(Math.abs(dx)/220,Math.abs(dz)/180),ring=(Math.hypot(x,z)-edge)/56;
-  const height=(r:number)=>{const zz=dz*(edge+r*56),ridge=(theme==='pass'?60:theme==='dunes'?24:19)*(1+.35*Math.sin(a*5)+.2*Math.cos(a*9));let y=r===0?course.height(dx*edge,dz*edge)-.12:course.height(dx*edge,dz*edge)+Math.sin(Math.min(1,r/5)*Math.PI*.62)*ridge+Math.sin(a*11+r)*2;if((theme==='coast'||theme==='port'||theme==='reservoir')&&zz>170)y=Math.min(y,Math.max(-6,-.12-(zz-180)*.18));return y;};
+  const height=(r:number)=>{const zz=dz*(edge+r*56),ridge=(theme==='pass'?60:theme==='ridge'?38:theme==='dunes'?24:19)*(1+.35*Math.sin(a*5)+.2*Math.cos(a*9));let y=r===0?course.height(dx*edge,dz*edge)-.12:course.height(dx*edge,dz*edge)+Math.sin(Math.min(1,r/5)*Math.PI*.62)*ridge+Math.sin(a*11+r)*2;if((theme==='coast'||theme==='port'||theme==='reservoir')&&zz>170)y=Math.min(y,Math.max(-6,-.12-(zz-180)*.18));return y;};
   return T.MathUtils.lerp(height(Math.floor(ring)),height(Math.ceil(ring)),ring%1)-.2;
  }
  function tree(x:number,z:number,size:number,pine:boolean){
   if(theme==='port'&&(z>160||(Math.abs(x)<225&&Math.abs(z)<180)))return;
   const r=size*(pine?.3:.48);
+  if(theme==='ridge'&&[[-55,-24,12,11],[80,-160,22,11],[75,45,9,8]].some(([cx,cz,w,d])=>Math.abs(x-cx)<w+r&&Math.abs(z-cz)<d+r))return;
   if(theme==='club'&&[[-35,-30,16,13],[62,-160,36,12],[-72,-35,10,6],[15,-28,10,6],[40,56,10,6]].some(([cx,cz,w,d])=>Math.abs(x-cx)<w+r&&Math.abs(z-cz)<d+r))return;
   if(!clear(x,z,r,'tree'))return;
   const y=scenicHeight(x,z),yaw=random()*6.28;
@@ -84,17 +86,18 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
  }
  function rock(x:number,z:number,size:number){if(!clear(x,z,size*.75,'rock'))return;const y=scenicHeight(x,z);add('rock','stone',x,y+size*.27,z,size*1.4,size*.8,size,random()*6.28);if(size>5)add('rock','stone',x+size*.36,y+size*.12,z-size*.25,size*.8,size*.5,size*.9,random()*6.28);}
  // Naturally staggered clusters, with a clear paddock on the southern side.
- for(let i=0;i<(theme==='port'?0:theme==='forest'?650:theme==='farm'?100:theme==='dunes'?180:240);i++){
+ for(let i=0;i<(theme==='port'?0:theme==='forest'?650:theme==='farm'?100:theme==='ridge'?125:theme==='dunes'?180:240);i++){
   const x=(random()-.5)*420,z=-85+random()*257;
   if(theme==='dunes'){
    if(i%4===0)rock(x,z,1.5+random()*3.5);
    else if(clear(x,z,1.9,'scrub')){const y=course.height(x,z);add('leaf','leaf',x,y+.55,z,2.5,.9,2,random()*6.28);add('round','bark',x,y+.3,z,.13,.6,.13);}
   }else if(theme==='coast'&&i%3===0)rock(x,z,2+random()*5);
+  else if(theme==='ridge'&&i%3===0)rock(x,z,2+random()*7);
   else if(theme==='pass'&&i%4===0)rock(x,z,3+random()*9);
-  else tree(x,z,theme==='pass'?10+random()*9:7+random()*8,theme==='pass'||(theme==='forest'?i%4!==0:i%7===0));
+  else tree(x,z,theme==='pass'?10+random()*9:7+random()*8,theme==='pass'||theme==='ridge'||(theme==='forest'?i%4!==0:i%7===0));
  }
  // Distant tree lines hide the rectangular terrain edge, with no physics cost.
- for(let i=0;i<130;i++){const a=i/130*Math.PI*2,x=Math.cos(a)*(242+random()*80),z=Math.sin(a)*(210+random()*70);if(theme==='dunes'){if(i%3===0)rock(x,z,6+random()*10);}else tree(x,z,11+random()*11,theme==='pass'||theme==='forest');}
+ for(let i=0;i<130;i++){const a=i/130*Math.PI*2,x=Math.cos(a)*(242+random()*80),z=Math.sin(a)*(210+random()*70);if(theme==='dunes'){if(i%3===0)rock(x,z,6+random()*10);}else tree(x,z,11+random()*11,theme==='pass'||theme==='forest'||theme==='ridge');}
 
  function building(x:number,z:number,w:number,d:number,h:number,finish:Finish){
   if(!clearRectangle(x,z,w+2,d+2,'building'))return;const y=course.height(x,z);
@@ -124,7 +127,37 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
   for(const dx of [-1.4,1.4])for(const dz of [-2.6,2.7])add('round','rubber',x+dx,y+.65,z+dz,.8,1.1,.8);
  }
  // Venue-specific southern paddocks are visible from the grid and race cameras.
- if(theme==='club'){
+ if(theme==='ridge'){
+  building(80,-160,40,18,5,'wood');stand(-100,-158);canopy(-45,-160,'ochre');canopy(-24,-160,'white');serviceTruck(127,-158,'ochre');
+  if(clearRectangle(80,-160,44,22,'ridge-service')){
+   for(const x of [68,80,92]){box('metal',x,2.4,-150.8,7.2,4.5,.15);for(let y=.5;y<4.5;y+=.5)box('white',x,y,-150.6,7,.08,.1);}
+   box('ochre',80,5.3,-150.5,35,.65,.18);box('white',80,3.7,-150.3,2,1,.1);box('red',80,3.7,-150.2,.18,.8,.1);box('red',80,3.7,-150.15,.8,.18,.1);
+   for(const x of [65,72,79]){add('round','rubber',x,.45,-167,2,.9,2);add('round','rubber',x,1.3,-167,2,.9,2);}
+  }
+  // Timber observation tower and climbing stairs form a clear infield landmark.
+  if(clearRectangle(-55,-24,24,22,'ridge-lookout')){
+   const x=-55,z=-24,y=course.height(x,z);
+   for(const dx of [-5,5])for(const dz of [-4,4])box('wood',x+dx,y+4,z+dz,.55,8,.55);
+   for(const h of [2,4,6])for(const side of [-1,1]){box('wood',x,y+h,z+side*4,10,.25,.25);box('wood',x+side*5,y+h,z,.25,.25,8);}
+   box('wood',x,y+8,z,12,.4,10);
+   for(const side of [-1,1]){box('wood',x+side*5.5,y+8.7,z,.18,1.4,10);box('wood',x,y+9.4,z+side*4.6,12,.18,.18);}
+   for(let i=0;i<10;i++)box('wood',x+8,y+.4+i*.8,z-8+i*1.6,2,.8,1.6);
+   for(const dx of [-5,5])for(const dz of [-4,4])box('wood',x+dx,y+10,z+dz,.25,4,.25);
+   add('cone','red',x,y+12.5,z,17,3,14,Math.PI/4);
+  }
+  if(clearRectangle(75,45,18,16,'ridge-radio')){
+   const y=course.height(75,45);box('white',75,y+1.8,45,8,3.6,6);box('metal',75,y+3.8,45,9,.4,7);box('glass',75,y+2,48.1,4,1.3,.15);
+   for(const dx of [-2,2])for(const dz of [-2,2])box('metal',75+dx,y+12,45+dz,.18,24,.18);
+   for(let h=5;h<=24;h+=4){box('metal',75,y+h,43,4,.12,.12);box('metal',75,y+h,47,4,.12,.12);}
+   box('red',75,y+25,45,.7,.7,.7);box('white',75,y+21,45,7,.4,.3);
+  }
+  for(const x of [-250,248])for(const z of [-55,35,125]){
+   if(!clearRectangle(x,z,27,22,'ridge-outcrop'))continue;const y=scenicHeight(x,z);
+   // Bury the broad foot into the slope; a shallow ellipsoid leaves a visible air gap downhill.
+   add('rock','stone',x,y-4,z+2,25,20,20);
+   for(let tier=1;tier<4;tier++)add('rock','stone',x+Math.sin(tier*2)*3,y+3+tier*4,z+Math.cos(tier)*2,25-tier*4,8,20-tier*3,tier*.3);
+  }
+ }else if(theme==='club'){
   building(62,-160,68,20,5.5,'white');stand(-97,-156);canopy(-42,-159,'red');canopy(-22,-159,'white');serviceTruck(119,-158,'red');
   if(clearRectangle(62,-160,72,24,'club-pits')){
    for(let x=37;x<=87;x+=10){box('metal',x,2.4,-149.8,7.5,4.6,.16);for(let y=.4;y<4.6;y+=.4)box('white',x,y,-149.65,7.3,.07,.12);box('red',x,5,-149.5,8.2,.65,.2);box('white',x,.1,-148,7.5,.15,.2);}
@@ -459,7 +492,7 @@ diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.73,.8,.74),foam*.65);`);};
  const horizon=new T.BufferGeometry(),positions:number[]=[],colorsOut:number[]=[],indices:number[]=[],segments=128,rings=9;
  for(let ring=0;ring<rings;ring++)for(let i=0;i<=segments;i++){
   const a=i/segments*Math.PI*2,dx=Math.cos(a),dz=Math.sin(a),edge=1/Math.max(Math.abs(dx)/220,Math.abs(dz)/180),r=edge+ring*56,x=dx*r,z=dz*r;
-  const ridge=(theme==='pass'?60:theme==='dunes'?24:19)*(1+.35*Math.sin(a*5)+.2*Math.cos(a*9));
+  const ridge=(theme==='pass'?60:theme==='ridge'?38:theme==='dunes'?24:19)*(1+.35*Math.sin(a*5)+.2*Math.cos(a*9));
   let y=ring===0?course.height(x,z)-.12:course.height(dx*edge,dz*edge)+Math.sin(Math.min(1,ring/5)*Math.PI*.62)*ridge+(Math.sin(a*11+ring)*2);
   // Northern headland slopes into the sea; never close the coast with a mountain wall.
   if((theme==='coast'||theme==='port'||theme==='reservoir')&&z>170)y=Math.min(y,Math.max(-6,-.12-(z-180)*.18));
