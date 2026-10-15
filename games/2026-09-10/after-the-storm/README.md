@@ -1,6 +1,6 @@
 # After the Storm
 
-**v2.18.0 · TIDELINE** — September 27, 2026. Waves break on the beaches: crests of the shared swell steepen at each break line, throw a lip, plunge and run up the sand as whitewater, timed from the visible swell and sized by exposure and sea state. Visual only; racing is unchanged. See [BEACH-BREAK-2.18.md](BEACH-BREAK-2.18.md). Previous release: [WAVE-REALISM-2.17.md](WAVE-REALISM-2.17.md).
+**v2.19.0 · WORLDWIDE** — October 15, 2026. Global leaderboards now share race times and stunt points across devices. Open **Global leaderboard** from the menu, or finish a solo event and choose **Post worldwide**. Course records continue to save on your device. See [GLOBAL-SCORING.md](GLOBAL-SCORING.md) for categories and validation. Previous water releases: [BEACH-BREAK-2.18.md](BEACH-BREAK-2.18.md) and [WAVE-REALISM-2.17.md](WAVE-REALISM-2.17.md).
 
 The shared wave/buoyancy simulation, adaptive graphics and gameplay remain active. Earlier land and water notes are in [LAND-2.10.md](LAND-2.10.md) and [GRAPHICS-2.9.md](GRAPHICS-2.9.md).
 
