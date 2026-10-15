@@ -21,6 +21,7 @@ const ENUM_LABELS = {
   diorama: v => v ? 'Miniature' : 'Classic map',
   cityShadows: v => v ? 'On' : 'Off',
   streetLife: v => v ? 'On · simulated' : 'Off',
+  streetMotion: v => ({system:'Follow computer setting',on:'Play',off:'Pause'}[v] || v),
   theme: (v) => getTheme(v).label,
   quality: (v) => ({ auto: 'Auto', performance: 'Performance', balanced: 'Balanced',
     cinematic: 'Cinematic' }[v] || v),

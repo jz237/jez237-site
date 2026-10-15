@@ -3,7 +3,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Philadelphia photographic renderer fixture</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cesium@1.145.0/Build/Cesium/Widgets/widgets.css">
+<link rel="stylesheet" href="../vendor/cesium-1.145.0/Widgets/widgets.css">
 <style>
   body{margin:0;background:#17313c;color:#fff;font:14px system-ui}
   header{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px}
@@ -25,7 +25,7 @@
 <div id="state" role="status"></div>
 <div id="stage"><div id="fallback">Diorama fallback remains available</div></div>
 <div id="photoCredits"></div>
-<script src="https://cdn.jsdelivr.net/npm/cesium@1.145.0/Build/Cesium/Cesium.js"></script>
+<script src="../vendor/cesium-1.145.0/Cesium.js"></script>
 <script type="module">
   import {createPhotographic} from '../src/photographic.js';
   import {createStore} from '../src/state.js';

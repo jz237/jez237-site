@@ -3,6 +3,30 @@ export const PHOTO_ENTER = 6500;
 export const PHOTO_EXIT = 9500;
 export const PHOTO_PRELOAD = 16000;
 
+// The diorama and photographic renderer coexist. Bound the second renderer's
+// framebuffer as well as its tile cache, especially on high-DPI laptops.
+export function photoBudget(width,height,dpr=1,quality='auto',retry=false){
+  const small=retry||quality==='performance',cinematic=quality==='cinematic'&&!retry;
+  const pixels=small?1500000:cinematic?5000000:2500000;
+  const scale=Math.min(Math.max(.5,Number.isFinite(dpr)?dpr:1),cinematic?2:1.5,
+    Math.sqrt(pixels/Math.max(1,width*height)));
+  return {scale,cacheBytes:(small?96:cinematic?384:192)*1024*1024,
+    overflowBytes:(small?32:cinematic?128:64)*1024*1024,detail:small?8:cinematic?2:4};
+}
+
+export function photoFailure(error,phase='render'){
+  const status=Number(error?.statusCode??error?.status);
+  // Classify locally; never expose provider URLs, tokens or raw error bodies.
+  if(status===401||status===403)return 'Photo service denied access. Retry or use Diorama.';
+  if(status===429)return 'Photo service is temporarily rate limited. Try again later.';
+  if(phase==='resources')return 'Photo engine or configuration could not load. '
+    +'Check the connection or browser blocking, then Retry.';
+  if(phase==='graphics'||phase==='render')return 'Photo graphics could not start or stopped. '
+    +'Retry uses less graphics memory; check Chrome graphics acceleration if it repeats.';
+  if(phase==='timeout')return 'Photo loading timed out. Retry uses less graphics memory and detail.';
+  return 'Photo service could not load the 3D tiles. Check the connection, then Retry.';
+}
+
 // Horizon views spread the first tile budget over a much larger visible area.
 // Accept neighborhood geometry for that initial handoff; final SSE is unchanged.
 export function photoTileReady(error, flightHeight, viewDistance = 0) {

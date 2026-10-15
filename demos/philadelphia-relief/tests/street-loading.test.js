@@ -57,3 +57,36 @@ test('disposing after cars become ready prevents deferred sidewalks from attachi
     assert.equal(f.streets.group.getObjectByName('sidewalk-walkers').count,0);
   }finally{globalThis.fetch=original;}
 });
+
+test('explicit Play advances vehicle transforms even when the computer requests reduced motion',async()=>{
+  const original=globalThis.fetch;globalThis.fetch=async()=>({ok:true,json:async()=>doc});
+  const f=fixture();
+  try{
+    f.streets.update(f.params);await new Promise(resolve=>setImmediate(resolve));f.streets.update(f.params);
+    const mesh=f.streets.group.children[2],before=Array.from(mesh.instanceMatrix.array);
+    f.streets.update(f.params);assert.deepEqual(Array.from(mesh.instanceMatrix.array),before);
+    f.params.state.streetMotion='on';
+    for(let i=0;i<20;i++)f.streets.update({...f.params,dt:.05});
+    assert.notDeepEqual(Array.from(mesh.instanceMatrix.array),before);
+    assert.ok(f.streets.stats().cars>0);assert.ok(f.streets.stats().moving>0);
+    f.params.state.streetMotion='off';f.streets.update(f.params);
+    assert.equal(f.streets.animating,false);assert.equal(f.streets.stats().moving,0);
+  }finally{f.streets.dispose();globalThis.fetch=original;}
+});
+
+test('street motion covers the same ground at two FPS as at twenty FPS',async()=>{
+  const original=globalThis.fetch;globalThis.fetch=async()=>({ok:true,json:async()=>doc});
+  const slow=fixture(),fast=fixture();
+  try{
+    for(const f of [slow,fast]){
+      f.params.state.streetMotion='on';f.params.dt=0;f.streets.update(f.params);
+    }
+    await new Promise(resolve=>setImmediate(resolve));
+    for(const f of [slow,fast])f.streets.update(f.params);
+    for(let i=0;i<4;i++)slow.streets.update({...slow.params,dt:.5});
+    for(let i=0;i<40;i++)fast.streets.update({...fast.params,dt:.05});
+    const a=slow.streets.group.children[2],b=fast.streets.group.children[2];
+    assert.equal(a.count,b.count);assert.ok(a.count>0);
+    for(let i=0;i<a.count*16;i++)assert.ok(Math.abs(a.instanceMatrix.array[i]-b.instanceMatrix.array[i])<.0001);
+  }finally{slow.streets.dispose();fast.streets.dispose();globalThis.fetch=original;}
+});
