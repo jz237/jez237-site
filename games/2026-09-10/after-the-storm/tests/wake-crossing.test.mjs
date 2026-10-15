@@ -1,3 +1,4 @@
+import {openWaterCourse} from './support/open-water-course.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {clearWakeTrail,recordWake,wakeHeight} from '../wake-field.js';
@@ -20,7 +21,7 @@ test('wake pressure lifts a fast crossing hull while a slow hull stays in contac
 // through stepRace; both use the same 90% throttle to retain a roughly 100 km/h
 // contact fixture after the top-end increase. Full throttle is tested separately.
 function twoCrafts(leader,x=-65,z=60,throttle=.9){
- const s=createRace({mode:'versus',seaState:'calm',course:{...COVE,ground:()=>-20,rocks:[],ramps:[],crossbars:[],passage:null}});s.phase='running';
+ const s=createRace({mode:'versus',seaState:'calm',course:{...openWaterCourse(),ground:()=>-20,rocks:[],ramps:[],crossbars:[],passage:null}});s.phase='running';
  const [a,b]=s.racers;Object.assign(a,{x:leader?0:1000,z:0,heading:0,power:5});Object.assign(b,{x,z,heading:Math.PI/2,power:5});let peak=0,air=0;
  for(let i=0;i<360;i++){stepRace(s,[{throttle,dampen:true},{throttle,dampen:true}],1/60);if(b.x> -10&&b.x<10){peak=Math.max(peak,b.hydro.y-b.hydro.waterHeight);air+=b.hydro.airborne/60;}}
  return {peak,air};

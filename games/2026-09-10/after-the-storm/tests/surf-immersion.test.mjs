@@ -1,3 +1,5 @@
+import {optionalRampCircuit} from './support/open-water-course.mjs';
+import {createRace} from '../race-core.js';
 import test from 'node:test';import assert from 'node:assert/strict';
 import {rampDraw,rampChoiceInput,RAMP_USE_PROBABILITY} from '../ramp-choice.js';
 import {characterAt,setWaterCharacter} from '../water-character.js';
@@ -46,7 +48,7 @@ test('shoreline sites stay on real banks and basins retain water after a retreat
  const c=getCourse('greyhaven'),sites=shoreSites(c);assert.ok(sites.length>0);assert.ok(sites.every(p=>p.y>.05&&p.y<1.7));let depth=retainedPool(0,1,.4,1/60);assert.ok(depth>.18);for(let i=0;i<600;i++)depth=retainedPool(depth,-1,.4,1/60);assert.ok(depth>.15);for(let i=0;i<6000;i++)depth=retainedPool(depth,-1,.4,1/60);assert.equal(depth,0);
 });
 test('a complete live race physically takes chosen ramps and clears declined ramps',()=>{
- const s=createDemoScene(),before=new Map();for(let i=0;i<9500&&!demoSceneDone(s);i++){stepRace(s,demoInput(s),1/60);for(const r of s.racers)if(r.rampChoices?.['1:210']&&!before.has(r.id))before.set(r.id,r.misses);}
+ const s=createRace({course:optionalRampCircuit(),seaState:'calm'}),before=new Map();s.demoRun=true;for(const r of s.racers)r.power=5;for(let i=0;i<9500&&!demoSceneDone(s);i++){stepRace(s,demoInput(s),1/60);for(const r of s.racers)if(r.rampChoices?.['1:210']&&!before.has(r.id))before.set(r.id,r.misses);}
  assert.ok(s.racers[0].lap>1);let jumps=0,bypasses=0;
  for(const r of s.racers){const decision=r.rampChoices['1:210'];assert.ok(decision);const hit=r.rampVisits?.some(p=>p.id===210&&p.lap===1);if(decision.use){jumps++;assert.ok(hit,`racer ${r.id} must actually reach the ramp`);}else{bypasses++;assert.ok(!hit,`racer ${r.id} must clear its declined ramp`);}assert.equal(r.misses,before.get(r.id),'ramp approach must not add a missed buoy');assert.equal(r.dq,'');}
  assert.equal(s.racers[0].misses,0);assert.ok(jumps>0&&bypasses>0);

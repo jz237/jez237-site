@@ -1,12 +1,13 @@
+import {openWaterCourse} from './support/open-water-course.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createRace,stepRace,COVE} from '../race-core.js';
-import {recoverToWater} from '../shore-recovery.js';
+import {recoverToWater,rememberWater} from '../shore-recovery.js';
 import {playerInput} from '../player-input.js';
 import {waterLevel} from '../simulation.js';
 
 function shore(){
- const s=createRace({mode:'practice',seaState:'calm',course:{...COVE,ground:(x,z)=>z>=0?2:-5,rocks:[],ramps:[],passage:null}});
+ const s=createRace({mode:'practice',seaState:'calm',course:{...openWaterCourse(),ground:(x,z)=>z>=0?2:-5,rocks:[],ramps:[],passage:null}});
  s.phase='running';Object.assign(s.racers[0],{x:0,z:-6,heading:0,vx:0,vz:14});return s;
 }
 test('driving into shore automatically returns to safe water and can drive away',()=>{
@@ -32,6 +33,15 @@ test('recovery rejects a newly exposed safe point and searches current water dep
  Object.assign(r,{x:0,z:1,lastWater:{x:0,z:-2,heading:0}});
  assert.ok(recoverToWater(s,r));assert.ok(r.z<-5.5);assert.equal(r.hydro.initialized,false);
 });
+
+test('shore recovery cancels unfinished moves while preserving earned stunt and race progress',()=>{
+ const s=shore(),r=s.racers[0];Object.assign(r,{z:3,lastWater:{x:0,z:-5,heading:0},next:7,passed:6,lap:2});
+ Object.assign(r.stunt,{trick:'left',angle:2,airDuration:1,pose:'handstand',poseTime:2,score:1250,rings:3,lastLanding:4,completedTricks:{flip:true}});
+ assert.ok(recoverToWater(s,r));
+ assert.equal(r.stunt.trick,null);assert.equal(r.stunt.angle,0);assert.equal(r.stunt.pose,null);assert.equal(r.stunt.airDuration,0);assert.equal(r.stunt.lastLanding,r.hydro.landingId);
+ assert.equal(r.stunt.score,1250);assert.equal(r.stunt.rings,3);assert.equal(r.stunt.completedTricks.flip,true);assert.equal(r.next,7);assert.equal(r.lap,2);
+ stepRace(s,{},1/60);assert.equal(r.stunt.trick,null);assert.equal(r.stunt.crashes,0);
+});
 test('keyboard turns are softened for both players while analogue steering stays precise',()=>{
  assert.equal(playerInput({KeyA:true}).steer,.8);
  assert.equal(playerInput({ArrowRight:true}).steer,-.8);
@@ -43,4 +53,18 @@ test('keyboard turns are softened for both players while analogue steering stays
  assert.equal(playerInput({}, {axes:[1],buttons:[]}).steer,-1,'full stick retains full lock');
  assert.equal(playerInput({KeyR:true}).rescue,true);
  assert.equal(playerInput({Backspace:true},null,1,true).rescue,true);
+});
+
+test('source outer-water shores permit the basin while excluding its islands and banks',()=>{
+ const s=shore(),r=s.racers[0];s.course.ground=()=>-8;waterLevel.value=0;
+ s.course.sourceShores=[{outline:[[-20,-20],[20,-20],[20,20],[-20,20]],waterInside:true},{outline:[[-2,-2],[2,-2],[2,2],[-2,2]],waterInside:false}];
+ Object.assign(r,{x:10,z:0});rememberWater(s,r);assert.deepEqual([r.lastWater.x,r.lastWater.z],[10,0]);
+ for(const [x,z] of [[0,0],[30,0],[19.5,0]]){Object.assign(r,{x,z});rememberWater(s,r);assert.deepEqual([r.lastWater.x,r.lastWater.z],[10,0]);}
+});
+
+test('an open source coast rejects real segments without closing its open mouth',()=>{
+ const s=shore(),r=s.racers[0];s.course.ground=()=>-8;waterLevel.value=0;
+ s.course.sourceShores=[{sourceClosed:false,outline:[[-10,0],[-10,10],[10,10],[10,0]]}];
+ Object.assign(r,{x:0,z:.2});rememberWater(s,r);assert.deepEqual([r.lastWater.x,r.lastWater.z],[0,.2]);
+ Object.assign(r,{x:-9.5,z:5});rememberWater(s,r);assert.deepEqual([r.lastWater.x,r.lastWater.z],[0,.2]);
 });
