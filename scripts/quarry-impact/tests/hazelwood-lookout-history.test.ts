@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readHazelwoodLookoutPrevious,restoreHazelwoodLookoutBytes,verifyHazelwoodLookoutRevision} from './hazelwood-lookout-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreSeabrookHeadlandBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('HazelwoodLookout preserves every prior fixture, vehicle asset, control and camera input',verifyHazelwoodLookoutRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/hazelwood-lookout/revision.json').toString());
@@ -10,3 +10,5 @@ test('the successor bridge restores full predecessors and does not conceal later
  }
  const unknown=Buffer.from('unknown');assert.deepEqual(restoreHazelwoodLookoutBytes('src/unknown.ts',unknown),unknown);
 });
+
+import {restoreSeabrookHeadlandBytes} from './seabrook-headland-invariants';

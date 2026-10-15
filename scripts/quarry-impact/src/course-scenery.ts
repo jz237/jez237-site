@@ -81,7 +81,7 @@ export function createCourseScenery(course:Course,theme:SceneryTheme){
  // Build excluded decoration normally, then discard only its geometry. This
  // preserves the random sequence and all distant scenery placements.
  function decorateLandmarks(x:number,z:number,r:number,build:()=>void){
-  const excluded=(theme==='dunes'?[[-249.5,-91.5,34.5,19.5],[-247,-59,9,23]]:theme==='canal'?[[0,26,27,14],[-27,12,8,13],[10,10,13,6]]:theme==='pass'?[[0,220,113,11]]:theme==='forest'?[[8,-10,9,10]]:[]).some(([cx,cz,w,d])=>Math.abs(x-cx)<w+r*1.2&&Math.abs(z-cz)<d+r*1.2);
+  const excluded=(theme==='dunes'?[[-249.5,-91.5,34.5,19.5],[-247,-59,9,23]]:theme==='canal'?[[0,26,27,14],[-27,12,8,13],[10,10,13,6]]:theme==='pass'?[[0,220,113,11]]:theme==='forest'?[[8,-10,9,10]]:theme==='coast'?[[200,110,18,20]]:[]).some(([cx,cz,w,d])=>Math.abs(x-cx)<w+r*1.2&&Math.abs(z-cz)<d+r*1.2);
   if(!excluded){build();return;}
   const lengths=new Map([...batches].map(([key,b])=>[key,b.matrices.length])),placed=placements.length,cards=treeCards.length;
   build();placements.length=placed;treeCards.length=cards;

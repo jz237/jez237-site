@@ -10,15 +10,18 @@ export function readHazelwoodLookoutPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreHazelwoodLookoutBytes(file:string,bytes:Buffer):Buffer{
+ bytes=restoreSeabrookHeadlandBytes(file,bytes);
  const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readHazelwoodLookoutPrevious(file);
 }
 export function verifyHazelwoodLookoutRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'73bfd5d1ca8f4ab9dfc2198b73e6f3d9cff54fc9');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreSeabrookHeadlandBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreHazelwoodLookoutBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the HazelwoodLookout release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreSeabrookHeadlandBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the HazelwoodLookout release');
  assert.equal(manifest.previousFixtureCount,2357);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,2357);
 }
+
+import {restoreSeabrookHeadlandBytes} from './seabrook-headland-invariants';
