@@ -1,8 +1,9 @@
+import type {DrivingSurface} from './driving-surface';
 import type R from '@dimforge/rapier3d-compat';
 import {registerTerrainContacts} from './terrain-collision';
 import type {CourseId} from './course-id';
 type Point={x:number;z:number};
-export type CountyCourseConfig={id:CourseId;name:string;controls:number[][];startX?:number;startZ:number;openCrossings?:boolean;height(x:number,z:number):number;asphalt(x:number,z:number):boolean};
+export type CountyCourseConfig={id:CourseId;name:string;controls:number[][];startX?:number;startZ:number;openCrossings?:boolean;looseSurface?:'mud';height(x:number,z:number):number;asphalt(x:number,z:number):boolean};
 export function createCountyCourse(config:CountyCourseConfig){
 const controls=config.controls;
 const wrap=(n:number,p:number)=>((n%p)+p)%p;
@@ -63,7 +64,7 @@ const solids:readonly CountySolid[]=(()=>{
 return {
  id:config.id,name:config.name,length,halfWidth:12,checkpointRadius:15,mapExtent:215,
  point,distance,samples,solids,terrain,terrainPatch,checkpoints:Array.from({length:24},(_,i)=>point(i/24)),height,
- surface:(x:number,z:number):'asphalt'|'gravel'=>config.asphalt(x,z)&&distance(x,z)<=12?'asphalt':'gravel',
+ surface:(x:number,z:number):DrivingSurface=>config.looseSurface?(distance(x,z)<=12?'mud':'gravel'):config.asphalt(x,z)&&distance(x,z)<=12?'asphalt':'gravel',
  outside:(x:number,y:number,z:number)=>Math.abs(x)>210||Math.abs(z)>170||y< -8,
  isDrivingObstacle:(collider:R.Collider)=>(collider.parent()?.userData as {courseSurface?:string}|undefined)?.courseSurface!==config.id,
     buildPhysics(api: typeof R, world: R.World): number[] { const owned: number[] = []; try {

@@ -61,7 +61,7 @@ float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(ha
 void main(){
  vec2 uv=gl_PointCoord-.5;float r=length(uv)*2.;float a;
  if(vKind==1.) {a=(1.-smoothstep(.08,.26,abs(uv.x)))*(1.-smoothstep(.15,.5,abs(uv.y)));}
- else if(vKind==3.) {a=1.-smoothstep(.18,.5,max(abs(uv.x+uv.y*.4),abs(uv.y)));}
+ else if(vKind==3. || vKind==4.) {a=1.-smoothstep(.18,.5,max(abs(uv.x+uv.y*.4),abs(uv.y)));}
  else {float n=noise(uv*8.+vSeed*27.)*.6+noise(uv*17.-vSeed*13.)*.3; a=smoothstep(1.,.18,r+n*.24)*(n*.6+.4);}
  vec3 lit=vKind==0.?vColor*(vec3(1.08,.99,.82)+vec3(.55,.35,.10)*vBacklight*(1.-r*.45)):vColor;
  gl_FragColor=vec4(lit,a*vAlpha);
@@ -126,12 +126,12 @@ void main(){
         (Math.random() - 0.5) * force,
       );
       s.max = s.life =
-        type === 1 ? 0.15 + Math.random() * 0.35 : type === 3 ? .6 + Math.random() * .5 : 1.5 + Math.random() * 2;
-      s.size = type === 1 ? 0.025 : type === 3 ? .015 + Math.random() * .035 : 0.25 + Math.random() * 0.35;
+        type === 1 ? 0.15 + Math.random() * 0.35 : type === 4 ? .35 + Math.random() * .3 : type === 3 ? .6 + Math.random() * .5 : 1.5 + Math.random() * 2;
+      s.size = type === 1 ? 0.025 : type === 4 ? .06 + Math.random() * .08 : type === 3 ? .015 + Math.random() * .035 : 0.25 + Math.random() * 0.35;
       s.type = type;
       this.types[i] = type;
       const col = new T.Color(
-        type === 1 ? 0xffcd87 : type === 3 ? 0xa4c5c8 : type === 2 ? 0x333430 : 0x9f957f,
+        type === 1 ? 0xffcd87 : type === 4 ? 0x58412c : type === 3 ? 0xa4c5c8 : type === 2 ? 0x333430 : 0x9f957f,
       );
       col.multiplyScalar(.8 + Math.random() * .3);
       col.toArray(this.colors, i * 3);
@@ -223,7 +223,7 @@ void main(){
       if (p.life > 0) {
         p.life -= dt;
         p.p.addScaledVector(p.v, dt);
-        const solid = p.type === 1 || p.type === 3;
+        const solid = p.type === 1 || p.type === 3 || p.type === 4;
         p.v.y += (solid ? -9 : p.type === 2 ? .6 : .18) * dt;
         p.v.multiplyScalar(Math.exp(-dt * 0.6));
         this.positions.set(p.p.toArray(), i * 3);

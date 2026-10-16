@@ -23,6 +23,7 @@ export const COURSE_NAMES={
  'millhaven-rally-v1':'Millhaven Rally Park',
  'merefield-airfield-v1':'Merefield Airfield',
  'dockside-loop-v1':'Dockside Loop',
+ 'wrenford-mud-v1':'Wrenford Mud Oval',
  'fairground-scramble-v1':'Fairground Scramble',
  'pinecrest-ridge-v1':'Pinecrest Ridge',
  'quarry-v1':'Blackridge Quarry',

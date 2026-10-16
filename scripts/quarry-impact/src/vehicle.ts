@@ -1,3 +1,4 @@
+import type {DrivingSurface} from './driving-surface';
 import type {DrivingAssists} from './driving-assists';
 import type {TransmissionInput,TransmissionState} from './transmission';
 import {freshStructure} from './structural-damage';
@@ -36,7 +37,7 @@ import {puddleDepth,type Puddle} from './puddle-splashes';
 import {wheelResponse,TireContact} from './wheel-mechanics';
 import {VehicleSurface} from './vehicle-surface';
 import { normalizeSetup, setupPhysics, stockSetup, type Setup } from './garage';
-export type VehicleGround = {height:(x:number,z:number)=>number;surface:(x:number,z:number)=>'asphalt'|'gravel'};
+export type VehicleGround = {height:(x:number,z:number)=>number;surface:(x:number,z:number)=>DrivingSurface};
 export type Input = {
   throttle: number;
   steer: number;
@@ -99,7 +100,7 @@ export class Vehicle {
   input: Input = { throttle: 0, steer: 0, brake: 0, handbrake: false };
   slip = 0;
   remoteGrounded?: boolean;
-  surface:'asphalt'|'gravel' = 'gravel';
+  surface:DrivingSurface = 'gravel';
   damageLeft = 0;
   damageRight = 0;
   readonly damageZones={front:0,rear:0,left:0,right:0,roof:0};
@@ -283,7 +284,7 @@ export class Vehicle {
       this.groundedWheels[i]=this.controller.wheelIsInContact(i);
       this.wetWheels[i]=!!point&&this.groundedWheels[i]&&this.waters.some(w=>puddleDepth(w,point.x,point.y,point.z)>0);
     }
-    this.surfaceFinish.advance(dt,this.speed,this.surface==='gravel',this.wetWheels,this.groundedWheels);
+    this.surfaceFinish.advance(dt,this.speed,this.surface!=='asphalt',this.wetWheels,this.groundedWheels);
     if (time - this.lastFx > 0.06) {
       this.lastFx = time;
       this.scraping=0;
@@ -294,8 +295,8 @@ export class Vehicle {
         const wet=this.surfaceFinish.water[i],yaw=Math.atan2(this.forward.x,this.forward.z);
         if(wet>.035&&Math.abs(this.speed)>.5&&!this.wetWheels[i]&&Math.abs(p.y-this.ground.height(p.x,p.z))<.15)this.fx.evidence?.add(p,yaw,Math.abs(this.speed)*.07,wet,0);
         if(this.wetWheels[i])continue;
-        if (Math.abs(this.speed) > 3 && this.surface === 'gravel')
-          this.fx.emit(p, 1, 0, Math.abs(this.speed) * 0.04);
+        if (Math.abs(this.speed) > 3 && this.surface !== 'asphalt')
+          this.fx.emit(p, 1, this.surface==='mud'?4:0, Math.abs(this.speed) * 0.04);
         if (this.slip > 2 || this.input.handbrake) {
           if (this.surface === 'asphalt')
             this.fx.mark(
@@ -303,8 +304,8 @@ export class Vehicle {
               Math.atan2(this.forward.x, this.forward.z),
               Math.max(0.2, Math.abs(this.speed) * 0.09),
             );
-          else this.fx.emit(p, 2, 0, 1);
-          if(this.surface==='gravel')this.fx.evidence?.add(p,yaw,Math.abs(this.speed)*.07,Math.min(.65,this.slip*.06),1);
+          else this.fx.emit(p, 2, this.surface==='mud'?4:0, 1);
+          if(this.surface!=='asphalt')this.fx.evidence?.add(p,yaw,Math.abs(this.speed)*.07,Math.min(.65,this.slip*.06),1);
         }
       }
       if(this.wreckParts.assemblies.some(a=>a.name.includes('bumper')&&a.loose>.55))this.model.updateWorldMatrix(true,true);

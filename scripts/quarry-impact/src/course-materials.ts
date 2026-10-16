@@ -24,10 +24,10 @@ vCourseWorld=(modelMatrix*coursePosition).xyz;
 `;
 /** Layer metre-scale aggregate over the existing course atlas. Palette and paint
  * stay authored per venue; normal detail and roughness now respond to the light. */
-export function addCourseGroundDetail(material:T.MeshStandardMaterial,course:Course){
+export function addCourseGroundDetail(material:T.MeshStandardMaterial,course:Course,looseSurface:'gravel'|'mud'='gravel'){
  const owned:T.Texture[]=[],mask=new T.DataTexture(courseSurfaceMask(course),...COURSE_MASK_SIZE);mask.name='course-surface-mask';mask.flipY=false;mask.minFilter=mask.magFilter=T.LinearFilter;mask.needsUpdate=true;owned.push(mask);
- const asphalt=photo('circuit_asphalt_diff',true,owned),gravel=photo('gravel_diff',true,owned),soil=photo('forrest_ground_01_diff',true,owned);
- const asphaltN=photo('circuit_asphalt_nor_gl',false,owned),soilN=photo('mud_nor_gl',false,owned);material.normalMap=photo('gravel_nor_gl',false,owned);material.normalScale.setScalar(.55);
+ const asphalt=photo('circuit_asphalt_diff',true,owned),gravel=photo(looseSurface==='mud'?'mud_diff':'gravel_diff',true,owned),soil=photo('forrest_ground_01_diff',true,owned);
+ const asphaltN=photo('circuit_asphalt_nor_gl',false,owned),soilN=photo('mud_nor_gl',false,owned);material.normalMap=photo(looseSurface==='mud'?'mud_nor_gl':'gravel_nor_gl',false,owned);material.normalScale.setScalar(.55);
  const originalCompile=material.onBeforeCompile,originalKey=material.customProgramCacheKey;
  material.onBeforeCompile=(shader,renderer)=>{
   originalCompile.call(material,shader,renderer);

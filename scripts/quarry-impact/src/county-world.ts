@@ -1,11 +1,12 @@
+import {WRENFORD} from './wrenford-course';
 import {ALDERWICK_CROSS} from './alderwick-cross-course';
 import {createCourseScenery,paintCourseGround} from './course-scenery';
 import {addCourseGroundDetail} from './course-materials';
 import * as T from 'three';
 import {DOCKSIDE,FAIRGROUND} from './county-courses';
 import {freezeSceneryTransforms} from './render-work';
-export function createCountyWorld(id:'dockside-loop-v1'|'fairground-scramble-v1'|'alderwick-cross-v1'){
- const cross=id==='alderwick-cross-v1',dock=id==='dockside-loop-v1',course=cross?ALDERWICK_CROSS:dock?DOCKSIDE:FAIRGROUND,root=new T.Group();root.name=id;
+export function createCountyWorld(id:'dockside-loop-v1'|'fairground-scramble-v1'|'alderwick-cross-v1'|'wrenford-mud-v1'){
+ const mud=id==='wrenford-mud-v1',cross=id==='alderwick-cross-v1',dock=id==='dockside-loop-v1',course=mud?WRENFORD:cross?ALDERWICK_CROSS:dock?DOCKSIDE:FAIRGROUND,root=new T.Group();root.name=id;
  const materials={concrete:new T.MeshStandardMaterial({color:dock?0xc9c3ac:0xd2c5a1,roughness:.95}),stripe:new T.MeshStandardMaterial({color:dock?0xd99033:0x9b3e38,roughness:.9}),steel:new T.MeshStandardMaterial({color:0x344553,roughness:.7,metalness:.4}),grass:new T.MeshStandardMaterial({color:0x687858,roughness:1}),seat:new T.MeshStandardMaterial({color:0xc7c0a4,roughness:.8}),blue:new T.MeshStandardMaterial({color:0x3e6c81,roughness:.85}),red:new T.MeshStandardMaterial({color:0x9f4b3e,roughness:.9})};
  const floorMaterial=new T.MeshStandardMaterial({color:dock?0x777771:0x847b53,roughness:.98}),groundGeometry=new T.BufferGeometry(),boxGeometry=new T.BoxGeometry(1,1,1),textures:T.Texture[]=[];
  const {spanX,spanZ}=course.terrain;
@@ -19,14 +20,14 @@ export function createCountyWorld(id:'dockside-loop-v1'|'fairground-scramble-v1'
    const route=()=>{ctx.beginPath();course.samples.forEach((p,i)=>i?ctx.lineTo(x(p.x),z(p.z)):ctx.moveTo(x(p.x),z(p.z)));ctx.closePath();};
    ctx.lineJoin='round';route();ctx.strokeStyle=dock?'#90918c':'#b09266';ctx.lineWidth=31*scale;ctx.stroke();
    route();ctx.strokeStyle='#dad6c7';ctx.lineWidth=25.5*scale;ctx.stroke();ctx.setLineDash([3*scale,3*scale]);ctx.strokeStyle=dock?'#d4933d':'#9b3e38';ctx.stroke();ctx.setLineDash([]);
-   route();ctx.strokeStyle=dock||cross?'#3e4447':'#a78056';ctx.lineWidth=24*scale;ctx.stroke();
+   route();ctx.strokeStyle=mud?'#64503c':dock||cross?'#3e4447':'#a78056';ctx.lineWidth=24*scale;ctx.stroke();
    if(dock){route();ctx.lineWidth=.18*scale;ctx.strokeStyle='#a9a995';ctx.setLineDash([3*scale,9*scale]);ctx.stroke();ctx.setLineDash([]);}
    const start=course.point(0);for(let i=0;i<24;i++)for(let j=0;j<2;j++){ctx.fillStyle=(i+j)%2?'#e6e2d7':'#272f32';ctx.fillRect(x(start.x-1+j),z(start.z-12+i+1),scale,scale);}
    for(let row=1;row<12;row++)for(const lane of [-2.4,2.4]){const p=course.point(-row*7/course.length);ctx.fillStyle='#e1d7bb';ctx.fillRect(x(p.x-2),z(p.z+lane+1),.2*scale,2*scale);}
    const texture=new T.CanvasTexture(canvas);texture.flipY=false;texture.colorSpace=T.SRGBColorSpace;texture.anisotropy=8;textures.push(texture);floorMaterial.map=texture;floorMaterial.color.set(0xffffff);
   }
  }
- const surfaceDetail=addCourseGroundDetail(floorMaterial,course);
+ const surfaceDetail=addCourseGroundDetail(floorMaterial,course,mud?'mud':'gravel');
  const patch=course.terrainPatch();groundGeometry.setAttribute('position',new T.BufferAttribute(patch.positions,3));groundGeometry.setAttribute('uv',new T.BufferAttribute(patch.uv,2));groundGeometry.setIndex(new T.BufferAttribute(patch.indices,1));groundGeometry.computeVertexNormals();
  const ground=new T.Mesh(groundGeometry,floorMaterial);ground.name=id+'_ground';ground.receiveShadow=true;root.add(ground);
  const batches=new Map<keyof typeof materials,T.Matrix4[]>(),matrix=new T.Matrix4(),q=new T.Quaternion();
@@ -40,8 +41,30 @@ export function createCountyWorld(id:'dockside-loop-v1'|'fairground-scramble-v1'
   // Canal backdrop remains behind the outer safety wall.
   box(0,-.08,168,430,.08,18,'blue');
  }
+ if(mud){
+  // Compact showground grandstands sit outside the continuous oval walls.
+  for(const side of [-1,1]){
+   for(let row=0;row<6;row++){
+    const z=side*(80+row*2),top=.6+row*.55;box(0,top/2,z,124,top,2,'concrete');
+    for(let seat=-58;seat<=58;seat+=3){
+     if(Math.abs(seat)<5)continue;
+     box(seat,top+.2,z,2,.18,.8,'blue');box(seat,top+.58,z-side*.35,.65,.7,.45,(row+seat)%3?'red':'blue');
+     box(seat,top+1.05,z-side*.35,.38,.38,.38,'seat');
+    }
+   }
+   box(0,6.4,side*86,128,.3,18,'steel');
+   for(let x=-62;x<=62;x+=31)box(x,3.2,side*94,.22,6.4,.22,'steel');
+   for(let x=-60;x<=60;x+=15)box(x,.6,side*69,12,1.2,.5,'stripe');
+  }
+  // Service awnings and paddock stalls frame the end of the bowl.
+  for(const z of [-35,-12,12,35]){
+   box(142,2,z,14,4,18,'red');box(140,4.4,z,24,.3,20,'seat');
+   box(129,2.2,z-8,.18,4.4,.18,'steel');box(129,2.2,z+8,.18,4.4,.18,'steel');
+   for(const dz of [-5,0,5])box(134,.8,z+dz,2,1.6,3,'blue');
+  }
+ }
  for(const [finish,matrices]of batches){const mesh=new T.InstancedMesh(boxGeometry,materials[finish],matrices.length);matrices.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.name=id+'_'+finish;mesh.castShadow=mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
- const scenery=dock?null:createCourseScenery(course,cross?'club':'fair',cross?{title:'ALDERWICK DOUBLE CROSS',subtitle:'TWO CROSSINGS / ZERO RIGHT OF WAY'}:undefined);if(scenery)root.add(scenery.root);
+ const scenery=dock?null:createCourseScenery(course,mud?'farm':cross?'club':'fair',mud?{title:'WRENFORD MUD OVAL',subtitle:'LOCAL PRODUCE / IMPORTED BODY PANELS'}:cross?{title:'ALDERWICK DOUBLE CROSS',subtitle:'TWO CROSSINGS / ZERO RIGHT OF WAY'}:undefined);if(scenery)root.add(scenery.root);
  root.userData.solidRecords=course.solids;freezeSceneryTransforms(root);
  let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;scenery?.dispose();surfaceDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
 }

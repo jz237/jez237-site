@@ -63,7 +63,7 @@ export class DrivingBrain {
       const turn=Math.abs(wrap(Math.atan2(after.x-next.x,after.z-next.z)-Math.atan2(sx,sz)));
       const near=Math.hypot(next.x-car.current.x,next.z-car.current.z);
       if(near<15){const blend=clamp((15-near)/15,0,.55);tx+=(after.x-next.x)*blend;tz+=(after.z-next.z)*blend;}
-      desiredSpeed=clamp(24-turn*(near<35?12:5),9,24)*(car.surface==='gravel'?.87:1)*AI_DIFFICULTIES[this.difficulty].racePace;
+      desiredSpeed=clamp(24-turn*(near<35?12:5),9,24)*(car.surface==='mud'?.72:car.surface==='gravel'?.87:1)*AI_DIFFICULTIES[this.difficulty].racePace;
       m.phase='racing';
     }
     let angle=wrap(Math.atan2(tx-car.current.x,tz-car.current.z)-yaw);

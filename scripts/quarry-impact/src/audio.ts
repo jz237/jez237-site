@@ -296,7 +296,7 @@ export class Sound {
             (car.surface === 'asphalt' ? 1 : 0.3);
         else if (name === 'gravel')
           v =
-            car.surface === 'gravel'
+            car.surface !== 'asphalt'
               ? Math.min(0.22, Math.abs(car.speed) * 0.008)
               : 0;
         else if (name === 'scrape')
