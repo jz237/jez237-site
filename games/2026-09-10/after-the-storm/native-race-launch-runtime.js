@@ -1,3 +1,4 @@
+import {NATIVE_TUNE_KEYS,nativeMenuTune,nativeTuneLaunchOperations} from './native-rider-tuning.js';
 import {NATIVE_TITLE_INITIAL_PAIR} from './native-title-menu-data.js';
 import {createNativeRaceState,nativeRaceStateSnapshot,prepareNativeRaceStateOperations,
  prepareNativeRaceCountdown,prepareNativeRacePrestartInitializationUpdate,prepareNativeRacePrestartStatusUpdate,prepareNativeRaceResultStatusUpdate,
@@ -47,7 +48,7 @@ function readFloat(v){numberBits.setUint32(0,v);return numberBits.getFloat32(0);
  * opaque original loaded palettes/resources/BSS had these same initial bits.
  * Current ordinary time/versus previews use source modes0/1 and nonzero courses.
  * A retained canonical state may instead be supplied for exact prepared tests. */
-export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initialState,recordSession,courseRuntime,course,laps=3,reverse=false,rngSeed=17}={}){
+export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initialState,recordSession,tunes=[],courseRuntime,course,laps=3,reverse=false,rngSeed=17}={}){
  if(!Array.isArray(racers)||racers.length<1||racers.length>4)throw new TypeError('Launch requires one to four initialized racers');
  integer(players,'players',1,2);integer(courseIndex,'courseIndex',1,9);
  if(players>racers.length)throw new RangeError('Launch requires each human source slot');
@@ -84,7 +85,7 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    ...(courseRuntime?{menuWordsE658:Array(21).fill(0),deviceWords4308:Array(10).fill(0),
     // Fresh web profile policy: YOU initials for each rider/variant. No
     // cartridge save data; these14-byte entries cross u32 word boundaries.
-    saveWordsB280:(()=>{const bytes=new DataView(new ArrayBuffer(136));for(let i=0;i<8;i++)for(const [j,b]of [89,79,85].entries())bytes.setUint8(24+i*14+j,b);return Array.from({length:34},(_,i)=>bytes.getUint32(i*4));})(),nameEntryWords61c4:Array(14).fill(0),resultsMenuWords6d30:Array(4).fill(0),
+    saveWordsB280:(()=>{const bytes=new DataView(new ArrayBuffer(136));for(let i=0;i<8;i++){for(const [j,b]of [89,79,85].entries())bytes.setUint8(24+i*14+j,b);const tune=nativeMenuTune();for(const [j,key]of NATIVE_TUNE_KEYS.entries())bytes.setUint8(24+i*14+11+j,tune[key]);}return Array.from({length:34},(_,i)=>bytes.getUint32(i*4));})(),nameEntryWords61c4:Array(14).fill(0),resultsMenuWords6d30:Array(4).fill(0),
     continuationMenuWords61e0:Array(4).fill(0),
     // Fresh web menu selection/latch, plus verified numeric return tables.
     continuationDataWords60f0:Array.from({length:20},(_,i)=>[40,10,20,2,30,2][i-13]??0)}:{}),scene:{
@@ -102,6 +103,7 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
     directionFlag1f90:courseRuntime.directionFlag1f90,fortressD8240:0,metadataD9b0:racers[0].id,metadataCb32c:0,seed6f00:0}:{} )}});
   if(courseRuntime){
    if(retainedRecords)current=createNativeRaceState(restoreNativeRecordSession(current,retainedRecords));
+   commit(nativeTuneLaunchOperations(racers,players,tunes));
    current=prepareNativeRaceStartup(courseRuntime.resetLayout,current).state;
   }
   else{

@@ -89,7 +89,7 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
  // input, not a complete saved physical/water history.
  const nativeLaunch=physics==='native'?createNativeRaceLaunchRuntime({racers,courseIndex:course.sourceWaterCourseIndex,
   players:mode==='versus'?2:1,courseRuntime:nativeCourseRuntime,course,laps:configuredLaps,reverse:!!course.reverse,
-  initialState:nativeInitialRaceState,recordSession:nativeRecordSession,rngSeed:surfSeed.value}):null;
+  initialState:nativeInitialRaceState,recordSession:nativeRecordSession,tunes:nativeTunes,rngSeed:surfSeed.value}):null;
  const nativeStarts=nativeLaunch?racers.map((r,i)=>{
   const start=nativeLaunch.gridStart(i);
   if(!start.transform.complete)throw new RangeError('Ordinary source grid requires a complete packed transform');

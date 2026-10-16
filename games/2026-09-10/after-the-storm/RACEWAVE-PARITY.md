@@ -1,5 +1,31 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Next checkpoint — original tuning connected to the playable preview
+
+The Sunny Beach original-physics Time Trial and Versus preview now offers
+separate twelve-position Handling, Engine and Grip controls. Eight profiles
+(two players by four riders) persist through validated browser saves and
+portable export/import. Old saves receive standard defaults; modern tuning
+remains independent. Both players can select the same rider with different
+settings. Position6 is the recovered default index5.
+
+The selected indices reach the actual water/steering profile and the canonical
+save-profile bytes after retained records are restored. New profiles initialize
+all three traits to5. Initials, unselected profiles and old record attribution
+survive retries and rider changes. The web adapter marks a current run Custom
+when any index differs from5; this is an explicit web policy, not a recreation
+of the original Normal/Custom menu toggle or the complete rider-selection loop.
+
+The byte layout and twelve-position bounds were checked against the original
+rider-menu helpers at802C676C/802C67E4. A private instruction audit covers576
+valid-domain cases,15,648 instructions and624 stores; a read-only EVO X2 Ghidra
+query exported595 matching instructions without changing its nine project files.
+The new web code applies selected values directly; it does not claim to execute
+those original menu helpers. Seven integration tests cover saved profiles,
+malformed imports, all positions/riders, two-player coefficients, actual motion,
+and Standard/Custom record preservation. Together with existing launch, host,
+record and save checks,37 focused tests pass. This checkpoint is not yet live.
+
 ## Next checkpoint — rider model relocation after decompression
 
 The bounded 80095CE8 rider fixup and its complete 800967EC display-list callee
