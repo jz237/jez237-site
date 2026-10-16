@@ -2,7 +2,7 @@ import type R from '@dimforge/rapier3d-compat';
 import {registerTerrainContacts} from './terrain-collision';
 import type {CourseId} from './course-id';
 type Point={x:number;z:number};
-export type CountyCourseConfig={id:CourseId;name:string;controls:number[][];startX?:number;startZ:number;height(x:number,z:number):number;asphalt(x:number,z:number):boolean};
+export type CountyCourseConfig={id:CourseId;name:string;controls:number[][];startX?:number;startZ:number;openCrossings?:boolean;height(x:number,z:number):number;asphalt(x:number,z:number):boolean};
 export function createCountyCourse(config:CountyCourseConfig){
 const controls=config.controls;
 const wrap=(n:number,p:number)=>((n%p)+p)%p;
@@ -57,7 +57,8 @@ const solids:readonly CountySolid[]=(()=>{
  const p=point(0);
  for(const side of [-1,1])solids.push({id:'start_post_'+side,x:p.x,y:4,z:p.z+side*18,half:[.25,4,.25],yaw:0,material:'steel',collision:true});
  solids.push({id:'start_gantry',x:p.x,y:8.2,z:p.z,half:[.3,.2,18.25],yaw:0,material:'steel',collision:true});
- return solids;
+ // Keep both approaches open where another branch crosses this edge.
+ return config.openCrossings?solids.filter(s=>!s.id.startsWith('barrier_')||[-1,0,1].every(t=>distance(s.x+Math.sin(s.yaw)*s.half[2]*t,s.z+Math.cos(s.yaw)*s.half[2]*t)>14)):solids;
 })();
 return {
  id:config.id,name:config.name,length,halfWidth:12,checkpointRadius:15,mapExtent:215,

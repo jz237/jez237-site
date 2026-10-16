@@ -10,15 +10,18 @@ export function readPursuitReachPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restorePursuitReachBytes(file:string,bytes:Buffer):Buffer{
+ bytes=restoreAlderwickCrossBytes(file,bytes);
  const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readPursuitReachPrevious(file);
 }
 export function verifyPursuitReachRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'f45f98ffd90464303855d4b114daae808b44d521');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreAlderwickCrossBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restorePursuitReachBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the PursuitReach release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreAlderwickCrossBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the PursuitReach release');
  assert.equal(manifest.previousFixtureCount,2492);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,2492);
 }
+
+import {restoreAlderwickCrossBytes} from './alderwick-cross-invariants';

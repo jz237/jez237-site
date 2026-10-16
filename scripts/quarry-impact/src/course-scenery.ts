@@ -37,8 +37,8 @@ export function paintCourseGround(ctx:CanvasRenderingContext2D,width:number,heig
 
 /** Shared scenic dressing: bounded batches, original signage and protected placement.
  * Decorative pieces stay behind the existing walls; no driving surface is replaced. */
-export function createCourseScenery(course:Course,theme:SceneryTheme){
- const root=new T.Group();root.name=course.id+'_scenery';const p=palettes[theme];
+export function createCourseScenery(course:Course,theme:SceneryTheme,identity?:{title:string;subtitle:string}){
+ const root=new T.Group();root.name=course.id+'_scenery';const p={...palettes[theme],...identity};
  let seed=8713+theme.length*659;const random=()=>((seed=(Math.imul(seed,1664525)+1013904223)>>>0)/4294967296);
  const geometries:Record<Shape,T.BufferGeometry>={gable:new T.BufferGeometry().setAttribute('position',new T.Float32BufferAttribute([-.5,0,0,.5,0,0,0,1,0],3)),ring:new T.TorusGeometry(.46,.025,6,32),box:new T.BoxGeometry(1,1,1),round:new T.CylinderGeometry(.5,.5,1,8),cone:new T.ConeGeometry(.5,1,9),rock:new T.IcosahedronGeometry(.5,1),leaf:new T.IcosahedronGeometry(.5,2)};
  geometries.gable.computeVertexNormals();
