@@ -17,7 +17,8 @@ const moderateTables={fixedSphereImpactNative:[4,4,3,3.3],racerImpactNative:[5,6
  objectImpactNative:[5,6,5.9,5.5]};
 const severeTilt=[.38,.43,.43,.4].map(F),mildTilt=[.48,.53,.53,.5].map(F);
 const moderatePrimary=[5,6,5.9,5.5].map(F),speedGate=F(22.22222328186035);
-const actionActors=new Set([8,9,10,17,25]),poseActors=new Set([7,8,9,10,15,17,22,23,24,25]);
+const resultActors=new Set([1,2,3,4,5,6]),actionActors=new Set([8,9,10,17,25]);
+const poseActors=new Set([...resultActors,7,8,9,10,15,17,22,23,24,25]);
 const stateFields=new Set(['schema','riderIndex','actorState','animationFrame','pendingActor','pendingAnimationFrame',
  'holdFrame','blendProgress','blendStep','crashCountdown','crashDampingLatch','contactMode','stumbleCountdown',
  'recoveryCounter','secondaryCounter','stumbleCounter','recoveryInputLock','alternateStumble','selectedActor',
@@ -83,6 +84,13 @@ function initialization(s,actor){
    jointTypes:[...values.riderJointTypes],requiresEquivalentInitializer:false};
  }
  const types=Array(19).fill(actor===23||actor===24?0:1);
+ //53C08's six result branches retain mode1. Actor5 keeps every point type1;
+ //2/3 keep the second grip,4 releases knees as well as foot endpoints.
+ if(resultActors.has(actor)&&actor!==5){
+  for(const i of [9,10,17,18])types[i]=0;
+  if(actor===2||actor===3)types[14]=3;
+  if(actor===4){types[8]=0;types[16]=0;}
+ }
  if(actor===7)for(const i of [0,1,2,6,7,8,9,10,14,15,16,17,18])types[i]=0;
  if(actor===15)types.splice(0,19,...NATIVE_RIDER_START_TYPES);
  if(actor===22){
@@ -264,7 +272,10 @@ export function decideNativeActorAfterHull(state,snapshot){
  * through options. Active blends skip every actor-specific consumer. Targets
  * remain external; procedural23/24/25 return exactly0. Actor15's nonnegative
  * inactive-blend outcome requires the actual transient phase650. This is
- * distinct from simulation648 and is not retained as another phase owner. */
+ * distinct from simulation648 and is not retained as another phase owner.
+ * Result actors1..6 clear selectionCountdown only after a negative outcome
+ * without an active blend. Actor5 additionally unlocks recovery input and
+ * returns through7; selectedActor remains retained in all six branches. */
 export function finishNativeActorPose(state,outcome,{physicalMode,poseCompletion,phase650}={}){
  const s=stateCopy(state,'pose'),effects=[];
  if(!outcome||typeof outcome!=='object')throw new TypeError('An equivalent pose evaluator outcome is required');
@@ -294,7 +305,9 @@ export function finishNativeActorPose(state,outcome,{physicalMode,poseCompletion
   const r=prepared.actorRequest;
   if(r)actorRequest=request(s,effects,r.actorState,r.animationFrame,r.blend,r.holdFrame);
  }else if(next<0){
-  actorRequest=request(s,effects,22,0,.15,0);
+  if(resultActors.has(s.actorState))s.selectionCountdown=-1;
+  if(s.actorState===5){s.recoveryInputLock=0;actorRequest=request(s,effects,7,0,.05,1);}
+  else actorRequest=request(s,effects,22,0,.15,0);
  }else if(s.actorState===15){
   const phase=integer(phase650,'phase650');
   if(phase===2||phase===3)s.animationFrame=next;

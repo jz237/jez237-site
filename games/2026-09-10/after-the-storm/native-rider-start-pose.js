@@ -1,4 +1,4 @@
-// Numeric actor15/descriptor7 evaluator. All selected frame records are explicit
+// Numeric actor15/descriptor7 and result1..6 evaluators. Selected records are explicit
 // caller data; this module includes no animation records or original rest rig.
 // Native coordinates remain native coordinates. The caller owns lifecycle,
 // physical points, prior pose history, and any conversion to presentation units.
@@ -70,17 +70,34 @@ function frame(v){
   throw new RangeError('frameView does not match the source descriptor7 frame selection');
  return expected;
 }
+const RESULT_COUNTS=Object.freeze([0,89,100,54,79,40,54]);
+/** The six result descriptors use the same upper clamp and terminal return.
+ *5 dispatches to the full-hull decoder;2/3 fit only the second arm. The other
+ *three use yaw-relative free arms. Counts do not imply original artwork. */
+export function nativeRiderResultFrameView({actorState,animationFrame}={}){
+ integer(actorState,'actorState',1,6);integer(animationFrame,'animationFrame',0,2147483647);
+ const frameCount=RESULT_COUNTS[actorState],evaluatedAnimationFrame=Math.min(animationFrame,frameCount-1);
+ return freeze({actorState,descriptorIndex:actorState,frameCount,requestedAnimationFrame:animationFrame,
+  evaluatedAnimationFrame,nextAnimationFrame:evaluatedAnimationFrame===frameCount-1?-1:evaluatedAnimationFrame+1});
+}
+function resultFrame(v){
+ if(!v||typeof v!=='object')throw new TypeError('frameView is required');
+ const expected=nativeRiderResultFrameView({actorState:v.actorState,animationFrame:v.requestedAnimationFrame});
+ if(Object.keys(v).length!==Object.keys(expected).length||Object.keys(expected).some(k=>v[k]!==expected[k]))
+  throw new RangeError('frameView does not match the source result descriptor selection');
+ return expected;
+}
 function record(v,name){
  if(!v||typeof v!=='object')throw new TypeError(`${name} is required`);
  return {p:array(v.coordinatesS16,3,`${name}.coordinatesS16`,(n,k)=>integer(n,k,-32768,32767)),
   a:array(v.firstDirectionS8,3,`${name}.firstDirectionS8`,(n,k)=>integer(n,k,-128,127)),
   b:array(v.secondDirectionS8,3,`${name}.secondDirectionS8`,(n,k)=>integer(n,k,-128,127))};
 }
-function body(v){
- if(!v||typeof v!=='object'||!v.yawFrame)throw new TypeError('bodyNative and its retained yawFrame are required');
+function body(v,needsYaw=true){
+ if(!v||typeof v!=='object'||needsYaw&&!v.yawFrame)throw new TypeError('bodyNative and its retained yawFrame are required');
  return {p:vector(v.position,'bodyNative.position'),r:vector(v.right,'bodyNative.right'),
   u:vector(v.up,'bodyNative.up'),f:vector(v.forward,'bodyNative.forward'),
-  yaw:['field1434','field1438','field143c','field1440'].map(k=>finite(v.yawFrame[k],`bodyNative.yawFrame.${k}`))};
+  yaw:needsYaw?['field1434','field1438','field143c','field1440'].map(k=>finite(v.yawFrame[k],`bodyNative.yawFrame.${k}`)):null};
 }
 function decodeFull(rec,h){
  const transform=v=>AXES.map((_,i)=>add(add(mul(h.r[i],v[0]),mul(h.u[i],v[1])),mul(h.f[i],v[2])));
@@ -139,33 +156,49 @@ function mapPoints(pose,g){
  * divisor is required where the original evaluator divides unconditionally;
  * nonfinite/FCSR exceptional outcomes are outside this bounded API. */
 export function prepareNativeRiderStartPose({frameView,selectedFrame,bodyNative,anatomy}={}){
- const view=frame(frameView),g=nativeRiderStartAnatomy(anatomy);
+ return prepareSelectedPose(frame(frameView),selectedFrame,bodyNative,anatomy,{fitFirst:true,fitSecond:true,fullHull:false});
+}
+/** Complete numeric result evaluator and25-point mapping, with original or
+ *explicit equivalent selected records. Actor/frame ownership remains outside
+ *this pure evaluator. This does not include an animation asset or select a
+ *result code. The original fixed dimensions are the default. */
+export function prepareNativeRiderResultPose({frameView,selectedFrame,bodyNative,anatomy}={}){
+ const view=resultFrame(frameView);
+ return prepareSelectedPose(view,selectedFrame,bodyNative,anatomy,
+  {fitFirst:false,fitSecond:view.actorState===2||view.actorState===3,fullHull:view.actorState===5});
+}
+function prepareSelectedPose(view,selectedFrame,bodyNative,anatomy,{fitFirst,fitSecond,fullHull}){
+ const g=nativeRiderStartAnatomy(anatomy);
  if(!selectedFrame||selectedFrame.evaluatedAnimationFrame!==view.evaluatedAnimationFrame)
   throw new RangeError('Selected records must identify the evaluated animation frame');
- const records=array(selectedFrame.records,18,'selectedFrame.records',record),h=body(bodyNative);
- const yawBones=new Set([2,5,6,7,10,13,14]);
+ const records=array(selectedFrame.records,18,'selectedFrame.records',record),h=body(bodyNative,!fullHull);
+ const yawBones=new Set(fullHull?[]:[2,5,6,7,10,13,14,...(fitFirst?[]:[8,9]),...(fitSecond?[]:[11,12])]);
  const pose=records.map((r,i)=>(yawBones.has(i)?decodeYaw:decodeFull)(r,h));
- for(let pass=0;pass<3;pass++){
-  pose[10].p=fitShoulder(pose[10].p,pose[8].p,pose[14].p,g);
-  pose[13].p=fitShoulder(pose[13].p,pose[11].p,pose[14].p,g);
-  const delta=minus(pose[10].p,pose[13].p),factor=finite(g.shoulderHalfSpanNative/sqrt(squared(delta)));
-  const middle=pose[10].p.map((v,i)=>finite(add(v,pose[13].p[i])*.5)),half=times(delta,factor);
-  pose[10].p=plus(half,middle);pose[13].p=minus(middle,half);
+ if(!fullHull){
+  for(let pass=0;pass<3;pass++){
+   if(fitFirst)pose[10].p=fitShoulder(pose[10].p,pose[8].p,pose[14].p,g);
+   if(fitSecond)pose[13].p=fitShoulder(pose[13].p,pose[11].p,pose[14].p,g);
+   const delta=minus(pose[10].p,pose[13].p),factor=finite(g.shoulderHalfSpanNative/sqrt(squared(delta)));
+   const middle=pose[10].p.map((v,i)=>finite(add(v,pose[13].p[i])*.5)),half=times(delta,factor);
+   pose[10].p=plus(half,middle);pose[13].p=minus(middle,half);
+  }
+  const neck=pose[14],a=minus(pose[10].p,neck.p),b=minus(pose[13].p,neck.p);
+  const neckDirection=pose[10].p.map((v,i)=>finite(add(v,pose[13].p[i])*.5-neck.p[i]));
+  neck.a=times(neckDirection,div(1,sqrt(squared(neckDirection))));
+  const neckNormal=cross(a,b);neck.b=times(neckNormal,div(1,sqrt(squared(neckNormal))));
+  for(const [shoulder,elbow,wrist,fit]of [[10,9,8,fitFirst],[13,12,11,fitSecond]]){
+   if(!fit)continue;
+   const hint=pose[elbow].p.map((v,i)=>finite(v-.5*add(pose[wrist].p[i],pose[shoulder].p[i])));
+   pose[elbow].p=armJoint(pose[shoulder].p,pose[wrist].p,hint,g);
+   pose[shoulder].a=minus(pose[elbow].p,pose[shoulder].p);pose[shoulder].b=[...h.f];normalizeBlock(pose[shoulder]);
+   pose[elbow].a=minus(pose[wrist].p,pose[elbow].p);pose[elbow].b=[...h.u];normalizeBlock(pose[elbow]);
+  }
+  pose[7].p=neck.p.map((v,i)=>finite(v+g.neckHeadNative*neck.a[i]));
  }
- const neck=pose[14],a=minus(pose[10].p,neck.p),b=minus(pose[13].p,neck.p);
- const neckDirection=pose[10].p.map((v,i)=>finite(add(v,pose[13].p[i])*.5-neck.p[i]));
- neck.a=times(neckDirection,div(1,sqrt(squared(neckDirection))));
- const neckNormal=cross(a,b);neck.b=times(neckNormal,div(1,sqrt(squared(neckNormal))));
- for(const [shoulder,elbow,wrist]of [[10,9,8],[13,12,11]]){
-  const hint=pose[elbow].p.map((v,i)=>finite(v-.5*add(pose[wrist].p[i],pose[shoulder].p[i])));
-  pose[elbow].p=armJoint(pose[shoulder].p,pose[wrist].p,hint,g);
-  pose[shoulder].a=minus(pose[elbow].p,pose[shoulder].p);pose[shoulder].b=[...h.f];normalizeBlock(pose[shoulder]);
-  pose[elbow].a=minus(pose[wrist].p,pose[elbow].p);pose[elbow].b=[...h.u];normalizeBlock(pose[elbow]);
- }
- pose[7].p=neck.p.map((v,i)=>finite(v+g.neckHeadNative*neck.a[i]));
  return freeze({poseNative:pose.map(p=>({origin:object(p.p),firstDirection:object(p.a),secondDirection:object(p.b)})),
   ...mapPoints(pose,g),evaluatedAnimationFrame:view.evaluatedAnimationFrame,nextAnimationFrame:view.nextAnimationFrame,
-  provenance:{mechanics:'numeric actor15 descriptor7 evaluator and nineteen-plus-six point mapping',
+  provenance:{mechanics:view.actorState?`numeric result actor${view.actorState} evaluator and nineteen-plus-six point mapping`:
+   'numeric actor15 descriptor7 evaluator and nineteen-plus-six point mapping',
    animation:'explicit caller-supplied selected records; no original animation or rest data',
    anatomy:g===SOURCE_ANATOMY?'original numeric dimensions':'explicit caller anatomy adapts the original fixed-size skeleton',
    units:'native global coordinates; no presentation scale conversion'}});

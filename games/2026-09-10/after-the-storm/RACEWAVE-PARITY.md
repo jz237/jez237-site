@@ -2452,3 +2452,37 @@ does not yet receive the next source actor phase. Continuing the original
 result schedule, equivalent result-actor poses/completion, zero-simulation
 dispatch, fades/menus and persistence remain required. Full gameplay parity
 and the complete native result flow remain unfinished.
+
+## Result rider lifecycle and numeric poses — October 15, 2026
+
+The existing rider lifecycle now handles the six result actors' original
+initializers and post-pose transitions. Successful entry applies each actor's
+actual nineteen point types. A negative evaluator return outside an active
+blend clears the selection countdown while retaining the selected result code
+and current animation frame. Actor5 additionally clears the recovery input
+lock and requests actor7/frame0 with float32 .05/hold1; the other result actors
+request ordinary22/frame0 with .15/hold0. Active blends skip these consumers.
+The shared request owner still controls initialization, frame holds and blends.
+
+The shared selected-record pose evaluator now includes the six original result
+descriptors, with counts89/100/54/79/40/54 and their terminal/clamp behavior.
+Actors1/4/6 use yaw-relative free arms,2/3 retain the second fitted arm, and5
+uses full-hull decoding without shoulder fitting or head replacement. Physical
+nineteen-point and six auxiliary goals use the existing original numeric mapping.
+No pose clock, original animation assets or second body owner is introduced.
+
+Original-instruction comparison matches720 prepared post-pose cases and18
+initializer cases. A separate comparison executes original5CD24 dispatch,
+54130/52E90 evaluation, reached helpers and both25-point copy routines against
+144 synthetic selected-record/body cases: all23,328 pose words and10,800 target
+words match exactly, including terminal frames, four rider slots and tilted
+noncardinal hulls. Only the existing float32 square-root boundary is intercepted.
+The shared actor15 evaluator still matches its prior130 original-code fixtures.
+All259 selected rider/lifecycle/authored-rig/result-owner regression tests pass.
+
+This is a local, unpublished numeric implementation. The lifecycle's browser
+pose provider still needs equivalent high-resolution result motion records;
+it must not replace them with a neutral pose or reuse startup artwork as a
+finished result animation. Normal driven finishes, post-result world updates,
+original61708 result-input handling, result/menu scheduling, fades and persistent
+records remain unfinished. Publicv2.24.0 and the broader parity gaps are unchanged.
