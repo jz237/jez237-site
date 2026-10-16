@@ -68,7 +68,7 @@ function frame(now){
  $('standby').hidden=true;$('hud').hidden=false;const r=f.racers[1];
  $('title').textContent='P2 · '+(descriptor.names?.[r.id]||'Rider '+(r.id+1))+(f.freeRide?' · FREE RIDE':' · LAP '+Math.min(r.lap,descriptor.laps)+'/'+descriptor.laps);
  $('status').textContent=r.wipeout?'WIPEOUT · TAP THROTTLE TO REMOUNT':nativeRaceNotice(r)|| (f.time-r.eventTime<2?r.event:'');
- $('power').textContent=f.freeRide?r.stunt.score+' pts · '+r.stunt.rings+' rings':'POWER '+r.power+'/5 · MISSES '+r.misses+'/5';$('speed').textContent=windowRacerHudSpeed(r)+' km/h';$('notice').textContent=f.phase==='paused'?'RACE PAUSED':f.nativeLaunchLabel??(f.phase==='countdown'?String(Math.ceil(f.countdown)):'');$('pause').textContent=f.phase==='paused'?'Resume both':'Pause both';
+ $('power').textContent=f.freeRide?r.stunt.score+' pts · '+r.stunt.rings+' rings':'POWER '+r.power+'/5 · MISSES '+r.misses+'/5';$('speed').textContent=windowRacerHudSpeed(r)+' km/h';$('notice').textContent=f.phase==='paused'?'RACE PAUSED':f.phase==='postrace'?'RACE COMPLETE':f.nativeLaunchLabel??(f.phase==='countdown'?String(Math.ceil(f.countdown)):'');$('pause').textContent=f.phase==='paused'?'Resume both':'Pause both';
  updateGamepadRumble(haptics,focused?{mode:'versus',phase:f.phase,time:f.time,racers:f.racers}:null,pads,descriptor.rumble,now);
 }
 if(!/^[a-f0-9]{32}$/.test(session??'')||!/^[a-f0-9]{32}$/.test(capability??'')||!window.opener)hold('Open Player 2 from the two-player display menu.');

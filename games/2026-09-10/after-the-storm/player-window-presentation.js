@@ -128,7 +128,7 @@ export function captureWindowFrame(state,water,{includeLocal=true}={}){
   ...(own(state,'primaryBuoys')?{primaryBuoys:primaryBuoys(state.primaryBuoys)}:{}),...launchPresentation(state)};
 }
 export function readWindowFrame(value){
- if(!plain(value)||!finite(value.time)||value.time<0||!finite(value.countdown)||!['countdown','running','paused','results'].includes(value.phase)||!Array.isArray(value.racers)||value.racers.length!==2)return null;
+ if(!plain(value)||!finite(value.time)||value.time<0||!finite(value.countdown)||!['countdown','running','postrace','paused','results'].includes(value.phase)||!Array.isArray(value.racers)||value.racers.length!==2)return null;
  const racers=value.racers.map(rider),water=validateWindowWater(value.water),weather=fields(value.weather,30),breakables=importBreakablePresentation(value.breakables);
  if(racers.some(r=>!r)||racers[0].player!==0||racers[1].player!==1||!water||!weather||!breakables)return null;
  if(value.passageOpenedAt!==null&&!finite(value.passageOpenedAt))return null;

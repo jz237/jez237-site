@@ -169,7 +169,11 @@ test('pure outputs remain detached and malformed or overflowing arithmetic canno
  assert.equal(result.state.previousMotionDirection.z,1);assert.equal(result.nearObjects,true);
  assert.ok(Object.isFrozen(result));assert.ok(Object.isFrozen(result.predictedMotionDirection));assert.ok(Object.isFrozen(result.diagnostic));
  for(const change of [{motionDirection:xyz(Infinity,0,0)},{motionDirection:xyz(1e38,0,0)},
-  {positionNative:xz(NaN,0)},{frameSpeedNative:-1},{markedBox:1},{wetCount:9},{players:0},
+  {positionNative:xz(NaN,0)},{frameSpeedNative:-1},{markedBox:1},{wetCount:13},{players:0},
   {selectionCircleNative:{x:0,z:0,radiusSquared:-1}},{proximityCount:-1}])assert.throws(()=>prepareNativeAIMotion(s,{...before,...change}));
  assert.deepEqual(s,state());assert.throws(()=>{result.state.stuckFrames=99;},TypeError);
+});
+
+test('AI accepts all twelve hull water contacts without clamping the count',()=>{
+ for(const wetCount of [9,10,11,12])assert.deepEqual(run({wetCount}),run({wetCount:8}));
 });

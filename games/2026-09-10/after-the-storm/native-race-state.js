@@ -1,5 +1,6 @@
 import {prepareNativeRaceFadeUpdate} from './native-race-fade-update.js';
 import {prepareNativeMenuInput,prepareNativeDeviceSample} from './native-menu-input.js';
+import {prepareNativeRaceResultCPUDisplay} from './native-race-prestart-stage.js';
 import {prepareNativeRaceWidgetUpdate,prepareNativeRaceHUDAnimationUpdate} from './native-race-widget-update.js';
 import {NATIVE_AI_STORAGE_WORDS} from './native-ai-storage.js';
 import {prepareNativeRaceCameraInput} from './native-race-camera-input.js';
@@ -570,6 +571,13 @@ export function prepareNativeRaceResultStageUpdate(state,consumer,input={}){
   operations.push(...expanded);effects.push(...apply(next,expanded));
  }
  return freeze({...prepared,operations,state:next,effects});
+}
+export function prepareNativeRaceResultCPUDisplayUpdate(state,input={}){
+ const next=copy(state),prepared=prepareNativeRaceResultCPUDisplay({...resultInputView(next),
+  expandTransitions:true,expandWidgets:true,fadeTemplateWords6cc0:input.fadeTemplateWords6cc0,
+  slotTemplateWords6c50:input.slotTemplateWords6c50});
+ const effects=apply(next,prepared.operations);
+ return freeze({...prepared,state:next,effects});
 }
 /** One-shot result estimate against the same records used by the race and HUD.
  * No live phase is inferred; the caller must schedule actual77F5C invocation. */

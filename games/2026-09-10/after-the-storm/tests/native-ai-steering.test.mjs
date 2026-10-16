@@ -116,8 +116,12 @@ test('missing, nonfinite and unsupported physical/AI inputs reject without infer
  for(const change of [{targetDirectionXZ:null},{rightXZ:xz(NaN,0)},{forwardXZ:xz(0,Infinity)},
   {predictedDirectionXZ:xz(1e100,0)},{impactNormalXZ:xz(0,NaN)},
   {steeringDegrees:0},{steeringDegrees:-1},{turnBudgetDegrees:-1},{turnBudgetDegrees:1e38},
-  {previousRawXNative:128},{previousRawXNative:.5},{recoveryPhase:4},{stuckFrames:-2147483649},{wetCount:9}]){
+  {previousRawXNative:128},{previousRawXNative:.5},{recoveryPhase:4},{stuckFrames:-2147483649},{wetCount:13}]){
   assert.throws(()=>run(change));
  }
  assert.throws(()=>run({targetDirectionXZ:xz(1,0),turnBudgetDegrees:1e9,steeringDegrees:.001}),/conversion/);
+});
+
+test('AI accepts all twelve hull water contacts without clamping the count',()=>{
+ for(const wetCount of [9,10,11,12])assert.deepEqual(run({wetCount}),run({wetCount:8}));
 });

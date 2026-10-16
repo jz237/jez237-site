@@ -134,7 +134,11 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
      const r=racers[op.racerIndex];announce(r,state,r.power===5?'ROCKET START · MAX POWER':'START BOOST · POWER '+r.power);
     }
    }
-   if(state.nativeLaunch.ordinary&&state.phase!=='countdown')finishRaceStep(state,.05);
+   if(state.nativeLaunch.ordinary&&state.phase!=='countdown'){
+    finishRaceStep(state,.05);
+    state.nativeResult=state.nativeLaunch.resultView();
+    if(state.nativeResult.exit)state.phase='results';
+   }
    return state.phase!=='results';
   },
   onFrame:(host,context,ordinary)=>{
@@ -412,16 +416,17 @@ export function stepRace(s,input,dt,options={}){if(s.phase==='paused'||s.phase==
 }
 function finishRaceStep(s,dt){
  if(s.freeRide)return;
+ if(s.nativeLaunch?.ordinary&&s.result)return;
  if(s.mode==='versus'){
   const finished=s.racers.filter(r=>r.finishTime!==null),disqualified=s.racers.filter(r=>r.dq);
   if(s.nativeLaunch?.ordinary&&(finished.length||disqualified.length)){
    const result=s.nativeLaunch.snapshot().scene.result6f0,winner=result===1?s.racers[1]:result===2?s.racers[0]:null;
-   s.phase='results';s.result={winner:winner?.player??null,position:winner?winner.player===0?1:2:null,
+   s.phase='postrace';s.result={winner:winner?.player??null,position:winner?winner.player===0?1:2:null,
     time:winner?.finishTime??(winner??s.racers[0]).raceTime,dq:disqualified.map(r=>'P'+(r.player+1)+': '+r.dq).join(' / '),
     lapTimes:[],players:s.racers.map(r=>({player:r.player,id:r.id,time:r.finishTime,misses:r.misses,passed:r.passed,dq:r.dq}))};
    return;
   }
   if(finished.length||disqualified.length){const winner=finished.length?finished.sort((a,b)=>a.finishTime-b.finishTime)[0]:s.racers.find(r=>!r.dq);s.phase='results';s.result={winner:winner?.player??null,position:winner?.player===0?1:2,time:winner?.finishTime??(s.nativeLaunch?(winner??s.racers[0]).raceTime:s.time),dq:disqualified.map(r=>'P'+(r.player+1)+': '+r.dq).join(' / '),lapTimes:[],players:s.racers.map(r=>({player:r.player,id:r.id,time:r.finishTime,misses:r.misses,passed:r.passed,dq:r.dq}))};}return;
  }
- const human=s.racers[0];if(human.dq||human.finishTime!==null){if(s.mode==='championship'&&s.racers.some(r=>!r.dq&&r.finishTime===null)){s.finishWait+=dt;if(s.finishWait<40)return;for(const r of s.racers)if(r.finishTime===null&&!r.dq)r.dq='Race time limit';}s.phase='results';s.result={position:raceOrder(s).indexOf(human)+1,time:human.finishTime,dq:human.dq,lapTimes:[...human.lapTimes]};}
+ const human=s.racers[0];if(human.dq||human.finishTime!==null){if(s.mode==='championship'&&s.racers.some(r=>!r.dq&&r.finishTime===null)){s.finishWait+=dt;if(s.finishWait<40)return;for(const r of s.racers)if(r.finishTime===null&&!r.dq)r.dq='Race time limit';}s.phase=s.nativeLaunch?.ordinary?'postrace':'results';s.result={position:raceOrder(s).indexOf(human)+1,time:human.finishTime,dq:human.dq,lapTimes:[...human.lapTimes]};}
 }

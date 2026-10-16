@@ -93,7 +93,7 @@ export function prepareNativeAIMotion(state,{motionDirection,actorState,animatio
  courseIndex,behindThresholdNative}={}){
  const old=createNativeAIMotionState(state),current=vector(motionDirection,['x','y','z'],'motionDirection');
  integer(actorState,'actorState');integer(animationFrame,'animationFrame');
- boolean(priorControlActive,'priorControlActive');boolean(markedBox,'markedBox');integer(wetCount,'wetCount',0,8);
+ boolean(priorControlActive,'priorControlActive');boolean(markedBox,'markedBox');integer(wetCount,'wetCount',0,12);
  const speed=scalar(frameSpeedNative,'frameSpeedNative');if(speed<0)throw new RangeError('frameSpeedNative must be nonnegative');
  const position=vector(positionNative,['x','z'],'positionNative'),circle=vector(selectionCircleNative,['x','z','radiusSquared'],'selectionCircleNative');
  if(circle.radiusSquared<0)throw new RangeError('selectionCircleNative.radiusSquared must be nonnegative');

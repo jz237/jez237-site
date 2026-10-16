@@ -15,6 +15,7 @@ import {prepareNativeRaceWaterInitialization} from './native-race-state.js';
 import {prepareNativeRaceWidgetAdvance,prepareNativeRaceFadeAdvance} from './native-race-state.js';
 import {prepareNativeWidgetPresentation,nativeWidgetDrawView} from './native-widget-presentation.js';
 import {prepareNativeRaceMenuInputAdvance,nativeRaceMenuInputView} from './native-race-state.js';
+import {prepareNativeRaceResultCPUDisplayUpdate} from './native-race-state.js';
 
 // Overlapping effect47FC, solo4800 and two-player4818 numeric entries. Ordinary
 // two-player place indices are0/1; other mode tables remain separate admission.
@@ -22,8 +23,8 @@ const RESULT_TABLE_WORDS=Object.freeze([0,1,2,3,4,5,6,1,4]);
 
 // One canonical owner for the admitted ordinary launch, primary race and numeric
 // HUD fields. DOM/racer properties below are views, never synchronized copies.
-// Result entry shares this owner; subsequent result updates and menu transitions
-// still require their complete world/input/presentation schedule.
+// Result entry and CPU result updates share this owner. Original menu/resource
+// loading and cartridge persistence remain explicit external boundaries.
 const BASE=(0x2938-0x1f94)/4,STRIDE=222,hi=a=>(a-0x7788)/4,ri=a=>(a-0x1f94)/4;
 const sourceFields={nextSourceRow:3,side:7,armed:8,power:75,lapMisses:76,totalMisses:77,missLimitReached:79};
 const booleans=new Set(['armed','missLimitReached']);
@@ -43,7 +44,7 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
  if(!Array.isArray(racers)||racers.length<1||racers.length>4)throw new TypeError('Launch requires one to four initialized racers');
  integer(players,'players',1,2);integer(courseIndex,'courseIndex',1,9);
  if(players>racers.length)throw new RangeError('Launch requires each human source slot');
- let current;
+ let current,resultExit=null;
  // Browser commands are queued edges, consumed once at the source display stage.
  const cameraCommands=Array.from({length:players},()=>[]);
  const extra=racers.map(r=>({logicalTicks:r.sourceBuoys?.logicalTicks??0,missedCheckpoint:r.sourceBuoys?.missedCheckpoint??false,dqLabel:r.dq||''}));
@@ -71,14 +72,16 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
     0x22c0+courseIndex*20,0x23b0+courseIndex*20])raceWords1f94[ri(base)]=599999;
   }
   current=createNativeRaceState({raceWords1f94,hudWords7788,profileWordsB330,i1Words9440,aiWords3c60:Array(NATIVE_AI_STORAGE_WORDS).fill(0),
-   ...(courseRuntime?{menuWordsE658:Array(21).fill(0),deviceWords4308:Array(10).fill(0)}:{}),scene:{
+   ...(courseRuntime?{menuWordsE658:Array(21).fill(0),deviceWords4308:Array(10).fill(0),
+    // Fresh web profile policy: YOU initials in slot0; no cartridge save data.
+    saveWordsB280:Array.from({length:34},(_,i)=>i===6?0x594f5500:0)}:{}),scene:{
    players,racerCount:racers.length,primaryHumanIndex:0,secondaryHumanIndex:1,courseIndex,
    mode620:players===2?1:0,mode608:players===2?1:0,main638:1,phase650:0,simulation648:1,
    clockStopped817c:1,activity624:-1,event628:0,gameStateAb24:40,specialAb64:0,ready6fc:0,
    missesEnabled72e:1,result6f0:0,ambientD4b00:0,field4964:0,resultEffect393c:0,toggleD9914:0,
    rngState4640:integer(rngSeed,'web shared RNG seed',0,0xffffffff),previousNavigationD9874:0,trainingSelectionDa9f8:0,
    ...(courseRuntime?{primaryCount:courseRuntime.data.nodes.length,finishSourceRow:courseRuntime.data.finishSourceRow,
-    cold8224:1,forceFirst8228:0,demoOffset5438:0,restart6f8:0,reverseDab68:Number(reverse),state600:0,
+    cold8224:1,forceFirst8228:0,demoOffset5438:0,restart6f8:0,reverseDab68:Number(reverse),state600:0,nameIndexA9b0:0,
     missLimit8174:5,noFinish8178:0,configuredLaps728:integer(laps,'configured laps',3,9),
     directionFlag1f90:courseRuntime.directionFlag1f90,fortressD8240:0,metadataD9b0:0,metadataCb32c:0,seed6f00:0}:{} )}});
   if(courseRuntime)current=prepareNativeRaceStartup(courseRuntime.resetLayout,current).state;
@@ -338,9 +341,30 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    current=prepared.state;cameraCommands.forEach(q=>q.shift());
    return {effects:prepared.effects,diagnostic:prepared.diagnostic};
   },
+  resultView(){
+   const g=current.scene,i=a=>current.i1Words9440[(a-0x9440)/4]|0;
+   return {gameState:g.gameStateAb24,active:[41,42,44].includes(g.gameStateAb24)&&!resultExit,
+    delay:g.gameStateAb24===42?i(0x9504):0,waitingFrames:i(0x9508),
+    canContinue:g.gameStateAb24===42&&g.players===1&&g.mode608===0&&i(0x9504)===0&&i(0x9500)===0&&!resultExit,
+    exit:resultExit};
+  },
+  advanceResult(){
+   if(!courseRuntime)throw new Error('Source result schedule requires ordinary race');
+   if(!runtime.resultView().active)return {effects:[],view:runtime.view(),result:runtime.resultView()};
+   const prepared=prepareNativeRaceResultCPUDisplayUpdate(current,{
+    slotTemplateWords6c50:Array(11).fill(0),fadeTemplateWords6cc0:[0,0,0,0x10000,0,0,0,0,0x10000]});
+   // Explicit high-resolution menu handoff. Original menu/resource loading and
+   // cartridge persistence remain unexecuted effects; stop this host once so
+   // they cannot be repeatedly requested on every later browser frame.
+   const menu=prepared.effects.find(op=>op.kind==='externalCall'&&
+    ['801ec830','801ec20c','801ec9c8','801ece50'].includes(op.consumer));
+   current=prepared.state;
+   if(menu)resultExit=Object.freeze({consumer:menu.consumer});
+   return {effects:prepared.effects,view:runtime.view(),result:runtime.resultView()};
+  },
   advanceStatus(bodyResultCode16c8BySlot){
-   // Live ordinary admission stops at its result boundary. Execute the real
-   // entry once; repeated status calls must not award another win or re-enter.
+   // Execute result entry once; the following source frame uses advanceResult.
+   // Repeated status calls cannot award another win or reset the result timer.
    if(current.scene.gameStateAb24!==40)return {effects:[],view:runtime.view()};
    const prepared=prepareNativeRaceResultStatusUpdate(current,{bodyResultCode16c8BySlot,
     expandTransitions:true,expandWidgets:true,

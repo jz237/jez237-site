@@ -364,6 +364,23 @@ export function prepareNativeRaceResultUpdate(value,consumer){
  if(value.expandTransitions!==undefined&&typeof value.expandTransitions!=='boolean')throw new TypeError('expandTransitions must be boolean');
  const c=context(value);updateResult(c,consumer);return freeze({operations:c.operations});
 }
+/** CPU portion of result display5AE4, in its actual order. The modern renderer
+ * owns drawing; this entry neither calls guest display builders nor invents
+ * their return addresses. 6B38's two-player retirement counter runs before the
+ * selected result update. Entry initialization has already run in5DF4. */
+export function prepareNativeRaceResultCPUDisplay(value){
+ const c=context(value),game=s(c,'gameStateAb24');
+ if(![41,42,44].includes(game))throw new RangeError('Expected an active result stage');
+ if(s(c,'initLatch63c')!==0)source(c,'initLatch63c',0);
+ if(s(c,'players',1,2)===2&&game===41){
+  const before=word(c,'i1Words9440',0x96a4),next=(before+1)|0;
+  if(before<30)source(c,'clockStopped817c',1);
+  write(c,'i1Words9440',0x96a4,next);
+  if(next>=61&&word(c,'i1Words9440',0x96a0)===0)write(c,'i1Words9440',0x96a0,1);
+ }
+ updateResult(c,game===41?'802c63b4':game===42?'802c6550':'802c6b00');
+ return freeze({operations:c.operations});
+}
 function updateResult(c,consumer){
  if(consumer==='802c6b00'){
   if(hudHalfword(c,0x8a16)===1){call(c,'800ad3c4');call(c,'801ece50');}

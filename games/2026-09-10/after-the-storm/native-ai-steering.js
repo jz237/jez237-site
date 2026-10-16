@@ -53,7 +53,7 @@ export function prepareNativeAISteering({targetDirectionXZ,forwardXZ,rightXZ,pre
  if(degrees<=0||budget<0)throw new RangeError('steeringDegrees must be positive and turnBudgetDegrees nonnegative');
  let x=integer(previousRawXNative,'previousRawXNative',-128,127);
  let phase=integer(recoveryPhase,'recoveryPhase',0,3);
- integer(stuckFrames,'stuckFrames',-2147483648,2147483647);integer(wetCount,'wetCount',0,8);
+ integer(stuckFrames,'stuckFrames',-2147483648,2147483647);integer(wetCount,'wetCount',0,12);
  const lateralError=F(F(target.x*right.x)+F(target.z*right.z));
  const gain=F(F(budget*70)/degrees);
  const motionCross=F(F(prediction.z*target.x)-F(target.z*prediction.x));

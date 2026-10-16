@@ -58,7 +58,7 @@ test('source two-player simultaneous finishes choose a tie and apply the numeric
  // Prepared result-boundary fixture. Driven three-lap matches are covered
  // separately; this isolates the same-source-frame finish equality branch.
  for(const r of s.racers)r.finishTime=1.025;
- frames(s,1,[{},{}]);assert.equal(s.phase,'results');assert.equal(s.result.winner,null);assert.equal(s.result.time,1.025);
+ frames(s,1,[{},{}]);assert.equal(s.phase,'postrace');assert.equal(s.result.winner,null);assert.equal(s.result.time,1.025);
  const a=s.nativeLaunch.snapshot();assert.equal(a.scene.result6f0,3);assert.equal(a.profileWordsB330[48],0);assert.equal(a.profileWordsB330[49],0);
  frames(s,0,[{},{}]);stepRace(s,[{},{}],1);assert.deepEqual(s.nativeLaunch.snapshot(),a);
 });

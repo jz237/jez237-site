@@ -66,7 +66,7 @@ test('result writes validate every target before changing any owner and retain a
 test('ordinary solo finish enters the source result stage with the actual body delay and initialized finish notice',()=>{
  const s=create();frames(s,130);s.racers[0].finishTime=3.75;frames(s,1);
  const state=s.nativeLaunch.snapshot(),h=a=>state.hudWords7788[(a-0x7788)/4],i=a=>state.i1Words9440[(a-0x9440)/4];
- assert.equal(s.phase,'results');assert.equal(state.scene.gameStateAb24,42);assert.equal(state.scene.previousGameState634,40);
+ assert.equal(s.phase,'postrace');assert.equal(state.scene.gameStateAb24,42);assert.equal(state.scene.previousGameState634,40);
  assert.equal(state.scene.initLatch63c,1);assert.equal(state.scene.field62a,0);
  const code=codes(s)[0];assert.notEqual(code,-1);
  assert.equal(i(0x9504),({1:130,2:140,3:100,4:120,5:110})[code]??100);
@@ -79,7 +79,7 @@ test('ordinary solo finish enters the source result stage with the actual body d
 test('ordinary solo retirement enters source stage41 and initializes its notice and delay fade',()=>{
  const s=create();frames(s,130);s.racers[0].dq='Prepared retirement boundary';frames(s,1);
  const state=s.nativeLaunch.snapshot(),h=a=>state.hudWords7788[(a-0x7788)/4];
- assert.equal(s.phase,'results');assert.equal(state.scene.gameStateAb24,41);
+ assert.equal(s.phase,'postrace');assert.equal(state.scene.gameStateAb24,41);
  assert.equal(h(0x8930),0x40000);assert.equal(h(0x8938),80);assert.equal(h(0x893c)|0,-40);assert.equal(h(0x8958),0);
  assert.equal(h(0x8a10),0x10000);assert.equal(h(0x8a18)&65535,120);assert.equal(h(0x8a1c)>>>16,4);
  assert.deepEqual(s.nativeLaunch.advanceStatus(codes(s)).effects,[]);assert.deepEqual(s.nativeLaunch.snapshot(),state);
@@ -91,7 +91,7 @@ test('ordinary versus result entry awards exactly one win, with tie and double r
   if(kind==='double-dq')s.racers.forEach(r=>r.dq='Prepared simultaneous retirement');
   else s.racers.forEach((r,i)=>{if(kind==='tie'||kind===`p${i+1}`)r.finishTime=3.75;});
   frames(s,1);const state=s.nativeLaunch.snapshot(),tie=kind==='tie'||kind==='double-dq';
-  assert.equal(s.phase,'results');assert.equal(state.scene.gameStateAb24,tie?44:42);
+  assert.equal(s.phase,'postrace');assert.equal(state.scene.gameStateAb24,tie?44:42);
   assert.deepEqual(state.profileWordsB330.slice(48,50),[kind==='p1'?1:0,kind==='p2'?1:0]);
   assert.equal(state.hudWords7788[(0x8aa8-0x7788)/4],tie?3:kind==='p1'?1:2);
   assert.ok(state.hudWords7788.slice((0x8930-0x7788)/4,(0x8a0c-0x7788)/4).every(w=>w===0));

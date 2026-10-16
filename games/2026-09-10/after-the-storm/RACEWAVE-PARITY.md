@@ -1,5 +1,45 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## v2.30.0 — live post-race sequence
+
+The admitted ordinary native Sunny time-trial and versus host now continues
+its physical world after finish or retirement. Each source frame samples the
+physical menu input, runs world/AI updates, advances widgets and fade, then
+runs the result CPU dispatcher. Result entry remains one-shot. The next frame
+clears its initialization latch; two-player retirement advances6B38 before
+63B4. Solo Continue consumes actual pressed edges after the body-specific
+result delay, with the original1200-frame unattended timeout. Menu requests
+end the host exactly once. Final browser result data stays fixed while riders
+continue moving. Pause holds both physical and menu/result histories.
+
+The CPU result portion matches684 existing original-ROM dispatch fixtures and
+7,728 ordered writes after excluding the explicit drawing boundaries. Five
+live tests cover source ordering, early held buttons, pause, finish/retirement/
+tie routing,30/60/144Hz timing and a naturally completed race through the full
+unattended timeout. Browser verification found and fixed an older AI validation
+bug: aggregateC7C can count all12 hull points, not just8 lower points. Motion,
+steering and floor escape now accept9..12;88 fresh original-instruction cases
+match their public outputs. The natural finish regression reaches those upper
+contacts without faulting. The browser finished three laps without misses or
+DQ, accepted Continue, and reached its results screen with no simulation error.
+
+The high-resolution finish panel, keyboard Enter, controller Start and Continue
+button are modern presentation/input adapters. Original numeric widget animation
+continues, but the original textured widget drawing is still unimplemented.
+The source menu/resource initializers and cartridge persistence remain explicit
+unexecuted boundaries. A fresh web profile supplies YOU initials; native preview
+records remain separate from modern/global records. Online/second-window frames
+accept postrace and continue drawing until the final results handoff. The normal
+modern-physics modes retain their existing result path. This checkpoint does
+not claim original menu/save parity or complete native physics admission.
+
+Final verification passes61 full-race/AI/host/versus checks,54 post-race and AI
+contact checks,47 transport/player-window checks, and40 release/input/result
+checks (overlapping selections). The broader565-test run initially passed562;
+its three finish-observation tests now explicitly stop at the finish source
+frame, preserving their exact physical comparisons while production continues
+post-race. All three pass in the final61-test run.
+
 ## Physical menu input — local October 16 checkpoint
 
 The ordinary native host now samples a separate menu-controller input before
@@ -22,8 +62,8 @@ pause leaves the stored input untouched. Existing host/launch/result checks
 also pass. The broad native suite passes all520 tests. A local browser trial finished three laps without misses or disqualification; the only console failures were missing favicon requests. Browser controls feed menu input separately; verification pilots
 may provide an explicit menu input source rather than being polled twice.
 
-This work does not yet make the browser continue its result/world/HUD loop or
-draw the original numeric banners. Continue/menu/save integration remains open.
+The following live post-race checkpoint connects this physical menu owner to
+result timing. Original menu/save integration and textured banners remain open.
 
 ## v2.29.1 — music enabled by default
 

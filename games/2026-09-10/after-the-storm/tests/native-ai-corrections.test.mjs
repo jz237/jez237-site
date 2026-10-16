@@ -92,7 +92,11 @@ test('source course→floor→player order preserves direction-only target owner
 test('correction leaves reject invalid native data without mutating caller state',()=>{
  assert.throws(()=>course({reverse:1}),/reverse/);assert.throws(()=>course({courseIndex:9}),/courseIndex/);
  assert.throws(()=>course({courseEscapeFrames:2147483648}),/courseEscapeFrames/);assert.throws(()=>course({sourceLap:1.5}),/sourceLap/);
- assert.throws(()=>floor({wetCount:9}),/wetCount/);assert.throws(()=>floor({floorImpactNative:Infinity}),/floorImpactNative/);
+ assert.throws(()=>floor({wetCount:13}),/wetCount/);assert.throws(()=>floor({floorImpactNative:Infinity}),/floorImpactNative/);
  assert.throws(()=>floor({impactNormalXZ:{x:3e38,z:3e38}}),/overflow/);
  assert.throws(()=>player({targetDistanceNative:-1}),/nonnegative/);assert.throws(()=>prepareNativeAICorrections({}),/targetSegment/);
+});
+
+test('AI accepts all twelve hull water contacts without clamping the count',()=>{
+ for(const wetCount of [9,10,11,12])assert.deepEqual(floor({wetCount}),floor({wetCount:8}));
 });

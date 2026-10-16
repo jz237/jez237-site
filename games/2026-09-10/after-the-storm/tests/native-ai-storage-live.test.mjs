@@ -73,11 +73,11 @@ test('start-phase AI retains its bank and shared navigation; invalid driving inp
 
 test('actual completed solo race hands control to the source driver with no further human polling',()=>{
  const s=make(),pilot=createNativeRacePilot({course:s.course});
- for(let i=0;i<16000&&s.phase!=='results';i++)stepRace(s,()=>pilot.input(s,s.racers[0]),.05);
- assert.equal(s.phase,'results');assert.notEqual(s.racers[0].finishTime,null);assert.equal(s.racers[0].dq,'');
+ for(let i=0;i<16000&&s.phase!=='postrace';i++)stepRace(s,()=>pilot.input(s,s.racers[0]),.05);
+ assert.equal(s.phase,'postrace');assert.notEqual(s.racers[0].finishTime,null);assert.equal(s.racers[0].dq,'');
  const host=s.nativeHost,a=host.world.adapters[0];
- // Continue the actual completed host explicitly. Browser result-overlay and
- // menu scheduling remain a separate integration; this is no fake finish flag.
+ // Continue the actual completed host explicitly to inspect AI independently
+ // of the browser menu handoff; this is no fake finish flag.
  host.onFrame=null;host.onLaunchFrame=null;
  let polls=0,selectedAt=-1;
  for(let i=0;i<180;i++){

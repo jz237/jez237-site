@@ -187,8 +187,8 @@ test('display mutation cannot move the source hull or feed a modern rescue/force
 
 test('local verification uses the authored native helm through normal frame-sampled controls',()=>{
  const s=create();s.phase='running';const r=s.racers[0];
- for(let i=0;i<180*60&&s.phase!=='results';i++)stepRace(s,()=>verificationInput(s,r),1/60);
- assert.equal(s.phase,'results');assert.equal(r.dq,'');assert.equal(r.misses,0);assert.equal(r.lap,3);
+ for(let i=0;i<180*60&&s.phase!=='postrace';i++)stepRace(s,()=>verificationInput(s,r),1/60);
+ assert.equal(s.phase,'postrace');assert.equal(r.dq,'');assert.equal(r.misses,0);assert.equal(r.lap,3);
  assert.equal(r.lapTimes.length,3);assert.ok(r.finishTime>0);
  assert.equal(r.passed,42);assert.equal(s.nativeHost.world.remainder,0);
  assert.equal(s.nativeHost.world.adapters[0].lastControls.heldButtons&0x4010,0);

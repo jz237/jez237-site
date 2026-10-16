@@ -102,7 +102,7 @@ test('a prepared versus DQ displays the surviving record clock without including
  assert.equal(s.phase,'running');assert.ok(s.racers.every(r=>r.raceTime>0&&r.raceTime<s.time));
  // Unit fixture for the host result branch; this is not a driven DQ proof.
  s.racers[0].dq='Outside course for five seconds';frames(s,1,[{},{}]);
- assert.equal(s.phase,'results');assert.equal(s.result.winner,1);
+ assert.equal(s.phase,'postrace');assert.equal(s.result.winner,1);
  assert.equal(s.result.time,s.racers[1].raceTime);assert.notEqual(s.result.time,s.time);
  assert.equal(record(s,0,187),1);assert.equal(record(s,1,187),0);
 });
@@ -143,4 +143,10 @@ test('source labels/cues and race clocks survive online transport without carryi
  assert.equal(interpolateWindowFrame(read,later,read.time+.02).nativeLaunchLabel,'3');
  assert.deepEqual(interpolateWindowFrame(read,later,later.time).nativeCountdownCue,{sequence:2,number:2});
  assert.equal(readWindowFrame({...read,nativeCountdownCue:{sequence:-1,number:3}}),null);
+ s.phase='postrace';
+ const finishFrame=captureWindowFrame(s,{wake:[],impacts:[],craft:[],level:0,native:captureRaceWater(s.raceWater)});
+ const finishWire=await decodeOnlinePacket(await encodeOnlinePacket(finishFrame));
+ assert.equal(readWindowFrame(finishWire).phase,'postrace');
+ assert.equal(interpolateWindowFrame(read,readWindowFrame(finishWire),read.time).phase,'postrace');
+ assert.equal(finishWire.nativeLaunch,undefined);
 });

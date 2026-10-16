@@ -159,10 +159,14 @@ test('invalid geometry, policy, backend, class and backward clock are rejected',
 function drive(difficulty,rider,hz){
  const course=getCourse('greyhaven',difficulty),s=createRace({course,difficulty,rider,mode:'time',physics:'native'}),r=s.racers[0];
  const anchors=JSON.stringify(s.course.anchors),pilot=createNativeRacePilot({course:s.course});
- for(let i=0;i<180*hz&&s.phase!=='results';i++)stepRace(s,()=>pilot.input(s,r),1/hz);
+ // Observe the exact finish source-frame boundary; the live host otherwise
+ // continues into the result sequence and can consume residual render time.
+ const after=s.nativeHost.world.afterFrame;
+ s.nativeHost.world.afterFrame=(...args)=>{const out=after(...args);return s.phase==='postrace'?false:out;};
+ for(let i=0;i<180*hz&&s.phase!=='postrace';i++)stepRace(s,()=>pilot.input(s,r),1/hz);
  // Capture the final judge observation; inactive input performs no simulation.
  assert.deepEqual(pilot.input(s,r),neutral);const d=pilot.diagnostics();
- assert.equal(s.phase,'results',`unfinished class${difficulty} rider${rider} at${hz}Hz`);
+ assert.equal(s.phase,'postrace',`unfinished class${difficulty} rider${rider} at${hz}Hz`);
  const resultState=s.nativeLaunch.snapshot(),bodyCode=s.nativeHost.world.adapters[0].riderLifecycle.state.selectedActor;
  assert.equal(resultState.scene.gameStateAb24,42,'genuine finish enters the original result stage');
  assert.equal(resultState.i1Words9440[(0x9504-0x9440)/4],({1:130,2:140,3:100,4:120,5:110})[bodyCode]??100);

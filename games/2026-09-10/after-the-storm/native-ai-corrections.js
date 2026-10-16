@@ -187,7 +187,7 @@ export function prepareNativeAICourseEscape({courseIndex,reverse,positionNative,
  */
 export function prepareNativeAIFloorEscape({courseIndex,dryFloorFrames,floorImpactNative,wetCount,
  impactNormalXZ,targetDirectionXZ}={}){
- integer(courseIndex,'courseIndex',0,8);integer(dryFloorFrames,'dryFloorFrames');integer(wetCount,'wetCount',0,8);
+ integer(courseIndex,'courseIndex',0,8);integer(dryFloorFrames,'dryFloorFrames');integer(wetCount,'wetCount',0,12);
  const impact=scalar(floorImpactNative,'floorImpactNative'),normal=xz(impactNormalXZ,'impactNormalXZ');
  const incoming=xz(targetDirectionXZ,'targetDirectionXZ');
  const count=courseIndex===4||courseIndex===6||courseIndex===8||impact===0||wetCount!==0?0:(dryFloorFrames+1)|0;
