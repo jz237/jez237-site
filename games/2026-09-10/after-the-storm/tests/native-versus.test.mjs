@@ -100,6 +100,6 @@ test('shared pause and restart cannot pump proxy history, impacts, body, rider o
  assert.deepEqual({world:nativeRaceWorldSnapshot(s.nativeHost.world),water:captureRaceWater(s.raceWater)},before);
  const fresh=create();assert.equal(fresh.time,0);assert.equal(fresh.nativeHost.world.craftContactPasses,0);
  assert.ok(fresh.nativeHost.world.adapters.every(a=>a.hull.ticks===0&&a.lastFrame.impacts.racerImpactNative===0));
- assert.throws(()=>create({handicap:true}),/catch-up/);assert.throws(()=>create({course:getCourse('practice')}),/Sunny Beach/);
+ assert.equal(create({handicap:true}).nativeLaunch.snapshot().scene.field4970,1);assert.throws(()=>create({course:getCourse('practice')}),/Sunny Beach/);
  assert.throws(()=>create({seaState:'surf'}),/Sunny Beach/);
 });

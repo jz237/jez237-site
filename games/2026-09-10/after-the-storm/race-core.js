@@ -67,7 +67,6 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
  if(nativeRecordSession!==undefined&&physics!=='native')throw new RangeError('Native record sessions require native physics');
  if(physics==='native'&&(!['time','versus'].includes(mode)||seaState!=='course'||![1,2].includes(course.sourceWaterCourseIndex)))
   throw new RangeError('Native integration preview requires Sunny Beach or Sunset Bay source-water Time trial or Two-player race');
- if(physics==='native'&&mode==='versus'&&handicap)throw new RangeError('Native two-player catch-up still requires its source integration');
  setRaceWater(null);
  const freeRide=mode==='practice'||mode==='versus'&&course.id==='practice';
  if(['race','championship'].includes(mode))course=racingStuntCourse(course);
@@ -90,7 +89,7 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
  // lag or previous positions are seeded. Prepared numeric state is diagnostic
  // input, not a complete saved physical/water history.
  const nativeLaunch=physics==='native'?createNativeRaceLaunchRuntime({racers,courseIndex:course.sourceWaterCourseIndex,
-  players:mode==='versus'?2:1,courseRuntime:nativeCourseRuntime,course,laps:configuredLaps,reverse:!!course.reverse,
+  players:mode==='versus'?2:1,handicap:mode==='versus'&&!!handicap,courseRuntime:nativeCourseRuntime,course,laps:configuredLaps,reverse:!!course.reverse,
   initialState:nativeInitialRaceState,recordSession:nativeRecordSession,tunes:nativeTunes,tuneModes:nativeTuneModes,rngSeed:surfSeed.value}):null;
  const nativeStarts=nativeLaunch?racers.map((r,i)=>{
   const start=nativeLaunch.gridStart(i);

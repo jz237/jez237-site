@@ -47,9 +47,10 @@ function readFloat(v){numberBits.setUint32(0,v);return numberBits.getFloat32(0);
  * opaque original loaded palettes/resources/BSS had these same initial bits.
  * Current ordinary time/versus previews use source modes0/1 and nonzero courses.
  * A retained canonical state may instead be supplied for exact prepared tests. */
-export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initialState,recordSession,tunes=[],tuneModes=[],courseRuntime,course,laps=3,reverse=false,rngSeed=17}={}){
+export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initialState,recordSession,tunes=[],tuneModes=[],courseRuntime,course,laps=3,reverse=false,rngSeed=17,handicap=false}={}){
  if(!Array.isArray(racers)||racers.length<1||racers.length>4)throw new TypeError('Launch requires one to four initialized racers');
  integer(players,'players',1,2);integer(courseIndex,'courseIndex',1,9);
+ if(typeof handicap!=='boolean')throw new TypeError('handicap must be boolean');
  if(players>racers.length)throw new RangeError('Launch requires each human source slot');
  if(recordSession!==undefined&&(initialState||!courseRuntime))throw new RangeError('Record session requires a fresh ordinary launch');
  const retainedRecords=recordSession===undefined?null:copyNativeRecordSession(recordSession);
@@ -91,7 +92,7 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    players,racerCount:racers.length,primaryHumanIndex:0,secondaryHumanIndex:1,courseIndex,
    mode620:players===2?1:0,mode608:players===2?1:0,main638:1,phase650:0,simulation648:1,
    clockStopped817c:1,activity624:-1,event628:0,gameStateAb24:40,specialAb64:0,ready6fc:0,
-   missesEnabled72e:1,result6f0:0,ambientD4b00:0,field4964:0,resultEffect393c:0,toggleD9914:0,
+   missesEnabled72e:1,result6f0:0,ambientD4b00:0,field4964:0,field4970:Number(handicap),resultEffect393c:0,toggleD9914:0,
    rngState4640:integer(rngSeed,'web shared RNG seed',0,0xffffffff),previousNavigationD9874:0,trainingSelectionDa9f8:0,
    ...(courseRuntime?{primaryCount:courseRuntime.data.nodes.length,finishSourceRow:courseRuntime.data.finishSourceRow,
     cold8224:1,forceFirst8228:0,demoOffset5438:0,restart6f8:0,reverseDab68:Number(reverse),state600:0,
@@ -176,6 +177,15 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
  const runtime={
   ordinary:!!courseRuntime,
   scene:()=>({simulationState:current.scene.simulation648,phase650:current.scene.phase650}),
+  // Read the same source rank/checkpoint clock and human slot selectors used
+  // by63C88. The host supplies preceding physical centers before any hull tick.
+  catchupContext(slot,positionsBySlot){
+   const g=current.scene;
+   if(g.players!==2||!g.field4970)return undefined;
+   if(!Array.isArray(positionsBySlot)||positionsBySlot.length!==racers.length)throw new TypeError('Catch-up requires all physical centers');
+   return {players:g.players,enabled4970:g.field4970,place293c:word(slot,1),checkpointClock2c4:word(slot,177),
+    primaryPositionNative:{...positionsBySlot[g.primaryHumanIndex]},secondaryPositionNative:{...positionsBySlot[g.secondaryHumanIndex]}};
+  },
   // Source6E3A8 reads this signed halfword AFTER79528. It gates the shared
   // primary/generic object motion call7DBC0 independently of simulation648.
   objectMotionActive:()=>current.scene.activity624===-1,

@@ -51,9 +51,10 @@ function present(host){
    scale,previous:host.presentations[i]});
   const r=host.racers[i],{hydro,...pose}=view.racer;
   Object.assign(r,pose);Object.assign(r.hydro,hydro);
+  r.handicapBoost=(a.frame?.catchup?.multiplier??1)-1;
   if(host.raceRuntime?.ordinary)r.nativeCamera=r.human&&cameras?captureNativeCamera(cameras[r.player],scale):null;
   r.nativeRiderPose=nativeRiderPresentation(a.articulatedRider,a.hull);
-  r.nativeTelemetry={...view.source,actionState:{...snapshot.source.actionState},
+  r.nativeTelemetry={...view.source,catchup:a.frame?.catchup?{...a.frame.catchup}:null,actionState:{...snapshot.source.actionState},
    actorState:snapshot.source.actorState,animationFrame:snapshot.source.animationFrame,
    controlActorState:snapshot.source.controlActorState??snapshot.source.actorState,
    recovery:snapshot.source.recovery?structuredClone(snapshot.source.recovery):null,
@@ -119,7 +120,8 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
       proximityObjectCentersNative:(floating?.state.objects??[]).map(o=>({x:F(o.position.x/water.scale),z:F(o.position.z/water.scale)}))},waterField:water.field});
     host.lastAIInput=prepared;return {...prepared.controls,action16f4:prepared.action16f4};
    }}:{}),
-   hullStart,contacts,powerSteps:r.power,sourceState:raceRuntime?()=>raceRuntime.scene():sourceStates[i]??(recovery?{simulationState:3}:{actorState:22,simulationState:3}),...bundle,
+   hullStart,contacts,powerSteps:r.power,sourceState:raceRuntime?()=>({...raceRuntime.scene(),
+    catchup:raceRuntime.catchupContext?.(i,host.world.adapters.map(a=>({x:F(a.hull.center.x/a.hull.scale),z:F(a.hull.center.z/a.hull.scale)})))}):sourceStates[i]??(recovery?{simulationState:3}:{actorState:22,simulationState:3}),...bundle,
    ...(recovery?{riderRecovery:{courseDatumNative:()=>water.field.datumNative,raceFinished:()=>r.finishTime!==null,...bundle.initialRiderRecovery}}:{})});
  });
  const host={racers,bundles,contacts,primary,primaryActive,floating,floatingActive,presentations:[],onFrame,raceRuntime,onLaunchFrame,world:null,

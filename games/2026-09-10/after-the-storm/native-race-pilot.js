@@ -17,7 +17,7 @@ export const NATIVE_RACE_PILOT_POLICY=Object.freeze({
  headingGain:6,yawDamping:1.5,
  cornerDistanceWorld:25,cornerSlowdown:1.5,
  speedHysteresisWorld:.25,waypointRadiusWorld:.8,
- steeringEngineThreshold:.6,steeringEngineMaxSpeedWorld:24,
+ steeringEngineThreshold:.6,steeringEngineMaxSpeedWorld:24,assistedSteeringEngineMaxSpeedWorld:28,
  buoyTrackingWorld:32,maxBuoyShiftWorld:3,buoyClearanceWorld:3
 });
 
@@ -25,7 +25,7 @@ const ranges={straightSpeedWorld:[1,80],cornerSpeedWorld:[1,80],
  minLookaheadWorld:[.1,100],lookaheadSeconds:[0,4],velocityPredictionSeconds:[0,2],
  headingGain:[0,30],yawDamping:[0,10],cornerDistanceWorld:[.1,150],cornerSlowdown:[0,10],
  speedHysteresisWorld:[0,5],waypointRadiusWorld:[.01,5],
- steeringEngineThreshold:[0,1],steeringEngineMaxSpeedWorld:[1,80],buoyTrackingWorld:[1,100],maxBuoyShiftWorld:[0,20],buoyClearanceWorld:[0,10]};
+ steeringEngineThreshold:[0,1],steeringEngineMaxSpeedWorld:[1,80],assistedSteeringEngineMaxSpeedWorld:[1,80],buoyTrackingWorld:[1,100],maxBuoyShiftWorld:[0,20],buoyClearanceWorld:[0,10]};
 function drivingPolicy(overrides){
  if(!overrides||typeof overrides!=='object'||Array.isArray(overrides))throw new TypeError('Expected a driving-policy object');
  for(const key of Object.keys(overrides))if(!Object.hasOwn(ranges,key))throw new TypeError(`Unknown native pilot policy ${key}`);
@@ -188,7 +188,12 @@ export function createNativeRacePilot({course,policy={},traceLimit=256}={}){
   else if(r.speed>desiredSpeed+config.speedHysteresisWorld)throttle=false;
   const controlYaw=last?angle(r.heading-last.heading)/((frame-last.logicalFrame)*.05):r.yawVelocity;
   const steer=clamp(error*config.headingGain-controlYaw*config.yawDamping,-1,1);
-  const reserve=Math.abs(steer)>config.steeringEngineThreshold&&r.speed<config.steeringEngineMaxSpeedWorld;
+  // Assistance changes both thrust and steering. Keep the inspection helm's
+  // jet engaged longer through a turn so coasting does not remove its steering
+  // force while the boosted trailing craft is still drifting. This threshold
+  // is authored driving policy, not a change to the original force multiplier.
+  const reserveSpeed=state.handicap?config.assistedSteeringEngineMaxSpeedWorld:config.steeringEngineMaxSpeedWorld;
+  const reserve=Math.abs(steer)>config.steeringEngineThreshold&&r.speed<reserveSpeed;
   if(reserve)throttle=true;
   held={...neutral(),throttle:Number(throttle),steer};samples++;if(!throttle)coastFrames++;if(reserve)reserveFrames++;
   last={logicalFrame:frame,index,circuits,x:r.x,z:r.z,speedWorld:r.speed,heading:r.heading,yawVelocity:r.yawVelocity,controlYawVelocity:controlYaw,

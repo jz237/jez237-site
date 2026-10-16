@@ -21,7 +21,8 @@ import {queryNativeWaterField} from './native-water-field.js';
 // buoyancyKOverride describe the current action. Default ordinary math is kept.
 // The explicit computerProfile selects source16ce coefficients; the current
 // input caller does not select that profile. AI navigation, original scene
-// dispatch and two-player catch-up remain separately owned integration work.
+// dispatch remains separately owned integration work. The race adapter supplies
+// a prepared steering override and power when original two-player assistance is active.
 
 export const NATIVE_WATER_SCALE = .025;
 const STEP=NATIVE_HULL_STEP,FRAME_TICKS=5,LOWER=[0,2,3,5,6,7,9,10],UPPER=[1,4,8,11];
@@ -151,9 +152,11 @@ export function createNativeWaterState(profile=createNativeWaterProfile()){
 
 function controls(options){
   const result={throttle:!!options.throttle,stickX:options.stickX??0,stickY:options.stickY??0,
-    powerSteps:options.powerSteps??5,powerFactor:options.powerFactor??1,jetStraight:options.jetStraight??false};
+    powerSteps:options.powerSteps??5,powerFactor:options.powerFactor??1,jetStraight:options.jetStraight??false,
+    steeringDegreesOverride:options.steeringDegreesOverride??null};
   range(result.stickX,'stickX',-1,1);range(result.stickY,'stickY',-1,1);
   range(result.powerSteps,'powerSteps',0,5);validPowerFactor(result.powerFactor);
+  if(result.steeringDegreesOverride!==null)range(result.steeringDegreesOverride,'steeringDegreesOverride',0,360);
   if(typeof result.jetStraight!=='boolean')throw new TypeError('jetStraight must be boolean');
   return result;
 }
@@ -265,7 +268,8 @@ export function applyNativeWaterForces(hull,state,options={}){
   const slow=state.frameSpeedNative<p.steeringSlowFrameSpeed?
     1+(1-state.frameSpeedNative/p.steeringSlowFrameSpeed)*p.steeringSlowGain:1;
   const rawStick=Math.trunc(c.stickX*70);
-  const angleIndex=c.jetStraight?0:Math.trunc(rawStick*p.steeringDegrees*slow/70*4096/360);
+  const angleIndex=c.jetStraight?0:c.steeringDegreesOverride===null?Math.trunc(rawStick*p.steeringDegrees*slow/70*4096/360):
+    Math.trunc(F(F(F(F(rawStick*c.steeringDegreesOverride)/70)*4096)/360));
   // Regenerate trigonometry at the observed 4096-step angle, without shipping
   // the original runtime lookup table or claiming bit-identical float results.
   const angle=angleIndex*Math.PI*2/4096,cos=Math.cos(angle),sin=Math.sin(angle);

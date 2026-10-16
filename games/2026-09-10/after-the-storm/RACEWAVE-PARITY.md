@@ -1,5 +1,35 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## v2.37.0 — native two-player assistance
+
+Catch-up assistance is now available in the opt-in native Two-player preview.
+It uses the original zero-based placement, physical separation, rider-specific
+power caps and steering divisors. The preceding checkpoint-clock gate remains
+active, and both players read the same preceding physical frame. Ordinary
+modern handling is unchanged. Preview access remains
+`?verify=1&qa=1&nativePhysics=1`, on Sunny Beach and Sunset Bay with venue conditions.
+
+A fresh read-only Ghidra query on EVO X2 matched 1,101 exported instructions to
+the private ROM and left all nine project files unchanged. A bounded original
+64100..642D8 execution, including its square-root helper, produced 532 prepared
+cases and 15,774 executed instructions. Both output words match the new helper
+exactly. These are numeric prepared-state results, not whole-console trajectory
+equivalence; no original executable bytes are included in the public fixture.
+
+All 127 focused checks pass: ten assistance checks, 85 existing native physics,
+adapter, versus, Sunset and live-AI checks, and 32 online/window/loading checks.
+Assisted full three-lap matches complete on all four Sunny classes and Normal/
+Hard Sunset. The authored inspection driver keeps its jet engaged longer through
+assisted turns; original assistance coefficients and judging are unchanged.
+The integrated state is identical at 30/60/144Hz on both admitted venues.
+
+Browser inspection confirms assisted Sunny and Sunset results, the actual
+1920x1080 High canvas and two 1920x540 player views. The final inspection-driver
+threshold was subsequently checked across all six course/class combinations
+in the physical simulation. Ocean, terrain and render budgets are unchanged.
+Full native handling/AI/art parity, remaining venues and modes, and the original
+multi-racer camera-corner producer remain unfinished.
+
 ## v2.36.0 — native Sunset Bay preview
 
 The opt-in native preview now accepts Sunset Bay Time trial and Two-player race

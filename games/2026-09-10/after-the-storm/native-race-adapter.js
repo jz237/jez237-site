@@ -3,6 +3,7 @@ import {createNativeWaterProfile,createNativeWaterState,applyNativeWaterForces} 
 import {createNativeRiderProfile,prepareNativeRiderFrame,applyNativeTrimForces,
   applyNativeAuxiliaryYawForces,decideNativeRiderAction,applyNativeManipulationForces} from './native-rider-forces.js';
 import {createNativeControlState,sampleNativeControls,nativeRiderControlOrigin} from './native-controls.js';
+import {prepareNativeTwoPlayerCatchup} from './native-two-player-catchup.js';
 import {stepNativeArticulatedRider} from './native-articulated-rider.js';
 import {createNativeRiderControlState,prepareNativeRiderControls,finishNativeRiderControls} from './native-rider-controls.js';
 import {createNativeImpactState,resetNativeImpacts,recordNativeImpact,nativeImpactSnapshot} from './native-impact-state.js';
@@ -162,6 +163,7 @@ function sourceSettings(value={}){
   integer(result.contactMode,'contactMode',0,65535);
   if(typeof result.crash!=='boolean')throw new TypeError('crash must be boolean');
   return {...result,...(value.actionState===undefined?{}:{actionState:value.actionState}),
+    ...(value.catchup===undefined?{}:{catchup:structuredClone(value.catchup)}),
     ...(Object.hasOwn(value,'phase650')?{phase650:integer(value.phase650,'phase650',-0x80000000,0x7fffffff)}:{}),
     ...(Object.hasOwn(value,'sourceTick')?{sourceTick:integer(value.sourceTick,'sourceTick',0,0xffffffff)}:{})};
 }
@@ -415,6 +417,20 @@ function beginFrame(adapter,input,options){
   }
   const forceControls={...sampled,conditionedXNative:sampled.workingXNative,conditionedYNative:sampled.workingYNative,
     workingXNative:decision.muteSteering?0:sampled.workingXNative,workingYNative:decision.muteTrim?0:sampled.workingYNative};
+  let catchup=null;
+  if(source.catchup){
+    const q=source.catchup;
+    integer(q.checkpointClock2c4,'checkpointClock2c4',-2147483648,2147483647);
+    if(q.players===2&&q.enabled4970!==0&&q.checkpointClock2c4!==0){
+      const F=Math.fround,p=water.profile,speed=F(lastFrame.frameSpeedNative),threshold=F(p.steeringSlowFrameSpeed);
+      const steering=speed>=threshold?F(p.steeringDegrees):
+        F(F(F(F(1-F(speed/threshold))*F(p.steeringSlowGain))+1)*F(p.steeringDegrees));
+      catchup=prepareNativeTwoPlayerCatchup({...q,riderIndex:hull.rider,
+        powerFactor1578:sampled.powerFactor,steeringDegrees1588:steering});
+      forceControls.powerFactor=catchup.powerFactor;
+      forceControls.steeringDegreesOverride=catchup.steeringDegrees;
+    }
+  }
   // Everything that may reject missing trim input precedes these mutations.
   adapter.controlState=sampled.state;adapter.lastControls=forceControls;adapter.actionState=nextAction;
   if(actionHistory)adapter.riderActions.inputHistory=actionHistory;
@@ -423,7 +439,7 @@ function beginFrame(adapter,input,options){
   adapter.frame={startCenter:copy(hull.center),startReference:referencePoint(hull),prepared,
     controls:forceControls,physicalControls,previousContacts,action:decision,actorState:source.actorState,
     simulationState:source.simulationState,animationFrame:source.animationFrame,riderPose:poseProvider,
-    actionHistory,actionSource:capturedActionSource,phase650};
+    actionHistory,actionSource:capturedActionSource,phase650,catchup};
   resetNativeImpacts(adapter.impacts,{simulationState:source.simulationState});
   if(source.simulationState!==0)adapter.contactWindow=contactsZero();
 }
@@ -618,6 +634,7 @@ function stepAdapter(adapter,dt,input,options){
         applyNativeWaterForces(hull,water,{surface,throttle:c.throttle,
           stickX:forceAxis(c.workingXNative),stickY:forceAxis(c.workingYNative),
           powerSteps:adapter.powerSteps,powerFactor:c.powerFactor,
+          steeringDegreesOverride:c.steeringDegreesOverride,
           jetStraight:frame.prepared.jetStraight,suppressDryCorrection:frame.action.suppressDryCorrection,
           buoyancyKOverride:frame.action.buoyancyKOverride,
           gravityNativeOverride:frame.physicalControls.gravityNative,
