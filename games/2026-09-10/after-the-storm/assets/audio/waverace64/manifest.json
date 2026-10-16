@@ -120,6 +120,70 @@
       "loopStart": null,
       "loopEnd": null,
       "sha256": "e578b3952c75d49f028785758ce491f593e22f397f24a7bacc6bb9ea9a79dd31"
+    },
+    "07-final": {
+      "title": "Sunny Beach \u2014 Final lap",
+      "file": "track-07-final.mp3",
+      "duration": 54.239645833333334,
+      "loopStart": 27.572979797979794,
+      "loopEnd": 54.23964646464646,
+      "sha256": "0418dab013261a68caa4f8347155dd97bff685dd183d3ed44fca84f28161e6df"
+    },
+    "08-final": {
+      "title": "Sunset Bay \u2014 Final lap",
+      "file": "track-08-final.mp3",
+      "duration": 44.54266666666667,
+      "loopStart": 22.724494949494947,
+      "loopEnd": 44.54267676767676,
+      "sha256": "9718ace33a233c0e57a0d175895f6d0d9eb136944211113be1106ff4a0bc848a"
+    },
+    "09-final": {
+      "title": "Marine Fortress \u2014 Final lap",
+      "file": "track-09-final.mp3",
+      "duration": 76.20025,
+      "loopStart": 38.553186274509805,
+      "loopEnd": 76.20024509803923,
+      "sha256": "28ba5e5f025b4174a7f0b87b02a5eedebab078461d8da60dbd9760b8e1ed86b2"
+    },
+    "0a-final": {
+      "title": "Drake Lake \u2014 Final lap",
+      "file": "track-0a-final.mp3",
+      "duration": 62.78152083333333,
+      "loopStart": 32.78151041666667,
+      "loopEnd": 62.78151041666667,
+      "sha256": "83bc81c6bd754c79151da8cd0a2b7352d4c264ac2412d0d99fc67cd43fb527cd"
+    },
+    "0b-final": {
+      "title": "Port Blue \u2014 Final lap",
+      "file": "track-0b-final.mp3",
+      "duration": 48.9069375,
+      "loopStart": 24.90694444444444,
+      "loopEnd": 48.90694444444444,
+      "sha256": "bb6909fb9d1ea4d86b7ebde5e324a1ce4d000567630e7fbbbc3df50d6524acb5"
+    },
+    "0c-final": {
+      "title": "Twilight City \u2014 Final lap",
+      "file": "track-0c-final.mp3",
+      "duration": 63.24577083333333,
+      "loopStart": 35.19383116883116,
+      "loopEnd": 63.245779220779205,
+      "sha256": "476f0f4c5bac6b2ace67cdf50a01f55b19856a1d1cf27f6f673f8b6890758201"
+    },
+    "0d-final": {
+      "title": "Southern Island \u2014 Final lap",
+      "file": "track-0d-final.mp3",
+      "duration": 56.48552083333333,
+      "loopStart": 31.22236842105263,
+      "loopEnd": 56.48552631578947,
+      "sha256": "4cc7ba073f1011e33f42f018bb22bb9c59e648369962012c9ff2245dca6835ca"
+    },
+    "0e-final": {
+      "title": "Glacier Coast \u2014 Final lap",
+      "file": "track-0e-final.mp3",
+      "duration": 91.62172916666667,
+      "loopStart": 46.26458333333333,
+      "loopEnd": 91.62172619047618,
+      "sha256": "cf2aab21f309df364f1410398cdf0369cf4fb62a7f47503fe501842da0508b97"
     }
   }
 }

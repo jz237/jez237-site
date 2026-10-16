@@ -11,6 +11,7 @@ import {createRace,stepRace} from '../race-core.js';
 import {getCourse} from '../courses.js';
 import {captureRaceWater} from '../race-water.js';
 import {captureWindowFrame,readWindowFrame} from '../player-window-presentation.js';
+import {raceMusicFinalLap} from '../original-music.js';
 
 function fixture(physics='modern'){
  const state=createRace({mode:'versus',physics,seaState:'course',course:getCourse('greyhaven'),secondRider:2});
@@ -18,6 +19,19 @@ function fixture(physics='modern'){
  const initialFrame=captureWindowFrame(state,water);
  return {state,initialFrame,descriptor:{course:'greyhaven',difficulty:0,laps:3,seaState:'course',freeRide:false,swapColours:false,waveSeed:state.waveSeed,roster:[0,2],names:['A','B','C','D'],initialFrame}};
 }
+
+test('online snapshots give host and guest the same final-lap soundtrack when either human leads',async()=>{
+ for(const physics of ['modern','native']){
+  const {state,descriptor}=fixture(physics);state.phase='running';
+  for(const laps of [[1,1],[2,3],[3,2]]){
+   state.racers.forEach((r,i)=>r.lap=laps[i]);
+   const sent=captureWindowFrame(state,{wake:[],impacts:[],craft:[],level:0,native:captureRaceWater(state.raceWater)});
+   const received=readWindowFrame(await decodeOnlinePacket(await encodeOnlinePacket(sent)));assert.ok(received);
+   const guest=raceMusicFinalLap({mode:'versus',freeRide:received.freeRide,laps:descriptor.laps,racers:received.racers});
+   assert.equal(guest,raceMusicFinalLap(state));assert.equal(guest,laps.includes(3));
+  }
+ }
+});
 test('binary wire retains exact source water, local surface and rider values without JSON array expansion',async()=>{
  for(const physics of ['modern','native']){
   const {state,initialFrame}=fixture(physics);state.phase='running';for(let i=0;i<9;i++)stepRace(state,[{throttle:1,steer:.2},{throttle:.5,steer:-.4}],1/60);

@@ -2620,8 +2620,8 @@ cached. The original sequence loop boundaries preserve introductions.
 
 This uses the original melodies and instrument samples, rendered through
 MIDI/SoundFont synthesis: envelopes and reverb approximate the N64 audio
-engine. It is not a bit-exact hardware recording. Final-lap variants remain
-future work. The public assets contain MP3s, hashes and provenance; the ROM,
+engine. It is not a bit-exact hardware recording. Final-lap variants were
+added in v2.26.0 below. The public assets contain MP3s, hashes and provenance; the ROM,
 raw banks, MIDI sequences and extraction tools remain private. No paid service
 or soundtrack download was used.
 
@@ -2807,3 +2807,43 @@ All92 selected camera, result, state, ordinary-race and world tests pass. No
 visible camera-mode or finish-to-menu flow is claimed yet: original camera
 transform production, source AI context, remaining drawing/widget effects and
 menu/reset/save consumers still need live integration. This checkpoint is local.
+
+## Final-lap soundtrack (v2.26.0)
+
+Eight additional stereo files follow the original course sequences' variation1
+branches, including their faster tempos and distinct musical entry sections.
+The private converter linearizes each reachable root path before SEQ64 MIDI
+export, which otherwise ignores sequence branches. An independent raw-byte
+walk of all eight original roots matches322 instructions, ordered commands,
+durations and loop starts. Original channel/layer definitions and instrument
+banks remain unchanged in private extraction files. EVO X2's installed
+FluidSynth and FFmpeg rendered and packaged the tracks; no money was spent.
+
+Each file includes the original1A final-lap fanfare before the accelerated
+theme. C37F4(21,80), BF370 and C1540 show the fanfare,18 outer-frame delay and
+variation1 restart. The offline mix uses the recovered50ms game step for a
+.9s delay. Its2s fade is a documented presentation approximation of the
+original audio engine's120-unit fade, not a bit-exact audio-engine port.
+Loop points exclude the fanfare and retain the settled second traversal.
+There are now23 standalone soundtrack files, with hashes in the manifest.
+
+Race and championship use the human's final lap; local/online versus use
+either human, so the guest receives the same selection as the host. AI laps,
+Free Ride, Stunt and Time Trial do not select this variation. Once selected,
+the final-lap theme remains latched for that race even if a later snapshot or
+disqualification no longer meets the trigger. Restart/course change clears
+the latch and results select the appropriate existing finish/retirement cue.
+Enabled race music preloads only the current course's upcoming variation;
+the decoded cache remains bounded to two tracks. Pause/mute preserves position,
+and an in-flight prefetch can become the selected track without a duplicate
+download. Results and new races invalidate stale requests.
+
+All33 focused soundtrack, audio, sample and online tests pass, including actual
+modern/native presentation snapshots through the online codec. Chrome decoded
+all eight new files as stereo within.03s of manifest duration. Browser playback
+verified a P2-triggered switch at playbackRate1, pause/resume at the identical
+position, and the v2.26.0 game page loading successfully. The full suite reports
+2,209 passes out of2,220 tests; all11 failure names match the pre-existing
+shoreline/gameplay baseline, with no new failures. Publication uses the mandatory
+site wrapper and its preview/production checks.
+The broader gameplay parity gaps documented above remain open.
