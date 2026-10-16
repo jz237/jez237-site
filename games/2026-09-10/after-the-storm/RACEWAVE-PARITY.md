@@ -2771,3 +2771,39 @@ flow. Original9328C world drawing,1E5554 HUD drawing,1DE3CC retained effects,
 nonzero6A4C widgets, fade presentation, menu/reset/save consumers and complete
 source AI context still need their appropriate high-resolution integration.
 The live host's stop-at-results policy is unchanged. This checkpoint is local.
+
+## Display-stage camera inputs - October 16, 2026
+
+native-race-camera-input.js reconstructs the numeric1DE3CC routine that precedes
+5DF4 status. It updates the canonical camera and auxiliary HUD records, with
+per-view controller mapping, bitwise camera toggles, four-mode wrap, ordered
+sound cues and float32 blending. Body states remain indexed by view ordinal,
+independently of controller remapping. Actors23/24 use their special blend rate;
+actor25 shares their near/far target rule, and actor7 switches at frame56.
+The unchanged-mode blend rate is the fixed word6020, not a mode-indexed lookup.
+Source instruction comparison caught and corrected an initial addressing error.
+
+The sixteen mode words3940..3980 and four blend words6018..6028 are explicit
+retained readonly dependencies. No duplicate persistent camera state is added.
+prepareNativeRaceCameraInputUpdate commits the writes to the existing HUD owner;
+prepareNativeRaceResultDisplayUpdate can expand the call with
+expandCameraInput:true and a cameraInput sample. The call remains in its original
+game40 position before result selection. Other result states do not consume
+camera input. Water-camera transport preserves these mode/toggle/blend and
+auxiliary fields rather than replacing them with a rendered camera snapshot.
+
+Original1DE3CC execution, with only audio intercepted, matches1,382 prepared
+cases,213,466 counted instructions,22,215 ordered operations and1,989,960
+canonical HUD words. A second composition audit executes actual5AE4 plus1DE3CC
+and the previously recovered result routines:135 cases,53,379 counted
+instructions,9,474 operations and457,515 canonical words all match. Graphics,
+menu/save calls and other documented dispatcher boundaries remain external.
+These are prepared finite numeric inputs, not complete original camera or
+gameplay trajectories.
+
+Seven new tests cover mode wrapping, raw toggle bits, actor targets, remapped
+controllers, water-camera ownership, dispatcher ordering and atomic rejection.
+All92 selected camera, result, state, ordinary-race and world tests pass. No
+visible camera-mode or finish-to-menu flow is claimed yet: original camera
+transform production, source AI context, remaining drawing/widget effects and
+menu/reset/save consumers still need live integration. This checkpoint is local.

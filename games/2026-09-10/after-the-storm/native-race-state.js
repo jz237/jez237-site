@@ -1,4 +1,5 @@
 import {prepareNativeRaceFadeUpdate} from './native-race-fade-update.js';
+import {prepareNativeRaceCameraInput} from './native-race-camera-input.js';
 // Shared source race/HUD storage. Decoded leaf views are temporary, and all
 // overlapping records, tables, timers and flags return to these same owners.
 import {createNativeRaceResetState,prepareNativeRaceReset} from './native-race-reset.js';
@@ -547,6 +548,14 @@ export function prepareNativeRaceCourseZeroSequenceDisplayUpdate(state){
  return freeze({...prepared,state:next,effects});
 }
 
+/** Original display-stage camera inputs commit to the same HUD/camera words
+ * used by water and direction consumers. No visual camera snapshot is written
+ * back into these retained selection/auxiliary/blend fields. */
+export function prepareNativeRaceCameraInputUpdate(state,input={}){
+ const next=copy(state),prepared=prepareNativeRaceCameraInput({...input,players:sceneValue(next,'players'),hudWords7788:next.hudWords7788});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
 /** Prepared5AE4 stage with6BD8 numeric/draw recipes expanded at its actual
  * call site. The older PrestartStageUpdate retains its explicit opaque6BD8
  * contract. This entry removes that original call, preserving the once-only
@@ -567,10 +576,12 @@ export function prepareNativeRaceI1DisplayUpdate(state,input={}){
  * against canonical storage. Invoke once AFTER the CPU world and fade update,
  * never as an extra render/interpolation call. Real supplied graphics-head
  * returns remain required; this does not fabricate original display memory.
- * Menu/reset/save/audio effects still require consumers. expandTransitions
- * and expandEstimates retain their explicit branch-lazy source dependencies. */
+ * Menu/reset/save/audio effects still require consumers. expandTransitions,
+ * expandEstimates and expandCameraInput retain their explicit branch-lazy
+ * source dependencies. Camera input reads the supplied cameraInput sample. */
 export function prepareNativeRaceResultDisplayUpdate(state,input={}){
  if(input.expandEstimates!==undefined&&typeof input.expandEstimates!=='boolean')throw new TypeError('expandEstimates must be boolean');
+ if(input.expandCameraInput!==undefined&&typeof input.expandCameraInput!=='boolean')throw new TypeError('expandCameraInput must be boolean');
  return prepareDisplayUpdate(state,input,true);
 }
 function prepareDisplayUpdate(state,input,results){
@@ -588,6 +599,11 @@ function prepareDisplayUpdate(state,input,results){
    const estimate=prepareNativePrimaryResultEstimates({...next,primaryRecordWordsBySourceRow:input.primaryRecordWordsBySourceRow,
     bodyPositionsNativeBySlot:input.bodyPositionsNativeBySlot});
    operations.push(...estimate.operations);effects.push(...apply(next,estimate.operations));
+  }else if(results&&input.expandCameraInput&&op.kind==='externalCall'&&op.consumer==='801de3cc'){
+   // This consumer writes only camera/auxiliary HUD fields, disjoint from
+   //5DF4's later predicates. Commit them at the original pre-status call site.
+   const cameraInput=prepareNativeRaceCameraInput({...input.cameraInput,players:sceneValue(next,'players'),hudWords7788:next.hudWords7788});
+   operations.push(...cameraInput.operations);effects.push(...apply(next,cameraInput.operations));
   }else{operations.push(op);effects.push(...apply(next,[op]));}
  }
  return freeze({state:next,operations,effects,displayListHead:stage.displayListHead,diagnostic:{sequenceCalls}});
