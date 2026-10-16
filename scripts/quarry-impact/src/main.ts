@@ -1,3 +1,4 @@
+import {pursuitTerrainClear} from './pursuit-corridor';
 import {DERBY_FORMATS,readDerbyFormat,derbyEndReason,derbyRecordPrefix,derbyWreckStatus} from './derby-policy';
 import {globalScoresButton} from './global-scoring-ui';
 import {createCanalPassWorld} from './canal-pass-world';
@@ -1120,8 +1121,10 @@ function ai(car: Vehicle, dt: number): Input {
   };
   if(pursuit)return pursuitDriving.update(pursuit,car,cars,dt,elapsed,raceRoute(car.id),probe,target=>{
     const dx=target.x-car.current.x,dz=target.z-car.current.z,length=Math.hypot(dx,dz);if(length<.1)return true;
+    const halfWidth=DEFINITIONS[car.kind].halfWidth;
+    if(!pursuitTerrainClear(car.current,target,halfWidth,(x,z)=>activeVenue.course.height(x,z),(x,y,z)=>activeVenue.course.outside(x,y,z)))return false;
     const y=Math.max(car.current.y,activeVenue.course.height(car.current.x,car.current.z)+.55);
-    return !physics.castRay(new R.Ray({x:car.current.x,y,z:car.current.z},{x:dx/length,y:0,z:dz/length}),length,true,undefined,undefined,undefined,car.body,c=>(activeVenue.course.isDrivingObstacle?.(c)??true)&&!cars.some(v=>v.body.handle===c.parent()?.handle));
+    return [-1,0,1].every(side=>!physics.castRay(new R.Ray({x:car.current.x+dz/length*side*(halfWidth+.35),y,z:car.current.z-dx/length*side*(halfWidth+.35)},{x:dx/length,y:0,z:dz/length}),length,true,undefined,undefined,undefined,car.body,c=>(activeVenue.course.isDrivingObstacle?.(c)??true)&&!cars.some(v=>v.body.handle===c.parent()?.handle)));
   });
   return drivers.update(car,cars,practiceTraffic?'race':mode,dt,probe,raceRoute(car.id));
 }
@@ -1187,7 +1190,7 @@ function finish(title: string) {
   )
     saved.best[bestKey] = score;
   persist();
-  if (!online?.active && cars[0].health <= 0 && !scoreDerby() && !(raceTimeLimit()&&cars[0].finished)) {
+  if (!online?.active && !pursuit && cars[0].health <= 0 && !scoreDerby() && !(raceTimeLimit()&&cars[0].finished)) {
     state = 'wrecked'; wreckHold = 5;
     sound.pause(false);
     keys.clear(); testInput = null; accumulator = 0;

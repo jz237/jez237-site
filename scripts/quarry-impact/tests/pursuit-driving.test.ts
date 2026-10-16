@@ -44,5 +44,5 @@ test('slow close contact backs out for a run-up, keeps the runner target and aba
  for(let i=0;i<90;i++)input=driver.update(s,chaser,[runner,chaser,ally],1/60,i/60,route,open,()=>true);
  assert.equal(brain.memory.get(1)?.target,0);assert.equal(brain.memory.get(1)?.derby?.kind,'back out');assert.ok(input!.throttle<0);
  assert.ok(brain.memory.get(1)!.derby!.x>190,'Maneuver remains on the remote road');
- runner.current.z=250;driver.update(s,chaser,[runner,chaser,ally],1/60,2,route,open,()=>true);assert.equal(brain.memory.get(1)?.derby,undefined);
+ runner.current.z=290;driver.update(s,chaser,[runner,chaser,ally],1/60,2,route,open,()=>true);assert.equal(brain.memory.get(1)?.derby,undefined);
 });

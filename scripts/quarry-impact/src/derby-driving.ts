@@ -78,7 +78,7 @@ export function driveDerby(car:DriverCar,cars:DriverCar[],m:DriverMemory,arena:A
    }
   }
   const run=m.derby!;
-  if(run.kind==='run up'&&(dist(car.current,run)<3||run.time>3.2||run.slow>1.25)){
+  if(run.kind==='run up'&&(targetId!==undefined||dist(car.current,run)<3||run.time>3.2||run.slow>1.25)){
    m.derby=undefined;m.commit=0;m.stalled=0;
   }else{tx=run.x;tz=run.z;desired=11;m.phase='run up';}
  }

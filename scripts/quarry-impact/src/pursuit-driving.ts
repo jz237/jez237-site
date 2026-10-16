@@ -12,13 +12,14 @@ export class PursuitDriving{
  update(session:PursuitSession,car:DriverCar,cars:DriverCar[],dt:number,time:number,route:readonly {x:number;z:number}[],probe:()=>Clearance,clearCorridor:(target:PursuitPosition)=>boolean):Input{
   const intent=this.targeting.intent(session,position(car),cars.map(position),time,clearCorridor);
   if(intent.kind==='stop')return{throttle:0,steer:0,brake:1,handbrake:false};
-  const attack=intent.kind==='intercept'&&intent.target!==null?{id:intent.target,point:intent.point!}:undefined;
-  if(attack){
+  const attack=(intent.kind==='intercept'||intent.kind==='stage')&&intent.target!==null?{id:intent.target,point:intent.point!}:undefined;
+  if(intent.kind==='stage'&&intent.point&&Math.hypot(intent.point.x-car.current.x,intent.point.z-car.current.z)<4)return{throttle:0,steer:0,brake:1,handbrake:false};
+  if(attack&&intent.kind!=='stage'){
    const dx=attack.point.x-car.current.x,dz=attack.point.z-car.current.z;
    const ahead=dx*car.forward.x+dz*car.forward.z,side=dx*car.right.x+dz*car.right.z;
    // An overshot runner can be closer than our turning circle. Back towards it
    // only in a clear rear corridor, braking forward momentum before reversing.
-   if(ahead< -2&&ahead> -10&&Math.abs(side)<4){
+   if(!this.brain.memory.get(car.id)?.derby&&ahead< -2&&ahead> -10&&Math.abs(side)<4){
     const occupied=cars.some(other=>{if(other.id===car.id||other.id===attack.id)return false;const x=other.current.x-car.current.x,z=other.current.z-car.current.z;const back=-(x*car.forward.x+z*car.forward.z);return back>0&&back< -ahead+4&&Math.abs(x*car.right.x+z*car.right.z)<3;});
     const clearance=probe();
     if(!occupied&&clearance.rear>Math.max(3,Math.abs(car.speed)*.8)){
