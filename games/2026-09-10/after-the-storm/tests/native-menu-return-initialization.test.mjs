@@ -41,7 +41,7 @@ test('rider mode selects exact audio entry; unread second-player selection is no
 });
 test('bad late fade and selected trait inputs reject atomically without executing callbacks',()=>{
  const state=fixture(),before=structuredClone(state);
- for(const [destination,bad]of [['course',{...views,slotTemplateWords6c50:[]}],['rider',{...views,defaultRiderTraits:[[128,0,0],...views.defaultRiderTraits.slice(1)]}],['title',views]]){
+ for(const [destination,bad]of [['course',{...views,slotTemplateWords6c50:[]}],['rider',{...views,defaultRiderTraits:[[128,0,0],...views.defaultRiderTraits.slice(1)]}],['unknown',views]]){
   assert.throws(()=>update(state,destination,bad),RangeError);assert.deepEqual(state,before);
  }
  assert.throws(()=>course({scene:{gameStateAb24:81,fieldA9ac:-1}}),RangeError);

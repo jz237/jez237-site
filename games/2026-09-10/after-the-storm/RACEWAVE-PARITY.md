@@ -1,5 +1,31 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Next checkpoint — original title and championship return initialization
+
+Direct callers 801EB180 and 801EB91C now have independent numeric ports and a
+canonical adapter. Title return advances the two demo counters with the source
+increment/reset order, reads the existing saved unlock flag, configures demo
+riders, and resets its exact scene/HUD fields. Championship return selects the
+profile's next course, preserves the temporary fortress profile write, advances
+the signed 16-bit counter only below 9999, consumes the shared RNG once, and
+reads signed rider traits from the existing save owner. Aliased body slots keep
+every intermediate write. Rider identity uses metadataD9b0 rather than a second
+copy of the same source word.
+
+The complete original callers and their shared RNG were executed against the
+local ROM in 12,664 prepared cases: 2,569,798 instructions and 648,256 ordered
+operations matched, covering all 91 non-stack store instructions. This includes
+the raw championship body beyond the gap in Ghidra's exported listing. All 98
+focused menu, fade, state, configuration and record tests pass. The adapter
+expands both fade helpers into the existing HUD owner; resource loads, physical
+tunes, audio and title bootstrap 8004A208 remain explicit pending effects.
+
+These two new destinations are not connected to the live preview yet. Their
+selection loops, original demo runtime, resource/bootstrap effects and durable
+save transport remain incomplete. The previously connected course/rider return
+flow is retained. This checkpoint is local and unpublished; v2.31.2 publication
+still awaits approval for the concurrent site documents.
+
 ## Next checkpoint — correct rider attribution in preview records
 
 An alternate-rider browser run exposed a live metadata bug: Eli's record was

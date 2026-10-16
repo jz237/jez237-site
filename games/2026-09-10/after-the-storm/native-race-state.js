@@ -26,7 +26,7 @@ import {prepareNativeRaceCourseZeroSequenceUpdate,prepareNativeRaceCourseZeroSeq
 import {prepareNativeRaceStartTransform,decodeNativeRaceStartTransform} from './native-race-start-transform.js';
 import {prepareNativeRaceFadePropertiesInitialization,prepareNativeRaceFadeSlotsReset} from './native-race-fade-initialization.js';
 import {prepareNativeRaceMainConfiguration} from './native-race-main-configuration.js';
-import {prepareNativeCourseMenuReturn,prepareNativeRiderMenuReturn} from './native-menu-return-initialization.js';
+import {prepareNativeCourseMenuReturn,prepareNativeRiderMenuReturn,prepareNativeTitleMenuReturn,prepareNativeChampionshipMenuReturn} from './native-menu-return-initialization.js';
 import {prepareNativeRaceMenuInitialization} from './native-race-menu-initialization.js';
 import {prepareNativeNameEntryInitialization,prepareNativeNameEntryInput,prepareNativeNameEntryAnimationPhase,prepareNativeNameEntryRecordUpdate,prepareNativeNameEntryDisplay} from './native-name-entry.js';
 import {prepareNativeNameEntryPresentation} from './native-name-presentation.js';
@@ -48,17 +48,17 @@ const hudInts={recordFlag8a98:0x8a98,placeChanged8a9c:0x8a9c};
 // reverse halfword is viewed as unsigned by progress and signed by reset.
 // metadataD9b0 is the one800DA9B0 owner for both record rider attribution and
 // fallback initials. A separate nameIndexA9b0 would diverge on rider changes.
-const sceneRanges={primaryHumanIndex:[0,3],secondaryHumanIndex:[0,3],players:[1,2],courseIndex:[0,11],
+const sceneRanges={fieldAb0c:[-32768,32767],championshipCountAa00:[-32768,32767],primaryHumanIndex:[0,3],secondaryHumanIndex:[0,3],players:[1,2],courseIndex:[0,11],
  racerCount:[0,4],primaryCount:[0,64],finishSourceRow:[0,63],activity624:[-32768,32767],event628:[-32768,32767],
  pendingPlayers60c:[-32768,32767],participantCount60e:[-32768,32767],result6f0:[-32768,32767],field62a:[-32768,32767],specialAb64:[-32768,32767],ready6fc:[-32768,32767],field4964:[0,65535],
  reverseDab68:[0,65535],missesEnabled72e:[0,65535],seed6f00:[0,65535],rngState4640:[0,0xffffffff],style6e28:[0,65535],
  field4970:[0,65535],field72c:[0,65535],fieldA9ac:[0,65535],pressed65a:[0,65535],unlockAb60:[-32768,32767],freshNameAb6c:[-32768,32767],variant6f4:[-32768,32767],variant6f6:[-32768,32767]};
-const sceneWords=new Set(['cold8224','clockStopped817c','phase650','simulation648','main638','mode620','state600',
+const sceneWords=new Set(['titlePairSelectionA9fc','fieldAa08','fortressCourse3a10','cold8224','clockStopped817c','phase650','simulation648','main638','mode620','state600',
  'missLimit8174','noFinish8178','configuredLaps728','difficulty','directionFlag1f90','ambientD4b00','fortressD8240',
  'metadataD9b0','metadataCb32c','restart6f8','initLatch63c','gameStateAb24','mode608','returnState630','forceFirst8228','demoOffset5438','rngState4640','style6e2c',
  'previousGameState634','field640','field644','fieldAb1c','fieldAb2c','field461c','field700','field704','field708','field70c','field710','field714','resultEffect393c','wave610','missLimit614','lapCount618','field61c','wave49b0','field64c','players','racerCount','toggleD9914','previousNavigationD9874','trainingSelectionDa9f8',
  'riderSelectionA9c0','secondRiderSelectionA9c4','riderFlagA9c8','secondRiderFlagA9cc','courseSelectionA9d0','courseIndex']);
-const sceneHalves=new Set(['activity624','event628','field62a','pendingPlayers60c','participantCount60e','result6f0','specialAb64','ready6fc','reverseDab68','missesEnabled72e','seed6f00','field4964','style6e28',
+const sceneHalves=new Set(['fieldAb0c','championshipCountAa00','activity624','event628','field62a','pendingPlayers60c','participantCount60e','result6f0','specialAb64','ready6fc','reverseDab68','missesEnabled72e','seed6f00','field4964','style6e28',
  'field4970','field72c','fieldA9ac','pressed65a','unlockAb60','freshNameAb6c','variant6f4','variant6f6']);
 function record(v,n){if(!v||typeof v!=='object'||Array.isArray(v))throw new TypeError(`Expected ${n}`);return v;}
 function integer(v,n,min=MIN,max=MAX){if(!Number.isInteger(v)||v<min||v>max)throw new RangeError(`Invalid ${n}`);return v||0;}
@@ -511,13 +511,14 @@ export function prepareNativeRaceMainConfigurationUpdate(state,sourceViews={}, {
   finalAudioPending:true,physicalInitialization:false}});
 }
 
-/** Numeric rider/course return entry, with both fade initializers expanded in
+/** Numeric title/championship/rider/course return entry, with fades expanded in
  * source order into the same canonical HUD owner. Physical rider tunes,
  * resources and audio remain required effects. The original selection-menu
  * loops and rendering are separate; no target entry remains for replay. */
 export function prepareNativeMenuReturnUpdate(state,destination,sourceViews={}){
- if(destination!=='course'&&destination!=='rider')throw new RangeError('Unreconstructed menu return destination');
- const next=copy(state),prepared=destination==='course'?prepareNativeCourseMenuReturn(next):prepareNativeRiderMenuReturn(next,sourceViews),operations=[],effects=[];
+ const prepare={course:prepareNativeCourseMenuReturn,rider:prepareNativeRiderMenuReturn,title:prepareNativeTitleMenuReturn,championship:prepareNativeChampionshipMenuReturn}[destination];
+ if(typeof prepare!=='function'||!['course','rider','title','championship'].includes(destination))throw new RangeError('Unreconstructed menu return destination');
+ const next=copy(state),prepared=prepare(next,sourceViews),operations=[],effects=[];
  for(const op of prepared.operations){
   let batch=[op];
   if(op.kind==='externalCall'&&op.consumer==='801e6fb0'){
