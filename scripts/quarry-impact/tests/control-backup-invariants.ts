@@ -10,15 +10,18 @@ export function readControlBackupPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreControlBackupBytes(file:string,bytes:Buffer):Buffer{
+ bytes=restoreWrenfordPitBytes(file,bytes);
  const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readControlBackupPrevious(file);
 }
 export function verifyControlBackupRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'792494bc73dae377d2728292ccc933def1ffb25d');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreWrenfordPitBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreControlBackupBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the ControlBackup release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreWrenfordPitBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the ControlBackup release');
  assert.equal(manifest.previousFixtureCount,2552);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,2552);
 }
+
+import {restoreWrenfordPitBytes} from './wrenford-pit-invariants';

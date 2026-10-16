@@ -24,6 +24,8 @@ import {createMillhavenWorld} from './millhaven-world';
 import {createMerefieldWorld} from './merefield-world';
 import {BRIARHILL_ARENA,buildBriarhillPhysics,briarhillGround} from './briarhill-arena';
 import {createBriarhillWorld} from './briarhill-world';
+import {WRENFORD_PIT_ARENA,buildWrenfordPitPhysics,wrenfordPitGround} from './wrenford-pit-arena';
+import {createWrenfordPitWorld} from './wrenford-pit-world';
 import {createCountyWorld} from './county-world';
 import {createPinecrestWorld} from './pinecrest-world';
 import {combatMotion,COMBAT_AWARDS} from './combat-feats';
@@ -546,11 +548,11 @@ function ensureVenue(id:CourseId,arenaId:ArenaId='quarry-arena-v1'):VenueContext
     const world=new R.World({x:0,y:-9.81,z:0});world.timestep=1/60;
     let artwork:ReturnType<typeof createHarrowWorld>|undefined;
     try{
-      const briarhill=arenaId==='briarhill-bowl-v1',foundry=arenaId==='foundry-yard-v1';
-      (foundry?buildFoundryPhysics:briarhill?buildBriarhillPhysics:buildHarrowPhysics)(R,world);artwork=foundry?createFoundryWorld():briarhill?createBriarhillWorld():createHarrowWorld();
-      const course:RaceCourse={...getRaceCourse(),...(foundry?foundryGround:briarhill?briarhillGround:harrowGround),name:ARENA_NAMES[arenaId]};
+      const mud=arenaId==='wrenford-pit-v1',briarhill=arenaId==='briarhill-bowl-v1',foundry=arenaId==='foundry-yard-v1';
+      (mud?buildWrenfordPitPhysics:foundry?buildFoundryPhysics:briarhill?buildBriarhillPhysics:buildHarrowPhysics)(R,world);artwork=mud?createWrenfordPitWorld():foundry?createFoundryWorld():briarhill?createBriarhillWorld():createHarrowWorld();
+      const course:RaceCourse={...getRaceCourse(),...(mud?wrenfordPitGround:foundry?foundryGround:briarhill?briarhillGround:harrowGround),name:ARENA_NAMES[arenaId]};
       const checkpoint=new T.Group();checkpoint.visible=false;artwork.root.add(checkpoint);artwork.root.visible=false;scene.add(artwork.root);
-      const venue:VenueContext={arenaId,arena:foundry?FOUNDRY_ARENA:briarhill?BRIARHILL_ARENA:HARROW_ARENA,course,physics:world,root:artwork.root,checkpoint,props:[],puddles:[],dispose:()=>{artwork!.dispose();world.free();}};
+      const venue:VenueContext={arenaId,arena:mud?WRENFORD_PIT_ARENA:foundry?FOUNDRY_ARENA:briarhill?BRIARHILL_ARENA:HARROW_ARENA,course,physics:world,root:artwork.root,checkpoint,props:[],puddles:[],dispose:()=>{artwork!.dispose();world.free();}};
       arenaVenues[arenaId]=venue;return venue;
     }catch(error){artwork?.dispose();world.free();throw error;}
   }

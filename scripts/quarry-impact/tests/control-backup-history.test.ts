@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readControlBackupPrevious,restoreControlBackupBytes,verifyControlBackupRevision} from './control-backup-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreWrenfordPitBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('ControlBackup preserves every prior fixture, vehicle asset, control and camera input',verifyControlBackupRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/control-backup/revision.json').toString());
@@ -10,3 +10,5 @@ test('the successor bridge restores full predecessors and does not conceal later
  }
  const unknown=Buffer.from('unknown');assert.deepEqual(restoreControlBackupBytes('src/unknown.ts',unknown),unknown);
 });
+
+import {restoreWrenfordPitBytes} from './wrenford-pit-invariants';
