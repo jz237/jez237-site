@@ -9,6 +9,13 @@ export default defineConfig({
         manualChunks: {
           physics: ['@dimforge/rapier3d-compat'],
           graphics: ['three'],
+          // Keep immutable terrain data cached when gameplay/UI code changes.
+          terrain: [
+            './src/quarry-extension-collision.json', './src/quarry-west-wall-collision.json',
+            './src/quarry-cut-collision.json', './src/quarry-headwall-collision.json',
+            './src/quarry-east-bay-collision.json', './src/quarry-roadside-data.json',
+            './src/quarry-rock-hulls.json', './src/quarry-north-forest.json',
+          ],
         },
       },
     },

@@ -10,15 +10,18 @@ export function readCameraSettingsPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreCameraSettingsBytes(file:string,bytes:Buffer):Buffer{
+ bytes=restoreTerrainCacheBytes(file,bytes);
  const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readCameraSettingsPrevious(file);
 }
 export function verifyCameraSettingsRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'2351c227c468cf95debfb77211b620469896703a');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreTerrainCacheBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreCameraSettingsBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the CameraSettings release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreTerrainCacheBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the CameraSettings release');
  assert.equal(manifest.previousFixtureCount,2631);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,2631);
 }
+
+import {restoreTerrainCacheBytes} from './terrain-cache-invariants';
