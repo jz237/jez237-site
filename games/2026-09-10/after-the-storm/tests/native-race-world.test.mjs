@@ -174,3 +174,42 @@ test('physical sample callback runs once per hull tick and outer callback can en
  assert.equal(a.logicalFrames,2);assert.equal(w.water.frames,2);assert.equal(w.fault,null);
  stepNativeRaceWorld(w,0,null);assert.equal(ticks.length,10);
 });
+
+
+test('simulation0 runs outer updates while retaining hull motion, water evolution and rider pose history',()=>{
+ let scene=3;const calls=[],adapters=[];
+ for(let i=0;i<2;i++){
+  const position=v(i*3),bundle=createAuthoredNativeRider({initialHull:createNativeHull({position})});
+  adapters.push(createNativeRaceAdapter({position,...bundle,sourceState:()=>({actorState:22,simulationState:scene})}));
+ }
+ const water=createRaceWater({crafts:adapters.map(camera),baseAmplitudeNative:20,seed:17});
+ const w=createNativeRaceWorld({adapters,water,humanIndices:[0,1],beforeFrame:(_,c)=>calls.push(['before',c.logicalFrame]),
+  beforeActor:(_,c)=>calls.push(['summary',c.racerIndex]),afterTick:()=>calls.push(['tick']),afterFrame:(_,c)=>calls.push(['after',c.time])});
+ stepNativeRaceWorld(w,.1,[{throttle:true},{throttle:true}]);
+ const hulls=adapters.map(a=>structuredClone(a.hull)),poses=adapters.map(a=>structuredClone(a.articulatedRider)),histories=adapters.map(a=>nativeRaceSnapshot(a).source),
+  field=structuredClone(water.field),passes=w.craftContactPasses;
+ scene=0;calls.length=0;
+ const inputTimes=[];const inputs=adapters.map((_,i)=>(t,f)=>{inputTimes.push([i,t,f]);return {throttle:false};});
+ stepNativeRaceWorld(w,.15,inputs);
+ assert.equal(w.ticks,10);assert.equal(w.clockTicks,25);assert.equal(w.frames,5);assert.equal(w.stepsLast,0);assert.equal(w.framesLast,3);
+ assert.equal(w.craftContactPasses,passes);assert.deepEqual(adapters.map(a=>a.hull),hulls);
+ assert.deepEqual(adapters.map(a=>a.articulatedRider),poses);assert.deepEqual(water.field,field);
+ for(const [i,a]of adapters.entries())for(const k of ['frameDisplacementNative','frameSpeedNative','hudSpeed','referenceDisplacementNative','referenceChangeNative'])assert.deepEqual(a.lastFrame[k],histories[i][k]);
+ assert.deepEqual(inputTimes.map(x=>[x[0],x[2]]),[[1,2],[0,2],[1,3],[0,3],[1,4],[0,4]]);
+ inputTimes.forEach((x,i)=>near(x[1],[.1,.1,.15,.15,.2,.2][i]));
+ assert.equal(water.frames,5);assert.equal(water.lastPlan.forcing.length,0);assert.deepEqual(water.lastPlan.patches.map(p=>[p.playerIndex,p.evolve]),[[1,false],[0,false]]);
+ assert.equal(calls.filter(c=>c[0]==='tick').length,0);assert.deepEqual(calls.filter(c=>c[0]==='summary').map(c=>c[1]),[1,0,1,0,1,0]);
+ const paused=nativeRaceWorldSnapshot(w);stepNativeRaceWorld(w,.8,inputs,{active:false});assert.deepEqual(nativeRaceWorldSnapshot(w),paused);
+ scene=3;stepNativeRaceWorld(w,.05,[{throttle:true},{throttle:true}]);assert.equal(w.ticks,15);assert.equal(w.clockTicks,30);assert.equal(w.frames,6);assert.ok(water.field.patchUpdates>field.patchUpdates);
+});
+
+test('mixed active/inactive native frames agree at30/60/144Hz without phantom hull ticks',()=>{
+ const results=[];
+ for(const hz of [30,60,144]){
+  const w=make(2,{humanIndices:[0,1],sourceState:(_,c)=>({actorState:22,simulationState:c.logicalFrame>=3&&c.logicalFrame<11?0:3})});
+  for(let i=0;i<hz;i++)stepNativeRaceWorld(w,1/hz,[{throttle:true},{throttle:true}]);
+  assert.equal(w.frames,20);assert.equal(w.ticks,60);assert.equal(w.clockTicks,100);assert.equal(w.water.field.patchUpdates,24);
+  results.push(w);
+ }
+ for(const w of results.slice(1)){assert.deepEqual(w.adapters.map(nativeRaceSnapshot),results[0].adapters.map(nativeRaceSnapshot));assert.deepEqual(captureRaceWater(w.water),captureRaceWater(results[0].water));}
+});

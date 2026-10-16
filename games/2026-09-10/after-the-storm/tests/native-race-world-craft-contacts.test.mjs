@@ -104,14 +104,16 @@ test('shared collision, recovery, rider and two-camera water histories are refre
  }
 });
 
-test('mixed or inactive raw source scenes cannot silently run a different global physics schedule',()=>{
+test('mixed scenes reject while shared simulation0 skips the global contact and hull passes',()=>{
  const mixed=make({sourceStates:[{simulationState:3},{simulationState:1}]});
  assert.throws(()=>stepNativeRaceWorld(mixed.world,.01,[{},{}]),/shared by the whole scene/);
  assert.ok(mixed.adapters.every(a=>a.hull.ticks===0));assert.equal(mixed.world.craftContactPasses,0);
  const inactive=make({sourceStates:[{simulationState:0},{simulationState:0}]});
- assert.throws(()=>stepNativeRaceWorld(inactive.world,.01,[{},{}]),/active:false/);
+ stepNativeRaceWorld(inactive.world,.05,[{},{}]);
  assert.ok(inactive.adapters.every(a=>a.hull.ticks===0));assert.equal(inactive.world.craftContactPasses,0);
- assert.equal(inactive.water.frames,0);assert.ok(inactive.world.fault);
+ assert.equal(inactive.water.frames,1);assert.equal(inactive.world.frames,1);
+ assert.equal(inactive.world.clockTicks,5);assert.equal(inactive.world.fault,null);
+ assert.ok(inactive.adapters.every(a=>a.logicalFrames===1));
 });
 
 test('a degenerate pair faults the owner before any additional hull advances',()=>{

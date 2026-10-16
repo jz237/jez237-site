@@ -1,5 +1,5 @@
 import {NATIVE_HULL_STEP} from './native-hull.js';
-import {stepNativeRaceAdapter,nativeRaceSnapshot,latchNativeRaceAdapterControls,prepareNativeRaceAdapterFrame,completeNativeRaceAdapterFrame} from './native-race-adapter.js';
+import {stepNativeRaceAdapter,nativeRaceSnapshot,latchNativeRaceAdapterControls,prepareNativeRaceAdapterFrame,completeNativeRaceAdapterFrame,completeNativeRaceAdapterInactiveFrame} from './native-race-adapter.js';
 import {createNativeWaterCellSurface} from './native-water.js';
 import {isHostRaceWater,advanceRaceWaterFrame} from './race-water.js';
 import {createNativeCraftContactStates,refreshNativeCraftContactState,applyNativeCraftContacts,nativeCraftContactSnapshot} from './native-craft-contact.js';
@@ -13,8 +13,11 @@ import {createNativeCraftContactStates,refreshNativeCraftContactState,applyNativ
 // Source timers advance50ms per five-pass update: .01/.05 are GAME seconds.
 // Original dispatch requests3VI and holds at most one pending update. Browser
 // wall-time accumulation is a separate host policy, not that original queue.
+// Simulation0 keeps the outer clock/input/summary/camera updates but skips
+// hull/contact passes, actor solves and water forcing/evolution. clockTicks
+// belongs to that outer clock; ticks counts actual physical hull work only.
 // Actor transitions, scoring, AI decisions and course collision discovery
-// remain in their own modules. This is the active ordinary scene schedule;
+// remain in their own modules. This is the ordinary scene schedule;
 // scripted source scene21 and its separate clock are not inferred from a UI.
 const H=NATIVE_HULL_STEP,TICKS_PER_FRAME=5;
 const known=new WeakSet(),adapterOwners=new WeakMap(),waterOwners=new WeakMap();
@@ -26,7 +29,7 @@ function aligned(world){
  if(world.water.frames!==world.frames||world.water.remainder!==0)
   throw new Error('Native world water was stepped outside its owner');
  for(const [i,a]of world.adapters.entries()){
-  if(a.hull.ticks!==world.ticks||a.logicalFrames!==Math.floor(world.ticks/TICKS_PER_FRAME)||a.remainder!==0||a.pendingFrameCompletion)
+  if(a.hull.ticks!==world.ticks||a.logicalFrames!==world.frames||a.remainder!==0||a.pendingFrameCompletion||a.inactiveTicks!==0)
    throw new Error('Native world adapters must share its exclusive clock');
   if(nativeCraftContactSnapshot(world.craftContactStates[i]).tick!==world.ticks)
    throw new Error('Native craft proxy history must share the exclusive hull clock');
@@ -58,7 +61,7 @@ function optionsAt(value,time,frame,index){
  * therefore reach the following rider before that rider's decision.
  * afterFrame(world,context), when supplied, runs AFTER water exactly once per
  * completed frame; it is the caller's slot for native floating-object updates.
- * afterTick(world,context) runs once per physical tick, after any completed
+ * afterTick(world,context) runs only for actual physical ticks, after any completed
  * frame's water. Use it for fixed-clock control-facing pose/rate history.
  * Returning false from afterFrame ends this step at that frame and discards
  * unused elapsed time; it supports terminal race results, not a pause timer.
@@ -86,7 +89,7 @@ export function createNativeRaceWorld({adapters,water,humanIndices=[0],beforeFra
  const surface=createNativeWaterCellSurface(water.field);
  const craftContactStates=createNativeCraftContactStates(adapters.map(a=>a.hull));
  const world={adapters:adapters.slice(),water,
-  humanIndices:humanIndices.slice(),surface,beforeFrame,beforeActor,afterFrame,afterTick,ticks,frames:water.frames,remainder:0,
+  humanIndices:humanIndices.slice(),surface,beforeFrame,beforeActor,afterFrame,afterTick,ticks,clockTicks:ticks,frames:water.frames,remainder:0,
   craftContacts,craftContactStates,craftContactPasses:0,craftContactCount:0,frameCraftContacts:[],
   stepsLast:0,framesLast:0,frame:null,busy:false,fault:null};
  for(const a of adapters){a.surface=surface;adapterOwners.set(a,world);}
@@ -95,9 +98,10 @@ export function createNativeRaceWorld({adapters,water,humanIndices=[0],beforeFra
 
 /**
  * Inputs is one object or adapter-compatible input provider per racer. Each is
- * sampled only at a five-tick boundary. adapterOptions (array of objects or
+ * sampled only at an outer-frame boundary. adapterOptions (array of objects or
  * providers(time,logicalFrame,index)) and waterOptions are latched there too.
- * Paused/inactive calls ignore elapsed dt and preserve fractional remainder.
+ * Host-paused calls (active:false) ignore dt and preserve fractional remainder.
+ * Source simulation0 still advances outer frames while physical work is held.
  * No display, replay or separate-window snapshot can advance this coordinator.
  * Hook failures fault the owner explicitly; continuing a half-stepped world is
  * forbidden. Recreate from an authoritative reset rather than hiding skew.
@@ -115,8 +119,8 @@ export function stepNativeRaceWorld(world,dt,inputs,{active=true,adapterOptions=
  world.remainder+=dt;world.busy=true;
  try{
   while(world.remainder+1e-12>=H){
-   if(world.ticks%TICKS_PER_FRAME===0){
-    const time=world.ticks*H,frame=world.frames;
+   if(world.clockTicks%TICKS_PER_FRAME===0){
+    const time=world.clockTicks*H,frame=world.frames;
     const perRacer=world.adapters.map((_,i)=>optionsAt(adapterOptions[i]??{},time,frame,i));
     const nextWater=typeof waterOptions==='function'?waterOptions(time,frame):waterOptions;
     if(!nextWater||typeof nextWater!=='object'||Array.isArray(nextWater))throw new TypeError('Expected water frame options');
@@ -126,38 +130,40 @@ export function stepNativeRaceWorld(world,dt,inputs,{active=true,adapterOptions=
     for(let i=world.adapters.length-1;i>=0;i--)prepareNativeRaceAdapterFrame(world.adapters[i],inputs[i],perRacer[i]);
     const scene=world.adapters[0].frame.simulationState;
     if(world.adapters.some(a=>a.frame.simulationState!==scene))throw new Error('Native simulation state is shared by the whole scene');
-    // The source suppresses the entire five-hull loop for simulation0. This
-    // owner schedules active gameplay; host pause uses active:false. Refuse
-    // an inactive raw scene rather than running five fictitious hull passes.
-    if(scene===0)throw new RangeError('Inactive native scenes require active:false; the zero-physics outer scene schedule is separate');
+    // Simulation0 still has input/preparation/summary and camera/display
+    // updates. Only its hull loop and water evolution are suppressed.
     world.frame.simulationState=scene;world.frameCraftContacts=[];
    }
-   if(typeof world.craftContacts!=='boolean')throw new TypeError('craftContacts must remain boolean');
-   const enabled=world.craftContacts;
-   const collision=applyNativeCraftContacts(world.adapters.map((a,i)=>({hull:a.hull,
-    contactState:world.craftContactStates[i],impacts:a.impacts})),{enabled});
-   if(enabled)world.craftContactPasses++;
-   world.craftContactCount+=collision.contacts.length;
-   // At most five passes of96 pair/proxy contacts in one source outer frame.
-   // These are bounded display diagnostics; impacts remain owned by adapters.
-   for(const event of collision.contacts)world.frameCraftContacts.push({tick:world.ticks,...event});
-   for(let i=world.adapters.length-1;i>=0;i--){
-    const a=world.adapters[i];
-    stepNativeRaceAdapter(a,H,inputs[i],{...world.frame.perRacer[i],surface:world.surface,deferFrameCompletion:true});
-    refreshNativeCraftContactState(world.craftContactStates[i],a.hull);
+   const inactive=world.frame.simulationState===0;
+   if(!inactive){
+    if(typeof world.craftContacts!=='boolean')throw new TypeError('craftContacts must remain boolean');
+    const enabled=world.craftContacts;
+    const collision=applyNativeCraftContacts(world.adapters.map((a,i)=>({hull:a.hull,
+     contactState:world.craftContactStates[i],impacts:a.impacts})),{enabled});
+    if(enabled)world.craftContactPasses++;
+    world.craftContactCount+=collision.contacts.length;
+    // At most five passes of96 pair/proxy contacts in one source outer frame.
+    // These are bounded display diagnostics; impacts remain owned by adapters.
+    for(const event of collision.contacts)world.frameCraftContacts.push({tick:world.ticks,...event});
+    for(let i=world.adapters.length-1;i>=0;i--){
+     const a=world.adapters[i];
+     stepNativeRaceAdapter(a,H,inputs[i],{...world.frame.perRacer[i],surface:world.surface,deferFrameCompletion:true});
+     refreshNativeCraftContactState(world.craftContactStates[i],a.hull);
+    }
+    world.ticks++;world.stepsLast++;
    }
-   world.ticks++;world.stepsLast++;world.remainder=Math.max(0,world.remainder-H);
-   if(world.ticks%TICKS_PER_FRAME===0){
-    for(let i=world.adapters.length-1;i>=0;i--)completeNativeRaceAdapterFrame(world.adapters[i],{
-     beforeActorDecision:world.beforeActor?()=>world.beforeActor(world,{racerIndex:i,logicalFrame:world.frames+1,time:world.ticks*H,step:H*TICKS_PER_FRAME}):undefined});
-    advanceRaceWaterFrame(world.water,world.humanIndices.map(i=>cameraCraft(world.adapters[i])),world.frame.water);
+   world.clockTicks++;world.remainder=Math.max(0,world.remainder-H);
+   if(world.clockTicks%TICKS_PER_FRAME===0){
+    for(let i=world.adapters.length-1;i>=0;i--)(inactive?completeNativeRaceAdapterInactiveFrame:completeNativeRaceAdapterFrame)(world.adapters[i],{
+     beforeActorDecision:world.beforeActor?()=>world.beforeActor(world,{racerIndex:i,logicalFrame:world.frames+1,time:world.clockTicks*H,step:H*TICKS_PER_FRAME}):undefined});
+    advanceRaceWaterFrame(world.water,world.humanIndices.map(i=>cameraCraft(world.adapters[i])),{...world.frame.water,simulationActive:!inactive});
     world.frames++;world.framesLast++;
    }
    // Control-facing pose/rate history must use this physical clock. Updating
    // it again on a render refresh makes a feedback controller FPS-dependent.
-   if(world.afterTick)world.afterTick(world,{tick:world.ticks,logicalFrame:world.frames,time:world.ticks*H,step:H});
-   if(world.ticks%TICKS_PER_FRAME===0&&world.afterFrame){
-    const keepRunning=world.afterFrame(world,{logicalFrame:world.frames,time:world.ticks*H,step:H*TICKS_PER_FRAME});
+   if(!inactive&&world.afterTick)world.afterTick(world,{tick:world.ticks,logicalFrame:world.frames,time:world.ticks*H,step:H});
+   if(world.clockTicks%TICKS_PER_FRAME===0&&world.afterFrame){
+    const keepRunning=world.afterFrame(world,{logicalFrame:world.frames,time:world.clockTicks*H,step:H*TICKS_PER_FRAME});
     if(keepRunning===false){world.remainder=0;break;}
    }
   }
@@ -168,7 +174,7 @@ export function stepNativeRaceWorld(world,dt,inputs,{active=true,adapterOptions=
 /** Detached diagnostics. The water field itself is never exported here. */
 export function nativeRaceWorldSnapshot(world){
  owned(world);
- return {simulationTime:world.ticks*H,ticks:world.ticks,logicalFrames:world.frames,remainder:world.remainder,
+ return {simulationTime:world.clockTicks*H,hullTime:world.ticks*H,clockTicks:world.clockTicks,ticks:world.ticks,logicalFrames:world.frames,remainder:world.remainder,
   waterRevision:world.water.revision,waterPhase:world.water.field.phaseCounter,
   craftContacts:{enabled:world.craftContacts,passes:world.craftContactPasses,contacts:world.craftContactCount,
    frameContacts:structuredClone(world.frameCraftContacts),proxies:world.craftContactStates.map(nativeCraftContactSnapshot)},

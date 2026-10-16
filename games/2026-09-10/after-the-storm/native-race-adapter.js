@@ -281,7 +281,7 @@ export function createNativeRaceAdapter({riderIndex=0,tuneB6c=0,tuneB70=0,tuneB7
     sourceState:typeof sourceState==='function'?sourceState:{...(lifecycle?sourceState:source),actionState:undefined},
     actionState:action,articulatedRider,riderPose,riderLifecycle:lifecycle,riderActions:actions,
     contactFactor,powerSteps,remainder:0,logicalFrames:0,stepsLast:0,frame:null,
-    preparedHullTick:null,pendingFrameCompletion:false,
+    preparedHullTick:null,pendingFrameCompletion:false,inactiveTicks:0,
     contactWindow:contactsZero(),contactDriveFrames:0,dryContactFrames16d0:0,lastControls:null,
     lastFrame:{logicalFrame:0,clockUnits:0,frameDisplacementNative:vec(),frameSpeedNative:0,
       hudSpeed:0,referenceDisplacementNative:vec(),referenceChangeNative:vec(),
@@ -317,9 +317,9 @@ function sampleFrameControls(adapter,input,options){
   // Preserve the explicit caller's established poll order. The source wrapper
   // must inspect its lifecycle before polling either producer, and must never
   // read human input on the AI branch (including invalid/disconnected input).
-  let requested=adapter.sourceAIInput?undefined:typeof input==='function'?input(hull.simulationTime,logicalFrames):input;
+  let requested=adapter.sourceAIInput?undefined:typeof input==='function'?input(logicalFrames*H*FRAME_TICKS,logicalFrames):input;
   const previousContacts={...lastFrame.contacts};
-  const frameContext={logicalFrame:logicalFrames,time:hull.simulationTime,
+  const frameContext={logicalFrame:logicalFrames,time:logicalFrames*H*FRAME_TICKS,
     previousContacts,previousFrame:lastFrame,previousAction:{...adapter.actionState}};
   const sourceProvider=options.sourceState??adapter.sourceState;
   const requestedSource=typeof sourceProvider==='function'?sourceProvider(hull,frameContext):sourceProvider;
@@ -340,7 +340,7 @@ function sampleFrameControls(adapter,input,options){
       throw new Error('The source rider countdown owns controlOrigin');
     requested=origin==='ai'?adapter.sourceAIInput(hull,{...frameContext,source:{...source},selectionCountdown,
       previousControls:adapter.lastControls?structuredClone(adapter.lastControls):null}):
-      typeof input==='function'?input(hull.simulationTime,logicalFrames):input;
+      typeof input==='function'?input(logicalFrames*H*FRAME_TICKS,logicalFrames):input;
   }
   const inputFields=nativeInput(requested,origin);
   // AI preparation returns16f4 beside its raw controls. Transport that exact
@@ -432,9 +432,10 @@ function endFrame(adapter,beforeActorDecision){
   const {hull,water,frame,lastFrame,contactWindow}=adapter,s=hull.scale;
   adapter.dryContactFrames16d0=nextNativeDryContactFrames(adapter.dryContactFrames16d0,{anyWet:water.anyWet,impacts:adapter.impacts});
   const movement=difference(hull.center,frame.startCenter),reference=difference(referencePoint(hull),frame.startReference);
-  const displacement=vec(movement.x/s,movement.y/s,movement.z/s),speed=magnitude(displacement);
-  const referenceDisplacement=vec(reference.x/s,reference.y/s,reference.z/s);
-  const referenceChange=difference(referenceDisplacement,lastFrame.referenceDisplacementNative);
+  const inactive=frame.simulationState===0;
+  const displacement=inactive?copy(lastFrame.frameDisplacementNative):vec(movement.x/s,movement.y/s,movement.z/s),speed=inactive?lastFrame.frameSpeedNative:magnitude(displacement);
+  const referenceDisplacement=inactive?copy(lastFrame.referenceDisplacementNative):vec(reference.x/s,reference.y/s,reference.z/s);
+  const referenceChange=inactive?copy(lastFrame.referenceChangeNative):difference(referenceDisplacement,lastFrame.referenceDisplacementNative);
   if((contactWindow.floorImpactNative===0&&contactWindow.boxImpactNative===0)||!frame.controls.throttle)adapter.contactDriveFrames=0;
   else if(adapter.contactDriveFrames<40&&speed<CONTACT_DRIVE_SPEED)adapter.contactDriveFrames++;
   const arc=finishNativeRiderArcState({turnCount16d4:adapter.actionState.turnCount16d4,
@@ -445,7 +446,7 @@ function endFrame(adapter,beforeActorDecision){
   adapter.logicalFrames++;
   adapter.lastFrame={logicalFrame:adapter.logicalFrames,clockUnits:adapter.logicalFrames*50,
     frameDisplacementNative:displacement,frameSpeedNative:speed,
-    hudSpeed:Math.trunc(Math.fround(Math.trunc(Math.fround(speed))*Math.fround(1.8))),
+    hudSpeed:inactive?lastFrame.hudSpeed:Math.trunc(Math.fround(Math.trunc(Math.fround(speed))*Math.fround(1.8))),
     referenceDisplacementNative:referenceDisplacement,referenceChangeNative:referenceChange,
     wetCount:water.wetCount,anyWet:water.anyWet,contacts:{...contactWindow},impacts:nativeImpactSnapshot(adapter.impacts),
     actorState:frame.actorState,animationFrame:frame.animationFrame,actionState:{...adapter.actionState},jointWorld:frame.prepared.jointWorld?copy(frame.prepared.jointWorld):null};
@@ -462,8 +463,8 @@ function endFrame(adapter,beforeActorDecision){
     actions.idleFramesC6c=decision.actionWrites.idleFramesC6c;actions.idleChoice16c4=decision.actionWrites.idleChoice16c4;
   }
   let postControls;
-  if(adapter.articulatedRider&&!decision?.skipped){
-    const pose=frame.riderPose(hull,{logicalFrame:adapter.logicalFrames-1,time:hull.simulationTime,
+  if(adapter.articulatedRider&&!inactive&&!decision?.skipped){
+    const pose=frame.riderPose(hull,{logicalFrame:adapter.logicalFrames-1,physicalFrame:adapter.articulatedRider.logicalFrames,time:hull.simulationTime,
       controls:frame.controls,actorState:decision?.state.actorState??frame.actorState,
       animationFrame:decision?.state.animationFrame??frame.animationFrame,
       poseRequest:decision?.poseRequest??null,recoveryState:decision?.state??null,
@@ -489,7 +490,7 @@ function endFrame(adapter,beforeActorDecision){
       ...(adapter.riderLifecycle?{types:adapter.articulatedRider.points.map(p=>p.type)}:{}),
       targets:postControls.targets,manipulationDeltas,center:hull.center,up:hull.frame.up});
     adapter.lastFrame.jointWorld=copy(adapter.articulatedRider.jointWorld);
-  }else postControls=finishNativeRiderControls(adapter.riderControlState,{active:!decision?.skipped});
+  }else postControls=finishNativeRiderControls(adapter.riderControlState,{active:!inactive&&!decision?.skipped});
   adapter.riderControlState=postControls.state;
   const c=frame.physicalControls;
   adapter.lastFrame.physicalControls={gravityNative:c.gravityNative,lateralRetention:c.lateralRetention,rollBalance:c.rollBalance,
@@ -541,6 +542,18 @@ function prepareFrame(adapter,input,options){
  beginFrame(adapter,input,options);adapter.preparedHullTick=adapter.hull.ticks;return adapter;
 }
 
+/** Complete source65C18 at a simulation0 outer boundary. Controls and63C88
+ * preparation still ran, but no hull ticks, contacts, actor advance or physical
+ * rider solve occur. Source motion history remains retained, not overwritten0. */
+export function completeNativeRaceAdapterInactiveFrame(adapter,{beforeActorDecision}={}){
+ if(beforeActorDecision!==undefined&&typeof beforeActorDecision!=='function')throw new TypeError('beforeActorDecision must be a function');
+ return adapterOperation(adapter,()=>{
+  if(!adapter?.frame||adapter.frame.simulationState!==0||adapter.preparedHullTick!==adapter.hull.ticks||adapter.pendingFrameCompletion||adapter.hull.ticks%FRAME_TICKS!==0)
+   throw new Error('Inactive completion requires one prepared simulation0 frame');
+  endFrame(adapter,beforeActorDecision);adapter.preparedHullTick=null;adapter.inactiveTicks=0;return adapter;
+ });
+}
+
 /** Complete a deferred fifth tick after ALL hulls have finished. This runs the
  * nineteen-point rider solve before water/cameras/floating objects advance.
  */
@@ -551,7 +564,7 @@ export function completeNativeRaceAdapterFrame(adapter,{beforeActorDecision}={})
 function completeFrame(adapter,beforeActorDecision){
  if(!adapter?.pendingFrameCompletion||adapter.hull.ticks%FRAME_TICKS!==0)
   throw new Error('No deferred native frame completion');
- endFrame(adapter,beforeActorDecision);adapter.pendingFrameCompletion=false;return adapter;
+ endFrame(adapter,beforeActorDecision);adapter.pendingFrameCompletion=false;if(adapter.frame.simulationState===0){adapter.preparedHullTick=null;adapter.inactiveTicks=0;}return adapter;
 }
 
 /**
@@ -585,13 +598,21 @@ function stepAdapter(adapter,dt,input,options){
   const previousRemainder=adapter.remainder,previousTicks=adapter.hull.ticks;
   adapter.remainder+=dt;
   const steps=Math.floor((adapter.remainder+1e-12)/H);
-  if(options.deferFrameCompletion&&steps>FRAME_TICKS-adapter.hull.ticks%FRAME_TICKS){
+  if(options.deferFrameCompletion&&steps>FRAME_TICKS-(adapter.inactiveTicks||adapter.hull.ticks%FRAME_TICKS)){
     adapter.remainder=previousRemainder;throw new RangeError('Deferred completion stops at the next outer boundary');
   }
   try{
     for(let i=0;i<steps;i++){
       if(adapter.hull.ticks%FRAME_TICKS===0&&adapter.preparedHullTick!==adapter.hull.ticks)prepareFrame(adapter,input,options);
       if(adapter.pendingFrameCompletion)throw new Error('Deferred completion permits no next-frame hull tick');
+      if(adapter.frame.simulationState===0){
+        adapter.remainder=Math.max(0,adapter.remainder-H);adapter.inactiveTicks++;
+        if(adapter.inactiveTicks===FRAME_TICKS){
+          if(options.deferFrameCompletion)adapter.pendingFrameCompletion=true;
+          else{endFrame(adapter);adapter.preparedHullTick=null;adapter.inactiveTicks=0;}
+        }
+        continue;
+      }
       stepNativeHull(adapter.hull,H,{beforeIntegrate:hull=>{
         const {frame,water,contactWindow}=adapter,c=frame.controls;
         applyNativeWaterForces(hull,water,{surface,throttle:c.throttle,

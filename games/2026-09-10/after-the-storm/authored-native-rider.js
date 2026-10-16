@@ -166,7 +166,9 @@ export function createAuthoredNativeRider({initialHull,geometryProvider=modernRi
   const provider=(hull,context)=>{
     hullData(hull);
     if(hull.scale!==scale)throw new RangeError('Authored rider and hull scales must match');
-    const frame=context?.logicalFrame;
+    // Source simulation0 skips physical solves while its outer clock continues.
+    // The adapter supplies the actual solved-frame owner for that distinction.
+    const frame=context?.physicalFrame===undefined?context?.logicalFrame:initialLogicalFrame+context.physicalFrame;
     if(!Number.isInteger(frame)||frame<0||!Number.isFinite(context?.time))throw new TypeError('A logicalFrame and simulation time are required');
     if(frame===lastFrame)return copyResult(cached);
     if(frame!==nextFrame)throw new RangeError('Authored rider must receive consecutive logical frames');

@@ -172,3 +172,18 @@ test('source input dispatch rejects competing origin and invalid AI output witho
  assert.equal(reads,1);assert.deepEqual(a.controlState,before);assert.equal(a.sampledHullTick,null);
  assert.throws(()=>createNativeRaceAdapter({sourceAIInput:()=>({})}),/physical rider lifecycle/);
 });
+
+
+test('all six physical result actors freeze and resume across simulation0 without an extra solve',()=>{
+ for(const actor of [1,2,3,4,5,6]){
+  const h=setup(),state=createNativeRiderRecovery({riderIndex:0,selectedActor:actor,selectionCountdown:10,hullDamping:h.hull.points.map(p=>Math.fround(p.damping))});
+  let simulationState=3;
+  const a=createNativeRaceAdapter({riderIndex:0,hullStart:h.hullStart,...h.bundle,riderRecovery:{courseDatumNative:0,raceFinished:true,state},sourceState:()=>({simulationState,phase650:4})});
+  for(let i=0;i<30&&a.riderLifecycle.state.actorState!==actor;i++)stepNativeRaceAdapter(a,.05,{});assert.equal(a.riderLifecycle.state.actorState,actor);const outer=a.logicalFrames;
+  const retained=structuredClone(a.riderLifecycle.state),points=structuredClone(a.articulatedRider.points),anchors=structuredClone(h.bundle.anchorState.points),solves=a.articulatedRider.logicalFrames,ticks=a.hull.ticks;
+  simulationState=0;stepNativeRaceAdapter(a,.25,{});
+  assert.deepEqual(a.riderLifecycle.state,retained);assert.deepEqual(a.articulatedRider.points,points);assert.deepEqual(h.bundle.anchorState.points,anchors);
+  assert.equal(a.articulatedRider.logicalFrames,solves);assert.equal(a.hull.ticks,ticks);assert.equal(a.logicalFrames,outer+5);
+  simulationState=3;stepNativeRaceAdapter(a,.05,{});assert.equal(a.articulatedRider.logicalFrames,solves+1);assert.equal(h.bundle.anchorState.logicalFrames,solves+1);assert.equal(a.hull.ticks,ticks+5);
+ }
+});

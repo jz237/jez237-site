@@ -93,13 +93,16 @@ export function createRaceWater({crafts,variant=0,scale=.025,baseAmplitudeNative
 
 /**
  * One AFTER-hull outer boundary. The native hull host should call this after
- * all five ticks of every craft. A modern 60Hz rigid hull can also call the
+ * the outer update of every craft. simulationActive:false retains the field
+ * while selecting camera patches, as source simulation0 does. Browser pause
+ * should skip this call entirely. A modern 60Hz rigid hull can also call the
  * accumulator below; that scheduling bridge does not make its hull native.
  * Previous snapped camera centers/orientation select forcing; the new camera
  * selects P2 then P1 patches. Paused callers must not consume elapsed time.
  */
-export function advanceRaceWaterFrame(state,crafts,{datumNative=state?.field.datumNative,zoomIndex=state?.zoomIndex}={}){
+export function advanceRaceWaterFrame(state,crafts,{datumNative=state?.field.datumNative,zoomIndex=state?.zoomIndex,simulationActive=true}={}){
  if(!known.has(state))throw new TypeError('Expected host race water');
+ if(typeof simulationActive!=='boolean')throw new TypeError('simulationActive must be boolean');
  if(!Array.isArray(crafts)||crafts.length!==state.players)throw new TypeError('Human camera count changed');
  datum(datumNative);
  const poses=crafts.map(c=>craftPose(c,state.scale));
@@ -113,7 +116,7 @@ export function advanceRaceWaterFrame(state,crafts,{datumNative=state?.field.dat
   previousPatchCentersNative:state.previousPatchCentersNative,
   craftPositionsNative:poses.map(p=>[p.position.x,p.position.z]),
   baseAmplitudeNative:state.baseAmplitudeNative,period:state.period,
-  amplitudeThresholdNative:state.amplitudeThresholdNative,datumNative});
+  amplitudeThresholdNative:state.amplitudeThresholdNative,datumNative,simulationActive});
  // The plan is pure. No phase is consumed until every camera input validated.
  state.field.datumNative=datumNative;
  for(const forcing of plan.forcing)forceNativeWaterLine(state.field,forcing);

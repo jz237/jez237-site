@@ -978,9 +978,9 @@ to 1 and that no human-count condition surrounds its observed reader. The
 global scene words gate the entire five-hull loop. Simulation0 still has input,
 retained-pose, camera and water-selection work outside that loop; it is not a
 complete original pause contract. Main-state21 can admit water with no hull
-ticks. These frontend schedules remain unported. The ordinary world therefore
-requires a shared nonzero simulation state; browser pause uses its explicit
-inactive-host policy. Numeric setups distinguish total craft from human count,
+ticks. At this checkpoint these frontend schedules remained unported; the
+October 16 simulation0 checkpoint below adds the ordinary zero-physics outer
+schedule. Browser pause retains its explicit inactive-host policy. Numeric setups distinguish total craft from human count,
 including 4/1, 1/1 and 2/2. The direct-reference scan does not exclude every
 unidentified indirect writer or prove a time-trial frontend count.
 
@@ -2667,3 +2667,38 @@ state, result, launch, host and world regression tests pass.
 This fade checkpoint is local. Complete normal post-race world/menu scheduling,
 source AI initialization/history, presentation effects and native persistence
 remain required before normal driven finishes can use the full source sequence.
+
+## Original simulation0 outer updates - October 16, 2026
+
+The ordinary native world now separates its outer clock from actual hull ticks.
+Shared simulation0 continues descending input sampling, control preparation and
+rider summaries while skipping the five contact/hull passes and physical rider
+solves. Motion-summary fields retain their prior values, as in source65C18.
+The six result actors retain their lifecycle and physical pose, then resume
+without skipping an animation solve. Standalone adapters also support fractional
+and deferred inactive frames. Host pause (active:false) still holds all clocks.
+
+Water still selects camera patches in player2/player1 order, but suppresses
+forcing and evolution during simulation0. This exposes the required ordinary
+world capability; it does not enable complete normal post-race UI scheduling,
+scripted main21, or exact source camera trajectories. Complete retained AI
+history/shared RNG, fade presentation consumers and menu/reset sequencing remain
+required before enabling the original result sequence in ordinary driven races.
+
+A fresh read-only Ghidra query on EVO X2 verified the gates in665B0,65C18,
+5DE24,50F8C and51238 without changing the nine project files. Private execution
+of the original665B0 caller through its camera-call boundary covers80 cases and
+7,483 counted instructions. Inputs/preparation/contact/hull/summary callees are
+explicit intercepted boundaries. All40 ordinary-world comparisons match caller
+order and gating; the40 scripted main21 cases are excluded from browser parity.
+Input call types are normalized for order comparison, not proof of AI outputs.
+
+New tests cover active/inactive/resumed physics, 30/60/144Hz equality, standalone
+and deferred frames, and all six result actors. An isolated Chrome numeric probe
+also froze and resumed all six actors without console errors. This is numeric
+browser verification, not a completed visual result-flow test. The full run
+reported2,182 passes out of2,194, the eleven existing course/gameplay failures,
+and one obsolete assertion requiring simulation0 to reject. That assertion was
+updated to verify the new zero-hull schedule and its contact suite passed9/9.
+The final focused regression run passes70/70, including the added deferred-frame test.
+This checkpoint remains local and does not change the published soundtrack.

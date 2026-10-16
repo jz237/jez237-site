@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createNativeRaceAdapter,stepNativeRaceAdapter,nativeRaceSnapshot,applyNativeRaceContact} from '../native-race-adapter.js';
+import {createNativeRaceAdapter,stepNativeRaceAdapter,nativeRaceSnapshot,applyNativeRaceContact,completeNativeRaceAdapterFrame} from '../native-race-adapter.js';
 import {createNativeHull,stepNativeHull} from '../native-hull.js';
 import {createNativeArticulatedRider} from '../native-articulated-rider.js';
 
@@ -357,4 +357,30 @@ test('missing authored pose provider and invalid restored actions fail explicitl
   assert.throws(()=>stepNativeRaceAdapter(a,.01,{}, {sourceState:{actionState:{action:8}}}),RangeError);
   assert.deepEqual(nativeRaceSnapshot(a),before);
   assert.throws(()=>stepNativeRaceAdapter(a,.01,{}, {sourceState:{crash:1}}),/boolean/);
+});
+
+
+test('standalone simulation0 consumes outer frames and input history without advancing its hull',()=>{
+ let scene=3;const a=createNativeRaceAdapter({sourceState:()=>({actorState:22,simulationState:scene})});
+ stepNativeRaceAdapter(a,.1,{throttle:true});const hull=structuredClone(a.hull),last=structuredClone(a.lastFrame);
+ scene=0;let sampled=0;stepNativeRaceAdapter(a,.12,()=>{sampled++;return {throttle:false};});
+ assert.equal(a.hull.ticks,10);assert.equal(a.logicalFrames,4);assert.equal(a.inactiveTicks,2);assert.equal(sampled,3);assert.deepEqual(a.hull,hull);
+ assert.deepEqual(a.lastFrame.frameDisplacementNative,last.frameDisplacementNative);assert.equal(a.lastFrame.frameSpeedNative,last.frameSpeedNative);
+ stepNativeRaceAdapter(a,.03,()=>{sampled++;return {};});assert.equal(sampled,3);assert.equal(a.logicalFrames,5);assert.equal(a.preparedHullTick,null);
+ scene=3;stepNativeRaceAdapter(a,.05,{throttle:true});assert.equal(a.logicalFrames,6);assert.equal(a.hull.ticks,15);
+});
+
+test('deferred simulation0 completion retains one input sample and resumes physical work',()=>{
+ let scene=0,samples=0;const a=createNativeRaceAdapter({sourceState:()=>({simulationState:scene})});
+ const input=()=>{samples++;return {throttle:true};},options={deferFrameCompletion:true};
+ stepNativeRaceAdapter(a,.02,input,options);
+ assert.throws(()=>stepNativeRaceAdapter(a,.04,input,options),/next outer boundary/);
+ assert.equal(a.inactiveTicks,2);assert.equal(a.remainder,0);
+ stepNativeRaceAdapter(a,.03,input,options);
+ assert.equal(a.pendingFrameCompletion,true);assert.equal(a.logicalFrames,0);assert.equal(samples,1);
+ completeNativeRaceAdapterFrame(a);
+ assert.equal(a.logicalFrames,1);assert.equal(a.hull.ticks,0);assert.equal(a.preparedHullTick,null);assert.equal(a.inactiveTicks,0);
+ assert.throws(()=>completeNativeRaceAdapterFrame(a),/No deferred/);
+ scene=3;stepNativeRaceAdapter(a,.05,input,options);completeNativeRaceAdapterFrame(a);
+ assert.equal(a.logicalFrames,2);assert.equal(a.hull.ticks,5);assert.equal(samples,2);
 });
