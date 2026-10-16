@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readOnlineCoursesPrevious,restoreOnlineCoursesBytes,verifyOnlineCoursesRevision} from './online-courses-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreOnlineArenasBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('OnlineCourses preserves every prior fixture, vehicle asset, control and camera input',verifyOnlineCoursesRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/online-courses/revision.json').toString());
@@ -10,3 +10,5 @@ test('the successor bridge restores full predecessors and does not conceal later
  }
  const unknown=Buffer.from('unknown');assert.deepEqual(restoreOnlineCoursesBytes('src/unknown.ts',unknown),unknown);
 });
+
+import {restoreOnlineArenasBytes} from './online-arenas-invariants';

@@ -1,3 +1,4 @@
+import {clearChasePosition} from './chase-camera-clearance';
 import {designGarageCallbacks} from './design-panel';
 import {armorWearWarning} from './armor-wear';
 import {showVenueBrowser,selectVenue,selectDemoVenue} from './venue-browser';
@@ -691,9 +692,9 @@ async function connectOnline(endpoint:string,room:string,name:string,loadout?:On
 }
 function receiveOnline() {
   const s=online.network.snapshot;if(!online.active||!s)return;
-  const venue=ensureVenue(s.mode==='race'?s.event?.rules.course??'quarry-v1':'quarry-v1');
+  const venue=ensureVenue(s.mode==='race'?s.event?.rules.course??'quarry-v1':'quarry-v1',s.mode==='derby'?s.event?.rules.arena??'quarry-arena-v1':'quarry-arena-v1');
   if(activeVenue!==venue){activateVenue(venue);fx.world=physics;fx.groundHeight=activeVenue.course.height;events.clear();vehicleFire?.reset();puddleSplashes?.reset();}
-  online.setWorld(physics);online.receive(s);elapsed=s.elapsed;countdown=s.countdown;mode=s.mode;
+  online.setWorld(physics,activeVenue.course);online.receive(s);elapsed=s.elapsed;countdown=s.countdown;mode=s.mode;
   waypointRace=s.event?.waypoints?new WaypointRace(s.event.rules.race as 'ordered'|'free'|'random',s.event.rules.laps,s.event.seed,activeVenue.course.checkpoints,activeVenue.course.waypointStations):null;
   if(s.event)restoreOnlineProgress(s.event,waypointRace,combat);else combat.reset();
   const changed=onlinePhase!==s.phase;onlinePhase=s.phase;
@@ -1435,13 +1436,18 @@ function updateCamera(dt: number) {
     : playerChaseComposition(target,f,p.speed,settings.camera).position;
   const cameraGround = activeVenue===quarryVenue?Math.max(scenerySurfaceHeight(desired.x, desired.z), quarryExtensionHeight(desired.x, desired.z) ?? -Infinity, quarryWestWallHeight(desired.x, desired.z) ?? -Infinity):activeVenue.course.height(desired.x,desired.z);
   desired.y = Math.max(desired.y, cameraGround + 0.65);
+  const chaseAnchor=target.clone().add(new T.Vector3(0,.8,0));
+  const chaseObstruction=(from:T.Vector3,to:T.Vector3)=>cameraObstruction(physics,from,to,p.body,true);
   camera.position.sub(cameraImpactOffset);
   camera.position.lerp(desired, 1 - Math.exp(-dt * (hood ? 25 : 5)));
+  if(!hood)camera.position.copy(clearChasePosition(chaseAnchor,camera.position,chaseObstruction));
   const look = hood ? target.clone().addScaledVector(f,22).add(new T.Vector3(0,.5,0)) : playerChaseComposition(target,f,p.speed,settings.camera).target;
   camera.lookAt(look);
   const response = p.impactResponse.step(state === 'playing' ? dt : 0);
   cameraImpactOffset.copy(response.offset).multiplyScalar((hood ? .65 : 1)*settings.camera.shake);
+  const beforeShake=camera.position.clone();
   camera.position.add(cameraImpactOffset);
+  if(!hood){camera.position.copy(clearChasePosition(chaseAnchor,camera.position,chaseObstruction));cameraImpactOffset.copy(camera.position).sub(beforeShake);camera.lookAt(look);}
   camera.rotateZ(response.roll * (hood ? .6 : 1)*settings.camera.shake);
   camera.rotateX(response.pitch*settings.camera.shake);
   camera.fov = T.MathUtils.damp(

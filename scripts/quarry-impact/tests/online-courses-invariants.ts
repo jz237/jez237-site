@@ -10,15 +10,18 @@ export function readOnlineCoursesPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreOnlineCoursesBytes(file:string,bytes:Buffer):Buffer{
+ bytes=restoreOnlineArenasBytes(file,bytes);
  const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readOnlineCoursesPrevious(file);
 }
 export function verifyOnlineCoursesRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'9b74b200367299bcab6e7a2c94801e7bfa6b3758');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreOnlineArenasBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreOnlineCoursesBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the OnlineCourses release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreOnlineArenasBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the OnlineCourses release');
  assert.equal(manifest.previousFixtureCount,2938);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,2938);
 }
+
+import {restoreOnlineArenasBytes} from './online-arenas-invariants';

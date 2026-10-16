@@ -1,3 +1,4 @@
+import {getRaceCourse,type RaceCourse} from './race-course';
 import {withWreckBatch} from './wreck-batch';
 import {vehicleSuspensionRestLength} from './vehicle-physics';
 import {sameOnlineSetup} from './online-setup';
@@ -24,7 +25,8 @@ export class OnlineView {
   constructor(private scene:T.Scene, private world:R.World, private fx:Effects, private sound:Sound,
     private getCars:()=>Vehicle[], private setCars:(cars:Vehicle[])=>void) {this.network.addEventListener('liveries',()=>{if(this.network.snapshot)this.applyLiveries(this.network.snapshot);});}
 
-  setWorld(world:R.World){if(this.world!==world){this.world=world;this.reset();}}
+  private course:RaceCourse=getRaceCourse();
+  setWorld(world:R.World,course:RaceCourse=getRaceCourse()){if(this.world!==world||this.course!==course){this.world=world;this.course=course;this.reset();}}
 
   reset() { this.repairs.clear(); this.appliedDamage.clear(); this.lastTick=-1; this.lastLiveryRevision=-1; this.initialized=false; }
   disconnect() { this.active=false; this.network.disconnect(); this.reset(); }
@@ -38,7 +40,7 @@ export class OnlineView {
       this.lastLiveryRevision=-1;
       this.sound.clearCars(); old.forEach(c=>c.dispose()); this.fx.reset(); this.repairs.clear(); this.appliedDamage.clear();
       const cars=s.cars.map(c=>{
-        const v=new Vehicle(c.id,c.kind,DEFINITIONS[c.kind].color,this.scene,this.world,this.fx,c.setup?{...c.setup,livery:[]}:undefined);
+        const v=new Vehicle(c.id,c.kind,DEFINITIONS[c.kind].color,this.scene,this.world,this.fx,c.setup?{...c.setup,livery:[]}:undefined,this.course);
         v.body.setBodyType(R.RigidBodyType.KinematicPositionBased,true);
         return v;
       }).sort((a,b)=>a.id===this.network.id?-1:b.id===this.network.id?1:a.id-b.id);
