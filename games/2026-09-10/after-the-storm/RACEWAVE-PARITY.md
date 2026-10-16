@@ -1,6 +1,6 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
-## Next checkpoint — normal results control
+## v2.31.1 — normal results preview
 
 The normal-results overlay now has its own four-word phase/offset/delay owner.
 The numeric802C5800..58A8 initialization prefix, complete802C6B34 controller
@@ -14,11 +14,25 @@ The private original-ROM comparison matches3,909 cases,82,956 instructions
 and7,742 ordered operations, including complete retained owners and supplied
 display-list return heads. The browser runtime boundary also passes a complete
 name-entry exit, results slide, either-controller confirmation and continuation.
-It uses modern presentation without inventing GPU addresses. All196 focused
-name/input/results/state/host/start/widget regression tests pass. The visible
-results panel is not connected yet; full5800 matrix/viewport generation,
-5C2C graphics, the subsequent game80 loop and durable record storage remain
-outside this checkpoint. This is not a new published release.
+It uses modern presentation without inventing GPU addresses. All200 focused
+name/input/results/state/host/start/widget regression tests pass, plus26
+online/window transport tests with the release identifier.
+
+The admitted native time trial now continues from initials into a readable
+high-resolution record table. Its rows use the existing canonical race book:
+top three, an unranked current run when applicable, best lap, reverse-course
+placeholders and record highlighting. Alternating rows slide in and out with
+the original offsets. Keyboard, on-screen Continue and either gamepad feed
+physical menu edges; Options and hidden-tab pauses retain the menu position.
+The browser completed three laps in1:49.287 with zero misses, enteredAAA,
+displayed that same total and0:35.363 best lap in their highlighted record
+rows, and opened Options without consuming confirmation. A second run restored
+the blank name toYOU and displayed1:48.837 /0:34.568. Continue reads current
+Options state at the input event, so closing Options does not require waiting
+for another rendered frame before confirming. Full5800 matrix/
+viewport generation,5C2C GPU drawing, the subsequent game80 loop and durable
+record storage remain outside this checkpoint. The game80 boundary returns
+to the existing web Restart race / Rider & mode select controls.
 
 ## v2.31.0 — original name-entry preview
 

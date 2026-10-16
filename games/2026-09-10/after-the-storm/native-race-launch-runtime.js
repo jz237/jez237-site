@@ -18,6 +18,7 @@ import {prepareNativeRaceMenuInputAdvance,nativeRaceMenuInputView} from './nativ
 import {prepareNativeRaceResultCPUDisplayUpdate} from './native-race-state.js';
 import {prepareNativeNameMenuFrame,nativeNameMenuView} from './native-name-menu-runtime.js';
 import {prepareNativeResultsMenuFrame,nativeResultsMenuView} from './native-results-menu-runtime.js';
+import {nativeResultsRecordView} from './native-results-record-view.js';
 
 // Overlapping effect47FC, solo4800 and two-player4818 numeric entries. Ordinary
 // two-player place indices are0/1; other mode tables remain separate admission.
@@ -165,6 +166,7 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
   snapshot:()=>nativeRaceStateSnapshot(current),
   nameEntryView:()=>nativeNameMenuView(current),
   resultsMenuView:()=>nativeResultsMenuView(current),
+  resultsRecordView:()=>nativeResultsRecordView(current,{ridersBySlot:racers.map(r=>r.id)}),
   advanceResultsMenu(rawControllers){
    const prepared=prepareNativeResultsMenuFrame(current,rawControllers);current=prepared.state;return prepared;
   },
