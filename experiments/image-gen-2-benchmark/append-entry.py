@@ -15,6 +15,7 @@ import mimetypes
 import os
 import re
 import shlex
+import shutil
 import subprocess
 from pathlib import Path
 from PIL import Image, ImageOps
@@ -103,6 +104,12 @@ def upload_to_r2(dest: Path, bucket: str, prefix: str, wrangler_bin: str) -> str
 
 def save_archive_jpeg(src: Path, dest: Path) -> None:
     with Image.open(src) as im:
+        # Stock image generation already retains verified, upright JPEGs.
+        # Keep those exact bytes rather than introducing another lossy encode.
+        if im.format == "JPEG" and im.getexif().get(274, 1) == 1:
+            im.load()
+            shutil.copyfile(src, dest)
+            return
         im = ImageOps.exif_transpose(im)
         if im.mode in ("RGBA", "LA") or (im.mode == "P" and "transparency" in im.info):
             rgba = im.convert("RGBA")
