@@ -4,6 +4,7 @@
   const label = body.dataset.collectionLabel || 'Collection';
   const emptyText = body.dataset.collectionEmpty || 'No images have been archived in this collection yet.';
   const order = body.dataset.collectionOrder || 'newest';
+  const subtype = body.dataset.collectionSubtype || '';
   const grid = document.getElementById('collection-grid');
   const count = document.getElementById('collection-count');
   const viewer = document.getElementById('collection-lightbox');
@@ -78,7 +79,11 @@
   }
 
   function render(items) {
-    const indexed = items.map((item, index) => ({ item, index }));
+    const matching = subtype ? items.filter((item) => {
+      const match = String(item.tests || '').match(/(?:^|;)\s*factual_subtype:\s*([a-z-]+)(?=;|\s|$)/);
+      return match && match[1] === subtype;
+    }) : items;
+    const indexed = matching.map((item, index) => ({ item, index }));
     indexed.sort((a, b) => {
       const dateOrder = String(b.item.date || '').localeCompare(String(a.item.date || ''));
       if (dateOrder) return dateOrder;
