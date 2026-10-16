@@ -123,7 +123,7 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
   state.nativeLaunch=nativeLaunch;
   state.nativeLaunchLabel=state.nativeLaunch.view().label;state.nativeCountdownCue=null;
   let launchCueSequence=0;
-  state.nativeHost=createNativeRaceHost({racers,water:raceWater,course,fixedSphereGrid:sourceSphereGrid,staticGeometry:nativeCourseRuntime.retirementGeometry,tunes:racers.map((_,i)=>effectiveNativeTune(nativeTunes[i],nativeTuneModes[i])),raceRuntime:state.nativeLaunch,hullStarts:nativeStarts,
+  state.nativeHost=createNativeRaceHost({racers,water:raceWater,course,fixedSphereGrid:sourceSphereGrid,staticGeometry:nativeCourseRuntime.staticContactGeometry,tunes:racers.map((_,i)=>effectiveNativeTune(nativeTunes[i],nativeTuneModes[i])),raceRuntime:state.nativeLaunch,hullStarts:nativeStarts,
   onLaunchFrame:(host,context,launch)=>{
    state.countdown=launch.view.countdown;state.nativeLaunchLabel=launch.view.label;
    if(state.phase==='countdown'&&launch.view.phase650>=2)state.phase='running';

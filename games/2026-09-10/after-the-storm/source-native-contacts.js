@@ -15,7 +15,7 @@ import {createNativeStaticContactBridge} from './native-static-contact-bridge.js
 // Exact candidate providers may override each selection/order independently.
 // Numeric normals/clip boundaries are double-precision reconstructions, not a
 // binary32 replay of the original collision consumer. Explicit staticGeometry
-// replaces the floor/box phases with original numeric consumers; shores and
+// replaces supplied shore/floor/box phases with original numeric consumers;
 // sphere phases retain the precision and selection documented here.
 
 const vec=p=>Array.isArray(p)?{x:p[0],y:p[1],z:p[2]}:{x:p.x,y:p.y,z:p.z};
@@ -166,7 +166,7 @@ export function createSourceNativeContacts(course,{scale=course?.sourceMetadata?
   if(!finite(scale)||scale<=0||!finite(scale*320))throw new RangeError('scale must be positive and finite');
   if(!candidateSelectors||typeof candidateSelectors!=='object')throw new TypeError('Expected candidateSelectors');
   for(const key of Object.keys(candidateSelectors))if(!['shore','floor','boxes'].includes(key)||typeof candidateSelectors[key]!=='function')throw new TypeError(`Unsupported candidate selector ${key}`);
-  if(staticGeometry&&(candidateSelectors.floor||candidateSelectors.boxes))throw new TypeError('Original static geometry owns its floor and box candidate selection');
+  if(staticGeometry&&(candidateSelectors.floor||candidateSelectors.boxes||staticGeometry.shore&&candidateSelectors.shore))throw new TypeError('Original static geometry owns its supplied shore, floor and box candidate selection');
   const numericStatic=staticGeometry?createNativeStaticContactBridge({geometry:staticGeometry,scale}):null;
   if(fixedSphereGrid&&(fixedSphereGrid.scale!==scale||typeof fixedSphereGrid.query!=='function'||!Array.isArray(fixedSphereGrid.spheres)))throw new TypeError('Expected a source fixed sphere grid at the contact scale');
   const shores=Object.freeze(compileShores(course)),floors=Object.freeze(compileFloors(course)),boxes=Object.freeze(compileBoxes(course)),band=16*scale;
@@ -174,11 +174,11 @@ export function createSourceNativeContacts(course,{scale=course?.sourceMetadata?
   const geometry=Object.freeze({shore:shores,floor:floors,boxes});
   const provenance=Object.freeze({phaseOrder:Object.freeze(['shore','floor','boxes','dynamicPlanes','racingBuoys','fixedSpheres','primarySpheres']),
     pointOrder:'11 to 0',boxOrder:'last volume to first, then point11 to0',
-    defaultCandidateSelection:numericStatic?'original floor grid/list and box row order; shore uses reconstructed expanded XZ bins':
+    defaultCandidateSelection:numericStatic?.shore?'original shore/floor grids/lists and box row order':numericStatic?'original floor grid/list and box row order; shore uses reconstructed expanded XZ bins':
       'reconstructed expanded XZ bins, stable public row order; not the original grid pointer lists',
     candidateOverrides:Object.freeze(Object.fromEntries(['shore','floor','boxes'].map(k=>[k,!!candidateSelectors[k]]))),
     geometryCounts:Object.freeze({shore:shores.length,floor:floors.length,boxes:boxes.length}),
-    geometryRole:numericStatic?'public geometry is reconstruction metadata; floor/box execution uses explicit original records':'selected reconstructed contact geometry',
+    geometryRole:numericStatic?'public geometry is reconstruction metadata; supplied numeric phases execute explicit original records':'selected reconstructed contact geometry',
     finitePlaneClipping:numericStatic?'original binary32 floor/box coefficients, clipping and response; world solver conversion remains explicit':
       'triangle-derived double precision; original normal/clip residuals and source grid admission are not reproduced',
     fixedSpheres:'collideSourceFixedSpheres: source grid/list/probe order and three-point velocity kicks; double precision, not original float32 bits',
@@ -200,6 +200,7 @@ export function createSourceNativeContacts(course,{scale=course?.sourceMetadata?
   }
   const hooks={
     shore(hull,context){
+      if(numericStatic?.shore)return numericStatic.shore(hull,context);
       const state=stateFor(hull,context);
       for(let pointIndex=11;pointIndex>=0;pointIndex--){
         const point=hull.points[pointIndex].position;

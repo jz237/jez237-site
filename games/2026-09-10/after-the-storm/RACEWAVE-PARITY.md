@@ -1,5 +1,42 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished checkpoint — original shoreline grid and contact pass
+
+Ordinary native race data now selects the original shoreline grid, signed
+halfword cell offsets, byte candidate lists and eight-float line records.
+Sunny's49 lines are shared by both player counts; their bytes were checked in
+both loaded course images. Sunset selects63 lines for one player, including
+its two static craft outlines, or47 for two players. The render geometry and
+source retirement support data retain their separate consumers.
+
+The complete51740 pass visits points11-to0, selects each point's grid cell
+once, and continues the selected list after a response moves the hull. Depth
+and finite-line endpoints are strict; only incoming horizontal velocity is
+removed. All twelve positions receive the horizontal push, while vertical
+position and velocity remain untouched. Original binary32 arithmetic feeds
+the existing impact owner in contact order. The world bridge preserves even
+non-binary32 vertical values without an unnecessary round trip.
+
+Fresh read-only Ghidra on EVO X2 left all nine project files unchanged; all210
+exported instructions match the local ROM. Complete original execution of
+1,148 prepared cases runs423,098 instructions without intercepted arithmetic
+or callees. Tests compare every point position/velocity, impact and normal bit,
+including strict edge neighbours, intersecting lines, retained impact maxima,
+signed-zero vertical fields, asymmetric grids and source shift masking.
+Public files contain numeric geometry and expected results, not ROM executables.
+
+Prepared Sunset native rider0/seed17 trials retain Normal's zero-miss123.178s
+finish and Hard's three-miss112.797s finish. Expert and Reverse retire at five
+misses; guidance and public source-course admission remain open. This change
+does not alter the renderer, water/terrain detail, textures or resolution.
+
+Validation:99 contact/host/launch/result/driving tests passed, including all16
+Sunny rider/class runs and matching three-lap results at30/60/144Hz for rider0
+in each class. Another24 impact, bridge and prepared-Sunset tests passed,
+including vertical-value preservation and actual adapter cadence. All11 loading
+checks passed; generated terrain and depth remain byte-identical to their
+full-resolution references. Packaging now contains311 module identities.
+
 ## v2.34.0 release candidate — original numeric floor and box contact passes
 
 This release packages the contact changes and prepared Sunset retirement

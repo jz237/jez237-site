@@ -31,6 +31,9 @@ test('prepared Sunset ordinary owners select their own course, 1200-unit slack, 
  for(let difficulty=0;difficulty<4;difficulty++)for(const players of [1,2]){
   const course=prepared(difficulty),runtime=createNativeRaceCourseRuntime({course,difficulty,players});
   assert.equal(runtime.courseIndex,2);assert.equal(runtime.sourceBuoyLayout.courseIndex,2);assert.equal(runtime.mode620,players===2?1:0);
+  assert.equal(runtime.staticContactGeometry.shore.lines.length-1,players===1?63:47);
+  assert.equal(runtime.staticContactGeometry.floor,runtime.retirementGeometry.floor);
+  assert.equal(runtime.staticContactGeometry.boxes,runtime.retirementGeometry.boxes);
   assert.equal(runtime.resetLayout.checkpointSlackNative,1200);assert.equal(runtime.sourceBuoyLayout.checkpointSlackNative,1200);
   assert.equal(runtime.directionFlag1f90,difficulty===3?1:0);assert.equal(runtime.sourceDifficulty,[0,1,2,2][difficulty]);
   assert.equal(runtime.resetLayout.boundaryNativeXZ.length,81);assert.deepEqual(runtime.resetLayout.objectKinds4c,[]);
