@@ -34,7 +34,6 @@ ARCHIVE_FILENAMES = (
     "impossible-documentary-data.json",
     "strange-botanicals-data.json",
     "cinematic-cats-data.json",
-    "quietly-uncanny-domestic-data.json",
     "ocean-scenes-data.json",
     "galactic-pictures-data.json",
 )

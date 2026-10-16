@@ -39,7 +39,6 @@ VISUAL_THOUGHT_EXPERIMENTS = ROOT / "visual-thought-experiments-data.json"
 IMPOSSIBLE_DOCUMENTARY = ROOT / "impossible-documentary-data.json"
 STRANGE_BOTANICALS = ROOT / "strange-botanicals-data.json"
 CINEMATIC_CATS = ROOT / "cinematic-cats-data.json"
-QUIETLY_UNCANNY_DOMESTIC = ROOT / "quietly-uncanny-domestic-data.json"
 OCEAN_SCENES = ROOT / "ocean-scenes-data.json"
 GALACTIC_PICTURES = ROOT / "galactic-pictures-data.json"
 IMAGES = ROOT / "images"
@@ -345,6 +344,9 @@ def main() -> None:
     ap.add_argument("--wrangler-bin", default=os.environ.get("WRANGLER_BIN", "wrangler"))
     args = ap.parse_args()
 
+    if args.slot == "quietly-uncanny-domestic":
+        raise SystemExit("Quietly Uncanny was retired by the owner on 2026-10-15; do not upload or republish it.")
+
     # Serialize check-and-append so two scheduler/retry processes cannot both
     # pass uniqueness against the same archive snapshot.
     APPEND_LOCK.parent.mkdir(parents=True, exist_ok=True)
@@ -519,8 +521,6 @@ def main() -> None:
             paths = (*paths, STRANGE_BOTANICALS)
         if args.slot == "serious-cinematic-cat":
             paths = (*paths, CINEMATIC_CATS)
-        if args.slot == "quietly-uncanny-domestic":
-            paths = (*paths, QUIETLY_UNCANNY_DOMESTIC)
         if args.slot == "ocean-exploration":
             paths = (*paths, OCEAN_SCENES)
         if args.slot == "outer-space-exploration":
