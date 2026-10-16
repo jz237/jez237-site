@@ -22,8 +22,8 @@ The801E12E0..183C animation prefix now handles31-update intro/outro,
 automatic END seeking after the third initial and the visible wheel window.
 Float32 state and float64 confirmation arithmetic remain distinct. All3,890
 original-execution cases match191,782 instructions and17,680 ordered writes,
-complete retained owners and transient confirmation poses. All94 focused
-name-entry, menu/input, canonical state/profile and result tests pass, including
+complete retained owners and transient confirmation poses. All134 focused
+name-entry, menu/input, canonical state, result and matrix tests pass, including
 a full numeric three-initial entry, automatic END selection and exit sequence.
 
 The complete2C14 record-name updater restores blank input from the selected
@@ -38,6 +38,17 @@ The2B8C/C500 exit callers preserve their distinct phase/player/fade behavior;
 1290 outer initialization gate plus numeric animation prefix matches72 cases,
 7,784 instructions and1,100 writes. Existing420 result-menu cases still match.
 
+The complete801E1290 numeric update now includes its16 wheel matrices and
+water-crossing call schedule. Independent affine composition49EB8 and packed
+matrix conversion47EE0 preserve source float32 rounding and store order.
+The183C..1BA8 projection tail matches216 original cases,5,900,171 counted
+instructions and14,682 operations. The entire1290 routine, including nested
+initialization, animation and matrix helpers, matches144 cases,3,962,385
+instructions and11,259 operations. Both comparisons include every packed
+matrix, crossing request, retained position and final owner. Water-disturbance
+callees remain pending effects; these checks do not execute original graphics
+microcode or claim that the wheel is already visible in the browser.
+
 EVO X2's installed Ghidra supplied another read-only query of five save/exit
 functions. All634 exported instruction bytes match the local original ROM,
 and all9 saved analysis-project files have unchanged hashes. Full raw function
@@ -46,9 +57,9 @@ not taken as proof of complete branch coverage.
 
 This is a local numeric checkpoint. The live site remainsv2.30.1. The outer
 initialization latch is connected to the display caller in prepared tests.
-Matrix projection/crossing effects, textured presentation, format/storage
-callees and live name-entry integration are still pending. These modules do
-not claim to execute the full801E1290 renderer or persist records. Source
+Textured presentation, water-disturbance callees, format/storage calls and
+live name-entry integration are still pending. These modules do not claim
+to render the complete original screen or persist records. Source
 constants and character bytes are explicit caller views; no ROM strings or
 tables are embedded in the new implementation.
 

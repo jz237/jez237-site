@@ -28,6 +28,7 @@ import {prepareNativeRaceFadePropertiesInitialization,prepareNativeRaceFadeSlots
 import {prepareNativeRaceMainConfiguration} from './native-race-main-configuration.js';
 import {prepareNativeRaceMenuInitialization} from './native-race-menu-initialization.js';
 import {prepareNativeNameEntryInitialization,prepareNativeNameEntryInput,prepareNativeNameEntryAnimationPhase,prepareNativeNameEntryRecordUpdate,prepareNativeNameEntryDisplay} from './native-name-entry.js';
+import {prepareNativeNameEntryPresentation} from './native-name-presentation.js';
 import {prepareNativeRaceRiderResourceConfiguration,prepareNativeRaceCourseResourceConfiguration} from './native-race-resource-configuration.js';
 import {prepareNativeRaceResultCodeSelection} from './native-race-body-fields.js';
 import {prepareNativePrimaryResultEstimates} from './native-primary-standings.js';
@@ -216,6 +217,8 @@ function apply(s,operations){
    integer(op.address,'presentation address',0,0xffffffff);
    if(op.width!==4||op.address%4)throw new RangeError('Invalid presentation memory word');
    integer(op.value,'presentation word bits',0,0xffffffff);effects.push(structuredClone(op));
+  }else if(op.kind==='nameEntryMatrix'){
+   integer(op.slot,'name matrix slot',0,15);words(op.matrixWords,'name matrix words',16);effects.push(structuredClone(op));
   }else if(op.kind==='audioEntry'||op.kind==='externalCall')effects.push(structuredClone(op));
   else throw new RangeError(`Unsupported native operation ${op.kind}`);
  }
@@ -326,6 +329,15 @@ export function prepareNativeNameEntryAnimationUpdate(state,sourceViews={}){
  if(initialized){const q=prepareNativeNameEntryInitialization(next,sourceViews);operations.push(...q.operations);effects.push(...apply(next,q.operations));}
  const phase=prepareNativeNameEntryAnimationPhase(next,sourceViews);operations.push(...phase.operations);effects.push(...apply(next,phase.operations));
  return freeze({...phase,state:next,operations,effects,diagnostic:{...phase.diagnostic,consumer:'801e1290..801e183c',initialized}});
+}
+
+/** Full1290 numeric update including all16 presentation transforms. Crossing
+ * disturbances remain ordered effects for their separate water owner. */
+export function prepareNativeNameEntryUpdate(state,sourceViews={}){
+ const phase=prepareNativeNameEntryAnimationUpdate(state,sourceViews),next=copy(phase.state);
+ const presentation=prepareNativeNameEntryPresentation(next,phase,sourceViews),effects=apply(next,presentation.operations);
+ return freeze({state:next,operations:[...phase.operations,...presentation.operations],effects:[...phase.effects,...effects],matrices:presentation.matrices,
+  diagnostic:{...phase.diagnostic,...presentation.diagnostic,consumer:'801e1290',initialized:phase.diagnostic.initialized}});
 }
 
 export function prepareNativeNameEntryRecordCommit(state,sourceViews={}){

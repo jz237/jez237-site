@@ -67,3 +67,28 @@ export function prepareNativeEulerMatrix(input){
   packed.setUint16(32+i*2,low);operations.push({kind:'matrixHalfwordWrite',byteOffset:32+i*2,width:2,value:low});}
  return freeze({complete:true,floatWords:scratch,matrixWords:Array.from({length:16},(_,i)=>packed.getUint32(i*4)),operations,diagnostic:{sineIndices:indices}});
 }
+
+/** Original49EB8 affine composition. It ignores the incoming fourth column
+ * and emits0,0,0,1 there. Preserve its different axis/translation sum order;
+ * a generic4x4 multiply or a double-precision sum changes float32 results. */
+export function prepareNativeAffineMatrixProduct(input){
+ function matrix(v,name){if(!Array.isArray(v)||v.length!==16)throw new RangeError(`Expected ${name}[16]`);return Array.from(v,float);}
+ const a=matrix(input?.leftFloatWords,'leftFloatWords'),b=matrix(input?.rightFloatWords,'rightFloatWords'),out=Array(16),operations=[];
+ const write=(i,v)=>{out[i]=bits(v);operations.push({kind:'scratchFloatWrite',wordIndex:i,value:out[i]});};
+ for(const base of [0,4,8])for(let j=0;j<3;j++)write(base+j,add(mul(b[base+2],a[8+j]),add(mul(a[j],b[base]),mul(a[4+j],b[base+1]))));
+ const translation=j=>add(a[12+j],add(add(mul(a[j],b[12]),mul(a[4+j],b[13])),mul(a[8+j],b[14])));
+ write(12,translation(0));write(13,translation(1));write(3,0);write(7,0);write(11,0);write(15,1);write(14,translation(2));
+ return freeze({floatWords:out,operations});
+}
+
+/** Original47EE0 packing, in descending element order. */
+export function prepareNativePackedMatrix(input){
+ const words=input?.floatWords;if(!Array.isArray(words)||words.length!==16)throw new RangeError('Expected floatWords[16]');
+ const packed=new DataView(new ArrayBuffer(64)),operations=[];
+ for(let i=15;i>=0;i--){
+  const v=fixed(mul(float(words[i]),65536)),high=v>>>16,low=v&65535;
+  packed.setUint16(i*2,high);operations.push({kind:'matrixHalfwordWrite',byteOffset:i*2,width:2,value:high});
+  packed.setUint16(32+i*2,low);operations.push({kind:'matrixHalfwordWrite',byteOffset:32+i*2,width:2,value:low});
+ }
+ return freeze({matrixWords:Array.from({length:16},(_,i)=>packed.getUint32(i*4)),operations});
+}
