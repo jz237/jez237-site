@@ -1,3 +1,4 @@
+import {createVenueCrowd,type SpectatorPlace} from './venue-crowd';
 import {createRaceMudTextures} from './race-mud';
 import {createWrenfordPitLandmarks} from './wrenford-pit-landmarks';
 import * as T from 'three';
@@ -11,6 +12,7 @@ export function createWrenfordPitWorld(){
  for(const t of textures)t.repeat.set(120,120);
  floorMaterial.color.set(0xffffff);floorMaterial.roughness=1;floorMaterial.map=mud.diffuse;floorMaterial.normalMap=mud.normal;floorMaterial.roughnessMap=mud.roughness;floorMaterial.normalScale.setScalar(.6);
  const floor=new T.Mesh(floorGeometry,floorMaterial);floor.name='wrenford_pit_mud';floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;root.add(floor);
+ const spectators:SpectatorPlace[]=[];
  const batches=new Map<keyof typeof materials,T.Matrix4[]>(),matrix=new T.Matrix4(),q=new T.Quaternion();
  const box=(x:number,y:number,z:number,w:number,h:number,d:number,finish:keyof typeof materials,yaw=0)=>{q.setFromAxisAngle(new T.Vector3(0,1,0),yaw);matrix.compose(new T.Vector3(x,y,z),q,new T.Vector3(w,h,d));const batch=batches.get(finish)??[];batch.push(matrix.clone());batches.set(finish,batch);};
  WRENFORD_PIT_BARRIERS.forEach((s,i)=>box(s.x,s.y,s.z,s.half[0]*2,s.half[1]*2,s.half[2]*2,i%12<6?'concrete':'orange',s.yaw));
@@ -19,7 +21,7 @@ export function createWrenfordPitWorld(){
   if(i%8<2)continue;const a=i/32*Math.PI*2;
   for(let row=0;row<4;row++){
    const r=46+row*2.3,y=.7+row*.8;box(Math.sin(a)*r,y/2,Math.cos(a)*r,8.6,y,2.1,'concrete',a);box(Math.sin(a)*r,y+.25,Math.cos(a)*r,7.9,.3,.65,'seat',a);
-   for(let person=0;person<5;person++){if((i+row+person)%4===0)continue;const offset=(person-2)*1.4,x=Math.sin(a)*r+Math.cos(a)*offset,z=Math.cos(a)*r-Math.sin(a)*offset;box(x,y+.83,z,.48,.9,.4,(i+person)%2?'orange':'cream',a);box(x,y+1.43,z,.3,.3,.3,'skin',a);}
+   for(let person=0;person<5;person++){if((i+row+person)%4===0)continue;const offset=(person-2)*1.4,x=Math.sin(a)*r+Math.cos(a)*offset,z=Math.cos(a)*r-Math.sin(a)*offset;spectators.push({x,y,z,yaw:a+Math.PI,seated:(i+person)%7!==0});}
   }
   box(Math.sin(a)*51,6.7,Math.cos(a)*51,9.2,.24,11,'steel',a);
   for(const r of [44.5,56])box(Math.sin(a)*r,3.3,Math.cos(a)*r,.18,6.6,.18,'steel',a);
@@ -39,7 +41,8 @@ export function createWrenfordPitWorld(){
  }
  for(const z of [-59,59]){const sign=new T.Mesh(signGeometry,signMaterial);sign.position.set(0,8,z);if(z>0)sign.rotation.y=Math.PI;root.add(sign);for(const x of [-8,8])box(x,4,z,.3,8,.3,'steel');}
  for(const [finish,matrices]of batches){const mesh=new T.InstancedMesh(boxGeometry,materials[finish],matrices.length);matrices.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.name='wrenford_pit_'+finish;mesh.castShadow=mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
+ const crowd=createVenueCrowd(spectators);root.add(crowd.root);
  const landmarks=createWrenfordPitLandmarks();root.add(landmarks.root);
  root.userData.solidRecords=WRENFORD_PIT_BARRIERS;freezeSceneryTransforms(root);
- let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;landmarks.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});floorGeometry.dispose();boxGeometry.dispose();signGeometry.dispose();floorMaterial.dispose();signMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
+ let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;crowd.dispose();landmarks.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});floorGeometry.dispose();boxGeometry.dispose();signGeometry.dispose();floorMaterial.dispose();signMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
 }

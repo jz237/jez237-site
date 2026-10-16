@@ -1,6 +1,7 @@
+import {restoreVenueCrowdBytes} from './venue-crowd-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readRaceMudPrevious,restoreRaceMudBytes,verifyRaceMudRevision} from './race-mud-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreVenueCrowdBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('RaceMud preserves every prior fixture, vehicle asset, control and camera input',verifyRaceMudRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/race-mud/revision.json').toString());

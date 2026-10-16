@@ -1,3 +1,4 @@
+import {createVenueCrowd,type SpectatorPlace} from './venue-crowd';
 import {WRENFORD} from './wrenford-course';
 import {ALDERWICK_CROSS} from './alderwick-cross-course';
 import {createCourseScenery,paintCourseGround} from './course-scenery';
@@ -30,6 +31,7 @@ export function createCountyWorld(id:'dockside-loop-v1'|'fairground-scramble-v1'
  const surfaceDetail=addCourseGroundDetail(floorMaterial,course,mud?'mud':'gravel');
  const patch=course.terrainPatch();groundGeometry.setAttribute('position',new T.BufferAttribute(patch.positions,3));groundGeometry.setAttribute('uv',new T.BufferAttribute(patch.uv,2));groundGeometry.setIndex(new T.BufferAttribute(patch.indices,1));groundGeometry.computeVertexNormals();
  const ground=new T.Mesh(groundGeometry,floorMaterial);ground.name=id+'_ground';ground.receiveShadow=true;root.add(ground);
+ const spectators:SpectatorPlace[]=[];
  const batches=new Map<keyof typeof materials,T.Matrix4[]>(),matrix=new T.Matrix4(),q=new T.Quaternion();
  function box(x:number,y:number,z:number,w:number,h:number,d:number,material:keyof typeof materials,yaw=0){q.setFromAxisAngle(new T.Vector3(0,1,0),yaw);matrix.compose(new T.Vector3(x,y,z),q,new T.Vector3(w,h,d));const batch=batches.get(material)??[];batch.push(matrix.clone());batches.set(material,batch);}
  for(const s of course.solids)box(s.x,s.y,s.z,s.half[0]*2,s.half[1]*2,s.half[2]*2,s.material,s.yaw);
@@ -48,8 +50,7 @@ export function createCountyWorld(id:'dockside-loop-v1'|'fairground-scramble-v1'
     const z=side*(80+row*2),top=.6+row*.55;box(0,top/2,z,124,top,2,'concrete');
     for(let seat=-58;seat<=58;seat+=3){
      if(Math.abs(seat)<5)continue;
-     box(seat,top+.2,z,2,.18,.8,'blue');box(seat,top+.58,z-side*.35,.65,.7,.45,(row+seat)%3?'red':'blue');
-     box(seat,top+1.05,z-side*.35,.38,.38,.38,'seat');
+     box(seat,top+.2,z,2,.18,.8,'blue');spectators.push({x:seat,y:top,z,yaw:side>0?Math.PI:0,seated:(row+seat)%7!==0});
     }
    }
    box(0,6.4,side*86,128,.3,18,'steel');
@@ -65,6 +66,7 @@ export function createCountyWorld(id:'dockside-loop-v1'|'fairground-scramble-v1'
  }
  for(const [finish,matrices]of batches){const mesh=new T.InstancedMesh(boxGeometry,materials[finish],matrices.length);matrices.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.name=id+'_'+finish;mesh.castShadow=mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
  const scenery=dock?null:createCourseScenery(course,mud?'farm':cross?'club':'fair',mud?{title:'WRENFORD MUD OVAL',subtitle:'LOCAL PRODUCE / IMPORTED BODY PANELS'}:cross?{title:'ALDERWICK DOUBLE CROSS',subtitle:'TWO CROSSINGS / ZERO RIGHT OF WAY'}:undefined);if(scenery)root.add(scenery.root);
+ const crowd=createVenueCrowd(spectators);root.add(crowd.root);
  root.userData.solidRecords=course.solids;freezeSceneryTransforms(root);
- let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;scenery?.dispose();surfaceDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
+ let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;crowd.dispose();scenery?.dispose();surfaceDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
 }
