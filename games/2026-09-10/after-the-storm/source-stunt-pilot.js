@@ -28,10 +28,27 @@ export function sourceStuntInput(state,r){
   const remaining=Math.max(0,length-along),blend=clamp(1-remaining/(control.bendLead??5),0,1),nx=next.x-p.x,nz=next.z-p.z,nLength=Math.hypot(nx,nz)||1;
   const forward=Math.max(5,r.speed),correction=clamp(-cross*2-lateral*.8,-forward*.8,forward*.8);
   desiredHeading=Math.atan2((ux*(1-blend)+nx/nLength*blend)*forward+uz*correction,(uz*(1-blend)+nz/nLength*blend)*forward-ux*correction);
+ }else if(Number.isFinite(q.passingHeading)){
+  // Intercept a line through the target with an authored passing direction.
+  // This can begin a ring-to-ring turn before crossing the first aperture;
+  // only the simulation's unchanged ring volume can award a hit.
+  const heading=q.passingHeading*Math.PI/180,ux=Math.sin(heading),uz=Math.cos(heading);
+  const cross=(r.x-p.x)*uz-(r.z-p.z)*ux,lateral=r.vx*uz-r.vz*ux;
+  const forward=Math.max(5,r.speed),correction=clamp(-cross*2-lateral*.8,-forward*.8,forward*.8);
+  desiredHeading=Math.atan2(ux*forward+uz*correction,uz*forward-ux*correction);
  }else if(v.recovery)desiredHeading=Math.atan2(p.x-r.x-r.vx*.10,p.z-r.z-r.vz*.10);
  const error=angleDelta(desiredHeading-r.heading),desired=v.recovery?Math.min(q.speed??18,10):q.speed??18;
  const controls={throttle:clamp(.53+(desired-r.speed)*.16,0,1),steer:clamp(error*(control.steeringGain??2.3)-(r.yawVelocity||0)*(control.yawDamping??.24),-1,1),brake:!r.onIce&&(Math.abs(error)>1.1||r.speed>desired+2),dampen:q.dampen??true};
  if(q.dive)controls.dive=q.dive==='descending'?r.hydro.diveRemaining>0||r.hydro.airborne&&r.hydro.vy<0&&r.hydro.y-r.hydro.waterHeight>.8:true;
  if(Number.isFinite(q.lean))controls.lean=clamp(q.lean,-1,1);
+ if(['flip','left','right'].includes(control.airTrick)){
+  const h=r.hydro;
+  // Arm only after actual ramp contact, and finish one rotation before landing.
+  // Wave-only flights and the next landing cannot inherit this permission.
+  if(r.sourceRampContact)v.rampLandingId=h.landingId;
+  const flightRemaining=(h.vy+Math.sqrt(h.vy*h.vy+19.62*Math.max(0,h.y-h.waterHeight)))/9.81;
+  if(Number.isInteger(v.rampLandingId)&&v.rampLandingId===h.landingId&&h.airborne&&(s.trick||flightRemaining>1.15)&&
+   (h.y-h.waterHeight>1.5||s.trick)&&Math.abs(s.angle)<6.2)controls.trick=s.trick||control.airTrick;
+ }
  return controls;
 }

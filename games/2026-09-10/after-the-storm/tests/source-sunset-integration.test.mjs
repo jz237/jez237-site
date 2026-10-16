@@ -47,18 +47,29 @@ test('race launch selects complete fixed-sphere order, real player shores, and f
  }}finally{restore();}
 });
 
-test('prepared Sunset Stunt guide crosses four finite checkpoints and eight rings with ordinary controls',()=>{
+for(let difficulty=0;difficulty<4;difficulty++)test(`prepared Sunset Stunt class${difficulty} crosses all rings, both piers and ramps and lands a flip with ordinary controls`,()=>{
  const restore=install();
  try{
-  const s=createRace({course:getCourse('amber'),mode:'stunt',waveSeed:17}),r=s.racers[0],crossings=[];
+  const s=createRace({course:getCourse('amber',difficulty),difficulty,mode:'stunt',waveSeed:17}),r=s.racers[0],crossings=[];
+  const contacts=new Set(),launches=new Set(),piers=new Set();let lastRamp=null,lastContactTime=-Infinity,contactLanding=-1;
   const geometry=()=>JSON.stringify({rings:s.course.rings,checkpoints:s.course.checkpoints,ramps:s.course.ramps,shores:s.course.sourceShores});
   const original=geometry();assert.deepEqual(s.course.checkpoints.map(q=>q.limit),[15,15,10,10]);
   for(let i=0;i<6000&&s.phase!=='results';i++){
    const index=r.stunt.nextCheckpoint,before=[r.x,r.hydro.y,r.z,r.stunt.score,r.stunt.remaining],input=aiInput(s,r);
    assert.deepEqual([r.x,r.hydro.y,r.z,r.stunt.score,r.stunt.remaining],before,'guidance only produces controls');
-   assert.ok(Object.keys(input).every(k=>['throttle','steer','brake','dampen'].includes(k)));
+   assert.ok(Object.keys(input).every(k=>['throttle','steer','brake','dampen','trick'].includes(k)));
    assert.ok((input.throttle??0)>=0&&(input.throttle??0)<=1&&Math.abs(input.steer??0)<=1);
+   if(input.trick){assert.equal(input.trick,'flip');assert.ok(r.hydro.airborne);assert.equal(r.hydro.landingId,contactLanding,'only the ramp flight may request a flip');}
    stepRace(s,input,1/60);
+   if(r.sourceRampContact){contacts.add(r.sourceRampContact);lastRamp=r.sourceRampContact;lastContactTime=s.time;contactLanding=r.hydro.landingId;}
+   if(lastRamp&&s.time-lastContactTime<2&&!r.hydro.onRamp&&r.hydro.airborne&&r.hydro.y-r.hydro.waterHeight>2)launches.add(lastRamp);
+   for(const pier of s.course.contactVolumes.volumes.filter(q=>q.kind==='crossbar')){
+    const mid=(pier.bounds.min[2]+pier.bounds.max[2])/2;
+    if(before[2]<mid&&r.z>=mid){
+     const f=(mid-before[2])/(r.z-before[2]),x=before[0]+(r.x-before[0])*f,y=before[1]+(r.hydro.y-before[1])*f;
+     if(x>pier.bounds.min[0]+1&&x<pier.bounds.max[0]-1&&y+1.1<pier.bounds.min[1])piers.add(pier.id);
+    }
+   }
    if(r.stunt.nextCheckpoint!==index){
     const cp=s.course.checkpoints[index],a=(before[0]-cp.x)*cp.tx+(before[2]-cp.z)*cp.tz,b=(r.x-cp.x)*cp.tx+(r.z-cp.z)*cp.tz;
     assert.ok(a<=0&&b>=0&&b>a,'forward physical plane crossing');
@@ -70,7 +81,9 @@ test('prepared Sunset Stunt guide crosses four finite checkpoints and eight ring
    }
   }
   assert.equal(s.phase,'results');assert.equal(r.dq,'');assert.equal(r.stunt.complete,true);assert.equal(crossings.length,4);
-  assert.equal(r.stunt.rings,8);assert.deepEqual(r.stunt.ringStatus,[...Array(8).fill('hit'),'miss']);
+  assert.equal(r.stunt.rings,9);assert.deepEqual(r.stunt.ringStatus,Array(9).fill('hit'));
+  assert.deepEqual([...contacts].sort(),s.course.ramps.map(q=>q.id).sort());assert.deepEqual([...launches].sort(),[...contacts].sort());
+  assert.equal(piers.size,2);assert.equal(r.stunt.completedTricks.flip,true);
   assert.equal(r.stunt.crashes,0);assert.equal(geometry(),original);
  }finally{restore();}
 });

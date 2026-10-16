@@ -1,5 +1,43 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished checkpoint — complete default-rider Sunset Stunt traversal
+
+The prepared source Sunset guide now collects all nine rings, physically crosses
+both pier underpasses, launches from both recovered ramp-volume families, lands
+two clean flips, and completes all four checkpoints. Tests cover all four
+classes with rider0, seed17 and60Hz. The run scores3,809 points in43.283333s;
+its last checkpoint uses0.6s of the existing coast allowance. No ring, ramp,
+shore, checkpoint, timer, scoring or physical response was changed.
+
+Two optional authored passing headings let the guide intercept a line through
+each final ring while beginning its turn early. The selected air-trick command
+arms only on actual ramp contact, checks available flight time, stops after one
+rotation, and cannot carry its permission through a landing. These are ordinary
+steering/throttle/stunt inputs, not original AI or source stunt-physics parity.
+The physical test checks the finite checkpoint spans, ramp launches, overhead
+clearances, unchanged geometry and scores/timers untouched by guide calls.
+
+A private fixed-seed fixture using the real race renderer reproduced the exact
+time, nine-ring chain, score, two tricks and zero crashes. It ran at1920x1080,
+High quality and1536x864 refraction. A jump-apex inspection showed the flip,
+rings, pier, static boat and shoreline. Resolution and detail settings remain
+unchanged. No game-script error or warning appeared; the local fixture's sole
+network error was its missing favicon.
+
+Eleven focused integration checks passed. A broader34-test group passed33;
+the all-venue Stunt check still fails on Marine Fortress. Previous committed
+and edited guides produce identical5,586 input frames and the same90.083333s
+timeout with11 rings/two checkpoints there. Its input SHA256 is
+`a7c82b8c7600cb65bddc1ec7909d252fe825c096f84a1b21251ee33798fc4821`.
+The existing Glacier physical checkpoint check passes.
+
+Broader admission remains open. Riders1/2/3 do not complete this authored guide;
+an independently seeded browser run finishes with eight rings and two clean
+flips. Public Sunset still uses the older map-based definition, and native
+Sunset host admission remains disabled. The new traversal proves the prepared
+default-rider route is physically feasible, not that all driving conditions or
+all original mechanics are complete. Nothing in this checkpoint is published.
+
 ## Unpublished checkpoint — Sunset ordinary course-out regions
 
 Recovered Sunset's eleven allowed-region rectangles, three separate progress

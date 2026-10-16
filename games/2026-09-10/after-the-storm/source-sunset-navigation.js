@@ -35,8 +35,8 @@ export const sunsetNavigation={
  policy:{passingDistanceWorld:5,leadWorld:3,envelope:'Authored browser envelope, not a recovered source course-out rule.'}
 };
 const ring=i=>{const [x,y,z,,,heading]=SUNSET_NATIVE_GEOMETRY.rings[i],[tx,tz]=direction(heading);
- return {kind:'ring',ringIndex:i,x:x*.025,y:y*.025,z:z*.025,tx,tz,speed:i===1?14:i<6?18:25,
-  ...(i===1?{navX:-12}:i===3?{navX:-34.5}:{})};};
+ return {kind:'ring',ringIndex:i,x:x*.025,y:y*.025,z:z*.025,tx,tz,speed:i===1?14:i<6?18:i===8?23:25,
+  ...(i===1?{navX:-12}:i===3?{navX:-34.5}:i===7?{passingHeading:225}:i===8?{passingHeading:230}:{})};};
 const checkpoint=i=>{const [x,z,,heading]=SUNSET_NATIVE_GEOMETRY.stuntRoute[[4,5,7,0][i]],[tx,tz]=direction(heading);
  return {kind:'checkpoint',checkpointIndex:i,x:x*.025,z:z*.025,tx,tz,speed:25,...(i===2?{navZ:110}:{})};};
 const waypoint=(x,z,speed=28)=>({kind:'waypoint',x,z,speed,radius:2,dampen:true});
@@ -44,9 +44,9 @@ const waypoint=(x,z,speed=28)=>({kind:'waypoint',x,z,speed,radius:2,dampen:true}
 // completion. The driver never changes scores, time limits or hull positions.
 export const sunsetStuntNavigation={
  anchors:[[3,16],[0,-40],[-20,-83],[-40,-125],[-65,-130],[-72,-110],[-73,75],[-65,108],[-44,124],[70,124],[102,100],[94,77],[46,66],[15,48]],
- validation:{status:'checkpoints-checked-ring-and-admission-pending',rider:0,seed:17,hz:60,rings:8,checkpoints:4,finishSeconds:43.8,
-  finalCheckpointCoastSeconds:1.116667,remaining:'Ring8, broader driving conditions and high-resolution scenery still need validation; this is authored guidance for the modern hull.'},
- verificationOnePass:true,pilotControl:{steeringGain:5,yawDamping:.8,bendLead:15},
+ validation:{status:'default-rider-stunt-checked-admission-pending',rider:0,seed:17,hz:60,classes:[0,1,2,3],rings:9,checkpoints:4,ramps:2,piers:2,cleanFlip:true,finishSeconds:43.283333,
+  finalCheckpointCoastSeconds:.6,remaining:'Other riders and wave seeds need guide tuning; complete source-host and public-course admission remain pending. This is authored guidance for the modern hull.'},
+ verificationOnePass:true,pilotControl:{steeringGain:5,yawDamping:.8,bendLead:15,airTrick:'flip'},
  verificationTargets:[ring(0),ring(1),ring(2),ring(3),waypoint(-43,-120),waypoint(-57,-130,18),waypoint(-71,-122,18),checkpoint(0),
   waypoint(-73,-70,18),ring(4),ring(5),checkpoint(1),waypoint(-69,99),waypoint(-58,117),waypoint(-40,127),waypoint(5,127),checkpoint(2),
   waypoint(85,110),waypoint(93,100),waypoint(80,88),waypoint(60,84),ring(6),ring(7),ring(8),checkpoint(3)]
