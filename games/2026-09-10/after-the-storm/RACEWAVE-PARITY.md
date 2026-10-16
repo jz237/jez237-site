@@ -1,5 +1,31 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Result HUD animation — local October 16 checkpoint
+
+The five shared HUD slots now have the reconstructed numeric update for all
+four widget kinds: finish banner, record banner, menu marker and retirement
+banner. This includes the finish-to-record allocation, ascending slot order,
+float32 motion, retirement bounce and signed counter behavior. The following
+four-frame HUD animation clock also updates the same canonical storage. The
+original outer update calls these two routines before the fade update; the
+later display dispatcher consumes result timing after that fade update.
+
+Independent execution of the ROM instructions matches 1,535 prepared cases,
+162,269 counted instructions, 7,924 ordered HUD writes and all 2,213,470 final
+HUD words. Cases include complete widget trajectories, allocation reuse,
+counter boundaries and unsigned float conversion failure paths. Matrix and
+audio callees remain ordered effects: their parameters are compared, but their
+rendering/playback is not proved by this check. Caller-local temporary matrix
+arguments are explicitly represented as null, not fabricated RAM pointers.
+Seven focused tests pass, including complete finish-to-record and retirement
+sequences using the original 0.7 bounce damping, allocation reuse and atomic
+failure on missing inputs. All 499 selected native-race regressions pass.
+
+These preparations are not yet scheduled by the live host. The browser still
+stops at its result overlay. Connecting the complete result/world/HUD/fade loop,
+high-resolution widget drawing, continue input and menu/save transitions remains
+required; this checkpoint does not claim a visible post-race fix or a release.
+
 ## v2.28.0 — solo source AI input and shared startup state
 
 This checkpoint includes the earlier October16 local result-entry, navigation,

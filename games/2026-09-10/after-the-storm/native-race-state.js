@@ -1,4 +1,5 @@
 import {prepareNativeRaceFadeUpdate} from './native-race-fade-update.js';
+import {prepareNativeRaceWidgetUpdate,prepareNativeRaceHUDAnimationUpdate} from './native-race-widget-update.js';
 import {NATIVE_AI_STORAGE_WORDS} from './native-ai-storage.js';
 import {prepareNativeRaceCameraInput} from './native-race-camera-input.js';
 // Shared source race/HUD storage. Decoded leaf views are temporary, and all
@@ -217,6 +218,16 @@ export function prepareNativeRaceFadeAdvance(state,input={}){
  const next=copy(state),prepared=prepareNativeRaceFadeUpdate({hudWords7788:next.hudWords7788,
   main638:next.scene.main638,fadeTemplateWords6cc0:input.fadeTemplateWords6cc0,frameBufferBase:input.frameBufferBase});
  const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+/** Original5470 thenAFB4 numeric HUD updates share the canonical owner.
+ * Matrix and audio effects are retained in source order for presentation. */
+export function prepareNativeRaceWidgetAdvance(state,input={}){
+ const next=copy(state),widgets=prepareNativeRaceWidgetUpdate({...input,hudWords7788:next.hudWords7788,
+  mode608:next.scene.mode608,activity624:next.scene.activity624,recordPlace2650:next.raceWords1f94[ri(0x2650)]|0});
+ const operations=[...widgets.operations],effects=apply(next,widgets.operations);
+ const animation=prepareNativeRaceHUDAnimationUpdate({hudWords7788:next.hudWords7788});
+ operations.push(...animation.operations);effects.push(...apply(next,animation.operations));
+ return freeze({state:next,operations,effects,diagnostic:widgets.diagnostic});
 }
 export function prepareNativeRaceFadeSlotsResetUpdate(state,input){
  const next=copy(state),prepared=prepareNativeRaceFadeSlotsReset(input),effects=apply(next,prepared.operations);
