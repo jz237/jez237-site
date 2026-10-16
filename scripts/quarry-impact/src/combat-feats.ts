@@ -1,7 +1,7 @@
 /** Scoring is observational: it never changes contacts, damage or vehicle motion. */
 export type CombatMotion={id:number;x:number;z:number;yaw:number;speed:number;vx:number;vz:number;angular:number;up:number;grounded:number;health:number};
-export type CombatAward={kind:'solid'|'heavy'|'massive'|'spin';points:number;time:number};
-export const COMBAT_AWARDS={solid:{label:'SOLID HIT',points:10},heavy:{label:'HEAVY HIT',points:25},massive:{label:'MASSIVE HIT',points:50},spin:{label:'SPIN OUT',points:75}} as const;
+export type CombatAward={kind:'solid'|'heavy'|'massive'|'spin'|'rival';points:number;time:number};
+export const COMBAT_AWARDS={rival:{label:'RIVAL HIT',points:25},solid:{label:'SOLID HIT',points:10},heavy:{label:'HEAVY HIT',points:25},massive:{label:'MASSIVE HIT',points:50},spin:{label:'SPIN OUT',points:75}} as const;
 type Pending={attacker:number;victim:number;until:number;yaw:number;turn:number;x:number;z:number;time:number;started:number;angular:number;armed:boolean};
 export type CombatFeatState={pending:Pending[];cooldowns:[string,number][]};
 const wrap=(a:number)=>Math.atan2(Math.sin(a),Math.cos(a));

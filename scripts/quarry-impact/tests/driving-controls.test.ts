@@ -41,11 +41,11 @@ test('new keyboard defaults reverse the prior release while saved custom binding
 });
 
 test('old default steering migrates once without resetting other controls',()=>{
- const old={...defaultControls(),keyboardDefaults:2,deadzone:.3,keys:{...defaultControls().keys,left:['KeyA','ArrowLeft'],right:['KeyD','ArrowRight'],throttle:['KeyL','ArrowUp']}};
+ const old={...defaultControls(),keyboardDefaults:3,deadzone:.3,keys:{...defaultControls().keys,left:['KeyA','ArrowLeft'],right:['KeyD','ArrowRight'],throttle:['KeyL','ArrowUp']}};
  const updated=readControls(JSON.stringify(old));assert.deepEqual(updated.keys.left,['KeyD','ArrowRight']);assert.deepEqual(updated.keys.right,['KeyA','ArrowLeft']);assert.deepEqual(updated.keys.throttle,old.keys.throttle);assert.equal(updated.deadzone,.3);
  assert.deepEqual(readControls(JSON.stringify(updated)),updated);
  assert.deepEqual(readControls(JSON.stringify({...old,keyboardDefaults:undefined})).keys,updated.keys);
- assert.equal(updated.keyboardDefaults,3);
+ assert.equal(updated.keyboardDefaults,4);
  const custom={...old,keys:{...old.keys,left:['KeyJ'],right:['KeyK']}};assert.deepEqual(readControls(JSON.stringify(custom)).keys,custom.keys);
- const intentional={...old,keyboardDefaults:3};assert.deepEqual(readControls(JSON.stringify(intentional)).keys,intentional.keys);
+ const intentional={...old,keyboardDefaults:4};assert.deepEqual(readControls(JSON.stringify(intentional)).keys,intentional.keys);
 });
