@@ -7981,6 +7981,27 @@
       "sha256": "44342d3d970ed2bbe7da6492d33bbb0a490e2d80fcaf70db1f2699ebaa9d2631",
       "key": "multimedia/vengeance-cybertect-van/vengeance-cybertect-van-full-master.mp4",
       "url": "https://media.jez237.com/multimedia/vengeance-cybertect-van/vengeance-cybertect-van-full-master.mp4"
+    },
+    {
+      "path": "multimedia/port-richmond-halloween-intro/hide-review-1080p.mp4",
+      "size": 87768212,
+      "sha256": "0afde7cff1176febf9f48d30cf7ea2dc77bc9d5e62575fbc5720f95a067b9b72",
+      "key": "multimedia/port-richmond-halloween-intro/hide-review-1080p.mp4",
+      "url": "https://media.jez237.com/multimedia/port-richmond-halloween-intro/hide-review-1080p.mp4"
+    },
+    {
+      "path": "multimedia/port-richmond-halloween-intro/hide-review-720p.mp4",
+      "size": 18732727,
+      "sha256": "a5ccc82f7fc8c3ece6246fe583645797c3fa2f9bb80979c95add239c61c2a62b",
+      "key": "multimedia/port-richmond-halloween-intro/hide-review-720p.mp4",
+      "url": "https://media.jez237.com/multimedia/port-richmond-halloween-intro/hide-review-720p.mp4"
+    },
+    {
+      "path": "multimedia/port-richmond-halloween-intro/preview-hide.mp4",
+      "size": 582755,
+      "sha256": "789a1ba4602fe21e57b8f0e3fa7e2c81dc5cb151fc84756e558eddbfd7ebb269",
+      "key": "multimedia/port-richmond-halloween-intro/preview-hide.mp4",
+      "url": "https://media.jez237.com/multimedia/port-richmond-halloween-intro/preview-hide.mp4"
     }
   ]
 }

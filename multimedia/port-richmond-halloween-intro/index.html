@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>(function(){try{var root=document.documentElement;if(localStorage.getItem("theme")==="light")root.setAttribute("data-theme","light");var touch=navigator.maxTouchPoints&&navigator.maxTouchPoints>0;var wide=window.innerWidth>=761||Math.min(screen.width||0,screen.height||0)>=700;if(touch&&wide)root.classList.add("is-touch-tablet");}catch(e){}})();</script>
+  <script>(function(){var q=new URLSearchParams(location.search);if(q.has("capture")&&q.get("capture")!=="0")document.documentElement.classList.add("prh-capture");})();</script>
+  <title>Port Richmond — Halloween Intro (real-time film) · Jez237 Multimedia</title>
+  <meta name="description" content="HIDE: a real-time Three.js horror short for PORT RICHMOND, my Unreal Engine 5 zombie game. Halloween night on the real Witte St block, three hiding places, three scares. About 88 seconds, drawn live in the browser." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://jez237.com/multimedia/port-richmond-halloween-intro/" />
+  <meta name="theme-color" content="#050d1d" />
+  <!-- Share images (to be rendered from the film): og.jpg 1200x630 next to this page; thumb.webp 16:9 for the
+       Multimedia index card. -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Jez237" />
+  <meta property="og:title" content="Port Richmond — Halloween Intro" />
+  <meta property="og:description" content="HIDE: a real-time horror short for my UE5 zombie game. Halloween night on Witte St, drawn live in the browser." />
+  <meta property="og:url" content="https://jez237.com/multimedia/port-richmond-halloween-intro/" />
+  <meta property="og:image" content="https://jez237.com/multimedia/port-richmond-halloween-intro/og.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Witte Street at night on Halloween, with the PORT RICHMOND title menu." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://jez237.com/multimedia/port-richmond-halloween-intro/og.jpg" />
+  <link rel="icon" type="image/svg+xml" href="../../assets/brand.svg" />
+  <link rel="stylesheet" href="../../assets/styles.css" />
+  <link rel="stylesheet" href="../../assets/site-enhance.css" />
+  <link rel="stylesheet" href="../../assets/design.css?v=galaxy-stars-20260705b" />
+  <link rel="stylesheet" href="../../assets/workbench-theme.css?v=multimedia-20260926" />
+  <link rel="stylesheet" href="./src/ui/ui.css" />
+  <script type="importmap">
+{ "imports": { "three":"./vendor/three/build/three.module.min.js", "three/addons/":"./vendor/three/addons/" } }
+  </script>
+  <style>
+    main.container { max-width: 1200px; margin: 0 auto; padding: 22px clamp(16px,3vw,40px) 80px; }
+    .pr-crumb { position: relative; z-index: 1; display: inline-flex; gap: 8px; color: var(--brand-gold); text-transform: uppercase; letter-spacing: .16em; font-size: 11px; font-weight: 700; }
+    .pr-crumb a { color: inherit !important; text-decoration: none; }
+    .pr-crumb a:hover { text-decoration: underline; }
+
+    /* theatre: film stage + chapters side panel (stacked below on laptops so the film gets the width) */
+    .pr-theatre { display: grid; grid-template-columns: minmax(0, 1fr) 250px; gap: 18px; align-items: start; }
+    .pr-stage { position: relative; border: 1px solid rgba(55,121,220,.5); border-radius: 12px; overflow: hidden; background: #000; box-shadow: inset 0 1px 0 rgba(120,179,255,.09), -7px 8px 0 rgba(0,0,0,.52), 0 16px 40px rgba(0,0,0,.35); }
+    .pr-stage #stage { position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; background: #000; }
+    /* the renderer sizes only its drawing buffer (setSize(w, h, false)); the canvas box follows the stage */
+    .pr-stage #stage > canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+    .pr-noscript { position: absolute; inset: 0; display: grid; place-items: center; padding: 20px; color: #d9e6ec; text-align: center; font-size: 14px; }
+    .pr-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px 12px; border-top: 1px solid rgba(55,121,220,.35); background: rgba(3,14,31,.85); }
+    .pr-bar .label { color: #7f93a0; font: 700 11px "Courier New", monospace; letter-spacing: .16em; text-transform: uppercase; margin-right: 2px; }
+    .pr-keys { color: #7f93a0; font-size: 12px; }
+    .pr-keys kbd { display: inline-block; min-width: 1.6em; margin: 0 2px 0 6px; padding: 1px 5px; border: 1px solid rgba(55,121,220,.45); border-radius: 5px; background: rgba(5,22,49,.6); color: #d9e6ec; font: 700 11px/1.3 "Courier New", monospace; text-align: center; }
+    .pr-keys kbd:first-child { margin-left: 0; }
+    .pr-btn { appearance: none; cursor: pointer; padding: 6px 11px; border: 1px solid rgba(55,121,220,.5) !important; border-radius: 7px !important; background: rgba(5,22,49,.7) !important; color: #d9e6ec !important; font-family: inherit; font-size: 12px; font-weight: 700; line-height: 1.2; text-decoration: none; }
+    .pr-btn:hover { border-color: rgba(62,188,255,.75) !important; color: #fff !important; }
+    .pr-bar .spacer { flex: 1; }
+
+    .pr-side { position: relative; padding: 14px 14px 12px; border: 1px solid rgba(55,121,220,.5); border-radius: 12px; background: radial-gradient(circle at 70% 0%, rgba(232,197,122,.08), transparent 45%), rgba(3,14,31,.62); box-shadow: -7px 8px 0 rgba(0,0,0,.52); }
+    .pr-side h2 { margin: 0 0 2px; color: #f4ecdf; font-family: var(--font-serif, 'Fraunces', Georgia, serif); font-size: 1.05rem; }
+    .pr-side .sub { margin: 0 0 8px; color: #7f93a0 !important; font: 700 10.5px "Courier New", monospace; letter-spacing: .14em; text-transform: uppercase; }
+    .pr-chapters { list-style: none; margin: 0; padding: 0; display: grid; gap: 3px; }
+    .pr-chapters li { display: grid; grid-template-columns: 40px 1fr; gap: 8px; align-items: baseline; padding: 6px 9px; border: 1px solid transparent; border-radius: 8px; color: #cfdce3; font-size: 13px; transition: background-color .2s ease, border-color .2s ease; }
+    .pr-chapters li b { color: #e8c57a; font: 700 12px "Courier New", monospace; }
+    .pr-chapters li[role="button"] { cursor: pointer; }
+    .pr-chapters li[role="button"]:hover { border-color: rgba(55,121,220,.5); background: rgba(5,22,49,.6); }
+    .pr-chapters li.on { border-color: rgba(232,197,122,.55); background: rgba(232,197,122,.1); color: #fff6d8; }
+    .pr-facts { display: grid; grid-template-columns: auto 1fr; gap: 5px 10px; margin: 12px 0 0; padding-top: 10px; border-top: 1px solid rgba(55,121,220,.25); font-size: 12px; line-height: 1.4; }
+    .pr-facts dt { color: #7f93a0; font: 700 10.5px/1.6 "Courier New", monospace; letter-spacing: .1em; text-transform: uppercase; }
+    .pr-facts dd { margin: 0; color: #b9cad3; }
+    .pr-warn-note { margin: 10px 0 0 !important; padding: 8px 10px; border: 1px solid rgba(232,197,122,.3); border-left: 3px solid #e8c57a; border-radius: 8px; background: rgba(232,197,122,.06); color: #d7c9b3 !important; font-size: 12px; line-height: 1.45; }
+
+    .pr-lower { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 18px; margin-top: 18px; }
+    .pr-panel { padding: 18px 20px; border: 1px solid rgba(55,121,220,.5); border-radius: 12px; background: rgba(3,14,31,.58); box-shadow: -7px 8px 0 rgba(0,0,0,.5); }
+    .pr-panel h2 { margin: 0 0 10px; color: #f4ecdf; font-family: var(--font-serif, 'Fraunces', Georgia, serif); font-size: 1.2rem; }
+    .pr-panel p, .pr-panel li { color: #b9cad3; font-size: 14px; line-height: 1.55; }
+    .pr-panel p { margin: 0 0 10px; }
+    .pr-panel ul { margin: 0; padding-left: 18px; }
+    .pr-panel li + li { margin-top: 4px; }
+    .pr-panel a { text-decoration: underline; text-underline-offset: 2px; }
+    .pr-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 12px; }
+    .pr-chips span { padding: 3px 9px; border: 1px solid rgba(255,255,255,.14); border-radius: 999px; color: #9fb3bf; font-size: 12px; }
+    .pr-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .pr-links a { color: #fff !important; font-size: 13px; font-weight: 750; text-decoration: none; padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(55,121,220,.5); background: rgba(5,22,49,.7); }
+    .pr-links a:hover { border-color: rgba(62,188,255,.75); }
+    .pr-links a.gold { border-color: rgba(232,197,122,.55); color: #ffe7b0 !important; }
+    .topbar-actions a { white-space: nowrap; }
+
+    /* while the film plays, the page's drifting galaxy layers hold still (frame budget for WebGL) */
+    html.prh-playing body.ai-sounds-page::before,
+    html.prh-playing body.ai-sounds-page::after,
+    html.prh-playing .desktop-hub::before { animation-play-state: paused !important; }
+
+    /* ?capture=1 (headless frame capture): only the film, full viewport */
+    html.prh-capture, html.prh-capture body { overflow: hidden !important; background: #000 !important; }
+    html.prh-capture body::before, html.prh-capture body::after, html.prh-capture .desktop-hub::before,
+    html.prh-capture #site-nav, html.prh-capture .hub-sidebar, html.prh-capture .hub-topbar,
+    html.prh-capture .pr-side, html.prh-capture .pr-lower, html.prh-capture .pr-bar { display: none !important; }
+    html.prh-capture .workbench-home, html.prh-capture .desktop-hub, html.prh-capture .hub-main,
+    html.prh-capture .pr-theatre, html.prh-capture .pr-stage { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; filter: none !important; transform: none !important; animation: none !important; box-shadow: none !important; border: 0 !important; }
+    html.prh-capture .pr-stage #stage { position: fixed !important; inset: 0 !important; width: 100vw !important; height: 100vh !important; aspect-ratio: auto !important; z-index: 2147483000; border-radius: 0 !important; }
+
+    @media (max-width: 1320px) {
+      .pr-theatre { grid-template-columns: 1fr; }
+      .pr-side { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 4px 22px; }
+      .pr-side > h2, .pr-side > .sub { grid-column: 1; }
+      .pr-side .pr-chapters { grid-column: 1; grid-row: 3; }
+      .pr-side .pr-facts { grid-column: 2; grid-row: 1 / span 3; margin: 0; padding: 0 0 0 18px; border-top: 0; border-left: 1px solid rgba(55,121,220,.25); align-content: start; }
+      .pr-side .pr-warn-note { grid-column: 1 / -1; }
+    }
+    @media (max-width: 980px) { .pr-lower { grid-template-columns: 1fr; } }
+    @media (max-width: 760px) {
+      .pr-side { display: block; }
+      .pr-side .pr-facts { margin: 12px 0 0; padding: 10px 0 0; border-left: 0; border-top: 1px solid rgba(55,121,220,.25); }
+      .pr-keys { display: none; }
+    }
+    /* touch screens: no keyboard hints */
+    @media (hover: none) and (pointer: coarse) { .pr-keys { display: none; } }
+    @media (max-width: 860px) { .desktop-hub { border-radius:0; } main.container { padding-inline:0; } .hub-main { padding:14px 10px 28px !important; } }
+    /* phones: the film runs edge to edge */
+    @media (max-width: 640px) { .pr-stage { margin-inline: -10px; border-radius: 0; border-left: 0; border-right: 0; } .pr-bar .label { display: none; } }
+    /* phones on their side: keep the whole 16:9 stage inside the viewport */
+    @media (orientation: landscape) and (max-height: 540px) { .pr-stage { width: min(100%, calc((100svh - 20px) * 16 / 9)); margin-inline: auto; } }
+  </style>
+</head>
+<body class="ai-sounds-page multimedia-page">
+  <header id="site-nav" class="home-hidden-nav"></header>
+  <main class="container workbench-home">
+    <section class="desktop-hub" aria-labelledby="pr-title">
+      <aside class="hub-sidebar" aria-label="Site sections">
+        <a class="hub-brand" href="../../"><strong>Jez237</strong><span>Philadelphia · Zone 7a</span></a>
+        <p class="sidebar-note">An AI site for experiments.</p>
+        <nav class="side-nav" data-site-menu data-active="multimedia" data-base="../../"></nav>
+        <div class="side-controls" aria-hidden="true"><span>☼</span><span>☾</span><span>⚙</span></div>
+      </aside>
+      <div class="hub-main">
+        <div class="hub-topbar">
+          <div>
+            <span class="pr-crumb"><a href="../">Multimedia</a><span aria-hidden="true">/</span><span>Halloween intro</span></span>
+            <h1 id="pr-title">Port Richmond: Halloween Intro</h1>
+            <p>A real-time Three.js horror film for my Unreal Engine 5 zombie game: Halloween night on the real Witte St block, ending on the game's title screen.</p>
+          </div>
+          <div class="topbar-actions"><a href="../">All reels</a><button type="button" aria-label="Menu">☰</button></div>
+        </div>
+
+        <div class="pr-theatre">
+          <div class="pr-stage" data-prh-fullscreen>
+            <div id="stage" role="region" aria-label="Film: Port Richmond, Halloween Intro">
+              <noscript><div class="pr-noscript"><span>This film is drawn live with JavaScript and WebGL. Switch JavaScript on, or <a href="../port-richmond-title-loop/">watch the game's title walk</a>.</span></div></noscript>
+            </div>
+            <div class="pr-bar">
+              <span class="label">Real-time · WebGL 2</span>
+              <span class="pr-keys"><kbd>Space</kbd> start <kbd>S</kbd> skip <kbd>M</kbd> mute <kbd>R</kbd> replay</span>
+              <span class="spacer"></span>
+              <a class="pr-btn" href="../port-richmond-title-loop/">Title walk reel</a>
+              <button class="pr-btn" type="button" id="pr-copy">Copy link</button>
+            </div>
+          </div>
+
+          <aside class="pr-side" aria-labelledby="pr-ch">
+            <h2 id="pr-ch">Six chapters</h2>
+            <p class="sub">About 88 s, cut like a short film</p>
+            <ol class="pr-chapters" data-prh-chapters>
+              <li data-prh-chapter data-t="0"><b>0:00</b><span>The Display</span></li>
+              <li data-prh-chapter data-t="17.5"><b>0:17</b><span>The Car</span></li>
+              <li data-prh-chapter data-t="33.6"><b>0:33</b><span>Under</span></li>
+              <li data-prh-chapter data-t="52.5"><b>0:52</b><span>The Street Wakes</span></li>
+              <li data-prh-chapter data-t="64"><b>1:04</b><span>False Safety</span></li>
+              <li data-prh-chapter data-t="77.9"><b>1:17</b><span>Port Richmond</span></li>
+            </ol>
+            <dl class="pr-facts">
+              <dt>Drawn</dt><dd>Live in your browser: Three.js and WebGL 2, nothing pre-rendered</dd>
+              <dt>Place</dt><dd>The 3600 block of Witte St, Port Richmond, Philadelphia</dd>
+              <dt>Ends</dt><dd>On the game's title screen, which holds until you replay</dd>
+              <dt>Quality</dt><dd>Auto picks for your device; High, Medium or Low on the start screen</dd>
+            </dl>
+            <p class="pr-warn-note">Content warning: graphic horror, blood and gore, and sudden loud sounds. No strobing or flashing lights.</p>
+          </aside>
+        </div>
+
+        <div class="pr-lower">
+          <section class="pr-panel" aria-labelledby="pr-about">
+            <h2 id="pr-about">About this film</h2>
+            <div class="pr-chips"><span>≈88 s</span><span>Real-time WebGL</span><span>Three.js</span><span>Halloween 2026</span><span>Unreal Engine 5 game</span></div>
+            <p><strong>HIDE</strong> is a real-time Three.js horror short set on PORT RICHMOND's real Witte St block on Halloween night, built from the game's own street kit, layout and audio. It is not a video: the street, the infected and every shot are drawn live, frame by frame, in your browser, and the sound is mixed as it plays.</p>
+            <ul>
+              <li>One neighbour's last minutes on the first night: the block's Halloween display, a parked car, the gap under another car and a front room that should be safe. Framed wide shots cut with first-person hiding places, and three scares that each hit differently.</li>
+              <li>The title menu at the end is an HTML recreation for this page. The game itself runs in Unreal Engine 5, so the menu cannot start it here.</li>
+              <li>Skip (S or Esc) lands on the title screen at any moment; Replay (R) runs the film again. Weaker devices get lighter shadows, effects and resolution.</li>
+            </ul>
+            <div class="pr-links">
+              <a class="gold" href="../port-richmond-title-loop/">Watch the game's title walk (3:31)</a>
+              <a href="https://media.jez237.com/multimedia/port-richmond-halloween-intro/hide-review-1080p.mp4" rel="noopener">Recorded version (MP4, 1080p, 88 MB)</a>
+              <a href="../">All reels</a>
+            </div>
+          </section>
+          <section class="pr-panel" aria-labelledby="pr-credits">
+            <h2 id="pr-credits">Credits</h2>
+            <ul>
+              <li>Street kit, textures, layout and game audio: <strong>PORT RICHMOND</strong> by Jez.</li>
+              <li>Rendering: <a href="https://threejs.org/" rel="noopener">Three.js</a> (MIT licence).</li>
+              <li>Infected anatomy: base meshes derived from <a href="https://www.z-anatomy.com/" rel="noopener">Z-Anatomy</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="noopener license">CC BY-SA 4.0</a>), based on <a href="https://lifesciencedb.jp/bp3d/" rel="noopener">BodyParts3D</a> (© The Database Center for Life Science, CC BY-SA 2.1 JP). The derived meshes share the same licence.</li>
+              <li>Brand-free: every business name is invented, except Bauder Graphics, the game's safehouse.</li>
+            </ul>
+          </section>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script type="module">
+    // Chapters come from the film's own cue sheet, so a re-timed beat moves here too (the static list above is
+    // the no-JS fallback). src/ui/ui.js highlights the current one while the film plays.
+    import { SECTIONS } from './src/film/cues.js';
+    const list = document.querySelector('[data-prh-chapters]');
+    const clock = (t) => { const s = Math.floor(t); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
+    if (list && SECTIONS && SECTIONS.length) {
+      list.replaceChildren(...SECTIONS.map((s) => {
+        const li = document.createElement('li');
+        li.dataset.prhChapter = '';
+        li.dataset.t = String(s.start);
+        const b = document.createElement('b'); b.textContent = clock(s.start);
+        const span = document.createElement('span'); span.textContent = s.title;
+        li.append(b, span);
+        return li;
+      }));
+    }
+    const copy = document.getElementById('pr-copy');
+    copy && copy.addEventListener('click', () => {
+      const url = 'https://jez237.com/multimedia/port-richmond-halloween-intro/';
+      const done = () => { copy.textContent = 'Link copied'; setTimeout(() => { copy.textContent = 'Copy link'; }, 1600); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, () => window.prompt('Copy this link', url));
+      else window.prompt('Copy this link', url);
+    });
+  </script>
+  <script type="module" src="./src/main.js"></script>
+  <script src="../../assets/nav.js?v=nav-20260926-multimedia"></script>
+  <script src="../../assets/side-menu.js?v=multimedia-20260926"></script>
+  <script src="../../assets/site-enhance.js"></script>
+</body>
+</html>

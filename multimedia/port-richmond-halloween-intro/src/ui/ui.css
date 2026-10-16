@@ -1,0 +1,631 @@
+/* PORT RICHMOND: Halloween intro - UI layer (owner: UI).
+ *
+ * Everything lives in <div class="prh-ui"> inside the 16:9 film stage (createUI adds .prh-stage to it):
+ *   .prh-title    HTML/CSS recreation of the game's title menu, driven per frame by ui.updateTitle(t)
+ *   .prh-start    start gate (title card, content warning, Start with sound / muted, quality, loading)
+ *   .prh-controls in-film Skip / Mute / Full screen (top-right, dim after 2 s idle)
+ *   .prh-actions  page actions in the title state (Replay intro, the game's title walk, Multimedia)
+ *   .prh-error    error card
+ *
+ * Title geometry is the game's own (PRHUDMenu.cpp DrawTitleBackdrop/DrawTitleScreen, newer row layout measured
+ * against review/ref/title_3.jpg) in 1080p units: 1 --u = stage height / 1080. Text is placed by baseline
+ * (text-box trim to cap/alphabetic), so the layout holds with Roboto, Noto Sans, Segoe UI or SF.
+ *
+ * The site's global CSS (workbench-theme.css) styles every button/a/p/h1-h3 with !important, so button and
+ * link colours here carry !important too, and the layer uses no p/h* elements.
+ */
+
+.prh-stage {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #000;
+  isolation: isolate;
+}
+.prh-ui {
+  --prh-font: "Roboto", "Noto Sans", "Droid Sans", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --paper: rgb(246 243 237);
+  --faint: rgb(218 215 207 / 0.85);
+  --gold: rgb(255 221 124);
+  --gold-deep: rgb(232 182 74);
+  --band: rgb(161 124 48 / 0.55);
+  --band-0: rgb(161 124 48 / 0);
+  --ink-0: rgb(0 0 0 / 0);
+  /* 1080p layout unit; resolved in descendants against this container */
+  --u: min(calc(100cqh / 1080), calc(100cqw / 1920));
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  container: prh / size;
+  pointer-events: none;
+  font-family: var(--prh-font);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.3;
+  color: var(--paper);
+  text-align: left;
+  letter-spacing: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+}
+.prh-ui *,
+.prh-ui *::before,
+.prh-ui *::after { box-sizing: border-box; }
+.prh-ui:focus { outline: none; }
+.prh-ui [hidden] { display: none !important; }
+.prh-ui svg { display: block; flex: 0 0 auto; fill: currentColor; }
+.prh-sr { position: absolute !important; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* ======================================================================== title recreation (film) */
+
+.prh-title {
+  position: absolute;
+  inset: 0;
+  display: none;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: default;
+}
+.prh-title.is-on { display: block; }
+/* behind the start gate main.js may already render the title view; the menu itself waits for the film */
+.prh-ui:not([data-capture="1"])[data-state="loading"] .prh-title,
+.prh-ui:not([data-capture="1"])[data-state="ready"] .prh-title,
+.prh-ui:not([data-capture="1"])[data-state="error"] .prh-title { visibility: hidden; }
+/* in the title state a click on the recreated menu explains it (it never pretends to start a game) */
+.prh-ui[data-state="title"]:not([data-capture="1"]) .prh-title { pointer-events: auto; }
+.prh-title * { transition: none !important; animation: none !important; }
+.prh-title.prh-skipin { animation: prh-fade-in 0.7s ease-out both; }
+@keyframes prh-fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+/* Soft washes: dark left behind logo and menu, a little at the top and the bottom (game: DrawTitleBackdrop). */
+.prh-wash {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgb(0 0 0 / 0.35) 0%, var(--ink-0) 16%),
+    linear-gradient(0deg, rgb(0 0 0 / 0.6) 0%, var(--ink-0) 22%),
+    linear-gradient(90deg, rgb(0 0 0 / 0.72) 0%, rgb(0 0 0 / 0.6) 22%, var(--ink-0) 65%);
+}
+/* darker band behind the rows (game: RowW + 200 wide, 20 above the first row, 9 rows + 30 tall) */
+.prh-rowsband {
+  position: absolute;
+  left: 0;
+  top: calc(401.2 * var(--u));
+  width: calc(1000 * var(--u));
+  height: calc(579 * var(--u));
+  background: linear-gradient(90deg, rgb(0 0 0 / 0.5), var(--ink-0));
+}
+
+/* Baseline-placed text: --y is the baseline. */
+.prh-t {
+  position: absolute;
+  margin: 0;
+  white-space: pre;
+  line-height: 1;
+  top: calc(var(--y) - 0.87em);
+}
+@supports (text-box: trim-both cap alphabetic) {
+  .prh-t { text-box: trim-both cap alphabetic; top: calc(var(--y) - 1cap); }
+}
+
+.prh-logo-title {
+  --y: calc(186.75 * var(--u));
+  /* --lsb / --ls / --sx are measured in ui.js so the ink spans the game's 7.77 em with any system font */
+  left: calc(115.5 * var(--u) - var(--lsb, 0.07) * var(--sx, 1) * 1em);
+  font-size: max(calc(85.33 * var(--u)), 27px);
+  font-weight: 700;
+  letter-spacing: calc(var(--ls, 0.012) * 1em);
+  color: var(--paper);
+  --sh: max(1px, round(nearest, calc(6.4 * var(--u)), 1px));
+  text-shadow: var(--sh) var(--sh) 0 rgb(0 0 0 / 0.6);
+}
+.prh-word { display: inline-block; transform: scaleX(var(--sx, 1)); transform-origin: 0 50%; }
+.prh-ch { display: inline-block; will-change: transform, opacity; }
+.prh-label,
+.prh-desc,
+.prh-foot .prh-t { letter-spacing: calc(var(--ls, 0) * 1em); }
+.prh-rule {
+  position: absolute;
+  left: calc((var(--lsb, 0.07) * var(--sx, 1) - 0.0176) * 1em);
+  top: calc(100% + 0.276em);
+  width: 7.611em;
+  height: max(1px, 0.0469em);
+  background: var(--gold);
+  transform-origin: 0 50%;
+}
+.prh-logo-sub {
+  --y: calc(243.9 * var(--u));
+  left: calc(114 * var(--u));
+  font-size: max(calc(19.33 * var(--u)), 9.5px);
+  letter-spacing: calc(var(--ls, 0) * 1em);
+  color: var(--gold);
+  text-shadow: max(1px, round(nearest, calc(1.45 * var(--u)), 1px)) max(1px, round(nearest, calc(1.45 * var(--u)), 1px)) 0 rgb(0 0 0 / 0.6);
+}
+.prh-logo-tag {
+  --y: calc(288.9 * var(--u));
+  left: calc(114 * var(--u));
+  font-size: max(calc(14 * var(--u)), 9px);
+  letter-spacing: calc(var(--ls, 0) * 1em);
+  color: var(--faint);
+  text-shadow: max(1px, round(nearest, calc(1.05 * var(--u)), 1px)) max(1px, round(nearest, calc(1.05 * var(--u)), 1px)) 0 rgb(0 0 0 / 0.51);
+}
+
+/* Menu rows (game: X = 110, Y = 0.39 H, RowH = 61, band = RowH - 8, RowW = 800, text scale 1.9). */
+.prh-menu { position: absolute; inset: 0; }
+.prh-row {
+  position: absolute;
+  left: calc(84 * var(--u));
+  top: calc((421.2 + 61 * var(--i, 0)) * var(--u));
+  width: calc(800 * var(--u));
+  height: calc(53 * var(--u));
+  font-size: max(calc(25.33 * var(--u)), 11px);
+}
+.prh-band {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--band), var(--band-0));
+  transform-origin: 0 50%;
+}
+.prh-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: max(2px, calc(5 * var(--u)));
+  background: var(--gold);
+  transform-origin: 50% 50%;
+}
+.prh-row-text {
+  --y: calc(34.35 * var(--u));
+  left: calc(26 * var(--u));
+  color: var(--faint);
+  --sh: max(1px, round(nearest, calc(1.9 * var(--u)), 1px));
+  text-shadow: var(--sh) var(--sh) 0 rgb(0 0 0 / 0.51);
+}
+.prh-row.is-sel .prh-row-text { color: var(--paper); text-shadow: var(--sh) var(--sh) 0 rgb(0 0 0 / 0.6); }
+.prh-row.is-off .prh-row-text { color: rgb(218 215 207 / 0.2975); text-shadow: var(--sh) var(--sh) 0 rgb(0 0 0 / 0.18); }
+.prh-desc {
+  position: relative;
+  top: calc(-3.15 * var(--u));
+  margin-left: calc(24 * var(--u));
+  font-size: max(calc(14 * var(--u)), 9px);
+  color: var(--faint);
+  text-shadow: max(1px, round(nearest, calc(1.05 * var(--u)), 1px)) max(1px, round(nearest, calc(1.05 * var(--u)), 1px)) 0 rgb(0 0 0 / 0.51);
+}
+.prh-row.is-sel .prh-desc { color: var(--faint); }
+.prh-row.is-off .prh-desc { color: rgb(218 215 207 / 0.595); text-shadow: 1px 1px 0 rgb(0 0 0 / 0.36); }
+
+/* Footer: DEMO BETA (gold) + the game's key hints. */
+.prh-foot { position: absolute; inset: 0; }
+.prh-foot .prh-t {
+  font-size: max(calc(14 * var(--u)), 9px);
+  color: var(--faint);
+  text-shadow: max(1px, round(nearest, calc(1.05 * var(--u)), 1px)) max(1px, round(nearest, calc(1.05 * var(--u)), 1px)) 0 rgb(0 0 0 / 0.51);
+}
+.prh-foot .prh-demo { --y: calc(1028.4 * var(--u)); left: calc(110 * var(--u)); color: var(--gold); text-shadow: 1px 1px 0 rgb(0 0 0 / 0.6); }
+.prh-foot .prh-hints { --y: calc(1031 * var(--u)); left: calc(290 * var(--u)); }
+.prh-foot .prh-tab { --y: calc(997 * var(--u)); right: calc(60 * var(--u)); }
+.prh-foot .prh-keys { --y: calc(1030 * var(--u)); right: calc(60 * var(--u)); }
+
+/* Mid-size stages (the page's theatre is ~600-900 px wide): legibility floors above keep the game layout;
+   the long middle hint would collide with the right one. */
+@container prh (max-width: 819.98px) {
+  .prh-foot .prh-hints { display: none; }
+}
+
+/* Small stages (phones in portrait): compact layout with the same elements. 1 --c = 1 px of a 390 px stage. */
+@container prh (max-width: 599.98px) {
+  .prh-title { --c: min(calc(100cqw / 390), calc(100cqh / 219.375)); }
+  .prh-rowsband { top: calc(51 * var(--c)); width: 66%; height: calc(158 * var(--c)); }
+  .prh-logo-title { --y: calc(30 * var(--c)); left: calc(17 * var(--c) - var(--lsb, 0.07) * var(--sx, 1) * 1em); font-size: calc(22.5 * var(--c)); --sh: 2px; }
+  .prh-logo-sub { --y: calc(47.2 * var(--c)); left: calc(17 * var(--c)); font-size: calc(8.4 * var(--c)); }
+  .prh-logo-tag, .prh-desc, .prh-foot .prh-hints, .prh-foot .prh-tab, .prh-foot .prh-keys { display: none; }
+  .prh-row { left: calc(9 * var(--c)); top: calc((56 + 16.1 * var(--i, 0)) * var(--c)); width: calc(205 * var(--c)); height: calc(14 * var(--c)); font-size: calc(10.4 * var(--c)); }
+  .prh-bar { width: 2px; }
+  .prh-row-text { --y: calc(10.8 * var(--c)); left: calc(8 * var(--c)); --sh: 1px; }
+  .prh-foot .prh-demo { --y: calc(212 * var(--c)); left: calc(17 * var(--c)); font-size: calc(7.6 * var(--c)); }
+}
+
+/* non-deceptive note for clicks on the recreated menu */
+.prh-note {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(10px, 7cqh, 64px);
+  max-width: min(92%, 560px);
+  padding: 0.7em 1em;
+  border: 1px solid rgb(232 197 122 / 0.45);
+  border-radius: 10px;
+  background: rgb(8 10 14 / 0.88);
+  color: var(--paper);
+  font-size: clamp(11px, 1.35cqw, 15px);
+  line-height: 1.4;
+  text-align: center;
+  transform: translate(-50%, 8px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s linear 0.25s;
+  pointer-events: none;
+}
+.prh-note.is-on { opacity: 1; visibility: visible; transform: translate(-50%, 0); transition: opacity 0.25s ease, transform 0.25s ease; pointer-events: auto; }
+.prh-note a { color: var(--gold) !important; text-decoration: underline; text-underline-offset: 2px; }
+
+/* ======================================================================== shared controls */
+
+/* zero-specificity reset so the size rules of .prh-btn / .prh-pill / .prh-ctl below always win */
+.prh-ui :where(button, a.prh-pill, a.prh-btn) {
+  font: inherit;
+  margin: 0;
+  pointer-events: auto;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  text-decoration: none;
+  touch-action: manipulation;
+}
+.prh-ui button:disabled { cursor: default; }
+.prh-ui :focus-visible { outline: 2px solid var(--gold) !important; outline-offset: 2px; }
+
+/* ======================================================================== start gate */
+
+.prh-start {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: clamp(10px, 3.2cqh, 34px) clamp(12px, 4cqw, 60px);
+  /* translucent: the street main.js renders behind the card shows through, dark enough for the warning */
+  background:
+    radial-gradient(ellipse 78% 72% at 50% 44%, rgb(14 10 6 / 0.42), rgb(0 0 0 / 0.88) 76%),
+    linear-gradient(180deg, rgb(0 0 0 / 0.3), rgb(0 0 0 / 0.5)),
+    var(--prh-poster, none) center / cover no-repeat;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.45s ease, visibility 0s linear 0.45s;
+  pointer-events: none;
+}
+.prh-ui[data-state="loading"] .prh-start,
+.prh-ui[data-state="ready"] .prh-start {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.45s ease;
+  pointer-events: auto;
+}
+.prh-start-card {
+  width: min(100%, 820px);
+  display: grid;
+  justify-items: center;
+  gap: clamp(5px, 1.55cqh, 16px);
+  text-align: center;
+}
+.prh-kicker {
+  color: var(--gold);
+  font-size: clamp(9.5px, 1.05cqw, 15px);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 2px rgb(0 0 0 / 0.8);
+}
+.prh-start-logo { display: grid; justify-items: center; gap: clamp(3px, 0.8cqh, 8px); }
+.prh-start-title {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.13em;
+  font-size: clamp(25px, 6.1cqw, 92px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.012em;
+  color: var(--paper);
+  text-shadow: 0.07em 0.07em 0 rgb(0 0 0 / 0.6);
+  white-space: nowrap;
+}
+.prh-start-title::after {
+  content: "";
+  position: absolute;
+  left: 0.04em;
+  right: 0.06em;
+  bottom: 0;
+  height: max(1px, 0.047em);
+  background: var(--gold);
+}
+.prh-start-sub {
+  color: var(--gold);
+  font-size: clamp(11px, 1.9cqw, 28px);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 0 rgb(0 0 0 / 0.6);
+}
+.prh-start-line {
+  max-width: 46em;
+  color: rgb(218 215 207 / 0.92);
+  font-size: clamp(11px, 1.6cqw, 20px);
+  line-height: 1.4;
+  text-shadow: 0 1px 2px rgb(0 0 0 / 0.9);
+}
+.prh-warn {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6em;
+  max-width: 40em;
+  margin-top: clamp(2px, 0.6cqh, 6px);
+  padding: 0.6em 0.9em;
+  border: 1px solid rgb(232 197 122 / 0.42);
+  border-left: 3px solid var(--gold);
+  border-radius: 8px;
+  background: rgb(10 8 6 / 0.72);
+  color: var(--paper);
+  font-size: clamp(10.5px, 1.45cqw, 19px);
+  line-height: 1.4;
+  text-align: left;
+}
+.prh-warn svg { width: 1.25em; height: 1.25em; margin-top: 0.05em; color: var(--gold); }
+.prh-warn b { color: var(--gold); font-weight: 700; letter-spacing: 0.04em; }
+.prh-start-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(6px, 1.2cqw, 14px);
+  margin-top: clamp(2px, 0.8cqh, 8px);
+}
+.prh-ui .prh-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55em;
+  min-height: max(34px, 2.9em);
+  padding: 0.62em 1.25em;
+  border: 1px solid rgb(246 243 237 / 0.38) !important;
+  border-radius: 8px !important;
+  background: rgb(12 12 14 / 0.72) !important;
+  color: var(--paper) !important;
+  font-size: clamp(12px, 1.65cqw, 21px);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 0.35);
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, opacity 0.2s ease;
+}
+.prh-ui .prh-btn svg { width: 1.05em; height: 1.05em; }
+.prh-ui .prh-btn:hover:not(:disabled) { border-color: rgb(255 221 124 / 0.85) !important; background: rgb(40 30 14 / 0.85) !important; color: #fff !important; }
+.prh-ui .prh-btn-primary {
+  border-color: var(--gold) !important;
+  background: linear-gradient(180deg, rgb(255 226 140), rgb(236 190 88)) !important;
+  color: #17110a !important;
+  font-weight: 700;
+  text-shadow: none;
+}
+.prh-ui .prh-btn-primary:hover:not(:disabled) { background: linear-gradient(180deg, rgb(255 236 170), rgb(246 204 110)) !important; color: #000 !important; border-color: #fff3c8 !important; }
+.prh-ui .prh-btn:disabled { opacity: 0.42; box-shadow: none; }
+
+.prh-start-opts {
+  display: grid;
+  justify-items: center;
+  gap: clamp(5px, 1.4cqh, 12px);
+  width: 100%;
+}
+.prh-start-opts > .prh-progress { width: min(100%, 26em); }
+.prh-quality {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  font-size: clamp(10.5px, 1.3cqw, 17px);
+  color: rgb(218 215 207 / 0.9);
+}
+.prh-quality legend { float: left; padding: 0; margin-right: 0.3em; color: rgb(218 215 207 / 0.85); letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.86em; font-weight: 700; }
+.prh-seg { display: inline-flex; border: 1px solid rgb(246 243 237 / 0.26); border-radius: 999px; overflow: hidden; background: rgb(0 0 0 / 0.45); pointer-events: auto; }
+.prh-seg label { position: relative; display: block; cursor: pointer; }
+.prh-seg input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; pointer-events: none; }
+.prh-seg span {
+  display: block;
+  min-width: 4.4em;
+  padding: 0.38em 0.9em;
+  color: rgb(218 215 207 / 0.88);
+  text-align: center;
+  line-height: 1.2;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+.prh-seg label + label span { border-left: 1px solid rgb(246 243 237 / 0.16); }
+.prh-seg label:hover span { color: #fff; background: rgb(255 255 255 / 0.07); }
+.prh-seg input:checked + span { background: rgb(255 221 124 / 0.2); color: var(--gold); font-weight: 700; }
+.prh-seg input:focus-visible + span { outline: 2px solid var(--gold); outline-offset: -2px; border-radius: 999px; }
+.prh-q-auto { color: rgb(218 215 207 / 0.6); font-size: 0.9em; min-width: 5.5em; text-align: left; }
+
+.prh-progress { display: grid; justify-items: center; gap: 0.45em; font-size: clamp(10px, 1.25cqw, 16px); }
+.prh-progress-track { width: 100%; height: 3px; border-radius: 3px; background: rgb(255 255 255 / 0.12); overflow: hidden; }
+.prh-progress-fill { height: 100%; width: 100%; background: linear-gradient(90deg, var(--gold-deep), var(--gold)); transform: scaleX(0); transform-origin: 0 50%; transition: transform 0.25s ease-out; }
+.prh-progress-label { color: rgb(218 215 207 / 0.78); letter-spacing: 0.04em; font-variant-numeric: tabular-nums; }
+.prh-ui[data-state="ready"] .prh-progress-label { color: var(--gold); }
+
+.prh-start-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4em 1.1em;
+  color: rgb(218 215 207 / 0.6);
+  font-size: clamp(10px, 1.2cqw, 15px);
+}
+.prh-start-foot kbd { font: inherit; padding: 0.05em 0.4em; border: 1px solid rgb(246 243 237 / 0.25); border-radius: 4px; color: rgb(246 243 237 / 0.85); }
+.prh-ui .prh-linkbtn {
+  padding: 0.3em 0.2em !important;
+  border: 0 !important;
+  border-radius: 4px !important;
+  background: transparent !important;
+  color: rgb(255 221 124 / 0.9) !important;
+  font-size: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgb(255 221 124 / 0.4);
+}
+.prh-ui .prh-linkbtn:hover:not(:disabled) { color: #fff !important; background: transparent !important; }
+.prh-ui .prh-linkbtn:disabled { opacity: 0.4; }
+
+/* compact start gate (phones in portrait): quality and "skip to the title screen" share a line, progress below */
+@container prh (max-width: 599.98px) {
+  .prh-start { padding: 7px 10px; }
+  .prh-start-card { gap: 5px; }
+  .prh-kicker, .prh-start-foot .prh-keyhint { display: none; }
+  .prh-start-logo { gap: 3px; }
+  .prh-start-title { font-size: clamp(18px, 5.9cqw, 30px); }
+  .prh-start-sub { font-size: 10px; letter-spacing: 0.16em; }
+  .prh-start-line { font-size: 10.5px; line-height: 1.25; }
+  .prh-warn { font-size: 10px; line-height: 1.28; padding: 0.4em 0.65em; margin-top: 0; }
+  .prh-start-actions { gap: 6px; margin-top: 0; }
+  .prh-ui .prh-btn { font-size: 12px; min-height: 32px; padding: 0.42em 0.85em; }
+  .prh-start-opts { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 5px 10px; }
+  .prh-quality { font-size: 10px; gap: 0.35em; }
+  .prh-quality legend, .prh-q-auto { display: none; }
+  .prh-seg span { min-width: 0; padding: 0.4em 0.62em; }
+  .prh-start-opts > .prh-start-foot { order: 1; flex: 0 0 auto; font-size: 10px; }
+  .prh-start-opts > .prh-progress { order: 2; flex: 0 0 100%; display: flex; align-items: center; gap: 8px; width: auto; max-width: 300px; margin: 0 auto; font-size: 9.5px; }
+  .prh-progress-track { flex: 1 1 auto; }
+  .prh-progress-label { flex: 0 0 auto; }
+}
+@container prh (max-height: 199.98px) {
+  .prh-start-line { display: none; }
+}
+/* touch screens have no keyboard shortcuts to advertise */
+@media (hover: none) and (pointer: coarse) {
+  .prh-start-foot .prh-keyhint { display: none; }
+}
+
+/* ======================================================================== in-film controls */
+
+.prh-controls,
+.prh-actions {
+  position: absolute;
+  top: clamp(8px, 2.2cqh, 22px);
+  right: clamp(8px, 1.6cqw, 26px);
+  display: flex;
+  align-items: center;
+  gap: clamp(5px, 0.7cqw, 10px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+}
+/* Skip / Mute stay until the title has settled (main.js may enter 'title' while the menu is still drawing);
+   then the page actions fade in */
+.prh-ui[data-state="playing"] .prh-controls,
+.prh-ui[data-state="title"]:not(.is-settled) .prh-controls,
+.prh-ui[data-state="title"].is-settled .prh-actions {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.5s ease;
+}
+.prh-ui .prh-ctl {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45em;
+  min-width: 34px;
+  min-height: 32px;
+  padding: 0.42em 0.85em;
+  border: 1px solid rgb(246 243 237 / 0.26) !important;
+  border-radius: 999px !important;
+  background: rgb(6 7 9 / 0.58) !important;
+  color: rgb(246 243 237 / 0.92) !important;
+  font-size: clamp(11px, 1.1cqw, 14px);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  text-shadow: 0 1px 2px rgb(0 0 0 / 0.7);
+  transition: opacity 0.6s ease, background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+.prh-ui .prh-ctl svg { width: 1.15em; height: 1.15em; }
+.prh-ui .prh-ctl.prh-icon { padding: 0.42em; width: max(34px, 2.5em); }
+.prh-ui .prh-ctl:hover { border-color: rgb(255 221 124 / 0.8) !important; background: rgb(30 22 10 / 0.8) !important; color: #fff !important; }
+.prh-ui .prh-ctl[aria-pressed="true"] { color: var(--gold) !important; border-color: rgb(255 221 124 / 0.55) !important; }
+/* idle: the cluster fades away, Skip stays faintly visible and clickable */
+.prh-ui.is-idle .prh-ctl { opacity: 0; pointer-events: none; transition-duration: 0.9s; }
+.prh-ui.is-idle .prh-ctl.prh-skip { opacity: 0.32; pointer-events: auto; }
+
+/* page actions in the title state: the site's own pill style (blue rims), so they read as page UI, not game UI;
+   kept small and translucent so the game composition stays clean */
+.prh-ui .prh-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  min-height: 28px;
+  padding: 0.38em 0.72em;
+  border: 1px solid rgb(55 121 220 / 0.4) !important;
+  border-radius: 7px !important;
+  background: rgb(4 14 30 / 0.5) !important;
+  color: rgb(217 230 236 / 0.86) !important;
+  font-size: clamp(11px, 0.95cqw, 12.5px);
+  font-weight: 600;
+  line-height: 1.1;
+  white-space: nowrap;
+  text-shadow: 0 1px 2px rgb(0 0 0 / 0.6);
+  transition: opacity 0.6s ease, background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+.prh-ui .prh-pill svg { width: 1.05em; height: 1.05em; opacity: 0.9; }
+.prh-ui .prh-pill:hover { border-color: rgb(62 188 255 / 0.75) !important; background: rgb(8 32 70 / 0.82) !important; color: #fff !important; }
+.prh-ui .prh-pill.prh-gold { border-color: rgb(232 197 122 / 0.5) !important; color: rgb(255 231 176 / 0.95) !important; }
+.prh-ui .prh-pill.prh-icon { padding: 0.38em; width: max(28px, 2.3em); justify-content: center; }
+.prh-ui .prh-pill[aria-pressed="true"] { color: var(--gold) !important; border-color: rgb(232 197 122 / 0.5) !important; }
+.prh-ui.is-idle .prh-pill { opacity: 0.5; }
+.prh-actions .prh-short { display: none; }
+@container prh (max-width: 719.98px) {
+  .prh-actions .prh-long { display: none; }
+  .prh-actions .prh-short { display: inline; }
+}
+@container prh (max-width: 479.98px) {
+  .prh-controls, .prh-actions { top: 7px; right: 7px; gap: 5px; }
+  .prh-ui .prh-ctl { font-size: 10.5px; min-width: 28px; min-height: 28px; padding: 0.3em 0.65em; }
+  .prh-ui .prh-ctl.prh-icon { width: 28px; padding: 0.3em; }
+  .prh-actions .prh-short { display: none; }
+  .prh-ui .prh-pill { padding: 0.3em; width: 28px; min-height: 28px; justify-content: center; }
+}
+
+/* ======================================================================== error card */
+
+.prh-error {
+  position: absolute;
+  inset: 0;
+  display: none;
+  place-items: center;
+  padding: 16px;
+  background: radial-gradient(ellipse at 50% 40%, rgb(40 10 8 / 0.5), rgb(0 0 0 / 0.92) 70%), #050505;
+  pointer-events: auto;
+}
+.prh-ui[data-state="error"] .prh-error { display: grid; }
+.prh-error-card { display: grid; justify-items: center; gap: 10px; max-width: 34em; text-align: center; font-size: clamp(11px, 1.4cqw, 15px); }
+.prh-error-title { color: var(--paper); font-size: 1.45em; font-weight: 700; }
+.prh-error-msg { color: rgb(218 215 207 / 0.85); line-height: 1.45; overflow-wrap: anywhere; }
+.prh-error-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 4px; }
+
+/* ======================================================================== capture + motion */
+
+.prh-ui[data-capture="1"] .prh-start,
+.prh-ui[data-capture="1"] .prh-controls,
+.prh-ui[data-capture="1"] .prh-actions,
+.prh-ui[data-capture="1"] .prh-note,
+.prh-ui[data-capture="1"] .prh-error { display: none !important; }
+.prh-ui[data-capture="1"],
+.prh-ui[data-capture="1"] * { transition: none !important; animation: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  .prh-ui .prh-start,
+  .prh-ui .prh-controls,
+  .prh-ui .prh-actions,
+  .prh-ui .prh-note,
+  .prh-ui .prh-ctl,
+  .prh-ui .prh-pill,
+  .prh-ui .prh-btn,
+  .prh-ui .prh-progress-fill,
+  .prh-ui .prh-title.prh-skipin { transition: none !important; animation: none !important; }
+}
+
+/* Full screen: the wrapper marked data-prh-fullscreen (or the stage) fills the screen, the 16:9 stage is
+   letterboxed so the renderer keeps its aspect. */
+[data-prh-fullscreen]:fullscreen { display: grid; place-items: center; width: 100%; height: 100%; padding: 0; border: 0; border-radius: 0; background: #000; }
+[data-prh-fullscreen]:fullscreen .prh-stage { width: min(100vw, 177.7778vh); height: auto; border-radius: 0; }
+[data-prh-fullscreen]:fullscreen > :not(:has(.prh-stage)):not(.prh-stage) { display: none; }
