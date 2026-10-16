@@ -17,6 +17,7 @@ import {prepareNativeWidgetPresentation,nativeWidgetDrawView} from './native-wid
 import {prepareNativeRaceMenuInputAdvance,nativeRaceMenuInputView} from './native-race-state.js';
 import {prepareNativeRaceResultCPUDisplayUpdate} from './native-race-state.js';
 import {prepareNativeNameMenuFrame,nativeNameMenuView} from './native-name-menu-runtime.js';
+import {prepareNativeResultsMenuFrame,nativeResultsMenuView} from './native-results-menu-runtime.js';
 
 // Overlapping effect47FC, solo4800 and two-player4818 numeric entries. Ordinary
 // two-player place indices are0/1; other mode tables remain separate admission.
@@ -75,7 +76,7 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
   current=createNativeRaceState({raceWords1f94,hudWords7788,profileWordsB330,i1Words9440,aiWords3c60:Array(NATIVE_AI_STORAGE_WORDS).fill(0),
    ...(courseRuntime?{menuWordsE658:Array(21).fill(0),deviceWords4308:Array(10).fill(0),
     // Fresh web profile policy: YOU initials in slot0; no cartridge save data.
-    saveWordsB280:Array.from({length:34},(_,i)=>i===6?0x594f5500:0),nameEntryWords61c4:Array(14).fill(0)}:{}),scene:{
+    saveWordsB280:Array.from({length:34},(_,i)=>i===6?0x594f5500:0),nameEntryWords61c4:Array(14).fill(0),resultsMenuWords6d30:Array(4).fill(0)}:{}),scene:{
    players,racerCount:racers.length,primaryHumanIndex:0,secondaryHumanIndex:1,courseIndex,
    mode620:players===2?1:0,mode608:players===2?1:0,main638:1,phase650:0,simulation648:1,
    clockStopped817c:1,activity624:-1,event628:0,gameStateAb24:40,specialAb64:0,ready6fc:0,
@@ -163,6 +164,10 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
   objectMotionActive:()=>current.scene.activity624===-1,
   snapshot:()=>nativeRaceStateSnapshot(current),
   nameEntryView:()=>nativeNameMenuView(current),
+  resultsMenuView:()=>nativeResultsMenuView(current),
+  advanceResultsMenu(rawControllers){
+   const prepared=prepareNativeResultsMenuFrame(current,rawControllers);current=prepared.state;return prepared;
+  },
   advanceNameEntry(rawController){
    const prepared=prepareNativeNameMenuFrame(current,rawController);current=prepared.state;return prepared;
   },

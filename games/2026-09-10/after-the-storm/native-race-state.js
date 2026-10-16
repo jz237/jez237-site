@@ -29,6 +29,7 @@ import {prepareNativeRaceMainConfiguration} from './native-race-main-configurati
 import {prepareNativeRaceMenuInitialization} from './native-race-menu-initialization.js';
 import {prepareNativeNameEntryInitialization,prepareNativeNameEntryInput,prepareNativeNameEntryAnimationPhase,prepareNativeNameEntryRecordUpdate,prepareNativeNameEntryDisplay} from './native-name-entry.js';
 import {prepareNativeNameEntryPresentation} from './native-name-presentation.js';
+import {prepareNativeResultsMenuInitialization,prepareNativeResultsMenuInput,prepareNativeResultsMenuDisplay} from './native-results-menu.js';
 import {prepareNativeRaceRiderResourceConfiguration,prepareNativeRaceCourseResourceConfiguration} from './native-race-resource-configuration.js';
 import {prepareNativeRaceResultCodeSelection} from './native-race-body-fields.js';
 import {prepareNativePrimaryResultEstimates} from './native-primary-standings.js';
@@ -86,6 +87,7 @@ function copy(value){
  }
  if(value.deviceWords4308!==undefined)s.deviceWords4308=words(value.deviceWords4308,'deviceWords4308',10);
  if(value.nameEntryWords61c4!==undefined)s.nameEntryWords61c4=words(value.nameEntryWords61c4,'nameEntryWords61c4',14);
+ if(value.resultsMenuWords6d30!==undefined)s.resultsMenuWords6d30=words(value.resultsMenuWords6d30,'resultsMenuWords6d30',4);
  if(value.profileWordsB330!==undefined){
   if(Object.hasOwn(scene,'difficulty'))throw new RangeError('difficulty overlaps profileWordsB330');
   const count=value.profileWordsB330?.length;
@@ -110,6 +112,9 @@ function copy(value){
  * Optional nameEntryWords61c4[14] owns shared name-menu scratch802261C4..61FC;
  * it does not overlap the HUD wheel/name bytes or the i1 overlay. field700 is
  * signed32 transport of four retained name bytes; freshNameAb6c is signed16.
+ * Optional resultsMenuWords6d30[4] owns normal-results overlay phase, two
+ * signed sliding offsets and delay at802C6D30..6D40, exclusive. It is separate
+ * from the race overlay and reads the combined menu record's pressedE692.
  * Optional profileWordsB330[50 or52] owns B330..B3F8 or B330..B400 exclusive.
  * The extended view includes the four adjacent B3F8..B3FE rider halfwords;
  * no second flag owner is accepted. Older bounded leaves retain50-word input.
@@ -186,8 +191,8 @@ function apply(s,operations){
    const bits=integer(op.value,'source halfword bits',0,65535);
    if(op.field==='pressed65a'&&s.menuWordsE658!==undefined)s.menuWordsE658[0]=((s.menuWordsE658[0]&0xffff0000)|bits)>>>0;
    else s.scene[op.field]=sceneRanges[op.field][0]<0?bits<<16>>16:bits;
-  }else if(op.kind==='i1Write'||op.kind==='profileWrite'||op.kind==='nameEntryWrite'){
-   const key=op.kind==='i1Write'?'i1Words9440':op.kind==='nameEntryWrite'?'nameEntryWords61c4':'profileWordsB330';
+  }else if(op.kind==='i1Write'||op.kind==='profileWrite'||op.kind==='nameEntryWrite'||op.kind==='resultsMenuWrite'){
+   const key=op.kind==='i1Write'?'i1Words9440':op.kind==='nameEntryWrite'?'nameEntryWords61c4':op.kind==='resultsMenuWrite'?'resultsMenuWords6d30':'profileWordsB330';
    if(!s[key])throw new TypeError(`Supply retained ${key} before applying its writes`);
    const width=op.width,count=s[key].length;
    if(width!==4&&(!['profileWrite','nameEntryWrite'].includes(op.kind)||width!==2))throw new RangeError(`Invalid ${key} patch width`);
@@ -343,6 +348,26 @@ export function prepareNativeNameEntryUpdate(state,sourceViews={}){
 export function prepareNativeNameEntryRecordCommit(state,sourceViews={}){
  const next=copy(state),prepared=prepareNativeNameEntryRecordUpdate(next,sourceViews),effects=apply(next,prepared.operations);
  return freeze({...prepared,state:next,effects});
+}
+
+export function prepareNativeResultsMenuInitializationUpdate(state){
+ const next=copy(state),prepared=prepareNativeResultsMenuInitialization(next),effects=apply(next,prepared.operations);
+ return freeze({...prepared,state:next,effects});
+}
+
+/** Expand input and the numericC830 exit at their original call positions.
+ * Menu graphics/resource/audio recipes retain explicit presentation effects. */
+export function prepareNativeResultsMenuDisplayUpdate(state,sourceViews={}, {expandInput=false,expandExit=false}={}){
+ if(typeof expandInput!=='boolean'||typeof expandExit!=='boolean'||expandExit&&!expandInput)throw new TypeError('Exit expansion requires input expansion');
+ const next=copy(state),prepared=prepareNativeResultsMenuDisplay(next,sourceViews),operations=[],effects=[];
+ for(const op of prepared.operations){
+  const batch=expandInput&&op.kind==='externalCall'&&op.consumer==='802c6b34'?prepareNativeResultsMenuInput(next).operations:[op];
+  for(const entry of batch){
+   const expanded=expandExit&&entry.kind==='externalCall'&&entry.consumer==='801ec830'?prepareNativeRaceMenuInitializationUpdate(next,{consumer:entry.consumer},sourceViews).operations:[entry];
+   operations.push(...expanded);effects.push(...apply(next,expanded));
+  }
+ }
+ return freeze({...prepared,state:next,operations,effects,diagnostic:{...prepared.diagnostic,inputExpanded:expandInput,exitExpanded:expandExit}});
 }
 
 export function prepareNativeNameEntryDisplayUpdate(state,sourceViews={}, {expandInput=false,expandRecords=false}={}){

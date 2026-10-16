@@ -1,5 +1,25 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Next checkpoint — normal results control
+
+The normal-results overlay now has its own four-word phase/offset/delay owner.
+The numeric802C5800..58A8 initialization prefix, complete802C6B34 controller
+dispatcher and complete802C5B74 display caller preserve signed wrapping,
+strict slide thresholds, the combined third controller record atE692, and
+ordered drawing/input/menu calls. Direct entry skips its first input frame;
+returning from name entry slides in before accepting confirmation. Three delay
+ticks after slide-out enter the numeric801EC830 continuation at game80.
+
+The private original-ROM comparison matches3,909 cases,82,956 instructions
+and7,742 ordered operations, including complete retained owners and supplied
+display-list return heads. The browser runtime boundary also passes a complete
+name-entry exit, results slide, either-controller confirmation and continuation.
+It uses modern presentation without inventing GPU addresses. All196 focused
+name/input/results/state/host/start/widget regression tests pass. The visible
+results panel is not connected yet; full5800 matrix/viewport generation,
+5C2C graphics, the subsequent game80 loop and durable record storage remain
+outside this checkpoint. This is not a new published release.
+
 ## v2.31.0 — original name-entry preview
 
 The admitted Sunny Beach native time trial now continues from its actual
