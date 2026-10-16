@@ -76,20 +76,8 @@ export class Guide {
     this.list = el.querySelector('.jt-list');
     this.card = el.querySelector('.jt-card');
     this.render();
-    const canvas = document.getElementById('scene');
-    canvas.addEventListener('pointerdown', (e) => (this.pickStart = { x: e.clientX, y: e.clientY, t: performance.now() }), true);
-    canvas.addEventListener(
-      'pointerup',
-      (e) => {
-        const s = this.pickStart;
-        this.pickStart = null;
-        if (!s || e.button !== 0) return;
-        if (Math.hypot(e.clientX - s.x, e.clientY - s.y) > 6 || performance.now() - s.t > 450) return;
-        const d = this.pick(e.clientX, e.clientY);
-        if (d) this.select(d);
-      },
-      true,
-    );
+    // (a click on an animal in the case is a poke with the hand, touch.js: it no longer starts following
+    // it, which slid the whole case across the screen as the animal walked off; follow from the list)
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && this.follow) this.release();
     });
