@@ -1,5 +1,41 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished checkpoint — prepared Sunset Stunt finish
+
+The authored Sunset Stunt guide now completes four physical checkpoints and
+eight of nine rings at rider 0 / seed 17 / 60 Hz, finishing in 43.8 seconds.
+It slows and aims before the second ring's roller crossing, starts waypoint
+turns 15 metres ahead, and takes a shorter water corridor around the east cape.
+The third checkpoint aim remains inside its unchanged finite span. Only helm
+guidance changed: source ring/checkpoint positions, timers, water, collisions,
+scoring, and hull physics are untouched. Render resolution and terrain/model/
+texture detail are unchanged.
+
+The last checkpoint uses 1.117 seconds of the existing coast-to-checkpoint rule
+after its ten-second section expires; this is not a claim of finishing every
+section before expiry. The final ring is still missed. A regression run checks
+actual forward plane crossings inside the checkpoint spans, unmodified geometry
+and timers, bounded controls without position/score mutations, all eight ring
+awards, and the real final miss. This is bounded evidence for the prepared
+modern-hull route, not original AI or complete Stunt parity. Public Sunset still
+uses the map-based course; final-ring guidance, broader conditions, source hull
+admission and high-resolution scenery validation remain outstanding.
+
+The existing Glacier inspection test also exposed an older guide regression:
+its third section took 21.25 seconds against a 20-second allowance and it reached
+seven rings. Running the committed and edited drivers produced identical input
+hashes and outcomes, confirming this preceded the new optional bend setting.
+An eight-metre bend lead now lets Glacier's ordinary-input inspection complete
+all four sections before expiry (13.0 / 16.6 / 16.25 / 13.233 seconds), collecting
+nine rings. The existing physical-crossing, unmodified-geometry, no-wipeout test
+is retained without weakening its assertions. Other courses retain their
+existing five-metre bend lead.
+
+All 35 focused checks pass: prepared Sunset and Glacier steering/source geometry
+18, Glacier ordinary races/geography and full-resolution loading 17. Generated
+worker modules and all four import maps were refreshed. This checkpoint is
+committed locally for continued development; no publication is claimed.
+
 ## Unpublished checkpoint — source Sunset routes and player geometry
 
 Four prepared source Sunset Time Trial classes now complete three laps using
@@ -23,8 +59,8 @@ reuse checks.
 
 Additional prepared runs exercise four-rider races and2P for every class.
 They finish, but do not prove every rider's perfect traversal: Expert four-rider
-human misses1 buoy and Expert P2 misses3 before P1 finishes. The Stunt guide is
-still incomplete: its current bounded run hits6/9 rings and3/4 checkpoints,
+human misses1 buoy and Expert P2 misses3 before P1 finishes. At this earlier
+checkpoint, the Stunt guide's bounded run hit6/9 rings and3/4 checkpoints,
 then coasts to a timeout at45.633s. No limits, scoring, collision, or positions
 were changed to pass that run. Public Sunset still uses the older map-based
 course while Stunt guidance and high-resolution scenery are validated. Neither

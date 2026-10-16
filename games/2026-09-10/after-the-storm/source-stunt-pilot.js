@@ -23,7 +23,9 @@ export function sourceStuntInput(state,r){
  if(q.kind==='waypoint'&&!v.recovery){
   const dx=p.x-prev.x,dz=p.z-prev.z,length=Math.hypot(dx,dz)||1,ux=dx/length,uz=dz/length;
   const along=(r.x-prev.x)*ux+(r.z-prev.z)*uz,cross=(r.x-prev.x)*uz-(r.z-prev.z)*ux,lateral=r.vx*uz-r.vz*ux;
-  const remaining=Math.max(0,length-along),blend=clamp(1-remaining/5,0,1),nx=next.x-p.x,nz=next.z-p.z,nLength=Math.hypot(nx,nz)||1;
+  // Begin a course's authored bend before reaching its waypoint. This adjusts
+  // helm input only; the physical checkpoint/ring still decides each crossing.
+  const remaining=Math.max(0,length-along),blend=clamp(1-remaining/(control.bendLead??5),0,1),nx=next.x-p.x,nz=next.z-p.z,nLength=Math.hypot(nx,nz)||1;
   const forward=Math.max(5,r.speed),correction=clamp(-cross*2-lateral*.8,-forward*.8,forward*.8);
   desiredHeading=Math.atan2((ux*(1-blend)+nx/nLength*blend)*forward+uz*correction,(uz*(1-blend)+nz/nLength*blend)*forward-ux*correction);
  }else if(v.recovery)desiredHeading=Math.atan2(p.x-r.x-r.vx*.10,p.z-r.z-r.vz*.10);

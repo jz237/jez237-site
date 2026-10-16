@@ -47,6 +47,34 @@ test('race launch selects complete fixed-sphere order, real player shores, and f
  }}finally{restore();}
 });
 
+test('prepared Sunset Stunt guide crosses four finite checkpoints and eight rings with ordinary controls',()=>{
+ const restore=install();
+ try{
+  const s=createRace({course:getCourse('amber'),mode:'stunt',waveSeed:17}),r=s.racers[0],crossings=[];
+  const geometry=()=>JSON.stringify({rings:s.course.rings,checkpoints:s.course.checkpoints,ramps:s.course.ramps,shores:s.course.sourceShores});
+  const original=geometry();assert.deepEqual(s.course.checkpoints.map(q=>q.limit),[15,15,10,10]);
+  for(let i=0;i<6000&&s.phase!=='results';i++){
+   const index=r.stunt.nextCheckpoint,before=[r.x,r.hydro.y,r.z,r.stunt.score,r.stunt.remaining],input=aiInput(s,r);
+   assert.deepEqual([r.x,r.hydro.y,r.z,r.stunt.score,r.stunt.remaining],before,'guidance only produces controls');
+   assert.ok(Object.keys(input).every(k=>['throttle','steer','brake','dampen'].includes(k)));
+   assert.ok((input.throttle??0)>=0&&(input.throttle??0)<=1&&Math.abs(input.steer??0)<=1);
+   stepRace(s,input,1/60);
+   if(r.stunt.nextCheckpoint!==index){
+    const cp=s.course.checkpoints[index],a=(before[0]-cp.x)*cp.tx+(before[2]-cp.z)*cp.tz,b=(r.x-cp.x)*cp.tx+(r.z-cp.z)*cp.tz;
+    assert.ok(a<=0&&b>=0&&b>a,'forward physical plane crossing');
+    const f=-a/(b-a),lateral=-(before[0]+(r.x-before[0])*f-cp.x)*cp.tz+(before[2]+(r.z-before[2])*f-cp.z)*cp.tx;
+    assert.ok(Math.abs(lateral)<cp.width,'inside the original checkpoint span');
+    const elapsed=s.time-(crossings.at(-1)??0);
+    if(elapsed>cp.limit){assert.equal(index,3);assert.ok(elapsed<cp.limit+10);assert.ok(r.speed*3.6>=10,'existing coast-to-checkpoint rule');}
+    crossings.push(s.time);
+   }
+  }
+  assert.equal(s.phase,'results');assert.equal(r.dq,'');assert.equal(r.stunt.complete,true);assert.equal(crossings.length,4);
+  assert.equal(r.stunt.rings,8);assert.deepEqual(r.stunt.ringStatus,[...Array(8).fill('hit'),'miss']);
+  assert.equal(r.stunt.crashes,0);assert.equal(geometry(),original);
+ }finally{restore();}
+});
+
 test('background worker and cache keep one-player and two-player terrain separate',async()=>{
  const restore=install(),previousSelf=globalThis.self;
  try{

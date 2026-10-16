@@ -42,7 +42,7 @@ function stuntLayout(rocks,boundary){
  verificationTargets[0].navX=-95.5;for(const q of verificationTargets.slice(0,4))q.speed=13;verificationTargets[4].speed=14;verificationTargets[5].speed=16;
  for(let i=0;i<verificationTargets.length;i++){const q=verificationTargets[i];if(q.tx===undefined){const next=verificationTargets[(i+1)%verificationTargets.length],prev=verificationTargets[(i+verificationTargets.length-1)%verificationTargets.length],d=Math.hypot(next.x-prev.x,next.z-prev.z);q.tx=(next.x-prev.x)/d;q.tz=(next.z-prev.z)/d;}}
  for(const q of verificationTargets)if(q.kind==='waypoint'&&q.x>20&&q.z< -95){q.coast=true;q.radius=6;}
- return {anchors:[[startGate.x,startGate.z],...verificationTargets.map(q=>[q.x,q.z])],routeInterpolation:'linear',driver:'source-layout',verificationOnePass:true,startGate,boundary,rocks,ramps:[],rings,checkpoints,verificationTargets};
+ return {anchors:[[startGate.x,startGate.z],...verificationTargets.map(q=>[q.x,q.z])],routeInterpolation:'linear',driver:'source-layout',verificationOnePass:true,pilotControl:{bendLead:8},startGate,boundary,rocks,ramps:[],rings,checkpoints,verificationTargets};
 }
 export function createGlacierCourse(polygonDistance){
  const lands=landOutlines.map(map),boundary=map(boundaryPoints);

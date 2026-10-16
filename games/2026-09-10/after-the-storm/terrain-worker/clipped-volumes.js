@@ -1,5 +1,5 @@
-import {HULL_PROBES,hullProbeOffset} from './hull-probes.js?v=9a336afd8a17';
-import {projectSolidContact} from './solid-contact.js?v=9a336afd8a17';
+import {HULL_PROBES,hullProbeOffset} from './hull-probes.js?v=19c36a236a0c';
+import {projectSolidContact} from './solid-contact.js?v=19c36a236a0c';
 
 const dot=(a,b)=>a.reduce((sum,v,i)=>sum+v*b[i],0);
 const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
