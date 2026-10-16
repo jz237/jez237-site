@@ -204,11 +204,55 @@ def skin_material(meta, name='skin_src'):
         fh = g.math('MULTIPLY', g.math('ADD', fbead, fdome), 0.75)
         # keep the existing bump scale meaningful: fine relief is scaled to the base scale's height range
         height = g.mixf(fz, height, g.math('MULTIPLY', fh, sc.get('fine_relief', 0.8)))
+    # ---- anatomy (the 'anat' attribute, from bake_detail.py; absent = no effect): deep transverse skin
+    # folds round the joints, muscle masses with grooves between them, a row of keeled scutes down the
+    # spine, and growth rings on claws, horns and beaks
+    fmask, fphase, mmask, ridge = attr('anat')
+    L = meta['length']
+    lam = sc.get('fold_wave', max(base * 3.2, 0.011 * L))
+    warp = g.math('MULTIPLY', g.math('SUBTRACT', noise(1.0 / (lam * 3.0), detail=2), 0.5), 2.2)
+    sn = g.math('SINE', g.math('ADD', g.math('MULTIPLY', fphase, math.pi / lam), warp))
+    crease = g.math('SUBTRACT', 1.0, g.smooth(g.math('ABSOLUTE', sn), 0.0, 0.32))
+    # (the anatomy is big: it gets its own, deeper relief, `ah`, a second bump on top of the scales')
+    ah = g.math('MULTIPLY', fmask, g.math('SUBTRACT', 0.35, g.math('MULTIPLY', crease, 1.5)))
+    msz = sc.get('muscle', 0.045 * L)
+    mlump = g.smooth(noise(1.0 / msz, detail=1, rough=0.4), 0.3, 0.75)
+    vm = vor(msz * 0.9, 'DISTANCE_TO_EDGE', 0.9)
+    mgroove = g.math('SUBTRACT', 1.0, g.smooth(vm.outputs['Distance'], 0.0, 0.06))
+    mgroove = g.math('MULTIPLY', mgroove, g.smooth(noise(1.0 / (msz * 1.6), detail=1), 0.5, 0.65))
+    ah = g.math('ADD', ah, g.math('MULTIPLY', mmask, g.math('SUBTRACT', g.math('MULTIPLY', mlump, 1.6), g.math('MULTIPLY', mgroove, 0.6))))
+    rsz = sc.get('ridge', feat * 2.4)
+    vr = vor(rsz, 'DISTANCE_TO_EDGE', 0.6)
+    scute = g.smooth(vr.outputs['Distance'], 0.0, 0.2)
+    vrc = vor(rsz, 'F1', 0.6)
+    keel = g.math('SUBTRACT', 1.0, g.smooth(vrc.outputs['Distance'], 0.0, 0.45))
+    ah = g.math('ADD', ah, g.math('MULTIPLY', ridge, g.math('ADD', g.math('MULTIPLY', scute, 0.6), g.math('MULTIPLY', keel, 0.9))))
+    height = g.math('MULTIPLY', height, g.math('SUBTRACT', 1.0, g.math('MULTIPLY', ridge, 0.6)))
+    rings = g.node('ShaderNodeTexWave', wave_type='BANDS', bands_direction='Z', wave_profile='SAW')
+    g.link(obj, rings.inputs['Vector'])
+    rings.inputs['Scale'].default_value = 1.0 / max(base * 0.5, 0.004)
+    rings.inputs['Distortion'].default_value = 2.0
+    height = g.math('ADD', height, g.math('MULTIPLY', g.math('MULTIPLY', rings.outputs['Fac'], g.math('ADD', kerat, claw, clamp=True)), 0.35))
+    # the crevices, for darkening the colour (baked as emission by bake_detail.py; strength 0 otherwise)
+    cav = g.math('ADD', g.math('MULTIPLY', fmask, crease), g.math('MULTIPLY', g.math('MULTIPLY', mmask, mgroove), 0.15), clamp=True)
+    # the hollows between muscle masses shade a little darker, so they read from a distance
+    cav = g.math('ADD', cav, g.math('MULTIPLY', g.math('MULTIPLY', mmask, g.math('SUBTRACT', 1.0, mlump)), 0.3), clamp=True)
+    cav = g.math('ADD', cav, g.math('MULTIPLY', g.math('MULTIPLY', ridge, g.math('SUBTRACT', 1.0, scute)), 0.6), clamp=True)
+    cavc = g.node('ShaderNodeCombineColor')
+    for k in range(3):
+        g.link(cav, cavc.inputs[k])
+    g.link(cavc.outputs[0], bsdf.inputs['Emission Color'])
+    bsdf.inputs['Emission Strength'].default_value = 0.0
     bump = g.node('ShaderNodeBump')
     bump.inputs['Strength'].default_value = sc.get('bump', 0.85)
     bump.inputs['Distance'].default_value = base * 0.3
     g.link(height, bump.inputs['Height'])
-    g.link(bump.outputs['Normal'], bsdf.inputs['Normal'])
+    bump2 = g.node('ShaderNodeBump')
+    bump2.inputs['Strength'].default_value = 1.0
+    bump2.inputs['Distance'].default_value = sc.get('anat_depth', 0.0035) * L
+    g.link(ah, bump2.inputs['Height'])
+    g.link(bump.outputs['Normal'], bump2.inputs['Normal'])
+    g.link(bump2.outputs['Normal'], bsdf.inputs['Normal'])
 
     # ---- colour: countershading back -> flank -> belly
     cs = meta.get('countershade', (-0.88, -0.5, -0.25, 0.4))  # belly->flank, flank->back ramps (dors units)
