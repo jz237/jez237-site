@@ -1,3 +1,4 @@
+import {standingsTable,standingsKey,STANDINGS_KEYS,type StandingRow} from './standings-view';
 import {pursuitTerrainClear} from './pursuit-corridor';
 import {DERBY_FORMATS,readDerbyFormat,derbyEndReason,derbyRecordPrefix,derbyWreckStatus} from './derby-policy';
 import {globalScoresButton} from './global-scoring-ui';
@@ -159,6 +160,7 @@ try {
 const settings = {
   quality: graphicsChoice(saved.quality),
   performance: saved.performance === true,
+  standingsKey: standingsKey(saved.standingsKey),
   engine: saved.engine ?? 0.72,
   effects: saved.effects ?? 0.8,
   ambience: saved.ambience ?? 0.45,
@@ -820,9 +822,22 @@ async function start(watch=demo) {
     preparingEvent=false;
   }
 }
+let standingsExpanded=false,standingsUpdated=-Infinity;
+function currentStandings():StandingRow[]{
+ const ranking=online?.active?online.network.snapshot?.ranking.map(id=>cars.find(c=>c.id===id)).filter((c):c is Vehicle=>!!c)??cars:mode==='derby'?derbyRanking():rankRace();
+ return ranking.map(c=>({id:c.id,name:DEFINITIONS[c.kind].name+' #'+(c.id+1),health:c.health,player:!demo&&isPlayer(c),followed:demo&&c.id===director.followed,detail:pursuit?(pursuit.role(c.id)==='runner'?'RUNNER':'CHASER'):mode==='derby'?(scoreDerby()?combat.points(c.id)+' PTS':c.health>0?'RUNNING':'OUT'):c.finished?formatTime(c.finishTime):waypointRace?'GATES '+c.passed:'LAP '+Math.min(raceLaps(),c.lap)}));
+}
+function refreshStandings(force=false){
+ const panel=document.getElementById('live-standings');if(!panel||!force&&clock-standingsUpdated<.25)return;standingsUpdated=clock;
+ panel.classList.toggle('expanded',standingsExpanded);
+ const button=panel.querySelector<HTMLButtonElement>('button')!;button.textContent=(standingsExpanded?'COLLAPSE':'STANDINGS')+' · '+STANDINGS_KEYS[settings.standingsKey];button.setAttribute('aria-expanded',String(standingsExpanded));
+ const body=panel.querySelector('.standings-body')!,html=standingsTable(currentStandings(),standingsExpanded);if(body.innerHTML!==html)body.innerHTML=html;
+}
+function toggleStandings(){standingsExpanded=!standingsExpanded;refreshStandings(true);}
 function hud() {
   ui.innerHTML = `<div class="hud"><div class="hud-top"><div><div class="eyebrow">BLACKRIDGE / ${mode === 'race'||mode==='playground'&&activeVenue!==quarryVenue ? activeVenue.course.id==='quarry-v1'?'CIRCUIT 01':activeVenue.course.name.toUpperCase() : activeVenue.arenaId?ARENA_NAMES[activeVenue.arenaId].toUpperCase():'QUARRY FLOOR'}</div><div class="hud-title">${eventLabel()}</div></div><div class="event-stats"><div><span id="event-label">${mode === 'derby' ? 'REMAINING' : mode === 'race' ? 'POSITION' : 'FREE DRIVE'}</span><strong id="event-value">${cars.length} / ${cars.length}</strong></div><div><span>${mode === 'race' ? 'LAP / TIME' : mode === 'derby' ? 'TIME LEFT' : 'SESSION'}</span><strong id="time-value">05:00</strong></div><button class="small-button" id="pause">Ⅱ</button></div></div><canvas class="minimap" id="map" width="400" height="400"></canvas><div class="status"><div class="status-row"><span>${DEFINITIONS[kind].name}</span><b id="health">100%</b></div><div class="condition"><b id="health-bar" style="width:100%"></b></div><div class="subsystems"><span id="engine-status">ENGINE OK</span><span id="steer-status">STEERING OK</span><span id="surface">GRAVEL</span></div><div class="tyre-status" id="tyre-status"></div><div class="tyre-status" id="engine-restart"></div></div><div class="speed"><strong id="speed">0</strong> <span>KM/H</span><small id="gear">GEAR 1 &nbsp; / &nbsp; 850 RPM</small><div class="rpm"><b id="rpm-bar"></b></div></div><div class="controls"><kbd>${['throttle','reverse','left','right'].map(a=>keyLabel(drivingControls.keys[a as 'throttle'][0])).join(' ')}</kbd> DRIVE <kbd>${keyLabel(drivingControls.keys.handbrake[0])}</kbd> HANDBRAKE <kbd>C</kbd> CAMERA ${pursuit?'NO RECOVERIES':'<kbd>R</kbd> RECOVER'} ${drivingControls.transmission!=='automatic'&&(!online?.active||online.network.snapshot?.transmissionSupport)?`<kbd>${keyLabel(drivingControls.keys.shiftDown[0])} / ${keyLabel(drivingControls.keys.shiftUp[0])}</kbd> SHIFT${drivingControls.transmission==='clutch'?` <kbd>${keyLabel(drivingControls.keys.clutch[0])}</kbd> CLUTCH`:''}`:''} ${mode === 'playground' && !online?.active ? '<kbd>I</kbd> INSPECT <kbd>T</kbd> TRAFFIC' : ''}</div><div class="center-message" id="countdown"></div><div id="toast"></div></div>`;
   document.querySelector<HTMLButtonElement>('#pause')!.onclick = () => pause();
+  if(mode!=='playground'&&!activeTimeTrial){ui.querySelector('.hud')!.insertAdjacentHTML('beforeend','<section id="live-standings" class="live-standings" aria-label="Live standings"><button type="button" aria-expanded="false" aria-controls="standings-body"></button><div id="standings-body" class="standings-body"></div></section>');ui.querySelector<HTMLButtonElement>('#live-standings button')!.onclick=toggleStandings;refreshStandings(true);}
   const instruments=document.createElement('canvas');instruments.id='instruments';instruments.width=400;instruments.height=450;instruments.className='instruments';ui.querySelector('.hud')!.append(instruments);
   if(scoreDerby())ui.querySelector('.hud-title')!.textContent=scoreElimination()?'SCORE DERBY · NO RESPAWNS':'SCORE DERBY';
   if(mode==='race'&&customEvent())ui.querySelector('.hud-title')!.textContent=waypointRace?`${eventLabel()} · ${RACE_NAMES[raceFormat()].toUpperCase()}`:`${eventLabel()} · ${eventOptions.direction.toUpperCase()}`;
@@ -863,6 +878,7 @@ function toast(t: string, duration = 3) {
 function updateHud() {
   if (!['playing', 'countdown'].includes(state)&&!(demo&&state==='result')) return;
   const player = demo?(cars.find(c=>c.id===director.followed)??cars[0]):cars[0];
+  refreshStandings();
   if(demo){text('follow-name',`#${player.id+1} ${DEFINITIONS[player.kind].name}`);const view=document.querySelector<HTMLSelectElement>('#demo-camera');if(view)view.value=director.view;const follow=document.querySelector<HTMLSelectElement>('#demo-car');if(follow)follow.value=director.manual?String(director.followed):'auto';}
   if(pursuit)text('pursuit-status',`${pursuit.role(player.id)==='runner'?'RUNNER · ESCAPE':'PURSUER · CATCH THE RUNNER'} · ${cars.filter(c=>pursuit!.role(c.id)==='chaser'&&c.health>0).length} pursuers · ${formatTime(Math.max(0,pursuit.snapshot().rules.duration-elapsed))} left`);
   text('health', Math.ceil(player.health) + '%');
@@ -961,6 +977,9 @@ function pause(settingsOnly = false) {
   sound.pause(true);
   orbit.enabled = false;
   ui.insertAdjacentHTML('beforeend', `<div class="overlay" id="overlay"><div class="dialog"><div class="eyebrow">BLACKRIDGE MOTOR CLUB</div><h2>${settingsOnly ? 'SETTINGS' : 'TAKE A BREATHER'}</h2><div class="settings-row"><label for="quality">Graphics</label><select id="quality"><option value="auto">Auto (recommended)</option><option value="ultra">Ultra</option><option value="high">High</option><option value="medium">Medium</option></select></div><p>Auto adjusts graphics for smoother driving. Car counts, physics and collision damage stay the same.</p>${(['engine', 'effects', 'ambience'] as const).map((k) => `<div class="settings-row"><label for="${k}-volume">${k[0].toUpperCase() + k.slice(1)}</label><input id="${k}-volume" type="range" min="0" max="1" step=".05" value="${settings[k]}"></div>`).join('')}<div class="settings-row"><label for="performance">Performance display</label><input type="checkbox" id="performance" ${settings.performance?'checked':''}></div><p>${demo?'C camera · [ / ] choose car<br>Space / Escape pause · M mute · F fullscreen<br>Free orbit: drag to look around, scroll to zoom':"Driving keys and gamepad: expand controls below<br>C camera · R recover · M mute · F fullscreen · Escape pause"+(mode === 'playground' ? '<br>I inspect wreck · T toggle traffic · R repair' : '')}</p><button class="primary" id="resume">${resumeState === 'menu' ? 'BACK' : 'RESUME'}</button>${resumeState !== 'menu' ? '<button class="small-button" id="restart">RESTART EVENT</button><button class="small-button" id="main-menu">RETURN TO QUARRY</button>' : ''}</div></div>`);
+  if(resumeState!=='menu'&&mode!=='playground'&&cars.length>1)ui.querySelector('#overlay h2')!.insertAdjacentHTML('afterend','<details class="pause-standings" open><summary>CURRENT STANDINGS</summary>'+standingsTable(currentStandings(),true)+'</details>');
+  ui.querySelector('#overlay .settings-row')!.insertAdjacentHTML('beforebegin',`<div class="settings-row"><label for="standings-key">Expand standings</label><select id="standings-key">${Object.entries(STANDINGS_KEYS).map(([key,label])=>`<option value="${key}">${label}</option>`).join('')}</select></div>`);
+  const standingsSelect=ui.querySelector<HTMLSelectElement>('#standings-key')!;standingsSelect.value=settings.standingsKey;standingsSelect.onchange=()=>{settings.standingsKey=standingsKey(standingsSelect.value);persist();refreshStandings(true);};
   document.querySelector<HTMLInputElement>('#performance')!.onchange=e=>{settings.performance=(e.target as HTMLInputElement).checked;persist();};
   const quality = document.querySelector<HTMLSelectElement>('#quality')!;
   quality.value = settings.quality;
@@ -1596,6 +1615,7 @@ addEventListener('keydown', (e) => {
   if(garageOpen){if(e.code==='Escape')ui.querySelector<HTMLButtonElement>('#garage-close')?.click();return;}
   if(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement || e.target instanceof HTMLTextAreaElement)return;
   if(state==='lobby')return;
+  if(e.code===settings.standingsKey&&['playing','countdown'].includes(state)&&document.getElementById('live-standings')){e.preventDefault();if(!e.repeat)toggleStandings();return;}
   if (
     (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)||Object.values(drivingControls.keys).some(binding=>binding.includes(e.code)))
   )
