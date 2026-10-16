@@ -537,8 +537,8 @@
     },
     {
       "path": "licenses/CREDITS.md",
-      "bytes": 25292,
-      "sha256": "edc7b8f7b1c9871bb76b7033f4dec62e9057c2e982c1a48147e005c6cf313cfe"
+      "bytes": 25420,
+      "sha256": "56b63befa0b5cde68af87b03a7e4797735ed490fa9321488222442d324567970"
     },
     {
       "path": "licenses/CarConcept-LICENSE.md",
@@ -564,6 +564,11 @@
       "path": "licenses/MARTEN-1600.md",
       "bytes": 644,
       "sha256": "ae05a9b78502dc3429f4c525e0e5ebe3bf1086d5c55ab2139a4eb95c874396bc"
+    },
+    {
+      "path": "licenses/MORROW-420.md",
+      "bytes": 380,
+      "sha256": "bf23d62c9dd6be7c0a77f772437394d8f70da56fcf65b03185ffc782cbbf4b63"
     },
     {
       "path": "licenses/RAPIER-LICENSE.txt",
@@ -814,6 +819,11 @@
       "path": "models/marten.glb",
       "bytes": 3035168,
       "sha256": "5a31202fa007a82c2a4eb133fd20eb0d0a1971bd5ad948eab3406fbf7df3ebdd"
+    },
+    {
+      "path": "models/morrow.glb",
+      "bytes": 3377352,
+      "sha256": "a3d00380de19cc5a64db04232ffab6a2bb5da068d5b6304b9d12ea82d2886f10"
     },
     {
       "path": "models/muscle.glb",
