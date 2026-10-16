@@ -2263,3 +2263,24 @@ and modes, result/menu bodies, persistence, shared RNG/camera special branches,
 force calibration with the authored anatomy and the existing course failures
 still require work. Native preview admission and competitive-record exclusion
 remain unchanged; global solo scoring and online two-player play stay available.
+
+## Shoreline surface overlap — October 15, 2026 (v2.24.0)
+
+A reported online view showed striped sand, flat pale patches and a broken
+boundary through the water. The course renderer drew the finite contact floors
+as a second mesh over the photographic terrain, which already sampled those
+same floors. Coplanar surfaces with different materials competed in the depth
+buffer, including the underwater refraction image.
+
+The textured terrain now owns that visible surface. The duplicate floor draw
+is removed; source floor arrays, physical contacts, height queries and source
+water simulation are unchanged. Glacier's separate ice sheets and vertical
+contact walls retain their own rendering. Sunny retains all 231 contact
+triangles while removing 149,887 duplicated tessellated render triangles.
+
+Fresh local online browsers establish WebRTC, drive and steer independently,
+and render clean shore and seabed views at High1280x720 on both players. The
+moving view was visually checked; only the development favicon returns404.
+This fixes rendering overlap without reducing water or terrain resolution.
+The 48 focused surface/contact checks pass. The complete suite remains at
+2,109 passes out of 2,120 tests, with the same eleven existing failures.
