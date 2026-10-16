@@ -544,9 +544,9 @@ export async function loadWorld({ renderer, scene, quality = 'high', onProgress,
     shared.uReflOn.value = reflection.enabled ? 1 : 0;
   }
 
-  // the world adds itself to the scene (the lead may re-parent world.root); warm the shaders
+  // the world adds itself to the scene (the lead may re-parent world.root). No shader warm-up here: main.js compiles
+  // everything once all lights exist (a compile now built programs for the wrong light count and output target)
   scene.add(root);
-  try { renderer.compile(scene, new THREE.PerspectiveCamera(60, 16 / 9, 0.1, 1000)); } catch (e) { /* optional */ }
   if (onProgress) onProgress(1);
 
   const stats = { kitTris, groundTris, instances: merged.placed, meshes: kitGroup.children.length + groundSrc.length + 2,

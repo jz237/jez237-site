@@ -227,7 +227,7 @@ export function createAudio({ baseUrl, events = null, camera = null, anchors: an
       const OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
       const decs = {};
       const decoderFor = (rate) => (decs[rate] ||= new OAC(1, 1, rate)); // band-limited beds decode at lower rates (memory)
-      const extP = resolveExternal(events || {});
+      const extP = Promise.resolve(events).then((ev) => resolveExternal(ev || {})); // events may be a promise
       await pool(ids, 6, async (id) => {
         const a = manifest.assets[id];
         const r = await fetch(base + a.file);

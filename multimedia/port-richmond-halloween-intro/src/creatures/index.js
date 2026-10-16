@@ -86,13 +86,14 @@ export async function loadCast({ scene, baseUrl = 'assets/creatures/', quality =
   }
   const unique = [...new Set(Object.values(files))];
   let done = 0;
-  for (const f of unique) {
+  // all files at once (downloads overlap each other's Draco/texture decoding); the actors are built below in the fixed
+  // CAST order, so the scene is the same whichever file finishes first
+  await Promise.all(unique.map(async (f) => {
     const g = await loader.loadAsync(baseUrl + f);
     dressCreature(g.scene, { normalScale: quality === 'low' ? 0.7 : 1.0 });
     cache.set(f, g);
-    done++;
-    onProgress && onProgress(done / unique.length);
-  }
+    onProgress && onProgress(++done / unique.length);
+  }));
   const group = new THREE.Group();
   group.name = 'Cast';
   scene.add(group);

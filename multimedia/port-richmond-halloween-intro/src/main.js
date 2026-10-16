@@ -66,15 +66,40 @@ function stageSize() {
 }
 
 // ---------------------------------------------------------------- loading
-const progress = { world: 0, props: 0, cast: 0, audio: 0 };
+// Everything downloads at once: the world, the cast and the sound start together, the props as soon as the world
+// exists. Then every shader program is compiled in one parallel batch (compileAll). Bar: 75 % loading, 25 % compiling.
+const progress = { world: 0, props: 0, cast: 0, audio: 0, compile: 0 };
 let ui = null;
 function reportProgress() {
-  const p = progress.world * 0.45 + progress.props * 0.2 + progress.cast * 0.25 + progress.audio * 0.1;
-  ui && ui.setProgress(p, p < 0.99 ? 'Loading Witte St…' : 'Warming up…');
+  const load = progress.world * 0.45 + progress.props * 0.2 + progress.cast * 0.25 + progress.audio * 0.1;
+  ui && ui.setProgress(load * 0.75 + progress.compile * 0.25, load < 0.99 ? 'Loading Witte St…' : 'Warming up…');
 }
 async function optional(path) {
   try { return await import(path); } catch (e) { console.warn('[prh] optional module missing', path, e.message); return null; }
 }
+
+const worldP = import('./world/index.js').then((m) => m.loadWorld({ renderer, scene, quality, lightPool: pool, onProgress: (p) => { progress.world = p; reportProgress(); } }));
+const propsModP = optional('./props/index.js');
+const castP = loadCast({ scene, quality, onProgress: (p) => { progress.cast = p; reportProgress(); } });
+// the sound fetches + decodes now; its event lists come from the shots/choreography, which exist only once everything
+// is loaded, so they are handed over later (giveAudioEvents) and the sound's load waits for them only at its very end
+let giveAudioEvents = null;
+const audioEvents = new Promise((resolve) => { giveAudioEvents = resolve; });
+const audioP = (async () => {
+  if (CAPTURE && qs.get('audio') !== '1') return null; // capture pages load sound only when asked (offline MP4 render)
+  const audioMod = await optional('./audio/index.js');
+  if (!audioMod) return null;
+  const a = audioMod.createAudio({
+    baseUrl: 'assets/audio/',
+    events: audioEvents,
+    camera: (t) => shots.cameraAt(t),
+    space: (t) => shots.spaceAt(t),
+  });
+  try {
+    await a.load((p) => { progress.audio = p; reportProgress(); });
+    return a;
+  } catch (e) { console.warn('[prh] audio failed to load; the film will run silently', e); return null; }
+})();
 
 const uiMod = await optional('./ui/ui.js'); // in capture mode ui.js draws only the title overlay, from t (for the MP4)
 let audio = null;
@@ -94,14 +119,14 @@ if (uiMod && uiMod.createUI) {
   });
   ui.setState('loading');
   ui.setQuality && ui.setQuality(qs.get('quality') || 'auto');
+  reportProgress();
 }
 
-const worldMod = await import('./world/index.js');
-const world = await worldMod.loadWorld({ renderer, scene, quality, lightPool: pool, onProgress: (p) => { progress.world = p; reportProgress(); } });
-const propsMod = await optional('./props/index.js');
+const world = await worldP;
+const propsMod = await propsModP;
 const props = propsMod ? await propsMod.loadProps({ renderer, scene, world, quality, lightPool: pool, onProgress: (p) => { progress.props = p; reportProgress(); } }) : null;
 progress.props = 1;
-const cast = await loadCast({ scene, quality, onProgress: (p) => { progress.cast = p; reportProgress(); } });
+const cast = await castP;
 // background extras for the street waking up: skeleton-aware clones of loaded actors (shared geometry + materials),
 // driven by choreo.js (extra0..). Low tier gets fewer.
 {
@@ -132,21 +157,9 @@ window.__hot = async (v = Date.now()) => {
 };
 props && props.api && props.api.rain && props.api.rain.setInside && props.api.rain.setInside((t) => shots.spaceAt(t) !== 'exterior');
 
-if (!CAPTURE || qs.get('audio') === '1') { // capture pages load sound only when asked (offline MP4 render)
-  const audioMod = await optional('./audio/index.js');
-  if (audioMod) {
-    audio = audioMod.createAudio({
-      baseUrl: 'assets/audio/',
-      events: { footsteps: shots.footsteps, breaths: shots.breaths, breathTimesFacepaint: choreo.breathTimesFacepaint },
-      camera: (t) => shots.cameraAt(t),
-      space: (t) => shots.spaceAt(t),
-    });
-    try {
-      await audio.load((p) => { progress.audio = p; reportProgress(); });
-      audio.setAnchors && audio.setAnchors(props ? props.anchors : {}, world.anchors);
-    } catch (e) { console.warn('[prh] audio failed to load; the film will run silently', e); audio = null; }
-  }
-}
+giveAudioEvents({ footsteps: shots.footsteps, breaths: shots.breaths, breathTimesFacepaint: choreo.breathTimesFacepaint });
+audio = await audioP;
+if (audio && audio.setAnchors) audio.setAnchors(props ? props.anchors : {}, world.anchors);
 progress.audio = 1;
 reportProgress();
 
@@ -191,10 +204,46 @@ function renderAt(t) {
 
 // the family photo's portrait loads asynchronously: wait for it (bounded) so no frame shows the placeholder
 try { const pr = props && props.api && props.api.room3609 && props.api.room3609.photoReady; if (pr) await Promise.race([pr, new Promise((r) => setTimeout(r, 8000))]); } catch (e) { /* placeholder stays */ }
-// warm shaders + upload textures before the viewer can press start
-renderer.compile(scene, camera);
-// one render per shot (start + middle) so every material/light/shadow variant compiles now, not mid-film (a first
-// appearance can cost ~0.5 s of shader compilation = a visible hitch in real-time playback)
+// Compile every shader program the film uses in one batch before the start card. Left to itself three.js compiles a
+// program at a material's first draw and waits for it, one after another: ~250 programs x ~0.3 s on Windows (ANGLE/D3D)
+// was most of a first visit's load time. compile() on the whole scene issues them all at once, so the browser compiles
+// them in parallel (KHR_parallel_shader_compile), then we wait until all report ready. Programs depend on the state they
+// are compiled in: the lights are already final (fixed pool), objects hidden by shot logic are shown for the compile only
+// (lights keep their real visibility), and a float render target is bound because the scene only ever renders into the
+// post chain's targets (linear output, tone mapping in the post): an unbound compile builds variants nothing draws.
+async function compileAll(onProgress) {
+  const lit = new Set(), shown = [], unlit = [];
+  scene.traverseVisible((o) => { if (o.isLight) lit.add(o); });
+  scene.traverse((o) => { if (!o.visible && !o.isLight) { o.visible = true; shown.push(o); } });
+  scene.traverseVisible((o) => { if (o.isLight && !lit.has(o)) { o.visible = false; unlit.push(o); } });
+  const rt = new THREE.WebGLRenderTarget(4, 4, { type: THREE.HalfFloatType });
+  const prevRT = renderer.getRenderTarget();
+  try {
+    renderer.setRenderTarget(rt);
+    renderer.compile(scene, camera);
+  } catch (e) {
+    console.warn('[prh] batch shader compile failed; programs will compile at first draw', e);
+  } finally {
+    renderer.setRenderTarget(prevRT);
+    rt.dispose();
+    for (const o of shown) o.visible = false;
+    for (const l of unlit) l.visible = true;
+  }
+  const programs = (renderer.info.programs || []).slice();
+  const t0 = performance.now();
+  await new Promise((resolve) => {
+    const poll = () => {
+      let ready = 0;
+      for (const p of programs) if (!p.isReady || p.isReady()) ready++;
+      onProgress && onProgress(programs.length ? ready / programs.length : 1);
+      if (ready >= programs.length || performance.now() - t0 > 60000) resolve(); else setTimeout(poll, 20);
+    };
+    poll();
+  });
+}
+await compileAll((f) => { progress.compile = f; reportProgress(); });
+// then one render per shot (start + middle) for what the batch can't know: shadow/override/post programs, texture
+// uploads, variants a shot switches on (a first appearance can cost ~0.5 s = a visible hitch in real-time playback)
 const WARM_LATER = [13.5, 15, 18, 21, 24, 26, 28.7, 29.6, 30.5, 32, 34.5, 38, 42, 44, 46.5, 47.9, 49, 50.5, 52.5,
   54.5, 56, 57.8, 58.6, 60, 62, 63.5, 65, 66.5, 69, 72, 75, 76.5, 77.5, 79];
 for (const t of [0.5, 3, 6, 11, 82]) renderAt(t); // the opening shots and the title view: before the start card
