@@ -20,6 +20,16 @@ test('higher-class harbour passage is open from the start with a navigable floor
  }
  assert.equal(passageOpening(getCourse('port',0).passage,70),0);
 });
+
+test('rival contact cannot pin the player inside the Port Blue tunnel wall',()=>{
+ const s=createRace({course:getCourse('port',1),difficulty:1}),r=s.racers[0];
+ for(let i=0;i<4500&&r.next<14;i++){
+  stepRace(s,aiInput(s,r),1/60);
+  assert.equal(passageCollision(s.course.passage,r.x,r.hydro.y,r.z,s.time,s.passageOpenedAt),false,'rider separation must preserve tunnel clearance');
+ }
+ assert.ok(r.next>=14,'ordinary helm input passes the bend where a rival previously pinned the player');
+ assert.equal(r.misses,0);assert.equal(r.dq,'');
+});
 test('shortcut checkpoint planes remain ordered in Expert and Reverse',()=>{
  for(const id of ['citadel','port'])for(const difficulty of [1,2,3]){
   const c=getCourse(id,difficulty),s=createRace({course:c}),p=c.passage;s.time=80;s.passageOpenedAt=60;
