@@ -1,3 +1,4 @@
+import {prepareNativeRaceFadeUpdate} from './native-race-fade-update.js';
 // Shared source race/HUD storage. Decoded leaf views are temporary, and all
 // overlapping records, tables, timers and flags return to these same owners.
 import {createNativeRaceResetState,prepareNativeRaceReset} from './native-race-reset.js';
@@ -200,6 +201,12 @@ export function prepareNativeRaceStateOperations(state,operations){
 export function prepareNativeRaceFadePropertiesUpdate(state,input){
  const next=copy(state),prepared=prepareNativeRaceFadePropertiesInitialization(input),effects=apply(next,prepared.operations);
  return freeze({...prepared,state:next,effects});
+}
+/** Advance the existing fade owner once; matrix/audio consumers remain effects. */
+export function prepareNativeRaceFadeAdvance(state,input={}){
+ const next=copy(state),prepared=prepareNativeRaceFadeUpdate({hudWords7788:next.hudWords7788,
+  main638:next.scene.main638,fadeTemplateWords6cc0:input.fadeTemplateWords6cc0,frameBufferBase:input.frameBufferBase});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
 }
 export function prepareNativeRaceFadeSlotsResetUpdate(state,input){
  const next=copy(state),prepared=prepareNativeRaceFadeSlotsReset(input),effects=apply(next,prepared.operations);

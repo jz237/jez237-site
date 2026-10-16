@@ -2630,3 +2630,40 @@ durations. The 28 focused music, audio and online tests pass. The full suite
 (before two additional focused tests) reports 2,172 passes and the same eleven
 pre-existing course/gameplay failures out of 2,183 tests. Native result work
 above remains opt-in; this release does not claim complete gameplay parity.
+
+
+## Original fade progression - October 16, 2026
+
+The earlier native result checkpoints through unfinished-rider estimates were
+included as source in published v2.25.0. Their historical unpublished notes
+above describe the state at each checkpoint; ordinary result scheduling remains
+unfinished and those routines are still opt-in.
+
+New native-race-fade-update.js reconstructs 1E71A8 and the numeric state changes
+of 7280/73A0/74BC/76C0. prepareNativeRaceFadeAdvance commits them to the existing
+canonical HUD owner, preserving signed halfword wrap, alpha float32 ordering,
+curtain position thresholds, alternating frame selection and the original
+one-update completion pulse. Completion restores the supplied nine-word
+template before writing the pulse. A following inactive update clears it.
+Unknown types preserve storage except for that required pulse clear.
+
+The existing EVO X2 Ghidra export of 800922E4 establishes its call after CPU
+world/overlay updates and before the separate display/results dispatcher.
+It must not be advanced from interpolated rendering. The curtain projection/
+view matrix calls (including their HUD8A34 perspective-normal write) and sound
+remain explicit ordered effects requiring their own consumers. Their execution
+and high-resolution curtain rendering are not claimed by this checkpoint.
+Nonfinite division inputs reject without mutating caller state.
+
+Private execution of the original routine and all four numeric callees matches
+655 prepared cases, 31,222 counted instructions, 2,671 ordered writes and all
+944,510 compared HUD words. Graphics matrix and audio calls are intercepted
+boundaries with exact argument comparison. Canonical transport also preserves
+all other state owners and supplied inputs. Five new tests cover complete fade
+sequences, the real tie-result completion consumer, curtain thresholds/calls,
+signed wrap and atomic invalid-input rejection. All 124 selected fade, main,
+state, result, launch, host and world regression tests pass.
+
+This fade checkpoint is local. Complete normal post-race world/menu scheduling,
+source AI initialization/history, presentation effects and native persistence
+remain required before normal driven finishes can use the full source sequence.
