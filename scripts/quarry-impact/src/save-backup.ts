@@ -1,3 +1,4 @@
+import {validCameraSettings} from './camera-settings';
 import {PROFILE_KEY,readProfile} from './progression';
 import {GARAGE_KEY,readGarage} from './garage';
 import {CONTROLS_KEY,readControls} from './driving-controls';
@@ -21,6 +22,7 @@ function normalize(key:string,text:string):string{
  if(!object(raw))throw Error(`Invalid saved data: ${key}`);
  if(key==='quarry-impact-v1'){
   const out:Record<string,unknown>={};
+  if(raw.camera!==undefined){if(!validCameraSettings(raw.camera))throw Error('Invalid camera setting.');out.camera={...raw.camera};}
   if(raw.quality!==undefined){if(!['auto','ultra','high','medium'].includes(raw.quality))throw Error('Invalid graphics setting.');out.quality=raw.quality;}
   if(raw.standingsKey!==undefined){if(raw.standingsKey!=='Tab'&&raw.standingsKey!=='Backquote')throw Error('Invalid standings shortcut.');out.standingsKey=raw.standingsKey;}
   if(raw.performance!==undefined){if(typeof raw.performance!=='boolean')throw Error('Invalid performance setting.');out.performance=raw.performance;}

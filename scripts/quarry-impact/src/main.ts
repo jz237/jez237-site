@@ -1,3 +1,4 @@
+import {readCameraSettings,playerChaseComposition,mountCameraSettings} from './camera-settings';
 import {dashboardComposition,nextDrivingCamera,DRIVING_CAMERA_LABELS,type DrivingCamera} from './driving-camera';
 import {DerbyEventFeed,derbyFeedMarkup} from './derby-event-feed';
 import {standingsTable,standingsKey,STANDINGS_KEYS,type StandingRow} from './standings-view';
@@ -162,6 +163,7 @@ try {
 const settings = {
   quality: graphicsChoice(saved.quality),
   performance: saved.performance === true,
+  camera: readCameraSettings(saved.camera),
   standingsKey: standingsKey(saved.standingsKey),
   engine: saved.engine ?? 0.72,
   effects: saved.effects ?? 0.8,
@@ -1005,6 +1007,7 @@ function pause(settingsOnly = false) {
       sound.setLevels();
       persist();
     };
+  mountCameraSettings(ui.querySelector<HTMLElement>('#overlay .dialog')!,settings.camera,persist);
   mountDrivingControls(ui.querySelector<HTMLElement>('#overlay .dialog')!,drivingControls,()=>{try{localStorage.setItem(CONTROLS_KEY,JSON.stringify(drivingControls));return true;}catch{return false;}});
   if(resumeState==='menu'&&!online?.active)mountSaveBackup(ui.querySelector<HTMLElement>('#overlay .dialog')!);
   studioButtons(ui.querySelector('#overlay .dialog'));
@@ -1407,7 +1410,7 @@ function updateCamera(dt: number) {
     camera.position.copy(view.position);camera.up.copy(view.up);camera.lookAt(view.target);
     // The rigid cabin must not translate through its own body after a hit.
     const response=p.impactResponse.step(state==='playing'?dt:0);
-    camera.rotateZ(response.roll*.25);camera.rotateX(response.pitch*.25);
+    camera.rotateZ(response.roll*.25*settings.camera.shake);camera.rotateX(response.pitch*.25*settings.camera.shake);
     camera.near=view.near;camera.fov=view.fov;camera.updateProjectionMatrix();return;
   }
   const hood=drivingCamera==='hood';
@@ -1420,21 +1423,21 @@ function updateCamera(dt: number) {
         .clone()
         .addScaledVector(f, 1.35)
         .add(new T.Vector3(0, 0.58, 0))
-    : chaseComposition(target,f,p.speed).position;
+    : playerChaseComposition(target,f,p.speed,settings.camera).position;
   const cameraGround = activeVenue===quarryVenue?Math.max(scenerySurfaceHeight(desired.x, desired.z), quarryExtensionHeight(desired.x, desired.z) ?? -Infinity, quarryWestWallHeight(desired.x, desired.z) ?? -Infinity):activeVenue.course.height(desired.x,desired.z);
   desired.y = Math.max(desired.y, cameraGround + 0.65);
   camera.position.sub(cameraImpactOffset);
   camera.position.lerp(desired, 1 - Math.exp(-dt * (hood ? 25 : 5)));
-  const look = hood ? target.clone().addScaledVector(f,22).add(new T.Vector3(0,.5,0)) : chaseComposition(target,f,p.speed).target;
+  const look = hood ? target.clone().addScaledVector(f,22).add(new T.Vector3(0,.5,0)) : playerChaseComposition(target,f,p.speed,settings.camera).target;
   camera.lookAt(look);
   const response = p.impactResponse.step(state === 'playing' ? dt : 0);
-  cameraImpactOffset.copy(response.offset).multiplyScalar(hood ? .65 : 1);
+  cameraImpactOffset.copy(response.offset).multiplyScalar((hood ? .65 : 1)*settings.camera.shake);
   camera.position.add(cameraImpactOffset);
-  camera.rotateZ(response.roll * (hood ? .6 : 1));
-  camera.rotateX(response.pitch);
+  camera.rotateZ(response.roll * (hood ? .6 : 1)*settings.camera.shake);
+  camera.rotateX(response.pitch*settings.camera.shake);
   camera.fov = T.MathUtils.damp(
     camera.fov,
-    hood ? 66 : CHASE_VIEW.fov + Math.min(5, Math.abs(p.speed) * 0.12),
+    hood ? 66 : settings.camera.fov + Math.min(5, Math.abs(p.speed) * 0.12),
     3,
     dt,
   );
