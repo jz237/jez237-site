@@ -1,5 +1,25 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Next checkpoint — continuation-menu control
+
+The original ovl_i14 follow-up menu now has independently reconstructed
+5800/5840 initialization,5F60 input,5E5C exit and the complete5924 display
+caller. It preserves four ordinary choices and two championship choices,
+retained selection/audio latch, alternating slide offsets, first-controller
+input, confirmation/up/down precedence and signed32 wrapping. Confirmation
+initializes game81 and its numeric fade; after signed fade completion1 the
+display caller requests qualified record saving before the selected return.
+Championship continuation retains the separate zero/one profile stores.
+
+Read-only EVO X2 Ghidra export matched536 instructions against the ROM with
+all nine project files unchanged. Complete ROM execution then matched3,378
+cases,90,943 instructions and11,783 ordered operations, covering all31
+non-stack store instructions in these control bodies. Canonical adapters
+expand input, exit and numeric fade initialization without replaying replaced
+calls. Graphics, durable record-saving effects and destination menu bodies
+remain explicit dependencies. This control checkpoint is not yet connected
+to the live browser menu; the curtain fade's presentation boundary is next.
+
 ## v2.31.1 — normal results preview
 
 The normal-results overlay now has its own four-word phase/offset/delay owner.

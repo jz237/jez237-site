@@ -30,6 +30,7 @@ import {prepareNativeRaceMenuInitialization} from './native-race-menu-initializa
 import {prepareNativeNameEntryInitialization,prepareNativeNameEntryInput,prepareNativeNameEntryAnimationPhase,prepareNativeNameEntryRecordUpdate,prepareNativeNameEntryDisplay} from './native-name-entry.js';
 import {prepareNativeNameEntryPresentation} from './native-name-presentation.js';
 import {prepareNativeResultsMenuInitialization,prepareNativeResultsMenuInput,prepareNativeResultsMenuDisplay} from './native-results-menu.js';
+import {prepareNativeContinuationMenuInitialization,prepareNativeContinuationMenuInput,prepareNativeContinuationMenuExit,prepareNativeContinuationMenuDisplay} from './native-continuation-menu.js';
 import {prepareNativeRaceRiderResourceConfiguration,prepareNativeRaceCourseResourceConfiguration} from './native-race-resource-configuration.js';
 import {prepareNativeRaceResultCodeSelection} from './native-race-body-fields.js';
 import {prepareNativePrimaryResultEstimates} from './native-primary-standings.js';
@@ -88,6 +89,8 @@ function copy(value){
  if(value.deviceWords4308!==undefined)s.deviceWords4308=words(value.deviceWords4308,'deviceWords4308',10);
  if(value.nameEntryWords61c4!==undefined)s.nameEntryWords61c4=words(value.nameEntryWords61c4,'nameEntryWords61c4',14);
  if(value.resultsMenuWords6d30!==undefined)s.resultsMenuWords6d30=words(value.resultsMenuWords6d30,'resultsMenuWords6d30',4);
+ if(value.continuationMenuWords61e0!==undefined)s.continuationMenuWords61e0=words(value.continuationMenuWords61e0,'continuationMenuWords61e0',4);
+ if(value.continuationDataWords60f0!==undefined)s.continuationDataWords60f0=words(value.continuationDataWords60f0,'continuationDataWords60f0',20);
  if(value.profileWordsB330!==undefined){
   if(Object.hasOwn(scene,'difficulty'))throw new RangeError('difficulty overlaps profileWordsB330');
   const count=value.profileWordsB330?.length;
@@ -115,6 +118,10 @@ function copy(value){
  * Optional resultsMenuWords6d30[4] owns normal-results overlay phase, two
  * signed sliding offsets and delay at802C6D30..6D40, exclusive. It is separate
  * from the race overlay and reads the combined menu record's pressedE692.
+ * Optional continuationMenuWords61e0[4] owns ovl_i14 phase/offsets/count BSS.
+ * continuationDataWords60f0[20] retains its loaded selection, numeric choice
+ * tables and audio-once latch through6140, exclusive. Intervening untouched
+ * descriptor words are opaque; original graphics assets are not implied.
  * Optional profileWordsB330[50 or52] owns B330..B3F8 or B330..B400 exclusive.
  * The extended view includes the four adjacent B3F8..B3FE rider halfwords;
  * no second flag owner is accepted. Older bounded leaves retain50-word input.
@@ -191,8 +198,9 @@ function apply(s,operations){
    const bits=integer(op.value,'source halfword bits',0,65535);
    if(op.field==='pressed65a'&&s.menuWordsE658!==undefined)s.menuWordsE658[0]=((s.menuWordsE658[0]&0xffff0000)|bits)>>>0;
    else s.scene[op.field]=sceneRanges[op.field][0]<0?bits<<16>>16:bits;
-  }else if(op.kind==='i1Write'||op.kind==='profileWrite'||op.kind==='nameEntryWrite'||op.kind==='resultsMenuWrite'){
-   const key=op.kind==='i1Write'?'i1Words9440':op.kind==='nameEntryWrite'?'nameEntryWords61c4':op.kind==='resultsMenuWrite'?'resultsMenuWords6d30':'profileWordsB330';
+  }else if(op.kind==='i1Write'||op.kind==='profileWrite'||op.kind==='nameEntryWrite'||op.kind==='resultsMenuWrite'||op.kind==='continuationMenuWrite'||op.kind==='continuationDataWrite'){
+   const key=op.kind==='i1Write'?'i1Words9440':op.kind==='nameEntryWrite'?'nameEntryWords61c4':op.kind==='resultsMenuWrite'?'resultsMenuWords6d30':
+    op.kind==='continuationMenuWrite'?'continuationMenuWords61e0':op.kind==='continuationDataWrite'?'continuationDataWords60f0':'profileWordsB330';
    if(!s[key])throw new TypeError(`Supply retained ${key} before applying its writes`);
    const width=op.width,count=s[key].length;
    if(width!==4&&(!['profileWrite','nameEntryWrite'].includes(op.kind)||width!==2))throw new RangeError(`Invalid ${key} patch width`);
@@ -353,6 +361,39 @@ export function prepareNativeNameEntryRecordCommit(state,sourceViews={}){
 export function prepareNativeResultsMenuInitializationUpdate(state){
  const next=copy(state),prepared=prepareNativeResultsMenuInitialization(next),effects=apply(next,prepared.operations);
  return freeze({...prepared,state:next,effects});
+}
+
+function continuationResult(next,prepared,sourceViews,{expandInput=false,expandExit=false,expandFade=false}={}){
+ const pending=[...prepared.operations],operations=[],effects=[];
+ while(pending.length){
+  const op=pending.shift();let expanded;
+  if(op.kind==='externalCall'){
+   if(expandInput&&op.consumer==='802c5f60')expanded=prepareNativeContinuationMenuInput(next).operations;
+   else if(expandExit&&op.consumer==='802c5e5c')expanded=prepareNativeContinuationMenuExit(next,{returnState630:op.arguments[0]|0}).operations;
+   else if(expandFade&&op.consumer==='801e6fb0'){
+    const [type,rate,selector]=op.arguments;
+    expanded=prepareNativeRaceFadePropertiesInitialization({fadeTemplateWords6cc0:sourceViews.fadeTemplateWords6cc0,type:type|0,rate:rate|0,selector:selector|0}).operations;
+   }else if(expandFade&&op.consumer==='801e6a4c')expanded=prepareNativeRaceFadeSlotsReset({slotTemplateWords6c50:sourceViews.slotTemplateWords6c50}).operations;
+  }
+  if(expanded){pending.unshift(...expanded);continue;}
+  operations.push(op);effects.push(...apply(next,[op]));
+ }
+ return freeze({...prepared,state:next,operations,effects,diagnostic:{...prepared.diagnostic,inputExpanded:expandInput,exitExpanded:expandExit,fadeExpansionEnabled:expandFade}});
+}
+
+export function prepareNativeContinuationMenuInitializationUpdate(state){
+ const next=copy(state);return continuationResult(next,prepareNativeContinuationMenuInitialization(next),{});
+}
+export function prepareNativeContinuationMenuExitUpdate(state,input,sourceViews={}){
+ const next=copy(state);return continuationResult(next,prepareNativeContinuationMenuExit(next,input),sourceViews,{expandFade:true});
+}
+export function prepareNativeContinuationMenuInputUpdate(state,sourceViews={}, {expandExit=false}={}){
+ if(typeof expandExit!=='boolean')throw new TypeError('expandExit must be boolean');
+ const next=copy(state);return continuationResult(next,prepareNativeContinuationMenuInput(next),sourceViews,{expandExit,expandFade:expandExit});
+}
+export function prepareNativeContinuationMenuDisplayUpdate(state,sourceViews={}, {expandInput=false,expandExit=false}={}){
+ if(typeof expandInput!=='boolean'||typeof expandExit!=='boolean'||expandExit&&!expandInput)throw new TypeError('Exit expansion requires input expansion');
+ const next=copy(state);return continuationResult(next,prepareNativeContinuationMenuDisplay(next,sourceViews),sourceViews,{expandInput,expandExit,expandFade:expandExit});
 }
 
 /** Expand input and the numericC830 exit at their original call positions.
