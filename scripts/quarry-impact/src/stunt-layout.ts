@@ -1,3 +1,4 @@
+import {doubleLoopMesh,DOUBLE_LOOP_SUPPORTS} from './double-loop';
 import type R from '@dimforge/rapier3d-compat';
 export const STUNT_LOOP={x:-65,z:25,radius:16,shift:16,halfWidth:4,segments:360}as const;
 export function stuntLoopPoint(t:number){const a=t*Math.PI*2,l=STUNT_LOOP;return{x:l.x+l.shift*t,y:l.radius*(1-Math.cos(a)),z:l.z+l.radius*Math.sin(a)};}
@@ -29,8 +30,9 @@ export function buildStuntPhysics(api:typeof R,world:R.World){
   const ground=world.createRigidBody(api.RigidBodyDesc.fixed());ground.userData={courseSurface:'alderwick-stunt-v1'};owned.push(ground.handle);
   world.createCollider(api.ColliderDesc.cuboid(240,.5,210).setTranslation(0,-.5,0).setFriction(.85),ground);
   const loop=stuntLoopMesh();world.createCollider(api.ColliderDesc.trimesh(loop.positions,loop.indices).setFriction(1),ground);
+  const double=doubleLoopMesh();world.createCollider(api.ColliderDesc.trimesh(double.positions,double.indices).setFriction(1),ground);
   for(const r of STUNT_RAMPS){const mesh=stuntRampMesh(r);world.createCollider(api.ColliderDesc.trimesh(mesh.positions,mesh.indices).setFriction(.85),ground);}
-  for(const s of [...STUNT_BARRIERS,...STUNT_SUPPORTS.map(s=>({...s,yaw:0}))]){const body=world.createRigidBody(api.RigidBodyDesc.fixed().setTranslation(s.x,s.y,s.z).setRotation({x:0,y:Math.sin(s.yaw/2),z:0,w:Math.cos(s.yaw/2)}));owned.push(body.handle);world.createCollider(api.ColliderDesc.cuboid(s.half[0],s.half[1],s.half[2]).setFriction(.5),body);}
+  for(const s of [...STUNT_BARRIERS,...[...STUNT_SUPPORTS,...DOUBLE_LOOP_SUPPORTS].map(s=>({...s,yaw:0}))]){const body=world.createRigidBody(api.RigidBodyDesc.fixed().setTranslation(s.x,s.y,s.z).setRotation({x:0,y:Math.sin(s.yaw/2),z:0,w:Math.cos(s.yaw/2)}));owned.push(body.handle);world.createCollider(api.ColliderDesc.cuboid(s.half[0],s.half[1],s.half[2]).setFriction(.5),body);}
   return owned;
  }catch(error){for(const h of owned){const body=world.getRigidBody(h);if(body)world.removeRigidBody(body);}throw error;}
 }
