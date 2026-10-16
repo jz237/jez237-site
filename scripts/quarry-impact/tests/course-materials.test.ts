@@ -16,7 +16,7 @@ const worlds:[CourseId,()=>{root:T.Group;dispose():void}][]=[
 ];
 for(const[id,create]of worlds)test(id+' photographic detail leaves terrain/physics exact and disposes on scene changes',()=>{
  const course=getRaceCourse(id) as any,before=JSON.stringify({samples:course.samples,solids:course.solids,checkpoints:course.checkpoints}),art=create();try{
-  const ground=art.root.getObjectByName(id+'_ground')as T.Mesh<T.BufferGeometry,T.MeshStandardMaterial>;assert.ok(ground);assert.ok(ground.material.normalMap);assert.equal(ground.material.customProgramCacheKey(),'course-photo-ground-v1');
+  const ground=art.root.getObjectByName(id+'_ground')as T.Mesh<T.BufferGeometry,T.MeshStandardMaterial>;assert.ok(ground);assert.ok(ground.material.normalMap);assert.equal(ground.material.customProgramCacheKey(),id==='willowbank-heath-v1'?'course-photo-ground-v1-heath-preview-1':'course-photo-ground-v1');
   const position=ground.geometry.getAttribute('position');for(let i=0;i<position.count;i+=193)assert.ok(Math.abs(position.getY(i)-course.height(position.getX(i),position.getZ(i)))<1e-5);
   assert.equal(JSON.stringify({samples:course.samples,solids:course.solids,checkpoints:course.checkpoints}),before);let disposal=0;ground.material.normalMap!.addEventListener('dispose',()=>disposal++);art.dispose();art.dispose();assert.equal(disposal,1);
  }finally{art.dispose();}

@@ -1,3 +1,4 @@
+import {createRaceMudTextures} from './race-mud';
 import * as T from 'three';
 import type {createCountyCourse} from './county-course';
 type Course=ReturnType<typeof createCountyCourse>;
@@ -26,15 +27,18 @@ vCourseWorld=(modelMatrix*coursePosition).xyz;
  * stay authored per venue; normal detail and roughness now respond to the light. */
 export function addCourseGroundDetail(material:T.MeshStandardMaterial,course:Course,looseSurface:'gravel'|'mud'='gravel'){
  const owned:T.Texture[]=[],mask=new T.DataTexture(courseSurfaceMask(course),...COURSE_MASK_SIZE);mask.name='course-surface-mask';mask.flipY=false;mask.minFilter=mask.magFilter=T.LinearFilter;mask.needsUpdate=true;owned.push(mask);
- const asphalt=photo('circuit_asphalt_diff',true,owned),gravel=photo(looseSurface==='mud'?'mud_diff':'gravel_diff',true,owned),soil=photo('forrest_ground_01_diff',true,owned);
- const asphaltN=photo('circuit_asphalt_nor_gl',false,owned),soilN=photo('mud_nor_gl',false,owned);material.normalMap=photo(looseSurface==='mud'?'mud_nor_gl':'gravel_nor_gl',false,owned);material.normalScale.setScalar(.55);
+ const mud=looseSurface==='mud'?createRaceMudTextures():null;if(mud)owned.push(mud.diffuse,mud.normal,mud.roughness);
+ const asphalt=photo('circuit_asphalt_diff',true,owned),gravel=mud?.diffuse??photo('gravel_diff',true,owned),soil=photo('forrest_ground_01_diff',true,owned);
+ const asphaltN=photo('circuit_asphalt_nor_gl',false,owned),soilN=photo('mud_nor_gl',false,owned);material.normalMap=mud?.normal??photo('gravel_nor_gl',false,owned);material.normalScale.setScalar(.55);
  const originalCompile=material.onBeforeCompile,originalKey=material.customProgramCacheKey;
  material.onBeforeCompile=(shader,renderer)=>{
   originalCompile.call(material,shader,renderer);
   Object.assign(shader.uniforms,{courseMask:{value:mask},courseAsphalt:{value:asphalt},courseGravel:{value:gravel},courseSoil:{value:soil},courseAsphaltN:{value:asphaltN},courseSoilN:{value:soilN}});
+  if(mud)shader.uniforms.courseMudRoughness={value:mud.roughness};
   shader.vertexShader='varying vec3 vCourseWorld;\n'+shader.vertexShader;shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\n'+positionVertex);
   shader.fragmentShader=`
 varying vec3 vCourseWorld;
+${mud?'uniform sampler2D courseMudRoughness;':''}
 uniform sampler2D courseMask,courseAsphalt,courseGravel,courseSoil,courseAsphaltN,courseSoilN;
 vec2 courseOffset(vec2 cell){return fract(sin(vec2(dot(cell,vec2(127.1,311.7)),dot(cell,vec2(269.5,183.3))))*43758.5453);}
 vec3 coursePair(sampler2D photograph,vec2 uv){
@@ -67,7 +71,7 @@ float courseMark=max(courseWeights.b,smoothstep(.42,.66,max(max(coursePaint.r,co
 diffuseColor.rgb=mix(courseFinish,coursePaint,courseMark);
 #include <alphamap_fragment>`);
   shader.fragmentShader=shader.fragmentShader.replace('#include <roughnessmap_fragment>',`#include <roughnessmap_fragment>
-roughnessFactor=mix(.98,mix(.94,.81,courseWeights.r),courseWeights.g);`);
+roughnessFactor=mix(.98,${mud?'coursePair(courseMudRoughness,courseDirtUV).g':'mix(.94,.81,courseWeights.r)'},courseWeights.g);`);
   shader.fragmentShader=shader.fragmentShader.replace('#include <normal_fragment_maps>',`
 #ifdef USE_NORMALMAP_TANGENTSPACE
 vec3 courseRN=mix(coursePair(normalMap,courseDirtUV),coursePair(courseAsphaltN,courseRoadUV),courseWeights.r)*2.0-1.0;
@@ -79,7 +83,7 @@ normal=normalize(mix(normalize(courseSoilFrame*courseEN),normalize(courseRoadFra
 normal=normalize(mix(normal,nonPerturbedNormal,courseMark*.7));
 #endif`);
  };
- material.customProgramCacheKey=()=> 'course-photo-ground-v1';material.needsUpdate=true;
+ material.customProgramCacheKey=()=> mud?'course-photo-race-mud-v1':'course-photo-ground-v1';material.needsUpdate=true;
  let disposed=false;return{textures:owned,dispose(){if(disposed)return;disposed=true;owned.forEach(t=>t.dispose());material.normalMap=null;material.onBeforeCompile=originalCompile;material.customProgramCacheKey=originalKey;}};
 }
 /** World-space projection keeps boulders and large ridges at the same rock scale. */

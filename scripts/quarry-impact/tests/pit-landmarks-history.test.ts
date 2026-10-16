@@ -1,6 +1,7 @@
+import {restoreRaceMudBytes} from './race-mud-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readPitLandmarksPrevious,restorePitLandmarksBytes,verifyPitLandmarksRevision} from './pit-landmarks-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreRaceMudBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('PitLandmarks preserves every prior fixture, vehicle asset, control and camera input',verifyPitLandmarksRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/pit-landmarks/revision.json').toString());

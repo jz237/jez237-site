@@ -1,3 +1,4 @@
+import {createRaceMudTextures} from './race-mud';
 import {createWrenfordPitLandmarks} from './wrenford-pit-landmarks';
 import * as T from 'three';
 import {WRENFORD_PIT_BARRIERS} from './wrenford-pit-arena';
@@ -6,10 +7,9 @@ export function createWrenfordPitWorld(){
  const root=new T.Group();root.name='wrenford_mud_pit';
  const materials={concrete:new T.MeshStandardMaterial({color:0xbcb5a4,roughness:.98}),orange:new T.MeshStandardMaterial({color:0xb9582e,roughness:.9}),steel:new T.MeshStandardMaterial({color:0x303539,roughness:.7,metalness:.3}),seat:new T.MeshStandardMaterial({color:0x557876,roughness:.85}),hay:new T.MeshStandardMaterial({color:0x998254,roughness:1}),skin:new T.MeshStandardMaterial({color:0xbb967b,roughness:1}),cream:new T.MeshStandardMaterial({color:0xd4c7a5,roughness:.9})};
  const floorMaterial=new T.MeshStandardMaterial({color:0x82705a,roughness:.91}),floorGeometry=new T.PlaneGeometry(480,480),boxGeometry=new T.BoxGeometry(),textures:T.Texture[]=[];
- if(typeof document!=='undefined'){
-  const loader=new T.TextureLoader(),base=import.meta.env.BASE_URL+'assets/';
-  for(const [name,color]of [['mud_diff',true],['mud_nor_gl',false]]as const){const t=loader.load(base+name+'.jpg');t.wrapS=t.wrapT=T.RepeatWrapping;t.repeat.set(120,120);t.anisotropy=8;t.colorSpace=color?T.SRGBColorSpace:T.NoColorSpace;textures.push(t);if(color)floorMaterial.map=t;else floorMaterial.normalMap=t;}floorMaterial.normalScale.setScalar(.6);
- }
+ const mud=createRaceMudTextures();textures.push(mud.diffuse,mud.normal,mud.roughness);
+ for(const t of textures)t.repeat.set(120,120);
+ floorMaterial.color.set(0xffffff);floorMaterial.roughness=1;floorMaterial.map=mud.diffuse;floorMaterial.normalMap=mud.normal;floorMaterial.roughnessMap=mud.roughness;floorMaterial.normalScale.setScalar(.6);
  const floor=new T.Mesh(floorGeometry,floorMaterial);floor.name='wrenford_pit_mud';floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;root.add(floor);
  const batches=new Map<keyof typeof materials,T.Matrix4[]>(),matrix=new T.Matrix4(),q=new T.Quaternion();
  const box=(x:number,y:number,z:number,w:number,h:number,d:number,finish:keyof typeof materials,yaw=0)=>{q.setFromAxisAngle(new T.Vector3(0,1,0),yaw);matrix.compose(new T.Vector3(x,y,z),q,new T.Vector3(w,h,d));const batch=batches.get(finish)??[];batch.push(matrix.clone());batches.set(finish,batch);};
