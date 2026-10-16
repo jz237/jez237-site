@@ -2,7 +2,7 @@ import {COURSES} from './courses.js';
 import {validateGhostLibrary} from './ghost-library.js';
 import {initialControls,validateControls} from './control-bindings.js';
 const KEY='after-the-storm-racing-v1';
-export const initialSave=()=>({version:1,dolphin:false,records:{},scores:{},ghosts:[],controls:initialControls(),settings:{},names:[],unlocked:0,reached:['greyhaven','practice'],audio:{mode:'stereo',music:false,volume:.8,enabled:true},rumble:{enabled:true,strength:[.25,.25]},preferences:{graphics:'auto',laps:3,seaState:'surf',ghost:true}});
+export const initialSave=()=>({version:1,dolphin:false,records:{},scores:{},ghosts:[],controls:initialControls(),settings:{},names:[],unlocked:0,reached:['greyhaven','practice'],audio:{mode:'stereo',music:true,volume:.8,enabled:true},rumble:{enabled:true,strength:[.25,.25]},preferences:{graphics:'auto',laps:3,seaState:'surf',ghost:true}});
 export const MAX_SAVE_BYTES=2000000;
 const layoutSuffix=({course,layoutRevision})=>{const revision=layoutRevision??COURSES.find(c=>c.id===course)?.layoutRevision??0;return revision?'/layout-'+revision:'';};
 export const recordKey=(entry)=>`${entry.course}/${entry.difficulty??0}/${entry.laps??3}${layoutSuffix(entry)}`;
