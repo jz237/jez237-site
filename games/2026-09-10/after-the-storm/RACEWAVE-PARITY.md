@@ -2416,3 +2416,39 @@ against prepared geometry owners, not evidence of original course bootstrap
 or live retirement animation. Live geometry installation, body16C8 lifetime,
 descending actor scheduling and remaining source result/menu flow still need
 integration. The public game remainsv2.24.0 and full parity is incomplete.
+
+## Local rider result ownership — October 15, 2026
+
+The ordinary Sunny Time/Versus runtime now installs the verified floor-query
+records and invokes result selection inside each descending actor phase, after
+the completed hull summary and before its decision/pose. The query uses actual
+hull point0 and the current water datum. There is no parallel body16C8 owner:
+the existing lifecycle selectedActor field is that source word. Cross-player
+writes reach the following rider before its decision, and all operations are
+validated before any owner changes. The selected code persists across frames.
+
+The original62F44..631F0 initialization also exposes a previous gap:1446 starts
+at10, not the generic lifecycle's disabled-1. The native race start now installs
+that delay. It holds while16C8 is negative and the existing eligible actor
+branch consumes it after selection. Generic prepared recovery fixtures retain
+their explicit caller-selected timing.
+
+Four local runtime tests cover partial/paused calls, actual-point retirement,
+descending tie writes before judging, retained codes and atomic invalid-target
+rejection. A private comparison captures15 actual actor boundaries following
+130ordinary frames with explicitly prepared finish/DQ flags. The original
+selector and complete nested5DD04/7F448/7FAE4 match ordered operations and final
+body words, including six actual geometry queries. These fixtures establish
+integration ordering, not driven-finish or complete post-race replay fidelity.
+
+The selected native regression run passes670tests. It began before the final
+startup-delay correction;38 focused lifecycle/start/result tests pass after
+that correction, and the captured original-instruction comparison was repeated
+on the final code. This is separate from the earlier full-game suite baseline.
+
+This checkpoint is local and unpublished. The browser still stops ordinary
+updates on its result screen; a finish first detected by later primary judging
+does not yet receive the next source actor phase. Continuing the original
+result schedule, equivalent result-actor poses/completion, zero-simulation
+dispatch, fades/menus and persistence remain required. Full gameplay parity
+and the complete native result flow remain unfinished.

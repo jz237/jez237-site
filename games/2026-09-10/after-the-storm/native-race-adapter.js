@@ -403,7 +403,7 @@ function beginFrame(adapter,input,options){
   if(source.simulationState!==0)adapter.contactWindow=contactsZero();
 }
 
-function endFrame(adapter){
+function endFrame(adapter,beforeActorDecision){
   const {hull,water,frame,lastFrame,contactWindow}=adapter,s=hull.scale;
   adapter.dryContactFrames16d0=nextNativeDryContactFrames(adapter.dryContactFrames16d0,{anyWet:water.anyWet,impacts:adapter.impacts});
   const movement=difference(hull.center,frame.startCenter),reference=difference(referencePoint(hull),frame.startReference);
@@ -424,6 +424,7 @@ function endFrame(adapter){
     referenceDisplacementNative:referenceDisplacement,referenceChangeNative:referenceChange,
     wetCount:water.wetCount,anyWet:water.anyWet,contacts:{...contactWindow},impacts:nativeImpactSnapshot(adapter.impacts),
     actorState:frame.actorState,animationFrame:frame.animationFrame,actionState:{...adapter.actionState},jointWorld:frame.prepared.jointWorld?copy(frame.prepared.jointWorld):null};
+  if(beforeActorDecision)beforeActorDecision();
   const actions=adapter.riderActions,actionSource=frame.actionSource;
   const actionDispatch=actions?{state:{action16f4:adapter.actionState.override,idleFramesC6c:actions.idleFramesC6c,
     idleChoice16c4:actions.idleChoice16c4},history:frame.actionHistory,tick:frame.controls.state.tick,
@@ -518,13 +519,14 @@ function prepareFrame(adapter,input,options){
 /** Complete a deferred fifth tick after ALL hulls have finished. This runs the
  * nineteen-point rider solve before water/cameras/floating objects advance.
  */
-export function completeNativeRaceAdapterFrame(adapter){
-  return adapterOperation(adapter,()=>completeFrame(adapter));
+export function completeNativeRaceAdapterFrame(adapter,{beforeActorDecision}={}){
+  if(beforeActorDecision!==undefined&&typeof beforeActorDecision!=='function')throw new TypeError('beforeActorDecision must be a function');
+  return adapterOperation(adapter,()=>completeFrame(adapter,beforeActorDecision));
 }
-function completeFrame(adapter){
+function completeFrame(adapter,beforeActorDecision){
  if(!adapter?.pendingFrameCompletion||adapter.hull.ticks%FRAME_TICKS!==0)
   throw new Error('No deferred native frame completion');
- endFrame(adapter);adapter.pendingFrameCompletion=false;return adapter;
+ endFrame(adapter,beforeActorDecision);adapter.pendingFrameCompletion=false;return adapter;
 }
 
 /**

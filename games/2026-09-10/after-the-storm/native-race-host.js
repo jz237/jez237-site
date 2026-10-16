@@ -12,6 +12,7 @@ import {createNativeFloatingWorld} from './native-floating-world.js';
 import {createNativePrimaryBuoyWorld} from './native-primary-buoy-world.js';
 import {bindRaceWaterCameraStorage} from './race-water.js';
 import {nativeRaceBodyFields} from './native-race-body-fields.js';
+import {applyNativeRiderResultCodes} from './native-rider-lifecycle.js';
 
 // Runnable host bridge for the recovered hull and rider recovery. This remains
 // an integration preview: other actors/tricks and original AI are incomplete.
@@ -113,7 +114,14 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
    recoveryGeometry:'authored anatomy/remount; reconstructed procedural fall/stumble; explicit authored rest/circle/history policy',
    nativeRacerCollision:craftContacts,sourcePrimaryBuoyContacts:!!primary})};
  if(raceRuntime?.ordinary)bindRaceWaterCameraStorage(water,raceRuntime.cameraStorage);
- host.world=createNativeRaceWorld({adapters,water,humanIndices,craftContacts,afterTick:(_,context)=>{
+ host.world=createNativeRaceWorld({adapters,water,humanIndices,craftContacts,
+ beforeActor:raceRuntime?.ordinary?(world,{racerIndex})=>{
+  const a=world.adapters[racerIndex],lifecycles=world.adapters.map(q=>q.riderLifecycle),p=a.hull.points[0].position;
+  const selected=raceRuntime.resultCodeFor(racerIndex,{bodyResultCodes16c8:lifecycles.map(q=>q.state.selectedActor),
+   point90Native:Object.fromEntries(['x','y','z'].map(k=>[k,F(p[k]/a.hull.scale)])),datum2458:water.field.datumNative});
+  applyNativeRiderResultCodes(lifecycles,selected.operations);
+  a.lastResultCodeOperations=selected.operations;
+ }:null,afterTick:(_,context)=>{
   if(context.tick%5!==0)present(host);
  },afterFrame:(_,context)=>{
   present(host);

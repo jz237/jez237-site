@@ -1,11 +1,16 @@
 import {createNativeRaceState,nativeRaceStateSnapshot,prepareNativeRaceStateOperations,
  prepareNativeRaceCountdown,prepareNativeRacePrestartInitializationUpdate,prepareNativeRacePrestartStatusUpdate,
- prepareNativeRaceStartup,prepareNativeRaceOrdinaryUpdate,nativeRaceGridTransformView,nativeRaceComputerProfileView} from './native-race-state.js';
+ prepareNativeRaceStartup,prepareNativeRaceOrdinaryUpdate,nativeRaceGridTransformView,nativeRaceComputerProfileView,nativeRaceResultCodeView} from './native-race-state.js';
 import {prepareNativeRaceStartupOverlay} from './native-race-startup-overlay.js';
 import {prepareNativePrimaryRaceClock} from './native-primary-race-clock.js';
 import {createNativeRaceCameraStorage} from './native-race-camera-storage.js';
 import {NATIVE_ANGLE_TABLE_WORDS,nativeSineTableWords} from './native-math-tables.js';
 import {sourceBuoyVisibleRow} from './source-buoy-progress.js';
+import {SUNNY_NATIVE_RETIREMENT_GEOMETRY} from './native-sunny-support.js';
+
+// Overlapping effect47FC, solo4800 and two-player4818 numeric entries. Ordinary
+// two-player place indices are0/1; other mode tables remain separate admission.
+const RESULT_TABLE_WORDS=Object.freeze([0,1,2,3,4,5,6,1,4]);
 
 // One canonical owner for the admitted ordinary launch, primary race and numeric
 // HUD fields. DOM/racer properties below are views, never synchronized copies.
@@ -58,7 +63,7 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    players,racerCount:racers.length,primaryHumanIndex:0,secondaryHumanIndex:1,courseIndex,
    mode620:players===2?1:0,mode608:players===2?1:0,main638:1,phase650:0,simulation648:1,
    clockStopped817c:1,activity624:-1,event628:0,gameStateAb24:40,specialAb64:0,ready6fc:0,
-   missesEnabled72e:1,result6f0:0,ambientD4b00:0,field4964:0,
+   missesEnabled72e:1,result6f0:0,ambientD4b00:0,field4964:0,resultEffect393c:0,
    ...(courseRuntime?{primaryCount:courseRuntime.data.nodes.length,finishSourceRow:courseRuntime.data.finishSourceRow,
     cold8224:1,forceFirst8228:0,demoOffset5438:0,restart6f8:0,reverseDab68:Number(reverse),state600:0,
     missLimit8174:5,noFinish8178:0,configuredLaps728:integer(laps,'configured laps',3,9),
@@ -136,6 +141,12 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
   ordinary:!!courseRuntime,
   scene:()=>({simulationState:current.scene.simulation648,phase650:current.scene.phase650}),
   snapshot:()=>nativeRaceStateSnapshot(current),
+  resultCodeFor(racerIndex,{bodyResultCodes16c8,point90Native,datum2458}){
+   if(!courseRuntime||current.scene.courseIndex!==1||![0,1].includes(current.scene.mode620))
+    throw new Error('Live rider results require admitted ordinary Sunny geometry');
+   return nativeRaceResultCodeView(current,{racerIndex,bodyResultCodes16c8,resultTableWords47fc:RESULT_TABLE_WORDS,
+    supportProbe:{point90Native,datum2458,geometry:SUNNY_NATIVE_RETIREMENT_GEOMETRY}});
+  },
   gridStart(racerIndex){
    if(!courseRuntime)throw new Error('Source grid requires initialized primary course geometry');
    // Grid6AC84 reads the tangent78/7C. The judging view's color-aligned80/84

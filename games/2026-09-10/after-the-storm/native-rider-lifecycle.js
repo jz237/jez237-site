@@ -84,6 +84,25 @@ export function nativeRiderLifecycleSource(lifecycle){
  return {actorState:s.actorState,animationFrame:s.animationFrame,crash:s.crashCountdown!==0,contactMode:s.contactMode};
 }
 
+/** selectedActor is the actual retained body16C8 word, already owned by the
+ * recovery state. The selector can write either selected human, including a
+ * rider whose actor phase has already run. Validate the whole operation list
+ * before committing its ordered writes; never create a parallel result owner.
+ */
+export function applyNativeRiderResultCodes(lifecycles,operations){
+ if(!Array.isArray(lifecycles)||!Array.isArray(operations))throw new TypeError('Supply actual rider owners and ordered result operations');
+ const prepared=[];
+ for(const op of operations){
+  if(op.kind==='supportProbeQuery')continue;
+  if(op.kind!=='bodyResultCodeWrite')throw new TypeError('Unexpected rider result operation');
+  const slot=integer(op.racerIndex,'result racerIndex',0,lifecycles.length-1),lifecycle=lifecycles[slot];owner(lifecycle);
+  if(lifecycle.state.phase!=='ready')throw new Error('Result writes require a ready actor phase');
+  const value=integer(op.value,'body16C8 bits',0,0xffffffff)|0;
+  prepared.push({lifecycle,state:createNativeRiderRecovery({...lifecycle.state,selectedActor:value})});
+ }
+ for(const p of prepared)p.lifecycle.state=p.state;
+}
+
 /** Actual prior solved joint2 is sampled BEFORE this frame's target/solve. */
 export function decideNativeRiderLifecycle(lifecycle,{completedFrame,simulationState,controls,manipulationAction,actionDispatch}={}){
  owner(lifecycle);const {hull,rider}=lifecycle;

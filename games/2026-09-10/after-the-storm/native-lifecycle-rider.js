@@ -68,7 +68,10 @@ export function createNativeLifecycleRider({initialHull,geometryProvider=modernR
   anchorState.anchors={2:copy(anchorState.points[3].position),3:copy(anchorState.points[4].position)};
   anchorState.mode=seed.physicalMode;
   initialRiderRecovery=Object.freeze({state:createNativeRiderRecovery({riderIndex:initialHull.rider,
-   hullDamping:initialHull.points.map(p=>p.damping),actorState:seed.actorState,animationFrame:seed.animationFrame}),physicalMode:seed.physicalMode});
+   //62F44->631F0 initializes actual1446 to10;16C8 starts-1. The countdown
+   // is consumed only after a result is selected and an eligible actor runs.
+   hullDamping:initialHull.points.map(p=>p.damping),actorState:seed.actorState,animationFrame:seed.animationFrame,
+   selectedActor:-1,selectionCountdown:10}),physicalMode:seed.physicalMode});
  }
  function evaluate(actor,animationFrame,hull,context){
   if(actor===15){

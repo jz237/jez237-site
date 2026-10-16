@@ -53,6 +53,9 @@ function optionsAt(value,time,frame,index){
  * beforeFrame(world,context) runs before ALL descending input samples. It is
  * the explicit owner hook for ascending navigation/global source updates;
  * rendering, inactive calls and fractional intervals cannot invoke it.
+ * beforeActor(world,context) runs within each descending completed-frame body,
+ * after its hull summary and before its actor decision/pose. Cross-body writes
+ * therefore reach the following rider before that rider's decision.
  * afterFrame(world,context), when supplied, runs AFTER water exactly once per
  * completed frame; it is the caller's slot for native floating-object updates.
  * afterTick(world,context) runs once per physical tick, after any completed
@@ -60,7 +63,7 @@ function optionsAt(value,time,frame,index){
  * Returning false from afterFrame ends this step at that frame and discards
  * unused elapsed time; it supports terminal race results, not a pause timer.
  */
-export function createNativeRaceWorld({adapters,water,humanIndices=[0],beforeFrame=null,afterFrame=null,afterTick=null,craftContacts=true}={}){
+export function createNativeRaceWorld({adapters,water,humanIndices=[0],beforeFrame=null,beforeActor=null,afterFrame=null,afterTick=null,craftContacts=true}={}){
  if(!Array.isArray(adapters)||adapters.length<1||adapters.length>4||new Set(adapters).size!==adapters.length)
   throw new TypeError('Expected one to four distinct native race adapters');
  if(!isHostRaceWater(water))throw new TypeError('Native world requires host water, not a presentation snapshot');
@@ -68,6 +71,7 @@ export function createNativeRaceWorld({adapters,water,humanIndices=[0],beforeFra
  if(!Array.isArray(humanIndices)||humanIndices.length!==water.players||new Set(humanIndices).size!==humanIndices.length||
   humanIndices.some(i=>!Number.isInteger(i)||i<0||i>=adapters.length))throw new RangeError('Human indices must match the water cameras');
  if(beforeFrame!==null&&typeof beforeFrame!=='function')throw new TypeError('beforeFrame must be a function');
+ if(beforeActor!==null&&typeof beforeActor!=='function')throw new TypeError('beforeActor must be a function');
  if(afterFrame!==null&&typeof afterFrame!=='function')throw new TypeError('afterFrame must be a function');
  if(afterTick!==null&&typeof afterTick!=='function')throw new TypeError('afterTick must be a function');
  if(typeof craftContacts!=='boolean')throw new TypeError('craftContacts must be an explicit boolean');
@@ -82,7 +86,7 @@ export function createNativeRaceWorld({adapters,water,humanIndices=[0],beforeFra
  const surface=createNativeWaterCellSurface(water.field);
  const craftContactStates=createNativeCraftContactStates(adapters.map(a=>a.hull));
  const world={adapters:adapters.slice(),water,
-  humanIndices:humanIndices.slice(),surface,beforeFrame,afterFrame,afterTick,ticks,frames:water.frames,remainder:0,
+  humanIndices:humanIndices.slice(),surface,beforeFrame,beforeActor,afterFrame,afterTick,ticks,frames:water.frames,remainder:0,
   craftContacts,craftContactStates,craftContactPasses:0,craftContactCount:0,frameCraftContacts:[],
   stepsLast:0,framesLast:0,frame:null,busy:false,fault:null};
  for(const a of adapters){a.surface=surface;adapterOwners.set(a,world);}
@@ -144,7 +148,8 @@ export function stepNativeRaceWorld(world,dt,inputs,{active=true,adapterOptions=
    }
    world.ticks++;world.stepsLast++;world.remainder=Math.max(0,world.remainder-H);
    if(world.ticks%TICKS_PER_FRAME===0){
-    for(let i=world.adapters.length-1;i>=0;i--)completeNativeRaceAdapterFrame(world.adapters[i]);
+    for(let i=world.adapters.length-1;i>=0;i--)completeNativeRaceAdapterFrame(world.adapters[i],{
+     beforeActorDecision:world.beforeActor?()=>world.beforeActor(world,{racerIndex:i,logicalFrame:world.frames+1,time:world.ticks*H,step:H*TICKS_PER_FRAME}):undefined});
     advanceRaceWaterFrame(world.water,world.humanIndices.map(i=>cameraCraft(world.adapters[i])),world.frame.water);
     world.frames++;world.framesLast++;
    }
