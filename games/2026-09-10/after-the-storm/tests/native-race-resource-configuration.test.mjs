@@ -79,7 +79,50 @@ test('negative signed avatars clamp to0 while unsupported positive IDs and kinds
  const {value,views}=fixture(),q=rider(value,{kind:0,avatarIndices:[-2147483648,-1,2,3]},views);
  assert.deepEqual(q.diagnostic.logicalAvatarIndices,[0,0,2,3]);
  assert.throws(()=>rider(value,{kind:0,avatarIndices:[8,0,0,0]},views),/avatarIndices/);
- for(const kind of [-1,1,3,5])assert.throws(()=>rider(value,{kind,avatarIndices:[0,1,2,3]},views),/kinds/);
+ for(const kind of [-1,5])assert.throws(()=>rider(value,{kind,avatarIndices:[0,1,2,3]},views),/kinds/);
+});
+
+test('title kind1 reads only two avatars and bases, clears the third descriptor and retains the tail',()=>{
+ const {value,views}=fixture();const before=structuredClone(value),ids=[2,6];ids.length=4;
+ for(const i of [2,3])Object.defineProperty(ids,i,{get:unused});
+ for(const i of [2,3])Object.defineProperty(views.mode0BaseWordsAB90,i,{get:unused});
+ const q=rider(value,{kind:1,avatarIndices:ids},views),n=apply(value,q.operations);
+ assert.deepEqual(q.diagnostic.logicalAvatarIndices,[2,6]);assert.equal(q.diagnostic.descriptorCount,2);
+ assert.deepEqual(n.resourceWordsB330.slice(8,12),[0,0,0,0]);assert.deepEqual(n.resourceWordsB330.slice(12),before.resourceWordsB330.slice(12));
+ assert.deepEqual(hudBlocks(n).slice(0,2).map(b=>b[16]),[2026,6036]);assert.deepEqual(hudBlocks(n).slice(2),hudBlocks(before).slice(2));
+ assert.deepEqual([field(n,36),field(n,40)],[0,1]);assert.deepEqual(value,before);
+ assert.doesNotThrow(()=>rider(value,{kind:1,avatarIndices:[0,1]},{...views,mode0BaseWordsAB90:[0,1]}));
+});
+
+test('rider selection kind3 retains eight identities and descriptors in one extended owner',()=>{
+ const {value,views}=fixture();value.resourceWordsB330=Array.from({length:36},(_,i)=>0xb1230000+i);
+ views.mode2BaseWordsABA0=[10,20,30,40,50,60,70,80];const before=structuredClone(value);
+ const q=rider(value,{kind:3,avatarIndices:[3,2,1,0]},views),n=apply(value,q.operations),ids=[3,2,1,0,7,6,5,4];
+ assert.deepEqual(q.diagnostic.logicalAvatarIndices,ids);assert.equal(q.diagnostic.descriptorCount,8);assert.equal(q.diagnostic.presentationBlockCount,8);
+ assert.deepEqual(Array.from({length:8},(_,i)=>n.resourceWordsE73c[i+1]>>>16),ids);
+ assert.ok(n.resourceWordsE73c.slice(1,9).every(w=>(w&65535)===0));
+ assert.deepEqual(Array.from({length:8},(_,i)=>n.resourceWordsB330[i*4]),ids.map(id=>100+id));
+ assert.deepEqual(n.resourceWordsB330.slice(32),[0,0,0,0]);assert.deepEqual([field(n,36),field(n,40)],[1,5]);
+ assert.equal(n.hudWords7788[atHud(0x7a60)+7*17],4080);
+ assert.equal(n.hudWords7788[atHud(0x7c80)],before.hudWords7788[atHud(0x7c80)]);assert.deepEqual(value,before);
+});
+
+test('kind3 duplicate special riders keep last selectors and reject short or sparse extended storage atomically',()=>{
+ const {value,views}=fixture();views.mode2BaseWordsABA0=[0xffffffff,0,1,2,3,4,5,6];
+ assert.throws(()=>rider(value,{kind:3,avatarIndices:[2,2,2,2]},views),/36/);
+ value.resourceWordsB330=Array(36).fill(0x12345678);const before=structuredClone(value);
+ const q=rider(value,{kind:3,avatarIndices:[2,2,2,2]},views),n=apply(value,q.operations);
+ assert.deepEqual([field(n,36),field(n,40)],[3,7]);assert.equal(n.hudWords7788[atHud(0x7a60)+16],2015);
+ assert.throws(()=>rider(value,{kind:3,avatarIndices:[4,0,1,2]},views),/avatarIndices/);
+ const short={...value,resourceWordsB330:value.resourceWordsB330.slice(0,35)};assert.throws(()=>rider(short,{kind:3,avatarIndices:[0,1,2,3]},views),/20 or36/);
+ const sparse=structuredClone(value);delete sparse.resourceWordsB330[35];assert.throws(()=>rider(sparse,{kind:3,avatarIndices:[0,1,2,3]},views),/Invalid/);
+ assert.deepEqual(value,before);
+});
+
+test('kind2 can reuse the extended ABA0 source span without reading its adjacent bank',()=>{
+ const {value,views}=fixture();views.mode2BaseWordsABA0.length=8;
+ for(let i=4;i<8;i++)Object.defineProperty(views.mode2BaseWordsABA0,i,{get:unused});
+ assert.doesNotThrow(()=>rider(value,{kind:2,avatarIndices:[0,1,2,3]},views));
 });
 
 test('rider reads only selected source rows/parts/bank and does not read the course descriptor owner',()=>{

@@ -1,5 +1,36 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Next checkpoint — title and rider-selection resource preparation
+
+The numeric 80096960 resource preparer now supports all five valid modes.
+Title/demo mode1 reads only two rider arguments and two base addresses, writes
+two descriptors plus their terminator, and retains the untouched tail. Rider
+selection mode3 builds eight variants: the four supplied riders followed by
+the same identities plus4. It uses eight descriptors, eight presentation blocks
+and the original last-match special selectors. Negative arguments clamp before
+variant selection; unavailable positive lookup rows reject atomically.
+
+The existing canonical resourceWordsB330 owner now accepts its original20-word
+form or an explicit36-word form for the eight-rider list and terminator. It is
+never silently grown or given a parallel owner. Mode3 reads the eight-word
+ABA0 span, including its adjacent ABC0 bank; mode2 can reuse that span while
+reading only its first four words. Menu-return preparation can explicitly
+expand both resource helpers at their original positions, provided the actual
+retained storage and readonly tables are supplied. Replaced calls are removed
+from pending effects. Default live callers still leave resource loading pending.
+
+Read-only Ghidra on EVO X2 exported1,345 instructions that matched the ROM;
+all nine saved project files were unchanged. Complete raw execution of modes1/3
+matched1,496 cases,1,897,644 instructions,431,704 ordered writes and2,287,384
+canonical owner words, reaching69 non-stack store instructions. The previous
+2,308 mode0/4/course cases and260 mode2 cases still match. All144 focused
+resource, menu, state, fade and record tests pass.
+
+This completes the bounded numeric descriptor preparation, not loading,
+decompression, original selection-model rendering or attract-mode physics.
+Those runtime consumers still need integration with the high-resolution game.
+This checkpoint is local and unpublished.
+
 ## Next checkpoint — connect title return and reset connected controllers
 
 Main menu now executes the original 801EB180 return initialization after the

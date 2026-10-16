@@ -101,7 +101,9 @@ function copy(value){
   if(count!==50&&count!==52)throw new RangeError('profileWordsB330 requires50 or52 unsigned words');
   s.profileWordsB330=words(value.profileWordsB330,'profileWordsB330',count);
  }
- for(const [key,count]of Object.entries(resourceOwnerWords))if(value[key]!==undefined)s[key]=words(value[key],key,count);
+ for(const [key,count]of Object.entries(resourceOwnerWords))if(value[key]!==undefined){
+  const size=key==='resourceWordsB330'&&value[key]?.length===36?36:count;s[key]=words(value[key],key,size);
+ }
  return s;
 }
 
@@ -132,7 +134,7 @@ function copy(value){
  * When supplied, difficulty comes from itsB338 word, never scene.difficulty.
  * Optional saveWordsB280[34] owns801CB280..B308, ending before the wave-row
  * regionB308 and metadataB32C. Result initials and unlock bytes share it.
- * Optional resourceWordsB330[20] owns800DB330..B380, distinct from profile
+ * Optional resourceWordsB330[20|36] owns800DB330..B380 or..B3C0, distinct from profile
  * 801CB330. resourceWordsB538[8] owns800DB538..B558; resourceWordsE73c[43]
  * owns801CE73C..E7E8. These raw descriptors/selectors retain source data;
  * they do not imply loaded resources or duplicate named scene slot fields.
@@ -217,11 +219,11 @@ function apply(s,operations){
    integer(op.racerIndex,'body tune racerIndex',0,3);integer(op.wordIndex,'body tune wordIndex',0,3);
    integer(op.value,'body tune raw word',0,0xffffffff);effects.push(structuredClone(op));
   }else if(op.kind==='resourceWrite'){
-   const key=op.owner,count=resourceOwnerWords[key];
+   const key=op.owner;
    if(!Object.hasOwn(resourceOwnerWords,key))throw new RangeError('Unknown resource owner');
    if(!s[key])throw new TypeError(`Supply retained ${key} before applying its writes`);
    const width=op.width;if(width!==2&&width!==4)throw new RangeError('Invalid resource patch width');
-   const offset=integer(op.byteOffset,'resource byteOffset',0,count*4-width);
+   const offset=integer(op.byteOffset,'resource byteOffset',0,s[key].length*4-width);
    if(offset%width)throw new RangeError('Invalid resource patch alignment');
    const value=integer(op.value,'resource bits',0,width===2?65535:0xffffffff),index=offset>>>2;
    if(width===4)s[key][index]=value;
@@ -514,14 +516,24 @@ export function prepareNativeRaceMainConfigurationUpdate(state,sourceViews={}, {
 /** Numeric title/championship/rider/course return entry, with fades expanded in
  * source order into the same canonical HUD owner. Physical rider tunes,
  * resources and audio remain required effects. The original selection-menu
- * loops and rendering are separate; no target entry remains for replay. */
-export function prepareNativeMenuReturnUpdate(state,destination,sourceViews={}){
+ * loops and rendering are separate; no target entry remains for replay.
+ * Explicit expandResourceInitializers consumes96960/9684C at their source
+ * positions, requiring actual retained owners and readonly views. Rider menu
+ * kind3 needs the36-word descriptor owner; no missing state is synthesized. */
+export function prepareNativeMenuReturnUpdate(state,destination,sourceViews={}, {expandResourceInitializers=false}={}){
+ if(typeof expandResourceInitializers!=='boolean')throw new TypeError('expandResourceInitializers must be boolean');
  const prepare={course:prepareNativeCourseMenuReturn,rider:prepareNativeRiderMenuReturn,title:prepareNativeTitleMenuReturn,championship:prepareNativeChampionshipMenuReturn}[destination];
  if(typeof prepare!=='function'||!['course','rider','title','championship'].includes(destination))throw new RangeError('Unreconstructed menu return destination');
- const next=copy(state),prepared=prepare(next,sourceViews),operations=[],effects=[];
+ const next=copy(state),prepared=prepare(next,sourceViews),operations=[],effects=[],expandedResourceConsumers=[];
  for(const op of prepared.operations){
   let batch=[op];
-  if(op.kind==='externalCall'&&op.consumer==='801e6fb0'){
+  if(expandResourceInitializers&&op.kind==='externalCall'&&op.consumer==='80096960'){
+   const [kind,...ids]=op.arguments;
+   batch=prepareNativeRaceRiderResourceConfiguration(next,{kind:kind|0,avatarIndices:ids.map(v=>v|0)},sourceViews).operations;expandedResourceConsumers.push(op.consumer);
+  }else if(expandResourceInitializers&&op.kind==='externalCall'&&op.consumer==='8009684c'){
+   const [baseWord,...ids]=op.arguments;
+   batch=prepareNativeRaceCourseResourceConfiguration(next,{baseWord,resourceIndices:ids.map(v=>v|0)},sourceViews).operations;expandedResourceConsumers.push(op.consumer);
+  }else if(op.kind==='externalCall'&&op.consumer==='801e6fb0'){
    const [type,rate,selector]=op.arguments;
    batch=prepareNativeRaceFadePropertiesInitialization({fadeTemplateWords6cc0:sourceViews.fadeTemplateWords6cc0,type,rate,selector}).operations;
   }else if(op.kind==='externalCall'&&op.consumer==='801e6a4c'){
@@ -531,7 +543,7 @@ export function prepareNativeMenuReturnUpdate(state,destination,sourceViews={}){
   }
   operations.push(...batch);effects.push(...apply(next,batch));
  }
- return freeze({state:next,operations,effects,diagnostic:{consumer:prepared.diagnostic.consumer,expandedFadeConsumers:['801e6fb0','801e6a4c'],
+ return freeze({state:next,operations,effects,diagnostic:{consumer:prepared.diagnostic.consumer,expandedFadeConsumers:['801e6fb0','801e6a4c'],expandedResourceConsumers,
   menuLoopExecuted:false,controllerResetExecuted:destination==='title',physicalInitialization:false,resourceLoadingPerformed:false,audioExecuted:false}});
 }
 

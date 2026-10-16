@@ -90,3 +90,41 @@ test('title reset reads the host connection mask, preserves disconnected data an
  const limited={...views,courseRiderTraits:views.courseRiderTraits.slice(0,1)};
  assert.doesNotThrow(()=>title(v,limited));v.scene.fortressD8240=1;v.scene.courseIndex=1;assert.throws(()=>title(v,limited),RangeError);
 });
+
+function resourceFixture(){
+ const value=fixture();value.resourceWordsB330=Array.from({length:36},(_,i)=>0x11110000+i);
+ value.resourceWordsB538=Array.from({length:8},(_,i)=>0x22220000+i);value.resourceWordsE73c=Array.from({length:43},(_,i)=>0x33330000+i);
+ return {value,source:{...views,riderOrder6ef0:[0,2,3,1],defaultRiderTraits:Array.from({length:4},()=>[5,5,5]),
+  riderDescriptorRowsABD0:Array.from({length:16},(_,id)=>[100+id,200+id,300+id,400+id]),
+  avatarLookupWordsACD0:Array.from({length:8},(_,id)=>Array.from({length:51},(_,i)=>id*1000+i)),
+  mode0BaseWordsAB90:[10,20,30,40],mode2BaseWordsABA0:[10,20,30,40,50,60,70,80],
+  courseResourcePairs:Array.from({length:9},()=>[0,-1]),courseDescriptorRowsB4a8:Array.from({length:9},(_,i)=>[100+i,200+i,300+i,400+i]),
+  courseByteLengthWordsCE18:Array(9).fill(65)}};
+}
+test('return resource expansion consumes title, rider and championship initializers at their source positions',()=>{
+ for(const destination of ['title','rider','championship']){
+  const {value,source}=resourceFixture(),before=structuredClone(value),q=update(value,destination,source,{expandResourceInitializers:true});
+  assert.deepEqual(q.diagnostic.expandedResourceConsumers,destination==='rider'?['80096960']:['80096960','8009684c']);
+  assert.ok(q.effects.every(o=>o.consumer!=='80096960'&&o.consumer!=='8009684c'));
+  assert.equal(q.state.resourceWordsB330.length,36);assert.equal(q.state.resourceWordsE73c[0],destination==='rider'?3:1);
+  if(destination==='rider'){
+   assert.deepEqual(Array.from({length:8},(_,i)=>q.state.resourceWordsB330[i*4]),[100,101,102,103,104,105,106,107]);
+   assert.deepEqual(q.state.resourceWordsB330.slice(32),[0,0,0,0]);assert.deepEqual(q.state.resourceWordsB538,before.resourceWordsB538);
+  }else{
+   assert.deepEqual(q.state.resourceWordsB330.slice(8,12),[0,0,0,0]);assert.deepEqual(q.state.resourceWordsB330.slice(12),before.resourceWordsB330.slice(12));
+   assert.equal(q.state.resourceWordsB538[3],0x60000);assert.deepEqual(q.state.resourceWordsB538.slice(4,6),before.resourceWordsB538.slice(4,6));
+  }
+  const resource=q.operations.findIndex(o=>o.kind==='resourceWrite'),fade=q.operations.findIndex(o=>o.kind==='hudWrite'&&o.byteOffset===0x8a10-0x7788);
+  assert.ok(destination==='championship'?fade<resource:resource<fade);
+  assert.equal(q.diagnostic.resourceLoadingPerformed,false);assert.deepEqual(value,before);
+ }
+});
+test('extended menu resources require retained storage and late failures leave controller/profile/HUD owners unchanged',()=>{
+ const {value,source}=resourceFixture(),before=structuredClone(value);
+ const short={...value,resourceWordsB330:value.resourceWordsB330.slice(0,20)};
+ assert.throws(()=>update(short,'rider',source,{expandResourceInitializers:true}),/36/);
+ const bad=structuredClone(source);bad.courseDescriptorRowsB4a8[0][3]=NaN;
+ assert.throws(()=>update(value,'title',bad,{expandResourceInitializers:true}),RangeError);assert.deepEqual(value,before);
+ assert.throws(()=>update(value,'rider',source,{expandResourceInitializers:1}),TypeError);
+ const q=update(value,'rider',source);assert.deepEqual(q.state.resourceWordsB330,value.resourceWordsB330);assert.deepEqual(q.diagnostic.expandedResourceConsumers,[]);
+});
