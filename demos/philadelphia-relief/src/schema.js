@@ -78,13 +78,19 @@ export const CONTROLS = {
 
   // ---- atmosphere --------------------------------------------------------
   cloudCoverage: {
-    k: 'ccv', kind: 'range', min: 0, max: 1, step: .01, def: .55,
+    // Retain the old URL key while clearing clouds from saved views as well.
+    k: 'ccv', kind: 'range', min: 0, max: 0, step: .01, def: 0, ui: false,
     group: 'atmosphere', label: 'Cloud coverage',
-    hint: 'Animated cumulus clouds and drifting cloud shadows. Simulated weather.',
+    hint: 'Clouds are disabled.',
   },
   streetLife: {
     k: 'stl', kind: 'enum', values: [1,0], def: 1, group: 'atmosphere', label: 'Street life',
     hint: 'Simulated cars, sidewalk walkers, trees and crossings in central Philadelphia.',
+  },
+  streetMotion: {
+    k: 'stm', kind: 'enum', values: ['system','on','off'], def: 'system', group: 'atmosphere',
+    label: 'Traffic motion',
+    hint: 'Follow the computer’s reduced-motion preference, or explicitly play or pause traffic.',
   },
   cityShadows: {
     k: 'csh', kind: 'enum', values: [1,0], def: 1, group: 'light', label: 'Building shadows',
@@ -341,5 +347,5 @@ export const CHEAP_KEYS = new Set([
   'structureDetail', 'structureHeight', 'floodMode', 'seaLevelRise',
   'timeMode', 'dayOfYear', 'clockHour', 'weather', 'era',
   'imageryDetail', 'compareMode', 'comparePosition', 'photoMode', 'cloudCoverage', 'cityShadows',
-  'streetLife',
+  'streetLife', 'streetMotion',
 ]);

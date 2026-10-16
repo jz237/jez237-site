@@ -1,13 +1,13 @@
 {
   "version": 1,
-  "esbuild": "0.28.1",
-  "sourceHash": "8d0557ca8f1df0790e1aff4a4228bd334ca4e515a1ae4e01ceb4360ea25ba7c3",
-  "entry": "load/app-4AJQWOR2.js",
+  "esbuild": "0.28.2",
+  "sourceHash": "ee4f37f596959b14c417ec0125e518461b133c3bb7de980ba39724c488020165",
+  "entry": "load/app-KC4NP6U6.js",
   "css": "load/style-49a2eea61d53.css",
   "startupRequests": 3,
-  "startupBytes": 1115901,
+  "startupBytes": 1121760,
   "files": {
-    "load/app-4AJQWOR2.js": "aa92f81eabe4580f965c37a5ccbb73d90c167134ce1c8a4c9ef97fba9e9b785c",
+    "load/app-KC4NP6U6.js": "3411e0b24e6e7b2ec9e413a003095498ca6a2900587ac7c2c666fa273ee6d928",
     "load/chunk-PWR376B6.js": "06fd02e3abfe1bc60f8196a62377d5c612cfc8b00f3bcde1a38d2faa5ebd58ba",
     "load/chunk-AEXPLQJR.js": "0c4d5332763adcaa9b518d170efbd60d2d15529a694f6fa086f34c5c48a06d45",
     "load/chunk-JYXLTZYM.js": "7859b18ebc8e9993d33f8d298b6a8bb4d94bd39f1fa3b229df180351bb8197b8",
