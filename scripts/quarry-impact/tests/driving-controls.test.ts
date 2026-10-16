@@ -45,9 +45,9 @@ test('old default steering migrates once without resetting other controls',()=>{
  const updated=readControls(JSON.stringify(old));assert.deepEqual(updated.keys.left,['KeyD','ArrowRight']);assert.deepEqual(updated.keys.right,['KeyA','ArrowLeft']);assert.deepEqual(updated.keys.throttle,old.keys.throttle);assert.equal(updated.deadzone,.3);
  assert.deepEqual(readControls(JSON.stringify(updated)),updated);
  assert.deepEqual(readControls(JSON.stringify({...old,keyboardDefaults:undefined})).keys,updated.keys);
- assert.equal(updated.keyboardDefaults,6);
+ assert.equal(updated.keyboardDefaults,7);
  const custom={...old,keys:{...old.keys,left:['KeyJ'],right:['KeyK']}};assert.deepEqual(readControls(JSON.stringify(custom)).keys,custom.keys);
- const intentional={...old,keyboardDefaults:6};assert.deepEqual(readControls(JSON.stringify(intentional)).keys,intentional.keys);
+ const intentional={...old,keyboardDefaults:7};assert.deepEqual(readControls(JSON.stringify(intentional)).keys,intentional.keys);
 });
 
 test('revision five normal steering saves adopt reversed defaults',()=>{
@@ -55,5 +55,14 @@ test('revision five normal steering saves adopt reversed defaults',()=>{
  const updated=readControls(JSON.stringify(old));
  for(const key of ['KeyA','ArrowLeft'])assert.equal(drivingInput(updated,new Set([key]),[],0).steer,1);
  for(const key of ['KeyD','ArrowRight'])assert.equal(drivingInput(updated,new Set([key]),[],0).steer,-1);
+ assert.deepEqual(readControls(JSON.stringify(updated)),updated);
+});
+
+test('revision six normal steering saves adopt reversed defaults and retain calibration',()=>{
+ const old={...defaultControls(),keyboardDefaults:6,deadzone:.24,keys:{...defaultControls().keys,left:['KeyA','ArrowLeft'],right:['KeyD','ArrowRight']}};
+ const updated=readControls(JSON.stringify(old));
+ for(const key of ['KeyA','ArrowLeft'])assert.equal(drivingInput(updated,new Set([key]),[],0).steer,1);
+ for(const key of ['KeyD','ArrowRight'])assert.equal(drivingInput(updated,new Set([key]),[],0).steer,-1);
+ assert.equal(updated.deadzone,.24);assert.equal(updated.keyboardDefaults,7);
  assert.deepEqual(readControls(JSON.stringify(updated)),updated);
 });

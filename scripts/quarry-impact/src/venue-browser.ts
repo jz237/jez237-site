@@ -1,3 +1,4 @@
+import type {DemoOptions} from './demo-session';
 import {COURSE_NAMES,isCourseId,type CourseId} from './course-id';
 import {ARENA_NAMES,isArenaId,type ArenaId} from './arena-id';
 import {getRaceCourse} from './race-course';
@@ -28,16 +29,22 @@ export function selectVenue(options:EventOptions,mode:Mode,id:string){
  else{if(!isCourseId(id))return false;if(mode==='playground')options.playgroundCourse=id;else options.course=id;}
  return true;
 }
-export function showVenueBrowser(ui:HTMLElement,initial:Mode,options:EventOptions,choose:(mode:Mode,id:string)=>void,close:()=>void){
- let mode=initial;
- ui.innerHTML=`<section id="venue-browser" aria-label="Choose a course"><div class="venue-panel"><header><div><div class="eyebrow">BLACKRIDGE MOTOR CLUB / VENUES</div><h1>CHOOSE YOUR GROUND.</h1><p>Pick a venue, then start from the title screen. Event Rules controls laps, opponents and damage.</p></div><button id="venue-close" class="small-button">BACK</button></header><div class="venue-tools"><label>Drive mode<select id="venue-mode"><option value="race">Race · ${Object.keys(COURSE_NAMES).length} circuits</option><option value="playground">Free drive · ${Object.keys(COURSE_NAMES).length} venues</option><option value="derby">Derby · ${Object.keys(ARENA_NAMES).length} arenas</option></select></label><label>Find a venue<input id="venue-search" type="search" placeholder="Search name or surface" autocomplete="off"></label></div><p id="venue-count" role="status" aria-live="polite"></p><div id="venue-grid"></div><p class="venue-footnote">Circuit previews show the racing route. Arena previews show the boundary. Race, free-drive and demo choices are saved separately.</p></div></section>`;
- const search=ui.querySelector<HTMLInputElement>('#venue-search')!,modeSelect=ui.querySelector<HTMLSelectElement>('#venue-mode')!,grid=ui.querySelector<HTMLElement>('#venue-grid')!;modeSelect.value=mode;
- const render=()=>{const cards=filterVenues(mode,search.value),selected=mode==='derby'?options.arena??'quarry-arena-v1':mode==='playground'?options.playgroundCourse??'quarry-v1':options.course??'quarry-v1';
+export function selectDemoVenue(options:Pick<DemoOptions,'course'|'arena'>,mode:Mode,id:string){
+ if(mode==='race'&&isCourseId(id)){options.course=id;return true;}
+ if(mode==='derby'&&isArenaId(id)){options.arena=id;return true;}
+ return false;
+}
+export function showVenueBrowser(ui:HTMLElement,initial:Mode,options:EventOptions,choose:(mode:Mode,id:string,demo:boolean)=>void,close:()=>void,demoChoices:Pick<DemoOptions,'course'|'arena'>={}){
+ let mode=initial,watch=false;
+ ui.innerHTML=`<section id="venue-browser" aria-label="Choose a course"><div class="venue-panel"><header><div><div class="eyebrow">BLACKRIDGE MOTOR CLUB / VENUES</div><h1>CHOOSE YOUR GROUND.</h1><p id="venue-help"></p></div><button id="venue-close" class="small-button">BACK</button></header><div class="venue-tools"><label>Drive mode<select id="venue-mode"><option value="race">Race · ${Object.keys(COURSE_NAMES).length} circuits</option><option value="playground">Free drive · ${Object.keys(COURSE_NAMES).length} venues</option><option value="derby">Derby · ${Object.keys(ARENA_NAMES).length} arenas</option></select></label><label>Find a venue<input id="venue-search" type="search" placeholder="Search name or surface" autocomplete="off"></label></div><label class="venue-watch"><input id="venue-watch" type="checkbox"> Watch demo on selection</label><p id="venue-count" role="status" aria-live="polite"></p><div id="venue-grid"></div><p class="venue-footnote">Circuit previews show the racing route. Arena previews show the boundary. Race, free-drive and demo choices are saved separately.</p></div></section>`;
+ const search=ui.querySelector<HTMLInputElement>('#venue-search')!,modeSelect=ui.querySelector<HTMLSelectElement>('#venue-mode')!,grid=ui.querySelector<HTMLElement>('#venue-grid')!,watchBox=ui.querySelector<HTMLInputElement>('#venue-watch')!;modeSelect.value=mode;
+ const render=()=>{if(mode==='playground')watch=false;watchBox.checked=watch;watchBox.disabled=mode==='playground';const choices=watch?demoChoices:options,cards=filterVenues(mode,search.value),selected=mode==='derby'?choices.arena??'quarry-arena-v1':mode==='playground'?options.playgroundCourse??'quarry-v1':choices.course??'quarry-v1';
+  ui.querySelector('#venue-help')!.textContent=watch?'Pick a venue to start its demo now. Uses your saved Demo Options, including camera, opponents and event loop.':'Pick a venue, then start from the title screen. Event Rules controls laps, opponents and damage.';
   ui.querySelector('#venue-count')!.textContent=`${cards.length} ${mode==='derby'?'arenas':'circuits'} found`;
-  grid.replaceChildren();for(const card of cards){const b=document.createElement('button');b.className='venue-card'+(card.id===selected?' selected':'');b.dataset.venue=card.id;b.setAttribute('aria-label',`Select ${card.name} for ${mode==='playground'?'free drive':mode}`);b.setAttribute('aria-pressed',String(card.id===selected));
+  grid.replaceChildren();for(const card of cards){const b=document.createElement('button');b.className='venue-card'+(card.id===selected?' selected':'');b.dataset.venue=card.id;b.setAttribute('aria-label',`${watch?'Watch':'Select'} ${card.name} ${watch?'demo':'for '+(mode==='playground'?'free drive':mode)}`);b.setAttribute('aria-pressed',String(card.id===selected));
    // Catalog text and path coordinates are authored data, never search input.
-   b.innerHTML=`<svg viewBox="0 0 256 128" aria-hidden="true"><path class="venue-road-shadow" d="${card.path}"/><path class="venue-road" d="${card.path}"/>${card.kind==='course'?`<circle cx="${card.start[0]}" cy="${card.start[1]}" r="4"/>`:''}</svg><span class="venue-name">${card.name}</span><span class="venue-detail">${card.detail}</span><span class="venue-select">${card.id===selected?'SELECTED':'SELECT VENUE ↗'}</span>`;b.onclick=()=>choose(mode,card.id);grid.append(b);}
+   b.innerHTML=`<svg viewBox="0 0 256 128" aria-hidden="true"><path class="venue-road-shadow" d="${card.path}"/><path class="venue-road" d="${card.path}"/>${card.kind==='course'?`<circle cx="${card.start[0]}" cy="${card.start[1]}" r="4"/>`:''}</svg><span class="venue-name">${card.name}</span><span class="venue-detail">${card.detail}</span><span class="venue-select">${watch?'WATCH DEMO ▷':card.id===selected?'SELECTED':'SELECT VENUE ↗'}</span>`;b.onclick=()=>choose(mode,card.id,watch);grid.append(b);}
   if(!cards.length){const empty=document.createElement('p');empty.className='venue-empty';empty.textContent='No matching venues. Try another name or clear the search.';grid.append(empty);}
  };
- modeSelect.onchange=()=>{mode=modeSelect.value as Mode;render();};search.oninput=render;ui.querySelector<HTMLButtonElement>('#venue-close')!.onclick=close;render();
+ watchBox.onchange=()=>{watch=watchBox.checked;render();};modeSelect.onchange=()=>{mode=modeSelect.value as Mode;render();};search.oninput=render;ui.querySelector<HTMLButtonElement>('#venue-close')!.onclick=close;render();
 }
