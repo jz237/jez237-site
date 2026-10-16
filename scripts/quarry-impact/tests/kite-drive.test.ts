@@ -11,4 +11,4 @@ test('Kite has distinct hot-hatch calibration and drives only front wheels, incl
  assert.equal(vehicleDrivetrain('kite'),'FWD');assert.deepEqual(gridPool('kite','fwd'),['tern','kite']);assert.ok(spec.speedLimit>vehicleSpecification('tern').speedLimit);assert.ok(spec.mass>vehicleSpecification('tern').mass);
  }finally{w.free();}
 });
-test('existing negotiated online roster remains fourteen cars until capability expansion',()=>{assert.equal(ONLINE_CARS.length,14);assert.equal(validOnlineCar('kite'),false);assert.equal(validOnlineCar('trail'),true);});
+test('base online roster remains fourteen while the protocol recognizes Kite',()=>{assert.equal(ONLINE_CARS.length,14);assert.equal(validOnlineCar('kite'),true);assert.equal(validOnlineCar('trail'),true);});

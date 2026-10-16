@@ -42,12 +42,12 @@ export type Snapshot = {
   cars: CarState[]; damage: DamageEvent[]; ranking: number[];
   members: Member[]; ack: Record<number, number>;
   props: PropState[];
-  arenaSupport?:true; courseSupport?:true; rosterSupport?:true; capacity?:OnlineCapacity; transmissionSupport?:true; assistsSupport?:true; absSupport?:true;
+  arenaSupport?:true; courseSupport?:true; rosterSupport?:true; kiteSupport?:true; capacity?:OnlineCapacity; transmissionSupport?:true; assistsSupport?:true; absSupport?:true;
   eventSupport?:true; timedRaceSupport?:true; noRespawnDerbySupport?:true; event?:OnlineEventState;
   cupSupport?:true; cup?:CupState; setupSupport?:true; setupRule?:SetupRule; liverySupport?:true; liveryRevision?:number;
 };
 export type ClientMessage =
-  | { type: 'hello'; protocol: number; name: string; kind: CarKind; token?: string; maxPlayers?:24; arenas?:1; courses?:1; roster?:1; eventRules?:1; timedRace?:1; noRespawnDerby?:1; wire?:'qiw1'; setup?:OnlineSetup }
+  | { type: 'hello'; protocol: number; name: string; kind: CarKind; token?: string; maxPlayers?:24; arenas?:1; courses?:1; roster?:1; kite?:1; eventRules?:1; timedRace?:1; noRespawnDerby?:1; wire?:'qiw1'; setup?:OnlineSetup }
   | { type:'livery'; kind:CarKind; layers:import('../src/livery-data').LiveryLayer[] }
   | { type:'setup'; kind:CarKind; setup:OnlineSetup }
   | { type:'setup-rule'; rule:SetupRule }
@@ -74,13 +74,13 @@ export function parseClientMessage(raw: string): ClientMessage | null {
   const finite = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v);
   if (d.type === 'hello' && d.protocol === PROTOCOL && typeof d.name === 'string' &&
       validOnlineCar(d.kind) &&
-      (d.arenas===undefined||d.arenas===1&&d.eventRules===1)&&(d.courses===undefined||d.courses===1&&d.eventRules===1)&&(d.roster===undefined||d.roster===1)&&(!extendedOnlineCar(d.kind)||d.roster===1)&&(d.setup===undefined||validOnlineSetup(d.setup))&&
+      (d.arenas===undefined||d.arenas===1&&d.eventRules===1)&&(d.courses===undefined||d.courses===1&&d.eventRules===1)&&(d.roster===undefined||d.roster===1)&&(d.kite===undefined||d.kite===1&&d.roster===1)&&(d.kind!=='kite'||d.kite===1)&&(!extendedOnlineCar(d.kind)||d.roster===1)&&(d.setup===undefined||validOnlineSetup(d.setup))&&
       (d.timedRace===undefined||d.timedRace===1&&d.eventRules===1)&&(d.eventRules===undefined||d.eventRules===1)&&(d.noRespawnDerby===undefined||d.noRespawnDerby===1&&d.eventRules===1)&&
       (d.maxPlayers===undefined||d.maxPlayers===24)&&(d.wire===undefined||d.wire==='qiw1')&&
       (d.token === undefined || typeof d.token === 'string' && d.token.length <= 64)) {
     return { type: 'hello', protocol: PROTOCOL,
       name: d.name.replace(/[^\p{L}\p{N} _-]/gu, '').trim().slice(0, 18) || 'DRIVER',
-      ...(d.arenas===1?{arenas:1 as const}:{}),...(d.courses===1?{courses:1 as const}:{}),...(d.roster===1?{roster:1 as const}:{}),kind: d.kind as CarKind, token: d.token as string | undefined,...(d.timedRace===1?{timedRace:1 as const}:{}),...(d.eventRules===1?{eventRules:1 as const}:{}),...(d.noRespawnDerby===1?{noRespawnDerby:1 as const}:{}),...(d.maxPlayers===24?{maxPlayers:24 as const}:{}),...(d.wire==='qiw1'?{wire:'qiw1' as const}:{}),...(d.setup===undefined?{}:{setup:copyOnlineSetup(d.setup as OnlineSetup)}) };
+      ...(d.arenas===1?{arenas:1 as const}:{}),...(d.courses===1?{courses:1 as const}:{}),...(d.roster===1?{roster:1 as const}:{}),...(d.kite===1?{kite:1 as const}:{}),kind: d.kind as CarKind, token: d.token as string | undefined,...(d.timedRace===1?{timedRace:1 as const}:{}),...(d.eventRules===1?{eventRules:1 as const}:{}),...(d.noRespawnDerby===1?{noRespawnDerby:1 as const}:{}),...(d.maxPlayers===24?{maxPlayers:24 as const}:{}),...(d.wire==='qiw1'?{wire:'qiw1' as const}:{}),...(d.setup===undefined?{}:{setup:copyOnlineSetup(d.setup as OnlineSetup)}) };
   }
   if(d.type==='setup'&&validOnlineCar(d.kind)&&validOnlineSetup(d.setup))return{type:'setup',kind:d.kind as CarKind,setup:copyOnlineSetup(d.setup)};
   if(d.type==='setup-rule'&&['open','stock'].includes(String(d.rule)))return{type:'setup-rule',rule:d.rule as SetupRule};

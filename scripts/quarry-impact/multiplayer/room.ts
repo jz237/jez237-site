@@ -1,4 +1,4 @@
-import {extendedOnlineCar,ONLINE_CARS} from '../src/online-roster';
+import {extendedOnlineCar,ONLINE_CARS,KITE_ONLINE_CARS} from '../src/online-roster';
 import {canJoinDerby,canStartDerby} from '../src/online-derby-capability';
 import {releaseControls} from './protocol';
 import {defaultOnlineEvent,type OnlineEventRules} from '../src/online-events';
@@ -12,8 +12,8 @@ import type Rapier from '@dimforge/rapier3d-compat';
 import { Simulation } from './simulation';
 import { NEUTRAL, PROTOCOL, parseClientMessage, type Member, type ServerMessage, type Snapshot } from './protocol';
 export type Peer = { send(message: ServerMessage): void; close(code: number, reason: string): void; sendEncoded?:(message:string)=>void; sendBinary?:(message:ArrayBuffer)=>void };
-type Session = { arenas?:1; courses?:1; roster?:1; eventRules?:1; timedRace?:1; noRespawnDerby?:1; livery?:SelectedLivery; liveryAt?:number; setupAt?:number; wire?:'qiw1'; cupId:string; voteAt:number; peer: Peer; member: Member; token: string; lastInput: number; seq: number; disconnected: number; rateStart: number; count: number };
-export type SavedRoom = { liveries?:LiveryFrame; setupRule?:SetupRule; snapshot: Snapshot; sessions: { arenas?:1; courses?:1; roster?:1; eventRules?:1; timedRace?:1; noRespawnDerby?:1; livery?:SelectedLivery; wire?:'qiw1'; cupId?:string; member: Member; token: string; disconnected: number; seq: number }[]; updated: number };
+type Session = { arenas?:1; courses?:1; roster?:1; kite?:1; eventRules?:1; timedRace?:1; noRespawnDerby?:1; livery?:SelectedLivery; liveryAt?:number; setupAt?:number; wire?:'qiw1'; cupId:string; voteAt:number; peer: Peer; member: Member; token: string; lastInput: number; seq: number; disconnected: number; rateStart: number; count: number };
+export type SavedRoom = { liveries?:LiveryFrame; setupRule?:SetupRule; snapshot: Snapshot; sessions: { arenas?:1; courses?:1; roster?:1; kite?:1; eventRules?:1; timedRace?:1; noRespawnDerby?:1; livery?:SelectedLivery; wire?:'qiw1'; cupId?:string; member: Member; token: string; disconnected: number; seq: number }[]; updated: number };
 
 export class Room {
   sim: Simulation;
@@ -37,6 +37,9 @@ export class Room {
     const extended=this.sim.cars.some(c=>extendedOnlineCar(c.state.kind))||[...this.sessions.values()].some(s=>extendedOnlineCar(s.member.kind)||extendedOnlineCar(s.member.loadout?.kind));
     if(hello.roster!==1&&extended){peer.close(1008,'Update the game to join a full-roster room.');return null;}
     if(extendedOnlineCar(hello.kind)&&[...this.sessions.values()].some(s=>s.member.connected&&s.roster!==1)){peer.close(1008,'All connected drivers must update before selecting newer cars.');return null;}
+    const hasKite=this.sim.cars.some(c=>c.state.kind==='kite')||[...this.sessions.values()].some(s=>s.member.kind==='kite'||s.member.loadout?.kind==='kite');
+    if(hello.kite!==1&&hasKite){peer.close(1008,'Update the game to join a Kite room.');return null;}
+    if(hello.kind==='kite'&&[...this.sessions.values()].some(s=>s.member.connected&&s.kite!==1)){peer.close(1008,'All connected drivers must update before selecting the Kite.');return null;}
     let session=hello.token?[...this.sessions.values()].find(s=>s.token===hello.token):undefined;
     if(session){
       if(session.member.connected)session.peer.close(4001,'Reconnected elsewhere');
@@ -48,7 +51,7 @@ export class Room {
       session={cupId:crypto.randomUUID(),voteAt:-Infinity,peer,member:{id,loadout:{kind:hello.kind,setup:hello.setup??stockOnlineSetup(hello.kind)},name:hello.name,kind:this.sim.phase==='lobby'||this.sim.phase==='result'?hello.kind:this.sim.cars[id].state.kind,connected:true,host:this.sessions.size===0},token:crypto.randomUUID(),lastInput:this.now(),seq:-1,disconnected:0,rateStart:this.now(),count:0};
       this.sessions.set(id,session);
     }
-    session.arenas=hello.arenas;session.courses=hello.courses;session.roster=hello.roster;session.wire=hello.wire;session.eventRules=hello.eventRules;session.timedRace=hello.timedRace;session.noRespawnDerby=hello.noRespawnDerby;
+    session.arenas=hello.arenas;session.courses=hello.courses;session.roster=hello.roster;session.kite=hello.kite;session.wire=hello.wire;session.eventRules=hello.eventRules;session.timedRace=hello.timedRace;session.noRespawnDerby=hello.noRespawnDerby;
     this.electHost();
     const welcome:ServerMessage={type:'welcome',protocol:PROTOCOL,room:this.code,id:session.member.id,token:session.token,snapshot:this.snapshot(true),liveries:this.liveryFrame(),...(session.livery?{pendingLivery:structuredClone(session.livery)}:{})};
     if(session.wire&&peer.sendBinary)peer.sendBinary(encodeSnapshotWire(welcome));else peer.send(welcome);
@@ -60,6 +63,7 @@ export class Room {
     if(++s.count>90){peer.close(1008,'Input rate exceeded');this.disconnect(id,peer);return;}
     const m=parseClientMessage(raw);if(!m){peer.close(1008,'Invalid message');this.disconnect(id,peer);return;}
     if((m.type==='setup'||m.type==='livery')&&extendedOnlineCar(m.kind)&&(s.roster!==1||[...this.sessions.values()].some(p=>p.member.connected&&p.roster!==1))){peer.send({type:'error',message:'All connected drivers must update before selecting newer cars.'});return;}
+    if((m.type==='setup'||m.type==='livery')&&m.kind==='kite'&&(s.kite!==1||[...this.sessions.values()].some(p=>p.member.connected&&p.kite!==1))){peer.send({type:'error',message:'All connected drivers must update before selecting the Kite.'});return;}
     if(m.type==='livery'){
       if(m.kind!==s.member.loadout?.kind){peer.send({type:'error',message:'Choose the matching car before applying its design.'});return;}
       if(this.now()-(s.liveryAt??-Infinity)<1000){peer.send({type:'error',message:'Wait a moment before applying another design.'});return;}
@@ -99,15 +103,16 @@ export class Room {
   disconnect(id:number,peer:Peer){const s=this.sessions.get(id);if(!s||s.peer!==peer)return;s.member.connected=false;s.disconnected=this.now();if(this.cup)delete this.cup.votes[id];this.sim.setInput(id,{...NEUTRAL});this.electHost();this.broadcast();}
   private electHost(){let host=[...this.sessions.values()].find(s=>s.member.connected&&s.member.host);host??=[...this.sessions.values()].find(s=>s.member.connected);for(const s of this.sessions.values())s.member.host=s===host;}
   step(){const human=new Set<number>();for(const [id,s]of this.sessions){if(s.member.connected){human.add(id);if(this.now()-s.lastInput>350)this.sim.setInput(id,releaseControls(this.sim.cars[id].state.input));}}this.sim.step(human);this.settleCup();}
-  snapshot(includeDamage=false):Snapshot{this.settleCup();return {...this.sim.snapshot(includeDamage),arenaSupport:true,courseSupport:true,rosterSupport:true,transmissionSupport:true,assistsSupport:true,absSupport:true,eventSupport:true,timedRaceSupport:true,noRespawnDerbySupport:true,liverySupport:true,liveryRevision:this.liveryRevision,setupSupport:true,setupRule:this.setupRule,cupSupport:true,...(this.cup?{cup:structuredClone(this.cup)}:{}),members:[...this.sessions.values()].map(s=>({...structuredClone(s.member),cupId:s.cupId})),ack:Object.fromEntries([...this.sessions].map(([id,s])=>[id,s.seq]))};}
+  snapshot(includeDamage=false):Snapshot{this.settleCup();return {...this.sim.snapshot(includeDamage),arenaSupport:true,courseSupport:true,rosterSupport:true,...([...this.sessions.values()].filter(s=>s.member.connected).every(s=>s.kite===1)?{kiteSupport:true as const}:{}),transmissionSupport:true,assistsSupport:true,absSupport:true,eventSupport:true,timedRaceSupport:true,noRespawnDerbySupport:true,liverySupport:true,liveryRevision:this.liveryRevision,setupSupport:true,setupRule:this.setupRule,cupSupport:true,...(this.cup?{cup:structuredClone(this.cup)}:{}),members:[...this.sessions.values()].map(s=>({...structuredClone(s.member),cupId:s.cupId})),ack:Object.fromEntries([...this.sessions].map(([id,s])=>[id,s.seq]))};}
   broadcast(){const snap=this.snapshot();let encoded:string|undefined,binary:ArrayBuffer|undefined;for(const s of this.sessions.values())if(s.member.connected)try{if(s.wire&&s.peer.sendBinary)s.peer.sendBinary(binary??=encodeSnapshotWire(snap));else if(s.peer.sendEncoded)s.peer.sendEncoded(encoded??=JSON.stringify(snap));else s.peer.send(snap);}catch{s.member.connected=false;s.disconnected=this.now();}this.electHost();}
-  save():SavedRoom{return{liveries:this.liveryFrame(),setupRule:this.setupRule,snapshot:this.snapshot(true),sessions:[...this.sessions.values()].map(s=>({...s.arenas===1?{arenas:1 as const}:{},...s.courses===1?{courses:1 as const}:{},...s.roster===1?{roster:1 as const}:{},...s.eventRules?{eventRules:s.eventRules}:{},...s.timedRace===1?{timedRace:1 as const}:{},...s.noRespawnDerby===1?{noRespawnDerby:1 as const}:{},...s.livery?{livery:structuredClone(s.livery)}:{},...s.wire?{wire:s.wire}:{},cupId:s.cupId,member:structuredClone(s.member),token:s.token,disconnected:s.disconnected,seq:s.seq})),updated:this.now()};}
+  save():SavedRoom{return{liveries:this.liveryFrame(),setupRule:this.setupRule,snapshot:this.snapshot(true),sessions:[...this.sessions.values()].map(s=>({...s.arenas===1?{arenas:1 as const}:{},...s.courses===1?{courses:1 as const}:{},...s.roster===1?{roster:1 as const}:{},...s.kite===1?{kite:1 as const}:{},...s.eventRules?{eventRules:s.eventRules}:{},...s.timedRace===1?{timedRace:1 as const}:{},...s.noRespawnDerby===1?{noRespawnDerby:1 as const}:{},...s.livery?{livery:structuredClone(s.livery)}:{},...s.wire?{wire:s.wire}:{},cupId:s.cupId,member:structuredClone(s.member),token:s.token,disconnected:s.disconnected,seq:s.seq})),updated:this.now()};}
   restore(saved:SavedRoom){this.liveryRevision=Number.isSafeInteger(saved.liveries?.revision)&&saved.liveries!.revision>=0?saved.liveries!.revision:0;this.activeLiveries=saved.snapshot.cars.map(c=>{const row=saved.liveries?.cars.find(v=>v.id===c.id&&v.kind===c.kind);return row&&validOnlineLivery(row.layers)?copyOnlineLivery(row.layers):[];});this.setupRule=saved.setupRule==='stock'?'stock':'open';this.sim.dispose();const capacity=saved.snapshot.capacity??saved.snapshot.cars.length;if(!validCapacity(capacity)||capacity!==saved.snapshot.cars.length)throw new Error('Invalid saved room capacity');this.sim=new Simulation(this.R,saved.snapshot.mode,saved.snapshot.cars.map(c=>c.kind),capacity,saved.snapshot.cars.map(c=>c.setup),saved.snapshot.event?.rules,saved.snapshot.event?.seed);this.sim.restore(saved.snapshot);this.cup=validCup(saved.snapshot.cup)?structuredClone(saved.snapshot.cup):undefined;this.sessions.clear();for(const s of saved.sessions)this.sessions.set(s.member.id,{...s,livery:validSelectedLivery(s.livery)?structuredClone(s.livery):undefined,cupId:s.cupId??crypto.randomUUID(),voteAt:-Infinity,member:{...structuredClone(s.member),...(validOnlineLoadout(s.member.loadout)?{}:{loadout:{kind:s.member.kind,setup:stockOnlineSetup(s.member.kind)}}),connected:false},peer:{send(){},close(){}},lastInput:0,rateStart:0,count:0,disconnected:s.disconnected||this.now()});}
   private startRound(mode:'race'|'derby'|'playground',rules:OnlineEventRules|undefined=this.sim.event?.rules){
     if(this.cup)beginCupRound(this.cup,mode as CupMode,Array.from({length:this.sim.capacity},(_,id)=>{const session=this.sessions.get(id);return session?.member.connected?{id:session.cupId,name:session.member.name,bot:false}:{id:'bot-'+id,name:'AI DRIVER '+(id+1),bot:true};}));
     const loadouts=Array.from({length:this.sim.capacity},(_,i)=>this.sessions.get(i)?.member.loadout);
     const fullRoster=[...this.sessions.values()].filter(s=>s.member.connected).every(s=>s.roster===1);
-    const kinds=loadouts.map((loadout,i)=>loadout?.kind??this.sessions.get(i)?.member.kind??(fullRoster?ONLINE_CARS[i%ONLINE_CARS.length]:this.sim.cars[i].state.kind));
+    const roster=[...this.sessions.values()].filter(s=>s.member.connected).every(s=>s.kite===1)?KITE_ONLINE_CARS:ONLINE_CARS;
+    const kinds=loadouts.map((loadout,i)=>loadout?.kind??this.sessions.get(i)?.member.kind??(fullRoster?roster[i%roster.length]:this.sim.cars[i].state.kind));
     const setups=loadouts.map((loadout,i)=>effectiveOnlineSetup(kinds[i],loadout?.setup??stockOnlineSetup(kinds[i]),this.setupRule));
     this.activeLiveries=kinds.map((kind,i)=>{const selection=this.sessions.get(i)?.livery;return selection?.kind===kind?copyOnlineLivery(selection.layers):[];});this.liveryRevision++;
     for(const [i,session]of this.sessions)session.member.kind=kinds[i];

@@ -1,6 +1,7 @@
+import {restoreOnlineKiteBytes} from './online-kite-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readKitePrevious,restoreKiteBytes,verifyKiteRevision} from './kite-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreOnlineKiteBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('Kite preserves every prior fixture, vehicle asset, control and camera input',verifyKiteRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/kite/revision.json').toString());

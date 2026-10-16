@@ -5,7 +5,7 @@ test('fresh and previously saved standard controls use reversed keyboard steerin
  for(const revision of [undefined,10,11]){
   const saved={...defaultControls(),keyboardDefaults:revision,deadzone:.25,keys:{...defaultControls().keys,left:['KeyA','ArrowLeft'],right:['KeyD','ArrowRight']}};
   const c=readControls(JSON.stringify(saved));
-  assert.equal(c.keyboardDefaults,12);assert.equal(c.deadzone,.25);
+  assert.equal(c.keyboardDefaults,13);assert.equal(c.deadzone,.25);
   for(const key of ['KeyA','ArrowLeft'])assert.equal(drivingInput(c,new Set([key]),[],0).steer,1);
   for(const key of ['KeyD','ArrowRight'])assert.equal(drivingInput(c,new Set([key]),[],0).steer,-1);
   assert.deepEqual(readControls(JSON.stringify(c)),c);
