@@ -2,7 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createNativeHullFromStart,prepareNativeHullStartFromPose} from '../native-hull.js';
 import {createNativeLifecycleRider} from '../native-lifecycle-rider.js';
-import {createNativeRaceAdapter,stepNativeRaceAdapter} from '../native-race-adapter.js';
+import {createNativeRaceAdapter,stepNativeRaceAdapter,latchNativeRaceAdapterControls,prepareNativeRaceAdapterFrame} from '../native-race-adapter.js';
+import {prepareNativeAIStartInput} from '../native-ai-start.js';
 import {createNativeRiderRecovery} from '../native-rider-recovery.js';
 import {createAuthoredNativeResultRecords} from '../authored-native-result-records.js';
 import {createNativeRiderResultPoseProvider} from '../native-rider-start-provider.js';
@@ -63,20 +64,27 @@ test('result record seeking is pure and actor5 never reads retained yaw',()=>{
 
 // Prepared result selection, not a driven original finish: every subsequent
 // actor/frame/pose/point is produced by actual lifecycle and physical solves.
-function run(actor,hz=20,riderIndex=0){
+function run(actor,hz=20,riderIndex=0,sourceDispatch=false,targetFrames=null){
  const h=setup({rider:riderIndex}),samples=[],state=createNativeRiderRecovery({riderIndex,selectedActor:actor,selectionCountdown:10,
   hullDamping:h.hull.points.map(p=>Math.fround(p.damping))});
+ let aiReads=0;
  const adapter=createNativeRaceAdapter({riderIndex,hullStart:h.hullStart,...h.bundle,
+  ...(sourceDispatch?{sourceAIInput:(_,c)=>{
+   aiReads++;return {...prepareNativeAIStartInput({role:-1,difficulty:0,chargeTimerNative:16,heldButtons:c.previousControls.heldButtons}),
+    basePowerFactor:c.previousControls.powerFactor};
+  }}:{}),
   riderPose:(hull,c)=>{const out=h.bundle.riderPose(hull,c);samples.push({request:structuredClone(c.poseRequest),outcome:out.animationOutcome});return out;},
   riderRecovery:{courseDatumNative:0,raceFinished:true,state},sourceState:{simulationState:3,phase650:4}});
  const history=[];let entered=false,returned=false,prior=-1;
  for(let i=0;i<hz*16;i++){
-  stepNativeRaceAdapter(adapter,1/hz,{rawXNative:0,rawYNative:0,heldButtons:0});
+  const dt=targetFrames===null?1/hz:Math.min(1/hz,targetFrames*.05-i/hz);
+  if(dt<1e-12)break;
+  stepNativeRaceAdapter(adapter,dt,{rawXNative:0,rawYNative:0,heldButtons:0});
   if(adapter.logicalFrames===prior)continue;prior=adapter.logicalFrames;
   const s=adapter.riderLifecycle.state;entered||=s.actorState===actor;
   history.push({state:s,points:adapter.articulatedRider.points.map(p=>({...p.position})),
    auxiliary:h.bundle.anchorState.logicalFrames,body:adapter.articulatedRider.logicalFrames});
-  if(entered&&s.actorState===22&&s.pendingActor===-1){returned=true;break;}
+  if(entered&&s.actorState===22&&s.pendingActor===-1){returned=true;if(targetFrames===null)break;}
  }
  assert.ok(entered&&returned,`actor${actor} did not finish: ${JSON.stringify(adapter.riderLifecycle.state)}`);
  for(const row of history){
@@ -88,6 +96,8 @@ function run(actor,hz=20,riderIndex=0){
  assert.equal(adapter.riderLifecycle.state.selectionCountdown,-1);
  assert.equal(adapter.riderLifecycle.state.selectedActor,actor);
  assert.equal(samples.length,adapter.articulatedRider.logicalFrames);
+ if(sourceDispatch){assert.ok(aiReads>0);assert.equal(adapter.lastControls.controlOrigin,'ai');}
+ if(targetFrames!==null){assert.equal(adapter.hull.ticks,targetFrames*5);assert.equal(adapter.logicalFrames,targetFrames);}
  return {adapter,history,samples};
 }
 for(let actor=1;actor<=6;actor++)test(`result${actor} completes actual poses and physical solves for all four riders${actor===5?' through remount7':''}`,()=>{
@@ -99,14 +109,66 @@ for(let actor=1;actor<=6;actor++)test(`result${actor} completes actual poses and
   assert.ok(h.samples.some(s=>s.request.pending?.actorState===actor&&s.request.pending.animationFrame===1));
  }
 });
-test('result completion is identical across30/60/144Hz render cadences',()=>{
+test('result completion and source AI takeover are identical across30/60/144Hz render cadences',()=>{
  for(const actor of [1,5]){
-  const reference=run(actor,30).adapter;
+  // A render call can otherwise enter the NEXT partially completed frame
+  // before observing completion. Compare all owners at the same exact time.
+  const frames=run(actor,20,0,true).adapter.logicalFrames;
+  const reference=run(actor,30,0,true,frames).adapter;
   for(const hz of [60,144]){
-   const actual=run(actor,hz).adapter;
+   const actual=run(actor,hz,0,true,frames).adapter;
    assert.deepEqual(actual.riderLifecycle.state,reference.riderLifecycle.state);
    assert.deepEqual(actual.articulatedRider.points,reference.articulatedRider.points);
    assert.deepEqual(actual.hull.points,reference.hull.points);
+   assert.deepEqual(actual.controlState,reference.controlState);
   }
  }
+});
+
+test('all six actual result completions switch input on the next frame, preserving human identity and button history',()=>{
+ for(let actor=1;actor<=6;actor++){
+  const h=setup(),state=createNativeRiderRecovery({riderIndex:0,selectedActor:actor,selectionCountdown:10,
+   hullDamping:h.hull.points.map(p=>Math.fround(p.damping))});
+  let humanReads=0,aiReads=0;
+  const a=createNativeRaceAdapter({hullStart:h.hullStart,...h.bundle,
+   riderRecovery:{courseDatumNative:0,raceFinished:true,state},sourceState:{simulationState:3,phase650:4},
+   sourceAIInput:(hull,c)=>{
+    aiReads++;assert.equal(c.selectionCountdown,-1);assert.equal(c.source.phase650,4);
+    assert.equal(hull,a.hull);assert.ok(c.previousControls);
+    return {...prepareNativeAIStartInput({role:-1,difficulty:0,chargeTimerNative:16,heldButtons:c.previousControls.heldButtons}),
+     basePowerFactor:c.previousControls.powerFactor};
+   }});
+  const profile=a.water.profile;
+  const human=()=>{humanReads++;return {rawXNative:0,rawYNative:0,heldButtons:0x8010};};
+  for(let frame=0;a.riderLifecycle.state.selectionCountdown>=0&&frame<250;frame++){
+   stepNativeRaceAdapter(a,.05,human);
+   assert.equal(a.lastControls.controlOrigin,'human');assert.equal(aiReads,0);
+  }
+  assert.equal(a.riderLifecycle.state.selectionCountdown,-1);
+  assert.ok(humanReads>10);const before=humanReads,frame=a.logicalFrames;
+  // Input phase consumes the AI producer once; preparation and five hull
+  // ticks must use that sample without repolling either provider.
+  const forbidden=()=>{throw new Error('Human controller read after takeover');};
+  latchNativeRaceAdapterControls(a,forbidden);
+  assert.equal(aiReads,1);assert.equal(a.lastControls.controlOrigin,'ai');
+  assert.equal(a.lastControls.heldButtons,0x10);assert.equal(a.lastControls.releasedButtons,0x8000);
+  assert.equal(a.lastControls.pressedButtons,0);assert.equal(a.lastControls.basePowerFactor,1);
+  prepareNativeRaceAdapterFrame(a,forbidden);
+  stepNativeRaceAdapter(a,.05,forbidden);
+  assert.equal(aiReads,1);assert.equal(humanReads,before);assert.equal(a.logicalFrames,frame+1);
+  assert.equal(a.controlOrigin,'human');assert.equal(a.computerProfile,false);assert.equal(a.water.profile,profile);
+  assert.equal(a.articulatedRider.logicalFrames,a.logicalFrames);
+ }
+});
+
+test('source input dispatch rejects competing origin and invalid AI output without consuming history',()=>{
+ const h=setup();let reads=0;
+ const a=createNativeRaceAdapter({...h.bundle,riderRecovery:{courseDatumNative:0},
+  sourceAIInput:()=>{reads++;return {rawXNative:35,rawYNative:20,heldButtons:0x8000};}});
+ const before=structuredClone(a.controlState);
+ assert.throws(()=>latchNativeRaceAdapterControls(a,{}, {controlOrigin:'human'}),/countdown owns/);
+ assert.equal(reads,0);assert.deepEqual(a.controlState,before);
+ assert.throws(()=>latchNativeRaceAdapterControls(a),/basePowerFactor/);
+ assert.equal(reads,1);assert.deepEqual(a.controlState,before);assert.equal(a.sampledHullTick,null);
+ assert.throws(()=>createNativeRaceAdapter({sourceAIInput:()=>({})}),/physical rider lifecycle/);
 });

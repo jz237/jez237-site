@@ -9,7 +9,7 @@ import {getCourse} from '../courses.js';
 import {createNativeHull} from '../native-hull.js';
 import {createAuthoredNativeRider} from '../authored-native-rider.js';
 import {createNativeLifecycleRider} from '../native-lifecycle-rider.js';
-import {createNativeRaceAdapter} from '../native-race-adapter.js';
+import {createNativeRaceAdapter,latchNativeRaceAdapterControls} from '../native-race-adapter.js';
 import {createNativeRaceWorld,stepNativeRaceWorld,nativeRaceWorldSnapshot} from '../native-race-world.js';
 import {createRaceWater,captureRaceWater} from '../race-water.js';
 const F=Math.fround;
@@ -27,6 +27,29 @@ function input(){return {globals:{state650:3,state638:1,mode620:4,difficulty:0,c
  geometry:{selectionCircleNative:{x:0,z:0,radiusSquared:100000000},proximityObjectCentersNative:[],proximityCount:0,
   cameraCornersNative:[{x:-5000,z:-5000},{x:-5000,z:5000},{x:5000,z:-5000},{x:5000,z:5000}]},
  waterField:createNativeWaterField()};}
+
+test('negative human result countdown runs the actual prepared AI driver in both driving and non-driving phases',()=>{
+ for(const phase650 of [3,4]){
+  const q=input(),s=state({role:-1});q.globals.state650=phase650;q.globals.chargeTimerNative=16;
+  q.racers[0].record.finished2c2c=1;q.racers[0].body.powerFactor=1.125;
+  const expected=prepareNativeAIDriver(table,s,q),initialHull=createNativeHull({rider:2});
+  const bundle=createNativeLifecycleRider({initialHull});let calls=0;
+  const a=createNativeRaceAdapter({riderIndex:2,...bundle,riderRecovery:{courseDatumNative:0,raceFinished:true},
+   sourceState:{simulationState:3,phase650},sourceAIInput:(_,context)=>{
+    calls++;assert.equal(context.selectionCountdown,-1);assert.equal(context.source.phase650,phase650);
+    const r=prepareNativeAIDriver(table,s,q);return {...r.controls,action16f4:r.action16f4};
+   }});
+  latchNativeRaceAdapterControls(a,()=>{throw new Error('Human device must not be polled');});
+  assert.equal(calls,1);assert.equal(expected.frame.phase,phase650===3?'driving':'start');
+  assert.equal(a.lastControls.rawXNative,expected.controls.rawXNative);
+  assert.equal(a.lastControls.workingXNative,expected.controls.rawXNative);
+  assert.equal(a.lastControls.workingYNative,expected.controls.rawYNative);
+  assert.equal(a.lastControls.basePowerFactor,expected.controls.basePowerFactor);
+  assert.equal(a.actionState.override,expected.action16f4);
+  assert.equal(a.controlOrigin,'human');assert.equal(a.computerProfile,false);
+  if(phase650===3)assert.notEqual(expected.controls.rawXNative,0);
+ }
+});
 
 test('driver composes original target, raw controls and shared input without changing its source snapshot or lattice',()=>{
  const s=state(),q=input(),before=structuredClone({s,globals:q.globals,racers:q.racers,geometry:q.geometry,field:q.waterField});

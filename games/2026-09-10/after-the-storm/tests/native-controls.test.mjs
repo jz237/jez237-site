@@ -1,7 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {conditionNativeStick,createNativeControlState,sampleNativeControls} from '../native-controls.js';
+import {conditionNativeStick,createNativeControlState,sampleNativeControls,nativeRiderControlOrigin} from '../native-controls.js';
 import {createNativeRiderProfile,decideNativeRiderAction} from '../native-rider-forces.js';
+
+test('source human dispatch tests the signed result countdown, including zero',()=>{
+ for(const n of [-32768,-10,-1])assert.equal(nativeRiderControlOrigin(n),'ai');
+ for(const n of [0,1,10,32767])assert.equal(nativeRiderControlOrigin(n),'human');
+ for(const n of [undefined,null,-32769,32768,.5,NaN])assert.throws(()=>nativeRiderControlOrigin(n));
+});
 
 test('native axis curve preserves sign and intentionally changes diagonal gain',()=>{
   for(const [x,y,expected] of [[35,0,[18,0]],[35,35,[35,35]],[70,35,[70,22]],[-35,20,[-23,8]],

@@ -28,6 +28,16 @@ function powerBaseline(origin,value){
   return F(value);
 }
 
+/** Source61708 reads signed body1446 before polling a human controller.
+ * Negative values call616B0 (AI80400 then common61184); zero still selects
+ * the human path. Actor, finish record, scene phase and physical profile do
+ * not select this branch. The lifecycle owns the countdown and its writes.
+ */
+export function nativeRiderControlOrigin(selectionCountdown){
+  integer(selectionCountdown,'selectionCountdown',-32768,32767);
+  return selectionCountdown<0?'ai':'human';
+}
+
 /** Signed square curve after diagonal gain; small-axis rounding is intrinsic. */
 export function conditionNativeStick(rawXNative,rawYNative){
   axis(rawXNative,'rawXNative');axis(rawYNative,'rawYNative');

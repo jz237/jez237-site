@@ -2,7 +2,7 @@ import {createNativeHull,createNativeHullFromStart,stepNativeHull,NATIVE_HULL_ST
 import {createNativeWaterProfile,createNativeWaterState,applyNativeWaterForces} from './native-water.js';
 import {createNativeRiderProfile,prepareNativeRiderFrame,applyNativeTrimForces,
   applyNativeAuxiliaryYawForces,decideNativeRiderAction,applyNativeManipulationForces} from './native-rider-forces.js';
-import {createNativeControlState,sampleNativeControls} from './native-controls.js';
+import {createNativeControlState,sampleNativeControls,nativeRiderControlOrigin} from './native-controls.js';
 import {stepNativeArticulatedRider} from './native-articulated-rider.js';
 import {createNativeRiderControlState,prepareNativeRiderControls,finishNativeRiderControls} from './native-rider-controls.js';
 import {createNativeImpactState,resetNativeImpacts,recordNativeImpact,nativeImpactSnapshot} from './native-impact-state.js';
@@ -228,6 +228,16 @@ export function applyNativeRaceContact(hull,{kind,pointIndex,normal,penetration=
  * not implement an AI producer or navigation. computerProfile selects the
  * separate recovered physical coefficient branch; input takeover never
  * changes that constructor choice.
+ * sourceAIInput explicitly enables the source61708 human dispatch wrapper.
+ * It requires a physical lifecycle and a human default origin. Negative
+ * lifecycle.selectionCountdown calls this producer instead of polling input;
+ * nonnegative values poll input normally. The producer receives(hull,context)
+ * and must return raw AI controls, retained basePowerFactor and any16f4 write.
+ * Context includes the captured source scene, countdown and prior controls.
+ * The caller owns the actual AI driver/context/history; no fallback producer,
+ * device record, zero history or scene-derived takeover is synthesized here.
+ * Without this option the existing explicit input dispatch remains available
+ * for prepared fixtures and callers which already own source scheduling.
  * riderActions opts into the additional gesture/idle actor path. Supply the
  * six retained inputHistory fields (directionMask15f6 has one control owner),
  * signed idleFramesC6c/idleChoice16c4, and source object/provider containing
@@ -238,7 +248,7 @@ export function applyNativeRaceContact(hull,{kind,pointIndex,normal,penetration=
  */
 export function createNativeRaceAdapter({riderIndex=0,tuneB6c=0,tuneB70=0,tuneB74=0,
   position,velocity,heading=0,pitch=0,roll=0,scale=.025,surface=0,contacts={},jointWorld,
-  contactFactor=1,powerSteps=5,sourceState={},articulatedRider,riderPose,riderRecovery,riderActions,controlOrigin='human',computerProfile=false,hullStart}={}){
+  contactFactor=1,powerSteps=5,sourceState={},articulatedRider,riderPose,riderRecovery,riderActions,controlOrigin='human',computerProfile=false,hullStart,sourceAIInput}={}){
   if(controlOrigin!=='human'&&controlOrigin!=='ai')throw new RangeError('controlOrigin must be human or ai');
   if(typeof computerProfile!=='boolean')throw new TypeError('computerProfile must be boolean');
   range(contactFactor,'contactFactor',0,1);range(powerSteps,'powerSteps',0,5);hookSet(contacts);
@@ -260,6 +270,8 @@ export function createNativeRaceAdapter({riderIndex=0,tuneB6c=0,tuneB70=0,tuneB7
   if(riderRecovery!==undefined&&(!articulatedRider||!riderRecovery||typeof riderRecovery!=='object'))throw new TypeError('riderRecovery requires a physical rider and explicit course settings');
   if(riderRecovery)for(const key of Object.keys(riderRecovery))if(!['courseDatumNative','raceFinished','state','physicalMode'].includes(key))throw new TypeError(`Unsupported riderRecovery.${key}`);
   const lifecycle=riderRecovery===undefined?null:createNativeRiderLifecycle({...riderRecovery,hull,rider:articulatedRider});
+  if(sourceAIInput!==undefined&&(typeof sourceAIInput!=='function'||!lifecycle||controlOrigin!=='human'))
+    throw new TypeError('sourceAIInput requires a producer, physical rider lifecycle and human default origin');
   const actions=createRiderActions(riderActions,lifecycle);
   if(articulatedRider)articulatedOwners.set(articulatedRider,hull);
   // The source reset seeds aggregate wet state to8/true before later water
@@ -278,6 +290,7 @@ export function createNativeRaceAdapter({riderIndex=0,tuneB6c=0,tuneB70=0,tuneB7
       ...(lifecycle?{recovery:nativeRiderLifecycleSnapshot(lifecycle)}:{})}};
   if(actions)adapter.lastFrame.riderActions=riderActionSnapshot(adapter);
   Object.defineProperties(adapter,{controlOrigin:{value:controlOrigin,enumerable:true},computerProfile:{value:computerProfile,enumerable:true},
+    sourceAIInput:{value:sourceAIInput,enumerable:true},
     sampledHullTick:{get:()=>latchedControlFrames.get(adapter)?.hullTick??null,enumerable:true}});return adapter;
 }
 
@@ -301,7 +314,10 @@ function nativeInput(input,origin){
 
 function sampleFrameControls(adapter,input,options){
   const {hull,lastFrame,logicalFrames}=adapter;
-  const requested=typeof input==='function'?input(hull.simulationTime,logicalFrames):input;
+  // Preserve the explicit caller's established poll order. The source wrapper
+  // must inspect its lifecycle before polling either producer, and must never
+  // read human input on the AI branch (including invalid/disconnected input).
+  let requested=adapter.sourceAIInput?undefined:typeof input==='function'?input(hull.simulationTime,logicalFrames):input;
   const previousContacts={...lastFrame.contacts};
   const frameContext={logicalFrame:logicalFrames,time:hull.simulationTime,
     previousContacts,previousFrame:lastFrame,previousAction:{...adapter.actionState}};
@@ -316,7 +332,16 @@ function sampleFrameControls(adapter,input,options){
   }
   const source=lifecycleSource?{...suppliedSource,...lifecycleSource}:suppliedSource;
   const oldAction=actionState(source.actionState,adapter.actionState);
-  const origin=options.controlOrigin===undefined?adapter.controlOrigin:options.controlOrigin;
+  let origin=options.controlOrigin===undefined?adapter.controlOrigin:options.controlOrigin;
+  if(adapter.sourceAIInput){
+    const selectionCountdown=adapter.riderLifecycle.state.selectionCountdown;
+    origin=nativeRiderControlOrigin(selectionCountdown);
+    if(options.controlOrigin!==undefined&&options.controlOrigin!==origin)
+      throw new Error('The source rider countdown owns controlOrigin');
+    requested=origin==='ai'?adapter.sourceAIInput(hull,{...frameContext,source:{...source},selectionCountdown,
+      previousControls:adapter.lastControls?structuredClone(adapter.lastControls):null}):
+      typeof input==='function'?input(hull.simulationTime,logicalFrames):input;
+  }
   const inputFields=nativeInput(requested,origin);
   // AI preparation returns16f4 beside its raw controls. Transport that exact
   // word through the same owner used by pre-hull manipulation and post-hull

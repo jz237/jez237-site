@@ -2524,3 +2524,50 @@ This checkpoint remains local and unpublished. Browser race results still
 stop normal world updates; source61708 result-input handling and the original
 result/menu update sequence, fades, unfinished-place estimation and persistence
 remain open. The broader full-game parity objective is still incomplete.
+
+## Result input handoff — October 15, 2026
+
+The adapter can now run the original human-input dispatch decision against
+the actual rider lifecycle's signed1446 countdown. Zero still polls human
+input; negative values invoke an explicitly supplied source AI producer.
+Original61708 calls616B0, which runs80400 then common61184 and skips the final
+human stick curve. Actor number, finished record, scene phase and computer
+physical profile do not select this branch. No parallel finish timer is added.
+
+The explicit sourceAIInput option requires a physical lifecycle and human
+default origin. It polls only the selected producer, captures the prior
+controls and scene at the logical boundary, transports raw AI axes/power/16f4
+through the existing consumers, and retains held-button/direction history.
+The source input latch samples once before physical preparation and all five
+hull ticks. Conflicting caller origins reject. The human identity and fixed
+physical profile survive takeover. Existing prepared callers without this
+option retain their explicit dispatch; a missing AI context is not fabricated.
+
+Private execution of original61708/616B0/61184/61644 matches148 prepared cases
+(22,762 executed instructions under the existing evaluator's counting rule).
+These cover signed countdown boundaries, two racer slots, mapped controller
+records, missing controllers, result/remount/riding actors, scene gates and
+crash muting. The80400 output is prepared at its call boundary; this audit
+does not claim original AI execution. Original six-byte device-copy tails
+were also checked privately; the browser still supplies adapted controls.
+
+Tests connect the actual reconstructed AI driver in both phase3 and phase4,
+and all six complete physical result sequences switch on the following frame
+without polling a human device. Button releases and one input sample per
+frame are checked. Celebration and fall/remount control history and physical
+state agree at30/60/144Hz at the same exact simulation instant. The cadence
+fixture now clips its final render interval, avoiding a comparison against
+a partially begun next frame. All560 selected control/AI/rider/lifecycle/
+adapter/host/world/grid/ordinary-result regression tests pass.
+
+A fresh local browser also ran all six actual physical result sequences and
+verified the input switch using the checked source module hashes. It reported
+no console errors or warnings. This was a prepared numeric browser probe,
+not a full-game UI or driven-finish replay. The first probe lacked the required
+retained yaw from prepared hull startup; the final probe uses that actual owner.
+
+This checkpoint remains unpublished. The normal host still needs complete
+retained AI context/history initialization and the original result/world/menu
+schedule before enabling this option. Shared RNG/camera context, zero-simulation
+dispatch, fades, unfinished-place estimation and persistent native records
+remain open, alongside the broader gameplay parity gaps. Livev2.24.0 is unchanged.
