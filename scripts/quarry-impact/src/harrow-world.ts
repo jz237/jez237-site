@@ -1,3 +1,4 @@
+import {attachArenaGroundDetail} from './arena-ground-detail';
 import * as T from 'three';
 import {HARROW_ARENA,HARROW_BARRIERS} from './harrow-arena';
 import {freezeSceneryTransforms} from './render-work';
@@ -9,7 +10,7 @@ export function createHarrowWorld(){
   const canvas=document.createElement('canvas');canvas.width=canvas.height=1024;const ctx=canvas.getContext('2d');
   if(ctx){
    ctx.fillStyle='#45484a';ctx.fillRect(0,0,1024,1024);let seed=421;
-   for(let i=0;i<16000;i++){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const x=seed%1024;seed=(Math.imul(seed,1664525)+1013904223)>>>0;ctx.fillStyle=i%2?'#515354':'#3d4143';ctx.fillRect(x,seed%1024,2,2);}
+   for(let i=0;i<16000;i++){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const x=seed>>>22;seed=(Math.imul(seed,1664525)+1013904223)>>>0;ctx.fillStyle=i%2?'#515354':'#3d4143';ctx.fillRect(x,seed>>>22,2,2);}
    const scale=1024/180;ctx.strokeStyle='#b6b099';ctx.lineWidth=.15*scale;
    for(const radius of [12,34,46]){ctx.beginPath();ctx.arc(512,512,radius*scale,0,Math.PI*2);ctx.stroke();}
    for(let i=0;i<24;i++){const a=i/24*Math.PI*2;ctx.save();ctx.translate(512+Math.sin(a)*34*scale,512-Math.cos(a)*34*scale);ctx.rotate(a);ctx.strokeRect(-1.3*scale,-2.8*scale,2.6*scale,5.6*scale);ctx.restore();}
@@ -17,6 +18,7 @@ export function createHarrowWorld(){
    const texture=new T.CanvasTexture(canvas);texture.flipY=false;texture.colorSpace=T.SRGBColorSpace;texture.anisotropy=8;textures.push(texture);floorMaterial.map=texture;
   }
  }else floorMaterial.color.set(0x45484a);
+ if(typeof document!=='undefined')attachArenaGroundDetail(floorMaterial,'harrow');
  const floor=new T.Mesh(floorGeometry,floorMaterial);floor.name='harrow_asphalt';floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;root.add(floor);
  const batches=new Map<keyof typeof materials,T.Matrix4[]>(),matrix=new T.Matrix4(),q=new T.Quaternion();
  const box=(x:number,y:number,z:number,w:number,h:number,d:number,finish:keyof typeof materials,yaw=0)=>{q.setFromAxisAngle(new T.Vector3(0,1,0),yaw);matrix.compose(new T.Vector3(x,y,z),q,new T.Vector3(w,h,d));const batch=batches.get(finish)??[];batch.push(matrix.clone());batches.set(finish,batch);};

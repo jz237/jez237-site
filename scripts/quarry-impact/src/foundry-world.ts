@@ -1,3 +1,4 @@
+import {attachArenaGroundDetail} from './arena-ground-detail';
 import {createFoundryIndustrial} from './foundry-industrial';
 import * as T from 'three';
 import {FOUNDRY_BARRIERS,FOUNDRY_OUTLINE,foundryHeight,foundryPatch,foundrySurface} from './foundry-arena';
@@ -13,7 +14,7 @@ export function createFoundryWorld(){
    const scale=1024/160;ctx.fillStyle='#687361';ctx.fillRect(0,0,1024,1024);
    ctx.save();ctx.beginPath();FOUNDRY_OUTLINE.forEach((p,i)=>i?ctx.lineTo(512+p.x*scale,512-p.z*scale):ctx.moveTo(512+p.x*scale,512-p.z*scale));ctx.closePath();ctx.clip();ctx.fillStyle='#6a706c';ctx.fillRect(0,0,1024,1024);
    ctx.fillStyle='#a78e70';ctx.beginPath();for(const [i,p]of [{x:-80,z:36},{x:80,z:-12},{x:80,z:-36},{x:-80,z:12}].entries())i?ctx.lineTo(512+p.x*scale,512-p.z*scale):ctx.moveTo(512+p.x*scale,512-p.z*scale);ctx.closePath();ctx.fill();
-   let seed=911;for(let i=0;i<32000;i++){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const x=seed%1024;seed=(Math.imul(seed,1664525)+1013904223)>>>0;const y=seed%1024;const gravel=foundrySurface((x-512)/scale,(512-y)/scale)==='gravel';ctx.fillStyle=gravel?(i%2?'#b7a180':'#968067'):(i%2?'#747a75':'#5c6460');ctx.fillRect(x,y,2,2);}
+   let seed=911;for(let i=0;i<32000;i++){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const x=seed>>>22;seed=(Math.imul(seed,1664525)+1013904223)>>>0;const y=seed>>>22;const gravel=foundrySurface((x-512)/scale,(512-y)/scale)==='gravel';ctx.fillStyle=gravel?(i%2?'#b7a180':'#968067'):(i%2?'#747a75':'#5c6460');ctx.fillRect(x,y,2,2);}
    ctx.strokeStyle='#444c49';ctx.lineWidth=.1*scale;for(let x=-48;x<=48;x+=12){ctx.beginPath();ctx.moveTo(512+x*scale,512-49*scale);ctx.lineTo(512+x*scale,512+49*scale);ctx.stroke();}for(let z=-40;z<=40;z+=10){ctx.beginPath();ctx.moveTo(512-57*scale,512-z*scale);ctx.lineTo(512+57*scale,512-z*scale);ctx.stroke();}
    // Loading-bank edges and starting boxes are road markings, not extra collision geometry.
    ctx.strokeStyle='#d8bc64';ctx.lineWidth=.25*scale;ctx.setLineDash([2*scale,1.5*scale]);for(const x of [-38,38]){ctx.beginPath();ctx.moveTo(512+x*scale,512-46*scale);ctx.lineTo(512+x*scale,512+46*scale);ctx.stroke();}ctx.setLineDash([]);
@@ -21,6 +22,7 @@ export function createFoundryWorld(){
    const texture=new T.CanvasTexture(canvas);texture.flipY=false;texture.colorSpace=T.SRGBColorSpace;texture.anisotropy=8;textures.push(texture);floorMaterial.map=texture;floorMaterial.color.set(0xffffff);
   }
  }
+ if(typeof document!=='undefined')attachArenaGroundDetail(floorMaterial,'foundry');
  const floor=new T.Mesh(floorGeometry,floorMaterial);floor.name='foundry_terrain';floor.receiveShadow=true;root.add(floor);
  const batches=new Map<keyof typeof materials,T.Matrix4[]>(),matrix=new T.Matrix4(),q=new T.Quaternion();
  function box(x:number,y:number,z:number,w:number,h:number,d:number,finish:keyof typeof materials,yaw=0){q.setFromAxisAngle(new T.Vector3(0,1,0),yaw);matrix.compose(new T.Vector3(x,y,z),q,new T.Vector3(w,h,d));const batch=batches.get(finish)??[];batch.push(matrix.clone());batches.set(finish,batch);}
