@@ -15,6 +15,7 @@ import mimetypes
 import os
 import re
 import shlex
+import shutil
 import subprocess
 from pathlib import Path
 from PIL import Image, ImageOps
@@ -38,7 +39,6 @@ VISUAL_THOUGHT_EXPERIMENTS = ROOT / "visual-thought-experiments-data.json"
 IMPOSSIBLE_DOCUMENTARY = ROOT / "impossible-documentary-data.json"
 STRANGE_BOTANICALS = ROOT / "strange-botanicals-data.json"
 CINEMATIC_CATS = ROOT / "cinematic-cats-data.json"
-QUIETLY_UNCANNY_DOMESTIC = ROOT / "quietly-uncanny-domestic-data.json"
 OCEAN_SCENES = ROOT / "ocean-scenes-data.json"
 GALACTIC_PICTURES = ROOT / "galactic-pictures-data.json"
 IMAGES = ROOT / "images"
@@ -56,6 +56,8 @@ FACTUAL_SOURCE_TYPES = {
     "university",
     "peer-reviewed-journal",
     "professional-scientific-organization",
+    "veterinary-reference",
+    "animal-welfare-organization",
     "museum",
     "standards-body",
     "manufacturer-technical-documentation",
@@ -103,6 +105,12 @@ def upload_to_r2(dest: Path, bucket: str, prefix: str, wrangler_bin: str) -> str
 
 def save_archive_jpeg(src: Path, dest: Path) -> None:
     with Image.open(src) as im:
+        # Stock image generation already retains verified, upright JPEGs.
+        # Keep those exact bytes rather than introducing another lossy encode.
+        if im.format == "JPEG" and im.getexif().get(274, 1) == 1:
+            im.load()
+            shutil.copyfile(src, dest)
+            return
         im = ImageOps.exif_transpose(im)
         if im.mode in ("RGBA", "LA") or (im.mode == "P" and "transparency" in im.info):
             rgba = im.convert("RGBA")
@@ -336,6 +344,9 @@ def main() -> None:
     ap.add_argument("--wrangler-bin", default=os.environ.get("WRANGLER_BIN", "wrangler"))
     args = ap.parse_args()
 
+    if args.slot == "quietly-uncanny-domestic":
+        raise SystemExit("Quietly Uncanny was retired by the owner on 2026-10-15; do not upload or republish it.")
+
     # Serialize check-and-append so two scheduler/retry processes cannot both
     # pass uniqueness against the same archive snapshot.
     APPEND_LOCK.parent.mkdir(parents=True, exist_ok=True)
@@ -510,8 +521,6 @@ def main() -> None:
             paths = (*paths, STRANGE_BOTANICALS)
         if args.slot == "serious-cinematic-cat":
             paths = (*paths, CINEMATIC_CATS)
-        if args.slot == "quietly-uncanny-domestic":
-            paths = (*paths, QUIETLY_UNCANNY_DOMESTIC)
         if args.slot == "ocean-exploration":
             paths = (*paths, OCEAN_SCENES)
         if args.slot == "outer-space-exploration":
