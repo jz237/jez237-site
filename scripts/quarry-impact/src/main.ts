@@ -190,7 +190,7 @@ const derbyFormat=()=>readDerbyFormat(online?.active?onlineRules()?.derby:demo?d
 const scoreDerby=()=>mode==='derby'&&DERBY_FORMATS[derbyFormat()].scored;
 const respawningDerby=()=>scoreDerby()&&DERBY_FORMATS[derbyFormat()].respawns;
 const scoreElimination=()=>mode==='derby'&&derbyFormat()==='score-no-respawn';
-const scoreSpectating=()=>!demo&&!online?.active&&scoreElimination()&&cars[0]?.health<=0&&(state==='playing'||state==='paused');
+const scoreSpectating=()=>!demo&&scoreElimination()&&cars[0]?.health<=0&&(state==='playing'||state==='paused');
 const derbyRanking=()=>online?.active?online.network.snapshot!.ranking.map(id=>cars.find(c=>c.id===id)!):eventDerbyOrder(cars,scoreDerby(),combat);
 const eventDuration=()=>clubRound()?.duration??activeChallenge?.limit??(demo?demoOptions.duration:online?.active?onlineRules()?.duration??300:eventOptions.duration);
 function openEventSetup(){eventSetupOpen=true;keys.clear();showEventSetup(ui,eventOptions,()=>{eventSetupOpen=false;menu();},()=>{try{localStorage.setItem(EVENT_KEY,JSON.stringify(eventOptions));return true;}catch{return false;}},kind,garage);}
@@ -664,7 +664,7 @@ function leaveOnline() {
 }
 async function connectOnline(endpoint:string,room:string,name:string,loadout?:OnlineSelection) {
   archiveReplay();waypointRace=null;bankRun(false);telemetry=null;activeChallenge=undefined;activeTimeTrial=null;timeTrialOpen=false;timeTrialResult=null;timeTrialInvalidReason='';lastAward=null;
-  demo=false;
+  demo=false;director.reset();
   if(activeVenue!==quarryVenue)createCars(true);
   await sound.init();online.reset();online.active=true;onlinePhase='';
   try {online.network.connect({endpoint,room,name,kind:loadout?.kind??kind,setup:loadout?.setup??copyOnlineSetup(garage.cars[kind].setup),livery:loadout?.livery??garage.cars[loadout?.kind??kind].setup.livery});}catch(error){online.active=false;throw error;}
@@ -680,6 +680,7 @@ function receiveOnline() {
   }
   kind=cars[0].kind;setQuarryMode();
   if(changed) {
+    if(s.phase==='countdown')director.reset();
     if(s.phase==='result') {
       finish(s.ranking[0]===online.network.id?'EVENT WINNER':mode==='race'?'RACE COMPLETE':'DERBY COMPLETE');
     }else if(state==='paused') resumeState=s.phase;
@@ -1323,7 +1324,7 @@ function updateCamera(dt: number) {
   if(studio){studio.updateCamera(camera,orbit,renderer);return;}
   quarry.sun.position.copy(p.root.position).addScaledVector(DAYLIGHT_DIRECTION, DAYLIGHT_DISTANCE);
   quarry.sun.target.position.copy(p.root.position);
-  if(demo||scoreSpectating()){cameraImpactOffset.set(0,0,0);if(scoreSpectating()&&director.view==='director')director.select('drone');if(state!=='paused')director.update(cars,camera,orbit,dt,mode==='race');return;}
+  if(demo||scoreSpectating()){cameraImpactOffset.set(0,0,0);if(scoreSpectating()&&director.view!=='drone')director.select('drone');if(state!=='paused')director.update(cars,camera,orbit,dt,mode==='race');return;}
   if (state === 'inspect' || state === 'wrecked' || state === 'paused' && resumeState === 'wrecked') {
     cameraImpactOffset.set(0,0,0);
     orbit.update();

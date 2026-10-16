@@ -42,7 +42,7 @@ test('solo and demo saves retain all three derby choices through reload',()=>{
  assert.equal(readEventOptions().derby,'survival');assert.equal(readDemoOptions().derby,undefined);
  assert.equal(readEventOptions(JSON.stringify({...DEFAULT_EVENT,derby:'invalid'})).derby,'survival');
  assert.equal(readDemoOptions(JSON.stringify({...DEFAULT_DEMO,derby:'invalid'})).derby,undefined);
- assert.equal(validOnlineEventRules({...DEFAULT_ONLINE_EVENT,derby:'score-no-respawn'}),false,'unsupported network option is rejected');
+ assert.equal(validOnlineEventRules({...DEFAULT_ONLINE_EVENT,derby:'score-no-respawn'}),true,'network schema supports the explicitly negotiated variant');
  assert.equal(validOnlineEventRules({...DEFAULT_ONLINE_EVENT,derby:'score'}),true);
 });
 const replay=():ReplayDocument=>{

@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readNoRespawnDerbyPrevious,restoreNoRespawnDerbyBytes,verifyNoRespawnDerbyRevision} from './no-respawn-derby-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreOnlineScoreEliminationBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('NoRespawnDerby preserves every prior fixture, vehicle asset, control and camera input',verifyNoRespawnDerbyRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/no-respawn-derby/revision.json').toString());
@@ -10,3 +10,5 @@ test('the successor bridge restores full predecessors and does not conceal later
  }
  const unknown=Buffer.from('unknown');assert.deepEqual(restoreNoRespawnDerbyBytes('src/unknown.ts',unknown),unknown);
 });
+
+import {restoreOnlineScoreEliminationBytes} from './online-score-elimination-invariants';

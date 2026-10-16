@@ -1,3 +1,4 @@
+import {derbyEndReason} from '../src/derby-policy';
 import {validDrivingAssists} from '../src/driving-assists';
 import {combatMotion} from '../src/combat-feats';
 import {validTransmissionState} from '../src/transmission';
@@ -196,7 +197,7 @@ export class Simulation {
     }
     // Repeat a bounded event history in snapshots to survive late packets/reconnects.
     this.damage=this.damage.filter(d=>this.tick-d.tick<600).slice(-128);
-    if(this.event?.score)stepScoreRespawns(this.event.combat,this.cars.map(c=>({id:c.state.id,health:c.state.health,current:c.state.p,place:(x:number,z:number,yaw:number)=>{
+    if(this.event?.respawns)stepScoreRespawns(this.event.combat,this.cars.map(c=>({id:c.state.id,health:c.state.health,current:c.state.p,place:(x:number,z:number,yaw:number)=>{
       const s=c.state;s.health=100;s.engineStall=0;s.transmission=undefined;s.gear=1;s.damageLeft=s.damageRight=0;s.repair++;s.dents=[];s.components=freshComponents();s.input={...NEUTRAL};c.reverse=0;c.lastRecovery=this.elapsed;
       this.damage=this.damage.filter(d=>d.car!==s.id);this.place(c,x,z,yaw);this.damageShape(c);
     }})),this.elapsed,this.event.rules.duration,ONLINE_ARENA,()=>{});
@@ -217,7 +218,7 @@ export class Simulation {
         }
       }
     }
-    if(this.mode==='derby'&&(this.elapsed>=(this.event?.rules.duration??300)||!this.event?.score&&this.cars.filter(c=>c.state.health>0).length<=1))this.phase='result';
+    if(this.mode==='derby'&&derbyEndReason(this.event?.rules.derby??'survival',this.cars.map(c=>c.state),this.elapsed,this.event?.rules.duration??300))this.phase='result';
     if(this.mode==='race'&&(this.elapsed>=Math.max(900,(this.event?.rules.laps??3)*300)||this.cars.every(c=>c.state.finished||c.state.health<=0)))this.phase='result';
   }
   ranking(){

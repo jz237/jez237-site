@@ -1,3 +1,4 @@
+import {DERBY_FORMATS} from './derby-policy';
 import {validCombatFeats,type CombatFeatState,COMBAT_AWARDS} from './combat-feats';
 import type {CombatRecord as ScoreRecord} from './event-rules';
 import {CombatScoreboard,DEFAULT_EVENT,RACE_NAMES,type EventOptions} from './event-rules';
@@ -14,7 +15,7 @@ const object=(v:unknown):v is Record<string,unknown>=>!!v&&typeof v==='object'&&
 /** Network rules are rejected rather than silently clamped to a different event. */
 export function validOnlineEventRules(v:unknown):v is OnlineEventRules{
   return object(v)&&Object.keys(v).length===6&&v.version===1&&integer(v.laps,1,20)&&integer(v.duration,60,1200)&&
-    ['forward','reverse','opposing'].includes(v.direction as string)&&['laps','ordered','free','random'].includes(v.race as string)&&['survival','score'].includes(v.derby as string);
+    ['forward','reverse','opposing'].includes(v.direction as string)&&['laps','ordered','free','random'].includes(v.race as string)&&['survival','score','score-no-respawn'].includes(v.derby as string);
 }
 export function copyOnlineEventRules(v:OnlineEventRules):OnlineEventRules{return{version:1,laps:v.laps,direction:v.direction,race:v.race,derby:v.derby,duration:v.duration};}
 export function defaultOnlineEvent(v:OnlineEventRules){return (Object.keys(DEFAULT_ONLINE_EVENT)as (keyof OnlineEventRules)[]).every(k=>v[k]===DEFAULT_ONLINE_EVENT[k]);}
@@ -28,7 +29,7 @@ export function validOnlineEventState(v:unknown,mode:Mode,count:number):v is Onl
       return rules.race==='free'||p.visited.every((id,i)=>id===sequence[i]);
     }))return false;
   }else if(v.waypoints!==undefined)return false;
-  if(mode==='derby'&&rules.derby==='score'){
+  if(mode==='derby'&&DERBY_FORMATS[rules.derby].scored){
     if(!rows(v.combat)||!v.combat.every(p=>typeof p.damage==='number'&&Number.isFinite(p.damage)&&p.damage>=0&&p.damage<=1e9&&integer(p.knockouts,0,1e6)&&integer(p.deaths,0,1e6)&&typeof p.respawnAt==='number'&&Number.isFinite(p.respawnAt)&&p.respawnAt>=0&&p.respawnAt<=rules.duration+5&&validBonus(p,rules.duration)))return false;
     if(v.feats!==undefined&&!validCombatFeats(v.feats,count,rules.duration))return false;
   }else if(v.combat!==undefined||v.feats!==undefined)return false;
@@ -46,13 +47,14 @@ export class OnlineEvent {
     if(!validOnlineEventRules(rules)||!integer(seed,0,0xffffffff))throw Error('Invalid event rules');
     this.rules=copyOnlineEventRules(rules);this.waypoints=mode==='race'&&rules.race!=='laps'?new WaypointRace(rules.race as WaypointOrder,rules.laps,seed):null;
   }
-  get score(){return this.mode==='derby'&&this.rules.derby==='score';}
+  get score(){return this.mode==='derby'&&DERBY_FORMATS[this.rules.derby].scored;}
+  get respawns(){return this.score&&DERBY_FORMATS[this.rules.derby].respawns;}
   snapshot(count:number):OnlineEventState{return{rules:copyOnlineEventRules(this.rules),seed:this.seed,
     ...(this.waypoints?{waypoints:Array.from({length:count},(_,id)=>{const p=this.waypoints!.get(id);return{id,round:p.round,visited:[...p.visited],passed:p.passed,finished:p.finished};})}:{}),
     ...(this.score?{combat:Array.from({length:count},(_,id)=>({id,...structuredClone(this.combat.get(id))})),feats:this.combat.feats.snapshot()}:{})};}
   restore(state:OnlineEventState,count:number){if(!validOnlineEventState(state,this.mode,count)||!(Object.keys(this.rules)as (keyof OnlineEventRules)[]).every(k=>state.rules[k]===this.rules[k])||state.seed!==this.seed)throw Error('Invalid saved event');restoreOnlineProgress(state,this.waypoints,this.combat);}
 }
-export function onlineEventLabel(mode:Mode,rules:OnlineEventRules){return mode==='race'?`${RACE_NAMES[rules.race]} · ${rules.laps} ${rules.race==='laps'?'laps · '+rules.direction:'rounds'}`:mode==='derby'?`${rules.derby==='score'?'Score derby · respawns':'Survival derby'} · ${rules.duration/60} min`:'Destruction playground';}
+export function onlineEventLabel(mode:Mode,rules:OnlineEventRules){return mode==='race'?`${RACE_NAMES[rules.race]} · ${rules.laps} ${rules.race==='laps'?'laps · '+rules.direction:'rounds'}`:mode==='derby'?`${DERBY_FORMATS[rules.derby].label} · ${rules.duration/60} min`:'Destruction playground';}
 
 function validBonus(p:Record<string,unknown>,duration:number){
  if(p.bonus===undefined&&p.spins===undefined&&p.impacts===undefined&&p.award===undefined)return true;
