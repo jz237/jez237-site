@@ -1,5 +1,36 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished checkpoint — Sunset ordinary course-out regions
+
+Recovered Sunset's eleven allowed-region rectangles, three separate progress
+regions, and empty warning-suppression table from the original initializer.
+The allowed regions are independent of the pink markers and the authored
+browser envelope. A read-only query of the Rea-installed Ghidra project on
+EVO X2 matched 1,519 instructions against the local ROM; all nine project files
+retained their hashes. Executing the original query against its actual ROM
+table pointers checked 449 positions and 36,508 instructions, including the
+binary32 neighbours at every rectangle edge. Public fixtures contain numeric
+inputs and results, with no original executable bytes.
+
+The ordinary data factory can now prepare Sunset's selected primary/AI links,
+regions, course index, and original 1,200-unit checkpoint slack for all four
+classes and both player counts. Sunny retains its seven allowed rectangles
+and 256-unit slack. The live native race gate remains Sunny-only: preparing
+these data does not verify Sunset's complete host, physical traversal, or
+result lifecycle. Public Sunset still uses its older map-based course.
+
+Rendering resolution, terrain and water detail, textures, and model detail
+are unchanged. All four page import maps include the new module (306 total).
+The remaining final-ring and full Stunt traversal work is still open; private
+guidance experiments did not produce a retained gameplay change.
+
+All 94 focused checks pass: 62 native host, reset, launch, unfinished-estimate,
+Sunset data and two-player checks, plus 32 source geometry, live AI input,
+asset loading and full-resolution terrain checks. Two-player coverage includes
+three-lap finishes in all four classes and matching physical finishes at
+30/60/144 Hz. All four import maps have verified current content hashes.
+This is a local checkpoint, pending publication.
+
 ## Unpublished checkpoint — visible source Sunset static hulls
 
 The two recovered boat-shaped shore outlines now have independently authored

@@ -63,7 +63,7 @@ test('distinct player companions yield 63 versus 47 real shoreline edges, includ
  assert.equal(one.sourceMooredCraft.length,2);assert.equal(two.sourceMooredCraft.length,0);assert.ok(one.sourceMooredCraft.every(q=>q.sourceStatic&&q.sourceHeight===null));
  assert.deepEqual(c.mooredBoats,[],'old invented bobbing-craft animation is not attached');
  assert.equal(c.boundary,undefined);assert.equal(c.stuntLayout.boundary,undefined);assert.equal(c.boundaryMarkers.length,81);
- assert.deepEqual(c.boundaryMarkers[0],[1201*S,1167*S]);assert.deepEqual(c.boundaryMarkers[80],[1101*S,667*S]);assert.equal(c.boundaryMetadata.nativeCourseOutRuleRecovered,false);
+ assert.deepEqual(c.boundaryMarkers[0],[1201*S,1167*S]);assert.deepEqual(c.boundaryMarkers[80],[1101*S,667*S]);assert.equal(c.boundaryMetadata.nativeCourseOutRuleRecovered,true);assert.equal(c.boundaryMetadata.nativeCourseOutRuntimeAdmitted,false);
 });
 
 test('source shoreline normals retain independently observed water-side directions',()=>{

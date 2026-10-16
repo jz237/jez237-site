@@ -1,3 +1,4 @@
+import {nativeRaceCourseRegions} from './native-course-regions.js';
 import {nativeRollerStep} from './native-water-rollers.js';
 import {shoreLines} from './shore-contact.js';
 import {facetedSurface} from './faceted-surfaces.js';
@@ -132,8 +133,9 @@ export function createSourceSunsetCourse(polygonDistance,{anchorsByClass,pilotAn
   recordMetadataByClass:Array.from({length:4},(_,difficulty)=>sunsetSourceSelection({difficulty})),
   buoysByClass,finishGatesByClass,sourceRouteRowsByClass,sourceOrdinaryProgress:clone(SUNSET_NATIVE_GEOMETRY.sourceOrdinaryProgress),
   boundary,boundaryMarkers:points(SUNSET_NATIVE_GEOMETRY.boundaryMarkers),
-  boundaryMetadata:{nativeCourseOutRuleRecovered:false,browserEnvelopeProvided:!!boundary,provisional:true,cyclicOrderInferred:false,
-   markerContactFamilySeparate:true,reason:'Marker sphere contacts do not establish course-out admission. Actual source shore components are closed only where their endpoints join.'},
+  sourceCourseOutRegions:nativeRaceCourseRegions(2),
+  boundaryMetadata:{nativeCourseOutRuleRecovered:true,nativeCourseOutRuntimeAdmitted:false,browserEnvelopeProvided:!!boundary,provisional:true,cyclicOrderInferred:false,
+   markerContactFamilySeparate:true,reason:'Original allowed-region queries and tables are recovered independently of marker contacts. Native host admission remains pending; the modern browser envelope is still authored.'},
   sourceMarkerSpheres:sunsetMarkerSpheresForSelection(),
   sourceMarkerContactMetadata:{radiusNative:25,probeRadiusNative:12,sourceTag:1,absoluteNativeY:0,sourcePhase:'fixed-sphere-grid',sourceOrder:'visibleXZ, markers, hiddenXYZ',
    response:'Full penetration shifts all12 hull points and kicks selected three point velocities, with no sphere recoil. The modern host uses the existing mean-velocity rigid-hull bridge; native point-hull admission remains separate.'},
