@@ -45,7 +45,7 @@ test('host stamps once after both human patches and pauses without consuming pha
 });
 test('prepared source-course setup selects class/mode rows and shares stamped surface with presentation',()=>{
  // These direct row centers are stationary diagnostic anchors, not an admitted
- // driving route. Public Sunset still uses the older map-based course.
+ // driving route. Public selection is checked separately below.
  const anchorsByClass=SUNSET_NATIVE_GEOMETRY.racePrimaryByClass.map(rows=>rows.map(q=>q.slice(0,2).map(v=>v*.025)));
  const source=createSourceSunsetCourse(polygonDistance,{anchorsByClass,stuntNavigation:{anchors:anchorsByClass[0]}});
  for(const difficulty of [0,1,2,3])for(const mode of ['time','versus','stunt']){
@@ -57,7 +57,7 @@ test('prepared source-course setup selects class/mode rows and shares stamped su
   const sample=raceWaterHeight(s.raceWater,20,12.5),view=captureRaceWater(s.raceWater);setRaceWater(view);
   assert.equal(activeRaceWaterHeight(20,12.5),sample);
  }
- assert.equal(createRace({course:getCourse('amber',0),mode:'time',seaState:'course'}).raceWater.rollers.length,0,'source course must be admitted before original-coordinate rollers enter public Sunset');
+ assert.equal(createRace({course:getCourse('amber',0),mode:'time',seaState:'course'}).raceWater.rollers.length,4,'public Normal Sunset selects the original four roller generators');
  assert.equal(createRace({course:getCourse('greyhaven',0),mode:'time',seaState:'course'}).raceWater.rollers.length,0);
  assert.equal(createRace({course:getCourse('amber',0),mode:'time',seaState:'surf'}).raceWater,null);setRaceWater(null);
 });

@@ -5,7 +5,8 @@ import {facetedSurface} from './faceted-surfaces.js';
 import {SUNSET_NATIVE_SCALE,sunsetRampVolumes,sunsetContactVolumes} from './source-sunset-boxes.js';
 
 // Independent numeric source reconstruction, not original graphics or code.
-// Roller generator and host hook are implemented; this course is not yet live.
+// The public registration supplies checked browser navigation. The standalone
+// factory deliberately remains unready without that admission step.
 const S=SUNSET_NATIVE_SCALE;
 const clone=value=>JSON.parse(JSON.stringify(value));
 const deepFreeze=value=>{if(value&&typeof value==='object'){Object.values(value).forEach(deepFreeze);Object.freeze(value);}return value;};

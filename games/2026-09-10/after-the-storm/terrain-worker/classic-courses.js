@@ -1,13 +1,14 @@
-import {createSourceSouthernCourse} from './source-southern-course.js?v=19c36a236a0c';
-import {createGlacierCourse} from './glacier-course.js?v=19c36a236a0c';
-import {cityStuntLayout} from './city-stunts.js?v=19c36a236a0c';
-import {portStuntLayout} from './port-stunts.js?v=19c36a236a0c';
-import {fortStuntLayout} from './fort-stunts.js?v=19c36a236a0c';
-import {drakeStuntLayout} from './drake-stunts.js?v=19c36a236a0c';
-import {sunsetStuntLayout} from './sunset-stunts.js?v=19c36a236a0c';
-import {createSourceSunnyCourse} from './source-sunny-course.js?v=19c36a236a0c';
-import {sunnyAnchors,sunnyPilotAnchors,sunnyStuntNavigation,sunnyNavigation} from './source-sunny-navigation.js?v=19c36a236a0c';
-import {createDolphinCourse} from './dolphin-course.js?v=19c36a236a0c';
+import {createSourceSouthernCourse} from './source-southern-course.js?v=ec0aacd01434';
+import {createGlacierCourse} from './glacier-course.js?v=ec0aacd01434';
+import {cityStuntLayout} from './city-stunts.js?v=ec0aacd01434';
+import {portStuntLayout} from './port-stunts.js?v=ec0aacd01434';
+import {fortStuntLayout} from './fort-stunts.js?v=ec0aacd01434';
+import {drakeStuntLayout} from './drake-stunts.js?v=ec0aacd01434';
+import {createSourceSunsetCourse} from './source-sunset-course.js?v=ec0aacd01434';
+import {sunsetAnchors,sunsetPilotAnchors,sunsetNavigation,sunsetStuntNavigation} from './source-sunset-navigation.js?v=ec0aacd01434';
+import {createSourceSunnyCourse} from './source-sunny-course.js?v=ec0aacd01434';
+import {sunnyAnchors,sunnyPilotAnchors,sunnyStuntNavigation,sunnyNavigation} from './source-sunny-navigation.js?v=ec0aacd01434';
+import {createDolphinCourse} from './dolphin-course.js?v=ec0aacd01434';
 // Authored reconstruction from course observations, in metres. Map coordinates
 // describe geography, not a texture or mesh extracted from the Nintendo game.
 // Source/remaining fidelity checks: COURSE-MATCH.md.
@@ -27,36 +28,15 @@ sunny.navigation.controlBySeaState={surf:{straightSpeed:40,gateSpeed:26}};
 Object.assign(sunny.navigation,{validated:true,status:'ordinary-input-paths-checked',reason:sunnyNavigation.validation.status});
 Object.assign(sunny.stuntLayout.navigation,{validated:true,status:'ordinary-input-stunt-path-checked',validation:{...sunnyStuntNavigation.validation}});
 Object.assign(sunny.boundaryMetadata,{status:'authored-browser-envelope-checked',provisional:true});
-const sunsetLand=fromMap([[176,55],[189,70],[190,105],[227,149],[247,182],[242,227],[249,280],[240,307],[250,343],[310,399],[345,420],[430,438],[461,443],[459,454],[193,455],[174,432],[165,340],[168,247],[170,184]],245,275);
-const sunsetMap=points=>fromMap(points,245,275);
-const sunsetBuoys=rows=>rows.map(([x,z,side])=>({x:(x-245)*.75,z:(z-275)*.75,side}));
-const sunsetNormalBuoys=sunsetBuoys([[258,134,-1],[203,66,1],[140,52,-1],[125,95,-1],[154,166,1],[110,283,-1],[156,342,1],[197,512,-1],[332,506,1],[429,501,-1],[482,405,-1],[426,389,-1],[382,405,1],[318,370,-1]]);
-// Hard adds seven pixels on the left; Expert removes sixty relative to Normal.
-const sunsetHardBuoys=sunsetBuoys([[264,134,-1],[209,66,1],[146,52,-1],[132,95,-1],[154,166,1],[140,283,-1],[144,342,1],[204,504,-1],[279,495,1],[357,506,-1],[419,490,1],[488,405,-1],[433,389,-1],[388,405,1],[324,370,-1]].map(([x,z,side])=>[x-7,z,side]));
-const sunsetExpertBuoys=sunsetBuoys([[197,134,-1],[142,66,1],[79,52,-1],[65,95,-1],[76,166,1],[79,266,-1],[78,342,1],[126,497,-1],[149,492,-1],[212,495,1],[292,495,-1],[352,490,1],[421,405,-1],[366,398,-1],[322,402,1],[257,370,-1]].map(([x,z,side])=>[x+60,z,side]));
-const sunsetReverseBuoys=sunsetBuoys([[192,175,-1],[128,147,1],[81,148,-1],[90,48,1],[154,60,-1],[239,48,1],[288,64,-1],[382,214,1],[365,288,-1],[381,464,-1],[295,492,1],[251,407,-1]].map(([x,z,side])=>[512-x,552-z,side]));
-// The Hard buoy exits close to a pier support. Settle in the real gap before
-// continuing to the following buoy; the piles retain their full collision.
-sunsetHardBuoys[6].approach={x:-84.75,z:10,throttle:.32,radius:2,range:38};
-// Ten metal balls, excluding the adjoining dotted course boundary.
-const sunsetBalls=points=>sunsetMap(points).map(([x,z])=>({x,z,r:.85,type:'ball'}));
-const sunsetForwardBalls=sunsetBalls([[364,350],[375,350],[388,350],[359,358],[369,358],[380,358],[390,358],[364,366],[374,366],[385,366]]);
-const sunsetReverseBalls=sunsetBalls([[124,183],[135,183],[145,183],[119,191],[129,191],[140,191],[150,191],[121,199],[134,199],[145,199]].map(([x,z])=>[512-x,552-z]));
-const sunset={
- name:'Sunset Bay',theme:'resort',tag:'02 / SUNSET BAY',layoutRevision:5,stuntLayout:sunsetStuntLayout(),
- finishLine:sunsetMap([[250,300],[420,300]]),finishBypass:3,
- waveTrain:[(130-245)*.75,(223-275)*.75,14,.9],
- mooredBoats:[[90,146],[93,299]].map(([x,z],i)=>({id:'sunset-mooring-'+i,x:(x-245)*.75,z:(z-275)*.75,width:3.5,length:10,heading:0})),
- buoysByClass:[sunsetNormalBuoys,sunsetHardBuoys,sunsetExpertBuoys,sunsetReverseBuoys],
- obstaclesByClass:[[],sunsetForwardBalls,sunsetForwardBalls,sunsetReverseBalls],
- anchorsByClass:{2:sunsetMap([[290,302],[281,222],[258,163],[217,80],[194,49],[167,52],[142,93],[131,165],[103,190],[99,219],[150,260],[140,333],[158,402],[180,458],[209,478],[268,510],[310,512],[352,480],[412,508],[448,486],[468,455],[448,420],[385,398],[317,376],[298,350]])},
- boundary:sunsetMap([[76,48],[91,17],[118,7],[220,7],[250,28],[280,72],[311,120],[326,163],[333,291],[348,322],[389,350],[475,384],[499,411],[499,498],[481,530],[445,539],[115,541],[80,518],[74,446]]),
- description:'Orange evening water wraps around an L-shaped island. A race ramp offers a jump beside the pier-lined western straight.',
- anchors:fromMap([[290,302],[281,222],[258,163],[217,80],[194,49],[167,52],[142,93],[131,165],[103,190],[99,219],[117,260],[140,333],[158,402],[180,458],[268,495],[366,515],[435,494],[468,455],[448,420],[385,398],[317,376],[298,350]],245,275),
- ground(x,z){return clamp(-polygonDistance(sunsetLand,x,z)*.48,-10,5);},
- obstacles:[],resistance:[],raceRamps:[{id:100,name:'SUNSET JUMP',x:(130-245)*.75,z:(198-275)*.75,tx:0,tz:1,width:12,length:17,height:2.1,floating:false}],
- crossbars:[{x:(133-245)*.75,z:(144-275)*.75,tx:1,tz:0,length:61,depth:3.2,bottom:2.8,top:3.2,material:'wood',pileSpacing:14},{x:(137.5-245)*.75,z:(299-275)*.75,tx:1,tz:0,length:57.75,depth:3.2,bottom:2.8,top:3.2,material:'wood',pileSpacing:14,pileOffsets:[-24.525,-10.925,2.675,16.275,28.875]}]
-};
+const sunset=createSourceSunsetCourse(polygonDistance,{anchorsByClass:sunsetAnchors,pilotAnchorsByClass:sunsetPilotAnchors,navigation:sunsetNavigation,stuntNavigation:sunsetStuntNavigation});
+// Source geometry and rollers use the modern browser craft. Original native
+// handling, AI and course-out admission remain separate parity work.
+sunset.integrationReady=true;
+sunset.description='An L-shaped island, two piers and a fixed jump surround rolling evening water. Harder classes add metal buoys; Reverse keeps the jump facing its original direction.';
+Object.assign(sunset.navigation,{validated:true,status:'default-rider-ordinary-input-checked',reason:'All four classes complete three source-judged laps at seed17/60Hz with the modern craft.'});
+Object.assign(sunset.stuntLayout.navigation,{validated:true,status:'default-rider-stunt-input-checked',validation:{...sunsetStuntNavigation.validation}});
+Object.assign(sunset.sourceWaterMetadata,{rollerLatticeIntegrated:true});
+sunset.pendingSourceMechanics=['native-handling-and-race-host-admission','source-ai','native-course-out-host-integration','broader-rider-and-wave-navigation'];
 const lakeLand=fromMap([[67,108],[104,98],[174,116],[229,109],[320,76],[334,107],[329,194],[345,246],[326,295],[294,329],[273,348],[228,351],[173,343],[126,368],[77,350],[70,293],[63,254],[72,215],[62,174]],200,240);
 const lakeIsland=fromMap([[127,72],[166,63],[207,66],[252,85],[224,96],[193,99],[153,88]],200,240);
 const lakeOuter=fromMap([[40,73],[87,38],[170,38],[247,34],[326,18],[377,37],[399,100],[395,215],[399,295],[372,343],[342,398],[274,419],[218,450],[153,458],[92,418],[38,354],[9,272],[16,204],[6,151]],200,240);

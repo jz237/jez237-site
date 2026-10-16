@@ -62,11 +62,6 @@ export function verificationInput(state,r){
   }
  }
 
- if(state.verifySunsetShortcut&&state.course.id==='amber'&&!state.course.reverse&&r.lap===state.laps){
-  if(r.next===state.course.gates.length-4&&r.z<(455-275)*.75&&r.x>(445-245)*.75)r.sunsetShortcut=true;
-  if(r.sunsetShortcut){const x=(410-245)*.75,z=(290-275)*.75,error=angleDelta(Math.atan2(x-r.x-r.vx*.18,z-r.z-r.vz*.18)-r.heading);return {throttle:1,steer:clamp(error*2.4-(r.yawVelocity||0)*.12,-1,1),brake:Math.abs(error)>1.1,dampen:true};}
- }
-
  if(state.verifyIceBalance&&r.onIce&&!r.wipeout)return {...aiInput(state,r),throttle:1,steer:1};
  if(state.mode==='practice'&&state.course.stuntLayout){const h=r.hydro,v=r.playgroundVerification||={contact:false,airborne:false,landed:false,peak:0,done:false};if(h.onRamp&&!v.contact){v.contact=true;v.landing=h.landingId;}if(v.contact){v.airborne||=h.airborne;v.peak=Math.max(v.peak,h.y-h.waterHeight);v.landed||=h.landingId>v.landing;v.done=v.landed&&r.stunt.rings>0;}return authoredParkInput(state,r);}
  if(state.mode==='practice'){

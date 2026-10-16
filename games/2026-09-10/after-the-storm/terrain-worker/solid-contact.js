@@ -1,4 +1,4 @@
-import {HULL_PROBES,hullProbeOffset} from './hull-probes.js?v=19c36a236a0c';
+import {HULL_PROBES,hullProbeOffset} from './hull-probes.js?v=ec0aacd01434';
 
 // Unit-mass rigid-body approximation of the reference's distributed hull.
 // A nose contact rotates the craft as well as moving its centre. Applying the

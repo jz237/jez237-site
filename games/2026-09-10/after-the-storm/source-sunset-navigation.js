@@ -1,7 +1,7 @@
 import {SUNSET_NATIVE_GEOMETRY} from './source-sunset-course.js';
 
 // Authored helm corridors around the recovered geometry. Five-metre passing
-// offsets (seven at the Normal northbound buoy) and lead distances are browser
+// offsets (seven at Normal's northbound buoy, nine at Expert's northern turn) and lead distances are browser
 // navigation policy, not source AI.
 // These points neither award buoy progress nor alter collision geometry.
 const direction=h=>{const a=(Math.trunc(h*4096/360)&4095)*Math.PI*2/4096;return [Math.sin(a),Math.cos(a)];};
@@ -11,7 +11,9 @@ const routes=SUNSET_NATIVE_GEOMETRY.visibleBuoysByClass.map((rows,difficulty)=>{
  add([finish[0],finish[1]+forward*3]);
  rows.forEach(([x,z,type,heading],i)=>{
   const [tx,tz]=direction(heading),side=[0,6].includes(type)?1:-1;
-  const clearance=difficulty===0&&i===6?7:5;
+  // Expert's closely spaced northbound-to-eastbound pair needs an earlier
+  // inside approach so slower-turning craft can reach the next red's side.
+  const clearance=difficulty===2&&i===7?9:difficulty===0&&i===6?7:5;
   const center=[x*.025-tz*side*clearance,z*.025+tx*side*clearance];
   if(!reverse&&i===2)for(const p of [[-35,-128],[-46,-132],[-58,-130]])add(p);
   if(!reverse&&i===7)for(const p of [[-66,83],[-64,101],[-57,111]])add(p);
@@ -29,9 +31,9 @@ export const sunsetAnchors=routes.map(q=>q.anchors);
 export const sunsetPilotAnchors=routes.map(q=>q.roles);
 export const sunsetNavigation={
  boundary:[[-115,-160],[125,-160],[125,150],[-115,150]],
- status:'solo-class-corridors-checked-admission-pending',validated:false,
+ status:'modern-class-corridors-checked',validated:false,
  validation:{rider:0,seed:17,hz:60,mode:'time',laps:3,classes:[0,1,2,3],misses:0,
-  finishSeconds:[223.2,227.6,301.2,293.8],scope:'Prepared source geometry and modern hull only; Stunt and visual admission remain pending.'},
+  scope:'Source geometry with the modern hull, seed17/60Hz default rider. The public registration records admission; this factory does not prove native AI or handling parity.'},
  policy:{passingDistanceWorld:5,leadWorld:3,envelope:'Authored browser envelope, not a recovered source course-out rule.'}
 };
 const ring=i=>{const [x,y,z,,,heading]=SUNSET_NATIVE_GEOMETRY.rings[i],[tx,tz]=direction(heading);

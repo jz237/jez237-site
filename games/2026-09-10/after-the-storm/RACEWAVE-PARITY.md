@@ -1,5 +1,47 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## v2.35.0 release candidate — public source Sunset Bay
+
+Sunset now selects recovered numeric geography through the normal course selector:
+63 one-player shore edges (including two static craft) or47 two-player edges,
+32 finite floor faces, the original fixed ramp/pier volumes, all four buoy
+sequences,16 higher-class visible spheres,81 boundary spheres and six hidden
+fixed spheres. Venue conditions use four/five original roller generators, or
+three in Stunt. The old map wave train is removed rather than layered over them.
+Stunt retains nine rings, two ramps and15/15/10/10 checkpoint limits. This is
+public geometry/roller integration with the existing modern craft, not a native
+handling or final visual-parity sign-off. Native Sunset gameplay remains gated.
+
+Public layout revision7 separates old revision6 local times, Stunt scores,
+ghost matching and global boards while retaining archived saves. The online
+compatibility version advances so peers cannot combine different layouts.
+Expert's authored northern approach gives slower-turning craft room to reach
+the next red buoy; it changes helm targets, not scoring or collision geometry.
+The recovered finish uses its original one-sided extent. The obsolete map-only
+three-buoy shortcut hook and inspection button are removed.
+
+The new championship order exposed an existing Twilight City overlap trap:
+a descending hull could enter the raised wall, then every movement rolled back
+to the same overlapping X/Z. Overlapping slab recovery now selects the nearest
+clear edge. Ordinary surface approaches remain blocked, and original jump/dive
+clearance tests pass. All four championship classes complete through controls.
+
+Validation:137 focused source geometry, roller, collision, gameplay, records,
+terrain/loading and music checks pass (136 on the broad run, then the updated
+public native-admission check and its two neighbours pass). All34 online/window
+checks pass. Browser Expert finishes three laps with51 scored gates, zero misses
+and272.327s; actual canvas1920x1080, High, approximately60fps. Two-player view
+retains1920x1080 split into two1920x540 views. Water/terrain sampling and render
+budget remain unchanged. The only browser request failure was local favicon404.
+
+The broad all-course guide test still stalls at Port Blue/Hard. Exact pre-change
+and current race owners reproduce the same596.983s state (lap1, next13, position
+4.482951544775993,-51.73286469523773); this is recorded as remaining work, not a
+passing all-course result. Other rider/seed/surf guidance, complete native race
+owners, source AI/course-out behavior and final visual comparisons remain open.
+
+This release also includes the original shoreline pass checkpoint below.
+
 ## Unpublished checkpoint — original shoreline grid and contact pass
 
 Ordinary native race data now selects the original shoreline grid, signed

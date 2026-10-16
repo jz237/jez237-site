@@ -1,6 +1,7 @@
+import {openWaterCourse} from './support/open-water-course.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {getCourse,sampleRoute} from '../courses.js';
+import {getCourse,sampleRoute,samplePolyline} from '../courses.js';
 import {courseResistance} from '../classic-courses.js';
 import {createRace,stepRace,adjudicateGate,aiInput,outsideCourse} from '../race-core.js';
 import {passageTarget} from '../course-passages.js';
@@ -13,12 +14,12 @@ test('Sunny Beach uses the horizontal source sandbar, finite shallows and separa
  for(let d=0;d<4;d++){const v=getCourse('greyhaven',d);assert.equal(v.rocks.filter(q=>!q.hidden).length,[0,3,5,5][d]);assert.equal(v.rocks.filter(q=>q.hidden&&!q.sourceBoundaryMarker).length,4);assert.equal(v.ramps.length,0);}
 });
 test('Sunset Bay has distinct L-shaped geography and a race-mode ramp with a wet bypass',()=>{
- const c=getCourse('amber');assert.equal(c.name,'Sunset Bay');assert.ok(c.ground(-34,40)>0);assert.ok(c.ground(90,127)>0);assert.ok(c.ground(65,30)<-4);
- const s=createRace({course:c}),ramp=s.course.ramps[0];assert.equal(ramp.name,'SUNSET JUMP');assert.ok(c.ground(ramp.x-15,ramp.z)<-3);assert.equal(s.mode,'race');
+ const c=getCourse('amber');assert.equal(c.name,'Sunset Bay');assert.ok(c.renderGround(-47,0)>3);assert.ok(c.renderGround(70,97)>3);assert.ok(c.ground(65,30)<-4);
+ const s=createRace({course:c}),ramp=s.course.ramps[0];assert.equal(ramp.name,'SUNSET BAY JUMP');assert.ok(c.ground(ramp.x-25,ramp.z)<-3);assert.equal(s.mode,'race');
  const reversed=getCourse('amber',3).ramps[0];assert.equal(reversed.tz,ramp.tz);
 });
 test('reconstructed routes are in water without cutting the authored shorelines',()=>{
- for(const id of ['greyhaven','amber','reed','citadel','port','neon']){const c=getCourse(id);for(const p of sampleRoute(c.anchors,240))assert.ok(c.ground(p.x,p.z)<-.8,id+' '+JSON.stringify(p));}
+ for(const id of ['greyhaven','amber','reed','citadel','port','neon']){const c=getCourse(id);for(const p of (c.routeInterpolation==='linear'?samplePolyline:sampleRoute)(c.anchors,240))assert.ok(c.ground(p.x,p.z)<(id==='amber'?0:-.8),id+' '+JSON.stringify(p));}
 });
 test('Drake Lake weeds have bounded elliptical resistance only during water contact',()=>{
  const c=getCourse('reed'),p=c.resistance[0];assert.equal(c.name,'Drake Lake');assert.equal(c.rocks.filter(o=>o.type==='post').length,13);
@@ -48,7 +49,7 @@ test('curved shortcut progress requires crossing each actual checkpoint plane',(
  r.x=g.x+g.tx*2;r.z=g.z+g.tz*2;assert.equal(adjudicateGate(s,r,g.x-g.tx*2,g.z-g.tz*2),true);assert.equal(r.passed,1);
 });
 test('an airborne hull clears a low breakwater but contacts it when it descends',()=>{
- const c=getCourse('amber'),s=createRace({mode:'time',course:{...c,ground:()=>1,rocks:[]}}),r=s.racers[0];s.phase='running';r.hydro.initialized=true;r.hydro.y=8;r.hydro.vy=0;
+ const c=openWaterCourse({ground:()=>1}),s=createRace({mode:'time',course:c}),r=s.racers[0];s.phase='running';r.hydro.initialized=true;r.hydro.y=8;r.hydro.vy=0;
  stepRace(s,{},1/60);assert.equal(r.collision,0);assert.ok(r.hydro.y>7);
  r.hydro.y=.9;r.hydro.vy=-2;stepRace(s,{},1/60);assert.ok(r.collision>0);
 });

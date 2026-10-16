@@ -14,6 +14,24 @@ export function barrierCamera(barriers,target,desired){
  let clear={...target};for(let i=1;i<=64;i++){const t=i/64,q={x:target.x+(desired.x-target.x)*t,y:target.y+(desired.y-target.y)*t,z:target.z+(desired.z-target.z)*t};if(barrierCollision(barriers,q.x,q.y,q.z,.25,.25))return clear;clear=q;}return desired;
 }
 
+// A landing can lower the hull into a raised slab even when its preceding
+// horizontal position was clear in the air. Rolling back to that same X/Z
+// leaves every following movement blocked. Find the closest clear slab edge;
+// ordinary approaches still use the previous clear position in the race owner.
+export function barrierOverlapExit(barriers,x,y,z,radius=.85,hullHeight=1.1){
+ const candidates=[];
+ for(const b of barriers||[]){
+  if(b.outline||!barrierCollision([b],x,y,z,radius,hullHeight))continue;
+  const dx=x-b.x,dz=z-b.z,along=dx*b.tx+dz*b.tz,across=-dx*b.tz+dz*b.tx;
+  const a=b.length/2+radius+.001,c=b.depth/2+radius+.001;
+  for(const [u,v] of [[-a,across],[a,across],[along,-c],[along,c]]){
+   const px=b.x+b.tx*u-b.tz*v,pz=b.z+b.tz*u+b.tx*v;
+   if(!barrierCollision(barriers,px,y,pz,radius,hullHeight))candidates.push({x:px,z:pz,d:Math.hypot(px-x,pz-z)});
+  }
+ }
+ candidates.sort((a,b)=>a.d-b.d);return candidates[0]??null;
+}
+
 const pileCache=new WeakMap();
 export function barrierPiles(b){
  if(!b.pileSpacing||b.outline)return [];

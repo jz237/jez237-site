@@ -33,7 +33,7 @@ test('source raw progression and visible gates stay separate and new racers neve
 });
 
 test('source race graph retains real guides while Stunt and Free Ride keep independent progress',()=>{
- for(const id of ['greyhaven','tempest']){
+ for(const id of ['greyhaven','amber','tempest']){
   const s=createRace({course:getCourse(id)}),r=s.racers[0];assert.ok(r.sourceBuoys);assert.equal(s.racers[1].sourceBuoys,undefined,'AI secondary-route admission is still pending');
   assert.ok(s.course.sourceBuoyLayout.nodes.some(n=>n.routeGroup===1&&!n.enabled));
   for(const mode of ['stunt','practice']){const q=createRace({course:getCourse(id),mode});assert.equal(q.racers[0].sourceBuoys,undefined);}

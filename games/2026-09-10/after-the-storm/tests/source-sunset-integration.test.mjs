@@ -1,39 +1,32 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {CLASSIC_COURSES,polygonDistance} from '../classic-courses.js';
-import {COURSES,getCourse} from '../courses.js';
-import {createSourceSunsetCourse} from '../source-sunset-course.js';
-import {sunsetAnchors,sunsetPilotAnchors,sunsetNavigation,sunsetStuntNavigation} from '../source-sunset-navigation.js';
+import {CLASSIC_COURSES} from '../classic-courses.js';
+import {getCourse} from '../courses.js';
 import {createRace,stepRace,aiInput} from '../race-core.js';
 import {terrainIdentity,terrainKey,sampleTerrain} from '../terrain-data.js';
 import {createTerrainPreparation} from '../terrain-preparation.js';
 import {courseWorldKey} from '../course-cache.js';
 
-// Exercise the prepared source definition through real getCourse/createRace.
-// Public admission awaits the separate Stunt/scenery checks. Restore the public
-// definition after each check; no altered progress or physics is injected.
-function install(){
- const source=createSourceSunsetCourse(polygonDistance,{anchorsByClass:sunsetAnchors,pilotAnchorsByClass:sunsetPilotAnchors,
-  navigation:sunsetNavigation,stuntNavigation:sunsetStuntNavigation});
- const index=COURSES.findIndex(c=>c.id==='amber'),old=COURSES[index],classic=CLASSIC_COURSES.amber;
- CLASSIC_COURSES.amber=source;
- COURSES[index]={id:'amber',storm:old.storm,sky:old.sky,water:old.water,laps:3,sourceWaterCourseIndex:2,waterModelRevision:2,...source};
- return ()=>{COURSES[index]=old;CLASSIC_COURSES.amber=classic;};
+// Exercise the public course selection without replacing any definitions.
+function assertPublicCourse(){
+ assert.equal(CLASSIC_COURSES.amber.integrationReady,true);
+ assert.equal(getCourse('amber').layoutRevision,7);
+ assert.equal(getCourse('amber').waveTrain,undefined,'the old artificial wave train must not overlay source rollers');
 }
 
-test('all four prepared Sunset classes finish three source-judged laps using ordinary helm input and rollers',()=>{
- const restore=install();
- try{for(let difficulty=0;difficulty<4;difficulty++){
+test('all four public Sunset classes finish three source-judged laps using ordinary helm input and rollers',()=>{
+ assertPublicCourse();
+ for(let difficulty=0;difficulty<4;difficulty++){
   const s=createRace({course:getCourse('amber',difficulty),difficulty,mode:'time'}),r=s.racers[0];
   for(let i=0;i<27000&&s.phase!=='results';i++)stepRace(s,aiInput(s,r),1/60);
   assert.equal(s.phase,'results',`class ${difficulty}`);assert.equal(r.lap,4);assert.equal(r.misses,0);assert.equal(r.dq,'');
   assert.ok(r.finishTime>0&&r.lapTimes.length===3);assert.ok(s.raceWater.rollers.every(q=>q.frames===s.raceWater.frames));
- }}finally{restore();}
+ }
 });
 
 test('race launch selects complete fixed-sphere order, real player shores, and finite ramp/crossbar volumes',()=>{
- const restore=install();
- try{for(const difficulty of [0,1,2,3])for(const mode of ['time','versus','stunt']){
+ assertPublicCourse();
+ for(const difficulty of [0,1,2,3])for(const mode of ['time','versus','stunt']){
   const s=createRace({course:getCourse('amber',difficulty),difficulty,mode}),c=s.course,two=mode==='versus';
   assert.equal(c.sourceCollisionPlayerCount,two?2:1);assert.equal(c.shoreContacts.edges.length,two?47:63);
   assert.equal(c.sourceMooredCraft.length,two?0:2);
@@ -44,12 +37,11 @@ test('race launch selects complete fixed-sphere order, real player shores, and f
   assert.equal(rows.filter(q=>q.runtimeTag===5).length,6);assert.deepEqual(rows.map(q=>q.sourceColliderIndex),rows.map((_,i)=>i));
   assert.deepEqual(rows.slice(visible.length,visible.length+81),markers);assert.ok(markers.every(q=>q.hidden&&q.sourceFixedSphere));
   assert.equal(rows.length,visible.length+87);
- }}finally{restore();}
+ }
 });
 
-for(let difficulty=0;difficulty<4;difficulty++)test(`prepared Sunset Stunt class${difficulty} crosses all rings, both piers and ramps and lands a flip with ordinary controls`,()=>{
- const restore=install();
- try{
+for(let difficulty=0;difficulty<4;difficulty++)test(`public Sunset Stunt class${difficulty} crosses all rings, both piers and ramps and lands a flip with ordinary controls`,()=>{
+ assertPublicCourse();
   const s=createRace({course:getCourse('amber',difficulty),difficulty,mode:'stunt',waveSeed:17}),r=s.racers[0],crossings=[];
   const contacts=new Set(),launches=new Set(),piers=new Set();let lastRamp=null,lastContactTime=-Infinity,contactLanding=-1;
   const geometry=()=>JSON.stringify({rings:s.course.rings,checkpoints:s.course.checkpoints,ramps:s.course.ramps,shores:s.course.sourceShores});
@@ -85,11 +77,10 @@ for(let difficulty=0;difficulty<4;difficulty++)test(`prepared Sunset Stunt class
   assert.deepEqual([...contacts].sort(),s.course.ramps.map(q=>q.id).sort());assert.deepEqual([...launches].sort(),[...contacts].sort());
   assert.equal(piers.size,2);assert.equal(r.stunt.completedTricks.flip,true);
   assert.equal(r.stunt.crashes,0);assert.equal(geometry(),original);
- }finally{restore();}
 });
 
 test('background worker and cache keep one-player and two-player terrain separate',async()=>{
- const restore=install(),previousSelf=globalThis.self;
+ assertPublicCourse();const previousSelf=globalThis.self;
  try{
   const one=createRace({course:getCourse('amber'),mode:'time'}).course,two=createRace({course:getCourse('amber'),mode:'versus'}).course;
   assert.notEqual(courseWorldKey(one),courseWorldKey(two));
@@ -105,5 +96,5 @@ test('background worker and cache keep one-player and two-player terrain separat
   }
   assert.notDeepEqual(samples[0],samples[1]);assert.equal(service.stats.cached,2);
   assert.deepEqual(service.get(one).heights,samples[0]);assert.deepEqual(service.get(two).heights,samples[1]);
- }finally{globalThis.self=previousSelf;restore();}
+ }finally{globalThis.self=previousSelf;}
 });

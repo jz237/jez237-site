@@ -47,8 +47,10 @@ test('prepared Sunset ordinary owners select their own course, 1200-unit slack, 
  }
 });
 
-test('preparing Sunset data does not admit legacy map geometry or enable an unverified live native race',()=>{
- assert.throws(()=>createNativeRaceCourseRuntime({course:getCourse('amber'),difficulty:0,players:1}),/source route rows/);
+test('public source Sunset provides numeric runtime data while unverified native gameplay remains gated',()=>{
+ assert.throws(()=>createNativeRaceCourseRuntime({course:{...getCourse('amber'),sourceRouteRowsByClass:undefined},difficulty:0,players:1}),/source route rows/);
+ assert.equal(createNativeRaceCourseRuntime({course:getCourse('amber'),difficulty:0,players:1}).courseIndex,2);
+ assert.throws(()=>createRace({course:getCourse('amber'),mode:'time',physics:'native'}),/Sunny|native|source/i);
  assert.throws(()=>createRace({course:prepared(0),mode:'time',physics:'native'}),/Sunny|native|source/i);
  const sunny=createNativeRaceCourseRuntime({course:getCourse('greyhaven'),difficulty:0,players:1});
  assert.equal(sunny.resetLayout.checkpointSlackNative,256);assert.equal(sunny.allowedRegionsNative.length,7);assert.equal(sunny.courseIndex,1);
