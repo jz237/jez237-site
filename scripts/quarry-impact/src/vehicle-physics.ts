@@ -1,3 +1,4 @@
+import {wheelContactMotion} from './wheel-contact-motion';
 import {steeringSpeedScale} from './countersteering';
 import {surfaceGrip,type DrivingSurface} from './driving-surface';
 import {limitBrakeImpulse,limitTractionForce,type DrivingAssists} from './driving-assists';
@@ -162,7 +163,7 @@ export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastV
   // Rapier ignores wheelBrake when engine force is nonzero. Disengage only
   // the handbraked rear wheels so the brake works while front drive is retained.
   let wheelForce=state.input.handbrake&&i>1&&kind!=='tern'?0:force*corner.power*(kind==='tern'?(i<2?front[i%2]:0):(kind==='coupe'||isClassicKind(kind)&&kind!=='trail')?(i>1?rear[i%2]:0):.5*(i<2?front:rear)[i%2]);
-  if(state.input.assists?.traction&&!state.input.handbrake)wheelForce=limitTractionForce(wheelForce,state.input.assists.traction,!!controller.wheelIsInContact(i),Math.min(corner.force,Math.max(0,controller.wheelSuspensionForce(i)??0)),state.slip,state.surface,corner.grip*spec.grip);
+  if(state.input.assists?.traction&&!state.input.handbrake)wheelForce=limitTractionForce(wheelForce,state.input.assists.traction,!!controller.wheelIsInContact(i),Math.min(corner.force,Math.max(0,controller.wheelSuspensionForce(i)??0)),wheelContactMotion(body,controller,i,forward,right).lateral,state.surface,corner.grip*spec.grip);
   controller.setWheelEngineForce(i,wheelForce);
   let serviceBrake=state.input.brake*90*(i<2?spec.frontBrake:spec.rearBrake);
   if(alive&&state.input.assists?.abs&&!(state.input.handbrake&&i>1))serviceBrake=limitBrakeImpulse(serviceBrake,state.input.assists.abs,!!controller.wheelIsInContact(i),Math.min(corner.force,Math.max(0,controller.wheelSuspensionForce(i)??0)),surfaceGrip(state.surface)*corner.grip*spec.grip,controller.wheelSideImpulse(i)??0,state.speed,dt);

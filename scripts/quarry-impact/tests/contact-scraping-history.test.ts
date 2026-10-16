@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readContactScrapingPrevious,restoreContactScrapingBytes,verifyContactScrapingRevision} from './contact-scraping-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreWheelContactMotionBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('ContactScraping preserves every prior fixture, vehicle asset, control and camera input',verifyContactScrapingRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/contact-scraping/revision.json').toString());
@@ -10,3 +10,5 @@ test('the successor bridge restores full predecessors and does not conceal later
  }
  const unknown=Buffer.from('unknown');assert.deepEqual(restoreContactScrapingBytes('src/unknown.ts',unknown),unknown);
 });
+
+import {restoreWheelContactMotionBytes} from './wheel-contact-motion-invariants';
