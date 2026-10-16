@@ -14,7 +14,8 @@ export function createReservoirShore(){
  const mat=new T.MeshStandardMaterial({vertexColors:true,roughness:1});const hill=new T.Mesh(geo,mat);hill.receiveShadow=true;root.add(hill);
  const trees:{x:number,y:number,z:number,size:number}[]=[];let seed=62317;const random=()=>((seed=(Math.imul(seed,1664525)+1013904223)>>>0)/4294967296);
  hill.updateMatrixWorld(true);const ray=new T.Raycaster();
- for(let i=0;i<240;i++){const x=(random()-.5)*1120,z=480+random()*260,y=reservoirShoreHeight(x,z);if(y<3)continue;ray.set(new T.Vector3(x,100,z),new T.Vector3(0,-1,0));const hit=ray.intersectObject(hill)[0];if(!hit)continue;trees.push({x,y:hit.point.y,z,size:9+random()*15});}
+ // Nine irregular stands leave open meadow between broad woodland silhouettes.
+ for(let i=0;i<1000;i++){const stand=i%9,angle=random()*Math.PI*2,radius=Math.sqrt(random()),cx=-500+stand*125,cz=565+Math.sin(stand*2.3)*65,x=cx+Math.cos(angle)*radius*92,z=cz+Math.sin(angle)*radius*72,y=reservoirShoreHeight(x,z);if(y<3)continue;ray.set(new T.Vector3(x,100,z),new T.Vector3(0,-1,0));const hit=ray.intersectObject(hill)[0];if(!hit)continue;trees.push({x,y:hit.point.y,z,size:12+random()*16});}
  const ownedGeo:T.BufferGeometry[]=[],ownedMat:T.Material[]=[],textures:T.Texture[]=[];
  if(typeof document!=='undefined'){
   const texture=new T.TextureLoader().load((import.meta.env?.BASE_URL??'./')+'models/pine.webp');texture.colorSpace=T.SRGBColorSpace;textures.push(texture);

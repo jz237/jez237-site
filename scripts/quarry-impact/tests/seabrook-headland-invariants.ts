@@ -10,15 +10,18 @@ export function readSeabrookHeadlandPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreSeabrookHeadlandBytes(file:string,bytes:Buffer):Buffer{
+ bytes=restoreReservoirWoodlandBytes(file,bytes);
  const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readSeabrookHeadlandPrevious(file);
 }
 export function verifySeabrookHeadlandRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'9669218b78e6cc914ac3864bf3e3cbf98ffbc732');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreReservoirWoodlandBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreSeabrookHeadlandBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the SeabrookHeadland release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreReservoirWoodlandBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the SeabrookHeadland release');
  assert.equal(manifest.previousFixtureCount,2367);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,2367);
 }
+
+import {restoreReservoirWoodlandBytes} from './reservoir-woodland-invariants';
