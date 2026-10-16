@@ -67,7 +67,7 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    players,racerCount:racers.length,primaryHumanIndex:0,secondaryHumanIndex:1,courseIndex,
    mode620:players===2?1:0,mode608:players===2?1:0,main638:1,phase650:0,simulation648:1,
    clockStopped817c:1,activity624:-1,event628:0,gameStateAb24:40,specialAb64:0,ready6fc:0,
-   missesEnabled72e:1,result6f0:0,ambientD4b00:0,field4964:0,resultEffect393c:0,
+   missesEnabled72e:1,result6f0:0,ambientD4b00:0,field4964:0,resultEffect393c:0,toggleD9914:0,
    ...(courseRuntime?{primaryCount:courseRuntime.data.nodes.length,finishSourceRow:courseRuntime.data.finishSourceRow,
     cold8224:1,forceFirst8228:0,demoOffset5438:0,restart6f8:0,reverseDab68:Number(reverse),state600:0,
     missLimit8174:5,noFinish8178:0,configuredLaps728:integer(laps,'configured laps',3,9),
@@ -148,6 +148,15 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
   // primary/generic object motion call7DBC0 independently of simulation648.
   objectMotionActive:()=>current.scene.activity624===-1,
   snapshot:()=>nativeRaceStateSnapshot(current),
+  advanceDisplayClock(){
+   // Source8E794 increments the shared button cadence AFTER input, hull,
+   // camera and water, BEFORE ordinary judging6E3A8. It also runs with
+   // simulation648==0. Preserve retained bits; never derive it from frame IDs.
+   const previous=integer(current.scene.toggleD9914,'retained display cadence');
+   const value=(previous+1)&3;
+   commit([{kind:'sourceWordWrite',field:'toggleD9914',value}]);
+   return {previous,value};
+  },
   aiTargetTable:courseRuntime?.aiTargetTable??null,
   aiRecords:()=>racers.map((_,slot)=>({sourceLap:word(slot,0),place293c:word(slot,1),
    navigationSourceRow:word(slot,4),finished2c2c:word(slot,189),record2c24:word(slot,187)})),

@@ -102,9 +102,38 @@ test('live navigation history is independent of rendering frequency',()=>{
  for(const hz of [30,60,144]){
   const s=make();
   for(let i=0;i<hz;i++)stepRace(s,{throttle:1},1/hz);
-  const value={records:s.nativeLaunch.aiRecords(),navigation:s.nativeHost.lastNavigation,water:s.raceWater.selectionMeshesNative};
+  const value={records:s.nativeLaunch.aiRecords(),navigation:s.nativeHost.lastNavigation,water:s.raceWater.selectionMeshesNative,
+   cadence:s.nativeLaunch.snapshot().scene.toggleD9914,lastDisplayClock:s.nativeHost.lastDisplayClock};
   if(expected)assert.deepEqual(value,expected);else expected=structuredClone(value);
  }
+});
+
+test('shared AI button cadence follows completed source frames after all input polls, even in simulation0',()=>{
+ const retained=make({mode:'versus'}).nativeLaunch.snapshot();
+ Object.assign(retained.scene,{toggleD9914:2,phase650:3,simulation648:0,activity624:0});
+ const s=make({mode:'versus',nativeInitialRaceState:retained}),host=s.nativeHost,polls=[],completed=[];
+ const providers=[0,1].map(slot=>()=>{polls.push([slot,s.nativeLaunch.snapshot().scene.toggleD9914]);return {};});
+ host.onFrame=()=>{completed.push(s.nativeLaunch.snapshot().scene.toggleD9914);};
+ stepNativeRaceHost(host,.01,providers);
+ assert.deepEqual(polls,[[1,2],[0,2]]);assert.deepEqual(completed,[]);
+ assert.equal(s.nativeLaunch.snapshot().scene.toggleD9914,2);
+ stepNativeRaceHost(host,.19,providers);
+ assert.deepEqual(polls,[[1,2],[0,2],[1,3],[0,3],[1,0],[0,0],[1,1],[0,1]]);
+ assert.deepEqual(completed,[3,0,1,2]);assert.equal(host.world.ticks,0);
+ const before=s.nativeLaunch.snapshot();stepNativeRaceHost(host,.5,providers,{active:false});
+ assert.deepEqual(s.nativeLaunch.snapshot(),before);assert.equal(polls.length,8);
+});
+
+test('display cadence retains signed native bits and rejects absent history without mutation',()=>{
+ for(const value of [-2147483648,-1,0,1,2,3,2147483647]){
+  const retained=make().nativeLaunch.snapshot();retained.scene.toggleD9914=value;
+  const s=make({nativeInitialRaceState:retained}),before=s.nativeLaunch.snapshot();
+  assert.equal(s.nativeLaunch.advanceDisplayClock().value,(value+1)&3);
+  const after=s.nativeLaunch.snapshot();after.scene.toggleD9914=value;assert.deepEqual(after,before);
+ }
+ const retained=make().nativeLaunch.snapshot();delete retained.scene.toggleD9914;
+ const runtime=make({nativeInitialRaceState:retained}).nativeLaunch,before=runtime.snapshot();
+ assert.throws(()=>runtime.advanceDisplayClock(),/retained display cadence/);assert.deepEqual(runtime.snapshot(),before);
 });
 
 test('source context overrides retained table only for main21 or versus mode1',()=>{

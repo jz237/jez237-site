@@ -134,6 +134,7 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
  }:null,afterTick:(_,context)=>{
   if(context.tick%5!==0)present(host);
  },afterFrame:(_,context)=>{
+  if(raceRuntime?.ordinary)host.lastDisplayClock=raceRuntime.advanceDisplayClock();
   present(host);
   let ordinary=null;
   if(raceRuntime?.ordinary)ordinary=raceRuntime.advanceOrdinary({

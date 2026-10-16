@@ -1,5 +1,21 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Shared AI button cadence — local October 16 checkpoint
+
+The live ordinary host now retains the original four-step display counter in
+the canonical scene. All racers sample its prior value; it advances once after
+the shared hull/camera/water frame, before ordinary judging. Simulation0 still
+advances it; browser pause does not. Retained state preserves its supplied value
+and rejects missing history. A fresh web race explicitly starts at zero; this
+does not reproduce the original menu's prior frame count.
+
+Original display-prefix execution matches136 prepared values, including signed
+word extremes, across1,224 instructions. The original dispatcher table sends
+states40–45 through the same input/world/display/judging sequence. All35 focused
+live-input, host and launch tests pass, including descending two-player polling,
+partial frames, pause, simulation0 and30/60/144Hz history equality. This change is
+local and unpublished. Full post-finish AI and result scheduling remain pending.
+
 ## Solo AI traffic dependency — local October 16 checkpoint
 
 The reconstructed80D20 traffic routine now skips camera-corner validation when
