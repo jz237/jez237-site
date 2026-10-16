@@ -2,7 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {prepareNativeNameEntryAnimationPhase as prepare} from '../native-name-entry.js';
 import {createNativeRaceState,prepareNativeNameEntryInitializationUpdate as initialize,
- prepareNativeNameEntryAnimationPhaseUpdate as animate,prepareNativeNameEntryInputUpdate as input} from '../native-race-state.js';
+ prepareNativeNameEntryAnimationPhaseUpdate as animate,prepareNativeNameEntryInputUpdate as input,
+ prepareNativeNameEntryAnimationUpdate as outer,prepareNativeNameEntryDisplayUpdate as display} from '../native-race-state.js';
 const hi=a=>(a-0x7788)/4,ni=a=>(a-0x61c4)/4;
 function word(f){const d=new DataView(new ArrayBuffer(4));d.setFloat32(0,f);return d.getUint32(0);}
 function fixture(){
@@ -89,4 +90,20 @@ test('invalid character data rejects after prepared writes without changing reta
  const f=fixture(),s=structuredClone(f.state);s.nameEntryWords61c4[1]=4;s.nameEntryWords61c4[7]=15;
  const before=structuredClone(s);f.views.characterBytes60bc[0]=256;
  assert.throws(()=>animate(s,f.views),RangeError);assert.deepEqual(s,before);assert.equal(Object.isFrozen(f.views),false);
+});
+
+test('outer initialization runs before animation and the display latch clears before the following frame',()=>{
+ const f=fixture(),s=structuredClone(f.state);Object.assign(s.scene,{initLatch63c:1,gameStateAb24:100,courseIndex:1,freshNameAb6c:1});
+ s.nameEntryWords61c4[1]=5;s.nameEntryWords61c4[7]=99;
+ const q=outer(s,f.views);assert.equal(q.diagnostic.initialized,true);assert.equal(q.state.nameEntryWords61c4[1],0);
+ assert.equal(q.state.nameEntryWords61c4[7],1);assert.equal(q.state.scene.initLatch63c,1);
+ const returns=Object.fromEntries(['80093f78','8008fb74','801e2058','80094a44','80090f58','801e229c'].map((v,i)=>[v,0x81000000+i*32]));
+ const drawn=display(q.state,{...f.views,externalReturns:returns},{expandInput:true}),next=outer(drawn.state,f.views);
+ assert.equal(next.diagnostic.initialized,false);assert.equal(next.state.nameEntryWords61c4[7],2);assert.equal(next.state.scene.initLatch63c,0);
+});
+
+test('non-name game state bypasses initialization despite a set outer latch',()=>{
+ const f=fixture(),s=structuredClone(f.state);s.scene.initLatch63c=1;s.scene.gameStateAb24=101;s.nameEntryWords61c4[1]=1;
+ delete s.scene.freshNameAb6c;delete s.scene.field700;
+ const q=outer(s);assert.equal(q.diagnostic.initialized,false);assert.equal(q.state.nameEntryWords61c4[1],1);
 });

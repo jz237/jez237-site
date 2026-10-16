@@ -27,7 +27,7 @@ import {prepareNativeRaceStartTransform,decodeNativeRaceStartTransform} from './
 import {prepareNativeRaceFadePropertiesInitialization,prepareNativeRaceFadeSlotsReset} from './native-race-fade-initialization.js';
 import {prepareNativeRaceMainConfiguration} from './native-race-main-configuration.js';
 import {prepareNativeRaceMenuInitialization} from './native-race-menu-initialization.js';
-import {prepareNativeNameEntryInitialization,prepareNativeNameEntryInput,prepareNativeNameEntryAnimationPhase} from './native-name-entry.js';
+import {prepareNativeNameEntryInitialization,prepareNativeNameEntryInput,prepareNativeNameEntryAnimationPhase,prepareNativeNameEntryRecordUpdate,prepareNativeNameEntryDisplay} from './native-name-entry.js';
 import {prepareNativeRaceRiderResourceConfiguration,prepareNativeRaceCourseResourceConfiguration} from './native-race-resource-configuration.js';
 import {prepareNativeRaceResultCodeSelection} from './native-race-body-fields.js';
 import {prepareNativePrimaryResultEstimates} from './native-primary-standings.js';
@@ -50,7 +50,7 @@ const sceneRanges={primaryHumanIndex:[0,3],secondaryHumanIndex:[0,3],players:[1,
 const sceneWords=new Set(['cold8224','clockStopped817c','phase650','simulation648','main638','mode620','state600',
  'missLimit8174','noFinish8178','configuredLaps728','difficulty','directionFlag1f90','ambientD4b00','fortressD8240',
  'metadataD9b0','metadataCb32c','restart6f8','initLatch63c','gameStateAb24','mode608','returnState630','forceFirst8228','demoOffset5438','rngState4640','style6e2c',
- 'previousGameState634','field640','field644','fieldAb1c','field461c','field700','field704','field708','field70c','field710','field714','nameIndexA9b0','resultEffect393c','wave610','missLimit614','lapCount618','field61c','wave49b0','field64c','players','racerCount','toggleD9914','previousNavigationD9874','trainingSelectionDa9f8']);
+ 'previousGameState634','field640','field644','fieldAb1c','fieldAb2c','field461c','field700','field704','field708','field70c','field710','field714','nameIndexA9b0','resultEffect393c','wave610','missLimit614','lapCount618','field61c','wave49b0','field64c','players','racerCount','toggleD9914','previousNavigationD9874','trainingSelectionDa9f8']);
 const sceneHalves=new Set(['activity624','event628','field62a','pendingPlayers60c','participantCount60e','result6f0','specialAb64','ready6fc','reverseDab68','missesEnabled72e','seed6f00','field4964','style6e28',
  'field4970','field72c','fieldA9ac','pressed65a','unlockAb60','freshNameAb6c','variant6f4','variant6f6']);
 function record(v,n){if(!v||typeof v!=='object'||Array.isArray(v))throw new TypeError(`Expected ${n}`);return v;}
@@ -315,6 +315,35 @@ export function prepareNativeNameEntryInputUpdate(state,sourceViews={}){
 export function prepareNativeNameEntryAnimationPhaseUpdate(state,sourceViews={}){
  const next=copy(state),prepared=prepareNativeNameEntryAnimationPhase(next,sourceViews),effects=apply(next,prepared.operations);
  return freeze({...prepared,state:next,effects});
+}
+
+/** Original1290 initialization gate followed by its numeric animation prefix.
+ * The latch stays set until the separate1E8C display caller clears it. Matrix
+ * projection and crossing effects after183C remain the next required stage. */
+export function prepareNativeNameEntryAnimationUpdate(state,sourceViews={}){
+ const next=copy(state),operations=[],effects=[];
+ const initialized=sceneValue(next,'initLatch63c')!==0&&sceneValue(next,'gameStateAb24')===100;
+ if(initialized){const q=prepareNativeNameEntryInitialization(next,sourceViews);operations.push(...q.operations);effects.push(...apply(next,q.operations));}
+ const phase=prepareNativeNameEntryAnimationPhase(next,sourceViews);operations.push(...phase.operations);effects.push(...apply(next,phase.operations));
+ return freeze({...phase,state:next,operations,effects,diagnostic:{...phase.diagnostic,consumer:'801e1290..801e183c',initialized}});
+}
+
+export function prepareNativeNameEntryRecordCommit(state,sourceViews={}){
+ const next=copy(state),prepared=prepareNativeNameEntryRecordUpdate(next,sourceViews),effects=apply(next,prepared.operations);
+ return freeze({...prepared,state:next,effects});
+}
+
+export function prepareNativeNameEntryDisplayUpdate(state,sourceViews={}, {expandInput=false,expandRecords=false}={}){
+ if(typeof expandInput!=='boolean'||typeof expandRecords!=='boolean'||expandRecords&&!expandInput)throw new TypeError('Record expansion requires input expansion');
+ const next=copy(state),prepared=prepareNativeNameEntryDisplay(next,sourceViews),operations=[],effects=[];
+ for(const op of prepared.operations){
+  const batch=expandInput&&op.kind==='externalCall'&&op.consumer==='801e2530'?prepareNativeNameEntryInput(next,sourceViews).operations:[op];
+  for(const entry of batch){
+   const expanded=expandRecords&&entry.kind==='externalCall'&&entry.consumer==='801e2c14'?prepareNativeNameEntryRecordUpdate(next,sourceViews).operations:[entry];
+   operations.push(...expanded);effects.push(...apply(next,expanded));
+  }
+ }
+ return freeze({...prepared,state:next,operations,effects,diagnostic:{...prepared.diagnostic,inputExpanded:expandInput,recordsExpanded:expandRecords}});
 }
 
 /** Original result-menu entry with numeric fades in the canonical HUD owner.

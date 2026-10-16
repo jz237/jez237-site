@@ -22,14 +22,33 @@ The801E12E0..183C animation prefix now handles31-update intro/outro,
 automatic END seeking after the third initial and the visible wheel window.
 Float32 state and float64 confirmation arithmetic remain distinct. All3,890
 original-execution cases match191,782 instructions and17,680 ordered writes,
-complete retained owners and transient confirmation poses. All76 focused
+complete retained owners and transient confirmation poses. All94 focused
 name-entry, menu/input, canonical state/profile and result tests pass, including
 a full numeric three-initial entry, automatic END selection and exit sequence.
 
+The complete2C14 record-name updater restores blank input from the selected
+profile and applies exact bytes to race, lap, reverse or stunt records. It
+preserves the source's fifth terminating-byte stores and includes championship
+round0. All1,288 original cases match147,832 instructions and14,120 writes.
+The complete1E8C display caller preserves latch clearing, graphics return
+heads, input timing and the championship storage-call schedule. All498 direct
+and expanded input/record cases match45,090 instructions and6,057 operations.
+The2B8C/C500 exit callers preserve their distinct phase/player/fade behavior;
+64 direct/expanded cases match6,832 instructions and2,144 operations. The
+1290 outer initialization gate plus numeric animation prefix matches72 cases,
+7,784 instructions and1,100 writes. Existing420 result-menu cases still match.
+
+EVO X2's installed Ghidra supplied another read-only query of five save/exit
+functions. All634 exported instruction bytes match the local original ROM,
+and all9 saved analysis-project files have unchanged hashes. Full raw function
+bodies supply the execution comparisons; Ghidra's inferred bodies alone are
+not taken as proof of complete branch coverage.
+
 This is a local numeric checkpoint. The live site remainsv2.30.1. The outer
-initialization latch, matrix projection/crossing effects, textured presentation,
-save callees and live name-entry integration are still pending. These modules
-do not claim to execute the full801E1290 renderer or persist records. Source
+initialization latch is connected to the display caller in prepared tests.
+Matrix projection/crossing effects, textured presentation, format/storage
+callees and live name-entry integration are still pending. These modules do
+not claim to execute the full801E1290 renderer or persist records. Source
 constants and character bytes are explicit caller views; no ROM strings or
 tables are embedded in the new implementation.
 

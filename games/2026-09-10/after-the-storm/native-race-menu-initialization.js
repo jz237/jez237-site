@@ -2,14 +2,16 @@
 // audio are ordered call recipes here; no original assets or tables are embedded.
 const entries={
  '801ec20c':{game:50,main:3},'801ec830':{game:80,main:13},
- '801ec9c8':{game:100,main:6},'801ece50':{game:54,main:18}
+ '801ec9c8':{game:100,main:6},'801ece50':{game:54,main:18},
+ '801e2b8c':{game:101,main:6},'801ec500':{game:66,main:12}
 };
 function word(value,name){if(!Number.isInteger(value)||value<-2147483648||value>2147483647)throw new RangeError(`Invalid ${name}`);return value;}
 function freeze(v){if(v&&typeof v==='object'&&!Object.isFrozen(v)){Object.values(v).forEach(freeze);Object.freeze(v);}return v;}
 
-/** Direct C20C/C830/C9C8/CE50 numeric initialization in source order.
+/** Direct result-menu and championship name-exit initialization in source order.
  * input.consumer selects the original entry; value.scene supplies gameStateAb24
- * and, only for C830/C9C8, mode608. Effects are recipes, not executed callbacks.
+ * and, only for C830/C9C8, mode608.2B8C also takes input.returnState630.
+ * Effects are recipes, not executed callbacks.
  * These callers initialize menus; their subsequent loops, resource transfers,
  * rendering and record persistence are separate responsibilities.
  */
@@ -23,6 +25,16 @@ export function prepareNativeRaceMenuInitialization(value,input){
  const fade=(type=4,rate=1)=>call('801e6fb0',[type,rate,0]);
  const slots=()=>call('801e6a4c',[0,0]);
  const resources=()=>call('80096960',[2,0,1,2,3]);
+ if(consumer==='801e2b8c'||consumer==='801ec500'){
+  write('previousGameState634',previous);write('returnState630',consumer==='801e2b8c'?word(input.returnState630,'returnState630'):0);
+  write('gameStateAb24',entry.game);
+  for(const [field,v]of [['main638',entry.main],['initLatch63c',1],['field640',0],['field644',0],['fieldAb1c',0],['field461c',2]])write(field,v);
+  if(consumer==='801e2b8c')call('801e6fb0',[1,14,20]);
+  else{write('players',1);resources();fade(2,4);slots();}
+  return freeze({operations,diagnostic:{consumer,targetGameState:entry.game,targetMain:entry.main,
+   requiredExternalConsumers:operations.filter(o=>o.kind==='externalCall').map(o=>o.consumer),
+   externalHelpersExecuted:false,menuLoopExecuted:false,resourceLoadingPerformed:false,recordsPersisted:false}});
+ }
  write('previousGameState634',previous);write('returnState630',0);write('gameStateAb24',entry.game);
  for(const [field,v]of [['main638',entry.main],['initLatch63c',1],['field640',0],['field644',0],['fieldAb1c',0],['field461c',2],['players',1]])write(field,v);
  if(consumer!=='801ece50')phases();

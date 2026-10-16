@@ -248,3 +248,97 @@ export function prepareNativeNameEntryAnimationPhase(value,sourceViews={}){
  return freeze({operations,motionActive,confirmationPose,diagnostic:{consumer:'801e12e0..801e183c',phase,
   matrixProjectionPending:true,crossingEffectsPending:true,recordsPersisted:false}});
 }
+
+/** Complete numeric801E2C14. Applies initials to the already-ranked records
+ * in RAM, including the source's fifth terminating-byte stores. It neither
+ * ranks a new result nor writes cartridge/browser storage. Empty input uses
+ * three bytes from the selected14-byte profile entry and sets freshNameAb6c.
+ * Championship covers round0 through the current round (unlike qualification
+ * in1BA8). Reached normal/stunt rank flags must be0..3; reverse flags only
+ * select a single row. All writable bytes retain their existing owners. */
+export function prepareNativeNameEntryRecordUpdate(value,sourceViews={}){
+ const owners={hudWords7788:[0x7788,1442,'hudWrite'],raceWords1f94:[0x1f94,1693,'raceByteWrite'],
+  saveWordsB280:[0xb280,34,null],profileWordsB330:[0xb330,50,null]},retained={},operations=[];
+ function memory(key){
+  if(!retained[key]){
+   const words=value?.[key],count=owners[key][1];
+   if(!Array.isArray(words)||(key==='profileWordsB330'?![50,52].includes(words.length):words.length!==count))throw new RangeError(`Invalid ${key} length`);
+   const m=new DataView(new ArrayBuffer(words.length*4));Array.from(words,(v,i)=>m.setUint32(i*4,integer(v,key,0,U32)));retained[key]=m;
+  }return retained[key];
+ }
+ const read=(key,a,w=4)=>w===1?memory(key).getUint8(a-owners[key][0]):memory(key).getInt32(a-owners[key][0]);
+ function byte(key,a,value){const byteOffset=a-owners[key][0];operations.push({kind:owners[key][2],byteOffset,width:1,value});memory(key).setUint8(byteOffset,value);}
+ const scene=key=>integer(value?.scene?.[key],`scene.${key}`);
+ const reverse=()=>integer(value?.scene?.reverseDab68,'scene.reverseDab68',0,65535)!==0;
+ let restored=false;
+ if(read('hudWords7788',0x88e8,1)===0){
+  const index=integer(scene('nameIndexA9b0'),'name index',0,7);
+  for(let i=0;i<3;i++)byte('hudWords7788',0x88e8+i,read('saveWordsB280',0xb298+index*14+i,1));
+  byte('hudWords7788',0x88eb,0);operations.push({kind:'sourceHalfwordWrite',field:'freshNameAb6c',value:1});restored=true;
+ }
+ const name=Array.from({length:4},(_,i)=>read('hudWords7788',0x88e8+i,1));
+ function writeName(address,order){for(const i of order)byte('raceWords1f94',address+i,i===4?0:name[i]);}
+ function courseRecords(course){
+  const place=read('raceWords1f94',0x2660+course*4);
+  if(place!==0){
+   const rev=reverse(),rank=rev?place:integer(place,'record rank',1,3);
+   writeName(rev?0x23b0+course*20+16:0x1ff0+course*60+rank*20-4,[0,1,2,3,4]);
+  }
+  if(read('raceWords1f94',0x2690+course*4)!==0)writeName(0x22c0+course*20+16,[1,2,3,0,4]);
+ }
+ const mode=scene('mode608');
+ if(mode===4){
+  const round=integer(read('profileWordsB330',0xb334),'profile round',0,7),difficulty=integer(read('profileWordsB330',0xb338),'profile difficulty',0,2);
+  const rows=sourceViews.championshipCourseRowsAc14;
+  if(!Array.isArray(rows)||rows.length!==3||!Array.isArray(rows[difficulty])||rows[difficulty].length!==8)throw new RangeError('Invalid championshipCourseRowsAc14');
+  for(let i=0;i<=round;i++)courseRecords(integer(rows[difficulty][i],'championship course',0,11));
+ }else if(mode===11){
+  const rank=integer(read('raceWords1f94',0x2928),'stunt rank',0,3);
+  if(rank!==0){const course=integer(scene('courseIndex'),'courseIndex',0,11);writeName(0x26e8+course*48+rank*16-4,[1,3,2,0,4]);}
+ }else courseRecords(integer(scene('courseIndex'),'courseIndex',0,11));
+ return freeze({operations,diagnostic:{consumer:'801e2c14',restoredProfileName:restored,recordBytesUpdated:true,recordsPersisted:false}});
+}
+
+/** Complete801E1E8C display caller with explicitly prepared graphics returns.
+ * Rendering/input/storage callees remain ordered recipes. The saved return
+ * head precedes input or fade-exit calls, which must not replace that head.
+ * The championship save loop includes warm-up and any nonzero record flag.
+ * Those storage callees do not write the profile/flags controlling this loop. */
+export function prepareNativeNameEntryDisplay(value,sourceViews={}){
+ const operations=[];
+ const scene=key=>integer(value?.scene?.[key],`scene.${key}`);
+ const write=(field,v)=>operations.push({kind:'sourceWordWrite',field,value:v>>>0});
+ function call(consumer,args=[],returns=false){
+  const op={kind:'externalCall',consumer,arguments:args.map(v=>v>>>0)};
+  if(returns){op.returnWord=integer(sourceViews.externalReturns?.[consumer],`actual return from${consumer}`,0,U32);
+   if(op.returnWord%4)throw new RangeError('Source display-list head must be word-aligned');}
+  operations.push(op);return op.returnWord;
+ }
+ const owners={};
+ function word(key,count,index){
+  if(!owners[key]){
+   const a=value?.[key];if(!Array.isArray(a)||(key==='profileWordsB330'?![50,52].includes(a.length):a.length!==count))throw new RangeError(`Invalid ${key} length`);
+   owners[key]=Array.from(a,v=>integer(v,key,0,U32));
+  }return owners[key][index]|0;
+ }
+ if(scene('initLatch63c')!==0)write('initLatch63c',0);
+ write('fieldAb2c',0);
+ let head=call('80093f78',[],true);head=call('8008fb74',[head],true);head=call('801e2058',[head],true);
+ operations.push({kind:'presentationWordWrite',address:head,width:4,value:0x01020040},
+  {kind:'presentationWordWrite',address:(head+4)>>>0,width:4,value:0x8011f820});
+ head=call('80094a44',[(head+8)>>>0,scene('courseIndex')],true);head=call('80090f58',[head],true);head=call('801e229c',[head],true);
+ if(scene('gameStateAb24')===100)call('801e2530');
+ else if((word('hudWords7788',1442,(0x8a14-0x7788)/4)<<16>>16)===1){
+  if(scene('mode608')===4){
+   const round=integer(word('profileWordsB330',50,1),'profile round',0,7),difficulty=integer(word('profileWordsB330',50,2),'profile difficulty',0,2),rows=sourceViews.championshipCourseRowsAc14;
+   if(!Array.isArray(rows)||rows.length!==3||!Array.isArray(rows[difficulty])||rows[difficulty].length!==8)throw new RangeError('Invalid championshipCourseRowsAc14');
+   for(let i=0;i<=round;i++){
+    const course=integer(rows[difficulty][i],'championship course',0,11);
+    if(word('raceWords1f94',1693,(0x2660-0x1f94)/4+course)!==0||word('raceWords1f94',1693,(0x2690-0x1f94)/4+course)!==0)
+     call(integer(value.scene.reverseDab68,'scene.reverseDab68',0,65535)!==0?'8007c204':'8007bea4',[course]);
+   }
+  }
+  call('801ec500');
+ }
+ return freeze({operations,displayListHead:head,diagnostic:{consumer:'801e1e8c',renderingPerformed:false,inputExpanded:false,recordsPersisted:false}});
+}
