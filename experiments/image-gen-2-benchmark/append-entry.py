@@ -57,6 +57,8 @@ FACTUAL_SOURCE_TYPES = {
     "university",
     "peer-reviewed-journal",
     "professional-scientific-organization",
+    "veterinary-reference",
+    "animal-welfare-organization",
     "museum",
     "standards-body",
     "manufacturer-technical-documentation",
