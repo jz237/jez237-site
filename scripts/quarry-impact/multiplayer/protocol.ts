@@ -42,11 +42,11 @@ export type Snapshot = {
   members: Member[]; ack: Record<number, number>;
   props: PropState[];
   capacity?:OnlineCapacity; transmissionSupport?:true; assistsSupport?:true; absSupport?:true;
-  eventSupport?:true; noRespawnDerbySupport?:true; event?:OnlineEventState;
+  eventSupport?:true; timedRaceSupport?:true; noRespawnDerbySupport?:true; event?:OnlineEventState;
   cupSupport?:true; cup?:CupState; setupSupport?:true; setupRule?:SetupRule; liverySupport?:true; liveryRevision?:number;
 };
 export type ClientMessage =
-  | { type: 'hello'; protocol: number; name: string; kind: CarKind; token?: string; maxPlayers?:24; eventRules?:1; noRespawnDerby?:1; wire?:'qiw1'; setup?:OnlineSetup }
+  | { type: 'hello'; protocol: number; name: string; kind: CarKind; token?: string; maxPlayers?:24; eventRules?:1; timedRace?:1; noRespawnDerby?:1; wire?:'qiw1'; setup?:OnlineSetup }
   | { type:'livery'; kind:CarKind; layers:import('../src/livery-data').LiveryLayer[] }
   | { type:'setup'; kind:CarKind; setup:OnlineSetup }
   | { type:'setup-rule'; rule:SetupRule }
@@ -74,12 +74,12 @@ export function parseClientMessage(raw: string): ClientMessage | null {
   if (d.type === 'hello' && d.protocol === PROTOCOL && typeof d.name === 'string' &&
       ['coupe', 'sedan', 'hatch'].includes(String(d.kind)) &&
       (d.setup===undefined||validOnlineSetup(d.setup))&&
-      (d.eventRules===undefined||d.eventRules===1)&&(d.noRespawnDerby===undefined||d.noRespawnDerby===1&&d.eventRules===1)&&
+      (d.timedRace===undefined||d.timedRace===1&&d.eventRules===1)&&(d.eventRules===undefined||d.eventRules===1)&&(d.noRespawnDerby===undefined||d.noRespawnDerby===1&&d.eventRules===1)&&
       (d.maxPlayers===undefined||d.maxPlayers===24)&&(d.wire===undefined||d.wire==='qiw1')&&
       (d.token === undefined || typeof d.token === 'string' && d.token.length <= 64)) {
     return { type: 'hello', protocol: PROTOCOL,
       name: d.name.replace(/[^\p{L}\p{N} _-]/gu, '').trim().slice(0, 18) || 'DRIVER',
-      kind: d.kind as CarKind, token: d.token as string | undefined,...(d.eventRules===1?{eventRules:1 as const}:{}),...(d.noRespawnDerby===1?{noRespawnDerby:1 as const}:{}),...(d.maxPlayers===24?{maxPlayers:24 as const}:{}),...(d.wire==='qiw1'?{wire:'qiw1' as const}:{}),...(d.setup===undefined?{}:{setup:copyOnlineSetup(d.setup as OnlineSetup)}) };
+      kind: d.kind as CarKind, token: d.token as string | undefined,...(d.timedRace===1?{timedRace:1 as const}:{}),...(d.eventRules===1?{eventRules:1 as const}:{}),...(d.noRespawnDerby===1?{noRespawnDerby:1 as const}:{}),...(d.maxPlayers===24?{maxPlayers:24 as const}:{}),...(d.wire==='qiw1'?{wire:'qiw1' as const}:{}),...(d.setup===undefined?{}:{setup:copyOnlineSetup(d.setup as OnlineSetup)}) };
   }
   if(d.type==='setup'&&['coupe','sedan','hatch'].includes(String(d.kind))&&validOnlineSetup(d.setup))return{type:'setup',kind:d.kind as CarKind,setup:copyOnlineSetup(d.setup)};
   if(d.type==='setup-rule'&&['open','stock'].includes(String(d.rule)))return{type:'setup-rule',rule:d.rule as SetupRule};

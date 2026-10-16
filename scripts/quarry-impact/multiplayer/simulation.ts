@@ -1,3 +1,4 @@
+import {timedRaceFinished,timedRaceOrder} from '../src/timed-race';
 import {armorWearMultiplier} from '../src/armor-wear';
 import {derbyEndReason} from '../src/derby-policy';
 import {validDrivingAssists} from '../src/driving-assists';
@@ -91,7 +92,7 @@ export class Simulation {
   setInput(id: number, input: Controls) { this.cars[id].state.input = {...input,...(input.assists?{assists:{...input.assists}}:{}),...(input.transmission?{transmission:{...input.transmission}}:{})}; }
   recover(id: number) {
     const c = this.cars[id], s = c?.state;
-    if (!s || this.phase !== 'playing' || this.elapsed-c.lastRecovery<5 || (s.health<=0 && this.mode!=='playground')) return false;
+    if (!s || this.mode==='race'&&this.event?.rules.raceDuration&&s.finished || this.phase !== 'playing' || this.elapsed-c.lastRecovery<5 || (s.health<=0 && this.mode!=='playground')) return false;
     c.lastRecovery = this.elapsed;this.event?.combat.feats.remove(id);
     if (this.mode === 'playground') { s.health=100;s.engineStall=0;s.transmission=undefined;s.gear=1; s.damageLeft=s.damageRight=0; s.repair++;s.dents=[];s.components=freshComponents();this.damage=this.damage.filter(d=>d.car!==id);this.place(c,s.p.x,s.p.z,Math.atan2(s.v.x,s.v.z)); }
     else if (this.mode === 'race') {
@@ -144,7 +145,7 @@ export class Simulation {
     this.tick++;
     if(this.phase==='countdown'){this.countdown-=STEP;if(this.countdown<=0)this.phase='playing';return;}
     this.elapsed+=STEP;
-    for(const c of this.cars){if(!humans.has(c.state.id))c.state.input=this.ai(c);this.drive(c);}
+    for(const c of this.cars){if(!humans.has(c.state.id)||this.mode==='race'&&this.event?.rules.raceDuration&&c.state.finished)c.state.input=this.ai(c);this.drive(c);}
     const scoreMotion=this.event?.score?this.cars.map(c=>combatMotion(c.state.id,c.state.p,c.state.q,c.state.v,c.body.angvel().y,c.state.health,[0,1,2,3].filter(i=>c.controller.wheelIsInContact(i)).length)):[];
     if(this.event?.score)this.event.combat.sample(scoreMotion,this.elapsed);
     const collisionMotion=captureCollisionMotion(this.world);
@@ -214,17 +215,18 @@ export class Simulation {
         }else{
           const check=checkRoute(this.route(s.id),s.p.x,s.p.z,s.nextCheckpoint,c.checkpointDistance);c.checkpointDistance=check.distance;
           if(check.passed){s.passed++;s.nextCheckpoint=(s.nextCheckpoint+1)%24;c.checkpointDistance=Infinity;
-            if(this.capacity===24||this.event){const progress=lapProgress(s.passed,this.event?.rules.laps??3);s.lap=progress.lap;if(progress.finished){s.finished=true;s.finishTime=this.elapsed+s.penalty;}}
+            if(this.capacity===24||this.event){const progress=lapProgress(s.passed,this.event?.rules.laps??3);s.lap=progress.lap;if(this.event?.rules.raceDuration?timedRaceFinished(s.passed,this.elapsed,this.event.rules.raceDuration):progress.finished){s.finished=true;s.finishTime=this.elapsed+s.penalty;}}
             else if(s.nextCheckpoint===1){s.lap++;if(s.lap>3){s.finished=true;s.finishTime=this.elapsed+s.penalty;}}
           }
         }
       }
     }
     if(this.mode==='derby'&&derbyEndReason(this.event?.rules.derby??'survival',this.cars.map(c=>c.state),this.elapsed,this.event?.rules.duration??300))this.phase='result';
-    if(this.mode==='race'&&(this.elapsed>=Math.max(900,(this.event?.rules.laps??3)*300)||this.cars.every(c=>c.state.finished||c.state.health<=0)))this.phase='result';
+    if(this.mode==='race'&&(this.elapsed>=(this.event?.rules.raceDuration?this.event.rules.raceDuration+120:Math.max(900,(this.event?.rules.laps??3)*300))||this.cars.every(c=>c.state.finished||c.state.health<=0)))this.phase='result';
   }
   ranking(){
     const cars=this.cars.map(c=>c.state),distance=(s:CarState)=>{if(this.event?.waypoints)return this.event.waypoints.remainingDistance(s.id,s.p);const p=this.route(s.id)[s.nextCheckpoint];return Math.hypot(s.p.x-p.x,s.p.z-p.z);};
+    if(this.mode==='race'&&this.event?.rules.raceDuration)return timedRaceOrder(cars.map(c=>({...c,current:c.p})),id=>this.route(id)).map(c=>c.id);
     return (this.mode==='derby'?(this.event?.score?this.event.combat.order(cars):derbyOrder(cars)):cars.sort((a,b)=>a.finished&&b.finished?a.finishTime-b.finishTime:a.finished?-1:b.finished?1:b.passed-a.passed||distance(a)-distance(b)||a.id-b.id)).map(c=>c.id);
   }
   snapshot(includeDamage=false): Omit<Snapshot,'members'|'ack'> {return {type:'snapshot',...(this.event?{event:this.event.snapshot(this.capacity)}:{}),capacity:this.capacity,tick:this.tick,elapsed:this.elapsed,countdown:this.countdown,mode:this.mode,phase:this.phase,props:this.props.map(p=>({id:p.id,p:{...p.body.translation()},q:{...p.body.rotation()},v:{...p.body.linvel()},av:{...p.body.angvel()}})),cars:this.cars.map(c=>structuredClone({...c.state,dents:includeDamage?c.state.dents:undefined})),damage:structuredClone(this.damage),ranking:this.ranking()};}

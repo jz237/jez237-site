@@ -200,7 +200,7 @@ let waypointRace:WaypointRace|null=null,waypointMarkers:WaypointMarkers|undefine
 const onlineRules=()=>online?.active?online.network.snapshot?.event?.rules:undefined;
 const raceFormat=()=>pursuitSelected()?'laps':demo?(demoOptions.race??'laps'):onlineRules()?.race??clubRound()?.race??activeChallenge?.race??(customEvent()?eventOptions.race:'laps');
 const damageRule=()=>sessionDamageRule(customEvent()&&mode!=='playground',demo,eventOptions.damage,demoOptions.damage);
-const raceTimeLimit=()=>pursuitSelected()?0:timedRaceLimit(mode,customEvent(),demo,raceFormat(),eventOptions,demoOptions);
+const raceTimeLimit=()=>online?.active?(mode==='race'&&onlineRules()?.race==='laps'?onlineRules()?.raceDuration??0:0):pursuitSelected()?0:timedRaceLimit(mode,customEvent(),demo,raceFormat(),eventOptions,demoOptions);
 const raceDirection=(id=0)=>pursuitSelected()?(eventOptions.direction==='reverse'?'reverse':'forward'):directionForCar(raceFormat()==='laps'?(onlineRules()?.direction??clubRound()?.direction??activeTimeTrial?.direction??activeChallenge?.direction??(customEvent()?eventOptions.direction:'forward')):'forward',id);
 const raceRoute=(id=0)=>waypointRace?.get(id).nav?.route??courseRoute(activeVenue.course,mode==='playground'?'forward':raceDirection(id));
 const derbyFormat=()=>readDerbyFormat(online?.active?onlineRules()?.derby:demo?demoOptions.derby:customEvent()?eventOptions.derby:'survival');
@@ -836,7 +836,7 @@ async function start(watch=demo) {
 let standingsExpanded=false,standingsUpdated=-Infinity;
 function currentStandings():StandingRow[]{
  const ranking=online?.active?online.network.snapshot?.ranking.map(id=>cars.find(c=>c.id===id)).filter((c):c is Vehicle=>!!c)??cars:mode==='derby'?derbyRanking():rankRace();
- return ranking.map(c=>({id:c.id,name:DEFINITIONS[c.kind].name+' #'+(c.id+1),health:c.health,player:!demo&&isPlayer(c),followed:demo&&c.id===director.followed,detail:pursuit?(pursuit.role(c.id)==='runner'?'RUNNER':'CHASER'):mode==='derby'?(scoreDerby()?combat.points(c.id)+' PTS':c.health>0?'RUNNING':'OUT'):c.finished?formatTime(c.finishTime):waypointRace?'GATES '+c.passed:'LAP '+Math.min(raceLaps(),c.lap)}));
+ return ranking.map(c=>({id:c.id,name:DEFINITIONS[c.kind].name+' #'+(c.id+1),health:c.health,player:!demo&&isPlayer(c),followed:demo&&c.id===director.followed,detail:pursuit?(pursuit.role(c.id)==='runner'?'RUNNER':'CHASER'):mode==='derby'?(scoreDerby()?combat.points(c.id)+' PTS':c.health>0?'RUNNING':'OUT'):raceTimeLimit()?(c.finished?Math.floor(c.passed/24)+' LAPS · '+formatTime(c.finishTime):c.health<=0?'RETIRED':'LAP '+c.lap):c.finished?formatTime(c.finishTime):waypointRace?'GATES '+c.passed:'LAP '+Math.min(raceLaps(),c.lap)}));
 }
 function refreshStandings(force=false){
  const panel=document.getElementById('live-standings');if(!panel||!force&&clock-standingsUpdated<.25)return;standingsUpdated=clock;
