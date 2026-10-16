@@ -1,6 +1,7 @@
+import {restoreTrackAcousticsBytes} from './track-acoustics-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readPursuitTeamsPrevious,restorePursuitTeamsBytes,verifyPursuitTeamsRevision} from './pursuit-teams-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreTrackAcousticsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('PursuitTeams preserves every prior fixture, vehicle asset, control and camera input',verifyPursuitTeamsRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/pursuit-teams/revision.json').toString());

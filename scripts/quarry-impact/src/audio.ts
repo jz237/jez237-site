@@ -1,3 +1,5 @@
+import {TrackAcousticProbe,TrackReflections} from './track-acoustics';
+import type {CameraObstruction} from './demo-camera-visibility';
 import {ContactScraping} from './contact-scraping';
 import {gearboxGrindSamples} from './transmission';
 import {audioListenerPosition,AudioListenerMotion,type AudioPerspective} from './audio-perspective';
@@ -11,6 +13,8 @@ import * as T from 'three';
 import type { ThermalAudio } from './vehicle-fire';
 type Loop = { source: AudioBufferSourceNode; gain: GainNode; pan: PannerNode };
 export class Sound {
+  private acousticProbe=new TrackAcousticProbe();
+  private reflections?:TrackReflections;
   ctx?: AudioContext;
   master?: GainNode;
   engineBus?: GainNode;
@@ -140,6 +144,7 @@ export class Sound {
   readonly contactScraping=new ContactScraping();
   clearCars() {
     this.contactScraping.clear();
+    this.reflections?.dispose();this.reflections=undefined;this.acousticProbe.reset();
     for (const source of this.activeShots) { try { source.stop(); } catch {} }
     for (const loops of this.loops.values())
       for (const l of loops.values()) {
@@ -209,7 +214,7 @@ export class Sound {
       source.start(at);source.stop(at+duration);
     }else source.start();
   }
-  update(cars: Vehicle[], camera: T.Camera, dt: number, wreckInspection=false,perspective?:AudioPerspective) {
+  update(cars: Vehicle[], camera: T.Camera, dt: number, wreckInspection=false,perspective?:AudioPerspective,sceneryProbe?:CameraObstruction) {
     if (!this.ready) return;
     const c = this.ctx!,
       listener = c.listener;
@@ -217,6 +222,10 @@ export class Sound {
     const p=audioListenerPosition(camera.position,focused?.current,perspective?.view);
     const listenerVelocity=this.listenerMotion.velocity(p,dt,`${focused?.id??-1}:${perspective?.view??'world'}`);
     this.listenerPrevious.copy(p);
+    if(sceneryProbe&&this.engineBus&&this.fxBus&&this.master){
+      this.reflections??=new TrackReflections(c,[this.engineBus,this.fxBus],this.master);
+      this.reflections.update(wreckInspection?{taps:[0,0,0,0],cutoff:4200}:this.acousticProbe.update(p,dt,sceneryProbe));
+    }
     listener.positionX.value = p.x;
     listener.positionY.value = p.y;
     listener.positionZ.value = p.z;
