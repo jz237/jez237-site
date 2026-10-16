@@ -88,7 +88,7 @@ export function createSourceSouthernCourse(polygonDistance){
   integrationReady:true,navigation,navigationDriver:'source-layout',pilotAnchorsByClass:southernPilotAnchors.map(a=>[...a]),anchors:southernAnchors[0].map(p=>[...p]),anchorsByClass:southernAnchors.map(a=>a.map(p=>[...p])),directedAnchorsByClass:true,routeInterpolation:'linear',
   sourceMetadata:{nativeCourseIndex:7,referenceRevision:'USA Rev1',nativeScale:SCALE,scaleStatus:'conditional',
    sourceCollisionPlaneCount:305,fixedSolidVolumeCount:17,placedRampVolumeCount:3,upwardCollisionPlaneCount:287,orientedAdditionalPlaneCount:18,
-   noFiniteColoredBuoySpan:true,sourceNavRowsAreDrivingAnchors:false},
+   noFiniteColoredBuoySpan:true,sourceNavRowsAreDrivingAnchors:false,sourceNativeClassByDifficulty:[0,1,2,2],sourceStuntNativeClass:2},
   sceneryTrees:[[61.1,123.7,.75],[63.9,126.0,.68],[62.5,-138.8,.72],[61.0,-136.4,.64],[-63.8,-24.5,.7],[-61.1,-23.7,.63]].map(([x,z,scale],i)=>({kind:'palm',x,y:1.27,z,scale,angle:i*2.399,stretch:1,tint:.8})),
   sourceShores,shoreContacts:shoreLines(sourceShores),staticSurfaces,orientedContactPlanes,contactWalls:triangleWalls(orientedContactPlanes),contactVolumesForRamps:southernContactVolumes,sourceFloor,landGround,ground,renderGround,authoredBackground,
   boundary,boundaryMarkers,sourceMarkerSpheres:sourceBoundarySpheres(boundaryMarkers,{idPrefix:'southern-marker-',tideFollowing:true}),boundaryMetadata:{cyclicOrderInferred:true,sourceOrderIsPolygon:false,sourceIndices:[...boundaryOrder],nativeCourseOutRuleRecovered:false},

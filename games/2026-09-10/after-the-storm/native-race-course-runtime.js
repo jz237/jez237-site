@@ -7,19 +7,20 @@ import {createNativeAITargetTable} from './native-ai-target.js';
 import {nativeRaceCourseRegions} from './native-course-regions.js';
 import {SUNNY_NATIVE_RETIREMENT_GEOMETRY} from './native-sunny-support.js';
 import {nativeSunsetRetirementGeometry} from './native-sunset-support.js';
+import {nativeSouthernRetirementGeometry} from './native-southern-support.js';
 import {nativeRaceShoreGeometry} from './native-shore-geometry.js';
 
-// Numeric course owners shared by the Sunny/Sunset native integration preview.
+// Numeric course owners for Sunny/Sunset and prepared Southern integration.
 // Mode and source-water admission remain the race host's responsibility.
 export function createNativeRaceCourseRuntime({course,difficulty,players}={}){
  const courseIndex=course?.sourceWaterCourseIndex;
- if(![1,2].includes(courseIndex)||!Number.isInteger(difficulty)||difficulty<0||difficulty>3||![1,2].includes(players))
-  throw new RangeError('Ordinary data preparation requires Sunny/Sunset source rows and one/two players');
+ if(![1,2,7].includes(courseIndex)||!Number.isInteger(difficulty)||difficulty<0||difficulty>3||![1,2].includes(players))
+  throw new RangeError('Ordinary data preparation requires Sunny/Sunset/Southern source rows and one/two players');
  if(!course.sourceRouteRowsByClass?.[difficulty]||course.sourceBuoyLayout?.courseIndex!==courseIndex)
   throw new TypeError('Selected source route rows and buoy layout are required');
  const mode620=players===2?1:0,scale=course.sourceBuoyLayout.scale,rules=sourceBuoyCourseRules(courseIndex,{reverse:!!course.reverse});
  const regions=nativeRaceCourseRegions(courseIndex);
- const retirementGeometry=courseIndex===1?SUNNY_NATIVE_RETIREMENT_GEOMETRY:nativeSunsetRetirementGeometry({players});
+ const retirementGeometry=courseIndex===1?SUNNY_NATIVE_RETIREMENT_GEOMETRY:courseIndex===2?nativeSunsetRetirementGeometry({players}):nativeSouthernRetirementGeometry({players});
  const staticContactGeometry=Object.freeze({...retirementGeometry,shore:nativeRaceShoreGeometry({courseIndex,players})});
  const data=createNativePrimaryCourseData({rows:course.sourceRouteRowsByClass[difficulty],courseIndex,mode620});
  const resetLayout=createNativeRaceResetLayout({nodes:data.nodes,

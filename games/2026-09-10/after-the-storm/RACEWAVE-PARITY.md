@@ -1,5 +1,38 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unreleased — native Southern Island geometry
+
+The prepared native Southern runtime now selects its original 305 floor planes,
+59 shoreline segments, 28 allowed regions, and 20 ordinary collision volumes.
+Original744EC initializes three ramp volumes followed by17 fixed ship volumes;
+Stunt selects six ramp volumes and the same17 ship volumes. The1P/2P floor and
+shore grid/list/record bytes are verified identical in both loaded images.
+Original ordering, binary32 coefficients and the retirement support owner are
+preserved. The renderer and quality settings are unchanged.
+
+The numeric implementation matches7,736 prepared original executions:3,226
+floor/box queries,1,409 complete support scans,380 shoreline passes,1,249 region
+queries and1,472 full floor/box contact passes. These execute4,388,258 original
+instructions including initialization. Existing EVO Ghidra exports were
+revalidated against the private ROM; Ghidra was not relaunched for this chunk.
+Only the display-only packed matrix conversion is intercepted in initialization;
+the contact/query arithmetic runs directly. This is prepared-state evidence,
+not whole-console equivalence. Public fixtures contain numeric states/results.
+
+Sixty focused checks pass across the new geometry, existing native contact,
+support, host, Southern course and loading suites. One old host test still
+expected native catch-up to be rejected; it now checks the enabled source flag,
+matching the previously published assistance behavior.
+
+Full-race diagnostic admission remains private. All four solo classes finish
+lap one with zero misses, then encounter the retained-primary navigation guard:
+Southern's original progression selects the secondary/tertiary AI routes as its
+lap/tide state advances. Those route families still need host integration.
+The Normal two-player probe reaches a legal three-lap first-to-finish result
+in177.792s, but its second rider remains on lap two near the ship. This does not
+establish complete Southern playability. Public native admission remains
+Sunny/Sunset until the course's remaining runtime behavior is verified.
+
 ## v2.37.0 — native two-player assistance
 
 Catch-up assistance is now available in the opt-in native Two-player preview.
