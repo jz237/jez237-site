@@ -20,6 +20,7 @@ import {prepareNativeNameMenuFrame,nativeNameMenuView} from './native-name-menu-
 import {prepareNativeResultsMenuFrame,nativeResultsMenuView} from './native-results-menu-runtime.js';
 import {prepareNativeContinuationMenuFrame,nativeContinuationMenuView} from './native-continuation-menu-runtime.js';
 import {nativeResultsRecordView} from './native-results-record-view.js';
+import {captureNativeRecordSession,restoreNativeRecordSession,copyNativeRecordSession} from './native-record-session.js';
 
 // Overlapping effect47FC, solo4800 and two-player4818 numeric entries. Ordinary
 // two-player place indices are0/1; other mode tables remain separate admission.
@@ -44,10 +45,12 @@ function readFloat(v){numberBits.setUint32(0,v);return numberBits.getFloat32(0);
  * opaque original loaded palettes/resources/BSS had these same initial bits.
  * Current ordinary time/versus previews use source modes0/1 and nonzero courses.
  * A retained canonical state may instead be supplied for exact prepared tests. */
-export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initialState,courseRuntime,course,laps=3,reverse=false,rngSeed=17}={}){
+export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initialState,recordSession,courseRuntime,course,laps=3,reverse=false,rngSeed=17}={}){
  if(!Array.isArray(racers)||racers.length<1||racers.length>4)throw new TypeError('Launch requires one to four initialized racers');
  integer(players,'players',1,2);integer(courseIndex,'courseIndex',1,9);
  if(players>racers.length)throw new RangeError('Launch requires each human source slot');
+ if(recordSession!==undefined&&(initialState||!courseRuntime))throw new RangeError('Record session requires a fresh ordinary launch');
+ const retainedRecords=recordSession===undefined?null:copyNativeRecordSession(recordSession);
  let current,resultExit=null,continuationHandoff=null;
  // Browser commands are queued edges, consumed once at the source display stage.
  const cameraCommands=Array.from({length:players},()=>[]);
@@ -72,8 +75,8 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
     hudWords7788[hi(address)]=bits;
    // Declared fresh WEB record-book policy. Source reset retains much of this
    // table; zero times would incorrectly prevent legitimate record insertion.
-   for(const base of [0x1ff0+courseIndex*60,0x1ff0+courseIndex*60+20,0x1ff0+courseIndex*60+40,
-    0x22c0+courseIndex*20,0x23b0+courseIndex*20])raceWords1f94[ri(base)]=599999;
+   for(let c=0;c<12;c++)for(const base of [0x1ff0+c*60,0x1ff0+c*60+20,0x1ff0+c*60+40,
+    0x22c0+c*20,0x23b0+c*20])raceWords1f94[ri(base)]=599999;
   }
   current=createNativeRaceState({raceWords1f94,hudWords7788,profileWordsB330,i1Words9440,aiWords3c60:Array(NATIVE_AI_STORAGE_WORDS).fill(0),
    ...(courseRuntime?{menuWordsE658:Array(21).fill(0),deviceWords4308:Array(10).fill(0),
@@ -92,7 +95,10 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
     freshNameAb6c:1,field700:0,fieldAb2c:0,
     missLimit8174:5,noFinish8178:0,configuredLaps728:integer(laps,'configured laps',3,9),
     directionFlag1f90:courseRuntime.directionFlag1f90,fortressD8240:0,metadataD9b0:0,metadataCb32c:0,seed6f00:0}:{} )}});
-  if(courseRuntime)current=prepareNativeRaceStartup(courseRuntime.resetLayout,current).state;
+  if(courseRuntime){
+   if(retainedRecords)current=createNativeRaceState(restoreNativeRecordSession(current,retainedRecords));
+   current=prepareNativeRaceStartup(courseRuntime.resetLayout,current).state;
+  }
   else{
    const startup=prepareNativeRaceStartupOverlay({raceWords1f94:current.raceWords1f94,hudWords7788:current.hudWords7788,globals:current.scene});
    commit(startup.operations);
@@ -168,6 +174,7 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
   // primary/generic object motion call7DBC0 independently of simulation648.
   objectMotionActive:()=>current.scene.activity624===-1,
   snapshot:()=>nativeRaceStateSnapshot(current),
+  recordSessionSnapshot:()=>captureNativeRecordSession(current),
   nameEntryView:()=>nativeNameMenuView(current),
   resultsMenuView:()=>nativeResultsMenuView(current),
   continuationMenuView:()=>({...nativeContinuationMenuView(current),active:!continuationHandoff&&nativeContinuationMenuView(current).active}),

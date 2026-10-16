@@ -61,8 +61,9 @@ export const angleDelta=a=>Math.atan2(Math.sin(a),Math.cos(a));
 export function makeCoveCourse(){return getCourse('greyhaven');}
 export const COVE=makeCoveCourse();
 export function settings(rider=0,tune={}){const r=RIDERS[rider];const engine=clamp(Number(tune.engine)||0,-1,1),grip=clamp(Number(tune.grip)||0,-1,1),handling=clamp(Number(tune.handling)||0,-1,1);return {...r,speed:r.speed+engine*1.4-grip*.7,accel:r.accel-engine*.8,grip:r.grip+grip*1.4,handling:r.handling+handling*.35};}
-export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,difficulty=0,course=COVE,gridOrder=null,seaState='course',secondRider=1,secondTune={},handicap=false,swapColours=false,physics='modern',nativeTunes=[],nativeInitialRaceState}={}){
+export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,difficulty=0,course=COVE,gridOrder=null,seaState='course',secondRider=1,secondTune={},handicap=false,swapColours=false,physics='modern',nativeTunes=[],nativeInitialRaceState,nativeRecordSession}={}){
  if(!['modern','native'].includes(physics))throw new RangeError('Unknown race physics');
+ if(nativeRecordSession!==undefined&&physics!=='native')throw new RangeError('Native record sessions require native physics');
  if(physics==='native'&&(!['time','versus'].includes(mode)||seaState!=='course'||course.sourceWaterCourseIndex!==1))
   throw new RangeError('Native integration preview requires Sunny Beach source-water Time trial or Two-player race');
  if(physics==='native'&&mode==='versus'&&handicap)throw new RangeError('Native two-player catch-up still requires its source integration');
@@ -88,7 +89,7 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
  // input, not a complete saved physical/water history.
  const nativeLaunch=physics==='native'?createNativeRaceLaunchRuntime({racers,courseIndex:course.sourceWaterCourseIndex,
   players:mode==='versus'?2:1,courseRuntime:nativeCourseRuntime,course,laps:configuredLaps,reverse:!!course.reverse,
-  initialState:nativeInitialRaceState,rngSeed:surfSeed.value}):null;
+  initialState:nativeInitialRaceState,recordSession:nativeRecordSession,rngSeed:surfSeed.value}):null;
  const nativeStarts=nativeLaunch?racers.map((r,i)=>{
   const start=nativeLaunch.gridStart(i);
   if(!start.transform.complete)throw new RangeError('Ordinary source grid requires a complete packed transform');

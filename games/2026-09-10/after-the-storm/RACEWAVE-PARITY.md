@@ -1,5 +1,31 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Next checkpoint — retain preview records between races
+
+Native preview restarts now transfer the retained record/setup region1FF0..2938
+and name-profile fields into the next canonical owner before the original75310
+warm reset. This preserves time, reverse and stunt tables, per-course flags,
+setup order and the cold latch. The reset still clears its own result flags,
+selects best-time caches from the retained book, and initializes new race clocks.
+Fresh web sessions initialize empty times for all12 record-table course slots;
+the original cold reset still installs its own numeric tail templates.
+
+The transport is a detached, validated, immutable handoff snapshot. It carries
+no physical simulation, water, HUD animation or controller history. Restart,
+return to setup and later native races retain records within the same page
+session; reloading/closing the page clears them. These preview records remain
+separate from permanent local saves and global ranked scores. The existing
+original-ROM reset audit covers126 cases and318,237 instructions with every
+canonical word/write footprint equal; the reset implementation is unchanged.
+Four new tests exercise real name commit followed by fresh launch, cached best
+times, inherited initials, original warm/cold tails, retained setup order,
+detached owners, malformed payloads and competing initial-state rejection.
+All58 focused session/reset/start/menu and global-score tests pass. A browser
+run followed by the original continuation menu's Restart choice retained both
+1:49.635 and1:48.427 under initials A, with the new best lap0:34.606. The second
+name-entry screen restored A and selected END. These are local preview checks;
+publication remains pending the separate full-site document approval.
+
 ## v2.31.2 â€” post-race continuation preview
 
 The original ovl_i14 follow-up menu now has independently reconstructed
