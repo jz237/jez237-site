@@ -48,7 +48,7 @@ function readFloat(v){numberBits.setUint32(0,v);return numberBits.getFloat32(0);
  * opaque original loaded palettes/resources/BSS had these same initial bits.
  * Current ordinary time/versus previews use source modes0/1 and nonzero courses.
  * A retained canonical state may instead be supplied for exact prepared tests. */
-export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initialState,recordSession,tunes=[],courseRuntime,course,laps=3,reverse=false,rngSeed=17}={}){
+export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initialState,recordSession,tunes=[],tuneModes=[],courseRuntime,course,laps=3,reverse=false,rngSeed=17}={}){
  if(!Array.isArray(racers)||racers.length<1||racers.length>4)throw new TypeError('Launch requires one to four initialized racers');
  integer(players,'players',1,2);integer(courseIndex,'courseIndex',1,9);
  if(players>racers.length)throw new RangeError('Launch requires each human source slot');
@@ -103,7 +103,7 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
     directionFlag1f90:courseRuntime.directionFlag1f90,fortressD8240:0,metadataD9b0:racers[0].id,metadataCb32c:0,seed6f00:0}:{} )}});
   if(courseRuntime){
    if(retainedRecords)current=createNativeRaceState(restoreNativeRecordSession(current,retainedRecords));
-   commit(nativeTuneLaunchOperations(racers,players,tunes));
+   commit(nativeTuneLaunchOperations(racers,players,tunes,tuneModes));
    current=prepareNativeRaceStartup(courseRuntime.resetLayout,current).state;
   }
   else{

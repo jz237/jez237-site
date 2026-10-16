@@ -1,6 +1,37 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
-## Next checkpoint — original tuning connected to the playable preview
+## v2.32.0 — original rider setup modes and tuning
+
+The original-physics Sunny Beach Time Trial/Versus preview now connects its
+12-position controls, two player banks, portable saves and live physical
+profiles. Each player explicitly chooses Normal or Custom. Normal uses the
+factory profile without overwriting saved Custom indices; Custom at the
+factory positions still produces a Custom record. Switching riders retains
+that player's mode and loads the corresponding saved Custom profile.
+
+This supersedes the previous checkpoint's inferred Standard/Custom policy.
+The original transition loop802C85B4–802C8660 selects immutable profiles at
+800DA950 or saved profiles at801CB298, with player stride56 and rider stride14.
+A private execution of the original loop covers128 combinations,4,992
+instructions and576 physical-profile stores, including nontrivial human slot
+mapping. All four original factory profiles contain indices5/5/5. The original
+confirmation paths802C5FB8/802C5FEC set the primary record flag from the chosen
+mode, independently of the slider values. Whole original menu-loop parity is
+not claimed; this is the web menu connected to those recovered choices.
+
+All29 focused save, grid, record and tuning tests pass. Two tests complete
+three genuine laps through the recovered hull and source buoy judge, using
+Normal and Custom with engine index11, and verify the resulting record flag.
+Browser checks confirm Normal locks the controls at factory values, Custom
+restores retained values, both players choose independently, and resetting
+Custom retains the selected mode. No JavaScript errors were observed.
+The high-resolution renderer and ordinary modern controls are unchanged.
+Publication is prepared through the mandatory whole-site deployment wrapper;
+a successful live receipt and asset verification are required before reporting
+this version live. Earlier historical unpublished notes below are superseded
+by their later release receipts; the unrelated document blocker was resolved.
+
+## Earlier checkpoint — original tuning connected to the playable preview
 
 The Sunny Beach original-physics Time Trial and Versus preview now offers
 separate twelve-position Handling, Engine and Grip controls. Eight profiles

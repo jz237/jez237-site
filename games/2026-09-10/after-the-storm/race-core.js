@@ -1,5 +1,6 @@
 import {createSourceFixedSphereGrid} from './source-boundary-spheres.js';
 import {createNativeRaceHost,stepNativeRaceHost} from './native-race-host.js';
+import {effectiveNativeTune} from './native-rider-tuning.js';
 import {createNativeRaceLaunchRuntime} from './native-race-launch-runtime.js';
 import {prepareNativeHullStartFromMatrix} from './native-hull.js';
 import {createNativeRaceCourseRuntime} from './native-race-course-runtime.js';
@@ -61,7 +62,7 @@ export const angleDelta=a=>Math.atan2(Math.sin(a),Math.cos(a));
 export function makeCoveCourse(){return getCourse('greyhaven');}
 export const COVE=makeCoveCourse();
 export function settings(rider=0,tune={}){const r=RIDERS[rider];const engine=clamp(Number(tune.engine)||0,-1,1),grip=clamp(Number(tune.grip)||0,-1,1),handling=clamp(Number(tune.handling)||0,-1,1);return {...r,speed:r.speed+engine*1.4-grip*.7,accel:r.accel-engine*.8,grip:r.grip+grip*1.4,handling:r.handling+handling*.35};}
-export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,difficulty=0,course=COVE,gridOrder=null,seaState='course',secondRider=1,secondTune={},handicap=false,swapColours=false,physics='modern',nativeTunes=[],nativeInitialRaceState,nativeRecordSession}={}){
+export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,difficulty=0,course=COVE,gridOrder=null,seaState='course',secondRider=1,secondTune={},handicap=false,swapColours=false,physics='modern',nativeTunes=[],nativeTuneModes=[],nativeInitialRaceState,nativeRecordSession}={}){
  if(!['modern','native'].includes(physics))throw new RangeError('Unknown race physics');
  if(nativeRecordSession!==undefined&&physics!=='native')throw new RangeError('Native record sessions require native physics');
  if(physics==='native'&&(!['time','versus'].includes(mode)||seaState!=='course'||course.sourceWaterCourseIndex!==1))
@@ -89,7 +90,7 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
  // input, not a complete saved physical/water history.
  const nativeLaunch=physics==='native'?createNativeRaceLaunchRuntime({racers,courseIndex:course.sourceWaterCourseIndex,
   players:mode==='versus'?2:1,courseRuntime:nativeCourseRuntime,course,laps:configuredLaps,reverse:!!course.reverse,
-  initialState:nativeInitialRaceState,recordSession:nativeRecordSession,tunes:nativeTunes,rngSeed:surfSeed.value}):null;
+  initialState:nativeInitialRaceState,recordSession:nativeRecordSession,tunes:nativeTunes,tuneModes:nativeTuneModes,rngSeed:surfSeed.value}):null;
  const nativeStarts=nativeLaunch?racers.map((r,i)=>{
   const start=nativeLaunch.gridStart(i);
   if(!start.transform.complete)throw new RangeError('Ordinary source grid requires a complete packed transform');
@@ -120,7 +121,7 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
   state.nativeLaunch=nativeLaunch;
   state.nativeLaunchLabel=state.nativeLaunch.view().label;state.nativeCountdownCue=null;
   let launchCueSequence=0;
-  state.nativeHost=createNativeRaceHost({racers,water:raceWater,course,fixedSphereGrid:sourceSphereGrid,tunes:nativeTunes,raceRuntime:state.nativeLaunch,hullStarts:nativeStarts,
+  state.nativeHost=createNativeRaceHost({racers,water:raceWater,course,fixedSphereGrid:sourceSphereGrid,tunes:racers.map((_,i)=>effectiveNativeTune(nativeTunes[i],nativeTuneModes[i])),raceRuntime:state.nativeLaunch,hullStarts:nativeStarts,
   onLaunchFrame:(host,context,launch)=>{
    state.countdown=launch.view.countdown;state.nativeLaunchLabel=launch.view.label;
    if(state.phase==='countdown'&&launch.view.phase650>=2)state.phase='running';

@@ -8,6 +8,7 @@ import {createNativeRaceCourseRuntime} from '../native-race-course-runtime.js';
 import {prepareNativeRacePrimaryUpdate,prepareNativeNameEntryRecordCommit} from '../native-race-state.js';
 import {nativeResultsRecordView} from '../native-results-record-view.js';
 import {captureNativeRecordSession} from '../native-record-session.js';
+import {createNativeRacePilot} from '../native-race-pilot.js';
 const course=getCourse('sunny-beach'),create=options=>createRace({physics:'native',mode:'time',course,...options});
 const bytes=state=>state.saveWordsB280.flatMap(w=>[w>>>24,w>>>16&255,w>>>8&255,w&255]);
 const traits=(state,player,rider)=>bytes(state).slice(24+(player*4+rider)*14+11,24+(player*4+rider)*14+14);
@@ -78,4 +79,48 @@ test('custom records keep attribution when restarting or resetting tuning, witho
  assert.equal(standard.nativeLaunch.snapshot().scene.metadataCb32c,0);assert.deepEqual(traits(standard.nativeLaunch.snapshot(),0,3),[5,5,5]);
  rows=nativeResultsRecordView(final).rows;assert.deepEqual(rows.slice(0,2).map(r=>[r.timeMs,r.rider,r.tuned,r.initials]),[[100000,3,false,'YOU'],[110000,3,true,'YOU']]);
  const other=create({rider:0,nativeRecordSession:session});assert.deepEqual(traits(other.nativeLaunch.snapshot(),0,3),[1,8,11]);assert.deepEqual(session,before);
+});
+
+test('Normal uses factory physics while preserving the selected Custom profile for the next launch',()=>{
+ const tune={tuneB6c:0,tuneB70:11,tuneB74:2},normal=create({rider:2,nativeTunes:[tune],nativeTuneModes:['normal']});
+ const state=normal.nativeLaunch.snapshot(),profile=normal.nativeHost.world.adapters[0].water.profile;
+ assert.deepEqual(traits(state,0,2),[0,11,2]);assert.equal(state.scene.riderFlagA9c8,0);assert.equal(state.scene.metadataCb32c,0);
+ for(const key of Object.keys(tune))assert.equal(profile[key],5);
+ const custom=create({rider:2,nativeTunes:[tune],nativeTuneModes:['custom'],nativeRecordSession:captureNativeRecordSession(state)});
+ for(const key of Object.keys(tune))assert.equal(custom.nativeHost.world.adapters[0].water.profile[key],tune[key]);
+ assert.equal(custom.nativeLaunch.snapshot().scene.metadataCb32c,1);assert.deepEqual(traits(custom.nativeLaunch.snapshot(),0,2),[0,11,2]);
+});
+
+test('Custom at the default positions remains a Custom record; Normal with a saved tune is a Normal record',()=>{
+ const custom=finish(create({nativeTunes:[nativeMenuTune()],nativeTuneModes:['custom']}),110000);
+ assert.equal(nativeResultsRecordView(custom).rows[0].tuned,true);
+ const normal=finish(create({nativeTunes:[{tuneB70:11}],nativeTuneModes:['normal'],nativeRecordSession:captureNativeRecordSession(custom)}),100000);
+ assert.deepEqual(nativeResultsRecordView(normal).rows.slice(0,2).map(r=>[r.timeMs,r.tuned]),[[100000,false],[110000,true]]);
+});
+
+test('same-rider players independently choose Normal and Custom and preserve both saved profiles',()=>{
+ const tune={tuneB6c:11,tuneB70:1,tuneB74:0},race=create({mode:'versus',rider:1,secondRider:1,nativeTunes:[tune,tune],nativeTuneModes:['normal','custom']});
+ const state=race.nativeLaunch.snapshot();assert.equal(state.scene.riderFlagA9c8,0);assert.equal(state.scene.secondRiderFlagA9cc,1);
+ assert.deepEqual(traits(state,0,1),[11,1,0]);assert.deepEqual(traits(state,1,1),[11,1,0]);
+ assert.equal(race.nativeHost.world.adapters[0].water.profile.tuneB6c,5);assert.equal(race.nativeHost.world.adapters[1].water.profile.tuneB6c,11);
+});
+
+test('save modes round-trip, earlier tuning saves migrate, and invalid modes cannot overwrite progress',()=>{
+ const save=initialSave();save.nativeSettings[1][3].tuneB70=11;save.nativeTuneModes=['normal','custom'];
+ assert.deepEqual(importSave(exportSave(save)),save);
+ const old=structuredClone(save);delete old.nativeTuneModes;assert.deepEqual(validateSave(old).nativeTuneModes,['normal','custom']);
+ let writes=0;for(const invalid of [null,[],['normal'],['normal','invalid'],['normal',1],Array(2)]){
+  assert.throws(()=>replaceSave(save,{...save,nativeTuneModes:invalid},{setItem(){writes++;}}));
+ }
+ assert.equal(writes,0);assert.deepEqual(save.nativeTuneModes,['normal','custom']);
+});
+
+for(const mode of ['normal','custom'])test(`${mode} setup completes three genuine laps with correct tuning attribution`,()=>{
+ const race=create({nativeTunes:[{tuneB70:11}],nativeTuneModes:[mode]}),racer=race.racers[0],pilot=createNativeRacePilot({course:race.course});
+ const after=race.nativeHost.world.afterFrame;
+ race.nativeHost.world.afterFrame=(...args)=>{const out=after(...args);return race.phase==='postrace'?false:out;};
+ for(let frame=0;frame<180*60&&race.phase!=='postrace';frame++)stepRace(race,()=>pilot.input(race,racer),1/60);
+ assert.equal(race.phase,'postrace');assert.equal(racer.dq,'');assert.equal(racer.lapTimes.length,3);assert.equal(racer.passed,race.course.gates.length*3);
+ assert.ok(racer.finishTime>60&&racer.finishTime<180);
+ const rows=nativeResultsRecordView(race.nativeLaunch.snapshot()).rows;assert.equal(rows[0].tuned,mode==='custom');
 });
