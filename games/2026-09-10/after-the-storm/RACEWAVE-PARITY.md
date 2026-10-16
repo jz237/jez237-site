@@ -2808,7 +2808,7 @@ visible camera-mode or finish-to-menu flow is claimed yet: original camera
 transform production, source AI context, remaining drawing/widget effects and
 menu/reset/save consumers still need live integration. This checkpoint is local.
 
-## Final-lap soundtrack (v2.26.0)
+## Final-lap soundtrack (v2.26.1)
 
 Eight additional stereo files follow the original course sequences' variation1
 branches, including their faster tempos and distinct musical entry sections.
@@ -2847,3 +2847,6 @@ position, and the v2.26.0 game page loading successfully. The full suite reports
 shoreline/gameplay baseline, with no new failures. Publication uses the mandatory
 site wrapper and its preview/production checks.
 The broader gameplay parity gaps documented above remain open.
+
+The v2.26.1 follow-up keys online music sessions by both connection and race
+generation; a new pairing cannot inherit the previous pairing's final-lap latch.
