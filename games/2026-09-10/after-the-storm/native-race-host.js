@@ -10,13 +10,15 @@ import {queryNativeWaterField} from './native-water-field.js';
 import {NATIVE_RIDER_TUNE_DEFAULTS} from './native-rider-controls.js';
 import {createNativeFloatingWorld} from './native-floating-world.js';
 import {createNativePrimaryBuoyWorld} from './native-primary-buoy-world.js';
-import {bindRaceWaterCameraStorage} from './race-water.js';
+import {bindRaceWaterCameraStorage,raceWaterAISelectionCircle} from './race-water.js';
+import {nativeAIBodyFields} from './native-ai-body-fields.js';
 import {nativeRaceBodyFields} from './native-race-body-fields.js';
 import {captureNativeCamera} from './native-camera-presentation.js';
 import {applyNativeRiderResultCodes} from './native-rider-lifecycle.js';
 
 // Runnable host bridge for the recovered hull and rider recovery. This remains
-// an integration preview: other actors/tricks and original AI are incomplete.
+// an integration preview: solo source input is connected, while multi-racer
+// AI, other actors/tricks and the complete result schedule remain incomplete.
 // The physical rider uses authored anatomy/remount art and recovered constraints.
 // Low-level native tune indices remain independent of the browser's three
 // modern settings; recovered profile defaults are 5/5/5, not zero.
@@ -96,6 +98,9 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
  const primary=course.sourceBuoyLayout?createNativePrimaryBuoyWorld({layout:course.sourceBuoyLayout,water}):null;
  const courseContacts=createSourceNativeContacts(course,{scale:water.scale,fixedSphereGrid});
  const contacts={...courseContacts,...(primary?{racingBuoys:primary.contact}:{}),...(floating?{primarySpheres:floating.contact}:{})};
+ // Solo Sunny needs no unresolved multi-racer camera-corner predicate. Its
+ // original61708 countdown, not a browser finish flag, selects this producer.
+ const sourceAI=!!raceRuntime?.ordinary&&racers.length===1;
  const bundles=[],adapters=racers.map((r,i)=>{
   const initial={position:{x:r.x,y:water.field.datumNative*water.scale,z:r.z},heading:r.heading,
    rider:r.id,scale:water.scale};
@@ -107,6 +112,13 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
   const bundle=recovery?createNativeLifecycleRider({initialHull,initializeStart:!!raceRuntime}):
    createAuthoredNativeRider({initialHull,poseProvider:poseProviders[i]});bundles.push(bundle);
   return createNativeRaceAdapter({...adapterOptions,
+   ...(sourceAI?{sourceAIInput:()=>{
+    const prepared=raceRuntime.sampleAI(i,{bodiesBySlot:host.aiBodies,
+     geometry:{selectionCircleNative:raceWaterAISelectionCircle(water),
+      nodePositionsNative:primary.state.nodes.map(n=>({sourceRow:n.sourceRow,x:n.positionNative.x,z:n.positionNative.z})),
+      proximityObjectCentersNative:(floating?.state.objects??[]).map(o=>({x:F(o.position.x/water.scale),z:F(o.position.z/water.scale)}))},waterField:water.field});
+    host.lastAIInput=prepared;return {...prepared.controls,action16f4:prepared.action16f4};
+   }}:{}),
    hullStart,contacts,powerSteps:r.power,sourceState:raceRuntime?()=>raceRuntime.scene():sourceStates[i]??(recovery?{simulationState:3}:{actorState:22,simulationState:3}),...bundle,
    ...(recovery?{riderRecovery:{courseDatumNative:()=>water.field.datumNative,raceFinished:()=>r.finishTime!==null,...bundle.initialRiderRecovery}}:{})});
  });
@@ -117,13 +129,25 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
    clock:'five10ms hull ticks then one water update',controls:'digital-accelerator; brake-coasts; B-crouch; R-slide',
    actorRecoveryAndTricks:false,riderRecovery:recovery,physicalRiderPresentation:true,
    recoveryGeometry:'authored anatomy/remount; reconstructed procedural fall/stumble; explicit authored rest/circle/history policy',
-   nativeRacerCollision:craftContacts,sourcePrimaryBuoyContacts:!!primary})};
- if(raceRuntime?.ordinary)bindRaceWaterCameraStorage(water,raceRuntime.cameraStorage);
+   nativeRacerCollision:craftContacts,sourcePrimaryBuoyContacts:!!primary,sourceAIInput:sourceAI})};
+ if(raceRuntime?.ordinary){
+  // Fresh browser inactive body slots are explicitly zero; active B64/B68
+  // both come from the host's selected numeric rider profile. Retained AI
+  // words are patched by890B4, never replaced with a neutral driver object.
+  const profiles=Array.from({length:4},(_,i)=>adapters[i]?.hull.rider??0);
+  host.aiInitialization=raceRuntime.initializeAI({hullProfilesB64:profiles,avatarsB68:profiles,
+   objectTypes4c:(floating?.state.objects??[]).map(o=>o.runtimeKind)});
+  bindRaceWaterCameraStorage(water,raceRuntime.cameraStorage);
+ }
  host.world=createNativeRaceWorld({adapters,water,humanIndices,craftContacts,
  beforeFrame:raceRuntime?.ordinary?world=>{
   host.lastNavigation=raceRuntime.advanceNavigation({
    bodiesBySlot:world.adapters.map(a=>({avatar:a.hull.rider,position:{x:a.hull.center.x,z:a.hull.center.z}})),
    nodePositions:primary.snapshot().map(n=>({sourceRow:n.sourceRow,x:n.position.x,z:n.position.z}))});
+  // Capture every preceding body BEFORE any descending control latch. Later
+  // selected producers must not observe another racer's new control frame.
+  if(sourceAI&&world.adapters.some(a=>a.riderLifecycle.state.selectionCountdown<0))
+   host.aiBodies=world.adapters.map(nativeAIBodyFields);
  }:null,
  beforeActor:raceRuntime?.ordinary?(world,{racerIndex})=>{
   const a=world.adapters[racerIndex],lifecycles=world.adapters.map(q=>q.riderLifecycle),p=a.hull.points[0].position;

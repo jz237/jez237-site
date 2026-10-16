@@ -8,6 +8,10 @@ import {NATIVE_ANGLE_TABLE_WORDS,nativeSineTableWords} from './native-math-table
 import {sourceBuoyVisibleRow} from './source-buoy-progress.js';
 import {SUNNY_NATIVE_RETIREMENT_GEOMETRY} from './native-sunny-support.js';
 import {createNativeAIRouteState,stepNativeAIRoute} from './native-ai-route.js';
+import {prepareNativeAIInitialization} from './native-ai-initialization.js';
+import {prepareNativeAIDriver} from './native-ai-driver.js';
+import {NATIVE_AI_STORAGE_WORDS,nativeAIDriverStateFromWords,nativeAIDriverStateWrites} from './native-ai-storage.js';
+import {prepareNativeRaceWaterInitialization} from './native-race-state.js';
 
 // Overlapping effect47FC, solo4800 and two-player4818 numeric entries. Ordinary
 // two-player place indices are0/1; other mode tables remain separate admission.
@@ -32,7 +36,7 @@ function readFloat(v){numberBits.setUint32(0,v);return numberBits.getFloat32(0);
  * opaque original loaded palettes/resources/BSS had these same initial bits.
  * Current ordinary time/versus previews use source modes0/1 and nonzero courses.
  * A retained canonical state may instead be supplied for exact prepared tests. */
-export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initialState,courseRuntime,course,laps=3,reverse=false}={}){
+export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initialState,courseRuntime,course,laps=3,reverse=false,rngSeed=17}={}){
  if(!Array.isArray(racers)||racers.length<1||racers.length>4)throw new TypeError('Launch requires one to four initialized racers');
  integer(players,'players',1,2);integer(courseIndex,'courseIndex',1,9);
  if(players>racers.length)throw new RangeError('Launch requires each human source slot');
@@ -63,11 +67,12 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    for(const base of [0x1ff0+courseIndex*60,0x1ff0+courseIndex*60+20,0x1ff0+courseIndex*60+40,
     0x22c0+courseIndex*20,0x23b0+courseIndex*20])raceWords1f94[ri(base)]=599999;
   }
-  current=createNativeRaceState({raceWords1f94,hudWords7788,profileWordsB330,i1Words9440,scene:{
+  current=createNativeRaceState({raceWords1f94,hudWords7788,profileWordsB330,i1Words9440,aiWords3c60:Array(NATIVE_AI_STORAGE_WORDS).fill(0),scene:{
    players,racerCount:racers.length,primaryHumanIndex:0,secondaryHumanIndex:1,courseIndex,
    mode620:players===2?1:0,mode608:players===2?1:0,main638:1,phase650:0,simulation648:1,
    clockStopped817c:1,activity624:-1,event628:0,gameStateAb24:40,specialAb64:0,ready6fc:0,
    missesEnabled72e:1,result6f0:0,ambientD4b00:0,field4964:0,resultEffect393c:0,toggleD9914:0,
+   rngState4640:integer(rngSeed,'web shared RNG seed',0,0xffffffff),previousNavigationD9874:0,trainingSelectionDa9f8:0,
    ...(courseRuntime?{primaryCount:courseRuntime.data.nodes.length,finishSourceRow:courseRuntime.data.finishSourceRow,
     cold8224:1,forceFirst8228:0,demoOffset5438:0,restart6f8:0,reverseDab68:Number(reverse),state600:0,
     missLimit8174:5,noFinish8178:0,configuredLaps728:integer(laps,'configured laps',3,9),
@@ -148,6 +153,45 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
   // primary/generic object motion call7DBC0 independently of simulation648.
   objectMotionActive:()=>current.scene.activity624===-1,
   snapshot:()=>nativeRaceStateSnapshot(current),
+  initializeWater(field,amplitudeNative){
+   if(!(field?.heightQ instanceof Int16Array)||!(field?.velocityQ instanceof Int16Array)||
+      field.heightQ.length!==49152||field.velocityQ.length!==49152)throw new TypeError('Supply the actual native water lattice');
+   const prepared=prepareNativeRaceWaterInitialization(current,{amplitudeNative});
+   field.heightQ.set(prepared.water.heightQ);field.velocityQ.set(prepared.water.velocityQ);current=prepared.state;
+   return prepared.diagnostic;
+  },
+  initializeAI({hullProfilesB64,avatarsB68,objectTypes4c}){
+   const words=current.aiWords3c60;if(!words)throw new TypeError('Supply retained AI storage before initialization');
+   const prepared=prepareNativeAIInitialization({rngState:current.scene.rngState4640,racerCount:racers.length,
+    primaryHumanIndex:current.scene.primaryHumanIndex,hullProfilesB64,avatarsB68,objectTypes4c,
+    retainedRoleWords:Array.from({length:4},(_,slot)=>words[(slot*0xe8+0x5c)/4]|0),
+    adjacentRoleWord:words[(0x405c-0x3c60)/4]|0,
+    sourceOrder:current.raceWords1f94.slice(ri(0x26c0),ri(0x26c0)+racers.length).map(v=>v|0)});
+   const operations=prepared.nativeWordPatches.map(p=>({kind:'aiWordWrite',wordIndex:(p.slot*0xe8+p.offset)/4,value:p.bits}));
+   const put=(address,value)=>operations.push({kind:'aiWordWrite',wordIndex:(address-0x3c60)/4,value:value>>>0});
+   if(prepared.adjacentRoleWordPatch)put(0x405c,prepared.adjacentRoleWordPatch.bits);
+   for(const p of prepared.inverseOrderPatches)put(0x4100+p.index*4,p.value);
+   put(0x4110,prepared.proximityCount);
+   prepared.proximityObjectIndicesPrefix.forEach((value,i)=>put(0x4118+i*4,value));
+   operations.push({kind:'sourceWordWrite',field:'rngState4640',value:prepared.rngState});
+   commit(operations);return prepared;
+  },
+  aiDriverState:slot=>nativeAIDriverStateFromWords(current.aiWords3c60,slot),
+  sampleAI(slot,{bodiesBySlot,geometry,waterField}){
+   if(!courseRuntime)throw new Error('Live AI requires initialized source course geometry');
+   if(!Array.isArray(bodiesBySlot)||bodiesBySlot.length!==racers.length)throw new TypeError('Supply all preceding AI body snapshots');
+   const g=current.scene,prepared=prepareNativeAIDriver(courseRuntime.aiTargetTable,runtime.aiDriverState(slot),{
+    globals:{state650:g.phase650,state638:g.main638,mode620:g.mode620,difficulty:current.profileWordsB330[2]|0,
+     courseIndex:g.courseIndex,reverse:g.reverseDab68!==0,players:g.players,primaryHumanIndex:g.primaryHumanIndex,
+     datumNative:waterField.datumNative,toggleD9914:g.toggleD9914,trainingSelection:g.trainingSelectionDa9f8,
+     previousNavigationGlobal:g.previousNavigationD9874,chargeTimerNative:current.hudWords7788[hi(0x8a90)]|0},
+    racers:runtime.aiRecords().map((record,i)=>({record,body:bodiesBySlot[i]})),
+    geometry:{...geometry,proximityCount:current.aiWords3c60[(0x4110-0x3c60)/4]|0},waterField});
+   const operations=prepared.frame.phase==='driving'?nativeAIDriverStateWrites(prepared.state,slot):[];
+   if(Object.hasOwn(prepared.globalWrites,'previousNavigationGlobal'))operations.push({kind:'sourceWordWrite',
+    field:'previousNavigationD9874',value:prepared.globalWrites.previousNavigationGlobal>>>0});
+   commit(operations);return prepared;
+  },
   advanceDisplayClock(){
    // Source8E794 increments the shared button cadence AFTER input, hull,
    // camera and water, BEFORE ordinary judging6E3A8. It also runs with

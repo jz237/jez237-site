@@ -1,5 +1,38 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## v2.28.0 — solo source AI input and shared startup state
+
+This checkpoint includes the earlier October16 local result-entry, navigation,
+water-perception and display-cadence changes documented below. The ordinary
+Sunny solo host now connects the complete selected source driver to the real
+rider control-selection countdown. It samples actual preceding hull/contact/
+controller fields, the live navigation row, current buoy centers and water
+lattice. Once selected, it bypasses the human device and commits retained AI
+history, shared navigation history, controls and the action word to their owners.
+
+The canonical AI span retains four contexts plus adjacent target/order/proximity
+storage. Initialization patches only source-written words, including the actual
+slot4 scratch alias. Water noise and subsequent AI setup consume one retained
+unsigned32 random stream. Fresh browser startup explicitly zeros unused memory
+and inactive body profiles and seeds that stream from the selected wave seed;
+this does not claim original boot/menu history or full scene initialization.
+The initializer's camera color/Y patches remain diagnostic output; multi-racer
+camera-corner geometry and its AI handoff are still pending.
+
+Validation:252 focused AI/canonical-state/water tests and35 host/launch/input
+checks pass. All33 pilot tests pass, including every rider/class three-lap finish
+and equal30/60/144Hz results. An additional complete solo race continues its
+actual host after finishing and reaches source AI through the rider animation
+countdown, with no further human polling. Seventeen live post-finish snapshots
+match57,984 original driver/callee instructions using the same actual water
+lattice (host float32 sqrt); this is prepared-input numeric equivalence, not
+original whole-game trajectory equivalence.
+
+The browser still opens its results overlay and stops stepping the race there.
+Visible post-finish continuation, complete result widgets/fade/menu/restart,
+multi-racer AI and broader course admission remain unfinished. High-resolution
+art and modern-mode simulation are unchanged by this integration checkpoint.
+
 ## Shared AI button cadence — local October 16 checkpoint
 
 The live ordinary host now retains the original four-step display counter in
@@ -14,7 +47,7 @@ word extremes, across1,224 instructions. The original dispatcher table sends
 states40–45 through the same input/world/display/judging sequence. All35 focused
 live-input, host and launch tests pass, including descending two-player polling,
 partial frames, pause, simulation0 and30/60/144Hz history equality. This change is
-local and unpublished. Full post-finish AI and result scheduling remain pending.
+included in v2.28.0. Full result scheduling remains pending.
 
 ## Solo AI traffic dependency — local October 16 checkpoint
 

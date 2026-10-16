@@ -88,7 +88,7 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
  // input, not a complete saved physical/water history.
  const nativeLaunch=physics==='native'?createNativeRaceLaunchRuntime({racers,courseIndex:course.sourceWaterCourseIndex,
   players:mode==='versus'?2:1,courseRuntime:nativeCourseRuntime,course,laps:configuredLaps,reverse:!!course.reverse,
-  initialState:nativeInitialRaceState}):null;
+  initialState:nativeInitialRaceState,rngSeed:surfSeed.value}):null;
  const nativeStarts=nativeLaunch?racers.map((r,i)=>{
   const start=nativeLaunch.gridStart(i);
   if(!start.transform.complete)throw new RangeError('Ordinary source grid requires a complete packed transform');
@@ -106,8 +106,9 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
  const primaryRows=mode==='stunt'?course.stuntLayout?.sourceRouteRows:course.sourceRouteRowsByClass?.[difficulty];
  const primaryPointsNative=primaryRows?primaryRows.map(q=>q.slice(0,2)):course.gates.map(q=>[(q.bx??q.x)/nativeScale,(q.bz??q.z)/nativeScale]);
  const boundaryPointsNative=[...(course.boundaryMarkers||[]).map(q=>q.map(v=>v/nativeScale)),...(course.rocks||[]).filter(q=>q.fixedSphere&&!q.sourceBoundaryMarker).map(q=>[q.x/nativeScale,q.z/nativeScale])];
- const raceWater=sourceWater?createRaceWater({...sourceWater,crafts:racers.filter(q=>q.human),scale:nativeScale,seed:surfSeed.value,
+ const raceWater=sourceWater?createRaceWater({...sourceWater,crafts:racers.filter(q=>q.human),scale:nativeScale,seed:surfSeed.value,initialNoise:!nativeLaunch,
   primaryPointsNative,boundaryPointsNative,datumNative:Math.round(waterLevel.value/nativeScale)}):null;
+ if(nativeLaunch)nativeLaunch.initializeWater(raceWater.field,raceWater.baseAmplitudeNative);
  setRaceWater(raceWater);
  const sourceFixedSpheres=(course.rocks||[]).filter(q=>q.sourceFixedSphere&&!q.breakable);
  const sourceSphereGrid=sourceFixedSpheres.length?createSourceFixedSphereGrid(sourceFixedSpheres,{scale:nativeScale}):null;

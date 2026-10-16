@@ -9,8 +9,9 @@ import {prepareNativeAISelectionCircle} from './native-ai-perception.js';
 // orbit/obstruction adjustments remain independently owned.
 // The50ms outer step is recovered source GAME time; .025 world scale and
 // browser wall-time accumulation remain explicit host policy.
-// The seeded random stream is reproducible browser history, not the original
-// global PRNG state. No unrecorded warm-up, modern swell or height cap is added.
+// Standalone water uses reproducible browser history. The native race supplies
+// noise from its canonical shared RNG before AI setup; its boot seed remains
+// explicit web policy. No unrecorded warm-up, modern swell or height cap is added.
 export const RACE_WATER_STEP=.05;
 const SIZE=128*384;
 const F=Math.fround,presentationVelocity=new Int16Array(SIZE),presentationFields=new WeakMap();

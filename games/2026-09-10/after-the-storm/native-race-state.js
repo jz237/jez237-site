@@ -1,4 +1,5 @@
 import {prepareNativeRaceFadeUpdate} from './native-race-fade-update.js';
+import {NATIVE_AI_STORAGE_WORDS} from './native-ai-storage.js';
 import {prepareNativeRaceCameraInput} from './native-race-camera-input.js';
 // Shared source race/HUD storage. Decoded leaf views are temporary, and all
 // overlapping records, tables, timers and flags return to these same owners.
@@ -44,7 +45,7 @@ const sceneRanges={primaryHumanIndex:[0,3],secondaryHumanIndex:[0,3],players:[1,
 const sceneWords=new Set(['cold8224','clockStopped817c','phase650','simulation648','main638','mode620','state600',
  'missLimit8174','noFinish8178','configuredLaps728','difficulty','directionFlag1f90','ambientD4b00','fortressD8240',
  'metadataD9b0','metadataCb32c','restart6f8','initLatch63c','gameStateAb24','mode608','returnState630','forceFirst8228','demoOffset5438','rngState4640','style6e2c',
- 'previousGameState634','field640','field644','fieldAb1c','field461c','field704','field708','field70c','field710','field714','nameIndexA9b0','resultEffect393c','wave610','missLimit614','lapCount618','field61c','wave49b0','field64c','players','racerCount','toggleD9914']);
+ 'previousGameState634','field640','field644','fieldAb1c','field461c','field704','field708','field70c','field710','field714','nameIndexA9b0','resultEffect393c','wave610','missLimit614','lapCount618','field61c','wave49b0','field64c','players','racerCount','toggleD9914','previousNavigationD9874','trainingSelectionDa9f8']);
 const sceneHalves=new Set(['activity624','event628','field62a','pendingPlayers60c','participantCount60e','result6f0','specialAb64','ready6fc','reverseDab68','missesEnabled72e','seed6f00','field4964','style6e28',
  'field4970','field72c','fieldA9ac','pressed65a','unlockAb60','variant6f4','variant6f6']);
 function record(v,n){if(!v||typeof v!=='object'||Array.isArray(v))throw new TypeError(`Expected ${n}`);return v;}
@@ -70,6 +71,7 @@ function copy(value){
  const s={raceWords1f94:words(value.raceWords1f94,'raceWords1f94',RACE_WORDS),
   hudWords7788:words(value.hudWords7788,'hudWords7788',HUD_WORDS),scene};
  if(value.i1Words9440!==undefined)s.i1Words9440=words(value.i1Words9440,'i1Words9440',168);
+ if(value.aiWords3c60!==undefined)s.aiWords3c60=words(value.aiWords3c60,'aiWords3c60',NATIVE_AI_STORAGE_WORDS);
  if(value.saveWordsB280!==undefined)s.saveWordsB280=words(value.saveWordsB280,'saveWordsB280',34);
  if(value.profileWordsB330!==undefined){
   if(Object.hasOwn(scene,'difficulty'))throw new RangeError('difficulty overlaps profileWordsB330');
@@ -85,6 +87,9 @@ function copy(value){
  * Four complete222-word records and every course table have ONE race span.
  * The single HUD span also retains loaded opaque data and byte latches.
  * scene contains actual external fields only, with phase650/main638 names.
+ * Optional aiWords3c60 owns the four retained AI contexts and adjacent target/
+ * order/proximity scratch through4218. Its slot4 role alias is in this same
+ * span. Decoded driver states are temporary views, never a second saved bank.
  * rngState4640 is unsigned32; seed6f00 and field4964 are separate unsigned
  * halfwords. Pending signed-halfword players60c is distinct from active players.
  * Partial scene samples are allowed; each entry point requires its real reads.
@@ -134,6 +139,10 @@ function apply(s,operations){
    const offset=integer(op.byteOffset,`${key} byte offset`,0,s[key].length*4-1),shift=24-(offset&3)*8;
    const value=integer(op.value,'source byte bits',0,255),index=offset>>>2;
    s[key][index]=((s[key][index]&~(255<<shift))|(value<<shift))>>>0;
+  }
+  else if(op.kind==='aiWordWrite'){
+   if(!s.aiWords3c60)throw new TypeError('Supply retained aiWords3c60 before applying AI writes');
+   s.aiWords3c60[integer(op.wordIndex,'AI wordIndex',0,NATIVE_AI_STORAGE_WORDS-1)]=integer(op.value,'AI word bits',0,0xffffffff);
   }
   else if(op.kind==='raceWordWrite')s.raceWords1f94[integer(op.wordIndex,'race wordIndex',0,RACE_WORDS-1)]=integer(op.value,'race word bits',0,0xffffffff);
   else if(op.kind==='recordWordWrite'){
