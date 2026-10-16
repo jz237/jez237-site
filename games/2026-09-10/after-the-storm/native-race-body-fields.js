@@ -1,6 +1,7 @@
 // Numeric65C18 contact counter and final HUD posture. These read the actual
 // completed hull/contact/actor owners; rider joints and display speed are not
 // source body fields. New web adapters explicitly start the counter at0.
+import {queryNativeSupportFloor,queryNativeSupportBoxes} from './native-support-queries.js';
 const F=Math.fround;
 function integer(v,n){if(!Number.isInteger(v)||v< -2147483648||v>2147483647)throw new RangeError(`Invalid ${n}`);return v;}
 export function nextNativeDryContactFrames(previous,{anyWet,impacts}={}){
@@ -37,17 +38,20 @@ function float(v,n){if(!Number.isFinite(v)||!Number.isFinite(F(v)))throw new Ran
 
 /** Numeric5DD04 downward support scan. The actual point90 and signed datum2458
  * are inputs. Each reached7F448/7FAE4 return is supplied in source call order;
- * the functions that select and query collision geometry are separate producers.
+ * alternatively, selected original geometry runs numeric7F448/7FAE4 directly.
  * No renderer height or boolean retirement approximation is consumed. Missing
  * reached returns reject; no external callback runs during preparation.
  */
 export function prepareNativeRetirementSupportProbe(value){
  const p=value?.point90Native;if(!p)throw new TypeError('Supply actual point90Native');
+ if(value.geometry!==undefined&&value.queryReturns!==undefined)throw new TypeError('Supply geometry or prepared returns, not both');
  const x=float(p.x,'point90.x'),z=float(p.z,'point90.z'),lower=F((integer(value.datum2458,'datum2458')-50)|0);
  let y=F(float(p.y,'point90.y')-10),index=0;const operations=[];
  while(lower<y){
   for(const consumer of ['8007f448','8007fae4']){
-   const result=float(value.queryReturns?.[index++],'actual support query return');
+   const positionNative={x,y,z};
+   const result=value.geometry!==undefined?(consumer==='8007f448'?queryNativeSupportFloor(positionNative,value.geometry.floor):queryNativeSupportBoxes(positionNative,value.geometry.boxes)).penetrationNative:
+    float(value.queryReturns?.[index++],'actual support query return');
    operations.push({kind:'supportProbeQuery',consumer,positionNative:{x,y,z},returnValue:result});
    if(result!==0)return frozen({supported:true,operations});
   }

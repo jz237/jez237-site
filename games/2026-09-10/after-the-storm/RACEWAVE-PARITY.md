@@ -2384,3 +2384,35 @@ This checkpoint is local and unpublished. Body16C8 lifetime and actor-phase
 scheduling, the exact geometry query producers, source result/menu scheduling
 and persistence remain unfinished. The live site remainsv2.24.0; full gameplay
 parity remains incomplete.
+
+## Source retirement support queries — October 15, 2026 (prepared integration)
+
+Numeric7F448 floor and7FAE4 box queries now consume original-layout native
+geometry directly. The floor query retains truncated coordinate selection,
+signed grid bounds, axis order and masked shifts, original cell/list offsets,
+one-based candidate order, three clip predicates, and inclusive0..16 depth.
+Its first accepted surface returns immediately even at zero depth. Runtime
+boxes are visited last-to-first, preserve their original nonorthogonal axes,
+exclude each far interval endpoint, and retain earlier faces on distance ties.
+Returned normals preserve float32 arithmetic and signed zero.
+
+The5DD04 retirement scan can now execute these queries against supplied
+geometry. The prepared-return input remains available for bounded audits;
+ambiguous inputs supplying both forms reject. This removes the query-return
+boundary when actual geometry is supplied, without substituting render meshes
+or reconstructed collision bins for the source records.
+
+Private execution of both complete original query functions matches2,606
+cases, including924 Sunny Beach record checks and162 original ramp-profile
+boundary checks. Penetration and normal float32 bits match, including zero-depth
+hits and negative-zero normals. All seven output-store sites are reached.
+A separate comparison executes complete5DD04 with actual nested7F448/7FAE4:
+967cases and5,125query calls match scan results, positions, order and returns.
+No geometry query return is intercepted in that composed comparison.
+
+All53 focused support/body/state/result tests pass. The earlier2,984result
+selector cases still match. These are numeric consumer and integration checks
+against prepared geometry owners, not evidence of original course bootstrap
+or live retirement animation. Live geometry installation, body16C8 lifetime,
+descending actor scheduling and remaining source result/menu flow still need
+integration. The public game remainsv2.24.0 and full parity is incomplete.
