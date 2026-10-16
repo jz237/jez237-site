@@ -21,6 +21,7 @@ import {prepareNativeRaceStartTransform,decodeNativeRaceStartTransform} from './
 import {prepareNativeRaceFadePropertiesInitialization,prepareNativeRaceFadeSlotsReset} from './native-race-fade-initialization.js';
 import {prepareNativeRaceMainConfiguration} from './native-race-main-configuration.js';
 import {prepareNativeRaceRiderResourceConfiguration,prepareNativeRaceCourseResourceConfiguration} from './native-race-resource-configuration.js';
+import {prepareNativeRaceResultCodeSelection} from './native-race-body-fields.js';
 
 const MIN=-2147483648,MAX=2147483647,RACE_BASE=0x1f94,RACE_WORDS=1693,HUD_BASE=0x7788,HUD_WORDS=1442;
 const resourceOwnerWords={resourceWordsB330:20,resourceWordsB538:8,resourceWordsE73c:43};
@@ -40,7 +41,7 @@ const sceneRanges={primaryHumanIndex:[0,3],secondaryHumanIndex:[0,3],players:[1,
 const sceneWords=new Set(['cold8224','clockStopped817c','phase650','simulation648','main638','mode620','state600',
  'missLimit8174','noFinish8178','configuredLaps728','difficulty','directionFlag1f90','ambientD4b00','fortressD8240',
  'metadataD9b0','metadataCb32c','restart6f8','initLatch63c','gameStateAb24','mode608','returnState630','forceFirst8228','demoOffset5438','rngState4640','style6e2c',
- 'previousGameState634','field640','field644','fieldAb1c','field461c','field704','field708','field70c','field710','field714','nameIndexA9b0','wave610','missLimit614','lapCount618','field61c','wave49b0','field64c','players','racerCount']);
+ 'previousGameState634','field640','field644','fieldAb1c','field461c','field704','field708','field70c','field710','field714','nameIndexA9b0','resultEffect393c','wave610','missLimit614','lapCount618','field61c','wave49b0','field64c','players','racerCount']);
 const sceneHalves=new Set(['activity624','event628','field62a','pendingPlayers60c','participantCount60e','result6f0','specialAb64','ready6fc','reverseDab68','missesEnabled72e','seed6f00','field4964','style6e28',
  'field4970','field72c','fieldA9ac','pressed65a','unlockAb60','variant6f4','variant6f6']);
 function record(v,n){if(!v||typeof v!=='object'||Array.isArray(v))throw new TypeError(`Expected ${n}`);return v;}
@@ -98,6 +99,17 @@ function copy(value){
  */
 export function createNativeRaceState(value){return freeze(copy(value));}
 export function nativeRaceStateSnapshot(value){return copy(value);}
+
+/** Read-only source actor result view. Apply its ordered body writes to the
+ * real body owners at the actor phase, before later primary judging. Source
+ * simulation0 never reaches this subsection of5DE24; no proxy result is made.
+ */
+export function nativeRaceResultCodeView(state,input={}){
+ const current=copy(state);
+ if(sceneValue(current,'simulation648')===0)return freeze({operations:[],diagnostic:{selected:false,reason:'zero-simulation'}});
+ return prepareNativeRaceResultCodeSelection({...current,racerIndex:input.racerIndex,
+  bodyResultCodes16c8:input.bodyResultCodes16c8,resultTableWords47fc:input.resultTableWords47fc,supportProbe:input.supportProbe});
+}
 
 function patchHud(s,op){
  const width=integer(op.width,'HUD width',1,4),offset=integer(op.byteOffset,'HUD byteOffset',0,HUD_WORDS*4-width);

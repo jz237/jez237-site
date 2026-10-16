@@ -2352,3 +2352,35 @@ estimation, further fade/menu/save callees, the live16C8 result-pose producer,
 zero-simulation scheduling and actual durable record storage still require
 integration. The public game remains on the verifiedv2.24 shoreline release;
 the full gameplay parity objective remains incomplete.
+
+## Source rider result selection — October 15, 2026 (prepared integration)
+
+The result-code subsection of5DE24 now preserves the retained16C8 gate,
+finish-before-retirement priority, record and mode11 choices, signed cup
+qualification tests, overlapping effect/solo/versus tables, and ordered writes
+to both selected bodies. Ties write the secondary body before the primary;
+aliased selected slots retain both writes. A solo table result4 is stored
+before its source overwrite to3. The canonical state exposes a read-only view
+and bypasses this subsection for actual simulation0, as the original caller
+does. No second body or race owner is created.
+
+The complete numeric5DD04 support scan uses actual hull point90 and datum2458:
+start ten native units below the point, check floor then box, descend sixteen
+units after misses, and stop at the strict lower bound. Its reached geometry
+query returns remain explicit inputs. The original7F448/7FAE4 geometry
+consumers are not replaced with rendered terrain or reconstructed contact
+normals. Their exact integration remains required before admitting live use.
+
+Private execution of the original selector gate and nested5DD04 matches2,984
+prepared cases,2,783 ordered operations and all four resulting body words.
+All21 result-code store sites are reached. There are557 observed geometry
+queries; their positions, order and return consumption match. The comparison
+also checks every case through the canonical view and verifies input owners
+remain unchanged. The preceding motion arithmetic is an explicit prepared
+carry, with its gate-delay store checked separately; the whole5DE24 actor is
+not claimed. All48 focused body/state/result regression tests pass.
+
+This checkpoint is local and unpublished. Body16C8 lifetime and actor-phase
+scheduling, the exact geometry query producers, source result/menu scheduling
+and persistence remain unfinished. The live site remainsv2.24.0; full gameplay
+parity remains incomplete.
