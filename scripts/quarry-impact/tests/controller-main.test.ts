@@ -6,13 +6,14 @@ import ts from 'typescript';
 import {ControllerInput} from '../src/controller-input';
 import {withWreckBatch} from '../src/wreck-batch';
 import {defaultControls,drivingInput,drivingButtons,selectedPad,type Pad} from '../src/driving-controls';
+import {nextDrivingCamera,DRIVING_CAMERA_LABELS} from '../src/driving-camera';
 import type {NavigationContext} from '../src/controller-navigation';
 
 /** Run the actual main declarations. DOM rendering and scene actions are explicit
  * boundaries; all pad edges, state keys, routing and input masking are production. */
 const main=ts.createSourceFile('main.ts',readFileSync(new URL('../src/main.ts',import.meta.url),'utf8'),ts.ScriptTarget.ES2022,true);
 function extract(context:Record<string,unknown>){
- const names=['controllerContext','controllerKey','pollController','input'];
+ const names=['controllerContext','controllerKey','pollController','input','cycleDrivingCamera'];
  const declarations=names.map(name=>{const node=main.statements.find(n=>ts.isFunctionDeclaration(n)&&n.name?.text===name);assert.ok(node,'missing production function '+name);return node.getText(main);});
  const code=ts.transpileModule(declarations.join('\n')+'\nglobalThis.boundaries={'+names.join(',')+'};',{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.None}}).outputText;
  runInNewContext(code,context);return context.boundaries as {controllerContext:()=>NavigationContext|null;controllerKey:(context:NavigationContext|null)=>string;pollController:(now:number)=>void;input:()=>ReturnType<typeof drivingInput>};
@@ -33,7 +34,7 @@ function harness(state='menu'){
  const ui=new Node(),calls:Record<string,number>={},navigation:{context:NavigationContext|null;handled:string[]}={context:null,handled:[]};
  let pads:readonly(Pad|null)[]=[pad()],time=0;
  const count=(name:string)=>calls[name]=(calls[name]??0)+1;
- const c:any={state,activeTimeTrial:null,timeTrialOpen:false,resumeState:'playing',preparingEvent:false,studio:null,closeReplayLibrary:null,clubOpen:false,eventSetupOpen:false,careerOpen:false,careerRun:false,openCareer(){},profileOpen:false,garageOpen:false,activeChallenge:null,online:null,demo:false,demoHudHidden:false,hood:false,
+ const c:any={state,activeTimeTrial:null,timeTrialOpen:false,resumeState:'playing',preparingEvent:false,studio:null,closeReplayLibrary:null,clubOpen:false,eventSetupOpen:false,careerOpen:false,careerRun:false,openCareer(){},profileOpen:false,garageOpen:false,activeChallenge:null,online:null,demo:false,demoHudHidden:false,drivingCamera:'chase',nextDrivingCamera,DRIVING_CAMERA_LABELS,
   sound:{ctx:{state:'running'}},ui,keys:new Set(),testInput:null,cars:[{speed:0}],drivingControls:defaultControls(),selectedPad,drivingInput,drivingButtons,controllerInput:new ControllerInput(),controllerHelp:{hidden:true,textContent:''},navigator:{getGamepads:()=>pads},
   controllerNavigation:{sync(context:NavigationContext|null){navigation.context=context;},handle(command:string){navigation.handled.push(command);const context=navigation.context;if(command==='back')context?.back?.();else if(command==='accept'&&context?.initial)(context.root as unknown as Node).querySelector(context.initial)?.click();}},
   pause(){count('pause');c.resumeState=c.state;c.state='paused';const overlay=ui.add('#overlay');overlay.add('#resume').onclick=()=>c.resume();},
@@ -134,9 +135,9 @@ test('losing an offline active pad pauses once and reconnecting cannot automatic
 });
 
 test('custom X/Y driving assignments take precedence over camera and recovery shortcuts',()=>{
- const h=harness('playing');h.c.drivingControls.throttleButton=2;h.c.drivingControls.brakeButton=3;h.release();h.poll({2:1});assert.equal(h.c.hood,false);assert.equal(h.currentInput().throttle,1);
+ const h=harness('playing');h.c.drivingControls.throttleButton=2;h.c.drivingControls.brakeButton=3;h.release();h.poll({2:1});assert.equal(h.c.drivingCamera,'chase');assert.equal(h.currentInput().throttle,1);
  h.release();h.poll({3:1});assert.equal(h.calls.recover,undefined);assert.ok(h.currentInput().throttle<0);
- h.release();Object.assign(h.c.drivingControls,defaultControls());h.poll({2:1});assert.equal(h.c.hood,true);h.release();h.poll({3:1});assert.equal(h.calls.recover,1);
+ h.release();Object.assign(h.c.drivingControls,defaultControls());h.poll({2:1});assert.equal(h.c.drivingCamera,'hood');h.release();h.poll({3:1});assert.equal(h.calls.recover,1);
  h.c.state='countdown';h.release();h.poll({3:1});assert.equal(h.calls.recover,1,'recovery remains restricted to active driving');
 });
 
@@ -228,8 +229,12 @@ test('save restore confirmation owns controller Back and defaults to Cancel; bus
 test('manual clutch and shift buttons retain driving actions, with legacy online fallback',()=>{
  const h=harness('playing');h.c.drivingControls.transmission='clutch';h.release();h.poll({1:1});
  assert.equal(h.c.state,'playing');assert.equal(h.currentInput().transmission?.clutch,1);
- h.release();h.c.drivingControls.shiftUpButton=2;h.poll({2:1});assert.equal(h.c.hood,false);assert.equal(h.currentInput().transmission?.up,true);
+ h.release();h.c.drivingControls.shiftUpButton=2;h.poll({2:1});assert.equal(h.c.drivingCamera,'chase');assert.equal(h.currentInput().transmission?.up,true);
  h.release();h.c.drivingControls.shiftDownButton=3;h.poll({3:1});assert.equal(h.calls.recover,undefined);assert.equal(h.currentInput().transmission?.down,true);
  h.release();h.poll({9:1});assert.equal(h.c.state,'paused');
  const legacy=harness('playing');legacy.c.drivingControls.transmission='clutch';legacy.c.online={active:true,network:{snapshot:{}}};legacy.release();legacy.poll({1:1});assert.equal(legacy.c.state,'paused');assert.equal(legacy.currentInput().transmission,undefined);
+});
+
+test('venue browser owns controller navigation and Back closes it without starting a race',()=>{
+ const h=harness();h.c.eventSetupOpen=true;const panel=h.root('#venue-browser');h.button(panel,'#venue-mode','chooseMode');h.button(panel,'#venue-close','closeBrowser',()=>{h.c.eventSetupOpen=false;h.ui.children.delete('#venue-browser')});h.release();assert.equal(h.navigation.context?.key,'venue-browser');assert.equal(h.navigation.context?.initial,'#venue-mode');h.poll({1:1});assert.equal(h.calls.closeBrowser,1);assert.equal(h.calls.startEvent,undefined);h.release();assert.equal(h.navigation.context?.key,'menu');
 });

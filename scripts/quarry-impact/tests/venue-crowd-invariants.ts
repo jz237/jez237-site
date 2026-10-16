@@ -1,3 +1,4 @@
+import {restoreVenueBrowserBytes} from './venue-browser-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readVenueCrowdPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreVenueCrowdBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreVenueBrowserBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readVenueCrowdPrevious(file);
 }
 export function verifyVenueCrowdRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'37bd3a6bc1d425feae683110dd968b82c88c22d7');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreVenueBrowserBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreVenueCrowdBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the VenueCrowd release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreVenueBrowserBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the VenueCrowd release');
  assert.equal(manifest.previousFixtureCount,2669);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,2669);
 }
