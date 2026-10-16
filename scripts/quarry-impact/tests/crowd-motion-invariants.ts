@@ -10,15 +10,18 @@ export function readCrowdMotionPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreCrowdMotionBytes(file:string,bytes:Buffer):Buffer{
+ bytes=restoreRotatingImpactBytes(file,bytes);
  const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readCrowdMotionPrevious(file);
 }
 export function verifyCrowdMotionRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'2bad8d34a1f3419a53505d258c31b977c6ce8d74');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreRotatingImpactBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreCrowdMotionBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the CrowdMotion release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreRotatingImpactBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the CrowdMotion release');
  assert.equal(manifest.previousFixtureCount,2703);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,2703);
 }
+
+import {restoreRotatingImpactBytes} from './rotating-impact-invariants';

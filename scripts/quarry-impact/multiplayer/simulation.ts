@@ -146,7 +146,6 @@ export class Simulation {
     for(const c of this.cars){if(!humans.has(c.state.id))c.state.input=this.ai(c);this.drive(c);}
     const scoreMotion=this.event?.score?this.cars.map(c=>combatMotion(c.state.id,c.state.p,c.state.q,c.state.v,c.body.angvel().y,c.state.health,[0,1,2,3].filter(i=>c.controller.wheelIsInContact(i)).length)):[];
     if(this.event?.score)this.event.combat.sample(scoreMotion,this.elapsed);
-    const impactVelocities=this.cars.map(c=>({...c.state.v}));
     const collisionMotion=captureCollisionMotion(this.world);
     this.world.step(this.queue);
     for(const c of this.cars)this.readBody(c);
@@ -156,10 +155,10 @@ export class Simulation {
       if(!a&&!b)return;
       const manifold=vehicleContactManifold(this.world,h1,h2),normal=manifold?.normal??{x:0,y:0,z:0};
       const point1=manifold?.point1??{...(a??b)!.state.p},point2=manifold?.point2??{...(b??a)!.state.p};
-      const va=a?impactVelocities[a.state.id]:{x:0,y:0,z:0},vb=b?impactVelocities[b.state.id]:{x:0,y:0,z:0};
+      const va=collisionPointVelocity(this.world,collisionMotion,h1,point1),vb=collisionPointVelocity(this.world,collisionMotion,h2,point2);
       const relative={x:vb.x-va.x,y:vb.y-va.y,z:vb.z-va.z},impulse=e.totalForceMagnitude()*STEP;
       const closing=dot(normal,normal)>.5?Math.abs(dot(relative,normal)):Math.hypot(relative.x,relative.y,relative.z);
-      const cv1=collisionPointVelocity(this.world,collisionMotion,h1,point1),cv2=collisionPointVelocity(this.world,collisionMotion,h2,point2);
+      const cv1=va,cv2=vb;
       const speed=Math.hypot(cv2.x-cv1.x,cv2.y-cv1.y,cv2.z-cv1.z),scarDirection=dir(cv2,cv1);
       contacts.push({a,b,key,point1,point2,scarDirection,speed,impulse,closing,damageScale:Math.max(a&&a.state.health>0?a.specification.damageScale:0,b&&b.state.health>0?b.specification.damageScale:0)});
     });
@@ -172,10 +171,10 @@ export class Simulation {
         this.damage.push(event);(s.dents??=[]).push({id:event.id,localPoint,localDirection,repair:s.repair,damage:0,scar:true});s.dents=s.dents.slice(-334);
       }
     }
-    for(const {contact:{a,b,point1,point2},damage} of this.impacts.adjudicate(contacts,this.elapsed,this.mode==='race'?.45:1)){
+    for(const {contact:{a,b,point1,point2,scarDirection},damage} of this.impacts.adjudicate(contacts,this.elapsed,this.mode==='race'?.45:1)){
       if(damage===0)continue;
       for(const [car,other] of [[a,b],[b,a]])if(car&&car.state.health>0){
-        const point=car===a?point1:point2,s=car.state,received=damage*car.specification.damageScale,actual=Math.min(received,s.health),direction=dir(other?impactVelocities[other.state.id]:{x:0,y:0,z:0},impactVelocities[s.id]);
+        const point=car===a?point1:point2,s=car.state,received=damage*car.specification.damageScale,actual=Math.min(received,s.health),direction=car===a?scarDirection:{x:-scarDirection.x,y:-scarDirection.y,z:-scarDirection.z};
         if(received<.1)continue;
         const before=s.health;s.health=Math.max(0,s.health-received);if(other){other.state.inflicted+=actual;if(this.event?.score){this.event.combat.hit(other.state.id,s.id,before,s.health,this.elapsed);this.event.combat.contact(scoreMotion[other.state.id],scoreMotion[s.id],actual,this.elapsed);}}
         const local=rotate({x:point.x-s.p.x,y:point.y-s.p.y,z:point.z-s.p.z},{x:-s.q.x,y:-s.q.y,z:-s.q.z,w:s.q.w});

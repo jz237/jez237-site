@@ -1287,9 +1287,9 @@ function step(dt: number) {
     const manifold=vehicleContactManifold(physics,h1,h2);
     if(manifold){point.copy(manifold.point);normal.copy(manifold.normal);}
     const point1=new T.Vector3().copy(manifold?.point1??point),point2=new T.Vector3().copy(manifold?.point2??point);
-    const va=a?.velocity??new T.Vector3(),vb=b?.velocity??new T.Vector3();
+    const va=new T.Vector3().copy(collisionPointVelocity(physics,collisionMotion,h1,point1)),vb=new T.Vector3().copy(collisionPointVelocity(physics,collisionMotion,h2,point2));
     const relative=vb.clone().sub(va),closing=normal.lengthSq()>.5?Math.abs(relative.dot(normal)):relative.length();
-    const scarDirection=new T.Vector3().copy(collisionPointVelocity(physics,collisionMotion,h2,point2)).sub(new T.Vector3().copy(collisionPointVelocity(physics,collisionMotion,h1,point1))),speed=scarDirection.length();
+    const scarDirection=relative.clone(),speed=scarDirection.length();
     scarDirection.normalize();
     contacts.push({key,point,point1,point2,va,vb,a,b,scarDirection,speed,closing,impulse:e.totalForceMagnitude()*dt,
       damageScale:Math.max(a&&a.health>0?a.specification.damageScale:0,b&&b.health>0?b.specification.damageScale:0)});
