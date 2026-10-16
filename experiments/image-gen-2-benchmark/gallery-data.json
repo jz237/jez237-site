@@ -22507,5 +22507,95 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-16-factual-infographic-factual-infographic-taurine-an-essentia",
+    "title": "Factual infographic: Taurine — An Essential Dietary Link",
+    "tests": "Focused nutrition subject, not a disease profile or broad preview. Limited synthesis is not zero synthesis. No supplement doses, individualized diet or subjective critic; no automatic reroll.; archive_slot=2026-10-16T16:20; concept=cat-dietary-taurine-limited-synthesis-retina-heart; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: food-and-hydration",
+    "prompt": "Create a finished, richly artistic scientific cat infographic, not a poster mockup. Title: “TAURINE” with subtitle “An essential dietary link”. Small collection kicker: “CAT ATLAS · FOOD & HYDRATION”. A luminous gouache-and-fine-ink illustration on a subtly textured pale mineral-blue ground, warm copper and deep petrol accents, elegant dark lettering. Asymmetric artwork-led composition, generous breathing room, no equal-panel grid, no detached rounded cards.\n\nMake a beautifully rendered healthy adult short-haired charcoal-and-white domestic cat the dominant hero, sitting in three-quarter profile, head turned toward the left and a small ceramic bowl of ordinary prepared cat food. Highly credible fur, eyes, ears, paws, relaxed posture and soft natural light. This is normal nutrition education, not a disease plate; no distressed animal, no anthropomorphism. Preserve graceful silhouette and abundant painterly fur detail.\n\nA fine copper conceptual ribbon curves from the food bowl through the surrounding negative space, explicitly labeled “Dietary taurine”; it is an explanatory connection, not a literal anatomical tube or visible bodily fluid. Nest an open, delicately inked pathway into its lower curve: “Cysteine → limited synthesis → Taurine”. Under it: “Cats cannot make enough to meet their needs.” Keep the arrow visibly narrow at limited synthesis; do not depict synthesis as absent. Small supporting line: “An essential dietary nutrient”. No enzyme names, molecular structure, quantities or invented chemical reactions.\n\nIntegrate two exquisite, small scientific studies into the open space around the hero with fine conceptual leader lines: a simplified feline eye section emphasizing the retina at the rear of the globe, labeled “Retina”; and an anatomically plausible small feline heart, labeled “Heart muscle”. They are explanatory studies, not translucent organs in the wrong body locations. Beside them set the carefully qualified concise sentence: “Too little taurine can damage the retina and weaken heart muscle.” Do not add symptoms, therapies, diagnosis, diseased-heart chamber comparisons, blood-flow arrows or quantitative claims. Tiny study note: “Schematic studies · not to scale”.\n\nLet the lower portion resolve into an airy illustrated food-label study, not an actual branded package or pet-food certification seal. Heading “Balance matters”. Main text: “Choose complete and balanced cat food for the appropriate life stage.” Supporting text: “Animal-source ingredients supply taurine, but one ingredient does not make a complete diet.” A final discreet educational line reads “Ask your veterinarian before adding supplements.” The cat's bowl must look like prepared cat food, not an endorsed raw-meat recipe; no pills, supplement bottles, feeding doses or nutritional promises.\n\nTypography: large sophisticated title, clean main labels, concise perfectly legible explanatory text. Use only the specified factual text; no filler, fabricated measurements, brand endorsements, citations masquerading as labels, or unrelated anatomy. Small source credit “Sources: Cornell Feline Health Center; Li & Wu, 2023”. The artwork must carry the visual weight with organically integrated annotations and refined scientific linework. Render the composition itself edge-to-edge, no surrounding room, frame, screen or photographed book. Opaque background. Requested output: auto size, medium quality.",
+    "image": "images/2026-10-16-factual-infographic-factual-infographic-taurine-an-essentia.jpg",
+    "thumb": "thumbs/2026-10-16-factual-infographic-factual-infographic-taurine-an-essentia.webp",
+    "color": "#acb1b1",
+    "date": "2026-10-16",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "cat-dietary-taurine-limited-synthesis-retina-heart",
+      "imageSha256": "853b2164de886c79e002393ce3577b6c3d902eaf39b7423984180f8121283875",
+      "imageDHash": "ac9a9adb9b9aaf9a"
+    },
+    "factualInfographic": {
+      "topic": "Why cats require dietary taurine",
+      "description": "A focused nutritional plate connecting limited feline taurine synthesis with dietary supply and normal retinal and heart-muscle needs, alongside complete-and-balanced food-label guidance.",
+      "sourceNote": "Read Cornell nutrition guidance and Li & Wu 2023 full-text taurine metabolism passage. https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feeding-your-cat; https://pmc.ncbi.nlm.nih.gov/articles/PMC9942351/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-16T20:21:04.333602+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Cornell University College of Veterinary Medicine",
+            "title": "Feeding Your Cat",
+            "sourceType": "university",
+            "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feeding-your-cat"
+          },
+          {
+            "id": "S2",
+            "publisher": "Journal of Animal Science and Biotechnology (Springer Nature)",
+            "title": "Amino acid nutrition and metabolism in domestic cats and dogs — Li and Wu, 2023",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9942351/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Cats have a very limited ability to synthesize taurine from cysteine; dietary taurine is essential.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Low activities of cysteine dioxygenase and cysteinesulfinic acid decarboxylase limit feline taurine synthesis. The plate simplifies this to a limited internal supply, not zero synthesis.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Taurine deficiency can cause central retinal degeneration and dilated cardiomyopathy; eye and heart studies illustrate the importance of adequate dietary taurine, not a disease diagnosis or treatment.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Animal-source foodstuffs supply taurine; a meat ingredient alone does not establish the completeness of a diet.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Cats are obligate carnivores requiring a balance of multiple nutrients, not taurine alone.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Choose cat food with a nutritional adequacy statement indicating complete and balanced nutrition for the appropriate life stage. Ingredients and nutrient balance are distinct.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Supplements are usually unnecessary with a complete balanced diet and should not be given without veterinary approval.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
