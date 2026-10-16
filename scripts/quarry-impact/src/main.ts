@@ -691,8 +691,10 @@ async function connectOnline(endpoint:string,room:string,name:string,loadout?:On
 }
 function receiveOnline() {
   const s=online.network.snapshot;if(!online.active||!s)return;
-  online.receive(s);elapsed=s.elapsed;countdown=s.countdown;mode=s.mode;
-  waypointRace=s.event?.waypoints?new WaypointRace(s.event.rules.race as 'ordered'|'free'|'random',s.event.rules.laps,s.event.seed):null;
+  const venue=ensureVenue(s.mode==='race'?s.event?.rules.course??'quarry-v1':'quarry-v1');
+  if(activeVenue!==venue){activateVenue(venue);fx.world=physics;fx.groundHeight=activeVenue.course.height;events.clear();vehicleFire?.reset();puddleSplashes?.reset();}
+  online.setWorld(physics);online.receive(s);elapsed=s.elapsed;countdown=s.countdown;mode=s.mode;
+  waypointRace=s.event?.waypoints?new WaypointRace(s.event.rules.race as 'ordered'|'free'|'random',s.event.rules.laps,s.event.seed,activeVenue.course.checkpoints,activeVenue.course.waypointStations):null;
   if(s.event)restoreOnlineProgress(s.event,waypointRace,combat);else combat.reset();
   const changed=onlinePhase!==s.phase;onlinePhase=s.phase;
   if(changed&&s.phase==='lobby')derbyFeed.reset();
@@ -1569,7 +1571,7 @@ function frame(now: number) {
   if(studio){studio.update(dt);if(studio.seeking)return;}
   else if(online?.active) {
     if(state==='playing' && online.network.connected)online.network.setInput(input());else online.network.idleInput();
-    const s=online.network.sample();if(s){online.apply(s,dt);quarry.applyProps(s.props);elapsed=s.elapsed;countdown=s.countdown;}
+    const s=online.network.sample();if(s){online.apply(s,dt);if(activeVenue===quarryVenue)quarry.applyProps(s.props);elapsed=s.elapsed;countdown=s.countdown;}
     accumulator+=dt;let n=0;while(accumulator>=1/60 && n++<4){physics.step();fx.update(1/60);accumulator-=1/60;}
     const net=document.getElementById('network-status');if(net)net.textContent=online.network.connected?`ROOM ${online.network.room} · ${online.network.latency} MS`:online.network.reconnecting?'RECONNECTING · CONTROLS CLEARED':`${online.network.disconnectReason} · ESC TO LEAVE`;
   } else if (['playing', 'countdown'].includes(state)) {

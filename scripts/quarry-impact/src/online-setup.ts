@@ -1,3 +1,4 @@
+import {validOnlineCar} from './online-roster';
 import {DEFINITIONS,type CarKind} from './rules';
 import type {PhysicsTuning} from './vehicle-physics';
 /** Bounded performance/paint data only. Clients never supply derived physics coefficients. */
@@ -13,7 +14,7 @@ export function validOnlineSetup(v:unknown):v is OnlineSetup{
  return ['engine','tires','armor'].every(k=>Number.isInteger(v[k])&&finite(v[k],0,3))&&
   ['paint','trim'].every(k=>Number.isInteger(v[k])&&finite(v[k],0,0xffffff))&&fields.every(k=>finite((v.tune as Record<string,unknown>)[k],-1,1))&&optionalFields.every(k=>!Object.hasOwn(v.tune as object,k)||finite((v.tune as Record<string,unknown>)[k],-1,1));
 }
-export function validOnlineLoadout(v:unknown):v is OnlineLoadout{return object(v)&&['coupe','sedan','hatch'].includes(String(v.kind))&&validOnlineSetup(v.setup);}
+export function validOnlineLoadout(v:unknown):v is OnlineLoadout{return object(v)&&validOnlineCar(v.kind)&&validOnlineSetup(v.setup);}
 /** Copy only allowlisted fields; garage decals and untrusted extra coefficients stay out. */
 export function copyOnlineSetup(s:OnlineSetup):OnlineSetup{return{paint:s.paint,trim:s.trim,engine:s.engine,tires:s.tires,armor:s.armor,tune:{gearing:s.tune.gearing,suspension:s.tune.suspension,steering:s.tune.steering,brakeBias:s.tune.brakeBias,differential:s.tune.differential,...Object.fromEntries(optionalFields.filter(k=>s.tune[k]!==undefined&&s.tune[k]!==0).map(k=>[k,s.tune[k]]))}};}
 export function stockOnlineSetup(kind:CarKind):OnlineSetup{return{paint:DEFINITIONS[kind].color,trim:0x202529,engine:0,tires:0,armor:0,tune:{gearing:0,suspension:0,steering:0,brakeBias:0,differential:0}};}

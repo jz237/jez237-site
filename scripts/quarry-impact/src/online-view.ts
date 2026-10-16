@@ -24,6 +24,8 @@ export class OnlineView {
   constructor(private scene:T.Scene, private world:R.World, private fx:Effects, private sound:Sound,
     private getCars:()=>Vehicle[], private setCars:(cars:Vehicle[])=>void) {this.network.addEventListener('liveries',()=>{if(this.network.snapshot)this.applyLiveries(this.network.snapshot);});}
 
+  setWorld(world:R.World){if(this.world!==world){this.world=world;this.reset();}}
+
   reset() { this.repairs.clear(); this.appliedDamage.clear(); this.lastTick=-1; this.lastLiveryRevision=-1; this.initialized=false; }
   disconnect() { this.active=false; this.network.disconnect(); this.reset(); }
 

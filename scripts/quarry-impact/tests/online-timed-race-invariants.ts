@@ -10,15 +10,18 @@ export function readOnlineTimedRacePrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreOnlineTimedRaceBytes(file:string,bytes:Buffer):Buffer{
+ bytes=restoreOnlineRosterBytes(file,bytes);
  const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readOnlineTimedRacePrevious(file);
 }
 export function verifyOnlineTimedRaceRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'6d835347f515843abcd4b32ea3044e7d795bf1de');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreOnlineRosterBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreOnlineTimedRaceBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the OnlineTimedRace release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreOnlineRosterBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the OnlineTimedRace release');
  assert.equal(manifest.previousFixtureCount,2892);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,2892);
 }
+
+import {restoreOnlineRosterBytes} from './online-roster-invariants';
