@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {prepareNativeDeviceSample,prepareNativeMenuInput} from '../native-menu-input.js';
-import {createNativeRaceState,prepareNativeRaceMenuInputAdvance,nativeRaceMenuInputView,prepareNativeRaceResultStageUpdate} from '../native-race-state.js';
+import {prepareNativeDeviceSample,prepareNativeMenuInput,prepareNativeDeviceReset} from '../native-menu-input.js';
+import {createNativeRaceState,prepareNativeRaceMenuInputAdvance,nativeRaceMenuInputView,prepareNativeRaceResultStageUpdate,prepareNativeRaceStateOperations} from '../native-race-state.js';
 import {createRace,stepRace} from '../race-core.js';
 import {getCourse} from '../courses.js';
 import {stepNativeRaceHost} from '../native-race-host.js';
@@ -9,6 +9,17 @@ const raw=(heldButtons=0,rawXNative=0,rawYNative=0)=>({heldButtons,rawXNative,ra
 const input={connectedMask4340:3,controllerCount4344:2,controllerPorts4330:[0,1],neutralBytesAb10:Array(10).fill(0),thresholdXb400:40,thresholdYb401:40};
 const state=()=>createNativeRaceState({scene:{players:1,mode608:0,gameStateAb24:42,courseIndex:1},raceWords1f94:Array(1693).fill(0),hudWords7788:Array(1442).fill(0),i1Words9440:Array(168).fill(0),menuWordsE658:Array(21).fill(0),deviceWords4308:Array(10).fill(0)});
 const step=(s,a=raw(),b=raw(),extra={})=>prepareNativeRaceMenuInputAdvance(s,{...input,rawControllers:[a,b],...extra});
+
+test('title device reset clears all fields only on connected ports, preserving menu history and byte neighbors',()=>{
+ const start=structuredClone(state());start.deviceWords4308=Array.from({length:10},(_,i)=>0x80ff0123+i);start.menuWordsE658.fill(0xffffffff);
+ const before=structuredClone(start),q=prepareNativeDeviceReset({connectedMask4340:0xaa}),next=prepareNativeRaceStateOperations(start,q.operations).state;
+ const readByte=(s,i)=>(s.deviceWords4308[i>>>2]>>>(24-(i&3)*8))&255;
+ for(let i=0;i<40;i++)assert.equal(readByte(next,i),[1,3].includes(Math.floor(i/10))?0:readByte(before,i));
+ assert.deepEqual(q.operations.map(o=>[o.byteOffset,o.width]),[[19,1],[16,2],[14,2],[12,2],[10,2],[18,1],[39,1],[36,2],[34,2],[32,2],[30,2],[38,1]]);
+ assert.deepEqual(next.menuWordsE658,before.menuWordsE658);assert.deepEqual(start,before);assert.ok(Object.isFrozen(q.operations));
+ assert.deepEqual(prepareNativeDeviceReset({connectedMask4340:0xf0}).operations,[]);
+ for(const mask of [-1,256,1.5,undefined])assert.throws(()=>prepareNativeDeviceReset({connectedMask4340:mask}),RangeError);
+});
 test('physical held edges retain prior and released buttons while disconnected devices stay untouched',()=>{
  const records=Array.from({length:4},()=>Array(10).fill(0));records[0][0]=0x80;records[2].fill(0xa5);
  const before=structuredClone(records),r=prepareNativeDeviceSample({deviceBytes4308:records,connectedMask4340:1,rawControllers:[raw(0x1000,-70,70)]});

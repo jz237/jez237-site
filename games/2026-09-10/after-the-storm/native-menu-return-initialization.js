@@ -57,12 +57,12 @@ export function prepareNativeRiderMenuReturn(value,sourceViews={}){
 }
 
 /** Complete801EB180 title/demo return caller. Numeric tables are explicit
- * read views: titleAvatarPairsAc44[4][2] signed16, courseRiderTraits[12][4][3]
+ * read views: titleAvatarPairsAc44[4][2] signed16, courseRiderTraits[1..12][4][3]
  * raw32 and courseResourcePairs[9][2] signed16 from this caller's B568 table.
  * Both demo counters retain the source increment-then-reset writes. A counter
  * wrapping into an unavailable negative pair row rejects instead of repairing
  * the source read. Save flags come from the existing canonical byte owner.
- * Resource/bootstrap8004A208, physical tunes and audio remain pending effects.
+ * Controller reset8004A208, resources, physical tunes and audio remain pending effects.
  */
 export function prepareNativeTitleMenuReturn(value,sourceViews={}){
  const operations=[...entry(value,2,0,3),word('mode620',0),word('players',1),word('racerCount',2),word('wave49b0',20),
@@ -75,7 +75,9 @@ export function prepareNativeTitleMenuReturn(value,sourceViews={}){
  counter('trainingSelectionDa9f8',3);
  const selection=counter('titlePairSelectionA9fc',4),pair=row(sourceViews.titleAvatarPairsAc44,'titleAvatarPairsAc44',selection,4,2),
   avatar=int(pair[0],'title primary avatar',0,3),other=int(pair[1],'title other avatar',0,3);
- function traits(id){return Array.from(row(array(sourceViews.courseRiderTraits,'courseRiderTraits',12)[course],'course rider traits',id,4,3),v=>int(v,'course rider trait',0,0xffffffff));}
+ function traits(id){const rows=sourceViews.courseRiderTraits;
+  if(!Array.isArray(rows)||rows.length<1||rows.length>12)throw new RangeError('Expected1..12 course rider rows');
+  return Array.from(row(rows[int(course,'course rider row',0,rows.length-1)],'course rider traits',id,4,3),v=>int(v,'course rider trait',0,0xffffffff));}
  const otherTraits=traits(other);
  for(let slot=0;slot<2;slot++)[other,...otherTraits].forEach((v,i)=>operations.push(body(slot,i,v)));
  const primary=read(value,'primaryHumanIndex',0,3);
@@ -84,7 +86,7 @@ export function prepareNativeTitleMenuReturn(value,sourceViews={}){
  operations.push(half('variant6f4',0),word('simulation648',1),word('field64c',0),word('phase650',3),
   call('80096960',[1,avatar,other,0,0]),call('8009684c',[0x08060000,...resourcePair(sourceViews,course)]),call('8004a208'),
   call('801e6fb0',[0,0,0]),call('801e6a4c',[0,0]),hud(0x7c80,5),half('fieldA9ac',1),call('800c21f4',[0,0]));
- return freeze({operations,diagnostic:{consumer:'801eb180',menuLoopExecuted:false,physicalInitialization:false,bootstrapExecuted:false}});
+ return freeze({operations,diagnostic:{consumer:'801eb180',menuLoopExecuted:false,physicalInitialization:false,controllerResetExecuted:false}});
 }
 
 /** Complete801EB91C championship-return caller with the shared RNG expanded.

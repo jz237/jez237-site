@@ -4,7 +4,7 @@ import {prepareNativeTitleMenuReturn as title,prepareNativeChampionshipMenuRetur
 import {prepareNativeMenuReturnUpdate as update} from '../native-race-state.js';
 import {createRace} from '../race-core.js';
 import {getCourse} from '../courses.js';
-const views={titleAvatarPairsAc44:[[0,1],[2,3],[1,2],[3,0]],
+const views={connectedMask4340:1,titleAvatarPairsAc44:[[0,1],[2,3],[1,2],[3,0]],
  courseRiderTraits:Array.from({length:12},(_,c)=>Array.from({length:4},(_,r)=>[c*100+r,0x80000000+r,0xffffffff-r])),
  courseResourcePairs:Array.from({length:9},(_,i)=>[i-10,i+20]),
  championshipCourseOrderAc14:[[0,1,2,3,4,5,6,7],[8,9,10,11,0,1,2,3],[4,5,6,7,8,9,10,11]],courseWaves:Array.from({length:12},(_,i)=>i*10-20),otherAvatarsA9b4:[1,2,3],
@@ -26,7 +26,10 @@ test('title return advances counters, reads the saved unlock flag and preserves 
  assert.deepEqual(tunes.slice(-3).map(o=>o.value),[0,0x80000000,0xffffffff]);
  const primary=q.operations.findLastIndex(o=>o.kind==='bodyTuneWordWrite'&&o.wordIndex===0);
  assert.deepEqual(q.operations[primary+1],{kind:'sourceHalfwordWrite',field:'variant6f6',value:0});
- assert.deepEqual(q.effects.filter(o=>o.kind==='externalCall').map(o=>o.consumer),['80096960','8009684c','8004a208','800c21f4']);
+ assert.deepEqual(q.effects.filter(o=>o.kind==='externalCall').map(o=>o.consumer),['80096960','8009684c','800c21f4']);
+ assert.equal(q.diagnostic.controllerResetExecuted,true);
+ const resource=q.operations.findIndex(o=>o.consumer==='8009684c'),reset=q.operations.findIndex(o=>o.kind==='deviceInputWrite'),fade=q.operations.findIndex(o=>o.kind==='hudWrite');
+ assert.ok(resource<reset&&reset<fade);
  assert.deepEqual(v,before);assert.ok(Object.isFrozen(q.state));assert.equal(q.state.profileWordsB330[1],0);
 });
 test('title counter wraps as signed32; retained high course clamps only the resource pair',()=>{
@@ -76,4 +79,14 @@ test('sparse reached trait and resource rows reject instead of silently omitting
  assert.throws(()=>title(v,badPair),RangeError);assert.throws(()=>championship(v,badPair),RangeError);
  const badRiders=structuredClone(views);delete badRiders.otherAvatarsA9b4[1];
  assert.throws(()=>championship(v,badRiders),RangeError);
+});
+test('title reset reads the host connection mask, preserves disconnected data and rejects a missing mask atomically',()=>{
+ const v=fixture();v.deviceWords4308.fill(0xffffffff);v.menuWordsE658.fill(0xa5a5a5a5);const before=structuredClone(v);
+ const q=update(v,'title',{...views,connectedMask4340:5});
+ const bytes=q.state.deviceWords4308.flatMap(w=>[w>>>24,(w>>>16)&255,(w>>>8)&255,w&255]);
+ assert.deepEqual(bytes,[...Array(10).fill(0),...Array(10).fill(255),...Array(10).fill(0),...Array(10).fill(255)]);
+ assert.deepEqual(q.state.menuWordsE658,v.menuWordsE658);
+ assert.throws(()=>update(v,'title',{...views,connectedMask4340:undefined}),RangeError);assert.deepEqual(v,before);
+ const limited={...views,courseRiderTraits:views.courseRiderTraits.slice(0,1)};
+ assert.doesNotThrow(()=>title(v,limited));v.scene.fortressD8240=1;v.scene.courseIndex=1;assert.throws(()=>title(v,limited),RangeError);
 });

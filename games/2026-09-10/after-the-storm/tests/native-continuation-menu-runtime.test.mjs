@@ -41,7 +41,7 @@ test('each choice reaches its exact destination only after twelve fade updates, 
   assert.equal(q.handoff.destination,destination);assert.equal(q.handoff.returnState,target);
   assert.equal(q.draw.fade.completion,1);
   const save=q.operations.findIndex(op=>op.consumer==='8007bea4');
-  const initialized=['course','rider'].includes(destination);
+  const initialized=['course','rider','title'].includes(destination);
   const handoff=initialized?q.operations.findIndex(op=>op.kind==='sourceWordWrite'&&op.field==='gameStateAb24'&&op.value===target):q.operations.findIndex(op=>op.consumer===q.handoff.consumer);
   assert.ok(save>=0&&handoff>save);assert.equal(q.diagnostic.recordsPersisted,false);
   assert.equal(q.diagnostic.targetInitializerExecuted,initialized);
@@ -50,6 +50,13 @@ test('each choice reaches its exact destination only after twelve fade updates, 
    assert.equal(q.view.active,false);assert.equal(q.view.fade.kind,2);assert.equal(q.view.fade.completion,0);
    assert.deepEqual(q.effects.filter(op=>op.kind==='bodyTuneWordWrite').map(op=>op.value),[0,5,5,5]);
    assert.equal(q.operations.some(op=>op.consumer==='801ebd28'),false);assert.equal(q.effects.some(op=>op.consumer==='801ebd28'),false);
+  }
+  if(destination==='title'){
+   assert.equal(state.scene.gameStateAb24,2);assert.equal(state.scene.returnState630,0);assert.equal(state.scene.courseIndex,0);
+   assert.equal(state.scene.titlePairSelectionA9fc,0);assert.equal(state.scene.fieldA9ac,1);assert.equal(q.view.active,false);
+   assert.equal(q.effects.some(op=>op.consumer==='801eb180'||op.consumer==='8004a208'),false);
+   assert.equal(q.operations.some(op=>op.consumer==='801eb180'||op.consumer==='8004a208'),false);
+   assert.deepEqual(state.deviceWords4308.slice(0,2),[0,0]);assert.equal(state.deviceWords4308[2]>>>16,0);
   }
   if(destination==='course'){
    assert.equal(state.scene.gameStateAb24,20);assert.equal(state.scene.returnState630,0);assert.equal(state.scene.main638,5);
@@ -73,6 +80,20 @@ test('live rider return uses original menu order and fresh-menu reset without ch
   assert.equal(q.effects.filter(op=>op.kind==='bodyTuneWordWrite').length,4);
   assert.deepEqual(race.nativeHost.world.adapters[0].hull,physical);
   assert.equal(q.effects.some(op=>op.consumer==='80096960'),true); // Selection-model loading is still a required effect.
+ }
+});
+
+test('title handoff cycles each verified demo pair and clears both sampled controllers after the save boundary',()=>{
+ const {race,state}=fixture(),physical=structuredClone(race.nativeHost.world.adapters[0].hull);
+ for(const [oldPair,expectedPair,avatars]of [[3,0,[2,2,0]],[0,1,[3,3,2]],[1,2,[2,2,1]],[2,3,[0,0,3]]]){
+  let current=structuredClone(ready(state));current.scene.titlePairSelectionA9fc=oldPair;current.continuationDataWords60f0[0]=3;
+  let q=step(current,[press(0x8000),press(0x4000)]);
+  for(let i=0;i<12;i++)q=step(q.state,[press(0x8000),press(0x4000)]);
+  assert.equal(q.handoff.destination,'title');assert.equal(q.state.scene.titlePairSelectionA9fc,expectedPair);
+  assert.deepEqual(q.effects.filter(o=>o.kind==='bodyTuneWordWrite'&&o.wordIndex===0).map(o=>o.value),avatars);
+  assert.deepEqual(q.state.deviceWords4308.slice(0,5),[0,0,0,0,0]);
+  assert.equal(q.effects.some(o=>o.consumer==='801eb180'||o.consumer==='8004a208'),false);
+  assert.deepEqual(race.nativeHost.world.adapters[0].hull,physical);
  }
 });
 

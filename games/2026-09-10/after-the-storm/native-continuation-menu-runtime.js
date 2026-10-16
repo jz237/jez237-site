@@ -3,6 +3,7 @@ import {prepareNativeRaceMenuInputAdvance,prepareNativeContinuationMenuInitializ
  prepareNativeRaceStateOperations,prepareNativeMenuReturnUpdate} from './native-race-state.js';
 import {prepareNativeContinuationMenuPostDisplay} from './native-continuation-menu.js';
 import {prepareNativeWidgetPresentation,nativeWidgetDrawView} from './native-widget-presentation.js';
+import {NATIVE_TITLE_MENU_DATA} from './native-title-menu-data.js';
 import {NATIVE_RIDER_MENU_ORDER,NATIVE_RIDER_TUNE_DEFAULTS} from './native-rider-controls.js';
 
 const constants={matrixTargets:'slots',slotTemplateWords6c50:Array(11).fill(0),
@@ -51,13 +52,13 @@ export function prepareNativeContinuationMenuFrame(state,rawControllers){
  const target=effects.find(op=>op.kind==='externalCall'&&destinations.has(op.consumer));
  const handoff=target?{destination:destinations.get(target.consumer),consumer:target.consumer,returnState:current.scene.returnState630}:null;
  let targetInitializerExecuted=false;
- if(handoff&&['course','rider'].includes(handoff.destination)){
+ if(handoff&&['course','rider','title'].includes(handoff.destination)){
   // This is the last operation in the display suffix; expand at its original
   // position after any record-save effect. Never leave the replaced entry queued.
   const index=operations.findIndex(op=>op.kind==='externalCall'&&op.consumer===target.consumer);
   if(index!==operations.length-1)throw new Error('Return initializer must follow the display suffix');
   operations.splice(index,1);effects.splice(effects.indexOf(target),1);
-  const next=prepareNativeMenuReturnUpdate(current,handoff.destination,constants);current=next.state;
+  const next=prepareNativeMenuReturnUpdate(current,handoff.destination,{...constants,...NATIVE_TITLE_MENU_DATA,connectedMask4340:(1<<count)-1});current=next.state;
   operations.push(...next.operations);effects.push(...next.effects);targetInitializerExecuted=true;
   if(handoff.destination==='rider')handoff.selectedRider=next.effects.filter(op=>op.kind==='bodyTuneWordWrite'&&op.racerIndex===current.scene.primaryHumanIndex&&op.wordIndex===0).at(-1).value;
  }

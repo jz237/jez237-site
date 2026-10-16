@@ -1,5 +1,34 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Next checkpoint — connect title return and reset connected controllers
+
+Main menu now executes the original 801EB180 return initialization after the
+record-save boundary and hands back once to the high-resolution setup. The
+original 8004A208 helper clears only connected controllers' held, pressed,
+released, previous-button and stick fields in the shared device owner. Menu
+input history and disconnected controller records remain unchanged. Neither
+expanded entry remains queued for replay. Fresh web launch seeds the title pair
+counter with the verified initial value 3; the existing training selection
+remains a retained web selection. Physical demo setup and resource/audio effects
+remain pending, so this does not claim the original attract-mode race is live.
+
+Read-only Ghidra on EVO X2 confirmed all 43 controller-reset instructions against
+the local ROM, with all nine saved project files unchanged. Full original
+execution matched 768 cases, 36,096 instructions and 9,216 ordered writes,
+covering all 12 store instructions and comparing all 7,680 canonical device
+words. The title tables were independently checked: 26 signed halfwords and
+109 raw words, including the initial pair counter. Only the nine actual course
+tuning rows are included; following unrelated data is not treated as more rows.
+
+All 108 focused tests pass, including every title pair, two sampled controllers,
+disconnected byte neighbors, save-before-handoff order and atomic rejection of
+missing connection masks. The 12,664-case title/championship caller comparison
+still matches. The original title/demo loop and championship return integration
+remain incomplete. Browser verification completed a clean 1:49.597 race
+with a 0:35.155 best lap, accepted blank initials as YOU, continued through
+records, and returned through Main menu with Start time trial focused and no
+console errors. This checkpoint is local and unpublished.
+
 ## Next checkpoint — original title and championship return initialization
 
 Direct callers 801EB180 and 801EB91C now have independent numeric ports and a

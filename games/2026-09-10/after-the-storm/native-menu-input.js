@@ -5,6 +5,17 @@ function integer(v,name,min,max){if(!Number.isInteger(v)||v<min||v>max)throw new
 function bytes(v,name,length){if(!Array.isArray(v)||v.length!==length)throw new RangeError(`${name} requires ${length} bytes`);return Array.from(v,n=>integer(n,name,0,255));}
 function freeze(v){if(v&&typeof v==='object'&&!Object.isFrozen(v)){Object.values(v).forEach(freeze);Object.freeze(v);}return v;}
 
+/** Complete8004A208. Clear only connected ten-byte device records, retaining
+ * the source byte/halfword store order. The last axis reads the just-cleared
+ * byte, so every written value is zero; no OS sampling or menu-record reset
+ * takes place here. High mask bits do not address additional controllers. */
+export function prepareNativeDeviceReset(input){
+ const mask=integer(input?.connectedMask4340,'connected mask',0,255),operations=[];
+ for(let port=0;port<4;port++)if(mask&(1<<port))for(const [offset,width]of [[9,1],[6,2],[4,2],[2,2],[0,2],[8,1]])
+  operations.push({kind:'deviceInputWrite',byteOffset:port*10+offset,width,value:0});
+ return freeze({operations});
+}
+
 /** Numeric8004A2F0..A394 portion after OS controller reads. The connected
  * mask chooses which device records receive fresh held/pressed/released and
  * prior-held fields; disconnected records remain byte-for-byte unchanged.

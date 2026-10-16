@@ -1,5 +1,5 @@
 import {prepareNativeRaceFadeUpdate} from './native-race-fade-update.js';
-import {prepareNativeMenuInput,prepareNativeDeviceSample} from './native-menu-input.js';
+import {prepareNativeMenuInput,prepareNativeDeviceSample,prepareNativeDeviceReset} from './native-menu-input.js';
 import {prepareNativeRaceResultCPUDisplay} from './native-race-prestart-stage.js';
 import {prepareNativeRaceWidgetUpdate,prepareNativeRaceHUDAnimationUpdate} from './native-race-widget-update.js';
 import {NATIVE_AI_STORAGE_WORDS} from './native-ai-storage.js';
@@ -526,11 +526,13 @@ export function prepareNativeMenuReturnUpdate(state,destination,sourceViews={}){
    batch=prepareNativeRaceFadePropertiesInitialization({fadeTemplateWords6cc0:sourceViews.fadeTemplateWords6cc0,type,rate,selector}).operations;
   }else if(op.kind==='externalCall'&&op.consumer==='801e6a4c'){
    batch=prepareNativeRaceFadeSlotsReset({slotTemplateWords6c50:sourceViews.slotTemplateWords6c50}).operations;
+  }else if(op.kind==='externalCall'&&op.consumer==='8004a208'){
+   batch=prepareNativeDeviceReset({connectedMask4340:sourceViews.connectedMask4340}).operations;
   }
   operations.push(...batch);effects.push(...apply(next,batch));
  }
  return freeze({state:next,operations,effects,diagnostic:{consumer:prepared.diagnostic.consumer,expandedFadeConsumers:['801e6fb0','801e6a4c'],
-  menuLoopExecuted:false,physicalInitialization:false,resourceLoadingPerformed:false,audioExecuted:false}});
+  menuLoopExecuted:false,controllerResetExecuted:destination==='title',physicalInitialization:false,resourceLoadingPerformed:false,audioExecuted:false}});
 }
 
 /** Complete numeric water-noise initialization from the canonical shared RNG.
