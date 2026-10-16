@@ -22,6 +22,7 @@ import {prepareNativeRaceFadePropertiesInitialization,prepareNativeRaceFadeSlots
 import {prepareNativeRaceMainConfiguration} from './native-race-main-configuration.js';
 import {prepareNativeRaceRiderResourceConfiguration,prepareNativeRaceCourseResourceConfiguration} from './native-race-resource-configuration.js';
 import {prepareNativeRaceResultCodeSelection} from './native-race-body-fields.js';
+import {prepareNativePrimaryResultEstimates} from './native-primary-standings.js';
 
 const MIN=-2147483648,MAX=2147483647,RACE_BASE=0x1f94,RACE_WORDS=1693,HUD_BASE=0x7788,HUD_WORDS=1442;
 const resourceOwnerWords={resourceWordsB330:20,resourceWordsB538:8,resourceWordsE73c:43};
@@ -484,9 +485,23 @@ export function prepareNativeRaceResultStatusUpdate(state,input={}){
  return freeze({state:next,operations,effects});
 }
 export function prepareNativeRaceResultStageUpdate(state,consumer,input={}){
+ if(input.expandEstimates!==undefined&&typeof input.expandEstimates!=='boolean')throw new TypeError('expandEstimates must be boolean');
  const next=copy(state),prepared=prepareNativeRaceResultUpdate({...next,expandTransitions:input.expandTransitions,
-  fadeTemplateWords6cc0:input.fadeTemplateWords6cc0,slotTemplateWords6c50:input.slotTemplateWords6c50},consumer),effects=apply(next,prepared.operations);
- return freeze({...prepared,state:next,effects});
+  fadeTemplateWords6cc0:input.fadeTemplateWords6cc0,slotTemplateWords6c50:input.slotTemplateWords6c50},consumer),operations=[],effects=[];
+ for(const op of prepared.operations){
+  const expanded=input.expandEstimates&&op.kind==='externalCall'&&op.consumer==='80077f5c'?
+   prepareNativePrimaryResultEstimates({...next,primaryRecordWordsBySourceRow:input.primaryRecordWordsBySourceRow,
+    bodyPositionsNativeBySlot:input.bodyPositionsNativeBySlot}).operations:[op];
+  operations.push(...expanded);effects.push(...apply(next,expanded));
+ }
+ return freeze({...prepared,operations,state:next,effects});
+}
+/** One-shot result estimate against the same records used by the race and HUD.
+ * No live phase is inferred; the caller must schedule actual77F5C invocation. */
+export function prepareNativeRaceUnfinishedEstimates(state,input={}){
+ const next=copy(state),prepared=prepareNativePrimaryResultEstimates({...next,
+  primaryRecordWordsBySourceRow:input.primaryRecordWordsBySourceRow,bodyPositionsNativeBySlot:input.bodyPositionsNativeBySlot});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
 }
 /** The actual display-stage dispatcher follows79528 once per source frame.
  * externalReturns supplies genuine consumed opaque presentation return words;

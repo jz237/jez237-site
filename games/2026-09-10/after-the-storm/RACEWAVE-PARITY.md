@@ -2571,3 +2571,36 @@ retained AI context/history initialization and the original result/world/menu
 schedule before enabling this option. Shared RNG/camera context, zero-simulation
 dispatch, fades, unfinished-place estimation and persistent native records
 remain open, alongside the broader gameplay parity gaps. Livev2.24.0 is unchanged.
+
+## Unfinished-rider result estimates — October 15, 2026
+
+Original77F5C is now reconstructed in the primary standings module and exposed
+through the canonical race state. It sets the actual1FD4 one-shot latch,
+projects the rider against the previous primary node, walks initialized A0
+links and length88 fields through the final finish, and estimates remaining
+time with original float32 operation order and place-dependent speed. It then
+clamps times in slot order, performs the original nested strict place swaps,
+and copies place words to26C0 on nonzero courses. Finished/DQ slots retain
+their places but still receive the source time clamp. No finish flag is invented.
+
+prepareNativeRaceResultStageUpdate can expand the77F5C call with explicit
+expandEstimates:true and actual primary records/body positions, committing
+its writes at the existing finish/DQ caller boundary. Default dependency
+recipes remain unchanged. Repeated calls skip without requiring geometry.
+The same canonical latch stops subsequent primary clock updates.
+
+Private whole-routine execution matches220 prepared cases,35,672 counted
+instructions, all ordered writes and all1,693 final race words per case.
+There are no intercepted arithmetic callees. Seven tests cover remaining laps,
+projection clamps, strict ties, place swaps, DQ/finish exclusions, one-shot
+reads, source stage expansion, initialization from all four Sunny classes and
+the canonical clock consumer. All174 selected primary/state/result/host/world
+regression tests pass. These are prepared numeric cases, not a driven finish.
+Malformed walks, nonfinite arithmetic and out-of-range signed conversions
+reject without committing state; no substitute estimate is produced.
+
+The normal host still needs its complete result/world/menu schedule, fades,
+AI context and persistence before this can be enabled through ordinary play.
+This checkpoint is local and unpublished; the broader parity goal remains open.
+The user additionally requested the original music from the existing locally
+provided Wave Race64 ROM; soundtrack extraction and integration are now active.
