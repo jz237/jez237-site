@@ -337,13 +337,14 @@ export function handicapBoost(s,r){if(s.mode!=='versus'||s.freeRide||!s.handicap
  const other=s.racers.find(q=>q!==r);if(!other||other.dq||other.finishTime!==null)return 0;return clamp((progress(other)-progress(r))*.075,0,.12);
 }
 export function raceWeather(s,time=s.time){const w=conditions(s.course,time,s.racers[0].lap);if(s.courseDatum)w.seaLevel=s.courseDatum.value;if(s.seaState!=='course')w.storm=({calm:0,chop:.45,storm:.95})[s.seaState]??w.storm;return w;}
-export function stepRace(s,input,dt){if(s.phase==='paused'||s.phase==='results')return;dt=clamp(dt,0,1/30);
+export function stepRace(s,input,dt,options={}){if(s.phase==='paused'||s.phase==='results')return;dt=clamp(dt,0,1/30);
  setRaceWater(s.raceWater??null);
  if(s.phase==='countdown'&&!s.nativeHost){for(const r of s.racers)if(r.human){const c=Array.isArray(input)?input[r.player]||{}:input||{};rocketStart(r,c.throttle||0,-s.countdown);}s.countdown-=dt;if(s.countdown<=0){s.phase='running';s.racers.forEach(r=>announce(r,s,'GO'));}return;}
  if(s.nativeHost){
   s.weather=raceWeather(s);waterLevel.value=s.weather.seaLevel;
    stepNativeRaceHost(s.nativeHost,dt,s.racers.map(r=>r.human?(typeof input==='function'?(r.player===0?input:{}):Array.isArray(input)?input[r.player]||{}:r.player===0?input||{}:{}):()=>aiInput(s,r)),
-   {waterOptions:{datumNative:Math.round(s.weather.seaLevel/s.raceWater.scale)}});
+   {waterOptions:{datumNative:Math.round(s.weather.seaLevel/s.raceWater.scale)},
+    menuInputs:options.menuInputs??(typeof input==='function'?[]:Array.isArray(input)?input.map(v=>typeof v==='function'?{}:v):[input??{}])});
   s.time=s.nativeHost.world.ticks*.01;
   s.primaryBuoys=capturePrimaryBuoyPresentation(s.nativeHost.primary?.snapshot());
    // The completed50ms native callback owns result and finish-wait updates.

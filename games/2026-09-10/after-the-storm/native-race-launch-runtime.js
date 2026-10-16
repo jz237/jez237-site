@@ -14,6 +14,7 @@ import {NATIVE_AI_STORAGE_WORDS,nativeAIDriverStateFromWords,nativeAIDriverState
 import {prepareNativeRaceWaterInitialization} from './native-race-state.js';
 import {prepareNativeRaceWidgetAdvance,prepareNativeRaceFadeAdvance} from './native-race-state.js';
 import {prepareNativeWidgetPresentation,nativeWidgetDrawView} from './native-widget-presentation.js';
+import {prepareNativeRaceMenuInputAdvance,nativeRaceMenuInputView} from './native-race-state.js';
 
 // Overlapping effect47FC, solo4800 and two-player4818 numeric entries. Ordinary
 // two-player place indices are0/1; other mode tables remain separate admission.
@@ -69,7 +70,8 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    for(const base of [0x1ff0+courseIndex*60,0x1ff0+courseIndex*60+20,0x1ff0+courseIndex*60+40,
     0x22c0+courseIndex*20,0x23b0+courseIndex*20])raceWords1f94[ri(base)]=599999;
   }
-  current=createNativeRaceState({raceWords1f94,hudWords7788,profileWordsB330,i1Words9440,aiWords3c60:Array(NATIVE_AI_STORAGE_WORDS).fill(0),scene:{
+  current=createNativeRaceState({raceWords1f94,hudWords7788,profileWordsB330,i1Words9440,aiWords3c60:Array(NATIVE_AI_STORAGE_WORDS).fill(0),
+   ...(courseRuntime?{menuWordsE658:Array(21).fill(0),deviceWords4308:Array(10).fill(0)}:{}),scene:{
    players,racerCount:racers.length,primaryHumanIndex:0,secondaryHumanIndex:1,courseIndex,
    mode620:players===2?1:0,mode608:players===2?1:0,main638:1,phase650:0,simulation648:1,
    clockStopped817c:1,activity624:-1,event628:0,gameStateAb24:40,specialAb64:0,ready6fc:0,
@@ -155,6 +157,18 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
   // primary/generic object motion call7DBC0 independently of simulation648.
   objectMotionActive:()=>current.scene.activity624===-1,
   snapshot:()=>nativeRaceStateSnapshot(current),
+  menuInputView:(slot=0)=>nativeRaceMenuInputView(current,slot),
+  advanceMenuInput(rawControllers){
+   if(!courseRuntime)throw new Error('Menu input requires ordinary race');
+   if(!Array.isArray(rawControllers)||rawControllers.length>players)throw new RangeError('Supply menu input for each connected human');
+   const count=rawControllers.length;
+   const prepared=prepareNativeRaceMenuInputAdvance(current,{rawControllers,controllerCount4344:count,
+    connectedMask4340:(1<<count)-1,controllerPorts4330:[0,1],neutralBytesAb10:Array(10).fill(0),
+    // Original92348..92390 sets35 on both axes each active update, with
+    // horizontal50 for record-name state100 and60 for state10.
+    thresholdXb400:current.scene.gameStateAb24===100?50:current.scene.gameStateAb24===10?60:35,thresholdYb401:35});
+   current=prepared.state;return {operations:prepared.operations,view:nativeRaceMenuInputView(current)};
+  },
   initializeWater(field,amplitudeNative){
    if(!(field?.heightQ instanceof Int16Array)||!(field?.velocityQ instanceof Int16Array)||
       field.heightQ.length!==49152||field.velocityQ.length!==49152)throw new TypeError('Supply the actual native water lattice');

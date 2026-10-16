@@ -1,4 +1,5 @@
 import {prepareNativeRaceFadeUpdate} from './native-race-fade-update.js';
+import {prepareNativeMenuInput,prepareNativeDeviceSample} from './native-menu-input.js';
 import {prepareNativeRaceWidgetUpdate,prepareNativeRaceHUDAnimationUpdate} from './native-race-widget-update.js';
 import {NATIVE_AI_STORAGE_WORDS} from './native-ai-storage.js';
 import {prepareNativeRaceCameraInput} from './native-race-camera-input.js';
@@ -59,6 +60,7 @@ function readFloat(v){floatBits.setUint32(0,v,false);return floatBits.getFloat32
 function floatWord(v){if(!Number.isFinite(v)||!Number.isFinite(Math.fround(v)))throw new RangeError('Canonical float write must fit finite float32');
  floatBits.setFloat32(0,v,false);return floatBits.getUint32(0,false);}
 function sceneValue(s,k){
+ if(k==='pressed65a'&&s.menuWordsE658!==undefined)return s.menuWordsE658[0]&65535;
  if(k==='difficulty'&&s.profileWordsB330!==undefined)return s.profileWordsB330[2]|0;
  const range=sceneRanges[k]??[MIN,MAX];return integer(s.scene[k],`scene.${k}`,...range);
 }
@@ -74,6 +76,11 @@ function copy(value){
  if(value.i1Words9440!==undefined)s.i1Words9440=words(value.i1Words9440,'i1Words9440',168);
  if(value.aiWords3c60!==undefined)s.aiWords3c60=words(value.aiWords3c60,'aiWords3c60',NATIVE_AI_STORAGE_WORDS);
  if(value.saveWordsB280!==undefined)s.saveWordsB280=words(value.saveWordsB280,'saveWordsB280',34);
+ if(value.menuWordsE658!==undefined){
+  if(Object.hasOwn(scene,'pressed65a'))throw new RangeError('pressed65a overlaps menuWordsE658');
+  s.menuWordsE658=words(value.menuWordsE658,'menuWordsE658',21);
+ }
+ if(value.deviceWords4308!==undefined)s.deviceWords4308=words(value.deviceWords4308,'deviceWords4308',10);
  if(value.profileWordsB330!==undefined){
   if(Object.hasOwn(scene,'difficulty'))throw new RangeError('difficulty overlaps profileWordsB330');
   const count=value.profileWordsB330?.length;
@@ -105,6 +112,9 @@ function copy(value){
  * 801CB330. resourceWordsB538[8] owns800DB538..B558; resourceWordsE73c[43]
  * owns801CE73C..E7E8. These raw descriptors/selectors retain source data;
  * they do not imply loaded resources or duplicate named scene slot fields.
+ * Optional menuWordsE658[21] owns all three28-byte menu input records; pressed65a
+ * is a view of its first record, never a second scene field. deviceWords4308[10]
+ * owns the separate four10-byte sampled device records, independently of rider AI.
  */
 export function createNativeRaceState(value){return freeze(copy(value));}
 export function nativeRaceStateSnapshot(value){return copy(value);}
@@ -133,6 +143,14 @@ function apply(s,operations){
  for(const op of operations){
   record(op,'native operation');
   if(op.kind==='hudWrite')patchHud(s,op);
+  else if(op.kind==='menuInputWrite'||op.kind==='deviceInputWrite'){
+   const key=op.kind==='menuInputWrite'?'menuWordsE658':'deviceWords4308';
+   if(!s[key])throw new TypeError(`Supply retained ${key} before applying input writes`);
+   const width=integer(op.width,'input write width',1,4),offset=integer(op.byteOffset,'input byte offset',0,s[key].length*4-width),
+    value=integer(op.value,'input write bits',0,2**(width*8)-1);
+   for(let j=0;j<width;j++){const at=offset+j,index=at>>>2,shift=24-(at&3)*8,bits=(value>>>((width-j-1)*8))&255;
+    s[key][index]=((s[key][index]&~(255<<shift))|(bits<<shift))>>>0;}
+  }
   else if(op.kind==='raceByteWrite'||op.kind==='saveByteWrite'){
    const key=op.kind==='raceByteWrite'?'raceWords1f94':'saveWordsB280';
    if(!s[key])throw new TypeError(`Supply retained ${key} before applying its writes`);
@@ -158,7 +176,8 @@ function apply(s,operations){
   }else if(op.kind==='sourceHalfwordWrite'){
    if(!sceneHalves.has(op.field))throw new RangeError(`Unsupported external source halfword ${op.field}`);
    const bits=integer(op.value,'source halfword bits',0,65535);
-   s.scene[op.field]=sceneRanges[op.field][0]<0?bits<<16>>16:bits;
+   if(op.field==='pressed65a'&&s.menuWordsE658!==undefined)s.menuWordsE658[0]=((s.menuWordsE658[0]&0xffff0000)|bits)>>>0;
+   else s.scene[op.field]=sceneRanges[op.field][0]<0?bits<<16>>16:bits;
   }else if(op.kind==='i1Write'||op.kind==='profileWrite'){
    const key=op.kind==='i1Write'?'i1Words9440':'profileWordsB330';
    if(!s[key])throw new TypeError(`Supply retained ${key} before applying its writes`);
@@ -204,6 +223,33 @@ function apply(s,operations){
 export function prepareNativeRaceStateOperations(state,operations){
  const next=copy(state),effects=apply(next,operations);return freeze({state:next,effects});
 }
+
+/** Once-per-outer-frame device and menu input preparation. Physical samples
+ * precede source menu adaptation and are independent of61708's AI selection.
+ * All writes, including prior records and counters, commit atomically. */
+export function prepareNativeRaceMenuInputAdvance(state,input={}){
+ const next=copy(state);
+ if(!next.deviceWords4308||!next.menuWordsE658)throw new TypeError('Supply retained deviceWords4308 and menuWordsE658');
+ const deviceBytes4308=Array.from({length:4},(_,port)=>Array.from({length:10},(_,i)=>{
+  const a=port*10+i;return (next.deviceWords4308[a>>>2]>>>(24-(a&3)*8))&255;
+ }));
+ const sampled=prepareNativeDeviceSample({...input,deviceBytes4308});
+ const adapted=prepareNativeMenuInput({...input,deviceBytes4308:sampled.deviceBytes4308,menuWordsE658:next.menuWordsE658});
+ const operations=[...sampled.operations,...adapted.operations],effects=apply(next,operations);
+ return freeze({state:next,operations,effects});
+}
+
+export function nativeRaceMenuInputView(state,slot=0){
+ integer(slot,'menu input slot',0,2);const storage=words(state.menuWordsE658,'menuWordsE658',21),base=slot*28;
+ const half=o=>(storage[(base+o)>>>2]>>>((base+o)&2?0:16))&65535;
+ const axis=o=>((storage[(base+o)>>>2]>>>(24-((base+o)&3)*8))&255)<<24>>24;
+ return freeze({heldButtons:half(0),pressedButtons:half(2),releasedButtons:half(4),priorHeldButtons:half(6),
+  rawXNative:axis(8),rawYNative:axis(9),horizontalHoldFrames:storage[(base+20)/4]|0,verticalHoldFrames:storage[(base+24)/4]|0});
+}
+
+// Leaf result APIs accept legacy prepared scene samples. Runtime callers with
+// full menu storage expose the overlapping halfword only in this temporary view.
+function resultInputView(state){return state.menuWordsE658===undefined?state:{...state,scene:{...state.scene,pressed65a:sceneValue(state,'pressed65a')}};}
 
 /** Source fade initialization writes the existing shared HUD owner. Advancing
  * or drawing the fade is separate; these preparations neither execute an
@@ -515,7 +561,7 @@ export function prepareNativeRaceResultStatusUpdate(state,input={}){
 }
 export function prepareNativeRaceResultStageUpdate(state,consumer,input={}){
  if(input.expandEstimates!==undefined&&typeof input.expandEstimates!=='boolean')throw new TypeError('expandEstimates must be boolean');
- const next=copy(state),prepared=prepareNativeRaceResultUpdate({...next,expandTransitions:input.expandTransitions,expandWidgets:input.expandWidgets,
+ const next=copy(state),prepared=prepareNativeRaceResultUpdate({...resultInputView(next),expandTransitions:input.expandTransitions,expandWidgets:input.expandWidgets,
   fadeTemplateWords6cc0:input.fadeTemplateWords6cc0,slotTemplateWords6c50:input.slotTemplateWords6c50},consumer),operations=[],effects=[];
  for(const op of prepared.operations){
   const expanded=input.expandEstimates&&op.kind==='externalCall'&&op.consumer==='80077f5c'?
@@ -606,7 +652,7 @@ export function prepareNativeRaceResultDisplayUpdate(state,input={}){
  return prepareDisplayUpdate(state,input,true);
 }
 function prepareDisplayUpdate(state,input,results){
- const next=copy(state),stage=results?prepareNativeRaceResultDisplay({...next,externalReturns:input.externalReturns,
+ const next=copy(state),stage=results?prepareNativeRaceResultDisplay({...resultInputView(next),externalReturns:input.externalReturns,
   bodyResultCode16c8BySlot:input.bodyResultCode16c8BySlot,expandTransitions:input.expandTransitions,expandWidgets:input.expandWidgets,
   fadeTemplateWords6cc0:input.fadeTemplateWords6cc0,slotTemplateWords6c50:input.slotTemplateWords6c50}):
   prepareNativeRacePrestartStage({...next,externalReturns:input.externalReturns}),

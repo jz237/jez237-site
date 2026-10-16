@@ -140,7 +140,15 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
   bindRaceWaterCameraStorage(water,raceRuntime.cameraStorage);
  }
  host.world=createNativeRaceWorld({adapters,water,humanIndices,craftContacts,
- beforeFrame:raceRuntime?.ordinary?world=>{
+ beforeFrame:raceRuntime?.ordinary?(world,context)=>{
+  const menu=typeof host.menuInputs==='function'?host.menuInputs(context.time,context.logicalFrame):host.menuInputs??[];
+  if(!Array.isArray(menu))throw new TypeError('Menu inputs must be a human-controller array');
+  host.lastMenuInput=raceRuntime.advanceMenuInput(menu.map(value=>{
+   const controls=typeof value==='function'?value(context.time,context.logicalFrame):value;
+   const raw=nativeHostInput(controls);
+   if(controls.continue!==undefined&&typeof controls.continue!=='boolean')throw new TypeError('continue must be boolean');
+   return {...raw,heldButtons:raw.heldButtons|(controls.continue?0x1000:0)};
+  }));
   host.lastNavigation=raceRuntime.advanceNavigation({
    bodiesBySlot:world.adapters.map(a=>({avatar:a.hull.rider,position:{x:a.hull.center.x,z:a.hull.center.z}})),
    nodePositions:primary.snapshot().map(n=>({sourceRow:n.sourceRow,x:n.position.x,z:n.position.z}))});
@@ -198,6 +206,10 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
  */
 export function stepNativeRaceHost(host,dt,inputs,options={}){
  if(!host?.world||!Array.isArray(inputs)||inputs.length!==host.racers.length)throw new TypeError('Expected a native host and one input per racer');
+ // Menu devices are an independent physical sample. In particular, never
+ // repoll a rider provider that61708 has already handed over to source AI.
+ // Headless callers without menu devices explicitly supply none.
+ host.menuInputs=options.menuInputs??[];
  const providers=inputs.map((value,i)=>(time,frame)=>{
   const input=typeof value==='function'?value(time,frame):value;
   host.world.adapters[i].powerSteps=host.racers[i].power;

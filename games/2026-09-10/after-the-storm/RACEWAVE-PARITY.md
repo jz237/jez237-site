@@ -1,5 +1,37 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Physical menu input — local October 16 checkpoint
+
+The ordinary native host now samples a separate menu-controller input before
+navigation and descending rider input selection. Source8004A2F0..A394 prepares
+held/pressed/released/prior device records; source80092938 copies the three menu
+histories, merges the updated second player's buttons into the shared record,
+and applies signed-axis thresholds and hold counters. Neither stage reads
+AI-selected rider buttons. Full device and menu words have canonical owners;
+pressed65a is a temporary view of menu storage, never a duplicate scene field.
+The outer source threshold setup is35 on both axes, with horizontal50 for
+state100 and60 for state10. Browser sampling and disconnected-device policy
+remain explicit host boundaries rather than emulated N64 hardware I/O.
+
+Independent ROM execution matches530 menu cases (94,639 counted instructions,
+21,176 ordered writes) and192 device cases (14,400 instructions,2,304 writes).
+Seven focused tests cover button merging, release/history behavior, signed
+counter wrap, atomic failure, result-delay input and30/60/144Hz cadence. The
+live AI regression confirms menu sampling continues after rider AI takeover;
+pause leaves the stored input untouched. Existing host/launch/result checks
+also pass. The broad native suite passes all520 tests. A local browser trial finished three laps without misses or disqualification; the only console failures were missing favicon requests. Browser controls feed menu input separately; verification pilots
+may provide an explicit menu input source rather than being polled twice.
+
+This work does not yet make the browser continue its result/world/HUD loop or
+draw the original numeric banners. Continue/menu/save integration remains open.
+
+## v2.29.1 — music enabled by default
+
+Original course and result music is enabled for new saves and legacy saves
+without audio preferences. Existing saved audio preferences are preserved.
+All24 audio, soundtrack, save and record tests pass. Published October16 and
+confirmed in a fresh browser session with Background music checked.
+
 ## v2.29.0 — result HUD numeric animation and matrix preparation
 
 The five shared HUD slots now have the reconstructed numeric update for all

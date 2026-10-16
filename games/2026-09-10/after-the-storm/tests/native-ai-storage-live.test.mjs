@@ -87,7 +87,13 @@ test('actual completed solo race hands control to the source driver with no furt
  }
  assert.ok(selectedAt>=0);assert.equal(host.lastAIInput.frame.phase,'driving');
  const before=s.nativeLaunch.snapshot(),state=s.nativeLaunch.aiDriverState(0);
- for(let i=0;i<20;i++)stepNativeRaceHost(host,.05,[()=>{throw new Error('AI must bypass the human device');}]);
+ let menuPolls=0;
+ for(let i=0;i<20;i++){
+  stepNativeRaceHost(host,.05,[()=>{throw new Error('AI must bypass the human device');}],{
+   menuInputs:()=>{menuPolls++;return [{continue:i===0||i===10}];}});
+  assert.equal(s.nativeLaunch.menuInputView().pressedButtons,i===0||i===10?0x1000:0);
+ }
+ assert.equal(menuPolls,20,'physical menu samples continue independently of AI-selected rider input');
  assert.equal(polls,selectedAt);assert.equal(a.lastControls.controlOrigin,'ai');
  assert.notDeepEqual(s.nativeLaunch.aiDriverState(0),state);
  assert.equal(s.nativeLaunch.snapshot().scene.previousNavigationD9874,s.nativeLaunch.aiRecords()[0].navigationSourceRow);
