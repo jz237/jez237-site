@@ -6,10 +6,11 @@ export type RecoverySlot=RoutePoint&{yaw:number};
 
 /** A last resort after ordinary reverse escapes fail. Object keys prevent a
  * restarted event inheriting the previous field's timers or vehicle IDs. */
+type RecoveryProgress=Pick<RecoveryCar,'passed'|'nextCheckpoint'|'finished'|'health'|'speed'>;
 export class RaceRecovery {
- private progress=new WeakMap<RecoveryCar,{passed:number;next:number;seconds:number;retry:number}>();
- clear(car:RecoveryCar){this.progress.delete(car);}
- ready(car:RecoveryCar,dt:number,attempts:number):boolean{
+ private progress=new WeakMap<RecoveryProgress,{passed:number;next:number;seconds:number;retry:number}>();
+ clear(car:RecoveryProgress){this.progress.delete(car);}
+ ready(car:RecoveryProgress,dt:number,attempts:number):boolean{
   if(car.finished||car.health<=0){this.clear(car);return false;}
   let state=this.progress.get(car);
   if(!state||state.passed!==car.passed||state.next!==car.nextCheckpoint){
