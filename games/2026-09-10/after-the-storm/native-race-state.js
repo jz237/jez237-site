@@ -7,7 +7,7 @@ import {createNativePrimaryRacePhaseState,prepareNativePrimaryRacePhase} from '.
 import {prepareNativeRacePresentationTail} from './native-race-finalization.js';
 import {prepareNativeRaceBoundaryWarning} from './native-race-boundary-warning.js';
 import {prepareNativeRaceStatusPrelude} from './native-race-status-prelude.js';
-import {prepareNativeRacePrestartInitialization,prepareNativeRacePrestartStatus,prepareNativeRacePrestartStage,prepareNativeRaceResultInitialization} from './native-race-prestart-stage.js';
+import {prepareNativeRacePrestartInitialization,prepareNativeRacePrestartStatus,prepareNativeRacePrestartStage,prepareNativeRaceResultInitialization,prepareNativeRaceResultUpdate} from './native-race-prestart-stage.js';
 import {prepareNativeRaceSpeedDisplay} from './native-race-speed-display.js';
 import {prepareNativeRaceMissFeedback,prepareNativeRaceMissFeedbackPalette} from './native-race-miss-feedback.js';
 import {prepareNativeRaceDirectionWarning} from './native-race-direction-warning.js';
@@ -36,13 +36,13 @@ const sceneRanges={primaryHumanIndex:[0,3],secondaryHumanIndex:[0,3],players:[1,
  racerCount:[0,4],primaryCount:[0,64],finishSourceRow:[0,63],activity624:[-32768,32767],event628:[-32768,32767],
  pendingPlayers60c:[-32768,32767],participantCount60e:[-32768,32767],result6f0:[-32768,32767],field62a:[-32768,32767],specialAb64:[-32768,32767],ready6fc:[-32768,32767],field4964:[0,65535],
  reverseDab68:[0,65535],missesEnabled72e:[0,65535],seed6f00:[0,65535],rngState4640:[0,0xffffffff],style6e28:[0,65535],
- field4970:[0,65535],field72c:[0,65535],fieldA9ac:[0,65535],variant6f4:[-32768,32767],variant6f6:[-32768,32767]};
+ field4970:[0,65535],field72c:[0,65535],fieldA9ac:[0,65535],pressed65a:[0,65535],unlockAb60:[-32768,32767],variant6f4:[-32768,32767],variant6f6:[-32768,32767]};
 const sceneWords=new Set(['cold8224','clockStopped817c','phase650','simulation648','main638','mode620','state600',
  'missLimit8174','noFinish8178','configuredLaps728','difficulty','directionFlag1f90','ambientD4b00','fortressD8240',
  'metadataD9b0','metadataCb32c','restart6f8','initLatch63c','gameStateAb24','mode608','returnState630','forceFirst8228','demoOffset5438','rngState4640','style6e2c',
- 'previousGameState634','field640','field644','fieldAb1c','field461c','field704','field708','field70c','field710','field714','wave610','missLimit614','lapCount618','field61c','wave49b0','field64c','players','racerCount']);
+ 'previousGameState634','field640','field644','fieldAb1c','field461c','field704','field708','field70c','field710','field714','nameIndexA9b0','wave610','missLimit614','lapCount618','field61c','wave49b0','field64c','players','racerCount']);
 const sceneHalves=new Set(['activity624','event628','field62a','pendingPlayers60c','participantCount60e','result6f0','specialAb64','ready6fc','reverseDab68','missesEnabled72e','seed6f00','field4964','style6e28',
- 'field4970','field72c','fieldA9ac','variant6f4','variant6f6']);
+ 'field4970','field72c','fieldA9ac','pressed65a','unlockAb60','variant6f4','variant6f6']);
 function record(v,n){if(!v||typeof v!=='object'||Array.isArray(v))throw new TypeError(`Expected ${n}`);return v;}
 function integer(v,n,min=MIN,max=MAX){if(!Number.isInteger(v)||v<min||v>max)throw new RangeError(`Invalid ${n}`);return v||0;}
 function words(v,n,count){if(!Array.isArray(v)||v.length!==count)throw new RangeError(`${n} requires${count} unsigned words`);
@@ -66,6 +66,7 @@ function copy(value){
  const s={raceWords1f94:words(value.raceWords1f94,'raceWords1f94',RACE_WORDS),
   hudWords7788:words(value.hudWords7788,'hudWords7788',HUD_WORDS),scene};
  if(value.i1Words9440!==undefined)s.i1Words9440=words(value.i1Words9440,'i1Words9440',168);
+ if(value.saveWordsB280!==undefined)s.saveWordsB280=words(value.saveWordsB280,'saveWordsB280',34);
  if(value.profileWordsB330!==undefined){
   if(Object.hasOwn(scene,'difficulty'))throw new RangeError('difficulty overlaps profileWordsB330');
   const count=value.profileWordsB330?.length;
@@ -87,7 +88,9 @@ function copy(value){
  * Optional profileWordsB330[50 or52] owns B330..B3F8 or B330..B400 exclusive.
  * The extended view includes the four adjacent B3F8..B3FE rider halfwords;
  * no second flag owner is accepted. Older bounded leaves retain50-word input.
- * when supplied, difficulty comes from itsB338 word, never scene.difficulty.
+ * When supplied, difficulty comes from itsB338 word, never scene.difficulty.
+ * Optional saveWordsB280[34] owns801CB280..B308, ending before the wave-row
+ * regionB308 and metadataB32C. Result initials and unlock bytes share it.
  * Optional resourceWordsB330[20] owns800DB330..B380, distinct from profile
  * 801CB330. resourceWordsB538[8] owns800DB538..B558; resourceWordsE73c[43]
  * owns801CE73C..E7E8. These raw descriptors/selectors retain source data;
@@ -109,6 +112,14 @@ function apply(s,operations){
  for(const op of operations){
   record(op,'native operation');
   if(op.kind==='hudWrite')patchHud(s,op);
+  else if(op.kind==='raceByteWrite'||op.kind==='saveByteWrite'){
+   const key=op.kind==='raceByteWrite'?'raceWords1f94':'saveWordsB280';
+   if(!s[key])throw new TypeError(`Supply retained ${key} before applying its writes`);
+   if(op.width!==1)throw new RangeError('Invalid source byte patch width');
+   const offset=integer(op.byteOffset,`${key} byte offset`,0,s[key].length*4-1),shift=24-(offset&3)*8;
+   const value=integer(op.value,'source byte bits',0,255),index=offset>>>2;
+   s[key][index]=((s[key][index]&~(255<<shift))|(value<<shift))>>>0;
+  }
   else if(op.kind==='raceWordWrite')s.raceWords1f94[integer(op.wordIndex,'race wordIndex',0,RACE_WORDS-1)]=integer(op.value,'race word bits',0,0xffffffff);
   else if(op.kind==='recordWordWrite'){
    const slot=integer(op.racerIndex,'record racerIndex',0,3),word=integer(op.wordIndex,'record wordIndex',0,221);
@@ -459,6 +470,11 @@ export function prepareNativeRaceResultStatusUpdate(state,input={}){
   operations.push(...expanded);effects.push(...apply(next,expanded));
  }
  return freeze({state:next,operations,effects});
+}
+export function prepareNativeRaceResultStageUpdate(state,consumer,input={}){
+ const next=copy(state),prepared=prepareNativeRaceResultUpdate({...next,expandTransitions:input.expandTransitions,
+  fadeTemplateWords6cc0:input.fadeTemplateWords6cc0,slotTemplateWords6c50:input.slotTemplateWords6c50},consumer),effects=apply(next,prepared.operations);
+ return freeze({...prepared,state:next,effects});
 }
 /** The actual display-stage dispatcher follows79528 once per source frame.
  * externalReturns supplies genuine consumed opaque presentation return words;

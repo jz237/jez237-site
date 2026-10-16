@@ -2314,3 +2314,41 @@ initials and save/menu routing. Those consumers, their canonical storage and
 zero-simulation scheduling must be integrated before replacing the current
 live result flow. Native persistence, other venues/modes, original AI and the
 remaining whole-game parity items above remain incomplete.
+
+## Source result updates — October 15, 2026 (prepared integration)
+
+The original DQ, finish and tie update bodies63B4/6550/6B00 now have numeric
+implementations against the shared state. They retain the source delay and
+button gates, signed timer wrapping, cup-round updates, three-byte record
+initials and terminator, normal/reverse/best-lap/stunt record destinations,
+unlock bit, and ordered requests to persistence and menu routines.
+
+The optional saveWordsB280 owner ends atB308, before the separate wave rows
+andB32C metadata. Byte writes preserve adjacent data in the canonical record
+and save spans. A later best-lap flag read observes earlier name stores even
+in an explicit prepared memory-alias case. No second record book is created.
+
+An explicit transition-expansion option runs numeric7570, the fade property
+initializer and its reached slot reset at the call site, before the caller's
+later HUD test. This matters when starting a fade resets the completion flag:
+the same call must not also enter the next menu based on the old flag.
+
+Private original-instruction comparison matches3,170 prepared cases, including
+192 with those real nested transition/fade bodies. All481 instructions and all
+26 non-stack store sites in the three update bodies are reached. The comparison
+checks ordered operations and resulting scene/race/HUD/profile/save storage.
+Seven new focused tests and457 selected native regression tests pass; the final
+memory-read ordering adjustment also passes the original comparison and28
+focused checks. These checks do not claim a new full-suite baseline.
+
+A fresh read-only EVO X2 Ghidra query confirms the result-pose producer in
+5DE24; all2,780 exported instruction words match the provided ROM and all nine
+analysis-project files retain their hashes. A separate save-routine query
+reported a missing analyzed function and was not counted as successful merely
+because the headless process exited zero. The existing database was preserved.
+
+This remains local prepared integration. Original77F5C unfinished-racer time
+estimation, further fade/menu/save callees, the live16C8 result-pose producer,
+zero-simulation scheduling and actual durable record storage still require
+integration. The public game remains on the verifiedv2.24 shoreline release;
+the full gameplay parity objective remains incomplete.

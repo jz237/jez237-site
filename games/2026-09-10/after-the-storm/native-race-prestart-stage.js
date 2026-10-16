@@ -1,9 +1,10 @@
 // Reconstructed original prestart numeric consumers. These are source-frame
 // calls, not presentation-frame updates. Storage and initialization remain
 // caller-owned; opaque source callees are returned as ordered dependencies.
+import {prepareNativeRaceFadePropertiesInitialization,prepareNativeRaceFadeSlotsReset} from './native-race-fade-initialization.js';
 const MIN=-2147483648,MAX=2147483647;
 const SPANS={i1Words9440:[0x9440,168,'i1Write'],hudWords7788:[0x7788,1442,'hudWrite'],
- profileWordsB330:[0xb330,50,'profileWrite'],raceWords1f94:[0x1f94,1693,null]};
+ profileWordsB330:[0xb330,50,'profileWrite'],raceWords1f94:[0x1f94,1693,null],saveWordsB280:[0xb280,34,'saveByteWrite']};
 const POINTS=[7,4,2,1,0,0];
 const REQUIRED_POINTS=[[0,1,2,4,8,12,16,0],[2,4,6,10,14,21,28,0],[2,4,8,12,16,23,30,37]];
 function integer(v,n,min=MIN,max=MAX){if(!Number.isInteger(v)||v<min||v>max)throw new RangeError(`Invalid ${n}`);return v||0;}
@@ -35,6 +36,27 @@ function source(c,field,value,width=4){
 function hudHalfword(c,address){const offset=address-0x7788,v=span(c,'hudWords7788')[offset>>>2];
  return ((v>>>(offset&2?0:16))&65535)<<16>>16;}
 function call(c,consumer,args=[],returns=false){
+ if(c.value.expandTransitions===true){
+  let prepared;
+  if(consumer==='801e6fb0')prepared=prepareNativeRaceFadePropertiesInitialization({
+   fadeTemplateWords6cc0:c.value.fadeTemplateWords6cc0,type:args[0],rate:args[1],selector:args[2]});
+  else if(consumer==='801e6a4c'&&args[0]===0&&args[1]===0)prepared=prepareNativeRaceFadeSlotsReset({slotTemplateWords6c50:c.value.slotTemplateWords6c50});
+  else if(consumer==='802c7570'){
+   source(c,'previousGameState634',s(c,'gameStateAb24'));source(c,'returnState630',args[0]);source(c,'gameStateAb24',45);
+   source(c,'main638',1);source(c,'initLatch63c',1);source(c,'field640',0);source(c,'field644',0);source(c,'fieldAb1c',0);source(c,'field461c',3);
+   call(c,'801e6a4c',[0,0]);write(c,'hudWords7788',0x8aa4,1);call(c,'800c21f4',[3,0]);return;
+  }
+  if(prepared){
+   for(const op of prepared.operations){
+    const words=span(c,'hudWords7788'),offset=op.byteOffset,index=offset>>>2;
+    if(op.width===4)words[index]=op.value;
+    else{const shift=(4-op.width-(offset&3))*8,mask=op.width===2?65535:255;
+     words[index]=((words[index]&~(mask<<shift))|(op.value<<shift))>>>0;}
+    c.operations.push(op);
+   }
+   return;
+  }
+ }
  const op={kind:'externalCall',consumer,arguments:args.map(v=>v>>>0)};
  if(returns){
   const value=integer(c.value.externalReturns?.[consumer],`actual return from${consumer}`,0,0xffffffff);
@@ -252,6 +274,108 @@ export function prepareNativeRaceResultInitialization(value,consumer){
    call(c,'800c21f4',[6,choice]);
   }
   call(c,'800bfd34');call(c,'800bfd68');
+ }
+ return freeze({operations:c.operations});
+}
+
+function byte(c,key,address){
+ const offset=integer(address-SPANS[key][0],`${key} byte offset`,0,span(c,key).length*4-1);
+ return (span(c,key)[offset>>>2]>>>(24-(offset&3)*8))&255;
+}
+function writeByte(c,key,address,value){
+ const offset=integer(address-SPANS[key][0],`${key} byte offset`,0,span(c,key).length*4-1),shift=24-(offset&3)*8;
+ const bits=integer(value,'source byte',0,255),kind=key==='raceWords1f94'?'raceByteWrite':'saveByteWrite';
+ span(c,key)[offset>>>2]=((span(c,key)[offset>>>2]&~(255<<shift))|(bits<<shift))>>>0;
+ c.operations.push({kind,byteOffset:offset,width:1,value:bits});
+}
+function recordName(c,address){
+ // The retained B280..B308 owner contains these source bytes. This validates
+ // the actual byte addresses; it does not invent a selectable-profile count.
+ const from=0xb298+s(c,'nameIndexA9b0',0)*14;
+ for(let i=0;i<3;i++)writeByte(c,'raceWords1f94',address+i,byte(c,'saveWordsB280',from+i));
+ writeByte(c,'raceWords1f94',address+3,0);
+}
+function timedRecordNames(c){
+ const place=word(c,'raceWords1f94',0x2650);
+ if(place!==0){const course=s(c,'courseIndex');
+  recordName(c,s(c,'reverseDab68',0,65535)!==0?0x23b0+course*20+16:0x1ff0+course*60+place*20-4);}
+ const lap=word(c,'raceWords1f94',0x2654);
+ if(lap!==0)recordName(c,0x22c0+s(c,'courseIndex')*20+16);
+ return place!==0||lap!==0;
+}
+function persistTimedRecord(c){call(c,s(c,'reverseDab68',0,65535)!==0?'8007c204':'8007bea4',[s(c,'courseIndex')]);}
+
+/** Entire numeric63B4/6550/6B00 result updates. Retained saveWordsB280[34]
+ * covers801CB280..B308 exclusively and never aliases profileWordsB330.
+ * Record-name stores remain individual big-endian byte operations. The source
+ * result timer runs once per source display/update call, not per render frame.
+ * Default calls remain ordered dependencies. expandTransitions:true executes
+ * numeric7570, the fade property setter and its reached slot reset inline,
+ * using explicit retained templates BEFORE later caller HUD predicates.
+ * 77F5C, storage, other fade branches and menu callees remain dependencies;
+ * these recipes are not proof that persistence or the outer schedule ran.
+ */
+export function prepareNativeRaceResultUpdate(value,consumer){
+ if(!['802c63b4','802c6550','802c6b00'].includes(consumer))throw new RangeError('Unknown source result update');
+ if(value.expandTransitions!==undefined&&typeof value.expandTransitions!=='boolean')throw new TypeError('expandTransitions must be boolean');
+ const c=context(value);
+ if(consumer==='802c6b00'){
+  if(hudHalfword(c,0x8a16)===1){call(c,'800ad3c4');call(c,'801ece50');}
+ }else if(consumer==='802c63b4'){
+  if(s(c,'players',1,2)===1){
+   if(word(c,'i1Words9440',0x9510)!==0){
+    let delay=word(c,'i1Words9440',0x950c);
+    if(delay>0){delay=(delay-1)|0;write(c,'i1Words9440',0x950c,delay);}
+    if(delay===0)call(c,'802c7570',[102]);
+   }
+  }else if(word(c,'i1Words9440',0x96a0)===1){write(c,'i1Words9440',0x96a0,2);call(c,'801e6fb0',[1,4,0]);}
+  if(hudHalfword(c,0x8a16)===1){
+   if(s(c,'players',1,2)===1){
+    const mode=s(c,'mode608');
+    if(mode===4){
+     if(profile(c,0xb330)===0){
+      source(c,'participantCount60e',4,2);const current=round(c);
+      for(let i=0;i<4;i++)write(c,'profileWordsB330',0xb350+current*16+i*4,0);
+      write(c,'profileWordsB330',0xb334,(current+1)|0);call(c,'801eb91c');
+     }else{call(c,'80077f5c');call(c,'801ec0d4');}
+    }else call(c,mode===0||mode===11?'801ec830':'801eb180');
+   }else call(c,'801ece50');
+   call(c,'800ad3c4');
+  }
+ }else{
+  const mode=s(c,'mode608');
+  if((mode===0||mode===4)&&word(c,'i1Words9440',0x9500)===0){
+   let delay=(word(c,'i1Words9440',0x9504)-1)|0;write(c,'i1Words9440',0x9504,delay);
+   if(delay<0){delay=0;write(c,'i1Words9440',0x9504,0);}
+   if(delay===0){
+    if(word(c,'i1Words9440',0x9510)!==0)call(c,'802c7570',[102]);
+    else{
+     const wait=word(c,'i1Words9440',0x9508);if(wait<1200)write(c,'i1Words9440',0x9508,(wait+1)|0);
+     if((s(c,'pressed65a',0,65535)&0xb000)!==0||word(c,'i1Words9440',0x9508)===1200){
+      write(c,'i1Words9440',0x9500,1);call(c,'801e6fb0',[1,4,0]);
+     }
+    }
+   }
+  }
+  if(hudHalfword(c,0x8a16)===1){
+   call(c,'800ad3c4');
+   if(mode===4&&profile(c,0xb330)===0){source(c,'participantCount60e',4,2);call(c,'801eb91c');}
+   else if(mode===0||mode===4){
+    const record=timedRecordNames(c);
+    if(mode===4)call(c,'80077f5c');
+    //77F5C changes unfinished-racer estimates/places and1FD4/26C0, not2650/2654.
+    if(record)persistTimedRecord(c);
+    call(c,mode===4?'801ec0d4':record?'801ec9c8':'801ec20c');
+   }else if(mode===11){
+    const place=word(c,'raceWords1f94',0x2928);
+    if(place!==0){recordName(c,0x26e8+s(c,'courseIndex')*48+place*16-4);call(c,'8007c0b8',[s(c,'courseIndex')]);}
+    if(word(c,'raceWords1f94',0x2930)!==0&&s(c,'unlockAb60',-32768,32767)===0){
+     const old=byte(c,'saveWordsB280',0xb280);source(c,'unlockAb60',1,2);
+     writeByte(c,'saveWordsB280',0xb280,old|0x10);call(c,'8007c494');
+    }
+    call(c,'801ecf18');
+   }else call(c,'801ece50');
+  }
  }
  return freeze({operations:c.operations});
 }
