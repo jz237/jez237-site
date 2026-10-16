@@ -272,7 +272,7 @@ export function prepareNativeNameEntryRecordUpdate(value,sourceViews={}){
  const reverse=()=>integer(value?.scene?.reverseDab68,'scene.reverseDab68',0,65535)!==0;
  let restored=false;
  if(read('hudWords7788',0x88e8,1)===0){
-  const index=integer(scene('nameIndexA9b0'),'name index',0,7);
+  const index=integer(scene('metadataD9b0'),'name index',0,7);
   for(let i=0;i<3;i++)byte('hudWords7788',0x88e8+i,read('saveWordsB280',0xb298+index*14+i,1));
   byte('hudWords7788',0x88eb,0);operations.push({kind:'sourceHalfwordWrite',field:'freshNameAb6c',value:1});restored=true;
  }

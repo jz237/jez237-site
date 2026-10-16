@@ -41,9 +41,16 @@ test('each choice reaches its exact destination only after twelve fade updates, 
   assert.equal(q.handoff.destination,destination);assert.equal(q.handoff.returnState,target);
   assert.equal(q.draw.fade.completion,1);
   const save=q.operations.findIndex(op=>op.consumer==='8007bea4');
-  const handoff=destination==='course'?q.operations.findIndex(op=>op.kind==='sourceWordWrite'&&op.field==='gameStateAb24'&&op.value===20):q.operations.findIndex(op=>op.consumer===q.handoff.consumer);
+  const initialized=['course','rider'].includes(destination);
+  const handoff=initialized?q.operations.findIndex(op=>op.kind==='sourceWordWrite'&&op.field==='gameStateAb24'&&op.value===target):q.operations.findIndex(op=>op.consumer===q.handoff.consumer);
   assert.ok(save>=0&&handoff>save);assert.equal(q.diagnostic.recordsPersisted,false);
-  assert.equal(q.diagnostic.targetInitializerExecuted,destination==='course');
+  assert.equal(q.diagnostic.targetInitializerExecuted,initialized);
+  if(destination==='rider'){
+   assert.equal(state.scene.gameStateAb24,10);assert.equal(state.scene.courseIndex,9);assert.equal(q.handoff.selectedRider,0);
+   assert.equal(q.view.active,false);assert.equal(q.view.fade.kind,2);assert.equal(q.view.fade.completion,0);
+   assert.deepEqual(q.effects.filter(op=>op.kind==='bodyTuneWordWrite').map(op=>op.value),[0,5,5,5]);
+   assert.equal(q.operations.some(op=>op.consumer==='801ebd28'),false);assert.equal(q.effects.some(op=>op.consumer==='801ebd28'),false);
+  }
   if(destination==='course'){
    assert.equal(state.scene.gameStateAb24,20);assert.equal(state.scene.returnState630,0);assert.equal(state.scene.main638,5);
    assert.equal(q.view.active,false);assert.equal(q.view.fade.kind,2);assert.equal(q.view.fade.completion,0);
@@ -51,6 +58,21 @@ test('each choice reaches its exact destination only after twelve fade updates, 
    assert.equal(q.operations.some(op=>op.consumer==='801ebfe4'),false);
   }
   assert.equal(q.effects.find(op=>op.consumer==='800481e0').arguments[0].kind,'fadeMatrixTarget');
+ }
+});
+
+test('live rider return uses original menu order and fresh-menu reset without changing the old physical race',()=>{
+ for(let rider=0;rider<4;rider++)for(const fresh of [0,1]){
+  const race=createRace({physics:'native',mode:'time',rider,course:getCourse('sunny-beach')}),original=race.nativeLaunch.snapshot();
+  assert.equal(original.scene.riderSelectionA9c0,[0,3,1,2][rider]);
+  original.scene.gameStateAb24=80;original.scene.mode608=0;original.scene.fieldA9ac=fresh;original.scene.initLatch63c=0;
+  original.continuationMenuWords61e0=[1,76,76,4];original.continuationDataWords60f0[0]=1;
+  const physical=structuredClone(race.nativeHost.world.adapters[0].hull);let q=step(original,[press(0x8000)]);
+  for(let tick=0;tick<12;tick++)q=step(q.state,[neutral]);
+  assert.equal(q.handoff.selectedRider,fresh?0:rider);assert.equal(q.state.scene.riderSelectionA9c0,fresh?0:[0,3,1,2][rider]);
+  assert.equal(q.effects.filter(op=>op.kind==='bodyTuneWordWrite').length,4);
+  assert.deepEqual(race.nativeHost.world.adapters[0].hull,physical);
+  assert.equal(q.effects.some(op=>op.consumer==='80096960'),true); // Selection-model loading is still a required effect.
  }
 });
 

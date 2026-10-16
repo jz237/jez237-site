@@ -9,7 +9,7 @@ const ii=a=>(a-0x9440)/4,hi=a=>(a-0x7788)/4,ri=(slot,word)=>(0x2938-0x1f94)/4+sl
 function fixture(players=1){
  const s={scene:{initLatch63c:0,gameStateAb24:40,players,racerCount:players,courseIndex:1,mode608:players-1,mode620:players-1,
   activity624:-1,event628:0,phase650:3,simulation648:3,main638:1,specialAb64:0,ready6fc:0,result6f0:0,
-  primaryHumanIndex:0,secondaryHumanIndex:1,missesEnabled72e:1,pressed65a:0,reverseDab68:0,nameIndexA9b0:0},
+  primaryHumanIndex:0,secondaryHumanIndex:1,missesEnabled72e:1,pressed65a:0,reverseDab68:0,metadataD9b0:0},
   raceWords1f94:Array(1693).fill(0),hudWords7788:Array(1442).fill(0),i1Words9440:Array(168).fill(0),
   profileWordsB330:Array(52).fill(0),saveWordsB280:Array(34).fill(0)};
  s.i1Words9440[0]=0xffffffff;return s;

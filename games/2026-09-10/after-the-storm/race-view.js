@@ -254,7 +254,7 @@ const nativeContinuationMenu=createNativeContinuationMenuView({before:$('results
  // the original destination initializer and cartridge save are not executed.
  nativeContinuationMenu.reset();$('restart').hidden=false;$('quit').hidden=false;
  if(handoff.destination==='retry')$('restart').click();
- else{$('quit').click();const target=handoff.destination==='course'?$('course'):handoff.destination==='rider'?document.querySelector('#riders .selected'):$('start');target?.focus();target?.scrollIntoView({block:'nearest'});}
+  else{$('quit').click();if(handoff.destination==='rider')selectRider(handoff.selectedRider);const target=handoff.destination==='course'?$('course'):handoff.destination==='rider'?document.querySelector('#riders .selected'):$('start');target?.focus();target?.scrollIntoView({block:'nearest'});}
 }});
 const nativeNameMenu=createNativeNameMenuView({before:$('results'),onSelect:()=>audio.signal('countdown'),onComplete:initials=>{$('dialogbody').textContent=initials+' · '+format(state.result.time)+' total · preview records last until this page closes';startNativeResultsMenu();}});
 const nativeResultOverlay=createNativeResultOverlay();

@@ -1,5 +1,46 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Next checkpoint — correct rider attribution in preview records
+
+An alternate-rider browser run exposed a live metadata bug: Eli's record was
+labeled Mara. Fresh launch now seeds800DA9B0 from the selected rider, and record
+ranking, result-name fallback and initials commit use its single canonical
+metadataD9b0 owner. The overlapping nameIndexA9b0 alias is rejected. Session
+record transport version2 retains the record book and initials but excludes
+current rider identity, so selecting another rider cannot misattribute the next
+result. Fresh web profiles provide YOU initials for all eight14-byte slots.
+
+Tests drive the actual primary record phase for all four riders, retain Eli's
+record while inserting Nia's faster run, and verify a rider-specific fallback
+name against that same owner. Original name-record/display and result-update/
+dispatcher comparisons were regenerated:5,812 cases,415,262 instructions and
+52,255 ordered operations matched, including complete canonical spans in the
+dispatcher check. These checks do not establish durable cartridge saving.
+All129 distinct focused tests after the ownership fix pass. Browser verification
+then completed Eli's clean1:51.230 run with a0:35.446 best lap. Both record rows
+correctly showed Eli North and blank-name fallback supplied YOU.
+Continuing through Choose rider then focused Eli's selected card, with no
+browser console errors across the corrected result/name/continuation flow.
+
+## Next checkpoint — connect original rider return to the preview
+
+Choose rider now executes the verified numeric801EBD28 caller and expands its
+fade setup before returning to the modern rider cards. Fresh web launch stores
+the selected rider's actual menu position using the verified0,2,3,1 order;
+the source fresh-menu latch still resets positions to0/3 when set. The handoff
+selects the final primary-slot avatar from the original ordered body writes,
+including the last write when human slots alias, instead of confusing a menu
+position with a rider ID. The replaced target call is removed from pending
+effects. The original resource load and selection-model body writes remain
+explicit effects; they do not mutate the finished race's physical hull.
+
+The four order words and12 signed default-trait bytes were compared directly
+with the local ROM. Defaults reuse the existing5/5/5 physical-profile values.
+All46 focused continuation, return, retained-record, rider-control and live
+launch tests pass, including every rider with both retained and fresh selection.
+Title/championship return initialization and original selection-menu loops
+remain separate incomplete work.
+
 ## Next checkpoint — original course and rider return initialization
 
 Direct callers801EBFE4 and801EBD28 are independently reconstructed. They

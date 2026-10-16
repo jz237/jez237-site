@@ -3,10 +3,13 @@ import {prepareNativeRaceMenuInputAdvance,prepareNativeContinuationMenuInitializ
  prepareNativeRaceStateOperations,prepareNativeMenuReturnUpdate} from './native-race-state.js';
 import {prepareNativeContinuationMenuPostDisplay} from './native-continuation-menu.js';
 import {prepareNativeWidgetPresentation,nativeWidgetDrawView} from './native-widget-presentation.js';
+import {NATIVE_RIDER_MENU_ORDER,NATIVE_RIDER_TUNE_DEFAULTS} from './native-rider-controls.js';
 
 const constants={matrixTargets:'slots',slotTemplateWords6c50:Array(11).fill(0),
  fadeTemplateWords6cc0:[0,0,0,0x10000,0,0,0,0,0x10000],
- rotationWord6c80:0x40490fdb,rotationWord6c84:0x40490fdb,bounceWord6c88:0x3f333333};
+ rotationWord6c80:0x40490fdb,rotationWord6c84:0x40490fdb,bounceWord6c88:0x3f333333,
+ riderOrder6ef0:NATIVE_RIDER_MENU_ORDER,
+ defaultRiderTraits:Array.from({length:4},()=>['tuneB6c','tuneB70','tuneB74'].map(k=>NATIVE_RIDER_TUNE_DEFAULTS[k]))};
 const destinations=new Map([['8009345c','retry'],['801ebd28','rider'],['801ebfe4','course'],['801eb180','title'],['801eb91c','championship']]);
 
 export function nativeContinuationMenuView(state){
@@ -48,14 +51,15 @@ export function prepareNativeContinuationMenuFrame(state,rawControllers){
  const target=effects.find(op=>op.kind==='externalCall'&&destinations.has(op.consumer));
  const handoff=target?{destination:destinations.get(target.consumer),consumer:target.consumer,returnState:current.scene.returnState630}:null;
  let targetInitializerExecuted=false;
- if(handoff?.destination==='course'){
+ if(handoff&&['course','rider'].includes(handoff.destination)){
   // This is the last operation in the display suffix; expand at its original
   // position after any record-save effect. Never leave the replaced entry queued.
   const index=operations.findIndex(op=>op.kind==='externalCall'&&op.consumer===target.consumer);
   if(index!==operations.length-1)throw new Error('Return initializer must follow the display suffix');
   operations.splice(index,1);effects.splice(effects.indexOf(target),1);
-  const next=prepareNativeMenuReturnUpdate(current,'course',constants);current=next.state;
+  const next=prepareNativeMenuReturnUpdate(current,handoff.destination,constants);current=next.state;
   operations.push(...next.operations);effects.push(...next.effects);targetInitializerExecuted=true;
+  if(handoff.destination==='rider')handoff.selectedRider=next.effects.filter(op=>op.kind==='bodyTuneWordWrite'&&op.racerIndex===current.scene.primaryHumanIndex&&op.wordIndex===0).at(-1).value;
  }
  return {state:current,operations,effects,draw,widgets,view:nativeContinuationMenuView(current),
   handoff,

@@ -72,7 +72,7 @@ test('invalid course walks or arithmetic reject without committing the one-shot 
 
 test('finish and DQ stages expand the estimator at its ordered canonical call boundary',()=>{
  for(const consumer of ['802c6550','802c63b4']){
-  const f=fixture();Object.assign(f.state.scene,{players:1,mode608:4,gameStateAb24:42,nameIndexA9b0:0,reverseDab68:0,pressed65a:0,unlockAb60:0});
+  const f=fixture();Object.assign(f.state.scene,{players:1,mode608:4,gameStateAb24:42,metadataD9b0:0,reverseDab68:0,pressed65a:0,unlockAb60:0});
   f.state.i1Words9440=Array(168).fill(0);f.state.i1Words9440[(0x9500-0x9440)/4]=1;
   f.state.profileWordsB330=Array(52).fill(0);f.state.profileWordsB330[0]=1;
   f.state.hudWords7788[(0x8a14-0x7788)/4]=1;

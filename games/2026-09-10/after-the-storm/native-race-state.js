@@ -46,6 +46,8 @@ const raceFloats={finishMetric39b0:0x39b0,dqMetric39b4:0x39b4,checkpointSlackNat
 const hudInts={recordFlag8a98:0x8a98,placeChanged8a9c:0x8a9c};
 // Only words physically outside both spans belong in scene. The same actual
 // reverse halfword is viewed as unsigned by progress and signed by reset.
+// metadataD9b0 is the one800DA9B0 owner for both record rider attribution and
+// fallback initials. A separate nameIndexA9b0 would diverge on rider changes.
 const sceneRanges={primaryHumanIndex:[0,3],secondaryHumanIndex:[0,3],players:[1,2],courseIndex:[0,11],
  racerCount:[0,4],primaryCount:[0,64],finishSourceRow:[0,63],activity624:[-32768,32767],event628:[-32768,32767],
  pendingPlayers60c:[-32768,32767],participantCount60e:[-32768,32767],result6f0:[-32768,32767],field62a:[-32768,32767],specialAb64:[-32768,32767],ready6fc:[-32768,32767],field4964:[0,65535],
@@ -54,7 +56,7 @@ const sceneRanges={primaryHumanIndex:[0,3],secondaryHumanIndex:[0,3],players:[1,
 const sceneWords=new Set(['cold8224','clockStopped817c','phase650','simulation648','main638','mode620','state600',
  'missLimit8174','noFinish8178','configuredLaps728','difficulty','directionFlag1f90','ambientD4b00','fortressD8240',
  'metadataD9b0','metadataCb32c','restart6f8','initLatch63c','gameStateAb24','mode608','returnState630','forceFirst8228','demoOffset5438','rngState4640','style6e2c',
- 'previousGameState634','field640','field644','fieldAb1c','fieldAb2c','field461c','field700','field704','field708','field70c','field710','field714','nameIndexA9b0','resultEffect393c','wave610','missLimit614','lapCount618','field61c','wave49b0','field64c','players','racerCount','toggleD9914','previousNavigationD9874','trainingSelectionDa9f8',
+ 'previousGameState634','field640','field644','fieldAb1c','fieldAb2c','field461c','field700','field704','field708','field70c','field710','field714','resultEffect393c','wave610','missLimit614','lapCount618','field61c','wave49b0','field64c','players','racerCount','toggleD9914','previousNavigationD9874','trainingSelectionDa9f8',
  'riderSelectionA9c0','secondRiderSelectionA9c4','riderFlagA9c8','secondRiderFlagA9cc','courseSelectionA9d0','courseIndex']);
 const sceneHalves=new Set(['activity624','event628','field62a','pendingPlayers60c','participantCount60e','result6f0','specialAb64','ready6fc','reverseDab68','missesEnabled72e','seed6f00','field4964','style6e28',
  'field4970','field72c','fieldA9ac','pressed65a','unlockAb60','freshNameAb6c','variant6f4','variant6f6']);

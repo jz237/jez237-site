@@ -335,7 +335,7 @@ function writeByte(c,key,address,value){
 function recordName(c,address){
  // The retained B280..B308 owner contains these source bytes. This validates
  // the actual byte addresses; it does not invent a selectable-profile count.
- const from=0xb298+s(c,'nameIndexA9b0',0)*14;
+ const from=0xb298+s(c,'metadataD9b0',0)*14;
  for(let i=0;i<3;i++)writeByte(c,'raceWords1f94',address+i,byte(c,'saveWordsB280',from+i));
  writeByte(c,'raceWords1f94',address+3,0);
 }

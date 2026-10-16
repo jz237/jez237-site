@@ -60,8 +60,8 @@ test('record snapshots are detached, bounded and do not carry physical, HUD, con
 
 test('malformed or competing session inputs reject without altering a retained book',()=>{
  const state=namedResult(),session=capture(state),before=structuredClone(state);
- for(const corrupt of [{version:2},{recordSetupWords1ff0:[]},{recordSetupWords1ff0:Array(594).fill(-1)},
-  {saveWordsB280:[]},{freshNameAb6c:65536},{nameIndexA9b0:8}]){
+ for(const corrupt of [{version:1},{recordSetupWords1ff0:[]},{recordSetupWords1ff0:Array(594).fill(-1)},
+  {saveWordsB280:[]},{freshNameAb6c:65536}]){
   assert.throws(()=>restore(state,{...session,...corrupt}),RangeError);assert.deepEqual(state,before);
  }
  assert.throws(()=>create({nativeRecordSession:session,nativeInitialRaceState:state}),/fresh ordinary/);

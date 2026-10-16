@@ -21,6 +21,7 @@ import {prepareNativeResultsMenuFrame,nativeResultsMenuView} from './native-resu
 import {prepareNativeContinuationMenuFrame,nativeContinuationMenuView} from './native-continuation-menu-runtime.js';
 import {nativeResultsRecordView} from './native-results-record-view.js';
 import {captureNativeRecordSession,restoreNativeRecordSession,copyNativeRecordSession} from './native-record-session.js';
+import {NATIVE_RIDER_MENU_ORDER} from './native-rider-controls.js';
 
 // Overlapping effect47FC, solo4800 and two-player4818 numeric entries. Ordinary
 // two-player place indices are0/1; other mode tables remain separate admission.
@@ -80,8 +81,9 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
   }
   current=createNativeRaceState({raceWords1f94,hudWords7788,profileWordsB330,i1Words9440,aiWords3c60:Array(NATIVE_AI_STORAGE_WORDS).fill(0),
    ...(courseRuntime?{menuWordsE658:Array(21).fill(0),deviceWords4308:Array(10).fill(0),
-    // Fresh web profile policy: YOU initials in slot0; no cartridge save data.
-    saveWordsB280:Array.from({length:34},(_,i)=>i===6?0x594f5500:0),nameEntryWords61c4:Array(14).fill(0),resultsMenuWords6d30:Array(4).fill(0),
+    // Fresh web profile policy: YOU initials for each rider/variant. No
+    // cartridge save data; these14-byte entries cross u32 word boundaries.
+    saveWordsB280:(()=>{const bytes=new DataView(new ArrayBuffer(136));for(let i=0;i<8;i++)for(const [j,b]of [89,79,85].entries())bytes.setUint8(24+i*14+j,b);return Array.from({length:34},(_,i)=>bytes.getUint32(i*4));})(),nameEntryWords61c4:Array(14).fill(0),resultsMenuWords6d30:Array(4).fill(0),
     continuationMenuWords61e0:Array(4).fill(0),
     // Fresh web menu selection/latch, plus verified numeric return tables.
     continuationDataWords60f0:Array.from({length:20},(_,i)=>[40,10,20,2,30,2][i-13]??0)}:{}),scene:{
@@ -91,10 +93,12 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    missesEnabled72e:1,result6f0:0,ambientD4b00:0,field4964:0,resultEffect393c:0,toggleD9914:0,
    rngState4640:integer(rngSeed,'web shared RNG seed',0,0xffffffff),previousNavigationD9874:0,trainingSelectionDa9f8:0,
    ...(courseRuntime?{primaryCount:courseRuntime.data.nodes.length,finishSourceRow:courseRuntime.data.finishSourceRow,
-    cold8224:1,forceFirst8228:0,demoOffset5438:0,restart6f8:0,reverseDab68:Number(reverse),state600:0,nameIndexA9b0:0,
-    freshNameAb6c:1,field700:0,fieldAb2c:0,fieldA9ac:0,courseSelectionA9d0:0,
+    cold8224:1,forceFirst8228:0,demoOffset5438:0,restart6f8:0,reverseDab68:Number(reverse),state600:0,
+    freshNameAb6c:1,field700:0,fieldAb2c:0,fieldA9ac:0,courseSelectionA9d0:0,pendingPlayers60c:players,
+    riderSelectionA9c0:NATIVE_RIDER_MENU_ORDER.indexOf(racers[0].id),
+    secondRiderSelectionA9c4:NATIVE_RIDER_MENU_ORDER.indexOf(racers[1]?.id??1),riderFlagA9c8:0,secondRiderFlagA9cc:0,
     missLimit8174:5,noFinish8178:0,configuredLaps728:integer(laps,'configured laps',3,9),
-    directionFlag1f90:courseRuntime.directionFlag1f90,fortressD8240:0,metadataD9b0:0,metadataCb32c:0,seed6f00:0}:{} )}});
+    directionFlag1f90:courseRuntime.directionFlag1f90,fortressD8240:0,metadataD9b0:racers[0].id,metadataCb32c:0,seed6f00:0}:{} )}});
   if(courseRuntime){
    if(retainedRecords)current=createNativeRaceState(restoreNativeRecordSession(current,retainedRecords));
    current=prepareNativeRaceStartup(courseRuntime.resetLayout,current).state;

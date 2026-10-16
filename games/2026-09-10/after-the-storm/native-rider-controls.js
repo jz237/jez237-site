@@ -38,6 +38,8 @@ const frozen=state=>Object.freeze(state);
 // Recovered default profile record, not a claim about every saved menu choice.
 // B6c steers; B70 selects the jet curve; B74 affects jet, grip and roll together.
 export const NATIVE_RIDER_TUNE_DEFAULTS=Object.freeze({tuneB6c:5,tuneB70:5,tuneB74:5});
+// Verified numeric selection order; menu position is not a physical avatar ID.
+export const NATIVE_RIDER_MENU_ORDER=Object.freeze([0,2,3,1]);
 
 /** Supply the selected profile's coefficients; no numeric rider is inferred. */
 export function createNativeRiderControlState({baseLateralRetention,baseRollBalance}={}){

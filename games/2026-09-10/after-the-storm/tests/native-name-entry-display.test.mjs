@@ -6,7 +6,7 @@ const hi=a=>(a-0x7788)/4,ri=a=>(a-0x1f94)/4;
 function fixture(){
  const state={raceWords1f94:Array(1693).fill(0),hudWords7788:Array(1442).fill(0),profileWordsB330:Array(52).fill(0),
   nameEntryWords61c4:Array(14).fill(0),menuWordsE658:Array(21).fill(0),deviceWords4308:Array(10).fill(0),saveWordsB280:Array(34).fill(0),
-  scene:{initLatch63c:1,fieldAb2c:8,gameStateAb24:100,courseIndex:1,mode608:0,reverseDab68:0,nameIndexA9b0:0,freshNameAb6c:0}};
+  scene:{initLatch63c:1,fieldAb2c:8,gameStateAb24:100,courseIndex:1,mode608:0,reverseDab68:0,metadataD9b0:0,freshNameAb6c:0}};
  state.hudWords7788[hi(0x88e8)]=0x41424300;
  const views={controllerPort4330:0,externalReturns:Object.fromEntries(['80093f78','8008fb74','801e2058','80094a44','80090f58','801e229c'].map((v,i)=>[v,0x81000000+i*0x20])),
   championshipCourseRowsAc14:[[0,1,2,3,4,5,6,7],[1,1,1,1,1,1,1,1],[2,3,4,5,6,7,8,9]],

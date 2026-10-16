@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {prepareNativeRaceResultStageUpdate as update,nativeRaceStateSnapshot} from '../native-race-state.js';
 const ri=a=>(a-0x1f94)/4,ii=a=>(a-0x9440)/4,hi=a=>(a-0x7788)/4;
-function fixture(){return {scene:{players:1,mode608:0,gameStateAb24:42,courseIndex:1,nameIndexA9b0:0,reverseDab68:0,
+function fixture(){return {scene:{players:1,mode608:0,gameStateAb24:42,courseIndex:1,metadataD9b0:0,reverseDab68:0,
  pressed65a:0,unlockAb60:0,metadataCb32c:123},raceWords1f94:Array(1693).fill(0),hudWords7788:Array(1442).fill(0),
  i1Words9440:Array(168).fill(0),profileWordsB330:Array(52).fill(0),saveWordsB280:Array(34).fill(0xaabbccdd)};}
 const effects=r=>r.effects.filter(c=>c.kind==='externalCall').map(c=>c.consumer);
@@ -43,7 +43,7 @@ test('result delay keeps source wrap, clamping and pressed-button mask',()=>{
 
 test('normal, reverse and lap record names preserve numeric records and neighboring bytes',()=>{
  for(const reverse of [0,65535]){
-  const v=fixture();v.scene.reverseDab68=reverse;v.scene.nameIndexA9b0=7;v.i1Words9440[ii(0x9500)]=1;
+  const v=fixture();v.scene.reverseDab68=reverse;v.scene.metadataD9b0=7;v.i1Words9440[ii(0x9500)]=1;
   v.hudWords7788[hi(0x8a14)]=1;v.raceWords1f94[ri(0x2650)]=2;v.raceWords1f94[ri(0x2654)]=1;
   setName(v,7,[0x80,0xff,0x41]);const before=structuredClone(v),r=update(v,'802c6550');
   const timeName=reverse?0x23b0+20+16:0x1ff0+60+40-4,lapName=0x22c0+20+16;
@@ -77,7 +77,7 @@ test('cup DQ clears only its four standings cells and increments the current rou
 test('tie routing retains call order and late missing data rejects all earlier writes',()=>{
  const v=fixture();v.hudWords7788[hi(0x8a14)]=1;
  assert.deepEqual(effects(update(v,'802c6b00')),['800ad3c4','801ece50']);
- v.raceWords1f94[ri(0x2650)]=1;v.scene.nameIndexA9b0=8;const before=structuredClone(v);
+ v.raceWords1f94[ri(0x2650)]=1;v.scene.metadataD9b0=8;const before=structuredClone(v);
  assert.throws(()=>update(v,'802c6550'),/byte offset/);assert.deepEqual(v,before);
  delete v.saveWordsB280;assert.throws(()=>update(v,'802c6550'),/saveWordsB280/);
  assert.throws(()=>update(fixture(),'802c6550',{expandTransitions:'yes'}),/boolean/);

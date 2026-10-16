@@ -6,7 +6,7 @@ const hi=a=>(a-0x7788)/4,ri=a=>(a-0x1f94)/4;
 function fixture({mode=0,course=1,reverse=0,name=0x41424300}={}){
  const state={raceWords1f94:Array(1693).fill(0xaabbccdd),hudWords7788:Array(1442).fill(0x12345678),
   saveWordsB280:Array.from({length:34},(_,i)=>0x81828300+i),profileWordsB330:Array(52).fill(0),
-  scene:{mode608:mode,courseIndex:course,reverseDab68:reverse,nameIndexA9b0:0,freshNameAb6c:0}};
+  scene:{mode608:mode,courseIndex:course,reverseDab68:reverse,metadataD9b0:0,freshNameAb6c:0}};
  for(let a=0x2660;a<0x26c0;a+=4)state.raceWords1f94[ri(a)]=0;state.raceWords1f94[ri(0x2928)]=0;state.hudWords7788[hi(0x88e8)]=name;
  return {state,views:{championshipCourseRowsAc14:[[0,1,2,3,4,5,6,7],[1,1,1,1,1,1,1,1],[11,10,9,8,7,6,5,4]]}};
 }
@@ -37,7 +37,7 @@ test('stunt record order preserves all four supplied bytes and terminates the ne
 
 test('blank names restore three exact bytes from each selected14-byte profile and set fresh-name',()=>{
  for(let index=0;index<8;index++){
-  const {state}=fixture({mode:11,name:0x00424344});state.scene.nameIndexA9b0=index;
+  const {state}=fixture({mode:11,name:0x00424344});state.scene.metadataD9b0=index;
   const b=new DataView(new ArrayBuffer(136));state.saveWordsB280.forEach((v,i)=>b.setUint32(i*4,v));
   const expected=((b.getUint8(24+index*14)<<24)|(b.getUint8(25+index*14)<<16)|(b.getUint8(26+index*14)<<8))>>>0;
   const q=commit(state);assert.equal(q.state.hudWords7788[hi(0x88e8)],expected);assert.equal(q.state.scene.freshNameAb6c,1);
