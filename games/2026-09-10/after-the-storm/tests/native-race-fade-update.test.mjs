@@ -9,6 +9,28 @@ function set(s,a,v){const o=a-0x7788,shift=o&2?0:16;s.hudWords7788[o>>>2]=((s.hu
 function initialized(type,rate=2,selector=0){return prepareNativeRaceFadePropertiesUpdate(state(),{fadeTemplateWords6cc0:template,type,rate,selector}).state;}
 const advance=s=>prepareNativeRaceFadeAdvance(s,{fadeTemplateWords6cc0:template,frameBufferBase:0x81000000});
 
+test('logical curtain targets preserve every numeric state and operation through completion',()=>{
+ for(const type of [4,5,6]){
+  let state=initialized(type);
+  for(let tick=0;tick<14;tick++){
+   const raw=advance(state),logical=prepareNativeRaceFadeAdvance(state,{fadeTemplateWords6cc0:template,matrixTargets:'slots'});
+   assert.deepEqual(logical.state,raw.state);
+   const expected=structuredClone(raw.operations);
+   for(const op of expected)if(op.kind==='externalCall'){
+    if(op.consumer==='800481e0'){op.arguments[0]={kind:'fadeMatrixTarget',slot:'projection'};op.arguments[1]={kind:'hudHalfwordTarget',byteOffset:0x8a34-0x7788};}
+    else if(op.consumer==='80048a88')op.arguments[0]={kind:'fadeMatrixTarget',slot:'curtain'};
+   }
+   assert.deepEqual(logical.operations,expected);state=logical.state;
+  }
+ }
+});
+
+test('ambiguous or unknown fade destination modes reject without changing their owner',()=>{
+ const state=initialized(5),before=structuredClone(state);
+ assert.throws(()=>prepareNativeRaceFadeAdvance(state,{matrixTargets:'slots',frameBufferBase:0x81000000}),/one fade/);
+ assert.throws(()=>prepareNativeRaceFadeAdvance(state,{matrixTargets:'unknown'}),/target mode/);assert.deepEqual(state,before);
+});
+
 test('original alpha fades include both endpoints, reset once, and expose completion for exactly one update',()=>{
  for(const [kind,alphas]of [[1,[0,0,127,255,255,0]],[2,[255,255,127,0,0,0]],[3,[0,0,127,255,255,0]],[7,[255,255,127,0,0,0]]]){
   let s=initialized(kind);const observed=[];

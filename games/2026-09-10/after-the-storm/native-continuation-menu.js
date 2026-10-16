@@ -85,8 +85,17 @@ export function prepareNativeContinuationMenuDisplay(value,sourceViews={}){
  else{
   operations.push(word('fieldAb2c',0));draw('8008fb74',[head]);draw('800949b8',[head,scene(value,'courseIndex')>>>0]);
   draw('80090f58',[head]);draw('802c5b70',[head]);
-  if(scene(value,'gameStateAb24')===80)operations.push(call('802c5f60'));
-  else if((at(value,'hudWords7788',1442,(0x8a14-0x7788)/4)<<16>>16)===1){
+  operations.push(...prepareNativeContinuationMenuPostDisplay(value).operations);
+ }
+ return freeze({operations,displayListHead:head,diagnostic:{consumer:'802c5924',firstEntry:first,renderingPerformed:false,recordsPersisted:false}});
+}
+
+/** The control suffix of5924, after its draw calls. Shared with the modern
+ * renderer so browser frames never need fabricated display-list addresses. */
+export function prepareNativeContinuationMenuPostDisplay(value){
+ const operations=[];
+ if(scene(value,'gameStateAb24')===80)operations.push(call('802c5f60'));
+ else if((at(value,'hudWords7788',1442,(0x8a14-0x7788)/4)<<16>>16)===1){
    const mode=scene(value,'mode608'),race=a=>at(value,'raceWords1f94',1693,(a-0x1f94)/4);
    if(mode===0&&(race(0x2650)!==0||race(0x2654)!==0)){
     const reverse=integer(value.scene.reverseDab68,'reverseDab68',0,65535);
@@ -99,6 +108,5 @@ export function prepareNativeContinuationMenuDisplay(value,sourceViews={}){
     operations.push(call('801eb91c'));
    }else{const consumer=new Map([[2,'801eb180'],[10,'801ebd28'],[20,'801ebfe4'],[40,'8009345c']]).get(target);if(consumer)operations.push(call(consumer));}
   }
- }
- return freeze({operations,displayListHead:head,diagnostic:{consumer:'802c5924',firstEntry:first,renderingPerformed:false,recordsPersisted:false}});
+ return freeze({operations,diagnostic:{consumer:'802c5924 post-display',renderingPerformed:false,recordsPersisted:false}});
 }

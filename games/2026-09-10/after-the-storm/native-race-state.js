@@ -285,7 +285,7 @@ export function prepareNativeRaceFadePropertiesUpdate(state,input){
 /** Advance the existing fade owner once; matrix/audio consumers remain effects. */
 export function prepareNativeRaceFadeAdvance(state,input={}){
  const next=copy(state),prepared=prepareNativeRaceFadeUpdate({hudWords7788:next.hudWords7788,
-  main638:next.scene.main638,fadeTemplateWords6cc0:input.fadeTemplateWords6cc0,frameBufferBase:input.frameBufferBase});
+  main638:next.scene.main638,fadeTemplateWords6cc0:input.fadeTemplateWords6cc0,frameBufferBase:input.frameBufferBase,matrixTargets:input.matrixTargets});
  const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
 }
 /** Original5470 thenAFB4 numeric HUD updates share the canonical owner.

@@ -18,6 +18,7 @@ import {prepareNativeRaceMenuInputAdvance,nativeRaceMenuInputView} from './nativ
 import {prepareNativeRaceResultCPUDisplayUpdate} from './native-race-state.js';
 import {prepareNativeNameMenuFrame,nativeNameMenuView} from './native-name-menu-runtime.js';
 import {prepareNativeResultsMenuFrame,nativeResultsMenuView} from './native-results-menu-runtime.js';
+import {prepareNativeContinuationMenuFrame,nativeContinuationMenuView} from './native-continuation-menu-runtime.js';
 import {nativeResultsRecordView} from './native-results-record-view.js';
 
 // Overlapping effect47FC, solo4800 and two-player4818 numeric entries. Ordinary
@@ -47,7 +48,7 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
  if(!Array.isArray(racers)||racers.length<1||racers.length>4)throw new TypeError('Launch requires one to four initialized racers');
  integer(players,'players',1,2);integer(courseIndex,'courseIndex',1,9);
  if(players>racers.length)throw new RangeError('Launch requires each human source slot');
- let current,resultExit=null;
+ let current,resultExit=null,continuationHandoff=null;
  // Browser commands are queued edges, consumed once at the source display stage.
  const cameraCommands=Array.from({length:players},()=>[]);
  const extra=racers.map(r=>({logicalTicks:r.sourceBuoys?.logicalTicks??0,missedCheckpoint:r.sourceBuoys?.missedCheckpoint??false,dqLabel:r.dq||''}));
@@ -77,7 +78,10 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
   current=createNativeRaceState({raceWords1f94,hudWords7788,profileWordsB330,i1Words9440,aiWords3c60:Array(NATIVE_AI_STORAGE_WORDS).fill(0),
    ...(courseRuntime?{menuWordsE658:Array(21).fill(0),deviceWords4308:Array(10).fill(0),
     // Fresh web profile policy: YOU initials in slot0; no cartridge save data.
-    saveWordsB280:Array.from({length:34},(_,i)=>i===6?0x594f5500:0),nameEntryWords61c4:Array(14).fill(0),resultsMenuWords6d30:Array(4).fill(0)}:{}),scene:{
+    saveWordsB280:Array.from({length:34},(_,i)=>i===6?0x594f5500:0),nameEntryWords61c4:Array(14).fill(0),resultsMenuWords6d30:Array(4).fill(0),
+    continuationMenuWords61e0:Array(4).fill(0),
+    // Fresh web menu selection/latch, plus verified numeric return tables.
+    continuationDataWords60f0:Array.from({length:20},(_,i)=>[40,10,20,2,30,2][i-13]??0)}:{}),scene:{
    players,racerCount:racers.length,primaryHumanIndex:0,secondaryHumanIndex:1,courseIndex,
    mode620:players===2?1:0,mode608:players===2?1:0,main638:1,phase650:0,simulation648:1,
    clockStopped817c:1,activity624:-1,event628:0,gameStateAb24:40,specialAb64:0,ready6fc:0,
@@ -166,6 +170,13 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
   snapshot:()=>nativeRaceStateSnapshot(current),
   nameEntryView:()=>nativeNameMenuView(current),
   resultsMenuView:()=>nativeResultsMenuView(current),
+  continuationMenuView:()=>({...nativeContinuationMenuView(current),active:!continuationHandoff&&nativeContinuationMenuView(current).active}),
+  advanceContinuationMenu(rawControllers){
+   if(continuationHandoff)throw new Error('Continuation menu already handed off');
+   const prepared=prepareNativeContinuationMenuFrame(current,rawControllers);current=prepared.state;
+   if(prepared.handoff)continuationHandoff=prepared.handoff;
+   return prepared;
+  },
   resultsRecordView:()=>nativeResultsRecordView(current,{ridersBySlot:racers.map(r=>r.id)}),
   advanceResultsMenu(rawControllers){
    const prepared=prepareNativeResultsMenuFrame(current,rawControllers);current=prepared.state;return prepared;

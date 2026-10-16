@@ -8,10 +8,12 @@ const bitsView=new DataView(new ArrayBuffer(4));
 function bits(v){bitsView.setFloat32(0,v);return bitsView.getUint32(0);}
 export function prepareNativeRaceFadeUpdate(input){
  if(!input||typeof input!=='object')throw new TypeError('Expected retained fade input');
+ if(input.matrixTargets!==undefined&&input.matrixTargets!=='slots')throw new RangeError('Unknown fade matrix target mode');
+ if(input.matrixTargets==='slots'&&input.frameBufferBase!==undefined)throw new RangeError('Choose one fade matrix destination owner');
  const hud=words(input.hudWords7788,'hudWords7788',1442),operations=[];
  const half=o=>{const a=BASE+o-HUD;return (hud[a>>>2]>>>(a&2?0:16))<<16>>16;};
  const write=(o,value)=>{const a=BASE+o-HUD,shift=a&2?0:16,v=value&65535;hud[a>>>2]=((hud[a>>>2]&~(65535<<shift))|(v<<shift))>>>0;operations.push({kind:'hudWrite',byteOffset:a,width:2,value:v});};
- const call=(consumer,args)=>operations.push({kind:'externalCall',consumer,arguments:args.map(x=>x>>>0)});
+ const call=(consumer,args)=>operations.push({kind:'externalCall',consumer,arguments:args.map(x=>typeof x==='object'?x:x>>>0)});
  const reset=()=>{const template=words(input.fadeTemplateWords6cc0,'fadeTemplateWords6cc0',9);for(let i=0;i<9;i++){hud[(BASE-HUD)/4+i]=template[i];operations.push({kind:'hudWrite',byteOffset:BASE-HUD+i*4,width:4,value:template[i]});}write(6,1);};
  if(half(6)===1)write(6,0);
  const kind=half(0);
@@ -42,10 +44,17 @@ export function prepareNativeRaceFadeUpdate(input){
   // Required original matrix consumers, including their perspective-normal
   // store at HUD8A34, remain ordered effects in their own presentation owner.
   // These calls do not alter the fade's 36-byte property record read below.
-  const frame=integer(input.frameBufferBase,'frameBufferBase',0,0xffffffff);
-  if(frame%4||frame>0xffffffff-0x1340)throw new RangeError('Invalid frameBufferBase range/alignment');
-  call('800481e0',[frame+0x1300,0x80228a34,bits(33),bits(1),bits(16),bits(4096),0,0]);
-  call('80048a88',[frame+0x1340,0,0,bits(kind===5?1:-1),0,bits(1),0,bits(half(24)),bits(half(26)),bits(-250),bits(.05)]);
+  let projection,curtainTarget,normal;
+  if(input.matrixTargets==='slots'){
+   projection={kind:'fadeMatrixTarget',slot:'projection'};curtainTarget={kind:'fadeMatrixTarget',slot:'curtain'};
+   normal={kind:'hudHalfwordTarget',byteOffset:0x8a34-HUD};
+  }else{
+   const frame=integer(input.frameBufferBase,'frameBufferBase',0,0xffffffff);
+   if(frame%4||frame>0xffffffff-0x1340)throw new RangeError('Invalid frameBufferBase range/alignment');
+   projection=frame+0x1300;curtainTarget=frame+0x1340;normal=0x80228a34;
+  }
+  call('800481e0',[projection,normal,bits(33),bits(1),bits(16),bits(4096),0,0]);
+  call('80048a88',[curtainTarget,0,0,bits(kind===5?1:-1),0,bits(1),0,bits(half(24)),bits(half(26)),bits(-250),bits(.05)]);
   write(30,half(30)+1);
   if(half(30)>=2){const toggle=half(28);write(30,0);write(28,toggle^1);}
  }
