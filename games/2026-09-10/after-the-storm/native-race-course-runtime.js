@@ -9,8 +9,8 @@ import {SUNNY_NATIVE_RETIREMENT_GEOMETRY} from './native-sunny-support.js';
 import {nativeSunsetRetirementGeometry} from './native-sunset-support.js';
 import {nativeRaceShoreGeometry} from './native-shore-geometry.js';
 
-// Sunny is live; Sunset can prepare its own ordinary data owners for further
-// host validation. This factory does not admit another course to live physics.
+// Numeric course owners shared by the Sunny/Sunset native integration preview.
+// Mode and source-water admission remain the race host's responsibility.
 export function createNativeRaceCourseRuntime({course,difficulty,players}={}){
  const courseIndex=course?.sourceWaterCourseIndex;
  if(![1,2].includes(courseIndex)||!Number.isInteger(difficulty)||difficulty<0||difficulty>3||![1,2].includes(players))

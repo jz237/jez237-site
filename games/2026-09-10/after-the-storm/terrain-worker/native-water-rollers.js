@@ -1,5 +1,5 @@
-import {locateNativeWaterCell} from './native-water-field.js?v=ec0aacd01434';
-import {nativePhaseSine} from './native-math-tables.js?v=ec0aacd01434';
+import {locateNativeWaterCell} from './native-water-field.js?v=446f22fe0449';
+import {nativePhaseSine} from './native-math-tables.js?v=446f22fe0449';
 
 // Independent reconstruction of the source course roller generator. Angles
 // initialize through binary32 degrees/360*4096, then the reconstructed source

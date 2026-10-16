@@ -1,4 +1,5 @@
-// Authored helm policy for opt-in Sunny Beach native time trials and versus.
+// Authored inspection helm for opt-in Sunny Beach/Sunset Bay native races.
+// Sunset Normal/Hard are checked; its Expert/Reverse guide can still miss buoys.
 // This is not the original AI. It reads the actual native presentation pose
 // and the existing navigation anchors; it never changes a physical point,
 // course, timer, buoy state, power, miss counter or lap. Use one pilot per race
@@ -60,9 +61,10 @@ function drivingPolicy(overrides){
  * sideMarginWorld is a geometric diagnostic, not a replacement Float32 judge.
  */
 export function createNativeRacePilot({course,policy={},traceLimit=256}={}){
- if(course?.sourceWaterCourseIndex!==1||!Array.isArray(course.anchors)||course.anchors.length<3)
-  throw new TypeError('Native pilot requires Sunny Beach source navigation');
- const anchors=course.anchors.map(p=>{
+ const selectedAnchors=course?.nativePilotAnchorsByClass?.[course.difficulty]??course?.anchors;
+ if(![1,2].includes(course?.sourceWaterCourseIndex)||!Array.isArray(selectedAnchors)||selectedAnchors.length<3)
+  throw new TypeError('Native pilot requires Sunny Beach or Sunset Bay source navigation');
+ const anchors=selectedAnchors.map(p=>{
   if(!Array.isArray(p)||p.length!==2||!p.every(Number.isFinite))throw new TypeError('Navigation anchors must be finite x/z pairs');
   return [...p];
  });
@@ -76,7 +78,7 @@ export function createNativeRacePilot({course,policy={},traceLimit=256}={}){
   if(state?.physics!=='native'||!state.nativeHost?.world||!Array.isArray(state.racers))throw new TypeError('Expected an opt-in native race');
   const player=state.racers.indexOf(racer),p=state.nativeHost.presentations?.[player]?.racer;
   if(player<0||!p||!['x','z','vx','vz','speed','heading','yawVelocity'].every(k=>Number.isFinite(p[k])))throw new TypeError('Expected the actual native craft presentation');
-  if(state.course?.sourceWaterCourseIndex!==1||state.course.difficulty!==course.difficulty)throw new RangeError('Pilot course/class does not match this race');
+  if(state.course?.sourceWaterCourseIndex!==course.sourceWaterCourseIndex||state.course.difficulty!==course.difficulty)throw new RangeError('Pilot course/class does not match this race');
   if(binding&&(binding.state!==state||binding.racer!==racer))throw new RangeError('Reset the pilot before binding another race or craft');
   binding??={state,racer};
   return p;

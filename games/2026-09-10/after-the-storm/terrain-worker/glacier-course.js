@@ -1,6 +1,6 @@
-import {facetedSurface} from './faceted-surfaces.js?v=ec0aacd01434';
-import {triangleWalls} from './triangle-walls.js?v=ec0aacd01434';
-import {sourceBoundarySpheres,orderSourceFixedSpheres} from './source-boundary-spheres.js?v=ec0aacd01434';
+import {facetedSurface} from './faceted-surfaces.js?v=446f22fe0449';
+import {triangleWalls} from './triangle-walls.js?v=446f22fe0449';
+import {sourceBoundarySpheres,orderSourceFixedSpheres} from './source-boundary-spheres.js?v=446f22fe0449';
 // Reimplemented from numeric collision and object-layout observations of the
 // user's USA Rev1 reference. No original graphics, textures or display lists.
 // Every object family shares this unrotated .025 scale; its SI interpretation

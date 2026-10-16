@@ -1,14 +1,14 @@
-import {createSourceSouthernCourse} from './source-southern-course.js?v=ec0aacd01434';
-import {createGlacierCourse} from './glacier-course.js?v=ec0aacd01434';
-import {cityStuntLayout} from './city-stunts.js?v=ec0aacd01434';
-import {portStuntLayout} from './port-stunts.js?v=ec0aacd01434';
-import {fortStuntLayout} from './fort-stunts.js?v=ec0aacd01434';
-import {drakeStuntLayout} from './drake-stunts.js?v=ec0aacd01434';
-import {createSourceSunsetCourse} from './source-sunset-course.js?v=ec0aacd01434';
-import {sunsetAnchors,sunsetPilotAnchors,sunsetNavigation,sunsetStuntNavigation} from './source-sunset-navigation.js?v=ec0aacd01434';
-import {createSourceSunnyCourse} from './source-sunny-course.js?v=ec0aacd01434';
-import {sunnyAnchors,sunnyPilotAnchors,sunnyStuntNavigation,sunnyNavigation} from './source-sunny-navigation.js?v=ec0aacd01434';
-import {createDolphinCourse} from './dolphin-course.js?v=ec0aacd01434';
+import {createSourceSouthernCourse} from './source-southern-course.js?v=446f22fe0449';
+import {createGlacierCourse} from './glacier-course.js?v=446f22fe0449';
+import {cityStuntLayout} from './city-stunts.js?v=446f22fe0449';
+import {portStuntLayout} from './port-stunts.js?v=446f22fe0449';
+import {fortStuntLayout} from './fort-stunts.js?v=446f22fe0449';
+import {drakeStuntLayout} from './drake-stunts.js?v=446f22fe0449';
+import {createSourceSunsetCourse} from './source-sunset-course.js?v=446f22fe0449';
+import {sunsetAnchors,sunsetPilotAnchors,sunsetNativeDrivingAnchors,sunsetNavigation,sunsetStuntNavigation} from './source-sunset-navigation.js?v=446f22fe0449';
+import {createSourceSunnyCourse} from './source-sunny-course.js?v=446f22fe0449';
+import {sunnyAnchors,sunnyPilotAnchors,sunnyStuntNavigation,sunnyNavigation} from './source-sunny-navigation.js?v=446f22fe0449';
+import {createDolphinCourse} from './dolphin-course.js?v=446f22fe0449';
 // Authored reconstruction from course observations, in metres. Map coordinates
 // describe geography, not a texture or mesh extracted from the Nintendo game.
 // Source/remaining fidelity checks: COURSE-MATCH.md.
@@ -29,8 +29,9 @@ Object.assign(sunny.navigation,{validated:true,status:'ordinary-input-paths-chec
 Object.assign(sunny.stuntLayout.navigation,{validated:true,status:'ordinary-input-stunt-path-checked',validation:{...sunnyStuntNavigation.validation}});
 Object.assign(sunny.boundaryMetadata,{status:'authored-browser-envelope-checked',provisional:true});
 const sunset=createSourceSunsetCourse(polygonDistance,{anchorsByClass:sunsetAnchors,pilotAnchorsByClass:sunsetPilotAnchors,navigation:sunsetNavigation,stuntNavigation:sunsetStuntNavigation});
-// Source geometry and rollers use the modern browser craft. Original native
-// handling, AI and course-out admission remain separate parity work.
+// The ordinary menu retains the modern craft; the opt-in native preview also
+// selects Sunset's recovered physical contacts, regions and roller owners.
+sunset.nativePilotAnchorsByClass=sunsetNativeDrivingAnchors;
 sunset.integrationReady=true;
 sunset.description='An L-shaped island, two piers and a fixed jump surround rolling evening water. Harder classes add metal buoys; Reverse keeps the jump facing its original direction.';
 Object.assign(sunset.navigation,{validated:true,status:'default-rider-ordinary-input-checked',reason:'All four classes complete three source-judged laps at seed17/60Hz with the modern craft.'});

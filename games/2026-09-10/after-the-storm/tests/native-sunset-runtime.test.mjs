@@ -47,11 +47,11 @@ test('prepared Sunset ordinary owners select their own course, 1200-unit slack, 
  }
 });
 
-test('public source Sunset provides numeric runtime data while unverified native gameplay remains gated',()=>{
+test('Sunset native preview accepts source-water time and versus while other modes remain gated',()=>{
  assert.throws(()=>createNativeRaceCourseRuntime({course:{...getCourse('amber'),sourceRouteRowsByClass:undefined},difficulty:0,players:1}),/source route rows/);
  assert.equal(createNativeRaceCourseRuntime({course:getCourse('amber'),difficulty:0,players:1}).courseIndex,2);
- assert.throws(()=>createRace({course:getCourse('amber'),mode:'time',physics:'native'}),/Sunny|native|source/i);
- assert.throws(()=>createRace({course:prepared(0),mode:'time',physics:'native'}),/Sunny|native|source/i);
+ for(const mode of ['time','versus'])assert.equal(createRace({course:getCourse('amber'),mode,physics:'native'}).nativeLaunch.snapshot().scene.courseIndex,2);
+ for(const options of [{mode:'race'},{mode:'stunt'},{mode:'time',seaState:'surf'}])assert.throws(()=>createRace({course:getCourse('amber'),physics:'native',...options}),/source-water/);
  const sunny=createNativeRaceCourseRuntime({course:getCourse('greyhaven'),difficulty:0,players:1});
  assert.equal(sunny.resetLayout.checkpointSlackNative,256);assert.equal(sunny.allowedRegionsNative.length,7);assert.equal(sunny.courseIndex,1);
 });

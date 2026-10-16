@@ -98,7 +98,7 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
  const primary=course.sourceBuoyLayout?createNativePrimaryBuoyWorld({layout:course.sourceBuoyLayout,water}):null;
  const courseContacts=createSourceNativeContacts(course,{scale:water.scale,fixedSphereGrid,staticGeometry});
  const contacts={...courseContacts,...(primary?{racingBuoys:primary.contact}:{}),...(floating?{primarySpheres:floating.contact}:{})};
- // Solo Sunny needs no unresolved multi-racer camera-corner predicate. Its
+ // A solo source race needs no unresolved multi-racer camera-corner predicate. Its
  // original61708 countdown, not a browser finish flag, selects this producer.
  const sourceAI=!!raceRuntime?.ordinary&&racers.length===1;
  const bundles=[],adapters=racers.map((r,i)=>{

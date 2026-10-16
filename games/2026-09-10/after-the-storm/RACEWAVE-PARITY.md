@@ -1,5 +1,40 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## v2.36.0 — native Sunset Bay preview
+
+The opt-in native preview now accepts Sunset Bay Time trial and Two-player race
+with venue conditions in all four classes. It selects the recovered source grid,
+primary rows, 11 allowed course regions, floor/box/shore contact owners, player
+geometry (63/47 shore edges), fixed spheres and original roller/water simulation.
+The ordinary menu continues to use the modern craft. Preview access remains
+`?verify=1&qa=1&nativePhysics=1`; this does not enable native championship, Stunt,
+catch-up assistance or the other venues.
+
+Normal and Hard default-rider inspection runs complete three laps with zero
+misses in solo and versus. Hard's native inspection guide begins the northern
+bend earlier; its separate anchors leave the modern route, original buoy rows,
+judging and contact geometry untouched. Expert/Reverse authored inspection
+guidance still needs tuning and can disqualify; it is not original AI.
+
+A separate diagnostic explicitly selects the existing source AI branch on the
+single human slot. All four classes finish through the physical solver and
+human buoy judge, with zero/one/two/two misses. This setup changes only input
+selection; it never supplies positions, progress, clocks, power or scores.
+It is evidence for the integrated course, not proof of original demo scheduling
+or four-rider AI. The unresolved multi-racer camera-corner producer remains.
+
+Thirteen Sunset runtime/live checks pass after correcting test-only references
+to internal geometry metadata: original region oracle, selected numeric owners,
+four complete human-control runs, four AI diagnostics, matching two-player
+physics/water/progress at 30/60/144Hz, presentation transport, and admission gates.
+Browser native Hard completes three legal laps in114.153s with zero misses and
+reaches the source result/name-entry flow at1920x1080 High, approximately60fps.
+Two-player Hard reaches the first-to-finish result in111.698s with zero misses
+and keeps the1920x1080 canvas and two1920x540 views. All61 existing native host,
+Sunny pilot, player-window and loading checks also pass. Rendering budgets,
+ocean and terrain detail remain unchanged. Full native handling/AI/art parity
+across the whole game is still unfinished.
+
 ## v2.35.1 — tunnel contact recovery
 
 Port Blue's Hard race could stall permanently at the tunnel bend: rider-to-rider

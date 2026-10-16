@@ -29,6 +29,13 @@ const routes=SUNSET_NATIVE_GEOMETRY.visibleBuoysByClass.map((rows,difficulty)=>{
 });
 export const sunsetAnchors=routes.map(q=>q.anchors);
 export const sunsetPilotAnchors=routes.map(q=>q.roles);
+// Inspection helm only: the native hull needs to begin Hard's northern bend
+// earlier than the modern craft. These targets never alter source buoy rows,
+// contact geometry or judging. Expert/Reverse guidance remains under review.
+export const sunsetNativeDrivingAnchors=routes.map((q,difficulty)=>q.anchors.map(([x,z])=>
+ difficulty===1&&x===-66&&z===83?[-72,80]:
+ difficulty===1&&x===-64&&z===101?[-68,94]:
+ difficulty===1&&x===-57&&z===111?[-58,103]:[x,z]));
 export const sunsetNavigation={
  boundary:[[-115,-160],[125,-160],[125,150],[-115,150]],
  status:'modern-class-corridors-checked',validated:false,
