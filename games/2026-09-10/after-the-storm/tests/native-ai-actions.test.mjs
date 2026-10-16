@@ -98,6 +98,16 @@ test('traffic uses source B90 frame displacement and selected-camera predicate, 
  assert.equal(nativeAITrafficBlocked({...q,racers:[]}),false);
 });
 
+test('empty and solo traffic skip camera reads while multiple racers require actual corners',()=>{
+ const racer={positionNative:{x:0,z:0},frameSpeedNative:100};
+ const q={racerIndex:0,racers:[],get cameraCornersNative(){throw new Error('unexpected camera read');}};
+ assert.equal(nativeAITrafficBlocked(q),false);
+ q.racers=[racer];assert.equal(nativeAITrafficBlocked(q),false);
+ q.racers.push(racer);assert.throws(()=>nativeAITrafficBlocked(q),/unexpected camera read/);
+ assert.throws(()=>nativeAITrafficBlocked({racerIndex:0,racers:[racer,racer]}),/cameraCornersNative/);
+ assert.throws(()=>nativeAITrafficBlocked({racerIndex:1,racers:[racer]}),/integer/);
+});
+
 test('traffic threshold retains binary32 subtraction/multiplier behavior',()=>{
  const racers=[{positionNative:{x:0,z:0},frameSpeedNative:8.333333015441895},
   {positionNative:{x:0,z:0},frameSpeedNative:0}];

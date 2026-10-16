@@ -88,7 +88,11 @@ test('actual triangular-plane water reads feed trim without stepping water histo
 test('camera traffic is read only on the source branch that needs it',()=>{
  const q=input();q.racers[0].body.actorState=23;delete q.geometry.cameraCornersNative;
  const r=prepareNativeAIDriver(table,state(),q);assert.equal(r.frame.buttons.trafficTested,false);assert.equal(r.frame.trafficBlocked,null);
- q.racers[0].body.actorState=22;assert.throws(()=>prepareNativeAIDriver(table,state(),q),/cameraCornersNative/);
+ q.racers[0].body.actorState=22;
+ const solo=prepareNativeAIDriver(table,state(),q);
+ assert.equal(solo.frame.buttons.trafficTested,true);assert.equal(solo.frame.trafficBlocked,false);
+ q.racers.push(structuredClone(q.racers[0]));q.racers[1].record.place293c=1;
+ assert.throws(()=>prepareNativeAIDriver(table,state(),q),/cameraCornersNative/);
 });
 test('motion circle and proximity flags feed their distinct native downstream fields',()=>{
  const q=input();q.geometry.selectionCircleNative={x:100000,z:100000,radiusSquared:0};

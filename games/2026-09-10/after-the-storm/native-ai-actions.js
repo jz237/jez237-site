@@ -106,10 +106,11 @@ export function nativeAICameraContains(input){
  * B90, the outer50ms displacement magnitude, before any HUD conversion. The
  * predicate uses the selected camera, not the own racer's guessed frustum.
  * It scans ascending slots, skips itself, and tests strict F32(diff*1.8)>15.
+ * No camera corners are consumed when there is no other racer.
  */
 export function nativeAITrafficBlocked(input){
  record(input,'traffic input');
- const racerIndex=integer(input.racerIndex,'racerIndex',0,3),c=corners(input.cameraCornersNative);
+ const racerIndex=integer(input.racerIndex,'racerIndex',0,3);
  if(!Array.isArray(input.racers)||input.racers.length>4)throw new TypeError('racers must contain at most four source slots');
  const racers=input.racers.map((r,i)=>{
   record(r,`racers[${i}]`);
@@ -117,6 +118,8 @@ export function nativeAITrafficBlocked(input){
  });
  if(racers.length===0)return false;
  integer(racerIndex,'racerIndex',0,racers.length-1);
+ if(racers.length===1)return false;
+ const c=corners(input.cameraCornersNative);
  const own=racers[racerIndex].speed;
  for(let i=0;i<racers.length;i++){
   if(i!==racerIndex&&contains(c,racers[i].position)&&F(F(own-racers[i].speed)*F(1.8))>15)return true;

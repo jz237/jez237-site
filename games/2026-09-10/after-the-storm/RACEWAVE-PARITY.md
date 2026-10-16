@@ -1,5 +1,17 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Solo AI traffic dependency — local October 16 checkpoint
+
+The reconstructed80D20 traffic routine now skips camera-corner validation when
+there are no other racers. Original instruction execution confirms zero camera
+predicate calls for zero/one racer and one call per other slot when all tested
+racers are outside the camera:44 prepared cases,2,576 executed instructions.
+The multi-racer predicate in this focused audit was explicitly intercepted as
+always outside; this is a call-count check, not a camera-geometry runtime proof.
+All33 action/driver tests pass, including the complete prepared solo driver
+without camera corners and continued rejection of missing multi-racer corners.
+This removes one integration dependency; live post-finish AI remains unfinished.
+
 Active objective, October 14, 2026: incorporate the installed RaceWave46 game's
 mechanics and features into this browser game while preserving its detailed
 Blender craft/riders, water, scenery and high-resolution rendering. This document
