@@ -1,3 +1,4 @@
+import {designGarageCallbacks} from './design-panel';
 import {armorWearWarning} from './armor-wear';
 import {showVenueBrowser,selectVenue,selectDemoVenue} from './venue-browser';
 import {readCameraSettings,playerChaseComposition,mountCameraSettings} from './camera-settings';
@@ -618,6 +619,7 @@ function setQuarryMode(){if(activeVenue===quarryVenue){quarryMode=mode;quarry.se
 function openGarage() {
   garageOpen=true;garageFace='right';keys.clear();
   showGarage(ui,kind,garage.cars[kind],{
+    ...designGarageCallbacks(ui,kind),
     preview:(setup:Setup)=>{if(cars[0]?.setup.armor!==setup.armor)createCars(true,setup);cars[0]?.setPaint(setup.paint,setup.trim);cars[0]?.livery.set(setup.livery);},
     view:face=>{garageFace=face;},
     save:car=>{garage.cars[kind]=car;try{localStorage.setItem(GARAGE_KEY,JSON.stringify(garage));return true;}catch{return false;}},
@@ -1477,6 +1479,7 @@ function controllerContext():NavigationContext|null {
   if(eventSetupOpen)return screen('event-setup','.event-setup','#event-field',click('#event-close'));
   if(careerOpen)return screen('career','.career-board','[data-career-filter="racing"]',click('#career-close'));
   if(profileOpen)return screen('profile','.profile-board','[data-filter="racing"]',click('#profile-close'));
+  if(ui.querySelector('.design-dialog')){const dialog=ui.querySelector<HTMLElement>('.design-dialog')!,confirm=dialog.querySelector<HTMLElement>('[data-confirm]');return {key:confirm?'design-confirm':'design-browser',root:confirm??dialog,initial:'button',back:()=>{if(confirm)confirm.querySelector<HTMLButtonElement>('button')?.click();else dialog.dispatchEvent(new Event('cancel',{cancelable:true}));}};}
   if(garageOpen)return screen('garage','.garage-screen','#garage-engine',click('#garage-close'));
   if(state==='result'&&activeTimeTrial)return screen('time-trial-result','#time-trial-result','#again',click('#back'));
   if(state==='result'&&!demo)return screen('result','.overlay',activeChallenge?'#challenge-retry':'#again',click(activeChallenge?'#challenge-menu':'#back'));
