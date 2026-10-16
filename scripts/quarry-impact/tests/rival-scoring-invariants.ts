@@ -10,15 +10,18 @@ export function readRivalScoringPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreRivalScoringBytes(file:string,bytes:Buffer):Buffer{
+ bytes=restoreDoubleLoopBytes(file,bytes);
  const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readRivalScoringPrevious(file);
 }
 export function verifyRivalScoringRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'2fde9588ad6390f5c9380559955babfd9065186d');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreDoubleLoopBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreRivalScoringBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the RivalScoring release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreDoubleLoopBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the RivalScoring release');
  assert.equal(manifest.previousFixtureCount,2449);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,2449);
 }
+
+import {restoreDoubleLoopBytes} from './double-loop-invariants';
