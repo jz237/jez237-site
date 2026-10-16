@@ -2729,3 +2729,45 @@ Normal finish-to-menu integration still needs the complete logical display
 dispatcher, source AI context, fade presentation consumers and menu/reset/save
 effects. The current browser stop-at-results policy has not been removed.
 This checkpoint is local; live remains v2.25.0 ORIGINAL MUSIC.
+
+## Composed result display dispatcher - October 16, 2026
+
+prepareNativeRaceResultDisplayUpdate now composes the actual5AE4 dispatcher
+with the previously recovered5DF4 status,6DCC/6FE0/7394 result initialization,
+and63B4/6550/6B00 result updates. These execute at their selected call sites
+against the same local state, preserving later winner-HUD writes and same-call
+fade predicates. Entering a result state does not dispatch its update again in
+that frame. The old pending-call APIs retain their contracts.
+
+The new composition also executes6B38, which despite its position among display
+calls draws nothing and always returns its input head. In two-player state41,
+it stops the race clock when the retained counter is below30, increments with
+signed32 wrap, and arms the fade after counter60. The immediately following
+63B4 sees that new flag and initializes the fade on the same call. Other states
+leave those fields untouched. No fabricated graphics return is needed for6B38.
+
+Optional transition expansion consumes retained fade/slot templates. Optional
+unfinished estimates expand77F5C at its ordered canonical boundary; course-zero
+glyph movement/style writes continue to expand before status/result entry.
+The dispatcher must run once after the CPU world and fade update, never once
+per interpolated render. Prepared world/fade/display sequences agree exactly
+at30/60/144Hz and consume the fade completion pulse before it clears.
+
+Private execution of original5AE4 and its reached numeric callees covers856
+prepared cases,110,406 counted instructions,18,693 ordered operations and
+2,900,984 canonical words, all matching. That includes actual6B38, entry/update
+bodies,7570, fade properties and the reached zero-argument slot reset. Graphics
+heads are explicit prepared return fixtures; menu/audio/storage,77F5C in this
+particular source audit, and nonzero slot/widget branches remain intercepted
+boundaries. Existing entry/update evidence also still matches1,296 and3,170
+cases respectively after the shared-function refactor.
+
+Eleven new tests cover solo and two-player entry, tie pulse routing, retirement
+delay/wrap, course-zero ordering, estimate integration, atomic failure and frame
+cadence. The broad regression run passed507 tests before the final6B38 addition;
+the final focused dispatcher/entry/update/i1/prestart regression passed49 tests.
+This is prepared numeric integration, not a verified visible finish-to-menu
+flow. Original9328C world drawing,1E5554 HUD drawing,1DE3CC retained effects,
+nonzero6A4C widgets, fade presentation, menu/reset/save consumers and complete
+source AI context still need their appropriate high-resolution integration.
+The live host's stop-at-results policy is unchanged. This checkpoint is local.

@@ -36,6 +36,23 @@ function source(c,field,value,width=4){
 function hudHalfword(c,address){const offset=address-0x7788,v=span(c,'hudWords7788')[offset>>>2];
  return ((v>>>(offset&2?0:16))&65535)<<16>>16;}
 function call(c,consumer,args=[],returns=false){
+ if(c.expandResults){
+  if(consumer==='802c6b38'){
+   // This helper does not draw: every return preserves the supplied head.
+   // In state41 it stops the clock for counters<30, then increments with
+   // signed32 wrap and arms the result fade after counter60. Its result6F0
+   // branches reconverge without changing any of those writes.
+   if(s(c,'gameStateAb24')===41){
+    const before=word(c,'i1Words9440',0x96a4),next=(before+1)|0;
+    if(before<30)source(c,'clockStopped817c',1);
+    write(c,'i1Words9440',0x96a4,next);
+    if(next>=61&&word(c,'i1Words9440',0x96a0)===0)write(c,'i1Words9440',0x96a0,1);
+   }
+   return args[0];
+  }
+  if(['802c6dcc','802c6fe0','802c7394'].includes(consumer)){initializeResult(c,consumer);return;}
+  if(['802c63b4','802c6550','802c6b00'].includes(consumer)){updateResult(c,consumer);return;}
+ }
  if(c.value.expandTransitions===true){
   let prepared;
   if(consumer==='801e6fb0')prepared=prepareNativeRaceFadePropertiesInitialization({
@@ -215,6 +232,17 @@ export function prepareNativeRacePrestartStatus(value){const c=context(value);st
  */
 export function prepareNativeRacePrestartStage(value){const c=context(value),displayListHead=dispatch(c);return freeze({operations:c.operations,displayListHead});}
 
+/** Actual5AE4 dispatch with6B38 timing and result initialization/update bodies executed at
+ * their call sites against the same local owners. A newly selected result
+ * state is NOT dispatched again during this call. Graphics-head returns and
+ * menu/audio/persistence consumers retain their explicit boundary contract.
+ * Transition expansion is opt-in and requires reached retained templates. */
+export function prepareNativeRaceResultDisplay(value){
+ if(value?.expandTransitions!==undefined&&typeof value.expandTransitions!=='boolean')throw new TypeError('expandTransitions must be boolean');
+ const c=context(value);c.expandResults=true;
+ const displayListHead=dispatch(c);return freeze({operations:c.operations,displayListHead});
+}
+
 /** Complete numeric result-entry bodies6DCC/6FE0/7394. These execute once at
  * the status consumer's selected call site, before subsequent HUD writes.
  * Audio, menu-widget and fade callees remain ordered external recipes. The
@@ -225,7 +253,10 @@ export function prepareNativeRacePrestartStage(value){const c=context(value),dis
  */
 export function prepareNativeRaceResultInitialization(value,consumer){
  if(!['802c6dcc','802c6fe0','802c7394'].includes(consumer))throw new RangeError('Unknown source result initializer');
- const c=context(value),finish=consumer==='802c6fe0',tie=consumer==='802c7394';
+ const c=context(value);initializeResult(c,consumer);return freeze({operations:c.operations});
+}
+function initializeResult(c,consumer){
+ const finish=consumer==='802c6fe0',tie=consumer==='802c7394';
  source(c,'previousGameState634',s(c,'gameStateAb24'));
  source(c,'returnState630',0);source(c,'gameStateAb24',tie?44:finish?42:41);
  source(c,'main638',1);source(c,'initLatch63c',1);source(c,'field640',0);source(c,'field644',0);
@@ -244,7 +275,7 @@ export function prepareNativeRaceResultInitialization(value,consumer){
  if(tie)call(c,'801e6fb0',[1,4,100]);
  else if(finish){
   if(s(c,'players',1,2)===1){
-   const code=integer(value.bodyResultCode16c8BySlot?.[selected(c)],'actual body result code16c8');
+   const code=integer(c.value.bodyResultCode16c8BySlot?.[selected(c)],'actual body result code16c8');
    const duration=({1:130,2:140,3:100,4:120,5:110})[code]??100;
    write(c,'i1Words9440',0x9504,duration);
    if(s(c,'mode620')===11)call(c,'801e6fb0',[1,4,duration]);
@@ -275,7 +306,6 @@ export function prepareNativeRaceResultInitialization(value,consumer){
   }
   call(c,'800bfd34');call(c,'800bfd68');
  }
- return freeze({operations:c.operations});
 }
 
 function byte(c,key,address){
@@ -318,7 +348,9 @@ function persistTimedRecord(c){call(c,s(c,'reverseDab68',0,65535)!==0?'8007c204'
 export function prepareNativeRaceResultUpdate(value,consumer){
  if(!['802c63b4','802c6550','802c6b00'].includes(consumer))throw new RangeError('Unknown source result update');
  if(value.expandTransitions!==undefined&&typeof value.expandTransitions!=='boolean')throw new TypeError('expandTransitions must be boolean');
- const c=context(value);
+ const c=context(value);updateResult(c,consumer);return freeze({operations:c.operations});
+}
+function updateResult(c,consumer){
  if(consumer==='802c6b00'){
   if(hudHalfword(c,0x8a16)===1){call(c,'800ad3c4');call(c,'801ece50');}
  }else if(consumer==='802c63b4'){
@@ -377,5 +409,4 @@ export function prepareNativeRaceResultUpdate(value,consumer){
    }else call(c,'801ece50');
   }
  }
- return freeze({operations:c.operations});
 }

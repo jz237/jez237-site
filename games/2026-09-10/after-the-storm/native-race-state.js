@@ -8,7 +8,7 @@ import {createNativePrimaryRacePhaseState,prepareNativePrimaryRacePhase} from '.
 import {prepareNativeRacePresentationTail} from './native-race-finalization.js';
 import {prepareNativeRaceBoundaryWarning} from './native-race-boundary-warning.js';
 import {prepareNativeRaceStatusPrelude} from './native-race-status-prelude.js';
-import {prepareNativeRacePrestartInitialization,prepareNativeRacePrestartStatus,prepareNativeRacePrestartStage,prepareNativeRaceResultInitialization,prepareNativeRaceResultUpdate} from './native-race-prestart-stage.js';
+import {prepareNativeRacePrestartInitialization,prepareNativeRacePrestartStatus,prepareNativeRacePrestartStage,prepareNativeRaceResultInitialization,prepareNativeRaceResultUpdate,prepareNativeRaceResultDisplay} from './native-race-prestart-stage.js';
 import {prepareNativeRaceSpeedDisplay} from './native-race-speed-display.js';
 import {prepareNativeRaceMissFeedback,prepareNativeRaceMissFeedbackPalette} from './native-race-miss-feedback.js';
 import {prepareNativeRaceDirectionWarning} from './native-race-direction-warning.js';
@@ -560,13 +560,34 @@ export function prepareNativeRaceCourseZeroSequenceDisplayUpdate(state){
  * can prepare those predicates before this ordered local expansion.
  */
 export function prepareNativeRaceI1DisplayUpdate(state,input={}){
- const next=copy(state),stage=prepareNativeRacePrestartStage({...next,externalReturns:input.externalReturns}),
+ return prepareDisplayUpdate(state,input,false);
+}
+
+/** Source display dispatcher plus result entry/update and course0 sequence
+ * against canonical storage. Invoke once AFTER the CPU world and fade update,
+ * never as an extra render/interpolation call. Real supplied graphics-head
+ * returns remain required; this does not fabricate original display memory.
+ * Menu/reset/save/audio effects still require consumers. expandTransitions
+ * and expandEstimates retain their explicit branch-lazy source dependencies. */
+export function prepareNativeRaceResultDisplayUpdate(state,input={}){
+ if(input.expandEstimates!==undefined&&typeof input.expandEstimates!=='boolean')throw new TypeError('expandEstimates must be boolean');
+ return prepareDisplayUpdate(state,input,true);
+}
+function prepareDisplayUpdate(state,input,results){
+ const next=copy(state),stage=results?prepareNativeRaceResultDisplay({...next,externalReturns:input.externalReturns,
+  bodyResultCode16c8BySlot:input.bodyResultCode16c8BySlot,expandTransitions:input.expandTransitions,
+  fadeTemplateWords6cc0:input.fadeTemplateWords6cc0,slotTemplateWords6c50:input.slotTemplateWords6c50}):
+  prepareNativeRacePrestartStage({...next,externalReturns:input.externalReturns}),
   operations=[],effects=[],sequenceCalls=[];
  for(const op of stage.operations){
   if(op.kind==='externalCall'&&op.consumer==='802c6bd8'){
    const sequence=prepareNativeRaceCourseZeroSequenceDisplay(next);
    operations.push(...sequence.operations);effects.push(...apply(next,sequence.operations));
    sequenceCalls.push({sourceHead:op.arguments[0],sourceReturnWord:op.returnWord,diagnostic:sequence.diagnostic});
+  }else if(results&&input.expandEstimates&&op.kind==='externalCall'&&op.consumer==='80077f5c'){
+   const estimate=prepareNativePrimaryResultEstimates({...next,primaryRecordWordsBySourceRow:input.primaryRecordWordsBySourceRow,
+    bodyPositionsNativeBySlot:input.bodyPositionsNativeBySlot});
+   operations.push(...estimate.operations);effects.push(...apply(next,estimate.operations));
   }else{operations.push(op);effects.push(...apply(next,[op]));}
  }
  return freeze({state:next,operations,effects,displayListHead:stage.displayListHead,diagnostic:{sequenceCalls}});
