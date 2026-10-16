@@ -117,7 +117,7 @@ test('six fixedXYZ spheres and16 class-selected visible spheres do not become mo
  const fixed=[[-3050,0,4823],[-2775,0,5085],[4416,0,4103],[4416,0,3723],[-1955,0,-5808],[-1575,0,-5808]];
  for(let d=0;d<4;d++)for(const players of [1,2]){
   const a=c.hazardsForPlayers(players,100,{difficulty:d});assert.equal(a.filter(q=>!q.hidden).length,d===0?0:16);
-  assert.deepEqual(a.filter(q=>q.hidden).map(q=>[q.x,q.y,q.z]),fixed.map(p=>p.map(v=>v*S)));
+  assert.deepEqual(a.filter(q=>q.runtimeTag===5).map(q=>[q.x,q.y,q.z]),fixed.map(p=>p.map(v=>v*S)));
   assert.ok(a.every(q=>q.fixed&&q.fixedSphere&&q.absoluteY&&!q.floating&&!q.followsWaterDatum&&q.y===0&&q.r===.625&&q.probeRadius===.3));
  }
  const stunt=sunsetHazardsForSelection({mode:'stunt'});assert.equal(stunt.length,6);assert.ok(stunt.every(q=>q.runtimeTag===5));

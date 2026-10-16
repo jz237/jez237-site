@@ -50,7 +50,7 @@ export function sunsetHazardsForSelection(options={}){const {visible,fixed}=sphe
 export function sunsetMarkerSpheresForSelection(options={}){return sphereFamilies(options).markers;}
 // Preserve native list priority when a host reconstructs its4x4 static grid.
 export function sunsetFixedSphereOrderForSelection(options={}){
- const {visible,markers,fixed}=sphereFamilies(options);return [...visible,...markers,...fixed].map((q,sourceColliderIndex)=>({...q,sourceColliderIndex}));
+ const {visible,markers,fixed}=sphereFamilies(options);return [...visible,...markers,...fixed].map((q,sourceColliderIndex)=>({...q,sourceColliderIndex,sourceFixedSphere:true}));
 }
 export function sunsetRollersForSelection(options={}){
  const selection=sunsetSourceSelection(options),rows=selection.family==='stunt'?SUNSET_NATIVE_GEOMETRY.rollersStunt:SUNSET_NATIVE_GEOMETRY.rollersOrdinary;
@@ -109,7 +109,7 @@ export function createSourceSunsetCourse(polygonDistance,{anchorsByClass,pilotAn
   timerSeconds:[...SUNSET_NATIVE_GEOMETRY.timerSeconds],sourceNativeClass:2};
  function hazardsForPlayers(playerCount=1,waterDatum=0,selection={}){
   if(!Number.isFinite(waterDatum))throw new TypeError('Water datum must be finite');
-  return sunsetHazardsForSelection({difficulty:this?.difficulty??0,mode:this?.stunt?'stunt':'race',...selection,playerCount});
+  return sunsetFixedSphereOrderForSelection({difficulty:this?.difficulty??0,mode:this?.stunt?'stunt':'race',...selection,playerCount});
  }
  function markerSpheresForPlayers(playerCount=1,waterDatum=0,selection={}){
   if(!Number.isFinite(waterDatum))throw new TypeError('Water datum must be finite');
@@ -136,7 +136,7 @@ export function createSourceSunsetCourse(polygonDistance,{anchorsByClass,pilotAn
    markerContactFamilySeparate:true,reason:'Marker sphere contacts do not establish course-out admission. Actual source shore components are closed only where their endpoints join.'},
   sourceMarkerSpheres:sunsetMarkerSpheresForSelection(),
   sourceMarkerContactMetadata:{radiusNative:25,probeRadiusNative:12,sourceTag:1,absoluteNativeY:0,sourcePhase:'fixed-sphere-grid',sourceOrder:'visibleXZ, markers, hiddenXYZ',
-   response:'Full penetration shifts all12 hull points and kicks selected three point velocities, with no sphere recoil. Independent core integration remains pending.'},
+   response:'Full penetration shifts all12 hull points and kicks selected three point velocities, with no sphere recoil. The modern host uses the existing mean-velocity rigid-hull bridge; native point-hull admission remains separate.'},
   obstacles:obstaclesByClass[0],obstaclesByClass,obstaclesByPlayerCount:{1:sunsetHazardsForSelection(),2:sunsetHazardsForSelection({playerCount:2})},
   raceRamps:raceRampsByClass[0],raceRampsByClass,raceRampsByPlayerCount:{1:sunsetRampsForSelection(),2:sunsetRampsForSelection({playerCount:2})},
   sourceRollers:sunsetRollersForSelection(),sourceRollersByClass:Array.from({length:4},(_,difficulty)=>sunsetRollersForSelection({difficulty})),
@@ -144,5 +144,5 @@ export function createSourceSunsetCourse(polygonDistance,{anchorsByClass,pilotAn
   sourceWaterMetadata:{ordinaryInitialDatum:0,lapTide:false,rollerGeneratorImplemented:true,rollerLatticeIntegrated:false,exactWavefieldValidated:false,
    rollerUpdate:'Once per source outer update, after patch evolution; requires the native toroidal height/velocity grid and external phase history.'},
   sourceState8Override:clone(SUNSET_NATIVE_GEOMETRY.state8),stuntLayout,resistance:[],
-  pendingSourceMechanics:['live-course-and-roller-selection','marker-sphere-contact-integration','ordinary-input-navigation-validation']};
+  pendingSourceMechanics:['live-course-and-roller-selection','ordinary-input-navigation-validation']};
 }

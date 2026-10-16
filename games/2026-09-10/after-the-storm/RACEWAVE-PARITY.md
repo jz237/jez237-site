@@ -1,5 +1,36 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished checkpoint — source Sunset routes and player geometry
+
+Four prepared source Sunset Time Trial classes now complete three laps using
+ordinary helm controls, the source buoy judge, fixed-sphere contacts, source
+floors/ramps, and the recovered roller field. At rider0/seed17/60Hz they finish
+in223.2/227.6/301.2/293.8 seconds with zero misses or disqualifications.
+The steering corridors are authored browser navigation; they are not the
+original AI. A seven-metre clearance at the Normal northbound buoy addresses
+wave-driven drift without changing the buoy or collision rules.
+
+The host and separate player renderer now select geometryForPlayers before
+building the course. Source Sunset uses63 shoreline edges and two static hull
+outlines in1P,47 edges and no static hull outlines in2P. The complete visible,
+81-marker, six-hidden-sphere ordering reaches the existing rigid-hull collision
+bridge. The source's finite crossbar solids remain1P-only. Terrain worker
+requests and cache keys now distinguish player geometry; worker heights and
+water-depth data match the selected course exactly. Generated worker files and
+all four304-module import maps are refreshed.33 focused tests pass, including
+four full solo races, full-resolution terrain, asset loading and GPU-world
+reuse checks.
+
+Additional prepared runs exercise four-rider races and2P for every class.
+They finish, but do not prove every rider's perfect traversal: Expert four-rider
+human misses1 buoy and Expert P2 misses3 before P1 finishes. The Stunt guide is
+still incomplete: its current bounded run hits6/9 rings and3/4 checkpoints,
+then coasts to a timeout at45.633s. No limits, scoring, collision, or positions
+were changed to pass that run. Public Sunset still uses the older map-based
+course while Stunt guidance and high-resolution scenery are validated. Neither
+this checkpoint nor the preceding roller checkpoint has been published.
+
+
 ## Unpublished checkpoint — Sunset Bay roller-water generator
 
 The reconstructed course roller generator now runs on the host triangular

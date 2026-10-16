@@ -73,6 +73,7 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
  if(['race','championship'].includes(mode))course=racingStuntCourse(course);
  frontEnabled.value=seaState==='surf'||seaState==='storm'?1:0;setWaterCharacter(course);surfSeed.value=((Math.floor(waveSeed)%997)+997)%997;surfStrength.value=seaState==='surf'?1:0;windSea.value=seaState==='chop'||seaState==='storm'?1:0;setCourseWaveTrain(course.waveTrain);setBoundaryWaves(course);clearImpacts();clearWakeTrail();waterLevel.value=conditions(course,0).seaLevel;
  if(mode==='stunt'||freeRide)course=stuntCourse(course,{freeRide});
+ if(course.geometryForPlayers)course={...course,...course.geometryForPlayers(mode==='versus'?2:1)};
  if(course.sourceObjectSelection){const playerCount=mode==='versus'?2:1;course={...course,playerCount,rocks:course.hazardsForPlayers(playerCount),sourceDecorations:course.decorationsForPlayers?course.decorationsForPlayers(playerCount):course.sourceDecorations};}
  if(course.contactVolumesForRamps)course={...course,contactVolumes:course.contactVolumesForRamps(course.ramps)};
  const nativeCourseRuntime=physics==='native'?createNativeRaceCourseRuntime({course,difficulty,players:mode==='versus'?2:1}):null;

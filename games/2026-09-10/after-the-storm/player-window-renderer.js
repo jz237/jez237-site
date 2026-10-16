@@ -91,6 +91,7 @@ export function createPlayerWindowRenderer(canvas){
  function init(value){
   if(!value||!['course','surf','calm','chop','storm'].includes(value.seaState)||!Array.isArray(value.roster)||value.roster.length!==2||value.roster.some(i=>!Number.isInteger(i)||i<0||i>3)||!Number.isInteger(value.difficulty)||value.difficulty<0||value.difficulty>3||!graphics(value.graphics))throw new Error('Invalid player view setup.');
   descriptor=value;course=getCourse(value.course,value.difficulty);if(course.id!==value.course)throw new Error('Unknown player view course.');if(value.freeRide)course=stuntCourse(course,{freeRide:true});
+  if(course.geometryForPlayers)course={...course,...course.geometryForPlayers(2)};
   if(course.sourceObjectSelection)course={...course,playerCount:2,rocks:course.hazardsForPlayers(2),sourceDecorations:course.decorationsForPlayers?course.decorationsForPlayers(2):course.sourceDecorations};
   if(course.contactVolumesForRamps)course={...course,contactVolumes:course.contactVolumesForRamps(course.ramps)};
   setRaceWater(null);setWaterCharacter(course);setCourseWaveTrain(course.waveTrain);surfSeed.value=value.waveSeed;surfStrength.value=value.seaState==='surf'?1:0;windSea.value=['chop','storm'].includes(value.seaState)?1:0;frontEnabled.value=['surf','storm'].includes(value.seaState)?1:0;

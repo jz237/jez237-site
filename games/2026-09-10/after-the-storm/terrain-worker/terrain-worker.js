@@ -1,8 +1,10 @@
-import {getCourse} from './courses.js?v=3d9805ca6afa';
-import {sampleTerrain} from './terrain-data.js?v=3d9805ca6afa';
-self.onmessage=({data:{id,difficulty,key}})=>{
+import {getCourse} from './courses.js?v=9a336afd8a17';
+import {sampleTerrain} from './terrain-data.js?v=9a336afd8a17';
+self.onmessage=({data:{id,difficulty,key,geometryPlayers=1}})=>{
  try{
-  const start=performance.now(),course=getCourse(id,difficulty),result=sampleTerrain(course.renderGround||course.ground);
+  const start=performance.now();let course=getCourse(id,difficulty);
+  if(course.geometryForPlayers)course={...course,...course.geometryForPlayers(geometryPlayers)};
+  const result=sampleTerrain(course.renderGround||course.ground);
   self.postMessage({key,...result,ms:performance.now()-start},[result.heights.buffer,result.depth.buffer]);
  }catch(error){self.postMessage({key,error:String(error)});}
 };
