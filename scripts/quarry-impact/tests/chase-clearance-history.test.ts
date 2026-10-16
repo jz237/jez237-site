@@ -1,6 +1,7 @@
+import {restorePursuitTeamsBytes} from './pursuit-teams-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readChaseClearancePrevious,restoreChaseClearanceBytes,verifyChaseClearanceRevision} from './chase-clearance-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restorePursuitTeamsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('ChaseClearance preserves every prior fixture, vehicle asset, control and camera input',verifyChaseClearanceRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/chase-clearance/revision.json').toString());
