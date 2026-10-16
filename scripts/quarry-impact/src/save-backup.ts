@@ -28,7 +28,13 @@ function normalize(key:string,text:string):string{
   return canonical(out);
  }
  if(raw.version!==1)throw Error(`Unsupported saved-data version: ${key}`);
- const value=readers[key](text);if(value===null)throw Error('The championship save is invalid.');
+ // Validate historical controls without applying the steering-default migration.
+ // Signed backups must retain their original canonical bytes; readControls migrates
+ // them normally when the restored settings are loaded by the game.
+ const legacyControls=key===CONTROLS_KEY&&(raw.keyboardDefaults===undefined||Number.isInteger(raw.keyboardDefaults)&&raw.keyboardDefaults>=1&&raw.keyboardDefaults<5);
+ const value=readers[key](legacyControls?JSON.stringify({...raw,keyboardDefaults:5}):text);
+ if(legacyControls){if(raw.keyboardDefaults===undefined)delete(value as Record<string,unknown>).keyboardDefaults;else (value as Record<string,unknown>).keyboardDefaults=raw.keyboardDefaults;}
+ if(value===null)throw Error('The championship save is invalid.');
  // Preserve the canonical bytes of controls exported before vibration existed.
  // readControls supplies the default after import; old signed backups stay valid.
  if(key===CONTROLS_KEY&&!Object.hasOwn(raw,'rumble'))delete(value as {rumble?:number}).rumble;

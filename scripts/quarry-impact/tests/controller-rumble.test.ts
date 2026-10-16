@@ -59,7 +59,7 @@ test('a later light scrape cannot refresh an old heavy impact at full strength',
 
 test('signed pre-vibration save files still import, while new backups preserve vibration off',async()=>{
  const {createHash}=await import('node:crypto');const {SAVE_KEYS,readSave,exportSave,restoreSave}=await import('../src/save-backup');const {CONTROLS_KEY}=await import('../src/driving-controls');
- const legacy:any=defaultControls();delete legacy.rumble;legacy.keys.throttle=['KeyE'];
+ const legacy:any={version:1,keys:{throttle:['KeyE'],reverse:['KeyS','ArrowDown'],left:['KeyA','ArrowLeft'],right:['KeyD','ArrowRight'],handbrake:['Space']},pad:-1,axis:0,invert:false,center:0,deadzone:.12,saturation:1,curve:1,throttleButton:7,brakeButton:6,handbrakeButton:0,triggerDeadzone:.05,speedAssist:0};
  const canonical=(v:unknown)=>JSON.stringify(v,(_key,x)=>x&&typeof x==='object'&&!Array.isArray(x)?Object.fromEntries(Object.keys(x).sort().map(k=>[k,x[k]])):x);
  const entries=Object.fromEntries(SAVE_KEYS.map(k=>[k,k===CONTROLS_KEY?canonical(legacy):null]));
  const body={format:'quarry-impact-save',version:1,created:'2026-10-08T00:00:00.000Z',entries};
