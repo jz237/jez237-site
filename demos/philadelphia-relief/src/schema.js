@@ -78,9 +78,10 @@ export const CONTROLS = {
 
   // ---- atmosphere --------------------------------------------------------
   cloudCoverage: {
-    k: 'ccv', kind: 'range', min: 0, max: 1, step: .01, def: .55,
+    // Retain the old URL key while clearing clouds from saved views as well.
+    k: 'ccv', kind: 'range', min: 0, max: 0, step: .01, def: 0, ui: false,
     group: 'atmosphere', label: 'Cloud coverage',
-    hint: 'Animated cumulus clouds and drifting cloud shadows. Simulated weather.',
+    hint: 'Clouds are disabled.',
   },
   streetLife: {
     k: 'stl', kind: 'enum', values: [1,0], def: 1, group: 'atmosphere', label: 'Street life',
