@@ -1,3 +1,4 @@
+import {createFoundryIndustrial} from './foundry-industrial';
 import * as T from 'three';
 import {FOUNDRY_BARRIERS,FOUNDRY_OUTLINE,foundryHeight,foundryPatch,foundrySurface} from './foundry-arena';
 import {freezeSceneryTransforms} from './render-work';
@@ -32,6 +33,7 @@ export function createFoundryWorld(){
  for(const x of [-37,37]){box(x,10,62,1.8,20,2,'yellow');box(x,2,62,5,4,5,'concrete');}box(0,20,62,78,2,2,'yellow');box(12,18.3,62,6,1.4,4,'steel');box(12,14,62,.15,7,.15,'steel');box(12,10.4,62,1,.8,.8,'rust');
  for(const x of [-60,60])for(const z of [-49,49]){const y=foundryHeight(x,z);box(x,y+8,z,.3,16,.3,'steel');box(x,y+16,z,4,.6,1,'concrete');}
  for(const [finish,matrices]of batches){const mesh=new T.InstancedMesh(boxGeometry,materials[finish],matrices.length);matrices.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.name='foundry_'+finish;mesh.castShadow=mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
+ const industrial=createFoundryIndustrial();root.add(industrial.root);
  root.userData.solidRecords=FOUNDRY_BARRIERS;freezeSceneryTransforms(root);
- let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});floorGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
+ let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;industrial.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});floorGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
 }
