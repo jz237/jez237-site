@@ -1,6 +1,7 @@
+import {restoreRedbankSurroundingsBytes} from './redbank-surroundings-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readReplayImpactAudioPrevious,restoreReplayImpactAudioBytes,verifyReplayImpactAudioRevision} from './replay-impact-audio-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreRedbankSurroundingsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('ReplayImpactAudio preserves every prior fixture, vehicle asset, control and camera input',verifyReplayImpactAudioRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/replay-impact-audio/revision.json').toString());

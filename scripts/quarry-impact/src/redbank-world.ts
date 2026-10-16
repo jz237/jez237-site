@@ -1,3 +1,4 @@
+import {createRedbankSurroundings} from './redbank-surroundings';
 import * as T from 'three';
 import { REDBANK, REDBANK_SOLIDS, REDBANK_TERRAIN, redbankTerrainPatch, redbankGroundSample } from './redbank-course';
 import { freezeSceneryTransforms } from './render-work';
@@ -112,11 +113,12 @@ export function createRedbankWorld() {
             root.add(sign);
         }
     }
+    const surroundings=createRedbankSurroundings();root.add(surroundings.root);
     root.userData.solidRecords = REDBANK_SOLIDS;
     freezeSceneryTransforms(root);
     let disposed = false;
-    return { root, groundCoverage: { width, height, spanX, spanZ, road }, dispose() { if (disposed)
-            return; disposed = true; root.removeFromParent(); root.traverse(o => { if (o instanceof T.InstancedMesh)
+    return { root, update:surroundings.update, groundCoverage: { width, height, spanX, spanZ, road }, dispose() { if (disposed)
+            return; disposed = true; surroundings.dispose();root.removeFromParent(); root.traverse(o => { if (o instanceof T.InstancedMesh)
             o.dispose(); }); for (const g of [groundGeometry, boxGeometry, apronGeometry, ...extraGeometry])
             g.dispose(); for (const m of [groundMaterial, ...Object.values(materials), ...extras])
             m.dispose(); textures.forEach(t => t.dispose()); root.clear(); } };
