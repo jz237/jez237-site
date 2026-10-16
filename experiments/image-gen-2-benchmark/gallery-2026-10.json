@@ -1,5 +1,94 @@
 [
   {
+    "id": "2026-10-16-factual-infographic-factual-infographic-cat-claws-the-pivot",
+    "title": "Factual infographic: Cat Claws — The Pivot Beneath the Fur",
+    "tests": "Focused normal-anatomy plate; digit 2–5 only; no broad preview repetition; no subjective review.; archive_slot=2026-10-16T00:20; concept=domestic-cat-claw-pivot-retraction-shedding; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: inside-the-cat",
+    "prompt": "Create a richly detailed, artwork-led factual feline anatomical infographic, finished directly as the image, not a photographed page or mockup. Title: \"CAT ATLAS\" with the main headline \"Claws: the pivot beneath the fur\" and a small category line \"Inside the Cat\". Use luminous gouache, precise anatomical colored pencil and fine technical ink on a deep midnight-teal ground, warm ivory lettering, copper and muted coral accents. Build an asymmetrical, flowing composition with a beautifully observed silver-tabby domestic cat leaning forward from upper right, one large forepaw reaching diagonally toward the viewer. Credible fur, whiskers, paw proportions and calm natural pose; no anthropomorphism. The cat and the enlarged anatomical mechanism dominate, with breathing room around elegant annotations; no dashboard, rigid boxes, equal tile grid or filler text.\n\nAn open magnification arc from one ordinary forepaw toe leads into a large cutaway of a digit 2–5, with soft tissue edges rendered as clean educational cutaway, never gore or injury. Clearly distinguish ivory bone, translucent warm horn sheath, blue-green elastic ligaments and a coral deep digital flexor tendon. Show the middle phalanx and distal phalanx as different bones at their joint, with the horn sheath over the distal phalanx and living tissue beneath. Label \"Middle phalanx\", \"Distal phalanx\", \"Horn sheath\", \"Living tissue\" using precise fine leader lines. Do not draw the keratin sheath as a bare bone or a telescoping needle.\n\nAlong a graceful open arc below the paw, integrate two side-view anatomical studies of the same digit, oriented consistently: \"Resting — retracted\" and \"In use — protruded\". The resting distal phalanx folds back to overlap beside the middle phalanx, sheltered by a skin fold; the active claw rotates forward around its joint. Small curved arrows indicate pivot direction, not linear sliding. Show the flexor tendon attaching to the flexor process of the distal phalanx and an elastic ligament connecting the middle and distal phalanges. Add the readable concise explanations \"Elastic ligaments return the claw to rest.\" and \"The deep digital flexor pulls the claw into use.\" A smaller caption: \"Digital extensors stabilize the other toe joints.\" Distinguish passive elastic return from active muscle pull with restrained color coding, not an invented motor or spring hardware. Near the resting study: \"Folded away from wear\".\n\nAt the lower left, weave in a jewel-like enlarged translucent shed horn cap beside a close-up of the intact claw, with a delicate peeling contour showing only the superficial horny layer. Label \"A shed cap, not the whole claw\" and explain \"Superficial horn layers shed while living tissues remain underneath.\" Keep the horn cap separate from bone, with no implication that a whole claw is discarded. A quiet footer reads \"Normal domestic cat forepaw digit 2–5 • anatomy simplified\" and \"Sources: University of Minnesota; Journal of Anatomy (2009)\". All scientific claims must be confined to the specified normal anatomy. No disease, declawing procedure, clipping advice, breed claims, pain advice, numerical trivia or invented claims. Preserve readable typography and exquisitely detailed artwork. The result is an informative artistic anatomical atlas, not a sparse title poster; omit decorative extras if they crowd the meaningful studies.",
+    "image": "images/2026-10-16-factual-infographic-factual-infographic-cat-claws-the-pivot.jpg",
+    "thumb": "thumbs/2026-10-16-factual-infographic-factual-infographic-cat-claws-the-pivot.webp",
+    "color": "#4a4f49",
+    "date": "2026-10-16",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "domestic-cat-claw-pivot-retraction-shedding",
+      "imageSha256": "facb1e5babe79b6fe7f3fb2d92e40861ea3d9465f4de197ba0ae717e7bf7463c",
+      "imageDHash": "6607130d67312697"
+    },
+    "factualInfographic": {
+      "topic": "How domestic cat claws pivot into use, retract through elastic ligaments, and shed superficial horn caps",
+      "description": "Normal forepaw claw anatomy, active protrusion, passive retraction and superficial horn-cap shedding.",
+      "sourceNote": "Verified against University of Minnesota anatomical teaching notes and Journal of Anatomy primary research: https://pressbooks.umn.edu/dogcatanatomylabguide/back-matter/appendix/ ; https://pmc.ncbi.nlm.nih.gov/articles/PMC2736126/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-16T04:21:03.399052+00:00",
+        "sources": [
+          {
+            "id": "umn",
+            "publisher": "University of Minnesota",
+            "title": "Supplemental Feline Notes — Dissection Lab Guide for Dog and Cat Anatomy",
+            "sourceType": "university",
+            "url": "https://pressbooks.umn.edu/dogcatanatomylabguide/back-matter/appendix/"
+          },
+          {
+            "id": "janat",
+            "publisher": "Journal of Anatomy",
+            "title": "The structure of the cornified claw sheath in the domesticated cat (Felis catus)",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2736126/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The illustrated mechanism is a normal domestic cat forepaw digit 2–5; middle and distal phalanges form the distal interphalangeal joint.",
+            "sourceIds": [
+              "umn"
+            ]
+          },
+          {
+            "claim": "The distal phalanx overlaps the middle phalanx during passive retraction rather than telescoping straight into the toe.",
+            "sourceIds": [
+              "umn"
+            ]
+          },
+          {
+            "claim": "Elastic ligaments passively retract the claw; the lateral elastic ligament is the most important.",
+            "sourceIds": [
+              "umn"
+            ]
+          },
+          {
+            "claim": "Contraction of the deep digital flexor protrudes the claw through its attachment to the flexor process of the distal phalanx; digital extensors stabilize more proximal joints.",
+            "sourceIds": [
+              "umn"
+            ]
+          },
+          {
+            "claim": "Retraction protects the claw from wear when not in use, with the claw sheltered in a protective skin fold.",
+            "sourceIds": [
+              "umn",
+              "janat"
+            ]
+          },
+          {
+            "claim": "The cornified claw sheath surrounds living tissues supported by the distal phalanx; the horny sheath is not the same thing as the bone.",
+            "sourceIds": [
+              "janat"
+            ]
+          },
+          {
+            "claim": "Superficial horn caps can shed without injury to the underlying living tissues; this maintains sharp tips. A shed cap is not the entire claw or toe bone.",
+            "sourceIds": [
+              "janat"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-10-15-factual-infographic-factual-infographic-type-1-diabetes-the",
     "title": "Factual infographic: Type 1 Diabetes — The Missing Insulin Signal",
     "tests": "factual_subtype: medical-health-infographic; claim-level NIDDK/NHS evidence; artwork-led organic anatomy; no non-Monday subjective review; archive_slot=2026-10-15T05:20; concept=type-one-diabetes-pancreatic-beta-cell-insulin-loss; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=high, size=auto; factual_subtype: medical-health-infographic",
