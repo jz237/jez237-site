@@ -332,3 +332,13 @@ v1.40.2: calmer herds; cave fireflies:
 v1.40.3: two fixes:
 - **The case sliding off screen:** a quick click on or near an animal still told the field guide to follow it, so poking an animal set the camera tracking it, and the whole case slid away as it walked off. Clicking in the case no longer follows anything: pick an animal's name in the field guide to follow it (Esc or "Stop following" to stop).
 - **Grabbed trees stuck leaning one way:** the planted trees' grab handler wrote the pointer's position and the camera's direction into the same scratch vector, so a grabbed tree always bent the same way whatever the mouse did. It now leans after the hand: right, left, back upright.
+
+v1.41: sculpted anatomy (graphics goal 1 of 6):
+- **Anatomical detail, baked:** every species' skin has been rebaked with anatomical detail sculpted from its skeleton:
+  - deep skin folds round every joint (neck, shoulders, elbows, wrists, hips, knees, ankles, tail root);
+  - rounded muscle masses on the flanks, thighs, upper arms and neck, with a few grooves between them;
+  - a ridge of keeled scutes down the spine;
+  - growth rings on claws, horns and beaks.
+
+  The relief goes into the normal map, and the creases and the hollows between muscles darken the colour map too, so the folds and muscle shapes read from across the case, not only close up.
+- **How:** `blender/bake_detail.py` works out the masks on each finished sculpture and bakes just the normal map and a crevice map. `tools/swap-skin.mjs` puts the new textures into each species' existing GLB, so the meshes, rigs and animations are untouched.
