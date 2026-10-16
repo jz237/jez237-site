@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {nativeHostInput,NATIVE_HOST_DEFAULT_TUNE} from '../native-race-host.js';
+import {nativeHostInput,NATIVE_HOST_DEFAULT_TUNE,stepNativeRaceHost} from '../native-race-host.js';
 import {nativeRaceSnapshot} from '../native-race-adapter.js';
 import {createRace,stepRace} from '../race-core.js';
 import {getCourse} from '../courses.js';
@@ -10,6 +10,44 @@ import {verificationInput} from '../race-verification.js';
 
 const create=(options={})=>createRace({mode:'time',course:getCourse('greyhaven'),physics:'native',...options});
 const near=(a,b,e=1e-10)=>assert.ok(Math.abs(a-b)<e,`${a} != ${b}`);
+
+test('canonical activity gates buoy and floating motion independently of frozen racer simulation',()=>{
+ for(const mode of ['time','versus']){
+  const initial=create({mode}).nativeLaunch.snapshot();
+  for(const activity of [-32768,-1,0,1,32767])for(const simulation of [0,3]){
+   const retained=structuredClone(initial);Object.assign(retained.scene,{activity624:activity,simulation648:simulation,phase650:3});
+   const course={...getCourse('greyhaven'),dynamicObjectsForPlayers:()=>[{id:'gate-fixture',x:40,y:-.5,z:40}]};
+   const s=create({mode,course,nativeInitialRaceState:retained}),h=s.nativeHost;
+   const primary=h.primary.snapshot(),floating=h.floating.snapshot(),hulls=h.world.adapters.map(a=>structuredClone(a.hull));
+   const input=s.racers.map(()=>({}));
+   stepNativeRaceHost(h,.15,input);
+   assert.equal(h.world.frames,3);assert.equal(h.primary.diagnostics().outerFrames,3);assert.equal(h.floating.diagnostics().outerFrames,3);
+   assert.equal(h.primary.diagnostics().motionUpdates,activity===-1?3:0);
+   assert.equal(h.floating.diagnostics().motionUpdates,activity===-1?3:0);
+   assert.equal(h.world.ticks,simulation===0?0:15);
+   if(simulation===0){
+    assert.deepEqual(h.world.adapters.map(a=>a.hull),hulls);
+    if(activity===-1){assert.notDeepEqual(h.primary.snapshot(),primary);assert.notDeepEqual(h.floating.snapshot(),floating);}
+    else{assert.deepEqual(h.primary.snapshot(),primary);assert.deepEqual(h.floating.snapshot(),floating);}
+   }
+   assert.equal(s.nativeLaunch.objectMotionActive(),activity===-1);
+   const before={primary:h.primary.snapshot(),floating:h.floating.snapshot(),water:captureRaceWater(s.raceWater),canonical:s.nativeLaunch.snapshot()};
+   stepNativeRaceHost(h,1,input,{active:false});
+   assert.equal(h.world.frames,3);assert.deepEqual({primary:h.primary.snapshot(),floating:h.floating.snapshot(),water:captureRaceWater(s.raceWater),canonical:s.nativeLaunch.snapshot()},before);
+  }
+ }
+});
+
+test('explicit host object-motion switches still hold an active canonical scene',()=>{
+ const retained=create().nativeLaunch.snapshot();Object.assign(retained.scene,{activity624:-1,simulation648:0,phase650:3});
+ const course={...getCourse('greyhaven'),dynamicObjectsForPlayers:()=>[{id:'preview-gate',x:40,y:-.5,z:40}]};
+ const s=create({course,nativeInitialRaceState:retained}),h=s.nativeHost;
+ h.primaryActive=false;h.floatingActive=false;stepNativeRaceHost(h,.1,[{}]);
+ assert.equal(h.primary.diagnostics().motionUpdates,0);assert.equal(h.floating.diagnostics().motionUpdates,0);
+ h.primaryActive=true;h.floatingActive=true;stepNativeRaceHost(h,.05,[{}]);
+ assert.equal(h.primary.diagnostics().motionUpdates,1);assert.equal(h.floating.diagnostics().motionUpdates,1);
+ assert.equal(h.world.ticks,0);assert.equal(h.world.frames,3);
+});
 
 test('browser adaptation retains the digital A/B/R bits and native axis signs',()=>{
  assert.deepEqual(nativeHostInput({throttle:.01,steer:.5,lean:-.5,dampen:true,slide:true}),

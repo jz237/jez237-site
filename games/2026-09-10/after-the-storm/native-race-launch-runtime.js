@@ -140,6 +140,9 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
  const runtime={
   ordinary:!!courseRuntime,
   scene:()=>({simulationState:current.scene.simulation648,phase650:current.scene.phase650}),
+  // Source6E3A8 reads this signed halfword AFTER79528. It gates the shared
+  // primary/generic object motion call7DBC0 independently of simulation648.
+  objectMotionActive:()=>current.scene.activity624===-1,
   snapshot:()=>nativeRaceStateSnapshot(current),
   resultCodeFor(racerIndex,{bodyResultCodes16c8,point90Native,datum2458}){
    if(!courseRuntime||current.scene.courseIndex!==1||![0,1].includes(current.scene.mode620))

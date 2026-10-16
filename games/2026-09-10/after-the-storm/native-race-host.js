@@ -77,6 +77,8 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
  if(onLaunchFrame!==null&&typeof onLaunchFrame!=='function')throw new TypeError('onLaunchFrame must be a function');
  if(raceRuntime&&(!recovery||sourceStates.length||poseProviders.length||['scene','advanceClock','advanceLaunch'].some(k=>typeof raceRuntime[k]!=='function')))
   throw new TypeError('Canonical launch requires recovered riders and its single scene owner');
+ if(raceRuntime?.ordinary&&typeof raceRuntime.objectMotionActive!=='function')
+  throw new TypeError('Canonical ordinary motion requires its activity owner');
  if(typeof floatingActive!=='boolean')throw new TypeError('floatingActive must be boolean');
  if(typeof primaryActive!=='boolean')throw new TypeError('primaryActive must be boolean');
  if(typeof recovery!=='boolean')throw new TypeError('recovery must be boolean');
@@ -134,9 +136,13 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
   // Adjudication observes contact-displaced current centers BEFORE the source
   // primary array's one motion pass. All craft share that mutable array.
   host.lastOrdinary=ordinary;
+  // Source6E3A8 reads activity624 after adjudication, before7DBC0. Free
+  // objects still move in simulation0 when activity is -1; a browser pause
+  // never reaches this frame callback. Keep explicit preview gates as well.
+  const objectMotionActive=!raceRuntime?.ordinary||raceRuntime.objectMotionActive();
   const keepRunning=host.onFrame?host.onFrame(host,context,ordinary):undefined;
-  if(primary)primary.afterFrame(host.world,context,{active:host.primaryActive});
-  if(floating)floating.afterFrame(host.world,context,{active:host.floatingActive});
+  if(primary)primary.afterFrame(host.world,context,{active:host.primaryActive&&objectMotionActive});
+  if(floating)floating.afterFrame(host.world,context,{active:host.floatingActive&&objectMotionActive});
   if(raceRuntime){
    const status=raceRuntime.ordinary?raceRuntime.advanceStatus():null;
    const launch=status?{...ordinary,effects:[...ordinary.effects,...status.effects],view:status.view}:

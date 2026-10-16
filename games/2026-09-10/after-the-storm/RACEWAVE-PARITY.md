@@ -2702,3 +2702,30 @@ and one obsolete assertion requiring simulation0 to reject. That assertion was
 updated to verify the new zero-hull schedule and its contact suite passed9/9.
 The final focused regression run passes70/70, including the added deferred-frame test.
 This checkpoint remains local and does not change the published soundtrack.
+
+## Post-adjudication object-motion gate - October 16, 2026
+
+The canonical launch runtime now exposes its actual signed activity624 value as
+the object-motion gate. The host reads that gate after ordinary adjudication,
+before the shared primary/generic motion pass. Simulation648 is independent:
+simulation0 can retain every hull and physical rider while free objects continue
+moving. An activity value other than -1 suppresses both object motion families.
+Both bridges still observe each outer frame, so their scheduling stays aligned
+when motion resumes. Explicit preview motion switches and host pause retain
+their existing behavior. This does not add motion for unsupported object kinds.
+
+A fresh read-only EVO X2 Ghidra query of6E3A8,7DBC0,6E0F4 and8E794 left all nine
+project files unchanged. Original6E3A8 execution covers150 prepared cases and
+2,590 counted instructions, with empty course effect arrays and explicit callee
+boundaries. The intercepted79528 changes activity to test that the caller reads
+the post-adjudication value. All100 mode0/1 cases match20 distinct actual host
+configurations;50 mode11 cases remain outside the admitted native host modes.
+This verifies schedule gates, not the intercepted callee bodies or full original
+trajectories. The39 selected host, ordinary race, grid start, result owner,
+floating and primary-object regression tests pass, including20 combinations of
+activity, simulation and player count plus explicit pause/resume checks.
+
+Normal finish-to-menu integration still needs the complete logical display
+dispatcher, source AI context, fade presentation consumers and menu/reset/save
+effects. The current browser stop-at-results policy has not been removed.
+This checkpoint is local; live remains v2.25.0 ORIGINAL MUSIC.
