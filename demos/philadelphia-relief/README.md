@@ -1268,7 +1268,7 @@ the deeper idle cadence; photographic views do not wake for hidden street geomet
 `tools/street-startup.html` compares the complete preparation sequence with
 continuous browser animation on the real Philadelphia street graph.
 
-Validation: 493 automated checks, including ten simulated minutes on the real
+Validation: 503 automated checks, including ten simulated minutes on the real
 street graph, multi-node junction separation, continuous U-turns, offscreen-only
 replenishment, tyre and curb elevation checks, and saturated scenery buffers.
 Browser checks cover diorama day/night views, sloped streets, mobile controls,
@@ -1279,3 +1279,30 @@ preview and live domain. A healthy service response cannot hide an older build.
 The wrapper waits for recent automatic production builds before uploading, then
 rechecks main so a slower build cannot normally replace the release with an older
 snapshot. `--publish-before=<ISO timestamp>` stops uploads at a requested cutoff.
+
+October 15 photo and traffic recovery: the pinned Cesium 1.145.0 runtime is
+served locally, including workers, styles, assets, and license notices. Photo
+rendering bounds framebuffer and tile memory; Retry uses a smaller budget.
+Failure messages distinguish engine loading, graphics, provider access, and
+timeouts without exposing provider URLs or credentials. Resource-loading timeouts
+count foreground time, matching the first-view timeout.
+
+View & layers provides a Center City traffic shortcut and explicit Play/Pause
+controls. Follow computer respects reduced-motion preferences; Play overrides
+that preference for street traffic. Status text explains inactive traffic and
+that photographic cars are captured imagery. Street motion consumes bounded
+real frame time separately from camera smoothing, verified at 2 FPS and 20 FPS.
+Chrome checks cover the traffic controls and actual Cesium failure/retry using
+the local synthetic fixture; production photographic loading must still be
+verified after each guarded release. The reported immediate failure on another
+computer could not be reproduced locally.
+
+Traffic density follow-up: 1,800 simulated vehicles now populate the street graph
+(previously 620). Painted cabin roofs improve visibility from above. The status
+separates moving and waiting cars, states the neighborhood radius, and explicitly
+includes off-screen streets and building occlusion rather than implying all cars
+are visible. The ten-minute real-street endurance check runs at the new population.
+
+Photo traffic follow-up: the same street simulation now drives native Cesium vehicle models in photographic close-ups. Tile-relative heights and normal depth testing keep cars on loaded surfaces and behind buildings. The photo radius is bounded to 650/850 metres, with no hidden Three.js scenery uploads. Play/Pause and reduced motion apply in either view; the traffic shortcut preserves the selected renderer. Captured imagery cars remain stationary. The gallery and social preview now use a City Hall photographic capture with attribution preserved.
+
+Validation includes shared-simulation continuity, pause behavior, model lifetime and heading, GLB integrity, and tools/photo-traffic-fixture.html: an elevated local 3D Tiles road with a building for checking attachment and occlusion without a hosted imagery token.

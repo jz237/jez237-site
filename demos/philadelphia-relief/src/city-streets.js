@@ -1,8 +1,12 @@
 import { prepareStreetGraph, prepareTraffic, trafficPose } from './city-traffic.js?v=philly-2026100901';
 import { CITY_LIGHT_GLSL } from './city-lighting.js?v=philly-2026100901';
 import { prepareCurbLayout } from './city-curbs.js?v=philly-2026101001';
+import { streetMotionEnabled } from './street-policy.js?v=philly-2026101501';
 import { prepareSidewalkRoutes, walkersForRoutes, sidewalkPose, walkerTravel }
   from './city-walkers.js?v=philly-2026101001';
+
+export const STREET_CAR_COUNT=1800;
+export const CAR_PARTS=11;
 
 // Instanced, illustrative street furniture; the OSM centerlines remain authoritative.
 export function createCityStreets(THREE,{scene,projection,sampleElevation,lighting,onReady=()=>{}}){
@@ -31,7 +35,7 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
     mesh.instanceColor=new THREE.InstancedBufferAttribute(new Float32Array(count*3),3);
     mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);mesh.frustumCulled=false;
     mesh.count=0;group.add(mesh);return mesh;};
-  const street=make(box,14000),trees=make(crown,1600),vehicles=make(box,620*10);
+  const street=make(box,14000),trees=make(crown,1600),vehicles=make(box,STREET_CAR_COUNT*CAR_PARTS);
   const signals=make(box,1800);
   const people=make(box,240*5),heads=make(crown,240);
   people.name='sidewalk-walkers';heads.name='sidewalk-walker-heads';
@@ -56,6 +60,7 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
   }
   let graph=null,traffic=null,curbLayout=null,loading=false,disposed=false,age=10;
   let retryDelay=0,request=null,vehicleView=null,motionEnabled=false;
+  let visibleCars=0,movingCars=0,trafficRadius=0,photoCars=[];
   let lastX=Infinity,lastZ=Infinity,lastExag=0,lastRadius=0;
   const palette=[0xb3b7bb,0x293746,0xd6cdb6,0x813b30,0x3e586c,0xdcb646,0xdddeda];
   const lamps={indicator:[2.6,1.8,.025],head:[2.2,2.1,1.65],
@@ -68,7 +73,7 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
       if(!r.ok)throw new Error('Street data unavailable');return r.json();})
       .then(async doc=>{if(disposed)return;const options={signal:request.signal};
         const nextGraph=await prepareStreetGraph(doc,projection,sampleElevation,options);
-        const nextTraffic=await prepareTraffic(nextGraph,620,239,options);
+        const nextTraffic=await prepareTraffic(nextGraph,STREET_CAR_COUNT,239,options);
         const nextCurbs=await prepareCurbLayout(nextGraph,options);
         if(disposed)return;graph=nextGraph;traffic=nextTraffic;curbLayout=nextCurbs;age=10;onReady();
         // Cars can start while sidewalk topology is prepared in short tasks.
@@ -165,26 +170,51 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
     for(const mesh of [street,trees,signals])uploadInstances(mesh);
   }
   return {group,
+    get photoCars(){return group.visible?photoCars:[];},
+    stats:()=>({loading:loading&&!graph,failed:retryDelay>0&&!graph,
+      cars:group.visible?visibleCars:0,moving:group.visible&&motionEnabled?movingCars:0,
+      radius:trafficRadius}),
     get animating(){return !disposed&&group.visible&&motionEnabled
-      &&(vehicles.count>0||signals.count>0||people.visible&&people.count>0);},
-    update({camera,pose,state,exaggeration,sunDir,dt,reducedMotion,archive,quality}){
+      &&(visibleCars>0||signals.count>0||people.visible&&people.count>0);},
+    update({camera,pose,state,exaggeration,sunDir,dt,reducedMotion,archive,quality,photo=false}){
       if(disposed)return;
-      motionEnabled=!reducedMotion&&state.animationSpeed>0;
+      motionEnabled=streetMotionEnabled(state,reducedMotion);
       retryDelay=Math.max(0,retryDelay-(Number.isFinite(dt)?Math.max(0,dt):0));
       group.visible=state.era==='present'&&state.compareMode==='off'&&!state.lightweight
         &&!archive&&state.layers.structures&&pose.dist<6500&&!!state.streetLife;
       if(!group.visible)return;load();if(!graph)return;
       const x=projection.lonToX(pose.lon),z=projection.latToZ(pose.lat);
-      const radius=quality==='performance'?650:Math.min(2000,Math.max(850,pose.dist*.8));
+      const radius=quality==='performance'?650:photo?850:Math.min(2000,Math.max(850,pose.dist*.8));
+      trafficRadius=radius;
       age+=dt;
-      if(age>1&&(Math.hypot(x-lastX,z-lastZ)>100||exaggeration!==lastExag||Math.abs(radius-lastRadius)>100)){
+      if(!photo&&age>1&&(Math.hypot(x-lastX,z-lastZ)>100
+        ||exaggeration!==lastExag||Math.abs(radius-lastRadius)>100)){
         rebuild(x,z,exaggeration,radius);age=0;lastX=x;lastZ=z;lastExag=exaggeration;lastRadius=radius;
       }
       uniforms.uSun.value.copy(sunDir);uniforms.uEye.value.copy(camera.position);
       uniforms.uNight.value=1-THREE.MathUtils.smoothstep(sunDir.y,-.1,.12);
       const advancing=motionEnabled&&Number.isFinite(dt)&&dt>0;
-      if(advancing){traffic.update(dt*state.animationSpeed,{x,z,radius:radius+150});
-        walkingTime+=Math.min(dt*state.animationSpeed,.25);}
+      if(advancing){
+        // Camera smoothing caps its own dt at 0.1 s. Street motion instead
+        // consumes real frame time in bounded steps, so slower PCs do not
+        // turn moving cars into nearly stationary dots. Never catch up a tab sleep.
+        let remaining=Math.min(dt*state.animationSpeed,.5);
+        walkingTime+=remaining;
+        while(remaining>1e-8){const step=Math.min(.1,remaining);
+          traffic.update(step,{x,z,radius:radius+150});remaining-=step;}
+      }
+      // The same simulation drives both renderers. Photo mode only needs car
+      // poses; do not rebuild or upload hidden Three.js scenery every frame.
+      if(photo){
+        photoCars=[];visibleCars=0;movingCars=0;vehicleView=null;
+        for(const car of traffic.cars){
+          const p=trafficPose(car);if(Math.hypot(p.x-x,p.z-z)>radius)continue;
+          visibleCars++;if(car.speed>.05)movingCars++;
+          photoCars.push({id:car,lon:projection.xToLon(p.x),lat:projection.zToLat(p.z),
+            angle:p.angle,variant:Math.floor(car.seed*palette.length)%palette.length,van:car.seed>.88});
+        }
+        return;
+      }
       people.visible=heads.visible=pose.dist<1800;
       let signalsChanged=false;
       for(const head of signalHeads){
@@ -227,8 +257,10 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
       }
       uploadInstances(people);uploadInstances(heads);
       vehicles.count=0;
+      visibleCars=0;movingCars=0;
       for(const car of traffic.cars){const p=trafficPose(car);
         if(Math.hypot(p.x-x,p.z-z)>radius)continue;
+        visibleCars++;if(car.speed>.05)movingCars++;
         const indicator=traffic.indicator(car);
         const van=car.seed>.88,length=van?6.4:4.4,sin=Math.sin(p.angle),cos=Math.cos(p.angle);
         const groundAt=(side,along)=>sampleElevation(projection.xToLon(p.x+cos*side+sin*along),
@@ -262,6 +294,10 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
           part(side*.61,.25,-length*.51,.38,.18,.12,indicator===side?lamps.indicator
             :car.braking?lamps.brake:lamps.tail);
         }
+        // A painted roof makes small moving cars readable from above while
+        // retaining dark windows around the cabin, instead of an all-glass top.
+        part(0,van?1.43:1.11,van?length*.5-.72:0,van?1.65:1.4,.09,
+          van?1.2:length*.36,tint);
       }
       uploadInstances(vehicles);
     },

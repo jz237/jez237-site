@@ -73,8 +73,10 @@
     "category": "3D · Geography",
     "description": "The Delaware Valley, in miniature. Explore wooded ridges and two rivers, then zoom seamlessly into photographic 3D buildings and streets. One map, from regional relief to neighborhood detail.",
     "url": "philadelphia-relief/",
-    "image": "assets/philadelphia-relief.png",
-    "imageAlt": "The live Philadelphia Relief diorama: wooded terrain, rivers and a raised cutaway base on a light backdrop",
+    "image": "assets/philadelphia-city-hall-20261015.webp",
+    "imageAlt": "Philadelphia City Hall and the Center City skyline in the map's photographic 3D view",
+    "imageWidth": 2141,
+    "imageHeight": 1227,
     "source": "https://github.com/jz237/jez237-site/tree/main/demos/philadelphia-relief",
     "features": [
       "Diorama to photographic 3D",
@@ -434,7 +436,7 @@
   },
   {
     "id": "019",
-    "title": "Weatherglass · Rainforest Terrarium",
+    "title": "Terrarium Tornado Experiment",
     "category": "3D · Living terrarium",
     "description": "A living rainforest under glass. Wring rain from clouds, shake out lightning, mist the ferns, stir the wind and ripple a waterfall-fed pool. Neon tetras school through the water while a fire-bellied toad explores the bank. The bearded dragon now has its own separate desert habitat.",
     "url": "terrarium/",
