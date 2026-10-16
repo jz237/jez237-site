@@ -1,6 +1,30 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
-## Original name-entry controls (local checkpoint)
+## v2.31.0 — original name-entry preview
+
+The admitted Sunny Beach native time trial now continues from its actual
+game100 result handoff into an interactive initials wheel. A separate20Hz
+menu clock keeps race physics stopped. Original initialization, animation,
+physical menu sampling, input precedence, record RAM updates and normal menu
+exit share the existing canonical owner. High-resolution SVG glyphs use the
+original packed-matrix positions. Keyboard, gamepad and on-screen controls
+select letters, delete, seek END after three initials and finish the menu.
+The verified%s name copy preserves bytes beyond its terminating zero.
+
+This remains a native-physics preview: initials update the current run's RAM
+records, while preview times stay excluded from saved/global competitive
+records. Cartridge graphics, the menu water-disturbance callees and EEPROM
+storage are not executed. Championship/stunt browser menu admission remains
+pending. The normal modern-physics record form keeps its existing behavior.
+All153 focused tests pass, including a complete three-letter input/END/exit
+sequence, blank-name restoration, byte preservation, atomic failure and menu
+clock agreement at30/60/144Hz. Automated verification runs now continue when
+unfocused; ordinary interactive races retain their focus-loss pause.
+The local browser completed three laps in1:48.995 with zero misses, reached
+the wheel through the normal result schedule, accepted/deleted initials,
+automatically selected END, returned ABB to the results screen, and restarted
+without retaining the old menu. No browser errors were reported. Fourteen
+online/window transport tests also pass with the new release identifier.
 
 The shared801E1BA8 numeric initializer now retains its own14-word scratch,
 the existing HUD wheel/name bytes, fresh-name halfword and four-byte previous
@@ -55,11 +79,10 @@ and all9 saved analysis-project files have unchanged hashes. Full raw function
 bodies supply the execution comparisons; Ghidra's inferred bodies alone are
 not taken as proof of complete branch coverage.
 
-This is a local numeric checkpoint. The live site remainsv2.30.1. The outer
-initialization latch is connected to the display caller in prepared tests.
-Textured presentation, water-disturbance callees, format/storage calls and
-live name-entry integration are still pending. These modules do not claim
-to render the complete original screen or persist records. Source
+The outer initialization latch is connected to the browser display boundary.
+Original textured presentation, water-disturbance callees and durable storage
+remain pending. These modules do not claim to render the complete original
+screen or persist preview records. Source
 constants and character bytes are explicit caller views; no ROM strings or
 tables are embedded in the new implementation.
 
