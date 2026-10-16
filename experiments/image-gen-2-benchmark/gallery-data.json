@@ -22424,5 +22424,88 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-16-factual-infographic-factual-infographic-kneading-a-familiar",
+    "title": "Factual infographic: Kneading — A Familiar Rhythm, an Uncertain Motive",
+    "tests": "Artwork-led focused behavior study; no broad preview repetition; uncertainty retained; no subjective review or automatic reroll.; archive_slot=2026-10-16T12:20; concept=adult-cat-kneading-nursing-rhythm-uncertain-motivation; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: curious-behaviors",
+    "prompt": "Create a finished, richly artistic scientific cat-behavior atlas, directly rendered artwork, not a photographed book, framed poster or interface. Title: “KNEADING” with subtitle “A familiar rhythm, an uncertain motive”. Small series line “CAT ATLAS • CURIOUS BEHAVIORS”.\n\nA dominant exquisitely rendered adult blue-grey and white domestic shorthair occupies the sweeping center and right of the composition, three-quarter low side view, both front paws clearly visible on a soft deep-teal knitted blanket. One forepaw presses down into the knitted folds while the other lifts lightly, believable normal feline anatomy and weight distribution, four legs total, finely painted individual guard hairs, soft white muzzle, delicate whiskers, ordinary natural paws. Quiet warm afternoon light falls across its fur against an atmospheric midnight-blue and warm ivory ground. Use refined gouache, colored pencil and precise technical ink, luminous depth with tactile wool and fur. The cat and blanket take visual precedence; never turn this into a grid of equal boxes. Its relaxed posture is an illustrative example, not a claimed universal emotional diagnosis.\n\nLet curving wool threads and spare fine leader lines guide the eye through open annotations, asymmetrically placed with generous breathing room. Near the main paws, integrate a beautiful enlarged observational study of the SAME two forepaws at two moments, small and anatomically coherent, labeled “Press • release • repeat” and “Alternating forepaw pressure on a soft surface”. Use two discreet curved arrows for the alternating motion, no invented quantitative timing or force traces. Keep this an external movement study, NOT a claw cutaway or muscle-mechanism claim.\n\nAt the lower left, a smaller tender naturalistic vignette shows a nursing kitten pressing its mother's belly while latched, mother resting comfortably, no human or bottle. Label “Starts in kittenhood” and concise caption “Nursing kittens knead their mother’s belly, helping stimulate milk flow.” Connect visually to the adult’s forepaw rhythm with a single flowing ink line; no claim that every adult kneads or that early weaning explains it.\n\nBeside the hero’s shoulder, use an airy heading “What it may mean” with “Kneading can be a sign of affection.” Directly below, in equally readable type, “That is an interpretation—not a window into a cat’s thoughts.” Along a small unobtrusive open sound-wave flourish, label “Some cats knead while purring” then “Purring also happens under stress; it is not proof of happiness.” Do not draw a medical diagnosis or quantified acoustic spectrum. At the bottom, an elegant open text ribbon: “OBSERVATION ≠ CERTAINTY” and “The rhythm is visible. The adult cat’s exact motive is not.” These qualifiers are essential and must remain legible.\n\nUse confident restrained typography, clear readable complete labels, fewer short paragraphs rather than microscopic filler. Intricate visual detail without crowding. Source credit in a small legible footer: “Sources: Cornell University • Washington State University”. No invented hormones, neurological pathways, glands, pheromone clouds, evolutionary grass-flattening explanation, breed history, individual care prescription, early-weaning claim, universal happiness promise, or anthropomorphic baking utensils. The phrase making biscuits need not appear. Preserve the distinctions between established nursing function, observed adult action and uncertain adult meaning. Opaque background. Render one image with auto size and medium quality.",
+    "image": "images/2026-10-16-factual-infographic-factual-infographic-kneading-a-familiar.jpg",
+    "thumb": "thumbs/2026-10-16-factual-infographic-factual-infographic-kneading-a-familiar.webp",
+    "color": "#878881",
+    "date": "2026-10-16",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "adult-cat-kneading-nursing-rhythm-uncertain-motivation",
+      "imageSha256": "6f29a763c9ffa946c8c721bc33f4bffc46651d53fba86aded406e3f33f7a0113",
+      "imageDHash": "20044607fbb2ab53"
+    },
+    "factualInfographic": {
+      "topic": "What is established and uncertain about feline kneading",
+      "description": "Focused feline kneading plate separating nursing function and observed adult behavior from interpretations of motivation.",
+      "sourceNote": "Read both complete university articles; Cornell veterinarian Bruce Kornreich and WSU veterinarian Sarah Guess. https://alumni.cornell.edu/cornellians/abcs-of-cats/ ; https://askdruniverse.wsu.edu/2023/09/21/7364/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-16T16:21:54.730739+00:00",
+        "sources": [
+          {
+            "id": "cornell",
+            "publisher": "Cornell University",
+            "title": "The ABCs of C-A-Ts",
+            "sourceType": "university",
+            "url": "https://alumni.cornell.edu/cornellians/abcs-of-cats/"
+          },
+          {
+            "id": "wsu",
+            "publisher": "Washington State University",
+            "title": "Why do cats purr? — Ask Dr. Universe",
+            "sourceType": "university",
+            "url": "https://askdruniverse.wsu.edu/2023/09/21/7364/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Kneading is a nursing-related paw-pressing behavior that can persist into adult life; the illustrated alternating forepaw presses on a soft blanket depict this behavior, not walking or scratching.",
+            "sourceIds": [
+              "cornell",
+              "wsu"
+            ]
+          },
+          {
+            "claim": "Nursing kittens knead their mother’s belly, helping stimulate milk flow.",
+            "sourceIds": [
+              "wsu"
+            ]
+          },
+          {
+            "claim": "Some cats knead while purring.",
+            "sourceIds": [
+              "wsu"
+            ]
+          },
+          {
+            "claim": "Kneading can be a sign of affection, not a guaranteed reading of a cat’s thoughts; broader engagement and context matter.",
+            "sourceIds": [
+              "cornell"
+            ]
+          },
+          {
+            "claim": "Purring occurs in contented and stressed cats, so purring alone does not prove happiness.",
+            "sourceIds": [
+              "wsu"
+            ]
+          },
+          {
+            "claim": "Adult motivation should be presented as interpretation rather than certainty: we cannot get inside a cat’s mind.",
+            "sourceIds": [
+              "cornell"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
