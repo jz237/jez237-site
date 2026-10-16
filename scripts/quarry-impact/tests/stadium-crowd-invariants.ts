@@ -10,15 +10,18 @@ export function readStadiumCrowdPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreStadiumCrowdBytes(file:string,bytes:Buffer):Buffer{
+ bytes=restoreCountersteeringBytes(file,bytes);
  const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readStadiumCrowdPrevious(file);
 }
 export function verifyStadiumCrowdRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'9cea5c0b3eaff3495592138b1afc2156ba0e4f59');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreCountersteeringBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreStadiumCrowdBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the StadiumCrowd release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreCountersteeringBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the StadiumCrowd release');
  assert.equal(manifest.previousFixtureCount,2794);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,2794);
 }
+
+import {restoreCountersteeringBytes} from './countersteering-invariants';

@@ -1,3 +1,4 @@
+import {steeringSpeedScale} from './countersteering';
 import {surfaceGrip,type DrivingSurface} from './driving-surface';
 import {limitBrakeImpulse,limitTractionForce,type DrivingAssists} from './driving-assists';
 import {manualEngineBrake,stepTransmission,type TransmissionInput,type TransmissionState} from './transmission';
@@ -145,8 +146,8 @@ const intact=new Float32Array(4),unshifted=[{x:0,y:0,z:0},{x:0,y:0,z:0},{x:0,y:0
 export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastVehicleController,kind:CarKind,spec:VehicleSpecification,state:PhysicsState,dt:number,wheelDamage:ArrayLike<number>=intact,wheelShift:readonly Vec[]=unshifted,engineDamage?:number,tyreDamage?:ArrayLike<number>){
  const q=body.rotation(),velocity=body.linvel(),forward=rotateVehicleVector({x:0,y:0,z:1},q),right=rotateVehicleVector({x:1,y:0,z:0},q),up=rotateVehicleVector({x:0,y:1,z:0},q),def=DEFINITIONS[kind],alive=state.health>0;
  const running=advanceEngineRestart(state,dt);
- state.speed=dot(velocity,forward);state.slip=Math.abs(dot(velocity,right));
- const target=(alive?state.input.steer:0)*(.55*spec.steering/(1+Math.abs(state.speed)*.016))+(state.damageRight-state.damageLeft)*.0007;
+ state.speed=dot(velocity,forward);const lateralSpeed=dot(velocity,right);state.slip=Math.abs(lateralSpeed);
+ const target=(alive?state.input.steer:0)*(.55*spec.steering*steeringSpeedScale(state.speed,lateralSpeed,state.input.steer,dot(body.angvel(),up)))+(state.damageRight-state.damageLeft)*.0007;
  const alpha=1-Math.exp(-8*dt);state.steering=(1-alpha)*state.steering+alpha*target;
  const throttle=stepTransmission(state,spec,dt,running);
  const force=running?throttle*spec.force*enginePowerFactor(state.health,engineDamage)*clamp((spec.speedLimit-Math.abs(state.speed))/10,0,1):0;
