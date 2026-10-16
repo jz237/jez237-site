@@ -12193,5 +12193,83 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-16-factual-infographic-factual-infographic-whiskers-touch-befo",
+    "title": "Factual infographic: Whiskers — Touch Before the Muzzle Arrives",
+    "tests": "Focused tactile mechanism; schematic not to scale; no broad preview repetition, quantitative traces, remote radar or rat-specific S-bend claim. No subjective review.; archive_slot=2026-10-16T04:20; concept=cat-whisker-contact-follicle-sensory-transduction; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: extraordinary-senses",
+    "prompt": "Create a finished, richly illustrated feline science atlas, artwork-led and organically annotated, not a boxed grid. Title: “WHISKERS” with subtitle “Touch before the muzzle arrives”. Small series line: “CAT ATLAS · EXTRAORDINARY SENSES”.\n\nA luminous close three-quarter portrait of a normal adult shorthaired smoky gray domestic cat dominates the right two-thirds, facing left, low curious head, anatomically credible muzzle pads and gently arcing long ivory whiskers. One whisker makes slight physical contact with a softly lit curved wooden edge at left while the muzzle remains visibly separated from it. Show one small contact point, a subtle change in curvature and a fine arrow toward the whisker base; no remote radar rings, no glowing sensor hairs, no force field. The face should be beautifully modeled in charcoal, layered gouache and precise colored-pencil fur on a deep muted midnight-teal ground, warm copper light across cheek, translucent ivory callout lettering, quiet sage anatomical accents. Render individual fur direction, whisker taper, moist nose, natural eye reflections. No breed stereotypes or anthropomorphism. The composition is asymmetrical and intimate, with real breathing room, not a generic parchment template.\n\nFrom the contact point, a fine flowing copper line guides the eye through three concise labels organically nested in open negative space: “CONTACT bends the shaft” → “DEFORMATION reaches the follicle” → “RECEPTORS trigger sensory nerve signals”. Label one normal exposed whisker “Hair shaft — no sensors along its length”. Connect the muzzle base with a delicate leader to a large elegant magnified follicle study integrated into the lower-left area, not a detached rectangular card. Show a simplified skin section, one coherent whisker descending into a deep follicle, sensory endings around its base and a single sensory nerve bundle leaving the follicle. Only label “Skin”, “Whisker follicle”, “Sensory endings”, “Sensory nerve”. No nerve inside the exposed shaft; no fanciful electrical circuits or exact anatomical receptor subtypes. Caption the study “Simplified schematic · not to scale”. Do not draw an S-bend or claim rat-model microanatomy as proven feline anatomy.\n\nBelow the portrait, along a sweeping open arc, integrate a compact qualitative study titled “Different receptors, different responses”. A single small bent-whisker sketch connects to two delicate ink traces with readable labels: “Slowly adapting: signal continues during held deflection” and “Rapidly adapting: brief response to movement”. Use an unnumbered time direction only, no invented spike counts or speed thresholds. Brief closing text woven into the curve: “A touch signal begins at the base, not the tip.” These are schematic teaching traces, never recorded-data claims. This is focused tactile mechanics, not an overview of all feline senses. No claim that whiskers measure body width, no balance organ claim, no emotional interpretation, no disease or husbandry guide, no unsupported statistics.\n\nEnsure the central mechanism and concise readable text remain clear; do not cram in additional trivia. Strong hierarchy, subtle leader lines, beautiful painted anatomy, credible proportions, visible object contact, no rigid panels, cards, frame, page mockup, screen, or photographed poster. A tiny source footer may read “Sources: Journal of Physiology; Northwestern University”. Output the finished artwork directly, opaque background. Use openai/gpt-image-2.5-sunburst, medium quality, auto size, exactly one image.",
+    "image": "images/2026-10-16-factual-infographic-factual-infographic-whiskers-touch-befo.jpg",
+    "thumb": "thumbs/2026-10-16-factual-infographic-factual-infographic-whiskers-touch-befo.webp",
+    "color": "#3a3e38",
+    "date": "2026-10-16",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "cat-whisker-contact-follicle-sensory-transduction",
+      "imageSha256": "afebc739e77d7d4ca0f1a7dd3095af6b5534ff1402353cf0be84ad35e703f404",
+      "imageDHash": "0bcfcbcf73393933"
+    },
+    "factualInfographic": {
+      "topic": "How feline whiskers transduce mechanical contact",
+      "description": "Focused feline whisker contact mechanics, receptor location and qualitative adaptation responses.",
+      "sourceNote": "Cat-specific physiology plus general mammalian mechanics; no rat-model S-bend extrapolation. Sources: https://pmc.ncbi.nlm.nih.gov/articles/PMC1350747/ ; https://news.northwestern.edu/stories/2021/04/whisker-simulation-gives-insight-into-mammals-sense-of-touch",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-16T08:21:22.230430+00:00",
+        "sources": [
+          {
+            "id": "cat-study",
+            "publisher": "The Journal of Physiology / The Physiological Society",
+            "title": "Functional characteristics of mechanoreceptors in sinus hair follicles of the cat",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1350747/"
+          },
+          {
+            "id": "northwestern",
+            "publisher": "Northwestern University",
+            "title": "Whisker simulation gives insight into mammals’ sense of touch",
+            "sourceType": "university",
+            "url": "https://news.northwestern.edu/stories/2021/04/whisker-simulation-gives-insight-into-mammals-sense-of-touch"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Cat maxillary whisker movement evokes impulses in sensory afferent fibres of the infraorbital nerve. Contact bends the shaft and mechanical deformation reaches the follicle, activating sensory receptors.",
+            "sourceIds": [
+              "cat-study",
+              "northwestern"
+            ]
+          },
+          {
+            "claim": "Sensory receptors are at the whisker base within the follicle, not distributed along the exposed shaft; depict no nerves or sensors in the exposed whisker.",
+            "sourceIds": [
+              "northwestern"
+            ]
+          },
+          {
+            "claim": "Cat whisker afferents include slowly adapting responses to maintained displacement and rapidly adapting responses to whisker movement. Diagrammatic traces are qualitative, without invented quantitative scales.",
+            "sourceIds": [
+              "cat-study"
+            ]
+          },
+          {
+            "claim": "Whiskers allow tactile contact with surroundings; the illustrated whisker touches an object before the muzzle reaches it, not remote sensing without physical input.",
+            "sourceIds": [
+              "cat-study",
+              "northwestern"
+            ]
+          },
+          {
+            "claim": "The follicle cutaway is a simplified schematic, not to scale. Avoid claiming a particular intrafollicular S-bend is demonstrated in cats: the Northwestern simulation used rat data.",
+            "sourceIds": [
+              "northwestern"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
