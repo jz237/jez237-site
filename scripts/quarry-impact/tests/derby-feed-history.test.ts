@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readDerbyFeedPrevious,restoreDerbyFeedBytes,verifyDerbyFeedRevision} from './derby-feed-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreSteeringRefreshBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('DerbyFeed preserves every prior fixture, vehicle asset, control and camera input',verifyDerbyFeedRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/derby-feed/revision.json').toString());
@@ -10,3 +10,5 @@ test('the successor bridge restores full predecessors and does not conceal later
  }
  const unknown=Buffer.from('unknown');assert.deepEqual(restoreDerbyFeedBytes('src/unknown.ts',unknown),unknown);
 });
+
+import {restoreSteeringRefreshBytes} from './steering-refresh-invariants';

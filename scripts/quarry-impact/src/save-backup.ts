@@ -32,8 +32,8 @@ function normalize(key:string,text:string):string{
  // Validate historical controls without applying the steering-default migration.
  // Signed backups must retain their original canonical bytes; readControls migrates
  // them normally when the restored settings are loaded by the game.
- const legacyControls=key===CONTROLS_KEY&&(raw.keyboardDefaults===undefined||Number.isInteger(raw.keyboardDefaults)&&raw.keyboardDefaults>=1&&raw.keyboardDefaults<5);
- const value=readers[key](legacyControls?JSON.stringify({...raw,keyboardDefaults:5}):text);
+ const legacyControls=key===CONTROLS_KEY&&(raw.keyboardDefaults===undefined||Number.isInteger(raw.keyboardDefaults)&&raw.keyboardDefaults>=1&&raw.keyboardDefaults<6);
+ const value=readers[key](legacyControls?JSON.stringify({...raw,keyboardDefaults:6}):text);
  if(legacyControls){if(raw.keyboardDefaults===undefined)delete(value as Record<string,unknown>).keyboardDefaults;else (value as Record<string,unknown>).keyboardDefaults=raw.keyboardDefaults;}
  if(value===null)throw Error('The championship save is invalid.');
  // Preserve the canonical bytes of controls exported before vibration existed.
