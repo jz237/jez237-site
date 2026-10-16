@@ -83,7 +83,7 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
  if(onLaunchFrame!==null&&typeof onLaunchFrame!=='function')throw new TypeError('onLaunchFrame must be a function');
  if(raceRuntime&&(!recovery||sourceStates.length||poseProviders.length||['scene','advanceClock','advanceLaunch'].some(k=>typeof raceRuntime[k]!=='function')))
   throw new TypeError('Canonical launch requires recovered riders and its single scene owner');
- if(raceRuntime?.ordinary&&['objectMotionActive','courseRollerState'].some(k=>typeof raceRuntime[k]!=='function'))
+ if(raceRuntime?.ordinary&&['objectMotionActive','courseRollerState','waterDatumAfterPhysics'].some(k=>typeof raceRuntime[k]!=='function'))
   throw new TypeError('Canonical ordinary motion requires its activity and roller state owner');
  if(typeof floatingActive!=='boolean')throw new TypeError('floatingActive must be boolean');
  if(typeof primaryActive!=='boolean')throw new TypeError('primaryActive must be boolean');
@@ -165,6 +165,10 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
    point90Native:Object.fromEntries(['x','y','z'].map(k=>[k,F(p[k]/a.hull.scale)])),datum2458:water.field.datumNative});
   applyNativeRiderResultCodes(lifecycles,selected.operations);
   a.lastResultCodeOperations=selected.operations;
+ }:null,beforeWater:raceRuntime?.ordinary?world=>{
+  //51238 observes the preceding lap judge's shared stage after all actors.
+  // The water field owns datum; a render-time option cannot reset its tide.
+  world.frame.water.datumNative=raceRuntime.waterDatumAfterPhysics(water.field.datumNative);
  }:null,afterTick:(_,context)=>{
   if(context.tick%5!==0)present(host);
  },afterFrame:(_,context)=>{
@@ -186,6 +190,11 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
   const keepRunning=host.onFrame?host.onFrame(host,context,ordinary):undefined;
   if(primary)primary.afterFrame(host.world,context,{active:host.primaryActive&&objectMotionActive});
   if(floating)floating.afterFrame(host.world,context,{active:host.floatingActive&&objectMotionActive});
+  //6E3A8 follows7DBC0 with Southern's generic fixed-sphere Y writes.
+  // Tags1/4 follow datum; tag5 mast bases retain authored Y. This is an
+  // activity-gated source frame operation, never a render-time correction.
+  if(course.sourceWaterCourseIndex===7&&objectMotionActive&&fixedSphereGrid)
+   for(const sphere of fixedSphereGrid.spheres)if(sphere.runtimeTag!==5)sphere.y=water.field.datumNative*water.scale;
   // The original caller stamps course rollers AFTER object motion. Read72c
   // here from the canonical state, not from the earlier water/input latch.
   if(raceRuntime?.ordinary)advanceRaceWaterRollers(water,{active:objectMotionActive,rollerState72c:raceRuntime.courseRollerState()});

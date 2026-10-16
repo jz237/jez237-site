@@ -20,6 +20,27 @@ function make(count=1,{humanIndices=[0],contacts=[],initialNoise=true,afterFrame
 }
 const near=(a,b,e=1e-10)=>assert.ok(Math.abs(a-b)<e,`${a} != ${b}`);
 
+test('course tide runs after every actor and before water once per50ms, independent of rendering',()=>{
+ const histories=[];
+ for(const hz of [30,60,144]){
+  const w=make(),observed=[];
+  w.beforeActor=(world,c)=>{assert.equal(world.water.field.datumNative,1-c.logicalFrame);};
+  w.beforeWater=(world,c)=>{
+   assert.equal(world.adapters[0].logicalFrames,c.logicalFrame);
+   assert.equal(world.water.frames,c.logicalFrame-1);
+   observed.push(world.water.field.datumNative);
+   world.frame.water.datumNative=world.water.field.datumNative-1;
+  };
+  w.afterFrame=(world,c)=>assert.equal(world.water.field.datumNative,-c.logicalFrame);
+  for(let i=0;i<hz;i++)stepNativeRaceWorld(w,1/hz,[{}],{waterOptions:{datumNative:123}});
+  assert.deepEqual(observed,Array.from({length:20},(_,i)=>i===0?0:-i));
+  assert.equal(w.water.field.datumNative,-20);
+  const calls=observed.length;stepNativeRaceWorld(w,1,null,{active:false});assert.equal(observed.length,calls);
+  histories.push({hull:nativeRaceSnapshot(w.adapters[0]),water:captureRaceWater(w.water)});
+ }
+ assert.deepEqual(histories[1],histories[0]);assert.deepEqual(histories[2],histories[0]);
+});
+
 test('all four hulls interleave descending on each tick before one water and object update',()=>{
  const calls=[],contacts=Array.from({length:4},(_,i)=>({primarySpheres:(h)=>calls.push(`${h.ticks}:${i}`)&&undefined}));
  const w=make(4,{contacts,afterFrame:(world,c)=>{calls.push(`water:${world.water.frames}`);calls.push(`objects:${c.logicalFrame}`);

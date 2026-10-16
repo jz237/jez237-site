@@ -1,5 +1,34 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unreleased — native Southern tide schedule
+
+The native host now applies51238's exact course/simulation/main-state gates and
+shared1FCC stage. It lowers the water one native unit per completed outer frame
+at stage1 toward-100, or at exactly stage2 toward-150. Other stages hold. The
+922E4 call order places this after all hull/actor work and before water selection
+and ordinary lap judging. The field owns datum; weather is a presentation view.
+Render updates cannot reset it or advance it. Southern fixed-sphere tags1/4
+follow datum after object motion under activity624, while tag5 stays fixed.
+The ship, land, floors, shorelines and ramps retain their authored heights.
+
+All2,160 prepared original tide-block executions match (16,342 instructions).
+A fresh read-only EVO Ghidra query exported446 ROM-matching instructions and
+left all nine project files unchanged. The prior6E3A8 export supplies the
+generic-sphere placement/order evidence. Focused checks cover30/60/144Hz,
+pause, inactive simulation, solo/versus, shared-stage ownership, stale incoming
+datum options, marker activity gates, host physics, buoy motion and loading.
+The regression/follow-up runs pass62 unique checks. Two initial new-test
+assertions were corrected: signed zero and taking a snapshot before a deliberate
+canonical lap write. No runtime behavior was weakened to pass them.
+
+Private ordinary-input probes now reach the actual-150 datum. Solo Normal,
+Hard and Expert finish with zero misses; Reverse finishes with two. Normal's
+inspection helm stalls near the exposed ship and finishes in279.310s; Hard,
+Expert and Reverse finish in127.243s,131.128s and133.988s. In the two-player
+probe P2 finishes in143.673s with four misses while P1 remains near the ship.
+This exposes an authored inspection-path limitation requiring further work;
+Southern public native admission remains gated. Resolution/detail are unchanged.
+
 ## Unreleased — Southern alternate navigation families
 
 Southern's native owner now initializes its separate secondary and tertiary

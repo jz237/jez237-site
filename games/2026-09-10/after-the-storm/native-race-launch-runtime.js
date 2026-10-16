@@ -23,6 +23,7 @@ import {prepareNativeContinuationMenuFrame,nativeContinuationMenuView} from './n
 import {nativeResultsRecordView} from './native-results-record-view.js';
 import {captureNativeRecordSession,restoreNativeRecordSession,copyNativeRecordSession} from './native-record-session.js';
 import {NATIVE_RIDER_MENU_ORDER} from './native-rider-controls.js';
+import {nativeCourseDatumAfterPhysics} from './native-course-datum.js';
 
 // Overlapping effect47FC, solo4800 and two-player4818 numeric entries. Ordinary
 // two-player place indices are0/1; other mode tables remain separate admission.
@@ -190,6 +191,8 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
   // primary/generic object motion call7DBC0 independently of simulation648.
   objectMotionActive:()=>current.scene.activity624===-1,
   courseRollerState:()=>(current.scene.field72c<<16)>>16,
+  waterDatumAfterPhysics:datumNative=>nativeCourseDatumAfterPhysics(datumNative,{
+   ...current.scene,southernLap1fcc:current.raceWords1f94[ri(0x1fcc)]|0}),
   snapshot:()=>nativeRaceStateSnapshot(current),
   recordSessionSnapshot:()=>captureNativeRecordSession(current),
   nameEntryView:()=>nativeNameMenuView(current),
