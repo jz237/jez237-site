@@ -62,5 +62,5 @@ export function createStadiumReservoirWorld(id:'holloway-stadium-v1'|'bramblebro
  const intake=paved?null:createReservoirIntake(),shore=paved?null:createReservoirShore();if(intake)root.add(intake.root);if(shore)root.add(shore.root);
  const venue=paved?createStadiumScenery():createCourseScenery(course,'reservoir');if(venue)root.add(venue.root);
  root.userData.solidRecords=course.solids;freezeSceneryTransforms(root);
- let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;intake?.dispose();shore?.dispose();venue?.dispose();surfaceDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
+ let disposed=false;return{root,update:venue&&'update' in venue?venue.update:undefined,dispose(){if(disposed)return;disposed=true;intake?.dispose();shore?.dispose();venue?.dispose();surfaceDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
 }

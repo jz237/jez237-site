@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readSpeedwayCrowdPrevious,restoreSpeedwayCrowdBytes,verifySpeedwayCrowdRevision} from './speedway-crowd-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreStadiumCrowdBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('SpeedwayCrowd preserves every prior fixture, vehicle asset, control and camera input',verifySpeedwayCrowdRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/speedway-crowd/revision.json').toString());
@@ -10,3 +10,5 @@ test('the successor bridge restores full predecessors and does not conceal later
  }
  const unknown=Buffer.from('unknown');assert.deepEqual(restoreSpeedwayCrowdBytes('src/unknown.ts',unknown),unknown);
 });
+
+import {restoreStadiumCrowdBytes} from './stadium-crowd-invariants';

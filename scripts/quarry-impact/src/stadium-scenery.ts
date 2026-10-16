@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {createVenueCrowd,type SpectatorPlace} from './venue-crowd';
 import {HOLLOWAY} from './stadium-reservoir-courses';
 /** Holloway's decorative venue furniture never participates in racing physics. */
 export function createStadiumScenery(){
@@ -6,6 +7,7 @@ export function createStadiumScenery(){
  const palette={steel:0x3b4548,roof:0xb3b5ab,red:0x984637,cream:0xd1c7a6,blue:0x45687a,glass:0x34474d,skin:0xae8c6b};
  type Finish=keyof typeof palette;
  const geometry=new T.BoxGeometry(1,1,1),materials=Object.fromEntries(Object.entries(palette).map(([k,color])=>[k,new T.MeshStandardMaterial({color,roughness:k==='glass'?.3:.87,metalness:k==='steel'?.35:0})])) as Record<Finish,T.MeshStandardMaterial>;
+ const spectators:SpectatorPlace[]=[];
  const batches=new Map<Finish,T.Matrix4[]>(),placements:{x:number;z:number;w:number;d:number;kind:string}[]=[],textures:T.Texture[]=[];
  function box(f:Finish,x:number,y:number,z:number,w:number,h:number,d:number){const a=batches.get(f)??[];a.push(new T.Matrix4().compose(new T.Vector3(x,y,z),new T.Quaternion(),new T.Vector3(w,h,d)));batches.set(f,a);}
  function reserve(x:number,z:number,w:number,d:number,kind:string){
@@ -24,8 +26,11 @@ export function createStadiumScenery(){
     // Deterministic empty seats and varied clothes avoid full uniform rows.
     if((seat*17+tier*7+Math.abs(x))%11<3)continue;
     const xx=x-22+seat*1.33;
-    box((seat+tier)%3===0?'cream':(seat+tier)%3===1?'red':'blue',xx,yy+.6,zz,.48,.85,.45);
-    box('skin',xx,yy+1.17,zz,.35,.35,.35);
+    const finish=(seat+tier)%2?'red':'blue';
+    box(finish,xx,yy+.2,zz,.62,.15,.55);
+    box(finish,xx,yy+.55,zz+sign*.27,.62,.65,.1);
+    for(const dx of [-.22,.22])box('steel',xx+dx,yy+.04,zz,.06,.28,.4);
+    spectators.push({x:xx,y:yy-.1,z:zz,yaw:sign>0?Math.PI:0,seated:true});
    }
    box('steel',x-24,yy+1.3,zz,.12,.12,3);
   }
@@ -56,6 +61,7 @@ export function createStadiumScenery(){
  sign('HOLLOWAY MOTOR STADIUM','FULL CONTACT / HALF THE RESALE VALUE',0,8,-6.4,31,10);
  sign('PANEL BEATERS CLUB','PIT SERVICE / DENT COLLECTION',0,11,-54,25,4);
  for(const [finish,matrices]of batches){const mesh=new T.InstancedMesh(geometry,materials[finish],matrices.length);matrices.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.castShadow=mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
+ const crowd=createVenueCrowd(spectators);crowd.root.name='holloway-spectators';for(const mesh of crowd.root.children)mesh.castShadow=false;root.add(crowd.root);
  root.userData.placements=placements;
- let disposed=false;return {root,dispose(){if(disposed)return;disposed=true;root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();else if(o instanceof T.Mesh){o.geometry.dispose();(o.material as T.Material).dispose();}});geometry.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
+ let disposed=false;return {root,update:crowd.update,dispose(){if(disposed)return;disposed=true;crowd.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();else if(o instanceof T.Mesh){o.geometry.dispose();(o.material as T.Material).dispose();}});geometry.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
 }
