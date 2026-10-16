@@ -33,9 +33,61 @@ test('speed steering assist is optional, symmetric and stateless across repeated
 });
 test('controls revision preserves exact prior local livery bytes',verifyControlsRevision);
 
-test('new keyboard defaults invert both key pairs while saved bindings retain their meanings',()=>{
+test('new keyboard defaults reverse the prior release while saved custom bindings retain their meanings',()=>{
  const fresh=readControls();assert.deepEqual(fresh.keys.left,['KeyD','ArrowRight']);assert.deepEqual(fresh.keys.right,['KeyA','ArrowLeft']);
  const saved={...fresh,keys:{...fresh.keys,left:['KeyA','ArrowLeft'],right:['KeyD','ArrowRight']}};
  const restored=readControls(JSON.stringify(saved));assert.equal(drivingInput(restored,new Set(['KeyA']),[],0).steer,-1);assert.equal(drivingInput(restored,new Set(['KeyD']),[],0).steer,1);
  assert.equal(steeringAxis(-1,fresh),-1);assert.equal(steeringAxis(1,fresh),1);
+});
+
+test('old default steering migrates once without resetting other controls',()=>{
+ const old={...defaultControls(),keyboardDefaults:4,deadzone:.3,keys:{...defaultControls().keys,left:['KeyA','ArrowLeft'],right:['KeyD','ArrowRight'],throttle:['KeyL','ArrowUp']}};
+ const updated=readControls(JSON.stringify(old));assert.deepEqual(updated.keys.left,['KeyD','ArrowRight']);assert.deepEqual(updated.keys.right,['KeyA','ArrowLeft']);assert.deepEqual(updated.keys.throttle,old.keys.throttle);assert.equal(updated.deadzone,.3);
+ assert.deepEqual(readControls(JSON.stringify(updated)),updated);
+ assert.deepEqual(readControls(JSON.stringify({...old,keyboardDefaults:undefined})).keys,updated.keys);
+ assert.equal(updated.keyboardDefaults,10);
+ const custom={...old,keys:{...old.keys,left:['KeyJ'],right:['KeyK']}};assert.deepEqual(readControls(JSON.stringify(custom)).keys,custom.keys);
+ const intentional={...old,keyboardDefaults:10};assert.deepEqual(readControls(JSON.stringify(intentional)).keys,intentional.keys);
+});
+
+test('revision five normal steering saves adopt reversed defaults',()=>{
+ const old={...defaultControls(),keyboardDefaults:5,keys:{...defaultControls().keys,left:['KeyA','ArrowLeft'],right:['KeyD','ArrowRight']}};
+ const updated=readControls(JSON.stringify(old));
+ for(const key of ['KeyA','ArrowLeft'])assert.equal(drivingInput(updated,new Set([key]),[],0).steer,1);
+ for(const key of ['KeyD','ArrowRight'])assert.equal(drivingInput(updated,new Set([key]),[],0).steer,-1);
+ assert.deepEqual(readControls(JSON.stringify(updated)),updated);
+});
+
+test('revision six normal steering saves adopt reversed defaults and retain calibration',()=>{
+ const old={...defaultControls(),keyboardDefaults:6,deadzone:.24,keys:{...defaultControls().keys,left:['KeyA','ArrowLeft'],right:['KeyD','ArrowRight']}};
+ const updated=readControls(JSON.stringify(old));
+ for(const key of ['KeyA','ArrowLeft'])assert.equal(drivingInput(updated,new Set([key]),[],0).steer,1);
+ for(const key of ['KeyD','ArrowRight'])assert.equal(drivingInput(updated,new Set([key]),[],0).steer,-1);
+ assert.equal(updated.deadzone,.24);assert.equal(updated.keyboardDefaults,10);
+ assert.deepEqual(readControls(JSON.stringify(updated)),updated);
+});
+
+test('revision seven normal steering saves adopt reversed defaults without losing custom pedals',()=>{
+ const old={...defaultControls(),keyboardDefaults:7,deadzone:.24,keys:{...defaultControls().keys,left:['KeyA','ArrowLeft'],right:['KeyD','ArrowRight'],throttle:['KeyL','ArrowUp']}};
+ const updated=readControls(JSON.stringify(old));
+ for(const key of ['KeyA','ArrowLeft'])assert.equal(drivingInput(updated,new Set([key]),[],0).steer,1);
+ for(const key of ['KeyD','ArrowRight'])assert.equal(drivingInput(updated,new Set([key]),[],0).steer,-1);
+ assert.equal(updated.deadzone,.24);assert.equal(updated.keyboardDefaults,10);assert.deepEqual(updated.keys.throttle,old.keys.throttle);
+ assert.deepEqual(readControls(JSON.stringify(updated)),updated);
+});
+test('revision eight normal steering saves adopt reversed defaults without losing custom pedals',()=>{
+ const old={...defaultControls(),keyboardDefaults:8,deadzone:.24,keys:{...defaultControls().keys,left:['KeyA','ArrowLeft'],right:['KeyD','ArrowRight'],throttle:['KeyL','ArrowUp']}};
+ const updated=readControls(JSON.stringify(old));
+ for(const key of ['KeyA','ArrowLeft'])assert.equal(drivingInput(updated,new Set([key]),[],0).steer,1);
+ for(const key of ['KeyD','ArrowRight'])assert.equal(drivingInput(updated,new Set([key]),[],0).steer,-1);
+ assert.equal(updated.deadzone,.24);assert.equal(updated.keyboardDefaults,10);assert.deepEqual(updated.keys.throttle,old.keys.throttle);
+ assert.deepEqual(readControls(JSON.stringify(updated)),updated);
+});
+test('revision nine normal steering saves adopt reversed defaults without losing custom pedals',()=>{
+ const old={...defaultControls(),keyboardDefaults:9,deadzone:.24,keys:{...defaultControls().keys,left:['KeyA','ArrowLeft'],right:['KeyD','ArrowRight'],throttle:['KeyL','ArrowUp']}};
+ const updated=readControls(JSON.stringify(old));
+ for(const key of ['KeyA','ArrowLeft'])assert.equal(drivingInput(updated,new Set([key]),[],0).steer,1);
+ for(const key of ['KeyD','ArrowRight'])assert.equal(drivingInput(updated,new Set([key]),[],0).steer,-1);
+ assert.equal(updated.deadzone,.24);assert.equal(updated.keyboardDefaults,10);assert.deepEqual(updated.keys.throttle,old.keys.throttle);
+ assert.deepEqual(readControls(JSON.stringify(updated)),updated);
 });

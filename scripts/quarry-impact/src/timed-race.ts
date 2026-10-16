@@ -1,7 +1,6 @@
 import type {EventOptions,RoutePoint} from './event-rules';
-import type {DemoOptions} from './demo-session';
-/** Local circuit rule; fixed challenges, championships and online retain their rules. */
-export function timedRaceLimit(mode:string,custom:boolean,demo:boolean,format:string,event:EventOptions,options:DemoOptions):number{
+/** Local selection helper; fixed challenges and championships retain their rules. */
+export function timedRaceLimit(mode:string,custom:boolean,demo:boolean,format:string,event:EventOptions,options:Pick<EventOptions,'raceDuration'>):number{
  return mode==='race'&&custom&&format==='laps'?(demo?options.raceDuration:event.raceDuration)??0:0;
 }
 export function timedRaceFinished(passed:number,elapsed:number,limit:number):boolean{return limit>0&&elapsed>=limit&&passed>0&&passed%24===0;}
