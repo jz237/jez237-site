@@ -2,7 +2,7 @@ import {AI_DIFFICULTIES} from './ai-difficulty';
 import {clamp,wrap,DEFINITIONS} from './rules';
 import type {ArenaLayout} from './derby-arena';
 import type {DriverCar,DriverMemory} from './driving-brain';
-import type {Input} from './vehicle';
+import type {AIInput as Input} from './ai-input';
 
 export type DerbyManeuver={kind:'back out'|'run up';x:number;z:number;startX:number;startZ:number;time:number;slow:number};
 const dist=(a:{x:number;z:number},b:{x:number;z:number})=>Math.hypot(a.x-b.x,a.z-b.z);

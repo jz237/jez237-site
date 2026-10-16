@@ -1,7 +1,7 @@
 import {AI_DIFFICULTIES,type AIDifficulty} from './ai-difficulty';
 import {driveDerby,type DerbyManeuver} from './derby-driving';
 import {CHECKPOINTS, DEFINITIONS, clamp, trackPoint, wrap, type Mode, type CarKind} from './rules';
-import type {Input} from './vehicle';
+import type {AIInput as Input} from './ai-input';
 import {LEGACY_ARENA,type ArenaLayout} from './derby-arena';
 
 type Point = {x:number;y:number;z:number};

@@ -1,7 +1,7 @@
 import {DrivingBrain,type DriverCar,type Clearance} from './driving-brain';
 import {PursuitTargeting,type PursuitPosition} from './pursuit-targeting';
 import type {PursuitSession} from './pursuit';
-import type {Input} from './vehicle';
+import type {AIInput as Input} from './ai-input';
 const position=(car:DriverCar):PursuitPosition=>({id:car.id,x:car.current.x,z:car.current.z,vx:car.velocity.x,vz:car.velocity.z,health:car.health});
 /** Chase uses road navigation, obstacle probes and unsticking even during attacks.
  * Only the intended runner is exempt from traffic avoidance; allies remain obstacles. */

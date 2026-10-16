@@ -1,3 +1,6 @@
+import {ChaseRound,validChaseRules,validChaseState,type ChaseRules} from './online-chase';
+import {validCapacity,type OnlineCapacity} from './online-capacity';
+import type {PursuitSnapshot} from './pursuit';
 import {ARENA_NAMES,isArenaId,type ArenaId} from './arena-id';
 import {getRaceCourse} from './race-course';
 import {COURSE_NAMES,isCourseId,type CourseId} from './course-id';
@@ -9,22 +12,23 @@ import {CombatScoreboard,DEFAULT_EVENT,RACE_NAMES,type EventOptions} from './eve
 import {WaypointRace,waypointSequence,type WaypointOrder} from './waypoint-race';
 import type {Mode} from './rules';
 
-export type OnlineEventRules=Pick<EventOptions,'version'|'laps'|'direction'|'race'|'derby'|'duration'|'raceDuration'>&{course?:CourseId;arena?:ArenaId};
+export type OnlineEventRules=Pick<EventOptions,'version'|'laps'|'direction'|'race'|'derby'|'duration'|'raceDuration'>&{course?:CourseId;arena?:ArenaId;chase?:ChaseRules};
 export const DEFAULT_ONLINE_EVENT:OnlineEventRules=(({field,...rules})=>rules)(DEFAULT_EVENT);
 export type WaypointRecord={id:number;round:number;visited:number[];passed:number;finished:boolean};
 export type CombatRecord=ScoreRecord&{id:number};
-export type OnlineEventState={rules:OnlineEventRules;seed:number;waypoints?:WaypointRecord[];combat?:CombatRecord[];feats?:CombatFeatState;rivals?:RivalState};
+export type OnlineEventState={rules:OnlineEventRules;seed:number;waypoints?:WaypointRecord[];combat?:CombatRecord[];feats?:CombatFeatState;rivals?:RivalState;chase?:PursuitSnapshot};
 const integer=(v:unknown,min:number,max:number):v is number=>typeof v==='number'&&Number.isInteger(v)&&v>=min&&v<=max;
 const object=(v:unknown):v is Record<string,unknown>=>!!v&&typeof v==='object'&&!Array.isArray(v);
 /** Network rules are rejected rather than silently clamped to a different event. */
 export function validOnlineEventRules(v:unknown):v is OnlineEventRules{
-  return object(v)&&Object.keys(v).length===6+Number(v.raceDuration!==undefined)+Number(v.course!==undefined)+Number(v.arena!==undefined)&&Object.keys(v).every(k=>['version','laps','direction','race','derby','duration','raceDuration','course','arena'].includes(k))&&(v.arena===undefined||isArenaId(v.arena))&&(v.course===undefined||isCourseId(v.course))&&(v.raceDuration===undefined||v.race==='laps'&&integer(v.raceDuration,60,1200))&&v.version===1&&integer(v.laps,1,20)&&integer(v.duration,60,1200)&&
+  return object(v)&&Object.keys(v).length===6+Number(v.chase!==undefined)+Number(v.raceDuration!==undefined)+Number(v.course!==undefined)+Number(v.arena!==undefined)&&Object.keys(v).every(k=>['version','laps','direction','race','derby','duration','raceDuration','course','arena','chase'].includes(k))&&(v.chase===undefined||validChaseRules(v.chase,24)&&v.race==='laps'&&v.direction!=='opposing'&&v.raceDuration===undefined)&&(v.arena===undefined||isArenaId(v.arena))&&(v.course===undefined||isCourseId(v.course))&&(v.raceDuration===undefined||v.race==='laps'&&integer(v.raceDuration,60,1200))&&v.version===1&&integer(v.laps,1,20)&&integer(v.duration,60,1200)&&
     ['forward','reverse','opposing'].includes(v.direction as string)&&['laps','ordered','free','random'].includes(v.race as string)&&['survival','score','score-no-respawn'].includes(v.derby as string);
 }
-export function copyOnlineEventRules(v:OnlineEventRules):OnlineEventRules{return{...(v.arena===undefined||v.arena==='quarry-arena-v1'?{}:{arena:v.arena}),version:1,laps:v.laps,direction:v.direction,race:v.race,derby:v.derby,duration:v.duration,...(v.course===undefined||v.course==='quarry-v1'?{}:{course:v.course}),...(v.raceDuration===undefined?{}:{raceDuration:v.raceDuration})};}
-export function defaultOnlineEvent(v:OnlineEventRules){return (v.arena===undefined||v.arena==='quarry-arena-v1')&&(v.course===undefined||v.course==='quarry-v1')&&v.raceDuration===undefined&&(Object.keys(DEFAULT_ONLINE_EVENT)as (keyof OnlineEventRules)[]).every(k=>v[k]===DEFAULT_ONLINE_EVENT[k]);}
+export function copyOnlineEventRules(v:OnlineEventRules):OnlineEventRules{return{...(v.chase?{chase:structuredClone(v.chase)}:{}),...(v.arena===undefined||v.arena==='quarry-arena-v1'?{}:{arena:v.arena}),version:1,laps:v.laps,direction:v.direction,race:v.race,derby:v.derby,duration:v.duration,...(v.course===undefined||v.course==='quarry-v1'?{}:{course:v.course}),...(v.raceDuration===undefined?{}:{raceDuration:v.raceDuration})};}
+export function defaultOnlineEvent(v:OnlineEventRules){return v.chase===undefined&&(v.arena===undefined||v.arena==='quarry-arena-v1')&&(v.course===undefined||v.course==='quarry-v1')&&v.raceDuration===undefined&&(Object.keys(DEFAULT_ONLINE_EVENT)as (keyof OnlineEventRules)[]).every(k=>v[k]===DEFAULT_ONLINE_EVENT[k]);}
 export function validOnlineEventState(v:unknown,mode:Mode,count:number):v is OnlineEventState{
   if(!object(v)||!validOnlineEventRules(v.rules)||!integer(v.seed,0,0xffffffff))return false;
+  if(v.rules.chase?(mode!=='race'||!validCapacity(count)||!validChaseState(v.rules.chase,count,v.chase)):v.chase!==undefined)return false;
   const rules=v.rules,rows=(r:unknown):r is Record<string,unknown>[]=>Array.isArray(r)&&r.length===count&&new Set(r.map(x=>x?.id)).size===count&&r.every(x=>object(x)&&integer(x.id,0,count-1));
   if(mode==='race'&&rules.race!=='laps'){
     if(!rows(v.waypoints)||!v.waypoints.every(p=>{
@@ -48,19 +52,21 @@ export function restoreOnlineProgress(state:OnlineEventState,waypoints:WaypointR
 export class OnlineEvent {
   readonly rules:OnlineEventRules;
   readonly waypoints:WaypointRace|null;
+  chase:ChaseRound|null=null;
   readonly combat=new CombatScoreboard();
-  constructor(readonly mode:Mode,rules:OnlineEventRules,readonly seed:number){
+  constructor(readonly mode:Mode,rules:OnlineEventRules,readonly seed:number,capacity:OnlineCapacity=8){
     if(!validOnlineEventRules(rules)||!integer(seed,0,0xffffffff))throw Error('Invalid event rules');
+    if(rules.chase){if(mode!=='race')throw Error('Chase requires a circuit race');this.chase=new ChaseRound(rules.chase,capacity);}
     this.rules=copyOnlineEventRules(rules);this.waypoints=mode==='race'&&rules.race!=='laps'?new WaypointRace(rules.race as WaypointOrder,rules.laps,seed,getRaceCourse(rules.course).checkpoints,getRaceCourse(rules.course).waypointStations):null;
   }
   get score(){return this.mode==='derby'&&DERBY_FORMATS[this.rules.derby].scored;}
   get respawns(){return this.score&&DERBY_FORMATS[this.rules.derby].respawns;}
-  snapshot(count:number):OnlineEventState{return{rules:copyOnlineEventRules(this.rules),seed:this.seed,
+  snapshot(count:number):OnlineEventState{return{rules:copyOnlineEventRules(this.rules),seed:this.seed,...(this.chase?{chase:this.chase.snapshot()}:{}),
     ...(this.waypoints?{waypoints:Array.from({length:count},(_,id)=>{const p=this.waypoints!.get(id);return{id,round:p.round,visited:[...p.visited],passed:p.passed,finished:p.finished};})}:{}),
     ...(this.score?{combat:Array.from({length:count},(_,id)=>({id,...structuredClone(this.combat.get(id))})),feats:this.combat.feats.snapshot(),...(this.combat.rivals?{rivals:this.combat.rivals.snapshot()}:{})}:{})};}
-  restore(state:OnlineEventState,count:number){if(!validOnlineEventState(state,this.mode,count)||!(Object.keys(this.rules)as (keyof OnlineEventRules)[]).every(k=>state.rules[k]===this.rules[k])||state.seed!==this.seed)throw Error('Invalid saved event');restoreOnlineProgress(state,this.waypoints,this.combat);}
+  restore(state:OnlineEventState,count:number){if(!validOnlineEventState(state,this.mode,count)||JSON.stringify(copyOnlineEventRules(state.rules))!==JSON.stringify(this.rules)||state.seed!==this.seed)throw Error('Invalid saved event');restoreOnlineProgress(state,this.waypoints,this.combat);if(this.rules.chase&&validCapacity(count))this.chase=ChaseRound.restoreState(this.rules.chase,count,state.chase);}
 }
-export function onlineEventLabel(mode:Mode,rules:OnlineEventRules){return (mode==='derby'&&rules.arena?ARENA_NAMES[rules.arena]+' · ':'')+(mode==='race'&&rules.course?COURSE_NAMES[rules.course]+' · ':'')+(mode==='race'&&rules.raceDuration?`Timed circuit · ${rules.raceDuration/60} min · finish current lap · ${rules.direction}`:mode==='race'?`${RACE_NAMES[rules.race]} · ${rules.laps} ${rules.race==='laps'?'laps · '+rules.direction:'rounds'}`:mode==='derby'?`${DERBY_FORMATS[rules.derby].label} · ${rules.duration/60} min`:'Destruction playground');}
+export function onlineEventLabel(mode:Mode,rules:OnlineEventRules){return (mode==='derby'&&rules.arena?ARENA_NAMES[rules.arena]+' · ':'')+(mode==='race'&&rules.course?COURSE_NAMES[rules.course]+' · ':'')+(mode==='race'&&rules.chase?`Chase · ${rules.chase.runners.length} runners · ${rules.laps} laps · ${rules.direction}`:mode==='race'&&rules.raceDuration?`Timed circuit · ${rules.raceDuration/60} min · finish current lap · ${rules.direction}`:mode==='race'?`${RACE_NAMES[rules.race]} · ${rules.laps} ${rules.race==='laps'?'laps · '+rules.direction:'rounds'}`:mode==='derby'?`${DERBY_FORMATS[rules.derby].label} · ${rules.duration/60} min`:'Destruction playground');}
 
 function validBonus(p:Record<string,unknown>,duration:number){
  if(p.bonus===undefined&&p.rivalHits===undefined&&p.spins===undefined&&p.impacts===undefined&&p.award===undefined)return true;
