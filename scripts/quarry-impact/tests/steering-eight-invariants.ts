@@ -10,15 +10,18 @@ export function readSteeringEightPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreSteeringEightBytes(file:string,bytes:Buffer):Buffer{
+ bytes=restoreGarageDesignBytes(file,bytes);
  const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readSteeringEightPrevious(file);
 }
 export function verifySteeringEightRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'779197986ec6aeb79b245425245bf28e0ba3e074');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreGarageDesignBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreSteeringEightBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the SteeringEight release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreGarageDesignBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the SteeringEight release');
  assert.equal(manifest.previousFixtureCount,2737);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,2737);
 }
+
+import {restoreGarageDesignBytes} from './garage-design-invariants';

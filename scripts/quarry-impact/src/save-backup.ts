@@ -1,7 +1,7 @@
 import {validCameraSettings} from './camera-settings';
 import {PROFILE_KEY,readProfile} from './progression';
 import {GARAGE_KEY,readGarage} from './garage';
-import {CONTROLS_KEY,readControls} from './driving-controls';
+import {CONTROLS_KEY,readControls,defaultControls} from './driving-controls';
 import {CLUB_CUP_KEY,readClubCup} from './club-cup';
 import {CLUB_RECORDS_KEY,readClubRecords} from './club-records';
 import {TIME_TRIAL_KEY,readTimeTrialRecords} from './time-trial';
@@ -34,8 +34,9 @@ function normalize(key:string,text:string):string{
  // Validate historical controls without applying the steering-default migration.
  // Signed backups must retain their original canonical bytes; readControls migrates
  // them normally when the restored settings are loaded by the game.
- const legacyControls=key===CONTROLS_KEY&&(raw.keyboardDefaults===undefined||Number.isInteger(raw.keyboardDefaults)&&raw.keyboardDefaults>=1&&raw.keyboardDefaults<6);
- const value=readers[key](legacyControls?JSON.stringify({...raw,keyboardDefaults:6}):text);
+ const currentKeyboardDefaults=defaultControls().keyboardDefaults!;
+ const legacyControls=key===CONTROLS_KEY&&(raw.keyboardDefaults===undefined||Number.isInteger(raw.keyboardDefaults)&&raw.keyboardDefaults>=1&&raw.keyboardDefaults<currentKeyboardDefaults);
+ const value=readers[key](legacyControls?JSON.stringify({...raw,keyboardDefaults:currentKeyboardDefaults}):text);
  if(legacyControls){if(raw.keyboardDefaults===undefined)delete(value as Record<string,unknown>).keyboardDefaults;else (value as Record<string,unknown>).keyboardDefaults=raw.keyboardDefaults;}
  if(value===null)throw Error('The championship save is invalid.');
  // Preserve the canonical bytes of controls exported before vibration existed.
