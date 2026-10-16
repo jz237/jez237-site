@@ -107,6 +107,9 @@ export const CHALLENGES:readonly Challenge[]=[
   {...race('trail-granite','Granite patrol climb','trail',1,[160,110,78],40),course:'granite-pass-v1'},
   {...race('shuttle-granite','Mountain return service','shuttle',1,[175,120,85],35),course:'granite-pass-v1',direction:'reverse',description:'Finish one reverse lap with at least 35% condition. Brake before the tighter turns and surface changes. No recoveries.'},
   {...race('bramble-granite','Granite V8 endurance','muscle',2,[310,215,155],30),course:'granite-pass-v1'},
+  {...race('kite-westmere','Hot hatch club sprint','kite',1,[160,110,80],40),course:'westmere-club-v1'},
+  {...race('kite-hazelwood','Front-drive forest dash','kite',1,[160,110,80],35),course:'hazelwood-forest-v1'},
+  {...race('kite-seabrook','Seaside hot hatch return','kite',1,[150,105,75],40),course:'seabrook-coast-v1',direction:'reverse'},
 ];
 /** Race and playground challenges retain their own fixed venue; derbies stay at Quarry. */
 export const challengeCourse=(c:Challenge):CourseId=>c.mode!=='derby'?resolveCourseId(c.course):'quarry-v1';

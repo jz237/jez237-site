@@ -33,6 +33,7 @@ export const CAREER_GROUPS:readonly CareerGroup[]=[
  {id:'dune-runners',title:'Dune Runners',discipline:'racing',description:'Carry the Ravine across the dunes, reverse the Trail and complete a two-lap Utility run.',cost:3,events:['ravine-copperfield', 'trail-copperfield', 'utility-copperfield']},
  {id:'canal-runners',title:'Canal Runners',discipline:'racing',description:'Switch between asphalt and gravel in the Tern, reverse the Carrier and take the Estate through two laps.',cost:3,events:['tern-millbrook', 'carrier-millbrook', 'estate-millbrook']},
  {id:'pass-climbers',title:'Pass Climbers',discipline:'racing',description:'Climb Granite Pass in the Trail, reverse the Shuttle and preserve the Bramble over two gravel laps.',cost:3,events:['trail-granite', 'shuttle-granite', 'bramble-granite']},
+ {id:'hot-hatch-weekend',title:'Hot Hatch Weekend',discipline:'racing',description:'Work the Kite’s front tyres on club asphalt, forest gravel and a reverse coastal sprint.',cost:3,events:['kite-westmere','kite-hazelwood','kite-seabrook']},
 ];
 export const CAREER_SERIES:readonly ClubSeriesId[]=['club','sprint','tour','gauntlet','dirt','road-rally','woodland','county-weekender','airfield-rally','banger-weekend','demolition-tour','freight-speed','heath-canyon','club-ridge','coastal-tour','park-dunes-tour','canal-pass-tour','mud-mayhem'];
 export function normalizeCareerPodiums(value:unknown):Partial<Record<ClubSeriesId,number>>{

@@ -203,3 +203,6 @@ Original Quarry Impact short-wheelbase minibus: [authorship and reuse](CALDER-SH
 ## Birch Trail 4×4
 
 Original Quarry Impact three-door 4×4 artwork, using original Rook wheel tooling. See [BIRCH-TRAIL.md](BIRCH-TRAIL.md).
+
+## Kite 2000
+Original fictional hot hatch model and integration for Quarry Impact. See [KITE-2000.md](KITE-2000.md).

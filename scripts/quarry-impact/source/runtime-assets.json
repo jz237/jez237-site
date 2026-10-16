@@ -537,8 +537,8 @@
     },
     {
       "path": "licenses/CREDITS.md",
-      "bytes": 25174,
-      "sha256": "f381abd7347def6f83b22946fe31d9b3d80b8a0a65d791947a0051f6fbeb2c8a"
+      "bytes": 25292,
+      "sha256": "edc7b8f7b1c9871bb76b7033f4dec62e9057c2e982c1a48147e005c6cf313cfe"
     },
     {
       "path": "licenses/CarConcept-LICENSE.md",
@@ -554,6 +554,11 @@
       "path": "licenses/HARTWELL-REGENT.md",
       "bytes": 339,
       "sha256": "5352d1fdcb2f58588abe4119d50f1a9e4da92b374d0deeac435c321b415be185"
+    },
+    {
+      "path": "licenses/KITE-2000.md",
+      "bytes": 392,
+      "sha256": "81beafcb0ebc90f2c4e5d58391b1358be8fb58b5fde65c759c272a578703ad96"
     },
     {
       "path": "licenses/MARTEN-1600.md",
@@ -789,6 +794,11 @@
       "path": "models/hemlock.webp",
       "bytes": 171084,
       "sha256": "04a9aa8be677b859ffc686347a512fa59e8733ae538d5521639a8564bad6c86f"
+    },
+    {
+      "path": "models/kite.glb",
+      "bytes": 3322224,
+      "sha256": "8a28d777a42347e15123cb5b359baabb41edc79ac40f230e2868281970fcfd0d"
     },
     {
       "path": "models/maple.webp",
@@ -1151,6 +1161,11 @@
       "sha256": "d9e13aa8c589e7561563a57d08361e2216667c080c3e9e0906ece06737dffc51"
     },
     {
+      "path": "models/rocks-lod.glb",
+      "bytes": 2044060,
+      "sha256": "9ff6999370677ea8fb1ef524b8caf601e041016afd146ee9f3c675e8775c80e7"
+    },
+    {
       "path": "models/rocks/AO_PROVENANCE.json",
       "bytes": 359,
       "sha256": "9194565c590723e503805fb58d442c5122eaf0a2bd9812bd2e514975d537071d"
@@ -1184,11 +1199,6 @@
       "path": "models/rocks/textures/rock_moss_set_01_rough_2k.jpg",
       "bytes": 293827,
       "sha256": "a05a8bd9f2563cf55b738484b894671df7b2391aa02d66451366c5ad38077cd2"
-    },
-    {
-      "path": "models/rocks-lod.glb",
-      "bytes": 2044060,
-      "sha256": "9ff6999370677ea8fb1ef524b8caf601e041016afd146ee9f3c675e8775c80e7"
     },
     {
       "path": "models/scenery/coupe-parked.glb",
