@@ -1,5 +1,29 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished checkpoint — visible source Sunset static hulls
+
+The two recovered boat-shaped shore outlines now have independently authored
+launch models: tapered hulls, inset deck seams, bevelled cabins/roofs, glazing,
+rails, fenders and antennas. Their deck corners match every recovered outline
+vertex. The artwork stays static, like the source shore contacts; it adds no
+collision deck, bobbing physics or guessed source height. Vertical dimensions
+and finishes are explicitly authored. The models are absent in the two-player
+geometry, along with the source's omitted crossbars.
+
+A local full-course browser fixture checked both close views, shoreline and
+overview, and switched one-player/two-player worlds. It rendered at 1920×1080
+with high quality, 130,321 terrain vertices, 83,521 water vertices, 1536×864
+refraction and 1024×1024 reflection. No resolution or detail setting was lowered.
+The fixture and ordinary race page loaded without console errors or warnings.
+Nineteen focused tests pass, including exact footprint alignment, finite mesh
+data, geometry disposal without destroying shared materials, source geometry,
+four complete solo race classes, and the prepared Stunt route. All four import
+maps now include the new module (305 modules).
+
+Public Sunset still uses the older map definition. The prepared source course
+still needs final-ring/complete Stunt traversal and broader gameplay admission;
+these visuals do not establish full source mechanics parity or publication.
+
 ## Unpublished checkpoint — prepared Sunset Stunt finish
 
 The authored Sunset Stunt guide now completes four physical checkpoints and
