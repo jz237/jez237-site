@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readOpponentSetsPrevious,restoreOpponentSetsBytes,verifyOpponentSetsRevision} from './opponent-sets-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreDerbyFeedBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('OpponentSets preserves every prior fixture, vehicle asset, control and camera input',verifyOpponentSetsRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/opponent-sets/revision.json').toString());
@@ -10,3 +10,5 @@ test('the successor bridge restores full predecessors and does not conceal later
  }
  const unknown=Buffer.from('unknown');assert.deepEqual(restoreOpponentSetsBytes('src/unknown.ts',unknown),unknown);
 });
+
+import {restoreDerbyFeedBytes} from './derby-feed-invariants';
