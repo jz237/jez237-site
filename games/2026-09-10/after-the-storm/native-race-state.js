@@ -7,7 +7,7 @@ import {createNativePrimaryRacePhaseState,prepareNativePrimaryRacePhase} from '.
 import {prepareNativeRacePresentationTail} from './native-race-finalization.js';
 import {prepareNativeRaceBoundaryWarning} from './native-race-boundary-warning.js';
 import {prepareNativeRaceStatusPrelude} from './native-race-status-prelude.js';
-import {prepareNativeRacePrestartInitialization,prepareNativeRacePrestartStatus,prepareNativeRacePrestartStage} from './native-race-prestart-stage.js';
+import {prepareNativeRacePrestartInitialization,prepareNativeRacePrestartStatus,prepareNativeRacePrestartStage,prepareNativeRaceResultInitialization} from './native-race-prestart-stage.js';
 import {prepareNativeRaceSpeedDisplay} from './native-race-speed-display.js';
 import {prepareNativeRaceMissFeedback,prepareNativeRaceMissFeedbackPalette} from './native-race-miss-feedback.js';
 import {prepareNativeRaceDirectionWarning} from './native-race-direction-warning.js';
@@ -34,14 +34,14 @@ const hudInts={recordFlag8a98:0x8a98,placeChanged8a9c:0x8a9c};
 // reverse halfword is viewed as unsigned by progress and signed by reset.
 const sceneRanges={primaryHumanIndex:[0,3],secondaryHumanIndex:[0,3],players:[1,2],courseIndex:[0,11],
  racerCount:[0,4],primaryCount:[0,64],finishSourceRow:[0,63],activity624:[-32768,32767],event628:[-32768,32767],
- pendingPlayers60c:[-32768,32767],participantCount60e:[-32768,32767],result6f0:[-32768,32767],specialAb64:[-32768,32767],ready6fc:[-32768,32767],field4964:[0,65535],
+ pendingPlayers60c:[-32768,32767],participantCount60e:[-32768,32767],result6f0:[-32768,32767],field62a:[-32768,32767],specialAb64:[-32768,32767],ready6fc:[-32768,32767],field4964:[0,65535],
  reverseDab68:[0,65535],missesEnabled72e:[0,65535],seed6f00:[0,65535],rngState4640:[0,0xffffffff],style6e28:[0,65535],
  field4970:[0,65535],field72c:[0,65535],fieldA9ac:[0,65535],variant6f4:[-32768,32767],variant6f6:[-32768,32767]};
 const sceneWords=new Set(['cold8224','clockStopped817c','phase650','simulation648','main638','mode620','state600',
  'missLimit8174','noFinish8178','configuredLaps728','difficulty','directionFlag1f90','ambientD4b00','fortressD8240',
  'metadataD9b0','metadataCb32c','restart6f8','initLatch63c','gameStateAb24','mode608','returnState630','forceFirst8228','demoOffset5438','rngState4640','style6e2c',
- 'previousGameState634','field640','field644','fieldAb1c','field461c','wave610','missLimit614','lapCount618','field61c','wave49b0','field64c','players','racerCount']);
-const sceneHalves=new Set(['activity624','event628','pendingPlayers60c','participantCount60e','result6f0','specialAb64','ready6fc','reverseDab68','missesEnabled72e','seed6f00','field4964','style6e28',
+ 'previousGameState634','field640','field644','fieldAb1c','field461c','field704','field708','field70c','field710','field714','wave610','missLimit614','lapCount618','field61c','wave49b0','field64c','players','racerCount']);
+const sceneHalves=new Set(['activity624','event628','field62a','pendingPlayers60c','participantCount60e','result6f0','specialAb64','ready6fc','reverseDab68','missesEnabled72e','seed6f00','field4964','style6e28',
  'field4970','field72c','fieldA9ac','variant6f4','variant6f6']);
 function record(v,n){if(!v||typeof v!=='object'||Array.isArray(v))throw new TypeError(`Expected ${n}`);return v;}
 function integer(v,n,min=MIN,max=MAX){if(!Number.isInteger(v)||v<min||v>max)throw new RangeError(`Invalid ${n}`);return v||0;}
@@ -446,6 +446,19 @@ export function prepareNativeRacePrestartInitializationUpdate(state){
 export function prepareNativeRacePrestartStatusUpdate(state){
  const next=copy(state),prepared=prepareNativeRacePrestartStatus(next),effects=apply(next,prepared.operations);
  return freeze({...prepared,state:next,effects});
+}
+/** Ordered result-entry expansion against the same canonical owners. Existing
+ * status-only consumers retain their explicit pending-call contract. This
+ * expanded entry requires the caller to schedule the following result stages;
+ * it must not be run as an extra status call on an already advanced frame. */
+export function prepareNativeRaceResultStatusUpdate(state,input={}){
+ const next=copy(state),status=prepareNativeRacePrestartStatus(next),operations=[],effects=[];
+ for(const op of status.operations){
+  const expanded=op.kind==='externalCall'&&['802c6dcc','802c6fe0','802c7394'].includes(op.consumer)?
+   prepareNativeRaceResultInitialization({...next,bodyResultCode16c8BySlot:input.bodyResultCode16c8BySlot},op.consumer).operations:[op];
+  operations.push(...expanded);effects.push(...apply(next,expanded));
+ }
+ return freeze({state:next,operations,effects});
 }
 /** The actual display-stage dispatcher follows79528 once per source frame.
  * externalReturns supplies genuine consumed opaque presentation return words;

@@ -2284,3 +2284,33 @@ moving view was visually checked; only the development favicon returns404.
 This fixes rendering overlap without reducing water or terrain resolution.
 The 48 focused surface/contact checks pass. The complete suite remains at
 2,109 passes out of 2,120 tests, with the same eleven existing failures.
+
+## Source result entry — October 15, 2026 (prepared integration)
+
+The complete numeric result-entry routines6DCC,6FE0 and7394 now have an
+explicit implementation and a canonical status entry that expands the chosen
+routine at its original call site. They preserve previous/current game states,
+initialization flags, result delays, selected-body16C8 timing, signed cup
+qualification flags, winner counters, menu choices and external-call order.
+The four cup qualification halfwords use the existing extended profile owner;
+there is no separate copy of the flags. Subsequent winner-HUD writes follow the
+transition, including source ties and disqualifications.
+
+Private execution of the original overlay instructions matches1,200 prepared
+entry cases and96 combined finish-status/entry cases:23,731 ordered operations
+and the resulting canonical scene, race, HUD, profile and overlay storage.
+All57 non-stack store sites in the three entry routines are reached. The
+416-instruction source interval has412 visited instruction addresses across
+these cases; this is bounded numeric evidence with explicit prepared inputs.
+Audio, fade and menu-widget callees remain ordered dependencies. Six new tests
+cover finish/tie/DQ ownership, timing, signed qualification and atomic failure.
+All450 selected native race regression tests pass, including driven three-lap
+and render-cadence checks. The previously recorded full-suite baseline above
+is separate from this selected regression run.
+
+This checkpoint is not connected to the live race scheduler or published as a
+new gameplay release. The next result updates63B4/6550/6B00 also handle record
+initials and save/menu routing. Those consumers, their canonical storage and
+zero-simulation scheduling must be integrated before replacing the current
+live result flow. Native persistence, other venues/modes, original AI and the
+remaining whole-game parity items above remain incomplete.

@@ -192,3 +192,66 @@ export function prepareNativeRacePrestartStatus(value){const c=context(value);st
  * helper internals are not reconstructed here.
  */
 export function prepareNativeRacePrestartStage(value){const c=context(value),displayListHead=dispatch(c);return freeze({operations:c.operations,displayListHead});}
+
+/** Complete numeric result-entry bodies6DCC/6FE0/7394. These execute once at
+ * the status consumer's selected call site, before subsequent HUD writes.
+ * Audio, menu-widget and fade callees remain ordered external recipes. The
+ * following result UPDATE bodies63B4/6550/6B00 are separate dependencies.
+ * field704..714 and field62a are actual external scene addresses; B3F8 flags
+ * share the extended profile owner. bodyResultCode16c8BySlot supplies actual
+ * body words only on the solo-finish branch; it is not a second body owner.
+ */
+export function prepareNativeRaceResultInitialization(value,consumer){
+ if(!['802c6dcc','802c6fe0','802c7394'].includes(consumer))throw new RangeError('Unknown source result initializer');
+ const c=context(value),finish=consumer==='802c6fe0',tie=consumer==='802c7394';
+ source(c,'previousGameState634',s(c,'gameStateAb24'));
+ source(c,'returnState630',0);source(c,'gameStateAb24',tie?44:finish?42:41);
+ source(c,'main638',1);source(c,'initLatch63c',1);source(c,'field640',0);source(c,'field644',0);
+ source(c,'fieldAb1c',0);source(c,'field461c',3);
+ if(!tie){
+  if(finish)write(c,'i1Words9440',0x9500,0);
+  else{write(c,'i1Words9440',0x96a4,0);write(c,'i1Words9440',0x96a0,0);}
+  if(s(c,'mode608')===4){
+   if(span(c,'profileWordsB330').length!==52)throw new RangeError('Result rider flags require extended profileWordsB330');
+   for(let i=0;i<4;i++){
+    const flag=Number(s(c,['field708','field70c','field710','field714'][i])>=racer(c,i,4));
+    c.operations.push({kind:'profileWrite',byteOffset:0xb3f8-0xb330+i*2,width:2,value:flag});
+   }
+  }
+ }
+ if(tie)call(c,'801e6fb0',[1,4,100]);
+ else if(finish){
+  if(s(c,'players',1,2)===1){
+   const code=integer(value.bodyResultCode16c8BySlot?.[selected(c)],'actual body result code16c8');
+   const duration=({1:130,2:140,3:100,4:120,5:110})[code]??100;
+   write(c,'i1Words9440',0x9504,duration);
+   if(s(c,'mode620')===11)call(c,'801e6fb0',[1,4,duration]);
+   write(c,'i1Words9440',0x9508,0);
+  }else call(c,'801e6fb0',[1,4,100]);
+ }else if(s(c,'players',1,2)===1){
+  if(word(c,'i1Words9440',0x9510)!==0)write(c,'i1Words9440',0x950c,120);
+  else call(c,'801e6fb0',[1,4,120]);
+ }
+ call(c,'801e6a4c',[0,0]);
+ if(!tie&&s(c,'players',1,2)===1){
+  if(finish)call(c,'801e6a4c',[1,1]);
+  else call(c,'801e6a4c',[4,Number(racer(c,selected(c),0x2ec)===2)]);
+ }
+ source(c,'field62a',0,2);
+ if(!finish){
+  if(!tie){call(c,'800bfd34');call(c,'800bfd68');}
+  call(c,'800c1f60',[4]);call(c,'800c21f4',[4,0]);
+  if(tie){call(c,'800bfd34');call(c,'800bfd68');}
+ }else{
+  const mode=s(c,'mode608');
+  if(mode!==11){
+   call(c,'800c1f60',[6]);let choice;
+   if(mode===0)choice=word(c,'raceWords1f94',0x2650)===1?0:1;
+   else if(mode===1){const result=s(c,'result6f0',-32768,32767);choice=result===3?0:result===1?2:1;}
+   else{const place=racer(c,selected(c),4);choice=s(c,'field704')>=place?(place+1)|0:5;}
+   call(c,'800c21f4',[6,choice]);
+  }
+  call(c,'800bfd34');call(c,'800bfd68');
+ }
+ return freeze({operations:c.operations});
+}
