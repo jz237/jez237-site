@@ -2885,3 +2885,31 @@ Actual Chrome WebRTC host/guest testing also confirmed a guest camera-button
 press changes host modes from[1,1] to[1,2], leaves P1 at75 degrees and renders
 P2 at90 degrees with the high-resolution solved rider. No JavaScript errors
 were observed; the isolated local preview reports only its missing favicon.
+
+## Ordinary source result entry and HUD slots (local checkpoint)
+
+The native Sunny time/versus host now executes the selected original result
+initializer after status judging, instead of leaving it as an unconsumed call.
+Solo finish uses the completed rider's actual selectedActor/16C8 value to set
+the result delay. Finish, retirement and tie enter source states42,41 and44;
+the original fade and HUD initialization share the canonical race owner.
+The winner write retains its original order after initialization. Repeated
+status calls after entry cannot reset the result or award another versus win.
+
+The full numeric1E6A4C widget initializer and1E6F6C first-free allocator now
+support all five HUD slots, all source kinds and selectors, low16 argument
+truncation, template retention, and a full slot pool. EVO X2's existing Ghidra
+project was queried read-only; its nine project files remained unchanged.
+An independent original-instruction execution checked1,840 cases comprising
+128,244 instructions and25,892 HUD stores. Every ordered store and resulting
+canonical HUD hash matches the implementation. ROM/tool output stays private.
+
+The84 focused tests pass, including live finish/retirement/tie entry and
+repeat-call protection. All33 pilot tests also pass: genuine three-lap finishes
+across all four riders and four classes enter source state42 with the actual
+body-dependent delay and finish widget. Rider0 finishes in all four classes
+have identical complete canonical result state at30/60/144Hz.
+These changes are local, pending the next publication. This is result entry,
+not complete post-race parity: the browser still opens results immediately.
+The subsequent physical rider animation, AI takeover, source widget animation,
+results-menu schedule and persistence still need full live integration.

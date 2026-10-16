@@ -151,7 +151,7 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
    // before5DF4. These are completed actor values, not the input-stage pose.
    host.lastCameraInput=raceRuntime.ordinary?raceRuntime.advanceCameraInput(host.world.adapters.map(a=>({
     actorStateC54:a.lastFrame.actorState,animationFrameC58:a.lastFrame.animationFrame}))):null;
-   const status=raceRuntime.ordinary?raceRuntime.advanceStatus():null;
+   const status=raceRuntime.ordinary?raceRuntime.advanceStatus(host.world.adapters.map(a=>a.riderLifecycle.state.selectedActor)):null;
    const launch=status?{...ordinary,effects:[...ordinary.effects,...host.lastCameraInput.effects,...status.effects],view:status.view}:
     raceRuntime.advanceLaunch(host.world.adapters.map(a=>a.lastControls.pressedButtons));
    if(onLaunchFrame&&onLaunchFrame(host,context,launch)===false)return false;

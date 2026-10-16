@@ -163,6 +163,10 @@ function drive(difficulty,rider,hz){
  // Capture the final judge observation; inactive input performs no simulation.
  assert.deepEqual(pilot.input(s,r),neutral);const d=pilot.diagnostics();
  assert.equal(s.phase,'results',`unfinished class${difficulty} rider${rider} at${hz}Hz`);
+ const resultState=s.nativeLaunch.snapshot(),bodyCode=s.nativeHost.world.adapters[0].riderLifecycle.state.selectedActor;
+ assert.equal(resultState.scene.gameStateAb24,42,'genuine finish enters the original result stage');
+ assert.equal(resultState.i1Words9440[(0x9504-0x9440)/4],({1:130,2:140,3:100,4:120,5:110})[bodyCode]??100);
+ assert.equal(resultState.hudWords7788[(0x8930-0x7788)/4],0x10000,'finish notice uses the canonical HUD slot');
  assert.equal(r.dq,'',`DQ class${difficulty} rider${rider}: ${r.dq}`);assert.equal(r.lap,3);assert.equal(r.lapTimes.length,3);
  assert.ok(r.finishTime>60&&r.finishTime<180);assert.equal(r.passed,s.course.gates.length*3);
  assert.equal(JSON.stringify(s.course.anchors),anchors);
@@ -191,7 +195,7 @@ for(let difficulty=0;difficulty<4;difficulty++){
    const {r,d,s}=drive(difficulty,0,hz);assert.equal(r.misses,0);
    const sample={finishTime:r.finishTime,time:s.time,progress:structuredClone(r.sourceBuoys),
     native:nativeRaceSnapshot(s.nativeHost.world.adapters[0]),water:captureRaceWater(s.raceWater),driver:d,
-    worldRemainder:s.nativeHost.world.remainder};
+    worldRemainder:s.nativeHost.world.remainder,resultState:s.nativeLaunch.snapshot()};
    assert.equal(sample.worldRemainder,0);
    if(reference)assert.deepEqual(sample,reference,`class${difficulty} finish at${hz}Hz`);else reference=sample;
   }

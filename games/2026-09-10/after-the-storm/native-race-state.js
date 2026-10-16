@@ -487,14 +487,15 @@ export function prepareNativeRaceResultStatusUpdate(state,input={}){
  const next=copy(state),status=prepareNativeRacePrestartStatus(next),operations=[],effects=[];
  for(const op of status.operations){
   const expanded=op.kind==='externalCall'&&['802c6dcc','802c6fe0','802c7394'].includes(op.consumer)?
-   prepareNativeRaceResultInitialization({...next,bodyResultCode16c8BySlot:input.bodyResultCode16c8BySlot},op.consumer).operations:[op];
+   prepareNativeRaceResultInitialization({...next,bodyResultCode16c8BySlot:input.bodyResultCode16c8BySlot,
+    expandTransitions:input.expandTransitions,expandWidgets:input.expandWidgets,fadeTemplateWords6cc0:input.fadeTemplateWords6cc0,slotTemplateWords6c50:input.slotTemplateWords6c50},op.consumer).operations:[op];
   operations.push(...expanded);effects.push(...apply(next,expanded));
  }
  return freeze({state:next,operations,effects});
 }
 export function prepareNativeRaceResultStageUpdate(state,consumer,input={}){
  if(input.expandEstimates!==undefined&&typeof input.expandEstimates!=='boolean')throw new TypeError('expandEstimates must be boolean');
- const next=copy(state),prepared=prepareNativeRaceResultUpdate({...next,expandTransitions:input.expandTransitions,
+ const next=copy(state),prepared=prepareNativeRaceResultUpdate({...next,expandTransitions:input.expandTransitions,expandWidgets:input.expandWidgets,
   fadeTemplateWords6cc0:input.fadeTemplateWords6cc0,slotTemplateWords6c50:input.slotTemplateWords6c50},consumer),operations=[],effects=[];
  for(const op of prepared.operations){
   const expanded=input.expandEstimates&&op.kind==='externalCall'&&op.consumer==='80077f5c'?
@@ -576,7 +577,7 @@ export function prepareNativeRaceI1DisplayUpdate(state,input={}){
  * against canonical storage. Invoke once AFTER the CPU world and fade update,
  * never as an extra render/interpolation call. Real supplied graphics-head
  * returns remain required; this does not fabricate original display memory.
- * Menu/reset/save/audio effects still require consumers. expandTransitions,
+ * Menu/reset/save/audio effects still require consumers. expandTransitions, expandWidgets,
  * expandEstimates and expandCameraInput retain their explicit branch-lazy
  * source dependencies. Camera input reads the supplied cameraInput sample. */
 export function prepareNativeRaceResultDisplayUpdate(state,input={}){
@@ -586,7 +587,7 @@ export function prepareNativeRaceResultDisplayUpdate(state,input={}){
 }
 function prepareDisplayUpdate(state,input,results){
  const next=copy(state),stage=results?prepareNativeRaceResultDisplay({...next,externalReturns:input.externalReturns,
-  bodyResultCode16c8BySlot:input.bodyResultCode16c8BySlot,expandTransitions:input.expandTransitions,
+  bodyResultCode16c8BySlot:input.bodyResultCode16c8BySlot,expandTransitions:input.expandTransitions,expandWidgets:input.expandWidgets,
   fadeTemplateWords6cc0:input.fadeTemplateWords6cc0,slotTemplateWords6c50:input.slotTemplateWords6c50}):
   prepareNativeRacePrestartStage({...next,externalReturns:input.externalReturns}),
   operations=[],effects=[],sequenceCalls=[];

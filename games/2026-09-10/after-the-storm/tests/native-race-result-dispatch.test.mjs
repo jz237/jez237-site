@@ -31,6 +31,15 @@ test('full dispatcher enters solo finish once and waits until the next logical d
  assert.ok(calls(legacy(s,inputs)).includes('802c6fe0'),'existing pending-call API remains unchanged');
 });
 
+test('result dispatcher can consume the complete numeric widget initializer at the original call site',()=>{
+ const s=fixture();s.raceWords1f94[ri(0,189)]=1;
+ const r=display(s,{...inputs,expandWidgets:true});
+ assert.equal(calls(r).includes('801e6a4c'),false);
+ assert.equal(r.state.hudWords7788[hi(0x8930)],0x10000);
+ assert.equal(r.state.hudWords7788[hi(0x8938)],80);assert.equal(r.state.hudWords7788[hi(0x893c)],93);
+ assert.throws(()=>display(s,{...inputs,expandWidgets:1}),/boolean/);
+});
+
 test('two-player finish keeps winner write after inline reset and never awards a second win',()=>{
  const s=fixture(2);s.raceWords1f94[ri(1,189)]=1;
  const r=display(s,inputs);assert.equal(r.state.scene.gameStateAb24,42);assert.equal(r.state.hudWords7788[hi(0x8aa8)],2);

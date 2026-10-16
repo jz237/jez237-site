@@ -1,7 +1,7 @@
 // Reconstructed original prestart numeric consumers. These are source-frame
 // calls, not presentation-frame updates. Storage and initialization remain
 // caller-owned; opaque source callees are returned as ordered dependencies.
-import {prepareNativeRaceFadePropertiesInitialization,prepareNativeRaceFadeSlotsReset} from './native-race-fade-initialization.js';
+import {prepareNativeRaceFadePropertiesInitialization,prepareNativeRaceFadeSlotsReset,prepareNativeRaceFadeSlotInitialization} from './native-race-fade-initialization.js';
 const MIN=-2147483648,MAX=2147483647;
 const SPANS={i1Words9440:[0x9440,168,'i1Write'],hudWords7788:[0x7788,1442,'hudWrite'],
  profileWordsB330:[0xb330,50,'profileWrite'],raceWords1f94:[0x1f94,1693,null],saveWordsB280:[0xb280,34,'saveByteWrite']};
@@ -11,6 +11,8 @@ function integer(v,n,min=MIN,max=MAX){if(!Number.isInteger(v)||v<min||v>max)thro
 function record(v,n){if(!v||typeof v!=='object'||Array.isArray(v))throw new TypeError(`Expected ${n}`);return v;}
 function freeze(v){if(v&&typeof v==='object'&&!Object.isFrozen(v)){Object.values(v).forEach(freeze);Object.freeze(v);}return v;}
 function context(value){record(value,'prestart source sample');record(value.scene,'prestart scene');
+ if(value.expandTransitions!==undefined&&typeof value.expandTransitions!=='boolean')throw new TypeError('expandTransitions must be boolean');
+ if(value.expandWidgets!==undefined&&typeof value.expandWidgets!=='boolean')throw new TypeError('expandWidgets must be boolean');
  if(value.profileWordsB330!==undefined&&Object.hasOwn(value.scene,'difficulty'))throw new RangeError('scene.difficulty overlaps profileWordsB330');
  return {value,scene:{...value.scene},spans:{},operations:[]};}
 function span(c,key){
@@ -36,6 +38,17 @@ function source(c,field,value,width=4){
 function hudHalfword(c,address){const offset=address-0x7788,v=span(c,'hudWords7788')[offset>>>2];
  return ((v>>>(offset&2?0:16))&65535)<<16>>16;}
 function call(c,consumer,args=[],returns=false){
+ if(c.value.expandWidgets===true&&consumer==='801e6a4c'){
+  const prepared=prepareNativeRaceFadeSlotInitialization({hudWords7788:span(c,'hudWords7788'),
+   slotTemplateWords6c50:c.value.slotTemplateWords6c50,type:args[0],selector:args[1]});
+  for(const op of prepared.operations){
+   const words=span(c,'hudWords7788'),index=op.byteOffset>>>2;
+   if(op.width===4)words[index]=op.value;
+   else{const shift=(2-(op.byteOffset&2))*8;words[index]=((words[index]&~(65535<<shift))|(op.value<<shift))>>>0;}
+   c.operations.push(op);
+  }
+  return;
+ }
  if(c.expandResults){
   if(consumer==='802c6b38'){
    // This helper does not draw: every return preserves the supplied head.
@@ -245,7 +258,8 @@ export function prepareNativeRaceResultDisplay(value){
 
 /** Complete numeric result-entry bodies6DCC/6FE0/7394. These execute once at
  * the status consumer's selected call site, before subsequent HUD writes.
- * Audio, menu-widget and fade callees remain ordered external recipes. The
+ * Audio calls remain ordered external recipes. expandWidgets/expandTransitions
+ * execute numeric HUD-slot/fade initialization with explicit templates. The
  * following result UPDATE bodies63B4/6550/6B00 are separate dependencies.
  * field704..714 and field62a are actual external scene addresses; B3F8 flags
  * share the extended profile owner. bodyResultCode16c8BySlot supplies actual

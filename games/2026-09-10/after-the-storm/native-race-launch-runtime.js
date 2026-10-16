@@ -1,5 +1,5 @@
 import {createNativeRaceState,nativeRaceStateSnapshot,prepareNativeRaceStateOperations,
- prepareNativeRaceCountdown,prepareNativeRacePrestartInitializationUpdate,prepareNativeRacePrestartStatusUpdate,
+ prepareNativeRaceCountdown,prepareNativeRacePrestartInitializationUpdate,prepareNativeRacePrestartStatusUpdate,prepareNativeRaceResultStatusUpdate,
  prepareNativeRaceCameraInputUpdate,prepareNativeRaceStartup,prepareNativeRaceOrdinaryUpdate,nativeRaceGridTransformView,nativeRaceComputerProfileView,nativeRaceResultCodeView} from './native-race-state.js';
 import {prepareNativeRaceStartupOverlay} from './native-race-startup-overlay.js';
 import {prepareNativePrimaryRaceClock} from './native-primary-race-clock.js';
@@ -14,7 +14,8 @@ const RESULT_TABLE_WORDS=Object.freeze([0,1,2,3,4,5,6,1,4]);
 
 // One canonical owner for the admitted ordinary launch, primary race and numeric
 // HUD fields. DOM/racer properties below are views, never synchronized copies.
-// The source results/menu transition bodies remain separate from this runtime.
+// Result entry shares this owner; subsequent result updates and menu transitions
+// still require their complete world/input/presentation schedule.
 const BASE=(0x2938-0x1f94)/4,STRIDE=222,hi=a=>(a-0x7788)/4,ri=a=>(a-0x1f94)/4;
 const sourceFields={nextSourceRow:3,side:7,armed:8,power:75,lapMisses:76,totalMisses:77,missLimitReached:79};
 const booleans=new Set(['armed','missLimitReached']);
@@ -232,8 +233,15 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    current=prepared.state;cameraCommands.forEach(q=>q.shift());
    return {effects:prepared.effects,diagnostic:prepared.diagnostic};
   },
-  advanceStatus(){
-   const prepared=prepareNativeRacePrestartStatusUpdate(current);current=prepared.state;
+  advanceStatus(bodyResultCode16c8BySlot){
+   // Live ordinary admission stops at its result boundary. Execute the real
+   // entry once; repeated status calls must not award another win or re-enter.
+   if(current.scene.gameStateAb24!==40)return {effects:[],view:runtime.view()};
+   const prepared=prepareNativeRaceResultStatusUpdate(current,{bodyResultCode16c8BySlot,
+    expandTransitions:true,expandWidgets:true,
+    // Verified numeric defaults6C50/6CC0: no art or resource pointers.
+    slotTemplateWords6c50:Array(11).fill(0),fadeTemplateWords6cc0:[0,0,0,0x10000,0,0,0,0,0x10000]});
+   current=prepared.state;
    return {effects:prepared.effects,view:runtime.view()};
   }
  };

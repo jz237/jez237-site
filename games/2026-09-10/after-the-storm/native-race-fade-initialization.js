@@ -46,3 +46,34 @@ export function prepareNativeRaceFadeSlotsReset(value){
  for(let slot=0;slot<5;slot++)for(let word=0;word<11;word++)store(operations,0x8930+slot*44+word*4,4,template[word]);
  return freeze({operations,diagnostic:{slotsReset:5}});
 }
+
+
+/** Complete1E6A4C slot initialization, including its actual1E6F6C first-free
+ * allocator. Both source arguments truncate to unsigned16 before dispatch.
+ * Unknown kinds and reset-with-nonzero-selector do nothing. Allocation scans
+ * only each slot's kind halfword; a full pool needs no template and writes
+ * nothing. Template copies and subsequent halfword/word stores retain order.
+ * These are numeric HUD slots, not drawings or a second animation owner. */
+export function prepareNativeRaceFadeSlotInitialization(value){
+ record(value,'fade slot initialization');
+ const type=integer(value.type,'slot type')&65535,selector=integer(value.selector,'slot selector')&65535;
+ if(type>4||type===0&&selector!==0)return freeze({operations:[],diagnostic:{type,selector,slot:null}});
+ if(type===0){const reset=prepareNativeRaceFadeSlotsReset(value);return freeze({...reset,diagnostic:{type,selector,slot:null,slotsReset:5}});}
+ const hud=words(value.hudWords7788,'hudWords7788',1442);
+ let slot=0;while(slot<5&&(hud[(0x8930+slot*44-HUD)/4]>>>16)!==0)slot++;
+ if(slot===5)return freeze({operations:[],diagnostic:{type,selector,slot:null,full:true}});
+ const template=words(value.slotTemplateWords6c50,'slotTemplateWords6c50',11),operations=[],base=0x8930+slot*44;
+ const put=(offset,width,v)=>store(operations,base+offset,width,v);
+ template.forEach((w,i)=>put(i*4,4,w));put(4,2,slot);put(0,2,type);
+ if(type===1){put(2,2,0);put(8,4,80);put(12,4,93);put(24,4,0);}
+ else if(type===2){put(2,2,0);put(8,4,selector===0?120:58);put(12,4,93);put(40,4,selector);}
+ else if(type===3){
+  if(selector<8){
+   put(2,2,selector<2?0:1);put(8,4,selector<2?(selector===0?82:239):(selector%2===0?80:240));
+   const y=selector<2?84:selector<4?101:selector<6?76:186;put(12,4,y);
+   if(selector>=2)put(36,4,y);
+  }
+  put(32,4,255);
+ }else{put(2,2,0);put(8,4,80);put(12,4,-40);put(40,4,selector);}
+ return freeze({operations,diagnostic:{type,selector,slot,full:false}});
+}
