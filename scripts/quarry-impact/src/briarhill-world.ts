@@ -1,3 +1,4 @@
+import {createVenueCrowd,type SpectatorPlace} from './venue-crowd';
 import {attachArenaGroundDetail} from './arena-ground-detail';
 import * as T from 'three';
 import {BRIARHILL_BARRIERS,briarhillHeight,briarhillPatch} from './briarhill-arena';
@@ -19,15 +20,31 @@ export function createBriarhillWorld(){
  }
  if(typeof document!=='undefined')attachArenaGroundDetail(floorMaterial,'briarhill');
  const floor=new T.Mesh(floorGeometry,floorMaterial);floor.name='briarhill_terrain';floor.receiveShadow=true;root.add(floor);
+ const spectators:SpectatorPlace[]=[];
  const batches=new Map<keyof typeof materials,T.Matrix4[]>(),matrix=new T.Matrix4(),q=new T.Quaternion();
  function box(x:number,y:number,z:number,w:number,h:number,d:number,finish:keyof typeof materials,yaw=0){q.setFromAxisAngle(new T.Vector3(0,1,0),yaw);matrix.compose(new T.Vector3(x,y,z),q,new T.Vector3(w,h,d));const batch=batches.get(finish)??[];batch.push(matrix.clone());batches.set(finish,batch);}
  BRIARHILL_BARRIERS.forEach((s,i)=>box(s.x,s.y,s.z,s.half[0]*2,s.half[1]*2,s.half[2]*2,i%16<8?'concrete':'red',s.yaw));
  // Scenery stays beyond the physical wall; driving space contains only the terrain.
  for(let i=0;i<48;i++){if(i%12<3)continue;const a=i/48*Math.PI*2;
-  for(let row=0;row<4;row++){const radius=63+row*2.3,x=Math.sin(a)*radius,z=Math.cos(a)*radius,y=briarhillHeight(x,z),h=.6+row*.7;box(x,y+h/2,z,7,h,2.1,'concrete',a);box(x,y+h+.18,z,6,.3,.65,'seat',a);}
+  for(let row=0;row<4;row++){
+   const radius=63+row*2.3,x=Math.sin(a)*radius,z=Math.cos(a)*radius,y=briarhillHeight(x,z),h=.6+row*.7;
+   box(x,y+h/2,z,7,h,2.1,'concrete',a);
+   for(let seat=0;seat<6;seat++){
+    const offset=(seat-2.5)*1.05,xx=x+Math.cos(a)*offset,zz=z-Math.sin(a)*offset;
+    box(xx,y+h+.18,zz,.66,.18,.6,'seat',a);box(xx+Math.sin(a)*.27,y+h+.53,zz+Math.cos(a)*.27,.66,.65,.1,'seat',a);
+    for(const side of [-1,1])box(xx+Math.cos(a)*side*.23,y+h+.055,zz-Math.sin(a)*side*.23,.07,.11,.4,'steel',a);
+    if((i*5+row*3+seat)%6!==0)spectators.push({x:xx,y:y+h-.21,z:zz,yaw:a+Math.PI,seated:true});
+   }
+  }
+  const r=66.4,base=briarhillHeight(Math.sin(a)*r,Math.cos(a)*r);
+  if(i%4!==0){box(Math.sin(a)*r,base+5.9,Math.cos(a)*r,7.2,.22,10.8,'steel',a);box(Math.sin(a)*61.1,base+5.5,Math.cos(a)*61.1,7.2,.65,.15,'red',a);}
+  for(const radius of [61.4,71.3])for(const side of [-1,1])box(Math.sin(a)*radius+Math.cos(a)*side*3.2,base+2.9,Math.cos(a)*radius-Math.sin(a)*side*3.2,.14,5.8,.14,'steel',a);
+  box(Math.sin(a)*61.4,base+1.4,Math.cos(a)*61.4,7,.09,.09,'steel',a);
+
  }
  for(const a of [0,Math.PI/2,Math.PI,Math.PI*1.5]){const x=Math.sin(a)*65,z=Math.cos(a)*65,y=briarhillHeight(x,z);box(x,y+7,z,.35,14,.35,'steel',a);box(x,y+14,z,5,.6,1,'concrete',a);}
  for(const [finish,matrices]of batches){const mesh=new T.InstancedMesh(boxGeometry,materials[finish],matrices.length);matrices.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.name='briarhill_'+finish;mesh.castShadow=mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
+ const crowd=createVenueCrowd(spectators);crowd.root.name='briarhill_spectators';for(const mesh of crowd.root.children)mesh.castShadow=false;root.add(crowd.root);
  root.userData.solidRecords=BRIARHILL_BARRIERS;freezeSceneryTransforms(root);
- let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});floorGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
+ let disposed=false;return{root,update:crowd.update,dispose(){if(disposed)return;disposed=true;crowd.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});floorGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
 }
