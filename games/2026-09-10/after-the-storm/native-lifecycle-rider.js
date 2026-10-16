@@ -5,8 +5,9 @@ import {prepareNativeRiderWipeoutPose} from './native-rider-wipeout-pose.js';
 import {prepareNativeRiderStumblePose} from './native-rider-stumble-pose.js';
 import {createAuthoredNativeRecoveryPose} from './authored-native-recovery-pose.js';
 import {createAuthoredNativeActionPoses} from './authored-native-action-poses.js';
-import {createNativeRiderStartPoseProvider,prepareNativeRiderStartSeed} from './native-rider-start-provider.js';
+import {createNativeRiderStartPoseProvider,prepareNativeRiderStartSeed,createNativeRiderResultPoseProvider} from './native-rider-start-provider.js';
 import {createAuthoredNativeStartRecords} from './authored-native-start-records.js';
+import {createAuthoredNativeResultRecords} from './authored-native-result-records.js';
 import {createNativeRiderRecovery} from './native-rider-recovery.js';
 
 // Source actor timing/effects with explicitly authored anatomy/action/remount art.
@@ -35,12 +36,15 @@ function blend(a,b,t,scale){
  * initialRiderRecovery must be supplied to the adapter along with its own
  * courseDatumNative/raceFinished inputs. The default host still starts22. */
 export function createNativeLifecycleRider({initialHull,geometryProvider=modernRiderPose,anchorRig:providedAnchorRig,
- startPoseProvider,initializeStart=false}={}){
+ startPoseProvider,resultPoseProvider,initializeStart=false}={}){
  if(typeof initializeStart!=='boolean')throw new TypeError('initializeStart must be boolean');
  if(startPoseProvider!==undefined&&typeof startPoseProvider?.evaluate!=='function')throw new TypeError('startPoseProvider must be an explicit selected-record provider');
+ if(resultPoseProvider!==undefined&&typeof resultPoseProvider?.evaluate!=='function')throw new TypeError('resultPoseProvider must be an explicit selected-record provider');
  const base=createAuthoredNativeRider({initialHull,geometryProvider,anchorRig:providedAnchorRig}),{articulatedRider:rider,anchorState,anchorRig,restTargets}=base;
  const scale=initialHull.scale,restTargetsLocal=restTargets.map(p=>local(p,initialHull));
  const actions=createAuthoredNativeActionPoses({scale,restTargetsLocal});
+ const resultArtwork=resultPoseProvider?null:createAuthoredNativeResultRecords({scale,restTargetsLocal,anchorRig});
+ const results=resultPoseProvider??createNativeRiderResultPoseProvider({scale,...resultArtwork,readYawFrame:hull=>hull.yawFrame});
  let remount=null,expectedSolves=0,previousFrame=-1;
  let yawForward={x:initialHull.frame.forward.x,z:initialHull.frame.forward.z};
  const yawLength=Math.hypot(yawForward.x,yawForward.z);
@@ -74,6 +78,7 @@ export function createNativeLifecycleRider({initialHull,geometryProvider=modernR
    selectedActor:-1,selectionCountdown:10}),physicalMode:seed.physicalMode});
  }
  function evaluate(actor,animationFrame,hull,context){
+  if(actor>=1&&actor<=6)return results.evaluate({actorState:actor,animationFrame,hull,context});
   if(actor===15){
    return startProvider().evaluate({animationFrame,hull,context});
   }
@@ -138,6 +143,7 @@ export function createNativeLifecycleRider({initialHull,geometryProvider=modernR
   lifecycle:'source decision/pose-completion timing and physical effect order',
   recoveryGeometry:'authored actor7; reconstructed procedural23/24; authored rest/circle/history compatibility policy',
   actionGeometry:actions.provenance,
+  resultGeometry:results.provenance,resultArtwork:resultArtwork?.provenance??'explicit caller-supplied result records',
   startGeometry:activeStart?.provenance??'authored detailed-rider selected records and explicit modern anatomy, prepared when requested',
   ...(authoredStart?{startArtwork:authoredStart.provenance}:{}),
   startInitialization:seed?'actor15/frame56 physical25-point/type seed; independent authored rest/circle; not full retained-body startup':'ordinary actor22 host initialization',

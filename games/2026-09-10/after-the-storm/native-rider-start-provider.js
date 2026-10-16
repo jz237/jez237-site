@@ -1,4 +1,5 @@
-import {nativeRiderStartFrameView,prepareNativeRiderStartPose,nativeRiderStartAnatomy} from './native-rider-start-pose.js';
+import {nativeRiderStartFrameView,prepareNativeRiderStartPose,nativeRiderStartAnatomy,
+ nativeRiderResultFrameView,prepareNativeRiderResultPose} from './native-rider-start-pose.js';
 
 // A selected-record bridge, not an animation asset or a second pose clock.
 // The physical hull supplies its current center and fitted axes. The caller
@@ -33,25 +34,36 @@ function world(p,scale){
  * callback is polled per substep or allowed to supply the lifecycle outcome.
  * evaluate is pure with respect to physical points/anchors/actor state. */
 export function createNativeRiderStartPoseProvider({scale,selectFrame,readYawFrame,anatomy}={}){
+ const provider=createRecordProvider({scale,selectFrame,readYawFrame,anatomy},false);
+ providers.add(provider);return provider;
+}
+
+/** Result1..6 use the same selected-record/world bridge and retained yaw.
+ * Actor5 consumes no yaw; its full-hull decoder does not call readYawFrame.
+ * Records and anatomy are explicit; this provider owns no result or frame. */
+export function createNativeRiderResultPoseProvider(options={}){
+ return createRecordProvider(options,true);
+}
+function createRecordProvider({scale,selectFrame,readYawFrame,anatomy},result){
  if(!Number.isFinite(scale)||scale<=0)throw new RangeError('scale must be positive and finite');
  if(typeof selectFrame!=='function')throw new TypeError('selectFrame must supply the actual requested selected records');
  if(typeof readYawFrame!=='function')throw new TypeError('readYawFrame must supply the actual retained yaw words');
  const dimensions=nativeRiderStartAnatomy(anatomy);
- const provenance=freeze({mechanics:'numeric actor15 evaluator and nineteen-plus-six point mapping',
+ const provenance=freeze({mechanics:result?'numeric result1..6 evaluators and nineteen-plus-six point mapping':'numeric actor15 evaluator and nineteen-plus-six point mapping',
   geometry:'explicit selected caller records; no animation data or anatomical resizing included',
   anatomy:dimensions===nativeRiderStartAnatomy()?'original numeric dimensions':'explicit caller anatomy; source fixed-size geometry adapted',
   units:'native global pose converted once to world by the declared hull scale',
   timing:'caller-owned actor/frame/phase; no provider clock or selected-frame cache'});
- const provider={provenance,evaluate({hull,animationFrame,context}={}){
-  const frameView=nativeRiderStartFrameView({animationFrame});
-  const bodyNative=body(hull,scale,readYawFrame(hull,context));
+ const provider={provenance,evaluate({actorState,hull,animationFrame,context}={}){
+  const frameView=result?nativeRiderResultFrameView({actorState,animationFrame}):nativeRiderStartFrameView({animationFrame});
+  const bodyNative=body(hull,scale,result&&actorState===5?undefined:readYawFrame(hull,context));
   const selectedFrame=selectFrame(frameView,context);
-  const pose=prepareNativeRiderStartPose({frameView,selectedFrame,bodyNative,anatomy:dimensions});
+  const pose=(result?prepareNativeRiderResultPose:prepareNativeRiderStartPose)({frameView,selectedFrame,bodyNative,anatomy:dimensions});
   return freeze({targets:pose.targetsNative.map(p=>world(p,scale)),
    auxiliaryTargets:pose.auxiliaryTargetsNative.map(p=>world(p,scale)),
    evaluatedAnimationFrame:pose.evaluatedAnimationFrame,nextAnimationFrame:pose.nextAnimationFrame,provenance});
  }};
- providers.add(provider);return Object.freeze(provider);
+ return Object.freeze(provider);
 }
 
 /** Prepare the ordinary source15/frame56 seed. This is the pose/type portion

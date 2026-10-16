@@ -67,7 +67,7 @@ function record(position,first){
  * and its physical radius remain separate mechanics, never fitted per frame.
  * This explicitly adapts the source's fixed-size pose geometry to the detailed
  * model; it does not claim original animation or fixed-dimension equality. */
-export function createAuthoredNativeStartRecords({scale,restTargetsLocal,anchorRig}={}){
+export function createAuthoredNativeRecordRig({scale,restTargetsLocal,anchorRig}={}){
  if(!Number.isFinite(scale)||scale<=0)throw new RangeError('scale must be positive and finite');
  if(!Array.isArray(restTargetsLocal)||restTargetsLocal.length!==19)throw new TypeError('Start rest anatomy requires nineteen vectors');
  const rest=restTargetsLocal.map((p,i)=>vector(p,`restTargetsLocal[${i}]`));
@@ -87,6 +87,26 @@ export function createAuthoredNativeStartRecords({scale,restTargetsLocal,anchorR
   neckHeadNative:axial+distance(rest[1],shoulder),headExtensionNative:distance(rest[0],rest[1]),
   gripExtensionNative:grip,toeExtensionNative:toe,auxiliaryAlongNative:0,
   auxiliaryGripHalfSpanNative:distance(rest[6],rest[14])/2,auxiliarySupportSpanNative:distance(rig.supportA,rig.supportB)});
+ function encodeTargets(targets){
+  if(!Array.isArray(targets)||targets.length!==19)throw new TypeError('Record rig requires nineteen desired targets');
+  const p=targets.map((v,i)=>vector(v,`desired target${i}`)),center=mid(p[3],p[11]);
+  const neck=sub(center,mul(unit(sub(p[1],center),'authored head/shoulder axis'),axial));
+  const map=[9,8,7,17,16,15,2,1,5,4,3,13,12,11];
+  const directions=[sub(p[10],p[9]),sub(p[9],p[8]),sub(p[8],p[7]),sub(p[18],p[17]),sub(p[17],p[16]),sub(p[16],p[15]),
+   sub(p[1],p[2]),sub(p[0],p[1]),sub(p[6],p[5]),sub(p[5],p[4]),sub(p[4],p[3]),
+   sub(p[14],p[13]),sub(p[13],p[12]),sub(p[12],p[11])];
+  const records=map.map((point,i)=>record(p[point],directions[i]));
+  // Auxiliary grip goals belong to the craft, including when a result frees
+  // either hand. Do not move the bars to follow an unconstrained arm gesture.
+  records.push(record(neck,sub(center,neck)),record(mid(rest[6],rest[14]),sub(rest[6],rest[14])),
+   record(rig.center,vec(0,0,1)),record(rig.supportA,sub(rig.supportB,rig.supportA)));
+  return records;
+ }
+ return Object.freeze({rest:rest.map(p=>Object.freeze(p)),height,reach,anatomy,encodeTargets});
+}
+
+export function createAuthoredNativeStartRecords(options={}){
+ const {rest,height,reach,anatomy,encodeTargets}=createAuthoredNativeRecordRig(options);
  const provenance=Object.freeze({geometry:'new authored ordinary launch path and signed18-record geometry from the detailed model',
   mechanics:'recovered actor15 placement/three shoulder passes/arm IK/point mapping with explicit modern anatomical dimensions',
   timing:'ordinary selected frames56..84 only; lifecycle owns phase/clock/terminal blend',
@@ -97,16 +117,7 @@ export function createAuthoredNativeStartRecords({scale,restTargetsLocal,anchorR
    throw new RangeError('Start records require the actual descriptor7 frame view');
   const frame=view.evaluatedAnimationFrame;if(frame<56)throw new RangeError('Authored ordinary launch starts at frame56');
   if(reach<=.25)throw new RangeError('Start anatomy is too small for signed-record quantization');
-  const p=goals(rest,height,key(frame),reach-.25),center=mid(p[3],p[11]);
-  const neck=sub(center,mul(unit(sub(p[1],center),'authored head/shoulder axis'),axial));
-  const map=[9,8,7,17,16,15,2,1,5,4,3,13,12,11];
-  const directions=[sub(p[10],p[9]),sub(p[9],p[8]),sub(p[8],p[7]),sub(p[18],p[17]),sub(p[17],p[16]),sub(p[16],p[15]),
-   sub(p[1],p[2]),sub(p[0],p[1]),sub(p[6],p[5]),sub(p[5],p[4]),sub(p[4],p[3]),
-   sub(p[14],p[13]),sub(p[13],p[12]),sub(p[12],p[11])];
-  const records=map.map((point,i)=>record(p[point],directions[i]));
-  records.push(record(neck,sub(center,neck)),record(mid(p[6],p[14]),sub(p[6],p[14])),
-   record(rig.center,vec(0,0,1)),record(rig.supportA,sub(rig.supportB,rig.supportA)));
-  return {evaluatedAnimationFrame:frame,records};
+  return {evaluatedAnimationFrame:frame,records:encodeTargets(goals(rest,height,key(frame),reach-.25))};
  }
  // Eagerly validate all authored samples before this provider is installed.
  for(let f=56;f<=84;f++)selectFrame(nativeRiderStartFrameView({animationFrame:f}));

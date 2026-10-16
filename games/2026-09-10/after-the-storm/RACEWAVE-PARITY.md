@@ -2486,3 +2486,41 @@ it must not replace them with a neutral pose or reuse startup artwork as a
 finished result animation. Normal driven finishes, post-result world updates,
 original61708 result-input handling, result/menu scheduling, fades and persistent
 records remain unfinished. Publicv2.24.0 and the broader parity gaps are unchanged.
+
+## Detailed result motion integration — October 15, 2026
+
+The native lifecycle now supplies high-resolution record poses for all six
+result actors. Private inspection of all416 original motion frames established
+the distinct two-hand/one-hand celebrations, slump, low crouch, backward fall
+and disappointed gesture. The public implementation contains newly authored
+angular/root keyframes on the existing detailed anatomy, with original frame
+counts and numeric evaluation. It includes no original animation record arrays.
+These are authored motion interpretations, not coordinate-exact original art.
+
+Start and result providers share record decoding, anatomy measurement and
+world conversion. Current/pending result poses use the existing held blend;
+one auxiliary solve and one actual nineteen-point solve follow each active
+logical frame. Freed hands do not drag the craft's auxiliary handlebar goals.
+Actor5 follows the full hull without reading retained yaw and returns through
+the actual7 remount path. The crouch is adapted to the taller modern saddle:
+the rider moves above the rear step before lowering and rises before returning.
+This explicit geometry policy prevents the initial visible saddle intersection.
+
+Ten new tests cover all416 authored samples, endpoint dimensions, fixed craft
+supports, distinct gestures, final rest alignment, pure seeking, the source
+delay/held blend, all six physical sequences for all four riders, and30/60/144Hz equality.
+The selected rider/lifecycle suite passes269 tests;34 additional ordinary
+race/grid/host/world regression tests pass. Prepared result selections are
+used here; they are not evidence of normal driven-finish scheduling.
+
+A fresh local browser inspected the actual detailed Blender rider and craft
+at1500x900 using default result providers and actual physical solves. All six
+completed without console warnings/errors, returned to22, and only5 entered7.
+Body and auxiliary solve counts agreed for every sequence. The inspection is
+a separate studio scene, not a full-game results screen or original-trajectory
+comparison. Final module hashes and screenshots are retained privately.
+
+This checkpoint remains local and unpublished. Browser race results still
+stop normal world updates; source61708 result-input handling and the original
+result/menu update sequence, fades, unfinished-place estimation and persistence
+remain open. The broader full-game parity objective is still incomplete.
