@@ -1,3 +1,4 @@
+import {readPackedResponse} from './packed-response';
 import {GLTFLoader as OriginalGLTFLoader,type GLTF} from 'three/addons/loaders/GLTFLoader.js';
 import packedModels from './packed-models.json';
 
@@ -13,7 +14,8 @@ export class GLTFLoader extends OriginalGLTFLoader {
     const response=await fetch(source);
     if(response.status===404)return super.loadAsync(file,onProgress);
     if(!response.ok||!response.body)throw new Error('Model unavailable: '+name);
-    const bytes=await new Response(response.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();
+    const bytes=await readPackedResponse(response),magic=new Uint8Array(bytes,0,Math.min(4,bytes.byteLength));
+    if(magic.length!==4||magic[0]!==0x67||magic[1]!==0x6c||magic[2]!==0x54||magic[3]!==0x46)throw new Error('Invalid packed model: '+name);
     return this.parseAsync(bytes,new URL('./',source).href);
   }
 }

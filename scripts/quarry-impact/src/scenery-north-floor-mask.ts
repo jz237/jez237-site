@@ -1,3 +1,4 @@
+import {readPackedResponse} from './packed-response';
 import * as T from 'three';
 import { url } from './assets';
 import spec from '../source/north-forest-floor.json';
@@ -15,7 +16,7 @@ export function loadNorthForestFloor(): Promise<T.DataTexture> {
 async function load(): Promise<T.DataTexture> {
   const response = await fetch(url(NORTH_FLOOR_PATH));
   if (!response.ok || !response.body) throw new Error(`Forest floor mask request failed: ${response.status}`);
-  const bytes = new Uint8Array(await new Response(response.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer());
+  const bytes = new Uint8Array(await readPackedResponse(response));
   const [width, height] = NORTH_FLOOR_SIZE;
   if (bytes.length !== width * height * 4) throw new Error(`Forest floor mask has invalid byte count ${bytes.length}`);
   const mask = new T.DataTexture(bytes, width, height, T.RGBAFormat, T.UnsignedByteType);

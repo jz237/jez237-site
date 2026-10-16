@@ -1,3 +1,4 @@
+import {readPackedResponse} from './packed-response';
 import * as T from 'three';
 import { url } from './assets';
 
@@ -23,8 +24,7 @@ async function load(): Promise<T.DataTexture> {
   const response = await fetch(url(ARENA_MASK_PATH));
   if (!response.ok) throw new Error(`Arena mask request failed: ${response.status}`);
   if (!response.body) throw new Error('Arena mask response has no body');
-  const stream = response.body.pipeThrough(new DecompressionStream('gzip'));
-  const bytes = new Uint8Array(await new Response(stream).arrayBuffer());
+  const bytes = new Uint8Array(await readPackedResponse(response));
   const expected = ARENA_MASK_SIZE * ARENA_MASK_SIZE * 4;
   if (bytes.length !== expected) throw new Error(`Arena mask byte count ${bytes.length}; expected ${expected}`);
   const texture = new T.DataTexture(bytes, ARENA_MASK_SIZE, ARENA_MASK_SIZE, T.RGBAFormat, T.UnsignedByteType);
