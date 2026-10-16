@@ -1,13 +1,14 @@
+import {createWrenfordPitLandmarks} from './wrenford-pit-landmarks';
 import * as T from 'three';
 import {WRENFORD_PIT_BARRIERS} from './wrenford-pit-arena';
 import {freezeSceneryTransforms} from './render-work';
 export function createWrenfordPitWorld(){
  const root=new T.Group();root.name='wrenford_mud_pit';
  const materials={concrete:new T.MeshStandardMaterial({color:0xbcb5a4,roughness:.98}),orange:new T.MeshStandardMaterial({color:0xb9582e,roughness:.9}),steel:new T.MeshStandardMaterial({color:0x303539,roughness:.7,metalness:.3}),seat:new T.MeshStandardMaterial({color:0x557876,roughness:.85}),hay:new T.MeshStandardMaterial({color:0x998254,roughness:1}),skin:new T.MeshStandardMaterial({color:0xbb967b,roughness:1}),cream:new T.MeshStandardMaterial({color:0xd4c7a5,roughness:.9})};
- const floorMaterial=new T.MeshStandardMaterial({color:0x82705a,roughness:.91}),floorGeometry=new T.PlaneGeometry(180,180),boxGeometry=new T.BoxGeometry(),textures:T.Texture[]=[];
+ const floorMaterial=new T.MeshStandardMaterial({color:0x82705a,roughness:.91}),floorGeometry=new T.PlaneGeometry(480,480),boxGeometry=new T.BoxGeometry(),textures:T.Texture[]=[];
  if(typeof document!=='undefined'){
   const loader=new T.TextureLoader(),base=import.meta.env.BASE_URL+'assets/';
-  for(const [name,color]of [['mud_diff',true],['mud_nor_gl',false]]as const){const t=loader.load(base+name+'.jpg');t.wrapS=t.wrapT=T.RepeatWrapping;t.repeat.set(45,45);t.anisotropy=8;t.colorSpace=color?T.SRGBColorSpace:T.NoColorSpace;textures.push(t);if(color)floorMaterial.map=t;else floorMaterial.normalMap=t;}floorMaterial.normalScale.setScalar(.6);
+  for(const [name,color]of [['mud_diff',true],['mud_nor_gl',false]]as const){const t=loader.load(base+name+'.jpg');t.wrapS=t.wrapT=T.RepeatWrapping;t.repeat.set(120,120);t.anisotropy=8;t.colorSpace=color?T.SRGBColorSpace:T.NoColorSpace;textures.push(t);if(color)floorMaterial.map=t;else floorMaterial.normalMap=t;}floorMaterial.normalScale.setScalar(.6);
  }
  const floor=new T.Mesh(floorGeometry,floorMaterial);floor.name='wrenford_pit_mud';floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;root.add(floor);
  const batches=new Map<keyof typeof materials,T.Matrix4[]>(),matrix=new T.Matrix4(),q=new T.Quaternion();
@@ -38,6 +39,7 @@ export function createWrenfordPitWorld(){
  }
  for(const z of [-59,59]){const sign=new T.Mesh(signGeometry,signMaterial);sign.position.set(0,8,z);if(z>0)sign.rotation.y=Math.PI;root.add(sign);for(const x of [-8,8])box(x,4,z,.3,8,.3,'steel');}
  for(const [finish,matrices]of batches){const mesh=new T.InstancedMesh(boxGeometry,materials[finish],matrices.length);matrices.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.name='wrenford_pit_'+finish;mesh.castShadow=mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
+ const landmarks=createWrenfordPitLandmarks();root.add(landmarks.root);
  root.userData.solidRecords=WRENFORD_PIT_BARRIERS;freezeSceneryTransforms(root);
- let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});floorGeometry.dispose();boxGeometry.dispose();signGeometry.dispose();floorMaterial.dispose();signMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
+ let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;landmarks.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});floorGeometry.dispose();boxGeometry.dispose();signGeometry.dispose();floorMaterial.dispose();signMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
 }
