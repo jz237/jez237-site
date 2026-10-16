@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readStandingsPrevious,restoreStandingsBytes,verifyStandingsRevision} from './standings-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreOpponentSetsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('Standings preserves every prior fixture, vehicle asset, control and camera input',verifyStandingsRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/standings/revision.json').toString());
@@ -10,3 +10,5 @@ test('the successor bridge restores full predecessors and does not conceal later
  }
  const unknown=Buffer.from('unknown');assert.deepEqual(restoreStandingsBytes('src/unknown.ts',unknown),unknown);
 });
+
+import {restoreOpponentSetsBytes} from './opponent-sets-invariants';

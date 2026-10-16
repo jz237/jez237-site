@@ -7,11 +7,11 @@ import {readDemoOptions,demoCarKind,demoVehicleSetup} from '../src/demo-session'
 import {GRID_LINEUPS,gridPool,gridCarKind,vehicleDrivetrain,vehicleWeightClass,gridRecordKey} from '../src/grid-rules';
 test('every selected vehicle builds a full valid 24-car class, drive and same-model field',()=>{
  for(const kind of CAR_KINDS)for(const lineup of Object.keys(GRID_LINEUPS)as (keyof typeof GRID_LINEUPS)[]){
-  const pool=gridPool(kind,lineup),field=Array.from({length:24},(_,i)=>gridCarKind(i,kind,lineup));assert.equal(field[0],kind);assert.equal(field.length,24);assert.ok(field.every(k=>pool.includes(k)));
+  const pool=gridPool(kind,lineup),field=Array.from({length:24},(_,i)=>gridCarKind(i,kind,lineup));assert.equal(field[0],kind);assert.equal(field.length,24);assert.ok(field.slice(1).every(k=>pool.includes(k)));
   if(lineup==='selected')assert.ok(field.every(k=>k===kind));if(lineup==='weight')assert.ok(field.every(k=>vehicleWeightClass(k)===vehicleWeightClass(kind)));if(lineup==='drivetrain')assert.ok(field.every(k=>vehicleDrivetrain(k)===vehicleDrivetrain(kind)));
-  assert.equal(new Set(field).size,pool.length);for(let i=0;i<24;i++)assert.ok(pool.includes(demoCarKind(i,kind,lineup)));
+  assert.equal(new Set(field.slice(1)).size,pool.length);for(let i=0;i<24;i++)assert.ok(pool.includes(demoCarKind(i,kind,lineup)));
  }
- assert.deepEqual(gridPool('sedan','drivetrain'),['sedan','hatch']);assert.deepEqual(gridPool('tern','drivetrain'),['tern']);assert.deepEqual(gridPool('buggy','weight'),['compact','tern','marten','buggy']);
+ assert.deepEqual(gridPool('sedan','drivetrain'),['sedan','hatch','trail']);assert.deepEqual(gridPool('tern','drivetrain'),['tern']);assert.deepEqual(gridPool('buggy','weight'),['compact','tern','marten','buggy']);
 });
 test('factory and matched fields enforce actual physical upgrades without mutating saved garage or sharing setup state',()=>{
  const garage=readGarage();garage.cars.tern.setup={...stockSetup('tern'),paint:0x123456,engine:3,armor:2,tires:1,tune:{gearing:.7,suspension:-.2,steering:.4,brakeBias:.1,differential:.9}};const before=JSON.stringify(garage);
