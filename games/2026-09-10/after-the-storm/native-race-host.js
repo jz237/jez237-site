@@ -74,7 +74,7 @@ function present(host){
  * Custom source actor/pose providers require explicit recovery:false.
  */
 export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,tunes=[],sourceStates=[],poseProviders=[],onFrame=null,
- raceRuntime=null,onLaunchFrame=null,hullStarts=[],
+ raceRuntime=null,onLaunchFrame=null,hullStarts=[],staticGeometry=null,
  floatingDefinitions,floatingActive=true,primaryActive=true,recovery=true,craftContacts=true}={}){
  if(!Array.isArray(racers)||racers.length<1||racers.some(r=>!r?.hydro||!Number.isInteger(r.id)||r.id<0||r.id>3))throw new TypeError('Expected initialized browser racers');
  if(!water?.field||!finite(water.scale))throw new TypeError('Expected host source water');
@@ -96,7 +96,7 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
  if(!Array.isArray(definitions))throw new TypeError('Expected selected floating definitions');
  const floating=definitions.length?createNativeFloatingWorld({definitions,water}):null;
  const primary=course.sourceBuoyLayout?createNativePrimaryBuoyWorld({layout:course.sourceBuoyLayout,water}):null;
- const courseContacts=createSourceNativeContacts(course,{scale:water.scale,fixedSphereGrid});
+ const courseContacts=createSourceNativeContacts(course,{scale:water.scale,fixedSphereGrid,staticGeometry});
  const contacts={...courseContacts,...(primary?{racingBuoys:primary.contact}:{}),...(floating?{primarySpheres:floating.contact}:{})};
  // Solo Sunny needs no unresolved multi-racer camera-corner predicate. Its
  // original61708 countdown, not a browser finish flag, selects this producer.

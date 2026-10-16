@@ -67,6 +67,8 @@ test('native preview creates actual point/rider solvers and explicit recovered t
  assert.ok(a.hull.yawFrame);assert.equal(a.hull.matrixWords,undefined);assert.equal(a.hull.prepared,undefined);
  for(const [key,value]of Object.entries(NATIVE_HOST_DEFAULT_TUNE))assert.equal(a.water.profile[key],value);
  assert.equal(host.contacts.geometry.shore.length,49);assert.equal(host.contacts.geometry.floor.length,231);
+ assert.match(host.contacts.provenance.numericStatic.floor,/original grid/);
+ assert.match(host.contacts.provenance.numericStatic.boxes,/binary32/);
  assert.equal(host.provenance.actorRecoveryAndTricks,false);assert.equal(host.provenance.nativeRacerCollision,true);
  assert.equal(host.provenance.sourcePrimaryBuoyContacts,true);assert.equal(host.primary.snapshot().length,s.course.sourceBuoyLayout.nodes.length);
  assert.equal(a.surface,host.world.surface);assert.ok(a.surface.cellAtNative);

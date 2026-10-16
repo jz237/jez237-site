@@ -1,5 +1,48 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## v2.34.0 release candidate — original numeric floor and box contact passes
+
+This release packages the contact changes and prepared Sunset retirement
+geometry below. Historical unpublished labels describe their original checkpoints.
+
+The ordinary native host now supplies the selected original floor/grid/list
+and box records to complete7F030/7F700 contact passes. Floor selection retains
+the point's initial cell while continuing its candidate list after each push.
+Boxes visit rows last-to-first and points11-to0, preserve non-upward exclusions
+for points1/8/11, and apply outgoing overlap response and marked-ramp flags.
+Each response moves all twelve positions before the next candidate; only the
+contacted point's velocity changes. Impact maxima and the shared normal remain
+owned by the existing adapter and receive contacts in their original order.
+
+Fresh read-only Ghidra queries on EVO X2 left all nine project files unchanged.
+All510 exported instructions match the local ROM. Complete original execution
+of540 prepared floor/box cases runs1,467,850 instructions without intercepted
+contact arithmetic or callees. JavaScript matches every position, velocity,
+impact, normal and marked-box bit. Cases include recovered Sunset ramp/pier/floor
+positions, all-point overlaps, retained impacts and outgoing marked contacts.
+The public fixture contains numeric inputs/results, not executable ROM bytes.
+
+The bridge converts the existing world-unit hull to native binary32 scratch
+values per pass and commits actual contacts once. A no-contact pass preserves
+the world hull exactly. It neither installs a second persistent hull owner nor
+claims original precision for the surrounding integrator, shores or spheres.
+Standalone reconstructed contact users retain their explicit previous path.
+The renderer, terrain/water meshes, textures and resolution are unchanged.
+
+Private prepared Sunset host trials now run through these passes: rider0,
+seed17 Normal finishes three laps with zero misses; Hard finishes with three.
+Expert/Reverse still retire for missed buoys, so public native Sunset admission
+remains pending. A Normal two-player trial reaches the winner's result stage
+with zero misses for player1 and one for the unfinished player2. These trials
+are evidence for further integration work, not complete course/AI parity.
+
+Validation:93 focused static-contact, native host/launch/results and driving
+tests passed. This includes all16 Sunny rider/class combinations, three-lap
+finishes at30/60/144Hz for each class with rider0, and matching physical/water
+history across refresh rates. A final26-test bridge/host/loading run and22
+impact/support/prepared-Sunset tests passed. The terrain worker and renderer
+remain unchanged; packaging refreshes309 module identities.
+
 ## Unpublished checkpoint — Sunset retirement support geometry
 
 Prepared Sunset ordinary race owners now select the recovered course floor and

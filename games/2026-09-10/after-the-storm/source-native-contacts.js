@@ -1,5 +1,6 @@
 import {volumeContact} from './clipped-volumes.js';
 import {collideSourceFixedSpheres} from './source-boundary-spheres.js';
+import {createNativeStaticContactBridge} from './native-static-contact-bridge.js';
 
 // Source point responses for an already selected course. This module never
 // calls a rigid-craft constrain function, infers floating-object motion, fits
@@ -8,12 +9,14 @@ import {collideSourceFixedSpheres} from './source-boundary-spheres.js';
 // -> racingBuoys -> fixedSpheres -> primarySpheres. The final legacy API name
 // denotes generic floating/breakable objects. Missing object phases are deliberate.
 //
-// Reconstructed triangles retain finite geometric clipping. Public course data
+// Without staticGeometry, reconstructed triangles retain finite clipping. Course data
 // omit the source grid pointer lists and some original normals/clip vectors;
 // the default expanded spatial bins and public row order ARE NOT that grid.
 // Exact candidate providers may override each selection/order independently.
 // Numeric normals/clip boundaries are double-precision reconstructions, not a
-// binary32 replay of the original collision consumer.
+// binary32 replay of the original collision consumer. Explicit staticGeometry
+// replaces the floor/box phases with original numeric consumers; shores and
+// sphere phases retain the precision and selection documented here.
 
 const vec=p=>Array.isArray(p)?{x:p[0],y:p[1],z:p[2]}:{x:p.x,y:p.y,z:p.z};
 const sub=(a,b)=>({x:a.x-b.x,y:a.y-b.y,z:a.z-b.z});
@@ -158,24 +161,29 @@ function candidates(select,all,fallback,input){
  * its objects or handles primary breakables/dynamic floating objects.
  */
 export function createSourceNativeContacts(course,{scale=course?.sourceMetadata?.nativeScale??.025,
-  fixedSphereGrid=course?.sourceFixedSphereGrid??course?.sourceSphereGrid??null,candidateSelectors={}}={}){
+  fixedSphereGrid=course?.sourceFixedSphereGrid??course?.sourceSphereGrid??null,candidateSelectors={},staticGeometry=null}={}){
   if(!course||typeof course!=='object')throw new TypeError('Expected a selected source course');
   if(!finite(scale)||scale<=0||!finite(scale*320))throw new RangeError('scale must be positive and finite');
   if(!candidateSelectors||typeof candidateSelectors!=='object')throw new TypeError('Expected candidateSelectors');
   for(const key of Object.keys(candidateSelectors))if(!['shore','floor','boxes'].includes(key)||typeof candidateSelectors[key]!=='function')throw new TypeError(`Unsupported candidate selector ${key}`);
+  if(staticGeometry&&(candidateSelectors.floor||candidateSelectors.boxes))throw new TypeError('Original static geometry owns its floor and box candidate selection');
+  const numericStatic=staticGeometry?createNativeStaticContactBridge({geometry:staticGeometry,scale}):null;
   if(fixedSphereGrid&&(fixedSphereGrid.scale!==scale||typeof fixedSphereGrid.query!=='function'||!Array.isArray(fixedSphereGrid.spheres)))throw new TypeError('Expected a source fixed sphere grid at the contact scale');
   const shores=Object.freeze(compileShores(course)),floors=Object.freeze(compileFloors(course)),boxes=Object.freeze(compileBoxes(course)),band=16*scale;
   const shoreQuery=bins(shores,320*scale,band),floorQuery=bins(floors,320*scale,band),reverseBoxes=Object.freeze([...boxes].reverse()),states=new WeakMap();
   const geometry=Object.freeze({shore:shores,floor:floors,boxes});
   const provenance=Object.freeze({phaseOrder:Object.freeze(['shore','floor','boxes','dynamicPlanes','racingBuoys','fixedSpheres','primarySpheres']),
     pointOrder:'11 to 0',boxOrder:'last volume to first, then point11 to0',
-    defaultCandidateSelection:'reconstructed expanded XZ bins, stable public row order; not the original grid pointer lists',
+    defaultCandidateSelection:numericStatic?'original floor grid/list and box row order; shore uses reconstructed expanded XZ bins':
+      'reconstructed expanded XZ bins, stable public row order; not the original grid pointer lists',
     candidateOverrides:Object.freeze(Object.fromEntries(['shore','floor','boxes'].map(k=>[k,!!candidateSelectors[k]]))),
     geometryCounts:Object.freeze({shore:shores.length,floor:floors.length,boxes:boxes.length}),
-    finitePlaneClipping:'triangle-derived double precision; original normal/clip residuals and source grid admission are not reproduced',
+    geometryRole:numericStatic?'public geometry is reconstruction metadata; floor/box execution uses explicit original records':'selected reconstructed contact geometry',
+    finitePlaneClipping:numericStatic?'original binary32 floor/box coefficients, clipping and response; world solver conversion remains explicit':
+      'triangle-derived double precision; original normal/clip residuals and source grid admission are not reproduced',
     fixedSpheres:'collideSourceFixedSpheres: source grid/list/probe order and three-point velocity kicks; double precision, not original float32 bits',
     fixedSphereGrid:Object.freeze({provided:!!fixedSphereGrid,entries:fixedSphereGrid?.entries??null,truncated:!!fixedSphereGrid?.truncated}),
-    dynamicAndPrimaryObjects:'caller-owned separate hooks',scale});
+    dynamicAndPrimaryObjects:'caller-owned separate hooks',numericStatic:numericStatic?.provenance??null,scale});
   function stateFor(hull,context){
     if(hull?.points?.length!==12||hull.scale!==scale)throw new TypeError('Expected a twelve-point hull at the course contact scale');
     if(typeof context?.applyContact!=='function')throw new TypeError('Use native-race-adapter contact context.applyContact');
@@ -204,6 +212,7 @@ export function createSourceNativeContacts(course,{scale=course?.sourceMetadata?
       }
     },
     floor(hull,context){
+      if(numericStatic)return numericStatic.floor(hull,context);
       const state=stateFor(hull,context);
       for(let pointIndex=11;pointIndex>=0;pointIndex--){
         const point=hull.points[pointIndex].position;
@@ -214,6 +223,7 @@ export function createSourceNativeContacts(course,{scale=course?.sourceMetadata?
       }
     },
     boxes(hull,context){
+      if(numericStatic)return numericStatic.boxes(hull,context);
       const state=stateFor(hull,context);
       for(const volume of candidates(candidateSelectors.boxes,boxes,reverseBoxes,{hull,context}))for(let pointIndex=11;pointIndex>=0;pointIndex--){
         const hit=volumeContact(volume,hull.points[pointIndex].position,pointIndex);
@@ -231,7 +241,7 @@ export function createSourceNativeContacts(course,{scale=course?.sourceMetadata?
           penetration:q.penetration,normalSpeedNative:q.normalSpeedNative});
       }
     },
-    geometry,provenance,
+    geometry,provenance,numericStaticDiagnostics:hull=>numericStatic?.diagnostics(hull)??null,
     diagnostics(hull){
       const s=states.get(hull);return s?{provenance,logicalFrame:s.frame,tick:s.tick,total:{...s.total},last:s.last.map(q=>({...q,report:q.report?{...q.report}:undefined})),
         fixedImpact:{maximum:s.fixedImpact.maximum,normal:s.fixedImpact.normal?copy(s.fixedImpact.normal):null},fixedUnresolved:s.fixedUnresolved.map(copy)}:null;
