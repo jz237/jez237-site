@@ -1,0 +1,1682 @@
+{
+  "scope": "Prepared original6E3A8 caller and complete4CC7C execution, with initialized\nroller records and patterned water. Judging and object/effect callees are\nexplicit intercepted boundaries, not full gameplay execution. Their prepared\nstate writes test when activity624 and72c are read. Other course arrays empty.\n",
+  "cases": [
+    {
+      "input": {
+        "mode620": 0,
+        "simulation648": 0,
+        "beforeActivity624": -1,
+        "afterActivity624": -1,
+        "beforeState72c": 0,
+        "afterObjectState72c": 0
+      },
+      "rows": [
+        [
+          1000,
+          500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          16,
+          2,
+          0,
+          1,
+          0
+        ],
+        [
+          900,
+          -500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          24,
+          2,
+          0,
+          1,
+          0
+        ]
+      ],
+      "phasesBefore": [
+        0,
+        4095
+      ],
+      "phasesAfter": [
+        4032,
+        3999
+      ],
+      "gridSHA256": "952a2b2559b4197fb0127d793c5f39a7c51aecb928132bc40556abd652982457",
+      "calls": [
+        "80079528",
+        "8007dbc0",
+        "8006e0f4",
+        "800b49c4",
+        "8004cc7c",
+        "8004cc7c"
+      ],
+      "recordOffsets": [
+        0,
+        64
+      ],
+      "instructions": 21620
+    },
+    {
+      "input": {
+        "mode620": 0,
+        "simulation648": 0,
+        "beforeActivity624": -1,
+        "afterActivity624": 0,
+        "beforeState72c": 0,
+        "afterObjectState72c": 0
+      },
+      "rows": [
+        [
+          1000,
+          500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          16,
+          2,
+          0,
+          1,
+          0
+        ],
+        [
+          900,
+          -500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          24,
+          2,
+          0,
+          1,
+          0
+        ]
+      ],
+      "phasesBefore": [
+        0,
+        4095
+      ],
+      "phasesAfter": [
+        0,
+        4095
+      ],
+      "gridSHA256": "edc4e5287a2a34c411b289e207f8dac4c382c9c032360cc5151ea4d38c07a8a4",
+      "calls": [
+        "80079528"
+      ],
+      "recordOffsets": [],
+      "instructions": 12
+    },
+    {
+      "input": {
+        "mode620": 0,
+        "simulation648": 0,
+        "beforeActivity624": 0,
+        "afterActivity624": -1,
+        "beforeState72c": 1,
+        "afterObjectState72c": 0
+      },
+      "rows": [
+        [
+          1000,
+          500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          16,
+          2,
+          0,
+          1,
+          0
+        ],
+        [
+          900,
+          -500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          24,
+          2,
+          0,
+          1,
+          0
+        ]
+      ],
+      "phasesBefore": [
+        0,
+        4095
+      ],
+      "phasesAfter": [
+        4032,
+        3999
+      ],
+      "gridSHA256": "952a2b2559b4197fb0127d793c5f39a7c51aecb928132bc40556abd652982457",
+      "calls": [
+        "80079528",
+        "8007dbc0",
+        "8006e0f4",
+        "800b49c4",
+        "8004cc7c",
+        "8004cc7c"
+      ],
+      "recordOffsets": [
+        0,
+        64
+      ],
+      "instructions": 21620
+    },
+    {
+      "input": {
+        "mode620": 0,
+        "simulation648": 0,
+        "beforeActivity624": -1,
+        "afterActivity624": -1,
+        "beforeState72c": 0,
+        "afterObjectState72c": 1
+      },
+      "rows": [
+        [
+          1000,
+          500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          16,
+          2,
+          0,
+          1,
+          0
+        ],
+        [
+          900,
+          -500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          24,
+          2,
+          0,
+          1,
+          0
+        ]
+      ],
+      "phasesBefore": [
+        0,
+        4095
+      ],
+      "phasesAfter": [
+        0,
+        4095
+      ],
+      "gridSHA256": "edc4e5287a2a34c411b289e207f8dac4c382c9c032360cc5151ea4d38c07a8a4",
+      "calls": [
+        "80079528",
+        "8007dbc0",
+        "8006e0f4",
+        "800b49c4",
+        "8004cc7c",
+        "8004cc7c"
+      ],
+      "recordOffsets": [
+        0,
+        64
+      ],
+      "instructions": 100
+    },
+    {
+      "input": {
+        "mode620": 0,
+        "simulation648": 0,
+        "beforeActivity624": -32768,
+        "afterActivity624": -1,
+        "beforeState72c": 1,
+        "afterObjectState72c": -32768
+      },
+      "rows": [
+        [
+          1000,
+          500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          16,
+          2,
+          0,
+          1,
+          0
+        ]
+      ],
+      "phasesBefore": [
+        0
+      ],
+      "phasesAfter": [
+        4032
+      ],
+      "gridSHA256": "258c4be694d245b7ee2636b0707cada3064357e5ae64ff2e3e45f7c62f35d830",
+      "calls": [
+        "80079528",
+        "8007dbc0",
+        "8006e0f4",
+        "800b49c4",
+        "8004cc7c"
+      ],
+      "recordOffsets": [
+        0
+      ],
+      "instructions": 10834
+    },
+    {
+      "input": {
+        "mode620": 0,
+        "simulation648": 0,
+        "beforeActivity624": 32767,
+        "afterActivity624": -1,
+        "beforeState72c": 1,
+        "afterObjectState72c": 32767
+      },
+      "rows": [
+        [
+          1000,
+          500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          16,
+          2,
+          0,
+          1,
+          0
+        ],
+        [
+          900,
+          -500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          24,
+          2,
+          0,
+          1,
+          0
+        ]
+      ],
+      "phasesBefore": [
+        0,
+        4095
+      ],
+      "phasesAfter": [
+        4032,
+        3999
+      ],
+      "gridSHA256": "952a2b2559b4197fb0127d793c5f39a7c51aecb928132bc40556abd652982457",
+      "calls": [
+        "80079528",
+        "8007dbc0",
+        "8006e0f4",
+        "800b49c4",
+        "8004cc7c",
+        "8004cc7c"
+      ],
+      "recordOffsets": [
+        0,
+        64
+      ],
+      "instructions": 21620
+    },
+    {
+      "input": {
+        "mode620": 0,
+        "simulation648": 0,
+        "beforeActivity624": -1,
+        "afterActivity624": 1,
+        "beforeState72c": 0,
+        "afterObjectState72c": -1
+      },
+      "rows": [
+        [
+          1000,
+          500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          16,
+          2,
+          0,
+          1,
+          0
+        ]
+      ],
+      "phasesBefore": [
+        0
+      ],
+      "phasesAfter": [
+        0
+      ],
+      "gridSHA256": "edc4e5287a2a34c411b289e207f8dac4c382c9c032360cc5151ea4d38c07a8a4",
+      "calls": [
+        "80079528"
+      ],
+      "recordOffsets": [],
+      "instructions": 12
+    },
+    {
+      "input": {
+        "mode620": 0,
+        "simulation648": 0,
+        "beforeActivity624": -1,
+        "afterActivity624": -1,
+        "beforeState72c": 1,
+        "afterObjectState72c": -1
+      },
+      "rows": [],
+      "phasesBefore": [],
+      "phasesAfter": [],
+      "gridSHA256": "edc4e5287a2a34c411b289e207f8dac4c382c9c032360cc5151ea4d38c07a8a4",
+      "calls": [
+        "80079528",
+        "8007dbc0",
+        "8006e0f4",
+        "800b49c4"
+      ],
+      "recordOffsets": [],
+      "instructions": 38
+    },
+    {
+      "input": {
+        "mode620": 0,
+        "simulation648": 3,
+        "beforeActivity624": -1,
+        "afterActivity624": -1,
+        "beforeState72c": 0,
+        "afterObjectState72c": 0
+      },
+      "rows": [
+        [
+          1000,
+          500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          16,
+          2,
+          0,
+          1,
+          0
+        ],
+        [
+          900,
+          -500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          24,
+          2,
+          0,
+          1,
+          0
+        ]
+      ],
+      "phasesBefore": [
+        0,
+        4095
+      ],
+      "phasesAfter": [
+        4032,
+        3999
+      ],
+      "gridSHA256": "952a2b2559b4197fb0127d793c5f39a7c51aecb928132bc40556abd652982457",
+      "calls": [
+        "80079528",
+        "8007dbc0",
+        "8006e0f4",
+        "800b49c4",
+        "8004cc7c",
+        "8004cc7c"
+      ],
+      "recordOffsets": [
+        0,
+        64
+      ],
+      "instructions": 21620
+    },
+    {
+      "input": {
+        "mode620": 0,
+        "simulation648": 3,
+        "beforeActivity624": -1,
+        "afterActivity624": 0,
+        "beforeState72c": 0,
+        "afterObjectState72c": 0
+      },
+      "rows": [
+        [
+          1000,
+          500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          16,
+          2,
+          0,
+          1,
+          0
+        ],
+        [
+          900,
+          -500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          24,
+          2,
+          0,
+          1,
+          0
+        ]
+      ],
+      "phasesBefore": [
+        0,
+        4095
+      ],
+      "phasesAfter": [
+        0,
+        4095
+      ],
+      "gridSHA256": "edc4e5287a2a34c411b289e207f8dac4c382c9c032360cc5151ea4d38c07a8a4",
+      "calls": [
+        "80079528"
+      ],
+      "recordOffsets": [],
+      "instructions": 12
+    },
+    {
+      "input": {
+        "mode620": 0,
+        "simulation648": 3,
+        "beforeActivity624": 0,
+        "afterActivity624": -1,
+        "beforeState72c": 1,
+        "afterObjectState72c": 0
+      },
+      "rows": [
+        [
+          1000,
+          500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          16,
+          2,
+          0,
+          1,
+          0
+        ],
+        [
+          900,
+          -500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          24,
+          2,
+          0,
+          1,
+          0
+        ]
+      ],
+      "phasesBefore": [
+        0,
+        4095
+      ],
+      "phasesAfter": [
+        4032,
+        3999
+      ],
+      "gridSHA256": "952a2b2559b4197fb0127d793c5f39a7c51aecb928132bc40556abd652982457",
+      "calls": [
+        "80079528",
+        "8007dbc0",
+        "8006e0f4",
+        "800b49c4",
+        "8004cc7c",
+        "8004cc7c"
+      ],
+      "recordOffsets": [
+        0,
+        64
+      ],
+      "instructions": 21620
+    },
+    {
+      "input": {
+        "mode620": 0,
+        "simulation648": 3,
+        "beforeActivity624": -1,
+        "afterActivity624": -1,
+        "beforeState72c": 0,
+        "afterObjectState72c": 1
+      },
+      "rows": [
+        [
+          1000,
+          500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          16,
+          2,
+          0,
+          1,
+          0
+        ],
+        [
+          900,
+          -500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          24,
+          2,
+          0,
+          1,
+          0
+        ]
+      ],
+      "phasesBefore": [
+        0,
+        4095
+      ],
+      "phasesAfter": [
+        0,
+        4095
+      ],
+      "gridSHA256": "edc4e5287a2a34c411b289e207f8dac4c382c9c032360cc5151ea4d38c07a8a4",
+      "calls": [
+        "80079528",
+        "8007dbc0",
+        "8006e0f4",
+        "800b49c4",
+        "8004cc7c",
+        "8004cc7c"
+      ],
+      "recordOffsets": [
+        0,
+        64
+      ],
+      "instructions": 100
+    },
+    {
+      "input": {
+        "mode620": 0,
+        "simulation648": 3,
+        "beforeActivity624": -32768,
+        "afterActivity624": -1,
+        "beforeState72c": 1,
+        "afterObjectState72c": -32768
+      },
+      "rows": [
+        [
+          1000,
+          500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          16,
+          2,
+          0,
+          1,
+          0
+        ]
+      ],
+      "phasesBefore": [
+        0
+      ],
+      "phasesAfter": [
+        4032
+      ],
+      "gridSHA256": "258c4be694d245b7ee2636b0707cada3064357e5ae64ff2e3e45f7c62f35d830",
+      "calls": [
+        "80079528",
+        "8007dbc0",
+        "8006e0f4",
+        "800b49c4",
+        "8004cc7c"
+      ],
+      "recordOffsets": [
+        0
+      ],
+      "instructions": 10834
+    },
+    {
+      "input": {
+        "mode620": 0,
+        "simulation648": 3,
+        "beforeActivity624": 32767,
+        "afterActivity624": -1,
+        "beforeState72c": 1,
+        "afterObjectState72c": 32767
+      },
+      "rows": [
+        [
+          1000,
+          500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          16,
+          2,
+          0,
+          1,
+          0
+        ],
+        [
+          900,
+          -500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          24,
+          2,
+          0,
+          1,
+          0
+        ]
+      ],
+      "phasesBefore": [
+        0,
+        4095
+      ],
+      "phasesAfter": [
+        4032,
+        3999
+      ],
+      "gridSHA256": "952a2b2559b4197fb0127d793c5f39a7c51aecb928132bc40556abd652982457",
+      "calls": [
+        "80079528",
+        "8007dbc0",
+        "8006e0f4",
+        "800b49c4",
+        "8004cc7c",
+        "8004cc7c"
+      ],
+      "recordOffsets": [
+        0,
+        64
+      ],
+      "instructions": 21620
+    },
+    {
+      "input": {
+        "mode620": 0,
+        "simulation648": 3,
+        "beforeActivity624": -1,
+        "afterActivity624": 1,
+        "beforeState72c": 0,
+        "afterObjectState72c": -1
+      },
+      "rows": [
+        [
+          1000,
+          500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          16,
+          2,
+          0,
+          1,
+          0
+        ]
+      ],
+      "phasesBefore": [
+        0
+      ],
+      "phasesAfter": [
+        0
+      ],
+      "gridSHA256": "edc4e5287a2a34c411b289e207f8dac4c382c9c032360cc5151ea4d38c07a8a4",
+      "calls": [
+        "80079528"
+      ],
+      "recordOffsets": [],
+      "instructions": 12
+    },
+    {
+      "input": {
+        "mode620": 0,
+        "simulation648": 3,
+        "beforeActivity624": -1,
+        "afterActivity624": -1,
+        "beforeState72c": 1,
+        "afterObjectState72c": -1
+      },
+      "rows": [],
+      "phasesBefore": [],
+      "phasesAfter": [],
+      "gridSHA256": "edc4e5287a2a34c411b289e207f8dac4c382c9c032360cc5151ea4d38c07a8a4",
+      "calls": [
+        "80079528",
+        "8007dbc0",
+        "8006e0f4",
+        "800b49c4"
+      ],
+      "recordOffsets": [],
+      "instructions": 38
+    },
+    {
+      "input": {
+        "mode620": 1,
+        "simulation648": 0,
+        "beforeActivity624": -1,
+        "afterActivity624": -1,
+        "beforeState72c": 0,
+        "afterObjectState72c": 0
+      },
+      "rows": [
+        [
+          1000,
+          500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          16,
+          2,
+          0,
+          1,
+          0
+        ],
+        [
+          900,
+          -500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          24,
+          2,
+          0,
+          1,
+          0
+        ]
+      ],
+      "phasesBefore": [
+        0,
+        4095
+      ],
+      "phasesAfter": [
+        4032,
+        3999
+      ],
+      "gridSHA256": "952a2b2559b4197fb0127d793c5f39a7c51aecb928132bc40556abd652982457",
+      "calls": [
+        "80079528",
+        "8007dbc0",
+        "8006e0f4",
+        "800b49c4",
+        "8004cc7c",
+        "8004cc7c"
+      ],
+      "recordOffsets": [
+        0,
+        64
+      ],
+      "instructions": 21620
+    },
+    {
+      "input": {
+        "mode620": 1,
+        "simulation648": 0,
+        "beforeActivity624": -1,
+        "afterActivity624": 0,
+        "beforeState72c": 0,
+        "afterObjectState72c": 0
+      },
+      "rows": [
+        [
+          1000,
+          500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          16,
+          2,
+          0,
+          1,
+          0
+        ],
+        [
+          900,
+          -500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          24,
+          2,
+          0,
+          1,
+          0
+        ]
+      ],
+      "phasesBefore": [
+        0,
+        4095
+      ],
+      "phasesAfter": [
+        0,
+        4095
+      ],
+      "gridSHA256": "edc4e5287a2a34c411b289e207f8dac4c382c9c032360cc5151ea4d38c07a8a4",
+      "calls": [
+        "80079528"
+      ],
+      "recordOffsets": [],
+      "instructions": 12
+    },
+    {
+      "input": {
+        "mode620": 1,
+        "simulation648": 0,
+        "beforeActivity624": 0,
+        "afterActivity624": -1,
+        "beforeState72c": 1,
+        "afterObjectState72c": 0
+      },
+      "rows": [
+        [
+          1000,
+          500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          16,
+          2,
+          0,
+          1,
+          0
+        ],
+        [
+          900,
+          -500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          24,
+          2,
+          0,
+          1,
+          0
+        ]
+      ],
+      "phasesBefore": [
+        0,
+        4095
+      ],
+      "phasesAfter": [
+        4032,
+        3999
+      ],
+      "gridSHA256": "952a2b2559b4197fb0127d793c5f39a7c51aecb928132bc40556abd652982457",
+      "calls": [
+        "80079528",
+        "8007dbc0",
+        "8006e0f4",
+        "800b49c4",
+        "8004cc7c",
+        "8004cc7c"
+      ],
+      "recordOffsets": [
+        0,
+        64
+      ],
+      "instructions": 21620
+    },
+    {
+      "input": {
+        "mode620": 1,
+        "simulation648": 0,
+        "beforeActivity624": -1,
+        "afterActivity624": -1,
+        "beforeState72c": 0,
+        "afterObjectState72c": 1
+      },
+      "rows": [
+        [
+          1000,
+          500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          16,
+          2,
+          0,
+          1,
+          0
+        ],
+        [
+          900,
+          -500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          24,
+          2,
+          0,
+          1,
+          0
+        ]
+      ],
+      "phasesBefore": [
+        0,
+        4095
+      ],
+      "phasesAfter": [
+        0,
+        4095
+      ],
+      "gridSHA256": "edc4e5287a2a34c411b289e207f8dac4c382c9c032360cc5151ea4d38c07a8a4",
+      "calls": [
+        "80079528",
+        "8007dbc0",
+        "8006e0f4",
+        "800b49c4",
+        "8004cc7c",
+        "8004cc7c"
+      ],
+      "recordOffsets": [
+        0,
+        64
+      ],
+      "instructions": 100
+    },
+    {
+      "input": {
+        "mode620": 1,
+        "simulation648": 0,
+        "beforeActivity624": -32768,
+        "afterActivity624": -1,
+        "beforeState72c": 1,
+        "afterObjectState72c": -32768
+      },
+      "rows": [
+        [
+          1000,
+          500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          16,
+          2,
+          0,
+          1,
+          0
+        ]
+      ],
+      "phasesBefore": [
+        0
+      ],
+      "phasesAfter": [
+        4032
+      ],
+      "gridSHA256": "258c4be694d245b7ee2636b0707cada3064357e5ae64ff2e3e45f7c62f35d830",
+      "calls": [
+        "80079528",
+        "8007dbc0",
+        "8006e0f4",
+        "800b49c4",
+        "8004cc7c"
+      ],
+      "recordOffsets": [
+        0
+      ],
+      "instructions": 10834
+    },
+    {
+      "input": {
+        "mode620": 1,
+        "simulation648": 0,
+        "beforeActivity624": 32767,
+        "afterActivity624": -1,
+        "beforeState72c": 1,
+        "afterObjectState72c": 32767
+      },
+      "rows": [
+        [
+          1000,
+          500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          16,
+          2,
+          0,
+          1,
+          0
+        ],
+        [
+          900,
+          -500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          24,
+          2,
+          0,
+          1,
+          0
+        ]
+      ],
+      "phasesBefore": [
+        0,
+        4095
+      ],
+      "phasesAfter": [
+        4032,
+        3999
+      ],
+      "gridSHA256": "952a2b2559b4197fb0127d793c5f39a7c51aecb928132bc40556abd652982457",
+      "calls": [
+        "80079528",
+        "8007dbc0",
+        "8006e0f4",
+        "800b49c4",
+        "8004cc7c",
+        "8004cc7c"
+      ],
+      "recordOffsets": [
+        0,
+        64
+      ],
+      "instructions": 21620
+    },
+    {
+      "input": {
+        "mode620": 1,
+        "simulation648": 0,
+        "beforeActivity624": -1,
+        "afterActivity624": 1,
+        "beforeState72c": 0,
+        "afterObjectState72c": -1
+      },
+      "rows": [
+        [
+          1000,
+          500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          16,
+          2,
+          0,
+          1,
+          0
+        ]
+      ],
+      "phasesBefore": [
+        0
+      ],
+      "phasesAfter": [
+        0
+      ],
+      "gridSHA256": "edc4e5287a2a34c411b289e207f8dac4c382c9c032360cc5151ea4d38c07a8a4",
+      "calls": [
+        "80079528"
+      ],
+      "recordOffsets": [],
+      "instructions": 12
+    },
+    {
+      "input": {
+        "mode620": 1,
+        "simulation648": 0,
+        "beforeActivity624": -1,
+        "afterActivity624": -1,
+        "beforeState72c": 1,
+        "afterObjectState72c": -1
+      },
+      "rows": [],
+      "phasesBefore": [],
+      "phasesAfter": [],
+      "gridSHA256": "edc4e5287a2a34c411b289e207f8dac4c382c9c032360cc5151ea4d38c07a8a4",
+      "calls": [
+        "80079528",
+        "8007dbc0",
+        "8006e0f4",
+        "800b49c4"
+      ],
+      "recordOffsets": [],
+      "instructions": 38
+    },
+    {
+      "input": {
+        "mode620": 1,
+        "simulation648": 3,
+        "beforeActivity624": -1,
+        "afterActivity624": -1,
+        "beforeState72c": 0,
+        "afterObjectState72c": 0
+      },
+      "rows": [
+        [
+          1000,
+          500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          16,
+          2,
+          0,
+          1,
+          0
+        ],
+        [
+          900,
+          -500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          24,
+          2,
+          0,
+          1,
+          0
+        ]
+      ],
+      "phasesBefore": [
+        0,
+        4095
+      ],
+      "phasesAfter": [
+        4032,
+        3999
+      ],
+      "gridSHA256": "952a2b2559b4197fb0127d793c5f39a7c51aecb928132bc40556abd652982457",
+      "calls": [
+        "80079528",
+        "8007dbc0",
+        "8006e0f4",
+        "800b49c4",
+        "8004cc7c",
+        "8004cc7c"
+      ],
+      "recordOffsets": [
+        0,
+        64
+      ],
+      "instructions": 21620
+    },
+    {
+      "input": {
+        "mode620": 1,
+        "simulation648": 3,
+        "beforeActivity624": -1,
+        "afterActivity624": 0,
+        "beforeState72c": 0,
+        "afterObjectState72c": 0
+      },
+      "rows": [
+        [
+          1000,
+          500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          16,
+          2,
+          0,
+          1,
+          0
+        ],
+        [
+          900,
+          -500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          24,
+          2,
+          0,
+          1,
+          0
+        ]
+      ],
+      "phasesBefore": [
+        0,
+        4095
+      ],
+      "phasesAfter": [
+        0,
+        4095
+      ],
+      "gridSHA256": "edc4e5287a2a34c411b289e207f8dac4c382c9c032360cc5151ea4d38c07a8a4",
+      "calls": [
+        "80079528"
+      ],
+      "recordOffsets": [],
+      "instructions": 12
+    },
+    {
+      "input": {
+        "mode620": 1,
+        "simulation648": 3,
+        "beforeActivity624": 0,
+        "afterActivity624": -1,
+        "beforeState72c": 1,
+        "afterObjectState72c": 0
+      },
+      "rows": [
+        [
+          1000,
+          500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          16,
+          2,
+          0,
+          1,
+          0
+        ],
+        [
+          900,
+          -500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          24,
+          2,
+          0,
+          1,
+          0
+        ]
+      ],
+      "phasesBefore": [
+        0,
+        4095
+      ],
+      "phasesAfter": [
+        4032,
+        3999
+      ],
+      "gridSHA256": "952a2b2559b4197fb0127d793c5f39a7c51aecb928132bc40556abd652982457",
+      "calls": [
+        "80079528",
+        "8007dbc0",
+        "8006e0f4",
+        "800b49c4",
+        "8004cc7c",
+        "8004cc7c"
+      ],
+      "recordOffsets": [
+        0,
+        64
+      ],
+      "instructions": 21620
+    },
+    {
+      "input": {
+        "mode620": 1,
+        "simulation648": 3,
+        "beforeActivity624": -1,
+        "afterActivity624": -1,
+        "beforeState72c": 0,
+        "afterObjectState72c": 1
+      },
+      "rows": [
+        [
+          1000,
+          500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          16,
+          2,
+          0,
+          1,
+          0
+        ],
+        [
+          900,
+          -500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          24,
+          2,
+          0,
+          1,
+          0
+        ]
+      ],
+      "phasesBefore": [
+        0,
+        4095
+      ],
+      "phasesAfter": [
+        0,
+        4095
+      ],
+      "gridSHA256": "edc4e5287a2a34c411b289e207f8dac4c382c9c032360cc5151ea4d38c07a8a4",
+      "calls": [
+        "80079528",
+        "8007dbc0",
+        "8006e0f4",
+        "800b49c4",
+        "8004cc7c",
+        "8004cc7c"
+      ],
+      "recordOffsets": [
+        0,
+        64
+      ],
+      "instructions": 100
+    },
+    {
+      "input": {
+        "mode620": 1,
+        "simulation648": 3,
+        "beforeActivity624": -32768,
+        "afterActivity624": -1,
+        "beforeState72c": 1,
+        "afterObjectState72c": -32768
+      },
+      "rows": [
+        [
+          1000,
+          500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          16,
+          2,
+          0,
+          1,
+          0
+        ]
+      ],
+      "phasesBefore": [
+        0
+      ],
+      "phasesAfter": [
+        4032
+      ],
+      "gridSHA256": "258c4be694d245b7ee2636b0707cada3064357e5ae64ff2e3e45f7c62f35d830",
+      "calls": [
+        "80079528",
+        "8007dbc0",
+        "8006e0f4",
+        "800b49c4",
+        "8004cc7c"
+      ],
+      "recordOffsets": [
+        0
+      ],
+      "instructions": 10834
+    },
+    {
+      "input": {
+        "mode620": 1,
+        "simulation648": 3,
+        "beforeActivity624": 32767,
+        "afterActivity624": -1,
+        "beforeState72c": 1,
+        "afterObjectState72c": 32767
+      },
+      "rows": [
+        [
+          1000,
+          500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          16,
+          2,
+          0,
+          1,
+          0
+        ],
+        [
+          900,
+          -500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          24,
+          2,
+          0,
+          1,
+          0
+        ]
+      ],
+      "phasesBefore": [
+        0,
+        4095
+      ],
+      "phasesAfter": [
+        4032,
+        3999
+      ],
+      "gridSHA256": "952a2b2559b4197fb0127d793c5f39a7c51aecb928132bc40556abd652982457",
+      "calls": [
+        "80079528",
+        "8007dbc0",
+        "8006e0f4",
+        "800b49c4",
+        "8004cc7c",
+        "8004cc7c"
+      ],
+      "recordOffsets": [
+        0,
+        64
+      ],
+      "instructions": 21620
+    },
+    {
+      "input": {
+        "mode620": 1,
+        "simulation648": 3,
+        "beforeActivity624": -1,
+        "afterActivity624": 1,
+        "beforeState72c": 0,
+        "afterObjectState72c": -1
+      },
+      "rows": [
+        [
+          1000,
+          500,
+          270,
+          180,
+          60,
+          16,
+          14,
+          64,
+          16,
+          2,
+          0,
+          1,
+          0
+        ]
+      ],
+      "phasesBefore": [
+        0
+      ],
+      "phasesAfter": [
+        0
+      ],
+      "gridSHA256": "edc4e5287a2a34c411b289e207f8dac4c382c9c032360cc5151ea4d38c07a8a4",
+      "calls": [
+        "80079528"
+      ],
+      "recordOffsets": [],
+      "instructions": 12
+    },
+    {
+      "input": {
+        "mode620": 1,
+        "simulation648": 3,
+        "beforeActivity624": -1,
+        "afterActivity624": -1,
+        "beforeState72c": 1,
+        "afterObjectState72c": -1
+      },
+      "rows": [],
+      "phasesBefore": [],
+      "phasesAfter": [],
+      "gridSHA256": "edc4e5287a2a34c411b289e207f8dac4c382c9c032360cc5151ea4d38c07a8a4",
+      "calls": [
+        "80079528",
+        "8007dbc0",
+        "8006e0f4",
+        "800b49c4"
+      ],
+      "recordOffsets": [],
+      "instructions": 38
+    }
+  ],
+  "count": 32,
+  "instructions": 303424,
+  "initializationInstructions": 4032,
+  "ghidraMatchingInstructions": 1437,
+  "evoProjectUnchanged": true
+}
