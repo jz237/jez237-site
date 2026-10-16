@@ -26,6 +26,7 @@ import {prepareNativeRaceCourseZeroSequenceUpdate,prepareNativeRaceCourseZeroSeq
 import {prepareNativeRaceStartTransform,decodeNativeRaceStartTransform} from './native-race-start-transform.js';
 import {prepareNativeRaceFadePropertiesInitialization,prepareNativeRaceFadeSlotsReset} from './native-race-fade-initialization.js';
 import {prepareNativeRaceMainConfiguration} from './native-race-main-configuration.js';
+import {prepareNativeRaceMenuInitialization} from './native-race-menu-initialization.js';
 import {prepareNativeRaceRiderResourceConfiguration,prepareNativeRaceCourseResourceConfiguration} from './native-race-resource-configuration.js';
 import {prepareNativeRaceResultCodeSelection} from './native-race-body-fields.js';
 import {prepareNativePrimaryResultEstimates} from './native-primary-standings.js';
@@ -292,6 +293,39 @@ export function prepareNativeRaceRiderResourceConfigurationUpdate(state,input,so
 export function prepareNativeRaceCourseResourceConfigurationUpdate(state,input,sourceViews={}){
  const next=copy(state),prepared=prepareNativeRaceCourseResourceConfiguration(next,input,sourceViews),effects=apply(next,prepared.operations);
  return freeze({...prepared,state:next,effects});
+}
+
+/** Original result-menu entry with numeric fades in the canonical HUD owner.
+ * Resource descriptors expand only when explicitly requested with retained
+ * resource owners and supplied tables. Transfers, rendering, audio playback,
+ * subsequent menu loops and record persistence do not execute here.
+ * Pending effects retain their call positions in operations; callers must not
+ * treat this preparation as a complete menu bootstrap while effects remain.
+ */
+export function prepareNativeRaceMenuInitializationUpdate(state,input,sourceViews={}, {expandResourceInitializers=false}={}){
+ if(typeof expandResourceInitializers!=='boolean')throw new TypeError('expandResourceInitializers must be boolean');
+ const next=copy(state),prepared=prepareNativeRaceMenuInitialization(next,input),operations=[],effects=[],expandedConsumers=[];
+ for(const operation of prepared.operations){
+  let batch=[operation];
+  if(operation.kind==='externalCall'){
+   const {consumer,arguments:args}=operation;
+   if(consumer==='80096960'&&expandResourceInitializers){
+    batch=prepareNativeRaceRiderResourceConfiguration(next,{kind:args[0],avatarIndices:args.slice(1)},sourceViews).operations;
+    expandedConsumers.push(consumer);
+   }else if(consumer==='801e6fb0'){
+    batch=prepareNativeRaceFadePropertiesInitialization({fadeTemplateWords6cc0:sourceViews.fadeTemplateWords6cc0,
+     type:args[0],rate:args[1],selector:args[2]}).operations;
+    expandedConsumers.push(consumer);
+   }else if(consumer==='801e6a4c'){
+    batch=prepareNativeRaceFadeSlotsReset({slotTemplateWords6c50:sourceViews.slotTemplateWords6c50}).operations;
+    expandedConsumers.push(consumer);
+   }
+  }
+  operations.push(...batch);effects.push(...apply(next,batch));
+ }
+ return freeze({state:next,operations,effects,diagnostic:{sourceMenu:prepared.diagnostic,expandedConsumers,
+  pendingConsumers:effects.filter(o=>o.kind==='externalCall').map(o=>o.consumer),
+  resourceLoadingPerformed:false,menuLoopExecuted:false,recordsPersisted:false}});
 }
 
 /** Direct9345C configuration and its two reached fade initializers, with one

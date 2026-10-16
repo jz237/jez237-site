@@ -1,5 +1,33 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Result-menu initialization — local October 16 checkpoint
+
+The four original result-menu entry callers C20C, C830, C9C8 and CE50 now have
+independent numeric implementations and a shared-state adapter. They preserve
+previous/current state, one-player menu selection, phase initialization, HUD
+camera mode and ordered resource/fade/audio requests. Returning from record
+name entry skips the normal results resource/fade reset. Retirement retains
+its mode-specific curtain predicate; name entry retains its separate resource
+and fade predicates. Versus initializes its phase fields after both fade calls.
+
+Resource96960 kind2 now prepares four unshifted rider descriptors and four
+leading presentation blocks using a supplied mode2 base bank. It preserves
+ordered variant clears, the last special-avatar physical slot, partial/full
+relocation and unsigned wrapping. No original tables or assets are embedded.
+The canonical menu adapter expands fade initialization and optionally resource
+preparation at their call positions, with atomic rejection of invalid inputs.
+
+Private original-instruction comparisons match all420 direct caller cases
+(22,193 counted instructions,5,880 stores), plus96 cases executing the actual
+nested resource and fade bodies (49,426 instructions,13,006 ordered operations).
+Kind2 separately matches260 cases and44,000 writes; all2,308 existing resource
+cases still match. All46 focused menu/resource/main-state tests pass.
+
+This checkpoint is local and is not connected to the live result handoff yet.
+Audio calls remain explicit effects. Full resource loading, menu loops,
+textured presentation and record persistence remain unfinished; the existing
+high-resolution browser results continue to handle the live handoff.
+
 ## v2.30.0 — live post-race sequence
 
 The admitted ordinary native Sunny time-trial and versus host now continues

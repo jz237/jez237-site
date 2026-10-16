@@ -9,7 +9,7 @@ function fixture(){
   resourceWordsE73c:Array.from({length:43},(_,i)=>0xa1230000+i),hudWords7788:Array.from({length:1442},(_,i)=>0xd1230000+i)};
  const views={riderDescriptorRowsABD0:Array.from({length:16},(_,i)=>[100+i,200+i,300+i,400+i]),
   avatarLookupWordsACD0:Array.from({length:8},(_,id)=>Array.from({length:51},(_,i)=>id*1000+i)),
-  mode0BaseWordsAB90:[10,20,30,40],mode4BaseWordsABC0:[50,60,70,80],
+  mode0BaseWordsAB90:[10,20,30,40],mode2BaseWordsABA0:[90,100,110,120],mode4BaseWordsABC0:[50,60,70,80],
   courseDescriptorRowsB4a8:Array.from({length:9},(_,i)=>[1000+i,2000+i,7,4000+i]),
   courseByteLengthWordsCE18:[0,1,63,64,65,127,128,0xffffffff,0x80000000]};
  return {value,views};
@@ -79,7 +79,7 @@ test('negative signed avatars clamp to0 while unsupported positive IDs and kinds
  const {value,views}=fixture(),q=rider(value,{kind:0,avatarIndices:[-2147483648,-1,2,3]},views);
  assert.deepEqual(q.diagnostic.logicalAvatarIndices,[0,0,2,3]);
  assert.throws(()=>rider(value,{kind:0,avatarIndices:[8,0,0,0]},views),/avatarIndices/);
- for(const kind of [-1,1,2,3,5])assert.throws(()=>rider(value,{kind,avatarIndices:[0,1,2,3]},views),/kinds/);
+ for(const kind of [-1,1,3,5])assert.throws(()=>rider(value,{kind,avatarIndices:[0,1,2,3]},views),/kinds/);
 });
 
 test('rider reads only selected source rows/parts/bank and does not read the course descriptor owner',()=>{
@@ -158,4 +158,41 @@ test('both leaves return deeply frozen detached numeric patches with no load/que
   assert.equal(q.diagnostic.queueCalls,0);assert.equal(q.diagnostic.rngCalls,0);assert.equal(q.diagnostic.physicalInitialization,false);
   assert.deepEqual(value,before);assert.deepEqual(views,beforeViews);assert.equal(Object.isFrozen(value.resourceWordsE73c),false);
  }
+});
+
+
+test('result-menu kind2 clears four variants in order and uses four unshifted descriptors',()=>{
+ const {value,views}=fixture(),q=rider(value,{kind:2,avatarIndices:[0,1,2,3]},views),n=apply(value,q.operations);
+ assert.deepEqual(q.operations.slice(11,15),[6,10,14,18].map(offset=>rw('resourceWordsE73c',offset,2,0)));
+ assert.deepEqual([0,1,2,3].map(i=>n.resourceWordsB330[i*4]),[100,101,102,103]);
+ assert.deepEqual([0,1,2,3].map(i=>n.resourceWordsB330[i*4+3]),[90,100,110,120]);
+ assert.deepEqual([0,1,2,3].map(i=>n.resourceWordsE73c[1+i]&65535),[0,0,0,0]);
+ assert.deepEqual(hudBlocks(n).slice(0,4).map(b=>b[0]),[90,1100,2110,3120]);
+ assert.deepEqual(hudBlocks(n).slice(0,4).map(b=>b[16]),[16,1016,2126,3016]);
+ assert.deepEqual(hudBlocks(n).slice(4),hudBlocks(value).slice(4));
+ assert.equal(q.diagnostic.presentationBlockCount,4);
+});
+
+test('kind2 special selectors use the last matching physical slot, with modulo32 relocation',()=>{
+ const {value,views}=fixture();views.mode2BaseWordsABA0[3]=0xffffffff;
+ const q=rider(value,{kind:2,avatarIndices:[2,6,2,6]},views),n=apply(value,q.operations);
+ assert.equal(field(n,36),2);assert.equal(field(n,40),3);
+ assert.deepEqual(hudBlocks(n).slice(0,4).map(b=>b[16]),[2106,6116,2126,6015]);
+ views.avatarLookupWordsACD0[6][0]=0;
+ const z=apply(value,rider(value,{kind:2,avatarIndices:[2,6,2,6]},views).operations);
+ assert.equal(hudBlocks(z)[3][0],0xffffffff);
+});
+
+test('kind2 reads no secondary parts, variant rows, or other base banks',()=>{
+ const {value,views}=fixture();
+ for(const bank of ['mode0BaseWordsAB90','mode4BaseWordsABC0'])Object.defineProperty(views,bank,{get:unused});
+ for(let row=4;row<16;row++)Object.defineProperty(views.riderDescriptorRowsABD0,row,{get:unused});
+ for(let row=0;row<4;row++)for(let j=17;j<51;j++)Object.defineProperty(views.avatarLookupWordsACD0[row],j,{get:unused});
+ assert.doesNotThrow(()=>rider(value,{kind:2,avatarIndices:[0,1,2,3]},views));
+});
+
+test('kind2 late invalid presentation data rejects without modifying retained owners',()=>{
+ const {value,views}=fixture(),before=structuredClone(value);views.avatarLookupWordsACD0[3][16]=NaN;
+ assert.throws(()=>rider(value,{kind:2,avatarIndices:[0,1,2,3]},views),/lookup/);
+ assert.deepEqual(value,before);
 });

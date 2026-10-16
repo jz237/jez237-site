@@ -20,7 +20,7 @@ function write(c,owner,byteOffset,width,value){
 }
 function tableRow(v,n,index,count,width){return array(array(v,n,count)[index],`${n}[${index}]`,width);}
 
-/** Full reached96960 kinds0/4. Input is {kind,avatarIndices:[signed32 x4]}.
+/** Full reached96960 kinds0/2/4. Input is {kind,avatarIndices:[signed32 x4]}.
  * Negative source arguments clamp to0; positive IDs must0..7. Logical IDs and
  * descriptor indices differ: slot variant flags add8 only for the descriptor
  * template, never for the presentation lookup row. Other kinds are unported.
@@ -29,7 +29,9 @@ function tableRow(v,n,index,count,width){return array(array(v,n,count)[index],`$
  * hudWords7788[1442], all dense rawu32. These do not overlap profile801CB330.
  * Readonly sourceViews: riderDescriptorRowsABD0[16][4],
  * avatarLookupWordsACD0[8][51] (three17-word blocks per logical ID), and the
- * selected mode0BaseWordsAB90[4] or mode4BaseWordsABC0[4], all rawu32.
+ * selected mode0BaseWordsAB90[4], mode2BaseWordsABA0[4], or
+ * mode4BaseWordsABC0[4], all rawu32. Kind2 uses four leading presentation
+ * parts and unshifted descriptors; special selectors retain physical slots.
  * Unselected rows/parts and the other base bank are not read.
  *
  * Returns ordered resourceWrite{owner,byteOffset,width:2|4,value} and hudWrite
@@ -39,38 +41,39 @@ function tableRow(v,n,index,count,width){return array(array(v,n,count)[index],`$
  */
 export function prepareNativeRaceRiderResourceConfiguration(value,input,sourceViews={}){
  record(input,'rider resource arguments');record(sourceViews,'resource source views');const kind=integer(input.kind,'resource kind');
- if(kind!==0&&kind!==4)throw new RangeError('Only reached resource kinds0/4 are reconstructed');
+ if(kind!==0&&kind!==2&&kind!==4)throw new RangeError('Only reached resource kinds0/2/4 are reconstructed');
  const avatars=Array.from(array(input.avatarIndices,'avatarIndices',4),(x,i)=>{
   const v=integer(x,`avatarIndices[${i}]`);return v<0?0:integer(v,`avatarIndices[${i}]`,0,7);
  });
  const c=context(value,['resourceWordsB330','resourceWordsE73c','hudWords7788']);
- const selected=kind===0?'mode0BaseWordsAB90':'mode4BaseWordsABC0',bases=words(sourceViews[selected],selected,4);
+ const selected=kind===0?'mode0BaseWordsAB90':kind===2?'mode2BaseWordsABA0':'mode4BaseWordsABC0',bases=words(sourceViews[selected],selected,4);
  const selector=(offset,width,value)=>write(c,'resourceWordsE73c',offset,width,value);
  for(let slot=0;slot<8;slot++)selector(6+slot*4,2,1);
  selector(0x28,4,U32);selector(0x24,4,U32);selector(0,4,kind);
- if(kind===4)selector(10,2,0);selector(6,2,0);
+ if(kind===2){for(let slot=0;slot<4;slot++)selector(6+slot*4,2,0);}
+ else{if(kind===4)selector(10,2,0);selector(6,2,0);}
  for(let slot=0;slot<4;slot++){
   const id=avatars[slot];selector(4+slot*4,2,id);
-  const templateIndex=id+(slot>=(kind===0?1:2)?8:0),row=words(tableRow(sourceViews.riderDescriptorRowsABD0,
+  const templateIndex=id+(kind!==2&&slot>=(kind===0?1:2)?8:0),row=words(tableRow(sourceViews.riderDescriptorRowsABD0,
    'riderDescriptorRowsABD0',templateIndex,16,4),'selected rider descriptor',4),offset=slot*16;
   write(c,'resourceWordsB330',offset,4,row[0]);write(c,'resourceWordsB330',offset+4,4,row[1]);
   write(c,'resourceWordsB330',offset+8,4,row[2]);write(c,'resourceWordsB330',offset+8,4,4);
   write(c,'resourceWordsB330',offset+12,4,row[3]);write(c,'resourceWordsB330',offset+12,4,bases[slot]);
  }
  for(let j=0;j<4;j++)write(c,'resourceWordsB330',64+j*4,4,0);
- const blocks=kind===0?[[0,0],[1,1],[1,2],[2,1],[2,2],[3,1],[3,2]]:[[0,0],[1,0],[2,1],[3,1],[2,2],[3,2]],start=0x7a60-0x7788;
+ const blocks=kind===0?[[0,0],[1,1],[1,2],[2,1],[2,2],[3,1],[3,2]]:kind===2?[[0,0],[1,0],[2,0],[3,0]]:[[0,0],[1,0],[2,1],[3,1],[2,2],[3,2]],start=0x7a60-0x7788;
  for(let block=0;block<blocks.length;block++){
   const [slot,part]=blocks[block],id=avatars[slot],row=tableRow(sourceViews.avatarLookupWordsACD0,'avatarLookupWordsACD0',id,8,51);
   for(let j=0;j<17;j++)write(c,'hudWords7788',start+block*68+j*4,4,integer(row[part*17+j],`source lookup[${id}][${part*17+j}]`,0,U32));
  }
- for(let slot=0;slot<(kind===0?4:2);slot++){
+ for(let slot=0;slot<(kind===4?2:4);slot++){
   const id=avatars[slot];if(id===2||id===6)selector(id===2?0x24:0x28,4,kind===0?(slot===0?0:slot*2-1):slot);
  }
  for(let block=0;block<blocks.length;block++){
   const [slot]=blocks[block],id=avatars[slot],offset=start+block*68;
   for(let j=0;j<(id===2||id===6?17:12);j++)write(c,'hudWords7788',offset+j*4,4,(c.owners.hudWords7788[(offset+j*4)/4]+bases[slot])>>>0);
  }
- return freeze({operations:c.operations,diagnostic:{scope:'bounded96960-kinds0-4',kind,logicalAvatarIndices:avatars,
+ return freeze({operations:c.operations,diagnostic:{scope:'bounded96960-kinds0-2-4',kind,logicalAvatarIndices:avatars,
   presentationBlockCount:blocks.length,descriptorCount:4,loaderExecuted:false,queueCalls:0,rngCalls:0,physicalInitialization:false}});
 }
 
