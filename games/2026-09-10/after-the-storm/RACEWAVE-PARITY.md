@@ -1,5 +1,29 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Next checkpoint — rider model relocation after decompression
+
+The bounded 80095CE8 rider fixup and its complete 800967EC display-list callee
+are reconstructed in `native-rider-resource-relocation.js`. Existing canonical
+resource selectors choose part0 or parts1+2. Riders2/6 also process the five
+extra lists. All five resource kinds select their original base bank, including
+eight slots for rider selection. Vertex and texture operands relocate modulo32;
+other commands remain unchanged and the first B8 terminates each list. Shared
+or overlapping lists execute repeatedly against prior writes in source order.
+Missing terminators or invalid supplied spans reject without caller mutation.
+
+The input is an explicit decoded asset word span and readonly lookup/base views.
+No original artwork, decoded assets, DMA, decompression or rendering is bundled
+or executed. The returned writes belong to that same supplied asset span. A
+test feeds all eight selectors directly from the existing kind3 initializer.
+The live loading path and high-resolution renderer connection remain pending.
+
+Read-only Ghidra on EVO X2 exported134 matching instructions with all nine saved
+project files unchanged. Its decompiler omitted jump-table arms, so those were
+checked by executing the complete raw bodies separately. The implementation
+matches704 rider cases and1,024 command cases:1,056,168 original instructions
+and27,992 ordered writes. Nine new focused tests pass. This checkpoint is local
+and unpublished; it does not establish end-to-end menu rendering parity.
+
 ## Next checkpoint — title and rider-selection resource preparation
 
 The numeric 80096960 resource preparer now supports all five valid modes.
