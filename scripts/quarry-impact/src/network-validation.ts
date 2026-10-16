@@ -26,7 +26,7 @@ export function validOnlineSnapshot(s:Snapshot):boolean {
   return s.cars.every(c=>c&&Number.isInteger(c.id)&&c.id>=0&&c.id<capacity&&
     validOnlineCar(c.kind)&&(c.kind!=='kite'||s.kiteSupport===true)&&(c.kind!=='morrow'||s.morrowSupport===true)&&(s.rosterSupport===true||!extendedOnlineCar(c.kind))&&vector(c.p)&&quaternion(c.q)&&vector(c.v)&&vector(c.av)&&
     ['health','inflicted','damageLeft','damageRight','steering','speed','rpm','gear','passed','nextCheckpoint','lap','finishTime','penalty','repair','slip'].every(k=>finite((c as any)[k]))&&
-    validEngineStall(c.engineStall)&&(c.transmission===undefined||validTransmissionState(c.transmission)&&[-1,0,1,2,3,4,5].includes(c.gear))&&(c.components===undefined||validComponents(c.components))&&(c.setup===undefined||validOnlineSetup(c.setup))&&
+    (c.contactScrape===undefined||finite(c.contactScrape)&&c.contactScrape>=0&&c.contactScrape<=1)&&validEngineStall(c.engineStall)&&(c.transmission===undefined||validTransmissionState(c.transmission)&&[-1,0,1,2,3,4,5].includes(c.gear))&&(c.components===undefined||validComponents(c.components))&&(c.setup===undefined||validOnlineSetup(c.setup))&&
     c.nextCheckpoint>=0&&c.nextCheckpoint<24&&((s.courseSupport||s.arenaSupport)?['asphalt','gravel','mud']:['asphalt','gravel']).includes(c.surface)&&input(c.input)&&
     Array.isArray(c.wheels)&&c.wheels.length<=4&&c.wheels.every(w=>finite(w.suspension)&&finite(w.rotation)&&(w.patch===undefined||typeof w.contact==='boolean'&&patch(w.patch)))&&
     (c.dents===undefined||Array.isArray(c.dents)&&c.dents.length<=334&&c.dents.every(dent)))&&

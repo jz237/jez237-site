@@ -1,3 +1,4 @@
+import {ContactScraping} from '../src/contact-scraping';
 import {ChaseRound} from './chase';
 import {PursuitDriving} from '../src/pursuit-driving';
 import {DrivingBrain,type DriverCar} from '../src/driving-brain';
@@ -63,6 +64,7 @@ export class Simulation {
   private raceRecovery = new RaceRecovery();
   private impacts = new ImpactAdjudicator();
   private scars = new CollisionScars();
+  private contactScraping=new ContactScraping();
   constructor(public R: RapierAPI, public mode: Mode = 'derby', kinds: CarKind[] = [],public readonly capacity:OnlineCapacity=LEGACY_ONLINE_PLAYERS,setups:(OnlineSetup|undefined)[]=[],rules?:OnlineEventRules,seed=0) {
     this.arenaId=mode==='derby'?rules?.arena??'quarry-arena-v1':'quarry-arena-v1';
     this.course=mode==='derby'?onlineArena(this.arenaId).ground:getRaceCourse(mode==='race'?rules?.course:undefined);
@@ -210,6 +212,8 @@ export class Simulation {
       const speed=Math.hypot(cv2.x-cv1.x,cv2.y-cv1.y,cv2.z-cv1.z),scarDirection=dir(cv2,cv1);
       contacts.push({a,b,key,point1,point2,scarDirection,speed,impulse,closing,damageScale:Math.max(a&&a.state.health>0?a.specification.damageScale:0,b&&b.state.health>0?b.specification.damageScale:0)});
     });
+    this.contactScraping.sample(contacts.map(c=>({...c,a:c.a?.state,b:c.b?.state})),this.elapsed);
+    for(const c of this.cars)c.state.contactScrape=this.contactScraping.level(c.state.id)||undefined;
     for(const {a,b,point1,point2,scarDirection} of this.scars.adjudicate(contacts,this.elapsed)){
       for(const car of [a,b])if(car){
         const s=car.state,point=car===a?point1:point2,direction=car===a?scarDirection:{x:-scarDirection.x,y:-scarDirection.y,z:-scarDirection.z};
@@ -286,13 +290,13 @@ export class Simulation {
     const arenaId=s.mode==='derby'?s.event?.rules.arena??'quarry-arena-v1':'quarry-arena-v1';
     const course=s.mode==='derby'?onlineArena(arenaId).ground:getRaceCourse(s.mode==='race'?s.event?.rules.course:undefined);
     if(course!==this.course||s.mode!==this.mode){this.queue.free();this.world.free();this.course=course;this.arenaId=arenaId;this.mode=s.mode;this.world=new this.R.World({x:0,y:-9.81,z:0});this.world.timestep=STEP;this.queue=new this.R.EventQueue(true);this.buildTerrain();this.cars=s.cars.map(c=>this.createCar(c.id,c.kind,c.setup));}
-    this.impacts.clear();this.scars.clear();this.chaseDriving.reset();
+    this.impacts.clear();this.scars.clear();this.contactScraping.clear();this.chaseDriving.reset();
     if(s.event){this.event=new OnlineEvent(s.mode,s.event.rules,s.event.seed,this.capacity);this.event.restore(s.event,this.capacity);}else this.event=undefined;
     this.tick=s.tick;this.elapsed=s.elapsed;this.countdown=s.countdown;this.phase=s.phase;this.damage=structuredClone(s.damage);
     this.damageId=Math.max(0,...s.damage.map(d=>d.id),...s.cars.flatMap(c=>(c.dents??[]).map(d=>d.id)));
-    for(const car of s.cars){if(car.setup!==undefined&&!validOnlineSetup(car.setup))throw new Error('Invalid saved vehicle setup');let c=this.cars[car.id];
+    for(const car of s.cars){if(car.contactScrape!==undefined&&(!Number.isFinite(car.contactScrape)||car.contactScrape<0||car.contactScrape>1))throw new Error('Invalid saved contact scraping');if(car.setup!==undefined&&!validOnlineSetup(car.setup))throw new Error('Invalid saved vehicle setup');let c=this.cars[car.id];
       if(c.state.kind!==car.kind||!sameOnlineSetup(c.state.setup,car.setup,car.kind)){this.world.removeVehicleController(c.controller);this.world.removeRigidBody(c.body);c=this.cars[car.id]=this.createCar(car.id,car.kind,car.setup);}
-      c.state={...c.state,...structuredClone(car),surface:car.surface??this.course.surface(car.p.x,car.p.z),slip:car.slip??0};c.state.input={...NEUTRAL,...(validDrivingAssists(car.input.assists)?{assists:{...car.input.assists}}:{})};c.state.transmission=validTransmissionState(car.transmission)?structuredClone(car.transmission):undefined;if(c.state.transmission)c.state.input.transmission={mode:c.state.transmission.mode,up:false,down:false,clutch:0};c.state.engineStall=validEngineStall(car.engineStall)?car.engineStall??0:0;
+      c.state={...c.state,contactScrape:undefined,...structuredClone(car),surface:car.surface??this.course.surface(car.p.x,car.p.z),slip:car.slip??0};c.state.input={...NEUTRAL,...(validDrivingAssists(car.input.assists)?{assists:{...car.input.assists}}:{})};c.state.transmission=validTransmissionState(car.transmission)?structuredClone(car.transmission):undefined;if(c.state.transmission)c.state.input.transmission={mode:c.state.transmission.mode,up:false,down:false,clutch:0};c.state.engineStall=validEngineStall(car.engineStall)?car.engineStall??0:0;
       const engineHistory=(c.state.dents??[]).filter(hit=>hit.repair===c.state.repair);
       // A bounded legacy history may have lost older hits. Only infer the new
       // component when those retained hits account for all structural health

@@ -7,6 +7,11 @@ export class ContactScraping{
  private levels=new Map<number,number>();
  private time=-Infinity;
  clear(){this.pairs.clear();this.levels.clear();this.time=-Infinity;}
+ /** Replace, rather than accumulate, authoritative levels; absent legacy data is silence. */
+ receive(cars:Iterable<{id:number;contactScrape?:number}>){
+  this.clear();
+  for(const car of cars)if(Number.isInteger(car.id)&&car.id>=0&&typeof car.contactScrape==='number'&&Number.isFinite(car.contactScrape)&&car.contactScrape>0&&car.contactScrape<=1)this.levels.set(car.id,car.contactScrape);
+ }
  level(id:number){return this.levels.get(id)??0;}
  sample(contacts:Iterable<ScrapeContact>,time:number){
   if(!Number.isFinite(time)){this.clear();return;}

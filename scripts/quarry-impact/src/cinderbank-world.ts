@@ -1,3 +1,4 @@
+import {createCinderbankSurroundings} from './cinderbank-surroundings';
 import * as T from 'three';
 import {CINDERBANK,CINDERBANK_SOLIDS} from './cinderbank-course';
 import {freezeSceneryTransforms} from './render-work';
@@ -45,6 +46,7 @@ export function createCinderbankWorld(){
   const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=128;const ctx=canvas.getContext('2d');
   if(ctx){ctx.fillStyle='#433e31';ctx.fillRect(0,0,1024,128);ctx.fillStyle='#e6d9b4';ctx.font='bold 66px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('CINDERBANK SPEEDWAY',512,64,990);const signMap=new T.CanvasTexture(canvas);signMap.colorSpace=T.SRGBColorSpace;textures.push(signMap);const material=new T.MeshStandardMaterial({map:signMap,roughness:.9,side:T.DoubleSide}),geometry=new T.PlaneGeometry(44,5.5);extras.push(material);extraGeometry.push(geometry);const sign=new T.Mesh(geometry,material);sign.name='cinderbank_title';sign.position.set(0,8,-82.9);root.add(sign);}
  }
+ const surroundings=createCinderbankSurroundings();root.add(surroundings.root);
  root.userData.solidRecords=CINDERBANK_SOLIDS;freezeSceneryTransforms(root);let disposed=false;
- return{root,groundCoverage:{width,height,spanX,spanZ,road},dispose(){if(disposed)return;disposed=true;root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});for(const g of [groundGeometry,boxGeometry,apronGeometry,...extraGeometry])g.dispose();for(const m of [groundMaterial,...Object.values(materials),...extras])m.dispose();textures.forEach(t=>t.dispose());root.clear();}};
+ return{root,update:surroundings.update,groundCoverage:{width,height,spanX,spanZ,road},dispose(){if(disposed)return;disposed=true;surroundings.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});for(const g of [groundGeometry,boxGeometry,apronGeometry,...extraGeometry])g.dispose();for(const m of [groundMaterial,...Object.values(materials),...extras])m.dispose();textures.forEach(t=>t.dispose());root.clear();}};
 }

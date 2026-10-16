@@ -698,6 +698,7 @@ function receiveOnline() {
   const venue=ensureVenue(s.mode==='race'?s.event?.rules.course??'quarry-v1':'quarry-v1',s.mode==='derby'?s.event?.rules.arena??'quarry-arena-v1':'quarry-arena-v1');
   if(activeVenue!==venue){activateVenue(venue);fx.world=physics;fx.groundHeight=activeVenue.course.height;events.clear();vehicleFire?.reset();puddleSplashes?.reset();}
   online.setWorld(physics,activeVenue.course);online.receive(s);elapsed=s.elapsed;countdown=s.countdown;mode=s.mode;
+  sound.contactScraping.receive(s.phase==='playing'?s.cars:[]);
   waypointRace=s.event?.waypoints?new WaypointRace(s.event.rules.race as 'ordered'|'free'|'random',s.event.rules.laps,s.event.seed,activeVenue.course.checkpoints,activeVenue.course.waypointStations):null;
   pursuit=s.event?.chase?PursuitSession.restore(s.event.chase):null;
   if(s.event)restoreOnlineProgress(s.event,waypointRace,combat);else combat.reset();
