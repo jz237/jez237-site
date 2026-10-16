@@ -20,4 +20,16 @@ test('rider collision conserves momentum, respects mass and separates coincident
  a.x=b.x=0;a.z=b.z=0;collideRiders(a,b);assert.ok(Math.hypot(a.x-b.x,a.z-b.z)>1.7);
 });
 
+test('contact separation respects a wall beside either rider and a corridor with no spare room',()=>{
+ for(const blocked of ['a','b','both']){
+  const [a,b]=createRace().racers;Object.assign(a,{x:0,z:0,vx:2,vz:0});Object.assign(b,{x:1.2,z:0,vx:0,vz:0});
+  const clear=(r,x)=>r===a?(blocked==='b'||x>=0):(blocked==='a'||x<=1.2);
+  assert.equal(collideRiders(a,b,clear),2);
+  assert.ok(clear(a,a.x));assert.ok(clear(b,b.x));
+  assert.ok(b.vx>a.vx,'the collision impulse still stops the closing motion');
+  if(blocked==='both'){assert.equal(a.x,0);assert.equal(b.x,1.2);}
+  else assert.ok(Math.hypot(a.x-b.x,a.z-b.z)>=1.8-1e-8);
+ }
+});
+
 test('a fast shoreline collision actually ejects the rider through the race loop',()=>{const s=createRace({mode:'practice',course:openWaterCourse()}),r=s.racers[0];s.phase='running';s.course={...s.course,ground:(x,z)=>z>1?5:-10,rocks:[],ramps:[]};r.x=r.z=0;r.heading=0;r.vz=22;for(let i=0;i<10;i++)stepRace(s,{throttle:1},1/60);assert.ok(r.wipeout);assert.equal(r.wipeoutId,1);assert.equal(r.throttle,0);assert.ok(r.recover>2);});

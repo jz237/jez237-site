@@ -415,7 +415,8 @@ export function stepRace(s,input,dt,options={}){if(s.phase==='paused'||s.phase==
  if(s.raceWater)stepRaceWater(s.raceWater,s.racers.filter(r=>r.human),dt,{datumNative:Math.round(s.weather.seaLevel/s.raceWater.scale)});
  if(s.localWater&&!s.raceWater){driveLocalWater(s.localWater,s.racers,dt);if(s.seaState==='surf')obstacleSurge(s.localWater,s.waterObstacles,s.time,dt,(x,z,t)=>wave(x,z,t,s.weather.storm));}
  stepSprayField(s.sprayField??(s.sprayField=createSprayField()),s.racers,dt,s.weather.storm);
- for(let i=0;i<s.racers.length;i++)for(let j=i+1;j<s.racers.length;j++){const a=s.racers[i],b=s.racers[j],impact=collideRiders(a,b);if(impact>9)for(const r of [a,b])if(impact>10+r.stats.stability*1.3&&beginWipeout(r,s.time,impact))announce(r,s,'WIPEOUT · TAP THROTTLE TO REMOUNT');}
+ const canSeparate=(r,x,z)=>!passageCollision(s.course.passage,x,r.hydro.y,z,s.time,s.passageOpenedAt)&&!barrierCollision(s.course.crossbars,x,r.hydro.y,z);
+ for(let i=0;i<s.racers.length;i++)for(let j=i+1;j<s.racers.length;j++){const a=s.racers[i],b=s.racers[j],impact=collideRiders(a,b,canSeparate);if(impact>9)for(const r of [a,b])if(impact>10+r.stats.stability*1.3&&beginWipeout(r,s.time,impact))announce(r,s,'WIPEOUT · TAP THROTTLE TO REMOUNT');}
  finishRaceStep(s,dt);
 }
 function finishRaceStep(s,dt){

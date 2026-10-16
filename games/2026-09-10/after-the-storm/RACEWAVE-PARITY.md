@@ -1,5 +1,23 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## v2.35.1 — tunnel contact recovery
+
+Port Blue's Hard race could stall permanently at the tunnel bend: rider-to-rider
+separation ran after world contact and pushed the player just inside a solid
+wall. Every later movement then rolled back to that embedded position. Rider
+separation now checks passage walls and raised slabs before moving either hull.
+When one rider is blocked, the other takes the available separation; if neither
+has room, both retain their valid positions. The ordinary mass-based collision
+impulse remains active. Checkpoints and course geometry are unchanged.
+
+All 29 course, championship, passage, slab and rider-action checks pass, including
+the previously failing 36 venue/class runs with three laps and zero misses,
+all four championship classes, and a regression for the actual Port Blue bend.
+All 34 online and separate-player-window checks also pass with the new build.
+Resolution, render budgets, water and terrain detail are unchanged. This repairs
+the modern race solver; original native AI and complete native venue integration
+remain separate unfinished work.
+
 ## v2.35.0 release candidate — public source Sunset Bay
 
 Sunset now selects recovered numeric geography through the normal course selector:
