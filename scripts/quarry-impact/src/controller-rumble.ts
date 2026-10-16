@@ -37,7 +37,7 @@ export class ControllerRumble {
   if(now<this.nextAt)return;
   const speed=Number.isFinite(motion.speed)?Math.abs(motion.speed):0;
   const rolling=motion.grounded&&speed>1;
-  const road=rolling&&motion.surface==='gravel'?Math.min(.16,speed*.004):0;
+  const road=rolling&&(motion.surface==='gravel'||motion.surface==='mud')?Math.min(.16,speed*.004):0;
   const slip=rolling?unit((motion.slip-1.5)/8)*.35:0;
   const scrape=rolling?unit(motion.scraping)*.3:0;
   const impact=this.burst*unit((this.burstUntil-now)/180);
