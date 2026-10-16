@@ -10,15 +10,18 @@ export function readCountersteeringPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreCountersteeringBytes(file:string,bytes:Buffer):Buffer{
+ bytes=restoreContactScrapingBytes(file,bytes);
  const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readCountersteeringPrevious(file);
 }
 export function verifyCountersteeringRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'6062c92699d72a863a260684127eb21ae88964d3');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreContactScrapingBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreCountersteeringBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the Countersteering release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreContactScrapingBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the Countersteering release');
  assert.equal(manifest.previousFixtureCount,2803);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,2803);
 }
+
+import {restoreContactScrapingBytes} from './contact-scraping-invariants';

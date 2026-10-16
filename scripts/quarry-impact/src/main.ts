@@ -1298,6 +1298,7 @@ function step(dt: number) {
     contacts.push({key,point,point1,point2,va,vb,a,b,scarDirection,speed,closing,impulse:e.totalForceMagnitude()*dt,
       damageScale:Math.max(a&&a.health>0?a.specification.damageScale:0,b&&b.health>0?b.specification.damageScale:0)});
   });
+  sound.contactScraping.sample(contacts,elapsed);
   for(const {a,b,point1,point2,scarDirection} of collisionScars.adjudicate(contacts,elapsed)){
     a?.scar(point1,scarDirection,b?.paintColor);
     b?.scar(point2,scarDirection.clone().negate(),a?.paintColor);

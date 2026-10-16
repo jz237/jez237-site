@@ -1,3 +1,4 @@
+import {ContactScraping} from './contact-scraping';
 import {gearboxGrindSamples} from './transmission';
 import {audioListenerPosition,AudioListenerMotion,type AudioPerspective} from './audio-perspective';
 import {starterSamples} from './engine-stall';
@@ -136,7 +137,9 @@ export class Sound {
       this.loops.set(car.id, loops);
     }
   }
+  readonly contactScraping=new ContactScraping();
   clearCars() {
+    this.contactScraping.clear();
     for (const source of this.activeShots) { try { source.stop(); } catch {} }
     for (const loops of this.loops.values())
       for (const l of loops.values()) {
@@ -300,7 +303,7 @@ export class Sound {
               ? Math.min(0.22, Math.abs(car.speed) * 0.008)
               : 0;
         else if (name === 'scrape')
-          v=Math.max(car.slip>4&&car.health<80?.035:0,Math.min(.13,(car.scraping??0)*.12));
+          v=Math.min(.13,Math.max(car.scraping??0,this.contactScraping.level(car.id))*.12);
         if (!grounded && ['tires','gravel'].includes(name)) v=0;
         if (car.health <= 0 && !['tires', 'gravel', 'scrape'].includes(name))
           v = 0;
