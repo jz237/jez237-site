@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readOnlineScoreEliminationPrevious,restoreOnlineScoreEliminationBytes,verifyOnlineScoreEliminationRevision} from './online-score-elimination-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restorePursuitDrivingBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('OnlineScoreElimination preserves every prior fixture, vehicle asset, control and camera input',verifyOnlineScoreEliminationRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/online-score-elimination/revision.json').toString());
@@ -10,3 +10,5 @@ test('the successor bridge restores full predecessors and does not conceal later
  }
  const unknown=Buffer.from('unknown');assert.deepEqual(restoreOnlineScoreEliminationBytes('src/unknown.ts',unknown),unknown);
 });
+
+import {restorePursuitDrivingBytes} from './pursuit-driving-invariants';

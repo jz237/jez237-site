@@ -32,12 +32,17 @@ export class DrivingBrain {
   constructor(public arena:ArenaLayout=LEGACY_ARENA,public difficulty:AIDifficulty='amateur'){}
   readonly memory=new Map<number,DriverMemory>();
   reset(){this.memory.clear();}
-  update(car:DriverCar,cars:DriverCar[],mode:Mode,dt:number,probe?:()=>Clearance,checkpoints:readonly {x:number;z:number}[]=CHECKPOINTS):Input {
+  update(car:DriverCar,cars:DriverCar[],mode:Mode,dt:number,probe?:()=>Clearance,checkpoints:readonly {x:number;z:number}[]=CHECKPOINTS,attack?:{id:number;point:{x:number;z:number}}):Input {
     if(car.health<=0||(car.finished&&mode!=='race'))return {...stop};
     let m=this.memory.get(car.id);
     if(!m){m={target:-1,commit:0,stalled:0,reverse:0,escape:0,escapeSteer:0,attempts:0,steer:0,lane:(car.id%3-1)*1.7,phase:'approach',scan:0,clear:{front:30,left:30,right:30,rear:30}};this.memory.set(car.id,m);}
     m.commit-=dt;m.scan-=dt;
     if(m.scan<=0){m.clear=probe?.()??m.clear;m.scan=.16+(car.id%3)*.025;}
+    if(mode==='race'&&attack&&cars.some(c=>c.id===attack.id&&c.id!==car.id&&c.health>0)){
+      const result=driveDerby(car,cars,m,null,dt,AI_DIFFICULTIES[this.difficulty],attack.id,attack.point);
+      m.phase='pursuit '+m.phase;return result;
+    }
+    if(mode==='race')m.derby=undefined;
     const yaw=Math.atan2(car.forward.x,car.forward.z);
     let tx=0,tz=0,desiredSpeed=18;
     if(mode==='derby'){
