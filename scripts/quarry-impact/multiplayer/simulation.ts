@@ -1,3 +1,4 @@
+import {armorWearMultiplier} from '../src/armor-wear';
 import {derbyEndReason} from '../src/derby-policy';
 import {validDrivingAssists} from '../src/driving-assists';
 import {combatMotion} from '../src/combat-feats';
@@ -174,7 +175,9 @@ export class Simulation {
     for(const {contact:{a,b,point1,point2,scarDirection},damage} of this.impacts.adjudicate(contacts,this.elapsed,this.mode==='race'?.45:1)){
       if(damage===0)continue;
       for(const [car,other] of [[a,b],[b,a]])if(car&&car.state.health>0){
-        const point=car===a?point1:point2,s=car.state,received=damage*car.specification.damageScale,actual=Math.min(received,s.health),direction=car===a?scarDirection:{x:-scarDirection.x,y:-scarDirection.y,z:-scarDirection.z};
+        const point=car===a?point1:point2,s=car.state,direction=car===a?scarDirection:{x:-scarDirection.x,y:-scarDirection.y,z:-scarDirection.z};
+        const armorInverse={x:-s.q.x,y:-s.q.y,z:-s.q.z,w:s.q.w},armorPoint=rotate({x:point.x-s.p.x,y:point.y-s.p.y,z:point.z-s.p.z},armorInverse);
+        const received=damage*car.specification.damageScale*armorWearMultiplier(car.kind,s.components?.structure,armorPoint,rotate(direction,armorInverse),car.specification.damageScale),actual=Math.min(received,s.health);
         if(received<.1)continue;
         const before=s.health;s.health=Math.max(0,s.health-received);if(other){other.state.inflicted+=actual;if(this.event?.score){this.event.combat.hit(other.state.id,s.id,before,s.health,this.elapsed);this.event.combat.contact(scoreMotion[other.state.id],scoreMotion[s.id],actual,this.elapsed);}}
         const local=rotate({x:point.x-s.p.x,y:point.y-s.p.y,z:point.z-s.p.z},{x:-s.q.x,y:-s.q.y,z:-s.q.z,w:s.q.w});

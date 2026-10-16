@@ -1,3 +1,4 @@
+import {armorWearMultiplier} from './armor-wear';
 import type {DrivingSurface} from './driving-surface';
 import type {DrivingAssists} from './driving-assists';
 import type {TransmissionInput,TransmissionState} from './transmission';
@@ -344,6 +345,12 @@ export class Vehicle {
     if(!markCollision(this.panels,contact,axis,this.surfaceFinish,otherPaint))return false;
     if(this.onVisualEvent){const inverse=this.root.quaternion.clone().invert();this.onVisualEvent({kind:'hit',pose:[...this.root.position.toArray(),...this.root.quaternion.toArray()],point:point.clone().sub(this.root.position).applyQuaternion(inverse).toArray(),direction:direction.clone().applyQuaternion(inverse).toArray(),damage:0,health:this.health,scar:true,...(otherPaint?{paint:otherPaint.getHex()}:{})});}
     return true;
+  }
+  collisionHit(point:T.Vector3,direction:T.Vector3,damage:number,time:number,otherPaint?:T.Color){
+    const p=this.body.translation(),q=this.body.rotation(),inverse={x:-q.x,y:-q.y,z:-q.z,w:q.w};
+    const local=rotateVehicleVector({x:point.x-p.x,y:point.y-p.y,z:point.z-p.z},inverse);
+    const factor=armorWearMultiplier(this.kind,this.structuralDamage,local,rotateVehicleVector(direction,inverse),this.specification.damageScale);
+    this.hit(point,direction,damage*factor,time,false,otherPaint);
   }
   hit(point: T.Vector3, direction: T.Vector3, damage: number, time: number, quiet = false,otherPaint?:T.Color) {
     damage *= this.specification.damageScale;
