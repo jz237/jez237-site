@@ -26,7 +26,7 @@ const copy=v=>({x:v.x,y:v.y,z:v.z});
 function interval(dt){if(!finite(dt)||dt<0||dt>1)throw new RangeError('Native world interval must be from0 to1 second');}
 function owned(world){if(!known.has(world))throw new TypeError('Expected a native race world');}
 function aligned(world){
- if(world.water.frames!==world.frames||world.water.remainder!==0)
+ if(world.water.frames!==world.frames||world.water.rollerFrames!==world.frames||world.water.remainder!==0)
   throw new Error('Native world water was stepped outside its owner');
  for(const [i,a]of world.adapters.entries()){
   if(a.hull.ticks!==world.ticks||a.logicalFrames!==world.frames||a.remainder!==0||a.pendingFrameCompletion||a.inactiveTicks!==0)
@@ -61,12 +61,14 @@ function optionsAt(value,time,frame,index){
  * therefore reach the following rider before that rider's decision.
  * afterFrame(world,context), when supplied, runs AFTER water exactly once per
  * completed frame; it is the caller's slot for native floating-object updates.
+ * With deferWaterRollers:true it must also consume the water's roller stage
+ * after judging and object motion, even if course activity holds that stage.
  * afterTick(world,context) runs only for actual physical ticks, after any completed
  * frame's water. Use it for fixed-clock control-facing pose/rate history.
  * Returning false from afterFrame ends this step at that frame and discards
  * unused elapsed time; it supports terminal race results, not a pause timer.
  */
-export function createNativeRaceWorld({adapters,water,humanIndices=[0],beforeFrame=null,beforeActor=null,afterFrame=null,afterTick=null,craftContacts=true}={}){
+export function createNativeRaceWorld({adapters,water,humanIndices=[0],beforeFrame=null,beforeActor=null,afterFrame=null,afterTick=null,craftContacts=true,deferWaterRollers=false}={}){
  if(!Array.isArray(adapters)||adapters.length<1||adapters.length>4||new Set(adapters).size!==adapters.length)
   throw new TypeError('Expected one to four distinct native race adapters');
  if(!isHostRaceWater(water))throw new TypeError('Native world requires host water, not a presentation snapshot');
@@ -78,6 +80,8 @@ export function createNativeRaceWorld({adapters,water,humanIndices=[0],beforeFra
  if(afterFrame!==null&&typeof afterFrame!=='function')throw new TypeError('afterFrame must be a function');
  if(afterTick!==null&&typeof afterTick!=='function')throw new TypeError('afterTick must be a function');
  if(typeof craftContacts!=='boolean')throw new TypeError('craftContacts must be an explicit boolean');
+ if(typeof deferWaterRollers!=='boolean'||deferWaterRollers&&afterFrame===null)
+  throw new TypeError('Deferred water rollers require an afterFrame owner');
  const ticks=water.frames*TICKS_PER_FRAME;
  for(const a of adapters){
   if(!a?.hull||a.hull.points?.length!==12||a.hull.scale!==water.scale||a.hull.ticks!==ticks||
@@ -85,12 +89,12 @@ export function createNativeRaceWorld({adapters,water,humanIndices=[0],beforeFra
    throw new RangeError('Adapters must match the water scale and completed-frame clock');
   if(adapterOwners.has(a))throw new Error('Adapter already belongs to a native world');
  }
- if(water.remainder!==0)throw new RangeError('Water must have no independent clock remainder');
+ if(water.remainder!==0||water.rollerFrames!==water.frames)throw new RangeError('Water must have no independent clock remainder or pending roller stage');
  const surface=createNativeWaterCellSurface(water.field);
  const craftContactStates=createNativeCraftContactStates(adapters.map(a=>a.hull));
  const world={adapters:adapters.slice(),water,
   humanIndices:humanIndices.slice(),surface,beforeFrame,beforeActor,afterFrame,afterTick,ticks,clockTicks:ticks,frames:water.frames,remainder:0,
-  craftContacts,craftContactStates,craftContactPasses:0,craftContactCount:0,frameCraftContacts:[],
+  craftContacts,deferWaterRollers,craftContactStates,craftContactPasses:0,craftContactCount:0,frameCraftContacts:[],
   stepsLast:0,framesLast:0,frame:null,busy:false,fault:null};
  for(const a of adapters){a.surface=surface;adapterOwners.set(a,world);}
  waterOwners.set(water,world);known.add(world);return world;
@@ -156,7 +160,7 @@ export function stepNativeRaceWorld(world,dt,inputs,{active=true,adapterOptions=
    if(world.clockTicks%TICKS_PER_FRAME===0){
     for(let i=world.adapters.length-1;i>=0;i--)(inactive?completeNativeRaceAdapterInactiveFrame:completeNativeRaceAdapterFrame)(world.adapters[i],{
      beforeActorDecision:world.beforeActor?()=>world.beforeActor(world,{racerIndex:i,logicalFrame:world.frames+1,time:world.clockTicks*H,step:H*TICKS_PER_FRAME}):undefined});
-    advanceRaceWaterFrame(world.water,world.humanIndices.map(i=>cameraCraft(world.adapters[i])),{...world.frame.water,simulationActive:!inactive});
+    advanceRaceWaterFrame(world.water,world.humanIndices.map(i=>cameraCraft(world.adapters[i])),{...world.frame.water,simulationActive:!inactive,deferRollers:world.deferWaterRollers});
     world.frames++;world.framesLast++;
    }
    // Control-facing pose/rate history must use this physical clock. Updating
@@ -164,6 +168,7 @@ export function stepNativeRaceWorld(world,dt,inputs,{active=true,adapterOptions=
    if(!inactive&&world.afterTick)world.afterTick(world,{tick:world.ticks,logicalFrame:world.frames,time:world.ticks*H,step:H});
    if(world.clockTicks%TICKS_PER_FRAME===0&&world.afterFrame){
     const keepRunning=world.afterFrame(world,{logicalFrame:world.frames,time:world.clockTicks*H,step:H*TICKS_PER_FRAME});
+    if(world.water.rollerFrames!==world.frames)throw new Error('Native afterFrame must complete its course roller stage');
     if(keepRunning===false){world.remainder=0;break;}
    }
   }

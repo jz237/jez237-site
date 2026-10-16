@@ -10,7 +10,7 @@ import {queryNativeWaterField} from './native-water-field.js';
 import {NATIVE_RIDER_TUNE_DEFAULTS} from './native-rider-controls.js';
 import {createNativeFloatingWorld} from './native-floating-world.js';
 import {createNativePrimaryBuoyWorld} from './native-primary-buoy-world.js';
-import {bindRaceWaterCameraStorage,raceWaterAISelectionCircle} from './race-water.js';
+import {bindRaceWaterCameraStorage,raceWaterAISelectionCircle,advanceRaceWaterRollers} from './race-water.js';
 import {nativeAIBodyFields} from './native-ai-body-fields.js';
 import {nativeRaceBodyFields} from './native-race-body-fields.js';
 import {captureNativeCamera} from './native-camera-presentation.js';
@@ -82,8 +82,8 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
  if(onLaunchFrame!==null&&typeof onLaunchFrame!=='function')throw new TypeError('onLaunchFrame must be a function');
  if(raceRuntime&&(!recovery||sourceStates.length||poseProviders.length||['scene','advanceClock','advanceLaunch'].some(k=>typeof raceRuntime[k]!=='function')))
   throw new TypeError('Canonical launch requires recovered riders and its single scene owner');
- if(raceRuntime?.ordinary&&typeof raceRuntime.objectMotionActive!=='function')
-  throw new TypeError('Canonical ordinary motion requires its activity owner');
+ if(raceRuntime?.ordinary&&['objectMotionActive','courseRollerState'].some(k=>typeof raceRuntime[k]!=='function'))
+  throw new TypeError('Canonical ordinary motion requires its activity and roller state owner');
  if(typeof floatingActive!=='boolean')throw new TypeError('floatingActive must be boolean');
  if(typeof primaryActive!=='boolean')throw new TypeError('primaryActive must be boolean');
  if(typeof recovery!=='boolean')throw new TypeError('recovery must be boolean');
@@ -139,7 +139,7 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
    objectTypes4c:(floating?.state.objects??[]).map(o=>o.runtimeKind)});
   bindRaceWaterCameraStorage(water,raceRuntime.cameraStorage);
  }
- host.world=createNativeRaceWorld({adapters,water,humanIndices,craftContacts,
+ host.world=createNativeRaceWorld({adapters,water,humanIndices,craftContacts,deferWaterRollers:!!raceRuntime?.ordinary,
  beforeFrame:raceRuntime?.ordinary?(world,context)=>{
   const menu=typeof host.menuInputs==='function'?host.menuInputs(context.time,context.logicalFrame):host.menuInputs??[];
   if(!Array.isArray(menu))throw new TypeError('Menu inputs must be a human-controller array');
@@ -184,6 +184,9 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
   const keepRunning=host.onFrame?host.onFrame(host,context,ordinary):undefined;
   if(primary)primary.afterFrame(host.world,context,{active:host.primaryActive&&objectMotionActive});
   if(floating)floating.afterFrame(host.world,context,{active:host.floatingActive&&objectMotionActive});
+  // The original caller stamps course rollers AFTER object motion. Read72c
+  // here from the canonical state, not from the earlier water/input latch.
+  if(raceRuntime?.ordinary)advanceRaceWaterRollers(water,{active:objectMotionActive,rollerState72c:raceRuntime.courseRollerState()});
   if(raceRuntime){
    host.lastHUD=raceRuntime.ordinary?raceRuntime.advanceHUD():null;
    // Original1DE3CC is after the completed world/camera/water frame and

@@ -101,7 +101,7 @@ export function createRaceWater({crafts,variant=0,scale=.025,baseAmplitudeNative
   follows,cameras,previousPositions:poses.map(p=>copy(p.position)),
   previousPatchCentersNative:crafts.map(()=>({xNative:0,zNative:0})),
   cameraProvider,selectionRadiusNative,selectionMeshesNative:Object.freeze(crafts.map(()=>null)),
-  remainder:0,frames:0,stepsLast:0,revision:0,lastPlan:null};
+  remainder:0,frames:0,rollerFrames:0,stepsLast:0,revision:0,lastPlan:null};
  known.add(state);return state;
 }
 
@@ -114,9 +114,11 @@ export function createRaceWater({crafts,variant=0,scale=.025,baseAmplitudeNative
  * Previous snapped camera centers/orientation select forcing; the new camera
  * selects P2 then P1 patches. Paused callers must not consume elapsed time.
  */
-export function advanceRaceWaterFrame(state,crafts,{datumNative=state?.field.datumNative,zoomIndex=state?.zoomIndex,simulationActive=true,rollerState72c=0}={}){
+export function advanceRaceWaterFrame(state,crafts,{datumNative=state?.field.datumNative,zoomIndex=state?.zoomIndex,simulationActive=true,rollerState72c=0,deferRollers=false}={}){
  if(!known.has(state))throw new TypeError('Expected host race water');
  if(typeof simulationActive!=='boolean')throw new TypeError('simulationActive must be boolean');
+ if(typeof deferRollers!=='boolean')throw new TypeError('deferRollers must be boolean');
+ if(state.rollerFrames!==state.frames)throw new Error('Complete the pending course roller stage before another water frame');
  if(!Number.isInteger(rollerState72c)||rollerState72c< -32768||rollerState72c>32767)throw new RangeError('Invalid roller state72c');
  if(!Array.isArray(crafts)||crafts.length!==state.players)throw new TypeError('Human camera count changed');
  datum(datumNative);
@@ -150,12 +152,29 @@ export function advanceRaceWaterFrame(state,crafts,{datumNative=state?.field.dat
   if(spec.evolve)stepNativeWaterPatch(state.field,patch);
   centers[spec.playerIndex]={xNative:patch.snappedCenterNative.x,zNative:patch.snappedCenterNative.z};
  }
- // Source course generators run after the ordinary water evolution.
- for(const roller of state.rollers)stampNativeWaterRoller(state.field,roller,{state72c:rollerState72c});
  state.follows=updates.map(q=>q.state);state.cameras=cameras;
  state.previousPositions=poses.map(p=>copy(p.position));state.previousPatchCentersNative=centers;
  state.selectionMeshesNative=Object.freeze(selectionMeshesNative);
  state.zoomIndex=zoomIndex;state.frames++;state.revision++;state.lastPlan=plan;
+ // Standalone/modern water has no canonical adjudication owner. The native
+ // ordinary host defers this stage until AFTER79528 and object motion6E3A8.
+ if(!deferRollers)advanceRaceWaterRollers(state,{rollerState72c});
+ return state;
+}
+
+/** Finish one water frame's course generators. activity624 gates the entire
+ * source6E3A8 motion section;4CC7C then reads signed72c for each roller. Neither
+ * gate is simulation648. A held stage still consumes its scheduling slot, but
+ * never the generator's phase. Browser pause must skip the whole water frame.
+ * A second revision invalidates any display snapshot captured before stamping. */
+export function advanceRaceWaterRollers(state,{active=true,rollerState72c=0}={}){
+ if(!known.has(state))throw new TypeError('Expected host race water');
+ if(typeof active!=='boolean')throw new TypeError('Roller activity must be boolean');
+ if(!Number.isInteger(rollerState72c)||rollerState72c< -32768||rollerState72c>32767)throw new RangeError('Invalid roller state72c');
+ if(state.frames===0||state.rollerFrames!==state.frames-1)throw new Error('Course rollers require one pending completed water frame');
+ if(active)for(const roller of state.rollers)stampNativeWaterRoller(state.field,roller,{state72c:rollerState72c});
+ state.rollerFrames=state.frames;
+ if(active&&rollerState72c!==1&&state.rollers.length)state.revision++;
  return state;
 }
 

@@ -180,6 +180,7 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
   // Source6E3A8 reads this signed halfword AFTER79528. It gates the shared
   // primary/generic object motion call7DBC0 independently of simulation648.
   objectMotionActive:()=>current.scene.activity624===-1,
+  courseRollerState:()=>(current.scene.field72c<<16)>>16,
   snapshot:()=>nativeRaceStateSnapshot(current),
   recordSessionSnapshot:()=>captureNativeRecordSession(current),
   nameEntryView:()=>nativeNameMenuView(current),

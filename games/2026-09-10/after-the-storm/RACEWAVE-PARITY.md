@@ -1,5 +1,46 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## v2.33.0 release candidate — source course preparation and roller scheduling
+
+This release packages the six Sunset preparation checkpoints below and the
+ordinary native roller scheduling correction. The prepared Sunset definitions
+remain separate from public map-based Sunset, and native host admission remains
+Sunny time/versus only. Packaging tested source work does not enable an
+unverified course or claim complete original gameplay parity. The historical
+unpublished labels below describe each checkpoint when it was written.
+
+The ordinary host now defers course rollers until after79528 adjudication and
+the primary/generic object-motion pass. The original6E3A8 caller reads signed
+activity624 after judging;4CC7C reads signed72c when stamping. Simulation648
+does not directly gate either roller phase or stamping. Thus frozen hulls can
+still have moving rollers, while activity other than-1 or72c equal1 retains
+the prior roller phase. Browser pause consumes no stage. The state is read from
+the canonical owner rather than a frame-start copy. Standalone modern water
+retains its existing immediate course-generator bridge.
+
+The stage is consumed exactly once per completed water frame, including held
+and terminal frames. Missing or repeated completion is rejected; a native
+callback that leaves its stage pending faults the world before another tick.
+A stamp invalidates any earlier display snapshot revision. This changes no
+terrain segments, water mesh resolution, texture size, render target, pixel
+ratio, quality level, model detail or visual-effect setting.
+
+Read-only Ghidra on EVO X2 recovered the caller and roller functions with all
+nine project files unchanged;1,437 disassembled instructions match the local
+ROM. Independent original-instruction execution covers32 prepared cases,
+303,424 caller/roller instructions plus4,032 initialization instructions,
+zero/one/two rollers, signed state edges, changed boundary values, both modes
+and both simulation states. Full height/velocity hashes and phases match JS.
+Judging and object/effect callees are explicitly intercepted in this oracle;
+it is not a complete gameplay replay. No executable ROM material is published.
+
+Validation:68 focused water/host/ordinary/AI tests passed, then57 world,
+launch/reset, prepared Sunset, loading and terrain tests passed (including
+the additional missing-stage test). Twenty-four actual native host setups
+exercise independent simulation/activity/72c gates and browser pause. The
+terrain worker remains byte-identical to the original full-resolution build.
+The broader parity and guide limitations recorded below remain open.
+
 ## Unpublished checkpoint — complete default-rider Sunset Stunt traversal
 
 The prepared source Sunset guide now collects all nine rings, physically crosses

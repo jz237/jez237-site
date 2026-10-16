@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createNativeRaceAdapter,stepNativeRaceAdapter,nativeRaceSnapshot,prepareNativeRaceAdapterFrame} from '../native-race-adapter.js';
 import {createNativeRaceWorld,stepNativeRaceWorld,nativeRaceWorldSnapshot} from '../native-race-world.js';
-import {createRaceWater,advanceRaceWaterFrame,captureRaceWater} from '../race-water.js';
+import {createRaceWater,advanceRaceWaterFrame,advanceRaceWaterRollers,captureRaceWater} from '../race-water.js';
 import {createNativeWaterCellSurface} from '../native-water.js';
 import {createNativeWaterFollowCamera,stepNativeWaterFollowCamera} from '../native-water-schedule.js';
 import {createNativeHull} from '../native-hull.js';
@@ -12,11 +12,11 @@ import {applyNativeCraftContacts,refreshNativeCraftContactState} from '../native
 const v=(x=0,y=0,z=0)=>({x,y,z});
 const camera=a=>({x:a.hull.center.x,y:a.hull.center.y,z:a.hull.center.z,
  sourceForwardXZ:[a.hull.frame.forward.x,a.hull.frame.forward.z]});
-function make(count=1,{humanIndices=[0],contacts=[],initialNoise=true,afterFrame=null,...options}={}){
+function make(count=1,{humanIndices=[0],contacts=[],initialNoise=true,afterFrame=null,deferWaterRollers=false,...options}={}){
  const adapters=Array.from({length:count},(_,i)=>createNativeRaceAdapter({position:v(i*.1,0,i*.2),
   tuneB6c:5,tuneB70:5,tuneB74:5,contacts:contacts[i]??{},...options}));
  const water=createRaceWater({crafts:humanIndices.map(i=>camera(adapters[i])),baseAmplitudeNative:20,seed:17,initialNoise});
- return createNativeRaceWorld({adapters,water,humanIndices,afterFrame});
+ return createNativeRaceWorld({adapters,water,humanIndices,afterFrame,deferWaterRollers});
 }
 const near=(a,b,e=1e-10)=>assert.ok(Math.abs(a-b)<e,`${a} != ${b}`);
 
@@ -157,6 +157,23 @@ test('floating-object slot cannot recursively step its owning world',()=>{
  let attempts=0;
  const w=make(1,{afterFrame:world=>{attempts++;assert.throws(()=>stepNativeRaceWorld(world,.01,[{}]),/not reentrant/);}});
  stepNativeRaceWorld(w,.1,[{}]);assert.equal(attempts,2);assert.equal(w.frames,2);assert.equal(w.fault,null);
+});
+
+test('a deferred roller owner must finish every frame, including a terminal callback',()=>{
+ assert.throws(()=>make(1,{deferWaterRollers:true}),/afterFrame owner/);
+ assert.throws(()=>make(1,{deferWaterRollers:1,afterFrame:()=>{}}),/afterFrame owner/);
+ for(const result of [undefined,false]){
+  const w=make(1,{deferWaterRollers:true,afterFrame:()=>result});
+  assert.throws(()=>stepNativeRaceWorld(w,.1,[{}]),/complete its course roller stage/);
+  assert.equal(w.frames,1);assert.equal(w.water.rollerFrames,0);assert.ok(w.fault);
+  assert.throws(()=>stepNativeRaceWorld(w,.05,[{}]),/faulted/);
+ }
+ const w=make(1,{deferWaterRollers:true,afterFrame:(world,context)=>{
+  assert.equal(world.water.rollerFrames,context.logicalFrame-1);
+  advanceRaceWaterRollers(world.water,{active:false});return context.logicalFrame<3;
+ }});
+ stepNativeRaceWorld(w,.2,[{}],{waterOptions:{deferRollers:false}});
+ assert.equal(w.frames,3);assert.equal(w.water.rollerFrames,3);assert.equal(w.remainder,0);assert.equal(w.fault,null);
 });
 
 test('world never accepts a render-height replacement for its raw-cell sampler',()=>{
