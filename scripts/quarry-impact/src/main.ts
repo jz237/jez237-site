@@ -542,7 +542,7 @@ orbit.maxDistance = 22;
 orbit.maxPolarAngle = Math.PI * 0.48;
 orbit.enableDamping = true;
 let physics: R.World, events: R.EventQueue, quarry: Quarry, fx: Effects;
-type VenueContext={arenaId?:ArenaId;arena?:ArenaLayout;course:RaceCourse;physics:R.World;root:T.Group;checkpoint:T.Group;props:Quarry['props'];puddles:Quarry['puddles'];dispose?:()=>void};
+type VenueContext={arenaId?:ArenaId;arena?:ArenaLayout;course:RaceCourse;physics:R.World;root:T.Group;checkpoint:T.Group;props:Quarry['props'];puddles:Quarry['puddles'];update?:(time:number)=>void;dispose?:()=>void};
 let quarryVenue:VenueContext,activeVenue:VenueContext;
 const raceVenues:Partial<Record<Exclude<CourseId,'quarry-v1'>,VenueContext>>={};
 const arenaVenues:Partial<Record<ArenaId,VenueContext>>={};
@@ -554,24 +554,24 @@ function ensureVenue(id:CourseId,arenaId:ArenaId='quarry-arena-v1'):VenueContext
   if(arenaId!=='quarry-arena-v1'){
     if(arenaVenues[arenaId])return arenaVenues[arenaId]!;
     const world=new R.World({x:0,y:-9.81,z:0});world.timestep=1/60;
-    let artwork:ReturnType<typeof createHarrowWorld>|undefined;
+    let artwork:{root:T.Group;update?:(time:number)=>void;dispose():void}|undefined;
     try{
       const mud=arenaId==='wrenford-pit-v1',briarhill=arenaId==='briarhill-bowl-v1',foundry=arenaId==='foundry-yard-v1';
       (mud?buildWrenfordPitPhysics:foundry?buildFoundryPhysics:briarhill?buildBriarhillPhysics:buildHarrowPhysics)(R,world);artwork=mud?createWrenfordPitWorld():foundry?createFoundryWorld():briarhill?createBriarhillWorld():createHarrowWorld();
       const course:RaceCourse={...getRaceCourse(),...(mud?wrenfordPitGround:foundry?foundryGround:briarhill?briarhillGround:harrowGround),name:ARENA_NAMES[arenaId]};
       const checkpoint=new T.Group();checkpoint.visible=false;artwork.root.add(checkpoint);artwork.root.visible=false;scene.add(artwork.root);
-      const venue:VenueContext={arenaId,arena:mud?WRENFORD_PIT_ARENA:foundry?FOUNDRY_ARENA:briarhill?BRIARHILL_ARENA:HARROW_ARENA,course,physics:world,root:artwork.root,checkpoint,props:[],puddles:[],dispose:()=>{artwork!.dispose();world.free();}};
+      const venue:VenueContext={arenaId,arena:mud?WRENFORD_PIT_ARENA:foundry?FOUNDRY_ARENA:briarhill?BRIARHILL_ARENA:HARROW_ARENA,course,physics:world,root:artwork.root,checkpoint,props:[],puddles:[],update:artwork.update,dispose:()=>{artwork!.dispose();world.free();}};
       arenaVenues[arenaId]=venue;return venue;
     }catch(error){artwork?.dispose();world.free();throw error;}
   }
   if(id==='quarry-v1')return quarryVenue;
   const cached=raceVenues[id];if(cached)return cached;
   const world=new R.World({x:0,y:-9.81,z:0});world.timestep=1/60;
-  let artwork:{root:T.Group;dispose():void}|undefined;
+  let artwork:{root:T.Group;update?:(time:number)=>void;dispose():void}|undefined;
   try{
     const course=getRaceCourse(id);course.buildPhysics!(R,world);artwork=id==='millbrook-canal-v1'||id==='granite-pass-v1'?createCanalPassWorld(id):id==='kingswell-park-v1'||id==='copperfield-dunes-v1'?createParkDunesWorld(id):id==='holloway-stadium-v1'||id==='bramblebrook-reservoir-v1'?createStadiumReservoirWorld(id):id==='saltmarsh-port-v1'||id==='dunmere-farm-v1'?createPortFarmWorld(id):id==='seabrook-coast-v1'||id==='hazelwood-forest-v1'?createCoastForestWorld(id):id==='westmere-club-v1'||id==='harrowstone-ridge-v1'?createRidgeClubWorld(id):id==='willowbank-heath-v1'?createWillowbankWorld():id==='sable-canyon-v1'?createSableWorld(()=>{if(activeVenue.course.id==='sable-canyon-v1')refreshVenueLighting();}):id==='elmsworth-speedway-v1'?createElmsworthWorld():id==='rookvale-yard-v1'?createRookvaleWorld():id==='fenwick-oval-v1'||id==='fenwick-eight-v1'?createFenwickWorld(id):id==='alderwick-stunt-v1'?createStuntWorld():id==='millhaven-rally-v1'?createMillhavenWorld():id==='merefield-airfield-v1'?createMerefieldWorld():id==='dockside-loop-v1'||id==='fairground-scramble-v1'||id==='alderwick-cross-v1'||id==='wrenford-mud-v1'?createCountyWorld(id):id==='pinecrest-ridge-v1'?createPinecrestWorld():id==='ashford-autodrome-v1'?createAshfordWorld():id==='redbank-jump-v1'?createRedbankWorld():id==='bracken-rallycross-v1'?createBrackenWorld():id==='cinderbank-oval-v1'?createCinderbankWorld():createIronfieldWorld();
     const checkpoint=quarry.checkpoint.clone(true);checkpoint.name=id+'_checkpoint';checkpoint.visible=false;artwork.root.add(checkpoint);artwork.root.visible=false;scene.add(artwork.root);
-    const venue:VenueContext={course,physics:world,root:artwork.root,checkpoint,props:[],puddles:[],dispose:()=>{checkpoint.removeFromParent();artwork!.dispose();world.free();}};
+    const venue:VenueContext={course,physics:world,root:artwork.root,checkpoint,props:[],puddles:[],update:artwork.update,dispose:()=>{checkpoint.removeFromParent();artwork!.dispose();world.free();}};
     raceVenues[id]=venue;return venue;
   }catch(error){artwork?.dispose();world.free();throw error;}
 }
@@ -1552,6 +1552,7 @@ function frame(now: number) {
   updateRumble(now);
   clock += dt;
   if (!physics || state === 'loading') return;
+  if(state!=='paused')activeVenue.update?.(clock);
   if(adaptiveGraphics.sample(raw*1000,!document.hidden&&!preparingEvent&&!studio&&state==='playing'))applyQuality();
   // Include long stalls in the sustained benchmark, including event restarts.
   if(capturedFrames&&capturedFrames.length<50_000&&Number.isFinite(raw)&&raw>0)capturedFrames.push(raw*1000);

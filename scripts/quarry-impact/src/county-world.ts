@@ -68,5 +68,5 @@ export function createCountyWorld(id:'dockside-loop-v1'|'fairground-scramble-v1'
  const scenery=dock?null:createCourseScenery(course,mud?'farm':cross?'club':'fair',mud?{title:'WRENFORD MUD OVAL',subtitle:'LOCAL PRODUCE / IMPORTED BODY PANELS'}:cross?{title:'ALDERWICK DOUBLE CROSS',subtitle:'TWO CROSSINGS / ZERO RIGHT OF WAY'}:undefined);if(scenery)root.add(scenery.root);
  const crowd=createVenueCrowd(spectators);root.add(crowd.root);
  root.userData.solidRecords=course.solids;freezeSceneryTransforms(root);
- let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;crowd.dispose();scenery?.dispose();surfaceDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
+ let disposed=false;return{root,update:crowd.update,dispose(){if(disposed)return;disposed=true;crowd.dispose();scenery?.dispose();surfaceDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
 }

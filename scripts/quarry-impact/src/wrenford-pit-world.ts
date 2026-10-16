@@ -44,5 +44,5 @@ export function createWrenfordPitWorld(){
  const crowd=createVenueCrowd(spectators);root.add(crowd.root);
  const landmarks=createWrenfordPitLandmarks();root.add(landmarks.root);
  root.userData.solidRecords=WRENFORD_PIT_BARRIERS;freezeSceneryTransforms(root);
- let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;crowd.dispose();landmarks.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});floorGeometry.dispose();boxGeometry.dispose();signGeometry.dispose();floorMaterial.dispose();signMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
+ let disposed=false;return{root,update:crowd.update,dispose(){if(disposed)return;disposed=true;crowd.dispose();landmarks.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});floorGeometry.dispose();boxGeometry.dispose();signGeometry.dispose();floorMaterial.dispose();signMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
 }
