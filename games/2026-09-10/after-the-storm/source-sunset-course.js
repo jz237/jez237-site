@@ -1,9 +1,10 @@
+import {nativeRollerStep} from './native-water-rollers.js';
 import {shoreLines} from './shore-contact.js';
 import {facetedSurface} from './faceted-surfaces.js';
 import {SUNSET_NATIVE_SCALE,sunsetRampVolumes,sunsetContactVolumes} from './source-sunset-boxes.js';
 
 // Independent numeric source reconstruction, not original graphics or code.
-// Authored navigation and native roller-lattice dynamics remain unintegrated.
+// Roller generator and host hook are implemented; this course is not yet live.
 const S=SUNSET_NATIVE_SCALE;
 const clone=value=>JSON.parse(JSON.stringify(value));
 const deepFreeze=value=>{if(value&&typeof value==='object'){Object.values(value).forEach(deepFreeze);Object.freeze(value);}return value;};
@@ -54,14 +55,14 @@ export function sunsetFixedSphereOrderForSelection(options={}){
 export function sunsetRollersForSelection(options={}){
  const selection=sunsetSourceSelection(options),rows=selection.family==='stunt'?SUNSET_NATIVE_GEOMETRY.rollersStunt:SUNSET_NATIVE_GEOMETRY.rollersOrdinary;
  return rows.flatMap((row,sourceIndex)=>{
-  const [x,z,crestHeading,travelHeading,amplitude,crestSamples,travelSamples,spacing,advance,cycle,low,high,mask]=row;
+  const [x,z,travelHeading,crestHeading,amplitude,crestSamples,travelSamples,spacing,advance,cycle,low,high,mask]=row;
   if(mask&(1<<selection.nativeClass)||selection.reverse&&(mask&8))return [];
-  const crest=direction(crestHeading),travel=direction(travelHeading);
+  const crest=nativeRollerStep(crestHeading),travel=nativeRollerStep(travelHeading);
   return [{id:`sunset-${selection.family}-roller-${sourceIndex}`,sourceIndex,nativeRow:[...row],x:x*S,z:z*S,
    originNativeXZ:[x,z],crestHeadingNative:crestHeading,travelAxisHeadingNative:travelHeading,
-   crestStepNativeXZ:[crest.tx*64,crest.tz*64],travelStepNativeXZ:[travel.tx*64,travel.tz*64],amplitudeNative:amplitude,amplitudeWorld:amplitude*S,
+   crestStepNativeXZ:crest,travelStepNativeXZ:travel,amplitudeNative:amplitude,amplitudeWorld:amplitude*S,
    crestSamples,travelSamples,phaseSpacingIndex:spacing*4,phaseAdvanceIndex:-advance*4,cycleIndex:cycle*2048,windowStartIndex:low*2048,windowEndIndex:high*2048,
-   exclusionMask:mask,initialPhaseIndex:0,requiresNativeWaterLattice:true,integrationReady:false,
+   exclusionMask:mask,initialPhaseIndex:0,requiresNativeWaterLattice:true,integrationReady:true,
    inactiveWindow:'Leaves the existing field unchanged; it does not impose a zero-height surface.'}];
  });
 }
@@ -77,8 +78,8 @@ export function createSourceSunsetCourse(polygonDistance,{anchorsByClass,pilotAn
  if(pilotAnchorsByClass!==undefined&&(!Array.isArray(pilotAnchorsByClass)||pilotAnchorsByClass.length!==4||pilotAnchorsByClass.some((q,i)=>!Array.isArray(q)||q.length!==anchors[i].length)))throw new TypeError('Pilot labels must match authored anchors');
  const pilot=pilotAnchorsByClass?clone(pilotAnchorsByClass):anchors.map(q=>q.map(()=>null)),stuntAnchors=navigationPoints(stuntNavigation.anchorsWorld??stuntNavigation.anchors,'Stunt anchors');
  const boundary=navigation.boundary===undefined?undefined:navigationPoints(navigation.boundary,'browser envelope');if(boundary&&boundary.length<3)throw new TypeError('A browser envelope needs at least three points');
- const nav={...clone(navigation),usable:anchors.every(q=>q.length>=3),validated:false,status:'navigation-and-roller-integration-pending',
-  reason:'Authored ordinary-input routes and source roller-lattice dynamics require independent integration and validation.'};
+ const nav={...clone(navigation),usable:anchors.every(q=>q.length>=3),validated:false,status:'navigation-validation-pending',
+  reason:'Authored ordinary-input routes require independent validation; the host supports roller dynamics once this source course is admitted.'};
  const sourceShoresByPlayerCount=Object.fromEntries([1,2].map(n=>[n,SUNSET_NATIVE_GEOMETRY.shoresByPlayerCount[n].map(q=>({
   id:q.id,outline:points(q.points),waterInside:q.waterInside,sourceClosed:q.sourceClosed,sourceLineIndices:[...q.lineIndices],sourceEdgeCount:q.lineIndices.length,
   kind:q.lineIndices.length>20?'sand':'static-hull-outline',solidInteriorDefined:q.sourceClosed
@@ -117,7 +118,7 @@ export function createSourceSunsetCourse(polygonDistance,{anchorsByClass,pilotAn
  function rollersForPlayers(playerCount=1,selection={}){return sunsetRollersForSelection({difficulty:this?.difficulty??0,mode:this?.stunt?'stunt':'race',...selection,playerCount});}
  const raceRampsByClass=Array.from({length:4},(_,difficulty)=>sunsetRampsForSelection({difficulty})),obstaclesByClass=Array.from({length:4},(_,difficulty)=>sunsetHazardsForSelection({difficulty}));
  return {name:'Sunset Bay',theme:'resort',tag:'02 / SUNSET BAY',layoutRevision:6,
-  description:'Source sand floors, player-selected static hull outlines and finite jumps. Roller-grid and authored navigation integration remain pending.',
+  description:'Source sand floors, player-selected static hull outlines and finite jumps. Roller generator verified; live course and authored navigation integration remain pending.',
   integrationReady:false,sourceDynamicsReady:false,navigation:nav,navigationDriver:'source-layout',anchors:anchors[0].map(p=>[...p]),anchorsByClass:anchors,pilotAnchorsByClass:pilot,directedAnchorsByClass:true,routeInterpolation:'linear',
   ...ordinaryGeometry,geometryForPlayers,sourceShoresByPlayerCount,shoreContactsByPlayerCount,authoredBackground,
   sourceMetadata:{nativeCourseIndex:2,referenceRevision:'USA Rev1',nativeScale:S,scaleStatus:'conditional',modernRigidCraftApproximation:true,
@@ -140,8 +141,8 @@ export function createSourceSunsetCourse(polygonDistance,{anchorsByClass,pilotAn
   raceRamps:raceRampsByClass[0],raceRampsByClass,raceRampsByPlayerCount:{1:sunsetRampsForSelection(),2:sunsetRampsForSelection({playerCount:2})},
   sourceRollers:sunsetRollersForSelection(),sourceRollersByClass:Array.from({length:4},(_,difficulty)=>sunsetRollersForSelection({difficulty})),
   sourceStuntRollers:sunsetRollersForSelection({mode:'stunt'}),sourceMovingObjects:[],mooredBoats:[],crossbars:[],
-  sourceWaterMetadata:{ordinaryInitialDatum:0,lapTide:false,rollerLatticeIntegrated:false,exactWavefieldValidated:false,
+  sourceWaterMetadata:{ordinaryInitialDatum:0,lapTide:false,rollerGeneratorImplemented:true,rollerLatticeIntegrated:false,exactWavefieldValidated:false,
    rollerUpdate:'Once per source outer update, after patch evolution; requires the native toroidal height/velocity grid and external phase history.'},
   sourceState8Override:clone(SUNSET_NATIVE_GEOMETRY.state8),stuntLayout,resistance:[],
-  pendingSourceMechanics:['roller-water-lattice-stamps','marker-sphere-contact-integration','ordinary-input-navigation-validation']};
+  pendingSourceMechanics:['live-course-and-roller-selection','marker-sphere-contact-integration','ordinary-input-navigation-validation']};
 }

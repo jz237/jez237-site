@@ -1,5 +1,39 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished checkpoint — Sunset Bay roller-water generator
+
+The reconstructed course roller generator now runs on the host triangular
+height/velocity field after ordinary patch evolution. It retains binary32
+coordinate accumulation, the reconstructed source sine initializer, inclusive
+phase windows, signed16 storage, velocity clearing, and later-generator
+priority. The original initializer showed that the previous source-course
+metadata had its crest/travel headings reversed; those fields are corrected.
+The host selects independent generator phases using class and Stunt rows,
+steps them once per outer water frame even with two human cameras, and exposes
+the resulting surface through existing read-only replay/window snapshots.
+
+Evidence: a read-only Rea-installed Ghidra query on EVO X2 exported 1,864
+instructions matching the local ROM; all nine saved project files remained
+unchanged. A private bounded execution audit covered 1,592,469 original
+instructions, 22 prepared cases, and six frames of overlapping generators.
+Every compared grid height, velocity, initialized axis and stored phase matched.
+These are function-level comparisons using the previously audited source sine
+initializer, not a claim of a complete original-game replay. Public tests retain
+numeric inputs and output hashes, with no original executable data. All 88
+focused tests passed: roller/source selection/host water34, field/surface37,
+original grid start3, and online14.
+
+**Live integration remains incomplete.** The public Amber/Sunset definition in
+classic-courses.js still uses the older map-based layout. The source-course
+factory is separate and cannot place its original-coordinate waves into that
+unrelated geometry. The new host hook is exercised with a prepared source
+course; its stationary diagnostic anchors do not establish navigability.
+Admitting the source shoreline/floors/ramps, player-specific geometry, marker
+contacts, racing routes and Stunt route is the next required work. Original
+hull admission beyond Sunny Beach also needs its source course-out and result
+support rules. No public course switch or publication is claimed here.
+
+
 ## v2.32.0 — original rider setup modes and tuning
 
 The original-physics Sunny Beach Time Trial/Versus preview now connects its

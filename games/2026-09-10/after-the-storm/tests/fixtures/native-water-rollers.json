@@ -1,0 +1,606 @@
+{
+  "scope": "Original initializer72538..72694 and complete roller4CC7C; prepared sine values from original47C38 audit; patterned initial water; no full game replay.",
+  "cases": [
+    {
+      "row": [
+        1000,
+        500,
+        270,
+        180,
+        60,
+        16,
+        14,
+        64,
+        16,
+        2,
+        0,
+        1,
+        0
+      ],
+      "phaseBefore": 0,
+      "state72c": 0,
+      "phaseAfter": 4032,
+      "gridSHA256": "258c4be694d245b7ee2636b0707cada3064357e5ae64ff2e3e45f7c62f35d830"
+    },
+    {
+      "row": [
+        1000,
+        500,
+        270,
+        180,
+        60,
+        16,
+        14,
+        64,
+        16,
+        2,
+        0,
+        1,
+        0
+      ],
+      "phaseBefore": 2048,
+      "state72c": 0,
+      "phaseAfter": 1984,
+      "gridSHA256": "6059fb31e94c600c710f25d8150a5afd3b3e3f768488547d2668dd7d53a101aa"
+    },
+    {
+      "row": [
+        1000,
+        500,
+        270,
+        180,
+        60,
+        16,
+        14,
+        64,
+        16,
+        2,
+        0,
+        1,
+        0
+      ],
+      "phaseBefore": 4095,
+      "state72c": 0,
+      "phaseAfter": 4031,
+      "gridSHA256": "d18becdd4598d2ae80c7009619526b51c2c6b17de92c5eb678ccc4a5d7d6c1db"
+    },
+    {
+      "row": [
+        900,
+        -500,
+        270,
+        180,
+        60,
+        16,
+        14,
+        64,
+        24,
+        2,
+        0,
+        1,
+        0
+      ],
+      "phaseBefore": 0,
+      "state72c": 0,
+      "phaseAfter": 4000,
+      "gridSHA256": "a79240b2ccc9cd82fb6d85debfe48051fadd41510f40dab1b3f8533ca3281487"
+    },
+    {
+      "row": [
+        900,
+        -500,
+        270,
+        180,
+        60,
+        16,
+        14,
+        64,
+        24,
+        2,
+        0,
+        1,
+        0
+      ],
+      "phaseBefore": 2048,
+      "state72c": 0,
+      "phaseAfter": 1952,
+      "gridSHA256": "a06e662fa32e6fcf0b87fe5116f442167976bdfe0cdf1203d144c76eb1b49ace"
+    },
+    {
+      "row": [
+        900,
+        -500,
+        270,
+        180,
+        60,
+        16,
+        14,
+        64,
+        24,
+        2,
+        0,
+        1,
+        0
+      ],
+      "phaseBefore": 4095,
+      "state72c": 0,
+      "phaseAfter": 3999,
+      "gridSHA256": "a79240b2ccc9cd82fb6d85debfe48051fadd41510f40dab1b3f8533ca3281487"
+    },
+    {
+      "row": [
+        800,
+        -1500,
+        270,
+        180,
+        60,
+        16,
+        14,
+        64,
+        32,
+        2,
+        0,
+        1,
+        0
+      ],
+      "phaseBefore": 0,
+      "state72c": 0,
+      "phaseAfter": 3968,
+      "gridSHA256": "79bbb233ede08d6b4895d254ae1e771754a5906da89efbcd3ebdc63c142561ec"
+    },
+    {
+      "row": [
+        800,
+        -1500,
+        270,
+        180,
+        60,
+        16,
+        14,
+        64,
+        32,
+        2,
+        0,
+        1,
+        0
+      ],
+      "phaseBefore": 2048,
+      "state72c": 0,
+      "phaseAfter": 1920,
+      "gridSHA256": "3f879ebd6e05349e3d9e3f8024f3c365f8d203191771846fa0c4ab1e8ee0259d"
+    },
+    {
+      "row": [
+        800,
+        -1500,
+        270,
+        180,
+        60,
+        16,
+        14,
+        64,
+        32,
+        2,
+        0,
+        1,
+        0
+      ],
+      "phaseBefore": 4095,
+      "state72c": 0,
+      "phaseAfter": 3967,
+      "gridSHA256": "79bbb233ede08d6b4895d254ae1e771754a5906da89efbcd3ebdc63c142561ec"
+    },
+    {
+      "row": [
+        -3650,
+        2500,
+        180,
+        70,
+        40,
+        28,
+        32,
+        64,
+        24,
+        2,
+        0,
+        2,
+        0
+      ],
+      "phaseBefore": 0,
+      "state72c": 0,
+      "phaseAfter": 4000,
+      "gridSHA256": "927356927f5447e3a40360fca40fbc4d954834313b676399c4a19ef8a31f9965"
+    },
+    {
+      "row": [
+        -3650,
+        2500,
+        180,
+        70,
+        40,
+        28,
+        32,
+        64,
+        24,
+        2,
+        0,
+        2,
+        0
+      ],
+      "phaseBefore": 2048,
+      "state72c": 0,
+      "phaseAfter": 1952,
+      "gridSHA256": "7e94776de435acc87764e97f99f0608674839ab575211e5f99e4e46f8c305373"
+    },
+    {
+      "row": [
+        -3650,
+        2500,
+        180,
+        70,
+        40,
+        28,
+        32,
+        64,
+        24,
+        2,
+        0,
+        2,
+        0
+      ],
+      "phaseBefore": 4095,
+      "state72c": 0,
+      "phaseAfter": 3999,
+      "gridSHA256": "927356927f5447e3a40360fca40fbc4d954834313b676399c4a19ef8a31f9965"
+    },
+    {
+      "row": [
+        -1000,
+        4800,
+        110,
+        20,
+        60,
+        32,
+        50,
+        64,
+        24,
+        2,
+        0,
+        1,
+        1
+      ],
+      "phaseBefore": 0,
+      "state72c": 0,
+      "phaseAfter": 4000,
+      "gridSHA256": "72601ae3a14aa936f587117b8da33a6c8d4eef8d2fdf5580b6336b6e018f6625"
+    },
+    {
+      "row": [
+        -1000,
+        4800,
+        110,
+        20,
+        60,
+        32,
+        50,
+        64,
+        24,
+        2,
+        0,
+        1,
+        1
+      ],
+      "phaseBefore": 2048,
+      "state72c": 0,
+      "phaseAfter": 1952,
+      "gridSHA256": "46e6b193591bf6690c811fc7ba88ca1e88ff7f283faaac201ba9689250a8b15b"
+    },
+    {
+      "row": [
+        -1000,
+        4800,
+        110,
+        20,
+        60,
+        32,
+        50,
+        64,
+        24,
+        2,
+        0,
+        1,
+        1
+      ],
+      "phaseBefore": 4095,
+      "state72c": 0,
+      "phaseAfter": 3999,
+      "gridSHA256": "72601ae3a14aa936f587117b8da33a6c8d4eef8d2fdf5580b6336b6e018f6625"
+    },
+    {
+      "row": [
+        1000,
+        500,
+        270,
+        180,
+        60,
+        16,
+        14,
+        64,
+        16,
+        2,
+        0,
+        1,
+        0
+      ],
+      "phaseBefore": 0,
+      "state72c": 1,
+      "phaseAfter": 0,
+      "gridSHA256": "edc4e5287a2a34c411b289e207f8dac4c382c9c032360cc5151ea4d38c07a8a4"
+    },
+    {
+      "row": [
+        1000,
+        500,
+        270,
+        180,
+        60,
+        16,
+        14,
+        64,
+        16,
+        2,
+        0,
+        1,
+        0
+      ],
+      "phaseBefore": 64,
+      "state72c": 0,
+      "phaseAfter": 0,
+      "gridSHA256": "1be274eb0f27490eb9f7de3b20068dba318d0a929c330f0e33c31e57793a0aa5"
+    },
+    {
+      "row": [
+        1000,
+        500,
+        270,
+        180,
+        60,
+        16,
+        14,
+        64,
+        16,
+        2,
+        0,
+        1,
+        0
+      ],
+      "phaseBefore": 320,
+      "state72c": 0,
+      "phaseAfter": 256,
+      "gridSHA256": "7bc0c6d4bc1b6e8ed9829ed41fe02b43347b5465d73e4bd3fc780849a62add39"
+    },
+    {
+      "row": [
+        1000,
+        500,
+        270,
+        180,
+        60,
+        16,
+        14,
+        64,
+        16,
+        2,
+        0,
+        1,
+        0
+      ],
+      "phaseBefore": 2368,
+      "state72c": 0,
+      "phaseAfter": 2304,
+      "gridSHA256": "3e2fca755e67a1410ac6c69f88fd02c911d0b4ab694877b8738f238c2e8517fb"
+    },
+    {
+      "row": [
+        -30000,
+        30000,
+        110,
+        20,
+        127,
+        4,
+        5,
+        64,
+        16,
+        2,
+        0,
+        2,
+        0
+      ],
+      "phaseBefore": 0,
+      "state72c": 0,
+      "phaseAfter": 4032,
+      "gridSHA256": "7ed77109544e22dad5b37ba91ac8f33c87de692d7c431de0d77a146340269970"
+    },
+    {
+      "row": [
+        30000,
+        -30000,
+        110,
+        20,
+        127,
+        4,
+        5,
+        64,
+        16,
+        2,
+        0,
+        2,
+        0
+      ],
+      "phaseBefore": 0,
+      "state72c": 0,
+      "phaseAfter": 4032,
+      "gridSHA256": "6122b4892189e75764944431a0ad0220cdb99ccf19d433dcec4554b1c275b43e"
+    },
+    {
+      "row": [
+        100,
+        200,
+        110,
+        20,
+        60,
+        0,
+        4,
+        64,
+        16,
+        2,
+        0,
+        1,
+        0
+      ],
+      "phaseBefore": 0,
+      "state72c": 0,
+      "phaseAfter": 4032,
+      "gridSHA256": "edc4e5287a2a34c411b289e207f8dac4c382c9c032360cc5151ea4d38c07a8a4"
+    }
+  ],
+  "overlapRows": [
+    [
+      1000,
+      500,
+      270,
+      180,
+      60,
+      16,
+      14,
+      64,
+      16,
+      2,
+      0,
+      1,
+      0
+    ],
+    [
+      900,
+      -500,
+      270,
+      180,
+      60,
+      16,
+      14,
+      64,
+      24,
+      2,
+      0,
+      1,
+      0
+    ],
+    [
+      800,
+      -1500,
+      270,
+      180,
+      60,
+      16,
+      14,
+      64,
+      32,
+      2,
+      0,
+      1,
+      0
+    ],
+    [
+      -3650,
+      2500,
+      180,
+      70,
+      40,
+      28,
+      32,
+      64,
+      24,
+      2,
+      0,
+      2,
+      0
+    ],
+    [
+      -1000,
+      4800,
+      110,
+      20,
+      60,
+      32,
+      50,
+      64,
+      24,
+      2,
+      0,
+      1,
+      1
+    ]
+  ],
+  "overlapHistory": [
+    {
+      "gridSHA256": "2c5246cd7df53299900766da0c8bcfeff0ec726042f6fcce60c7898a413f356c",
+      "phases": [
+        4032,
+        4000,
+        3968,
+        4000,
+        4000
+      ]
+    },
+    {
+      "gridSHA256": "e7d54ff4d300c196d9594bb70b8a910b86ace12328a6c83369f191fad3d541df",
+      "phases": [
+        3968,
+        3904,
+        3840,
+        3904,
+        3904
+      ]
+    },
+    {
+      "gridSHA256": "55be8ac3b85e43307782dc628264e468dd472d08522ab6d54587e98c322efdd9",
+      "phases": [
+        3904,
+        3808,
+        3712,
+        3808,
+        3808
+      ]
+    },
+    {
+      "gridSHA256": "d7a7d30bd3b6004c85378e29c9163b028aafdebbf1db5c71b9255d69377a945f",
+      "phases": [
+        3840,
+        3712,
+        3584,
+        3712,
+        3712
+      ]
+    },
+    {
+      "gridSHA256": "d8d6f996d42e95be267142ef51fb0b6f8f8425e1b9f0b16e02ac0d84d68443c0",
+      "phases": [
+        3776,
+        3616,
+        3456,
+        3616,
+        3616
+      ]
+    },
+    {
+      "gridSHA256": "a7bd28ad6fa776414f5fe04514bb3ceabd11abfc8328f0e291cbd5c9e1db557b",
+      "phases": [
+        3712,
+        3520,
+        3328,
+        3520,
+        3520
+      ]
+    }
+  ]
+}

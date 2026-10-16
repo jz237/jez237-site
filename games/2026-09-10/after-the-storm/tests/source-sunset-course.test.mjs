@@ -145,9 +145,9 @@ test('class masks preserve the three prominent rollers plus the actual ordinary 
  const rows=[[1000,500,270,180,60,16,14,64,16,2,0,1,0],[900,-500,270,180,60,16,14,64,24,2,0,1,0],[800,-1500,270,180,60,16,14,64,32,2,0,1,0]];
  rows.forEach((row,i)=>{
   const q=c.sourceStuntRollers[i];assert.deepEqual(q.nativeRow,row);close(q.x,row[0]*S);close(q.z,row[1]*S);assert.equal(q.amplitudeNative,60);assert.equal(q.amplitudeWorld,1.5);
-  close(q.crestStepNativeXZ[0],-64);close(q.crestStepNativeXZ[1],0);close(q.travelStepNativeXZ[0],0);close(q.travelStepNativeXZ[1],-64);
+  close(q.crestStepNativeXZ[0],0);close(q.crestStepNativeXZ[1],-64);close(q.travelStepNativeXZ[0],-64);close(q.travelStepNativeXZ[1],0);
   assert.equal(q.crestSamples,16);assert.equal(q.travelSamples,14);assert.equal(q.phaseSpacingIndex,256);assert.equal(q.phaseAdvanceIndex,[-64,-96,-128][i]);assert.equal(q.cycleIndex,4096);assert.equal(q.windowStartIndex,0);assert.equal(q.windowEndIndex,2048);
-  assert.ok(q.requiresNativeWaterLattice&&!q.integrationReady);
+  assert.ok(q.requiresNativeWaterLattice&&q.integrationReady);
  });
  assert.deepEqual(c.sourceRollersByClass[0].map(q=>q.sourceIndex),[0,1,2,3]);assert.deepEqual(c.sourceRollersByClass[1].map(q=>q.sourceIndex),[0,1,2,3,4]);
  assert.deepEqual(c.sourceRollersByClass[0][3].nativeRow,[-3650,2500,180,70,40,28,32,64,24,2,0,2,0]);

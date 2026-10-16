@@ -109,6 +109,7 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
  const primaryPointsNative=primaryRows?primaryRows.map(q=>q.slice(0,2)):course.gates.map(q=>[(q.bx??q.x)/nativeScale,(q.bz??q.z)/nativeScale]);
  const boundaryPointsNative=[...(course.boundaryMarkers||[]).map(q=>q.map(v=>v/nativeScale)),...(course.rocks||[]).filter(q=>q.fixedSphere&&!q.sourceBoundaryMarker).map(q=>[q.x/nativeScale,q.z/nativeScale])];
  const raceWater=sourceWater?createRaceWater({...sourceWater,crafts:racers.filter(q=>q.human),scale:nativeScale,seed:surfSeed.value,initialNoise:!nativeLaunch,
+  rollerRows:course.rollersForPlayers?.(mode==='versus'?2:1,{difficulty,mode:course.stunt?'stunt':'race'}).map(q=>q.nativeRow)??[],
   primaryPointsNative,boundaryPointsNative,datumNative:Math.round(waterLevel.value/nativeScale)}):null;
  if(nativeLaunch)nativeLaunch.initializeWater(raceWater.field,raceWater.baseAmplitudeNative);
  setRaceWater(raceWater);

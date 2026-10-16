@@ -2,6 +2,7 @@ import {createNativeWaterField,seedNativeWaterNoise,queryNativeWaterField,
  createNativeWaterPatch,stepNativeWaterPatch,forceNativeWaterLine} from './native-water-field.js';
 import {createNativeWaterFollowCamera,stepNativeWaterFollowCamera,nativeWaterCameraBasis,
  nativeWaterAmplitudeThreshold,planNativeWaterFrame} from './native-water-schedule.js';
+import {createNativeWaterRoller,stampNativeWaterRoller} from './native-water-rollers.js';
 import {prepareNativeAISelectionCircle} from './native-ai-perception.js';
 
 // Host-owned source water. The source camera below selects simulation cells;
@@ -75,7 +76,7 @@ export function createRaceWaterRandom(seed){
 export function createRaceWater({crafts,variant=0,scale=.025,baseAmplitudeNative,
  primaryPointsNative=[],boundaryPointsNative=[],amplitudeThresholdNative,
  datumNative=0,period=20,seed=17,phaseCounter=0,random15,
- initialNoise=true,zoomIndex=1,cameraProvider=null,selectionRadiusNative=1500}={}){
+ initialNoise=true,zoomIndex=1,cameraProvider=null,selectionRadiusNative=1500,rollerRows=[]}={}){
  if(!Array.isArray(crafts)||crafts.length<1||crafts.length>2)throw new TypeError('Expected one or two human water cameras');
  if(!finite(scale)||scale<=0)throw new RangeError('Water scale must be positive');
  if(!Number.isInteger(baseAmplitudeNative)||baseAmplitudeNative<0||baseAmplitudeNative>127)throw new RangeError('Explicit source amplitude is required');
@@ -85,6 +86,8 @@ export function createRaceWater({crafts,variant=0,scale=.025,baseAmplitudeNative
  if(cameraProvider!==null&&typeof cameraProvider!=='function')throw new TypeError('cameraProvider must be a function');
  if(!Number.isInteger(selectionRadiusNative)||selectionRadiusNative< -2147483648||selectionRadiusNative>2147483647)
   throw new RangeError('selectionRadiusNative must be signed32');
+ if(!Array.isArray(rollerRows)||rollerRows.length>8)throw new TypeError('Expected at most eight source rollers');
+ const rollers=rollerRows.map(createNativeWaterRoller);
  const field=createNativeWaterField({variant,players:crafts.length,datumNative:datum(datumNative),phaseCounter});
  const poses=crafts.map(c=>craftPose(c,scale));
  const follows=poses.map(p=>createNativeWaterFollowCamera({positionNative:Object.values(p.position),forwardXZ:p.forward,zoomIndex,datumNative}));
@@ -93,7 +96,7 @@ export function createRaceWater({crafts,variant=0,scale=.025,baseAmplitudeNative
  // first solves ordinary type5 AFTER the first five hull ticks (also in Stunt).
  const cameras=poses.map(()=>nativeWaterCameraBasis({eyeNative:[1,1,1],targetNative:[0,0,0],up:[0,1,0],fovDegrees:75,nearNative:10,projectionOffset:[0,3]}));
  if(initialNoise)seedNativeWaterNoise(field,{amplitudeNative:baseAmplitudeNative,random15:random15??createRaceWaterRandom(seed>>>0)});
- const state={field,scale,variant,players:crafts.length,baseAmplitudeNative,period,seed,zoomIndex,
+ const state={field,rollers,scale,variant,players:crafts.length,baseAmplitudeNative,period,seed,zoomIndex,
   amplitudeThresholdNative:amplitudeThresholdNative??nativeWaterAmplitudeThreshold({primaryPointsNative,boundaryPointsNative}),
   follows,cameras,previousPositions:poses.map(p=>copy(p.position)),
   previousPatchCentersNative:crafts.map(()=>({xNative:0,zNative:0})),
@@ -104,16 +107,17 @@ export function createRaceWater({crafts,variant=0,scale=.025,baseAmplitudeNative
 
 /**
  * One AFTER-hull outer boundary. The native hull host should call this after
- * the outer update of every craft. simulationActive:false retains the field
+ * the outer update of every craft. simulationActive:false retains the ordinary patches
  * while selecting camera patches, as source simulation0 does. Browser pause
  * should skip this call entirely. A modern 60Hz rigid hull can also call the
  * accumulator below; that scheduling bridge does not make its hull native.
  * Previous snapped camera centers/orientation select forcing; the new camera
  * selects P2 then P1 patches. Paused callers must not consume elapsed time.
  */
-export function advanceRaceWaterFrame(state,crafts,{datumNative=state?.field.datumNative,zoomIndex=state?.zoomIndex,simulationActive=true}={}){
+export function advanceRaceWaterFrame(state,crafts,{datumNative=state?.field.datumNative,zoomIndex=state?.zoomIndex,simulationActive=true,rollerState72c=0}={}){
  if(!known.has(state))throw new TypeError('Expected host race water');
  if(typeof simulationActive!=='boolean')throw new TypeError('simulationActive must be boolean');
+ if(!Number.isInteger(rollerState72c)||rollerState72c< -32768||rollerState72c>32767)throw new RangeError('Invalid roller state72c');
  if(!Array.isArray(crafts)||crafts.length!==state.players)throw new TypeError('Human camera count changed');
  datum(datumNative);
  const poses=crafts.map(c=>craftPose(c,state.scale));
@@ -146,6 +150,8 @@ export function advanceRaceWaterFrame(state,crafts,{datumNative=state?.field.dat
   if(spec.evolve)stepNativeWaterPatch(state.field,patch);
   centers[spec.playerIndex]={xNative:patch.snappedCenterNative.x,zNative:patch.snappedCenterNative.z};
  }
+ // Source course generators run after the ordinary water evolution.
+ for(const roller of state.rollers)stampNativeWaterRoller(state.field,roller,{state72c:rollerState72c});
  state.follows=updates.map(q=>q.state);state.cameras=cameras;
  state.previousPositions=poses.map(p=>copy(p.position));state.previousPatchCentersNative=centers;
  state.selectionMeshesNative=Object.freeze(selectionMeshesNative);
