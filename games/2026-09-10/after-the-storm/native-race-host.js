@@ -12,6 +12,7 @@ import {createNativeFloatingWorld} from './native-floating-world.js';
 import {createNativePrimaryBuoyWorld} from './native-primary-buoy-world.js';
 import {bindRaceWaterCameraStorage} from './race-water.js';
 import {nativeRaceBodyFields} from './native-race-body-fields.js';
+import {captureNativeCamera} from './native-camera-presentation.js';
 import {applyNativeRiderResultCodes} from './native-rider-lifecycle.js';
 
 // Runnable host bridge for the recovered hull and rider recovery. This remains
@@ -40,6 +41,7 @@ export function nativeHostInput(input={}){
 
 function present(host){
  const scale=host.world.water.scale,field=host.world.water.field;
+ const cameras=host.world.water.frames>0&&host.raceRuntime?.ordinary?host.world.water.cameras:null;
  host.presentations=host.world.adapters.map((a,i)=>{
   const snapshot=nativeRaceSnapshot(a),p=snapshot.position;
   const query=queryNativeWaterField(field,F(F(p.x)*F(1/scale)),F(F(p.z)*F(1/scale)));
@@ -47,6 +49,7 @@ function present(host){
    scale,previous:host.presentations[i]});
   const r=host.racers[i],{hydro,...pose}=view.racer;
   Object.assign(r,pose);Object.assign(r.hydro,hydro);
+  if(host.raceRuntime?.ordinary)r.nativeCamera=r.human&&cameras?captureNativeCamera(cameras[r.player],scale):null;
   r.nativeRiderPose=nativeRiderPresentation(a.articulatedRider,a.hull);
   r.nativeTelemetry={...view.source,actionState:{...snapshot.source.actionState},
    actorState:snapshot.source.actorState,animationFrame:snapshot.source.animationFrame,
@@ -144,8 +147,12 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
   if(primary)primary.afterFrame(host.world,context,{active:host.primaryActive&&objectMotionActive});
   if(floating)floating.afterFrame(host.world,context,{active:host.floatingActive&&objectMotionActive});
   if(raceRuntime){
+   // Original1DE3CC is after the completed world/camera/water frame and
+   // before5DF4. These are completed actor values, not the input-stage pose.
+   host.lastCameraInput=raceRuntime.ordinary?raceRuntime.advanceCameraInput(host.world.adapters.map(a=>({
+    actorStateC54:a.lastFrame.actorState,animationFrameC58:a.lastFrame.animationFrame}))):null;
    const status=raceRuntime.ordinary?raceRuntime.advanceStatus():null;
-   const launch=status?{...ordinary,effects:[...ordinary.effects,...status.effects],view:status.view}:
+   const launch=status?{...ordinary,effects:[...ordinary.effects,...host.lastCameraInput.effects,...status.effects],view:status.view}:
     raceRuntime.advanceLaunch(host.world.adapters.map(a=>a.lastControls.pressedButtons));
    if(onLaunchFrame&&onLaunchFrame(host,context,launch)===false)return false;
   }

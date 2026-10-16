@@ -1,3 +1,4 @@
+import {nativeCameraFrame} from './native-camera-presentation.js';
 import {speedLens} from './contact-cues.js';
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const angle = v => Math.atan2(Math.sin(v), Math.cos(v));
@@ -11,6 +12,7 @@ export function translateFollow(memory,rider,position,target){
 // The lens follows the travel line and a suspended water datum. Hull pitch,
 // rider tricks and momentary handlebar reversals never roll the horizon.
 export function chaseFrame(memory, rider, dt, { orbit = 0, zoom = 8, pitch = .22 } = {}) {
+  if(rider.nativeCamera)return nativeCameraFrame(rider.nativeCamera,{orbit,zoom,pitch});
   dt = clamp(dt, 0, .1);
   const h = rider.hydro, speed = Math.hypot(rider.vx, rider.vz);
   const water = Number.isFinite(h.waterHeight) ? h.waterHeight : 0;

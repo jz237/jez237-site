@@ -32,7 +32,7 @@ export function createOnlinePeer({role,PeerConnection=globalThis.RTCPeerConnecti
   if(!validOnlineEnvelope(m,session))throw new TypeError('Incompatible online message');
   if(m.type==='ping'){if(Number.isFinite(m.sent))sendText('control','pong',{sent:m.sent});return;}
   if(m.type==='pong'){if(Number.isFinite(m.sent)&&m.sent<=now()&&now()-m.sent<30000){rtt=Math.round(now()-m.sent);status();}return;}
-  const permitted=role==='host'?['ready','setup','pause','heartbeat','leave']:['init','standby','preferences','leave'];
+  const permitted=role==='host'?['ready','setup','pause','camera','heartbeat','leave']:['init','standby','preferences','leave'];
   if(!permitted.includes(m.type))throw new TypeError('Online peer cannot send that command');
   Promise.resolve(onControl(m)).catch(fail);
  }

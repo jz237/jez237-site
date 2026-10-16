@@ -1,6 +1,6 @@
 import {createNativeRaceState,nativeRaceStateSnapshot,prepareNativeRaceStateOperations,
  prepareNativeRaceCountdown,prepareNativeRacePrestartInitializationUpdate,prepareNativeRacePrestartStatusUpdate,
- prepareNativeRaceStartup,prepareNativeRaceOrdinaryUpdate,nativeRaceGridTransformView,nativeRaceComputerProfileView,nativeRaceResultCodeView} from './native-race-state.js';
+ prepareNativeRaceCameraInputUpdate,prepareNativeRaceStartup,prepareNativeRaceOrdinaryUpdate,nativeRaceGridTransformView,nativeRaceComputerProfileView,nativeRaceResultCodeView} from './native-race-state.js';
 import {prepareNativeRaceStartupOverlay} from './native-race-startup-overlay.js';
 import {prepareNativePrimaryRaceClock} from './native-primary-race-clock.js';
 import {createNativeRaceCameraStorage} from './native-race-camera-storage.js';
@@ -35,6 +35,8 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
  integer(players,'players',1,2);integer(courseIndex,'courseIndex',1,9);
  if(players>racers.length)throw new RangeError('Launch requires each human source slot');
  let current;
+ // Browser commands are queued edges, consumed once at the source display stage.
+ const cameraCommands=Array.from({length:players},()=>[]);
  const extra=racers.map(r=>({logicalTicks:r.sourceBuoys?.logicalTicks??0,missedCheckpoint:r.sourceBuoys?.missedCheckpoint??false,dqLabel:r.dq||''}));
  function word(slot,index){integer(slot,'source slot',0,racers.length-1);return current.raceWords1f94[BASE+slot*STRIDE+index]|0;}
  function commit(operations){if(operations.length)current=prepareNativeRaceStateOperations(current,operations).state;}
@@ -211,6 +213,24 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    current=prepared.state;
    before.forEach((_,i)=>extra[i].logicalTicks++);
    return {effects:prepared.effects,operations:prepared.tailOperations,diagnostic:prepared.diagnostic,before,view:runtime.view()};
+  },
+  queueCamera(view,command='next'){
+   integer(view,'camera view',0,players-1);
+   const mask=command==='next'?8:command==='previous'?4:command==='tilt'?1:undefined;
+   if(mask===undefined)throw new RangeError('Unknown source camera command');
+   if(!courseRuntime)throw new Error('Source camera controls require ordinary race');
+   if(cameraCommands[view].length<16)cameraCommands[view].push(mask);
+  },
+  advanceCameraInput(bodyStatesBySlot){
+   if(!courseRuntime)throw new Error('Source camera controls require ordinary race');
+   if(current.scene.gameStateAb24!==40)return {effects:[],diagnostic:{views:[]}};
+   const prepared=prepareNativeRaceCameraInputUpdate(current,{
+    controllerPortsByView:Array.from({length:players},(_,i)=>i),
+    pressedButtonsByController:Array.from({length:4},(_,i)=>cameraCommands[i]?.[0]??0),bodyStatesBySlot,
+    cameraModeWords3940:[72,75,90,90,200,140,90,80,23,23,23,30,0,0,12,62].map(floatBits),
+    cameraBlendWords6018:[.3,.2,.07,.15].map(floatBits)});
+   current=prepared.state;cameraCommands.forEach(q=>q.shift());
+   return {effects:prepared.effects,diagnostic:prepared.diagnostic};
   },
   advanceStatus(){
    const prepared=prepareNativeRacePrestartStatusUpdate(current);current=prepared.state;

@@ -4,7 +4,8 @@ import {createNativeWaterFollowCamera,stepNativeWaterFollowCamera,nativeWaterCam
  nativeWaterAmplitudeThreshold,planNativeWaterFrame} from './native-water-schedule.js';
 
 // Host-owned source water. The source camera below selects simulation cells;
-// the high-resolution presentation camera and mesh remain independently owned.
+// the high-resolution view consumes read-only endpoints; its mesh and optional
+// orbit/obstruction adjustments remain independently owned.
 // The50ms outer step is recovered source GAME time; .025 world scale and
 // browser wall-time accumulation remain explicit host policy.
 // The seeded random stream is reproducible browser history, not the original
@@ -49,6 +50,11 @@ export function bindRaceWaterCameraStorage(state,store){
   throw new TypeError('Camera storage binds once, before the first source water frame');
  store.write(state.cameras);
  Object.defineProperty(state,'cameras',{enumerable:true,configurable:false,get:()=>store.read(),set:value=>store.write(value)});
+ if(typeof store.initializeFollow==='function'){
+  store.initializeFollow(state.follows);
+  Object.defineProperty(state,'follows',{enumerable:true,configurable:false,get:()=>store.readFollow(),set:value=>store.writeFollow(value)});
+  Object.defineProperty(state,'followControls',{enumerable:true,configurable:false,get:()=>store.readFollowControls()});
+ }
  boundCameraStores.add(state);return state;
 }
 export function createRaceWaterRandom(seed){
@@ -106,10 +112,11 @@ export function advanceRaceWaterFrame(state,crafts,{datumNative=state?.field.dat
  if(!Array.isArray(crafts)||crafts.length!==state.players)throw new TypeError('Human camera count changed');
  datum(datumNative);
  const poses=crafts.map(c=>craftPose(c,state.scale));
- const updates=poses.map((p,i)=>stepNativeWaterFollowCamera(state.follows[i],{
+ const follows=state.follows,controls=state.followControls;
+ const updates=poses.map((p,i)=>stepNativeWaterFollowCamera(follows[i],{
   positionNative:Object.values(p.position),forwardXZ:p.forward,
   velocityXZ:[p.position.x-state.previousPositions[i].x,p.position.z-state.previousPositions[i].z],
-  datumNative,zoomIndex,sourcePoseState:p.sourcePoseState,sourcePoseTimer:p.sourcePoseTimer}));
+  datumNative,zoomIndex:controls?.[i].zoomIndex??zoomIndex,followControl:controls?.[i],sourcePoseState:p.sourcePoseState,sourcePoseTimer:p.sourcePoseTimer}));
  const cameras=updates.map((q,i)=>state.cameraProvider?state.cameraProvider(crafts[i],q.camera,{playerIndex:i,frame:state.frames+1}):q.camera);
  const plan=planNativeWaterFrame({variant:state.variant,players:state.players,
   camerasBeforeUpdate:state.cameras,camerasAfterUpdate:cameras,

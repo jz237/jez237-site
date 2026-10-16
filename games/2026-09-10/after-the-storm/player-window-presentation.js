@@ -1,3 +1,4 @@
+import {readNativeCamera} from './native-camera-presentation.js';
 import {readRaceWater} from './race-water.js';
 import {exportBreakablePresentation,importBreakablePresentation} from './breakable-hazards.js';
 import {RIDER_TARGET_BONES,prepareRiderTargetPose,interpolateRiderTargetPose} from './rider-target-pose.js';
@@ -59,6 +60,7 @@ function copyNativeRacer(from,to={...from}){
  if(own(from,'nativeBoundaryFrames')&&!integer(from.nativeBoundaryFrames,-1,65535))throw new RangeError('Invalid source boundary display');
  if(own(from,'nativeWrongWay')&&typeof from.nativeWrongWay!=='boolean')throw new TypeError('Invalid source direction display');
  if(own(from,'nativePlace')&&!integer(from.nativePlace,0,3))throw new RangeError('Invalid source place display');
+ if(own(from,'nativeCamera'))to.nativeCamera=readNativeCamera(from.nativeCamera);
  if(own(from,'nativeRiderPose'))to.nativeRiderPose=nativeRiderPose(from.nativeRiderPose);
  if(own(from,'nativeTelemetry'))to.nativeTelemetry=nativeTelemetry(from.nativeTelemetry);
  return to;

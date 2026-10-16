@@ -2850,3 +2850,38 @@ The broader gameplay parity gaps documented above remain open.
 
 The v2.26.1 follow-up keys online music sessions by both connection and race
 generation; a new pairing cannot inherit the previous pairing's final-lap latch.
+
+
+## v2.27.0 — ordinary source camera controls and shared water selection
+
+The opt-in native Sunny time/versus integration now consumes the recovered
+1DE3CC numeric camera input after the completed world/water frame and before
+5DF4. Browser camera commands queue explicit edges per human view; mode,
+toggle, lift, follow lag and current/target radius, pitch and FOV use the same
+canonical HUD/camera owner. The ordinary type5 admitted numeric subset has
+explicit fresh-web initialization; this does not restore an opaque source
+camera template or claim complete source startup memory. Input reads each
+completed actor and animation timer and blends lift exactly once per frame.
+The four original modes and wrap/change coefficients reach the next water
+frame, including independent P2/P1 patch selection. Pause consumes no edge.
+
+High-resolution local, split, separate-window and online renderers consume
+bounded read-only world-unit camera endpoints. Mouse orbit/zoom and existing
+modern obstruction guards remain presentation adjustments; source camera
+collision corrections and scripted/result cameras are still incomplete.
+Remote camera messages use the ordered control channel, current generation
+and monotonic sequence; guests can change only Player 2. The remote view never
+creates a water/camera solver. Modern physics retains its existing cameras.
+
+The125 targeted tests pass. The full suite reports2,215 passes out of2,226;
+all11 failure names exactly match the preceding full-suite baseline. New
+coverage checks next-frame timing, four-mode wrap, independent views, completed
+actor/lift cadence, pause, atomic invalid writes, exact online DTO transport,
+and duplicate/stale/old-generation guest command rejection. Chrome local split
+views confirmed independent keyboard mode changes and matching source FOVs.
+The broader parity gaps above remain open.
+
+Actual Chrome WebRTC host/guest testing also confirmed a guest camera-button
+press changes host modes from[1,1] to[1,2], leaves P1 at75 degrees and renders
+P2 at90 degrees with the high-resolution solved rider. No JavaScript errors
+were observed; the isolated local preview reports only its missing favicon.

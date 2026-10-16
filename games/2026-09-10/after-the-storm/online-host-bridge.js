@@ -32,6 +32,9 @@ export function createOnlineHostBridge({capability,window:win=globalThis.window,
   if(m.type==='pause'&&m.generation===generation&&connected&&Number.isSafeInteger(m.sequence)&&m.sequence>commandSequence&&typeof m.paused==='boolean'){
    commandSequence=m.sequence;mailbox.clear();onCommand({kind:'pause',paused:m.paused});return;
   }
+  if(m.type==='camera'&&m.generation===generation&&connected&&loaded&&!stale&&Number.isSafeInteger(m.sequence)&&m.sequence>commandSequence){
+   commandSequence=m.sequence;onCommand({kind:'camera',player:1});return;
+  }
   if(m.type==='leave'){connected=false;unavailable('Player 2 left. Both riders are paused.');}
   if(m.type==='host-pause'&&typeof m.paused==='boolean'){mailbox.clear();onCommand({kind:'pause',paused:m.paused});}
  }

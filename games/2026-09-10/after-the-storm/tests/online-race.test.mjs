@@ -135,3 +135,17 @@ test('peer channel roles reject guest snapshots while accepting only the dedicat
   assert.equal(frames.length,0);assert.equal(errors.length,1);assert.equal(host.sendInput({control:{throttle:1,steer:0}}),false);
  }finally{host.close();}
 });
+
+
+test('online camera commands target P2 only and reject duplicate, unready, stale and old-session edges',async()=>{
+ let now=0;const commands=[],f=bridgeFixture(),bridge=createOnlineHostBridge({capability:'a'.repeat(32),window:f.win,now:()=>now,onCommand:c=>commands.push(c)}),channel=f.bind(bridge),send=m=>channel.port2.postMessage(m);
+ try{
+  send({type:'link',connection:'b'.repeat(32),connected:true});await settle();bridge.begin(fixture('native').descriptor);
+  send({type:'camera',generation:1,sequence:1});await settle();assert.deepEqual(commands,[]);
+  send({type:'ready',generation:1});send({type:'camera',generation:1,sequence:2,player:0});send({type:'camera',generation:1,sequence:2});send({type:'camera',generation:0,sequence:99});await settle();
+  assert.deepEqual(commands,[{kind:'camera',player:1}]);
+  now=4000;bridge.poll();send({type:'camera',generation:1,sequence:3});await settle();assert.equal(commands.length,1);
+  send({type:'heartbeat'});send({type:'camera',generation:1,sequence:3});await settle();assert.equal(commands.length,2);
+  bridge.begin(fixture('native').descriptor);send({type:'ready',generation:2});send({type:'camera',generation:1,sequence:100});send({type:'camera',generation:2,sequence:1});await settle();assert.equal(commands.length,3);
+ }finally{bridge.dispose();channel.port1.close();channel.port2.close();}
+});

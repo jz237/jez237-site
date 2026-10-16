@@ -57,7 +57,7 @@ function frame(now){
  const latest=frames.at(-1),focused=document.hasFocus()&&document.visibilityState==='visible',pads=navigator.getGamepads?.()||[];
  if(focused&&descriptor&&!standby&&now-lastInput>15){
   const controls=sample(keys,{},pads,true);
-  controls.forEach((c,i)=>{if(!primeButtons&&c.pause&&!padPause[i])pauseRequest();if(!primeButtons&&c.camera&&!padCamera[i]){if(i===1)viewer?.camera();else command({kind:'camera',player:0});}padPause[i]=c.pause;padCamera[i]=c.camera;});primeButtons=false;
+  controls.forEach((c,i)=>{if(!primeButtons&&c.pause&&!padPause[i])pauseRequest();if(!primeButtons&&c.camera&&!padCamera[i]){if(i===1&&!Object.hasOwn(latest?.frame.racers[1]??descriptor?.initialFrame.racers[1]??{},'nativeCamera'))viewer?.camera();else command({kind:'camera',player:i});}padPause[i]=c.pause;padCamera[i]=c.camera;});primeButtons=false;
   send('input',{sequence:++inputSequence,controls:normalizeWindowControls(controls)});lastInput=now;
  }
  if(standby||!latest){updateGamepadRumble(haptics,null,pads,descriptor?.rumble,now);return;}

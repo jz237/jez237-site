@@ -77,6 +77,17 @@ function bearingDegrees(x,z,acosLookup){
 }
 function sealFollow(state){followStates.add(state);return frozen(state);}
 
+/** Rehydrate the ordinary follow's admitted numeric fields from their owner.
+ * This makes canonical auxiliary records authoritative without retaining a
+ * second solver state. Initialization remains a separate caller operation. */
+export function readNativeWaterFollowCamera(value){
+  if(!value||value.fovDegrees>=180)throw new TypeError('Invalid retained follow camera');
+  return sealFollow({zoomIndex:integer(value.zoomIndex,'zoomIndex',0,3),
+    lagXZ:vector(tuple(value.lagXZ,2,'lagXZ')),radiusNative:positive(value.radiusNative,'radiusNative'),
+    pitchDegrees:finite(value.pitchDegrees,'pitchDegrees'),fovDegrees:positive(value.fovDegrees,'fovDegrees'),
+    liftOffsetNative:finite(value.liftOffsetNative,'liftOffsetNative'),datumNative:finite(value.datumNative,'datumNative')});
+}
+
 /** Source camera zoom presets; these select water, not modern image resolution. */
 export function nativeWaterFollowProfile(zoomIndex=1){
   return PROFILES[integer(zoomIndex,'zoomIndex',0,3)];
@@ -136,19 +147,26 @@ export function createNativeWaterFollowCamera({positionNative,forwardXZ,zoomInde
  */
 export function stepNativeWaterFollowCamera(state,{positionNative,forwardXZ,velocityXZ,
   datumNative=state?.datumNative,zoomIndex=state?.zoomIndex,zoomResponse,liftResponse,liftTargetNative,
-  liftOffsetNative,sourcePoseState=0,sourcePoseTimer=0,tilt=false,sineLookup,acosLookup}={}){
+  liftOffsetNative,sourcePoseState=0,sourcePoseTimer=0,tilt=false,sineLookup,acosLookup,followControl}={}){
   if(!followStates.has(state))throw new TypeError('Expected an ordinary native water follow state');
   const p=tuple(positionNative,3,'positionNative'),forward=tuple(forwardXZ,2,'forwardXZ');
   const velocity=tuple(velocityXZ,2,'velocityXZ'),datum=finite(datumNative,'datumNative');
   const profile=nativeWaterCameraControl({zoomIndex,previousZoomIndex:state.zoomIndex,
     liftOffsetNative:state.liftOffsetNative,sourcePoseState,sourcePoseTimer});
+  if(followControl!==undefined){
+    if(!followControl||typeof followControl!=='object')throw new TypeError('Expected retained follow controls');
+    for(const key of ['radiusNative','pitchDegrees','fovDegrees','radiusResponse','pitchResponse','fovResponse'])finite(followControl[key],key);
+    liftOffsetNative=followControl.liftOffsetNative;tilt=followControl.tilt;
+    if(typeof tilt!=='boolean'||liftOffsetNative===undefined)throw new TypeError('Retained follow control requires lift and tilt');
+  }
   const t=response(zoomResponse??profile.zoomResponse,'zoomResponse');
   const lt=response(liftResponse??profile.liftResponse,'liftResponse');
   const lift=liftOffsetNative===undefined?
     lerp(state.liftOffsetNative,finite(liftTargetNative??profile.liftTargetNative,'liftTargetNative'),lt):finite(liftOffsetNative,'liftOffsetNative');
   const anchor=[p[0],F(p[1]+lift),p[2]];
-  const radius=lerp(state.radiusNative,profile.radiusNative,t),pitch=lerp(state.pitchDegrees,profile.pitchDegrees,t);
-  const fov=lerp(state.fovDegrees,profile.fovDegrees,t);
+  const radius=lerp(state.radiusNative,positive(followControl?.radiusNative??profile.radiusNative,'radius target'),response(followControl?.radiusResponse??t,'radius response')),
+    pitch=lerp(state.pitchDegrees,finite(followControl?.pitchDegrees??profile.pitchDegrees,'pitch target'),response(followControl?.pitchResponse??t,'pitch response'));
+  const fov=lerp(state.fovDegrees,positive(followControl?.fovDegrees??profile.fovDegrees,'fov target'),response(followControl?.fovResponse??t,'fov response'));
   const dx=F(state.lagXZ[0]-anchor[0]),dz=F(state.lagXZ[1]-anchor[2]),distance=length2(dx,dz);
   if(!distance)throw new RangeError('Source follow lag coincides with the craft; reset the follow state explicitly');
   const lagRatio=F(77/distance),lag=vector([F(F(dx*lagRatio)+anchor[0]),F(F(dz*lagRatio)+anchor[2])]);

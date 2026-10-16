@@ -13,7 +13,7 @@ import {Soundscape} from './audio.js';
 import {raceMusicFinalLap} from './original-music.js';
 
 const $=id=>document.getElementById(id),saved=readSave(localStorage),audio=new Soundscape(),haptics=createGamepadRumble();audio.setOptions(saved.audio);
-const sample=createInputSampler(()=>saved.controls),touch=mountTouchControls({onCamera:()=>viewer?.camera()});
+const sample=createInputSampler(()=>saved.controls),touch=mountTouchControls({onCamera:()=>requestCamera()});
 for(const option of $('guestRider').options)if(saved.names?.[Number(option.value)])option.textContent=saved.names[Number(option.value)];
 $('guestRider').value=String(saved.versus?.rider??2);
 let peer=null,role=null,peerNonce=0,hostFrame=null,hostPort=null,hostCapability=null,hostGeneration=0,hostPhase='standby',guestSetup=null,
@@ -35,6 +35,12 @@ function hold(title,text,resume=false){$('onlineHold').hidden=false;$('holdTitle
 function openConnection(){if(document.body.classList.contains('in-game'))requestPause(true);$('onlineLobby').hidden=false;$('returnToRace').hidden=!document.body.classList.contains('in-game');clearInput();}
 function returnToRace(){if(!document.body.classList.contains('in-game'))return;$('onlineLobby').hidden=true;clearInput();if(role==='guest')$('onlineSea').focus();}
 function requestPause(paused){clearInput();if(role==='host')postHost('host-pause',{paused});else if(peer?.connected&&generation)peer.sendControl('pause',{generation,sequence:++commandSequence,paused});}
+function requestCamera(){
+ if(role!=='guest'||!guestLoaded)return;
+ if(Object.hasOwn(frames.at(-1)?.frame.racers[1]??descriptor?.initialFrame.racers[1]??{},'nativeCamera')){
+  if(peer?.connected&&generation)peer.sendControl('camera',{generation,sequence:++commandSequence});
+ }else viewer?.camera();
+}
 function hostLink(){if(peer?.session)postHost('link',{connection:peer.session,connected:peer.connected});if(guestSetup)postHost('setup',{setup:guestSetup});}
 function makeHostFrame(){
  if(hostFrame){hostLink();return;}
@@ -77,7 +83,7 @@ function makePeer(nextRole){
   onFrame:m=>{if(nonce!==peerNonce||role!=='guest'||!guestLoaded||m.generation!==generation)return;const frame=readWindowFrame(m.frame);if(frame)receiveFrame(frame);},
   onControl:m=>{
    if(nonce!==peerNonce)return;if(m.type==='leave'){if(role==='host')postHost('leave');else hold('Host left the race','Open Connection to join another game.');clearInput();return;}
-   if(role==='host'){if(m.type==='setup'){const value=onlineGuestSetup(m.setup);if(value){guestSetup=value;postHost('setup',{setup:value});}}else if(['ready','pause','heartbeat'].includes(m.type))postHost(m.type,m);}
+   if(role==='host'){if(m.type==='setup'){const value=onlineGuestSetup(m.setup);if(value){guestSetup=value;postHost('setup',{setup:value});}}else if(['ready','pause','camera','heartbeat'].includes(m.type))postHost(m.type,m);}
    else if(m.type==='init')return initializeGuest(m);else if(m.type==='standby'){guestLoaded=false;frames=[];clearInput();hold('Waiting for the host',typeof m.label==='string'?m.label.slice(0,160):'The host is choosing the next race.');}
   }
  });peer=value;return value;
@@ -97,7 +103,7 @@ async function copy(id){const input=$(id);try{await navigator.clipboard.writeTex
 $('copyInvite').onclick=()=>copy('inviteLink');$('copyAnswer').onclick=()=>copy('answerCode');$('guestRider').onchange=sendSetup;
 $('connectionButton').onclick=$('holdConnection').onclick=openConnection;$('returnToRace').onclick=returnToRace;
 $('pauseOnline').onclick=()=>requestPause(currentPhase()!=='paused');$('holdResume').onclick=()=>requestPause(false);
-$('cameraOnline').onclick=()=>viewer?.camera();$('soundOnline').onclick=()=>{audio.start();audio.setOptions({enabled:!audio.enabled});toolbar();};$('leaveOnline').onclick=()=>{peer?.close();location.href='./race';};
+$('cameraOnline').onclick=()=>requestCamera();$('soundOnline').onclick=()=>{audio.start();audio.setOptions({enabled:!audio.enabled});toolbar();};$('leaveOnline').onclick=()=>{peer?.close();location.href='./race';};
 function graphics(){const view=fullPlayerViewport(innerWidth,innerHeight),ratio=Math.min(devicePixelRatio||1,2),scale=Math.min(ratio,3840/view.width,2160/view.height);return {width:Math.max(1,Math.floor(view.width*scale)),height:Math.max(1,Math.floor(view.height*scale)),quality:$('qualityOnline').value};}
 function resize(){const view=fullPlayerViewport(innerWidth,innerHeight),canvas=$('onlineSea');canvas.style.cssText=`width:${view.width}px;height:${view.height}px;left:${view.x}px;top:${view.y}px`;viewer?.graphics(graphics());clearInput();}
 $('qualityOnline').onchange=resize;window.addEventListener('resize',resize);
@@ -124,7 +130,7 @@ function frame(now){
  const latest=frames.at(-1),stale=!peer?.connected||now-lastFrameAt>3500,pads=navigator.getGamepads?.()??[],visible=document.visibilityState==='visible';
  if(guestLoaded&&latest&&stale&&!stalePaused){stalePaused=true;requestPause(true);hold('Connection interrupted','The race pauses while the connection recovers. Open Connection for a fresh invite.');}if(!stale)stalePaused=false;
  const drive=guestLoaded&&latest&&!stale&&visible&&$('onlineLobby').hidden&&['running','countdown'].includes(latest.frame.phase);touch.setActive(!!drive);
- if(drive&&now-lastInputAt>=25){const c=touch.apply(sample(keys,touch.keys(),pads,false));if(!primePad&&c.pause&&!padPause)requestPause(currentPhase()!=='paused');if(!primePad&&c.camera&&!padCamera)viewer?.camera();padPause=c.pause;padCamera=c.camera;primePad=false;const control=onlinePlayerInput(c);if(control)peer.sendInput({generation,sequence:++inputSequence,control});lastInputAt=now;}
+ if(drive&&now-lastInputAt>=25){const c=touch.apply(sample(keys,touch.keys(),pads,false));if(!primePad&&c.pause&&!padPause)requestPause(currentPhase()!=='paused');if(!primePad&&c.camera&&!padCamera)requestCamera();padPause=c.pause;padCamera=c.camera;primePad=false;const control=onlinePlayerInput(c);if(control)peer.sendInput({generation,sequence:++inputSequence,control});lastInputAt=now;}
  if(!guestLoaded||!latest||!viewer||stale){audio.setRaceMusic({...audio.raceMusicContext,held:true});audio.update(0,0,false,true,0);resetGamepadRumble(haptics);return;}
  const a=frames[0],b=latest,renderTime=Math.min(b.frame.time,a.frame.time+Math.max(0,(now-b.at)/1000)),f=interpolateWindowFrame(a.frame,b.frame,renderTime),r=f.racers[1];
  viewer.draw(f);$('onlineRiderTitle').textContent='P2 · '+(descriptor.names[r.id]||'Rider '+(r.id+1))+(f.freeRide?' · FREE RIDE':' · LAP '+Math.min(r.lap,descriptor.laps)+'/'+descriptor.laps);
