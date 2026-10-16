@@ -10,15 +10,18 @@ export function readArmorWearPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreArmorWearBytes(file:string,bytes:Buffer):Buffer{
+ bytes=restoreSteeringEightBytes(file,bytes);
  const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readArmorWearPrevious(file);
 }
 export function verifyArmorWearRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'75e23fea0b39b1399bf9fa074ff2373fe3539bb7');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreSteeringEightBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreArmorWearBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the ArmorWear release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreSteeringEightBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the ArmorWear release');
  assert.equal(manifest.previousFixtureCount,2725);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,2725);
 }
+
+import {restoreSteeringEightBytes} from './steering-eight-invariants';
