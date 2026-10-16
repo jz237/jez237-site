@@ -10,15 +10,18 @@ export function readSteeringRefreshPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreSteeringRefreshBytes(file:string,bytes:Buffer):Buffer{
+ bytes=restoreDashboardBytes(file,bytes);
  const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readSteeringRefreshPrevious(file);
 }
 export function verifySteeringRefreshRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'278352a95dad1a3f35dd0a4b0715bab146203954');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreDashboardBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreSteeringRefreshBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the SteeringRefresh release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreDashboardBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the SteeringRefresh release');
  assert.equal(manifest.previousFixtureCount,2603);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,2603);
 }
+
+import {restoreDashboardBytes} from './dashboard-invariants';

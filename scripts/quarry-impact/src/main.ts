@@ -1,3 +1,4 @@
+import {dashboardComposition,nextDrivingCamera,DRIVING_CAMERA_LABELS,type DrivingCamera} from './driving-camera';
 import {DerbyEventFeed,derbyFeedMarkup} from './derby-event-feed';
 import {standingsTable,standingsKey,STANDINGS_KEYS,type StandingRow} from './standings-view';
 import {pursuitTerrainClear} from './pursuit-corridor';
@@ -486,7 +487,7 @@ let elapsed = 0,
   clock = 0,
   lastFrame = performance.now(),
   hudTime = 0;
-let hood = false,
+let drivingCamera:DrivingCamera = 'chase',
   traffic = eventOptions.playgroundTraffic??true,
   autopilot = false,
   resultTitle = '',
@@ -1377,9 +1378,11 @@ function step(dt: number) {
   if(demo&&!pursuit&&!raceTimeLimit()&&mode==='race'&&(cars.every(c=>c.finished||c.health<=0)||elapsed>=Math.max(600,raceLaps()*150)))finish('RACE COMPLETE');
   fx.update(dt);
 }
+function cycleDrivingCamera(){drivingCamera=nextDrivingCamera(drivingCamera);toast(DRIVING_CAMERA_LABELS[drivingCamera]+' CAMERA');}
 function updateCamera(dt: number) {
   const p = demo||scoreSpectating()?(cars.find(c=>c.id===director.followed)??cars[0]):cars[0];
   if (!p) return;
+  if(camera.near!==.1){camera.near=.1;camera.updateProjectionMatrix();}
   if(!garageOpen){camera.up.set(0,1,0);if(camera.view?.enabled)camera.clearViewOffset();}
   if(studio){studio.updateCamera(camera,orbit,renderer);return;}
   quarry.sun.position.copy(p.root.position).addScaledVector(DAYLIGHT_DIRECTION, DAYLIGHT_DISTANCE);
@@ -1398,6 +1401,16 @@ function updateCamera(dt: number) {
     camera.lookAt(target.x-2.15,target.y+.12,target.z);
     return;
   }
+  if(drivingCamera==='dashboard'){
+    const view=dashboardComposition(p.kind,p.model);
+    cameraImpactOffset.set(0,0,0);
+    camera.position.copy(view.position);camera.up.copy(view.up);camera.lookAt(view.target);
+    // The rigid cabin must not translate through its own body after a hit.
+    const response=p.impactResponse.step(state==='playing'?dt:0);
+    camera.rotateZ(response.roll*.25);camera.rotateX(response.pitch*.25);
+    camera.near=view.near;camera.fov=view.fov;camera.updateProjectionMatrix();return;
+  }
+  const hood=drivingCamera==='hood';
   const f = new T.Vector3(0, 0, 1).applyQuaternion(p.root.quaternion);
   f.y = 0;
   f.normalize();
@@ -1493,7 +1506,7 @@ function pollController(now:number){
       // Preserve custom driving maps: a button assigned to a pedal/handbrake keeps that meaning.
       const button=command==='camera'?2:3,assigned=drivingButtons(drivingControls,!online?.active||online.network.snapshot?.transmissionSupport===true).includes(button);
       if(!assigned&&!studio&&['playing','countdown'].includes(state)){
-        if(command==='camera'){if(demo)director.cycleView();else hood=!hood;}
+        if(command==='camera'){if(demo)director.cycleView();else cycleDrivingCamera();}
         else if(!demo&&state==='playing')recover();
       }
     }else if(context)controllerNavigation.handle(command);
@@ -1571,7 +1584,7 @@ function frame(now: number) {
   if(!studio)vehicleFire?.update(cars,effectsActive?dt:0,camera);
   if(!studio)puddleSplashes?.update(cars,activeVenue.puddles,effectsActive?dt:0,state==='playing');
   if(!studio&&state==='playing')captureReplay();
-  if(effectsActive){sound.update(cars,camera,dt,state==='wrecked',{id:demo?director.followed:cars[0]?.id??0,view:demo?director.activeView:hood?'hood':'chase'});if(vehicleFire)sound.thermal(vehicleFire.audio,vehicleFire.bursts);}
+  if(effectsActive){sound.update(cars,camera,dt,state==='wrecked',{id:demo?director.followed:cars[0]?.id??0,view:demo?director.activeView:drivingCamera==='dashboard'?'hood':drivingCamera});if(vehicleFire)sound.thermal(vehicleFire.audio,vehicleFire.bursts);}
   if(activeVenue===quarryVenue)quarry.update(camera);
   waypointMarkers??=new WaypointMarkers(scene);waypointMarkers.update(waypointRace,demo?director.followed:online?.active?online.network.id:0,!studio&&mode==='race'&&['playing','countdown','paused','result'].includes(state),activeVenue.course.height);
   if(waypointRace)activeVenue.checkpoint.visible=false;
@@ -1637,7 +1650,7 @@ addEventListener('keydown', (e) => {
   if(demo&&e.code==='KeyH'){demoHudHidden=!demoHudHidden;ui.classList.toggle('demo-clean',demoHudHidden);return;}
   if (demo&&e.code==='Space'){e.preventDefault();state==='paused'?resume():pause();return;}
   if(demo&&(e.code==='BracketLeft'||e.code==='BracketRight'))director.cycleCar(cars,e.code==='BracketLeft'?-1:1);
-  if (e.code === 'KeyC') {if(demo)director.cycleView();else hood = !hood;}
+  if (e.code === 'KeyC') {if(demo)director.cycleView();else cycleDrivingCamera();}
   if (!demo && e.code === 'KeyR' && state === 'playing') recover();
   if (!activeChallenge && !online?.active && e.code === 'KeyT' && mode === 'playground' && state === 'playing') {
     traffic = !traffic;eventOptions.playgroundTraffic=traffic;
