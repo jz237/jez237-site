@@ -1,3 +1,5 @@
+import {ReplayImpactPlayback} from './replay-impact-audio';
+import {ReplayAudioTransport} from './replay-audio';
 import {driverLabel,resultDriverLabel} from './driver-identity';
 import {teamPursuitRules,pursuitGridOrder,pursuitTeamWon,pursuitRecordSuffix,pursuitTeamTitle} from './pursuit-teams';
 import {clearChasePosition} from './chase-camera-clearance';
@@ -396,19 +398,20 @@ function finishClubEvent(){
 }
 let recorder:ReplayRecorder|null=null,lastReplay:ReplayDocument|null=null,replayEpochs:number[]=[];
 let closeReplayLibrary:(()=>void)|null=null;
+let replayImpacts:ReplayImpactPlayback|null=null;
 let studio:ReplayStudio|null=null,studioRestore:(()=>void)|null=null;
-function captureReplay(force=false){if(recorder&&!studio&&!online?.active)recorder.capture(elapsed,()=>captureReplayFrame(cars,activeVenue.props,replayEpochs,recorder!.meta.tyreModel,recorder!.meta.engineModel),force);}
+function captureReplay(force=false){if(recorder&&!studio&&!online?.active)recorder.capture(elapsed,()=>captureReplayFrame(cars,activeVenue.props,replayEpochs,recorder!.meta.tyreModel,recorder!.meta.engineModel,recorder!.meta.audioModel,id=>sound.contactScraping.level(id)),force);}
 function archiveReplay(){
   if(!recorder)return;captureReplay(true);if(recorder.frames.length>1)lastReplay=recorder.document();
   for(const car of cars)car.onVisualEvent=undefined;recorder=null;
 }
 function beginReplay(){
   lastReplay=null;replayEpochs=cars.map(()=>0);
-  recorder=new ReplayRecorder({version:1,tyreModel:1,engineModel:1,...(activeVenue.arenaId?{arenaId:activeVenue.arenaId}:{}),...(activeVenue.course.id==='quarry-v1'?{}:{courseId:activeVenue.course.id}),mode,...(pursuit?{pursuit:true as const}:{}),...(scoreElimination()?{derbyFormat:'score-no-respawn' as const}:{}),reverse:mode==='race'&&(clubRound()?clubRound()!.direction==='reverse':activeTimeTrial?activeTimeTrial.direction==='reverse':activeChallenge?activeChallenge.direction==='reverse':customEvent()&&eventOptions.direction==='reverse'),cars:cars.map(c=>({id:c.id,kind:c.kind,setup:{...structuredClone(c.setup),paint:c.paintColor.getHex()}})),props:activeVenue.props.length,created:new Date().toISOString()});
+  recorder=new ReplayRecorder({version:1,tyreModel:1,engineModel:1,audioModel:1,...(activeVenue.arenaId?{arenaId:activeVenue.arenaId}:{}),...(activeVenue.course.id==='quarry-v1'?{}:{courseId:activeVenue.course.id}),mode,...(pursuit?{pursuit:true as const}:{}),...(scoreElimination()?{derbyFormat:'score-no-respawn' as const}:{}),reverse:mode==='race'&&(clubRound()?clubRound()!.direction==='reverse':activeTimeTrial?activeTimeTrial.direction==='reverse':activeChallenge?activeChallenge.direction==='reverse':customEvent()&&eventOptions.direction==='reverse'),cars:cars.map(c=>({id:c.id,kind:c.kind,setup:{...structuredClone(c.setup),paint:c.paintColor.getHex()}})),props:activeVenue.props.length,created:new Date().toISOString()});
   cars.forEach((car,i)=>car.onVisualEvent=e=>{if(e.kind==='jump'||e.kind==='repair')replayEpochs[i]++;recorder?.event(i,elapsed,e);});
   cars.forEach(c=>c.render(1));captureReplay(true);
 }
-function closeStudio(){const restore=studioRestore;studio=null;studioRestore=null;restore?.();}
+function closeStudio(){const restore=studioRestore;studio=null;studioRestore=null;replayImpacts=null;restore?.();}
 function openStudio(photo=false,document?:ReplayDocument,savedName?:string):boolean{
   if(studio||online?.active||preparingEvent)return false;
   let doc=photo?null:document??recorder?.document()??lastReplay;
@@ -425,26 +428,27 @@ function openStudio(photo=false,document?:ReplayDocument,savedName?:string):bool
   const hidden=new Map<T.Object3D,boolean>();let view:ReplayScene|null=null,restored=false;
   const hide=(o:T.Object3D|undefined)=>{if(o&&!hidden.has(o)){hidden.set(o,o.visible);o.visible=false;}};
   const restore=()=>{
-    if(restored)return;restored=true;view?.dispose();cars=oldCars;mode=returnMode;
+    if(restored)return;restored=true;replayAudio.reset();view?.dispose();cars=oldCars;mode=returnMode;
     quarryMode=oldQuarryMode;quarry.setMode(oldQuarryMode,false);quarryEnabled.forEach(([c,enabled])=>c.setEnabled(enabled));
     hidden.forEach((visible,o)=>o.visible=visible);quarryVisibility.forEach(([o,visible])=>o.visible=visible);
     activateVenue(returnVenue);refreshVenueLighting();
     ui.replaceChildren(...oldNodes);if(closeReplayLibrary)ui.querySelector<HTMLInputElement>('#library-search')?.focus();state=returnState;
     camera.position.copy(savedCamera.p);camera.quaternion.copy(savedCamera.q);camera.fov=savedCamera.fov;camera.updateProjectionMatrix();renderer.toneMappingExposure=savedCamera.exposure;
     orbit.target.copy(savedCamera.target);orbit.enabled=savedCamera.enabled;orbit.enablePan=savedCamera.pan;orbit.maxDistance=savedCamera.max;orbit.minDistance=savedCamera.min;
-    lastFrame=performance.now();accumulator=0;sound.pause(!['playing','countdown','menu'].includes(returnState));
+    lastFrame=performance.now();accumulator=0;sound.attach(oldCars);sound.pause(!['playing','countdown','menu'].includes(returnState));
   };
   try{
     if(doc)view=new ReplayScene(doc,scene,targetVenue.physics,targetVenue.props,targetVenue.course);
-    keys.clear();sound.pause(true);state='studio';
+    keys.clear();replayAudio.reset();if(doc&&!sound.ready)void sound.init().catch(error=>console.warn('Replay audio unavailable',error));state='studio';
     if(doc){
       for(const car of oldCars)hide(car.root);for(const prop of returnVenue.props)hide(prop.mesh);for(const prop of targetVenue.props)hide(prop.mesh);
       for(const o of [fx.points,fx.marks,...fx.debris.map(d=>d.mesh),vehicleFire?.mesh,...(vehicleFire?.lights??[]),puddleSplashes?.spray,puddleSplashes?.rings,fx.evidence.mesh])hide(o);
       activateVenue(targetVenue);cars=view!.cars;mode=doc.meta.mode;setQuarryMode();view!.props.forEach(p=>staticShadows?.bindReceivers(p));
     }
     hide(activeVenue.checkpoint);studioRestore=restore;
+    replayImpacts=doc?new ReplayImpactPlayback(doc.impacts??[],sound):null;
     studio=new ReplayStudio(ui,cars,doc,time=>view?.seekChunk(time),closeStudio,savedCamera.exposure,savedName,activeVenue.course.height);return true;
-  }catch(error){studio=null;studioRestore=null;restore();throw error;}
+  }catch(error){studio=null;studioRestore=null;replayImpacts=null;restore();throw error;}
 }
 function studioButtons(container:Element|null){
   if(!container||online?.active)return;
@@ -460,6 +464,7 @@ function replayMenu(){
 }
 const cameraImpactOffset = new T.Vector3();
 const sound = new Sound();
+const replayAudio=new ReplayAudioTransport(sound);
 let vehicleFire:VehicleFire | undefined;
 let puddleSplashes:PuddleSplashes|undefined;
 const raceRecovery=new RaceRecovery();
@@ -1328,7 +1333,9 @@ function step(dt: number) {
     }
     if(feedback){
       collisions++;
-      sound.impact(impactAudioSeverity(impulse),point,!!(a?.impactEffects.glass||b?.impactEffects.glass),!!(a?.impactEffects.debris||b?.impactEffects.debris));
+      const severity=impactAudioSeverity(impulse),glass=!!(a?.impactEffects.glass||b?.impactEffects.glass),debris=!!(a?.impactEffects.debris||b?.impactEffects.debris);
+      sound.impact(severity,point,glass,debris);
+      recorder?.impact({time:elapsed,severity,position:point.toArray(),glass,debris});
       if(a?.id===0||b?.id===0)recordRumbleImpact(.12+impulse/22000);
       if(a?.id===0||b?.id===0)toast(damage>12?'HEAVY IMPACT':'CONTACT',.8);
     }
@@ -1580,7 +1587,7 @@ function frame(now: number) {
     frames.push(raw * 1000);
     if (frames.length > 600) frames.shift();
   }
-  if(studio){studio.update(dt);if(studio.seeking)return;}
+  if(studio){const from=studio.time,playing=studio.playing;studio.update(dt);replayAudio.sync(playing,studio.seeking,cars);replayImpacts?.step(from,studio.time,playing,studio.seeking,sound.ready);if(studio.seeking)return;}
   else if(online?.active) {
     if(state==='playing' && online.network.connected)online.network.setInput(input());else online.network.idleInput();
     const s=online.network.sample();if(s){online.apply(s,dt);if(activeVenue===quarryVenue)quarry.applyProps(s.props);elapsed=s.elapsed;countdown=s.countdown;}
@@ -1611,6 +1618,7 @@ function frame(now: number) {
   if(!studio)vehicleFire?.update(cars,effectsActive?dt:0,camera);
   if(!studio)puddleSplashes?.update(cars,activeVenue.puddles,effectsActive?dt:0,state==='playing');
   if(!studio&&state==='playing')captureReplay();
+  if(studio?.playing&&!studio.seeking)sound.update(cars,camera,dt,false,{id:cars[studio.follow]?.id??0,view:studio.view==='hood'?'hood':studio.view==='chase'?'chase':'orbit'},(from,to)=>cameraObstruction(physics,from,to,undefined,true));
   if(effectsActive){sound.update(cars,camera,dt,state==='wrecked',{id:demo?director.followed:cars[0]?.id??0,view:demo?director.activeView:drivingCamera==='dashboard'?'hood':drivingCamera},(from,to)=>cameraObstruction(physics,from,to,undefined,true));if(vehicleFire)sound.thermal(vehicleFire.audio,vehicleFire.bursts);}
   if(activeVenue===quarryVenue)quarry.update(camera);
   waypointMarkers??=new WaypointMarkers(scene);waypointMarkers.update(waypointRace,demo?director.followed:online?.active?online.network.id:0,!studio&&mode==='race'&&['playing','countdown','paused','result'].includes(state),activeVenue.course.height);
