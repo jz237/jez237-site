@@ -1,0 +1,464 @@
+{
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+  },
+  "currentDate": "2026-10-16",
+  "historicDate": "1985-01-28",
+  "displayDate": "Week of January 28-February 3, 1985",
+  "edition": "Issue 131 - Weekly 1985 Computer & Culture Chronicle",
+  "sources": [
+    {
+      "title": "Commodore Woes Make an Industry Wince — Paul Richter, Los Angeles Times",
+      "url": "https://www.latimes.com/archives/la-xpm-1985-02-01-fi-6052-story.html",
+      "date": "1985-02-01"
+    },
+    {
+      "title": "TurboTape — Harrie De Ceukelaire, COMPUTE! issue 56",
+      "url": "https://www.atarimagazines.com/compute/issue56/133_1_TurboTape.php",
+      "date": "1985-01"
+    },
+    {
+      "title": "JTERM For Atari — Frank C. Jones, COMPUTE! issue 56",
+      "url": "https://www.atarimagazines.com/compute/issue56/148_1_JTERM_For_Atari.php",
+      "date": "1985-01"
+    },
+    {
+      "title": "Telecomputing Today — Arlan R. Levitan, COMPUTE! issue 56",
+      "url": "https://www.atarimagazines.com/compute/issue56/159_1_TELECOMPUTING_TODAY.php",
+      "date": "1985-01"
+    },
+    {
+      "title": "Sequential Circuits Music Sequencer — Richard Mansfield, COMPUTE! issue 56",
+      "url": "https://www.atarimagazines.com/compute/issue56/124_1_Reviews_Sequential_Circuits_Music_Sequencer_For_Commodore_64.php",
+      "date": "1985-01"
+    },
+    {
+      "title": "Paratrooper — John Goetz, COMPUTE! issue 56",
+      "url": "https://www.atarimagazines.com/compute/issue56/113_1_Paratrooper.php",
+      "date": "1985-01"
+    },
+    {
+      "title": "COMPUTE! issue 56 original OCR, advertisements",
+      "url": "https://archive.org/stream/1985-01-compute-magazine/Compute_Issue_056_1985_Jan_djvu.txt",
+      "date": "1985-01"
+    },
+    {
+      "title": "Billboard volume 97 number 5 — Top Rock Tracks",
+      "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-02.pdf",
+      "date": "1985-02-02"
+    },
+    {
+      "title": "Domestic Weekend 5 — Box Office Mojo",
+      "url": "https://www.boxofficemojo.com/weekend/1985W05/",
+      "date": "1985-02-01/1985-02-03"
+    },
+    {
+      "title": "We Are the World — Britannica, retrospective",
+      "url": "https://www.britannica.com/topic/We-Are-the-World",
+      "date": null
+    },
+    {
+      "title": "We Are the World — Wikipedia, retrospective",
+      "url": "https://en.wikipedia.org/wiki/We_Are_the_World",
+      "date": null
+    },
+    {
+      "title": "LaserWriter 40th anniversary — MacRumors",
+      "url": "https://www.macrumors.com/2025/01/23/laserwriter-introduced-40-years-ago-today/",
+      "date": "2025-01-23"
+    },
+    {
+      "title": "David H. Ahl: 1985 Winter Consumer Electronic Show, Creative Computing volume 11 number 4, page 50",
+      "url": "https://www.atarimagazines.com/creative/v11n4/50_1985_Winter_Consumer_Elec.php",
+      "date": "1985-04"
+    }
+  ],
+  "visualProfile": {
+    "tone": "Home-computer crossroads",
+    "motifs": [
+      "Commodore 64",
+      "cassette deck",
+      "Atari modem",
+      "type-in games"
+    ],
+    "layout": "Dense warm newsprint with red and blue headers"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Commodore earnings lead with C64 halftone; Paratrooper and cassette feature illustration",
+    "secondaryRail": "Music studio, Atari terminals, games, rock and cinema",
+    "archiveNavigation": "Weekly archive and previous/next controls"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Issue 131 - Weekly 1985 Computer & Culture Chronicle",
+    "dateline": "Week of January 28-February 3, 1985",
+    "price": "75 cents"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1985-01-28.jpg",
+    "alt": "Newspaper front page for January 28-February 3, 1985",
+    "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "The home-computer trade takes stock while owners put their machines to work, play and music.",
+  "morningLine": "Commodore counts the cost; cassette users pick up speed.",
+  "lead": {
+    "headline": "Commodore earnings plunge 94%; home-computer boom faces its reckoning",
+    "dek": "Quarterly profit shrinks to $3.2 million as the industry searches for its next reason to buy.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      0
+    ],
+    "body": [
+      "Commodore’s latest figures have put a hard number on the cooling home-computer boom. Paul Richter reports in the February 1 Los Angeles Times that quarterly profit fell 94 percent to $3.2 million. Sales for the quarter ended December 31 declined 21 percent from a year earlier, to $338.7 million.",
+      "Inventory exceeded $400 million. The results included a $30 million pretax charge connected with product pricing; analysts said it provided for compensation to retailers facing a planned Commodore 64 price cut. Their expectation was a move from roughly $200 to $150—not a confirmed new price at every counter.",
+      "The C64 remains a formidable installed base: the report credits Commodore with sales of more than three million machines. Yet an industry built on rapid expansion now has to persuade families that a computer offers enough beyond the first burst of curiosity. A strong dollar also hurt the company, which put the revenue effect at $35 million compared with year-earlier exchange rates.",
+      "New machines offer hope, but promises are not deliveries. The report anticipates the Commodore 128 in the first half, while analysts float an April arrival and an $800–$1,000 price for Amiga. Atari’s recently demonstrated ST is another challenger. For owners of today’s machines, the more immediate story is what can be done with the equipment already on the desk."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "TurboTape promises disk-like loading from ordinary Commodore cassettes",
+      "body": [
+        "A cassette deck need not condemn a Commodore owner to a long wait. January COMPUTE! publishes Harrie De Ceukelaire’s TurboTape for the C64 and VIC-20, offering what the magazine calls disk-like loading from ordinary tape hardware.",
+        "The utility handles BASIC and machine-language programs without modifying the computer or recorder. Saved tapes can subsequently load at accelerated speed without first loading TurboTape. On the C64 the resident utility takes 642 bytes; the VIC version uses 639.",
+        "The VIC listing needs at least 8K expansion for entry, although the resulting utility can run in any VIC memory configuration. This is a January magazine type-in, not a newly announced release this week, and the speed comparison remains the magazine’s claim."
+      ],
+      "sourceRefs": [
+        1
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "The C64 becomes a six-track music studio",
+      "body": [
+        "The Commodore 64 can be more than a game machine or household ledger. Richard Mansfield’s January COMPUTE! review describes Sequential Circuits Music Sequencer, a $225 package joining the computer to a compatible synthesizer over MIDI.",
+        "Six recorded tracks can be edited, looped, copied, erased or transposed separately. Tempo can change without changing pitch, and as many as eight sequences can be chained into a song and saved. Tape or disk storage is recommended alongside the required computer and synthesizer.",
+        "Timing autocorrection offers selectable resolutions, but six tracks do not mean every connected instrument produces six different sounds at once. The review distinguishes ordinary synthesizer limits from the Six-Trak’s multivoice capability with expansion software."
+      ],
+      "sourceRefs": [
+        4
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "JTERM’s new version brings 1200-bps access to Atari bulletin-board callers",
+      "body": [
+        "Atari callers have a fresh reason to examine their terminal software. Frank C. Jones’s JTERM 3.8, published in January COMPUTE!, adds 1200-bps modem support while retaining 300-bps operation. It requires at least 32K RAM and an Atari 850 Interface Module or equivalent.",
+        "Jones describes donating his terminal to a Washington, D.C. Atari user-group bulletin board operated by Frank Huband. Suggestions and complaints from callers helped shape its development—an example of software improving through a working community rather than a sealed retail box.",
+        "The BASIC and machine-language terminal serves bulletin boards, commercial information services, mainframe connections and file transfers. Jones reports extensive use, but his account is not an independently measured census of callers."
+      ],
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Commodore 128, Amiga and Atari ST on the horizon",
+      "summary": "February 1 reporting positions these machines as hopes for renewed consumer demand. All delivery and price projections must remain attributed forecasts.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "Paratrooper",
+      "summary": "John Goetz’s January COMPUTE! type-in game gives ten parachutists per round, with wind, weight and altitude determining landing. Three pads score 25, 50 and 75 points; versions cover TI-99/4A, C64, VIC-20, Atari, Apple, IBM PC, PCjr, Plus/4 and Commodore 16. Publication timing, not a commercial release date.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        5
+      ]
+    },
+    {
+      "title": "MegaWars",
+      "summary": "January CompuServe advertisement promotes space-conflict gaming alongside airline reservations and financial information. Confirms active period marketing, not a new launch.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        6
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "TurboTape",
+      "detail": "C64/VIC cassette acceleration distributed as magazine type-in.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "name": "JTERM 3.8",
+      "detail": "Atari terminal software now supports 300 and 1200 bps.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "name": "Sequential Circuits Music Sequencer",
+      "detail": "Six-track MIDI sequencer for C64; review lists $225.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games — editorial selections, not sales rankings",
+      "items": [
+        "Paratrooper — January COMPUTE! multi-platform type-in.",
+        "MegaWars — advertised on CompuServe in January.",
+        "Racing Destruction Set — January CES showing, reported in April.",
+        "Adventure Construction Set — January CES showing, reported in April.",
+        "F-15 Strike Eagle — January CES showing, reported in April."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        5,
+        6,
+        12
+      ]
+    },
+    {
+      "label": "Top 5 Movies — February 1-3 domestic weekend box office",
+      "items": [
+        "1. Beverly Hills Cop",
+        "2. The Killing Fields",
+        "3. A Passage to India",
+        "4. Tuff Turf",
+        "5. The Falcon and the Snowman"
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        8
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Commodore 64",
+      "price": "About $150 projected",
+      "note": "Analysts expect reduction from about $200; not universal shelf pricing",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "PCjr system",
+      "price": "$775",
+      "note": "Processor-console, monitor and disk drive; analyst-reported discount",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Anchor Mark XII",
+      "price": "$265",
+      "note": "AB Computers January advertisement",
+      "confidence": "same-month",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "item": "Sequential Circuits Music Sequencer",
+      "price": "$225",
+      "note": "January review; computer and synthesizer extra",
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "artist": "John Fogerty",
+      "title": "The Old Man Down the Road",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-02-02",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-02.pdf"
+      ]
+    },
+    {
+      "rank": 2,
+      "artist": "Foreigner",
+      "title": "I Want to Know What Love Is",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-02-02",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-02.pdf"
+      ]
+    },
+    {
+      "rank": 3,
+      "artist": "David Lee Roth",
+      "title": "California Girls",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-02-02",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-02.pdf"
+      ]
+    },
+    {
+      "rank": 4,
+      "artist": "Glenn Frey",
+      "title": "The Heat Is On",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-02-02",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-02.pdf"
+      ]
+    },
+    {
+      "rank": 5,
+      "artist": "Giuffria",
+      "title": "Call to the Heart",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-02-02",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-02.pdf"
+      ]
+    },
+    {
+      "rank": 6,
+      "artist": "Don Henley",
+      "title": "The Boys of Summer",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-02-02",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-02.pdf"
+      ]
+    },
+    {
+      "rank": 7,
+      "artist": "Don Henley",
+      "title": "Sunset Grill",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-02-02",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-02.pdf"
+      ]
+    },
+    {
+      "rank": 8,
+      "artist": "Bryan Adams",
+      "title": "Somebody",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-02-02",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-02.pdf"
+      ]
+    },
+    {
+      "rank": 9,
+      "artist": "Deep Purple",
+      "title": "Knocking at Your Back Door",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-02-02",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-02.pdf"
+      ]
+    },
+    {
+      "rank": 10,
+      "artist": "REO Speedwagon",
+      "title": "Can’t Fight This Feeling",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-02-02",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-02.pdf"
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Home computers compete with VCRs",
+      "summary": "February 1 LA Times cites Electronics Industries Association estimates of 7.3 million VCRs sold in 1984, up 78% from 4.1 million in 1983. This is retrospective market context, not a weekly gadget launch.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "worldAnchor": {
+    "headline": "Stars assemble to record famine-relief song",
+    "summary": "The We Are the World recording session took place January 28, 1985, bringing artists together for African famine relief. The single was not yet released; do not place its March release or later sales in the week’s news.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      9,
+      10
+    ]
+  },
+  "bbsNote": {
+    "headline": "The 1200-bps middle ground and the user-group BBS",
+    "posts": [
+      {
+        "topic": "User feedback shapes terminal software",
+        "platform": "Washington, D.C. Atari user-group BBS",
+        "text": "Frank C. Jones identifies sysop Frank Huband and describes calls, suggestions and complaints after donating JTERM; version 3.8 supports 1200 bps."
+      },
+      {
+        "topic": "Is 2400 bps worth the premium?",
+        "platform": "COMPUTE! / Telecomputing Today",
+        "text": "Levitan compares $800–$1,500 high-speed units with sub-$300 300/1200-bps competition, stressing that value depends on service use and online charges."
+      },
+      {
+        "topic": "Online worlds advertised to home users",
+        "platform": "CompuServe",
+        "text": "January advertisement offers MegaWars, flight schedules and reservations, financial data and other remote services. No service tariff verified."
+      }
+    ],
+    "summary": "January magazine reports describe user-group collaboration and the cost of faster calls; these are editorial notes, not transcribed BBS posts."
+  },
+  "curiosity": {
+    "headline": "Your cassette deck can sprint without a hardware upgrade",
+    "summary": "TurboTape challenges the assumption that tape must mean minutes of waiting.",
+    "detail": "The January type-in occupies only 642 bytes on the C64; accelerated saved tapes can reload without the utility preinstalled. Disk-like performance is the magazine’s claim, not a fresh benchmark."
+  },
+  "periodAd": {
+    "headline": "Anchor Mark XII: $265 at AB Computers",
+    "summary": "January COMPUTE! advertisement lists the modem at $265; dealer offer, not manufacturer list price.",
+    "tagline": "From the January advertising pages",
+    "sourceRefs": [
+      6
+    ]
+  },
+  "market": {
+    "headline": "The home computer competes with the VCR",
+    "summary": "February 1 reporting cites 7.3 million VCRs sold in 1984, up 78 percent from 4.1 million in 1983, according to Electronics Industries Association estimates. Home computers must compete for the same household dollars.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Week ends February 3. January cover dates are same-month evidence, not exact publication or launch days.",
+      "No milestone: the lead is an important earnings report, not an era-defining launch. LaserWriter announcement falls in the preceding week.",
+      "No gadgetCandidates: verified VCR data are annual market context rather than a breaking gadget announcement.",
+      "No exact-week commercial game debut verified; use sourced January magazine games and active online-game advertising without inventing release dates.",
+      "Game selections are not a sales chart; CES evidence is retrospective April reporting.",
+      "Amiga and C64 prices are forecasts, not verified launches or universal shelf prices."
+    ]
+  }
+}
