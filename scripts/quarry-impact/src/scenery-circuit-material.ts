@@ -1,3 +1,4 @@
+import {readPackedResponse} from './packed-response';
 import * as T from 'three';
 import { texture, url } from './assets';
 import { quarryAggregate } from './scenery-surfaces';
@@ -15,7 +16,7 @@ export function prepareCircuitSurface() {
   return pending ??= (async () => {
     const response = await fetch(url(CIRCUIT_MASK_PATH));
     if (!response.ok || !response.body) throw new Error(`Circuit surface request failed: ${response.status}`);
-    const bytes = new Uint8Array(await new Response(response.body.pipeThrough(new DecompressionStream('gzip'))).arrayBuffer());
+    const bytes = new Uint8Array(await readPackedResponse(response));
     const [width, height] = CIRCUIT_MASK_SIZE;
     if (bytes.length !== width * height * 4) throw new Error('Circuit surface has invalid decoded size');
     const mask = new T.DataTexture(bytes, width, height, T.RGBAFormat, T.UnsignedByteType);

@@ -1,3 +1,4 @@
+import {addStuntScenery} from './stunt-scenery';
 import {DOUBLE_LOOP,DOUBLE_LOOP_SPAWN,DOUBLE_LOOP_SUPPORTS,doubleLoopMesh} from './double-loop';
 import * as T from 'three';
 import {STUNT_PARK} from './stunt-course';
@@ -39,6 +40,7 @@ export function createStuntWorld(){
  // Service buildings sit outside the collision boundary.
  for(const x of [-130,-50,50,130]){box(x,5,200,[27,5,12],'concrete');box(x,10.4,200,[28,.4,13],'steel');}
  for(const [finish,matrices]of batches){const mesh=new T.InstancedMesh(boxGeometry,materials[finish],matrices.length);matrices.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.name='alderwick_'+finish;mesh.castShadow=mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
+ const detail=addStuntScenery(root);geometries.push(...detail.geometries);textures.push(...detail.textures);
  freezeSceneryTransforms(root);let disposed=false;
- return{root,dispose(){if(disposed)return;disposed=true;root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});geometries.forEach(g=>g.dispose());textures.forEach(t=>t.dispose());Object.values(materials).forEach(m=>m.dispose());root.clear();}};
+ return{root,dispose(){if(disposed)return;disposed=true;root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});geometries.forEach(g=>g.dispose());textures.forEach(t=>t.dispose());Object.values(materials).forEach(m=>m.dispose());detail.materials.forEach(m=>m.dispose());root.clear();}};
 }
