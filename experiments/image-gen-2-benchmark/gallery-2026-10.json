@@ -78,6 +78,90 @@
     }
   },
   {
+    "id": "2026-10-16-factual-infographic-factual-infographic-tail-signals-read-t",
+    "title": "Factual infographic: Tail Signals — Read the Whole Cat",
+    "tests": "Focused subtopic, not the broad Body Language preview. No subjective review or automatic reroll. Context qualifiers retained; no quantitative behavioral claims.; archive_slot=2026-10-16T08:20; concept=cat-tail-postures-contextual-signal-clusters; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: body-language",
+    "prompt": "Create a finished, richly illustrated factual Cat Atlas infographic titled “TAIL SIGNALS” with subtitle “Read the whole cat”. This is a focused field study of feline tail postures in context, not a broad body-language overview. Direct artwork only, no photographed poster, frame, screen, book, or UI. Request medium quality, auto canvas size and opaque background.\n\nART DIRECTION: Contemporary natural-history gouache with exquisite colored-pencil fur and fine technical ink. Cool deep blue-green washes fading into misty pale celadon negative space; warm copper and cream fur; restrained apricot annotations. A luminous, large copper-and-white shorthaired adult domestic cat walks diagonally through the center-left, tail held vertically with a soft natural tip, smooth fur, ears upright, open unstrained posture. Anatomically credible paws, joints, face, whiskers, and tail attachment. Hero occupies nearly half the composition, with expressive brushwork, detailed individual hairs and soft ambient shadows, not anthropomorphic expression. Its upright tail becomes the organic compositional spine, leading the eye through a loose clockwise arc of smaller observational studies. Include ample open space. No rigid boxed grid, detached fact cards, numbered dashboard, or obligatory humans. Keep text crisply readable with an elegant title and clear labels; explanations belong naturally beside the illustrated cats using slender curved leaders. Do not use quotation marks around printed text.\n\nHERO ANNOTATION: label “Upright + relaxed approach” and text “Can be a friendly greeting, especially toward people.” One delicate leader identifies erect ears; another points to the smooth, unfluffed tail. The relaxed cat approaches open space, not a hand. Do not claim that this guarantees happiness or permission to touch.\n\nSUPPORTING STUDIES integrated asymmetrically, distinctly smaller than hero but with enough detail to inspect posture: at upper right, the same copper-and-white cat crouches low with tail tucked closely under its body and ears flattened outward. Label “Tucked + crouched” and concise sentence “Can signal fear; check ears and posture.” Make the tail's tucked path clear without drawing impossible extra limbs. At lower right, a side view of this cat seated tensely, ears rotated back, tail sweeping in a broad lateral motion, drawn as one solid tail plus a faint single dotted motion arc, NOT multiple tails. Label “Lashing during petting” with text “May precede a bite. Stop petting; allow a no-contact pause.” Do not draw a person touching the cat or imply every tail swish means aggression. At lower left, a smaller three-quarter side study has arched back, visibly raised tail fur and flattened-back ears; anatomically credible larger silhouette through raised fur, not an oversized extra tail. Label “Puffed + arched” and text “A defensive display—not one guaranteed emotion.” Use fine dark silhouettes or simple ground shadows, not colored warning badges.\n\nAt the open center-right weave a concise contextual note into a pale wash: “Tail movement also occurs in play. Watch the situation, not just the tail.” Finish with an airy bottom line: “EARS + POSTURE + TAIL + CONTEXT” and beneath it “Signals are clues, not diagnoses.” The four examples are separate observations of one cat, not a chronological transformation or behavioral scale; no connecting progression arrows or happy-to-angry meter. Ear direction and body posture must reinforce each particular example. Avoid pupil-size claims or diagrams, speculative thoughts, numerical certainty, breed lore, disease or husbandry guidance. Essential facts must survive; if space is tight, omit decorative detail rather than the context qualifications. Tiny source footer: “Sources: Cornell Feline Health Center; Deputte et al., Animals (2021).” No invented citations, logos, extra facts, placeholder text or nonsense microtype. Deliver an artwork-led educational plate with strong asymmetric rhythm, breathing room, rich feline realism and integrated factual explanation.",
+    "image": "images/2026-10-16-factual-infographic-factual-infographic-tail-signals-read-t.jpg",
+    "thumb": "thumbs/2026-10-16-factual-infographic-factual-infographic-tail-signals-read-t.webp",
+    "color": "#a5a491",
+    "date": "2026-10-16",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "cat-tail-postures-contextual-signal-clusters",
+      "imageSha256": "a9dae754bfd713fe44f48d56576d98e3f46606c2999942650d50f788e9e16060",
+      "imageDHash": "080f9b1343453433"
+    },
+    "factualInfographic": {
+      "topic": "Interpreting feline tail postures with whole-body context",
+      "description": "Focused feline tail-signal clusters with whole-body and interaction context, rather than isolated emotion labels.",
+      "sourceNote": "Claims checked against Cornell veterinary guidance (https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-behavior-problems-aggression) and Deputte et al., Animals 2021 (https://pmc.ncbi.nlm.nih.gov/articles/PMC8469685/); the research supports multimodal/contextual interpretation, not universal pose-to-emotion decoding.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-16T12:21:16.561779+00:00",
+        "sources": [
+          {
+            "id": "cornell",
+            "publisher": "Cornell University College of Veterinary Medicine",
+            "title": "Feline Behavior Problems: Aggression",
+            "sourceType": "university",
+            "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-behavior-problems-aggression"
+          },
+          {
+            "id": "deputte",
+            "publisher": "Animals (MDPI)",
+            "title": "Heads and Tails: An Analysis of Visual Signals in Cats, Felis catus",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8469685/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Interpret tails together with ear positions, posture and interaction context; a single pose is not a guaranteed emotion or diagnosis.",
+            "sourceIds": [
+              "cornell",
+              "deputte"
+            ]
+          },
+          {
+            "claim": "A tail-up approach can be a friendly greeting, particularly in cat-human interactions; show smooth fur, upright ears and an easy walking posture, not a universal invitation to touch.",
+            "sourceIds": [
+              "deputte",
+              "cornell"
+            ]
+          },
+          {
+            "claim": "A tucked tail combined with a low crouch and flattened ears can indicate fear; these are clustered cues, not certainty.",
+            "sourceIds": [
+              "cornell"
+            ]
+          },
+          {
+            "claim": "Tail lashing with ears moving backward during petting can precede aggression; stop petting and allow a no-contact pause. Tail movement can also occur in play, so context matters.",
+            "sourceIds": [
+              "cornell"
+            ]
+          },
+          {
+            "claim": "Raised tail fur with an arched back and flattened-back ears can accompany defensive/aggressive displays; do not label a puffed tail as a unique emotion.",
+            "sourceIds": [
+              "cornell"
+            ]
+          },
+          {
+            "claim": "Ear positions were more predictive than tails of cat-cat interaction outcome in this observational shelter study; do not generalize its exact frequencies or treat tails as meaningless.",
+            "sourceIds": [
+              "deputte"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-10-16-factual-infographic-factual-infographic-cat-claws-the-pivot",
     "title": "Factual infographic: Cat Claws — The Pivot Beneath the Fur",
     "tests": "Focused normal-anatomy plate; digit 2–5 only; no broad preview repetition; no subjective review.; archive_slot=2026-10-16T00:20; concept=domestic-cat-claw-pivot-retraction-shedding; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: inside-the-cat",
