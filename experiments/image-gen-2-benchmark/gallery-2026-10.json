@@ -599,6 +599,369 @@
     }
   },
   {
+    "id": "2026-10-15-factual-infographic-factual-infographic-cat-atlas-inside-th",
+    "title": "Factual infographic: Cat Atlas — Inside the Cat",
+    "tests": "Owner-authorized publication of an existing Cat Atlas preview; request=1560443384768892970; original generation request=1560436291584139367; original JPEG preserved without resizing or regeneration; archive_slot=2026-10-15T20:04:54; concept=cat-normal-anatomy-connected-body-systems; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: inside-the-cat",
+    "prompt": "Create ONE elaborate, richly detailed, artistically exceptional educational infographic titled \"INSIDE THE CAT\", subtitle \"An intricate body, beautifully connected\". It is the first plate of an illustrated cat atlas. Render the finished artwork directly as a portrait composition, edge to edge, not a photograph of a poster, book, wall, framed print, desk or exhibit. The art should feel like a master natural-history illustrator collaborating with a veterinary anatomist: luminous watercolor and opaque gouache, extremely fine engraved ink detail, delicate scientific leader lines, elegant typography, warm ivory with mineral teal, muted terracotta and deep charcoal. High artistic detail and substantial information; not a flat vector icon sheet.\n\nThe dominant central subject is a beautiful healthy adult domestic shorthair tabby cat standing naturally in left lateral profile, alive, calm and anatomically proportionate, four limbs and one long expressive tail. Fur remains exquisitely drawn around a clean, non-gory educational cutaway window through the trunk. Show correctly positioned internal structures, not fantasy organs or a human torso inside a cat. Thoracic heart and lungs must be cranial to the diaphragm; liver just caudal to it; stomach and intestinal loops in the abdomen; kidneys toward the dorsal abdomen; bladder near the pelvic inlet. Use carefully separated translucent layers only where needed for clarity. Never pile contradictory anatomical planes on top of one another.\n\nBuild an organic visual journey around this hero, with open callouts and a few richly rendered enlarged studies connected to their actual locations. Let the cat's curved back and tail guide the layout. No rigid grid, repeated rectangular panels, detached dashboard cards or wall of text. Use spacious, artistic hierarchy: large hero, medium supporting drawings, brief readable labels and restrained caption lines. Each supporting study must show a real mechanism rather than repeat the main image. The main silhouette should occupy about half the composition.\n\nMain labels, each connected by an accurate fine leader: \"Brain\", \"Spinal cord\", \"Lungs\", \"Heart\", \"Diaphragm\", \"Liver\", \"Stomach\", \"Small intestine\", \"Colon\", \"Kidney\", \"Urinary bladder\". Show a delicate partial rib-cage and vertebral study adjacent to the body so the organs have a believable protective framework.\n\nWeave in these small explanatory studies, varying their size and shape:\n- Heart and lung relationship, with a simple precise flow ribbon: \"Body → right heart → lungs → left heart → body\". Short text: \"The heart moves blood; the lungs exchange gases.\" Avoid an elaborate unreadable vessel map.\n- Digestive pathway, with a small close-up of intestinal folds: \"Food is broken down, nutrients are absorbed, and remaining waste passes onward.\" Label stomach and small intestine clearly.\n- A separate tiny urinary-system drawing showing two kidneys, two ureters and one bladder, accurately connected. Text: \"Kidneys remove wastes and balance water and salts.\" Distinguish urine from the digestive pathway.\n- An exquisite paw-and-claw study with one claw retracted and one extended, explicitly drawn as two separate comparison views. Short text: \"Curved claws provide grip; soft pads cushion contact.\"\n\nKeep the overall emotional impression beautiful, curious and respectful of the living animal. Normal anatomy only: no disease, wounds, blood, surgery, diagnoses, medical treatments, breed profiles or human figures. Do not fabricate numbers, organs or claims. Use the exact short labels supplied and fluent readable English; small body text must remain decipherable when zoomed. You may omit one secondary study if necessary for breathing room, but preserve accurate main anatomy and the connected-system idea. Artwork and information should be inseparable. Small quiet footer: \"Normal anatomy • Simplified educational illustration\".\n",
+    "image": "images/2026-10-15-factual-infographic-factual-infographic-cat-atlas-inside-th.jpg",
+    "thumb": "thumbs/2026-10-15-factual-infographic-factual-infographic-cat-atlas-inside-th.webp",
+    "color": "#cabaa4",
+    "date": "2026-10-15",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "cat-normal-anatomy-connected-body-systems",
+      "imageSha256": "b261639c699ada856e0ea1699e9efd6b410cee3fbb4ffb68bd659ef5cbc46419",
+      "imageDHash": "2e89c46c99995a3a"
+    },
+    "factualInfographic": {
+      "topic": "normal feline anatomy and connected body systems",
+      "description": "An artistic atlas of normal feline anatomy, circulation, digestion, urinary function and paw-and-claw structure.",
+      "sourceNote": "Source-checked educational claims; veterinary, university and specialist references: https://pressbooks.umn.edu/dogcatanatomylabguide/chapter/part-2-abdominal-viscera/ https://www.msdvetmanual.com/cat-owners/heart-and-blood-vessel-disorders-of-cats/introduction-to-heart-and-blood-vessel-disorders-in-cats https://www.msdvetmanual.com/cat-owners/digestive-disorders-of-cats/introduction-to-digestive-disorders-of-cats https://www.msdvetmanual.com/cat-owners/kidney-and-urinary-tract-disorders-of-cats/the-urinary-system-of-cats https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/chronic-kidney-disease https://www.msdvetmanual.com/cat-owners/introduction-to-cats/physical-description-of-cats",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-16T00:19:40.429177+00:00",
+        "sources": [
+          {
+            "id": "viscera",
+            "publisher": "University of Minnesota",
+            "title": "Part 2: Abdominal Viscera — Dissection Lab Guide for Dog and Cat Anatomy",
+            "sourceType": "university",
+            "url": "https://pressbooks.umn.edu/dogcatanatomylabguide/chapter/part-2-abdominal-viscera/"
+          },
+          {
+            "id": "heart",
+            "publisher": "MSD Veterinary Manual",
+            "title": "Introduction to Heart and Blood Vessel Disorders in Cats",
+            "sourceType": "veterinary-reference",
+            "url": "https://www.msdvetmanual.com/cat-owners/heart-and-blood-vessel-disorders-of-cats/introduction-to-heart-and-blood-vessel-disorders-in-cats"
+          },
+          {
+            "id": "digestive",
+            "publisher": "MSD Veterinary Manual",
+            "title": "Introduction to Digestive Disorders of Cats",
+            "sourceType": "veterinary-reference",
+            "url": "https://www.msdvetmanual.com/cat-owners/digestive-disorders-of-cats/introduction-to-digestive-disorders-of-cats"
+          },
+          {
+            "id": "urinary",
+            "publisher": "MSD Veterinary Manual",
+            "title": "The Urinary System of Cats",
+            "sourceType": "veterinary-reference",
+            "url": "https://www.msdvetmanual.com/cat-owners/kidney-and-urinary-tract-disorders-of-cats/the-urinary-system-of-cats"
+          },
+          {
+            "id": "kidneys",
+            "publisher": "Cornell University College of Veterinary Medicine",
+            "title": "Chronic Kidney Disease — normal kidney function introduction",
+            "sourceType": "university",
+            "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/chronic-kidney-disease"
+          },
+          {
+            "id": "physical",
+            "publisher": "MSD Veterinary Manual",
+            "title": "Physical Description of Cats",
+            "sourceType": "veterinary-reference",
+            "url": "https://www.msdvetmanual.com/cat-owners/introduction-to-cats/physical-description-of-cats"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The liver lies immediately caudal to the diaphragm; the stomach lies caudal to the liver and intestinal loops occupy the abdomen.",
+            "sourceIds": [
+              "viscera"
+            ]
+          },
+          {
+            "claim": "Blood returns from the body to the right heart, travels to the lungs, returns to the left heart, and is pumped to the body.",
+            "sourceIds": [
+              "heart"
+            ]
+          },
+          {
+            "claim": "The heart pumps blood while the lungs exchange oxygen and carbon dioxide.",
+            "sourceIds": [
+              "heart"
+            ]
+          },
+          {
+            "claim": "The digestive tract breaks down food, absorbs nutrients and moves remaining waste toward elimination.",
+            "sourceIds": [
+              "digestive"
+            ]
+          },
+          {
+            "claim": "The urinary system includes two kidneys, ureters, a bladder and a urethra; it removes wastes and regulates water and electrolytes.",
+            "sourceIds": [
+              "urinary",
+              "kidneys"
+            ]
+          },
+          {
+            "claim": "Cats have retractile curved claws for grip and padded paws that cushion contact.",
+            "sourceIds": [
+              "physical"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-10-15-factual-infographic-factual-infographic-cat-atlas-extraordi",
+    "title": "Factual infographic: Cat Atlas — Extraordinary Senses",
+    "tests": "Owner-authorized publication of an existing Cat Atlas preview; request=1560443384768892970; original generation request=1560436291584139367; original JPEG preserved without resizing or regeneration; archive_slot=2026-10-15T20:04:55; concept=cat-senses-vision-hearing-whisker-balance; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: extraordinary-senses",
+    "prompt": "Create ONE sumptuous, elaborate and richly detailed scientific-art infographic titled \"EXTRAORDINARY SENSES\", subtitle \"The world through a cat\". This is a finished portrait-format illustrated atlas plate, directly rendered edge to edge. Not a photographed book, poster, frame, screen, room or mockup. Combine masterful realistic natural-history painting, jewel-toned translucent watercolor, fine copperplate-style linework and beautifully controlled explanatory diagrams. Palette: deep midnight blue, softly glowing amber, pale aquamarine and warm ivory. The result must be unmistakably artistic and information-rich, with variation in scale and generous breathing room, not a matrix of boxed fact panels.\n\nThe hero is an exquisitely painted alert silver-and-brown domestic shorthair cat in three-quarter view, with bright natural eyes, fine individual whiskers, expressive mobile ears, realistic fur and a poised intact body. Keep the entire cat anatomically coherent. A subtle dusk-to-day sweep behind the head evokes its sensory world; delicate flowing colored trails connect each sense to its accurate anatomical study. These trails are explanatory visual metaphors, not literal rays emitted by the animal.\n\nArrange the following detailed scientific studies organically around the hero, interlocking with its silhouette rather than forming a grid:\n1. \"VISION — Making the most of dim light\": a cutaway of one feline eye showing cornea, lens, retina and the reflective layer BEHIND the retina. Use a light path entering through the pupil, focusing through the lens, reaching the retina, and reflecting back through it from the tapetum. Labels: \"Retina\", \"Tapetum lucidum\", \"Optic nerve\". Text: \"Light-sensitive rods and a reflective layer help in low light.\" A small bright-versus-dim pupil comparison and the essential note \"Low light, not total darkness.\" No claims of seeing in zero light; no numeric superiority claims.\n2. \"HEARING — Finding the smallest sound\": a beautifully drawn ear cutaway with pinna, canal, eardrum and cochlea, connected correctly. Show the two external ears subtly directed toward different sounds. Text: \"Mobile ears help locate sounds. Cats hear frequencies beyond our range.\" Sound waves are illustrative only, with no invented scale.\n3. \"SMELL — A landscape of chemical clues\": an elegant close view of the nose with a small nasal-section study and gentle scent-path motifs. Text: \"Odors help identify food, places and other cats.\" Do not give unverified receptor counts or claim supernatural navigation.\n4. \"WHISKERS — Touch beyond the fur\": enlarge one whisker follicle in the skin, with sensory nerve endings around the follicle and the hair shaft extending naturally out. Text: \"Movement of a whisker stimulates sensory endings at its base.\" The hair shaft itself is not a living nerve. Include fine muzzle whiskers and a small foreleg-whisker detail only if space allows. No claim that whiskers perfectly measure every gap.\n5. \"BALANCE — Sensing motion\": a precisely rendered inner-ear balance study showing the semicircular canals separate from the spiral cochlea. Text: \"Inner-ear sensors work with vision and body-position information.\" Pair it with a graceful cat walking safely along a broad low branch; do not show falling from a height, promise cats always land safely or imply fall immunity.\n6. A smaller taste-and-tongue detail, if composition permits: \"TASTE & TEXTURE\", with backward-pointing tongue papillae, labeled \"Keratin papillae\". Text: \"The rough tongue helps groom the coat.\" Do not confuse the visible hooks with taste buds.\n\nBeautiful serif title, refined readable labels, concise English text, fine leader lines and rich micro-detail in the illustrations. The cat remains the dominant visual presence. Preserve the central mechanisms and important distinctions, but omit a secondary detail rather than crowding the art. No diseases, treatments, breed profiles, genetic charts, product branding, fake statistics, sci-fi implants or cartoon human facial expressions. Small quiet footer: \"Different senses, one integrated world\".\n",
+    "image": "images/2026-10-15-factual-infographic-factual-infographic-cat-atlas-extraordi.jpg",
+    "thumb": "thumbs/2026-10-15-factual-infographic-factual-infographic-cat-atlas-extraordi.webp",
+    "color": "#615f58",
+    "date": "2026-10-15",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "cat-senses-vision-hearing-whisker-balance",
+      "imageSha256": "e69a473440608da5cf72112eb99bb523aac3fb8124619a400355bc8291d5d770",
+      "imageDHash": "506747c3a141470d"
+    },
+    "factualInfographic": {
+      "topic": "feline vision hearing smell touch and balance",
+      "description": "A sensory atlas connecting the cat to its eye, ear, nose, whisker-follicle and balance mechanisms.",
+      "sourceNote": "Source-checked educational claims; veterinary, university and specialist references: https://www.msdvetmanual.com/cat-owners/eye-disorders-of-cats/eye-structure-and-function-in-cats https://www.msdvetmanual.com/cat-owners/introduction-to-cats/physical-description-of-cats https://www.msdvetmanual.com/cat-owners/ear-disorders-of-cats/ear-structure-and-function-in-cats https://pmc.ncbi.nlm.nih.gov/articles/PMC1350747/ https://www.me.gatech.edu/ga-tech-researchers-unmask-cat-tongue-mechanics",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-16T00:19:40.504507+00:00",
+        "sources": [
+          {
+            "id": "eye",
+            "publisher": "MSD Veterinary Manual",
+            "title": "Eye Structure and Function in Cats",
+            "sourceType": "veterinary-reference",
+            "url": "https://www.msdvetmanual.com/cat-owners/eye-disorders-of-cats/eye-structure-and-function-in-cats"
+          },
+          {
+            "id": "physical",
+            "publisher": "MSD Veterinary Manual",
+            "title": "Physical Description of Cats",
+            "sourceType": "veterinary-reference",
+            "url": "https://www.msdvetmanual.com/cat-owners/introduction-to-cats/physical-description-of-cats"
+          },
+          {
+            "id": "ear",
+            "publisher": "MSD Veterinary Manual",
+            "title": "Ear Structure and Function in Cats",
+            "sourceType": "veterinary-reference",
+            "url": "https://www.msdvetmanual.com/cat-owners/ear-disorders-of-cats/ear-structure-and-function-in-cats"
+          },
+          {
+            "id": "whiskers",
+            "publisher": "The Journal of Physiology",
+            "title": "Functional characteristics of mechanoreceptors in sinus hair follicles of the cat",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1350747/"
+          },
+          {
+            "id": "papillae",
+            "publisher": "Georgia Institute of Technology",
+            "title": "Ga Tech Researchers Unmask Cat Tongue Mechanics",
+            "sourceType": "university",
+            "url": "https://www.me.gatech.edu/ga-tech-researchers-unmask-cat-tongue-mechanics"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Retinal rod photoreceptors and the reflective tapetum contribute to vision in dim light; this does not mean vision in total darkness.",
+            "sourceIds": [
+              "eye",
+              "physical"
+            ]
+          },
+          {
+            "claim": "The cornea and lens direct incoming light to the retina; the optic nerve carries visual information.",
+            "sourceIds": [
+              "eye"
+            ]
+          },
+          {
+            "claim": "The pupil changes size in response to light.",
+            "sourceIds": [
+              "eye"
+            ]
+          },
+          {
+            "claim": "Mobile pinnae help collect and locate sound; the ear canal, eardrum and cochlea have distinct roles in hearing.",
+            "sourceIds": [
+              "ear",
+              "physical"
+            ]
+          },
+          {
+            "claim": "Cats hear higher sound frequencies than humans.",
+            "sourceIds": [
+              "physical"
+            ]
+          },
+          {
+            "claim": "Smell provides information about food, places and other animals.",
+            "sourceIds": [
+              "physical"
+            ]
+          },
+          {
+            "claim": "Mechanical displacement of a whisker stimulates sensory receptors associated with the follicle, not nerves inside the hair shaft.",
+            "sourceIds": [
+              "whiskers"
+            ]
+          },
+          {
+            "claim": "The semicircular canals are inner-ear balance structures, separate from the cochlea used in hearing.",
+            "sourceIds": [
+              "ear"
+            ]
+          },
+          {
+            "claim": "Backward-facing keratin papillae on the tongue contribute to grooming; these visible spines are not taste buds.",
+            "sourceIds": [
+              "papillae"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-10-15-factual-infographic-factual-infographic-cat-atlas-body-lang",
+    "title": "Factual infographic: Cat Atlas — Body Language",
+    "tests": "Owner-authorized publication of an existing Cat Atlas preview; request=1560443384768892970; original generation request=1560436291584139367; original JPEG preserved without resizing or regeneration; archive_slot=2026-10-15T20:04:56; concept=cat-body-language-whole-body-context; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: body-language",
+    "prompt": "Create ONE elaborate, beautifully artistic, richly detailed feline communication infographic titled \"THE QUIET LANGUAGE OF CATS\", subtitle \"Read the whole cat, not one signal\". This is the Body Language plate of an illustrated cat atlas. Render the finished portrait composition itself, directly edge to edge, not a photograph of a poster, book on a table, framed print, room, screen or physical display. Use exquisite observational watercolor and gouache with fine ink, accurate soft fur, subtle expressive anatomy, muted sage, warm ochre, dusty rose and ivory. Every cat must look like a real domestic cat, never anthropomorphic, grinning, dressed up or cartoonish.\n\nMake a large, graceful relaxed domestic shorthair walking toward the viewer with upright tail and a gently curved tip the visual anchor. Let the tail's arc lead naturally into smaller studies arranged as a flowing asymmetrical composition. Build a thoughtful visual narrative through varied scales, open annotations and beautifully integrated close-ups. No rigid rows of identical cards, grids or charts of disembodied emoji faces. Each full-body study must have correct limbs, a single tail, believable posture and naturally coordinated ears, eyes and whiskers. Use a few different natural coat colors to distinguish study subjects without describing breeds.\n\nCore message, elegantly typeset under the title: \"Ears + eyes + whiskers + posture + tail + context\". A readable small explanatory line: \"These are clues, not a fixed emotional code.\"\n\nInclude these meaningful, carefully coordinated visual studies:\n- \"A FRIENDLY APPROACH\": upright tail with soft curved tip, loose posture, ears relaxed. Text: \"Often a greeting when the rest of the body is relaxed.\" Fine leader lines identify the tail curve and soft body posture.\n- \"RELAXED & COMFORTABLE\": a cat resting loosely with neutral ears, relaxed whiskers and softly narrowed eyes. A small eye sequence shows an ordinary slow blink. Text: \"Soft eyes and a slow blink can signal comfort.\" Do not turn this into human smiling.\n- \"FOCUSED & CURIOUS\": a cat leaning gently toward a quiet point of interest, ears aimed forward and whiskers oriented toward it. Text: \"Attention follows a sound, scent or movement.\" Do not equate alertness automatically with happiness.\n- \"UNEASY — GIVE SPACE\": a crouched cat with tense body, ears turned sideways or back and a low tail held close. Text: \"Look for a cluster of tension signals.\" Show concern rather than a monster; no injury, exposed teeth or attack scene is necessary.\n- \"TOO MUCH CONTACT\": a standing or seated cat turning away, body tensing, ears rotating back and tail sweeping firmly. Use two light motion strokes around the tail without duplicating the tail anatomically. Text: \"Tail swishing plus tension is a cue to pause.\" Do not claim every tail movement means anger.\n- \"BELLY EXPOSED\": a loose relaxed cat lying on its back, paws naturally curled. Text: \"A sign of comfort can be a greeting—not an invitation to rub the belly.\" No human hands touching the belly.\n- An integrated paired pupil close-up with a small light-and-shadow motif: \"PUPILS NEED CONTEXT\". Text: \"Light changes pupil size; excitement and fear can too.\" Never label one pupil size as a reliable diagnosis or a single fixed emotion.\n\nFinish with a small graceful takeaway: \"Notice patterns. Respect distance. Let the cat choose contact.\" This is interpretation of body language, not a general care guide, medical diagnosis, disease chart, breed catalog or behavior-training manual. Avoid absolute emotion claims, invented facts, aggressive handling and fear-provoking situations. Keep all main text crisp and naturally phrased, with substantial fine illustrative detail and breathing room. If necessary, omit one secondary study to preserve artistic flow, but keep the whole-body/context principle, the pupil caveat and the belly distinction. Beautiful natural poses and truthful communication matter more than decorative filler.\n",
+    "image": "images/2026-10-15-factual-infographic-factual-infographic-cat-atlas-body-lang.jpg",
+    "thumb": "thumbs/2026-10-15-factual-infographic-factual-infographic-cat-atlas-body-lang.webp",
+    "color": "#c7bca5",
+    "date": "2026-10-15",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "cat-body-language-whole-body-context",
+      "imageSha256": "63ca6c308471cd12bc48411923bf2354132505a73f042350989d7453ca8ede4f",
+      "imageDHash": "ae5a4a8899128d0f"
+    },
+    "factualInfographic": {
+      "topic": "interpreting feline body language in context",
+      "description": "A contextual guide to feline ears, eyes, whiskers, posture and tail, with comfort, tension, pupil and belly-display distinctions.",
+      "sourceNote": "Source-checked educational claims; veterinary, university and specialist references: https://www.cats.org.uk/help-and-advice/cat-behaviour/cat-body-language https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-behavior-problems-aggression https://www.cats.org.uk/cats-blog/how-to-tell-if-your-cat-is-happy https://www.nature.com/articles/s41598-020-73426-0 https://www.cats.org.uk/cats-blog/behaviour-focus-when-cats-attack https://www.msdvetmanual.com/cat-owners/eye-disorders-of-cats/eye-structure-and-function-in-cats",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-16T00:19:40.515699+00:00",
+        "sources": [
+          {
+            "id": "signals",
+            "publisher": "Cats Protection",
+            "title": "Cat body language",
+            "sourceType": "animal-welfare-organization",
+            "url": "https://www.cats.org.uk/help-and-advice/cat-behaviour/cat-body-language"
+          },
+          {
+            "id": "aggression",
+            "publisher": "Cornell University College of Veterinary Medicine",
+            "title": "Feline Behavior Problems: Aggression",
+            "sourceType": "university",
+            "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-behavior-problems-aggression"
+          },
+          {
+            "id": "happy",
+            "publisher": "Cats Protection",
+            "title": "How to tell if your cat is happy",
+            "sourceType": "animal-welfare-organization",
+            "url": "https://www.cats.org.uk/cats-blog/how-to-tell-if-your-cat-is-happy"
+          },
+          {
+            "id": "blink",
+            "publisher": "Scientific Reports",
+            "title": "The role of cat eye narrowing movements in cat–human communication",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://www.nature.com/articles/s41598-020-73426-0"
+          },
+          {
+            "id": "contact",
+            "publisher": "Cats Protection",
+            "title": "Behaviour focus: When cats attack",
+            "sourceType": "animal-welfare-organization",
+            "url": "https://www.cats.org.uk/cats-blog/behaviour-focus-when-cats-attack"
+          },
+          {
+            "id": "eye",
+            "publisher": "MSD Veterinary Manual",
+            "title": "Eye Structure and Function in Cats",
+            "sourceType": "veterinary-reference",
+            "url": "https://www.msdvetmanual.com/cat-owners/eye-disorders-of-cats/eye-structure-and-function-in-cats"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Cat body signals should be interpreted together and in context, not as a fixed one-signal emotional code.",
+            "sourceIds": [
+              "signals",
+              "aggression"
+            ]
+          },
+          {
+            "claim": "An upright tail with a softly curved tip and relaxed body often accompanies a friendly greeting.",
+            "sourceIds": [
+              "signals",
+              "happy"
+            ]
+          },
+          {
+            "claim": "Soft narrowed eyes and slow blinking can accompany comfort; experiments link slow-blink interactions with positive cat–human communication.",
+            "sourceIds": [
+              "happy",
+              "blink"
+            ]
+          },
+          {
+            "claim": "Ears directed forward and whiskers oriented toward an object can accompany interest or attention, not necessarily happiness.",
+            "sourceIds": [
+              "signals"
+            ]
+          },
+          {
+            "claim": "A crouched tense body, ears sideways or back and a closely held tail can form a cluster of unease signals.",
+            "sourceIds": [
+              "signals",
+              "aggression"
+            ]
+          },
+          {
+            "claim": "During contact, body tension, ears turning back and tail lashing can indicate that interaction should pause.",
+            "sourceIds": [
+              "contact",
+              "aggression"
+            ]
+          },
+          {
+            "claim": "A relaxed exposed belly is not automatically an invitation to rub it.",
+            "sourceIds": [
+              "happy"
+            ]
+          },
+          {
+            "claim": "Pupil size changes with lighting and can also change with arousal; one pupil size does not identify one emotion.",
+            "sourceIds": [
+              "eye",
+              "signals",
+              "aggression"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-10-15-factual-infographic-factual-infographic-appendicitis-the-in",
     "title": "Factual infographic: Appendicitis — The Inflamed Cul-de-sac",
     "tests": "factual_subtype: medical-health-infographic; claim-level NIDDK/NHS evidence; organic anatomical composition; no non-Monday subjective review; archive_slot=2026-10-15T02:20; concept=appendicitis-inflamed-appendix-abdominal-pain; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=high, size=auto; factual_subtype: medical-health-infographic",
