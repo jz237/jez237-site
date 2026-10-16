@@ -48,7 +48,7 @@ function decodeRow(row,sourceRow,courseIndex,mode,scale){
  const classification=[1,5,7,10,13,16,19,22].includes(type)?1:type===2?2:type===3?3:
   [8,11,14,17,20,23].includes(type)?4:type>=24?type-18:0;
  let routeGroup=[6,7,8,24,25,29,30,31,32].includes(type)?1:type>=9&&type<=23?Math.floor((type-9)/3)+2:0;
- if(type===26||type===27)routeGroup=courseIndex===0&&type===27?1:2;
+ if(type===26||type===27)routeGroup=courseIndex===0?(type===27?1:0):2;
  const phase=Math.trunc(F(F(heading/360)*4096))&4095,a=phase*Math.PI*2/4096;
  let tx=F(Math.sin(a)),tz=F(Math.cos(a));
  if(phase%1024===0)[tx,tz]=[[0,1],[1,0],[0,-1],[-1,0]][phase/1024];

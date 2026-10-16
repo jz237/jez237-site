@@ -2604,3 +2604,29 @@ AI context and persistence before this can be enabled through ordinary play.
 This checkpoint is local and unpublished; the broader parity goal remains open.
 The user additionally requested the original music from the existing locally
 provided Wave Race64 ROM; soundtrack extraction and integration are now active.
+
+
+## Original soundtrack files (v2.25.0)
+
+The supplied USA Rev1 ROM's sequence and instrument banks were extracted
+privately and rendered offline on EVO X2 with seq64 and FluidSynth. Fifteen
+standalone stereo MP3 files provide the title theme, nine course themes and
+five finish/retirement cues. The browser downloads only the selected music
+when Background music or Preview music is enabled. Course/result selection
+works in the race view and the online guest; host playback uses the race view.
+Pause/mute preserves playback position, new races reset it, stereo/mono/
+headphones use the existing sound options, and only two decoded tracks stay
+cached. The original sequence loop boundaries preserve introductions.
+
+This uses the original melodies and instrument samples, rendered through
+MIDI/SoundFont synthesis: envelopes and reverb approximate the N64 audio
+engine. It is not a bit-exact hardware recording. Final-lap variants remain
+future work. The public assets contain MP3s, hashes and provenance; the ROM,
+raw banks, MIDI sequences and extraction tools remain private. No paid service
+or soundtrack download was used.
+
+Validation: all fifteen files decode as stereo in Chrome with exact manifest
+durations. The 28 focused music, audio and online tests pass. The full suite
+(before two additional focused tests) reports 2,172 passes and the same eleven
+pre-existing course/gameplay failures out of 2,183 tests. Native result work
+above remains opt-in; this release does not claim complete gameplay parity.

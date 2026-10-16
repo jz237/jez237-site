@@ -1,13 +1,13 @@
-import {createSourceSouthernCourse} from './source-southern-course.js?v=9267cf1551ef';
-import {createGlacierCourse} from './glacier-course.js?v=9267cf1551ef';
-import {cityStuntLayout} from './city-stunts.js?v=9267cf1551ef';
-import {portStuntLayout} from './port-stunts.js?v=9267cf1551ef';
-import {fortStuntLayout} from './fort-stunts.js?v=9267cf1551ef';
-import {drakeStuntLayout} from './drake-stunts.js?v=9267cf1551ef';
-import {sunsetStuntLayout} from './sunset-stunts.js?v=9267cf1551ef';
-import {createSourceSunnyCourse} from './source-sunny-course.js?v=9267cf1551ef';
-import {sunnyAnchors,sunnyPilotAnchors,sunnyStuntNavigation,sunnyNavigation} from './source-sunny-navigation.js?v=9267cf1551ef';
-import {createDolphinCourse} from './dolphin-course.js?v=9267cf1551ef';
+import {createSourceSouthernCourse} from './source-southern-course.js?v=3d9805ca6afa';
+import {createGlacierCourse} from './glacier-course.js?v=3d9805ca6afa';
+import {cityStuntLayout} from './city-stunts.js?v=3d9805ca6afa';
+import {portStuntLayout} from './port-stunts.js?v=3d9805ca6afa';
+import {fortStuntLayout} from './fort-stunts.js?v=3d9805ca6afa';
+import {drakeStuntLayout} from './drake-stunts.js?v=3d9805ca6afa';
+import {sunsetStuntLayout} from './sunset-stunts.js?v=3d9805ca6afa';
+import {createSourceSunnyCourse} from './source-sunny-course.js?v=3d9805ca6afa';
+import {sunnyAnchors,sunnyPilotAnchors,sunnyStuntNavigation,sunnyNavigation} from './source-sunny-navigation.js?v=3d9805ca6afa';
+import {createDolphinCourse} from './dolphin-course.js?v=3d9805ca6afa';
 // Authored reconstruction from course observations, in metres. Map coordinates
 // describe geography, not a texture or mesh extracted from the Nintendo game.
 // Source/remaining fidelity checks: COURSE-MATCH.md.

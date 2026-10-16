@@ -124,7 +124,7 @@ function frame(now){
  if(guestLoaded&&latest&&stale&&!stalePaused){stalePaused=true;requestPause(true);hold('Connection interrupted','The race pauses while the connection recovers. Open Connection for a fresh invite.');}if(!stale)stalePaused=false;
  const drive=guestLoaded&&latest&&!stale&&visible&&$('onlineLobby').hidden&&['running','countdown'].includes(latest.frame.phase);touch.setActive(!!drive);
  if(drive&&now-lastInputAt>=25){const c=touch.apply(sample(keys,touch.keys(),pads,false));if(!primePad&&c.pause&&!padPause)requestPause(currentPhase()!=='paused');if(!primePad&&c.camera&&!padCamera)viewer?.camera();padPause=c.pause;padCamera=c.camera;primePad=false;const control=onlinePlayerInput(c);if(control)peer.sendInput({generation,sequence:++inputSequence,control});lastInputAt=now;}
- if(!guestLoaded||!latest||!viewer||stale){audio.update(0,0,false,true,0);resetGamepadRumble(haptics);return;}
+ if(!guestLoaded||!latest||!viewer||stale){audio.setRaceMusic({...audio.raceMusicContext,held:true});audio.update(0,0,false,true,0);resetGamepadRumble(haptics);return;}
  const a=frames[0],b=latest,renderTime=Math.min(b.frame.time,a.frame.time+Math.max(0,(now-b.at)/1000)),f=interpolateWindowFrame(a.frame,b.frame,renderTime),r=f.racers[1];
  viewer.draw(f);$('onlineRiderTitle').textContent='P2 · '+(descriptor.names[r.id]||'Rider '+(r.id+1))+(f.freeRide?' · FREE RIDE':' · LAP '+Math.min(r.lap,descriptor.laps)+'/'+descriptor.laps);
  $('onlineProgress').textContent=f.freeRide?r.stunt.rings+' rings · '+r.stunt.score+' points':'POWER '+r.power+'/5 · MISSES '+r.misses+'/5';
@@ -135,7 +135,7 @@ function frame(now){
    winner=r.nativePlace!==undefined?nativeRaceDisplayWinner(f.racers):finished[0]??(remaining.length===1?remaining[0]:null);
   hold(winner?'Player '+(winner.player+1)+' wins':'Race finished',f.racers.map(q=>'P'+(q.player+1)+' · '+(q.dq||time(q.finishTime))).join(' · ')+'. The host can restart or choose another course.');
  }else $('onlineHold').hidden=true;
- const paused=f.phase!=='running'||!visible;audio.update(r.speed*.45,f.weather.storm,false,paused,f.time,r.hydro.wet,null,r.throttle,r.mount==='dolphin');audio.updateRide(r,Math.max(0,f.water.level-course.ground(r.x,r.z)),f.time,paused);audio.updateRivals(r,f.racers,paused);
+ const paused=f.phase!=='running'||!visible;audio.setRaceMusic({session:generation,course:descriptor.course,phase:f.phase,place:(Number.isInteger(r.nativePlace)?r.nativePlace+1:(f.racers.filter(q=>q.finishTime!==null&&!q.dq).sort((a,b)=>a.finishTime-b.finishTime).findIndex(q=>q.player===r.player)+1)),disqualified:!!r.dq,held:!visible});audio.update(r.speed*.45,f.weather.storm,false,paused,f.time,r.hydro.wet,null,r.throttle,r.mount==='dolphin');audio.updateRide(r,Math.max(0,f.water.level-course.ground(r.x,r.z)),f.time,paused);audio.updateRivals(r,f.racers,paused);
  updateGamepadRumble(haptics,{mode:'versus',phase:f.phase,time:f.time,racers:[{...r,player:0},{...f.racers[0],player:1}]},pads,saved.rumble,now);
 }
 const invite=new URLSearchParams(location.hash.slice(1)).get('invite');if(invite){$('friendInvite').value=invite;message('Choose your rider, then make a return code for your friend.');history.replaceState(null,'',location.pathname+location.search);}

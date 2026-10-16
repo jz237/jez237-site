@@ -1,0 +1,12 @@
+{
+  "source": "User-supplied Wave Race 64 USA revision 1 ROM on VENGEANCE",
+  "sourceSha256": "f35d2423ebcb86eaf86fa935b613c7532b123a7bc50fb74996984c3b02fc3999",
+  "method": "Original music sequences and ADPCM instrument samples extracted locally; normal-race variation resolved before sequence conversion; rendered offline on EVO X2 and encoded into standalone MP3 files.",
+  "tools": ["N64-Tools audio-layout reference (Unlicense)", "SEQ64 2.4.1 (GPL-3.0)", "FluidSynth installed on EVO X2", "FFmpeg / libmp3lame installed on EVO X2"],
+  "sourceReferences": ["https://github.com/jombo23/N64-Tools", "https://github.com/sauraen/seq64", "https://github.com/FluidSynth/fluidsynth"],
+  "mix": "Original compositions and instrument samples. Offline MIDI/SoundFont rendering approximates the game's envelopes and reverb; this is not a bit-exact N64 RSP recording. Source sequence waits determine loop duration; a second traversal retains release and reverb tails. Final-lap variants are not included.",
+  "rights": "Underlying Wave Race 64 music and samples remain the property of their respective rights holders; not covered by the website code license.",
+  "purchases": 0,
+  "extractedAt": "2026-10-16",
+  "trackHashes": "manifest.json"
+}

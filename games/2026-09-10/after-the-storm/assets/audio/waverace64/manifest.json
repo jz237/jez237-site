@@ -1,0 +1,125 @@
+{
+  "version": 1,
+  "tracks": {
+    "03": {
+      "title": "Main title",
+      "file": "track-03.mp3",
+      "duration": 148.77160416666666,
+      "loopStart": 107.34303912647862,
+      "loopEnd": 148.77161055505005,
+      "sha256": "2d797706d38d92b8eb84c1c5660d5c915ad79aa66c09636795b7fb17efac8727"
+    },
+    "06": {
+      "title": "Dolphin Park",
+      "file": "track-06.mp3",
+      "duration": 100.327875,
+      "loopStart": 51.147540983606554,
+      "loopEnd": 100.327868852459,
+      "sha256": "75d8b6762ff9989d829f3f095a89ca4c019f8ad06a743de4dde59958af7ef846"
+    },
+    "07": {
+      "title": "Sunny Beach",
+      "file": "track-07.mp3",
+      "duration": 74.28570833333333,
+      "loopStart": 42.857142857142854,
+      "loopEnd": 74.28571428571428,
+      "sha256": "e25b4f50b11ed7488b2008f9bd377d0038ab9fd5ddc38ee26e0f3cb23ae31b98"
+    },
+    "08": {
+      "title": "Sunset Bay",
+      "file": "track-08.mp3",
+      "duration": 54.28570833333333,
+      "loopStart": 28.57142857142857,
+      "loopEnd": 54.28571428571428,
+      "sha256": "25798b321ff114f2cc910fce0d393f3bb437d3a5783ce3a6c645d653a851516e"
+    },
+    "09": {
+      "title": "Marine Fortress",
+      "file": "track-09.mp3",
+      "duration": 88.33333333333333,
+      "loopStart": 45.666666666666664,
+      "loopEnd": 88.33333333333333,
+      "sha256": "3ecb2ece01a9672c724a73129bc316b2baf55696e6ae9d826e867becda44f7ad"
+    },
+    "0a": {
+      "title": "Drake Lake",
+      "file": "track-0a.mp3",
+      "duration": 80.0,
+      "loopStart": 44.44444444444444,
+      "loopEnd": 80.0,
+      "sha256": "aacade9b35510c65743c66ab2739b7e0a724f5b271f0df323b25e13bb6c53ded"
+    },
+    "0b": {
+      "title": "Port Blue",
+      "file": "track-0b.mp3",
+      "duration": 56.15385416666667,
+      "loopStart": 28.461538461538463,
+      "loopEnd": 56.15384615384616,
+      "sha256": "2f5204d648392c52296887805dda0c3382d78bc6ddd4f82c90a1c81e6a927bdd"
+    },
+    "0c": {
+      "title": "Twilight City",
+      "file": "track-0c.mp3",
+      "duration": 82.5,
+      "loopStart": 48.75,
+      "loopEnd": 82.5,
+      "sha256": "22d71be0f491598dce7e9cd01c745b8a779d4036eb8da4c9e06ffc879824f330"
+    },
+    "0d": {
+      "title": "Southern Island",
+      "file": "track-0d.mp3",
+      "duration": 72.375,
+      "loopStart": 42.375,
+      "loopEnd": 72.375,
+      "sha256": "1c33b77dadfeb1b5b470d971430833a6b7ab5cb94c2c330ca0841c13e18f9c9b"
+    },
+    "0e": {
+      "title": "Glacier Coast",
+      "file": "track-0e.mp3",
+      "duration": 118.78379166666667,
+      "loopStart": 67.2972972972973,
+      "loopEnd": 118.7837837837838,
+      "sha256": "8fc333da796d1e9252686da9a5551564892568b334a53b751e075df442f45d8e"
+    },
+    "0f": {
+      "title": "First place",
+      "file": "track-0f.mp3",
+      "duration": 21.5,
+      "loopStart": 13.5,
+      "loopEnd": 21.5,
+      "sha256": "5dc74d84515ed4ac762aa01e5e066f50f3faea49342c35a2c294fbceab67fb2d"
+    },
+    "10": {
+      "title": "Second place",
+      "file": "track-10.mp3",
+      "duration": 23.650791666666667,
+      "loopStart": 15.079365079365079,
+      "loopEnd": 23.650793650793652,
+      "sha256": "7ffa4e98956d9e767f628f17582a1a9814756c937e0dab25ec1efe1f0c613324"
+    },
+    "11": {
+      "title": "Third place",
+      "file": "track-11.mp3",
+      "duration": 30.909083333333335,
+      "loopStart": 16.363636363636363,
+      "loopEnd": 30.909090909090907,
+      "sha256": "c5f590fb8e397aaa2a6369d4da1d9ba3c67b039cdb8be8d3d2d4099c6dd97b12"
+    },
+    "12": {
+      "title": "Fourth place",
+      "file": "track-12.mp3",
+      "duration": 30.452895833333333,
+      "loopStart": 17.119565217391305,
+      "loopEnd": 30.45289855072464,
+      "sha256": "4d2099612301f454fb359859a6e71b40f2c0810b92d43d9dd603d6e70c16a0b5"
+    },
+    "13": {
+      "title": "Retired",
+      "file": "track-13.mp3",
+      "duration": 7.6195625,
+      "loopStart": null,
+      "loopEnd": null,
+      "sha256": "e578b3952c75d49f028785758ce491f593e22f397f24a7bacc6bb9ea9a79dd31"
+    }
+  }
+}

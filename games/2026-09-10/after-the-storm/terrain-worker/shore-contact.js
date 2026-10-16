@@ -1,5 +1,5 @@
-import {HULL_PROBES,hullProbeOffset} from './hull-probes.js?v=9267cf1551ef';
-import {projectSolidContact,solidContactVelocity} from './solid-contact.js?v=9267cf1551ef';
+import {HULL_PROBES,hullProbeOffset} from './hull-probes.js?v=3d9805ca6afa';
+import {projectSolidContact,solidContactVelocity} from './solid-contact.js?v=3d9805ca6afa';
 
 // Source shore edges constrain horizontal hull points at every height. They
 // are separate from water datum, the finite 3D floors and visual land heights.
