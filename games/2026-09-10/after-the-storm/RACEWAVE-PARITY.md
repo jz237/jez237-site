@@ -1,5 +1,30 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished checkpoint — Sunset retirement support geometry
+
+Prepared Sunset ordinary race owners now select the recovered course floor and
+player-specific ramp/pier support records for retirement decisions. The floor
+has32 original planes,168 grid cells and189 list halfwords. Ordinary single-player
+uses six ramp boxes followed by two piers; two-player uses only the six ramps.
+The separate prepared Stunt selection has twelve ramp boxes followed by two
+piers. Original row ordering, binary32 coefficients and signed zeros are retained.
+
+Read-only Ghidra queries on EVO X2 left all nine project files unchanged;
+2,722 disassembled instructions match the local ROM. The private oracle executes
+the original744EC box initializer and its floating-point transform helpers,
+intercepting only display-only packed matrix conversion. Original7F448/7FAE4
+execution supplies916 query cases; complete5DD04 execution supplies216 support
+scans. Initialization/query/scan instruction counts are6,320/219,076/142,617.
+The inputs are recovered course tables in a prepared harness, not full bootstrap.
+Public data contains numeric records and expected results, not executable bytes.
+
+All54 focused support, result, launch, host and Sunset runtime tests pass,
+including binary32 normal signs, single-player-only piers, all four ordinary
+classes and actual canonical result selection. Public map-based Sunset and live
+native admission are unchanged; further host validation remains necessary.
+The user's full-resolution requirement remains mandatory: this checkpoint
+changes no renderer, mesh density, texture, render target or quality setting.
+
 ## v2.33.0 release candidate — source course preparation and roller scheduling
 
 This release packages the six Sunset preparation checkpoints below and the

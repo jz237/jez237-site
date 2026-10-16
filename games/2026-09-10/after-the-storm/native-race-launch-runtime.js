@@ -8,7 +8,6 @@ import {prepareNativePrimaryRaceClock} from './native-primary-race-clock.js';
 import {createNativeRaceCameraStorage} from './native-race-camera-storage.js';
 import {NATIVE_ANGLE_TABLE_WORDS,nativeSineTableWords} from './native-math-tables.js';
 import {sourceBuoyVisibleRow} from './source-buoy-progress.js';
-import {SUNNY_NATIVE_RETIREMENT_GEOMETRY} from './native-sunny-support.js';
 import {createNativeAIRouteState,stepNativeAIRoute} from './native-ai-route.js';
 import {prepareNativeAIInitialization} from './native-ai-initialization.js';
 import {prepareNativeAIDriver} from './native-ai-driver.js';
@@ -295,10 +294,10 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    commit(operations);return {operations,diagnostics};
   },
   resultCodeFor(racerIndex,{bodyResultCodes16c8,point90Native,datum2458}){
-   if(!courseRuntime||current.scene.courseIndex!==1||![0,1].includes(current.scene.mode620))
-    throw new Error('Live rider results require admitted ordinary Sunny geometry');
+   if(!courseRuntime?.retirementGeometry||courseRuntime.courseIndex!==current.scene.courseIndex||![0,1].includes(current.scene.mode620))
+    throw new Error('Rider results require selected ordinary support geometry');
    return nativeRaceResultCodeView(current,{racerIndex,bodyResultCodes16c8,resultTableWords47fc:RESULT_TABLE_WORDS,
-    supportProbe:{point90Native,datum2458,geometry:SUNNY_NATIVE_RETIREMENT_GEOMETRY}});
+    supportProbe:{point90Native,datum2458,geometry:courseRuntime.retirementGeometry}});
   },
   gridStart(racerIndex){
    if(!courseRuntime)throw new Error('Source grid requires initialized primary course geometry');

@@ -5,6 +5,8 @@ import {createSourceBuoyLayout,sourceBuoyCourseRules} from './source-buoy-progre
 import {createNativeAIRoute} from './native-ai-route.js';
 import {createNativeAITargetTable} from './native-ai-target.js';
 import {nativeRaceCourseRegions} from './native-course-regions.js';
+import {SUNNY_NATIVE_RETIREMENT_GEOMETRY} from './native-sunny-support.js';
+import {nativeSunsetRetirementGeometry} from './native-sunset-support.js';
 
 // Sunny is live; Sunset can prepare its own ordinary data owners for further
 // host validation. This factory does not admit another course to live physics.
@@ -16,6 +18,7 @@ export function createNativeRaceCourseRuntime({course,difficulty,players}={}){
   throw new TypeError('Selected source route rows and buoy layout are required');
  const mode620=players===2?1:0,scale=course.sourceBuoyLayout.scale,rules=sourceBuoyCourseRules(courseIndex,{reverse:!!course.reverse});
  const regions=nativeRaceCourseRegions(courseIndex);
+ const retirementGeometry=courseIndex===1?SUNNY_NATIVE_RETIREMENT_GEOMETRY:nativeSunsetRetirementGeometry({players});
  const data=createNativePrimaryCourseData({rows:course.sourceRouteRowsByClass[difficulty],courseIndex,mode620});
  const resetLayout=createNativeRaceResetLayout({nodes:data.nodes,
   boundaryNativeXZ:course.boundaryMarkers.map(([x,z])=>({x:x/scale,z:z/scale})),objectKinds4c:[],
@@ -39,7 +42,7 @@ export function createNativeRaceCourseRuntime({course,difficulty,players}={}){
   passingDirectionXZ:n.rightXZ,initialPositionNativeXZ:n.centerNativeXZ}));
  const aiRoute=createNativeAIRoute({nodes:aiNodes,scale,courseIndex});
  const aiTargetTable=createNativeAITargetTable({route:aiRoute,nodes:aiNodes});
- return Object.freeze({data,resetLayout,primaryLayout,sourceBuoyLayout,mode620,aiRoute,aiTargetTable,...regions,
+ return Object.freeze({data,resetLayout,primaryLayout,sourceBuoyLayout,mode620,aiRoute,aiTargetTable,retirementGeometry,...regions,
   sourceDifficulty:course.sourceMetadata.sourceNativeClassByDifficulty[difficulty],
   directionFlag1f90:rules.checkpointSide,scale});
 }
