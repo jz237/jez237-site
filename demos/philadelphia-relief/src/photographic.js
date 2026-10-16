@@ -2,6 +2,7 @@ import { photoAllowed, photoWanted, photoCamera, photoReady, photoTileReady,
   photoLandmarkVisible, photoBudget, photoFailure, PHOTO_PRELOAD }
   from './photo-policy.js?v=philly-2026092121';
 import { createVisibleTimeout } from './visible-timeout.js?v=philly-2026101001';
+import { createPhotoTraffic } from './photo-traffic.js?v=philly-2026101502';
 
 // Serve the pinned engine and its workers from the same origin as the map.
 // This also works when an extension or network blocks third-party script CDNs.
@@ -37,7 +38,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
   const select = document.getElementById('photoMode');
   const message = document.getElementById('photoStatus');
   const retry = document.getElementById('photoRetry');
-  let viewer, tileset, loading = false, failed = false, disposed = false;
+  let viewer, tileset, photoTraffic, loading = false, failed = false, disposed = false;
   let active = false, wanted = false, firstViewReady = false, visibleTiles = 0;
   let pending = 0, lastPoseKey = '', lastMotion = 0, lastStatus = '';
   let lastPose, width = 1, height = 1, detailTiles = 0, bestError = Infinity, generation = 0;
@@ -52,6 +53,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
   }
   function present(on) {
     active = on;
+    photoTraffic?.show(on);
     host.classList.toggle('visible', on);
     document.body.classList.toggle('photographic-view', on);
     credits.hidden = !on;
@@ -133,6 +135,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
         creditContainer: credits, creditViewport: document.body,
       });
       viewer.scene.screenSpaceCameraController.enableInputs = false;
+      photoTraffic=createPhotoTraffic(C,viewer);
       // The relief rig owns the camera. Tile collision data is used only to
       // anchor labels to their actual roofs, not to move that shared camera.
       viewer.scene.screenSpaceCameraController.enableCollisionDetection = false;
@@ -192,6 +195,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
   select.onchange = () => store.set({ photoMode: select.value,
     ...(select.value === 'photo' ? { lightweight: 0 } : {}) }, { source: 'photo-mode' });
   function destroyRenderer(){
+    photoTraffic?.dispose();photoTraffic=undefined;
     if (viewer && !viewer.isDestroyed()) viewer.destroy();
     viewer=undefined;tileset=undefined;
     firstViewReady = false; lastPoseKey = ''; pending = 0;
@@ -226,6 +230,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
   stage.addEventListener('pointerup', up);
 
   return {
+    updateTraffic(cars){photoTraffic?.update(cars);},
     setExhibit(bounds) { exhibitBounds = bounds; return applyExhibit(); },
     get exhibitSupported() {
       return !viewer || window.Cesium.ClippingPolygonCollection.isSupported(viewer.scene);

@@ -60,7 +60,7 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
   }
   let graph=null,traffic=null,curbLayout=null,loading=false,disposed=false,age=10;
   let retryDelay=0,request=null,vehicleView=null,motionEnabled=false;
-  let visibleCars=0,movingCars=0,trafficRadius=0;
+  let visibleCars=0,movingCars=0,trafficRadius=0,photoCars=[];
   let lastX=Infinity,lastZ=Infinity,lastExag=0,lastRadius=0;
   const palette=[0xb3b7bb,0x293746,0xd6cdb6,0x813b30,0x3e586c,0xdcb646,0xdddeda];
   const lamps={indicator:[2.6,1.8,.025],head:[2.2,2.1,1.65],
@@ -170,12 +170,13 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
     for(const mesh of [street,trees,signals])uploadInstances(mesh);
   }
   return {group,
+    get photoCars(){return group.visible?photoCars:[];},
     stats:()=>({loading:loading&&!graph,failed:retryDelay>0&&!graph,
       cars:group.visible?visibleCars:0,moving:group.visible&&motionEnabled?movingCars:0,
       radius:trafficRadius}),
     get animating(){return !disposed&&group.visible&&motionEnabled
-      &&(vehicles.count>0||signals.count>0||people.visible&&people.count>0);},
-    update({camera,pose,state,exaggeration,sunDir,dt,reducedMotion,archive,quality}){
+      &&(visibleCars>0||signals.count>0||people.visible&&people.count>0);},
+    update({camera,pose,state,exaggeration,sunDir,dt,reducedMotion,archive,quality,photo=false}){
       if(disposed)return;
       motionEnabled=streetMotionEnabled(state,reducedMotion);
       retryDelay=Math.max(0,retryDelay-(Number.isFinite(dt)?Math.max(0,dt):0));
@@ -183,10 +184,11 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
         &&!archive&&state.layers.structures&&pose.dist<6500&&!!state.streetLife;
       if(!group.visible)return;load();if(!graph)return;
       const x=projection.lonToX(pose.lon),z=projection.latToZ(pose.lat);
-      const radius=quality==='performance'?650:Math.min(2000,Math.max(850,pose.dist*.8));
+      const radius=quality==='performance'?650:photo?850:Math.min(2000,Math.max(850,pose.dist*.8));
       trafficRadius=radius;
       age+=dt;
-      if(age>1&&(Math.hypot(x-lastX,z-lastZ)>100||exaggeration!==lastExag||Math.abs(radius-lastRadius)>100)){
+      if(!photo&&age>1&&(Math.hypot(x-lastX,z-lastZ)>100
+        ||exaggeration!==lastExag||Math.abs(radius-lastRadius)>100)){
         rebuild(x,z,exaggeration,radius);age=0;lastX=x;lastZ=z;lastExag=exaggeration;lastRadius=radius;
       }
       uniforms.uSun.value.copy(sunDir);uniforms.uEye.value.copy(camera.position);
@@ -200,6 +202,18 @@ export function createCityStreets(THREE,{scene,projection,sampleElevation,lighti
         walkingTime+=remaining;
         while(remaining>1e-8){const step=Math.min(.1,remaining);
           traffic.update(step,{x,z,radius:radius+150});remaining-=step;}
+      }
+      // The same simulation drives both renderers. Photo mode only needs car
+      // poses; do not rebuild or upload hidden Three.js scenery every frame.
+      if(photo){
+        photoCars=[];visibleCars=0;movingCars=0;vehicleView=null;
+        for(const car of traffic.cars){
+          const p=trafficPose(car);if(Math.hypot(p.x-x,p.z-z)>radius)continue;
+          visibleCars++;if(car.speed>.05)movingCars++;
+          photoCars.push({id:car,lon:projection.xToLon(p.x),lat:projection.zToLat(p.z),
+            angle:p.angle,variant:Math.floor(car.seed*palette.length)%palette.length,van:car.seed>.88});
+        }
+        return;
       }
       people.visible=heads.visible=pose.dist<1800;
       let signalsChanged=false;

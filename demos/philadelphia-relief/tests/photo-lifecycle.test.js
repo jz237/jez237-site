@@ -29,6 +29,7 @@ function fixture(t,options={}){
     destroyed=false;destroyCount=0;rendering=false;
     camera={frustum:{},lookAt(){},lookAtTransform(){}};
     entities={values:[]};
+    dataSources={add(){},remove(){}};
     scene={screenSpaceCameraController:{},postProcessStages:{fxaa:{}},
       requestRender(){},primitives:{add:tiles=>{this.tiles=tiles;}},renderError:new Signal()};
     constructor(_host,settings){if(options.graphicsError)throw options.graphicsError;
@@ -46,7 +47,8 @@ function fixture(t,options={}){
       this.rendering=false;
     }
   }
-  const C={Viewer,Ion:{},Color:{fromCssColorString:s=>s},Cartesian3:{fromDegrees:()=>({})},
+  const C={Viewer,Ion:{},CustomDataSource:class{},
+    Color:{fromCssColorString:s=>s},Cartesian3:{fromDegrees:()=>({})},
     Matrix4:{IDENTITY:{}},HeadingPitchRange:class{},Math:{toRadians:n=>n*Math.PI/180},
     createGooglePhotorealistic3DTileset:()=>new Promise((resolve,reject)=>tileRequests.push({resolve,reject}))};
   globalThis.document=doc;globalThis.window={Cesium:C,devicePixelRatio:1};

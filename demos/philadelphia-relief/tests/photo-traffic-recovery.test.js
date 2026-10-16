@@ -28,9 +28,10 @@ test('traffic follows reduced motion by default but explicit play survives a sha
   state.streetMotion='on';state.animationSpeed=0;assert.equal(streetMotionEnabled(state,false),false);
 });
 
-test('traffic status explains captured photo cars, paused animation and unavailable street coverage',()=>{
+test('traffic status explains simulated photo cars, paused animation and unavailable street coverage',()=>{
   const state=defaults(),pose={dist:350},stats={cars:12,moving:3};
-  assert.match(streetStatus(state,pose,stats,{photo:true}),/captured imagery/);
+  assert.match(streetStatus(state,pose,stats,{photo:true}),/Moving cars are simulated/);
+  assert.match(streetStatus(state,pose,stats,{photo:true,reducedMotion:true}),/paused by reduced motion/);
   assert.match(streetStatus(state,pose,stats,{reducedMotion:true}),/paused by reduced motion/);
   assert.match(streetStatus(state,pose,{...stats,radius:650}),/3 moving \/ 9 waiting within 650 m/);
   assert.match(streetStatus(state,pose,stats),/Includes off-screen streets/);

@@ -4,7 +4,6 @@ export function streetMotionEnabled(state,reducedMotion){
 }
 
 export function streetStatus(state,pose,stats,{photo=false,archive=false,reducedMotion=false}={}){
-  if(photo)return 'Photographic cars are captured imagery. Show moving traffic in Diorama.';
   if(!state.streetLife)return 'Street life is off.';
   if(state.lightweight)return 'Lighter graphics hides simulated traffic.';
   if(archive||state.era!=='present'||state.compareMode!=='off'||!state.layers.structures)
@@ -18,5 +17,6 @@ export function streetStatus(state,pose,stats,{photo=false,archive=false,reduced
   if(!stats.cars)return 'No simulated cars in this view. Show moving traffic in Center City.';
   const area=stats.radius?`within ${Math.round(stats.radius)} m`:'in the surrounding streets';
   return `Simulated traffic · ${stats.moving||0} moving / ${stats.cars-(stats.moving||0)} waiting`
-    +` ${area}. Includes off-screen streets and cars hidden by buildings.`;
+    +` ${area}. Includes off-screen streets and cars hidden by buildings.`
+    +(photo?' Moving cars are simulated; parked cars in the imagery remain still.':'');
 }

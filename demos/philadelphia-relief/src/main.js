@@ -533,7 +533,7 @@ async function boot() {
   store.subscribe(state=>{streetMotion.value=state.streetMotion;});
   $('showTraffic').onclick=()=>{
     explore?.close();cityFeatures?.close();bathymetry?.disable();
-    store.set({photoMode:'relief',era:'present',compareMode:'off',lightweight:0,
+    store.set({era:'present',compareMode:'off',lightweight:0,
       streetLife:1,streetMotion:'on',animationSpeed:1,exaggeration:1,fov:42,
       layers:{structures:true,terrain:true,imagery:true,flood:false,contours:false}},
     {source:'show-traffic'});
@@ -1020,8 +1020,13 @@ async function boot() {
     supplement(now, state);
     orientation.update(now, viewW / viewH, dt); navigation.update(now);
     bathymetry.update();
+    if(photographic.active){
+      streetLife.update({camera,pose:now,state,exaggeration:1,sunDir,dt:streetDt,
+        reducedMotion:REDUCED_MOTION,archive:mapLayers.archiveActive,quality:effectiveQuality,photo:true});
+      photographic.updateTraffic(streetLife.photoCars);
+    }
     if (photographic.update(now, state, viewW, viewH)) {
-      const text=streetStatus(state,now,streetLife.stats(),{photo:true});
+      const text=streetStatus(state,now,streetLife.stats(),{photo:true,reducedMotion:REDUCED_MOTION});
       if(streetMessage.textContent!==text)streetMessage.textContent=text;
       explore?.update(camera, 1);
       mapLayers.update(camera, { pose: now, width: viewW, height: viewH, exaggeration: 1 });
@@ -1256,7 +1261,7 @@ async function boot() {
     const photo = photographic.stats();
     scheduledDelay = frameDelay({ saving: powerToggle.checked,
       moving: rig.dragging || motion.playing || cityFeatures?.animating, live: aircraftLayer.animating,
-      streets: !photographic.active && streetLife.animating,
+      streets: streetLife.animating,
       loading: photo.wanted && !photo.failed && (photo.loading || !photo.firstViewReady || photo.pending > 0)
         || imageryDetail.stats().pending > 0,
       now: performance.now(), lastInteraction });

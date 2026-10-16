@@ -1302,3 +1302,7 @@ Traffic density follow-up: 1,800 simulated vehicles now populate the street grap
 separates moving and waiting cars, states the neighborhood radius, and explicitly
 includes off-screen streets and building occlusion rather than implying all cars
 are visible. The ten-minute real-street endurance check runs at the new population.
+
+Photo traffic follow-up: the same street simulation now drives native Cesium vehicle models in photographic close-ups. Tile-relative heights and normal depth testing keep cars on loaded surfaces and behind buildings. The photo radius is bounded to 650/850 metres, with no hidden Three.js scenery uploads. Play/Pause and reduced motion apply in either view; the traffic shortcut preserves the selected renderer. Captured imagery cars remain stationary. The gallery and social preview now use a City Hall photographic capture with attribution preserved.
+
+Validation includes shared-simulation continuity, pause behavior, model lifetime and heading, GLB integrity, and tools/photo-traffic-fixture.html: an elevated local 3D Tiles road with a building for checking attachment and occlusion without a hosted imagery token.
