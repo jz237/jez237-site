@@ -574,7 +574,7 @@ attribute vec2 aBend;
     this._hand = true;
     this.held = new Map();
     const trees = this.plants.filter((p) => p.crown || p.kind === 'cycad' || p.H > 0.3);
-    const tmp = new Vector3(), R = new Vector3(), Z = new Vector3(), D = new Vector3();
+    const tmp = new Vector3(), R = new Vector3(), Z = new Vector3(), D = new Vector3(), at = new Vector3();
     const axes = () => {
       const cam = this.ctx.camera;
       R.setFromMatrixColumn(cam.matrixWorld, 0).setY(0).normalize();
@@ -619,7 +619,7 @@ attribute vec2 aBend;
       onMove: () => {
         const g = this.grab;
         if (!g) return;
-        const pt = this.ctx.input.rayToCameraPlane(g.anchor, D);
+        const pt = this.ctx.input.rayToCameraPlane(g.anchor, at); // (its own vector: axes() reuses D)
         if (!pt) return;
         axes();
         const dx = pt.x - g.anchor.x, dy = pt.y - g.anchor.y, dz = pt.z - g.anchor.z;

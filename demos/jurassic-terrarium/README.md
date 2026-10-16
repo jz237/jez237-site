@@ -328,3 +328,7 @@ v1.40.1: animals no longer walk through each other:
 v1.40.2: calmer herds; cave fireflies:
 - **No more skittering:** a plant-eater near the T. rex used to flip between fleeing and walking many times a second. Now it doesn't run from a sleeping T. rex and gives one lying in the stream less room. After running off, it settles a few seconds before bolting again (unless charged or very close), and its wandering keeps it out of an awake T. rex's way. Over 20 simulated minutes each Triceratops now bolts 3–8 times instead of up to hundreds of re-starts.
 - **Cave fireflies:** the little lights in the den were glow-fungus beads hanging still in mid-air. They're now cave fireflies drifting about in the dark on their own slow courses, bobbing and glowing and fading at their own pace, brighter at dusk and night. They swirl up when the T. rex moves through the den.
+
+v1.40.3: two fixes:
+- **The case sliding off screen:** a quick click on or near an animal still told the field guide to follow it, so poking an animal set the camera tracking it, and the whole case slid away as it walked off. Clicking in the case no longer follows anything: pick an animal's name in the field guide to follow it (Esc or "Stop following" to stop).
+- **Grabbed trees stuck leaning one way:** the planted trees' grab handler wrote the pointer's position and the camera's direction into the same scratch vector, so a grabbed tree always bent the same way whatever the mouse did. It now leans after the hand: right, left, back upright.
