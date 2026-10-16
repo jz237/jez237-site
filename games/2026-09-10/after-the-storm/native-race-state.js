@@ -27,6 +27,7 @@ import {prepareNativeRaceStartTransform,decodeNativeRaceStartTransform} from './
 import {prepareNativeRaceFadePropertiesInitialization,prepareNativeRaceFadeSlotsReset} from './native-race-fade-initialization.js';
 import {prepareNativeRaceMainConfiguration} from './native-race-main-configuration.js';
 import {prepareNativeRaceMenuInitialization} from './native-race-menu-initialization.js';
+import {prepareNativeNameEntryInitialization,prepareNativeNameEntryInput,prepareNativeNameEntryAnimationPhase} from './native-name-entry.js';
 import {prepareNativeRaceRiderResourceConfiguration,prepareNativeRaceCourseResourceConfiguration} from './native-race-resource-configuration.js';
 import {prepareNativeRaceResultCodeSelection} from './native-race-body-fields.js';
 import {prepareNativePrimaryResultEstimates} from './native-primary-standings.js';
@@ -45,13 +46,13 @@ const sceneRanges={primaryHumanIndex:[0,3],secondaryHumanIndex:[0,3],players:[1,
  racerCount:[0,4],primaryCount:[0,64],finishSourceRow:[0,63],activity624:[-32768,32767],event628:[-32768,32767],
  pendingPlayers60c:[-32768,32767],participantCount60e:[-32768,32767],result6f0:[-32768,32767],field62a:[-32768,32767],specialAb64:[-32768,32767],ready6fc:[-32768,32767],field4964:[0,65535],
  reverseDab68:[0,65535],missesEnabled72e:[0,65535],seed6f00:[0,65535],rngState4640:[0,0xffffffff],style6e28:[0,65535],
- field4970:[0,65535],field72c:[0,65535],fieldA9ac:[0,65535],pressed65a:[0,65535],unlockAb60:[-32768,32767],variant6f4:[-32768,32767],variant6f6:[-32768,32767]};
+ field4970:[0,65535],field72c:[0,65535],fieldA9ac:[0,65535],pressed65a:[0,65535],unlockAb60:[-32768,32767],freshNameAb6c:[-32768,32767],variant6f4:[-32768,32767],variant6f6:[-32768,32767]};
 const sceneWords=new Set(['cold8224','clockStopped817c','phase650','simulation648','main638','mode620','state600',
  'missLimit8174','noFinish8178','configuredLaps728','difficulty','directionFlag1f90','ambientD4b00','fortressD8240',
  'metadataD9b0','metadataCb32c','restart6f8','initLatch63c','gameStateAb24','mode608','returnState630','forceFirst8228','demoOffset5438','rngState4640','style6e2c',
- 'previousGameState634','field640','field644','fieldAb1c','field461c','field704','field708','field70c','field710','field714','nameIndexA9b0','resultEffect393c','wave610','missLimit614','lapCount618','field61c','wave49b0','field64c','players','racerCount','toggleD9914','previousNavigationD9874','trainingSelectionDa9f8']);
+ 'previousGameState634','field640','field644','fieldAb1c','field461c','field700','field704','field708','field70c','field710','field714','nameIndexA9b0','resultEffect393c','wave610','missLimit614','lapCount618','field61c','wave49b0','field64c','players','racerCount','toggleD9914','previousNavigationD9874','trainingSelectionDa9f8']);
 const sceneHalves=new Set(['activity624','event628','field62a','pendingPlayers60c','participantCount60e','result6f0','specialAb64','ready6fc','reverseDab68','missesEnabled72e','seed6f00','field4964','style6e28',
- 'field4970','field72c','fieldA9ac','pressed65a','unlockAb60','variant6f4','variant6f6']);
+ 'field4970','field72c','fieldA9ac','pressed65a','unlockAb60','freshNameAb6c','variant6f4','variant6f6']);
 function record(v,n){if(!v||typeof v!=='object'||Array.isArray(v))throw new TypeError(`Expected ${n}`);return v;}
 function integer(v,n,min=MIN,max=MAX){if(!Number.isInteger(v)||v<min||v>max)throw new RangeError(`Invalid ${n}`);return v||0;}
 function words(v,n,count){if(!Array.isArray(v)||v.length!==count)throw new RangeError(`${n} requires${count} unsigned words`);
@@ -83,6 +84,7 @@ function copy(value){
   s.menuWordsE658=words(value.menuWordsE658,'menuWordsE658',21);
  }
  if(value.deviceWords4308!==undefined)s.deviceWords4308=words(value.deviceWords4308,'deviceWords4308',10);
+ if(value.nameEntryWords61c4!==undefined)s.nameEntryWords61c4=words(value.nameEntryWords61c4,'nameEntryWords61c4',14);
  if(value.profileWordsB330!==undefined){
   if(Object.hasOwn(scene,'difficulty'))throw new RangeError('difficulty overlaps profileWordsB330');
   const count=value.profileWordsB330?.length;
@@ -104,6 +106,9 @@ function copy(value){
  * halfwords. Pending signed-halfword players60c is distinct from active players.
  * Partial scene samples are allowed; each entry point requires its real reads.
  * Optional i1Words9440 retains that overlay's separate168-word data/BSS span.
+ * Optional nameEntryWords61c4[14] owns shared name-menu scratch802261C4..61FC;
+ * it does not overlap the HUD wheel/name bytes or the i1 overlay. field700 is
+ * signed32 transport of four retained name bytes; freshNameAb6c is signed16.
  * Optional profileWordsB330[50 or52] owns B330..B3F8 or B330..B400 exclusive.
  * The extended view includes the four adjacent B3F8..B3FE rider halfwords;
  * no second flag owner is accepted. Older bounded leaves retain50-word input.
@@ -180,11 +185,11 @@ function apply(s,operations){
    const bits=integer(op.value,'source halfword bits',0,65535);
    if(op.field==='pressed65a'&&s.menuWordsE658!==undefined)s.menuWordsE658[0]=((s.menuWordsE658[0]&0xffff0000)|bits)>>>0;
    else s.scene[op.field]=sceneRanges[op.field][0]<0?bits<<16>>16:bits;
-  }else if(op.kind==='i1Write'||op.kind==='profileWrite'){
-   const key=op.kind==='i1Write'?'i1Words9440':'profileWordsB330';
+  }else if(op.kind==='i1Write'||op.kind==='profileWrite'||op.kind==='nameEntryWrite'){
+   const key=op.kind==='i1Write'?'i1Words9440':op.kind==='nameEntryWrite'?'nameEntryWords61c4':'profileWordsB330';
    if(!s[key])throw new TypeError(`Supply retained ${key} before applying its writes`);
    const width=op.width,count=s[key].length;
-   if(width!==4&&(op.kind!=='profileWrite'||width!==2))throw new RangeError(`Invalid ${key} patch width`);
+   if(width!==4&&(!['profileWrite','nameEntryWrite'].includes(op.kind)||width!==2))throw new RangeError(`Invalid ${key} patch width`);
    const offset=integer(op.byteOffset,`${key} byteOffset`,0,count*4-width);
    if(offset%width)throw new RangeError(`Invalid ${key} word alignment`);
    const value=integer(op.value,`${key} bits`,0,width===2?65535:0xffffffff),index=offset>>>2;
@@ -292,6 +297,23 @@ export function prepareNativeRaceRiderResourceConfigurationUpdate(state,input,so
 }
 export function prepareNativeRaceCourseResourceConfigurationUpdate(state,input,sourceViews={}){
  const next=copy(state),prepared=prepareNativeRaceCourseResourceConfiguration(next,input,sourceViews),effects=apply(next,prepared.operations);
+ return freeze({...prepared,state:next,effects});
+}
+
+/** Source1E1BA8 shares the retained name scratch and existing HUD/race owners.
+ * The subsequent animation, physical input and record save loop is separate. */
+export function prepareNativeNameEntryInitializationUpdate(state,sourceViews={}){
+ const next=copy(state),prepared=prepareNativeNameEntryInitialization(next,sourceViews),effects=apply(next,prepared.operations);
+ return freeze({...prepared,state:next,effects});
+}
+
+export function prepareNativeNameEntryInputUpdate(state,sourceViews={}){
+ const next=copy(state),prepared=prepareNativeNameEntryInput(next,sourceViews),effects=apply(next,prepared.operations);
+ return freeze({state:next,operations:prepared.operations,effects,diagnostic:prepared.diagnostic});
+}
+
+export function prepareNativeNameEntryAnimationPhaseUpdate(state,sourceViews={}){
+ const next=copy(state),prepared=prepareNativeNameEntryAnimationPhase(next,sourceViews),effects=apply(next,prepared.operations);
  return freeze({...prepared,state:next,effects});
 }
 

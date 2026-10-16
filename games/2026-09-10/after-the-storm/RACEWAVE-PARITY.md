@@ -1,5 +1,38 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Original name-entry controls (local checkpoint)
+
+The shared801E1BA8 numeric initializer now retains its own14-word scratch,
+the existing HUD wheel/name bytes, fresh-name halfword and four-byte previous
+name. It preserves restoration, float32 angle rounding and mode-specific
+record qualification, including championship warm-up exclusion and every
+qualifying-round write. Original-instruction execution matches624 cases,
+114,433 counted instructions and20,856 ordered writes.
+
+The complete801E2530 control dispatcher and numeric31A0 analog helper now
+use the sampled menu/device owners and explicit selected physical port.
+They preserve confirm/delete precedence, the three-character limit, circular
+31-symbol wheel, digital/analog priority, queued movement and intermediate
+wrap stores. Exit keeps ordered pending save, format and menu calls.
+Original execution matches1,386 control cases plus1,280 analog-speed cases,
+116,885 counted instructions and5,298 writes; complete retained owners match.
+
+The801E12E0..183C animation prefix now handles31-update intro/outro,
+16-update confirmation, insertion/delete/END, speed refresh, angle wrapping,
+automatic END seeking after the third initial and the visible wheel window.
+Float32 state and float64 confirmation arithmetic remain distinct. All3,890
+original-execution cases match191,782 instructions and17,680 ordered writes,
+complete retained owners and transient confirmation poses. All76 focused
+name-entry, menu/input, canonical state/profile and result tests pass, including
+a full numeric three-initial entry, automatic END selection and exit sequence.
+
+This is a local numeric checkpoint. The live site remainsv2.30.1. The outer
+initialization latch, matrix projection/crossing effects, textured presentation,
+save callees and live name-entry integration are still pending. These modules
+do not claim to execute the full801E1290 renderer or persist records. Source
+constants and character bytes are explicit caller views; no ROM strings or
+tables are embedded in the new implementation.
+
 ## v2.30.1 — original result-menu entry
 
 The four original result-menu entry callers C20C, C830, C9C8 and CE50 now have
