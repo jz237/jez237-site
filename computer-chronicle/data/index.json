@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-10-16",
+      "historicDate": "1985-01-28",
+      "displayDate": "Week of January 28-February 3, 1985",
+      "edition": "Issue 131 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Commodore counts the cost; cassette users pick up speed.",
+      "leadHeadline": "Commodore earnings plunge 94%; home-computer boom faces its reckoning",
+      "storyHeadlines": [
+        "TurboTape promises disk-like loading from ordinary Commodore cassettes",
+        "The C64 becomes a six-track music studio",
+        "JTERM’s new version brings 1200-bps access to Atari bulletin-board callers"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-01-28.jpg",
+      "thumb": "media/thumbs/1985-01-28.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-10-15",
       "historicDate": "1985-01-21",
       "displayDate": "Week of January 21-27, 1985",

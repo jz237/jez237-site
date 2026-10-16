@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Thu, 15 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 16 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of January 28-February 3, 1985 — Commodore earnings plunge 94%; home-computer boom faces its reckoning</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-01-28</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-01-28</guid>
+      <pubDate>Fri, 16 Oct 2026 12:00:00 GMT</pubDate>
+      <description>Quarterly profit shrinks to $3.2 million as the industry searches for its next reason to buy. Commodore’s latest figures have put a hard number on the cooling home-computer boom. Paul Richter reports in the February 1 Los Angeles Times that quarterly profit fell 94 percent to $3.2 million. Sales for the quarter ended December 31 declined 21 percent from a year earlier, to $338.7 million. Also this week: TurboTape promises disk-like loading from ordinary Commodore cassettes · The C64 becomes a six-track music studio · JTERM’s new version brings 1200-bps access to Atari bulletin-board callers.</description>
+    </item>
     <item>
       <title>Week of January 21-27, 1985 — Apple puts a shared laser printer at the center of the Macintosh Office</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-01-21</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-09-17</guid>
       <pubDate>Fri, 25 Sep 2026 12:00:00 GMT</pubDate>
       <description>Acornsoft’s new space game turns a 32K home computer into an open-ended universe. Acornsoft releases Elite for the BBC Micro on September 20, opening a new kind of journey at the home-computer keyboard. Ian Bell and David Braben have built a space game in which a pilot can trade, fight and roam rather than simply chase a fixed score. The ship begins with the humble rank of Harmless; the coveted destination is Elite. Also this week: Seven Cities of Gold Sends Players Across an Uncharted Map · Ultima III Turns Fantasy Quest into a Four-Character Expedition · Word Flyer Makes Reading Practice a Shared Game · The Fat Mac Gives Macintosh Four Times the Memory.</description>
-    </item>
-    <item>
-      <title>Week of September 10-16, 1984 — Apple Unveils a 512K Macintosh</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-09-10</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-09-10</guid>
-      <pubDate>Wed, 23 Sep 2026 12:00:00 GMT</pubDate>
-      <description>Four times the memory gives the little graphical computer room to breathe. Apple opened the week on September 10 with the Macintosh 512K, its first major revision of the compact machine introduced in January. The familiar all-in-one case still houses a nine-inch black-and-white display and a Motorola 68000 processor, but the built-in memory leaps from 128K to 512K. That fourfold increase tackles the original Macintosh’s most conspicuous limitation. Also this week: AtariSoft Sends Arcade Favorites Across the Home-Computer Aisle · PC Compatibles Compete on Price, Portability and Speed · Framework Packs Six Office Tools Into One Box.</description>
     </item>
   </channel>
 </rss>
