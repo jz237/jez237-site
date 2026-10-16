@@ -42,9 +42,12 @@ test('damaged packed responses recover through the uncompressed source',async()=
 });
 test('world reuse follows authored mode and difficulty, independent of rider or waves',()=>{
  for(const id of ['greyhaven','amber','reed','citadel','port','neon','glacier','tempest','practice']){
-  const key=(mode,difficulty=0,rider=0)=>courseWorldKey(createRace({course:getCourse(id,difficulty),mode,rider}).course,mode==='practice');
+  const key=(mode,difficulty=0,rider=0)=>{const race=createRace({course:getCourse(id,difficulty),mode,rider});return courseWorldKey(race.course,race.freeRide);};
   assert.equal(key('practice'),key('practice',0,2));
-  assert.equal(key('race'),key('time'));assert.equal(key('race'),key('versus'));
+  assert.equal(key('race'),key('time'));
+  if(id==='practice'){assert.equal(key('practice'),key('versus'));assert.notEqual(key('race'),key('versus'));}
+  else if(['tempest','greyhaven','amber'].includes(id))assert.notEqual(key('race'),key('versus'),'source player families select distinct collision or render objects');
+  else assert.equal(key('race'),key('versus'));
   assert.notEqual(key('practice'),key('race'));assert.notEqual(key('practice'),key('stunt'));
   assert.notEqual(key('stunt'),key('race'));
   for(const difficulty of [1,2,3])assert.notEqual(key('race'),key('race',difficulty));
