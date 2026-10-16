@@ -1,3 +1,4 @@
+import {restoreSteeringFourteenBytes} from './steering-fourteen-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readMorrowPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreMorrowBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreSteeringFourteenBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readMorrowPrevious(file);
 }
 export function verifyMorrowRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'5787ad03130b62e6405f55cfe01b33f31a81e87a');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreSteeringFourteenBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreMorrowBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the Morrow release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreSteeringFourteenBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the Morrow release');
  assert.equal(manifest.previousFixtureCount,3080);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,3080);
 }

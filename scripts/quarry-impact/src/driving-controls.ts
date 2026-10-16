@@ -6,12 +6,12 @@ export const ACTIONS=['throttle','reverse','left','right','handbrake','shiftUp',
 export type Action=typeof ACTIONS[number];
 export const ACTION_LABELS:Record<Action,string>={throttle:'Accelerate',reverse:'Brake / reverse',left:'Steer left',right:'Steer right',handbrake:'Handbrake',shiftUp:'Shift up',shiftDown:'Shift down',clutch:'Clutch'};
 export interface DrivingControls {
- version:1; keyboardDefaults?:13; assists?:DrivingAssists; keys:Record<Action,string[]>;
+ version:1; keyboardDefaults?:14; assists?:DrivingAssists; keys:Record<Action,string[]>;
  pad:number; axis:number; invert:boolean; center:number; deadzone:number; saturation:number; curve:number;
  throttleButton:number; brakeButton:number; handbrakeButton:number; triggerDeadzone:number;
  speedAssist:number; rumble:number; transmission:TransmissionMode; shiftUpButton:number; shiftDownButton:number; clutchButton:number;
 }
-export function defaultControls():DrivingControls{return {version:1,keyboardDefaults:13,keys:{throttle:['KeyW','ArrowUp'],reverse:['KeyS','ArrowDown'],left:['KeyD','ArrowRight'],right:['KeyA','ArrowLeft'],handbrake:['Space'],shiftUp:['KeyE'],shiftDown:['KeyQ'],clutch:['ShiftLeft']},pad:-1,axis:0,invert:false,center:0,deadzone:.12,saturation:1,curve:1,throttleButton:7,brakeButton:6,handbrakeButton:0,triggerDeadzone:.05,speedAssist:0,rumble:.65,transmission:'automatic',shiftUpButton:5,shiftDownButton:4,clutchButton:1};}
+export function defaultControls():DrivingControls{return {version:1,keyboardDefaults:14,keys:{throttle:['KeyW','ArrowUp'],reverse:['KeyS','ArrowDown'],left:['KeyD','ArrowRight'],right:['KeyA','ArrowLeft'],handbrake:['Space'],shiftUp:['KeyE'],shiftDown:['KeyQ'],clutch:['ShiftLeft']},pad:-1,axis:0,invert:false,center:0,deadzone:.12,saturation:1,curve:1,throttleButton:7,brakeButton:6,handbrakeButton:0,triggerDeadzone:.05,speedAssist:0,rumble:.65,transmission:'automatic',shiftUpButton:5,shiftDownButton:4,clutchButton:1};}
 const reserved=new Set(['KeyC','KeyR','KeyM','KeyF','KeyP','KeyI','KeyT']);
 export const allowedKey=(key:string)=>/^(Key[A-Z]|Digit[0-9]|Arrow(Up|Down|Left|Right)|Space|Shift(Left|Right))$/.test(key)&&!reserved.has(key);
 const bound=(n:unknown,min:number,max:number,fallback:number)=>typeof n==='number'&&Number.isFinite(n)?Math.max(min,Math.min(max,n)):fallback;
@@ -25,7 +25,7 @@ export function readControls(raw?:string|null):DrivingControls{
  if(!Array.isArray(entries)||entries.length<1||entries.length>2){valid=false;break;}keys[action]=[];for(const key of entries){if(typeof key!=='string'||!allowedKey(key)||seen.has(key)){valid=false;break;}seen.add(key);keys[action].push(key);}}
  if(valid){
   // Adopt the revised default once, preserving custom bindings and calibration.
-  const previousDefault=v.keyboardDefaults!==13&&keys.left.join(',')==='KeyA,ArrowLeft'&&keys.right.join(',')==='KeyD,ArrowRight';
+  const previousDefault=v.keyboardDefaults!==14&&keys.left.join(',')==='KeyA,ArrowLeft'&&keys.right.join(',')==='KeyD,ArrowRight';
   if(previousDefault){keys.left=[...d.keys.left];keys.right=[...d.keys.right];}
   d.keys=keys;
  }
