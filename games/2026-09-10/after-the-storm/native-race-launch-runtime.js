@@ -1,6 +1,6 @@
 import {createNativeRaceState,nativeRaceStateSnapshot,prepareNativeRaceStateOperations,
  prepareNativeRaceCountdown,prepareNativeRacePrestartInitializationUpdate,prepareNativeRacePrestartStatusUpdate,
- prepareNativeRaceStartup,prepareNativeRaceOrdinaryUpdate} from './native-race-state.js';
+ prepareNativeRaceStartup,prepareNativeRaceOrdinaryUpdate,nativeRaceGridTransformView,nativeRaceComputerProfileView} from './native-race-state.js';
 import {prepareNativeRaceStartupOverlay} from './native-race-startup-overlay.js';
 import {prepareNativePrimaryRaceClock} from './native-primary-race-clock.js';
 import {createNativeRaceCameraStorage} from './native-race-camera-storage.js';
@@ -58,7 +58,7 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    players,racerCount:racers.length,primaryHumanIndex:0,secondaryHumanIndex:1,courseIndex,
    mode620:players===2?1:0,mode608:players===2?1:0,main638:1,phase650:0,simulation648:1,
    clockStopped817c:1,activity624:-1,event628:0,gameStateAb24:40,specialAb64:0,ready6fc:0,
-   missesEnabled72e:1,result6f0:0,ambientD4b00:0,
+   missesEnabled72e:1,result6f0:0,ambientD4b00:0,field4964:0,
    ...(courseRuntime?{primaryCount:courseRuntime.data.nodes.length,finishSourceRow:courseRuntime.data.finishSourceRow,
     cold8224:1,forceFirst8228:0,demoOffset5438:0,restart6f8:0,reverseDab68:Number(reverse),state600:0,
     missLimit8174:5,noFinish8178:0,configuredLaps728:integer(laps,'configured laps',3,9),
@@ -136,6 +136,17 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
   ordinary:!!courseRuntime,
   scene:()=>({simulationState:current.scene.simulation648,phase650:current.scene.phase650}),
   snapshot:()=>nativeRaceStateSnapshot(current),
+  gridStart(racerIndex){
+   if(!courseRuntime)throw new Error('Source grid requires initialized primary course geometry');
+   // Grid6AC84 reads the tangent78/7C. The judging view's color-aligned80/84
+   // is a separate source field and is zero at the finish row.
+   const primaryNodes=courseRuntime.data.recordWordsBySourceRow.map((row,sourceRow)=>{
+    const pair=(a,b)=>({x:readFloat(row[a/4]),z:readFloat(row[b/4])});
+    return {sourceRow,centerNativeXZ:pair(0,8),forwardXZ:pair(0x70,0x74),rightXZ:pair(0x78,0x7c),classification98:row[0x98/4]|0};
+   });
+   return Object.freeze({...nativeRaceGridTransformView(current,{racerIndex,primaryNodes}),
+    computerProfile:nativeRaceComputerProfileView(current,racerIndex)});
+  },
   records:()=>racers.map((r,slot)=>({slot,lap:word(slot,0),place:word(slot,1),nextSourceRow:word(slot,3),
    totalMs:word(slot,103),lapMs:word(slot,90),savedLapsMs:(r.lapTimes??[]).map(s=>Math.round(s*1000)),
    power:word(slot,75),misses:word(slot,77),finished:word(slot,189)!==0,disqualification:word(slot,187),

@@ -1,6 +1,7 @@
 import {createSourceFixedSphereGrid} from './source-boundary-spheres.js';
 import {createNativeRaceHost,stepNativeRaceHost} from './native-race-host.js';
 import {createNativeRaceLaunchRuntime} from './native-race-launch-runtime.js';
+import {prepareNativeHullStartFromMatrix} from './native-hull.js';
 import {createNativeRaceCourseRuntime} from './native-race-course-runtime.js';
 import {capturePrimaryBuoyPresentation} from './primary-buoy-presentation.js';
 import {constrainSourceSphereRace} from './source-sphere-race.js';
@@ -81,10 +82,27 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
   r.sourceBuoys=createSourceBuoyProgress(course.sourceBuoyLayout,{nextSourceRow:finish.nextSourceRow,power:r.power});
   r.sourceBuoyElapsed=0;r.sourceBuoyPrevious={x:r.x,z:r.z};
  }
+ const nativeScale=course.sourceMetadata?.nativeScale??.025,configuredLaps=mode==='stunt'?1:clamp(laps,3,9);
+ // The single canonical race owner selects the source grid before water follow
+ // lag or previous positions are seeded. Prepared numeric state is diagnostic
+ // input, not a complete saved physical/water history.
+ const nativeLaunch=physics==='native'?createNativeRaceLaunchRuntime({racers,courseIndex:course.sourceWaterCourseIndex,
+  players:mode==='versus'?2:1,courseRuntime:nativeCourseRuntime,course,laps:configuredLaps,reverse:!!course.reverse,
+  initialState:nativeInitialRaceState}):null;
+ const nativeStarts=nativeLaunch?racers.map((r,i)=>{
+  const start=nativeLaunch.gridStart(i);
+  if(!start.transform.complete)throw new RangeError('Ordinary source grid requires a complete packed transform');
+  const prepared=prepareNativeHullStartFromMatrix({matrixWords:start.transform.matrixWords,
+   rider:nativeTunes[i]?.riderIndex??r.id,computerProfile:start.computerProfile});
+  r.x=prepared.centerNative.x*nativeScale;r.z=prepared.centerNative.z*nativeScale;r.hydro.y=prepared.centerNative.y*nativeScale;
+  r.heading=Math.atan2(prepared.frameNative.forward.x,prepared.frameNative.forward.z);
+  r.sourceForwardXZ=[prepared.frameNative.forward.x,prepared.frameNative.forward.z];
+  r.sourceBuoyPrevious={x:r.x,z:r.z};
+  return {prepared,computerProfile:start.computerProfile};
+ }):[];
  const obstacles=[...(course.rocks||[]).filter(o=>!o.type||o.type==='rock'),...(course.crossbars||[]).flatMap(barrierPiles).filter(p=>p.bottom<.2).map(p=>({...p,r:p.radius}))];
  const localWater=createLocalWater((x,z)=>course.ground(x,z)>-.3||obstacles.some(o=>Math.hypot(x-o.x,z-o.z)<o.r+.22));setLocalWater(localWater);
  const sourceWater=seaState==='course'&&course.sourceWaterCourseIndex!==undefined?sourceWaterConditions({courseIndex:course.sourceWaterCourseIndex,players:mode==='versus'?2:1,stunt:mode==='stunt',reverse:!!course.reverse}):null;
- const nativeScale=course.sourceMetadata?.nativeScale??.025;
  const primaryRows=mode==='stunt'?course.stuntLayout?.sourceRouteRows:course.sourceRouteRowsByClass?.[difficulty];
  const primaryPointsNative=primaryRows?primaryRows.map(q=>q.slice(0,2)):course.gates.map(q=>[(q.bx??q.x)/nativeScale,(q.bz??q.z)/nativeScale]);
  const boundaryPointsNative=[...(course.boundaryMarkers||[]).map(q=>q.map(v=>v/nativeScale)),...(course.rocks||[]).filter(q=>q.fixedSphere&&!q.sourceBoundaryMarker).map(q=>[q.x/nativeScale,q.z/nativeScale])];
@@ -93,18 +111,14 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
  setRaceWater(raceWater);
  const sourceFixedSpheres=(course.rocks||[]).filter(q=>q.sourceFixedSphere&&!q.breakable);
  const sourceSphereGrid=sourceFixedSpheres.length?createSourceFixedSphereGrid(sourceFixedSpheres,{scale:nativeScale}):null;
- const state={sourceSphereGrid,raceWater,courseDatum:createCourseDatum(course),breakables:createBreakableState(),localWater,waterObstacles:obstacles,fixedPiles:(course.crossbars||[]).flatMap(barrierPiles),waveSeed:surfSeed.value,swapColours:!!swapColours,passageOpenedAt:Infinity,mode,freeRide,seaState,handicap:!!handicap,phase:freeRide?'running':'countdown',countdown:freeRide?0:3,time:0,course,racers,laps:mode==='stunt'?1:clamp(laps,3,9),difficulty,events:[],result:null,weather:conditions(course,0),finishWait:0,physics,nativeHost:null};
+ const state={sourceSphereGrid,raceWater,courseDatum:createCourseDatum(course),breakables:createBreakableState(),localWater,waterObstacles:obstacles,fixedPiles:(course.crossbars||[]).flatMap(barrierPiles),waveSeed:surfSeed.value,swapColours:!!swapColours,passageOpenedAt:Infinity,mode,freeRide,seaState,handicap:!!handicap,phase:freeRide?'running':'countdown',countdown:freeRide?0:3,time:0,course,racers,laps:configuredLaps,difficulty,events:[],result:null,weather:conditions(course,0),finishWait:0,physics,nativeHost:null};
  if(physics==='native'){
   // Preview histories must not compete with saved modern-physics records.
   state.nativePreview=true;state.demoRun=true;
-  state.nativeLaunch=createNativeRaceLaunchRuntime({racers,courseIndex:course.sourceWaterCourseIndex,players:mode==='versus'?2:1,
-   courseRuntime:nativeCourseRuntime,course,laps:state.laps,reverse:!!course.reverse,
-   // Explicit prepared numeric state for bounded diagnostics. Physical/water
-   // histories still start fresh; this is not a complete saved-race restore.
-   initialState:nativeInitialRaceState});
+  state.nativeLaunch=nativeLaunch;
   state.nativeLaunchLabel=state.nativeLaunch.view().label;state.nativeCountdownCue=null;
   let launchCueSequence=0;
-  state.nativeHost=createNativeRaceHost({racers,water:raceWater,course,fixedSphereGrid:sourceSphereGrid,tunes:nativeTunes,raceRuntime:state.nativeLaunch,
+  state.nativeHost=createNativeRaceHost({racers,water:raceWater,course,fixedSphereGrid:sourceSphereGrid,tunes:nativeTunes,raceRuntime:state.nativeLaunch,hullStarts:nativeStarts,
   onLaunchFrame:(host,context,launch)=>{
    state.countdown=launch.view.countdown;state.nativeLaunchLabel=launch.view.label;
    if(state.phase==='countdown'&&launch.view.phase650>=2)state.phase='running';

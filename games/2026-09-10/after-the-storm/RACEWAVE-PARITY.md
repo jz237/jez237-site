@@ -2212,3 +2212,54 @@ RNG/camera special branches, source force calibration with modern anatomy and
 the eleven existing calibration failures remain unfinished. Default modern
 play, global solo scoring and the high-resolution assets remain available.
 The native preview stays opt-in and excluded from competitive records.
+
+## Source physical starting grid — October 15, 2026 (v2.23.0)
+
+The admitted Sunny Beach native Time trial and two-player previews now consume
+the recovered grid placement and packed16.16 transform through the physical
+hull initializer. The one canonical race owner selects the grid before the
+water follow lag, previous craft positions or starting rider are created.
+The high-resolution renderer receives the resulting physical pose. Its visible
+gate art cannot move that spawn. Reverse uses its selected source finish row
+and forward direction; the two players retain the source lateral offsets.
+
+Grid placement reads the initialized tangent78/7C. The judging consumer's
+color-aligned80/84 fields are distinct and are zero at the finish. The source
+computer-profile selector reads canonical scene half4964 and simulation state;
+fresh web play explicitly initializes the halfword to zero. Packed matrices
+are consumed directly, without converting the decoded basis back into Euler
+angles and packing it again. No second mutable physical or camera owner is added.
+
+Fifty-two bounded startup cases cover all four Sunny classes, all four rider
+choices, one/two players and retained profile-selection branches. Original
+numeric grid, matrix and physical-start routines match 1,664 packed/decoded
+words and 6,760 live physical field words. Their original numeric execution
+uses 571,819 counted instructions under the retained interpreter convention.
+Prior frozen evidence is unchanged. Authored local shape, prepared actor data
+and the documented arithmetic boundaries remain explicit inputs; this is not
+an original cold-boot, animation-asset or whole-trajectory equivalence claim.
+
+The recovery inspection now steers toward the actual moving buoy and damps yaw
+over the logical control interval. The ordinary inspection helm anticipates
+150ms of measured hull drift while steering, with a 3m buoy-clearance target.
+Neither changes physical state, buoys, progress or the judge. The existing zero/one-miss acceptance limits and
+severe-impact recovery assertions remain in force.
+
+The final complete suite checks 2,120 tests: 2,109 pass, with exactly the same
+eleven existing failures. All sixteen native rider/class three-lap runs and
+four native two-player class matches pass, including the unchanged cadence,
+collision/recovery and zero/one-miss assertions.
+
+An ordinary solo keyboard run enters source lap1 and pauses at frame 220 with
+8.200s on the source record clock. Two isolated local browsers establish actual
+WebRTC, accept independent throttle inputs and pause at frame 200 with matching
+positions, speeds, 4.600s clocks and source water hash4048089368. Solo and both
+online views render High1280x720; a running online view was visually checked.
+Only the development favicon returns 404. These are local browser checks, not
+an additional second-computer/WAN compatibility claim.
+
+The full gameplay objective remains active: original AI, other native venues
+and modes, result/menu bodies, persistence, shared RNG/camera special branches,
+force calibration with the authored anatomy and the existing course failures
+still require work. Native preview admission and competitive-record exclusion
+remain unchanged; global solo scoring and online two-player play stay available.

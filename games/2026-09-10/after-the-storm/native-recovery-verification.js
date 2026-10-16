@@ -16,18 +16,21 @@ export function nativeRecoveryVerificationInput(state,racer=state?.racers?.[0]){
  if(!guide){
   const target=state.course.sourceBuoyLayout.nodes.find(n=>n.enabled&&n.classification===1);
   if(!target)throw new Error('Recovery inspection needs an enabled source buoy');
-  guide={target:{x:target.x,z:target.z},frame:-1,triggered:false,held:neutral()};riders.set(racer,guide);
+  guide={sourceRow:target.sourceRow,frame:-1,heading:null,triggered:false,held:neutral()};riders.set(racer,guide);
  }
  const frame=host.world.frames;
  if(frame<guide.frame)throw new Error('Restart recovery inspection with a fresh race');
  if(frame===guide.frame)return {...guide.held};
- guide.frame=frame;
+ const elapsed=guide.frame<0?0:(frame-guide.frame)*.05;guide.frame=frame;
  const recovery=a.lastFrame.recovery.state;
  guide.triggered||=recovery.crashCountdown!==0||recovery.stumbleCountdown!==0||[7,23,24].includes(recovery.actorState);
  if(guide.triggered)guide.held=neutral();
  else{
-  const error=angle(Math.atan2(guide.target.x-p.x,guide.target.z-p.z)-p.heading);
-  guide.held={throttle:1,steer:Math.max(-1,Math.min(1,error*6-p.yawVelocity*1.2))};
+  const target=host.primary.positionForSourceRow(guide.sourceRow);
+  const error=angle(Math.atan2(target.x-p.x,target.z-p.z)-p.heading);
+  const yaw=guide.heading===null||elapsed===0?p.yawVelocity:angle(p.heading-guide.heading)/elapsed;
+  guide.held={throttle:1,steer:Math.max(-1,Math.min(1,error*6-yaw*1.2))};
  }
+ guide.heading=p.heading;
  return {...guide.held};
 }

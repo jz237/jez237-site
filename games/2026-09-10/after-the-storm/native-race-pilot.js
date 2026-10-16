@@ -12,12 +12,12 @@ const copy=value=>structuredClone(value);
 /** These are driving choices in world metres/seconds, not source constants. */
 export const NATIVE_RACE_PILOT_POLICY=Object.freeze({
  straightSpeedWorld:16,cornerSpeedWorld:10,
- minLookaheadWorld:16,lookaheadSeconds:.8,velocityPredictionSeconds:0,
+ minLookaheadWorld:16,lookaheadSeconds:.8,velocityPredictionSeconds:.15,
  headingGain:6,yawDamping:1.5,
  cornerDistanceWorld:25,cornerSlowdown:1.5,
  speedHysteresisWorld:.25,waypointRadiusWorld:.8,
  steeringEngineThreshold:.6,steeringEngineMaxSpeedWorld:24,
- buoyTrackingWorld:32,maxBuoyShiftWorld:2,buoyClearanceWorld:2
+ buoyTrackingWorld:32,maxBuoyShiftWorld:3,buoyClearanceWorld:3
 });
 
 const ranges={straightSpeedWorld:[1,80],cornerSpeedWorld:[1,80],
@@ -171,6 +171,8 @@ export function createNativeRacePilot({course,policy={},traceLimit=256}={}){
     buoyTracking={sourceRow:marker.sourceRow,lateralShiftWorld:shift,weight};
    }
   }
+  // Aim from a short extrapolation of the actual drifting hull. Its velocity
+  // can point outside the heading during a turn, especially for heavy riders.
   const desiredHeading=Math.atan2(target[0]-r.x-r.vx*config.velocityPredictionSeconds,target[1]-r.z-r.vz*config.velocityPredictionSeconds);
   const error=angle(desiredHeading-r.heading);
   let bend=0,distance=Math.max(0,remaining),from=previous,to=q;

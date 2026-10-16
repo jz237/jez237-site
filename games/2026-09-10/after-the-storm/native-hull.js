@@ -127,7 +127,15 @@ export function prepareNativeHullStartFromPose({position=ZERO,heading=0,pitch=0,
   const packed=prepareNativeRaceStartTransform({positionNative:vec(position.x/scale,position.y/scale,position.z/scale),
     forwardNative:rotatedLocal([0,0,1],heading,pitch,roll),upNative:rotatedLocal([0,1,0],heading,pitch,roll)});
   if(!packed.complete)throw new RangeError('Native hull startup requires a complete nondegenerate transform');
-  return prepareNativeHullStart({matrixWords:packed.matrixWords,localPointsNative:LOCAL_POINTS.map(([x,y,z])=>vec(x,y,z)),
+  return prepareNativeHullStartFromMatrix({matrixWords:packed.matrixWords,rider,computerProfile,retainedYawFrame});
+}
+
+/** Consume the source grid's actual packed destination directly. Euler pose
+ * adaptation must not unpack and repack this matrix before physical startup. */
+export function prepareNativeHullStartFromMatrix({matrixWords,rider=0,computerProfile=false,retainedYawFrame}={}){
+  if(!Number.isInteger(rider)||rider<0||rider>3)throw new RangeError('rider must be an index from0 to3');
+  if(typeof computerProfile!=='boolean')throw new TypeError('computerProfile must be boolean');
+  return prepareNativeHullStart({matrixWords,localPointsNative:LOCAL_POINTS.map(([x,y,z])=>vec(x,y,z)),
     dampingInner:(computerProfile?COMPUTER_DAMPING_INNER:DAMPING_INNER)[rider],
     // Descriptor20=.4 gives the ordinary .5/(.4*10+1) pair gain.
     dampingOuter:(computerProfile?COMPUTER_DAMPING_OUTER:DAMPING_OUTER)[rider],constraint20:.4,retainedYawFrame});

@@ -177,11 +177,11 @@ function drive(difficulty,rider,hz){
 for(let rider=0;rider<4;rider++)for(let difficulty=0;difficulty<4;difficulty++){
  test(`native Sunny class${difficulty}, rider${rider}: three genuine laps through the human source judge`,()=>{
   const {r,d}=drive(difficulty,rider,60);
-  // The heavy profile's Hard/Expert margin remains observable. With the live
-  // source countdown/water phase its genuine Hard miss is at row29, rather
-  // than the old browser-start row47; Expert remains row46. No miss is forgiven.
+  // The heavy profile's Hard/Expert margin remains observable. With the
+  // recovered physical grid and drift anticipation, the genuine missed rows
+  // are47/46. The zero/one-miss limits and physical judge remain unchanged.
   assert.ok(r.misses<=(rider===1&&[1,2].includes(difficulty)?1:0));
-  if(r.misses)assert.equal(d.transitions.find(t=>t.missDelta).fromSourceRow,difficulty===1?29:46);
+  if(r.misses)assert.equal(d.transitions.find(t=>t.missDelta).fromSourceRow,difficulty===1?47:46);
  });
 }
 for(let difficulty=0;difficulty<4;difficulty++){

@@ -63,11 +63,12 @@ function present(host){
 
 /** Caller supplies selected course geometry and a host-owned source field.
  * Actual physical rider joint2 feeds subsequent trim; no constant joint is
- * substituted. Initial center at the course datum is a declared host policy.
+ * substituted. Direct callers adapt a browser pose at the course datum; the
+ * ordinary race passes physical starts prepared from its canonical source grid.
  * Custom source actor/pose providers require explicit recovery:false.
  */
 export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,tunes=[],sourceStates=[],poseProviders=[],onFrame=null,
- raceRuntime=null,onLaunchFrame=null,
+ raceRuntime=null,onLaunchFrame=null,hullStarts=[],
  floatingDefinitions,floatingActive=true,primaryActive=true,recovery=true,craftContacts=true}={}){
  if(!Array.isArray(racers)||racers.length<1||racers.some(r=>!r?.hydro||!Number.isInteger(r.id)||r.id<0||r.id>3))throw new TypeError('Expected initialized browser racers');
  if(!water?.field||!finite(water.scale))throw new TypeError('Expected host source water');
@@ -81,6 +82,8 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
  if(typeof craftContacts!=='boolean')throw new TypeError('craftContacts must be boolean');
  if(recovery&&(sourceStates.length||poseProviders.length))throw new TypeError('Custom actor/pose providers require explicit recovery:false');
  const humanIndices=racers.map((r,i)=>r.human?i:-1).filter(i=>i>=0);
+ if(!Array.isArray(hullStarts)||hullStarts.length!==0&&hullStarts.length!==racers.length)
+  throw new TypeError('Supply one prepared hull start per racer');
  const definitions=floatingDefinitions??course.dynamicObjectsForPlayers?.(humanIndices.length)??[];
  if(!Array.isArray(definitions))throw new TypeError('Expected selected floating definitions');
  const floating=definitions.length?createNativeFloatingWorld({definitions,water}):null;
@@ -90,8 +93,10 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
  const bundles=[],adapters=racers.map((r,i)=>{
   const initial={position:{x:r.x,y:water.field.datumNative*water.scale,z:r.z},heading:r.heading,
    rider:r.id,scale:water.scale};
-  const adapterOptions={...initial,riderIndex:r.id,...NATIVE_HOST_DEFAULT_TUNE,...tunes[i]},computerProfile=adapterOptions.computerProfile??false;
-  const hullStart=prepareNativeHullStartFromPose({...initial,rider:adapterOptions.riderIndex,computerProfile});
+  const adapterOptions={...initial,riderIndex:r.id,...NATIVE_HOST_DEFAULT_TUNE,...tunes[i]};
+  const computerProfile=hullStarts.length?hullStarts[i].computerProfile:adapterOptions.computerProfile??false;
+  adapterOptions.computerProfile=computerProfile;
+  const hullStart=hullStarts.length?hullStarts[i].prepared:prepareNativeHullStartFromPose({...initial,rider:adapterOptions.riderIndex,computerProfile});
   const initialHull=createNativeHullFromStart({prepared:hullStart,rider:adapterOptions.riderIndex,scale:water.scale,computerProfile});
   const bundle=recovery?createNativeLifecycleRider({initialHull,initializeStart:!!raceRuntime}):
    createAuthoredNativeRider({initialHull,poseProvider:poseProviders[i]});bundles.push(bundle);
@@ -101,7 +106,7 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
  });
  const host={racers,bundles,contacts,primary,primaryActive,floating,floatingActive,presentations:[],onFrame,raceRuntime,onLaunchFrame,world:null,
   provenance:Object.freeze({status:'ordinary-source-solver-integration-preview',riderGeometry:'authored-modern-anatomy',
-   initialHeight:'course-datum',tuning:'explicit-native-indices; default5/5/5',
+   initialHeight:hullStarts.length?'source-grid-transform':'course-datum',tuning:'explicit-native-indices; default5/5/5',
    hullStartup:'decoded packed16.16 transform; source point/frame/rest/damping recipe with authored local shape',
    clock:'five10ms hull ticks then one water update',controls:'digital-accelerator; brake-coasts; B-crouch; R-slide',
    actorRecoveryAndTricks:false,riderRecovery:recovery,physicalRiderPresentation:true,
