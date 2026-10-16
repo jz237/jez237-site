@@ -40,7 +40,7 @@ export function mountOptions({saved,storage,audio,onChange,onCaptureChange=()=>{
  $('defaultNames').onclick=()=>{saved.names=[];refreshNames();persist('Default names restored.');records();};
  function sound(){saved.audio={...saved.audio,mode:$('audioMode').value,volume:Number($('audioVolume').value),music:$('musicEnabled').checked};audio.setOptions(saved.audio);persist('Sound settings saved.');}
  for(const id of ['audioMode','audioVolume','musicEnabled'])$(id).onchange=sound;
- let previewTimer=null;$('previewMusic').onclick=()=>{clearTimeout(previewTimer);const ok=audio.preview();$('audioStatus').textContent=ok?'Playing the coastal theme · 10 seconds':'Enable Sound in the main menu to preview.';if(ok)previewTimer=setTimeout(()=>{$('audioStatus').textContent='Preview finished.';},10000);};
+ let previewTimer=null;$('previewMusic').onclick=()=>{clearTimeout(previewTimer);const ok=audio.preview();$('audioStatus').textContent=ok?'Previewing original music · 10 seconds':'Enable Sound in the main menu to preview.';if(ok)previewTimer=setTimeout(()=>{$('audioStatus').textContent='Preview finished.';},10000);};
  for(const id of ['recordCourse','recordClass','recordType','recordLaps'])$(id).onchange=records;
  $('eraseCourse').onclick=()=>$('eraseConfirm').hidden=false;$('cancelErase').onclick=()=>$('eraseConfirm').hidden=true;
  $('confirmErase').onclick=()=>{undo=eraseRecords(saved,scope());persist('Displayed records erased.');$('undoErase').hidden=false;records();};
