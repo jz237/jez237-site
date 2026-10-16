@@ -1,5 +1,32 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Next checkpoint — original course and rider return initialization
+
+Direct callers801EBFE4 and801EBD28 are independently reconstructed. They
+preserve previous game state, reset the exact scene fields, select source
+player counts, initialize fade/HUD state and request mode-specific audio in
+source order. Rider return reads supplied selection/trait tables, preserves
+signed trait bytes and both writes when human slots alias, and resets both
+selection/flag pairs only for the original fresh-menu latch.
+
+Read-only Ghidra on EVO X2 exported all four return entries: all714 exported
+instructions matched the local ROM bytes and all nine saved project files were unchanged.
+Complete execution of the rider/course callers matched2,900 cases,
+387,086 instructions and103,691 ordered operations, covering all52 non-stack
+store instructions. The canonical adapter expands both existing fade helpers
+into the same HUD owner; resource/body/audio effects remain explicit.
+
+The live solo continuation now executes the course initializer after its
+qualified save request, removes the replaced target call from pending effects,
+and hands off once to the high-resolution setup. Rider initialization has a
+tested canonical adapter but still needs its original selection-table inputs
+connected at the browser boundary. Title/championship return initializers,
+original selection-menu loops, resource loading and durable cartridge saves
+remain incomplete. All93 focused return/menu/fade/state/live-launch tests pass.
+Browser verification completed a clean1:48.039 three-lap race, entered initials,
+continued through the record table, and selected Choose course. The transition
+returned to setup with the venue selector focused and no console errors.
+
 ## Next checkpoint — retain preview records between races
 
 Native preview restarts now transfer the retained record/setup region1FF0..2938

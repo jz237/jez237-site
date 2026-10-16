@@ -92,7 +92,7 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    rngState4640:integer(rngSeed,'web shared RNG seed',0,0xffffffff),previousNavigationD9874:0,trainingSelectionDa9f8:0,
    ...(courseRuntime?{primaryCount:courseRuntime.data.nodes.length,finishSourceRow:courseRuntime.data.finishSourceRow,
     cold8224:1,forceFirst8228:0,demoOffset5438:0,restart6f8:0,reverseDab68:Number(reverse),state600:0,nameIndexA9b0:0,
-    freshNameAb6c:1,field700:0,fieldAb2c:0,
+    freshNameAb6c:1,field700:0,fieldAb2c:0,fieldA9ac:0,courseSelectionA9d0:0,
     missLimit8174:5,noFinish8178:0,configuredLaps728:integer(laps,'configured laps',3,9),
     directionFlag1f90:courseRuntime.directionFlag1f90,fortressD8240:0,metadataD9b0:0,metadataCb32c:0,seed6f00:0}:{} )}});
   if(courseRuntime){

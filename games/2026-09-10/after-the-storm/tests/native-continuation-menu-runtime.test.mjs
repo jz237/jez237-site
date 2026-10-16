@@ -38,9 +38,18 @@ test('each choice reaches its exact destination only after twelve fade updates, 
    assert.equal(q.view.selection,selection);
    if(tick<12)assert.equal(q.handoff,null);
   }
-  assert.equal(q.handoff.destination,destination);assert.equal(q.view.fade.completion,1);
-  const save=q.effects.findIndex(op=>op.consumer==='8007bea4'),handoff=q.effects.findIndex(op=>op.consumer===q.handoff.consumer);
+  assert.equal(q.handoff.destination,destination);assert.equal(q.handoff.returnState,target);
+  assert.equal(q.draw.fade.completion,1);
+  const save=q.operations.findIndex(op=>op.consumer==='8007bea4');
+  const handoff=destination==='course'?q.operations.findIndex(op=>op.kind==='sourceWordWrite'&&op.field==='gameStateAb24'&&op.value===20):q.operations.findIndex(op=>op.consumer===q.handoff.consumer);
   assert.ok(save>=0&&handoff>save);assert.equal(q.diagnostic.recordsPersisted,false);
+  assert.equal(q.diagnostic.targetInitializerExecuted,destination==='course');
+  if(destination==='course'){
+   assert.equal(state.scene.gameStateAb24,20);assert.equal(state.scene.returnState630,0);assert.equal(state.scene.main638,5);
+   assert.equal(q.view.active,false);assert.equal(q.view.fade.kind,2);assert.equal(q.view.fade.completion,0);
+   assert.equal(q.effects.some(op=>op.consumer==='801ebfe4'),false);
+   assert.equal(q.operations.some(op=>op.consumer==='801ebfe4'),false);
+  }
   assert.equal(q.effects.find(op=>op.consumer==='800481e0').arguments[0].kind,'fadeMatrixTarget');
  }
 });

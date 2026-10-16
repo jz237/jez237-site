@@ -1,6 +1,6 @@
 import {prepareNativeRaceMenuInputAdvance,prepareNativeContinuationMenuInitializationUpdate,
  prepareNativeContinuationMenuInputUpdate,prepareNativeRaceWidgetAdvance,prepareNativeRaceFadeAdvance,
- prepareNativeRaceStateOperations} from './native-race-state.js';
+ prepareNativeRaceStateOperations,prepareNativeMenuReturnUpdate} from './native-race-state.js';
 import {prepareNativeContinuationMenuPostDisplay} from './native-continuation-menu.js';
 import {prepareNativeWidgetPresentation,nativeWidgetDrawView} from './native-widget-presentation.js';
 
@@ -46,7 +46,18 @@ export function prepareNativeContinuationMenuFrame(state,rawControllers){
   }
  }
  const target=effects.find(op=>op.kind==='externalCall'&&destinations.has(op.consumer));
+ const handoff=target?{destination:destinations.get(target.consumer),consumer:target.consumer,returnState:current.scene.returnState630}:null;
+ let targetInitializerExecuted=false;
+ if(handoff?.destination==='course'){
+  // This is the last operation in the display suffix; expand at its original
+  // position after any record-save effect. Never leave the replaced entry queued.
+  const index=operations.findIndex(op=>op.kind==='externalCall'&&op.consumer===target.consumer);
+  if(index!==operations.length-1)throw new Error('Return initializer must follow the display suffix');
+  operations.splice(index,1);effects.splice(effects.indexOf(target),1);
+  const next=prepareNativeMenuReturnUpdate(current,'course',constants);current=next.state;
+  operations.push(...next.operations);effects.push(...next.effects);targetInitializerExecuted=true;
+ }
  return {state:current,operations,effects,draw,widgets,view:nativeContinuationMenuView(current),
-  handoff:target?{destination:destinations.get(target.consumer),consumer:target.consumer,returnState:current.scene.returnState630}:null,
-  diagnostic:{originalNumericControl:true,modernPresentation:true,firstEntry:first,recordsPersisted:false,targetInitializerExecuted:false}};
+  handoff,
+  diagnostic:{originalNumericControl:true,modernPresentation:true,firstEntry:first,recordsPersisted:false,targetInitializerExecuted}};
 }

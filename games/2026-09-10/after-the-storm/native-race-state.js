@@ -26,6 +26,7 @@ import {prepareNativeRaceCourseZeroSequenceUpdate,prepareNativeRaceCourseZeroSeq
 import {prepareNativeRaceStartTransform,decodeNativeRaceStartTransform} from './native-race-start-transform.js';
 import {prepareNativeRaceFadePropertiesInitialization,prepareNativeRaceFadeSlotsReset} from './native-race-fade-initialization.js';
 import {prepareNativeRaceMainConfiguration} from './native-race-main-configuration.js';
+import {prepareNativeCourseMenuReturn,prepareNativeRiderMenuReturn} from './native-menu-return-initialization.js';
 import {prepareNativeRaceMenuInitialization} from './native-race-menu-initialization.js';
 import {prepareNativeNameEntryInitialization,prepareNativeNameEntryInput,prepareNativeNameEntryAnimationPhase,prepareNativeNameEntryRecordUpdate,prepareNativeNameEntryDisplay} from './native-name-entry.js';
 import {prepareNativeNameEntryPresentation} from './native-name-presentation.js';
@@ -53,7 +54,8 @@ const sceneRanges={primaryHumanIndex:[0,3],secondaryHumanIndex:[0,3],players:[1,
 const sceneWords=new Set(['cold8224','clockStopped817c','phase650','simulation648','main638','mode620','state600',
  'missLimit8174','noFinish8178','configuredLaps728','difficulty','directionFlag1f90','ambientD4b00','fortressD8240',
  'metadataD9b0','metadataCb32c','restart6f8','initLatch63c','gameStateAb24','mode608','returnState630','forceFirst8228','demoOffset5438','rngState4640','style6e2c',
- 'previousGameState634','field640','field644','fieldAb1c','fieldAb2c','field461c','field700','field704','field708','field70c','field710','field714','nameIndexA9b0','resultEffect393c','wave610','missLimit614','lapCount618','field61c','wave49b0','field64c','players','racerCount','toggleD9914','previousNavigationD9874','trainingSelectionDa9f8']);
+ 'previousGameState634','field640','field644','fieldAb1c','fieldAb2c','field461c','field700','field704','field708','field70c','field710','field714','nameIndexA9b0','resultEffect393c','wave610','missLimit614','lapCount618','field61c','wave49b0','field64c','players','racerCount','toggleD9914','previousNavigationD9874','trainingSelectionDa9f8',
+ 'riderSelectionA9c0','secondRiderSelectionA9c4','riderFlagA9c8','secondRiderFlagA9cc','courseSelectionA9d0','courseIndex']);
 const sceneHalves=new Set(['activity624','event628','field62a','pendingPlayers60c','participantCount60e','result6f0','specialAb64','ready6fc','reverseDab68','missesEnabled72e','seed6f00','field4964','style6e28',
  'field4970','field72c','fieldA9ac','pressed65a','unlockAb60','freshNameAb6c','variant6f4','variant6f6']);
 function record(v,n){if(!v||typeof v!=='object'||Array.isArray(v))throw new TypeError(`Expected ${n}`);return v;}
@@ -505,6 +507,27 @@ export function prepareNativeRaceMainConfigurationUpdate(state,sourceViews={}, {
  return freeze({state:next,operations,effects,diagnostic:{sourceMain:prepared.diagnostic,expandedFadeConsumers,expandedResourceConsumers,
   pendingResourceConsumers:['80096960','8009684c'].filter(v=>!expandedResourceConsumers.includes(v)),resourceLoadingPerformed:false,
   finalAudioPending:true,physicalInitialization:false}});
+}
+
+/** Numeric rider/course return entry, with both fade initializers expanded in
+ * source order into the same canonical HUD owner. Physical rider tunes,
+ * resources and audio remain required effects. The original selection-menu
+ * loops and rendering are separate; no target entry remains for replay. */
+export function prepareNativeMenuReturnUpdate(state,destination,sourceViews={}){
+ if(destination!=='course'&&destination!=='rider')throw new RangeError('Unreconstructed menu return destination');
+ const next=copy(state),prepared=destination==='course'?prepareNativeCourseMenuReturn(next):prepareNativeRiderMenuReturn(next,sourceViews),operations=[],effects=[];
+ for(const op of prepared.operations){
+  let batch=[op];
+  if(op.kind==='externalCall'&&op.consumer==='801e6fb0'){
+   const [type,rate,selector]=op.arguments;
+   batch=prepareNativeRaceFadePropertiesInitialization({fadeTemplateWords6cc0:sourceViews.fadeTemplateWords6cc0,type,rate,selector}).operations;
+  }else if(op.kind==='externalCall'&&op.consumer==='801e6a4c'){
+   batch=prepareNativeRaceFadeSlotsReset({slotTemplateWords6c50:sourceViews.slotTemplateWords6c50}).operations;
+  }
+  operations.push(...batch);effects.push(...apply(next,batch));
+ }
+ return freeze({state:next,operations,effects,diagnostic:{consumer:prepared.diagnostic.consumer,expandedFadeConsumers:['801e6fb0','801e6a4c'],
+  menuLoopExecuted:false,physicalInitialization:false,resourceLoadingPerformed:false,audioExecuted:false}});
 }
 
 /** Complete numeric water-noise initialization from the canonical shared RNG.
