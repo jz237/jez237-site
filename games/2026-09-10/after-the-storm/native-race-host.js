@@ -120,6 +120,11 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
    nativeRacerCollision:craftContacts,sourcePrimaryBuoyContacts:!!primary})};
  if(raceRuntime?.ordinary)bindRaceWaterCameraStorage(water,raceRuntime.cameraStorage);
  host.world=createNativeRaceWorld({adapters,water,humanIndices,craftContacts,
+ beforeFrame:raceRuntime?.ordinary?world=>{
+  host.lastNavigation=raceRuntime.advanceNavigation({
+   bodiesBySlot:world.adapters.map(a=>({avatar:a.hull.rider,position:{x:a.hull.center.x,z:a.hull.center.z}})),
+   nodePositions:primary.snapshot().map(n=>({sourceRow:n.sourceRow,x:n.position.x,z:n.position.z}))});
+ }:null,
  beforeActor:raceRuntime?.ordinary?(world,{racerIndex})=>{
   const a=world.adapters[racerIndex],lifecycles=world.adapters.map(q=>q.riderLifecycle),p=a.hull.points[0].position;
   const selected=raceRuntime.resultCodeFor(racerIndex,{bodyResultCodes16c8:lifecycles.map(q=>q.state.selectedActor),

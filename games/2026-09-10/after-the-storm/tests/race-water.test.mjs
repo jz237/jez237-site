@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createRaceWater,createRaceWaterRandom,advanceRaceWaterFrame,stepRaceWater,captureRaceWater,readRaceWater,
- setRaceWater,currentRaceWater,activeRaceWaterHeight,raceWaterHeight} from '../race-water.js';
+ setRaceWater,currentRaceWater,activeRaceWaterHeight,raceWaterHeight,raceWaterAISelectionCircle} from '../race-water.js';
 import {sourceWaterConditions} from '../source-water-conditions.js';
 import {createNativeWaterField,forceNativeWaterLine,createNativeWaterPatch,stepNativeWaterPatch} from '../native-water-field.js';
 import {createRace,stepRace} from '../race-core.js';
@@ -31,6 +31,40 @@ test('source water uses the low15 bits of its32bit LCG and permits seed0',()=>{
  for(const [value,state]of [[25974,1579902326],[22391,3232257911],[12260,794669028]]){assert.equal(random(),value);assert.equal(random.state,state);}
  assert.equal(createRaceWaterRandom(0)(),12345);
 });
+
+test('water retains the source AI circle only after its first completed frame',()=>{
+ const c=craft(12,-24),s=make([c]);
+ assert.throws(()=>raceWaterAISelectionCircle(s),/completed source water frame/);
+ stepRaceWater(s,[c],.025);assert.throws(()=>raceWaterAISelectionCircle(s),/completed source water frame/);
+ stepRaceWater(s,[c],.025);
+ const circle=raceWaterAISelectionCircle(s),mesh=s.selectionMeshesNative[0];
+ assert.equal(circle,mesh.selectionCircleNative);assert.equal(circle.radiusSquared,2250000);
+ assert.deepEqual(mesh.snappedCenterNative,{x:s.previousPatchCentersNative[0].xNative,z:s.previousPatchCentersNative[0].zNative});
+ assert.ok(Object.isFrozen(circle)&&Object.isFrozen(mesh)&&Object.isFrozen(s.selectionMeshesNative));
+ assert.notDeepEqual({x:circle.x,z:circle.z},{x:s.lastPlan.patches[0].xNative,z:s.lastPlan.patches[0].zNative});
+ c.x+=30;stepRaceWater(s,[c],1,{active:false});assert.equal(raceWaterAISelectionCircle(s),circle);
+ stepRaceWater(s,[c],.05);assert.notDeepEqual(raceWaterAISelectionCircle(s),circle);
+ assert.equal(circle,mesh.selectionCircleNative);assert.throws(()=>raceWaterAISelectionCircle(captureRaceWater(s)),/host race water/);
+});
+
+test('AI reads patch0 despite reverse two-player generation order and inactive water evolution',()=>{
+ const crafts=[craft(0,0),craft(100,50)],s=make(crafts,{initialNoise:false});
+ advanceRaceWaterFrame(s,crafts,{simulationActive:false});
+ assert.deepEqual(s.lastPlan.patches.map(p=>p.playerIndex),[1,0]);
+ assert.equal(s.selectionMeshesNative[0].patchIndex,0);assert.equal(s.selectionMeshesNative[1].patchIndex,1);
+ assert.equal(raceWaterAISelectionCircle(s),s.selectionMeshesNative[0].selectionCircleNative);
+ assert.notDeepEqual(s.selectionMeshesNative[0].selectionCircleNative,s.selectionMeshesNative[1].selectionCircleNative);
+ const circle=raceWaterAISelectionCircle(s),field=structuredClone(s.field);
+ crafts[0].x=80;crafts[0].heading=1;advanceRaceWaterFrame(s,crafts,{simulationActive:false});
+ assert.notDeepEqual(raceWaterAISelectionCircle(s),circle);assert.deepEqual(s.field,field);
+});
+
+test('selection preparation failure cannot partially evolve the field or replace prior circles',()=>{
+ const c=craft(),s=make([c]);advanceRaceWaterFrame(s,[c]);
+ s.selectionRadiusNative=NaN;const before=structuredClone(s);
+ assert.throws(()=>advanceRaceWaterFrame(s,[c]),/selectionRadiusNative/);
+ assert.deepEqual(s,before);
+});
 test('race water seed matches normalized ghost setup metadata',()=>{
  const a=createRace({mode:'time',waveSeed:1014}),b=createRace({mode:'time',waveSeed:a.waveSeed});
  assert.equal(a.waveSeed,17);assert.equal(a.raceWater.seed,17);assert.deepEqual(a.raceWater.field.heightQ,b.raceWater.field.heightQ);
@@ -44,7 +78,7 @@ test('water uses one logical update per50ms and ignores paused elapsed time',()=
 test('stationary water histories match across30/60/144Hz host accumulation',()=>{
  const histories=[];
  for(const hz of [30,60,144]){const c=craft(12,-24),s=make([c]);for(let i=0;i<hz*3;i++)stepRaceWater(s,[c],1/hz);assert.equal(s.frames,60);histories.push(s);}
- for(const s of histories.slice(1)){assert.deepEqual(s.field.heightQ,histories[0].field.heightQ);assert.deepEqual(s.field.velocityQ,histories[0].field.velocityQ);assert.deepEqual(s.previousPatchCentersNative,histories[0].previousPatchCentersNative);}
+ for(const s of histories.slice(1)){assert.deepEqual(s.field.heightQ,histories[0].field.heightQ);assert.deepEqual(s.field.velocityQ,histories[0].field.velocityQ);assert.deepEqual(s.previousPatchCentersNative,histories[0].previousPatchCentersNative);assert.deepEqual(s.selectionMeshesNative,histories[0].selectionMeshesNative);}
 });
 test('forcing uses the prior snapped camera while the after-hull camera selects new patches',()=>{
  const c=craft(),s=make([c],{initialNoise:false}),oldCamera=s.cameras[0],oldCenter={...s.previousPatchCentersNative[0]};

@@ -2,6 +2,8 @@ import {createNativePrimaryCourseData} from './native-primary-initialization.js'
 import {createNativeRaceResetLayout} from './native-race-reset.js';
 import {createNativePrimaryRacePhaseLayout} from './native-primary-race-phase.js';
 import {createSourceBuoyLayout,sourceBuoyCourseRules} from './source-buoy-progress.js';
+import {createNativeAIRoute} from './native-ai-route.js';
+import {createNativeAITargetTable} from './native-ai-target.js';
 
 // Live admission is deliberately the existing Sunny ordinary preview. Other
 // courses need their own full current-region/object/alternate-route owners.
@@ -25,7 +27,16 @@ export function createNativeRaceCourseRuntime({course,difficulty,players}={}){
   finishSourceRow:data.finishSourceRow,nodes:data.nodes.map((n,i)=>({...course.sourceBuoyLayout.nodes[i],
    tx:n.forwardXZ.x,tz:n.forwardXZ.z,nextSourceRow:n.nextSourceRowA0,
    halfWidthNative:n.halfWidthNative8c,enabled:n.enabledC8!==0,checkpoint:n.checkpointFlag9c!==0}))});
- return Object.freeze({data,resetLayout,primaryLayout,sourceBuoyLayout,mode620,
+ // AI retains avatar links and initialized endpoints from the same source
+ // records. Human judging's nextA0 links are a separate graph.
+ const aiNodes=data.nodes.map((n,i)=>({...sourceBuoyLayout.nodes[i],
+  x:n.centerNativeXZ.x*scale,z:n.centerNativeXZ.z*scale,
+  classification:n.classification98,routeGroup:n.routeGroupC0,
+  endpointPlusNativeXZ:n.endpointANativeXZ,endpointMinusNativeXZ:n.endpointBNativeXZ,
+  passingDirectionXZ:n.rightXZ,initialPositionNativeXZ:n.centerNativeXZ}));
+ const aiRoute=createNativeAIRoute({nodes:aiNodes,scale,courseIndex:1});
+ const aiTargetTable=createNativeAITargetTable({route:aiRoute,nodes:aiNodes});
+ return Object.freeze({data,resetLayout,primaryLayout,sourceBuoyLayout,mode620,aiRoute,aiTargetTable,
   sourceDifficulty:course.sourceMetadata.sourceNativeClassByDifficulty[difficulty],
   directionFlag1f90:rules.checkpointSide,allowedRegionsNative:Object.freeze(allowed.map(r=>Object.freeze(r.slice()))),
   warningSuppressionRegionsNative:Object.freeze([]),scale});

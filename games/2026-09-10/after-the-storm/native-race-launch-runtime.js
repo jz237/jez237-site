@@ -7,6 +7,7 @@ import {createNativeRaceCameraStorage} from './native-race-camera-storage.js';
 import {NATIVE_ANGLE_TABLE_WORDS,nativeSineTableWords} from './native-math-tables.js';
 import {sourceBuoyVisibleRow} from './source-buoy-progress.js';
 import {SUNNY_NATIVE_RETIREMENT_GEOMETRY} from './native-sunny-support.js';
+import {createNativeAIRouteState,stepNativeAIRoute} from './native-ai-route.js';
 
 // Overlapping effect47FC, solo4800 and two-player4818 numeric entries. Ordinary
 // two-player place indices are0/1; other mode tables remain separate admission.
@@ -147,6 +148,26 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
   // primary/generic object motion call7DBC0 independently of simulation648.
   objectMotionActive:()=>current.scene.activity624===-1,
   snapshot:()=>nativeRaceStateSnapshot(current),
+  aiTargetTable:courseRuntime?.aiTargetTable??null,
+  aiRecords:()=>racers.map((_,slot)=>({sourceLap:word(slot,0),place293c:word(slot,1),
+   navigationSourceRow:word(slot,4),finished2c2c:word(slot,189),record2c24:word(slot,187)})),
+  advanceNavigation({bodiesBySlot,nodePositions}){
+   if(!courseRuntime)throw new Error('Source AI navigation needs initialized course geometry');
+   if(!Array.isArray(bodiesBySlot)||bodiesBySlot.length!==racers.length)throw new TypeError('Supply every source body for navigation');
+   const operations=[],diagnostics=[];
+   // Original86148 visits ALL racers ascending before any input producer.
+   // No simulation, finish or human-only gate occurs inside this prepass.
+   for(let slot=0;slot<racers.length;slot++){
+    if(current.scene.main638!==21&&current.scene.mode620!==1&&word(slot,212)!==(0x801aee20|0))
+     throw new Error('Sunny AI navigation requires the retained primary table');
+    const body=bodiesBySlot[slot],previous=createNativeAIRouteState(courseRuntime.aiRoute,{
+     avatar:body.avatar,navigationSourceRow:word(slot,4)});
+    const next=stepNativeAIRoute(courseRuntime.aiRoute,previous,{position:body.position,nodePositions});
+    if(next.state.navigationSourceRow!==word(slot,4))operations.push(write(slot,4,next.state.navigationSourceRow));
+    diagnostics.push({racerIndex:slot,...next.diagnostic});
+   }
+   commit(operations);return {operations,diagnostics};
+  },
   resultCodeFor(racerIndex,{bodyResultCodes16c8,point90Native,datum2458}){
    if(!courseRuntime||current.scene.courseIndex!==1||![0,1].includes(current.scene.mode620))
     throw new Error('Live rider results require admitted ordinary Sunny geometry');

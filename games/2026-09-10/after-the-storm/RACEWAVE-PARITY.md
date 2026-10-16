@@ -29,8 +29,13 @@ parity. The work remains in progress; it is not a course-parity sign-off.
   Its actual format is 16-bit byte-swapped, despite the `.n64` extension.
 - Normalized big-endian SHA-256:
   `f35d2423ebcb86eaf86fa935b613c7532b123a7bc50fb74996984c3b02fc3999`.
-- EVO X2 has REA 6.4.0 and Ghidra 12.1.4. REA rejects this ISA revision: its
-  verified MIPS lane requires MIPS32r2. Direct installed Ghidra analysis used
+- The initial EVO X2 REA6.4.0 ELF analysis rejected this ROM's ISA revision.
+  On October16, the installed REA6.5.0 checks still admit specified MIPS32
+  profiles, while its raw-binary CLI lists6502/x86/x86_64/arm/arm64. This is
+  a limitation of those REA import routes, not a claim that REA cannot help
+  this project or was not used by the RaceWave46 author. Its public README
+  credits N64Recomp/RT64 and AI assistance without naming REA. Ghidra12.1.4
+  remains installed and in use on EVO X2. Direct Ghidra analysis used
   `MIPS:BE:64:64-32addr` with the o32 compiler convention, without changing REA's
   admission checks. A separately identified ELF loader carrier maps the initial
   ROM image at its real entry address.
@@ -2938,3 +2943,36 @@ rule: the host executes original CPU code and audio microcode, while graphics
 tasks provide bounded metadata without executing graphics microcode or GPU.
 All logs parse with matching hashes, zero observer errors and a clean joined
 shutdown; the1,477 existing diagnostic files retain their previous hashes.
+
+## Live AI navigation and water perception (local checkpoint)
+
+The Sunny ordinary host now runs the source86148 navigation prepass for every
+rider in ascending slot order before descending input sampling. The canonical
+record2948 owns the navigation row; human buoy progress2944, lap, power and
+finish records remain separate. Simulation0 still performs navigation, while
+browser pause performs no frame. The selected class's initialized source
+records supply avatar links, axes, fixed target endpoints and passing axes.
+The retained table is checked with the original main21/mode1 primary override.
+
+The actual after-hull water pass now retains its source50F8C expanded-mesh
+selection circles for the next input frame. It preserves camera record order
+despite P2-before-P1 patch generation. AI reads patch0 in either player mode;
+there is no invented circle before the first completed water frame. Inactive
+simulation still refreshes selection geometry without evolving water. These
+numeric snapshots do not change the high-resolution renderer or wire format.
+
+The new body-input reader uses actual preceding hull motion, controller mute
+gate, profile, actor/blend, contact and action owners. It rejects startup and
+an already-latched next input. In particular, coasting can retain15DC=1 even
+with no accelerator held. The complete live post-finish driver is not yet
+connected: retained AI setup/shared RNG and result-world sequencing remain.
+
+Validation:254 focused AI/water/ordinary/launch tests passed, followed by all6
+live-input tests after adding the main21 context case; all33 race-pilot tests
+passed, including genuine three-lap finishes and render-cadence comparisons.
+The existing14 host tests also passed. Private original-instruction comparison
+matched291 live navigation samples (211 driving,123 changed rows), executing
+19,998 instructions, and all18 live water mesh/circle samples. Separately,
+1,344 retained original61184 cases confirm the15DC/control-mute relationship.
+These are bounded numeric comparisons, not whole-game trajectory equivalence.
+No new full-suite claim is made; prior unrelated failures remain tracked.

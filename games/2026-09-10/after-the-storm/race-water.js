@@ -2,6 +2,7 @@ import {createNativeWaterField,seedNativeWaterNoise,queryNativeWaterField,
  createNativeWaterPatch,stepNativeWaterPatch,forceNativeWaterLine} from './native-water-field.js';
 import {createNativeWaterFollowCamera,stepNativeWaterFollowCamera,nativeWaterCameraBasis,
  nativeWaterAmplitudeThreshold,planNativeWaterFrame} from './native-water-schedule.js';
+import {prepareNativeAISelectionCircle} from './native-ai-perception.js';
 
 // Host-owned source water. The source camera below selects simulation cells;
 // the high-resolution view consumes read-only endpoints; its mesh and optional
@@ -73,7 +74,7 @@ export function createRaceWaterRandom(seed){
 export function createRaceWater({crafts,variant=0,scale=.025,baseAmplitudeNative,
  primaryPointsNative=[],boundaryPointsNative=[],amplitudeThresholdNative,
  datumNative=0,period=20,seed=17,phaseCounter=0,random15,
- initialNoise=true,zoomIndex=1,cameraProvider=null}={}){
+ initialNoise=true,zoomIndex=1,cameraProvider=null,selectionRadiusNative=1500}={}){
  if(!Array.isArray(crafts)||crafts.length<1||crafts.length>2)throw new TypeError('Expected one or two human water cameras');
  if(!finite(scale)||scale<=0)throw new RangeError('Water scale must be positive');
  if(!Number.isInteger(baseAmplitudeNative)||baseAmplitudeNative<0||baseAmplitudeNative>127)throw new RangeError('Explicit source amplitude is required');
@@ -81,6 +82,8 @@ export function createRaceWater({crafts,variant=0,scale=.025,baseAmplitudeNative
  if(!Number.isInteger(period)||period<1||period>65535)throw new RangeError('Invalid source water period');
  if(!Number.isSafeInteger(seed))throw new TypeError('Water seed must be an integer');
  if(cameraProvider!==null&&typeof cameraProvider!=='function')throw new TypeError('cameraProvider must be a function');
+ if(!Number.isInteger(selectionRadiusNative)||selectionRadiusNative< -2147483648||selectionRadiusNative>2147483647)
+  throw new RangeError('selectionRadiusNative must be signed32');
  const field=createNativeWaterField({variant,players:crafts.length,datumNative:datum(datumNative),phaseCounter});
  const poses=crafts.map(c=>craftPose(c,scale));
  const follows=poses.map(p=>createNativeWaterFollowCamera({positionNative:Object.values(p.position),forwardXZ:p.forward,zoomIndex,datumNative}));
@@ -93,7 +96,8 @@ export function createRaceWater({crafts,variant=0,scale=.025,baseAmplitudeNative
   amplitudeThresholdNative:amplitudeThresholdNative??nativeWaterAmplitudeThreshold({primaryPointsNative,boundaryPointsNative}),
   follows,cameras,previousPositions:poses.map(p=>copy(p.position)),
   previousPatchCentersNative:crafts.map(()=>({xNative:0,zNative:0})),
-  cameraProvider,remainder:0,frames:0,stepsLast:0,revision:0,lastPlan:null};
+  cameraProvider,selectionRadiusNative,selectionMeshesNative:Object.freeze(crafts.map(()=>null)),
+  remainder:0,frames:0,stepsLast:0,revision:0,lastPlan:null};
  known.add(state);return state;
 }
 
@@ -124,6 +128,14 @@ export function advanceRaceWaterFrame(state,crafts,{datumNative=state?.field.dat
   craftPositionsNative:poses.map(p=>[p.position.x,p.position.z]),
   baseAmplitudeNative:state.baseAmplitudeNative,period:state.period,
   amplitudeThresholdNative:state.amplitudeThresholdNative,datumNative,simulationActive});
+ // Source50F8C stores the expanded mesh's selection circle after the hull
+ // phase, including simulation0. Keep it for the NEXT frame's AI input.
+ // Camera record order is independent of the P2-then-P1 patch call order.
+ const horizontalForwardsNative=cameras.map(c=>({x:c.horizontalForward[0],z:c.horizontalForward[1]}));
+ const selectionMeshesNative=Array(state.players);
+ for(const spec of plan.patches)selectionMeshesNative[spec.playerIndex]=prepareNativeAISelectionCircle({
+  radius:spec.radius,selectionRadiusNative:state.selectionRadiusNative,patchIndex:spec.playerIndex,
+  requestedCenterNative:{x:spec.xNative,z:spec.zNative},horizontalForwardsNative});
  // The plan is pure. No phase is consumed until every camera input validated.
  state.field.datumNative=datumNative;
  for(const forcing of plan.forcing)forceNativeWaterLine(state.field,forcing);
@@ -135,8 +147,19 @@ export function advanceRaceWaterFrame(state,crafts,{datumNative=state?.field.dat
  }
  state.follows=updates.map(q=>q.state);state.cameras=cameras;
  state.previousPositions=poses.map(p=>copy(p.position));state.previousPatchCentersNative=centers;
+ state.selectionMeshesNative=Object.freeze(selectionMeshesNative);
  state.zoomIndex=zoomIndex;state.frames++;state.revision++;state.lastPlan=plan;
  return state;
+}
+
+/** AI86DA8 always reads patch0, even in two-player mode. Before the first
+ * completed water frame there is no produced circle; do not substitute the
+ * requested center, the rendered camera, or an invented startup circle. */
+export function raceWaterAISelectionCircle(state){
+ if(!known.has(state))throw new TypeError('Expected host race water');
+ const circle=state.selectionMeshesNative[0]?.selectionCircleNative;
+ if(!circle)throw new Error('AI selection circle requires a completed source water frame');
+ return circle;
 }
 
 export function stepRaceWater(state,crafts,dt,{active=true,...options}={}){
