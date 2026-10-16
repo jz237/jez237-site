@@ -1,7 +1,7 @@
 import {encodeOnlinePacket,decodeOnlinePacket} from './online-race-codec.js';
 import {normalizeWindowControls,neutralWindowControls} from './player-window-protocol.js';
 import {readWindowFrame} from './player-window-presentation.js';
-export const ONLINE_VERSION=1,ONLINE_BUILD='2.30.0',ONLINE_STUN='stun:stun.cloudflare.com:3478';
+export const ONLINE_VERSION=1,ONLINE_BUILD='2.30.1',ONLINE_STUN='stun:stun.cloudflare.com:3478';
 export const ONLINE_INPUT_STALE_MS=250,ONLINE_LINK_STALE_MS=3500;
 const courses=new Set(['greyhaven','amber','reed','citadel','port','neon','tempest','glacier','practice']);
 const token=s=>typeof s==='string'&&/^[a-f0-9]{32}$/.test(s);

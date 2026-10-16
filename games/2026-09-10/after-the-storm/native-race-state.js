@@ -607,11 +607,22 @@ export function prepareNativeRaceResultStageUpdate(state,consumer,input={}){
  return freeze({...prepared,operations,state:next,effects});
 }
 export function prepareNativeRaceResultCPUDisplayUpdate(state,input={}){
+ if(input.expandMenus!==undefined&&typeof input.expandMenus!=='boolean')throw new TypeError('expandMenus must be boolean');
  const next=copy(state),prepared=prepareNativeRaceResultCPUDisplay({...resultInputView(next),
   expandTransitions:true,expandWidgets:true,fadeTemplateWords6cc0:input.fadeTemplateWords6cc0,
   slotTemplateWords6c50:input.slotTemplateWords6c50});
- const effects=apply(next,prepared.operations);
- return freeze({...prepared,state:next,effects});
+ const operations=[],effects=[],menus=[];
+ for(const operation of prepared.operations){
+  if(input.expandMenus&&operation.kind==='externalCall'&&['801ec20c','801ec830','801ec9c8','801ece50'].includes(operation.consumer)){
+   // Apply at the original call position. In retirement63B4 the following
+   // AD3C4 effect must stay after this entire menu initializer.
+   const menu=prepareNativeRaceMenuInitializationUpdate(next,{consumer:operation.consumer},input);
+   operations.push(...menu.operations);effects.push(...apply(next,menu.operations));
+   menus.push({consumer:operation.consumer,gameState:menu.state.scene.gameStateAb24,main:menu.state.scene.main638,
+    pendingConsumers:menu.diagnostic.pendingConsumers});
+  }else{operations.push(operation);effects.push(...apply(next,[operation]));}
+ }
+ return freeze({operations,state:next,effects,menus});
 }
 /** One-shot result estimate against the same records used by the race and HUD.
  * No live phase is inferred; the caller must schedule actual77F5C invocation. */

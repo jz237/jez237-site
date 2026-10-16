@@ -23,8 +23,8 @@ const RESULT_TABLE_WORDS=Object.freeze([0,1,2,3,4,5,6,1,4]);
 
 // One canonical owner for the admitted ordinary launch, primary race and numeric
 // HUD fields. DOM/racer properties below are views, never synchronized copies.
-// Result entry and CPU result updates share this owner. Original menu/resource
-// loading and cartridge persistence remain explicit external boundaries.
+// Result entry, CPU result updates and menu entry share this owner. Original
+// resource loading, menu loops and cartridge persistence remain boundaries.
 const BASE=(0x2938-0x1f94)/4,STRIDE=222,hi=a=>(a-0x7788)/4,ri=a=>(a-0x1f94)/4;
 const sourceFields={nextSourceRow:3,side:7,armed:8,power:75,lapMisses:76,totalMisses:77,missLimitReached:79};
 const booleans=new Set(['armed','missLimitReached']);
@@ -352,14 +352,13 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    if(!courseRuntime)throw new Error('Source result schedule requires ordinary race');
    if(!runtime.resultView().active)return {effects:[],view:runtime.view(),result:runtime.resultView()};
    const prepared=prepareNativeRaceResultCPUDisplayUpdate(current,{
-    slotTemplateWords6c50:Array(11).fill(0),fadeTemplateWords6cc0:[0,0,0,0x10000,0,0,0,0,0x10000]});
-   // Explicit high-resolution menu handoff. Original menu/resource loading and
-   // cartridge persistence remain unexecuted effects; stop this host once so
-   // they cannot be repeatedly requested on every later browser frame.
-   const menu=prepared.effects.find(op=>op.kind==='externalCall'&&
-    ['801ec830','801ec20c','801ec9c8','801ece50'].includes(op.consumer));
+    expandMenus:true,slotTemplateWords6c50:Array(11).fill(0),fadeTemplateWords6cc0:[0,0,0,0x10000,0,0,0,0,0x10000]});
+   // Commit the actual numeric menu entry before the high-resolution handoff.
+   // The race host stops here: resource installation, the subsequent menu loop
+   // and cartridge persistence are still separate from this numeric entry.
+   const menu=prepared.menus[0];
    current=prepared.state;
-   if(menu)resultExit=Object.freeze({consumer:menu.consumer});
+   if(menu)resultExit=menu;
    return {effects:prepared.effects,view:runtime.view(),result:runtime.resultView()};
   },
   advanceStatus(bodyResultCode16c8BySlot){

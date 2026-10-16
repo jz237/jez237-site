@@ -40,8 +40,13 @@ test('postrace keeps source world alive, freezes finish data, rejects early held
  const fadeStart=w.frames;for(let i=0;i<100&&s.phase!=='results';i++)frames(s,1);
  assert.equal(s.phase,'results');assert.ok(w.frames>fadeStart);assert.equal(s.nativeResult.exit.consumer,'801ec9c8');
  const end=s.nativeLaunch.snapshot(),endFrames=w.frames;
+ assert.equal(end.scene.previousGameState634,42);assert.equal(end.scene.gameStateAb24,100);assert.equal(end.scene.main638,6);
+ assert.equal(end.scene.phase650,0);assert.equal(end.scene.players,1);assert.equal(end.scene.initLatch63c,1);
+ assert.deepEqual(s.nativeResult.exit.pendingConsumers,['80096960','800c21f4']);
+ assert.equal(s.nativeResult.exit.gameState,100);assert.equal(s.nativeResult.exit.main,6);
  for(let i=0;i<10;i++)stepRace(s,{},1/30);
  assert.deepEqual(s.nativeLaunch.snapshot(),end);assert.equal(w.frames,endFrames);assert.deepEqual(s.result,finishResult);
+ const repeat=s.nativeLaunch.advanceResult();assert.deepEqual(repeat.effects,[]);assert.deepEqual(s.nativeLaunch.snapshot(),end);
 });
 
 test('retirement, two-player wins, and ties run their source delay before handing off the menu',()=>{
@@ -53,8 +58,27 @@ test('retirement, two-player wins, and ties run their source delay before handin
   for(let i=0;i<200&&s.phase!=='results';i++)frames(s,1);
   assert.equal(s.phase,'results',kind);assert.ok(s.nativeHost.world.frames-at>=60,kind);
   assert.equal(s.nativeResult.exit.consumer,kind==='retired'?'801ec830':'801ece50');
+  const menu=s.nativeLaunch.snapshot().scene;
+  assert.equal(menu.gameStateAb24,kind==='retired'?80:54);assert.equal(menu.main638,kind==='retired'?13:18);
+  assert.equal(menu.players,1);assert.equal(menu.phase650,0);assert.equal(menu.initLatch63c,1);
   assert.deepEqual(s.nativeLaunch.snapshot().profileWordsB330.slice(48,50),kind==='p1'?[1,0]:kind==='versus-retired'?[0,1]:[0,0]);
  }
+});
+
+test('expanded retirement menu stays before the caller audio cleanup and late failure is atomic',()=>{
+ const state=structuredClone(finish(create()).nativeLaunch.snapshot());state.scene.gameStateAb24=41;
+ const completion=(0x8a14-0x7788)/4;state.hudWords7788[completion]=(state.hudWords7788[completion]&0xffff0000)|1;
+ const before=structuredClone(state),templates={slotTemplateWords6c50:Array(11).fill(0),fadeTemplateWords6cc0:[0,0,0,0x10000,0,0,0,0,0x10000]};
+ const q=cpu(state,{...templates,expandMenus:true});
+ assert.equal(q.menus.length,1);assert.equal(q.menus[0].consumer,'801ec830');
+ assert.equal(q.operations.some(o=>o.consumer==='801ec830'),false);
+ assert.equal(q.operations.at(-1).consumer,'800ad3c4');
+ const menuStart=q.operations.findIndex(o=>o.field==='previousGameState634');
+ assert.ok(menuStart>=0);assert.ok(q.operations.findIndex(o=>o.consumer==='800c6ad0')>menuStart);
+ assert.equal(q.state.scene.gameStateAb24,80);assert.deepEqual(state,before);
+ assert.throws(()=>cpu(state,{...templates,expandMenus:1}),TypeError);
+ assert.throws(()=>cpu(state,{...templates,expandMenus:true,slotTemplateWords6c50:Array(10).fill(0)}),/slotTemplate/);
+ assert.deepEqual(state,before);
 });
 
 test('result delay and menu readiness depend on source frames at30/60/144Hz',()=>{

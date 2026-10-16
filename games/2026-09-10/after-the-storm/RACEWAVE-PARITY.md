@@ -1,6 +1,6 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
-## Result-menu initialization — local October 16 checkpoint
+## v2.30.1 — original result-menu entry
 
 The four original result-menu entry callers C20C, C830, C9C8 and CE50 now have
 independent numeric implementations and a shared-state adapter. They preserve
@@ -23,10 +23,23 @@ nested resource and fade bodies (49,426 instructions,13,006 ordered operations).
 Kind2 separately matches260 cases and44,000 writes; all2,308 existing resource
 cases still match. All46 focused menu/resource/main-state tests pass.
 
-This checkpoint is local and is not connected to the live result handoff yet.
-Audio calls remain explicit effects. Full resource loading, menu loops,
-textured presentation and record persistence remain unfinished; the existing
-high-resolution browser results continue to handle the live handoff.
+The ordinary live host now commits these numeric menu entries at their actual
+CPU call positions before the browser handoff. Retirement retains its final
+AD3C4 cleanup after the expanded menu calls. The race host stops once, including
+when the original menu switches two-player race state back to one-player menu
+state. Repeated result calls cannot reinitialize the menu. The QA snapshot now
+reports the target menu and pending consumers explicitly.
+
+All14 focused post-race/menu tests pass, including a naturally completed race
+through the1200-frame unattended timeout. All34 host/launch/input tests and34
+online/player-window tests pass. The684 existing direct result CPU cases still
+match7,728 ordered stores. These test groups overlap earlier validation.
+Browser verification completed three laps with zero misses and no retirement,
+waited the full1200-frame timeout, entered gameState100/main6, and stopped at
+source frame3552 with the high-resolution results dialog visible.
+Audio and resource loading remain explicit pending effects at the high-resolution
+handoff. Subsequent original menu loops, textured presentation and record
+persistence remain unfinished. This is numeric menu entry, not full menu parity.
 
 ## v2.30.0 — live post-race sequence
 
