@@ -2913,3 +2913,16 @@ These changes are local, pending the next publication. This is result entry,
 not complete post-race parity: the browser still opens results immediately.
 The subsequent physical rider animation, AI takeover, source widget animation,
 results-menu schedule and persistence still need full live integration.
+
+The private original-ROM CPU diagnostic now reaches a genuine four-racer Sunny
+championship through ordinary Start/A/Down menu inputs, including skipping
+warm-up. The fifth bounded30-second run reaches main638=1, gameState40,
+phase650=3 and simulation648=3. It records621 camera-predicate calls during
+driving loops513..581 with changing racer coordinates. Both watched corner
+buffers retain zero XZ throughout; the160 observed overlapping stores are
+startup clears and the known Y/RGB initialization. This supersedes the earlier
+neutral-boot-only coverage, but does not establish a universal zero-corner
+rule: the host executes original CPU code and audio microcode, while graphics
+tasks provide bounded metadata without executing graphics microcode or GPU.
+All logs parse with matching hashes, zero observer errors and a clean joined
+shutdown; the1,477 existing diagnostic files retain their previous hashes.
