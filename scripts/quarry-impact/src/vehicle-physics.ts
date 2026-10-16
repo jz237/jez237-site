@@ -151,7 +151,9 @@ export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastV
  const target=(alive?state.input.steer:0)*(.55*spec.steering*steeringSpeedScale(state.speed,lateralSpeed,state.input.steer,dot(body.angvel(),up)))+(state.damageRight-state.damageLeft)*.0007;
  const alpha=1-Math.exp(-8*dt);state.steering=(1-alpha)*state.steering+alpha*target;
  const throttle=stepTransmission(state,spec,dt,running);
- const force=running?throttle*spec.force*enginePowerFactor(state.health,engineDamage)*clamp((spec.speedLimit-Math.abs(state.speed))/10,0,1):0;
+ // Brake priority also applies to manual pedals: Rapier ignores wheelBrake
+ // whenever a wheel has engine force, even under full service braking.
+ const force=running&&state.input.brake<=0?throttle*spec.force*enginePowerFactor(state.health,engineDamage)*clamp((spec.speedLimit-Math.abs(state.speed))/10,0,1):0;
  const engineBrake=running?manualEngineBrake(state,spec):0;
  const front=axleDrive(spec.differential,!!controller.wheelIsInContact(0),!!controller.wheelIsInContact(1)),rear=axleDrive(spec.differential,!!controller.wheelIsInContact(2),!!controller.wheelIsInContact(3));
  for(let i=0;i<4;i++){
