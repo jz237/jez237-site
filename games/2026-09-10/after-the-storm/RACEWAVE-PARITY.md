@@ -1,5 +1,31 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unreleased — Southern alternate navigation families
+
+Southern's native owner now initializes its separate secondary and tertiary
+routes and selects them from the canonical retained record. Navigation and
+AI aiming use the same selected family. Alternate centers stay independent of
+moving primary buoys; human judging keeps its primary graph. Original main21
+and two-player mode force primary without rewriting the retained family.
+
+All50,180 initialized words match16 prepared original executions. Another48
+original selector cases match across all four avatars and both override gates.
+A fresh read-only EVO X2 Ghidra query exported714 matching instruction records
+and left all nine project files unchanged. The initializer/selector oracle
+executed297,924 instructions; this is numeric prepared-state evidence.
+All49 focused family, contact, live-AI, host, Sunset and loading checks pass
+across the regression and follow-up runs. One existing test's error-message
+match was updated for the generalized route-family validation.
+
+Private full-race probes no longer fail at the lap-one family switch. Normal,
+Hard and Expert finish three laps with zero misses; Reverse finishes with two.
+However, inspection then found that the native branch never advances Southern's
+water datum: these probes run at zero water level. They do not prove the
+falling-tide course. Original51238's gated discrete decrement, its exact place
+in the native frame, and the resulting complete-course runs remain to integrate
+and verify. Southern public native admission stays gated. Rendering and
+resolution remain unchanged.
+
 ## Unreleased — native Southern Island geometry
 
 The prepared native Southern runtime now selects its original 305 floor planes,

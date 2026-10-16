@@ -9,6 +9,7 @@ import {SUNNY_NATIVE_RETIREMENT_GEOMETRY} from './native-sunny-support.js';
 import {nativeSunsetRetirementGeometry} from './native-sunset-support.js';
 import {nativeSouthernRetirementGeometry} from './native-southern-support.js';
 import {nativeRaceShoreGeometry} from './native-shore-geometry.js';
+import {SOUTHERN_NATIVE_AI_ROWS_BY_CLASS} from './source-southern-ai-routes.js';
 
 // Numeric course owners for Sunny/Sunset and prepared Southern integration.
 // Mode and source-water admission remain the race host's responsibility.
@@ -45,7 +46,24 @@ export function createNativeRaceCourseRuntime({course,difficulty,players}={}){
   passingDirectionXZ:n.rightXZ,initialPositionNativeXZ:n.centerNativeXZ}));
  const aiRoute=createNativeAIRoute({nodes:aiNodes,scale,courseIndex});
  const aiTargetTable=createNativeAITargetTable({route:aiRoute,nodes:aiNodes});
- return Object.freeze({data,resetLayout,primaryLayout,sourceBuoyLayout,mode620,aiRoute,aiTargetTable,retirementGeometry,staticContactGeometry,...regions,
+ const aiFamilies={primary:Object.freeze({family:'primary',data,route:aiRoute,targetTable:aiTargetTable})};
+ //85EEC forces primary in two-player mode. The solo Southern record retains
+ // its source lap/tide-selected family; alternate centers are static and do
+ // not share the physical primary buoy motion array.
+ if(courseIndex===7&&players===1)for(const family of ['secondary','tertiary']){
+  const rows=SOUTHERN_NATIVE_AI_ROWS_BY_CLASS[difficulty][family];
+  if(rows.length!==data.nodes.length)throw new RangeError('Alternate source loader count differs from primary');
+  const alternate=createNativePrimaryCourseData({rows,courseIndex,mode620});
+  const nodes=alternate.nodes.map((n,i)=>({
+   sourceRow:n.sourceRow,x:n.centerNativeXZ.x*scale,z:n.centerNativeXZ.z*scale,
+   tx:n.forwardXZ.x,tz:n.forwardXZ.z,classification:n.classification98,routeGroup:n.routeGroupC0,
+   nativeType:rows[i][2],halfWidthNative:n.halfWidthNative8c,
+   endpointPlusNativeXZ:n.endpointANativeXZ,endpointMinusNativeXZ:n.endpointBNativeXZ,
+   passingDirectionXZ:n.rightXZ,initialPositionNativeXZ:n.centerNativeXZ}));
+  const route=createNativeAIRoute({nodes,scale,courseIndex,family});
+  aiFamilies[family]=Object.freeze({family,data:alternate,route,targetTable:createNativeAITargetTable({route,nodes})});
+ }
+ return Object.freeze({data,resetLayout,primaryLayout,sourceBuoyLayout,mode620,aiRoute,aiTargetTable,aiFamilies:Object.freeze(aiFamilies),retirementGeometry,staticContactGeometry,...regions,
   sourceDifficulty:course.sourceMetadata.sourceNativeClassByDifficulty[difficulty],
   directionFlag1f90:rules.checkpointSide,scale});
 }

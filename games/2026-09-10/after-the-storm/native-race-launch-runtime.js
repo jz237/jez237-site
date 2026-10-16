@@ -247,13 +247,14 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
   sampleAI(slot,{bodiesBySlot,geometry,waterField}){
    if(!courseRuntime)throw new Error('Live AI requires initialized source course geometry');
    if(!Array.isArray(bodiesBySlot)||bodiesBySlot.length!==racers.length)throw new TypeError('Supply all preceding AI body snapshots');
-   const g=current.scene,prepared=prepareNativeAIDriver(courseRuntime.aiTargetTable,runtime.aiDriverState(slot),{
+   const g=current.scene,family=runtime.aiFamilyFor(slot),prepared=prepareNativeAIDriver(family.targetTable,runtime.aiDriverState(slot),{
     globals:{state650:g.phase650,state638:g.main638,mode620:g.mode620,difficulty:current.profileWordsB330[2]|0,
      courseIndex:g.courseIndex,reverse:g.reverseDab68!==0,players:g.players,primaryHumanIndex:g.primaryHumanIndex,
      datumNative:waterField.datumNative,toggleD9914:g.toggleD9914,trainingSelection:g.trainingSelectionDa9f8,
      previousNavigationGlobal:g.previousNavigationD9874,chargeTimerNative:current.hudWords7788[hi(0x8a90)]|0},
     racers:runtime.aiRecords().map((record,i)=>({record,body:bodiesBySlot[i]})),
-    geometry:{...geometry,proximityCount:current.aiWords3c60[(0x4110-0x3c60)/4]|0},waterField});
+    geometry:{...geometry,nodePositionsNative:family.family==='primary'?geometry?.nodePositionsNative:undefined,
+     proximityCount:current.aiWords3c60[(0x4110-0x3c60)/4]|0},waterField});
    const operations=prepared.frame.phase==='driving'?nativeAIDriverStateWrites(prepared.state,slot):[];
    if(Object.hasOwn(prepared.globalWrites,'previousNavigationGlobal'))operations.push({kind:'sourceWordWrite',
     field:'previousNavigationD9874',value:prepared.globalWrites.previousNavigationGlobal>>>0});
@@ -284,6 +285,17 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    current=fade.state;return value;
   },
   aiTargetTable:courseRuntime?.aiTargetTable??null,
+  aiFamilyFor(slot){
+   if(!courseRuntime)throw new Error('Source AI selection requires initialized course geometry');
+   integer(slot,'AI racer slot',0,racers.length-1);
+   // Original85EEC: main21 and mode1 force primary without overwriting the
+   // retained record2C88 family. Ordinary Southern uses that retained pointer.
+   const pointer=current.scene.main638===21||current.scene.mode620===1?0x801aee20:word(slot,212)>>>0;
+   const name=({[0x801aee20]:'primary',[0x801b2f20]:'secondary',[0x801b7020]:'tertiary'})[pointer];
+   const selected=courseRuntime.aiFamilies?.[name];
+   if(!selected)throw new Error('Source AI navigation requires the selected initialized route family');
+   return selected;
+  },
   aiRecords:()=>racers.map((_,slot)=>({sourceLap:word(slot,0),place293c:word(slot,1),
    navigationSourceRow:word(slot,4),finished2c2c:word(slot,189),record2c24:word(slot,187)})),
   advanceNavigation({bodiesBySlot,nodePositions}){
@@ -293,11 +305,9 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    // Original86148 visits ALL racers ascending before any input producer.
    // No simulation, finish or human-only gate occurs inside this prepass.
    for(let slot=0;slot<racers.length;slot++){
-    if(current.scene.main638!==21&&current.scene.mode620!==1&&word(slot,212)!==(0x801aee20|0))
-     throw new Error('Sunny AI navigation requires the retained primary table');
-    const body=bodiesBySlot[slot],previous=createNativeAIRouteState(courseRuntime.aiRoute,{
+    const family=runtime.aiFamilyFor(slot),body=bodiesBySlot[slot],previous=createNativeAIRouteState(family.route,{
      avatar:body.avatar,navigationSourceRow:word(slot,4)});
-    const next=stepNativeAIRoute(courseRuntime.aiRoute,previous,{position:body.position,nodePositions});
+    const next=stepNativeAIRoute(family.route,previous,{position:body.position,nodePositions:family.family==='primary'?nodePositions:undefined});
     if(next.state.navigationSourceRow!==word(slot,4))operations.push(write(slot,4,next.state.navigationSourceRow));
     diagnostics.push({racerIndex:slot,...next.diagnostic});
    }

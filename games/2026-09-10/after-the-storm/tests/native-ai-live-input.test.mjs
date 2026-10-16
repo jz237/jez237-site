@@ -146,7 +146,7 @@ test('source context overrides retained table only for main21 or versus mode1',(
   const input={bodiesBySlot:h.world.adapters.map(a=>({avatar:a.hull.rider,position:a.hull.center})),
    nodePositions:h.primary.snapshot().map(n=>({sourceRow:n.sourceRow,x:n.position.x,z:n.position.z}))};
   if(accepted)assert.equal(runtime.advanceNavigation(input).diagnostics.length,s.racers.length);
-  else assert.throws(()=>runtime.advanceNavigation(input),/retained primary table/);
+  else assert.throws(()=>runtime.advanceNavigation(input),/selected initialized route family/);
   assert.equal(runtime.snapshot().raceWords1f94[base+212],0x801b2f20);
  }
 });
