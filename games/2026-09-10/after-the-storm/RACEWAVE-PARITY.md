@@ -1,6 +1,6 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
-## Result HUD animation — local October 16 checkpoint
+## v2.29.0 — result HUD numeric animation and matrix preparation
 
 The five shared HUD slots now have the reconstructed numeric update for all
 four widget kinds: finish banner, record banner, menu marker and retirement
@@ -21,10 +21,22 @@ Seven focused tests pass, including complete finish-to-record and retirement
 sequences using the original 0.7 bounce damping, allocation reuse and atomic
 failure on missing inputs. All 499 selected native-race regressions pass.
 
-These preparations are not yet scheduled by the live host. The browser still
-stops at its result overlay. Connecting the complete result/world/HUD/fade loop,
-high-resolution widget drawing, continue input and menu/save transitions remains
-required; this checkpoint does not claim a visible post-race fix or a release.
+The ordinary native host now schedules widget animation and fade advancement
+after world updates and before display-stage camera/status consumers. Matrix
+recipes resolve into five logical renderer slots, using reconstructed scaled
+basis and Euler consumers and the original sine lookup and angle periods.
+Independent ROM execution matches another 522 matrix cases, 150,674 counted
+instructions and 18,652 ordered writes. Four presentation tests cover packed
+scale/translation, negative-angle lookup, full banner trajectories, allocation
+draw suppression and rejection of invalid destinations without input mutation.
+All 43 focused host, live-launch, AI storage, widget and presentation tests pass.
+
+Read-only widget drawing data and fade values are available to the host; actual
+high-resolution widget drawing is still unfinished. The browser still stops at
+its result overlay. Connecting the complete result/world/HUD/fade loop, continue
+input and menu/save transitions remains required. This checkpoint does not
+claim a visible post-race fix. Modern racing and online modes retain their
+existing presentation and scoring; native preview remains isolated from records.
 
 ## v2.28.0 — solo source AI input and shared startup state
 

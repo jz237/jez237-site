@@ -27,11 +27,16 @@ function context(input){
 /** Full numeric5470/6074/62A8/66F4/68EC updates. Matrix and sound calls
  * remain ordered effects. Null argument1 in48854/49A94 explicitly denotes
  * their caller-local temporary float matrix, not an invented RAM address.
- * frameBufferBase is the actual presentation owner; other dependencies are
+ * frameBufferBase is the actual presentation owner. matrixTargets:'slots'
+ * instead emits a logical widgetMatrixTarget in argument0 for a modern
+ * renderer, without fabricating a guest GPU pointer. Other dependencies are
  * required only on reached branches. No GPU memory or input is mutated. */
 export function prepareNativeRaceWidgetUpdate(input){
+ if(input?.matrixTargets!==undefined&&input.matrixTargets!=='slots')throw new RangeError('Unknown widget matrix target mode');
+ if(input?.matrixTargets==='slots'&&input.frameBufferBase!==undefined)throw new RangeError('Choose one widget matrix destination owner');
  const c=context(input),{half,word,put,call}=c,activeSlots=[];
  const target=base=>{
+  if(input.matrixTargets==='slots')return {kind:'widgetMatrixTarget',index:half(base+4)};
   const frame=integer(input.frameBufferBase,'frameBufferBase',0,0xffffffff),address=frame+0x900+half(base+4)*64;
   if(frame%4||address>0xffffffff-63)throw new RangeError('Invalid widget matrix range/alignment');return address;
  };

@@ -12,6 +12,8 @@ import {prepareNativeAIInitialization} from './native-ai-initialization.js';
 import {prepareNativeAIDriver} from './native-ai-driver.js';
 import {NATIVE_AI_STORAGE_WORDS,nativeAIDriverStateFromWords,nativeAIDriverStateWrites} from './native-ai-storage.js';
 import {prepareNativeRaceWaterInitialization} from './native-race-state.js';
+import {prepareNativeRaceWidgetAdvance,prepareNativeRaceFadeAdvance} from './native-race-state.js';
+import {prepareNativeWidgetPresentation,nativeWidgetDrawView} from './native-widget-presentation.js';
 
 // Overlapping effect47FC, solo4800 and two-player4818 numeric entries. Ordinary
 // two-player place indices are0/1; other mode tables remain separate admission.
@@ -200,6 +202,21 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    const value=(previous+1)&3;
    commit([{kind:'sourceWordWrite',field:'toggleD9914',value}]);
    return {previous,value};
+  },
+  advanceHUD(){
+   if(!courseRuntime)throw new Error('Source HUD update requires ordinary race');
+   // Source922E4 reaches5470,AFB4,71A8 after world/overlay CPU updates and
+   // before the display-stage camera/status/result consumers. Resolve modern
+   // matrix slots atomically; no guest GPU address or original art is invented.
+   const widget=prepareNativeRaceWidgetAdvance(current,{matrixTargets:'slots',slotTemplateWords6c50:Array(11).fill(0),
+    rotationWord6c80:0x40490fdb,rotationWord6c84:0x40490fdb,bounceWord6c88:0x3f333333});
+   const presentation=prepareNativeWidgetPresentation(widget.effects),widgets=nativeWidgetDrawView(widget.state.hudWords7788,presentation);
+   const fade=prepareNativeRaceFadeAdvance(widget.state,{fadeTemplateWords6cc0:[0,0,0,0x10000,0,0,0,0,0x10000]});
+   const h=fade.state.hudWords7788,half=a=>((h[(a-0x7788)>>>2]>>>(a%4?0:16))&65535)<<16>>16;
+   const value={widgets,fade:{kind:half(0x8a10),completion:half(0x8a16),alpha:half(0x8a26),
+    red:half(0x8a20),green:half(0x8a22),blue:half(0x8a24)},
+    effects:[...presentation.operations.filter(op=>op.kind!=='widgetMatrix'),...fade.effects]};
+   current=fade.state;return value;
   },
   aiTargetTable:courseRuntime?.aiTargetTable??null,
   aiRecords:()=>racers.map((_,slot)=>({sourceLap:word(slot,0),place293c:word(slot,1),
