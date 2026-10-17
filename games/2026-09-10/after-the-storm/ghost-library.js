@@ -8,7 +8,7 @@ const courseIds=new Set(COURSES.filter(c=>c.id!=='practice').map(c=>c.id));
 // never silently compared against a ghost recorded on another wave sequence.
 export function trialSetupKey(setup){
  const t=setup.tune??{};
- return JSON.stringify([setup.course,setup.layoutRevision??0,setup.difficulty??0,setup.laps??3,setup.seaState,setup.rider,t.engine??0,t.grip??0,t.handling??0]);
+ return JSON.stringify([setup.course,setup.layoutRevision??0,setup.difficulty??0,setup.laps??3,setup.seaState,setup.rider,t.engine??0,t.grip??0,t.handling??0,setup.waterRevision??0]);
 }
 export function validateGhostLibrary(value){
  if(!Array.isArray(value)||value.length>MAX_SAVED_GHOSTS)throw Error('Invalid saved time-trial ghosts.');

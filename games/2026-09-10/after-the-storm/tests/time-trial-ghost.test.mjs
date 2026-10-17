@@ -7,6 +7,15 @@ function state(){return {mode:'time',phase:'countdown',time:0,seaState:'course',
 function complete(s){const r=s.racers[0];s.phase='results';r.finishTime=s.time;r.lapTimes=[s.time/3,s.time/3,s.time/3];r.lap=4;r.next=1;r.passed=6;}
 function recording(duration=1,options={}){const s=state(),rec=beginGhostRace(s,options);s.phase='running';for(let i=1;i<=Math.round(duration*60);i++){s.time=i/60;s.racers[0].x=1+s.time*10;s.racers[0].z=3-s.time*2;s.racers[0].hydro.y=2+Math.sin(s.time);s.racers[0].hydro.pitch=Math.sin(s.time)*.2;s.racers[0].hydro.roll=Math.cos(s.time)*.3;recordGhostFrame(rec,s);}complete(s);return {s,rec,ghost:finishGhostRace(rec,s)};}
 
+test('older custom seas remain importable but do not compete with depth-corrected water',()=>{
+ const {ghost,s}=recording(),oldCustom=validateGhost({...ghost,setup:{...ghost.setup,seaState:'surf'}});
+ s.seaState='surf';assert.equal(ghostCompatible(oldCustom,s),false);
+ const current=validateGhost({...oldCustom,setup:{...oldCustom.setup,waterRevision:1}});
+ assert.equal(ghostCompatible(current,s),true);
+ s.seaState='course';assert.equal(ghostCompatible(ghost,s),true);
+ assert.throws(()=>validateGhost({...ghost,setup:{...ghost.setup,waterRevision:-1}}));
+});
+
 test('records the full measured run at bounded frequency, including start and finish',()=>{
  const {s,rec,ghost}=recording(1.0333333333333);
  assert.ok(ghost);assert.equal(ghost.count,22);assert.equal(ghost.sampleHz,GHOST_SAMPLE_HZ);assert.equal(ghost.duration,s.time);assert.equal(rec.closed,true);

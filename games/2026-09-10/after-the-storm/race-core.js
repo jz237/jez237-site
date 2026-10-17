@@ -20,6 +20,7 @@ import {cornerDrive} from './race-response.js';
 import {frontEnabled} from './weather-front.js';
 import {wavePilotInput} from './wave-pilot.js';
 import {rampChoiceInput,racingStuntCourse} from './ramp-choice.js';
+import {setCoastalDepth} from './coastal-depth.js';
 import {setWaterCharacter} from './water-character.js';
 import {createLocalWater,driveLocalWater,setLocalWater} from './local-water.js';
 import {gustAt} from './wind-gusts.js';
@@ -112,7 +113,7 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
   rollerRows:course.rollersForPlayers?.(mode==='versus'?2:1,{difficulty,mode:course.stunt?'stunt':'race'}).map(q=>q.nativeRow)??[],
   primaryPointsNative,boundaryPointsNative,datumNative:Math.round(waterLevel.value/nativeScale)}):null;
  if(nativeLaunch)nativeLaunch.initializeWater(raceWater.field,raceWater.baseAmplitudeNative);
- setRaceWater(raceWater);
+ setRaceWater(raceWater);setCoastalDepth(seaState==='course'?null:course);
  const sourceFixedSpheres=(course.rocks||[]).filter(q=>q.sourceFixedSphere&&!q.breakable);
  const sourceSphereGrid=sourceFixedSpheres.length?createSourceFixedSphereGrid(sourceFixedSpheres,{scale:nativeScale}):null;
  const state={sourceSphereGrid,raceWater,courseDatum:createCourseDatum(course),breakables:createBreakableState(),localWater,waterObstacles:obstacles,fixedPiles:(course.crossbars||[]).flatMap(barrierPiles),waveSeed:surfSeed.value,swapColours:!!swapColours,passageOpenedAt:Infinity,mode,freeRide,seaState,handicap:!!handicap,phase:freeRide?'running':'countdown',countdown:freeRide?0:3,time:0,course,racers,laps:configuredLaps,difficulty,events:[],result:null,weather:conditions(course,0),finishWait:0,physics,nativeHost:null};
@@ -345,7 +346,7 @@ export function handicapBoost(s,r){if(s.mode!=='versus'||s.freeRide||!s.handicap
 }
 export function raceWeather(s,time=s.time){const w=conditions(s.course,time,s.racers[0].lap);if(s.nativeHost)w.seaLevel=s.raceWater.field.datumNative*s.raceWater.scale;else if(s.courseDatum)w.seaLevel=s.courseDatum.value;if(s.seaState!=='course')w.storm=({calm:0,chop:.45,storm:.95})[s.seaState]??w.storm;return w;}
 export function stepRace(s,input,dt,options={}){if(s.phase==='paused'||s.phase==='results')return;dt=clamp(dt,0,1/30);
- setRaceWater(s.raceWater??null);
+ setRaceWater(s.raceWater??null);setCoastalDepth(s.seaState==='course'?null:s.course);
  if(s.phase==='countdown'&&!s.nativeHost){for(const r of s.racers)if(r.human){const c=Array.isArray(input)?input[r.player]||{}:input||{};rocketStart(r,c.throttle||0,-s.countdown);}s.countdown-=dt;if(s.countdown<=0){s.phase='running';s.racers.forEach(r=>announce(r,s,'GO'));}return;}
  if(s.nativeHost){
   s.weather=raceWeather(s);waterLevel.value=s.weather.seaLevel;

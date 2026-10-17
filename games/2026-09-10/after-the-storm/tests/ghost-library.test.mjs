@@ -17,6 +17,14 @@ test('saved ghosts survive a portable save without changing time records',()=>{
  assert.equal(findTrialGhost(imported.ghosts,{...g.setup,waveSeed:999}).setup.waveSeed,17);
  assert.equal(findTrialGhost(imported.ghosts,{...g.setup,tune:{engine:1}}),null);
 });
+
+test('custom-water revisions select their own saved wave seed and retain older ghosts',()=>{
+ const base=ghost(),old={...base,setup:{...base.setup,seaState:'surf'}},current={...base,setup:{...base.setup,seaState:'surf',waterRevision:1,waveSeed:33}};
+ const library=validateGhostLibrary([old,current]);
+ assert.equal(findTrialGhost(library,{...current.setup,waveSeed:999}).setup.waveSeed,33);
+ assert.equal(findTrialGhost(library,old.setup).setup.waveSeed,17);
+ assert.equal(findTrialGhost([old],current.setup),null);
+});
 test('slower trials cannot replace a saved ghost; a faster full run replaces it',()=>{
  const save=initialSave();saveTrialGhost(save,ghost(2));assert.equal(saveTrialGhost(save,ghost(3)),false);assert.equal(saveTrialGhost(save,ghost(1)),true);assert.equal(save.ghosts.length,1);assert.equal(save.ghosts[0].duration,1);
 });

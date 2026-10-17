@@ -1,4 +1,4 @@
-import {beginGhostRace,recordGhostFrame,finishGhostRace,ghostCompatible,ghostMetadata,ghostSample} from './time-trial-ghost.js';
+import {ghostWaterRevision,beginGhostRace,recordGhostFrame,finishGhostRace,ghostCompatible,ghostMetadata,ghostSample} from './time-trial-ghost.js';
 import {findTrialGhost,saveTrialGhost} from './ghost-library.js';
 import {makeGhostCraft} from './ghost-craft.js';
 import {writeSave} from './race-records.js';
@@ -17,7 +17,7 @@ export function createTrialSession({scene,vesselFor,saved,storage}){
   if(candidate&&ghostCompatible(candidate,state,{tune})){ghost=candidate;craft=makeGhostCraft(scene,vesselFor(state.racers[0]));}
  }
  return {
-  waveSeed(setup,fallback){return findTrialGhost(saved.ghosts,setup)?.setup.waveSeed??fallback;},
+  waveSeed(setup,fallback){return findTrialGhost(saved.ghosts,{...setup,waterRevision:ghostWaterRevision(setup.seaState)})?.setup.waveSeed??fallback;},
   begin(state,selectedTune){
    tune={...selectedTune};recorder=beginGhostRace(state,{tune});status.hidden=true;status.textContent='';refresh(state);
   },

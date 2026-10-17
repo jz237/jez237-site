@@ -33,7 +33,12 @@ void main(){
  disturbanceSlope=vec2(
    hullContactHeight(p+vec2(e,0))-hullContactHeight(p-vec2(e,0))+jetWake(p+vec2(e,0))+impactHeight(p+vec2(e,0))-jetWake(p-vec2(e,0))-impactHeight(p-vec2(e,0)),
    hullContactHeight(p+vec2(0,e))-hullContactHeight(p-vec2(0,e))+jetWake(p+vec2(0,e))+impactHeight(p+vec2(0,e))-jetWake(p-vec2(0,e))-impactHeight(p-vec2(0,e)))/(2.*e)+wakeResponse.yz;
- worldP=vec3(p.x,seaLevel+broadSurface.x+hullContactHeight(p)+jetWake(p)+impactHeight(p)+wakeResponse.x,p.y);
+ float completeHeight=broadSurface.x+hullContactHeight(p)+jetWake(p)+impactHeight(p)+wakeResponse.x;
+ if(coastalDepthActive>.5){
+  broadSurface=coastalDepthSurface(p,vec3(completeHeight,broadSurface.yz+disturbanceSlope));disturbanceSlope=vec2(0.);
+  completeHeight=broadSurface.x;
+ }
+ worldP=vec3(p.x,seaLevel+completeHeight,p.y);
  mirrorP=mirrorMatrix*vec4(worldP,1.);
  gl_Position=projectionMatrix*viewMatrix*vec4(worldP,1.);
 }`;
