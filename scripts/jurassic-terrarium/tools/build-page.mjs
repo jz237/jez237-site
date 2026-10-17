@@ -149,6 +149,18 @@ patch('uVignette:{value:.32},uGrain:{value:.035}', 'uVignette:{value:.32},uGrain
 // pool (swaying planting, walking animals, clouds) moved in jerky steps and the reflection popped
 // between sharpnesses: the water flickered. Now on medium/high it is redrawn every frame at a fixed
 // scale and margin. And the sun glitter twinkles slower and less hot, so it no longer strobes the glow.
+// The sun's caustics on the lake bed and the river bed: brighter and plainer to see (they were a faint
+// shimmer under the water's absorption)
+patch('caus *= smoothstep(0.0, 0.03, cd) * exp(-cd * 1.4) * sub', 'caus *= 2.1 * smoothstep(0.0, 0.03, cd) * exp(-cd * 1.2) * sub', 'stronger bed caustics');
+// The plunge pool under the waterfall: wider, and churned white (a dense core of froth, rings of foam
+// breaking outwards, more bubbles), whiter still when the stream runs high
+patch('const c=.36,h=new Tr(c,40)', 'const c=.52,h=new Tr(c,48)', 'wider plunge pool');
+patch(`float core = smoothstep(0.75, 0.0, r);
+  float foam = clamp(core * 0.8 + smoothstep(0.45, 0.8, ring) * (1.0 - r) * 1.3, 0.0, 1.0) * clamp(0.55 + uFlow * 0.35, 0.0, 1.2);
+  float bubbles = step(0.72, wgHash(floor(vWorld.xz * 70.0 + floor(clock * 6.0)))) * core;`, `float core = smoothstep(0.62, 0.0, r + (ring - 0.5) * 0.25);
+  float foam = clamp(core * 1.05 + smoothstep(0.38, 0.72, ring) * (1.0 - r) * 1.7, 0.0, 1.0) * clamp(0.8 + uFlow * 0.35, 0.0, 1.25);
+  vec2 bq = vWorld.xz * 70.0 + floor(clock * 6.0);
+  float bubbles = step(0.62, wgHash(floor(bq))) * smoothstep(0.45, 0.2, length(fract(bq) - 0.5)) * smoothstep(0.95, 0.2, r);`, 'whiter plunge pool');
 patch('this.fastEvery=n.pick(2,2,1),this.slowEvery=n.pick(5,4,3)', 'this.fastEvery=n.pick(2,1,1),this.slowEvery=n.pick(3,1,1)', 'mirror every frame');
 patch('const m=.04+(f?.05:.02);', 'const m=.09;', 'mirror margin fixed');
 patch('M=Math.min(this.maxScale,Math.sqrt(_/Math.max(w*y,1)))', 'M=this.maxScale', 'mirror scale fixed');

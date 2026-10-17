@@ -119,6 +119,7 @@ import { Trails } from './trails.js';
 import { Touch } from './touch.js';
 import { Feeding } from './feeding.js';
 import { Cooling } from './cooling.js';
+import { Wakes } from './wakes.js';
 import { Rocks } from './rocks.js';
 import { Paths } from './paths.js';
 import { prepareSkinGeometry, prepareEyeGeometry, prepareTeeth, Saliva, averageColour, skinUniforms, skinShader, eyeShader, eyeUniforms, EYES, SCALES } from './skin.js';
@@ -2559,6 +2560,7 @@ class Dinosaurs {
     this.trails = new Trails(this);
     this.touch = new Touch(this);
     this.cooling = new Cooling(this);
+    this.wakes = params.get('wakes') === '0' ? null : new Wakes(this);
     this.ambience = new Ambience(ctx, this.voice);
     this.timers = [];
     // trunks the bodies keep off: the planted ones and Weatherglass's own trees
@@ -3041,6 +3043,7 @@ class Dinosaurs {
     this.aquatic?.update(dt);
     this.effects.update(dt, env);
     this.contact.update(dt);
+    this.wakes?.update(dt);
     this.backdrop?.update(dt);
     this.rocks?.update(dt);
     this.paths?.update(dt);

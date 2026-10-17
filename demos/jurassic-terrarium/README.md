@@ -362,3 +362,9 @@ v1.43: living eyes (graphics goal 3 of 6):
 - **Catchlights:** a sharp highlight from the sun and a small soft window of sky on the top of the cornea, so an eye in shade still glints. The upper lid shades the top of the eye beneath it.
 - **Moist lids:** a pink-dark inner rim where the lid meets the eye, and a wet line of tears glinting along both lids.
 - **Eyeshine at night** now glows out through the wide-open pupil, with the iris still visible round it, instead of lighting the whole eyeball.
+
+v1.44: better water (graphics goal 4 of 6):
+- **Foam and wakes round wading legs:** wherever a leg of a wading, soaking or swimming animal goes through the surface, a collar of churning froth hugs it at the waterline, frothier as the leg moves. A moving leg leaves foam behind it: patches of bubbles that spread and break up over a few seconds, drawing a wake behind a walking animal. Each stride also rings the water with Weatherglass's own ripples where the leg goes in (`runtime/wakes.js`; `?wakes=0` turns it off, and weak devices get fewer patches and no trail).
+- **White plunge pool:** the pool under the waterfall is wider and churned white, with a dense core of froth, rings of foam breaking outwards and round bubbles in place of square specks. It is whiter still when the stream runs high.
+- **Caustics:** the dancing net of focused sunlight on the lake and river beds is about twice as bright, and reaches a little deeper.
+- **Reflections:** the pool's mirror already carries the animals, so legs, bodies and heads show upside-down in the water from low angles. Checked, no change needed.
