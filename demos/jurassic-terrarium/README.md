@@ -368,3 +368,9 @@ v1.44: better water (graphics goal 4 of 6):
 - **White plunge pool:** the pool under the waterfall is wider and churned white, with a dense core of froth, rings of foam breaking outwards and round bubbles in place of square specks. It is whiter still when the stream runs high.
 - **Caustics:** the dancing net of focused sunlight on the lake and river beds is about twice as bright, and reaches a little deeper.
 - **Reflections:** the pool's mirror already carries the animals, so legs, bodies and heads show upside-down in the water from low angles. Checked, no change needed.
+
+v1.45: better plants (graphics goal 5 of 6):
+- **Light through the leaves:** every light that reaches a frond, leaf or branchlet now also shines through it: strongest when you look towards the light through the leaf, and onto the face turned away from it. The light comes through yellower and more saturated, as it does through a real leaf. It uses each light's colour after its shadow (hooked into three's own light loop), so ferns against a low sun glow gold-green while fronds in shade stay dark. It works for the lamps and the hearth too.
+- **Veins and ridges:** the leaves have relief, a bump map built at load from the leaf atlas itself. Each leaflet is domed, curling down at its edges, and its painted midrib and side veins stand as ridges, so raking light picks out the creases. Weak devices skip it, and so do the distant versions of the ferns.
+- **Layered undergrowth:** the foot of every tree fern and cycad gets a skirt of big ferns, with small ferns and crimson rosettes in a ring outside it. The planting now rises in layers from the moss-like carpet through ferns and skirts to cycads and the tree-fern canopy. High-end devices get a fuller skirt; weak devices none.
+- `?understorey=0`, `?relief=0` and `?trans=0` turn these off, for comparing.

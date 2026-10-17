@@ -7,6 +7,15 @@ import {
   Vector4, Vector2, Color, DoubleSide, InstancedBufferAttribute, DynamicDrawUsage, DataTexture, RGBAFormat, UnsignedByteType, LinearFilter,
 } from 'three';
 import { pathAt } from './paths.js';
+import { ShaderChunk } from 'three';
+
+// three's light loop with light through the leaves added: for every light, the part that comes through a
+// thin leaf from behind (seen against the light, and onto the face turned away from it), using the
+// light's colour after its shadow
+const NO_TRANS = /[?&]trans=0/.test(location.search);
+const RE = 'RE_Direct( directLight, geometryPosition, geometryNormal, geometryViewDir, geometryClearcoatNormal, material, reflectedLight );';
+const TRANS_BEGIN = 'vec3 jtTrans = vec3(0.0);\n' + ShaderChunk.lights_fragment_begin.split(RE).join(RE + `
+		jtTrans += directLight.color * (pow(saturate(dot(geometryViewDir, -directLight.direction)), 4.0) * 0.9 + saturate(dot(-geometryNormal, directLight.direction)) * 0.35);`);
 import { fords } from './nav.js';
 import { frondAtlas, plantGeometry, vineGeometry, BASE_H } from './floragen.js';
 
@@ -222,6 +231,32 @@ export class Flora {
       add('fernlet', x, z, 1.3 + rand() * 1.3, 0.0, 0);
       want--;
     }
+    // the understorey: a skirt of big ferns round the foot of every tree fern and cycad, and a ring of
+    // smaller ones outside it, so the planting rises in layers (carpet, ferns, skirts, cycads, tree ferns)
+    // to the canopy. Its own random numbers, so everything placed after it stays where it was.
+    if (tier > 0 && new URLSearchParams(location.search).get('understorey') !== '0') {
+      let seed = 0x5eed1234;
+      const r2 = () => ((seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296);
+      const put = (kind, x, z, scale) => P[kind].push({ x, z, y: T.height(x, z), scale, rot: r2() * Math.PI * 2, v: Math.floor(r2() * 8) });
+      for (const host of [...P.treefern.map((h) => ({ ...h, cy: false })), ...P.cycad.map((h) => ({ ...h, cy: true }))]) {
+        const n = tier > 1 ? 2 : 1;
+        for (let i = 0; i < n; i++) {
+          const a = (i / n) * Math.PI * 2 + r2() * 0.9, d = 0.09 + r2() * 0.1;
+          const x = host.x + Math.cos(a) * d, z = host.z + Math.sin(a) * d;
+          if (Math.abs(x) > box.halfW - 0.12 || Math.abs(z) > box.halfD - 0.12) continue;
+          if (water(x, z) > 0.08 || nearCabin(x, z, 0.08) || T.slope(x, z) > 0.65 || pathAt(x, z, 0.04)) continue;
+          put('fern', x, z, 1.9 + r2() * 0.9);
+        }
+        for (let i = 0; i < 1; i++) {
+          const a = r2() * Math.PI * 2, d = 0.2 + r2() * 0.14;
+          const x = host.x + Math.cos(a) * d, z = host.z + Math.sin(a) * d;
+          if (Math.abs(x) > box.halfW - 0.12 || Math.abs(z) > box.halfD - 0.12) continue;
+          if (water(x, z) > 0.08 || nearCabin(x, z, 0.08) || T.slope(x, z) > 0.65 || pathAt(x, z, 0.04)) continue;
+          const u = r2();
+          put(u < 0.2 ? 'redplant' : 'fernlet', x, z, u < 0.2 ? 1.2 + r2() * 0.8 : 1.8 + r2() * 1.0);
+        }
+      }
+    }
     // crimson rosettes in drifts under the tree ferns and along the paths
     tries = 0;
     want = [80, 160, 240][tier] ?? 160;
@@ -257,6 +292,8 @@ export class Flora {
     this.cell = 0.5;
     const tier = this.ctx.quality?.tier ?? 1;
     this.atlas = frondAtlas(tier === 0 ? 1024 : 2048);
+    // the leaves' relief (veins as ridges, domed leaflets): not on weak devices
+    this.relief = tier > 0 && new URLSearchParams(location.search).get('relief') !== '0' ? this.atlas.userData.relief() : null;
     const M = new Matrix4(), q = new Quaternion(), s = new Vector3(), t = new Vector3(), col = new Color();
     for (const [kind, list] of Object.entries(this.placements)) {
       const variants = kind === 'treefern' || kind === 'cycad' ? 4 : kind === 'araucaria' || kind === 'ginkgo' || kind === 'redwood' ? 3 : 3;
@@ -490,6 +527,10 @@ attribute vec2 aBend;
       map: this.atlas, vertexColors: true, roughness: 0.78, metalness: 0, side: DoubleSide,
       alphaTest: 0.5, alphaToCoverage: tier > 0, envMapIntensity: 0.55,
     });
+    if (this.relief && !vine && lod !== 'far') {
+      m.bumpMap = this.relief;
+      m.bumpScale = 2.2;
+    }
     if (vine) m.defines = { VINE: 1 };
     if (lod) m.defines = { ...(m.defines || {}), [lod === 'far' ? 'LOD_FAR' : 'LOD_NEAR']: 1 };
     m.onBeforeCompile = (sh) => {
@@ -519,6 +560,7 @@ attribute vec2 aBend;
     diffuseColor *= tx;
   }`)
         .replace('#include <color_fragment>', '#include <color_fragment>\n  diffuseColor.rgb *= uTint;')
+        .replace('#include <lights_fragment_begin>', NO_TRANS ? 'vec3 jtTrans = vec3(0.0);\n#include <lights_fragment_begin>' : TRANS_BEGIN)
         .replace('#include <lights_fragment_end>', `#include <lights_fragment_end>
   {
     // shade under and round the animals' bodies: ferns at their feet sit in their shadow
@@ -529,10 +571,14 @@ attribute vec2 aBend;
     reflectedLight.directDiffuse *= 1.0 - 0.55 * occ;
   }
   if (vTrunk < 0.5) {
-    // light through the fronds when the sun is behind them
+    // light through the leaves: each light's own colour after its shadow (so a frond in shade does not
+    // glow), strongest looking towards the light through the leaf and on the face turned away from it;
+    // the light comes through yellower and more saturated, as it does through a real leaf
+    vec3 thru = diffuseColor.rgb * vec3(1.05, 1.22, 0.45);
+    reflectedLight.directDiffuse += thru * jtTrans * 0.5;
+    // and a little of the sky's light through them too
     vec3 V = normalize(cameraPosition - vFWorld);
-    float back = pow(clamp(dot(V, -uLightDir), 0.0, 1.0), 3.0);
-    reflectedLight.indirectDiffuse += diffuseColor.rgb * uLightColor * back * 0.28;
+    reflectedLight.indirectDiffuse += thru * uLightColor * pow(clamp(dot(V, -uLightDir), 0.0, 1.0), 3.0) * 0.06;
   }`);
     };
     m.customProgramCacheKey = () => `jt-flora-${kind}${vine ? '-vine' : ''}${lod ? '-' + lod : ''}`;

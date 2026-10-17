@@ -17,6 +17,41 @@ export const CELL = {
 const GRID = 4;
 
 // ------------------------------------------------------------------ the atlas
+
+// The leaves' relief, for a bump map over the same atlas: every leaflet domed (its edges curl down, from a
+// blurred copy of its outline) and its veins raised as ridges (the painted veins, against the blade round
+// them), so light rakes across the midribs and the pleats between the side veins.
+function frondRelief(src, cell) {
+  const W = src.width, H = src.height;
+  const blur = (px) => {
+    const c = document.createElement('canvas');
+    c.width = W;
+    c.height = H;
+    const g = c.getContext('2d', { willReadFrequently: true });
+    g.filter = `blur(${px}px)`;
+    g.drawImage(src, 0, 0);
+    return g.getImageData(0, 0, W, H).data;
+  };
+  const S = src.getContext('2d', { willReadFrequently: true }).getImageData(0, 0, W, H).data;
+  const B1 = blur(Math.max(1, cell * 0.004)), B2 = blur(Math.max(2, cell * 0.03));
+  const out = document.createElement('canvas');
+  out.width = W;
+  out.height = H;
+  const og = out.getContext('2d');
+  const img = og.createImageData(W, H), d = img.data;
+  const lum = (A, k) => A[k] * 0.3 + A[k + 1] * 0.55 + A[k + 2] * 0.15;
+  for (let k = 0; k < d.length; k += 4) {
+    const dome = B2[k + 3] / 255;
+    const ridge = (lum(S, k) - lum(B1, k)) / 255; // the veins: lighter than the blade beside them
+    const v = Math.max(0, Math.min(1, 0.15 + 0.6 * dome * dome + 2.2 * ridge * (S[k + 3] / 255)));
+    d[k] = d[k + 1] = d[k + 2] = v * 255;
+    d[k + 3] = 255;
+  }
+  og.putImageData(img, 0, 0);
+  const t = new CanvasTexture(out);
+  t.anisotropy = 8;
+  return t;
+}
 export function frondAtlas(size = 2048) {
   const c = document.createElement('canvas');
   c.width = c.height = size;
@@ -329,6 +364,7 @@ export function frondAtlas(size = 2048) {
   tex.colorSpace = SRGBColorSpace;
   tex.anisotropy = 8;
   tex.premultiplyAlpha = false;
+  tex.userData.relief = () => frondRelief(c, h);
   return tex;
 }
 
