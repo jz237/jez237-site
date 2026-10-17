@@ -161,6 +161,55 @@ patch(`float core = smoothstep(0.75, 0.0, r);
   float foam = clamp(core * 1.05 + smoothstep(0.38, 0.72, ring) * (1.0 - r) * 1.7, 0.0, 1.0) * clamp(0.8 + uFlow * 0.35, 0.0, 1.25);
   vec2 bq = vWorld.xz * 70.0 + floor(clock * 6.0);
   float bubbles = step(0.62, wgHash(floor(bq))) * smoothstep(0.45, 0.2, length(fract(bq) - 0.5)) * smoothstep(0.95, 0.2, r);`, 'whiter plunge pool');
+// The film look (runtime/cinema.js drives it): a colour grade in the last pass (saturation, a soft S-curve,
+// shadows and highlights split-toned), set for the time of day, and the soft-focus band of the tilt-shift
+// following what the camera looks at instead of a fixed height on the screen
+patch('AT={uniforms:{tDiffuse:{value:null},uTime:{value:0},uVignette:{value:.32},', 'AT={uniforms:{tDiffuse:{value:null},uTime:{value:0},uVignette:{value:.32},uGSat:{value:1},uGCon:{value:0},uGShadow:{value:[0,0,0]},uGHigh:{value:[0,0,0]},', 'grade uniforms');
+patch(`    uniform vec2 uResolution;
+    varying vec2 vUv;
+    float h(vec2 p)`, `    uniform vec2 uResolution;
+    uniform float uGSat;
+    uniform float uGCon;
+    uniform vec3 uGShadow;
+    uniform vec3 uGHigh;
+    varying vec2 vUv;
+    float h(vec2 p)`, 'grade uniform declarations');
+patch(`      // gentle filmic lift in the shadows, warm highlights
+      c.rgb = c.rgb * vec3(1.01, 1.0, 0.985) + vec3(0.008, 0.007, 0.01) * (1.0 - c.rgb);`, `      // the grade: saturation, a soft S-curve round mid-grey, and the shadows and highlights tinted apart
+      c.rgb = clamp(c.rgb, 0.0, 1.0);
+      float gl = dot(c.rgb, vec3(0.2126, 0.7152, 0.0722));
+      c.rgb = max(mix(vec3(gl), c.rgb, uGSat), 0.0);
+      c.rgb = mix(c.rgb, c.rgb * c.rgb * (3.0 - 2.0 * c.rgb), uGCon) * (1.0 + 0.3 * uGCon);
+      c.rgb += uGShadow * (1.0 - gl) * (1.0 - gl) + uGHigh * gl * gl;
+      // gentle filmic lift in the shadows, warm highlights
+      c.rgb = c.rgb * vec3(1.01, 1.0, 0.985) + vec3(0.008, 0.007, 0.01) * (1.0 - c.rgb);`, 'grade');
+patch('u.setTiltShift(.47,Xn(.24,.17,p),Xn(.7,.95,p)*Xn(.35,1,v))', '(window.__jtTilt||((a,b,c)=>u.setTiltShift(a,b,c)))(.47,Xn(.24,.17,p),Xn(.7,.95,p)*Xn(.35,1,v))', 'focus follows the view');
+// Depth of field from the scene's depth (runtime/cinema.js attaches a depth texture to the render pass
+// and sets the focus distance): what the camera looks at is sharp, nearer and farther things soften by
+// how far they are from it; the screen band of the tilt-shift stays as a faint extra
+patch('uFocus:{value:.52},uBand:{value:.2},uAmount:{value:1}}', 'uFocus:{value:.52},uBand:{value:.2},uAmount:{value:1},tDepth:{value:null},uDepthOn:{value:0},uZFocus:{value:5},uZNear:{value:.1},uZFar:{value:250},uDof:{value:1},uBandK:{value:1}}', 'dof uniforms');
+patch(`    uniform float uAmount;
+    varying vec2 vUv;
+    void main() {
+      float d = abs(vUv.y - uFocus);
+      float k = smoothstep(uBand, uBand + 0.38, d);`, `    uniform float uAmount;
+    uniform sampler2D tDepth;
+    uniform float uDepthOn;
+    uniform float uZFocus;
+    uniform float uZNear;
+    uniform float uZFar;
+    uniform float uDof;
+    uniform float uBandK;
+    varying vec2 vUv;
+    void main() {
+      float d = abs(vUv.y - uFocus);
+      float k = smoothstep(uBand, uBand + 0.38, d);
+      if (uDepthOn > 0.5) {
+        float zd = texture2D(tDepth, vUv).x;
+        float z = uZNear * uZFar / (uZFar - zd * (uZFar - uZNear));
+        float coc = abs(z - uZFocus) / max(uZFocus, 0.01);
+        k = max(k * uBandK, smoothstep(0.06, 0.75, coc * uDof));
+      }`, 'dof from depth');
 patch('this.fastEvery=n.pick(2,2,1),this.slowEvery=n.pick(5,4,3)', 'this.fastEvery=n.pick(2,1,1),this.slowEvery=n.pick(3,1,1)', 'mirror every frame');
 patch('const m=.04+(f?.05:.02);', 'const m=.09;', 'mirror margin fixed');
 patch('M=Math.min(this.maxScale,Math.sqrt(_/Math.max(w*y,1)))', 'M=this.maxScale', 'mirror scale fixed');

@@ -374,3 +374,23 @@ v1.45: better plants (graphics goal 5 of 6):
 - **Veins and ridges:** the leaves have relief, a bump map built at load from the leaf atlas itself. Each leaflet is domed, curling down at its edges, and its painted midrib and side veins stand as ridges, so raking light picks out the creases. Weak devices skip it, and so do the distant versions of the ferns.
 - **Layered undergrowth:** the foot of every tree fern and cycad gets a skirt of big ferns, with small ferns and crimson rosettes in a ring outside it. The planting now rises in layers from the moss-like carpet through ferns and skirts to cycads and the tree-fern canopy. High-end devices get a fuller skirt; weak devices none.
 - `?understorey=0`, `?relief=0` and `?trans=0` turn these off, for comparing.
+
+v1.46: cinematic look (graphics goal 6 of 6):
+- **Film grade by the hour:** the last pass now grades the picture with saturation, a soft S-curve and split-toned shadows and highlights, set for the time of day and the weather and fading between them:
+  - dawn is cool, soft and pearly with peach highlights;
+  - noon is clean and lightly warm;
+  - the golden hour has amber highlights over teal shadows;
+  - dusk turns rose and violet;
+  - night is blue, quiet and less saturated;
+  - rain is flat and cool.
+- **Depth of field on what you look at:** the scene's depth now drives the soft focus. Whatever the camera follows, or the point it turns about, is sharp, and nearer and farther things soften by how far they are from it, shallower close up like a longer lens. The old tilt-shift band stays as a faint extra; Documentary mode keeps its own narrow band on its subject. Weak devices keep the plain band. `?dof=0` turns the depth focus off.
+- **Vignette:** it deepens a little towards dusk and night and while the camera follows an animal.
+- `?cinema=0` turns all of this off, for comparing.
+
+With this the six-part graphics push is complete:
+1. sculpted anatomy (v1.41);
+2. ambient occlusion (v1.42);
+3. living eyes (v1.43);
+4. water (v1.44);
+5. plants (v1.45);
+6. the cinematic look (v1.46).
