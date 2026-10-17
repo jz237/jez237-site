@@ -1,5 +1,25 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unreleased — spray and shallow-water overlay cleanup
+
+The Southern low-tide follow-up isolated two transparent effects producing
+hard-edged pale shapes. The chine spray used row number as age even when
+render intervals changed. It now uses actual emission age, breaks up sooner
+into the existing droplets, and fades near the camera. Shore runoff now uses
+the actual local wave height to limit its film to exposed wet ground; it no
+longer draws a second flat water surface over submerged banks. Restart clears
+the old film immediately. The runoff solver and original water remain intact.
+
+All29 focused spray, runoff, immersion and native-surface checks pass, as do
+the6 loading checks. Coverage includes sparse/dense spray refresh, paused
+effects, expired packets, flooding/retained runoff and course reset. Local
+Chrome inspections cover native Southern at the-150 datum, modern Sunny calm
+water and horizontal two-player Sunny. High quality remains selected with a
+1280x720 drawing buffer; the native ocean retains83,521 vertices. Both spray
+and runoff retain their geometry counts. No shader/runtime errors were seen;
+the private server's missing favicon is the only console404. This is a local
+visual repair, not a complete course-art or hardware-performance sign-off.
+
 ## Unreleased — Southern native preview admission
 
 Southern Island is now available through the existing opt-in native-physics
