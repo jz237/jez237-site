@@ -1,4 +1,4 @@
-import {clippedVolume,clippedVolumes} from './clipped-volumes.js?v=9b0344b98dac';
+import {clippedVolume,clippedVolumes} from './clipped-volumes.js?v=7724c72847cc';
 
 // Independently reconstructed finite projection solids; no original artwork.
 // Uniform .025 metres/native unit remains an explicit calibration assumption.

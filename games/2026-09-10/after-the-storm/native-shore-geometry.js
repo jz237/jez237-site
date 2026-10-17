@@ -1,4 +1,5 @@
 import {SOUTHERN_NATIVE_SHORE_GEOMETRY} from './native-southern-support.js';
+import {GLACIER_NATIVE_SHORE_GEOMETRY} from './native-glacier-support.js';
 // Original numeric shore grid, byte-list and line records for selected races.
 // Shared Sunny1P/2P bytes verified from both loaded course images. Sunset has
 // distinct1P/2P shores, including its1P-only static craft outlines.
@@ -212,7 +213,8 @@ const sunset2=freeze({
 ],
 });
 export function nativeRaceShoreGeometry({courseIndex,players=1}={}){
- if(![1,2,7].includes(courseIndex)||![1,2].includes(players))throw new RangeError('Shore geometry requires Sunny/Sunset/Southern and one/two players');
+ if(![1,2,7,8].includes(courseIndex)||![1,2].includes(players))throw new RangeError('Shore geometry requires Sunny/Sunset/Southern/Glacier and one/two players');
+ if(courseIndex===8)return GLACIER_NATIVE_SHORE_GEOMETRY;
  if(courseIndex===7)return SOUTHERN_NATIVE_SHORE_GEOMETRY;
  return courseIndex===1?sunny:players===1?sunset1:sunset2;
 }

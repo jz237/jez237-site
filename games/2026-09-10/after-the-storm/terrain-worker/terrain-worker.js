@@ -1,5 +1,5 @@
-import {getCourse} from './courses.js?v=9b0344b98dac';
-import {sampleTerrain} from './terrain-data.js?v=9b0344b98dac';
+import {getCourse} from './courses.js?v=7724c72847cc';
+import {sampleTerrain} from './terrain-data.js?v=7724c72847cc';
 self.onmessage=({data:{id,difficulty,key,geometryPlayers=1}})=>{
  try{
   const start=performance.now();let course=getCourse(id,difficulty);

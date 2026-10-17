@@ -1,5 +1,46 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unreleased — prepared Glacier native geometry and route graph
+
+Glacier's prepared native owner now retains the complete original primary
+route graph:59 rows in Normal/Hard/Expert and48 in Reverse, identical between
+player selections. These rows remain separate from the live modern course.
+Its judging, water forcing, visible16 buoys, navigation and revision are unchanged.
+
+Prepared native geometry retains165 ordered contact planes,127 shore lines,
+16 allowed regions and an empty separate box list, as original744EC specifies.
+Ice ramps belong to the planes. All29,250 initialized route words match the
+original. In total3,673 prepared original executions cover loading, support,
+retirement, full floor/shore response and region boundaries, executing1,772,589
+instructions. A fresh EVO X2 read-only Ghidra query matches1,541 instructions
+and leaves all nine project files unchanged. Public fixtures contain numeric
+states/results; ROM and tool outputs remain private.
+
+The focused comparisons cover all original contact responses and every route
+word. One stale Southern admission assertion was corrected to reflect its
+already-open native preview. An experimental live source-graph activation
+passed four solo runs, but regressed the Reverse two-player inspection from
+a finish to a course-out DQ. That activation was removed; preparation cannot
+mutate the live course. Modern versus Normal finished with no misses under
+either setup. Full source-graph activation requires further driver/water work.
+After removal, all20 focused Glacier/geography/loading checks pass; the
+unchanged host/Southern regression previously passed22 checks. No full-suite
+or complete native gameplay claim is made.
+
+Before removing that experimental activation, local Chrome completed Glacier's
+venue-water Time Trial in431.481s,51 passes and zero misses. High1280x720 and
+about60FPS were measured, with876,769 triangles in the finishing sample. This
+is diagnostic evidence, not a browser acceptance run of the final checkpoint.
+The only console404 was the preview favicon. The finishing view contains a
+dark overhead polygon requiring separate visual diagnosis.
+
+Private native-hull probes finish Normal/Hard/Expert in137.863s with three
+misses and Reverse in132.901s with four. Those probes temporarily admit the
+course only in private module copies. Glacier native admission remains closed:
+its twelve runtime-kind10 breakable ice blocks do not yet have a native
+generic-object collision phase. These runs are not complete-course native
+parity evidence. Renderer resolution and terrain detail are unchanged.
+
 ## Unreleased — spray and shallow-water overlay cleanup
 
 The Southern low-tide follow-up isolated two transparent effects producing

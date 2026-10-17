@@ -74,8 +74,9 @@ test('prepared Southern runtime selects shared original geometry across classes 
    assert.equal(runtime.sourceBuoyLayout.nodes[n.sourceRow].nextSourceRow,row.nextSourceRowA0);
   }
  }
- // Preparing geometry does not silently claim full course/host admission.
- assert.throws(()=>createRace({course:getCourse('tempest'),physics:'native',mode:'time'}),/native/i);
+ // Southern's subsequent verified tide integration opened ordinary admission.
+ const state=createRace({course:getCourse('tempest'),physics:'native',mode:'time'});
+ assert.ok(state.nativeHost);assert.equal(state.nativeHost.world.water.field.datumNative,0);
 });
 
 test('Southern original retirement support reaches the canonical dry/wet result-code owner',()=>{

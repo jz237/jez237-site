@@ -1,14 +1,14 @@
-import {createSourceSouthernCourse} from './source-southern-course.js?v=9b0344b98dac';
-import {createGlacierCourse} from './glacier-course.js?v=9b0344b98dac';
-import {cityStuntLayout} from './city-stunts.js?v=9b0344b98dac';
-import {portStuntLayout} from './port-stunts.js?v=9b0344b98dac';
-import {fortStuntLayout} from './fort-stunts.js?v=9b0344b98dac';
-import {drakeStuntLayout} from './drake-stunts.js?v=9b0344b98dac';
-import {createSourceSunsetCourse} from './source-sunset-course.js?v=9b0344b98dac';
-import {sunsetAnchors,sunsetPilotAnchors,sunsetNativeDrivingAnchors,sunsetNavigation,sunsetStuntNavigation} from './source-sunset-navigation.js?v=9b0344b98dac';
-import {createSourceSunnyCourse} from './source-sunny-course.js?v=9b0344b98dac';
-import {sunnyAnchors,sunnyPilotAnchors,sunnyStuntNavigation,sunnyNavigation} from './source-sunny-navigation.js?v=9b0344b98dac';
-import {createDolphinCourse} from './dolphin-course.js?v=9b0344b98dac';
+import {createSourceSouthernCourse} from './source-southern-course.js?v=7724c72847cc';
+import {createGlacierCourse} from './glacier-course.js?v=7724c72847cc';
+import {cityStuntLayout} from './city-stunts.js?v=7724c72847cc';
+import {portStuntLayout} from './port-stunts.js?v=7724c72847cc';
+import {fortStuntLayout} from './fort-stunts.js?v=7724c72847cc';
+import {drakeStuntLayout} from './drake-stunts.js?v=7724c72847cc';
+import {createSourceSunsetCourse} from './source-sunset-course.js?v=7724c72847cc';
+import {sunsetAnchors,sunsetPilotAnchors,sunsetNativeDrivingAnchors,sunsetNavigation,sunsetStuntNavigation} from './source-sunset-navigation.js?v=7724c72847cc';
+import {createSourceSunnyCourse} from './source-sunny-course.js?v=7724c72847cc';
+import {sunnyAnchors,sunnyPilotAnchors,sunnyStuntNavigation,sunnyNavigation} from './source-sunny-navigation.js?v=7724c72847cc';
+import {createDolphinCourse} from './dolphin-course.js?v=7724c72847cc';
 // Authored reconstruction from course observations, in metres. Map coordinates
 // describe geography, not a texture or mesh extracted from the Nintendo game.
 // Source/remaining fidelity checks: COURSE-MATCH.md.
