@@ -113,10 +113,12 @@ test('260 object updates match original removal and age saturation while racer s
  assert.equal(world.frames,260);assert.equal(a.hull.ticks,0);
 });
 
-test('host selects the course ice owner and keeps real Glacier native admission closed',()=>{
+test('host selects the course ice owner and installs all twelve real Glacier blocks',()=>{
  const course={...getCourse('greyhaven'),hazardsForPlayers:()=>[definition]},s=createRace({course,mode:'time',physics:'native'});
  assert.equal(s.nativeHost.ice.snapshot().length,1);assert.equal(s.nativeHost.floating,null);
  assert.deepEqual(s.nativeIce,s.nativeHost.ice.presentationSnapshot());
  stepRace(s,{},.01);assert.equal(s.nativeHost.ice.diagnostics().objectCount,1);assert.deepEqual(s.nativeIce,s.nativeHost.ice.presentationSnapshot());
- assert.throws(()=>createRace({course:getCourse('glacier'),mode:'time',physics:'native'}),/preview/);
+ const glacier=createRace({course:getCourse('glacier'),mode:'time',physics:'native'});
+ assert.equal(glacier.nativeHost.ice.snapshot().length,12);
+ assert.equal(glacier.nativeHost.floating,null);
 });

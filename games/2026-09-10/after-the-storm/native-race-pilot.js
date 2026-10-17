@@ -1,4 +1,4 @@
-// Authored inspection helm for opt-in Sunny/Sunset/Southern native races.
+// Authored inspection helm for opt-in Sunny/Sunset/Southern/Glacier native races.
 // Inspection paths can still miss buoys, especially in versus or Reverse.
 // This is not the original AI. It reads the actual native presentation pose
 // and the existing navigation anchors; it never changes a physical point,
@@ -62,8 +62,8 @@ function drivingPolicy(overrides){
  */
 export function createNativeRacePilot({course,policy={},traceLimit=256}={}){
  const selectedAnchors=course?.nativePilotAnchorsByClass?.[course.difficulty]??course?.anchors;
- if(![1,2,7].includes(course?.sourceWaterCourseIndex)||!Array.isArray(selectedAnchors)||selectedAnchors.length<3)
-  throw new TypeError('Native pilot requires Sunny Beach, Sunset Bay or Southern Island source navigation');
+ if(![1,2,7,8].includes(course?.sourceWaterCourseIndex)||!Array.isArray(selectedAnchors)||selectedAnchors.length<3)
+  throw new TypeError('Native pilot requires Sunny Beach, Sunset Bay, Southern Island or Glacier Coast source navigation');
  // A wider authored Normal driving line clears Southern's exposed bow at
  // low tide. This changes only the inspection helm, never the source AI,
  // collider, human checkpoint graph or modern course navigation.
@@ -74,7 +74,11 @@ export function createNativeRacePilot({course,policy={},traceLimit=256}={}){
   return [...p];
  });
  if(!Number.isInteger(traceLimit)||traceLimit<0||traceLimit>4096)throw new RangeError('traceLimit must be from0 to4096');
- const config=drivingPolicy(policy),sourceNodes=new Map((course.sourceBuoyLayout?.nodes??[]).map(n=>[n.sourceRow,n]));
+ // Glacier's forward route needs earlier compensation for lateral hull drift
+ // off the sloped ice. This is inspection-driver anticipation, not a force,
+ // buoy rule or source-AI change. Explicit caller policy still takes precedence.
+ const defaults=course.sourceWaterCourseIndex===8&&!course.reverse?{velocityPredictionSeconds:.5}:{};
+ const config=drivingPolicy({...defaults,...policy}),sourceNodes=new Map((course.sourceBuoyLayout?.nodes??[]).map(n=>[n.sourceRow,n]));
  const visibleNodes=new Map(Object.entries(course.sourceVisibleGateIndices??{}).map(([row,index])=>[index,sourceNodes.get(Number(row))]));
  let binding=null,index=0,circuits=1,start=null,stamp=-1,held=neutral(),throttle=true,last=null,previousProgress=null;
  let samples=0,coastFrames=0,reserveFrames=0,transitions=[],markerShift=null;

@@ -13,16 +13,16 @@ import {GLACIER_NATIVE_ROUTE_ROWS_BY_CLASS} from './source-glacier-rows.js';
 import {nativeRaceShoreGeometry} from './native-shore-geometry.js';
 import {SOUTHERN_NATIVE_AI_ROWS_BY_CLASS} from './source-southern-ai-routes.js';
 
-// Numeric course owners for Sunny/Sunset/Southern and prepared Glacier integration.
+// Numeric course owners for Sunny/Sunset/Southern/Glacier integration.
 // Mode and source-water admission remain the race host's responsibility.
 export function createNativeRaceCourseRuntime({course,difficulty,players}={}){
  const courseIndex=course?.sourceWaterCourseIndex;
  if(![1,2,7,8].includes(courseIndex)||!Number.isInteger(difficulty)||difficulty<0||difficulty>3||![1,2].includes(players))
   throw new RangeError('Ordinary data preparation requires Sunny/Sunset/Southern/Glacier source rows and one/two players');
- // Glacier's verified rows are prepared here while live admission remains
- // closed. Do not activate a different modern water/judging graph implicitly.
+ // The native selection owns its route metadata. Do not activate a different
+ // modern water/judging graph by modifying the shared authored course.
  if(courseIndex===8)course={...course,sourceRouteRowsByClass:GLACIER_NATIVE_ROUTE_ROWS_BY_CLASS,
-  sourceMetadata:{...course.sourceMetadata,sourceNativeClassByDifficulty:[0,1,2,2]},
+  sourceMetadata:{...course.sourceMetadata,nativeCourseIndex:8,nativeScale:.025,sourceNativeClassByDifficulty:[0,1,2,2]},
   sourceBuoyLayout:createSourceBuoyLayout({rows:GLACIER_NATIVE_ROUTE_ROWS_BY_CLASS[difficulty],courseIndex,scale:.025,reverse:!!course.reverse})};
  if(!course.sourceRouteRowsByClass?.[difficulty]||course.sourceBuoyLayout?.courseIndex!==courseIndex)
   throw new TypeError('Selected source route rows and buoy layout are required');
@@ -44,6 +44,15 @@ export function createNativeRaceCourseRuntime({course,difficulty,players}={}){
   finishSourceRow:data.finishSourceRow,nodes:data.nodes.map((n,i)=>({...course.sourceBuoyLayout.nodes[i],
    tx:n.forwardXZ.x,tz:n.forwardXZ.z,nextSourceRow:n.nextSourceRowA0,
    halfWidthNative:n.halfWidthNative8c,enabled:n.enabledC8!==0,checkpoint:n.checkpointFlag9c!==0}))});
+ // Hidden navigation rows force the source water too. The host must receive
+ // this complete view rather than falling back to the17 visible Glacier gates.
+ // Numeric-only preparation also accepts course inputs without render gates.
+ const sourceVisibleGateIndices=course.sourceVisibleGateIndices??(Array.isArray(course.gates)?Object.fromEntries(sourceBuoyLayout.nodes.filter(n=>n.enabled).map(n=>{
+  const index=n.classification===3?0:course.gates.findIndex(g=>g.side&&Math.abs(g.bx-n.x)<1e-6&&Math.abs(g.bz-n.z)<1e-6);
+  if(index<0)throw new RangeError('Native visible buoy has no matching course marker');
+  return [n.sourceRow,index];
+ })):undefined);
+ const courseView=Object.freeze({...course,sourceBuoyLayout,...(sourceVisibleGateIndices?{sourceVisibleGateIndices:Object.freeze({...sourceVisibleGateIndices})}:{})});
  // AI retains avatar links and initialized endpoints from the same source
  // records. Human judging's nextA0 links are a separate graph.
  const aiNodes=data.nodes.map((n,i)=>({...sourceBuoyLayout.nodes[i],
@@ -70,7 +79,7 @@ export function createNativeRaceCourseRuntime({course,difficulty,players}={}){
   const route=createNativeAIRoute({nodes,scale,courseIndex,family});
   aiFamilies[family]=Object.freeze({family,data:alternate,route,targetTable:createNativeAITargetTable({route,nodes})});
  }
- return Object.freeze({data,resetLayout,primaryLayout,sourceBuoyLayout,mode620,aiRoute,aiTargetTable,aiFamilies:Object.freeze(aiFamilies),retirementGeometry,staticContactGeometry,...regions,
+ return Object.freeze({courseView,data,resetLayout,primaryLayout,sourceBuoyLayout,mode620,aiRoute,aiTargetTable,aiFamilies:Object.freeze(aiFamilies),retirementGeometry,staticContactGeometry,...regions,
   sourceDifficulty:course.sourceMetadata.sourceNativeClassByDifficulty[difficulty],
   directionFlag1f90:rules.checkpointSide,scale});
 }

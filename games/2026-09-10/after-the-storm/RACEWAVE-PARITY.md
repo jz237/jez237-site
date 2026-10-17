@@ -4613,4 +4613,39 @@ The AudioContext is running and authored samples loaded. High graphics remains
 This completes the contact subset for current human native previews, not the
 full original mixer, engine pitch/control, voice/rank scheduler, mode4 rider
 water cue, nearest-rival routing, or original SFX bank playback. Native venue
-admission is unchanged (courses1/2/7); Glacier remains closed.
+admission at that checkpoint was courses1/2/7; the subsequent Glacier preview
+is described below.
+
+## Unreleased — native Glacier Coast preview
+
+Glacier Coast now admits the opt-in native source-water Time trial and Two-player
+preview. The native race owns a separate course view containing all59 forward
+or48 reverse source rows, the17 visible marker mappings, original static
+contact geometry and twelve shared breakable ice blocks. Modern course objects
+retain their existing navigation and water metadata. Numeric preparation also
+continues to accept fixtures without rendered gates.
+
+The authored inspection driver anticipates forward Glacier lateral drift by
+half a second; Reverse retains its existing0.15-second policy, and explicit
+caller overrides take precedence. This changes driver inputs only. Source
+forces, buoy judging, five-miss disqualification and original AI are unchanged.
+All four classes finish three-lap seed17 runs in both solo and versus probes.
+Solo runs have three misses; versus runs have two per player forward and two/four
+in Reverse. These are completion checks, not claims of perfect driving. A random
+seed436 browser versus run still disqualified player two after five misses.
+
+Focused runtime tests verify admission, modern-course isolation, complete route
+ownership, ice contacts/fragments/splashes, source contact audio, paused-state
+retention and a genuine third-finish/result handoff. The final focused checks
+pass89 unique tests, including existing Sunny driver/cadence, Southern/Sunset
+runtime, modern Glacier geography and loading regressions. A seed17 browser solo run
+finishes in151.494 seconds with three misses, five ice breaks and an active
+source result sequence. Its authored audio samples are loaded and playing;
+the High setting retains1280x720 output and83,521 water vertices. A split-screen
+browser run confirms both rendered views share the ice world. The browser has
+one local missing-resource404 and no observed JavaScript or shader exception.
+
+This remains an inspection preview, selected using verify/nativePhysics query
+flags with the course sea state. It does not switch ordinary players to the
+native backend or claim complete original-game parity. Random-seed driver
+reliability and the remaining full audio/gameplay integrations remain open.

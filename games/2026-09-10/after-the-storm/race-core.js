@@ -67,8 +67,8 @@ export function settings(rider=0,tune={}){const r=RIDERS[rider];const engine=cla
 export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,difficulty=0,course=COVE,gridOrder=null,seaState='course',secondRider=1,secondTune={},handicap=false,swapColours=false,physics='modern',nativeTunes=[],nativeTuneModes=[],nativeInitialRaceState,nativeRecordSession}={}){
  if(!['modern','native'].includes(physics))throw new RangeError('Unknown race physics');
  if(nativeRecordSession!==undefined&&physics!=='native')throw new RangeError('Native record sessions require native physics');
- if(physics==='native'&&(!['time','versus'].includes(mode)||seaState!=='course'||![1,2,7].includes(course.sourceWaterCourseIndex)))
-  throw new RangeError('Native integration preview requires Sunny Beach, Sunset Bay or Southern Island source-water Time trial or Two-player race');
+ if(physics==='native'&&(!['time','versus'].includes(mode)||seaState!=='course'||![1,2,7,8].includes(course.sourceWaterCourseIndex)))
+  throw new RangeError('Native integration preview requires Sunny Beach, Sunset Bay, Southern Island or Glacier Coast source-water Time trial or Two-player race');
  setRaceWater(null);
  const freeRide=mode==='practice'||mode==='versus'&&course.id==='practice';
  if(['race','championship'].includes(mode))course=racingStuntCourse(course);
@@ -78,7 +78,7 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
  if(course.sourceObjectSelection){const playerCount=mode==='versus'?2:1;course={...course,playerCount,rocks:course.hazardsForPlayers(playerCount),sourceDecorations:course.decorationsForPlayers?course.decorationsForPlayers(playerCount):course.sourceDecorations};}
  if(course.contactVolumesForRamps)course={...course,contactVolumes:course.contactVolumesForRamps(course.ramps)};
  const nativeCourseRuntime=physics==='native'?createNativeRaceCourseRuntime({course,difficulty,players:mode==='versus'?2:1}):null;
- if(nativeCourseRuntime)course={...course,sourceBuoyLayout:nativeCourseRuntime.sourceBuoyLayout};
+ if(nativeCourseRuntime)course=nativeCourseRuntime.courseView;
  const ids=mode==='versus'?[rider,secondRider]:[rider,...RIDERS.map((_,i)=>i).filter(i=>i!==rider)],g=course.gates[0];
  const racers=ids.slice(0,mode==='versus'?2:['race','championship'].includes(mode)?4:1).map((id,i)=>{const grid=mode==='versus'?i:gridOrder?gridOrder.indexOf(id):i===0?3:i-1,lateral=(grid%2?1:-1)*2.4,back=7+Math.floor(grid/2)*5;return {id,grid,human:i===0||mode==='versus',player:i===0?0:mode==='versus'?1:null,stats:settings(id,i===0?tune:mode==='versus'?secondTune:{}),x:g.x-g.tx*back+g.tz*lateral,z:g.z-g.tz*back-g.tx*lateral,heading:Math.atan2(g.tx,g.tz),vx:0,vz:0,speed:0,turn:0,throttle:0,power:freeRide||mode==='stunt'?5:0,misses:0,next:1,passed:0,lap:1,lapStart:0,lapTimes:[],finishTime:null,dq:'',out:0,collision:0,recover:0,event:'',eventTime:0,previousWave:0,hydro:createHydro(),stunt:createStunt(course),raceTime:0};});
  if(course.sourceBuoyLayout&&!freeRide&&mode!=='stunt')for(const r of racers)if(r.human){

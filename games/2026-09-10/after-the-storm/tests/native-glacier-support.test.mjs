@@ -72,11 +72,20 @@ test('all29250 initialized Glacier route words match the original in all classes
  assert.equal(words,29250);
 });
 
-test('prepared Glacier runtime shares source geometry and route graphs without opening native race admission',()=>{
+test('Glacier native runtime shares source geometry and route graphs without changing modern admission',()=>{
  for(let difficulty=0;difficulty<4;difficulty++)for(const players of [1,2]){
   const course=getCourse('glacier',difficulty),runtime=createNativeRaceCourseRuntime({course,difficulty,players});
   assert.equal(course.sourceBuoyLayout,undefined,'preparation must not change the live modern judge');
   assert.equal(course.sourceRouteRowsByClass,undefined,'preparation must not change modern water forcing');
+  assert.notEqual(runtime.courseView,course);
+  assert.equal(runtime.courseView.sourceBuoyLayout,runtime.sourceBuoyLayout);
+  assert.equal(runtime.courseView.sourceRouteRowsByClass,rows);
+  assert.equal(runtime.courseView.sourceMetadata.nativeScale,.025);
+  for(const n of runtime.sourceBuoyLayout.nodes.filter(n=>n.enabled)){
+   const index=runtime.courseView.sourceVisibleGateIndices[n.sourceRow],g=course.gates[index];
+   assert.ok(g,'every source colored buoy and finish has a visible marker');
+   if(n.classification!==3){assert.ok(Math.abs(g.bx-n.x)<1e-6);assert.ok(Math.abs(g.bz-n.z)<1e-6);}
+  }
   assert.equal(runtime.courseIndex,8);assert.equal(runtime.sourceBuoyLayout.courseIndex,8);
   assert.equal(runtime.sourceDifficulty,[0,1,2,2][difficulty]);assert.equal(runtime.retirementGeometry,selections[`ordinary${players}`]);
   assert.equal(runtime.staticContactGeometry.shore,shore);assert.equal(runtime.resetLayout.boundaryNativeXZ.length,90);
@@ -85,7 +94,9 @@ test('prepared Glacier runtime shares source geometry and route graphs without o
    const row=runtime.data.nodes[n.sourceRow];assert.deepEqual(n.endpointPlusNativeXZ,row.endpointANativeXZ);assert.deepEqual(n.endpointMinusNativeXZ,row.endpointBNativeXZ);
    assert.equal(runtime.sourceBuoyLayout.nodes[n.sourceRow].nextSourceRow,row.nextSourceRowA0);
   }
-  assert.throws(()=>createRace({course,difficulty,physics:'native',seaState:'course',mode:players===1?'time':'versus'}),/native/i);
+  const race=createRace({course,difficulty,physics:'native',seaState:'course',mode:players===1?'time':'versus'});
+  assert.equal(race.nativeLaunch.snapshot().scene.courseIndex,8);
+  assert.deepEqual(race.course.sourceVisibleGateIndices,runtime.courseView.sourceVisibleGateIndices);
  }
 });
 
