@@ -81,8 +81,10 @@ test('splash phase shares canonical seed after fragments and advances despite in
  assert.deepEqual(s.ice.splashSnapshot(),first.state);assert.equal(runtime.snapshot().scene.seed6f00,first.seed6f00);
  assert.deepEqual(s.ice.fragmentSnapshot(),burst.state,'object activity holds solid fragments');
  assert.equal(first.state.slots[0].age,1);
+ const firstDisplay=s.ice.presentationSnapshot().splashes;assert.equal(firstDisplay[0].generation,1);assert.equal(firstDisplay[0].age,1);assert.equal(firstDisplay[0].active,true);
  const second=stepNativeIceSplashes(first.state,first.seed6f00);stepNativeRaceWorld(s.world,.05,[{},{}]);
  assert.deepEqual(s.ice.splashSnapshot(),second.state);assert.equal(runtime.snapshot().scene.seed6f00,second.seed6f00);
+ const secondDisplay=s.ice.presentationSnapshot().splashes;assert.equal(secondDisplay[0].generation,1);assert.equal(secondDisplay[0].age,2);assert.equal(secondDisplay[1].generation,2);
  const before=runtime.snapshot();stepNativeRaceWorld(s.world,1,[{},{}],{active:false});
  assert.deepEqual(runtime.snapshot(),before);assert.deepEqual(s.ice.splashSnapshot(),second.state);
  assert.throws(()=>s.ice.afterEffects(s.world,{logicalFrame:s.world.frames,step:.05}),/once/);

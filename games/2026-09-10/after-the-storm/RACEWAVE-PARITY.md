@@ -4401,3 +4401,36 @@ matched291 live navigation samples (211 driving,123 changed rows), executing
 1,344 retained original61184 cases confirm the15DC/control-mute relationship.
 These are bounded numeric comparisons, not whole-game trajectory equivalence.
 No new full-suite claim is made; prior unrelated failures remain tracked.
+
+
+## Native ice splash display checkpoint
+
+The shared ice owner now exports the eight AF4A0/AF51C splash particles into
+live, replay and separate-player presentation. Positions and uniform scales
+come from the recovered numeric pool. AF798 selects seven discrete frames at
+ages 1 through 7; retirement at age 8, emitter replacement and generation
+identity remain simulation-owned. Rendering consumes detached data and never
+advances the pool or random seed. Legacy display snapshots without splashes
+remain readable.
+
+The separately ROM-verified Ghidra AF798 listing supplies camera-eye facing,
+frame selection and the 01051580 display-list reference. A unique raw display
+list at ROM 147610 references quad vertices spanning 32 native units in X/Y.
+That bounded decoding establishes the rendered extent; it does not execute the
+whole segment loader or original graphics pipeline. Seven authored 512-pixel
+mist textures replace the low-resolution artwork. Original textures are not
+copied, and original global RGB tint is not yet reproduced.
+
+Validation: 35 focused tests passed across ice presentation, shared owner,
+splash arithmetic, player windows and full-resolution loading. Replay and
+second-player snapshots preserve the same discrete ages and slot identities.
+Browser checks rendered four splashes through both live world and actual
+second-player renderer at High, 1280x720, with the live 83,521-vertex water mesh
+unchanged. Seven distinct 512-pixel frames, three camera-facing orientations
+(including directly above), retirement and snapshot immutability were checked.
+The browser reported one resource 404 and no shader/runtime errors in this check.
+
+Native Glacier admission remains closed: existing course acceptance and
+scenery problems are unresolved. The other global splash producer and native
+impact sound consumer also remain separate work. This checkpoint is not full
+Glacier or whole-game parity.

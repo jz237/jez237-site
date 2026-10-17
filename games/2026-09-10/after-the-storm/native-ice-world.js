@@ -16,7 +16,7 @@ export function createNativeIceWorld({definitions,water,fragmentBurst=null,splas
  if(new Set(ids).size!==ids.length||ids.some(id=>typeof id!=='string'&&!Number.isSafeInteger(id)))throw new TypeError('Ice needs unique ids');
  const state=createNativeGenericSpheres(definitions.map(q=>({kind:10,position:[q.x/scale,q.y/scale,q.z/scale],radius:q.r/scale}))),display=definitions.map(()=>({renderKind:1,age:0}));
  let frames=0,updates=0,fragmentGeneration=0,fragments=fragmentBurst?createNativeIceFragments():null;const generations=Array(16).fill(0),events=[],hulls=new WeakMap();
- let splashes=splashAdvance?createNativeIceSplashes():null,effectsFrames=0;
+ let splashes=splashAdvance?createNativeIceSplashes():null,effectsFrames=0,splashGeneration=0;const splashGenerations=Array(8).fill(0);
  const bridge={state,
   contact(hull,context){
    if(hull.scale!==scale||context?.logicalFrame!==frames||typeof context.readGenericObjectState!=='function'||typeof context.recordGenericHitKind!=='function'||typeof context.recordImpact!=='function')throw new Error('Ice requires the current native impact owner');
@@ -48,13 +48,15 @@ export function createNativeIceWorld({definitions,water,fragmentBurst=null,splas
    if(world?.water!==water||context?.logicalFrame!==frames||effectsFrames+1!==frames||context.step!==.05)throw new Error('Splash effects must run once after the completed object frame');
    //922E4 calls B2ABC after6E3A8; B2ABC calls AF51C unconditionally,
    // independently of activity624. A browser pause never enters this phase.
-   splashes=splashAdvance(splashes).state;effectsFrames++;
+   const result=splashAdvance(splashes);splashes=result.state;
+   for(const slot of result.emitted)splashGenerations[slot]=++splashGeneration;
+   effectsFrames++;
   },
   snapshot(){return snapshotNativeGenericSpheres(state).map((n,i)=>({id:ids[i],sourceIndex:i,runtimeKind:10,position:{x:n.position[0]*scale,y:n.position[1]*scale,z:n.position[2]*scale},broken:n.broken,...display[i]}));},
   breakEvents(){return events.map(e=>({...e,positionNative:[...e.positionNative],velocityNative:[...e.velocityNative]}));},
   fragmentSnapshot(){return fragments?{cursor:fragments.cursor,slots:fragments.slots.map(s=>({...s,position:[...s.position],velocity:[...s.velocity]}))}:null;},
   splashSnapshot(){return splashes?structuredClone(splashes):null;},
-  presentationSnapshot(){return nativeIceOwnerPresentation(bridge.snapshot(),fragments,scale,generations);},
+  presentationSnapshot(){return nativeIceOwnerPresentation(bridge.snapshot(),fragments,scale,generations,splashes,splashGenerations);},
   diagnostics(hull){return {outerFrames:frames,displayUpdates:updates,objectCount:state.nodes.length,breaks:events.length,hull:hulls.get(hull)??null};}
  };
  return Object.freeze(bridge);

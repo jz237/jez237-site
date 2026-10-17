@@ -13,15 +13,26 @@ export function captureNativeIcePresentation(view){
  const objects=view.objects.map(o=>{const key=id(o.id);if(ids.has(key))throw new Error('Duplicate ice display id');ids.add(key);return {id:key,visible:flag(o.visible),position:point(o.position)};});
  const fragments=view.fragments.map(f=>({active:flag(f.active),generation:integer(f.generation,0,0xffffffff),variant:integer(f.variant,-1,7),position:point(f.position),axis:point(f.axis),angleDegrees:scalar(f.angleDegrees)}));
  if(fragments.some(f=>f.active&&(f.generation===0||f.variant<0)))throw new Error('Active ice fragment lacks identity');
- return {version:1,objects,fragments};
+ const result={version:1,objects,fragments};
+ // Optional for saved replays recorded before splash presentation existed.
+ if(view.splashes!==undefined){
+  if(!Array.isArray(view.splashes)||![0,8].includes(view.splashes.length))throw new TypeError('Invalid ice splash display pool');
+  result.splashes=view.splashes.map(s=>({active:flag(s.active),generation:integer(s.generation,0,0xffffffff),age:integer(s.age,0,0xffffffff),position:point(s.position),size:scalar(s.size)}));
+  if(result.splashes.some(s=>s.size<0||s.active&&(s.generation===0||s.age<1||s.age>7||s.size<=0)))throw new Error('Invalid active ice splash display');
+ }
+ return result;
 }
-export function nativeIceOwnerPresentation(objects,pool,scale,generations){
+export function nativeIceOwnerPresentation(objects,pool,scale,generations,splashes=null,splashGenerations=[]){
  if(!Number.isFinite(scale)||scale<=0)throw new RangeError('Invalid source ice scale');
  return captureNativeIcePresentation({version:1,objects:objects.map(o=>({id:o.id,visible:o.renderKind!==0,position:o.position})),
   fragments:pool?pool.slots.map((s,i)=>({active:s.active,generation:generations[i],variant:s.variant,
    position:Object.fromEntries(keys.map((k,j)=>[k,s.position[j]*scale])),
    // B4ABC passes signed32(-age*8), axis(-vz,0,vx) and source XYZ to EE46C.
-   axis:{x:-s.velocity[2],y:0,z:s.velocity[0]},angleDegrees:F(Math.imul(s.age,-8))})):[]});
+   axis:{x:-s.velocity[2],y:0,z:s.velocity[0]},angleDegrees:F(Math.imul(s.age,-8))})):[],
+  ...(splashes?{splashes:splashes.slots.map((s,i)=>({active:s.active,generation:splashGenerations[i],age:s.age,
+   position:Object.fromEntries(keys.map((k,j)=>[k,s.position[j]*scale])),
+   // AF798 scales the camera-facing quad at01051580; its XY span is32.
+   size:32*s.scale*scale}))}:{})});
 }
 export function sampleNativeIcePresentation(a,b,t){
  if(!Number.isFinite(t)||t<0||t>1)throw new RangeError('Invalid ice display interpolation');
@@ -35,6 +46,11 @@ export function sampleNativeIcePresentation(a,b,t){
   chosen.fragments[i]={...p,position:Object.fromEntries(keys.map(k=>[k,mix(p.position[k],q.position[k])])),axis:{...p.axis},angleDegrees:mix(p.angleDegrees,q.angleDegrees)};
  }
  return chosen;
+}
+// Source particles are stationary and select discrete frames at ages1..7.
+// Do not blend births, retired slots or texture ages during replay interpolation.
+export function nativeIceSplashPose(splash){
+ return splash.active?{position:splash.position,size:splash.size,frame:splash.age-1}:null;
 }
 // Authored detailed mesh dimensions; source supplies position and rotation.
 const shapes=[[.72,.5,.65],[.6,.7,.6],[.65,.6,.65],[.7,.5,.7],[.6,.65,.55],[.55,.5,.7],[.65,.7,.5],[.7,.55,.65]];
