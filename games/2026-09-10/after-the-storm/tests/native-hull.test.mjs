@@ -10,6 +10,26 @@ const mean=(points,field)=>Object.fromEntries(['x','y','z'].map(axis=>
   [axis,points.reduce((sum,p)=>sum+p[field][axis],0)/points.length]));
 const minus=(a,b)=>({x:a.x-b.x,y:a.y-b.y,z:a.z-b.z});
 
+test('audio lateral motion follows the last physical tick, including contact translation, in native displacement units',()=>{
+  const hull=createNativeHull({velocity:{x:4,y:0,z:9}}),F=Math.fround;
+  assert.equal(hull.lateralMotionBfc,0);
+  const before={...hull.center};stepNativeHull(hull,.01);
+  const expected=F(F(hull.center.x/hull.scale)-F(before.x/hull.scale));
+  close(hull.lateralMotionBfc,expected,1e-6);
+  assert.ok(hull.lateralMotionBfc<2,'must not use metres/second or five-tick speed');
+  const retained=hull.lateralMotionBfc;stepNativeHull(hull,0);assert.equal(hull.lateralMotionBfc,retained);
+  const still=createNativeHull();stepNativeHull(still,.01,{beforeIntegrate:h=>{
+    for(const p of h.points)p.position.x+=.05;
+  }});
+  close(still.lateralMotionBfc,2,1e-5);
+});
+
+test('lateral sound input keeps the same final tick across batched and individual updates',()=>{
+  const options={heading:.4,roll:.2,velocity:{x:5,y:1,z:10}},a=createNativeHull(options),b=createNativeHull(options);
+  stepNativeHull(a,.05);for(let i=0;i<5;i++)stepNativeHull(b,.01);
+  assert.equal(a.lateralMotionBfc,b.lateralMotionBfc);assert.deepEqual(a.center,b.center);
+});
+
 test('source point geometry has the requested center and distinct rider damping',()=>{
   const hull=createNativeHull({position:{x:10,y:3,z:-8}});
   vecClose(mean(hull.points,'position'),{x:10,y:3,z:-8});

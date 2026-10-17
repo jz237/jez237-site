@@ -19,6 +19,22 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — live native audio motion inputs
+
+The contact-audio owner now receives all four original sound-prefix bytes.
+The canonical race record supplies2C8; each physical hull tick supplies BFC
+from the fitted right axis and last-tick center displacement in native units.
+This value is lateral slip, not pitch, world velocity or the five-tick HUD
+speed. A singular right axis retains the preceding BFC. Startup seeds zero.
+Existing source-timed contact playback remains unchanged; the complete engine
+and voice mixer is still unfinished. These additional bytes are groundwork
+for that mixer, not a claim of new original engine playback.
+
+The scalar kernel retains its81 original-instruction comparison cases.
+Integration checks cover actual tick units, contact translation, batched ticks,
+separate player records/slip bytes and incomplete-input rejection. No physics
+forces, water geometry, graphics quality or resolution settings changed.
+
 ## Current preview scope
 
 Native source-water Time trial and Two-player previews admit Sunny Beach,
