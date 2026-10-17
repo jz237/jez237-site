@@ -1,5 +1,51 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unreleased — native generic ice contact kernel
+
+The original generic sphere phase now has a binary32 numeric reconstruction
+for runtime9 floating objects and runtime10 breakable ice. It preserves the
+descending candidate order, two latched hull probes, full ice translation,
+floating-object recoil, three-point velocity response, and twelve-point
+position translation. Ice breaks only when the incoming normal velocity both
+raises the retained C50 maximum and reaches half the prepared16A0 stability.
+The shared broken flag excludes it immediately from subsequent probes/racers.
+
+All186 prepared executions of original7E938 match the reconstructed outputs
+bit for bit, including the effect call's position and incoming velocity.
+They execute46,946 original instructions, with6243C translation executed and
+square root/effect calls explicitly intercepted. The effect's actual register
+and stack ABI supplies six floats; the decompiler's inferred extra integer
+arguments are not used. This evidence does not execute the fragment pool.
+Four tests cover these comparisons, shared removal/reinitialization, explicit
+coincident-center handling, and unsupported inputs.
+
+A fresh read-only query using EVO X2's installed Ghidra matches1,395 instruction
+records to the local ROM and leaves nine project files unchanged. Only numeric
+fixtures enter the repository. This kernel is prepared infrastructure: the
+native host still needs the shared object owner, prepared stability/C50/hit-kind
+connection, fragment presentation, and complete-course validation. Glacier's
+native preview remains closed; the Reverse two-player route regression also
+remains unresolved. No renderer resolution or detail changed.
+
+## Unreleased — custom-wave shallow-water depth correction
+
+The reported Sunny Beach image was reproduced with Big Surf: custom troughs
+could fall below the1.25m-deep course floor, exposing broad strips of seabed.
+Custom seas now compress deep troughs against a conservative terrain envelope,
+retaining20% of resting depth. Positive crests and sufficiently deep water
+remain unchanged. CPU hull queries and GPU water heights/normals share the
+same correction; original venue water and its tides bypass it.
+
+In the reproduced scene, all2,311 shallow samples remain covered after the
+fix. An actual64-sample GPU readback agrees with CPU heights within0.000004m
+and slopes within0.000001. High1280x720 keeps83,521 water vertices, and both
+solo and horizontal split-screen views were inspected. Eight complete custom
+sea runs finish without DQ across solo/versus and Calm/Big Surf/Chop/Storm;
+Big Surf still produces some verification-pilot misses. The58 unique focused
+checks pass. Older custom-water ghosts remain importable but use a separate
+water revision; original venue ghosts remain compatible. These are authored
+custom-wave improvements, not additional original-ROM physics parity.
+
 ## Unreleased — prepared Glacier native geometry and route graph
 
 Glacier's prepared native owner now retains the complete original primary
