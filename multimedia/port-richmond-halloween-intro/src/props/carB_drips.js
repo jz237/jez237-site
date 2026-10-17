@@ -36,7 +36,7 @@ export function buildDrips(ctx, { frame, underY = () => 0.27, faceDefault } = {}
   // drops: hanging (growing) + falling streaks, instanced; splash rings, instanced
   const N = src.length + 1;
   const dropGeo = new THREE.SphereGeometry(1, 10, 8);
-  const dropMat = new THREE.MeshStandardMaterial({ name: 'CarBDrop', color: 0x6f7f88, roughness: 0.05, metalness: 0.0, emissive: 0x161c20, emissiveIntensity: 0.35, envMap: ctx.envMap, envMapIntensity: 1.6, transparent: true, opacity: 0.7 });
+  const dropMat = new THREE.MeshStandardMaterial({ name: 'CarBDrop', color: 0x6f7f88, roughness: 0.05, metalness: 0.0, emissive: 0x1c2630, emissiveIntensity: 1.1, envMap: ctx.envMap, envMapIntensity: 1.6, transparent: true, opacity: 0.7 });
   const drops = new THREE.InstancedMesh(dropGeo, dropMat, N * 2);
   drops.name = 'carB_drops';
   drops.frustumCulled = false;

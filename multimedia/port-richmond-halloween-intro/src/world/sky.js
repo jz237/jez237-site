@@ -43,11 +43,13 @@ void main() {
   #include <colorspace_fragment>
 }`;
 
+// gfx pass 2026-10-16 (lead's grade): the ambient haze and sky are a cold, desaturated blue-grey (moonlit overcast);
+// warmth lives only in the practical-light pools (porch bulbs, pumpkins, lamp glows). Darker at the zenith.
 export const SKY_DEFAULTS = {
-  zenith: new THREE.Color(0.0034, 0.0040, 0.0060),
-  horizon: new THREE.Color(0.022, 0.0185, 0.0165),
-  glow: new THREE.Color(0.036, 0.021, 0.0115),
-  fog: new THREE.Color(0.0135, 0.0117, 0.0108),
+  zenith: new THREE.Color(0.0021, 0.0026, 0.0036),
+  horizon: new THREE.Color(0.0150, 0.0182, 0.0228),
+  glow: new THREE.Color(0.0175, 0.0200, 0.0240),
+  fog: new THREE.Color(0.0112, 0.0133, 0.0164),   // a touch brighter than the old warm fog: depth separation
 };
 
 export function makeSky({ bright = 1.0 } = {}) {
@@ -86,7 +88,7 @@ export function makeEnvironment(renderer, sky) {
     m.position.set(x, y, z);
     envScene.add(m);
   }
-  const ground = new THREE.Mesh(new THREE.PlaneGeometry(400, 400), new THREE.MeshBasicMaterial({ color: new THREE.Color(0.006, 0.0055, 0.005), toneMapped: false }));
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(400, 400), new THREE.MeshBasicMaterial({ color: new THREE.Color(0.0046, 0.0051, 0.0058), toneMapped: false }));
   ground.rotation.x = -Math.PI / 2;
   ground.position.y = -1.6;
   envScene.add(ground);

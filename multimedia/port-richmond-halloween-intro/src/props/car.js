@@ -29,6 +29,55 @@ const WHEELS = { FL: [1.38, -0.7955], FR: [1.38, 0.7955], RL: [-1.38, -0.7955], 
 const WHEELS_SUV = { FL: [1.458, -0.849], FR: [1.458, 0.849], RL: [-1.458, -0.849], RR: [-1.458, 0.849] };
 
 // ------------------------------------------------------------------------------------------------- materials
+// gfx pass 2026-10-16: rain on the car bodies. Beads stand on the upward-facing panels (roof, hood, trunk, the top of
+// the doors), denser and rounder where the panel is flat, smaller and sparser on steep sides; they live in the
+// clearcoat normal, so every lamp and the night sky glint in them, and the wet paint goes a touch darker and glossier.
+// World-space cells (the car never moves far; the beads ride the rock within a cell). One shared snippet, both cars.
+function rainBeadPaint(m, quality = 'high') {
+  if (quality === 'low') return m;   // phones: plain paint (never heavier on low)
+  m.onBeforeCompile = (sh) => {
+    sh.vertexShader = sh.vertexShader
+      .replace('#include <common>', '#include <common>\nvarying vec3 vRbW;\nvarying vec3 vRbN;')
+      .replace('#include <project_vertex>', '#include <project_vertex>\nvRbW = ( modelMatrix * vec4( transformed, 1.0 ) ).xyz; vRbN = normalize( mat3( modelMatrix ) * objectNormal );');
+    sh.fragmentShader = sh.fragmentShader
+      .replace('#include <common>', `#include <common>
+        varying vec3 vRbW; varying vec3 vRbN;
+        float rbK = 0.0;
+        float rbH( vec2 p ) { p = fract( p * vec2( 443.897, 441.423 ) ); p += dot( p, p.yx + 19.19 ); return fract( ( p.x + p.y ) * p.x ); }
+        // one bead layer: xy = lens offset (-1..1 inside the bead), z = cap height (0 = none)
+        vec3 rbLayer( vec2 p, float cell, float prob, float rmin, float rmax, float seed ) {
+          vec2 q = p / cell; vec2 id = floor( q ); vec2 f = fract( q ) - 0.5;
+          if ( rbH( id + seed ) > prob ) return vec3( 0.0 );
+          float r = mix( rmin, rmax, rbH( id * 1.7 + seed * 3.1 ) );
+          vec2 c = ( vec2( rbH( id + seed * 7.7 ), rbH( id * 2.3 + seed ) ) - 0.5 ) * max( 0.0, 0.9 - 2.0 * r );
+          vec2 d = ( f - c ) / r; float l = dot( d, d );
+          return l < 1.0 ? vec3( d, sqrt( 1.0 - l ) ) : vec3( 0.0 );
+        }`)
+      .replace('#include <clearcoat_normal_fragment_maps>', `#include <clearcoat_normal_fragment_maps>
+        {
+          vec3 nW = normalize( vRbN );
+          float up = smoothstep( 0.25, 0.75, nW.y );
+          if ( up > 0.0 ) {
+            vec2 p = vRbW.xz + vec2( 0.0, vRbW.y * 0.7 );
+            vec3 b = rbLayer( p, 0.011, 0.55, 0.18, 0.42, 1.0 );
+            vec3 b2 = rbLayer( p + 0.37, 0.0052, 0.5, 0.2, 0.42, 2.0 );
+            if ( b2.z > b.z ) b = b2 * vec3( 1.0, 1.0, 0.8 );
+            float k = b.z > 0.0 ? up : 0.0;
+            vec3 tx = normalize( ( viewMatrix * vec4( 1.0, 0.0, 0.0, 0.0 ) ).xyz );
+            vec3 tz = normalize( ( viewMatrix * vec4( 0.0, 0.0, 1.0, 0.0 ) ).xyz );
+            vec2 g = b.xy / max( 0.15, b.z );
+            clearcoatNormal = normalize( clearcoatNormal + ( tx * g.x + tz * g.y ) * 0.9 * k );
+            rbK = k;
+          }
+        }`)
+      .replace('#include <lights_physical_fragment>', `#include <lights_physical_fragment>
+        { float upW = smoothstep( 0.25, 0.75, normalize( vRbN ).y ); material.diffuseContribution *= 1.0 - 0.18 * upW; material.roughness = mix( material.roughness, material.roughness * 0.7, upW );
+          material.clearcoatRoughness = mix( material.clearcoatRoughness, 0.04, rbK ); }`);
+  };
+  m.customProgramCacheKey = () => 'car-rain-paint';
+  return m;
+}
+
 function baseMaterial(n, ctx) {
   const M = (key, make) => ctx.mat(key, make);
   const alias = { M_Car_Cladding: 'M_Plastic_Black', M_Car_Screen: 'M_Plastic_Black', M_Car_Carpet: 'M_Car_Dash', M_Car_Engine: 'M_Metal_Dark', M_Car_Mirror: 'M_Car_Chrome', M_Car_LampInner: 'M_Car_Chrome' };
@@ -142,7 +191,7 @@ export async function buildCar(ctx) {
   let lightScale = 1;
 
   // ================================================================================================ CAR A
-  const paintA = new THREE.MeshPhysicalMaterial({ name: 'CarPaintA', color: 0x8a8578, roughness: 0.42, metalness: 0.45, clearcoat: 0.55, clearcoatRoughness: 0.32, envMap });
+  const paintA = rainBeadPaint(new THREE.MeshPhysicalMaterial({ name: 'CarPaintA', color: 0x8a8578, roughness: 0.42, metalness: 0.45, clearcoat: 0.55, clearcoatRoughness: 0.32, envMap }), q);
   const rainA = makeRainGlass({ quality: q, envMap, seed: 11 });
   const smashGlassMat = makeRainGlass({ quality: q, envMap, seed: 23, smash: true });
   let smashGlassMesh = null;
@@ -247,7 +296,7 @@ export async function buildCar(ctx) {
   );
 
   // ================================================================================================ CAR B
-  const paintB = new THREE.MeshPhysicalMaterial({ name: 'CarPaintB', color: 0x1d2128, roughness: 0.45, metalness: 0.35, clearcoat: 0.45, clearcoatRoughness: 0.4, envMap });
+  const paintB = rainBeadPaint(new THREE.MeshPhysicalMaterial({ name: 'CarPaintB', color: 0x1d2128, roughness: 0.45, metalness: 0.35, clearcoat: 0.45, clearcoatRoughness: 0.4, envMap }), q);
   const glassB = makeGlass({ name: 'CarGlassB', tint: 0x7c8a8c, opacity: 0.5, grime: 0.5, metres: [0.9, 0.5], envMap });
   const glassBDark = makeGlass({ name: 'CarGlassBDark', tint: 0x2a3234, opacity: 0.78, grime: 0.4, metres: [0.9, 0.5], envMap });
   // the SUV's curb-side tyres would stand in the curb at PLACES.carB.x (curb face ~x -2.85): 12 cm toward the street

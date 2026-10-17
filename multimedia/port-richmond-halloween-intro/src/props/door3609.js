@@ -6,7 +6,7 @@ import { HERO, placeOnKit, kitRotY } from './site.js';
 import { doorAngleAt, simulateKeys, defaultKeySim, KEYS, deadboltAngleAt, doorSlapAt } from './timings.js';
 import { CUES } from '../film/cues.js';
 import { box, rbox, cyl, merge, xform } from './geo.js';
-import { canvasTexture } from './textures.js';
+import { canvasTexture, roomTexture } from './textures_interior.js';
 import { rng, noise1 } from './util.js';
 
 const W = 0.908, H = 2.021, T = 0.045;      // leaf (from the game's SM_R_Door_Panel6 opening)
@@ -125,20 +125,29 @@ function buildHandSlap(wx0, wx1, wy0, wy1, T) {
   };
 }
 
-export function buildDoor3609(ctx) {
+export async function buildDoor3609(ctx) {
   const it = HERO.door3609;
   const group = new THREE.Group();
   group.name = 'Door3609';
   placeOnKit(group, it);
 
-  const paint = new THREE.MeshStandardMaterial({ name: 'Door3609Paint', color: 0xffffff, map: doorGrimeTexture(), roughness: 0.42, metalness: 0 });
-  const trim = new THREE.MeshStandardMaterial({ name: 'Door3609Trim', color: 0xe4e0d4, roughness: 0.55 });
+  // (INTERIOR gfx) baked leaf texture (tools/interior/bake_textures.py door_paint): old chalky white with brush marks
+  // along stiles/rails, dirt in the panel mouldings, hand grime + worn paint round the knob and deadbolt, kick scuffs,
+  // chips at the edges through to old green paint and wood. Both faces share it (u = x / W, v = y / H).
+  const [doorTex, glassTex, trimTex] = await Promise.all([roomTexture('door', { wrap: false }), roomTexture('glass', { srgb: false }), roomTexture('trim')]);
+  const paint = new THREE.MeshStandardMaterial({ name: 'Door3609Paint', color: 0xffffff, map: doorTex || doorGrimeTexture(), roughness: 0.46, metalness: 0 });
+  let trim;
+  if (trimTex) { const t = trimTex.clone(); t.repeat.set(2, 2); t.needsUpdate = true; trim = new THREE.MeshStandardMaterial({ name: 'Door3609Trim', map: t, color: new THREE.Color(1.2, 1.26, 1.4), roughness: 0.48 }); }   // x linear: the leaf's aged white (the room's trim is dirtier)
+  else trim = new THREE.MeshStandardMaterial({ name: 'Door3609Trim', color: 0xe4e0d4, roughness: 0.55 });
   const brass = new THREE.MeshStandardMaterial({ name: 'Brass', color: 0xc9a04f, roughness: 0.32, metalness: 1 });
   const nickel = new THREE.MeshStandardMaterial({ name: 'KeyNickel', color: 0xc8c8c2, roughness: 0.28, metalness: 1 });
   const keyBrass = new THREE.MeshStandardMaterial({ name: 'KeyBrass', color: 0xd4b066, roughness: 0.3, metalness: 1 });
   const alu = new THREE.MeshStandardMaterial({ name: 'Aluminium', color: 0xa9aaa6, roughness: 0.62, metalness: 0.85 });
   const dark = new THREE.MeshStandardMaterial({ name: 'DarkMetal', color: 0x151515, roughness: 0.5, metalness: 0.6 });
-  const glass = new THREE.MeshPhysicalMaterial({ name: 'Door3609Glass', color: 0xdfe8ec, roughness: 0.05, metalness: 0, transparent: true, opacity: 0.18, depthWrite: false, envMapIntensity: 1.0 });
+  // grimy old glass: rain-spot rings, a wiped smear, dust thicker toward the bottom and the putty edges (alphaMap,
+  // loaded as linear data: clean glass keeps the old ~0.15-0.18 haze the hand print reads against)
+  const glass = new THREE.MeshPhysicalMaterial({ name: 'Door3609Glass', color: glassTex ? 0xd4cec2 : 0xdfe8ec, roughness: 0.05, metalness: 0, transparent: true, opacity: glassTex ? 0.6 : 0.18, depthWrite: false, envMapIntensity: 1.0 });
+  if (glassTex) { const t = glassTex.clone(); t.repeat.set(1 / 0.209, 1 / 0.235); t.needsUpdate = true; glass.alphaMap = t; }
 
   // ---------------- leaf (pivot at the hinge) ----------------
   const pivot = new THREE.Group();

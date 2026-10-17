@@ -12,21 +12,21 @@ import { addHair } from './hair.js';
 export const HAIR = {
   // wet, matted, dull yellowed grey; centre parting; thick tapered locks at the sides and back, 2-3 strays over the face
   homeowner: {
-    seed: 31, clumps: 135, perClump: [6, 9], clumpRadius: 0.0075, width: [0.0035, 0.0065], conv: 0.8, length: [0.17, 0.29], backLen: 0.55,
-    color: 0x72777f, colorDark: 0x19191b, cardShade: [0.8, 1.1], salt: 0.26, tipColor: 0x2e0c08, dirty: 0.7, frizz: 0.1,
-    lift: [0.0015, 0.006], part: 0.003, sweep: 0.2, faceClear: 0.036, strays: 1, plaster: { face: 2, neck: 5 }, plasterWidth: 0.003,
-    flyaways: 10, wet: true, roughness: 0.55, gloss: 0.12, gravity: [0, -1, -0.1], cling: 0.25, kink: 0.006, hairline: 12, rootLift: 0.15,
-    cap: { color: 0x26272a, height: 0.003, shells: 4, density: 0.85, cell: 0.0008, rootCover: 0.97, hairline: 7 },
+    seed: 31, clumps: 165, perClump: [9, 13], clumpRadius: 0.0075, width: [0.0022, 0.004], conv: 0.8, length: [0.17, 0.29], backLen: 0.55,
+    color: 0xa3a6ab, colorDark: 0x3a3a3e, cardShade: [0.8, 1.1], salt: 0.55, tipColor: 0x2e0c08, dirty: 0.7, frizz: 0.1,
+    lift: [0.0015, 0.006], part: 0.003, sweep: 0.2, faceClear: 0.036, strays: 3, plaster: { face: 3, neck: 5 }, plasterWidth: 0.003,
+    flyaways: 26, wet: true, roughness: 0.55, gloss: 0.12, gravity: [0, -1, -0.1], cling: 0.25, kink: 0.006, hairline: 12, rootLift: 0.15,
+    cap: { color: 0x4a4b50, height: 0.003, shells: 4, density: 0.85, cell: 0.0008, rootCover: 0.97, hairline: 7 },
   },
   // short, rain- and blood-soaked, matted flat to the scalp: flattened clumped shells
-  wreck: { buzz: true, flat: 4, color: 0x201c1a, height: 0.0085, shells: 14, density: 0.86, cell: 0.0008, clump: 0.0065, strand: 0.0009, blood: 0.6, tint: 0x3a0906, roughness: 0.36, gloss: 0, hairline: 7 },
+  wreck: { buzz: true, flat: 4, color: 0x201c1a, height: 0.0125, shells: 16, density: 0.86, cell: 0.0008, clump: 0.0065, strand: 0.0009, blood: 0.6, tint: 0x3a0906, roughness: 0.5, gloss: 0, hairline: 7 },
   facepaint: { buzz: true, color: 0x1e1b19, height: 0.0045, density: 0.72, rootCover: 0.97 }, // under the hood: <= 5 mm
   brute: { buzz: true, color: 0x1f1c1a, height: 0.005, density: 0.85, rootCover: 0.98 }, // dense dark root layer: no bald read at 6-25 m
   crawler: { buzz: true, color: 0x24211e, height: 0.0045, density: 0.8, rootCover: 0.98 },
   walker: { buzz: true, color: 0x2a2622, height: 0.0045, density: 0.78, rootCover: 0.98 }, // seen knees-down only; no bald head if it ever enters frame
   // long dark wet hair, read at 8-12 m: thick clumped locks over a dark cap
   screamer: {
-    seed: 53, clumps: 130, perClump: [8, 12], length: [0.22, 0.40], clumpRadius: 0.012, width: [0.004, 0.007],
+    seed: 53, clumps: 160, perClump: [10, 15], length: [0.22, 0.40], clumpRadius: 0.012, width: [0.0026, 0.0048],
     color: 0x3a332c, colorDark: 0x14110f, tipColor: 0x1e0907, dirty: 0.3, frizz: 0.1, lift: [0.002, 0.008], part: 0.006,
     faceClear: 0.03, strays: 2, flyaways: 8, wet: true, roughness: 0.42, gloss: 0.35,
     cap: { color: 0x1a1714, height: 0.003, shells: 4, density: 0.85, cell: 0.0008, rootCover: 0.97 },
@@ -70,6 +70,16 @@ export class Actor {
 }
 
 export async function loadCast({ scene, baseUrl = 'assets/creatures/', quality = 'high', onProgress } = {}) {
+  // debug A/B only (?crold=1, dev server): the pre-graphics-pass creature materials + hair (tools/creatures/legacy)
+  let dress = dressCreature, hairFn = addHair, hairT = HAIR;
+  const crold = typeof location !== 'undefined' ? (location.search.match(/[?&]crold=(\w+)/) || [])[1] : null; // 1 | mat | hair
+  if (crold) {
+    try {
+      const L = '../../tools/creatures/legacy/';
+      if (crold !== 'hair') dress = (await import(L + 'materials.js')).dressCreature;
+      if (crold !== 'mat') { hairFn = (await import(L + 'hair.js')).addHair; hairT = (await import(L + 'index.js')).HAIR; }
+    } catch (e) { console.warn('[prh] crold unavailable', e); }
+  }
   const draco = new DRACOLoader();
   draco.setDecoderPath(new URL('../../vendor/three/addons/libs/draco/gltf/', import.meta.url).href);
   const loader = new GLTFLoader();
@@ -85,12 +95,15 @@ export async function loadCast({ scene, baseUrl = 'assets/creatures/', quality =
     }
   }
   const unique = [...new Set(Object.values(files))];
+  // per-file look (materials.js LOOK): the first actor (CAST order) that uses a file names its look
+  const actorOf = {};
+  for (const [name, f] of Object.entries(files)) if (!(f in actorOf)) actorOf[f] = name;
   let done = 0;
   // all files at once (downloads overlap each other's Draco/texture decoding); the actors are built below in the fixed
   // CAST order, so the scene is the same whichever file finishes first
   await Promise.all(unique.map(async (f) => {
     const g = await loader.loadAsync(baseUrl + f);
-    dressCreature(g.scene, { normalScale: quality === 'low' ? 0.7 : 1.0 });
+    dress(g.scene, { normalScale: quality === 'low' ? 0.7 : 1.0, quality, actor: actorOf[f] });
     cache.set(f, g);
     onProgress && onProgress(++done / unique.length);
   }));
@@ -107,8 +120,11 @@ export async function loadCast({ scene, baseUrl = 'assets/creatures/', quality =
     used.set(f, true);
     root.name = 'actor_' + name;
     group.add(root);
-    if (HAIR[name]) {
-      try { addHair(root, HAIR[name]); } catch (e) { console.warn('[prh] hair failed for', name, e); }
+    if (hairT[name]) {
+      // low tier: about the pre-pass card count (fewer, wider locks) so phones never draw more hair than before
+      let st = hairT[name];
+      if (quality === 'low' && st.clumps && st.width) st = { ...st, clumps: Math.round(st.clumps * 0.65), width: st.width.map((w) => w * 1.4) };
+      try { hairFn(root, st); } catch (e) { console.warn('[prh] hair failed for', name, e); }
     }
     actors[name] = new Actor(name, root);
     actors[name].file = f;

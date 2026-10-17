@@ -52,6 +52,9 @@ export class Rig {
   lookAt(name, target, w = 1) {
     const b = this.bones[name];
     if (!b || w <= 0) return;
+    // eye bones: the gaze (iris) is the bone's +Y (its local +Z points up at bind), so aim +Y at the target;
+    // with +Z the iris ended ~90 deg off the camera and every "eyes on us" beat showed the side of the eyeball
+    if (/^eye_/.test(name)) { this.aim(name, target, w); return; }
     b.updateWorldMatrix(true, false);
     const pos = new THREE.Vector3().setFromMatrixPosition(b.matrixWorld);
     const qW = b.getWorldQuaternion(new THREE.Quaternion());

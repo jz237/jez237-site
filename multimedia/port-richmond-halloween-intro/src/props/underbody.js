@@ -74,16 +74,18 @@ export function buildUnderbody(ctx, { frame, wheels, quality = 'high' } = {}) {
     uBounceCurb: { value: new THREE.Color(0.42, 0.3, 0.2) },
     uBounceK: { value: 36.0 },
     uCarInv: { value: new THREE.Matrix4() },
+    uGlintK: { value: 1.0 },
+    uTime: { value: 0 },
   };
   const addBounce = (m, k = 1) => {
     m.onBeforeCompile = (sh) => {
       Object.assign(sh.uniforms, bounce);
       sh.uniforms.uMatK = { value: k };
       sh.vertexShader = sh.vertexShader
-        .replace('#include <common>', '#include <common>\nvarying vec3 vUbPos; varying vec3 vUbN;')
-        .replace('#include <begin_vertex>', '#include <begin_vertex>\nvUbPos = transformed; vUbN = normalize(objectNormal);');
+        .replace('#include <common>', '#include <common>\nvarying vec3 vUbPos; varying vec3 vUbN; varying vec3 vUbW; varying vec3 vUbSide;')
+        .replace('#include <begin_vertex>', '#include <begin_vertex>\nvUbPos = transformed; vUbN = normalize(objectNormal); vUbW = (modelMatrix * vec4(transformed, 1.0)).xyz; vUbSide = normalize(modelMatrix[2].xyz);');
       sh.fragmentShader = sh.fragmentShader
-        .replace('#include <common>', '#include <common>\nvarying vec3 vUbPos; varying vec3 vUbN; uniform vec3 uBounceStreet; uniform vec3 uBounceCurb; uniform float uBounceK; uniform float uMatK;')
+        .replace('#include <common>', '#include <common>\nvarying vec3 vUbPos; varying vec3 vUbN; varying vec3 vUbW; varying vec3 vUbSide; uniform vec3 uBounceStreet; uniform vec3 uBounceCurb; uniform float uBounceK; uniform float uMatK; uniform float uGlintK; uniform float uTime;')
         .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
           {
             // car-frame position/normal (the meshes are built in the car frame)
@@ -102,6 +104,22 @@ export function buildUnderbody(ctx, { frame, wheels, quality = 'high' } = {}) {
             float rimV = pow(1.0 - abs(dot(normal, normalize(vViewPosition))), 3.0);
             b += uBounceStreet * rimV * (0.25 + 1.6 * fs) * 0.9;
             totalEmissiveRadiance += alb * b * uBounceK * uMatK * lowK * 0.004;
+            // gfx pass 2026-10-16: the underside is sprayed wet. Smooth wet parts mirror the bright slit (the lit wet
+            // street and the facades across it, street side + low): glints along pipes, the tank, shield edges and
+            // seams; patchy (water collects in runs), sparkling with the bump, twinkling as drops form (pure in t)
+            {
+              vec3 nW = normalize((vec4(normal, 0.0) * viewMatrix).xyz);
+              vec3 vW = normalize(cameraPosition - vUbW);
+              vec3 rW = reflect(-vW, nW);
+              float side = dot(rW, vUbSide);
+              float slit = smoothstep(0.35, 0.85, side) * smoothstep(-0.5, -0.16, rW.y) * smoothstep(0.16, -0.04, rW.y);
+              float wetP = smoothstep(0.35, 0.75, fract(sin(dot(floor(vUbPos.xz * 22.0), vec2(12.9898, 78.233))) * 43758.5453) * 0.6 + 0.5 * sin(vUbPos.x * 7.0 + vUbPos.z * 11.0) * 0.5 + 0.25);
+              float tw = 0.75 + 0.25 * sin(uTime * 3.1 + vUbPos.x * 31.0 + vUbPos.z * 17.0);
+              wetP *= smoothstep(0.2, 0.55, diffuseColor.g * 25.0);
+              float gl = pow(clamp(1.0 - roughnessFactor + 0.25, 0.0, 1.0), 3.0) * slit * wetP * tw;
+              float fr = 0.25 + 0.75 * pow(1.0 - abs(dot(nW, vW)), 2.0);
+              totalEmissiveRadiance += uBounceStreet * gl * fr * uGlintK * (0.35 + fs) * lowK;
+            }
           }`);
     };
     m.customProgramCacheKey = () => 'carB_bounce_' + k;
@@ -315,5 +333,5 @@ export function buildUnderbody(ctx, { frame, wheels, quality = 'high' } = {}) {
     return h;
   }
 
-  return { group, heightAt, animated: null, dims: SUV, bounce, update() {} };
+  return { group, heightAt, animated: null, dims: SUV, bounce, update(t) { bounce.uTime.value = t || 0; } };
 }

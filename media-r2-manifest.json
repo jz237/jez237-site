@@ -8002,6 +8002,13 @@
       "sha256": "789a1ba4602fe21e57b8f0e3fa7e2c81dc5cb151fc84756e558eddbfd7ebb269",
       "key": "multimedia/port-richmond-halloween-intro/preview-hide.mp4",
       "url": "https://media.jez237.com/multimedia/port-richmond-halloween-intro/preview-hide.mp4"
+    },
+    {
+      "path": "multimedia/port-richmond-halloween-intro/hide-review-1080p-v2.mp4",
+      "size": 49050131,
+      "sha256": "6e2d939da4576d74f81df80206fa19308868d197914f4cb1d792dc8f21d69b0e",
+      "key": "multimedia/port-richmond-halloween-intro/hide-review-1080p-v2.mp4",
+      "url": "https://media.jez237.com/multimedia/port-richmond-halloween-intro/hide-review-1080p-v2.mp4"
     }
   ]
 }

@@ -27,6 +27,33 @@ function clothTexture(key, base, seed) {
     g.putImageData(img, 0, 0);
   }, { repeat: [1, 1] });
 }
+// gfx pass 2026-10-16: moulded-plastic / vinyl grain with wear (bump + roughness; R = G = B): a fine pebble stipple,
+// smoother scuffed patches (glossier) and dust pooling in low spots (rougher). Tiles ~10 x per metre on metric UVs.
+function grainTexture() {
+  return canvasTexture('carA_grain', 256, 256, (g, w, h) => {
+    const R = rng(2610);
+    const img = g.createImageData(w, h), d = img.data;
+    const blot = new Float32Array(w * h);
+    for (let k = 0; k < 26; k++) {
+      const cx = R() * w, cy = R() * h, r = 12 + R() * 40, s = (R() - 0.5) * 0.5;
+      for (let y = -r; y <= r; y++) for (let x = -r; x <= r; x++) {
+        const q = 1 - Math.hypot(x, y) / r;
+        if (q <= 0) continue;
+        const px = ((Math.round(cx + x) % w) + w) % w, py = ((Math.round(cy + y) % h) + h) % h;
+        blot[py * w + px] += s * q * q;
+      }
+    }
+    for (let i = 0; i < w * h; i++) {
+      const pebble = 0.5 + 0.35 * (R() - 0.5) + 0.25 * (R() < 0.22 ? 1 : 0);
+      const v = clamp(140 + (pebble - 0.5) * 90 + blot[i] * 160, 20, 250) | 0;
+      d[i * 4] = d[i * 4 + 1] = d[i * 4 + 2] = v; d[i * 4 + 3] = 255;
+    }
+    g.putImageData(img, 0, 0);
+    g.filter = 'blur(0.6px)';
+    g.drawImage(g.canvas, 0, 0);
+    g.filter = 'none';
+  }, { repeat: [10, 10], srgb: false });
+}
 function grilleTexture() {
   return canvasTexture('carA_grille', 128, 128, (g, w, h) => {
     g.fillStyle = '#1a1a1a'; g.fillRect(0, 0, w, h);
@@ -121,14 +148,16 @@ export function buildCarAInterior(ctx, { frame, nodes }) {
   const M = (key, make) => ctx.mat('carAInt_' + key, make);
   const cloth = clothTexture('carA_cloth', '#4a4640', 7);
   cloth.repeat.set(1, 1);
+  const grain = grainTexture();
   const mats = {
     // velour sheen: the seat and headrest edges catch the street light from behind (pass 3)
     cloth: M('cloth', () => new THREE.MeshPhysicalMaterial({ name: 'CarASeatCloth', color: 0x8c877d, map: cloth, roughness: 0.9, bumpMap: cloth, bumpScale: 0.6, sheen: 0.7, sheenRoughness: 0.5, sheenColor: new THREE.Color(0.36, 0.35, 0.33) })),
     clothDark: M('clothDark', () => new THREE.MeshStandardMaterial({ name: 'CarASeatClothDark', color: 0x5d5952, map: cloth, roughness: 0.95 })),
-    plastic: M('plastic', () => new THREE.MeshStandardMaterial({ name: 'CarATrimPlastic', color: 0x262626, roughness: 0.55 })),
-    plasticGloss: M('plasticGloss', () => new THREE.MeshStandardMaterial({ name: 'CarATrimGloss', color: 0x101010, roughness: 0.28 })),
-    vinyl: M('vinyl', () => new THREE.MeshStandardMaterial({ name: 'CarAVinyl', color: 0x34322f, roughness: 0.48 })),
-    leather: M('leather', () => new THREE.MeshStandardMaterial({ name: 'CarAWheelLeather', color: 0x171615, roughness: 0.42 })),
+    // gfx pass 2026-10-16: grained / worn surfaces (one shared grain map as bump + roughness)
+    plastic: M('plastic', () => new THREE.MeshStandardMaterial({ name: 'CarATrimPlastic', color: 0x262626, roughness: 0.75, bumpMap: grain, bumpScale: 0.35, roughnessMap: grain })),
+    plasticGloss: M('plasticGloss', () => new THREE.MeshStandardMaterial({ name: 'CarATrimGloss', color: 0x101010, roughness: 0.42, bumpMap: grain, bumpScale: 0.2, roughnessMap: grain })),
+    vinyl: M('vinyl', () => new THREE.MeshStandardMaterial({ name: 'CarAVinyl', color: 0x34322f, roughness: 0.66, bumpMap: grain, bumpScale: 0.45, roughnessMap: grain })),
+    leather: M('leather', () => new THREE.MeshStandardMaterial({ name: 'CarAWheelLeather', color: 0x171615, roughness: 0.6, bumpMap: grain, bumpScale: 0.5, roughnessMap: grain })),
     chrome: M('chrome', () => new THREE.MeshStandardMaterial({ name: 'CarAChrome', color: 0xb8b8b4, roughness: 0.22, metalness: 1 })),
     belt: M('belt', () => new THREE.MeshStandardMaterial({ name: 'CarABelt', color: 0x1d1d1f, roughness: 0.6 })),
     grille: M('grille', () => new THREE.MeshStandardMaterial({ name: 'CarASpeaker', color: 0x777777, map: grilleTexture(), roughness: 0.7 })),
@@ -363,13 +392,19 @@ export function buildCarAInterior(ctx, { frame, nodes }) {
   }
   group.add(charm);
 
+  // gfx pass 2026-10-16: the street lamps' light through the rainy glass (motivated, no real light): the three lamps
+  // nearest car A light its interior surfaces through the windows (above the beltline, below the roof), broken into
+  // drifting bead dapples; the failing lamp's flicker pulses through the cabin. Patched before interiorize (the
+  // interior clones inherit it); the game's interior clones below get it too.
+  const windowLight = makeWindowLight(ctx, frame);
+  for (const k of ['cloth', 'clothDark', 'plastic', 'plasticGloss', 'vinyl', 'leather', 'headliner', 'belt']) windowLight.patch(mats[k]);
   // interior lighting: the roof blocks most of the sky fill; practicals (street spill through the glass) carry it
   interiorize(group, 0.32, { skip: (o) => o === charm || charm.children.includes(o) });
   interiorize(rrGroup, 0.32);
   // the game's own interior surfaces (headliner, dash, carpet, door cards)
   frame.traverse((o) => {
     if (!o.isMesh || !o.userData.gameMat) return;
-    if (['M_Car_Headliner', 'M_Car_Dash', 'M_Car_Carpet'].includes(o.userData.gameMat)) interiorize(o, 0.32);
+    if (['M_Car_Headliner', 'M_Car_Dash', 'M_Car_Carpet'].includes(o.userData.gameMat)) { interiorize(o, 0.32); windowLight.patch(o.material); }
   });
 
   frame.add(group);
@@ -401,11 +436,95 @@ export function buildCarAInterior(ctx, { frame, nodes }) {
     animated: charm,
     anchors,
     charmAngleAt: (t) => charmAngleAt(t).roll,
+    windowLight,
     update(t) {
       const c = charmAngleAt(t);
       charm.rotation.set(c.roll, 0, c.pitch);
+      windowLight.update(t);
     },
   };
+}
+
+// ---------------------------------------------------------------------------------- window light (gfx pass 2026-10-16)
+function makeWindowLight(ctx, frame) {
+  const N = 3;
+  const U = {
+    uWLTime: { value: 0 },
+    uWLPos: { value: Array.from({ length: N }, () => new THREE.Vector3(0, -1000, 0)) },
+    uWLCol: { value: Array.from({ length: N }, () => new THREE.Vector3()) },
+    uWLY: { value: new THREE.Vector3(0, 1, 0) },
+  };
+  frame.updateMatrixWorld(true);
+  const car = new THREE.Vector3().setFromMatrixPosition(frame.matrixWorld);
+  const lamps = ((ctx.world && ctx.world.lamps) || []).filter((e) => e.lit && e.intensity > 0)
+    .map((e) => {
+      const p = e.lightPos || e.position;
+      let beam = 1;
+      if (e.kind === 'cobra' && e.dir) {
+        const c = car.clone().add(new THREE.Vector3(0, 1, 0)).sub(p).normalize().dot(e.dir);
+        const c0 = Math.cos(e.angle || 1.2), c1 = Math.cos((e.angle || 1.2) * (1 - (e.penumbra ?? 0.7)));
+        beam = THREE.MathUtils.smoothstep(c, c0, c1);
+      }
+      return { e, p, w: (e.intensity * beam) / Math.max(1, p.distanceToSquared(car)) };
+    })
+    .sort((a, b) => b.w - a.w).slice(0, N);
+  const GLASS_T = 0.75;
+  const patched = new WeakSet();
+  const off = ctx.quality === 'low';   // phones: no window light (never heavier on low)
+  function patch(m) {
+    if (off || !m || patched.has(m) || !(m.isMeshStandardMaterial)) return;
+    patched.add(m);
+    const prev = m.onBeforeCompile && m.onBeforeCompile !== THREE.Material.prototype.onBeforeCompile ? m.onBeforeCompile : null;
+    const prevKey = prev && m.customProgramCacheKey ? m.customProgramCacheKey.bind(m) : null;
+    m.onBeforeCompile = (sh, r) => {
+      if (prev) prev(sh, r);
+      Object.assign(sh.uniforms, U);
+      sh.vertexShader = sh.vertexShader
+        .replace('#include <common>', '#include <common>\nvarying vec3 vWLW;')
+        .replace('#include <project_vertex>', '#include <project_vertex>\nvWLW = ( modelMatrix * vec4( transformed, 1.0 ) ).xyz;');
+      sh.fragmentShader = sh.fragmentShader
+        .replace('#include <common>', `#include <common>
+          varying vec3 vWLW;
+          uniform float uWLTime; uniform vec3 uWLPos[ ${N} ]; uniform vec3 uWLCol[ ${N} ]; uniform vec3 uWLY;
+          float wlH( vec2 p ) { return fract( sin( dot( p, vec2( 127.1, 311.7 ) ) ) * 43758.5453 ); }
+          float wlN( vec2 p ) { vec2 i = floor( p ), f = fract( p ); f = f * f * ( 3.0 - 2.0 * f );
+            return mix( mix( wlH( i ), wlH( i + vec2( 1.0, 0.0 ) ), f.x ), mix( wlH( i + vec2( 0.0, 1.0 ) ), wlH( i + vec2( 1.0, 1.0 ) ), f.x ), f.y ); }`)
+        .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
+          {
+            vec3 nW = normalize( ( vec4( normal, 0.0 ) * viewMatrix ).xyz );
+            vec3 acc = vec3( 0.0 );
+            for ( int i = 0; i < ${N}; i ++ ) {
+              vec3 d = uWLPos[ i ] - vWLW; float d2 = max( dot( d, d ), 1.0 ); vec3 L = d * inversesqrt( d2 );
+              float ly = dot( L, uWLY );
+              float ap = smoothstep( -0.03, 0.1, ly ) * ( 1.0 - smoothstep( 0.6, 0.85, ly ) );
+              float ndl = max( dot( nW, L ), 0.0 );
+              vec3 T1 = normalize( cross( L, vec3( 0.0, 1.0, 0.0 ) ) + vec3( 1e-5 ) ); vec3 T2 = cross( L, T1 );
+              vec2 q = vec2( dot( vWLW, T1 ), dot( vWLW, T2 ) ) * 26.0 + vec2( float( i ) * 7.3, uWLTime * 1.3 );
+              float dap = 0.5 + 1.4 * smoothstep( 0.6, 0.92, wlN( q ) ) - 0.3 * smoothstep( 0.5, 0.8, wlN( q * 0.45 + 3.3 ) );
+              acc += uWLCol[ i ] * ( ndl * ap * dap / d2 );
+            }
+            totalEmissiveRadiance += diffuseColor.rgb * acc * RECIPROCAL_PI;
+          }`);
+    };
+    m.customProgramCacheKey = () => (prevKey ? prevKey() : m.type) + '|carA-wl';
+    m.needsUpdate = true;
+  }
+  const up = new THREE.Vector3();
+  function update(t) {
+    U.uWLTime.value = t;
+    frame.updateMatrixWorld(true);
+    up.setFromMatrixColumn(frame.matrixWorld, 1).normalize();
+    U.uWLY.value.copy(up);
+    for (let i = 0; i < N; i++) {
+      const L = lamps[i];
+      if (!L) { U.uWLCol.value[i].set(0, 0, 0); continue; }
+      const k = (L.e.k ? L.e.k(t) : 1) * L.e.intensity * GLASS_T * (L.e.kind === 'cobra' ? 1 : 1);
+      U.uWLPos.value[i].copy(L.p);
+      const b = L.e.kind === 'cobra' ? Math.max(0.15, L.w * Math.max(1, L.p.distanceToSquared(car)) / L.e.intensity) : 1;
+      U.uWLCol.value[i].set(L.e.color.r * k * b, L.e.color.g * k * b, L.e.color.b * k * b);
+    }
+  }
+  return { patch, update, lamps, uniforms: U };
 }
 // keep the import list honest for the rock-driven charm (carARock is the full response if needed later)
 void carARock;

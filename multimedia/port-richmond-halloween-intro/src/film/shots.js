@@ -229,7 +229,9 @@ export function makeShots({ world = null, props = null } = {}) {
       { t: 48.4, p: underEye.clone().add(V(-0.25, 0.0, 0.03)), l: face().add(V(-0.25, 0.02, 0.0)), fov: 48, hand: 0.9 },
     ],
     recoil: (t) => { const s = flinch(t, CUES.contact2, 0.025, 0.5); return { roll: 0.06 * kick(t, CUES.contact2, 11, 6), pitch: 0.03 * s, yaw: 0.04 * kick(t, CUES.grabYank, 7, 5) }; },
-    dof: (t) => ({ focus: t < CUES.lunge2 ? underEye.distanceTo(face()) : 0.45, aperture: 0.45 }),
+    // from the lunge the focus rides its face (main.js resolves `track` to the live head distance): the scare's face is
+    // the sharpest thing in the frame instead of a 0.45 m guess it rushed through
+    dof: (t) => (t < CUES.lunge2 ? { focus: underEye.distanceTo(face()), aperture: 0.45 } : { focus: 0.45, aperture: 0.45, track: 'facepaint' }),
     breath: 0.12,
   });
   add({ id: 'U4', start: 48.4, end: CUES.shotS1, space: (t) => (t < CUES.rollOut + 0.4 ? 'underB' : 'exterior'), kind: 'pov', pov: true,

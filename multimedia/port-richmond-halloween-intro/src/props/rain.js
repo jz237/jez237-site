@@ -31,6 +31,15 @@ const DROP_W = 0.0011;   // physical drop width (m)
 const MAX_LAMPS = 16;
 const MAX_BOXES = 4;
 
+// gfx pass 2026-10-16: keep the rain out of override-material passes (post GTAO normal/depth, depth prepass): with
+// the override material the instanced quads would draw at their raw unit-quad positions near the world origin
+function skipOverridePasses(mesh) {
+  const own = mesh.material;
+  mesh.onBeforeRender = (r, s, c, geometry, material) => { if (material !== own) geometry.drawRange.count = 0; };
+  mesh.onAfterRender = (r, s, c, geometry) => { geometry.drawRange.count = Infinity; };
+  return mesh;
+}
+
 // ---------------------------------------------------------------- shared GLSL
 const LAMP_GLSL = /* glsl */`
   uniform vec4 uLampPos[${MAX_LAMPS}];   // xyz, intensity (already x flicker x enabled)
@@ -176,7 +185,7 @@ function buildStreaks(count, shared, mode = 'camera', volOf = null) {
       }`,
   });
   const mesh = new THREE.Mesh(ig, mat);
-  mesh.frustumCulled = false; mesh.name = mode === 'lamps' ? 'RainStreaksLamps' : 'RainStreaks'; mesh.renderOrder = 6;
+  mesh.frustumCulled = false; mesh.name = mode === 'lamps' ? 'RainStreaksLamps' : 'RainStreaks'; mesh.renderOrder = 6; skipOverridePasses(mesh);
   return { mesh, uniforms: u, maxCount: count };
 }
 // ---------------------------------------------------------------- splash rings on the ground near the camera
@@ -241,7 +250,7 @@ function buildSplashes(count, shared) {
       }`,
   });
   const mesh = new THREE.Mesh(ig, mat);
-  mesh.frustumCulled = false; mesh.name = 'RainSplashes'; mesh.renderOrder = 5;
+  mesh.frustumCulled = false; mesh.name = 'RainSplashes'; mesh.renderOrder = 5; skipOverridePasses(mesh);
   return { mesh, uniforms: u, maxCount: count };
 }
 
@@ -301,7 +310,7 @@ function buildDrips(count, shared, emitters) {
       void main() { if (vA < 0.003) discard; gl_FragColor = vec4(vCol * vA, 1.0); }`,
   });
   const mesh = new THREE.Mesh(ig, mat);
-  mesh.frustumCulled = false; mesh.name = 'RainDrips'; mesh.renderOrder = 6;
+  mesh.frustumCulled = false; mesh.name = 'RainDrips'; mesh.renderOrder = 6; skipOverridePasses(mesh);
   return { mesh, uniforms: u, count: n };
 }
 

@@ -19,6 +19,7 @@ const qs = new URLSearchParams(location.search);
 const CAPTURE = qs.has('capture');
 const DEV = qs.has('dev');
 const NODOF = qs.has('nodof') || qs.has('freecam'); // diagnostics: free-camera views without the shot's depth of field
+const NOMB = qs.has('nomb') || qs.has('freecam'); // diagnostics: no camera motion blur
 
 function autoQuality() {
   const forced = qs.get('quality');
@@ -43,7 +44,7 @@ const stage = document.getElementById('stage') || (() => { const d = document.cr
 const renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: 'high-performance', preserveDrawingBuffer: CAPTURE, stencil: false });
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.AgXToneMapping;
-renderer.toneMappingExposure = 1.0;
+renderer.toneMappingExposure = 1.10; // with the post grade's black point + contrast curve (post.js LOOK)
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFShadowMap;
 const maxDpr = quality === 'high' ? 1.5 : 1.0;
@@ -176,7 +177,7 @@ resize();
 window.addEventListener('resize', resize);
 
 // ---------------------------------------------------------------- per-frame grading: fades, cut to black, impacts
-function grade(t) {
+function grade(t, free = false) {
   let fade = smooth(0, FILM.fadeInEnd, t);
   if (t >= CUES.cutToBlack && t < CUES.titleFadeIn) fade = 0;
   if (t >= CUES.titleFadeIn) fade = smooth(CUES.titleFadeIn, CUES.titleFadeIn + 1.6, t);
@@ -188,7 +189,32 @@ function grade(t) {
   // tension: the inspected close-up under car B and the false-relief room tighten the frame
   const tense = Math.max(smooth(CUES.inspectStart, CUES.gazeLock2, t) * (1 - smooth(CUES.contact2, CUES.contact2 + 1.2, t)), smooth(CUES.lookPhoto, CUES.creak3, t) * (t < CUES.cutToBlack ? 1 : 0));
   const vig = shot.kind === 'insert' ? 0.36 : shot.kind === 'high' || shot.kind === 'title' ? 0.26 : shot.space === 'underB' ? 0.4 : 0.3;
-  return { fade, impact, vignette: vig + 0.12 * tense, bloom: t >= CUES.titleFadeIn ? 0.28 : 0.32, dof: NODOF ? null : shots.dofAt(t) };
+  return { fade, impact, vignette: vig + 0.12 * tense, bloom: t >= CUES.titleFadeIn ? 0.28 : 0.32, dof: NODOF ? null : dofAt(t),
+    prevCamera: free || NOMB ? null : prevCameraAt(t), ao: shots.spaceAt(t) === 'underB' ? 0.4 : 1 };
+}
+// a shot's DOF may track an actor: focus on the front of its head, live (choreo has already posed it for t)
+const _focusP = new THREE.Vector3();
+function dofAt(t) {
+  const d = shots.dofAt(t);
+  if (d && d.enabled && d.track) {
+    const a = cast.actors[d.track];
+    if (a && a.visible && a.rig.bones.head) {
+      a.root.updateMatrixWorld(true);
+      d.focus = Math.max(0.12, camera.position.distanceTo(a.rig.worldPos('head', _focusP)) - (d.trackFront ?? 0.1));
+    }
+  }
+  return d;
+}
+// motion blur: the shot camera one shutter earlier, never across a cut. 1/96 s = a 90-degree shutter at 24 fps: the
+// narrow action-film shutter (a 180-degree one smeared the run's whip pans past reading: 2.6 deg per 1/48 s at t=60)
+const SHUTTER = 1 / 96;
+const prevCam = new THREE.PerspectiveCamera(50, 16 / 9, 0.03, 420);
+function prevCameraAt(t) {
+  if (t < SHUTTER || shots.shotAt(t - SHUTTER) !== shots.shotAt(t)) return null;
+  prevCam.aspect = camera.aspect; prevCam.near = camera.near; prevCam.far = camera.far;
+  shots.apply(t - SHUTTER, prevCam);
+  prevCam.updateProjectionMatrix();
+  return prevCam;
 }
 
 function renderAt(t) {
@@ -197,6 +223,7 @@ function renderAt(t) {
   props && props.update(t, camera);
   story.update(t, camera);
   choreo.update(t, camera);
+  story.lateUpdate && story.lateUpdate(t, camera); // lights that follow a posed actor (after choreo, so still pure in t)
   pool.update(t, camera);
   post.render(t, grade(t));
   ui && ui.updateTitle && ui.updateTitle(t);
@@ -338,11 +365,12 @@ window.__renderAt = (t, opts = {}) => {
     props && props.update(t, camera);
     story.update(t, camera);
     choreo.update(t, camera);
+    story.lateUpdate && story.lateUpdate(t, camera);
     camera.position.set(v[0], v[1], v[2]);
     camera.lookAt(v[3], v[4], v[5]);
     camera.fov = v[6] || 50; camera.updateProjectionMatrix();
     pool.update(t, camera);
-    post.render(t, grade(t));
+    post.render(t, grade(t, true));
     ui && ui.updateTitle && ui.updateTitle(t);
     return;
   }

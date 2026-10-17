@@ -124,7 +124,7 @@ export function makeRainGlass({ quality = 'high', envMap = null, seed = 1, smash
   const transmissive = quality === 'high';
   const uniforms = {
     uTime: { value: 0 }, uSeed: { value: seed }, uWet: { value: 1 }, uCraze: { value: 0 },
-    uImpact: { value: new THREE.Vector2(0, 0) }, uLens: { value: 0.16 }, uBulge: { value: 0 },
+    uImpact: { value: new THREE.Vector2(0, 0) }, uLens: { value: 0.16 }, uBulge: { value: 0 }, uGather: { value: 1.4 },
   };
   let mat;
   if (transmissive) {
@@ -160,6 +160,7 @@ export function makeRainGlass({ quality = 'high', envMap = null, seed = 1, smash
       .replace('#include <common>', `#include <common>
         ${DROP_GLSL}
         uniform float uLens;
+        uniform float uGather;
         float rgH; vec2 rgL; float rgTrail; float rgKind;`)
       .replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
         {
@@ -190,6 +191,14 @@ export function makeRainGlass({ quality = 'high', envMap = null, seed = 1, smash
             float lod = rgH > 0.001 ? 1.6 + 1.2 * (1.0 - rgH) : 0.0;
             ${smash ? 'lod = max(lod, cz_lod);' : ''}
             vec4 tl = textureBicubic(transmissionSamplerMap, clamp(suv, vec2(0.001), vec2(0.999)), lod);
+            // gfx pass 2026-10-16: a bead is a lens with a wide field of view: it gathers the light of everything
+            // behind it (the lamps, lit windows, the wet street), so beads glow softly with the colours of the night
+            // outside even where the glass is dark, and the trails shine thinly
+            if (rgH > 0.001 || rgTrail > 0.0) {
+              vec2 suw = ndc.xy / ndc.w * 0.5 + 0.5 - lens * 0.09;
+              vec3 wide = textureBicubic(transmissionSamplerMap, clamp(suw, vec2(0.001), vec2(0.999)), 4.6).rgb;
+              tl.rgb += wide * (uGather * smoothstep(0.0, 0.6, rgH) + 0.6 * uGather * rgTrail);
+            }
             vec3 nW = transformNormalByInverseViewMatrix(normal, viewMatrix);
             vec3 vW = normalize(cameraPosition - vWorldPosition);
             vec3 F = EnvironmentBRDF(nW, vW, material.specularColorBlended, material.specularF90, material.roughness);

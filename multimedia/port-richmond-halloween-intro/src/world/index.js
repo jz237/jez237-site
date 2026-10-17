@@ -22,6 +22,8 @@ import { mergeInstances } from './merge.js';
 import { makeSky, makeEnvironment, SKY_DEFAULTS } from './sky.js';
 import { GroundHeight } from './ground.js';
 import { flickerAt, FLICKER_EPISODES, FLICKER_EVENTS } from './flicker.js';
+import { bakeHeightMap, bakeFacadeMap, makeNoiseTexture, makeRippleTexture, FACADE } from './weather.js';
+import { buildVolumes, skipOverridePasses } from './volumes.js';
 
 const BASE = new URL('../../assets/world/', import.meta.url).href;
 const DRACO_PATH = new URL('../../vendor/three/addons/libs/draco/gltf/', import.meta.url).href;
@@ -86,6 +88,14 @@ const GROUND_RECIPES = {
   M_RB_Steel: { tex: 'T_RustSteel', rough: 0.7, wall: true },
   M_Rail_Steel: { flat: [0.2, 0.13, 0.08], rough: 0.55 },
   M_Ballast: { flat: [0.14, 0.12, 0.1], rough: 1.0 },
+};
+
+// facade weathering family per wall slot (gfx pass 2026-10-16): 1 brick (efflorescence), 2 siding / panels and
+// 3 paint / masonry (algae + mildew), 0 generic
+const WALL_TYPE = {
+  M_Brick_Row: 1, M_Brick_Focus: 1, M_Brick_Commercial: 1, M_Civic: 1, M_Industrial: 1,
+  M_Wall_Siding: 2, M_Wall_Cedar: 2, M_Wall_Shake: 2, M_Wall_WoodPlank: 2, M_Wall_FauxStoneVinyl: 2, M_Wall_Panel: 2,
+  M_Wall_MetalPanel: 2, M_Wall_CorrugatedVRib: 2,
 };
 
 // focus finish wall slots: they carry the game's weathering coordinates (UV1) -> damp foot
@@ -196,7 +206,7 @@ export async function loadWorld({ renderer, scene, quality = 'high', onProgress,
       }
     }
     if (geos.length) {
-      const bm = new THREE.Mesh(mergeGeometries(geos, false), texturedKitMaterial(shared, tex('T_Blades'), { roughness: 0.35 }));
+      const bm = new THREE.Mesh(mergeGeometries(geos, false), texturedKitMaterial(shared, tex('T_Blades'), { roughness: 0.35, weather: quality !== 'low' }));
       bm.name = 'StreetNameBlades';
       bm.castShadow = true;
       bm.receiveShadow = true;
@@ -213,12 +223,29 @@ export async function loadWorld({ renderer, scene, quality = 'high', onProgress,
     if (!a || !a.bottom || !lib.has(`${a.piece}__open`)) { console.warn(`[world] openWindows: cannot open ${nm}`); continue; }
     swaps.push({ name: nm, pos: a.bottom, from: a.piece, to: `${a.piece}__open` });
   }
+  // piece bounding boxes (local, unscaled) for the facade weathering map
+  const boxCache = new Map();
+  const pieceBox = (name) => {
+    if (boxCache.has(name)) return boxCache.get(name);
+    const prims = lib.get(name);
+    let b = null;
+    if (prims && prims.length) {
+      b = new THREE.Box3();
+      for (const p of prims) { if (!p.geometry.boundingBox) p.geometry.computeBoundingBox(); b.union(p.geometry.boundingBox); }
+    }
+    boxCache.set(name, b);
+    return b;
+  };
+  for (const r of data.instances) {
+    const k = data.kinds[r[1]];
+    if (k === 'opening' || k === 'ac' || k === 'cornice' || k === 'sill' || k === 'downspout' || k === 'lintel' || k === 'wall_item' || k === 'rollup_hood' || k === 'canopy' || k === 'awning') pieceBox(data.pieces[r[0]]);
+  }
   const merged = mergeInstances(lib, data, { dropDetail: false, farAll: quality === 'low', swaps });
   if (merged.missing.length) console.warn('[world] pieces missing from the library:', merged.missing);
   for (const g of [kitG, carsG]) g.scene.traverse((o) => { if (o.isMesh) o.geometry.dispose(); });
 
   const mats = {
-    opaque: uberMaterial(shared),
+    opaque: uberMaterial(shared, { weather: quality !== 'low' }),
     lamp: lampMaterial(shared),
     glass: glassMaterial(shared),
     leaves: foliageMaterial(shared, tex('T_LeafAtlasFocus')),
@@ -234,12 +261,13 @@ export async function loadWorld({ renderer, scene, quality = 'high', onProgress,
     let mat = mats[m.group];
     if (!mat && m.group.startsWith('tex:')) {
       const tn = m.group.slice(4);
-      if (!texMats.has(tn)) texMats.set(tn, texturedKitMaterial(shared, tex(tn), TEX_GROUP_OPTS[tn] || {}));
+      if (!texMats.has(tn)) texMats.set(tn, texturedKitMaterial(shared, tex(tn), { ...(TEX_GROUP_OPTS[tn] || {}), weather: quality !== 'low' }));
       mat = texMats.get(tn);
     }
     if (!mat) mat = mats.opaque;
     const mesh = new THREE.Mesh(m.geometry, mat);
     mesh.name = `kit_${m.group}_${m.cell}${m.detail ? '_detail' : ''}${m.cast ? '_cast' : ''}`;
+    if (m.group === 'glass') mesh.renderOrder = 1;   // perf: glass (window rooms) after the walls and the kit
     mesh.castShadow = !!m.cast;
     mesh.receiveShadow = true;
     mesh.matrixAutoUpdate = false;
@@ -278,9 +306,12 @@ export async function loadWorld({ renderer, scene, quality = 'high', onProgress,
         wetRough: r.wetRough ?? (r.wall ? 0.85 : 0.7), normalScale: r.ns ?? 1, name: key, alphaGutter: !!r.gutter,
         gutterK: r.gutterK ?? 0, depK: r.depK ?? 0, wetRefl: r.wetRefl ?? 0,
         dampFoot: !!(r.wall && FOCUS_FINISH.has(key) && o.geometry.attributes.uv1),
+        wall: !!r.wall, wallType: r.wall ? (WALL_TYPE[key] ?? 3) : 0, ripple: quality === 'high', lowTier: quality === 'low',
+        stain: (key === 'M_Sidewalk' || key === 'M_Concrete' || key === 'M_Lot' || key === 'M_Path') ? 1 : key === 'M_Curb' ? 0.6 : 0,
       });
     }
     o.material = mat;
+    o.renderOrder = -1;   // perf: shells + ground first (early-Z for everything drawn after)
     o.castShadow = !meta.ground && key !== 'M_Wire';
     o.receiveShadow = true;
     o.matrixAutoUpdate = false;
@@ -301,6 +332,20 @@ export async function loadWorld({ renderer, scene, quality = 'high', onProgress,
       shared.uWetBounds.value.set(x0, z0, 1 / (x1 - x0), 1 / (z1 - z0));
       resolve();
     }, undefined, () => resolve()));
+  }
+  // gfx pass 2026-10-16: ground height map + facade weathering map (weather.js), baked here once
+  let weatherMs = 0;
+  {
+    const tw0 = performance.now();
+    const b = data.wet ? data.wet.bounds : [FACADE.x0, FACADE.z0, FACADE.x1, FACADE.z1];
+    shared.uHgtTex.value = bakeHeightMap(groundH, b, 0.5);
+    shared.uHgtB.value.set(b[0], b[1], 1 / (b[2] - b[0]), 1 / (b[3] - b[1]));
+    shared.uFacTex.value = bakeFacadeMap(data, (n) => boxCache.get(n) || null);
+    shared.uFacB.value.set(FACADE.x0, FACADE.z0, 1 / (FACADE.x1 - FACADE.x0), 1 / (FACADE.z1 - FACADE.z0));
+    shared.uFacY.value.set(FACADE.y0, 1 / (FACADE.y1 - FACADE.y0));
+    shared.uNoiseTex.value = makeNoiseTexture(256);
+    shared.uRipTex.value = makeRippleTexture(256, 9);
+    weatherMs = performance.now() - tw0;
   }
 
   // interior linings behind the story openings (hollow game shells): inward-facing dark boxes; PROPS' rooms sit inside
@@ -338,7 +383,8 @@ export async function loadWorld({ renderer, scene, quality = 'high', onProgress,
   const lights = { hemisphere: hemi, pool };
   data.lamps.forEach((l, i) => {
     const P = new THREE.Vector3(...l.pos);
-    const e = { id: l.id, index: l.index ?? i, kind: l.kind, position: P, lit: l.lit !== false, failing: !!l.failing };
+    const e = { id: l.id, index: l.index ?? i, kind: l.kind, position: P, lit: l.lit !== false, failing: !!l.failing,
+      base: l.base ? new THREE.Vector3(l.base[0], l.base[1], l.base[2]) : null };
     if (l.kind === 'cobra') {
       const src = LAMP.cobra;
       e.color = src.color.clone();
@@ -394,7 +440,14 @@ export async function loadWorld({ renderer, scene, quality = 'high', onProgress,
     halos.instanceMatrix.needsUpdate = true;
   }
   root.add(halos);
+  skipOverridePasses(halos);   // not a surface: keep the quads out of GTAO / depth prepasses
+  halos.userData.noAO = true;
   const haloK = { cobra: 0.016, lantern: 0.03 };
+
+  // volumetric lamp light (gfx pass 2026-10-16): cones under the cobra heads, glow domes at the lit lanterns
+  const volumes = buildVolumes(lamps, { groundY: (x, z, f) => groundH.y(x, z, f), quality });
+  root.add(volumes.mesh);
+  reflSkip.push(volumes.mesh);
 
   // lit-window spill on the sidewalk (fake layer only, no pool slot)
   const winSpill = [];
@@ -526,6 +579,7 @@ export async function loadWorld({ renderer, scene, quality = 'high', onProgress,
       halos.setColorAt(i, haloCol);
     }
     if (halos.instanceColor) halos.instanceColor.needsUpdate = true;
+    volumes.update(t);
     if (reflection.enabled && camera) reflection.render(camera);
   }
 
@@ -533,6 +587,10 @@ export async function loadWorld({ renderer, scene, quality = 'high', onProgress,
   const reflection = makeReflection(renderer, scene, shared, groundY, reflSkip);
   reflection.enabled = quality === 'high';
   shared.uReflOn.value = reflection.enabled ? 1 : 0;
+  shared.uRipple.value = quality === 'low' ? 0 : 1;   // puddle rain ripples (not on phones)
+  // low tier (phones): facade weathering from the baked maps only, no kit weathering noise
+  shared.uWeatherK.value = quality === 'low' ? 0 : 1;
+  shared.uWeatherLo.value = quality === 'low' ? 1 : 0;
 
   function setHaloStrength(cobra = 0.016, lantern = 0.03) { haloK.cobra = cobra; haloK.lantern = lantern; }
 
@@ -542,6 +600,10 @@ export async function loadWorld({ renderer, scene, quality = 'high', onProgress,
     fakeMax = q === 'low' ? 12 : FAKE_MAX;
     reflection.enabled = q === 'high';
     shared.uReflOn.value = reflection.enabled ? 1 : 0;
+    volumes.setQuality(q);
+    shared.uRipple.value = q === 'low' ? 0 : 1;
+    shared.uWeatherK.value = q === 'low' ? 0 : 1;
+    shared.uWeatherLo.value = q === 'low' ? 1 : 0;
   }
 
   // the world adds itself to the scene (the lead may re-parent world.root). No shader warm-up here: main.js compiles
@@ -550,9 +612,9 @@ export async function loadWorld({ renderer, scene, quality = 'high', onProgress,
   if (onProgress) onProgress(1);
 
   const stats = { kitTris, groundTris, instances: merged.placed, meshes: kitGroup.children.length + groundSrc.length + 2,
-    lamps: lamps.length, litWindows: winSpill.length };
+    lamps: lamps.length, litWindows: winSpill.length, weatherMs: Math.round(weatherMs) };
   const world = {
-    root, anchors, lights, update, setQuality, setHaloStrength, halos, groundY, surfaceY, ground: groundH, flickerTimes: FLICKER_EPISODES, flickerEvents: FLICKER_EVENTS, flickerAt, linings,
+    root, anchors, lights, update, setQuality, setHaloStrength, halos, volumes, groundY, surfaceY, ground: groundH, flickerTimes: FLICKER_EPISODES, flickerEvents: FLICKER_EVENTS, flickerAt, linings,
     recommendedExposure: RECOMMENDED_EXPOSURE, envMap, sky, shared, data, stats, reflection, lamps,
     dispose() { draco.dispose(); reflection.dispose(); if (ownPool) scene.remove(pool.group); },
   };

@@ -60,6 +60,17 @@ export function makeStory({ scene, world, props, cast, pool, quality, renderer, 
   const photoP = (props && props.anchors && props.anchors.familyPhoto) ? props.anchors.familyPhoto.position.clone() : V(6.95, 1.9, 4.24);
   const photoKey = spot('photoKey', 0xffc890, 4.0, 0.22, 0.6, V(photoP.x + 1.9, photoP.y + 0.55, photoP.z - 1.25), photoP);
   const herRim = spot('herRim', 0x9fb6e8, 4.5, 0.62, 0.85, V(5.78, 2.15, 3.62 + 0.25 * MARKS.homeownerSide), V(R.x + 0.05, 0.98, R.z));
+  // head-riding keys (lateUpdate): herKey on the homeowner in scare three, faceRim re-aimed at the screamer at 59-60 s
+  const HER_KEY = 10.0, HER_KEY_RANGE = 1.65, SCREAMER_FILL = 2.2;
+  const herKeyPos = herKey.position.clone(), herKeyTgt = herKey.target.position.clone(), herRimTgt = herRim.target.position.clone();
+  const faceRimPos = faceRim.position.clone(), faceRimTgt = faceRim.target.position.clone();
+  const _hp = new THREE.Vector3(), _toCam = new THREE.Vector3(), _left = new THREE.Vector3(), _Y = new THREE.Vector3(0, 1, 0);
+  // a key around a head as the camera sees it: `side` m to camera-left, `front` m toward the camera, `up` m above
+  const keyAround = (head, camera, side, front, up, out) => {
+    _toCam.copy(camera.position).sub(head); _toCam.y = 0; _toCam.normalize();
+    _left.crossVectors(_toCam, _Y);
+    return out.copy(head).addScaledVector(_left, side).addScaledVector(_toCam, front).addScaledVector(_Y, up);
+  };
 
   // ---- the victim's breath fog in the cold (exterior POV, and faintly inside car A)
   const breathTimes = (shots && shots.breaths) ? shots.breaths : [];
@@ -125,10 +136,12 @@ export function makeStory({ scene, world, props, cast, pool, quality, renderer, 
       const c2 = smooth(CUES.shotC2 - 0.05, CUES.shotC2, t) * (1 - smooth(CUES.shotC3 - 0.05, CUES.shotC3, t));
       if (c2 > 0) { const sc = scarecrowAt(t); scRim.target.position.set(sc.x, 1.25, sc.z); scRim.position.set(sc.x - 0.9, 3.0, sc.z + 4.2); }
       scRim.intensity = 9.0 * c2;
+      // (tried 2026-10-16: re-aiming this idle spot as a street bounce into car B's underbody. In front of the lens it
+      // mirrors in the wet street as a glare dot; from behind or off frame it barely shows on the dark underside)
       // scare one
       const s1 = smooth(CUES.windowSmash - 0.4, CUES.windowSmash, t) * (1 - smooth(33.4, 33.6, t));
-      wreckKey.intensity = 6.0 * s1;
-      wreckRim.intensity = 7.0 * smooth(CUES.shotC3, CUES.windowSmash, t) * (1 - smooth(33.4, 33.6, t));
+      wreckKey.intensity = 16.0 * s1;
+      wreckRim.intensity = 10.0 * smooth(CUES.shotC3, CUES.windowSmash, t) * (1 - smooth(33.4, 33.6, t));
       // scare two
       const u = smooth(36.0, 37.0, t) * (1 - smooth(52.4, 52.5, t));
       legKey.intensity = 3.2 * u;
@@ -153,10 +166,51 @@ export function makeStory({ scene, world, props, cast, pool, quality, renderer, 
       } else phoneGlow.intensity = 0;
       // scare three
       // the door window's cold street light from above our shoulder is her key (deep eye sockets); the lamp rims her
+      // (tried 2026-10-16: a hotter lamp key only lit the wall behind her; a re-aimed backlight barely showed from the floor)
       const r = smooth(CUES.sofaSlip, CUES.creak3, t) * (t < CUES.cutToBlack ? 1 : 0);
       herKey.intensity = 2.6 * r;
       photoKey.intensity = 2.2 * smooth(CUES.slideDown, CUES.lookPhoto, t) * (1 - smooth(CUES.reveal3, CUES.attack3, t));
-      herRim.intensity = (3.0 + 4.0 * smooth(CUES.creak3, CUES.reveal3, t)) * r;
+      // (the graphics pass's skin detail needs modelling, not flat front light: the door-window light was 3 + 4)
+      herRim.intensity = (1.8 + 2.4 * smooth(CUES.creak3, CUES.reveal3, t)) * r;
+    },
+    // after choreo has posed the cast for t (main.js): keys that ride an actor's head
+    lateUpdate(t, camera) {
+      // scare three: the lamp-side key becomes a narrow warm cone on her head from camera left, ~1.2 m off her face and
+      // a little above it, so the new skin reads with real shape (it was a broad cone that lit the wall behind her)
+      const ho = cast && cast.actors.homeowner;
+      if (ho && ho.visible && t >= CUES.sofaSlip && t < CUES.cutToBlack) {
+        ho.root.updateMatrixWorld(true);
+        ho.rig.worldPos('head', _hp);
+        keyAround(_hp, camera, 1.0, 0.55, 0.35, herKey.position);
+        herKey.target.position.copy(_hp);
+        herKey.angle = 0.3; herKey.penumbra = 0.7; herKey.distance = HER_KEY_RANGE; // no shadow: fade out just past her face, before the wall
+        herKey.intensity = HER_KEY * smooth(CUES.sofaSlip, CUES.creak3, t);
+        // the door-window light narrows onto her head and follows it into the lunge (wide, it lit the wall behind her
+        // brighter than her: wall luminance 65 -> 45 at the reveal, face unchanged)
+        herRim.target.position.copy(_hp); herRim.angle = 0.28; herRim.penumbra = 0.55;
+      } else {
+        herKey.position.copy(herKeyPos); herKey.target.position.copy(herKeyTgt);
+        herKey.angle = 0.5; herKey.penumbra = 0.8; herKey.distance = 5;
+        herRim.target.position.copy(herRimTgt); herRim.angle = 0.62; herRim.penumbra = 0.85;
+      }
+      herKey.target.updateMatrixWorld();
+      herRim.target.updateMatrixWorld();
+      // the screamer on the 3605 stoop (59.2-60.4) was a backlit silhouette: a faint warm porch fill on her face from
+      // camera left (faceRim: same colour, idle after scare two)
+      const sc = cast && cast.actors.screamer;
+      const sw = smooth(59.0, 59.4, t) * (1 - smooth(60.2, 60.6, t));
+      if (sc && sc.visible && sw > 0) {
+        sc.root.updateMatrixWorld(true);
+        sc.rig.worldPos('head', _hp);
+        keyAround(_hp, camera, 1.1, 0.5, 0.15, faceRim.position);
+        faceRim.target.position.copy(_hp);
+        faceRim.angle = 0.45; faceRim.distance = 4;
+        faceRim.intensity = SCREAMER_FILL * sw;
+      } else {
+        faceRim.position.copy(faceRimPos); faceRim.target.position.copy(faceRimTgt);
+        faceRim.angle = 0.4; faceRim.distance = 8;
+      }
+      faceRim.target.updateMatrixWorld();
     },
   };
 }

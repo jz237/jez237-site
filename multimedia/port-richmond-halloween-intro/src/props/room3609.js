@@ -8,8 +8,10 @@ import { HERO, placeOnKit, kitRotY } from './site.js';
 import { CUES } from '../film/cues.js';
 import { box, rbox, cyl, merge, wallWithHoles, xform, rod, mergeStatic } from './geo.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { wallpaperTexture, plasterTexture, woodFloorTexture, rugTexture } from './textures.js';
-import { furnitureMaterials, sofa, armchair, coffeeTable, endTable, tableLamp, flatTV, tvStand, radiator, photoFrame, laceCurtain, doubleHungWindow } from './furniture.js';
+import { roomTextures, glowTexture, flatTexture, PHOTO_CELLS } from './textures_interior.js';
+import { wallpaperMaterial, ceilingMaterial, floorMaterial } from './room3609_surfaces.js';
+import { buildDressing3609, dressFurniture3609 } from './room3609_dress.js';
+import { furnitureMaterials, sofa, armchair, coffeeTable, endTable, tableLamp, flatTV, tvStand, radiator, laceCurtain, doubleHungWindow } from './furniture.js';
 import { kelvinRGB, smoothstep } from './util.js';
 import { interiorize } from './interior.js';
 
@@ -56,6 +58,11 @@ function buildFamilyPhoto(ctx, L) {
     box(b, H, 0.026, -W / 2 - b / 2, 0, 0.013), box(b, H, 0.026, W / 2 + b / 2, 0, 0.013), box(W + 0.01, H + 0.01, 0.006, 0, 0, 0.003)]), fm.frameWood);
   frame.castShadow = true; frame.receiveShadow = true; frame.name = 'FamilyPhotoFrame';
   g.add(frame);
+  // (INTERIOR gfx) a worn gilt lip between the dark frame and the mat
+  const lip = 0.008;
+  const lipMesh = new THREE.Mesh(merge([box(W, lip, 0.004, 0, H / 2 - lip / 2, 0.0098), box(W, lip, 0.004, 0, -H / 2 + lip / 2, 0.0098),
+    box(lip, H - 2 * lip, 0.004, -W / 2 + lip / 2, 0, 0.0098), box(lip, H - 2 * lip, 0.004, W / 2 - lip / 2, 0, 0.0098)]), fm.frameGold);
+  lipMesh.name = 'FamilyPhotoLip'; g.add(lipMesh);
   const matMesh = new THREE.Mesh(new THREE.PlaneGeometry(W, H), new THREE.MeshStandardMaterial({ name: 'PhotoMat', color: 0xe8dfcc, roughness: 0.9 }));
   matMesh.position.z = 0.0075; g.add(matMesh);
   const picMat = new THREE.MeshStandardMaterial({ name: 'FamilyPhotoPrint', map: photoPlaceholder(), roughness: 0.35 });
@@ -82,7 +89,11 @@ function buildFamilyPhoto(ctx, L) {
         tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
         const ia = tex.image.width / tex.image.height, fa = pw / ph;   // cover-fit into the mat opening
         if (ia > fa) { tex.repeat.set(fa / ia, 1); tex.offset.set((1 - fa / ia) / 2, 0); } else { tex.repeat.set(1, ia / fa); tex.offset.set(0, (1 - ia / fa) / 2); }
-        picMat.map = tex; picMat.needsUpdate = true; state.loaded = true; done(true);
+        // (INTERIOR gfx) interiorize() has replaced picMat by a clone before this callback runs: set the map on the
+        // material the mesh actually renders (before this fix the film always showed the blurred placeholder)
+        for (const mm of new Set([picMat, pic.material])) { mm.map = tex; mm.needsUpdate = true; }
+        state.loaded = true; state.texture = tex; done(true);
+        if (state.onLoad) state.onLoad(tex);
       }, undefined, () => done(false));
     }).catch(() => done(false));
   } else done(false);
@@ -90,23 +101,76 @@ function buildFamilyPhoto(ctx, L) {
   return { group: g, picture: pic, state, size: [W + 2 * b, H + 2 * b] };
 }
 
-export function buildRoom3609(ctx) {
+// (INTERIOR gfx) framed prints from the baked photo atlas (tools/interior/bake_textures.py: 4x2 cells of 256x320):
+// one shared print material and one shared glass material for every frame. `crop` = [v0, v1] window of the cell
+// (landscape frames take a horizontal band). Built facing +Z, picture centred at the origin.
+const ATLAS_COLS = 4, ATLAS_ROWS = 2;
+function atlasFrame(w, h, cell, mats, { gold = false, crop = null, depth = 0.02, border = 0.025, matBoard = 0 } = {}) {
+  const fm = furnitureMaterials();
+  const g = new THREE.Group();
+  const b = border, W = w + 2 * matBoard, Hh = h + 2 * matBoard;
+  const fr = new THREE.Mesh(merge([box(W + 2 * b, b, depth, 0, Hh / 2 + b / 2, 0), box(W + 2 * b, b, depth, 0, -Hh / 2 - b / 2, 0), box(b, Hh, depth, -W / 2 - b / 2, 0, 0), box(b, Hh, depth, W / 2 + b / 2, 0, 0),
+    box(W + 0.004, Hh + 0.004, 0.004, 0, 0, -depth / 2 + 0.002)]), gold ? fm.frameGold : fm.frameWood);
+  fr.castShadow = true; fr.receiveShadow = true;
+  g.add(fr);
+  if (matBoard > 0) {
+    const mb = new THREE.Mesh(new THREE.PlaneGeometry(W, Hh), mats.matBoard);
+    mb.position.z = -depth / 2 + 0.0045; g.add(mb);
+  }
+  const geo = new THREE.PlaneGeometry(w, h);
+  const col = cell % ATLAS_COLS, row = Math.floor(cell / ATLAS_COLS);
+  const [c0, c1] = crop || [0, 1];
+  const uv = geo.attributes.uv;
+  for (let i = 0; i < uv.count; i++) {
+    const u = uv.getX(i), v = c0 + (c1 - c0) * uv.getY(i);
+    uv.setXY(i, (col + u) / ATLAS_COLS, 1 - (row + (1 - v)) / ATLAS_ROWS);
+  }
+  const pic = new THREE.Mesh(geo, mats.print);
+  pic.position.z = -depth / 2 + 0.005; pic.receiveShadow = true;
+  g.add(pic);
+  const glass = new THREE.Mesh(new THREE.PlaneGeometry(W, Hh), mats.glass);
+  glass.position.z = depth / 2 - 0.004; glass.renderOrder = 3;
+  g.add(glass);
+  return g;
+}
+
+export async function buildRoom3609(ctx) {
   const { XL, XR, FW, BW, H } = ROOM3609;
   const it = HERO.door3609;
   const group = new THREE.Group();
   group.name = 'Room3609';
   placeOnKit(group, it);
   const fm = furnitureMaterials();
+  const T = await roomTextures();   // baked in tools/interior/bake_textures.py; downloads started at boot
 
   // ---- materials ----
-  const wpTex = wallpaperTexture().clone(); wpTex.needsUpdate = true; wpTex.repeat.set(1 / 0.62, 1 / 0.62);
-  const wallpaper = new THREE.MeshStandardMaterial({ name: 'Wallpaper3609', map: wpTex, roughness: 0.85, side: THREE.FrontSide });
-  const plTex = plasterTexture('plaster3609', '#d9d2c2').clone(); plTex.needsUpdate = true; plTex.repeat.set(0.6, 0.6);
-  const ceilingMat = new THREE.MeshStandardMaterial({ name: 'Ceiling3609', map: plTex, roughness: 0.95 });
-  const flTex = woodFloorTexture().clone(); flTex.needsUpdate = true; flTex.repeat.set(1, 1);
-  const floorMat = new THREE.MeshStandardMaterial({ name: 'Floor3609', map: flTex, roughness: 0.42 });
-  const rugMat = new THREE.MeshStandardMaterial({ name: 'Rug3609', map: rugTexture(), roughness: 0.97 });
-  const trim = fm.paintWhite;
+  // (INTERIOR gfx) vintage rose-stripe paper in 0.53 m strips, aged by position in room3609_surfaces.js
+  let wpTex;
+  if (T.wallpaper) { wpTex = T.wallpaper.clone(); wpTex.repeat.set(1 / 0.53, 1 / 0.53); } else { wpTex = flatTexture('#8a7a5c').clone(); }
+  wpTex.needsUpdate = true;
+  const wallpaper = wallpaperMaterial({ map: wpTex, room: ROOM3609, quality: ctx.quality });
+  // (INTERIOR gfx) old flat-painted plaster with hairline cracks (1.2 m tile), stains + yellowing by position
+  let plTex;
+  if (T.plaster) { plTex = T.plaster.clone(); plTex.repeat.set(1 / 1.2, 1 / 1.2); } else { plTex = flatTexture('#c8c0b0').clone(); }
+  plTex.needsUpdate = true;
+  const ceilingMat = ceilingMaterial({ map: plTex, room: ROOM3609, quality: ctx.quality });
+  // (INTERIOR gfx) worn oak strips (baked), dust along the baseboards + a worn traffic lane (room3609_surfaces.js)
+  const flTex = (T.floor || flatTexture('#6a4a30')).clone(); flTex.needsUpdate = true; flTex.repeat.set(1, 1);
+  const floorMat = floorMaterial({ map: flTex, room: ROOM3609, quality: ctx.quality });
+  const rugMat = new THREE.MeshStandardMaterial({ name: 'Rug3609', map: T.rug || flatTexture('#5a2420'), roughness: 0.97 });
+  // (INTERIOR gfx) worn, yellowed oil-paint trim (chips through to old green / bare wood), stained stair treads worn
+  // pale where feet land, and the room's own upholstery (tapestry sofa, velour armchair)
+  let trim = fm.paintWhite;
+  if (T.trim) { const t = T.trim.clone(); t.repeat.set(2, 2); t.needsUpdate = true; trim = new THREE.MeshStandardMaterial({ name: 'TrimWorn3609', map: t, color: 0xffffff, roughness: 0.42 }); }
+  let treadMat = fm.wood;
+  if (T.tread) { const t = T.tread.clone(); t.repeat.set(1 / 0.92, 1 / 0.26); t.needsUpdate = true; treadMat = new THREE.MeshStandardMaterial({ name: 'StairTread3609', map: t, color: 0xffffff, roughness: 0.5 }); }
+  const fabric = (tex, rep, sheen, name, fallback) => {
+    if (!tex) return fallback;
+    const t = tex.clone(); t.repeat.set(rep, rep); t.needsUpdate = true;
+    return new THREE.MeshPhysicalMaterial({ name, color: 0xffffff, map: t, roughness: 0.97, sheen: 1, sheenRoughness: 0.6, sheenColor: new THREE.Color(sheen), specularIntensity: 0.25 });
+  };
+  const sofaMat = fabric(T.sofa, 1 / 0.33, 0x6a5238, 'SofaTapestry3609', fm.sofaFabric);
+  const chairMat = fabric(T.chair, 1 / 0.4, 0x5c4c32, 'ChairVelour3609', fm.chairFabric);
   const darkVoid = new THREE.MeshStandardMaterial({ name: 'Void', color: 0x020202, roughness: 1 });
 
   const shell = [];  // wallpaper surfaces
@@ -195,7 +259,7 @@ export function buildRoom3609(ctx) {
     if (i < st.n - 1) treads.push(box(st.x1 - st.x0, 0.03, st.run + 0.025, (st.x0 + st.x1) / 2, y - 0.015, zf - st.run / 2 + 0.0125));
     risers.push(box(st.x1 - st.x0, st.rise, 0.02, (st.x0 + st.x1) / 2, y - st.rise / 2, zf + 0.01));
   }
-  add(merge(treads), fm.wood, { name: 'StairTreads3609' });
+  add(merge(treads), treadMat, { name: 'StairTreads3609' });
   add(merge(risers), trim, { name: 'StairRisers3609' });
   // closed side under the stairs (triangular skirt wall) + stringer
   const sk = new THREE.Shape();
@@ -258,11 +322,21 @@ export function buildRoom3609(ctx) {
   // ~0.67 m crawl gap to the right (3607 party) wall; the hidden strip is the floor in front of the seat; the lamp
   // stands at the far (left) end and rakes across toward the right wall; the family photo hangs on the right wall.
   const LAY = ROOM3609_LAYOUT;
-  const sofaG = sofa(LAY.sofa.len); sofaG.scale.set(1, LAY.sofa.yScale, 1.06);
+  const sofaG = sofa(LAY.sofa.len, sofaMat, chairMat); sofaG.scale.set(1, LAY.sofa.yScale, 1.06);
   sofaG.position.set(LAY.sofa.x, 0, LAY.sofa.z); sofaG.rotation.y = Math.PI; group.add(sofaG);
   const endT = endTable(0.5, 0.62); endT.position.set(LAY.lamp.x, 0, LAY.lamp.z); group.add(endT);
-  const lamp = tableLamp(); lamp.group.scale.setScalar(1.12); lamp.group.position.set(LAY.lamp.x, 0.62, LAY.lamp.z); group.add(lamp.group);
+  const lamp = tableLamp(T.lampshadeGlow ? { shadeMap: T.lampshade, glowMap: T.lampshadeGlow, glowDisc: glowTexture() } : {});
+  lamp.group.scale.setScalar(1.12); lamp.group.position.set(LAY.lamp.x, 0.62, LAY.lamp.z); group.add(lamp.group);
   const lampBulbLocal = lamp.bulb.clone().multiplyScalar(1.12).add(lamp.group.position);
+  // (INTERIOR gfx) the shade throws a hot circle of light on the ceiling through its open top (the real point light
+  // is unshaded, so it can't): an additive card just under the ceiling, centred over the lamp
+  let ceilPool = null;
+  if (T.lampshadeGlow) {
+    const poolMat = new THREE.MeshBasicMaterial({ name: 'LampCeilingPool', map: glowTexture('room3609_pool', { inner: 0.18, falloff: 1.8 }), color: new THREE.Color(1.0, 0.62, 0.32).multiplyScalar(0.22), transparent: true, blending: THREE.AdditiveBlending, depthWrite: false });
+    ceilPool = new THREE.Mesh(new THREE.PlaneGeometry(2.5, 2.5).rotateX(Math.PI / 2), poolMat);
+    ceilPool.position.set(LAY.lamp.x, H - 0.004, LAY.lamp.z); ceilPool.renderOrder = 2; ceilPool.name = 'LampCeilingPool';
+    group.add(ceilPool);
+  }
   const ct = coffeeTable(1.1, 0.55, 0.43); ct.position.set(LAY.coffee.x, 0, LAY.coffee.z); group.add(ct);
   const rugGeo = new THREE.PlaneGeometry(LAY.rug.w, LAY.rug.d); rugGeo.rotateX(-Math.PI / 2);
   const rug = new THREE.Mesh(rugGeo, rugMat); rug.position.set(LAY.rug.x, 0.004, LAY.rug.z); rug.receiveShadow = true; rug.name = 'Rug3609'; group.add(rug);
@@ -270,16 +344,27 @@ export function buildRoom3609(ctx) {
   // from the door to the kitchen doorway (R2)
   const stand = tvStand(1.0, 0.42, 0.5); stand.position.set(LAY.tv.x, 0, LAY.tv.z); stand.rotation.y = LAY.tv.yaw; group.add(stand);
   const tv = flatTV(); tv.group.position.set(LAY.tv.x, 0.5 + tv.group.userData.standOffset, LAY.tv.z); tv.group.rotation.y = LAY.tv.yaw; group.add(tv.group);
-  const chair = armchair(); chair.position.set(LAY.chair.x, 0, LAY.chair.z); chair.rotation.y = LAY.chair.yaw; group.add(chair);
+  const chair = armchair(chairMat); chair.position.set(LAY.chair.x, 0, LAY.chair.z); chair.rotation.y = LAY.chair.yaw; group.add(chair);
   const rad = radiator(0.76, 0.62); rad.position.set(xa, 0, FW - 0.11); group.add(rad);
-  // other framed photos: climbing the stair wall (left), one on the TV stand
+  // other framed photos (INTERIOR gfx: real-looking vintage prints from the baked atlas, under glass): the wedding
+  // and the shore holiday climbing the stair wall, the Sacred Heart print by the armchair, a grandchild's school
+  // picture on the TV stand, the late husband's Navy portrait standing on the end table under the lamp
+  const photoMats = {
+    print: new THREE.MeshStandardMaterial({ name: 'RoomPhotos', map: T.photos || null, color: T.photos ? 0xffffff : 0x8a7a66, roughness: 0.45 }),
+    glass: new THREE.MeshPhysicalMaterial({ name: 'PhotoGlass', color: 0xffffff, roughness: 0.04, metalness: 0, transparent: true, opacity: 0.07, depthWrite: false, envMapIntensity: 1.4 }),
+    matBoard: new THREE.MeshStandardMaterial({ name: 'PhotoMat', color: 0xe8dfcc, roughness: 0.9 }),
+  };
   const frames = [
-    [0.3, 0.4, 4, XL + 0.012, 1.75, -3.9, Math.PI / 2], [0.4, 0.3, 5, XL + 0.012, 2.25, -4.9, Math.PI / 2], [0.26, 0.34, 3, XL + 0.012, 1.55, -1.6, Math.PI / 2],
+    [0.24, 0.32, PHOTO_CELLS.wedding, XL + 0.012, 1.75, -3.9, Math.PI / 2, { matBoard: 0.04 }],
+    [0.4, 0.3, PHOTO_CELLS.shore, XL + 0.012, 2.25, -4.9, Math.PI / 2, { crop: [0.2, 0.8] }],
+    [0.22, 0.28, PHOTO_CELLS.sacredHeart, XL + 0.014, 1.57, -1.6, Math.PI / 2, { gold: true, border: 0.03, matBoard: 0.02 }],
   ];
-  for (const [w, h, s, x, y, z, ry] of frames) { const f = photoFrame(w, h, s, s === 2); f.position.set(x, y, z); f.rotation.y = ry; group.add(f); }
-  const smallFrame = photoFrame(0.13, 0.18, 6, true);
+  for (const [w, h, cell, x, y, z, ry, o] of frames) { const f = atlasFrame(w, h, cell, photoMats, o); f.position.set(x, y, z); f.rotation.y = ry; group.add(f); }
+  const smallFrame = atlasFrame(0.13, 0.17, PHOTO_CELLS.school, photoMats, { gold: true, border: 0.018, depth: 0.016 });
   smallFrame.position.copy(new THREE.Vector3(-0.32, 0.5 + 0.11, 0.05).applyAxisAngle(new THREE.Vector3(0, 1, 0), LAY.tv.yaw).add(new THREE.Vector3(LAY.tv.x, 0, LAY.tv.z)));
   smallFrame.rotation.set(-0.12, LAY.tv.yaw + 0.3, 0); group.add(smallFrame);
+  const navy = atlasFrame(0.12, 0.16, PHOTO_CELLS.navy, photoMats, { border: 0.016, depth: 0.014 });
+  navy.position.set(LAY.lamp.x + 0.15, 0.62 + 0.094, LAY.lamp.z + 0.12); navy.rotation.set(-0.2, 0.98, 0, 'YXZ'); group.add(navy);
   // THE family photo (scare three, R4): right wall, readable from the floor at the door; glass with a faint reflection
   const fp = buildFamilyPhoto(ctx, LAY.photo);
   fp.group.position.set(XR - 0.003, LAY.photo.y, LAY.photo.z); fp.group.rotation.y = -Math.PI / 2; group.add(fp.group);
@@ -300,6 +385,10 @@ export function buildRoom3609(ctx) {
 
   // the candy bowl lives on the coffee table (filled by the candy module through api.candyBowlAnchor)
   const candyBowlLocal = new THREE.Vector3(LAY.coffee.x + 0.18, 0.43, LAY.coffee.z + 0.04);
+  // (INTERIOR gfx) set dressing (room3609_dress.js): end-table clutter, remote + mug, the afghan, crucifix, calendar
+  const dress = buildDressing3609({ T, LAY, room: ROOM3609, stair: st, rugMat });
+  group.add(dress.group);
+  const laceMeshes = T.doily ? dressFurniture3609({ chair, sofa: sofaG, lace: dress.materials.lace, sofaLen: LAY.sofa.len }) : [];
 
   // ---- the doorway's own windows (sashes + glass), the game kit also has WinDH_M here ----
   const glassMat = new THREE.MeshPhysicalMaterial({ name: 'Glass3609', color: 0xe4ecef, roughness: 0.04, transparent: true, opacity: 0.16, depthWrite: false, envMapIntensity: 1.2 });
@@ -328,7 +417,9 @@ export function buildRoom3609(ctx) {
     lamp3609.shadow.camera.near = 0.08;
     lamp3609.shadow.camera.far = 10;
   }
-  const LAMP_CD = 22; // candela-ish (60-75 W bulb behind a shade); scaled by api.lightScale
+  // candela-ish (60-75 W bulb behind a shade); scaled by api.lightScale. (INTERIOR gfx) 22 -> 9.5: the old value was
+  // calibrated while GTAO's bogus occlusion (the shadow-proxy bug, see below) darkened the lit room 3.5-6.5x
+  const LAMP_CD = 9.5;
 
   // street spill (cold) through the front windows during the refuge sequence: pool spot source
   group.updateMatrixWorld(true);
@@ -341,7 +432,7 @@ export function buildRoom3609(ctx) {
     // priority (the world's fake-lamp layer keeps every street lamp lit when it loses its real slot).
     { id: 'room3609_streetSpill', kind: 'spot', position: spillPos, target: spillTarget, color: new THREE.Color(...kelvinRGB(6500)).multiplyScalar(0.9), intensity: 6, distance: 12, decay: 2, angle: 0.42, penumbra: 0.6, priority: 400, wantsShadow: true,
       enabledAt: (t) => t > CUES.runForDoor + 1 && t < CUES.cutToBlack + 0.1 },
-    { id: 'room3609_fill', kind: 'point', position: fillPos, color: new THREE.Color(...kelvinRGB(3000)), intensity: 1.3, distance: 6.5, decay: 2, priority: 600,
+    { id: 'room3609_fill', kind: 'point', position: fillPos, color: new THREE.Color(...kelvinRGB(3000)), intensity: 0.3, distance: 6.5, decay: 2, priority: 600,
       enabledAt: (t) => t > CUES.doorEnter - 0.5 && t < CUES.cutToBlack + 0.1 },
   ];
 
@@ -381,7 +472,13 @@ export function buildRoom3609(ctx) {
   }
 
   // interior lighting: no outdoor sky fill inside (practicals carry the room); then batch the static meshes
+  group.updateMatrixWorld(true);
+  const dressBoxesWorld = dress.boxes.map(({ name, box: b }) => ({ name, box: b.clone().applyMatrix4(group.matrixWorld) }));
+  for (const m of laceMeshes) dressBoxesWorld.push({ name: m.name, box: new THREE.Box3().setFromObject(m) });
   interiorize(group, 0.2);
+  // the shade's emissive is driven per frame: drive the (interiorized clone) material the mesh renders
+  const shadeLive = lamp.shade.material !== fm.shadeGlow ? lamp.shade.material : null;
+  const shadeBase = shadeLive ? shadeLive.emissiveIntensity : 0;
   kitchen.userData.noMerge = true;
   mergeStatic(kitchen);
   mergeStatic(group);
@@ -408,6 +505,16 @@ export function buildRoom3609(ctx) {
   proxy.frustumCulled = false;
   proxy.castShadow = true;
   group.add(proxy);
+  // (INTERIOR gfx) THE SOFA/ARMCHAIR SPARKLE FIX. The proxy (and the front skin) exist for the shadow maps only, but
+  // they were also drawn in every normal render. Harmless in the main pass (no colour/depth writes), not in GTAO's
+  // normal/depth pass: its override material ignores colorWrite/depthWrite, so the normal-less duplicate of the whole
+  // room z-fought the real furniture and walls there (sawtooth stripes + false, near-black occlusion on everything lit
+  // by the lamp). three calls onBeforeRender for normal renders but not for shadow-map renders (onBeforeShadow), so an
+  // empty draw range here keeps them in the shadow maps only (and saves a full-room draw per frame and pass).
+  for (const m of [proxy, fskMesh]) {
+    m.onBeforeRender = () => { m.geometry.drawRange.count = 0; };
+    m.onAfterRender = () => { m.geometry.drawRange.count = Infinity; };
+  }
   let castersOn = true;
   const setCasters = (on) => { if (on === castersOn) return; castersOn = on; proxy.castShadow = on; };
   // portal culling: the room is only drawn when the camera is inside or can see the doorway / an open window
@@ -469,11 +576,14 @@ export function buildRoom3609(ctx) {
       lampIntensityAt(t) { return LAMP_CD * lightScale; },
       candyBowlLocal,
       photoReady: fp.state.ready,
+      // new set dressing bounds (world space) for the sight-line / crawl-path probe (tools/interior/probe.mjs)
+      dressBoxes: dressBoxesWorld,
     },
     update(t, camera) {
       // stable warm lamp; a tiny filament wobble only
       lamp3609.intensity = LAMP_CD * lightScale * (1 + 0.01 * Math.sin(t * 7.3));
       fm.shadeGlow.emissiveIntensity = 0.55 * lightScale;
+      if (shadeLive) shadeLive.emissiveIntensity = shadeBase * lightScale;
       cull(t, camera);
       setCasters(t > CUES.runForDoor && t < CUES.cutToBlack + 0.5);
       // the cube shadow map is re-rendered only during the refuge sequence (and once when entering a frozen span)

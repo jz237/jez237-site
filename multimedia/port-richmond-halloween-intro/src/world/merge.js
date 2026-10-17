@@ -21,7 +21,7 @@ function lin2srgbByte(c) {
 
 const GROUP_ATTRS = {
   opaque: { uv: false, albedo: true, metal: true },
-  glass: { uv: true, albedo: true, lit: true },
+  glass: { uv: true, albedo: true, lit: true, win: true },
   lamp: { uv: false, lamp: true },
   leaves: { uv: true, wind: true },
   weeds: { uv: true, wind: true },
@@ -66,7 +66,11 @@ class Builder {
     const nor = new Float32Array(nv * 3);
     const uv = A.uv ? new Float32Array(nv * 2) : null;
     const alb = A.albedo ? new Uint8Array(nv * 4) : null;
-    const met = A.metal ? new Uint8Array(nv * 2) : null;
+    // metalFlag: x metalness, y emissive, z 1 = vehicle (no rust / facade grime), w per-instance random (weathering)
+    const met = A.metal ? new Uint8Array(nv * 4) : null;
+    // winInfo (window glazing only): xyz = the opening's pivot (hole bottom centre on the wall face), w = pane width
+    // (0 = not a window, e.g. car glass): the glass shader builds a room behind every window from it
+    const win = A.win ? new Float32Array(nv * 4) : null;
     const lit = A.lit ? new Uint8Array(nv * 4) : null;
     const lamp = A.lamp ? new Float32Array(nv) : null;
     const wind = A.wind ? new Uint8Array(nv * 4) : null;
@@ -128,7 +132,16 @@ class Builder {
       if (met) {
         const m = Math.round(Math.max(0, Math.min(1, info.metal)) * 255);
         const em = Math.round(Math.max(0, Math.min(1, info.emis || 0)) * 255);
-        for (let i = 0; i < cnt; i++) { met[(vo + i) * 2] = m; met[(vo + i) * 2 + 1] = em; }
+        const car = info.car ? 255 : 0;
+        const rnd = Math.round(Math.max(0, Math.min(1, info.rnd || 0)) * 255);
+        for (let i = 0; i < cnt; i++) { const w = (vo + i) * 4; met[w] = m; met[w + 1] = em; met[w + 2] = car; met[w + 3] = rnd; }
+      }
+      if (win) {
+        const W = info.win;
+        for (let i = 0; i < cnt; i++) {
+          const w = (vo + i) * 4;
+          if (W) { win[w] = W[0]; win[w + 1] = W[1]; win[w + 2] = W[2]; win[w + 3] = W[3]; }
+        }
       }
       if (lit) {
         const L = info.lit;
@@ -155,7 +168,8 @@ class Builder {
     g.setAttribute('normal', new THREE.BufferAttribute(nor, 3));
     if (uv) g.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
     if (alb) g.setAttribute('albedoRough', new THREE.BufferAttribute(alb, 4, true));
-    if (met) g.setAttribute('metalFlag', new THREE.BufferAttribute(met, 2, true));
+    if (met) g.setAttribute('metalFlag', new THREE.BufferAttribute(met, 4, true));
+    if (win) g.setAttribute('winInfo', new THREE.BufferAttribute(win, 4));
     if (lit) g.setAttribute('litColor', new THREE.BufferAttribute(lit, 4, true));
     if (lamp) g.setAttribute('lampId', new THREE.BufferAttribute(lamp, 1));
     if (wind) g.setAttribute('wind', new THREE.BufferAttribute(wind, 4, true));
@@ -205,6 +219,8 @@ export function mergeInstances(lib, data, { dropDetail = false, farAll = false, 
     const matrix = new THREE.Matrix4().compose(p, q, s);
     const cell = cellOf(pz);
     const piSlot = data.piSlot[name] ?? data.piSlot[name.replace(/__far$/, '')];
+    const isCar = data.kinds[ki] === 'car';
+    const rnd = ((Math.sin((px * 12.9898 + pz * 78.233 + py * 37.719) * 0.7) * 43758.5453) % 1 + 1) % 1;
     for (const prim of prims) {
       const slot = data.slots[prim.slot] || data.slots.none || { rgb: [0.5, 0.5, 0.5], rough: 0.7, metal: 0, group: 'opaque' };
       let group = slot.group || 'opaque';
@@ -217,11 +233,17 @@ export function mergeInstances(lib, data, { dropDetail = false, farAll = false, 
       const rgb = (piSlot && prim.slot === piSlot && col) ? col : slot.rgb;
       // window glazing is flat and faces the street: one normal per pane (robust to decimated far LODs)
       let flatN = null;
+      let win = null;
       if (prim.slot === 'M_FX_GlassInterior' || prim.slot === 'M_Window_Glass') {
         fwd.set(0, 0, -1).applyQuaternion(q);
         flatN = [fwd.x, fwd.y, fwd.z];
+        if (!isCar) {
+          if (!prim.geometry.boundingBox) prim.geometry.computeBoundingBox();
+          const bb = prim.geometry.boundingBox;
+          win = [px, py, pz, Math.max(0.3, (bb.max.x - bb.min.x) * Math.abs(sx))];
+        }
       }
-      b.add(prim.geometry, matrix, { rgb, rough: slot.rough, metal: slot.metal, emis: slot.emis, lamp: lamp ?? -1, lit, flatN });
+      b.add(prim.geometry, matrix, { rgb, rough: slot.rough, metal: slot.metal, emis: slot.emis, lamp: lamp ?? -1, lit, flatN, car: isCar, rnd, win });
       tris += (prim.geometry.index ? prim.geometry.index.count : prim.geometry.attributes.position.count) / 3;
     }
     placed++;

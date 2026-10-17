@@ -150,7 +150,7 @@ export function addBuzz(actorRoot, style = {}) {
   if (flat) { g.setAttribute('hflow', new THREE.BufferAttribute(FL, 3)); g.setAttribute('hside', new THREE.BufferAttribute(SD, 3)); }
   g.setIndex(new THREE.BufferAttribute(I, 1));
   const mat = flat
-    ? new THREE.MeshPhysicalMaterial({ color: style.color ?? 0x1d1a18, roughness: style.roughness ?? 0.42, metalness: 0, clearcoat: style.gloss ?? 0.5, clearcoatRoughness: 0.22, specularIntensity: 0.7 })
+    ? new THREE.MeshPhysicalMaterial({ color: style.color ?? 0x1d1a18, roughness: style.roughness ?? 0.42, metalness: 0, clearcoat: style.gloss ?? 0.5, clearcoatRoughness: 0.22, specularIntensity: 0.5 })
     : new THREE.MeshPhysicalMaterial({ color: style.color ?? 0x2a2622, roughness: style.roughness ?? 0.85, metalness: 0, specularIntensity: style.spec ?? 0.35 });
   const density = style.density ?? 0.62;
   const freq = 1 / (style.cell ?? 0.00085);
@@ -214,7 +214,7 @@ float bhash(vec3 q) { q = fract(q * vec3(0.1031, 0.1030, 0.0973)); q += dot(q, q
         float cf = fract(b / ${glsl(clumpW)});
         float fa = fract(a / ${glsl(clumpW * 2.6)});
         // wet clumps are solid lumps (strands stuck together): round cross-section, tapered shingle ends
-        float clumpH = (0.45 + 0.55 * cid) * sqrt(max(0.0, 1.0 - pow(abs(cf - 0.5) * 2.0, 2.0))) * (0.55 + 0.45 * smoothstep(0.0, 0.35, fa));
+        float clumpH = (0.3 + 0.7 * cid * cid) * sqrt(max(0.0, 1.0 - pow(abs(cf - 0.5) * 2.0, 2.0))) * (0.55 + 0.45 * smoothstep(0.0, 0.35, fa));
         float sb = b / ${glsl(strandW)};
         float sid = floor(sb);
         float sf = fract(sb);
@@ -227,7 +227,7 @@ float bhash(vec3 q) { q = fract(q * vec3(0.1031, 0.1030, 0.0973)); q += dot(q, q
         diffuseColor.rgb *= shade;
         float blood = smoothstep(0.55, 0.95, bhash(vec3(cb, ca, 4.4))) * ${(style.blood ?? 0.6).toFixed(2)};
         diffuseColor.rgb = mix(diffuseColor.rgb, vec3(${tint.r.toFixed(4)}, ${tint.g.toFixed(4)}, ${tint.b.toFixed(4)}), blood);
-        hPert = root ? 0.0 : (sf - 0.5) * 2.0 * w * 1.6;
+        hPert = root ? 0.0 : (sf - 0.5) * 2.0 * w * 0.7; // per-strand jitter low: highlights per wet clump, not glitter
         // each matted clump is a lump with its own tilt (breaks the smooth bald-dome highlight)
         hTiltS = root ? 0.0 : (bhash(vec3(cb, ca, 5.5)) - 0.5) * 0.9 + (cf - 0.5) * 0.8;
         hTiltF = root ? 0.0 : (bhash(vec3(cb, ca, 6.6)) - 0.5) * 0.9 + (fa - 0.5) * 0.6;
@@ -237,6 +237,7 @@ float bhash(vec3 q) { q = fract(q * vec3(0.1031, 0.1030, 0.0973)); q += dot(q, q
     }
   };
   mat.customProgramCacheKey = () => `hairshell-${flat}-${density}-${freq}-${H}-${style.clump}-${style.strand}-${style.rootCover}`;
+  mat.name = 'CreatureHairShell';
   const buzz = new THREE.SkinnedMesh(g, mat);
   buzz.name = style.cap ? 'HairCap' : 'HairBuzz';
   buzz.frustumCulled = false;
@@ -254,34 +255,39 @@ float bhash(vec3 q) { q = fract(q * vec3(0.1031, 0.1030, 0.0973)); q += dot(q, q
 let _lockTex = null;
 function lockTexture() {
   if (_lockTex) return _lockTex;
-  const W = 64, H = 256;
+  // a wet lock as SEPARATE strands with gaps between them (no solid ribbon): strands start spread across the card,
+  // converge toward the tip (wet clumping), taper and end at different lengths; a couple of stray hairs leave the lock
+  const W = 128, H = 256;
   const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
   const g = cv.getContext('2d');
   const img = g.createImageData(W, H);
   const r = rng(99);
-  const col = new Float32Array(W), drift = new Float32Array(W);
-  for (let x = 0; x < W; x++) { const salt = r() < 0.3; col[x] = salt ? 0.9 + 0.1 * r() : 0.22 + 0.45 * r(); if (r() < 0.18) col[x] *= 0.35; drift[x] = (r() - 0.5) * 3; }
-  // separated edge hairs: [u, width(px), length(v)]
-  const edge = [];
-  for (let k = 0; k < 5; k++) edge.push([r() < 0.5 ? 0.06 + r() * 0.12 : 0.82 + r() * 0.12, 0.8 + r() * 0.9, 0.55 + r() * 0.45, (r() - 0.5) * 6]);
+  const S = [];
+  const K = 11;
+  for (let k = 0; k < K; k++) {
+    const salt = r() < 0.3;
+    S.push({
+      u0: (k + 0.5 + (r() - 0.5) * 0.7) / K * 0.92 + 0.04, conv: 0.55 + 0.4 * r(), len: k === 0 || k === K - 1 ? 0.45 + 0.4 * r() : 0.7 + 0.3 * r(),
+      w: 1.3 + 1.6 * r(), wob: r() * 6.28, wf: 5 + 6 * r(), wa: 0.004 + 0.01 * r(),
+      L: salt ? 0.85 + 0.15 * r() : (r() < 0.2 ? 0.12 : 0.25 + 0.45 * r()),
+    });
+  }
+  for (let k = 0; k < 2; k++) S.push({ u0: r() < 0.5 ? 0.03 : 0.97, conv: -0.25 - 0.3 * r(), len: 0.5 + 0.4 * r(), w: 0.9, wob: r() * 6.28, wf: 3, wa: 0.02, L: 0.7, stray: true });
   for (let y = 0; y < H; y++) {
     const v = 1 - y / (H - 1);
-    const hw = 0.36 * (1 - 0.88 * ss(0.45, 1.0, v)) + 0.015; // core half width (pointy tip)
-    const wob = Math.sin(v * 9.0) * 0.02;
     for (let x = 0; x < W; x++) {
-      const u = (x + 0.5) / W;
-      const du = Math.abs(u - 0.5 - wob);
-      let a = 1 - ss(hw - 0.07, hw, du);
-      for (const [eu, ew, el, ed] of edge) {
-        if (v > el) continue;
-        const cx = eu * W + ed * v;
-        a = Math.max(a, (1 - ss(ew * 0.5, ew * 0.5 + 1, Math.abs(x + 0.5 - cx))) * (1 - ss(el - 0.12, el, v)) * 0.95);
+      let a = 0, L = 0, wsum = 0;
+      for (const s of S) {
+        if (v > s.len) continue;
+        const uc = (s.u0 + (0.5 - s.u0) * s.conv * ss(0.0, 1.0, v / s.len) + s.wa * Math.sin(v * s.wf + s.wob)) * W;
+        const hw = s.w * (1 - 0.75 * ss(0.55 * s.len, s.len, v));
+        const cov = (1 - ss(hw - 0.6, hw + 0.6, Math.abs(x + 0.5 - uc))) * (s.stray ? 0.85 : 1);
+        if (cov > 0) { a = Math.max(a, cov); L += s.L * cov; wsum += cov; }
       }
-      const xi = Math.min(W - 1, Math.max(0, Math.round(x + drift[x] * v)));
-      const L = col[xi] * (0.85 + 0.15 * Math.sin(y * 0.11 + x));
       const o = (y * W + x) * 4;
-      img.data[o] = img.data[o + 1] = img.data[o + 2] = Math.round(255 * Math.min(1, L));
-      img.data[o + 3] = Math.round(255 * a);
+      const lum = wsum > 0 ? L / wsum : 0.3;
+      img.data[o] = img.data[o + 1] = img.data[o + 2] = Math.round(255 * Math.min(1, lum * (0.9 + 0.1 * Math.sin(y * 0.37 + x))));
+      img.data[o + 3] = Math.round(255 * Math.min(1, a));
     }
   }
   g.putImageData(img, 0, 0);
@@ -729,6 +735,21 @@ export function addHair(actorRoot, style = {}) {
     clearcoat: wet ? (style.gloss ?? 0.65) : 0, clearcoatRoughness: 0.13,
     alphaTest: 0.32, alphaToCoverage: true, envMapIntensity: 0.6,
   });
+  // keep the strands' coverage at distance: mip-mapped alpha of thin strands averages below the alpha test and the
+  // hair thinned out / vanished beyond ~2 m (alpha scaled by the mip level, then A2C sharpening as usual)
+  mat.onBeforeCompile = (sh) => {
+    sh.fragmentShader = sh.fragmentShader.replace('#include <alphatest_fragment>', `
+    #ifdef USE_MAP
+    {
+      vec2 tc = vMapUv * vec2( 128.0, 256.0 );
+      float md = max( dot( dFdx( tc ), dFdx( tc ) ), dot( dFdy( tc ), dFdy( tc ) ) );
+      diffuseColor.a *= 1.0 + max( 0.0, 0.5 * log2( md ) ) * 0.3;
+    }
+    #endif
+    #include <alphatest_fragment>`);
+  };
+  mat.customProgramCacheKey = () => 'crHairLock';
+  mat.name = 'CreatureHair';
   const hair = new THREE.SkinnedMesh(g, mat);
   hair.name = 'Hair';
   hair.frustumCulled = false;
