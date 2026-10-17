@@ -66,7 +66,18 @@ vec3 pavingColor=mix(vec3(.17,.19,.19),vec3(.32,.33,.30),macro)*(.83+triColor(sa
 earth=mix(earth,pavingColor,paving);
 float fringe=4.*plantWeight*(1.-plantWeight)*(1.-snowCover);
  earth*=1.-fringe*smoothstep(.55,.8,boundary)*.18;
- earth=mix(earth,vec3(.76,.86,.89)*(0.85+macro*.2),snowCover*smoothstep(.15,.8,ln.y));
+// Preserve fine surface detail under snow instead of replacing the entire
+// slope with a constant colour. Steeper faces expose blue layered ice.
+if(snowCover>.5){
+float snowGrain=triColor(sandColor,landP*1.2,tw).r;
+float snowDrift=landNoise(vec2(landP.x*.16+landP.z*.05,landP.z*.7));
+float snowAmount=snowCover*smoothstep(.60,.94,ln.y+(snowDrift-.5)*.08);
+float iceLayers=sin(landP.y*2.4+landNoise(landP.xz*.12)*3.);
+vec3 glacierIce=mix(vec3(.22,.40,.47),vec3(.48,.65,.70),.5+iceLayers*.16+snowGrain*.18);
+vec3 glacierSnow=vec3(.76,.86,.89)*(.77+macro*.12+snowGrain*.25+snowDrift*.08);
+earth=mix(earth,glacierIce,snowCover);
+earth=mix(earth,glacierSnow,snowAmount);
+}
 vec2 shoreUV=(landP.xz-shoreCenter)/shoreSpan+.5;
 float shoreInside=step(0.,shoreUV.x)*step(shoreUV.x,1.)*step(0.,shoreUV.y)*step(shoreUV.y,1.);
 vec2 beachHistory=texture2D(shoreMap,shoreUV).ba*shoreInside;
@@ -103,7 +114,7 @@ vec3 surfaceN=normalize(mix(mix(triNormal(sandNormal,sandUV,tw,ln),triNormal(roc
 surfaceN=normalize(surfaceN+vec3(.9,0.,3.6)*sin(bedPhase)*.024*bedMask);
 normal=normalize((viewMatrix*vec4(normalize(mix(ln,surfaceN,.65*(1.-snowCover*.7)*(1.-film*.35))),0.)).xyz);`);
  };
- mat.customProgramCacheKey=()=>`photographic-coast-fringe-v7-${palette.grass??0}-${palette.paved?1:0}`;
+ mat.customProgramCacheKey=()=>`photographic-coast-fringe-v8-${palette.grass??0}-${palette.paved?1:0}`;
 }
 
 export function rockMaterial({scale=.18,vegetation=0}={}){

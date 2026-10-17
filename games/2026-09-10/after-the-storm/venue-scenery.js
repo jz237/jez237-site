@@ -2,6 +2,7 @@ import * as T from './vendor/three.module.js';
 import {planVenueDressing} from './venue-dressing.js';
 import {rockMaterial,barkMaterial} from './land-materials.js';
 import {dressMaterial} from './venue-materials.js';
+import {groundedRockMatrix} from './scenery-grounding.js';
 
 export function makeVenueScenery(root,course){
  const plan=planVenueDressing(course),group=new T.Group();group.userData.dynamic=true;root.add(group);
@@ -12,18 +13,18 @@ export function makeVenueScenery(root,course){
  const metal=material(dressMaterial(new T.MeshStandardMaterial({color:0x414b4b,roughness:.64,metalness:.35}),'metal'));
  const lamp=material(new T.MeshStandardMaterial({color:0xd6d0a8,emissive:0xffc782,emissiveIntensity:night?2:.08,roughness:.4}));
  const dummy=new T.Object3D();
- function batch(g,m,rows,scale=(p)=>[p.scale,p.scale,p.scale],height=0){
+ function batch(g,m,rows,scale=(p)=>[p.scale,p.scale,p.scale],height=0,grounded=false){
   geos.push(g);if(!rows.length)return;
   const bins=new Map();for(const p of rows){const k=Math.floor(p.x/100)+','+Math.floor(p.z/100);if(!bins.has(k))bins.set(k,[]);bins.get(k).push(p);}
   for(const points of bins.values()){
    const mesh=new T.InstancedMesh(g,m,points.length);
-   points.forEach((p,i)=>{dummy.position.set(p.x,p.y+height,p.z);dummy.rotation.set(0,p.angle,0);dummy.scale.fromArray(scale(p));dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix);mesh.setColorAt(i,new T.Color().setScalar(.8+p.tint*.28));});
+   points.forEach((p,i)=>{dummy.position.set(p.x,p.y+height,p.z);dummy.rotation.set(0,p.angle,0);dummy.scale.fromArray(scale(p));dummy.updateMatrix();mesh.setMatrixAt(i,grounded?groundedRockMatrix(g,course.renderGround||course.ground,p,scale(p)):dummy.matrix);mesh.setColorAt(i,new T.Color().setScalar(.8+p.tint*.28));});
    mesh.computeBoundingSphere();mesh.castShadow=!cold&&m!==leaf;mesh.receiveShadow=true;group.add(mesh);meshes.push(mesh);
   }
  }
  const rock=new T.IcosahedronGeometry(1,1),rp=rock.attributes.position;
  for(let i=0;i<rp.count;i++){const x=rp.getX(i),y=rp.getY(i),z=rp.getZ(i),k=.85+.13*Math.sin(x*6+z*3)*Math.cos(y*7);rp.setXYZ(i,x*k,y*k*.75,z*k);}rock.computeVertexNormals();
- batch(rock,stone,plan.rocks,p=>[p.scale,p.scale*(cold?.9:.65),p.scale*.8],-.12);
+ batch(rock,stone,plan.rocks,p=>[p.scale,p.scale*(cold?.9:.65),p.scale*.8],-.12,cold);
  // Curved overlapping leaf blades form three-dimensional fern/grass clumps.
  function blades(reed=false){const positions=[],colors=[];for(let i=0;i<(reed?32:44);i++){
   const a=i*2.3999,r=(i%7)/7*.6,x=Math.cos(a)*r,z=Math.sin(a)*r,h=reed?1.4+(i%5)*.19:.32+(i%9)*.065,w=reed?.018:.035;
