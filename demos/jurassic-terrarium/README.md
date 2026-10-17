@@ -398,3 +398,9 @@ With this the six-part graphics push is complete:
 v1.46.1: the depth of field from v1.46 is removed. It blurred the view badly while zooming in and out, because its focus distance lagged behind the camera. Its stronger close-up soft focus is removed too. The soft focus is Weatherglass's own again, and the colour grade and vignette stay.
 
 v1.46.2: fixed the terrarium sticking on the loading screen after an update. The page is always fetched fresh, but `dinos.js` could be cached for up to four hours. A new page with yesterday's runtime then failed to boot. The page now loads `dinos.js?v=<hash of its contents>`, so the two always match.
+
+v1.47 (Jez's notes):
+- **No blur:** the soft-focus tilt-shift is switched off. Every part of the view is sharp, at any zoom, and in Documentary mode too.
+- **Softer mist at the back:** the mist curtains in the back valleys and the cloud wisps round the rocky peaks now thin out towards the land under them, like the chimney smoke. The ground and the boulders no longer slice them off in hard straight edges.
+- **Brachiosaurus shake:** its wet-dog shake no longer flails the long neck up and down several times a second. Long necks now shake slower and side to side, a little in each neck bone and most in the head, with the body barely twisting. Short-necked animals shake as before.
+- **Neck through trees:** monkey-puzzle and redwood trunks are solid almost to the top for every animal, including the tall browse trees. When the Brachiosaurus browses a monkey-puzzle it stands back so its head goes into the foliage beside the trunk, not through it. In a long run, neck-through-trunk moments fell by about 85%.

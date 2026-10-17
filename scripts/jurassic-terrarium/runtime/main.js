@@ -1796,12 +1796,16 @@ class Dino {
       }
       this.root.position.y -= 0.01 * this.k * (u > 0.55 && u < 0.75 ? 1 : 0);
     } else if (P.kind === 'shake') {
-      // a wet-dog shake travelling down the body, drops flying off
-      const w = 2 * Math.PI * 7;
-      fx.spine.forEach((b, i) => turn(b, 'z', 0.1 * env * Math.sin(w * t - i * 0.7)));
-      fx.neck.forEach((b, i) => turn(b, 'z', 0.14 * env * Math.sin(w * t + 0.8 - i * 0.5)));
-      turn(B.head, 'y', 0.3 * env * Math.sin(w * t + 1.5));
-      fx.tail.forEach((b, i) => turn(b, 'y', 0.12 * env * Math.sin(w * t - 1 - i * 0.5)));
+      // a wet-dog shake travelling down the body, drops flying off. A long neck (the Brachiosaurus) can't
+      // twist bone by bone like a short one: the rolls add up along it into a wild flail. So it shakes
+      // slower, side to side, a little in each bone and most in the head, while the body barely twists.
+      const long = fx.neck.length > 4;
+      const w = 2 * Math.PI * (long ? 3 : 7);
+      fx.spine.forEach((b, i) => turn(b, 'z', (long ? 0.035 : 0.1) * env * Math.sin(w * t - i * 0.7)));
+      if (long) fx.neck.forEach((b, i) => turn(b, 'y', 0.035 * env * (0.5 + i / fx.neck.length) * Math.sin(w * t + 0.8 - i * 0.35)));
+      else fx.neck.forEach((b, i) => turn(b, 'z', 0.14 * env * Math.sin(w * t + 0.8 - i * 0.5)));
+      turn(B.head, 'y', (long ? 0.35 : 0.3) * env * Math.sin(w * t + 1.5));
+      fx.tail.forEach((b, i) => turn(b, 'y', (long ? 0.06 : 0.12) * env * Math.sin(w * t - 1 - i * 0.5)));
       P.dropT = (P.dropT || 0) - dt;
       if (P.dropT <= 0 && env > 0.3) {
         P.dropT = 0.05;
@@ -2963,14 +2967,16 @@ class Dinosaurs {
           const ang = (i / 10) * Math.PI * 2 + rand() * 0.3;
           const cx = Math.cos(ang), cz = Math.sin(ang);
           // on a slope the body pitches (as place() does), which lifts the head and pulls it back:
-          // settle the stand-off distance so the head ends up over the trunk
-          let D = reach.fwd, x = 0, z = 0, headY = 0;
+          // settle the stand-off distance so the head ends up over the trunk; a conifer's trunk runs up
+          // through its crown, so there the head stops short of it, in the foliage at its side
+          const clear = t.wantTop || this.flora.placements.araucaria?.includes(t) ? 0.24 : 0;
+          let D = reach.fwd + clear, x = 0, z = 0, headY = 0;
           for (let k = 0; k < 3; k++) {
             x = t.x + cx * D;
             z = t.z + cz * D;
             const hf = T.height(x - cx * half, z - cz * half), hb = T.height(x + cx * half, z + cz * half);
             const th = Math.atan2(hf - hb, 2 * half) * 0.6; // nose up when the tree side is higher
-            D = Math.max(0.5, reach.fwd * Math.cos(th) - reach.up * Math.sin(th));
+            D = Math.max(0.5, reach.fwd * Math.cos(th) - reach.up * Math.sin(th)) + clear;
             headY = Math.min(T.height(x, z), (hf + hb) / 2) + reach.up * Math.cos(th) + reach.fwd * Math.sin(th);
           }
           if (!d.layer.walkable(x, z) || !d.clearOfGlass(x, z)) continue;

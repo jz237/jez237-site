@@ -183,6 +183,8 @@ patch(`      // gentle filmic lift in the shadows, warm highlights
       c.rgb += uGShadow * (1.0 - gl) * (1.0 - gl) + uGHigh * gl * gl;
       // gentle filmic lift in the shadows, warm highlights
       c.rgb = c.rgb * vec3(1.01, 1.0, 0.985) + vec3(0.008, 0.007, 0.01) * (1.0 - c.rgb);`, 'grade');
+// No soft focus at all (Jez: "i'd rather no blurring"): the tilt-shift passes stay off
+patch('this.tiltX.enabled=this.tiltY.enabled=s.tier>0', 'this.tiltX.enabled=this.tiltY.enabled=!1', 'no tilt-shift blur');
 patch('this.fastEvery=n.pick(2,2,1),this.slowEvery=n.pick(5,4,3)', 'this.fastEvery=n.pick(2,1,1),this.slowEvery=n.pick(3,1,1)', 'mirror every frame');
 patch('const m=.04+(f?.05:.02);', 'const m=.09;', 'mirror margin fixed');
 patch('M=Math.min(this.maxScale,Math.sqrt(_/Math.max(w*y,1)))', 'M=this.maxScale', 'mirror scale fixed');
