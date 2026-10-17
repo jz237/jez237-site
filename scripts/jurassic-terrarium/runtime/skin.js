@@ -24,6 +24,8 @@
 //     cold;
 //   - colours through the year: in spring frills, plates and crests flush bright for the breeding
 //     season; in winter the hide is duller and dustier; calves are mottled, fading as they grow;
+//   - ambient occlusion: the ground shades the body close above it (the belly, the underside, the feet),
+//     and the inner faces of the legs are shaded by the body between them;
 //   - flesh in motion: the belly, the throat and the mass of the thighs are soft (aSoft, found from the
 //     bone each vertex hangs from and which way it faces) and are moved by per-animal springs that lag
 //     behind the body as it speeds up, slows, turns and lands each foot; the ribcage swells with each
@@ -302,6 +304,8 @@ export function skinUniforms(info, sc = SCALES.trex) {
     uFlapW: { value: new Vector2() }, // wing membranes: each side's stroke speed (rad/s, + = rising)
     uSpan: { value: 3 }, // half the wingspan, metres
     uColour: { value: new Vector4() }, // x breeding flush, y winter dullness, z calf mottling
+    uAOr: { value: 0.12 }, // how far the ground's shade reaches up the body (the case's units)
+    uHipY: { value: 1.5 }, // hip height in the bind pose's metres (for the shade between the legs)
     uSnow: { value: 0 }, // 0..1 snow lying on it
     uSnowH: { value: 0 }, // how thick, metres
     uFrost: { value: 0 }, // 0..1 rime in a hard frost
@@ -322,6 +326,9 @@ export function skinShader(mat, U, shared, { membrane = false } = {}) {
     sh.uniforms.uFlash = shared.uFlash;
     sh.uniforms.uWarmPos = WARM.uWarmPos;
     sh.uniforms.uWarmCol = WARM.uWarmCol;
+    sh.uniforms.uTerrainTex = shared.uTerrainTex;
+    sh.uniforms.uFieldMin = shared.uFieldMin;
+    sh.uniforms.uFieldSize = shared.uFieldSize;
     sh.vertexShader = sh.vertexShader
       .replace('#include <common>', `#include <common>
 attribute float aThin;
@@ -340,11 +347,16 @@ uniform float uSpan;
 uniform float uTime;
 uniform float uSnow;
 uniform float uSnowH;
+uniform float uHipY;
+varying vec3 vJtW;
+varying float vJtInner;
 uniform float uFlare;
 uniform float uNosDepth;
 varying float vThin;
 varying float vNeck;
 varying vec3 vLocal;`)
+      .replace('#include <worldpos_vertex>', `#include <worldpos_vertex>
+  vJtW = (modelMatrix * vec4(transformed, 1.0)).xyz;`)
       .replace('#include <skinning_vertex>', `#include <skinning_vertex>
   vThin = aThin;
   vNeck = aNeck;
@@ -366,6 +378,8 @@ varying vec3 vLocal;`)
     // snow lying on the upward faces has a little thickness, thinning at its ragged edge
     float jtUpB = smoothstep(0.25, 0.8, jn.y + (fract(sin(dot(aBind, vec3(12.9, 78.2, 37.7))) * 4375.85) - 0.5) * 0.15);
     jd += jn * uSnow * jtUpB * uSnowH;
+    // the inner faces of the legs (facing in towards the body's midline, below the hips)
+    vJtInner = smoothstep(0.05, 0.6, -sign(aBind.x) * jn.x) * smoothstep(uHipY, uHipY * 0.1, aBind.y) * smoothstep(0.02, 0.12, abs(aBind.x));
     ${membrane ? `// the membrane bellies against the air: lifted on a downstroke, pressed down on an upstroke, most
     // out across the span and in the thin of the membrane; a light flutter in a glide
     float sf = clamp(abs(aBind.x) / uSpan, 0.0, 1.0);
@@ -390,6 +404,12 @@ uniform float uFlash;
 uniform vec4 uColour;
 uniform float uSnow;
 uniform float uFrost;
+uniform sampler2D uTerrainTex;
+uniform vec2 uFieldMin;
+uniform vec2 uFieldSize;
+uniform float uAOr;
+varying vec3 vJtW;
+varying float vJtInner;
 uniform vec3 uWarmPos[4];
 uniform vec4 uWarmCol[4];
 uniform vec4 uScales;
@@ -542,6 +562,19 @@ float jtNoise(vec3 p) {
     float th = vThin${membrane ? ' * (1.0 - 0.55 * smoothstep(0.82, 0.97, abs(sin(vLocal.x * 18.0 + sin(vLocal.z * 7.0) * 2.4)))) * (1.0 - 0.35 * jtFib)' : ''};
     vec3 blood = mix(diffuseColor.rgb, vec3(0.85, 0.2, 0.08), 0.7);
     reflectedLight.directDiffuse += blood * uLightColor * th * (back * 0.75 + wrap * 0.25) * (1.0 - jtMud * 0.8) * (1.0 - uNight * 0.7);
+  }
+  {
+    // ambient occlusion: shade from the ground close below (most on faces turned down to it), and
+    // between the legs
+    float gh = texture2D(uTerrainTex, clamp((vJtW.xz - uFieldMin) / uFieldSize, 0.0, 1.0)).x;
+    float above = max(0.0, vJtW.y - gh);
+    float down = clamp(0.5 - 0.5 * jtUpF, 0.0, 1.0);
+    // (and the sky is hidden from the faces turned down: the underside is darker however high it is)
+    float ao = (1.0 - 0.85 * exp(-above / max(uAOr, 1e-3)) * (0.35 + 0.65 * down)) * (1.0 - 0.55 * vJtInner) * (1.0 - 0.35 * down * down);
+    reflectedLight.indirectDiffuse *= ao;
+    reflectedLight.indirectSpecular *= ao;
+    reflectedLight.directDiffuse *= mix(1.0, ao, 0.6);
+    reflectedLight.directSpecular *= mix(1.0, ao, 0.6);
   }
   // warm light from the hearth and the lantern on a passing body (wrapped a little round the form)
   for (int i = 0; i < 4; i++) {

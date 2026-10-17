@@ -4,7 +4,7 @@
 // Weatherglass's wind field (windAt) plus a per-plant spring when an animal pushes through.
 import {
   Group, Mesh, InstancedMesh, MeshStandardMaterial, MeshDepthMaterial, RGBADepthPacking, Matrix4, Quaternion, Vector3,
-  Vector4, Vector2, Color, DoubleSide, InstancedBufferAttribute, DynamicDrawUsage,
+  Vector4, Vector2, Color, DoubleSide, InstancedBufferAttribute, DynamicDrawUsage, DataTexture, RGBAFormat, UnsignedByteType, LinearFilter,
 } from 'three';
 import { pathAt } from './paths.js';
 import { fords } from './nav.js';
@@ -36,6 +36,7 @@ export class Flora {
       uShiver: { value: new Vector4(0, 0, 0, 0) },
       // bodies among the trees, for the branches to part round: (x, y, z, radius) and (vx, vz, speed, 0)
       uBPush: { value: Array.from({ length: Flora.BRANCH_PUSHERS }, () => new Vector4()) },
+      uBodyTex: { value: null },
       uBPushV: { value: Array.from({ length: Flora.BRANCH_PUSHERS }, () => new Vector4()) },
     };
     this.obstacles = []; // {x, z, r} trunks for the dinosaurs' route finder
@@ -477,6 +478,7 @@ attribute vec2 aBend;
     sh.uniforms.uTint = U.uTint;
     sh.uniforms.uBPush = U.uBPush;
     sh.uniforms.uBPushV = U.uBPushV;
+    sh.uniforms.uBodyTex = U.uBodyTex;
   }
 
   // Shaded like Weatherglass's foliage: frond atlas with alpha-to-coverage, ambient occlusion in the heart
@@ -497,7 +499,7 @@ attribute vec2 aBend;
         .replace('#include <begin_vertex>', this.bendChunk(kind))
         .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\n  vFWorld = (toW * vec4(transformed, 1.0)).xyz;\n  vTrunk = aTrunk;\n  #if defined(LOD_NEAR)\n  vLod = 1.0 - aFar;\n  if (aFar > 0.999) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);\n  #elif defined(LOD_FAR)\n  vLod = aFar;\n  if (aFar < 0.001) gl_Position = vec4(2.0, 2.0, 2.0, 1.0);\n  #endif');
       sh.fragmentShader = sh.fragmentShader
-        .replace('#include <common>', '#include <common>\nuniform vec3 uTint;\nuniform vec3 uLightDir;\nuniform vec3 uLightColor;\nvarying vec3 vFWorld;\nvarying float vTrunk;\n#if defined(LOD_NEAR) || defined(LOD_FAR)\nvarying float vLod;\n#endif')
+        .replace('#include <common>', '#include <common>\nuniform sampler2D uBodyTex;\nuniform vec2 uFieldMin;\nuniform vec2 uFieldSize;\nuniform vec3 uTint;\nuniform vec3 uLightDir;\nuniform vec3 uLightColor;\nvarying vec3 vFWorld;\nvarying float vTrunk;\n#if defined(LOD_NEAR) || defined(LOD_FAR)\nvarying float vLod;\n#endif')
         .replace('#include <map_fragment>', `
   if (vTrunk > 0.5) {
     // bark: the vertex colour is the albedo (brown, greening to moss towards the foot)
@@ -518,6 +520,14 @@ attribute vec2 aBend;
   }`)
         .replace('#include <color_fragment>', '#include <color_fragment>\n  diffuseColor.rgb *= uTint;')
         .replace('#include <lights_fragment_end>', `#include <lights_fragment_end>
+  {
+    // shade under and round the animals' bodies: ferns at their feet sit in their shadow
+    // (a little map of the shade, painted each frame from the bodies: R = how deep, G = how high it reaches)
+    vec2 bs = texture2D(uBodyTex, clamp((vFWorld.xz - uFieldMin) / uFieldSize, 0.0, 1.0)).rg;
+    float occ = bs.r * smoothstep(bs.g * 4.0 - 1.0, bs.g * 4.0 - 1.15, vFWorld.y);
+    reflectedLight.indirectDiffuse *= 1.0 - 0.7 * occ;
+    reflectedLight.directDiffuse *= 1.0 - 0.55 * occ;
+  }
   if (vTrunk < 0.5) {
     // light through the fronds when the sun is behind them
     vec3 V = normalize(cameraPosition - vFWorld);
@@ -668,6 +678,37 @@ attribute vec2 aBend;
   // a roar at (x, z): plants within r shiver, fading out
   shiver(x, z, r, strength = 1) {
     this.uniforms.uShiver.value.set(x, z, r, strength);
+  }
+
+  // the same bodies, for the shade they cast on the planting round them
+  setBodies(list) {
+    // painted into a small map over the field (one lookup per pixel in the plants' shader, however many
+    // bodies there are): R = depth of shade, G = (height it reaches + 1) / 4
+    const W = 160, H = 80;
+    if (!this.bodyTex) {
+      this.bodyData = new Uint8Array(W * H * 4);
+      this.bodyTex = new DataTexture(this.bodyData, W, H, RGBAFormat, UnsignedByteType);
+      this.bodyTex.magFilter = this.bodyTex.minFilter = LinearFilter;
+      this.uniforms.uBodyTex.value = this.bodyTex;
+    }
+    const D = this.bodyData, U = this.ctx.uniforms, mx = U.uFieldMin.value.x, mz = U.uFieldMin.value.y;
+    const sx = W / U.uFieldSize.value.x, sz = H / U.uFieldSize.value.y;
+    D.fill(0);
+    for (const b of list) {
+      const R = b.r * 2.6, top = Math.min(255, Math.max(0, ((b.y + b.r * 0.2 + 1) / 4) * 255));
+      const x0 = Math.max(0, Math.floor((b.x - R - mx) * sx)), x1 = Math.min(W - 1, Math.ceil((b.x + R - mx) * sx));
+      const z0 = Math.max(0, Math.floor((b.z - R - mz) * sz)), z1 = Math.min(H - 1, Math.ceil((b.z + R - mz) * sz));
+      for (let j = z0; j <= z1; j++) {
+        for (let i = x0; i <= x1; i++) {
+          const d = Math.hypot((i + 0.5) / sx + mx - b.x, (j + 0.5) / sz + mz - b.z);
+          const t = Math.min(1, Math.max(0, (R - d) / (R - b.r * 0.4)));
+          const v = t * t * (3 - 2 * t) * 255, k = (j * W + i) * 4;
+          if (v > D[k]) D[k] = v;
+          if (v > 4 && top > D[k + 1]) D[k + 1] = top;
+        }
+      }
+    }
+    this.bodyTex.needsUpdate = true;
   }
 
   // spheres along animals' bodies (from the runtime each frame): {x, y, z, r}

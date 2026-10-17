@@ -342,3 +342,10 @@ v1.41: sculpted anatomy (graphics goal 1 of 6):
 
   The relief goes into the normal map, and the creases and the hollows between muscles darken the colour map too, so the folds and muscle shapes read from across the case, not only close up.
 - **How:** `blender/bake_detail.py` works out the masks on each finished sculpture and bakes just the normal map and a crevice map. `tools/swap-skin.mjs` puts the new textures into each species' existing GLB, so the meshes, rigs and animations are untouched.
+
+v1.42: ambient occlusion (graphics goal 2 of 6):
+- **Bodies:** the ground shades the body close above it, so bellies, undersides and feet are darker the nearer they are to the earth. The inner faces of the legs are shaded by the body between them, and faces turned down lose the sky. This works in the skin shader from Weatherglass's terrain height map, so it follows every animal and pose.
+- **Plants round their feet:** ferns and fronds under and beside an animal sit in its shade. Each frame the bodies are painted into a small shade map over the field, and the plants' shader does a single lookup, at no measurable cost.
+- **Stones:** every rock darkens where it meets the ground and in its downward hollows.
+- **Ground:** soft dark pools lie round the foot of every stone and tree, the cabin and the den.
+- `?ao=0` turns all of it off, for comparing.

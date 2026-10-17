@@ -63,6 +63,7 @@ export class Rocks {
     this.group.name = 'rockwork';
     this.obstacles = [];
     this.tops = [];
+    this.shadeSpots = []; // {x, z, r}: soft shade on the ground round the stones (contact.js)
     const T = ctx.terrain, box = ctx.box, tier = ctx.quality?.tier ?? 1;
     const k = tier === 0 ? 0.5 : tier === 1 ? 1 : 1.3;
     const water = (x, z) => Math.max(T.lakeMask(x, z), T.riverMask(x, z));
@@ -107,6 +108,27 @@ export class Rocks {
 
     // build: a few shapes, two levels of detail by size
     const mat = new MeshStandardMaterial({ vertexColors: true, roughness: 0.9, metalness: 0, flatShading: false });
+    // ambient occlusion: a stone darkens where it meets the ground (the crevice under its edge) and in its
+    // own hollows (faces turned down and in)
+    if (!/[?&]ao=0/.test(location.search)) mat.onBeforeCompile = (sh) => {
+      sh.uniforms.uTerrainTex = ctx.uniforms.uTerrainTex;
+      sh.uniforms.uFieldMin = ctx.uniforms.uFieldMin;
+      sh.uniforms.uFieldSize = ctx.uniforms.uFieldSize;
+      sh.vertexShader = sh.vertexShader
+        .replace('#include <common>', '#include <common>\nvarying vec3 vRkW;\nvarying float vRkDown;')
+        .replace('#include <worldpos_vertex>', `#include <worldpos_vertex>
+  vRkW = (modelMatrix * instanceMatrix * vec4(transformed, 1.0)).xyz;
+  vRkDown = clamp(-normalize(mat3(modelMatrix * instanceMatrix) * objectNormal).y, 0.0, 1.0);`);
+      sh.fragmentShader = sh.fragmentShader
+        .replace('#include <common>', '#include <common>\nuniform sampler2D uTerrainTex;\nuniform vec2 uFieldMin;\nuniform vec2 uFieldSize;\nvarying vec3 vRkW;\nvarying float vRkDown;')
+        .replace('#include <lights_fragment_end>', `#include <lights_fragment_end>
+  {
+    float gh = texture2D(uTerrainTex, clamp((vRkW.xz - uFieldMin) / uFieldSize, 0.0, 1.0)).x;
+    float ao = mix(0.28, 1.0, smoothstep(0.0, 0.07, vRkW.y - gh)) * (1.0 - 0.45 * vRkDown);
+    reflectedLight.indirectDiffuse *= ao;
+    reflectedLight.directDiffuse *= mix(1.0, ao, 0.55);
+  }`);
+    };
     const shapes = [0, 1, 2, 3, 4].map((i) => ({ big: boulderGeometry(i * 3.7 + 1, 3), small: boulderGeometry(i * 3.7 + 1, 2) }));
     const buckets = new Map();
     list.forEach((r, i) => {
@@ -129,6 +151,7 @@ export class Rocks {
         const nearMouth = den && Math.abs(r.x - den.x) < 2.4 && r.z > den.z - 1.2 && r.z < den.mouth.z + 1.4;
         // (bank stones are small enough to step over: walling the stream with them would cut the case in two)
         if (!r.lift && !r.bank && !nearMouth && T.slope(r.x, r.z) < 0.35 && r.s > 0.1) this.obstacles.push({ x: r.x, z: r.z, r: r.s * 0.75 });
+        if (!r.lift && r.s > 0.05) this.shadeSpots.push({ x: r.x, z: r.z, r: r.s * 1.5, a: 0.55 });
       });
       im.castShadow = true;
       im.receiveShadow = true;

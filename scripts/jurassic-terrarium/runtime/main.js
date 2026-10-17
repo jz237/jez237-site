@@ -167,6 +167,7 @@ const SPECIES = [
 ];
 
 const params = new URLSearchParams(location.search);
+const NO_AO = params.get('ao') === '0'; // (ambient occlusion off, for comparing)
 const rand = mulberry32(Number(params.get('seed') || 20261011));
 
 // procedural idles (no clip of their own): played on top of idle (or rest) by Dino.performFrame
@@ -586,6 +587,10 @@ class Dino {
       // a full belly (feeding.js), going down slowly as it digests
       this.full = Math.max(0, (this.full || 0) - dt / 300);
       U.uBelly.value = this.full * (this.info?.length || 6) * 0.012 * FLESH;
+      // ambient occlusion reach and hip height (skin.js)
+      this._hipBind = Math.max(this._hipBind || 0, this.hipHeight() / this.model.scale.x); // (standing: the highest it gets)
+      U.uAOr.value = NO_AO ? 1e-4 : this.height * 0.42;
+      U.uHipY.value = NO_AO ? 1e-4 : this._hipBind;
       // the scales' relief, from metres in the bind pose to the view's units
       if (U.uScaleH.value > 0) U.uScaleH.value = (SCALES[this.sp.id]?.h ?? 0.012) * (this._skinWS ??= this.skinMesh?.getWorldScale(new Vector3()).x || this.model.scale.x);
     }
@@ -2550,6 +2555,19 @@ class Dinosaurs {
     // the cabin is solid to the ridge: a swinging tail or a passing neck keeps off its walls and roof
     const cab = ctx.terrain.shape?.CABIN, lp = ctx.modules.life?.props;
     if (cab && lp?.ridgeY) this.trunks.push({ x: cab.x, z: cab.z, r: 0.44, y0: cab.y ?? 0, crownY: lp.ridgeY + 0.05, kind: 'cabin' });
+    // ambient occlusion pooled on the ground round their feet (contact.js)
+    if (!NO_AO) {
+      const spots = [...(this.rocks?.shadeSpots || [])];
+      for (const t of this.trunks) {
+        if (t.kind === 'stand') continue;
+        if (t.kind === 'cabin') spots.push({ x: t.x, z: t.z, r: 0.78, a: 0.5 });
+        else if (t.kind.startsWith('wg-')) spots.push({ x: t.x, z: t.z, r: 0.12, a: 0.5 });
+        else spots.push({ x: t.x, z: t.z, r: Math.max(0.12, t.r * 4.5), a: 0.6 });
+      }
+      const den = this.rocks?.glowAt;
+      if (den) spots.push({ x: den.x, z: den.z, r: 0.7, a: 0.55 });
+      this.contact.groundShade(spots);
+    }
     this.trunkGrid = new Map();
     for (const t of this.trunks) {
       const key = Math.floor(t.x / 0.5) + ',' + Math.floor(t.z / 0.5);
@@ -3051,6 +3069,7 @@ class Dinosaurs {
     for (const e of this._shake || []) pushers.push(e);
     this._shake = [];
     this.flora.setPushers(pushers);
+    if (!NO_AO) this.flora.setBodies(pushers); // (and the shade they cast on the planting round them)
     this.branchPush(dt);
     this.lamps?.update(dt);
     this.social.update(dt);
