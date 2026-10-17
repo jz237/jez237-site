@@ -1,3 +1,6 @@
+import {puddleDepth,type Puddle} from './puddle-splashes';
+import {tyreFeedback} from './tyre-feedback';
+import {isImpactMaterial} from './impact-material';
 import {getRaceCourse,type RaceCourse} from './race-course';
 import {withWreckBatch} from './wreck-batch';
 import {vehicleSuspensionRestLength} from './vehicle-physics';
@@ -26,7 +29,8 @@ export class OnlineView {
     private getCars:()=>Vehicle[], private setCars:(cars:Vehicle[])=>void) {this.network.addEventListener('liveries',()=>{if(this.network.snapshot)this.applyLiveries(this.network.snapshot);});}
 
   private course:RaceCourse=getRaceCourse();
-  setWorld(world:R.World,course:RaceCourse=getRaceCourse()){if(this.world!==world||this.course!==course){this.world=world;this.course=course;this.reset();}}
+  private waters:Puddle[]=[];
+  setWorld(world:R.World,course:RaceCourse=getRaceCourse(),waters:Puddle[]=[]){this.waters=waters;if(this.world!==world||this.course!==course){this.world=world;this.course=course;this.reset();}}
 
   reset() { this.repairs.clear(); this.appliedDamage.clear(); this.lastTick=-1; this.lastLiveryRevision=-1; this.initialized=false; }
   disconnect() { this.active=false; this.network.disconnect(); this.reset(); }
@@ -66,8 +70,7 @@ export class OnlineView {
       else c.hit(point,direction,hit.damage/c.specification.damageScale,s.elapsed,hit.tick<0);
       if(!hit.scar && this.network.connected && s.tick-hit.tick<8) {
         if(hit.car===this.network.id&&hit.tick>=0&&hit.tick<=s.tick)this.onLocalImpact(hit.damage);
-        this.sound.shot(hit.damage>15?'impact-heavy':hit.damage>5?'impact-medium':'impact-light',point,Math.min(.8,.25+hit.damage/30));
-        if(hit.damage>7)this.sound.shot('glass',point,.15);
+        this.sound.impact(hit.damage,point,c.impactEffects.glass,c.impactEffects.debris,'material'in hit&&isImpactMaterial(hit.material)?hit.material:undefined);
       }
     }
     const repeated=new Set(s.damage.map(d=>d.id));
@@ -102,6 +105,8 @@ export class OnlineView {
       c.input=at.input; c.surface=at.surface;
       c.slip=at.slip;
       c.remoteGrounded=at.wheels.some(w=>w.contact);
+      c.remoteWheelAngles=at.wheels.map(w=>w.rotation);
+      c.wheelSlips.splice(0,4,...at.wheels.map(w=>w.slip??at.slip));
       for(const material of c.brakeLights)material.emissiveIntensity=at.input.brake>.05||at.input.handbrake?3.5:.8;
       if(at.components){
         c.wreckParts.wheelDamage.set(at.components.wheelDamage);
@@ -115,6 +120,16 @@ export class OnlineView {
       });
       c.syncSuspension();
       c.syncTyres();
+      c.waters=this.waters;
+      c.remoteContactPoints=at.wheels.map((wheel,i)=>{
+        if(!wheel.contact)return null;
+        const p=c.wheels[i].getWorldPosition(new T.Vector3()),plane=wheel.patch?.plane;
+        if(plane){const n=new T.Vector3(plane[0],plane[1],plane[2]),length=n.lengthSq();if(length>1e-8)p.addScaledVector(n,-(n.dot(p)+plane[3])/length);else return null;}
+        else p.y=this.course.height(p.x,p.z);
+        return p;
+      });
+      const wet=c.remoteContactPoints.map(p=>!!p&&this.waters.some(w=>puddleDepth(w,p.x,p.y,p.z)>0));
+      c.surfaceFinish.advance(dt,c.speed,c.surface!=='asphalt',wet,at.wheels.map(w=>w.contact));
       c.tireContacts.forEach((contact,i)=>{
         const wheel=at.wheels[i],patch=wheel?.patch;
         contact.active.value=patch&&wheel.contact?1:0;contact.load.value=patch?.load??0;
@@ -127,8 +142,14 @@ export class OnlineView {
       this.lastFx=0;
       for(const c of this.getCars()) {
         if(c.health<42) this.fx.emit(c.current.clone().addScaledVector(c.forward,1.45).add(new T.Vector3(0,.05,0)),1,2,.3);
-        if(c.surface==='gravel' && Math.abs(c.speed)>3) for(const i of [2,3]) {
-          const p=c.wheels[i].getWorldPosition(new T.Vector3());p.y-=.3;this.fx.emit(p,1,0,Math.abs(c.speed)*.04);
+        const state=s.cars.find(v=>v.id===c.id);
+        for(let i=0;i<4;i++){
+          const p=c.remoteContactPoints?.[i];if(!p)continue;
+          const wet=this.waters.some(w=>puddleDepth(w,p.x,p.y,p.z)>0);
+          const feedback=tyreFeedback(c.surface,c.speed,c.wheelSlips[i],c.input.handbrake,i,!!state?.wheels[i]?.contact,wet);
+          if(!feedback.count&&!feedback.skid)continue;
+          if(feedback.count)this.fx.emit(p,feedback.count,feedback.type,feedback.force);
+          if(feedback.skid&&c.surface==='asphalt')this.fx.mark(p,Math.atan2(c.forward.x,c.forward.z),feedback.markLength);
         }
       }
     }

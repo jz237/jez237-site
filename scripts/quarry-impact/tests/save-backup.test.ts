@@ -20,7 +20,7 @@ function populated(){
  settleRun(p,'earned-lap',{seconds:40,distance:620,damage:0,knockouts:0,drift:0,airtime:0,maxSpeed:25,checkpoints:24,health:100,rank:1,finished:true,completed:true,recovered:false,won:true},c);
  p=unlockCareerGroup(p,'heavy-duty')!;assert.ok(p);
  s.setItem(PROFILE_KEY,JSON.stringify(p));const garage=readGarage();garage.cars.buggy.setup.engine=2;garage.cars.buggy.presets.push({name:'Rally',setup:garage.cars.buggy.setup});s.setItem(GARAGE_KEY,JSON.stringify(garage));
- const controls=defaultControls();controls.keys.throttle=['KeyE'];s.setItem(CONTROLS_KEY,JSON.stringify(controls));s.setItem(TIME_TRIAL_KEY,JSON.stringify({version:1,bests:{'quarry-v1:coupe:forward':40}}));s.setItem(CLUB_CUP_KEY,JSON.stringify(beginClubRound(createClubCup('coupe','12345678-1234-4234-8234-123456789abc',1000))));
+ const controls=defaultControls();controls.keys.throttle=['KeyL'];s.setItem(CONTROLS_KEY,JSON.stringify(controls));s.setItem(TIME_TRIAL_KEY,JSON.stringify({version:1,bests:{'quarry-v1:coupe:forward':40}}));s.setItem(CLUB_CUP_KEY,JSON.stringify(beginClubRound(createClubCup('coupe','12345678-1234-4234-8234-123456789abc',1000))));
  const recorder=new TrialGhostRecorder({kind:'coupe',course:'quarry-v1',direction:'forward'}),pose={x:0,y:1,z:0},rotation={x:0,y:0,z:0,w:1};for(let i=0;i<=240;i++){recorder.sample(i/10,pose,rotation);if(i&&i%10===0)recorder.gate(i/10,i/10);}const ghost=recorder.finish(24,pose,rotation);assert.ok(ghost);s.setItem(TRIAL_GHOST_KEY,JSON.stringify({version:1,enabled:false,ghosts:[ghost]}));
  s.setItem('quarry-impact-v1',JSON.stringify({quality:'medium',engine:.6,best:{'race:forward:3:8':72}}));s.setItem('unrelated-site-data','untouched');return s;
 }

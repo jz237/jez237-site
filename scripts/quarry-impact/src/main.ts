@@ -1,3 +1,11 @@
+import {ReplayPuddles} from './replay-puddles';
+import {setSceneShadows} from './rendering';
+import {quarryReplayProps} from './quarry-tyres';
+import {colliderImpactMaterial,type ImpactMaterial} from './impact-material';
+import {demoRaceDirection} from './demo-session';
+import {AUDIO_OUTPUTS,readAudioOutput} from './audio-output';
+import {ReplayFire} from './replay-fire';
+import {ReplayBurstPlayback} from './replay-burst-audio';
 import {ReplayImpactPlayback} from './replay-impact-audio';
 import {ReplayAudioTransport} from './replay-audio';
 import {driverLabel,resultDriverLabel} from './driver-identity';
@@ -98,6 +106,7 @@ import { prepareArenaFloor } from './scenery-arena-material';
 import {prepareReferenceFloor} from './scenery-reference-floor';
 import {CHASE_VIEW,chaseComposition,QUARRY_DAYLIGHT} from './quarry-art-direction';
 import {drawInstruments} from './instruments';
+import {OffroadMarker} from './offroad-marker';
 import {drawQuarryMap} from './quarry-minimap';
 import { prepareCircuitSurface } from './scenery-circuit-material';
 import { Quarry } from './world';
@@ -176,6 +185,7 @@ const settings = {
   engine: saved.engine ?? 0.72,
   effects: saved.effects ?? 0.8,
   ambience: saved.ambience ?? 0.45,
+  audioOutput: readAudioOutput(saved.audioOutput),
 };
 const adaptiveGraphics=new AdaptiveGraphics();
 let drivingControls=readControls();
@@ -206,7 +216,8 @@ const onlineRules=()=>online?.active?online.network.snapshot?.event?.rules:undef
 const raceFormat=()=>pursuitSelected()?'laps':demo?(demoOptions.race??'laps'):onlineRules()?.race??clubRound()?.race??activeChallenge?.race??(customEvent()?eventOptions.race:'laps');
 const damageRule=()=>sessionDamageRule(customEvent()&&mode!=='playground',demo,eventOptions.damage,demoOptions.damage);
 const raceTimeLimit=()=>online?.active?(mode==='race'&&onlineRules()?.race==='laps'?onlineRules()?.raceDuration??0:0):pursuitSelected()?0:timedRaceLimit(mode,customEvent(),demo,raceFormat(),eventOptions,demoOptions);
-const raceDirection=(id=0)=>pursuitSelected()?(eventOptions.direction==='reverse'?'reverse':'forward'):directionForCar(raceFormat()==='laps'?(onlineRules()?.direction??clubRound()?.direction??activeTimeTrial?.direction??activeChallenge?.direction??(customEvent()?eventOptions.direction:'forward')):'forward',id);
+const sessionDirection=()=>demo?demoRaceDirection(demoOptions):eventOptions.direction;
+const raceDirection=(id=0)=>pursuitSelected()?(sessionDirection()==='reverse'?'reverse':'forward'):directionForCar(raceFormat()==='laps'?(onlineRules()?.direction??clubRound()?.direction??activeTimeTrial?.direction??activeChallenge?.direction??(customEvent()?sessionDirection():'forward')):'forward',id);
 const raceRoute=(id=0)=>waypointRace?.get(id).nav?.route??courseRoute(activeVenue.course,mode==='playground'?'forward':raceDirection(id));
 const derbyFormat=()=>readDerbyFormat(online?.active?onlineRules()?.derby:demo?demoOptions.derby:customEvent()?eventOptions.derby:'survival');
 const scoreDerby=()=>mode==='derby'&&DERBY_FORMATS[derbyFormat()].scored;
@@ -399,26 +410,29 @@ function finishClubEvent(){
 let recorder:ReplayRecorder|null=null,lastReplay:ReplayDocument|null=null,replayEpochs:number[]=[];
 let closeReplayLibrary:(()=>void)|null=null;
 let replayImpacts:ReplayImpactPlayback|null=null;
+let replayBursts:ReplayBurstPlayback|null=null;
+let replayPuddles:ReplayPuddles|null=null;
+let replayFire:ReplayFire|null=null;
 let studio:ReplayStudio|null=null,studioRestore:(()=>void)|null=null;
-function captureReplay(force=false){if(recorder&&!studio&&!online?.active)recorder.capture(elapsed,()=>captureReplayFrame(cars,activeVenue.props,replayEpochs,recorder!.meta.tyreModel,recorder!.meta.engineModel,recorder!.meta.audioModel,id=>sound.contactScraping.level(id)),force);}
+function captureReplay(force=false){if(recorder&&!studio&&!online?.active)recorder.capture(elapsed,()=>captureReplayFrame(cars,activeVenue.props,replayEpochs,recorder!.meta.tyreModel,recorder!.meta.engineModel,recorder!.meta.audioModel,id=>sound.contactScraping.level(id),recorder!.meta.thermalModel,vehicleFire?.audio??[]),force);}
 function archiveReplay(){
   if(!recorder)return;captureReplay(true);if(recorder.frames.length>1)lastReplay=recorder.document();
   for(const car of cars)car.onVisualEvent=undefined;recorder=null;
 }
 function beginReplay(){
   lastReplay=null;replayEpochs=cars.map(()=>0);
-  recorder=new ReplayRecorder({version:1,tyreModel:1,engineModel:1,audioModel:1,...(activeVenue.arenaId?{arenaId:activeVenue.arenaId}:{}),...(activeVenue.course.id==='quarry-v1'?{}:{courseId:activeVenue.course.id}),mode,...(pursuit?{pursuit:true as const}:{}),...(scoreElimination()?{derbyFormat:'score-no-respawn' as const}:{}),reverse:mode==='race'&&(clubRound()?clubRound()!.direction==='reverse':activeTimeTrial?activeTimeTrial.direction==='reverse':activeChallenge?activeChallenge.direction==='reverse':customEvent()&&eventOptions.direction==='reverse'),cars:cars.map(c=>({id:c.id,kind:c.kind,setup:{...structuredClone(c.setup),paint:c.paintColor.getHex()}})),props:activeVenue.props.length,created:new Date().toISOString()});
+  recorder=new ReplayRecorder({version:1,tyreModel:1,engineModel:1,audioModel:1,thermalModel:1,...(activeVenue.arenaId?{arenaId:activeVenue.arenaId}:{}),...(activeVenue.course.id==='quarry-v1'?{}:{courseId:activeVenue.course.id}),mode,...(pursuit?{pursuit:true as const}:{}),...(scoreElimination()?{derbyFormat:'score-no-respawn' as const}:{}),reverse:mode==='race'&&(clubRound()?clubRound()!.direction==='reverse':activeTimeTrial?activeTimeTrial.direction==='reverse':activeChallenge?activeChallenge.direction==='reverse':customEvent()&&eventOptions.direction==='reverse'),cars:cars.map(c=>({id:c.id,kind:c.kind,setup:{...structuredClone(c.setup),paint:c.paintColor.getHex()}})),props:activeVenue.props.length,created:new Date().toISOString()});
   cars.forEach((car,i)=>car.onVisualEvent=e=>{if(e.kind==='jump'||e.kind==='repair')replayEpochs[i]++;recorder?.event(i,elapsed,e);});
   cars.forEach(c=>c.render(1));captureReplay(true);
 }
-function closeStudio(){const restore=studioRestore;studio=null;studioRestore=null;replayImpacts=null;restore?.();}
+function closeStudio(){const restore=studioRestore;studio=null;studioRestore=null;replayImpacts=null;replayBursts=null;restore?.();}
 function openStudio(photo=false,document?:ReplayDocument,savedName?:string):boolean{
   if(studio||online?.active||preparingEvent)return false;
   let doc=photo?null:document??recorder?.document()??lastReplay;
   if(!photo&&(!doc||doc.frames.length<2)){if(document)throw Error('This replay needs at least two frames.');return false;}
   // Imported identity and layout must be accepted before recording or scene changes.
   const targetId=doc?replayCourseId(doc.meta):activeVenue.course.id;
-  if(doc&&doc.meta.props!==(resolveArenaId(doc.meta.arenaId)==='quarry-arena-v1'&&targetId==='quarry-v1'?quarry.props.length:0))throw Error('This replay uses an unsupported course layout.');
+  if(doc){if(resolveArenaId(doc.meta.arenaId)==='quarry-arena-v1'&&targetId==='quarry-v1')quarryReplayProps(quarry.props,doc.meta.props);else if(doc.meta.props!==0)throw Error('This replay uses an unsupported course layout.');}
   const targetVenue=doc?ensureVenue(targetId,resolveArenaId(doc.meta.arenaId)):activeVenue;
   captureReplay(true);if(!photo&&!document&&recorder)doc=recorder.document();
   const returnState=state,returnMode=mode,returnVenue=activeVenue,oldQuarryMode=quarryMode,oldCars=cars,oldNodes=Array.from(ui.childNodes);
@@ -428,7 +442,7 @@ function openStudio(photo=false,document?:ReplayDocument,savedName?:string):bool
   const hidden=new Map<T.Object3D,boolean>();let view:ReplayScene|null=null,restored=false;
   const hide=(o:T.Object3D|undefined)=>{if(o&&!hidden.has(o)){hidden.set(o,o.visible);o.visible=false;}};
   const restore=()=>{
-    if(restored)return;restored=true;replayAudio.reset();view?.dispose();cars=oldCars;mode=returnMode;
+    if(restored)return;restored=true;replayThermal=[];replayFire?.dispose();replayFire=null;replayPuddles?.dispose();replayPuddles=null;replayAudio.reset();view?.dispose();cars=oldCars;mode=returnMode;
     quarryMode=oldQuarryMode;quarry.setMode(oldQuarryMode,false);quarryEnabled.forEach(([c,enabled])=>c.setEnabled(enabled));
     hidden.forEach((visible,o)=>o.visible=visible);quarryVisibility.forEach(([o,visible])=>o.visible=visible);
     activateVenue(returnVenue);refreshVenueLighting();
@@ -438,7 +452,7 @@ function openStudio(photo=false,document?:ReplayDocument,savedName?:string):bool
     lastFrame=performance.now();accumulator=0;sound.attach(oldCars);sound.pause(!['playing','countdown','menu'].includes(returnState));
   };
   try{
-    if(doc)view=new ReplayScene(doc,scene,targetVenue.physics,targetVenue.props,targetVenue.course);
+    if(doc){view=new ReplayScene(doc,scene,targetVenue.physics,quarryReplayProps(targetVenue.props,doc.meta.props),targetVenue.course);replayThermal=view.thermalAudio;replayPuddles=new ReplayPuddles(doc,scene,targetVenue.puddles,view.cars);if(doc.meta.thermalModel===1){replayFire=new ReplayFire(doc,scene);replayFire.fire.setQuality(adaptiveGraphics.quality);}}
     keys.clear();replayAudio.reset();if(doc&&!sound.ready)void sound.init().catch(error=>console.warn('Replay audio unavailable',error));state='studio';
     if(doc){
       for(const car of oldCars)hide(car.root);for(const prop of returnVenue.props)hide(prop.mesh);for(const prop of targetVenue.props)hide(prop.mesh);
@@ -446,9 +460,9 @@ function openStudio(photo=false,document?:ReplayDocument,savedName?:string):bool
       activateVenue(targetVenue);cars=view!.cars;mode=doc.meta.mode;setQuarryMode();view!.props.forEach(p=>staticShadows?.bindReceivers(p));
     }
     hide(activeVenue.checkpoint);studioRestore=restore;
-    replayImpacts=doc?new ReplayImpactPlayback(doc.impacts??[],sound):null;
+    replayImpacts=doc?new ReplayImpactPlayback(doc.impacts??[],sound):null;replayBursts=doc?new ReplayBurstPlayback(doc.bursts??[],sound):null;
     studio=new ReplayStudio(ui,cars,doc,time=>view?.seekChunk(time),closeStudio,savedCamera.exposure,savedName,activeVenue.course.height);return true;
-  }catch(error){studio=null;studioRestore=null;replayImpacts=null;restore();throw error;}
+  }catch(error){studio=null;studioRestore=null;replayImpacts=null;replayBursts=null;restore();throw error;}
 }
 function studioButtons(container:Element|null){
   if(!container||online?.active)return;
@@ -464,15 +478,18 @@ function replayMenu(){
 }
 const cameraImpactOffset = new T.Vector3();
 const sound = new Sound();
+let replayThermal:ReplayScene['thermalAudio']=[];
 const replayAudio=new ReplayAudioTransport(sound);
 let vehicleFire:VehicleFire | undefined;
 let puddleSplashes:PuddleSplashes|undefined;
 const raceRecovery=new RaceRecovery();
+const offroadMarker=new OffroadMarker();
 const drivers=new DrivingBrain(DERBY_ARENA),director=new DemoDirector(DERBY_ARENA,(from,to,car)=>cameraObstruction(physics,from,to,car.body,true),(x,z)=>activeVenue.course.height(x,z));
 const pursuitDriving=new PursuitDriving(drivers);
 let demo=false,demoRestart=0,demoHudHidden=false;
 let demoOptions=readDemoOptions();try{demoOptions=readDemoOptions(localStorage.getItem(DEMO_KEY));}catch{}
 let preparingEvent=false,preparationInterrupted=false;
+sound.setOutput(settings.audioOutput);
 sound.levels = {
   engine: settings.engine,
   effects: settings.effects,
@@ -678,7 +695,7 @@ function menu() {
   watch.onclick=()=>{if(mode==='playground')mode='derby';void start(true);};
   ui.querySelector('.intro')!.append(watch);
   const careerButton=document.createElement('button');careerButton.id='career-open';careerButton.className='small-button';careerButton.textContent='CAREER · CHOOSE YOUR PATH';careerButton.onclick=()=>openCareer();ui.querySelector('.intro')!.append(careerButton);
-  const demoSetup=document.createElement('button');demoSetup.className='small-button';demoSetup.id='demo-options';demoSetup.textContent='DEMO OPTIONS';demoSetup.onclick=()=>{eventSetupOpen=true;showDemoSetup(ui,demoOptions,kind,value=>{try{localStorage.setItem(DEMO_KEY,JSON.stringify(value));return true;}catch{return false;}},()=>{eventSetupOpen=false;},()=>{if(mode==='playground')mode='derby';void start(true);},garage);};ui.querySelector('.intro')!.append(demoSetup);
+  const demoSetup=document.createElement('button');demoSetup.className='small-button';demoSetup.id='demo-options';demoSetup.textContent='DEMO OPTIONS';demoSetup.onclick=()=>{eventSetupOpen=true;showDemoSetup(ui,demoOptions,kind,value=>{try{localStorage.setItem(DEMO_KEY,JSON.stringify(value));return true;}catch{return false;}},()=>{eventSetupOpen=false;},demoMode=>{mode=demoMode;void start(true);},garage);};ui.querySelector('.intro')!.append(demoSetup);
   document.querySelector<HTMLButtonElement>('#settings')!.onclick = () =>
     pause(true);
   document.querySelector<HTMLButtonElement>('#fullscreen')!.onclick =
@@ -702,7 +719,7 @@ function receiveOnline() {
   const s=online.network.snapshot;if(!online.active||!s)return;
   const venue=ensureVenue(s.mode==='race'?s.event?.rules.course??'quarry-v1':'quarry-v1',s.mode==='derby'?s.event?.rules.arena??'quarry-arena-v1':'quarry-arena-v1');
   if(activeVenue!==venue){activateVenue(venue);fx.world=physics;fx.groundHeight=activeVenue.course.height;events.clear();vehicleFire?.reset();puddleSplashes?.reset();}
-  online.setWorld(physics,activeVenue.course);online.receive(s);elapsed=s.elapsed;countdown=s.countdown;mode=s.mode;
+  online.setWorld(physics,activeVenue.course,activeVenue.puddles);online.receive(s);elapsed=s.elapsed;countdown=s.countdown;mode=s.mode;
   sound.contactScraping.receive(s.phase==='playing'?s.cars:[]);
   waypointRace=s.event?.waypoints?new WaypointRace(s.event.rules.race as 'ordered'|'free'|'random',s.event.rules.laps,s.event.seed,activeVenue.course.checkpoints,activeVenue.course.waypointStations):null;
   pursuit=s.event?.chase?PursuitSession.restore(s.event.chase):null;
@@ -725,6 +742,7 @@ function receiveOnline() {
   }
 }
 function createCars(attract = false, previewSetup?:Setup) {
+  offroadMarker.reset();
   const targetVenue=ensureVenue(attract?'quarry-v1':preferredCourse(),!attract&&mode==='derby'?resolveArenaId(clubRound()?.arena??(customEvent()?(demo?demoOptions.arena:eventOptions.arena):undefined)):'quarry-arena-v1');
   archiveReplay();bankRun(false);
   drivers.difficulty=attract?'amateur':aiDifficulty();pursuit=null;pursuitDriving.reset();combat.reset();derbyFeed.reset();waypointRace=!attract&&mode==='race'&&raceFormat()!=='laps'?new WaypointRace(raceFormat() as 'ordered'|'free'|'random',raceLaps(),clubRound()?.seed??activeChallenge?.seed??Math.floor(Math.random()*0xffffffff),targetVenue.course.checkpoints,targetVenue.course.waypointStations):null;
@@ -756,7 +774,7 @@ function createCars(attract = false, previewSetup?:Setup) {
     const type =
       ratedGrid?ratedGrid.at(i):!attract&&activeClubRound!==null?clubCup!.roster[i].kind:demo&&!attract?demoCarKind(i,kind,demoOptions.lineup):i === 0 ? kind : activeChallenge?(['coupe','sedan','hatch']as CarKind[])[i%3]:!attract&&customEvent()&&mode!=='playground'?gridCarKind(i,kind,eventOptions.lineup):CAR_KINDS[i%CAR_KINDS.length];
     const setup=!attract&&activeTimeTrial?timeTrialSetup(activeTimeTrial):!attract&&activeClubRound!==null?undefined:demo&&!attract?demoVehicleSetup(type,demoOptions,garage,kind):!attract&&customEvent()&&mode!=='playground'?eventGridSetup(type,kind,garage,eventOptions.performance,i===0,colors[i%colors.length]):i===0 && (attract || !demo) && !activeChallenge ? previewSetup??garage.cars[type].setup : undefined;
-    const car = new Vehicle(i, type, setup?.paint ?? colors[i%colors.length], scene, physics, fx, setup,activeVenue.course);
+    const car = new Vehicle(i, type, setup?.paint ?? colors[i%colors.length], scene, physics, fx, setup,activeVenue.course,online?.active?'legacy':'angular-v1');
     car.waters=activeVenue.puddles;
     if(mode==='derby'&&!online?.active&&activeVenue===quarryVenue)car.arenaSurface=DERBY_ARENA;
     cars.push(car);
@@ -765,7 +783,7 @@ function createCars(attract = false, previewSetup?:Setup) {
       const spawn=derbyGridSlot(i,count,activeVenue.arena??DERBY_ARENA);
       car.place(spawn.x,spawn.z,spawn.yaw);
     } else if (mode === 'race') {
-      const spawn=courseGridSlot(activeVenue.course,pursuitGrid?pursuitGrid.indexOf(i):i,pursuitSelected()?raceDirection(i):waypointRace?.startDirection()??clubRound()?.direction??activeTimeTrial?.direction??activeChallenge?.direction??(customEvent()&&raceFormat()==='laps'?eventOptions.direction:'forward'));
+      const spawn=courseGridSlot(activeVenue.course,pursuitGrid?pursuitGrid.indexOf(i):i,pursuitSelected()?raceDirection(i):waypointRace?.startDirection()??clubRound()?.direction??activeTimeTrial?.direction??activeChallenge?.direction??(customEvent()&&raceFormat()==='laps'?sessionDirection():'forward'));
       car.place(spawn.x,spawn.z,spawn.yaw);
       car.nextCheckpoint=spawn.next;car.passed=waypointRace?0:spawn.passed;
     } else if(activeVenue!==quarryVenue){const spawn=(i===0?stuntChallengeSpawn(activeChallenge?.stunt):undefined)??freeDriveSpawn(activeVenue.course,i);car.place(spawn.x,spawn.z,spawn.yaw);car.nextCheckpoint=spawn.next;}
@@ -879,9 +897,10 @@ function hud() {
   if(customEvent()&&mode!=='playground'&&!demo&&eventOptions.classLimit)ui.querySelector('.hud-title')!.textContent+=' · '+classLimitLabel(eventOptions.classLimit).toUpperCase();
   if(activeClubRound!==null){ui.querySelector('.hud-title')!.textContent=`${clubSeries(clubCup).name.toUpperCase()} · ROUND ${activeClubRound+1} / ${clubRounds(clubCup).length} · ${eventLabel()}`;ui.querySelector('.hud')!.insertAdjacentHTML('beforeend',`<div class="club-live" id="club-live" role="status">Factory stock · ${GRID_LINEUPS[clubCup?.lineup??'mixed']} · ${classLimitLabel(clubCup?.classLimit)} · Championship points</div>`);}
   if(online?.active)ui.querySelector('.hud')!.insertAdjacentHTML('beforeend','<div class="network-status" id="network-status"></div>');
+  updateHud();
 }
 function demoHud(){
-  ui.querySelector('.hud-title')!.textContent='LIVE DEMO / '+(pursuit?'CHASE · ':'')+eventLabel()+(waypointRace?' / '+RACE_NAMES[raceFormat()].toUpperCase():'')+' · '+AI_DIFFICULTIES[drivers.difficulty].label.toUpperCase()+' AI · '+DAMAGE_RULES[damageRule()].label.toUpperCase()+(demoOptions.classLimit?' · '+classLimitLabel(demoOptions.classLimit).toUpperCase():'');
+  ui.querySelector('.hud-title')!.textContent='LIVE DEMO / '+(pursuit?'CHASE · ':'')+eventLabel()+(waypointRace?' / '+RACE_NAMES[raceFormat()].toUpperCase():mode==='race'?' / '+demoRaceDirection(demoOptions).toUpperCase():'')+' · '+AI_DIFFICULTIES[drivers.difficulty].label.toUpperCase()+' AI · '+DAMAGE_RULES[damageRule()].label.toUpperCase()+(demoOptions.classLimit?' · '+classLimitLabel(demoOptions.classLimit).toUpperCase():'');
   ui.querySelector('.controls')!.innerHTML='<kbd>C</kbd> CAMERA <kbd>[</kbd><kbd>]</kbd> CAR <kbd>SPACE</kbd> PAUSE · FREE ORBIT: DRAG / SCROLL';
   ui.querySelector('.status-row > span')!.id='follow-name';
   ui.querySelector('.hud')!.insertAdjacentHTML('beforeend',`<div class="demo-toolbar"><label>VIEW<select id="demo-camera">${Object.entries(DEMO_CAMERAS).map(([key,label])=>`<option value="${key}">${label}</option>`).join('')}</select></label><label>FOLLOW<select id="demo-car"><option value="auto">Director chooses</option>${cars.map(c=>`<option value="${c.id}">#${c.id+1} ${DEFINITIONS[c.kind].name}</option>`).join('')}</select></label><label>EVENT<select id="demo-event"><option value="derby">Demolition derby</option><option value="race">${raceLabel(resolveCourseId(demoOptions.course))}</option></select></label><button class="small-button" id="demo-next">NEXT EVENT</button><button class="small-button" id="demo-hide">HIDE HUD · H</button><button class="small-button" id="demo-exit">EXIT DEMO</button></div>`);
@@ -988,7 +1007,10 @@ function updateHud() {
 }
 function drawMap() {
   const canvas=document.querySelector<HTMLCanvasElement>('#map');
-  if(canvas)drawQuarryMap(canvas,cars,activeVenue.arena??quarry.arenaLayout,mode,demo?director.followed:online?.active?online.network.id:0,waypointRace?waypointRace.available(demo?director.followed:online?.active?online.network.id:0).map(i=>waypointRace!.stations[i]):[],activeVenue.course.id==='quarry-v1'?undefined:{point:activeVenue.course.point,extent:activeVenue.course.mapExtent??145,halfWidth:activeVenue.course.halfWidth,lines:activeVenue.course.mapLines});
+  const followed=demo?director.followed:online?.active?online.network.id:0,car=cars.find(c=>c.id===followed);
+  const returnPoint=car?offroadMarker.update(activeVenue.course,followed,car.current,mode==='race'&&!waypointRace&&!pursuit&&!car.finished&&car.health>0):undefined;
+  if(!car)offroadMarker.reset();
+  if(canvas)drawQuarryMap(canvas,cars,activeVenue.arena??quarry.arenaLayout,mode,demo?director.followed:online?.active?online.network.id:0,waypointRace?waypointRace.available(demo?director.followed:online?.active?online.network.id:0).map(i=>waypointRace!.stations[i]):[],activeVenue.course.id==='quarry-v1'?undefined:{point:activeVenue.course.point,extent:activeVenue.course.mapExtent??145,halfWidth:activeVenue.course.halfWidth,lines:activeVenue.course.mapLines},returnPoint);
 }
 function formatTime(t: number) {
   return `${Math.floor(t / 60)
@@ -1011,6 +1033,9 @@ function pause(settingsOnly = false) {
   ui.querySelector('#overlay .settings-row')!.insertAdjacentHTML('beforebegin',`<div class="settings-row"><label for="standings-key">Expand standings</label><select id="standings-key">${Object.entries(STANDINGS_KEYS).map(([key,label])=>`<option value="${key}">${label}</option>`).join('')}</select></div>`);
   const standingsSelect=ui.querySelector<HTMLSelectElement>('#standings-key')!;standingsSelect.value=settings.standingsKey;standingsSelect.onchange=()=>{settings.standingsKey=standingsKey(standingsSelect.value);persist();refreshStandings(true);};
   document.querySelector<HTMLInputElement>('#performance')!.onchange=e=>{settings.performance=(e.target as HTMLInputElement).checked;persist();};
+  ui.querySelector('#engine-volume')!.closest('.settings-row')!.insertAdjacentHTML('beforebegin',`<div class="settings-row"><label for="audio-output">Audio output</label><select id="audio-output">${Object.entries(AUDIO_OUTPUTS).map(([value,label])=>`<option value="${value}">${label}</option>`).join('')}</select></div>`);
+  const audioOutput=ui.querySelector<HTMLSelectElement>('#audio-output')!;audioOutput.value=settings.audioOutput;
+  audioOutput.onchange=()=>{settings.audioOutput=readAudioOutput(audioOutput.value);sound.setOutput(settings.audioOutput);persist();};
   const quality = document.querySelector<HTMLSelectElement>('#quality')!;
   quality.value = settings.quality;
   quality.onchange = () => {
@@ -1092,7 +1117,7 @@ function applyQuality() {
   ao.enabled = quality !== 'medium';
   reflections.enabled = quality !== 'medium';
   reflections.interval = quality === 'ultra' ? 3 : 6;
-  renderer.shadowMap.enabled = quality !== 'medium';
+  setSceneShadows(renderer,scene,quality !== 'medium');
 }
 function fullScreen() {
   if (document.fullscreenElement) document.exitFullscreen();
@@ -1103,6 +1128,7 @@ function recover() {
   if(scoreElimination()&&cars[0]?.health<=0){toast('WRECKED · NO RESPAWNS',2);return;}
   if(activeClubRound!==null&&clubPlayerStopped)return;
   if(activeChallenge){toast('CHALLENGE RULE: NO RECOVERIES',2);return;}
+  offroadMarker.reset();
   telemetry?.recover();
   if(activeTimeTrial)timeTrialInvalidReason='RECOVERY USED';
   if(online?.active){online.network.recover();return;}
@@ -1297,7 +1323,7 @@ function step(dt: number) {
   physics.step(events);
   for (const c of cars) c.postStep(dt, elapsed);
   if(activeTimeTrial)trialGhostRecorder?.sample(elapsed,cars[0].current,cars[0].currentQ);
-  const contacts: (ImpactContact & {a?:Vehicle;b?:Vehicle;point:T.Vector3;point1:T.Vector3;point2:T.Vector3;va:T.Vector3;vb:T.Vector3;scarDirection:T.Vector3;speed:number})[]=[];
+  const contacts: (ImpactContact & {a?:Vehicle;b?:Vehicle;point:T.Vector3;point1:T.Vector3;point2:T.Vector3;va:T.Vector3;vb:T.Vector3;scarDirection:T.Vector3;speed:number;material:ImpactMaterial})[]=[];
   events.drainContactForceEvents((e) => {
     const h1=e.collider1(),h2=e.collider2(),{a,b,key}=vehicleContact(physics,cars,h1,h2);
     if(!a&&!b)return;
@@ -1309,7 +1335,7 @@ function step(dt: number) {
     const relative=vb.clone().sub(va),closing=normal.lengthSq()>.5?Math.abs(relative.dot(normal)):relative.length();
     const scarDirection=relative.clone(),speed=scarDirection.length();
     scarDirection.normalize();
-    contacts.push({key,point,point1,point2,va,vb,a,b,scarDirection,speed,closing,impulse:e.totalForceMagnitude()*dt,
+    contacts.push({key,point,point1,point2,va,vb,a,b,scarDirection,speed,closing,material:a&&b?'metal':colliderImpactMaterial(physics,a?h2:h1,activeVenue.root.userData.solidRecords),impulse:e.totalForceMagnitude()*dt,
       damageScale:Math.max(a&&a.health>0?a.specification.damageScale:0,b&&b.health>0?b.specification.damageScale:0)});
   });
   sound.contactScraping.sample(contacts,elapsed);
@@ -1317,7 +1343,7 @@ function step(dt: number) {
     a?.scar(point1,scarDirection,b?.paintColor);
     b?.scar(point2,scarDirection.clone().negate(),a?.paintColor);
   }
-  for(const {contact:{a,b,point,point1,point2,va,vb,impulse},damage,feedback} of impactAdjudicator.adjudicate(contacts,elapsed,collisionDamageMultiplier(mode==='race',damageRule()))){
+  for(const {contact:{a,b,point,point1,point2,va,vb,impulse,material},damage,feedback} of impactAdjudicator.adjudicate(contacts,elapsed,collisionDamageMultiplier(mode==='race',damageRule()))){
     // A feedback-only contact still clears stale glass/debris flags in hit().
     if(a){
       const before=a.health;
@@ -1334,8 +1360,8 @@ function step(dt: number) {
     if(feedback){
       collisions++;
       const severity=impactAudioSeverity(impulse),glass=!!(a?.impactEffects.glass||b?.impactEffects.glass),debris=!!(a?.impactEffects.debris||b?.impactEffects.debris);
-      sound.impact(severity,point,glass,debris);
-      recorder?.impact({time:elapsed,severity,position:point.toArray(),glass,debris});
+      sound.impact(severity,point,glass,debris,material);
+      recorder?.impact({time:elapsed,severity,position:point.toArray(),glass,debris,material});
       if(a?.id===0||b?.id===0)recordRumbleImpact(.12+impulse/22000);
       if(a?.id===0||b?.id===0)toast(damage>12?'HEAVY IMPACT':'CONTACT',.8);
     }
@@ -1587,7 +1613,7 @@ function frame(now: number) {
     frames.push(raw * 1000);
     if (frames.length > 600) frames.shift();
   }
-  if(studio){const from=studio.time,playing=studio.playing;studio.update(dt);replayAudio.sync(playing,studio.seeking,cars);replayImpacts?.step(from,studio.time,playing,studio.seeking,sound.ready);if(studio.seeking)return;}
+  if(studio){const from=studio.time,playing=studio.playing;studio.update(dt);replayAudio.sync(playing,studio.seeking,cars);replayImpacts?.step(from,studio.time,playing,studio.seeking,sound.ready);replayBursts?.step(from,studio.time,playing,studio.seeking,sound.ready);if(studio.seeking)return;}
   else if(online?.active) {
     if(state==='playing' && online.network.connected)online.network.setInput(input());else online.network.idleInput();
     const s=online.network.sample();if(s){online.apply(s,dt);if(activeVenue===quarryVenue)quarry.applyProps(s.props);elapsed=s.elapsed;countdown=s.countdown;}
@@ -1613,12 +1639,13 @@ function frame(now: number) {
   if(demo&&state==='result'){demoRestart=Math.max(0,demoRestart-dt);fx.update(dt);if(demoRestart===0){const next=nextDemoMode(mode,demoOptions.loop);if(next){mode=next;state='loading';void start(true);}}}
   updateTrialGhost();
   updateCamera(dt);
+  if(studio&&!studio.seeking){replayFire?.update(studio.time,camera);replayPuddles?.update(studio.time);}
   if(!studio)for(const car of cars){car.wreckParts.pose(['playing','countdown'].includes(state)?dt:0,car.speed);car.wreckParts.wheelsPose();car.syncSuspension();}
   const effectsActive=['playing','countdown','wrecked'].includes(state)||(demo&&state==='result');
   if(!studio)vehicleFire?.update(cars,effectsActive?dt:0,camera);
   if(!studio)puddleSplashes?.update(cars,activeVenue.puddles,effectsActive?dt:0,state==='playing');
-  if(!studio&&state==='playing')captureReplay();
-  if(studio?.playing&&!studio.seeking)sound.update(cars,camera,dt,false,{id:cars[studio.follow]?.id??0,view:studio.view==='hood'?'hood':studio.view==='chase'?'chase':'orbit'},(from,to)=>cameraObstruction(physics,from,to,undefined,true));
+  if(!studio&&state==='playing'){for(const burst of vehicleFire?.bursts??[])recorder?.burst({time:elapsed,position:burst.position.toArray()});captureReplay();}
+  if(studio?.playing&&!studio.seeking){sound.update(cars,camera,dt,false,{id:cars[studio.follow]?.id??0,view:studio.view==='hood'?'hood':studio.view==='chase'?'chase':'orbit'},(from,to)=>cameraObstruction(physics,from,to,undefined,true));sound.thermal(replayThermal,[]);}
   if(effectsActive){sound.update(cars,camera,dt,state==='wrecked',{id:demo?director.followed:cars[0]?.id??0,view:demo?director.activeView:drivingCamera==='dashboard'?'hood':drivingCamera},(from,to)=>cameraObstruction(physics,from,to,undefined,true));if(vehicleFire)sound.thermal(vehicleFire.audio,vehicleFire.bursts);}
   if(activeVenue===quarryVenue)quarry.update(camera);
   waypointMarkers??=new WaypointMarkers(scene);waypointMarkers.update(waypointRace,demo?director.followed:online?.active?online.network.id:0,!studio&&mode==='race'&&['playing','countdown','paused','result'].includes(state),activeVenue.course.height);

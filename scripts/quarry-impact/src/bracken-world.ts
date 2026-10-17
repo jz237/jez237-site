@@ -1,3 +1,5 @@
+import {createBrackenWoodland} from './bracken-woodland';
+import {createBrackenPaddock} from './bracken-paddock';
 import * as T from 'three';
 import { BRACKEN, BRACKEN_SOLIDS, BRACKEN_TERRAIN, brackenTerrainPatch, brackenGroundSample } from './bracken-course';
 import { freezeSceneryTransforms } from './render-work';
@@ -48,7 +50,7 @@ export function createBrackenWorld() {
         geometry: T.BufferGeometry;
         finish: Finish;
         matrices: T.Matrix4[];
-    }>(), matrix = new T.Matrix4(), rotation = new T.Quaternion(), boxGeometry = new T.BoxGeometry(1, 1, 1), treeGeometry = new T.ConeGeometry(1, 1, 7), trunkGeometry = new T.CylinderGeometry(.5, .6, 1, 6);
+    }>(), matrix = new T.Matrix4(), rotation = new T.Quaternion(), boxGeometry = new T.BoxGeometry(1, 1, 1), treeGeometry = new T.IcosahedronGeometry(1, 1), trunkGeometry = new T.CylinderGeometry(.5, .6, 1, 6);
     function instance(geometry: T.BufferGeometry, finish: Finish, x: number, y: number, z: number, w: number, h: number, d: number, yaw = 0) { rotation.setFromAxisAngle(new T.Vector3(0, 1, 0), yaw); matrix.compose(new T.Vector3(x, y, z), rotation, new T.Vector3(w, h, d)); const key = geometry.uuid + finish, batch = batches.get(key) ?? { geometry, finish, matrices: [] }; batch.matrices.push(matrix.clone()); batches.set(key, batch); }
     const box = (x: number, y: number, z: number, w: number, h: number, d: number, finish: Finish, yaw = 0) => instance(boxGeometry, finish, x, y, z, w, h, d, yaw);
     for (const s of BRACKEN_SOLIDS)
@@ -80,7 +82,7 @@ export function createBrackenWorld() {
         const y = BRACKEN.height(x, z), h = 7 + random() * 7, w = 2.8 + random() * 2, yaw = random() * Math.PI;
         instance(trunkGeometry, 'wood', x, y + h * .32, z, .65, h * .64, .65, yaw);
         for (let j = 0; j < 3; j++)
-            instance(treeGeometry, i % 3 ? 'foliage' : 'foliageLight', x, y + h * (.45 + j * .19), z, w * (1 - j * .2), h * .55, w * (1 - j * .2), yaw);
+            instance(treeGeometry, i % 3 ? 'foliage' : 'foliageLight', x + Math.cos(yaw+j*2.094)*w*.35, y + h * (.48 + j * .16), z + Math.sin(yaw+j*2.094)*w*.35, w*(1-j*.1), h*.24, w*(1-j*.1), yaw);
     }
     // Distance backdrop uses the terrain edge elevations so the ground never
     // ends in a bright void when the director pulls back.
@@ -130,11 +132,13 @@ export function createBrackenWorld() {
             root.add(sign);
         }
     }
+    const woodland=createBrackenWoodland();root.add(woodland.root);
+    const paddock=createBrackenPaddock();root.add(paddock.root);
     root.userData.solidRecords = BRACKEN_SOLIDS;
     freezeSceneryTransforms(root);
     let disposed = false;
-    return { root, groundCoverage: { width, height, spanX, spanZ, road }, dispose() { if (disposed)
-            return; disposed = true; root.removeFromParent(); root.traverse(o => { if (o instanceof T.InstancedMesh)
+    return { root, update:paddock.update, groundCoverage: { width, height, spanX, spanZ, road }, dispose() { if (disposed)
+            return; disposed = true; woodland.dispose();paddock.dispose();root.removeFromParent(); root.traverse(o => { if (o instanceof T.InstancedMesh)
             o.dispose(); }); for (const g of [groundGeometry, boxGeometry, treeGeometry, trunkGeometry, apronGeometry, ...extraGeometry])
             g.dispose(); for (const m of [groundMaterial, ...Object.values(materials), ...extras])
             m.dispose(); textures.forEach(t => t.dispose()); root.clear(); } };

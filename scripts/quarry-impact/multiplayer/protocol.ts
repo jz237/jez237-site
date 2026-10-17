@@ -1,3 +1,5 @@
+import type {DriveSnapshot} from '../src/drivetrain/state';
+import type {ImpactMaterial} from '../src/impact-material';
 import {validOnlineCar,extendedOnlineCar} from '../src/online-roster';
 import {validDrivingAssists,type DrivingAssists} from '../src/driving-assists';
 import {validTransmissionInput,type TransmissionInput,type TransmissionState} from '../src/transmission';
@@ -19,15 +21,16 @@ export const releaseControls=(c:Controls):Controls=>({...NEUTRAL,...(c.assists?{
 export type Vec3 = { x: number; y: number; z: number };
 export type Quat = Vec3 & { w: number };
 export type Member = { id: number; name: string; kind: CarKind; connected: boolean; host: boolean; cupId?:string;loadout?:OnlineLoadout;liveryLayers?:number };
-export type DamageEvent = { id: number; tick: number; car: number; point: Vec3; direction: Vec3; localPoint: Vec3; localDirection: Vec3; repair: number; damage: number; scar?: boolean };
+export type DamageEvent = { id: number; tick: number; car: number; point: Vec3; direction: Vec3; localPoint: Vec3; localDirection: Vec3; repair: number; damage: number; scar?: boolean; material?:ImpactMaterial };
 export type Dent = Pick<DamageEvent,'id'|'localPoint'|'localDirection'|'damage'|'repair'|'scar'>;
 export type PropState = {id:number;p:Vec3;q:Quat;v:Vec3;av:Vec3};
 export type CarState = {
   id: number; kind: CarKind; setup?:OnlineSetup; p: Vec3; q: Quat; v: Vec3; av: Vec3;
   health: number; inflicted: number; damageLeft: number; damageRight: number;
   steering: number; speed: number; rpm: number; gear: number;
+  drivetrain?:DriveSnapshot;
   contactScrape?:number; engineStall?:number; transmission?:TransmissionState;
-  wheels: { suspension: number; rotation: number; contact: boolean;patch?:{plane:number[];load:number} }[];
+  wheels: { suspension: number; rotation: number; contact: boolean; slip?:number;patch?:{plane:number[];load:number} }[];
   input: Controls; passed: number; nextCheckpoint: number; lap: number;
   finished: boolean; finishTime: number; penalty: number; repair: number;
   surface: 'asphalt' | 'gravel' | 'mud'; slip: number;
@@ -37,6 +40,7 @@ export type CarState = {
   dents?: Dent[];
 };
 export type Snapshot = {
+  driveModel?:'angular-v1';
   type: 'snapshot'; tick: number; elapsed: number; countdown: number;
   mode: Mode; phase: 'lobby' | 'countdown' | 'playing' | 'result';
   cars: CarState[]; damage: DamageEvent[]; ranking: number[];

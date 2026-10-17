@@ -25,7 +25,7 @@ test('all registered car/course/direction identities round-trip independently wi
     const next=finishTimeTrialRecord(records,selection,at(time));identities.add(timeTrialKey(selection));
     assert.equal(next.result.newBest,true);assert.equal(next.result.best,time);records=next.records;time+=.0123456789;
   }
-  const expected=CAR_KINDS.length*Object.keys(COURSE_NAMES).length*2;assert.equal(expected,312);assert.equal(identities.size,expected);assert.equal(Object.keys(records.bests).length,expected);
+  const expected=CAR_KINDS.length*Object.keys(COURSE_NAMES).length*2;assert.equal(expected,840);assert.equal(identities.size,expected);assert.equal(Object.keys(records.bests).length,expected);
   let saved='';assert.equal(saveTimeTrialRecords(records,{setItem(key,text){assert.equal(key,TIME_TRIAL_KEY);saved=text;}}),true);
   assert.ok(saved.length>16000,'Full-precision records exceed the obsolete fixed capacity');
   assert.deepEqual(readTimeTrialRecords(saved),records);

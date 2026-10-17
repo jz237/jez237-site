@@ -1,3 +1,4 @@
+import {tagImpactMaterial} from './impact-material';
 import * as T from 'three';
 import R from '@dimforge/rapier3d-compat';
 import {landscapeHeight} from './quarry-layout';
@@ -31,7 +32,7 @@ export class DerbyArenaPhysics {
     for(let i=0;i<DERBY_ARENA.segments;i++){
       const p=arenaBarrier(i),q={x:0,y:Math.sin(p.yaw/2),z:0,w:Math.cos(p.yaw/2)};
       const collider=world.createCollider(R.ColliderDesc.cuboid(2.22,.58,.375).setTranslation(p.x,p.y+.58,p.z).setRotation(q).setFriction(.6).setRestitution(.02));
-      collider.setEnabled(false);this.walls.push(collider);
+      tagImpactMaterial(collider,'concrete');collider.setEnabled(false);this.walls.push(collider);
     }
     for(const [id,collider]of statics)if(id.startsWith('fence-'))this.fences.push({collider,spec:{id,p:{...collider.translation()},half:{...collider.halfExtents()}}});
   }

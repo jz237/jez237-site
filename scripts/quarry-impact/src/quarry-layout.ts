@@ -1,3 +1,5 @@
+import {createQuarryTyres} from './quarry-tyres';
+import {tagImpactMaterial,quarryImpactMaterial} from './impact-material';
 import {terrainCollisionTiles,registerTerrainContacts} from './terrain-collision';
 import { terrainHeight, trackPoint, clamp } from './rules';
 import rockHulls from './quarry-rock-hulls.json';
@@ -180,9 +182,10 @@ export function createQuarryPhysics(R:typeof Rapier,world:Rapier.World,derby:boo
     }
     else desc=R.ColliderDesc.convexHull(s.points);
     if(!desc)throw new Error('Invalid quarry collider '+s.id);desc.setTranslation(s.p.x,s.p.y,s.p.z).setFriction(s.friction??.6);if(s.q)desc.setRotation(s.q);
-    const collider=world.createCollider(desc);statics.set(s.id,collider);if(s.derby){walls.push(collider);collider.setEnabled(derby);}
+    const collider=world.createCollider(desc);tagImpactMaterial(collider,quarryImpactMaterial(s.id));statics.set(s.id,collider);if(s.derby){walls.push(collider);collider.setEnabled(derby);}
   }
-  const props=BARRELS.map(p=>{const body=world.createRigidBody(R.RigidBodyDesc.dynamic().setTranslation(p.x,p.y,p.z));world.createCollider(R.ColliderDesc.cylinder(.55,.34).setMass(28).setFriction(.7),body);return {id:p.id,body,start:{x:p.x,y:p.y,z:p.z}};});
+  const props=BARRELS.map(p=>{const body=world.createRigidBody(R.RigidBodyDesc.dynamic().setTranslation(p.x,p.y,p.z));tagImpactMaterial(world.createCollider(R.ColliderDesc.cylinder(.55,.34).setMass(28).setFriction(.7),body),'metal');return {id:p.id,body,start:{x:p.x,y:p.y,z:p.z}};});
+  props.push(...createQuarryTyres(R,world));
   return {statics,walls,props};
 }
 const quarryLevels = [0, 1.2, 9, 10.4, 12.1, 21, 22.2, 25, 35, 38, 43];

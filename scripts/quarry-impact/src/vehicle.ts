@@ -1,3 +1,5 @@
+import {tyreFeedback} from './tyre-feedback';
+import {createVehicleDrive} from './drivetrain/chassis';
 import {armorWearMultiplier} from './armor-wear';
 import type {DrivingSurface} from './driving-surface';
 import type {DrivingAssists} from './driving-assists';
@@ -48,6 +50,11 @@ export type Input = {
   transmission?:TransmissionInput;
 };
 export class Vehicle {
+  readonly drivetrain?:ReturnType<typeof createVehicleDrive>;
+  remoteWheelAngles?:number[];
+  remoteContactPoints?:(T.Vector3|null)[];
+  readonly wheelSlips=[0,0,0,0];
+  wheelAngle(index:number){return this.remoteWheelAngles?.[index]??this.drivetrain?.wheels[index]?.angle??this.controller.wheelRotation(index)??0;}
   private drawBatch?:VehicleDrawBatch;
   syncDrawBatch(){this.drawBatch??=new VehicleDrawBatch(this.root);this.drawBatch.sync();}
   get drawBatchStats(){return{batches:this.drawBatch?.batches.length??0,panels:this.drawBatch?.batches.reduce((n,b)=>n+b.parts.length,0)??0};}
@@ -143,6 +150,7 @@ export class Vehicle {
     public fx: Effects,
     setup?: Setup,
     readonly ground:VehicleGround = {height:landscapeHeight,surface:surfaceAt},
+    readonly driveModel:'legacy'|'angular-v1'='legacy',
   ) {
     this.setup = normalizeSetup(setup ?? stockSetup(kind), kind);
     this.specification = setupPhysics(kind, this.setup);
@@ -154,6 +162,7 @@ export class Vehicle {
     scene.add(this.root);
     const physical=createVehiclePhysics(R,world,kind,def.mass,this.setup.armor);
     this.structure=physical.structure;this.body=physical.body;this.collider=physical.collider;this.roof=physical.roof;this.controller=physical.controller;
+    if(driveModel==='angular-v1')this.drivetrain=createVehicleDrive(this.body,this.controller,kind);
     for(const name of ['FL','FR','RL','RR'])this.wheels.push(this.model.getObjectByName('wheel_'+name)!);
     this.model.traverse((o) => {
       if (o instanceof T.Mesh) {
@@ -193,6 +202,8 @@ export class Vehicle {
     this.currentQ.copy(q);
     this.root.position.copy(p);
     this.root.quaternion.copy(q);
+    this.wheelSlips.fill(0);this.drivetrain?.reset();
+    if(this.drivetrain){this.transmission=undefined;this.gear=1;this.rpm=this.engineStall!>0||this.health<=0?0:850;this.speed=0;this.slip=0;}
     this.rollTime = 0;
     this.stuck = 0;
     this.onVisualEvent?.({kind:'jump',pose:this.visualPose()});
@@ -206,10 +217,12 @@ export class Vehicle {
     this.surfaceFinish.reset();
     this.impactResponse.reset();
     this.impactEffects = {glass:false,debris:false};
+    this.wheelSlips.fill(0);
     this.health = 100;
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
+    if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
     this.damageLeft = this.damageRight = 0;
@@ -271,7 +284,11 @@ export class Vehicle {
     this.surface = this.ground.surface(this.previous.x, this.previous.z);
     if(this.arenaSurface&&Math.hypot(this.previous.x-this.arenaSurface.x,this.previous.z-this.arenaSurface.z)<this.arenaSurface.radius)this.surface='gravel';
     this.oldGear=this.gear;
-    stepVehiclePhysics(this.body,this.controller,this.kind,this.specification,this,dt,this.wreckParts.wheelDamage,this.wreckParts.wheelShift,this.engineDamage,this.tyreDamage);
+    if(this.drivetrain){
+      const result=this.drivetrain.step(this.specification,this,dt,undefined,{wheelDamage:this.wreckParts.wheelDamage,wheelShift:this.wreckParts.wheelShift,engineDamage:this.engineDamage,tyreDamage:this.tyreDamage});
+      // Only grounded tire slip creates skid audio, marks and surface effects.
+      this.wheelSlips.splice(0,4,...result.contactSlips);this.slip=Math.max(this.slip,...this.wheelSlips);
+    }else{stepVehiclePhysics(this.body,this.controller,this.kind,this.specification,this,dt,this.wreckParts.wheelDamage,this.wreckParts.wheelShift,this.engineDamage,this.tyreDamage);this.wheelSlips.fill(this.slip);}
   }
   postStep(dt: number, time: number) {
     this.current.copy(this.body.translation());
@@ -296,17 +313,11 @@ export class Vehicle {
         const wet=this.surfaceFinish.water[i],yaw=Math.atan2(this.forward.x,this.forward.z);
         if(wet>.035&&Math.abs(this.speed)>.5&&!this.wetWheels[i]&&Math.abs(p.y-this.ground.height(p.x,p.z))<.15)this.fx.evidence?.add(p,yaw,Math.abs(this.speed)*.07,wet,0);
         if(this.wetWheels[i])continue;
-        if (Math.abs(this.speed) > 3 && this.surface !== 'asphalt')
-          this.fx.emit(p, 1, this.surface==='mud'?4:0, Math.abs(this.speed) * 0.04);
-        if (this.slip > 2 || this.input.handbrake) {
-          if (this.surface === 'asphalt')
-            this.fx.mark(
-              p,
-              Math.atan2(this.forward.x, this.forward.z),
-              Math.max(0.2, Math.abs(this.speed) * 0.09),
-            );
-          else this.fx.emit(p, 2, this.surface==='mud'?4:0, 1);
-          if(this.surface!=='asphalt')this.fx.evidence?.add(p,yaw,Math.abs(this.speed)*.07,Math.min(.65,this.slip*.06),1);
+        const feedback=tyreFeedback(this.surface,this.speed,this.wheelSlips[i],this.input.handbrake,i,true);
+        if(feedback.count)this.fx.emit(p,feedback.count,feedback.type,feedback.force);
+        if(feedback.skid){
+          if(this.surface==='asphalt')this.fx.mark(p,yaw,feedback.markLength);
+          else this.fx.evidence?.add(p,yaw,Math.abs(this.speed)*.07,feedback.evidence,1);
         }
       }
       if(this.wreckParts.assemblies.some(a=>a.name.includes('bumper')&&a.loose>.55))this.model.updateWorldMatrix(true,true);
@@ -332,7 +343,7 @@ export class Vehicle {
         -this.model.position.y - 0.12 - (this.controller.wheelSuspensionLength(i) ?? vehicleSuspensionRestLength(this.kind));
       const tyre=this.tyreDamage?.[i],corner=wheelResponse(this.wreckParts.wheelDamage[i],i%2?1:-1,this.speed,vehicleWheelRadius(this.kind),tyre,vehicleFlatTyreRadius(this.kind));
       w.rotation.set(0,(i<2?this.steering:0)+corner.toe,0);
-      w.rotateX(-(this.controller.wheelRotation(i) ?? 0));
+      w.rotateX(-this.wheelAngle(i));
       const coating=this.surfaceFinish.coating.value;
       this.tireContacts[i].update(this.controller,i,this.specification.mass,this.wreckParts.wheelDamage[i],i%2?coating.w:coating.z,tyre===undefined?undefined:{failure:tyreFailure(tyre),radius:corner.radius,baseRadius:wheelResponse(this.wreckParts.wheelDamage[i],i%2?1:-1,this.speed,vehicleWheelRadius(this.kind),0,vehicleFlatTyreRadius(this.kind)).radius});
     }

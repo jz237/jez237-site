@@ -1,3 +1,8 @@
+import {addCourseGroundDetail} from './course-materials';
+import {PINECREST_TERRAIN} from './pinecrest-course';
+import {createPinecrestRoadsideTrees} from './pinecrest-roadside-trees';
+import {createPinecrestLandscape} from './pinecrest-landscape';
+import {createPinecrestPaddock} from './pinecrest-paddock';
 import * as T from 'three';
 import {PINECREST,PINECREST_SOLIDS,pinecrestTerrainPatch} from './pinecrest-course';
 import {freezeSceneryTransforms} from './render-work';
@@ -23,6 +28,7 @@ export function createPinecrestWorld(){
   }
  }else groundMaterial.color.set(0x66704e);
  const patch=pinecrestTerrainPatch();groundGeometry.setAttribute('position',new T.BufferAttribute(patch.positions,3));groundGeometry.setAttribute('uv',new T.BufferAttribute(patch.uv,2));groundGeometry.setIndex(new T.BufferAttribute(patch.indices,1));groundGeometry.computeVertexNormals();
+ const detail=addCourseGroundDetail(groundMaterial,{terrain:PINECREST_TERRAIN,distance:PINECREST.distance,surface:PINECREST.surface});
  const floor=new T.Mesh(groundGeometry,groundMaterial);floor.name='pinecrest_ground';floor.receiveShadow=true;root.add(floor);
  const batches=new Map<keyof typeof materials,T.Matrix4[]>();
  const matrix=new T.Matrix4(),q=new T.Quaternion();
@@ -32,11 +38,10 @@ export function createPinecrestWorld(){
  for(let row=0;row<5;row++){const h=.6+row*.55,z=-127-row*2;box(0,h/2,z,150,h,2,'concrete');for(let x=-70;x<=70;x+=3)box(x,h+.2,z,2.2,.2,.65,'seat');}
  box(0,5.6,-134,158,.25,14,'steel');for(const x of [-75,-25,25,75])box(x,2.8,-140,.2,5.6,.2,'steel');
  for(let x=-65;x<=65;x+=26){box(x,2.2,-150,23,4.4,12,'stripe');box(x,4.5,-150,24,.2,13,'steel');for(const dx of [-7,0,7])box(x+dx,1.8,-143.9,5,3.4,.15,'seat');}
- const trunks=new T.CylinderGeometry(.3,.45,1,5),crowns=new T.ConeGeometry(1,1,7),trees: {x:number;z:number}[]=[];
- for(let x=-160;x<=160;x+=16)for(const z of [-155,143]){if(z<0&&Math.abs(x)<85)continue;trees.push({x,z});}
- for(let z=-110;z<=115;z+=16)for(const x of [-165,165])trees.push({x,z});
- for(const [geometry,material,offset,scale]of [[trunks,materials.steel,2,new T.Vector3(1,4,1)],[crowns,materials.grass,5,new T.Vector3(4,8,4)]] as const){const mesh=new T.InstancedMesh(geometry,material,trees.length);trees.forEach((tree,i)=>{matrix.compose(new T.Vector3(tree.x,PINECREST.height(tree.x,tree.z)+offset,tree.z),new T.Quaternion(),scale);mesh.setMatrixAt(i,matrix);});mesh.castShadow=mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
+ const trees=createPinecrestRoadsideTrees();root.add(trees.root);
  for(const [finish,matrices]of batches){const mesh=new T.InstancedMesh(boxGeometry,materials[finish],matrices.length);matrices.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.name='pinecrest_'+finish;mesh.castShadow=mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
+ const landscape=createPinecrestLandscape();root.add(landscape.root);
+ const paddock=createPinecrestPaddock();root.add(paddock.root);
  root.userData.solidRecords=PINECREST_SOLIDS;freezeSceneryTransforms(root);
- let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();trunks.dispose();crowns.dispose();groundMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
+ let disposed=false;return{root,update:paddock.update,dispose(){if(disposed)return;disposed=true;detail.dispose();trees.dispose();landscape.dispose();paddock.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();groundMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
 }

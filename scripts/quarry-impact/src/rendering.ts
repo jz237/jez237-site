@@ -131,3 +131,18 @@ export class LocalReflections {
     this.generator.dispose();
   }
 }
+
+/** Shadow defines are compiled into material programs. Toggling the renderer
+ * alone can leave old programs sampling a disposed map after a quality change. */
+export function setSceneShadows(renderer:Pick<T.WebGLRenderer,'shadowMap'>,scene:T.Object3D,enabled:boolean){
+ if(renderer.shadowMap.enabled===enabled)return;
+ renderer.shadowMap.enabled=enabled;
+ const changed=new Set<T.Material>();
+ scene.traverse(object=>{
+  if(!(object instanceof T.Mesh))return;
+  for(const material of Array.isArray(object.material)?object.material:[object.material]){
+   if(changed.has(material))continue;
+   changed.add(material);material.needsUpdate=true;
+  }
+ });
+}

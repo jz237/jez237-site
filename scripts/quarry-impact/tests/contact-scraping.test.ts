@@ -6,9 +6,9 @@ test('initial impacts stay silent, sustained rubbing ramps up, separation resets
  s.sample([], .27);assert.equal(s.level(0),0);s.sample([contact()],.31);assert.equal(s.level(0),0);
  s.sample([contact()],0);assert.equal(s.level(0),0);s.clear();assert.equal(s.level(0),0);
 });
-test('only environmental tangential motion sounds; duplicates and multiple surfaces cannot inflate volume',()=>{
- const s=new ContactScraping();for(let i=0;i<=15;i++)s.sample([contact(),contact({key:'other'}),contact({b:{id:1}}),contact({key:'head-on',a:{id:2},closing:12}),contact({key:'still',a:{id:3},speed:0}),contact({key:'invalid',a:{id:4},impulse:NaN})],i/60);
- assert.equal(s.level(0),1);for(const id of [1,2,3,4])assert.equal(s.level(id),0);
+test('only tangential contact motion sounds; duplicates and multiple surfaces cannot inflate volume',()=>{
+ const s=new ContactScraping();for(let i=0;i<=15;i++)s.sample([contact(),contact({key:'other'}),contact({key:'cars',b:{id:1}}),contact({key:'head-on',a:{id:2},closing:12}),contact({key:'still',a:{id:3},speed:0}),contact({key:'invalid',a:{id:4},impulse:NaN})],i/60);
+ assert.equal(s.level(0),1);assert.equal(s.level(1),1);for(const id of [2,3,4])assert.equal(s.level(id),0);
  for(let i=16;i<=35;i++)s.sample([contact({a:undefined,b:{id:5},impulse:100,speed:6})],i/60);assert.equal(s.level(5),.25);assert.equal(s.level(0),0);
  s.sample([],NaN);assert.equal(s.level(5),0);
 });
@@ -40,4 +40,33 @@ test('actual mixer plays contact on an intact car, removes false damaged-drift s
  for(let i=0;i<20;i++)sound.contactScraping.sample([contact()],i/60);update();assert.ok(loop.gain.gain.value>0);
  update(true);assert.equal(loop.gain.gain.value,0);sound.contactScraping.sample([],1);car.health=50;car.slip=8;update();assert.equal(loop.gain.gain.value,0);
  car.scraping=.7;update();assert.ok(loop.gain.gain.value>0,'loose bumper contact remains audible');sound.clearCars();assert.equal(sound.contactScraping.level(0),0);
+});
+
+ test('side-to-side rubbing reaches both cars and clears both at separation',()=>{
+ const s=new ContactScraping(),touch={key:'car:2:7',a:{id:2},b:{id:7},impulse:100,speed:6,closing:0};
+ for(let i=0;i<20;i++)s.sample([touch,touch],i/60);
+ assert.equal(s.level(2),.25);assert.equal(s.level(7),.25);
+ s.sample([],20/60);assert.equal(s.level(2),0);assert.equal(s.level(7),0);
+ for(let i=21;i<40;i++)s.sample([{...touch,closing:6}],i/60);
+ assert.equal(s.level(2),0);assert.equal(s.level(7),0);
+ });
+
+test('real sliding body-to-body manifolds feed both scrape voices',async()=>{
+ const {default:R}=await import('@dimforge/rapier3d-compat');await R.init();
+ const {captureCollisionMotion,collisionPointVelocity}=await import('../src/collision-contact');
+ const {vehicleContactManifold}=await import('../src/vehicle-contact');
+ const world=new R.World({x:0,y:0,z:0}),events=new R.EventQueue(true),s=new ContactScraping();world.timestep=1/60;
+ const bodies=[-1,1].map(x=>world.createRigidBody(R.RigidBodyDesc.dynamic().setTranslation(x,1,0).lockRotations()));
+ const colliders=bodies.map(b=>world.createCollider(R.ColliderDesc.cuboid(1,.5,4).setMass(1000).setFriction(.05).setActiveEvents(R.ActiveEvents.CONTACT_FORCE_EVENTS).setContactForceEventThreshold(0),b));
+ let peak=0;
+ try{for(let tick=0;tick<30;tick++){
+  bodies[0].setLinvel({x:1,y:0,z:3},true);bodies[1].setLinvel({x:-1,y:0,z:-3},true);
+  const motion=captureCollisionMotion(world);world.step(events);const contacts:any[]=[];
+  events.drainContactForceEvents(e=>{const h1=e.collider1(),h2=e.collider2(),m=vehicleContactManifold(world,h1,h2);if(!m)return;
+   const a=collisionPointVelocity(world,motion,h1,m.point1),b=collisionPointVelocity(world,motion,h2,m.point2),x=b.x-a.x,y=b.y-a.y,z=b.z-a.z;
+   contacts.push({key:'pair',a:{id:h1===colliders[0].handle?0:1},b:{id:h2===colliders[0].handle?0:1},speed:Math.hypot(x,y,z),closing:Math.abs(x*m.normal.x+y*m.normal.y+z*m.normal.z),impulse:e.totalForceMagnitude()/60});});
+  s.sample(contacts,tick/60);assert.equal(s.level(0),s.level(1));peak=Math.max(peak,s.level(0));
+ }
+ assert.ok(peak>.1,`body rub peak ${peak}`);s.sample([],1);assert.equal(s.level(0),0);assert.equal(s.level(1),0);
+ }finally{events.free();world.free();}
 });

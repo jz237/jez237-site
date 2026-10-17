@@ -1,3 +1,4 @@
+import {AUDIO_OUTPUTS} from './audio-output';
 import {validCameraSettings} from './camera-settings';
 import {PROFILE_KEY,readProfile} from './progression';
 import {GARAGE_KEY,readGarage} from './garage';
@@ -25,6 +26,7 @@ function normalize(key:string,text:string):string{
   if(raw.camera!==undefined){if(!validCameraSettings(raw.camera))throw Error('Invalid camera setting.');out.camera={...raw.camera};}
   if(raw.quality!==undefined){if(!['auto','ultra','high','medium'].includes(raw.quality))throw Error('Invalid graphics setting.');out.quality=raw.quality;}
   if(raw.standingsKey!==undefined){if(raw.standingsKey!=='Tab'&&raw.standingsKey!=='Backquote')throw Error('Invalid standings shortcut.');out.standingsKey=raw.standingsKey;}
+  if(raw.audioOutput!==undefined){if(typeof raw.audioOutput!=='string'||!Object.hasOwn(AUDIO_OUTPUTS,raw.audioOutput))throw Error('Invalid audio output setting.');out.audioOutput=raw.audioOutput;}
   if(raw.performance!==undefined){if(typeof raw.performance!=='boolean')throw Error('Invalid performance setting.');out.performance=raw.performance;}
   for(const k of ['engine','effects','ambience'])if(raw[k]!==undefined){if(typeof raw[k]!=='number'||!Number.isFinite(raw[k])||raw[k]<0||raw[k]>1)throw Error('Invalid sound setting.');out[k]=raw[k];}
   if(raw.best!==undefined){if(!object(raw.best)||Object.keys(raw.best).length>10000||Object.entries(raw.best).some(([k,v])=>k.length>200||!/^[-\w:.]+$/.test(k)||typeof v!=='number'||!Number.isFinite(v)||v<0))throw Error('Invalid event records.');out.best=raw.best;}

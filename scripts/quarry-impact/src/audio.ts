@@ -1,6 +1,9 @@
+import {materialImpactProfile,type ImpactMaterial} from './impact-material';
+import {readAudioOutput,type AudioOutput} from './audio-output';
 import {TrackAcousticProbe,TrackReflections} from './track-acoustics';
 import type {CameraObstruction} from './demo-camera-visibility';
 import {ContactScraping} from './contact-scraping';
+import {scrapeSurfaceMix} from './scrape-surface-audio';
 import {gearboxGrindSamples} from './transmission';
 import {audioListenerPosition,AudioListenerMotion,type AudioPerspective} from './audio-perspective';
 import {starterSamples} from './engine-stall';
@@ -27,6 +30,16 @@ export class Sound {
   ready = false;
   activeVoices = 0;
   private activeShots = new Set<AudioBufferSourceNode>();
+  private shotPanners=new Map<AudioBufferSourceNode,PannerNode>();
+  output:AudioOutput='speakers';
+  setOutput(value:unknown){
+    this.output=readAudioOutput(value);
+    if(this.master){this.master.channelCount=this.output==='mono'?1:2;this.master.channelCountMode='explicit';this.master.channelInterpretation='speakers';}
+    const model=this.output==='headphones'?'HRTF':'equalpower';
+    for(const loops of this.loops.values())for(const loop of loops.values())loop.pan.panningModel=model;
+    if(this.ambient)this.ambient.pan.panningModel=model;
+    for(const pan of this.shotPanners.values())pan.panningModel=model;
+  }
   lastShot = new Map<string, number>();
   levels = { engine: 0.72, effects: 0.8, ambience: 0.45 };
   history = new Map<
@@ -63,6 +76,7 @@ export class Sound {
     const c = this.ctx;
     this.master = c.createGain();
     this.master.gain.value = 0.75;
+    this.setOutput(this.output);
     const compressor = c.createDynamicsCompressor();
     compressor.threshold.value = -12;
     compressor.knee.value = 12;
@@ -112,7 +126,7 @@ export class Sound {
     const gain = c.createGain();
     gain.gain.value = 0;
     const pan = c.createPanner();
-    pan.panningModel = 'equalpower';
+    pan.panningModel = this.output==='headphones'?'HRTF':'equalpower';
     pan.distanceModel = 'inverse';
     pan.refDistance = 7;
     pan.maxDistance = 200;
@@ -134,8 +148,8 @@ export class Sound {
       }
       const grind=this.loop('gear-grind',this.engineBus!);if(grind)loops.set('gear-grind',grind);
       const starter=this.loop('starter',this.engineBus!);if(starter)loops.set('starter',starter);
-      for (const name of ['tires', 'gravel', 'scrape', 'fire-roar', 'fire-crackle']) {
-        const loop = this.loop(name, this.fxBus!);
+      for (const name of ['tires', 'gravel', 'scrape', 'scrape-loose', 'fire-roar', 'fire-crackle']) {
+        const loop = this.loop(name==='scrape-loose'?'gravel':name, this.fxBus!);
         if (loop) loops.set(name, loop);
       }
       this.loops.set(car.id, loops);
@@ -172,10 +186,14 @@ export class Sound {
       this.shot('debris',e.position,.2,{rate:.84,delay:.17,duration:1.7});
     }
   }
-  impact(damage:number,p:T.Vector3,glass=false,debris=false) {
-    for(const layer of impactSoundLayers(damage,glass,debris))this.shot(layer.id,p,layer.volume,layer);
+  impact(damage:number,p:T.Vector3,glass=false,debris=false,material:ImpactMaterial='metal') {
+    const profile=materialImpactProfile(material);
+    for(const layer of impactSoundLayers(damage,glass,debris)){
+      const body=layer.id.startsWith('impact-');
+      this.shot(layer.id,p,layer.volume*(body?profile.gain:1),body?{...layer,rate:layer.rate*profile.rate,duration:layer.duration*profile.duration,lowpass:profile.lowpass}:layer);
+    }
   }
-  shot(id: string, p: T.Vector3, volume = 1, options?:{rate:number;delay:number;duration:number}) {
+  shot(id: string, p: T.Vector3, volume = 1, options?:{rate:number;delay:number;duration:number;lowpass?:number}) {
     if (!this.ready || this.activeVoices >= 18) return;
     const c = this.ctx!,
       buf = this.buffers.get(id);
@@ -190,19 +208,24 @@ export class Sound {
     const gain = c.createGain();
     gain.gain.value = Math.min(1, volume);
     const pan = c.createPanner();
-    pan.panningModel = 'equalpower';
+    pan.panningModel = this.output==='headphones'?'HRTF':'equalpower';
     pan.refDistance = 8;
     pan.rolloffFactor = 1;
     pan.positionX.value = p.x;
     pan.positionY.value = p.y;
     pan.positionZ.value = p.z;
-    source.connect(gain).connect(pan).connect(this.fxBus!);
+    const filter=options?.lowpass?c.createBiquadFilter():undefined;
+    if(filter){filter.type='lowpass';filter.frequency.value=options!.lowpass!;filter.Q.value=.7;source.connect(filter).connect(gain);}else source.connect(gain);
+    gain.connect(pan).connect(this.fxBus!);
     this.activeVoices++;
     this.activeShots.add(source);
+    this.shotPanners.set(source,pan);
     source.onended = () => {
       this.activeVoices--;
       this.activeShots.delete(source);
+      this.shotPanners.delete(source);
       source.disconnect();
+      filter?.disconnect();
       gain.disconnect();
       pan.disconnect();
     };
@@ -277,6 +300,7 @@ export class Sound {
       );
       const rpm = car.rpm,
         level = car === focused ? 0.38 : 0.22;
+      const scrapeMix=scrapeSurfaceMix(car.scraping??0,this.contactScraping.level(car.id),car.surface,car.speed);
       for (const [name, l] of loops) {
         if(name.startsWith('fire-'))continue;
         l.pan.positionX.value = car.current.x;
@@ -311,10 +335,12 @@ export class Sound {
             car.surface !== 'asphalt'
               ? Math.min(0.22, Math.abs(car.speed) * 0.008)
               : 0;
-        else if (name === 'scrape')
-          v=Math.min(.13,Math.max(car.scraping??0,this.contactScraping.level(car.id))*.12);
+        else if (name === 'scrape'||name==='scrape-loose'){
+          const loose=name==='scrape-loose';v=loose?scrapeMix.looseGain:scrapeMix.metalGain;
+          l.source.playbackRate.setTargetAtTime((loose?scrapeMix.looseRate:scrapeMix.metalRate)*doppler,c.currentTime,.13);
+        }
         if (!grounded && ['tires','gravel'].includes(name)) v=0;
-        if (car.health <= 0 && !['tires', 'gravel', 'scrape'].includes(name))
+        if (car.health <= 0 && !['tires', 'gravel', 'scrape', 'scrape-loose'].includes(name))
           v = 0;
         if(car.engineStall!>0&&['idle','low','mid','high','load','damaged'].includes(name))v=0;
         if(wreckInspection)v=0;

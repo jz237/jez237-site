@@ -1,3 +1,5 @@
+import {createAshfordLandscape} from './ashford-landscape';
+import {createAshfordPaddock} from './ashford-paddock';
 import * as T from 'three';
 import {ASHFORD,ASHFORD_SOLIDS} from './ashford-course';
 import {freezeSceneryTransforms} from './render-work';
@@ -16,6 +18,28 @@ export function createAshfordWorld(){
    ctx.lineJoin='round';route();ctx.strokeStyle='#a39574';ctx.lineWidth=30*scale;ctx.stroke();
    route();ctx.strokeStyle='#e3ddd0';ctx.lineWidth=25.5*scale;ctx.stroke();ctx.setLineDash([3*scale,3*scale]);ctx.strokeStyle='#30517a';ctx.stroke();ctx.setLineDash([]);
    route();ctx.strokeStyle='#393e40';ctx.lineWidth=24*scale;ctx.stroke();
+   // Baked road wear is clipped to asphalt, leaving painted curbs and grass clean.
+   const wearCanvas=document.createElement('canvas');wearCanvas.width=canvas.width;wearCanvas.height=canvas.height;const wear=wearCanvas.getContext('2d');
+   if(wear){
+    let wearSeed=90171;const random=()=>((wearSeed=(Math.imul(wearSeed,1664525)+1013904223)>>>0)/4294967296);
+    for(let i=0;i<170000;i++){wear.fillStyle=i%3?'rgba(9,14,17,.1)':'rgba(130,132,125,.07)';wear.fillRect(random()*2048,random()*1808,.5+random()*.75,.5+random()*.75);}
+    // Uneven repaired patches and sealed cracks align with the route, never form obstacles.
+    for(let i=0;i<70;i++){
+     const t=random(),p=ASHFORD.point(t),a=ASHFORD.point(t-.0001),b=ASHFORD.point(t+.0001),yaw=Math.atan2(b.z-a.z,b.x-a.x),offset=(random()-.5)*17;
+     wear.save();wear.translate(x(p.x-Math.sin(yaw)*offset),z(p.z+Math.cos(yaw)*offset));wear.rotate(-yaw);
+     const w=(1.5+random()*5)*scale,h=(1+random()*2.8)*scale;
+     wear.fillStyle=i%2?'rgba(21,27,29,.22)':'rgba(130,132,121,.13)';wear.fillRect(-w/2,-h/2,w,h);
+     wear.strokeStyle='rgba(14,20,23,.3)';wear.lineWidth=.07*scale;wear.beginPath();wear.moveTo(-w/2,-h/2);wear.lineTo(-w*.1,-h*.27);wear.lineTo(w*.16,h*.1);wear.lineTo(w/2,h/2);wear.stroke();wear.restore();
+    }
+    // Paired rubber arcs through bends add braking/drifting history, with varied lengths.
+    for(let i=0;i<115;i++){
+     const t=random(),offset=(random()-.5)*14,duration=(5+random()*20)/ASHFORD.length;
+     for(const side of [-1,1]){wear.beginPath();for(let j=0;j<=12;j++){const u=t+duration*j/12,p=ASHFORD.point(u),a=ASHFORD.point(u-.0001),b=ASHFORD.point(u+.0001),yaw=Math.atan2(b.x-a.x,b.z-a.z),lane=offset+side*.8+Math.sin(j/12*Math.PI)*.4,px=x(p.x+Math.cos(yaw)*lane),pz=z(p.z-Math.sin(yaw)*lane);if(j)wear.lineTo(px,pz);else wear.moveTo(px,pz);}wear.strokeStyle='rgba(10,16,19,.16)';wear.lineWidth=(.16+random()*.1)*scale;wear.stroke();}
+    }
+    // destination-in retains existing detail only beneath this full asphalt stroke.
+    const mask=document.createElement('canvas');mask.width=canvas.width;mask.height=canvas.height;const mc=mask.getContext('2d');
+    if(mc){mc.beginPath();ASHFORD.samples.forEach((p,i)=>i?mc.lineTo(x(p.x),z(p.z)):mc.moveTo(x(p.x),z(p.z)));mc.closePath();mc.lineJoin='round';mc.strokeStyle='#fff';mc.lineWidth=23.8*scale;mc.stroke();wear.globalCompositeOperation='destination-in';wear.drawImage(mask,0,0);ctx.drawImage(wearCanvas,0,0);}
+   }
    const start=ASHFORD.point(0);for(let i=0;i<24;i++)for(let j=0;j<2;j++){ctx.fillStyle=(i+j)%2?'#deddd3':'#25292c';ctx.fillRect(x(start.x-1+j),z(start.z-12+i+1),scale,scale);}
    for(let row=1;row<12;row++)for(const lane of [-2.4,2.4]){const p=ASHFORD.point(-row*7/ASHFORD.length);ctx.fillStyle='#b6b7b1';ctx.fillRect(x(p.x-2),z(p.z+lane+1),.2*scale,2*scale);}
    const texture=new T.CanvasTexture(canvas);texture.flipY=false;texture.colorSpace=T.SRGBColorSpace;texture.anisotropy=8;textures.push(texture);groundMaterial.map=texture;
@@ -31,6 +55,8 @@ export function createAshfordWorld(){
  box(0,5.6,-113,158,.25,14,'steel');for(const x of [-75,-25,25,75])box(x,2.8,-118,.2,5.6,.2,'steel');
  for(let x=-65;x<=65;x+=26){box(x,2.2,-135,23,4.4,12,'stripe');box(x,4.5,-135,24,.2,13,'steel');for(const dx of [-7,0,7])box(x+dx,1.8,-128.9,5,3.4,.15,'seat');}
  for(const [finish,matrices]of batches){const mesh=new T.InstancedMesh(boxGeometry,materials[finish],matrices.length);matrices.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.name='ashford_'+finish;mesh.castShadow=mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
+ const landscape=createAshfordLandscape();root.add(landscape.root);
+ const paddock=createAshfordPaddock();root.add(paddock.root);
  root.userData.solidRecords=ASHFORD_SOLIDS;freezeSceneryTransforms(root);
- let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();groundMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
+ let disposed=false;return{root,update:paddock.update,dispose(){if(disposed)return;disposed=true;landscape.dispose();paddock.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();groundMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
 }

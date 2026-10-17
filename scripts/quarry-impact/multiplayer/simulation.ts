@@ -1,3 +1,7 @@
+import {circuitSteeringTarget} from '../src/circuit-steering-target';
+import {createVehicleDrive} from '../src/drivetrain/chassis';
+import {readNetworkDrives} from '../src/drivetrain/network';
+import {colliderImpactMaterial,type ImpactMaterial} from '../src/impact-material';
 import {ContactScraping} from '../src/contact-scraping';
 import {ChaseRound} from './chase';
 import {PursuitDriving} from '../src/pursuit-driving';
@@ -33,7 +37,7 @@ import { DEFINITIONS, CHECKPOINTS, clamp, wrap, surfaceAt, trackPoint, terrainHe
 import { STEP, NEUTRAL, type Controls, type Vec3, type Quat, type CarState, type DamageEvent, type Snapshot } from './protocol';
 
 type RapierAPI = typeof Rapier;
-type Car = { structure:VehicleStructure; kind:CarKind; specification:VehicleSpecification; body: Rapier.RigidBody; collider: Rapier.Collider; roof: Rapier.Collider; controller: Rapier.DynamicRayCastVehicleController; state: CarState; stuck: number; escapeAttempts: number; reverse: number; roll: number; offTrack: number; lastRecovery: number; checkpointDistance: number };
+type Car = { wheelSlips?:number[]; drivetrain?:ReturnType<typeof createVehicleDrive>; structure:VehicleStructure; kind:CarKind; specification:VehicleSpecification; body: Rapier.RigidBody; collider: Rapier.Collider; roof: Rapier.Collider; controller: Rapier.DynamicRayCastVehicleController; state: CarState; stuck: number; escapeAttempts: number; reverse: number; roll: number; offTrack: number; lastRecovery: number; checkpointDistance: number };
 const ONLINE_ARENA={x:0,z:0,radius:46,segments:66,spawnRadius:32,fenceRadius:50};
 const AI_TRACK=Array.from({length:100},(_,i)=>trackPoint(i/100));
 const quat = (yaw: number) => ({ x: 0, y: Math.sin(yaw / 2), z: 0, w: Math.cos(yaw / 2) });
@@ -62,10 +66,11 @@ export class Simulation {
   private damageId = 0;
   private chaseDriving=new PursuitDriving(new DrivingBrain());
   private raceRecovery = new RaceRecovery();
+  private recoveryRetry = new WeakMap<Car,number>();
   private impacts = new ImpactAdjudicator();
   private scars = new CollisionScars();
   private contactScraping=new ContactScraping();
-  constructor(public R: RapierAPI, public mode: Mode = 'derby', kinds: CarKind[] = [],public readonly capacity:OnlineCapacity=LEGACY_ONLINE_PLAYERS,setups:(OnlineSetup|undefined)[]=[],rules?:OnlineEventRules,seed=0) {
+  constructor(public R: RapierAPI, public mode: Mode = 'derby', kinds: CarKind[] = [],public readonly capacity:OnlineCapacity=LEGACY_ONLINE_PLAYERS,setups:(OnlineSetup|undefined)[]=[],rules?:OnlineEventRules,seed=0,public driveModel:'legacy'|'angular-v1'='legacy') {
     this.arenaId=mode==='derby'?rules?.arena??'quarry-arena-v1':'quarry-arena-v1';
     this.course=mode==='derby'?onlineArena(this.arenaId).ground:getRaceCourse(mode==='race'?rules?.course:undefined);
     if(rules)this.event=new OnlineEvent(mode,rules,seed,capacity);
@@ -82,11 +87,12 @@ export class Simulation {
   private createCar(id: number, kind: CarKind,setup?:OnlineSetup): Car {
     const specification=vehicleSpecification(kind,setup),{body,collider,roof,controller,structure}=createVehiclePhysics(this.R,this.world,kind,specification.mass,setup?.armor);
     const state: CarState = { id,kind,...(setup?{setup:copyOnlineSetup(setup)}:{}),p:{x:0,y:0,z:0},q:quat(0),v:{x:0,y:0,z:0},av:{x:0,y:0,z:0},health:100,engineStall:0,inflicted:0,damageLeft:0,damageRight:0,steering:0,speed:0,rpm:850,gear:1,wheels:[],input:{...NEUTRAL},passed:0,nextCheckpoint:1,lap:1,finished:false,finishTime:0,penalty:0,repair:0,surface:'gravel',slip:0,dents:[],components:freshComponents() };
-    return {structure,kind,specification,body,collider,roof,controller,state,stuck:0,escapeAttempts:0,reverse:0,roll:0,offTrack:0,lastRecovery:-100,checkpointDistance:Infinity};
+    return {drivetrain:this.driveModel==='angular-v1'?createVehicleDrive(body,controller,kind):undefined,structure,kind,specification,body,collider,roof,controller,state,stuck:0,escapeAttempts:0,reverse:0,roll:0,offTrack:0,lastRecovery:-100,checkpointDistance:Infinity};
   }
   private place(c: Car, x: number, z: number, yaw: number) {
     c.body.setTranslation({x,y:this.course.height(x,z)+.89,z},true); c.body.setRotation(quat(yaw),true);
     c.body.setLinvel({x:0,y:0,z:0},true); c.body.setAngvel({x:0,y:0,z:0},true); c.roll = c.stuck = c.offTrack = 0;
+    this.recoveryRetry.delete(c);c.wheelSlips=undefined;c.drivetrain?.reset();if(c.drivetrain){c.state.transmission=undefined;c.state.gear=1;c.state.rpm=c.state.engineStall!>0||c.state.health<=0?0:850;c.state.speed=0;c.state.slip=0;}
     this.readBody(c);
   }
   private spawn(c: Car) {
@@ -102,7 +108,7 @@ export class Simulation {
         plane:[normal.x,normal.y,normal.z,-(normal.x*point.x+normal.y*point.y+normal.z*point.z)-.001],
         load:this.wheelPatchLoad(c,i),
       }:undefined;
-      return {suspension:c.controller.wheelSuspensionLength(i)??vehicleSuspensionRestLength(c.state.kind),rotation:c.controller.wheelRotation(i)??0,contact,...(patch?{patch}:{})};
+      return {suspension:c.controller.wheelSuspensionLength(i)??vehicleSuspensionRestLength(c.state.kind),rotation:c.drivetrain?.wheels[i].angle??c.controller.wheelRotation(i)??0,contact,...(c.drivetrain?{slip:c.wheelSlips?.[i]??0}:{}),...(patch?{patch}:{})};
     });
   }
   private wheelPatchLoad(c:Car,i:number){return clamp((c.controller.wheelSuspensionForce(i)??0)/(c.specification.mass*9.81/4),0,2)+(c.state.components?.wheelDamage[i]??0)*.5;}
@@ -136,6 +142,11 @@ export class Simulation {
   }
   private route(id:number){return courseRoute(this.course,directionForCar(this.event?.rules.race==='laps'?this.event.rules.direction:'forward',id));}
   private damageShape(c: Car) { c.structure.update(c.state.components?.structure,c.state.health); }
+  private retryAIRecovery(c:Car){
+    if(this.elapsed<(this.recoveryRetry.get(c)??0))return;
+    if(this.recover(c.state.id))this.recoveryRetry.delete(c);
+    else this.recoveryRetry.set(c,this.elapsed+1);
+  }
   ai(c: Car): Controls {
     const s=c.state;
     if (s.health<=0) return {...NEUTRAL};
@@ -146,12 +157,12 @@ export class Simulation {
       const target=targets[Math.floor((this.elapsed+s.id*1.79)/5)%Math.min(3,targets.length)]?.state;
       if (!target) return {...NEUTRAL};
       if (Math.hypot(s.p.x-this.arena.x,s.p.z-this.arena.z)<this.arena.radius-5) { tx=target.p.x+target.v.x*.35; tz=target.p.z+target.v.z*.35; }
-    } else if(this.mode==='race') {const nav=s.finished?undefined:this.event?.waypoints?.navigation(s.id,s.p);if(nav)s.nextCheckpoint=nav.next;const p=(nav?.route??this.route(s.id))[s.nextCheckpoint];tx=p.x+Math.sin(s.id*1.79)*2;tz=p.z+Math.cos(s.id*1.79)*2;}
+    } else if(this.mode==='race') {const nav=s.finished?undefined:this.event?.waypoints?.navigation(s.id,s.p);if(nav)s.nextCheckpoint=nav.next;const p=nav?nav.route[s.nextCheckpoint]:circuitSteeringTarget(this.course,s.nextCheckpoint,directionForCar(this.event?.rules.race==='laps'?this.event.rules.direction:'forward',s.id)==='reverse',s.p,s.speed);tx=p.x+Math.sin(s.id*1.79)*2;tz=p.z+Math.cos(s.id*1.79)*2;}
     else {const p=trackPoint((this.elapsed*.011+s.id*.18)%1);tx=p.x;tz=p.z;}
     if(this.mode==='race'){
       const nearest=this.event?.waypoints&&this.course.waypointStations?0:this.course.distance(s.p.x,s.p.z);
       c.offTrack=nearest>14?c.offTrack+STEP:0;
-      if(c.offTrack>7||c.roll>4){this.recover(s.id);c.offTrack=0;}
+      if(c.offTrack>7||c.roll>4)this.retryAIRecovery(c);
     }
     const f=rotate({x:0,y:0,z:1},s.q),right=rotate({x:1,y:0,z:0},s.q), angle=wrap(Math.atan2(tx-s.p.x,tz-s.p.z)-Math.atan2(f.x,f.z));
     let steer=clamp(angle*1.65,-1,1),throttle=.8,brake=Math.abs(s.speed)>17&&Math.abs(angle)>.8?.5:0;
@@ -159,8 +170,8 @@ export class Simulation {
     c.stuck=Math.abs(s.speed)<1.2&&this.elapsed>2?c.stuck+STEP:0;
     if(c.stuck>1.8){c.reverse=1.5+s.id*.08;c.stuck=0;c.escapeAttempts++;}
     if(c.reverse>0){c.reverse=Math.max(0,c.reverse-STEP);throttle=-.65;steer=-steer;brake=0;}
-    if(this.mode==='race'&&this.raceRecovery.ready(s,STEP,c.escapeAttempts))this.recover(s.id);
-    if(c.roll>5)this.recover(s.id);
+    if(this.mode==='race'&&this.raceRecovery.ready(s,STEP,c.escapeAttempts))this.retryAIRecovery(c);
+    if(this.mode!=='race'&&c.roll>5)this.recover(s.id);
     if(this.mode!=='derby')for(const other of this.cars){if(other===c)continue;const o=other.state,d={x:o.p.x-s.p.x,y:o.p.y-s.p.y,z:o.p.z-s.p.z};
       const ahead=dot(d,f),side=dot(d,right),blocked=o.health===0||Math.abs(o.speed)<Math.abs(s.speed)-3;
       if(Math.hypot(d.x,d.y,d.z)<9&&ahead>0&&Math.abs(side)<3&&blocked)steer=clamp(steer+(side>0?-1:1)*.7,-1,1);
@@ -185,7 +196,12 @@ export class Simulation {
   }
   private drive(c:Car) {
     const s=c.state;s.surface=this.course.surface(s.p.x,s.p.z);
-    const up=stepVehiclePhysics(c.body,c.controller,s.kind,c.specification,s,STEP,s.components?.wheelDamage,s.components?.wheelShift,s.components?.engineDamage,s.components?.tyreDamage);
+    let up:number;
+    if(c.drivetrain){
+      const result=c.drivetrain.step(c.specification,s,STEP,undefined,{wheelDamage:s.components?.wheelDamage,wheelShift:s.components?.wheelShift,engineDamage:s.components?.engineDamage,tyreDamage:s.components?.tyreDamage});
+      c.wheelSlips=result.contactSlips;s.slip=Math.max(s.slip,...c.wheelSlips);
+      up=rotate({x:0,y:1,z:0},c.body.rotation()).y;
+    }else up=stepVehiclePhysics(c.body,c.controller,s.kind,c.specification,s,STEP,s.components?.wheelDamage,s.components?.wheelShift,s.components?.engineDamage,s.components?.tyreDamage);
     c.roll=up<.2?c.roll+STEP:0;
   }
   step(humans: Set<number>) {
@@ -199,7 +215,7 @@ export class Simulation {
     const collisionMotion=captureCollisionMotion(this.world);
     this.world.step(this.queue);
     for(const c of this.cars)this.readBody(c);
-    const contacts:(ImpactContact&{a?:Car;b?:Car;point1:Vec3;point2:Vec3;scarDirection:Vec3;speed:number})[]=[];
+    const contacts:(ImpactContact&{a?:Car;b?:Car;point1:Vec3;point2:Vec3;scarDirection:Vec3;speed:number;material:ImpactMaterial})[]=[];
     this.queue.drainContactForceEvents(e=>{
       const h1=e.collider1(),h2=e.collider2(),{a,b,key}=vehicleContact(this.world,this.cars,h1,h2);
       if(!a&&!b)return;
@@ -210,7 +226,7 @@ export class Simulation {
       const closing=dot(normal,normal)>.5?Math.abs(dot(relative,normal)):Math.hypot(relative.x,relative.y,relative.z);
       const cv1=va,cv2=vb;
       const speed=Math.hypot(cv2.x-cv1.x,cv2.y-cv1.y,cv2.z-cv1.z),scarDirection=dir(cv2,cv1);
-      contacts.push({a,b,key,point1,point2,scarDirection,speed,impulse,closing,damageScale:Math.max(a&&a.state.health>0?a.specification.damageScale:0,b&&b.state.health>0?b.specification.damageScale:0)});
+      contacts.push({a,b,key,point1,point2,scarDirection,speed,impulse,closing,material:a&&b?'metal':colliderImpactMaterial(this.world,a?h2:h1,'solids'in this.course?this.course.solids:undefined),damageScale:Math.max(a&&a.state.health>0?a.specification.damageScale:0,b&&b.state.health>0?b.specification.damageScale:0)});
     });
     this.contactScraping.sample(contacts.map(c=>({...c,a:c.a?.state,b:c.b?.state})),this.elapsed);
     for(const c of this.cars)c.state.contactScrape=this.contactScraping.level(c.state.id)||undefined;
@@ -223,7 +239,7 @@ export class Simulation {
         this.damage.push(event);(s.dents??=[]).push({id:event.id,localPoint,localDirection,repair:s.repair,damage:0,scar:true});s.dents=s.dents.slice(-334);
       }
     }
-    for(const {contact:{a,b,point1,point2,scarDirection},damage} of this.impacts.adjudicate(contacts,this.elapsed,this.mode==='race'?.45:1)){
+    for(const {contact:{a,b,point1,point2,scarDirection,material},damage} of this.impacts.adjudicate(contacts,this.elapsed,this.mode==='race'?.45:1)){
       if(damage===0)continue;
       for(const [car,other] of [[a,b],[b,a]])if(car&&car.state.health>0){
         const point=car===a?point1:point2,s=car.state,direction=car===a?scarDirection:{x:-scarDirection.x,y:-scarDirection.y,z:-scarDirection.z};
@@ -234,7 +250,7 @@ export class Simulation {
         const local=rotate({x:point.x-s.p.x,y:point.y-s.p.y,z:point.z-s.p.z},{x:-s.q.x,y:-s.q.y,z:-s.q.z,w:s.q.w});
         if(local.x<0)s.damageLeft+=received;else s.damageRight+=received;
         const localDirection=rotate(direction,{x:-s.q.x,y:-s.q.y,z:-s.q.z,w:s.q.w});
-        const event={id:++this.damageId,tick:this.tick,car:s.id,point,direction,localPoint:local,localDirection,repair:s.repair,damage:received};
+        const event={id:++this.damageId,tick:this.tick,car:s.id,point,direction,localPoint:local,localDirection,repair:s.repair,damage:received,material};
         applyComponentImpact(s.components??=freshComponents(),s.kind,local,localDirection,received);
         s.engineStall=stalledByImpact(s.engineStall,s.health,s.components.engineDamage,received);
         if(s.engineStall!>0||s.health<=0)s.rpm=0;
@@ -284,19 +300,23 @@ export class Simulation {
     if(this.mode==='race'&&this.event?.rules.raceDuration)return timedRaceOrder(cars.map(c=>({...c,current:c.p})),id=>this.route(id)).map(c=>c.id);
     return (this.mode==='derby'?(this.event?.score?this.event.combat.order(cars):derbyOrder(cars)):cars.sort((a,b)=>a.finished&&b.finished?a.finishTime-b.finishTime:a.finished?-1:b.finished?1:b.passed-a.passed||distance(a)-distance(b)||a.id-b.id)).map(c=>c.id);
   }
-  snapshot(includeDamage=false): Omit<Snapshot,'members'|'ack'> {return {type:'snapshot',...(this.event?{event:this.event.snapshot(this.capacity)}:{}),capacity:this.capacity,tick:this.tick,elapsed:this.elapsed,countdown:this.countdown,mode:this.mode,phase:this.phase,props:this.props.map(p=>({id:p.id,p:{...p.body.translation()},q:{...p.body.rotation()},v:{...p.body.linvel()},av:{...p.body.angvel()}})),cars:this.cars.map(c=>structuredClone({...c.state,dents:includeDamage?c.state.dents:undefined})),damage:structuredClone(this.damage),ranking:this.ranking()};}
+  snapshot(includeDamage=false): Omit<Snapshot,'members'|'ack'> {return {type:'snapshot',...(this.driveModel==='angular-v1'?{driveModel:'angular-v1' as const}:{}),...(this.event?{event:this.event.snapshot(this.capacity)}:{}),capacity:this.capacity,tick:this.tick,elapsed:this.elapsed,countdown:this.countdown,mode:this.mode,phase:this.phase,props:this.props.map(p=>({id:p.id,p:{...p.body.translation()},q:{...p.body.rotation()},v:{...p.body.linvel()},av:{...p.body.angvel()}})),cars:this.cars.map(c=>structuredClone({...c.state,...(c.drivetrain?{drivetrain:c.drivetrain.snapshot()}:{}),dents:includeDamage?c.state.dents:undefined})),damage:structuredClone(this.damage),ranking:this.ranking()};}
   restore(s:Snapshot) {
+    readNetworkDrives(s);
+    const driveModel=s.driveModel??'legacy',modelChanged=driveModel!==this.driveModel;this.driveModel=driveModel;
     if(s.event?.rules.chase)ChaseRound.restore(s.event.rules.chase,this.capacity,s.event.chase,s.cars,s.elapsed);
     const arenaId=s.mode==='derby'?s.event?.rules.arena??'quarry-arena-v1':'quarry-arena-v1';
     const course=s.mode==='derby'?onlineArena(arenaId).ground:getRaceCourse(s.mode==='race'?s.event?.rules.course:undefined);
-    if(course!==this.course||s.mode!==this.mode){this.queue.free();this.world.free();this.course=course;this.arenaId=arenaId;this.mode=s.mode;this.world=new this.R.World({x:0,y:-9.81,z:0});this.world.timestep=STEP;this.queue=new this.R.EventQueue(true);this.buildTerrain();this.cars=s.cars.map(c=>this.createCar(c.id,c.kind,c.setup));}
-    this.impacts.clear();this.scars.clear();this.contactScraping.clear();this.chaseDriving.reset();
+    if(modelChanged||course!==this.course||s.mode!==this.mode){this.queue.free();this.world.free();this.course=course;this.arenaId=arenaId;this.mode=s.mode;this.world=new this.R.World({x:0,y:-9.81,z:0});this.world.timestep=STEP;this.queue=new this.R.EventQueue(true);this.buildTerrain();this.cars=s.cars.map(c=>this.createCar(c.id,c.kind,c.setup));}
+    this.recoveryRetry=new WeakMap();this.impacts.clear();this.scars.clear();this.contactScraping.clear();this.chaseDriving.reset();
     if(s.event){this.event=new OnlineEvent(s.mode,s.event.rules,s.event.seed,this.capacity);this.event.restore(s.event,this.capacity);}else this.event=undefined;
     this.tick=s.tick;this.elapsed=s.elapsed;this.countdown=s.countdown;this.phase=s.phase;this.damage=structuredClone(s.damage);
     this.damageId=Math.max(0,...s.damage.map(d=>d.id),...s.cars.flatMap(c=>(c.dents??[]).map(d=>d.id)));
     for(const car of s.cars){if(car.contactScrape!==undefined&&(!Number.isFinite(car.contactScrape)||car.contactScrape<0||car.contactScrape>1))throw new Error('Invalid saved contact scraping');if(car.setup!==undefined&&!validOnlineSetup(car.setup))throw new Error('Invalid saved vehicle setup');let c=this.cars[car.id];
       if(c.state.kind!==car.kind||!sameOnlineSetup(c.state.setup,car.setup,car.kind)){this.world.removeVehicleController(c.controller);this.world.removeRigidBody(c.body);c=this.cars[car.id]=this.createCar(car.id,car.kind,car.setup);}
+      c.drivetrain?.restore(car.drivetrain);c.wheelSlips=c.drivetrain?car.wheels.map(w=>w.slip??0):undefined;
       c.state={...c.state,contactScrape:undefined,...structuredClone(car),surface:car.surface??this.course.surface(car.p.x,car.p.z),slip:car.slip??0};c.state.input={...NEUTRAL,...(validDrivingAssists(car.input.assists)?{assists:{...car.input.assists}}:{})};c.state.transmission=validTransmissionState(car.transmission)?structuredClone(car.transmission):undefined;if(c.state.transmission)c.state.input.transmission={mode:c.state.transmission.mode,up:false,down:false,clutch:0};c.state.engineStall=validEngineStall(car.engineStall)?car.engineStall??0:0;
+      delete c.state.drivetrain; // The live adapter owns this state; snapshots capture it afresh.
       const engineHistory=(c.state.dents??[]).filter(hit=>hit.repair===c.state.repair);
       // A bounded legacy history may have lost older hits. Only infer the new
       // component when those retained hits account for all structural health
@@ -317,6 +337,10 @@ export class Simulation {
         c.state.components!.engineDamage=completeEngineHistory?engineDamage:undefined;
       }
       c.body.setTranslation(car.p,true);c.body.setRotation(car.q,true);c.body.setLinvel(car.v,true);c.body.setAngvel(car.av,true);this.damageShape(c);}
+    // Older saves omit subsequently added props. Restore them to spawn rather
+    // than keeping positions/velocities from the room that is being replaced.
+    const savedProps=new Set((s.props??[]).map(p=>p.id));
+    for(const prop of this.props)if(!savedProps.has(prop.id)){prop.body.setTranslation(prop.start,true);prop.body.setRotation({x:0,y:0,z:0,w:1},true);prop.body.setLinvel({x:0,y:0,z:0},true);prop.body.setAngvel({x:0,y:0,z:0},true);}
     for(const p of s.props??[]){const prop=this.props[p.id];if(!prop)continue;prop.body.setTranslation(p.p,true);prop.body.setRotation(p.q,true);prop.body.setLinvel(p.v,true);prop.body.setAngvel(p.av,true);}
   }
 

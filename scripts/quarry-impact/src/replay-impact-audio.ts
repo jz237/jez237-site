@@ -12,7 +12,7 @@ export class ReplayImpactPlayback {
   const start=Math.max(this.pendingFrom??from,to-.25);this.pendingFrom=undefined;
   const upper=(time:number)=>{let lo=0,hi=this.events.length;while(lo<hi){const mid=(lo+hi)>>>1;if(this.events[mid].time<=time)lo=mid+1;else hi=mid;}return lo;};
   const end=upper(to),begin=Math.max(upper(start),end-8);
-  for(let i=begin;i<end;i++){const e=this.events[i];this.sound.impact(e.severity,new Vector3().fromArray(e.position),e.glass,e.debris);}
+  for(let i=begin;i<end;i++){const e=this.events[i];this.sound.impact(e.severity,new Vector3().fromArray(e.position),e.glass,e.debris,e.material);}
   return end-begin;
  }
 }

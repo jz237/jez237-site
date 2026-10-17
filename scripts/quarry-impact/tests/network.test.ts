@@ -185,3 +185,13 @@ test('new connections upload saved artwork once and reconnects retain the server
  socket.message({type:'welcome',protocol:1,room:'ABCDEF',id:1,token:'artist',snapshot:s,liveries});assert.equal(socket.sent.at(-1).type,'livery');assert.equal(socket.sent.at(-1).layers.length,32);
  socket.serverClose(1012,'Restart');h.timers.advance(500);const next=h.sockets.at(-1)!;next.open();const before=next.sent.length;next.message({type:'welcome',protocol:1,room:'ABCDEF',id:1,token:'artist',snapshot:s,liveries,pendingLivery:{kind:'coupe',layers:[newLayer('number')]}});assert.equal(next.sent.length,before,'stale local artwork must not overwrite the accepted next-event design');
 });
+
+test('prop interpolation follows IDs, smooths shortest-path rotation and avoids reset smearing',t=>{
+ t.mock.method(performance,'now',()=>1000);const h=harness(t),socket=h.connect(),before=state(600);before.props=before.props.slice(0,24);h.welcome(socket,before);
+ const after=state(603);after.props[0].p.x+=4;after.props[0].q={x:0,y:1,z:0,w:0};after.props[22].p.x+=100;after.props[23].q={x:0,y:0,z:0,w:-1};after.props.reverse();socket.message(after);
+ const middle=h.network.sample(1025)!,p=middle.props.find(p=>p.id===0)!;
+ assert.equal(p.p.x,before.props[0].p.x+2);assert.ok(Math.abs(p.q.y-Math.SQRT1_2)<1e-8);assert.ok(Math.abs(p.q.w-Math.SQRT1_2)<1e-8);
+ assert.deepEqual(middle.props.find(p=>p.id===22),after.props.find(p=>p.id===22),'teleport snaps');assert.deepEqual(middle.props.find(p=>p.id===24),after.props.find(p=>p.id===24),'new prop does not interpolate another ID');assert.equal(middle.props.find(p=>p.id===23)!.q.w,1,'opposite quaternion signs do not spin');
+ assert.equal(h.network.sample(900)!.props.find(p=>p.id===0)!.p.x,before.props[0].p.x);assert.equal(h.network.sample(1100)!.props.find(p=>p.id===0)!.p.x,after.props.find(p=>p.id===0)!.p.x);
+ const reconnect=h.connect();h.welcome(reconnect,after);assert.deepEqual(h.network.sample(1025)!.props,after.props,'welcome does not carry old interpolation');
+});

@@ -131,7 +131,7 @@ void main(){
       s.type = type;
       this.types[i] = type;
       const col = new T.Color(
-        type === 1 ? 0xffcd87 : type === 4 ? 0x58412c : type === 3 ? 0xa4c5c8 : type === 2 ? 0x333430 : 0x9f957f,
+        type === 1 ? 0xffcd87 : type === 4 ? 0x58412c : type === 3 ? 0xa4c5c8 : type === 2 ? 0x333430 : type === 5 ? 0xc7c9c8 : 0x9f957f,
       );
       col.multiplyScalar(.8 + Math.random() * .3);
       col.toArray(this.colors, i * 3);

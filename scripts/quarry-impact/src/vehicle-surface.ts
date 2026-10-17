@@ -74,11 +74,11 @@ material.clearcoatRoughness=mix(material.clearcoatRoughness,.07,carWet);
   }
   transfer(mesh:T.Mesh,contact:T.Vector3,damage:number,color?:T.Color){
     if(!color)return;
-    const attribute=mesh.geometry.attributes.transferPaint,rest=mesh.userData.wreckRest as T.BufferAttribute;
-    if(!attribute||!rest)return;
+    const attribute=mesh.geometry.attributes.transferPaint,position=mesh.geometry.attributes.position,toModel=mesh.userData.wreckToModel as T.Matrix4;
+    if(!attribute||!position||!toModel)return;
     const p=new T.Vector3(),radius=.55+Math.min(23,damage)*.02;
-    for(let i=0;i<rest.count;i++){
-      const weight=Math.max(0,1-p.fromBufferAttribute(rest,i).distanceTo(contact)/radius);
+    for(let i=0;i<position.count;i++){
+      const weight=Math.max(0,1-p.fromBufferAttribute(position,i).applyMatrix4(toModel).distanceTo(contact)/radius);
       if(weight<=0)continue;
       const alpha=Math.min(.8,attribute.getW(i)+weight*damage*.012);
       attribute.setXYZW(i,color.r,color.g,color.b,alpha);

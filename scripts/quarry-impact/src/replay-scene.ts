@@ -1,3 +1,4 @@
+import type {ThermalAudio} from './vehicle-fire';
 import {withWreckBatch} from './wreck-batch';
 import {ReplayCheckpointCache} from './replay-checkpoint';
 import * as T from 'three';
@@ -7,13 +8,14 @@ import type {Effects} from './effects';
 import {REPLAY_STRIDE,replayCarStride,replayBracket,replayCourseId,type ReplayDocument} from './replay-data';
 export type ReplayProp={mesh:T.Mesh;body:R.RigidBody};
 const axis=new T.Vector3(1,0,0),spin=new T.Quaternion(),base=new T.Quaternion(),q=new T.Quaternion();
-export function captureReplayFrame(cars:readonly Vehicle[],props:readonly ReplayProp[],epochs:readonly number[],tyreModel?:1,engineModel?:1,audioModel?:1,contactLevel:(id:number)=>number=()=>0){
-  const stride=replayCarStride({tyreModel,engineModel,audioModel}),data=new Float32Array(cars.length*stride+props.length*7);
+export function captureReplayFrame(cars:readonly Vehicle[],props:readonly ReplayProp[],epochs:readonly number[],tyreModel?:1,engineModel?:1,audioModel?:1,contactLevel:(id:number)=>number=()=>0,thermalModel?:1,thermal:readonly ThermalAudio[]=[]){
+  const stride=replayCarStride({tyreModel,engineModel,audioModel,thermalModel}),data=new Float32Array(cars.length*stride+props.length*7);
   cars.forEach((c,i)=>{const o=i*stride;data.set(c.current.toArray(),o);data.set(c.currentQ.toArray(),o+3);data.set(c.velocity.toArray(),o+7);data.set([c.speed,c.rpm,c.gear,c.steering,c.health],o+10);
-    c.wheels.forEach((w,j)=>{const a=c.controller.wheelRotation(j)??0,k=o+15+j*8;base.copy(w.quaternion).multiply(spin.setFromAxisAngle(axis,a));data.set(w.position.toArray(),k);data.set(base.toArray(),k+3);data[k+7]=a;});
+    c.wheels.forEach((w,j)=>{const a=c.wheelAngle(j),k=o+15+j*8;base.copy(w.quaternion).multiply(spin.setFromAxisAngle(axis,a));data.set(w.position.toArray(),k);data.set(base.toArray(),k+3);data[k+7]=a;});
     data.set(c.surfaceFinish.coating.value.toArray(),o+47);data[o+51]=c.wreckFinish.soot.value;data[o+52]=c.slip;data[o+53]=c.input.brake>.05||c.input.handbrake?1:0;data[o+54]=epochs[i]??0;data[o+55]=c.wreckParts.poseTime;
     if(engineModel===1)data[o+REPLAY_STRIDE+(tyreModel===1?24:0)]=c.engineStall??0;
-    if(audioModel===1)data.set([c.input.throttle,['gravel','asphalt','mud'].indexOf(c.surface),Number(c.remoteGrounded??[0,1,2,3].some(j=>c.controller.wheelIsInContact(j))),Math.max(0,Math.min(1,Math.max(c.scraping??0,contactLevel(c.id))))],o+stride-4);
+    if(audioModel===1)data.set([c.input.throttle,['gravel','asphalt','mud'].indexOf(c.surface),Number(c.remoteGrounded??[0,1,2,3].some(j=>c.controller.wheelIsInContact(j))),Math.max(0,Math.min(1,Math.max(c.scraping??0,contactLevel(c.id))))],o+REPLAY_STRIDE+(tyreModel===1?24:0)+(engineModel===1?1:0));
+    if(thermalModel===1){const e=thermal.find(e=>e.id===c.id);data.set([e?.heat??0,...(e?.position??c.current).toArray()],o+stride-4);}
     if(tyreModel===1)c.tireContacts.forEach((contact,j)=>{const k=o+REPLAY_STRIDE+j*6;data.set(contact.plane.value.toArray(),k);data[k+4]=contact.load.value;data[k+5]=contact.active.value;});
   });
   props.forEach((p,i)=>{const o=cars.length*stride+i*7,at=p.body.translation(),rot=p.body.rotation();data.set([at.x,at.y,at.z,rot.x,rot.y,rot.z,rot.w],o);});return data;
@@ -22,6 +24,7 @@ export function captureReplayFrame(cars:readonly Vehicle[],props:readonly Replay
 export class ReplayScene {
   private checkpoints:ReplayCheckpointCache;
   get checkpointStats(){return {count:this.checkpoints.size,bytes:this.checkpoints.bytes,limit:this.checkpoints.limit};}
+  readonly thermalAudio:ThermalAudio[]=[];
   readonly cars:Vehicle[]=[];readonly props:T.Mesh[]=[];private eventIndex=0;private time=-1;private incomplete=false;private visibility=new Map<T.Object3D,boolean>();
   constructor(readonly doc:ReplayDocument,scene:T.Scene,world:R.World,sourceProps:readonly ReplayProp[],ground?:VehicleGround,checkpointLimit?:number){
     this.checkpoints=new ReplayCheckpointCache(checkpointLimit);
@@ -65,12 +68,14 @@ export class ReplayScene {
     }
     const {a,b,alpha}=replayBracket(this.doc.frames,time),av=a.values,bv=b.values;
     const stride=replayCarStride(this.doc.meta);
+    this.thermalAudio.length=0;
     this.cars.forEach((c,i)=>{const o=i*stride,t=av[o+54]===bv[o+54]?alpha:0,mix=(k:number)=>av[o+k]+(bv[o+k]-av[o+k])*t;
       c.current.set(mix(0),mix(1),mix(2));c.currentQ.fromArray(av,o+3).slerp(q.fromArray(bv,o+3),t).normalize();c.root.position.copy(c.current);c.root.quaternion.copy(c.currentQ);c.previous.copy(c.current);c.previousQ.copy(c.currentQ);
       c.velocity.set(mix(7),mix(8),mix(9));c.speed=mix(10);c.rpm=mix(11);c.gear=av[o+12];c.steering=mix(13);c.health=av[o+14];c.slip=mix(52);
       if(this.doc.meta.engineModel===1){const k=REPLAY_STRIDE+(this.doc.meta.tyreModel===1?24:0),continuous=av[o+k]>0&&bv[o+k]>0;c.engineStall=continuous?mix(k):av[o+k];if((av[o+k]>0)!==(bv[o+k]>0))c.rpm=av[o+11];}else c.engineStall=undefined;
-      if(this.doc.meta.audioModel===1){const k=stride-4;c.input.throttle=mix(k);c.surface=(['gravel','asphalt','mud'] as const)[av[o+k+1]];c.remoteGrounded=av[o+k+2]===1;c.scraping=mix(k+3);}
+      if(this.doc.meta.audioModel===1){const k=REPLAY_STRIDE+(this.doc.meta.tyreModel===1?24:0)+(this.doc.meta.engineModel===1?1:0);c.input.throttle=mix(k);c.surface=(['gravel','asphalt','mud'] as const)[av[o+k+1]];c.remoteGrounded=av[o+k+2]===1;c.scraping=mix(k+3);}
       else{c.input.throttle=0;c.surface=c.ground.surface(c.current.x,c.current.z);c.remoteGrounded=this.doc.meta.tyreModel===1?[0,1,2,3].some(j=>av[o+REPLAY_STRIDE+j*6+5]===1):false;c.scraping=0;}
+      if(this.doc.meta.thermalModel===1){const k=stride-4;this.thermalAudio.push({id:c.id,heat:mix(k),position:new T.Vector3(mix(k+1),mix(k+2),mix(k+3)),burst:0});}
       c.forward.set(0,0,1).applyQuaternion(c.currentQ);c.right.set(1,0,0).applyQuaternion(c.currentQ);
       c.surfaceFinish.coating.value.set(mix(47),mix(48),mix(49),mix(50));c.wreckFinish.soot.value=mix(51);c.wreckParts.poseAt(mix(55),c.speed);
       c.wheels.forEach((w,j)=>{const k=15+j*8;w.position.set(mix(k),mix(k+1),mix(k+2));w.quaternion.fromArray(av,o+k+3).slerp(q.fromArray(bv,o+k+3),t).multiply(spin.setFromAxisAngle(axis,-mix(k+7)));});

@@ -146,7 +146,7 @@ export function createVehiclePhysics(api:typeof R,world:R.World,kind:CarKind,mas
 }
 const intact=new Float32Array(4),unshifted=[{x:0,y:0,z:0},{x:0,y:0,z:0},{x:0,y:0,z:0},{x:0,y:0,z:0}];
 /** No renderer, wall clock or networking state: both simulations execute this kernel. */
-export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastVehicleController,kind:CarKind,spec:VehicleSpecification,state:PhysicsState,dt:number,wheelDamage:ArrayLike<number>=intact,wheelShift:readonly Vec[]=unshifted,engineDamage?:number,tyreDamage?:ArrayLike<number>){
+export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastVehicleController,kind:CarKind,spec:VehicleSpecification,state:PhysicsState,dt:number,wheelDamage:ArrayLike<number>=intact,wheelShift:readonly Vec[]=unshifted,engineDamage?:number,tyreDamage?:ArrayLike<number>,externalLongitudinal=false){
  const q=body.rotation(),velocity=body.linvel(),forward=rotateVehicleVector({x:0,y:0,z:1},q),right=rotateVehicleVector({x:1,y:0,z:0},q),up=rotateVehicleVector({x:0,y:1,z:0},q),def=DEFINITIONS[kind],alive=state.health>0;
  const running=advanceEngineRestart(state,dt);
  state.speed=dot(velocity,forward);const lateralSpeed=dot(velocity,right);state.slip=Math.abs(lateralSpeed);
@@ -169,11 +169,11 @@ export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastV
   let wheelForce=state.input.handbrake&&i>1&&!isFrontDriveKind(kind)?0:force*corner.power*(isFrontDriveKind(kind)?(i<2?front[i%2]:0):(kind==='coupe'||isClassicKind(kind)&&kind!=='trail')?(i>1?rear[i%2]:0):.5*(i<2?front:rear)[i%2]);
   const contactMotion=state.input.assists?.traction||state.input.assists?.abs?wheelContactMotion(body,controller,i,forward,right):undefined;
   if(state.input.assists?.traction&&!state.input.handbrake)wheelForce=limitTractionForce(wheelForce,state.input.assists.traction,!!controller.wheelIsInContact(i),Math.min(corner.force,Math.max(0,controller.wheelSuspensionForce(i)??0)),contactMotion!.lateral,state.surface,corner.grip*spec.grip);
-  controller.setWheelEngineForce(i,wheelForce);
+  controller.setWheelEngineForce(i,externalLongitudinal?0:wheelForce);
   let serviceBrake=state.input.brake*90*(i<2?spec.frontBrake:spec.rearBrake);
   if(alive&&state.input.assists?.abs&&!(state.input.handbrake&&i>1))serviceBrake=limitBrakeImpulse(serviceBrake,state.input.assists.abs,!!controller.wheelIsInContact(i),Math.min(corner.force,Math.max(0,controller.wheelSuspensionForce(i)??0)),surfaceGrip(state.surface)*corner.grip*spec.grip,controller.wheelSideImpulse(i)??0,controller.wheelIsInContact(i)?contactMotion!.longitudinal:state.speed,dt);
   const driven=isFrontDriveKind(kind)?i<2:(kind==='coupe'||isClassicKind(kind)&&kind!=='trail')?i>1:true;
-  controller.setWheelBrake(i,!alive?18:serviceBrake+(state.input.handbrake&&i>1?100:0)+corner.drag+(driven?engineBrake:0));
+  controller.setWheelBrake(i,externalLongitudinal?0:!alive?18:serviceBrake+(state.input.handbrake&&i>1?100:0)+corner.drag+(driven?engineBrake:0));
   controller.setWheelFrictionSlip(i,surfaceGrip(state.surface)*(state.input.handbrake&&i>1?.6:1)*corner.grip*spec.grip);
   controller.setWheelSuspensionStiffness(i,corner.stiffness*spec.spring*(kind==='utility'&&i>1?1.16:1));
  }
@@ -182,7 +182,7 @@ export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastV
  // Rapier ignores wheelBrake while engineForce is nonzero. Apply tyre rolling
  // loss to the actual contact on both driven and free wheels, capped at the
  // impulse that cancels their relative ground speed so it cannot propel a car.
- if(tyreDamage)for(let i=0;i<4;i++)applyTyreRollingResistance(body,controller,i,tyreFailure(tyreDamage[i]),forward,right,dt);
+ if(tyreDamage&&!externalLongitudinal)for(let i=0;i<4;i++)applyTyreRollingResistance(body,controller,i,tyreFailure(tyreDamage[i]),forward,right,dt);
  if(up.y>.5){const av=body.angvel(),frontFailure=(tyreFailure(tyreDamage?.[0])+tyreFailure(tyreDamage?.[1]))/2,rearFailure=(tyreFailure(tyreDamage?.[2])+tyreFailure(tyreDamage?.[3]))/2;
   // A flat front tyre cannot receive the intact steering assist; rear failures
   // also leave more of the actual contact-induced yaw instead of cancelling it.

@@ -1,3 +1,4 @@
+import {createWrenfordWindpump} from './wrenford-windpump';
 import {createVenueCrowd,type SpectatorPlace} from './venue-crowd';
 import {WRENFORD} from './wrenford-course';
 import {ALDERWICK_CROSS} from './alderwick-cross-course';
@@ -67,6 +68,7 @@ export function createCountyWorld(id:'dockside-loop-v1'|'fairground-scramble-v1'
  for(const [finish,matrices]of batches){const mesh=new T.InstancedMesh(boxGeometry,materials[finish],matrices.length);matrices.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.name=id+'_'+finish;mesh.castShadow=mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
  const scenery=dock?null:createCourseScenery(course,mud?'farm':cross?'club':'fair',mud?{title:'WRENFORD MUD OVAL',subtitle:'LOCAL PRODUCE / IMPORTED BODY PANELS'}:cross?{title:'ALDERWICK DOUBLE CROSS',subtitle:'TWO CROSSINGS / ZERO RIGHT OF WAY'}:undefined);if(scenery)root.add(scenery.root);
  const crowd=createVenueCrowd(spectators);root.add(crowd.root);
+ const windpump=mud?createWrenfordWindpump():null;if(windpump)root.add(windpump.root);
  root.userData.solidRecords=course.solids;freezeSceneryTransforms(root);
- let disposed=false;return{root,update:crowd.update,dispose(){if(disposed)return;disposed=true;crowd.dispose();scenery?.dispose();surfaceDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
+ let disposed=false;return{root,update(time:number){crowd.update(time);windpump?.update(time);},dispose(){if(disposed)return;disposed=true;windpump?.dispose();crowd.dispose();scenery?.dispose();surfaceDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
 }

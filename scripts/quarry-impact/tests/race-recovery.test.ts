@@ -46,7 +46,7 @@ function mainHarness(){
  const r=new RaceRecovery(),c:any={...car(),id:0,forward:{x:0,z:1},offTrackTime:0,rollTime:0,penalty:2,checkpointDistance:3,body:{},engineDamage:.6,engineStall:2,scars:7};
  const calls:any[]=[],memory=new Map([[0,{attempts:8}]]);
  c.place=(...args:any[])=>{calls.push(args);c.current={x:args[0],z:args[1]};};
- const context:any={RaceRecovery,freeRecoverySlot,courseRecoveryArea,DEFINITIONS,raceRecovery:r,mode:'race',waypointRace:null,cars:[c],activeVenue:{course},raceRoute:()=>route,drivers:{memory,update:()=>({throttle:.4})},R:{Cuboid:class{}},physics:{intersectionWithShape:()=>null}};
+ const context:any={RaceRecovery,freeRecoverySlot,courseRecoveryArea,DEFINITIONS,raceRecovery:r,mode:'race',pursuit:null,waypointRace:null,cars:[c],activeVenue:{course},raceRoute:()=>route,drivers:{memory,update:()=>({throttle:.4})},R:{Cuboid:class{}},physics:{intersectionWithShape:()=>null}};
  runInNewContext(executable,context);return{c,r,calls,context,step(){return context.ai(c,1/60);}};
 }
 test('actual AI handler adds one penalty, clears escape state, and retains damage and checkpoint counts',()=>{

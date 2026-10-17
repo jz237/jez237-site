@@ -71,8 +71,13 @@ export class QuarryNetwork extends EventTarget {
   /** One snapshot of interpolation delay. Caller may predict its own car, but must reconcile to snapshot. */
   sample(now=performance.now()):Snapshot|undefined{
     const cur=this.snapshot,prev=this.previous;if(!cur)return; if(!prev||prev.phase!==cur.phase||cur.tick<=prev.tick)return cur;
-    const alpha=Math.min(1,(now-this.receivedAt)/(1000/20));
-    return {...cur,props:cur.props.map((p,i)=>{const before=prev.props?.[i];if(!before)return p;return {...p,p:{x:before.p.x+(p.p.x-before.p.x)*alpha,y:before.p.y+(p.p.y-before.p.y)*alpha,z:before.p.z+(p.p.z-before.p.z)*alpha}};}),cars:cur.cars.map((c,i)=>{const p=prev.cars[i];if(!p||p.repair!==c.repair||Math.hypot(c.p.x-p.p.x,c.p.z-p.p.z)>12)return c;
+    const alpha=Math.max(0,Math.min(1,(now-this.receivedAt)/(1000/20)));
+    const previousProps=new Map(prev.props.map(p=>[p.id,p]));
+    return {...cur,props:cur.props.map(p=>{const before=previousProps.get(p.id);if(!before||Math.hypot(p.p.x-before.p.x,p.p.y-before.p.y,p.p.z-before.p.z)>12)return p;
+      const sign=before.q.x*p.q.x+before.q.y*p.q.y+before.q.z*p.q.z+before.q.w*p.q.w<0?-1:1;
+      const q={x:before.q.x*(1-alpha)+p.q.x*sign*alpha,y:before.q.y*(1-alpha)+p.q.y*sign*alpha,z:before.q.z*(1-alpha)+p.q.z*sign*alpha,w:before.q.w*(1-alpha)+p.q.w*sign*alpha};
+      const length=Math.hypot(q.x,q.y,q.z,q.w)||1;for(const k of ['x','y','z','w']as const)q[k]/=length;
+      return {...p,p:{x:before.p.x+(p.p.x-before.p.x)*alpha,y:before.p.y+(p.p.y-before.p.y)*alpha,z:before.p.z+(p.p.z-before.p.z)*alpha},q};}),cars:cur.cars.map((c,i)=>{const p=prev.cars[i];if(!p||p.repair!==c.repair||Math.hypot(c.p.x-p.p.x,c.p.z-p.p.z)>12)return c;
       const sign=p.q.x*c.q.x+p.q.y*c.q.y+p.q.z*c.q.z+p.q.w*c.q.w<0?-1:1;
       const q={x:p.q.x*(1-alpha)+c.q.x*sign*alpha,y:p.q.y*(1-alpha)+c.q.y*sign*alpha,z:p.q.z*(1-alpha)+c.q.z*sign*alpha,w:p.q.w*(1-alpha)+c.q.w*sign*alpha};
       const len=Math.hypot(q.x,q.y,q.z,q.w)||1;for(const k of ['x','y','z','w']as const)q[k]/=len;
