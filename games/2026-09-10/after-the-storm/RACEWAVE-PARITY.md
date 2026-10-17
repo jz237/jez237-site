@@ -4434,3 +4434,26 @@ Native Glacier admission remains closed: existing course acceptance and
 scenery problems are unresolved. The other global splash producer and native
 impact sound consumer also remain separate work. This checkpoint is not full
 Glacier or whole-game parity.
+
+
+## Glacier snowbank presentation repair
+
+Raycasts identified the large grey surfaces in the eastern Glacier inspection
+as the intended snowbank terrain, rather than displaced ice sheets. All
+130,321 terrain vertices matched the render heightfield within 0.000002 metres.
+The flat appearance came from the snow material replacing textured colour;
+decorative rocks also retained a world-upright pose on steep banks.
+
+Snow now retains photographic grain and procedural drift/ice layering. The
+254 venue-dressing rocks tilt to the rendered slope and embed their underside
+vertices into the local heightfield. This affects scenery only: source ice
+obstacles, terrain heights, contact planes, gates and course physics are
+unchanged. Non-snow venues retain their existing placement and shading paths.
+
+Eleven focused checks passed: nine venue-placement tests and two grounding
+tests covering steep/curved banks and every Glacier dressing rock. Browser
+before/after inspection retained High 1280x720, 83,521 water vertices and the
+130,321-vertex terrain; shaders compiled with no runtime/shader errors (one
+resource404 remains). The inspected bank and rock undersides improved; this
+does not prove every Glacier camera or the separate native course acceptance
+requirements. Native Glacier admission remains closed.
