@@ -53,6 +53,26 @@ The additional1C5C/1C60 audio levels come from the original spray producer;
 modern particle counts cannot substitute for those values. Full original
 spray/audio scheduling and engine/voice playback remain unfinished.
 
+## Unpublished — original engine and spray command consumers
+
+`native-engine-audio.js` reconstructs C010C's envelope preparation, throttle
+edge/surge, power announcement, speed/power pitch table, retained pitch smoothing
+and three-channel mixer commands. The adjacent spray consumer uses the original
+level threshold, wet/channel gates, course-dependent variants and alternate
+engine behavior. All commands retain original argument bits and call order.
+
+The arithmetic matches842 original-instruction executions:56 envelope cases,
+474 engine cases covering every speed and surge entry,108 consecutive frames,
+132 spray cases and72 continuous envelope/wet/engine/spray executions. These
+include signed byte behavior and float32 rounding. The ROM and Ghidra listing
+remain private; public fixtures contain prepared numeric inputs and outputs.
+
+These are prepared consumers, not live original engine playback. Full source
+packet ownership, channel lifecycle, mixer/voice callees and sample playback
+still need integration. The source gate at7CA0 retains its address-based name
+until its owner is established. Existing music, live contact sounds and all
+rendering/resolution settings remain unchanged.
+
 ## Current preview scope
 
 Native source-water Time trial and Two-player previews admit Sunny Beach,
@@ -65,7 +85,7 @@ their closed/unconnected status. Full original-game parity remains incomplete.
 ## Unreleased — complete source sound-control packet
 
 The prepared52480 producer now reconstructs all original packet writes, including
-button state, rider/actor cues, rank, record power, two rider counters, the rider
+button state, rider/actor cues, rank, record power, two spray levels, the rider
 water-entry edge and the latched animation-frame58 event. It preserves consumer
 timers, prior speed and unacknowledged events. It takes actual source fields and
 an explicit normalized4D30C water query; missing fields reject rather than being
