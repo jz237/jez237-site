@@ -9,6 +9,7 @@ import {createNativeRiderControlState,prepareNativeRiderControls,finishNativeRid
 import {createNativeImpactState,resetNativeImpacts,recordNativeImpact,nativeImpactSnapshot,nativePreparedIceStability} from './native-impact-state.js';
 import {createNativeRiderLifecycle,nativeRiderLifecycleSource,decideNativeRiderLifecycle,finishNativeRiderLifecycle,nativeRiderLifecycleSnapshot} from './native-rider-lifecycle.js';
 import {nextNativeDryContactFrames} from './native-race-body-fields.js';
+import {initialNativeHullWetState,completeNativeHullWetState} from './native-hull-wet-state.js';
 import {createNativeRiderActionInputHistory,stepNativeRiderActionInputHistory,
   prepareNativeRiderInversion,finishNativeRiderArcState} from './native-rider-action-dispatch.js';
 
@@ -278,8 +279,8 @@ export function createNativeRaceAdapter({riderIndex=0,tuneB6c=0,tuneB70=0,tuneB7
   if(articulatedRider)articulatedOwners.set(articulatedRider,hull);
   // The source reset seeds aggregate wet state to8/true before later water
   // samples establish point bits. Rear wet flags remain independently false.
-  water.wetCount=8;water.anyWet=true;
-  const adapter={hull,water,rider,riderControlState,impacts,controlState:createNativeControlState(),surface,contacts,jointWorld,
+  const wetState=initialNativeHullWetState();water.wetCount=wetState.wetCountC78;water.anyWet=wetState.wetFlagC7c!==0;
+  const adapter={hull,water,wetState,rider,riderControlState,impacts,controlState:createNativeControlState(),surface,contacts,jointWorld,
     sourceState:typeof sourceState==='function'?sourceState:{...(lifecycle?sourceState:source),actionState:undefined},
     actionState:action,articulatedRider,riderPose,riderLifecycle:lifecycle,riderActions:actions,
     contactFactor,powerSteps,remainder:0,logicalFrames:0,stepsLast:0,frame:null,
@@ -287,7 +288,7 @@ export function createNativeRaceAdapter({riderIndex=0,tuneB6c=0,tuneB70=0,tuneB7
     objectHitKind16d8:0,contactWindow:contactsZero(),contactDriveFrames:0,dryContactFrames16d0:0,lastControls:null,
     lastFrame:{objectHitKind16d8:0,logicalFrame:0,clockUnits:0,frameDisplacementNative:vec(),frameSpeedNative:0,
       hudSpeed:0,referenceDisplacementNative:vec(),referenceChangeNative:vec(),
-      wetCount:8,anyWet:true,contacts:contactsZero(),impacts:nativeImpactSnapshot(impacts),actorState:lifecycle?.state.actorState??source.actorState??22,
+      wetCount:8,anyWet:true,wetState,contacts:contactsZero(),impacts:nativeImpactSnapshot(impacts),actorState:lifecycle?.state.actorState??source.actorState??22,
       animationFrame:lifecycle?.state.animationFrame??source.animationFrame??0,actionState:{...action},jointWorld:articulatedRider?copy(articulatedRider.jointWorld):null,
       ...(lifecycle?{recovery:nativeRiderLifecycleSnapshot(lifecycle)}:{})}};
   if(actions)adapter.lastFrame.riderActions=riderActionSnapshot(adapter);
@@ -446,6 +447,8 @@ function beginFrame(adapter,input,options){
 
 function endFrame(adapter,beforeActorDecision){
   const {hull,water,frame,lastFrame,contactWindow}=adapter,s=hull.scale;
+  adapter.wetState=completeNativeHullWetState(adapter.wetState.wetFlagC7c,water.wet.map(Number));
+  water.wetCount=adapter.wetState.wetCountC78;water.anyWet=adapter.wetState.wetFlagC7c!==0;
   adapter.dryContactFrames16d0=nextNativeDryContactFrames(adapter.dryContactFrames16d0,{anyWet:water.anyWet,impacts:adapter.impacts});
   const movement=difference(hull.center,frame.startCenter),reference=difference(referencePoint(hull),frame.startReference);
   const inactive=frame.simulationState===0;
@@ -456,7 +459,7 @@ function endFrame(adapter,beforeActorDecision){
   else if(adapter.contactDriveFrames<40&&speed<CONTACT_DRIVE_SPEED)adapter.contactDriveFrames++;
   const arc=finishNativeRiderArcState({turnCount16d4:adapter.actionState.turnCount16d4,
     noWetNoContactFrames16dc:adapter.actionState.noWetNoContactFrames,arcActive16e2:Number(adapter.actionState.arcActive)},
-    {fieldC7c:water.wetCount,manipulationAction:adapter.actionState.action,...contactWindow});
+    {fieldC7c:adapter.wetState.wetFlagC7c,manipulationAction:adapter.actionState.action,...contactWindow});
   Object.assign(adapter.actionState,{turnCount16d4:arc.turnCount16d4,noWetNoContactFrames:arc.noWetNoContactFrames16dc,
     arcActive:arc.arcActive16e2!==0});
   adapter.logicalFrames++;
@@ -464,7 +467,7 @@ function endFrame(adapter,beforeActorDecision){
     frameDisplacementNative:displacement,frameSpeedNative:speed,
     hudSpeed:inactive?lastFrame.hudSpeed:Math.trunc(Math.fround(Math.trunc(Math.fround(speed))*Math.fround(1.8))),
     referenceDisplacementNative:referenceDisplacement,referenceChangeNative:referenceChange,
-    wetCount:water.wetCount,anyWet:water.anyWet,contacts:{...contactWindow},impacts:nativeImpactSnapshot(adapter.impacts),objectHitKind16d8:adapter.objectHitKind16d8,
+    wetCount:water.wetCount,anyWet:water.anyWet,wetState:adapter.wetState,contacts:{...contactWindow},impacts:nativeImpactSnapshot(adapter.impacts),objectHitKind16d8:adapter.objectHitKind16d8,
     actorState:frame.actorState,animationFrame:frame.animationFrame,actionState:{...adapter.actionState},jointWorld:frame.prepared.jointWorld?copy(frame.prepared.jointWorld):null};
   if(beforeActorDecision)beforeActorDecision();
   const actions=adapter.riderActions,actionSource=frame.actionSource;

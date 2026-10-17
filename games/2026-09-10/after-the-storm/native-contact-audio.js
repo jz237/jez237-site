@@ -17,12 +17,12 @@ export function nativeContactAudioMaterials(courseIndex){
 // First four bytes of52480, ending before525C8. All values are completed
 // source body/record fields. In particular C78/C7E must not be guessed from
 // renderer splash particles or the browser's airborne flag.
-export function nativeHullAudioPrefix({frameSpeedNative,record2c8,bodyBfc,verticalFrameB7c,bodyC78,wetCountC7c,landingC7e}){
+export function nativeHullAudioPrefix({frameSpeedNative,record2c8,bodyBfc,verticalFrameB7c,bodyC78,wetFlagC7c,landingC7e}){
  const speed=float(frameSpeedNative),pitch=float(bodyBfc),vertical=float(verticalFrameB7c);
  if(speed<0)throw new RangeError('Native frame speed must be nonnegative');
  integer(record2c8,-2147483648,2147483647);integer(bodyC78,-2147483648,2147483647);
- integer(wetCountC7c,0,65535);integer(landingC7e,0,65535);
- let wet=wetCountC7c;
+ integer(wetFlagC7c,0,65535);integer(landingC7e,0,65535);
+ let wet=wetFlagC7c;
  if(landingC7e!==0){
   const value=(trunc(F(vertical*-3))+Math.imul(bodyC78,10))|0;
   wet=value<0?1:Math.min(127,value);

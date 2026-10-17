@@ -67,7 +67,8 @@ export function nativeAIMotionBehindThreshold({difficulty,role}={}){
  * motionDirection is the current body5c/60/64 field. priorControlActive means
  * preceding numeric15dc!=0, NOT held accelerator or engineMask; this runs
  * before current61184. frameSpeedNative is preceding five-tick displacement
- * magnitudeB90. markedBox means preceding15de!=0; wetCount is aggregateC7c.
+ * magnitudeB90. markedBox means preceding15de!=0. The wetCount input is used
+ * only for zero/nonzero tests; the source caller supplies the C7C wet flag.
  *
  * proximityObjectCentersNative retains raw object record order. The source
  * helper scans its FIRST proximityCount records, not the separately produced

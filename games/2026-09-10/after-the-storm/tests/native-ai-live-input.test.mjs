@@ -9,6 +9,7 @@ import {createNativeLifecycleRider} from '../native-lifecycle-rider.js';
 import {createNativeRaceCourseRuntime} from '../native-race-course-runtime.js';
 import {createNativeRaceLaunchRuntime} from '../native-race-launch-runtime.js';
 import {stepNativeRaceHost} from '../native-race-host.js';
+import {prepareNativeAIWaterTrim} from '../native-ai-actions.js';
 const F=Math.fround,base=(0x2938-0x1f94)/4;
 const make=options=>createRace({mode:'time',physics:'native',course:getCourse('greyhaven'),...options});
 
@@ -31,6 +32,7 @@ test('AI body input reads solved motion, source controller gate and retained act
   assert.notDeepEqual(b.motionDirection,b.forwardNative);
   assert.equal(b.steeringDegrees,F(a.water.profile.steeringDegrees));
   assert.equal(b.frameSpeedNative,F(a.lastFrame.frameSpeedNative));
+  assert.equal(b.fieldC7c,Number(a.water.anyWet));
   assert.equal(b.actorState,a.riderLifecycle.state.actorState);
   assert.equal(b.pendingActorState,a.riderLifecycle.state.pendingActor);
   a.actionState.override=4;a.actionState.turnCount16d4=2;
@@ -42,6 +44,19 @@ test('AI body input reads solved motion, source controller gate and retained act
   latchNativeRaceAdapterControls(a,{});
   assert.throws(()=>nativeAIBodyFields(a),/precede the next control latch/);
  }
+});
+
+test('a submerged live hull supplies flag1 so source AI can select the wet-wave trim branch',()=>{
+ const initialHull=createNativeHull(),a=createNativeRaceAdapter({...createNativeLifecycleRider({initialHull}),
+  riderRecovery:{courseDatumNative:0,raceFinished:false},sourceState:{simulationState:3}});
+ stepNativeRaceAdapter(a,.05,{});assert.ok(a.water.wetCount>1);
+ const body=nativeAIBodyFields(a);assert.equal(body.fieldC7c,1);
+ const input={positionNative:{x:0,y:1,z:0},forwardNative:{x:0,y:.1,z:1},datumNative:0,
+  waterHeightsNative:[21,0],state638:1,mode620:4,difficulty:1,courseIndex:1,
+  fieldC7c:body.fieldC7c,flag94:0,markedBox15de:0,rawYNative:-42};
+ assert.equal(prepareNativeAIWaterTrim(input).rawYNative,70);
+ // The old bridge supplied the count and incorrectly skipped that branch.
+ assert.equal(prepareNativeAIWaterTrim({...input,fieldC7c:a.water.wetCount}).rawYNative,-42);
 });
 
 test('ordinary AI tables share initialized source axes, endpoints and avatar links across classes',()=>{

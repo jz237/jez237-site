@@ -23,7 +23,7 @@ export function nativeAIBodyFields(adapter){
   steeringDegrees:F(water.profile.steeringDegrees),actorState:state.actorState,
   pendingActorState:state.pendingActor,animationFrame:state.animationFrame,
   priorControlActive:!controls.muted,markedBox15de:Number(lastFrame.impacts.markedBox),
-  fieldC7c:water.wetCount,floorImpactNative:F(lastFrame.impacts.floorImpactNative),
+  fieldC7c:adapter.wetState.wetFlagC7c,floorImpactNative:F(lastFrame.impacts.floorImpactNative),
   impactNormalNative:vector(lastFrame.impacts.normal),rawXNative:controls.rawXNative,rawYNative:controls.rawYNative,
   heldButtons:controls.heldButtons,powerFactor:F(controls.powerFactor),frameSpeedNative:F(lastFrame.frameSpeedNative),
   action16f4:actionState.override,actionState16d4:actionState.turnCount16d4,

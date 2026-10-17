@@ -4509,8 +4509,38 @@ passed across the two audio modules, including landing-to-steady-water frames,
 marked-box ordering and previous-speed retention. Fixtures contain numeric
 prepared inputs, outputs and captured leaf command arguments only.
 
-Live integration is still pending: C78/C7E must come from their actual completed
-body owners; the full packet schedule, mode gates, nearest-rival selection and
-downstream playback remain separate work. These kernels do not replace the
+Live audio integration is still pending. C78/C7E now have a completed-frame
+owner as described below; the full packet schedule, mode gates, nearest-rival
+selection and downstream playback remain separate work. These kernels do not replace the
 existing browser audio or embed original sound samples. Rendering resolution,
 water geometry and course admission are unaffected.
+
+## Completed hull wet flags and live AI trim correction
+
+The live AI bridge incorrectly supplied the submerged-point count as C7C.
+Original65C18 stores that count in C78 and a separate zero/one flag in C7C.
+AI water-trim branches that require C7C exactly1 therefore failed for hulls
+with several submerged points. The bridge now supplies the actual wet flag.
+
+`native-hull-wet-state.js` reconstructs the twelve-point bit0 recount and its
+C7E landing, C80 takeoff and C82 preceding-flag stores. The adapter runs this
+once at completed-frame boundaries, before contact/arc/actor consumers, even
+when source simulation648 holds physical motion. Source62E50 initializes
+count8/current1/previous1 with no edges, while4B0F8 clears the individual point
+flags; the first inactive completion consequently recounts zero. Display
+snapshots retain immutable completed values. Physical count-dependent buoyancy
+and rider rules still receive the actual count. The audio prefix now names
+its C7C input `wetFlagC7c`, independently of the count supplied through C78.
+
+Three read-only EVO X2 Ghidra queries left all nine project files unchanged.
+All2,312 exported instruction records matched ROM bytes. The private evaluator
+executed all4,096 wet masks with both preceding flags, plus eight unsigned16
+edge cases:8,200 executions and680,594 instructions. Public fixtures contain
+only prepared numeric cases and results. The focused suites passed328 unique
+checks, including the live AI trim regression, startup/inactive transitions,
+landing audio preparation, rendering-cadence independence, two-player world
+coordination and a driven complete solo race followed by source AI takeover.
+
+This corrects live source state and AI behavior; it does not claim that native
+sound playback, every venue, or the full original game is complete. Rendering
+resolution and mesh density are unchanged.
