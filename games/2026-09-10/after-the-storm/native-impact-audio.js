@@ -31,7 +31,7 @@ export function consumeNativeImpactAudio(input,context){
  if(!Array.isArray(input)||input.length!==32)throw new TypeError('Expected32 audio packet bytes');
  const packet=input.map(v=>integer(v,0,255)),g={...context},commands=[];
  for(const key of ['surfaceCode','markedBoxCode','floorCode','pairedImpact','pairedVariant','mixerLane'])integer(g[key],-2147483648,2147483647);
- integer(g.channel,0,2);integer(g.random4562c,0,0xffffffff);
+ integer(g.channel,0,2);if(g.random4562c!==undefined)integer(g.random4562c,0,0xffffffff);
  const signed=v=>(v<<24)>>24,byte=i=>signed(packet[i]),timer=()=>((packet[12]<<8|packet[13])<<16)>>16;
  const setTimer=n=>{packet[12]=(n>>>8)&255;packet[13]=n&255;};
  const emit=(consumer,...args)=>commands.push({consumer,arguments:args});
@@ -52,6 +52,7 @@ export function consumeNativeImpactAudio(input,context){
    if(type===0x14){
     if(g.channel===0&&byte(19)>100){g.pairedImpact=1;g.pairedVariant=variant;}
     if(g.channel===2&&g.pairedImpact!==0){
+     integer(g.random4562c,0,0xffffffff);
      const voice=(byte(27)*4+(g.random4562c&1))>>>0;
      if(g.pairedVariant===0)emit('c3240',voice);
      else if(g.pairedVariant===2)emit('c3270',voice);

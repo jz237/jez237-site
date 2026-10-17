@@ -17,19 +17,32 @@ export function nativeContactAudioMaterials(courseIndex){
 // First four bytes of52480, ending before525C8. All values are completed
 // source body/record fields. In particular C78/C7E must not be guessed from
 // renderer splash particles or the browser's airborne flag.
-export function nativeHullAudioPrefix({frameSpeedNative,record2c8,bodyBfc,verticalFrameB7c,bodyC78,wetFlagC7c,landingC7e}){
- const speed=float(frameSpeedNative),pitch=float(bodyBfc),vertical=float(verticalFrameB7c);
+export function nativeContactMotionBytes({frameSpeedNative,verticalFrameB7c,bodyC78,wetFlagC7c,landingC7e}){
+ const speed=float(frameSpeedNative),vertical=float(verticalFrameB7c);
  if(speed<0)throw new RangeError('Native frame speed must be nonnegative');
- integer(record2c8,-2147483648,2147483647);integer(bodyC78,-2147483648,2147483647);
+ integer(bodyC78,-2147483648,2147483647);
  integer(wetFlagC7c,0,65535);integer(landingC7e,0,65535);
  let wet=wetFlagC7c;
  if(landingC7e!==0){
   const value=(trunc(F(vertical*-3))+Math.imul(bodyC78,10))|0;
   wet=value<0?1:Math.min(127,value);
  }
- return [trunc(F(speed*F(1.4399999380111694)))&255,
+ return {speed:trunc(F(speed*F(1.4399999380111694)))&255,wet:wet&255};
+}
+
+export function nativeHullAudioPrefix(input){
+ const {record2c8,bodyBfc}=input,pitch=float(bodyBfc),motion=nativeContactMotionBytes(input);
+ integer(record2c8,-2147483648,2147483647);
+ return [motion.speed,
   trunc(F(F(record2c8)*F(.4444444477558136)))&255,
-  Math.max(-15,Math.min(15,trunc(F(pitch*5))))&255,wet&255];
+  Math.max(-15,Math.min(15,trunc(F(pitch*5))))&255,motion.wet];
+}
+
+//52480's byteF uses4D30C at the midpoint of source points90/D0. The caller
+// supplies that normalized physics query, never the rendered water height.
+export function nativeContactImmersion({waterQueryNative,point90YNative,pointD0YNative}){
+ const midpoint=F(F(float(point90YNative)+float(pointD0YNative))*.5);
+ return Math.max(0,Math.min(127,trunc(F(F(F(float(waterQueryNative)-midpoint)-7)*20))));
 }
 
 // C010C's C042C..C0608 wet-transition slice. It runs BEFORE the impact

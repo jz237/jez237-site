@@ -4569,9 +4569,48 @@ focused tests passed across the channel, contact and impact audio modules.
 They include restart suppression, correct packet ownership and retained-state
 validation; public fixtures contain only numeric cases and command arguments.
 
-These verified entries are not yet connected to live playback. The source
-prestart status already emits BFDD0/secondary-start effects and result status
-emits the two stop effects, giving the live integration its actual schedule.
-C21F4/C1F60's broader mode lifecycle, persistent runtime packet ownership and
-downstream mixer/sample playback still require integration. Existing browser
-audio and high-resolution rendering are unchanged.
+The subsequent contact-playback checkpoint below connects these entries to
+the admitted live native races. The complete downstream mixer remains separate.
+
+## Unreleased — live native contact audio
+
+The one-human and two-human native previews now produce and consume landing
+and impact packets once per completed physics frame, after all actors and
+before water advancement. Human slots and record318 come from the canonical
+race owner. Float32 source motion, actual C78/C7C/C7E wet fields, impact priority,
+course material codes, prior-speed volume bands and retained cooldowns drive
+the commands. Inactive simulation retains motion. Wet transitions run before
+impact consumption, and the previous-speed byte changes only afterward.
+
+The ordinary startup now initializes the verified6FB0(2,4,0) fade. Its completion
+pulse enables the actual BFDD0/BFEF8 channel starts; result effects stop them.
+The contact owner observes the relevant C21F4/C1F60 mode/mute changes. Fresh web
+packet/motion storage explicitly starts at zero; diagnostic retained race
+states keep their supplied HUD fade. This is not restored cartridge audio RAM.
+
+A fresh read-only EVO X2 query confirms that52480's immersion byte uses4D30C's
+normalized physics query at the point90/D0 midpoint, not rendered wave height.
+All120 original midpoint/clamp executions match (4,455 instructions). Human
+channels no longer require an unread rival-voice random value; channel2 still
+requires it when its paired-voice branch is reached.
+
+The Web Audio adapter uses existing authored splash/impact recordings, with
+source volume and timing plus synthesized fallbacks. It bypasses the modern
+landing debounce and suppresses the duplicate render-triggered landing sound.
+A bounded queue drains once, discards muted/held events, and clears on replay
+entry. Snapshots and replay never advance audio state. Existing music settings
+and continuous engine/water sound remain under their existing owners.
+
+All114 focused tests pass across contact kernels/runtime, sound options, live
+launch/host/results, fade initialization/update, body fields and asset loading.
+A browser two-player native run reaches120.85s/frame2417 and results mode6:
+nine commands reach playback exactly once, including paired impacts on lanes2/5
+and a player-two landing; none are dropped or left pending. A five-second replay
+returns with the live state unchanged and no additional contact playback.
+The AudioContext is running and authored samples loaded. High graphics remains
+1280x720 with83,521 water vertices.
+
+This completes the contact subset for current human native previews, not the
+full original mixer, engine pitch/control, voice/rank scheduler, mode4 rider
+water cue, nearest-rival routing, or original SFX bank playback. Native venue
+admission is unchanged (courses1/2/7); Glacier remains closed.

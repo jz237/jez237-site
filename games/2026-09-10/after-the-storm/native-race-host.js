@@ -76,12 +76,13 @@ function present(host){
  * Custom source actor/pose providers require explicit recovery:false.
  */
 export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,tunes=[],sourceStates=[],poseProviders=[],onFrame=null,
- raceRuntime=null,onLaunchFrame=null,hullStarts=[],staticGeometry=null,
+ raceRuntime=null,onLaunchFrame=null,onContactFrame=null,hullStarts=[],staticGeometry=null,
  floatingDefinitions,floatingActive=true,primaryActive=true,recovery=true,craftContacts=true}={}){
  if(!Array.isArray(racers)||racers.length<1||racers.some(r=>!r?.hydro||!Number.isInteger(r.id)||r.id<0||r.id>3))throw new TypeError('Expected initialized browser racers');
  if(!water?.field||!finite(water.scale))throw new TypeError('Expected host source water');
  if(onFrame!==null&&typeof onFrame!=='function')throw new TypeError('onFrame must be a function');
  if(onLaunchFrame!==null&&typeof onLaunchFrame!=='function')throw new TypeError('onLaunchFrame must be a function');
+ if(onContactFrame!==null&&typeof onContactFrame!=='function')throw new TypeError('onContactFrame must be a function');
  if(raceRuntime&&(!recovery||sourceStates.length||poseProviders.length||['scene','advanceClock','advanceLaunch'].some(k=>typeof raceRuntime[k]!=='function')))
   throw new TypeError('Canonical launch requires recovered riders and its single scene owner');
  if(raceRuntime?.ordinary&&['objectMotionActive','courseRollerState','waterDatumAfterPhysics'].some(k=>typeof raceRuntime[k]!=='function'))
@@ -171,6 +172,7 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
   applyNativeRiderResultCodes(lifecycles,selected.operations);
   a.lastResultCodeOperations=selected.operations;
  }:null,beforeWater:raceRuntime?.ordinary?world=>{
+  if(onContactFrame)onContactFrame(host,world);
   //51238 observes the preceding lap judge's shared stage after all actors.
   // The water field owns datum; a render-time option cannot reset its tide.
   world.frame.water.datumNative=raceRuntime.waterDatumAfterPhysics(water.field.datumNative);

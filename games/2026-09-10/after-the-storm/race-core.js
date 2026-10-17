@@ -2,6 +2,7 @@ import {createSourceFixedSphereGrid} from './source-boundary-spheres.js';
 import {createNativeRaceHost,stepNativeRaceHost} from './native-race-host.js';
 import {effectiveNativeTune} from './native-rider-tuning.js';
 import {createNativeRaceLaunchRuntime} from './native-race-launch-runtime.js';
+import {createNativeRaceContactAudio} from './native-race-contact-audio.js';
 import {prepareNativeHullStartFromMatrix} from './native-hull.js';
 import {createNativeRaceCourseRuntime} from './native-race-course-runtime.js';
 import {capturePrimaryBuoyPresentation} from './primary-buoy-presentation.js';
@@ -121,10 +122,16 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
   // Preview histories must not compete with saved modern-physics records.
   state.nativePreview=true;state.demoRun=true;
   state.nativeLaunch=nativeLaunch;
+  state.nativeContactAudio=createNativeRaceContactAudio({players:racers.length,courseIndex:course.sourceWaterCourseIndex});
   state.nativeLaunchLabel=state.nativeLaunch.view().label;state.nativeCountdownCue=null;
   let launchCueSequence=0;
   state.nativeHost=createNativeRaceHost({racers,water:raceWater,course,fixedSphereGrid:sourceSphereGrid,staticGeometry:nativeCourseRuntime.staticContactGeometry,tunes:racers.map((_,i)=>effectiveNativeTune(nativeTunes[i],nativeTuneModes[i])),raceRuntime:state.nativeLaunch,hullStarts:nativeStarts,
+  onContactFrame:(host,world)=>{
+   const input=state.nativeLaunch.contactAudioInputs();
+   state.nativeContactAudio.advance(input.slots.map(slot=>world.adapters[slot]),raceWater.field,input.recordFlags318);
+  },
   onLaunchFrame:(host,context,launch)=>{
+   state.nativeContactAudio.applyEffects(launch.effects);
    state.countdown=launch.view.countdown;state.nativeLaunchLabel=launch.view.label;
    if(state.phase==='countdown'&&launch.view.phase650>=2)state.phase='running';
    for(const cue of launch.effects)if(cue.kind==='audioEntry'&&[0x22,0x23].includes(cue.arguments[0])){

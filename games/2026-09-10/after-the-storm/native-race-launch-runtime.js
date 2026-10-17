@@ -13,7 +13,7 @@ import {prepareNativeAIInitialization} from './native-ai-initialization.js';
 import {prepareNativeAIDriver} from './native-ai-driver.js';
 import {NATIVE_AI_STORAGE_WORDS,nativeAIDriverStateFromWords,nativeAIDriverStateWrites} from './native-ai-storage.js';
 import {prepareNativeRaceWaterInitialization} from './native-race-state.js';
-import {prepareNativeRaceWidgetAdvance,prepareNativeRaceFadeAdvance} from './native-race-state.js';
+import {prepareNativeRaceWidgetAdvance,prepareNativeRaceFadeAdvance,prepareNativeRaceFadePropertiesUpdate} from './native-race-state.js';
 import {prepareNativeWidgetPresentation,nativeWidgetDrawView} from './native-widget-presentation.js';
 import {prepareNativeRaceMenuInputAdvance,nativeRaceMenuInputView} from './native-race-state.js';
 import {prepareNativeRaceResultCPUDisplayUpdate} from './native-race-state.js';
@@ -108,6 +108,11 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    if(retainedRecords)current=createNativeRaceState(restoreNativeRecordSession(current,retainedRecords));
    commit(nativeTuneLaunchOperations(racers,players,tunes,tuneModes));
    current=prepareNativeRaceStartup(courseRuntime.resetLayout,current).state;
+   //9345C's ordinary race entry calls6FB0(2,4,0). Its completed fade
+   // pulse8A16 is what5DF4 uses to start both source audio channels.
+   // Retained diagnostic states above keep their supplied fade untouched.
+   current=prepareNativeRaceFadePropertiesUpdate(current,{type:2,rate:4,selector:0,
+    fadeTemplateWords6cc0:[0,0,0,0x10000,0,0,0,0,0x10000]}).state;
   }
   else{
    const startup=prepareNativeRaceStartupOverlay({raceWords1f94:current.raceWords1f94,hudWords7788:current.hudWords7788,globals:current.scene});
@@ -180,6 +185,10 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
  const runtime={
   ordinary:!!courseRuntime,
   scene:()=>({simulationState:current.scene.simulation648,phase650:current.scene.phase650}),
+  contactAudioInputs(){
+   const slots=[current.scene.primaryHumanIndex,...(players===2?[current.scene.secondaryHumanIndex]:[])];
+   return {slots,recordFlags318:slots.map(slot=>word(slot,0x318/4))};
+  },
   // Read the same source rank/checkpoint clock and human slot selectors used
   // by63C88. The host supplies preceding physical centers before any hull tick.
   catchupContext(slot,positionsBySlot){

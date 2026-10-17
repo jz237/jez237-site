@@ -29,6 +29,30 @@ export class Soundscape{
  splash(impact=3,side=0){if(this.enabled&&this.samples?.play('splash',{gain:Math.min(.85,impact*.065),rate:1.15-Math.min(12,impact)*.025,pan:side}))return;if(!this.ctx||!this.enabled||!this.noiseBuffer)return;const t=this.ctx.currentTime,source=this.ctx.createBufferSource(),filter=this.ctx.createBiquadFilter(),gain=this.ctx.createGain(),pan=this.ctx.createStereoPanner();pan.pan.value=side*stereoWidth(this.mode);source.buffer=this.noiseBuffer;filter.type='bandpass';filter.frequency.setValueAtTime(1600,t);filter.frequency.exponentialRampToValueAtTime(280,t+.55);filter.Q.value=.45;gain.gain.setValueAtTime(Math.min(.65,impact*.09),t);gain.gain.exponentialRampToValueAtTime(.001,t+.7);source.connect(filter).connect(gain).connect(pan).connect(this.effects);source.start(t);source.stop(t+.75);source.onended=()=>{source.disconnect();filter.disconnect();gain.disconnect();pan.disconnect();};}
  updateRide(r,depth,time,paused=false){if(!this.ctx||!this.ride)return;this.rideMix=this.ride.update(r,depth,time,paused||!this.enabled);this.immersionFilter.frequency.setTargetAtTime(this.rideMix.cutoff,this.ctx.currentTime,.07);}
  updateRivals(listener,racers,paused=false,camera=null){this.samples?.updateRivals(listener,racers,paused||!this.enabled,camera);}
+ // Original command timing/volume, with the existing authored recordings.
+ // No wall-clock landing debounce: the source packet owns contact cooldowns.
+ nativeContacts(owner,active,players=1){
+  if(!owner)return;
+  const commands=owner.drain();
+  if(!active||!this.enabled||!this.ctx)return;
+  for(const command of commands)this.nativeContact(command,players===2?(command.player===1?.4:-.4):0);
+ }
+ nativeContact(command,side=0){
+  if(!this.ctx||!this.enabled)return;
+  const args=command.arguments,hit=command.consumer==='bffec',ice=command.consumer==='c53d4'&&args[0]===0x06000700&&args[1]===0x13;
+  if(!hit&&!ice)return;
+  const splash=hit&&args[1]>=11&&args[1]<=14,volume=ice?1:Math.max(0,Math.min(127,args[2]))/127;
+  if(volume===0)return;
+  const gain=volume*(splash?.65:.48),rate=splash?({11:.8,12:.9,13:1,14:1.1}[args[1]]):ice?1.3:.85;
+  if(this.samples?.play(splash?'splash':'hit',{gain,rate,pan:side}))return;
+  const ctx=this.ctx,t=ctx.currentTime,g=ctx.createGain(),pan=ctx.createStereoPanner();
+  pan.pan.value=side*stereoWidth(this.mode);g.gain.setValueAtTime(gain,t);g.gain.exponentialRampToValueAtTime(.0001,t+(splash?.65:.28));
+  g.connect(pan).connect(this.effects);
+  let source,filter;
+  if(splash&&this.noiseBuffer){source=ctx.createBufferSource();source.buffer=this.noiseBuffer;filter=ctx.createBiquadFilter();filter.type='bandpass';filter.Q.value=.45;filter.frequency.setValueAtTime(1600,t);filter.frequency.exponentialRampToValueAtTime(280,t+.55);source.connect(filter).connect(g);}
+  else{source=ctx.createOscillator();source.type='sine';source.frequency.setValueAtTime(ice?160:95,t);source.frequency.exponentialRampToValueAtTime(32,t+.18);source.connect(g);}
+  source.start(t);source.stop(t+(splash?.7:.3));source.onended=()=>{source.disconnect();filter?.disconnect();g.disconnect();pan.disconnect();};
+ }
  landing(impact=3,speed=0,side=0){
   if(!this.ctx||!this.enabled)return;const t=this.ctx.currentTime;if(t-(this.lastLanding??-10)<.16)return;this.lastLanding=t;
   this.splash(impact,side);if(impact<3)return;const gain=Math.min(.48,(impact-2)*.038)*( .65+Math.min(1,speed/25)*.35);
