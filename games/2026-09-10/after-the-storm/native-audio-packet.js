@@ -29,6 +29,16 @@ export function prepareNativeRiderWaterAudio(previous,{actorC54,point6b4Native,w
  return {bodyC84,bodyC86:Number(p.y<F(waterQueryNative))};
 }
 
+//52480's raw throttle and actor fields.1608 is the physical crash countdown.
+// An animation event stays latched until its consumer acknowledges it.
+export function prepareNativeActorAudioFields(input,previousAnimationEvent){
+ const buttons=half(input.buttonsB56),actor=word(input.actorC54),frame=word(input.animationC58),crash=half(input.body1608);
+ integer(previousAnimationEvent,0,255);
+ return {buttonByte:Number((buttons&0xa000)!==0),
+  animationEvent:actor===7&&frame===58?1:previousAnimationEvent,
+  riderEvent:crash!==0||actor===23||actor===7&&frame<56?2:actor===24?1:0};
+}
+
 // Complete52480 producer. Inputs are source body, record and rider fields;
 // offsets remain explicit where their gameplay meaning is not established.
 // The supplied4D30C return is a normalized physics query at the returned XZ
@@ -37,14 +47,14 @@ export function prepareNativeRiderWaterAudio(previous,{actorC54,point6b4Native,w
 export function prepareNativeHullAudioPacket(input,previous){
  if(!Array.isArray(previous)||previous.length!==32)throw new TypeError('Expected32 retained audio packet bytes');
  const packet=previous.map(v=>integer(v,0,255)),p0=point(input.point90Native),p2=point(input.pointD0Native);
- const buttons=half(input.buttonsB56),actor=word(input.actorC54),frame=word(input.animationC58);
- const prior=half(input.bodyC84),current=half(input.bodyC86),held=half(input.body1608);
+ const actorAudio=prepareNativeActorAudioFields(input,packet[28]);
+ const prior=half(input.bodyC84),current=half(input.bodyC86);
  const power=word(input.record12c),place=word(input.place4),rider=word(input.riderB68);
  const countA=word(input.rider1c5c),countB=word(input.rider1c60);
  const prefix=nativeHullAudioPrefix(input);for(let i=0;i<4;i++)packet[i]=prefix[i];
- packet[4]=(buttons&0xa000)!==0?1:0;
+ packet[4]=actorAudio.buttonByte;
  // The producer only SETS this event. Consumer acknowledgement owns clearing.
- if(actor===7&&frame===58)packet[28]=1;
+ packet[28]=actorAudio.animationEvent;
  packet[15]=nativeContactImmersion({waterQueryNative:input.waterQueryNative,point90YNative:p0.y,pointD0YNative:p2.y});
  packet[24]=prior===0&&current===1?1:0;
  packet[14]=power&255;
@@ -52,6 +62,6 @@ export function prepareNativeHullAudioPacket(input,previous){
  packet[18]=impact.type;packet[19]=impact.strength;packet[20]=impact.trigger;
  packet[17]=Math.max(countA,countB)&255;packet[16]=1;
  packet[25]=place&255;packet[27]=rider&255;
- packet[21]=held!==0||actor===23||actor===7&&frame<56?2:actor===24?1:0;
+ packet[21]=actorAudio.riderEvent;
  return {packet,waterQueryPositionNative:{x:F(F(p0.x+p2.x)*.5),z:F(F(p0.z+p2.z)*.5)}};
 }

@@ -3,7 +3,7 @@ import {nativeImpactAudioPacket,consumeNativeImpactAudio} from './native-impact-
 import {prepareNativeAudioChannel} from './native-audio-channels.js';
 import {nativeRaceBodyFields} from './native-race-body-fields.js';
 import {queryNativeWaterField} from './native-water-field.js';
-import {prepareNativeRiderWaterAudio} from './native-audio-packet.js';
+import {prepareNativeRiderWaterAudio,prepareNativeActorAudioFields} from './native-audio-packet.js';
 const F=Math.fround;
 const channelEntries=new Set(['800bfdd0','800bfde4','800bfe70','800bfef8','800bffac','800bfd34','800bfd68','800bffcc']);
 
@@ -74,9 +74,14 @@ export function createNativeRaceContactAudio({players,courseIndex}){
     const packet=packets[player],prefix=nativeHullAudioPrefix({frameSpeedNative:motion[player].speed,verticalFrameB7c:motion[player].vertical,
      record2c8:recordMotion2c8[player],bodyBfc:adapter.hull.lateralMotionBfc,
      bodyC78:wet.wetCountC78,wetFlagC7c:wet.wetFlagC7c,landingC7e:wet.landingC7e});
+    // The completed physical lifecycle owns1608 (crash countdown). Controls
+    // retain the raw B56 buttons even if the force engine mask was suppressed.
+    const actorAudio=prepareNativeActorAudioFields({buttonsB56:adapter.frame.controls?.heldButtons,
+     actorC54,animationC58:adapter.lastFrame.animationFrame,body1608:adapter.riderLifecycle?.state.crashCountdown},packet[28]);
     const points=[0,2].map(i=>Object.fromEntries(['x','y','z'].map(k=>[k,F(adapter.hull.points[i].position[k]/adapter.hull.scale)])));
     const query=queryNativeWaterField(field,F(F(points[0].x+points[1].x)*.5),F(F(points[0].z+points[1].z)*.5));
     for(let i=0;i<4;i++)packet[i]=prefix[i];
+    packet[4]=actorAudio.buttonByte;packet[21]=actorAudio.riderEvent;packet[28]=actorAudio.animationEvent;
     packet[24]=Number(riderWater[player].bodyC84===0&&riderWater[player].bodyC86===1);
     packet[15]=nativeContactImmersion({waterQueryNative:query.sourcePlaneQueryNative,point90YNative:points[0].y,pointD0YNative:points[1].y});
     const impact=nativeImpactAudioPacket({impacts:adapter.impacts,objectHitKind16d8:adapter.objectHitKind16d8,

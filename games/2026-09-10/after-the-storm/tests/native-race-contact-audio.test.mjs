@@ -13,11 +13,25 @@ const call=(consumer,...args)=>({kind:'externalCall',consumer,arguments:args});
 const start=owner=>owner.applyEffects([call('800bfdd0',0x80192610),call('800bfef8',0x80192630)]);
 const field=()=>createNativeWaterField({datumNative:20});
 function body(frame,{speed=50,vertical=0,wet=1,landing=0,simulation=3,impacts=createNativeImpactState(),rider=0}={}){
- return {logicalFrames:frame,pendingFrameCompletion:false,frame:{simulationState:simulation,startCenter:{x:0,y:-vertical,z:0}},
+ return {logicalFrames:frame,pendingFrameCompletion:false,frame:{simulationState:simulation,startCenter:{x:0,y:-vertical,z:0},controls:{heldButtons:0}},
   hull:{scale:1,rider,lateralMotionBfc:0,center:{x:speed,y:0,z:0},frame:{forward:{x:0,y:0,z:1}},points:[0,1,2].map(()=>({position:{x:64,y:0,z:0}}))},
   water:{profile:{contactForceNative:1,peakForceNative:1,lowSpeedForceRatio:1},forceNative:0},dryContactFrames16d0:0,
-  lastFrame:{actorState:22},wetState:{wetCountC78:wet?12:0,wetFlagC7c:wet,landingC7e:landing},impacts,objectHitKind16d8:0};
+  lastFrame:{actorState:22,animationFrame:0},riderLifecycle:{state:{crashCountdown:0}},wetState:{wetCountC78:wet?12:0,wetFlagC7c:wet,landingC7e:landing},impacts,objectHitKind16d8:0};
 }
+
+test('live actor audio reads raw buttons, completed recovery and retained animation events',()=>{
+ const owner=createNativeRaceContactAudio({players:1,courseIndex:1}),f=field();
+ const inputs=[[22,0,5,0x8000],[7,55,0,0],[7,56,0,0],[7,58,0,0],[24,0,0,0],[22,0,0,0]];
+ const expected=[[1,2,0],[0,2,0],[0,0,0],[0,0,1],[0,1,1],[0,0,1]];
+ for(let i=0;i<inputs.length;i++){
+  const [actor,animation,crash,buttons]=inputs[i],b=body(i+1);
+  b.lastFrame.actorState=actor;b.lastFrame.animationFrame=animation;b.riderLifecycle.state.crashCountdown=crash;
+  b.frame.controls={heldButtons:buttons,engineMask:0,throttle:false};
+  owner.advance([b],f,[0],[0]);const packet=owner.snapshot().packets[0];
+  assert.deepEqual([packet[4],packet[21],packet[28]],expected[i]);
+ }
+ assert.deepEqual(owner.drain(),[],'new packet fields must not invent unconnected voice playback');
+});
 
 test('120 original immersion executions preserve midpoint rounding and byte clamp thresholds',()=>{
  const reference=JSON.parse(readFileSync(new URL('./fixtures/native-contact-immersion-reference.json',import.meta.url)));

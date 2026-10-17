@@ -16,16 +16,20 @@ function drive(hz){
   stepRace(state,()=>nativeRecoveryVerificationInput(state),1/hz);
   if(a.logicalFrames===stamp)continue;stamp=a.logicalFrames;
   const q=a.lastFrame.recovery.state,key=[q.actorState,q.pendingActor,q.crashCountdown,q.crashDampingLatch].join(',');
-  if(key!==previous){events.push({frame:stamp,key,state:structuredClone(q),impact:a.lastFrame.impacts.primaryBuoyImpactNative});previous=key;}
+  if(key!==previous){events.push({frame:stamp,key,state:structuredClone(q),impact:a.lastFrame.impacts.primaryBuoyImpactNative,
+   audioRiderEvent:state.nativeContactAudio.snapshot().packets[0][21]});previous=key;}
   assert.equal(a.articulatedRider.logicalFrames,host.world.frames);assert.equal(bundle.anchorState.logicalFrames,host.world.frames);
   for(const p of a.articulatedRider.points)assert.ok(Object.values(p.position).every(Number.isFinite));
  }
  assert.deepEqual(state.course.sourceBuoyLayout,layout,'the drive never changes source admission or geometry');
  assert.ok(contacts.some(c=>c.sourceRow===2&&c.channel==='primaryBuoy'),'the actual primary kernel finds the buoy from the ordinary grid drive');
  const trigger=events.find(e=>e.state.crashCountdown===5);assert.ok(trigger&&trigger.impact>10,'actual incoming contact exceeds the severe threshold');
+ assert.equal(trigger.audioRiderEvent,2,'the live sound packet observes the crash countdown before the falling actor begins');
  const fall=events.find(e=>e.state.actorState===23);assert.equal(fall.frame-trigger.frame,5);
  assert.deepEqual(events.filter(e=>e.state.pendingActor<0).map(e=>e.state.actorState).filter((v,i,all)=>i===0||v!==all[i-1]),[15,22,23,7,22]);
  const restore=events.find(e=>e.state.actorState===7&&!e.state.crashDampingLatch);assert.equal(restore.state.animationFrame,56);
+ assert.equal(restore.audioRiderEvent,0,'remount frame56 ends the rider-event signal');
+ assert.equal(state.nativeContactAudio.snapshot().packets[0][28],1,'remount frame58 latches its event until the engine consumer acknowledges it');
  assert.equal(a.lastFrame.actorState,22);assert.equal(a.riderLifecycle.state.pendingActor,-1);assert.equal(a.riderLifecycle.state.crashDampingLatch,false);
  assert.deepEqual(a.hull.points.map(p=>p.damping),saved);assert.deepEqual(nativeRecoveryVerificationInput(state),{throttle:0,steer:0});
  assert.equal(state.time,15);assert.equal(host.world.ticks,1500);assert.equal(state.raceWater.frames,300);

@@ -73,6 +73,35 @@ still need integration. The source gate at7CA0 retains its address-based name
 until its owner is established. Existing music, live contact sounds and all
 rendering/resolution settings remain unchanged.
 
+## Unpublished — complete race sound-packet control flow
+
+`native-race-audio-consumer.js` now composes the complete C010C routine: outer
+mode gates, rank announcements and cooldown writes, course/mode power override,
+channel place latches, envelope, wet transition, engine, spray, impacts, rider
+voices, water-entry acknowledgement and final prior-speed commit. All336
+complete prepared original executions and216 isolated rider-tail executions
+match packet state, global fields and ordered leaf-call arguments.
+
+The separate mode4 secondary cue requires the actual retained caller-stack
+byte. The prepared consumer accepts that explicit input; live mode4 playback
+remains disabled until the caller's stack lifetime is established. No secondary
+lane is guessed. Mixer/voice callees remain captured commands rather than
+executed sample playback, so complete original audio parity is still unfinished.
+
+The live packet owner now connects raw B56 buttons, completed C54/C58 actor
+state and physical crash countdown1608. This countdown is already owned by the
+recovered rider lifecycle. The packet reports the crash before actor23 begins,
+clears its rider-event signal at remount frame56, and latches frame58 until
+acknowledged. The full52480 producer and live subset share this actor kernel.
+
+Two fresh read-only REA/Ghidra queries on EVO X2 leave all nine project files
+unchanged;1,773 exported instructions match the supplied ROM. They identify
+the engine-start gate's event writer, audio-thread rank-delay decrement and
+the separate audio random stream, which depends on mixer output. Gameplay RNG
+cannot substitute for that stream. All46 focused tests pass, including a real
+buoy-triggered fall/remount and identical physical histories at30/60/144Hz.
+Rendering resolution, water geometry and existing music playback are unchanged.
+
 ## Current preview scope
 
 Native source-water Time trial and Two-player previews admit Sunny Beach,
