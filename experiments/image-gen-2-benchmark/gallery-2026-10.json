@@ -444,6 +444,129 @@
     }
   },
   {
+    "id": "2026-10-17-factual-infographic-factual-infographic-balloon-fear-antici",
+    "title": "Factual infographic: Balloon Fear — Anticipating the Pop",
+    "tests": "factual_subtype: phobia-infographic; phobia: Fear of balloons (descriptive label); balloon-specific trigger case report, general specific-phobia care evidence; no unsafe exposure advice; no subjective critic or automatic reroll; archive_slot=2026-10-17T16:08; concept=balloon-fear-popping-anticipation-gathering; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create a finished, richly illustrated factual phobia infographic directly on the canvas. Artwork-led artistic educational atlas, not a photographed page, app, frame, poster mockup, rigid grid, or collection of boxed cards. Prefer a tall portrait composition if suitable; automatic native size, opaque background. Refined luminous gouache with translucent colored-pencil and fine ink details, cool midnight teal and lavender balanced with coral and honey-gold light. Absolutely no horror, gore, monsters, comedy, diagnostic stereotypes, logos, watermarks, bibliography or URLs.\n\nMain title: “BALLOON FEAR”\nSubtitle: “Anticipating the pop”\nSmall readable deck line: “A descriptive fear label—not a separate diagnosis.”\n\nBuild the composition around three beautifully painted intact balloons drifting in a softly lit, quiet gathering space: one giant coral balloon dominates the upper-right with convincing stretched-rubber sheen, soft window reflections, delicate translucency at the rim, a tightly tied neck, and a fine curling ribbon. Lavender and amber balloons at different depths echo its silhouette without crowding the typography. A distant table, folded cloth and faint warm party lights establish an ordinary setting, not danger. No needles, sharp objects, bursting balloons, balloon fragments, or actual explosions. Around the dominant balloon, an extremely light dotted halo and short sound-wave mark inside a clearly labelled thought motif represent the anticipated sound, never a physical sound blast. Label this motif “What if it pops?” and connect to “For some, balloons or the prospect of a pop become feared cues.” These are examples, not universal symptoms.\n\nIn the lower-left, paint a dignified adult with medium-brown skin at the doorway, three-quarter profile, one hand gently resting near the chest, with believable hands, clothing folds and a concerned but not caricatured expression. They are not trapped or forced toward the balloons. Preserve room for an open curved annotation beside them: “BODY ALARM” / “Racing heart • shaking • sweating”. Use delicate abstract pulse lines, not fabricated neural anatomy. Above this, an elegant short definition: “A phobia is intense fear out of proportion to actual danger. A dislike or startle alone is not a diagnosis.”\n\nLet the balloon ribbons become an organic visual pathway flowing toward the doorway and then the warm gathering beyond it. Along this path integrate three concise open captions connected by curved arrows, not boxes: “Anticipate an encounter” → “Anxiety rises” → “Avoid the situation”. Follow with “Avoidance can shrink social life.” Show a small quiet suggestion of an empty chair at the gathering to express missed participation, without implying that every person responds this way. Do not draw an unsupported brain-circuit or causal reinforcement loop. Give the ribbons tangible fibers, fine curved shadows and elegant changes in scale.\n\nNear the intact hero balloon, a calm open comparison reads “Perceived threat can exceed actual danger” and below it “The fear is real; it is not proof of immediate danger.” Do not claim balloons are harmless, deny real-world risks, or turn this into balloon safety advice. The anticipated pop remains clearly labelled as a thought.\n\nThe lower-right opens into a gently brighter warm pool of light, with a small compassionate scene of an adult speaking to a clinician across comfortable chairs, no forced contact with a balloon. Weave this help text into the open space: “HELP THAT HAS EVIDENCE” / “CBT can help change fear-related thoughts and responses.” / “Clinician-guided exposure can use gradual, planned steps.” / “Seek professional support when fear disrupts daily life.” Place a short note below: “Evidence is for specific phobias generally—not a balloon-specific cure promise.” No exposure ladder, popping exercise, flooding instructions, mandatory confrontation, self-treatment recipe or cure guarantee. A discreet footer says “Educational overview • Individual assessment matters”.\n\nTypography must be elegant and genuinely readable, with a strong title, clear group labels and restrained short captions. Prioritize the dominant artwork, expressive light and sufficient breathing room, with asymmetry and no repeated rectangular panels. Integrate all essential clinical information above; omit decorative clutter before shrinking text. Specific visual details—rubber reflections, ribbon curls, fabric weave, wood grain, soft airborne dust in the window light—should reward close inspection without competing with legibility. Facts are sourced to NIMH, NHS, MedlinePlus and a single published balloon/noise-phobia case report; do not put citations on the image. Do not invent any statistics, prevalence, diagnostic criteria or additional medical claims.",
+    "image": "images/2026-10-17-factual-infographic-factual-infographic-balloon-fear-antici.jpg",
+    "thumb": "thumbs/2026-10-17-factual-infographic-factual-infographic-balloon-fear-antici.webp",
+    "color": "#8a6d59",
+    "date": "2026-10-17",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "balloon-fear-popping-anticipation-gathering",
+      "imageSha256": "94efb2a6081ada7784088f0ef1666cae1101769123e9735ec6bab1dfc7a6ed6a",
+      "imageDHash": "41c8c0331b802121"
+    },
+    "factualInfographic": {
+      "topic": "Fear of balloons: anticipated popping, body alarm, avoidance, and evidence-based support",
+      "description": "Artwork-led educational overview of balloon-related fear, distinguishing a documented trigger example from general specific-phobia evidence and individualized care.",
+      "sourceNote": "National Institute of Mental Health: https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders; NHS: https://www.nhs.uk/mental-health/conditions/phobias/; Journal of Behavior Therapy and Experimental Psychiatry: https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:8188847%20AND%20SRC:MED&format=json&resultType=core; MedlinePlus: https://medlineplus.gov/ency/article/000956.htm. Verified general specific-phobia definition, symptoms, anticipatory anxiety, avoidance and treatment; balloon/noise trigger evidence is a single case, not proof of universal triggers or a balloon-specific treatment effect.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-17T20:09:12.107159+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Mental Health",
+            "title": "Phobias and Phobia-Related Disorders",
+            "sourceType": "government-agency",
+            "url": "https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          },
+          {
+            "id": "S3",
+            "publisher": "Journal of Behavior Therapy and Experimental Psychiatry",
+            "title": "The rapid treatment of a young man's balloon (noise) phobia using in vivo flooding",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID:8188847%20AND%20SRC:MED&format=json&resultType=core"
+          },
+          {
+            "id": "S4",
+            "publisher": "MedlinePlus",
+            "title": "Phobia - simple/specific",
+            "sourceType": "government-agency",
+            "url": "https://medlineplus.gov/ency/article/000956.htm"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "A phobia involves intense fear that is out of proportion to actual danger; an ordinary dislike or startle is not by itself a diagnosis.",
+            "sourceIds": [
+              "S1",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Fear of balloons is used here as a descriptive fear label, not a separate invented diagnostic category; balloon/noise fear and avoidance have been documented in a case report.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "For some people, balloons and the prospect of a pop are feared cues; a published case described fear of balloons/noise and avoidance of situations where balloons might be encountered. This is an example, not a universal trigger profile.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Thinking about a feared object can provoke anxiety before an encounter.",
+            "sourceIds": [
+              "S4"
+            ]
+          },
+          {
+            "claim": "Phobic anxiety can include a racing heartbeat, shaking, and sweating.",
+            "sourceIds": [
+              "S2",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Fear can lead to avoiding situations where the object may be encountered; avoidance can interfere with social life. The illustration of missing a gathering is an example of this general pattern, not a prevalence claim.",
+            "sourceIds": [
+              "S1",
+              "S3",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Phobic alarm can exceed the actual danger presented; fear is real even when disproportionate. The imagined pop is an anticipation, not an ongoing explosion.",
+            "sourceIds": [
+              "S1",
+              "S4"
+            ]
+          },
+          {
+            "claim": "CBT and exposure-based therapy are evidence-based approaches for specific phobias generally; exposure treatment can progress gradually. General evidence is not a balloon-specific cure guarantee.",
+            "sourceIds": [
+              "S1",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Seek a health professional when fear affects daily life; a provider can assess symptoms and guide treatment. This chart is educational, not an individual treatment plan.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S4"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-10-16-factual-infographic-factual-infographic-whiskers-touch-befo",
     "title": "Factual infographic: Whiskers — Touch Before the Muzzle Arrives",
     "tests": "Focused tactile mechanism; schematic not to scale; no broad preview repetition, quantitative traces, remote radar or rat-specific S-bend claim. No subjective review.; archive_slot=2026-10-16T04:20; concept=cat-whisker-contact-follicle-sensory-transduction; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: extraordinary-senses",
