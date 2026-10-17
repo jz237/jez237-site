@@ -4489,3 +4489,28 @@ to the live host. Leaf audio calls were captured, not executed. The actual
 665B0 caller places packet production after all actor completions and before
 later camera/water work; live integration must preserve that boundary and the
 consumer's retained state. Existing browser audio is unchanged at this stage.
+
+## Native contact materials and landing audio preparation
+
+`native-contact-audio.js` adds the nine source-course contact palettes, the
+first four52480 packet bytes, and C010C's preceding wet-transition consumer.
+The packet preserves source float32 speed conversion, signed pitch clamping,
+landing arithmetic and byte storage. The wet consumer selects landing commands
+by intensity and prior speed, updates its dry timer, and establishes packet7
+before that latch gates marked-box impact sounds. Both consumers retain the
+previous-speed byte until the full audio caller finishes its other branches.
+
+Two further read-only Ghidra queries on EVO X2 identified the material globals'
+single initialization writer and decoded C21F4. All nine project files remained
+unchanged, and830 additional instruction records matched ROM bytes. A private
+bounded evaluator executed156 packet-prefix cases,1,170 wet-consumer cases and
+all nine material selections (49,132 instructions). Thirteen focused tests
+passed across the two audio modules, including landing-to-steady-water frames,
+marked-box ordering and previous-speed retention. Fixtures contain numeric
+prepared inputs, outputs and captured leaf command arguments only.
+
+Live integration is still pending: C78/C7E must come from their actual completed
+body owners; the full packet schedule, mode gates, nearest-rival selection and
+downstream playback remain separate work. These kernels do not replace the
+existing browser audio or embed original sound samples. Rendering resolution,
+water geometry and course admission are unaffected.
