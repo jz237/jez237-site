@@ -31,11 +31,11 @@ export function nativeContactMotionBytes({frameSpeedNative,verticalFrameB7c,body
 }
 
 export function nativeHullAudioPrefix(input){
- const {record2c8,bodyBfc}=input,pitch=float(bodyBfc),motion=nativeContactMotionBytes(input);
+ const {record2c8,bodyBfc}=input,lateralMotion=float(bodyBfc),motion=nativeContactMotionBytes(input);
  integer(record2c8,-2147483648,2147483647);
  return [motion.speed,
   trunc(F(F(record2c8)*F(.4444444477558136)))&255,
-  Math.max(-15,Math.min(15,trunc(F(pitch*5))))&255,motion.wet];
+  Math.max(-15,Math.min(15,trunc(F(lateralMotion*5))))&255,motion.wet];
 }
 
 //52480's byteF uses4D30C at the midpoint of source points90/D0. The caller

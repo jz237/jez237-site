@@ -1,5 +1,37 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Current preview scope
+
+Native source-water Time trial and Two-player previews admit Sunny Beach,
+Sunset Bay, Southern Island and Glacier Coast. Ordinary play retains the modern
+backend. Ice contacts, fragments, splashes and the human contact-audio subset
+are connected. Earlier checkpoint descriptions below record their state at
+that time; the later Glacier admission and live contact-audio sections supersede
+their closed/unconnected status. Full original-game parity remains incomplete.
+
+## Unreleased — complete source sound-control packet
+
+The prepared52480 producer now reconstructs all original packet writes, including
+button state, rider/actor cues, rank, record power, two rider counters, the rider
+water-entry edge and the latched animation-frame58 event. It preserves consumer
+timers, prior speed and unacknowledged events. It takes actual source fields and
+an explicit normalized4D30C water query; missing fields reject rather than being
+inferred from the renderer. All150 prepared full-routine executions match.
+
+A fresh read-only Ghidra query on EVO X2 identifies BFC as the horizontal
+velocity projection onto the right axis, rather than an Euler pitch angle.
+Its original624CC arithmetic retains the previous value when that axis is
+vertical. All81 prepared executions match, including the singular boundary.
+The231 original cases execute25,355 instructions. All622 exported instruction
+records match ROM bytes; all nine Ghidra project files remain unchanged.
+Eighteen focused tests pass, including the existing wet/impact consumers.
+
+This is a prerequisite for full engine and rider-sound integration. The live
+contact owner still produces its existing subset; connecting all source body
+and rider fields and the remaining mixer/voice consumers is unfinished. No
+new original-engine playback or complete retained mixer state is claimed.
+Rendering resolution and existing music settings are unchanged.
+
 ## Unreleased — shared native ice splash simulation
 
 Ice breaks now queue AF43C's two four-update emitters. AF51C populates the

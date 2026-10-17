@@ -11,7 +11,7 @@ test('all nine course contact palettes match original material-selection instruc
  const a=nativeContactAudioMaterials(1);a.surfaceCode=0;assert.equal(nativeContactAudioMaterials(1).surfaceCode,52);
  for(const course of [-1,9,.5,NaN])assert.throws(()=>nativeContactAudioMaterials(course));
 });
-test('156 original packet-prefix executions match speed, signed pitch and landing clamp arithmetic',()=>{
+test('156 original packet-prefix executions match speed, signed lateral motion and landing clamp arithmetic',()=>{
  for(const c of reference.prefixCases)assert.deepEqual(nativeHullAudioPrefix(c.input),c.expected,JSON.stringify(c.input));
 });
 test('1170 original wet-consumer executions match landing thresholds, signed bytes and dry timers',()=>{
