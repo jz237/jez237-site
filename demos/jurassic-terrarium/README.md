@@ -349,3 +349,16 @@ v1.42: ambient occlusion (graphics goal 2 of 6):
 - **Stones:** every rock darkens where it meets the ground and in its downward hollows.
 - **Ground:** soft dark pools lie round the foot of every stone and tree, the cabin and the den.
 - `?ao=0` turns all of it off, for comparing.
+
+v1.43: living eyes (graphics goal 3 of 6):
+- **The iris, drawn in the shader:** radial fibres, darker crypts and flecks, a bright collar round the pupil and a dark ring at its edge. It sits under a clear cornea, so it shifts against the glassy surface as the view moves.
+- **Pupils by species:**
+  - the T. rex has a vertical slit in a gold iris;
+  - the Triceratops has a horizontal bar in a hazel-green iris;
+  - the Stegosaurus has an amber round pupil;
+  - the Brachiosaurus has a grey-olive round pupil;
+  - the Pteranodon has a dark red-brown round pupil.
+- **Living pupils:** they slowly open in the dark and close down in bright sun, and widen when an animal flees or hunts.
+- **Catchlights:** a sharp highlight from the sun and a small soft window of sky on the top of the cornea, so an eye in shade still glints. The upper lid shades the top of the eye beneath it.
+- **Moist lids:** a pink-dark inner rim where the lid meets the eye, and a wet line of tears glinting along both lids.
+- **Eyeshine at night** now glows out through the wide-open pupil, with the iris still visible round it, instead of lighting the whole eyeball.

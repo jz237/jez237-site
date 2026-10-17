@@ -23,7 +23,13 @@ function dress(owner) {
     if (!o.isSkinnedMesh || !/_eye$/.test(o.material?.name || '') || !o.geometry.userData.jtEye) return;
     if (!o.material.userData.jtOwn) (o.material = o.material.clone()), (o.material.userData.jtOwn = true);
     owner.eyeU = eyeUniforms(owner.lidColour?.clone().multiplyScalar(0.8));
-    eyeShader(o.material, owner.eyeU);
+    const sp = EYES[owner.sp.id];
+    if (sp) {
+      owner.eyeU.uIrisIn.value.setRGB(...sp.in);
+      owner.eyeU.uIrisOut.value.setRGB(...sp.out);
+      owner.eyeU.uPupil.value.set(sp.pupil[0], sp.pupil[1]);
+    }
+    eyeShader(o.material, owner.eyeU, owner.mod.ctx.uniforms);
   });
 }
 
@@ -53,6 +59,15 @@ function faceEyes(o, dt, { shut = 0 } = {}) {
   const g = o._eyeGoal || [0, 0], e = E.uEyeRot.value, k = Math.min(1, dt * 30);
   e.x += (g[0] - e.x) * k;
   e.y += (g[1] - e.y) * k;
+  // the pupil opens in the dark and closes down in bright sun (slowly, as a real one does); wider for a
+  // moment when startled or hunting
+  const sp = EYES[o.sp.id];
+  if (sp) {
+    const env = o.mod.ctx.modules.life?.env || {};
+    const dark = Math.min(1, (env.night || 0) + (env.dusk || 0) * 0.5 + (o._inCave || 0)), want = Math.min(1, dark + (o.state === 'flee' || o.state === 'hunt' ? 0.45 : 0));
+    o._pupil = (o._pupil ?? want) + (want - (o._pupil ?? want)) * Math.min(1, dt * 0.8);
+    E.uPupil.value.set(MathUtils.lerp(sp.pupil[0], sp.pupil[2], o._pupil), MathUtils.lerp(sp.pupil[1], sp.pupil[3], o._pupil));
+  }
 }
 
 // the closest points of two 2D segments [ax, az, bx, bz]: [px, pz on the first, qx, qz on the second]
@@ -106,7 +121,7 @@ import { Feeding } from './feeding.js';
 import { Cooling } from './cooling.js';
 import { Rocks } from './rocks.js';
 import { Paths } from './paths.js';
-import { prepareSkinGeometry, prepareEyeGeometry, prepareTeeth, Saliva, averageColour, skinUniforms, skinShader, eyeShader, eyeUniforms, SCALES } from './skin.js';
+import { prepareSkinGeometry, prepareEyeGeometry, prepareTeeth, Saliva, averageColour, skinUniforms, skinShader, eyeShader, eyeUniforms, EYES, SCALES } from './skin.js';
 import { BufferGeometry as BG3, BufferAttribute as BA3, DoubleSide as DS3 } from 'three';
 
 // One terrarium unit is 5.5 m: the 18 x 8 unit floor is a 100 x 44 m valley. Like a museum diorama,

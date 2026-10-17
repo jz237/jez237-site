@@ -251,6 +251,29 @@ export function prepareEyeGeometry(mesh) {
     a.set([cen[k].x, cen[k].y, cen[k].z, rad[k] * (k ? 1 : -1)], i * 4); // the sign of w says which side
   }
   g.setAttribute('aEyeC', new BufferAttribute(a, 4));
+  // which way each eye looks: the pole of its sphere (the iris was painted round it) that faces out of
+  // the head; the sphere's UVs run pole to pole
+  const uv = g.attributes.uv, poles = [[new Vector3(), new Vector3(), 0, 0], [new Vector3(), new Vector3(), 0, 0]];
+  if (uv) {
+    for (let i = 0; i < n; i++) {
+      const v = uv.getY(i), k = pos.getX(i) < 0 ? 0 : 1;
+      if (v < 0.01) poles[k][0].add(_v.fromBufferAttribute(pos, i)), poles[k][2]++;
+      else if (v > 0.99) poles[k][1].add(_v.fromBufferAttribute(pos, i)), poles[k][3]++;
+    }
+  }
+  const look = [0, 1].map((k) => {
+    const out = new Vector3(k ? 1 : -1, 0, 0);
+    if (!poles[k][2] || !poles[k][3]) return out;
+    const a0 = poles[k][0].multiplyScalar(1 / poles[k][2]).sub(cen[k]).normalize();
+    const a1 = poles[k][1].multiplyScalar(1 / poles[k][3]).sub(cen[k]).normalize();
+    return a0.dot(out) > a1.dot(out) ? a0 : a1;
+  });
+  const L = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) {
+    const k = pos.getX(i) < 0 ? 0 : 1;
+    L.set([look[k].x, look[k].y, look[k].z], i * 3);
+  }
+  g.setAttribute('aEyeL', new BufferAttribute(L, 3));
   g.userData.jtEye = true;
 }
 
@@ -614,16 +637,30 @@ float jtNoise(vec3 p) {
   mat.needsUpdate = true;
 }
 
-export function eyeShader(mat, U) {
+// each species' eye: iris colours (inner, outer), pupil half-width and half-height by day (x, y) and fully
+// open in the dark (z, w), in the eye's own units (the sine of the angle from its axis)
+export const EYES = {
+  trex: { in: [1.0, 0.62, 0.12], out: [0.55, 0.26, 0.05], pupil: [0.05, 0.4, 0.26, 0.44] }, // a vertical slit
+  triceratops: { in: [0.62, 0.52, 0.22], out: [0.24, 0.2, 0.08], pupil: [0.26, 0.11, 0.38, 0.28] }, // a goat's bar
+  stegosaurus: { in: [0.82, 0.5, 0.16], out: [0.32, 0.18, 0.06], pupil: [0.17, 0.17, 0.34, 0.34] },
+  brachiosaurus: { in: [0.5, 0.48, 0.3], out: [0.2, 0.17, 0.1], pupil: [0.19, 0.19, 0.38, 0.38] },
+  pteranodon: { in: [0.5, 0.18, 0.06], out: [0.12, 0.05, 0.03], pupil: [0.16, 0.16, 0.32, 0.32] },
+};
+
+export function eyeShader(mat, U, shared) {
   const prev = mat.onBeforeCompile;
   mat.onBeforeCompile = (sh, r) => {
     prev?.call(mat, sh, r);
     Object.assign(sh.uniforms, U);
+    if (shared) for (const k of ['uLightDir', 'uLightColor', 'uSkyColor', 'uNight']) sh.uniforms[k] = shared[k];
     sh.vertexShader = sh.vertexShader
       .replace('#include <common>', `#include <common>
 attribute vec4 aEyeC;
+attribute vec3 aEyeL;
 uniform vec2 uEyeRot;
 varying vec3 vEyeRel;
+varying vec3 vEyeLv;
+varying vec3 vEyeUv;
 mat3 jtRotY(float a) { float c = cos(a), s = sin(a); return mat3(c, 0.0, -s, 0.0, 1.0, 0.0, s, 0.0, c); }
 mat3 jtRotZ(float a) { float c = cos(a), s = sin(a); return mat3(c, s, 0.0, -s, c, 0.0, 0.0, 0.0, 1.0); }`)
       .replace('#include <beginnormal_vertex>', `#include <beginnormal_vertex>
@@ -634,30 +671,100 @@ mat3 jtRotZ(float a) { float c = cos(a), s = sin(a); return mat3(c, s, 0.0, -s, 
       .replace('#include <begin_vertex>', `#include <begin_vertex>
   vec3 jtRel = position - aEyeC.xyz;
   vEyeRel = jtRel / abs(aEyeC.w);
-  transformed = aEyeC.xyz + jtR * jtRel;`);
+  transformed = aEyeC.xyz + jtR * jtRel;
+  // the eye's axis and its up, turned with the ball, into view space (for the iris and the pupil)
+  vec3 jtLk = jtR * aEyeL, jtUk = jtR * vec3(0.0, 1.0, 0.0);
+  #ifdef USE_SKINNING
+  jtLk = (skinMatrix * vec4(jtLk, 0.0)).xyz;
+  jtUk = (skinMatrix * vec4(jtUk, 0.0)).xyz;
+  #endif
+  vEyeLv = normalize(normalMatrix * jtLk);
+  vEyeUv = normalize(normalMatrix * jtUk);`);
     sh.fragmentShader = sh.fragmentShader
       .replace('#include <common>', `#include <common>
 uniform float uBlink;
 uniform vec3 uLidColor;
 uniform vec3 uShine;
-varying vec3 vEyeRel;`)
+uniform vec3 uIrisIn;
+uniform vec3 uIrisOut;
+uniform vec2 uPupil;
+uniform vec3 uLightDir;
+uniform vec3 uLightColor;
+uniform vec3 uSkyColor;
+uniform float uNight;
+varying vec3 vEyeRel;
+varying vec3 vEyeLv;
+varying vec3 vEyeUv;
+float jeH(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+float jeN(vec2 p) { vec2 i = floor(p), f = fract(p); f = f * f * (3.0 - 2.0 * f);
+  return mix(mix(jeH(i), jeH(i + vec2(1, 0)), f.x), mix(jeH(i + vec2(0, 1)), jeH(i + vec2(1, 1)), f.x), f.y); }`)
       .replace('#include <map_fragment>', `#include <map_fragment>
   // the lids: the upper comes down, the lower rises a little; a dark line where they meet the ball
   float jtUp = 1.0 - 2.05 * uBlink, jtLo = -1.0 + 0.75 * uBlink;
   float jtLid = max(smoothstep(jtUp - 0.04, jtUp + 0.04, vEyeRel.y), smoothstep(jtLo + 0.04, jtLo - 0.04, vEyeRel.y));
   float jtEdge = max(1.0 - smoothstep(0.0, 0.12, abs(vEyeRel.y - jtUp)), 1.0 - smoothstep(0.0, 0.1, abs(vEyeRel.y - jtLo))) * (1.0 - jtLid);
-  diffuseColor.rgb = mix(diffuseColor.rgb * (1.0 - jtEdge * 0.6), uLidColor, jtLid);`)
+  // the eye itself, drawn here: the iris lies under a clear cornea (so it shifts against the surface as the
+  // view moves), with fibres, crypts, a bright collar round the pupil and a dark ring at its edge; the
+  // pupil is the species' shape and opens in the dark
+  vec3 jeV = normalize(vViewPosition), jeL = normalize(vEyeLv), jeP = normalize(vNormal);
+  vec3 jeU = normalize(vEyeUv - jeL * dot(vEyeUv, jeL)), jeR = cross(jeL, jeU);
+  float jeAx = dot(jeP, jeL);
+  vec3 jeQ = normalize(jeP - (jeV - jeL * dot(jeV, jeL)) * 0.22 * smoothstep(0.5, 0.95, jeAx));
+  vec2 jeXY = vec2(dot(jeQ, jeR), dot(jeQ, jeU));
+  float jeRho = length(jeXY) * step(0.0, dot(jeQ, jeL)) + (1.0 - step(0.0, dot(jeQ, jeL))) * 2.0;
+  float jeTh = atan(jeXY.y, jeXY.x);
+  float jeIrisR = 0.74;
+  float jePup = length(jeXY / max(uPupil, vec2(0.01)));
+  jePup = 1.0 - smoothstep(0.86, 1.08, jePup);
+  float jeT = clamp(jeRho / jeIrisR, 0.0, 1.0);
+  float jeFib = jeN(vec2(jeTh * 38.0, jeRho * 6.0)) * 0.6 + jeN(vec2(jeTh * 90.0, jeRho * 14.0)) * 0.4;
+  float jeCrypt = smoothstep(0.62, 0.8, jeN(vec2(jeTh * 9.0, jeRho * 18.0 + 3.0)));
+  vec3 jeCol = mix(uIrisIn, uIrisOut, smoothstep(0.15, 0.95, jeT));
+  jeCol *= 0.62 + 0.62 * jeFib;
+  jeCol *= 1.0 - 0.45 * jeCrypt * smoothstep(0.3, 0.6, jeT);
+  float jeCollar = smoothstep(0.1, 0.0, abs(jeT - (length(uPupil) * 0.9 / jeIrisR + 0.16)));
+  jeCol += uIrisIn * 0.35 * jeCollar;
+  jeCol += vec3(0.05, 0.035, 0.0) * step(0.86, jeN(vec2(jeTh * 23.0, jeRho * 31.0))) * (1.0 - jeT); // flecks
+  jeCol *= 1.0 - 0.75 * smoothstep(0.72, 1.0, jeT); // the dark limbal ring
+  vec3 jeSclera = uIrisOut * 0.18 + vec3(0.02, 0.014, 0.01);
+  jeCol = mix(jeSclera, jeCol, 1.0 - smoothstep(jeIrisR, jeIrisR + 0.04, jeRho));
+  jeCol = mix(jeCol, vec3(0.004, 0.004, 0.006), jePup);
+  // the upper lid shades the top of the eye beneath it
+  jeCol *= 1.0 - 0.55 * smoothstep(jtUp - 0.5, jtUp, vEyeRel.y);
+  diffuseColor.rgb = jeCol;
+  // the lid's moist inner rim: pink-dark and glistening along the edge where it meets the ball
+  float jtRim = max(smoothstep(0.1, 0.0, vEyeRel.y - jtUp), smoothstep(0.08, 0.0, jtLo - vEyeRel.y)) * jtLid * (1.0 - smoothstep(0.1, 0.2, max(vEyeRel.y - jtUp, jtLo - vEyeRel.y)));
+  diffuseColor.rgb = mix(diffuseColor.rgb * (1.0 - jtEdge * 0.6), uLidColor, jtLid);
+  diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.32, 0.12, 0.1) * 0.6, jtRim * 0.7);`)
       .replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
-  roughnessFactor = mix(roughnessFactor, 0.75, jtLid);`)
+  roughnessFactor = mix(roughnessFactor, 0.75, jtLid * (1.0 - jtRim));`)
       .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
-  // eyeshine: in the dark, light thrown straight back from behind the retina, strongest looking right at us
-  totalEmissiveRadiance += uShine * pow(clamp(dot(normal, normalize(vViewPosition)), 0.0, 1.0), 3.0);
+  // (the material's own night glow, too, only out of the pupil)
+  totalEmissiveRadiance *= jePup * 1.5 + 0.04;
+  // eyeshine: in the dark, light thrown straight back from behind the retina, out through the (wide open)
+  // pupil, strongest looking right at us; a faint glow in the iris round it
+  totalEmissiveRadiance += uShine * pow(clamp(dot(normal, normalize(vViewPosition)), 0.0, 1.0), 2.0) * (jePup * 2.2 + 0.03 * (1.0 - smoothstep(jeIrisR * 0.6, jeIrisR, jeRho)));
   totalEmissiveRadiance *= 1.0 - jtLid;`)
       .replace('#include <clearcoat_normal_fragment_begin>', `#include <clearcoat_normal_fragment_begin>`)
       .replace('#include <lights_physical_fragment>', `#include <lights_physical_fragment>
   #ifdef USE_CLEARCOAT
   material.clearcoat *= 1.0 - jtLid;
-  #endif`);
+  #endif`)
+      .replace('#include <lights_fragment_end>', `#include <lights_fragment_end>
+  {
+    // catchlights: the sun, sharp, and the bright sky above as a soft window on the top of the cornea,
+    // so an eye in shade still glints; and the wet line of tears along the lids
+    vec3 jeRf = reflect(-jeV, normal);
+    vec3 jeSun = normalize((viewMatrix * vec4(uLightDir, 0.0)).xyz);
+    vec3 jeUpV = normalize((viewMatrix * vec4(0.0, 1.0, 0.0, 0.0)).xyz);
+    float open = 1.0 - jtLid;
+    float day = 1.0 - uNight;
+    reflectedLight.directSpecular += uLightColor * pow(max(dot(jeRf, jeSun), 0.0), 900.0) * 14.0 * open;
+    float win = smoothstep(0.84, 0.93, dot(jeRf, jeUpV)) * smoothstep(-0.5, 0.0, dot(jeRf, jeV - jeUpV * dot(jeV, jeUpV)));
+    reflectedLight.indirectSpecular += uSkyColor * win * 1.1 * open * (0.25 + 0.75 * day);
+    float tear = (1.0 - smoothstep(0.0, 0.05, abs(vEyeRel.y - jtUp + 0.03))) + (1.0 - smoothstep(0.0, 0.04, abs(vEyeRel.y - jtLo - 0.025)));
+    reflectedLight.indirectSpecular += (uSkyColor * 0.45 + uLightColor * 0.25) * tear * open * (0.4 + 0.6 * day);
+  }`);
   };
   const key = mat.customProgramCacheKey?.bind(mat);
   mat.customProgramCacheKey = () => (key ? key() : '') + '-jteye';
@@ -665,7 +772,10 @@ varying vec3 vEyeRel;`)
 }
 
 export function eyeUniforms(lid) {
-  return { uEyeRot: { value: new Vector2() }, uBlink: { value: 0 }, uLidColor: { value: lid || new Color(0.12, 0.1, 0.08) }, uShine: { value: new Color(0, 0, 0) } };
+  return {
+    uEyeRot: { value: new Vector2() }, uBlink: { value: 0 }, uLidColor: { value: lid || new Color(0.12, 0.1, 0.08) }, uShine: { value: new Color(0, 0, 0) },
+    uIrisIn: { value: new Color(0.7, 0.5, 0.2) }, uIrisOut: { value: new Color(0.3, 0.2, 0.08) }, uPupil: { value: new Vector2(0.18, 0.18) },
+  };
 }
 
 // Saliva: strands strung between upper and lower teeth as the jaw opens on a roar. Each stretches and sags
