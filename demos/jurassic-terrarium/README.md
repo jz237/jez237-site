@@ -394,3 +394,5 @@ With this the six-part graphics push is complete:
 4. water (v1.44);
 5. plants (v1.45);
 6. the cinematic look (v1.46).
+
+v1.46.1: the depth of field from v1.46 is removed. It blurred the view badly while zooming in and out, because its focus distance lagged behind the camera. Its stronger close-up soft focus is removed too. The soft focus is Weatherglass's own again, and the colour grade and vignette stay.

@@ -2,12 +2,10 @@
 //   - a colour grade for the time of day: cool, soft and pearly at dawn; clean and lightly warm at noon;
 //     amber highlights over teal shadows in the golden hour; rose and violet at dusk; blue, quiet and
 //     less saturated at night; flat and cool under rain;
-//   - the soft focus (the tilt-shift's sharp band) follows what the camera looks at: the animal it follows,
-//     or the point it turns about, eased so it settles rather than snaps; a little narrower and stronger
-//     close up, like a longer lens;
 //   - the vignette deepens towards night and while the camera follows an animal.
-// The grade's uniforms and the focus hook are patched into the page (tools/build-page.mjs).
-import { Vector3, MathUtils, DepthTexture } from 'three';
+// The grade's uniforms are patched into the page (tools/build-page.mjs). (The depth of field tried in
+// v1.46 is gone: it blurred badly while zooming. Weatherglass's own soft focus is untouched.)
+import { Vector3 } from 'three';
 
 const _v = new Vector3();
 // [saturation, contrast (S-curve), shadow tint rgb, highlight tint rgb], in display units
@@ -26,64 +24,14 @@ export class Cinema {
     this.ctx = mod.ctx;
     this.post = this.ctx.post;
     this.on = new URLSearchParams(location.search).get('cinema') !== '0';
-    this.focus = 0.47;
-    this.cur = null;
     if (!this.on || !this.post) return;
     const U = this.post.grade?.uniforms;
     if (U) for (const k of ['uGShadow', 'uGHigh']) U[k].value = new Vector3().fromArray(U[k].value);
-    window.__jtTilt = (f, band, amount) => this.tilt(f, band, amount);
-    // the scene's depth, for focusing by distance (the render pass draws into its own multisampled target
-    // on all but the weakest devices; without one the plain tilt-shift band is kept)
-    const tgt = this.post.renderPass?.target;
-    if (tgt && new URLSearchParams(location.search).get('dof') !== '0') {
-      tgt.dispose();
-      tgt.depthTexture = new DepthTexture(tgt.width, tgt.height);
-      for (const p of [this.post.tiltX, this.post.tiltY]) {
-        p.uniforms.tDepth.value = tgt.depthTexture;
-        p.uniforms.uDepthOn.value = 1;
-      }
-      this.dof = true;
-    }
-  }
-
-  // Weatherglass's per-frame tilt-shift (its band and strength for the zoom), aimed at what we look at
-  tilt(f, band, amount) {
-    const docu = this.mod.interact?.docu?.on;
-    if (this.dof) {
-      const cam = this.ctx.camera;
-      for (const p of [this.post.tiltX, this.post.tiltY]) {
-        const u = p.uniforms;
-        u.uZFocus.value = this.zFocus;
-        u.uZNear.value = cam.near;
-        u.uZFar.value = cam.far;
-        u.uDof.value = this.dofK;
-        u.uBandK.value = 0.3;
-        u.uDepthOn.value = docu ? 0 : 1; // (Documentary mode keeps its own narrow focus band on its subject)
-      }
-    }
-    if (docu) return; // Documentary mode places its own focus band (docu.js)
-    const r = this.ctx.cameraRig;
-    const close = MathUtils.clamp((6 - r.radius) / 5, 0, 1);
-    this.post.setTiltShift(this.focus, band * (1 - 0.3 * close), amount * (1 + 0.25 * close));
   }
 
   update(dt) {
     if (!this.on || !this.post?.grade) return;
-    const cam = this.ctx.camera, r = this.ctx.cameraRig;
-    // where the subject is on the screen
     const sub = this.mod.guide?.follow || null;
-    const docu = this.mod.interact?.docu;
-    if (docu?.on && docu.look) _v.copy(docu.look);
-    else if (sub?.root) _v.copy(sub.root.position).setY(sub.root.position.y + (sub.height || 0.3) * 0.5);
-    else _v.copy(r.target);
-    // its distance from the lens (eased), and how shallow the focus is: shallower close up, as with a
-    // longer lens on a nearer subject
-    const z = Math.max(0.3, -_v.clone().applyMatrix4(cam.matrixWorldInverse).z);
-    this.zFocus = this.zFocus ? this.zFocus + (z - this.zFocus) * Math.min(1, dt * 3) : z;
-    this.dofK = MathUtils.lerp(1.6, 3.2, MathUtils.clamp((7 - z) / 6, 0, 1)) * (docu?.on ? 1.3 : 1);
-    _v.project(cam);
-    const want = MathUtils.clamp((_v.y + 1) / 2, 0.18, 0.82);
-    this.focus += (want - this.focus) * Math.min(1, dt * 1.6);
     // the grade for the hour and the weather
     const e = this.ctx.modules.life?.env || {};
     const t = this.ctx.world.timeOfDay ?? 0.5;
