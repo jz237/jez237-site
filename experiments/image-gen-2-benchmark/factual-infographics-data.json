@@ -12825,5 +12825,118 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-17-factual-infographic-factual-infographic-driving-fear-alarm-",
+    "title": "Factual infographic: Driving Fear — Alarm Behind the Wheel",
+    "tests": "factual_subtype: phobia-infographic; phobia: Driving fear (possible specific phobia or trauma-related presentation); clinician assessment and road-safety context; no subjective critic; archive_slot=2026-10-17T08:08; concept=driving-fear-road-anticipation-avoidance; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create the finished artwork directly: an exquisitely illustrated educational phobia infographic, not a photographed poster or mockup. Title: \"DRIVING FEAR\". Subtitle: \"When the alarm feels bigger than the road\". Portrait-oriented composition if suitable, auto size, opaque background. Refined luminous gouache and colored-pencil editorial illustration with precise ink annotations, deep petrol teal, amber morning sunlight, muted coral alarm accents and airy ivory lettering spaces. Rich material detail, humane tone, credible perspective; no monsters, crashes, gore, sensationalism, logos, citations or bibliography on canvas.\n\nDominant hero occupying the central and lower canvas: an adult with medium-brown skin and short textured hair seated upright in a clearly PARKED car in a quiet pull-off, transmission visibly in park only if legible, vehicle stationary, seatbelt worn, eyes open, hands resting comfortably and naturally near the wheel, not performing a breathing or distraction exercise. Fine stitching on the steering wheel, dashboard material grain, soft window reflections and sunlit roadside foliage. Through the windscreen a realistic winding road opens toward layered hills. The gently curving road becomes the artwork's organizing motif, carrying open annotations and small integrated studies through the composition. No attached dashboard cards or rigid boxed grid. Keep large breathable sky areas for typography; do not put tiny text over busy foliage.\n\nIntegrate the following exact concise explanatory text with elegant hierarchy. Under the title: \"Intense fear and avoidance of driving. A clinician can assess whether this is a specific phobia, trauma-related anxiety, or another difficulty.\" Do not present driving phobia as a distinct universal diagnosis or use an invented diagnostic name.\n\nAlong a light flowing amber line from the distant road toward the driver's shoulder, write \"ANTICIPATION\" and \"Highways or unfamiliar routes may trigger worry.\" Depict two delicate road sketches, one highway interchange and one unfamiliar winding route, visually nested in open sky rather than floating picture boxes. The line reaches a subtle translucent coral halo near the upper torso, labeled \"BODY ALARM\" with three readable short labels: \"Racing heart\", \"Trembling\", \"Dizziness\". These are symbolic sensations, not a detailed neural or anatomical diagram; no fabricated brain circuit, no claim that alarm predicts a crash. Continue the line to a modest branching route sketch beside the car door, labeled \"AVOIDANCE\" and \"Avoiding driving or certain routes can restrict daily life.\" Show one route fading to suggest an unmade journey, without adding a causal neuroscience claim or invented statistics.\n\nAcross a generous open bend in the road, a balanced central statement: \"Fear can exceed the actual danger. Road hazards still require real precautions.\" Show the real road as calm but not magically hazard-free: ordinary lane markings, modest traffic far away, no impossible claims of absolute safety. The image must distinguish anxious prediction from actual road conditions without ridiculing the person.\n\nThe flowing line changes to muted turquoise near a small warm human vignette at lower right: a clinician and adult client discussing an unlettered simple route sketch at a desk, comfortable compassionate body language, not an in-traffic therapy demonstration. Label \"HELP CAN BE PLANNED\". Add \"CBT and exposure-based therapy help phobias. Work with a clinician on individually planned, safety-conscious steps.\" Smaller supporting note: \"Driving-simulator studies are promising, but evidence is limited.\" Do not draw a DIY exposure ladder with driving assignments; do not tell anyone to drive while panicking. Bottom readable clinical footer: \"Seek help when fear affects your life. General education, not diagnosis or a plan to practise alone in traffic.\" Preserve all essential definition, triggers, symptoms, actual-risk distinction and help context. Text should be compact and genuinely readable, while the magnificent illustrated car, road, atmosphere and organic annotations remain the visual experience. No extra facts, percentages, causes, medication advice, crash imagery or treatment guarantees.",
+    "image": "images/2026-10-17-factual-infographic-factual-infographic-driving-fear-alarm-.jpg",
+    "thumb": "thumbs/2026-10-17-factual-infographic-factual-infographic-driving-fear-alarm-.webp",
+    "color": "#a69c89",
+    "date": "2026-10-17",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "driving-fear-road-anticipation-avoidance",
+      "imageSha256": "aba535b0751c47f0a16d362a4a32a3bab38bd3c1e6479770f6eaeaccd6c02bb4",
+      "imageDHash": "5438112b6271e523"
+    },
+    "factualInfographic": {
+      "topic": "Driving fear: anticipatory anxiety, body alarm, avoidance, realistic road safety, and evidence-based support",
+      "description": "An artwork-led educational overview of driving fear, associated symptoms and avoidance, clinical context, real road safety, and evidence-based support.",
+      "sourceNote": "NIMH: https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders ; NHS: https://www.nhs.uk/mental-health/conditions/phobias/ ; PLOS ONE: https://pmc.ncbi.nlm.nih.gov/articles/PMC6946146/ . Verified phobia definition, symptoms, driving-specific avoidance and professional treatment context; simulator evidence qualified as limited.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-17T12:09:02.648979+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Mental Health",
+            "title": "Phobias and Phobia-Related Disorders",
+            "sourceType": "government-agency",
+            "url": "https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          },
+          {
+            "id": "S3",
+            "publisher": "PLOS ONE",
+            "title": "Treating patients with driving phobia by virtual reality exposure therapy – a pilot study",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6946146/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Driving fear can involve intense fear and avoidance of driving; specific phobia is one possible clinical explanation, while PTSD and other presentations also occur.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "In a phobia, fear is out of proportion to actual danger; this does not mean driving is risk-free.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Anticipating feared situations can cause excessive worry; highways and unfamiliar routes may be avoided by people with driving fear.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Body alarm can include a racing or noticeable heartbeat, trembling and dizziness.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Anxiety and avoidance can restrict driving in general or particular routes; these are characteristic responses, not a prediction of a crash.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "CBT is an established treatment for phobias, and exposure is a particularly effective CBT method for phobias generally.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Driving-fear care can use an individually planned anxiety hierarchy and professional assessment; simulator exposure has promising but limited pilot evidence, not a guaranteed cure.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Seek a clinician when symptoms affect life; professional assessment can distinguish specific phobia and trauma-related symptoms.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Safety framing: clinician-guided treatment is not a directive to practise alone in traffic or ignore road hazards; the cited driving study used assessment and professionally supervised driving.",
+            "sourceIds": [
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
