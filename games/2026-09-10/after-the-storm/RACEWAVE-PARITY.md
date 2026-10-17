@@ -1,5 +1,24 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## v2.38.0 — shallow water, native ice and contact audio
+
+Custom-wave troughs now respect the shallow course floor, fixing broad exposed
+seabed patches without reducing resolution, mesh density or texture detail.
+Spray ribbons and shore film are refined, and Glacier scenery is grounded.
+
+The opt-in native preview adds Southern Island and Glacier Coast, recovered
+course geometry/routes, Southern tide and marker timing, shared breakable ice,
+fragments and splashes across live/replay/player views, and source-timed human
+landing/impact sounds using the authored sample backend. The native wet flag
+now correctly distinguishes a submerged-point count from an in-water boolean.
+Original sound-packet/channel reconstruction is included as groundwork; full
+original engine, mixer and voice playback remains unfinished. Existing music
+defaults and high-resolution presentation are preserved.
+
+The online build identifier changes to2.38.0 so peers must use the same release.
+The detailed checkpoint evidence and limitations below apply to this release;
+their historical “Unreleased” headings describe work since2.37.0.
+
 ## Current preview scope
 
 Native source-water Time trial and Two-player previews admit Sunny Beach,
