@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-10-17",
+      "historicDate": "1985-02-04",
+      "displayDate": "Week of February 4-10, 1985",
+      "edition": "Issue 132 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Amazon puts cleverness first; Wozniak sets his sights beyond the computer.",
+      "leadHeadline": "Michael Crichton wants adventure games to make sense",
+      "storyHeadlines": [
+        "Wozniak leaves daily Apple duties for a living-room video venture",
+        "Online games and conversation challenge the established services",
+        "PC-Write turns copying into a sales channel"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-02-04.jpg",
+      "thumb": "media/thumbs/1985-02-04.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-10-16",
       "historicDate": "1985-01-28",
       "displayDate": "Week of January 28-February 3, 1985",

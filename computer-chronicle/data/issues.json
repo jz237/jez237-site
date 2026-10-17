@@ -9,6 +9,495 @@
         "secondary": "royal blue",
         "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
       },
+      "currentDate": "2026-10-17",
+      "historicDate": "1985-02-04",
+      "displayDate": "Week of February 4-10, 1985",
+      "edition": "Issue 132 - Weekly 1985 Computer & Culture Chronicle",
+      "sources": [
+        {
+          "title": "COMPUTE! issue 57 — February 1985, full issue OCR (interviews, reviews, ads, Telecomputing Today)",
+          "url": "https://archive.org/download/1985-02-compute-magazine/Compute_Issue_057_1985_Feb_djvu.txt",
+          "date": "1985-02"
+        },
+        {
+          "title": "COMPUTE! issue 57 scan and bibliographic record",
+          "url": "https://archive.org/details/1985-02-compute-magazine",
+          "date": "1985-02"
+        },
+        {
+          "title": "Kathleen Day — Wozniak Takes Leave at Apple to Start Firm, Los Angeles Times",
+          "url": "https://www.latimes.com/archives/la-xpm-1985-02-07-fi-5420-story.html",
+          "date": "1985-02-07"
+        },
+        {
+          "title": "Paul Richter — Commodore Woes Make an Industry Wince, Los Angeles Times",
+          "url": "https://www.latimes.com/archives/la-xpm-1985-02-01-fi-6052-story.html",
+          "date": "1985-02-01"
+        },
+        {
+          "title": "Billboard rock airplay chart, week of February 9",
+          "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-09/",
+          "date": "1985-02-09"
+        },
+        {
+          "title": "Box Office Mojo — domestic weekend February 8–10",
+          "url": "https://www.boxofficemojo.com/weekend/1985W06/",
+          "date": "1985-02-10"
+        },
+        {
+          "title": "David Barber — New Zealand makes waves for US Navy, Christian Science Monitor",
+          "url": "https://www.csmonitor.com/1985/0206/ozus1.html",
+          "date": "1985-02-06"
+        },
+        {
+          "title": "Computer Chronicles — Software Piracy (date ambiguous; excluded from weekly candidates)",
+          "url": "https://archive.org/details/Software1985",
+          "date": "1985-02 (archive metadata; broadcast date disputed)"
+        }
+      ],
+      "visualProfile": {
+        "tone": "Adventure and the living room",
+        "motifs": [
+          "Apple II adventure graphics",
+          "Commodore 64",
+          "modem",
+          "software disks"
+        ],
+        "layout": "Dense warm newsprint, red and blue headers"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Amazon adventure gaming gets the largest illustrated treatment; Wozniak exact-week news in a prominent adjacent column",
+        "secondaryRail": "Online games, PC-Write, music and cinema",
+        "archiveNavigation": "Weekly archive and previous/next controls"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Issue 132 - Weekly 1985 Computer & Culture Chronicle",
+        "dateline": "Week of February 4-10, 1985",
+        "price": "75 cents"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1985-02-04.jpg",
+        "alt": "GPT Image 2 newspaper artifact for February 4-10, 1985",
+        "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Adventure writers rethink puzzles while the home computer reaches outward through the telephone and toward the living room.",
+      "morningLine": "Amazon puts cleverness first; Wozniak sets his sights beyond the computer.",
+      "lead": {
+        "headline": "Michael Crichton wants adventure games to make sense",
+        "body": [
+          "Michael Crichton has a complaint familiar to anyone stranded at an adventure-game prompt: a sensible solution ought not to fail merely because the player has guessed the wrong words. In February’s COMPUTE!, the novelist discusses Amazon and argues for puzzles that answer to the logic of the situation rather than an arbitrary phrase.",
+          "His damaged boat offers an example. Players can patch it in three plausible ways, an invitation to think through the problem rather than hunt for a single approved command. Crichton favors cleverness over violence and has little affection for mazes. The interview treats the adventure as an existing game, not a new release this week.",
+          "The project began with scripting in 1982. Crichton knew BASIC, but brought in Steve Warrady to help realize the story in Apple assembly-language graphics and text. Development took about eighteen months, with writer, programmer and graphic designer working in a collaboration he compares to a film crew.",
+          "Trillium approached him about adventures based on novels while he was polishing Amazon. The timing was a coincidence: he already had a game under way. For home-computer players, the interesting promise is not simply a famous name on a box, but a story world that rewards a reasonable idea."
+        ],
+        "sourceRefs": [
+          0
+        ],
+        "confidence": "same-month",
+        "dek": "February’s COMPUTE! finds the novelist building adventures around believable solutions, not magic words."
+      },
+      "stories": [
+        {
+          "headline": "Wozniak leaves daily Apple duties for a living-room video venture",
+          "body": [
+            "Apple co-founder Stephen Wozniak is giving up his daily principal-engineer duties to pursue a self-financed business involving video in the living room. Kathleen Day’s February 7 Los Angeles Times report says Apple confirmed the change Wednesday, after employees were told in a Tuesday newsletter.",
+            "This is not a complete break with Apple. Wozniak remains on the payroll as a consultant. Joe Ennis, another key Apple engineer, is leaving with him, giving the new undertaking a second experienced designer.",
+            "Wozniak is withholding product details and hopes to have something ready by the fall. No price or technical specifications have been disclosed. The Apple II designer’s next direction is intriguing, but a proposed home-video business is not yet a product on the dealer’s shelf."
+          ],
+          "sourceRefs": [
+            2
+          ],
+          "confidence": "exact-date"
+        },
+        {
+          "headline": "Online games and conversation challenge the established services",
+          "body": [
+            "An evening online need not mean only messages or stock tables. February’s Telecomputing Today column in COMPUTE! describes Play/Net’s medium-resolution color games for the Commodore 64, reached with a proprietary terminal program at an introductory $2 an hour.",
+            "People/Link is courting callers at an introductory $2.95 an hour with conversation, special-interest activities and electronic mail. Its advertising names Partyline, Club-Link, Netmail and PeopleScan, as well as chess and bridge. These are connect-time offers, not a guarantee that every telephone or access charge is included.",
+            "Play/Net says IBM and Apple support will follow by spring; that remains a promise rather than present availability. Columnist Arlan R. Levitan also expects introductory prices to rise. The attraction is immediate nonetheless: the opponent or conversation partner can be at another keyboard."
+          ],
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "PC-Write turns copying into a sales channel",
+          "body": [
+            "Quicksoft’s PC-Write makes distribution part of the sales pitch. Sheldon Leemon’s February COMPUTE! review encourages owners to pass the word processor and its documentation to friends, user groups and bulletin boards. This is authorized sharing, not illicit copying.",
+            "Bob Wallace, formerly of Microsoft, designed the program. A $75 registration buys a personalized copy, bound manual, assistance, Pascal and machine-language source, and the next major update. When a personalized copy produces another registration, its owner receives $25.",
+            "The practical tools include search and replace, recoverable deletions, adjustable margins, help screens and macros, with special handling for the PCjr keyboard. Editing and printing are separate programs. Buyers should note a discrepancy in the review: its body quotes $10 for disk and postage, while the closing product box lists $20 for the program disk."
+          ],
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "same-month"
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Riteman R64",
+          "summary": "Advertisement specifies Commodore 64 compatibility, a second parallel interface, 120 characters/second and a one-year warranty; these are advertiser claims, not measured review results.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Atari development plans",
+          "summary": "COMPUTE! p. 30 interview with software president Sigmund Hartmann was conducted at November COMDEX, despite February cover date. Distinguish old promises of an upgraded 800XL, a 68000 machine and a 32-bit machine from actual February shipments.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Amiga",
+          "summary": "February 1 newspaper describes a future machine, analyst-estimated $800–$1,000; no target-week launch.",
+          "confidence": "period",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "PC-Write",
+          "detail": "Quicksoft shareware word processor for IBM PC/PCjr; $75 registration; conflicting $10/$20 disk-only figures in the same review.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "name": "Plus/Term",
+          "detail": "Gregg Peele’s BASIC/machine-language terminal listing, p. 88 onward: C64 or VIC-20 with at least 16K RAM and modem, up to 1200 bps, upload/download, key redefinition and word wrapping.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "name": "Math Blaster!",
+          "detail": "Davidson advertisement lists ages 6–12, two disks, $49.95; addition through percentages, over 600 problems and user-added problems. Ad names Apple, IBM and C64 product lines; verify individual version before making a version-specific claim.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games — editorial selections, not sales rankings",
+          "items": [
+            "Amazon — Crichton adventure profiled in February COMPUTE!",
+            "Acrobat — animated type-in for C64, VIC-20 and Atari",
+            "King’s Quest — Inside King’s Quest column in February COMPUTE!",
+            "Chess — People/Link advertisement lists online play",
+            "Bridge — People/Link advertisement lists online play"
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "label": "Top 5 Movies — February 8-10 domestic weekend box office",
+          "items": [
+            "1. Beverly Hills Cop",
+            "2. Witness",
+            "3. The Killing Fields",
+            "4. A Passage to India",
+            "5. Mischief"
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            5
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "PC-Write registration",
+          "price": "$75, plus $25 referral commission when a recipient registers",
+          "note": "$75, plus $25 referral commission when a recipient registers; disk-only price internally inconsistent at $10 vs. $20.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "People/Link",
+          "price": "$2.95/hour introductory connect-time charge",
+          "note": "$2.95/hour introductory connect-time charge; other charges not established.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Play/Net",
+          "price": "$2.00/hour introductory connect time",
+          "note": "$2.00/hour introductory connect time; proprietary terminal program separately required, price not established here.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Dow Jones last-trade quotations",
+          "price": "$12/month surcharge plus normal quotation connect time",
+          "note": "$12/month surcharge plus normal quotation connect time; The Source counterpart $20/month.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Davidson educational software",
+          "price": "Spell It!, Math Blaster! and Word Attack!: $49.95 each, two disks",
+          "note": "Spell It!, Math Blaster! and Word Attack!: $49.95 each, two disks; Speed Reader II: $69.95, two disks, in February advertisement.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Commodore 64",
+          "price": "Analyst-described planned reduction from about $200 toward $150",
+          "note": "Analyst-described planned reduction from about $200 toward $150; not verified retailer offer.",
+          "confidence": "period",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "item": "IBM PCjr package",
+          "price": "Analyst cited discounted $775 processor/monitor/disk-drive package",
+          "note": "Analyst cited discounted $775 processor/monitor/disk-drive package; specific retailer not named.",
+          "confidence": "period",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "The Old Man Down The Road",
+          "artist": "John Fogerty",
+          "chart": "Billboard Top Rock Tracks (archive now labeled Mainstream Rock Airplay)",
+          "chartDate": "1985-02-09",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-09/"
+          ]
+        },
+        {
+          "rank": 2,
+          "title": "Somebody",
+          "artist": "Bryan Adams",
+          "chart": "Billboard Top Rock Tracks (archive now labeled Mainstream Rock Airplay)",
+          "chartDate": "1985-02-09",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-09/"
+          ]
+        },
+        {
+          "rank": 3,
+          "title": "Only The Young",
+          "artist": "Journey",
+          "chart": "Billboard Top Rock Tracks (archive now labeled Mainstream Rock Airplay)",
+          "chartDate": "1985-02-09",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-09/"
+          ]
+        },
+        {
+          "rank": 4,
+          "title": "California Girls",
+          "artist": "David Lee Roth",
+          "chart": "Billboard Top Rock Tracks (archive now labeled Mainstream Rock Airplay)",
+          "chartDate": "1985-02-09",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-09/"
+          ]
+        },
+        {
+          "rank": 5,
+          "title": "The Heat Is On",
+          "artist": "Glenn Frey",
+          "chart": "Billboard Top Rock Tracks (archive now labeled Mainstream Rock Airplay)",
+          "chartDate": "1985-02-09",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-09/"
+          ]
+        },
+        {
+          "rank": 6,
+          "title": "Can’t Fight This Feeling",
+          "artist": "REO Speedwagon",
+          "chart": "Billboard Top Rock Tracks (archive now labeled Mainstream Rock Airplay)",
+          "chartDate": "1985-02-09",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-09/"
+          ]
+        },
+        {
+          "rank": 7,
+          "title": "Knocking At Your Back Door",
+          "artist": "Deep Purple",
+          "chart": "Billboard Top Rock Tracks (archive now labeled Mainstream Rock Airplay)",
+          "chartDate": "1985-02-09",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-09/"
+          ]
+        },
+        {
+          "rank": 8,
+          "title": "Rock & Roll Girls",
+          "artist": "John Fogerty",
+          "chart": "Billboard Top Rock Tracks (archive now labeled Mainstream Rock Airplay)",
+          "chartDate": "1985-02-09",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-09/"
+          ]
+        },
+        {
+          "rank": 9,
+          "title": "Sunset Grill",
+          "artist": "Don Henley",
+          "chart": "Billboard Top Rock Tracks (archive now labeled Mainstream Rock Airplay)",
+          "chartDate": "1985-02-09",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-09/"
+          ]
+        },
+        {
+          "rank": 10,
+          "title": "I Want To Know What Love Is",
+          "artist": "Foreigner",
+          "chart": "Billboard Top Rock Tracks (archive now labeled Mainstream Rock Airplay)",
+          "chartDate": "1985-02-09",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-09/"
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "BBS advice beats the hotel booklet",
+          "summary": "Levitan reports asking an unnamed local San Francisco BBS for restaurant recommendations while traveling, then enjoying Szechwan food based on a reply. Do not invent the board name or turn the account into a newly dated February event.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "headline": "Electronic airline searching",
+          "summary": "Levitan says an Official Airline Guide search took about 90 seconds and cost roughly $1.50. A separate CompuServe/TWA Travelshopper advertisement says customers can inspect flight availability and order tickets; distinguish these different offerings.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "worldAnchor": {
+        "headline": "New Zealand’s nuclear stance puts ANZUS under strain",
+        "summary": "New Zealand’s rejection of a USS Buchanan visit has put the ANZUS alliance under strain. A February 6 report describes cancellation of next month’s Sea Eagle exercises and an alliance review, as David Lange maintains his policy is directed at nuclear weapons rather than the United States.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          6
+        ]
+      },
+      "bbsNote": {
+        "headline": "At $2 an hour, online play joins a busy dial-up marketplace",
+        "summary": "February COMPUTE! supplies dated coverage of online games, chat, stock information, portable telecommuting and a new terminal listing. The posts below are research summaries, not fabricated historical BBS messages.",
+        "posts": [
+          {
+            "topic": "Games online",
+            "platform": "Play/Net / Commodore 64",
+            "text": "Introductory $2/hour color online games; proprietary terminal program; IBM and Apple support only promised for spring."
+          },
+          {
+            "topic": "Chat and clubs",
+            "platform": "American People/Link",
+            "text": "Introductory $2.95/hour; Partyline public/private live conversation, Club-Link interest groups, Netmail and PeopleScan advertised."
+          },
+          {
+            "topic": "A terminal you type in",
+            "platform": "Commodore 64 / expanded VIC-20",
+            "text": "Plus/Term supports up to 1200 bps, file transfers, key redefinition and word wrapping; VIC needs at least 16K RAM. No modem purchase price established."
+          },
+          {
+            "topic": "BBS travel culture",
+            "platform": "Unnamed San Francisco BBS",
+            "text": "Levitan’s travel column recounts requesting local restaurant tips; no named sysop or board in the account."
+          },
+          {
+            "topic": "More timely stock quotes",
+            "platform": "Dow Jones News/Retrieval / The Source",
+            "text": "Last-trade quote surcharges $12/month and $20/month respectively, on top of connect time; Source/Spears online trading described as a service, not a consumer how-to."
+          }
+        ]
+      },
+      "curiosity": {
+        "headline": "The word processor that pays you to give it away",
+        "summary": "PC-Write’s registered users can earn $25 each time a shared copy produces a new $75 registration.",
+        "detail": "COMPUTE!’s February review calls the referral system the software equivalent of a legal chain letter. Authorized copying is central to Quicksoft’s business model; this is not a piracy report. The review’s separate disk-only prices conflict ($10 in the body; $20 in its product box)."
+      },
+      "gadgetWatch": {
+        "headline": "Apple founder aims at the living room",
+        "summary": "Wozniak’s new self-financed home-video business is announced this week, with Joe Ennis joining him and an autumn product target. The February 7 contemporary report gives no product name, price or specifications; do not call the eventual CL 9 remote control a shipped 1985 product.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          2
+        ]
+      },
+      "periodAd": {
+        "headline": "Math Blaster! — $49.95",
+        "summary": "Davidson’s February advertisement offers two disks, ages 6–12, covering addition through percentages with over 600 problems and user-added problems.",
+        "tagline": "From the February advertising pages",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "market": {
+        "headline": "Commodore’s inventory hangover lingers",
+        "summary": "February 1 reporting provides the backdrop: quarterly profit fell 94 percent to $3.2 million, sales declined 21 percent to $338.7 million, and inventory stood near $400 million. Analyst forecasts for cheaper C64s and a forthcoming Amiga are not confirmed shelf offers.",
+        "confidence": "period",
+        "sourceRefs": [
+          3
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "February magazine coverage establishes publication month, not a launch this week.",
+          "Game selections are editorial, not a sales chart. Chess and bridge are advertised People/Link games.",
+          "Wozniak remains an Apple consultant; the home-video product has no disclosed specifications or price.",
+          "PC-Write authorized sharing is not piracy; disk-only prices conflict in the review.",
+          "Introductory online rates exclude any unverified additional charges.",
+          "February 1 Commodore figures are background, not breaking target-week news."
+        ]
+      }
+    },
+    {
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+      },
       "currentDate": "2026-10-16",
       "historicDate": "1985-01-28",
       "displayDate": "Week of January 28-February 3, 1985",

@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Fri, 16 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 17 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of February 4-10, 1985 — Michael Crichton wants adventure games to make sense</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-02-04</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-02-04</guid>
+      <pubDate>Sat, 17 Oct 2026 12:00:00 GMT</pubDate>
+      <description>February’s COMPUTE! finds the novelist building adventures around believable solutions, not magic words. Michael Crichton has a complaint familiar to anyone stranded at an adventure-game prompt: a sensible solution ought not to fail merely because the player has guessed the wrong words. In February’s COMPUTE!, the novelist discusses Amazon and argues for puzzles that answer to the logic of the situation rather than an arbitrary phrase. Also this week: Wozniak leaves daily Apple duties for a living-room video venture · Online games and conversation challenge the established services · PC-Write turns copying into a sales channel.</description>
+    </item>
     <item>
       <title>Week of January 28-February 3, 1985 — Commodore earnings plunge 94%; home-computer boom faces its reckoning</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-01-28</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-09-24</guid>
       <pubDate>Sat, 26 Sep 2026 12:00:00 GMT</pubDate>
       <description>Rescue on Fractalus and Ballblazer give Atari players two sharply different visions of computer play. September’s Electronic Games puts the first Lucasfilm–Atari games on its cover and asks whether filmmakers can make games worth playing. Its answer is emphatic: Rescue on Fractalus and Ballblazer bring the studio’s eye for spectacle to the Atari home-computer screen. The magazine describes a design group led by Stephen D. Arnold and Peter S. Langston, with David Fox guiding the rescue game. Also this week: Seven Cities of Gold Makes the Map the Adventure · Ultima III Packs a Whole Campaign into a Box · Educational Software Claims More of the Home Screen · The Modem Buyer Meets the Telephone Line.</description>
-    </item>
-    <item>
-      <title>Week of September 17-23, 1984 — Elite Opens a Galaxy of Trade and Combat on the BBC Micro</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-09-17</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-09-17</guid>
-      <pubDate>Fri, 25 Sep 2026 12:00:00 GMT</pubDate>
-      <description>Acornsoft’s new space game turns a 32K home computer into an open-ended universe. Acornsoft releases Elite for the BBC Micro on September 20, opening a new kind of journey at the home-computer keyboard. Ian Bell and David Braben have built a space game in which a pilot can trade, fight and roam rather than simply chase a fixed score. The ship begins with the humble rank of Harmless; the coveted destination is Elite. Also this week: Seven Cities of Gold Sends Players Across an Uncharted Map · Ultima III Turns Fantasy Quest into a Four-Character Expedition · Word Flyer Makes Reading Practice a Shared Game · The Fat Mac Gives Macintosh Four Times the Memory.</description>
     </item>
   </channel>
 </rss>
