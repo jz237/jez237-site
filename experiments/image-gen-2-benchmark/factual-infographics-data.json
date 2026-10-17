@@ -12714,5 +12714,116 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-17-factual-infographic-factual-infographic-choking-phobia-the-",
+    "title": "Factual infographic: Choking Phobia — The Meal That Feels Unsafe",
+    "tests": "factual_subtype: phobia-infographic; phobia: Choking phobia (phagophobia); medically assess swallowing symptoms; limited disorder-specific treatment evidence; no subjective critic; archive_slot=2026-10-17T04:08; concept=choking-phobia-swallowing-meal-avoidance-assessment; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create the finished artistic educational infographic directly on the canvas, not a photograph of a poster, book, screen or room. Portrait-oriented composition when suitable, auto size, opaque background. Title: “CHOKING PHOBIA” with an elegant smaller subtitle “When a meal feels unsafe”. A richly painted contemporary gouache-and-fine-ink illustration, warm ochre evening light against muted petrol-blue shadows, with precise ceramic glazes, linen fibers, wood grain and gently reflected glass. No rigid boxes, grids or detached cards. No gore, monsters, sensationalism or actual choking scene.\n\nThe dominant illustration is a dignified adult with medium-brown skin and short curly hair seated at a quiet dining table, pausing before a meal, hands resting naturally rather than clutching the throat. The plate and clear water glass are ordinary still-life objects, not recommended foods or a swallowing exercise. A graceful transparent amber arc of anticipated fear curves from the untouched meal toward the person's face and chest, then drifts into a looping ink ribbon. Give the human and meal substantial breathing room; use asymmetrical scale and an open, welcoming composition, not a clinical dashboard. The artwork should be worth studying: reflected window light, tactile cloth, fine expressive facial modeling, nuanced shadow, subtly sketched botanical silhouettes outside the window. Do not depict an airway obstruction or invent anatomical cross-sections.\n\nWeave these concise factual labels into open negative space with delicate leader lines and gently curved pathways. Exact main text:\n“Intense fear of choking when swallowing food, drinks or pills.”\n“Also called phagophobia; a form of specific phobia.”\nNear the meal: “Triggers: anticipating swallowing, meals, or memories of choking.” Small qualifier: “A past choking event is not always present.”\nNear three unobtrusive symbolic ink studies, a heart shape, trembling hand silhouette and stomach curve, label: “Body alarm: racing heart • trembling • nausea”. These are conceptual symbols, not anatomical diagrams.\nThe looping ribbon connects “Anticipation” → “Alarm” → “Avoiding meals” → “Fear persists”. Add “Restriction can affect nutrition and daily life.” This is a conceptual anxiety loop, not a guaranteed sequence for everyone.\n\nMake the lower composition open into a pale sage-green wash, where a small non-prescriptive vignette shows the adult talking with a clinician, no food challenge taking place. Heading: “Assess safety, then treat the fear”. Two clear lines: “Swallowing trouble needs medical assessment—not an assumption of anxiety.” and “Fear is not proof of a blockage.” Include a highly readable, warmly emphasized clinical note: “Get urgent medical advice for difficulty swallowing, coughing or choking with meals, food stuck, or a wet voice after swallowing.”\nA flowing help pathway reads “Medical / swallowing assessment” → “Nutrition support when needed” → “CBT and clinician-guided gradual exposure”. Place beside it: “Choking-phobia research is limited; care is individualized.” Small footer, still legible: “Educational, not a diagnosis. No do-it-yourself food challenges.”\n\nPrioritize a compelling, richly detailed hero scene and organically integrated information. Clear typographic hierarchy, confident title, short crisp labels, readable clinical note. Do not add other facts, statistics, cure guarantees, mechanisms, diagnostic criteria, treatment dosages, citations, URLs, logos or watermarks. Avoid depicting avoidance as a solution, any guaranteed safe food, or any instruction to swallow through difficulty. Keep essential definition, triggers, alarm/avoidance loop, danger distinction and professional help; optional decoration may yield to legibility. Request model openai/gpt-image-2.5-sunburst, quality medium, size auto, opaque background.",
+    "image": "images/2026-10-17-factual-infographic-factual-infographic-choking-phobia-the-.jpg",
+    "thumb": "thumbs/2026-10-17-factual-infographic-factual-infographic-choking-phobia-the-.webp",
+    "color": "#a48e6c",
+    "date": "2026-10-17",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "choking-phobia-swallowing-meal-avoidance-assessment",
+      "imageSha256": "e3016a7e4f24c73d3f46be9a97cb294d638a6d7ecc77233d2462d0de8b10d214",
+      "imageDHash": "c341d33919232113"
+    },
+    "factualInfographic": {
+      "topic": "Choking phobia: fear of swallowing, anticipatory anxiety, avoidance, medical assessment, and evidence-based support",
+      "description": "Choking phobia definition, meal-related triggers, body alarm and avoidance, distinction from swallowing pathology, and clinically guided care.",
+      "sourceNote": "Shanghai Archives of Psychiatry: https://pmc.ncbi.nlm.nih.gov/articles/PMC5434294/ ; NHS: https://www.nhs.uk/mental-health/conditions/phobias/ ; NHS dysphagia: https://www.nhs.uk/symptoms/swallowing-problems-dysphagia/ . Verified definition, fear/avoidance, limited treatment evidence and swallowing-assessment safety context; no DIY exposure.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-17T08:08:59.895826+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Shanghai Archives of Psychiatry",
+            "title": "Choking Phobia: An Uncommon Phobic Disorder, Treated with Behavior Therapy: A Case Report and Review of the Literature",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5434294/"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          },
+          {
+            "id": "S3",
+            "publisher": "NHS",
+            "title": "Dysphagia (swallowing problems)",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/symptoms/swallowing-problems-dysphagia/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Choking phobia, also called phagophobia, involves intense fear of choking and avoidance of swallowing food, drinks or pills; it may be classified as a specific phobia.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "It may follow a frightening choking experience but can also arise without one.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Anticipating swallowing or seeing a meal can trigger anxiety; palpitations, trembling and nausea can accompany phobic alarm.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Fear of swallowing can lead to avoidance or restriction, maintaining the fear cycle; severe restriction can cause weight loss and social disruption.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Fear is not proof of an airway blockage; swallowing difficulty must be medically evaluated, not assumed to be anxiety.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Difficulty swallowing, coughing or choking during meals, food feeling stuck, or a wet voice after swallowing warrant urgent medical advice.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Assessment may involve a swallowing specialist and dietitian; care should protect swallowing safety and nutrition.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "CBT is a treatment for phobias; behavior therapy including clinician-guided gradual exposure has been reported to help choking phobia, but disorder-specific research is limited and does not justify promises of cure.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Education does not diagnose an individual; swallowing-related exposure should be clinician-guided after medical assessment rather than attempted as a do-it-yourself food challenge.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
