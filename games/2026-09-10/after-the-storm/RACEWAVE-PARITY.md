@@ -1,5 +1,34 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unreleased — native ice fragment pool and shared random state
+
+Ice impacts now populate the original sixteen-slot fragment pool, eight pieces
+per break, replacing older live slots in ring order. Each piece consumes both
+original random draws, including the discarded ED338 result, through the
+canonical shared halfword seed used by the speed display. Binary32 position,
+launch velocity, gravity, age, strict Y<-128 retirement and retained-field
+reset match715 prepared original executions (197,927 instructions).
+
+The reference executes B4750/B4788/B490C/B49C4 and both random leaves. Square
+root is explicitly intercepted and AF43C event arguments are captured; the
+separate splash sprite lifecycle and original rendering are not executed.
+A fresh read-only EVO X2 Ghidra query verifies230 instruction records and
+leaves nine project files unchanged. Its existing database has no function
+entries for the two overlay random leaves; those are checked from raw ROM.
+Only numeric fixtures are included in the repository.
+
+The host creates fragments at contact time and advances them after the shared
+water/object phase, under its canonical activity gate. Actual two-racer
+contact tests verify one burst, shared seed consumption, pause, snapshot
+isolation and matching fragment/random histories at30/60/144Hz. All54 focused
+fragment, owner, speed-display, host, floating and loading checks pass.
+Private Glacier runs retain the previous solo Normal146.114s/two misses and
+versus Reverse139.069s (winner two misses, other racer four); three and five
+breaks respectively populate and retire the pool without runtime errors.
+High-resolution fragment meshes and splash presentation still need to consume
+these snapshots. Glacier native admission remains closed; no resolution or
+rendering detail was reduced.
+
 ## Unreleased — shared native ice owner
 
 The native host now connects selected runtime10 ice to the generic contact
@@ -7,6 +36,7 @@ kernel, prepared rider stability, retained C50 impact maximum and16D8 hit kind.
 Every racer sees the same broken flags immediately. Display removal and its
 saturating age follow the shared water frame and original object-activity gate.
 Snapshots and immutable break events are ready for the presentation layer;
+the newer checkpoint above connects the numeric fragment pool, while
 fragment rendering and the sound consumer remain unconnected. Mixed floating
 and ice definitions are explicitly rejected pending a unified ordered owner.
 

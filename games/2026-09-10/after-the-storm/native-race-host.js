@@ -98,7 +98,8 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
  if(!Array.isArray(definitions))throw new TypeError('Expected selected floating definitions');
  const iceDefinitions=(course.rocks??[]).filter(q=>q.sourceGenericSphere&&q.runtimeKind===10);
  if(iceDefinitions.length&&definitions.length)throw new RangeError('Mixed floating and ice motion requires a unified original generic owner');
- const ice=iceDefinitions.length?createNativeIceWorld({definitions:iceDefinitions,water}):null;
+ const ice=iceDefinitions.length?createNativeIceWorld({definitions:iceDefinitions,water,
+  fragmentBurst:raceRuntime?.ordinary?raceRuntime.spawnIceFragments:null}):null;
  const floating=definitions.length?createNativeFloatingWorld({definitions,water}):null;
  const primary=course.sourceBuoyLayout?createNativePrimaryBuoyWorld({layout:course.sourceBuoyLayout,water}):null;
  const courseContacts=createSourceNativeContacts(course,{scale:water.scale,fixedSphereGrid,staticGeometry});

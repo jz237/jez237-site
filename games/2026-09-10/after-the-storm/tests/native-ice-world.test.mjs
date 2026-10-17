@@ -8,12 +8,13 @@ import {createNativeRaceWorld,stepNativeRaceWorld} from '../native-race-world.js
 import {createRaceWater} from '../race-water.js';
 import {createRace,stepRace} from '../race-core.js';
 import {getCourse} from '../courses.js';
+import {createNativeIceFragments,spawnNativeIceFragments,stepNativeIceFragments} from '../native-ice-fragments.js';
 const definition={id:'test-ice',runtimeKind:10,sourceGenericSphere:true,x:.4,y:0,z:.675,r:1.25};
 const v=(x=0,y=0,z=0)=>({x,y,z});
 const reference=JSON.parse(readFileSync(new URL('./fixtures/native-ice-owner-reference.json',import.meta.url)));
-function make({count=2,active=()=>true,prior=0}={}){
+function make({count=2,active=()=>true,prior=0,fragmentBurst=null}={}){
  const adapters=Array.from({length:count},()=>createNativeRaceAdapter()),water=createRaceWater({crafts:adapters.map(a=>({x:a.hull.center.x,z:a.hull.center.z,sourceForwardXZ:[0,1]})),baseAmplitudeNative:20});
- const ice=createNativeIceWorld({definitions:[definition],water}),calls=[];
+ const ice=createNativeIceWorld({definitions:[definition],water,fragmentBurst}),calls=[];
  for(const [index,a] of adapters.entries()){
   a.hull.points.forEach(p=>p.velocity=v(20));
   a.contacts={primarySpheres:(h,c)=>{if(prior)c.recordImpact({channel:'object',incomingNative:prior,normal:v(0,1)});calls.push({index,before:ice.snapshot()[0]});ice.contact(h,c);calls.at(-1).after=ice.snapshot()[0];}};
@@ -39,6 +40,23 @@ test('activity gating retains intact presentation while the broken collider rema
  const before=s.ice.snapshot();stepNativeRaceWorld(s.world,1,[{},{}],{active:false});assert.deepEqual(s.ice.snapshot(),before);
 });
 
+test('actual shared ice contact consumes canonical random state once and advances fragments only after the water frame',()=>{
+ const race=createRace({course:getCourse('greyhaven'),mode:'time',physics:'native'}),runtime=race.nativeLaunch;
+ const before=runtime.snapshot(),seed=before.scene.seed6f00;let active=false;
+ const s=make({fragmentBurst:runtime.spawnIceFragments,active:()=>active});
+ stepNativeRaceWorld(s.world,.01,[{},{}]);
+ assert.equal(s.ice.breakEvents().length,1);
+ const event=s.ice.breakEvents()[0],expected=spawnNativeIceFragments(createNativeIceFragments(),{...event,seed6f00:seed});
+ assert.deepEqual(s.ice.fragmentSnapshot(),expected.state);
+ const after=runtime.snapshot();assert.equal(after.scene.seed6f00,expected.seed6f00);
+ after.scene.seed6f00=seed;assert.deepEqual(after,before,'fragment draws change only the canonical halfword seed');
+ stepNativeRaceWorld(s.world,.04,[{},{}]);assert.deepEqual(s.ice.fragmentSnapshot(),expected.state);
+ active=true;stepNativeRaceWorld(s.world,.05,[{},{}]);assert.deepEqual(s.ice.fragmentSnapshot(),stepNativeIceFragments(expected.state));
+ const held=s.ice.fragmentSnapshot();stepNativeRaceWorld(s.world,1,[{},{}],{active:false});assert.deepEqual(s.ice.fragmentSnapshot(),held);
+ held.slots[0].position[0]=123456;assert.notEqual(s.ice.fragmentSnapshot().slots[0].position[0],123456);
+ assert.equal(runtime.snapshot().scene.seed6f00,expected.seed6f00,'other racer and fragment motion consume no extra draws');
+});
+
 test('a retained stronger C50 suppresses the ice break without suppressing physical contact',()=>{
  const s=make({prior:100});stepNativeRaceWorld(s.world,.01,[{},{}]);
  assert.equal(s.ice.snapshot()[0].broken,false);assert.equal(s.ice.breakEvents().length,0);
@@ -46,11 +64,12 @@ test('a retained stronger C50 suppresses the ice break without suppressing physi
  assert.deepEqual(s.adapters[1].impacts.normal,v(0,1));
 });
 
-test('two racers share identical ice, impact and physical histories at30/60/144Hz',()=>{
+test('two racers share identical ice, fragment, random, impact and physical histories at30/60/144Hz',()=>{
  const runs=[];
  for(const hz of [30,60,144]){
-  const s=make();for(let i=0;i<hz;i++)stepNativeRaceWorld(s.world,1/hz,[{},{}]);
-  runs.push({objects:s.ice.snapshot(),events:s.ice.breakEvents(),racers:s.adapters.map(a=>({points:a.hull.points,impacts:a.impacts,hitKind:a.objectHitKind16d8}))});
+  let seed=65535;const fragmentBurst=(pool,event)=>{const result=spawnNativeIceFragments(pool,{...event,seed6f00:seed});seed=result.seed6f00;return result;};
+  const s=make({fragmentBurst});for(let i=0;i<hz;i++)stepNativeRaceWorld(s.world,1/hz,[{},{}]);
+  runs.push({objects:s.ice.snapshot(),events:s.ice.breakEvents(),seed,fragments:s.ice.fragmentSnapshot(),racers:s.adapters.map(a=>({points:a.hull.points,impacts:a.impacts,hitKind:a.objectHitKind16d8}))});
  }
  assert.deepEqual(runs[0],runs[1]);assert.deepEqual(runs[1],runs[2]);
 });
