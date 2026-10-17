@@ -23,7 +23,13 @@ function dress(owner) {
     if (!o.isSkinnedMesh || !/_eye$/.test(o.material?.name || '') || !o.geometry.userData.jtEye) return;
     if (!o.material.userData.jtOwn) (o.material = o.material.clone()), (o.material.userData.jtOwn = true);
     owner.eyeU = eyeUniforms(owner.lidColour?.clone().multiplyScalar(0.8));
-    eyeShader(o.material, owner.eyeU);
+    const sp = EYES[owner.sp.id];
+    if (sp) {
+      owner.eyeU.uIrisIn.value.setRGB(...sp.in);
+      owner.eyeU.uIrisOut.value.setRGB(...sp.out);
+      owner.eyeU.uPupil.value.set(sp.pupil[0], sp.pupil[1]);
+    }
+    eyeShader(o.material, owner.eyeU, owner.mod.ctx.uniforms);
   });
 }
 
@@ -53,6 +59,28 @@ function faceEyes(o, dt, { shut = 0 } = {}) {
   const g = o._eyeGoal || [0, 0], e = E.uEyeRot.value, k = Math.min(1, dt * 30);
   e.x += (g[0] - e.x) * k;
   e.y += (g[1] - e.y) * k;
+  // the pupil opens in the dark and closes down in bright sun (slowly, as a real one does); wider for a
+  // moment when startled or hunting
+  const sp = EYES[o.sp.id];
+  if (sp) {
+    const env = o.mod.ctx.modules.life?.env || {};
+    const dark = Math.min(1, (env.night || 0) + (env.dusk || 0) * 0.5 + (o._inCave || 0)), want = Math.min(1, dark + (o.state === 'flee' || o.state === 'hunt' ? 0.45 : 0));
+    o._pupil = (o._pupil ?? want) + (want - (o._pupil ?? want)) * Math.min(1, dt * 0.8);
+    E.uPupil.value.set(MathUtils.lerp(sp.pupil[0], sp.pupil[2], o._pupil), MathUtils.lerp(sp.pupil[1], sp.pupil[3], o._pupil));
+  }
+}
+
+// the closest points of two 2D segments [ax, az, bx, bz]: [px, pz on the first, qx, qz on the second]
+function closestSegSeg(s1, s2) {
+  const [ax, az, bx, bz] = s1, [cx, cz, dx2, dz2] = s2;
+  const ux = bx - ax, uz = bz - az, vx = dx2 - cx, vz = dz2 - cz, wx = ax - cx, wz = az - cz;
+  const a = ux * ux + uz * uz, b = ux * vx + uz * vz, c = vx * vx + vz * vz, d = ux * wx + uz * wz, e = vx * wx + vz * wz;
+  const D = a * c - b * b;
+  let s = D > 1e-9 ? Math.max(0, Math.min(1, (b * e - c * d) / D)) : 0;
+  let t = c > 1e-9 ? (b * s + e) / c : 0;
+  if (t < 0) (t = 0), (s = a > 1e-9 ? Math.max(0, Math.min(1, -d / a)) : 0);
+  else if (t > 1) (t = 1), (s = a > 1e-9 ? Math.max(0, Math.min(1, (b - d) / a)) : 0);
+  return [ax + ux * s, az + uz * s, cx + vx * t, cz + vz * t];
 }
 
 // distance in plan from (px, pz) to the segment a-b
@@ -90,9 +118,12 @@ import { Social } from './social.js';
 import { Trails } from './trails.js';
 import { Touch } from './touch.js';
 import { Feeding } from './feeding.js';
+import { Cooling } from './cooling.js';
+import { Wakes } from './wakes.js';
+import { Cinema } from './cinema.js';
 import { Rocks } from './rocks.js';
 import { Paths } from './paths.js';
-import { prepareSkinGeometry, prepareEyeGeometry, prepareTeeth, Saliva, averageColour, skinUniforms, skinShader, eyeShader, eyeUniforms, SCALES } from './skin.js';
+import { prepareSkinGeometry, prepareEyeGeometry, prepareTeeth, Saliva, averageColour, skinUniforms, skinShader, eyeShader, eyeUniforms, EYES, SCALES } from './skin.js';
 import { BufferGeometry as BG3, BufferAttribute as BA3, DoubleSide as DS3 } from 'three';
 
 // One terrarium unit is 5.5 m: the 18 x 8 unit floor is a 100 x 44 m valley. Like a museum diorama,
@@ -153,10 +184,11 @@ const SPECIES = [
 ];
 
 const params = new URLSearchParams(location.search);
+const NO_AO = params.get('ao') === '0'; // (ambient occlusion off, for comparing)
 const rand = mulberry32(Number(params.get('seed') || 20261011));
 
 // procedural idles (no clip of their own): played on top of idle (or rest) by Dino.performFrame
-const PERFORM = new Set(['yawn', 'rub', 'dustbath', 'scratch', 'shake']);
+const PERFORM = new Set(['yawn', 'rub', 'dustbath', 'scratch', 'shake', 'mudbath']);
 
 class Dino {
   // opts.scale: size relative to the adult (hatchlings); opts.parent: the adult it follows;
@@ -361,6 +393,8 @@ class Dino {
     const opts = Object.entries(acts).filter(
       ([k]) => k === 'wander' || k === 'drink' || k === 'trail' || PERFORM.has(k) || (k === 'hunt' && prey) || this.actions[k],
     );
+    // a hot, sunny day: off to cool off in the water or the mud (cooling.js)
+    if (this.mod.cooling?.hot() && !this.parent && !this._cooled) opts.push(['cool', 3]);
     let tot = opts.reduce((a, [, w]) => a + w, 0);
     let r = rand() * tot;
     for (const [k, w] of opts) if ((r -= w) <= 0) return k;
@@ -558,9 +592,22 @@ class Dino {
       if (name === 'roar' || name === 'threat' || name === 'alert') flare = 1;
       U.uFlare.value += (flare - U.uFlare.value) * Math.min(1, dt * 10);
       this.flesh(dt);
+      // colours through the year (skin.js): the breeding flush in spring, winter's dull coat, a calf's
+      // mottling fading as it grows (over about half an hour)
+      {
+        const le = mod.ctx.modules.life?.env || {};
+        this._age = (this._age || 0) + dt;
+        const male = this._male ??= rand() < 0.5;
+        U.uColour.value.set((le.spring || 0) * (male ? 1 : 0.65) * (this.parent ? 0 : 1), (le.winter || 0) * 0.85,
+          this.parent ? Math.max(0.15, 1 - this._age / 1800) : 0, 0);
+      }
       // a full belly (feeding.js), going down slowly as it digests
       this.full = Math.max(0, (this.full || 0) - dt / 300);
       U.uBelly.value = this.full * (this.info?.length || 6) * 0.012 * FLESH;
+      // ambient occlusion reach and hip height (skin.js)
+      this._hipBind = Math.max(this._hipBind || 0, this.hipHeight() / this.model.scale.x); // (standing: the highest it gets)
+      U.uAOr.value = NO_AO ? 1e-4 : this.height * 0.42;
+      U.uHipY.value = NO_AO ? 1e-4 : this._hipBind;
       // the scales' relief, from metres in the bind pose to the view's units
       if (U.uScaleH.value > 0) U.uScaleH.value = (SCALES[this.sp.id]?.h ?? 0.012) * (this._skinWS ??= this.skinMesh?.getWorldScale(new Vector3()).x || this.model.scale.x);
     }
@@ -676,7 +723,7 @@ class Dino {
     const cap = walking ? 0.03 : 0.012;
     if (m > cap) (px *= cap / m), (pz *= cap / m);
     // standing and being pressed off something: take a step away rather than slide
-    if (!walking && !/^(sleep|perform|standoff|drinking)$/.test(this.state) && !this.parent && !this._tear && !this._eating && !this._peer && !this._lean) {
+    if (!walking && !/^(sleep|perform|standoff|drinking|wading|soak)$/.test(this.state) && !this.parent && !this._tear && !this._eating && !this._peer && !this._lean) {
       this._pressed = (this._pressed || 0) + m;
       if (this._pressed > 0.03 * this.length) {
         this._pressed = 0;
@@ -781,6 +828,10 @@ class Dino {
       const p = mod.predator.pos;
       const dd = Math.hypot(p.x - this.pos.x, p.z - this.pos.z);
       const charging = mod.predator.state === 'hunt' && mod.predator.prey === this;
+      // a sleeping predator is left alone; one lying in the stream is given less room; and after running
+      // off, an animal settles a few seconds before it bolts again (unless charged, or very close)
+      const asleep = mod.predator.state === 'sleep', lying = mod.predator.state === 'soak';
+      const settled = (this._fledAt ?? -99) < (mod.clock || 0) - 5;
       if (this.sp.tooBig) {
         // too big to be prey: it doesn't run, it turns its head to watch (lookTarget follows the predator)
         const awake = mod.predator.state !== 'sleep' && mod.predator.speed > 0.03;
@@ -788,7 +839,7 @@ class Dino {
           this.watchT = performance.now() + 20000;
           this.oneShot('alert');
         }
-      } else if ((dd < 1.6 || (charging && dd < 2.6)) && !night) {
+      } else if (!asleep && ((dd < (lying ? 1.0 : 1.6) && (settled || dd < 0.9)) || (charging && dd < 2.6)) && !night) {
         if (charging && this.sp.standsGround && this.actions.threat && rand() < this.sp.standsGround) {
           // face the predator and present the horns: a standoff (see Dinosaurs.standoff)
           this.heading = Math.atan2(p.x - this.pos.x, p.z - this.pos.z);
@@ -798,7 +849,7 @@ class Dino {
         const ax = this.pos.x - p.x, az = this.pos.z - p.z;
         const k = 2.5 / Math.max(dd, 0.01);
         const t = this.layer.nearestOpen(this.pos.x + ax * k, this.pos.z + az * k);
-        if (t && this.goTo(t.x, t.z, null, 'run')) this.state = 'flee';
+        if (t && this.goTo(t.x, t.z, null, 'run')) (this.state = 'flee'), (this._fledAt = mod.clock || 0);
       } else if (dd < 3 && this.state === 'idle' && this.actions.alert && rand() < dt * 0.3) this.oneShot('alert');
     }
     switch (this.state) {
@@ -833,6 +884,34 @@ class Dino {
       }
       case 'circle':
         this.circleStep(dt);
+        break;
+      case 'wading': {
+        // standing in the water: a stamp and a splash now and then, a drink, the head about
+        if (this.wadeIn(dt)) break;
+        if ((this._wadeT -= dt) <= 0) {
+          this._wadeT = 2.5 + rand() * 3;
+          if (this.currentName === 'drink') this.play('idle', 0.6);
+          else if (rand() < 0.35 && this.actions.drink) this.play('drink', 0.6);
+          else {
+            const sy = mod.waterSurface(this.pos.x, this.pos.z), fw = this.length * 0.3;
+            if (sy != null) {
+              mod.effects.splash(this.pos.x + Math.sin(this.heading) * fw, this.pos.z + Math.cos(this.heading) * fw, sy, Math.min(1.2, 0.4 + this.length * 0.25));
+              mod.voice.play('step', this.root.position, this.stepSize * 1.2, 'water');
+            }
+            this._flinch = 0.2;
+          }
+        }
+        if (this.timer <= 0) this.rest(0.6);
+        break;
+      }
+      case 'soak':
+        // lying in the stream: rings spreading from the body, a slow breath
+        if (this.wadeIn(dt)) break;
+        if ((this._wadeT = (this._wadeT || 0) - dt) <= 0) {
+          this._wadeT = 1.2 + rand();
+          mod.ctx.modules.water?.ripple?.(this.pos.x + (rand() - 0.5) * this.length * 0.5, this.pos.z + (rand() - 0.5) * this.length * 0.5, 0.06, 0.7);
+        }
+        if (this.timer <= 0) this.rest(1.2);
         break;
       case 'social': // driven by its scene (social.js)
         break;
@@ -1440,7 +1519,8 @@ class Dino {
         const mates = mod.dinos.filter((d) => d.sp.id === this.sp.id && !d.parent);
         const cx = mates.reduce((a, d) => a + d.pos.x, 0) / mates.length;
         const cz = mates.reduce((a, d) => a + d.pos.z, 0) / mates.length;
-        const t = this.layer.randomOpen(rand, (x, z) => this.clearOfGlass(x, z) && Math.hypot(x - cx, z - cz) < 1.6 + rand() * 1.5);
+        const rex = mod.predator, wary = rex && !this.sp.predator && rex.state !== 'sleep';
+        const t = this.layer.randomOpen(rand, (x, z) => this.clearOfGlass(x, z) && Math.hypot(x - cx, z - cz) < 1.6 + rand() * 1.5 && !(wary && Math.hypot(x - rex.pos.x, z - rex.pos.z) < 2.2));
         (tx = t.x), (tz = t.z);
       } else {
         const t = this.layer.randomOpen(rand, (x, z) => {
@@ -1450,6 +1530,10 @@ class Dino {
         (tx = t.x), (tz = t.z);
       }
       if (!this.goTo(tx, tz, null, !this.sp.noRun && rand() < 0.08 ? 'run' : 'walk')) this.timer = 1;
+    } else if (kind === 'cool') {
+      this._cooled = true;
+      this.mod.later(240, () => (this._cooled = false)); // not again for a while
+      if (!mod.cooling.start(this)) this.act('wander');
     } else if (kind === 'hunt') {
       if ((this.huntCool || 0) > this.mod.clock) return void this.act('wander'); // still smarting from the last standoff
       const prey = mod.walkers
@@ -1562,8 +1646,46 @@ class Dino {
   }
 
   // ---------------------------------------------------------------- idles without clips
+  // cooling off (cooling.js): standing in the shallows; the T. rex lying down in the stream
+  // (`at`: the spot in the water; the route ends a little short of it, so the last steps are taken here)
+  beginWade(at) {
+    this.state = 'wading';
+    this.timer = 15 + rand() * 15;
+    this.speed = 0;
+    this._wadeAt = at || null;
+    this.play(at ? 'walk' : 'idle', 0.5, 0.45);
+    this._wadeT = 1 + rand() * 2;
+  }
+
+  beginSoak(at) {
+    this.state = 'soak';
+    this.timer = 30 + rand() * 20;
+    this.speed = 0;
+    this._wadeAt = at || null;
+    this.play(at ? 'walk' : 'rest', 0.5, 0.45);
+  }
+
+  // the last few steps into the water; true while still stepping
+  wadeIn(dt) {
+    const at = this._wadeAt;
+    if (!at) return false;
+    const dx = at.x - this.pos.x, dz = at.z - this.pos.z, d = Math.hypot(dx, dz);
+    if (d < 0.03) {
+      this._wadeAt = null;
+      this.play(this.state === 'soak' ? 'rest' : 'idle', this.state === 'soak' ? 1.4 : 0.5);
+      return false;
+    }
+    const want = Math.atan2(dx, dz), dh = Math.atan2(Math.sin(want - this.heading), Math.cos(want - this.heading));
+    this.heading += Math.sign(dh) * Math.min(Math.abs(dh), dt * 1.2);
+    const step = Math.min(d, dt * 0.16);
+    this.pos.x += (dx / d) * step;
+    this.pos.z += (dz / d) * step;
+    this.timer += dt;
+    return true;
+  }
+
   perform(kind, opts = {}) {
-    const len = { yawn: 2.8, rub: 6 + rand() * 3, dustbath: 7 + rand() * 3, scratch: 3.2, shake: 1.7 }[kind];
+    const len = { yawn: 2.8, rub: 6 + rand() * 3, dustbath: 7 + rand() * 3, scratch: 3.2, shake: 1.7, mudbath: 8 + rand() * 3 }[kind];
     this.perf = { kind, t: 0, len, side: rand() < 0.5 ? -1 : 1, ...opts };
     if (kind === 'rub') {
       // turn so the trunk is at the flank
@@ -1577,7 +1699,7 @@ class Dino {
     this.state = 'perform';
     this.speed = 0;
     this.path = null;
-    this.play(kind === 'dustbath' ? 'rest' : 'idle', 0.6);
+    this.play(kind === 'dustbath' || kind === 'mudbath' ? 'rest' : 'idle', 0.6);
   }
 
   // turn a bone about one of the animal's own axes ('x' across, 'y' up, 'z' forward), whatever the rig's
@@ -1674,12 +1796,16 @@ class Dino {
       }
       this.root.position.y -= 0.01 * this.k * (u > 0.55 && u < 0.75 ? 1 : 0);
     } else if (P.kind === 'shake') {
-      // a wet-dog shake travelling down the body, drops flying off
-      const w = 2 * Math.PI * 7;
-      fx.spine.forEach((b, i) => turn(b, 'z', 0.1 * env * Math.sin(w * t - i * 0.7)));
-      fx.neck.forEach((b, i) => turn(b, 'z', 0.14 * env * Math.sin(w * t + 0.8 - i * 0.5)));
-      turn(B.head, 'y', 0.3 * env * Math.sin(w * t + 1.5));
-      fx.tail.forEach((b, i) => turn(b, 'y', 0.12 * env * Math.sin(w * t - 1 - i * 0.5)));
+      // a wet-dog shake travelling down the body, drops flying off. A long neck (the Brachiosaurus) can't
+      // twist bone by bone like a short one: the rolls add up along it into a wild flail. So it shakes
+      // slower, side to side, a little in each bone and most in the head, while the body barely twists.
+      const long = fx.neck.length > 4;
+      const w = 2 * Math.PI * (long ? 3 : 7);
+      fx.spine.forEach((b, i) => turn(b, 'z', (long ? 0.035 : 0.1) * env * Math.sin(w * t - i * 0.7)));
+      if (long) fx.neck.forEach((b, i) => turn(b, 'y', 0.035 * env * (0.5 + i / fx.neck.length) * Math.sin(w * t + 0.8 - i * 0.35)));
+      else fx.neck.forEach((b, i) => turn(b, 'z', 0.14 * env * Math.sin(w * t + 0.8 - i * 0.5)));
+      turn(B.head, 'y', (long ? 0.35 : 0.3) * env * Math.sin(w * t + 1.5));
+      fx.tail.forEach((b, i) => turn(b, 'y', (long ? 0.06 : 0.12) * env * Math.sin(w * t - 1 - i * 0.5)));
       P.dropT = (P.dropT || 0) - dt;
       if (P.dropT <= 0 && env > 0.3) {
         P.dropT = 0.05;
@@ -1720,19 +1846,32 @@ class Dino {
         P.leafT = 1.2 + rand();
         this.mod.effects.leafBurst(new Vector3(tr.x, tr.crownY + (tr.top ? (tr.top - tr.crownY) * 0.3 : 0.2), tr.z), 2 + Math.floor(rand() * 3));
       }
-    } else if (P.kind === 'dustbath') {
+    } else if (P.kind === 'dustbath' || P.kind === 'mudbath') {
       // lying down, it rolls onto one side and back, kicking up dust, and comes up dusty
       const roll = P.side * 0.5 * env * (0.6 + 0.4 * Math.sin(t * 1.3));
       this.root.rotateZ(roll);
       this.root.position.y += Math.abs(roll) * this.height * 0.08;
       P.dustT = (P.dustT || 0) - dt;
+      const mud = P.kind === 'mudbath';
       if (P.dustT <= 0 && env > 0.2) {
-        P.dustT = 0.22;
+        P.dustT = mud ? 0.35 : 0.22;
         const a = rand() * Math.PI * 2, r = this.length * 0.3;
-        this.mod.effects.dust(new Vector3(this.pos.x + Math.cos(a) * r, this.mod.ctx.terrain.height(this.pos.x, this.pos.z), this.pos.z + Math.sin(a) * r), this.length * 0.09);
+        const at = new Vector3(this.pos.x + Math.cos(a) * r, this.mod.ctx.terrain.height(this.pos.x, this.pos.z) + 0.02, this.pos.z + Math.sin(a) * r);
+        if (mud) {
+          // mud flung about: dark clods and wet splats, and the squelch of it
+          this.mod.effects.bits?.(at, 0x2c1d10, 4);
+          this.mod.effects.spray(at, 3, 0.25, at.y - 0.02);
+          if (rand() < 0.5) this.mod.voice.play('step', this.root.position, this.stepSize, 'mud');
+        } else this.mod.effects.dust(at, this.length * 0.09);
       }
       const U = this.skinU;
-      if (U && env > 0.5) {
+      if (U && env > 0.5 && mud) {
+        // caked from head to tail, glistening wet (it dries pale and flakes off, skinFrame)
+        U.uMudLine.value = (this.hipHeight() / this.model.scale.x) * 3;
+        U.uMudAmt.value = 1;
+        U.uMudWet.value = 1;
+        this.wet = Math.max(this.wet || 0, 0.6);
+      } else if (U && env > 0.5) {
         U.uMudLine.value = Math.max(U.uMudAmt.value > 0.05 ? U.uMudLine.value : 0, (this.hipHeight() / this.model.scale.x) * 1.3);
         U.uMudAmt.value = Math.max(U.uMudAmt.value, 0.6);
         U.uMudWet.value = Math.min(U.uMudWet.value, 0.05);
@@ -1748,6 +1887,11 @@ class Dino {
       if (fx.neck[0]) turn(fx.neck[0], 'y', (L ? 1 : -1) * 0.45 * g);
       turn(B.head, 'y', (L ? 1 : -1) * 0.3 * g);
     }
+  }
+
+  // half the body's width, in the case's units (for keeping bodies apart)
+  bodyRadius() {
+    return (this.sp.bodyR ?? 0.12) * (this.k || 1) * 1.25 * Math.min(1, this.grow ?? 1);
   }
 
   // the point `dist` further along the route from where the animal stands
@@ -1808,7 +1952,26 @@ class Dino {
     }
     if (pr.t === 0 && d < 0.1) pr.tries = 0;
     const c = this.carrot(look);
-    const want = Math.atan2(c.x - this.pos.x, c.z - this.pos.z);
+    let want = Math.atan2(c.x - this.pos.x, c.z - this.pos.z);
+    // another animal in the way (standing, or coming the other way): veer round it, slowing a little,
+    // rather than walking into it (bodies are also kept apart, Dinosaurs.separate)
+    let avoid = 0, slow = 1;
+    if (!hunting) {
+      const fx = Math.sin(want), fz = Math.cos(want), me = this.bodyRadius(), reach = this.length * 1.1 + 0.2;
+      for (const o of this.mod.walkers) {
+        if (o === this || !o.root.visible || o.sp.flyer || o === this.parent || o.parent === this) continue;
+        const dx = o.pos.x - this.pos.x, dz = o.pos.z - this.pos.z, ahead = dx * fx + dz * fz;
+        if (ahead <= 0 || ahead > reach + o.length * 0.4) continue;
+        const side = dx * fz - dz * fx, clear = me + o.bodyRadius() + o.length * 0.18 + 0.04;
+        if (Math.abs(side) > clear) continue;
+        if (o.speed > 0.03 && Math.cos(o.heading - this.heading) > 0.5) continue; // going the same way: the queue handles it
+        const k = (1 - Math.abs(side) / clear) * (1 - Math.max(0, ahead - this.length * 0.3) / reach);
+        const turn = (side > 0 ? -1 : 1) * 0.9 * k; // steer away from the side it is on
+        if (Math.abs(turn) > Math.abs(avoid)) avoid = turn;
+        if (this.state !== 'flee') slow = Math.min(slow, 1 - 0.5 * k); // (running for it: no slowing down)
+      }
+    }
+    want += avoid;
     let dh = want - this.heading;
     dh = Math.atan2(Math.sin(dh), Math.cos(dh));
     const turnRate = (gait === 'run' ? 1.4 : 0.9) * Math.min(2, 1.2 / Math.max(this.length, 0.4));
@@ -1832,7 +1995,7 @@ class Dino {
         room = Math.min(room, MathUtils.clamp(gap / 0.35, 0, 1));
       }
     }
-    this.speed += (v * align * room - this.speed) * Math.min(1, dt * 1.5);
+    this.speed += (v * align * room * slow - this.speed) * Math.min(1, dt * 1.5);
     this.pos.x += Math.sin(this.heading) * this.speed * dt;
     this.pos.z += Math.cos(this.heading) * this.speed * dt;
     this.play(gait, 0.5);
@@ -2401,6 +2564,9 @@ class Dinosaurs {
     this.social = new Social(this);
     this.trails = new Trails(this);
     this.touch = new Touch(this);
+    this.cooling = new Cooling(this);
+    this.wakes = params.get('wakes') === '0' ? null : new Wakes(this);
+    this.cinema = new Cinema(this);
     this.ambience = new Ambience(ctx, this.voice);
     this.timers = [];
     // trunks the bodies keep off: the planted ones and Weatherglass's own trees
@@ -2412,6 +2578,19 @@ class Dinosaurs {
     // the cabin is solid to the ridge: a swinging tail or a passing neck keeps off its walls and roof
     const cab = ctx.terrain.shape?.CABIN, lp = ctx.modules.life?.props;
     if (cab && lp?.ridgeY) this.trunks.push({ x: cab.x, z: cab.z, r: 0.44, y0: cab.y ?? 0, crownY: lp.ridgeY + 0.05, kind: 'cabin' });
+    // ambient occlusion pooled on the ground round their feet (contact.js)
+    if (!NO_AO) {
+      const spots = [...(this.rocks?.shadeSpots || [])];
+      for (const t of this.trunks) {
+        if (t.kind === 'stand') continue;
+        if (t.kind === 'cabin') spots.push({ x: t.x, z: t.z, r: 0.78, a: 0.5 });
+        else if (t.kind.startsWith('wg-')) spots.push({ x: t.x, z: t.z, r: 0.12, a: 0.5 });
+        else spots.push({ x: t.x, z: t.z, r: Math.max(0.12, t.r * 4.5), a: 0.6 });
+      }
+      const den = this.rocks?.glowAt;
+      if (den) spots.push({ x: den.x, z: den.z, r: 0.7, a: 0.55 });
+      this.contact.groundShade(spots);
+    }
     this.trunkGrid = new Map();
     for (const t of this.trunks) {
       const key = Math.floor(t.x / 0.5) + ',' + Math.floor(t.z / 0.5);
@@ -2788,14 +2967,16 @@ class Dinosaurs {
           const ang = (i / 10) * Math.PI * 2 + rand() * 0.3;
           const cx = Math.cos(ang), cz = Math.sin(ang);
           // on a slope the body pitches (as place() does), which lifts the head and pulls it back:
-          // settle the stand-off distance so the head ends up over the trunk
-          let D = reach.fwd, x = 0, z = 0, headY = 0;
+          // settle the stand-off distance so the head ends up over the trunk; a conifer's trunk runs up
+          // through its crown, so there the head stops short of it, in the foliage at its side
+          const clear = t.wantTop || this.flora.placements.araucaria?.includes(t) ? 0.24 : 0;
+          let D = reach.fwd + clear, x = 0, z = 0, headY = 0;
           for (let k = 0; k < 3; k++) {
             x = t.x + cx * D;
             z = t.z + cz * D;
             const hf = T.height(x - cx * half, z - cz * half), hb = T.height(x + cx * half, z + cz * half);
             const th = Math.atan2(hf - hb, 2 * half) * 0.6; // nose up when the tree side is higher
-            D = Math.max(0.5, reach.fwd * Math.cos(th) - reach.up * Math.sin(th));
+            D = Math.max(0.5, reach.fwd * Math.cos(th) - reach.up * Math.sin(th)) + clear;
             headY = Math.min(T.height(x, z), (hf + hb) / 2) + reach.up * Math.cos(th) + reach.fwd * Math.sin(th);
           }
           if (!d.layer.walkable(x, z) || !d.clearOfGlass(x, z)) continue;
@@ -2832,14 +3013,46 @@ class Dinosaurs {
     return { night, storm: life?.storm || 0, rain: life?.rain || 0, wet: life?.wet || this.ctx.world.groundWetness || 0 };
   }
 
+  // Bodies keep apart: each grounded animal is a capsule along its length (hips to chest), as wide as
+  // its body; where two overlap they are pushed apart along the line between them, the lighter one
+  // moving more. (Head-butting calves and a mother with her calf at her flank are let a little closer.)
+  separate(dt) {
+    const W = (this.walkers || []).filter((d) => d.root.visible && !d.sp.flyer && !d.swimming);
+    const seg = (d) => {
+      const h = d.length * 0.3, fx = Math.sin(d.heading) * h, fz = Math.cos(d.heading) * h;
+      return [d.pos.x - fx, d.pos.z - fz, d.pos.x + fx * 1.2, d.pos.z + fz * 1.2];
+    };
+    const S = W.map(seg);
+    for (let i = 0; i < W.length; i++)
+      for (let j = i + 1; j < W.length; j++) {
+        const a = W[i], b = W[j];
+        const close = (a.parent === b || b.parent === a || (a.soc && a.soc === b.soc)) ? 0.6 : 1;
+        const ra = a.bodyRadius(), rb = b.bodyRadius(), lim = (ra + rb) * close;
+        if (Math.abs(a.pos.x - b.pos.x) > a.length + b.length + lim || Math.abs(a.pos.z - b.pos.z) > a.length + b.length + lim) continue;
+        const [px, pz, qx, qz] = closestSegSeg(S[i], S[j]);
+        let dx = qx - px, dz = qz - pz, d = Math.hypot(dx, dz);
+        if (d >= lim) continue;
+        if (d < 1e-4) (dx = b.pos.x - a.pos.x || 1e-3), (dz = b.pos.z - a.pos.z), (d = Math.hypot(dx, dz) || 1e-3);
+        const over = Math.min(lim - d, 0.04 + dt * 0.6), ma = a.length ** 3, mb = b.length ** 3;
+        const ka = mb / (ma + mb), kb = ma / (ma + mb), ux = dx / d, uz = dz / d;
+        a.pos.x -= ux * over * ka;
+        a.pos.z -= uz * over * ka;
+        b.pos.x += ux * over * kb;
+        b.pos.z += uz * over * kb;
+      }
+  }
+
   update(dt) {
     if (!this.ready) return;
+    this.separate(dt);
     const env = this.env();
     if (!this.flora._hand && this.flora.plants?.length) (this.flora.mod = this), this.flora.installHand();
     this.flora.update(dt);
     this.aquatic?.update(dt);
     this.effects.update(dt, env);
     this.contact.update(dt);
+    this.wakes?.update(dt);
+    this.cinema.update(dt);
     this.backdrop?.update(dt);
     this.rocks?.update(dt);
     this.paths?.update(dt);
@@ -2883,12 +3096,14 @@ class Dinosaurs {
     for (const e of this._shake || []) pushers.push(e);
     this._shake = [];
     this.flora.setPushers(pushers);
+    if (!NO_AO) this.flora.setBodies(pushers); // (and the shade they cast on the planting round them)
     this.branchPush(dt);
     this.lamps?.update(dt);
     this.social.update(dt);
     this.trails.update(dt);
     this.touch.update(dt);
     this.feeding?.update(dt);
+    this.cooling.update(dt);
     for (const d of this.dinos) d.update(dt, env);
     this.weather.update(dt);
     this.night.update(dt);

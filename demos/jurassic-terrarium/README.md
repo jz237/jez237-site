@@ -304,3 +304,103 @@ v1.39: feeding:
 - **From your hand:** a quick click drops the food. Press and hold to feed from your hand: the food stays in the hand, follows it, and the animals come to it there. The Brachiosaurus browses the branch you hold up, a Pteranodon swoops at a fish dangled over the water, and the T. rex snatches the meat out of your hand. Let go and whatever is left falls (or the branch stays hung).
 - **Eating you can see:** jaws work between mouthfuls, scraps fall (fronds, seeds, meat), the food shrinks bite by bite, with crop and tear sounds. Each animal's belly fills as it eats and slowly goes down over a few minutes. A full animal lies down to sleep it off.
 - **Documentary:** it films the feeding ("feeding", "stripping a branch", "tearing at a meal") and the nap afterwards ("sleeping it off").
+
+v1.40: hot days, jostling at the food, colours through the year:
+- **Cooling off:** on hot, sunny days the animals go to cool off:
+  - the plant-eaters wade into the shallows of the pool or at the stream's fords, stand in the water, stamp up splashes and dip to drink, and the calves hop and splash about beside their mother;
+  - Triceratops and Stegosaurus go to the mud hole on the pool's bank and roll in it, coming out caked from head to tail (it dries pale and flakes away over a few minutes);
+  - the T. rex lies down in the stream and soaks;
+  - the Brachiosaurus wades in.
+
+  The documentary films them ("cooling off in the shallows", "wallowing in the stream", "a mud bath").
+- **Jostling at the food:**
+  - at a shared pile the bigger animal pushes in, so a smaller one gets a threat display, starts back, and edges in again a few seconds later;
+  - a Stegosaurus swings its tail at anyone crowding it;
+  - calves dart in for a stolen mouthful and scamper back to their mother;
+  - when the T. rex comes for its meat, every plant-eater near it scatters.
+- **Colours through the year:** in spring the frills, plates and crests flush bright red-orange for the breeding season (stronger on the males). In winter the hide goes duller, greyer and dustier. Calves are mottled and dappled, with pale broken bands across the back, fading as they grow up.
+
+v1.40.1: animals no longer walk through each other:
+- **Bodies kept apart:** each animal's body is a capsule along its length, as wide as its body. Where two overlap they are pushed apart along the line between them, the lighter one giving way more.
+- **Walking round:** an animal whose way is blocked by another (standing, or coming towards it) veers round it and slows, instead of walking into it. One going the same way still queues behind.
+- **Measured over 10 simulated minutes:** frames with two bodies deeply overlapping dropped from 77% to about 3%. What's left is intended: calves head-butting in play, and calves walking under the Brachiosaurus.
+
+v1.40.2: calmer herds; cave fireflies:
+- **No more skittering:** a plant-eater near the T. rex used to flip between fleeing and walking many times a second. Now it doesn't run from a sleeping T. rex and gives one lying in the stream less room. After running off, it settles a few seconds before bolting again (unless charged or very close), and its wandering keeps it out of an awake T. rex's way. Over 20 simulated minutes each Triceratops now bolts 3–8 times instead of up to hundreds of re-starts.
+- **Cave fireflies:** the little lights in the den were glow-fungus beads hanging still in mid-air. They're now cave fireflies drifting about in the dark on their own slow courses, bobbing and glowing and fading at their own pace, brighter at dusk and night. They swirl up when the T. rex moves through the den.
+
+v1.40.3: two fixes:
+- **The case sliding off screen:** a quick click on or near an animal still told the field guide to follow it, so poking an animal set the camera tracking it, and the whole case slid away as it walked off. Clicking in the case no longer follows anything: pick an animal's name in the field guide to follow it (Esc or "Stop following" to stop).
+- **Grabbed trees stuck leaning one way:** the planted trees' grab handler wrote the pointer's position and the camera's direction into the same scratch vector, so a grabbed tree always bent the same way whatever the mouse did. It now leans after the hand: right, left, back upright.
+
+v1.41: sculpted anatomy (graphics goal 1 of 6):
+- **Anatomical detail, baked:** every species' skin has been rebaked with anatomical detail sculpted from its skeleton:
+  - deep skin folds round every joint (neck, shoulders, elbows, wrists, hips, knees, ankles, tail root);
+  - rounded muscle masses on the flanks, thighs, upper arms and neck, with a few grooves between them;
+  - a ridge of keeled scutes down the spine;
+  - growth rings on claws, horns and beaks.
+
+  The relief goes into the normal map, and the creases and the hollows between muscles darken the colour map too, so the folds and muscle shapes read from across the case, not only close up.
+- **How:** `blender/bake_detail.py` works out the masks on each finished sculpture and bakes just the normal map and a crevice map. `tools/swap-skin.mjs` puts the new textures into each species' existing GLB, so the meshes, rigs and animations are untouched.
+
+v1.42: ambient occlusion (graphics goal 2 of 6):
+- **Bodies:** the ground shades the body close above it, so bellies, undersides and feet are darker the nearer they are to the earth. The inner faces of the legs are shaded by the body between them, and faces turned down lose the sky. This works in the skin shader from Weatherglass's terrain height map, so it follows every animal and pose.
+- **Plants round their feet:** ferns and fronds under and beside an animal sit in its shade. Each frame the bodies are painted into a small shade map over the field, and the plants' shader does a single lookup, at no measurable cost.
+- **Stones:** every rock darkens where it meets the ground and in its downward hollows.
+- **Ground:** soft dark pools lie round the foot of every stone and tree, the cabin and the den.
+- `?ao=0` turns all of it off, for comparing.
+
+v1.43: living eyes (graphics goal 3 of 6):
+- **The iris, drawn in the shader:** radial fibres, darker crypts and flecks, a bright collar round the pupil and a dark ring at its edge. It sits under a clear cornea, so it shifts against the glassy surface as the view moves.
+- **Pupils by species:**
+  - the T. rex has a vertical slit in a gold iris;
+  - the Triceratops has a horizontal bar in a hazel-green iris;
+  - the Stegosaurus has an amber round pupil;
+  - the Brachiosaurus has a grey-olive round pupil;
+  - the Pteranodon has a dark red-brown round pupil.
+- **Living pupils:** they slowly open in the dark and close down in bright sun, and widen when an animal flees or hunts.
+- **Catchlights:** a sharp highlight from the sun and a small soft window of sky on the top of the cornea, so an eye in shade still glints. The upper lid shades the top of the eye beneath it.
+- **Moist lids:** a pink-dark inner rim where the lid meets the eye, and a wet line of tears glinting along both lids.
+- **Eyeshine at night** now glows out through the wide-open pupil, with the iris still visible round it, instead of lighting the whole eyeball.
+
+v1.44: better water (graphics goal 4 of 6):
+- **Foam and wakes round wading legs:** wherever a leg of a wading, soaking or swimming animal goes through the surface, a collar of churning froth hugs it at the waterline, frothier as the leg moves. A moving leg leaves foam behind it: patches of bubbles that spread and break up over a few seconds, drawing a wake behind a walking animal. Each stride also rings the water with Weatherglass's own ripples where the leg goes in (`runtime/wakes.js`; `?wakes=0` turns it off, and weak devices get fewer patches and no trail).
+- **White plunge pool:** the pool under the waterfall is wider and churned white, with a dense core of froth, rings of foam breaking outwards and round bubbles in place of square specks. It is whiter still when the stream runs high.
+- **Caustics:** the dancing net of focused sunlight on the lake and river beds is about twice as bright, and reaches a little deeper.
+- **Reflections:** the pool's mirror already carries the animals, so legs, bodies and heads show upside-down in the water from low angles. Checked, no change needed.
+
+v1.45: better plants (graphics goal 5 of 6):
+- **Light through the leaves:** every light that reaches a frond, leaf or branchlet now also shines through it: strongest when you look towards the light through the leaf, and onto the face turned away from it. The light comes through yellower and more saturated, as it does through a real leaf. It uses each light's colour after its shadow (hooked into three's own light loop), so ferns against a low sun glow gold-green while fronds in shade stay dark. It works for the lamps and the hearth too.
+- **Veins and ridges:** the leaves have relief, a bump map built at load from the leaf atlas itself. Each leaflet is domed, curling down at its edges, and its painted midrib and side veins stand as ridges, so raking light picks out the creases. Weak devices skip it, and so do the distant versions of the ferns.
+- **Layered undergrowth:** the foot of every tree fern and cycad gets a skirt of big ferns, with small ferns and crimson rosettes in a ring outside it. The planting now rises in layers from the moss-like carpet through ferns and skirts to cycads and the tree-fern canopy. High-end devices get a fuller skirt; weak devices none.
+- `?understorey=0`, `?relief=0` and `?trans=0` turn these off, for comparing.
+
+v1.46: cinematic look (graphics goal 6 of 6):
+- **Film grade by the hour:** the last pass now grades the picture with saturation, a soft S-curve and split-toned shadows and highlights, set for the time of day and the weather and fading between them:
+  - dawn is cool, soft and pearly with peach highlights;
+  - noon is clean and lightly warm;
+  - the golden hour has amber highlights over teal shadows;
+  - dusk turns rose and violet;
+  - night is blue, quiet and less saturated;
+  - rain is flat and cool.
+- **Depth of field on what you look at:** the scene's depth now drives the soft focus. Whatever the camera follows, or the point it turns about, is sharp, and nearer and farther things soften by how far they are from it, shallower close up like a longer lens. The old tilt-shift band stays as a faint extra; Documentary mode keeps its own narrow band on its subject. Weak devices keep the plain band. `?dof=0` turns the depth focus off.
+- **Vignette:** it deepens a little towards dusk and night and while the camera follows an animal.
+- `?cinema=0` turns all of this off, for comparing.
+
+With this the six-part graphics push is complete:
+1. sculpted anatomy (v1.41);
+2. ambient occlusion (v1.42);
+3. living eyes (v1.43);
+4. water (v1.44);
+5. plants (v1.45);
+6. the cinematic look (v1.46).
+
+v1.46.1: the depth of field from v1.46 is removed. It blurred the view badly while zooming in and out, because its focus distance lagged behind the camera. Its stronger close-up soft focus is removed too. The soft focus is Weatherglass's own again, and the colour grade and vignette stay.
+
+v1.46.2: fixed the terrarium sticking on the loading screen after an update. The page is always fetched fresh, but `dinos.js` could be cached for up to four hours. A new page with yesterday's runtime then failed to boot. The page now loads `dinos.js?v=<hash of its contents>`, so the two always match.
+
+v1.47 (Jez's notes):
+- **No blur:** the soft-focus tilt-shift is switched off. Every part of the view is sharp, at any zoom, and in Documentary mode too.
+- **Softer mist at the back:** the mist curtains in the back valleys and the cloud wisps round the rocky peaks now thin out towards the land under them, like the chimney smoke. The ground and the boulders no longer slice them off in hard straight edges.
+- **Brachiosaurus shake:** its wet-dog shake no longer flails the long neck up and down several times a second. Long necks now shake slower and side to side, a little in each neck bone and most in the head, with the body barely twisting. Short-necked animals shake as before.
+- **Neck through trees:** monkey-puzzle and redwood trunks are solid almost to the top for every animal, including the tall browse trees. When the Brachiosaurus browses a monkey-puzzle it stands back so its head goes into the foliage beside the trunk, not through it. In a long run, neck-through-trunk moments fell by about 85%.

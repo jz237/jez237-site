@@ -210,16 +210,20 @@ void main() {
     const vs = (bill) => `
 uniform float uWide;
 varying vec2 vUv;
+varying vec3 vW;
 void main() {
   vUv = uv;
+  vW = (modelMatrix * vec4(position, 1.0)).xyz;
   ${bill
-    ? 'vec4 mv = modelViewMatrix * vec4(0.0, 0.0, 0.0, 1.0); mv.xy += position.xy * vec2(uWide, 1.0); gl_Position = projectionMatrix * mv;'
+    ? 'vec4 mv = modelViewMatrix * vec4(0.0, 0.0, 0.0, 1.0); mv.xy += position.xy * vec2(uWide, 1.0); gl_Position = projectionMatrix * mv; vW = (inverse(viewMatrix) * mv).xyz;'
     : 'gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);'}
 }`;
     const fs = `
 uniform vec3 uColor; uniform float uAmount; uniform float uTime; uniform float uSeed; uniform vec2 uStretch;
 uniform vec2 uDrift; uniform float uStreak;
+uniform sampler2D uTerrainTex; uniform vec2 uFieldMin; uniform vec2 uFieldSize; uniform float uGround;
 varying vec2 vUv;
+varying vec3 vW;
 float hh(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
 float vn(vec2 p) { vec2 i = floor(p), f = fract(p); f = f * f * (3.0 - 2.0 * f);
   return mix(mix(hh(i), hh(i + vec2(1, 0)), f.x), mix(hh(i + vec2(0, 1)), hh(i + vec2(1, 1)), f.x), f.y); }
@@ -233,9 +237,15 @@ void main() {
   float n = fbm(p + vec2(fbm(p * 0.7 + uTime * 0.006), 0.0) * (0.6 - 0.3 * uStreak));
   // ragged top and bottom edges, ragged ends: never a straight-edged bar however hard it blows
   float ry = vUv.y + (n - 0.5) * 0.45, rx = vUv.x + (fbm(p * 1.9 + 3.3) - 0.5) * 0.25;
-  float band = smoothstep(0.0, 0.42, ry) * smoothstep(1.0, 0.52, ry);
+  float band = smoothstep(0.0, 0.5, ry) * smoothstep(1.0, 0.52, ry);
   float edge = smoothstep(0.0, 0.25, rx) * smoothstep(1.0, 0.75, rx);
   float a = band * edge * smoothstep(0.32 + 0.1 * uStreak, 0.72, n) * uAmount;
+  // thinning out towards the ground under it, so the ground never slices the sheet off in a straight line
+  // (it lies on the land like smoke, not like a pane standing in it)
+  if (uGround > 0.0) {
+    float gh = texture2D(uTerrainTex, clamp((vW.xz - uFieldMin) / uFieldSize, 0.0, 1.0)).x;
+    a *= smoothstep(0.0, uGround, vW.y - gh + (n - 0.5) * 0.12);
+  }
   if (a < 0.003) discard;
   gl_FragColor = vec4(uColor, a);
 }`;
@@ -244,6 +254,7 @@ void main() {
         uniforms: {
           uColor: { value: new Color(1, 1, 1) }, uAmount: { value: 0 }, uTime: { value: 0 }, uSeed: { value: seed },
           uStretch: { value: new Vector2(...stretch) }, uDrift: { value: new Vector2() }, uStreak: { value: 0 }, uWide: { value: 1 },
+          uTerrainTex: this.ctx.uniforms.uTerrainTex, uFieldMin: this.ctx.uniforms.uFieldMin, uFieldSize: this.ctx.uniforms.uFieldSize, uGround: { value: bill ? 0.45 : 0.3 }, // (fade height: the wisps clear the boulders on the peaks)
         },
         vertexShader: vs(bill), fragmentShader: fs, transparent: true, depthWrite: false, side: DoubleSide, fog: false,
       });
@@ -263,7 +274,7 @@ void main() {
         if (dn && z > dn.z - 0.6 && Math.abs(cx - dn.x) < w / 2 + 1.4) continue;
         const hgt = 0.55 + Math.random() * 0.35;
         const m = new Mesh(new PlaneGeometry(w, hgt), mk(false, [w * 1.1, hgt * 2.2], Math.random() * 50));
-        m.position.set(cx, Math.max(h, 0.05) + hgt * 0.32, z + (Math.random() - 0.5) * 0.25);
+        m.position.set(cx, Math.max(h, 0.05) + hgt * 0.42, z + (Math.random() - 0.5) * 0.25);
         m.rotation.y = (Math.random() - 0.5) * 0.2;
         m.userData = { k: (0.75 + 0.25 * Math.random()) * (0.55 + 0.45 * (1 - ri / rows.length)), base: m.position.clone(), ph: Math.random() * 6.28, nu: 1.1, lift: 0.15, w, wx: 0, wz: 0 };
         m.renderOrder = 5;

@@ -7,6 +7,7 @@
 //   - hold the loading veil until the dinosaurs have loaded (window.__wgHold),
 //   - load dinos.js after the main bundle.
 import { readFileSync, writeFileSync, mkdirSync, copyFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -149,6 +150,41 @@ patch('uVignette:{value:.32},uGrain:{value:.035}', 'uVignette:{value:.32},uGrain
 // pool (swaying planting, walking animals, clouds) moved in jerky steps and the reflection popped
 // between sharpnesses: the water flickered. Now on medium/high it is redrawn every frame at a fixed
 // scale and margin. And the sun glitter twinkles slower and less hot, so it no longer strobes the glow.
+// The sun's caustics on the lake bed and the river bed: brighter and plainer to see (they were a faint
+// shimmer under the water's absorption)
+patch('caus *= smoothstep(0.0, 0.03, cd) * exp(-cd * 1.4) * sub', 'caus *= 2.1 * smoothstep(0.0, 0.03, cd) * exp(-cd * 1.2) * sub', 'stronger bed caustics');
+// The plunge pool under the waterfall: wider, and churned white (a dense core of froth, rings of foam
+// breaking outwards, more bubbles), whiter still when the stream runs high
+patch('const c=.36,h=new Tr(c,40)', 'const c=.52,h=new Tr(c,48)', 'wider plunge pool');
+patch(`float core = smoothstep(0.75, 0.0, r);
+  float foam = clamp(core * 0.8 + smoothstep(0.45, 0.8, ring) * (1.0 - r) * 1.3, 0.0, 1.0) * clamp(0.55 + uFlow * 0.35, 0.0, 1.2);
+  float bubbles = step(0.72, wgHash(floor(vWorld.xz * 70.0 + floor(clock * 6.0)))) * core;`, `float core = smoothstep(0.62, 0.0, r + (ring - 0.5) * 0.25);
+  float foam = clamp(core * 1.05 + smoothstep(0.38, 0.72, ring) * (1.0 - r) * 1.7, 0.0, 1.0) * clamp(0.8 + uFlow * 0.35, 0.0, 1.25);
+  vec2 bq = vWorld.xz * 70.0 + floor(clock * 6.0);
+  float bubbles = step(0.62, wgHash(floor(bq))) * smoothstep(0.45, 0.2, length(fract(bq) - 0.5)) * smoothstep(0.95, 0.2, r);`, 'whiter plunge pool');
+// The film look (runtime/cinema.js drives it): a colour grade in the last pass (saturation, a soft S-curve,
+// shadows and highlights split-toned), set for the time of day
+patch('AT={uniforms:{tDiffuse:{value:null},uTime:{value:0},uVignette:{value:.32},', 'AT={uniforms:{tDiffuse:{value:null},uTime:{value:0},uVignette:{value:.32},uGSat:{value:1},uGCon:{value:0},uGShadow:{value:[0,0,0]},uGHigh:{value:[0,0,0]},', 'grade uniforms');
+patch(`    uniform vec2 uResolution;
+    varying vec2 vUv;
+    float h(vec2 p)`, `    uniform vec2 uResolution;
+    uniform float uGSat;
+    uniform float uGCon;
+    uniform vec3 uGShadow;
+    uniform vec3 uGHigh;
+    varying vec2 vUv;
+    float h(vec2 p)`, 'grade uniform declarations');
+patch(`      // gentle filmic lift in the shadows, warm highlights
+      c.rgb = c.rgb * vec3(1.01, 1.0, 0.985) + vec3(0.008, 0.007, 0.01) * (1.0 - c.rgb);`, `      // the grade: saturation, a soft S-curve round mid-grey, and the shadows and highlights tinted apart
+      c.rgb = clamp(c.rgb, 0.0, 1.0);
+      float gl = dot(c.rgb, vec3(0.2126, 0.7152, 0.0722));
+      c.rgb = max(mix(vec3(gl), c.rgb, uGSat), 0.0);
+      c.rgb = mix(c.rgb, c.rgb * c.rgb * (3.0 - 2.0 * c.rgb), uGCon) * (1.0 + 0.3 * uGCon);
+      c.rgb += uGShadow * (1.0 - gl) * (1.0 - gl) + uGHigh * gl * gl;
+      // gentle filmic lift in the shadows, warm highlights
+      c.rgb = c.rgb * vec3(1.01, 1.0, 0.985) + vec3(0.008, 0.007, 0.01) * (1.0 - c.rgb);`, 'grade');
+// No soft focus at all (Jez: "i'd rather no blurring"): the tilt-shift passes stay off
+patch('this.tiltX.enabled=this.tiltY.enabled=s.tier>0', 'this.tiltX.enabled=this.tiltY.enabled=!1', 'no tilt-shift blur');
 patch('this.fastEvery=n.pick(2,2,1),this.slowEvery=n.pick(5,4,3)', 'this.fastEvery=n.pick(2,1,1),this.slowEvery=n.pick(3,1,1)', 'mirror every frame');
 patch('const m=.04+(f?.05:.02);', 'const m=.09;', 'mirror margin fixed');
 patch('M=Math.min(this.maxScale,Math.sqrt(_/Math.max(w*y,1)))', 'M=this.maxScale', 'mirror scale fixed');
@@ -289,7 +325,10 @@ patch(
 );
 
 // Load the dinosaur module after the main bundle (module scripts run in document order).
-patch('</script>\n</body></html>', '</script>\n<script type="module" src="dinos.js"></script>\n</body></html>', 'dinos.js tag');
+// dinos.js is versioned by its content: the page itself is always fetched fresh but dinos.js may be cached
+// for hours, and a new page with an old runtime (or the reverse) can fail to boot. (Build the runtime first.)
+const runtimeV = createHash('md5').update(readFileSync(join(outDir, 'dinos.js'))).digest('hex').slice(0, 10);
+patch('</script>\n</body></html>', `</script>\n<script type="module" src="dinos.js?v=${runtimeV}"></script>\n</body></html>`, 'dinos.js tag');
 
 writeFileSync(join(outDir, 'index.html'), html);
 for (const f of ['favicon.svg', 'THREE-LICENSE.txt']) copyFileSync(join(repo, 'demos/weatherglass', f), join(outDir, f));
