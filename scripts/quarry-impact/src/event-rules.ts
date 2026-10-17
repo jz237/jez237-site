@@ -1,3 +1,6 @@
+import {pursuitRunnerCount} from './pursuit-teams';
+import {DerbyRivals} from './derby-rivals';
+import {readDerbyFormat,type DerbyFormat} from './derby-policy';
 import {isClassLimit,type ClassLimit} from './performance-class-id';
 import {CombatFeats,type CombatMotion,type CombatAward} from './combat-feats';
 import {ARENA_NAMES,isArenaId,resolveArenaId,type ArenaId} from './arena-id';
@@ -7,12 +10,12 @@ import {isAIDifficulty,type AIDifficulty} from './ai-difficulty';
 import {isCourseId,type CourseId} from './course-id';
 import {CHECKPOINTS,trackPoint,clamp,derbyOrder} from './rules';
 import type {ArenaLayout} from './derby-arena';
-export type EventOptions={version:1;classLimit?:ClassLimit;playgroundCourse?:CourseId;playgroundTraffic?:boolean;arena?:ArenaId;damage?:DamageRule;difficulty?:AIDifficulty;course?:CourseId;lineup?:GridLineup;performance?:GridPerformance;field:number;laps:number;raceDuration?:number;direction:'forward'|'reverse'|'opposing';race:'laps'|'ordered'|'free'|'random';derby:'survival'|'score';duration:number};
+export type EventOptions={version:1;pursuit?:boolean;pursuitRole?:'runner'|'chaser';pursuitRunners?:number;classLimit?:ClassLimit;playgroundCourse?:CourseId;playgroundTraffic?:boolean;arena?:ArenaId;damage?:DamageRule;difficulty?:AIDifficulty;course?:CourseId;lineup?:GridLineup;performance?:GridPerformance;field:number;laps:number;raceDuration?:number;direction:'forward'|'reverse'|'opposing';race:'laps'|'ordered'|'free'|'random';derby:DerbyFormat;duration:number};
 export const EVENT_KEY='quarry-impact-events-v1';
 export const DEFAULT_EVENT:EventOptions={version:1,field:8,laps:3,direction:'forward',race:'laps',derby:'survival',duration:300};
 const integer=(value:unknown,fallback:number,min:number,max:number)=>typeof value==='number'&&Number.isFinite(value)?Math.round(clamp(value,min,max)):fallback;
 export function readEventOptions(json?:string|null):EventOptions{
-  try{const v=JSON.parse(json??'{}');if(!v||v.version!==1)return {...DEFAULT_EVENT};return {version:1,...(isClassLimit(v.classLimit)?{classLimit:v.classLimit}:{}),...(isCourseId(v.playgroundCourse)?{playgroundCourse:v.playgroundCourse}:{}),...(typeof v.playgroundTraffic==='boolean'?{playgroundTraffic:v.playgroundTraffic}:{}),...(isArenaId(v.arena)?{arena:v.arena}:{}),...(isDamageRule(v.damage)?{damage:v.damage}:{}),...(isAIDifficulty(v.difficulty)?{difficulty:v.difficulty}:{}),...(isCourseId(v.course)?{course:v.course}:{}),...(typeof v.raceDuration==='number'&&Number.isFinite(v.raceDuration)?{raceDuration:integer(v.raceDuration,120,60,1200)}:{}),...(isGridLineup(v.lineup)?{lineup:v.lineup}:{}),...(isGridPerformance(v.performance)?{performance:v.performance}:{}),field:integer(v.field,8,2,24),laps:integer(v.laps,3,1,20),direction:v.direction==='opposing'?'opposing':v.direction==='reverse'?'reverse':'forward',race:['ordered','free','random'].includes(v.race)?v.race:'laps',derby:v.derby==='score'?'score':'survival',duration:integer(v.duration,300,60,1200)};}catch{return {...DEFAULT_EVENT};}
+  try{const v=JSON.parse(json??'{}');if(!v||v.version!==1)return {...DEFAULT_EVENT};return {version:1,...(v.pursuit===true?{pursuit:true}:{}),...(v.pursuitRole==='chaser'?{pursuitRole:'chaser' as const}:{}),...(v.pursuitRunners!==undefined?{pursuitRunners:pursuitRunnerCount(v.pursuitRunners,integer(v.field,8,2,24))}:{}),...(isClassLimit(v.classLimit)?{classLimit:v.classLimit}:{}),...(isCourseId(v.playgroundCourse)?{playgroundCourse:v.playgroundCourse}:{}),...(typeof v.playgroundTraffic==='boolean'?{playgroundTraffic:v.playgroundTraffic}:{}),...(isArenaId(v.arena)?{arena:v.arena}:{}),...(isDamageRule(v.damage)?{damage:v.damage}:{}),...(isAIDifficulty(v.difficulty)?{difficulty:v.difficulty}:{}),...(isCourseId(v.course)?{course:v.course}:{}),...(typeof v.raceDuration==='number'&&Number.isFinite(v.raceDuration)?{raceDuration:integer(v.raceDuration,120,60,1200)}:{}),...(isGridLineup(v.lineup)?{lineup:v.lineup}:{}),...(isGridPerformance(v.performance)?{performance:v.performance}:{}),field:integer(v.field,8,2,24),laps:integer(v.laps,3,1,20),direction:v.direction==='opposing'?'opposing':v.direction==='reverse'?'reverse':'forward',race:['ordered','free','random'].includes(v.race)?v.race:'laps',derby:readDerbyFormat(v.derby),duration:integer(v.duration,300,60,1200)};}catch{return {...DEFAULT_EVENT};}
 }
 export type RoutePoint={x:number;z:number};
 const reverse=[CHECKPOINTS[0],...CHECKPOINTS.slice(1).reverse()];
@@ -37,20 +40,26 @@ export function checkRoute(route:readonly RoutePoint[],x:number,z:number,next:nu
   return {passed:distance<radius&&distance<lastDistance,distance};
 }
 export function lapProgress(passed:number,laps:number){return {lap:Math.max(1,Math.floor(passed/24)+1),finished:passed>=laps*24};}
-export type CombatRecord={damage:number;knockouts:number;deaths:number;respawnAt:number;bonus?:number;spins?:number;impacts?:[number,number,number];award?:CombatAward};
+export type CombatRecord={damage:number;knockouts:number;deaths:number;respawnAt:number;bonus?:number;rivalHits?:number;spins?:number;spins180?:number;spins360?:number;impacts?:[number,number,number];award?:CombatAward};
 /** Collision damage uses actual health loss; a disabled opponent pays out once per life. */
 export class CombatScoreboard {
   readonly records=new Map<number,CombatRecord>();
-  readonly feats=new CombatFeats();
-  award(id:number,award:CombatAward){const r=this.get(id);r.bonus=(r.bonus??0)+award.points;r.award={...award};if(award.kind==='spin')r.spins=(r.spins??0)+1;else{r.impacts??=[0,0,0];r.impacts[['solid','heavy','massive'].indexOf(award.kind)]++;}}
-  contact(attacker:CombatMotion,victim:CombatMotion,damage:number,time:number){const award=this.feats.contact(attacker,victim,damage,time);if(award)this.award(attacker.id,award);}
-  sample(cars:readonly CombatMotion[],time:number){for(const {id,award}of this.feats.sample(cars,time))this.award(id,award);}
-  reset(){this.records.clear();this.feats.reset();}
+  readonly feats:CombatFeats;
+  constructor(gradedSpins=false){this.feats=new CombatFeats(gradedSpins);}
+  rivals:DerbyRivals|null=null;
+  private living=new Set<number>();
+  private frameRivals=new Map<number,number|null>();
+  enableRivals(count:number){this.rivals=new DerbyRivals(count);this.living.clear();this.frameRivals.clear();}
+  rival(id:number){return this.rivals?.selected(id)??null;}
+  award(id:number,award:CombatAward){const r=this.get(id);r.bonus=(r.bonus??0)+award.points;r.award={...award};if(award.kind==='rival')r.rivalHits=(r.rivalHits??0)+1;else if(award.kind==='spin')r.spins=(r.spins??0)+1;else if(award.kind==='spin180')r.spins180=(r.spins180??0)+1;else if(award.kind==='spin360')r.spins360=(r.spins360??0)+1;else{r.impacts??=[0,0,0];r.impacts[['solid','heavy','massive'].indexOf(award.kind)]++;}}
+  contact(attacker:CombatMotion,victim:CombatMotion,damage:number,time:number){const award=this.feats.contact(attacker,victim,damage,time);if(award)this.award(attacker.id,award);const points=this.rivals?.hit(attacker,victim,damage,time,this.living,this.frameRivals.get(attacker.id)??null)??0;if(points)this.award(attacker.id,{kind:'rival',points,time});}
+  sample(cars:readonly CombatMotion[],time:number){this.living=new Set(cars.filter(c=>c.health>0).map(c=>c.id));this.frameRivals.clear();if(this.rivals)for(const c of cars)this.frameRivals.set(c.id,this.rivals.rival(c.id,this.living));for(const {id,award}of this.feats.sample(cars,time))this.award(id,award);}
+  reset(gradedSpins=this.feats.graded){this.records.clear();this.feats.graded=gradedSpins;this.feats.reset();this.rivals=null;this.living.clear();this.frameRivals.clear();}
   get(id:number){let r=this.records.get(id);if(!r){r={damage:0,knockouts:0,deaths:0,respawnAt:0};this.records.set(id,r);}return r;}
   hit(attacker:number,victim:number,before:number,after:number,time:number){
     if(attacker===victim||before<=0||![before,after,time].every(Number.isFinite))return;
     const target=this.get(victim);if(target.respawnAt>0)return;
-    this.get(attacker).damage+=Math.max(0,Math.min(100,before)-Math.max(0,after));
+    const loss=Math.max(0,Math.min(100,before)-Math.max(0,after));this.get(attacker).damage+=loss;this.rivals?.record(attacker,victim,loss);
     if(after<=0){this.get(attacker).knockouts++;this.disable(victim,time);}
   }
   disable(id:number,time:number){const r=this.get(id);if(r.respawnAt<=0){r.deaths++;r.respawnAt=time+4;}}

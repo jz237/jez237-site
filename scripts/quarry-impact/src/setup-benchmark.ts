@@ -9,7 +9,7 @@ export type SetupBenchmark={acceleration:number|null;speed:number;braking:number
 const dt=1/60,target=100/3.6,stop=.1;
 /** Paint and decals do not alter a physical measurement. */
 export function benchmarkKey(kind:CarKind,input:Setup,surface:BenchmarkSurface){
- const s=normalizeSetup(input,kind);return JSON.stringify([kind,surface,s.engine,s.tires,s.armor,s.tune]);
+ const s=normalizeSetup(input,kind);return JSON.stringify([kind,surface,s.engine,s.tires,s.armor,s.tune,...(s.engineRestriction?[s.engineRestriction]:[])]);
 }
 /** A separate, intact car on a flat straight. Each yield bounds main-thread work.
  * Uses the same chassis, suspension, drive, tyres and brakes as an actual race. */
