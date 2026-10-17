@@ -65,8 +65,8 @@ export function settings(rider=0,tune={}){const r=RIDERS[rider];const engine=cla
 export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,difficulty=0,course=COVE,gridOrder=null,seaState='course',secondRider=1,secondTune={},handicap=false,swapColours=false,physics='modern',nativeTunes=[],nativeTuneModes=[],nativeInitialRaceState,nativeRecordSession}={}){
  if(!['modern','native'].includes(physics))throw new RangeError('Unknown race physics');
  if(nativeRecordSession!==undefined&&physics!=='native')throw new RangeError('Native record sessions require native physics');
- if(physics==='native'&&(!['time','versus'].includes(mode)||seaState!=='course'||![1,2].includes(course.sourceWaterCourseIndex)))
-  throw new RangeError('Native integration preview requires Sunny Beach or Sunset Bay source-water Time trial or Two-player race');
+ if(physics==='native'&&(!['time','versus'].includes(mode)||seaState!=='course'||![1,2,7].includes(course.sourceWaterCourseIndex)))
+  throw new RangeError('Native integration preview requires Sunny Beach, Sunset Bay or Southern Island source-water Time trial or Two-player race');
  setRaceWater(null);
  const freeRide=mode==='practice'||mode==='versus'&&course.id==='practice';
  if(['race','championship'].includes(mode))course=racingStuntCourse(course);

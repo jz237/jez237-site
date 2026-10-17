@@ -1,5 +1,29 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unreleased — Southern native preview admission
+
+Southern Island is now available through the existing opt-in native-physics
+verification route for source-water Time Trial and Two-player race, in all four
+classes. Other modes retain their prior admission gates. Its Normal inspection
+helm takes a wider line around the exposed ship bow; this is authored guidance,
+not a change to original AI, collision geometry, human judging or modern routes.
+The ordinary-input solo regression finishes all three laps with zero misses,
+passes both falling-tide stages and reaches-150 without changing course anchors.
+
+The admission/host/tide/Sunset checks and complete existing pilot/loading suite
+pass62 tests. A separate two-player diagnostic with a14/8 world-speed inspection
+policy for P2 reaches a genuine P1 finish in126.039s, zero misses; P2 reaches lap3
+with four misses before the source result wait ends. The default heavy-rider
+guide still can miss five buoys; automated inspection is not original CPU AI.
+
+An isolated local browser completes Southern Normal in126.773s with zero misses
+and datum-150. It uses High quality, a1280x720 drawing buffer and860,340 displayed
+triangles in the sampled solo view. Native versus starts with two source cameras
+and two1280x360 views inside the same1280x720 buffer. Console404s are favicon
+requests only. No renderer/detail/resolution setting was reduced. The low-tide
+view still exhibits hard-edged water highlights; shading remains a separate
+visual follow-up. This checkpoint is not a claim of complete native art parity.
+
 ## Unreleased — native Southern tide schedule
 
 The native host now applies51238's exact course/simulation/main-state gates and

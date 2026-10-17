@@ -1,5 +1,5 @@
-// Authored inspection helm for opt-in Sunny Beach/Sunset Bay native races.
-// Sunset Normal/Hard are checked; its Expert/Reverse guide can still miss buoys.
+// Authored inspection helm for opt-in Sunny/Sunset/Southern native races.
+// Inspection paths can still miss buoys, especially in versus or Reverse.
 // This is not the original AI. It reads the actual native presentation pose
 // and the existing navigation anchors; it never changes a physical point,
 // course, timer, buoy state, power, miss counter or lap. Use one pilot per race
@@ -62,9 +62,14 @@ function drivingPolicy(overrides){
  */
 export function createNativeRacePilot({course,policy={},traceLimit=256}={}){
  const selectedAnchors=course?.nativePilotAnchorsByClass?.[course.difficulty]??course?.anchors;
- if(![1,2].includes(course?.sourceWaterCourseIndex)||!Array.isArray(selectedAnchors)||selectedAnchors.length<3)
-  throw new TypeError('Native pilot requires Sunny Beach or Sunset Bay source navigation');
- const anchors=selectedAnchors.map(p=>{
+ if(![1,2,7].includes(course?.sourceWaterCourseIndex)||!Array.isArray(selectedAnchors)||selectedAnchors.length<3)
+  throw new TypeError('Native pilot requires Sunny Beach, Sunset Bay or Southern Island source navigation');
+ // A wider authored Normal driving line clears Southern's exposed bow at
+ // low tide. This changes only the inspection helm, never the source AI,
+ // collider, human checkpoint graph or modern course navigation.
+ const guide=course.sourceWaterCourseIndex===7&&course.difficulty===0?
+  selectedAnchors.flatMap(p=>p?.[0]===3&&p?.[1]===-139?[[15,-150],[0,-146],[-8,-130]]:[p]):selectedAnchors;
+ const anchors=guide.map(p=>{
   if(!Array.isArray(p)||p.length!==2||!p.every(Number.isFinite))throw new TypeError('Navigation anchors must be finite x/z pairs');
   return [...p];
  });
