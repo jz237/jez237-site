@@ -48,10 +48,14 @@ test('actual shared ice contact consumes canonical random state once and advance
  assert.equal(s.ice.breakEvents().length,1);
  const event=s.ice.breakEvents()[0],expected=spawnNativeIceFragments(createNativeIceFragments(),{...event,seed6f00:seed});
  assert.deepEqual(s.ice.fragmentSnapshot(),expected.state);
+ const presentation=s.ice.presentationSnapshot();assert.equal(presentation.objects[0].visible,true);
+ assert.deepEqual(presentation.fragments.filter(f=>f.active).map(f=>f.generation),[1,2,3,4,5,6,7,8]);
+ presentation.fragments[0].position.x=98765;assert.notEqual(s.ice.presentationSnapshot().fragments[0].position.x,98765);
  const after=runtime.snapshot();assert.equal(after.scene.seed6f00,expected.seed6f00);
  after.scene.seed6f00=seed;assert.deepEqual(after,before,'fragment draws change only the canonical halfword seed');
  stepNativeRaceWorld(s.world,.04,[{},{}]);assert.deepEqual(s.ice.fragmentSnapshot(),expected.state);
  active=true;stepNativeRaceWorld(s.world,.05,[{},{}]);assert.deepEqual(s.ice.fragmentSnapshot(),stepNativeIceFragments(expected.state));
+ assert.equal(s.ice.presentationSnapshot().objects[0].visible,false);
  const held=s.ice.fragmentSnapshot();stepNativeRaceWorld(s.world,1,[{},{}],{active:false});assert.deepEqual(s.ice.fragmentSnapshot(),held);
  held.slots[0].position[0]=123456;assert.notEqual(s.ice.fragmentSnapshot().slots[0].position[0],123456);
  assert.equal(runtime.snapshot().scene.seed6f00,expected.seed6f00,'other racer and fragment motion consume no extra draws');
@@ -90,6 +94,7 @@ test('260 object updates match original removal and age saturation while racer s
 test('host selects the course ice owner and keeps real Glacier native admission closed',()=>{
  const course={...getCourse('greyhaven'),hazardsForPlayers:()=>[definition]},s=createRace({course,mode:'time',physics:'native'});
  assert.equal(s.nativeHost.ice.snapshot().length,1);assert.equal(s.nativeHost.floating,null);
- stepRace(s,{},.01);assert.equal(s.nativeHost.ice.diagnostics().objectCount,1);
+ assert.deepEqual(s.nativeIce,s.nativeHost.ice.presentationSnapshot());
+ stepRace(s,{},.01);assert.equal(s.nativeHost.ice.diagnostics().objectCount,1);assert.deepEqual(s.nativeIce,s.nativeHost.ice.presentationSnapshot());
  assert.throws(()=>createRace({course:getCourse('glacier'),mode:'time',physics:'native'}),/preview/);
 });

@@ -164,6 +164,7 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
    if(state.phase!=='countdown')finishRaceStep(state,.05);return state.phase!=='results';
   }});
   state.primaryBuoys=capturePrimaryBuoyPresentation(state.nativeHost.primary?.snapshot());
+  state.nativeIce=state.nativeHost.ice?.presentationSnapshot()??null;
  }
  return state;
 }
@@ -356,6 +357,7 @@ export function stepRace(s,input,dt,options={}){if(s.phase==='paused'||s.phase==
   s.weather=raceWeather(s);waterLevel.value=s.weather.seaLevel;
   if(s.courseDatum)s.courseDatum.value=s.weather.seaLevel;
   s.primaryBuoys=capturePrimaryBuoyPresentation(s.nativeHost.primary?.snapshot());
+  s.nativeIce=s.nativeHost.ice?.presentationSnapshot()??null;
    // The completed50ms native callback owns result and finish-wait updates.
    // Advancing them here as well would count render time a second time.
    return;

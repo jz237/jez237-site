@@ -1,5 +1,33 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unreleased — native ice presentation in live, replay and second-player views
+
+The detailed course renderer now consumes native block visibility/position and
+fragment snapshots. Eight authored angular shard variants retain the existing
+mesh vertex count and ice materials. Source position and the B4ABC spin axis
+(-vz,0,vx) and signed angle(-age*8) drive their transforms. Fifteen prepared
+original display-producer executions (6,678 instructions) match the captured
+transform arguments. EE46C matrix construction and original display-list
+rendering are not executed; the meshes remain authored high-resolution assets.
+A fresh EVO X2 read-only Ghidra query matches390 instruction records and
+leaves all nine project files unchanged.
+
+Bounded detached snapshots carry only display fields. Fragment generations
+prevent interpolation across pool-slot reuse. Removal, birth and retirement
+remain discrete until the recorded boundary; replay and the second-player
+wire frame preserve historical states without changing the live pool or RNG.
+All45 focused owner, presentation, replay, player-window and loading checks
+pass. A private browser fixture visibly transitions12 blocks/zero fragments
+to11 blocks/eight fragments; the actual second-player renderer independently
+draws the validated snapshot. Both retain1280x720 High; main-view water keeps
+83,521 vertices. The final child view reports632,647 triangles and no console
+errors/warnings after reload. These are held presentation fixtures, not a
+full native race or performance acceptance run.
+
+The separate AF43C splash producer and its following shared random draws are
+still pending, as are the sound consumer and Glacier course validation.
+Glacier native admission remains closed. No resolution was reduced.
+
 ## Unreleased — native ice fragment pool and shared random state
 
 Ice impacts now populate the original sixteen-slot fragment pool, eight pieces
@@ -25,9 +53,9 @@ fragment, owner, speed-display, host, floating and loading checks pass.
 Private Glacier runs retain the previous solo Normal146.114s/two misses and
 versus Reverse139.069s (winner two misses, other racer four); three and five
 breaks respectively populate and retire the pool without runtime errors.
-High-resolution fragment meshes and splash presentation still need to consume
-these snapshots. Glacier native admission remains closed; no resolution or
-rendering detail was reduced.
+The newer checkpoint above connects high-resolution fragment meshes to these
+snapshots. Splash presentation remains pending. Glacier native admission
+remains closed; no resolution or rendering detail was reduced.
 
 ## Unreleased — shared native ice owner
 
@@ -37,7 +65,8 @@ Every racer sees the same broken flags immediately. Display removal and its
 saturating age follow the shared water frame and original object-activity gate.
 Snapshots and immutable break events are ready for the presentation layer;
 the newer checkpoint above connects the numeric fragment pool, while
-fragment rendering and the sound consumer remain unconnected. Mixed floating
+fragment rendering is now connected by the newer checkpoint; the sound
+consumer remains unconnected. Mixed floating
 and ice definitions are explicitly rejected pending a unified ordered owner.
 
 An additional288 prepared original executions verify28 rider/actor stability

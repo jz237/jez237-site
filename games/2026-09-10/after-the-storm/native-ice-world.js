@@ -1,6 +1,7 @@
 import {createNativeGenericSpheres,collideNativeGenericSpheres,snapshotNativeGenericSpheres} from './native-generic-spheres.js';
 import {isHostRaceWater} from './race-water.js';
 import {createNativeIceFragments,stepNativeIceFragments} from './native-ice-fragments.js';
+import {nativeIceOwnerPresentation} from './native-ice-presentation.js';
 const F=Math.fround,axes=['x','y','z'];
 
 // Shared Glacier ice owner. The physical array is visible to every racer.
@@ -12,7 +13,7 @@ export function createNativeIceWorld({definitions,water,fragmentBurst=null}={}){
  const scale=water.scale,ids=definitions.map(q=>q.id);
  if(new Set(ids).size!==ids.length||ids.some(id=>typeof id!=='string'&&!Number.isSafeInteger(id)))throw new TypeError('Ice needs unique ids');
  const state=createNativeGenericSpheres(definitions.map(q=>({kind:10,position:[q.x/scale,q.y/scale,q.z/scale],radius:q.r/scale}))),display=definitions.map(()=>({renderKind:1,age:0}));
- let frames=0,updates=0,fragments=fragmentBurst?createNativeIceFragments():null;const events=[],hulls=new WeakMap();
+ let frames=0,updates=0,fragmentGeneration=0,fragments=fragmentBurst?createNativeIceFragments():null;const generations=Array(16).fill(0),events=[],hulls=new WeakMap();
  const bridge={state,
   contact(hull,context){
    if(hull.scale!==scale||context?.logicalFrame!==frames||typeof context.readGenericObjectState!=='function'||typeof context.recordGenericHitKind!=='function'||typeof context.recordImpact!=='function')throw new Error('Ice requires the current native impact owner');
@@ -28,7 +29,7 @@ export function createNativeIceWorld({definitions,water,fragmentBurst=null}={}){
    }
    let eventIndex=0;for(const hit of result.contacts)if(hit.broke){
     const event=result.fragmentEvents[eventIndex++],positionNative=[...event.position],velocityNative=[...event.velocity];
-    if(fragmentBurst)fragments=fragmentBurst(fragments,{positionNative,velocityNative}).state;
+    if(fragmentBurst){const cursor=fragments.cursor;fragments=fragmentBurst(fragments,{positionNative,velocityNative}).state;for(let i=0;i<8;i++)generations[(cursor+i)&15]=++fragmentGeneration;}
     events.push(Object.freeze({id:ids[hit.index],index:hit.index,logicalFrame:frames,substep:context.substep,positionNative:Object.freeze(positionNative),velocityNative:Object.freeze(velocityNative)}));
    }
    const previous=hulls.get(hull);hulls.set(hull,{contacts:(previous?.contacts??0)+result.contacts.length,unresolved:(previous?.unresolved??0)+result.unresolved.length});
@@ -42,6 +43,7 @@ export function createNativeIceWorld({definitions,water,fragmentBurst=null}={}){
   snapshot(){return snapshotNativeGenericSpheres(state).map((n,i)=>({id:ids[i],sourceIndex:i,runtimeKind:10,position:{x:n.position[0]*scale,y:n.position[1]*scale,z:n.position[2]*scale},broken:n.broken,...display[i]}));},
   breakEvents(){return events.map(e=>({...e,positionNative:[...e.positionNative],velocityNative:[...e.velocityNative]}));},
   fragmentSnapshot(){return fragments?{cursor:fragments.cursor,slots:fragments.slots.map(s=>({...s,position:[...s.position],velocity:[...s.velocity]}))}:null;},
+  presentationSnapshot(){return nativeIceOwnerPresentation(bridge.snapshot(),fragments,scale,generations);},
   diagnostics(hull){return {outerFrames:frames,displayUpdates:updates,objectCount:state.nodes.length,breaks:events.length,hull:hulls.get(hull)??null};}
  };
  return Object.freeze(bridge);
