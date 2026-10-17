@@ -1,5 +1,37 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unreleased — shared native ice splash simulation
+
+Ice breaks now queue AF43C's two four-update emitters. AF51C populates the
+shared eight-slot splash pool in original slot order, consumes four ED338
+draws per active ice emitter, ages new particles immediately and retires
+them at age8. The separate global emitter's three draws and scale arithmetic
+are reconstructed numerically; its other gameplay producer is not connected.
+All544 prepared original executions match (77,984 instructions), including
+overwriting active emitters/particles, shared seed order and retained states.
+Two fresh read-only EVO X2 Ghidra queries match1,620 instruction records and
+leave nine project files unchanged in each query. Public fixtures are numeric.
+
+The ordinary host queues splashes at contact time, then advances them once
+after the object/roller phase and before HUD processing. Unlike solid-fragment
+motion, this effect update is not gated by activity624. Six bounded original
+922E4 call-order slices and the complete B2ABC listing establish that order;
+they do not execute the full main loop or its other effect callees. Browser
+pause still stops the shared world, including these effects. The canonical
+halfword seed is committed only when a draw occurs.
+
+All54 focused splash, fragment, owner, presentation, host, speed-display and
+loading checks pass, including shared two-racer contacts, activity/pause and
+30/60/144Hz histories. Private Glacier probes retain solo Normal146.114s with
+two misses and versus Reverse139.069s (winner two misses, other racer four).
+Three/five breaks respectively produce and retire their splash pools without
+runtime errors. The changed final seeds reflect the newly connected draws.
+
+Splash visuals remain pending. Other native spray/effect producers may also
+consume this shared seed and are outside this checkpoint; this is not a
+complete original-game random-stream claim. Glacier native admission remains
+closed, and rendering resolution/detail are unchanged.
+
 ## Unreleased — native ice presentation in live, replay and second-player views
 
 The detailed course renderer now consumes native block visibility/position and
@@ -24,8 +56,9 @@ draws the validated snapshot. Both retain1280x720 High; main-view water keeps
 errors/warnings after reload. These are held presentation fixtures, not a
 full native race or performance acceptance run.
 
-The separate AF43C splash producer and its following shared random draws are
-still pending, as are the sound consumer and Glacier course validation.
+The newer checkpoint above connects AF43C's numerical producer and following
+draws. Splash rendering, the sound consumer and Glacier course validation
+remain pending.
 Glacier native admission remains closed. No resolution was reduced.
 
 ## Unreleased — native ice fragment pool and shared random state

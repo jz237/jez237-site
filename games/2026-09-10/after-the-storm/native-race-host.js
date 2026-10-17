@@ -99,7 +99,7 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
  const iceDefinitions=(course.rocks??[]).filter(q=>q.sourceGenericSphere&&q.runtimeKind===10);
  if(iceDefinitions.length&&definitions.length)throw new RangeError('Mixed floating and ice motion requires a unified original generic owner');
  const ice=iceDefinitions.length?createNativeIceWorld({definitions:iceDefinitions,water,
-  fragmentBurst:raceRuntime?.ordinary?raceRuntime.spawnIceFragments:null}):null;
+  fragmentBurst:raceRuntime?.ordinary?raceRuntime.spawnIceFragments:null,splashAdvance:raceRuntime?.ordinary?raceRuntime.advanceIceSplashes:null}):null;
  const floating=definitions.length?createNativeFloatingWorld({definitions,water}):null;
  const primary=course.sourceBuoyLayout?createNativePrimaryBuoyWorld({layout:course.sourceBuoyLayout,water}):null;
  const courseContacts=createSourceNativeContacts(course,{scale:water.scale,fixedSphereGrid,staticGeometry});
@@ -204,6 +204,7 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
   // The original caller stamps course rollers AFTER object motion. Read72c
   // here from the canonical state, not from the earlier water/input latch.
   if(raceRuntime?.ordinary)advanceRaceWaterRollers(water,{active:objectMotionActive,rollerState72c:raceRuntime.courseRollerState()});
+  if(ice)ice.afterEffects(host.world,context);
   if(raceRuntime){
    host.lastHUD=raceRuntime.ordinary?raceRuntime.advanceHUD():null;
    // Original1DE3CC is after the completed world/camera/water frame and

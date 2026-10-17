@@ -25,6 +25,7 @@ import {captureNativeRecordSession,restoreNativeRecordSession,copyNativeRecordSe
 import {NATIVE_RIDER_MENU_ORDER} from './native-rider-controls.js';
 import {nativeCourseDatumAfterPhysics} from './native-course-datum.js';
 import {spawnNativeIceFragments} from './native-ice-fragments.js';
+import {stepNativeIceSplashes} from './native-ice-splashes.js';
 
 // Overlapping effect47FC, solo4800 and two-player4818 numeric entries. Ordinary
 // two-player place indices are0/1; other mode tables remain separate admission.
@@ -194,6 +195,11 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
   spawnIceFragments(pool,event){
    const result=spawnNativeIceFragments(pool,{...event,seed6f00:current.scene.seed6f00});
    commit([{kind:'sourceHalfwordWrite',field:'seed6f00',value:result.seed6f00}]);
+   return result;
+  },
+  advanceIceSplashes(pool){
+   const result=stepNativeIceSplashes(pool,current.scene.seed6f00);
+   if(result.randomDraws)commit([{kind:'sourceHalfwordWrite',field:'seed6f00',value:result.seed6f00}]);
    return result;
   },
   courseRollerState:()=>(current.scene.field72c<<16)>>16,
