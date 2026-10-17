@@ -8,6 +8,16 @@ varying vec3 broadSurface; varying vec2 disturbanceSlope; varying float breaking
 uniform mat4 mirrorMatrix;
 void main(){
  vec2 q=position.xz+craft.xy;
+ if(nativeWaterActive!=0){
+  vec3 source=nativeWaterSurface(q);
+  broadSurface=vec3(source.x-seaLevel,source.yz);
+  disturbanceSlope=vec2(0.);
+  breakingCrest=smoothstep(.18,.55,length(source.yz))*smoothstep(.1,.6,source.x-seaLevel);
+  worldP=vec3(q.x,source.x,q.y);
+  mirrorP=mirrorMatrix*vec4(worldP,1.);
+  gl_Position=projectionMatrix*viewMatrix*vec4(worldP,1.);
+  return;
+ }
  swellCell=cell;
  float h;vec2 shift,grad;mat2 J;swellAt(q,h,shift,grad,J);
  vec2 p=q+shift;
@@ -23,7 +33,12 @@ void main(){
  disturbanceSlope=vec2(
    hullContactHeight(p+vec2(e,0))-hullContactHeight(p-vec2(e,0))+jetWake(p+vec2(e,0))+impactHeight(p+vec2(e,0))-jetWake(p-vec2(e,0))-impactHeight(p-vec2(e,0)),
    hullContactHeight(p+vec2(0,e))-hullContactHeight(p-vec2(0,e))+jetWake(p+vec2(0,e))+impactHeight(p+vec2(0,e))-jetWake(p-vec2(0,e))-impactHeight(p-vec2(0,e)))/(2.*e)+wakeResponse.yz;
- worldP=vec3(p.x,seaLevel+broadSurface.x+hullContactHeight(p)+jetWake(p)+impactHeight(p)+wakeResponse.x,p.y);
+ float completeHeight=broadSurface.x+hullContactHeight(p)+jetWake(p)+impactHeight(p)+wakeResponse.x;
+ if(coastalDepthActive>.5){
+  broadSurface=coastalDepthSurface(p,vec3(completeHeight,broadSurface.yz+disturbanceSlope));disturbanceSlope=vec2(0.);
+  completeHeight=broadSurface.x;
+ }
+ worldP=vec3(p.x,seaLevel+completeHeight,p.y);
  mirrorP=mirrorMatrix*vec4(worldP,1.);
  gl_Position=projectionMatrix*viewMatrix*vec4(worldP,1.);
 }`;
