@@ -23007,5 +23007,118 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-17-factual-infographic-factual-infographic-bridge-fear-crossin",
+    "title": "Factual infographic: Bridge Fear — Crossing and Anticipation",
+    "tests": "factual_subtype: phobia-infographic; phobia: Fear of bridges (descriptive label); individualized clinician-guided help; no subjective critic or automatic reroll; archive_slot=2026-10-17T12:08; concept=bridge-fear-crossing-anticipation-detour; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create the finished artwork directly: an artistic factual phobia infographic titled “BRIDGE FEAR” with the subtitle “When a crossing becomes a feared situation”. Refined luminous environmental gouache with exquisitely fine architectural ink, asymmetrical portrait-leaning composition, exceptionally readable elegant lettering. This is an educational infographic, not a frightening scene, poster mockup, photographed page, UI, or diagnostic chart. Dominant hero: a gracefully curving pedestrian bridge crossing a shallow green valley in warm late-afternoon light. The bridge has believable continuous railings, timber deck grain, steel fasteners and stone abutments. The far side opens into a peaceful sunlit path. No water focus, ocean, precipice spectacle, collapsing structure, monsters or danger exaggeration. At the near approach, a fully clothed adult with medium-brown skin in a plum jacket stands on the broad safe approach path, naturally hesitant, hands loosely held, not gripping an edge, not in traffic, not hanging over a rail. Treat them with dignity. Render fine grasses, worn path stones, soft tree crowns, violet hillside shadows and glints on railing joints. A second subtle amber contour around the person represents felt alarm, explicitly a conceptual overlay, not a neural/anatomical scan.\n\nIntegrate facts organically into the spacious sky, valley contours and bridge arc through open callouts, delicate curved leader lines and a branching path motif, never a grid of boxed cards. Use deep teal, warm ochre, plum and pale cream. Let the dominant bridge occupy most of the canvas; preserve negative space around labels. The bridge and footpath guide a flowing reading journey. Make the title large and assured, body lettering clearly legible; no tiny bibliography, URLs, citations, invented numerical statistics, or decorative pseudo-text.\n\nWrite these concise educational labels, with natural hierarchy:\nNear the title: “A descriptive fear label—not a separate diagnosis.” Then a smaller definition: “Persistent, excessive fear that disrupts life deserves assessment.”\nNear the bridge approach, an open branching annotation: “Possible triggers” with “Seeing a bridge • approaching a crossing • imagining the journey”. These are illustrative possible triggers, not a universal list.\nBeside the person, three tiny organically nested gesture studies of a hand, chest silhouette and shoulder line, not anatomical cutaways: “Body alarm” and “Racing heart • trembling • dizziness • muscle tension”. Include “Symptoms vary.” The amber contour gently links these labels; show no invented brain circuitry.\nFollowing a faint winding detour path into the lower left: “Anticipation → alarm → avoidance” and “Avoiding crossings can restrict everyday life.” This is a conceptual sequence and functional cost, not a recommendation. No invented claim that all bridge fear is height fear; omit named alternative diagnoses.\nOver a calm open valley area: “Felt danger is not proof of actual danger.” Smaller: “Assess the real situation; keep ordinary safety precautions.” Never claim that every bridge is safe, never draw a safety-certification symbol, and do not imply people must cross while distressed.\nAt the warm lower-right path, a small humane vignette of a seated adult speaking with a clinician in an open gently suggested room, no detached card: “Help can change the pattern” and “CBT: rethink fearful predictions and gradually face fears with an individualized plan.” Add the short safety line: “Plan with a qualified clinician—never force a crossing or ignore hazards.” This is evidence-based general help, not a DIY exposure ladder. No person undertaking a bridge exposure exercise.\nAt the base, restrained but readable: “If fear limits your life, seek professional support.” And “Education, not diagnosis.”\n\nDo not overcrowd. Weave all essential definition, possible triggers, body alarm, avoidance cost, perceived versus actual danger, and professional help into the artwork. Secondary decorative foliage may be reduced for readability. Every factual label must stay within this supplied text; do not add medical claims, guarantees, prevalence, cure promises or medication instructions. Deliver a polished luminous, artwork-led finished infographic on an opaque background.",
+    "image": "images/2026-10-17-factual-infographic-factual-infographic-bridge-fear-crossin.jpg",
+    "thumb": "thumbs/2026-10-17-factual-infographic-factual-infographic-bridge-fear-crossin.webp",
+    "color": "#ab9d79",
+    "date": "2026-10-17",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "bridge-fear-crossing-anticipation-detour",
+      "imageSha256": "0f40d1a0d23bad449f3b711782f8f7eb802ab07b0b9593fed26c0b113fbd1e74",
+      "imageDHash": "4432f2beac21291f"
+    },
+    "factualInfographic": {
+      "topic": "Fear of bridges: crossing-related anticipatory anxiety, body alarm, avoidance, and evidence-based support",
+      "description": "An artwork-led educational overview of crossing-related fear, general phobia mechanisms and individualized support, without diagnosing or prescribing unsafe exposure.",
+      "sourceNote": "NHS England: https://www.nhs.uk/mental-health/conditions/phobias/ ; American Psychiatric Association: https://www.psychiatry.org/patients-families/anxiety-disorders/what-are-anxiety-disorders ; NHS inform: https://www.nhsinform.scot/illnesses-and-conditions/mental-health/phobias/ . Verified general situational-phobia symptoms, anticipation, avoidance and clinical support; bridge-specific imagery is illustrative, not a claim of a separate recognized diagnosis.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-17T16:09:28.439714+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NHS England",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          },
+          {
+            "id": "S2",
+            "publisher": "American Psychiatric Association",
+            "title": "What are Anxiety Disorders?",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.psychiatry.org/patients-families/anxiety-disorders/what-are-anxiety-disorders"
+          },
+          {
+            "id": "S3",
+            "publisher": "NHS inform (NHS Scotland)",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhsinform.scot/illnesses-and-conditions/mental-health/phobias/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Bridge fear is used here as a descriptive fear label, not a separate diagnosis; persistent situational fear that is excessive and interferes with life warrants assessment.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Phobias may concern places or situations; contact with or even thinking about the feared situation can cause anxiety. The illustrated bridge approach, crossing and imagined crossing are examples of that general principle, not a claim that every person has these triggers.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Anxiety anticipates a future concern, while fear responds to immediate threat; fear can involve a fight-or-flight response.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Possible body symptoms include a racing heart, trembling, dizziness and muscle tension; these are possibilities, not symptoms everyone has.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Avoidance of feared situations can limit everyday activities; the illustrated detour represents that functional cost, not a prescribed coping strategy.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Clinically significant anxiety is out of proportion to the situation; feeling intense alarm alone is not evidence that the illustrated bridge is dangerous. Ordinary situational safety precautions still apply; no bridge safety guarantee is made.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "CBT can help people identify unhelpful thought patterns and gradually face feared situations; care should be individualized with a qualified clinician.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "When fear affects everyday life, consult a health professional; diagnosis requires professional assessment. Educational artwork is not a diagnosis.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Gradual exposure is an established approach to simple phobias; this image offers no independent bridge-crossing exercise or instruction to enter unsafe situations.",
+            "sourceIds": [
+              "S3",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
