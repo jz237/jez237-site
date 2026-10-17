@@ -274,6 +274,25 @@ export class Contact {
     ctx.scene.add(this.blob.im, this.prints.im);
   }
 
+  // ambient occlusion on the ground: soft dark pools that never move, round the foot of every stone, tree,
+  // the cabin and the den ({x, z, r, a}); built once when the scene is laid out
+  groundShade(spots) {
+    if (this.shade) return;
+    const T = this.ctx.terrain, n = spots.length;
+    if (!n) return;
+    this.shade = decalMesh(blobTexture(), n, new Color(0.015, 0.012, 0.008), 'ground-occlusion');
+    const a = this.shade.attr.array;
+    spots.forEach((p, i) => {
+      M.compose(P.set(p.x, T.height(p.x, p.z) + 0.002, p.z), Q.identity(), Sc.set(p.r * 2, 1, p.r * 2));
+      this.shade.im.setMatrixAt(i, M);
+      a.set([p.a ?? 0.45, 0, 1, 0], i * 4);
+    });
+    this.shade.im.renderOrder = 0.58;
+    this.shade.im.instanceMatrix.needsUpdate = true;
+    this.shade.attr.needsUpdate = true;
+    this.ctx.scene.add(this.shade.im);
+  }
+
   // called when a foot plants: press a print if the ground there is soft
   footprint(d, p, heading, rounded) {
     const T = this.ctx.terrain, w = this.ctx.world;
