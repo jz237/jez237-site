@@ -4544,3 +4544,34 @@ coordination and a driven complete solo race followed by source AI takeover.
 This corrects live source state and AI behavior; it does not claim that native
 sound playback, every venue, or the full original game is complete. Rendering
 resolution and mesh density are unchanged.
+
+## Native engine channel lifecycle and retained packets
+
+`native-audio-channels.js` reconstructs the complete primary, secondary,
+alternate, wrapper and stop entries around BFDD0/BFE70/BFEF8, plus BFD9C's
+selective packet reset. The actual BFDD0 entry begins five instructions before
+the existing Ghidra function at BFDE4: that prefix enables the primary channel
+and starts the400-frame rank-change delay. Entering BFDE4 directly preserves
+those globals. The distinction is checked against original instructions.
+
+Packet reset preserves cooldown, previous impact type, previous speed and all
+other unlisted bytes. Alternate startup can select the secondary mixer while
+resetting the caller's original packet; channel choice does not redirect the
+packet pointer. Mode2 suppresses secondary startup, and the course-zero
+alternate retains its companion flag and rank-delay state. Mixer commands are
+captured in their original order with raw argument bits.
+
+Five read-only queries on EVO X2 left all nine Ghidra project files unchanged.
+All555 exported instruction records matched ROM bytes. The private evaluator
+executed864 channel cases and256 packet resets (31,050 instructions), including
+the raw BFDD0 prefix and nested original reset/secondary routines. Twenty
+focused tests passed across the channel, contact and impact audio modules.
+They include restart suppression, correct packet ownership and retained-state
+validation; public fixtures contain only numeric cases and command arguments.
+
+These verified entries are not yet connected to live playback. The source
+prestart status already emits BFDD0/secondary-start effects and result status
+emits the two stop effects, giving the live integration its actual schedule.
+C21F4/C1F60's broader mode lifecycle, persistent runtime packet ownership and
+downstream mixer/sample playback still require integration. Existing browser
+audio and high-resolution rendering are unchanged.
