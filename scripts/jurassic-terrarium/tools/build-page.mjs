@@ -7,6 +7,7 @@
 //   - hold the loading veil until the dinosaurs have loaded (window.__wgHold),
 //   - load dinos.js after the main bundle.
 import { readFileSync, writeFileSync, mkdirSync, copyFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -322,7 +323,10 @@ patch(
 );
 
 // Load the dinosaur module after the main bundle (module scripts run in document order).
-patch('</script>\n</body></html>', '</script>\n<script type="module" src="dinos.js"></script>\n</body></html>', 'dinos.js tag');
+// dinos.js is versioned by its content: the page itself is always fetched fresh but dinos.js may be cached
+// for hours, and a new page with an old runtime (or the reverse) can fail to boot. (Build the runtime first.)
+const runtimeV = createHash('md5').update(readFileSync(join(outDir, 'dinos.js'))).digest('hex').slice(0, 10);
+patch('</script>\n</body></html>', `</script>\n<script type="module" src="dinos.js?v=${runtimeV}"></script>\n</body></html>`, 'dinos.js tag');
 
 writeFileSync(join(outDir, 'index.html'), html);
 for (const f of ['favicon.svg', 'THREE-LICENSE.txt']) copyFileSync(join(repo, 'demos/weatherglass', f), join(outDir, f));

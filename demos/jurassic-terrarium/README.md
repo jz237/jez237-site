@@ -396,3 +396,5 @@ With this the six-part graphics push is complete:
 6. the cinematic look (v1.46).
 
 v1.46.1: the depth of field from v1.46 is removed. It blurred the view badly while zooming in and out, because its focus distance lagged behind the camera. Its stronger close-up soft focus is removed too. The soft focus is Weatherglass's own again, and the colour grade and vignette stay.
+
+v1.46.2: fixed the terrarium sticking on the loading screen after an update. The page is always fetched fresh, but `dinos.js` could be cached for up to four hours. A new page with yesterday's runtime then failed to boot. The page now loads `dinos.js?v=<hash of its contents>`, so the two always match.
