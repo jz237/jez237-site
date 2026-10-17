@@ -4457,3 +4457,35 @@ before/after inspection retained High 1280x720, 83,521 water vertices and the
 resource404 remains). The inspected bank and rock undersides improved; this
 does not prove every Glacier camera or the separate native course acceptance
 requirements. Native Glacier admission remains closed.
+
+
+## Native collision audio packet arithmetic
+
+`native-impact-audio.js` now reconstructs the impact portion of52480 and its
+C010C consumer as detached numeric operations. Priority is racer, primary buoy,
+generic object, shore, floor, box, then fixed sphere. Generic hit kind2 selects
+the separate ice-break command. Source float32 scaling, integer conversion,
+127-volume ceiling, retained type, signed packet-byte interpretation, cooldown,
+previous-speed bands and paired crash voice commands are preserved.
+
+The ice-break consumer issues command06000700/13 and clears both type and
+strength, including when the incoming strength is zero. This prevents a stale
+break code from firing again after contact ends. Ordinary repeated contacts
+follow the source cooldown and reduced retrigger strength, rather than a new
+wall-clock debounce.
+
+Evidence: four read-only queries through EVO X2's REA-installed Ghidra left all
+nine project files unchanged; 2,195 instruction records matched the local ROM.
+The private bounded evaluator executed1,004 producer cases (21,705 instructions)
+and2,600 consumer cases (67,383 instructions). Public fixtures contain only
+numeric inputs, results and command arguments. Six new tests and ten existing
+impact-state tests passed, including repeated producer/consumer frames and
+non-repeating ice breaks.
+
+These are verified kernels, not a claim of audible native integration. The
+consumer's earlier mode gates, retained packet context, material-bank globals,
+nearest-rival routing and downstream sample/voice mixer are not yet connected
+to the live host. Leaf audio calls were captured, not executed. The actual
+665B0 caller places packet production after all actor completions and before
+later camera/water work; live integration must preserve that boundary and the
+consumer's retained state. Existing browser audio is unchanged at this stage.
