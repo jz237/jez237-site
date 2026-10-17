@@ -22676,5 +22676,112 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-17-factual-infographic-factual-infographic-social-phobia-when-",
+    "title": "Factual infographic: Social Phobia — When Attention Feels Like a Spotlight",
+    "tests": "factual_subtype: phobia-infographic; phobia: Social phobia (social anxiety disorder); source-backed educational overview; no subjective critic; archive_slot=2026-10-17T00:08; concept=social-phobia-scrutiny-gathering-avoidance; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create a finished richly illustrated factual phobia infographic directly on the canvas, portrait-oriented composition if suitable, opaque background. Title: \"SOCIAL PHOBIA\". Subtitle: \"Social anxiety disorder • When attention feels like a spotlight\". Refined luminous gouache with colored-pencil and delicate technical-ink annotation, deep midnight-indigo and dusty violet shadows, warm copper and pale amber window light, clean ivory lettering. This is an empathetic artistic educational atlas, not a horror scene, not a photographed poster or app UI. No rigid grid, boxed dashboard, equal panels, bibliography, URLs, logos or watermark.\n\nDominant hero occupying the central two-thirds: a believable adult with medium-brown skin and short curly hair standing at the edge of a small, welcoming community gathering, holding a ceramic cup with slightly trembling hands, shoulders held tensely. Highly specific tactile detail: soft knitted cardigan loops, glazed cup highlights, worn wooden floorboards, translucent window curtains, brass lamp and softly reflected light on glass. Other attendees vary in age and appearance; their expressions are neutral or friendly, not staring or mocking. Use a soft theatrical pool of amber light falling around the central person as an explicitly labeled visual metaphor, not a literal symptom or claim that others are scrutinizing them. Tiny nearby label: \"The spotlight is a metaphor for feeling scrutinized.\" Leave generous negative space around face and hands. Make the emotional contrast visually readable: threat experienced internally within an ordinary social setting. No distorted anatomy, giant eyes, monsters, threatening crowd, gore or humiliating caricature.\n\nWeave concise factual annotations around the hero with curved, fine leaders and open typography, varied in scale and integrated into the light and room contours. Main definition beneath title: \"Persistent fear of being judged, embarrassed or rejected in social situations. More than shyness when it disrupts daily life.\" An upper-left arc of three small naturalistic, borderless vignette studies growing out of the room: two people introducing themselves, a person at a small lectern, a shared meal. Label only \"Meeting people\", \"Speaking publicly\", \"Eating around others\". Small connector: \"Worry may begin before an event and continue afterward.\"\n\nBeside the central figure, three elegant close annotations tethered to actual depicted areas: face \"Blushing • mind goes blank\", hands \"Sweating • trembling\", chest \"Racing heart • nausea\". Modest heading \"Body alarm — experiences vary\"; these are illustrative symptoms, not a diagnostic checklist. No invented brain circuitry or neurotransmitter diagrams. In a faint translucent thought ribbon that does NOT cover the face write \"They will judge me\"; below it a distinctly contrasting grounded annotation: \"A feared prediction is not proof of rejection.\" The neutral/friendly gathering visibly supports that distinction without promising that social rejection never happens.\n\nOne flowing curved return path at the lower left, not a boxed cycle: \"Feared situation → anxiety → avoidance → brief relief\" and a returning fine arrow labeled \"Anxiety can persist without treatment\". Use a retreating doorway silhouette only as a small illustrative motif. Do not imply avoidance causes all social anxiety or that everyone follows an identical cycle.\n\nAcross the lower right, a warm open path leading toward a small supportive conversation with a therapist. Heading \"Help can change the pattern\". Concise text: \"CBT with a therapist addresses thoughts and behavior.\" Next annotation: \"Gradual, planned practice with professional support — not forced exposure.\" Smaller note: \"Medication such as an SSRI may also help; care is individualized.\" End the visual pathway with a calm, meaningful line: \"Seek assessment if fear disrupts school, work, relationships or daily life.\" Footer: \"Educational overview • not a diagnosis\". Do not prescribe medications, doses, unsupervised exposure tasks or instant cures. No statistics, prevalence rankings, diagnostic duration thresholds, causes or extra clinical assertions. Keep the essential definition, triggers, body alarm, avoidance, perceived-versus-actual threat distinction and evidence-based help readable, but omit extra decorative studies if needed for breathing room. Rich layered environmental painting and the human subject must remain the visual center; text is concise, intentionally typeset and subordinate to the artwork.",
+    "image": "images/2026-10-17-factual-infographic-factual-infographic-social-phobia-when-.jpg",
+    "thumb": "thumbs/2026-10-17-factual-infographic-factual-infographic-social-phobia-when-.webp",
+    "color": "#604539",
+    "date": "2026-10-17",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "social-phobia-scrutiny-gathering-avoidance",
+      "imageSha256": "aeac126fb2c78ae407bc8aa7751876db58c7fd22a3b0a8ebd8a19e48ef2291de",
+      "imageDHash": "3551510d2863670e"
+    },
+    "factualInfographic": {
+      "topic": "Social phobia (social anxiety disorder): fear of scrutiny, body alarm, avoidance, and evidence-based help",
+      "description": "Artwork-led clinical overview distinguishing social anxiety disorder from shyness, illustrating triggers, variable physical symptoms, avoidance and evidence-based care.",
+      "sourceNote": "NIMH: https://www.nimh.nih.gov/health/publications/social-anxiety-disorder-more-than-just-shyness ; NHS: https://www.nhs.uk/mental-health/conditions/social-anxiety/ . Verified terminology, triggers, symptoms, avoidance, feared judgment versus evidence, CBT and individualized treatment.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-17T04:09:27.770890+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Mental Health",
+            "title": "Social Anxiety Disorder: What You Need to Know",
+            "sourceType": "government-agency",
+            "url": "https://www.nimh.nih.gov/health/publications/social-anxiety-disorder-more-than-just-shyness"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Social anxiety (social phobia)",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/social-anxiety/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Social anxiety disorder, also called social phobia, is persistent overwhelming fear of social situations involving possible scrutiny, negative judgment, humiliation or rejection; it is more than ordinary shyness and can impair daily life.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Possible triggers include meeting new people, speaking publicly and eating while others are present; some people have anxiety mainly during performance.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Anticipatory worry before social events and self-critical review afterward can occur.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Symptoms may include blushing, sweating, trembling, rapid heartbeat, nausea and the mind going blank; responses differ among people.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Fearful predictions about others judging or rejecting a person may be distorted or untrue; anxiety is not proof that rejection is occurring.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Avoiding feared social situations can feel helpful briefly, but anxiety is likely to remain without treatment.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "CBT with a therapist is a well-supported treatment, addressing patterns of thinking and behavior; graduated exposure is a CBT method that progressively approaches feared activities.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Treatment is tailored with a clinician; medication such as an SSRI may also help some people.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Seek professional assessment when anxiety disrupts school, work, relationships or daily life; an educational chart is not a diagnosis.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
