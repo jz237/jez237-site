@@ -3,6 +3,7 @@ import {nativeImpactAudioPacket,consumeNativeImpactAudio} from './native-impact-
 import {prepareNativeAudioChannel} from './native-audio-channels.js';
 import {nativeRaceBodyFields} from './native-race-body-fields.js';
 import {queryNativeWaterField} from './native-water-field.js';
+import {prepareNativeRiderWaterAudio} from './native-audio-packet.js';
 const F=Math.fround;
 const channelEntries=new Set(['800bfdd0','800bfde4','800bfe70','800bfef8','800bffac','800bfd34','800bfd68','800bffcc']);
 
@@ -18,6 +19,7 @@ export function createNativeRaceContactAudio({players,courseIndex}){
   rankDelay:0,primaryStart:0,secondaryStart:0,primaryPitchBits:0,secondaryPitchBits:0,rivalPitchBits:0,
   primaryFlag:0,primaryCompanionFlag:0,primaryLastPlace:0,secondaryFlag:0,secondaryCompanionFlag:0,secondaryLastPlace:0};
  const packets=[Array(32).fill(0),Array(32).fill(0)],motion=Array.from({length:players},()=>({speed:0,vertical:0})),queue=[];
+ const riderWater=Array.from({length:players},()=>({bodyC84:0,bodyC86:0}));
  let emitted=0,dropped=0;
  function enqueue(command,player){
   // Engine-water controls remain captured by the kernels; this backend only
@@ -59,6 +61,15 @@ export function createNativeRaceContactAudio({players,courseIndex}){
    frame=next;
    for(let player=0;player<players;player++){
     const adapter=adapters[player],body=nativeRaceBodyFields(adapter),wet=adapter.wetState;
+    const actorC54=adapter.lastFrame.actorState;
+    let point6b4Native,waterQueryNative;
+    if(actorC54===23||actorC54===5){
+     const joint=adapter.articulatedRider?.jointWorld;
+     if(!joint)throw new TypeError('Rider water audio requires the completed physical joint2');
+     point6b4Native=Object.fromEntries(['x','y','z'].map(k=>[k,F(joint[k]/adapter.hull.scale)]));
+     waterQueryNative=queryNativeWaterField(field,point6b4Native.x,point6b4Native.z).sourcePlaneQueryNative;
+    }
+    riderWater[player]=prepareNativeRiderWaterAudio(riderWater[player].bodyC86,{actorC54,point6b4Native,waterQueryNative});
     if(adapter.frame.simulationState!==0)motion[player]={speed:body.speedB90Native,vertical:F(body.positionNative.y-body.priorBodyPointNative.y)};
     const packet=packets[player],prefix=nativeHullAudioPrefix({frameSpeedNative:motion[player].speed,verticalFrameB7c:motion[player].vertical,
      record2c8:recordMotion2c8[player],bodyBfc:adapter.hull.lateralMotionBfc,
@@ -66,6 +77,7 @@ export function createNativeRaceContactAudio({players,courseIndex}){
     const points=[0,2].map(i=>Object.fromEntries(['x','y','z'].map(k=>[k,F(adapter.hull.points[i].position[k]/adapter.hull.scale)])));
     const query=queryNativeWaterField(field,F(F(points[0].x+points[1].x)*.5),F(F(points[0].z+points[1].z)*.5));
     for(let i=0;i<4;i++)packet[i]=prefix[i];
+    packet[24]=Number(riderWater[player].bodyC84===0&&riderWater[player].bodyC86===1);
     packet[15]=nativeContactImmersion({waterQueryNative:query.sourcePlaneQueryNative,point90YNative:points[0].y,pointD0YNative:points[1].y});
     const impact=nativeImpactAudioPacket({impacts:adapter.impacts,objectHitKind16d8:adapter.objectHitKind16d8,
      frameSpeedNative:motion[player].speed,recordFlag318:recordFlags318[player]},packet[18]);
@@ -85,6 +97,6 @@ export function createNativeRaceContactAudio({players,courseIndex}){
   },
   drain(){return queue.splice(0);},
   snapshot(){return {scope:'source-contact-timing; authored-sample-backend',frame,audioMode,globals:{...globals},
-   packets:packets.map(p=>p.slice()),motion:motion.map(m=>({...m})),pending:queue.length,emitted,dropped};}
+   packets:packets.map(p=>p.slice()),motion:motion.map(m=>({...m})),riderWater:riderWater.map(w=>({...w})),pending:queue.length,emitted,dropped};}
  };
 }

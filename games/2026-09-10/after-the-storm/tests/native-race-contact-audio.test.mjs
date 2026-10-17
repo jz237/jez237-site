@@ -43,6 +43,25 @@ test('live sound prefix takes record motion and signed hull slip from their sepa
  assert.equal(next.snapshot().frame,0);
 });
 
+test('rider-water events follow the physical joint and strict source query, independently of hull wetness',()=>{
+ const a=createNativeRaceContactAudio({players:1,courseIndex:1}),f=field(),cell=queryNativeWaterField(f,64,0);
+ cell.indices.forEach((index,i)=>f.heightQ[index]=i*25*256);
+ const query=queryNativeWaterField(f,64,0);assert.notEqual(query.sourcePlaneQueryNative,query.renderHeightNative);
+ const fall=(frame,y,actor=23)=>{
+  const b=body(frame,{wet:0});b.lastFrame.actorState=actor;
+  b.articulatedRider={jointWorld:{x:64,y,z:0}};return b;
+ };
+ a.advance([fall(1,query.sourcePlaneQueryNative-1)],f,[0],[0]);
+ assert.deepEqual(a.snapshot().riderWater,[{bodyC84:0,bodyC86:1}]);
+ assert.equal(a.snapshot().packets[0][24],1);assert.equal(a.snapshot().packets[0][3],0);
+ a.advance([fall(2,query.sourcePlaneQueryNative-1)],f,[0],[0]);assert.equal(a.snapshot().packets[0][24],0);
+ a.advance([fall(3,query.sourcePlaneQueryNative)],f,[0],[0]);
+ assert.deepEqual(a.snapshot().riderWater,[{bodyC84:1,bodyC86:0}]);
+ a.advance([fall(4,query.sourcePlaneQueryNative-1,7)],f,[0],[0]);assert.equal(a.snapshot().riderWater[0].bodyC86,0);
+ assert.deepEqual(a.drain(),[],'unimplemented mode4 playback must not invent a mixer lane');
+ const copy=a.snapshot();copy.riderWater[0].bodyC86=1;assert.equal(a.snapshot().riderWater[0].bodyC86,0);
+});
+
 test('packet production precedes channel start, and impacts read the previous consumed speed',()=>{
  const a=createNativeRaceContactAudio({players:1,courseIndex:1}),f=field(),impacts=createNativeImpactState();impacts.racerImpactNative=.1;
  a.advance([body(1,{impacts})],f,[0],[0]);assert.equal(a.snapshot().packets[0][0],72);assert.equal(a.snapshot().packets[0][31],0);assert.deepEqual(a.drain(),[]);

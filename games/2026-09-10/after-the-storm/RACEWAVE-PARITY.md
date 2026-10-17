@@ -35,6 +35,24 @@ Integration checks cover actual tick units, contact translation, batched ticks,
 separate player records/slip bytes and incomplete-input rejection. No physics
 forces, water geometry, graphics quality or resolution settings changed.
 
+## Unpublished — physical rider-water audio edge
+
+The live native sound owner now follows the original65C18 rider-water edge:
+C84 retains the prior C86, and only actors5/23 compare the completed physical
+joint2 against the normalized source-water query. Equality is dry. This is
+independent of hull wetness, landing spray and the rendered rider pose. The
+result feeds sound packet byte24. The separate mode4 consumer remains disabled
+until its retained secondary-channel lane is verified; no guessed lane is used.
+
+The numeric transition matches108 original-instruction runs. The live owner
+checks a sloped source cell, strict equality, held immersion, return to actor7,
+packet production while muted and detached diagnostics. A read-only EVO X2
+REA/Ghidra query identified the original fields without changing any of its
+nine project files;7,573 exported instructions matched the supplied private ROM.
+The additional1C5C/1C60 audio levels come from the original spray producer;
+modern particle counts cannot substitute for those values. Full original
+spray/audio scheduling and engine/voice playback remain unfinished.
+
 ## Current preview scope
 
 Native source-water Time trial and Two-player previews admit Sunny Beach,

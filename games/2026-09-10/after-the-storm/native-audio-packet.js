@@ -18,6 +18,17 @@ export function prepareNativeAudioLateralMotion(previous,{velocity50Native,right
  return horizontal>0?F(F(F(velocity.x*right.x)+F(velocity.z*right.z))/F(Math.sqrt(horizontal))):F(previous);
 }
 
+//65C18,662E0..6633C, after the physical rider solve. Only falling actor23
+// and actor5 query joint2 (body6B4). Equality is dry. C84 is the prior C86,
+// independently of hull wet/landing flags; inactive actor branches read no point.
+export function prepareNativeRiderWaterAudio(previous,{actorC54,point6b4Native,waterQueryNative}){
+ const bodyC84=half(previous),actor=word(actorC54);
+ if(actor!==23&&actor!==5)return {bodyC84,bodyC86:0};
+ const p=point(point6b4Native);
+ if(!Number.isFinite(waterQueryNative)||!Number.isFinite(F(waterQueryNative)))throw new TypeError('Supply actual native rider water query');
+ return {bodyC84,bodyC86:Number(p.y<F(waterQueryNative))};
+}
+
 // Complete52480 producer. Inputs are source body, record and rider fields;
 // offsets remain explicit where their gameplay meaning is not established.
 // The supplied4D30C return is a normalized physics query at the returned XZ
