@@ -12528,5 +12528,84 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-16-factual-infographic-factual-infographic-colorpoints-pigment",
+    "title": "Factual infographic: Colorpoints — Pigment Meets Temperature",
+    "tests": "Focused colorpoint mechanism, not a broad preview or breed profile. Relative-temperature illustration, no numeric thresholds or thermal scan. Two independent journal publishers; no subjective critic or automatic reroll.; archive_slot=2026-10-16T20:20; concept=colorpoint-cat-temperature-sensitive-tyrosinase-pigmentation; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: coats-and-genetics",
+    "prompt": "Create a finished, richly illustrated factual Cat Atlas plate, not a photographed poster or book. Topic: temperature-sensitive pigmentation in colorpoint domestic cats. Title exactly: \"COLORPOINTS\" with subtitle \"Pigment meets temperature\" and a small category line \"CAT ATLAS · COATS & GENETICS\". Artwork-led, asymmetric scientific natural-history illustration in luminous gouache and extremely fine colored-pencil/technical ink on a cool mist-gray ground. Use deep sepia, ivory, petrol teal and restrained copper. A magnificent anatomically credible adult seal-point domestic cat dominates about two thirds of the image, sitting in relaxed three-quarter profile, its long tail sweeping toward the bottom margin. Exquisite individual guard hairs, whiskers, natural paws, supple shoulder anatomy, soft reflected light; cream torso transitions softly to dark brown mask, ears, paws and tail. This is a coat-pattern example, not a breed-history plate. No humans, costumes, room props, borders or rigid panel grid.\n\nWeave concise readable educational annotations into the negative space around the silhouette, with thin curved leader lines following the tail and shoulder. Preserve the beautiful cat and breathing room. Show the key process in one graceful open sequence above/along its back: \"TYR gene\" → \"Tyrosinase enzyme\" → \"Melanin pigment\". Use a modest abstract DNA ribbon and small pigment dots as schematic symbols, explicitly labeled \"Simplified pigment pathway\"; do not invent a molecular structure or imply one DNA strand physically connects body regions. Near the torso: \"Warmer body • less pigment\". Fine branching lines to the mask/ears and paws/tail: \"Cooler points • darker fur\". Tiny qualifier beneath: \"Relative body regions—not a thermal scan\". No numerical temperatures, heat-map scale, glowing hot/cold cat or abrupt geometric color boundaries.\n\nA beautifully drawn small open fur study near the tail compares a few pale and dark hairs, labeled \"The difference is pigment production\"; do not show external staining or a live hair changing color instantly. One short, legible integrated explanatory passage: \"A temperature-sensitive TYR variant reduces pigment production in warmer regions. Cooler extremities develop darker fur.\" An airy genetics footnote connected to the small DNA motif: \"The Siamese-type allele is recessive to full color. Other genes also shape the coat.\" No Punnett grid, percentages, inheritance guarantees, disease claims, breed origin, kitten sequence, seasonal timeline, quantitative thresholds or eye-color mechanism. Do not call this complete albinism. If space is tight omit the auxiliary hair study, never the hero or temperature mechanism. Organic educational flow, strong title and typography, readable real English, visual depth and meticulous fine material detail. A small source footer: \"Sources: Animal Genetics (2006); Journal of Heredity (2005)\". Render the finished illustration itself, opaque background, auto size, medium quality.",
+    "image": "images/2026-10-16-factual-infographic-factual-infographic-colorpoints-pigment.jpg",
+    "thumb": "thumbs/2026-10-16-factual-infographic-factual-infographic-colorpoints-pigment.webp",
+    "color": "#a39e95",
+    "date": "2026-10-16",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "colorpoint-cat-temperature-sensitive-tyrosinase-pigmentation",
+      "imageSha256": "f7fc4796165c799e98f10a8400678c37e6940a49b44f92f55c263783f545b127",
+      "imageDHash": "94c5492dcc86b6dc"
+    },
+    "factualInfographic": {
+      "topic": "Temperature-sensitive pigmentation in colorpoint cats",
+      "description": "A focused artistic atlas of temperature-sensitive TYR-associated coat pigmentation, with relative warm-body/cool-point regions and a simplified melanin pathway.",
+      "sourceNote": "Sources read: https://pmc.ncbi.nlm.nih.gov/articles/PMC1464423/; https://nsuworks.nova.edu/cnso_bio_facarticles/535/. Full Schmidt-Kuntzel article read via its archived PDF; access details retained in the evidence sheet. Focused normal coat-genetics education; temperature regions schematic, no measured heat map.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-17T00:21:08.964914+00:00",
+        "sources": [
+          {
+            "id": "imes2006",
+            "publisher": "Animal Genetics / International Society for Animal Genetics",
+            "title": "Albinism in the domestic cat (Felis catus) is associated with a tyrosinase (TYR) mutation",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1464423/"
+          },
+          {
+            "id": "schmidt2005",
+            "publisher": "Journal of Heredity / Oxford University Press",
+            "title": "Tyrosinase and Tyrosinase Related Protein 1 Alleles Specify Domestic Cat Coat Color Phenotypes of the albino and brown Loci",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://nsuworks.nova.edu/cnso_bio_facarticles/535/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Variants in TYR are associated with temperature-sensitive Siamese-type colorpoint pigmentation; this is a pigment-production mechanism, not a surface stain.",
+            "sourceIds": [
+              "imes2006",
+              "schmidt2005"
+            ]
+          },
+          {
+            "claim": "TYR encodes tyrosinase, an enzyme involved in the initial steps of melanin pigment synthesis.",
+            "sourceIds": [
+              "schmidt2005"
+            ]
+          },
+          {
+            "claim": "In the Siamese-type pattern, cooler extremities have darker fur, while warmer body regions have lighter fur because pigment production is temperature-sensitive; illustrate face, ears, paws and tail as points, without numerical temperatures or an actual thermal scan.",
+            "sourceIds": [
+              "schmidt2005"
+            ]
+          },
+          {
+            "claim": "The Siamese-type allele is recessive to the full-color wild-type allele; cats with two copies can express this pointed pattern. Other loci also influence coat appearance.",
+            "sourceIds": [
+              "schmidt2005",
+              "imes2006"
+            ]
+          },
+          {
+            "claim": "Different TYR variants are associated with Siamese and Burmese pigmentation, and a distinct TYR variant is associated with complete albinism; the pictured point pattern should not be equated to complete pigment absence.",
+            "sourceIds": [
+              "imes2006",
+              "schmidt2005"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
