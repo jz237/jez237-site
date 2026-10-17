@@ -6,7 +6,7 @@ import {createNativeControlState,sampleNativeControls,nativeRiderControlOrigin} 
 import {prepareNativeTwoPlayerCatchup} from './native-two-player-catchup.js';
 import {stepNativeArticulatedRider} from './native-articulated-rider.js';
 import {createNativeRiderControlState,prepareNativeRiderControls,finishNativeRiderControls} from './native-rider-controls.js';
-import {createNativeImpactState,resetNativeImpacts,recordNativeImpact,nativeImpactSnapshot} from './native-impact-state.js';
+import {createNativeImpactState,resetNativeImpacts,recordNativeImpact,nativeImpactSnapshot,nativePreparedIceStability} from './native-impact-state.js';
 import {createNativeRiderLifecycle,nativeRiderLifecycleSource,decideNativeRiderLifecycle,finishNativeRiderLifecycle,nativeRiderLifecycleSnapshot} from './native-rider-lifecycle.js';
 import {nextNativeDryContactFrames} from './native-race-body-fields.js';
 import {createNativeRiderActionInputHistory,stepNativeRiderActionInputHistory,
@@ -284,8 +284,8 @@ export function createNativeRaceAdapter({riderIndex=0,tuneB6c=0,tuneB70=0,tuneB7
     actionState:action,articulatedRider,riderPose,riderLifecycle:lifecycle,riderActions:actions,
     contactFactor,powerSteps,remainder:0,logicalFrames:0,stepsLast:0,frame:null,
     preparedHullTick:null,pendingFrameCompletion:false,inactiveTicks:0,
-    contactWindow:contactsZero(),contactDriveFrames:0,dryContactFrames16d0:0,lastControls:null,
-    lastFrame:{logicalFrame:0,clockUnits:0,frameDisplacementNative:vec(),frameSpeedNative:0,
+    objectHitKind16d8:0,contactWindow:contactsZero(),contactDriveFrames:0,dryContactFrames16d0:0,lastControls:null,
+    lastFrame:{objectHitKind16d8:0,logicalFrame:0,clockUnits:0,frameDisplacementNative:vec(),frameSpeedNative:0,
       hudSpeed:0,referenceDisplacementNative:vec(),referenceChangeNative:vec(),
       wetCount:8,anyWet:true,contacts:contactsZero(),impacts:nativeImpactSnapshot(impacts),actorState:lifecycle?.state.actorState??source.actorState??22,
       animationFrame:lifecycle?.state.animationFrame??source.animationFrame??0,actionState:{...action},jointWorld:articulatedRider?copy(articulatedRider.jointWorld):null,
@@ -436,7 +436,7 @@ function beginFrame(adapter,input,options){
   if(actionHistory)adapter.riderActions.inputHistory=actionHistory;
   latchedControlFrames.delete(adapter);
   adapter.riderControlState=physicalControls.state;
-  adapter.frame={startCenter:copy(hull.center),startReference:referencePoint(hull),prepared,
+  adapter.frame={iceStabilityNative:nativePreparedIceStability(adapter.rider.riderIndex,source.actorState),startCenter:copy(hull.center),startReference:referencePoint(hull),prepared,
     controls:forceControls,physicalControls,previousContacts,action:decision,actorState:source.actorState,
     simulationState:source.simulationState,animationFrame:source.animationFrame,riderPose:poseProvider,
     actionHistory,actionSource:capturedActionSource,phase650,catchup};
@@ -464,7 +464,7 @@ function endFrame(adapter,beforeActorDecision){
     frameDisplacementNative:displacement,frameSpeedNative:speed,
     hudSpeed:inactive?lastFrame.hudSpeed:Math.trunc(Math.fround(Math.trunc(Math.fround(speed))*Math.fround(1.8))),
     referenceDisplacementNative:referenceDisplacement,referenceChangeNative:referenceChange,
-    wetCount:water.wetCount,anyWet:water.anyWet,contacts:{...contactWindow},impacts:nativeImpactSnapshot(adapter.impacts),
+    wetCount:water.wetCount,anyWet:water.anyWet,contacts:{...contactWindow},impacts:nativeImpactSnapshot(adapter.impacts),objectHitKind16d8:adapter.objectHitKind16d8,
     actorState:frame.actorState,animationFrame:frame.animationFrame,actionState:{...adapter.actionState},jointWorld:frame.prepared.jointWorld?copy(frame.prepared.jointWorld):null};
   if(beforeActorDecision)beforeActorDecision();
   const actions=adapter.riderActions,actionSource=frame.actionSource;
@@ -651,6 +651,8 @@ function stepAdapter(adapter,dt,input,options){
           time:hull.simulationTime,controls:c,water,contactWindow,actorState:frame.actorState,action:frame.action,
           report:report=>mergeContacts(contactWindow,report),
           recordImpact:hit=>recordNativeImpact(adapter.impacts,hit),
+          readGenericObjectState:()=>({maximum:adapter.impacts.objectImpactNative,normal:copy(adapter.impacts.normal),hitKind:adapter.objectHitKind16d8,stabilityNative:frame.iceStabilityNative}),
+          recordGenericHitKind:kind=>{if(!Number.isInteger(kind)||kind<0||kind>2)throw new RangeError('Invalid generic hit kind');adapter.objectHitKind16d8=kind;},
           applyContact:hit=>{
             // Read signed incoming before the point response changes velocity.
             // The public legacy report retains its existing world conversion;

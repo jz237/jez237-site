@@ -1,0 +1,76 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {createNativeIceWorld} from '../native-ice-world.js';
+import {nativePreparedIceStability} from '../native-impact-state.js';
+import {createNativeRaceAdapter} from '../native-race-adapter.js';
+import {createNativeRaceWorld,stepNativeRaceWorld} from '../native-race-world.js';
+import {createRaceWater} from '../race-water.js';
+import {createRace,stepRace} from '../race-core.js';
+import {getCourse} from '../courses.js';
+const definition={id:'test-ice',runtimeKind:10,sourceGenericSphere:true,x:.4,y:0,z:.675,r:1.25};
+const v=(x=0,y=0,z=0)=>({x,y,z});
+const reference=JSON.parse(readFileSync(new URL('./fixtures/native-ice-owner-reference.json',import.meta.url)));
+function make({count=2,active=()=>true,prior=0}={}){
+ const adapters=Array.from({length:count},()=>createNativeRaceAdapter()),water=createRaceWater({crafts:adapters.map(a=>({x:a.hull.center.x,z:a.hull.center.z,sourceForwardXZ:[0,1]})),baseAmplitudeNative:20});
+ const ice=createNativeIceWorld({definitions:[definition],water}),calls=[];
+ for(const [index,a] of adapters.entries()){
+  a.hull.points.forEach(p=>p.velocity=v(20));
+  a.contacts={primarySpheres:(h,c)=>{if(prior)c.recordImpact({channel:'object',incomingNative:prior,normal:v(0,1)});calls.push({index,before:ice.snapshot()[0]});ice.contact(h,c);calls.at(-1).after=ice.snapshot()[0];}};
+ }
+ const world=createNativeRaceWorld({adapters,water,craftContacts:false,humanIndices:adapters.map((_,i)=>i),afterFrame:(w,c)=>ice.afterFrame(w,c,{active:active()})});
+ return {adapters,water,ice,world,calls};
+}
+
+test('ice breaks through actual native contacts, is shared across racers, and hides only after the object phase',()=>{
+ const s=make();stepNativeRaceWorld(s.world,.01,[{},{}]);
+ assert.deepEqual(s.calls.map(q=>q.index),[1,0]);
+ assert.equal(s.calls[0].before.broken,false);assert.equal(s.calls[0].after.broken,true);assert.equal(s.calls[1].before.broken,true);
+ assert.equal(s.ice.snapshot()[0].renderKind,1);assert.equal(s.ice.breakEvents().length,1);
+ assert.equal(s.adapters[1].objectHitKind16d8,2);assert.ok(s.adapters[1].impacts.objectImpactNative>0);
+ assert.equal(s.adapters[0].impacts.objectImpactNative,0);
+ stepNativeRaceWorld(s.world,.04,[{},{}]);assert.equal(s.ice.snapshot()[0].renderKind,0);assert.equal(s.ice.snapshot()[0].age,1);assert.equal(s.ice.diagnostics().outerFrames,1);
+});
+
+test('activity gating retains intact presentation while the broken collider remains absent',()=>{
+ let active=false;const s=make({active:()=>active});stepNativeRaceWorld(s.world,.1,[{},{}]);
+ assert.equal(s.ice.snapshot()[0].broken,true);assert.equal(s.ice.snapshot()[0].renderKind,1);assert.equal(s.ice.snapshot()[0].age,0);
+ active=true;stepNativeRaceWorld(s.world,.05,[{},{}]);assert.equal(s.ice.snapshot()[0].renderKind,0);assert.equal(s.ice.snapshot()[0].age,1);
+ const before=s.ice.snapshot();stepNativeRaceWorld(s.world,1,[{},{}],{active:false});assert.deepEqual(s.ice.snapshot(),before);
+});
+
+test('a retained stronger C50 suppresses the ice break without suppressing physical contact',()=>{
+ const s=make({prior:100});stepNativeRaceWorld(s.world,.01,[{},{}]);
+ assert.equal(s.ice.snapshot()[0].broken,false);assert.equal(s.ice.breakEvents().length,0);
+ assert.equal(s.adapters[1].impacts.objectImpactNative,100);assert.equal(s.adapters[1].objectHitKind16d8,1);assert.ok(s.ice.diagnostics(s.adapters[1].hull).hull.contacts>0);
+ assert.deepEqual(s.adapters[1].impacts.normal,v(0,1));
+});
+
+test('two racers share identical ice, impact and physical histories at30/60/144Hz',()=>{
+ const runs=[];
+ for(const hz of [30,60,144]){
+  const s=make();for(let i=0;i<hz;i++)stepNativeRaceWorld(s.world,1/hz,[{},{}]);
+  runs.push({objects:s.ice.snapshot(),events:s.ice.breakEvents(),racers:s.adapters.map(a=>({points:a.hull.points,impacts:a.impacts,hitKind:a.objectHitKind16d8}))});
+ }
+ assert.deepEqual(runs[0],runs[1]);assert.deepEqual(runs[1],runs[2]);
+});
+
+test('prepared stability uses source profile and frame actor float32 scaling',()=>{
+ for(const q of reference.thresholds)assert.equal(nativePreparedIceStability(q.rider,q.actor),q.stability);
+ assert.throws(()=>nativePreparedIceStability(4,22));
+});
+
+test('260 object updates match original removal and age saturation while racer simulation is frozen',()=>{
+ const a=createNativeRaceAdapter({sourceState:{simulationState:0,actorState:22}}),water=createRaceWater({crafts:[{x:0,z:0,sourceForwardXZ:[0,1]}],baseAmplitudeNative:20});
+ const ice=createNativeIceWorld({definitions:[definition,{...definition,id:'broken-ice'}],water});ice.state.nodes[1].broken=true;
+ const world=createNativeRaceWorld({adapters:[a],water,humanIndices:[0],afterFrame:(w,c)=>ice.afterFrame(w,c)});
+ for(const expected of reference.displayFrames){stepNativeRaceWorld(world,.05,[{}]);assert.deepEqual(ice.snapshot().map(q=>({renderKind:q.renderKind,age:q.age})),expected.objects);}
+ assert.equal(world.frames,260);assert.equal(a.hull.ticks,0);
+});
+
+test('host selects the course ice owner and keeps real Glacier native admission closed',()=>{
+ const course={...getCourse('greyhaven'),hazardsForPlayers:()=>[definition]},s=createRace({course,mode:'time',physics:'native'});
+ assert.equal(s.nativeHost.ice.snapshot().length,1);assert.equal(s.nativeHost.floating,null);
+ stepRace(s,{},.01);assert.equal(s.nativeHost.ice.diagnostics().objectCount,1);
+ assert.throws(()=>createRace({course:getCourse('glacier'),mode:'time',physics:'native'}),/preview/);
+});

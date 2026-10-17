@@ -9,6 +9,13 @@ export const NATIVE_IMPACT_FIELDS=Object.freeze({
  shore:'shoreImpactNative',box:'boxImpactNative',floor:'floorImpactNative',object:'objectImpactNative'
 });
 const fields=Object.values(NATIVE_IMPACT_FIELDS),owners=new WeakSet();
+//63C88 prepares16A0 from numeric bodyB64 and the actor at frame preparation.
+//7E938 compares HALF this value, after its strict C50 maximum test.
+export function nativePreparedIceStability(riderIndex,actorState){
+ if(!Number.isInteger(riderIndex)||riderIndex<0||riderIndex>3||!Number.isInteger(actorState))throw new TypeError('Expected numeric source rider and actor');
+ const factor=actorState===8?F(.1):actorState===9?F(.15):actorState===17?F(.2):1;
+ return F([9.5,10,9,8][riderIndex]*factor);
+}
 const zero=()=>({x:0,y:0,z:0});
 function owned(state){if(!owners.has(state))throw new TypeError('Expected a native impact state');}
 function normalVector(value){

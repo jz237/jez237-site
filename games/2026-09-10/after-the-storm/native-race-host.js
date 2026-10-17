@@ -8,6 +8,7 @@ import {createNativeRaceWorld,stepNativeRaceWorld} from './native-race-world.js'
 import {nativeRacerPresentation} from './native-racer-presentation.js';
 import {queryNativeWaterField} from './native-water-field.js';
 import {NATIVE_RIDER_TUNE_DEFAULTS} from './native-rider-controls.js';
+import {createNativeIceWorld} from './native-ice-world.js';
 import {createNativeFloatingWorld} from './native-floating-world.js';
 import {createNativePrimaryBuoyWorld} from './native-primary-buoy-world.js';
 import {bindRaceWaterCameraStorage,raceWaterAISelectionCircle,advanceRaceWaterRollers} from './race-water.js';
@@ -95,10 +96,13 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
   throw new TypeError('Supply one prepared hull start per racer');
  const definitions=floatingDefinitions??course.dynamicObjectsForPlayers?.(humanIndices.length)??[];
  if(!Array.isArray(definitions))throw new TypeError('Expected selected floating definitions');
+ const iceDefinitions=(course.rocks??[]).filter(q=>q.sourceGenericSphere&&q.runtimeKind===10);
+ if(iceDefinitions.length&&definitions.length)throw new RangeError('Mixed floating and ice motion requires a unified original generic owner');
+ const ice=iceDefinitions.length?createNativeIceWorld({definitions:iceDefinitions,water}):null;
  const floating=definitions.length?createNativeFloatingWorld({definitions,water}):null;
  const primary=course.sourceBuoyLayout?createNativePrimaryBuoyWorld({layout:course.sourceBuoyLayout,water}):null;
  const courseContacts=createSourceNativeContacts(course,{scale:water.scale,fixedSphereGrid,staticGeometry});
- const contacts={...courseContacts,...(primary?{racingBuoys:primary.contact}:{}),...(floating?{primarySpheres:floating.contact}:{})};
+ const contacts={...courseContacts,...(primary?{racingBuoys:primary.contact}:{}),...(floating?{primarySpheres:floating.contact}:ice?{primarySpheres:ice.contact}:{})};
  // A solo source race needs no unresolved multi-racer camera-corner predicate. Its
  // original61708 countdown, not a browser finish flag, selects this producer.
  const sourceAI=!!raceRuntime?.ordinary&&racers.length===1;
@@ -117,28 +121,28 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
     const prepared=raceRuntime.sampleAI(i,{bodiesBySlot:host.aiBodies,
      geometry:{selectionCircleNative:raceWaterAISelectionCircle(water),
       nodePositionsNative:primary.state.nodes.map(n=>({sourceRow:n.sourceRow,x:n.positionNative.x,z:n.positionNative.z})),
-      proximityObjectCentersNative:(floating?.state.objects??[]).map(o=>({x:F(o.position.x/water.scale),z:F(o.position.z/water.scale)}))},waterField:water.field});
+      proximityObjectCentersNative:ice?ice.state.nodes.map(o=>({x:o.position[0],z:o.position[2]})):(floating?.state.objects??[]).map(o=>({x:F(o.position.x/water.scale),z:F(o.position.z/water.scale)}))},waterField:water.field});
     host.lastAIInput=prepared;return {...prepared.controls,action16f4:prepared.action16f4};
    }}:{}),
    hullStart,contacts,powerSteps:r.power,sourceState:raceRuntime?()=>({...raceRuntime.scene(),
     catchup:raceRuntime.catchupContext?.(i,host.world.adapters.map(a=>({x:F(a.hull.center.x/a.hull.scale),z:F(a.hull.center.z/a.hull.scale)})))}):sourceStates[i]??(recovery?{simulationState:3}:{actorState:22,simulationState:3}),...bundle,
    ...(recovery?{riderRecovery:{courseDatumNative:()=>water.field.datumNative,raceFinished:()=>r.finishTime!==null,...bundle.initialRiderRecovery}}:{})});
  });
- const host={racers,bundles,contacts,primary,primaryActive,floating,floatingActive,presentations:[],onFrame,raceRuntime,onLaunchFrame,world:null,
+ const host={racers,bundles,contacts,primary,primaryActive,ice,floating,floatingActive,presentations:[],onFrame,raceRuntime,onLaunchFrame,world:null,
   provenance:Object.freeze({status:'ordinary-source-solver-integration-preview',riderGeometry:'authored-modern-anatomy',
    initialHeight:hullStarts.length?'source-grid-transform':'course-datum',tuning:'explicit-native-indices; default5/5/5',
    hullStartup:'decoded packed16.16 transform; source point/frame/rest/damping recipe with authored local shape',
    clock:'five10ms hull ticks then one water update',controls:'digital-accelerator; brake-coasts; B-crouch; R-slide',
    actorRecoveryAndTricks:false,riderRecovery:recovery,physicalRiderPresentation:true,
    recoveryGeometry:'authored anatomy/remount; reconstructed procedural fall/stumble; explicit authored rest/circle/history policy',
-   nativeRacerCollision:craftContacts,sourcePrimaryBuoyContacts:!!primary,sourceAIInput:sourceAI})};
+   nativeRacerCollision:craftContacts,sourcePrimaryBuoyContacts:!!primary,sourceGenericIceContacts:!!ice,sourceAIInput:sourceAI})};
  if(raceRuntime?.ordinary){
   // Fresh browser inactive body slots are explicitly zero; active B64/B68
   // both come from the host's selected numeric rider profile. Retained AI
   // words are patched by890B4, never replaced with a neutral driver object.
   const profiles=Array.from({length:4},(_,i)=>adapters[i]?.hull.rider??0);
   host.aiInitialization=raceRuntime.initializeAI({hullProfilesB64:profiles,avatarsB68:profiles,
-   objectTypes4c:(floating?.state.objects??[]).map(o=>o.runtimeKind)});
+   objectTypes4c:ice?ice.state.nodes.map(o=>o.kind):(floating?.state.objects??[]).map(o=>o.runtimeKind)});
   bindRaceWaterCameraStorage(water,raceRuntime.cameraStorage);
  }
  host.world=createNativeRaceWorld({adapters,water,humanIndices,craftContacts,deferWaterRollers:!!raceRuntime?.ordinary,
@@ -189,6 +193,7 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
   const objectMotionActive=!raceRuntime?.ordinary||raceRuntime.objectMotionActive();
   const keepRunning=host.onFrame?host.onFrame(host,context,ordinary):undefined;
   if(primary)primary.afterFrame(host.world,context,{active:host.primaryActive&&objectMotionActive});
+  if(ice)ice.afterFrame(host.world,context,{active:objectMotionActive});
   if(floating)floating.afterFrame(host.world,context,{active:host.floatingActive&&objectMotionActive});
   //6E3A8 follows7DBC0 with Southern's generic fixed-sphere Y writes.
   // Tags1/4 follow datum; tag5 mast bases retain authored Y. This is an

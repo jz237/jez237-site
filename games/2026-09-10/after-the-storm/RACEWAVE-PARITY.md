@@ -1,5 +1,31 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unreleased — shared native ice owner
+
+The native host now connects selected runtime10 ice to the generic contact
+kernel, prepared rider stability, retained C50 impact maximum and16D8 hit kind.
+Every racer sees the same broken flags immediately. Display removal and its
+saturating age follow the shared water frame and original object-activity gate.
+Snapshots and immutable break events are ready for the presentation layer;
+fragment rendering and the sound consumer remain unconnected. Mixed floating
+and ice definitions are explicitly rejected pending a unified ordered owner.
+
+An additional288 prepared original executions verify28 rider/actor stability
+states and260 display updates, executing23,539 instructions. The display
+reference explicitly disables the external matrix/motion branch; it is not
+evidence for that branch. The64 unique focused checks pass, including actual
+two-racer contacts and identical histories at30/60/144Hz.
+
+Private native Glacier solo probes finish Normal/Hard/Expert in146.114s with
+two misses and Reverse in133.589s with three, each breaking three blocks.
+The Normal versus probe disqualifies P2 for five misses; Reverse finishes.
+With only ice contact disabled, both Normal and Reverse disqualify P2, so the
+Normal failure also exists without ice collision. This control does not
+establish its root cause or validate the pilot. Glacier native admission
+remains closed pending presentation and complete-course acceptance. The
+earlier modern Reverse two-player route regression is a separate issue.
+Resolution, terrain and water detail are unchanged.
+
 ## Unreleased — native generic ice contact kernel
 
 The original generic sphere phase now has a binary32 numeric reconstruction
@@ -21,11 +47,11 @@ coincident-center handling, and unsupported inputs.
 
 A fresh read-only query using EVO X2's installed Ghidra matches1,395 instruction
 records to the local ROM and leaves nine project files unchanged. Only numeric
-fixtures enter the repository. This kernel is prepared infrastructure: the
-native host still needs the shared object owner, prepared stability/C50/hit-kind
-connection, fragment presentation, and complete-course validation. Glacier's
-native preview remains closed; the Reverse two-player route regression also
-remains unresolved. No renderer resolution or detail changed.
+fixtures enter the repository. The shared host owner and stability/C50/hit-kind
+connection are now covered by the newer checkpoint above. Fragment
+presentation and complete-course validation remain pending. Glacier's native
+preview remains closed; the Reverse two-player route regression also remains
+unresolved. No renderer resolution or detail changed.
 
 ## Unreleased — custom-wave shallow-water depth correction
 
