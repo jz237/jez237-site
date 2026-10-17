@@ -1,0 +1,47 @@
+/* Full-resolution live ocean, with a console-era sports title in front. */
+#menu{background:linear-gradient(90deg,#031c39ed 0%,#062b46c9 30%,#07364d40 57%,transparent 78%),linear-gradient(0deg,#021a32b0,transparent 28%);isolation:isolate}
+#menu .intro{width:min(600px,49vw);min-height:100%;padding:clamp(105px,14vh,160px) 3.8vw 50px;background:none;box-sizing:border-box}
+#menu .intro>.eyebrow{color:#a4e9ef;font-size:10px;letter-spacing:.25em}
+#menu .title-logo{position:relative;display:flex;flex-direction:column;align-items:flex-start;margin:24px 0 30px;font-family:Arial,Helvetica,sans-serif;font-style:italic;font-weight:950;line-height:.84;text-transform:uppercase;filter:drop-shadow(0 5px 0 #06264a) drop-shadow(0 8px 20px #00182e80);transform:rotate(-5deg);transform-origin:25% 50%}
+.title-overline{font-size:clamp(26px,3.1vw,49px);letter-spacing:-.065em;color:#faffff;-webkit-text-stroke:1px #c7f5ff;padding-left:9px;z-index:1}
+.title-storm{font-size:clamp(76px,8.9vw,140px);letter-spacing:-.085em;padding:6px 18px 11px 0;background:linear-gradient(172deg,#fff 10%,#dafbff 32%,#65d8f8 48%,#fff 50%,#32aeda 57%,#0978c2 78%,#b5f6ff 93%);background-size:100% 145%;background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-stroke:1.5px #e4fbff;animation:title-water-light 8s ease-in-out infinite alternate}
+.title-underline{align-self:flex-end;position:relative;margin-right:18px;margin-top:1px;padding:8px 15px 7px;font:800 italic 11px/1 Arial,sans-serif;letter-spacing:.27em;color:#052e48;background:#ffcf56;box-shadow:-35px 0 0 -2px #ffcf5666;transform:skew(-12deg)}
+.title-logo:after{content:"";position:absolute;left:0;right:-6px;bottom:21px;height:42%;border-bottom:3px solid #8cedff;border-radius:0 0 65% 45%;transform:rotate(-5deg);pointer-events:none;opacity:.8}
+#menu .title-caption{font-size:15px;letter-spacing:.015em;color:#d1eef3;margin:18px 0}
+#menu .launch-actions{margin:30px 0 12px;gap:8px}
+#menu .launch-actions button{min-width:140px;border-radius:3px;font-weight:800;min-height:50px;box-shadow:0 4px 16px #00152c40}
+#menu #start{background:linear-gradient(135deg,#ffea8b,#ffbe45);color:#133047;border:1px solid #ffe9a8}
+#menu #demoStart{background:#062c48c9;border:1px solid #91dce780;color:#ecfcff}
+#menu .online-race-link{margin:0 0 8px;padding:8px 0;border:0;color:#b5f5ff;font-weight:700}
+#raceSetup{margin:20px 0 16px;border-top:1px solid #9ce6f34d;border-bottom:1px solid #9ce6f34d;background:#03243b6b;border-radius:3px}
+#raceSetup summary{cursor:pointer;list-style-position:inside;padding:16px 13px;font-size:14px;font-weight:800;color:#f0fbff}
+#raceSetup summary span{display:block;font-weight:400;font-size:11px;color:#a5c9d8;margin:5px 0 0 18px;letter-spacing:.04em}
+#raceSetup[open] summary{border-bottom:1px solid #9ce6f329}
+.setup-content{padding:4px 13px 15px}
+#menu #recordsButton,#menu #optionsButton{font-size:12px;padding:9px 12px;background:#052b44b0;border-color:#8bd5e24d;margin-bottom:12px}
+#menu .salvage,#menu .salvage+a{font-size:11px;color:#a9cbd9}
+.title-scene-caption{position:fixed;right:4vw;bottom:8vh;display:grid;gap:7px;text-align:right;color:#fff;text-shadow:0 2px 8px #001c32;pointer-events:none}
+.title-scene-caption>span{font-size:9px;letter-spacing:.25em;color:#b4eff9}
+.title-scene-caption>span:before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:#ffda68;margin:0 8px 1px 0;box-shadow:0 0 10px #ffdd78}
+.title-scene-caption strong{font-size:23px;font-style:italic;letter-spacing:-.03em}
+.title-scene-caption button{pointer-events:auto;justify-self:end;font-size:10px;padding:7px 10px;background:#032740a6;border:1px solid #b6e5f34a;border-radius:3px;color:#dcf5ff}
+#menu button:focus-visible,#menu summary:focus-visible,#menu a:focus-visible{outline:3px solid #ffda68;outline-offset:4px}
+@keyframes title-water-light{from{background-position:0 0}to{background-position:0 100%}}
+@media(max-width:760px){
+ #menu{background:linear-gradient(0deg,#031e39ed 8%,#062b4690 55%,#062b4610 85%)}
+ #menu .intro{width:100%;max-width:510px;padding:32vh 24px 42px;min-height:100%}
+ #menu .intro>.eyebrow{font-size:8px;letter-spacing:.2em}
+ #menu .title-logo{width:min(310px,82vw);margin:18px 0 24px}
+ .title-overline{font-size:30px}.title-storm{font-size:91px}.title-underline{font-size:9px;letter-spacing:.2em}
+ #menu .launch-actions{margin-top:22px}
+ #menu .title-caption{font-size:13px}
+ .title-scene-caption{right:18px;bottom:auto;top:100px;gap:5px}
+ .title-scene-caption strong{font-size:17px}.title-scene-caption>span{font-size:8px}
+}
+@media(max-height:540px) and (min-width:761px){
+ #menu .intro{padding-top:80px;width:50vw}.title-overline{font-size:26px}.title-storm{font-size:80px}
+ #menu .title-logo{margin:8px 0 20px}#menu .launch-actions{margin-top:15px}
+}
+@media(prefers-reduced-motion:reduce){.title-storm{animation:none}}
+
+#menu[data-motion-paused="true"] .title-storm{animation-play-state:paused}
