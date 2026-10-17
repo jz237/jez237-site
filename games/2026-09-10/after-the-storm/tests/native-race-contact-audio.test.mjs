@@ -9,9 +9,13 @@ import {createNativeWaterField,queryNativeWaterField} from '../native-water-fiel
 import {createRace} from '../race-core.js';
 import {stepNativeRaceHost} from '../native-race-host.js';
 import {getCourse} from '../courses.js';
+import {createNativeRaceLaunchRuntime} from '../native-race-launch-runtime.js';
 const call=(consumer,...args)=>({kind:'externalCall',consumer,arguments:args});
 const start=owner=>owner.applyEffects([call('800bfdd0',0x80192610),call('800bfef8',0x80192630)]);
 const field=()=>createNativeWaterField({datumNative:20});
+function advance(owner,adapters,field,recordFlags318,recordMotion2c8,recordPower12c=adapters.map(()=>0),recordPlace4=adapters.map(()=>0)){
+ owner.advance(adapters,field,{recordFlags318,recordMotion2c8,recordPower12c,recordPlace4});
+}
 function body(frame,{speed=50,vertical=0,wet=1,landing=0,simulation=3,impacts=createNativeImpactState(),rider=0}={}){
  return {logicalFrames:frame,pendingFrameCompletion:false,frame:{simulationState:simulation,startCenter:{x:0,y:-vertical,z:0},controls:{heldButtons:0}},
   hull:{scale:1,rider,lateralMotionBfc:0,center:{x:speed,y:0,z:0},frame:{forward:{x:0,y:0,z:1}},points:[0,1,2].map(()=>({position:{x:64,y:0,z:0}}))},
@@ -27,7 +31,7 @@ test('live actor audio reads raw buttons, completed recovery and retained animat
   const [actor,animation,crash,buttons]=inputs[i],b=body(i+1);
   b.lastFrame.actorState=actor;b.lastFrame.animationFrame=animation;b.riderLifecycle.state.crashCountdown=crash;
   b.frame.controls={heldButtons:buttons,engineMask:0,throttle:false};
-  owner.advance([b],f,[0],[0]);const packet=owner.snapshot().packets[0];
+  advance(owner,[b],f,[0],[0]);const packet=owner.snapshot().packets[0];
   assert.deepEqual([packet[4],packet[21],packet[28]],expected[i]);
  }
  assert.deepEqual(owner.drain(),[],'new packet fields must not invent unconnected voice playback');
@@ -49,12 +53,33 @@ test('human impact channels do not require or consume the rival paired-voice ran
 test('live sound prefix takes record motion and signed hull slip from their separate owners',()=>{
  const a=createNativeRaceContactAudio({players:2,courseIndex:1}),f=field(),left=body(1),right=body(1,{rider:1});
  left.hull.lateralMotionBfc=-2.5;right.hull.lateralMotionBfc=3.8;
- a.advance([left,right],f,[0,0],[90,180]);
+ advance(a,[left,right],f,[0,0],[90,180]);
  assert.deepEqual(a.snapshot().packets.map(p=>p.slice(0,4)),[[72,40,244,1],[72,80,15,1]]);
  assert.deepEqual(a.drain(),[],'producing engine inputs must not play unimplemented engine commands');
  const next=createNativeRaceContactAudio({players:1,courseIndex:1});
- assert.throws(()=>next.advance([left],f,[0]),/source record/);
+ assert.throws(()=>advance(next,[left],f,[0]),/source record/);
  assert.equal(next.snapshot().frame,0);
+});
+
+test('power and place come from canonical human slots and retain native byte stores',()=>{
+ const race=createRace({mode:'versus',physics:'native',course:getCourse('greyhaven')}),retained=race.nativeLaunch.snapshot();
+ const base=(0x2938-0x1f94)/4,stride=222;
+ for(const [slot,power,place,motion]of [[0,259,-1,90],[1,-1,258,180]]){
+  retained.raceWords1f94[base+slot*stride+0x12c/4]=power>>>0;
+  retained.raceWords1f94[base+slot*stride+1]=place>>>0;
+  retained.raceWords1f94[base+slot*stride+0x2c8/4]=motion;
+ }
+ retained.scene.primaryHumanIndex=1;retained.scene.secondaryHumanIndex=0;
+ const runtime=createNativeRaceLaunchRuntime({players:2,courseIndex:1,initialState:retained,
+  racers:race.racers.map(r=>({...r,sourceBuoys:{...r.sourceBuoys}}))});
+ const records=runtime.contactAudioInputs();assert.deepEqual(records.slots,[1,0]);
+ assert.deepEqual(records.recordPower12c,[-1,259]);assert.deepEqual(records.recordPlace4,[258,-1]);
+ const owner=createNativeRaceContactAudio({players:2,courseIndex:1});
+ owner.advance([body(1,{rider:1}),body(1)],field(),records);
+ assert.deepEqual(owner.snapshot().packets.map(p=>[p[1],p[14],p[25]]),[[80,255,2],[40,3,255]]);
+ records.recordPower12c[0]=12;assert.equal(runtime.contactAudioInputs().recordPower12c[0],-1);
+ const before=owner.snapshot(),invalid={...runtime.contactAudioInputs(),recordPlace4:[0,NaN]};
+ assert.throws(()=>owner.advance([body(2),body(2)],field(),invalid),/source record/);assert.deepEqual(owner.snapshot(),before);
 });
 
 test('rider-water events follow the physical joint and strict source query, independently of hull wetness',()=>{
@@ -65,58 +90,58 @@ test('rider-water events follow the physical joint and strict source query, inde
   const b=body(frame,{wet:0});b.lastFrame.actorState=actor;
   b.articulatedRider={jointWorld:{x:64,y,z:0}};return b;
  };
- a.advance([fall(1,query.sourcePlaneQueryNative-1)],f,[0],[0]);
+ advance(a,[fall(1,query.sourcePlaneQueryNative-1)],f,[0],[0]);
  assert.deepEqual(a.snapshot().riderWater,[{bodyC84:0,bodyC86:1}]);
  assert.equal(a.snapshot().packets[0][24],1);assert.equal(a.snapshot().packets[0][3],0);
- a.advance([fall(2,query.sourcePlaneQueryNative-1)],f,[0],[0]);assert.equal(a.snapshot().packets[0][24],0);
- a.advance([fall(3,query.sourcePlaneQueryNative)],f,[0],[0]);
+ advance(a,[fall(2,query.sourcePlaneQueryNative-1)],f,[0],[0]);assert.equal(a.snapshot().packets[0][24],0);
+ advance(a,[fall(3,query.sourcePlaneQueryNative)],f,[0],[0]);
  assert.deepEqual(a.snapshot().riderWater,[{bodyC84:1,bodyC86:0}]);
- a.advance([fall(4,query.sourcePlaneQueryNative-1,7)],f,[0],[0]);assert.equal(a.snapshot().riderWater[0].bodyC86,0);
+ advance(a,[fall(4,query.sourcePlaneQueryNative-1,7)],f,[0],[0]);assert.equal(a.snapshot().riderWater[0].bodyC86,0);
  assert.deepEqual(a.drain(),[],'unimplemented mode4 playback must not invent a mixer lane');
  const copy=a.snapshot();copy.riderWater[0].bodyC86=1;assert.equal(a.snapshot().riderWater[0].bodyC86,0);
 });
 
 test('packet production precedes channel start, and impacts read the previous consumed speed',()=>{
  const a=createNativeRaceContactAudio({players:1,courseIndex:1}),f=field(),impacts=createNativeImpactState();impacts.racerImpactNative=.1;
- a.advance([body(1,{impacts})],f,[0],[0]);assert.equal(a.snapshot().packets[0][0],72);assert.equal(a.snapshot().packets[0][31],0);assert.deepEqual(a.drain(),[]);
- start(a);a.advance([body(2,{impacts})],f,[0],[0]);
+ advance(a,[body(1,{impacts})],f,[0],[0]);assert.equal(a.snapshot().packets[0][0],72);assert.equal(a.snapshot().packets[0][31],0);assert.deepEqual(a.drain(),[]);
+ start(a);advance(a,[body(2,{impacts})],f,[0],[0]);
  assert.deepEqual(a.drain(),[{frame:2,player:0,consumer:'bffec',arguments:[2,21,63]}]);
  assert.equal(a.snapshot().packets[0][31],72);assert.equal(a.snapshot().packets[0][13],7);
- a.advance([body(2,{impacts})],f,[0],[0]);assert.deepEqual(a.drain(),[]);assert.equal(a.snapshot().packets[0][13],7);
- a.advance([body(3,{impacts})],f,[0],[0]);assert.deepEqual(a.drain(),[]);assert.equal(a.snapshot().packets[0][13],6);
+ advance(a,[body(2,{impacts})],f,[0],[0]);assert.deepEqual(a.drain(),[]);assert.equal(a.snapshot().packets[0][13],7);
+ advance(a,[body(3,{impacts})],f,[0],[0]);assert.deepEqual(a.drain(),[]);assert.equal(a.snapshot().packets[0][13],6);
 });
 
 test('two human landings use independent wet latches and lanes, then drain only once',()=>{
  const a=createNativeRaceContactAudio({players:2,courseIndex:2}),f=field();start(a);
- a.advance([body(1,{wet:0}),body(1,{wet:0,rider:1})],f,[0,0],[0,0]);
- a.advance([body(2,{landing:1,vertical:-1}),body(2,{landing:1,vertical:-1,rider:1})],f,[0,0],[0,0]);
+ advance(a,[body(1,{wet:0}),body(1,{wet:0,rider:1})],f,[0,0],[0,0]);
+ advance(a,[body(2,{landing:1,vertical:-1}),body(2,{landing:1,vertical:-1,rider:1})],f,[0,0],[0,0]);
  assert.deepEqual(a.drain(),[0,1].map(player=>({frame:2,player,consumer:'bffec',arguments:[player?5:2,11,121]})));
- assert.deepEqual(a.drain(),[]);a.advance([body(3),body(3,{rider:1})],f,[0,0],[0,0]);assert.deepEqual(a.drain(),[]);
+ assert.deepEqual(a.drain(),[]);advance(a,[body(3),body(3,{rider:1})],f,[0,0],[0,0]);assert.deepEqual(a.drain(),[]);
 });
 
 test('inactive source frames retain motion; physics scalar query supplies immersion rather than render height',()=>{
  const a=createNativeRaceContactAudio({players:1,courseIndex:1}),f=field();start(a);
  // A sloped triangular cell makes the normalized query differ from its mesh.
  const location=queryNativeWaterField(f,64,0);location.indices.forEach((index,i)=>f.heightQ[index]=i*25*256);
- a.advance([body(1,{vertical:2})],f,[0],[0]);const previous=a.snapshot(),q=queryNativeWaterField(f,64,0);
+ advance(a,[body(1,{vertical:2})],f,[0],[0]);const previous=a.snapshot(),q=queryNativeWaterField(f,64,0);
  assert.notEqual(q.sourcePlaneQueryNative,q.renderHeightNative);
  assert.equal(previous.packets[0][15],nativeContactImmersion({waterQueryNative:q.sourcePlaneQueryNative,point90YNative:0,pointD0YNative:0}));
- a.advance([body(2,{speed:0,vertical:0,simulation:0})],f,[0],[0]);assert.deepEqual(a.snapshot().motion,previous.motion);
+ advance(a,[body(2,{speed:0,vertical:0,simulation:0})],f,[0],[0]);assert.deepEqual(a.snapshot().motion,previous.motion);
  assert.equal(a.snapshot().packets[0][0],previous.packets[0][0]);
  const exposed=a.snapshot();exposed.packets[0][0]=255;assert.notEqual(a.snapshot().packets[0][0],255);
 });
 
 test('source stops and result mode suppress consumption without erasing retained cooldown',()=>{
  const a=createNativeRaceContactAudio({players:1,courseIndex:7}),f=field(),impacts=createNativeImpactState();impacts.shoreImpactNative=1;start(a);
- a.advance([body(1,{impacts})],f,[0],[0]);a.drain();const cooldown=a.snapshot().packets[0][13];
- a.applyEffects([call('800c1f60',4)]);a.advance([body(2,{impacts})],f,[0],[0]);assert.deepEqual(a.drain(),[]);assert.equal(a.snapshot().packets[0][13],cooldown);
+ advance(a,[body(1,{impacts})],f,[0],[0]);a.drain();const cooldown=a.snapshot().packets[0][13];
+ a.applyEffects([call('800c1f60',4)]);advance(a,[body(2,{impacts})],f,[0],[0]);assert.deepEqual(a.drain(),[]);assert.equal(a.snapshot().packets[0][13],cooldown);
  start(a);assert.equal(a.snapshot().packets[0][13],cooldown);
- a.applyEffects([call('800c21f4',4,0)]);a.advance([body(3,{impacts})],f,[0],[0]);assert.deepEqual(a.drain(),[]);assert.equal(a.snapshot().audioMode,4);
+ a.applyEffects([call('800c21f4',4,0)]);advance(a,[body(3,{impacts})],f,[0],[0]);assert.deepEqual(a.drain(),[]);assert.equal(a.snapshot().audioMode,4);
 });
 
 test('suspended rendering has a bounded contact backlog, preserving the newest events',()=>{
  const a=createNativeRaceContactAudio({players:1,courseIndex:1}),f=field();start(a);
- for(let i=1;i<=80;i++){const impacts=createNativeImpactState();impacts[i%2?'shoreImpactNative':'fixedSphereImpactNative']=1;a.advance([body(i,{impacts})],f,[0],[0]);}
+ for(let i=1;i<=80;i++){const impacts=createNativeImpactState();impacts[i%2?'shoreImpactNative':'fixedSphereImpactNative']=1;advance(a,[body(i,{impacts})],f,[0],[0]);}
  assert.equal(a.snapshot().pending,64);assert.equal(a.snapshot().dropped,16);const events=a.drain();assert.equal(events[0].frame,17);assert.equal(events.at(-1).frame,80);
 });
 

@@ -187,7 +187,8 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
   scene:()=>({simulationState:current.scene.simulation648,phase650:current.scene.phase650}),
   contactAudioInputs(){
    const slots=[current.scene.primaryHumanIndex,...(players===2?[current.scene.secondaryHumanIndex]:[])];
-   return {slots,recordFlags318:slots.map(slot=>word(slot,0x318/4)),recordMotion2c8:slots.map(slot=>word(slot,0x2c8/4))};
+   return {slots,recordFlags318:slots.map(slot=>word(slot,0x318/4)),recordMotion2c8:slots.map(slot=>word(slot,0x2c8/4)),
+    recordPower12c:slots.map(slot=>word(slot,0x12c/4)),recordPlace4:slots.map(slot=>word(slot,1))};
   },
   // Read the same source rank/checkpoint clock and human slot selectors used
   // by63C88. The host supplies preceding physical centers before any hull tick.

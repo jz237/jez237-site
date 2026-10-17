@@ -102,6 +102,26 @@ cannot substitute for that stream. All46 focused tests pass, including a real
 buoy-triggered fall/remount and identical physical histories at30/60/144Hz.
 Rendering resolution, water geometry and existing music playback are unchanged.
 
+## Unpublished — canonical audio records and event state
+
+The live audio packet now receives power12C and place4 from the canonical race
+records, using the actual primary/secondary human slot selectors. Raw signed
+record words retain the source byte-store conversion. This does not read HUD
+labels or assume that player one is always racer slot zero. Missing or invalid
+record arrays reject before advancing the audio owner.
+
+`native-audio-events.js` reconstructs the complete C37F4 handler, including
+countdown/start cues, finish branches, power-dependent event selection, per-player
+flags, rank delays and repeated-event counters. All773 prepared executions of
+the original routine match its global writes and ordered leaf calls. The start
+event's engine gate and delays feed the complete packet consumer through shared
+context fields; packet processing does not decrement audio-thread timers.
+
+This event handler remains prepared logic. Original voice scheduling, mixer
+output and audio-thread cadence still require integration before full original
+audio playback can be claimed. Existing music, live contact playback and high
+resolution remain unchanged.
+
 ## Current preview scope
 
 Native source-water Time trial and Two-player previews admit Sunny Beach,

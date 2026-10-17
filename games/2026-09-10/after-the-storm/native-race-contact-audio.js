@@ -53,8 +53,11 @@ export function createNativeRaceContactAudio({players,courseIndex}){
     }
    }
   },
-  advance(adapters,field,recordFlags318,recordMotion2c8){
-   if(adapters.length!==players||recordFlags318.length!==players||!Array.isArray(recordMotion2c8)||recordMotion2c8.length!==players)throw new RangeError('Contact audio needs every admitted human body and source record');
+  advance(adapters,field,records){
+   const {recordFlags318,recordMotion2c8,recordPower12c,recordPlace4}=records??{};
+   if(adapters.length!==players||[recordFlags318,recordMotion2c8,recordPower12c,recordPlace4].some(values=>
+    !Array.isArray(values)||values.length!==players||values.some(v=>!Number.isInteger(v)||v< -2147483648||v>2147483647)))
+    throw new RangeError('Contact audio needs every admitted human body and source record');
    const next=adapters[0].logicalFrames;
    if(next===frame)return;
    if(next!==frame+1||adapters.some(a=>a.logicalFrames!==next||a.pendingFrameCompletion))throw new RangeError('Contact audio requires successive completed physics frames');
@@ -82,6 +85,7 @@ export function createNativeRaceContactAudio({players,courseIndex}){
     const query=queryNativeWaterField(field,F(F(points[0].x+points[1].x)*.5),F(F(points[0].z+points[1].z)*.5));
     for(let i=0;i<4;i++)packet[i]=prefix[i];
     packet[4]=actorAudio.buttonByte;packet[21]=actorAudio.riderEvent;packet[28]=actorAudio.animationEvent;
+    packet[14]=recordPower12c[player]&255;packet[25]=recordPlace4[player]&255;
     packet[24]=Number(riderWater[player].bodyC84===0&&riderWater[player].bodyC86===1);
     packet[15]=nativeContactImmersion({waterQueryNative:query.sourcePlaneQueryNative,point90YNative:points[0].y,pointD0YNative:points[1].y});
     const impact=nativeImpactAudioPacket({impacts:adapter.impacts,objectHitKind16d8:adapter.objectHitKind16d8,
