@@ -11,6 +11,7 @@ export function puddleDepth(p:Puddle,x:number,y:number,z:number){
 }
 type Drop={p:T.Vector3;v:T.Vector3;age:number;life:number;size:number;level:number};
 type Ripple={p:T.Vector3;water:Puddle|null;age:number;life:number;radius:number;strength:number};
+export type SplashSource=Pick<Vehicle,'id'|'velocity'|'health'|'right'|'remoteContactPoints'>&{controller?:Pick<Vehicle['controller'],'wheelIsInContact'|'wheelContactPoint'>};
 export class PuddleSplashes {
   readonly capacity=768;
   readonly drops:Drop[]=Array.from({length:this.capacity},()=>({p:new T.Vector3(),v:new T.Vector3(),age:0,life:0,size:0,level:0}));
@@ -46,18 +47,18 @@ export class PuddleSplashes {
     this.rings.name='puddle-wheel-ripples';this.rings.frustumCulled=false;this.rings.renderOrder=2;scene.add(this.rings);
   }
   setQuality(quality:string){this.quality=quality==='medium'?.55:quality==='high'?.8:1;}
-  update(cars:Vehicle[],waters:Puddle[],dt:number,emit:boolean){
+  update(cars:readonly SplashSource[],waters:Puddle[],dt:number,emit:boolean,render=true){
     this.accumulator+=Number.isFinite(dt)?Math.min(.05,Math.max(0,dt)):0;
     while(this.accumulator+1e-9>=1/60){this.step(cars,waters,1/60,emit);this.accumulator=Math.max(0,this.accumulator-1/60);}
-    this.prepare();
+    if(render)this.prepare();
   }
-  private step(cars:Vehicle[],waters:Puddle[],dt:number,emit:boolean){
+  private step(cars:readonly SplashSource[],waters:Puddle[],dt:number,emit:boolean){
     this.wetWheels=0;
     const used=new Set<string>();
     if(emit)for(const car of cars){
       const speed=Math.hypot(car.velocity.x,car.velocity.z);if(speed<.45||car.health<=0)continue;
       for(let wheel=0;wheel<4;wheel++){
-        const p=car.controller.wheelContactPoint(wheel);if(!p||!car.controller.wheelIsInContact(wheel))continue;
+        const p=car.remoteContactPoints?car.remoteContactPoints[wheel]:car.controller?.wheelIsInContact(wheel)?car.controller.wheelContactPoint(wheel):null;if(!p)continue;
         const water=waters.find(w=>puddleDepth(w,p.x,p.y,p.z)>.02);if(!water)continue;
         const depth=puddleDepth(water,p.x,p.y,p.z),key=car.id+':'+wheel+':'+water.id;used.add(key);this.wetWheels++;this.maxSpeed=Math.max(this.maxSpeed,speed);
         let b=this.budgets.get(key);if(!b){b={spray:1,ring:1};this.budgets.set(key,b);}

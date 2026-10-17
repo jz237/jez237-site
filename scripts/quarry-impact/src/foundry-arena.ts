@@ -1,3 +1,4 @@
+import {tagImpactMaterial} from './impact-material';
 import type R from '@dimforge/rapier3d-compat';
 import type {ArenaLayout} from './derby-arena';
 import {registerTerrainContacts} from './terrain-collision';
@@ -25,7 +26,7 @@ export function foundryPatch(x0=0,z0=0,nx=80,nz=80){
 }
 export const FOUNDRY_BARRIERS=FOUNDRY_OUTLINE.flatMap((a,i)=>{
  const b=FOUNDRY_OUTLINE[(i+1)%FOUNDRY_OUTLINE.length],dx=b.x-a.x,dz=b.z-a.z,length=Math.hypot(dx,dz),count=Math.ceil(length/3);
- return Array.from({length:count},(_,j)=>{const t=(j+.5)/count,x=a.x+dx*t,z=a.z+dz*t;return{x,z,y:foundryHeight(x,z)+1.2,yaw:-Math.atan2(dz,dx),half:[length/count/2+.12,1.35,.55]as const};});
+ return Array.from({length:count},(_,j)=>{const t=(j+.5)/count,x=a.x+dx*t,z=a.z+dz*t;return{material:'concrete' as const,x,z,y:foundryHeight(x,z)+1.2,yaw:-Math.atan2(dz,dx),half:[length/count/2+.12,1.35,.55]as const};});
 });
 export const foundrySurface=(x:number,z:number):'gravel'|'asphalt'=>Math.abs(z+.3*x)<12?'gravel':'asphalt';
 export const foundryGround={height:foundryHeight,surface:foundrySurface,outside:(x:number,y:number,z:number)=>Math.abs(x)>70||Math.abs(z)>65||y< -8,
@@ -37,7 +38,7 @@ export function buildFoundryPhysics(api:typeof R,world:R.World){
   const tiles:R.Collider[]=[];
   for(let z=0;z<80;z+=16)for(let x=0;x<80;x+=16){const p=foundryPatch(x,z,16,16);tiles.push(world.createCollider(api.ColliderDesc.trimesh(p.positions,p.indices).setFriction(.85),ground));}
   registerTerrainContacts(world,tiles);
-  for(const s of FOUNDRY_BARRIERS){const body=world.createRigidBody(api.RigidBodyDesc.fixed().setTranslation(s.x,s.y,s.z).setRotation({x:0,y:Math.sin(s.yaw/2),z:0,w:Math.cos(s.yaw/2)}));owned.push(body.handle);world.createCollider(api.ColliderDesc.cuboid(...s.half).setFriction(.55).setRestitution(.02),body);}
+  for(const s of FOUNDRY_BARRIERS){const body=world.createRigidBody(api.RigidBodyDesc.fixed().setTranslation(s.x,s.y,s.z).setRotation({x:0,y:Math.sin(s.yaw/2),z:0,w:Math.cos(s.yaw/2)}));owned.push(body.handle);tagImpactMaterial(world.createCollider(api.ColliderDesc.cuboid(...s.half).setFriction(.55).setRestitution(.02),body),'concrete');}
   return owned;
  }catch(error){for(const handle of owned){const body=world.getRigidBody(handle);if(body)world.removeRigidBody(body);}throw error;}
 }

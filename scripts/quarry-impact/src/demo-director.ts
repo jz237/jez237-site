@@ -35,7 +35,22 @@ export class DemoDirector {
   reset(){this.cut=0;this.shotAge=0;this.lostAge=0;this.subjectOffset.set(0,0,0);this.lastSubjectId=-1;this.initialized=false;this.snap=true;this.followed=0;this.manual=false;this.health.clear();this.recentDamage.clear();this.avoidanceOffset=null;}
   select(view:DemoCamera){if(!Object.hasOwn(DEMO_CAMERAS,view))return;this.view=view;this.snap=true;this.cut=0;}
   follow(id:number){this.followed=id;this.manual=true;this.snap=true;this.cut=0;}
-  cycleCar(cars:Vehicle[],direction=1){if(!cars.length)return;const i=Math.max(0,cars.findIndex(c=>c.id===this.followed));this.follow(cars[(i+direction+cars.length)%cars.length].id);}
+  cycleCar(cars:Vehicle[],direction=1){
+    if(!cars.length||!Number.isFinite(direction)||direction===0)return;
+    const step=direction<0?-1:1,current=cars.findIndex(c=>c.id===this.followed);
+    // Walk roster order, including from a wrecked or disconnected subject.
+    // Finished survivors remain available for post-race viewing.
+    const start=current<0?(step>0?-1:0):current;
+    for(let offset=1;offset<=cars.length;offset++){
+      const car=cars[(start+step*offset+cars.length)%cars.length];
+      if(car.health>0){
+        // A single remaining survivor needs no camera reset on repeated input.
+        if(car.id!==this.followed)this.follow(car.id);
+        return;
+      }
+    }
+    // No living subject: retain the final scene rather than cycling wrecks.
+  }
   cycleView(){const views=Object.keys(DEMO_CAMERAS)as DemoCamera[];this.select(views[(views.indexOf(this.view)+1)%views.length]);}
   update(cars:Vehicle[],camera:T.PerspectiveCamera,orbit:OrbitControls,dt:number,race:boolean){
     if(!cars.length||!Number.isFinite(dt)||dt<0)return;

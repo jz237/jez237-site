@@ -1,3 +1,4 @@
+import {QUARRY_TYRES} from './quarry-tyres';
 import {loadWorkyard, workyardFences} from './scenery-workyard';
 import {ReferenceArena} from './scenery-reference-arena';
 import {referenceArenaFloor} from './scenery-reference-floor';
@@ -443,6 +444,13 @@ export class Quarry {
       this.scenery.add(mesh);
       this.props.push({ mesh, body, start: new T.Vector3(x, y, z) });
     }
+    const tyreGeometry=new T.TorusGeometry(.44,.14,8,24);tyreGeometry.rotateX(Math.PI/2);
+    const tyreMaterial=new T.MeshStandardMaterial({color:0x262623,roughness:.98});
+    for(const {id,x,y,z} of QUARRY_TYRES){
+      const body=this.collisionPhysics.props[id].body,mesh=new T.Mesh(tyreGeometry,tyreMaterial);
+      mesh.castShadow=mesh.receiveShadow=true;mesh.name='movable_quarry_tyre_'+id;
+      this.scenery.add(mesh);this.props.push({mesh,body,start:new T.Vector3(x,y,z)});
+    }
     const water = softShoreMaterial(new T.MeshPhysicalMaterial({
       color: 0x858d87,
       metalness: 0.05,
@@ -571,10 +579,15 @@ export class Quarry {
     }
   }
   applyProps(states:{id:number;p:{x:number;y:number;z:number};q:{x:number;y:number;z:number;w:number};v:{x:number;y:number;z:number};av:{x:number;y:number;z:number}}[]) {
+    // The server owns the prop set too. Older servers have only the barrel
+    // prefix; absent props must neither render nor collide on this client.
+    const present=new Set(states.map(state=>state.id));
+    this.props.forEach((p,id)=>{const enabled=present.has(id);p.mesh.visible=enabled;if(p.body.isEnabled()!==enabled)p.body.setEnabled(enabled);});
     for(const state of states){const p=this.props[state.id];if(!p)continue;p.body.setBodyType(R.RigidBodyType.KinematicPositionBased,true);p.body.setTranslation(state.p,true);p.body.setRotation(state.q,true);p.body.setLinvel(state.v,true);p.body.setAngvel(state.av,true);p.mesh.position.copy(state.p);p.mesh.quaternion.copy(state.q);}
   }
   resetProps() {
     for (const p of this.props) {
+      p.mesh.visible=true;p.body.setEnabled(true);
       p.body.setBodyType(R.RigidBodyType.Dynamic,true);
       p.body.setRotation({x:0,y:0,z:0,w:1},true);
       p.body.setTranslation(p.start, true);

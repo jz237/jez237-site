@@ -1,6 +1,7 @@
+import {createRaceMudTextures} from './race-mud';
 import * as T from 'three';
 import type {createCountyCourse} from './county-course';
-type Course=ReturnType<typeof createCountyCourse>;
+type Course=Pick<ReturnType<typeof createCountyCourse>,'terrain'|'distance'|'surface'>;
 export const COURSE_MASK_SIZE=[256,210] as const;
 /** The mask selects photographs only: the existing terrain/collision mesh stays exact. */
 export function courseSurfaceMask(course:Course){
@@ -24,28 +25,41 @@ vCourseWorld=(modelMatrix*coursePosition).xyz;
 `;
 /** Layer metre-scale aggregate over the existing course atlas. Palette and paint
  * stay authored per venue; normal detail and roughness now respond to the light. */
-export function addCourseGroundDetail(material:T.MeshStandardMaterial,course:Course){
+export function addCourseGroundDetail(material:T.MeshStandardMaterial,course:Course,looseSurface:'gravel'|'mud'='gravel'){
  const owned:T.Texture[]=[],mask=new T.DataTexture(courseSurfaceMask(course),...COURSE_MASK_SIZE);mask.name='course-surface-mask';mask.flipY=false;mask.minFilter=mask.magFilter=T.LinearFilter;mask.needsUpdate=true;owned.push(mask);
- const asphalt=photo('circuit_asphalt_diff',true,owned),gravel=photo('gravel_diff',true,owned),soil=photo('forrest_ground_01_diff',true,owned);
- const asphaltN=photo('circuit_asphalt_nor_gl',false,owned),soilN=photo('mud_nor_gl',false,owned);material.normalMap=photo('gravel_nor_gl',false,owned);material.normalScale.setScalar(.55);
+ const mud=looseSurface==='mud'?createRaceMudTextures():null;if(mud)owned.push(mud.diffuse,mud.normal,mud.roughness);
+ const asphalt=photo('circuit_asphalt_diff',true,owned),gravel=mud?.diffuse??photo('gravel_diff',true,owned),soil=photo('forrest_ground_01_diff',true,owned);
+ const asphaltN=photo('circuit_asphalt_nor_gl',false,owned),soilN=photo('mud_nor_gl',false,owned);material.normalMap=mud?.normal??photo('gravel_nor_gl',false,owned);material.normalScale.setScalar(.55);
  const originalCompile=material.onBeforeCompile,originalKey=material.customProgramCacheKey;
  material.onBeforeCompile=(shader,renderer)=>{
   originalCompile.call(material,shader,renderer);
   Object.assign(shader.uniforms,{courseMask:{value:mask},courseAsphalt:{value:asphalt},courseGravel:{value:gravel},courseSoil:{value:soil},courseAsphaltN:{value:asphaltN},courseSoilN:{value:soilN}});
+  if(mud)shader.uniforms.courseMudRoughness={value:mud.roughness};
   shader.vertexShader='varying vec3 vCourseWorld;\n'+shader.vertexShader;shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\n'+positionVertex);
   shader.fragmentShader=`
 varying vec3 vCourseWorld;
+${mud?'uniform sampler2D courseMudRoughness;':''}
 uniform sampler2D courseMask,courseAsphalt,courseGravel,courseSoil,courseAsphaltN,courseSoilN;
 vec2 courseOffset(vec2 cell){return fract(sin(vec2(dot(cell,vec2(127.1,311.7)),dot(cell,vec2(269.5,183.3))))*43758.5453);}
-vec3 coursePair(sampler2D photograph,vec2 uv){
- // Three continuously blended offsets break visible rows of repeated cracks.
+vec3 courseSample(sampler2D photograph,vec2 uv,vec2 cell,vec2 dx,vec2 dy,bool normalSample){
+ vec2 offset=courseOffset(cell);
+ float angle=offset.x*6.28318530718,c=cos(angle),s=sin(angle);
+ mat2 rotation=mat2(c,s,-s,c);
+ vec3 sampleValue=textureGrad(photograph,rotation*uv+offset,rotation*dx,rotation*dy).rgb;
+ // Normals return to the original world-projected tangent frame before blending.
+ if(normalSample)sampleValue.xy=(transpose(rotation)*(sampleValue.xy*2.0-1.0))*.5+.5;
+ return sampleValue;
+}
+vec3 coursePair(sampler2D photograph,vec2 uv,bool normalSample){
+ // Shared cell rotations keep diffuse, roughness and normals aligned without repeated crack directions.
  vec2 grid=mat2(1.0,0.0,-.57735027,1.15470054)*uv*.5;
  vec2 cell=floor(grid),f=fract(grid),a,b,c;vec3 weights;
  if(f.x+f.y<1.0){weights=vec3(1.0-f.x-f.y,f.x,f.y);a=cell;b=cell+vec2(1,0);c=cell+vec2(0,1);}
  else{weights=vec3(f.x+f.y-1.0,1.0-f.x,1.0-f.y);a=cell+vec2(1,1);b=cell+vec2(0,1);c=cell+vec2(1,0);}
  weights=pow(weights,vec3(4.0));weights/=dot(weights,vec3(1.0));vec2 dx=dFdx(uv),dy=dFdy(uv);
- return textureGrad(photograph,uv+courseOffset(a),dx,dy).rgb*weights.x+textureGrad(photograph,uv+courseOffset(b),dx,dy).rgb*weights.y+textureGrad(photograph,uv+courseOffset(c),dx,dy).rgb*weights.z;
+ return courseSample(photograph,uv,a,dx,dy,normalSample)*weights.x+courseSample(photograph,uv,b,dx,dy,normalSample)*weights.y+courseSample(photograph,uv,c,dx,dy,normalSample)*weights.z;
 }
+vec3 coursePair(sampler2D photograph,vec2 uv){return coursePair(photograph,uv,false);}
 `+shader.fragmentShader;
   shader.fragmentShader=shader.fragmentShader.replace('#include <alphamap_fragment>',`
 vec2 courseUV=vec2(vCourseWorld.x/${course.terrain.spanX.toFixed(1)}+.5,.5-vCourseWorld.z/${course.terrain.spanZ.toFixed(1)});
@@ -67,11 +81,11 @@ float courseMark=max(courseWeights.b,smoothstep(.42,.66,max(max(coursePaint.r,co
 diffuseColor.rgb=mix(courseFinish,coursePaint,courseMark);
 #include <alphamap_fragment>`);
   shader.fragmentShader=shader.fragmentShader.replace('#include <roughnessmap_fragment>',`#include <roughnessmap_fragment>
-roughnessFactor=mix(.98,mix(.94,.81,courseWeights.r),courseWeights.g);`);
+roughnessFactor=mix(.98,${mud?'coursePair(courseMudRoughness,courseDirtUV).g':'mix(.94,.81,courseWeights.r)'},courseWeights.g);`);
   shader.fragmentShader=shader.fragmentShader.replace('#include <normal_fragment_maps>',`
 #ifdef USE_NORMALMAP_TANGENTSPACE
-vec3 courseRN=mix(coursePair(normalMap,courseDirtUV),coursePair(courseAsphaltN,courseRoadUV),courseWeights.r)*2.0-1.0;
-vec3 courseEN=coursePair(courseSoilN,courseSoilUV)*2.0-1.0;
+vec3 courseRN=mix(coursePair(normalMap,courseDirtUV,true),coursePair(courseAsphaltN,courseRoadUV,true),courseWeights.r)*2.0-1.0;
+vec3 courseEN=coursePair(courseSoilN,courseSoilUV,true)*2.0-1.0;
 courseRN.xy*=.48;courseEN.xy*=.65;
 mat3 courseRoadFrame=getTangentFrame(-vViewPosition,nonPerturbedNormal,courseRoadUV);
 mat3 courseSoilFrame=getTangentFrame(-vViewPosition,nonPerturbedNormal,courseSoilUV);
@@ -79,7 +93,7 @@ normal=normalize(mix(normalize(courseSoilFrame*courseEN),normalize(courseRoadFra
 normal=normalize(mix(normal,nonPerturbedNormal,courseMark*.7));
 #endif`);
  };
- material.customProgramCacheKey=()=> 'course-photo-ground-v1';material.needsUpdate=true;
+ material.customProgramCacheKey=()=> mud?'course-photo-race-mud-v2':'course-photo-ground-v2';material.needsUpdate=true;
  let disposed=false;return{textures:owned,dispose(){if(disposed)return;disposed=true;owned.forEach(t=>t.dispose());material.normalMap=null;material.onBeforeCompile=originalCompile;material.customProgramCacheKey=originalKey;}};
 }
 /** World-space projection keeps boulders and large ridges at the same rock scale. */

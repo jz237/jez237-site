@@ -17,3 +17,11 @@ test('live snapshots are accepted; stale audio state and nonfinite transforms ar
     assert.equal(validOnlineSnapshot(duplicate),false,'Each driver owns a unique car slot');
   }finally{sim.dispose();}
 });
+
+test('prop IDs reject duplicates, negative and out-of-range values but allow sparse reordered sets',async()=>{
+ await R.init();const sim=new Simulation(R);try{const snapshot={...sim.snapshot(),members:[],ack:{}};
+ for(const id of [-1,128,1.5,NaN]){const invalid=structuredClone(snapshot);invalid.props[0].id=id;assert.equal(validOnlineSnapshot(invalid),false);}
+ const duplicate=structuredClone(snapshot);duplicate.props[1].id=duplicate.props[0].id;assert.equal(validOnlineSnapshot(duplicate),false);
+ snapshot.props=snapshot.props.filter(p=>p.id%2===0).reverse();assert.equal(validOnlineSnapshot(snapshot),true);
+ }finally{sim.dispose();}
+});

@@ -70,3 +70,12 @@ test('replay copies use an optional venue sampler while omitted legacy terrain a
   assert.deepEqual(f.scene.children,f.children);assert.equal(f.world.bodies.len(),2);assert.equal(f.world.colliders.len(),2);assert.equal(f.world.vehicleControllers.size,0);
  }finally{f.dispose();}
 });
+
+test('appended quarry tyres retain full playback and legacy barrel-only recordings',async()=>{
+ const {quarryReplayProps}=await import('../src/quarry-tyres');const f=fixture();try{
+  const sources=Array.from({length:34},(_,id)=>{const mesh=f.props[id%2].mesh.clone();mesh.name=id<22?'barrel-'+id:'tyre-'+id;return{mesh,body:f.props[id%2].body};});
+  for(const count of [22,34]){const doc=document();doc.meta.props=count;const stride=replayCarStride(doc.meta),values=new Float32Array(stride+count*7);values.set(doc.frames[0].values.subarray(0,stride));for(let i=0;i<count;i++)values.set([i,1,4,0,0,0,1],stride+i*7);doc.frames[0].values=values;
+   const view=new ReplayScene(doc,f.scene,f.world,quarryReplayProps(sources,count));try{view.seek(0);assert.equal(view.props.length,count);assert.equal(view.props[count-1].position.x,count-1);assert.equal(view.props[count-1].name,count===22?'barrel-21':'tyre-33');}finally{view.dispose();}
+  }
+ }finally{f.dispose();}
+});

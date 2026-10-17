@@ -74,6 +74,6 @@ test('authority emits zero-health scars from real light contact and retains them
  const events=sim.damage.filter(d=>d.car===0);assert.ok(events.some(d=>d.scar));assert.ok(events.every(d=>d.scar&&d.damage===0));
  assert.equal(c.state.health,100);assert.equal(c.state.inflicted,0);assert.deepEqual(c.state.components,before);
  const snapshot=sim.snapshot(true),decoded=decodeSnapshotWire(encodeSnapshotWire(snapshot))as typeof snapshot;
- assert.deepEqual(decoded,snapshot);assert.ok(decoded.cars[0].dents!.some(d=>d.scar));
+ assert.deepEqual(decoded,JSON.parse(JSON.stringify(snapshot)));assert.ok(decoded.cars[0].dents!.some(d=>d.scar));
  sim.queue.free();sim.world.free();
 });

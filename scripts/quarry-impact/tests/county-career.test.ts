@@ -37,7 +37,7 @@ test('old earned medals and purchased groups survive; all added groups unlock an
    settleRun(profile,'county-repeat-'+id,run,c);assert.equal(careerStatus(profile).earned,before+3);
   }
  }
- assert.equal(careerStatus(profile).completed,4);assert.equal(careerStatus(profile).available,24);
+ assert.equal(careerStatus(profile).completed,6);assert.equal(careerStatus(profile).available,36);
  const save=await readSave(await exportSave({getItem:key=>key===PROFILE_KEY?JSON.stringify(profile):null}));
  assert.deepEqual(readProfile(save.entries[PROFILE_KEY]),profile);
  assert.deepEqual(profile.challenges['first-lap'],old.challenges['first-lap']);

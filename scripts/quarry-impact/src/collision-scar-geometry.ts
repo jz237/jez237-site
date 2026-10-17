@@ -25,7 +25,7 @@ export function scuffGeometry(mesh:T.Mesh,contact:T.Vector3,direction:T.Vector3,
   if(offset.lengthSq()>construction.budget**2)current.copy(orig).add(offset.setLength(construction.budget));
   current.applyMatrix4(from);position.setXYZ(i,current.x,current.y,current.z);
   if(wear)wear.setXY(i,Math.min(1,wear.getX(i)+weight*.72),Math.min(1,wear.getY(i)+weight*.48));
-  if(paint&&transfer){const paintWeight=Math.max(0,1-orig.distanceTo(contact)/.71);if(paintWeight>0)transfer.setXYZW(i,paint.r,paint.g,paint.b,Math.min(.8,transfer.getW(i)+paintWeight*.096));}
+  if(paint&&transfer){const paintWeight=Math.max(0,1-Math.sqrt(distance2)/.71);if(paintWeight>0)transfer.setXYZW(i,paint.r,paint.g,paint.b,Math.min(.8,transfer.getW(i)+paintWeight*.096));}
   changed=true;
  }
  if(!changed)return false;

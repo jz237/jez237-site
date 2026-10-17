@@ -1,3 +1,4 @@
+import {QUARRY_TYRES} from '../src/quarry-tyres';
 import westWallData from '../src/quarry-west-wall-collision.json';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -162,7 +163,7 @@ test('actual rendered Quarry and authoritative server use identical static geome
     assert.equal(layout.filter(s=>s.id.startsWith('tree-'+kind+'-')).length,placements.length);
     for(const p of placements)assert.ok(quarry.collisionPhysics.statics.has('tree-'+kind+'-'+p.colliderIndex));
   }
-  assert.equal(server.props.length,22);quarry.props.forEach((p,i)=>assert.deepEqual(p.body.translation(),server.props[i].body.translation()));
+  assert.equal(server.props.length,BARRELS.length+QUARRY_TYRES.length);assert.equal(quarry.props.length,server.props.length);quarry.props.forEach((p,i)=>assert.deepEqual(p.body.translation(),server.props[i].body.translation()));
   const impulse={x:80,y:20,z:12};quarry.props[0].body.applyImpulse(impulse,true);server.props[0].body.applyImpulse(impulse,true);
   for(let i=0;i<60;i++){browserWorld.step();server.world.step();}
   assert.deepEqual(quarry.props[0].body.translation(),server.props[0].body.translation());
@@ -175,7 +176,10 @@ test('authority completes derby, preserves disabled obstacles, rematches fresh, 
   room.sim.cars.forEach((c,i)=>c.state.health=i===0?30:0);const wreck=room.sim.cars[1].body.handle;room.step();
   assert.equal(room.sim.phase,'result');assert.equal(room.sim.ranking()[0],0);assert.ok(room.sim.world.getRigidBody(wreck));assert.ok(room.sim.cars[1].collider.isEnabled());
   room.receive(0,peer.peer,JSON.stringify({type:'start',mode:'race'}));assert.equal(room.sim.phase,'countdown');assert.ok(room.sim.cars.every(c=>c.state.health===100&&c.state.passed===0));assert.equal(room.sim.tick,0);
-  room.sim.phase='playing';room.sim.elapsed=10;const ai=room.sim.cars[1];ai.offTrack=6.99;ai.state.p={x:0,y:.89,z:0};room.sim.ai(ai);
+  room.sim.phase='playing';room.sim.elapsed=10;const ai=room.sim.cars[1];
+  // A recovery must have free road space; the untouched start grid occupies it.
+  for(const [i,c]of room.sim.cars.entries()){const p={x:500+i*10,y:5,z:500};c.body.setTranslation(p,true);c.state.p=p;}
+  ai.body.setTranslation({x:0,y:.89,z:0},true);ai.state.p={x:0,y:.89,z:0};room.sim.world.step();ai.offTrack=6.99;room.sim.ai(ai);
   assert.equal(ai.state.penalty,5);assert.ok(Math.hypot(ai.state.p.x,ai.state.p.z)>70);assert.equal(ai.offTrack,0);
   assert.equal(room.sim.recover(1),false,'Recovery spam is rate limited');room.sim.elapsed+=6;assert.equal(room.sim.recover(1),true);assert.equal(ai.state.penalty,10);
   room.sim.elapsed=899.995;room.step();assert.equal(room.sim.phase,'result');room.dispose();

@@ -190,6 +190,8 @@ export class VehicleFire {
       else {p.v.x*=Math.exp(-dt*.6);p.v.z*=Math.exp(-dt*.6);p.v.y+=dt*.45;}
     }
   }
+  /** Upload externally reconstructed particles without advancing live thermal state. */
+  renderRecorded(time:number,camera:T.Camera){this.time=time;this.prepare(camera);}
   private prepare(camera:T.Camera){
     camera.updateMatrixWorld();this.visible.length=0;
     // Same calibrated HDRI sun as static-shadows.ts, guarded by the renderer test.
