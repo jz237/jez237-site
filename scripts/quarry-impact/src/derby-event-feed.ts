@@ -1,8 +1,8 @@
 import type {CombatRecord} from './event-rules';
 export type DerbyFeedDriver={id:number;name:string;record:CombatRecord};
-export type DerbyFeedEntry={id:number;driver:number;name:string;kind:'massive'|'rival'|'spin'|'knockout';count:number;time:number};
-const labels={massive:'MASSIVE HIT',rival:'RIVAL HIT',spin:'SPIN OUT',knockout:'KNOCKOUT'} as const;
-const counts=(r:CombatRecord)=>({massive:r.impacts?.[2]??0,rival:r.rivalHits??0,spin:r.spins??0,knockout:r.knockouts});
+export type DerbyFeedEntry={id:number;driver:number;name:string;kind:'massive'|'rival'|'spin'|'spin180'|'spin360'|'knockout';count:number;time:number};
+const labels={massive:'MASSIVE HIT',rival:'RIVAL HIT',spin:'90° SPIN ★',spin180:'180° SPIN ★★',spin360:'360° SPIN ★★★',knockout:'KNOCKOUT'} as const;
+const counts=(r:CombatRecord)=>({massive:r.impacts?.[2]??0,rival:r.rivalHits??0,spin:r.spins??0,spin180:r.spins180??0,spin360:r.spins360??0,knockout:r.knockouts});
 const escape=(s:string)=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 /** Observe cumulative awarded counters, never infer awards from vehicle damage.
  * Baseline on entry/reconnect; batched snapshots retain multiple earned events. */
@@ -14,7 +14,7 @@ export class DerbyEventFeed{
   if(time<this.time)this.reset();this.time=time;
   const seen=new Set<number>();
   for(const driver of drivers){seen.add(driver.id);const current=counts(driver.record),before=this.previous.get(driver.id);
-   if(this.ready&&before)for(const kind of ['massive','rival','spin','knockout']as const){const delta=current[kind]-before[kind];if(Number.isInteger(delta)&&delta>0)this.entries.push({id:++this.sequence,driver:driver.id,name:driver.name,kind,count:delta,time});}
+   if(this.ready&&before)for(const kind of ['massive','rival','spin','spin180','spin360','knockout']as const){const delta=current[kind]-before[kind];if(Number.isInteger(delta)&&delta>0)this.entries.push({id:++this.sequence,driver:driver.id,name:driver.name,kind,count:delta,time});}
    this.previous.set(driver.id,current);
   }
   for(const id of this.previous.keys())if(!seen.has(id))this.previous.delete(id);

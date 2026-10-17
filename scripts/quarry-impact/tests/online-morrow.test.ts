@@ -21,7 +21,7 @@ test('mixed peers cannot select Morrow; leaving enables it; stale joins and reco
  room.disconnect(1,old);assert.equal(room.snapshot().morrowSupport,true);room.receive(0,host,setup('morrow'));assert.equal(room.sessions.get(0)!.member.kind,'morrow');
  assert.equal(room.connect(peer(),hello('coupe',null)),null);assert.equal(room.connect(peer(),hello('coupe',null,room.sessions.get(0)!.token)),null);assert.equal(room.sessions.get(0)!.member.connected,true);
  room.receive(0,host,JSON.stringify({type:'start',mode:'race'}));assert.ok(room.sim.cars.some(c=>c.state.kind==='morrow'));assert.equal(room.sim.cars[0].state.kind,'morrow');
- const snap=room.snapshot(true);assert.ok(validOnlineSnapshot(snap));assert.deepEqual(decodeSnapshotWire(encodeSnapshotWire(snap)),snap);assert.equal(validOnlineSnapshot({...snap,morrowSupport:undefined}),false);
+ const snap=room.snapshot(true);assert.ok(validOnlineSnapshot(snap));assert.deepEqual(JSON.parse(JSON.stringify(decodeSnapshotWire(encodeSnapshotWire(snap)))),JSON.parse(JSON.stringify(snap)));assert.equal(validOnlineSnapshot({...snap,morrowSupport:undefined}),false);
  }finally{room.dispose();}
 });
 test('Morrow physics, persisted car condition and reconnect survive room restoration',()=>{

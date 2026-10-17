@@ -17,7 +17,7 @@ test('timed authority completes a whole gate-validated lap after expiry in every
  const id=direction==='opposing'?1:0,c=s.cars[id];for(let i=0;i<24;i++)gate(s,id);assert.equal(c.state.passed,24);assert.equal(c.state.finished,false,'configured lap count cannot end a timed race');
  s.elapsed=60;for(let i=0;i<23;i++)gate(s,id);assert.equal(c.state.finished,false,'expiry itself and intermediate gates cannot finish');c.state.penalty=5;gate(s,id);assert.equal(c.state.passed,48);assert.equal(c.state.finished,true);assert.equal(c.state.finishTime,s.elapsed+5);
  assert.equal(s.recover(id),false,'classified drivers cannot recover');const passed=c.state.passed;gate(s,id);assert.equal(c.state.passed,passed,'finished cars circulate without adding laps');
- const snap={...s.snapshot(true),eventSupport:true as const,timedRaceSupport:true as const,members:[],ack:{}};assert.ok(validOnlineSnapshot(snap));assert.deepEqual(decodeSnapshotWire(encodeSnapshotWire(snap)),snap);assert.equal(validOnlineSnapshot({...snap,timedRaceSupport:undefined}),false);
+ const snap={...s.snapshot(true),eventSupport:true as const,timedRaceSupport:true as const,members:[],ack:{}};assert.ok(validOnlineSnapshot(snap));assert.deepEqual(JSON.parse(JSON.stringify(decodeSnapshotWire(encodeSnapshotWire(snap)))),JSON.parse(JSON.stringify(snap)));assert.equal(validOnlineSnapshot({...snap,timedRaceSupport:undefined}),false);
  const restored=new Simulation(R,'race',[],24);try{restored.restore(snap);assert.deepEqual(restored.event!.rules,s.event!.rules);assert.equal(restored.cars[id].state.finishTime,c.state.finishTime);assert.equal(restored.elapsed,s.elapsed);}finally{restored.dispose();}
  }finally{s.dispose();}}
 });

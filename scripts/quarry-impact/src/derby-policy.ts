@@ -13,7 +13,7 @@ export function derbyEndReason(format:DerbyFormat,cars:readonly {health:number}[
  if(!DERBY_FORMATS[format].respawns&&cars.filter(c=>c.health>0).length<=1)return 'elimination';
  return null;
 }
-export function derbyRecordPrefix(format:DerbyFormat,rivals=false){if(rivals&&DERBY_FORMATS[format].scored)return format==='score-no-respawn'?'score-elimination-v2':'score-derby-v3';return format==='score-no-respawn'?'score-elimination-v1':format==='score'?'score-derby-v2':'derby';}
+export function derbyRecordPrefix(format:DerbyFormat,rivals=false,gradedSpins=false){if(gradedSpins&&DERBY_FORMATS[format].scored)return (format==='score-no-respawn'?'score-elimination-v3':'score-derby-v4')+(rivals?'':'-no-rivals');if(rivals&&DERBY_FORMATS[format].scored)return format==='score-no-respawn'?'score-elimination-v2':'score-derby-v3';return format==='score-no-respawn'?'score-elimination-v1':format==='score'?'score-derby-v2':'derby';}
 export function derbyWreckStatus(format:DerbyFormat,respawnAt:number,elapsed:number){
  if(!DERBY_FORMATS[format].respawns)return 'WRECKED · WATCHING REMAINING DRIVERS';
  return elapsed<respawnAt?`WRECKED · RESPAWN IN ${Math.ceil(respawnAt-elapsed)}s`:'WAITING FOR A CLEAR SPAWN';

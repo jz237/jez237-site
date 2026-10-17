@@ -1,3 +1,5 @@
+import {validStartReadiness,type StartReadinessState} from './start-readiness';
+import {isOnlineOpponentSet,type OnlineOpponentSet} from '../src/online-opponents';
 import type {DriveSnapshot} from '../src/drivetrain/state';
 import type {ImpactMaterial} from '../src/impact-material';
 import {validOnlineCar,extendedOnlineCar} from '../src/online-roster';
@@ -46,15 +48,17 @@ export type Snapshot = {
   cars: CarState[]; damage: DamageEvent[]; ranking: number[];
   members: Member[]; ack: Record<number, number>;
   props: PropState[];
-  arenaSupport?:true; courseSupport?:true; rosterSupport?:true; kiteSupport?:true; morrowSupport?:true; capacity?:OnlineCapacity; transmissionSupport?:true; assistsSupport?:true; absSupport?:true;
-  eventSupport?:true; timedRaceSupport?:true; chaseSupport?:true; noRespawnDerbySupport?:true; event?:OnlineEventState;
+  arenaSupport?:true; courseSupport?:true; rosterSupport?:true; kiteSupport?:true; morrowSupport?:true; alderSupport?:true; capacity?:OnlineCapacity; transmissionSupport?:true; assistsSupport?:true; absSupport?:true;
+  eventSupport?:true; timedRaceSupport?:true; chaseSupport?:true; noRespawnDerbySupport?:true; spinTierSupport?:true; classEngineSupport?:true; raceFinishWindowSupport?:true; startReadySupport?:true; startReadiness?:StartReadinessState; opponentSetSupport?:true; opponentSet?:OnlineOpponentSet; event?:OnlineEventState;
   cupSupport?:true; cup?:CupState; setupSupport?:true; setupRule?:SetupRule; liverySupport?:true; liveryRevision?:number;
 };
 export type ClientMessage =
-  | { type: 'hello'; protocol: number; name: string; kind: CarKind; token?: string; maxPlayers?:24; arenas?:1; courses?:1; roster?:1; kite?:1; morrow?:1; eventRules?:1; timedRace?:1; chase?:1; noRespawnDerby?:1; wire?:'qiw1'; setup?:OnlineSetup }
+  | { type: 'hello'; protocol: number; name: string; kind: CarKind; token?: string; maxPlayers?:24; arenas?:1; courses?:1; roster?:1; kite?:1; morrow?:1; alder?:1; eventRules?:1; timedRace?:1; chase?:1; noRespawnDerby?:1; spinTiers?:1; classEngines?:1; startReady?:1; opponentSets?:1; wire?:'qiw1'; setup?:OnlineSetup }
   | { type:'livery'; kind:CarKind; layers:import('../src/livery-data').LiveryLayer[] }
   | { type:'setup'; kind:CarKind; setup:OnlineSetup }
   | { type:'setup-rule'; rule:SetupRule }
+  | { type:'start-ready'; round:string }
+  | { type:'opponent-set'; set:OnlineOpponentSet|'auto' }
   | { type: 'input'; seq: number; controls: Controls }
   | { type: 'start'; mode: Mode; rounds?:number; rules?:OnlineEventRules }
   | { type: 'vote'; mode:CupMode }
@@ -78,15 +82,17 @@ export function parseClientMessage(raw: string): ClientMessage | null {
   const finite = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v);
   if (d.type === 'hello' && d.protocol === PROTOCOL && typeof d.name === 'string' &&
       validOnlineCar(d.kind) &&
-      (d.arenas===undefined||d.arenas===1&&d.eventRules===1)&&(d.courses===undefined||d.courses===1&&d.eventRules===1)&&(d.roster===undefined||d.roster===1)&&(d.kite===undefined||d.kite===1&&d.roster===1)&&(d.kind!=='kite'||d.kite===1)&&(d.morrow===undefined||d.morrow===1&&d.kite===1&&d.roster===1)&&(d.kind!=='morrow'||d.morrow===1)&&(!extendedOnlineCar(d.kind)||d.roster===1)&&(d.setup===undefined||validOnlineSetup(d.setup))&&
-      (d.chase===undefined||d.chase===1&&d.eventRules===1)&&(d.timedRace===undefined||d.timedRace===1&&d.eventRules===1)&&(d.eventRules===undefined||d.eventRules===1)&&(d.noRespawnDerby===undefined||d.noRespawnDerby===1&&d.eventRules===1)&&
+      (d.arenas===undefined||d.arenas===1&&d.eventRules===1)&&(d.courses===undefined||d.courses===1&&d.eventRules===1)&&(d.roster===undefined||d.roster===1)&&(d.kite===undefined||d.kite===1&&d.roster===1)&&(d.kind!=='kite'||d.kite===1)&&(d.morrow===undefined||d.morrow===1&&d.kite===1&&d.roster===1)&&(d.kind!=='morrow'||d.morrow===1)&&(d.alder===undefined||d.alder===1&&d.morrow===1&&d.kite===1&&d.roster===1)&&(d.kind!=='alder'||d.alder===1)&&(!extendedOnlineCar(d.kind)||d.roster===1)&&(d.setup===undefined||validOnlineSetup(d.setup))&&
+      (d.chase===undefined||d.chase===1&&d.eventRules===1)&&(d.timedRace===undefined||d.timedRace===1&&d.eventRules===1)&&(d.eventRules===undefined||d.eventRules===1)&&(d.startReady===undefined||d.startReady===1)&&(d.opponentSets===undefined||d.opponentSets===1&&d.roster===1&&d.kite===1&&d.morrow===1)&&(d.classEngines===undefined||d.classEngines===1&&d.eventRules===1)&&(d.setup===undefined||!(d.setup as any).engineRestriction||d.classEngines===1)&&(d.spinTiers===undefined||d.spinTiers===1&&d.eventRules===1)&&(d.noRespawnDerby===undefined||d.noRespawnDerby===1&&d.eventRules===1)&&
       (d.maxPlayers===undefined||d.maxPlayers===24)&&(d.wire===undefined||d.wire==='qiw1')&&
       (d.token === undefined || typeof d.token === 'string' && d.token.length <= 64)) {
     return { type: 'hello', protocol: PROTOCOL,
       name: d.name.replace(/[^\p{L}\p{N} _-]/gu, '').trim().slice(0, 18) || 'DRIVER',
-      ...(d.arenas===1?{arenas:1 as const}:{}),...(d.courses===1?{courses:1 as const}:{}),...(d.roster===1?{roster:1 as const}:{}),...(d.kite===1?{kite:1 as const}:{}),...(d.morrow===1?{morrow:1 as const}:{}),kind: d.kind as CarKind, token: d.token as string | undefined,...(d.chase===1?{chase:1 as const}:{}),...(d.timedRace===1?{timedRace:1 as const}:{}),...(d.eventRules===1?{eventRules:1 as const}:{}),...(d.noRespawnDerby===1?{noRespawnDerby:1 as const}:{}),...(d.maxPlayers===24?{maxPlayers:24 as const}:{}),...(d.wire==='qiw1'?{wire:'qiw1' as const}:{}),...(d.setup===undefined?{}:{setup:copyOnlineSetup(d.setup as OnlineSetup)}) };
+      ...(d.arenas===1?{arenas:1 as const}:{}),...(d.courses===1?{courses:1 as const}:{}),...(d.roster===1?{roster:1 as const}:{}),...(d.kite===1?{kite:1 as const}:{}),...(d.morrow===1?{morrow:1 as const}:{}),...(d.alder===1?{alder:1 as const}:{}),kind: d.kind as CarKind, token: d.token as string | undefined,...(d.chase===1?{chase:1 as const}:{}),...(d.timedRace===1?{timedRace:1 as const}:{}),...(d.eventRules===1?{eventRules:1 as const}:{}),...(d.startReady===1?{startReady:1 as const}:{}),...(d.opponentSets===1?{opponentSets:1 as const}:{}),...(d.classEngines===1?{classEngines:1 as const}:{}),...(d.spinTiers===1?{spinTiers:1 as const}:{}),...(d.noRespawnDerby===1?{noRespawnDerby:1 as const}:{}),...(d.maxPlayers===24?{maxPlayers:24 as const}:{}),...(d.wire==='qiw1'?{wire:'qiw1' as const}:{}),...(d.setup===undefined?{}:{setup:copyOnlineSetup(d.setup as OnlineSetup)}) };
   }
   if(d.type==='setup'&&validOnlineCar(d.kind)&&validOnlineSetup(d.setup))return{type:'setup',kind:d.kind as CarKind,setup:copyOnlineSetup(d.setup)};
+  if(d.type==='start-ready'&&validStartReadiness({round:d.round,pending:[],remainingMs:0}))return{type:'start-ready',round:d.round as string};
+  if(d.type==='opponent-set'&&(d.set==='auto'||isOnlineOpponentSet(d.set)))return{type:'opponent-set',set:d.set};
   if(d.type==='setup-rule'&&['open','stock'].includes(String(d.rule)))return{type:'setup-rule',rule:d.rule as SetupRule};
   if (d.type === 'input' && Number.isSafeInteger(d.seq) && Number(d.seq) >= 0 &&
       d.controls && typeof d.controls === 'object') {

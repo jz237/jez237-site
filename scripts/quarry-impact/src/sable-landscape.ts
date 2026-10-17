@@ -1,3 +1,4 @@
+import {createTalusGeometry} from './sable-talus';
 import {url} from './assets';
 import * as T from 'three';
 import {SABLE} from './sable-course';
@@ -62,14 +63,16 @@ diffuseColor.rgb*=mix(vec3(.65),stone*2.0,.75)*(.86+.25*patches)*(.86+.18*runoff
  material.customProgramCacheKey=()=> 'sable-photo-cliffs-1';
  const mesh=new T.Mesh(geometry,material);mesh.castShadow=mesh.receiveShadow=true;root.add(mesh);
  // Talus fans break up the flat apron with irregular, clustered rock silhouettes.
- const rockGeometry=new T.IcosahedronGeometry(1,1),rockMaterial=new T.MeshStandardMaterial({color:0x78604a,roughness:1,flatShading:true});
- const rockPositions=rockGeometry.attributes.position;for(let i=0;i<rockPositions.count;i++){const x=rockPositions.getX(i),y=rockPositions.getY(i),z=rockPositions.getZ(i),n=.82+.32*hash(x*8,z*8+y);rockPositions.setXYZ(i,x*n,y*n,z*n);}rockGeometry.computeVertexNormals();
- const rocks=new T.InstancedMesh(rockGeometry,rockMaterial,420),dummy=new T.Object3D();
+ const rockGeometries=Array.from({length:4},(_,i)=>createTalusGeometry(i));
+ const loadRock=(file:string,color=false)=>{const t=typeof document==='undefined'?new T.Texture():new T.TextureLoader().load(url(file));t.wrapS=t.wrapT=T.RepeatWrapping;t.anisotropy=8;if(color)t.colorSpace=T.SRGBColorSpace;textures.push(t);return t;};
+ const rockMaterial=new T.MeshStandardMaterial({color:0xc3a785,roughness:.96,map:photo,normalMap:loadRock('assets/geology_rock_nor_gl.jpg'),normalScale:new T.Vector2(.55,.55),roughnessMap:loadRock('assets/geology_rock_rough.jpg')});
+ const rockBatches=rockGeometries.map((g,i)=>{const mesh=new T.InstancedMesh(g,rockMaterial,105);mesh.name='sable-talus-'+i;return mesh;}),dummy=new T.Object3D();
  for(let i=0;i<420;i++){
+  const rocks=rockBatches[i%4],instance=Math.floor(i/4);
   const cluster=Math.floor(i/14),angle=cluster/30*Math.PI*2+(hash(i,3)-.5)*.11,dx=Math.cos(angle),dz=Math.sin(angle);
   const edge=1/Math.max(Math.abs(dx)/220,Math.abs(dz)/180),r=edge+2+hash(i,5)*19,x=dx*r,z=dz*r;
-  const size=.55+Math.pow(hash(i,9),3)*4.8;dummy.position.set(x,sableCliffHeight(x,z)+size*.25,z);dummy.rotation.set(hash(i,4),hash(i,7)*6,hash(i,8));dummy.scale.set(size*1.5,size*.8,size);dummy.updateMatrix();rocks.setMatrixAt(i,dummy.matrix);rocks.setColorAt(i,new T.Color().setHSL(.075+hash(i,10)*.025,.19,.25+hash(i,11)*.16));
+  const size=.55+Math.pow(hash(i,9),3)*4.8;dummy.position.set(x,sableCliffHeight(x,z)+size*.25,z);dummy.rotation.set(hash(i,4),hash(i,7)*6,hash(i,8));dummy.scale.set(size*1.5,size*.8,size);dummy.updateMatrix();rocks.setMatrixAt(instance,dummy.matrix);rocks.setColorAt(instance,new T.Color().setHSL(.075+hash(i,10)*.025,.12,.62+hash(i,11)*.20));
  }
- rocks.castShadow=rocks.receiveShadow=true;rocks.computeBoundingSphere();root.add(rocks);
- let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;root.removeFromParent();geometry.dispose();material.dispose();textures.forEach(t=>t.dispose());rocks.dispose();rockGeometry.dispose();rockMaterial.dispose();root.clear();}};
+ for(const rocks of rockBatches){rocks.castShadow=rocks.receiveShadow=true;rocks.computeBoundingSphere();root.add(rocks);}
+ let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;root.removeFromParent();geometry.dispose();material.dispose();textures.forEach(t=>t.dispose());rockBatches.forEach(r=>r.dispose());rockGeometries.forEach(g=>g.dispose());rockMaterial.dispose();root.clear();}};
 }

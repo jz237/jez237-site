@@ -1,3 +1,4 @@
+import {engineOutput,type EngineRestriction} from './engine-packages';
 import {wheelContactMotion} from './wheel-contact-motion';
 import {steeringSpeedScale} from './countersteering';
 import {surfaceGrip,type DrivingSurface} from './driving-surface';
@@ -75,7 +76,8 @@ export function createVehiclePhysics(api:typeof R,world:R.World,kind:CarKind,mas
  const trailUpper=Float32Array.from([[-.942,1.18,.96],[.942,1.18,.96],[-.823,1.985,.54],[.823,1.985,.54],[-.823,1.985,-2.07],[.823,1.985,-2.07],[-.942,1.18,-2.20],[.942,1.18,-2.20]].flatMap(([x,y,z])=>[x,y-.92,z]));
  const kiteUpper=Float32Array.from([[-.802,1.035,.74],[.802,1.035,.74],[-.664,1.55,.15],[.664,1.55,.15],[-.664,1.55,-1.12],[.664,1.55,-1.12],[-.782,1.035,-1.72],[.782,1.035,-1.72]].flatMap(([x,y,z])=>[x,y-.84,z]));
  const morrowUpper=Float32Array.from([[-.875,1.055,.75],[.875,1.055,.75],[-.71,1.50,.12],[.71,1.50,.12],[-.71,1.50,-1.12],[.71,1.50,-1.12],[-.875,1.055,-1.55],[.875,1.055,-1.55]].flatMap(([x,y,z])=>[x,y-.85,z]));
- const roofDesc=kind==='morrow'?api.ColliderDesc.convexHull(morrowUpper)!:kind==='kite'?api.ColliderDesc.convexHull(kiteUpper)!:kind==='trail'?api.ColliderDesc.convexHull(trailUpper)!:kind==='regent'?api.ColliderDesc.convexHull(regentUpper)!:kind==='shuttle'?api.ColliderDesc.convexHull(shuttleUpper)!:buggy?api.ColliderDesc.capsule(.35,.026).setRotation({x:0,y:0,z:Math.SQRT1_2,w:Math.SQRT1_2}).setTranslation(0,.734,-.63):kind==='marten'?api.ColliderDesc.convexHull(martenUpper)!:kind==='tern'?api.ColliderDesc.convexHull(ternUpper)!:kind==='van'?api.ColliderDesc.convexHull(vanUpper)!:
+ const alderUpper=Float32Array.from([[-.875,1.055,.75],[.875,1.055,.75],[-.76,1.605,.25],[.76,1.605,.25],[-.76,1.605,-2.17],[.76,1.605,-2.17],[-.875,1.055,-2.30],[.875,1.055,-2.30]].flatMap(([x,y,z])=>[x,y-.85,z]));
+ const roofDesc=kind==='alder'?api.ColliderDesc.convexHull(alderUpper)!:kind==='morrow'?api.ColliderDesc.convexHull(morrowUpper)!:kind==='kite'?api.ColliderDesc.convexHull(kiteUpper)!:kind==='trail'?api.ColliderDesc.convexHull(trailUpper)!:kind==='regent'?api.ColliderDesc.convexHull(regentUpper)!:kind==='shuttle'?api.ColliderDesc.convexHull(shuttleUpper)!:buggy?api.ColliderDesc.capsule(.35,.026).setRotation({x:0,y:0,z:Math.SQRT1_2,w:Math.SQRT1_2}).setTranslation(0,.734,-.63):kind==='marten'?api.ColliderDesc.convexHull(martenUpper)!:kind==='tern'?api.ColliderDesc.convexHull(ternUpper)!:kind==='van'?api.ColliderDesc.convexHull(vanUpper)!:
   api.ColliderDesc.cuboid(kind==='compact'?.60:classic?.70:.65,classic?.22:.24,classic?(utility?.56:estate?1.195:kind==='compact'?.73:.72):.65)
    .setTranslation(0,classic?.43:kind==='coupe'?.12:.2,classic?(utility?-.16:estate?-.98:kind==='compact'?-.25:-.40):-.1);
  const roof=world.createCollider(roofDesc.setMass(0).setFriction(.5).setActiveEvents(api.ActiveEvents.CONTACT_FORCE_EVENTS).setContactForceEventThreshold(0),body);
@@ -192,14 +194,14 @@ export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastV
  return up.y;
 }
 
-export type PhysicsTuning={engine:number;tires:number;armor:number;tune:{gearing:number;suspension:number;steering:number;brakeBias:number;differential:number;compression?:number;rebound?:number;rideHeight?:number;brakePressure?:number}};
+export type PhysicsTuning={engine:number;engineRestriction?:EngineRestriction;tires:number;armor:number;tune:{gearing:number;suspension:number;steering:number;brakeBias:number;differential:number;compression?:number;rebound?:number;rideHeight?:number;brakePressure?:number}};
 export function vehicleSpecification(kind: CarKind, input: PhysicsTuning = {engine:0,tires:0,armor:0,tune:{gearing:0,suspension:0,steering:0,brakeBias:0,differential:0}}) {
   const s = input, d = DEFINITIONS[kind];
-  const ratio = 1 + s.tune.gearing * .22;
-  return {mass: d.mass + s.armor * 95 + s.engine * 12,
-    force: d.force * (1 + s.engine * .12) * ratio,
-    speedLimit: ((kind==='morrow'?49:kind==='kite'?47:kind==='trail'?39:kind==='regent'?43:kind==='shuttle'?31:kind==='wagon'?44:kind==='muscle'?50:kind==='utility'?46:kind==='compact'?38:kind==='van'?35:kind==='tern'?42:kind==='marten'?40:kind==='buggy'?44:53) + s.engine * 1.4) / ratio, gearStep: (kind==='morrow'?8.0:kind==='kite'?7.6:kind==='trail'?6.4:kind==='regent'?7.0:kind==='shuttle'?5.9:kind==='wagon'?7.4:kind==='muscle'?8.2:kind==='utility'?7.8:kind==='compact'?6.5:kind==='van'?6.8:kind==='tern'?7:kind==='marten'?6.6:kind==='buggy'?7.1:9) / ratio,
-    spring: (kind==='morrow'?1.02:kind==='kite'?.94:kind==='trail'?1.05:kind==='regent'?1.04:kind==='shuttle'?1.15:kind==='wagon'?.84:kind==='muscle'?.93:kind==='utility'?.96:kind==='compact'?.76:kind==='van'?.94:kind==='tern'?.83:kind==='marten'?.78:kind==='buggy'?.68:1)*(1 + s.tune.suspension * .35), damping: (kind==='trail'?1.05:kind==='regent'?1.04:kind==='shuttle'?1.20:kind==='wagon'?.92:kind==='van'?1.08:kind==='marten'?.96:kind==='buggy'?1.12:1)*(1 + s.tune.suspension * .18),
+  const ratio = 1 + s.tune.gearing * .22, output=engineOutput(s.engineRestriction), engine=output===1?s.engine:0;
+  return {mass: d.mass + s.armor * 95 + engine * 12,
+    force: d.force * (1 + engine * .12) * ratio * output,
+    speedLimit: ((kind==='alder'?44:kind==='morrow'?49:kind==='kite'?47:kind==='trail'?39:kind==='regent'?43:kind==='shuttle'?31:kind==='wagon'?44:kind==='muscle'?50:kind==='utility'?46:kind==='compact'?38:kind==='van'?35:kind==='tern'?42:kind==='marten'?40:kind==='buggy'?44:53) + engine * 1.4) / ratio * Math.cbrt(output), gearStep: (kind==='alder'?7.2:kind==='morrow'?8.0:kind==='kite'?7.6:kind==='trail'?6.4:kind==='regent'?7.0:kind==='shuttle'?5.9:kind==='wagon'?7.4:kind==='muscle'?8.2:kind==='utility'?7.8:kind==='compact'?6.5:kind==='van'?6.8:kind==='tern'?7:kind==='marten'?6.6:kind==='buggy'?7.1:9) / ratio,
+    spring: (kind==='alder'?.97:kind==='morrow'?1.02:kind==='kite'?.94:kind==='trail'?1.05:kind==='regent'?1.04:kind==='shuttle'?1.15:kind==='wagon'?.84:kind==='muscle'?.93:kind==='utility'?.96:kind==='compact'?.76:kind==='van'?.94:kind==='tern'?.83:kind==='marten'?.78:kind==='buggy'?.68:1)*(1 + s.tune.suspension * .35), damping: (kind==='trail'?1.05:kind==='regent'?1.04:kind==='shuttle'?1.20:kind==='wagon'?.92:kind==='van'?1.08:kind==='marten'?.96:kind==='buggy'?1.12:1)*(1 + s.tune.suspension * .18),
     ...(s.tune.compression?{compression:1+s.tune.compression*.5}:{}),
     ...(s.tune.rebound?{rebound:1+s.tune.rebound*.5}:{}),
     rideHeight: s.tune.rideHeight?-s.tune.suspension * .035+s.tune.rideHeight*.06:-s.tune.suspension * .035, grip: 1 + s.tires * .06,

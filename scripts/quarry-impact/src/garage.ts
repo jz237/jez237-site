@@ -1,3 +1,4 @@
+import {isEngineRestriction,type EngineRestriction} from './engine-packages';
 import {normalizeDesignSource,type DesignSource} from './design-source';
 import {vehicleSpecification} from './vehicle-physics';
 export {axleDrive} from './vehicle-physics';
@@ -5,7 +6,7 @@ import {normalizeLivery,normalizeGroups,type LiveryLayer,type LiveryGroup} from 
 import { DEFINITIONS, CAR_KINDS, type CarKind } from './rules';
 
 export type Tune = { gearing: number; suspension: number; differential: number; brakeBias: number; steering: number; compression?:number; rebound?:number; rideHeight?:number; brakePressure?:number };
-export type Setup = { paint: number; trim: number; engine: number; tires: number; armor: number; tune: Tune; livery:LiveryLayer[]; designSource?:DesignSource };
+export type Setup = { paint: number; trim: number; engine: number; engineRestriction?:EngineRestriction; tires: number; armor: number; tune: Tune; livery:LiveryLayer[]; designSource?:DesignSource };
 export type Preset = { name: string; setup: Setup };
 export type GarageCar = { setup: Setup; presets: Preset[]; groups:LiveryGroup[] };
 export type Garage = { version: 1; cars: Record<CarKind, GarageCar> };
@@ -33,7 +34,7 @@ export function normalizeSetup(value: unknown, kind: CarKind): Setup {
   // Invalid attribution must not silently turn a restricted design into editable art.
   if(raw.designSource!==undefined&&!designSource){raw.livery=[];raw.paint=stock.paint;raw.trim=stock.trim;}
   return { ...(designSource?{designSource}:{}), livery:normalizeLivery(raw.livery), paint: Math.round(number(raw.paint, stock.paint, 0, 0xffffff)), trim: Math.round(number(raw.trim, stock.trim, 0, 0xffffff)),
-    engine: Math.round(number(raw.engine, 0, 0, 3)), tires: Math.round(number(raw.tires, 0, 0, 3)), armor: Math.round(number(raw.armor, 0, 0, 3)),
+    engine: isEngineRestriction(raw.engineRestriction)?0:Math.round(number(raw.engine, 0, 0, 3)), ...(isEngineRestriction(raw.engineRestriction)?{engineRestriction:raw.engineRestriction}:{}), tires: Math.round(number(raw.tires, 0, 0, 3)), armor: Math.round(number(raw.armor, 0, 0, 3)),
     // Omit neutral additions so old signed backups and stock setup identities
     // keep exactly their established shape. A nonzero adjustment is persisted.
     tune: Object.fromEntries(TUNE_FIELDS.map(({key}) => [key, number(tune[key], 0, -1, 1)]).filter(([key,value])=>!['compression','rebound','rideHeight','brakePressure'].includes(key as string)||value!==0)) as Tune };

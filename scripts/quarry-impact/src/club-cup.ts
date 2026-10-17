@@ -1,3 +1,4 @@
+import {classEngineSetup} from './class-engine';
 import {classEligible,isClassLimit,type ClassLimit} from './performance-class';
 import type {ArenaId} from './arena-id';
 import {gridPool,isGridLineup,type GridLineup} from './grid-rules';
@@ -16,6 +17,7 @@ export const isClubField=(value:unknown):value is number=>typeof value==='number
 const FIELD_KINDS=Object.freeze([...CLUB_KINDS,'shuttle'] as const);
 // Class-limited cups start with the complete current roster; open v1 saves keep their original pool.
 const CLASS_KINDS=Object.freeze([...FIELD_KINDS,'regent','trail'] as const);
+const CLASS_ENGINE_KINDS=Object.freeze([...CLASS_KINDS,'kite','morrow','alder'] as const);
 export const CLUB_POINTS=Object.freeze([25,20,16,13,11,9,7,5,3,2,1] as const);
 export type ClubRoundId='quarry-circuit'|'ironfield-circuit'|'quarry-survival'|'cinderbank-sprint'|'cinderbank-reverse'|'bracken-sprint'|'cinderbank-circuit'|'bracken-circuit'|'ironfield-opposing'|'quarry-opposing'|'bracken-reverse'|'quarry-finale'|'redbank-sprint'|'redbank-reverse'|'ashford-sprint'|'ashford-reverse'|'pinecrest-climb'|'pinecrest-return'|'dockside-sprint'|'dockside-return'|'fairground-sprint'|'fairground-return'|'merefield-sprint'|'merefield-return'|'millhaven-sprint'|'millhaven-return'|'fenwick-oval'|'fenwick-eight'|'alderwick-sprint'|'fenwick-return'|'harrow-survival'|'briarhill-survival'|'foundry-survival'|'rookvale-route'|'elmsworth-sprint'|'rookvale-dispatch'|'elmsworth-return'|'sable-sprint'|'willowbank-sprint'|'sable-return'|'willowbank-return'|'westmere-sprint'|'harrowstone-sprint'|'westmere-return'|'harrowstone-return'|'seabrook-sprint'|'hazelwood-sprint'|'seabrook-return'|'hazelwood-return'|'kingswell-sprint'|'copperfield-sprint'|'kingswell-return'|'copperfield-return'|'millbrook-sprint'|'granite-sprint'|'millbrook-return'|'granite-return'|'wrenford-sprint'|'alderwick-cross-sprint'|'wrenford-return'|'wrenford-survival';
 export type ClubRound=Readonly<{race?:'ordered'|'free'|'random';seed?:number;index:number;id:ClubRoundId;name:string;mode:Mode;course:CourseId;arena?:ArenaId;laps:number;duration:number;stock:true;direction?:'forward'|'reverse'|'opposing'}>;
@@ -130,11 +132,13 @@ export const CLUB_SERIES:readonly ClubSeries[]=Object.freeze([
   Object.freeze({index:3,id:'wrenford-survival',name:'Wrenford Mud Pit Finale',mode:'derby',course:'quarry-v1',arena:'wrenford-pit-v1',laps:0,duration:90,stock:true} as const),
  ])}),
 ]);
-export function clubRoster(kind:CarKind,lineup:GridLineup='mixed',field=11,classLimit?:ClassLimit){
+export function clubRoster(kind:CarKind,lineup:GridLineup='mixed',field=11,classLimit?:ClassLimit,enginePolicy?:'class-v1'){
  requireValue(isCarKind(kind)&&isGridLineup(lineup)&&isClubField(field),'selected car or field rule');
  requireValue(classLimit===undefined||isClassLimit(classLimit),'performance class');
+ requireValue(enginePolicy===undefined||enginePolicy==='class-v1'&&classLimit!==undefined,'engine policy');
+ if(enginePolicy){const pool=CLASS_ENGINE_KINDS.filter(k=>gridPool(kind,lineup).includes(k)),offset=Math.max(0,pool.indexOf(kind));return Array.from({length:field},(_,slot)=>({slot,kind:slot===0?kind:pool[(offset+slot-(pool.includes(kind)?0:1))%pool.length]}));}
  requireValue(classEligible(kind,undefined,classLimit),'selected car exceeds class limit');
- const eligible=gridPool(kind,lineup),pool=((kind==='kite'||kind==='morrow')?[kind,...(classLimit?CLASS_KINDS:field===11?CLUB_KINDS:FIELD_KINDS)] as CarKind[]:classLimit?CLASS_KINDS:kind==='trail'?['trail','regent',...(field===11?CLUB_KINDS:FIELD_KINDS)] as CarKind[]:kind==='regent'?['regent',...(field===11?CLUB_KINDS:FIELD_KINDS)] as CarKind[]:field===11?(kind==='shuttle'?['shuttle',...CLUB_KINDS] as CarKind[]:CLUB_KINDS):FIELD_KINDS).filter(k=>eligible.includes(k)&&classEligible(k,undefined,classLimit)),offset=pool.indexOf(kind);
+ const eligible=gridPool(kind,lineup),pool=((kind==='alder'||kind==='kite'||kind==='morrow')?[kind,...(classLimit?CLASS_KINDS:field===11?CLUB_KINDS:FIELD_KINDS)] as CarKind[]:classLimit?CLASS_KINDS:kind==='trail'?['trail','regent',...(field===11?CLUB_KINDS:FIELD_KINDS)] as CarKind[]:kind==='regent'?['regent',...(field===11?CLUB_KINDS:FIELD_KINDS)] as CarKind[]:field===11?(kind==='shuttle'?['shuttle',...CLUB_KINDS] as CarKind[]:CLUB_KINDS):FIELD_KINDS).filter(k=>eligible.includes(k)&&classEligible(k,undefined,classLimit)),offset=pool.indexOf(kind);
  return Array.from({length:field},(_,slot)=>({slot,kind:pool[(offset+slot)%pool.length]}));
 }
 export const clubSeries=(cup?:Pick<ClubCupState,'series'>|null):ClubSeries=>CLUB_SERIES.find(s=>s.id===(cup?.series??'club'))!;
@@ -143,7 +147,7 @@ export type ClubStatus='finished'|'survived'|'wrecked'|'dnf'|'retired';
 export type ClubRowInput=Readonly<{slot:number;status:ClubStatus;finishTime:number|null;health:number;progress:number;damage:number}>;
 export type ClubResultRow=ClubRowInput&Readonly<{place:number;points:number}>;
 export type ClubRoundResult=Readonly<{index:number;round:ClubRoundId;rows:readonly ClubResultRow[];runStats?:Readonly<RunStats>}>;
-export type ClubCupState=Readonly<{version:1;id:string;created:number;series?:ClubSeriesId;difficulty?:AIDifficulty;lineup?:GridLineup;field?:number;classLimit?:ClassLimit;roster:readonly Readonly<{slot:number;kind:CarKind}>[];phase:'ready'|'running'|'complete';results:readonly ClubRoundResult[]}>;
+export type ClubCupState=Readonly<{version:1;id:string;created:number;series?:ClubSeriesId;difficulty?:AIDifficulty;lineup?:GridLineup;field?:number;classLimit?:ClassLimit;enginePolicy?:'class-v1';roster:readonly Readonly<{slot:number;kind:CarKind}>[];phase:'ready'|'running'|'complete';results:readonly ClubRoundResult[]}>;
 export type ClubStanding=Readonly<{slot:number;kind:CarKind;points:number;wins:number;place:number}>;
 const UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 function requireValue(condition:unknown,message:string):asserts condition{if(!condition)throw new Error('Invalid Club Cup: '+message);}
@@ -198,17 +202,18 @@ function outcomeStats(value:unknown,rows:readonly ClubResultRow[]):Readonly<RunS
 function sameRows(a:readonly ClubResultRow[],b:readonly ClubResultRow[]){return a.length===b.length&&a.every((r,i)=>[...rowFields,'place','points'].every(k=>r[k as keyof ClubResultRow]===b[i][k as keyof ClubResultRow]));}
 function sameStats(a:Readonly<RunStats>|undefined,b:Readonly<RunStats>|undefined){return a===undefined||b===undefined?a===b:[...statFields,'won'].every(k=>a[k as keyof RunStats]===b[k as keyof RunStats]);}
 function validate(value:unknown):ClubCupState{
- const v=object(value,['version','id','created','roster','phase','results'],['series','difficulty','lineup','field','classLimit']);requireValue(v.version===1&&typeof v.id==='string'&&UUID.test(v.id),'version or UUID');number(v.created,0,8640000000000000,true);
+ const v=object(value,['version','id','created','roster','phase','results'],['series','difficulty','lineup','field','classLimit','enginePolicy']);requireValue(v.version===1&&typeof v.id==='string'&&UUID.test(v.id),'version or UUID');number(v.created,0,8640000000000000,true);
  requireValue(v.series===undefined||CLUB_SERIES.some(s=>s.id===v.series),'series');
  requireValue(v.difficulty===undefined||isAIDifficulty(v.difficulty),'difficulty');
  requireValue(v.lineup===undefined||isGridLineup(v.lineup),'field rule');
  requireValue(v.field===undefined||isClubField(v.field),'field size');const field=v.field as number|undefined;
  requireValue(v.classLimit===undefined||isClassLimit(v.classLimit),'performance class');
  const classLimit=v.classLimit as ClassLimit|undefined;
+ requireValue(v.enginePolicy===undefined||v.enginePolicy==='class-v1'&&classLimit!==undefined,'engine policy');const enginePolicy=v.enginePolicy as 'class-v1'|undefined;
  const rounds=clubRounds({series:v.series as ClubSeriesId|undefined});
  requireValue(Array.isArray(v.roster)&&v.roster.length===(field??11),'roster');
  const first=object(v.roster[0],['slot','kind']).kind;requireValue(isCarKind(first),'selected car');
- const expected=clubRoster(first as CarKind,v.lineup as GridLineup|undefined,field,classLimit);
+ const expected=clubRoster(first as CarKind,v.lineup as GridLineup|undefined,field,classLimit,enginePolicy);
  const roster=v.roster.map((raw,i)=>{const r=object(raw,['slot','kind']);requireValue(r.slot===i&&r.kind===expected[i].kind,'roster order or field eligibility');return {slot:i,kind:r.kind as CarKind};});
  requireValue(Array.isArray(v.results)&&v.results.length<=rounds.length,'results');
  requireValue(v.phase==='ready'||v.phase==='running'||v.phase==='complete','phase');requireValue((v.phase==='complete')===(v.results.length===rounds.length),'phase/result count');
@@ -219,15 +224,15 @@ function validate(value:unknown):ClubCupState{
   if(runStats)requireValue(sameStats(runStats,outcomeStats(runStats,rows)),'telemetry outcome disagrees with results');
   return {index,round:rounds[index].id,rows,...(runStats?{runStats}:{})};
  });
- return freeze({version:1,id:v.id,created:v.created as number,...(v.series?{series:v.series as ClubSeriesId}:{}),...(v.difficulty?{difficulty:v.difficulty as AIDifficulty}:{}),...(v.lineup?{lineup:v.lineup as GridLineup}:{}),...(field!==undefined?{field}:{}),...(classLimit?{classLimit}:{}),roster,phase:v.phase,results});
+ return freeze({version:1,id:v.id,created:v.created as number,...(v.series?{series:v.series as ClubSeriesId}:{}),...(v.difficulty?{difficulty:v.difficulty as AIDifficulty}:{}),...(v.lineup?{lineup:v.lineup as GridLineup}:{}),...(field!==undefined?{field}:{}),...(classLimit?{classLimit}:{}),...(enginePolicy?{enginePolicy}:{}),roster,phase:v.phase,results});
 }
 /** Reject the whole save rather than repairing rankings, awards or poisoned fields. */
 export function readClubCup(text?:string|null):ClubCupState|null{
  if(typeof text!=='string'||text.length>100000)return null;try{return validate(JSON.parse(text));}catch{return null;}
 }
-export function createClubCup(kind:CarKind,id:string,created:number,series?:ClubSeriesId,difficulty?:AIDifficulty,lineup?:GridLineup,field=11,classLimit?:ClassLimit):ClubCupState{
+export function createClubCup(kind:CarKind,id:string,created:number,series?:ClubSeriesId,difficulty?:AIDifficulty,lineup?:GridLineup,field=11,classLimit?:ClassLimit,enginePolicy?:'class-v1'):ClubCupState{
  requireValue(isCarKind(kind),'selected car');
- return validate({version:1,id,created,...(series?{series}:{}),...(difficulty?{difficulty}:{}),...(lineup&&lineup!=='mixed'?{lineup}:{}),...(field!==11?{field}:{}),...(classLimit?{classLimit}:{}),roster:clubRoster(kind,lineup,field,classLimit),phase:'ready',results:[]});
+ return validate({version:1,id,created,...(series?{series}:{}),...(difficulty?{difficulty}:{}),...(lineup&&lineup!=='mixed'?{lineup}:{}),...(field!==11?{field}:{}),...(classLimit?{classLimit}:{}),...(enginePolicy?{enginePolicy}:{}),roster:clubRoster(kind,lineup,field,classLimit,enginePolicy),phase:'ready',results:[]});
 }
 export function currentClubRound(cup:ClubCupState):ClubRound|null{return clubRounds(cup)[validate(cup).results.length]??null;}
 export function beginClubRound(cup:ClubCupState):ClubCupState{
@@ -264,3 +269,6 @@ export function replayCupAwards(profile:DriverProfile,cup:ClubCupState,allowUnse
  if(present.length){const retained=new Set(present);profile.settled=[...profile.settled.filter(id=>!retained.has(id)),...present].slice(-256);}
  return recorded.filter(result=>allowUnsettled||profile.settled.includes(clubRoundRunId(state,result.index))).map(result=>settleRun(profile,clubRoundRunId(state,result.index),result.runStats!));
 }
+
+/** Explicit policy preserves original factory-stock saved cups. */
+export const clubVehicleSetup=(cup:Pick<ClubCupState,'classLimit'|'enginePolicy'>,kind:CarKind)=>cup.enginePolicy==='class-v1'?classEngineSetup(kind,undefined,cup.classLimit):undefined;

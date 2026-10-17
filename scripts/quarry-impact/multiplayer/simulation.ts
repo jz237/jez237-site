@@ -1,3 +1,4 @@
+import {raceFinishRemaining} from '../src/race-finish-window';
 import {circuitSteeringTarget} from '../src/circuit-steering-target';
 import {createVehicleDrive} from '../src/drivetrain/chassis';
 import {readNetworkDrives} from '../src/drivetrain/network';
@@ -23,7 +24,7 @@ import {stalledByImpact,validEngineStall} from '../src/engine-stall';
 import {CollisionScars,captureCollisionMotion,collisionPointVelocity} from '../src/collision-contact';
 import {OnlineEvent,type OnlineEventRules} from '../src/online-events';
 import {nearestRoad} from '../src/waypoint-race';
-import {validOnlineSetup,copyOnlineSetup,sameOnlineSetup,type OnlineSetup} from '../src/online-setup';
+import {classOnlineSetup,onlineClassEligible,validOnlineSetup,copyOnlineSetup,sameOnlineSetup,type OnlineSetup} from '../src/online-setup';
 import {LEGACY_ONLINE_PLAYERS,validCapacity,type OnlineCapacity} from '../src/online-capacity';
 import {raceGridSlot,lapProgress,circuitRoute,directionForCar,checkRoute,stepScoreRespawns} from '../src/event-rules';
 import {applyComponentImpact,freshComponents,validComponents} from '../src/component-damage';
@@ -70,20 +71,26 @@ export class Simulation {
   private impacts = new ImpactAdjudicator();
   private scars = new CollisionScars();
   private contactScraping=new ContactScraping();
-  constructor(public R: RapierAPI, public mode: Mode = 'derby', kinds: CarKind[] = [],public readonly capacity:OnlineCapacity=LEGACY_ONLINE_PLAYERS,setups:(OnlineSetup|undefined)[]=[],rules?:OnlineEventRules,seed=0,public driveModel:'legacy'|'angular-v1'='legacy') {
+  constructor(public R: RapierAPI, public mode: Mode = 'derby', kinds: CarKind[] = [],public readonly capacity:OnlineCapacity=LEGACY_ONLINE_PLAYERS,setups:(OnlineSetup|undefined)[]=[],rules?:OnlineEventRules,seed=0,public driveModel:'legacy'|'angular-v1'='legacy',gradedSpins=false) {
     this.arenaId=mode==='derby'?rules?.arena??'quarry-arena-v1':'quarry-arena-v1';
     this.course=mode==='derby'?onlineArena(this.arenaId).ground:getRaceCourse(mode==='race'?rules?.course:undefined);
-    if(rules)this.event=new OnlineEvent(mode,rules,seed,capacity);
+    if(rules)this.event=new OnlineEvent(mode,rules,seed,capacity,gradedSpins);
     if(setups.some(s=>s!==undefined&&!validOnlineSetup(s)))throw new Error('Invalid vehicle setup');
     if(!validCapacity(capacity))throw new Error('Invalid online capacity');
     this.world = new R.World({ x: 0, y: -9.81, z: 0 });
     this.world.timestep = STEP;
     this.queue = new R.EventQueue(true);
     this.buildTerrain();
-    for (let id = 0; id < capacity; id++) this.cars.push(this.createCar(id, kinds[id] ?? (['coupe', 'sedan', 'hatch'] as CarKind[])[id % 3],setups[id]));
+    for(let id=0;id<capacity;id++){const kind=kinds[id]??(['coupe','sedan','hatch']as CarKind[])[id%3],setup=rules?.classLimit?classOnlineSetup(kind,setups[id],rules.classLimit):setups[id];this.cars.push(this.createCar(id,kind,setup));}
     for (const car of this.cars) this.spawn(car);
   }
   private buildTerrain() {if(this.course.id==='quarry-v1'&&this.arenaId==='quarry-arena-v1')this.props=createQuarryPhysics(this.R,this.world,this.mode==='derby').props;else{this.course.buildPhysics!(this.R,this.world);this.props=[];}}
+  replaceLobbyCar(id:number,kind:CarKind){
+    if(this.phase!=='lobby')throw Error('Only lobby vehicles may be replaced');
+    const previous=this.cars[id];if(!previous||previous.kind===kind)return false;
+    this.world.removeVehicleController(previous.controller);this.world.removeRigidBody(previous.body);
+    const car=this.cars[id]=this.createCar(id,kind);this.spawn(car);return true;
+  }
   private createCar(id: number, kind: CarKind,setup?:OnlineSetup): Car {
     const specification=vehicleSpecification(kind,setup),{body,collider,roof,controller,structure}=createVehiclePhysics(this.R,this.world,kind,specification.mass,setup?.armor);
     const state: CarState = { id,kind,...(setup?{setup:copyOnlineSetup(setup)}:{}),p:{x:0,y:0,z:0},q:quat(0),v:{x:0,y:0,z:0},av:{x:0,y:0,z:0},health:100,engineStall:0,inflicted:0,damageLeft:0,damageRight:0,steering:0,speed:0,rpm:850,gear:1,wheels:[],input:{...NEUTRAL},passed:0,nextCheckpoint:1,lap:1,finished:false,finishTime:0,penalty:0,repair:0,surface:'gravel',slip:0,dents:[],components:freshComponents() };
@@ -292,7 +299,7 @@ export class Simulation {
     }
     if(this.mode==='derby'&&derbyEndReason(this.event?.rules.derby??'survival',this.cars.map(c=>c.state),this.elapsed,this.event?.rules.duration??300))this.phase='result';
     if(this.event?.chase){this.event.chase.update(this.cars.map(c=>c.state),this.elapsed);if(this.event.chase.session.complete)this.phase='result';}
-    if(!this.event?.chase&&this.mode==='race'&&(this.elapsed>=(this.event?.rules.raceDuration?this.event.rules.raceDuration+120:Math.max(900,(this.event?.rules.laps??3)*300))||this.cars.every(c=>c.state.finished||c.state.health<=0)))this.phase='result';
+    if(!this.event?.chase&&this.mode==='race'&&((!this.event?.rules.raceDuration&&raceFinishRemaining(this.cars.map(c=>c.state),this.elapsed)===0)||this.elapsed>=(this.event?.rules.raceDuration?this.event.rules.raceDuration+120:Math.max(900,(this.event?.rules.laps??3)*300))||this.cars.every(c=>c.state.finished||c.state.health<=0)))this.phase='result';
   }
   ranking(){
     const cars=this.cars.map(c=>c.state),distance=(s:CarState)=>{if(this.event?.waypoints)return this.event.waypoints.remainingDistance(s.id,s.p);const p=this.route(s.id)[s.nextCheckpoint];return Math.hypot(s.p.x-p.x,s.p.z-p.z);};
@@ -302,6 +309,7 @@ export class Simulation {
   }
   snapshot(includeDamage=false): Omit<Snapshot,'members'|'ack'> {return {type:'snapshot',...(this.driveModel==='angular-v1'?{driveModel:'angular-v1' as const}:{}),...(this.event?{event:this.event.snapshot(this.capacity)}:{}),capacity:this.capacity,tick:this.tick,elapsed:this.elapsed,countdown:this.countdown,mode:this.mode,phase:this.phase,props:this.props.map(p=>({id:p.id,p:{...p.body.translation()},q:{...p.body.rotation()},v:{...p.body.linvel()},av:{...p.body.angvel()}})),cars:this.cars.map(c=>structuredClone({...c.state,...(c.drivetrain?{drivetrain:c.drivetrain.snapshot()}:{}),dents:includeDamage?c.state.dents:undefined})),damage:structuredClone(this.damage),ranking:this.ranking()};}
   restore(s:Snapshot) {
+    if(s.event?.rules.classLimit&&s.cars.some(c=>c.setup!==undefined&&!validOnlineSetup(c.setup)||!onlineClassEligible(c.kind,c.setup,s.event!.rules.classLimit!)))throw new Error('Saved vehicle exceeds its event class');
     readNetworkDrives(s);
     const driveModel=s.driveModel??'legacy',modelChanged=driveModel!==this.driveModel;this.driveModel=driveModel;
     if(s.event?.rules.chase)ChaseRound.restore(s.event.rules.chase,this.capacity,s.event.chase,s.cars,s.elapsed);

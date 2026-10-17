@@ -1,3 +1,4 @@
+import {addReservoirShoreDetail} from './reservoir-shore-material';
 import * as T from 'three';
 export function reservoirShoreHeight(x:number,z:number){
  const r=Math.hypot(x/650,(z-630)/200);if(r>=1)return -6;
@@ -11,7 +12,7 @@ export function createReservoirShore(){
   if(ix<columns-1&&iz<rows-1){const i=iz*columns+ix;indices.push(i,i+columns,i+1,i+1,i+columns,i+columns+1);}
  }
  const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(pos,3));geo.setAttribute('color',new T.Float32BufferAttribute(color,3));geo.setIndex(indices);geo.computeVertexNormals();
- const mat=new T.MeshStandardMaterial({vertexColors:true,roughness:1});const hill=new T.Mesh(geo,mat);hill.receiveShadow=true;root.add(hill);
+ const mat=new T.MeshStandardMaterial({vertexColors:true,roughness:1});const detail=addReservoirShoreDetail(mat);const hill=new T.Mesh(geo,mat);hill.receiveShadow=true;root.add(hill);
  const trees:{x:number,y:number,z:number,size:number}[]=[];let seed=62317;const random=()=>((seed=(Math.imul(seed,1664525)+1013904223)>>>0)/4294967296);
  hill.updateMatrixWorld(true);const ray=new T.Raycaster();
  // Nine irregular stands leave open meadow between broad woodland silhouettes.
@@ -28,5 +29,5 @@ export function createReservoirShore(){
   const mesh=new T.InstancedMesh(geometry,material,trees.length),m=new T.Matrix4();
   trees.forEach((t,i)=>{m.makeScale(t.size,t.size,t.size);m.setPosition(t.x,t.y,t.z);mesh.setMatrixAt(i,m);mesh.setColorAt(i,new T.Color().setScalar(.87+(i%7)*.025));});mesh.computeBoundingSphere();root.add(mesh);
  }
- root.userData.trees=trees;let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});geo.dispose();mat.dispose();ownedGeo.forEach(g=>g.dispose());ownedMat.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
+ root.userData.trees=trees;let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;detail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});geo.dispose();mat.dispose();ownedGeo.forEach(g=>g.dispose());ownedMat.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
 }

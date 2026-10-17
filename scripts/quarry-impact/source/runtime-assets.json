@@ -521,6 +521,11 @@
       "sha256": "33d5a9290970ac3814d64fd46571c98c91301e761ef8ca6c715b0c69c3a6e0ea"
     },
     {
+      "path": "licenses/ALDER-230.md",
+      "bytes": 381,
+      "sha256": "1241f76bfa6b6aefddef1f47517abcef5588902884fdab0c29af0822f7e42376"
+    },
+    {
       "path": "licenses/BIRCH-TRAIL.md",
       "bytes": 268,
       "sha256": "594e0136ed1e71329af51f4d7e6a4cf5877574dc9c96849f96817e71ffcbcd5f"
@@ -537,8 +542,8 @@
     },
     {
       "path": "licenses/CREDITS.md",
-      "bytes": 25420,
-      "sha256": "56b63befa0b5cde68af87b03a7e4797735ed490fa9321488222442d324567970"
+      "bytes": 25544,
+      "sha256": "309da2146809a5735c631edba22df53fbf46de329d90a7f508c65ba8d1e25e7f"
     },
     {
       "path": "licenses/CarConcept-LICENSE.md",
@@ -614,6 +619,11 @@
       "path": "licenses/ironvale-utility.txt",
       "bytes": 818,
       "sha256": "3499c4042faff8f639cc5889fd92e54f4c7409257299ebdc303b08ea7a1ec402"
+    },
+    {
+      "path": "models/alder.glb",
+      "bytes": 3606504,
+      "sha256": "91067853d28dea2598256c5588e8f9a81ad4466483104705bd4fee2bbcb2efce"
     },
     {
       "path": "models/arena-escarpment.glb",

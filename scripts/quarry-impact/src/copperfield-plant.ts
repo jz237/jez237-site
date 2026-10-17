@@ -1,3 +1,4 @@
+import {createAggregateConveyor} from './aggregate-conveyor';
 import * as T from 'three';
 /** Trackside aggregate works, authored as shared instanced geometry. */
 export function createCopperfieldPlant(){
@@ -39,9 +40,8 @@ export function createCopperfieldPlant(){
  // Concrete access steps descend from the stair plinth to the yard.
  for(let i=0;i<11;i++){const top=5.5-i*.5;box('stone',26.5+i*.8,top/2-origin.y,0,.9,top,6);}
  // Discharge conveyor reaches toward the existing aggregate-yard equipment.
- const a=[0,13,12],b=[10,8,54];beam('dark',a,b,2.8,.35);
- for(const side of [-1,1]){beam('steel',[-2*side,13,12],[10-2*side,8,54],.25);for(let i=0;i<7;i++){const t=i/6,x=10*t-2*side,y=13-5*t,z=12+42*t;box('steel',x,(origin.y+y)/2-origin.y,z,.3,origin.y+y,.3);if(i<6)beam('steel',[x,1,z],[10*(t+1/6)-2*side,13-5*(t+1/6),z+7],.13);}}
+ const conveyor=createAggregateConveyor(origin.clone().add(new T.Vector3(0,13,12)),origin.clone().add(new T.Vector3(10,8,54)));root.add(conveyor.root);bounds.push(...conveyor.root.userData.bounds);
  if(typeof document!=='undefined'){const c=document.createElement('canvas');c.width=1536;c.height=384;const ctx=c.getContext('2d')!;ctx.fillStyle='#c8b991';ctx.fillRect(0,0,c.width,c.height);ctx.fillStyle='#813f30';ctx.fillRect(0,0,c.width,30);ctx.fillStyle='#293638';ctx.textAlign='center';ctx.font='900 100px sans-serif';ctx.fillText('STONE COLD',768,155);ctx.font='bold 64px sans-serif';ctx.fillText('AGGREGATES',768,240);ctx.font='bold 34px sans-serif';ctx.fillText('WE CRUSH IT. YOU CRASH IT.',768,325);const texture=new T.CanvasTexture(c);texture.colorSpace=T.SRGBColorSpace;const mesh=new T.Mesh(new T.PlaneGeometry(16,4),new T.MeshStandardMaterial({map:texture,roughness:.9}));mesh.position.copy(origin).add(new T.Vector3(12.95,15,0));mesh.rotation.y=Math.PI/2;root.add(mesh);extra.push(mesh);}
  for(const[key,ms]of batches){const[shape,finish]=key.split(':')as[S,F];const mesh=new T.InstancedMesh(geometries[shape],materials[finish],ms.length);ms.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.castShadow=mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
- root.userData.bounds=bounds;root.userData.pieces=bounds.length;let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});Object.values(geometries).forEach(g=>g.dispose());Object.values(materials).forEach(m=>m.dispose());extra.forEach(m=>{m.geometry.dispose();const mat=m.material as T.MeshStandardMaterial;mat.map?.dispose();mat.dispose();});root.clear();}};
+ root.userData.bounds=bounds;root.userData.pieces=bounds.length;let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;conveyor.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});Object.values(geometries).forEach(g=>g.dispose());Object.values(materials).forEach(m=>m.dispose());extra.forEach(m=>{m.geometry.dispose();const mat=m.material as T.MeshStandardMaterial;mat.map?.dispose();mat.dispose();});root.clear();}};
 }

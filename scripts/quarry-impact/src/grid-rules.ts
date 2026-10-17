@@ -1,8 +1,8 @@
 import {CAR_KINDS,DEFINITIONS,type CarKind} from './rules';
 export const GRID_LINEUPS={mixed:'Mixed vehicles',selected:'Same model',drivetrain:'Same drivetrain',weight:'Same weight class',fwd:'Front-wheel-drive opponents',rwd:'Rear-wheel-drive opponents',american:'American-style opponents',european:'European-style opponents',muscle:'Muscle-car opponents'} as const;
 export type GridLineup=keyof typeof GRID_LINEUPS;
-export type GridPerformance='open'|'stock'|'matched';
-export const GRID_PERFORMANCE={open:'My garage vs factory opponents',stock:'Factory performance for everyone',matched:'Same upgrades and tuning for everyone'} as const;
+export type GridPerformance='open'|'stock'|'matched'|'class';
+export const GRID_PERFORMANCE={class:'Class-matched engines · garage chassis',open:'My garage vs factory opponents',stock:'Factory performance for everyone',matched:'Same upgrades and tuning for everyone'} as const;
 export const isGridLineup=(v:unknown):v is GridLineup=>typeof v==='string'&&Object.hasOwn(GRID_LINEUPS,v);
 export const isGridPerformance=(v:unknown):v is GridPerformance=>typeof v==='string'&&Object.hasOwn(GRID_PERFORMANCE,v);
 /** Match the actual driven axles; weight classes use factory chassis mass so
@@ -11,7 +11,7 @@ export const vehicleDrivetrain=(kind:CarKind)=>(kind==='tern'||kind==='kite')?'F
 export const vehicleWeightClass=(kind:CarKind)=>DEFINITIONS[kind].mass<1200?'Light':DEFINITIONS[kind].mass<1700?'Middle':'Heavy';
 /** Original fictional roster groupings; these describe each design's styling. */
 export const VEHICLE_GROUPS:Record<CarKind,{region:'american'|'european';muscle:boolean}>={
- morrow:{region:'american',muscle:true},kite:{region:'european',muscle:false},coupe:{region:'american',muscle:true},sedan:{region:'european',muscle:false},hatch:{region:'european',muscle:false},muscle:{region:'american',muscle:true},wagon:{region:'american',muscle:false},utility:{region:'american',muscle:false},compact:{region:'european',muscle:false},van:{region:'european',muscle:false},tern:{region:'european',muscle:false},marten:{region:'european',muscle:false},buggy:{region:'american',muscle:false},shuttle:{region:'european',muscle:false},regent:{region:'american',muscle:false},trail:{region:'european',muscle:false},
+ alder:{region:'european',muscle:false},morrow:{region:'american',muscle:true},kite:{region:'european',muscle:false},coupe:{region:'american',muscle:true},sedan:{region:'european',muscle:false},hatch:{region:'european',muscle:false},muscle:{region:'american',muscle:true},wagon:{region:'american',muscle:false},utility:{region:'american',muscle:false},compact:{region:'european',muscle:false},van:{region:'european',muscle:false},tern:{region:'european',muscle:false},marten:{region:'european',muscle:false},buggy:{region:'american',muscle:false},shuttle:{region:'european',muscle:false},regent:{region:'american',muscle:false},trail:{region:'european',muscle:false},
 };
 export const fixedOpponentSet=(lineup:GridLineup|undefined)=>lineup==='fwd'||lineup==='rwd'||lineup==='american'||lineup==='european'||lineup==='muscle';
 export function gridPool(selected:CarKind,lineup:GridLineup='mixed'):CarKind[]{

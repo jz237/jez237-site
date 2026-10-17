@@ -70,14 +70,18 @@ export class QuarryRoom extends DurableObject<Env> {
       }
       const saved = await readSavedRoom(ctx.storage);
       if (saved) { R.init(); this.room = new Room(this.meta.code, R); this.room.restore(saved); }
-      for (const ws of ctx.getWebSockets()) {
+      // Hibernated sockets have no guaranteed enumeration order. Reconnect the
+      // persisted host first so ordinary election does not transfer ownership.
+      const hostId=saved?.sessions.find(session=>session.member.host)?.member.id;
+      const sockets=ctx.getWebSockets().slice().sort((a,b)=>Number(hostId!==undefined&&(b.deserializeAttachment() as Attachment).id===hostId)-Number(hostId!==undefined&&(a.deserializeAttachment() as Attachment).id===hostId));
+      for (const ws of sockets) {
         const attachment = ws.deserializeAttachment() as Attachment;
         if (attachment.generation !== this.meta.lease.id) { ws.close(4000, 'Room expired'); continue; }
         if (attachment.id === undefined) continue; // Pending hello stays lightweight through hibernation.
         const previous = saved?.sessions.find(s => s.member.id === attachment.id);
         if (!this.room || !previous) { ws.close(1012, 'Room unavailable'); continue; }
         const peer: Peer = { sendBinary:message=>ws.send(message),sendEncoded:message=>ws.send(message),send: m => ws.send(JSON.stringify(m)), close: (c, r) => ws.close(c, r) };
-        const id = this.room.connect(peer, JSON.stringify({ type: 'hello', protocol: PROTOCOL, ...previous.member, token: previous.token,maxPlayers:24,eventRules:previous.eventRules,arenas:previous.arenas,courses:previous.courses,roster:previous.roster,kite:previous.kite,morrow:previous.morrow,timedRace:previous.timedRace,chase:previous.chase,noRespawnDerby:previous.noRespawnDerby,wire:previous.wire }));
+        const id = this.room.connect(peer, JSON.stringify({ type: 'hello', protocol: PROTOCOL, ...previous.member, token: previous.token,maxPlayers:24,eventRules:previous.eventRules,arenas:previous.arenas,courses:previous.courses,roster:previous.roster,kite:previous.kite,morrow:previous.morrow,alder:previous.alder,timedRace:previous.timedRace,chase:previous.chase,noRespawnDerby:previous.noRespawnDerby,spinTiers:previous.spinTiers,classEngines:previous.classEngines,opponentSets:previous.opponentSets,startReady:previous.startReady,wire:previous.wire }));
         if (id !== null) this.peers.set(ws, { peer, id });
       }
       if (this.room?.activeCount) this.meta.emptySince = undefined;

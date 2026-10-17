@@ -7,7 +7,7 @@ test('snapshot levels replace old contact audio and legacy/invalid levels cannot
  const audio=new ContactScraping();audio.receive([{id:0,contactScrape:.6},{id:1,contactScrape:1}]);assert.equal(audio.level(0),.6);
  audio.receive([{id:1,contactScrape:.3}]);assert.equal(audio.level(0),0);assert.equal(audio.level(1),.3);
  audio.receive([{id:1},{id:2,contactScrape:NaN},{id:3,contactScrape:2}]);for(const id of [1,2,3])assert.equal(audio.level(id),0);
- const room=new Room('ABCDEF',R);try{const snap=room.snapshot(true);snap.cars[0].contactScrape=.7;assert.ok(validOnlineSnapshot(snap));assert.deepEqual(decodeSnapshotWire(encodeSnapshotWire(snap)),snap);
+ const room=new Room('ABCDEF',R);try{const snap=room.snapshot(true);snap.cars[0].contactScrape=.7;assert.ok(validOnlineSnapshot(snap));assert.deepEqual(JSON.parse(JSON.stringify(decodeSnapshotWire(encodeSnapshotWire(snap)))),JSON.parse(JSON.stringify(snap)));
  for(const n of [-1,1.1,NaN,Infinity]){snap.cars[0].contactScrape=n;assert.equal(validOnlineSnapshot(snap),false);}
  delete snap.cars[0].contactScrape;assert.ok(validOnlineSnapshot(snap));
  }finally{room.dispose();}

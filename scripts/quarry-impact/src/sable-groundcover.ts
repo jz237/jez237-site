@@ -23,8 +23,18 @@ export function createSableGroundcover(reserved:(x:number,z:number,radius:number
   if(SABLE.distance(x,z)<24+radius||reserved(x,z,radius+1.6))continue;
   // Keep the centre of the bowl open, with denser cover on its slopes and northern banks.
   if(Math.abs(x)<55&&z<35&&hash(c+177)<.8)continue;
-  const base=patchPositions.length/3;patchPositions.push(x,SABLE.height(x,z)+.025,z);patchColors.push(.28,.25,.17);
-  for(let j=0;j<=16;j++){const a=j%16/16*Math.PI*2,r=radius*(.75+.25*hash(c*19+j%16));const px=x+Math.cos(a)*r,pz=z+Math.sin(a)*r;patchPositions.push(px,SABLE.height(px,pz)+.025,pz);patchColors.push(.58,.49,.32);if(j<16)patchIndices.push(base,base+j+2,base+j+1);}
+  // Three terrain-following rings feather each bed into the dirt. The old
+  // single opaque perimeter made every cluster read as a pale polygon sticker.
+  const base=patchPositions.length/3;patchPositions.push(x,SABLE.height(x,z)+.025,z);patchColors.push(.24,.19,.12,.3);
+  for(let ring=0;ring<3;ring++)for(let j=0;j<16;j++){
+   const a=j/16*Math.PI*2,edge=radius*(.75+.25*hash(c*19+j)),r=edge*[.35,.7,1][ring];
+   const px=x+Math.cos(a)*r,pz=z+Math.sin(a)*r,grain=hash(c*71+j*3+ring);
+   patchPositions.push(px,SABLE.height(px,pz)+.025,pz);
+   patchColors.push(.24+grain*.06,.19+grain*.04,.12+grain*.025,ring===2?0:(.16+grain*.18)*(ring===1?.7:1));
+   const current=base+1+ring*16+j,next=base+1+ring*16+(j+1)%16;
+   if(ring===0)patchIndices.push(base,next,current);
+   else{const inner=current-16,innerNext=next-16;patchIndices.push(inner,innerNext,current,current,innerNext,next);}
+  }
   for(let j=0;j<23;j++){
    const n=c*101+j,a=hash(n+204)*Math.PI*2,r=Math.sqrt(hash(n+505))*radius*.85,px=x+Math.cos(a)*r,pz=z+Math.sin(a)*r;
    const size=.5+hash(n+906)*1.1;
@@ -36,8 +46,8 @@ export function createSableGroundcover(reserved:(x:number,z:number,radius:number
    dummy.position.set(px,SABLE.height(px,pz)+size*.2,pz);dummy.rotation.set(hash(n+901),hash(n+912)*6.28,hash(n+915));dummy.scale.set(size,size*.5,size*.8);dummy.updateMatrix();pebbleTransforms.push(dummy.matrix.clone());placements.push({x:px,z:pz,radius:size,kind:'gravel'});
   }
  }
- const patchGeometry=new T.BufferGeometry();patchGeometry.setAttribute('position',new T.Float32BufferAttribute(patchPositions,3));patchGeometry.setAttribute('color',new T.Float32BufferAttribute(patchColors,3));patchGeometry.setIndex(patchIndices);patchGeometry.computeVertexNormals();
- const patchMaterial=new T.MeshStandardMaterial({vertexColors:true,transparent:true,opacity:.22,depthWrite:false,roughness:1});const patches=new T.Mesh(patchGeometry,patchMaterial);patches.name='weathered-scrub-beds';patches.receiveShadow=true;root.add(patches);
+ const patchGeometry=new T.BufferGeometry();patchGeometry.setAttribute('position',new T.Float32BufferAttribute(patchPositions,3));patchGeometry.setAttribute('color',new T.Float32BufferAttribute(patchColors,4));patchGeometry.setIndex(patchIndices);patchGeometry.computeVertexNormals();
+ const patchMaterial=new T.MeshStandardMaterial({vertexColors:true,transparent:true,opacity:.65,depthWrite:false,roughness:1});const patches=new T.Mesh(patchGeometry,patchMaterial);patches.name='weathered-scrub-beds';patches.receiveShadow=true;root.add(patches);
  for(const [name,g,m,transforms] of [['sagebrush',shrubGeometry,shrubMaterial,shrubTransforms],['gravel-fans',pebbleGeometry,pebbleMaterial,pebbleTransforms]] as const){const mesh=new T.InstancedMesh(g,m,transforms.length);transforms.forEach((matrix,i)=>mesh.setMatrixAt(i,matrix));mesh.name=name;mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
  root.userData.placements=placements;
  let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});for(const r of [shrubGeometry,pebbleGeometry,patchGeometry,shrubMaterial,pebbleMaterial,patchMaterial])r.dispose();root.clear();}};

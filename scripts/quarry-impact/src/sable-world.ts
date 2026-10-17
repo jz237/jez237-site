@@ -1,3 +1,4 @@
+import {createSableSettlingWorks,settlingWorksReserved} from './sable-settling-works';
 import {createWeighStation,weighStationReserved} from './sable-weigh-station';
 import {createSableGroundcover} from './sable-groundcover';
 import {createSableLandscape} from './sable-landscape';
@@ -42,8 +43,8 @@ export function createSableWorld(onSceneryReady:()=>void=()=>{}){
  for(const s of course.solids)box(s.x,s.y,s.z,s.half[0]*2,s.half[1]*2,s.half[2]*2,s.material,s.yaw);
  for(const x of [-192,192]){box(x,7,-85,.6,14,.6,'steel');box(x,14,-85,5,.8,1,'seat');}
  for(const [finish,matrices]of batches){const mesh=new T.InstancedMesh(boxGeometry,materials[finish],matrices.length);matrices.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.name=id+'_'+finish;mesh.castShadow=mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
- const landscape=createSableLandscape(),landmarks=createSableLandmarks(),paddock=createSablePaddock(),groundcover=createSableGroundcover(weighStationReserved),station=createWeighStation();root.add(landscape.root,landmarks.root,paddock.root,groundcover.root,station.root);
- const scenery={dispose(){landscape.dispose();landmarks.dispose();paddock.dispose();groundcover.dispose();station.dispose();}};
+ const landscape=createSableLandscape(),landmarks=createSableLandmarks(),paddock=createSablePaddock(),groundcover=createSableGroundcover((x,z,r)=>weighStationReserved(x,z,r)||settlingWorksReserved(x,z,r)),station=createWeighStation(),settling=createSableSettlingWorks();root.add(landscape.root,landmarks.root,paddock.root,groundcover.root,station.root,settling.root);
+ const scenery={dispose(){landscape.dispose();landmarks.dispose();paddock.dispose();groundcover.dispose();station.dispose();settling.dispose();}};
  root.userData.solidRecords=course.solids;freezeSceneryTransforms(root);
  let disposed=false;const ready=paddock.ready.then(()=>{if(disposed)return;freezeSceneryTransforms(paddock.root);onSceneryReady();}).catch(error=>{if(!disposed){root.userData.sceneryLoadError=String(error);console.warn('Sable parked scenery unavailable',error);}});return{root,ready,dispose(){if(disposed)return;disposed=true;scenery.dispose();surfaceDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
 }

@@ -1,3 +1,8 @@
+import {createPortWarehouse} from './port-warehouse';
+import {createCoastalPavilion} from './coastal-pavilion';
+import {createForestLodge} from './forest-lodge';
+import {createReservoirPumphouse} from './reservoir-pumphouse';
+import {createKingswellBandstands} from './kingswell-bandstands';
 import {createMidway} from './fairground-midway';
 import {createFairWheel} from './fairground-wheel';
 import {addCourseRockDetail} from './course-materials';
@@ -38,6 +43,7 @@ export function paintCourseGround(ctx:CanvasRenderingContext2D,width:number,heig
 /** Shared scenic dressing: bounded batches, original signage and protected placement.
  * Decorative pieces stay behind the existing walls; no driving surface is replaced. */
 export function createCourseScenery(course:Course,theme:SceneryTheme,identity?:{title:string;subtitle:string}){
+ const bandstandSites:{x:number;y:number;z:number}[]=[];
  const root=new T.Group();root.name=course.id+'_scenery';const p={...palettes[theme],...identity};
  let seed=8713+theme.length*659;const random=()=>((seed=(Math.imul(seed,1664525)+1013904223)>>>0)/4294967296);
  const geometries:Record<Shape,T.BufferGeometry>={gable:new T.BufferGeometry().setAttribute('position',new T.Float32BufferAttribute([-.5,0,0,.5,0,0,0,1,0],3)),ring:new T.TorusGeometry(.46,.025,6,32),box:new T.BoxGeometry(1,1,1),round:new T.CylinderGeometry(.5,.5,1,8),cone:new T.ConeGeometry(.5,1,9),rock:new T.IcosahedronGeometry(.5,1),leaf:new T.IcosahedronGeometry(.5,2)};
@@ -81,7 +87,7 @@ export function createCourseScenery(course:Course,theme:SceneryTheme,identity?:{
  // Build excluded decoration normally, then discard only its geometry. This
  // preserves the random sequence and all distant scenery placements.
  function decorateLandmarks(x:number,z:number,r:number,build:()=>void){
-  const excluded=(course.id==='wrenford-mud-v1'?[[0,-86,65,13],[0,86,65,13],[140,0,16,47],[-147.5,7.5,20,18]]:theme==='dunes'?[[-249.5,-91.5,34.5,19.5],[-247,-59,9,23]]:theme==='canal'?[[0,26,27,14],[-27,12,8,13],[10,10,13,6]]:theme==='pass'?[[0,220,113,11]]:theme==='forest'?[[8,-10,9,10]]:theme==='coast'?[[200,110,18,20]]:[]).some(([cx,cz,w,d])=>Math.abs(x-cx)<w+r*1.2&&Math.abs(z-cz)<d+r*1.2);
+  const excluded=(course.id==='wrenford-mud-v1'?[[0,-86,65,13],[0,86,65,13],[140,0,16,47],[-147.5,7.5,20,18]]:theme==='park'?[[0,-30,10,10],[-80,-45,10,10],[78,0,10,10]]:theme==='dunes'?[[-249.5,-91.5,34.5,19.5],[-247,-59,9,23]]:theme==='canal'?[[0,26,27,14],[-27,12,8,13],[10,10,13,6]]:theme==='pass'?[[0,220,113,11]]:theme==='forest'?[[8,-10,9,10],[52,-158,24,11.1]]:theme==='coast'?[[200,110,18,20],[52,-158,25,11]]:theme==='port'?[[62,-158,27,11]]:theme==='reservoir'?[[90,-163,24.5,9.5]]:[]).some(([cx,cz,w,d])=>Math.abs(x-cx)<w+r*1.2&&Math.abs(z-cz)<d+r*1.2);
   if(!excluded){build();return;}
   const lengths=new Map([...batches].map(([key,b])=>[key,b.matrices.length])),placed=placements.length,cards=treeCards.length;
   build();placements.length=placed;treeCards.length=cards;
@@ -120,6 +126,7 @@ export function createCourseScenery(course:Course,theme:SceneryTheme,identity?:{
  // Distant tree lines hide the rectangular terrain edge, with no physics cost.
  for(let i=0;i<130;i++){const a=i/130*Math.PI*2,x=Math.cos(a)*(242+random()*80),z=Math.sin(a)*(210+random()*70);if(theme==='dunes'||theme==='canyon'){if(i%3===0)rock(x,z,6+random()*10);}else tree(x,z,11+random()*11,theme==='pass'||theme==='forest'||theme==='ridge');}
 
+ function reserveReplaced(build:()=>void){const lengths=new Map([...batches].map(([key,b])=>[key,b.matrices.length]));build();for(const[key,b]of batches){const n=lengths.get(key);if(n===undefined)batches.delete(key);else{b.matrices.length=n;b.colors.length=n;}}}
  function building(x:number,z:number,w:number,d:number,h:number,finish:Finish){
   if(!clearRectangle(x,z,w+2,d+2,'building'))return;const y=course.height(x,z);
   box(finish,x,y+h/2,z,w,h,d);box('metal',x,y+h+.2,z,w+1,.4,d+1);
@@ -276,11 +283,7 @@ export function createCourseScenery(course:Course,theme:SceneryTheme,identity?:{
   // An old park bandstand and picnic terraces turn the infield into a venue.
   for(const [x,z]of [[0,-30],[-80,-45],[78,0]]){
    if(!clear(x,z,10,'park-pavilion'))continue;const y=course.height(x,z);
-   add('round','stone',x,y+.35,z,17,.7,17);
-   for(let i=0;i<8;i++){const a=i*Math.PI/4;box('white',x+Math.cos(a)*6,y+2.8,z+Math.sin(a)*6,.28,5,.28);}
-   add('cone','red',x,y+6.1,z,19,3.2,19,Math.PI/8);
-   add('round','white',x,y+4.9,z,17,.4,17);
-   box('white',x,y+8.2,z,.18,2,.18);
+   bandstandSites.push({x,y,z});
   }
   for(const [x,z]of [[-36,-35],[-18,-35],[37,-35],[55,-35],[-220,70],[220,50]]){
    if(!clearRectangle(x,z,9,7,'picnic-area'))continue;const y=scenicHeight(x,z);
@@ -377,7 +380,7 @@ export function createCourseScenery(course:Course,theme:SceneryTheme,identity?:{
    box('wood',0,y+1.6,-33.9,1.6,3.2,.15);box('white',0,y+4.4,-33.8,9,.45,.15);
   }
  }else if(theme==='port'){
-  building(62,-158,48,18,8,'metal');stand(-88,-155);canopy(-30,-157,'ochre');canopy(-10,-157,'white');serviceTruck(112,-157,'red');
+  reserveReplaced(()=>building(62,-158,48,18,8,'metal'));stand(-88,-155);canopy(-30,-157,'ochre');canopy(-10,-157,'white');serviceTruck(112,-157,'red');
   function container(x:number,z:number,y:number,finish:Finish){
    box(finish,x,y+1.5,z,22,3,8);
    for(const side of [-1,1]){
@@ -447,7 +450,7 @@ export function createCourseScenery(course:Course,theme:SceneryTheme,identity?:{
    box('metal',tx,y+1,tz-5.8,.25,.25,4);box('wood',tx,y+1.5,tz-8,3.2,.4,5);for(const side of [-1,1])box('wood',tx+side*1.6,y+2,tz-8,.15,1,5);for(const x of [-.8,.8])cylinder('ochre',tx+x,y+2.3,tz-8,1.5,3.8);
   }
  }else if(theme==='coast'){
-  building(52,-158,48,16,5,'white');stand(-85,-155);canopy(-28,-157,'red');canopy(-8,-157,'white');serviceTruck(105,-157,'white');
+  reserveReplaced(()=>building(52,-158,48,16,5,'white'));stand(-85,-155);canopy(-28,-157,'red');canopy(-8,-157,'white');serviceTruck(105,-157,'white');
   // A round, banded lighthouse and wraparound lantern replace the old stack of boxes.
   const x=206,z=137,y=course.height(x,z);
   rock(x,z,11);
@@ -458,10 +461,12 @@ export function createCourseScenery(course:Course,theme:SceneryTheme,identity?:{
   box('wood',x,y+1.5,z-2.3,1.4,2.8,.2);
   for(let i=0;i<35;i++)rock(-212+i*12,155+Math.sin(i*.8)*7,3+random()*5);
  }else if(theme==='forest'){
-  building(52,-158,44,17,6,'wood');stand(-88,-155);canopy(-30,-157,'ochre');canopy(-10,-157,'red');serviceTruck(111,-157,'ochre');
-  // Lodge gables, chimney and stacked cut timber at the service clearing.
+  reserveReplaced(()=>building(52,-158,44,17,6,'wood'));stand(-88,-155);canopy(-30,-157,'ochre');canopy(-10,-157,'red');serviceTruck(111,-157,'ochre');
+  // Preserve the old decoration sequence while replacing the lodge.
+  reserveReplaced(()=>{
   for(const side of [-1,1]){const roof=new T.Matrix4().makeRotationX(side*.38);roof.setPosition(52,7.9,-158+side*5);roof.scale(new T.Vector3(47,.5,11));const key='box_metal',b=batches.get(key)!;b.matrices.push(roof);b.colors.push(new T.Color(.9,.9,.9));}
   box('stone',66,7.7,-158,2,5,2);
+  });
   for(const [x,z]of [[-84,-52],[70,23],[214,18]]){if(!clear(x,z,9,'log-pile'))continue;const y=course.height(x,z);
    for(let row=0;row<3;row++)for(let col=0;col<4-row;col++){const xx=x+(col+row*.5-1.5)*1.3,yy=y+.65+row*1.12;
     const m=new T.Matrix4().makeRotationX(Math.PI/2);m.setPosition(xx,yy,z);m.scale(new T.Vector3(1.2,8,1.2));const key='round_bark',b=batches.get(key)??{shape:'round' as const,finish:'bark' as const,matrices:[],colors:[]};b.matrices.push(m);b.colors.push(new T.Color(.85,.8,.7));batches.set(key,b);
@@ -469,8 +474,9 @@ export function createCourseScenery(course:Course,theme:SceneryTheme,identity?:{
    }
   }
  }else if(theme==='reservoir'){
-  building(90,-163,45,15,8,'stone');stand(-105,-158);canopy(-48,-159,'red');canopy(-27,-159,'white');serviceTruck(136,-159,'ochre');
+  reserveReplaced(()=>building(90,-163,45,15,8,'stone'));stand(-105,-158);canopy(-48,-159,'red');canopy(-27,-159,'white');serviceTruck(136,-159,'ochre');
   // Dam control house and maintenance yard are set back from the start straight.
+  reserveReplaced(()=>{
   if(clearRectangle(90,-163,49,19,'dam-control')){
    const y=course.height(90,-163);
    box('glass',90,y+6,-155.3,35,2.1,.18);
@@ -479,6 +485,7 @@ export function createCourseScenery(course:Course,theme:SceneryTheme,identity?:{
    box('white',90,y+10,-163,18,4,10);box('glass',90,y+10,-157.9,16,2.4,.15);box('metal',90,y+12.3,-163,20,.5,12);
    box('metal',99,y+15,-165,.18,6,.18);add('round','white',99,y+17,-165,2,.5,2);
   }
+  });
   // Intake machinery, a shoreline service pier and dam railings make the water legible.
   for(const x of [-110,0,110]){
    if(!clearRectangle(x,198,15,27,'water-intake'))continue;
@@ -605,7 +612,12 @@ reflectedLight.directDiffuse *= .5;reflectedLight.directSpecular *= .5;`);
   }
  }
  for(const [key,b]of batches){const mesh=new T.InstancedMesh(geometries[b.shape],materials[b.finish],b.matrices.length);b.matrices.forEach((m,i)=>{mesh.setMatrixAt(i,m);mesh.setColorAt(i,b.colors[i]);});mesh.name=course.id+'_dressing_'+key;mesh.castShadow=b.shape==='box'||b.finish==='bark';mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
+ const portWarehouse=theme==='port'?createPortWarehouse(course.height(62,-158)):null;if(portWarehouse)root.add(portWarehouse.root);
+ const coastalPavilion=theme==='coast'?createCoastalPavilion(course.height(52,-158)):null;if(coastalPavilion)root.add(coastalPavilion.root);
+ const forestLodge=theme==='forest'?createForestLodge(course.height(52,-158)):null;if(forestLodge)root.add(forestLodge.root);
+ const pumpHouse=theme==='reservoir'?createReservoirPumphouse(course.height(90,-163)):null;if(pumpHouse)root.add(pumpHouse.root);
+ const bandstands=bandstandSites.length?createKingswellBandstands(bandstandSites):null;if(bandstands)root.add(bandstands.root);
  const fairWheel=theme==='fair'?createFairWheel():null,fairMidway=theme==='fair'?createMidway():null;if(fairWheel)root.add(fairWheel.root);if(fairMidway)root.add(fairMidway.root);
  root.userData.placements=placements;root.userData.theme=theme;
- let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;fairMidway?.dispose();fairWheel?.dispose();stoneDetail.dispose();ridgeDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});Object.values(geometries).forEach(g=>g.dispose());Object.values(materials).forEach(m=>m.dispose());ownedGeometries.forEach(g=>g.dispose());ownedMaterials.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());foliageTextures.forEach(t=>t.dispose());root.clear();}};
+ let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;portWarehouse?.dispose();coastalPavilion?.dispose();forestLodge?.dispose();pumpHouse?.dispose();bandstands?.dispose();fairMidway?.dispose();fairWheel?.dispose();stoneDetail.dispose();ridgeDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});Object.values(geometries).forEach(g=>g.dispose());Object.values(materials).forEach(m=>m.dispose());ownedGeometries.forEach(g=>g.dispose());ownedMaterials.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());foliageTextures.forEach(t=>t.dispose());root.clear();}};
 }

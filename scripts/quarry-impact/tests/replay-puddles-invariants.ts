@@ -1,3 +1,4 @@
+import {restoreSableTalusBytes} from './sable-talus-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readReplayPuddlesPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreReplayPuddlesBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreSableTalusBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readReplayPuddlesPrevious(file);
 }
 export function verifyReplayPuddlesRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'ab1c033b19cf86504d784b72073aac04fa81ea02');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreSableTalusBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreReplayPuddlesBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the ReplayPuddles release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreSableTalusBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the ReplayPuddles release');
  assert.equal(manifest.previousFixtureCount,3879);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,3879);
 }

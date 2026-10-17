@@ -40,20 +40,21 @@ export function checkRoute(route:readonly RoutePoint[],x:number,z:number,next:nu
   return {passed:distance<radius&&distance<lastDistance,distance};
 }
 export function lapProgress(passed:number,laps:number){return {lap:Math.max(1,Math.floor(passed/24)+1),finished:passed>=laps*24};}
-export type CombatRecord={damage:number;knockouts:number;deaths:number;respawnAt:number;bonus?:number;rivalHits?:number;spins?:number;impacts?:[number,number,number];award?:CombatAward};
+export type CombatRecord={damage:number;knockouts:number;deaths:number;respawnAt:number;bonus?:number;rivalHits?:number;spins?:number;spins180?:number;spins360?:number;impacts?:[number,number,number];award?:CombatAward};
 /** Collision damage uses actual health loss; a disabled opponent pays out once per life. */
 export class CombatScoreboard {
   readonly records=new Map<number,CombatRecord>();
-  readonly feats=new CombatFeats();
+  readonly feats:CombatFeats;
+  constructor(gradedSpins=false){this.feats=new CombatFeats(gradedSpins);}
   rivals:DerbyRivals|null=null;
   private living=new Set<number>();
   private frameRivals=new Map<number,number|null>();
   enableRivals(count:number){this.rivals=new DerbyRivals(count);this.living.clear();this.frameRivals.clear();}
   rival(id:number){return this.rivals?.selected(id)??null;}
-  award(id:number,award:CombatAward){const r=this.get(id);r.bonus=(r.bonus??0)+award.points;r.award={...award};if(award.kind==='rival')r.rivalHits=(r.rivalHits??0)+1;else if(award.kind==='spin')r.spins=(r.spins??0)+1;else{r.impacts??=[0,0,0];r.impacts[['solid','heavy','massive'].indexOf(award.kind)]++;}}
+  award(id:number,award:CombatAward){const r=this.get(id);r.bonus=(r.bonus??0)+award.points;r.award={...award};if(award.kind==='rival')r.rivalHits=(r.rivalHits??0)+1;else if(award.kind==='spin')r.spins=(r.spins??0)+1;else if(award.kind==='spin180')r.spins180=(r.spins180??0)+1;else if(award.kind==='spin360')r.spins360=(r.spins360??0)+1;else{r.impacts??=[0,0,0];r.impacts[['solid','heavy','massive'].indexOf(award.kind)]++;}}
   contact(attacker:CombatMotion,victim:CombatMotion,damage:number,time:number){const award=this.feats.contact(attacker,victim,damage,time);if(award)this.award(attacker.id,award);const points=this.rivals?.hit(attacker,victim,damage,time,this.living,this.frameRivals.get(attacker.id)??null)??0;if(points)this.award(attacker.id,{kind:'rival',points,time});}
   sample(cars:readonly CombatMotion[],time:number){this.living=new Set(cars.filter(c=>c.health>0).map(c=>c.id));this.frameRivals.clear();if(this.rivals)for(const c of cars)this.frameRivals.set(c.id,this.rivals.rival(c.id,this.living));for(const {id,award}of this.feats.sample(cars,time))this.award(id,award);}
-  reset(){this.records.clear();this.feats.reset();this.rivals=null;this.living.clear();this.frameRivals.clear();}
+  reset(gradedSpins=this.feats.graded){this.records.clear();this.feats.graded=gradedSpins;this.feats.reset();this.rivals=null;this.living.clear();this.frameRivals.clear();}
   get(id:number){let r=this.records.get(id);if(!r){r={damage:0,knockouts:0,deaths:0,respawnAt:0};this.records.set(id,r);}return r;}
   hit(attacker:number,victim:number,before:number,after:number,time:number){
     if(attacker===victim||before<=0||![before,after,time].every(Number.isFinite))return;

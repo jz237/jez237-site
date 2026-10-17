@@ -208,3 +208,5 @@ Original Quarry Impact three-door 4×4 artwork, using original Rook wheel toolin
 Original fictional hot hatch model and integration for Quarry Impact. See [KITE-2000.md](KITE-2000.md).
 
 Morrow 420: original fictional coupe bodywork and original Marten road-wheel assemblies. See [MORROW-420.md](MORROW-420.md).
+
+Alder 230: original fictional estate bodywork and original Marten road-wheel assemblies. See [ALDER-230.md](ALDER-230.md).
