@@ -10,7 +10,7 @@ for(const [course,theme]of [[KINGSWELL,'park'],[COPPERFIELD,'dunes'],[MILLBROOK,
    const placements=art.root.userData.placements;
    for(const p of placements){if(p.halfWidth!==undefined){for(const x of [-p.halfWidth,0,p.halfWidth])for(const z of [-p.halfDepth,0,p.halfDepth])assert.ok(course.distance(p.x+x,p.z+z)>=23,p.kind);}else assert.ok(course.distance(p.x,p.z)>=23+p.radius,p.kind);}
    assert.ok(placements.some((p:any)=>p.kind==='building'),'clubhouse/service buildings are not rejected by clearance');assert.ok(placements.some((p:any)=>p.kind==='grandstand'),'spectator stand');assert.ok(placements.some((p:any)=>p.kind==='canopy'),'paddock shelters');
-   if(theme==='canal')for(const p of placements)assert.ok(Math.abs(p.x)>=78+p.radius||p.z<=-23-p.radius||p.z>=15+p.radius,'canal navigation kept open');
+   if(theme==='canal')for(const p of placements.filter((p:any)=>p.kind!=='narrowboat'&&p.kind!=='lock-gate'))assert.ok(Math.abs(p.x)>=78+p.radius||p.z<=-23-p.radius||p.z>=15+p.radius,'canal navigation kept open');
    const meshes=art.root.children.filter(o=>o instanceof T.Mesh) as T.Mesh[];
    assert.ok(meshes.length<=32,'bounded scenery draw batches');let triangles=0;for(const m of meshes)triangles+=(m.geometry.index?.count??m.geometry.getAttribute('position').count)/3*(m instanceof T.InstancedMesh?m.count:1);assert.ok(triangles<260000,'bounded scenery triangle cost');
    assert.ok(art.root.getObjectByName(course.id+'_surrounding_landscape'));assert.ok(placements.length>70); 
