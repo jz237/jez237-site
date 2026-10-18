@@ -40,6 +40,8 @@ import {prepareNativeStuntRecords} from './native-stunt-records.js';
 import {createNativeStuntScoring,stepNativeStuntScoring} from './native-stunt-scoring.js';
 import {prepareNativeStuntPrelude} from './native-stunt-prelude.js';
 import {prepareNativeStuntCheckpoint} from './native-stunt-checkpoint.js';
+import {prepareNativeStuntFinish} from './native-stunt-finish.js';
+import {prepareNativePrimaryScratchContext} from './native-primary-scratch-context.js';
 
 const MIN=-2147483648,MAX=2147483647,RACE_BASE=0x1f94,RACE_WORDS=1693,HUD_BASE=0x7788,HUD_WORDS=1442;
 const resourceOwnerWords={resourceWordsB330:20,resourceWordsB538:8,resourceWordsE73c:43};
@@ -58,7 +60,7 @@ const sceneRanges={fieldAb0c:[-32768,32767],championshipCountAa00:[-32768,32767]
  pendingPlayers60c:[-32768,32767],participantCount60e:[-32768,32767],result6f0:[-32768,32767],field62a:[-32768,32767],specialAb64:[-32768,32767],ready6fc:[-32768,32767],field4964:[0,65535],
  reverseDab68:[0,65535],missesEnabled72e:[0,65535],seed6f00:[0,65535],rngState4640:[0,0xffffffff],inputTick1960:[0,0xffffffff],style6e28:[0,65535],
  field4970:[0,65535],field72c:[0,65535],fieldA9ac:[0,65535],pressed65a:[0,65535],unlockAb60:[-32768,32767],freshNameAb6c:[-32768,32767],variant6f4:[-32768,32767],variant6f6:[-32768,32767]};
-const sceneWords=new Set(['titlePairSelectionA9fc','fieldAa08','fortressCourse3a10','cold8224','clockStopped817c','phase650','simulation648','main638','mode620','state600',
+const sceneWords=new Set(['ringCountB134','titlePairSelectionA9fc','fieldAa08','fortressCourse3a10','cold8224','clockStopped817c','phase650','simulation648','main638','mode620','state600',
  'missLimit8174','noFinish8178','configuredLaps728','difficulty','directionFlag1f90','ambientD4b00','fortressD8240',
  'metadataD9b0','metadataCb32c','restart6f8','initLatch63c','gameStateAb24','mode608','returnState630','forceFirst8228','demoOffset5438','rngState4640','inputTick1960','style6e2c',
  'previousGameState634','field640','field644','fieldAb1c','fieldAb2c','field461c','field700','field704','field708','field70c','field710','field714','resultEffect393c','wave610','missLimit614','lapCount618','field61c','wave49b0','field64c','players','racerCount','toggleD9914','previousNavigationD9874','trainingSelectionDa9f8',
@@ -242,6 +244,40 @@ export function prepareNativeRaceStuntCheckpointUpdate(state,input={}){
   else effects.push(...apply(next,[op]));
  }
  return freeze({...prepared,state:next,applied:true,effects});
+}
+
+export function prepareNativeRaceStuntFinishUpdate(state,input){
+ const next=copy(state);
+ if(!stuntModeActive(next))return freeze({state:next,applied:false,effects:[],diagnostic:{finished:false,masteryGranted:false}});
+ const prepared=prepareNativeStuntFinish({raceWords1f94:next.raceWords1f94,globals:next.scene},input),effects=apply(next,prepared.operations);
+ return freeze({...prepared,state:next,applied:true,effects});
+}
+
+/** One actual76378/783AC racer invocation. All branches share canonical state:
+ * scratch -> prelude/delayed/clock -> move -> checkpoint -> finish/lap/mastery.
+ * A prelude early return skips the remainder. Call in original racer order;
+ * the later79528 record check and source display stage are separate. Physics,
+ * ring-object contacts, course initialization and live mode admission remain
+ * the enclosing host's responsibility. */
+export function prepareNativeRaceStuntRacerUpdate(state,input={}){
+ let next=copy(state);const diagnostic={},effects=[];
+ if(!stuntModeActive(next))return freeze({state:next,applied:false,effects,diagnostic});
+ const slot=integer(input.racerIndex,'racerIndex',0,3),scratch=prepareNativePrimaryScratchContext(input.primaryScratchLayout,
+  Object.fromEntries(['postJudgeSourceRow2c48','weed2c50','region2c54'].map(k=>[k,next.raceWords1f94[ri(parseInt(k.slice(-4),16))+slot*222]|0])),
+  {...input,state638:sceneValue(next,'main638'),players:sceneValue(next,'players'),courseIndex:sceneValue(next,'courseIndex'),
+   primaryHumanIndex:sceneValue(next,'primaryHumanIndex'),secondaryHumanIndex:sceneValue(next,'secondaryHumanIndex'),
+   ...(next.scene.courseIndex===4?{difficulty:sceneValue(next,'difficulty')}:{})});
+ ['x','y','z'].forEach((k,i)=>next.raceWords1f94[ri(0x3780)+i]=floatWord(scratch.positionNative[k]));
+ for(const [key,value]of Object.entries(scratch.recordWrites))next.raceWords1f94[ri(parseInt(key.slice(-4),16))+slot*222]=value>>>0;
+ effects.push(...scratch.effects);diagnostic.scratch=scratch.diagnostic;
+ const prelude=prepareNativeRaceStuntPreludeUpdate(next,input);next=prelude.state;effects.push(...prelude.effects);diagnostic.prelude=prelude.diagnostic;
+ if(prelude.diagnostic.earlyReturn)return freeze({state:next,applied:true,effects,diagnostic});
+ const move=prepareNativeRaceStuntMoveUpdate(next,input);next=move.state;diagnostic.moveAwards=move.awards;
+ const checkpoint=prepareNativeRaceStuntCheckpointUpdate(next,input);next=checkpoint.state;effects.push(...checkpoint.effects);diagnostic.checkpoint=checkpoint.diagnostic;
+ const finish=prepareNativeRaceStuntFinishUpdate(next,{racerIndex:input.racerIndex,continueFinish:checkpoint.diagnostic.continueFinish,
+  sourceRow:checkpoint.diagnostic.sourceRow,crossingOffsetNative:checkpoint.diagnostic.crossingOffsetNative,move1604:input.move});
+ next=finish.state;effects.push(...finish.effects);diagnostic.finish=finish.diagnostic;
+ return freeze({state:next,applied:true,effects,diagnostic});
 }
 
 /** Reached delayed-award slice78490..784D4, before the later clock/retirement

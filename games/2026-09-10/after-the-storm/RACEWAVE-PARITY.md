@@ -19,6 +19,34 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — native stunt finish and combined racer update
+
+Stunt finish processing now writes the original lap and visited-node flags,
+settles a held pose into the delayed bonus, recomputes the recorded time and
+selects the provisional result cue. The provisional result includes the pending
+trick and finish-checkpoint bonuses; final record insertion still waits for
+their queue transfer. Dolphin Park mastery checks the actual ring count and
+all eight move-completion words, including its special finish-cue flag.
+
+The combined racer entry runs existing primary scratch/context selection,
+retirement and clocks, move settlement, checkpoint crossing and finish/mastery
+in source order on one canonical race/HUD state. Retirement returns before the
+later scoring branches. Scratch nearest-node and course-region writes still
+occur before that return. Display transfer and final record checks retain their
+separate original stages; callers must not also run the delayed-bonus leaf.
+
+The original finish tail passed242 prepared cases in28,925 instructions, with
+312 exported instruction records matched to ROM. A further160 combined cases
+executed the complete783AC function plus retirement, then replayed its ordered
+award calls through the original queue consumer:67,028 instructions and1,143
+matching exported records. Those combined cases prepare caller scratch and
+synthetic primary nodes; they do not execute76378, physics or ring contacts.
+Square root uses host sqrt rounded to float32 and audio calls are intercepted.
+Public fixtures contain only synthetic numeric states. Integration checks cover
+the final bonus draining once into the saved record, early-return ordering and
+scratch side effects. Native Stunt admission, live HUD and ring/course setup
+remain unfinished. Rendering resolution and detail are unchanged.
+
 ## Unpublished — native stunt checkpoint geometry and time awards
 
 Stunt crossings now consume canonical scratch position and the actual selected
