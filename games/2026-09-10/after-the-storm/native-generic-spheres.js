@@ -44,7 +44,7 @@ export function collideNativeGenericSpheres(state,hull,{probesNative,stabilityNa
   if(squared===0){unresolved.push({index,probeIndex,reason:'coincident-center'});break;}
   const distance=F(Math.sqrt(squared)),inverse=F(1/distance),normal=delta.map(v=>F(v*inverse));
   const depth=F(radius-distance),craftDepth=n.kind===10?depth:F(depth*F(.3)),translation=normal.map(v=>F(v*craftDepth));
-  if(n.kind===9){
+  if(n.kind!==10){
    const remainder=F(depth-craftDepth),recoil=normal.map(v=>F(remainder*v));
    n.position=n.position.map((v,k)=>F(v-recoil[k]));n.velocity=n.velocity.map((v,k)=>F(v-recoil[k]));
   }
@@ -66,3 +66,36 @@ export function collideNativeGenericSpheres(state,hull,{probesNative,stabilityNa
 }
 
 export function snapshotNativeGenericSpheres(state){owned(state);return state.nodes.map(n=>({...n,position:copy(n.position),velocity:copy(n.velocity)}));}
+
+/** Original7E938 selection over a complete retained generic-object array.
+ * Kind10 ignores collision5C and checks brokenBC; every other kind requires
+ * collision5C==2 and takes the floating recoil branch. Temporary decoded nodes
+ * are discarded after writes return to the same raw owner. Only touched
+ * position/velocity or newly broken words change; ring/ramp flags stay intact.
+ * Hull/impact are prepared native body views, returned without mutating input.
+ */
+export function prepareNativeGenericObjectContacts({objectWordsC940,objectCountFa40,hull,probesNative,stabilityNative,impact}={}){
+ if(!Array.isArray(objectWordsC940)||objectWordsC940.length!==3136||Array.from(objectWordsC940).some(v=>!Number.isInteger(v)||v<0||v>0xffffffff))
+  throw new RangeError('Supply objectWordsC940[3136] unsigned words');
+ if(!Number.isInteger(objectCountFa40)||objectCountFa40<0||objectCountFa40>64)throw new RangeError('Invalid objectCountFa40');
+ const raw=objectWordsC940.slice(),view=new DataView(new ArrayBuffer(4)),indices=[],nodes=[];
+ const read=i=>{view.setUint32(0,raw[i]);return scalar(view.getFloat32(0),'generic object float');};
+ const put=(i,v)=>{view.setFloat32(0,scalar(v,'generic contact result'));raw[i]=view.getUint32(0);};
+ for(let i=0;i<objectCountFa40;i++){
+  const b=i*49,kind=raw[b+0x4c/4]|0,broken=raw[b+0xbc/4]!==0;
+  if(kind===10?broken:raw[b+0x5c/4]!==2)continue;
+  indices.push(i);nodes.push({kind,broken:false,position:[read(b),read(b+1),read(b+2)],
+   velocity:kind===10?[0,0,0]:[read(b+6),read(b+7),read(b+8)],radius:read(b+0x40/4)});
+ }
+ const transient={nodes};owners.add(transient);
+ const body={positions:hull?.positions?.map(p=>[...p]),velocities:hull?.velocities?.map(p=>[...p])},
+  retainedImpact={maximum:impact?.maximum,normal:impact?.normal?[...impact.normal]:null,hitKind:impact?.hitKind};
+ const result=collideNativeGenericSpheres(transient,body,{probesNative,stabilityNative,impact:retainedImpact});
+ for(const index of new Set(result.contacts.map(c=>c.index))){
+  const node=nodes[index],b=indices[index]*49;
+  if(node.kind===10){if(node.broken)raw[b+0xbc/4]=1;}
+  else for(let j=0;j<3;j++){put(b+j,node.position[j]);put(b+6+j,node.velocity[j]);}
+ }
+ const mapped=list=>list.map(c=>({...c,index:indices[c.index]}));
+ return {objectWordsC940:raw,hull:body,impact:retainedImpact,contacts:mapped(result.contacts),unresolved:mapped(result.unresolved),fragmentEvents:result.fragmentEvents};
+}

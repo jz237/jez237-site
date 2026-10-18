@@ -44,6 +44,9 @@ import {prepareNativeStuntFinish} from './native-stunt-finish.js';
 import {prepareNativeStuntRings} from './native-stunt-rings.js';
 import {prepareNativeObjectInitialization} from './native-object-initialization.js';
 import {prepareNativeObjectLoading} from './native-object-loading.js';
+import {prepareNativeObjectMotion} from './native-object-motion.js';
+import {prepareNativeGenericObjectContacts} from './native-generic-spheres.js';
+import {queryNativeWaterField} from './native-water-field.js';
 import {prepareNativeFixedSphereLoading,prepareNativeFixedSphereInitialization} from './native-fixed-sphere-startup.js';
 import {prepareNativePrimaryScratchContext} from './native-primary-scratch-context.js';
 
@@ -321,6 +324,31 @@ export function prepareNativeRaceStuntRingUpdate(state,input={}){
   else effects.push(...apply(next,[op]));
  }
  return freeze({...prepared,state:next,applied:true,effects});
+}
+
+/** Generic half of7DBC0, once after primary motion. The source activity gate
+ * is independent of simulation648; rings/fixed objects remain in this owner
+ * but move only if their actual motion58 word is4. Water is the shared field. */
+export function prepareNativeRaceObjectMotionUpdate(state,input={}){
+ const next=copy(state);record(input,'object motion resources');
+ for(const key of ['objectWordsC940','objectCountFa40','activity624'])if(Object.hasOwn(input,key))throw new RangeError(`${key} overlaps canonical native state`);
+ if(sceneValue(next,'activity624')!==-1)return freeze({state:next,applied:false,effects:[],diagnostic:{queries:[]}});
+ const prepared=prepareNativeObjectMotion({objectWordsC940:next.objectWordsC940,objectCountFa40:sceneValue(next,'objectCountFa40'),
+  queryNative:(x,z)=>queryNativeWaterField(input.waterField,x,z).sourcePlaneQueryNative});
+ next.objectWordsC940=prepared.objectWordsC940;
+ return freeze({state:next,applied:true,effects:[],diagnostic:prepared.diagnostic});
+}
+
+/** Reached7E938 front/rear probe calls. Body/impact are prepared views of the
+ * current physical rider; object contacts commit to the same owner used by
+ * loading, initialization, rings and motion. Fragment events remain an ordered
+ * caller boundary. No world activity gate is inferred inside a hull phase. */
+export function prepareNativeRaceGenericObjectContacts(state,input={}){
+ const next=copy(state);record(input,'generic contact body');
+ for(const key of ['objectWordsC940','objectCountFa40'])if(Object.hasOwn(input,key))throw new RangeError(`${key} overlaps canonical native state`);
+ const prepared=prepareNativeGenericObjectContacts({...input,objectWordsC940:next.objectWordsC940,objectCountFa40:sceneValue(next,'objectCountFa40')});
+ next.objectWordsC940=prepared.objectWordsC940;
+ const {objectWordsC940,...result}=prepared;return freeze({...result,state:next,effects:[]});
 }
 
 export function prepareNativeRaceStuntFinishUpdate(state,input){

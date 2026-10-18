@@ -19,6 +19,37 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — shared generic-object contact and motion bridge
+
+The canonical object span now supports the original7E938 sphere-contact
+selection and the generic half of7DBC0 free motion. Intact kind10 ice ignores
+the general collision flag; other kinds require collision5C=2 and use floating
+recoil. Contact writes only the source position/velocity or newly broken words.
+Rings, ramps and other retained fields remain in the same array. The motion
+pass follows motion58=4 independently of kind/render/broken flags, retains the
+source float32/double operation order, and samples the old X/Z through the
+physics-plane water query. Its activity gate is independent of simulation648.
+
+All103 mixed contact cases match complete original7E938 with original6243C:
+26,220 instructions and224 exported instruction records matched to ROM.
+sqrt is host-rounded float32; fragment entry arguments remain an explicit
+boundary. Motion matches46 original cases and120 consecutive retained steps:
+35,713 instructions and227 exported records matched. The motion audit supplies
+prepared4D30C returns and sets primaryCount=0; it does not claim primary motion.
+
+A physical bridge reads and commits the caller's canonical owner immediately
+for each rider, then advances free motion once after shared water/adjudication
+and primary motion. Two actual physical adapters share floating recoil and one
+ice break; the later rider sees the break immediately. Tests also compose
+loading, initialization, contact, motion and ring collection, and verify equal
+object state across30/60/144 render updates with five hull ticks per water frame.
+There is no second saved object-position or collected/broken-state array.
+
+The bridge is tested with the physical world but is not yet selected by the
+live browser host. Host startup/resource selection and generic6E0F4 presentation
+must be connected before replacing its older separate floating/ice adapters or
+enabling native Stunt mode. Graphics quality and resolution are unchanged.
+
 ## Unpublished — fixed-sphere startup and collision grid
 
 The selected fixed-sphere tail of71E70 now loads generic XZ obstacles, boundary
