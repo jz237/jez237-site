@@ -1,12 +1,12 @@
-import {createSourceTwilightCourse} from './source-twilight-course.js?v=8e78b4f796b7';
-import {polygonDistance} from './classic-courses.js?v=8e78b4f796b7';
-import {twilightAnchors,twilightPilotAnchors,twilightStuntNavigation} from './source-twilight-navigation.js?v=8e78b4f796b7';
-import {samplePolyline} from './courses.js?v=8e78b4f796b7';
-import {createSourcePortCourse} from './source-port-course.js?v=8e78b4f796b7';
-import {portStuntNavigation} from './source-port-navigation.js?v=8e78b4f796b7';
-import {createSourceDolphinStuntCourse} from './source-dolphin-stunt-course.js?v=8e78b4f796b7';
-import {createSourceFortressStuntCourse} from './source-fortress-stunt-course.js?v=8e78b4f796b7';
-import {createSourceDrakeStuntCourse} from './source-drake-stunt-course.js?v=8e78b4f796b7';
+import {createSourceTwilightCourse} from './source-twilight-course.js?v=d5529706860a';
+import {polygonDistance} from './classic-courses.js?v=d5529706860a';
+import {twilightAnchors,twilightPilotAnchors,twilightStuntNavigation} from './source-twilight-navigation.js?v=d5529706860a';
+import {samplePolyline} from './courses.js?v=d5529706860a';
+import {createSourcePortCourse} from './source-port-course.js?v=d5529706860a';
+import {portStuntNavigation} from './source-port-navigation.js?v=d5529706860a';
+import {createSourceDolphinStuntCourse} from './source-dolphin-stunt-course.js?v=d5529706860a';
+import {createSourceFortressStuntCourse} from './source-fortress-stunt-course.js?v=d5529706860a';
+import {createSourceDrakeStuntCourse} from './source-drake-stunt-course.js?v=d5529706860a';
 
 /** Source-aligned high-resolution scene for native Stunt. Course geometry and
  * decorative materials remain separate from the original physical owners.

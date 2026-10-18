@@ -1,2 +1,2 @@
 // Every worker dependency uses the same graph revision (workers have no import maps).
-export const terrainWorkerURL='./terrain-worker/terrain-worker.js?v=8e78b4f796b7';
+export const terrainWorkerURL='./terrain-worker/terrain-worker.js?v=d5529706860a';

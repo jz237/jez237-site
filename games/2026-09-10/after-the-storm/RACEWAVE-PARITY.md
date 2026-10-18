@@ -6451,3 +6451,41 @@ existing Stunt, Drake, online and player-window tests pass. Terrain remains
 361x361 with512x512 depth data; all401 module hashes and four page preloads are
 refreshed. Native physics remains opt-in. Ordinary Port/Twilight integration,
 original AI and remaining trick/alternate-route validation are still pending.
+
+
+### Ordinary Port Blue preparation — 2026-10-18
+
+The ordinary Port runtime now prepares all four primary routes from the
+correct player-selected companion images: 45/46/46/55 rows in both solo and
+two-player modes. An older raw-ROM lookup used the solo address range for the
+two-player Reverse pointer and misread collision data as route rows. Repeating
+the original loading and initialization in the selected image gives 24,960
+matching initialized words across eight cases (147,318 executed instructions).
+The original AI family selector keeps the primary family for ordinary Port;
+its separately stored secondary rows are not activated without source evidence.
+
+Two-player support retains 109 shoreline segments rather than solo's 117.
+Both original three-dimensional floor grids are disabled; stale cell-list
+bytes do not create extra physical floors. All 436 complete two-player shore
+contact cases and 45 floor probes match the original floating-point words,
+including point velocities, impacts, normals and output stores (185,652
+executed instructions). Solo support reuses the already verified Stunt resource.
+
+The prepared high-resolution ordinary scene selects the canonical objects
+and markers independently for each player count. Solo retains 12 floating
+bodies and 51 boundary spheres; two-player has no floating spheres and has
+33 boundary spheres, with a kind6 solid in Hard/Expert/Reverse. Each mode has
+three ramps with its original class/reverse profile. Canonical startup owns
+all finite planes, including the supplementary static quay volumes. Shared
+original startup fixtures cover these selections, and the scene checks every
+rendered shore edge, solid plane, floating binding and marker against that
+selected physical data. Display reads do not advance object motion.
+
+The ordinary scene excludes the older illustration map and has its own
+worker/cache identity. Terrain remains 361x361 with 512x512 depth data, with
+identical worker output for selected two-player geometry. Eight new runtime
+and scene tests pass alongside the existing Port Stunt, Fortress, Drake and
+native host regressions. A private Normal physical drive completes three laps
+in 134.581 seconds with zero misses, using only ordinary input. Hard/Expert/
+Reverse driving, browser presentation and separate-window admission remain
+under validation. Ordinary Port is not yet admitted by the public race host.

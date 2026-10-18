@@ -137,8 +137,8 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
    const initial=state.nativeStuntDisplay.snapshot();state.nativeStuntWorld=initial.world;state.nativeStuntHud=initial.hud;
    Object.defineProperty(racers[0],'stunt',{enumerable:true,configurable:true,get:()=>state.nativeStuntHud});
   }
-  else if(course.sourceSolidObjects?.length||course.sourceStaticObjects?.length){
-   const present=course.sourceSolidObjects?.length?createNativeCourseObjectPresentation:createNativeCourseDecorationPresentation;
+  else if(course.sourceSolidObjects?.length||course.sourceStaticObjects?.length||course.nativeSceneMode==='race'&&course.nativeSceneCourseIndex===5){
+   const present=course.sourceSolidObjects?.length||course.nativeSceneCourseIndex===5?createNativeCourseObjectPresentation:createNativeCourseDecorationPresentation;
    state.nativeCourseDisplay=present({course,readState:nativeLaunch.snapshot,scale:nativeScale});
    course={...course,nativeCourseLayout:state.nativeCourseDisplay.layout};state.course=course;
    state.nativeCourseWorld=state.nativeCourseDisplay.snapshot();
