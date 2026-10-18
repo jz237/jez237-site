@@ -19,6 +19,34 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — shared stunt scoring state
+
+Stunt queue, pulse, totals, move accumulation, repeat/completion flags and score
+records now have adapters into the existing canonical race/HUD spans. There is
+no second saved score bank. Ordered award events, display transfer and record
+checks observe each other's writes directly. Tests check all12 course tables
+and all4 selected-primary slots, and verify unrelated words stay intact.
+
+The result gate is explicitly the pending finish-bonus AMOUNT39cc; its signed
+countdown lives at39d0. Independent raw execution covers both fields varying
+separately. The reached delayed-award consumer decrements only positive counts,
+enqueues at one, and clears the amount. The later move consumer does not tick
+that clock. Existing source startup clears only the four award type words,
+retaining payload and pulse words, which the shared-state tests preserve.
+
+A prepared airborne test then uses normal inputs and the real hull/rider
+solvers: the successful roll settles on frame24, queues58 points and transfers
+them on frame46. The over-rotated failure earns no points. This is a composed
+physics/state test, not a naturally driven browser course jump or live Stunt
+admission. Move consumers currently require reset-normalized0/1 flags and
+explicit actual move/primary arc inputs. Full783AC event retirement, clock,
+checkpoint/ring qualification, finish bookkeeping and live HUD remain pending.
+
+The additional delayed-award audit executes24 signed/count/amount cases in108
+original instructions; all17 relevant exported instructions match ROM bytes.
+All94 focused checks pass, including shared storage, source startup, physical
+landings, ordinary live launches and30/60/144Hz invariance.
+
 ## Unpublished — native stunt award queue and numeric records
 
 The independent stunt scoring consumer now reproduces the four-slot award
@@ -29,7 +57,8 @@ Enqueueing alone leaves the total unchanged. These calls belong to the source
 world-display stage, after gameplay updates, with the original HUD gates.
 
 The selected-course record consumer waits for every slot to empty and for the
-delayed finish award countdown to end. It then inserts strictly higher scores
+pending finish award amount39cc to clear (its countdown is separately39d0).
+It then inserts strictly higher scores
 into the three retained rows, preserving source metadata and untouched row
 words. Ties retain their earlier place. Since the record check precedes display,
 a final transfer can unblock recording only on the next gameplay update.
@@ -37,7 +66,7 @@ a final transfer can unblock recording only on the next gameplay update.
 Fresh read-only EVO X2 Ghidra queries preserved all9 project files. Queue audit:
 96 enqueue and120 advance cases,19,716 original instructions,715 exported
 instruction records matched to ROM bytes. Caller/record audit:72 display gates
-and196 result cases,16,660 original instructions,1,583 matched exported records.
+and200 result cases,17,056 original instructions,1,583 matched exported records.
 Rendering callees were intercepted for the caller audit; graphics commands,
 save storage and unrelated message timers are not reconstructed here. Public
 fixtures contain synthetic numeric state only. All38 focused scoring, award

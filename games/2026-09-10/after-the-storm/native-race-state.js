@@ -35,6 +35,9 @@ import {prepareNativeContinuationMenuInitialization,prepareNativeContinuationMen
 import {prepareNativeRaceRiderResourceConfiguration,prepareNativeRaceCourseResourceConfiguration} from './native-race-resource-configuration.js';
 import {prepareNativeRaceResultCodeSelection} from './native-race-body-fields.js';
 import {prepareNativePrimaryResultEstimates} from './native-primary-standings.js';
+import {enqueueNativeStuntAward,displayNativeStuntAwards} from './native-stunt-awards.js';
+import {prepareNativeStuntRecords} from './native-stunt-records.js';
+import {createNativeStuntScoring,stepNativeStuntScoring} from './native-stunt-scoring.js';
 
 const MIN=-2147483648,MAX=2147483647,RACE_BASE=0x1f94,RACE_WORDS=1693,HUD_BASE=0x7788,HUD_WORDS=1442;
 const resourceOwnerWords={resourceWordsB330:20,resourceWordsB538:8,resourceWordsE73c:43};
@@ -144,6 +147,116 @@ function copy(value){
  */
 export function createNativeRaceState(value){return freeze(copy(value));}
 export function nativeRaceStateSnapshot(value){return copy(value);}
+
+const stuntSlotFields=['type','amount','age','x','y','velocityY','finishOffset'];
+const stuntTotalFields={total:0x26d0,time:0x26d4,ring:0x26d8,trick:0x26dc};
+function stuntAwardsView(s){
+ return {slots:Array.from({length:4},(_,i)=>Object.fromEntries(stuntSlotFields.map((k,j)=>[k,s.hudWords7788[hi(0x8ae0)+i*7+j]|0]))),
+  pulsePhase:s.hudWords7788[hi(0x8d14)]|0,pulseTick:s.hudWords7788[hi(0x8d18)]|0,
+  totals:Object.fromEntries(Object.entries(stuntTotalFields).map(([k,a])=>[k,s.raceWords1f94[ri(a)]|0]))};
+}
+function commitStuntAwards(s,awards){
+ awards.slots.forEach((slot,i)=>stuntSlotFields.forEach((k,j)=>s.hudWords7788[hi(0x8ae0)+i*7+j]=slot[k]>>>0));
+ s.hudWords7788[hi(0x8d14)]=awards.pulsePhase>>>0;s.hudWords7788[hi(0x8d18)]=awards.pulseTick>>>0;
+ for(const [k,a]of Object.entries(stuntTotalFields))s.raceWords1f94[ri(a)]=awards.totals[k]>>>0;
+}
+
+/** Detached read view, never an additional saved score/queue bank. The source
+ * startup already clears the four type words through its shared HUD owner;
+ * all other slot fields and pulse words retain their actual prior contents. */
+export function nativeRaceStuntAwardsView(state){return freeze(stuntAwardsView(copy(state)));}
+
+/** Consume qualified enqueue events in original producer order. This leaf has
+ * no mode/contact gate, just like FB488: callers must establish eligibility.
+ * Invalid later events leave the supplied canonical state unchanged. */
+export function prepareNativeRaceStuntAwardEnqueue(state,awards){
+ if(!Array.isArray(awards))throw new TypeError('Supply ordered qualified stunt award events');
+ const next=copy(state),diagnostic=[];let queue=stuntAwardsView(next);
+ for(const award of awards){const result=enqueueNativeStuntAward(queue,award);queue=result.state;
+  diagnostic.push({slot:result.slot,replaced:result.replaced});}
+ commitStuntAwards(next,queue);
+ return freeze({state:next,diagnostic});
+}
+
+/** Reached source9328C display-stage consumer, after gameplay updates. The
+ * gate reads the actual scene and HUD words, including overlay8aa4. Never run
+ * this from the independent high-resolution render/interpolation callback. */
+export function prepareNativeRaceStuntAwardDisplay(state){
+ const next=copy(state),prepared=displayNativeStuntAwards(stuntAwardsView(next),{
+  mainState638:sceneValue(next,'main638'),activity624:sceneValue(next,'activity624'),mode620:sceneValue(next,'mode620'),
+  gameStateDab24:sceneValue(next,'gameStateAb24'),overlayMode8aa4:next.hudWords7788[hi(0x8aa4)]|0});
+ commitStuntAwards(next,prepared.state);
+ return freeze({...prepared,state:next});
+}
+
+/** Post-scoring79528 record branch, before the later display/transfer stage.
+ * Selected primary finish status, delayed bonus AMOUNT39cc, totals and course
+ * rows all come from the same race span. This does not persist records or
+ * advance result menus. No caller-provided redundant score/finish fields. */
+export function prepareNativeRaceStuntRecords(state){
+ const next=copy(state),a=next.raceWords1f94,course=sceneValue(next,'courseIndex'),primary=sceneValue(next,'primaryHumanIndex');
+ const base=ri(0x26e8)+course*12;
+ const prepared=prepareNativeStuntRecords({flag1fd8:a[ri(0x1fd8)]|0,recordPlace2928:a[ri(0x2928)]|0,
+  courseRecords:Array.from({length:3},(_,i)=>a.slice(base+i*4,base+(i+1)*4).map(v=>v|0))},
+  {awards:stuntAwardsView(next),mainState638:sceneValue(next,'main638'),mode620:sceneValue(next,'mode620'),
+   activity624:sceneValue(next,'activity624'),state600:sceneValue(next,'state600'),delayedAward39cc:a[ri(0x39cc)]|0,
+   finished2c2c:a[ri(0x2c2c)+primary*222]|0,metadataD9b0:sceneValue(next,'metadataD9b0'),metadataCb32c:sceneValue(next,'metadataCb32c')});
+ a[ri(0x1fd8)]=prepared.state.flag1fd8>>>0;a[ri(0x2928)]=prepared.state.recordPlace2928>>>0;
+ prepared.state.courseRecords.forEach((row,i)=>row.forEach((v,j)=>a[base+i*4+j]=v>>>0));
+ return freeze({...prepared,state:next});
+}
+
+const stuntMoveWords={previousMove:0x39c8,rotationGroup:0x26e0,pending:0x26e4};
+const stuntRepeatWords={handstand:0x39d8,backwards:0x39dc,standing:0x39e0,dive:0x39e4};
+const stuntCompletedWords={handstand:0x39e8,backwards:0x39ec,standing:0x39f0,somersault:0x39f4,dive:0x39f8,
+ negativeRoll:0x39fc,positiveRoll:0x3a00,flip:0x3a04};
+const stuntModeActive=s=>sceneValue(s,'activity624')===-1&&sceneValue(s,'mode620')===11;
+
+/** Reached delayed-award slice78490..784D4, before the later clock/retirement
+ * and move branches. The enclosing783AC event-retirement early return must
+ * already have been handled by its caller. Does not run that prelude itself.
+ * Amount39cc and signed countdown39d0 remain separate canonical words. */
+export function prepareNativeRaceStuntDelayedAwardUpdate(state){
+ const next=copy(state),a=next.raceWords1f94;
+ if(!stuntModeActive(next))return freeze({state:next,applied:false,awards:[]});
+ const ticks=a[ri(0x39d0)]|0,awards=[];
+ if(ticks>0){
+  a[ri(0x39d0)]=(ticks-1)>>>0;
+  if(ticks===1){
+   const award={kind:'trick',points:a[ri(0x39cc)]|0,finish:true};
+   commitStuntAwards(next,enqueueNativeStuntAward(stuntAwardsView(next),award).state);
+   a[ri(0x39cc)]=0;awards.push(award);
+  }
+ }
+ return freeze({state:next,applied:true,awards});
+}
+
+/** Reached pose/rotation score slice, after the clock/retirement producer and
+ * before checkpoint qualification. Inputs are the actual racer move1604 and
+ * PRIMARY body's15ec arc (the original score branch uses that selected arc).
+ * This is not the full783AC caller: no timers, checkpoint crossing, repeat
+ * resets, ring contacts, finish bookkeeping or result menus are invented.
+ * Delayed awards have their own earlier call above and never tick here.
+ * Fresh reset produces0/1 flags; reject other retained flag encodings rather
+ * than silently normalizing unknown raw state through boolean leaf views. */
+export function prepareNativeRaceStuntMoveUpdate(state,{racerIndex,move,primaryArcNative}={}){
+ const next=copy(state),a=next.raceWords1f94;
+ if(!stuntModeActive(next))return freeze({state:next,applied:false,awards:[]});
+ const slot=integer(racerIndex,'scoring racerIndex',0,3);
+ if(a[ri(0x2c2c)+slot*222]!==0||a[ri(0x2c24)+slot*222]!==0)return freeze({state:next,applied:false,awards:[]});
+ const scoring=createNativeStuntScoring();
+ for(const [k,address]of Object.entries(stuntMoveWords))scoring[k]=a[ri(address)]|0;
+ for(const [name,fields]of [['repeat',stuntRepeatWords],['completed',stuntCompletedWords]])
+  for(const [k,address]of Object.entries(fields))scoring[name][k]=integer(a[ri(address)],`stunt flag${address.toString(16)}`,0,1)!==0;
+ const prepared=stepNativeStuntScoring(scoring,{move,arcNative:primaryArcNative});
+ for(const [k,address]of Object.entries(stuntMoveWords))a[ri(address)]=prepared.state[k]>>>0;
+ for(const [name,fields]of [['repeat',stuntRepeatWords],['completed',stuntCompletedWords]])
+  for(const [k,address]of Object.entries(fields))a[ri(address)]=Number(prepared.state[name][k]);
+ let queue=stuntAwardsView(next);
+ for(const award of prepared.awards)queue=enqueueNativeStuntAward(queue,award).state;
+ commitStuntAwards(next,queue);
+ return freeze({state:next,applied:true,awards:prepared.awards});
+}
 
 /** Read-only source actor result view. Apply its ordered body writes to the
  * real body owners at the actor phase, before later primary judging. Source

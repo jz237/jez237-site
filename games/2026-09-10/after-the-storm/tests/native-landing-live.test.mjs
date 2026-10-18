@@ -6,6 +6,8 @@ import {createNativeRiderRecovery} from '../native-rider-recovery.js';
 import {createNativeRaceAdapter,stepNativeRaceAdapter,nativeRaceSnapshot} from '../native-race-adapter.js';
 import {createNativeRaceContactAudio} from '../native-race-contact-audio.js';
 import {createNativeWaterField} from '../native-water-field.js';
+import {createNativeRaceState,prepareNativeRaceStuntMoveUpdate,prepareNativeRaceStuntAwardDisplay,
+ nativeRaceStuntAwardsView} from '../native-race-state.js';
 // Prepared airborne start; all subsequent roll, release, water contact and
 // recovery use ordinary input and the actual hull/rider solvers.
 function make({slot=0,landingTicks=0,enabled=true,sourceState={},recoveryMode}={}){
@@ -82,5 +84,26 @@ test('actor7 landing reads the actual physical mode157c independently of the con
   const a=make({landingTicks:1,sourceState:{simulationState:0},recoveryMode:mode});
   stepNativeRaceAdapter(a,.05,{});assert.equal(a.riderLifecycle.state.contactMode,1-mode);
   assert.equal(a.lastFrame.landing.move,mode===0?8:7);assert.deepEqual(a.lastFrame.landing.effects.map(e=>e.consumer),['80051ec0']);
+ }
+});
+
+test('actual physical landing results feed canonical Stunt scoring and later HUD transfer',()=>{
+ for(const [heldFrames,expectedTotal]of [[1,58],[12,0]]){
+  const a=make();let state=createNativeRaceState({raceWords1f94:Array(1693).fill(0),hudWords7788:Array(1442).fill(0),
+   scene:{activity624:-1,mode620:11,main638:1,gameStateAb24:40}}),awards=[],firstPaid=null;
+  const input=(_,frame)=>frame===0?{rawXNative:-70,heldButtons:0x8000}:frame<=heldFrames?{rawXNative:70,heldButtons:0x8000}:{};
+  for(let frame=1;frame<=60;frame++){
+   stepNativeRaceAdapter(a,.05,input);
+   const actual=a.lastFrame.landing;
+   const scored=prepareNativeRaceStuntMoveUpdate(state,{racerIndex:0,move:actual.move,primaryArcNative:actual.arcNative});
+   awards.push(...scored.awards.map(award=>({frame,...award})));
+   state=prepareNativeRaceStuntAwardDisplay(scored.state).state;
+   if(firstPaid===null&&nativeRaceStuntAwardsView(state).totals.total>0)firstPaid=frame;
+  }
+  assert.equal(nativeRaceStuntAwardsView(state).totals.total,expectedTotal);
+  if(expectedTotal){
+   assert.deepEqual(awards,[{frame:24,kind:'trick',points:58,finish:false}]);assert.equal(firstPaid,46);
+   assert.equal(state.raceWords1f94[(0x3a00-0x1f94)/4],1,'positive-roll completion comes from the actual rotation group');
+  }else{assert.deepEqual(awards,[]);assert.equal(firstPaid,null);}
  }
 });

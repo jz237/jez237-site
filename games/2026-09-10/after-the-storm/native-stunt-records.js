@@ -1,7 +1,7 @@
 // Source79528's Stunt record branch, after all racer scoring calls and before
 // the later display stage. Selected-course numeric records only; persistence,
 // ratings, unlocks, and result-menu transitions remain owned elsewhere.
-const fields=['mainState638','mode620','activity624','state600','delayedTicks39cc',
+const fields=['mainState638','mode620','activity624','state600','delayedAward39cc',
  'finished2c2c','metadataD9b0','metadataCb32c'];
 function integer(value,name){
  if(!Number.isInteger(value)||value< -2147483648||value>2147483647)throw new RangeError(`Invalid ${name}`);return value;
@@ -9,7 +9,8 @@ function integer(value,name){
 function freeze(value){if(value&&typeof value==='object'){Object.values(value).forEach(freeze);Object.freeze(value);}return value;}
 
 /** Pass the canonical award queue, including its TRANSFERRED total, and the
- * selected primary's finished word. Delayed finish awards must be processed
+ * selected primary's finished word. delayedAward39cc is the pending AMOUNT,
+ * not the countdown at39d0. Delayed finish awards must be processed
  * before this check. A queue that drains in this frame's later display stage
  * can only unblock the next gameplay update. The fresh result latch is set
  * even when no record improves. Ties do not beat the existing score.
@@ -31,7 +32,7 @@ export function prepareNativeStuntRecords(value,{awards,...context}={}){
  const empty=awards.slots.map((s,i)=>integer(s?.type,`slots[${i}].type`)).every(type=>type===0);
  const total=integer(awards?.totals?.total,'transferred total');
  const applied=g.activity624===-1&&g.mode620===11&&g.mainState638===1&&g.state600===0&&
-  state.flag1fd8===0&&g.finished2c2c!==0&&g.delayedTicks39cc===0&&empty;
+  state.flag1fd8===0&&g.finished2c2c!==0&&g.delayedAward39cc===0&&empty;
  let insertedPlace=null;
  if(applied){
   state.flag1fd8=1;state.recordPlace2928=0;
