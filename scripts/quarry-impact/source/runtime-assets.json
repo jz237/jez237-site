@@ -542,8 +542,8 @@
     },
     {
       "path": "licenses/CREDITS.md",
-      "bytes": 25665,
-      "sha256": "2e260c2275008894f364a40bff564d063f9bc3c7352f9a18d996758022143e9b"
+      "bytes": 25803,
+      "sha256": "a28b19de71447b65a7b53276a1c83f169dd6a8c3edbc6be9db4f5d777c062d4b"
     },
     {
       "path": "licenses/CarConcept-LICENSE.md",
@@ -614,6 +614,11 @@
       "path": "licenses/THREE-LICENSE.txt",
       "bytes": 1081,
       "sha256": "bfe119ea4fd413f5f7ca3fcd63adb0c4a073ed39daa2fe7d3e6b769e21272601"
+    },
+    {
+      "path": "licenses/TORDAL-244.md",
+      "bytes": 490,
+      "sha256": "ce8f39ecfa3420b425be98495aeaea32926e40b912db14d9cb96816bb0fde108"
     },
     {
       "path": "licenses/brightretro-muscle.txt",
@@ -1284,6 +1289,11 @@
       "path": "models/tern.glb",
       "bytes": 3295572,
       "sha256": "8ffed185ca086f75d46b5c8d7ebc05d5b65e3434c548efacb41c507485d94177"
+    },
+    {
+      "path": "models/tordal.glb",
+      "bytes": 3487296,
+      "sha256": "4abf162b15e97dc20840a17eb2f88aee6f3ae30ccd20cfa60479ec70d6123e70"
     },
     {
       "path": "models/trail.glb",

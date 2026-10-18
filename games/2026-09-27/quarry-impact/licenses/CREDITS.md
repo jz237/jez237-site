@@ -214,3 +214,5 @@ Alder 230: original fictional estate bodywork and original Marten road-wheel ass
 Saber 2.0 GT: original fictional 1980s liftback coupe bodywork and original Tern road-wheel assemblies. See [SABER-20GT.md](SABER-20GT.md).
 
 Starfin 58: original fictional late-1950s hardtop bodywork, original Marten road-wheel assemblies and whitewall bands. See [STARFIN-58.md](STARFIN-58.md).
+
+Tordal 244: original fictional 1980s boxy saloon bodywork and original Marten road-wheel assemblies. See [TORDAL-244.md](TORDAL-244.md).

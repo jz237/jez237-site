@@ -107,7 +107,7 @@ function batchRigidChildren(group: THREE.Object3D) {
 
 export async function loadCars(progress: (s: string) => void) {
   const loader = new GLTFLoader();
-  const loadedKinds: CarKind[] = ['coupe', 'sedan', 'hatch', 'muscle', 'wagon', 'utility', 'compact', 'van', 'tern', 'marten', 'buggy', 'shuttle', 'regent', 'trail', 'kite', 'morrow', 'alder', 'saber', 'starfin'];
+  const loadedKinds: CarKind[] = ['coupe', 'sedan', 'hatch', 'muscle', 'wagon', 'utility', 'compact', 'van', 'tern', 'marten', 'buggy', 'shuttle', 'regent', 'trail', 'kite', 'morrow', 'alder', 'saber', 'starfin', 'tordal'];
   const kinds: CarKind[] = loadedKinds;
   // Start independent transfers together; preserve template processing order.
   const [loaded] = await Promise.all([Promise.all(loadedKinds.map(kind => loader.loadAsync(url('models/' + kind + '.glb')))),prepareWheelPresentation()]);
@@ -167,10 +167,10 @@ export function cloneCar(kind: CarKind, color: number, armor = 0) {
     if (old.name.startsWith('paint')) {
       const trim = old.name.includes('Paint 2');
       m.color.setHex(trim ? 0x202529 : color);
-      m.metalness = trim ? .18 : (kind==='starfin'||kind==='saber'||kind==='alder'||kind==='morrow'||kind==='kite'||kind==='trail'||kind==='regent'||kind==='shuttle'||kind==='van'||kind==='tern'||kind==='marten'||kind==='buggy')?.12:.48;
-      m.roughness = trim ? .38 : (kind==='starfin'||kind==='saber'||kind==='alder'||kind==='morrow'||kind==='kite'||kind==='trail'||kind==='regent'||kind==='shuttle'||kind==='van'||kind==='tern'||kind==='marten'||kind==='buggy')?.36:.24;
+      m.metalness = trim ? .18 : (kind==='tordal'||kind==='starfin'||kind==='saber'||kind==='alder'||kind==='morrow'||kind==='kite'||kind==='trail'||kind==='regent'||kind==='shuttle'||kind==='van'||kind==='tern'||kind==='marten'||kind==='buggy')?.12:.48;
+      m.roughness = trim ? .38 : (kind==='tordal'||kind==='starfin'||kind==='saber'||kind==='alder'||kind==='morrow'||kind==='kite'||kind==='trail'||kind==='regent'||kind==='shuttle'||kind==='van'||kind==='tern'||kind==='marten'||kind==='buggy')?.36:.24;
       m.normalScale.setScalar(.055);
-      if ('clearcoat' in m) { m.clearcoat = trim ? .45 : (kind==='starfin'||kind==='saber'||kind==='alder'||kind==='morrow'||kind==='kite'||kind==='trail'||kind==='regent'||kind==='shuttle'||kind==='van'||kind==='tern'||kind==='marten'||kind==='buggy')?.85:1; m.clearcoatRoughness = (kind==='starfin'||kind==='saber'||kind==='alder'||kind==='morrow'||kind==='kite'||kind==='trail'||kind==='regent'||kind==='shuttle'||kind==='van'||kind==='tern'||kind==='marten'||kind==='buggy')?.18:.12; }
+      if ('clearcoat' in m) { m.clearcoat = trim ? .45 : (kind==='tordal'||kind==='starfin'||kind==='saber'||kind==='alder'||kind==='morrow'||kind==='kite'||kind==='trail'||kind==='regent'||kind==='shuttle'||kind==='van'||kind==='tern'||kind==='marten'||kind==='buggy')?.85:1; m.clearcoatRoughness = (kind==='tordal'||kind==='starfin'||kind==='saber'||kind==='alder'||kind==='morrow'||kind==='kite'||kind==='trail'||kind==='regent'||kind==='shuttle'||kind==='van'||kind==='tern'||kind==='marten'||kind==='buggy')?.18:.12; }
       if(!animated)finishPaint(m, kind !== 'coupe');
     }
     if (o.name.startsWith('panel_')) {

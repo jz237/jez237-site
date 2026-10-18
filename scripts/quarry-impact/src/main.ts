@@ -901,7 +901,7 @@ async function start(watch=demo) {
 let standingsExpanded=false,standingsUpdated=-Infinity;
 function currentStandings():StandingRow[]{
  const ranking=online?.active?online.network.snapshot?.ranking.map(id=>cars.find(c=>c.id===id)).filter((c):c is Vehicle=>!!c)??cars:mode==='derby'?derbyRanking():rankRace();
- return ranking.map(c=>({id:c.id,name:displayedDriver(c),health:c.health,player:!demo&&isPlayer(c),followed:demo&&c.id===director.followed,detail:pursuit?(pursuit.role(c.id)==='runner'?'RUNNER':'CHASER'):mode==='derby'?(scoreDerby()?combat.points(c.id)+' PTS':c.health>0?'RUNNING':'OUT'):raceTimeLimit()?(c.finished?Math.floor(c.passed/24)+' LAPS · '+formatTime(c.finishTime):c.health<=0?'RETIRED':'LAP '+c.lap):c.finished?formatTime(c.finishTime):waypointRace?'GATES '+c.passed:'LAP '+Math.min(raceLaps(),c.lap)}));
+ return ranking.map(c=>({id:c.id,name:displayedDriver(c),health:c.health,player:!demo&&isPlayer(c),followed:demo&&c.id===director.followed,detail:pursuit?(pursuit.role(c.id)==='runner'?'RUNNER':'CHASER'):mode==='derby'?(scoreDerby()?combat.points(c.id)+' PTS':c.health>0?'RUNNING':'OUT'):raceTimeLimit()?(c.finished?Math.floor(c.passed/24)+' LAPS · '+formatTime(c.finishTime):c.health<=0?'RETIRED':'LAP '+c.lap):c.finished?formatTime(c.finishTime):c.health<=0?'RETIRED':state==='result'?'DNF':waypointRace?'GATES '+c.passed:'LAP '+Math.min(raceLaps(),c.lap)}));
 }
 function refreshStandings(force=false){
  const panel=document.getElementById('live-standings');if(!panel||!force&&clock-standingsUpdated<.25)return;standingsUpdated=clock;
