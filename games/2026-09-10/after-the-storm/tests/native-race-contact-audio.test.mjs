@@ -127,13 +127,35 @@ test('source mode changes clear admitted race timers and voice slots before thei
   {kind:'audioEntry',consumer:'800c37f4',arguments:[1,0]}]);
  seed();a.drain();assert.equal(a.snapshot().announcer.delay,25);
  a.applyEffects([call('800c21f4',7,1)]);const entry=a.snapshot();
- assert.equal(entry.announcer.delay,0);assert.equal(entry.announcer.delayedHold,0);assert.equal(entry.announcer.hold,60,'entry prefix does not clear current hold');
+ assert.equal(entry.announcer.delay,15);assert.equal(entry.announcer.delayedHold,10);assert.equal(entry.announcer.delayedNote,1,'mode7 replaces the old delayed message with its source course introduction');assert.equal(entry.announcer.hold,60,'entry prefix does not clear current hold');
  assert.equal(entry.globals.delay7cd4,0);assert.equal(entry.globals.delay7cd8,0);assert.equal(entry.globals.engineGate7ca0,0);
  seed();a.drain();a.applyEffects([call('800c1f60',4)]);const exit=a.snapshot();
  assert.equal(exit.announcer.hold,0);assert.equal(exit.announcer.delay,0);assert.equal(exit.globals.delay7cd8,0);
  assert.equal(exit.globals.delay7cd4,180,'C1F60 leaves the initial-place timer for the following entry to reset');assert.deepEqual(a.drain(),[],'mode4 exit retains current speech playback');
  seed();a.drain();a.applyEffects([call('800c1f60',1)]);
  assert.deepEqual(a.drain().map(c=>[c.consumer,...c.arguments]),[['c538c',0x01000c00,0]]);
+});
+
+test('mode7 course introductions use original selector mapping and are disabled for two-player entry',()=>{
+ for(const [players,course,note]of [[1,1,1],[1,7,9],[1,8,8],[2,1,null]]){
+  const a=createNativeRaceContactAudio({players,courseIndex:course}),f=field();a.applyEffects([call('800c21f4',7,course)]);
+  assert.equal(a.snapshot().globals.cueBase7e05,players===1?8:4);
+  for(let frame=1;frame<=15;frame++){
+   a.beforeFrame(frame);advance(a,Array.from({length:players},()=>body(frame)),f,Array(players).fill(0),Array(players).fill(0));
+   const voices=a.drain().filter(c=>c.consumer==='c53d4'&&c.arguments[0]===0x06000c00);
+   assert.deepEqual(voices.map(c=>c.arguments[1]),frame===15&&note!==null?[note]:[]);
+  }
+ }
+});
+
+test('source finish entry selects clean solo and versus announcements and retains original hold priorities',()=>{
+ for(const [players,note,priority]of [[1,16,127],[2,16,125]]){
+  const a=createNativeRaceContactAudio({players,courseIndex:1});a.applyEffects([call('800c1f60',6),call('800c21f4',6,1)]);
+  const voices=a.drain().filter(c=>c.consumer==='c53d4'&&c.arguments[0]===0x06000c00).map(c=>c.arguments[1]);
+  assert.deepEqual(voices,players===1?[14,14,note]:[note]);
+  assert.equal(a.snapshot().announcer.priority,priority);assert.equal(a.snapshot().globals.resultFlag7dd0,1);
+  assert.equal(a.snapshot().audioMode,6);assert.ok(a.engineChannels().every(c=>!c.enabled));
+ }
 });
 
 test('120 original immersion executions preserve midpoint rounding and byte clamp thresholds',()=>{

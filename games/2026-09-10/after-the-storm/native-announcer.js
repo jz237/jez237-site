@@ -1,5 +1,5 @@
 const fields=['note','priority','hold','delayedNote','delayedPriority','delayedHold','delay'];
-const arities={c32a0:3,c3320:3,c338c:4,c33c8:4,c3408:3,c3464:4,c3494:0,c36f8:1};
+const arities={c32a0:3,c3320:3,c338c:4,c33c8:4,c3408:3,c3464:4,c3494:0,c36f8:1,c3500:1,c3524:2};
 function integer(v,min,max){if(!Number.isInteger(v)||v<min||v>max)throw new RangeError('Invalid original announcer field');return v;}
 export const freshNativeAnnouncer=()=>Object.fromEntries(fields.map(k=>[k,0]));
 
@@ -31,6 +31,8 @@ export function prepareNativeAnnouncer(input,command,context){
  };
  let remaining=null;
  if(consumer==='c32a0')remaining=now(...args);
+ else if(consumer==='c3500')now(args[0],125,10);
+ else if(consumer==='c3524')later(args[0],args[1],125,10);
  else if(consumer==='c3320'){if(gate)gatedNow(...args);}
  else if(consumer==='c338c')later(...args);
  else if(consumer==='c33c8'){if(gate)later(...args);}
@@ -47,14 +49,16 @@ export function prepareNativeAnnouncer(input,command,context){
 }
 
 // Racing subset of BF370, called by47B00 before922E4's source-frame increment.
-// The web music owner retains soundtrack playback. Menu/tempo/mixer timers
-// are not admitted here; this owns the race-event/voice fields only.
+// The web music owner retains soundtrack playback. Credits/tempo/mixer timers
+// remain separate; delayed music/announcer dispatch precedes the pause gate.
 export function advanceNativeRaceAnnouncer(input,context){
  const g={...context},commands=[];let state={...input};
- for(const key of ['rankDelay','delay7cd8','delay7cf0','counter7cf4','delay7cd4','delay7cec','field7c98','musicSelection','paused7cc4'])integer(g[key],-2147483648,2147483647);
+ for(const key of ['rankDelay','delay7cd8','delay7cf0','counter7cf4','delay7cd4','delay7cec','field7c98','musicSelection','paused7cc4','delay7cdc','delay7ce4','delayedCue7e1c'])integer(g[key],-2147483648,2147483647);
  integer(g.primaryPlaceByte,0,255);integer(g.random4562c,0,0xffffffff);
  const call=(consumer,...args)=>commands.push({consumer,arguments:args.map(v=>v>>>0)});
  const voice=(consumer,...args)=>{const next=prepareNativeAnnouncer(state,{consumer,arguments:args},g);state=next.state;commands.push(...next.commands);};
+ if(g.delay7cdc!==0&&(g.delay7cdc=(g.delay7cdc-1)|0)===0)call('c15c8',g.musicSelection,10);
+ if(g.delay7ce4!==0&&(g.delay7ce4=(g.delay7ce4-1)|0)===0)call('c377c',g.delayedCue7e1c);
  if(g.paused7cc4===0){
   if(g.rankDelay!==0)g.rankDelay=(g.rankDelay-1)|0;
   if(g.delay7cd8!==0&&(g.delay7cd8=(g.delay7cd8-1)|0)===0&&g.field7c98!==0)call('c1540',g.musicSelection,0,0);

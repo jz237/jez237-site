@@ -10,24 +10,29 @@ import {consumeNativeRaceAudio} from './native-race-audio-consumer.js';
 import {prepareNativeAudioEvent} from './native-audio-events.js';
 import {freshNativeAnnouncer,prepareNativeAnnouncer,advanceNativeRaceAnnouncer} from './native-announcer.js';
 import {resetNativeRaceAudioTimers} from './native-audio-transition.js';
+import {prepareNativeAudioMode} from './native-audio-mode.js';
 const F=Math.fround;
 const channelEntries=new Set(['800bfdd0','800bfde4','800bfe70','800bfef8','800bffac','800bfd34','800bfd68','800bffcc']);
-const voiceEntries=new Set(['c32a0','c3320','c338c','c33c8','c3408','c3464','c36f8']);
+const voiceEntries=new Set(['c32a0','c3320','c338c','c33c8','c3408','c3464','c36f8','c3500','c3524']);
 
 // Engine/contact/rider owner for the admitted one-human and two-human races.
 // Fresh web sessions explicitly start packet storage/motion at zero, in racing
 // audio mode7 with muted channels. Source status effects enable them. This is
 // not an emulation of retained cartridge mixer state or nearest-rival
 // channel2 routing. Original music keeps its separate presentation owner.
-export function createNativeRaceContactAudio({players,courseIndex}){
+export function createNativeRaceContactAudio({players,courseIndex,difficultyWord=0}){
  if(![1,2].includes(players))throw new RangeError('Contact audio requires one or two human racers');
+ if(!Number.isInteger(difficultyWord)||difficultyWord<0||difficultyWord>2)throw new RangeError('Contact audio requires a source difficulty');
  let materials=nativeContactAudioMaterials(courseIndex),audioMode=7,frame=0,timerFrame=0,pairedImpact=0,pairedVariant=0,announcer=freshNativeAnnouncer();
  let globals={raceMode:players-1,courseIndex,primaryMuted:1,secondaryMuted:1,alternateEngine:0,
   rankDelay:0,primaryStart:0,secondaryStart:0,primaryPitchBits:0,secondaryPitchBits:0,rivalPitchBits:0,
   primaryFlag:0,primaryCompanionFlag:0,primaryLastPlace:0,secondaryFlag:0,secondaryCompanionFlag:0,secondaryLastPlace:0,
   engineGate7ca0:0,primaryPowerByte:0,secondaryPowerByte:0,riderEvent7ca4:0,
   primaryPlaceByte:0,secondaryPlaceByte:0,rankPlaceWord:0,eventGate7cb8:0,field7c98:0,eventLatch7ca8:0,
-  delay7cd8:0,delay7cd4:0,delay7cec:0,delay7cf0:0,counter7cf4:0};
+  delay7cd8:0,delay7cd4:0,delay7cec:0,delay7cf0:0,counter7cf4:0,
+  stage7dc8:0,musicSelection:0,tempoDelay7ce0:0,delay7cdc:0,resultFlag7dd0:0,alternateCue7cb0:0,
+  splitFlag7c90:0,cueBase7e05:255,creditsTrack7dd4:0,creditsCounter7e18:0,creditsField7e14:0,difficultyWord,
+  delay7ce4:0,delayedCue7e1c:0};
  let engineChannels=createOriginalEngineChannels(players).map((c,i)=>({...c,volume:F(60/127),pan:players===2?(i?127:0):64}));
  const packets=[Array(32).fill(0),Array(32).fill(0)],motion=Array.from({length:players},()=>({speed:0,vertical:0})),queue=[];
  const riderWater=Array.from({length:players},()=>({bodyC84:0,bodyC86:0}));
@@ -46,6 +51,12 @@ export function createNativeRaceContactAudio({players,courseIndex}){
    const next=prepareNativeAnnouncer(announcer,command,{...globals,audioMode});announcer=next.state;
    for(const raw of next.commands)submit(raw,player);return;
   }
+  if(command.consumer==='c37f4'){
+   const next=prepareNativeAudioEvent(command.arguments[0]|0,command.arguments[1],{...globals,audioMode,random4562c:jitter()});
+   retain(next.context);for(const raw of next.commands)submit(raw,player);return;
+  }
+  if(command.consumer==='c37c0'){globals.delay7ce4=command.arguments[1]|0;globals.delayedCue7e1c=command.arguments[0]|0;return;}
+  if(command.consumer==='c538c'&&command.arguments[0]===0x01000c00&&command.arguments[1]===0){enqueue(command,player);return;}
   if(effectPoll.submit({...command,frame,player},globals.raceMode))return;
   if(command.consumer==='c53d4'&&[0x06000700,0x06000c00].includes(command.arguments[0]))enqueue(command,player);
  }
@@ -53,7 +64,7 @@ export function createNativeRaceContactAudio({players,courseIndex}){
   beforeFrame(next){
    if(!Number.isInteger(next)||next!==timerFrame+1||next!==frame+1)throw new RangeError('Announcer requires successive outer game frames');
    timerFrame=next;
-   const result=advanceNativeRaceAnnouncer(announcer,{...globals,audioMode,paused7cc4:0,musicSelection:0,random4562c:jitter()});
+   const result=advanceNativeRaceAnnouncer(announcer,{...globals,audioMode,paused7cc4:0,random4562c:jitter()});
    announcer=result.state;retain(result.context);
    for(const command of result.commands)submit(command);
   },
@@ -69,9 +80,11 @@ export function createNativeRaceContactAudio({players,courseIndex}){
     }
     if(effect.kind!=='externalCall')continue;
     const {consumer,arguments:args}=effect;
-    if(consumer==='800c1f60'||consumer==='800c21f4'){
+    if(consumer==='800c1f60'){
      const reset=resetNativeRaceAudioTimers(consumer,args[0]|0,announcer,{...globals,audioMode});
      announcer=reset.state;retain(reset.context);
+     globals.delay7cdc=0;
+     if((args[0]|0)!==((audioMode<<24)>>24)||args[0]!==1&&args[0]!==10)globals.delay7ce4=0;
      if(reset.stopAnnouncer)enqueue({consumer:'c538c',arguments:[0x01000c00,0]},0);
     }
     if(channelEntries.has(consumer)){
@@ -85,14 +98,10 @@ export function createNativeRaceContactAudio({players,courseIndex}){
      // The racing-mode branch stops both engines without changing audioMode.
      if(audioMode===7)globals.primaryMuted=globals.secondaryMuted=1;
     }else if(consumer==='800c21f4'){
-     const mode=args[0]|0,previous=(audioMode<<24)>>24;
-     globals.engineGate7ca0=0;
-     if(mode!==previous||mode!==1&&mode!==10){
-      audioMode=mode&255;globals.primaryMuted=globals.secondaryMuted=1;
-      if(mode===0){globals.raceMode=0;globals.courseIndex=0;}
-      else if(mode===1&&previous!==10)globals.raceMode=args[1]|0;
-      else if(mode===7){globals.courseIndex=args[1]|0;materials=nativeContactAudioMaterials(globals.courseIndex);}
-     }
+     const next=prepareNativeAudioMode(args[0]|0,args[1]>>>0,announcer,{...globals,...materials,audioMode,random4562c:jitter()});
+     announcer=next.state;audioMode=next.context.audioMode;retain(next.context);
+     materials=Object.fromEntries(['surfaceCode','markedBoxCode','floorCode'].map(k=>[k,next.context[k]]));
+     for(const command of next.commands)submit(command);
     }
    }
   },

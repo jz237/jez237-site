@@ -122,7 +122,10 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
   // Preview histories must not compete with saved modern-physics records.
   state.nativePreview=true;state.demoRun=true;
   state.nativeLaunch=nativeLaunch;
-  state.nativeContactAudio=createNativeRaceContactAudio({players:racers.length,courseIndex:course.sourceWaterCourseIndex});
+  state.nativeContactAudio=createNativeRaceContactAudio({players:racers.length,courseIndex:course.sourceWaterCourseIndex,difficultyWord:nativeCourseRuntime.sourceDifficulty});
+  // The fresh web launch skips resource-loading presentation, but still enters
+  // racing audio through the source main-configuration call before its clock.
+  state.nativeContactAudio.applyEffects([{kind:'externalCall',consumer:'800c21f4',arguments:[7,course.sourceWaterCourseIndex]}]);
   state.nativeLaunchLabel=state.nativeLaunch.view().label;state.nativeCountdownCue=null;
   let launchCueSequence=0;
   state.nativeHost=createNativeRaceHost({racers,water:raceWater,course,fixedSphereGrid:sourceSphereGrid,staticGeometry:nativeCourseRuntime.staticContactGeometry,tunes:racers.map((_,i)=>effectiveNativeTune(nativeTunes[i],nativeTuneModes[i])),raceRuntime:state.nativeLaunch,hullStarts:nativeStarts,

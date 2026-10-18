@@ -19,6 +19,46 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — original course and finish audio-mode entry
+
+Native human launches now enter racing audio through the original C21F4 mode
+handler before the first source frame. Its complete direct body preserves mode
+exceptions, nine recovered material rows, retained music/stage fields, channel
+mutes and ordered leaf calls. Source difficulty comes from the course runtime.
+The original C3500/C3524 wrappers now feed the live priority/delayed voice slot:
+solo course introductions use their source selector (Southern maps7 to9),
+while the two-player entry retains its original behavior. Finish entry selects
+the source solo/versus messages and delayed follow-up. No display or physics
+resolution settings change.
+
+The existing read-only EVO X2 export was checked against744 complete original
+C21F4 executions. Eleven additional sequential transitions actually execute
+the nested C32A0/C338C/C3500/C3524/C37C0 callees; the live owner matches their
+retained globals, voice slot and emitted announcer commands. These checks
+execute73,063 original instructions. The priority fixture now adds240 wrapper
+cases (1,200 calls plus94 history and180 timer cases). BF370's delayed music
+and menu-cue timers advance before its pause gate, preserving source order.
+
+All74 unique focused tests pass, including physical recovery, render-rate
+independence, results, retirement and the full unattended Continue timeout.
+A natural pilot run finished with zero misses or disqualification, entered
+audio mode6 at frame2216, emitted finish14/14 then delayed15 at2255, and reached
+mode12/results at3523. Browser verification independently completed the race
+and played the finish sequence, retaining High quality,1280x720 and83,521 water
+vertices. A normal-speed loaded-bank run played course intro1 and every
+countdown/start cue. An accelerated cold-load run outran loading for its first
+three cues; they were discarded rather than replayed late, as documented by
+the backend. It did not lose the finish messages or stop the race.
+
+This completes the direct mode-entry body and its regular announcer path,
+not the whole audio lifecycle. Soundtrack playback still has its browser owner.
+Sample-bank loading handshakes, reverb/tempo/credits processing, C1EB8 channel11
+cues, C377C special127 menu composites, special126 and channel15 event sequences
+remain separate work. The retained delayed menu cue is counted down, but its
+special sequence is not yet played. Source audio random variants still use
+the documented independent web pattern. Four HTML maps/preloads cover345
+modules; the native gameplay preview retains its existing mode admission.
+
 ## Unpublished — original announcer and live race audio events
 
 Native human races now connect C37F4 events and the complete mode7 C010C packet
