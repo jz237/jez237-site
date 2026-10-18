@@ -1,0 +1,447 @@
+{
+  "version": 1,
+  "programs": {
+    "0": {
+      "file": "cue-00.wav",
+      "sourceTuning": 0.375,
+      "envelope": [
+        100,
+        32000,
+        300,
+        28000,
+        600,
+        0,
+        0,
+        0
+      ],
+      "release": 24,
+      "sourceLoop": [
+        3900,
+        18006
+      ]
+    },
+    "1": {
+      "file": "cue-01.wav",
+      "sourceTuning": 0.375,
+      "envelope": [
+        100,
+        32000,
+        300,
+        28000,
+        600,
+        0,
+        0,
+        0
+      ],
+      "release": 24,
+      "sourceLoop": [
+        2089,
+        21420
+      ]
+    },
+    "2": {
+      "file": "cue-02.wav",
+      "sourceTuning": 0.375,
+      "envelope": [
+        100,
+        32000,
+        300,
+        28000,
+        600,
+        0,
+        0,
+        0
+      ],
+      "release": 24,
+      "sourceLoop": [
+        7418,
+        21977
+      ]
+    },
+    "3": null,
+    "4": {
+      "file": "cue-04.wav",
+      "sourceTuning": 0.375,
+      "envelope": [
+        100,
+        32000,
+        300,
+        28000,
+        600,
+        0,
+        0,
+        0
+      ],
+      "release": 24,
+      "sourceLoop": [
+        3548,
+        20353
+      ]
+    },
+    "5": {
+      "file": "cue-05.wav",
+      "sourceTuning": 0.375,
+      "envelope": [
+        100,
+        32000,
+        300,
+        28000,
+        600,
+        0,
+        0,
+        0
+      ],
+      "release": 24,
+      "sourceLoop": [
+        2832,
+        15220
+      ]
+    },
+    "6": {
+      "file": "cue-06.wav",
+      "sourceTuning": 0.375,
+      "envelope": [
+        100,
+        32000,
+        300,
+        28000,
+        600,
+        0,
+        0,
+        0
+      ],
+      "release": 24,
+      "sourceLoop": [
+        4379,
+        19507
+      ]
+    },
+    "7": null,
+    "8": {
+      "file": "cue-08.wav",
+      "sourceTuning": 0.375,
+      "envelope": [
+        100,
+        32000,
+        300,
+        28000,
+        600,
+        0,
+        0,
+        0
+      ],
+      "release": 24,
+      "sourceLoop": [
+        2054,
+        25659
+      ]
+    },
+    "9": {
+      "file": "cue-09.wav",
+      "sourceTuning": 0.375,
+      "envelope": [
+        100,
+        32000,
+        300,
+        28000,
+        600,
+        0,
+        0,
+        0
+      ],
+      "release": 24,
+      "sourceLoop": [
+        1218,
+        14419
+      ]
+    },
+    "10": {
+      "file": "cue-0a.wav",
+      "sourceTuning": 0.375,
+      "envelope": [
+        100,
+        32000,
+        300,
+        28000,
+        600,
+        0,
+        0,
+        0
+      ],
+      "release": 24,
+      "sourceLoop": [
+        3744,
+        24270
+      ]
+    },
+    "11": {
+      "file": "cue-0b.wav",
+      "sourceTuning": 0.75,
+      "envelope": [
+        320,
+        32000,
+        1000,
+        30000,
+        2400,
+        0,
+        0,
+        0
+      ],
+      "release": 16,
+      "sourceLoop": [
+        2786,
+        64574
+      ]
+    },
+    "12": {
+      "file": "cue-0c.wav",
+      "sourceTuning": 0.42092326283454895,
+      "envelope": [
+        120,
+        32000,
+        400,
+        28000,
+        60,
+        32000,
+        400,
+        0,
+        0,
+        0
+      ],
+      "release": 24,
+      "sourceLoop": [
+        36,
+        39091
+      ]
+    },
+    "13": {
+      "file": "cue-0d.wav",
+      "sourceTuning": 0.3340871334075928,
+      "envelope": [
+        120,
+        32000,
+        400,
+        28000,
+        60,
+        32000,
+        400,
+        0,
+        0,
+        0
+      ],
+      "release": 24,
+      "sourceLoop": [
+        36,
+        39091
+      ]
+    },
+    "14": {
+      "file": "cue-0e.wav",
+      "sourceTuning": 0.3972986340522766,
+      "envelope": [
+        2000,
+        32000,
+        2000,
+        32000,
+        2000,
+        12000,
+        -1,
+        0
+      ],
+      "release": 8,
+      "sourceLoop": [
+        36,
+        39091
+      ]
+    },
+    "15": {
+      "file": "cue-0f.wav",
+      "sourceTuning": 0.375,
+      "envelope": [
+        800,
+        32000,
+        200,
+        28000,
+        100,
+        30000,
+        360,
+        22000,
+        240,
+        28000,
+        480,
+        24000,
+        -2,
+        3
+      ],
+      "release": 2,
+      "sourceLoop": [
+        36,
+        39091
+      ]
+    },
+    "16": null,
+    "17": null,
+    "18": {
+      "file": "cue-12.wav",
+      "sourceTuning": 0.375,
+      "envelope": [
+        20,
+        32000,
+        600,
+        29000,
+        600,
+        0,
+        0,
+        0
+      ],
+      "release": 24,
+      "sourceLoop": [
+        15115,
+        32009
+      ]
+    },
+    "19": {
+      "file": "cue-13.wav",
+      "sourceTuning": 0.2976378798484802,
+      "envelope": [
+        100,
+        32000,
+        300,
+        28000,
+        400,
+        0,
+        0,
+        0
+      ],
+      "release": 24,
+      "sourceLoop": [
+        12441,
+        21837
+      ]
+    }
+  },
+  "files": {
+    "cue-00.wav": {
+      "sha256": "26c49491ab757137252b7975694ae38282fca0335257616d932bb31a208550fe",
+      "duration": 4.17084375,
+      "bytes": 266978,
+      "peak": 27242,
+      "rms": 4152.158814027475
+    },
+    "cue-01.wav": {
+      "sha256": "dbcfdbeb92cfc059c60e92a2872fe83668e91502867f2b035818bb3c7b17ee43",
+      "duration": 4.17084375,
+      "bytes": 266978,
+      "peak": 26224,
+      "rms": 5389.614583407975
+    },
+    "cue-02.wav": {
+      "sha256": "2a7d8540cec7aad44a89232605f8b23f9acd252964a29801559035fa05413be1",
+      "duration": 4.17084375,
+      "bytes": 266978,
+      "peak": 28114,
+      "rms": 4176.3630940648945
+    },
+    "cue-04.wav": {
+      "sha256": "8346b16dc399daa39175e49c47b8fa9d8e2646209f6fdafc6f19eca66e5f63ef",
+      "duration": 4.17084375,
+      "bytes": 266978,
+      "peak": 25621,
+      "rms": 4479.999890847984
+    },
+    "cue-05.wav": {
+      "sha256": "ccf01c2ad3a161d9fb102320d7aafe9fe2c8bb42a6f30dfc785b755e65e41c00",
+      "duration": 4.17084375,
+      "bytes": 266978,
+      "peak": 26373,
+      "rms": 4686.659270042334
+    },
+    "cue-06.wav": {
+      "sha256": "911b13350077b0e08833d67931b2a4ee9c44431650cb05fd1371f776a2d941c8",
+      "duration": 4.17084375,
+      "bytes": 266978,
+      "peak": 24495,
+      "rms": 5451.422695329709
+    },
+    "cue-08.wav": {
+      "sha256": "c331606f7fb93ea3de65d50639fd9837df6c632bf0bff17b7d6999e0d3300b38",
+      "duration": 4.17084375,
+      "bytes": 266978,
+      "peak": 24331,
+      "rms": 4128.286652558189
+    },
+    "cue-09.wav": {
+      "sha256": "1f92b304f1e55d0b5204a1c6229e4da0bf6d3891ac9aa8883bf00e45273bc70d",
+      "duration": 4.17084375,
+      "bytes": 266978,
+      "peak": 27064,
+      "rms": 6693.350302493322
+    },
+    "cue-0a.wav": {
+      "sha256": "637cb2b2a5b51f3af263e039513a8b517018db7031c2ca92aa823f4b6060ac22",
+      "duration": 4.17084375,
+      "bytes": 266978,
+      "peak": 27146,
+      "rms": 6764.911394587548
+    },
+    "cue-0b.wav": {
+      "sha256": "90c4d4969f75dcda3040c33a406723cd778552688dca3d415681771b8e83b6d9",
+      "duration": 8.1,
+      "bytes": 518444,
+      "peak": 29464,
+      "rms": 7447.850000255895
+    },
+    "cue-0c.wav": {
+      "sha256": "5ddb10ba34e2481ce966099a93f10de37ec36d15865e1ab13bf2b54b285355a4",
+      "duration": 4.0875,
+      "bytes": 261644,
+      "peak": 26983,
+      "rms": 4457.181378737729
+    },
+    "cue-0d.wav": {
+      "sha256": "c3ba879b08b8647681b4756f38285c79c83963c45a8a886597ae22bcf8afdd89",
+      "duration": 4.0875,
+      "bytes": 261644,
+      "peak": 27678,
+      "rms": 4461.673824605655
+    },
+    "cue-0e.wav": {
+      "sha256": "9f5dad1725b541391911d25e052ba6e583d7633385c21bd14fca3ff902b28aac",
+      "duration": 9.03334375,
+      "bytes": 578178,
+      "peak": 21098,
+      "rms": 2553.604012098367
+    },
+    "cue-0f.wav": {
+      "sha256": "cb0cd0f9eceef7c959b427f24edb2ac7cfb98a43ff7497d03337ad77228c7b21",
+      "duration": 12.40834375,
+      "bytes": 794178,
+      "peak": 23630,
+      "rms": 3030.872147886668
+    },
+    "cue-12.wav": {
+      "sha256": "b55743f05ea7dd2a5b19f9a2fadfc762d2661a6784e9addc85b646fdef16e0fa",
+      "duration": 5.0875,
+      "bytes": 325644,
+      "peak": 25123,
+      "rms": 5125.110242163622
+    },
+    "cue-13.wav": {
+      "sha256": "472aa69cc6da5cc6fd882ac12656708a6168e70ef0537d20f594674cdf416c84",
+      "duration": 3.3375,
+      "bytes": 213644,
+      "peak": 29119,
+      "rms": 5143.825372509697
+    }
+  },
+  "sequence": {
+    "channel": 11,
+    "bank": 3,
+    "note": 39,
+    "noteTicks": 1200,
+    "tempo": 200,
+    "ticksPerQuarter": 48,
+    "pollTicks": 8,
+    "audioUpdatesPerSecond": 240
+  }
+}
