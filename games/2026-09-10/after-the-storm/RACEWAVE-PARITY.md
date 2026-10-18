@@ -6005,3 +6005,41 @@ quality and a1440x900 canvas. The local server reported missing-resource404s;
 no JavaScript or shader exception was observed. Records remain page-session
 records in this preview, not durable or global leaderboard submissions. The
 normal gameplay backend and its graphics quality settings are unchanged.
+
+
+### Native Stunt record screen and continuation — 2026-10-18
+
+The previously pending state57 records screen now follows both qualified name
+entry and unqualified Stunt results. It shows the source top three scores with
+rider, standard/custom tune, initials and rank highlight; an unranked current
+run gets its own fourth row. Original slide-in/out timing, player-one input,
+entry/confirm cues and delay lead to the four-choice continuation menu. Restart,
+rider, course and title destinations run their existing numeric fade/return
+flow in Stunt mode. Source Stunt save calls remain ordered effects, and preview
+records remain page-session storage rather than cartridge or global saves.
+
+A read-only EVO X2 Ghidra query with the actual jump table resolved the complete
+input switch; all nine project files were unchanged. Independent numeric control
+matches3,534 complete original-input/display-caller or initialization-prefix
+cases. The original drawing body also ran for all48 prepared course/rank cases:
+score, rider, initials pointer, tuning and highlight selection matched the web
+record view. Original GPU, font and formatting helper calls were intercepted;
+this verifies data selection without claiming cartridge graphics emulation.
+
+Focused tests cover all four record outcomes and all four continuation choices,
+12-tick fade completion, source save-before-handoff ordering, atomic failures,
+30/60/144Hz menu cadence and ordinary-results regressions. Browser verification
+completed a native Sunny Stunt run, entered AAA, displayed the first-place2,770
+score, continued to all four choices and restarted into a fresh native Stunt
+countdown. The High setting retained a1440x900 canvas. The native backend remains
+an opt-in preview on the four admitted physical courses.
+
+An ordinary native time-trial regression run also reached its unchanged time
+record table (1:48.303 total,0:33.785 best lap, AAA initials), then returned
+through Choose course. This exposed a collapsed setup panel that prevented
+the target selector from receiving focus; rider/course handoffs now open it
+before focusing their target. No JavaScript or shader
+exception appeared; the local test server still had missing-resource404s.
+
+A fresh Stunt browser pass verifies that Choose course opens Race setup, keeps
+Stunt selected and focuses the now-visible course selector at High quality.

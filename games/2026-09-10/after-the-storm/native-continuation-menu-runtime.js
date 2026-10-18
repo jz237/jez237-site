@@ -24,9 +24,9 @@ export function nativeContinuationMenuView(state){
 /** One original20Hz update, then the numeric5924 display suffix. Modern
  * drawing replaces GPU calls; no display-list address is synthesized. Save
  * calls remain effects. The host must stop this menu when handoff is returned.
- * Only ordinary solo result state80/81 is admitted by the browser boundary. */
+ * Ordinary solo and Stunt result state80/81 are admitted by the browser boundary. */
 export function prepareNativeContinuationMenuFrame(state,rawControllers){
- if(![80,81].includes(state.scene.gameStateAb24)||state.scene.mode608!==0)
+ if(![80,81].includes(state.scene.gameStateAb24)||![0,11].includes(state.scene.mode608))
   throw new RangeError('Continuation menu requires admitted solo state80/81');
  if(!Array.isArray(rawControllers)||rawControllers.length<1||rawControllers.length>2)
   throw new RangeError('Supply one or two menu controllers');

@@ -21,6 +21,8 @@ import {prepareNativeRaceResultCPUDisplayUpdate} from './native-race-state.js';
 import {prepareNativeNameMenuFrame,nativeNameMenuView} from './native-name-menu-runtime.js';
 import {prepareNativeResultsMenuFrame,nativeResultsMenuView} from './native-results-menu-runtime.js';
 import {prepareNativeStuntResultsMenuFrame,nativeStuntResultsMenuView} from './native-stunt-results-menu-runtime.js';
+import {prepareNativeStuntRecordMenuFrame,nativeStuntRecordMenuView} from './native-stunt-record-menu-runtime.js';
+import {nativeStuntRecordView} from './native-stunt-record-view.js';
 import {prepareNativeContinuationMenuFrame,nativeContinuationMenuView} from './native-continuation-menu-runtime.js';
 import {nativeResultsRecordView} from './native-results-record-view.js';
 import {captureNativeRecordSession,restoreNativeRecordSession,copyNativeRecordSession} from './native-record-session.js';
@@ -285,6 +287,11 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
   nameEntryView:()=>nativeNameMenuView(current),
   resultsMenuView:()=>nativeResultsMenuView(current),
   stuntResultsMenuView:()=>nativeStuntResultsMenuView(current),
+  stuntRecordMenuView:()=>nativeStuntRecordMenuView(current),
+  stuntRecordView:()=>nativeStuntRecordView(current,{ridersBySlot:racers.map(r=>r.id)}),
+  advanceStuntRecordMenu(rawControllers){
+   const prepared=prepareNativeStuntRecordMenuFrame(current,rawControllers);current=prepared.state;return prepared;
+  },
   advanceStuntResultsMenu(rawControllers){
    const prepared=prepareNativeStuntResultsMenuFrame(current,rawControllers);current=prepared.state;return prepared;
   },

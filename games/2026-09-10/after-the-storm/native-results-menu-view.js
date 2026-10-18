@@ -4,8 +4,8 @@ const format=ms=>`${Math.floor(ms/60000)}:${String(Math.floor(ms/1000)%60).padSt
 
 /** Responsive HTML record table with source phase/offset timing. It is a
  * high-resolution presentation, not an emulation of original GPU geometry. */
-export function createNativeResultsMenuView({before,riderName,isActive=()=>true,onSelect=()=>{},onComplete=()=>{}}){
- const root=document.createElement('section');root.id='nativeResultsMenu';root.hidden=true;root.setAttribute('aria-label','Race records');
+export function createNativeResultsMenuView({before,riderName,stunt=false,isActive=()=>true,onSelect=()=>{},onComplete=()=>{}}){
+ const root=document.createElement('section');root.id=stunt?'nativeStuntRecordMenu':'nativeResultsMenu';root.hidden=true;root.setAttribute('aria-label',stunt?'Stunt records':'Race records');
  const style=document.createElement('style');style.textContent=`
  #nativeResultsMenu{margin:18px 0;overflow:hidden;color:#eaf8fb}
  #nativeResultsMenu .result-table{display:grid;gap:7px}
@@ -19,7 +19,7 @@ export function createNativeResultsMenuView({before,riderName,isActive=()=>true,
  #nativeResultsMenu .result-status{font-size:12px;color:#a9c8cf;min-height:18px;margin:12px 0}
  #nativeResultsMenu .result-continue{width:100%}
  @media(max-width:440px){#nativeResultsMenu .result-row{grid-template-columns:45px minmax(0,1fr) 32px 86px;gap:5px;padding:9px 6px;font-size:12px}}
- `;
+ `.replaceAll('#nativeResultsMenu','#'+root.id);
  const table=document.createElement('div');table.className='result-table';table.setAttribute('role','table');table.setAttribute('aria-label','Course records');
  const status=document.createElement('p');status.className='result-status';status.setAttribute('role','status');
  const button=document.createElement('button');button.type='button';button.className='result-continue primary';button.textContent='Continue';
@@ -43,15 +43,15 @@ export function createNativeResultsMenuView({before,riderName,isActive=()=>true,
  }
  return {root,start(nextRuntime){
    release();runtime=nextRuntime;completed=false;enabled=true;root.hidden=false;button.hidden=false;table.replaceChildren();rows=[];
-   const book=runtime.resultsRecordView();
+   const book=stunt?runtime.stuntRecordView():runtime.resultsRecordView();
    for(const record of book.rows){
     const row=document.createElement('div');row.className='result-row';row.dataset.highlight=record.highlight;row.setAttribute('role','row');
-    const empty=record.placeholder||record.timeMs===599999&&!record.initials;
+    const empty=record.placeholder||!record.initials&&(stunt?record.score===0&&record.kind!=='current':record.timeMs===599999);
     const label=document.createElement('span');label.textContent=record.kind==='lap'?'Best lap':record.kind==='current'?'Your run':String(record.rank).padStart(2,'0');
     const rider=document.createElement('span');rider.className='result-rider';rider.textContent=empty?'—':riderName(record.rider);
-    const detail=document.createElement('small');detail.className='result-detail';detail.textContent=empty?'':`${book.reverse?'Reverse':['Normal','Hard','Expert'][record.difficulty]??'Race'} · ${record.tuned?'Custom tune':'Standard'}`;rider.append(detail);
+    const detail=document.createElement('small');detail.className='result-detail';detail.textContent=empty?'':`${stunt?'Stunt':book.reverse?'Reverse':['Normal','Hard','Expert'][record.difficulty]??'Race'} · ${record.tuned?'Custom tune':'Standard'}`;rider.append(detail);
     const initials=document.createElement('span');initials.className='result-initials';initials.textContent=empty?'—':record.initials||'YOU';
-    const time=document.createElement('span');time.className='result-time';time.textContent=empty?'—':format(record.timeMs);
+    const time=document.createElement('span');time.className='result-time';time.textContent=empty?'—':stunt?record.score.toLocaleString():format(record.timeMs);
     for(const cell of [label,rider,initials,time])cell.setAttribute('role','cell');row.append(label,rider,initials,time);table.append(row);rows.push({element:row,offset:record.offset});
    }
    // Wait for the first source initialization before revealing its offsets.
@@ -63,7 +63,7 @@ export function createNativeResultsMenuView({before,riderName,isActive=()=>true,
     const controllers=[0,1].map(i=>{const pad=pads[i];let mask=i===0?keyboard:0;
      if(pad?.buttons?.[0]?.pressed)mask|=0x8000;if(pad?.buttons?.[9]?.pressed)mask|=0x1000;
      return {heldButtons:mask,rawXNative:0,rawYNative:0};});
-    const frame=runtime.advanceResultsMenu(controllers);table.style.visibility='';draw(frame.draw);root.dataset.phase=String(frame.view.phase);
+    const frame=stunt?runtime.advanceStuntRecordMenu(controllers):runtime.advanceResultsMenu(controllers);table.style.visibility='';draw(frame.draw);root.dataset.phase=String(frame.view.phase);
     if(frame.effects.some(e=>e.consumer==='800c37f4'))onSelect();
     if(!frame.view.active){completed=true;enabled=false;release();button.hidden=true;status.textContent='Choose Restart race or Rider & mode select below.';onComplete();return false;}
    });
