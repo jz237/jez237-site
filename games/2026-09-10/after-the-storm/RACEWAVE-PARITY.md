@@ -7012,3 +7012,41 @@ tests also pass.421 module hashes and all four page preload sets are verified.
 The live host still needs to install the overlay at its actual load boundary
 and consume the required audio, resource and rider presentation effects. This
 does not admit an unfinished championship mode or alter rendering resolution.
+
+### Original graphics writes and retained AI corners — 2026-10-18
+
+The original-ROM diagnostic now captures complete command streams: all 582
+lists reached their end markers, with 4,238,735 commands and no observer
+truncation. The sampled Sunny race contains 621 actual AI traffic readers;
+their corner XZ values retain the boot zeros. The observed CPU writes to the
+two blocks remain boot clearing and the ordinary initializer's Y/RGB patches.
+
+The microcode audit covers all graphics overlays. It identifies three shared
+DMA-write callers: the graphics FIFO, matrix stack and yield-save path. The
+last was absent from the earlier core-only caller enumeration. Captured
+MoveWord/MoveMem commands do not overwrite those destination pointers, and
+their configured ranges are separate from both AI corner blocks.
+
+A separate private offline replay now executes the original graphics boot,
+core and overlays against three captured active-race task snapshots. It uses
+the existing project's Ares-derived vector instruction implementation. The
+snapshots' command words match the diagnostic metadata, and their graphics
+code matches the verified ROM. Branch-delay, DMA alignment/wrap, instruction
+memory loading, write journaling and vector dispatch checks pass before replay.
+
+All three replays reach BREAK: 5,374,790 scalar/vector instructions,
+2,718,601 vector instructions, 24,627 DMA transfers and 19,601 writes. Every
+write is inside the configured matrix stack or graphics FIFO; neither AI
+corner block is written. Parsing the complete generated RDP packet streams
+also confirms only the expected color/depth targets. Matrix writes use the
+actual length register 64, producing 72-byte rounded transfers; the nearby
+T4=63 assignment must not be mistaken for that length register.
+
+This supports retained boot-zero corner coordinates for the sampled Sunny
+path. It is not an unconditional zero producer for every scene. The offline
+replay models immediate DMA/DPC completion, does not rasterize RDP pixels and
+does not feed graphics writes back into the running CPU. Broader scheduling
+and scene equivalence remain unproven. Retained-state ownership and the live
+four-rider integration still need implementation; no unfinished mode is
+enabled by this evidence alone. All ROM bytes, memory snapshots and replay
+outputs remain private. Rendering resolution is unchanged.
