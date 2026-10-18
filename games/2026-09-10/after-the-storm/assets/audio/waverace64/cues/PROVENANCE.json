@@ -1,0 +1,13 @@
+{
+  "source": "User-supplied Wave Race 64 USA revision 1 ROM on VENGEANCE",
+  "sourceSha256": "f35d2423ebcb86eaf86fa935b613c7532b123a7bc50fb74996984c3b02fc3999",
+  "method": "Sequence0/channel11, logical/physical bank3. Sixteen standalone mono32kHz PCM files cover the populated instruments among20 slots. Original ADPCM samples and loop bounds are retained privately. Note39 selects the original normal sample zone and tuning. Missing instrument selectors fall back to the channel's initialized program0, verified by original BD138/BDBEC/BA8AC executions. Selector16 starts two layers of program15; selector127 uses the empty percussion table and is silent.",
+  "envelopes": "Original BC5B8 instructions generate each full ADSR history, including program15's backward branch. NTSC configuration0 initialization verifies four audio updates per60Hz frame; source targets, binary32 accumulation, squared mixer amplitude and release multipliers are retained. BC4B0/BC24C/BC208 generate source vibrato from channel depth128/rate512; vibrato freezes after the7.5second note releases. Files include natural release tails and are not peak-normalized.",
+  "adaptations": "PCM uses linear interpolation between source update amplitudes and decoded sample positions rather than the original RSP resampler, VI sample jitter or reverb. Browser bus gain is0.45 per centered layer. Replacement stops the replaced layer immediately; complete source note allocation/stealing and interruption release tails are not emulated. The special16 delay discards writes for1200 ticks, then polls after8 ticks; delivery otherwise follows browser drains rather than the original polling phase. Missing files never replay stale cues.",
+  "tools": ["Read-only existing REA/Ghidra project on EVO X2", "Bounded private original MIPS evaluator", "SEQ64 SM64 EU ABI reference", "N64-Tools ADPCM/layout reference", "Local Python"],
+  "sourceReferences": ["https://github.com/jombo23/N64-Tools", "https://github.com/sauraen/seq64"],
+  "rights": "Underlying Wave Race 64 samples remain the property of their respective rights holders; not covered by the website code license.",
+  "purchases": 0,
+  "extractedAt": "2026-10-17",
+  "assetHashes": "manifest.json"
+}

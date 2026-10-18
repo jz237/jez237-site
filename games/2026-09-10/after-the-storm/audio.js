@@ -3,6 +3,7 @@ import {SampleSound} from './sample-sound.js';
 import {OriginalMusic} from './original-music.js';
 import {OriginalContactSound} from './original-contact-sound.js';
 import {OriginalAnnouncerSound} from './original-announcer-sound.js';
+import {OriginalCueSound} from './original-cue-sound.js';
 import {OriginalEngineSound} from './original-engine-sound.js';
 import {musicNotes,NOTE_INTERVAL,midiFrequency,stereoWidth} from './coastal-music.js';
 export class Soundscape{
@@ -21,6 +22,28 @@ export class Soundscape{
  }
  preview(){if(!this.enabled)return false;this.start();if(!this.ctx)return false;this.previewUntil=this.ctx.currentTime+10;this.nextNote=this.ctx.currentTime;this.musicStep=0;return true;}
  stopPreview(){this.previewUntil=0;}
+ beginNativeAudio(owner,now=performance.now()){
+  this.nativeAudioPreparation=null;
+  if(!owner||!this.ctx||!this.enabled)return;
+  if(!this.originalContacts)this.originalContacts=new OriginalContactSound(this.ctx,this.effects);
+  if(!this.originalAnnouncer)this.originalAnnouncer=new OriginalAnnouncerSound(this.ctx,this.effects);
+  if(!this.originalCues)this.originalCues=new OriginalCueSound(this.ctx,this.effects);
+  if(!this.originalEngines)this.originalEngines=new OriginalEngineSound(this.ctx,this.effects);
+  const banks=[this.originalContacts,this.originalAnnouncer,this.originalCues,this.originalEngines];
+  const preparation=this.nativeAudioPreparation={owner,pending:!banks.every(b=>b.ready),deadline:now+8000,failed:[],timedOut:false};
+  if(!preparation.pending)return;
+  // Keep the source's frame0 commands queued while fetching. A failed/offline
+  // bank or a bounded timeout releases the race; loading never replays cues.
+  preparation.loading=Promise.allSettled(banks.map(b=>Promise.resolve().then(()=>b.load()))).then(results=>{
+   preparation.failed=results.flatMap((r,i)=>r.status==='rejected'||!r.value?[i]:[]);preparation.pending=false;
+  });
+ }
+ nativeAudioPending(owner,now=performance.now()){
+  const p=this.nativeAudioPreparation;
+  if(!p||p.owner!==owner||!p.pending)return false;
+  if(!this.enabled||now>=p.deadline){p.pending=false;p.timedOut=this.enabled;return false;}
+  return true;
+ }
  setRaceMusic(context){this.raceMusicContext={...context};if(this.ctx&&!this.originalMusic)this.originalMusic=new OriginalMusic(this.ctx,this.musicGain);}
  scheduleMusic(active){const ctx=this.ctx,c=ctx.currentTime;this.musicGain.gain.setTargetAtTime(active?.8:0,c,.2);if(!active){this.nextNote=c;return;}if(this.nextNote<c-.2)this.nextNote=c;
   while(this.nextNote<c+.15){for(const note of musicNotes(this.musicStep)){const o=ctx.createOscillator(),g=ctx.createGain(),pan=ctx.createStereoPanner();o.type=note.type;o.frequency.value=midiFrequency(note.midi);pan.pan.value=note.pan*stereoWidth(this.mode);const entry={node:pan,base:note.pan};this.musicPans.add(entry);g.gain.setValueAtTime(0,this.nextNote);g.gain.linearRampToValueAtTime(note.gain,this.nextNote+.035);g.gain.exponentialRampToValueAtTime(.0001,this.nextNote+note.duration);o.connect(g).connect(pan).connect(this.musicGain);o.start(this.nextNote);o.stop(this.nextNote+note.duration+.04);o.onended=()=>{o.disconnect();g.disconnect();pan.disconnect();this.musicPans.delete(entry);};}this.nextNote+=NOTE_INTERVAL;this.musicStep++;}
@@ -38,30 +61,33 @@ export class Soundscape{
  nativeContacts(owner,active,players=1){
   this.nativeEngineReady=false;this.nativeEnginePrepared=false;
   this.nativeContactPrepared=false;
-  if(owner!==this.nativeContactOwner){this.originalContacts?.resetChannels();this.originalAnnouncer?.stop();this.nativeContactOwner=owner;}
+  if(owner!==this.nativeContactOwner){this.originalContacts?.resetChannels();this.originalAnnouncer?.stop();this.originalCues?.stop();this.nativeContactOwner=owner;}
   const engines=owner?.engineChannels?.();
   if(engines&&active&&this.enabled&&this.ctx){
    if(!this.originalEngines)this.originalEngines=new OriginalEngineSound(this.ctx,this.effects);
    if(typeof location!=='undefined')this.originalEngines.load();
    this.nativeEngineReady=this.originalEngines.update(engines,{mode:this.mode});this.nativeEnginePrepared=true;
   }else this.originalEngines?.stop();
-  if(!owner){this.originalContacts?.stop();this.originalAnnouncer?.stop();return;}
+  if(!owner){this.originalContacts?.stop();this.originalAnnouncer?.stop();this.originalCues?.stop();return;}
   const commands=owner.drain();
-  if(!active||!this.enabled||!this.ctx){owner.clearPendingSounds?.();this.originalContacts?.stop();this.originalAnnouncer?.stop();return;}
+  if(!active||!this.enabled||!this.ctx){owner.clearPendingSounds?.();this.originalContacts?.stop();this.originalAnnouncer?.stop();this.originalCues?.stop();return;}
   if(!this.originalContacts)this.originalContacts=new OriginalContactSound(this.ctx,this.effects);
   if(!this.originalAnnouncer)this.originalAnnouncer=new OriginalAnnouncerSound(this.ctx,this.effects);
+  if(!this.originalCues)this.originalCues=new OriginalCueSound(this.ctx,this.effects);
   this.nativeContactPrepared=true;
   this.originalContacts.setMode(this.mode);
   this.originalAnnouncer.update(this.mode);
-  if(typeof location!=='undefined'){this.originalContacts.load();this.originalAnnouncer.load();}
+  this.originalCues.update();
+  if(typeof location!=='undefined'){this.originalContacts.load();this.originalAnnouncer.load();this.originalCues.load();}
   for(const command of commands)this.nativeContact(command,players===2?(command.player===1?.4:-.4):0);
  }
  finishNativeContactFrame(active){
-  if(!this.nativeContactPrepared||!active){this.originalContacts?.stop();this.originalAnnouncer?.stop();}
+  if(!this.nativeContactPrepared||!active){this.originalContacts?.stop();this.originalAnnouncer?.stop();this.originalCues?.stop();}
   this.nativeContactPrepared=false;
  }
  nativeContact(command,side=0){
   if(!this.ctx||!this.enabled)return;
+  if(command.consumer==='c53d4'&&command.arguments[0]===0x06000b00||command.consumer==='c538c'&&command.arguments[0]===0x01000b00){this.originalCues?.play(command);return;}
   if(command.consumer==='c53d4'&&[0x06000c00,0x06000c01].includes(command.arguments[0])||command.consumer==='c538c'&&command.arguments[0]===0x01000c00){this.originalAnnouncer?.play(command);return;}
   if(this.originalContacts?.play(command,side))return;
   const args=command.arguments,hit=command.consumer==='bffec',spray=command.consumer==='c0044',ice=command.consumer==='c53d4'&&args[0]===0x06000700&&args[1]===0x13;

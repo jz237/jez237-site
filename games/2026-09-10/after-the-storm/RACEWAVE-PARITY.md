@@ -19,6 +19,51 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — original cue instruments and race audio preparation
+
+Native solo/versus launches and finish events now route the original C1EB8
+retained-base selectors into sequence0/channel11. This channel has16 looping
+instruments across20 slots, rendered as standalone PCM (5.36MB). Original
+instruction execution supplies their complete ADSR curves, backward envelope
+branches, vibrato and natural release tails. Missing program selectors use the
+source default instrument;127 selects an empty drum table. Special16 starts
+two copies of instrument15, discards incoming writes during its1200-tick wait,
+and then resumes its8-tick poll. Layer1's release tail can coexist with a later
+layer0 cue. Cue playback remains independent of announcer12 and contact audio.
+
+Fresh read-only EVO X2 Ghidra inspection left9 project files unchanged.
+846 C1EB8 cases and128 actual short-note layer executions verify selectors,
+fallbacks, note length, gate and tuning (44,888 instructions). Rendering executes
+the NTSC initialization prefix and BC4B0/BC24C/BC208/BC5B8 routines:734,161
+instructions with811 exported instruction matches. Its fixed configuration
+uses4 updates per60Hz audio frame. The mode-history audit now also executes
+C1EB8, with73,144 instructions overall. RSP resampling/reverb, hardware sample
+jitter and complete note stealing/interruption tails remain adaptations.
+
+A cold browser test exposed a missing frame0 cue because assets were still
+loading. Native launches now prepare all four original sound banks before
+advancing their source clock or draining initial commands. The screen shows
+PREPARING RACE. A failed bank, mute or8-second timeout releases the race so an
+offline asset cannot trap it; late loading never replays consumed commands.
+This is a browser resource barrier, not the cartridge's bank-loading protocol.
+Modern physics launches retain their existing start path.
+
+75 unique focused tests pass, covering source state/history, postrace and
+retirement, all audio backends, silent/fallback selectors, two-layer timing,
+loading failure, timeout and mute. Browser Web Audio rendered all20 cue
+selections plus silent127; special16 has exactly four times the energy of its
+single program15 layer. A fresh launch started with zero decoded buffers,
+then played frame0 cue16 and every course/countdown voice after preparation.
+An injected1200ms loader delay held frame/time at0 with the preparation label;
+140ms after readiness the race was at time0.13/frame2, with both cue layers
+playing. A two-player restart played program6. All checks retain High quality,
+1280x720 and83,521 water vertices. Four HTML maps/preloads cover348 modules.
+
+Original soundtrack ownership/defaults are preserved. Special126/channel15,
+credits/tempo processing, complete native menu admission and the full original
+bank-loading/mixer lifecycle remain unfinished; this checkpoint does not claim
+complete audio parity.
+
 ## Unpublished — original multi-part menu announcements
 
 The admitted native audio owner now dispatches C377C's ordered IO1 selector
