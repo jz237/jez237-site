@@ -1,6 +1,7 @@
+import {restorePackLandmarksBytes} from './pack-landmarks-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readPortWarehousePrevious,restorePortWarehouseBytes,verifyPortWarehouseRevision} from './port-warehouse-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restorePackLandmarksBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('PortWarehouse preserves every prior fixture, vehicle asset, control and camera input',verifyPortWarehouseRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/port-warehouse/revision.json').toString());

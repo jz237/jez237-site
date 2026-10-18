@@ -3,6 +3,9 @@ import {createCoastalPavilion} from './coastal-pavilion';
 import {createForestLodge} from './forest-lodge';
 import {createReservoirPumphouse} from './reservoir-pumphouse';
 import {createKingswellBandstands} from './kingswell-bandstands';
+import {createRidgeRallyHQ} from './ridge-rally-hq';
+import {createWestmerePitPavilion} from './westmere-pit-pavilion';
+import {createCopperfieldSiteOffice} from './copperfield-site-office';
 import {createMidway} from './fairground-midway';
 import {createFairWheel} from './fairground-wheel';
 import {addCourseRockDetail} from './course-materials';
@@ -209,12 +212,13 @@ export function createCourseScenery(course:Course,theme:SceneryTheme,identity?:{
    }
   }
  }else if(theme==='ridge'){
-  building(80,-160,40,18,5,'wood');stand(-100,-158);canopy(-45,-160,'ochre');canopy(-24,-160,'white');serviceTruck(127,-158,'ochre');
-  if(clearRectangle(80,-160,44,22,'ridge-service')){
+  reserveReplaced(()=>building(80,-160,40,18,5,'wood'));stand(-100,-158);canopy(-45,-160,'ochre');canopy(-24,-160,'white');serviceTruck(127,-158,'ochre');
+  // The rally HQ module replaces the shutters and tyre stacks; the reservation stays.
+  if(clearRectangle(80,-160,44,22,'ridge-service'))reserveReplaced(()=>{
    for(const x of [68,80,92]){box('metal',x,2.4,-150.8,7.2,4.5,.15);for(let y=.5;y<4.5;y+=.5)box('white',x,y,-150.6,7,.08,.1);}
    box('ochre',80,5.3,-150.5,35,.65,.18);box('white',80,3.7,-150.3,2,1,.1);box('red',80,3.7,-150.2,.18,.8,.1);box('red',80,3.7,-150.15,.8,.18,.1);
    for(const x of [65,72,79]){add('round','rubber',x,.45,-167,2,.9,2);add('round','rubber',x,1.3,-167,2,.9,2);}
-  }
+  });
   // Timber observation tower and climbing stairs form a clear infield landmark.
   if(clearRectangle(-55,-24,24,22,'ridge-lookout')){
    const x=-55,z=-24,y=course.height(x,z);
@@ -239,13 +243,14 @@ export function createCourseScenery(course:Course,theme:SceneryTheme,identity?:{
    for(let tier=1;tier<4;tier++)add('rock','stone',x+Math.sin(tier*2)*3,y+3+tier*4,z+Math.cos(tier)*2,25-tier*4,8,20-tier*3,tier*.3);
   }
  }else if(theme==='club'){
-  building(62,-160,68,20,5.5,'white');stand(-97,-156);canopy(-42,-159,'red');canopy(-22,-159,'white');serviceTruck(119,-158,'red');
-  if(clearRectangle(62,-160,72,24,'club-pits')){
+  reserveReplaced(()=>building(62,-160,68,20,5.5,'white'));stand(-97,-156);canopy(-42,-159,'red');canopy(-22,-159,'white');serviceTruck(119,-158,'red');
+  // The pit pavilion module replaces the shutters and control box; the reservation stays.
+  if(clearRectangle(62,-160,72,24,'club-pits'))reserveReplaced(()=>{
    for(let x=37;x<=87;x+=10){box('metal',x,2.4,-149.8,7.5,4.6,.16);for(let y=.4;y<4.6;y+=.4)box('white',x,y,-149.65,7.3,.07,.12);box('red',x,5,-149.5,8.2,.65,.2);box('white',x,.1,-148,7.5,.15,.2);}
    box('red',62,7.7,-159,24,4,15);box('glass',62,8,-151.3,22,2.1,.15);box('white',62,10,-159,26,.5,17);
    for(let x=52;x<=72;x+=4)box('white',x,8,-151.1,.15,2.5,.2);
    box('metal',72,12,-160,.18,4,.18);box('ochre',74,13,-160,4,1.5,.1);
-  }
+  });
   // The infield clubhouse overlooks the technical bends, safely behind barriers.
   if(clearRectangle(-35,-30,32,26,'clubhouse')){
    const y=course.height(-35,-30);box('wood',-35,y+3,-30,28,6,20);
@@ -302,7 +307,7 @@ export function createCourseScenery(course:Course,theme:SceneryTheme,identity?:{
   }
 
  }else if(theme==='dunes'){
-  building(70,-158,34,14,4.5,'wood');stand(-95,-155);for(const x of [-40,-20,0])canopy(x,-156,x===-20?'red':'ochre');serviceTruck(110,-157,'ochre');
+  reserveReplaced(()=>building(70,-158,34,14,4.5,'wood'));stand(-95,-155);for(const x of [-40,-20,0])canopy(x,-156,x===-20?'red':'ochre');serviceTruck(110,-157,'ochre');
   // Industrial landmarks use shared batches and stay beyond the racing corridor.
   function beam(finish:Finish,a:T.Vector3,b:T.Vector3,width:number,depth=width){
    const direction=b.clone().sub(a),rotation=new T.Quaternion().setFromUnitVectors(new T.Vector3(0,1,0),direction.clone().normalize());
@@ -615,9 +620,12 @@ reflectedLight.directDiffuse *= .5;reflectedLight.directSpecular *= .5;`);
  const portWarehouse=theme==='port'?createPortWarehouse(course.height(62,-158)):null;if(portWarehouse)root.add(portWarehouse.root);
  const coastalPavilion=theme==='coast'?createCoastalPavilion(course.height(52,-158)):null;if(coastalPavilion)root.add(coastalPavilion.root);
  const forestLodge=theme==='forest'?createForestLodge(course.height(52,-158)):null;if(forestLodge)root.add(forestLodge.root);
+ const ridgeHQ=theme==='ridge'&&placements.some(entry=>entry.kind==='ridge-service')?createRidgeRallyHQ(course.height(80,-160)):null;if(ridgeHQ)root.add(ridgeHQ.root);
+ const clubPits=theme==='club'&&placements.some(entry=>entry.kind==='club-pits')?createWestmerePitPavilion(course.height(62,-160),p.title,p.subtitle):null;if(clubPits)root.add(clubPits.root);
+ const siteOffice=theme==='dunes'&&placements.some(entry=>entry.kind==='building'&&entry.x===70&&entry.z===-158)?createCopperfieldSiteOffice(course.height(70,-158)):null;if(siteOffice)root.add(siteOffice.root);
  const pumpHouse=theme==='reservoir'?createReservoirPumphouse(course.height(90,-163)):null;if(pumpHouse)root.add(pumpHouse.root);
  const bandstands=bandstandSites.length?createKingswellBandstands(bandstandSites):null;if(bandstands)root.add(bandstands.root);
  const fairWheel=theme==='fair'?createFairWheel():null,fairMidway=theme==='fair'?createMidway():null;if(fairWheel)root.add(fairWheel.root);if(fairMidway)root.add(fairMidway.root);
  root.userData.placements=placements;root.userData.theme=theme;
- let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;portWarehouse?.dispose();coastalPavilion?.dispose();forestLodge?.dispose();pumpHouse?.dispose();bandstands?.dispose();fairMidway?.dispose();fairWheel?.dispose();stoneDetail.dispose();ridgeDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});Object.values(geometries).forEach(g=>g.dispose());Object.values(materials).forEach(m=>m.dispose());ownedGeometries.forEach(g=>g.dispose());ownedMaterials.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());foliageTextures.forEach(t=>t.dispose());root.clear();}};
+ let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;portWarehouse?.dispose();ridgeHQ?.dispose();clubPits?.dispose();siteOffice?.dispose();coastalPavilion?.dispose();forestLodge?.dispose();pumpHouse?.dispose();bandstands?.dispose();fairMidway?.dispose();fairWheel?.dispose();stoneDetail.dispose();ridgeDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});Object.values(geometries).forEach(g=>g.dispose());Object.values(materials).forEach(m=>m.dispose());ownedGeometries.forEach(g=>g.dispose());ownedMaterials.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());foliageTextures.forEach(t=>t.dispose());root.clear();}};
 }
