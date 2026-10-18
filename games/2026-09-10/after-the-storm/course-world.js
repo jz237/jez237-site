@@ -1,3 +1,9 @@
+import {makeNativeIceSplashRenderer} from './native-ice-splash-render.js';
+import {nativeIceFragmentPose} from './native-ice-presentation.js';
+import {nativeStuntVolumePositions} from './native-stunt-presentation.js';
+import {nativeReedGeometry} from './native-reed-geometry.js';
+import {surfaceMeshPositions} from './faceted-surfaces.js';
+import {hazardBroken,breakableEvents,fragmentPose} from './breakable-hazards.js';
 import {terrainPreparation} from './terrain-preparation.js';
 import {makeVenueScenery} from './venue-scenery.js';
 import {dressMaterial} from './venue-materials.js';
@@ -8,6 +14,7 @@ import {makeShorelineLife} from './shoreline-life.js';
 import {waterlineMaterial,makeWaterlineScenery} from './waterline-detail.js';
 import {makeUnderwaterScenery} from './underwater-scenery.js';
 import {mooredBoatOutline,mooredBoatPose} from './moored-boats.js';
+import {makeSourceMooredCraft} from './source-moored-craft.js';
 import {barrierPiles} from './course-barriers.js';
 import {rampWaterOffset,ringHeight} from './stunts.js';
 import {makeCoastalScenery} from './coastal-scenery.js';
@@ -29,6 +36,7 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
  const naturalRock=rockMaterial();materials.push(naturalRock);
  const timber=barkMaterial();materials.push(timber);wood.map=timber.map;wood.normalMap=timber.normalMap;wood.normalScale=timber.normalScale;wood.roughnessMap=timber.roughnessMap;for(const m of [wood,stone,naturalRock,steel])waterlineMaterial(m);
  const theme=course.theme,night=theme==='city',cold=theme==='ice';
+ const visualGround=(x,z)=>(course.sourceShores&&course.renderGround?course.renderGround:course.ground)(x,z);
  dressMaterial(stone,theme==='fortress'?'masonry':'concrete');dressMaterial(steel,'metal');
  const palette=cold?{sand:0x94bdc9,rock:0xadc8d5,grass:0xe5f0f0}:theme==='port'||night?{sand:0x737e81,rock:0x899091,grass:0x828b83,paved:true}:theme==='beach'||theme==='resort'||theme==='island'?{sand:0xd8c99c,rock:0xa7a58a,grass:0x759358}:{};
  const venueScenery=makeVenueScenery(root,course),scenery=makeCoastalScenery(root,course),distant=makeDistantCoast(root,course),obstacleFoam=makeObstacleFoam(root,course);
@@ -43,9 +51,50 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
  const cylinder=(x,y,z,r,h,m=stone,parent=root)=>{const o=add(new T.CylinderGeometry(r,r,h,12),m,x,y,z,parent);if(m===wood&&r<.7&&h>2)tidalPiles.push({o,r,h});return o;};
  function rod(a,b,r,m=steel,parent=root){const av=new T.Vector3(...a),bv=new T.Vector3(...b),delta=bv.clone().sub(av),o=add(new T.CylinderGeometry(r,r,delta.length(),8),m,0,0,0,parent);o.position.copy(av.add(bv).multiplyScalar(.5));o.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),delta.normalize());return o;}
  function label(text,x,y,z,w=15,parent=root,color='#f3dab0'){const c=document.createElement('canvas');c.width=1024;c.height=128;const ctx=c.getContext('2d');ctx.fillStyle='#183c4b';ctx.fillRect(0,0,1024,128);ctx.fillStyle=color;ctx.font='bold 49px sans-serif';ctx.textAlign='center';ctx.fillText(text,512,84);const tex=new T.CanvasTexture(c);tex.colorSpace=T.SRGBColorSpace;textures.push(tex);const m=new T.MeshBasicMaterial({map:tex,side:T.DoubleSide});materials.push(m);return add(new T.PlaneGeometry(w,w/8),m,x,y,z,parent);}
- function buoy(x,z,m,s=1){const g=new T.Group();g.userData.dynamic=true;g.position.set(x,0,z);root.add(g);add(new T.CylinderGeometry(.3*s,.6*s,.7*s,12),m,0,.35*s,0,g);add(new T.CylinderGeometry(.4*s,.5*s,.1*s,12),white,0,.44*s,0,g);cylinder(0,.98*s,0,.025,.7*s,black,g);buoys.push({g,x,z});}
- const red=mat(0xef503e,.35),yellow=mat(0xf5ce46,.35),pink=mat(0xd06aa9,.4);for(const g of freeRide||authoredStunts?[]:course.gates){if(g.side)buoy(g.bx,g.bz,g.side>0?red:yellow,1.25);if(!course.boundary)for(const side of [-1,1])buoy(g.x+g.tz*29*side,g.z-g.tx*29*side,pink,.6);}
- if(course.boundary&&!freeRide)for(let i=0;i<course.boundary.length;i++){const a=course.boundary[i],b=course.boundary[(i+1)%course.boundary.length],count=Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])/7);for(let j=0;j<count;j++){const x=a[0]+(b[0]-a[0])*j/count,z=a[1]+(b[1]-a[1])*j/count;if(course.ground(x,z)<-.2)buoy(x,z,pink,.6);}}
+ function buoy(x,z,m,s=1,placement=null){const g=new T.Group();g.userData.dynamic=true;g.position.set(x,0,z);root.add(g);add(new T.CylinderGeometry(.3*s,.6*s,.7*s,12),m,0,.35*s,0,g);add(new T.CylinderGeometry(.4*s,.5*s,.1*s,12),white,0,.44*s,0,g);cylinder(0,.98*s,0,.025,.7*s,black,g);const item={g,x,z,placement,visualCenter:.35*s};buoys.push(item);return item;}
+ const sourceRowByGate=new Map(Object.entries(course.sourceVisibleGateIndices??{}).map(([row,index])=>[index,Number(row)]));
+ // Authored metal floats use the original buoyant bodies' live transforms.
+ // No wave sampling, spring or recoil is duplicated in this display layer.
+ const nativeFloatingMeshes=((course.nativeCourseLayout??course.nativeStuntLayout)?.floating??[]).map(definition=>{
+  const g=new T.Group();g.userData.dynamic=true;g.matrixAutoUpdate=false;g.visible=false;root.add(g);
+  const radius=definition.radius;
+  add(new T.SphereGeometry(radius,40,28),steel,0,0,0,g);
+  const band=add(new T.TorusGeometry(radius*.98,.035,12,48),white,0,0,0,g);band.rotation.x=Math.PI/2;
+  const eye=add(new T.TorusGeometry(.12,.035,12,24),steel,0,radius+.07,0,g);
+  eye.rotation.y=Math.PI/2;
+  return {id:definition.id,g};
+ });
+ function updateNativeFloating(world){
+  const rows=new Map(world?.floating?.map(q=>[q.id,q])??[]);
+  for(const {id,g} of nativeFloatingMeshes){const q=rows.get(id);g.visible=!!q?.visible;if(q){g.matrix.fromArray(q.matrix);g.matrixWorldNeedsUpdate=true;}}
+  root.userData.nativeFloating={count:nativeFloatingMeshes.length,visible:nativeFloatingMeshes.filter(q=>q.g.visible).length};
+ }
+ const decorationLayout=course.nativeCourseLayout??course.nativeStuntLayout;
+ const reedMaterial=decorationLayout?.decorations?.length?mat(0xffffff,.9):null;
+ if(reedMaterial){reedMaterial.vertexColors=true;reedMaterial.side=T.DoubleSide;}
+ const nativeDecorationMeshes=(decorationLayout?.decorations??[]).map(definition=>{
+  const data=nativeReedGeometry(definition.sourceIndex),geometry=new T.BufferGeometry();
+  geometry.setAttribute('position',new T.BufferAttribute(data.positions,3));geometry.setAttribute('color',new T.BufferAttribute(data.colors,3));geometry.setIndex(data.indices);geometry.computeVertexNormals();
+  const mesh=add(geometry,reedMaterial);mesh.userData.dynamic=true;mesh.visible=false;return {id:definition.id,mesh};
+ });
+ function updateNativeDecorations(world){
+  const rows=new Map(world?.decorations?.map(q=>[q.id,q])??[]);
+  for(const {id,mesh} of nativeDecorationMeshes){const q=rows.get(id);mesh.visible=!!q?.visible;if(q)mesh.position.fromArray(q.position);}
+  root.userData.nativeDecorations={count:nativeDecorationMeshes.length,visible:nativeDecorationMeshes.filter(q=>q.mesh.visible).length};
+ }
+ const red=mat(0xef503e,.35),yellow=mat(0xf5ce46,.35),pink=mat(0xd06aa9,.4);for(const [index,g] of (freeRide||authoredStunts?[]:course.gates).entries()){if(g.side){const m=g.side>0?red:yellow,b=buoy(g.bx,g.bz,m,1.25);b.primarySourceRow=sourceRowByGate.get(index);if(b.primarySourceRow!==undefined){b.nativeSkirt=add(new T.CylinderGeometry(.75,.525,.875,16),m,0,-.4375,0,b.g);b.nativeSkirt.visible=false;}}if(!course.boundary)for(const side of [-1,1])buoy(g.x+g.tz*29*side,g.z-g.tx*29*side,pink,.6);}
+ // Independently authored high-resolution bodies follow native centers. Align
+ // each upper body's center with its physical source center. A submerged
+ // authored lower body bridges that higher native center to the waterline;
+ // native state is never snapped to a display-height query. Fixed endpoint
+ // bodies are shown only when the native display snapshot is present.
+ for(const node of course.sourceBuoyLayout?.nodes??[])if(node.checkpoint)for(const endpoint of [0,1]){
+  const sign=endpoint===0?1:-1,half=node.halfWidthNative*course.sourceBuoyLayout.scale;
+  const b=buoy(node.x+sign*node.tz*half,node.z-sign*node.tx*half,yellow,node.classification===3?1.75:1.5);
+  b.primaryEndpoint={sourceRow:node.sourceRow,index:endpoint};b.g.visible=false;
+ }
+ const sourceMarkers=(course.rocks||[]).filter(q=>q.sourceBoundaryMarker);
+ if(sourceMarkers.length){for(const q of sourceMarkers)buoy(q.x,q.z,pink,.6,q);}else if(course.boundaryMarkers&&!freeRide){for(const [x,z] of course.boundaryMarkers)buoy(x,z,pink,.6);}else if(course.boundary&&!freeRide)for(let i=0;i<course.boundary.length;i++){const a=course.boundary[i],b=course.boundary[(i+1)%course.boundary.length],count=Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])/7);for(let j=0;j<count;j++){const x=a[0]+(b[0]-a[0])*j/count,z=a[1]+(b[1]-a[1])*j/count;if(visualGround(x,z)<-.2)buoy(x,z,pink,.6);}}
  // Visible weed leaves occupy the same elliptical patches used by hull drag.
  if(course.resistance?.length){const weedMaterial=mat(0x536b27,.93);weedMaterial.side=T.DoubleSide;const leafShape=new T.Shape();leafShape.moveTo(0,-.35);leafShape.quadraticCurveTo(.18,.03,0,.4);leafShape.quadraticCurveTo(-.15,.04,0,-.35);const leaf=new T.ShapeGeometry(leafShape,5),lp=leaf.attributes.position;for(let i=0;i<lp.count;i++)lp.setZ(i,.07*Math.sin((lp.getY(i)+.35)/.75*Math.PI));leaf.computeVertexNormals();geometries.push(leaf);const dummy=new T.Object3D();
   for(const patch of course.resistance){const mesh=new T.InstancedMesh(leaf,weedMaterial,180);mesh.userData.dynamic=true;mesh.position.set(patch.x,0,patch.z);root.add(mesh);weedMeshes.push({mesh,patch});
@@ -53,15 +102,97 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
   }
  }
  if(!freeRide&&!authoredStunts){
- const finish=course.gates[0],finishMin=finish.spanMin??-21,finishMax=finish.spanMax??21,finishCenter=(finishMin+finishMax)/2,finishWidth=finishMax-finishMin,gantry=new T.Group();gantry.position.set(finish.x-finish.tz*finishCenter,0,finish.z+finish.tx*finishCenter);gantry.rotation.y=Math.atan2(finish.tx,finish.tz);root.add(gantry);for(const x of[-finishWidth/2,finishWidth/2]){cylinder(x,3.4,0,.16,7,steel,gantry);box(x,.15,0,2,.5,3,yellow,gantry);}box(0,6.7,0,finishWidth,1.6,.4,black,gantry);label(course.name.toUpperCase()+' / FINISH',0,6.8,.25,34,gantry);label(course.name.toUpperCase()+' / FINISH',0,6.8,-.25,34,gantry).rotation.y=Math.PI;
+ const finish=course.gates[0],finishMin=finish.spanMin??-(finish.width??21),finishMax=finish.spanMax??finish.width??21,finishCenter=(finishMin+finishMax)/2,finishWidth=finishMax-finishMin,labelWidth=Math.min(34,finishWidth*.9),gantry=new T.Group();gantry.position.set(finish.x-finish.tz*finishCenter,0,finish.z+finish.tx*finishCenter);gantry.rotation.y=Math.atan2(finish.tx,finish.tz);root.add(gantry);for(const x of[-finishWidth/2,finishWidth/2]){cylinder(x,3.4,0,.16,7,steel,gantry);box(x,.15,0,2,.5,3,yellow,gantry);}box(0,6.7,0,finishWidth,1.6,.4,black,gantry);label(course.name.toUpperCase()+' / FINISH',0,6.8,.25,labelWidth,gantry);label(course.name.toUpperCase()+' / FINISH',0,6.8,-.25,labelWidth,gantry).rotation.y=Math.PI;
+ }
+ // Static source placements select independently authored beach furniture.
+ // Their variants locate objects; their original artwork/identity is not used.
+ if(course.sceneryDecks){
+  const {height,width,path,branches,platforms}=course.sceneryDecks;
+  const plank=(x,z,w,d,angle=0)=>{const g=new T.Group();g.position.set(x,height-.12,z);g.rotation.y=angle;root.add(g);
+   box(0,0,0,w,.24,d,wood,g);for(let at=-d/2+.4;at<d/2;at+=.45)box(0,.125,at,w,.012,.018,black,g);};
+  for(const points of [path,...branches])for(let i=1;i<points.length;i++){const a=points[i-1],b=points[i];plank((a[0]+b[0])/2,(a[1]+b[1])/2,width,Math.hypot(b[0]-a[0],b[1]-a[1])+.2,Math.atan2(b[0]-a[0],b[1]-a[1]));}
+  for(const [x,z,w,d] of platforms)plank(x,z,w,d);
+ }
+ for(const q of course.sourceDecorations||[]){
+  const g=new T.Group();g.position.set(q.x,q.y,q.z);g.rotation.y=Math.atan2(q.tx,q.tz);root.add(g);
+  const variant=q.sourceVariant%3;
+  if(variant===0){
+   cylinder(0,1.2,0,.035,2.4,steel,g);const shade=add(new T.ConeGeometry(.95,.35,24),q.sourceVariant%2?white:yellow,0,2.4,0,g);
+   shade.rotation.y=.18;box(.7,.24,.35,.5,.15,1.25,white,g);box(.7,.58,-.15,.5,.65,.12,wood,g).rotation.x=-.4;
+  }else if(variant===1){
+   for(const side of [-1,1]){box(side*.38,.28,0,.56,.13,1.35,white,g);box(side*.38,.57,-.45,.56,.62,.12,wood,g).rotation.x=-.36;}
+   cylinder(0,.38,.8,.28,.07,wood,g);cylinder(0,.19,.8,.035,.38,steel,g);
+  }else{
+   cylinder(0,1.1,0,.065,2.2,wood,g);box(0,1.9,0,1.2,.55,.09,q.sourceVariant%2?white:yellow,g);
+   const ring=add(new T.TorusGeometry(.28,.07,8,24),red,0,.88,.1,g);ring.rotation.z=.22;
+   box(0,.12,.65,1.0,.22,.5,wood,g);
+  }
  }
  const facadeMaterials=new Map();
- function building(x,z,w,d,h,m=stone){const y=course.ground(x,z);if(y<1)return;if(night){if(!facadeMaterials.has(m)){const facade=dressMaterial(m.clone(),'facade');materials.push(facade);facadeMaterials.set(m,facade);}m=facadeMaterials.get(m);}box(x,y+h/2,z,w,h,d,m);box(x,y+h+.2,z,w+.6,.4,d+.6,steel);return y;}
- function rock(x,z,r=5,ice=false){let y=course.ground(x,z);for(let j=0;j<8;j++){const a=j*Math.PI/4;y=Math.min(y,course.ground(x+Math.cos(a)*r*.55,z+Math.sin(a)*r*.55));}const geo=ice?new T.IcosahedronGeometry(r,2):new T.SphereGeometry(r,24,16),p=geo.attributes.position;for(let i=0;i<p.count;i++){const scale=.93+.11*Math.sin(p.getX(i)*.17+p.getZ(i)*.23)+.045*Math.sin(p.getY(i)*.7+p.getX(i)*.4);p.setXYZ(i,p.getX(i)*scale,p.getY(i)*scale*.65,p.getZ(i)*scale);}geo.computeVertexNormals();return add(geo,ice?iceMat:naturalRock,x,y+r*.15,z);}
+ function building(x,z,w,d,h,m=stone){const y=visualGround(x,z);if(y<1)return;if(night){if(!facadeMaterials.has(m)){const facade=dressMaterial(m.clone(),'facade');materials.push(facade);facadeMaterials.set(m,facade);}m=facadeMaterials.get(m);}box(x,y+h/2,z,w,h,d,m);box(x,y+h+.2,z,w+.6,.4,d+.6,steel);return y;}
+ function rock(x,z,r=5,ice=false){let y=visualGround(x,z);for(let j=0;j<8;j++){const a=j*Math.PI/4;y=Math.min(y,visualGround(x+Math.cos(a)*r*.55,z+Math.sin(a)*r*.55));}const geo=ice?new T.IcosahedronGeometry(r,2):new T.SphereGeometry(r,24,16),p=geo.attributes.position;for(let i=0;i<p.count;i++){const scale=.93+.11*Math.sin(p.getX(i)*.17+p.getZ(i)*.23)+.045*Math.sin(p.getY(i)*.7+p.getX(i)*.4);p.setXYZ(i,p.getX(i)*scale,p.getY(i)*scale*.65,p.getZ(i)*scale);}geo.computeVertexNormals();return add(geo,ice?iceMat:naturalRock,x,y+r*.15,z);}
  const sheetMat=dressMaterial(mat(0xc7e6ee,.28,.04),'ice');
- for(const p of course.iceSheets||[]){const shape=new T.Shape();p.outline.forEach(([x,z],i)=>i?shape.lineTo(x,z):shape.moveTo(x,z));shape.closePath();const mesh=add(new T.ExtrudeGeometry(shape,{depth:.7,bevelEnabled:false,steps:1}),sheetMat,0,p.height,0);mesh.rotation.x=Math.PI/2;}
- const iceMat=dressMaterial(mat(0x9fd2e2,.35,.05),'ice');const glass=mat(night?0x263e59:0x608897,.2,.55);const cityLight=mat(0xa7dced,.4,.15,0x62a6cb);
- for(const obstacle of course.rocks){if(obstacle.type==='ice'){const o=rock(obstacle.x,obstacle.z,obstacle.r,true);animated.push({o,obstacle,offset:.3});}else if(obstacle.type==='post'){cylinder(obstacle.x,.65,obstacle.z,obstacle.r,3.8,wood);cylinder(obstacle.x,1.3,obstacle.z,obstacle.r+.04,.2,white);}else if(obstacle.type==='ball'){const o=new T.Group();o.position.set(obstacle.x,.1,obstacle.z);root.add(o);
+ // Drake's overhangs retain full finite faces in separate detailed meshes.
+ // Its renderGround excludes these structures so the underside stays open.
+ for(const surface of course.scenerySurfaces??[]){
+  const positions=surfaceMeshPositions(surface.triangles),geometry=new T.BufferGeometry();
+  geometry.setAttribute('position',new T.BufferAttribute(positions,3));
+  geometry.setAttribute('uv',new T.Float32BufferAttribute(Array.from({length:positions.length/3},(_,i)=>[positions[i*3]*.2,(positions[i*3+1]+positions[i*3+2])*.2]).flat(),2));
+  geometry.computeVertexNormals();add(geometry,surface.kind==='rock'?naturalRock:wood);
+ }
+ // The textured terrain already samples staticSurfaces through renderGround.
+ // Rendering those contact planes again at the same height creates coplanar
+ // depth fighting in the main, reflection and underwater refraction passes.
+ const nativeVolumeIds=new Set((course.nativeCourseLayout??course.nativeStuntLayout)?.volumes?.map(v=>v.id)??[]),nativeVolumeMeshes=[];
+ for(const volume of course.contactVolumes?.volumes||[]){
+  if(volume.kind==='ship')continue; // Independently authored continuous hull below.
+  const geometry=new T.BufferGeometry(),positions=surfaceMeshPositions(volume.triangles);geometry.setAttribute('position',new T.BufferAttribute(positions,3));geometry.setAttribute('uv',new T.Float32BufferAttribute(Array.from({length:positions.length/3},(_,i)=>[positions[i*3]*.2,(positions[i*3+1]+positions[i*3+2])*.2]).flat(),2));geometry.computeVertexNormals();const mesh=add(geometry,volume.kind==='reef'?naturalRock:['finish','gate'].includes(volume.kind)?steel:wood);
+  if(nativeVolumeIds.has(volume.id)){mesh.userData.dynamic=true;nativeVolumeMeshes.push({id:volume.id,mesh,shape:null});}
+ }
+ if(course.id==='tempest'&&course.sourceShores){
+  for(const shore of course.sourceShores){
+   if(shore.kind==='ship')continue;
+   const shape=new T.Shape();shore.outline.forEach(([x,z],i)=>i?shape.lineTo(x,-z):shape.moveTo(x,-z));shape.closePath();
+   const deck=new T.ExtrudeGeometry(shape,{depth:.42,steps:1,bevelEnabled:true,bevelThickness:.025,bevelSize:.025,bevelSegments:2});deck.rotateX(-Math.PI/2);add(deck,wood,0,.83,0);
+   // Under-deck supports stay within the measured height-independent blocker.
+   for(let i=0;i<shore.outline.length;i++){const a=shore.outline[i],b=shore.outline[(i+1)%shore.outline.length],n=Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])/8);for(let j=0;j<n;j++){const t=j/n;cylinder(a[0]+(b[0]-a[0])*t,-1.5,a[1]+(b[1]-a[1])*t,.15,4.65,wood);}}
+  }
+ }
+ if((night||theme==='port'||theme==='fortress')&&course.sourceShores){
+  const top=course.authoredBackground?.quayHeight??course.authoredBackground?.visualQuayHeight??2.5;
+  for(const shore of course.sourceShores){if(theme==='fortress'&&shore.sourceClosed)continue;const points=shore.outline,count=shore.sourceClosed===false?points.length-1:points.length;
+   for(let i=0;i<count;i++){const a=points[i],b=points[(i+1)%points.length],dx=b[0]-a[0],dz=b[1]-a[1],length=Math.hypot(dx,dz);if(length<.01)continue;
+    const wall=box((a[0]+b[0])/2,(top-3)/2,(a[1]+b[1])/2,.4,top+3,length,stone);wall.rotation.y=Math.atan2(dx,dz);
+    const coping=box((a[0]+b[0])/2,top+.04,(a[1]+b[1])/2,.65,.12,length,steel);coping.rotation.y=wall.rotation.y;
+   }
+  }
+ }
+ if(course.sceneryTrees)for(const [x,z] of [[62.5,125],[62.5,-137.5],[-62.5,-24.5]]){const island=add(new T.CircleGeometry(4.0,64),sand,x,1.274,z);island.rotation.x=-Math.PI/2;}
+ if(course.boat){
+  const boat=course.boat,shape=new T.Shape();boat.hull.outline.forEach(([x,z],i)=>i?shape.lineTo(x,-z):shape.moveTo(x,-z));shape.closePath();
+  const hullMaterial=mat(0x23505b,.46,.42),deckMaterial=mat(0xa48c6c,.86),glassMaterial=mat(0x193f4b,.24,.38);
+  const hull=new T.ExtrudeGeometry(shape,{depth:boat.hull.upperY-boat.hull.lowerY,bevelEnabled:true,bevelSize:.12,bevelThickness:.08,bevelSegments:4,steps:2});hull.rotateX(-Math.PI/2);add(hull,hullMaterial,0,boat.hull.lowerY,0);
+  const deck=new T.ShapeGeometry(shape,8);deck.rotateX(-Math.PI/2);add(deck,deckMaterial,0,boat.hull.upperY+.012,0);
+  const cabin=new T.Shape();boat.cabin.outline.forEach(([x,z],i)=>i?cabin.lineTo(x,-z):cabin.moveTo(x,-z));cabin.closePath();
+  const cabinHeight=boat.cabin.roofYRange[1]-boat.hull.upperY,body=new T.ExtrudeGeometry(cabin,{depth:cabinHeight,bevelEnabled:true,bevelSize:.08,bevelThickness:.08,bevelSegments:3});body.rotateX(-Math.PI/2);add(body,white,0,boat.hull.upperY,0);
+  for(const mast of boat.masts){cylinder(mast.x,(mast.minY+mast.maxY)/2,mast.z,mast.width/2,mast.maxY-mast.minY,steel);rod([mast.x,mast.maxY-.1,mast.z],[boat.hull.outline[0][0],boat.hull.upperY+.25,boat.hull.outline[0][1]],.025,steel);}
+  box(7.2,2.0,-113.82,6.5,1.15,.08,glassMaterial);box(7.2,2.35,-105.05,5.0,1.0,.08,glassMaterial);
+  for(const x of [4.1,6.2,8.3,10.4])box(x,2.0,-113.87,.08,1.25,.04,white);
+  for(const x of [3.1,11.27]){box(x,1.3,-109.4,.08,1.15,5.4,glassMaterial);for(const z of [-111.6,-109.4,-107.2])box(x,1.3,z,.11,1.25,.08,white);}
+  box(7.2,3.78,-110.4,8.3,.12,6.8,steel);box(7.2,-1.2,-122,7.0,.05,14,deckMaterial);
+  for(let z=-128.5;z<-114;z+=.5)box(7.2,-1.164,z,7.1,.018,.018,wood);
+  for(let i=0;i<boat.hull.outline.length;i++){const a=boat.hull.outline[i],b=boat.hull.outline[(i+1)%boat.hull.outline.length];rod([a[0],-.83,a[1]],[b[0],-.83,b[1]],.035,steel);}
+
+ }
+ if(course.contactWalls){const geometry=new T.BufferGeometry(),positions=surfaceMeshPositions(course.contactWalls.triangles);geometry.setAttribute('position',new T.BufferAttribute(positions,3));geometry.setAttribute('uv',new T.Float32BufferAttribute(Array.from({length:positions.length/3},(_,i)=>[positions[i*3]*.1,(positions[i*3+1]+positions[i*3+2])*.1]).flat(),2));geometry.computeVertexNormals();add(geometry,cold?sheetMat:steel);}
+ for(const p of course.iceSheets||[]){if(p.triangles){const geometry=new T.BufferGeometry(),positions=surfaceMeshPositions(p.triangles);geometry.setAttribute('position',new T.BufferAttribute(positions,3));geometry.setAttribute('uv',new T.Float32BufferAttribute(Array.from({length:positions.length/3},(_,i)=>[positions[i*3]*.1,positions[i*3+2]*.1]).flat(),2));geometry.computeVertexNormals();add(geometry,sheetMat);continue;}const shape=new T.Shape();p.outline.forEach(([x,z],i)=>i?shape.lineTo(x,z):shape.moveTo(x,z));shape.closePath();const mesh=add(new T.ExtrudeGeometry(shape,{depth:.7,bevelEnabled:false,steps:1}),sheetMat,0,p.height,0);mesh.rotation.x=Math.PI/2;}
+ const iceMat=dressMaterial(mat(0x9fd2e2,.35,.05),'ice');
+ const iceSplashRenderer=course.rocks.some(q=>q.sourceGenericSphere&&q.runtimeKind===10)?makeNativeIceSplashRenderer(root):null;
+ const iceFragments=course.rocks.some(q=>q.breakable||q.sourceGenericSphere&&q.runtimeKind===10)?Array.from({length:16},()=>{const m=iceMat.clone();materials.push(m);m.transparent=true;const o=add(new T.IcosahedronGeometry(1,1),m);o.userData.modernIceGeometry=o.geometry;const shard=new T.IcosahedronGeometry(1,1),points=shard.attributes.position;for(let i=0;i<points.count;i++){const x=points.getX(i),y=points.getY(i),z=points.getZ(i),r=.85+.18*Math.sin(x*4.7+y*3.1-z*2.3)+.12*Math.cos(z*7.1-x*2.7);points.setXYZ(i,x*r,y*r,z*r);}shard.computeVertexNormals();geometries.push(shard);o.userData.nativeIceGeometry=shard;o.userData.dynamic=true;o.visible=false;return o;}):[];
+ const glass=mat(night?0x263e59:0x608897,.2,.55);const cityLight=mat(0xa7dced,.4,.15,0x62a6cb);
+ const staticCraftMaterials=course.sourceMooredCraft?.length?{hull:mat(0x28505b,.4,.3),deck:wood,cabin:white,glass,metal:steel,rubber:black}:null;
+ const staticCraft=(course.sourceMooredCraft??[]).map(craft=>makeSourceMooredCraft(root,craft,staticCraftMaterials));
+ for(const obstacle of course.rocks){if(obstacle.hidden)continue;if(obstacle.type==='ice'){const o=rock(obstacle.x,obstacle.z,obstacle.r,true);if(obstacle.fixed){o.position.set(obstacle.x,obstacle.y??0,obstacle.z);o.rotation.set(0,0,0);o.scale.y=1.45;}animated.push({o,obstacle,offset:.3});}else if(obstacle.type==='post'){cylinder(obstacle.x,.65,obstacle.z,obstacle.r,3.8,wood);cylinder(obstacle.x,1.3,obstacle.z,obstacle.r+.04,.2,white);}else if(obstacle.type==='ball'){const o=new T.Group();o.position.set(obstacle.x,.1,obstacle.z);root.add(o);
   add(new T.SphereGeometry(obstacle.r*(obstacle.spiked ? .48 : 1),16,12),steel,0,0,0,o);
   if(obstacle.spiked)for(const direction of [[1,0,0],[-1,0,0],[0,1,0],[0,-1,0],[0,0,1],[0,0,-1]]){
    const axis=new T.Vector3(...direction),r=obstacle.r;
@@ -90,6 +221,7 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
  const parkDeck=authoredStunts?mat(0xb99562,.87):null,plankSeam=authoredStunts?mat(0x70563b,.95):null;
  const rampMeshes=[],deckMat=mat(0x24535a,.82),ringGlow=mat(0xffca57,.32,.2,0x684012),waterRingMat=mat(0x6de5cf,.34,.12,0x164e45);
  for(const ramp of course.ramps||[]){
+  if(ramp.sourceVolumeProfile)continue;
   const g=new T.Group();g.userData.dynamic=true;g.position.set(ramp.x,0,ramp.z);g.rotation.y=Math.atan2(ramp.tx,ramp.tz);root.add(g);rampMeshes.push({g,ramp});
   const angle=-Math.atan2(ramp.height,ramp.length),length=Math.hypot(ramp.length,ramp.height),rampMaterial=parkDeck||deckMat;
   box(0,ramp.height/2+.08,0,ramp.width,.24,length,rampMaterial,g).rotation.x=angle;
@@ -114,31 +246,47 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
  }
  for(const cp of course.checkpoints||[]){const g=new T.Group();g.position.set(cp.x,0,cp.z);g.rotation.y=Math.atan2(cp.tx,cp.tz);root.add(g);for(const side of [-1,1]){cylinder(side*cp.width,3.2,0,.15,6.4,steel,g);box(side*cp.width,.1,0,2,.5,3,white,g);}label(authoredStunts&&cp.section===3?'START / FINISH':'CHECKPOINT '+(cp.section+1),0,6.3,0,authoredStunts?18:30,g);label(authoredStunts&&cp.section===3?'START / FINISH':'CHECKPOINT '+(cp.section+1),0,6.3,-.05,authoredStunts?18:30,g).rotation.y=Math.PI;}
  // Small waterfront structures include railings, planks, lamps, mooring posts and ladders.
- function pier(x,z,angle=0,length=16){const y=Math.max(1,course.ground(x,z)),g=new T.Group();g.position.set(x,y,z);g.rotation.y=angle;root.add(g);box(0,0,0,5,.3,length,wood,g);for(let i=0;i<length;i+=1.1)box(0,.18,-length/2+i,5,.025,.05,black,g);for(const side of[-1,1])for(let i=-length/2;i<=length/2;i+=4){cylinder(side*2.2,-1.5,i,.18,4,wood,g);cylinder(side*2.2,.4,i,.10,1,white,g);}return g;}
+ function pier(x,z,angle=0,length=16){const y=Math.max(1,visualGround(x,z)),g=new T.Group();g.position.set(x,y,z);g.rotation.y=angle;root.add(g);box(0,0,0,5,.3,length,wood,g);for(let i=0;i<length;i+=1.1)box(0,.18,-length/2+i,5,.025,.05,black,g);for(const side of[-1,1])for(let i=-length/2;i<=length/2;i+=4){cylinder(side*2.2,-1.5,i,.18,4,wood,g);cylinder(side*2.2,.4,i,.10,1,white,g);}return g;}
  if(theme==='beach'||theme==='coast'||theme==='resort'||theme==='island'||theme==='park'){
 
-  for(let i=0;i<20;i++){const a=random()*Math.PI*2,x=Math.sin(a)*185,z=Math.cos(a)*185;if(course.ground(x,z)>0)rock(x,z,3+random()*7);}
-  if(theme==='coast'){const x=0,z=-30,y=course.ground(x,z);cylinder(x,y+12,z,4,24,white);for(let j=0;j<8;j++)cylinder(x+Math.sin(j*.785)*4.2,y+25,z+Math.cos(j*.785)*4.2,.12,3,steel);add(new T.ConeGeometry(5.5,3,16),steel,x,y+28,z);cylinder(x,y+24,z,4.7,.6,black);}
-  if(theme==='resort'){for(let i=0;i<7;i++){const x=-30+i*14,z=170,y=building(x,z,11,12,5,white);if(y){add(new T.ConeGeometry(9,4,4),wood,x,y+7,z).rotation.y=Math.PI/4;box(x,y+2.8,z-6.1,6,2.5,.1,glass);}}for(let i=0;i<12;i++){const x=110+i%4*10,z=130+Math.floor(i/4)*11,y=course.ground(x,z);if(y>1){cylinder(x,y+2,z,.05,4,steel);add(new T.ConeGeometry(3.2,.7,12),i%2?white:yellow,x,y+4,z);box(x+1,y+.4,z+2,1,.25,3,wood);}}}
-  if(theme==='island'){for(let i=0;i<6;i++){const a=i*1.04,x=Math.sin(a)*22,z=Math.cos(a)*24,y=building(x,z,8,7,3,wood);if(y)add(new T.ConeGeometry(6.5,3,5),sand,x,y+5,z);}if(course.ground(0,-10)>2)rock(0,-10,12);}
+  for(let i=0;i<20;i++){const a=random()*Math.PI*2,x=Math.sin(a)*185,z=Math.cos(a)*185;if(visualGround(x,z)>0)rock(x,z,3+random()*7);}
+  if(theme==='coast'){const x=0,z=-30,y=visualGround(x,z);cylinder(x,y+12,z,4,24,white);for(let j=0;j<8;j++)cylinder(x+Math.sin(j*.785)*4.2,y+25,z+Math.cos(j*.785)*4.2,.12,3,steel);add(new T.ConeGeometry(5.5,3,16),steel,x,y+28,z);cylinder(x,y+24,z,4.7,.6,black);}
+  if(theme==='resort'){for(let i=0;i<7;i++){const x=-30+i*14,z=170,y=building(x,z,11,12,5,white);if(y){add(new T.ConeGeometry(9,4,4),wood,x,y+7,z).rotation.y=Math.PI/4;box(x,y+2.8,z-6.1,6,2.5,.1,glass);}}for(let i=0;i<12;i++){const x=110+i%4*10,z=130+Math.floor(i/4)*11,y=visualGround(x,z);if(y>1){cylinder(x,y+2,z,.05,4,steel);add(new T.ConeGeometry(3.2,.7,12),i%2?white:yellow,x,y+4,z);box(x+1,y+.4,z+2,1,.25,3,wood);}}}
+  if(theme==='island'&&!course.sourceShores){for(let i=0;i<6;i++){const a=i*1.04,x=Math.sin(a)*22,z=Math.cos(a)*24,y=building(x,z,8,7,3,wood);if(y)add(new T.ConeGeometry(6.5,3,5),sand,x,y+5,z);}if(visualGround(0,-10)>2)rock(0,-10,12);}
   if(theme==='park'&&!course.layoutRevision){for(let i=0;i<4;i++)pier(-100+i*16,105,0,15);label('PELICAN PARK / TRAINING WATER',-65,9,118,35);for(let i=0;i<10;i++){const x=-110+i*22,z=145,y=building(x,z,6,7,3,i%2?white:yellow);if(y)box(x,y+4,z,7,.3,8,steel);}}
  }
- if(theme==='lake'){
+ if(theme==='lake'&&!course.sourceShores){
 
   // Reed clumps are instanced to keep the shoreline detail inexpensive.
-  const reeds=new T.InstancedMesh(new T.CylinderGeometry(.035,.045,1.4,4),green,700),dummy=new T.Object3D();root.add(reeds);geometries.push(reeds.geometry);for(let i=0;i<700;i++){const g=course.gates[i%course.gates.length],side=i%2?1:-1,x=g.x+g.tz*side*(39+random()*5)+(random()-.5)*9,z=g.z-g.tx*side*(39+random()*5)+(random()-.5)*9;dummy.position.set(x,course.ground(x,z)+.6,z);dummy.rotation.z=(random()-.5)*.3;dummy.updateMatrix();reeds.setMatrixAt(i,dummy.matrix);}pier(-125,120,.6,20);building(-155,140,16,12,7,wood);
+  const reeds=new T.InstancedMesh(new T.CylinderGeometry(.035,.045,1.4,4),green,700),dummy=new T.Object3D();root.add(reeds);geometries.push(reeds.geometry);for(let i=0;i<700;i++){const g=course.gates[i%course.gates.length],side=i%2?1:-1,x=g.x+g.tz*side*(39+random()*5)+(random()-.5)*9,z=g.z-g.tx*side*(39+random()*5)+(random()-.5)*9;dummy.position.set(x,visualGround(x,z)+.6,z);dummy.rotation.z=(random()-.5)*.3;dummy.updateMatrix();reeds.setMatrixAt(i,dummy.matrix);}pier(-125,120,.6,20);building(-155,140,16,12,7,wood);
  }
- if(theme==='fortress'&&!course.fortWalls){
-  const y=course.ground(0,0);box(0,y+3,0,85,6,68,stone);for(const x of [-42,42])for(const z of [-34,34]){cylinder(x,y+11,z,8,22,stone);cylinder(x,y+22,z,8.5,1,black);for(let i=0;i<10;i++){const a=i*Math.PI*.2;box(x+Math.sin(a)*7.3,y+23,z+Math.cos(a)*7.3,2,2,2,stone);}}for(let i=-38;i<=38;i+=5)for(const z of [-34,34])box(i,y+7,z,2.6,2,3,stone);building(0,0,30,22,19,stone);for(let i=0;i<25;i++){const a=i/25*Math.PI*2;rock(Math.sin(a)*165,Math.cos(a)*177,4+random()*6);}label('CITADEL SOUND',0,y+10,35,28);
+ if(theme==='fortress'&&!course.fortWalls&&!course.sourceShores){
+  const y=visualGround(0,0);box(0,y+3,0,85,6,68,stone);for(const x of [-42,42])for(const z of [-34,34]){cylinder(x,y+11,z,8,22,stone);cylinder(x,y+22,z,8.5,1,black);for(let i=0;i<10;i++){const a=i*Math.PI*.2;box(x+Math.sin(a)*7.3,y+23,z+Math.cos(a)*7.3,2,2,2,stone);}}for(let i=-38;i<=38;i+=5)for(const z of [-34,34])box(i,y+7,z,2.6,2,3,stone);building(0,0,30,22,19,stone);for(let i=0;i<25;i++){const a=i/25*Math.PI*2;rock(Math.sin(a)*165,Math.cos(a)*177,4+random()*6);}label('CITADEL SOUND',0,y+10,35,28);
+ }
+ if(theme==='fortress'&&course.nativeSceneCourseIndex===3){
+  // Authored masonry stays on the selected land. The old illustration-map
+  // castle spans navigable source water and cannot be reused here.
+  for(const [x,z,w,d,h] of [[-35,140,18,20,10],[-5,120,16,22,7],[-25,-9,14,10,6]]){
+   if([-1,1].every(a=>[-1,1].every(b=>visualGround(x+a*w/2,z+b*d/2)>1.5))){
+    const y=building(x,z,w,d,h,stone);
+    if(y){for(let at=-w/2+1;at<w/2;at+=3)for(const side of [-1,1])box(x+at,y+h+.9,z+side*(d/2-.4),1.4,1.4,1,stone);}
+   }
+  }
+  label('MARINE FORTRESS',-35,10,129.9,16);
  }
  if(course.fortWalls){
-  const path=course.fortWalls;for(let i=1;i<path.length;i++){const a=path[i-1],b=path[i],distance=Math.hypot(b[0]-a[0],b[1]-a[1]),steps=Math.ceil(distance/5);for(let j=0;j<steps;j++){const t=(j+.5)/steps,x=a[0]+(b[0]-a[0])*t,z=a[1]+(b[1]-a[1])*t,y=course.ground(x,z);if(y<1.5)continue;const wall=box(x,y+2,z,2.8,4,distance/steps+.08,stone);wall.rotation.y=Math.atan2(b[0]-a[0],b[1]-a[1]);box(x,y+4.1,z,3.3,.3,3.3,white);}}
-  building(-25,60,24,22,11,stone);building(15,75,20,30,7,stone);for(const [x,z] of [[-32,20],[-5,110]]){const y=course.ground(x,z);if(y>2){cylinder(x,y+7,z,4.5,14,stone);cylinder(x,y+14,z,5,.7,white);}}
+  const path=course.fortWalls;for(let i=1;i<path.length;i++){const a=path[i-1],b=path[i],distance=Math.hypot(b[0]-a[0],b[1]-a[1]),steps=Math.ceil(distance/5);for(let j=0;j<steps;j++){const t=(j+.5)/steps,x=a[0]+(b[0]-a[0])*t,z=a[1]+(b[1]-a[1])*t,y=visualGround(x,z);if(y<1.5)continue;const wall=box(x,y+2,z,2.8,4,distance/steps+.08,stone);wall.rotation.y=Math.atan2(b[0]-a[0],b[1]-a[1]);box(x,y+4.1,z,3.3,.3,3.3,white);}}
+  building(-25,60,24,22,11,stone);building(15,75,20,30,7,stone);for(const [x,z] of [[-32,20],[-5,110]]){const y=visualGround(x,z);if(y>2){cylinder(x,y+7,z,4.5,14,stone);cylinder(x,y+14,z,5,.7,white);}}
   label('MARINE FORTRESS',-24,19,47,26);
  }
- function crane(x,z,angle){const y=course.ground(x,z);if(y<1)return;const g=new T.Group();g.position.set(x,y,z);g.rotation.y=angle;root.add(g);for(const side of[-1,1]){box(side*5,12,0,.7,24,.7,yellow,g);rod([side*5,0,0],[side*5,24,-5],.2,steel,g);}box(0,25,-11,13,1,35,yellow,g);box(0,23,1,6,4,5,white,g);rod([0,25,-24],[0,5,-24],.06,steel,g);box(0,4.8,-24,7,.4,2,black,g);}
+ function crane(x,z,angle){const y=visualGround(x,z);if(y<1)return;const g=new T.Group();g.position.set(x,y,z);g.rotation.y=angle;root.add(g);for(const side of[-1,1]){box(side*5,12,0,.7,24,.7,yellow,g);rod([side*5,0,0],[side*5,24,-5],.2,steel,g);}box(0,25,-11,13,1,35,yellow,g);box(0,23,1,6,4,5,white,g);rod([0,25,-24],[0,5,-24],.06,steel,g);box(0,4.8,-24,7,.4,2,black,g);}
  if(theme==='port'){
-  const cargoMats=[mat(0xa6533d),mat(0x496e83),mat(0xe0b557),mat(0x557567)];for(let i=0;i<45;i++){const x=(i%9-4)*15,z=Math.floor(i/9)*10-20,y=course.ground(x,z);if(y<1||routeDistance(course,x,z)<42)continue;box(x,y+1.7,z,12,3.4,5,cargoMats[i%4]);for(let k=-5;k<6;k++)box(x+k,y+1.7,z-2.55,.08,3.1,.08,steel);if(i%3===0)box(x,y+5.1,z,12,3.4,5,cargoMats[(i+1)%4]);}for(let i=0;i<5;i++)crane(-155,80-i*40,Math.PI/2);for(let i=0;i<4;i++)building(165,-85+i*55,35,38,14,white);if(!course.shipOutline)label('PORT MERIDIAN / 07',165,18,75,40);for(let i=0;i<4;i++)pier(-150,110-i*45,Math.PI/2,18);
+  const cargoMats=[mat(0xa6533d),mat(0x496e83),mat(0xe0b557),mat(0x557567)];for(let i=0;i<45;i++){const x=(i%9-4)*15,z=Math.floor(i/9)*10-20,y=visualGround(x,z);if(y<1||routeDistance(course,x,z)<42)continue;box(x,y+1.7,z,12,3.4,5,cargoMats[i%4]);for(let k=-5;k<6;k++)box(x+k,y+1.7,z-2.55,.08,3.1,.08,steel);if(i%3===0)box(x,y+5.1,z,12,3.4,5,cargoMats[(i+1)%4]);}if(course.nativeSceneCourseIndex===5){
+   // Decorative structures stay on the selected closed quays. The old map's
+   // docks and freestanding sign fall in open water in the source harbour.
+   for(const x of [-10,30,70])crane(x,-156,Math.PI);
+   const y=building(110,-170,30,32,14,white);if(y)label('PORT BLUE',110,y+8,-153.9,25);
+  }else{for(let i=0;i<5;i++)crane(-155,80-i*40,Math.PI/2);for(let i=0;i<4;i++)building(165,-85+i*55,35,38,14,white);if(!course.shipOutline)label('PORT MERIDIAN / 07',165,18,75,40);for(let i=0;i<4;i++)pier(-150,110-i*45,Math.PI/2,18);}
  }
  for(const outline of course.quayOutlines||[]){const shape=new T.Shape();outline.forEach(([x,z],i)=>i?shape.lineTo(x,-z):shape.moveTo(x,-z));shape.closePath();const geo=new T.ExtrudeGeometry(shape,{depth:8,bevelEnabled:false});geo.rotateX(-Math.PI/2);add(geo,stone,0,-2,0);}
  if(course.dockOutline){
@@ -160,10 +308,14 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
  }
  if(night){
   for(let i=0;i<90;i++){const a=i*2.3999,r=165+random()*115,x=Math.sin(a)*r,z=Math.cos(a)*r,w=12+random()*16,d=12+random()*16,h=20+random()*80,y=building(x,z,w,d,h,i%3?glass:stone);if(!y)continue;for(let floor=3;floor<h-2;floor+=5)for(let col=-w/2+2;col<w/2;col+=4){if(random()>.2)random();}}
-  for(let i=0;i<course.gates.length;i+=2){const p=course.gates[i],x=p.x+p.tz*42,z=p.z-p.tx*42,y=course.ground(x,z);cylinder(x,y+5,z,.12,10,steel);box(x,y+10,z,1.4,.2,1.4,cityLight);if(i%6===0){const l=new T.PointLight(0x99d8ff,45,35,2);l.position.set(x,y+8,z);root.add(l);lights.push(l);}}
+  for(let i=0;i<course.gates.length;i+=2){const p=course.gates[i],x=p.x+p.tz*42,z=p.z-p.tx*42,y=visualGround(x,z);cylinder(x,y+5,z,.12,10,steel);box(x,y+10,z,1.4,.2,1.4,cityLight);if(i%6===0){const l=new T.PointLight(0x99d8ff,45,35,2);l.position.set(x,y+8,z);root.add(l);lights.push(l);}}
+  // Source canals already draw their finite crossbars above. The older map
+  // bridge is decorative and its gate index is not a native checkpoint index.
+  if(!course.sourceShores){
   const p=course.gates[5],bridge=new T.Group();bridge.position.set(p.x,8,p.z);bridge.rotation.y=Math.atan2(p.tx,p.tz);root.add(bridge);box(0,0,0,100,1,9,steel,bridge);for(const x of[-40,40])box(x,-4,0,3,8,10,stone,bridge);for(let x=-45;x<46;x+=5)box(x,1.2,-4,.18,2,.18,cityLight,bridge);label(course.quayOutlines?'TWILIGHT CITY':'NEON REACH',0,2,4.6,33,bridge,'#9ceaff');
+  }
  }
- if(cold){for(let i=0;i<50;i++){const g=course.gates[i%course.gates.length],side=i%2?1:-1,x=g.x+g.tz*side*(52+random()*35),z=g.z-g.tx*side*(52+random()*35);const radius=9+random()*16;if(Array.from({length:12},(_,j)=>course.ground(x+Math.cos(j*Math.PI/6)*radius,z+Math.sin(j*Math.PI/6)*radius)).every(y=>y>1))rock(x,z,radius,true);}building(-170,125,25,16,8,white);label('ARCTIC RESEARCH / 64',-170,14,134,28);}
+ if(cold){for(let i=0;i<50;i++){const g=course.gates[i%course.gates.length],side=i%2?1:-1,x=g.x+g.tz*side*(52+random()*35),z=g.z-g.tx*side*(52+random()*35);const radius=9+random()*16;if(Array.from({length:12},(_,j)=>visualGround(x+Math.cos(j*Math.PI/6)*radius,z+Math.sin(j*Math.PI/6)*radius)).every(y=>y>1))rock(x,z,radius,true);}building(-170,125,25,16,8,white);label('ARCTIC RESEARCH / 64',-170,14,134,28);}
  // Navigable masonry/harbour passage; dimensions are shared with collision.
  const passage=course.passage;let gateMesh=null,gateSignal=null;
  if(passage?.continuous){
@@ -183,11 +335,11 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
   for(const y of [.4,2.5,4.9])box(0,y,0,w*2,.16,.22,steel,gateMesh);
   const signal=mat(0xc65a32,.4,.1,0x8e3018);gateSignal=signal;cylinder(-w-.65,passage.clearance+.7,length*.31,.25,.5,signal,g);
   label(passage.kind==='gate'?(passage.enabled?'SLUICE / OPENS LAP 2':'SLUICE CLOSED'):(passage.enabled?'SHORT CHANNEL / LOW ROOF':'SERVICE CHANNEL CLOSED'),0,7.2,length*.32-.08,w*1.8,g).rotation.y=Math.PI;
-  label('MAIN CHANNEL →',-w-7,3,length*.29,10,g).rotation.y=Math.PI;for(const side of [-1,1])box(-w-7+side*3.8,-2,length*.29,.12,10,.12,steel,g);
+  label('MAIN CHANNEL â†’',-w-7,3,length*.29,10,g).rotation.y=Math.PI;for(const side of [-1,1])box(-w-7+side*3.8,-2,length*.29,.12,10,.12,steel,g);
  }
  // Render each stone arch as one continuous profile; contact interpolates the same sampled underside.
  for(const arch of new Set((course.crossbars||[]).filter(b=>b.kind==='stone-arch').map(b=>b.arch))){const parts=course.crossbars.filter(b=>b.kind==='stone-arch'&&b.arch===arch),first=parts[0],last=parts.at(-1),length=Math.hypot(last.x-first.x,last.z-first.z)+first.length,shape=new T.Shape();shape.moveTo(-length/2,first.top);if(arch==='dolphin')for(let i=0;i<parts.length;i++)shape.lineTo(-length/2+length*(i+.5)/parts.length,parts[i].top);shape.lineTo(length/2,last.top);shape.lineTo(length/2,-10);for(let i=parts.length-1;i>=0;i--)shape.lineTo(-length/2+length*(i+.5)/parts.length,parts[i].bottom);shape.lineTo(-length/2,-10);shape.closePath();const mesh=add(new T.ExtrudeGeometry(shape,{depth:first.depth,bevelEnabled:false,steps:1}),arch==='dolphin'?naturalRock:stone,(first.x+last.x)/2,0,(first.z+last.z)/2);mesh.rotation.y=Math.atan2(-first.tz,first.tx);mesh.geometry.translate(0,0,-first.depth/2);}
- for(const b of course.crossbars||[]){if(b.kind==='stone-arch')continue;if(b.outline){const shape=new T.Shape();b.outline.forEach(([x,z],i)=>i?shape.lineTo(x,z):shape.moveTo(x,z));shape.closePath();let parent=root;if(b.floating){parent=new T.Group();parent.userData.dynamic=true;root.add(parent);floatingBarriers.push(parent);}const platform=add(new T.ExtrudeGeometry(shape,{depth:b.top-b.bottom,bevelEnabled:false,steps:1}),b.material==='ship'?white:wood,0,b.top,0,parent);platform.rotation.x=Math.PI/2;if(b.kind==='ship'){const deck=add(new T.ExtrudeGeometry(shape,{depth:.025,bevelEnabled:false,steps:1}),wood,0,b.top+.005,0,parent);deck.rotation.x=Math.PI/2;for(let i=0;i<b.outline.length;i++){const a=b.outline[i],c=b.outline[(i+1)%b.outline.length];rod([a[0],b.top-.12,a[1]],[c[0],b.top-.12,c[1]],.1,black,parent);}}continue;}for(const p of barrierPiles(b)){const floor=Math.max(p.bottom,course.ground(p.x,p.z)-.3);if(floor<p.top)cylinder(p.x,(floor+p.top)/2,p.z,p.radius,p.top-floor,wood);}const g=new T.Group();g.position.set(b.x,0,b.z);g.rotation.y=Math.atan2(b.tx,b.tz);root.add(g);if(b.floating){g.userData.dynamic=true;floatingBarriers.push(g);}box(0,(b.bottom+b.top)/2,0,b.depth,b.top-b.bottom,b.length,b.material==='wood'?wood:b.material==='white'?white:stone,g);
+ for(const b of course.crossbars||[]){if(b.kind==='stone-arch')continue;if(b.outline){const shape=new T.Shape();b.outline.forEach(([x,z],i)=>i?shape.lineTo(x,z):shape.moveTo(x,z));shape.closePath();let parent=root;if(b.floating){parent=new T.Group();parent.userData.dynamic=true;root.add(parent);floatingBarriers.push(parent);}const platform=add(new T.ExtrudeGeometry(shape,{depth:b.top-b.bottom,bevelEnabled:false,steps:1}),b.material==='ship'?white:wood,0,b.top,0,parent);platform.rotation.x=Math.PI/2;if(b.kind==='ship'){const deck=add(new T.ExtrudeGeometry(shape,{depth:.025,bevelEnabled:false,steps:1}),wood,0,b.top+.005,0,parent);deck.rotation.x=Math.PI/2;for(let i=0;i<b.outline.length;i++){const a=b.outline[i],c=b.outline[(i+1)%b.outline.length];rod([a[0],b.top-.12,a[1]],[c[0],b.top-.12,c[1]],.1,black,parent);}}continue;}for(const p of barrierPiles(b)){const floor=Math.max(p.bottom,visualGround(p.x,p.z)-.3);if(floor<p.top)cylinder(p.x,(floor+p.top)/2,p.z,p.radius,p.top-floor,wood);}const g=new T.Group();g.position.set(b.x,0,b.z);g.rotation.y=Math.atan2(b.tx,b.tz);root.add(g);if(b.floating){g.userData.dynamic=true;floatingBarriers.push(g);}box(0,(b.bottom+b.top)/2,0,b.depth,b.top-b.bottom,b.length,b.material==='wood'?wood:b.material==='white'?white:stone,g);
   if(b.kind==='cabin'){box(0,b.top-.65,-b.length/2-.02,b.depth*.75,.8,.05,glass,g);for(const side of [-1,1])box(side*(b.depth/2+.02),b.top-.65,0,.05,.8,b.length*.6,glass,g);box(0,b.top+.05,0,b.depth+.2,.1,b.length+.2,steel,g);}
   if(!b.floating&&b.kind!=='stone-arch')for(let z=-b.length/2+1;z<b.length/2;z+=2.5)box(-b.depth/2-.02,b.top-.12,z,.04,.16,1.2,yellow,g);
  }
@@ -196,5 +348,17 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
  terrain.userData.dynamic=true;animated.forEach(a=>a.o.userData.dynamic=true);root.updateMatrixWorld(true);const batches=new Map(),remove=[];const pos=new T.Vector3(),normal=new T.Vector3(),normalMatrix=new T.Matrix3();
  root.traverse(o=>{if(!o.isMesh||o.isInstancedMesh)return;for(let p=o;p&&p!==root;p=p.parent)if(p.userData.dynamic)return;const geo=o.geometry,pa=geo.attributes.position,na=geo.attributes.normal,ua=geo.attributes.uv;if(!pa||!na)return;let batch=batches.get(o.material);if(!batch){batch={p:[],n:[],uv:[],indices:[]};batches.set(o.material,batch);}const offset=batch.p.length/3;normalMatrix.getNormalMatrix(o.matrixWorld);for(let i=0;i<pa.count;i++){pos.fromBufferAttribute(pa,i).applyMatrix4(o.matrixWorld);normal.fromBufferAttribute(na,i).applyMatrix3(normalMatrix).normalize();batch.p.push(pos.x,pos.y,pos.z);batch.n.push(normal.x,normal.y,normal.z);batch.uv.push(ua?ua.getX(i):0,ua?ua.getY(i):0);}if(geo.index)for(let i=0;i<geo.index.count;i++)batch.indices.push(geo.index.getX(i)+offset);else for(let i=0;i<pa.count;i++)batch.indices.push(i+offset);remove.push(o);});
  for(const o of remove)o.removeFromParent();for(const [m,b] of batches){const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(b.p,3));geo.setAttribute('normal',new T.Float32BufferAttribute(b.n,3));geo.setAttribute('uv',new T.Float32BufferAttribute(b.uv,2));geo.setIndex(b.indices);add(geo,m);}
- return {root,update(time,storm,stunt=null,openedAt=Infinity,racers=[],sceneryView=[1]){venueScenery.update(sceneryView[1],ocean.quality,sceneryView[2]);obstacleFoam.update(time,storm,sceneryView[1],ocean.quality);shorelineLife.update(time,storm,ocean.quality,sceneryView[1]);scenery.update(time,storm,ocean.quality,...sceneryView);underwater.update(time,storm,ocean.quality,racers);for(const g of floatingBarriers)g.position.y=waterLevel.value;for(const {g,boat,ropes} of mooredMeshes){const p=mooredBoatPose(boat,time,storm);g.position.set(boat.x,p.y,boat.z);g.rotation.set(p.pitch,boat.heading||0,p.roll,'YXZ');g.updateMatrixWorld(true);for(const {rope,cleat,anchor} of ropes){const end=cleat.clone().applyMatrix4(g.matrixWorld),mid=end.clone().add(anchor).multiplyScalar(.5);mid.y-=.3;const a=rope.geometry.attributes.position;a.setXYZ(0,end.x,end.y,end.z);a.setXYZ(1,mid.x,mid.y,mid.z);a.setXYZ(2,anchor.x,anchor.y,anchor.z);a.needsUpdate=true;rope.geometry.computeBoundingSphere();}}for(const {mesh,patch} of weedMeshes)mesh.position.y=wave(patch.x,patch.z,time,storm)*.35;if(gateMesh){const opening=passageOpening(passage,time,openedAt);gateMesh.position.y=-1+opening*(passage.clearance+1.5);gateSignal.color.setHex(opening>.98?0x66b88b:0xc65a32);gateSignal.emissive.setHex(opening>.98?0x2d8052:0x8e3018);}for(const {g,ramp} of rampMeshes)g.position.y=rampWaterOffset(ramp,time,storm);for(const item of ringMeshes){item.ring.position.y=ringHeight(item.definition,course,time,storm);item.ring.visible=!stunt||stunt.ringStatus[item.index]!=='hit';}const surface=(x,z,t)=>wave(x,z,t,storm);for(const b of buoys){const pose=floatingPose(b.x,b.z,time,surface);b.g.position.y=pose.y;b.g.rotation.x=pose.pitch;b.g.rotation.z=pose.roll;}for(const a of animated){const p=obstaclePosition(a.obstacle,time),heading=time*.02+a.obstacle.x,pose=floatingPose(p.x,p.z,time,surface,a.obstacle.r,heading);a.o.position.set(p.x,pose.y+a.offset,p.z);a.o.rotation.set(pose.pitch,heading,pose.roll,'YXZ');}ocean.mat.uniforms.reefs.value.forEach((v,i)=>{const q=course.rocks[i];if(q){const p=obstaclePosition(q,time);v.set(p.x,p.z,q.r);}});},dispose(){venueScenery.dispose();obstacleFoam.dispose();distant.dispose();shorelineLife.dispose();tidalDetail.dispose();underwater.dispose();scenery.dispose();scene.remove(root);for(const g of new Set(geometries))g.dispose();for(const m of new Set(materials))m.dispose();for(const t of textures)t.dispose();}};
+ return {root,update(time,storm,stunt=null,openedAt=Infinity,racers=[],sceneryView=[1],breakables=null,primaryBuoys=null,nativeIce=null,nativeStuntWorld=null){updateNativeFloating(nativeStuntWorld);updateNativeDecorations(nativeStuntWorld);const nativeRings=new Map(nativeStuntWorld?.rings.map(r=>[r.index,r])??[]),nativeVolumes=new Map(nativeStuntWorld?.volumes.map(v=>[v.id,v])??[]);root.userData.nativeStunt=nativeStuntWorld?{rings:nativeStuntWorld.rings.length,visibleRings:nativeStuntWorld.rings.filter(r=>r.visible).length,volumes:nativeStuntWorld.volumes.length}:null;for(const item of nativeVolumeMeshes){
+  const view=nativeVolumes.get(item.id);if(!view)continue;
+  item.mesh.visible=view.visible;item.mesh.position.fromArray(view.origin);
+  const shape=JSON.stringify([view.axes,view.spans]);
+  if(item.shape!==shape){
+   // Keep the existing 1.5 m tessellation. Translation updates only the mesh
+   // transform; changed plane shapes rebuild matching positions, UVs and normals.
+   const positions=nativeStuntVolumePositions({...view,origin:[0,0,0]}),uv=new Float32Array(positions.length/3*2);
+   for(let i=0;i<positions.length/3;i++){uv[i*2]=(positions[i*3]+view.origin[0])*.2;uv[i*2+1]=(positions[i*3+1]+view.origin[1]+positions[i*3+2]+view.origin[2])*.2;}
+   const geometry=item.mesh.geometry;geometry.setAttribute('position',new T.BufferAttribute(positions,3));geometry.setAttribute('uv',new T.BufferAttribute(uv,2));
+   geometry.computeVertexNormals();geometry.computeBoundingSphere();item.shape=shape;
+  }
+ }iceSplashRenderer?.update(nativeIce?.splashes);const nativeIceById=nativeIce?new Map(nativeIce.objects.map(q=>[q.id,q])):null;root.userData.nativeIce=nativeIce?{blocks:nativeIce.objects.filter(q=>q.visible).length,fragments:nativeIce.fragments.filter(q=>q.active).length,splashes:(nativeIce.splashes||[]).filter(q=>q.active).length}:null;const primaryByRow=primaryBuoys?new Map(primaryBuoys.map(q=>[q.sourceRow,q])):null;root.userData.primaryBuoys=primaryBuoys?{nodes:primaryBuoys.length,movable:primaryBuoys.filter(q=>!q.fixed&&q.renderEnabled).length,fixedEndpoints:primaryBuoys.filter(q=>q.fixed&&q.renderEnabled).length*2}:null;venueScenery.update(sceneryView[1],ocean.quality,sceneryView[2]);obstacleFoam.update(time,storm,sceneryView[1],ocean.quality);shorelineLife.update(time,storm,ocean.quality,sceneryView[1]);scenery.update(time,storm,ocean.quality,...sceneryView);underwater.update(time,storm,ocean.quality,racers);for(const g of floatingBarriers)g.position.y=waterLevel.value;for(const {g,boat,ropes} of mooredMeshes){const p=mooredBoatPose(boat,time,storm);g.position.set(boat.x,p.y,boat.z);g.rotation.set(p.pitch,boat.heading||0,p.roll,'YXZ');g.updateMatrixWorld(true);for(const {rope,cleat,anchor} of ropes){const end=cleat.clone().applyMatrix4(g.matrixWorld),mid=end.clone().add(anchor).multiplyScalar(.5);mid.y-=.3;const a=rope.geometry.attributes.position;a.setXYZ(0,end.x,end.y,end.z);a.setXYZ(1,mid.x,mid.y,mid.z);a.setXYZ(2,anchor.x,anchor.y,anchor.z);a.needsUpdate=true;rope.geometry.computeBoundingSphere();}}for(const {mesh,patch} of weedMeshes)mesh.position.y=wave(patch.x,patch.z,time,storm)*.35;if(gateMesh){const opening=passageOpening(passage,time,openedAt);gateMesh.position.y=-1+opening*(passage.clearance+1.5);gateSignal.color.setHex(opening>.98?0x66b88b:0xc65a32);gateSignal.emissive.setHex(opening>.98?0x2d8052:0x8e3018);}for(const {g,ramp} of rampMeshes)g.position.y=rampWaterOffset(ramp,time,storm);for(const item of ringMeshes){const q=nativeRings.get(item.index);if(q){item.ring.position.fromArray(q.position);item.ring.scale.setScalar(q.scale??1);item.ring.matrixAutoUpdate=!q.matrix;if(q.matrix){item.ring.matrix.fromArray(q.matrix).scale(item.ring.scale);item.ring.matrixWorldNeedsUpdate=true;}else item.ring.rotation.set(0,q.heading,0);item.ring.visible=q.visible;}else{item.ring.matrixAutoUpdate=true;item.ring.scale.setScalar(1);item.ring.rotation.set(0,Math.atan2(item.definition.tx,item.definition.tz),0);item.ring.position.y=ringHeight(item.definition,course,time,storm);item.ring.visible=!stunt||stunt.ringStatus[item.index]!=='hit';}}const surface=(x,z,t)=>wave(x,z,t,storm);for(const b of buoys){if(b.primaryEndpoint){const q=primaryByRow?.get(b.primaryEndpoint.sourceRow);b.g.visible=!!q?.renderEnabled;if(q){const p=q.endpoints[b.primaryEndpoint.index];b.g.position.set(p.x,p.y-b.visualCenter,p.z);b.g.rotation.x=b.g.rotation.z=0;}continue;}const q=primaryByRow?.get(b.primarySourceRow);if(b.nativeSkirt)b.nativeSkirt.visible=!!q;b.g.visible=q?q.renderEnabled:true;if(q){b.g.position.set(q.position.x,q.position.y-b.visualCenter,q.position.z);b.g.rotation.x=b.g.rotation.z=0;continue;}b.g.position.x=b.x;b.g.position.z=b.z;if(b.placement){b.g.position.y=b.placement.followsWaterDatum?waterLevel.value:b.placement.y;b.g.rotation.x=b.g.rotation.z=0;continue;}const pose=floatingPose(b.x,b.z,time,surface);b.g.position.y=pose.y;b.g.rotation.x=pose.pitch;b.g.rotation.z=pose.roll;}for(const a of animated){const native=nativeIceById?.get(a.obstacle.id);a.o.visible=native?native.visible:!hazardBroken(breakables,a.obstacle);if(native){a.o.position.set(native.position.x,native.position.y,native.position.z);a.o.rotation.set(0,0,0);continue;}if(!a.o.visible||a.obstacle.fixed)continue;const p=obstaclePosition(a.obstacle,time),heading=time*.02+a.obstacle.x,pose=floatingPose(p.x,p.z,time,surface,a.obstacle.r,heading);a.o.position.set(p.x,pose.y+a.offset,p.z);a.o.rotation.set(pose.pitch,heading,pose.roll,'YXZ');}ocean.mat.uniforms.reefs.value.forEach((v,i)=>{const q=course.rocks[i];if(q&&!q.hidden&&(nativeIceById?.has(q.id)?nativeIceById.get(q.id).visible:!hazardBroken(breakables,q))){const p=obstaclePosition(q,time);v.set(p.x,p.z,q.r);}else v.set(10000,10000,0);});for(const piece of iceFragments){piece.visible=false;piece.geometry=nativeIce?piece.userData.nativeIceGeometry:piece.userData.modernIceGeometry;}let slot=0;if(nativeIce){for(const fragment of nativeIce.fragments){const p=nativeIceFragmentPose(fragment);if(!p||slot>=iceFragments.length)continue;const o=iceFragments[slot++];o.visible=true;o.position.set(p.position.x,p.position.y,p.position.z);o.quaternion.fromArray(p.quaternion);o.scale.fromArray(p.scale);o.material.opacity=1;}}else for(const event of breakableEvents(breakables,time))for(const fragment of event.fragments){const p=fragmentPose(event,fragment,time);if(!p||slot>=iceFragments.length)continue;const o=iceFragments[slot++];o.visible=true;o.position.set(p.x,p.y,p.z);o.rotation.set(p.rx,p.ry,p.rz);o.scale.setScalar(p.scale);o.material.opacity=p.opacity;}},dispose(){iceSplashRenderer?.dispose();for(const craft of staticCraft)craft.dispose();venueScenery.dispose();obstacleFoam.dispose();distant.dispose();shorelineLife.dispose();tidalDetail.dispose();underwater.dispose();scenery.dispose();scene.remove(root);for(const g of new Set(geometries))g.dispose();for(const m of new Set(materials))m.dispose();for(const t of textures)t.dispose();}};
 }
