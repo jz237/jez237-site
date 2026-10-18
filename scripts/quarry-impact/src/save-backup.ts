@@ -47,6 +47,7 @@ function normalize(key:string,text:string):string{
  if(key===CONTROLS_KEY){const controls=value as Record<string,any>;for(const key of ['transmission','shiftUpButton','shiftDownButton','clutchButton'])if(!Object.hasOwn(raw,key))delete controls[key];for(const key of ['shiftUp','shiftDown','clutch'])if(!Object.hasOwn(raw.keys??{},key))delete controls.keys[key];}
  // Keep older signed garage backups canonical; readGarage adds new stock cars on load.
  if(key===GARAGE_KEY&&!Object.hasOwn(raw.cars??{},'shuttle'))delete(value as {cars:Record<string,unknown>}).cars.shuttle;
+ if(key===GARAGE_KEY&&!Object.hasOwn(raw.cars??{},'saber'))delete(value as {cars:Record<string,unknown>}).cars.saber;
  if(key===GARAGE_KEY&&!Object.hasOwn(raw.cars??{},'alder'))delete(value as {cars:Record<string,unknown>}).cars.alder;
  if(key===GARAGE_KEY&&!Object.hasOwn(raw.cars??{},'morrow'))delete(value as {cars:Record<string,unknown>}).cars.morrow;
  if(key===GARAGE_KEY&&!Object.hasOwn(raw.cars??{},'kite'))delete(value as {cars:Record<string,unknown>}).cars.kite;

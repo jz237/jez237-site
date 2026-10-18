@@ -210,3 +210,5 @@ Original fictional hot hatch model and integration for Quarry Impact. See [KITE-
 Morrow 420: original fictional coupe bodywork and original Marten road-wheel assemblies. See [MORROW-420.md](MORROW-420.md).
 
 Alder 230: original fictional estate bodywork and original Marten road-wheel assemblies. See [ALDER-230.md](ALDER-230.md).
+
+Saber 2.0 GT: original fictional 1980s liftback coupe bodywork and original Tern road-wheel assemblies. See [SABER-20GT.md](SABER-20GT.md).

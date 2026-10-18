@@ -25,7 +25,7 @@ const canonical=(v:any)=>JSON.stringify(v,(_,x)=>x&&typeof x==='object'&&!Array.
 test('alder has a distinct loaded chassis, four aligned rear-drive wheels and visible light/heavy damage that fully repairs',()=>{
  const world=new R.World({x:0,y:0,z:0}),scene=new T.Scene(),c=new Vehicle(0,'alder',DEFINITIONS.alder.color,scene,world,fx);
  try{
-  assert.equal(CAR_KINDS.length,17);assert.ok(Math.abs(c.body.mass()-1430)<1);assert.ok(c.glass.length>=6);assert.ok(c.panels.length>25);assert.deepEqual(c.wreckParts.assemblies.filter(a=>a.name.startsWith('door-')).map(a=>a.name).sort(),['door-left','door-rear-left','door-rear-right','door-right']);
+  assert.ok(CAR_KINDS.length>=17&&CAR_KINDS.includes('alder'));assert.ok(Math.abs(c.body.mass()-1430)<1);assert.ok(c.glass.length>=6);assert.ok(c.panels.length>25);assert.deepEqual(c.wreckParts.assemblies.filter(a=>a.name.startsWith('door-')).map(a=>a.name).sort(),['door-left','door-rear-left','door-rear-right','door-right']);
   assert.ok(c.wreckParts.assemblies.some(a=>a.name==='tailgate'));
   const anchors=classicWheelAnchors('alder');for(let i=0;i<4;i++){assert.equal(c.wheels[i].position.x,anchors.wheels[i].x);assert.equal(c.wheels[i].position.z,anchors.wheels[i].z);assert.ok(Math.abs(c.controller.wheelRadius(i)!-.38)<1e-6);}
   c.root.updateMatrixWorld(true);const clean=shape(c),mass=c.body.mass();
@@ -42,7 +42,7 @@ test('alder garage and cup saves work while sixteen-car signed backups and exist
  const entries=Object.fromEntries(SAVE_KEYS.map(k=>[k,k===GARAGE_KEY?canonical(g):null]));const body={format:'quarry-impact-save',version:1,created:'2026-10-01T00:00:00Z',entries};
  const checksum=createHash('sha256').update(canonical(body)).digest('hex');const old=await readSave(JSON.stringify({...body,checksum}));assert.equal(old.checksum,checksum);const migrated=readGarage(old.entries[GARAGE_KEY]);assert.equal(migrated.cars.shuttle.setup.engine,2);assert.deepEqual(migrated.cars.alder.setup,stockSetup('alder'));
  const current=await readSave(await exportSave({getItem:k=>k===GARAGE_KEY?JSON.stringify(migrated):null}));assert.ok(JSON.parse(current.entries[GARAGE_KEY]!).cars.alder);
- const bests=Object.fromEntries(CAR_KINDS.flatMap(kind=>Object.keys(COURSE_NAMES).flatMap(course=>['forward','reverse'].map(direction=>[`${course}:${kind}:${direction}`,100]))));assert.equal(Object.keys(readTimeTrialRecords(JSON.stringify({version:1,bests})).bests).length,1088);
+ const bests=Object.fromEntries(CAR_KINDS.flatMap(kind=>Object.keys(COURSE_NAMES).flatMap(course=>['forward','reverse'].map(direction=>[`${course}:${kind}:${direction}`,100]))));assert.equal(Object.keys(readTimeTrialRecords(JSON.stringify({version:1,bests})).bests).length,CAR_KINDS.length*Object.keys(COURSE_NAMES).length*2);
 });
 test('alder damage and repair reconstruct through compressed replay and backwards seeking',async()=>{
  const world=new R.World({x:0,y:0,z:0}),scene=new T.Scene(),setup=stockSetup('alder'),c=new Vehicle(0,'alder',setup.paint,scene,world,fx,setup);

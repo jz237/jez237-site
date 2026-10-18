@@ -1,4 +1,4 @@
-export type ClassicKind='muscle'|'wagon'|'utility'|'compact'|'van'|'tern'|'marten'|'buggy'|'shuttle'|'regent'|'trail'|'kite'|'morrow'|'alder';
+export type ClassicKind='muscle'|'wagon'|'utility'|'compact'|'van'|'tern'|'marten'|'buggy'|'shuttle'|'regent'|'trail'|'kite'|'morrow'|'alder'|'saber';
 export const CLASSIC_VEHICLES={
  muscle:{name:'BRAMBLE V8',subtitle:'1970s muscle · 6.2 V8 · Rear-wheel drive',mass:1710,force:11100,halfLength:2.44,halfWidth:.914,wheelbase:2.82,color:0xaf542b,modelOffset:.8200195},
  wagon:{name:'MILLHAVEN ESTATE',subtitle:'1970s estate · 5.4 V8 · Rear-wheel drive',mass:1960,force:10500,halfLength:2.44,halfWidth:.914,wheelbase:2.82,color:0x739080,modelOffset:.8200195},
@@ -14,13 +14,14 @@ export const CLASSIC_VEHICLES={
  kite:{name:'KITE 2000',subtitle:'1990s hot hatch · 2.0 inline-four · Front-wheel drive',mass:1160,force:8750,halfLength:2.04,halfWidth:.86,wheelbase:2.48,color:0x327b82,modelOffset:.84},
  morrow:{name:'MORROW 420',subtitle:'1980s coupe · 4.2 V8 · Rear-wheel drive',mass:1560,force:10100,halfLength:2.48,halfWidth:.93,wheelbase:2.72,color:0x713b42,modelOffset:.85},
  alder:{name:'ALDER 230',subtitle:'1980s estate · 2.3 inline four · Rear-wheel drive',mass:1430,force:8400,halfLength:2.48,halfWidth:.93,wheelbase:2.72,color:0xb29a65,modelOffset:.85},
+ saber:{name:'SABER 2.0 GT',subtitle:'1980s liftback coupe · 2.0 twin-cam four · Rear-wheel drive',mass:1120,force:7900,halfLength:2.20,halfWidth:.86,wheelbase:2.42,color:0xb3261e,modelOffset:.8200195},
 }as const;
 
-export const isClassicKind=(kind:string):kind is ClassicKind=>kind==='alder'||kind==='morrow'||kind==='kite'||kind==='muscle'||kind==='wagon'||kind==='utility'||kind==='compact'||kind==='van'||kind==='tern'||kind==='marten'||kind==='buggy'||kind==='shuttle'||kind==='regent'||kind==='trail';
-export const classicWheelHalfTrack=(kind:ClassicKind)=>kind==='alder'?.77:kind==='morrow'?.77:kind==='kite'?.72:kind==='trail'?.82:kind==='regent'?.86:kind==='shuttle'?.92:kind==='buggy'?.85:kind==='marten'?.665:kind==='tern'?.690:kind==='compact'?.655:kind==='van'?.805:.79;
-export const vehicleWheelRadius=(kind:string)=>kind==='alder'?.38:kind==='morrow'?.38:kind==='kite'?.34:kind==='trail'?.42:kind==='regent'?.38:kind==='shuttle'?.43:kind==='buggy'?.38:kind==='compact'||kind==='tern'||kind==='marten'?.32:.375;
+export const isClassicKind=(kind:string):kind is ClassicKind=>kind==='saber'||kind==='alder'||kind==='morrow'||kind==='kite'||kind==='muscle'||kind==='wagon'||kind==='utility'||kind==='compact'||kind==='van'||kind==='tern'||kind==='marten'||kind==='buggy'||kind==='shuttle'||kind==='regent'||kind==='trail';
+export const classicWheelHalfTrack=(kind:ClassicKind)=>kind==='saber'?.71:kind==='alder'?.77:kind==='morrow'?.77:kind==='kite'?.72:kind==='trail'?.82:kind==='regent'?.86:kind==='shuttle'?.92:kind==='buggy'?.85:kind==='marten'?.665:kind==='tern'?.690:kind==='compact'?.655:kind==='van'?.805:.79;
+export const vehicleWheelRadius=(kind:string)=>kind==='saber'?.32:kind==='alder'?.38:kind==='morrow'?.38:kind==='kite'?.34:kind==='trail'?.42:kind==='regent'?.38:kind==='shuttle'?.43:kind==='buggy'?.38:kind==='compact'||kind==='tern'||kind==='marten'?.32:.375;
 export function classicWheelAnchors(kind:ClassicKind){const d=CLASSIC_VEHICLES[kind];return{modelOffset:d.modelOffset,wheels:Array.from({length:4},(_,i)=>({x:(i%2?1:-1)*classicWheelHalfTrack(kind),y:kind==='alder'?.39:kind==='morrow'?.39:kind==='kite'?.36:kind==='trail'?.43:kind==='regent'?.36:kind==='shuttle'?.42:kind==='buggy'?.40:.3400195,z:(i<2?1:-1)*d.wheelbase/2}))};}
-export const classicEngineVoice=(kind:string)=>({bank:kind==='alder'||kind==='kite'||kind==='compact'||kind==='van'||kind==='tern'||kind==='marten'||kind==='buggy'?'hatch':isClassicKind(kind)?'coupe':kind,pitch:kind==='alder'?.96:kind==='morrow'?.93:kind==='kite'?1.07:kind==='trail'?.86:kind==='regent'?.72:kind==='shuttle'?.65:kind==='buggy'?1.01:kind==='muscle'?.88:kind==='wagon'?.76:kind==='utility'?.82:kind==='compact'?1.12:kind==='van'?.86:kind==='tern'?1.04:kind==='marten'?.94:1});
+export const classicEngineVoice=(kind:string)=>({bank:kind==='saber'||kind==='alder'||kind==='kite'||kind==='compact'||kind==='van'||kind==='tern'||kind==='marten'||kind==='buggy'?'hatch':isClassicKind(kind)?'coupe':kind,pitch:kind==='saber'?1.1:kind==='alder'?.96:kind==='morrow'?.93:kind==='kite'?1.07:kind==='trail'?.86:kind==='regent'?.72:kind==='shuttle'?.65:kind==='buggy'?1.01:kind==='muscle'?.88:kind==='wagon'?.76:kind==='utility'?.82:kind==='compact'?1.12:kind==='van'?.86:kind==='tern'?1.04:kind==='marten'?.94:1});
 
 /** Authored rear-mounted air-cooled flat-four layouts. */
 export const isRearEngineKind=(kind:string)=>kind==='marten'||kind==='buggy';

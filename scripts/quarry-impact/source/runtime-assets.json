@@ -542,8 +542,8 @@
     },
     {
       "path": "licenses/CREDITS.md",
-      "bytes": 25544,
-      "sha256": "309da2146809a5735c631edba22df53fbf46de329d90a7f508c65ba8d1e25e7f"
+      "bytes": 25509,
+      "sha256": "cafb198d192d69072dda104e5705af90d359d9254509f9e00887b06c9bf330c8"
     },
     {
       "path": "licenses/CarConcept-LICENSE.md",
@@ -594,6 +594,11 @@
       "path": "licenses/ROOK-1100.md",
       "bytes": 499,
       "sha256": "5873162a2bbf274f9d6f61f313301422a8c6ee9ee4d248647453a656ad1eeb0e"
+    },
+    {
+      "path": "licenses/SABER-20GT.md",
+      "bytes": 433,
+      "sha256": "7a88f36f9dac10f5faa7051fd41df0bab0bd030795719cb684b120cd5c75f7b7"
     },
     {
       "path": "licenses/TERN-1400.md",
@@ -1219,6 +1224,11 @@
       "path": "models/rocks/textures/rock_moss_set_01_rough_2k.jpg",
       "bytes": 293827,
       "sha256": "a05a8bd9f2563cf55b738484b894671df7b2391aa02d66451366c5ad38077cd2"
+    },
+    {
+      "path": "models/saber.glb",
+      "bytes": 3453776,
+      "sha256": "25ee9a84c0738a02bc685530ef45c354a1cca7199095a40f0f6d26a1e787d68b"
     },
     {
       "path": "models/scenery/coupe-parked.glb",
