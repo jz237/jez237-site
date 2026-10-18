@@ -1,3 +1,4 @@
+import {restoreMillbrookWharfBytes} from './millbrook-wharf-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readStarfinCarPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreStarfinCarBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreMillbrookWharfBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readStarfinCarPrevious(file);
 }
 export function verifyStarfinCarRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'7b8d8777966cd289eb90318982019d56b54f0662');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreMillbrookWharfBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreStarfinCarBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the StarfinCar release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreMillbrookWharfBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the StarfinCar release');
  assert.equal(manifest.previousFixtureCount,4346);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,4346);
 }

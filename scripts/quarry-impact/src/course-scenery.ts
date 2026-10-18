@@ -9,6 +9,7 @@ import {createCopperfieldSiteOffice} from './copperfield-site-office';
 import {createKingswellPalmHouse} from './kingswell-palm-house';
 import {createWillowbankPaddock} from './willowbank-nissen-hut';
 import {createFairgroundBigTop} from './fairground-big-top';
+import {createMillbrookWharf} from './millbrook-wharf';
 import {createMidway} from './fairground-midway';
 import {createFairWheel} from './fairground-wheel';
 import {addCourseRockDetail} from './course-materials';
@@ -352,7 +353,7 @@ export function createCourseScenery(course:Course,theme:SceneryTheme,identity?:{
    for(let i=0;i<7;i++){const angle=i*Math.PI*2/7;add('rock','stone',px+Math.cos(angle)*size*.68,py+.6,pz+Math.sin(angle)*size*.62,2.5,1.4,2.2,angle);}
   }
  }else if(theme==='canal'){
-  building(-77,-158,48,16,7,'red');building(65,-158,48,16,6,'red');stand(-10,-155);canopy(22,-157,'ochre');serviceTruck(112,-157,'white');
+  reserveReplaced(()=>{building(-77,-158,48,16,7,'red');building(65,-158,48,16,6,'red');});stand(-10,-155);canopy(22,-157,'ochre');serviceTruck(112,-157,'white');
   // Quayside cranes, bollards, warehouse tanks and a towpath footbridge.
   for(const x of [-56,58]){box('metal',x,6,-19,.55,12,.55);box('ochre',x+6,11.6,-19,13,.6,.7);box('metal',x+11.5,8,-19,.1,7,.1);}
   for(let x=-60;x<=60;x+=12)for(const z of [-17,7])add('round','metal',x,1.1,z,.45,.85,.45);
@@ -629,9 +630,10 @@ reflectedLight.directDiffuse *= .5;reflectedLight.directSpecular *= .5;`);
  const palmHouse=theme==='park'&&placements.some(entry=>entry.kind==='building'&&entry.x===38&&entry.z===-158)?createKingswellPalmHouse(course.height(38,-158)):null;if(palmHouse)root.add(palmHouse.root);
  const heathPaddock=theme==='heath'&&placements.some(entry=>entry.kind==='building'&&entry.x===65&&entry.z===-160)?createWillowbankPaddock(course.height(65,-160)):null;if(heathPaddock)root.add(heathPaddock.root);
  const bigTop=theme==='fair'&&placements.some(entry=>entry.kind==='building'&&entry.x===110&&entry.z===-150)?createFairgroundBigTop(course.height(110,-150)):null;if(bigTop)root.add(bigTop.root);
+ const wharf=theme==='canal'&&[-77,65].every(x=>placements.some(entry=>entry.kind==='building'&&entry.x===x&&entry.z===-158))?createMillbrookWharf(course.height(-77,-158),course.height(65,-158)):null;if(wharf)root.add(wharf.root);
  const pumpHouse=theme==='reservoir'?createReservoirPumphouse(course.height(90,-163)):null;if(pumpHouse)root.add(pumpHouse.root);
  const bandstands=bandstandSites.length?createKingswellBandstands(bandstandSites):null;if(bandstands)root.add(bandstands.root);
  const fairWheel=theme==='fair'?createFairWheel():null,fairMidway=theme==='fair'?createMidway():null;if(fairWheel)root.add(fairWheel.root);if(fairMidway)root.add(fairMidway.root);
  root.userData.placements=placements;root.userData.theme=theme;
- let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;portWarehouse?.dispose();ridgeHQ?.dispose();clubPits?.dispose();siteOffice?.dispose();palmHouse?.dispose();heathPaddock?.dispose();bigTop?.dispose();coastalPavilion?.dispose();forestLodge?.dispose();pumpHouse?.dispose();bandstands?.dispose();fairMidway?.dispose();fairWheel?.dispose();stoneDetail.dispose();ridgeDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});Object.values(geometries).forEach(g=>g.dispose());Object.values(materials).forEach(m=>m.dispose());ownedGeometries.forEach(g=>g.dispose());ownedMaterials.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());foliageTextures.forEach(t=>t.dispose());root.clear();}};
+ let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;portWarehouse?.dispose();ridgeHQ?.dispose();clubPits?.dispose();siteOffice?.dispose();palmHouse?.dispose();heathPaddock?.dispose();bigTop?.dispose();wharf?.dispose();coastalPavilion?.dispose();forestLodge?.dispose();pumpHouse?.dispose();bandstands?.dispose();fairMidway?.dispose();fairWheel?.dispose();stoneDetail.dispose();ridgeDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});Object.values(geometries).forEach(g=>g.dispose());Object.values(materials).forEach(m=>m.dispose());ownedGeometries.forEach(g=>g.dispose());ownedMaterials.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());foliageTextures.forEach(t=>t.dispose());root.clear();}};
 }
