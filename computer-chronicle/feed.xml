@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Sat, 17 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 18 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of February 11-17, 1985 — Michael Crichton trades the movie screen for the adventure game</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-02-11</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-02-11</guid>
+      <pubDate>Sun, 18 Oct 2026 12:00:00 GMT</pubDate>
+      <description>In a February interview, the author behind Amazon explains why story should guide the player. Michael Crichton wants the computer adventure to tell a story, not merely conceal a solution. Interviewed by Betsy Staples in February’s Creative Computing, the novelist and filmmaker describes Amazon, his Trillium Software adventure made with programmer Stephen Warady, as a sequence of dramatic episodes. Also this week: A $239 color printer meets the real-paper test · The Commodore 64 becomes a music room for non-musicians · IBM announces its 3090 mainframe family.</description>
+    </item>
     <item>
       <title>Week of February 4-10, 1985 — Michael Crichton wants adventure games to make sense</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-02-04</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-10-01</guid>
       <pubDate>Sun, 27 Sep 2026 12:00:00 GMT</pubDate>
       <description>FTL’s $40 space adventure turns icons, trade and survival into a living star map. October’s Computer Gaming World gives its gaming spotlight to Sundog: Frozen Legacy, an Apple II adventure from FTL Games of San Diego. Reviewer Ken Ryall credits Bruce Webster with a remarkably broad design: the player must supply and settle a colony, but the route runs across twelve star systems, eighteen planets and more than fifty cities. This is the magazine’s October appraisal, not a claim of a launch this week. Also this week: Game Designers Take Questions Over the Modem · Spy Hunter and Tapper Head for the Home Screen · Commodore Aims the Plus/4 at the Household Desk · Atari’s New Owner Confronts the Next Machine.</description>
-    </item>
-    <item>
-      <title>Week of September 24-30, 1984 — Lucasfilm Brings Movie-Scale Worlds to the Game Screen</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-09-24</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-09-24</guid>
-      <pubDate>Sat, 26 Sep 2026 12:00:00 GMT</pubDate>
-      <description>Rescue on Fractalus and Ballblazer give Atari players two sharply different visions of computer play. September’s Electronic Games puts the first Lucasfilm–Atari games on its cover and asks whether filmmakers can make games worth playing. Its answer is emphatic: Rescue on Fractalus and Ballblazer bring the studio’s eye for spectacle to the Atari home-computer screen. The magazine describes a design group led by Stephen D. Arnold and Peter S. Langston, with David Fox guiding the rescue game. Also this week: Seven Cities of Gold Makes the Map the Adventure · Ultima III Packs a Whole Campaign into a Box · Educational Software Claims More of the Home Screen · The Modem Buyer Meets the Telephone Line.</description>
     </item>
   </channel>
 </rss>

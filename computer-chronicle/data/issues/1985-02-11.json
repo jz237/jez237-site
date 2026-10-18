@@ -1,0 +1,487 @@
+{
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+  },
+  "visualProfile": {
+    "tone": "Stories, sound and color at home",
+    "motifs": [
+      "Amazon adventure map",
+      "Commodore 64 keyboard",
+      "color printer",
+      "music keyboard"
+    ],
+    "layout": "Dense warm newsprint with red and blue headers"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Crichton and Amazon dominate the illustrated front page",
+    "secondaryRail": "Color printing, C64 music, IBM and the modem desk",
+    "archiveNavigation": "Weekly archive and previous/next controls"
+  },
+  "currentDate": "2026-10-18",
+  "historicDate": "1985-02-11",
+  "displayDate": "Week of February 11-17, 1985",
+  "edition": "Issue 133 - Weekly 1985 Computer & Culture Chronicle",
+  "sources": [
+    {
+      "title": "COMPUTE!'s Gazette, vol. 3 no. 2, issue 20: February OCR (articles and advertisements)",
+      "url": "https://archive.org/stream/computes.gazette/Compute_Gazette_Issue_20_1985_Feb_djvu.txt",
+      "date": "1985-02"
+    },
+    {
+      "title": "Betsy Staples: Michael Crichton, Creative Computing vol. 11 no. 2 p. 26",
+      "url": "https://www.atarimagazines.com/creative/v11n2/26_Michael_Crichton.php",
+      "date": "1985-02"
+    },
+    {
+      "title": "Billboard rock chart archive; chart rows verified from HTML",
+      "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-16/",
+      "date": "1985-02-16"
+    },
+    {
+      "title": "The Numbers: domestic weekend chart",
+      "url": "https://www.the-numbers.com/box-office-chart/weekend/1985/02/15",
+      "date": "1985-02-15"
+    },
+    {
+      "title": "UPI, Samira Kawar: Palestinian leader Yasser Arafat and Jordan’s King Hussein agreed (search extract only)",
+      "url": "https://www.upi.com/Archives/1985/02/12/Palestinian-leader-Yasser-Arafat-and-Jordans-King-Hussein-agreed/7769477032400/",
+      "date": "1985-02-12"
+    },
+    {
+      "title": "Audio February cover, Pioneer CLD-900 (indexed cover extract only)",
+      "url": "https://www.worldradiohistory.com/Archive-All-Audio/Archive-Audio/80s/Audio-1985-02.pdf",
+      "date": "1985-02"
+    },
+    {
+      "title": "InfoWorld vol. 7 no. 6; bibliographic index only",
+      "url": "https://books.google.com/books?id=7S4EAAAAMBAJ",
+      "date": "1985-02-11"
+    },
+    {
+      "title": "IBM 3090 historical overview and model table; cites IBM announcement 185-014",
+      "url": "https://en.wikipedia.org/wiki/IBM_3090",
+      "date": "retrospective; event 1985-02-12"
+    },
+    {
+      "title": "Sierra Adds Power to I.B.M., The New York Times; title/date only",
+      "url": "https://www.nytimes.com/1985/02/13/business/sierra-adds-power-to-ibm.html",
+      "date": "1985-02-13"
+    },
+    {
+      "title": "Personal Computers; New Mouse Resides on the Floor, The New York Times; title/date only",
+      "url": "https://www.nytimes.com/1985/02/12/science/personal-computers-new-mouse-resides-on-the-floor.html",
+      "date": "1985-02-12"
+    }
+  ],
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Issue 133 - Weekly 1985 Computer & Culture Chronicle",
+    "dateline": "Week of February 11-17, 1985",
+    "price": "75 cents"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1985-02-11.jpg",
+    "alt": "Computer Chronicle newspaper front page for February 11-17, 1985",
+    "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "Adventure, music and color give the home computer new work to do.",
+  "morningLine": "Crichton maps a different kind of adventure; the Commodore learns new tunes.",
+  "lead": {
+    "headline": "Michael Crichton trades the movie screen for the adventure game",
+    "dek": "In a February interview, the author behind Amazon explains why story should guide the player.",
+    "body": [
+      "Michael Crichton wants the computer adventure to tell a story, not merely conceal a solution. Interviewed by Betsy Staples in February’s Creative Computing, the novelist and filmmaker describes Amazon, his Trillium Software adventure made with programmer Stephen Warady, as a sequence of dramatic episodes.",
+      "A river crossing, a volcano climb and a journey to a Lost City form the expedition. Crichton compares the arrangement to beads on a string: individual challenges serve the trip. “My interest is not in creating a puzzle space; my interest is in trying to tell a story in a new way,” he says.",
+      "The author did more than supply a name for the package. He supplied a text flowchart, location map and color graphics frames, along with BASIC portions subsequently translated into machine language. His contributions included main-title graphics, in-game computer modules and sound effects.",
+      "Crichton sees room for an eventual family entertainment form between films and computer games, though he cautions that it will not arrive this year. His own collection ranges from an IBM PC/AT to a Commodore 64; for travel, he favors the TRS-80 Model 100. Amazon is a current adventure under discussion this month, not a newly announced release this week."
+    ],
+    "confidence": "same-month",
+    "sourceRefs": [
+      1
+    ]
+  },
+  "stories": [
+    {
+      "headline": "A $239 color printer meets the real-paper test",
+      "body": [
+        "Color printing reaches the Commodore desk at a quoted $239 with interface. Charles Brannon’s February Gazette review examines the Okimate-10, whose nine-wire thermal-transfer element melts waxlike ribbon ink onto paper. The process is quieter than impact printing.",
+        "The paper matters as much as the mechanism. Brannon reports unacceptable results on ordinary fanfold, photocopy and bond paper, while acetate gives clear, sharp images. The supplied glossy paper is acceptable but light. A bargain printer still asks the buyer to choose supplies carefully.",
+        "The $169.95 base unit requires its proprietary interface; a generic printer interface will not substitute. Black ribbons are quoted at $5.95 and rated by Okidata for roughly 75 average text pages. They cannot be reused. These are February review prices and manufacturer claims, not a nationwide store-price survey."
+      ],
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "headline": "The Commodore 64 becomes a music room for non-musicians",
+      "body": [
+        "The Commodore 64’s music circuit is finding new companions. February’s Gazette describes Sight & Sound’s work with jazz guitarist Ryo Kawasaki on software for its keyboard accessory. The series runs from $29.95 to $49.95.",
+        "Kawasaki Synthesizer makes the machine a programmable synthesizer and sound processor. Kawasaki Rhythm Rocker joins electronic rhythms, sound effects and high-resolution graphics. Music Processor handles composing, editing, recording and playback; 3001: A Sound Odyssey teaches, while Music Video Kit turns toward pictures.",
+        "Waveform’s Colortone Keyboard takes another approach: a $79.95 touch-sensitive membrane with 25 piano-like keys, a harp strip and 14 function keys. Its supplied software offers eight instrument sounds and 12 songs. These are products described in the February feature, not new weekly shipping announcements."
+      ],
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "headline": "IBM announces its 3090 mainframe family",
+      "body": [
+        "IBM announced the 3090 Models 200 and 400 on February 12. The new large-system family brings a two-central-processor Model 200 and a four-processor Model 400 configuration formed from two 200 systems.",
+        "The announcement sits far from the home-computer shelf, but marks the week’s clearest dated computing development. The New York Times followed on February 13 with “Sierra Adds Power to I.B.M.” No price is established here. The later 3090 vector facility is not part of this February announcement."
+      ],
+      "sourceRefs": [
+        7,
+        8
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Okimate-10",
+      "summary": "Thermal-transfer color printer; $239 with Commodore interface in Brannon’s February review.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "Waveform Colortone Keyboard",
+      "summary": "25-key membrane musical accessory, $79.95 in February feature.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "IBM 3090 Models 200 and 400",
+      "summary": "February 12 announcement of two- and four-processor mainframes; historical secondary source read, contemporary NYT title/date corroborated. No verified price.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        7,
+        8
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Bank Street Writer",
+      "detail": "Broderbund C64 advertisement: $49.95 suggested retail, documentation and backup disk; prompts, menus, search/replace and page formatting.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "name": "WordPro 3 Plus/64 and SpellRight Plus",
+      "detail": "Professional Software advertisement offers both for $99.95; mail merge, column math and spell-checking. Treat feature and sales claims as advertising.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "name": "Address File",
+      "detail": "Robert D. Gunn’s VIC/C64 type-in filing program, p. 60, offers alphabetical sorting and instant searching.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games — editorial selections, not sales rankings",
+      "items": [
+        "Amazon — Current Trillium adventure discussed by Crichton and programmer Stephen Warady; story-led design, not a newly verified weekly release.",
+        "Raid on Bungeling Bay — Broderbund C64 advertisement describes helicraft attacks against factories on six islands and an enemy war machine that repairs and expands.",
+        "Championship Lode Runner — Broderbund advertisement offers fifty difficult Treasury Chambers; an advertised current title, not a new-release date.",
+        "The Forbidden Crypt — Ted Reynolds’s type-in action game begins p. 53; cover identifies versions for VIC-20, C64, Plus/4 and Commodore 16.",
+        "Break Street — Creative Software advertisement promotes break-dancing moves, slow motion, musical accompaniment and recording routines for replay on C64."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        0,
+        1
+      ]
+    },
+    {
+      "label": "Top 5 Movies — February 15-17 domestic weekend box office",
+      "items": [
+        "1. Beverly Hills Cop",
+        "2. Witness",
+        "3. The Breakfast Club",
+        "4. The Killing Fields",
+        "5. Vision Quest"
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        3
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Okimate-10 with Commodore interface",
+      "price": "$239.00",
+      "note": "$239 review quotation; US dollars.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Okimate-10 replacement black ribbon",
+      "price": "$5.95",
+      "note": "$5.95; about 75 average text pages per manufacturer claim.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Bank Street Writer C64",
+      "price": "$49.95",
+      "note": "$49.95 suggested retail in Broderbund advertisement.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "WordPro/SpellRight bundle",
+      "price": "$99.95",
+      "note": "$99.95 advertised package.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Colortone Keyboard",
+      "price": "$79.95",
+      "note": "$79.95 in music feature.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "song": "Somebody",
+      "artist": "Bryan Adams",
+      "chart": "Billboard rock chart (archive currently labels it Mainstream Rock Airplay)",
+      "chartDate": "1985-02-16",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-16/"
+      ],
+      "title": "Somebody"
+    },
+    {
+      "rank": 2,
+      "song": "The Old Man Down The Road",
+      "artist": "John Fogerty",
+      "chart": "Billboard rock chart (archive currently labels it Mainstream Rock Airplay)",
+      "chartDate": "1985-02-16",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-16/"
+      ],
+      "title": "The Old Man Down The Road"
+    },
+    {
+      "rank": 3,
+      "song": "Only The Young",
+      "artist": "Journey",
+      "chart": "Billboard rock chart (archive currently labels it Mainstream Rock Airplay)",
+      "chartDate": "1985-02-16",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-16/"
+      ],
+      "title": "Only The Young"
+    },
+    {
+      "rank": 4,
+      "song": "Just Another Night",
+      "artist": "Mick Jagger",
+      "chart": "Billboard rock chart (archive currently labels it Mainstream Rock Airplay)",
+      "chartDate": "1985-02-16",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-16/"
+      ],
+      "title": "Just Another Night"
+    },
+    {
+      "rank": 5,
+      "song": "Can’t Fight This Feeling",
+      "artist": "REO Speedwagon",
+      "chart": "Billboard rock chart (archive currently labels it Mainstream Rock Airplay)",
+      "chartDate": "1985-02-16",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-16/"
+      ],
+      "title": "Can’t Fight This Feeling"
+    },
+    {
+      "rank": 6,
+      "song": "Rock & Roll Girls",
+      "artist": "John Fogerty",
+      "chart": "Billboard rock chart (archive currently labels it Mainstream Rock Airplay)",
+      "chartDate": "1985-02-16",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-16/"
+      ],
+      "title": "Rock & Roll Girls"
+    },
+    {
+      "rank": 7,
+      "song": "Radioactive",
+      "artist": "The Firm",
+      "chart": "Billboard rock chart (archive currently labels it Mainstream Rock Airplay)",
+      "chartDate": "1985-02-16",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-16/"
+      ],
+      "title": "Radioactive"
+    },
+    {
+      "rank": 8,
+      "song": "The Heat Is On",
+      "artist": "Glenn Frey",
+      "chart": "Billboard rock chart (archive currently labels it Mainstream Rock Airplay)",
+      "chartDate": "1985-02-16",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-16/"
+      ],
+      "title": "The Heat Is On"
+    },
+    {
+      "rank": 9,
+      "song": "California Girls",
+      "artist": "David Lee Roth",
+      "chart": "Billboard rock chart (archive currently labels it Mainstream Rock Airplay)",
+      "chartDate": "1985-02-16",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-16/"
+      ],
+      "title": "California Girls"
+    },
+    {
+      "rank": 10,
+      "song": "High On You",
+      "artist": "Survivor",
+      "chart": "Billboard rock chart (archive currently labels it Mainstream Rock Airplay)",
+      "chartDate": "1985-02-16",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-16/"
+      ],
+      "title": "High On You"
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Fifty rooms for expert runners",
+      "summary": "Broderbund’s February advertisement offers fifty Treasury Chambers in Championship Lode Runner.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "headline": "A filing cabinet on tape or disk",
+      "summary": "Robert D. Gunn’s Address File type-in for VIC and C64 offers alphabetical sorting and instant searching in February Gazette.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "worldAnchor": {
+    "headline": "Hussein and Arafat agree on joint action",
+    "summary": "King Hussein and Yasser Arafat agreed on joint action on February 11, according to UPI’s February 12 dispatch.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      4
+    ]
+  },
+  "gadgetWatch": {
+    "headline": "One deck for LaserDiscs and compact discs",
+    "summary": "February’s Audio cover spotlights the Pioneer CLD-900 as a unit that plays both LaserDiscs and compact discs.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      5
+    ]
+  },
+  "bbsNote": {
+    "headline": "Local boards versus metered online services",
+    "summary": "February Gazette explains the BBS economy and the difference between a membership charge, connect time and telephone tolls.",
+    "posts": [
+      {
+        "topic": "Finding a local board",
+        "platform": "US local BBS culture",
+        "text": "Editorial paraphrase, not an authentic BBS post: stores and user groups can point callers toward boards, and boards advertise other boards."
+      },
+      {
+        "topic": "Busy signals are a sign of success",
+        "platform": "Volunteer BBSs",
+        "text": "Editorial paraphrase: growing membership makes single-line boards harder to reach and can prompt membership fees to support the sysop."
+      },
+      {
+        "topic": "Budget the whole connection",
+        "platform": "CompuServe / The Source / Dow Jones / Delphi",
+        "text": "Editorial paraphrase: national-service connect time generally starts around $6 an hour or more; time, speed and telephone distance matter. No invented user handles or historical message transcripts."
+      }
+    ],
+    "sourceRefs": [
+      0
+    ]
+  },
+  "curiosity": {
+    "headline": "Break-dancing comes home to the Commodore",
+    "summary": "Creative Software sells a dancing program instead of another space battle.",
+    "detail": "The February Gazette ad for Break Street names moonwalk, backspin, windmill and tut, offers slow motion, and lets players string moves together and record them for replay. This is evidence of an advertised February product, not a release that week.",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "periodAd": {
+    "headline": "Bank Street Writer — $49.95",
+    "summary": "Broderbund’s C64 advertisement offers prompts, menus, search and replace, page formatting, documentation and a backup disk at $49.95 suggested retail.",
+    "tagline": "From the February advertising pages",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "market": {
+    "headline": "The cost of going online",
+    "summary": "February Gazette distinguishes mostly free local bulletin boards from metered commercial services, generally $6 or more per connected hour depending on time and speed. Long-distance telephone tolls remain a separate expense; even a free board can cost money to call.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Exact-week IBM 3090 announcement verified from a retrospective model table citing IBM letter 185-014; original IBM URL redirects and contemporary NYT body is blocked. Gaming lead remains an explicitly same-month feature, not a weekly launch. InfoWorld February 11 bodies still unavailable.",
+      "World anchor is verified to headline/date/name level through a dated UPI search extract; full UPI article blocked, so do not embellish its diplomatic terms without further reading.",
+      "Gadget candidate is limited to verified February Audio cover text; PDF retrieval blocked. No product introduction date or price claimed.",
+      "Prices below are period advertisements or review quotations, not verified nationwide transaction prices. No named cracking crew or pirate board verified; underground item covers the contemporary copy-protection market only.",
+      "Additional primary-source attempts: February 12 NYT floor-mouse column blocked (403); April 1985 Datapro IBM 3090 PDF at Bitsavers blocked (403). These did not yield usable product detail. Status remains partial; inherited magazine/chart findings retained, Crichton interview independently re-read in this pass.",
+      "Game selections are editorial, not sales ranks. Monthly features are not weekly launch claims.",
+      "World bulletin is limited to the verified agreement headline; no diplomatic terms inferred."
+    ]
+  }
+}

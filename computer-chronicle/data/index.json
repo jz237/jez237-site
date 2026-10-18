@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-10-18",
+      "historicDate": "1985-02-11",
+      "displayDate": "Week of February 11-17, 1985",
+      "edition": "Issue 133 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Crichton maps a different kind of adventure; the Commodore learns new tunes.",
+      "leadHeadline": "Michael Crichton trades the movie screen for the adventure game",
+      "storyHeadlines": [
+        "A $239 color printer meets the real-paper test",
+        "The Commodore 64 becomes a music room for non-musicians",
+        "IBM announces its 3090 mainframe family"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-02-11.jpg",
+      "thumb": "media/thumbs/1985-02-11.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-10-17",
       "historicDate": "1985-02-04",
       "displayDate": "Week of February 4-10, 1985",
