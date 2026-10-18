@@ -34,6 +34,7 @@ import {prepareNativeResultsMenuInitialization,prepareNativeResultsMenuInput,pre
 import {prepareNativeStuntResultsMenuInitialization,prepareNativeStuntResultsMenuInput,prepareNativeStuntResultsMenuDisplay} from './native-stunt-results-menu.js';
 import {prepareNativeContinuationMenuInitialization,prepareNativeContinuationMenuInput,prepareNativeContinuationMenuExit,prepareNativeContinuationMenuDisplay} from './native-continuation-menu.js';
 import {prepareNativeEndingMenuInitialization,prepareNativeEndingPanelEnqueue,prepareNativeEndingMenuInput,prepareNativeEndingMenuScroll,prepareNativeEndingMenuDisplay,prepareNativeEndingMenuPostDisplay} from './native-ending-menu.js';
+import {prepareNativeRecordsBrowserInput,prepareNativeRecordsBrowserUpdate,prepareNativeRecordsBrowserPostDisplay} from './native-records-browser.js';
 import {prepareNativeRaceRiderResourceConfiguration,prepareNativeRaceCourseResourceConfiguration} from './native-race-resource-configuration.js';
 import {prepareNativeRaceResultCodeSelection} from './native-race-body-fields.js';
 import {prepareNativePrimaryResultEstimates} from './native-primary-standings.js';
@@ -121,6 +122,7 @@ function copy(value){
  if(value.stuntResultsMenuWords5d80!==undefined)s.stuntResultsMenuWords5d80=words(value.stuntResultsMenuWords5d80,'stuntResultsMenuWords5d80',4);
  if(value.continuationMenuWords61e0!==undefined)s.continuationMenuWords61e0=words(value.continuationMenuWords61e0,'continuationMenuWords61e0',4);
  if(value.endingMenuWords6d50!==undefined)s.endingMenuWords6d50=words(value.endingMenuWords6d50,'endingMenuWords6d50',126);
+ if(value.recordsBrowserWords80c0!==undefined)s.recordsBrowserWords80c0=words(value.recordsBrowserWords80c0,'recordsBrowserWords80c0',62);
  if(value.continuationDataWords60f0!==undefined)s.continuationDataWords60f0=words(value.continuationDataWords60f0,'continuationDataWords60f0',20);
  if(value.profileWordsB330!==undefined){
   if(Object.hasOwn(scene,'difficulty'))throw new RangeError('difficulty overlaps profileWordsB330');
@@ -557,9 +559,9 @@ function apply(s,operations){
    const bits=integer(op.value,'source halfword bits',0,65535);
    if(op.field==='pressed65a'&&s.menuWordsE658!==undefined)s.menuWordsE658[0]=((s.menuWordsE658[0]&0xffff0000)|bits)>>>0;
    else s.scene[op.field]=sceneRanges[op.field][0]<0?bits<<16>>16:bits;
-  }else if(op.kind==='i1Write'||op.kind==='profileWrite'||op.kind==='nameEntryWrite'||op.kind==='resultsMenuWrite'||op.kind==='stuntResultsMenuWrite'||op.kind==='continuationMenuWrite'||op.kind==='continuationDataWrite'||op.kind==='endingMenuWrite'){
+  }else if(op.kind==='i1Write'||op.kind==='profileWrite'||op.kind==='nameEntryWrite'||op.kind==='resultsMenuWrite'||op.kind==='stuntResultsMenuWrite'||op.kind==='continuationMenuWrite'||op.kind==='continuationDataWrite'||op.kind==='endingMenuWrite'||op.kind==='recordsBrowserWrite'){
    const key=op.kind==='i1Write'?'i1Words9440':op.kind==='nameEntryWrite'?'nameEntryWords61c4':op.kind==='resultsMenuWrite'?'resultsMenuWords6d30':op.kind==='stuntResultsMenuWrite'?'stuntResultsMenuWords5d80':
-    op.kind==='continuationMenuWrite'?'continuationMenuWords61e0':op.kind==='continuationDataWrite'?'continuationDataWords60f0':op.kind==='endingMenuWrite'?'endingMenuWords6d50':'profileWordsB330';
+    op.kind==='continuationMenuWrite'?'continuationMenuWords61e0':op.kind==='continuationDataWrite'?'continuationDataWords60f0':op.kind==='endingMenuWrite'?'endingMenuWords6d50':op.kind==='recordsBrowserWrite'?'recordsBrowserWords80c0':'profileWordsB330';
    if(!s[key])throw new TypeError(`Supply retained ${key} before applying its writes`);
    const width=op.width,count=s[key].length;
    if(width!==4&&(!['profileWrite','nameEntryWrite'].includes(op.kind)||width!==2))throw new RangeError(`Invalid ${key} patch width`);
@@ -767,6 +769,34 @@ export function prepareNativeContinuationMenuInitializationUpdate(state){
 export function prepareNativeEndingMenuInitializationUpdate(state,sourceViews={}){
  const next=copy(state),prepared=prepareNativeEndingMenuInitialization(next,sourceViews),effects=apply(next,prepared.operations);
  return freeze({...prepared,state:next,effects});
+}
+/** Retained ovl_i9 records browser control/slide owner, separate from other
+ * overlays sharing its VRAM base. No missing loaded data is synthesized. */
+export function prepareNativeRecordsBrowserAdvance(state,sourceViews={}){
+ const next=copy(state),prepared=prepareNativeRecordsBrowserUpdate(next,sourceViews),effects=apply(next,prepared.operations);
+ return freeze({...prepared,state:next,effects});
+}
+function recordsBrowserControlResult(next,prepared,sourceViews,expandInput){
+ const pending=[...prepared.operations],operations=[],effects=[];
+ while(pending.length){
+  const op=pending.shift();let batch=[op];
+  if(expandInput&&op.kind==='externalCall'&&op.consumer==='802c5e5c'){
+   pending.unshift(...prepareNativeRecordsBrowserInput(next,sourceViews).operations);continue;
+  }
+  if(expandInput&&op.kind==='externalCall'&&op.consumer==='801e6fb0'){
+   const [type,rate,selector]=op.arguments;
+   batch=prepareNativeRaceFadePropertiesInitialization({fadeTemplateWords6cc0:sourceViews.fadeTemplateWords6cc0,type,rate,selector}).operations;
+  }
+  operations.push(...batch);effects.push(...apply(next,batch));
+ }
+ return freeze({...prepared,state:next,operations,effects});
+}
+export function prepareNativeRecordsBrowserInputUpdate(state,sourceViews={}){
+ const next=copy(state);return recordsBrowserControlResult(next,prepareNativeRecordsBrowserInput(next,sourceViews),sourceViews,true);
+}
+export function prepareNativeRecordsBrowserPostDisplayUpdate(state,sourceViews={}, {expandInput=false}={}){
+ if(typeof expandInput!=='boolean')throw new TypeError('expandInput must be boolean');
+ const next=copy(state);return recordsBrowserControlResult(next,prepareNativeRecordsBrowserPostDisplay(next),sourceViews,expandInput);
 }
 export function prepareNativeEndingPanelEnqueueUpdate(state,panelType){
  const next=copy(state),prepared=prepareNativeEndingPanelEnqueue(next,panelType),effects=apply(next,prepared.operations);

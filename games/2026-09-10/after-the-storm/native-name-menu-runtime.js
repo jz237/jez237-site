@@ -88,7 +88,7 @@ export function nativeChampionshipNameMenuView(state){
  * canonical state AFTER controller sampling and the main6 scene updates
  * (1DDE48,51238,8E794). This is not a replacement for those scene consumers.
  * Source1290 animation,5470/AFB4 widgets and71A8 fade precede drawing, then
- * 1E8C controls or storage/standings handoff. Only the returned semantic view
+ * 1E8C controls or storage/records-browser handoff. Only the returned semantic view
  * replaces GPU drawing; output resolution remains owned by the host renderer.
  */
 export function prepareNativeChampionshipNameMenuPhase(state,readonlyViews={}){
@@ -111,7 +111,7 @@ export function prepareNativeChampionshipNameMenuPhase(state,readonlyViews={}){
  const controls=expandNameMenuOperations(current,post.operations,constants);current=controls.state;
  operations.push(...controls.operations);effects.push(...controls.effects);
  return freeze({state:current,operations,effects,draw,view:nativeChampionshipNameMenuView(current),
-  handoff:target?{destination:'standings',consumer:target.consumer,gameState:66}:null,
+  handoff:target?{destination:'records-browser',consumer:target.consumer,gameState:66}:null,
   diagnostic:{originalNumericControl:true,inputAndSceneUpdateRequiredBeforePhase:true,sceneUpdated:false,
    targetInitializerExecuted:Boolean(target),graphicsExecuted:false,recordsPersisted:false}});
 }

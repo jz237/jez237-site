@@ -77,7 +77,7 @@ test('championship name exit preserves phase/players and starts its delayed fade
  assert.deepEqual(q.effects,[]);
 });
 
-test('completed name exit initializes championship standings without adding race phase or camera resets',()=>{
+test('completed name exit initializes the records browser without adding race phase or camera resets',()=>{
  const {state,views}=fixture();state.scene.gameStateAb24=101;state.scene.players=2;state.scene.phase650=3;state.hudWords7788[hi(0x7c80)]=99;
  const q=menu(state,{consumer:'801ec500'},views);
  assert.equal(q.state.scene.gameStateAb24,66);assert.equal(q.state.scene.main638,12);assert.equal(q.state.scene.previousGameState634,101);

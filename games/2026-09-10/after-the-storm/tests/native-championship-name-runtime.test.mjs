@@ -53,7 +53,7 @@ test('ending return fades from white, initializes once and accepts letters befor
  for(const address of [0x1ff0+16,0x1ff0+60+36,0x22c0+40+16])assert.equal(state.raceWords1f94[ri(address)],0x41414100);
 });
 
-test('38 delayed fade ticks precede ordered normal/reverse saves and exactly one standings initializer',()=>{
+test('38 delayed fade ticks precede ordered normal/reverse saves and exactly one records-browser initializer',()=>{
  for(const reverse of [0,65535]){
   let q=exitReady(reverse);const saved=structuredClone(q.state.raceWords1f94);
   for(let tick=1;tick<=38;tick++){
@@ -61,7 +61,7 @@ test('38 delayed fade ticks precede ordered normal/reverse saves and exactly one
    assert.equal(q.effects.filter(o=>['8007bea4','8007c204'].includes(o.consumer)).length,tick===38?3:0);
    if(tick<38){assert.equal(q.handoff,null);assert.equal(q.state.scene.gameStateAb24,101);}
   }
-  assert.equal(q.draw.view.fade.completion,1);assert.equal(q.handoff.destination,'standings');assert.equal(q.view.active,false);
+  assert.equal(q.draw.view.fade.completion,1);assert.equal(q.handoff.destination,'records-browser');assert.equal(q.view.active,false);
   assert.equal(q.state.scene.gameStateAb24,66);assert.equal(q.state.scene.main638,12);assert.equal(q.state.scene.previousGameState634,101);
   assert.equal(q.view.fade.kind,2);assert.equal(q.state.scene.initLatch63c,1);
   const saves=q.effects.filter(o=>['8007bea4','8007c204'].includes(o.consumer));
@@ -101,7 +101,7 @@ test('paused and30/60/144Hz schedules keep identical canonical outro and a singl
  }
 });
 
-test('late record and standings failures leave all supplied owners unchanged',()=>{
+test('late record and records-browser failures leave all supplied owners unchanged',()=>{
  const s=structuredClone(ready());s.nameEntryWords61c4[1]=5;s.hudWords7788[hi(0x88e8)]=0x41424300;s.raceWords1f94[ri(0x2664)]=4;
  const before=structuredClone(s);assert.throws(()=>step(s),/record rank/);assert.deepEqual(s,before);
  let q=exitReady();for(let i=0;i<37;i++)q=step(q.state);

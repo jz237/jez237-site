@@ -6887,7 +6887,7 @@ and immediately enters state101, preserving the original distinction from the
 solo wheel's outro. Blank input restores the selected profile name first. The
 delayed fade completes after 38 updates; only then does the display suffix emit
 normal or reverse course-save calls, including warm-up and repeated courses,
-before initializing standings state66. Initializers and the literal name copy
+before initializing the records browser at state66. Initializers and the literal name copy
 expand once, in source order, without leaving duplicate pending entry calls.
 The numeric display suffix is shared with the existing graphics caller; all
 498 cached original executions still match (45,090 instructions, 6,057 ordered
@@ -6901,3 +6901,39 @@ versus reverse storage, warm-up qualification versus saving, repeated rounds,
 resource, audio and scene effects remain host responsibilities. This is not a
 claim of durable persistence or a new live championship admission. High-resolution
 drawing, canvas size and public mode defaults are unchanged.
+
+### Original records-browser controls and slides — 2026-10-18
+
+The recovered ovl_i9 menu at state66/67 is the records browser, not championship
+standings. Its renderer selects the ordinary-time, reverse-time, stunt-score and
+best-lap record tables. This corrects the prior name-menu handoff label; that
+handoff now explicitly reports `records-browser`. Its numeric destination and
+entry sequence are unchanged.
+
+`native-records-browser.js` reconstructs input5E5C, descriptor helper7194,
+exit802C, the numeric update5800 and the post-draw portion of5D24. It includes
+category/course navigation, the irregular course grid, distinct course wrap
+rules, normal/stunt/reverse record-type changes, unlock gating, button priority,
+context-sensitive confirm/back actions and their ordered sound cues. Horizontal
+slides take eleven updates; vertical slides take eight. Controls are gated
+during slides and resume on the settling frame. Post-name entry initializes
+the original locked browsing context and reverse record style when appropriate.
+
+The canonical state retains the explicit62-word80C0..81B8 owner. Its writes do
+not alias another overlay merely because both load at802C5800. Loaded record
+data, course-order views and transform constants are supplied, never invented.
+Viewport recipes preserve the caller's exact descriptor/axis arithmetic and
+word/halfword packing. Matrix helpers and renderer bodies remain separate.
+The post-display suffix dispatches only the three original return destinations
+after signed fade completion exactly1; expanded controls initialize the shared
+fade before later effects, without replaying the entry call.
+
+2,532 original-ROM executions (171,788 instructions) match the input writes,
+descriptor/exit calls, update writes, viewport recipes and post-display gates.
+The public fixture contains synthetic state and observed semantic operations,
+not original executable or assets. Seven tests cover these comparisons, actual
+slide completion, blocked/re-enabled controls, retained neighboring data,
+reverse post-name initialization and atomic rejection of late invalid inputs.
+The visible records browser, matrix consumers and live menu integration are
+still pending. This work does not reduce rendering resolution or enable an
+unfinished public mode.
