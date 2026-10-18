@@ -1,8 +1,8 @@
-import {FORTRESS_STUNT_GEOMETRY as G} from './source-fortress-stunt-data.js?v=6fdabd848c37';
-import {facetedSurface} from './faceted-surfaces.js?v=6fdabd848c37';
-import {clippedVolume,clippedVolumes} from './clipped-volumes.js?v=6fdabd848c37';
-import {shoreLines} from './shore-contact.js?v=6fdabd848c37';
-import {sourceBoundarySpheres,orderSourceFixedSpheres} from './source-boundary-spheres.js?v=6fdabd848c37';
+import {FORTRESS_STUNT_GEOMETRY as G} from './source-fortress-stunt-data.js?v=8e78b4f796b7';
+import {facetedSurface} from './faceted-surfaces.js?v=8e78b4f796b7';
+import {clippedVolume,clippedVolumes} from './clipped-volumes.js?v=8e78b4f796b7';
+import {shoreLines} from './shore-contact.js?v=8e78b4f796b7';
+import {sourceBoundarySpheres,orderSourceFixedSpheres} from './source-boundary-spheres.js?v=8e78b4f796b7';
 const S=.025,xyz=p=>p.map(v=>v*S);
 const direction=heading=>{const a=(Math.trunc(heading*4096/360)&4095)*Math.PI*2/4096;return {tx:Math.sin(a),tz:Math.cos(a)};};
 
@@ -16,10 +16,10 @@ export const fortressStuntNavigation={anchors:[
  [-79,177],[-87.625,146.1],[-91.275,121.75],[-83.775,96.7],[-89,58],[-89.275,21.825]
 ]};
 
-/** Numeric source-aligned display for Fortress solo Stunt. Rock overhangs and
+/** Shared source-aligned Fortress terrain. Rock overhangs and
  * vertical faces are separate meshes: baking their tops into a heightfield
  * would fill the navigable water beneath them with false solid terrain. */
-export function createSourceFortressStuntCourse(polygonDistance){
+export function createSourceFortressTerrain(polygonDistance){
  if(typeof polygonDistance!=='function')throw new TypeError('Expected signed polygon distance');
  const scenerySurfaces=G.floors.map(q=>({id:q.id,kind:'rock',triangles:q.triangles.map(t=>t.map(xyz)),sourcePlaneIndices:[...q.indices]}));
  const staticSurfaces=G.floors.map(q=>{
@@ -39,6 +39,11 @@ export function createSourceFortressStuntCourse(polygonDistance){
  ];
  const renderGround=(x,z)=>{let y=-8;for(const outline of authoredLandOutlines){const distance=polygonDistance(outline,x,z);if(distance<=0)y=Math.max(y,.4+Math.min(2,-distance*.3));}return y;};
  const ground=(x,z)=>Math.max(renderGround(x,z),sourceFloor(x,z)??-8);
+ return {sourceShores,shoreContacts:shoreLines(sourceShores),staticSurfaces,scenerySurfaces,sourceFloor,ground,landGround:renderGround,renderGround,
+  authoredLandOutlines,authoredBackground:{seabedHeight:-8,status:'Authored terrain caps beside the gate; source rock overhangs remain separate meshes, with no added collision edges.'}};
+}
+export function createSourceFortressStuntCourse(polygonDistance){
+ const terrain=createSourceFortressTerrain(polygonDistance);
  const boundaryMarkers=G.markers.map(xyz),markers=sourceBoundarySpheres(boundaryMarkers,{idPrefix:'fortress-marker-'});
  const hidden=G.hidden.map(([x,y,z],i)=>({id:'fortress-hidden-'+i,x:x*S,y:y*S,z:z*S,r:.625,probeRadius:.3,
   sourceIndex:i,runtimeTag:5,type:'rock',hidden:true,fixed:true,fixedSphere:true,floating:false,absoluteY:true}));
@@ -68,8 +73,7 @@ export function createSourceFortressStuntCourse(polygonDistance){
   sourceMetadata:{nativeCourseIndex:3,referenceRevision:'USA Rev1',nativeScale:S,sourceCollisionPlaneCount:78,sourceShoreSegmentCount:92,sourceStuntNativeClass:2},
   anchors,routeInterpolation:'linear',navigationDriver:'source-layout',stuntLayout:{anchors,routeInterpolation:'linear',driver:'source-layout',
    startGate:{...gates[0]},rocks:hazards(),ramps,rings,checkpoints,sourceNativeClass:2},
-  sourceShores,shoreContacts:shoreLines(sourceShores),staticSurfaces,scenerySurfaces,sourceFloor,ground,landGround:renderGround,renderGround,
-  authoredLandOutlines,authoredBackground:{seabedHeight:-8,status:'Authored terrain caps beside the gate; source rock overhangs remain separate meshes, with no added collision edges.'},
+  ...terrain,
   sourceObjectSelection:{singlePlayerIncludesStunt:true,stuntFixedSphereCount:112,stuntNativeClass:2},
   hazardsForPlayers:players=>{if(players!==1)throw new RangeError('Fortress native Stunt scene is solo');return hazards();},
   boundaryMarkers,sourceMarkerSpheres:markers,sourceSolidObjects,sourceDynamicObjects,contactVolumesForRamps,

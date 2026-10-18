@@ -82,7 +82,8 @@ test('Fortress gate feedback and both HUD consumers share the selected canonical
  for(const [address,value]of [[0x2938,2],[0x2c58,2],[0x2944,0],[0x2958,1],[0x2954,-1]])s.raceWords1f94[ri(address)]=value>>>0;
  input.bodiesBySlot[0].positionNativeXZ={x:-10,z:10};
  input.primary.samplesBySlot[0]={bodyPositionNative:{x:-10,y:0,z:10},priorBodyPointNative:{x:-10,z:-10}};
- input.primary.gateObjectNativeXZ={x:0,z:0};
+ s.scene.objectCountFa40=2;s.raceWords1f94[ri(0x39c0)]=1;s.objectWordsC940=Array(3136).fill(0);
+ s.objectWordsC940[49+19]=2;s.objectWordsC940[0]=0x45bb8000;s.objectWordsC940[2]=0x45bb8000;
  const original=createNativeRaceState(s),cues=r=>r.effects.filter(e=>e.kind==='fortressGateCue').length;
  assert.equal(cues(prepareNativeRaceOrdinaryUpdate(c.layout,original,input)),1);
  // Only camera0 moves outside the cue's4000-native-unit range. Selecting
@@ -93,6 +94,10 @@ test('Fortress gate feedback and both HUD consumers share the selected canonical
  assert.equal(cues(prepareNativeRaceOrdinaryUpdate(c.layout,far,{...input,cameraIndicesByView:[1,0]})),1);
  assert.throws(()=>prepareNativeRaceOrdinaryUpdate(c.layout,original,{...input,
   primary:{...input.primary,gateCamerasNativeXZ:[{x:6000,z:6000}]}}),/overlaps canonical/);
+ assert.throws(()=>prepareNativeRaceOrdinaryUpdate(c.layout,original,{...input,
+  primary:{...input.primary,gateObjectNativeXZ:{x:6000,z:6000}}}),/overlaps canonical/);
+ const moved=nativeRaceStateSnapshot(original);moved.objectWordsC940[49]=0x45bb8000;moved.objectWordsC940[49+2]=0x45bb8000;
+ assert.equal(cues(prepareNativeRaceOrdinaryUpdate(c.layout,createNativeRaceState(moved),input)),0);
  assert.deepEqual(nativeRaceStateSnapshot(original),s);
 });
 

@@ -61,6 +61,6 @@ test('Fortress preparation shares verified finite support but does not enable th
  assert.throws(()=>nativeFortressSupportGeometry({players:3}),/one or two/);
  assert.throws(()=>createNativeRaceCourseRuntime({course:course(0),difficulty:0,players:1,objectLayout:'authored'}),/canonical/);
  assert.throws(()=>createNativeRaceCourseRuntime({course:getCourse('citadel'),difficulty:0,players:1}),/source route rows/);
- for(const mode of ['time','versus'])assert.throws(()=>createRace({course:getCourse('citadel'),physics:'native',mode}),/verified course/);
+ for(const mode of ['time','versus'])assert.equal(createRace({course:getCourse('citadel'),physics:'native',mode}).course.nativeSceneMode,'race');
  assert.equal(createRace({course:getCourse('citadel'),mode:'time'}).physics,'modern');
 });

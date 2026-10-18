@@ -1301,6 +1301,13 @@ export function prepareNativeRaceOrdinaryUpdate(layout,state,input={}){
   if(!Array.isArray(indices)||indices.length>2)throw new RangeError('Supply actual source camera view indices');
   const gateCamerasNativeXZ=Array.from({length:players},(_,view)=>cameras[integer(indices[view],'camera view index',0,1)].positionNativeXZ);
   primaryInput={...primaryInput,gateCamerasNativeXZ};
+  if(sceneValue(current,'courseIndex')===3){
+   if(Object.hasOwn(primaryInput,'gateObjectNativeXZ'))throw new RangeError('gateObjectNativeXZ overlaps canonical objectWordsC940');
+   const gate=current.raceWords1f94[(0x39c0-0x1f94)/4]|0;
+   integer(gate,'canonical Fortress gate index',0,sceneValue(current,'objectCountFa40')-1);
+   const bits=new DataView(new ArrayBuffer(4)),read=i=>{bits.setUint32(0,current.objectWordsC940[gate*49+i]);return bits.getFloat32(0);};
+   primaryInput={...primaryInput,gateObjectNativeXZ:{x:read(0),z:read(2)}};
+  }
  }
  const primary=prepareNativeRacePrimaryUpdate(layout,current,primaryInput);
  let next=primary.state;

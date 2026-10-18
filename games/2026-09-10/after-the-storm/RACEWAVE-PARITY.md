@@ -6407,3 +6407,47 @@ are refreshed. This is numeric preparation only: ordinary Fortress remains
 unavailable in the native preview until its matching high-resolution scene,
 gate presentation and full physical lap routes have been verified. The
 existing Stunt and modern modes are unchanged.
+
+
+### Ordinary Marine Fortress live scene and gate — 2026-10-18
+
+Admitted native Time trial and Two-player race on all four Fortress classes.
+The scene shares the verified 78 finite faces and 92 shore segments with Stunt,
+while ordinary loading selects its own gate, three floating spheres and
+class-dependent boxes. Each mesh reads canonical object transforms or finite
+plane origins, preserving their axes and spans. The original illustration
+map's arches, walls and shortcut are excluded. Rock undercuts remain separate
+meshes so the heightfield does not fill their navigable water.
+
+The ordinary update now reads gate position from the canonical object selected
+by39C0, alongside its existing canonical camera coordinates. External gate or
+camera replacements are rejected. Normal retains the closed gate; Hard, Expert
+and Reverse lift it through the source lap rule. Physical probes observe the
+original rise from -1.5 to 3.3 metres. The same gate and floating-body snapshots
+are detached for replay, the separate player window and online presentation.
+Plain JSON transform numbers treat signed zero as equivalent; typed water
+arrays retain their existing exact binary encoding.
+
+Four complete physical tests finish three laps without disqualification using
+ordinary throttle and steering, and check the final gate state. Expert and
+Reverse probes finish in147.727 and166.691 seconds with zero misses. A Hard
+versus probe completes the winner in136.024 seconds with zero misses while the
+second independently controlled rider is on lap three with four misses; the
+gate is open. Inspection paths remain authored driving choices rather than
+the original AI, and no hull, judge, buoy or lap state is overridden.
+
+A real-time1440x900 High browser run independently completes Expert in
+2:23.685 with zero misses. The water, source terrain and detailed rider were
+visually checked. The corrected separate player view was also inspected at
+1440x900 High with both physical riders. One local404 occurred in the main
+view; there were no JavaScript or shader errors. These checks do not claim a
+new end-to-end internet race test.
+
+Three ordinary scene tests cover every class/player selection, exact obstacle
+bindings, canonical motion, detached snapshots and full-resolution worker
+identity. Three online/window tests cover the scene selection, bounded
+transforms and interpolation. Thirty primary/ordinary update regressions and
+existing Stunt, Drake, online and player-window tests pass. Terrain remains
+361x361 with512x512 depth data; all401 module hashes and four page preloads are
+refreshed. Native physics remains opt-in. Ordinary Port/Twilight integration,
+original AI and remaining trick/alternate-route validation are still pending.

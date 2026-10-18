@@ -55,7 +55,7 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
  const sourceRowByGate=new Map(Object.entries(course.sourceVisibleGateIndices??{}).map(([row,index])=>[index,Number(row)]));
  // Authored metal floats use the original buoyant bodies' live transforms.
  // No wave sampling, spring or recoil is duplicated in this display layer.
- const nativeFloatingMeshes=(course.nativeStuntLayout?.floating??[]).map(definition=>{
+ const nativeFloatingMeshes=((course.nativeCourseLayout??course.nativeStuntLayout)?.floating??[]).map(definition=>{
   const g=new T.Group();g.userData.dynamic=true;g.matrixAutoUpdate=false;g.visible=false;root.add(g);
   const radius=definition.radius;
   add(new T.SphereGeometry(radius,40,28),steel,0,0,0,g);
@@ -143,7 +143,7 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
  // The textured terrain already samples staticSurfaces through renderGround.
  // Rendering those contact planes again at the same height creates coplanar
  // depth fighting in the main, reflection and underwater refraction passes.
- const nativeVolumeIds=new Set(course.nativeStuntLayout?.volumes.map(v=>v.id)??[]),nativeVolumeMeshes=[];
+ const nativeVolumeIds=new Set((course.nativeCourseLayout??course.nativeStuntLayout)?.volumes?.map(v=>v.id)??[]),nativeVolumeMeshes=[];
  for(const volume of course.contactVolumes?.volumes||[]){
   if(volume.kind==='ship')continue; // Independently authored continuous hull below.
   const geometry=new T.BufferGeometry(),positions=surfaceMeshPositions(volume.triangles);geometry.setAttribute('position',new T.BufferAttribute(positions,3));geometry.setAttribute('uv',new T.Float32BufferAttribute(Array.from({length:positions.length/3},(_,i)=>[positions[i*3]*.2,(positions[i*3+1]+positions[i*3+2])*.2]).flat(),2));geometry.computeVertexNormals();const mesh=add(geometry,volume.kind==='reef'?naturalRock:['finish','gate'].includes(volume.kind)?steel:wood);

@@ -64,7 +64,7 @@ export function createNativeRacePilot({course,policy={},traceLimit=256}={}){
  // Stunt routes retain their own rings and ramps; ordinary class-specific
  // inspection corridors must not replace that selected route.
  const selectedAnchors=course?.stunt?course.anchors:course?.nativePilotAnchorsByClass?.[course.difficulty]??course?.anchors;
- if(!(course?.stunt?[0,1,2,3,4,5,6,7,8]:[1,2,4,7,8]).includes(course?.sourceWaterCourseIndex)||!Array.isArray(selectedAnchors)||selectedAnchors.length<3)
+ if(!(course?.stunt?[0,1,2,3,4,5,6,7,8]:[1,2,3,4,7,8]).includes(course?.sourceWaterCourseIndex)||!Array.isArray(selectedAnchors)||selectedAnchors.length<3)
   throw new TypeError('Native pilot requires an admitted course and its selected source navigation');
  // A wider authored Normal driving line clears Southern's exposed bow at
  // low tide. This changes only the inspection helm, never the source AI,

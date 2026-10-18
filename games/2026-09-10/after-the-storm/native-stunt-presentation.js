@@ -59,10 +59,13 @@ export function nativeStuntVolumePositions(volume){return surfaceMeshPositions(c
  * Matching occurs once at initialization; snapshots contain no callable owner,
  * writable source words, timers or rule execution. No display read awards points.
  */
-export function createNativeStuntPresentation({course,readState,scale=.025}){
+export function createNativeStuntPresentation(options){return createNativeObjectPresentation(options,false);}
+export function createNativeCourseObjectPresentation(options){return createNativeObjectPresentation(options,true);}
+function createNativeObjectPresentation({course,readState,scale=.025},ordinary){
  if(typeof readState!=='function'||!Number.isFinite(scale)||scale<=0)throw new TypeError('Expected selected Stunt display owner');
  const initial=readState(),raw=initial.objectWordsC940,courseIndex=initial.scene.courseIndex,d=new DataView(new ArrayBuffer(4));
- if(initial.scene.mode620!==11||course.sourceWaterCourseIndex!==courseIndex)throw new RangeError('Stunt display requires its selected mode11 course');
+ const mode=initial.scene.mode620;
+ if(!(ordinary?[0,1].includes(mode):mode===11)||course.sourceWaterCourseIndex!==courseIndex)throw new RangeError('Object display requires its selected course and mode');
  const float=w=>{d.setUint32(0,w);return scalar(d.getFloat32(0));};
  const position=(a,row)=>keys.map((_,j)=>float(a[row*49+j])*scale);
  const rows=Array.from({length:initial.scene.objectCountFa40},(_,i)=>i),rings=[],volumes=[],used=new Set();
@@ -85,7 +88,7 @@ export function createNativeStuntPresentation({course,readState,scale=.025}){
   surfaces.forEach((v,i)=>volumes.push({id:v.id,sourceIndex:row,planeIndex:start+i}));
  }
  if(matchedRamps.size!==ramps.length)throw new RangeError('Every source Stunt ramp needs its high-resolution surfaces');
- // Drake's gate and buoyant box bodies use the same canonical finite-plane
+ // Fortress's gate and buoyant box bodies use the same canonical finite-plane
  // array as the ramps. Bind their complete ranges rather than deriving a new
  // collider from the visual object matrix:6E0F4 changes origins, not axes.
  const solidRows=rows.filter(i=>[2,6,7].includes(raw[i*49+19])),matchedSolids=new Set();
@@ -126,7 +129,7 @@ export function createNativeStuntPresentation({course,readState,scale=.025}){
  const layout=freeze({version:1,courseIndex,rings,volumes,...(floating.length?{floating}:{}),...(decorations.length?{decorations}:{})});
  function snapshot(){
   const s=readState(),a=s.objectWordsC940,w=s.raceWords1f94;
-  if(s.scene.mode620!==11||s.scene.courseIndex!==courseIndex)throw new RangeError('Stunt display selection changed');
+  if(s.scene.mode620!==mode||s.scene.courseIndex!==courseIndex)throw new RangeError('Object display selection changed');
   const world=captureNativeStuntWorld({version:1,...(decorations.length?{decorations:decorations.map(v=>{
    const b=v.sourceIndex*49;if(a[b+19]!==v.runtimeKind)throw new RangeError('Static decoration source row changed');
    return {id:v.id,sourceIndex:v.sourceIndex,position:position(a,v.sourceIndex),visible:a[b+21]===2};
@@ -148,6 +151,7 @@ export function createNativeStuntPresentation({course,readState,scale=.025}){
    const p=s.collisionPlaneWordsFd78.slice(v.planeIndex*16,(v.planeIndex+1)*16).map(float);
    return {...v,origin:p.slice(0,3).map(n=>n*scale),axes:[p.slice(3,6),p.slice(6,9),p.slice(9,12)],spans:p.slice(12,15).map(n=>n*scale),visible:a[v.sourceIndex*49+21]!==0};
   })});
+  if(ordinary)return freeze(world);
   const word=a=>w[ri(a)]|0,complete=word(0x2c2c)!==0;
   const completedTricks=Object.fromEntries(Object.entries({handstand:0x39e8,backwards:0x39ec,stand:0x39f0,somersault:0x39f4,dive:0x39f8,negativeRoll:0x39fc,positiveRoll:0x3a00,flip:0x3a04}).map(([k,a])=>[k,word(a)!==0]));
   const hud={native:true,score:word(0x26d0),rings:word(0x292c),chain:s.scene.ringStreak0cb4,

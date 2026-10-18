@@ -4,7 +4,7 @@ import * as T from './vendor/three.module.js';
 import {makeSky,makeOcean,shared,skyColors} from './ocean.js';
 import {makeCourseWorld} from './course-world.js';
 import {getCourse} from './courses.js';
-import {nativeDrakeRaceScene} from './source-drake-course.js';
+import {nativeRaceScene} from './native-race-scene.js';
 import {stuntCourse,rampCameraHeight} from './stunts.js';
 import {makeJetSki} from './jetski.js';
 import {makeStuntRider} from './stunt-rider.js';
@@ -93,8 +93,8 @@ export function createPlayerWindowRenderer(canvas){
   if(!value||!['course','surf','calm','chop','storm'].includes(value.seaState)||!Array.isArray(value.roster)||value.roster.length!==2||value.roster.some(i=>!Number.isInteger(i)||i<0||i>3)||!Number.isInteger(value.difficulty)||value.difficulty<0||value.difficulty>3||!graphics(value.graphics))throw new Error('Invalid player view setup.');
   descriptor=value;course=getCourse(value.course,value.difficulty);if(course.id!==value.course)throw new Error('Unknown player view course.');if(value.freeRide)course=stuntCourse(course,{freeRide:true});
   if(value.nativeSceneCourseIndex!==undefined){
-   if(value.nativeSceneCourseIndex!==4||course.sourceWaterCourseIndex!==4||value.nativeSceneMode!=='race'||value.freeRide)throw new Error('Invalid native player view course.');
-   course=nativeDrakeRaceScene(course);
+   if(![3,4].includes(value.nativeSceneCourseIndex)||course.sourceWaterCourseIndex!==value.nativeSceneCourseIndex||value.nativeSceneMode!=='race'||value.freeRide)throw new Error('Invalid native player view course.');
+   course=nativeRaceScene(course);
   }
   if(course.geometryForPlayers)course={...course,...course.geometryForPlayers(2)};
   if(course.sourceObjectSelection)course={...course,playerCount:2,rocks:course.hazardsForPlayers(2),sourceDecorations:course.decorationsForPlayers?course.decorationsForPlayers(2):course.sourceDecorations};
