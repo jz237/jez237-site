@@ -1,6 +1,18 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
-## Unpublished — championship standings handoff
+## v2.40.0 — source gameplay checkpoint
+
+Publishes the tested source gameplay, audio, object, stunt and championship
+foundations accumulated since v2.39.0. High-resolution presentation is preserved.
+Native championship remains headless/verification work: browser standings and
+continued cup progression are unfinished. The newer, untested championship
+points implementation is saved privately and excluded from this release.
+Multiplayer feature work is deferred until single-player work is finished.
+
+Publication/pause cutoff changed by the user to 40% used on 2026-10-18;
+the account already reported 45% used, so feature work stopped for publication.
+
+## v2.40.0 — championship standings handoff
 
 Headless championship finish/retirement now runs the original unfinished-rider
 time estimates at its result-stage call, using completed physical bodies and
@@ -18,7 +30,7 @@ one-time menu transition. They do not claim a naturally completed cup. Missing
 estimate geometry fails atomically before any menu/record change. Existing
 ordinary result scheduling is regression-checked independently.
 
-## Unpublished — championship application startup and qualification
+## v2.40.0 — championship application startup and qualification
 
 The headless native championship now uses the application race loop with four
 prepared hulls/riders, three original AI inputs, one human audio channel and the
@@ -61,7 +73,7 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
-## Unpublished — full-start native aerial gesture coverage
+## v2.40.0 — full-start native aerial gesture coverage
 
 Sunny Stunt verification now drives from the original grid to the unchanged
 ramp, supplies ordinary keyboard gestures while airborne, and observes the
@@ -78,7 +90,7 @@ has exactly matching source state, physical hull/rider, action and scoring
 histories at30 and144Hz. All six checks pass. They cover the previously missing full-start
 roll/flip/dive integration alongside the existing pose and course-finish checks.
 
-## Unpublished — original collected-ring disappearance
+## v2.40.0 — original collected-ring disappearance
 
 Collected rings in the native Stunt preview now stay full size through source
 age8, shrink by one eighth per logical frame at ages9–15, and disappear at16.
@@ -103,7 +115,7 @@ shows that shrinking ring, then returns to the live half-size ring at time8.4
 with the live-state fingerprint unchanged. High remains1440x900, with about
 1.08 million triangles in the live view and no JavaScript or shader errors.
 
-## Unpublished — native Stunt ring rotation
+## v2.40.0 — native Stunt ring rotation
 
 High-resolution Stunt rings now use their actual source object matrices,
 including the alternating four-degree spin per logical frame. Translation
@@ -118,7 +130,7 @@ A1440x900 High browser run shows intact detailed rings and water without
 JavaScript or shader errors. The original collected-ring fade remains pending;
 collected rings still hide immediately in this preview.
 
-## Unpublished — complete native Stunt drives and physical pose awards
+## v2.40.0 — complete native Stunt drives and physical pose awards
 
 The four admitted native Stunt courses now have complete physical driving
 checks from the original grid through all four checkpoints and the scoring
@@ -156,7 +168,7 @@ error was observed; the local server's favicon404 remains unrelated.
 Validation: all21 selected helm, ordinary three-lap, complete Stunt-route and
 physical-gesture checks pass, plus the six presentation checks above.
 
-## Unpublished — native Stunt presentation and result handoff
+## v2.40.0 — native Stunt presentation and result handoff
 
 The opt-in native preview now admits solo Stunt runs on Sunny Beach, Sunset Bay,
 Southern Island and Glacier Coast with venue sea conditions. The high-resolution
@@ -193,7 +205,7 @@ full driven checkpoint/finish/gesture validation and the other five native
 physical Stunt courses remain open. Original ring collection fade is not yet
 reproduced; collected rings currently disappear immediately.
 
-## Unpublished — physical Stunt host and moving support queries
+## v2.40.0 — physical Stunt host and moving support queries
 
 The internal native host now runs prepared solo Stunt races on Sunny, Sunset,
 Southern and Glacier using their verified shore and floor resources. The five
@@ -223,7 +235,7 @@ browser checks are connected. Five other courses still need verified physical
 support resources. No completed Stunt lap or full gameplay parity is claimed;
 high-resolution assets, meshes and graphics settings are unchanged.
 
-## Unpublished — selected Stunt startup and canonical scoring runtime
+## v2.40.0 — selected Stunt startup and canonical scoring runtime
 
 All nine normal solo Stunt courses now compile their selected primary route,
 complete object/fixed storage, reset layout, coarse/allowed/warning regions,
@@ -258,7 +270,7 @@ stages to the actual rider/body/world schedule, selected support geometry,
 Stunt HUD/result presentation and driven completion checks. No resolution,
 rendering, music, public mode selection or online scoring changes are implied.
 
-## Unpublished — all nine native Stunt primary routes
+## v2.40.0 — all nine native Stunt primary routes
 
 Readonly primary route resources now cover the nine Stunt entries selected by
 the800D653C table:83 four-short rows, including hidden guide rows. The existing
@@ -271,7 +283,7 @@ Sunny and Sunset agree with their independently recovered course metadata.
 This supplies route data for the next native Stunt integration step. It does not
 enable Stunt admission or replace the modern routes, renderer, or resolution.
 
-## Unpublished — complete object owner connected to ordinary native races
+## v2.40.0 — complete object owner connected to ordinary native races
 
 The admitted Sunny/Sunset/Southern/Glacier native time/versus previews now start
 from the complete selected generic-object, fixed-sphere, fixed-grid, collision
@@ -308,7 +320,7 @@ finishes with zero misses. The AI runs use the authored hull and are completion
 checks, not original-ROM driving traces; no source rules were relaxed to meet
 the old approximate-world expectations.
 
-## Unpublished — canonical moving collision surfaces
+## v2.40.0 — canonical moving collision surfaces
 
 Full7F700 box contacts now have a canonical entry point that decodes the latest
 collision-plane owner, including origins moved by6E0F4. These temporary rows
@@ -324,7 +336,7 @@ the actual adapter callback and shared frame schedule with its rising collision
 origin. Invalid later rows reject without changing the canonical or body inputs.
 Live host startup/selection remains to be connected; resolution is unchanged.
 
-## Unpublished — complete fixed-sphere numeric contact phase
+## v2.40.0 — complete fixed-sphere numeric contact phase
 
 Full7EF80 now consumes the canonical fixed-sphere and spatial-grid words via
 the original741A4 query and front/rear7ED2C contact sequence. Grid selection uses
@@ -349,7 +361,7 @@ fixed/generic impacts and identical full histories at30/60/144 render updates.
 This bridge is prepared for live startup selection; the existing browser host
 still selects the older fixed-sphere bridge. No resolution or visual changes.
 
-## Unpublished — shared object effects and presentation
+## v2.40.0 — shared object effects and presentation
 
 The complete-object bridge can now own ice fragments and splash pools while
 reading object visibility/age/positions directly from canonical object words.
@@ -367,7 +379,7 @@ and verify that changing a snapshot cannot change simulation state. Duplicate
 effect phases and incomplete preceding frames reject. The browser host still
 uses its existing ice/floating owners until startup/contact integration lands.
 
-## Unpublished — ordinary course object resources
+## v2.40.0 — ordinary course object resources
 
 Readonly object resources now cover ordinary modes0/1 as well as Stunt11 for
 all nine source courses and both player counts. Ordinary ramps and fixed XZ
@@ -386,7 +398,7 @@ also agree with independently recovered resources. Stunt resources are shared
 without copying or modification. This prepares live startup integration; it
 does not change host mode/course admission or rendering resolution.
 
-## Unpublished — shared fixed-sphere tide update
+## v2.40.0 — shared fixed-sphere tide update
 
 The shared object bridge now follows generic motion with Southern Island's
 fixed-sphere height update, then object transforms, using the completed water
@@ -402,7 +414,7 @@ water-level changes reach this same canonical storage before transforms, while
 inactive frames and other courses preserve it. Invalid datum/overflow rejects
 atomically. Browser-host selection remains separate; resolution is unchanged.
 
-## Unpublished — complete generic-object post-motion update
+## v2.40.0 — complete generic-object post-motion update
 
 Full numeric6E0F4 now updates the same canonical object and collision-plane
 owners used by loading, contact and buoyancy. Broken ice hides and ages even
@@ -429,7 +441,7 @@ resource audit executes628,927 instructions. This is still prepared stage
 coverage, not full native boot or browser-host admission. Live host startup and
 presentation selection remain to be connected. Resolution is unchanged.
 
-## Unpublished — shared generic-object contact and motion bridge
+## v2.40.0 — shared generic-object contact and motion bridge
 
 The canonical object span now supports the original7E938 sphere-contact
 selection and the generic half of7DBC0 free motion. Intact kind10 ice ignores
@@ -460,7 +472,7 @@ live browser host. Host startup/resource selection and the source transform
 stage described above must be connected before replacing its separate adapters or
 enabling native Stunt mode. Graphics quality and resolution are unchanged.
 
-## Unpublished — fixed-sphere startup and collision grid
+## v2.40.0 — fixed-sphere startup and collision grid
 
 The selected fixed-sphere tail of71E70 now loads generic XZ obstacles, boundary
 markers and hidden XYZ points in source order, with original difficulty,
@@ -484,7 +496,7 @@ XYZ lists match their separately recovered existing resource files. Earlier
 71E70 selection/reset/primary stages, complete startup scheduling and live Stunt
 admission remain unfinished. Resolution and rendering are unchanged.
 
-## Unpublished — native object rows and actual Stunt course resources
+## v2.40.0 — native object rows and actual Stunt course resources
 
 The reached generic-object section of71E70 now loads selected ramp, ring and
 obstacle rows into the canonical object array. It preserves the source's write
@@ -510,7 +522,7 @@ override disabled. Two-player resource coverage does not admit a two-player
 Stunt menu. Live native Stunt startup/scheduling remains unfinished; graphics,
 resolution and the live mode guards are unchanged.
 
-## Unpublished — native object initialization and transforms
+## v2.40.0 — native object initialization and transforms
 
 The full numeric744EC initializer now prepares the shared generic-object array,
 including live positions, heading axes, collection/fade flags, type-specific
@@ -537,7 +549,7 @@ work above adds actual selected generic rows/templates; the rest of71E70,
 75274/6AACC startup scheduling and live native Stunt admission remain unfinished.
 Resolution and rendering quality are unchanged.
 
-## Unpublished — complete native Stunt judging and HUD update
+## v2.40.0 — complete native Stunt judging and HUD update
 
 The canonical race owner now composes the complete Stunt79528 numeric update:
 each racer's scratch context and Stunt judgment in ascending slot order, one
@@ -566,7 +578,7 @@ live Stunt races. Native Stunt admission still needs course/object initializatio
 and world scheduling. The subsequent ring stage, display transfer, physics,
 rendering and saving remain separate. Resolution and rendering are unchanged.
 
-## Unpublished — native ring commentary entry
+## v2.40.0 — native ring commentary entry
 
 Ring collection'sC3628 audio recipe now reaches the existing announcer owner.
 Its4/8/12 streak cues and course-completion cue use the original delayed slot,
@@ -584,7 +596,7 @@ browser sound backend; this update connects its spoken commentary and preserves
 the separate tone commands in the numeric entry. Native Stunt admission still
 requires the remaining course/startup integration. High resolution is unchanged.
 
-## Unpublished — native stunt ring contacts
+## v2.40.0 — native stunt ring contacts
 
 The shared state can now retain the original64-object array and its separate
 ring-chain words. Ring collection uses the selected primary body's44/48/4C
@@ -611,7 +623,7 @@ entry is intercepted. Course object loading, reset6AACC, ring graphics and the
 audio entry's live execution still require integration before native Stunt
 admission. No rendering resolution, texture or mesh detail was reduced.
 
-## Unpublished — native stunt finish and combined racer update
+## v2.40.0 — native stunt finish and combined racer update
 
 Stunt finish processing now writes the original lap and visited-node flags,
 settles a held pose into the delayed bonus, recomputes the recorded time and
@@ -639,7 +651,7 @@ the final bonus draining once into the saved record, early-return ordering and
 scratch side effects. Native Stunt admission, live HUD and ring/course setup
 remain unfinished. Rendering resolution and detail are unchanged.
 
-## Unpublished — native stunt checkpoint geometry and time awards
+## v2.40.0 — native stunt checkpoint geometry and time awards
 
 Stunt crossings now consume canonical scratch position and the actual selected
 primary node. The loader exposes its separate78/7C aperture axis; checkpoint
@@ -667,7 +679,7 @@ still follow separately; native Stunt mode remains unadmitted. Resolution is
 unchanged. All109 focused checks pass, including primary initialization and
 the existing ordinary launch and physical landing suites.
 
-## Unpublished — native stunt timer and retirement prelude
+## v2.40.0 — native stunt timer and retirement prelude
 
 The shared Stunt state now includes the original783AC prelude: selected-player
 event retirement, delayed finish-bonus enqueue, source clocks and timeout
@@ -691,7 +703,7 @@ unchanged neighboring words and late-input failure without partial writes.
 Full checkpoint progression, finish bookkeeping, rings and live Stunt admission
 remain incomplete. High-resolution rendering is unchanged.
 
-## Unpublished — shared stunt scoring state
+## v2.40.0 — shared stunt scoring state
 
 Stunt queue, pulse, totals, move accumulation, repeat/completion flags and score
 records now have adapters into the existing canonical race/HUD spans. There is
@@ -719,7 +731,7 @@ original instructions; all17 relevant exported instructions match ROM bytes.
 All94 focused checks pass, including shared storage, source startup, physical
 landings, ordinary live launches and30/60/144Hz invariance.
 
-## Unpublished — native stunt award queue and numeric records
+## v2.40.0 — native stunt award queue and numeric records
 
 The independent stunt scoring consumer now reproduces the four-slot award
 queue, popup motion/fade, pulse clock and delayed transfer to capped total,
@@ -749,7 +761,7 @@ canonical state wiring, HUD and full result flow are still required. Ordinary
 native time/versus gains no stunt points from these standalone consumers.
 Resolution, geometry detail and music defaults are unchanged.
 
-## Unpublished — native rotation landing and hull repair
+## v2.40.0 — native rotation landing and hull repair
 
 Ordinary native time/versus now retains the source release countdown, accumulates
 the tracked point-motion arc, and classifies each completed rider frame. Released
@@ -787,7 +799,7 @@ driven course-jump browser run; an unrelated resource404 remains in the preview.
 Native backend/course admission remains opt-in; original geometry/animation,
 native stunt award queue/HUD/results and all-mode parity remain incomplete.
 
-## Unpublished — ordinary native gesture and idle actions
+## v2.40.0 — ordinary native gesture and idle actions
 
 Ordinary native time/versus hosts now admit the existing source gesture and
 idle dispatcher. Normal keyboard sequences enter actors8/9/17, run their real
@@ -817,7 +829,7 @@ This supersedes the earlier disabled-host-action limitation below. Native
 backend/course admission remains opt-in. Pose anatomy/artwork remains authored;
 full original stunt scoring, landing triggers and all-mode parity are unfinished.
 
-## Unpublished — original rider feedback audio bridge
+## v2.40.0 — original rider feedback audio bridge
 
 C3548/C35B4 now preserve their complete result gate, unsigned audio-random
 selection and ordered commentary/cue calls. Commentary uses the existing
@@ -848,7 +860,7 @@ the prepared physical action path to sound; it does not claim ordinary native
 gesture admission. Supplying that launch state and its shared RNG/record inputs
 is the next gameplay integration. Special126 and channel15 audio remain open.
 
-## Unpublished — original cue instruments and race audio preparation
+## v2.40.0 — original cue instruments and race audio preparation
 
 Native solo/versus launches and finish events now route the original C1EB8
 retained-base selectors into sequence0/channel11. This channel has16 looping
@@ -893,7 +905,7 @@ credits/tempo processing, complete native menu admission and the full original
 bank-loading/mixer lifecycle remain unfinished; this checkpoint does not claim
 complete audio parity.
 
-## Unpublished — original multi-part menu announcements
+## v2.40.0 — original multi-part menu announcements
 
 The admitted native audio owner now dispatches C377C's ordered IO1 selector
 and IO0=127 command. Its mode-entry delay reaches playback through the outer
@@ -931,7 +943,7 @@ still follows browser render drains rather than the source polling phase.
 Stereo/headphone width, gain and resampling remain documented web adaptations.
 All four HTML maps/preloads now cover346 modules. Resolution is unchanged.
 
-## Unpublished — original course and finish audio-mode entry
+## v2.40.0 — original course and finish audio-mode entry
 
 Native human launches now enter racing audio through the original C21F4 mode
 handler before the first source frame. Its complete direct body preserves mode
@@ -971,7 +983,7 @@ announcement checkpoint above. Source audio random variants still use
 the documented independent web pattern. Four HTML maps/preloads cover345
 modules; the native gameplay preview retains its existing mode admission.
 
-## Unpublished — original announcer and live race audio events
+## v2.40.0 — original announcer and live race audio events
 
 Native human races now connect C37F4 events and the complete mode7 C010C packet
 consumer to original announcer playback. Countdown, start, rank, maximum-power,
@@ -1026,7 +1038,7 @@ completion and the full unattended1200-frame Continue timeout. Together with
 the announcer checkpoint,69 unique focused tests have passed. The four HTML
 import maps and preload hashes cover344 modules.
 
-## Unpublished — original rider reactions and water-entry audio
+## v2.40.0 — original rider reactions and water-entry audio
 
 Native human races now run the original rider-audio tail after impact handling.
 Actual crash/remount event edges choose the character's reaction; a sustained
@@ -1061,7 +1073,7 @@ independent two-player layers are covered by the dispatch and playback tests.
 High1280×720 and83,521 water vertices remain unchanged. One local resource404
 remains; no observed JavaScript exception. Full native gameplay parity is open.
 
-## Unpublished — original spray playback and effect-channel polling
+## v2.40.0 — original spray playback and effect-channel polling
 
 The native human audio owner now consumes original spray levels after engine
 controls and before impacts. Five separately extracted bank4 PCM effects use
@@ -1092,7 +1104,7 @@ nonzero signal and silent final tails. High1280×720 and83,521 water vertices
 remain unchanged. One local missing-resource404 remains; no observed JavaScript
 exception. Native AI/voice scheduling and full gameplay parity remain open.
 
-## Unpublished — live source spray inputs and cadence
+## v2.40.0 — live source spray inputs and cadence
 
 The native human races now assemble AE210 spray inputs from actual completed
 hull motion, the per-tick physical reference, floor-impact maxima, alternate
@@ -1115,7 +1127,7 @@ quality,1280×720 and83,521 water vertices remain unchanged.
 This completes the live spray-level input path. Original bank4 spray samples,
 channel pitch/poll priority and independent layer1 playback remain unfinished.
 
-## Unpublished — original spray levels and physical reference motion
+## v2.40.0 — original spray levels and physical reference motion
 
 The B08F8 scalar spray-level calculation is reconstructed from the original
 camera/scene gates, physical motion, wet transitions and retained side levels.
@@ -1136,7 +1148,7 @@ C0044 writes spray IO6/IO1; sequence0 routes these to channel2/5 layer1 with
 bank4 percussion, leaving the landing/impact layer0 independent. Playback and
 source polling priority remain to be implemented.
 
-## Unpublished — live original human engine audio
+## v2.40.0 — live original human engine audio
 
 Native one-human and two-human previews now connect the original engine loops
 to completed physical frames and canonical race records. Envelope preparation
@@ -1161,7 +1173,7 @@ water/wind. Holding stopped all original voices and tails. The check retained
 High quality,1280×720 and83,521 water vertices. No graphics settings changed.
 Original voice/rank scheduling and source spray playback remain unfinished.
 
-## Unpublished — original engine samples and playback support
+## v2.40.0 — original engine samples and playback support
 
 Four original engine waveforms are extracted as standalone PCM loops, retaining
 their source loop boundaries and low/middle/high sample ranges. Sequence0's
@@ -1182,7 +1194,7 @@ Original portamento,
 RSP interpolation and envelopes are approximated by Web Audio smoothing and
 short crossfades; this does not claim a complete hardware audio emulation.
 
-## Unpublished — original ice-break sequence
+## v2.40.0 — original ice-break sequence
 
 Native ice collisions now play the original channel7 ice-break cue. Sequence0
 resolves command19 through its dynamic table to bank5/instrument7: five notes
@@ -1201,7 +1213,7 @@ all17 effects, renders nonzero ice audio with the intended silent channel tail,
 and verifies that repeated commands wait for the first cue before playing the
 latest pending cue. Graphics, resolution and original music remain unchanged.
 
-## Unpublished — original landing and impact samples
+## v2.40.0 — original landing and impact samples
 
 The native preview now plays the original landing and material-impact samples
 from the supplied ROM. Sequence0's human channels2/5 select bank0 percussion
@@ -1232,7 +1244,7 @@ mixer. The separate ice cue is covered by the checkpoint above. Original
 engine loops, voice scheduling and full audio-thread emulation remain unfinished.
 No raw ROM, soundbank or sequence is distributed with these standalone effects.
 
-## Unpublished — live native audio motion inputs
+## v2.40.0 — live native audio motion inputs
 
 The contact-audio owner now receives all four original sound-prefix bytes.
 The canonical race record supplies2C8; each physical hull tick supplies BFC
@@ -1248,7 +1260,7 @@ Integration checks cover actual tick units, contact translation, batched ticks,
 separate player records/slip bytes and incomplete-input rejection. No physics
 forces, water geometry, graphics quality or resolution settings changed.
 
-## Unpublished — physical rider-water audio edge
+## v2.40.0 — physical rider-water audio edge
 
 The live native sound owner now follows the original65C18 rider-water edge:
 C84 retains the prior C86, and only actors5/23 compare the completed physical
@@ -1266,7 +1278,7 @@ The additional1C5C/1C60 audio levels come from the original spray producer;
 modern particle counts cannot substitute for those values. Full original
 spray/audio scheduling and engine/voice playback remain unfinished.
 
-## Unpublished — original engine and spray command consumers
+## v2.40.0 — original engine and spray command consumers
 
 `native-engine-audio.js` reconstructs C010C's envelope preparation, throttle
 edge/surge, power announcement, speed/power pitch table, retained pitch smoothing
@@ -1286,7 +1298,7 @@ still need integration. The source gate at7CA0 retains its address-based name
 until its owner is established. Existing music, live contact sounds and all
 rendering/resolution settings remain unchanged.
 
-## Unpublished — complete race sound-packet control flow
+## v2.40.0 — complete race sound-packet control flow
 
 `native-race-audio-consumer.js` now composes the complete C010C routine: outer
 mode gates, rank announcements and cooldown writes, course/mode power override,
@@ -1315,7 +1327,7 @@ cannot substitute for that stream. All46 focused tests pass, including a real
 buoy-triggered fall/remount and identical physical histories at30/60/144Hz.
 Rendering resolution, water geometry and existing music playback are unchanged.
 
-## Unpublished — canonical audio records and event state
+## v2.40.0 — canonical audio records and event state
 
 The live audio packet now receives power12C and place4 from the canonical race
 records, using the actual primary/secondary human slot selectors. Raw signed
