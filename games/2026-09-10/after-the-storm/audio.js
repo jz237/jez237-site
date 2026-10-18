@@ -2,6 +2,7 @@ import {RideSound} from './ride-sound.js';
 import {SampleSound} from './sample-sound.js';
 import {OriginalMusic} from './original-music.js';
 import {OriginalContactSound} from './original-contact-sound.js';
+import {OriginalAnnouncerSound} from './original-announcer-sound.js';
 import {OriginalEngineSound} from './original-engine-sound.js';
 import {musicNotes,NOTE_INTERVAL,midiFrequency,stereoWidth} from './coastal-music.js';
 export class Soundscape{
@@ -37,28 +38,30 @@ export class Soundscape{
  nativeContacts(owner,active,players=1){
   this.nativeEngineReady=false;this.nativeEnginePrepared=false;
   this.nativeContactPrepared=false;
-  if(owner!==this.nativeContactOwner){this.originalContacts?.resetChannels();this.nativeContactOwner=owner;}
+  if(owner!==this.nativeContactOwner){this.originalContacts?.resetChannels();this.originalAnnouncer?.stop();this.nativeContactOwner=owner;}
   const engines=owner?.engineChannels?.();
   if(engines&&active&&this.enabled&&this.ctx){
    if(!this.originalEngines)this.originalEngines=new OriginalEngineSound(this.ctx,this.effects);
    if(typeof location!=='undefined')this.originalEngines.load();
    this.nativeEngineReady=this.originalEngines.update(engines,{mode:this.mode});this.nativeEnginePrepared=true;
   }else this.originalEngines?.stop();
-  if(!owner){this.originalContacts?.stop();return;}
+  if(!owner){this.originalContacts?.stop();this.originalAnnouncer?.stop();return;}
   const commands=owner.drain();
-  if(!active||!this.enabled||!this.ctx){owner.clearPendingSounds?.();this.originalContacts?.stop();return;}
+  if(!active||!this.enabled||!this.ctx){owner.clearPendingSounds?.();this.originalContacts?.stop();this.originalAnnouncer?.stop();return;}
   if(!this.originalContacts)this.originalContacts=new OriginalContactSound(this.ctx,this.effects);
+  if(!this.originalAnnouncer)this.originalAnnouncer=new OriginalAnnouncerSound(this.ctx,this.effects);
   this.nativeContactPrepared=true;
   this.originalContacts.setMode(this.mode);
-  if(typeof location!=='undefined')this.originalContacts.load();
+  if(typeof location!=='undefined'){this.originalContacts.load();this.originalAnnouncer.load();}
   for(const command of commands)this.nativeContact(command,players===2?(command.player===1?.4:-.4):0);
  }
  finishNativeContactFrame(active){
-  if(!this.nativeContactPrepared||!active)this.originalContacts?.stop();
+  if(!this.nativeContactPrepared||!active){this.originalContacts?.stop();this.originalAnnouncer?.stop();}
   this.nativeContactPrepared=false;
  }
  nativeContact(command,side=0){
   if(!this.ctx||!this.enabled)return;
+  if(command.consumer==='c53d4'&&command.arguments[0]===0x06000c00){this.originalAnnouncer?.play(command);return;}
   if(this.originalContacts?.play(command,side))return;
   const args=command.arguments,hit=command.consumer==='bffec',spray=command.consumer==='c0044',ice=command.consumer==='c53d4'&&args[0]===0x06000700&&args[1]===0x13;
   if(!hit&&!ice&&!spray)return;

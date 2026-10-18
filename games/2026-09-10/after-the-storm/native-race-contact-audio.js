@@ -1,28 +1,32 @@
-import {nativeHullAudioPrefix,nativeContactImmersion,nativeContactAudioMaterials,consumeNativeWetAudio} from './native-contact-audio.js';
-import {nativeImpactAudioPacket,consumeNativeImpactAudio} from './native-impact-audio.js';
+import {nativeHullAudioPrefix,nativeContactImmersion,nativeContactAudioMaterials} from './native-contact-audio.js';
+import {nativeImpactAudioPacket} from './native-impact-audio.js';
 import {prepareNativeAudioChannel} from './native-audio-channels.js';
 import {nativeRaceBodyFields} from './native-race-body-fields.js';
 import {queryNativeWaterField} from './native-water-field.js';
 import {prepareNativeRiderWaterAudio,prepareNativeActorAudioFields} from './native-audio-packet.js';
-import {prepareNativeEngineEnvelope,consumeNativeEngineAudio,consumeNativeSprayAudio} from './native-engine-audio.js';
 import {createOriginalEngineChannels,applyOriginalEngineCommands} from './original-engine-sound.js';
 import {createOriginalEffectPoll} from './original-effect-poll.js';
-import {consumeNativeRiderAudio} from './native-race-audio-consumer.js';
+import {consumeNativeRaceAudio} from './native-race-audio-consumer.js';
+import {prepareNativeAudioEvent} from './native-audio-events.js';
+import {freshNativeAnnouncer,prepareNativeAnnouncer,advanceNativeRaceAnnouncer} from './native-announcer.js';
 const F=Math.fround;
 const channelEntries=new Set(['800bfdd0','800bfde4','800bfe70','800bfef8','800bffac','800bfd34','800bfd68','800bffcc']);
+const voiceEntries=new Set(['c32a0','c3320','c338c','c33c8','c3408','c3464','c36f8']);
 
 // Engine/contact/rider owner for the admitted one-human and two-human races.
 // Fresh web sessions explicitly start packet storage/motion at zero, in racing
 // audio mode7 with muted channels. Source status effects enable them. This is
-// not an emulation of retained cartridge mixer/voice state or nearest-rival
+// not an emulation of retained cartridge mixer state or nearest-rival
 // channel2 routing. Original music keeps its separate presentation owner.
 export function createNativeRaceContactAudio({players,courseIndex}){
  if(![1,2].includes(players))throw new RangeError('Contact audio requires one or two human racers');
- let materials=nativeContactAudioMaterials(courseIndex),audioMode=7,frame=0,pairedImpact=0,pairedVariant=0;
+ let materials=nativeContactAudioMaterials(courseIndex),audioMode=7,frame=0,timerFrame=0,pairedImpact=0,pairedVariant=0,announcer=freshNativeAnnouncer();
  let globals={raceMode:players-1,courseIndex,primaryMuted:1,secondaryMuted:1,alternateEngine:0,
   rankDelay:0,primaryStart:0,secondaryStart:0,primaryPitchBits:0,secondaryPitchBits:0,rivalPitchBits:0,
   primaryFlag:0,primaryCompanionFlag:0,primaryLastPlace:0,secondaryFlag:0,secondaryCompanionFlag:0,secondaryLastPlace:0,
-  engineGate7ca0:0,primaryPowerByte:0,secondaryPowerByte:0,riderEvent7ca4:0};
+  engineGate7ca0:0,primaryPowerByte:0,secondaryPowerByte:0,riderEvent7ca4:0,
+  primaryPlaceByte:0,secondaryPlaceByte:0,rankPlaceWord:0,eventGate7cb8:0,field7c98:0,eventLatch7ca8:0,
+  delay7cd8:0,delay7cd4:0,delay7cec:0,delay7cf0:0,counter7cf4:0};
  let engineChannels=createOriginalEngineChannels(players).map((c,i)=>({...c,volume:F(60/127),pan:players===2?(i?127:0):64}));
  const packets=[Array(32).fill(0),Array(32).fill(0)],motion=Array.from({length:players},()=>({speed:0,vertical:0})),queue=[];
  const riderWater=Array.from({length:players},()=>({bodyC84:0,bodyC86:0}));
@@ -34,14 +38,32 @@ export function createNativeRaceContactAudio({players,courseIndex}){
   if(queue.length===64){queue.shift();dropped++;}
   queue.push({frame,player,consumer:command.consumer,arguments:[...command.arguments]});emitted++;
  }
+ const jitter=()=>((Math.imul(frame,1664525)+1013904223)>>>0);
+ const retain=context=>{for(const key of Object.keys(globals))globals[key]=context[key];};
+ function submit(command,player=0){
+  if(voiceEntries.has(command.consumer)){
+   const next=prepareNativeAnnouncer(announcer,command,{...globals,audioMode});announcer=next.state;
+   for(const raw of next.commands)submit(raw,player);return;
+  }
+  if(effectPoll.submit({...command,frame,player},globals.raceMode))return;
+  if(command.consumer==='c53d4'&&[0x06000700,0x06000c00].includes(command.arguments[0]))enqueue(command,player);
+ }
  return {
+  beforeFrame(next){
+   if(!Number.isInteger(next)||next!==timerFrame+1||next!==frame+1)throw new RangeError('Announcer requires successive outer game frames');
+   timerFrame=next;
+   const result=advanceNativeRaceAnnouncer(announcer,{...globals,audioMode,paused7cc4:0,musicSelection:0,random4562c:jitter()});
+   announcer=result.state;retain(result.context);
+   for(const command of result.commands)submit(command);
+  },
   applyEffects(effects){
    for(const effect of effects){
     // Source start-control emits audioEntry, separately from channel calls.
-    // C21F4 and the supplied ROM initialize7CA0/7CB8 tozero; this browser owner
-    // has no voice-muting7CB8 override. Other C37F4 voice/timer work is separate.
+    // C21F4 and the supplied ROM initialize7CA0/7CB8 tozero. Event voices
+    // enter the same priority slot as rank, power and rider-water commentary.
     if(effect.consumer==='800c37f4'&&['audioEntry','externalCall'].includes(effect.kind)){
-     if(audioMode===7&&effect.arguments[0]===0x23)globals.engineGate7ca0=1;
+     const next=prepareNativeAudioEvent(effect.arguments[0],effect.arguments[1]??0,{...globals,audioMode,random4562c:jitter()});
+     retain(next.context);for(const command of next.commands)submit(command);
      continue;
     }
     if(effect.kind!=='externalCall')continue;
@@ -57,10 +79,10 @@ export function createNativeRaceContactAudio({players,courseIndex}){
      // The racing-mode branch stops both engines without changing audioMode.
      if(audioMode===7)globals.primaryMuted=globals.secondaryMuted=1;
     }else if(consumer==='800c21f4'){
-     const mode=args[0]|0,previous=audioMode;
+     const mode=args[0]|0,previous=(audioMode<<24)>>24;
      globals.engineGate7ca0=0;
      if(mode!==previous||mode!==1&&mode!==10){
-      audioMode=(mode<<24)>>24;globals.primaryMuted=globals.secondaryMuted=1;
+      audioMode=mode&255;globals.primaryMuted=globals.secondaryMuted=1;
       if(mode===0){globals.raceMode=0;globals.courseIndex=0;}
       else if(mode===1&&previous!==10)globals.raceMode=args[1]|0;
       else if(mode===7){globals.courseIndex=args[1]|0;materials=nativeContactAudioMaterials(globals.courseIndex);}
@@ -111,35 +133,25 @@ export function createNativeRaceContactAudio({players,courseIndex}){
     // Mode4's separate rider-water cue is outside this contact subset.
     if(audioMode!==7||globals[player===0?'primaryMuted':'secondaryMuted']!==0)continue;
     const context={raceMode:globals.raceMode,channel:player,mixerLane:player===0?0:3};
-    const prepared=prepareNativeEngineEnvelope(packet),landing=consumeNativeWetAudio(prepared.packet,context);
     // Only human channels are admitted. The rival-only inputs satisfy the
     // prepared kernel's structural validation and are never read on this path.
     // The original RNG is mixed-audio-derived. Use a separate reproducible web
     // jitter pattern here; it neither claims that RNG nor consumes gameplay RNG.
-    const jitter=(Math.imul(frame,1664525)+1013904223)>>>0;
-    const engine=consumeNativeEngineAudio(landing.packet,{...globals,...context,random4562c:jitter,
-     rivalPanByte:0,rivalControlByte:0,rivalGate7de8:0,rivalPitchMultiplierBits:0,rivalGainBits:0},prepared.envelope);
-    for(const key of Object.keys(globals))globals[key]=engine.context[key];
-    engineChannels=applyOriginalEngineCommands(engineChannels,[...landing.commands,...engine.commands]);
-    const spray=consumeNativeSprayAudio(engine.packet,{...globals,...context,random4562c:jitter});
-    const hit=consumeNativeImpactAudio(spray.packet,{...context,...materials,pairedImpact,pairedVariant});
-    pairedImpact=hit.context.pairedImpact;pairedVariant=hit.context.pairedVariant;
-    const rider=consumeNativeRiderAudio(hit.packet,{...context,random4562c:jitter,riderEvent7ca4:globals.riderEvent7ca4});
-    globals.riderEvent7ca4=rider.context.riderEvent7ca4;
+    const result=consumeNativeRaceAudio(packet,{...globals,...context,...materials,audioMode,pairedImpact,pairedVariant,random4562c:jitter(),
+     rivalPanByte:0,rivalControlByte:0,rivalGate7de8:0,rivalPitchMultiplierBits:0,rivalGainBits:0});
+    retain(result.context);pairedImpact=result.context.pairedImpact;pairedVariant=result.context.pairedVariant;
+    engineChannels=applyOriginalEngineCommands(engineChannels,result.commands);
     // The rider tail acknowledges event/water-entry latches and commits the
     // prior-speed byte only after the impact consumer has read it.
-    packets[player]=rider.packet;
-    for(const command of [...landing.commands,...engine.commands,...spray.commands,...hit.commands,...rider.commands]){
-     if(effectPoll.submit({...command,frame,player},globals.raceMode))continue;
-     if(command.consumer==='c53d4'&&command.arguments[0]===0x06000700)enqueue(command,player);
-    }
+    packets[player]=result.packet;
+    for(const command of result.commands)submit(command,player);
    }
    for(const command of effectPoll.poll())enqueue(command,command.player);
   },
   drain(){return queue.splice(0);},
-  clearPendingSounds(){effectPoll.clear();queue.length=0;},
+  clearPendingSounds(){effectPoll.clear();queue.length=0;announcer.delay=announcer.delayedHold=0;},
   engineChannels(){return globals.alternateEngine!==0?null:engineChannels.map((c,i)=>({...c,enabled:c.enabled&&audioMode===7&&globals[i?'secondaryMuted':'primaryMuted']===0}));},
-  snapshot(){return {scope:'source-human-engine-contact-spray-rider-controls; browser-audio-jitter-poll-phase-and-smoothing',frame,audioMode,globals:{...globals},
+  snapshot(){return {scope:'source-human-race-audio-and-announcer-controls; browser-audio-jitter-poll-phase-and-smoothing',frame,timerFrame,audioMode,globals:{...globals},announcer:{...announcer},
    engineChannels:engineChannels.map(c=>({...c})),effectPoll:effectPoll.snapshot(),riderPoll:effectPoll.riderSnapshot(),
    packets:packets.map(p=>p.slice()),motion:motion.map(m=>({...m})),riderWater:riderWater.map(w=>({...w})),pending:queue.length,emitted,dropped};}
  };

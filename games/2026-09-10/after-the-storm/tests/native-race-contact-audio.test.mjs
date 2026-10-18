@@ -87,9 +87,38 @@ test('actual source start reaches the engine gate and audio histories are render
   for(let i=0;i<hz*6;i++)stepNativeRaceHost(race.nativeHost,1/hz,[{throttle:1},{throttle:0}]);
   const audio=race.nativeContactAudio;assert.equal(audio.snapshot().globals.engineGate7ca0,1);
   histories.push({channels:audio.engineChannels(),packets:audio.snapshot().packets,globals:audio.snapshot().globals,frame:audio.snapshot().frame,
-   effectPoll:audio.snapshot().effectPoll,commands:audio.drain()});
+   effectPoll:audio.snapshot().effectPoll,timerFrame:audio.snapshot().timerFrame,announcer:audio.snapshot().announcer,commands:audio.drain()});
  }
  assert.deepEqual(histories[1],histories[0]);assert.deepEqual(histories[2],histories[0]);
+});
+
+test('announcer outer frame precedes the next physical packet and honors the original countdown hold',()=>{
+ const a=createNativeRaceContactAudio({players:1,courseIndex:1}),f=field();start(a);
+ a.applyEffects([{kind:'audioEntry',consumer:'800c37f4',arguments:[0x23,0]}]);
+ assert.deepEqual(a.drain().filter(c=>c.arguments[0]===0x06000c00).map(c=>c.arguments),[[0x06000c00,10]]);
+ assert.equal(a.snapshot().globals.rankDelay,320);assert.equal(a.snapshot().announcer.hold,60);
+ for(let frame=1;frame<=60;frame++){
+  a.beforeFrame(frame);assert.equal(a.snapshot().announcer.hold,60-frame);
+  advance(a,[body(frame)],f,[0],[0]);
+ }
+ assert.equal(a.snapshot().globals.delay7cd8,0);assert.equal(a.snapshot().globals.rankDelay,260);
+ assert.throws(()=>a.beforeFrame(60),/successive/);assert.throws(()=>a.beforeFrame(62),/successive/);
+ a.applyEffects([call('800c21f4',-1,0)]);assert.equal(a.snapshot().audioMode,255);a.beforeFrame(61);
+});
+
+test('physical rider water-entry schedules one delayed announcer cue and pause discards it',()=>{
+ const a=createNativeRaceContactAudio({players:1,courseIndex:1}),f=field();start(a);
+ const q=queryNativeWaterField(f,64,0).sourcePlaneQueryNative;
+ for(let frame=1;frame<=11;frame++){
+  a.beforeFrame(frame);const b=body(frame);b.lastFrame.actorState=23;b.articulatedRider={jointWorld:{x:64,y:q-1,z:0}};
+  advance(a,[b],f,[0],[0]);const speech=a.drain().filter(c=>c.arguments[0]===0x06000c00);
+  assert.equal(speech.length,frame===11?1:0);
+  if(frame===11)assert.equal(speech[0].arguments[1],((Math.imul(1,1664525)+1013904223)>>>0)%3+0x50);
+ }
+ const b=body(12);b.lastFrame.actorState=23;b.articulatedRider={jointWorld:{x:64,y:q,z:0}};
+ a.beforeFrame(12);advance(a,[b],f,[0],[0]);
+ b.logicalFrames=13;b.articulatedRider.jointWorld.y=q-1;a.beforeFrame(13);advance(a,[b],f,[0],[0]);
+ assert.equal(a.snapshot().announcer.delay,10);a.clearPendingSounds();assert.equal(a.snapshot().announcer.delay,0);assert.deepEqual(a.drain(),[]);
 });
 
 test('120 original immersion executions preserve midpoint rounding and byte clamp thresholds',()=>{

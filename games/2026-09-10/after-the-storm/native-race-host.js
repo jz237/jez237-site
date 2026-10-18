@@ -77,13 +77,14 @@ function present(host){
  * Custom source actor/pose providers require explicit recovery:false.
  */
 export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,tunes=[],sourceStates=[],poseProviders=[],onFrame=null,
- raceRuntime=null,onLaunchFrame=null,onContactFrame=null,hullStarts=[],staticGeometry=null,
+ raceRuntime=null,onLaunchFrame=null,onContactFrame=null,onAudioFrame=null,hullStarts=[],staticGeometry=null,
  floatingDefinitions,floatingActive=true,primaryActive=true,recovery=true,craftContacts=true}={}){
  if(!Array.isArray(racers)||racers.length<1||racers.some(r=>!r?.hydro||!Number.isInteger(r.id)||r.id<0||r.id>3))throw new TypeError('Expected initialized browser racers');
  if(!water?.field||!finite(water.scale))throw new TypeError('Expected host source water');
  if(onFrame!==null&&typeof onFrame!=='function')throw new TypeError('onFrame must be a function');
  if(onLaunchFrame!==null&&typeof onLaunchFrame!=='function')throw new TypeError('onLaunchFrame must be a function');
  if(onContactFrame!==null&&typeof onContactFrame!=='function')throw new TypeError('onContactFrame must be a function');
+ if(onAudioFrame!==null&&typeof onAudioFrame!=='function')throw new TypeError('onAudioFrame must be a function');
  if(raceRuntime&&(!recovery||sourceStates.length||poseProviders.length||['scene','advanceClock','advanceLaunch'].some(k=>typeof raceRuntime[k]!=='function')))
   throw new TypeError('Canonical launch requires recovered riders and its single scene owner');
  if(raceRuntime?.ordinary&&['objectMotionActive','courseRollerState','waterDatumAfterPhysics'].some(k=>typeof raceRuntime[k]!=='function'))
@@ -151,6 +152,8 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
  }
  host.world=createNativeRaceWorld({adapters,water,humanIndices,craftContacts,deferWaterRollers:!!raceRuntime?.ordinary,
  beforeFrame:raceRuntime?.ordinary?(world,context)=>{
+  //47B00/BF370 precedes922E4 in46DA0's outer game loop.
+  if(onAudioFrame)onAudioFrame(host,context);
   //6A264 at922E4 entry precedes control/input and physical world work.
   host.lastSourceFrameCounter=raceRuntime.advanceSourceFrameCounter();
   const menu=typeof host.menuInputs==='function'?host.menuInputs(context.time,context.logicalFrame):host.menuInputs??[];

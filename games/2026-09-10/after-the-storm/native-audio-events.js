@@ -7,8 +7,8 @@ const bytes=['audioMode','primaryPowerByte','secondaryPowerByte','primaryFlag','
  'secondaryFlag','secondaryCompanionFlag','primaryPlaceByte','primaryLastPlace'];
 
 // Complete C37F4 event handler. This owns its actual global writes and returns
-// ordered raw leaf-call arguments. Audio-thread timers, voice scheduling and
-// mixer callees remain separate; a frame of physics is not an audio tick.
+// ordered raw leaf-call arguments. BF370 timers run before the outer game
+// update; voice scheduling and the sequence/mixer consumers remain separate.
 export function prepareNativeAudioEvent(event,parameter,context){
  integer(event,-2147483648,2147483647);integer(parameter,0,0xffffffff);
  const g={...context},commands=[];

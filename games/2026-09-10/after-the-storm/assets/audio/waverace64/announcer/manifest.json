@@ -1,0 +1,2213 @@
+{
+  "version": 1,
+  "sounds": {
+    "0": {
+      "file": "announcer-00.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "1": {
+      "file": "announcer-01.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "2": {
+      "file": "announcer-02.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "3": {
+      "file": "announcer-03.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "4": {
+      "file": "announcer-04.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "5": {
+      "file": "announcer-05.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "6": {
+      "file": "announcer-06.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "7": {
+      "file": "announcer-03.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "8": {
+      "file": "announcer-08.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "9": {
+      "file": "announcer-09.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "10": {
+      "file": "announcer-0a.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "11": {
+      "file": "announcer-0b.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "12": {
+      "file": "announcer-0c.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "13": {
+      "file": "announcer-0d.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "14": {
+      "file": "announcer-0e.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "15": {
+      "file": "announcer-0f.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "16": {
+      "file": "announcer-10.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "17": {
+      "file": "announcer-11.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "18": {
+      "file": "announcer-12.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "19": {
+      "file": "announcer-13.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "20": {
+      "file": "announcer-14.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "21": {
+      "file": "announcer-15.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "22": {
+      "file": "announcer-16.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "23": {
+      "file": "announcer-17.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "24": {
+      "file": "announcer-18.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "25": {
+      "file": "announcer-19.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "26": {
+      "file": "announcer-1a.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "27": {
+      "file": "announcer-1b.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "28": {
+      "file": "announcer-1c.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "29": {
+      "file": "announcer-1d.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "30": {
+      "file": "announcer-1e.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "31": {
+      "file": "announcer-1f.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "32": {
+      "file": "announcer-20.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "33": null,
+    "34": {
+      "file": "announcer-22.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "35": {
+      "file": "announcer-23.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "36": {
+      "file": "announcer-24.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "37": {
+      "file": "announcer-25.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "38": null,
+    "39": {
+      "file": "announcer-27.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "40": {
+      "file": "announcer-28.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "41": null,
+    "42": {
+      "file": "announcer-2a.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "43": {
+      "file": "announcer-2b.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "44": null,
+    "45": {
+      "file": "announcer-2d.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "46": {
+      "file": "announcer-2e.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "47": null,
+    "48": {
+      "file": "announcer-30.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "49": {
+      "file": "announcer-31.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "50": null,
+    "51": {
+      "file": "announcer-33.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "52": {
+      "file": "announcer-34.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "53": null,
+    "54": {
+      "file": "announcer-36.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "55": {
+      "file": "announcer-37.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "56": null,
+    "57": {
+      "file": "announcer-39.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "58": {
+      "file": "announcer-3a.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "59": {
+      "file": "announcer-3b.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "60": null,
+    "61": {
+      "file": "announcer-3d.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "62": {
+      "file": "announcer-3e.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "63": {
+      "file": "announcer-3f.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "64": {
+      "file": "announcer-40.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "65": {
+      "file": "announcer-41.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "66": {
+      "file": "announcer-42.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "67": {
+      "file": "announcer-43.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "68": {
+      "file": "announcer-44.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "69": {
+      "file": "announcer-45.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "70": null,
+    "71": {
+      "file": "announcer-47.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "72": {
+      "file": "announcer-48.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "73": {
+      "file": "announcer-49.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "74": {
+      "file": "announcer-4a.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "75": {
+      "file": "announcer-4b.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "76": {
+      "file": "announcer-4c.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "77": {
+      "file": "announcer-4d.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "78": {
+      "file": "announcer-4e.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "79": {
+      "file": "announcer-4f.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "80": {
+      "file": "announcer-50.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "81": {
+      "file": "announcer-51.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "82": {
+      "file": "announcer-52.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "83": null,
+    "84": null,
+    "85": null,
+    "86": {
+      "file": "announcer-56.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "87": {
+      "file": "announcer-57.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "88": {
+      "file": "announcer-58.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "89": {
+      "file": "announcer-59.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "90": {
+      "file": "announcer-5a.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "91": {
+      "file": "announcer-5b.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.4375,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "92": {
+      "file": "announcer-5c.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "93": null,
+    "94": {
+      "file": "announcer-5e.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "95": null,
+    "96": null,
+    "97": {
+      "file": "announcer-61.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "98": {
+      "file": "announcer-62.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "99": {
+      "file": "announcer-63.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "100": {
+      "file": "announcer-64.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "101": null,
+    "102": {
+      "file": "announcer-66.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "103": {
+      "file": "announcer-67.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "104": {
+      "file": "announcer-68.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "105": {
+      "file": "announcer-69.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "106": {
+      "file": "announcer-6a.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "107": {
+      "file": "announcer-6b.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "108": {
+      "file": "announcer-6c.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "109": {
+      "file": "announcer-6d.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "110": {
+      "file": "announcer-6e.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "111": {
+      "file": "announcer-6f.wav",
+      "sourceBank": 2,
+      "sourceTuning": 0.46875,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    }
+  },
+  "files": {
+    "announcer-00.wav": {
+      "sha256": "b879c46cff116e9870d5e0258e8fe14a42c561cb2cc6fe3a966c2b83c9b6ae9b",
+      "duration": 1.245875,
+      "bytes": 79780,
+      "peak": 32001,
+      "rms": 9972.162595697615
+    },
+    "announcer-01.wav": {
+      "sha256": "212ef3046a7411ba556b313688f42e343a9d1bf51cc9446a298b3090bb6e4bdb",
+      "duration": 2.784,
+      "bytes": 178220,
+      "peak": 32000,
+      "rms": 9178.353977233632
+    },
+    "announcer-02.wav": {
+      "sha256": "32da02d53fbb0286c16d82d1c9f4692f42ac857e5a8b035a07fd9efbc33e777d",
+      "duration": 1.52321875,
+      "bytes": 97530,
+      "peak": 32001,
+      "rms": 12250.310819750563
+    },
+    "announcer-03.wav": {
+      "sha256": "e98b4a694132d8658639a49d9f6e3558cb1b3f8a56e374bacd67566e7c14f8b9",
+      "duration": 1.14346875,
+      "bytes": 73226,
+      "peak": 32001,
+      "rms": 9286.15399849495
+    },
+    "announcer-04.wav": {
+      "sha256": "a9a1b6f44a591766fd36673eddea9ca4c487a0c3e14f2de790a19f422736f64d",
+      "duration": 1.2309375,
+      "bytes": 78824,
+      "peak": 32000,
+      "rms": 10734.029311366417
+    },
+    "announcer-05.wav": {
+      "sha256": "f96a05ef88463a8063a571ac7f6fd0d4696ae41b07ba5167e78c003b70bb481e",
+      "duration": 1.773875,
+      "bytes": 113572,
+      "peak": 32001,
+      "rms": 9528.619233040388
+    },
+    "announcer-06.wav": {
+      "sha256": "263fccb34da7c1a40b97c78a7dc2f2ad15a040c0f460fd2566b325afe6ca58e3",
+      "duration": 2.21440625,
+      "bytes": 141766,
+      "peak": 32001,
+      "rms": 13547.62515676027
+    },
+    "announcer-08.wav": {
+      "sha256": "513b156a4904cc3005d4cfd04abcd8166d269f50d6897448bf85042440dba3f4",
+      "duration": 1.3525625,
+      "bytes": 86608,
+      "peak": 32001,
+      "rms": 15279.853350904323
+    },
+    "announcer-09.wav": {
+      "sha256": "d2c11fc7a86802a74a8d3ceb9c7a680b9cb3f364c6ff871953438929d81e43d7",
+      "duration": 3.2426875,
+      "bytes": 207576,
+      "peak": 31406,
+      "rms": 8291.69369965398
+    },
+    "announcer-0a.wav": {
+      "sha256": "49ded6171fe200230bf488fefee1766b9bc349aa6aeba9e766c3f96a9154e614",
+      "duration": 1.36640625,
+      "bytes": 87494,
+      "peak": 32000,
+      "rms": 15157.944582443783
+    },
+    "announcer-0b.wav": {
+      "sha256": "3f43c43c8464fec613bc8ad9d71b19b62a582be73f04ab6d92958ebf3f4f5a87",
+      "duration": 0.5749375,
+      "bytes": 36840,
+      "peak": 32001,
+      "rms": 11798.218451375293
+    },
+    "announcer-0c.wav": {
+      "sha256": "f2f782f8f5ff424722ff5894cea04cf3f8f66352c08c7a69a28f42c13a59d2d3",
+      "duration": 0.53015625,
+      "bytes": 33974,
+      "peak": 32001,
+      "rms": 13910.908208385954
+    },
+    "announcer-0d.wav": {
+      "sha256": "69537eb9f8f4eeb97a72dc6819d4608c98765f54e2319c09d3dc8c5d5f1d61af",
+      "duration": 0.60375,
+      "bytes": 38684,
+      "peak": 31646,
+      "rms": 11305.37365402132
+    },
+    "announcer-0e.wav": {
+      "sha256": "199f80c7c77c569bcba6492349f5d46aa1005f659741e4f481ea9e0da6a3aaf4",
+      "duration": 1.63309375,
+      "bytes": 104562,
+      "peak": 32001,
+      "rms": 16857.75199756176
+    },
+    "announcer-0f.wav": {
+      "sha256": "13c27e9a970c4c96d1553b3421b34c5d8b7730de2ad4884d6d5f846fe3043ca9",
+      "duration": 0.99521875,
+      "bytes": 63738,
+      "peak": 32001,
+      "rms": 10268.049944763778
+    },
+    "announcer-10.wav": {
+      "sha256": "e1674a8d5f8ed59a7de3cecba7370ad368c0d423397a0cd0011ba46c703cc0bd",
+      "duration": 1.6586875,
+      "bytes": 106200,
+      "peak": 32000,
+      "rms": 13253.341439061003
+    },
+    "announcer-11.wav": {
+      "sha256": "965bb56ca8f224d81ea463ac8937225d4a047ce53663c6063c5bd0657d1803de",
+      "duration": 1.26828125,
+      "bytes": 81214,
+      "peak": 32001,
+      "rms": 13103.943131321661
+    },
+    "announcer-12.wav": {
+      "sha256": "0133c10d7b9bcedf05e37072db5c52cdafe8988c306d6f8c25b5a2fae3c2ea8f",
+      "duration": 1.053875,
+      "bytes": 67492,
+      "peak": 32001,
+      "rms": 8155.290597377367
+    },
+    "announcer-13.wav": {
+      "sha256": "0ffc44c4e3d7762496bd409286675c381d1dc43846bc239b0806c016eedbeb46",
+      "duration": 1.19040625,
+      "bytes": 76230,
+      "peak": 32000,
+      "rms": 10666.32933207148
+    },
+    "announcer-14.wav": {
+      "sha256": "d4517c927cc7f3bdecbeebea0b9368eb07a215503d7cf322d6a9522ccb270fb2",
+      "duration": 1.39309375,
+      "bytes": 89202,
+      "peak": 31598,
+      "rms": 11272.811199067382
+    },
+    "announcer-15.wav": {
+      "sha256": "02be9749d35e1841a4fef2205b20fabf9f5790c6dbdf095da6b2608e81b3420a",
+      "duration": 1.35575,
+      "bytes": 86812,
+      "peak": 30205,
+      "rms": 9536.440706398196
+    },
+    "announcer-16.wav": {
+      "sha256": "8bacf6728e5a72c97ba7c4377f3d50efc44448b50a86ea868226563334eb257c",
+      "duration": 3.19040625,
+      "bytes": 204230,
+      "peak": 32000,
+      "rms": 6974.08663022122
+    },
+    "announcer-17.wav": {
+      "sha256": "374f472ced4ab208d97f4fa8f7b02de3b498fdc7d3d9fecd2b1f66691638a3d2",
+      "duration": 1.62240625,
+      "bytes": 103878,
+      "peak": 32000,
+      "rms": 11937.33173486542
+    },
+    "announcer-18.wav": {
+      "sha256": "1daa12e09e9719c1b8c801775e2e709eea8131bd7aae4e4e6f063ed9632e1ee1",
+      "duration": 0.96746875,
+      "bytes": 61962,
+      "peak": 31529,
+      "rms": 10829.405156123132
+    },
+    "announcer-19.wav": {
+      "sha256": "87ec043c9d97072c597e207a8b87676901e80f9c9df8e095f26101cc1cb6f00b",
+      "duration": 2.42028125,
+      "bytes": 154942,
+      "peak": 32001,
+      "rms": 9247.125265206229
+    },
+    "announcer-1a.wav": {
+      "sha256": "38b42dbecc6c61b418421f1b8c34ec58573c8cf80b9b6be4ac0453a1a2ba74b3",
+      "duration": 1.3066875,
+      "bytes": 83672,
+      "peak": 32001,
+      "rms": 13928.6131955054
+    },
+    "announcer-1b.wav": {
+      "sha256": "e1ec1be0d490892a9ee4470b8efbe4a298b86fb98da9e6202217f9b420dc48ec",
+      "duration": 0.76375,
+      "bytes": 48924,
+      "peak": 32001,
+      "rms": 9906.975476808093
+    },
+    "announcer-1c.wav": {
+      "sha256": "12323b360fa6dc0a9e302d941419eec57f16c9ab0ef7555244e1e465a4052f6a",
+      "duration": 1.06028125,
+      "bytes": 67902,
+      "peak": 32001,
+      "rms": 11733.44073197498
+    },
+    "announcer-1d.wav": {
+      "sha256": "fec7f431be2e5d325b3a42f14a3889983d80c7526ee33e2959a4c25f229ffd0f",
+      "duration": 1.264,
+      "bytes": 80940,
+      "peak": 32001,
+      "rms": 11704.633602227208
+    },
+    "announcer-1e.wav": {
+      "sha256": "316af013b29e84ab9f86c27afda2ba2630c83afe2ddd7ba13f666ae56564d1a5",
+      "duration": 1.2565625,
+      "bytes": 80464,
+      "peak": 32001,
+      "rms": 8198.042274677757
+    },
+    "announcer-1f.wav": {
+      "sha256": "de39d3eea2dac32270f2f9dcb8e5f8619063fe2f830ffeac3c27ac8e28a422ce",
+      "duration": 2.0288125,
+      "bytes": 129888,
+      "peak": 32001,
+      "rms": 8527.72120923986
+    },
+    "announcer-20.wav": {
+      "sha256": "ebda28208cca8a949b2cf865594fe817e72a7ea2257a00d74a6afcbca8bd68c4",
+      "duration": 1.5349375,
+      "bytes": 98280,
+      "peak": 32000,
+      "rms": 9292.022118002691
+    },
+    "announcer-22.wav": {
+      "sha256": "4cdf1ed7efa51b49bc8a7086d0128018952234be2f7b22c5a87981e31ff00f4b",
+      "duration": 2.01815625,
+      "bytes": 129206,
+      "peak": 32000,
+      "rms": 9637.804544239323
+    },
+    "announcer-23.wav": {
+      "sha256": "524f82bb1b60915aa038f4ef9911fcf8948451cc3bcb5209eaa8305480f5d4ee",
+      "duration": 2.4906875,
+      "bytes": 159448,
+      "peak": 32000,
+      "rms": 7735.374087238215
+    },
+    "announcer-24.wav": {
+      "sha256": "f4090f436ddca38d9ec7c10324fd26d3db25161bd9855044c34cd386d29d09c9",
+      "duration": 3.0186875,
+      "bytes": 193240,
+      "peak": 32000,
+      "rms": 9116.01175797337
+    },
+    "announcer-25.wav": {
+      "sha256": "4647434b66eb084321900130ba39afd8db8bf63326af4e3b3b62acb1425b9e28",
+      "duration": 1.81546875,
+      "bytes": 116234,
+      "peak": 32000,
+      "rms": 8151.886930050009
+    },
+    "announcer-27.wav": {
+      "sha256": "91ff349c4b20902eaefb7d6e80af5ca18ce2b0d37391cdd1c4588cfe75460efb",
+      "duration": 2.06721875,
+      "bytes": 132346,
+      "peak": 32001,
+      "rms": 11272.556047996619
+    },
+    "announcer-28.wav": {
+      "sha256": "7b090e56a3a831b3d8436972f1473fa8bcc7eb3a0090ed9042bebd8d6bddae8d",
+      "duration": 1.66934375,
+      "bytes": 106882,
+      "peak": 32001,
+      "rms": 8005.104497986314
+    },
+    "announcer-2a.wav": {
+      "sha256": "dd0411e53394d445d4a4a785d1deb62fb2d0c6e2216b18c3f80479f054f2ea76",
+      "duration": 1.309875,
+      "bytes": 83876,
+      "peak": 32000,
+      "rms": 10268.142023702649
+    },
+    "announcer-2b.wav": {
+      "sha256": "457c760966164d537cbec2ce3d80e8679fa00145e4c3ff60e1a84dc7138bb20d",
+      "duration": 1.193625,
+      "bytes": 76436,
+      "peak": 30936,
+      "rms": 10333.871799550318
+    },
+    "announcer-2d.wav": {
+      "sha256": "244638bd370da9aa9111243a3cbf81238cf75d1c9ac1a081f1393add11741714",
+      "duration": 1.4389375,
+      "bytes": 92136,
+      "peak": 32001,
+      "rms": 10973.827593539543
+    },
+    "announcer-2e.wav": {
+      "sha256": "a0c0ea94b816d8095f018cf99a9f3e19cf7b20164868ccce3ab81751185c8037",
+      "duration": 1.01546875,
+      "bytes": 65034,
+      "peak": 32000,
+      "rms": 10144.938943926489
+    },
+    "announcer-30.wav": {
+      "sha256": "20b03dd38cf568bc738a7f516954947f0eaa3ae54053ba218415b721cf60209d",
+      "duration": 1.02828125,
+      "bytes": 65854,
+      "peak": 31901,
+      "rms": 9115.241093242403
+    },
+    "announcer-31.wav": {
+      "sha256": "b79d95aa782f783d46b012b5c198a401b22838ee790b01edc549d14766c5e15b",
+      "duration": 2.13121875,
+      "bytes": 136442,
+      "peak": 32001,
+      "rms": 7949.831375827383
+    },
+    "announcer-33.wav": {
+      "sha256": "3d8793ebc33561e3c7c99faac8230fc5cadfb489d86639ca99196d5f50012070",
+      "duration": 1.26934375,
+      "bytes": 81282,
+      "peak": 32001,
+      "rms": 11319.58364344736
+    },
+    "announcer-34.wav": {
+      "sha256": "6b8fe21a52560007ae145d2c91b7f3156415f998129ae23fd9824105beef0946",
+      "duration": 0.765875,
+      "bytes": 49060,
+      "peak": 32001,
+      "rms": 12823.9708640725
+    },
+    "announcer-36.wav": {
+      "sha256": "2eacf1efebf24f777658799f6824f188ddc89c8eebe87424617713a682d87fa4",
+      "duration": 1.53815625,
+      "bytes": 98486,
+      "peak": 31470,
+      "rms": 10322.877689586025
+    },
+    "announcer-37.wav": {
+      "sha256": "1a530f01b5955efa788a297e53553cdcd0969b39c4261d427baea44fdbd9b9dd",
+      "duration": 1.3845625,
+      "bytes": 88656,
+      "peak": 32001,
+      "rms": 11881.545044074068
+    },
+    "announcer-39.wav": {
+      "sha256": "ca6b99296d6c349b3dd978042b155733499251c7abd601aef7a52f2e7c910f9e",
+      "duration": 1.60534375,
+      "bytes": 102786,
+      "peak": 31719,
+      "rms": 10643.502008914294
+    },
+    "announcer-3a.wav": {
+      "sha256": "3cc4b9379b7dfac47f86b59442bce60c61c38b0b989e7c69d3f2fed7b0c2e5fc",
+      "duration": 2.96640625,
+      "bytes": 189894,
+      "peak": 31798,
+      "rms": 8484.357638589949
+    },
+    "announcer-3b.wav": {
+      "sha256": "2dedc2efd63ceea6f71519e3ddd27517a44485a3e65c77d20aaa65ea71d00629",
+      "duration": 1.90828125,
+      "bytes": 122174,
+      "peak": 32000,
+      "rms": 10995.168251795993
+    },
+    "announcer-3d.wav": {
+      "sha256": "5130684fc47fcaa8a27b98685f93b5fea0e9f8ade30368d6ced69827efb517d2",
+      "duration": 2.2666875,
+      "bytes": 145112,
+      "peak": 32001,
+      "rms": 10472.033614745473
+    },
+    "announcer-3e.wav": {
+      "sha256": "25e1f02740ddeebce13175d704e7019f324c4494d9086b95b84d1c343a25c3e5",
+      "duration": 1.28321875,
+      "bytes": 82170,
+      "peak": 32001,
+      "rms": 7985.44155540204
+    },
+    "announcer-3f.wav": {
+      "sha256": "b55eb047b43da9fe1a811436db797fb058a3fd7f48fd19d718abccdb21fc3d1b",
+      "duration": 0.969625,
+      "bytes": 62100,
+      "peak": 32001,
+      "rms": 7152.046398728878
+    },
+    "announcer-40.wav": {
+      "sha256": "4ef8fd3724ab03355307db413a0d9f5b9cf90c3598f55a64f2fbc6ae3cde4e80",
+      "duration": 1.344,
+      "bytes": 86060,
+      "peak": 32001,
+      "rms": 11509.628401881824
+    },
+    "announcer-41.wav": {
+      "sha256": "fbf7d09e9b1e3fe7d0decb2ad69039d49e5dfe2065482e97fa2660ef94fca7d1",
+      "duration": 1.309875,
+      "bytes": 83876,
+      "peak": 31390,
+      "rms": 9257.321237712922
+    },
+    "announcer-42.wav": {
+      "sha256": "bb768528622bedc8683dc09a7e81600a83e1ac66506d02c30cb52815ae48c346",
+      "duration": 1.21709375,
+      "bytes": 77938,
+      "peak": 32001,
+      "rms": 12553.525658364202
+    },
+    "announcer-43.wav": {
+      "sha256": "a48f3950a2ce6d807f16a46fe76b39ead7f88b557c71ba8cba3c30e6e8e34522",
+      "duration": 0.873625,
+      "bytes": 55956,
+      "peak": 31064,
+      "rms": 13223.385440964717
+    },
+    "announcer-44.wav": {
+      "sha256": "3aa330bf584709c1df921673078a3a90ac07b602ecc9a8027c444ecf208bcf7b",
+      "duration": 0.905625,
+      "bytes": 58004,
+      "peak": 32000,
+      "rms": 12978.221279662534
+    },
+    "announcer-45.wav": {
+      "sha256": "ad875b07c65740f57567f2b85246ed8646d8928f667aac530b465b136d78a91d",
+      "duration": 1.21921875,
+      "bytes": 78074,
+      "peak": 32000,
+      "rms": 9272.680054866722
+    },
+    "announcer-47.wav": {
+      "sha256": "51bd02e052cc7f82c56253a6bd3dd0a7d3a834fb95a2565e378030f509ffaa7a",
+      "duration": 0.96746875,
+      "bytes": 61962,
+      "peak": 32000,
+      "rms": 11027.779022142819
+    },
+    "announcer-48.wav": {
+      "sha256": "3b50f0cc1ad03e7791797c59c9f5922f654c8cc213bb27159f5125c7f0a43abe",
+      "duration": 1.21921875,
+      "bytes": 78074,
+      "peak": 32001,
+      "rms": 11015.542815504381
+    },
+    "announcer-49.wav": {
+      "sha256": "588e2bfd1fa1ae35b06d05c586506702549d657907663a507bef6b039be2d965",
+      "duration": 1.3845625,
+      "bytes": 88656,
+      "peak": 32001,
+      "rms": 10960.960293802575
+    },
+    "announcer-4a.wav": {
+      "sha256": "32a2f1f6cdb049738d64976c6e39b98af1848f55e08c6b0eec22c07c18ea52a7",
+      "duration": 1.561625,
+      "bytes": 99988,
+      "peak": 30869,
+      "rms": 9920.307203724546
+    },
+    "announcer-4b.wav": {
+      "sha256": "4517c410e7ca58cb45f5be75a8e4289d9d8cfe5c2c5aa557ed3abe46d025d1c4",
+      "duration": 1.504,
+      "bytes": 96300,
+      "peak": 32000,
+      "rms": 11094.252521882792
+    },
+    "announcer-4c.wav": {
+      "sha256": "4698482e8bb12afa4e18e09a2626727c562c1a43356b52fa2b36aa169715077f",
+      "duration": 2.08109375,
+      "bytes": 133234,
+      "peak": 32001,
+      "rms": 13233.362015851102
+    },
+    "announcer-4d.wav": {
+      "sha256": "546c2ff378decf45eb2edd83ea4735fd651aab2f5a19e3716c7bc36514eb3f54",
+      "duration": 1.248,
+      "bytes": 79916,
+      "peak": 32001,
+      "rms": 10845.255538524134
+    },
+    "announcer-4e.wav": {
+      "sha256": "0d3e5bf0baeb65a20db6f2a2c61e942ccfa6110e022443ba2d673ef33cf8bc23",
+      "duration": 1.3386875,
+      "bytes": 85720,
+      "peak": 32001,
+      "rms": 10798.597896792111
+    },
+    "announcer-4f.wav": {
+      "sha256": "7d0d343f6f03655621b4413da60c733ba8f9ab23524320b4320c33b1e6b6f739",
+      "duration": 1.408,
+      "bytes": 90156,
+      "peak": 32001,
+      "rms": 11306.503103307106
+    },
+    "announcer-50.wav": {
+      "sha256": "280df252ae44a06e0bb1bf34a9305b4ec424329bc779500257cfc2d76b7dbe16",
+      "duration": 1.24375,
+      "bytes": 79644,
+      "peak": 32001,
+      "rms": 10312.631926571397
+    },
+    "announcer-51.wav": {
+      "sha256": "25a7057d344bcb34a2604e6a4ff39bc598398c574a2fc4256c4d0c4e29eeef28",
+      "duration": 0.80640625,
+      "bytes": 51654,
+      "peak": 32000,
+      "rms": 11384.678628501077
+    },
+    "announcer-52.wav": {
+      "sha256": "32ad3ec002d800ea0ab37dcf9bcbc1744b2f259e91a914a372b720d223708e6a",
+      "duration": 1.22775,
+      "bytes": 78620,
+      "peak": 32001,
+      "rms": 9208.732166118749
+    },
+    "announcer-56.wav": {
+      "sha256": "b86c6b458c9ba8f02cbdd20616bb28048d95e4d6070db70790deead99eab7fa2",
+      "duration": 4.0906875,
+      "bytes": 261848,
+      "peak": 32000,
+      "rms": 8472.100224143158
+    },
+    "announcer-57.wav": {
+      "sha256": "d99fdf29f14e5705431733a1e2ea6325b5c124f68e654a7b5511dd7ca52598c6",
+      "duration": 3.8229375,
+      "bytes": 244712,
+      "peak": 32001,
+      "rms": 8303.929793654488
+    },
+    "announcer-58.wav": {
+      "sha256": "8cea8da2c2f98d739c0e6d2db6030fa7a7b8dbad4b017569546d4573ea9ae0a8",
+      "duration": 3.901875,
+      "bytes": 249764,
+      "peak": 32001,
+      "rms": 10025.877677876444
+    },
+    "announcer-59.wav": {
+      "sha256": "7e3c1e4e8efb5ce4c1e42598f6fe2e0fd73e869d45ed6e3f1523447576af1d4f",
+      "duration": 3.49546875,
+      "bytes": 223754,
+      "peak": 32001,
+      "rms": 10183.28968140797
+    },
+    "announcer-5a.wav": {
+      "sha256": "b74b8fa59f62035ad39d5118636ae855a1045e5cf4cdd06f1e0a751f6eac2229",
+      "duration": 4.13975,
+      "bytes": 264988,
+      "peak": 32001,
+      "rms": 9708.700929508883
+    },
+    "announcer-5b.wav": {
+      "sha256": "1e44fefca5b39796bfcdc16e48b97fa3642a4212cc5f0822efd75bca1d10597b",
+      "duration": 5.32115625,
+      "bytes": 340598,
+      "peak": 32001,
+      "rms": 7789.606432257574
+    },
+    "announcer-5c.wav": {
+      "sha256": "8e69f9cc121b0fc421ec9dcda31a1cba7fd3f609270e0b7d034151638a765131",
+      "duration": 2.38828125,
+      "bytes": 152894,
+      "peak": 32000,
+      "rms": 10571.129792162605
+    },
+    "announcer-5e.wav": {
+      "sha256": "d1fc2dbbaaceee2cf79469683726759a37085a343952eaf48574f50096727db1",
+      "duration": 1.91040625,
+      "bytes": 122310,
+      "peak": 32000,
+      "rms": 10591.940922619842
+    },
+    "announcer-61.wav": {
+      "sha256": "a878c577938e41320b5ecf54982ad9942e37ae7de2e2fa1df7bcb1fa3090ef60",
+      "duration": 1.1328125,
+      "bytes": 72544,
+      "peak": 32001,
+      "rms": 12147.061761173585
+    },
+    "announcer-62.wav": {
+      "sha256": "06b387548ce9dc9e54a216e75f3ae5dbdad463f814cc17fc3272556d90434529",
+      "duration": 1.04,
+      "bytes": 66604,
+      "peak": 30435,
+      "rms": 11215.322020088091
+    },
+    "announcer-63.wav": {
+      "sha256": "cd4c8485688d0c517a69e8d3b836d01103d5e891ec21ea3263abf2b30ab40885",
+      "duration": 0.8106875,
+      "bytes": 51928,
+      "peak": 31741,
+      "rms": 10430.298499749964
+    },
+    "announcer-64.wav": {
+      "sha256": "db732a0811f2a7e40fcfd8abc23438dc6108126781d11524c9b423741125b827",
+      "duration": 0.8629375,
+      "bytes": 55272,
+      "peak": 32001,
+      "rms": 9857.559894727943
+    },
+    "announcer-66.wav": {
+      "sha256": "f8de004445bbc9798cb249cb788d856fb36591f2ae576dc23aba47d82107dc8e",
+      "duration": 1.95946875,
+      "bytes": 125450,
+      "peak": 32000,
+      "rms": 9434.233337900594
+    },
+    "announcer-67.wav": {
+      "sha256": "3221ec5a87f7c68a54c307729f29103180e1fe18e4058bcdf64ed40b8b281ae5",
+      "duration": 1.2106875,
+      "bytes": 77528,
+      "peak": 32001,
+      "rms": 16050.789088090625
+    },
+    "announcer-68.wav": {
+      "sha256": "979342696ffa091538db9014b06f227a9fcf2d3a3470f27219c07608fd2e3c6b",
+      "duration": 1.6928125,
+      "bytes": 108384,
+      "peak": 32001,
+      "rms": 11290.097001509288
+    },
+    "announcer-69.wav": {
+      "sha256": "f081e45281d8ece249ebfbb83448b9b39aeda51f4d629a0526c07759cfb98f11",
+      "duration": 0.688,
+      "bytes": 44076,
+      "peak": 32000,
+      "rms": 10742.053351604238
+    },
+    "announcer-6a.wav": {
+      "sha256": "6957651931868f5e5e439d697dcb2d3f7a3cb1cb3cda2c7429f5717b226812f9",
+      "duration": 1.02509375,
+      "bytes": 65650,
+      "peak": 32001,
+      "rms": 9510.756761445447
+    },
+    "announcer-6b.wav": {
+      "sha256": "330ed7ac83fa8d8a7eec5195ae7a4a4ac3ff780bcb4a65b1c66b87b52c03c927",
+      "duration": 1.51575,
+      "bytes": 97052,
+      "peak": 32000,
+      "rms": 8862.587828868629
+    },
+    "announcer-6c.wav": {
+      "sha256": "de3aad3bc27fe289930d94d574990320f727f20219812e334d42135419fe8a89",
+      "duration": 1.81440625,
+      "bytes": 116166,
+      "peak": 32001,
+      "rms": 9236.97571175754
+    },
+    "announcer-6d.wav": {
+      "sha256": "92f43a87aed55cba7a2d7e62156eedb09621ef69407f4c989ab11800c97233ce",
+      "duration": 1.4026875,
+      "bytes": 89816,
+      "peak": 32001,
+      "rms": 13425.136907333193
+    },
+    "announcer-6e.wav": {
+      "sha256": "917864966250fa648c5e61848578f40d186f1508f21269a50a3b85c11e30f452",
+      "duration": 1.25975,
+      "bytes": 80668,
+      "peak": 31411,
+      "rms": 8487.641064303478
+    },
+    "announcer-6f.wav": {
+      "sha256": "e1ade94565fa887750ca8a209a1684c2f1c91ee57105a31774b7af313c351b9e",
+      "duration": 1.35575,
+      "bytes": 86812,
+      "peak": 32001,
+      "rms": 9942.214612755773
+    }
+  },
+  "sequence": {
+    "sequence": 0,
+    "channel": 12,
+    "logicalBank": 2,
+    "bank": 2,
+    "tempo": 200,
+    "ticksPerQuarter": 48,
+    "pollTicks": 6,
+    "noteTicks": 1200,
+    "pan": 64
+  }
+}

@@ -126,6 +126,7 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
   state.nativeLaunchLabel=state.nativeLaunch.view().label;state.nativeCountdownCue=null;
   let launchCueSequence=0;
   state.nativeHost=createNativeRaceHost({racers,water:raceWater,course,fixedSphereGrid:sourceSphereGrid,staticGeometry:nativeCourseRuntime.staticContactGeometry,tunes:racers.map((_,i)=>effectiveNativeTune(nativeTunes[i],nativeTuneModes[i])),raceRuntime:state.nativeLaunch,hullStarts:nativeStarts,
+  onAudioFrame:(host,context)=>state.nativeContactAudio.beforeFrame(context.logicalFrame+1),
   onContactFrame:(host,world)=>{
    const input=state.nativeLaunch.contactAudioInputs();
    const levels=host.spray.levels();

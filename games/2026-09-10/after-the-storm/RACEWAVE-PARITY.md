@@ -19,6 +19,49 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — original announcer and live race audio events
+
+Native human races now connect C37F4 events and the complete mode7 C010C packet
+consumer to original announcer playback. Countdown, start, rank, maximum-power,
+missed-buoy and rider-water requests share the recovered priority/hold and
+single delayed slot. The delayed slot does not retry automatically if blocked.
+Source start/rank/event timers run at47B00/BF370 before922E4's frame increment,
+including inactive simulation0 frames, independently of browser rendering.
+Source course/mode gates remain intact. Standalone mode4 and nearest-rival
+audio routing remain outside the admitted human preview.
+
+Fresh read-only REA/Ghidra inspection on EVO X2 verified the caller order and
+828 instructions against the supplied ROM. The private evaluator executes960
+priority/dispatch cases,94 sequential-history cases and180 BF370 race-timer
+cases (33,163 instructions), including actual nested voice calls. Unrelated
+menu/tempo timers are explicitly zero in the BF370 comparison; this is not a
+claim of complete mixer or audio-thread emulation. Existing773 event-handler,
+336 complete packet-consumer and216 rider-tail reference cases still pass.
+
+Sequence0/channel12 uses physical bank2 with112 slots:95 populated selectors
+and17 silent entries, rendered to94 standalone PCM files (9.89MB). Original
+tuning, source envelope metadata and per-file hashes are retained. One centered
+voice replaces its predecessor. Pause, mute, replay and a changed race owner
+stop playback; pending delayed speech is discarded on inactive presentation.
+Missing files retry after30 seconds without replaying stale requests. Original
+soundtrack ownership/defaults and graphics resolution are unchanged.
+
+The browser's bus gain, approximate envelope steps/end fades, resampling and
+render-time delivery remain adaptations. Original sequence polling is37.5ms;
+its phase and reverb are not emulated. Special announcer commands126/127 and
+event channel15 sequences remain unfinished. Audio random variants continue
+to use a separate deterministic web pattern, never the gameplay RNG.
+
+All61 focused tests pass, including one/two-human frame histories at30/60/144Hz,
+source countdown/rider-entry scheduling, asset hashes and playback cleanup.
+Browser solo recovery emitted notes13/12/11/10 at source frames12/27/42/57,
+water-entry commentary82 at167 and initial-position commentary40 at236.
+Two-player launch emitted13/12/11/10 at64/79/94/109. All94 files loaded with
+no asset failures; every95 populated selector rendered nonzero audio with
+equal left/right output and a silent tail in OfflineAudioContext. High quality,
+1280x720 canvas and83,521 water vertices were retained. Browser presentation
+is verified here; this does not expand the native preview's admitted modes.
+
 ## Unpublished — original rider reactions and water-entry audio
 
 Native human races now run the original rider-audio tail after impact handling.
