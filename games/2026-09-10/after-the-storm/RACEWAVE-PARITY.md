@@ -19,6 +19,59 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — native Stunt ring rotation
+
+High-resolution Stunt rings now use their actual source object matrices,
+including the alternating four-degree spin per logical frame. Translation
+converts to world metres while the ring's existing radius, segments, materials
+and mesh detail remain unchanged. Pause freezes the source rotation; replay
+captures detached matrices and holds the earlier logical sample. Existing
+version1 replay snapshots without matrices retain their heading fallback.
+
+Six presentation checks pass across the four admitted courses, covering source
+matrix equality, scale, pause, replay ownership and malformed matrix rejection.
+A1440x900 High browser run shows intact detailed rings and water without
+JavaScript or shader errors. The original collected-ring fade remains pending;
+collected rings still hide immediately in this preview.
+
+## Unpublished — complete native Stunt drives and physical pose awards
+
+The four admitted native Stunt courses now have complete physical driving
+checks from the original grid through all four checkpoints and the scoring
+finish. The inspection helm supplies only ordinary controls; the original
+judge, finite apertures, timers, ring collection, award queue and record
+insertion decide the outcome. Seed17 runs score2,720/11 rings on Sunny,
+615/1 on Sunset,4,135/10 on Southern and1,550/5 on Glacier. Optional rings can
+still be missed. The finished source score table and web result agree after
+pending awards drain, and the original fade reaches result entry801ECF18.
+
+The native inspection helm now selects the Stunt route instead of inheriting
+ordinary class-specific navigation (which affected Sunset), and excludes the
+ordinary Southern low-tide detour from Stunt navigation. This is an inspection
+control correction, with no changes to the physical course or original rules.
+The earlier source-stunt-pilot starting-waypoint experiment was not retained:
+that modern helm is not the native browser's verification controller.
+
+Ordinary keyboard gestures also complete physical handstand, backwards-riding
+and standing poses and transfer310,556 and135 points in the timed fixtures.
+Holding rearward trim after the standing gesture performs a somersault and
+transfers542 points, marking both standing and somersault completion. These
+checks use playerInput and the actual body/rider lifecycle rather than injecting
+action states or scoring fields. Standing-gesture owner, hull, rider and score
+snapshots match at30 and144Hz. Aerial flips/rolls and diving still need equivalent
+full-start integration coverage; numeric and prepared-body tests alone do not
+establish that remaining scope.
+
+A browser run with its random seed independently finishes Sunny with2,440
+points,10 rings and4/4 checkpoints, then displays the score dialog. High remains
+1440x900 with roughly1.21 million rendered triangles. The preview footer now
+shows its actual throttle, coast, trim, crouch and slide controls; returning to
+modern racing restores its existing shortcut hints. No JavaScript or shader
+error was observed; the local server's favicon404 remains unrelated.
+
+Validation: all21 selected helm, ordinary three-lap, complete Stunt-route and
+physical-gesture checks pass, plus the six presentation checks above.
+
 ## Unpublished — native Stunt presentation and result handoff
 
 The opt-in native preview now admits solo Stunt runs on Sunny Beach, Sunset Bay,

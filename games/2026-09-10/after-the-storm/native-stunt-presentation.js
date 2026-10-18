@@ -6,13 +6,20 @@ function scalar(v){if(!Number.isFinite(v)||Math.abs(v)>1e9)throw new RangeError(
 function integer(v,min,max){if(!Number.isInteger(v)||v<min||v>max)throw new RangeError('Invalid Stunt display index');return v;}
 function vector(v){if(!Array.isArray(v)||v.length!==3)throw new TypeError('Expected Stunt display vector');return v.map(scalar);}
 function flag(v){if(typeof v!=='boolean')throw new TypeError('Expected Stunt display flag');return v;}
+function matrix(v){
+ if(!Array.isArray(v)||v.length!==16)throw new TypeError('Expected Stunt display matrix');
+ const m=v.map(scalar);
+ if(m[3]!==0||m[7]!==0||m[11]!==0||m[15]!==1)throw new RangeError('Expected affine Stunt display matrix');
+ return m;
+}
 function name(v){if(typeof v!=='string'||!v.length||v.length>160)throw new TypeError('Invalid Stunt volume id');return v;}
 export function captureNativeStuntWorld(value){
  if(value===null)return null;
  if(!value||value.version!==1||!Array.isArray(value.rings)||value.rings.length>64||!Array.isArray(value.volumes)||value.volumes.length>32)
   throw new TypeError('Invalid Stunt world presentation');
  const rings=value.rings.map(r=>({index:integer(r.index,0,63),sourceIndex:integer(r.sourceIndex,0,63),position:vector(r.position),
-  heading:scalar(r.heading),visible:flag(r.visible),collected:flag(r.collected)}));
+  heading:scalar(r.heading),visible:flag(r.visible),collected:flag(r.collected),
+  ...(r.matrix===undefined?{}:{matrix:matrix(r.matrix)})}));
  const volumes=value.volumes.map(v=>({id:name(v.id),sourceIndex:integer(v.sourceIndex,0,63),planeIndex:integer(v.planeIndex,0,31),
   origin:vector(v.origin),axes:Array.isArray(v.axes)&&v.axes.length===3?v.axes.map(vector):(()=>{throw new TypeError('Expected Stunt display axes');})(),spans:vector(v.spans),visible:flag(v.visible)}));
  if(new Set(rings.map(r=>r.index)).size!==rings.length||new Set(rings.map(r=>r.sourceIndex)).size!==rings.length||new Set(volumes.map(v=>v.id)).size!==volumes.length)
@@ -58,7 +65,11 @@ export function createNativeStuntPresentation({course,readState,scale=.025}){
   const world=captureNativeStuntWorld({version:1,rings:rings.map(r=>{
    const b=r.sourceIndex*49,collected=a[b+47]!==0;
    if(a[b+19]!==8)throw new RangeError('Stunt ring source row changed');
-   return {...r,position:position(a,r.sourceIndex),heading:Math.atan2(float(a[b+12]),float(a[b+13])),collected,visible:a[b+21]!==0&&!collected};
+   // Use the actual EE6F4 matrix refreshed by6E0F4: its ordinal-dependent
+   // spin is already part of the simulation. Only translation changes units;
+   // the high-resolution torus already has its world-space radius.
+   const transform=a.slice(b+29,b+45).map(float);for(let j=12;j<15;j++)transform[j]*=scale;
+   return {...r,position:position(a,r.sourceIndex),heading:Math.atan2(float(a[b+12]),float(a[b+13])),matrix:transform,collected,visible:a[b+21]!==0&&!collected};
   }),volumes:volumes.map(v=>{
    const p=s.collisionPlaneWordsFd78.slice(v.planeIndex*16,(v.planeIndex+1)*16).map(float);
    return {...v,origin:p.slice(0,3).map(n=>n*scale),axes:[p.slice(3,6),p.slice(6,9),p.slice(9,12)],spans:p.slice(12,15).map(n=>n*scale),visible:a[v.sourceIndex*49+21]!==0};

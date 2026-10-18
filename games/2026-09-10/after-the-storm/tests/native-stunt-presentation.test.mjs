@@ -30,6 +30,12 @@ test('four native Stunt races retain high-resolution courses and bind every ring
   frames(s,60);assert.equal(s.phase,'running');assert.equal(r.stunt.score,s.nativeLaunch.stuntView().awards.totals.total);
   assert.equal(r.stunt.remaining,s.nativeLaunch.stuntView().remainingMs/1000);
   const raw=s.nativeLaunch.snapshot(),d=new DataView(new ArrayBuffer(4)),read=w=>{d.setUint32(0,w);return d.getFloat32(0);};
+  for(const ring of s.nativeStuntWorld.rings){
+   const expected=raw.objectWordsC940.slice(ring.sourceIndex*49+29,ring.sourceIndex*49+45).map(read);
+   for(let j=12;j<15;j++)expected[j]*=.025;
+   assert.deepEqual(ring.matrix,expected);assert.deepEqual(ring.matrix.slice(12,15),ring.position);
+   assert.ok(Math.abs(Math.hypot(...ring.matrix.slice(0,3))-1)<1e-6,'ring radius stays in world units');
+  }
   for(const v of s.nativeStuntWorld.volumes){
    const p=raw.collisionPlaneWordsFd78.slice(v.planeIndex*16,(v.planeIndex+1)*16).map(read);
    assert.deepEqual(v.origin,p.slice(0,3).map(n=>n*.025));assert.deepEqual(v.axes,[p.slice(3,6),p.slice(6,9),p.slice(9,12)]);
@@ -64,11 +70,14 @@ test('ring and HUD views cannot score early; pause holds the queue and result wa
 
 test('display bindings reject changed source layouts and snapshots are detached from live scoring and geometry',()=>{
  const s=create(),before=s.nativeLaunch.snapshot(),a=captureNativeStuntWorld(s.nativeStuntWorld);
- a.rings[0].position[0]=999;a.volumes[0].axes[0][0]=999;assert.deepEqual(s.nativeLaunch.snapshot(),before);
+ a.rings[0].position[0]=999;a.rings[0].matrix[0]=999;a.volumes[0].axes[0][0]=999;assert.deepEqual(s.nativeLaunch.snapshot(),before);
  assert.throws(()=>createNativeStuntPresentation({course:{...s.course,rings:s.course.rings.slice(1)},readState:s.nativeLaunch.snapshot}),/Every source/);
  const wrong=s.course.rings.map(r=>({...r}));wrong[0].x+=1;
  assert.throws(()=>createNativeStuntPresentation({course:{...s.course,rings:wrong},readState:s.nativeLaunch.snapshot}),/ordinal and center/);
  assert.throws(()=>captureNativeStuntWorld({...s.nativeStuntWorld,rings:[s.nativeStuntWorld.rings[0],s.nativeStuntWorld.rings[0]]}),/Duplicate/);
+ for(const bad of [[1],Array(16).fill(NaN),Array(16).fill(0)])assert.throws(()=>captureNativeStuntWorld({...s.nativeStuntWorld,rings:[{...s.nativeStuntWorld.rings[0],matrix:bad}]}));
+ const legacy=structuredClone(s.nativeStuntWorld);legacy.rings.forEach(r=>delete r.matrix);
+ assert.deepEqual(captureNativeStuntWorld(legacy),legacy,'older version1 replay snapshots retain their heading fallback');
 });
 
 test('replay records Stunt object visibility and geometry without retaining or advancing an owner',()=>{
@@ -77,8 +86,21 @@ test('replay records Stunt object visibility and geometry without retaining or a
  frames(s,1);recordMoment(rec,s,water);frames(s,1);recordMoment(rec,s,water);
  assert.equal(rec.frames.length,2);const [a,b]=rec.frames,before=s.nativeLaunch.snapshot();
  const sampled=replaySample({frames:rec.frames,start:a.time,end:b.time},(a.time+b.time)/2);
- assert.deepEqual(sampled.nativeStuntWorld,a.nativeStuntWorld);sampled.nativeStuntWorld.rings[0].position[0]=999;
- assert.notEqual(a.nativeStuntWorld.rings[0].position[0],999);assert.deepEqual(s.nativeLaunch.snapshot(),before);
+ assert.deepEqual(sampled.nativeStuntWorld,a.nativeStuntWorld);sampled.nativeStuntWorld.rings[0].position[0]=999;sampled.nativeStuntWorld.rings[0].matrix[0]=999;
+ assert.notEqual(a.nativeStuntWorld.rings[0].position[0],999);assert.notEqual(a.nativeStuntWorld.rings[0].matrix[0],999);assert.deepEqual(s.nativeLaunch.snapshot(),before);
+});
+
+test('ring display follows opposite source spins and holds them exactly while paused',()=>{
+ const s=create();frames(s,60);const before=s.nativeStuntWorld,raw=s.nativeLaunch.snapshot();frames(s,1);
+ const after=s.nativeStuntWorld,next=s.nativeLaunch.snapshot(),d=new DataView(new ArrayBuffer(4));
+ const read=w=>{d.setUint32(0,w);return d.getFloat32(0);};
+ for(const r of after.rings){
+  const b=r.sourceIndex*49,angle=read(raw.objectWordsC940[b+5]),updated=read(next.objectWordsC940[b+5]);
+  assert.equal((updated-angle+360)%360,r.index%2?4:356);
+  assert.notDeepEqual(r.matrix,before.rings[r.index].matrix);assert.deepEqual(r.position,before.rings[r.index].position);
+ }
+ s.phase='paused';for(let i=0;i<144;i++)stepRace(s,{},1/144);
+ assert.equal(s.nativeStuntWorld,after);assert.deepEqual(s.nativeLaunch.snapshot(),next);
 });
 
 

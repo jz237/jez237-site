@@ -61,13 +61,15 @@ function drivingPolicy(overrides){
  * sideMarginWorld is a geometric diagnostic, not a replacement Float32 judge.
  */
 export function createNativeRacePilot({course,policy={},traceLimit=256}={}){
- const selectedAnchors=course?.nativePilotAnchorsByClass?.[course.difficulty]??course?.anchors;
+ // Stunt routes retain their own rings and ramps; ordinary class-specific
+ // inspection corridors must not replace that selected route.
+ const selectedAnchors=course?.stunt?course.anchors:course?.nativePilotAnchorsByClass?.[course.difficulty]??course?.anchors;
  if(![1,2,7,8].includes(course?.sourceWaterCourseIndex)||!Array.isArray(selectedAnchors)||selectedAnchors.length<3)
   throw new TypeError('Native pilot requires Sunny Beach, Sunset Bay, Southern Island or Glacier Coast source navigation');
  // A wider authored Normal driving line clears Southern's exposed bow at
  // low tide. This changes only the inspection helm, never the source AI,
  // collider, human checkpoint graph or modern course navigation.
- const guide=course.sourceWaterCourseIndex===7&&course.difficulty===0?
+ const guide=!course.stunt&&course.sourceWaterCourseIndex===7&&course.difficulty===0?
   selectedAnchors.flatMap(p=>p?.[0]===3&&p?.[1]===-139?[[15,-150],[0,-146],[-8,-130]]:[p]):selectedAnchors;
  const anchors=guide.map(p=>{
   if(!Array.isArray(p)||p.length!==2||!p.every(Number.isFinite))throw new TypeError('Navigation anchors must be finite x/z pairs');

@@ -221,3 +221,12 @@ test('closed-loop physical pose, human progress and water history are exactly in
   }
  }
 });
+
+
+test('Stunt inspection selects its own anchors even when ordinary per-class corridors are present',()=>{
+ const f=fixture(),expected=createNativeRacePilot({course:f.course}).input(f.state);
+ f.course.stunt=true;f.course.nativePilotAnchorsByClass=[[[80,0],[80,50],[100,0]]];
+ const before=structuredClone(f.state),pilot=createNativeRacePilot({course:f.course});
+ assert.deepEqual(pilot.input(f.state),expected);assert.deepEqual(f.state,before);
+ assert.equal(pilot.diagnostics().last.target[0],0);
+});
