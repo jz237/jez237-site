@@ -1,0 +1,12 @@
+{
+  "source": "User-supplied Wave Race 64 USA revision 1 ROM on VENGEANCE",
+  "sourceSha256": "f35d2423ebcb86eaf86fa935b613c7532b123a7bc50fb74996984c3b02fc3999",
+  "method": "Four standalone mono PCM loop assets decoded from bank0 ADPCM samples. Original loop starts/ends and instrument0/1/2 zone tunings are retained in manifest.json. Sequence0's layers select base instrument0 at velocity117 and a water/dry layer using channel program1/2 with independently controlled velocity.",
+  "tools": ["Existing REA/Ghidra analysis on EVO X2", "SEQ64 2.4.1 SM64 EU ABI reference", "N64-Tools ADPCM/layout reference", "Local Python"],
+  "sourceReferences": ["https://github.com/jombo23/N64-Tools", "https://github.com/sauraen/seq64"],
+  "mix": "Original sample PCM and loop boundaries. Web Audio pitch smoothing, short crossfades for sample-zone changes, attack/release smoothing and bus gain approximate the original audio engine; not bit-exact N64 RSP output. This asset/playback checkpoint does not yet replace the live game's engine owner.",
+  "rights": "Underlying Wave Race 64 samples remain the property of their respective rights holders; not covered by the website code license.",
+  "purchases": 0,
+  "extractedAt": "2026-10-17",
+  "assetHashes": "manifest.json"
+}

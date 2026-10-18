@@ -19,6 +19,27 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — original engine samples and playback support
+
+Four original engine waveforms are extracted as standalone PCM loops, retaining
+their source loop boundaries and low/middle/high sample ranges. Sequence0's
+base layer uses instrument0 at velocity117; the second layer uses instrument1
+on water or the detuned instrument2 out of water. The prepared browser adapter
+accepts the recovered channel0/3 pitch, expression, volume, pan and IO controls.
+It preserves the source's primary-channel-only transpose command behavior.
+
+Fourteen focused engine tests pass, including the existing original-instruction
+comparisons, asset hashes/loops, both players, wet/dry sample selection, bounded
+sample crossfades and fallback loading. Captured human mixer traces produce
+valid playback plans; deliberate negative-pitch stress cases are rejected.
+Chrome decodes all four loops and renders separate wet/dry stereo engines,
+identical mono channels and silence when stopped, with no output clipping.
+
+This is playback support awaiting the live engine-owner connection. The game
+still uses its existing engine audio at this checkpoint. Original portamento,
+RSP interpolation and envelopes are approximated by Web Audio smoothing and
+short crossfades; this does not claim a complete hardware audio emulation.
+
 ## Unpublished — original ice-break sequence
 
 Native ice collisions now play the original channel7 ice-break cue. Sequence0
