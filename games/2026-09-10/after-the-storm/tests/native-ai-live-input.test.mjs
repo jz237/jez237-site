@@ -1,0 +1,206 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {createRace,stepRace} from '../race-core.js';
+import {getCourse} from '../courses.js';
+import {nativeAIBodyFields,nativeAIStartupBodyFields} from '../native-ai-body-fields.js';
+import {createNativeRaceAdapter,stepNativeRaceAdapter,latchNativeRaceAdapterControls} from '../native-race-adapter.js';
+import {createNativeHull} from '../native-hull.js';
+import {createNativeLifecycleRider} from '../native-lifecycle-rider.js';
+import {createNativeRaceCourseRuntime} from '../native-race-course-runtime.js';
+import {createNativeRaceLaunchRuntime} from '../native-race-launch-runtime.js';
+import {stepNativeRaceHost} from '../native-race-host.js';
+import {prepareNativeAIWaterTrim} from '../native-ai-actions.js';
+const F=Math.fround,base=(0x2938-0x1f94)/4;
+const make=options=>createRace({mode:'time',physics:'native',course:getCourse('greyhaven'),...options});
+
+test('fresh AI input uses original reset stores without inventing a completed driving sample',()=>{
+ const fixture=JSON.parse(readFileSync(new URL('./fixtures/native-ai-startup-input.json',import.meta.url),'utf8'));
+ for(const row of fixture.cases){
+  const a=make().nativeHost.world.adapters[0],before=structuredClone(a.controlState);
+  for(const phase650 of [0,1,2,4,-1,2147483647])assert.deepEqual(nativeAIStartupBodyFields(a,phase650),row.expected);
+  assert.deepEqual(a.controlState,before);assert.equal(a.lastControls,null);assert.equal(a.logicalFrames,0);
+  assert.throws(()=>nativeAIStartupBodyFields(a,3),/non-driving/);
+  a.actionState.override=4;assert.throws(()=>nativeAIStartupBodyFields(a,0),/source-cleared/);a.actionState.override=0;
+  latchNativeRaceAdapterControls(a,{});
+  assert.throws(()=>nativeAIStartupBodyFields(a,0),/fresh unsampled/);
+ }
+ const s=make(),a=s.nativeHost.world.adapters[0];stepNativeRaceHost(s.nativeHost,.05,[{}]);
+ assert.throws(()=>nativeAIStartupBodyFields(a,0),/fresh unsampled/);
+ assert.ok(nativeAIBodyFields(a));
+});
+
+test('both versus riders can hand off to source AI using one preceding snapshot without repolling devices',()=>{
+ for(const simulation648 of [0,3]){
+  const initial=make({mode:'versus'}).nativeLaunch.snapshot();Object.assign(initial.scene,{phase650:3,simulation648,activity624:0});
+  const s=make({mode:'versus',nativeInitialRaceState:initial}),h=s.nativeHost;
+  stepNativeRaceHost(h,.05,[{},{}]);
+  // Prepared source result completion: the real subsequent source navigation,
+  // input producers, control conditioning and physical host remain connected.
+  for(const a of h.world.adapters)a.riderLifecycle.state={...a.riderLifecycle.state,selectionCountdown:-1};
+  const bodies=h.world.adapters.map(nativeAIBodyFields),ticks=h.world.ticks;
+  const forbidden=()=>{throw new Error('Human device read after source takeover');};
+  stepNativeRaceHost(h,.05,[forbidden,forbidden]);
+  assert.deepEqual(h.aiBodies,bodies);assert.equal(h.lastAIInput.frame.phase,'driving');
+  for(const a of h.world.adapters){
+   assert.equal(a.lastControls.controlOrigin,'ai');assert.equal(a.logicalFrames,2);
+   assert.equal(a.controlOrigin,'human');assert.equal(a.computerProfile,false);
+   assert.ok(Number.isFinite(a.lastControls.basePowerFactor));
+  }
+  assert.equal(h.world.ticks-ticks,simulation648===0?0:5);
+  assert.deepEqual(h.raceRuntime.aiCameraCorners().cameraCornersNative,Array.from({length:4},()=>({x:0,z:0})));
+ }
+});
+
+test('AI body input reads solved motion, source controller gate and retained action owners',()=>{
+ for(let rider=0;rider<4;rider++){
+  let simulationState=3;
+  const initialHull=createNativeHull({rider});
+  const a=createNativeRaceAdapter({riderIndex:rider,...createNativeLifecycleRider({initialHull}),
+   riderRecovery:{courseDatumNative:0,raceFinished:false},sourceState:()=>({simulationState})});
+  assert.throws(()=>nativeAIBodyFields(a),/completed/);
+  stepNativeRaceAdapter(a,.05,{throttle:0,steer:.5});
+  const b=nativeAIBodyFields(a);
+  assert.equal(b.priorControlActive,true);assert.equal(a.lastControls.throttle,false);
+  for(const k of ['x','y','z']){
+   assert.equal(b.positionNative[k],F(a.hull.center[k]/a.hull.scale));
+   assert.equal(b.motionDirection[k],F(a.hull.motionDirection[k]));
+   assert.equal(b.forwardNative[k],F(a.hull.frame.forward[k]));
+   assert.equal(b.rightNative[k],F(a.hull.frame.right[k]));
+  }
+  assert.notDeepEqual(b.motionDirection,b.forwardNative);
+  assert.equal(b.steeringDegrees,F(a.water.profile.steeringDegrees));
+  assert.equal(b.frameSpeedNative,F(a.lastFrame.frameSpeedNative));
+  assert.equal(b.fieldC7c,Number(a.water.anyWet));
+  assert.equal(b.actorState,a.riderLifecycle.state.actorState);
+  assert.equal(b.pendingActorState,a.riderLifecycle.state.pendingActor);
+  a.actionState.override=4;a.actionState.turnCount16d4=2;
+  assert.equal(nativeAIBodyFields(a).action16f4,4);assert.equal(nativeAIBodyFields(a).actionState16d4,2);
+  b.motionDirection.x=100;b.positionNative.x=100;
+  assert.notEqual(nativeAIBodyFields(a).motionDirection.x,100);
+  simulationState=1;stepNativeRaceAdapter(a,.05,{throttle:1});
+  assert.equal(nativeAIBodyFields(a).priorControlActive,false);
+  latchNativeRaceAdapterControls(a,{});
+  assert.throws(()=>nativeAIBodyFields(a),/precede the next control latch/);
+ }
+});
+
+test('a submerged live hull supplies flag1 so source AI can select the wet-wave trim branch',()=>{
+ const initialHull=createNativeHull(),a=createNativeRaceAdapter({...createNativeLifecycleRider({initialHull}),
+  riderRecovery:{courseDatumNative:0,raceFinished:false},sourceState:{simulationState:3}});
+ stepNativeRaceAdapter(a,.05,{});assert.ok(a.water.wetCount>1);
+ const body=nativeAIBodyFields(a);assert.equal(body.fieldC7c,1);
+ const input={positionNative:{x:0,y:1,z:0},forwardNative:{x:0,y:.1,z:1},datumNative:0,
+  waterHeightsNative:[21,0],state638:1,mode620:4,difficulty:1,courseIndex:1,
+  fieldC7c:body.fieldC7c,flag94:0,markedBox15de:0,rawYNative:-42};
+ assert.equal(prepareNativeAIWaterTrim(input).rawYNative,70);
+ // The old bridge supplied the count and incorrectly skipped that branch.
+ assert.equal(prepareNativeAIWaterTrim({...input,fieldC7c:a.water.wetCount}).rawYNative,-42);
+});
+
+test('ordinary AI tables share initialized source axes, endpoints and avatar links across classes',()=>{
+ for(let difficulty=0;difficulty<4;difficulty++)for(const players of [1,2]){
+  const runtime=createNativeRaceCourseRuntime({course:getCourse('greyhaven',difficulty),difficulty,players});
+  for(const n of runtime.aiTargetTable.nodes){
+   const source=runtime.data.nodes[n.sourceRow],words=runtime.data.recordWordsBySourceRow[n.sourceRow];
+   assert.deepEqual(n.forwardXZ,source.forwardXZ);assert.deepEqual(n.passingDirectionXZ,source.rightXZ);
+   assert.deepEqual(n.endpointPlusNativeXZ,source.endpointANativeXZ);
+   assert.deepEqual(n.endpointMinusNativeXZ,source.endpointBNativeXZ);
+   for(let avatar=0;avatar<4;avatar++){
+    assert.equal(n.nextByAvatar[avatar],words[0xcc/4+avatar]);
+    assert.equal(n.previousByAvatar[avatar],words[0xf4/4+avatar]);
+   }
+  }
+ }
+});
+
+test('source navigation runs for both humans before descending device polls, including simulation0',()=>{
+ const initial=make({mode:'versus'}).nativeLaunch.snapshot();
+ Object.assign(initial.scene,{phase650:3,simulation648:0,activity624:0});
+ const s=make({mode:'versus',nativeInitialRaceState:initial}),host=s.nativeHost,polls=[];
+ const providers=[0,1].map(slot=>()=>{
+  polls.push(slot);assert.equal(host.lastNavigation.diagnostics.length,2);
+  assert.deepEqual(host.lastNavigation.diagnostics.map(d=>d.racerIndex),[0,1]);
+  for(const d of host.lastNavigation.diagnostics){
+   const row=host.raceRuntime.aiRecords()[d.racerIndex].navigationSourceRow;
+   assert.ok(Number.isInteger(row));
+   assert.equal(row,host.raceRuntime.snapshot().raceWords1f94[base+d.racerIndex*222+4]);
+  }
+  return {};
+ });
+ stepNativeRaceHost(host,.05,providers);assert.deepEqual(polls,[1,0]);assert.equal(host.world.ticks,0);
+ const snapshot=s.nativeLaunch.snapshot(),last=host.lastNavigation;
+ stepNativeRaceHost(host,.5,providers,{active:false});
+ assert.deepEqual(s.nativeLaunch.snapshot(),snapshot);assert.equal(host.lastNavigation,last);assert.equal(polls.length,2);
+});
+
+test('navigation updates its canonical row atomically without awarding primary progress',()=>{
+ const s=make({mode:'versus'}),runtime=s.nativeLaunch,host=s.nativeHost;
+ const before=runtime.snapshot(),records=runtime.aiRecords(),nodes=host.primary.snapshot().map(n=>({
+  sourceRow:n.sourceRow,x:n.position.x,z:n.position.z}));
+ const bodies=host.world.adapters.map(a=>({avatar:a.hull.rider,position:{...a.hull.center}}));
+ bodies[1].avatar=9;
+ assert.throws(()=>runtime.advanceNavigation({bodiesBySlot:bodies,nodePositions:nodes}),/avatar/);
+ assert.deepEqual(runtime.snapshot(),before);
+ bodies[1].avatar=host.world.adapters[1].hull.rider;
+ const result=runtime.advanceNavigation({bodiesBySlot:bodies,nodePositions:nodes}),after=runtime.snapshot();
+ for(let i=0;i<after.raceWords1f94.length;i++)if(![base+4,base+222+4].includes(i))
+  assert.equal(after.raceWords1f94[i],before.raceWords1f94[i]);
+ assert.deepEqual(after.scene,before.scene);assert.deepEqual(after.hudWords7788,before.hudWords7788);
+ assert.deepEqual(runtime.aiRecords().map(({navigationSourceRow,...r})=>r),records.map(({navigationSourceRow,...r})=>r));
+ assert.equal(result.diagnostics.length,2);
+});
+
+test('live navigation history is independent of rendering frequency',()=>{
+ let expected;
+ for(const hz of [30,60,144]){
+  const s=make();
+  for(let i=0;i<hz;i++)stepRace(s,{throttle:1},1/hz);
+  const value={records:s.nativeLaunch.aiRecords(),navigation:s.nativeHost.lastNavigation,water:s.raceWater.selectionMeshesNative,
+   cadence:s.nativeLaunch.snapshot().scene.toggleD9914,lastDisplayClock:s.nativeHost.lastDisplayClock};
+  if(expected)assert.deepEqual(value,expected);else expected=structuredClone(value);
+ }
+});
+
+test('shared AI button cadence follows completed source frames after all input polls, even in simulation0',()=>{
+ const retained=make({mode:'versus'}).nativeLaunch.snapshot();
+ Object.assign(retained.scene,{toggleD9914:2,phase650:3,simulation648:0,activity624:0});
+ const s=make({mode:'versus',nativeInitialRaceState:retained}),host=s.nativeHost,polls=[],completed=[];
+ const providers=[0,1].map(slot=>()=>{polls.push([slot,s.nativeLaunch.snapshot().scene.toggleD9914]);return {};});
+ host.onFrame=()=>{completed.push(s.nativeLaunch.snapshot().scene.toggleD9914);};
+ stepNativeRaceHost(host,.01,providers);
+ assert.deepEqual(polls,[[1,2],[0,2]]);assert.deepEqual(completed,[]);
+ assert.equal(s.nativeLaunch.snapshot().scene.toggleD9914,2);
+ stepNativeRaceHost(host,.19,providers);
+ assert.deepEqual(polls,[[1,2],[0,2],[1,3],[0,3],[1,0],[0,0],[1,1],[0,1]]);
+ assert.deepEqual(completed,[3,0,1,2]);assert.equal(host.world.ticks,0);
+ const before=s.nativeLaunch.snapshot();stepNativeRaceHost(host,.5,providers,{active:false});
+ assert.deepEqual(s.nativeLaunch.snapshot(),before);assert.equal(polls.length,8);
+});
+
+test('display cadence retains signed native bits and rejects absent history without mutation',()=>{
+ for(const value of [-2147483648,-1,0,1,2,3,2147483647]){
+  const retained=make().nativeLaunch.snapshot();retained.scene.toggleD9914=value;
+  const s=make({nativeInitialRaceState:retained}),before=s.nativeLaunch.snapshot();
+  assert.equal(s.nativeLaunch.advanceDisplayClock().value,(value+1)&3);
+  const after=s.nativeLaunch.snapshot();after.scene.toggleD9914=value;assert.deepEqual(after,before);
+ }
+ const retained=make().nativeLaunch.snapshot();delete retained.scene.toggleD9914;
+ const runtime=make({nativeInitialRaceState:retained}).nativeLaunch,before=runtime.snapshot();
+ assert.throws(()=>runtime.advanceDisplayClock(),/retained display cadence/);assert.deepEqual(runtime.snapshot(),before);
+});
+
+test('source context overrides retained table only for main21 or versus mode1',()=>{
+ for(const [mode,main638,accepted]of [['time',1,false],['time',21,true],['versus',1,true]]){
+  const s=make({mode}),h=s.nativeHost,initial=s.nativeLaunch.snapshot();initial.scene.main638=main638;
+  initial.raceWords1f94[base+212]=0x801b2f20;
+  const players=mode==='versus'?2:1;
+  const runtime=createNativeRaceLaunchRuntime({racers:structuredClone(s.racers),courseIndex:1,players,initialState:initial,
+   course:s.course,courseRuntime:createNativeRaceCourseRuntime({course:s.course,difficulty:0,players})});
+  const input={bodiesBySlot:h.world.adapters.map(a=>({avatar:a.hull.rider,position:a.hull.center})),
+   nodePositions:h.primary.snapshot().map(n=>({sourceRow:n.sourceRow,x:n.position.x,z:n.position.z}))};
+  if(accepted)assert.equal(runtime.advanceNavigation(input).diagnostics.length,s.racers.length);
+  else assert.throws(()=>runtime.advanceNavigation(input),/selected initialized route family/);
+  assert.equal(runtime.snapshot().raceWords1f94[base+212],0x801b2f20);
+ }
+});
