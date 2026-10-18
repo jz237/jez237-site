@@ -6843,3 +6843,32 @@ panel with its record marker. Preview records/portraits are synthetic and stay
 outside the public game. The visible layout is implemented, but live ceremony
 timing, real rider previews, physical podium world and championship integration
 are still unfinished; this does not enable a public ending mode yet.
+
+### Championship ending frame composition — 2026-10-18
+
+`native-ending-menu-runtime.js` composes the ending portion of each 20Hz frame:
+scroll update, shared widgets/animation, fade, semantic drawing, then controls.
+The initial white frame clears the entry latch and defers controls. Draw data
+captures the state before controls, including on the frame that starts an exit.
+At fade completion the title or records initializer is expanded exactly once;
+the replaced entry call is not also returned as an effect. Records entry from
+state103 uses its original white fade and preserves championship resources.
+Title return resets sampled controllers and retains its resource/audio effects.
+
+A private execution of the original common dispatcher covers both ending states
+with and without the initialization latch (four cases, 262 instructions). It
+establishes that input and physical world updates precede the ending portion;
+main21 skips the ordinary camera update. Its callees are boundaries in that
+audit, so this does not establish completed physical ceremony behavior. The new
+API explicitly consumes state after those updates and cannot substitute for
+the original world. It does not resample controllers after the world or invent
+display-list addresses, renderer output, or retained scene data.
+
+Five integration tests cover the full original 542-update readiness schedule,
+one readiness cue, held-button edges, player-two rejection, the exact 601-tick
+automatic acceptance, A/Z/Start, both record flags, 24-tick exit fades, and
+title/records initialization. 30/60/144Hz presentation schedules and suspended
+menus produce the same final state. Late invalid layout or target data cannot
+partially mutate state. Real rider previews, physical podium world, live
+championship integration and championship name-menu completion remain pending.
+Resolution and public mode defaults are unchanged.
