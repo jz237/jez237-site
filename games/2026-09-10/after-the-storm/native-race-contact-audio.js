@@ -13,6 +13,7 @@ import {resetNativeRaceAudioTimers} from './native-audio-transition.js';
 import {prepareNativeAudioMode} from './native-audio-mode.js';
 import {prepareNativeCueAudio} from './native-cue-audio.js';
 import {prepareNativeRiderFeedbackAudio} from './native-rider-feedback-audio.js';
+import {prepareNativeStuntRingAudio} from './native-stunt-ring-audio.js';
 const F=Math.fround;
 const channelEntries=new Set(['800bfdd0','800bfde4','800bfe70','800bfef8','800bffac','800bfd34','800bfd68','800bffcc']);
 const voiceEntries=new Set(['c32a0','c3320','c338c','c33c8','c3408','c3464','c36f8','c3500','c3524','c377c']);
@@ -49,6 +50,9 @@ export function createNativeRaceContactAudio({players,courseIndex,difficultyWord
  const jitter=()=>((Math.imul(frame,1664525)+1013904223)>>>0);
  const retain=context=>{for(const key of Object.keys(globals))globals[key]=context[key];};
  function submit(command,player=0){
+  if(command.consumer==='c3628'){
+   for(const raw of prepareNativeStuntRingAudio(command.arguments[0],globals.courseIndex))submit(raw,player);return;
+  }
   if(command.consumer==='c3548'||command.consumer==='c35b4'){
    for(const raw of prepareNativeRiderFeedbackAudio(command.consumer,{...globals,random4562c:jitter()}))submit(raw,player);return;
   }
@@ -78,7 +82,7 @@ export function createNativeRaceContactAudio({players,courseIndex,difficultyWord
   },
   applyEffects(effects){
    for(const effect of effects){
-    if(effect.kind==='externalCall'&&['800c3548','800c35b4'].includes(effect.consumer)){
+    if(effect.kind==='externalCall'&&['800c3548','800c35b4','800c3628'].includes(effect.consumer)){
      submit({consumer:effect.consumer.slice(3),arguments:effect.arguments});continue;
     }
     // Source start-control emits audioEntry, separately from channel calls.

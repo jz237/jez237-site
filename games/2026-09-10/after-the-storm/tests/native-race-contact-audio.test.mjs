@@ -24,6 +24,20 @@ function body(frame,{speed=50,vertical=0,wet=1,landing=0,simulation=3,impacts=cr
   lastFrame:{actorState:22,animationFrame:0},riderLifecycle:{state:{crashCountdown:0}},wetState:{wetCountC78:wet?12:0,wetFlagC7c:wet,landingC7e:landing},impacts,objectHitKind16d8:0};
 }
 
+test('native ring commentary reaches playback once after its twenty outer-frame delay',()=>{
+ const owner=createNativeRaceContactAudio({players:1,courseIndex:1}),f=field();
+ owner.applyEffects([call('800c21f4',1,3),call('800c21f4',7,1)]);owner.clearPendingSounds();
+ owner.applyEffects([call('800c3628',12)]);
+ const spoken=[];
+ for(let frame=1;frame<=24;frame++){
+  owner.beforeFrame(frame);advance(owner,[body(frame)],f,[0],[0]);
+  for(const c of owner.drain())if(c.consumer==='c53d4'&&c.arguments[0]===0x06000c00)spoken.push({frame,note:c.arguments[1]});
+ }
+ assert.deepEqual(spoken,[{frame:20,note:107}]);
+ assert.equal(owner.snapshot().announcer.delayedHold,0);
+ assert.equal(owner.snapshot().announcer.hold,25);
+});
+
 test('live actor audio reads raw buttons, completed recovery and retained animation events',()=>{
  const owner=createNativeRaceContactAudio({players:1,courseIndex:1}),f=field();
  const inputs=[[22,0,5,0x8000],[7,55,0,0],[7,56,0,0],[7,58,0,0],[24,0,0,0],[22,0,0,0]];

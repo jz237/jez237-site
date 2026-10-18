@@ -19,6 +19,24 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — native ring commentary entry
+
+Ring collection'sC3628 audio recipe now reaches the existing announcer owner.
+Its4/8/12 streak cues and course-completion cue use the original delayed slot,
+priority and hold rules. The course-completion cue follows the12-ring cue on
+Sunny Beach and can replace it through the same priority rules. Finish mode
+entry clears the pending ring voice. A full owner test advances outer-frame
+timers and physical frames, confirming one final-ring announcement at frame20.
+
+The complete original entry was executed for270 inputs across all9 course
+targets, including signed and byte-wrap cases:8,190 instructions, with all52
+exported records matched to ROM. Sequence15 receives the signed low byte;
+milestone comparisons retain the full incoming register, so260 does not announce
+a4-ring streak. The standalone ring-tone sequence remains unconnected to the
+browser sound backend; this update connects its spoken commentary and preserves
+the separate tone commands in the numeric entry. Native Stunt admission still
+requires the remaining course/startup integration. High resolution is unchanged.
+
 ## Unpublished — native stunt ring contacts
 
 The shared state can now retain the original64-object array and its separate
