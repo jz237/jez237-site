@@ -19,6 +19,41 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — selected Stunt startup and canonical scoring runtime
+
+All nine normal solo Stunt courses now compile their selected primary route,
+complete object/fixed storage, reset layout, coarse/allowed/warning regions,
+checkpoint refill bytes and AI navigation table. Source9345C selection fixes
+one lap, full starting power, forward routes and difficulty2 (Port uses0).
+The reset bounds include the full C938 fixed family, including hidden objects.
+Fresh ring-order/streak words follow6AACC; cartridge saves, trail resources and
+the remainder of that initialization program are still separate boundaries.
+
+The existing launch owner accepts this prepared mode11 state. Separate reached
+methods execute79528 scoring/HUD, then6A748 ring contacts, and later9328C award
+transfer. Timer, collected flags, delayed bonuses, score queue and record writes
+all use that single canonical owner. Reading a presentation snapshot never
+advances the award queue. Retained mode/lap/direction and object storage must
+match; ordinary updates cannot run on a Stunt owner.
+
+Verification compares63 selected start/checkpoint/finish/delayed-bonus/record
+transitions against127,654 actual original instructions: complete race/HUD
+words and ordered effects agree. Nine selected75310→EED70/EE9C0 reset cases
+also agree, as do all nine normal-difficulty object startup images (339,261
+original instructions). Prepared route completion is a numeric consumer test,
+not a physically driven lap. Tests additionally cover ring collection/transfer,
+timeouts, inactive gates, retained-state rejection and immutable presentation.
+
+A Port warning discrepancy exposed omitted readonly numeric constants in the
+fresh web HUD storage.7A24..7A50 now contains its verified numeric values; the
+existing numeric warning implementation is unchanged. Ghidra on EVO X2 was
+used with read-only temporary overlay analysis; the saved project is unchanged.
+
+Physical Stunt admission remains closed. The next step is to connect these
+stages to the actual rider/body/world schedule, selected support geometry,
+Stunt HUD/result presentation and driven completion checks. No resolution,
+rendering, music, public mode selection or online scoring changes are implied.
+
 ## Unpublished — all nine native Stunt primary routes
 
 Readonly primary route resources now cover the nine Stunt entries selected by

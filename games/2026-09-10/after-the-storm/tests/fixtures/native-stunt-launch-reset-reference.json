@@ -1,0 +1,77 @@
+{
+  "scope": "Actual75310 and terminalEED70/EE9C0 on selected Stunt primary, full fixed sphere and generic storage; supplied retained numeric state and explicit zero presentation buffers.",
+  "checks": [
+    {
+      "courseIndex": 0,
+      "hashes": {
+        "raceWords1f94": "c236dcedf09dd771a3ac493333fc2ca9a65051539a844d5f549abb85afad8e77",
+        "hudWords7788": "a27913851f6034b939b5361736914ebd9820119fbc0fc5c29a16556a36789977"
+      },
+      "instructions": 7738
+    },
+    {
+      "courseIndex": 1,
+      "hashes": {
+        "raceWords1f94": "ed08c1f255c32012f9bbe64b492a976097840babf1719768651209faec802b4b",
+        "hudWords7788": "904ea1783b3c2881ac397f1ee07a290ba3de07a4f503fdf2b20acf319b2bf4dd"
+      },
+      "instructions": 4463
+    },
+    {
+      "courseIndex": 2,
+      "hashes": {
+        "raceWords1f94": "692c61477163861945ca26c4fac2e9fd1fe92307c049f9fa6eccee24bfdcfecb",
+        "hudWords7788": "904ea1783b3c2881ac397f1ee07a290ba3de07a4f503fdf2b20acf319b2bf4dd"
+      },
+      "instructions": 5054
+    },
+    {
+      "courseIndex": 3,
+      "hashes": {
+        "raceWords1f94": "4399b25a5819994d9a21b75350e763589d6941bcc5a0eb7204b8439938f6beeb",
+        "hudWords7788": "904ea1783b3c2881ac397f1ee07a290ba3de07a4f503fdf2b20acf319b2bf4dd"
+      },
+      "instructions": 5838
+    },
+    {
+      "courseIndex": 4,
+      "hashes": {
+        "raceWords1f94": "7c80671be0ee3f7baf402cbea256043b9ff42e7a01c71a7827c2b24efd4df8fe",
+        "hudWords7788": "904ea1783b3c2881ac397f1ee07a290ba3de07a4f503fdf2b20acf319b2bf4dd"
+      },
+      "instructions": 3181
+    },
+    {
+      "courseIndex": 5,
+      "hashes": {
+        "raceWords1f94": "0f4b7d171fee7b94541e60c589a24898868a196f33ec93ac90ed41c68a007422",
+        "hudWords7788": "904ea1783b3c2881ac397f1ee07a290ba3de07a4f503fdf2b20acf319b2bf4dd"
+      },
+      "instructions": 3818
+    },
+    {
+      "courseIndex": 6,
+      "hashes": {
+        "raceWords1f94": "9152f7d0b1f43d054c3af53d754fe0b3c757e495dc7d702dbb261e3af8c31133",
+        "hudWords7788": "904ea1783b3c2881ac397f1ee07a290ba3de07a4f503fdf2b20acf319b2bf4dd"
+      },
+      "instructions": 3339
+    },
+    {
+      "courseIndex": 7,
+      "hashes": {
+        "raceWords1f94": "5d1199c2880b7d4d7cb5995e2bf438593aa26de6900ed7d1ce5afdd2f01fecd0",
+        "hudWords7788": "904ea1783b3c2881ac397f1ee07a290ba3de07a4f503fdf2b20acf319b2bf4dd"
+      },
+      "instructions": 5295
+    },
+    {
+      "courseIndex": 8,
+      "hashes": {
+        "raceWords1f94": "85ab8d8756f378ad7503d374c7182189e100be2b20f0d76d2af91f6cd2ee8ad6",
+        "hudWords7788": "904ea1783b3c2881ac397f1ee07a290ba3de07a4f503fdf2b20acf319b2bf4dd"
+      },
+      "instructions": 5441
+    }
+  ]
+}

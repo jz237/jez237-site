@@ -1,0 +1,194 @@
+{
+  "scope": "Original numeric71E70 header selections. Hashes cover selected float32 rows without the consumer sentinel. Timers are actual800D9280 bytes.",
+  "cases": [
+    {
+      "courseIndex": 0,
+      "allowed": {
+        "count": 1,
+        "sha256": "ddaae17e988bfabf4777c8c9f82702c0f19b854784d8dc25349f484e20f0352a"
+      },
+      "coarse": {
+        "count": 1,
+        "sha256": "2363932b1ec3dda472410246987a41c1abd2c5c0bc5557fde7047a11f539ea38"
+      },
+      "warnings": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "checkpointSeconds": [
+        15,
+        15,
+        15,
+        15
+      ]
+    },
+    {
+      "courseIndex": 1,
+      "allowed": {
+        "count": 7,
+        "sha256": "6b0ad27795e61a43c9070ae76688340a2c8fdf6a1e16f516bff5df858ff9b04a"
+      },
+      "coarse": {
+        "count": 4,
+        "sha256": "40aacc13ddd38ba24a763dc12469422e00e04fd214a75ee962c81dd9d659b565"
+      },
+      "warnings": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "checkpointSeconds": [
+        15,
+        15,
+        15,
+        10
+      ]
+    },
+    {
+      "courseIndex": 2,
+      "allowed": {
+        "count": 11,
+        "sha256": "8afedb169469c2c04294250e793aae2042d8c3ae7c98170d1796012432d056f0"
+      },
+      "coarse": {
+        "count": 3,
+        "sha256": "4f191f1bc67499650ded48d424e0d4d949a078878b0d1859ea8d54bb7c09bf4f"
+      },
+      "warnings": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "checkpointSeconds": [
+        15,
+        15,
+        10,
+        10
+      ]
+    },
+    {
+      "courseIndex": 3,
+      "allowed": {
+        "count": 19,
+        "sha256": "30bf0e8e68a3f33767990f9fa125fc35ef132a6e06fff6835086f8e26583635c"
+      },
+      "coarse": {
+        "count": 5,
+        "sha256": "b102b1f13da16399d00eb54aee608b690e6e4edbe33b74c8bb32560bd9672805"
+      },
+      "warnings": {
+        "count": 2,
+        "sha256": "ad395e13ae7b1a21f606bd4851ef646fae785f644d984ef749de6c29f29d6551"
+      },
+      "checkpointSeconds": [
+        20,
+        15,
+        15,
+        15
+      ]
+    },
+    {
+      "courseIndex": 4,
+      "allowed": {
+        "count": 1,
+        "sha256": "45c30997628bc94705ea454e3cfcc184f1d16b64f926bae5d7d884d9c2c051c7"
+      },
+      "coarse": {
+        "count": 4,
+        "sha256": "53d7c018c2249933b684c7caa615a0b641bf8f2a431b2a771d0a401fbc57b788"
+      },
+      "warnings": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "checkpointSeconds": [
+        15,
+        15,
+        15,
+        15
+      ]
+    },
+    {
+      "courseIndex": 5,
+      "allowed": {
+        "count": 4,
+        "sha256": "f1ee75dfe0cc5daef5c9c203bfce7c2b24982b7dfc5601003a9b13cc3e04a978"
+      },
+      "coarse": {
+        "count": 4,
+        "sha256": "4365564f4810e26fdbfc2926ea1deeea8673f2991f59ae78fd882eb2fcae1691"
+      },
+      "warnings": {
+        "count": 1,
+        "sha256": "c17cb38f9c4c7b2aca415a0e63a3efd799f86a2b7988a1d2fa9adbb1518bd92c"
+      },
+      "checkpointSeconds": [
+        15,
+        25,
+        10,
+        15
+      ]
+    },
+    {
+      "courseIndex": 6,
+      "allowed": {
+        "count": 1,
+        "sha256": "ddaae17e988bfabf4777c8c9f82702c0f19b854784d8dc25349f484e20f0352a"
+      },
+      "coarse": {
+        "count": 4,
+        "sha256": "76e6353a889fc1773972d366c2d46e63ef40adb3e3f04b2b243a483dd98401e4"
+      },
+      "warnings": {
+        "count": 1,
+        "sha256": "bee7f7f00debc91ac1c8249f9c0c970fc3aabdd27bd40d7fc63cd4d8de990e89"
+      },
+      "checkpointSeconds": [
+        20,
+        15,
+        15,
+        15
+      ]
+    },
+    {
+      "courseIndex": 7,
+      "allowed": {
+        "count": 28,
+        "sha256": "05eb6e96003a67e30790d2b9f3f5c9b466b2c9f89a38d6dc2d9f49364825b14d"
+      },
+      "coarse": {
+        "count": 4,
+        "sha256": "212fcc1c27a379e61391287916b0ec943ae1c490b228d41631bd0fa1df253a5e"
+      },
+      "warnings": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "checkpointSeconds": [
+        20,
+        15,
+        20,
+        15
+      ]
+    },
+    {
+      "courseIndex": 8,
+      "allowed": {
+        "count": 16,
+        "sha256": "0e844e5ab3ec51463b1aa9d9b09688a5e4d26ebaa2b011c06c5c4a7de63dfc4f"
+      },
+      "coarse": {
+        "count": 5,
+        "sha256": "73e1d6506531e6bf1708654a618bb8ad8fa4c6ef57d61f78ec34bb2ca25d64a2"
+      },
+      "warnings": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "checkpointSeconds": [
+        20,
+        20,
+        20,
+        20
+      ]
+    }
+  ]
+}

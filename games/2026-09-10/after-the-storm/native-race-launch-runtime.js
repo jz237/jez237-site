@@ -29,13 +29,14 @@ import {spawnNativeIceFragments} from './native-ice-fragments.js';
 import {stepNativeIceSplashes} from './native-ice-splashes.js';
 import {nextNativeSprayFrameCounter} from './native-spray-levels.js';
 import {createNativeGenericObjectWorld} from './native-generic-object-world.js';
+import {prepareNativeRaceStuntUpdate,prepareNativeRaceStuntRingUpdate,prepareNativeRaceStuntAwardDisplay,nativeRaceStuntAwardsView} from './native-race-state.js';
 
 // Overlapping effect47FC, solo4800 and two-player4818 numeric entries. Ordinary
 // two-player place indices are0/1; other mode tables remain separate admission.
 const RESULT_TABLE_WORDS=Object.freeze([0,1,2,3,4,5,6,1,4]);
 
-// One canonical owner for the admitted ordinary launch, primary race and numeric
-// HUD fields. DOM/racer properties below are views, never synchronized copies.
+// One canonical owner for admitted ordinary races and prepared Stunt launches.
+// Numeric HUD and racer properties below are views, never synchronized copies.
 // Result entry, CPU result updates and menu entry share this owner. Original
 // resource loading, menu loops and cartridge persistence remain boundaries.
 const BASE=(0x2938-0x1f94)/4,STRIDE=222,hi=a=>(a-0x7788)/4,ri=a=>(a-0x1f94)/4;
@@ -51,14 +52,19 @@ function readFloat(v){numberBits.setUint32(0,v);return numberBits.getFloat32(0);
  * Actual source HUD startup and i1 initialization then supply their numeric
  * writes. This is an equivalent high-resolution runtime, not a claim that
  * opaque original loaded palettes/resources/BSS had these same initial bits.
- * Current ordinary time/versus previews use source modes0/1 and nonzero courses.
+ * Current physical time/versus previews use source modes0/1. Prepared solo
+ * Stunt course runtimes also own numeric startup/scoring, before host admission.
  * A retained canonical state may instead be supplied for exact prepared tests. */
 export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initialState,recordSession,tunes=[],tuneModes=[],courseRuntime,course,laps=3,reverse=false,rngSeed=17,handicap=false}={}){
  if(!Array.isArray(racers)||racers.length<1||racers.length>4)throw new TypeError('Launch requires one to four initialized racers');
- integer(players,'players',1,2);integer(courseIndex,'courseIndex',1,9);
+ const stunt=courseRuntime?.mode620===11,mode620=stunt?11:players===2?1:0;
+ integer(players,'players',1,2);integer(courseIndex,'courseIndex',stunt?0:1,stunt?8:9);
+ if(stunt&&(players!==1||racers.length!==1||reverse))throw new RangeError('Prepared Stunt launch requires one rider and a forward course');
+ if(stunt&&courseRuntime.courseIndex!==courseIndex)throw new RangeError('Stunt launch must use its selected source course');
+ if(stunt)course=courseRuntime.courseView;
  if(typeof handicap!=='boolean')throw new TypeError('handicap must be boolean');
  if(players>racers.length)throw new RangeError('Launch requires each human source slot');
- if(recordSession!==undefined&&(initialState||!courseRuntime))throw new RangeError('Record session requires a fresh ordinary launch');
+ if(recordSession!==undefined&&(initialState||!courseRuntime))throw new RangeError('Record session requires a fresh source launch');
  const retainedRecords=recordSession===undefined?null:copyNativeRecordSession(recordSession);
  let current,resultExit=null,continuationHandoff=null,objectWorldCreated=false;
  // Browser commands are queued edges, consumed once at the source display stage.
@@ -78,10 +84,12 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
   }
   if(courseRuntime){
    profileWordsB330[2]=courseRuntime.sourceDifficulty;
-   // Three numeric constants in the actual loaded readonly HUD interval.
+   // Numeric constants7A24..7A50 in the loaded readonly HUD interval,
+   // including direction-warning thresholds. They also make original-body
+   // comparisons use the same constants as the reconstructed numeric leaves.
    // Opaque palettes/resources and BSS are not copied from a ROM address alias.
-   for(const [address,bits]of [[0x7a44,0x3da3d70a],[0x7a48,0x3f333333],[0x7a50,0x3f2aaaab]])
-    hudWords7788[hi(address)]=bits;
+   [0x44bb8000,0x3f333333,0x3f333333,0x3f333333,0x3f333333,0xc51c4000,0x48ef4200,0x3fe66666,
+    0x3da3d70a,0x3f333333,0x3fe66666,0x3f2aaaab].forEach((bits,i)=>hudWords7788[hi(0x7a24)+i]=bits);
    // Declared fresh WEB record-book policy. Source reset retains much of this
    // table; zero times would incorrectly prevent legitimate record insertion.
    for(let c=0;c<12;c++)for(const base of [0x1ff0+c*60,0x1ff0+c*60+20,0x1ff0+c*60+40,
@@ -98,8 +106,8 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
     continuationDataWords60f0:Array.from({length:20},(_,i)=>[40,10,20,2,30,2][i-13]??0)}:{}),scene:{
    players,racerCount:racers.length,primaryHumanIndex:0,secondaryHumanIndex:1,courseIndex,
    ...(courseRuntime?.objectStartup?{...courseRuntime.objectStartup.counts,forceStunt824c:0,rampFilterOverride8254:0,alternate8250:0}:{}),
-   mode620:players===2?1:0,mode608:players===2?1:0,main638:1,phase650:0,simulation648:1,
-   clockStopped817c:1,activity624:-1,event628:0,gameStateAb24:40,specialAb64:0,ready6fc:0,
+   mode620,mode608:mode620,main638:1,phase650:0,simulation648:1,
+   clockStopped817c:1,activity624:-1,event628:0,gameStateAb24:40,specialAb64:0,ready6fc:Number(stunt&&courseIndex===0),
    missesEnabled72e:1,result6f0:0,ambientD4b00:0,field4964:0,field4970:Number(handicap),resultEffect393c:0,toggleD9914:0,
    rngState4640:integer(rngSeed,'web shared RNG seed',0,0xffffffff),inputTick1960:0,previousNavigationD9874:0,trainingSelectionDa9f8:0,
    ...(courseRuntime?{primaryCount:courseRuntime.data.nodes.length,finishSourceRow:courseRuntime.data.finishSourceRow,
@@ -107,7 +115,10 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
     freshNameAb6c:1,field700:0,fieldAb2c:0,titlePairSelectionA9fc:NATIVE_TITLE_INITIAL_PAIR,fieldA9ac:0,courseSelectionA9d0:0,pendingPlayers60c:players,
     riderSelectionA9c0:NATIVE_RIDER_MENU_ORDER.indexOf(racers[0].id),
     secondRiderSelectionA9c4:NATIVE_RIDER_MENU_ORDER.indexOf(racers[1]?.id??1),riderFlagA9c8:0,secondRiderFlagA9cc:0,
-    missLimit8174:5,noFinish8178:0,configuredLaps728:integer(laps,'configured laps',3,9),
+    //6AACC clears the shared ring chain after loaded objects/reset. These
+    // words are unrelated to75310's collected-ring/award totals in raceWords.
+    ...(stunt?{ringNext0cb0:0,ringStreak0cb4:0,unlockAb60:0}:{}),
+    missLimit8174:5,noFinish8178:0,configuredLaps728:stunt?1:integer(laps,'configured laps',3,9),
     directionFlag1f90:courseRuntime.directionFlag1f90,fortressD8240:0,metadataD9b0:racers[0].id,metadataCb32c:0,seed6f00:0}:{} )}});
   if(courseRuntime){
    if(retainedRecords)current=createNativeRaceState(restoreNativeRecordSession(current,retainedRecords));
@@ -127,8 +138,11 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
  }
  if(current.scene.players!==players||current.scene.racerCount!==racers.length||current.scene.courseIndex!==courseIndex)
   throw new RangeError('Retained launch scene must match the live participants/course');
+ if(stunt&&(current.scene.mode620!==11||current.scene.mode608!==11||current.scene.configuredLaps728!==1||current.scene.reverseDab68!==0))
+  throw new RangeError('Retained Stunt scene must match the selected mode, lap and direction');
+ if(stunt)for(const key of ['ringNext0cb0','ringStreak0cb4','unlockAb60'])integer(current.scene[key],`retained ${key}`);
  if(courseRuntime&&(current.scene.primaryCount!==courseRuntime.data.nodes.length||current.scene.finishSourceRow!==courseRuntime.data.finishSourceRow))
-  throw new RangeError('Retained ordinary state must match the initialized primary course');
+  throw new RangeError('Retained source state must match the initialized primary course');
  if(courseRuntime?.objectStartup&&Object.keys(courseRuntime.objectStartup.storage).some(key=>!current[key]))
   throw new RangeError('Source object layout requires all retained object, plane and fixed-grid owners');
  function setWord(slot,index,value,min=0,max=2147483647){integer(value,'record value',min,max);if(word(slot,index)!==value)commit([write(slot,index,value)]);}
@@ -190,7 +204,8 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
   }
  }
  const runtime={
-  ordinary:!!courseRuntime,
+  ordinary:!!courseRuntime&&!stunt,
+  stunt,
   canonicalObjects:!!courseRuntime?.objectStartup,
   objectTransformResources:courseRuntime?.objectStartup?.transformResources??null,
   createObjectWorld({water,objectIds}){
@@ -413,7 +428,7 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
     label:g.phase650<2?(g.phase650===0||stage===0?'READY':String(Math.max(1,Math.ceil((charge-15)/15)))):g.phase650===2?'GO':'',
     countdown:g.phase650<2?Math.max(1,Math.ceil((charge-15)/15)):0};},
   advanceClock(){
-   if(courseRuntime)throw new Error('Full ordinary update already owns the source record clock');
+   if(courseRuntime)throw new Error('Full source update already owns the record clock');
    const g=current.scene,ops=[];let dqMetric=readFloat(current.raceWords1f94[ri(0x39b4)]);
    for(let slot=0;slot<racers.length;slot++){
     // The enclosing event/DQ handler is separate from this timing subsection.
@@ -434,7 +449,7 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    commit(ops);return runtime;
   },
   advanceLaunch(pressedButtonsB58BySlot){
-   if(courseRuntime)throw new Error('Full ordinary update already owns the source countdown');
+   if(courseRuntime)throw new Error('Full source update already owns the countdown');
    const before=current.scene.phase650,launch=prepareNativeRaceCountdown(current,{pressedButtonsB58BySlot});current=launch.state;
    // This admitted portion owns prestart status only. Result-stage dispatch
    // belongs to the separate full i1 integration, not another countdown call.
@@ -444,7 +459,7 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
     started:before<2&&current.scene.phase650>=2,view:runtime.view()};
   },
   advanceOrdinary({bodiesBySlot,nodePositionsNative,pressedButtonsB58BySlot}){
-   if(!courseRuntime)throw new Error('Ordinary race needs its initialized source course');
+   if(!courseRuntime||stunt)throw new Error('Ordinary race needs its initialized ordinary source course');
    const before=racers.map((_,slot)=>({row:word(slot,3),lap:word(slot,0),misses:word(slot,77),finished:word(slot,189),dq:word(slot,187)}));
    const prepared=prepareNativeRaceOrdinaryUpdate(courseRuntime.primaryLayout,current,{
     primary:{samplesBySlot:bodiesBySlot.map(body=>({bodyPositionNative:body.positionNative,priorBodyPointNative:body.priorBodyPointNative})),nodePositionsNative},
@@ -454,6 +469,37 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    current=prepared.state;
    before.forEach((_,i)=>extra[i].logicalTicks++);
    return {effects:prepared.effects,operations:prepared.tailOperations,diagnostic:prepared.diagnostic,before,view:runtime.view()};
+  },
+  advanceStunt({bodiesBySlot,nodePositionsNative,pressedButtonsB58BySlot}){
+   if(!stunt)throw new Error('Stunt update requires initialized mode11 course data');
+   const prepared=prepareNativeRaceStuntUpdate(current,{nodes:courseRuntime.data.nodes,
+    primaryScratchLayout:courseRuntime.primaryScratchLayout,checkpointSecondsByIndex:courseRuntime.checkpointSecondsByIndex,
+    bodiesBySlot,nodePositionsNative,pressedButtonsB58BySlot,cameraIndicesByView:[0],
+    angleTableWords6f08:NATIVE_ANGLE_TABLE_WORDS,sineTableWords4350:nativeSineTableWords(),
+    allowedRegionsNative:courseRuntime.allowedRegionsNative,warningSuppressionRegionsNative:courseRuntime.warningSuppressionRegionsNative});
+   current=prepared.state;if(prepared.applied)extra[0].logicalTicks++;
+   return {applied:prepared.applied,effects:prepared.effects,operations:prepared.tailOperations,diagnostic:prepared.diagnostic,view:runtime.view()};
+  },
+  advanceStuntRings(primaryBodyPositionNative){
+   if(!stunt)throw new Error('Stunt ring stage requires initialized mode11 course data');
+   // Reached6E3A8 stage, AFTER79528 and BEFORE primary/generic motion. The
+   // supplied point must be the actual primary physical body's44/48/4C.
+   const prepared=prepareNativeRaceStuntRingUpdate(current,{primaryBodyPositionNative});current=prepared.state;
+   return {applied:prepared.applied,effects:prepared.effects,diagnostic:prepared.diagnostic};
+  },
+  advanceStuntDisplay(){
+   if(!stunt)throw new Error('Stunt display requires initialized mode11 course data');
+   //9328C once per source frame; an independent render must only read views.
+   const {state,...prepared}=prepareNativeRaceStuntAwardDisplay(current);current=state;return prepared;
+  },
+  stuntView(){
+   if(!stunt)throw new Error('Stunt view requires initialized mode11 course data');
+   return Object.freeze({remainingMs:word(0,0x2c4/4),checkpointIndex:word(0,0x164/4),nextSourceRow:word(0,3),
+    rings:current.raceWords1f94[ri(0x292c)]|0,ringCount:current.scene.ringCountB134,
+    nextRing:current.scene.ringNext0cb0,chain:current.scene.ringStreak0cb4,
+    pendingTrick:current.raceWords1f94[ri(0x26e4)]|0,delayedBonus:current.raceWords1f94[ri(0x39cc)]|0,
+    delayedFrames:current.raceWords1f94[ri(0x39d0)]|0,finished:word(0,189)!==0,disqualification:word(0,187),
+    awards:nativeRaceStuntAwardsView(current)});
   },
   queueCamera(view,command='next'){
    integer(view,'camera view',0,players-1);

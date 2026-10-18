@@ -1,0 +1,1085 @@
+{
+  "scope": "Actual original79528 Stunt update on selected initialized course routes, headers, objects and prepared physical/camera samples. Full race/HUD words and ordered effects compared; physical driving, world object motion and drawing are separate.",
+  "checks": [
+    {
+      "courseIndex": 0,
+      "frame": 1,
+      "stage": "start-cross",
+      "hashes": {
+        "raceWords1f94": "21edb64a43cf050c7fd0a78fe1fe348f596296bcf0667c3ab4ed4bc8a17a865a",
+        "hudWords7788": "2cbdc76d8e691fbc176548eb7b5774d95afa1764a0d67fbe20c78ec653a48fb0"
+      },
+      "effects": [],
+      "instructions": 1665
+    },
+    {
+      "courseIndex": 0,
+      "frame": 3,
+      "stage": "checkpoint",
+      "hashes": {
+        "raceWords1f94": "7bf80c951ff0af6a05b2bdfe18deb94934b0a74eacb8247b9b7cc15eeb5d462d",
+        "hudWords7788": "d2f856b01b8030b18bf5714e4aef8f8ebcb9c540b0f5e325ad805cd71e3189c1"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c37f4",
+          "arguments": [
+            51,
+            0
+          ]
+        }
+      ],
+      "instructions": 1978
+    },
+    {
+      "courseIndex": 0,
+      "frame": 5,
+      "stage": "checkpoint",
+      "hashes": {
+        "raceWords1f94": "d4ed97fd7e44972f051c9a23f012c5f519fd247ccc22dd2b788fb4cf2ed22c94",
+        "hudWords7788": "37cef10f503cdfcefe9c199eb96f3a72967757fef8605d53f091f353a4720a67"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c37f4",
+          "arguments": [
+            51,
+            0
+          ]
+        }
+      ],
+      "instructions": 2288
+    },
+    {
+      "courseIndex": 0,
+      "frame": 7,
+      "stage": "checkpoint",
+      "hashes": {
+        "raceWords1f94": "10cbdf6a6c12e6eeeca612b5facc648a74c496dc1e1c4c69def81ee3c9845a25",
+        "hudWords7788": "0e59fa8ee5eb7a772aea2c993b5786bf650fbe4a78c9d11a9dbb9010aa3a08a4"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c37f4",
+          "arguments": [
+            51,
+            0
+          ]
+        }
+      ],
+      "instructions": 2144
+    },
+    {
+      "courseIndex": 0,
+      "frame": 9,
+      "stage": "finish",
+      "hashes": {
+        "raceWords1f94": "338401a21ce6e0297edd560ad7643f6d43b7327fa32e892b526102fd19925354",
+        "hudWords7788": "c8510114749889f7ec7b9ab861a862caf3823a17b0a6a7abcc5124eab8f9ed9e"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c1f60",
+          "arguments": [
+            6
+          ]
+        },
+        {
+          "kind": "externalCall",
+          "consumer": "800c21f4",
+          "arguments": [
+            6,
+            0
+          ]
+        }
+      ],
+      "instructions": 1832
+    },
+    {
+      "courseIndex": 0,
+      "frame": 29,
+      "stage": "delayed-bonus",
+      "hashes": {
+        "raceWords1f94": "dc8db0cd7d6f227a3fac8ac6a0c495f70f41853102a42798761b5b53d9c8cec6",
+        "hudWords7788": "7c73fc513e4c778bbe7cd9c3a9956a1a73c35a827cdc3846781cb74c13fb3969"
+      },
+      "effects": [],
+      "instructions": 1479
+    },
+    {
+      "courseIndex": 0,
+      "frame": 57,
+      "stage": "record",
+      "hashes": {
+        "raceWords1f94": "0f2f1a321e2bce95243f7a611cf37ab6e05cb05d473b0a8b1f44cb660b9669e8",
+        "hudWords7788": "b894e90ff2d1b6278878d3622b207a5153b95238719ffc0dcd665163e8ad299a"
+      },
+      "effects": [],
+      "instructions": 1427
+    },
+    {
+      "courseIndex": 1,
+      "frame": 1,
+      "stage": "start-cross",
+      "hashes": {
+        "raceWords1f94": "14e0b8abd11d68c941eb85f4f3c8e825b66377f124f45d93e9b8a620fd2058bc",
+        "hudWords7788": "49d19c3cf4d572b75a8362f56dd4d5ddf42562493972e6969c0c55523cf7ced4"
+      },
+      "effects": [],
+      "instructions": 1811
+    },
+    {
+      "courseIndex": 1,
+      "frame": 3,
+      "stage": "checkpoint",
+      "hashes": {
+        "raceWords1f94": "3fea268ccacc63bba726905736ad425ae5da3aaa167b6d2cdeadb216c835a4ac",
+        "hudWords7788": "df15039bafa7698fcd0557c09e63e27774ed02d721f1bf7e9383f732f1e57680"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c37f4",
+          "arguments": [
+            51,
+            0
+          ]
+        }
+      ],
+      "instructions": 2054
+    },
+    {
+      "courseIndex": 1,
+      "frame": 5,
+      "stage": "checkpoint",
+      "hashes": {
+        "raceWords1f94": "6dcf7f126df7c16a971898f7c15a7b46669d133f2acc35aa63e2ffad43eba272",
+        "hudWords7788": "ecfbe441cff257231ffab7af245b33e3e85d6ee89223f4c2490803295dda4f4a"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c37f4",
+          "arguments": [
+            51,
+            0
+          ]
+        }
+      ],
+      "instructions": 2088
+    },
+    {
+      "courseIndex": 1,
+      "frame": 7,
+      "stage": "checkpoint",
+      "hashes": {
+        "raceWords1f94": "0045751f052522239d9743c403d6e408174f78de05e0c05449028696bb8ea192",
+        "hudWords7788": "0b5cec8f16cbe8db920facc8facd85ec0e24bf3200fedb9685e6a8b6117d951e"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c37f4",
+          "arguments": [
+            51,
+            0
+          ]
+        }
+      ],
+      "instructions": 2292
+    },
+    {
+      "courseIndex": 1,
+      "frame": 9,
+      "stage": "finish",
+      "hashes": {
+        "raceWords1f94": "364e0db1687f3a5b17c301015bced9290a31820dc12a9445cec7f35e98ac36f5",
+        "hudWords7788": "69804f1d7e83090e598a1c011b4b0b245a6e7a9a64fe2efc5957187d72ed25b4"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c1f60",
+          "arguments": [
+            6
+          ]
+        },
+        {
+          "kind": "externalCall",
+          "consumer": "800c21f4",
+          "arguments": [
+            6,
+            0
+          ]
+        }
+      ],
+      "instructions": 1935
+    },
+    {
+      "courseIndex": 1,
+      "frame": 29,
+      "stage": "delayed-bonus",
+      "hashes": {
+        "raceWords1f94": "dece31503c3487cdc7ecb4445e3f8575595380c3ad50e596eb3fbaf1563b5f07",
+        "hudWords7788": "8a3a4cf459137f5b4fa80a22ef3de3da8f6c8248f5902035aef41e9ab22e9fe8"
+      },
+      "effects": [],
+      "instructions": 1481
+    },
+    {
+      "courseIndex": 1,
+      "frame": 57,
+      "stage": "record",
+      "hashes": {
+        "raceWords1f94": "40eebaa9359d02b72d6254594a0ab8e32f40b7fb2f98f91b55ed3589f07e3420",
+        "hudWords7788": "148518a16e237063af5021474bb7b1d01ae730ec0916f3f0d9bdf364f190c9ac"
+      },
+      "effects": [],
+      "instructions": 1429
+    },
+    {
+      "courseIndex": 2,
+      "frame": 1,
+      "stage": "start-cross",
+      "hashes": {
+        "raceWords1f94": "f863dfdf6c5884dd00091bd3849f9856e764930ac6bcbdd4512f322f1938bbcf",
+        "hudWords7788": "7797239e1a7b5f78e84402f400a60d4b169b935fb7824f9420b6b783d489d0f1"
+      },
+      "effects": [],
+      "instructions": 1729
+    },
+    {
+      "courseIndex": 2,
+      "frame": 9,
+      "stage": "checkpoint",
+      "hashes": {
+        "raceWords1f94": "86c38c213fa0395d35506965b709710bd39711935ff4d3cdd8941a9ef3683900",
+        "hudWords7788": "313b519384a47edb7b0446c7b876144d2111c2ddb75fa20bbac0817d294599e1"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c37f4",
+          "arguments": [
+            51,
+            0
+          ]
+        }
+      ],
+      "instructions": 1894
+    },
+    {
+      "courseIndex": 2,
+      "frame": 11,
+      "stage": "checkpoint",
+      "hashes": {
+        "raceWords1f94": "1caaf36f5dd14e189695c1ba55247f3c22dd2cd2abcff8b4b8a2231036015687",
+        "hudWords7788": "6be03e0a50f3b7eb69e5858722ff5a2a178be7ed9d818207fc7a9deae46defa9"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c37f4",
+          "arguments": [
+            51,
+            0
+          ]
+        }
+      ],
+      "instructions": 2144
+    },
+    {
+      "courseIndex": 2,
+      "frame": 15,
+      "stage": "checkpoint",
+      "hashes": {
+        "raceWords1f94": "8aa0cbff77de2b1a8848b5f42c25a9dce950e877841571a527cd0bacca6b750a",
+        "hudWords7788": "4a4c11f2450bd7d254de2db4662361886587df0b97146426a58360c8c590af60"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c37f4",
+          "arguments": [
+            51,
+            0
+          ]
+        }
+      ],
+      "instructions": 2174
+    },
+    {
+      "courseIndex": 2,
+      "frame": 21,
+      "stage": "finish",
+      "hashes": {
+        "raceWords1f94": "445753d4449d89b694d28349a1ebbd166956e0472f72f14c725972359c6563b0",
+        "hudWords7788": "aab5ad25a95fd6be462a2a9131cd4e80e234618bb115ae2815601f0cf7d45c01"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c1f60",
+          "arguments": [
+            6
+          ]
+        },
+        {
+          "kind": "externalCall",
+          "consumer": "800c21f4",
+          "arguments": [
+            6,
+            0
+          ]
+        }
+      ],
+      "instructions": 1875
+    },
+    {
+      "courseIndex": 2,
+      "frame": 41,
+      "stage": "delayed-bonus",
+      "hashes": {
+        "raceWords1f94": "4d7a195a9937b4270f2b14e8964c9c8a2d6a13f850b4a820c1fe64d3a75c96f9",
+        "hudWords7788": "29c9e9e150df8ba271503362821bcf86e6469c21cf81a4d1c326b7be318b9903"
+      },
+      "effects": [],
+      "instructions": 1474
+    },
+    {
+      "courseIndex": 2,
+      "frame": 69,
+      "stage": "record",
+      "hashes": {
+        "raceWords1f94": "8a4e958d8a31e874bcd5844042cce118e2c183ee400e689eb47720e3f85a1971",
+        "hudWords7788": "df38f442469e2fb4d8459c85f0ff14ec615caf858a2890b216beeaabcb0ad8dc"
+      },
+      "effects": [],
+      "instructions": 1425
+    },
+    {
+      "courseIndex": 3,
+      "frame": 1,
+      "stage": "start-cross",
+      "hashes": {
+        "raceWords1f94": "fea3d8ec855c3a140639bb512e3e00e07e3d39e26ac7f08e7e073fc7c43ffc0c",
+        "hudWords7788": "fe0855b361c654e9038cf863b4a3e454800f772118f9dabbaf7bc9ea5aa78503"
+      },
+      "effects": [],
+      "instructions": 1773
+    },
+    {
+      "courseIndex": 3,
+      "frame": 7,
+      "stage": "checkpoint",
+      "hashes": {
+        "raceWords1f94": "63964a573be119ff422442a73d26ed053606e9f49c9393c06f07a18225f86be1",
+        "hudWords7788": "b0a97f55bfca4452f8bf6ce19009831c10e306b9373a24009c09545e51b71192"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c37f4",
+          "arguments": [
+            51,
+            0
+          ]
+        }
+      ],
+      "instructions": 2722
+    },
+    {
+      "courseIndex": 3,
+      "frame": 13,
+      "stage": "checkpoint",
+      "hashes": {
+        "raceWords1f94": "92c46bfa6e728c14685b3e2eb3933ee1b8ec042ce3f8c78fe59f5642066ed10d",
+        "hudWords7788": "a10978b318a58c9629088eb079e7c61f055d850e10626c455c98dea61211372f"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c37f4",
+          "arguments": [
+            51,
+            0
+          ]
+        }
+      ],
+      "instructions": 2238
+    },
+    {
+      "courseIndex": 3,
+      "frame": 19,
+      "stage": "checkpoint",
+      "hashes": {
+        "raceWords1f94": "3b60102701211fa2af61ed4f0ce5b3888c817303ae4cb595c95c903609940e82",
+        "hudWords7788": "c5fb69c6b5835fe1e8d9facb2ccb3193e58a67773b65bd26aee93fb168bb6b38"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c37f4",
+          "arguments": [
+            51,
+            0
+          ]
+        }
+      ],
+      "instructions": 2378
+    },
+    {
+      "courseIndex": 3,
+      "frame": 23,
+      "stage": "finish",
+      "hashes": {
+        "raceWords1f94": "a9b6b401ab692ff471a5efce19044838eff83481a8e478498ab909560479b336",
+        "hudWords7788": "2a888d6ab4b27dd43f17303653089696aa3aa5a7adfa289764b30e7b36e54015"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c1f60",
+          "arguments": [
+            6
+          ]
+        },
+        {
+          "kind": "externalCall",
+          "consumer": "800c21f4",
+          "arguments": [
+            6,
+            0
+          ]
+        }
+      ],
+      "instructions": 1942
+    },
+    {
+      "courseIndex": 3,
+      "frame": 43,
+      "stage": "delayed-bonus",
+      "hashes": {
+        "raceWords1f94": "77212e563bebcbab551b178d6d3bbd944df2b287a4fd499c7a8308381d9c8d9d",
+        "hudWords7788": "1fa7cce830323e93ca7296a145e73cef7584ed4d05e35e1f6f458cb7fb8ac6cf"
+      },
+      "effects": [],
+      "instructions": 1507
+    },
+    {
+      "courseIndex": 3,
+      "frame": 71,
+      "stage": "record",
+      "hashes": {
+        "raceWords1f94": "c66dd526fa27c8ad7c679c5928649fee5b46540f9d7fa2dee89ec59d899ffb14",
+        "hudWords7788": "b4ba8ddb0f0b3e116030ff80cea56f6f01ec79827c4243962bc1d687ca61291f"
+      },
+      "effects": [],
+      "instructions": 1458
+    },
+    {
+      "courseIndex": 4,
+      "frame": 1,
+      "stage": "start-cross",
+      "hashes": {
+        "raceWords1f94": "ba15048722ab1ee0bb679476559f4bd32e097c05a41335a7c246aceffa7b343b",
+        "hudWords7788": "6374ff51d11f9deaa56df0692accf6e43803f4625215beb4b71d9968de62a2f5"
+      },
+      "effects": [],
+      "instructions": 1864
+    },
+    {
+      "courseIndex": 4,
+      "frame": 3,
+      "stage": "checkpoint",
+      "hashes": {
+        "raceWords1f94": "748add06d921e56a35f633a639d59b42477bd64bc6e32c6dd2e88a5b9e197d51",
+        "hudWords7788": "ae64caac980feef28f2bc0bb36278a4ecd92951d6ae3bb4d81d54a4f3a3b41b8"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c37f4",
+          "arguments": [
+            51,
+            0
+          ]
+        }
+      ],
+      "instructions": 2082
+    },
+    {
+      "courseIndex": 4,
+      "frame": 11,
+      "stage": "checkpoint",
+      "hashes": {
+        "raceWords1f94": "ae71e517d75c52516d7167968045555ac3dbce575dfab52b62bcf1401be057f9",
+        "hudWords7788": "537c8ca2549db5142e187b91408bb3f3f5c5b26f0f6462e37f9e2493c10494a7"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c37f4",
+          "arguments": [
+            51,
+            0
+          ]
+        }
+      ],
+      "instructions": 2363
+    },
+    {
+      "courseIndex": 4,
+      "frame": 19,
+      "stage": "checkpoint",
+      "hashes": {
+        "raceWords1f94": "e11eee05b1fc20cfd2be2ad59621a8d0ede4c4813a46f06b339ac9719355d1fd",
+        "hudWords7788": "cfed99522419ae4d1dd8c50ac4c782d7b698aebdb395664bc685d105d58e4a09"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c37f4",
+          "arguments": [
+            51,
+            0
+          ]
+        }
+      ],
+      "instructions": 2509
+    },
+    {
+      "courseIndex": 4,
+      "frame": 23,
+      "stage": "finish",
+      "hashes": {
+        "raceWords1f94": "afa383e1cdcc34e183cf8fc19c7f5e16bb0f9a4a62dc7e9a9b966509f4a5fff4",
+        "hudWords7788": "915d507959d6d48b28df9513b60a3d5d3f4867329c61ca2608a274053959d410"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c1f60",
+          "arguments": [
+            6
+          ]
+        },
+        {
+          "kind": "externalCall",
+          "consumer": "800c21f4",
+          "arguments": [
+            6,
+            0
+          ]
+        }
+      ],
+      "instructions": 2047
+    },
+    {
+      "courseIndex": 4,
+      "frame": 43,
+      "stage": "delayed-bonus",
+      "hashes": {
+        "raceWords1f94": "cb8f0c16d62195c165635093a74d18873d82850c8b79b4fa03dce33e639af22e",
+        "hudWords7788": "5d0c55d3183e57162dccddb35c566c5bee9b9fa9f2a6cd1e19509ed5cf7ba914"
+      },
+      "effects": [],
+      "instructions": 1637
+    },
+    {
+      "courseIndex": 4,
+      "frame": 71,
+      "stage": "record",
+      "hashes": {
+        "raceWords1f94": "2fd0030bf960d82cffa409b4a08e11ab1ac7bbe90dc54a438df9c99f2c6755dd",
+        "hudWords7788": "b299a433229d4ba22c64cce40b7b851eb9f5abd1213357b50b76ceb1adb07949"
+      },
+      "effects": [],
+      "instructions": 1588
+    },
+    {
+      "courseIndex": 5,
+      "frame": 1,
+      "stage": "start-cross",
+      "hashes": {
+        "raceWords1f94": "270ac02c4484155130d077d7035255d937ae09713133c0165095abc99fd4c17c",
+        "hudWords7788": "c661c0e35e8afa79f5e0d6a644f5785cbf16339321be3b915597a4532264fe2a"
+      },
+      "effects": [],
+      "instructions": 2547
+    },
+    {
+      "courseIndex": 5,
+      "frame": 3,
+      "stage": "checkpoint",
+      "hashes": {
+        "raceWords1f94": "c33028d9229f5e70b387427a7cb86f0da5730042167c85f625cadceec48a5071",
+        "hudWords7788": "57118ffaa404416710379eded6462a7e55722db4e2cace957b905c09b5109082"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c37f4",
+          "arguments": [
+            51,
+            0
+          ]
+        }
+      ],
+      "instructions": 2707
+    },
+    {
+      "courseIndex": 5,
+      "frame": 9,
+      "stage": "checkpoint",
+      "hashes": {
+        "raceWords1f94": "37b60261a5fd0e37d1c528681bcd04472aef091e8628406e9694c524a539ef41",
+        "hudWords7788": "dba8bf1ca4ab0ef5e88d298a4ffb33584fffb8881c5aff06997bc24fabc801b8"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c37f4",
+          "arguments": [
+            51,
+            0
+          ]
+        }
+      ],
+      "instructions": 2393
+    },
+    {
+      "courseIndex": 5,
+      "frame": 11,
+      "stage": "checkpoint",
+      "hashes": {
+        "raceWords1f94": "4014aa98855bffec4f11c2e835b63726a1f20457b4f154fa0cfb4ae33918f96f",
+        "hudWords7788": "22ee6516f1cb3e98b7325cf087f9bbd4eac41ffb5851080e3f7c26464e2ef91c"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c37f4",
+          "arguments": [
+            51,
+            0
+          ]
+        }
+      ],
+      "instructions": 2734
+    },
+    {
+      "courseIndex": 5,
+      "frame": 13,
+      "stage": "finish",
+      "hashes": {
+        "raceWords1f94": "3c159b77c8a56fb8cb9412c90dcecf9545df97bd7ed6b17669971da8e1c9eb41",
+        "hudWords7788": "fd153cf58f532ab03bb566d40f60270bb0dbba9480cf40e4af67a5d83ee5f790"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c1f60",
+          "arguments": [
+            6
+          ]
+        },
+        {
+          "kind": "externalCall",
+          "consumer": "800c21f4",
+          "arguments": [
+            6,
+            0
+          ]
+        }
+      ],
+      "instructions": 2689
+    },
+    {
+      "courseIndex": 5,
+      "frame": 33,
+      "stage": "delayed-bonus",
+      "hashes": {
+        "raceWords1f94": "1f09e49a2c329c1578940ca0665355dad86beef632c092f6e1c0735e46ecadd7",
+        "hudWords7788": "0eae62bf54a62a16cee0a25dee46e23f70620306e9e82f90257c285d1088ffb4"
+      },
+      "effects": [],
+      "instructions": 2301
+    },
+    {
+      "courseIndex": 5,
+      "frame": 61,
+      "stage": "record",
+      "hashes": {
+        "raceWords1f94": "add48436b0a0215e296d97b0fd4a2ce820b1787db5b275fa911ac3f080f7dbe8",
+        "hudWords7788": "01a69cf188ae21d6b3c8531d2c6072b5fda5e6b76cfa2203f7ae0937d599a447"
+      },
+      "effects": [],
+      "instructions": 2249
+    },
+    {
+      "courseIndex": 6,
+      "frame": 1,
+      "stage": "start-cross",
+      "hashes": {
+        "raceWords1f94": "4b29deeee8bbbe4743dbc32a2d27314639830fde294e72f547d995b5c2adbdfa",
+        "hudWords7788": "371096fdffebf730cad5837feaa2a230bc94b2d6ae32d31c10df34fad21b5b1f"
+      },
+      "effects": [],
+      "instructions": 2469
+    },
+    {
+      "courseIndex": 6,
+      "frame": 3,
+      "stage": "checkpoint",
+      "hashes": {
+        "raceWords1f94": "7854f7fe77f63d8416316e22d4793af2d7719ea6694b3d34806f01a4ccc0bbad",
+        "hudWords7788": "59f3a06fd2b2c52beee32f41ce6d85a04f6a932a097802e19691c5653d082cc7"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c37f4",
+          "arguments": [
+            51,
+            0
+          ]
+        }
+      ],
+      "instructions": 2557
+    },
+    {
+      "courseIndex": 6,
+      "frame": 7,
+      "stage": "checkpoint",
+      "hashes": {
+        "raceWords1f94": "15550fd2ca2e928b36a23836b3ee0f7a21fd6682dc46138f0ae2da4bb30ae0aa",
+        "hudWords7788": "b1967968a9e60c89fd58ccaf3e525f88f5c65b3dca727340528d54bcd6fe777f"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c37f4",
+          "arguments": [
+            51,
+            0
+          ]
+        }
+      ],
+      "instructions": 2281
+    },
+    {
+      "courseIndex": 6,
+      "frame": 13,
+      "stage": "checkpoint",
+      "hashes": {
+        "raceWords1f94": "c140193312ea9c169610c1dd27022b783398f13cde5ac9ee64b7ad205087aa09",
+        "hudWords7788": "357308087f461c55050223ec5a849fad623dcfa0ec2897ca4937d9f9fc41d800"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c37f4",
+          "arguments": [
+            51,
+            0
+          ]
+        }
+      ],
+      "instructions": 2510
+    },
+    {
+      "courseIndex": 6,
+      "frame": 17,
+      "stage": "finish",
+      "hashes": {
+        "raceWords1f94": "2cb95b74bd717b6fed976871e166fbf00440d589e3ac06e697e7c96b924207df",
+        "hudWords7788": "1c854f5cd956c3f0322a97ecac2899f24807fd461ffd9b2ddc61c1f8e4150544"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c1f60",
+          "arguments": [
+            6
+          ]
+        },
+        {
+          "kind": "externalCall",
+          "consumer": "800c21f4",
+          "arguments": [
+            6,
+            0
+          ]
+        }
+      ],
+      "instructions": 2652
+    },
+    {
+      "courseIndex": 6,
+      "frame": 37,
+      "stage": "delayed-bonus",
+      "hashes": {
+        "raceWords1f94": "6fd005ab426244e7b5e09309471831fc666c3fee6af71921a3b6b0b2108fc83b",
+        "hudWords7788": "79eddbda2123391ca0d698e8a353a2402026bac3c57d61248c4e5bbd3970ba3c"
+      },
+      "effects": [],
+      "instructions": 2257
+    },
+    {
+      "courseIndex": 6,
+      "frame": 65,
+      "stage": "record",
+      "hashes": {
+        "raceWords1f94": "c4db4f7930a3e44429334d0dc06fd73a3632cccc40bb0d9c4e4aebf2135f5c51",
+        "hudWords7788": "96d15bd32400d8f8707b8566725df5cadcc49e0fc94c58c9480ed070145f1ffc"
+      },
+      "effects": [],
+      "instructions": 2206
+    },
+    {
+      "courseIndex": 7,
+      "frame": 1,
+      "stage": "start-cross",
+      "hashes": {
+        "raceWords1f94": "d0ba40cc70ba349281f5c6b193af9da9f2a459321dcb3bfbe8ee7d3596c7fa31",
+        "hudWords7788": "a5ee88b4347cc54f519ae44b48890ea4451e5280e9eddccfbaf74db480d74172"
+      },
+      "effects": [],
+      "instructions": 1872
+    },
+    {
+      "courseIndex": 7,
+      "frame": 3,
+      "stage": "checkpoint",
+      "hashes": {
+        "raceWords1f94": "3ddeb03f45bc3ae5e9c73048375d321e8f8d4087cf3917618517a8852eaa7bb6",
+        "hudWords7788": "c36b4b40be7c3cd4bf792b3a8a73ef204d546d49ffa3265403d929b0dfd3ee0b"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c37f4",
+          "arguments": [
+            51,
+            0
+          ]
+        }
+      ],
+      "instructions": 2048
+    },
+    {
+      "courseIndex": 7,
+      "frame": 5,
+      "stage": "checkpoint",
+      "hashes": {
+        "raceWords1f94": "feab0d2aa0347798a47334759ae8cece5d44b1731c3543f40d0fbc3b09246cec",
+        "hudWords7788": "2a4a2725010b6069cd72306bb6c64b5b03f20962b08a525f5bfe218af6ad06e3"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c37f4",
+          "arguments": [
+            51,
+            0
+          ]
+        }
+      ],
+      "instructions": 2290
+    },
+    {
+      "courseIndex": 7,
+      "frame": 11,
+      "stage": "checkpoint",
+      "hashes": {
+        "raceWords1f94": "30ff1cda2946d6102e1cc2e82ab564c3d331b0bf38561147ce409d81ceaecb42",
+        "hudWords7788": "0dd174edc986aaedc6d8c7fbf632bb8b2abc82de44fbdb88068e3e78873e0af9"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c37f4",
+          "arguments": [
+            51,
+            0
+          ]
+        }
+      ],
+      "instructions": 2492
+    },
+    {
+      "courseIndex": 7,
+      "frame": 13,
+      "stage": "finish",
+      "hashes": {
+        "raceWords1f94": "83b25fd36c11ac063b9e5f72da94a84a3efa87c3b44b4de2ceb59f8d7321a72b",
+        "hudWords7788": "88fc16ca7b1c29924208e420bd66ff6a00230e1cef3fb58c878de51bab75990a"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c1f60",
+          "arguments": [
+            6
+          ]
+        },
+        {
+          "kind": "externalCall",
+          "consumer": "800c21f4",
+          "arguments": [
+            6,
+            0
+          ]
+        }
+      ],
+      "instructions": 1854
+    },
+    {
+      "courseIndex": 7,
+      "frame": 33,
+      "stage": "delayed-bonus",
+      "hashes": {
+        "raceWords1f94": "bbbf80222d56dc8eaf7bfd16c21e218594e9b06266246e244a3d18033a289a2a",
+        "hudWords7788": "170d7b7885e6f0ac53cc689c342b3e43f4462bed01b9309c860e5d285592c2cf"
+      },
+      "effects": [],
+      "instructions": 1502
+    },
+    {
+      "courseIndex": 7,
+      "frame": 61,
+      "stage": "record",
+      "hashes": {
+        "raceWords1f94": "c07318e179aa4d83be347aa81a83e328b69a55f9cc0e8f5c2b358d9585016eb2",
+        "hudWords7788": "e5b32518962e78d55dcaa35bf1c37523d967f3a02c9232892d4af0f86f505f4e"
+      },
+      "effects": [],
+      "instructions": 1450
+    },
+    {
+      "courseIndex": 8,
+      "frame": 1,
+      "stage": "start-cross",
+      "hashes": {
+        "raceWords1f94": "10fabf92db53f8f998754e3124b383a6af387ab71c47bb598b2a323f85f3222b",
+        "hudWords7788": "5ead84072c41e7df86ce55492c9fe569fe5f8449cc55be1e66aaf8edf6e1136f"
+      },
+      "effects": [],
+      "instructions": 1697
+    },
+    {
+      "courseIndex": 8,
+      "frame": 3,
+      "stage": "checkpoint",
+      "hashes": {
+        "raceWords1f94": "0a3e77dac849ec92cc39616ce21500168522b693e4aae17160bb6a034eceadc2",
+        "hudWords7788": "7099376bf78393326329610dc49623a76f64b6fdebbf8544d1eafca4c4984537"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c37f4",
+          "arguments": [
+            51,
+            0
+          ]
+        }
+      ],
+      "instructions": 1936
+    },
+    {
+      "courseIndex": 8,
+      "frame": 9,
+      "stage": "checkpoint",
+      "hashes": {
+        "raceWords1f94": "79e7734653a94e5e48ec15a988e17a8fb4f73176567b1dcbbe2d059b236d34aa",
+        "hudWords7788": "948ba11fae1865eaa65dbff0e3db22f726b245dc2231749b2ca347a53592193d"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c37f4",
+          "arguments": [
+            51,
+            0
+          ]
+        }
+      ],
+      "instructions": 2189
+    },
+    {
+      "courseIndex": 8,
+      "frame": 11,
+      "stage": "checkpoint",
+      "hashes": {
+        "raceWords1f94": "a135518d2c2db5dd701d6bd6e84c25cf3d600f0f0c35defa95d5b8dd9f1854f7",
+        "hudWords7788": "713d57e9ac5b1a21a7029044e73b3673decd1f9d3514e9e9a759afd18485bec2"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c37f4",
+          "arguments": [
+            51,
+            0
+          ]
+        }
+      ],
+      "instructions": 2288
+    },
+    {
+      "courseIndex": 8,
+      "frame": 15,
+      "stage": "finish",
+      "hashes": {
+        "raceWords1f94": "ef7dee77c8cea1f9bb89b73dbc342175e430d859cb7373ad25f8f598e4bbbc5a",
+        "hudWords7788": "b9b49b4052aaf6adb7bf29c9a5cf37d52a63b5b14feb50de2a1f5b14663dae59"
+      },
+      "effects": [
+        {
+          "kind": "externalCall",
+          "consumer": "800c1f60",
+          "arguments": [
+            6
+          ]
+        },
+        {
+          "kind": "externalCall",
+          "consumer": "800c21f4",
+          "arguments": [
+            6,
+            0
+          ]
+        }
+      ],
+      "instructions": 1868
+    },
+    {
+      "courseIndex": 8,
+      "frame": 35,
+      "stage": "delayed-bonus",
+      "hashes": {
+        "raceWords1f94": "cca4fb41b44d17cd892b69fabf78505a8567a6069cc0a86074d5b63c4bb9e5ac",
+        "hudWords7788": "ab404e267e5a0eba5001a7e684e9555127dc4fb4864936e431b7e0ffc96e4ace"
+      },
+      "effects": [],
+      "instructions": 1470
+    },
+    {
+      "courseIndex": 8,
+      "frame": 63,
+      "stage": "record",
+      "hashes": {
+        "raceWords1f94": "80683c51e21e4bda26339d2909f671934f7484e0669fdf9738ec3ec64e9f5aa5",
+        "hudWords7788": "c4699ac6d389ef0acf83b8f10dd3beef6bb0c7dbef6797ad260f9986aab39d9b"
+      },
+      "effects": [],
+      "instructions": 1420
+    }
+  ]
+}
