@@ -38,6 +38,33 @@ test('live actor audio reads raw buttons, completed recovery and retained animat
  assert.deepEqual(owner.drain(),[],'new packet fields must not invent unconnected voice playback');
 });
 
+test('live crash and remount voices follow the original zero-to-event edge for both actual riders',()=>{
+ const owner=createNativeRaceContactAudio({players:2,courseIndex:1}),f=field();start(owner);
+ const events=[[22,0],[22,5],[22,5],[24,0],[22,0],[24,0]];
+ for(let i=0;i<events.length;i++){
+  const bodies=[body(i+1,{rider:0}),body(i+1,{rider:3})];
+  for(const b of bodies){b.lastFrame.actorState=events[i][0];b.riderLifecycle.state.crashCountdown=events[i][1];}
+  advance(owner,bodies,f,[0,0],[0,0]);const commands=owner.drain().filter(c=>c.consumer==='c53d4'&&c.arguments[0]>>>8===0x06000a);
+  if(i===1||i===5){
+   const variant=((Math.imul(i+1,1664525)+1013904223)>>>0)&1,offset=i===5?2:0;
+   assert.deepEqual(commands.map(c=>c.arguments),[[0x06000a01,variant+offset],[0x06000a02,12+variant+offset]]);
+  }else assert.deepEqual(commands,[],'holding or changing a nonzero event must not replay the voice');
+  assert.deepEqual(owner.snapshot().packets.map(p=>p[23]),owner.snapshot().packets.map(p=>p[21]));
+ }
+ assert.equal(owner.snapshot().globals.riderEvent7ca4,1);
+});
+
+test('a physical rider water-entry edge emits drum1 once and acknowledges its source packet',()=>{
+ const owner=createNativeRaceContactAudio({players:1,courseIndex:1}),f=field();start(owner);
+ const q=queryNativeWaterField(f,64,0).sourcePlaneQueryNative;
+ for(let i=0;i<4;i++){
+  const b=body(i+1);b.lastFrame.actorState=23;b.articulatedRider={jointWorld:{x:64,y:i===2?q:q-1,z:0}};
+  advance(owner,[b],f,[0],[0]);const hits=owner.drain().filter(c=>c.consumer==='bffec'&&c.arguments[1]===1);
+  assert.equal(hits.length,i===0||i===3?1:0);if(hits.length)assert.deepEqual(hits[0].arguments,[2,1,127]);
+  assert.equal(owner.snapshot().packets[0][24],0);assert.equal(owner.snapshot().packets[0][31],owner.snapshot().packets[0][0]);
+ }
+});
+
 test('live engine channels use physical wetness, canonical power and real source start events',()=>{
  const f=field(),owner=createNativeRaceContactAudio({players:2,courseIndex:1});start(owner);
  const left=body(1,{speed:20}),right=body(1,{speed:50,wet:0});left.frame.controls.heldButtons=0x8000;

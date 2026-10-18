@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
 import {createOriginalEffectPoll,originalEffectPitch} from '../original-effect-poll.js';
 const cmd=(consumer,lane,n,v=80)=>({consumer,arguments:[lane,n,v]});
 test('source IO latches retain the latest write, prioritize contact, and defer spray independently for each human',()=>{
@@ -20,4 +21,23 @@ test('retained channel pitch is applied before either note layer, with unrelated
  for(const a of [[0x04000000,0x3f800000],[0x01000200,0x3f800000],[0x04000500,0x7fc00000],[0x04000500,0xbf800000]]){
   const c={consumer:'c538c',arguments:a};assert.equal(originalEffectPitch(c),null);assert.equal(p.submit(c),false);
  }
+});
+
+test('192 original rider dispatch executions resolve the solo/versus ports and all16 samples',()=>{
+ const fixture=JSON.parse(readFileSync(new URL('./fixtures/native-rider-voice-reference.json',import.meta.url)));
+ assert.equal(fixture.cases.length,192);
+ for(const c of fixture.cases){
+  const p=createOriginalEffectPoll(),command={consumer:'c317c',arguments:[c.channel,c.note]};
+  assert.equal(p.submit(command,c.raceMode),c.channel<2);
+  assert.deepEqual(p.poll(),c.expected.filter(x=>x.arguments[0]>>>24===6));
+ }
+});
+
+test('rider IO0 takes priority over IO1 while P2 always gets its own layer; pause clears all ports',()=>{
+ const p=createOriginalEffectPoll(),submit=(player,note,mode)=>p.submit({consumer:'c317c',arguments:[player,note]},mode);
+ submit(0,1,1);submit(0,4,0);submit(1,9,1);submit(1,15,1);
+ const notes=p.poll();assert.deepEqual(notes.map(c=>c.arguments),[[0x06000a00,4],[0x06000a02,15]]);
+ assert.deepEqual(p.poll().map(c=>c.arguments),[[0x06000a01,1]]);assert.deepEqual(p.poll(),[]);
+ submit(0,3,1);const copy=p.riderSnapshot();copy[1].arguments[1]=99;assert.equal(p.riderSnapshot()[1].arguments[1],3);
+ p.clear();assert.deepEqual(p.poll(),[]);assert.deepEqual(p.riderSnapshot(),[null,null,null]);
 });

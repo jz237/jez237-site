@@ -19,6 +19,41 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — original rider reactions and water-entry audio
+
+Native human races now run the original rider-audio tail after impact handling.
+Actual crash/remount event edges choose the character's reaction; a sustained
+nonzero event does not replay it. The physical rider joint entering water emits
+original bank0 drum1 once, acknowledges its packet flag, and preserves the
+prior-speed commit order. Engine remount audio remains separately owned.
+
+Sixteen reaction selectors resolve logical bank8 to physical bank7, following
+the ROM's reversed bank set with its final two entries swapped. Their original
+ADPCM samples and tuning are rendered into standalone PCM; the identical source
+selectors2/3 remain identical. Channel10 uses centered solo P1 or left P1/right
+P2 layers. IO0 has priority over IO1 on their shared layer, and IO2 remains
+independent. Its poll uses the same documented physical-frame phase adaptation
+as the effect channels. Original reverb sends and delayed announcer commentary
+are not yet reproduced; no substituted speech is generated for missing clips.
+
+All73 focused tests pass. The new192 original dispatcher executions verify
+the routed ports and every admitted selector. Existing216 rider-tail reference
+cases and the full336-case consumer comparison also pass. Ordinary grid input
+hits a real buoy, emits one reaction and one rider-entry splash, then completes
+recovery and emits/acknowledges the remount starter cue. Physical and emitted
+audio histories agree at30/60/144Hz. This updates an older recovery assertion
+that still expected the animation event to remain unconsumed after the engine
+was connected.
+
+Chrome's live solo recovery played the reaction at source frame151 and water
+entry at158, then returned to actor22. All40 effect files loaded without failure.
+All16 rider selectors rendered through OfflineAudioContext with the expected
+solo/split stereo energy and silent final tails. A two-player inspection loaded
+and ran, but did not trigger a physical rider reaction during that drive; the
+independent two-player layers are covered by the dispatch and playback tests.
+High1280×720 and83,521 water vertices remain unchanged. One local resource404
+remains; no observed JavaScript exception. Full native gameplay parity is open.
+
 ## Unpublished — original spray playback and effect-channel polling
 
 The native human audio owner now consumes original spray levels after engine

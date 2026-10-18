@@ -966,6 +966,312 @@
         7005
       ],
       "sourceTuning": 0.5
+    },
+    "1": {
+      "file": "contact-01.wav",
+      "rate": 1,
+      "pan": 64,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 4,
+      "sourceBank": 0,
+      "sourceTuning": 0.5
+    },
+    "rider-00": {
+      "file": "rider-00.wav",
+      "rate": 1,
+      "pan": 64,
+      "envelope": [
+        1,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64,
+      "sourceBank": 7,
+      "sourceTuning": 0.5625
+    },
+    "rider-01": {
+      "file": "rider-01.wav",
+      "rate": 1,
+      "pan": 64,
+      "envelope": [
+        1,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64,
+      "sourceBank": 7,
+      "sourceTuning": 0.5625
+    },
+    "rider-02": {
+      "file": "rider-02.wav",
+      "rate": 1,
+      "pan": 64,
+      "envelope": [
+        1,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64,
+      "sourceBank": 7,
+      "sourceTuning": 0.5625
+    },
+    "rider-03": {
+      "file": "rider-03.wav",
+      "rate": 1,
+      "pan": 64,
+      "envelope": [
+        1,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64,
+      "sourceBank": 7,
+      "sourceTuning": 0.5625
+    },
+    "rider-04": {
+      "file": "rider-04.wav",
+      "rate": 1,
+      "pan": 64,
+      "envelope": [
+        1,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64,
+      "sourceBank": 7,
+      "sourceTuning": 0.44544950127601624
+    },
+    "rider-05": {
+      "file": "rider-05.wav",
+      "rate": 1,
+      "pan": 64,
+      "envelope": [
+        1,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64,
+      "sourceBank": 7,
+      "sourceTuning": 0.44544950127601624
+    },
+    "rider-06": {
+      "file": "rider-06.wav",
+      "rate": 1,
+      "pan": 64,
+      "envelope": [
+        1,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64,
+      "sourceBank": 7,
+      "sourceTuning": 0.44544950127601624
+    },
+    "rider-07": {
+      "file": "rider-07.wav",
+      "rate": 1,
+      "pan": 64,
+      "envelope": [
+        1,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64,
+      "sourceBank": 7,
+      "sourceTuning": 0.44544950127601624
+    },
+    "rider-08": {
+      "file": "rider-08.wav",
+      "rate": 1,
+      "pan": 64,
+      "envelope": [
+        1,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64,
+      "sourceBank": 7,
+      "sourceTuning": 0.5625
+    },
+    "rider-09": {
+      "file": "rider-09.wav",
+      "rate": 1,
+      "pan": 64,
+      "envelope": [
+        1,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64,
+      "sourceBank": 7,
+      "sourceTuning": 0.5625
+    },
+    "rider-0a": {
+      "file": "rider-0a.wav",
+      "rate": 1,
+      "pan": 64,
+      "envelope": [
+        1,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64,
+      "sourceBank": 7,
+      "sourceTuning": 0.5625
+    },
+    "rider-0b": {
+      "file": "rider-0b.wav",
+      "rate": 1,
+      "pan": 64,
+      "envelope": [
+        1,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64,
+      "sourceBank": 7,
+      "sourceTuning": 0.5625
+    },
+    "rider-0c": {
+      "file": "rider-0c.wav",
+      "rate": 1,
+      "pan": 64,
+      "envelope": [
+        1,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64,
+      "sourceBank": 7,
+      "sourceTuning": 0.5612310171127319
+    },
+    "rider-0d": {
+      "file": "rider-0d.wav",
+      "rate": 1,
+      "pan": 64,
+      "envelope": [
+        1,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64,
+      "sourceBank": 7,
+      "sourceTuning": 0.5612310171127319
+    },
+    "rider-0e": {
+      "file": "rider-0e.wav",
+      "rate": 1,
+      "pan": 64,
+      "envelope": [
+        1,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64,
+      "sourceBank": 7,
+      "sourceTuning": 0.5612310171127319
+    },
+    "rider-0f": {
+      "file": "rider-0f.wav",
+      "rate": 1,
+      "pan": 64,
+      "envelope": [
+        1,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64,
+      "sourceBank": 7,
+      "sourceTuning": 0.5612310171127319
     }
   },
   "files": {
@@ -1129,6 +1435,125 @@
       "bytes": 137644,
       "peak": 30818,
       "rms": 8636.876497804544
+    },
+    "contact-01.wav": {
+      "sha256": "f7aec125a3f27218d25e43836b3394f0588260570b575f1277fb9e40afd05af9",
+      "duration": 1.153,
+      "bytes": 73836,
+      "peak": 31175,
+      "rms": 3508.114073303745
+    },
+    "rider-00.wav": {
+      "sha256": "4cb1a5b1936e81411c7189e9b5e288159de2f1b35c0d3b95cae77368fa5ed566",
+      "duration": 0.639125,
+      "bytes": 40948,
+      "peak": 32001,
+      "rms": 17292.26263325195
+    },
+    "rider-01.wav": {
+      "sha256": "9abfd3052d21f4bf9666eb2a0bc6591d57c5735cdd3843a04b6dd2906d755549",
+      "duration": 0.752,
+      "bytes": 48172,
+      "peak": 32001,
+      "rms": 10731.538363623993
+    },
+    "rider-02.wav": {
+      "sha256": "a52b5b37d5c82eb6d7ecb100780a9ed38bb3cb3ebfd9fdaec09cbf8b6c34a244",
+      "duration": 0.607125,
+      "bytes": 38900,
+      "peak": 32001,
+      "rms": 12377.436065518643
+    },
+    "rider-03.wav": {
+      "sha256": "a52b5b37d5c82eb6d7ecb100780a9ed38bb3cb3ebfd9fdaec09cbf8b6c34a244",
+      "duration": 0.607125,
+      "bytes": 38900,
+      "peak": 32001,
+      "rms": 12377.436065518643
+    },
+    "rider-04.wav": {
+      "sha256": "e49a1de381207c72de374465b19b63f14fd7c6839c02c75a36bc3782f612ec29",
+      "duration": 0.6555625,
+      "bytes": 42000,
+      "peak": 32001,
+      "rms": 13688.985771963202
+    },
+    "rider-05.wav": {
+      "sha256": "a25be906926a0fcc64b397ff3aeb113c3d535a53435049d55d114dc2e62e247b",
+      "duration": 0.7633125,
+      "bytes": 48896,
+      "peak": 32001,
+      "rms": 10696.921220468295
+    },
+    "rider-06.wav": {
+      "sha256": "c31b09d83e8c1acec7e4d2134999c26df0daa3cd997115ed73df1017c741d21b",
+      "duration": 0.3131875,
+      "bytes": 20088,
+      "peak": 32001,
+      "rms": 12469.73011138126
+    },
+    "rider-07.wav": {
+      "sha256": "e0541b0a5a00ddd28005736db53c42ead15a2a857d2bc1d3f4e58cfe0039c331",
+      "duration": 0.37828125,
+      "bytes": 24254,
+      "peak": 32001,
+      "rms": 9179.02802635171
+    },
+    "rider-08.wav": {
+      "sha256": "d9c4654cc3e2a5e2ca3be5b063aa336546748a0b16c83d0d37d935eed4fafc16",
+      "duration": 0.74046875,
+      "bytes": 47434,
+      "peak": 32001,
+      "rms": 17184.69906666196
+    },
+    "rider-09.wav": {
+      "sha256": "eb243443edf0802654e1b4cd452cfe232229a40d51e0d7f36860e00af94283c7",
+      "duration": 0.58934375,
+      "bytes": 37762,
+      "peak": 32001,
+      "rms": 13228.97448521355
+    },
+    "rider-0a.wav": {
+      "sha256": "b145f45b189282c5f5b0295c7edb064990d726a5ffeaea6429b0fbf6ca4f68f3",
+      "duration": 0.20446875,
+      "bytes": 13130,
+      "peak": 32001,
+      "rms": 17148.076953436444
+    },
+    "rider-0b.wav": {
+      "sha256": "3c39263b2150cfb9f8ba4050bbe6dc8585a18698a6fe1faa2a6be048d5f49558",
+      "duration": 0.456,
+      "bytes": 29228,
+      "peak": 32001,
+      "rms": 14612.250878962004
+    },
+    "rider-0c.wav": {
+      "sha256": "2e9ce3b4c89603eee76a7852d09a25246f99aabc23277618ea9fbdffc95e0aef",
+      "duration": 0.57734375,
+      "bytes": 36994,
+      "peak": 32001,
+      "rms": 16877.109149552238
+    },
+    "rider-0d.wav": {
+      "sha256": "e460673c534411d9a31f273e5a7f19761e76ab92ded98e32c379caa04a78d071",
+      "duration": 0.47396875,
+      "bytes": 30378,
+      "peak": 32001,
+      "rms": 13362.569601107116
+    },
+    "rider-0e.wav": {
+      "sha256": "746333b9b07bbbb30913b41fba7e4b0022792db7b1a20c69e2eb44e901a6a45d",
+      "duration": 0.3109375,
+      "bytes": 19944,
+      "peak": 32001,
+      "rms": 9691.005782123222
+    },
+    "rider-0f.wav": {
+      "sha256": "6386f83460d46570e8f77f44659437d55f3d2a41f39603d5aeb47f30bb1a18be",
+      "duration": 0.39825,
+      "bytes": 25532,
+      "peak": 32001,
+      "rms": 15006.866506722727
     }
   },
   "iceSequence": {
@@ -1219,6 +1644,26 @@
       64,
       127,
       0
+    ]
+  },
+  "riderSequence": {
+    "sequence": 0,
+    "logicalBank": 8,
+    "bank": 7,
+    "channel": 10,
+    "tempo": 200,
+    "ticksPerQuarter": 48,
+    "pollTicks": 8,
+    "noteTicks": 240,
+    "portLayers": [
+      0,
+      0,
+      1
+    ],
+    "portPans": [
+      64,
+      32,
+      96
     ]
   }
 }

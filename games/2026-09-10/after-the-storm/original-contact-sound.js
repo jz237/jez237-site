@@ -1,18 +1,27 @@
 import {stereoWidth} from './coastal-music.js';
 import {originalEffectPitch} from './original-effect-poll.js';
 const base=new URL('./assets/audio/waverace64/contacts/',import.meta.url);
-const ids=[11,12,13,14,15,...Array.from({length:48},(_,i)=>i+16)];
-const files=new Set([11,12,13,14,15,...Array.from({length:12},(_,i)=>16+i*4)].map(i=>'contact-'+i.toString(16).padStart(2,'0')+'.wav'));
+const ids=[1,11,12,13,14,15,...Array.from({length:48},(_,i)=>i+16)];
+const files=new Set([1,11,12,13,14,15,...Array.from({length:12},(_,i)=>16+i*4)].map(i=>'contact-'+i.toString(16).padStart(2,'0')+'.wav'));
 files.add('ice-break.wav');
 const sprayKeys=Array.from({length:5},(_,i)=>'spray-'+i);
 for(const key of sprayKeys)files.add(key+'.wav');
+const riderKeys=Array.from({length:16},(_,i)=>'rider-'+i.toString(16).padStart(2,'0'));
+for(const key of riderKeys)files.add(key+'.wav');
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 
 // Sequence0, channels2/5: BFFEC writes IO5 (velocity), then IO0 (note).
 // Both channels select bank0/percussion127 and restart layer0. Ice's channel7
 // dynamic-call19 plays a separate three-layer bank5/instrument7 sequence.
+// Rider channel10 resolves logical bank8 to physical bank7 and uses fixed
+// layer pans for its solo/P1/P2 ports. Original reverb sends remain separate.
 export function originalContactSelection(command){
  const a=command?.arguments;
+ if(command?.consumer==='c53d4'&&Array.isArray(a)&&a.length===2&&[0x06000a00,0x06000a01,0x06000a02].includes(a[0])&&
+  Number.isInteger(a[1])&&a[1]>=0&&a[1]<16){
+  const port=a[0]&255;
+  return {lane:10,key:riderKeys[a[1]],velocity:127,layer:port===2?1:0,pan:[64,32,96][port],fixedPan:true};
+ }
  if(command?.consumer==='c0044'&&Array.isArray(a)&&a.length===3&&[2,5].includes(a[0])&&
   Number.isInteger(a[1])&&a[1]>=0&&a[1]<20&&Number.isInteger(a[2])&&a[2]>=0&&a[2]<=127)
   return {lane:a[0],key:'spray-'+Math.floor(a[1]/4),velocity:a[2],layer:1,pan:[0,64,127,0][a[1]&3]};
@@ -40,7 +49,7 @@ export class OriginalContactSound{
    if(!this.manifest){
     const m=JSON.parse(new TextDecoder().decode(await this.loader(new URL('manifest.json',base),controller.signal)));
     if(this.disposed||controller.signal.aborted)return false;
-    if(m.version!==1||!m.sounds||!m.files||[...ids,'ice-break',...sprayKeys].some(id=>{
+    if(m.version!==1||!m.sounds||!m.files||[...ids,'ice-break',...sprayKeys,...riderKeys].some(id=>{
      const s=m.sounds[id],f=m.files[s?.file];
      return !s||!files.has(s.file)||!Number.isFinite(s.rate)||s.rate<.9||s.rate>1||
       !Number.isInteger(s.pan)||s.pan<0||s.pan>127||!f||!Number.isFinite(f.duration)||f.duration<=0||f.duration>3;
@@ -78,13 +87,13 @@ export class OriginalContactSound{
   // Channel7 cannot poll IO0 during its dynamic call. Repeated ice hits retain
   // one pending command; the clip includes the original routine/poll duration.
   if(selection.lane===7&&this.voices.has(7)){this.pendingIce={command,side};return true;}
-  const key=selection.layer===1?selection.lane+':spray':selection.lane;
+  const key=selection.lane===10?'10:'+selection.layer:selection.layer===1?selection.lane+':spray':selection.lane;
   this.stopVoice(key);
   if(selection.velocity===0)return true;
   const sound=this.manifest?.sounds[selection.key],buffer=this.buffers.get(sound?.file);
   if(!buffer)return false;
   const source=this.ctx.createBufferSource(),gain=this.ctx.createGain(),pan=this.ctx.createStereoPanner();
-  const position=clamp(((selection.pan??sound.pan)-64)/64+(Number.isFinite(side)?side:0),-1,1);
+  const position=clamp(((selection.pan??sound.pan)-64)/64+(!selection.fixedPan&&Number.isFinite(side)?side:0),-1,1);
   source.buffer=buffer;source.playbackRate.value=sound.rate*(this.channelPitch.get(selection.lane)??1);
   // The source note interpreter squares velocity. Bus gain, stereo placement,
   // resampling and the offline envelopes are browser presentation adaptations.

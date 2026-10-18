@@ -7,10 +7,11 @@ import {prepareNativeRiderWaterAudio,prepareNativeActorAudioFields} from './nati
 import {prepareNativeEngineEnvelope,consumeNativeEngineAudio,consumeNativeSprayAudio} from './native-engine-audio.js';
 import {createOriginalEngineChannels,applyOriginalEngineCommands} from './original-engine-sound.js';
 import {createOriginalEffectPoll} from './original-effect-poll.js';
+import {consumeNativeRiderAudio} from './native-race-audio-consumer.js';
 const F=Math.fround;
 const channelEntries=new Set(['800bfdd0','800bfde4','800bfe70','800bfef8','800bffac','800bfd34','800bfd68','800bffcc']);
 
-// Engine/contact owner for the admitted one-human and two-human browser races.
+// Engine/contact/rider owner for the admitted one-human and two-human races.
 // Fresh web sessions explicitly start packet storage/motion at zero, in racing
 // audio mode7 with muted channels. Source status effects enable them. This is
 // not an emulation of retained cartridge mixer/voice state or nearest-rival
@@ -21,7 +22,7 @@ export function createNativeRaceContactAudio({players,courseIndex}){
  let globals={raceMode:players-1,courseIndex,primaryMuted:1,secondaryMuted:1,alternateEngine:0,
   rankDelay:0,primaryStart:0,secondaryStart:0,primaryPitchBits:0,secondaryPitchBits:0,rivalPitchBits:0,
   primaryFlag:0,primaryCompanionFlag:0,primaryLastPlace:0,secondaryFlag:0,secondaryCompanionFlag:0,secondaryLastPlace:0,
-  engineGate7ca0:0,primaryPowerByte:0,secondaryPowerByte:0};
+  engineGate7ca0:0,primaryPowerByte:0,secondaryPowerByte:0,riderEvent7ca4:0};
  let engineChannels=createOriginalEngineChannels(players).map((c,i)=>({...c,volume:F(60/127),pan:players===2?(i?127:0):64}));
  const packets=[Array(32).fill(0),Array(32).fill(0)],motion=Array.from({length:players},()=>({speed:0,vertical:0})),queue=[];
  const riderWater=Array.from({length:players},()=>({bodyC84:0,bodyC86:0}));
@@ -123,11 +124,13 @@ export function createNativeRaceContactAudio({players,courseIndex}){
     const spray=consumeNativeSprayAudio(engine.packet,{...globals,...context,random4562c:jitter});
     const hit=consumeNativeImpactAudio(spray.packet,{...context,...materials,pairedImpact,pairedVariant});
     pairedImpact=hit.context.pairedImpact;pairedVariant=hit.context.pairedVariant;
-    packets[player]=hit.packet;
-    // End of C010C: impacts above read the PRIOR frame's speed byte.
-    packets[player][31]=packets[player][0];
-    for(const command of [...landing.commands,...engine.commands,...spray.commands,...hit.commands]){
-     if(effectPoll.submit({...command,frame,player}))continue;
+    const rider=consumeNativeRiderAudio(hit.packet,{...context,random4562c:jitter,riderEvent7ca4:globals.riderEvent7ca4});
+    globals.riderEvent7ca4=rider.context.riderEvent7ca4;
+    // The rider tail acknowledges event/water-entry latches and commits the
+    // prior-speed byte only after the impact consumer has read it.
+    packets[player]=rider.packet;
+    for(const command of [...landing.commands,...engine.commands,...spray.commands,...hit.commands,...rider.commands]){
+     if(effectPoll.submit({...command,frame,player},globals.raceMode))continue;
      if(command.consumer==='c53d4'&&command.arguments[0]===0x06000700)enqueue(command,player);
     }
    }
@@ -136,8 +139,8 @@ export function createNativeRaceContactAudio({players,courseIndex}){
   drain(){return queue.splice(0);},
   clearPendingSounds(){effectPoll.clear();queue.length=0;},
   engineChannels(){return globals.alternateEngine!==0?null:engineChannels.map((c,i)=>({...c,enabled:c.enabled&&audioMode===7&&globals[i?'secondaryMuted':'primaryMuted']===0}));},
-  snapshot(){return {scope:'source-human-engine-contact-spray-controls; browser-audio-jitter-poll-phase-and-smoothing',frame,audioMode,globals:{...globals},
-   engineChannels:engineChannels.map(c=>({...c})),effectPoll:effectPoll.snapshot(),
+  snapshot(){return {scope:'source-human-engine-contact-spray-rider-controls; browser-audio-jitter-poll-phase-and-smoothing',frame,audioMode,globals:{...globals},
+   engineChannels:engineChannels.map(c=>({...c})),effectPoll:effectPoll.snapshot(),riderPoll:effectPoll.riderSnapshot(),
    packets:packets.map(p=>p.slice()),motion:motion.map(m=>({...m})),riderWater:riderWater.map(w=>({...w})),pending:queue.length,emitted,dropped};}
  };
 }

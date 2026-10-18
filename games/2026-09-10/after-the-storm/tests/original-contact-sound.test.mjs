@@ -9,6 +9,7 @@ const manifest=JSON.parse(readFileSync(new URL('manifest.json',base)));
 const command=(key=11,velocity=127,lane=2)=>({consumer:'bffec',arguments:[lane,key,velocity]});
 const ice=()=>({consumer:'c53d4',arguments:[0x06000700,19]});
 const spray=(key=1,velocity=80,lane=2)=>({consumer:'c0044',arguments:[lane,key,velocity]});
+const rider=(note=0,port=0)=>({consumer:'c53d4',arguments:[0x06000a00|port,note]});
 const pitch=(rate,lane=2)=>{const view=new DataView(new ArrayBuffer(4));view.setFloat32(0,rate);return {consumer:'c538c',arguments:[0x04000000|(lane<<8),view.getUint32(0)]};};
 class Param{constructor(){this.value=0;}setTargetAtTime(v){this.value=v;}}
 class Node{constructor(){for(const key of ['gain','pan','playbackRate'])this[key]=new Param();this.stopped=0;this.disconnected=0;}connect(n){return n;}disconnect(){this.disconnected++;}start(t){this.started=t;}stop(){this.stopped++;this.onended?.();}}
@@ -19,8 +20,8 @@ function setup(options={}){
  return {ctx,requested,loader,bank:new OriginalContactSound(ctx,new Node(),{loader:options.loader??loader})};
 }
 
-test('23 standalone PCM files cover53 contact selectors, five spray drums and the ice sequence',()=>{
- assert.equal(Object.keys(manifest.files).length,23);assert.equal(Object.keys(manifest.sounds).length,59);
+test('40 standalone PCM files cover54 contacts, five spray drums,16 rider reactions and ice',()=>{
+ assert.equal(Object.keys(manifest.files).length,40);assert.equal(Object.keys(manifest.sounds).length,76);
  for(const [file,record]of Object.entries(manifest.files)){
   const bytes=readFileSync(new URL(file,base));assert.equal(createHash('sha256').update(bytes).digest('hex'),record.sha256);
   assert.equal(bytes.length,record.bytes);assert.equal(bytes.toString('ascii',0,4),'RIFF');assert.equal(bytes.toString('ascii',8,12),'WAVE');
@@ -46,7 +47,7 @@ test('only original human contact commands select this bank',()=>{
 
 test('lazy bank loads once; note restart replaces only that player, retaining source velocity and pan variants',async()=>{
  const {bank,ctx,requested}=setup();assert.equal(bank.play(command()),false);assert.equal(requested.length,0);
- const first=bank.load();assert.equal(bank.load(),first);assert.equal(await first,true);assert.equal(requested.length,24);
+ const first=bank.load();assert.equal(bank.load(),first);assert.equal(await first,true);assert.equal(requested.length,41);
  assert.equal(bank.play(command(17,127),-.4),true);const left=bank.voices.get(2);
  assert.equal(left.gain.gain.value,.55);assert.equal(left.pan.pan.value,-.4);
  bank.play(command(53,63,5),.4);const right=bank.voices.get(5);assert.equal(right.gain.gain.value,(63/127)**2*.55);
@@ -55,14 +56,14 @@ test('lazy bank loads once; note restart replaces only that player, retaining so
  assert.equal(replacement.source.playbackRate.value,manifest.sounds[19].rate);lateEnd();assert.equal(bank.voices.get(2),replacement);
  bank.setMode('mono');assert.ok([...bank.voices.values()].every(v=>v.pan.pan.value===0));bank.setMode('headphones');assert.equal(right.pan.pan.value,.4*.45);
  bank.play(command(19,0));assert.equal(bank.voices.has(2),false);assert.equal(bank.voices.has(5),true);
- right.source.onended();assert.equal(bank.voices.size,0);await bank.load();assert.equal(requested.length,24);
+ right.source.onended();assert.equal(bank.voices.size,0);await bank.load();assert.equal(requested.length,41);
 });
 
 test('a missing effect falls back without blocking the rest and retries only that file after30 seconds',async()=>{
  const fixture=setup();let fail=true;const bank=new OriginalContactSound(fixture.ctx,new Node(),{loader:async url=>{
   if(fail&&url.pathname.endsWith('contact-0b.wav'))throw Error('offline');return fixture.loader(url);
  }});
- assert.equal(await bank.load(),false);assert.equal(bank.buffers.size,22);assert.deepEqual(bank.failures,['contact-0b.wav']);
+ assert.equal(await bank.load(),false);assert.equal(bank.buffers.size,39);assert.deepEqual(bank.failures,['contact-0b.wav']);
  assert.equal(bank.play(command(11)),false);assert.equal(bank.play(command(12)),true);
  const count=fixture.requested.length;fail=false;await bank.load();assert.equal(fixture.requested.length,count);
  fixture.ctx.currentTime=30;assert.equal(await bank.load(),true);assert.equal(fixture.requested.length,count+1);assert.equal(bank.play(command(11)),true);
@@ -108,6 +109,39 @@ test('replay cannot retain live effects, pause keeps pitch, and a new race reset
  queue.push(spray());audio.nativeContacts(owner,true);assert.equal(bank.voices.get('2:spray').source.playbackRate.value,1.5);
  audio.finishNativeContactFrame(false);assert.equal(bank.voices.size,0);
  audio.nativeContacts({drain:()=>[spray()]},true);assert.equal(bank.voices.get('2:spray').source.playbackRate.value,1);
+});
+
+test('source rider ports select independent layers and fixed solo/split pans without changing spray or impact voices',async()=>{
+ const {bank}=setup();await bank.load();bank.play(command());bank.play(spray());
+ const contact=bank.voices.get(2),water=bank.voices.get('2:spray');
+ for(let note=0;note<16;note++)for(let port=0;port<3;port++){
+  const key='rider-'+note.toString(16).padStart(2,'0');
+  assert.deepEqual(originalContactSelection(rider(note,port)),{lane:10,key,velocity:127,layer:port===2?1:0,pan:[64,32,96][port],fixedPan:true});
+  assert.equal(manifest.sounds[key].sourceBank,7);
+ }
+ bank.play(rider(0),.4);assert.equal(bank.voices.get('10:0').position,0);
+ bank.play(rider(4,1),-.4);bank.play(rider(13,2),.4);
+ const left=bank.voices.get('10:0'),right=bank.voices.get('10:1');
+ assert.equal(left.source.buffer,bank.buffers.get('rider-04.wav'));assert.equal(left.position,-.5);assert.equal(right.position,.5);
+ assert.equal(left.source.playbackRate.value,1);bank.play(pitch(1.8));assert.equal(left.source.playbackRate.value,1);
+ bank.play(rider(7,1));assert.equal(left.source.stopped,1);assert.equal(right.source.stopped,0);
+ assert.equal(bank.voices.get(2),contact);assert.equal(bank.voices.get('2:spray'),water);
+ bank.setMode('mono');assert.ok([...bank.voices.values()].every(v=>v.pan.pan.value===0));
+ bank.setMode('headphones');assert.equal(right.pan.pan.value,.225);bank.stop(10);
+ assert.equal(bank.voices.size,2);assert.equal(bank.voices.get(2),contact);
+ const meta=manifest.riderSequence;assert.deepEqual([meta.logicalBank,meta.bank,meta.channel,meta.noteTicks],[8,7,10,240]);
+ assert.deepEqual(meta.portLayers,[0,0,1]);assert.deepEqual(meta.portPans,[64,32,96]);
+ for(const c of [rider(-1),rider(16),rider(0,3)])assert.equal(originalContactSelection(c),null);
+ bank.buffers.delete('rider-00.wav');assert.equal(bank.play(rider()),false);
+});
+
+test('water entry has its own original sample and retains splash fallback when missing',async()=>{
+ const {bank,ctx}=setup();await bank.load();const audio=new Soundscape();audio.ctx=ctx;audio.effects=new Node();audio.originalContacts=bank;
+ const fallback=[];audio.samples={play:(...a)=>{fallback.push(a);return true;}};
+ audio.nativeContact(command(1));assert.equal(bank.voices.get(2).source.buffer,bank.buffers.get('contact-01.wav'));
+ assert.equal(fallback.length,0);bank.buffers.delete('contact-01.wav');audio.nativeContact(command(1));
+ assert.equal(fallback.length,1);assert.equal(fallback[0][0],'splash');assert.equal(fallback[0][1].rate,1);
+ bank.buffers.delete('rider-00.wav');audio.nativeContact(rider());assert.equal(fallback.length,1,'missing voice does not invent spoken output or another impact');
 });
 
 test('invalid paths, truncated audio and disposal during a load never become playable',async()=>{

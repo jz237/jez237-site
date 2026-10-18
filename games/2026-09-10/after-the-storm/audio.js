@@ -62,9 +62,9 @@ export class Soundscape{
   if(this.originalContacts?.play(command,side))return;
   const args=command.arguments,hit=command.consumer==='bffec',spray=command.consumer==='c0044',ice=command.consumer==='c53d4'&&args[0]===0x06000700&&args[1]===0x13;
   if(!hit&&!ice&&!spray)return;
-  const splash=spray||hit&&args[1]>=11&&args[1]<=14,volume=ice?1:Math.max(0,Math.min(127,args[2]))/127;
+  const splash=spray||hit&&(args[1]===1||args[1]>=11&&args[1]<=14),volume=ice?1:Math.max(0,Math.min(127,args[2]))/127;
   if(volume===0)return;
-  const gain=volume*(splash?.65:.48),rate=spray?(this.originalContacts?.channelPitch.get(args[0])??1):splash?({11:.8,12:.9,13:1,14:1.1}[args[1]]):ice?1.3:.85;
+  const gain=volume*(splash?.65:.48),rate=spray?(this.originalContacts?.channelPitch.get(args[0])??1):splash?({1:1,11:.8,12:.9,13:1,14:1.1}[args[1]]):ice?1.3:.85;
   if(this.samples?.play(splash?'splash':'hit',{gain,rate,pan:side}))return;
   const ctx=this.ctx,t=ctx.currentTime,g=ctx.createGain(),pan=ctx.createStereoPanner();
   pan.pan.value=side*stereoWidth(this.mode);g.gain.setValueAtTime(gain,t);g.gain.exponentialRampToValueAtTime(.0001,t+(splash?.65:.28));
