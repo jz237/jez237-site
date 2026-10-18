@@ -1,0 +1,327 @@
+{
+  "scope": "Complete original75310 reset plus EED70/EE9C0 HUD startup, using actual selected primary/fixed/generic storage; zero presentation buffers, no graphics emulation.",
+  "cases": 32,
+  "instructions": 257087,
+  "checks": [
+    {
+      "id": "greyhaven",
+      "difficulty": 0,
+      "players": 1,
+      "hashes": {
+        "raceWords1f94": "1a43006433c904fcd58a53486cc8cdbe9e854dbedbb45e0970682503f91ece48",
+        "hudWords7788": "60b2db98fb2955e641d7a91fd525d840cf7732969435cb3644094e82c1e73fe2"
+      },
+      "instructions": 6569
+    },
+    {
+      "id": "greyhaven",
+      "difficulty": 0,
+      "players": 2,
+      "hashes": {
+        "raceWords1f94": "7fa5272c8d1df5274451c64b1308c075f05735f74808f7f3dd331475679a920e",
+        "hudWords7788": "f53f94aa72b47d622cd88f4f2d67e64fca8013ae15744c111099bf5fd13c90d9"
+      },
+      "instructions": 7478
+    },
+    {
+      "id": "greyhaven",
+      "difficulty": 1,
+      "players": 1,
+      "hashes": {
+        "raceWords1f94": "257b23174300fbb3ad7d726a6c63ecebca4fb2ee3bf2e366fd48633291c1c3d6",
+        "hudWords7788": "60b2db98fb2955e641d7a91fd525d840cf7732969435cb3644094e82c1e73fe2"
+      },
+      "instructions": 6436
+    },
+    {
+      "id": "greyhaven",
+      "difficulty": 1,
+      "players": 2,
+      "hashes": {
+        "raceWords1f94": "7134af13c015b6d083b4c08fc6a88d5b306fdc4f4fd46ea6e61ac8702346dd51",
+        "hudWords7788": "f53f94aa72b47d622cd88f4f2d67e64fca8013ae15744c111099bf5fd13c90d9"
+      },
+      "instructions": 7325
+    },
+    {
+      "id": "greyhaven",
+      "difficulty": 2,
+      "players": 1,
+      "hashes": {
+        "raceWords1f94": "12f24765cab26655930d02eeeced62d7034f5a046c86c8ef069c390b92681a0e",
+        "hudWords7788": "60b2db98fb2955e641d7a91fd525d840cf7732969435cb3644094e82c1e73fe2"
+      },
+      "instructions": 6593
+    },
+    {
+      "id": "greyhaven",
+      "difficulty": 2,
+      "players": 2,
+      "hashes": {
+        "raceWords1f94": "808e0fd802451a8357e98e160f595035cbfe34aa6da6f972bd44d5c27b50cd4f",
+        "hudWords7788": "f53f94aa72b47d622cd88f4f2d67e64fca8013ae15744c111099bf5fd13c90d9"
+      },
+      "instructions": 7492
+    },
+    {
+      "id": "greyhaven",
+      "difficulty": 3,
+      "players": 1,
+      "hashes": {
+        "raceWords1f94": "2c3693d9141f91129b47a1cd764f03754dad9359e80bce866b90659b541bef7f",
+        "hudWords7788": "cfdd550085e79e9c8bbd43c2dd3b485ac871af885558e3c5ee8b83c05a3dcc31"
+      },
+      "instructions": 6457
+    },
+    {
+      "id": "greyhaven",
+      "difficulty": 3,
+      "players": 2,
+      "hashes": {
+        "raceWords1f94": "fdb6aa8053fe4ed126a9abae446561e06f9aef5bcd21ca046c174996e301e2b5",
+        "hudWords7788": "bb45846eccd7395787eab7b07143dfc7d89caf609e0b24cc5b77354fef54fd32"
+      },
+      "instructions": 7346
+    },
+    {
+      "id": "amber",
+      "difficulty": 0,
+      "players": 1,
+      "hashes": {
+        "raceWords1f94": "b58218ceb9d32d6516b76333dfb8fadc9bf472e7df59bdf5994f8f5b303b748f",
+        "hudWords7788": "f7aab0997306dc6158b146cca243732acd46ac06b04eb32a684190bde4b66b49"
+      },
+      "instructions": 6773
+    },
+    {
+      "id": "amber",
+      "difficulty": 0,
+      "players": 2,
+      "hashes": {
+        "raceWords1f94": "ea0ebf6535a5a31c35713db66588361bfac6172cbbb3c6417149910c36fd0d78",
+        "hudWords7788": "0aebe0c802e5b38fd8c99ba171c74eac1dc7662905c7351acfc3e3d6d94a24a4"
+      },
+      "instructions": 9101
+    },
+    {
+      "id": "amber",
+      "difficulty": 1,
+      "players": 1,
+      "hashes": {
+        "raceWords1f94": "35cac2542b5551d0b2af1703273daf5dc914b430644b33073a431a7003955332",
+        "hudWords7788": "f7aab0997306dc6158b146cca243732acd46ac06b04eb32a684190bde4b66b49"
+      },
+      "instructions": 7260
+    },
+    {
+      "id": "amber",
+      "difficulty": 1,
+      "players": 2,
+      "hashes": {
+        "raceWords1f94": "9942f41b13268c8a331f24d9e20a0cb8b457c1713c20bee534193e964b9f3c10",
+        "hudWords7788": "0aebe0c802e5b38fd8c99ba171c74eac1dc7662905c7351acfc3e3d6d94a24a4"
+      },
+      "instructions": 9592
+    },
+    {
+      "id": "amber",
+      "difficulty": 2,
+      "players": 1,
+      "hashes": {
+        "raceWords1f94": "6ae3d5738543bffd91f5867da7f6bcb9326b1d1f16b532542abc7ddf5537aaa9",
+        "hudWords7788": "f7aab0997306dc6158b146cca243732acd46ac06b04eb32a684190bde4b66b49"
+      },
+      "instructions": 7327
+    },
+    {
+      "id": "amber",
+      "difficulty": 2,
+      "players": 2,
+      "hashes": {
+        "raceWords1f94": "74cc55f6cd2a2ab39a05f0f6654203370cc65a75776288180c878ef5484c11c1",
+        "hudWords7788": "0aebe0c802e5b38fd8c99ba171c74eac1dc7662905c7351acfc3e3d6d94a24a4"
+      },
+      "instructions": 9665
+    },
+    {
+      "id": "amber",
+      "difficulty": 3,
+      "players": 1,
+      "hashes": {
+        "raceWords1f94": "1bcf6bd42fd397db446137543ea747beb1e472b1126e28a550574c9a245f2f58",
+        "hudWords7788": "3b0d0e969f8ef4a49117ad55e1cc8b4b196e61e0cae266d6c3658e4df32ecd8f"
+      },
+      "instructions": 7657
+    },
+    {
+      "id": "amber",
+      "difficulty": 3,
+      "players": 2,
+      "hashes": {
+        "raceWords1f94": "8c1a99f0ad5a86d49396b03ad01c1bcaf0cc186c5f098939061bd6150eaa0487",
+        "hudWords7788": "98edb369d3094f6bf3faa037324668767d55279413ef99ad04c0043c1cbdf339"
+      },
+      "instructions": 10028
+    },
+    {
+      "id": "tempest",
+      "difficulty": 0,
+      "players": 1,
+      "hashes": {
+        "raceWords1f94": "7cc1dbbc4b8651981be83891adcdffe202e6740b128b0b02952a3e2a975ecbc6",
+        "hudWords7788": "de1d32d26d482844501e83a993947da283e2beb4b4f026a500001d4db675e075"
+      },
+      "instructions": 7613
+    },
+    {
+      "id": "tempest",
+      "difficulty": 0,
+      "players": 2,
+      "hashes": {
+        "raceWords1f94": "5f5b12101ce99e9cedd31d94c53169c49d2e6f70030642e4a63464e1dd2341d1",
+        "hudWords7788": "2926d4d417ab9b627849735c54f86af4583954f20cff3659c5c71baf7b8d4645"
+      },
+      "instructions": 8410
+    },
+    {
+      "id": "tempest",
+      "difficulty": 1,
+      "players": 1,
+      "hashes": {
+        "raceWords1f94": "e07008e958ee75b6eaf99cd91c933151d418d98113b3a67e6c11639deebab229",
+        "hudWords7788": "de1d32d26d482844501e83a993947da283e2beb4b4f026a500001d4db675e075"
+      },
+      "instructions": 7909
+    },
+    {
+      "id": "tempest",
+      "difficulty": 1,
+      "players": 2,
+      "hashes": {
+        "raceWords1f94": "57727d5dcbc2d8dea19e452570e4bf5d1b679bdc7bf65d4406f636de9287c01e",
+        "hudWords7788": "2926d4d417ab9b627849735c54f86af4583954f20cff3659c5c71baf7b8d4645"
+      },
+      "instructions": 8731
+    },
+    {
+      "id": "tempest",
+      "difficulty": 2,
+      "players": 1,
+      "hashes": {
+        "raceWords1f94": "509a80b730caff8e7aeeecf666bfaba2b0d94785e974548f436b406026573458",
+        "hudWords7788": "de1d32d26d482844501e83a993947da283e2beb4b4f026a500001d4db675e075"
+      },
+      "instructions": 7748
+    },
+    {
+      "id": "tempest",
+      "difficulty": 2,
+      "players": 2,
+      "hashes": {
+        "raceWords1f94": "55f7ec8f44ce3cf00173f70a1cf46f2f688589bb925d77c2f3a8628bd38dddb9",
+        "hudWords7788": "2926d4d417ab9b627849735c54f86af4583954f20cff3659c5c71baf7b8d4645"
+      },
+      "instructions": 8555
+    },
+    {
+      "id": "tempest",
+      "difficulty": 3,
+      "players": 1,
+      "hashes": {
+        "raceWords1f94": "8b8292c3183030a58e34dd83f02c339798ef0d3f38f4a0bf4a41abf511da4f01",
+        "hudWords7788": "e7fba680d7466e034e2c25cde1a803e073874d2e9e1f28b5620ffbd1db4b3355"
+      },
+      "instructions": 7561
+    },
+    {
+      "id": "tempest",
+      "difficulty": 3,
+      "players": 2,
+      "hashes": {
+        "raceWords1f94": "65ec44299fd7f0ad6e2ff3b01318c9c712287923189b4eca3c21ef956bfeb01b",
+        "hudWords7788": "3c388a1e6b9c4bbdccc337bf0f94a404fcfa60ddaa7be56284ecd4a82781b49e"
+      },
+      "instructions": 8348
+    },
+    {
+      "id": "glacier",
+      "difficulty": 0,
+      "players": 1,
+      "hashes": {
+        "raceWords1f94": "6d1f5ac085905719ee8cde92a6d0143bf411663cec74736443a4b24328fcb34c",
+        "hudWords7788": "42f0d8d2b0022c105417bb8ca4d6d9654401d00795f5556d2389ebf1ae205e4a"
+      },
+      "instructions": 8340
+    },
+    {
+      "id": "glacier",
+      "difficulty": 0,
+      "players": 2,
+      "hashes": {
+        "raceWords1f94": "8e756758c14190cd06b0e76d932ca2c138aaa9553e6e7f87d15f37208b91c26c",
+        "hudWords7788": "b222022589f348e8453132f31c2ef1c4b4eaef30f28b38222d90196319b258fd"
+      },
+      "instructions": 9249
+    },
+    {
+      "id": "glacier",
+      "difficulty": 1,
+      "players": 1,
+      "hashes": {
+        "raceWords1f94": "b7140d0c5f74fc1ee3711963501eb56f48719b9e2b0e1ba49da20889290fa1ac",
+        "hudWords7788": "42f0d8d2b0022c105417bb8ca4d6d9654401d00795f5556d2389ebf1ae205e4a"
+      },
+      "instructions": 8342
+    },
+    {
+      "id": "glacier",
+      "difficulty": 1,
+      "players": 2,
+      "hashes": {
+        "raceWords1f94": "d904f1dcf4844b9463bcf359c4046f9ee244a026dffaac5a5fbb4d05715ca9bc",
+        "hudWords7788": "b222022589f348e8453132f31c2ef1c4b4eaef30f28b38222d90196319b258fd"
+      },
+      "instructions": 9251
+    },
+    {
+      "id": "glacier",
+      "difficulty": 2,
+      "players": 1,
+      "hashes": {
+        "raceWords1f94": "ca8fd3f4e4eb6e6715910a57fbd2af831a4d240ffa478cf2b0fd169b40c176f9",
+        "hudWords7788": "42f0d8d2b0022c105417bb8ca4d6d9654401d00795f5556d2389ebf1ae205e4a"
+      },
+      "instructions": 8341
+    },
+    {
+      "id": "glacier",
+      "difficulty": 2,
+      "players": 2,
+      "hashes": {
+        "raceWords1f94": "e5920985112b825141be01442d32d865986af8820fb23cb336fee96aad706ccd",
+        "hudWords7788": "b222022589f348e8453132f31c2ef1c4b4eaef30f28b38222d90196319b258fd"
+      },
+      "instructions": 9250
+    },
+    {
+      "id": "glacier",
+      "difficulty": 3,
+      "players": 1,
+      "hashes": {
+        "raceWords1f94": "080181b0ccd26433be4dcf40e57bdabe1ed04f94607d2ca09c0ea9509e5eec1b",
+        "hudWords7788": "0aa4decc73a2961a8af4e9a47fe3323abc82d66211cd1b69d9caae4a0c3d5e92"
+      },
+      "instructions": 7743
+    },
+    {
+      "id": "glacier",
+      "difficulty": 3,
+      "players": 2,
+      "hashes": {
+        "raceWords1f94": "bc2d0402b3c9cccad80a37ebb195be775498823efa79fc750fb0d9dd1924ff31",
+        "hudWords7788": "cb2bc0ade5f287c3d8116e09ddcca8383f95fd17d8d291efbb5f6e80a48654c2"
+      },
+      "instructions": 8597
+    }
+  ]
+}
