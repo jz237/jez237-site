@@ -6381,3 +6381,29 @@ remains 361x361 with 512x512 depth data and matches its worker byte for byte.
 All 395 module hashes and four page preloads are refreshed. Native ordinary
 Fortress, Port and Twilight coverage, original AI and further trick/alternate
 route validation remain outstanding.
+
+
+### Ordinary Marine Fortress numeric preparation — 2026-10-18
+
+Verified all eight solo/two-player primary route selections and four solo
+secondary families against the provided ROM. The Normal/Hard/Expert/Reverse
+primary arrays contain 55/54/54/30 rows; alternate families preserve those
+counts. Original loading and initialization executions cover 215,664
+instructions. The prepared runtime matches all 25,090 primary and 12,545
+secondary initialized state words, including per-avatar navigation links.
+Two-player navigation retains its source primary-family selection.
+
+Fortress reuses its verified 78 finite faces and 92 shore segments for both
+player counts. Its ordinary object startup selects 4/7/12/12 objects and
+1/4/9/9 collision planes across the four classes: the gate, three floating
+spheres, and difficulty-selected floating boxes. All 112 fixed sphere records
+are retained; no Stunt rings are loaded. The two original warning regions also
+supply the Fortress-specific standings branch through the same 1F88 table.
+Dynamic planes remain owned by canonical object state after startup.
+
+Three new preparation tests pass, as do eleven Drake, Sunset and Southern
+runtime/navigation regressions. All 398 module hashes and four page preloads
+are refreshed. This is numeric preparation only: ordinary Fortress remains
+unavailable in the native preview until its matching high-resolution scene,
+gate presentation and full physical lap routes have been verified. The
+existing Stunt and modern modes are unchanged.
