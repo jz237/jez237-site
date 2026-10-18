@@ -19,6 +19,35 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — native stunt award queue and numeric records
+
+The independent stunt scoring consumer now reproduces the four-slot award
+queue, popup motion/fade, pulse clock and delayed transfer to capped total,
+time, ring and trick scores. A full queue replaces slot zero without paying the
+evicted award. Each surviving award transfers after23 source display calls.
+Enqueueing alone leaves the total unchanged. These calls belong to the source
+world-display stage, after gameplay updates, with the original HUD gates.
+
+The selected-course record consumer waits for every slot to empty and for the
+delayed finish award countdown to end. It then inserts strictly higher scores
+into the three retained rows, preserving source metadata and untouched row
+words. Ties retain their earlier place. Since the record check precedes display,
+a final transfer can unblock recording only on the next gameplay update.
+
+Fresh read-only EVO X2 Ghidra queries preserved all9 project files. Queue audit:
+96 enqueue and120 advance cases,19,716 original instructions,715 exported
+instruction records matched to ROM bytes. Caller/record audit:72 display gates
+and196 result cases,16,660 original instructions,1,583 matched exported records.
+Rendering callees were intercepted for the caller audit; graphics commands,
+save storage and unrelated message timers are not reconstructed here. Public
+fixtures contain synthetic numeric state only. All38 focused scoring, award
+and record tests pass, including delayed finish composition and repeat safety.
+
+Native Stunt mode remains unadmitted in the live host: source course setup,
+canonical state wiring, HUD and full result flow are still required. Ordinary
+native time/versus gains no stunt points from these standalone consumers.
+Resolution, geometry detail and music defaults are unchanged.
+
 ## Unpublished — native rotation landing and hull repair
 
 Ordinary native time/versus now retains the source release countdown, accumulates

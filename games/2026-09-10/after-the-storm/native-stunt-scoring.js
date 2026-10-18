@@ -12,8 +12,9 @@
 // Skip calls while paused. `active:false` suppresses new move/CP awards, while
 // an already scheduled finish award still counts down.
 //
-// Outputs are award ENQUEUE events, not the native displayed total. Source
-// popup display/queue capacity, later transfer/capping of totals, ratings,
+// Outputs are award ENQUEUE events, not the native displayed total. The separate
+// native-stunt-awards module owns queue capacity and later capped transfer;
+// native-stunt-records owns the post-drain numeric record branch. Ratings,
 // unlocks, sounds and recovery side effects are outside this module. Its arc
 // and landing helpers require explicit native values; live browser airtime,
 // Euler turns or a button alone do not establish native scoring eligibility.
