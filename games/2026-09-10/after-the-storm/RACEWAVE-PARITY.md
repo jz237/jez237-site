@@ -19,6 +19,25 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — ordinary course object resources
+
+Readonly object resources now cover ordinary modes0/1 as well as Stunt11 for
+all nine source courses and both player counts. Ordinary ramps and fixed XZ
+spheres use their own tables; generic objects, markers, hidden XYZ obstacles
+and collision templates share the existing source resources. Difficulty and
+reverse filtering remain in the source loading/initialization stages. These
+selectors cover normal main1 with warm-up/force overrides disabled.
+
+The original72818..72B80 selector matches324 prepared combinations;218 exported
+instruction records match the private ROM. Original selected row loading plus
+complete744EC and73E6C initialization match all108 ordinary layouts across
+three native difficulties, one/two players and forward/reverse. The audit runs
+2,506,198 instructions. Public tests compare every resulting object, plane,
+packed matrix, fixed sphere and spatial-grid word by digest; Sunny/Sunset rows
+also agree with independently recovered resources. Stunt resources are shared
+without copying or modification. This prepares live startup integration; it
+does not change host mode/course admission or rendering resolution.
+
 ## Unpublished — shared fixed-sphere tide update
 
 The shared object bridge now follows generic motion with Southern Island's
