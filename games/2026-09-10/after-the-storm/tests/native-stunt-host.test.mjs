@@ -10,8 +10,8 @@ import {createNativeRaceLaunchRuntime} from '../native-race-launch-runtime.js';
 const ri=a=>(a-0x1f94)/4;
 const bits=n=>{const d=new DataView(new ArrayBuffer(4));d.setFloat32(0,n);return d.getUint32(0);};
 
-test('four Stunt hosts use the complete source objects and real rider, camera, water and input schedule',()=>{
- for(const courseIndex of [1,2,7,8]){
+test('all nine Stunt hosts use the complete source objects and real rider, camera, water and input schedule',()=>{
+ for(const courseIndex of [0,1,2,3,4,5,6,7,8]){
   const f=stuntHostFixture(courseIndex),{host,runtime,water,racers}=f,a=host.world.adapters[0];
   assert.equal(runtime.stunt,true);assert.equal(runtime.ordinary,false);assert.equal(host.sourceSchedule,true);
   assert.equal(host.contacts.boxes,host.objects.boxContact);assert.equal(host.contacts.fixedSpheres,host.objects.fixedContact);
@@ -59,7 +59,11 @@ test('Stunt result selection uses source record ranking and the current canonica
   assert.equal(result.operations.at(-1).value,code);assert.deepEqual(f.runtime.snapshot(),before);
   assert.equal(result.operations[1].consumer,'8007fae4');assert.equal(result.operations[1].returnValue,code===4?5:0);
  }
- const unsupported=stuntLaunchFixture(3);assert.throws(()=>unsupported.runtime.resultCodeFor(0,{bodyResultCodes16c8:[-1]}),/source support geometry/);
+ for(const courseIndex of [0,3,4,5,6]){
+  const f=stuntLaunchFixture(courseIndex,{running:true,patch:s=>s.raceWords1f94[ri(0x2c24)]=2});
+  const result=f.runtime.resultCodeFor(0,{bodyResultCodes16c8:[-1],point90Native:{x:50000,y:10,z:50000},datum2458:0});
+  assert.equal(result.operations.at(-1).value,5,'remaining solo courses now select their original floor and live boxes');
+ }
 });
 
 test('actual physical ring collection queues one award and transfers it after23 source display calls',()=>{

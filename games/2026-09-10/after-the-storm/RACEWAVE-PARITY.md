@@ -6066,3 +6066,33 @@ rows. Source reset, independent launch clocks, wrong-side judging, pause,
 online transport and30/60/144Hz live cadence checks all pass (27 focused tests).
 This corrects numeric setup; it does not change graphics resolution or admit
 additional native physical courses.
+
+### Remaining solo Stunt collision resources — 2026-10-18
+
+Prepared native Stunt runtimes now select the original solo floor and shoreline
+resources for Dolphin, Drake, Marine Fortress, Port and Twilight. Together with
+the existing four selections, all nine prepared Stunt courses have support and
+static-contact geometry. The recovered71E70 selection uses player count for
+these tables, including Dolphin and Port's distinct one/two-player selections.
+Only the solo resources are added here. Live box planes remain owned by the
+canonical initialized Stunt objects.
+
+The five courses contain100/78/22/0/16 floor planes and55/92/72/117/78 shoreline
+segments respectively. Port's original floor header has zero width and depth:
+both original consumers reject every point before accessing its stale candidate
+lists. Those lists are retained without inventing collision triangles.
+
+Complete original7F448,7F030,51740 and5DD04 execution supplied5,391 comparisons:
+1,143 floor queries,1,116 full floor-contact passes,2,682 full shoreline passes
+and450 retirement scans, totaling2,004,032 interpreted instructions. All match
+the web consumers, including binary32 results, ordered normal stores, all twelve
+hull points, retained impacts and query sequences. Retirement fixtures explicitly
+use empty boxes to isolate floor selection; the live runtime continues to read
+its current canonical box owner. Reference fixtures contain numeric states,
+not original executable code or rendering assets.
+
+All nine internal physical Stunt hosts now pass60 source frames with the actual
+rider, camera, water, input, objects, ring and score schedule. This is a startup
+integration check, not a complete driven route or visual alignment check.
+Public physical admission remains limited to the four previously verified
+courses pending those checks. High-resolution rendering is unchanged.

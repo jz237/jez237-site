@@ -12,7 +12,7 @@ import {sourceWaterConditions} from '../../source-water-conditions.js';
 // are deliberately separate; no authored stunt judge or rescue runs here.
 export function stuntHostFixture(courseIndex=1,{patch,startPose,runtimeWrapper,onFrame,onLaunchFrame,onContactFrame}={}){
  const courseRuntime=createNativeStuntCourseRuntime({courseIndex}),scale=courseRuntime.scale;
- let course=stuntCourse(getCourse(({1:'greyhaven',2:'amber',7:'tempest',8:'glacier'})[courseIndex]));
+ let course=stuntCourse(getCourse(({0:'practice',1:'greyhaven',2:'amber',3:'reed',4:'citadel',5:'port',6:'neon',7:'tempest',8:'glacier'})[courseIndex]));
  if(course.geometryForPlayers)course={...course,...course.geometryForPlayers(1)};
  if(course.sourceObjectSelection)course={...course,playerCount:1,rocks:course.hazardsForPlayers(1),
   sourceDecorations:course.decorationsForPlayers?.(1)??course.sourceDecorations};
@@ -30,7 +30,7 @@ export function stuntHostFixture(courseIndex=1,{patch,startPose,runtimeWrapper,o
  const water=createRaceWater({...sourceWaterConditions({courseIndex,players:1,stunt:true,reverse:false}),crafts:racers,scale,seed:17,initialNoise:false,
   rollerRows:course.rollersForPlayers?.(1,{difficulty:courseRuntime.sourceDifficulty,mode:'stunt'}).map(q=>q.nativeRow)??[],
   primaryPointsNative:courseRuntime.data.nodes.map(n=>[n.centerNativeXZ.x,n.centerNativeXZ.z]),
-  boundaryPointsNative:course.boundaryMarkers.map(q=>q.map(v=>v/scale))});
+  boundaryPointsNative:(course.boundaryMarkers??[]).map(q=>q.map(v=>v/scale))});
  runtime.initializeWater(water.field,water.baseAmplitudeNative);
  const host=createNativeRaceHost({racers,water,course,raceRuntime:runtimeWrapper?runtimeWrapper(runtime):runtime,
   staticGeometry:courseRuntime.staticContactGeometry,hullStarts:[{prepared,computerProfile:start.computerProfile}],onFrame,onLaunchFrame,onContactFrame});
