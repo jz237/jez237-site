@@ -6096,3 +6096,25 @@ rider, camera, water, input, objects, ring and score schedule. This is a startup
 integration check, not a complete driven route or visual alignment check.
 Public physical admission remains limited to the four previously verified
 courses pending those checks. High-resolution rendering is unchanged.
+
+### Canonical water amplitude threshold — 2026-10-18
+
+Native water now reads1FB4 directly from the canonical race owner. Previously
+the water host calculated a second threshold from authored/visible boundary
+markers, which could omit initialized fixed objects. The bound value therefore
+uses the already verified75310 extent, including hidden source rows and retained
+prepared histories. Standalone modern water keeps its selected threshold.
+
+All32 ordinary course/class/player selections and all nine internal Stunt hosts
+read the canonical value. Sunset two-player now exposes48,388.50390625 rather
+than10,390.365234375, but original66A48's two-player branch does not consume this
+parameter: no change to two-player waves is claimed. Direct original execution
+confirms that fact and the solo effect: at radius9,000, Dolphin's correct
+12,937.33984375 threshold keeps amplitude20, while the old prepared-host
+8,140.37353515625 threshold incorrectly produces28.
+
+The four admitted Stunt courses still complete physically driven runs, cross
+all four checkpoints, drain awards and reach their score results. Gesture,
+pause, source support and30/60/144Hz checks pass, along with ordinary launch,
+two-player clocks and online transport regression coverage. This changes the
+simulation's threshold ownership; rendering resolution remains unchanged.

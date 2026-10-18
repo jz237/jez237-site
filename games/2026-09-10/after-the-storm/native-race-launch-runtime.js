@@ -280,6 +280,7 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    return result;
   },
   courseRollerState:()=>(current.scene.field72c<<16)>>16,
+  waterAmplitudeThreshold:()=>readFloat(current.raceWords1f94[ri(0x1fb4)]),
   waterDatumAfterPhysics:datumNative=>nativeCourseDatumAfterPhysics(datumNative,{
    ...current.scene,southernLap1fcc:current.raceWords1f94[ri(0x1fcc)]|0}),
   snapshot:()=>nativeRaceStateSnapshot(current),

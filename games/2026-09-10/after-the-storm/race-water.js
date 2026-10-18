@@ -60,6 +60,19 @@ export function bindRaceWaterCameraStorage(state,store){
  }
  boundCameraStores.add(state);return state;
 }
+
+/** Original75310 owns1FB4; native66A48 reads that value when choosing wave
+ * forcing. Authored/visible boundary markers must not replace hidden source
+ * fixed rows. Standalone modern water keeps its independently selected value. */
+export function bindRaceWaterAmplitudeThreshold(state,readThreshold){
+ if(!known.has(state)||state.frames!==0||typeof readThreshold!=='function'||
+    Object.getOwnPropertyDescriptor(state,'amplitudeThresholdNative')?.get)
+  throw new TypeError('Water amplitude threshold binds once before its first source frame');
+ const value=readThreshold();
+ if(!finite(value)||value<=0)throw new RangeError('Source water threshold must be positive and finite');
+ Object.defineProperty(state,'amplitudeThresholdNative',{enumerable:true,configurable:false,get:readThreshold});
+ return state;
+}
 export function createRaceWaterRandom(seed){
  // Separate from scenery, physics and driver RNG. Captured initialization
  // therefore survives restart without consuming another subsystem's history.

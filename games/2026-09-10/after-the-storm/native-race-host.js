@@ -12,7 +12,7 @@ import {NATIVE_RIDER_TUNE_DEFAULTS} from './native-rider-controls.js';
 import {createNativeIceWorld} from './native-ice-world.js';
 import {createNativeFloatingWorld} from './native-floating-world.js';
 import {createNativePrimaryBuoyWorld} from './native-primary-buoy-world.js';
-import {bindRaceWaterCameraStorage,raceWaterAISelectionCircle,advanceRaceWaterRollers} from './race-water.js';
+import {bindRaceWaterCameraStorage,bindRaceWaterAmplitudeThreshold,raceWaterAISelectionCircle,advanceRaceWaterRollers} from './race-water.js';
 import {nativeAIBodyFields} from './native-ai-body-fields.js';
 import {nativeRaceBodyFields} from './native-race-body-fields.js';
 import {captureNativeCamera} from './native-camera-presentation.js';
@@ -89,7 +89,7 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
  if(onAudioFrame!==null&&typeof onAudioFrame!=='function')throw new TypeError('onAudioFrame must be a function');
  if(raceRuntime&&(!recovery||sourceStates.length||poseProviders.length||['scene','advanceClock','advanceLaunch'].some(k=>typeof raceRuntime[k]!=='function')))
   throw new TypeError('Canonical launch requires recovered riders and its single scene owner');
- if(sourceSchedule&&['objectMotionActive','courseRollerState','waterDatumAfterPhysics'].some(k=>typeof raceRuntime[k]!=='function'))
+ if(sourceSchedule&&['objectMotionActive','courseRollerState','waterDatumAfterPhysics','waterAmplitudeThreshold'].some(k=>typeof raceRuntime[k]!=='function'))
   throw new TypeError('Canonical source motion requires its activity and roller state owner');
  if(typeof floatingActive!=='boolean')throw new TypeError('floatingActive must be boolean');
  if(typeof primaryActive!=='boolean')throw new TypeError('primaryActive must be boolean');
@@ -177,6 +177,7 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
   host.aiInitialization=raceRuntime.initializeAI({hullProfilesB64:profiles,avatarsB68:profiles,
    objectTypes4c:objects?objects.snapshot().map(o=>o.runtimeKind):ice?ice.state.nodes.map(o=>o.kind):(floating?.state.objects??[]).map(o=>o.runtimeKind)});
   bindRaceWaterCameraStorage(water,raceRuntime.cameraStorage);
+  bindRaceWaterAmplitudeThreshold(water,raceRuntime.waterAmplitudeThreshold);
   host.spray=createNativeRaceSpray({adapters,field:water.field,courseIndex:course.sourceWaterCourseIndex});
  }
  host.world=createNativeRaceWorld({adapters,water,humanIndices,craftContacts,deferWaterRollers:sourceSchedule,
