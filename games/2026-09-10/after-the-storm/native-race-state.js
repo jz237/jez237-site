@@ -43,6 +43,7 @@ import {prepareNativeStuntCheckpoint} from './native-stunt-checkpoint.js';
 import {prepareNativeStuntFinish} from './native-stunt-finish.js';
 import {prepareNativeStuntRings} from './native-stunt-rings.js';
 import {prepareNativeObjectInitialization} from './native-object-initialization.js';
+import {prepareNativeObjectLoading} from './native-object-loading.js';
 import {prepareNativePrimaryScratchContext} from './native-primary-scratch-context.js';
 
 const MIN=-2147483648,MAX=2147483647,RACE_BASE=0x1f94,RACE_WORDS=1693,HUD_BASE=0x7788,HUD_WORDS=1442;
@@ -62,7 +63,7 @@ const sceneRanges={fieldAb0c:[-32768,32767],championshipCountAa00:[-32768,32767]
  pendingPlayers60c:[-32768,32767],participantCount60e:[-32768,32767],result6f0:[-32768,32767],field62a:[-32768,32767],specialAb64:[-32768,32767],ready6fc:[-32768,32767],field4964:[0,65535],
  reverseDab68:[0,65535],missesEnabled72e:[0,65535],seed6f00:[0,65535],rngState4640:[0,0xffffffff],inputTick1960:[0,0xffffffff],style6e28:[0,65535],
  field4970:[0,65535],field72c:[0,65535],fieldA9ac:[0,65535],pressed65a:[0,65535],unlockAb60:[-32768,32767],freshNameAb6c:[-32768,32767],variant6f4:[-32768,32767],variant6f6:[-32768,32767]};
-const sceneWords=new Set(['collisionPlaneCount0578','alternate8250','ringNext0cb0','ringStreak0cb4','objectCountFa40','ringCountB134','titlePairSelectionA9fc','fieldAa08','fortressCourse3a10','cold8224','clockStopped817c','phase650','simulation648','main638','mode620','state600',
+const sceneWords=new Set(['forceStunt824c','rampFilterOverride8254','collisionPlaneCount0578','alternate8250','ringNext0cb0','ringStreak0cb4','objectCountFa40','ringCountB134','titlePairSelectionA9fc','fieldAa08','fortressCourse3a10','cold8224','clockStopped817c','phase650','simulation648','main638','mode620','state600',
  'missLimit8174','noFinish8178','configuredLaps728','difficulty','directionFlag1f90','ambientD4b00','fortressD8240',
  'metadataD9b0','metadataCb32c','restart6f8','initLatch63c','gameStateAb24','mode608','returnState630','forceFirst8228','demoOffset5438','rngState4640','inputTick1960','style6e2c',
  'previousGameState634','field640','field644','fieldAb1c','fieldAb2c','field461c','field700','field704','field708','field70c','field710','field714','resultEffect393c','wave610','missLimit614','lapCount618','field61c','wave49b0','field64c','players','racerCount','toggleD9914','previousNavigationD9874','trainingSelectionDa9f8',
@@ -163,6 +164,18 @@ function copy(value){
  */
 export function createNativeRaceState(value){return freeze(copy(value));}
 export function nativeRaceStateSnapshot(value){return copy(value);}
+
+/** Reached generic-row subsection of71E70. The earlier loader owns table
+ * selection and count resets; this consumes those actual counts and selected
+ * rows, preserving any prior object prefix and all untouched words. */
+export function prepareNativeRaceObjectLoading(state,input={}){
+ const next=copy(state);record(input,'selected generic object rows');
+ const keys=['objectCountFa40','ringCountB134','difficulty','mode620','players','rampFilterOverride8254','forceStunt824c'];
+ for(const key of ['objectWordsC940',...keys])if(Object.hasOwn(input,key))throw new RangeError(`${key} overlaps canonical native state`);
+ const loaded=prepareNativeObjectLoading({...input,objectWordsC940:next.objectWordsC940,...Object.fromEntries(keys.map(k=>[k,sceneValue(next,k)]))});
+ next.objectWordsC940=loaded.objectWordsC940;next.scene.objectCountFa40=loaded.objectCountFa40;next.scene.ringCountB134=loaded.ringCountB134;
+ return freeze({state:next,effects:[],diagnostic:loaded.diagnostic});
+}
 
 /** Actual744EC initialization using the same object owner consumed by rings.
  * Readonly templates/table inputs are external selected-course resources.

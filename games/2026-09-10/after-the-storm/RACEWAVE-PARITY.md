@@ -19,6 +19,32 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — native object rows and actual Stunt course resources
+
+The reached generic-object section of71E70 now loads selected ramp, ring and
+obstacle rows into the canonical object array. It preserves the source's write
+order, difficulty/player filtering, retained rejected-ramp fields, ring totals
+and per-group capacity behavior. Earlier pointer selection/count resets and
+primary loading, and the later fixed-sphere stage, remain separate unfinished
+parts of the enclosing startup routine. Unsupported writes beyond the object
+span reject atomically.
+
+All102 prepared cases match original72EBC..73278 execution:89,520 instructions
+and238 exported instruction records matched to ROM. The selected numeric Stunt
+rows for all9 courses, both player counts, and actual collision templates now
+feed the full744EC initializer. Eighteen combined comparisons execute243,953
+original instructions and match every object, collision-plane and packed-matrix
+word by full-buffer hashes. These comparisons explicitly start with zeroed
+buffers; they do not establish original BSS initialization or the omitted stages.
+Each course's first ring also collects once through the same canonical state,
+queues its50-point award and preserves the initialized collision geometry.
+Recovered Sunny/Sunset rows agree with the existing independent resource files.
+
+The resource selector describes normal main638=1,mode620=11 with the warm-up
+override disabled. Two-player resource coverage does not admit a two-player
+Stunt menu. Live native Stunt startup/scheduling remains unfinished; graphics,
+resolution and the live mode guards are unchanged.
+
 ## Unpublished — native object initialization and transforms
 
 The full numeric744EC initializer now prepares the shared generic-object array,
@@ -41,7 +67,8 @@ The Ghidra project on EVO X2 was inspected read-only and its9 files stayed
 unchanged. Its existing database has no functions at the four overlay transform
 entries; those routines were independently decoded and executed from the private
 ROM. Numeric tests use synthetic collision templates, not original scene assets.
-Out-of-span plane writes are rejected atomically. Source71E70 row loading,
+Out-of-span plane writes are rejected atomically. The later course-resource
+work above adds actual selected generic rows/templates; the rest of71E70,
 75274/6AACC startup scheduling and live native Stunt admission remain unfinished.
 Resolution and rendering quality are unchanged.
 
