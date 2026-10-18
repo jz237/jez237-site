@@ -19,14 +19,38 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — fixed-sphere startup and collision grid
+
+The selected fixed-sphere tail of71E70 now loads generic XZ obstacles, boundary
+markers and hidden XYZ points in source order, with original difficulty,
+reverse/alternate filters and per-family capacity checks. Full73E6C then sets
+radius/flags and Y, preserves tag5 height, and builds the float32 grid with
+ascending byte indices and the shared511-entry cap. Empty grids retain the
+original sentinel bounds. Unwritten record words and grid bytes survive.
+
+The canonical race state owns both the256-record sphere span and its grid.
+All96 synthetic retained-state cases match626,177 original instructions;
+381 exported instruction records match ROM. The source's missing decompiler
+switch cases were decoded directly from the original instructions. Late
+out-of-span writes reject atomically; full hidden lists stop before an unread
+row as the source does.
+
+The real nine-course Stunt resource comparison now includes both fixed-sphere
+stages as well as generic loading/initialization:18 scenarios,581,541 original
+instructions, and full-buffer hashes for all five output spans. Ring collection
+preserves both fixed-sphere spans. Sunny/Sunset fixed rows, markers and hidden
+XYZ lists match their separately recovered existing resource files. Earlier
+71E70 selection/reset/primary stages, complete startup scheduling and live Stunt
+admission remain unfinished. Resolution and rendering are unchanged.
+
 ## Unpublished — native object rows and actual Stunt course resources
 
 The reached generic-object section of71E70 now loads selected ramp, ring and
 obstacle rows into the canonical object array. It preserves the source's write
 order, difficulty/player filtering, retained rejected-ramp fields, ring totals
 and per-group capacity behavior. Earlier pointer selection/count resets and
-primary loading, and the later fixed-sphere stage, remain separate unfinished
-parts of the enclosing startup routine. Unsupported writes beyond the object
+primary loading remain separate unfinished parts of the enclosing startup
+routine; the later fixed-sphere work is described above. Writes beyond the object
 span reject atomically.
 
 All102 prepared cases match original72EBC..73278 execution:89,520 instructions
