@@ -1,10 +1,10 @@
-import {createSourceTwilightCourse,TWILIGHT_NATIVE_GEOMETRY as G,twilightRampsForSelection,twilightHazardsForSelection} from './source-twilight-course.js?v=c69bdfad4cd7';
-import {TWILIGHT_RACE_OBJECTS} from './source-twilight-race-objects.js?v=c69bdfad4cd7';
-import {twilightAnchors} from './source-twilight-navigation.js?v=c69bdfad4cd7';
-import {createSourceBuoyLayout} from './source-buoy-progress.js?v=c69bdfad4cd7';
-import {clippedVolume,clippedVolumes} from './clipped-volumes.js?v=c69bdfad4cd7';
-import {polygonDistance} from './classic-courses.js?v=c69bdfad4cd7';
-import {samplePolyline} from './courses.js?v=c69bdfad4cd7';
+import {createSourceTwilightCourse,TWILIGHT_NATIVE_GEOMETRY as G,twilightRampsForSelection,twilightHazardsForSelection} from './source-twilight-course.js?v=edc570968f5a';
+import {TWILIGHT_RACE_OBJECTS} from './source-twilight-race-objects.js?v=edc570968f5a';
+import {twilightAnchors} from './source-twilight-navigation.js?v=edc570968f5a';
+import {createSourceBuoyLayout} from './source-buoy-progress.js?v=edc570968f5a';
+import {clippedVolume,clippedVolumes} from './clipped-volumes.js?v=edc570968f5a';
+import {polygonDistance} from './classic-courses.js?v=edc570968f5a';
+import {samplePolyline} from './courses.js?v=edc570968f5a';
 const S=.025,xyz=p=>p.map(v=>v*S);
 
 /** Original ordinary City geometry with separately authored inspection paths.

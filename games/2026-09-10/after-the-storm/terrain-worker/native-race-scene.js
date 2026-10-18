@@ -1,7 +1,7 @@
-import {nativeDrakeRaceScene} from './source-drake-course.js?v=c69bdfad4cd7';
-import {nativeFortressRaceScene} from './source-fortress-course.js?v=c69bdfad4cd7';
-import {nativePortRaceScene} from './source-port-race-course.js?v=c69bdfad4cd7';
-import {nativeTwilightRaceScene} from './source-twilight-race-course.js?v=c69bdfad4cd7';
+import {nativeDrakeRaceScene} from './source-drake-course.js?v=edc570968f5a';
+import {nativeFortressRaceScene} from './source-fortress-course.js?v=edc570968f5a';
+import {nativePortRaceScene} from './source-port-race-course.js?v=edc570968f5a';
+import {nativeTwilightRaceScene} from './source-twilight-race-course.js?v=edc570968f5a';
 
 // Only these ordinary courses currently replace an older illustration scene.
 // Race-host admission remains independent of preparing/rendering the geometry.

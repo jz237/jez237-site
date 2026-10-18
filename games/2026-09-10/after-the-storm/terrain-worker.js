@@ -2,12 +2,13 @@ import {getCourse} from './courses.js';
 import {sampleTerrain} from './terrain-data.js';
 import {nativeStuntScene} from './native-stunt-scene.js';
 import {nativeRaceScene} from './native-race-scene.js';
+import {nativeDolphinPracticeScene} from './source-dolphin-practice-course.js';
 self.onmessage=({data:{id,difficulty,key,geometryPlayers=1,nativeSceneCourseIndex,nativeSceneMode}})=>{
  try{
   const start=performance.now();let course=getCourse(id,difficulty);
   if(nativeSceneCourseIndex!==undefined){
    if(nativeSceneCourseIndex!==course.sourceWaterCourseIndex)throw new RangeError('Native terrain course mismatch');
-   course=nativeSceneMode==='race'?nativeRaceScene(course):nativeStuntScene(course);
+   course=nativeSceneMode==='practice'?nativeDolphinPracticeScene(course):nativeSceneMode==='race'?nativeRaceScene(course):nativeStuntScene(course);
   }
   if(course.geometryForPlayers)course={...course,...course.geometryForPlayers(geometryPlayers)};
   const result=sampleTerrain(course.renderGround||course.ground);

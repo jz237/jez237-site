@@ -60,8 +60,10 @@ function readFloat(v){numberBits.setUint32(0,v);return numberBits.getFloat32(0);
  * A retained canonical state may instead be supplied for exact prepared tests. */
 export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initialState,recordSession,tunes=[],tuneModes=[],courseRuntime,course,laps=3,reverse=false,rngSeed=17,handicap=false}={}){
  if(!Array.isArray(racers)||racers.length<1||racers.length>4)throw new TypeError('Launch requires one to four initialized racers');
- const stunt=courseRuntime?.mode620===11,mode620=stunt?11:players===2?1:0;
- integer(players,'players',1,2);integer(courseIndex,'courseIndex',stunt?0:1,stunt?8:9);
+ const stunt=courseRuntime?.mode620===11,practice=courseRuntime?.courseView?.nativeSceneMode==='practice',mode620=stunt?11:players===2?1:0;
+ integer(players,'players',1,2);integer(courseIndex,'courseIndex',stunt||practice?0:1,stunt?8:9);
+ if(practice&&(stunt||courseIndex!==0||courseRuntime.courseIndex!==0||courseRuntime.sourceDifficulty!==0||players!==1||racers.length!==1||reverse))
+  throw new RangeError('Native Practice requires the prepared solo forward Normal Dolphin course');
  if(stunt&&(players!==1||racers.length!==1||reverse))throw new RangeError('Prepared Stunt launch requires one rider and a forward course');
  if(stunt&&courseRuntime.courseIndex!==courseIndex)throw new RangeError('Stunt launch must use its selected source course');
  if(stunt)course=courseRuntime.courseView;
@@ -109,7 +111,8 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
     continuationDataWords60f0:Array.from({length:20},(_,i)=>[40,10,20,2,30,2][i-13]??0)}:{}),scene:{
    players,racerCount:racers.length,primaryHumanIndex:0,secondaryHumanIndex:1,courseIndex,
    ...(courseRuntime?.objectStartup?{...courseRuntime.objectStartup.counts,forceStunt824c:0,rampFilterOverride8254:0,alternate8250:0}:{}),
-   mode620,mode608:mode620,main638:1,phase650:0,simulation648:1,
+   //9345C enters ordinary Dolphin Park directly in physical free play.
+   mode620,mode608:mode620,main638:1,phase650:practice?3:0,simulation648:practice?3:1,
    clockStopped817c:1,activity624:-1,event628:0,gameStateAb24:40,specialAb64:0,ready6fc:Number(stunt&&courseIndex===0),
    missesEnabled72e:1,result6f0:0,ambientD4b00:0,field4964:0,field4970:Number(handicap),resultEffect393c:0,toggleD9914:0,
    rngState4640:integer(rngSeed,'web shared RNG seed',0,0xffffffff),inputTick1960:0,previousNavigationD9874:0,trainingSelectionDa9f8:0,
@@ -141,6 +144,8 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
  }
  if(current.scene.players!==players||current.scene.racerCount!==racers.length||current.scene.courseIndex!==courseIndex)
   throw new RangeError('Retained launch scene must match the live participants/course');
+ if(practice&&(current.scene.mode620!==0||current.scene.mode608!==0||current.profileWordsB330[2]!==0||current.scene.reverseDab68!==0||current.scene.primaryHumanIndex!==0))
+  throw new RangeError('Retained Practice scene must match solo forward Normal Dolphin Park');
  if(stunt&&(current.scene.mode620!==11||current.scene.mode608!==11||current.scene.configuredLaps728!==1||current.scene.reverseDab68!==0||current.scene.primaryHumanIndex!==0))
   throw new RangeError('Retained Stunt scene must match the selected mode, lap, direction and primary rider');
  if(stunt)for(const key of ['ringNext0cb0','ringStreak0cb4','unlockAb60'])integer(current.scene[key],`retained ${key}`);

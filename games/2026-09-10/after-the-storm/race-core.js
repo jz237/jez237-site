@@ -10,6 +10,7 @@ import {nativeStuntScene} from './native-stunt-scene.js';
 import {createNativeStuntPresentation,createNativeCourseObjectPresentation} from './native-stunt-presentation.js';
 import {createNativeCourseDecorationPresentation} from './native-course-decoration-presentation.js';
 import {nativeRaceScene} from './native-race-scene.js';
+import {nativeDolphinPracticeScene} from './source-dolphin-practice-course.js';
 import {capturePrimaryBuoyPresentation} from './primary-buoy-presentation.js';
 import {constrainSourceSphereRace} from './source-sphere-race.js';
 import {createRaceWater,stepRaceWater,setRaceWater} from './race-water.js';
@@ -72,15 +73,17 @@ export function settings(rider=0,tune={}){const r=RIDERS[rider];const engine=cla
 export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,difficulty=0,course=COVE,gridOrder=null,seaState='course',secondRider=1,secondTune={},handicap=false,swapColours=false,physics='modern',nativeTunes=[],nativeTuneModes=[],nativeInitialRaceState,nativeRecordSession,nativeObjectLayout='source'}={}){
  if(!['modern','native'].includes(physics))throw new RangeError('Unknown race physics');
  if(nativeRecordSession!==undefined&&physics!=='native')throw new RangeError('Native record sessions require native physics');
- if(physics==='native'&&(!['time','versus','stunt'].includes(mode)||seaState!=='course'||!(mode==='stunt'?[0,1,2,3,4,5,6,7,8]:[1,2,3,4,5,6,7,8]).includes(course.sourceWaterCourseIndex)))
-  throw new RangeError('Native integration preview requires a verified course and source-water Time trial, Two-player race or Stunt run');
+ const nativePractice=physics==='native'&&mode==='practice'&&course.sourceWaterCourseIndex===0&&difficulty===0&&!course.reverse;
+ if(physics==='native'&&(seaState!=='course'||!nativePractice&&(!['time','versus','stunt'].includes(mode)||!(mode==='stunt'?[0,1,2,3,4,5,6,7,8]:[1,2,3,4,5,6,7,8]).includes(course.sourceWaterCourseIndex))))
+  throw new RangeError('Native integration preview requires a verified course and source-water Time trial, Two-player race, Stunt run or solo Dolphin Practice');
  setRaceWater(null);
  if(physics==='native'&&mode==='stunt')course=nativeStuntScene(course);
+ else if(nativePractice)course=nativeDolphinPracticeScene(course);
  else if(physics==='native')course=nativeRaceScene(course);
  const freeRide=mode==='practice'||mode==='versus'&&course.id==='practice';
  if(['race','championship'].includes(mode))course=racingStuntCourse(course);
  frontEnabled.value=seaState==='surf'||seaState==='storm'?1:0;setWaterCharacter(course);surfSeed.value=((Math.floor(waveSeed)%997)+997)%997;surfStrength.value=seaState==='surf'?1:0;windSea.value=seaState==='chop'||seaState==='storm'?1:0;setCourseWaveTrain(course.waveTrain);setBoundaryWaves(course);clearImpacts();clearWakeTrail();waterLevel.value=conditions(course,0).seaLevel;
- if(mode==='stunt'||freeRide)course=stuntCourse(course,{freeRide});
+ if(mode==='stunt'||freeRide&&!nativePractice)course=stuntCourse(course,{freeRide});
  if(course.geometryForPlayers)course={...course,...course.geometryForPlayers(mode==='versus'?2:1)};
  if(course.sourceObjectSelection){const playerCount=mode==='versus'?2:1;course={...course,playerCount,rocks:course.hazardsForPlayers(playerCount),sourceDecorations:course.decorationsForPlayers?course.decorationsForPlayers(playerCount):course.sourceDecorations};}
  if(course.contactVolumesForRamps)course={...course,contactVolumes:course.contactVolumesForRamps(course.ramps)};
@@ -137,8 +140,8 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
    const initial=state.nativeStuntDisplay.snapshot();state.nativeStuntWorld=initial.world;state.nativeStuntHud=initial.hud;
    Object.defineProperty(racers[0],'stunt',{enumerable:true,configurable:true,get:()=>state.nativeStuntHud});
   }
-  else if(course.sourceSolidObjects?.length||course.sourceStaticObjects?.length||course.nativeSceneMode==='race'&&[5,6].includes(course.nativeSceneCourseIndex)){
-   const present=course.sourceSolidObjects?.length||[5,6].includes(course.nativeSceneCourseIndex)?createNativeCourseObjectPresentation:createNativeCourseDecorationPresentation;
+  else if(nativePractice||course.sourceSolidObjects?.length||course.sourceStaticObjects?.length||course.nativeSceneMode==='race'&&[5,6].includes(course.nativeSceneCourseIndex)){
+   const present=nativePractice||course.sourceSolidObjects?.length||[5,6].includes(course.nativeSceneCourseIndex)?createNativeCourseObjectPresentation:createNativeCourseDecorationPresentation;
    state.nativeCourseDisplay=present({course,readState:nativeLaunch.snapshot,scale:nativeScale});
    course={...course,nativeCourseLayout:state.nativeCourseDisplay.layout};state.course=course;
    state.nativeCourseWorld=state.nativeCourseDisplay.snapshot();

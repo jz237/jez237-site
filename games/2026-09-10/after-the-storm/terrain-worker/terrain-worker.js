@@ -1,13 +1,14 @@
-import {getCourse} from './courses.js?v=c69bdfad4cd7';
-import {sampleTerrain} from './terrain-data.js?v=c69bdfad4cd7';
-import {nativeStuntScene} from './native-stunt-scene.js?v=c69bdfad4cd7';
-import {nativeRaceScene} from './native-race-scene.js?v=c69bdfad4cd7';
+import {getCourse} from './courses.js?v=edc570968f5a';
+import {sampleTerrain} from './terrain-data.js?v=edc570968f5a';
+import {nativeStuntScene} from './native-stunt-scene.js?v=edc570968f5a';
+import {nativeRaceScene} from './native-race-scene.js?v=edc570968f5a';
+import {nativeDolphinPracticeScene} from './source-dolphin-practice-course.js?v=edc570968f5a';
 self.onmessage=({data:{id,difficulty,key,geometryPlayers=1,nativeSceneCourseIndex,nativeSceneMode}})=>{
  try{
   const start=performance.now();let course=getCourse(id,difficulty);
   if(nativeSceneCourseIndex!==undefined){
    if(nativeSceneCourseIndex!==course.sourceWaterCourseIndex)throw new RangeError('Native terrain course mismatch');
-   course=nativeSceneMode==='race'?nativeRaceScene(course):nativeStuntScene(course);
+   course=nativeSceneMode==='practice'?nativeDolphinPracticeScene(course):nativeSceneMode==='race'?nativeRaceScene(course):nativeStuntScene(course);
   }
   if(course.geometryForPlayers)course={...course,...course.geometryForPlayers(geometryPlayers)};
   const result=sampleTerrain(course.renderGround||course.ground);

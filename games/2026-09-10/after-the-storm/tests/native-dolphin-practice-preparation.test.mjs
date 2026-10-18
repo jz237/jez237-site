@@ -63,5 +63,6 @@ test('Practice preparation preserves full shared shore and terrain detail while 
  for(const patch of [{players:2},{difficulty:1},{course:{...c,reverse:true}},{course:{...c,nativeSceneMode:'race'}}])
   assert.throws(()=>createNativeRaceCourseRuntime({course:c,difficulty:0,players:1,...patch}),/solo forward Normal/);
  assert.throws(()=>createNativeRaceCourseRuntime({course:c,difficulty:0,players:1,objectLayout:'authored'}),/canonical/);
- assert.throws(()=>createRace({course:getCourse('practice'),mode:'practice',physics:'native'}),/verified course/);
+ for(const patch of [{mode:'versus'},{difficulty:1},{seaState:'surf'},{course:getCourse('greyhaven')}])
+  assert.throws(()=>createRace({course:getCourse('practice'),mode:'practice',physics:'native',...patch}),/verified course/);
 });

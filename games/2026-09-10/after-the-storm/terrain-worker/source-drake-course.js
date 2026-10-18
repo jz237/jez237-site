@@ -1,9 +1,9 @@
-import {createSourceDrakeTerrain} from './source-drake-stunt-course.js?v=c69bdfad4cd7';
-import {DRAKE_STUNT_GEOMETRY as G} from './source-drake-stunt-data.js?v=c69bdfad4cd7';
-import {DRAKE_NATIVE_ROUTE_ROWS_BY_CLASS as rows} from './source-drake-rows.js?v=c69bdfad4cd7';
-import {createSourceBuoyLayout} from './source-buoy-progress.js?v=c69bdfad4cd7';
-import {polygonDistance} from './classic-courses.js?v=c69bdfad4cd7';
-import {samplePolyline} from './courses.js?v=c69bdfad4cd7';
+import {createSourceDrakeTerrain} from './source-drake-stunt-course.js?v=edc570968f5a';
+import {DRAKE_STUNT_GEOMETRY as G} from './source-drake-stunt-data.js?v=edc570968f5a';
+import {DRAKE_NATIVE_ROUTE_ROWS_BY_CLASS as rows} from './source-drake-rows.js?v=edc570968f5a';
+import {createSourceBuoyLayout} from './source-buoy-progress.js?v=edc570968f5a';
+import {polygonDistance} from './classic-courses.js?v=edc570968f5a';
+import {samplePolyline} from './courses.js?v=edc570968f5a';
 const S=.025;
 
 /** Source-coordinate ordinary scene. The inspection line is authored from

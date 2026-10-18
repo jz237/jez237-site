@@ -1,8 +1,8 @@
-import {sourceWaterConditions} from './source-water-conditions.js?v=c69bdfad4cd7';
-import {createSourceBuoyLayout} from './source-buoy-progress.js?v=c69bdfad4cd7';
-import {CLASSIC_COURSES,polygonDistance} from './classic-courses.js?v=c69bdfad4cd7';
-import {configurePassage,passageDistance} from './course-passages.js?v=c69bdfad4cd7';
-import {tideLevel} from './course-environment.js?v=c69bdfad4cd7';
+import {sourceWaterConditions} from './source-water-conditions.js?v=edc570968f5a';
+import {createSourceBuoyLayout} from './source-buoy-progress.js?v=edc570968f5a';
+import {CLASSIC_COURSES,polygonDistance} from './classic-courses.js?v=edc570968f5a';
+import {configurePassage,passageDistance} from './course-passages.js?v=edc570968f5a';
+import {tideLevel} from './course-environment.js?v=edc570968f5a';
 // Course geometry is shared by navigation, collision, terrain and presentation.
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const definitions=[

@@ -1,4 +1,4 @@
-import {clippedVolume,clippedVolumes} from './clipped-volumes.js?v=c69bdfad4cd7';
+import {clippedVolume,clippedVolumes} from './clipped-volumes.js?v=edc570968f5a';
 
 // Independently reconstructed finite projection intervals, not original artwork.
 // .025 metres/native is conditional on the shared HUD/clock calibration.

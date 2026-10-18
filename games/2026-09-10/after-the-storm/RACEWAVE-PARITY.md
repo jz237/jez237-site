@@ -6630,3 +6630,42 @@ Fifteen focused Practice, Dolphin Stunt, Port and Twilight runtime checks pass;
 terrain remains361x361 with512x512 depth data. The scene has a distinct Practice
 identity, while worker and live-mode wiring remain pending. This preparation
 does not implement the original training-lesson or championship warm-up loops.
+
+### Dolphin solo Practice live integration — 2026-10-18
+
+The opt-in native preview now admits solo forward Normal Dolphin Practice with
+venue water. It starts in the original phase3/simulation3 with full power and
+no countdown. Canonical ordinary reset, primary navigation, physical rider,
+water, camera and object owners remain active; course0 does not acquire timed
+laps or a fabricated finish. The tested fresh Practice launch retains the
+source stopped record clock. Two-player, Reverse, other classes and custom
+sea selections remain outside this particular native admission.
+
+The live scene preserves the prepared two ordinary jumps,12 ramp planes,
+12 decorations,205 fixed spheres and60 primary nodes. It bypasses the modern
+Free Ride Stunt conversion, and its terrain worker explicitly selects the
+same Practice geometry. Worker heights and depth bytes exactly match the main
+thread at361x361 and512x512. The HUD identifies Practice and full-power free
+exploration instead of displaying inactive Stunt points/rings; its airborne
+label reads the source no-wet/no-contact counter.
+
+Five live tests cover immediate physical movement, pause freezing all owners,
+restart restoring the initial source state, retained-mode/class rejection,
+full-resolution worker equality, and a control-driven jump/landing. The finite
+authored inspection route reaches jump2, rises to3.7768978313658654 world metres,
+leaves all water points dry and returns to water without modifying positions,
+collision data, lap state or scores. This inspection drive uses ordinary helm
+inputs and coasts after24 seconds; it is not original AI or a training lesson.
+The Practice verification button fixes seed17 for repeatable inspection;
+ordinary human launches retain their varied wave seeds.
+
+The browser confirmed the same3.7768978313658654 maximum height, airborne state
+and return to water at1440x900 on High. Real-time inspection was needed to
+observe the short jump between rendered frames; accelerated sampling initially
+skipped it. Keyboard throttle, pause and restart also work in the browser.
+There were no JavaScript or shader errors; the local server reported an
+unrelated missing-resource404. All29 distinct bounded Practice, Dolphin Stunt,
+native launch and loading checks pass, and411 module hashes/four page preload
+sets are refreshed. Resolution remains unchanged. Native physics remains
+opt-in; original training lessons, championship warm-up flow, original computer
+driving and the remaining trick/alternate-route work are still pending.

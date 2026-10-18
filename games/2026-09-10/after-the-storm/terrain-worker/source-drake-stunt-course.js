@@ -1,8 +1,8 @@
-import {DRAKE_STUNT_GEOMETRY as G} from './source-drake-stunt-data.js?v=c69bdfad4cd7';
-import {facetedSurface} from './faceted-surfaces.js?v=c69bdfad4cd7';
-import {clippedVolume,clippedVolumes} from './clipped-volumes.js?v=c69bdfad4cd7';
-import {shoreLines} from './shore-contact.js?v=c69bdfad4cd7';
-import {orderSourceFixedSpheres} from './source-boundary-spheres.js?v=c69bdfad4cd7';
+import {DRAKE_STUNT_GEOMETRY as G} from './source-drake-stunt-data.js?v=edc570968f5a';
+import {facetedSurface} from './faceted-surfaces.js?v=edc570968f5a';
+import {clippedVolume,clippedVolumes} from './clipped-volumes.js?v=edc570968f5a';
+import {shoreLines} from './shore-contact.js?v=edc570968f5a';
+import {orderSourceFixedSpheres} from './source-boundary-spheres.js?v=edc570968f5a';
 const S=.025,xyz=p=>p.map(v=>v*S);
 const direction=heading=>{const a=(Math.trunc(heading*4096/360)&4095)*Math.PI*2/4096;return {tx:Math.sin(a),tz:Math.cos(a)};};
 

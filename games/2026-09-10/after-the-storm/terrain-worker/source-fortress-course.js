@@ -1,12 +1,12 @@
-import {createSourceFortressTerrain} from './source-fortress-stunt-course.js?v=c69bdfad4cd7';
-import {FORTRESS_STUNT_GEOMETRY as G} from './source-fortress-stunt-data.js?v=c69bdfad4cd7';
-import {FORTRESS_RACE_OBJECTS} from './source-fortress-race-objects.js?v=c69bdfad4cd7';
-import {FORTRESS_NATIVE_ROUTE_ROWS_BY_CLASS as rows} from './source-fortress-rows.js?v=c69bdfad4cd7';
-import {createSourceBuoyLayout} from './source-buoy-progress.js?v=c69bdfad4cd7';
-import {sourceBoundarySpheres,orderSourceFixedSpheres} from './source-boundary-spheres.js?v=c69bdfad4cd7';
-import {clippedVolume,clippedVolumes} from './clipped-volumes.js?v=c69bdfad4cd7';
-import {polygonDistance} from './classic-courses.js?v=c69bdfad4cd7';
-import {samplePolyline} from './courses.js?v=c69bdfad4cd7';
+import {createSourceFortressTerrain} from './source-fortress-stunt-course.js?v=edc570968f5a';
+import {FORTRESS_STUNT_GEOMETRY as G} from './source-fortress-stunt-data.js?v=edc570968f5a';
+import {FORTRESS_RACE_OBJECTS} from './source-fortress-race-objects.js?v=edc570968f5a';
+import {FORTRESS_NATIVE_ROUTE_ROWS_BY_CLASS as rows} from './source-fortress-rows.js?v=edc570968f5a';
+import {createSourceBuoyLayout} from './source-buoy-progress.js?v=edc570968f5a';
+import {sourceBoundarySpheres,orderSourceFixedSpheres} from './source-boundary-spheres.js?v=edc570968f5a';
+import {clippedVolume,clippedVolumes} from './clipped-volumes.js?v=edc570968f5a';
+import {polygonDistance} from './classic-courses.js?v=edc570968f5a';
+import {samplePolyline} from './courses.js?v=edc570968f5a';
 const S=.025,xyz=p=>p.map(v=>v*S);
 
 /** Ordinary source coordinates, with independently authored driving anchors.
