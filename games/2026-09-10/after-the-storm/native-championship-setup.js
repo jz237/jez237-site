@@ -6,6 +6,7 @@ import {createNativeRaceMemory} from './native-race-memory.js';
 import {prepareNativeRaceStateOperations} from './native-race-state.js';
 import {restoreNativeRecordSession} from './native-record-session.js';
 import {nativeTuneLaunchOperations} from './native-rider-tuning.js';
+import {nativeChampionshipQualificationView} from './native-championship-qualification.js';
 
 const freeze=v=>{if(v&&typeof v==='object'&&!Object.isFrozen(v)){Object.values(v).forEach(freeze);Object.freeze(v);}return v;};
 const preparedCourses=new WeakMap();
@@ -15,6 +16,11 @@ export const isNativeChampionshipLaunch=(value,courseRuntime)=>!!value&&prepared
 // Numeric defaults copied by original91F50 from A988 into the three B308 rows.
 // Runtime menu settings may replace these rows; they are not difficulty guesses.
 export const NATIVE_CHAMPIONSHIP_SETUP_DATA=freeze({
+ // Resident AC14 signed-halfword rows. Normal includes Dolphin warmup at0;
+ // Hard/Expert start atSunny. -1 is the unused final entry, not a course.
+ courseOrderAc14:[[0,1,2,4,3,5,7,-1],[1,2,4,3,5,6,7,-1],[1,2,4,3,5,6,8,7]],
+ // Loaded i1 words9514..951C consumed by587C (overlay ROM1B55A0).
+ lastRound9514:[6,6,7],
  waveRowsByClass:[[0,5,3],[0,5,3],[0,5,3]],
  courseWaves1P:[20,20,20,40,10,30,20,25,25],courseWavesOther:[15,15,15,35,5,20,15,20,20],
  defaultRiderTraits:Array.from({length:4},()=>[5,5,5]),
@@ -41,10 +47,24 @@ export function prepareNativeChampionshipWebLaunch({racers,courseRuntime,recordS
  if(courseRuntime?.mode620!==4)throw new RangeError('Fresh championship selection requires its prepared mode4 course');
  if(!Array.isArray(racers)||racers.length!==4||racers.some((r,i)=>r?.human!==(i===0)||i===0&&r.player!==0))
   throw new RangeError('Fresh championship selection requires four racers with the primary human in slot0');
+ const round=NATIVE_CHAMPIONSHIP_SETUP_DATA.courseOrderAc14[courseRuntime.sourceDifficulty]?.indexOf(courseRuntime.courseIndex);
+ if(round===undefined||round<0)throw new RangeError('Selected course does not belong to this championship class');
  let state=createNativeRaceMemory({racers,courseRuntime,courseIndex:courseRuntime.courseIndex,players:1,mode620:4,
   reverse:!!courseRuntime.courseView.reverse,rngSeed});
  if(recordSession!==undefined)state=createNativeRaceState(restoreNativeRecordSession(state,recordSession));
  state=createNativeRaceState({...state,scene:{...state.scene,participantCount60e:4,field61c:0,variant6f4:0}});
+ // This is an isolated selected round with empty prior standings. Leaving
+ // B330 atzero incorrectly routes a completed race through Dolphin warmup.
+ // A full cup must carry its existing profile/standings instead of reseeding.
+ state=prepareNativeRaceStateOperations(state,[
+  {kind:'profileWrite',byteOffset:0,width:4,value:courseRuntime.courseIndex},
+  {kind:'profileWrite',byteOffset:4,width:4,value:round},
+  ...NATIVE_CHAMPIONSHIP_SETUP_DATA.lastRound9514.map((value,i)=>
+   ({kind:'i1Write',byteOffset:0x9514-0x9440+i*4,width:4,value}))]).state;
+ const qualification=nativeChampionshipQualificationView(state);
+ state=prepareNativeRaceStateOperations(state,[
+  ...qualification.requiredPlaceBySlot.map((value,i)=>({kind:'sourceWordWrite',field:['field708','field70c','field710','field714'][i],value})),
+  {kind:'sourceWordWrite',field:'field704',value:qualification.primaryRequiredPlace}]).state;
  state=prepareNativeRaceStateOperations(state,nativeTuneLaunchOperations(racers,1,tunes,tuneModes)).state;
  return prepareNativeChampionshipLaunch(state,{courseRuntime,avatarsBySlot:racers.map(r=>r.id)});
 }

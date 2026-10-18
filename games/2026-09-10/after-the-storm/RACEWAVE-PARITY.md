@@ -1,5 +1,29 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — championship application startup and qualification
+
+The headless native championship now uses the application race loop with four
+prepared hulls/riders, three original AI inputs, one human audio channel and the
+selected source grid/tunes. Startup audio executes once. Source result entry
+owns the finish; the modern40-second rival-disqualification rule is bypassed.
+Pending rider/course resource requests and128 HUD-buffer writes remain explicit.
+Browser championship admission, those presentation consumers, full result/menu
+handoffs and continued cup progression still require work. Resolution and the
+high-resolution models, water and renderer are unchanged.
+
+Fresh isolated rounds now initialize the actual course/round profile instead of
+accidentally selecting Dolphin warmup. The original class course-order and
+last-round tables are installed before startup. The selection screen's retained
+qualification limits are derived from its numeric calculation;116 bounded
+original i3 runs (11,400 instructions) verify all primary slots, classes, rounds,
+warmup and signed-overflow cases. This projection does not run the complete
+selection menu or its scratch/graphics consumers. An isolated later round has
+empty previous standings; it is not a restored cup.
+
+Application tests cover four avatars/custom tuning, startup audio, retained
+presentation dependencies and source finish entry. Twelve-second application
+runs at30/60/144Hz match canonical state, hull points, water and audio histories.
+
 ## v2.38.0 — shallow water, native ice and contact audio
 
 Custom-wave troughs now respect the shallow course floor, fixing broad exposed

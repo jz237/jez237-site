@@ -54,7 +54,6 @@ test('four-rider runtime requires the actual prepared course handoff and exact h
   assert.throws(()=>createNativeRaceLaunchRuntime({...q.args,...patch}),/participants must match/);
  assert.deepEqual(q.prepared.state,before);
  assert.throws(()=>createNativeRaceLaunchRuntime(setup({primaryHumanIndex:1}).args),/primary human in slot0/);
- assert.throws(()=>createRace({physics:'native',mode:'championship',course:getCourse('greyhaven')}),/verified course/);
 });
 
 test('prepared physical championship consumes all grid/profile outputs and starts three computers without device polls',()=>{

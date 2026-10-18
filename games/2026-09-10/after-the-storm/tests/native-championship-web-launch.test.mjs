@@ -37,6 +37,8 @@ test('fresh selection carries each supported course/class into its own prepared 
   assert.equal(g.mode620,4);assert.equal(g.courseIndex,q.courseRuntime.courseIndex);assert.equal(g.players,1);assert.equal(g.racerCount,4);
   assert.equal(g.phase650,0);assert.equal(g.simulation648,1);assert.equal(g.reverseDab68,Number(difficulty===3));
   assert.equal(p.state.profileWordsB330[2],Math.min(difficulty,2));
+  assert.equal(p.state.profileWordsB330[0],q.courseRuntime.courseIndex,'race result must not take the Dolphin warmup branch');
+  assert.equal(p.state.profileWordsB330[1],NATIVE_CHAMPIONSHIP_SETUP_DATA.courseOrderAc14[Math.min(difficulty,2)].indexOf(q.courseRuntime.courseIndex));
   const effects=p.pendingEffects.filter(o=>o.kind==='externalCall');
   assert.deepEqual(effects.map(o=>o.consumer),['80096960','8009684c','800c21f4']);
   assert.deepEqual(effects[2].arguments,[7,q.courseRuntime.courseIndex]);
@@ -63,4 +65,5 @@ test('invalid fresh selection cannot partially overwrite caller racers or tune b
   {courseRuntime:{...q.courseRuntime,mode620:0}},{rngSeed:-1},{tuneModes:['invalid']},{tunes:[{tuneB6c:12}]}])
   assert.throws(()=>prepareNativeChampionshipWebLaunch({...q,tunes,...patch}));
  assert.deepEqual({racers:q.racers,tunes},before);
+ assert.throws(()=>prepareNativeChampionshipWebLaunch(selected({id:'glacier',difficulty:0})),/does not belong/);
 });
