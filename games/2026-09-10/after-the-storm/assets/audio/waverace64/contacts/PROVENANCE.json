@@ -1,0 +1,12 @@
+{
+  "source": "User-supplied Wave Race 64 USA revision 1 ROM on VENGEANCE",
+  "sourceSha256": "f35d2423ebcb86eaf86fa935b613c7532b123a7bc50fb74996984c3b02fc3999",
+  "method": "Locally decoded ADPCM samples from bank0, selected by sequence0's channel2/channel5 IO0 and IO5 commands. Rendered as sixteen standalone mono WAV effects covering52 note selectors. The original bank-set resolver confirms logical bank0 selects physical bank0.",
+  "tools": ["Existing REA/Ghidra analysis on EVO X2", "SEQ64 2.4.1 SM64 EU ABI reference", "N64-Tools ADPCM/layout reference", "Local Python and FFmpeg"],
+  "sourceReferences": ["https://github.com/jombo23/N64-Tools", "https://github.com/sauraen/seq64"],
+  "mix": "Original samples and tuning; approximate7.5ms envelope steps and150ms release,2s note hold from the original sequence's320 ticks at tempo200. Variants share rendered base effects with their original relative pitch and pan. Velocity is squared as in the original note interpreter; browser bus gain, stereo placement, resampling and effect tails are adaptations, not bit-exact N64 RSP output. Ice's separate dynamic channel, engine loops and voice scheduling remain outside this bank.",
+  "rights": "Underlying Wave Race 64 samples remain the property of their respective rights holders; not covered by the website code license.",
+  "purchases": 0,
+  "extractedAt": "2026-10-17",
+  "assetHashes": "manifest.json"
+}

@@ -1,6 +1,7 @@
 import {RideSound} from './ride-sound.js';
 import {SampleSound} from './sample-sound.js';
 import {OriginalMusic} from './original-music.js';
+import {OriginalContactSound} from './original-contact-sound.js';
 import {musicNotes,NOTE_INTERVAL,midiFrequency,stereoWidth} from './coastal-music.js';
 export class Soundscape{
  constructor(){this.ctx=null;this.enabled=true;this.mode='stereo';this.music=false;this.volume=.8;this.previewUntil=0;this.signalUntil=0;this.nextNote=0;this.musicStep=0;this.pans=[];this.musicPans=new Set();this.voices=[];}
@@ -29,16 +30,21 @@ export class Soundscape{
  splash(impact=3,side=0){if(this.enabled&&this.samples?.play('splash',{gain:Math.min(.85,impact*.065),rate:1.15-Math.min(12,impact)*.025,pan:side}))return;if(!this.ctx||!this.enabled||!this.noiseBuffer)return;const t=this.ctx.currentTime,source=this.ctx.createBufferSource(),filter=this.ctx.createBiquadFilter(),gain=this.ctx.createGain(),pan=this.ctx.createStereoPanner();pan.pan.value=side*stereoWidth(this.mode);source.buffer=this.noiseBuffer;filter.type='bandpass';filter.frequency.setValueAtTime(1600,t);filter.frequency.exponentialRampToValueAtTime(280,t+.55);filter.Q.value=.45;gain.gain.setValueAtTime(Math.min(.65,impact*.09),t);gain.gain.exponentialRampToValueAtTime(.001,t+.7);source.connect(filter).connect(gain).connect(pan).connect(this.effects);source.start(t);source.stop(t+.75);source.onended=()=>{source.disconnect();filter.disconnect();gain.disconnect();pan.disconnect();};}
  updateRide(r,depth,time,paused=false){if(!this.ctx||!this.ride)return;this.rideMix=this.ride.update(r,depth,time,paused||!this.enabled);this.immersionFilter.frequency.setTargetAtTime(this.rideMix.cutoff,this.ctx.currentTime,.07);}
  updateRivals(listener,racers,paused=false,camera=null){this.samples?.updateRivals(listener,racers,paused||!this.enabled,camera);}
- // Original command timing/volume, with the existing authored recordings.
+ // Original contact commands and samples, with authored recordings available
+ // during loading or for commands whose original sequence is not connected.
  // No wall-clock landing debounce: the source packet owns contact cooldowns.
  nativeContacts(owner,active,players=1){
-  if(!owner)return;
+  if(!owner){this.originalContacts?.stop();return;}
   const commands=owner.drain();
-  if(!active||!this.enabled||!this.ctx)return;
+  if(!active||!this.enabled||!this.ctx){this.originalContacts?.stop();return;}
+  if(!this.originalContacts)this.originalContacts=new OriginalContactSound(this.ctx,this.effects);
+  this.originalContacts.setMode(this.mode);
+  if(typeof location!=='undefined')this.originalContacts.load();
   for(const command of commands)this.nativeContact(command,players===2?(command.player===1?.4:-.4):0);
  }
  nativeContact(command,side=0){
   if(!this.ctx||!this.enabled)return;
+  if(this.originalContacts?.play(command,side))return;
   const args=command.arguments,hit=command.consumer==='bffec',ice=command.consumer==='c53d4'&&args[0]===0x06000700&&args[1]===0x13;
   if(!hit&&!ice)return;
   const splash=hit&&args[1]>=11&&args[1]<=14,volume=ice?1:Math.max(0,Math.min(127,args[2]))/127;

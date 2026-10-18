@@ -1,0 +1,954 @@
+{
+  "version": 1,
+  "sourceSha256": "f35d2423ebcb86eaf86fa935b613c7532b123a7bc50fb74996984c3b02fc3999",
+  "sequence": 0,
+  "bank": 0,
+  "sounds": {
+    "11": {
+      "file": "contact-0b.wav",
+      "rate": 1.0,
+      "pan": 64,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 4
+    },
+    "12": {
+      "file": "contact-0c.wav",
+      "rate": 1.0,
+      "pan": 64,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 4
+    },
+    "13": {
+      "file": "contact-0d.wav",
+      "rate": 1.0,
+      "pan": 64,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 4
+    },
+    "14": {
+      "file": "contact-0e.wav",
+      "rate": 1.0,
+      "pan": 64,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 4
+    },
+    "16": {
+      "file": "contact-10.wav",
+      "rate": 1.0,
+      "pan": 0,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "17": {
+      "file": "contact-10.wav",
+      "rate": 1.0,
+      "pan": 64,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "18": {
+      "file": "contact-10.wav",
+      "rate": 1.0,
+      "pan": 127,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "19": {
+      "file": "contact-10.wav",
+      "rate": 0.9438749949137369,
+      "pan": 64,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "20": {
+      "file": "contact-14.wav",
+      "rate": 1.0,
+      "pan": 0,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "21": {
+      "file": "contact-14.wav",
+      "rate": 1.0,
+      "pan": 64,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "22": {
+      "file": "contact-14.wav",
+      "rate": 1.0,
+      "pan": 127,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "23": {
+      "file": "contact-14.wav",
+      "rate": 0.9438749949137369,
+      "pan": 64,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "24": {
+      "file": "contact-18.wav",
+      "rate": 1.0,
+      "pan": 0,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "25": {
+      "file": "contact-18.wav",
+      "rate": 1.0,
+      "pan": 64,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "26": {
+      "file": "contact-18.wav",
+      "rate": 1.0,
+      "pan": 127,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "27": {
+      "file": "contact-18.wav",
+      "rate": 0.9438750147819519,
+      "pan": 64,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "28": {
+      "file": "contact-1c.wav",
+      "rate": 1.0,
+      "pan": 0,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "29": {
+      "file": "contact-1c.wav",
+      "rate": 1.0,
+      "pan": 64,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "30": {
+      "file": "contact-1c.wav",
+      "rate": 1.0,
+      "pan": 127,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "31": {
+      "file": "contact-1c.wav",
+      "rate": 0.9438750147819519,
+      "pan": 64,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "32": {
+      "file": "contact-20.wav",
+      "rate": 1.0,
+      "pan": 0,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "33": {
+      "file": "contact-20.wav",
+      "rate": 1.0,
+      "pan": 64,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "34": {
+      "file": "contact-20.wav",
+      "rate": 1.0,
+      "pan": 127,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "35": {
+      "file": "contact-20.wav",
+      "rate": 0.9438749949137369,
+      "pan": 64,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "36": {
+      "file": "contact-24.wav",
+      "rate": 1.0,
+      "pan": 0,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "37": {
+      "file": "contact-24.wav",
+      "rate": 1.0,
+      "pan": 64,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "38": {
+      "file": "contact-24.wav",
+      "rate": 1.0,
+      "pan": 127,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "39": {
+      "file": "contact-24.wav",
+      "rate": 0.9438749949137369,
+      "pan": 64,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "40": {
+      "file": "contact-28.wav",
+      "rate": 1.0,
+      "pan": 0,
+      "envelope": [
+        1,
+        32000,
+        240,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 8
+    },
+    "41": {
+      "file": "contact-28.wav",
+      "rate": 1.0,
+      "pan": 64,
+      "envelope": [
+        1,
+        32000,
+        240,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 8
+    },
+    "42": {
+      "file": "contact-28.wav",
+      "rate": 1.0,
+      "pan": 127,
+      "envelope": [
+        1,
+        32000,
+        240,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 8
+    },
+    "43": {
+      "file": "contact-28.wav",
+      "rate": 0.9438744255969276,
+      "pan": 64,
+      "envelope": [
+        1,
+        32000,
+        240,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 8
+    },
+    "44": {
+      "file": "contact-2c.wav",
+      "rate": 1.0,
+      "pan": 0,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "45": {
+      "file": "contact-2c.wav",
+      "rate": 1.0,
+      "pan": 64,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "46": {
+      "file": "contact-2c.wav",
+      "rate": 1.0,
+      "pan": 127,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "47": {
+      "file": "contact-2c.wav",
+      "rate": 0.9438749949137369,
+      "pan": 64,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "48": {
+      "file": "contact-30.wav",
+      "rate": 1.0,
+      "pan": 0,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "49": {
+      "file": "contact-30.wav",
+      "rate": 1.0,
+      "pan": 64,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "50": {
+      "file": "contact-30.wav",
+      "rate": 1.0,
+      "pan": 127,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "51": {
+      "file": "contact-30.wav",
+      "rate": 0.9438749949137369,
+      "pan": 64,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "52": {
+      "file": "contact-34.wav",
+      "rate": 1.0,
+      "pan": 0,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "53": {
+      "file": "contact-34.wav",
+      "rate": 1.0,
+      "pan": 64,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "54": {
+      "file": "contact-34.wav",
+      "rate": 1.0,
+      "pan": 127,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "55": {
+      "file": "contact-34.wav",
+      "rate": 0.9438749949137369,
+      "pan": 64,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "56": {
+      "file": "contact-38.wav",
+      "rate": 1.0,
+      "pan": 0,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "57": {
+      "file": "contact-38.wav",
+      "rate": 1.0,
+      "pan": 64,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "58": {
+      "file": "contact-38.wav",
+      "rate": 1.0,
+      "pan": 127,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "59": {
+      "file": "contact-38.wav",
+      "rate": 0.9438749949137369,
+      "pan": 64,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "60": {
+      "file": "contact-3c.wav",
+      "rate": 1.0,
+      "pan": 0,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "61": {
+      "file": "contact-3c.wav",
+      "rate": 1.0,
+      "pan": 64,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "62": {
+      "file": "contact-3c.wav",
+      "rate": 1.0,
+      "pan": 127,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    },
+    "63": {
+      "file": "contact-3c.wav",
+      "rate": 0.9438749949137369,
+      "pan": 64,
+      "envelope": [
+        4,
+        32000,
+        680,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16
+    }
+  },
+  "files": {
+    "contact-0b.wav": {
+      "sha256": "97bbcffd5bf3760d069217aa34020c7ffec74c472a37a94635db0af681819744",
+      "duration": 1.99734375,
+      "bytes": 127874,
+      "peak": 31999,
+      "rms": 13376.3870500049
+    },
+    "contact-0c.wav": {
+      "sha256": "75b62b2bf94844ff14d12154efd9ed67c8f59cabcf9a1642ddb95ea1341d26b9",
+      "duration": 2.15,
+      "bytes": 137644,
+      "peak": 32000,
+      "rms": 9936.180953727546
+    },
+    "contact-0d.wav": {
+      "sha256": "1c3dcc366db9163952ea329a1b286bb6ec4c4284e24211cdb0d9b2b364633e98",
+      "duration": 1.26,
+      "bytes": 80684,
+      "peak": 31541,
+      "rms": 9233.443734112523
+    },
+    "contact-0e.wav": {
+      "sha256": "17142b904a5672677d62d3f9d8599377e14fc07c1633cc5740b914d5fc3b6b64",
+      "duration": 0.29,
+      "bytes": 18604,
+      "peak": 31873,
+      "rms": 4597.142662194994
+    },
+    "contact-10.wav": {
+      "sha256": "6c688e9d19f621706b6172eaf9cdeca42b459b9a5b726043fd6f55fde7ee16c8",
+      "duration": 0.3486875,
+      "bytes": 22360,
+      "peak": 31994,
+      "rms": 16833.553007088103
+    },
+    "contact-14.wav": {
+      "sha256": "1eba418db15eb291a955e07f251a3d087d901f58a4cb26d93f38360a58c67744",
+      "duration": 0.37934375,
+      "bytes": 24322,
+      "peak": 31995,
+      "rms": 15560.59312418096
+    },
+    "contact-18.wav": {
+      "sha256": "0847c9df8aeed24c50422416f95d1d8d2a77de87da3749b56abcd55601910c8b",
+      "duration": 0.254,
+      "bytes": 16300,
+      "peak": 31988,
+      "rms": 24617.527991809708
+    },
+    "contact-1c.wav": {
+      "sha256": "4df1eb671e14320e95a5c9ec6e3535b606232d1a8720392fc694db8bd7e97b9d",
+      "duration": 0.14,
+      "bytes": 9004,
+      "peak": 31154,
+      "rms": 6604.524004034361
+    },
+    "contact-20.wav": {
+      "sha256": "882feba5de14fc1423c7c9d1d522e91a2cad4e00d17a94080a213c192416632d",
+      "duration": 0.16,
+      "bytes": 10284,
+      "peak": 32000,
+      "rms": 19207.48013870406
+    },
+    "contact-24.wav": {
+      "sha256": "882b738fa05f1347a686b9e2ee721fc7c95424d8d93ff09dc67b1bed48400f92",
+      "duration": 0.5546875,
+      "bytes": 35544,
+      "peak": 31998,
+      "rms": 16198.703274238247
+    },
+    "contact-28.wav": {
+      "sha256": "2ed22ee742f4e3cc23c2848cbd24a482f6c1f65b499fa6bd52d796311ca47672",
+      "duration": 0.44690625,
+      "bytes": 28646,
+      "peak": 24925,
+      "rms": 5559.7608157391805
+    },
+    "contact-2c.wav": {
+      "sha256": "08d735fa6231378123b9ad2a561bf7fc54d33f0d78db9fde699e9356177aab72",
+      "duration": 0.372,
+      "bytes": 23852,
+      "peak": 31881,
+      "rms": 8721.330661114967
+    },
+    "contact-30.wav": {
+      "sha256": "3b626cf05c470bcad906cfb4ed74e056ec6f0d9eac3c29f0d8cf47bbe1e7054f",
+      "duration": 0.6966875,
+      "bytes": 44632,
+      "peak": 31778,
+      "rms": 7140.435655514497
+    },
+    "contact-34.wav": {
+      "sha256": "cb9db0099c017f76a4c3fbc671235440b0ebf4b2551df9dec9054c7872887c80",
+      "duration": 0.58,
+      "bytes": 37164,
+      "peak": 32000,
+      "rms": 14148.952323944266
+    },
+    "contact-38.wav": {
+      "sha256": "a20a943e75be0ff3e93fa85ea941c75da44eb84800465140a58db137965ba30b",
+      "duration": 0.40934375,
+      "bytes": 26242,
+      "peak": 31903,
+      "rms": 5627.121185020199
+    },
+    "contact-3c.wav": {
+      "sha256": "08d477ec5473b61735458697009ec32e23ad4c283fbea9f73d698626103d3342",
+      "duration": 0.46734375,
+      "bytes": 29954,
+      "peak": 31671,
+      "rms": 10447.060406260838
+    }
+  }
+}

@@ -105,7 +105,7 @@ export function createNativeRaceContactAudio({players,courseIndex}){
    }
   },
   drain(){return queue.splice(0);},
-  snapshot(){return {scope:'source-contact-timing; authored-sample-backend',frame,audioMode,globals:{...globals},
+  snapshot(){return {scope:'source-contact-timing; original-contact-samples-with-fallback',frame,audioMode,globals:{...globals},
    packets:packets.map(p=>p.slice()),motion:motion.map(m=>({...m})),riderWater:riderWater.map(w=>({...w})),pending:queue.length,emitted,dropped};}
  };
 }

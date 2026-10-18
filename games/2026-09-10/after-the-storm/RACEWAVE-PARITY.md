@@ -19,6 +19,37 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — original landing and impact samples
+
+The native preview now plays the original landing and material-impact samples
+from the supplied ROM. Sequence0's human channels2/5 select bank0 percussion
+and restart layer0 with the physics command's sound ID and velocity. Sixteen
+standalone WAV effects cover52 source selectors, including the original pitch
+and pan variants. Velocity follows the original squared response; each human
+channel replaces its own preceding effect without interrupting the other.
+
+The bank loads on native play, caches decoded effects, retries missing assets,
+and uses the existing authored fallback until each effect is ready. Pause and
+inactive frames stop effects and drain pending commands so they cannot replay
+on resume. Stereo, headphones and mono remain available. Original music and
+all rendering quality, water geometry and resolution settings are unchanged.
+
+Private sequence-byte and bank-set checks establish the mappings. Public tests
+verify all exported PCM hashes, selector variants, separate player voices,
+fallback/retry, late disposal, and Soundscape routing. Chrome's actual audio
+decoder accepts all16 files; offline rendering verifies stereo separation,
+narrowed headphones, equal mono channels and silence after stopping.
+All40 focused audio/contact tests pass. A live two-human browser race produced
+original effects on both channels at physical frame834; all16 buffers were
+ready with no bank failures. Holding the race left zero active contact voices.
+The browser remained1280×720, High quality, with83,521 water vertices.
+
+These are original samples with browser presentation: the offline envelopes,
+release tails, resampling, bus gain and stereo placement approximate the N64
+mixer. Ice's separate dynamic channel retains its fallback. Original engine
+loops, voice scheduling and full audio-thread emulation remain unfinished.
+No raw ROM, soundbank or sequence is distributed with these standalone effects.
+
 ## Unpublished — live native audio motion inputs
 
 The contact-audio owner now receives all four original sound-prefix bytes.

@@ -1,0 +1,83 @@
+import {stereoWidth} from './coastal-music.js';
+const base=new URL('./assets/audio/waverace64/contacts/',import.meta.url);
+const ids=[11,12,13,14,...Array.from({length:48},(_,i)=>i+16)];
+const files=new Set([11,12,13,14,...Array.from({length:12},(_,i)=>16+i*4)].map(i=>'contact-'+i.toString(16).padStart(2,'0')+'.wav'));
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+// Sequence0, channels2/5: BFFEC writes IO5 (velocity), then IO0 (note).
+// Both channels select bank0/percussion127 and restart layer0. Ice uses a
+// different dynamic channel and remains with the existing fallback for now.
+export function originalContactSelection(command){
+ const a=command?.arguments;
+ if(command?.consumer!=='bffec'||!Array.isArray(a)||a.length!==3||
+  ![2,5].includes(a[0])||!ids.includes(a[1])||!Number.isInteger(a[2])||a[2]<0||a[2]>127)return null;
+ return {lane:a[0],key:String(a[1]),velocity:a[2]};
+}
+
+export class OriginalContactSound{
+ constructor(ctx,destination,{loader=(url,signal)=>fetch(url,{signal}).then(r=>{if(!r.ok)throw Error('Contact asset '+r.status);return r.arrayBuffer();})}={}){
+  this.ctx=ctx;this.destination=destination;this.loader=loader;this.buffers=new Map();this.voices=new Map();
+  this.mode='stereo';this.ready=false;this.disposed=false;this.retryAt=0;this.failures=[];
+ }
+ load(){
+  if(this.disposed||this.ready||this.ctx.currentTime<this.retryAt)return Promise.resolve(this.ready);
+  if(this.loading)return this.loading;
+  this.loading=this.loadAssets().finally(()=>{this.loading=null;});return this.loading;
+ }
+ async loadAssets(){
+  const controller=this.controller=new AbortController();this.failures=[];
+  try{
+   if(!this.manifest){
+    const m=JSON.parse(new TextDecoder().decode(await this.loader(new URL('manifest.json',base),controller.signal)));
+    if(this.disposed||controller.signal.aborted)return false;
+    if(m.version!==1||!m.sounds||!m.files||ids.some(id=>{
+     const s=m.sounds[id],f=m.files[s?.file];
+     return !s||!files.has(s.file)||!Number.isFinite(s.rate)||s.rate<.9||s.rate>1||
+      !Number.isInteger(s.pan)||s.pan<0||s.pan>127||!f||!Number.isFinite(f.duration)||f.duration<=0||f.duration>3;
+    }))throw Error('Invalid contact manifest');
+    this.manifest=m;
+   }
+   await Promise.all([...files].filter(file=>!this.buffers.has(file)).map(async file=>{
+    try{
+     const buffer=await this.ctx.decodeAudioData(await this.loader(new URL(file,base),controller.signal));
+     if(!Number.isFinite(buffer.duration)||Math.abs(buffer.duration-this.manifest.files[file].duration)>.025)throw Error('Truncated contact asset');
+     if(!this.disposed&&!controller.signal.aborted)this.buffers.set(file,buffer);
+    }catch{if(!controller.signal.aborted)this.failures.push(file);}
+   }));
+   this.ready=!this.disposed&&this.buffers.size===files.size;
+  }catch(error){if(!controller.signal.aborted)this.failures.push(String(error.message||error));}
+  finally{if(this.controller===controller)this.controller=null;}
+  if(!this.ready)this.retryAt=this.ctx.currentTime+30;
+  return this.ready;
+ }
+ setMode(mode){
+  this.mode=mode;
+  for(const voice of this.voices.values())voice.pan.pan.setTargetAtTime(voice.position*stereoWidth(mode),this.ctx.currentTime,.025);
+ }
+ play(command,side=0){
+  const selection=originalContactSelection(command);
+  if(this.disposed||!selection)return false;
+  this.stop(selection.lane);
+  if(selection.velocity===0)return true;
+  const sound=this.manifest?.sounds[selection.key],buffer=this.buffers.get(sound?.file);
+  if(!buffer)return false;
+  const source=this.ctx.createBufferSource(),gain=this.ctx.createGain(),pan=this.ctx.createStereoPanner();
+  const position=clamp((sound.pan-64)/64+(Number.isFinite(side)?side:0),-1,1);
+  source.buffer=buffer;source.playbackRate.value=sound.rate;
+  // The source note interpreter squares velocity. Bus gain, stereo placement,
+  // resampling and the offline envelopes are browser presentation adaptations.
+  gain.gain.value=(selection.velocity/127)**2*.55;pan.pan.value=position*stereoWidth(this.mode);
+  source.connect(gain).connect(pan).connect(this.destination);
+  const voice={source,gain,pan,position};this.voices.set(selection.lane,voice);
+  source.onended=()=>{source.disconnect();gain.disconnect();pan.disconnect();if(this.voices.get(selection.lane)===voice)this.voices.delete(selection.lane);};
+  source.start(this.ctx.currentTime);return true;
+ }
+ stop(lane){
+  for(const [key,voice]of this.voices){
+   if(lane!==undefined&&key!==lane)continue;
+   this.voices.delete(key);voice.source.onended=null;voice.source.stop();
+   voice.source.disconnect();voice.gain.disconnect();voice.pan.disconnect();
+  }
+ }
+ dispose(){this.disposed=true;this.controller?.abort();this.stop();this.buffers.clear();this.ready=false;}
+}
