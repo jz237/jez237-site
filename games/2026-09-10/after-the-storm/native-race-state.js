@@ -45,6 +45,7 @@ import {prepareNativeStuntRings} from './native-stunt-rings.js';
 import {prepareNativeObjectInitialization} from './native-object-initialization.js';
 import {prepareNativeObjectLoading} from './native-object-loading.js';
 import {prepareNativeObjectMotion} from './native-object-motion.js';
+import {prepareNativeObjectUpdate} from './native-object-update.js';
 import {prepareNativeGenericObjectContacts} from './native-generic-spheres.js';
 import {queryNativeWaterField} from './native-water-field.js';
 import {prepareNativeFixedSphereLoading,prepareNativeFixedSphereInitialization} from './native-fixed-sphere-startup.js';
@@ -336,6 +337,19 @@ export function prepareNativeRaceObjectMotionUpdate(state,input={}){
  const prepared=prepareNativeObjectMotion({objectWordsC940:next.objectWordsC940,objectCountFa40:sceneValue(next,'objectCountFa40'),
   queryNative:(x,z)=>queryNativeWaterField(input.waterField,x,z).sourcePlaneQueryNative});
  next.objectWordsC940=prepared.objectWordsC940;
+ return freeze({state:next,applied:true,effects:[],diagnostic:prepared.diagnostic});
+}
+
+/** Source6E0F4 after object motion and fixed-sphere tide writes. Fortress1FC8
+ * comes from raceWords, not a parallel scene flag. Only float matrices and
+ * collision origins change; draw-time packed matrices are a later stage. */
+export function prepareNativeRaceObjectUpdate(state,input={}){
+ const next=copy(state);record(input,'object update resources');
+ for(const key of ['objectWordsC940','collisionPlaneWordsFd78','objectCountFa40','fortressFlag1fc8','activity624'])if(Object.hasOwn(input,key))throw new RangeError(`${key} overlaps canonical native state`);
+ if(sceneValue(next,'activity624')!==-1)return freeze({state:next,applied:false,effects:[],diagnostic:{hiddenIceRows:[],matrixRows:[],planeOrigins:[]}});
+ const prepared=prepareNativeObjectUpdate({...input,objectWordsC940:next.objectWordsC940,collisionPlaneWordsFd78:next.collisionPlaneWordsFd78,
+  objectCountFa40:sceneValue(next,'objectCountFa40'),fortressFlag1fc8:next.raceWords1f94[ri(0x1fc8)]|0});
+ next.objectWordsC940=prepared.objectWordsC940;next.collisionPlaneWordsFd78=prepared.collisionPlaneWordsFd78;
  return freeze({state:next,applied:true,effects:[],diagnostic:prepared.diagnostic});
 }
 

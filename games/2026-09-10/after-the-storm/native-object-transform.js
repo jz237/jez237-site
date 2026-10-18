@@ -22,6 +22,13 @@ const mul=(a,b)=>scalar(F(a*b),'transform product'),add=(a,b)=>scalar(F(a+b),'tr
  * Unsupported nonfinite or signed32 conversion inputs reject atomically.
  */
 export function prepareNativeObjectTransform(input){
+ const prepared=prepareNativeObjectFloatTransform(input),packed=prepareNativePackedMatrix({floatWords:prepared.floatWords});
+ return freeze({...prepared,matrixWords:packed.matrixWords,operations:[...prepared.operations,...packed.operations]});
+}
+
+/** EE6F4 alone. The post-motion6E0F4 caller writes float matrices without
+ * invoking EDD90 or touching the separate packed-matrix array. */
+export function prepareNativeObjectFloatTransform(input){
  const angles=vector(input?.anglesDegrees,'anglesDegrees'),position=vector(input.positionNative,'positionNative'),table=input.sineTableWords4350;
  if(!Array.isArray(table)||table.length!==4096)throw new RangeError('Supply sineTableWords4350[4096]');
  const indices=[],floatWords=Array(16),operations=[];
@@ -40,8 +47,7 @@ export function prepareNativeObjectTransform(input){
  write(2,sub(mul(sxCy,sz),mul(sy,cz)));
  write(10,mul(cx,cy));write(6,add(mul(sxCy,cz),mul(sy,sz)));
  write(3,0);write(7,0);write(11,0);write(15,1);write(14,position.z);
- const packed=prepareNativePackedMatrix({floatWords});operations.push(...packed.operations);
- return freeze({floatWords,matrixWords:packed.matrixWords,operations,diagnostic:{sineIndices:indices}});
+ return freeze({floatWords,operations,diagnostic:{sineIndices:indices}});
 }
 
 /** EDC60 transforms a collision-plane origin; EDD04 transforms each direction

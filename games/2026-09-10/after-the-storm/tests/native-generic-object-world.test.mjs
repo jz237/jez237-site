@@ -25,7 +25,7 @@ function make({near=false,activity624=-1}={}){
   // A preceding source stage may change the canonical owner between contacts
   // and motion. The bridge must read fresh state rather than cache a copy.
   const changed=nativeRaceStateSnapshot(current);changed.raceWords1f94[0]=c.logicalFrame;current=createNativeRaceState(changed);
-  motion.push(objects.afterFrame(w,c));
+  motion.push(objects.afterFrame(w,c));objects.updateTransforms(w,c,{sineTableWords4350:nativeSineTableWords(),planeTemplatesByAddress:resource.planeTemplatesByAddress});
  }});
  return {adapters,water,world,objects,fragments,hits,motion,state:()=>current};
 }
@@ -39,10 +39,13 @@ test('two physical riders share mixed object contacts, one ice break and later r
  assert.ok(q.hits.flat().some(hit=>hit.index===2),'floating and ice share one source array');
  assert.deepEqual(q.motion[0].diagnostic.queries.map(q=>q.objectIndex),[2]);
  assert.equal(q.state().raceWords1f94[0],1);assert.equal(q.objects.diagnostics().outerFrames,1);
- assert.deepEqual(q.state().objectWordsC940.slice(0,2*49),before.objectWordsC940.slice(0,2*49));
+ assert.deepEqual(q.state().objectWordsC940.slice(0,49),before.objectWordsC940.slice(0,49));
+ assert.deepEqual(q.state().objectWordsC940.slice(49,49+3),before.objectWordsC940.slice(49,49+3));
+ assert.deepEqual(q.state().objectWordsC940.slice(49+0x30/4,49+0x40/4),before.objectWordsC940.slice(49+0x30/4,49+0x40/4));
  assert.deepEqual(q.state().collisionPlaneWordsFd78,before.collisionPlaneWordsFd78);
  assert.deepEqual(q.state().packedObjectMatrixWords0cd0,before.packedObjectMatrixWords0cd0);
- assert.equal(q.objects.snapshot()[3].broken,true);
+ assert.equal(q.objects.snapshot()[3].broken,true);assert.equal(q.objects.snapshot()[3].renderKind,0);assert.equal(q.objects.snapshot()[3].age,1);
+ assert.equal(q.objects.snapshot()[1].anglesDegrees[2],356);assert.equal(q.objects.diagnostics().transformUpdates,1);
 });
 
 test('the shared physical clock produces identical object state at30,60 and144 render updates',()=>{
@@ -50,6 +53,7 @@ test('the shared physical clock produces identical object state at30,60 and144 r
  for(const hz of [30,60,144]){
   const q=make();for(let i=0;i<hz;i++)stepNativeRaceWorld(q.world,1/hz,[{},{}]);
   assert.equal(q.objects.diagnostics().outerFrames,20);assert.equal(q.objects.diagnostics().motionUpdates,20);
+  assert.equal(q.objects.diagnostics().transformUpdates,20);assert.equal(q.objects.snapshot()[1].anglesDegrees[2],280);
   assert.equal(q.state().raceWords1f94[0],20);assert.ok(q.adapters.every(a=>a.hull.ticks===100));
   if(expected)assert.deepEqual(q.state().objectWordsC940,expected);else expected=q.state().objectWordsC940;
  }
@@ -58,6 +62,8 @@ test('the shared physical clock produces identical object state at30,60 and144 r
 test('inactive object motion preserves data, and duplicate/out-of-order frame calls reject',()=>{
  const q=make({activity624:0}),before=q.state().objectWordsC940;stepNativeRaceWorld(q.world,.05,[{},{}]);
  assert.deepEqual(q.state().objectWordsC940,before);assert.equal(q.objects.diagnostics().motionUpdates,0);
+ assert.equal(q.objects.diagnostics().transformUpdates,0);assert.equal(q.objects.diagnostics().transformFrames,1);
  assert.throws(()=>q.objects.afterFrame(q.world,{logicalFrame:1,step:.05}),/exactly one/);
  assert.throws(()=>q.objects.contact(q.adapters[0].hull,{logicalFrame:0}),/current native/);
+ assert.throws(()=>q.objects.updateTransforms(q.world,{logicalFrame:1,step:.05}),/completed object-motion/);
 });

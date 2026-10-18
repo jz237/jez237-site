@@ -19,6 +19,33 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — complete generic-object post-motion update
+
+Full numeric6E0F4 now updates the same canonical object and collision-plane
+owners used by loading, contact and buoyancy. Broken ice hides and ages even
+when its motion flag is zero. Moving rings rotate4 degrees by ordinal parity,
+with the original single wrap; their collection axes remain unchanged. Opened
+Fortress gates rise6 while their prior height is below128, without an added
+height clamp. Moving objects update float matrices and plane origins only;
+plane directions/metadata and the separate packed-matrix array are retained.
+
+All208 prepared cases match complete original6E0F4 with originalEE6F4/EDC60:
+50,960 instructions and171 exported records matched to ROM, without numeric
+helper stubs. Cases include signed fade ages, ring wrap boundaries, gate height
+boundaries, all source kinds, retained/overlapping plane destinations and large
+float positions that require no packed conversion. Existing matrix-packing and
+initialization comparisons still pass after separating the float-only helper.
+Out-of-span plane writes reject atomically.
+
+The shared physical bridge exposes the ordered transform stage after motion
+and the caller's fixed-sphere tide writes. Two-rider physical tests now verify
+ice disappearance and ring spin as well as contact/motion, with identical object
+state at30/60/144 render updates. All18 actual course/player resource scenarios
+also match the original post-initialization object update; the extended numeric
+resource audit executes628,927 instructions. This is still prepared stage
+coverage, not full native boot or browser-host admission. Live host startup and
+presentation selection remain to be connected. Resolution is unchanged.
+
 ## Unpublished — shared generic-object contact and motion bridge
 
 The canonical object span now supports the original7E938 sphere-contact
@@ -46,8 +73,8 @@ object state across30/60/144 render updates with five hull ticks per water frame
 There is no second saved object-position or collected/broken-state array.
 
 The bridge is tested with the physical world but is not yet selected by the
-live browser host. Host startup/resource selection and generic6E0F4 presentation
-must be connected before replacing its older separate floating/ice adapters or
+live browser host. Host startup/resource selection and the source transform
+stage described above must be connected before replacing its separate adapters or
 enabling native Stunt mode. Graphics quality and resolution are unchanged.
 
 ## Unpublished — fixed-sphere startup and collision grid

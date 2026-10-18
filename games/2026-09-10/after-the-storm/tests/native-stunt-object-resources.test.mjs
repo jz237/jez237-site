@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import {createHash} from 'node:crypto';
 import {nativeStuntObjectResources} from '../native-stunt-object-resources.js';
 import {nativeSineTableWords} from '../native-math-tables.js';
-import {createNativeRaceState,prepareNativeRaceObjectLoading,prepareNativeRaceObjectInitialization,prepareNativeRaceFixedSphereLoading,prepareNativeRaceFixedSphereInitialization,prepareNativeRaceStuntRingUpdate,nativeRaceStuntAwardsView} from '../native-race-state.js';
+import {createNativeRaceState,prepareNativeRaceObjectLoading,prepareNativeRaceObjectInitialization,prepareNativeRaceObjectUpdate,prepareNativeRaceFixedSphereLoading,prepareNativeRaceFixedSphereInitialization,prepareNativeRaceStuntRingUpdate,nativeRaceStuntAwardsView} from '../native-race-state.js';
 import {SUNNY_NATIVE_GEOMETRY} from '../source-sunny-course.js';
 import {SUNSET_NATIVE_GEOMETRY} from '../source-sunset-course.js';
 const reference=JSON.parse(fs.readFileSync(new URL('./fixtures/native-stunt-object-resources-reference.json',import.meta.url)));
@@ -29,6 +29,8 @@ test('all nine selected course layouts match original row loading and full initi
   const state=initialize(c.courseIndex,c.players),label=`course ${c.courseIndex}, players ${c.players}`;
   for(const key of ['objectCountFa40','ringCountB134','collisionPlaneCount0578','fixedSphereCountC938'])assert.equal(state.scene[key],c[key],`${label}: ${key}`);
   for(const [key,hash]of Object.entries(c.hashes))assert.equal(digest(state[key]),hash,`${label}: ${key}`);
+  const resources=nativeStuntObjectResources(c),updated=prepareNativeRaceObjectUpdate(state,{sineTableWords4350,planeTemplatesByAddress:resources.planeTemplatesByAddress});
+  for(const [key,hash]of Object.entries(c.postObjectUpdateHashes))assert.equal(digest(updated.state[key]),hash,`${label}: updated ${key}`);
  }
 });
 
