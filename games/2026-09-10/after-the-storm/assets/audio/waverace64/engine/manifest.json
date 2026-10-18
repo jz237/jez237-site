@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "sourceSha256": "f35d2423ebcb86eaf86fa935b613c7532b123a7bc50fb74996984c3b02fc3999",
+  "bank": 0,
+  "note": 39,
+  "baseVelocity": 117,
+  "initialWaterVelocity": 100,
+  "channelVolumes": [
+    0.47244094488188976,
+    0.6299212598425197
+  ],
+  "files": {
+    "base-low.wav": {
+      "sha256": "c8575703434eafa3e50fec329fce57aa48a30222e899279c3eae7738192eb844",
+      "frames": 5208,
+      "sampleRate": 32000,
+      "loopStartFrame": 10,
+      "loopEndFrame": 5208,
+      "peak": 32768,
+      "rms": 23770.600986253918
+    },
+    "base-middle.wav": {
+      "sha256": "f4c4531863ccda92dad62429625abeadb3591e9684716a7fcdacbf74a8f2f14a",
+      "frames": 3906,
+      "sampleRate": 32000,
+      "loopStartFrame": 8,
+      "loopEndFrame": 3906,
+      "peak": 32768,
+      "rms": 23390.704143827865
+    },
+    "base-high.wav": {
+      "sha256": "2fe669a61801ff2d9ce86b3a7976f0d03856504e8c6c5590d515a4fb32459f94",
+      "frames": 2604,
+      "sampleRate": 32000,
+      "loopStartFrame": 5,
+      "loopEndFrame": 2604,
+      "peak": 32767,
+      "rms": 23545.253907966882
+    },
+    "water.wav": {
+      "sha256": "8d6f6db21e8041be495d172875b8168580f2f6cbf903df974565e8f7f55662b1",
+      "frames": 3985,
+      "sampleRate": 32000,
+      "loopStartFrame": 135,
+      "loopEndFrame": 3985,
+      "peak": 32767,
+      "rms": 8023.519106833138
+    }
+  },
+  "zones": [
+    {
+      "low": 0,
+      "high": 37,
+      "file": "base-low.wav",
+      "baseTuning": 1.0,
+      "dryTuning": 0.9900000095367432
+    },
+    {
+      "low": 38,
+      "high": 41,
+      "file": "base-middle.wav",
+      "baseTuning": 0.75,
+      "dryTuning": 0.7425000071525574
+    },
+    {
+      "low": 42,
+      "high": 127,
+      "file": "base-high.wav",
+      "baseTuning": 0.5,
+      "dryTuning": 0.4950000047683716
+    }
+  ],
+  "water": {
+    "file": "water.wav",
+    "tuning": 0.75
+  }
+}
