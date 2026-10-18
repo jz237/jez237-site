@@ -59,7 +59,8 @@ test('actual source start reaches the engine gate and audio histories are render
   const race=createRace({mode:'versus',physics:'native',course:getCourse('greyhaven'),waveSeed:123});
   for(let i=0;i<hz*6;i++)stepNativeRaceHost(race.nativeHost,1/hz,[{throttle:1},{throttle:0}]);
   const audio=race.nativeContactAudio;assert.equal(audio.snapshot().globals.engineGate7ca0,1);
-  histories.push({channels:audio.engineChannels(),packets:audio.snapshot().packets,globals:audio.snapshot().globals,frame:audio.snapshot().frame});
+  histories.push({channels:audio.engineChannels(),packets:audio.snapshot().packets,globals:audio.snapshot().globals,frame:audio.snapshot().frame,
+   effectPoll:audio.snapshot().effectPoll,commands:audio.drain()});
  }
  assert.deepEqual(histories[1],histories[0]);assert.deepEqual(histories[2],histories[0]);
 });

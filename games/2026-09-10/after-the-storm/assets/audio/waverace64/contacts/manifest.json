@@ -861,6 +861,111 @@
         15971
       ],
       "sourceTuning": 0.25
+    },
+    "spray-0": {
+      "file": "spray-0.wav",
+      "rate": 1,
+      "pan": 0,
+      "envelope": [
+        2,
+        32000,
+        200,
+        24000,
+        400,
+        0,
+        0,
+        0
+      ],
+      "release": 2,
+      "sourceLoop": [
+        7,
+        14315
+      ],
+      "sourceTuning": 0.5
+    },
+    "spray-1": {
+      "file": "spray-1.wav",
+      "rate": 1,
+      "pan": 0,
+      "envelope": [
+        2,
+        32000,
+        200,
+        24000,
+        400,
+        0,
+        0,
+        0
+      ],
+      "release": 2,
+      "sourceLoop": [
+        2,
+        15044
+      ],
+      "sourceTuning": 0.5
+    },
+    "spray-2": {
+      "file": "spray-2.wav",
+      "rate": 1,
+      "pan": 0,
+      "envelope": [
+        2,
+        32000,
+        200,
+        24000,
+        400,
+        0,
+        0,
+        0
+      ],
+      "release": 2,
+      "sourceLoop": [
+        13,
+        14557
+      ],
+      "sourceTuning": 0.5
+    },
+    "spray-3": {
+      "file": "spray-3.wav",
+      "rate": 1,
+      "pan": 0,
+      "envelope": [
+        2,
+        32000,
+        200,
+        24000,
+        400,
+        0,
+        0,
+        0
+      ],
+      "release": 2,
+      "sourceLoop": [
+        6,
+        7287
+      ],
+      "sourceTuning": 0.5
+    },
+    "spray-4": {
+      "file": "spray-4.wav",
+      "rate": 1,
+      "pan": 0,
+      "envelope": [
+        2,
+        32000,
+        200,
+        24000,
+        400,
+        0,
+        0,
+        0
+      ],
+      "release": 2,
+      "sourceLoop": [
+        21,
+        7005
+      ],
+      "sourceTuning": 0.5
     }
   },
   "files": {
@@ -989,6 +1094,41 @@
       "bytes": 137644,
       "peak": 32001,
       "rms": 12160.261502537156
+    },
+    "spray-0.wav": {
+      "sha256": "e16466df5459deffe032e90ad2342040c524a3f58501828159a8d6a4084bb486",
+      "duration": 2.15,
+      "bytes": 137644,
+      "peak": 31638,
+      "rms": 5353.3431334559855
+    },
+    "spray-1.wav": {
+      "sha256": "e350e1a3e25389d7ade805377d1a45e4579f6d0b4d162d65dc1be8f70812c86e",
+      "duration": 2.15,
+      "bytes": 137644,
+      "peak": 31624,
+      "rms": 5851.2938221395725
+    },
+    "spray-2.wav": {
+      "sha256": "4a5ab54d51f7a2f1841d2d3d0438128e34f8bbe8fd993709693bc759ee697118",
+      "duration": 2.15,
+      "bytes": 137644,
+      "peak": 29333,
+      "rms": 6225.103928916686
+    },
+    "spray-3.wav": {
+      "sha256": "efb97fa9866597e21a804395ed9fe4b689b4b28766b9b16f9f7373aee1bda446",
+      "duration": 2.15,
+      "bytes": 137644,
+      "peak": 29120,
+      "rms": 5974.138024523793
+    },
+    "spray-4.wav": {
+      "sha256": "8f4e9090ae697b0857b50a7ccf10855f3c56d7fe6329c3abeca4e2053732a114",
+      "duration": 2.15,
+      "bytes": 137644,
+      "peak": 30818,
+      "rms": 8636.876497804544
     }
   },
   "iceSequence": {
@@ -1039,5 +1179,46 @@
       }
     ],
     "presentationGain": 13.526930548810101
+  },
+  "spraySequence": {
+    "sequence": 0,
+    "bank": 4,
+    "layer": 1,
+    "channels": [
+      2,
+      5
+    ],
+    "tempo": 200,
+    "ticksPerQuarter": 48,
+    "pollTicks": 8,
+    "noteTicks": 320,
+    "selectorNotes": [
+      0,
+      0,
+      0,
+      0,
+      1,
+      1,
+      1,
+      1,
+      2,
+      2,
+      2,
+      2,
+      3,
+      3,
+      3,
+      3,
+      4,
+      4,
+      4,
+      4
+    ],
+    "selectorPans": [
+      0,
+      64,
+      127,
+      0
+    ]
   }
 }

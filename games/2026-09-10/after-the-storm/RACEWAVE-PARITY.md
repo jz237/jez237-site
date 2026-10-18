@@ -19,6 +19,37 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — original spray playback and effect-channel polling
+
+The native human audio owner now consumes original spray levels after engine
+controls and before impacts. Five separately extracted bank4 PCM effects use
+sequence0's selector-to-note/pan tables and independent layer1 on channels2/5.
+Landings and impacts retain layer0. Source frequency commands update both
+layers and remain in force for subsequent notes, with separate player channels.
+
+The effect poll retains the latest IO writes, gives contact IO0 priority, and
+defers spray IO1 until a poll without a contact. Its eight-tick interval equals
+50ms at200BPM/48PPQN; the browser anchors that poll to completed physical frames.
+This phase choice is a browser adaptation. Original audio-derived random values
+still use the previously documented independent deterministic browser jitter.
+
+The bank now contains23 standalone PCM files. The five spray renders preserve
+source half-rate tuning, loop ranges and all three envelope stages. Envelopes,
+release, pitch smoothing and the pitched offline note tail approximate the
+original mixer; they are not bit-exact RSP output. Missing samples use fallback.
+Pause/mute clear pending sounds, replay stops live layers, and a fresh race
+resets channel pitch while a pause retains it.
+
+All57 focused audio, source-consumer, polling and live spray tests pass, including
+30/60/144Hz command histories. A Chrome two-player run through1300 physical
+frames loaded all23 files without failures and issued1252 spray notes for both
+humans alongside12 contact notes. Separate effect-bus measurement recorded
+nonzero output and up to four concurrent layers; holding stopped all voices.
+All five drums also rendered through OfflineAudioContext with centered stereo,
+nonzero signal and silent final tails. High1280×720 and83,521 water vertices
+remain unchanged. One local missing-resource404 remains; no observed JavaScript
+exception. Native AI/voice scheduling and full gameplay parity remain open.
+
 ## Unpublished — live source spray inputs and cadence
 
 The native human races now assemble AE210 spray inputs from actual completed

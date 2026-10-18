@@ -4,8 +4,9 @@ import {prepareNativeAudioChannel} from './native-audio-channels.js';
 import {nativeRaceBodyFields} from './native-race-body-fields.js';
 import {queryNativeWaterField} from './native-water-field.js';
 import {prepareNativeRiderWaterAudio,prepareNativeActorAudioFields} from './native-audio-packet.js';
-import {prepareNativeEngineEnvelope,consumeNativeEngineAudio} from './native-engine-audio.js';
+import {prepareNativeEngineEnvelope,consumeNativeEngineAudio,consumeNativeSprayAudio} from './native-engine-audio.js';
 import {createOriginalEngineChannels,applyOriginalEngineCommands} from './original-engine-sound.js';
+import {createOriginalEffectPoll} from './original-effect-poll.js';
 const F=Math.fround;
 const channelEntries=new Set(['800bfdd0','800bfde4','800bfe70','800bfef8','800bffac','800bfd34','800bfd68','800bffcc']);
 
@@ -24,11 +25,11 @@ export function createNativeRaceContactAudio({players,courseIndex}){
  let engineChannels=createOriginalEngineChannels(players).map((c,i)=>({...c,volume:F(60/127),pan:players===2?(i?127:0):64}));
  const packets=[Array(32).fill(0),Array(32).fill(0)],motion=Array.from({length:players},()=>({speed:0,vertical:0})),queue=[];
  const riderWater=Array.from({length:players},()=>({bodyC84:0,bodyC86:0}));
+ const effectPoll=createOriginalEffectPoll();
  let emitted=0,dropped=0;
  function enqueue(command,player){
   // Continuous engine controls retain their latest state, not a render queue.
   // Limit transient backlog when rendering is suspended.
-  if(command.consumer!=='bffec'&&!(command.consumer==='c53d4'&&command.arguments[0]===0x06000700))return;
   if(queue.length===64){queue.shift();dropped++;}
   queue.push({frame,player,consumer:command.consumer,arguments:[...command.arguments]});emitted++;
  }
@@ -119,18 +120,24 @@ export function createNativeRaceContactAudio({players,courseIndex}){
      rivalPanByte:0,rivalControlByte:0,rivalGate7de8:0,rivalPitchMultiplierBits:0,rivalGainBits:0},prepared.envelope);
     for(const key of Object.keys(globals))globals[key]=engine.context[key];
     engineChannels=applyOriginalEngineCommands(engineChannels,[...landing.commands,...engine.commands]);
-    const hit=consumeNativeImpactAudio(engine.packet,{...context,...materials,pairedImpact,pairedVariant});
+    const spray=consumeNativeSprayAudio(engine.packet,{...globals,...context,random4562c:jitter});
+    const hit=consumeNativeImpactAudio(spray.packet,{...context,...materials,pairedImpact,pairedVariant});
     pairedImpact=hit.context.pairedImpact;pairedVariant=hit.context.pairedVariant;
     packets[player]=hit.packet;
     // End of C010C: impacts above read the PRIOR frame's speed byte.
     packets[player][31]=packets[player][0];
-    for(const command of [...landing.commands,...engine.commands,...hit.commands])enqueue(command,player);
+    for(const command of [...landing.commands,...engine.commands,...spray.commands,...hit.commands]){
+     if(effectPoll.submit({...command,frame,player}))continue;
+     if(command.consumer==='c53d4'&&command.arguments[0]===0x06000700)enqueue(command,player);
+    }
    }
+   for(const command of effectPoll.poll())enqueue(command,command.player);
   },
   drain(){return queue.splice(0);},
+  clearPendingSounds(){effectPoll.clear();queue.length=0;},
   engineChannels(){return globals.alternateEngine!==0?null:engineChannels.map((c,i)=>({...c,enabled:c.enabled&&audioMode===7&&globals[i?'secondaryMuted':'primaryMuted']===0}));},
-  snapshot(){return {scope:'source-engine-and-contact-controls; browser-audio-jitter-and-smoothing',frame,audioMode,globals:{...globals},
-   engineChannels:engineChannels.map(c=>({...c})),
+  snapshot(){return {scope:'source-human-engine-contact-spray-controls; browser-audio-jitter-poll-phase-and-smoothing',frame,audioMode,globals:{...globals},
+   engineChannels:engineChannels.map(c=>({...c})),effectPoll:effectPoll.snapshot(),
    packets:packets.map(p=>p.slice()),motion:motion.map(m=>({...m})),riderWater:riderWater.map(w=>({...w})),pending:queue.length,emitted,dropped};}
  };
 }

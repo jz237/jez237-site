@@ -24,7 +24,7 @@ export class Soundscape{
  scheduleMusic(active){const ctx=this.ctx,c=ctx.currentTime;this.musicGain.gain.setTargetAtTime(active?.8:0,c,.2);if(!active){this.nextNote=c;return;}if(this.nextNote<c-.2)this.nextNote=c;
   while(this.nextNote<c+.15){for(const note of musicNotes(this.musicStep)){const o=ctx.createOscillator(),g=ctx.createGain(),pan=ctx.createStereoPanner();o.type=note.type;o.frequency.value=midiFrequency(note.midi);pan.pan.value=note.pan*stereoWidth(this.mode);const entry={node:pan,base:note.pan};this.musicPans.add(entry);g.gain.setValueAtTime(0,this.nextNote);g.gain.linearRampToValueAtTime(note.gain,this.nextNote+.035);g.gain.exponentialRampToValueAtTime(.0001,this.nextNote+note.duration);o.connect(g).connect(pan).connect(this.musicGain);o.start(this.nextNote);o.stop(this.nextNote+note.duration+.04);o.onended=()=>{o.disconnect();g.disconnect();pan.disconnect();this.musicPans.delete(entry);};}this.nextNote+=NOTE_INTERVAL;this.musicStep++;}
  }
- update(speed,storm,recovery,paused,t,wet=1,companion=null,throttle=0,engineMuted=false){if(!this.ctx)return;if(!this.nativeEnginePrepared||paused||!this.enabled){this.originalEngines?.stop();this.nativeEngineReady=false;}this.nativeEnginePrepared=false;const c=this.ctx.currentTime,preview=c<this.previewUntil,signal=c<this.signalUntil,resultMusic=this.raceMusicContext?.phase==='results'&&!this.raceMusicContext?.held&&this.music;this.master.gain.setTargetAtTime(this.enabled&&(!paused||preview||signal||resultMusic)?.38*this.volume:0,c,.15);this.effects.gain.setTargetAtTime(paused&&!signal?0:1,c,.12);
+ update(speed,storm,recovery,paused,t,wet=1,companion=null,throttle=0,engineMuted=false){if(!this.ctx)return;this.finishNativeContactFrame(!paused&&this.enabled);if(!this.nativeEnginePrepared||paused||!this.enabled){this.originalEngines?.stop();this.nativeEngineReady=false;}this.nativeEnginePrepared=false;const c=this.ctx.currentTime,preview=c<this.previewUntil,signal=c<this.signalUntil,resultMusic=this.raceMusicContext?.phase==='results'&&!this.raceMusicContext?.held&&this.music;this.master.gain.setTargetAtTime(this.enabled&&(!paused||preview||signal||resultMusic)?.38*this.volume:0,c,.15);this.effects.gain.setTargetAtTime(paused&&!signal?0:1,c,.12);
   for(let i=0;i<2;i++){const v=this.voices[i],s=i?(companion?.speed||0):speed,w=i?(companion?.wet??1):wet;v.engine.frequency.setTargetAtTime(58+Math.abs(s)*(20+(1-w)*5)+Math.sin(t*13+i)*1.2,c,.12);v.gain.gain.setTargetAtTime(this.nativeEngineReady||this.samples?.ready||i&&!companion||i===0&&engineMuted?0:(.022+Math.abs(s)*.011+(recovery?.03:0))*(companion?.65:1),c,.12);v.pan.pan.setTargetAtTime(companion?(i?.4:-.4)*stereoWidth(this.mode):0,c,.08);}
   this.wind.frequency.setTargetAtTime(350+storm*1800,c,.6);this.windGain.gain.setTargetAtTime(this.samples?.ready?0:.10+storm*.45,c,.5);this.waterGain.gain.setTargetAtTime(this.samples?.ready?0:.08+Math.abs(speed)*.025*wet+storm*.15+Math.sin(t*.7)*.02,c,.3);const musicActive=this.enabled&&(preview||this.music&&!paused||resultMusic);if(this.originalMusic){this.musicGain.gain.setTargetAtTime(musicActive?.8:0,c,.2);this.originalMusic.update(this.raceMusicContext,musicActive,this.mode);}else if(this.samples?.buffers.music)this.musicGain.gain.setTargetAtTime(musicActive?.8:0,c,.2);else this.scheduleMusic(musicActive);this.samples?.update(speed,storm,wet,companion,throttle,musicActive&&!this.originalMusic,this.mode,engineMuted,paused,this.nativeEngineReady);
  }
@@ -36,6 +36,8 @@ export class Soundscape{
  // No wall-clock landing debounce: the source packet owns contact cooldowns.
  nativeContacts(owner,active,players=1){
   this.nativeEngineReady=false;this.nativeEnginePrepared=false;
+  this.nativeContactPrepared=false;
+  if(owner!==this.nativeContactOwner){this.originalContacts?.resetChannels();this.nativeContactOwner=owner;}
   const engines=owner?.engineChannels?.();
   if(engines&&active&&this.enabled&&this.ctx){
    if(!this.originalEngines)this.originalEngines=new OriginalEngineSound(this.ctx,this.effects);
@@ -44,20 +46,25 @@ export class Soundscape{
   }else this.originalEngines?.stop();
   if(!owner){this.originalContacts?.stop();return;}
   const commands=owner.drain();
-  if(!active||!this.enabled||!this.ctx){this.originalContacts?.stop();return;}
+  if(!active||!this.enabled||!this.ctx){owner.clearPendingSounds?.();this.originalContacts?.stop();return;}
   if(!this.originalContacts)this.originalContacts=new OriginalContactSound(this.ctx,this.effects);
+  this.nativeContactPrepared=true;
   this.originalContacts.setMode(this.mode);
   if(typeof location!=='undefined')this.originalContacts.load();
   for(const command of commands)this.nativeContact(command,players===2?(command.player===1?.4:-.4):0);
  }
+ finishNativeContactFrame(active){
+  if(!this.nativeContactPrepared||!active)this.originalContacts?.stop();
+  this.nativeContactPrepared=false;
+ }
  nativeContact(command,side=0){
   if(!this.ctx||!this.enabled)return;
   if(this.originalContacts?.play(command,side))return;
-  const args=command.arguments,hit=command.consumer==='bffec',ice=command.consumer==='c53d4'&&args[0]===0x06000700&&args[1]===0x13;
-  if(!hit&&!ice)return;
-  const splash=hit&&args[1]>=11&&args[1]<=14,volume=ice?1:Math.max(0,Math.min(127,args[2]))/127;
+  const args=command.arguments,hit=command.consumer==='bffec',spray=command.consumer==='c0044',ice=command.consumer==='c53d4'&&args[0]===0x06000700&&args[1]===0x13;
+  if(!hit&&!ice&&!spray)return;
+  const splash=spray||hit&&args[1]>=11&&args[1]<=14,volume=ice?1:Math.max(0,Math.min(127,args[2]))/127;
   if(volume===0)return;
-  const gain=volume*(splash?.65:.48),rate=splash?({11:.8,12:.9,13:1,14:1.1}[args[1]]):ice?1.3:.85;
+  const gain=volume*(splash?.65:.48),rate=spray?(this.originalContacts?.channelPitch.get(args[0])??1):splash?({11:.8,12:.9,13:1,14:1.1}[args[1]]):ice?1.3:.85;
   if(this.samples?.play(splash?'splash':'hit',{gain,rate,pan:side}))return;
   const ctx=this.ctx,t=ctx.currentTime,g=ctx.createGain(),pan=ctx.createStereoPanner();
   pan.pan.value=side*stereoWidth(this.mode);g.gain.setValueAtTime(gain,t);g.gain.exponentialRampToValueAtTime(.0001,t+(splash?.65:.28));
