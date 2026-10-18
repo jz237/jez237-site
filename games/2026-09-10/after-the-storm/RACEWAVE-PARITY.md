@@ -19,6 +19,31 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — live original human engine audio
+
+Native one-human and two-human previews now connect the original engine loops
+to completed physical frames and canonical race records. Envelope preparation
+precedes wet-state consumption, followed by original pitch/volume/IO controls
+and then impacts. Source launch event23 enables the running-engine gate; source
+channel starts, stops, mode changes and canonical power remain authoritative.
+The original starter effect15 is a separate PCM asset, bringing the effect bank
+to18 files covering53 drum selectors plus the ice sequence.
+
+Both human fallback engines become silent only after all original loops are
+ready. Water, wind and rival sound retain their existing owners. Paused, held,
+muted and replay frames stop the original voices; missing assets retain fallback.
+The source's mixed-audio-derived random pitch variation is represented by a
+separate deterministic browser jitter pattern, without consuming gameplay RNG.
+This is an explicit presentation adaptation, not bit-exact source audio RNG.
+
+All49 focused engine/contact/options/sample tests pass. Actual launch and audio
+state agree at30,60 and144 render Hz. Chrome's live two-human race loaded all
+four engine buffers without failures, played four independent loop voices with
+distinct pitch/pan, silenced both authored human engines and retained audible
+water/wind. Holding stopped all original voices and tails. The check retained
+High quality,1280×720 and83,521 water vertices. No graphics settings changed.
+Original voice/rank scheduling and source spray playback remain unfinished.
+
 ## Unpublished — original engine samples and playback support
 
 Four original engine waveforms are extracted as standalone PCM loops, retaining
@@ -35,8 +60,8 @@ valid playback plans; deliberate negative-pitch stress cases are rejected.
 Chrome decodes all four loops and renders separate wet/dry stereo engines,
 identical mono channels and silence when stopped, with no output clipping.
 
-This is playback support awaiting the live engine-owner connection. The game
-still uses its existing engine audio at this checkpoint. Original portamento,
+This prepared checkpoint is connected to the live owner by the section above.
+Original portamento,
 RSP interpolation and envelopes are approximated by Web Audio smoothing and
 short crossfades; this does not claim a complete hardware audio emulation.
 

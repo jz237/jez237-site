@@ -37,6 +37,32 @@ test('live actor audio reads raw buttons, completed recovery and retained animat
  assert.deepEqual(owner.drain(),[],'new packet fields must not invent unconnected voice playback');
 });
 
+test('live engine channels use physical wetness, canonical power and real source start events',()=>{
+ const f=field(),owner=createNativeRaceContactAudio({players:2,courseIndex:1});start(owner);
+ const left=body(1,{speed:20}),right=body(1,{speed:50,wet:0});left.frame.controls.heldButtons=0x8000;
+ advance(owner,[left,right],f,[0,0],[90,180],[5,1],[0,1]);
+ const mix=owner.engineChannels();assert.ok(mix.every(c=>c.enabled));assert.deepEqual(mix.map(c=>c.program),[1,2]);
+ assert.ok(mix[1].frequency>mix[0].frequency);assert.deepEqual(mix.map(c=>c.pan),[0,127]);
+ assert.deepEqual(owner.snapshot().packets.map(p=>p[14]),[5,1]);assert.equal(owner.snapshot().packets[0][6],1);
+ mix[0].frequency=999;assert.notEqual(owner.engineChannels()[0].frequency,999);
+ owner.applyEffects([{kind:'audioEntry',consumer:'800c37f4',arguments:[0x23,0]}]);assert.equal(owner.snapshot().globals.engineGate7ca0,1);
+ owner.applyEffects([call('800c21f4',7,1)]);assert.equal(owner.snapshot().globals.engineGate7ca0,0);assert.ok(owner.engineChannels().every(c=>!c.enabled));
+ const idle=gate=>{const a=createNativeRaceContactAudio({players:1,courseIndex:1});start(a);if(gate)a.applyEffects([{kind:'audioEntry',consumer:'800c37f4',arguments:[0x23,0]}]);const b=body(1,{speed:0});b.frame.controls.heldButtons=0x8000;advance(a,[b],f,[0],[0]);return a;};
+ assert.ok(idle(false).drain().some(c=>c.consumer==='bffec'&&c.arguments[1]===15));
+ assert.ok(!idle(true).drain().some(c=>c.consumer==='bffec'&&c.arguments[1]===15));
+});
+
+test('actual source start reaches the engine gate and audio histories are render-rate independent',()=>{
+ const histories=[];
+ for(const hz of [30,60,144]){
+  const race=createRace({mode:'versus',physics:'native',course:getCourse('greyhaven'),waveSeed:123});
+  for(let i=0;i<hz*6;i++)stepNativeRaceHost(race.nativeHost,1/hz,[{throttle:1},{throttle:0}]);
+  const audio=race.nativeContactAudio;assert.equal(audio.snapshot().globals.engineGate7ca0,1);
+  histories.push({channels:audio.engineChannels(),packets:audio.snapshot().packets,globals:audio.snapshot().globals,frame:audio.snapshot().frame});
+ }
+ assert.deepEqual(histories[1],histories[0]);assert.deepEqual(histories[2],histories[0]);
+});
+
 test('120 original immersion executions preserve midpoint rounding and byte clamp thresholds',()=>{
  const reference=JSON.parse(readFileSync(new URL('./fixtures/native-contact-immersion-reference.json',import.meta.url)));
  for(const c of reference.cases)assert.equal(nativeContactImmersion(c.input),c.expected,JSON.stringify(c.input));

@@ -4,6 +4,20 @@ class Param{constructor(){this.value=0;}setTargetAtTime(v){this.value=v;}setValu
 class Node{constructor(){for(const k of ['gain','frequency','pan','Q','threshold','knee','ratio'])this[k]=new Param();}connect(n){return n;}disconnect(){}start(){}stop(){}}
 class Context{constructor(){this.currentTime=0;this.sampleRate=8000;this.destination=new Node();}resume(){}createGain(){return new Node();}createDynamicsCompressor(){return new Node();}createStereoPanner(){return new Node();}createOscillator(){return new Node();}createBiquadFilter(){return new Node();}createBufferSource(){return new Node();}createBuffer(ch,n){return {getChannelData:()=>new Float32Array(n)};}}
 function withAudio(fn){const previous=globalThis.AudioContext;globalThis.AudioContext=Context;try{fn(new Soundscape());}finally{globalThis.AudioContext=previous;}}
+
+test('native engines replace fallback only when ready and stop on replay-style frames without a native update',()=>withAudio(a=>{
+ a.start();let ready=false,stops=0;const calls=[];
+ a.originalEngines={update:(channels,options)=>{calls.push({channels,options});return ready;},stop:()=>{stops++;}};
+ const owner={drain:()=>[],engineChannels:()=>[{lane:0,enabled:true},{lane:3,enabled:true}]},mixes=[];
+ a.samples.update=(...args)=>mixes.push(args);a.samples.ready=false;
+ a.nativeContacts(owner,true,2);a.update(4,.2,false,false,0,1,{speed:10,wet:1});
+ assert.ok(a.voices.every(v=>v.gain.gain.value>0));assert.equal(mixes.at(-1).at(-1),false);
+ ready=true;a.nativeContacts(owner,true,2);a.update(4,.2,false,false,0,1,{speed:10,wet:1});
+ assert.ok(a.voices.every(v=>v.gain.gain.value===0));assert.equal(mixes.at(-1).at(-1),true);assert.equal(calls.at(-1).channels.length,2);
+ const before=stops;a.update(4,.2,false,false,0,1,{speed:10,wet:1});
+ assert.ok(stops>before);assert.ok(a.voices.every(v=>v.gain.gain.value>0));assert.equal(mixes.at(-1).at(-1),false);
+ a.nativeContacts(owner,true,2);a.update(4,.2,false,true,0);assert.equal(a.master.gain.value,0);assert.equal(a.nativeEngineReady,false);
+}));
 test('audio stays uninitialized until start; mono centres active sources and headphones narrow them',()=>withAudio(a=>{a.update(10,.3,false,false,0);assert.equal(a.ctx,null);a.start();a.setOptions({music:true});a.update(10,.3,false,false,0,1,{speed:6,wet:.5});assert.notEqual(a.voices[0].pan.pan.value,a.voices[1].pan.pan.value);a.setOptions({mode:'mono'});a.update(10,.3,false,false,0,1,{speed:6,wet:.5});assert.ok([...a.pans,...a.musicPans].every(p=>p.node.pan.value===0));assert.equal(stereoWidth('headphones'),.45);assert.equal(stereoWidth('mono'),0);}));
 test('both engines respond independently, and pause or mute suppresses playback',()=>withAudio(a=>{a.start();a.update(4,.2,false,false,0,1,{speed:10,wet:.2});const first=a.voices[0].engine.frequency.value,second=a.voices[1].engine.frequency.value;assert.ok(second>first);a.update(4,.2,false,false,0,1,{speed:2,wet:1});assert.equal(a.voices[0].engine.frequency.value,first);assert.ok(a.voices[1].engine.frequency.value<second);a.update(4,.2,false,true,0);assert.equal(a.master.gain.value,0);assert.equal(a.effects.gain.value,0);a.enabled=false;a.update(4,.2,false,false,0);assert.equal(a.master.gain.value,0);}));
 test('music preview works during pause without engine noise and expires after ten seconds',()=>withAudio(a=>{a.preview();a.update(0,0,false,true,0);assert.ok(a.musicGain.gain.value>0);assert.equal(a.effects.gain.value,0);a.ctx.currentTime=11;a.update(0,0,false,true,0);assert.equal(a.musicGain.gain.value,0);assert.equal(a.master.gain.value,0);}));

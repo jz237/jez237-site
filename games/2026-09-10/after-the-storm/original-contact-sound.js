@@ -1,7 +1,7 @@
 import {stereoWidth} from './coastal-music.js';
 const base=new URL('./assets/audio/waverace64/contacts/',import.meta.url);
-const ids=[11,12,13,14,...Array.from({length:48},(_,i)=>i+16)];
-const files=new Set([11,12,13,14,...Array.from({length:12},(_,i)=>16+i*4)].map(i=>'contact-'+i.toString(16).padStart(2,'0')+'.wav'));
+const ids=[11,12,13,14,15,...Array.from({length:48},(_,i)=>i+16)];
+const files=new Set([11,12,13,14,15,...Array.from({length:12},(_,i)=>16+i*4)].map(i=>'contact-'+i.toString(16).padStart(2,'0')+'.wav'));
 files.add('ice-break.wav');
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 

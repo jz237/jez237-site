@@ -4,7 +4,7 @@
   "method": "Four standalone mono PCM loop assets decoded from bank0 ADPCM samples. Original loop starts/ends and instrument0/1/2 zone tunings are retained in manifest.json. Sequence0's layers select base instrument0 at velocity117 and a water/dry layer using channel program1/2 with independently controlled velocity.",
   "tools": ["Existing REA/Ghidra analysis on EVO X2", "SEQ64 2.4.1 SM64 EU ABI reference", "N64-Tools ADPCM/layout reference", "Local Python"],
   "sourceReferences": ["https://github.com/jombo23/N64-Tools", "https://github.com/sauraen/seq64"],
-  "mix": "Original sample PCM and loop boundaries. Web Audio pitch smoothing, short crossfades for sample-zone changes, attack/release smoothing and bus gain approximate the original audio engine; not bit-exact N64 RSP output. This asset/playback checkpoint does not yet replace the live game's engine owner.",
+  "mix": "Original sample PCM and loop boundaries. Native human previews use source engine controls from completed physical frames and canonical race records. Web Audio pitch smoothing, short crossfades for sample-zone changes, attack/release smoothing and bus gain approximate the original audio engine; not bit-exact N64 RSP output. A separate deterministic browser jitter pattern approximates the original mixed-audio-derived RNG without consuming gameplay RNG. Authored human engines remain fallback until all original loops load; water, wind and rivals retain their existing owners.",
   "rights": "Underlying Wave Race 64 samples remain the property of their respective rights holders; not covered by the website code license.",
   "purchases": 0,
   "extractedAt": "2026-10-17",

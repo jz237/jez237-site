@@ -840,6 +840,27 @@
       "file": "ice-break.wav",
       "rate": 1,
       "pan": 64
+    },
+    "15": {
+      "file": "contact-0f.wav",
+      "rate": 1,
+      "pan": 64,
+      "envelope": [
+        4,
+        32000,
+        200,
+        32000,
+        1000,
+        0,
+        0,
+        0
+      ],
+      "release": 32,
+      "sourceLoop": [
+        14644,
+        15971
+      ],
+      "sourceTuning": 0.25
     }
   },
   "files": {
@@ -961,6 +982,13 @@
       "bytes": 80844,
       "peak": 27852,
       "rms": 2722.0496427461158
+    },
+    "contact-0f.wav": {
+      "sha256": "f044ffdccc12f8313c21679a84a347d79056c4dca50af421fa6b6ef8a261be29",
+      "duration": 2.15,
+      "bytes": 137644,
+      "peak": 32001,
+      "rms": 12160.261502537156
     }
   },
   "iceSequence": {

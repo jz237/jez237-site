@@ -4,26 +4,30 @@ import {prepareNativeAudioChannel} from './native-audio-channels.js';
 import {nativeRaceBodyFields} from './native-race-body-fields.js';
 import {queryNativeWaterField} from './native-water-field.js';
 import {prepareNativeRiderWaterAudio,prepareNativeActorAudioFields} from './native-audio-packet.js';
+import {prepareNativeEngineEnvelope,consumeNativeEngineAudio} from './native-engine-audio.js';
+import {createOriginalEngineChannels,applyOriginalEngineCommands} from './original-engine-sound.js';
 const F=Math.fround;
 const channelEntries=new Set(['800bfdd0','800bfde4','800bfe70','800bfef8','800bffac','800bfd34','800bfd68','800bffcc']);
 
-// Contact-only owner for the admitted one-human and two-human browser races.
+// Engine/contact owner for the admitted one-human and two-human browser races.
 // Fresh web sessions explicitly start packet storage/motion at zero, in racing
 // audio mode7 with muted channels. Source status effects enable them. This is
 // not an emulation of retained cartridge mixer/voice state or nearest-rival
-// channel2 routing; ordinary engine sound and music keep their existing owners.
+// channel2 routing. Original music keeps its separate presentation owner.
 export function createNativeRaceContactAudio({players,courseIndex}){
  if(![1,2].includes(players))throw new RangeError('Contact audio requires one or two human racers');
  let materials=nativeContactAudioMaterials(courseIndex),audioMode=7,frame=0,pairedImpact=0,pairedVariant=0;
  let globals={raceMode:players-1,courseIndex,primaryMuted:1,secondaryMuted:1,alternateEngine:0,
   rankDelay:0,primaryStart:0,secondaryStart:0,primaryPitchBits:0,secondaryPitchBits:0,rivalPitchBits:0,
-  primaryFlag:0,primaryCompanionFlag:0,primaryLastPlace:0,secondaryFlag:0,secondaryCompanionFlag:0,secondaryLastPlace:0};
+  primaryFlag:0,primaryCompanionFlag:0,primaryLastPlace:0,secondaryFlag:0,secondaryCompanionFlag:0,secondaryLastPlace:0,
+  engineGate7ca0:0,primaryPowerByte:0,secondaryPowerByte:0};
+ let engineChannels=createOriginalEngineChannels(players).map((c,i)=>({...c,volume:F(60/127),pan:players===2?(i?127:0):64}));
  const packets=[Array(32).fill(0),Array(32).fill(0)],motion=Array.from({length:players},()=>({speed:0,vertical:0})),queue=[];
  const riderWater=Array.from({length:players},()=>({bodyC84:0,bodyC86:0}));
  let emitted=0,dropped=0;
  function enqueue(command,player){
-  // Engine-water controls remain captured by the kernels; this backend only
-  // presents transient contacts. Limit backlog when rendering is suspended.
+  // Continuous engine controls retain their latest state, not a render queue.
+  // Limit transient backlog when rendering is suspended.
   if(command.consumer!=='bffec'&&!(command.consumer==='c53d4'&&command.arguments[0]===0x06000700))return;
   if(queue.length===64){queue.shift();dropped++;}
   queue.push({frame,player,consumer:command.consumer,arguments:[...command.arguments]});emitted++;
@@ -31,6 +35,13 @@ export function createNativeRaceContactAudio({players,courseIndex}){
  return {
   applyEffects(effects){
    for(const effect of effects){
+    // Source start-control emits audioEntry, separately from channel calls.
+    // C21F4 and the supplied ROM initialize7CA0/7CB8 tozero; this browser owner
+    // has no voice-muting7CB8 override. Other C37F4 voice/timer work is separate.
+    if(effect.consumer==='800c37f4'&&['audioEntry','externalCall'].includes(effect.kind)){
+     if(audioMode===7&&effect.arguments[0]===0x23)globals.engineGate7ca0=1;
+     continue;
+    }
     if(effect.kind!=='externalCall')continue;
     const {consumer,arguments:args}=effect;
     if(channelEntries.has(consumer)){
@@ -39,11 +50,13 @@ export function createNativeRaceContactAudio({players,courseIndex}){
      if(index<0)throw new RangeError('Unknown source audio packet address');
      const next=prepareNativeAudioChannel(consumer,packets[index],globals);
      packets[index]=next.packet;globals=next.globals;
+     engineChannels=applyOriginalEngineCommands(engineChannels,next.commands);
     }else if(consumer==='800c1f60'){
      // The racing-mode branch stops both engines without changing audioMode.
      if(audioMode===7)globals.primaryMuted=globals.secondaryMuted=1;
     }else if(consumer==='800c21f4'){
      const mode=args[0]|0,previous=audioMode;
+     globals.engineGate7ca0=0;
      if(mode!==previous||mode!==1&&mode!==10){
       audioMode=(mode<<24)>>24;globals.primaryMuted=globals.secondaryMuted=1;
       if(mode===0){globals.raceMode=0;globals.courseIndex=0;}
@@ -95,17 +108,28 @@ export function createNativeRaceContactAudio({players,courseIndex}){
     // Mode4's separate rider-water cue is outside this contact subset.
     if(audioMode!==7||globals[player===0?'primaryMuted':'secondaryMuted']!==0)continue;
     const context={raceMode:globals.raceMode,channel:player,mixerLane:player===0?0:3};
-    const landing=consumeNativeWetAudio(packet,context);
-    const hit=consumeNativeImpactAudio(landing.packet,{...context,...materials,pairedImpact,pairedVariant});
+    const prepared=prepareNativeEngineEnvelope(packet),landing=consumeNativeWetAudio(prepared.packet,context);
+    // Only human channels are admitted. The rival-only inputs satisfy the
+    // prepared kernel's structural validation and are never read on this path.
+    // The original RNG is mixed-audio-derived. Use a separate reproducible web
+    // jitter pattern here; it neither claims that RNG nor consumes gameplay RNG.
+    const jitter=(Math.imul(frame,1664525)+1013904223)>>>0;
+    const engine=consumeNativeEngineAudio(landing.packet,{...globals,...context,random4562c:jitter,
+     rivalPanByte:0,rivalControlByte:0,rivalGate7de8:0,rivalPitchMultiplierBits:0,rivalGainBits:0},prepared.envelope);
+    for(const key of Object.keys(globals))globals[key]=engine.context[key];
+    engineChannels=applyOriginalEngineCommands(engineChannels,[...landing.commands,...engine.commands]);
+    const hit=consumeNativeImpactAudio(engine.packet,{...context,...materials,pairedImpact,pairedVariant});
     pairedImpact=hit.context.pairedImpact;pairedVariant=hit.context.pairedVariant;
     packets[player]=hit.packet;
     // End of C010C: impacts above read the PRIOR frame's speed byte.
     packets[player][31]=packets[player][0];
-    for(const command of [...landing.commands,...hit.commands])enqueue(command,player);
+    for(const command of [...landing.commands,...engine.commands,...hit.commands])enqueue(command,player);
    }
   },
   drain(){return queue.splice(0);},
-  snapshot(){return {scope:'source-contact-timing; original-contact-samples-with-fallback',frame,audioMode,globals:{...globals},
+  engineChannels(){return globals.alternateEngine!==0?null:engineChannels.map((c,i)=>({...c,enabled:c.enabled&&audioMode===7&&globals[i?'secondaryMuted':'primaryMuted']===0}));},
+  snapshot(){return {scope:'source-engine-and-contact-controls; browser-audio-jitter-and-smoothing',frame,audioMode,globals:{...globals},
+   engineChannels:engineChannels.map(c=>({...c})),
    packets:packets.map(p=>p.slice()),motion:motion.map(m=>({...m})),riderWater:riderWater.map(w=>({...w})),pending:queue.length,emitted,dropped};}
  };
 }

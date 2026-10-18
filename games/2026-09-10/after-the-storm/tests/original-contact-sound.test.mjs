@@ -17,8 +17,8 @@ function setup(options={}){
  return {ctx,requested,loader,bank:new OriginalContactSound(ctx,new Node(),{loader:options.loader??loader})};
 }
 
-test('17 complete standalone PCM files cover52 source drum selectors and the ice sequence',()=>{
- assert.equal(Object.keys(manifest.files).length,17);assert.equal(Object.keys(manifest.sounds).length,53);
+test('18 complete standalone PCM files cover53 source drum selectors and the ice sequence',()=>{
+ assert.equal(Object.keys(manifest.files).length,18);assert.equal(Object.keys(manifest.sounds).length,54);
  for(const [file,record]of Object.entries(manifest.files)){
   const bytes=readFileSync(new URL(file,base));assert.equal(createHash('sha256').update(bytes).digest('hex'),record.sha256);
   assert.equal(bytes.length,record.bytes);assert.equal(bytes.toString('ascii',0,4),'RIFF');assert.equal(bytes.toString('ascii',8,12),'WAVE');
@@ -37,12 +37,12 @@ test('17 complete standalone PCM files cover52 source drum selectors and the ice
 test('only original human contact commands select this bank',()=>{
  for(const lane of [2,5])for(const key of Object.keys(manifest.sounds).filter(k=>k!=='ice-break'))assert.deepEqual(originalContactSelection(command(+key,63,lane)),{lane,key,velocity:63});
  assert.deepEqual(originalContactSelection(ice()),{lane:7,key:'ice-break',velocity:127});
- for(const c of [command(15),command(64),command(11,128),command(11,-1),command(11,2.5),command(11,127,8),{consumer:'c53d4',arguments:[0x06000700,18]},{consumer:'c53d4',arguments:[0x06000701,19]},null])assert.equal(originalContactSelection(c),null);
+ for(const c of [command(10),command(64),command(11,128),command(11,-1),command(11,2.5),command(11,127,8),{consumer:'c53d4',arguments:[0x06000700,18]},{consumer:'c53d4',arguments:[0x06000701,19]},null])assert.equal(originalContactSelection(c),null);
 });
 
 test('lazy bank loads once; note restart replaces only that player, retaining source velocity and pan variants',async()=>{
  const {bank,ctx,requested}=setup();assert.equal(bank.play(command()),false);assert.equal(requested.length,0);
- const first=bank.load();assert.equal(bank.load(),first);assert.equal(await first,true);assert.equal(requested.length,18);
+ const first=bank.load();assert.equal(bank.load(),first);assert.equal(await first,true);assert.equal(requested.length,19);
  assert.equal(bank.play(command(17,127),-.4),true);const left=bank.voices.get(2);
  assert.equal(left.gain.gain.value,.55);assert.equal(left.pan.pan.value,-.4);
  bank.play(command(53,63,5),.4);const right=bank.voices.get(5);assert.equal(right.gain.gain.value,(63/127)**2*.55);
@@ -51,14 +51,14 @@ test('lazy bank loads once; note restart replaces only that player, retaining so
  assert.equal(replacement.source.playbackRate.value,manifest.sounds[19].rate);lateEnd();assert.equal(bank.voices.get(2),replacement);
  bank.setMode('mono');assert.ok([...bank.voices.values()].every(v=>v.pan.pan.value===0));bank.setMode('headphones');assert.equal(right.pan.pan.value,.4*.45);
  bank.play(command(19,0));assert.equal(bank.voices.has(2),false);assert.equal(bank.voices.has(5),true);
- right.source.onended();assert.equal(bank.voices.size,0);await bank.load();assert.equal(requested.length,18);
+ right.source.onended();assert.equal(bank.voices.size,0);await bank.load();assert.equal(requested.length,19);
 });
 
 test('a missing effect falls back without blocking the rest and retries only that file after30 seconds',async()=>{
  const fixture=setup();let fail=true;const bank=new OriginalContactSound(fixture.ctx,new Node(),{loader:async url=>{
   if(fail&&url.pathname.endsWith('contact-0b.wav'))throw Error('offline');return fixture.loader(url);
  }});
- assert.equal(await bank.load(),false);assert.equal(bank.buffers.size,16);assert.deepEqual(bank.failures,['contact-0b.wav']);
+ assert.equal(await bank.load(),false);assert.equal(bank.buffers.size,17);assert.deepEqual(bank.failures,['contact-0b.wav']);
  assert.equal(bank.play(command(11)),false);assert.equal(bank.play(command(12)),true);
  const count=fixture.requested.length;fail=false;await bank.load();assert.equal(fixture.requested.length,count);
  fixture.ctx.currentTime=30;assert.equal(await bank.load(),true);assert.equal(fixture.requested.length,count+1);assert.equal(bank.play(command(11)),true);
