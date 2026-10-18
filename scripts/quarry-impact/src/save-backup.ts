@@ -1,6 +1,8 @@
+import {AUDIO_OUTPUTS} from './audio-output';
+import {validCameraSettings} from './camera-settings';
 import {PROFILE_KEY,readProfile} from './progression';
 import {GARAGE_KEY,readGarage} from './garage';
-import {CONTROLS_KEY,readControls} from './driving-controls';
+import {CONTROLS_KEY,readControls,defaultControls} from './driving-controls';
 import {CLUB_CUP_KEY,readClubCup} from './club-cup';
 import {CLUB_RECORDS_KEY,readClubRecords} from './club-records';
 import {TIME_TRIAL_KEY,readTimeTrialRecords} from './time-trial';
@@ -21,20 +23,37 @@ function normalize(key:string,text:string):string{
  if(!object(raw))throw Error(`Invalid saved data: ${key}`);
  if(key==='quarry-impact-v1'){
   const out:Record<string,unknown>={};
+  if(raw.camera!==undefined){if(!validCameraSettings(raw.camera))throw Error('Invalid camera setting.');out.camera={...raw.camera};}
   if(raw.quality!==undefined){if(!['auto','ultra','high','medium'].includes(raw.quality))throw Error('Invalid graphics setting.');out.quality=raw.quality;}
+  if(raw.standingsKey!==undefined){if(raw.standingsKey!=='Tab'&&raw.standingsKey!=='Backquote')throw Error('Invalid standings shortcut.');out.standingsKey=raw.standingsKey;}
+  if(raw.audioOutput!==undefined){if(typeof raw.audioOutput!=='string'||!Object.hasOwn(AUDIO_OUTPUTS,raw.audioOutput))throw Error('Invalid audio output setting.');out.audioOutput=raw.audioOutput;}
   if(raw.performance!==undefined){if(typeof raw.performance!=='boolean')throw Error('Invalid performance setting.');out.performance=raw.performance;}
   for(const k of ['engine','effects','ambience'])if(raw[k]!==undefined){if(typeof raw[k]!=='number'||!Number.isFinite(raw[k])||raw[k]<0||raw[k]>1)throw Error('Invalid sound setting.');out[k]=raw[k];}
   if(raw.best!==undefined){if(!object(raw.best)||Object.keys(raw.best).length>10000||Object.entries(raw.best).some(([k,v])=>k.length>200||!/^[-\w:.]+$/.test(k)||typeof v!=='number'||!Number.isFinite(v)||v<0))throw Error('Invalid event records.');out.best=raw.best;}
   return canonical(out);
  }
  if(raw.version!==1)throw Error(`Unsupported saved-data version: ${key}`);
- const value=readers[key](text);if(value===null)throw Error('The championship save is invalid.');
+ // Validate historical controls without applying the steering-default migration.
+ // Signed backups must retain their original canonical bytes; readControls migrates
+ // them normally when the restored settings are loaded by the game.
+ const currentKeyboardDefaults=defaultControls().keyboardDefaults!;
+ const legacyControls=key===CONTROLS_KEY&&(raw.keyboardDefaults===undefined||Number.isInteger(raw.keyboardDefaults)&&raw.keyboardDefaults>=1&&raw.keyboardDefaults<currentKeyboardDefaults);
+ const value=readers[key](legacyControls?JSON.stringify({...raw,keyboardDefaults:currentKeyboardDefaults}):text);
+ if(legacyControls){if(raw.keyboardDefaults===undefined)delete(value as Record<string,unknown>).keyboardDefaults;else (value as Record<string,unknown>).keyboardDefaults=raw.keyboardDefaults;}
+ if(value===null)throw Error('The championship save is invalid.');
  // Preserve the canonical bytes of controls exported before vibration existed.
  // readControls supplies the default after import; old signed backups stay valid.
  if(key===CONTROLS_KEY&&!Object.hasOwn(raw,'rumble'))delete(value as {rumble?:number}).rumble;
  if(key===CONTROLS_KEY){const controls=value as Record<string,any>;for(const key of ['transmission','shiftUpButton','shiftDownButton','clutchButton'])if(!Object.hasOwn(raw,key))delete controls[key];for(const key of ['shiftUp','shiftDown','clutch'])if(!Object.hasOwn(raw.keys??{},key))delete controls.keys[key];}
  // Keep older signed garage backups canonical; readGarage adds new stock cars on load.
  if(key===GARAGE_KEY&&!Object.hasOwn(raw.cars??{},'shuttle'))delete(value as {cars:Record<string,unknown>}).cars.shuttle;
+ if(key===GARAGE_KEY&&!Object.hasOwn(raw.cars??{},'linnet'))delete(value as {cars:Record<string,unknown>}).cars.linnet;
+ if(key===GARAGE_KEY&&!Object.hasOwn(raw.cars??{},'tordal'))delete(value as {cars:Record<string,unknown>}).cars.tordal;
+ if(key===GARAGE_KEY&&!Object.hasOwn(raw.cars??{},'starfin'))delete(value as {cars:Record<string,unknown>}).cars.starfin;
+ if(key===GARAGE_KEY&&!Object.hasOwn(raw.cars??{},'saber'))delete(value as {cars:Record<string,unknown>}).cars.saber;
+ if(key===GARAGE_KEY&&!Object.hasOwn(raw.cars??{},'alder'))delete(value as {cars:Record<string,unknown>}).cars.alder;
+ if(key===GARAGE_KEY&&!Object.hasOwn(raw.cars??{},'morrow'))delete(value as {cars:Record<string,unknown>}).cars.morrow;
+ if(key===GARAGE_KEY&&!Object.hasOwn(raw.cars??{},'kite'))delete(value as {cars:Record<string,unknown>}).cars.kite;
  if(key===GARAGE_KEY&&!Object.hasOwn(raw.cars??{},'trail'))delete(value as {cars:Record<string,unknown>}).cars.trail;
  if(key===GARAGE_KEY&&!Object.hasOwn(raw.cars??{},'regent'))delete(value as {cars:Record<string,unknown>}).cars.regent;
  return canonical(value);

@@ -203,3 +203,18 @@ Original Quarry Impact short-wheelbase minibus: [authorship and reuse](CALDER-SH
 ## Birch Trail 4×4
 
 Original Quarry Impact three-door 4×4 artwork, using original Rook wheel tooling. See [BIRCH-TRAIL.md](BIRCH-TRAIL.md).
+
+## Kite 2000
+Original fictional hot hatch model and integration for Quarry Impact. See [KITE-2000.md](KITE-2000.md).
+
+Morrow 420: original fictional coupe bodywork and original Marten road-wheel assemblies. See [MORROW-420.md](MORROW-420.md).
+
+Alder 230: original fictional estate bodywork and original Marten road-wheel assemblies. See [ALDER-230.md](ALDER-230.md).
+
+Saber 2.0 GT: original fictional 1980s liftback coupe bodywork and original Tern road-wheel assemblies. See [SABER-20GT.md](SABER-20GT.md).
+
+Starfin 58: original fictional late-1950s hardtop bodywork, original Marten road-wheel assemblies and whitewall bands. See [STARFIN-58.md](STARFIN-58.md).
+
+Tordal 244: original fictional 1980s boxy saloon bodywork and original Marten road-wheel assemblies. See [TORDAL-244.md](TORDAL-244.md).
+
+Linnet 1300: original fictional 1960s roadster bodywork and original Marten road-wheel assemblies. See [LINNET-1300.md](LINNET-1300.md).

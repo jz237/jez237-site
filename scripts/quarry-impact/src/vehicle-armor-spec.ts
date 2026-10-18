@@ -13,6 +13,13 @@ type Fit={front:number;rear:number;frontY:number;rearY:number;frontWidth:number;
 // coordinates. The three modern bodies are asymmetric and wider than their
 // simple chassis boxes, so nominal halfLength/halfWidth cannot fit their kits.
 const fits:Record<CarKind,Fit>={
+ linnet:{front:1.98,rear:-1.98,frontY:.45,rearY:.48,frontWidth:.72,rearWidth:.72,sideX:.79,sideY:.36,rearRise:.10},
+ tordal:{front:2.50,rear:-2.50,frontY:.48,rearY:.48,frontWidth:.86,rearWidth:.86,sideX:.89,sideY:.42,rearRise:.08},
+ starfin:{front:2.70,rear:-2.70,frontY:.50,rearY:.52,frontWidth:.96,rearWidth:.96,sideX:1.0,sideY:.43,rearRise:.12},
+ saber:{front:2.18,rear:-2.18,frontY:.46,rearY:.48,frontWidth:.82,rearWidth:.82,sideX:.865,sideY:.40,rearRise:.06},
+ alder:{front:2.47,rear:-2.47,frontY:.53,rearY:.53,frontWidth:.91,rearWidth:.91,sideX:.94,sideY:.43,rearRise:.10},
+ morrow:{front:2.47,rear:-2.47,frontY:.53,rearY:.53,frontWidth:.91,rearWidth:.91,sideX:.94,sideY:.43,rearRise:.10},
+ kite:{front:2.02,rear:-2.02,frontY:.52,rearY:.52,frontWidth:.84,rearWidth:.84,sideX:.865,sideY:.42,rearRise:0},
  trail:{front:2.32,rear:-2.32,frontY:.57,rearY:.57,frontWidth:.98,rearWidth:.98,sideX:1.015,sideY:.54,rearRise:0},
  regent:{front:2.80,rear:-2.80,frontY:.52,rearY:.52,frontWidth:1.00,rearWidth:1.00,sideX:1.045,sideY:.415,rearRise:.14},
  shuttle:{front:3.11,rear:-3.11,frontY:.56,rearY:.56,frontWidth:1.06,rearWidth:1.06,sideX:1.085,sideY:.58,rearRise:0},

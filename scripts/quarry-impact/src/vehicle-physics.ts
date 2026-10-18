@@ -1,8 +1,12 @@
+import {engineOutput,type EngineRestriction} from './engine-packages';
+import {wheelContactMotion} from './wheel-contact-motion';
+import {steeringSpeedScale} from './countersteering';
+import {surfaceGrip,type DrivingSurface} from './driving-surface';
 import {limitBrakeImpulse,limitTractionForce,type DrivingAssists} from './driving-assists';
 import {manualEngineBrake,stepTransmission,type TransmissionInput,type TransmissionState} from './transmission';
 import {VehicleStructure} from './vehicle-structure';
 import {advanceEngineRestart,starterRPM} from './engine-stall';
-import {isClassicKind,classicWheelHalfTrack,vehicleWheelRadius} from './classic-vehicle-specs';
+import {isFrontDriveKind,isClassicKind,classicWheelHalfTrack,vehicleWheelRadius} from './classic-vehicle-specs';
 import type R from '@dimforge/rapier3d-compat';
 import {DEFINITIONS,clamp,type CarKind} from './rules';
 import {wheelResponse} from './wheel-physics';
@@ -12,7 +16,7 @@ import {vehicleArmorLayout,vehicleArmorCollisionHulls} from './vehicle-armor-spe
 type Vec={x:number;y:number;z:number};
 type Quat=Vec&{w:number};
 export type VehicleSpecification=ReturnType<typeof vehicleSpecification>;
-export type PhysicsState={health:number;engineStall?:number;damageLeft:number;damageRight:number;steering:number;speed:number;slip:number;surface:'asphalt'|'gravel';gear:number;rpm:number;transmission?:TransmissionState;input:{throttle:number;steer:number;brake:number;handbrake:boolean;assists?:DrivingAssists;transmission?:TransmissionInput}};
+export type PhysicsState={health:number;engineStall?:number;damageLeft:number;damageRight:number;steering:number;speed:number;slip:number;surface:DrivingSurface;gear:number;rpm:number;transmission?:TransmissionState;input:{throttle:number;steer:number;brake:number;handbrake:boolean;assists?:DrivingAssists;transmission?:TransmissionInput}};
 export function rotateVehicleVector(v:Vec,q:Quat):Vec{
  const tx=2*(q.y*v.z-q.z*v.y),ty=2*(q.z*v.x-q.x*v.z),tz=2*(q.x*v.y-q.y*v.x);
  return{x:v.x+q.w*tx+q.y*tz-q.z*ty,y:v.y+q.w*ty+q.z*tx-q.x*tz,z:v.z+q.w*tz+q.x*ty-q.y*tx};
@@ -55,7 +59,7 @@ export function createVehiclePhysics(api:typeof R,world:R.World,kind:CarKind,mas
  const d=DEFINITIONS[kind],utility=kind==='utility',buggy=kind==='buggy',massHalfLength=utility?2.745:d.halfLength,massHeight=kind==='trail'?1.9:kind==='shuttle'?2.5:kind==='van'?1.9:1.3;
  const body=world.createRigidBody(api.RigidBodyDesc.dynamic().setLinearDamping(.06).setAngularDamping(.85).setCcdEnabled(true).setCanSleep(true));
  const collider=world.createCollider((utility?api.ColliderDesc.cuboid(.70,.065,2.69).setTranslation(0,-.25,-.22):buggy?api.ColliderDesc.cuboid(.55,.013,.725).setTranslation(0,-.54,-.115):api.ColliderDesc.cuboid(d.halfWidth-.06,.25,d.halfLength-.12))
-  .setMassProperties(mass,utility?{x:0,y:.19,z:.34}:buggy?{x:0,y:.46,z:-.085}:{x:0,y:kind==='trail'?.16:kind==='shuttle'?.30:kind==='van'?.15:-.06,z:kind==='tern'?.16:kind==='marten'?-.22:0},{x:mass*((massHalfLength*2)**2+massHeight**2)/12,y:mass*((massHalfLength*2)**2+(d.halfWidth*2)**2)/12,z:mass*((d.halfWidth*2)**2+massHeight**2)/12},{x:0,y:0,z:0,w:1})
+  .setMassProperties(mass,utility?{x:0,y:.19,z:.34}:buggy?{x:0,y:.46,z:-.085}:{x:0,y:kind==='trail'?.16:kind==='shuttle'?.30:kind==='van'?.15:-.06,z:isFrontDriveKind(kind)?.16:kind==='marten'?-.22:0},{x:mass*((massHalfLength*2)**2+massHeight**2)/12,y:mass*((massHalfLength*2)**2+(d.halfWidth*2)**2)/12,z:mass*((d.halfWidth*2)**2+massHeight**2)/12},{x:0,y:0,z:0,w:1})
   .setFriction(.45).setRestitution(.035).setActiveEvents(api.ActiveEvents.CONTACT_FORCE_EVENTS).setContactForceEventThreshold(0),body);
  const classic=isClassicKind(kind),estate=kind==='wagon';
  // A van's windscreen slopes into the taller cargo shell. Its collision
@@ -70,7 +74,15 @@ export function createVehiclePhysics(api:typeof R,world:R.World,kind:CarKind,mas
  const shuttleUpper=Float32Array.from([[-1.03,1.12,-3],[1.03,1.12,-3],[-.865,2.50,-3],[.865,2.50,-3],[-.865,2.50,2.72],[.865,2.50,2.72],[-1.03,1.12,3],[1.03,1.12,3]].flatMap(([x,y,z])=>[x,y-.90,z]));
  const regentUpper=Float32Array.from([[-.972,1.045,.91],[.972,1.045,.91],[-.79,1.52,.48],[.79,1.52,.48],[-.79,1.52,-.98],[.79,1.52,-.98],[-.972,1.045,-1.22],[.972,1.045,-1.22]].flatMap(([x,y,z])=>[x,y-.85,z]));
  const trailUpper=Float32Array.from([[-.942,1.18,.96],[.942,1.18,.96],[-.823,1.985,.54],[.823,1.985,.54],[-.823,1.985,-2.07],[.823,1.985,-2.07],[-.942,1.18,-2.20],[.942,1.18,-2.20]].flatMap(([x,y,z])=>[x,y-.92,z]));
- const roofDesc=kind==='trail'?api.ColliderDesc.convexHull(trailUpper)!:kind==='regent'?api.ColliderDesc.convexHull(regentUpper)!:kind==='shuttle'?api.ColliderDesc.convexHull(shuttleUpper)!:buggy?api.ColliderDesc.capsule(.35,.026).setRotation({x:0,y:0,z:Math.SQRT1_2,w:Math.SQRT1_2}).setTranslation(0,.734,-.63):kind==='marten'?api.ColliderDesc.convexHull(martenUpper)!:kind==='tern'?api.ColliderDesc.convexHull(ternUpper)!:kind==='van'?api.ColliderDesc.convexHull(vanUpper)!:
+ const kiteUpper=Float32Array.from([[-.802,1.035,.74],[.802,1.035,.74],[-.664,1.55,.15],[.664,1.55,.15],[-.664,1.55,-1.12],[.664,1.55,-1.12],[-.782,1.035,-1.72],[.782,1.035,-1.72]].flatMap(([x,y,z])=>[x,y-.84,z]));
+ const morrowUpper=Float32Array.from([[-.875,1.055,.75],[.875,1.055,.75],[-.71,1.50,.12],[.71,1.50,.12],[-.71,1.50,-1.12],[.71,1.50,-1.12],[-.875,1.055,-1.55],[.875,1.055,-1.55]].flatMap(([x,y,z])=>[x,y-.85,z]));
+ const alderUpper=Float32Array.from([[-.875,1.055,.75],[.875,1.055,.75],[-.76,1.605,.25],[.76,1.605,.25],[-.76,1.605,-2.17],[.76,1.605,-2.17],[-.875,1.055,-2.30],[.875,1.055,-2.30]].flatMap(([x,y,z])=>[x,y-.85,z]));
+ const saberUpper=Float32Array.from([[-.80,.925,.66],[.80,.925,.66],[-.63,1.29,-.05],[.63,1.29,-.05],[-.63,1.29,-.72],[.63,1.29,-.72],[-.79,.975,-1.86],[.79,.975,-1.86]].flatMap(([x,y,z])=>[x,y-.82,z]));
+ const starfinUpper=Float32Array.from([[-.91,.975,.82],[.91,.975,.82],[-.75,1.385,.10],[.75,1.385,.10],[-.75,1.385,-.80],[.75,1.385,-.80],[-.90,.99,-1.26],[.90,.99,-1.26]].flatMap(([x,y,z])=>[x,y-.85,z]));
+ const tordalUpper=Float32Array.from([[-.83,.945,.95],[.83,.945,.95],[-.72,1.395,.42],[.72,1.395,.42],[-.72,1.395,-1.27],[.72,1.395,-1.27],[-.80,.965,-1.64],[.80,.965,-1.64]].flatMap(([x,y,z])=>[x,y-.84,z]));
+ // Open roadster: only the framed windscreen and folded hood stand above the tub.
+ const linnetUpper=Float32Array.from([[-.62,.86,.32],[.62,.86,.32],[-.58,1.18,.18],[.58,1.18,.18],[-.62,1.04,-1.0],[.62,1.04,-1.0],[-.62,.86,-1.05],[.62,.86,-1.05]].flatMap(([x,y,z])=>[x,y-.82,z]));
+ const roofDesc=kind==='linnet'?api.ColliderDesc.convexHull(linnetUpper)!:kind==='tordal'?api.ColliderDesc.convexHull(tordalUpper)!:kind==='starfin'?api.ColliderDesc.convexHull(starfinUpper)!:kind==='saber'?api.ColliderDesc.convexHull(saberUpper)!:kind==='alder'?api.ColliderDesc.convexHull(alderUpper)!:kind==='morrow'?api.ColliderDesc.convexHull(morrowUpper)!:kind==='kite'?api.ColliderDesc.convexHull(kiteUpper)!:kind==='trail'?api.ColliderDesc.convexHull(trailUpper)!:kind==='regent'?api.ColliderDesc.convexHull(regentUpper)!:kind==='shuttle'?api.ColliderDesc.convexHull(shuttleUpper)!:buggy?api.ColliderDesc.capsule(.35,.026).setRotation({x:0,y:0,z:Math.SQRT1_2,w:Math.SQRT1_2}).setTranslation(0,.734,-.63):kind==='marten'?api.ColliderDesc.convexHull(martenUpper)!:kind==='tern'?api.ColliderDesc.convexHull(ternUpper)!:kind==='van'?api.ColliderDesc.convexHull(vanUpper)!:
   api.ColliderDesc.cuboid(kind==='compact'?.60:classic?.70:.65,classic?.22:.24,classic?(utility?.56:estate?1.195:kind==='compact'?.73:.72):.65)
    .setTranslation(0,classic?.43:kind==='coupe'?.12:.2,classic?(utility?-.16:estate?-.98:kind==='compact'?-.25:-.40):-.1);
  const roof=world.createCollider(roofDesc.setMass(0).setFriction(.5).setActiveEvents(api.ActiveEvents.CONTACT_FORCE_EVENTS).setContactForceEventThreshold(0),body);
@@ -141,14 +153,16 @@ export function createVehiclePhysics(api:typeof R,world:R.World,kind:CarKind,mas
 }
 const intact=new Float32Array(4),unshifted=[{x:0,y:0,z:0},{x:0,y:0,z:0},{x:0,y:0,z:0},{x:0,y:0,z:0}];
 /** No renderer, wall clock or networking state: both simulations execute this kernel. */
-export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastVehicleController,kind:CarKind,spec:VehicleSpecification,state:PhysicsState,dt:number,wheelDamage:ArrayLike<number>=intact,wheelShift:readonly Vec[]=unshifted,engineDamage?:number,tyreDamage?:ArrayLike<number>){
+export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastVehicleController,kind:CarKind,spec:VehicleSpecification,state:PhysicsState,dt:number,wheelDamage:ArrayLike<number>=intact,wheelShift:readonly Vec[]=unshifted,engineDamage?:number,tyreDamage?:ArrayLike<number>,externalLongitudinal=false){
  const q=body.rotation(),velocity=body.linvel(),forward=rotateVehicleVector({x:0,y:0,z:1},q),right=rotateVehicleVector({x:1,y:0,z:0},q),up=rotateVehicleVector({x:0,y:1,z:0},q),def=DEFINITIONS[kind],alive=state.health>0;
  const running=advanceEngineRestart(state,dt);
- state.speed=dot(velocity,forward);state.slip=Math.abs(dot(velocity,right));
- const target=(alive?state.input.steer:0)*(.55*spec.steering/(1+Math.abs(state.speed)*.016))+(state.damageRight-state.damageLeft)*.0007;
+ state.speed=dot(velocity,forward);const lateralSpeed=dot(velocity,right);state.slip=Math.abs(lateralSpeed);
+ const target=(alive?state.input.steer:0)*(.55*spec.steering*steeringSpeedScale(state.speed,lateralSpeed,state.input.steer,dot(body.angvel(),up)))+(state.damageRight-state.damageLeft)*.0007;
  const alpha=1-Math.exp(-8*dt);state.steering=(1-alpha)*state.steering+alpha*target;
  const throttle=stepTransmission(state,spec,dt,running);
- const force=running?throttle*spec.force*enginePowerFactor(state.health,engineDamage)*clamp((spec.speedLimit-Math.abs(state.speed))/10,0,1):0;
+ // Brake priority also applies to manual pedals: Rapier ignores wheelBrake
+ // whenever a wheel has engine force, even under full service braking.
+ const force=running&&state.input.brake<=0?throttle*spec.force*enginePowerFactor(state.health,engineDamage)*clamp((spec.speedLimit-Math.abs(state.speed))/10,0,1):0;
  const engineBrake=running?manualEngineBrake(state,spec):0;
  const front=axleDrive(spec.differential,!!controller.wheelIsInContact(0),!!controller.wheelIsInContact(1)),rear=axleDrive(spec.differential,!!controller.wheelIsInContact(2),!!controller.wheelIsInContact(3));
  for(let i=0;i<4;i++){
@@ -159,14 +173,15 @@ export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastV
   controller.setWheelRadius(i,corner.radius);controller.setWheelMaxSuspensionForce(i,corner.force);controller.setWheelSideFrictionStiffness(i,corner.sideGrip);controller.setWheelAxleCs(i,{x:-Math.cos(corner.camber),y:Math.sin(corner.camber),z:0});
   // Rapier ignores wheelBrake when engine force is nonzero. Disengage only
   // the handbraked rear wheels so the brake works while front drive is retained.
-  let wheelForce=state.input.handbrake&&i>1&&kind!=='tern'?0:force*corner.power*(kind==='tern'?(i<2?front[i%2]:0):(kind==='coupe'||isClassicKind(kind)&&kind!=='trail')?(i>1?rear[i%2]:0):.5*(i<2?front:rear)[i%2]);
-  if(state.input.assists?.traction&&!state.input.handbrake)wheelForce=limitTractionForce(wheelForce,state.input.assists.traction,!!controller.wheelIsInContact(i),Math.min(corner.force,Math.max(0,controller.wheelSuspensionForce(i)??0)),state.slip,state.surface,corner.grip*spec.grip);
-  controller.setWheelEngineForce(i,wheelForce);
+  let wheelForce=state.input.handbrake&&i>1&&!isFrontDriveKind(kind)?0:force*corner.power*(isFrontDriveKind(kind)?(i<2?front[i%2]:0):(kind==='coupe'||isClassicKind(kind)&&kind!=='trail')?(i>1?rear[i%2]:0):.5*(i<2?front:rear)[i%2]);
+  const contactMotion=state.input.assists?.traction||state.input.assists?.abs?wheelContactMotion(body,controller,i,forward,right):undefined;
+  if(state.input.assists?.traction&&!state.input.handbrake)wheelForce=limitTractionForce(wheelForce,state.input.assists.traction,!!controller.wheelIsInContact(i),Math.min(corner.force,Math.max(0,controller.wheelSuspensionForce(i)??0)),contactMotion!.lateral,state.surface,corner.grip*spec.grip);
+  controller.setWheelEngineForce(i,externalLongitudinal?0:wheelForce);
   let serviceBrake=state.input.brake*90*(i<2?spec.frontBrake:spec.rearBrake);
-  if(alive&&state.input.assists?.abs&&!(state.input.handbrake&&i>1))serviceBrake=limitBrakeImpulse(serviceBrake,state.input.assists.abs,!!controller.wheelIsInContact(i),Math.min(corner.force,Math.max(0,controller.wheelSuspensionForce(i)??0)),(state.surface==='asphalt'?3.2:2.4)*corner.grip*spec.grip,controller.wheelSideImpulse(i)??0,state.speed,dt);
-  const driven=kind==='tern'?i<2:(kind==='coupe'||isClassicKind(kind)&&kind!=='trail')?i>1:true;
-  controller.setWheelBrake(i,!alive?18:serviceBrake+(state.input.handbrake&&i>1?100:0)+corner.drag+(driven?engineBrake:0));
-  controller.setWheelFrictionSlip(i,(state.surface==='asphalt'?3.2:2.4)*(state.input.handbrake&&i>1?.6:1)*corner.grip*spec.grip);
+  if(alive&&state.input.assists?.abs&&!(state.input.handbrake&&i>1))serviceBrake=limitBrakeImpulse(serviceBrake,state.input.assists.abs,!!controller.wheelIsInContact(i),Math.min(corner.force,Math.max(0,controller.wheelSuspensionForce(i)??0)),surfaceGrip(state.surface)*corner.grip*spec.grip,controller.wheelSideImpulse(i)??0,controller.wheelIsInContact(i)?contactMotion!.longitudinal:state.speed,dt);
+  const driven=isFrontDriveKind(kind)?i<2:(kind==='coupe'||isClassicKind(kind)&&kind!=='trail')?i>1:true;
+  controller.setWheelBrake(i,externalLongitudinal?0:!alive?18:serviceBrake+(state.input.handbrake&&i>1?100:0)+corner.drag+(driven?engineBrake:0));
+  controller.setWheelFrictionSlip(i,surfaceGrip(state.surface)*(state.input.handbrake&&i>1?.6:1)*corner.grip*spec.grip);
   controller.setWheelSuspensionStiffness(i,corner.stiffness*spec.spring*(kind==='utility'&&i>1?1.16:1));
  }
  if(spec.differential>0&&running&&Math.abs(throttle)>.1&&Math.abs(state.speed)>2)body.applyTorqueImpulse({x:0,y:-body.angvel().y*spec.mass*.16*spec.differential*Math.abs(throttle)*dt,z:0},true);
@@ -174,7 +189,7 @@ export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastV
  // Rapier ignores wheelBrake while engineForce is nonzero. Apply tyre rolling
  // loss to the actual contact on both driven and free wheels, capped at the
  // impulse that cancels their relative ground speed so it cannot propel a car.
- if(tyreDamage)for(let i=0;i<4;i++)applyTyreRollingResistance(body,controller,i,tyreFailure(tyreDamage[i]),forward,right,dt);
+ if(tyreDamage&&!externalLongitudinal)for(let i=0;i<4;i++)applyTyreRollingResistance(body,controller,i,tyreFailure(tyreDamage[i]),forward,right,dt);
  if(up.y>.5){const av=body.angvel(),frontFailure=(tyreFailure(tyreDamage?.[0])+tyreFailure(tyreDamage?.[1]))/2,rearFailure=(tyreFailure(tyreDamage?.[2])+tyreFailure(tyreDamage?.[3]))/2;
   // A flat front tyre cannot receive the intact steering assist; rear failures
   // also leave more of the actual contact-induced yaw instead of cancelling it.
@@ -184,14 +199,14 @@ export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastV
  return up.y;
 }
 
-export type PhysicsTuning={engine:number;tires:number;armor:number;tune:{gearing:number;suspension:number;steering:number;brakeBias:number;differential:number;compression?:number;rebound?:number;rideHeight?:number;brakePressure?:number}};
+export type PhysicsTuning={engine:number;engineRestriction?:EngineRestriction;tires:number;armor:number;tune:{gearing:number;suspension:number;steering:number;brakeBias:number;differential:number;compression?:number;rebound?:number;rideHeight?:number;brakePressure?:number}};
 export function vehicleSpecification(kind: CarKind, input: PhysicsTuning = {engine:0,tires:0,armor:0,tune:{gearing:0,suspension:0,steering:0,brakeBias:0,differential:0}}) {
   const s = input, d = DEFINITIONS[kind];
-  const ratio = 1 + s.tune.gearing * .22;
-  return {mass: d.mass + s.armor * 95 + s.engine * 12,
-    force: d.force * (1 + s.engine * .12) * ratio,
-    speedLimit: ((kind==='trail'?39:kind==='regent'?43:kind==='shuttle'?31:kind==='wagon'?44:kind==='muscle'?50:kind==='utility'?46:kind==='compact'?38:kind==='van'?35:kind==='tern'?42:kind==='marten'?40:kind==='buggy'?44:53) + s.engine * 1.4) / ratio, gearStep: (kind==='trail'?6.4:kind==='regent'?7.0:kind==='shuttle'?5.9:kind==='wagon'?7.4:kind==='muscle'?8.2:kind==='utility'?7.8:kind==='compact'?6.5:kind==='van'?6.8:kind==='tern'?7:kind==='marten'?6.6:kind==='buggy'?7.1:9) / ratio,
-    spring: (kind==='trail'?1.05:kind==='regent'?1.04:kind==='shuttle'?1.15:kind==='wagon'?.84:kind==='muscle'?.93:kind==='utility'?.96:kind==='compact'?.76:kind==='van'?.94:kind==='tern'?.83:kind==='marten'?.78:kind==='buggy'?.68:1)*(1 + s.tune.suspension * .35), damping: (kind==='trail'?1.05:kind==='regent'?1.04:kind==='shuttle'?1.20:kind==='wagon'?.92:kind==='van'?1.08:kind==='marten'?.96:kind==='buggy'?1.12:1)*(1 + s.tune.suspension * .18),
+  const ratio = 1 + s.tune.gearing * .22, output=engineOutput(s.engineRestriction), engine=output===1?s.engine:0;
+  return {mass: d.mass + s.armor * 95 + engine * 12,
+    force: d.force * (1 + engine * .12) * ratio * output,
+    speedLimit: ((kind==='linnet'?41:kind==='tordal'?44:kind==='starfin'?45:kind==='saber'?47:kind==='alder'?44:kind==='morrow'?49:kind==='kite'?47:kind==='trail'?39:kind==='regent'?43:kind==='shuttle'?31:kind==='wagon'?44:kind==='muscle'?50:kind==='utility'?46:kind==='compact'?38:kind==='van'?35:kind==='tern'?42:kind==='marten'?40:kind==='buggy'?44:53) + engine * 1.4) / ratio * Math.cbrt(output), gearStep: (kind==='linnet'?7.6:kind==='tordal'?7.3:kind==='starfin'?7.0:kind==='saber'?7.8:kind==='alder'?7.2:kind==='morrow'?8.0:kind==='kite'?7.6:kind==='trail'?6.4:kind==='regent'?7.0:kind==='shuttle'?5.9:kind==='wagon'?7.4:kind==='muscle'?8.2:kind==='utility'?7.8:kind==='compact'?6.5:kind==='van'?6.8:kind==='tern'?7:kind==='marten'?6.6:kind==='buggy'?7.1:9) / ratio,
+    spring: (kind==='linnet'?.82:kind==='tordal'?.95:kind==='starfin'?.9:kind==='saber'?.9:kind==='alder'?.97:kind==='morrow'?1.02:kind==='kite'?.94:kind==='trail'?1.05:kind==='regent'?1.04:kind==='shuttle'?1.15:kind==='wagon'?.84:kind==='muscle'?.93:kind==='utility'?.96:kind==='compact'?.76:kind==='van'?.94:kind==='tern'?.83:kind==='marten'?.78:kind==='buggy'?.68:1)*(1 + s.tune.suspension * .35), damping: (kind==='trail'?1.05:kind==='regent'?1.04:kind==='shuttle'?1.20:kind==='wagon'?.92:kind==='van'?1.08:kind==='marten'?.96:kind==='buggy'?1.12:1)*(1 + s.tune.suspension * .18),
     ...(s.tune.compression?{compression:1+s.tune.compression*.5}:{}),
     ...(s.tune.rebound?{rebound:1+s.tune.rebound*.5}:{}),
     rideHeight: s.tune.rideHeight?-s.tune.suspension * .035+s.tune.rideHeight*.06:-s.tune.suspension * .035, grip: 1 + s.tires * .06,
