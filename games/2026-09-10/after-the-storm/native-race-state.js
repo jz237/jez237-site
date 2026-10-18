@@ -42,6 +42,7 @@ import {prepareNativeStuntPrelude} from './native-stunt-prelude.js';
 import {prepareNativeStuntCheckpoint} from './native-stunt-checkpoint.js';
 import {prepareNativeStuntFinish} from './native-stunt-finish.js';
 import {prepareNativeStuntRings} from './native-stunt-rings.js';
+import {prepareNativeObjectInitialization} from './native-object-initialization.js';
 import {prepareNativePrimaryScratchContext} from './native-primary-scratch-context.js';
 
 const MIN=-2147483648,MAX=2147483647,RACE_BASE=0x1f94,RACE_WORDS=1693,HUD_BASE=0x7788,HUD_WORDS=1442;
@@ -61,7 +62,7 @@ const sceneRanges={fieldAb0c:[-32768,32767],championshipCountAa00:[-32768,32767]
  pendingPlayers60c:[-32768,32767],participantCount60e:[-32768,32767],result6f0:[-32768,32767],field62a:[-32768,32767],specialAb64:[-32768,32767],ready6fc:[-32768,32767],field4964:[0,65535],
  reverseDab68:[0,65535],missesEnabled72e:[0,65535],seed6f00:[0,65535],rngState4640:[0,0xffffffff],inputTick1960:[0,0xffffffff],style6e28:[0,65535],
  field4970:[0,65535],field72c:[0,65535],fieldA9ac:[0,65535],pressed65a:[0,65535],unlockAb60:[-32768,32767],freshNameAb6c:[-32768,32767],variant6f4:[-32768,32767],variant6f6:[-32768,32767]};
-const sceneWords=new Set(['ringNext0cb0','ringStreak0cb4','objectCountFa40','ringCountB134','titlePairSelectionA9fc','fieldAa08','fortressCourse3a10','cold8224','clockStopped817c','phase650','simulation648','main638','mode620','state600',
+const sceneWords=new Set(['collisionPlaneCount0578','alternate8250','ringNext0cb0','ringStreak0cb4','objectCountFa40','ringCountB134','titlePairSelectionA9fc','fieldAa08','fortressCourse3a10','cold8224','clockStopped817c','phase650','simulation648','main638','mode620','state600',
  'missLimit8174','noFinish8178','configuredLaps728','difficulty','directionFlag1f90','ambientD4b00','fortressD8240',
  'metadataD9b0','metadataCb32c','restart6f8','initLatch63c','gameStateAb24','mode608','returnState630','forceFirst8228','demoOffset5438','rngState4640','inputTick1960','style6e2c',
  'previousGameState634','field640','field644','fieldAb1c','fieldAb2c','field461c','field700','field704','field708','field70c','field710','field714','resultEffect393c','wave610','missLimit614','lapCount618','field61c','wave49b0','field64c','players','racerCount','toggleD9914','previousNavigationD9874','trainingSelectionDa9f8',
@@ -93,6 +94,8 @@ function copy(value){
   hudWords7788:words(value.hudWords7788,'hudWords7788',HUD_WORDS),scene};
  if(value.i1Words9440!==undefined)s.i1Words9440=words(value.i1Words9440,'i1Words9440',168);
  if(value.objectWordsC940!==undefined)s.objectWordsC940=words(value.objectWordsC940,'objectWordsC940',3136);
+ if(value.collisionPlaneWordsFd78!==undefined)s.collisionPlaneWordsFd78=words(value.collisionPlaneWordsFd78,'collisionPlaneWordsFd78',512);
+ if(value.packedObjectMatrixWords0cd0!==undefined)s.packedObjectMatrixWords0cd0=words(value.packedObjectMatrixWords0cd0,'packedObjectMatrixWords0cd0',1024);
  if(value.aiWords3c60!==undefined)s.aiWords3c60=words(value.aiWords3c60,'aiWords3c60',NATIVE_AI_STORAGE_WORDS);
  if(value.saveWordsB280!==undefined)s.saveWordsB280=words(value.saveWordsB280,'saveWordsB280',34);
  if(value.menuWordsE658!==undefined){
@@ -130,6 +133,10 @@ function copy(value){
  * Optional objectWordsC940[3136] owns all64 retained49-word source objects at
  * 801BC940..FA40, exclusive. objectCountFa40 and ringNext0cb0/ringStreak0cb4
  * are separate external words; total collected ring count292C is in raceWords.
+ * Optional collisionPlaneWordsFd78[512] owns32 retained16-word planes at
+ * 801BFD78..801C0578; collisionPlaneCount0578 stays in scene. Optional
+ * packedObjectMatrixWords0cd0[1024] owns64 packed matrices at801C0CD0..1CD0.
+ * These are separate from the float matrices inside objectWordsC940 records.
  * Optional nameEntryWords61c4[14] owns shared name-menu scratch802261C4..61FC;
  * it does not overlap the HUD wheel/name bytes or the i1 overlay. field700 is
  * signed32 transport of four retained name bytes; freshNameAb6c is signed16.
@@ -156,6 +163,21 @@ function copy(value){
  */
 export function createNativeRaceState(value){return freeze(copy(value));}
 export function nativeRaceStateSnapshot(value){return copy(value);}
+
+/** Actual744EC initialization using the same object owner consumed by rings.
+ * Readonly templates/table inputs are external selected-course resources.
+ * This does not load71E70 rows or infer75274/6AACC startup scheduling. */
+export function prepareNativeRaceObjectInitialization(state,input={}){
+ const next=copy(state);record(input,'object initialization resources');
+ for(const key of ['objectWordsC940','collisionPlaneWordsFd78','packedObjectMatrixWords0cd0','objectCountFa40','courseIndex','players','mode620','difficulty','reverseDab68','alternate8250'])
+  if(Object.hasOwn(input,key))throw new RangeError(`${key} overlaps canonical native state`);
+ const scene=Object.fromEntries(['objectCountFa40','courseIndex','players','mode620','difficulty','reverseDab68','alternate8250'].map(k=>[k,sceneValue(next,k)]));
+ const initialized=prepareNativeObjectInitialization({...input,...scene,objectWordsC940:next.objectWordsC940,
+  collisionPlaneWordsFd78:next.collisionPlaneWordsFd78,packedObjectMatrixWords0cd0:next.packedObjectMatrixWords0cd0});
+ for(const key of ['objectWordsC940','collisionPlaneWordsFd78','packedObjectMatrixWords0cd0'])next[key]=initialized[key];
+ next.scene.collisionPlaneCount0578=initialized.collisionPlaneCount0578;
+ return freeze({state:next,effects:[]});
+}
 
 const stuntSlotFields=['type','amount','age','x','y','velocityY','finishOffset'];
 const stuntTotalFields={total:0x26d0,time:0x26d4,ring:0x26d8,trick:0x26dc};

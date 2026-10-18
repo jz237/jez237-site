@@ -19,6 +19,32 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — native object initialization and transforms
+
+The full numeric744EC initializer now prepares the shared generic-object array,
+including live positions, heading axes, collection/fade flags, type-specific
+motion/collision fields, float and packed matrices, transformed collision planes
+and the selected course's fixed-plane tail. Retained words outside the actual
+writes are preserved. The canonical race state owns the separate plane and
+packed-matrix spans; initialized rings feed the existing collection/award stage
+without a second position or collected-state owner.
+
+All100 prepared cases match complete original744EC execution with original
+EE6F4/EDD90/EDC60/EDD04 callees:179,465 instructions and864 exported initializer
+instruction records matched to ROM. Cases cover all9 courses, both player counts,
+ordinary/Stunt selection, all supported object kinds, mixed arrays,64 rings and
+the source's repeated plane-cap check. Another564 direct transform cases match
+59,784 original instructions. The object Euler routine uses degree division,
+truncation and its own float32 product order; the HUD Euler helper is different.
+
+The Ghidra project on EVO X2 was inspected read-only and its9 files stayed
+unchanged. Its existing database has no functions at the four overlay transform
+entries; those routines were independently decoded and executed from the private
+ROM. Numeric tests use synthetic collision templates, not original scene assets.
+Out-of-span plane writes are rejected atomically. Source71E70 row loading,
+75274/6AACC startup scheduling and live native Stunt admission remain unfinished.
+Resolution and rendering quality are unchanged.
+
 ## Unpublished — complete native Stunt judging and HUD update
 
 The canonical race owner now composes the complete Stunt79528 numeric update:
