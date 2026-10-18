@@ -38,6 +38,39 @@ test('live actor audio reads raw buttons, completed recovery and retained animat
  assert.deepEqual(owner.drain(),[],'new packet fields must not invent unconnected voice playback');
 });
 
+test('pose feedback uses completed recipes even with engine channels muted, with no held-frame repeats or result replay',()=>{
+ const owner=createNativeRaceContactAudio({players:1,courseIndex:1}),f=field();
+ owner.applyEffects([call('800c21f4',7,1)]);owner.drain();
+ const b=body(1);b.riderLifecycle.lastEffects=[{kind:'actionPoseCue',actorState:8}];
+ assert.equal(owner.snapshot().globals.primaryMuted,1);
+ advance(owner,[b],f,[0],[0]);
+ assert.deepEqual(owner.drain().map(c=>c.arguments),[[0x06000b00,8]]);
+ advance(owner,[b],f,[0],[0]);assert.deepEqual(owner.drain(),[],'duplicate completion does not consume recipes twice');
+ b.logicalFrames=2;b.frame.simulationState=0;advance(owner,[b],f,[0],[0]);assert.deepEqual(owner.drain(),[],'inactive frames cannot replay stale recipes');
+ b.logicalFrames=3;b.frame.simulationState=3;b.riderLifecycle.lastEffects=[];b.lastFrame.actorState=8;b.lastFrame.animationFrame=30;
+ advance(owner,[b],f,[0],[0]);assert.deepEqual(owner.drain(),[],'a displayed pose alone is not an event');
+ owner.applyEffects([call('800c21f4',6,0)]);owner.drain();
+ b.logicalFrames=4;b.riderLifecycle.lastEffects=[{kind:'actionPoseCue',actorState:8}];advance(owner,[b],f,[0],[0]);
+ assert.deepEqual(owner.drain(),[],'original result flag suppresses both feedback calls');
+});
+
+test('explicit original rider feedback calls reach cue playback, without inventing a landing trigger',()=>{
+ const owner=createNativeRaceContactAudio({players:1,courseIndex:1});owner.applyEffects([call('800c21f4',7,1)]);owner.drain();
+ owner.applyEffects([call('800c3548'),call('800c35b4')]);
+ assert.deepEqual(owner.drain().map(c=>c.arguments),[[0x06000b00,9],[0x06000b00,19]]);
+ owner.applyEffects([{kind:'recordWordWrite',consumer:'800c3548',arguments:[]}]);assert.deepEqual(owner.drain(),[]);
+});
+
+test('completed primary-slot feedback preserves player attribution and the two-player cue base',()=>{
+ const owner=createNativeRaceContactAudio({players:2,courseIndex:1}),f=field();
+ owner.applyEffects([call('800c21f4',7,1)]);owner.drain();
+ const bodies=[body(1),body(1)];bodies[1].riderLifecycle.lastEffects=[{kind:'actionPoseCue',actorState:17}];
+ advance(owner,bodies,f,[0,0],[0,0]);
+ assert.deepEqual(owner.drain(),[{frame:1,player:1,consumer:'c53d4',arguments:[0x06000b00,4]}]);
+ const disabled=createNativeRaceContactAudio({players:1,courseIndex:1});
+ advance(disabled,[bodies[1]],f,[0],[0]);assert.deepEqual(disabled.drain(),[],'fresh source cue base255 remains disabled until mode entry');
+});
+
 test('live crash and remount voices follow the original zero-to-event edge for both actual riders',()=>{
  const owner=createNativeRaceContactAudio({players:2,courseIndex:1}),f=field();start(owner);
  const events=[[22,0],[22,5],[22,5],[24,0],[22,0],[24,0]];

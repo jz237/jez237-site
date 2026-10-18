@@ -8,6 +8,8 @@ import {nativeRiderActionPoseInitialization} from '../native-rider-action-pose-l
 import {NATIVE_RIDER_LINKS} from '../native-articulated-rider.js';
 import {createAuthoredNativeActionPoses} from '../authored-native-action-poses.js';
 import {stepNativeArticulatedRider} from '../native-articulated-rider.js';
+import {createNativeRaceContactAudio} from '../native-race-contact-audio.js';
+import {createNativeWaterField} from '../native-water-field.js';
 
 // Independently prepared source requests/scene inputs exercise the ACTUAL
 // hull, auxiliary and nineteen-point solvers with authored equivalent art.
@@ -17,7 +19,7 @@ import {stepNativeArticulatedRider} from '../native-articulated-rider.js';
 const AXES=['x','y','z'],copy=p=>({...p}),distance=(a,b)=>Math.hypot(...AXES.map(k=>a[k]-b[k]));
 const ORDINARY=[1,1,1,1,1,1,2,1,1,4,4,1,1,1,3,1,1,4,4];
 const ALTERNATE=[1,1,0,1,1,1,0,0,1,1,1,1,1,1,0,0,1,1,1];
-function harness({actor,choice=0,alternate=0,fastRelease=false,skipReverseHold=false,cancelIdle=false,crash=false}={}){
+function harness({actor,choice=0,alternate=0,fastRelease=false,skipReverseHold=false,cancelIdle=false,crash=false,feedbackAudio=false}={}){
  const initialHull=createNativeHull(),bundle=createNativeLifecycleRider({initialHull}),samples=[];
  let randomReads=0,heldFrames=0,returned=-1,qualifiedImpact=false;
  const restore=actor===25?createNativeRiderRecovery({riderIndex:0,actorState:25,alternateStumble:alternate,
@@ -53,10 +55,18 @@ function harness({actor,choice=0,alternate=0,fastRelease=false,skipReverseHold=f
   else if(actor===10&&cancelIdle&&adapter.logicalFrames>0)held=1;
   return {rawXNative:0,rawYNative:y,heldButtons:held};
  };
+ const audio=feedbackAudio?createNativeRaceContactAudio({players:1,courseIndex:1}):null,feedback=[];
+ const audioField=audio?createNativeWaterField({datumNative:0}):null;
+ if(audio){audio.applyEffects([{kind:'externalCall',consumer:'800c21f4',arguments:[7,1]}]);audio.drain();}
  const records=[];let entered=actor===25;
  for(let frame=0;frame<240;frame++){
   const prior=adapter.riderLifecycle.state;
+  if(audio)audio.beforeFrame(frame+1);
   stepNativeRaceAdapter(adapter,.05,controls);
+  if(audio){
+   audio.advance([adapter],audioField,{recordFlags318:[0],recordMotion2c8:[0],recordPower12c:[0],recordPlace4:[0],sprayLeft1c5c:[0],sprayRight1c60:[0]});
+   feedback.push(...audio.drain().filter(c=>c.arguments[0]===0x06000b00));
+  }
   const state=adapter.riderLifecycle.state;entered||=state.actorState===actor||state.pendingActor===actor;
   records.push({frame,prior,state,mode:adapter.riderLifecycle.physicalMode,types:adapter.articulatedRider.points.map(p=>p.type),
    bodySolves:adapter.articulatedRider.logicalFrames,auxSolves:bundle.anchorState.logicalFrames,
@@ -80,8 +90,19 @@ function harness({actor,choice=0,alternate=0,fastRelease=false,skipReverseHold=f
  assert.deepEqual(records.at(-1).types,alternate?ALTERNATE:ORDINARY);assert.equal(records.at(-1).mode,1);
  if(!crash)assert.ok(records.every(r=>r.state.crashCountdown===0&&r.state.stumbleCountdown===0&&![7,23,24].includes(r.state.actorState)),
   'successful action completion cannot be disguised by a separate wipeout/recovery');
- return {adapter,bundle,records,samples,returned,randomReads,qualifiedImpact};
+ return {adapter,bundle,records,samples,returned,randomReads,qualifiedImpact,feedback};
 }
+
+test('actual action pose completions reach the cue channel once without altering physical trajectories or gameplay RNG',()=>{
+ for(const actor of [8,9,17]){
+  const ordinary=harness({actor}),audible=harness({actor,feedbackAudio:true});
+  assert.deepEqual(audible.records,ordinary.records);assert.equal(audible.randomReads,ordinary.randomReads);
+  const effects=audible.records.filter(r=>r.effects.some(e=>e.kind==='actionPoseCue'));
+  assert.equal(effects.length,1);assert.equal(audible.feedback.length,1);
+  const frame=effects[0].frame+1,random=(Math.imul(frame,1664525)+1013904223)>>>0;
+  assert.deepEqual(audible.feedback[0],{frame,player:0,consumer:'c53d4',arguments:[0x06000b00,8+(random&1)]});
+ }
+});
 
 test('actor8 request blends into real inversion targets, holds30 and returns22 through one physical solve per frame',()=>{
  const h=harness({actor:8}),held=h.records.filter(r=>r.state.actorState===8&&r.state.animationFrame===30);

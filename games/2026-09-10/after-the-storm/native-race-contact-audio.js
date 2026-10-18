@@ -12,6 +12,7 @@ import {freshNativeAnnouncer,prepareNativeAnnouncer,advanceNativeRaceAnnouncer} 
 import {resetNativeRaceAudioTimers} from './native-audio-transition.js';
 import {prepareNativeAudioMode} from './native-audio-mode.js';
 import {prepareNativeCueAudio} from './native-cue-audio.js';
+import {prepareNativeRiderFeedbackAudio} from './native-rider-feedback-audio.js';
 const F=Math.fround;
 const channelEntries=new Set(['800bfdd0','800bfde4','800bfe70','800bfef8','800bffac','800bfd34','800bfd68','800bffcc']);
 const voiceEntries=new Set(['c32a0','c3320','c338c','c33c8','c3408','c3464','c36f8','c3500','c3524','c377c']);
@@ -48,6 +49,9 @@ export function createNativeRaceContactAudio({players,courseIndex,difficultyWord
  const jitter=()=>((Math.imul(frame,1664525)+1013904223)>>>0);
  const retain=context=>{for(const key of Object.keys(globals))globals[key]=context[key];};
  function submit(command,player=0){
+  if(command.consumer==='c3548'||command.consumer==='c35b4'){
+   for(const raw of prepareNativeRiderFeedbackAudio(command.consumer,{...globals,random4562c:jitter()}))submit(raw,player);return;
+  }
   if(command.consumer==='c1eb8'){
    for(const raw of prepareNativeCueAudio(command.arguments[0],globals.cueBase7e05))submit(raw,player);return;
   }
@@ -74,6 +78,9 @@ export function createNativeRaceContactAudio({players,courseIndex,difficultyWord
   },
   applyEffects(effects){
    for(const effect of effects){
+    if(effect.kind==='externalCall'&&['800c3548','800c35b4'].includes(effect.consumer)){
+     submit({consumer:effect.consumer.slice(3),arguments:effect.arguments});continue;
+    }
     // Source start-control emits audioEntry, separately from channel calls.
     // C21F4 and the supplied ROM initialize7CA0/7CB8 tozero. Event voices
     // enter the same priority slot as rank, power and rider-water commentary.
@@ -120,6 +127,15 @@ export function createNativeRaceContactAudio({players,courseIndex,difficultyWord
    frame=next;
    for(let player=0;player<players;player++){
     const adapter=adapters[player],body=nativeRaceBodyFields(adapter),wet=adapter.wetState;
+    // The pose lifecycle already owns the primary-slot and648 gates. Consume
+    // its actual completion recipes once per physical frame, including when
+    // engine packets are muted. Do not infer a stunt from its rendered pose.
+    if(adapter.frame.simulationState!==0)for(const effect of adapter.riderLifecycle?.lastEffects??[]){
+     if(effect.kind==='actionPoseCue'){
+      if(![8,9,17].includes(effect.actorState))throw new RangeError('Unknown action pose feedback');
+      submit({consumer:'c3548',arguments:[]},player);
+     }
+    }
     const actorC54=adapter.lastFrame.actorState;
     let point6b4Native,waterQueryNative;
     if(actorC54===23||actorC54===5){

@@ -19,6 +19,37 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — original rider feedback audio bridge
+
+C3548/C35B4 now preserve their complete result gate, unsigned audio-random
+selection and ordered commentary/cue calls. Commentary uses the existing
+C3408 race-mode/priority consumer; the channel11 cue remains independent.
+The audio owner consumes actual actionPoseCue completion recipes once per
+physical frame, including with engine packets muted. A held rendered pose
+does not produce a new event. Duplicate completions and inactive frames cannot
+replay a recipe, and the original nonzero result flag suppresses both calls.
+Explicit external C3548/C35B4 calls use the same consumer; no unverified landing
+trigger was added. Player attribution and solo/versus cue bases are retained.
+
+A fresh read-only EVO X2 Ghidra query left all9 project files unchanged.
+All56 exported instruction records matched the ROM. The original routines
+executed740 prepared cases and7,548 instructions, including unsigned32 RNG
+boundaries and signed result flags. Public fixtures contain numeric commands.
+72 focused tests pass across feedback, source actor completion, announcer/cue
+playback, live contact frames and audio options. Three real physical action
+runs each emit one cue; their complete physical histories and gameplay RNG
+reads are identical with and without audio enabled. Existing30/60/144Hz audio
+history tests still pass.
+
+Browser verification used an explicitly prepared actor8 request with real hull,
+pose and rider solving: frame35/animation30 emitted cue8 once, and Web Audio
+started its original program8 successfully. High remains1280x720 with83,521
+water vertices. The normal native launch was also checked at time9/frame180;
+its additional gesture/idle adapter remains disabled. This checkpoint connects
+the prepared physical action path to sound; it does not claim ordinary native
+gesture admission. Supplying that launch state and its shared RNG/record inputs
+is the next gameplay integration. Special126 and channel15 audio remain open.
+
 ## Unpublished — original cue instruments and race audio preparation
 
 Native solo/versus launches and finish events now route the original C1EB8
