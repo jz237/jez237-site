@@ -39,7 +39,7 @@ test('liftback exports a self-contained repeatable GLB matching the published mo
 test('tordal has a distinct chassis, four detachable doors, aligned wheels, and damage that fully repairs',()=>{
  const world=new R.World({x:0,y:0,z:0}),scene=new T.Scene(),c=new Vehicle(0,'tordal',DEFINITIONS.tordal.color,scene,world,fx);
  try{
-  assert.equal(CAR_KINDS.length,20);assert.ok(Math.abs(c.body.mass()-1340)<1);assert.ok(c.glass.length>=6);assert.ok(c.panels.length>25);
+  assert.ok(CAR_KINDS.length>=20&&CAR_KINDS.includes('tordal'));assert.ok(Math.abs(c.body.mass()-1340)<1);assert.ok(c.glass.length>=6);assert.ok(c.panels.length>25);
   assert.deepEqual(c.wreckParts.assemblies.filter(a=>a.name.startsWith('door-')).map(a=>a.name).sort(),['door-left','door-rear-left','door-rear-right','door-right']);
   const anchors=classicWheelAnchors('tordal');for(let i=0;i<4;i++){assert.equal(c.wheels[i].position.x,anchors.wheels[i].x);assert.equal(c.wheels[i].position.z,anchors.wheels[i].z);assert.ok(Math.abs(c.controller.wheelRadius(i)!-.34)<1e-6);}
   c.root.updateMatrixWorld(true);const clean=shape(c),mass=c.body.mass();

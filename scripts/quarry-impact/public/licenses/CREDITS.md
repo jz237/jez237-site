@@ -216,3 +216,5 @@ Saber 2.0 GT: original fictional 1980s liftback coupe bodywork and original Tern
 Starfin 58: original fictional late-1950s hardtop bodywork, original Marten road-wheel assemblies and whitewall bands. See [STARFIN-58.md](STARFIN-58.md).
 
 Tordal 244: original fictional 1980s boxy saloon bodywork and original Marten road-wheel assemblies. See [TORDAL-244.md](TORDAL-244.md).
+
+Linnet 1300: original fictional 1960s roadster bodywork and original Marten road-wheel assemblies. See [LINNET-1300.md](LINNET-1300.md).

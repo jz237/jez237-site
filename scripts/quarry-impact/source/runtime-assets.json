@@ -542,8 +542,8 @@
     },
     {
       "path": "licenses/CREDITS.md",
-      "bytes": 25803,
-      "sha256": "a28b19de71447b65a7b53276a1c83f169dd6a8c3edbc6be9db4f5d777c062d4b"
+      "bytes": 25941,
+      "sha256": "0e344ab875bca5616631985905dd8e900c7f326992544985b184e737e1dc03b1"
     },
     {
       "path": "licenses/CarConcept-LICENSE.md",
@@ -564,6 +564,11 @@
       "path": "licenses/KITE-2000.md",
       "bytes": 392,
       "sha256": "81beafcb0ebc90f2c4e5d58391b1358be8fb58b5fde65c759c272a578703ad96"
+    },
+    {
+      "path": "licenses/LINNET-1300.md",
+      "bytes": 503,
+      "sha256": "0e321ce8ff3821215b8607023584dfb09573358f408ee17105509a57694d0ce4"
     },
     {
       "path": "licenses/MARTEN-1600.md",
@@ -829,6 +834,11 @@
       "path": "models/kite.glb",
       "bytes": 3322224,
       "sha256": "8a28d777a42347e15123cb5b359baabb41edc79ac40f230e2868281970fcfd0d"
+    },
+    {
+      "path": "models/linnet.glb",
+      "bytes": 2927880,
+      "sha256": "cd183de3689f03e483d0bfe0e994040ab0179c0570bf48ab3c5865d350b48a1c"
     },
     {
       "path": "models/maple.webp",

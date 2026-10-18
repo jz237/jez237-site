@@ -6,7 +6,7 @@ export const DRIVING_CAMERA_LABELS:Record<DrivingCamera,string>={chase:'CHASE',h
 /** Eye positions in the authored model's coordinate system, before its chassis
  * offset. The three original cars have center-mounted steering assemblies. */
 export const DASHBOARD_EYES:Record<CarKind,readonly[number,number,number]>={
- tordal:[-.38,1.30,-.10],starfin:[-.42,1.24,-.15],saber:[-.36,1.17,-.20],alder:[-.40,1.31,-.12],morrow:[-.40,1.29,-.10],kite:[-.36,1.30,-.07],coupe:[0,1.19,.43],sedan:[0,1.30,.48],hatch:[0,1.32,.32],
+ linnet:[-.30,1.10,-.42],tordal:[-.38,1.30,-.10],starfin:[-.42,1.24,-.15],saber:[-.36,1.17,-.20],alder:[-.40,1.31,-.12],morrow:[-.40,1.29,-.10],kite:[-.36,1.30,-.07],coupe:[0,1.19,.43],sedan:[0,1.30,.48],hatch:[0,1.32,.32],
  muscle:[-.36,1.25,-.05],wagon:[-.36,1.25,-.05],utility:[-.36,1.25,.06],
  compact:[-.324,1.21,-.12],van:[-.405,1.51,.36],tern:[-.343,1.26,-.08],
  marten:[-.343,1.26,-.08],buggy:[-.325,1.34,-.12],shuttle:[-.52,1.96,2.06],
