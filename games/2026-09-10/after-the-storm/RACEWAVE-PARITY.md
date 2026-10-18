@@ -6712,3 +6712,28 @@ rejects a mode4 course instead of silently treating it as mode0. The source
 producer/lifetime; a fabricated frustum or permanent zero corners is not supplied.
 Championship progression, original AI traffic and training/warm-up integration
 remain unfinished. No rendering resolution or public mode default changes.
+
+### Original training entry preparation — 2026-10-18
+
+The complete 801ECB98 entry now has an independent numeric implementation and
+canonical state adapter. It selects source dispatcher 102, main state 21 and
+course 7, with one human, four racers, simulation state 2, phase 3 and no finish.
+This is distinct from Dolphin Practice. All four body profiles use the selected
+avatars and course 7 CPU traits; the human variant changes the resource avatar
+without changing its physical profile. The retained primary lesson word selects
+the audio argument after resource and fade initialization, including 32-bit wrap.
+
+The original instruction interpreter executed the entire caller and its reached
+resource/fade helpers for 288 cases (351,696 instructions). The numeric fixture
+compares every ordered direct write and call across all 24 avatar permutations,
+four primary slots and three variant values. It also covers signed/raw trait
+words and lesson counter boundaries. The canonical adapter expands the existing
+fade routines and retains explicit physical-profile, resource and audio effects.
+Three new tests and nine title/championship return regressions pass, including
+unchanged caller state and rejection of sparse or missing consumed data.
+Another 26 menu-entry, fade, resource-state and loading checks pass (38 distinct
+checks total); all 412 module hashes and four page preload sets are refreshed.
+
+This prepares entry only: it does not expose a playable training mode, run the
+lesson overlay, initialize its physical world or claim completed warm-up flow.
+High-resolution rendering and public mode defaults remain unchanged.

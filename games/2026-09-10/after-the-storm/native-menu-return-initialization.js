@@ -121,3 +121,29 @@ export function prepareNativeChampionshipMenuReturn(value,sourceViews={}){
  operations.push(call('8009684c',[0x08060000,...resourcePair(sourceViews,course)]),call('800c21f4',[2,course]));
  return freeze({operations,diagnostic:{consumer:'801eb91c',rngCalls:1,menuLoopExecuted:false,physicalInitialization:false}});
 }
+
+/** Complete801ECB98 training entry. It selects source course7 and main21,
+ * not Dolphin free practice. All four body profiles use that course's CPU
+ * trait table. The selected human variant changes only the resource avatar;
+ * the retained lesson word selects audio after resource/fade initialization.
+ * This entry does not run the lesson overlay, reset or physical initializer. */
+export function prepareNativeTrainingEntry(value,sourceViews={}){
+ const operations=[...entry(value,102,21,3),word('mode620',0),word('players',1),word('racerCount',4),
+  word('wave49b0',10),word('missLimit8174',5),word('configuredLaps728',3),word('courseIndex',7),
+  word('noFinish8178',1),word('simulation648',2),word('field64c',0),word('phase650',3)];
+ const avatars=Array.from(array(sourceViews.avatarsA9b0,'avatarsA9b0',4),v=>int(v,'training avatar',0,3));
+ const courses=sourceViews.courseRiderTraits;
+ if(!Array.isArray(courses)||courses.length<8||courses.length>12)throw new RangeError('Training requires course7 rider traits');
+ for(let slot=0;slot<4;slot++){
+  const avatar=avatars[slot],traits=Array.from(row(courses[7],'training course rider traits',avatar,4,3),v=>int(v,'training trait word',0,0xffffffff));
+  operations.push(body(slot,0,avatar));
+  traits.forEach((v,i)=>operations.push(body(slot,i+1,v)));
+ }
+ const primary=read(value,'primaryHumanIndex',0,3),variant=read(value,'variant6f4',-32768,32767);
+ const records=array(value.raceWords1f94,'raceWords1f94',1693);
+ const lesson=int(records[(0x2c70-0x1f94)/4+primary*222],'retained training lesson',0,0xffffffff);
+ operations.push(call('80096960',[2,avatars[primary]+(variant!==0?4:0),...avatars.slice(1)]),
+  call('8009684c',[0x08060000,3,-1]),call('801e6fb0',[7,10,0]),call('801e6a4c',[0,0]),
+  hud(0x7c80,8),call('800c21f4',[11,(lesson+1)>>>0]));
+ return freeze({operations,diagnostic:{consumer:'801ecb98',lessonLoopExecuted:false,physicalInitialization:false}});
+}

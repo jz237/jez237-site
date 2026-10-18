@@ -26,7 +26,7 @@ import {prepareNativeRaceCourseZeroSequenceUpdate,prepareNativeRaceCourseZeroSeq
 import {prepareNativeRaceStartTransform,decodeNativeRaceStartTransform} from './native-race-start-transform.js';
 import {prepareNativeRaceFadePropertiesInitialization,prepareNativeRaceFadeSlotsReset} from './native-race-fade-initialization.js';
 import {prepareNativeRaceMainConfiguration} from './native-race-main-configuration.js';
-import {prepareNativeCourseMenuReturn,prepareNativeRiderMenuReturn,prepareNativeTitleMenuReturn,prepareNativeChampionshipMenuReturn} from './native-menu-return-initialization.js';
+import {prepareNativeCourseMenuReturn,prepareNativeRiderMenuReturn,prepareNativeTitleMenuReturn,prepareNativeChampionshipMenuReturn,prepareNativeTrainingEntry} from './native-menu-return-initialization.js';
 import {prepareNativeRaceMenuInitialization} from './native-race-menu-initialization.js';
 import {prepareNativeNameEntryInitialization,prepareNativeNameEntryInput,prepareNativeNameEntryAnimationPhase,prepareNativeNameEntryRecordUpdate,prepareNativeNameEntryDisplay} from './native-name-entry.js';
 import {prepareNativeNameEntryPresentation} from './native-name-presentation.js';
@@ -880,7 +880,7 @@ export function prepareNativeRaceMainConfigurationUpdate(state,sourceViews={}, {
   finalAudioPending:true,physicalInitialization:false}});
 }
 
-/** Numeric title/championship/rider/course return entry, with fades expanded in
+/** Numeric title/championship/rider/course return or training entry, with fades expanded in
  * source order into the same canonical HUD owner. Physical rider tunes,
  * resources and audio remain required effects. The original selection-menu
  * loops and rendering are separate; no target entry remains for replay.
@@ -889,8 +889,8 @@ export function prepareNativeRaceMainConfigurationUpdate(state,sourceViews={}, {
  * kind3 needs the36-word descriptor owner; no missing state is synthesized. */
 export function prepareNativeMenuReturnUpdate(state,destination,sourceViews={}, {expandResourceInitializers=false}={}){
  if(typeof expandResourceInitializers!=='boolean')throw new TypeError('expandResourceInitializers must be boolean');
- const prepare={course:prepareNativeCourseMenuReturn,rider:prepareNativeRiderMenuReturn,title:prepareNativeTitleMenuReturn,championship:prepareNativeChampionshipMenuReturn}[destination];
- if(typeof prepare!=='function'||!['course','rider','title','championship'].includes(destination))throw new RangeError('Unreconstructed menu return destination');
+ const prepare={course:prepareNativeCourseMenuReturn,rider:prepareNativeRiderMenuReturn,title:prepareNativeTitleMenuReturn,championship:prepareNativeChampionshipMenuReturn,training:prepareNativeTrainingEntry}[destination];
+ if(typeof prepare!=='function'||!['course','rider','title','championship','training'].includes(destination))throw new RangeError('Unreconstructed menu return destination');
  const next=copy(state),prepared=prepare(next,sourceViews),operations=[],effects=[],expandedResourceConsumers=[];
  for(const op of prepared.operations){
   let batch=[op];
