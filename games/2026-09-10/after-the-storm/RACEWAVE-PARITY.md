@@ -6599,3 +6599,34 @@ that correction. All407 module hashes and four page preload sets are refreshed.
 Resolution remains unchanged. Native physics remains opt-in; ordinary Dolphin
 Practice, original computer driving, additional tricks and alternate-route
 physical validation are still pending.
+
+### Dolphin solo Practice preparation — 2026-10-18
+
+The actual one- and two-player resource descriptors select the same Dolphin
+companion image, but their route and collision pointers differ. Solo ordinary
+Normal/Hard/Expert all select the same60 primary rows. Two-player and Reverse
+select an eight-row fallback outside that companion; all eight floor/shore
+selectors also differ. Consequently the prepared full Dolphin Practice scene
+is explicitly solo and forward Normal. It does not substitute the full solo
+park for an unverified two-player source layout.
+
+Executing the original primary loading/initialization on the selected solo
+rows produced3,900 exact initialized words in23,558 instructions. The prepared
+runtime retains all60 rows, including hidden navigation, and the original
+370-unit finish half-width. Canonical ordinary object startup supplies two
+jumps with12 planes,12 beach decorations and205 fixed spheres. It has no Stunt
+rings and does not inherit the four Stunt jumps. Floor and shore support share
+the verified solo100 finite faces and55 segments. Every fixed sphere, jump
+plane, decoration center and shore endpoint is checked against canonical data.
+
+The direct main-configuration and primary-progress implementations establish
+the next integration boundary: ordinary course0 starts in phase3/simulation3,
+reset gives full power, and course0 skips ordinary lap/finish bookkeeping.
+The Practice scene and numeric owners are prepared, but live Practice admission,
+free-riding controls, rendering and physical traversal still require validation.
+No timed-race or two-player admission is enabled by this preparation.
+
+Fifteen focused Practice, Dolphin Stunt, Port and Twilight runtime checks pass;
+terrain remains361x361 with512x512 depth data. The scene has a distinct Practice
+identity, while worker and live-mode wiring remain pending. This preparation
+does not implement the original training-lesson or championship warm-up loops.
