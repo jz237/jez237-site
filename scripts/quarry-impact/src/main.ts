@@ -58,6 +58,7 @@ import {combatMotion,COMBAT_AWARDS} from './combat-feats';
 import {transmissionGearLabel,transmissionNotice} from './transmission';
 import {drivingButtons} from './driving-controls';
 import {AdaptiveGraphics,graphicsChoice} from './adaptive-graphics';
+import {LIGHTING_CHOICES,readLighting,resolveLighting,applyLighting,createOvercastSky,type LightingMood} from './lighting-presets';
 import {createAshfordWorld} from './ashford-world';
 import {recoverSaveImport,BACKUP_JOURNAL} from './save-backup';
 import {mountSaveBackup} from './save-backup-ui';
@@ -192,6 +193,7 @@ const settings = {
   effects: saved.effects ?? 0.8,
   ambience: saved.ambience ?? 0.45,
   audioOutput: readAudioOutput(saved.audioOutput),
+  lighting: readLighting(saved.lighting),
 };
 const adaptiveGraphics=new AdaptiveGraphics();
 let drivingControls=readControls();
@@ -619,6 +621,16 @@ function activateVenue(venue:VenueContext){
   activeVenue=venue;physics=venue.physics;drivers.arena=venue.arena??DERBY_ARENA;director.arena=venue.arena??DERBY_ARENA;venue.root.visible=true;refreshVenueLighting();
 }
 let staticShadows: StaticQuarryShadows | undefined;
+/** Chosen per event; 'random' never repeats the previous mood. */
+let eventLighting: LightingMood | null = null;
+let clearSky: T.Texture | null = null, overcastSky: T.Texture | null = null;
+function applyEventLighting(fresh: boolean) {
+  if (fresh || !eventLighting) eventLighting = resolveLighting(settings.lighting, eventLighting);
+  if (!clearSky && scene.background instanceof T.Texture) clearSky = scene.background;
+  overcastSky ??= createOvercastSky();
+  const preset = applyLighting({ sun: quarry.sun, hemisphere: scene.children.find((o): o is T.HemisphereLight => o instanceof T.HemisphereLight), scene, renderer, skies: { clear: clearSky, overcast: overcastSky } }, eventLighting);
+  if (staticShadows) staticShadows.intensity = preset.shadow;
+}
 let environmentTarget: T.WebGLRenderTarget | undefined;
 let online:OnlineView, onlineUI:OnlineUI, onlinePhase='';
 const isPlayer=(c:Vehicle)=>c===cars[0];
@@ -827,6 +839,7 @@ async function start(watch=demo) {
   bankRun(false);telemetry=null;
   if(watch){activeChallenge=undefined;activeTimeTrial=null;}
   timeTrialOpen=false;timeTrialInvalidReason='';timeTrialResult=null;
+  applyEventLighting(true);
   demo=watch;demoRestart=0;director.reset();if(watch)director.select(demoOptions.camera);keys.clear();testInput=null;
   wreckHold = 0;
   if(online?.active) {if(online.network.isHost){online.network.start(mode);return true;}return false;}
@@ -1064,6 +1077,9 @@ function pause(settingsOnly = false) {
   ui.querySelector('#engine-volume')!.closest('.settings-row')!.insertAdjacentHTML('beforebegin',`<div class="settings-row"><label for="audio-output">Audio output</label><select id="audio-output">${Object.entries(AUDIO_OUTPUTS).map(([value,label])=>`<option value="${value}">${label}</option>`).join('')}</select></div>`);
   const audioOutput=ui.querySelector<HTMLSelectElement>('#audio-output')!;audioOutput.value=settings.audioOutput;
   audioOutput.onchange=()=>{settings.audioOutput=readAudioOutput(audioOutput.value);sound.setOutput(settings.audioOutput);persist();};
+  ui.querySelector('#quality')!.closest('.settings-row')!.insertAdjacentHTML('afterend',`<div class="settings-row"><label for="lighting">Lighting</label><select id="lighting">${Object.entries(LIGHTING_CHOICES).map(([value,label])=>`<option value="${value}">${label}</option>`).join('')}</select></div>`);
+  const lighting=ui.querySelector<HTMLSelectElement>('#lighting')!;lighting.value=settings.lighting;
+  lighting.onchange=()=>{settings.lighting=readLighting(lighting.value);applyEventLighting(true);persist();};
   const quality = document.querySelector<HTMLSelectElement>('#quality')!;
   quality.value = settings.quality;
   quality.onchange = () => {
@@ -1788,12 +1804,13 @@ canvas.addEventListener('webglcontextlost', (e) => {
 });
 canvas.addEventListener('webglcontextrestored', () => {
   // Render-target contents are lost with the context, unlike source HDR data.
-  if (environmentTarget && scene.background instanceof T.Texture) {
+  const environmentSky = clearSky ?? scene.background;
+  if (environmentTarget && environmentSky instanceof T.Texture) {
     const generator = createPMREMGenerator(renderer);
     try {
       // A fresh PMREMGenerator needs to allocate its own filtering planes.
       // Passing an old target here skips that initialization in Three r181.
-      const replacement = generator.fromEquirectangular(scene.background);
+      const replacement = generator.fromEquirectangular(environmentSky);
       scene.environment = replacement.texture;
       environmentTarget.dispose();
       environmentTarget = replacement;
@@ -1848,6 +1865,7 @@ async function boot() {
   createCars(true);
   staticShadows.bindReceivers(scene);
   applyQuality();
+  applyEventLighting(true);
   loading('WARMING LIGHTING AND REFLECTIONS');
   void sound.preload().catch(()=>{}); // A failed prefetch is retried on Start.
   // Queue programs together instead of waiting for each shader during the first
