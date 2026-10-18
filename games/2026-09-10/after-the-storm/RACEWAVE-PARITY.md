@@ -6872,3 +6872,32 @@ menus produce the same final state. Late invalid layout or target data cannot
 partially mutate state. Real rider previews, physical podium world, live
 championship integration and championship name-menu completion remain pending.
 Resolution and public mode defaults are unchanged.
+
+### Championship initials and record-exit phase — 2026-10-18
+
+The shared name-menu runtime now also prepares the championship portion of
+states100/101. It consumes state after controller sampling and the main6 scene
+updates, then runs the original wheel animation, shared widgets and fade before
+drawing and controls. The original dispatcher was executed for both states and
+both latch values (four cases, 201 instructions); its scene callees remain
+explicit boundaries. This phase does not replace those scene updates.
+
+Championship END confirmation commits the name to qualifying RAM record rows
+and immediately enters state101, preserving the original distinction from the
+solo wheel's outro. Blank input restores the selected profile name first. The
+delayed fade completes after 38 updates; only then does the display suffix emit
+normal or reverse course-save calls, including warm-up and repeated courses,
+before initializing standings state66. Initializers and the literal name copy
+expand once, in source order, without leaving duplicate pending entry calls.
+The numeric display suffix is shared with the existing graphics caller; all
+498 cached original executions still match (45,090 instructions, 6,057 ordered
+operations). The existing solo runtime retains its admission and behavior.
+
+Six integration tests cover actual button edges through three-letter entry and
+END, white entry fade, immediate championship confirmation, RAM record targets,
+blank-name restoration and the fifth null byte, delayed save ordering, normal
+versus reverse storage, warm-up qualification versus saving, repeated rounds,
+30/60/144Hz cadence, suspended time and atomic late failures. Required storage,
+resource, audio and scene effects remain host responsibilities. This is not a
+claim of durable persistence or a new live championship admission. High-resolution
+drawing, canvas size and public mode defaults are unchanged.

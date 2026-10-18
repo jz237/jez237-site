@@ -314,19 +314,30 @@ export function prepareNativeNameEntryDisplay(value,sourceViews={}){
    if(op.returnWord%4)throw new RangeError('Source display-list head must be word-aligned');}
   operations.push(op);return op.returnWord;
  }
- const owners={};
- function word(key,count,index){
-  if(!owners[key]){
-   const a=value?.[key];if(!Array.isArray(a)||(key==='profileWordsB330'?![50,52].includes(a.length):a.length!==count))throw new RangeError(`Invalid ${key} length`);
-   owners[key]=Array.from(a,v=>integer(v,key,0,U32));
-  }return owners[key][index]|0;
- }
  if(scene('initLatch63c')!==0)write('initLatch63c',0);
  write('fieldAb2c',0);
  let head=call('80093f78',[],true);head=call('8008fb74',[head],true);head=call('801e2058',[head],true);
  operations.push({kind:'presentationWordWrite',address:head,width:4,value:0x01020040},
   {kind:'presentationWordWrite',address:(head+4)>>>0,width:4,value:0x8011f820});
  head=call('80094a44',[(head+8)>>>0,scene('courseIndex')],true);head=call('80090f58',[head],true);head=call('801e229c',[head],true);
+ operations.push(...prepareNativeNameEntryPostDisplay(value,sourceViews).operations);
+ return freeze({operations,displayListHead:head,diagnostic:{consumer:'801e1e8c',renderingPerformed:false,inputExpanded:false,recordsPersisted:false}});
+}
+
+/** Numeric1E8C suffix for high-resolution drawing, without guest GPU returns.
+ * Saves include warm-up and repeated course indices in source order. Callers
+ * must consume the storage effects; preparing them is not durable persistence.
+ */
+export function prepareNativeNameEntryPostDisplay(value,sourceViews={}){
+ const operations=[],owners={};
+ const scene=key=>integer(value?.scene?.[key],`scene.${key}`);
+ const call=(consumer,args=[])=>operations.push({kind:'externalCall',consumer,arguments:args.map(v=>v>>>0)});
+ function word(key,count,index){
+  if(!owners[key]){
+   const a=value?.[key];if(!Array.isArray(a)||(key==='profileWordsB330'?![50,52].includes(a.length):a.length!==count))throw new RangeError(`Invalid ${key} length`);
+   owners[key]=Array.from(a,v=>integer(v,key,0,U32));
+  }return owners[key][index]|0;
+ }
  if(scene('gameStateAb24')===100)call('801e2530');
  else if((word('hudWords7788',1442,(0x8a14-0x7788)/4)<<16>>16)===1){
   if(scene('mode608')===4){
@@ -340,5 +351,5 @@ export function prepareNativeNameEntryDisplay(value,sourceViews={}){
   }
   call('801ec500');
  }
- return freeze({operations,displayListHead:head,diagnostic:{consumer:'801e1e8c',renderingPerformed:false,inputExpanded:false,recordsPersisted:false}});
+ return freeze({operations,diagnostic:{consumer:'801e1e8c post-display',inputExpanded:false,recordsPersisted:false}});
 }

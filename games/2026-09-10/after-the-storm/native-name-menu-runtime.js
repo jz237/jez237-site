@@ -1,6 +1,9 @@
 import {prepareNativeRaceMenuInputAdvance,prepareNativeNameEntryUpdate,prepareNativeNameEntryInputUpdate,
- prepareNativeNameEntryRecordCommit,prepareNativeRaceStateOperations,prepareNativeRaceMenuInitializationUpdate} from './native-race-state.js';
+ prepareNativeNameEntryRecordCommit,prepareNativeRaceStateOperations,prepareNativeRaceMenuInitializationUpdate,
+ prepareNativeRaceWidgetAdvance,prepareNativeRaceFadeAdvance} from './native-race-state.js';
 import {nativeSineTableWords} from './native-math-tables.js';
+import {prepareNativeNameEntryPostDisplay} from './native-name-entry.js';
+import {prepareNativeWidgetPresentation,nativeWidgetDrawView} from './native-widget-presentation.js';
 const hi=a=>(a-0x7788)/4,characters='ABCDEFGHIJKLMNOPQRSTUVWXYZ-. ';
 let views;
 function sourceViews(){
@@ -37,8 +40,23 @@ export function prepareNativeNameMenuFrame(state,rawController){
  const clear=[];
  if(current.scene.initLatch63c!==0)clear.push({kind:'sourceWordWrite',field:'initLatch63c',value:0});
  clear.push({kind:'sourceWordWrite',field:'fieldAb2c',value:0});apply(clear);
- const input=prepareNativeNameEntryInputUpdate(current,constants);
- for(const op of input.operations){
+ const controls=expandNameMenuOperations(current,[{kind:'externalCall',consumer:'801e2530',arguments:[]}],constants);
+ current=controls.state;operations.push(...controls.operations);effects.push(...controls.effects);
+ return {state:current,operations,effects,matrices:update.matrices,draw,view:nativeNameMenuView(current),
+  diagnostic:{originalNumericUpdate:true,modernPresentation:true,recordsPersisted:false}};
+}
+
+// Shared numeric control expansion keeps the literal name copy and record
+// commit identical across solo and championship paths. No queued entry is
+// executed a second time by the host after its canonical initializer expands.
+function expandNameMenuOperations(state,input,constants){
+ let current=state;const pending=[...input],operations=[],effects=[];
+ function apply(ops){const q=prepareNativeRaceStateOperations(current,ops);current=q.state;operations.push(...ops);effects.push(...q.effects);}
+ while(pending.length){
+  const op=pending.shift();
+  if(op.kind==='externalCall'&&op.consumer==='801e2530'){
+   pending.unshift(...prepareNativeNameEntryInputUpdate(current,constants).operations);continue;
+  }
   if(op.kind==='externalCall'&&op.consumer==='801e2c14')apply(prepareNativeNameEntryRecordCommit(current,constants).operations);
   else if(op.kind==='externalCall'&&op.consumer==='800ca210'){
    // The original format at80226284 is%s. Its terminating byte is copied;
@@ -47,11 +65,55 @@ export function prepareNativeNameMenuFrame(state,rawController){
    for(let i=0;i<4;i++){const shift=24-i*8,byte=src>>>shift&255;dest=((dest&~(255<<shift))|(byte<<shift))>>>0;if(byte===0){terminated=true;break;}}
    if(!terminated)throw new RangeError('Name must terminate inside its four-byte owner');
    apply([{kind:'sourceWordWrite',field:'field700',value:dest}]);
-  }else if(op.kind==='externalCall'&&['801ec20c','801ed004'].includes(op.consumer))apply(prepareNativeRaceMenuInitializationUpdate(current,{consumer:op.consumer}).operations);
+  }else if(op.kind==='externalCall'&&['801ec20c','801ed004','801e2b8c','801ec500'].includes(op.consumer))
+   apply(prepareNativeRaceMenuInitializationUpdate(current,{consumer:op.consumer,...(op.consumer==='801e2b8c'?{returnState630:op.arguments[0]}:{})},constants).operations);
   else apply([op]);
  }
- return {state:current,operations,effects,matrices:update.matrices,draw,view:nativeNameMenuView(current),
-  diagnostic:{originalNumericUpdate:true,modernPresentation:true,recordsPersisted:false}};
+ return {state:current,operations,effects};
+}
+
+const sharedConstants={matrixTargets:'slots',slotTemplateWords6c50:Array(11).fill(0),
+ fadeTemplateWords6cc0:[0,0,0,0x10000,0,0,0,0,0x10000],
+ rotationWord6c80:0x40490fdb,rotationWord6c84:0x40490fdb,bounceWord6c88:0x3f333333};
+function freeze(v){if(v&&typeof v==='object'&&!Object.isFrozen(v)){Object.values(v).forEach(freeze);Object.freeze(v);}return v;}
+export function nativeChampionshipNameMenuView(state){
+ const half=a=>((state.hudWords7788[(a-0x7788)>>>2]>>>(a%4?0:16))&65535)<<16>>16;
+ return freeze({...nativeNameMenuView(state),active:state.scene.mode608===4&&[100,101].includes(state.scene.gameStateAb24),
+  exiting:state.scene.gameStateAb24===101,
+  fade:{kind:half(0x8a10),stage:half(0x8a12),active:half(0x8a14),completion:half(0x8a16),
+   rgba:[half(0x8a20),half(0x8a22),half(0x8a24),half(0x8a26)]}});
+}
+
+/** Championship100/101 portion of an original20Hz frame. The caller supplies
+ * canonical state AFTER controller sampling and the main6 scene updates
+ * (1DDE48,51238,8E794). This is not a replacement for those scene consumers.
+ * Source1290 animation,5470/AFB4 widgets and71A8 fade precede drawing, then
+ * 1E8C controls or storage/standings handoff. Only the returned semantic view
+ * replaces GPU drawing; output resolution remains owned by the host renderer.
+ */
+export function prepareNativeChampionshipNameMenuPhase(state,readonlyViews={}){
+ if(state.scene.mode608!==4||state.scene.main638!==6||![100,101].includes(state.scene.gameStateAb24))
+  throw new RangeError('Championship name phase requires state100/101, main6');
+ const constants={...sourceViews(),...sharedConstants,...readonlyViews};
+ const update=prepareNativeNameEntryUpdate(state,constants),widget=prepareNativeRaceWidgetAdvance(update.state,constants);
+ const presentation=prepareNativeWidgetPresentation(widget.effects),fade=prepareNativeRaceFadeAdvance(widget.state,constants);
+ let current=fade.state;
+ const operations=[...update.operations,...widget.operations,...fade.operations];
+ const effects=[...update.effects,...presentation.operations.filter(o=>o.kind!=='widgetMatrix'),...fade.effects];
+ const draw={view:nativeChampionshipNameMenuView(current),matrices:update.matrices,
+  widgets:nativeWidgetDrawView(widget.state.hudWords7788,presentation)};
+ const clear=[];
+ if(current.scene.initLatch63c!==0)clear.push({kind:'sourceWordWrite',field:'initLatch63c',value:0});
+ clear.push({kind:'sourceWordWrite',field:'fieldAb2c',value:0});
+ const cleared=prepareNativeRaceStateOperations(current,clear);current=cleared.state;operations.push(...clear);effects.push(...cleared.effects);
+ const post=prepareNativeNameEntryPostDisplay(current,constants);
+ const target=post.operations.find(o=>o.kind==='externalCall'&&o.consumer==='801ec500');
+ const controls=expandNameMenuOperations(current,post.operations,constants);current=controls.state;
+ operations.push(...controls.operations);effects.push(...controls.effects);
+ return freeze({state:current,operations,effects,draw,view:nativeChampionshipNameMenuView(current),
+  handoff:target?{destination:'standings',consumer:target.consumer,gameState:66}:null,
+  diagnostic:{originalNumericControl:true,inputAndSceneUpdateRequiredBeforePhase:true,sceneUpdated:false,
+   targetInitializerExecuted:Boolean(target),graphicsExecuted:false,recordsPersisted:false}});
 }
 
 /** Independent20Hz menu clock; race physics remains stopped. Pausing discards
