@@ -1,0 +1,3884 @@
+{
+  "scope": "Actual original5DD04 with complete nested7F448 and7FAE4, selected verified source floors and canonical Stunt planes after0/1/60 physical frames. Actual hull point0 and prepared plane interior probes; not full-ROM physical driving.",
+  "checks": [
+    {
+      "courseIndex": 1,
+      "frame": 0,
+      "plane": -1,
+      "point": {
+        "x": -2338,
+        "y": -7,
+        "z": 792
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": -2338.0,
+            "y": -17.0,
+            "z": 792.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": -2338.0,
+            "y": -17.0,
+            "z": 792.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": -2338.0,
+            "y": -33.0,
+            "z": 792.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": -2338.0,
+            "y": -33.0,
+            "z": 792.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": -2338.0,
+            "y": -49.0,
+            "z": 792.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": -2338.0,
+            "y": -49.0,
+            "z": 792.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 1084
+    },
+    {
+      "courseIndex": 1,
+      "frame": 0,
+      "plane": 0,
+      "point": {
+        "x": -505.0000915527344,
+        "y": -173,
+        "z": -1065
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 1,
+      "frame": 0,
+      "plane": 1,
+      "point": {
+        "x": -1170,
+        "y": -107.00003814697266,
+        "z": -1065
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 1,
+      "frame": 0,
+      "plane": 2,
+      "point": {
+        "x": -1142,
+        "y": -40.00004959106445,
+        "z": -1065
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 1,
+      "frame": 0,
+      "plane": 3,
+      "point": {
+        "x": -1104,
+        "y": -63.499977111816406,
+        "z": -1065
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 1,
+      "frame": 0,
+      "plane": 4,
+      "point": {
+        "x": -955.9999389648438,
+        "y": -100.99999237060547,
+        "z": -1065
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 1,
+      "frame": 0,
+      "plane": 5,
+      "point": {
+        "x": -784.0000610351562,
+        "y": -117.00010681152344,
+        "z": -1065
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 1,
+      "frame": 1,
+      "plane": -1,
+      "point": {
+        "x": -2338.00634765625,
+        "y": -5.084466934204102,
+        "z": 792.1307373046875
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": -2338.00634765625,
+            "y": -15.084466934204102,
+            "z": 792.1307373046875
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": -2338.00634765625,
+            "y": -15.084466934204102,
+            "z": 792.1307373046875
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": -2338.00634765625,
+            "y": -31.0844669342041,
+            "z": 792.1307373046875
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": -2338.00634765625,
+            "y": -31.0844669342041,
+            "z": 792.1307373046875
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": -2338.00634765625,
+            "y": -47.08446502685547,
+            "z": 792.1307373046875
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": -2338.00634765625,
+            "y": -47.08446502685547,
+            "z": 792.1307373046875
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 1084
+    },
+    {
+      "courseIndex": 1,
+      "frame": 1,
+      "plane": 0,
+      "point": {
+        "x": -505.0000915527344,
+        "y": -173,
+        "z": -1065
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 1,
+      "frame": 1,
+      "plane": 1,
+      "point": {
+        "x": -1170,
+        "y": -107.00003814697266,
+        "z": -1065
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 1,
+      "frame": 1,
+      "plane": 2,
+      "point": {
+        "x": -1142,
+        "y": -40.00004959106445,
+        "z": -1065
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 1,
+      "frame": 1,
+      "plane": 3,
+      "point": {
+        "x": -1104,
+        "y": -63.499977111816406,
+        "z": -1065
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 1,
+      "frame": 1,
+      "plane": 4,
+      "point": {
+        "x": -955.9999389648438,
+        "y": -100.99999237060547,
+        "z": -1065
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 1,
+      "frame": 1,
+      "plane": 5,
+      "point": {
+        "x": -784.0000610351562,
+        "y": -117.00010681152344,
+        "z": -1065
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 1,
+      "frame": 60,
+      "plane": -1,
+      "point": {
+        "x": -2337.896484375,
+        "y": -6.866521835327148,
+        "z": 792.2514038085938
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": -2337.896484375,
+            "y": -16.86652183532715,
+            "z": 792.2514038085938
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": -2337.896484375,
+            "y": -16.86652183532715,
+            "z": 792.2514038085938
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": -2337.896484375,
+            "y": -32.86652374267578,
+            "z": 792.2514038085938
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": -2337.896484375,
+            "y": -32.86652374267578,
+            "z": 792.2514038085938
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": -2337.896484375,
+            "y": -48.86652374267578,
+            "z": 792.2514038085938
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": -2337.896484375,
+            "y": -48.86652374267578,
+            "z": 792.2514038085938
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 1084
+    },
+    {
+      "courseIndex": 1,
+      "frame": 60,
+      "plane": 0,
+      "point": {
+        "x": -505.0000915527344,
+        "y": -173,
+        "z": -1065
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 1,
+      "frame": 60,
+      "plane": 1,
+      "point": {
+        "x": -1170,
+        "y": -107.00003814697266,
+        "z": -1065
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 1,
+      "frame": 60,
+      "plane": 2,
+      "point": {
+        "x": -1142,
+        "y": -40.00004959106445,
+        "z": -1065
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 1,
+      "frame": 60,
+      "plane": 3,
+      "point": {
+        "x": -1104,
+        "y": -63.499977111816406,
+        "z": -1065
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 1,
+      "frame": 60,
+      "plane": 4,
+      "point": {
+        "x": -955.9999389648438,
+        "y": -100.99999237060547,
+        "z": -1065
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 1,
+      "frame": 60,
+      "plane": 5,
+      "point": {
+        "x": -784.0000610351562,
+        "y": -117.00010681152344,
+        "z": -1065
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 0,
+      "plane": -1,
+      "point": {
+        "x": 132,
+        "y": -7,
+        "z": 1312
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": 132.0,
+            "y": -17.0,
+            "z": 1312.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": 132.0,
+            "y": -17.0,
+            "z": 1312.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": 132.0,
+            "y": -33.0,
+            "z": 1312.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": 132.0,
+            "y": -33.0,
+            "z": 1312.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": 132.0,
+            "y": -49.0,
+            "z": 1312.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": 132.0,
+            "y": -49.0,
+            "z": 1312.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 1345
+    },
+    {
+      "courseIndex": 2,
+      "frame": 0,
+      "plane": 0,
+      "point": {
+        "x": -2901.8466796875,
+        "y": -173,
+        "z": -2315.93505859375
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 0,
+      "plane": 1,
+      "point": {
+        "x": -2879.40869140625,
+        "y": -107.00003814697266,
+        "z": -1651.3138427734375
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 0,
+      "plane": 2,
+      "point": {
+        "x": -2880.353271484375,
+        "y": -40.00004959106445,
+        "z": -1679.2978515625
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 0,
+      "plane": 3,
+      "point": {
+        "x": -2881.6357421875,
+        "y": -63.499977111816406,
+        "z": -1717.276123046875
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 0,
+      "plane": 4,
+      "point": {
+        "x": -2886.629150390625,
+        "y": -100.99999237060547,
+        "z": -1865.1920166015625
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 0,
+      "plane": 5,
+      "point": {
+        "x": -2892.432861328125,
+        "y": -117.00010681152344,
+        "z": -2037.0938720703125
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 0,
+      "plane": 6,
+      "point": {
+        "x": -1425.9805908203125,
+        "y": -173,
+        "z": 5067.9013671875
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 0,
+      "plane": 7,
+      "point": {
+        "x": -761.0933837890625,
+        "y": -107.00003814697266,
+        "z": 5080.1416015625
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 0,
+      "plane": 8,
+      "point": {
+        "x": -789.088623046875,
+        "y": -40.00004959106445,
+        "z": 5079.626953125
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 0,
+      "plane": 9,
+      "point": {
+        "x": -827.0822143554688,
+        "y": -63.499977111816406,
+        "z": 5078.92724609375
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 0,
+      "plane": 10,
+      "point": {
+        "x": -975.0571899414062,
+        "y": -100.99999237060547,
+        "z": 5076.20263671875
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 0,
+      "plane": 11,
+      "point": {
+        "x": -1147.0279541015625,
+        "y": -117.00010681152344,
+        "z": 5073.037109375
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 0,
+      "plane": 12,
+      "point": {
+        "x": -2805,
+        "y": 113,
+        "z": 692
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": -2805.0,
+            "y": 103.0,
+            "z": 692.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": -2805.0,
+            "y": 103.0,
+            "z": 692.0
+          },
+          "returnValue": 13.0
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 4
+        }
+      ],
+      "instructions": 216
+    },
+    {
+      "courseIndex": 2,
+      "frame": 0,
+      "plane": 13,
+      "point": {
+        "x": -2825,
+        "y": 113,
+        "z": -2508
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": -2825.0,
+            "y": 103.0,
+            "z": -2508.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": -2825.0,
+            "y": 103.0,
+            "z": -2508.0
+          },
+          "returnValue": 13.0
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 4
+        }
+      ],
+      "instructions": 178
+    },
+    {
+      "courseIndex": 2,
+      "frame": 1,
+      "plane": -1,
+      "point": {
+        "x": 132.10679626464844,
+        "y": -5.0803704261779785,
+        "z": 1312.0037841796875
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": 132.10679626464844,
+            "y": -15.08036994934082,
+            "z": 1312.0037841796875
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": 132.10679626464844,
+            "y": -15.08036994934082,
+            "z": 1312.0037841796875
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": 132.10679626464844,
+            "y": -31.08036994934082,
+            "z": 1312.0037841796875
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": 132.10679626464844,
+            "y": -31.08036994934082,
+            "z": 1312.0037841796875
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": 132.10679626464844,
+            "y": -47.08036804199219,
+            "z": 1312.0037841796875
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": 132.10679626464844,
+            "y": -47.08036804199219,
+            "z": 1312.0037841796875
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 1345
+    },
+    {
+      "courseIndex": 2,
+      "frame": 1,
+      "plane": 0,
+      "point": {
+        "x": -2901.8466796875,
+        "y": -173,
+        "z": -2315.93505859375
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 1,
+      "plane": 1,
+      "point": {
+        "x": -2879.40869140625,
+        "y": -107.00003814697266,
+        "z": -1651.3138427734375
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 1,
+      "plane": 2,
+      "point": {
+        "x": -2880.353271484375,
+        "y": -40.00004959106445,
+        "z": -1679.2978515625
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 1,
+      "plane": 3,
+      "point": {
+        "x": -2881.6357421875,
+        "y": -63.499977111816406,
+        "z": -1717.276123046875
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 1,
+      "plane": 4,
+      "point": {
+        "x": -2886.629150390625,
+        "y": -100.99999237060547,
+        "z": -1865.1920166015625
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 1,
+      "plane": 5,
+      "point": {
+        "x": -2892.432861328125,
+        "y": -117.00010681152344,
+        "z": -2037.0938720703125
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 1,
+      "plane": 6,
+      "point": {
+        "x": -1425.9805908203125,
+        "y": -173,
+        "z": 5067.9013671875
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 1,
+      "plane": 7,
+      "point": {
+        "x": -761.0933837890625,
+        "y": -107.00003814697266,
+        "z": 5080.1416015625
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 1,
+      "plane": 8,
+      "point": {
+        "x": -789.088623046875,
+        "y": -40.00004959106445,
+        "z": 5079.626953125
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 1,
+      "plane": 9,
+      "point": {
+        "x": -827.0822143554688,
+        "y": -63.499977111816406,
+        "z": 5078.92724609375
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 1,
+      "plane": 10,
+      "point": {
+        "x": -975.0571899414062,
+        "y": -100.99999237060547,
+        "z": 5076.20263671875
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 1,
+      "plane": 11,
+      "point": {
+        "x": -1147.0279541015625,
+        "y": -117.00010681152344,
+        "z": 5073.037109375
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 1,
+      "plane": 12,
+      "point": {
+        "x": -2805,
+        "y": 113,
+        "z": 692
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": -2805.0,
+            "y": 103.0,
+            "z": 692.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": -2805.0,
+            "y": 103.0,
+            "z": 692.0
+          },
+          "returnValue": 13.0
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 4
+        }
+      ],
+      "instructions": 216
+    },
+    {
+      "courseIndex": 2,
+      "frame": 1,
+      "plane": 13,
+      "point": {
+        "x": -2825,
+        "y": 113,
+        "z": -2508
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": -2825.0,
+            "y": 103.0,
+            "z": -2508.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": -2825.0,
+            "y": 103.0,
+            "z": -2508.0
+          },
+          "returnValue": 13.0
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 4
+        }
+      ],
+      "instructions": 178
+    },
+    {
+      "courseIndex": 2,
+      "frame": 60,
+      "plane": -1,
+      "point": {
+        "x": 132.0686798095703,
+        "y": -10.440220832824707,
+        "z": 1312.0634765625
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": 132.0686798095703,
+            "y": -20.44021987915039,
+            "z": 1312.0634765625
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": 132.0686798095703,
+            "y": -20.44021987915039,
+            "z": 1312.0634765625
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": 132.0686798095703,
+            "y": -36.44021987915039,
+            "z": 1312.0634765625
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": 132.0686798095703,
+            "y": -36.44021987915039,
+            "z": 1312.0634765625
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 910
+    },
+    {
+      "courseIndex": 2,
+      "frame": 60,
+      "plane": 0,
+      "point": {
+        "x": -2901.8466796875,
+        "y": -173,
+        "z": -2315.93505859375
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 60,
+      "plane": 1,
+      "point": {
+        "x": -2879.40869140625,
+        "y": -107.00003814697266,
+        "z": -1651.3138427734375
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 60,
+      "plane": 2,
+      "point": {
+        "x": -2880.353271484375,
+        "y": -40.00004959106445,
+        "z": -1679.2978515625
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 60,
+      "plane": 3,
+      "point": {
+        "x": -2881.6357421875,
+        "y": -63.499977111816406,
+        "z": -1717.276123046875
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 60,
+      "plane": 4,
+      "point": {
+        "x": -2886.629150390625,
+        "y": -100.99999237060547,
+        "z": -1865.1920166015625
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 60,
+      "plane": 5,
+      "point": {
+        "x": -2892.432861328125,
+        "y": -117.00010681152344,
+        "z": -2037.0938720703125
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 60,
+      "plane": 6,
+      "point": {
+        "x": -1425.9805908203125,
+        "y": -173,
+        "z": 5067.9013671875
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 60,
+      "plane": 7,
+      "point": {
+        "x": -761.0933837890625,
+        "y": -107.00003814697266,
+        "z": 5080.1416015625
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 60,
+      "plane": 8,
+      "point": {
+        "x": -789.088623046875,
+        "y": -40.00004959106445,
+        "z": 5079.626953125
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 60,
+      "plane": 9,
+      "point": {
+        "x": -827.0822143554688,
+        "y": -63.499977111816406,
+        "z": 5078.92724609375
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 60,
+      "plane": 10,
+      "point": {
+        "x": -975.0571899414062,
+        "y": -100.99999237060547,
+        "z": 5076.20263671875
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 60,
+      "plane": 11,
+      "point": {
+        "x": -1147.0279541015625,
+        "y": -117.00010681152344,
+        "z": 5073.037109375
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 2,
+      "frame": 60,
+      "plane": 12,
+      "point": {
+        "x": -2805,
+        "y": 113,
+        "z": 692
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": -2805.0,
+            "y": 103.0,
+            "z": 692.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": -2805.0,
+            "y": 103.0,
+            "z": 692.0
+          },
+          "returnValue": 13.0
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 4
+        }
+      ],
+      "instructions": 216
+    },
+    {
+      "courseIndex": 2,
+      "frame": 60,
+      "plane": 13,
+      "point": {
+        "x": -2825,
+        "y": 113,
+        "z": -2508
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": -2825.0,
+            "y": 103.0,
+            "z": -2508.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": -2825.0,
+            "y": 103.0,
+            "z": -2508.0
+          },
+          "returnValue": 13.0
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 4
+        }
+      ],
+      "instructions": 178
+    },
+    {
+      "courseIndex": 7,
+      "frame": 0,
+      "plane": -1,
+      "point": {
+        "x": 4001.9111328125,
+        "y": -7,
+        "z": 1548.1275634765625
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": 4001.9111328125,
+            "y": -17.0,
+            "z": 1548.1275634765625
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": 4001.9111328125,
+            "y": -17.0,
+            "z": 1548.1275634765625
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": 4001.9111328125,
+            "y": -33.0,
+            "z": 1548.1275634765625
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": 4001.9111328125,
+            "y": -33.0,
+            "z": 1548.1275634765625
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": 4001.9111328125,
+            "y": -49.0,
+            "z": 1548.1275634765625
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": 4001.9111328125,
+            "y": -49.0,
+            "z": 1548.1275634765625
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 2638
+    },
+    {
+      "courseIndex": 7,
+      "frame": 0,
+      "plane": 0,
+      "point": {
+        "x": -525.6273193359375,
+        "y": -140,
+        "z": 3694.365234375
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 0,
+      "plane": 1,
+      "point": {
+        "x": -525.6710205078125,
+        "y": -39.80344009399414,
+        "z": 3694.298095703125
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": -525.6710205078125,
+            "y": -49.80344009399414,
+            "z": 3694.298095703125
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": -525.6710205078125,
+            "y": -49.80344009399414,
+            "z": 3694.298095703125
+          },
+          "returnValue": 78.93534851074219
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 4
+        }
+      ],
+      "instructions": 691
+    },
+    {
+      "courseIndex": 7,
+      "frame": 0,
+      "plane": 2,
+      "point": {
+        "x": -654.6427001953125,
+        "y": -140,
+        "z": 3495.558837890625
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 0,
+      "plane": 3,
+      "point": {
+        "x": -1281.17822265625,
+        "y": -140,
+        "z": -3619.94189453125
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 0,
+      "plane": 4,
+      "point": {
+        "x": -1281.1148681640625,
+        "y": -39.80344009399414,
+        "z": -3619.9912109375
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": -1281.1148681640625,
+            "y": -49.80344009399414,
+            "z": -3619.9912109375
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": -1281.1148681640625,
+            "y": -49.80344009399414,
+            "z": -3619.9912109375
+          },
+          "returnValue": 78.9353256225586
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 4
+        }
+      ],
+      "instructions": 633
+    },
+    {
+      "courseIndex": 7,
+      "frame": 0,
+      "plane": 5,
+      "point": {
+        "x": -1094.3975830078125,
+        "y": -140,
+        "z": -3765.8251953125
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 0,
+      "plane": 6,
+      "point": {
+        "x": 994.5,
+        "y": -189.99998474121094,
+        "z": -5565
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 0,
+      "plane": 7,
+      "point": {
+        "x": -2500,
+        "y": -60,
+        "z": 1400
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 0,
+      "plane": 8,
+      "point": {
+        "x": -1900,
+        "y": -60,
+        "z": 1400
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 0,
+      "plane": 9,
+      "point": {
+        "x": -2100,
+        "y": -60,
+        "z": 2000
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 0,
+      "plane": 10,
+      "point": {
+        "x": -1500,
+        "y": -60,
+        "z": 2000
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 0,
+      "plane": 11,
+      "point": {
+        "x": 1925,
+        "y": -90,
+        "z": 5000
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 0,
+      "plane": 12,
+      "point": {
+        "x": 4500,
+        "y": 70,
+        "z": 1000
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": 4500.0,
+            "y": 60.0,
+            "z": 1000.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": 4500.0,
+            "y": 60.0,
+            "z": 1000.0
+          },
+          "returnValue": 20.0
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 4
+        }
+      ],
+      "instructions": 589
+    },
+    {
+      "courseIndex": 7,
+      "frame": 0,
+      "plane": 13,
+      "point": {
+        "x": 3500,
+        "y": 95,
+        "z": 1000
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": 3500.0,
+            "y": 85.0,
+            "z": 1000.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": 3500.0,
+            "y": 85.0,
+            "z": 1000.0
+          },
+          "returnValue": 20.0
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 4
+        }
+      ],
+      "instructions": 706
+    },
+    {
+      "courseIndex": 7,
+      "frame": 0,
+      "plane": 14,
+      "point": {
+        "x": 287.5,
+        "y": -219.50009155273438,
+        "z": -5344
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 0,
+      "plane": 15,
+      "point": {
+        "x": 278.0000305175781,
+        "y": -365,
+        "z": -5247
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 0,
+      "plane": 16,
+      "point": {
+        "x": 296.9999694824219,
+        "y": -365,
+        "z": -5247
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 0,
+      "plane": 17,
+      "point": {
+        "x": 358,
+        "y": -365,
+        "z": -5166.5
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 0,
+      "plane": 18,
+      "point": {
+        "x": 217.00001525878906,
+        "y": -365,
+        "z": -5166.5
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 0,
+      "plane": 19,
+      "point": {
+        "x": 287.5,
+        "y": -365,
+        "z": -4850
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 0,
+      "plane": 20,
+      "point": {
+        "x": 435,
+        "y": 22.5,
+        "z": 5000
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": 435.0,
+            "y": 12.5,
+            "z": 5000.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": 435.0,
+            "y": 12.5,
+            "z": 5000.0
+          },
+          "returnValue": 37.5
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 4
+        }
+      ],
+      "instructions": 321
+    },
+    {
+      "courseIndex": 7,
+      "frame": 0,
+      "plane": 21,
+      "point": {
+        "x": 50,
+        "y": 37.5,
+        "z": 5225
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": 50.0,
+            "y": 27.5,
+            "z": 5225.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": 50.0,
+            "y": 27.5,
+            "z": 5225.0
+          },
+          "returnValue": 52.5
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 4
+        }
+      ],
+      "instructions": 258
+    },
+    {
+      "courseIndex": 7,
+      "frame": 0,
+      "plane": 22,
+      "point": {
+        "x": -780,
+        "y": 37.5,
+        "z": 5000
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": -780.0,
+            "y": 27.5,
+            "z": 5000.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": -780.0,
+            "y": 27.5,
+            "z": 5000.0
+          },
+          "returnValue": 52.5
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 4
+        }
+      ],
+      "instructions": 220
+    },
+    {
+      "courseIndex": 7,
+      "frame": 1,
+      "plane": -1,
+      "point": {
+        "x": 4002.0205078125,
+        "y": -4.880207538604736,
+        "z": 1548.082763671875
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": 4002.0205078125,
+            "y": -14.880207061767578,
+            "z": 1548.082763671875
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": 4002.0205078125,
+            "y": -14.880207061767578,
+            "z": 1548.082763671875
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": 4002.0205078125,
+            "y": -30.880207061767578,
+            "z": 1548.082763671875
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": 4002.0205078125,
+            "y": -30.880207061767578,
+            "z": 1548.082763671875
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": 4002.0205078125,
+            "y": -46.88020706176758,
+            "z": 1548.082763671875
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": 4002.0205078125,
+            "y": -46.88020706176758,
+            "z": 1548.082763671875
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 2638
+    },
+    {
+      "courseIndex": 7,
+      "frame": 1,
+      "plane": 0,
+      "point": {
+        "x": -525.6273193359375,
+        "y": -140,
+        "z": 3694.365234375
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 1,
+      "plane": 1,
+      "point": {
+        "x": -525.6710205078125,
+        "y": -39.80344009399414,
+        "z": 3694.298095703125
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": -525.6710205078125,
+            "y": -49.80344009399414,
+            "z": 3694.298095703125
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": -525.6710205078125,
+            "y": -49.80344009399414,
+            "z": 3694.298095703125
+          },
+          "returnValue": 78.93534851074219
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 4
+        }
+      ],
+      "instructions": 691
+    },
+    {
+      "courseIndex": 7,
+      "frame": 1,
+      "plane": 2,
+      "point": {
+        "x": -654.6427001953125,
+        "y": -140,
+        "z": 3495.558837890625
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 1,
+      "plane": 3,
+      "point": {
+        "x": -1281.17822265625,
+        "y": -140,
+        "z": -3619.94189453125
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 1,
+      "plane": 4,
+      "point": {
+        "x": -1281.1148681640625,
+        "y": -39.80344009399414,
+        "z": -3619.9912109375
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": -1281.1148681640625,
+            "y": -49.80344009399414,
+            "z": -3619.9912109375
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": -1281.1148681640625,
+            "y": -49.80344009399414,
+            "z": -3619.9912109375
+          },
+          "returnValue": 78.9353256225586
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 4
+        }
+      ],
+      "instructions": 633
+    },
+    {
+      "courseIndex": 7,
+      "frame": 1,
+      "plane": 5,
+      "point": {
+        "x": -1094.3975830078125,
+        "y": -140,
+        "z": -3765.8251953125
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 1,
+      "plane": 6,
+      "point": {
+        "x": 994.5,
+        "y": -189.99998474121094,
+        "z": -5565
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 1,
+      "plane": 7,
+      "point": {
+        "x": -2500,
+        "y": -60,
+        "z": 1400
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 1,
+      "plane": 8,
+      "point": {
+        "x": -1900,
+        "y": -60,
+        "z": 1400
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 1,
+      "plane": 9,
+      "point": {
+        "x": -2100,
+        "y": -60,
+        "z": 2000
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 1,
+      "plane": 10,
+      "point": {
+        "x": -1500,
+        "y": -60,
+        "z": 2000
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 1,
+      "plane": 11,
+      "point": {
+        "x": 1925,
+        "y": -90,
+        "z": 5000
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 1,
+      "plane": 12,
+      "point": {
+        "x": 4500,
+        "y": 70,
+        "z": 1000
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": 4500.0,
+            "y": 60.0,
+            "z": 1000.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": 4500.0,
+            "y": 60.0,
+            "z": 1000.0
+          },
+          "returnValue": 20.0
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 4
+        }
+      ],
+      "instructions": 589
+    },
+    {
+      "courseIndex": 7,
+      "frame": 1,
+      "plane": 13,
+      "point": {
+        "x": 3500,
+        "y": 95,
+        "z": 1000
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": 3500.0,
+            "y": 85.0,
+            "z": 1000.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": 3500.0,
+            "y": 85.0,
+            "z": 1000.0
+          },
+          "returnValue": 20.0
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 4
+        }
+      ],
+      "instructions": 706
+    },
+    {
+      "courseIndex": 7,
+      "frame": 1,
+      "plane": 14,
+      "point": {
+        "x": 287.5,
+        "y": -219.50009155273438,
+        "z": -5344
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 1,
+      "plane": 15,
+      "point": {
+        "x": 278.0000305175781,
+        "y": -365,
+        "z": -5247
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 1,
+      "plane": 16,
+      "point": {
+        "x": 296.9999694824219,
+        "y": -365,
+        "z": -5247
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 1,
+      "plane": 17,
+      "point": {
+        "x": 358,
+        "y": -365,
+        "z": -5166.5
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 1,
+      "plane": 18,
+      "point": {
+        "x": 217.00001525878906,
+        "y": -365,
+        "z": -5166.5
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 1,
+      "plane": 19,
+      "point": {
+        "x": 287.5,
+        "y": -365,
+        "z": -4850
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 1,
+      "plane": 20,
+      "point": {
+        "x": 435,
+        "y": 22.5,
+        "z": 5000
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": 435.0,
+            "y": 12.5,
+            "z": 5000.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": 435.0,
+            "y": 12.5,
+            "z": 5000.0
+          },
+          "returnValue": 37.5
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 4
+        }
+      ],
+      "instructions": 321
+    },
+    {
+      "courseIndex": 7,
+      "frame": 1,
+      "plane": 21,
+      "point": {
+        "x": 50,
+        "y": 37.5,
+        "z": 5225
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": 50.0,
+            "y": 27.5,
+            "z": 5225.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": 50.0,
+            "y": 27.5,
+            "z": 5225.0
+          },
+          "returnValue": 52.5
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 4
+        }
+      ],
+      "instructions": 258
+    },
+    {
+      "courseIndex": 7,
+      "frame": 1,
+      "plane": 22,
+      "point": {
+        "x": -780,
+        "y": 37.5,
+        "z": 5000
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": -780.0,
+            "y": 27.5,
+            "z": 5000.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": -780.0,
+            "y": 27.5,
+            "z": 5000.0
+          },
+          "returnValue": 52.5
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 4
+        }
+      ],
+      "instructions": 220
+    },
+    {
+      "courseIndex": 7,
+      "frame": 60,
+      "plane": -1,
+      "point": {
+        "x": 4002.054443359375,
+        "y": -13.329524993896484,
+        "z": 1547.802978515625
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": 4002.054443359375,
+            "y": -23.329524993896484,
+            "z": 1547.802978515625
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": 4002.054443359375,
+            "y": -23.329524993896484,
+            "z": 1547.802978515625
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": 4002.054443359375,
+            "y": -39.329524993896484,
+            "z": 1547.802978515625
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": 4002.054443359375,
+            "y": -39.329524993896484,
+            "z": 1547.802978515625
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 1791
+    },
+    {
+      "courseIndex": 7,
+      "frame": 60,
+      "plane": 0,
+      "point": {
+        "x": -525.6273193359375,
+        "y": -140,
+        "z": 3694.365234375
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 60,
+      "plane": 1,
+      "point": {
+        "x": -525.6710205078125,
+        "y": -39.80344009399414,
+        "z": 3694.298095703125
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": -525.6710205078125,
+            "y": -49.80344009399414,
+            "z": 3694.298095703125
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": -525.6710205078125,
+            "y": -49.80344009399414,
+            "z": 3694.298095703125
+          },
+          "returnValue": 78.93534851074219
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 4
+        }
+      ],
+      "instructions": 691
+    },
+    {
+      "courseIndex": 7,
+      "frame": 60,
+      "plane": 2,
+      "point": {
+        "x": -654.6427001953125,
+        "y": -140,
+        "z": 3495.558837890625
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 60,
+      "plane": 3,
+      "point": {
+        "x": -1281.17822265625,
+        "y": -140,
+        "z": -3619.94189453125
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 60,
+      "plane": 4,
+      "point": {
+        "x": -1281.1148681640625,
+        "y": -39.80344009399414,
+        "z": -3619.9912109375
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": -1281.1148681640625,
+            "y": -49.80344009399414,
+            "z": -3619.9912109375
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": -1281.1148681640625,
+            "y": -49.80344009399414,
+            "z": -3619.9912109375
+          },
+          "returnValue": 78.9353256225586
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 4
+        }
+      ],
+      "instructions": 633
+    },
+    {
+      "courseIndex": 7,
+      "frame": 60,
+      "plane": 5,
+      "point": {
+        "x": -1094.3975830078125,
+        "y": -140,
+        "z": -3765.8251953125
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 60,
+      "plane": 6,
+      "point": {
+        "x": 994.5,
+        "y": -189.99998474121094,
+        "z": -5565
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 60,
+      "plane": 7,
+      "point": {
+        "x": -2500,
+        "y": -60,
+        "z": 1400
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 60,
+      "plane": 8,
+      "point": {
+        "x": -1900,
+        "y": -60,
+        "z": 1400
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 60,
+      "plane": 9,
+      "point": {
+        "x": -2100,
+        "y": -60,
+        "z": 2000
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 60,
+      "plane": 10,
+      "point": {
+        "x": -1500,
+        "y": -60,
+        "z": 2000
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 60,
+      "plane": 11,
+      "point": {
+        "x": 1925,
+        "y": -90,
+        "z": 5000
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 60,
+      "plane": 12,
+      "point": {
+        "x": 4500,
+        "y": 70,
+        "z": 1000
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": 4500.0,
+            "y": 60.0,
+            "z": 1000.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": 4500.0,
+            "y": 60.0,
+            "z": 1000.0
+          },
+          "returnValue": 20.0
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 4
+        }
+      ],
+      "instructions": 589
+    },
+    {
+      "courseIndex": 7,
+      "frame": 60,
+      "plane": 13,
+      "point": {
+        "x": 3500,
+        "y": 95,
+        "z": 1000
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": 3500.0,
+            "y": 85.0,
+            "z": 1000.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": 3500.0,
+            "y": 85.0,
+            "z": 1000.0
+          },
+          "returnValue": 20.0
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 4
+        }
+      ],
+      "instructions": 706
+    },
+    {
+      "courseIndex": 7,
+      "frame": 60,
+      "plane": 14,
+      "point": {
+        "x": 287.5,
+        "y": -219.50009155273438,
+        "z": -5344
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 60,
+      "plane": 15,
+      "point": {
+        "x": 278.0000305175781,
+        "y": -365,
+        "z": -5247
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 60,
+      "plane": 16,
+      "point": {
+        "x": 296.9999694824219,
+        "y": -365,
+        "z": -5247
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 60,
+      "plane": 17,
+      "point": {
+        "x": 358,
+        "y": -365,
+        "z": -5166.5
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 60,
+      "plane": 18,
+      "point": {
+        "x": 217.00001525878906,
+        "y": -365,
+        "z": -5166.5
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 60,
+      "plane": 19,
+      "point": {
+        "x": 287.5,
+        "y": -365,
+        "z": -4850
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 34
+    },
+    {
+      "courseIndex": 7,
+      "frame": 60,
+      "plane": 20,
+      "point": {
+        "x": 435,
+        "y": 22.5,
+        "z": 5000
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": 435.0,
+            "y": 12.5,
+            "z": 5000.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": 435.0,
+            "y": 12.5,
+            "z": 5000.0
+          },
+          "returnValue": 37.5
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 4
+        }
+      ],
+      "instructions": 321
+    },
+    {
+      "courseIndex": 7,
+      "frame": 60,
+      "plane": 21,
+      "point": {
+        "x": 50,
+        "y": 37.5,
+        "z": 5225
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": 50.0,
+            "y": 27.5,
+            "z": 5225.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": 50.0,
+            "y": 27.5,
+            "z": 5225.0
+          },
+          "returnValue": 52.5
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 4
+        }
+      ],
+      "instructions": 258
+    },
+    {
+      "courseIndex": 7,
+      "frame": 60,
+      "plane": 22,
+      "point": {
+        "x": -780,
+        "y": 37.5,
+        "z": 5000
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": -780.0,
+            "y": 27.5,
+            "z": 5000.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": -780.0,
+            "y": 27.5,
+            "z": 5000.0
+          },
+          "returnValue": 52.5
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 4
+        }
+      ],
+      "instructions": 220
+    },
+    {
+      "courseIndex": 8,
+      "frame": 0,
+      "plane": -1,
+      "point": {
+        "x": -3507,
+        "y": -7,
+        "z": 3765
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": -3507.0,
+            "y": -17.0,
+            "z": 3765.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": -3507.0,
+            "y": -17.0,
+            "z": 3765.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": -3507.0,
+            "y": -33.0,
+            "z": 3765.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": -3507.0,
+            "y": -33.0,
+            "z": 3765.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": -3507.0,
+            "y": -49.0,
+            "z": 3765.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": -3507.0,
+            "y": -49.0,
+            "z": 3765.0
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 352
+    },
+    {
+      "courseIndex": 8,
+      "frame": 1,
+      "plane": -1,
+      "point": {
+        "x": -3506.887939453125,
+        "y": -3.6520636081695557,
+        "z": 3765.02734375
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": -3506.887939453125,
+            "y": -13.652063369750977,
+            "z": 3765.02734375
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": -3506.887939453125,
+            "y": -13.652063369750977,
+            "z": 3765.02734375
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": -3506.887939453125,
+            "y": -29.652063369750977,
+            "z": 3765.02734375
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": -3506.887939453125,
+            "y": -29.652063369750977,
+            "z": 3765.02734375
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": -3506.887939453125,
+            "y": -45.652061462402344,
+            "z": 3765.02734375
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": -3506.887939453125,
+            "y": -45.652061462402344,
+            "z": 3765.02734375
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 352
+    },
+    {
+      "courseIndex": 8,
+      "frame": 60,
+      "plane": -1,
+      "point": {
+        "x": -3507.199951171875,
+        "y": -10.110228538513184,
+        "z": 3765.5830078125
+      },
+      "datum": 0,
+      "operations": [
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": -3507.199951171875,
+            "y": -20.1102294921875,
+            "z": 3765.5830078125
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": -3507.199951171875,
+            "y": -20.1102294921875,
+            "z": 3765.5830078125
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007f448",
+          "positionNative": {
+            "x": -3507.199951171875,
+            "y": -36.1102294921875,
+            "z": 3765.5830078125
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "supportProbeQuery",
+          "consumer": "8007fae4",
+          "positionNative": {
+            "x": -3507.199951171875,
+            "y": -36.1102294921875,
+            "z": 3765.5830078125
+          },
+          "returnValue": 0.0
+        },
+        {
+          "kind": "bodyResultCodeWrite",
+          "racerIndex": 0,
+          "value": 5
+        }
+      ],
+      "instructions": 248
+    }
+  ]
+}
