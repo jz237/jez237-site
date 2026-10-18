@@ -33,11 +33,17 @@ export function captureNativeStuntWorld(value){
   ...(r.scale===undefined?{}:{scale:scalar(r.scale)})}));
  const volumes=value.volumes.map(v=>({id:name(v.id),sourceIndex:integer(v.sourceIndex,0,63),planeIndex:integer(v.planeIndex,0,31),
   origin:vector(v.origin),axes:Array.isArray(v.axes)&&v.axes.length===3?v.axes.map(vector):(()=>{throw new TypeError('Expected Stunt display axes');})(),spans:vector(v.spans),visible:flag(v.visible)}));
+ let floating;
+ if(value.floating!==undefined){
+  if(!Array.isArray(value.floating)||value.floating.length>64)throw new TypeError('Expected Stunt floating display list');
+  floating=value.floating.map(v=>({id:name(v.id),sourceIndex:integer(v.sourceIndex,0,63),position:vector(v.position),matrix:matrix(v.matrix),visible:flag(v.visible)}));
+  if(new Set(floating.map(v=>v.id)).size!==floating.length||new Set(floating.map(v=>v.sourceIndex)).size!==floating.length)throw new RangeError('Duplicate floating presentation identity');
+ }
  if(new Set(rings.map(r=>r.index)).size!==rings.length||new Set(rings.map(r=>r.sourceIndex)).size!==rings.length||new Set(volumes.map(v=>v.id)).size!==volumes.length)
   throw new RangeError('Duplicate Stunt presentation identity');
  if(volumes.some(v=>v.spans.some(s=>s<=0)))throw new RangeError('Invalid Stunt display span');
  if(rings.some(r=>r.scale!==undefined&&(r.scale<=0||r.scale>1)))throw new RangeError('Invalid Stunt ring scale');
- return {version:1,rings,volumes};
+ return {version:1,rings,volumes,...(floating?{floating}:{})};
 }
 // These independently tessellated wooden surfaces follow the same finite
 // planes as contact. The renderer retains its detailed materials and mesh count.
@@ -73,11 +79,22 @@ export function createNativeStuntPresentation({course,readState,scale=.025}){
   surfaces.forEach((v,i)=>volumes.push({id:v.id,sourceIndex:row,planeIndex:start+i}));
  }
  if(matchedRamps.size!==ramps.length)throw new RangeError('Every source Stunt ramp needs its high-resolution surfaces');
- const layout=freeze({version:1,courseIndex,rings,volumes});
+ const floating=[],usedFloating=new Set();
+ for(const definition of course.sourceDynamicObjects??[]){
+  const row=rows.find(i=>!usedFloating.has(i)&&raw[i*49+19]===9&&keys.every((k,j)=>Math.abs(position(raw,i)[j]-definition[k])<1e-5));
+  if(row===undefined||!Number.isFinite(definition.radius)||definition.radius<=0)throw new RangeError('Native floating display must match its source center and radius');
+  usedFloating.add(row);floating.push({id:definition.id,sourceIndex:row,radius:definition.radius});
+ }
+ if(usedFloating.size!==rows.filter(i=>raw[i*49+19]===9).length)throw new RangeError('Every source floating body needs its high-resolution mesh');
+ const layout=freeze({version:1,courseIndex,rings,volumes,...(floating.length?{floating}:{})});
  function snapshot(){
   const s=readState(),a=s.objectWordsC940,w=s.raceWords1f94;
   if(s.scene.mode620!==11||s.scene.courseIndex!==courseIndex)throw new RangeError('Stunt display selection changed');
-  const world=captureNativeStuntWorld({version:1,rings:rings.map(r=>{
+  const world=captureNativeStuntWorld({version:1,...(floating.length?{floating:floating.map(v=>{
+   const b=v.sourceIndex*49;if(a[b+19]!==9)throw new RangeError('Floating source row changed');
+   const transform=a.slice(b+29,b+45).map(float);for(let j=12;j<15;j++)transform[j]*=scale;
+   return {id:v.id,sourceIndex:v.sourceIndex,position:position(a,v.sourceIndex),matrix:transform,visible:a[b+21]!==0};
+  })}:{}),rings:rings.map(r=>{
    const b=r.sourceIndex*49,collected=a[b+47]!==0;
    if(a[b+19]!==8)throw new RangeError('Stunt ring source row changed');
    // Use the actual EE6F4 matrix refreshed by6E0F4: its ordinal-dependent

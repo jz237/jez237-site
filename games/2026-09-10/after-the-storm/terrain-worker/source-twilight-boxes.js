@@ -1,4 +1,4 @@
-import {clippedVolume,clippedVolumes} from './clipped-volumes.js?v=4580da672e07';
+import {clippedVolume,clippedVolumes} from './clipped-volumes.js?v=22930fe0a660';
 
 // Independent numeric reconstruction of three-axis projection intervals.
 // No original artwork or executable code is included. Scale remains conditional

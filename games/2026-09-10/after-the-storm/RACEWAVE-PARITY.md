@@ -6159,3 +6159,38 @@ accept the previously enabled Stunt modes while retaining unsupported-mode gates
 Four native Stunt scenes remain to align and admit: Dolphin, Drake, Fortress and
 Port. Full original AI, ordinary course coverage and the broader parity work
 remain separate outstanding requirements; native physics remains opt-in.
+
+## Port Blue native Stunt scene and floating presentation — 2026-10-18
+
+Port Blue now joins the opt-in native Stunt selections. Its high-resolution
+scene uses the reconstructed117 solo shore segments, sixteen source rings,
+four source ramps with twenty finite surfaces, and the original checkpoint
+sequence1/4/5/0 with15/25/10/15 second limits. The inactive3D floor remains
+inactive. Only closed quays receive filled terrain; open shore chains stay
+open. Detailed concrete edges follow the selected lines, and the authored
+cranes and building sign are placed on the corrected quay layout.
+
+All twelve floating bodies remain owned by the complete canonical object
+array. Their independently authored40x28 metal sphere meshes follow source
+positions and matrices, including actual buoyancy and contact recoil, without
+starting another spring simulation. Display reads cannot change source state;
+pause and instant replay preserve the captured transforms. Binding checks
+reject missing, duplicate or mismatched bodies. The original visual identity
+of these objects is not claimed by the authored metal float design.
+
+The authored inspection helm drives from the original grid through all sixteen
+rings and four source checkpoints using throttle and steering only. The
+seed17 logical-frame-provider regression finishes with7,795 points, drains all
+awards, inserts its record and reaches the original result handoff. A real-time
+browser run independently finishes with16 rings and7,810 points at High quality
+on a1440x900 canvas; accelerated browser control sampling collected13 rings and
+also completed all checkpoints. These runs do not claim identical browser
+control sampling or original AI. Water, rider, ring and floating-body rendering
+were visually checked without JavaScript or shader errors; one local404 remains.
+
+The native scene has a separate terrain cache identity. Worker and foreground
+361x361 heights and512x512 depth maps match exactly. The three new scene tests,
+existing presentation/Port geometry checks, Twilight regressions and the full
+physical Port run pass. All384 module hashes in four entry pages are refreshed.
+Native Dolphin, Drake and Fortress Stunt scenes remain outstanding, along with
+ordinary-course admission and the broader gameplay parity requirements.

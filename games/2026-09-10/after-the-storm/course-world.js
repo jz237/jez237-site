@@ -52,6 +52,22 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
  function label(text,x,y,z,w=15,parent=root,color='#f3dab0'){const c=document.createElement('canvas');c.width=1024;c.height=128;const ctx=c.getContext('2d');ctx.fillStyle='#183c4b';ctx.fillRect(0,0,1024,128);ctx.fillStyle=color;ctx.font='bold 49px sans-serif';ctx.textAlign='center';ctx.fillText(text,512,84);const tex=new T.CanvasTexture(c);tex.colorSpace=T.SRGBColorSpace;textures.push(tex);const m=new T.MeshBasicMaterial({map:tex,side:T.DoubleSide});materials.push(m);return add(new T.PlaneGeometry(w,w/8),m,x,y,z,parent);}
  function buoy(x,z,m,s=1,placement=null){const g=new T.Group();g.userData.dynamic=true;g.position.set(x,0,z);root.add(g);add(new T.CylinderGeometry(.3*s,.6*s,.7*s,12),m,0,.35*s,0,g);add(new T.CylinderGeometry(.4*s,.5*s,.1*s,12),white,0,.44*s,0,g);cylinder(0,.98*s,0,.025,.7*s,black,g);const item={g,x,z,placement,visualCenter:.35*s};buoys.push(item);return item;}
  const sourceRowByGate=new Map(Object.entries(course.sourceVisibleGateIndices??{}).map(([row,index])=>[index,Number(row)]));
+ // Authored metal floats use the original buoyant bodies' live transforms.
+ // No wave sampling, spring or recoil is duplicated in this display layer.
+ const nativeFloatingMeshes=(course.nativeStuntLayout?.floating??[]).map(definition=>{
+  const g=new T.Group();g.userData.dynamic=true;g.matrixAutoUpdate=false;g.visible=false;root.add(g);
+  const radius=definition.radius;
+  add(new T.SphereGeometry(radius,40,28),steel,0,0,0,g);
+  const band=add(new T.TorusGeometry(radius*.98,.035,12,48),white,0,0,0,g);band.rotation.x=Math.PI/2;
+  const eye=add(new T.TorusGeometry(.12,.035,12,24),steel,0,radius+.07,0,g);
+  eye.rotation.y=Math.PI/2;
+  return {id:definition.id,g};
+ });
+ function updateNativeFloating(world){
+  const rows=new Map(world?.floating?.map(q=>[q.id,q])??[]);
+  for(const {id,g} of nativeFloatingMeshes){const q=rows.get(id);g.visible=!!q?.visible;if(q){g.matrix.fromArray(q.matrix);g.matrixWorldNeedsUpdate=true;}}
+  root.userData.nativeFloating={count:nativeFloatingMeshes.length,visible:nativeFloatingMeshes.filter(q=>q.g.visible).length};
+ }
  const red=mat(0xef503e,.35),yellow=mat(0xf5ce46,.35),pink=mat(0xd06aa9,.4);for(const [index,g] of (freeRide||authoredStunts?[]:course.gates).entries()){if(g.side){const m=g.side>0?red:yellow,b=buoy(g.bx,g.bz,m,1.25);b.primarySourceRow=sourceRowByGate.get(index);if(b.primarySourceRow!==undefined){b.nativeSkirt=add(new T.CylinderGeometry(.75,.525,.875,16),m,0,-.4375,0,b.g);b.nativeSkirt.visible=false;}}if(!course.boundary)for(const side of [-1,1])buoy(g.x+g.tz*29*side,g.z-g.tx*29*side,pink,.6);}
  // Independently authored high-resolution bodies follow native centers. Align
  // each upper body's center with its physical source center. A submerged
@@ -113,8 +129,8 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
    for(let i=0;i<shore.outline.length;i++){const a=shore.outline[i],b=shore.outline[(i+1)%shore.outline.length],n=Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])/8);for(let j=0;j<n;j++){const t=j/n;cylinder(a[0]+(b[0]-a[0])*t,-1.5,a[1]+(b[1]-a[1])*t,.15,4.65,wood);}}
   }
  }
- if(night&&course.sourceShores){
-  const top=course.authoredBackground?.quayHeight??2.5;
+ if((night||theme==='port')&&course.sourceShores){
+  const top=course.authoredBackground?.quayHeight??course.authoredBackground?.visualQuayHeight??2.5;
   for(const shore of course.sourceShores){const points=shore.outline,count=shore.sourceClosed===false?points.length-1:points.length;
    for(let i=0;i<count;i++){const a=points[i],b=points[(i+1)%points.length],dx=b[0]-a[0],dz=b[1]-a[1],length=Math.hypot(dx,dz);if(length<.01)continue;
     const wall=box((a[0]+b[0])/2,(top-3)/2,(a[1]+b[1])/2,.4,top+3,length,stone);wall.rotation.y=Math.atan2(dx,dz);
@@ -225,7 +241,12 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
  }
  function crane(x,z,angle){const y=visualGround(x,z);if(y<1)return;const g=new T.Group();g.position.set(x,y,z);g.rotation.y=angle;root.add(g);for(const side of[-1,1]){box(side*5,12,0,.7,24,.7,yellow,g);rod([side*5,0,0],[side*5,24,-5],.2,steel,g);}box(0,25,-11,13,1,35,yellow,g);box(0,23,1,6,4,5,white,g);rod([0,25,-24],[0,5,-24],.06,steel,g);box(0,4.8,-24,7,.4,2,black,g);}
  if(theme==='port'){
-  const cargoMats=[mat(0xa6533d),mat(0x496e83),mat(0xe0b557),mat(0x557567)];for(let i=0;i<45;i++){const x=(i%9-4)*15,z=Math.floor(i/9)*10-20,y=visualGround(x,z);if(y<1||routeDistance(course,x,z)<42)continue;box(x,y+1.7,z,12,3.4,5,cargoMats[i%4]);for(let k=-5;k<6;k++)box(x+k,y+1.7,z-2.55,.08,3.1,.08,steel);if(i%3===0)box(x,y+5.1,z,12,3.4,5,cargoMats[(i+1)%4]);}for(let i=0;i<5;i++)crane(-155,80-i*40,Math.PI/2);for(let i=0;i<4;i++)building(165,-85+i*55,35,38,14,white);if(!course.shipOutline)label('PORT MERIDIAN / 07',165,18,75,40);for(let i=0;i<4;i++)pier(-150,110-i*45,Math.PI/2,18);
+  const cargoMats=[mat(0xa6533d),mat(0x496e83),mat(0xe0b557),mat(0x557567)];for(let i=0;i<45;i++){const x=(i%9-4)*15,z=Math.floor(i/9)*10-20,y=visualGround(x,z);if(y<1||routeDistance(course,x,z)<42)continue;box(x,y+1.7,z,12,3.4,5,cargoMats[i%4]);for(let k=-5;k<6;k++)box(x+k,y+1.7,z-2.55,.08,3.1,.08,steel);if(i%3===0)box(x,y+5.1,z,12,3.4,5,cargoMats[(i+1)%4]);}if(course.nativeSceneCourseIndex===5){
+   // Decorative structures stay on the selected closed quays. The old map's
+   // docks and freestanding sign fall in open water in the source harbour.
+   for(const x of [-10,30,70])crane(x,-156,Math.PI);
+   const y=building(110,-170,30,32,14,white);if(y)label('PORT BLUE',110,y+8,-153.9,25);
+  }else{for(let i=0;i<5;i++)crane(-155,80-i*40,Math.PI/2);for(let i=0;i<4;i++)building(165,-85+i*55,35,38,14,white);if(!course.shipOutline)label('PORT MERIDIAN / 07',165,18,75,40);for(let i=0;i<4;i++)pier(-150,110-i*45,Math.PI/2,18);}
  }
  for(const outline of course.quayOutlines||[]){const shape=new T.Shape();outline.forEach(([x,z],i)=>i?shape.lineTo(x,-z):shape.moveTo(x,-z));shape.closePath();const geo=new T.ExtrudeGeometry(shape,{depth:8,bevelEnabled:false});geo.rotateX(-Math.PI/2);add(geo,stone,0,-2,0);}
  if(course.dockOutline){
@@ -287,7 +308,7 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
  terrain.userData.dynamic=true;animated.forEach(a=>a.o.userData.dynamic=true);root.updateMatrixWorld(true);const batches=new Map(),remove=[];const pos=new T.Vector3(),normal=new T.Vector3(),normalMatrix=new T.Matrix3();
  root.traverse(o=>{if(!o.isMesh||o.isInstancedMesh)return;for(let p=o;p&&p!==root;p=p.parent)if(p.userData.dynamic)return;const geo=o.geometry,pa=geo.attributes.position,na=geo.attributes.normal,ua=geo.attributes.uv;if(!pa||!na)return;let batch=batches.get(o.material);if(!batch){batch={p:[],n:[],uv:[],indices:[]};batches.set(o.material,batch);}const offset=batch.p.length/3;normalMatrix.getNormalMatrix(o.matrixWorld);for(let i=0;i<pa.count;i++){pos.fromBufferAttribute(pa,i).applyMatrix4(o.matrixWorld);normal.fromBufferAttribute(na,i).applyMatrix3(normalMatrix).normalize();batch.p.push(pos.x,pos.y,pos.z);batch.n.push(normal.x,normal.y,normal.z);batch.uv.push(ua?ua.getX(i):0,ua?ua.getY(i):0);}if(geo.index)for(let i=0;i<geo.index.count;i++)batch.indices.push(geo.index.getX(i)+offset);else for(let i=0;i<pa.count;i++)batch.indices.push(i+offset);remove.push(o);});
  for(const o of remove)o.removeFromParent();for(const [m,b] of batches){const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(b.p,3));geo.setAttribute('normal',new T.Float32BufferAttribute(b.n,3));geo.setAttribute('uv',new T.Float32BufferAttribute(b.uv,2));geo.setIndex(b.indices);add(geo,m);}
- return {root,update(time,storm,stunt=null,openedAt=Infinity,racers=[],sceneryView=[1],breakables=null,primaryBuoys=null,nativeIce=null,nativeStuntWorld=null){const nativeRings=new Map(nativeStuntWorld?.rings.map(r=>[r.index,r])??[]),nativeVolumes=new Map(nativeStuntWorld?.volumes.map(v=>[v.id,v])??[]);root.userData.nativeStunt=nativeStuntWorld?{rings:nativeStuntWorld.rings.length,visibleRings:nativeStuntWorld.rings.filter(r=>r.visible).length,volumes:nativeStuntWorld.volumes.length}:null;for(const item of nativeVolumeMeshes){
+ return {root,update(time,storm,stunt=null,openedAt=Infinity,racers=[],sceneryView=[1],breakables=null,primaryBuoys=null,nativeIce=null,nativeStuntWorld=null){updateNativeFloating(nativeStuntWorld);const nativeRings=new Map(nativeStuntWorld?.rings.map(r=>[r.index,r])??[]),nativeVolumes=new Map(nativeStuntWorld?.volumes.map(v=>[v.id,v])??[]);root.userData.nativeStunt=nativeStuntWorld?{rings:nativeStuntWorld.rings.length,visibleRings:nativeStuntWorld.rings.filter(r=>r.visible).length,volumes:nativeStuntWorld.volumes.length}:null;for(const item of nativeVolumeMeshes){
   const view=nativeVolumes.get(item.id);if(!view)continue;
   item.mesh.visible=view.visible;item.mesh.position.fromArray(view.origin);
   const shape=JSON.stringify([view.axes,view.spans]);
