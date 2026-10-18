@@ -6489,3 +6489,44 @@ native host regressions. A private Normal physical drive completes three laps
 in 134.581 seconds with zero misses, using only ordinary input. Hard/Expert/
 Reverse driving, browser presentation and separate-window admission remain
 under validation. Ordinary Port is not yet admitted by the public race host.
+
+
+### Ordinary Port Blue live integration — 2026-10-18
+
+Port Blue is admitted to the opt-in native Time trial and Two-player preview
+in all four classes, with source water and its player-selected high-resolution
+scene. Main rendering, the terrain worker, separate player renderer and online
+setup select the same scene. The online descriptor validates course index5
+against Port, ordinary mode and source water; mismatched selections are rejected.
+The release identifier must be advanced before publishing these new descriptors.
+
+The inspection helm follows an authored centre line through the narrow inner
+canal, using an eight-metre lookahead there and its existing wider anticipation
+outside. Explicit caller lookahead settings take precedence. Stunt navigation
+is unaffected. This changes only throttle/steering decisions, not source route
+links, hull points, contact geometry, buoy judgement, lap state or scoring.
+
+All four full physical driving tests complete three canonical laps without
+disqualification. Private Normal/Hard/Expert probes finish in134.581/138.563/
+138.882 seconds with zero misses. Reverse finishes in149.198 seconds with
+three misses, which remain visible in the source record. A Normal two-player
+probe finishes the winner in132.072 seconds with zero misses; the independently
+controlled second rider is on lap three with zero misses at that moment.
+This does not claim both riders finished or that the inspection helm is the
+original AI.
+
+The actual browser's Expert run at1440x900 High finishes in2:22.567 with one
+miss and no disqualification. Detailed water, rider and harbour geometry were
+visually checked. The actual separate player renderer also displays the Expert
+two-player capture at1440x900 High:46 primary nodes,16 object-owned ramp/solid
+planes,33 fixed markers and109 shoreline segments, with two native rider meshes.
+It correctly has no solo floating bodies. The main run logged one local404 and
+no JavaScript or shader errors; the player-renderer inspection logged no errors.
+This is presentation and protocol validation, not an end-to-end internet race.
+
+Four complete-lap tests, three Port window/codec tests,37 combined online/window
+checks and13 bounded pilot regressions pass. The broader Sunny endurance suite
+was stopped in favour of these relevant checks; it was not reported as a new
+pass. Full terrain density and texture resolution remain unchanged, and all404
+module hashes/four page preload sets match. Ordinary Twilight/Dolphin integration,
+original AI and the remaining feature-level parity work are still pending.

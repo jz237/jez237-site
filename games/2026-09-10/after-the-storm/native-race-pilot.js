@@ -64,7 +64,7 @@ export function createNativeRacePilot({course,policy={},traceLimit=256}={}){
  // Stunt routes retain their own rings and ramps; ordinary class-specific
  // inspection corridors must not replace that selected route.
  const selectedAnchors=course?.stunt?course.anchors:course?.nativePilotAnchorsByClass?.[course.difficulty]??course?.anchors;
- if(!(course?.stunt?[0,1,2,3,4,5,6,7,8]:[1,2,3,4,7,8]).includes(course?.sourceWaterCourseIndex)||!Array.isArray(selectedAnchors)||selectedAnchors.length<3)
+ if(!(course?.stunt?[0,1,2,3,4,5,6,7,8]:[1,2,3,4,5,7,8]).includes(course?.sourceWaterCourseIndex)||!Array.isArray(selectedAnchors)||selectedAnchors.length<3)
   throw new TypeError('Native pilot requires an admitted course and its selected source navigation');
  // A wider authored Normal driving line clears Southern's exposed bow at
  // low tide. This changes only the inspection helm, never the source AI,
@@ -146,7 +146,12 @@ export function createNativeRacePilot({course,policy={},traceLimit=256}={}){
   const dx=q[0]-previous[0],dz=q[1]-previous[1],length=Math.hypot(dx,dz)||1,ux=dx/length,uz=dz/length;
   const along=(r.x-previous[0])*ux+(r.z-previous[1])*uz;
   const cross=(r.x-previous[0])*uz-(r.z-previous[1])*ux,remaining=length-along;
-  const look=Math.max(config.minLookaheadWorld,r.speed*config.lookaheadSeconds);
+  // Port's inner canal needs a shorter inspection lookahead to follow its
+  // bends. Outside it, retain the wider anticipation used at coloured buoys.
+  // This affects only steering targets; explicit caller policy takes precedence.
+  const portCanal=!course.stunt&&course.sourceWaterCourseIndex===5&&course.difficulty>0&&
+   r.x>-42&&r.x<40&&r.z>-113&&r.z<17&&!Object.hasOwn(policy,'minLookaheadWorld')&&!Object.hasOwn(policy,'lookaheadSeconds');
+  const look=portCanal?8:Math.max(config.minLookaheadWorld,r.speed*config.lookaheadSeconds);
   let spare=look-Math.max(0,remaining),target=q;
   if(spare<0)target=[previous[0]+ux*(along+look),previous[1]+uz*(along+look)];
   else{

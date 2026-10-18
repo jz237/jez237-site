@@ -93,7 +93,7 @@ export function createPlayerWindowRenderer(canvas){
   if(!value||!['course','surf','calm','chop','storm'].includes(value.seaState)||!Array.isArray(value.roster)||value.roster.length!==2||value.roster.some(i=>!Number.isInteger(i)||i<0||i>3)||!Number.isInteger(value.difficulty)||value.difficulty<0||value.difficulty>3||!graphics(value.graphics))throw new Error('Invalid player view setup.');
   descriptor=value;course=getCourse(value.course,value.difficulty);if(course.id!==value.course)throw new Error('Unknown player view course.');if(value.freeRide)course=stuntCourse(course,{freeRide:true});
   if(value.nativeSceneCourseIndex!==undefined){
-   if(![3,4].includes(value.nativeSceneCourseIndex)||course.sourceWaterCourseIndex!==value.nativeSceneCourseIndex||value.nativeSceneMode!=='race'||value.freeRide)throw new Error('Invalid native player view course.');
+   if(![3,4,5].includes(value.nativeSceneCourseIndex)||course.sourceWaterCourseIndex!==value.nativeSceneCourseIndex||value.nativeSceneMode!=='race'||value.freeRide)throw new Error('Invalid native player view course.');
    course=nativeRaceScene(course);
   }
   if(course.geometryForPlayers)course={...course,...course.geometryForPlayers(2)};
