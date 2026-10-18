@@ -1,4 +1,4 @@
-import {prepareNativeRaceGenericObjectContacts,prepareNativeRaceObjectMotionUpdate,prepareNativeRaceObjectUpdate} from './native-race-state.js';
+import {prepareNativeRaceGenericObjectContacts,prepareNativeRaceObjectMotionUpdate,prepareNativeRaceFixedSphereUpdate,prepareNativeRaceObjectUpdate} from './native-race-state.js';
 import {isHostRaceWater} from './race-water.js';
 const F=Math.fround,axes=['x','y','z'],bits=new DataView(new ArrayBuffer(4));
 function number(word){bits.setUint32(0,word);return bits.getFloat32(0);}
@@ -6,8 +6,8 @@ function number(word){bits.setUint32(0,word);return bits.getFloat32(0);}
 /** Physical bridge over the caller's ONE canonical object owner. Course
  * loading/initialization must already have run. Every craft contact reads the
  * latest owner and commits back immediately; free motion follows shared water
- * and adjudication once. updateTransforms follows the caller's fixed-sphere
- * tide writes. Ring collection, primary motion, fragment/splash simulation
+ * and adjudication once. updateTransforms first writes Southern fixed-sphere
+ * heights from the shared water datum. Ring collection, primary motion, fragment/splash simulation
  * and live mode admission remain caller stages.
  */
 export function createNativeGenericObjectWorld({water,readRaceState,commitRaceState,onFragment=null}={}){
@@ -44,7 +44,9 @@ export function createNativeGenericObjectWorld({water,readRaceState,commitRaceSt
   },
   updateTransforms(world,context,resources){
    if(world?.water!==water||context?.logicalFrame!==frames||water.frames!==frames||transformFrames+1!==frames||context.step!==.05)throw new Error('Generic transforms must follow the completed object-motion frame once');
-   const result=prepareNativeRaceObjectUpdate(read(),resources);
+   const fixed=prepareNativeRaceFixedSphereUpdate(read(),{datum2458:water.field.datumNative});
+   const transformed=prepareNativeRaceObjectUpdate(fixed.state,resources),result=Object.freeze({...transformed,
+    diagnostic:Object.freeze({...transformed.diagnostic,fixedSphereRows:fixed.diagnostic.updatedRows})});
    commitRaceState(result.state);transformFrames++;if(result.applied)transformUpdates++;return result;
   },
   snapshot(){

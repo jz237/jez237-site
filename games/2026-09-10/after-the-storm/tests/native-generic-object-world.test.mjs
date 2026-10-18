@@ -8,26 +8,28 @@ import {createNativeRaceState,nativeRaceStateSnapshot,prepareNativeRaceObjectLoa
 import {nativeStuntObjectResources} from '../native-stunt-object-resources.js';
 import {nativeSineTableWords} from '../native-math-tables.js';
 
-function make({near=false,activity624=-1}={}){
+function make({near=false,activity624=-1,courseIndex=1}={}){
  const adapters=Array.from({length:2},()=>createNativeRaceAdapter({position:{x:near?.75:0,y:0,z:0}}));
  const water=createRaceWater({crafts:adapters.map(a=>({x:a.hull.center.x,y:a.hull.center.y,z:a.hull.center.z,sourceForwardXZ:[a.hull.frame.forward.x,a.hull.frame.forward.z]})),baseAmplitudeNative:20,initialNoise:false});
- const resource=nativeStuntObjectResources({courseIndex:1,players:1});
+ const resource=nativeStuntObjectResources({courseIndex,players:1});
+ const fixedSphereWordsB138=Array(1536).fill(0);fixedSphereWordsB138[1]=0x42000000;fixedSphereWordsB138[7]=0x42800000;fixedSphereWordsB138[10]=5;
  let current=createNativeRaceState({raceWords1f94:Array(1693).fill(0),hudWords7788:Array(1442).fill(0),objectWordsC940:Array(3136).fill(0),
   collisionPlaneWordsFd78:Array(512).fill(0),packedObjectMatrixWords0cd0:Array(1024).fill(0),
-  scene:{courseIndex:1,players:1,difficulty:2,mode620:11,objectCountFa40:0,ringCountB134:0,forceStunt824c:0,rampFilterOverride8254:0,reverseDab68:0,alternate8250:0,activity624,simulation648:0}});
+  fixedSphereWordsB138,fixedSphereGridWords1ce8:Array(166).fill(0x12340000),
+  scene:{courseIndex,players:1,difficulty:2,mode620:11,objectCountFa40:0,ringCountB134:0,fixedSphereCountC938:2,forceStunt824c:0,rampFilterOverride8254:0,reverseDab68:0,alternate8250:0,activity624,simulation648:0}});
  current=prepareNativeRaceObjectLoading(current,{rampRows:[[4000,4000,0,0,0]],ringRows:[[3000,64,3000,0,0,90]],genericRows:[[near?0:1200,0,near?0:1200,8,0],[near?1:1800,0,near?0:1800,9,0]]}).state;
  current=prepareNativeRaceObjectInitialization(current,{sineTableWords4350:nativeSineTableWords(),planeTemplatesByAddress:resource.planeTemplatesByAddress}).state;
  const fragments=[],hits=[[],[]],objects=createNativeGenericObjectWorld({water,readRaceState:()=>current,commitRaceState:s=>current=s,onFragment:e=>fragments.push(e)});
  adapters.forEach((a,i)=>{a.contacts={primarySpheres:(h,c)=>{const r=objects.contact(h,c);hits[i].push(...r.contacts);}};if(near)for(const p of a.hull.points)p.velocity.x=-30;});
- const motion=[];
+ const motion=[],transforms=[];
  const world=createNativeRaceWorld({adapters,water,humanIndices:[0,1],craftContacts:false,afterFrame:(w,c)=>{
   assert.ok(adapters.every(a=>a.hull.ticks===c.logicalFrame*5));assert.equal(water.frames,c.logicalFrame);
   // A preceding source stage may change the canonical owner between contacts
   // and motion. The bridge must read fresh state rather than cache a copy.
   const changed=nativeRaceStateSnapshot(current);changed.raceWords1f94[0]=c.logicalFrame;current=createNativeRaceState(changed);
-  motion.push(objects.afterFrame(w,c));objects.updateTransforms(w,c,{sineTableWords4350:nativeSineTableWords(),planeTemplatesByAddress:resource.planeTemplatesByAddress});
+  motion.push(objects.afterFrame(w,c));transforms.push(objects.updateTransforms(w,c,{sineTableWords4350:nativeSineTableWords(),planeTemplatesByAddress:resource.planeTemplatesByAddress}));
  }});
- return {adapters,water,world,objects,fragments,hits,motion,state:()=>current};
+ return {adapters,water,world,objects,fragments,hits,motion,transforms,state:()=>current};
 }
 
 test('two physical riders share mixed object contacts, one ice break and later recoil-driven motion',()=>{
@@ -66,4 +68,19 @@ test('inactive object motion preserves data, and duplicate/out-of-order frame ca
  assert.throws(()=>q.objects.afterFrame(q.world,{logicalFrame:1,step:.05}),/exactly one/);
  assert.throws(()=>q.objects.contact(q.adapters[0].hull,{logicalFrame:0}),/current native/);
  assert.throws(()=>q.objects.updateTransforms(q.world,{logicalFrame:1,step:.05}),/completed object-motion/);
+});
+
+test('completed shared water reaches Southern fixed spheres before transforms and keeps hidden heights',()=>{
+ for(const [courseIndex,activity624]of [[7,-1],[7,0],[1,-1]]){
+  const q=make({courseIndex,activity624}),before=q.state();
+  for(const datumNative of [-99,-100,-150]){
+   stepNativeRaceWorld(q.world,.05,[{},{}],{waterOptions:{datumNative}});
+   const reached=courseIndex===7&&activity624===-1,expected=before.fixedSphereWordsB138.slice();
+   if(reached){const b=new DataView(new ArrayBuffer(4));b.setFloat32(0,datumNative);expected[1]=b.getUint32(0);}
+   assert.equal(q.water.field.datumNative,datumNative);assert.deepEqual(q.state().fixedSphereWordsB138,expected);
+   assert.deepEqual(q.state().fixedSphereGridWords1ce8,before.fixedSphereGridWords1ce8);
+   assert.deepEqual(q.transforms.at(-1).diagnostic.fixedSphereRows,reached?[0]:[]);
+   if(reached)assert.equal(q.transforms.at(-1).applied,true);
+  }
+ }
 });

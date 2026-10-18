@@ -49,6 +49,7 @@ import {prepareNativeObjectUpdate} from './native-object-update.js';
 import {prepareNativeGenericObjectContacts} from './native-generic-spheres.js';
 import {queryNativeWaterField} from './native-water-field.js';
 import {prepareNativeFixedSphereLoading,prepareNativeFixedSphereInitialization} from './native-fixed-sphere-startup.js';
+import {prepareNativeFixedSphereUpdate} from './native-fixed-sphere-update.js';
 import {prepareNativePrimaryScratchContext} from './native-primary-scratch-context.js';
 
 const MIN=-2147483648,MAX=2147483647,RACE_BASE=0x1f94,RACE_WORDS=1693,HUD_BASE=0x7788,HUD_WORDS=1442;
@@ -337,6 +338,20 @@ export function prepareNativeRaceObjectMotionUpdate(state,input={}){
  const prepared=prepareNativeObjectMotion({objectWordsC940:next.objectWordsC940,objectCountFa40:sceneValue(next,'objectCountFa40'),
   queryNative:(x,z)=>queryNativeWaterField(input.waterField,x,z).sourcePlaneQueryNative});
  next.objectWordsC940=prepared.objectWordsC940;
+ return freeze({state:next,applied:true,effects:[],diagnostic:prepared.diagnostic});
+}
+
+/** Source6E3F4..6E468, with the enclosing activity gate. Datum2458 is supplied
+ * by the water field owner, separate from the race span's unrelated2458 word.
+ * No fixed-sphere storage is read outside Southern or during inactive frames. */
+export function prepareNativeRaceFixedSphereUpdate(state,input={}){
+ const next=copy(state);record(input,'fixed sphere water datum');
+ for(const key of ['fixedSphereWordsB138','fixedSphereCountC938','courseIndex','activity624'])if(Object.hasOwn(input,key))throw new RangeError(`${key} overlaps canonical native state`);
+ if(sceneValue(next,'activity624')!==-1||sceneValue(next,'courseIndex')!==7)return freeze({state:next,applied:false,effects:[],diagnostic:{updatedRows:[]}});
+ const count=sceneValue(next,'fixedSphereCountC938');
+ if(count<=0)return freeze({state:next,applied:false,effects:[],diagnostic:{updatedRows:[]}});
+ const prepared=prepareNativeFixedSphereUpdate({...input,fixedSphereWordsB138:next.fixedSphereWordsB138,fixedSphereCountC938:count,courseIndex:7});
+ next.fixedSphereWordsB138=prepared.fixedSphereWordsB138;
  return freeze({state:next,applied:true,effects:[],diagnostic:prepared.diagnostic});
 }
 

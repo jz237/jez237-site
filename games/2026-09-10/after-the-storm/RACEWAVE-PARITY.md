@@ -19,6 +19,22 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — shared fixed-sphere tide update
+
+The shared object bridge now follows generic motion with Southern Island's
+fixed-sphere height update, then object transforms, using the completed water
+field's datum. Original6E3F4..6E468 writes the signed datum as float32 to every
+fixed sphere except tag5, which retains its loaded hidden-obstacle height.
+Sphere X/Z, radii, tags, flags and spatial-grid words remain intact. The activity
+gate is independent of simulation648; other courses skip this stage.
+
+All52 prepared comparisons match5,336 original instructions and29 ROM-checked
+exported records, including signed integer rounding, negative/empty counts,
+all256 spheres and nonstandard tags. Physical two-rider tests verify consecutive
+water-level changes reach this same canonical storage before transforms, while
+inactive frames and other courses preserve it. Invalid datum/overflow rejects
+atomically. Browser-host selection remains separate; resolution is unchanged.
+
 ## Unpublished — complete generic-object post-motion update
 
 Full numeric6E0F4 now updates the same canonical object and collision-plane
@@ -38,7 +54,7 @@ initialization comparisons still pass after separating the float-only helper.
 Out-of-span plane writes reject atomically.
 
 The shared physical bridge exposes the ordered transform stage after motion
-and the caller's fixed-sphere tide writes. Two-rider physical tests now verify
+and fixed-sphere tide writes. Two-rider physical tests now verify
 ice disappearance and ring spin as well as contact/motion, with identical object
 state at30/60/144 render updates. All18 actual course/player resource scenarios
 also match the original post-initialization object update; the extended numeric
