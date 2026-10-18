@@ -19,6 +19,31 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — original collected-ring disappearance
+
+Collected rings in the native Stunt preview now stay full size through source
+age8, shrink by one eighth per logical frame at ages9–15, and disappear at16.
+Their original spin continues during the shrink. Rendering reads the age owned
+by the original collection stage, so pause, finish and retirement retain its
+exact stopped state. Replay preserves the recorded scale without advancing
+collection, changing the collider or awarding another score. Older replay
+snapshots without scale keep their existing size.
+
+EVO X2 Ghidra confirmed draw routine6D494 in read-only mode with all nine
+project files unchanged.1,620 prepared executions of the complete original
+routine cover signed age boundaries, collection flags, visibility classes,
+camera visibility and three environment branches:516,780 instructions,
+612 exported instructions matched against the private ROM. Environment setup
+and matrix-packing callees are intercepted; the visibility and scale arithmetic
+execute unchanged. Three retains its own camera frustum culling and detailed
+materials. The public fixture contains540 distinct numeric cases only.
+
+All12 presentation/collection checks pass. A real browser collection retains
+scale1 through frames156–164 and reaches.875 at165. The replay camera visibly
+shows that shrinking ring, then returns to the live half-size ring at time8.4
+with the live-state fingerprint unchanged. High remains1440x900, with about
+1.08 million triangles in the live view and no JavaScript or shader errors.
+
 ## Unpublished — native Stunt ring rotation
 
 High-resolution Stunt rings now use their actual source object matrices,

@@ -13,18 +13,30 @@ function matrix(v){
  return m;
 }
 function name(v){if(typeof v!=='string'||!v.length||v.length>160)throw new TypeError('Invalid Stunt volume id');return v;}
+// The class3 draw branch in6D494 holds a collected ring through age8, then
+// multiplies its object matrix by a uniform scale until age16 hides it.
+// The age comes from6A748, never from render time. Three handles live camera
+// frustum culling; cameraVisibility is exposed for independent source checks.
+export function nativeStuntRingAppearance({renderClass,age,collected,cameraVisibility=0}){
+ integer(renderClass,-2147483648,2147483647);integer(age,-2147483648,2147483647);
+ integer(collected,-2147483648,2147483647);integer(cameraVisibility,-32768,32767);
+ const visible=cameraVisibility>=0&&renderClass===3&&age<16;
+ return {visible,scale:visible&&collected!==0&&age>8?1-(age-8)*.125:1};
+}
 export function captureNativeStuntWorld(value){
  if(value===null)return null;
  if(!value||value.version!==1||!Array.isArray(value.rings)||value.rings.length>64||!Array.isArray(value.volumes)||value.volumes.length>32)
   throw new TypeError('Invalid Stunt world presentation');
  const rings=value.rings.map(r=>({index:integer(r.index,0,63),sourceIndex:integer(r.sourceIndex,0,63),position:vector(r.position),
   heading:scalar(r.heading),visible:flag(r.visible),collected:flag(r.collected),
-  ...(r.matrix===undefined?{}:{matrix:matrix(r.matrix)})}));
+  ...(r.matrix===undefined?{}:{matrix:matrix(r.matrix)}),
+  ...(r.scale===undefined?{}:{scale:scalar(r.scale)})}));
  const volumes=value.volumes.map(v=>({id:name(v.id),sourceIndex:integer(v.sourceIndex,0,63),planeIndex:integer(v.planeIndex,0,31),
   origin:vector(v.origin),axes:Array.isArray(v.axes)&&v.axes.length===3?v.axes.map(vector):(()=>{throw new TypeError('Expected Stunt display axes');})(),spans:vector(v.spans),visible:flag(v.visible)}));
  if(new Set(rings.map(r=>r.index)).size!==rings.length||new Set(rings.map(r=>r.sourceIndex)).size!==rings.length||new Set(volumes.map(v=>v.id)).size!==volumes.length)
   throw new RangeError('Duplicate Stunt presentation identity');
  if(volumes.some(v=>v.spans.some(s=>s<=0)))throw new RangeError('Invalid Stunt display span');
+ if(rings.some(r=>r.scale!==undefined&&(r.scale<=0||r.scale>1)))throw new RangeError('Invalid Stunt ring scale');
  return {version:1,rings,volumes};
 }
 // These independently tessellated wooden surfaces follow the same finite
@@ -69,7 +81,8 @@ export function createNativeStuntPresentation({course,readState,scale=.025}){
    // spin is already part of the simulation. Only translation changes units;
    // the high-resolution torus already has its world-space radius.
    const transform=a.slice(b+29,b+45).map(float);for(let j=12;j<15;j++)transform[j]*=scale;
-   return {...r,position:position(a,r.sourceIndex),heading:Math.atan2(float(a[b+12]),float(a[b+13])),matrix:transform,collected,visible:a[b+21]!==0&&!collected};
+   const appearance=nativeStuntRingAppearance({renderClass:a[b+21]|0,age:a[b+27]|0,collected:a[b+47]|0});
+   return {...r,position:position(a,r.sourceIndex),heading:Math.atan2(float(a[b+12]),float(a[b+13])),matrix:transform,collected,...appearance};
   }),volumes:volumes.map(v=>{
    const p=s.collisionPlaneWordsFd78.slice(v.planeIndex*16,(v.planeIndex+1)*16).map(float);
    return {...v,origin:p.slice(0,3).map(n=>n*scale),axes:[p.slice(3,6),p.slice(6,9),p.slice(9,12)],spans:p.slice(12,15).map(n=>n*scale),visible:a[v.sourceIndex*49+21]!==0};

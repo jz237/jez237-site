@@ -1,8 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
 import {createRace,stepRace,aiInput} from '../race-core.js';
 import {getCourse} from '../courses.js';
-import {captureNativeStuntWorld,nativeStuntVolumePositions,createNativeStuntPresentation} from '../native-stunt-presentation.js';
+import {captureNativeStuntWorld,nativeStuntVolumePositions,createNativeStuntPresentation,nativeStuntRingAppearance} from '../native-stunt-presentation.js';
 import {prepareNativeRaceStuntRingUpdate,createNativeRaceState} from '../native-race-state.js';
 import {createRecorder,recordMoment,replaySample} from '../instant-replay.js';
 const create=(id='greyhaven',options={})=>createRace({course:getCourse(id),mode:'stunt',physics:'native',...options});
@@ -55,7 +56,8 @@ test('four native Stunt races retain high-resolution courses and bind every ring
 
 test('ring and HUD views cannot score early; pause holds the queue and result waits for source display transfer',()=>{
  const s=create('greyhaven',{nativeInitialRaceState:queuedRingState()}),r=s.racers[0];
- assert.equal(r.stunt.rings,1);assert.equal(r.stunt.ringStatus[0],'hit');assert.equal(s.nativeStuntWorld.rings[0].visible,false);
+ assert.equal(r.stunt.rings,1);assert.equal(r.stunt.ringStatus[0],'hit');assert.equal(s.nativeStuntWorld.rings[0].visible,true);
+ assert.equal(s.nativeStuntWorld.rings[0].scale,1);
  assert.equal(r.stunt.score,0);const initial=s.nativeLaunch.snapshot();
  for(let i=0;i<50;i++){s.nativeStuntDisplay.snapshot();captureNativeStuntWorld(s.nativeStuntWorld);}assert.deepEqual(s.nativeLaunch.snapshot(),initial);
  frames(s,22);assert.equal(r.stunt.score,0);const before=s.nativeLaunch.snapshot(),view=s.nativeStuntHud;
@@ -76,18 +78,45 @@ test('display bindings reject changed source layouts and snapshots are detached 
  assert.throws(()=>createNativeStuntPresentation({course:{...s.course,rings:wrong},readState:s.nativeLaunch.snapshot}),/ordinal and center/);
  assert.throws(()=>captureNativeStuntWorld({...s.nativeStuntWorld,rings:[s.nativeStuntWorld.rings[0],s.nativeStuntWorld.rings[0]]}),/Duplicate/);
  for(const bad of [[1],Array(16).fill(NaN),Array(16).fill(0)])assert.throws(()=>captureNativeStuntWorld({...s.nativeStuntWorld,rings:[{...s.nativeStuntWorld.rings[0],matrix:bad}]}));
- const legacy=structuredClone(s.nativeStuntWorld);legacy.rings.forEach(r=>delete r.matrix);
+ for(const bad of [0,-1,1.1,NaN])assert.throws(()=>captureNativeStuntWorld({...s.nativeStuntWorld,rings:[{...s.nativeStuntWorld.rings[0],scale:bad}]}));
+ const legacy=structuredClone(s.nativeStuntWorld);legacy.rings.forEach(r=>{delete r.matrix;delete r.scale;});
  assert.deepEqual(captureNativeStuntWorld(legacy),legacy,'older version1 replay snapshots retain their heading fallback');
 });
 
 test('replay records Stunt object visibility and geometry without retaining or advancing an owner',()=>{
  const s=create('greyhaven',{nativeInitialRaceState:queuedRingState()}),rec=createRecorder();
  const water={wake:[],impacts:[],craft:[],level:0};
- frames(s,1);recordMoment(rec,s,water);frames(s,1);recordMoment(rec,s,water);
+ frames(s,9);recordMoment(rec,s,water);frames(s,1);recordMoment(rec,s,water);
  assert.equal(rec.frames.length,2);const [a,b]=rec.frames,before=s.nativeLaunch.snapshot();
+ assert.equal(a.nativeStuntWorld.rings[0].scale,.875);assert.equal(b.nativeStuntWorld.rings[0].scale,.75);
  const sampled=replaySample({frames:rec.frames,start:a.time,end:b.time},(a.time+b.time)/2);
  assert.deepEqual(sampled.nativeStuntWorld,a.nativeStuntWorld);sampled.nativeStuntWorld.rings[0].position[0]=999;sampled.nativeStuntWorld.rings[0].matrix[0]=999;
  assert.notEqual(a.nativeStuntWorld.rings[0].position[0],999);assert.notEqual(a.nativeStuntWorld.rings[0].matrix[0],999);assert.deepEqual(s.nativeLaunch.snapshot(),before);
+});
+
+test('collected-ring draw decisions match the complete original routine across ages and visibility classes',()=>{
+ const reference=JSON.parse(readFileSync(new URL('./fixtures/native-stunt-ring-draw-reference.json',import.meta.url),'utf8'));
+ assert.equal(reference.checks.cases,1620);assert.equal(reference.cases.length,540);
+ for(const c of reference.cases)assert.deepEqual(nativeStuntRingAppearance(c.input),{visible:c.expected.visible,scale:c.expected.scale},JSON.stringify(c.input));
+ for(const patch of [{age:NaN},{age:2147483648},{collected:1.2},{renderClass:Infinity},{cameraVisibility:32768}])
+  assert.throws(()=>nativeStuntRingAppearance({age:0,collected:0,renderClass:3,...patch}));
+});
+
+test('the original collection age holds, shrinks and hides a ring without changing its score or collider',()=>{
+ const s=create('greyhaven',{nativeInitialRaceState:queuedRingState()}),geometry=JSON.stringify(s.course.rings),ring=()=>s.nativeStuntWorld.rings[0];
+ assert.equal(ring().visible,true);assert.equal(ring().scale,1);frames(s,8);
+ assert.equal(ring().scale,1);assert.equal(ring().visible,true);frames(s,1);
+ assert.equal(ring().scale,.875);const held=s.nativeStuntWorld,before=s.nativeLaunch.snapshot();
+ s.phase='paused';for(let i=0;i<144;i++)stepRace(s,{},1/144);
+ assert.equal(s.nativeStuntWorld,held);assert.deepEqual(s.nativeLaunch.snapshot(),before);
+ s.phase='running';frames(s,6);assert.equal(ring().scale,.125);assert.equal(ring().visible,true);
+ frames(s,1);assert.equal(ring().visible,false);assert.equal(s.racers[0].stunt.score,0);
+ frames(s,7);assert.equal(s.racers[0].stunt.score,50);assert.equal(s.racers[0].stunt.rings,1);
+ assert.equal(JSON.stringify(s.course.rings),geometry);
+ const terminal=structuredClone(queuedRingState()),row=ring().sourceIndex;
+ terminal.objectWordsC940[row*49+27]=10;terminal.raceWords1f94[ri(0x2c2c)]=1;
+ const finished=create('greyhaven',{nativeInitialRaceState:terminal});frames(finished,20);
+ assert.equal(finished.nativeStuntWorld.rings[0].visible,true);assert.equal(finished.nativeStuntWorld.rings[0].scale,.75,'finish stops the source age, including its partial shrink');
 });
 
 test('ring display follows opposite source spins and holds them exactly while paused',()=>{
