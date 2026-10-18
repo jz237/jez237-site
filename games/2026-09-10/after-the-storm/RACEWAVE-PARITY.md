@@ -6043,3 +6043,26 @@ exception appeared; the local test server still had missing-resource404s.
 
 A fresh Stunt browser pass verifies that Choose course opens Race setup, keeps
 Stunt selected and focuses the now-visible course selector at High quality.
+
+
+### Ordinary source reset extents and initial checkpoint time — 2026-10-18
+
+The ordinary native course factory now gives75310 the complete initialized
+fixed-object family for extent calculation. Previously it passed only visible
+authored boundary markers. Original execution exposed different bounds in Sunny
+and Sunset, including Sunset's two hidden two-player rows; these are retained
+exactly rather than clipped to the visible course. Explicit authored diagnostic
+layouts continue to use their own marker family.
+
+The reset also reads the first unsigned byte of the original course checkpoint
+table shared with Stunt setup. This corrects Southern and Glacier's initial
+checkpoint allowance from15,000 to20,000ms. Sunny and Sunset remain15,000ms.
+
+Complete original75310 plus EED70/EE9C0 startup execution now matches every one
+of the1,693 race words and1,442 HUD words for all32 combinations of four admitted
+courses, four classes and one/two players (257,087 interpreted instructions).
+Committed reference hashes cover the selected source objects and actual primary
+rows. Source reset, independent launch clocks, wrong-side judging, pause,
+online transport and30/60/144Hz live cadence checks all pass (27 focused tests).
+This corrects numeric setup; it does not change graphics resolution or admit
+additional native physical courses.

@@ -5,3 +5,5 @@ export function nativeStuntCheckpointSeconds(courseIndex){
  if(!Number.isInteger(courseIndex)||courseIndex<0||courseIndex>=seconds.length)throw new RangeError('Select one of the nine source Stunt courses');
  return seconds[courseIndex];
 }
+//75310 reads this same table's first byte in ordinary races as well.
+export const nativeCourseCheckpointSeconds=nativeStuntCheckpointSeconds;

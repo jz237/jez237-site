@@ -13,6 +13,7 @@ import {GLACIER_NATIVE_ROUTE_ROWS_BY_CLASS} from './source-glacier-rows.js';
 import {nativeRaceShoreGeometry} from './native-shore-geometry.js';
 import {SOUTHERN_NATIVE_AI_ROWS_BY_CLASS} from './source-southern-ai-routes.js';
 import {createNativeCourseObjectStartup} from './native-course-object-startup.js';
+import {nativeCourseCheckpointSeconds} from './native-stunt-checkpoint-times.js';
 
 // Numeric course owners for Sunny/Sunset/Southern/Glacier integration.
 // Mode and source-water admission remain the race host's responsibility.
@@ -35,9 +36,15 @@ export function createNativeRaceCourseRuntime({course,difficulty,players,objectL
  const data=createNativePrimaryCourseData({rows:course.sourceRouteRowsByClass[difficulty],courseIndex,mode620});
  const sourceDifficulty=course.sourceMetadata.sourceNativeClassByDifficulty[difficulty];
  const objectStartup=objectLayout==='source'?createNativeCourseObjectStartup({courseIndex,players,mode620,difficulty:sourceDifficulty,reverseDab68:Number(!!course.reverse)}):null;
+ const fixed=objectStartup?.storage.fixedSphereWordsB138,bits=new DataView(new ArrayBuffer(4));
+ const fixedFloat=i=>{bits.setUint32(0,fixed[i]);return bits.getFloat32(0);};
+ //75310 includes every initialized fixed record, even hidden rows. Visible
+ // authored markers are retained only for the explicit authored diagnostic.
+ const resetBoundary=objectStartup?Array.from({length:objectStartup.counts.fixedSphereCountC938},(_,i)=>({x:fixedFloat(i*6),z:fixedFloat(i*6+2)})):
+  course.boundaryMarkers.map(([x,z])=>({x:x/scale,z:z/scale}));
  const resetLayout=createNativeRaceResetLayout({nodes:data.nodes,
-  boundaryNativeXZ:course.boundaryMarkers.map(([x,z])=>({x:x/scale,z:z/scale})),objectKinds4c:objectStartup?.objectKinds4c??[],
-  checkpointSeconds:15,checkpointSlackNative:rules.checkpointSlackNative,
+  boundaryNativeXZ:resetBoundary,objectKinds4c:objectStartup?.objectKinds4c??[],
+  checkpointSeconds:nativeCourseCheckpointSeconds(courseIndex)[0],checkpointSlackNative:rules.checkpointSlackNative,
   recordTimeTemplateWords:[599999,0,0,0,0x494e4900],stuntTemplateWords:[0,0,0,0x494e4900]});
  const primaryLayout=createNativePrimaryRacePhaseLayout({nodes:data.nodes,regionsNative:rules.regionsNative,fortressRegionsNative:[],
   weedCentersNativeXZ:[[-2130,-3130],[-60,-2380],[10,-3940],[-3980,620],[-4610,1620],[-4690,-490]].map(([x,z])=>({x,z})),
