@@ -41,6 +41,7 @@ import {createNativeStuntScoring,stepNativeStuntScoring} from './native-stunt-sc
 import {prepareNativeStuntPrelude} from './native-stunt-prelude.js';
 import {prepareNativeStuntCheckpoint} from './native-stunt-checkpoint.js';
 import {prepareNativeStuntFinish} from './native-stunt-finish.js';
+import {prepareNativeStuntRings} from './native-stunt-rings.js';
 import {prepareNativePrimaryScratchContext} from './native-primary-scratch-context.js';
 
 const MIN=-2147483648,MAX=2147483647,RACE_BASE=0x1f94,RACE_WORDS=1693,HUD_BASE=0x7788,HUD_WORDS=1442;
@@ -60,7 +61,7 @@ const sceneRanges={fieldAb0c:[-32768,32767],championshipCountAa00:[-32768,32767]
  pendingPlayers60c:[-32768,32767],participantCount60e:[-32768,32767],result6f0:[-32768,32767],field62a:[-32768,32767],specialAb64:[-32768,32767],ready6fc:[-32768,32767],field4964:[0,65535],
  reverseDab68:[0,65535],missesEnabled72e:[0,65535],seed6f00:[0,65535],rngState4640:[0,0xffffffff],inputTick1960:[0,0xffffffff],style6e28:[0,65535],
  field4970:[0,65535],field72c:[0,65535],fieldA9ac:[0,65535],pressed65a:[0,65535],unlockAb60:[-32768,32767],freshNameAb6c:[-32768,32767],variant6f4:[-32768,32767],variant6f6:[-32768,32767]};
-const sceneWords=new Set(['ringCountB134','titlePairSelectionA9fc','fieldAa08','fortressCourse3a10','cold8224','clockStopped817c','phase650','simulation648','main638','mode620','state600',
+const sceneWords=new Set(['ringNext0cb0','ringStreak0cb4','objectCountFa40','ringCountB134','titlePairSelectionA9fc','fieldAa08','fortressCourse3a10','cold8224','clockStopped817c','phase650','simulation648','main638','mode620','state600',
  'missLimit8174','noFinish8178','configuredLaps728','difficulty','directionFlag1f90','ambientD4b00','fortressD8240',
  'metadataD9b0','metadataCb32c','restart6f8','initLatch63c','gameStateAb24','mode608','returnState630','forceFirst8228','demoOffset5438','rngState4640','inputTick1960','style6e2c',
  'previousGameState634','field640','field644','fieldAb1c','fieldAb2c','field461c','field700','field704','field708','field70c','field710','field714','resultEffect393c','wave610','missLimit614','lapCount618','field61c','wave49b0','field64c','players','racerCount','toggleD9914','previousNavigationD9874','trainingSelectionDa9f8',
@@ -91,6 +92,7 @@ function copy(value){
  const s={raceWords1f94:words(value.raceWords1f94,'raceWords1f94',RACE_WORDS),
   hudWords7788:words(value.hudWords7788,'hudWords7788',HUD_WORDS),scene};
  if(value.i1Words9440!==undefined)s.i1Words9440=words(value.i1Words9440,'i1Words9440',168);
+ if(value.objectWordsC940!==undefined)s.objectWordsC940=words(value.objectWordsC940,'objectWordsC940',3136);
  if(value.aiWords3c60!==undefined)s.aiWords3c60=words(value.aiWords3c60,'aiWords3c60',NATIVE_AI_STORAGE_WORDS);
  if(value.saveWordsB280!==undefined)s.saveWordsB280=words(value.saveWordsB280,'saveWordsB280',34);
  if(value.menuWordsE658!==undefined){
@@ -125,6 +127,9 @@ function copy(value){
  * halfwords. Pending signed-halfword players60c is distinct from active players.
  * Partial scene samples are allowed; each entry point requires its real reads.
  * Optional i1Words9440 retains that overlay's separate168-word data/BSS span.
+ * Optional objectWordsC940[3136] owns all64 retained49-word source objects at
+ * 801BC940..FA40, exclusive. objectCountFa40 and ringNext0cb0/ringStreak0cb4
+ * are separate external words; total collected ring count292C is in raceWords.
  * Optional nameEntryWords61c4[14] owns shared name-menu scratch802261C4..61FC;
  * it does not overlap the HUD wheel/name bytes or the i1 overlay. field700 is
  * signed32 transport of four retained name bytes; freshNameAb6c is signed16.
@@ -239,6 +244,19 @@ export function prepareNativeRaceStuntCheckpointUpdate(state,input={}){
  const slot=integer(input.racerIndex,'racerIndex',0,3),row=next.raceWords1f94[ri(0x2944)+slot*222]|0;
  if(!Array.isArray(input.nodes)||row<0||row>=input.nodes.length)throw new RangeError('Supply the actual primary node selected by2944');
  const prepared=prepareNativeStuntCheckpoint({raceWords1f94:next.raceWords1f94,globals:next.scene},{...input,selectedNode:input.nodes[row]}),effects=[];
+ for(const op of prepared.operations){
+  if(op.kind==='stuntAwardEnqueue')commitStuntAwards(next,enqueueNativeStuntAward(stuntAwardsView(next),op.award).state);
+  else effects.push(...apply(next,[op]));
+ }
+ return freeze({...prepared,state:next,applied:true,effects});
+}
+
+/** Source6E3A8 ring stage follows79528 judging/record checks, before7DBC0
+ * object motion. Run once per reached world update, never per racer or render. */
+export function prepareNativeRaceStuntRingUpdate(state,input={}){
+ const next=copy(state);
+ if(!stuntModeActive(next))return freeze({state:next,applied:false,effects:[],diagnostic:{collectedRows:[],fadedRows:[]}});
+ const prepared=prepareNativeStuntRings({...next,globals:next.scene},input),effects=[];
  for(const op of prepared.operations){
   if(op.kind==='stuntAwardEnqueue')commitStuntAwards(next,enqueueNativeStuntAward(stuntAwardsView(next),op.award).state);
   else effects.push(...apply(next,[op]));
@@ -371,6 +389,10 @@ function apply(s,operations){
    s.aiWords3c60[integer(op.wordIndex,'AI wordIndex',0,NATIVE_AI_STORAGE_WORDS-1)]=integer(op.value,'AI word bits',0,0xffffffff);
   }
   else if(op.kind==='raceWordWrite')s.raceWords1f94[integer(op.wordIndex,'race wordIndex',0,RACE_WORDS-1)]=integer(op.value,'race word bits',0,0xffffffff);
+  else if(op.kind==='objectWordWrite'){
+   if(!s.objectWordsC940)throw new TypeError('Supply retained objectWordsC940 before applying object writes');
+   s.objectWordsC940[integer(op.wordIndex,'object wordIndex',0,3135)]=integer(op.value,'object word bits',0,0xffffffff);
+  }
   else if(op.kind==='recordWordWrite'){
    const slot=integer(op.racerIndex,'record racerIndex',0,3),word=integer(op.wordIndex,'record wordIndex',0,221);
    s.raceWords1f94[ri(0x2938)+slot*222+word]=integer(op.value,'record word bits',0,0xffffffff);

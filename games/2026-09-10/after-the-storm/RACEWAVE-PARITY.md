@@ -19,6 +19,33 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — native stunt ring contacts
+
+The shared state can now retain the original64-object array and its separate
+ring-chain words. Ring collection uses the selected primary body's44/48/4C
+position with the original+8 vertical offset, each type8 object's two axes,
+an inclusive32-unit plane slab and a strict112-unit radial bound. It iterates
+the full object array in source order. Collection flags prevent repeat awards;
+already collected rings advance their retained fade counter up to255.
+
+Consecutive source ordinals increase the chain; a different ordinal resets it
+to one. Ring count and chain updates enqueue into the existing four-slot HUD
+queue and emit the original ring-audio entry recipe. They do not immediately
+change the displayed total. Finished/DQ primary riders skip collection and
+fade. The source world caller places this stage after79528 judging/record
+checks and before7DBC0 object motion, once per world update, not per racer.
+
+Two fresh read-only Ghidra queries on EVO X2 preserved all9 project files.
+The complete6A748 contact consumer passed154 synthetic cases in28,640 original
+instructions, including ordered queue-call replay; all194 exported ring
+instruction records match ROM. Tests compare entire race/HUD/object spans,
+check primary-slot selection, exact geometry edges, signed counters, mixed
+object kinds, queue overflow, repeated calls and atomic late-input rejection.
+Square root is represented by host sqrt rounded to float32 and the ring audio
+entry is intercepted. Course object loading, reset6AACC, ring graphics and the
+audio entry's live execution still require integration before native Stunt
+admission. No rendering resolution, texture or mesh detail was reduced.
+
 ## Unpublished — native stunt finish and combined racer update
 
 Stunt finish processing now writes the original lap and visited-node flags,
