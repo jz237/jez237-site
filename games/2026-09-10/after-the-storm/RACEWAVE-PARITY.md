@@ -19,6 +19,23 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — full-start native aerial gesture coverage
+
+Sunny Stunt verification now drives from the original grid to the unchanged
+ramp, supplies ordinary keyboard gestures while airborne, and observes the
+original action, landing classifier and queued scoring. Brief opposite-steer
+gestures earn47/50 points for the two roll categories; forward/rearward trim
+earns79 for the flip category; rearward/forward trim held into the dive earns
+680. These are the original judge's awards for those brief gestures, not a
+claim that each performs a complete360-degree rotation. No body placement,
+action override or scoring field is injected.
+
+The longer-held flip receives the original failed-landing classification,
+without a success cue, completed-flip flag or trick points. The successful flip
+has exactly matching source state, physical hull/rider, action and scoring
+histories at30 and144Hz. All six checks pass. They cover the previously missing full-start
+roll/flip/dive integration alongside the existing pose and course-finish checks.
+
 ## Unpublished — original collected-ring disappearance
 
 Collected rings in the native Stunt preview now stay full size through source
