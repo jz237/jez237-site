@@ -14,7 +14,7 @@ function profile(v,i){const a=v.profileWordsB330;if(!Array.isArray(a)||![50,52].
 /** Exact5CE8 initial panel schedule and per-course avatar-to-row lookup.
  * The source's missing-avatar sentinel is4. Difficulty selects the loaded
  * course count, while final rank selects one of seven ending-message delays.
- * Graphics/assets and the outer5800 scroll/update remain separate consumers. */
+ * Graphics/assets remain separate consumers. */
 export function prepareNativeEndingMenuInitialization(value,{riderOrderEabb0}={}){
  const operations=[];
  for(let row=0;row<10;row++)for(let col=0;col<4;col++)operations.push(write(0x6e80+row*16+col*4,data(value,0x6d8c+col*4)));
@@ -74,4 +74,106 @@ export function prepareNativeEndingMenuInput(value){
   }
  }
  return freeze({operations,diagnostic:{consumer:'802c6c1c',destination}});
+}
+
+/** Numeric5800 update, including reached initialization and first-free enqueue.
+ * Panel positions retain the source's 320x240 coordinate system; this does not
+ * change output resolution. Matrix helpers are an explicit rendering boundary.
+ * Viewport words and their operation positions preserve each rider preview's
+ * writes without exporting guest pointers or pretending to execute N64 drawing.
+ */
+export function prepareNativeEndingMenuScroll(value,sourceViews={}){
+ const ending=value.endingMenuWords6d50;
+ if(!Array.isArray(ending)||ending.length!==126)throw new RangeError('Expected endingMenuWords6d50[126]');
+ const working={...value,endingMenuWords6d50:ending.slice()},operations=[],presentation=[];
+ const read=a=>data(working,a)|0;
+ const append=ops=>{for(const op of ops){operations.push(op);if(op.kind==='endingMenuWrite')working.endingMenuWords6d50[op.byteOffset/4]=op.value;}};
+ const put=(a,v)=>append([write(a,v)]);
+ let initialized=false;
+ if(scene(value,'initLatch63c')!==0&&scene(value,'gameStateAb24')===102){
+  append(prepareNativeEndingMenuInitialization(working,sourceViews).operations);initialized=true;
+  put(0x6e78,0);put(0x6e74,0);
+  const count=((profile(value,1)|0)+1)|0;
+  if(count>0){
+   if(count>8)throw new RangeError('Ending records exceed the eight-course owner');
+   const difficulty=int(profile(value,2)|0,'ending difficulty',0,2),order=sourceViews.courseOrderEac14;
+   if(!Array.isArray(order)||order.length!==3||!Array.isArray(order[difficulty])||order[difficulty].length!==8)throw new RangeError('Expected courseOrderEac14[3][8]');
+   for(let i=0;i<count;i++){
+    const course=int(order[difficulty][i],'ending record course',-32768,32767);
+    if(at(value,'raceWords1f94',1693,(0x2660-0x1f94)/4+course)!==0)put(0x6e74,1);
+    if(at(value,'raceWords1f94',1693,(0x2690-0x1f94)/4+course)!==0)put(0x6e78,1);
+   }
+  }
+ }
+ const delay=(read(0x6d6c)-1)|0;put(0x6d6c,delay);
+ if(delay<0&&read(0x6d68)!==-1){
+  append(prepareNativeEndingPanelEnqueue(working,read(0x6d68)).operations);put(0x6d6c,40);
+  const next=read(0x6d68);
+  if(next===read(0x6e7c)){put(0x6d68,10);put(0x6d6c,110);}
+  else put(0x6d68,next===10?-1:(next+1)|0);
+ }
+ presentation.push({kind:'matrixSetup',afterOperation:operations.length,transformWord6e34:data(working,0x6e34)});
+ for(let slot=0;slot<10;slot++){
+  const base=0x6e80+slot*16,active=read(base);let preview=false;
+  if(active===0)continue;
+  if(active===1){
+   const y=(read(base+12)-2)|0;put(base+12,y);
+   if(read(base+4)===10){if(y<26){put(base,2);put(base+12,25);}preview=true;}
+   else if(y< -12)put(base,0);
+  }else if(active===2){
+   preview=true;let timer=read(0x6df0);
+   if(timer<20){timer=(timer+1)|0;put(0x6df0,timer);}
+   if(timer>=11){
+    const fade=(read(0x6ddc)+1)|0;put(0x6ddc,fade);
+    if(fade===20){put(base,3);put(0x6dd4,255);put(0x6dd8,170);put(0x6df4,1);append([call('800c489c')]);}
+    else{put(0x6dd8,Math.trunc(Math.imul(fade,170)/20));put(0x6dd4,Math.trunc(Math.imul(fade,255)/20));}
+   }
+  }else if(active===3)preview=true;
+  if(preview){
+   const template=Array.from({length:4},(_,i)=>data(working,0x6de0+i*4));
+   for(let rider=0;rider<4;rider++){
+    const viewportWords=[...template];
+    viewportWords[2]=((((read(base+8)+58)<<2)&65535)*65536+(((read(base+12)+rider*32+65)<<2)&65535))>>>0;
+    presentation.push({kind:'riderViewport',afterOperation:operations.length,panelSlot:slot,riderIndex:rider,viewportWords});
+   }
+  }
+ }
+ return freeze({operations,presentation,diagnostic:{consumer:'802c5800',initialized,matrixHelpersExecuted:false,graphicsExecuted:false}});
+}
+
+/** Exact5F50 display caller. Returned display-list heads are supplied by the
+ * explicit render boundary. The first entry clears the latch and draws white;
+ * ordinary frames draw the scene and ending HUD before input or exit handoff.
+ */
+export function prepareNativeEndingMenuDisplay(value,sourceViews={}){
+ const operations=[];let head=int(sourceViews.displayListHead,'incoming displayListHead',0,0xffffffff);
+ if(head%4)throw new RangeError('Display-list head must be word-aligned');
+ const draw=(consumer,args)=>{
+  head=int(sourceViews.externalReturns?.[consumer],`return from ${consumer}`,0,0xffffffff);
+  if(head%4)throw new RangeError('Display-list head must be word-aligned');
+  operations.push({...call(consumer,args),returnWord:head});
+ };
+ let firstEntry=false;
+ if(scene(value,'initLatch63c')!==0){
+  operations.push(word('initLatch63c',0));firstEntry=scene(value,'gameStateAb24')===102;
+ }
+ if(firstEntry)draw('80093dbc',[head,255,255,255]);
+ else{
+  operations.push(word('fieldAb2c',0));draw('80091dbc',[head]);draw('8009328c',[head]);draw('802c602c',[head]);
+  operations.push(...prepareNativeEndingMenuPostDisplay(value).operations);
+ }
+ return freeze({operations,displayListHead:head,diagnostic:{consumer:'802c5f50',firstEntry,renderingPerformed:false,targetMenuEntered:false}});
+}
+
+/** Numeric suffix shared with a high-resolution renderer, requiring no guest
+ * display-list addresses. Only signed fade completion exactly1 enters the next
+ * menu. Every destination other than title2 follows the source records route.
+ */
+export function prepareNativeEndingMenuPostDisplay(value){
+ const operations=[];
+ if(scene(value,'gameStateAb24')===102)operations.push(call('802c6c1c'));
+ else if((at(value,'hudWords7788',1442,(0x8a14-0x7788)/4)<<16>>16)===1){
+  operations.push(call(scene(value,'returnState630')===2?'801eb180':'801ec9c8'));
+ }
+ return freeze({operations,diagnostic:{consumer:'802c5f50 post-display',targetMenuEntered:false}});
 }

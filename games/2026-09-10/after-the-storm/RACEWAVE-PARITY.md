@@ -6773,3 +6773,36 @@ change the caller's scene, timer or panel owner.
 tests and 42 grid, fade, championship and return regressions pass (50 distinct
 checks). This does not yet run the scrolling display producer, draw ending
 panels, construct the podium world or complete the championship loop.
+
+### Championship ending scroll and display control — 2026-10-18
+
+The numeric 5800 update now composes initialization, record-flag collection,
+first-free panel allocation, the original two-pixel scroll, final-standings
+settling and readiness fade. Signed counters and multiplication keep 32-bit
+wrapping. Full panel pools still advance the source schedule. Multiple active
+standings rows share the original timers in ascending slot order. Four rider
+viewport records retain their exact word/halfword results and operation order;
+matrix construction remains an explicit presentation boundary. Source panel
+coordinates do not lower the high-resolution output.
+
+The 5F50 display controller clears the entry latch, presents the initial white
+frame, then orders scene/HUD drawing before controls. Its numeric suffix can be
+used by the modern renderer without guest display-list addresses. Expanded
+controls prepare the existing fade and optional music stop after drawing. Only
+fade completion exactly 1 dispatches the title or records handoff; those target
+menu calls remain explicit effects. Supplied render returns preserve the source
+display head even when subsequent control/handoff calls clobber registers.
+
+Original-ROM execution covers 184 scroll cases, a successive 650-update ceremony
+and 144 display cases: 208,037 instructions. The full-sequence trace, including
+every ordered numeric write and viewport recipe, matches its original digest;
+the final standings become ready at frame 541 (the 542nd update) and emit the cue once. Cases
+cover record collection, first/full allocations, signed overflow, shared fades,
+entry/exit states and returned display heads. Seven new tests also verify
+canonical integration and atomic rejection of late invalid data. All 52 ending,
+continuation-runtime, fade and canonical-state tests pass; 413 module hashes and
+four page preload sets are refreshed and verified.
+
+This supersedes the earlier unimplemented-scroll note. The visible ending HUD,
+matrix/drawing helpers, physical ceremony world and live championship loop are
+still unfinished. These preparations do not change public mode defaults.

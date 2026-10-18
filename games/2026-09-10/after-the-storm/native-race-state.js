@@ -33,7 +33,7 @@ import {prepareNativeNameEntryPresentation} from './native-name-presentation.js'
 import {prepareNativeResultsMenuInitialization,prepareNativeResultsMenuInput,prepareNativeResultsMenuDisplay} from './native-results-menu.js';
 import {prepareNativeStuntResultsMenuInitialization,prepareNativeStuntResultsMenuInput,prepareNativeStuntResultsMenuDisplay} from './native-stunt-results-menu.js';
 import {prepareNativeContinuationMenuInitialization,prepareNativeContinuationMenuInput,prepareNativeContinuationMenuExit,prepareNativeContinuationMenuDisplay} from './native-continuation-menu.js';
-import {prepareNativeEndingMenuInitialization,prepareNativeEndingPanelEnqueue,prepareNativeEndingMenuInput} from './native-ending-menu.js';
+import {prepareNativeEndingMenuInitialization,prepareNativeEndingPanelEnqueue,prepareNativeEndingMenuInput,prepareNativeEndingMenuScroll,prepareNativeEndingMenuDisplay,prepareNativeEndingMenuPostDisplay} from './native-ending-menu.js';
 import {prepareNativeRaceRiderResourceConfiguration,prepareNativeRaceCourseResourceConfiguration} from './native-race-resource-configuration.js';
 import {prepareNativeRaceResultCodeSelection} from './native-race-body-fields.js';
 import {prepareNativePrimaryResultEstimates} from './native-primary-standings.js';
@@ -762,8 +762,8 @@ export function prepareNativeContinuationMenuInitializationUpdate(state){
  const next=copy(state);return continuationResult(next,prepareNativeContinuationMenuInitialization(next),{});
 }
 
-/** Prepared ending control with one retained overlay owner. The ceremony's
- * graphical scroll producer and physical podium scene are not advanced here. */
+/** Prepared ending controls with one retained overlay owner. Presentation
+ * recipes and the physical podium scene remain separate consumers. */
 export function prepareNativeEndingMenuInitializationUpdate(state,sourceViews={}){
  const next=copy(state),prepared=prepareNativeEndingMenuInitialization(next,sourceViews),effects=apply(next,prepared.operations);
  return freeze({...prepared,state:next,effects});
@@ -772,17 +772,35 @@ export function prepareNativeEndingPanelEnqueueUpdate(state,panelType){
  const next=copy(state),prepared=prepareNativeEndingPanelEnqueue(next,panelType),effects=apply(next,prepared.operations);
  return freeze({...prepared,state:next,effects});
 }
+export function prepareNativeEndingMenuScrollUpdate(state,sourceViews={}){
+ const next=copy(state),prepared=prepareNativeEndingMenuScroll(next,sourceViews),effects=apply(next,prepared.operations);
+ return freeze({...prepared,state:next,effects});
+}
 export function prepareNativeEndingMenuInputUpdate(state,sourceViews={}){
- const next=copy(state),prepared=prepareNativeEndingMenuInput(next),operations=[],effects=[];
- for(const op of prepared.operations){
-  let batch=[op];
-  if(op.kind==='externalCall'&&op.consumer==='801e6fb0'){
+ const next=copy(state);return endingControlResult(next,prepareNativeEndingMenuInput(next),sourceViews,true);
+}
+function endingControlResult(next,prepared,sourceViews,expandInput){
+ const operations=[],effects=[],pending=[...prepared.operations];
+ while(pending.length){
+  const op=pending.shift();let batch=[op];
+  if(expandInput&&op.kind==='externalCall'&&op.consumer==='802c6c1c'){
+   pending.unshift(...prepareNativeEndingMenuInput(next).operations);continue;
+  }
+  if(expandInput&&op.kind==='externalCall'&&op.consumer==='801e6fb0'){
    const [type,rate,selector]=op.arguments;
    batch=prepareNativeRaceFadePropertiesInitialization({fadeTemplateWords6cc0:sourceViews.fadeTemplateWords6cc0,type,rate,selector}).operations;
   }
   operations.push(...batch);effects.push(...apply(next,batch));
  }
  return freeze({...prepared,state:next,operations,effects});
+}
+export function prepareNativeEndingMenuDisplayUpdate(state,sourceViews={}, {expandInput=false}={}){
+ if(typeof expandInput!=='boolean')throw new TypeError('expandInput must be boolean');
+ const next=copy(state);return endingControlResult(next,prepareNativeEndingMenuDisplay(next,sourceViews),sourceViews,expandInput);
+}
+export function prepareNativeEndingMenuPostDisplayUpdate(state,sourceViews={}, {expandInput=false}={}){
+ if(typeof expandInput!=='boolean')throw new TypeError('expandInput must be boolean');
+ const next=copy(state);return endingControlResult(next,prepareNativeEndingMenuPostDisplay(next),sourceViews,expandInput);
 }
 export function prepareNativeContinuationMenuExitUpdate(state,input,sourceViews={}){
  const next=copy(state);return continuationResult(next,prepareNativeContinuationMenuExit(next,input),sourceViews,{expandFade:true});
