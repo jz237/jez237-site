@@ -1,5 +1,5 @@
-import {HULL_PROBES,hullProbeOffset} from './hull-probes.js?v=d5529706860a';
-import {projectSolidContact} from './solid-contact.js?v=d5529706860a';
+import {HULL_PROBES,hullProbeOffset} from './hull-probes.js?v=0de61eeb1bd1';
+import {projectSolidContact} from './solid-contact.js?v=0de61eeb1bd1';
 
 const dot=(a,b)=>a.x*b.x+a.y*b.y+a.z*b.z;
 const sub=(a,b)=>({x:a.x-b.x,y:a.y-b.y,z:a.z-b.z});

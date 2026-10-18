@@ -1,10 +1,10 @@
-import {createSourcePortCourse,PORT_NATIVE_GEOMETRY as G,portRampsForSelection} from './source-port-course.js?v=d5529706860a';
-import {PORT_RACE_OBJECTS} from './source-port-race-objects.js?v=d5529706860a';
-import {createSourceBuoyLayout} from './source-buoy-progress.js?v=d5529706860a';
-import {sourceBoundarySpheres,orderSourceFixedSpheres} from './source-boundary-spheres.js?v=d5529706860a';
-import {clippedVolume,clippedVolumes} from './clipped-volumes.js?v=d5529706860a';
-import {polygonDistance} from './classic-courses.js?v=d5529706860a';
-import {samplePolyline} from './courses.js?v=d5529706860a';
+import {createSourcePortCourse,PORT_NATIVE_GEOMETRY as G,portRampsForSelection} from './source-port-course.js?v=0de61eeb1bd1';
+import {PORT_RACE_OBJECTS} from './source-port-race-objects.js?v=0de61eeb1bd1';
+import {createSourceBuoyLayout} from './source-buoy-progress.js?v=0de61eeb1bd1';
+import {sourceBoundarySpheres,orderSourceFixedSpheres} from './source-boundary-spheres.js?v=0de61eeb1bd1';
+import {clippedVolume,clippedVolumes} from './clipped-volumes.js?v=0de61eeb1bd1';
+import {polygonDistance} from './classic-courses.js?v=0de61eeb1bd1';
+import {samplePolyline} from './courses.js?v=0de61eeb1bd1';
 const S=.025,xyz=p=>p.map(v=>v*S);
 
 /** Ordinary Port uses the selected original shoreline and object bank.

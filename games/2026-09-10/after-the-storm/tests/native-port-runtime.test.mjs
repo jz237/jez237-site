@@ -9,6 +9,7 @@ import {nativeAdditionalStuntSupportGeometry} from '../native-additional-stunt-s
 import {prepareNativeShoreContacts} from '../native-shore-contacts.js';
 import {queryNativeSupportFloor} from '../native-support-queries.js';
 import {getCourse} from '../courses.js';
+import {prepareNativeAIContext} from '../native-ai-context.js';
 const read=name=>JSON.parse(readFileSync(new URL('./fixtures/native-port-'+name+'.json',import.meta.url),'utf8'));
 const course=difficulty=>({sourceWaterCourseIndex:5,reverse:difficulty===3,
  sourceRouteRowsByClass:G.racePrimaryByClass,sourceMetadata:{nativeCourseIndex:5,nativeScale:.025,sourceNativeClassByDifficulty:[0,1,2,2]},
@@ -26,7 +27,7 @@ test('Port primary initialization matches 24960 original words using the selecte
   words+=r.data.recordWordsBySourceRow.flat().length;
   assert.equal(r.data.finishSourceRow,f.finishSourceRow);assert.equal(r.mode620,f.players-1);
   assert.equal(r.sourceDifficulty,[0,1,2,2][f.difficulty]);assert.equal(r.directionFlag1f90,Number(f.difficulty!==3));
-  assert.deepEqual(Object.keys(r.aiFamilies),['primary']);
+  assert.deepEqual(Object.keys(r.aiFamilies),f.players===1?['primary','secondary']:['primary']);
   for(const n of r.aiTargetTable.nodes){
    const data=r.data.nodes[n.sourceRow],w=r.data.recordWordsBySourceRow[n.sourceRow];
    assert.deepEqual(n.endpointPlusNativeXZ,data.endpointANativeXZ);assert.deepEqual(n.endpointMinusNativeXZ,data.endpointBNativeXZ);
@@ -53,6 +54,25 @@ test('Port startup preserves mode-selected objects, markers, ramp profiles and c
   assert.equal(r.staticContactGeometry.shore,nativePortSupportGeometry({players}).shore);
   assert.equal(r.allowedRegionsNative.length,4);
  }
+});
+
+test('Port prepares 12480 original secondary words for its avatar-specific solo AI route',()=>{
+ const cases=read('secondary');assert.equal(cases.length,4);let words=0;
+ for(const f of cases){
+  const r=runtime(f.difficulty),family=r.aiFamilies.secondary;
+  assert.deepEqual(family.data.recordWordsBySourceRow,f.recordWordsBySourceRow);words+=family.data.recordWordsBySourceRow.flat().length;
+  assert.equal(family.data.finishSourceRow,f.finishSourceRow);
+  for(const n of family.targetTable.nodes){const w=family.data.recordWordsBySourceRow[n.sourceRow];
+   for(let avatar=0;avatar<4;avatar++){assert.equal(n.nextByAvatar[avatar],w[0xcc/4+avatar]);assert.equal(n.previousByAvatar[avatar],w[0xf4/4+avatar]);}
+  }
+ }
+ assert.equal(words,12480);
+ const r=runtime(1),tables=Object.fromEntries(Object.entries(r.aiFamilies).map(([k,f])=>[k,f.targetTable]));
+ const input={courseIndex:5,state638:1,mode620:0,difficulty:1,avatar:1,recordFamily:'primary',cityRouteFlag74:0,navigationSourceRow:12};
+ assert.equal(prepareNativeAIContext(tables,input).table,tables.secondary);
+ assert.equal(prepareNativeAIContext(tables,{...input,avatar:0}).table,tables.primary);
+ assert.equal(prepareNativeAIContext(tables,{...input,difficulty:2}).table,tables.primary);
+ assert.equal(prepareNativeAIContext(tables,{...input,mode620:1}).table,tables.primary);
 });
 
 test('Port support selects 117 or 109 shore segments and retains the disabled floor grid',()=>{

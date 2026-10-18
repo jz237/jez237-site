@@ -6461,8 +6461,10 @@ two-player modes. An older raw-ROM lookup used the solo address range for the
 two-player Reverse pointer and misread collision data as route rows. Repeating
 the original loading and initialization in the selected image gives 24,960
 matching initialized words across eight cases (147,318 executed instructions).
-The original AI family selector keeps the primary family for ordinary Port;
-its separately stored secondary rows are not activated without source evidence.
+Human buoy judging retains the primary family. The independent computer-racer
+context selector chooses secondary for avatar1 outside source difficulty2 in
+solo ordinary racing; two-player mode forces primary. The secondary family is
+prepared separately, and original computer-racer driving is not yet integrated.
 
 Two-player support retains 109 shoreline segments rather than solo's 117.
 Both original three-dimensional floor grids are disabled; stale cell-list
@@ -6530,3 +6532,32 @@ was stopped in favour of these relevant checks; it was not reported as a new
 pass. Full terrain density and texture resolution remain unchanged, and all404
 module hashes/four page preload sets match. Ordinary Twilight/Dolphin integration,
 original AI and the remaining feature-level parity work are still pending.
+
+### Ordinary Twilight preparation and alternate AI tables — 2026-10-18
+
+The original selected Twilight companion image has identical floor and shore
+selectors for both player counts. Ordinary support shares the already verified
+16 finite floor triangles and78 shoreline segments. No Normal primary route
+exists in that image; the native runtime explicitly rejects class0 rather than
+silently borrowing Hard. Hard/Expert/Reverse primary initialization matches
+15,860 original words across both player counts (91,970 executed instructions).
+The three solo secondary families match7,930 original words (46,030 instructions).
+The separately prepared Port secondary families match12,480 original words
+(74,435 instructions). Both retain the original per-avatar navigation links.
+
+Human judging remains primary. The independent original AI selector can choose
+Port's secondary family for avatar1 outside source difficulty2, or Twilight's
+secondary family through its variant, position/height and retained-route rules.
+Two-player mode forces primary. These tables prepare later original AI driving;
+they do not claim that the source AI driver already controls live opponents.
+
+The ordinary Twilight scene now has four canonical ramps, eight finite collision
+planes and10/16/10 fixed spheres by class. Both player counts share those source
+selections. Every displayed shore edge, plane, sphere and primary marker matches
+its selected numeric geometry; the four object-owned ramp surfaces bind directly
+to the canonical object state. The four supplementary walls remain static.
+Stunt objects and the older illustration map are not inherited. Worker output
+still contains361x361 terrain vertices and512x512 depth data. Twenty-one combined
+Twilight scene/runtime, Port runtime and AI context checks pass. Ordinary-input
+driving and browser/remote presentation validation remain in progress; native
+Twilight ordinary races are not yet admitted by the public host.
