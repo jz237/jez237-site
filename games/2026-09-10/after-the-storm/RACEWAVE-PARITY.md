@@ -19,6 +19,22 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — canonical moving collision surfaces
+
+Full7F700 box contacts now have a canonical entry point that decodes the latest
+collision-plane owner, including origins moved by6E0F4. These temporary rows
+are discarded after the contact pass; no separate mutable geometry is created.
+The physical object bridge reports ordered box impacts through the adapter's
+existing C48/shared-normal/marked-box owner, preserving the source flagged-box
+attenuation and point-velocity/whole-hull response.
+
+All439 existing original7F700 cases match through the canonical entry point.
+A loaded/initialized gate collides when closed, rises through the original
+object update, then clears the same test position. Two physical riders exercise
+the actual adapter callback and shared frame schedule with its rising collision
+origin. Invalid later rows reject without changing the canonical or body inputs.
+Live host startup/selection remains to be connected; resolution is unchanged.
+
 ## Unpublished — complete fixed-sphere numeric contact phase
 
 Full7EF80 now consumes the canonical fixed-sphere and spatial-grid words via

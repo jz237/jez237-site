@@ -51,6 +51,7 @@ import {queryNativeWaterField} from './native-water-field.js';
 import {prepareNativeFixedSphereLoading,prepareNativeFixedSphereInitialization} from './native-fixed-sphere-startup.js';
 import {prepareNativeFixedSphereUpdate} from './native-fixed-sphere-update.js';
 import {prepareNativeFixedSphereContacts} from './native-fixed-sphere-contacts.js';
+import {prepareNativeBoxContacts} from './native-static-contacts.js';
 import {prepareNativePrimaryScratchContext} from './native-primary-scratch-context.js';
 
 const MIN=-2147483648,MAX=2147483647,RACE_BASE=0x1f94,RACE_WORDS=1693,HUD_BASE=0x7788,HUD_WORDS=1442;
@@ -367,6 +368,20 @@ export function prepareNativeRaceObjectUpdate(state,input={}){
   objectCountFa40:sceneValue(next,'objectCountFa40'),fortressFlag1fc8:next.raceWords1f94[ri(0x1fc8)]|0});
  next.objectWordsC940=prepared.objectWordsC940;next.collisionPlaneWordsFd78=prepared.collisionPlaneWordsFd78;
  return freeze({state:next,applied:true,effects:[],diagnostic:prepared.diagnostic});
+}
+
+/** Full7F700 reads the latest canonical collision rows, including origins
+ * changed by6E0F4. Decoded rows are temporary; contact never writes geometry.
+ * The returned body holds the prepared physical point/impact state separately
+ * from the canonical race owner. This reached phase has no activity gate. */
+export function prepareNativeRaceObjectPlaneContacts(state,input={}){
+ const next=copy(state);record(input,'object plane contact body');
+ for(const key of ['collisionPlaneWordsFd78','collisionPlaneCount0578','boxes'])if(Object.hasOwn(input,key))throw new RangeError(`${key} overlaps canonical native state`);
+ const count=integer(sceneValue(next,'collisionPlaneCount0578'),'collisionPlaneCount0578',0,32);
+ if(count>0&&!next.collisionPlaneWordsFd78)throw new TypeError('Supply retained collisionPlaneWordsFd78');
+ const rows=Array.from({length:count},(_,i)=>next.collisionPlaneWordsFd78.slice(i*16,(i+1)*16).map(readFloat));
+ const prepared=prepareNativeBoxContacts(input,{count0578:count,rows});
+ return freeze({state:next,body:prepared.state,contacts:prepared.contacts,effects:[]});
 }
 
 /** Full7EF80 fixed-sphere phase. The original query owns candidate selection;
