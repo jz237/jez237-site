@@ -40,11 +40,11 @@ test('course9 selected secondary uses its actual row basis for both grid and dec
  assert.deepEqual(nativeRaceStateSnapshot(state),before);
 });
 
-test('training record threshold selects the diagonal constructor before fixed-point decoding',()=>{
+test('ending rank threshold selects the diagonal constructor before fixed-point decoding',()=>{
  const state=fixture({main638:21}),training=prepareNativeRaceStateOperations(state,[
   {kind:'recordWordWrite',racerIndex:3,wordIndex:0x338/4,value:3}]).state;
  const result=nativeRaceGridTransformView(training,{racerIndex:3,
-  trainingAnchorsNative:[{x:10,y:2,z:30},null,null,{x:70,y:-1,z:-20}]});
+  endingAnchorsNative:[{x:10,y:2,z:30},null,null,{x:70,y:-1,z:-20}]});
  assert.deepEqual(result.placement.forwardNative,{x:1,y:0,z:-1});
  assert.deepEqual(result.decoded.positionNative,{x:62,y:-1,z:-20});
  assert.deepEqual(result.decoded.frameNative.forward,{x:.70709228515625,y:0,z:-.70709228515625});

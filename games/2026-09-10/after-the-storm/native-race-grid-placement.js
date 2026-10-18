@@ -33,15 +33,15 @@ function fromRow(nodes,index,family,lateral,fore,branch,offsets=true){
   ...(offsets?{lateralNative:lateral,foreNative:fore}:{})});
 }
 
-/** Complete bounded6AC84 argument selection, including demo main8 and training
+/** Complete bounded6AC84 argument selection, including demo main8 and ending
  * main21. Other branches use actual finish row/basis, not heading inferred from
  * browser start poses. primaryNodes/secondaryNodes are stored source-order rows
  * with sourceRow,centerNativeXZ,forwardXZ,rightXZ; only demo scan reads their
  * classification98. The primaryCount active prefix may be shorter than stored
  * rows: a failed demo scan falls back to its actual masked row0..3.
  *
- * trainingAnchorsNative are explicit caller-supplied source XYZ rows; main21
- * selects row0 or3 from the actual record2c70 threshold. Forward(1,0,-1) is
+ * endingAnchorsNative are explicit caller-supplied source XYZ rows; main21
+ * selects row0 or3 from the actual final-rank record2c70. Forward(1,0,-1) is
  * deliberately not normalized. The return is the numeric48854 call recipe,
  * not a claim to reproduce that matrix helper or initialize actor15/physics.
  */
@@ -49,11 +49,12 @@ export function prepareNativeRaceGridPlacement(input){
  record(input,'grid placement input');
  const main=integer(input.main638,'main638'),slot=integer(input.racerIndex,'racerIndex',0,3);
  if(main===21){
-  const index=integer(input.training2c70,'training2c70')<3?0:3,anchors=input.trainingAnchorsNative;
-  if(!Array.isArray(anchors)||anchors.length<index+1||anchors.length>4)throw new RangeError('Supply actual training anchor row');
-  const a=record(anchors[index],'training anchor');
+  // Accept the earlier misnamed inputs for retained external diagnostic callers.
+  const index=integer(input.endingRank2c70??input.training2c70,'endingRank2c70')<3?0:3,anchors=input.endingAnchorsNative??input.trainingAnchorsNative;
+  if(!Array.isArray(anchors)||anchors.length<index+1||anchors.length>4)throw new RangeError('Supply actual ending anchor row');
+  const a=record(anchors[index],'ending anchor');
   return recipe({x:sub(scalar(a.x,'anchor.x'),8),y:scalar(a.y,'anchor.y'),z:scalar(a.z,'anchor.z')},
-   {x:1,y:0,z:index===0?0:-1},{branch:'main21',trainingAnchorRow:index});
+   {x:1,y:0,z:index===0?0:-1},{branch:'main21',endingAnchorRow:index});
  }
  const course=integer(input.courseIndex,'courseIndex',0,11);
  if(main===8&&course!==1){

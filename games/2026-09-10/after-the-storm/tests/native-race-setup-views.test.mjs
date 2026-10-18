@@ -40,11 +40,11 @@ test('grid placement reads actual retained26c0 order while ranking remains indep
  assert.equal(nativeRaceComputerProfileView(s,0),true);assert.deepEqual(nativeRaceStateSnapshot(s),before);
 });
 
-test('training reads the selected canonical record word before preparing its explicit anchor recipe',()=>{
+test('ending reads the selected canonical record word before preparing its explicit anchor recipe',()=>{
  const s=fixture(),training=prepareNativeRaceStateOperations(s,[{kind:'sourceWordWrite',field:'main638',value:21},
   {kind:'recordWordWrite',racerIndex:3,wordIndex:0x338/4,value:3}]).state;
- const trainingAnchorsNative=[{x:10,y:2,z:30},null,null,{x:70,y:-1,z:-20}];
- const v=nativeRaceGridPlacementView(training,{racerIndex:3,trainingAnchorsNative});
+ const endingAnchorsNative=[{x:10,y:2,z:30},null,null,{x:70,y:-1,z:-20}];
+ const v=nativeRaceGridPlacementView(training,{racerIndex:3,endingAnchorsNative});
  assert.deepEqual(v.positionNative,{x:62,y:-1,z:-20});assert.deepEqual(v.forwardNative,{x:1,y:0,z:-1});
  assert.equal(v.diagnostic.physicalInitialization,false);assert.equal(training.raceWords1f94[ri(0x2c70)+3*222],3);
 });

@@ -69,12 +69,12 @@ test('failed demo scan uses masked stored row even outside the active prefix',()
  }
 });
 
-test('main21 training reads actual XYZ anchor and preserves unnormalized diagonal forward',()=>{
+test('main21 ending reads actual XYZ anchor and preserves unnormalized diagonal forward',()=>{
  const anchors=[{x:10,y:2,z:30},{x:0,y:0,z:0},{x:0,y:0,z:0},{x:70,y:-1,z:-20}];
- for(const training2c70 of [-2147483648,2,3,2147483647]){
-  const v=prepare({main638:21,racerIndex:0,training2c70,trainingAnchorsNative:anchors,get courseIndex(){return unused();}});
-  assert.deepEqual(v.positionNative,training2c70<3?{x:2,y:2,z:30}:{x:62,y:-1,z:-20});
-  assert.deepEqual(v.forwardNative,{x:1,y:0,z:training2c70<3?0:-1});assert.equal(v.diagnostic.matrixEvaluated,false);
+ for(const endingRank2c70 of [-2147483648,2,3,2147483647]){
+  const v=prepare({main638:21,racerIndex:0,endingRank2c70,endingAnchorsNative:anchors,get courseIndex(){return unused();}});
+  assert.deepEqual(v.positionNative,endingRank2c70<3?{x:2,y:2,z:30}:{x:62,y:-1,z:-20});
+  assert.deepEqual(v.forwardNative,{x:1,y:0,z:endingRank2c70<3?0:-1});assert.equal(v.diagnostic.matrixEvaluated,false);
  }
 });
 
@@ -101,7 +101,7 @@ test('invalid active indices, missing actual geometry and sparse order words rej
  assert.throws(()=>prepare(base({primaryNodes:[node(0,{forwardXZ:{x:Infinity,z:1}})]})),/finite float32/);
  assert.throws(()=>prepare(base({mode620:4,order26c0:[0,,2,3],directionFlag1f90:0})),/order26c0/);
  assert.throws(()=>prepare({main638:8,racerIndex:3,courseIndex:0,demoOffset5438:0,primaryCount:0,primaryNodes:[node()]}),/source row/);
- assert.throws(()=>prepare({main638:21,racerIndex:0,training2c70:3,trainingAnchorsNative:[{x:0,y:0,z:0}]}),/training anchor/);
+ assert.throws(()=>prepare({main638:21,racerIndex:0,endingRank2c70:3,endingAnchorsNative:[{x:0,y:0,z:0}]}),/ending anchor/);
 });
 
 test('computer profile source main0/8 branches need no human identity or input origin',()=>{

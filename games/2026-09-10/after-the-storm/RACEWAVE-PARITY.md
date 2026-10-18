@@ -6713,27 +6713,63 @@ producer/lifetime; a fabricated frustum or permanent zero corners is not supplie
 Championship progression, original AI traffic and training/warm-up integration
 remain unfinished. No rendering resolution or public mode default changes.
 
-### Original training entry preparation — 2026-10-18
+### Original championship ending entry preparation — 2026-10-18
 
 The complete 801ECB98 entry now has an independent numeric implementation and
 canonical state adapter. It selects source dispatcher 102, main state 21 and
 course 7, with one human, four racers, simulation state 2, phase 3 and no finish.
 This is distinct from Dolphin Practice. All four body profiles use the selected
 avatars and course 7 CPU traits; the human variant changes the resource avatar
-without changing its physical profile. The retained primary lesson word selects
+without changing its physical profile. The retained primary final-rank word selects
 the audio argument after resource and fade initialization, including 32-bit wrap.
 
 The original instruction interpreter executed the entire caller and its reached
 resource/fade helpers for 288 cases (351,696 instructions). The numeric fixture
 compares every ordered direct write and call across all 24 avatar permutations,
 four primary slots and three variant values. It also covers signed/raw trait
-words and lesson counter boundaries. The canonical adapter expands the existing
+words and rank word boundaries. The canonical adapter expands the existing
 fade routines and retains explicit physical-profile, resource and audio effects.
 Three new tests and nine title/championship return regressions pass, including
 unchanged caller state and rejection of sparse or missing consumed data.
 Another 26 menu-entry, fade, resource-state and loading checks pass (38 distinct
 checks total); all 412 module hashes and four page preload sets are refreshed.
 
-This prepares entry only: it does not expose a playable training mode, run the
-lesson overlay, initialize its physical world or claim completed warm-up flow.
+This prepares entry only: it does not expose a playable ending ceremony, run the
+ceremony overlay, initialize its physical world or claim completed warm-up flow.
 High-resolution rendering and public mode defaults remain unchanged.
+
+The initial training label for this entry was incorrect and is superseded here.
+The reference project identifies main21/dispatchers102–103 as the championship
+ending HUD, and original callers reach it from the final championship results.
+The numeric implementation is unchanged; its API, tests and fixture now use
+ending-ceremony names. Training and warm-up remain separate unfinished work.
+
+### Championship ending panel control — 2026-10-18
+
+The ovl_i15 source is the championship ending, confirmed by the reference
+project's ending HUD implementation and the original result-screen callers.
+The retained record2C70 is the final rank in this context. Main21 grid placement
+now exposes ending-rank and ending-anchor names; earlier diagnostic input names
+remain accepted for compatibility. A fresh read-only Ghidra query on EVO X2
+exported 427 entry/grid instructions, all matched to the ROM, with all nine
+saved project files unchanged.
+
+The original 5CE8 panel initializer, 5EE4 first-free allocation, 6C1C controls
+and 6CAC exit entry are reconstructed. A canonical 126-word ending owner retains
+the loaded tables and BSS, including ten four-word panels. Initialization selects
+the original rank/class message delay and maps each course's saved avatar to
+its original row, preserving the missing-avatar sentinel. Allocation preserves
+the original panel height and initial position, and a full pool leaves it alone.
+
+Exit input is gated by the original ready flag. A/Z/Start or the incremented
+601-frame counter selects the title or records route from the retained record
+flags. The counter keeps signed wrapping. Canonical fade writes precede the
+optional original music-stop call; missing late fade data cannot partially
+change the caller's scene, timer or panel owner.
+
+846 prepared executions of the original overlay and reached fade helper cover
+420 initialization cases, 66 allocation cases and 360 control cases, totaling
+108,412 instructions. Every ordered write and call matches. Eight entry/control
+tests and 42 grid, fade, championship and return regressions pass (50 distinct
+checks). This does not yet run the scrolling display producer, draw ending
+panels, construct the podium world or complete the championship loop.

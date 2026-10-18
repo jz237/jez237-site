@@ -26,13 +26,14 @@ import {prepareNativeRaceCourseZeroSequenceUpdate,prepareNativeRaceCourseZeroSeq
 import {prepareNativeRaceStartTransform,decodeNativeRaceStartTransform} from './native-race-start-transform.js';
 import {prepareNativeRaceFadePropertiesInitialization,prepareNativeRaceFadeSlotsReset} from './native-race-fade-initialization.js';
 import {prepareNativeRaceMainConfiguration} from './native-race-main-configuration.js';
-import {prepareNativeCourseMenuReturn,prepareNativeRiderMenuReturn,prepareNativeTitleMenuReturn,prepareNativeChampionshipMenuReturn,prepareNativeTrainingEntry} from './native-menu-return-initialization.js';
+import {prepareNativeCourseMenuReturn,prepareNativeRiderMenuReturn,prepareNativeTitleMenuReturn,prepareNativeChampionshipMenuReturn,prepareNativeEndingCeremonyEntry} from './native-menu-return-initialization.js';
 import {prepareNativeRaceMenuInitialization} from './native-race-menu-initialization.js';
 import {prepareNativeNameEntryInitialization,prepareNativeNameEntryInput,prepareNativeNameEntryAnimationPhase,prepareNativeNameEntryRecordUpdate,prepareNativeNameEntryDisplay} from './native-name-entry.js';
 import {prepareNativeNameEntryPresentation} from './native-name-presentation.js';
 import {prepareNativeResultsMenuInitialization,prepareNativeResultsMenuInput,prepareNativeResultsMenuDisplay} from './native-results-menu.js';
 import {prepareNativeStuntResultsMenuInitialization,prepareNativeStuntResultsMenuInput,prepareNativeStuntResultsMenuDisplay} from './native-stunt-results-menu.js';
 import {prepareNativeContinuationMenuInitialization,prepareNativeContinuationMenuInput,prepareNativeContinuationMenuExit,prepareNativeContinuationMenuDisplay} from './native-continuation-menu.js';
+import {prepareNativeEndingMenuInitialization,prepareNativeEndingPanelEnqueue,prepareNativeEndingMenuInput} from './native-ending-menu.js';
 import {prepareNativeRaceRiderResourceConfiguration,prepareNativeRaceCourseResourceConfiguration} from './native-race-resource-configuration.js';
 import {prepareNativeRaceResultCodeSelection} from './native-race-body-fields.js';
 import {prepareNativePrimaryResultEstimates} from './native-primary-standings.js';
@@ -119,6 +120,7 @@ function copy(value){
  if(value.resultsMenuWords6d30!==undefined)s.resultsMenuWords6d30=words(value.resultsMenuWords6d30,'resultsMenuWords6d30',4);
  if(value.stuntResultsMenuWords5d80!==undefined)s.stuntResultsMenuWords5d80=words(value.stuntResultsMenuWords5d80,'stuntResultsMenuWords5d80',4);
  if(value.continuationMenuWords61e0!==undefined)s.continuationMenuWords61e0=words(value.continuationMenuWords61e0,'continuationMenuWords61e0',4);
+ if(value.endingMenuWords6d50!==undefined)s.endingMenuWords6d50=words(value.endingMenuWords6d50,'endingMenuWords6d50',126);
  if(value.continuationDataWords60f0!==undefined)s.continuationDataWords60f0=words(value.continuationDataWords60f0,'continuationDataWords60f0',20);
  if(value.profileWordsB330!==undefined){
   if(Object.hasOwn(scene,'difficulty'))throw new RangeError('difficulty overlaps profileWordsB330');
@@ -162,6 +164,8 @@ function copy(value){
  * Optional stuntResultsMenuWords5d80[4] owns Stunt-results phase, delay and
  * two signed sliding offsets at802C5D80..5D90, exclusive. It reads player1.
  * Optional continuationMenuWords61e0[4] owns ovl_i14 phase/offsets/count BSS.
+ * Optional endingMenuWords6d50[126] owns ovl_i15 loaded control tables and BSS,
+ * ending at6F48, including ten four-word panel rows and course/rank selectors.
  * continuationDataWords60f0[20] retains its loaded selection, numeric choice
  * tables and audio-once latch through6140, exclusive. Intervening untouched
  * descriptor words are opaque; original graphics assets are not implied.
@@ -553,9 +557,9 @@ function apply(s,operations){
    const bits=integer(op.value,'source halfword bits',0,65535);
    if(op.field==='pressed65a'&&s.menuWordsE658!==undefined)s.menuWordsE658[0]=((s.menuWordsE658[0]&0xffff0000)|bits)>>>0;
    else s.scene[op.field]=sceneRanges[op.field][0]<0?bits<<16>>16:bits;
-  }else if(op.kind==='i1Write'||op.kind==='profileWrite'||op.kind==='nameEntryWrite'||op.kind==='resultsMenuWrite'||op.kind==='stuntResultsMenuWrite'||op.kind==='continuationMenuWrite'||op.kind==='continuationDataWrite'){
+  }else if(op.kind==='i1Write'||op.kind==='profileWrite'||op.kind==='nameEntryWrite'||op.kind==='resultsMenuWrite'||op.kind==='stuntResultsMenuWrite'||op.kind==='continuationMenuWrite'||op.kind==='continuationDataWrite'||op.kind==='endingMenuWrite'){
    const key=op.kind==='i1Write'?'i1Words9440':op.kind==='nameEntryWrite'?'nameEntryWords61c4':op.kind==='resultsMenuWrite'?'resultsMenuWords6d30':op.kind==='stuntResultsMenuWrite'?'stuntResultsMenuWords5d80':
-    op.kind==='continuationMenuWrite'?'continuationMenuWords61e0':op.kind==='continuationDataWrite'?'continuationDataWords60f0':'profileWordsB330';
+    op.kind==='continuationMenuWrite'?'continuationMenuWords61e0':op.kind==='continuationDataWrite'?'continuationDataWords60f0':op.kind==='endingMenuWrite'?'endingMenuWords6d50':'profileWordsB330';
    if(!s[key])throw new TypeError(`Supply retained ${key} before applying its writes`);
    const width=op.width,count=s[key].length;
    if(width!==4&&(!['profileWrite','nameEntryWrite'].includes(op.kind)||width!==2))throw new RangeError(`Invalid ${key} patch width`);
@@ -757,6 +761,29 @@ function continuationResult(next,prepared,sourceViews,{expandInput=false,expandE
 export function prepareNativeContinuationMenuInitializationUpdate(state){
  const next=copy(state);return continuationResult(next,prepareNativeContinuationMenuInitialization(next),{});
 }
+
+/** Prepared ending control with one retained overlay owner. The ceremony's
+ * graphical scroll producer and physical podium scene are not advanced here. */
+export function prepareNativeEndingMenuInitializationUpdate(state,sourceViews={}){
+ const next=copy(state),prepared=prepareNativeEndingMenuInitialization(next,sourceViews),effects=apply(next,prepared.operations);
+ return freeze({...prepared,state:next,effects});
+}
+export function prepareNativeEndingPanelEnqueueUpdate(state,panelType){
+ const next=copy(state),prepared=prepareNativeEndingPanelEnqueue(next,panelType),effects=apply(next,prepared.operations);
+ return freeze({...prepared,state:next,effects});
+}
+export function prepareNativeEndingMenuInputUpdate(state,sourceViews={}){
+ const next=copy(state),prepared=prepareNativeEndingMenuInput(next),operations=[],effects=[];
+ for(const op of prepared.operations){
+  let batch=[op];
+  if(op.kind==='externalCall'&&op.consumer==='801e6fb0'){
+   const [type,rate,selector]=op.arguments;
+   batch=prepareNativeRaceFadePropertiesInitialization({fadeTemplateWords6cc0:sourceViews.fadeTemplateWords6cc0,type,rate,selector}).operations;
+  }
+  operations.push(...batch);effects.push(...apply(next,batch));
+ }
+ return freeze({...prepared,state:next,operations,effects});
+}
 export function prepareNativeContinuationMenuExitUpdate(state,input,sourceViews={}){
  const next=copy(state);return continuationResult(next,prepareNativeContinuationMenuExit(next,input),sourceViews,{expandFade:true});
 }
@@ -880,7 +907,7 @@ export function prepareNativeRaceMainConfigurationUpdate(state,sourceViews={}, {
   finalAudioPending:true,physicalInitialization:false}});
 }
 
-/** Numeric title/championship/rider/course return or training entry, with fades expanded in
+/** Numeric title/championship/rider/course return or ending ceremony entry, with fades expanded in
  * source order into the same canonical HUD owner. Physical rider tunes,
  * resources and audio remain required effects. The original selection-menu
  * loops and rendering are separate; no target entry remains for replay.
@@ -889,8 +916,8 @@ export function prepareNativeRaceMainConfigurationUpdate(state,sourceViews={}, {
  * kind3 needs the36-word descriptor owner; no missing state is synthesized. */
 export function prepareNativeMenuReturnUpdate(state,destination,sourceViews={}, {expandResourceInitializers=false}={}){
  if(typeof expandResourceInitializers!=='boolean')throw new TypeError('expandResourceInitializers must be boolean');
- const prepare={course:prepareNativeCourseMenuReturn,rider:prepareNativeRiderMenuReturn,title:prepareNativeTitleMenuReturn,championship:prepareNativeChampionshipMenuReturn,training:prepareNativeTrainingEntry}[destination];
- if(typeof prepare!=='function'||!['course','rider','title','championship','training'].includes(destination))throw new RangeError('Unreconstructed menu return destination');
+ const prepare={course:prepareNativeCourseMenuReturn,rider:prepareNativeRiderMenuReturn,title:prepareNativeTitleMenuReturn,championship:prepareNativeChampionshipMenuReturn,ending:prepareNativeEndingCeremonyEntry}[destination];
+ if(typeof prepare!=='function'||!['course','rider','title','championship','ending'].includes(destination))throw new RangeError('Unreconstructed menu return destination');
  const next=copy(state),prepared=prepare(next,sourceViews),operations=[],effects=[],expandedResourceConsumers=[];
  for(const op of prepared.operations){
   let batch=[op];
@@ -947,8 +974,8 @@ export function prepareNativeRaceWaveSelectionUpdate(state,input={}){
 export function nativeRaceGridPlacementView(state,input){
  record(input,'source grid geometry input');const s=copy(state),racerIndex=integer(input.racerIndex,'racerIndex',0,3);
  return prepareNativeRaceGridPlacement({...s.scene,racerIndex,primaryNodes:input.primaryNodes,secondaryNodes:input.secondaryNodes,
-  trainingAnchorsNative:input.trainingAnchorsNative,order26c0:s.raceWords1f94.slice(ri(0x26c0),ri(0x26c0)+4).map(v=>v|0),
-  training2c70:s.raceWords1f94[ri(0x2c70)+racerIndex*222]|0});
+  endingAnchorsNative:input.endingAnchorsNative??input.trainingAnchorsNative,order26c0:s.raceWords1f94.slice(ri(0x26c0),ri(0x26c0)+4).map(v=>v|0),
+  endingRank2c70:s.raceWords1f94[ri(0x2c70)+racerIndex*222]|0});
 }
 /** Transient grid-to-physical matrix view: evaluate the actual constructor,
  * pack its16.16 destination, then decode that quantized destination as62E50
@@ -1282,7 +1309,7 @@ function currentPrimaryNodes(layout,primary){
  * those same selected HUD positions, never a second gate-camera input. Current primary node centers
  * use the same input.primary.nodePositionsNative override as race judging.
  *
- * Source order is FC39C→EF504→F23A0→[F03E0]→F8DD0→F9EA0→F0E7C→F1CFC.
+ * Source order is FC39Câ†’EF504â†’F23A0â†’[F03E0]â†’F8DD0â†’F9EA0â†’F0E7Câ†’F1CFC.
  * The conditional start gate reads fresh post-prelude canonical status. All
  * overlay writes commit immediately to the next local consumer. tailOperations
  * describes these overlay stores/effects only; earlier phase writes are already
