@@ -1,4 +1,4 @@
-import {prepareNativeRaceGenericObjectContacts,prepareNativeRaceObjectMotionUpdate,prepareNativeRaceFixedSphereUpdate,prepareNativeRaceObjectUpdate} from './native-race-state.js';
+import {prepareNativeRaceGenericObjectContacts,prepareNativeRaceObjectMotionUpdate,prepareNativeRaceFixedSphereContacts,prepareNativeRaceFixedSphereUpdate,prepareNativeRaceObjectUpdate} from './native-race-state.js';
 import {isHostRaceWater} from './race-water.js';
 import {createNativeIceFragments,stepNativeIceFragments} from './native-ice-fragments.js';
 import {createNativeIceSplashes,queueNativeIceSplash} from './native-ice-splashes.js';
@@ -33,6 +33,18 @@ export function createNativeGenericObjectWorld({water,readRaceState,commitRaceSt
  const bridge={water,
   provenance:Object.freeze({owner:'caller canonical objectWordsC940',contactOrder:'descending source rows; front then rear; immediate shared commit',
    motionOrder:'ascending motion58=4 after water/adjudication/primary motion',waterQuery:'source4D30C plane result',numericPrecision:'source float32/double operation order'}),
+  fixedContact(hull,context){
+   if(hull.scale!==scale||context?.logicalFrame!==frames||typeof context.readFixedSphereState!=='function'||typeof context.recordImpact!=='function')throw new Error('Fixed contacts require the current native physical impact owner');
+   const prepared=context.readFixedSphereState(),center=axes.map(k=>F(hull.center[k]/scale)),up=axes.map(k=>F(hull.frame.up[k])),forward=axes.map(k=>F(hull.frame.forward[k]));
+   const result=prepareNativeRaceFixedSphereContacts(read(),{centerNativeXZ:[center[0],center[2]],
+    hull:{positions:hull.points.map(p=>axes.map(k=>F(p.position[k]/scale))),velocities:hull.points.map(p=>axes.map(k=>F(p.velocity[k]*.01/scale)))},
+    probesNative:[27,-9].map(z=>axes.map((_,k)=>F(F(z*forward[k])+F(center[k]+F(up[k]+up[k]))))),
+    impact:{maximum:prepared.maximum,normal:axes.map(k=>prepared.normal[k])}});
+   for(const hit of result.contacts)context.recordImpact({channel:'fixedSphere',incomingNative:hit.incoming,normal:Object.fromEntries(axes.map((k,i)=>[k,hit.normal[i]]))});
+   if(result.contacts.length)hull.points.forEach((p,i)=>axes.forEach((k,j)=>{p.position[k]=result.hull.positions[i][j]*scale;p.velocity[k]=result.hull.velocities[i][j]*scale/.01;}));
+   const previous=hulls.get(hull);hulls.set(hull,{...previous,fixedContacts:(previous?.fixedContacts??0)+result.contacts.length,fixedUnresolved:(previous?.fixedUnresolved??0)+result.unresolved.length});
+   return result;
+  },
   contact(hull,context){
    if(hull.scale!==scale||context?.logicalFrame!==frames||typeof context.readGenericObjectState!=='function'||typeof context.recordGenericHitKind!=='function'||typeof context.recordImpact!=='function')throw new Error('Generic contacts require the current native physical impact owner');
    const prepared=context.readGenericObjectState(),impact={maximum:prepared.maximum,normal:axes.map(k=>prepared.normal[k]),hitKind:prepared.hitKind};
@@ -46,7 +58,7 @@ export function createNativeGenericObjectWorld({water,readRaceState,commitRaceSt
     context.recordGenericHitKind(result.impact.hitKind);
     hull.points.forEach((p,i)=>axes.forEach((k,j)=>{p.position[k]=result.hull.positions[i][j]*scale;p.velocity[k]=result.hull.velocities[i][j]*scale/.01;}));
    }
-   const previous=hulls.get(hull);hulls.set(hull,{contacts:(previous?.contacts??0)+result.contacts.length,unresolved:(previous?.unresolved??0)+result.unresolved.length});
+   const previous=hulls.get(hull);hulls.set(hull,{...previous,contacts:(previous?.contacts??0)+result.contacts.length,unresolved:(previous?.unresolved??0)+result.unresolved.length});
    let index=0;for(const hit of result.contacts)if(hit.broke){
     const raw=result.fragmentEvents[index++],positionNative=[...raw.position],velocityNative=[...raw.velocity];
     if(fragmentBurst){

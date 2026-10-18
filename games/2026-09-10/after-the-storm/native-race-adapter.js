@@ -700,6 +700,7 @@ function stepAdapter(adapter,dt,input,options){
           time:hull.simulationTime,controls:c,water,contactWindow,actorState:frame.actorState,action:frame.action,
           report:report=>mergeContacts(contactWindow,report),
           recordImpact:hit=>recordNativeImpact(adapter.impacts,hit),
+          readFixedSphereState:()=>({maximum:adapter.impacts.fixedSphereImpactNative,normal:copy(adapter.impacts.normal)}),
           readGenericObjectState:()=>({maximum:adapter.impacts.objectImpactNative,normal:copy(adapter.impacts.normal),hitKind:adapter.objectHitKind16d8,stabilityNative:frame.iceStabilityNative}),
           recordGenericHitKind:kind=>{if(!Number.isInteger(kind)||kind<0||kind>2)throw new RangeError('Invalid generic hit kind');adapter.objectHitKind16d8=kind;},
           applyContact:hit=>{

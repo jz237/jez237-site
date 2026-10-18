@@ -50,6 +50,7 @@ import {prepareNativeGenericObjectContacts} from './native-generic-spheres.js';
 import {queryNativeWaterField} from './native-water-field.js';
 import {prepareNativeFixedSphereLoading,prepareNativeFixedSphereInitialization} from './native-fixed-sphere-startup.js';
 import {prepareNativeFixedSphereUpdate} from './native-fixed-sphere-update.js';
+import {prepareNativeFixedSphereContacts} from './native-fixed-sphere-contacts.js';
 import {prepareNativePrimaryScratchContext} from './native-primary-scratch-context.js';
 
 const MIN=-2147483648,MAX=2147483647,RACE_BASE=0x1f94,RACE_WORDS=1693,HUD_BASE=0x7788,HUD_WORDS=1442;
@@ -366,6 +367,16 @@ export function prepareNativeRaceObjectUpdate(state,input={}){
   objectCountFa40:sceneValue(next,'objectCountFa40'),fortressFlag1fc8:next.raceWords1f94[ri(0x1fc8)]|0});
  next.objectWordsC940=prepared.objectWordsC940;next.collisionPlaneWordsFd78=prepared.collisionPlaneWordsFd78;
  return freeze({state:next,applied:true,effects:[],diagnostic:prepared.diagnostic});
+}
+
+/** Full7EF80 fixed-sphere phase. The original query owns candidate selection;
+ * the body owns cached probes and C3C. No activity gate or sphere-count filter
+ * is inserted here, and neither fixed storage nor its grid is modified. */
+export function prepareNativeRaceFixedSphereContacts(state,input={}){
+ const next=copy(state);record(input,'fixed contact body');
+ for(const key of ['fixedSphereWordsB138','fixedSphereGridWords1ce8'])if(Object.hasOwn(input,key))throw new RangeError(`${key} overlaps canonical native state`);
+ const result=prepareNativeFixedSphereContacts({...input,fixedSphereWordsB138:next.fixedSphereWordsB138,fixedSphereGridWords1ce8:next.fixedSphereGridWords1ce8});
+ return freeze({...result,state:next,effects:[]});
 }
 
 /** Reached7E938 front/rear probe calls. Body/impact are prepared views of the

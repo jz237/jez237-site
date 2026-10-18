@@ -19,6 +19,31 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — complete fixed-sphere numeric contact phase
+
+Full7EF80 now consumes the canonical fixed-sphere and spatial-grid words via
+the original741A4 query and front/rear7ED2C contact sequence. Grid selection uses
+float32 subtraction/division/multiplication before signed truncation. Candidate
+bytes retain their stored order and are visited descending for each cached
+probe; the first overlap applies full penetration to all12 positions and three
+velocities, including separating contacts. C3C has its own strict impact maximum.
+The collision extent is the source constant37, independent of stored tag/radius.
+Fixed storage and grid never change during contact. Coincident centers remain
+explicitly unresolved; unsupported conversion/list spans reject atomically.
+
+An EVO X2 read-only/no-analysis Ghidra query recovered all three functions and
+241 instruction records, each matched to the private ROM. The existing analysis
+database is unchanged. All98 prepared cases match36,428 original instructions,
+including original6243C translation; sqrt alone is host-rounded float32. Cases
+cover cell-edge rounding, separating/approaching motion, equal/retained impacts,
+candidate order/duplicates, all256 sphere indices and fractional coordinates.
+
+The shared-object physical bridge exposes this fixed phase using the adapter's
+existing C3C/shared-normal owner. Two-rider checks retain raw geometry, separate
+fixed/generic impacts and identical full histories at30/60/144 render updates.
+This bridge is prepared for live startup selection; the existing browser host
+still selects the older fixed-sphere bridge. No resolution or visual changes.
+
 ## Unpublished — shared object effects and presentation
 
 The complete-object bridge can now own ice fragments and splash pools while
