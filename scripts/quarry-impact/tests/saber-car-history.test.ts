@@ -1,0 +1,13 @@
+import {restoreLightingMoodsBytes} from './lighting-moods-invariants';
+import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
+import {readSaberCarPrevious,restoreSaberCarBytes,verifySaberCarRevision} from './saber-car-invariants';
+const source=(file:string)=>restoreLightingMoodsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
+test('SaberCar preserves every prior fixture, vehicle asset, control and camera input',verifySaberCarRevision);
+test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
+ const manifest=JSON.parse(source('tests/fixtures/saber-car/revision.json').toString());
+ for(const file of Object.keys(manifest.files)){
+  const bytes=source(file);assert.deepEqual(restoreSaberCarBytes(file,bytes),readSaberCarPrevious(file));
+  const corrupt=Buffer.concat([bytes,Buffer.from('\ncorrupt')]);assert.deepEqual(restoreSaberCarBytes(file,corrupt),corrupt);
+ }
+ const unknown=Buffer.from('unknown');assert.deepEqual(restoreSaberCarBytes('src/unknown.ts',unknown),unknown);
+});

@@ -96,6 +96,7 @@ uniform sampler2D quarryStaticMap;
 uniform vec2 quarryStaticSize;
 uniform float quarryStaticEnabled;
 uniform float quarryStaticBias;
+uniform float quarryStaticIntensity;
 varying vec4 vQuarryStaticCoord;
 #ifdef QUARRY_STATIC_FRAGMENT_SURFACE
 uniform mat4 quarryStaticMatrix;
@@ -108,7 +109,7 @@ float quarryStaticVisibility() {
   vec4 coordinate = vQuarryStaticCoord;
   #endif
   if (quarryStaticEnabled < 0.5 || coordinate.z < 0.0) return 1.0;
-  return getShadow(quarryStaticMap, quarryStaticSize, 1.0, quarryStaticBias, 1.0, coordinate);
+  return getShadow(quarryStaticMap, quarryStaticSize, quarryStaticIntensity, quarryStaticBias, 1.0, coordinate);
 }
 #endif
 `;
@@ -131,12 +132,16 @@ export class StaticQuarryShadows {
     quarryStaticEnabled: { value: 0 },
     quarryStaticNormalBias: { value: .10 },
     quarryStaticBias: { value: -.00008 },
+    quarryStaticIntensity: { value: 1 },
   };
   captures = 0;
   lastCaptureMs = 0;
   lastCaptureDraws = 0;
   lastCaptureTriangles = 0;
   enabled = true;
+  /** Matches the sun's shadow intensity so overcast light softens baked shadows too. */
+  set intensity(value: number) { this.uniforms.quarryStaticIntensity.value = Math.max(0, Math.min(1, value)); }
+  get intensity() { return this.uniforms.quarryStaticIntensity.value; }
 
   constructor(source: T.Object3D, excluded: ReadonlySet<T.Object3D>) {
     const casters = staticCasterScene(source, excluded);
