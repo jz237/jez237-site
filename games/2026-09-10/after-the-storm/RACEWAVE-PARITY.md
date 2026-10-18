@@ -19,6 +19,36 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — physical Stunt host and moving support queries
+
+The internal native host now runs prepared solo Stunt races on Sunny, Sunset,
+Southern and Glacier using their verified shore and floor resources. The five
+hull steps, rider gesture/landing classifier, navigation, cameras, source water,
+spray and actor recovery share the existing source schedule. Stunt79528 consumes
+the actual completed body, then6A748 collects rings before primary and generic
+object motion. Award9328C advances once at the later source display stage,
+before camera input/status; independent rendering only reads the resulting view.
+
+Stunt result poses use the source provisional score ranking. Dry-support checks
+now read the current canonical FD78 collision planes in both ordinary and Stunt
+hosts. This fixes the previous use of an ordinary startup box snapshot after
+objects had moved. Stunt static-contact initialization also uses the selected
+Stunt plane rows; its live box pass belongs exclusively to the object owner.
+
+Eight physical-host checks cover the four source starts, stage ordering, an
+actual physical ring contact and23-call score transfer, identical source/body/
+water snapshots at30/60/144Hz, timer expiry through the retirement actor/menu,
+and simulation/activity gates.141 support probes on actual hull points and
+prepared plane interiors after0/1/60 physical frames match29,775 instructions
+of original5DD04 with complete nested7F448/7FAE4 execution.19 focused Stunt
+checks and44 ordinary launch/object/camera/result regression checks pass.
+
+This is an internal integration milestone. Public native Stunt admission stays
+closed until the score/result HUD, ring/ramp render views, driven completion and
+browser checks are connected. Five other courses still need verified physical
+support resources. No completed Stunt lap or full gameplay parity is claimed;
+high-resolution assets, meshes and graphics settings are unchanged.
+
 ## Unpublished — selected Stunt startup and canonical scoring runtime
 
 All nine normal solo Stunt courses now compile their selected primary route,

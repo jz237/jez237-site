@@ -45,7 +45,7 @@ export function nativeHostInput(input={}){
 
 function present(host){
  const scale=host.world.water.scale,field=host.world.water.field;
- const cameras=host.world.water.frames>0&&host.raceRuntime?.ordinary?host.world.water.cameras:null;
+ const cameras=host.world.water.frames>0&&host.sourceSchedule?host.world.water.cameras:null;
  host.presentations=host.world.adapters.map((a,i)=>{
   const snapshot=nativeRaceSnapshot(a),p=snapshot.position;
   const query=queryNativeWaterField(field,F(F(p.x)*F(1/scale)),F(F(p.z)*F(1/scale)));
@@ -54,7 +54,7 @@ function present(host){
   const r=host.racers[i],{hydro,...pose}=view.racer;
   Object.assign(r,pose);Object.assign(r.hydro,hydro);
   r.handicapBoost=(a.frame?.catchup?.multiplier??1)-1;
-  if(host.raceRuntime?.ordinary)r.nativeCamera=r.human&&cameras?captureNativeCamera(cameras[r.player],scale):null;
+  if(host.sourceSchedule)r.nativeCamera=r.human&&cameras?captureNativeCamera(cameras[r.player],scale):null;
   r.nativeRiderPose=nativeRiderPresentation(a.articulatedRider,a.hull);
   r.nativeTelemetry={...view.source,catchup:a.frame?.catchup?{...a.frame.catchup}:null,actionState:{...snapshot.source.actionState},
    actorState:snapshot.source.actorState,animationFrame:snapshot.source.animationFrame,
@@ -79,6 +79,8 @@ function present(host){
 export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,tunes=[],sourceStates=[],poseProviders=[],onFrame=null,
  raceRuntime=null,onLaunchFrame=null,onContactFrame=null,onAudioFrame=null,hullStarts=[],staticGeometry=null,
  floatingDefinitions,floatingActive=true,primaryActive=true,recovery=true,craftContacts=true}={}){
+ const sourceSchedule=!!(raceRuntime?.ordinary||raceRuntime?.stunt);
+ if(raceRuntime?.stunt&&(!staticGeometry?.floor||!staticGeometry?.shore))throw new RangeError('Physical Stunt host requires verified source shore and floor geometry');
  if(!Array.isArray(racers)||racers.length<1||racers.some(r=>!r?.hydro||!Number.isInteger(r.id)||r.id<0||r.id>3))throw new TypeError('Expected initialized browser racers');
  if(!water?.field||!finite(water.scale))throw new TypeError('Expected host source water');
  if(onFrame!==null&&typeof onFrame!=='function')throw new TypeError('onFrame must be a function');
@@ -87,8 +89,8 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
  if(onAudioFrame!==null&&typeof onAudioFrame!=='function')throw new TypeError('onAudioFrame must be a function');
  if(raceRuntime&&(!recovery||sourceStates.length||poseProviders.length||['scene','advanceClock','advanceLaunch'].some(k=>typeof raceRuntime[k]!=='function')))
   throw new TypeError('Canonical launch requires recovered riders and its single scene owner');
- if(raceRuntime?.ordinary&&['objectMotionActive','courseRollerState','waterDatumAfterPhysics'].some(k=>typeof raceRuntime[k]!=='function'))
-  throw new TypeError('Canonical ordinary motion requires its activity and roller state owner');
+ if(sourceSchedule&&['objectMotionActive','courseRollerState','waterDatumAfterPhysics'].some(k=>typeof raceRuntime[k]!=='function'))
+  throw new TypeError('Canonical source motion requires its activity and roller state owner');
  if(typeof floatingActive!=='boolean')throw new TypeError('floatingActive must be boolean');
  if(typeof primaryActive!=='boolean')throw new TypeError('primaryActive must be boolean');
  if(typeof recovery!=='boolean')throw new TypeError('recovery must be boolean');
@@ -118,7 +120,7 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
  // Renderer compatibility is a detached view of the complete source array.
  const ice=objects?(iceDefinitions.length?Object.freeze({snapshot:()=>objects.snapshot().filter(o=>o.runtimeKind===10),
   presentationSnapshot:objects.presentationSnapshot,breakEvents:objects.breakEvents,diagnostics:objects.diagnostics}):null):iceDefinitions.length?createNativeIceWorld({definitions:iceDefinitions,water,
-  fragmentBurst:raceRuntime?.ordinary?raceRuntime.spawnIceFragments:null,splashAdvance:raceRuntime?.ordinary?raceRuntime.advanceIceSplashes:null}):null;
+  fragmentBurst:sourceSchedule?raceRuntime.spawnIceFragments:null,splashAdvance:sourceSchedule?raceRuntime.advanceIceSplashes:null}):null;
  const floating=!objects&&definitions.length?createNativeFloatingWorld({definitions,water}):null;
  const primary=course.sourceBuoyLayout?createNativePrimaryBuoyWorld({layout:course.sourceBuoyLayout,water}):null;
  const courseContacts=createSourceNativeContacts(course,{scale:water.scale,fixedSphereGrid:objects?null:fixedSphereGrid,staticGeometry});
@@ -128,7 +130,7 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
   objectDiagnostics:objects.diagnostics}:floating?{primarySpheres:floating.contact}:ice?{primarySpheres:ice.contact}:{})};
  // A solo source race needs no unresolved multi-racer camera-corner predicate. Its
  // original61708 countdown, not a browser finish flag, selects this producer.
- const sourceAI=!!raceRuntime?.ordinary&&racers.length===1;
+ const sourceAI=sourceSchedule&&racers.length===1;
  const bundles=[],adapters=racers.map((r,i)=>{
   const initial={position:{x:r.x,y:water.field.datumNative*water.scale,z:r.z},heading:r.heading,
    rider:r.id,scale:water.scale};
@@ -141,7 +143,7 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
    createAuthoredNativeRider({initialHull,poseProvider:poseProviders[i]});bundles.push(bundle);
   // Fresh browser body memory is explicitly zero before the original partial
   // startup stores. No cartridge-retained gesture/idle state is inferred.
-  const actionStart=raceRuntime?.ordinary?raceRuntime.riderActionStartup({gestureTick15f0:0,flag1600:0,
+  const actionStart=sourceSchedule?raceRuntime.riderActionStartup({gestureTick15f0:0,flag1600:0,
    sequence15f8:0,sequence15fa:0,lastPressedDirections15fc:0,quietFrames15fe:0,idleFramesC6c:0,idleChoice16c4:0}):null;
   const {idleFramesC6c,idleChoice16c4,...inputHistory}=actionStart??{};
   return createNativeRaceAdapter({...adapterOptions,
@@ -154,20 +156,20 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
       proximityObjectCentersNative:objects?objects.snapshot().map(o=>({x:o.positionNative[0],z:o.positionNative[2]})):ice?ice.state.nodes.map(o=>({x:o.position[0],z:o.position[2]})):(floating?.state.objects??[]).map(o=>({x:F(o.position.x/water.scale),z:F(o.position.z/water.scale)}))},waterField:water.field});
     host.lastAIInput=prepared;return {...prepared.controls,action16f4:prepared.action16f4};
    }}:{}),
-   hullStart,contacts,powerSteps:r.power,sourceState:raceRuntime?()=>({...raceRuntime.scene(),...(raceRuntime.ordinary?{sourceTick:raceRuntime.inputClock()}:{}),
+   hullStart,contacts,powerSteps:r.power,sourceState:raceRuntime?()=>({...raceRuntime.scene(),...(sourceSchedule?{sourceTick:raceRuntime.inputClock()}:{}),
     catchup:raceRuntime.catchupContext?.(i,host.world.adapters.map(a=>({x:F(a.hull.center.x/a.hull.scale),z:F(a.hull.center.z/a.hull.scale)})))}):sourceStates[i]??(recovery?{simulationState:3}:{actorState:22,simulationState:3}),...bundle,
    ...(recovery?{riderRecovery:{courseDatumNative:()=>water.field.datumNative,raceFinished:()=>r.finishTime!==null,...bundle.initialRiderRecovery}}:{})});
  });
  const objectTransformResources=objects?raceRuntime.objectTransformResources:null;
- const host={racers,bundles,contacts,primary,primaryActive,objects,ice,floating,floatingActive,presentations:[],onFrame,raceRuntime,onLaunchFrame,world:null,
-  provenance:Object.freeze({status:'ordinary-source-solver-integration-preview',riderGeometry:'authored-modern-anatomy',
+ const host={sourceSchedule,racers,bundles,contacts,primary,primaryActive,objects,ice,floating,floatingActive,presentations:[],onFrame,raceRuntime,onLaunchFrame,world:null,
+  provenance:Object.freeze({status:raceRuntime?.stunt?'stunt-source-solver-integration-preview':'ordinary-source-solver-integration-preview',riderGeometry:'authored-modern-anatomy',
    initialHeight:hullStarts.length?'source-grid-transform':'course-datum',tuning:'explicit-native-indices; default5/5/5',
    hullStartup:'decoded packed16.16 transform; source point/frame/rest/damping recipe with authored local shape',
    clock:'five10ms hull ticks then one water update',controls:'digital-accelerator; brake-coasts; B-crouch; R-slide',
-   actorRecoveryAndTricks:false,nativeGestureAndIdleActions:!!raceRuntime?.ordinary,riderRecovery:recovery,physicalRiderPresentation:true,
+   actorRecoveryAndTricks:false,nativeGestureAndIdleActions:sourceSchedule,riderRecovery:recovery,physicalRiderPresentation:true,
    recoveryGeometry:'authored anatomy/remount; reconstructed procedural fall/stumble; explicit authored rest/circle/history policy',
    nativeRacerCollision:craftContacts,sourcePrimaryBuoyContacts:!!primary,sourceGenericIceContacts:!!ice,canonicalCourseObjects:!!objects,sourceAIInput:sourceAI})};
- if(raceRuntime?.ordinary){
+ if(sourceSchedule){
   // Fresh browser inactive body slots are explicitly zero; active B64/B68
   // both come from the host's selected numeric rider profile. Retained AI
   // words are patched by890B4, never replaced with a neutral driver object.
@@ -177,8 +179,8 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
   bindRaceWaterCameraStorage(water,raceRuntime.cameraStorage);
   host.spray=createNativeRaceSpray({adapters,field:water.field,courseIndex:course.sourceWaterCourseIndex});
  }
- host.world=createNativeRaceWorld({adapters,water,humanIndices,craftContacts,deferWaterRollers:!!raceRuntime?.ordinary,
- beforeFrame:raceRuntime?.ordinary?(world,context)=>{
+ host.world=createNativeRaceWorld({adapters,water,humanIndices,craftContacts,deferWaterRollers:sourceSchedule,
+ beforeFrame:sourceSchedule?(world,context)=>{
   //47B00/BF370 precedes922E4 in46DA0's outer game loop.
   if(onAudioFrame)onAudioFrame(host,context);
   //6A264 at922E4 entry precedes control/input and physical world work.
@@ -199,13 +201,13 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
   if(sourceAI&&world.adapters.some(a=>a.riderLifecycle.state.selectionCountdown<0))
    host.aiBodies=world.adapters.map(nativeAIBodyFields);
  }:null,
- beforeActor:raceRuntime?.ordinary?(world,{racerIndex})=>{
+ beforeActor:sourceSchedule?(world,{racerIndex})=>{
   const a=world.adapters[racerIndex],lifecycles=world.adapters.map(q=>q.riderLifecycle),p=a.hull.points[0].position;
   const selected=raceRuntime.resultCodeFor(racerIndex,{bodyResultCodes16c8:lifecycles.map(q=>q.state.selectedActor),
    point90Native:Object.fromEntries(['x','y','z'].map(k=>[k,F(p[k]/a.hull.scale)])),datum2458:water.field.datumNative});
   applyNativeRiderResultCodes(lifecycles,selected.operations);
   a.lastResultCodeOperations=selected.operations;
- }:null,beforeWater:raceRuntime?.ordinary?world=>{
+ }:null,beforeWater:sourceSchedule?world=>{
   if(onContactFrame)onContactFrame(host,world);
   //51238 observes the preceding lap judge's shared stage after all actors.
   // The water field owns datum; a render-time option cannot reset its tide.
@@ -213,22 +215,30 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
  }:null,afterTick:(_,context)=>{
   if(context.tick%5!==0)present(host);
  },afterFrame:(_,context)=>{
-  if(raceRuntime?.ordinary)host.lastDisplayClock=raceRuntime.advanceDisplayClock();
+  if(sourceSchedule)host.lastDisplayClock=raceRuntime.advanceDisplayClock();
   present(host);
-  let ordinary=null;
-  if(raceRuntime?.ordinary)ordinary=raceRuntime.advanceOrdinary({
+  let judging=null;
+  if(raceRuntime?.ordinary)judging=raceRuntime.advanceOrdinary({
+   bodiesBySlot:host.world.adapters.map(nativeRaceBodyFields),
+   nodePositionsNative:primary.state.nodes.map(n=>({sourceRow:n.sourceRow,x:n.positionNative.x,z:n.positionNative.z})),
+   pressedButtonsB58BySlot:host.world.adapters.map(a=>a.lastControls.pressedButtons)});
+  else if(raceRuntime?.stunt)judging=raceRuntime.advanceStunt({
    bodiesBySlot:host.world.adapters.map(nativeRaceBodyFields),
    nodePositionsNative:primary.state.nodes.map(n=>({sourceRow:n.sourceRow,x:n.positionNative.x,z:n.positionNative.z})),
    pressedButtonsB58BySlot:host.world.adapters.map(a=>a.lastControls.pressedButtons)});
   else if(raceRuntime)raceRuntime.advanceClock();
+  host.lastStunt=raceRuntime?.stunt?judging:null;
+  //6A748 observes the completed primary body after79528 and before7DBC0.
+  host.lastStuntRings=raceRuntime?.stunt?raceRuntime.advanceStuntRings(nativeRaceBodyFields(host.world.adapters[0]).positionNative):null;
+  if(host.lastStuntRings)judging={...judging,effects:[...judging.effects,...host.lastStuntRings.effects]};
   // Adjudication observes contact-displaced current centers BEFORE the source
   // primary array's one motion pass. All craft share that mutable array.
-  host.lastOrdinary=ordinary;
+  host.lastOrdinary=raceRuntime?.ordinary?judging:null;
   // Source6E3A8 reads activity624 after adjudication, before7DBC0. Free
   // objects still move in simulation0 when activity is -1; a browser pause
   // never reaches this frame callback. Keep explicit preview gates as well.
-  const objectMotionActive=!raceRuntime?.ordinary||raceRuntime.objectMotionActive();
-  const keepRunning=host.onFrame?host.onFrame(host,context,ordinary):undefined;
+  const objectMotionActive=!sourceSchedule||raceRuntime.objectMotionActive();
+  const keepRunning=host.onFrame?host.onFrame(host,context,judging):undefined;
   if(primary)primary.afterFrame(host.world,context,{active:host.primaryActive&&objectMotionActive});
   if(objects){objects.afterFrame(host.world,context);objects.updateTransforms(host.world,context,objectTransformResources);}
   else if(ice)ice.afterFrame(host.world,context,{active:objectMotionActive});
@@ -240,24 +250,27 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
    for(const sphere of fixedSphereGrid.spheres)if(sphere.runtimeTag!==5)sphere.y=water.field.datumNative*water.scale;
   // The original caller stamps course rollers AFTER object motion. Read72c
   // here from the canonical state, not from the earlier water/input latch.
-  if(raceRuntime?.ordinary)advanceRaceWaterRollers(water,{active:objectMotionActive,rollerState72c:raceRuntime.courseRollerState()});
+  if(sourceSchedule)advanceRaceWaterRollers(water,{active:objectMotionActive,rollerState72c:raceRuntime.courseRollerState()});
   if(host.spray)host.spray.advance(raceRuntime.sprayInputs(),raceRuntime.cameraStorage.read());
   if(objects)objects.afterEffects(host.world,context);
   else if(ice)ice.afterEffects(host.world,context);
   let launchContinues=true;
   if(raceRuntime){
-   host.lastHUD=raceRuntime.ordinary?raceRuntime.advanceHUD():null;
+   host.lastHUD=sourceSchedule?raceRuntime.advanceHUD():null;
+   //9328C is a source display-stage update before1DE3CC/status, including
+   // result frames. Browser presentation reads cannot advance award transfers.
+   host.lastStuntDisplay=raceRuntime.stunt?raceRuntime.advanceStuntDisplay():null;
    // Original1DE3CC is after the completed world/camera/water frame and
    // before5DF4. These are completed actor values, not the input-stage pose.
-   host.lastCameraInput=raceRuntime.ordinary?raceRuntime.advanceCameraInput(host.world.adapters.map(a=>({
+   host.lastCameraInput=sourceSchedule?raceRuntime.advanceCameraInput(host.world.adapters.map(a=>({
     actorStateC54:a.lastFrame.actorState,animationFrameC58:a.lastFrame.animationFrame}))):null;
-   const status=raceRuntime.ordinary?(raceRuntime.resultView().active?raceRuntime.advanceResult():
+   const status=sourceSchedule?(raceRuntime.resultView().active?raceRuntime.advanceResult():
     raceRuntime.advanceStatus(host.world.adapters.map(a=>a.riderLifecycle.state.selectedActor))):null;
-   const launch=status?{...ordinary,effects:[...ordinary.effects,...host.lastHUD.effects,...host.lastCameraInput.effects,...status.effects],view:status.view}:
+   const launch=status?{...judging,effects:[...judging.effects,...host.lastHUD.effects,...host.lastCameraInput.effects,...status.effects],view:status.view}:
     raceRuntime.advanceLaunch(host.world.adapters.map(a=>a.lastControls.pressedButtons));
    if(onLaunchFrame&&onLaunchFrame(host,context,launch)===false)launchContinues=false;
   }
-  if(raceRuntime?.ordinary)host.lastInputClock=raceRuntime.advanceInputClock();
+  if(sourceSchedule)host.lastInputClock=raceRuntime.advanceInputClock();
   return launchContinues?keepRunning:false;
  }});
  present(host);return host;

@@ -8,19 +8,35 @@ import {nativeRaceCourseRegions} from './native-course-regions.js';
 import {sourceBuoyCourseRules,createSourceBuoyLayout} from './source-buoy-progress.js';
 import {createNativeAIRoute} from './native-ai-route.js';
 import {createNativeAITargetTable} from './native-ai-target.js';
+import {SUNNY_NATIVE_RETIREMENT_GEOMETRY} from './native-sunny-support.js';
+import {nativeSunsetRetirementGeometry} from './native-sunset-support.js';
+import {nativeSouthernRetirementGeometry} from './native-southern-support.js';
+import {nativeGlacierRetirementGeometry} from './native-glacier-support.js';
+import {nativeRaceShoreGeometry} from './native-shore-geometry.js';
 
 /** Normal solo Stunt numeric initialization. All nine source selections share
  * mode11, one lap and forward routes;9345C forces difficulty2 except Port0.
- * This compiles route/reset/object/HUD inputs, not shore/support geometry or a
- * playable host. Physical admission and high-resolution presentation are separate.
+ * Four courses also have verified shore/floor resources. Their mode-independent
+ *71E70 headers are selected before the Stunt objects. Moving box planes belong
+ * to objectStartup and the canonical race, never to an ordinary layout snapshot.
+ * Physical admission and high-resolution presentation are separate.
  */
 export function createNativeStuntCourseRuntime({courseIndex}={}){
  const rows=nativeStuntPrimaryRows({courseIndex}),mode620=11,players=1,scale=.025;
  const sourceDifficulty=courseIndex===5?0:2,rules=sourceBuoyCourseRules(courseIndex);
+ const support=courseIndex===1?SUNNY_NATIVE_RETIREMENT_GEOMETRY:courseIndex===2?nativeSunsetRetirementGeometry({players}):
+  courseIndex===7?nativeSouthernRetirementGeometry({players}):courseIndex===8?nativeGlacierRetirementGeometry({players}):null;
+ const retirementGeometry=support?Object.freeze({floor:support.floor}):null;
  const data=createNativePrimaryCourseData({rows,courseIndex,mode620});
  const objectStartup=createNativeCourseObjectStartup({courseIndex,players,mode620,difficulty:sourceDifficulty,reverseDab68:0});
  const bits=new DataView(new ArrayBuffer(4)),fixed=objectStartup.storage.fixedSphereWordsB138;
  const value=i=>{bits.setUint32(0,fixed[i]);return bits.getFloat32(0);};
+ const staticContactGeometry=support?Object.freeze({floor:support.floor,shore:nativeRaceShoreGeometry({courseIndex,players}),
+  // Startup view only. The live host replaces this box pass with its canonical
+  // object owner, which reads the transformed rows on every physical contact.
+  boxes:Object.freeze({count0578:objectStartup.counts.collisionPlaneCount0578,
+   rows:Object.freeze(Array.from({length:objectStartup.counts.collisionPlaneCount0578},(_,i)=>Object.freeze(
+    objectStartup.storage.collisionPlaneWordsFd78.slice(i*16,(i+1)*16).map(w=>{bits.setUint32(0,w);return bits.getFloat32(0);}))))})}):null;
  const checkpointSecondsByIndex=nativeStuntCheckpointSeconds(courseIndex);
  const resetLayout=createNativeRaceResetLayout({nodes:data.nodes,objectKinds4c:objectStartup.objectKinds4c,
   //75310 scans the entire C938 fixed family, including hidden rows. Its
@@ -50,6 +66,6 @@ export function createNativeStuntCourseRuntime({courseIndex}={}){
  const courseView=Object.freeze({sourceWaterCourseIndex:courseIndex,reverse:false,gates,sourceVisibleGateIndices,sourceBuoyLayout});
  return Object.freeze({courseIndex,mode620,players,scale,sourceDifficulty,configuredLaps728:1,
   data,objectStartup,resetLayout,primaryScratchLayout,checkpointSecondsByIndex,sourceBuoyLayout,
-  checkpointSourceRows:Object.freeze(checkpointSourceRows),courseView,aiRoute,aiTargetTable,aiFamilies,
+  checkpointSourceRows:Object.freeze(checkpointSourceRows),courseView,aiRoute,aiTargetTable,aiFamilies,retirementGeometry,staticContactGeometry,
   ...nativeRaceCourseRegions(courseIndex),directionFlag1f90:rules.checkpointSide});
 }

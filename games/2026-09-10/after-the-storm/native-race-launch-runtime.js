@@ -138,8 +138,8 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
  }
  if(current.scene.players!==players||current.scene.racerCount!==racers.length||current.scene.courseIndex!==courseIndex)
   throw new RangeError('Retained launch scene must match the live participants/course');
- if(stunt&&(current.scene.mode620!==11||current.scene.mode608!==11||current.scene.configuredLaps728!==1||current.scene.reverseDab68!==0))
-  throw new RangeError('Retained Stunt scene must match the selected mode, lap and direction');
+ if(stunt&&(current.scene.mode620!==11||current.scene.mode608!==11||current.scene.configuredLaps728!==1||current.scene.reverseDab68!==0||current.scene.primaryHumanIndex!==0))
+  throw new RangeError('Retained Stunt scene must match the selected mode, lap, direction and primary rider');
  if(stunt)for(const key of ['ringNext0cb0','ringStreak0cb4','unlockAb60'])integer(current.scene[key],`retained ${key}`);
  if(courseRuntime&&(current.scene.primaryCount!==courseRuntime.data.nodes.length||current.scene.finishSourceRow!==courseRuntime.data.finishSourceRow))
   throw new RangeError('Retained source state must match the initialized primary course');
@@ -403,10 +403,16 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    commit(operations);return {operations,diagnostics};
   },
   resultCodeFor(racerIndex,{bodyResultCodes16c8,point90Native,datum2458}){
-   if(!courseRuntime?.retirementGeometry||courseRuntime.courseIndex!==current.scene.courseIndex||![0,1].includes(current.scene.mode620))
-    throw new Error('Rider results require selected ordinary support geometry');
+   if(!courseRuntime?.retirementGeometry||courseRuntime.courseIndex!==current.scene.courseIndex||![0,1,11].includes(current.scene.mode620))
+    throw new Error('Rider results require selected source support geometry');
+   //5E2A0 calls7FAE4 on the CURRENT FD78 rows. Ramps can move after startup;
+   // an ordinary-course box snapshot would also select the wrong Stunt layout.
+   const count=current.scene.collisionPlaneCount0578;
+   const geometry=runtime.canonicalObjects?{floor:courseRuntime.retirementGeometry.floor,
+    boxes:{count0578:count,rows:Array.from({length:count},(_,i)=>current.collisionPlaneWordsFd78.slice(i*16,(i+1)*16).map(readFloat))}}:
+    courseRuntime.retirementGeometry;
    return nativeRaceResultCodeView(current,{racerIndex,bodyResultCodes16c8,resultTableWords47fc:RESULT_TABLE_WORDS,
-    supportProbe:{point90Native,datum2458,geometry:courseRuntime.retirementGeometry}});
+    supportProbe:{point90Native,datum2458,geometry}});
   },
   gridStart(racerIndex){
    if(!courseRuntime)throw new Error('Source grid requires initialized primary course geometry');
