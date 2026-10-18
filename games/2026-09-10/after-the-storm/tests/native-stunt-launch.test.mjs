@@ -107,7 +107,7 @@ test('retained inactive, terminal and invalid updates preserve source gates and 
  assert.throws(()=>invalid.runtime.advanceStunt({bodiesBySlot:[body],pressedButtonsB58BySlot:[0]}));assert.deepEqual(invalid.runtime.snapshot(),saved);
 });
 
-test('prepared Stunt mode rejects incompatible retained selections and does not broaden physical admission',()=>{
+test('prepared Stunt mode rejects incompatible retained selections and unsupported physical courses',()=>{
  const k=createNativeStuntCourseRuntime({courseIndex:1}),fresh=stuntLaunchFixture(1).runtime.snapshot();
  const launch=options=>createNativeRaceLaunchRuntime({courseIndex:1,players:1,racers:[{id:0}],courseRuntime:k,...options});
  for(const patch of [{mode620:0},{configuredLaps728:3},{reverseDab68:1},{primaryHumanIndex:1}]){
@@ -115,5 +115,5 @@ test('prepared Stunt mode rejects incompatible retained selections and does not 
  }
  const missing=structuredClone(fresh);delete missing.scene.ringNext0cb0;assert.throws(()=>launch({initialState:missing}),/ringNext/);
  assert.throws(()=>launch({reverse:true}),/forward/);assert.throws(()=>launch({players:2}),/one rider/);
- assert.throws(()=>createRace({course:getCourse('greyhaven'),physics:'native',mode:'stunt'}),/native|Native/);
+ assert.throws(()=>createRace({course:getCourse('practice'),physics:'native',mode:'stunt'}),/native|Native/);
 });

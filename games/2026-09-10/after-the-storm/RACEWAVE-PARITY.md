@@ -19,6 +19,43 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — native Stunt presentation and result handoff
+
+The opt-in native preview now admits solo Stunt runs on Sunny Beach, Sunset Bay,
+Southern Island and Glacier Coast with venue sea conditions. The high-resolution
+course remains intact. Its rings bind to actual source row ordinals; wooden ramp
+surfaces use the current canonical finite collision planes. Moving ramps reuse
+their detailed mesh and update its position, rebuilding only when plane shape
+changes. The existing 1.5 m tessellation, materials and rendering quality remain.
+
+Score, timer, checkpoint count, ring streak and completed-trick flags are detached
+reads of the native owner. Rendering cannot advance awards. Replay captures ring
+visibility and ramp geometry without retaining an owner. A fresh Sunny start,
+driven with ordinary helm inputs, physically collects a ring, hides it and
+transfers its 50 points only at the original display stage. This is one ring,
+not a completed Stunt run: the existing authored inspection driver still fails
+to finish the native course and needs separate route/control work.
+
+The original Stunt result initializer801ECF18 now expands at the completed fade,
+so a scoring finish reaches game state56/main22 instead of remaining in the
+post-race phase.105 prepared original executions match every ordered write and
+resource/fade/audio call recipe (5,565 instructions). EVO X2 Ghidra independently
+confirmed the initializer using a temporary read-only block; all nine project
+files were unchanged. This reconstructs the entry boundary, not its subsequent
+original result-menu loop or textured UI. The web result presents Stunt points
+and rings and refreshes awards until handoff.
+
+Browser checks cover all four course starts and Glacier timer expiry through
+the retirement/results dialog. High remains1440x900, with approximately0.88–1.17
+million rendered triangles in these views. No JavaScript/shader error was
+observed; the local server has its existing favicon404. Focused checks cover
+source binding, finite surfaces, immutable HUD reads, pause/award ordering,
+replay detachment and finish handoff.44 ordinary launch/object/camera/result
+regression checks pass. This remains a verify/nativePhysics integration preview;
+full driven checkpoint/finish/gesture validation and the other five native
+physical Stunt courses remain open. Original ring collection fade is not yet
+reproduced; collected rings currently disappear immediately.
+
 ## Unpublished — physical Stunt host and moving support queries
 
 The internal native host now runs prepared solo Stunt races on Sunny, Sunset,

@@ -1,4 +1,5 @@
 import {captureNativeIcePresentation,sampleNativeIcePresentation} from './native-ice-presentation.js';
+import {captureNativeStuntWorld} from './native-stunt-presentation.js';
 import {captureBreakableState} from './breakable-hazards.js';
 import {capturePrimaryBuoyPresentation,samplePrimaryBuoyPresentation} from './primary-buoy-presentation.js';
 import {interpolateRiderTargetPose} from './rider-target-pose.js';
@@ -21,6 +22,7 @@ export function recordMoment(rec,state,water,beads=[]){
  const f=state.localWater,local=f&&Number.isFinite(f.x)?{h:f.h.slice(),mask:f.mask.slice(),x:f.x,z:f.z,cell:f.cell,size:f.size,version:f.version}:null;
  const frame={time:state.time,racers:clone(racers),weather:clone(state.weather),passageOpenedAt:state.passageOpenedAt,water:clone(typeof water==='function'?water():water),localWater:local,beads:clone(typeof beads==='function'?beads():beads),breakables:captureBreakableState(state.breakables,state.time)};
  if(Object.hasOwn(state,'nativeIce'))frame.nativeIce=captureNativeIcePresentation(state.nativeIce);
+ if(Object.hasOwn(state,'nativeStuntWorld'))frame.nativeStuntWorld=captureNativeStuntWorld(state.nativeStuntWorld);
  if(state.primaryBuoys)frame.primaryBuoys=capturePrimaryBuoyPresentation(state.primaryBuoys);
  rec.frames.push(frame);rec.last=state.time;rec.previous=frame;
  while(rec.frames.length>201||rec.frames[0].time<state.time-10)rec.frames.shift();
@@ -62,6 +64,9 @@ export function replaySample(clip,time){
   }
  });
  if(Object.hasOwn(a,'nativeIce')||Object.hasOwn(b,'nativeIce'))frame.nativeIce=sampleNativeIcePresentation(a.nativeIce,b.nativeIce,t);
+ // Stunt geometry and collected flags belong to completed source frames.
+ // Hold them together until b, without interpolating a collision or score state.
+ if(Object.hasOwn(a,'nativeStuntWorld')||Object.hasOwn(b,'nativeStuntWorld'))frame.nativeStuntWorld=captureNativeStuntWorld((t<1?a:b).nativeStuntWorld??null);
  if(a.primaryBuoys||b.primaryBuoys)frame.primaryBuoys=samplePrimaryBuoyPresentation(a.primaryBuoys,b.primaryBuoys,t);
  // World-aligned samples survive patch recentering without moving the waves.
  if(a.localWater&&b.localWater){const f=a.localWater,g=b.localWater,h=f.h.slice(),dx=Math.round((f.x-g.x)/f.cell),dz=Math.round((f.z-g.z)/f.cell);for(let j=0;j<f.size;j++)for(let k=0;k<f.size;k++){const x=k+dx,z=j+dz;if(x>=0&&z>=0&&x<g.size&&z<g.size)h[j*f.size+k]=mix(h[j*f.size+k],g.h[z*g.size+x],t);}frame.localWater={...f,h,version:time};}

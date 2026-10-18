@@ -2,7 +2,7 @@
 // audio are ordered call recipes here; no original assets or tables are embedded.
 const entries={
  '801ec20c':{game:50,main:3},'801ec830':{game:80,main:13},
- '801ec9c8':{game:100,main:6},'801ece50':{game:54,main:18},
+ '801ec9c8':{game:100,main:6},'801ece50':{game:54,main:18},'801ecf18':{game:56,main:22},
  '801e2b8c':{game:101,main:6},'801ec500':{game:66,main:12}
 };
 function word(value,name){if(!Number.isInteger(value)||value<-2147483648||value>2147483647)throw new RangeError(`Invalid ${name}`);return value;}
@@ -46,11 +46,12 @@ export function prepareNativeRaceMenuInitialization(value,input){
  }else if(consumer==='801ec9c8'){
   const mode=word(scene.mode608,'scene.mode608');if(mode===0||mode===11)resources();
   if(previous===103)fade(7,20);else if(previous===42)fade();slots();
- }else{fade();slots();phases();}
+ }else if(consumer==='801ecf18'){resources();fade();slots();}
+ else{fade();slots();phases();}
  operations.push({kind:'hudWrite',byteOffset:0x7c80-0x7788,width:4,value:1});
- if(consumer==='801ec20c')call('800c21f4',[3,0]);
+ if(consumer==='801ec20c'||consumer==='801ecf18')call('800c21f4',[3,0]);
  else if(consumer==='801ec9c8')call('800c21f4',[12,0]);
- else if(consumer==='801ece50')call('800c6ad0',[1]);
+ if(consumer==='801ece50'||consumer==='801ecf18')call('800c6ad0',[1]);
  return freeze({operations,diagnostic:{consumer,targetGameState:entry.game,targetMain:entry.main,
   requiredExternalConsumers:operations.filter(o=>o.kind==='externalCall').map(o=>o.consumer),
   externalHelpersExecuted:false,menuLoopExecuted:false,resourceLoadingPerformed:false,recordsPersisted:false}});

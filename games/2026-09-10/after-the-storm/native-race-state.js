@@ -1127,7 +1127,7 @@ export function prepareNativeRaceResultCPUDisplayUpdate(state,input={}){
   slotTemplateWords6c50:input.slotTemplateWords6c50});
  const operations=[],effects=[],menus=[];
  for(const operation of prepared.operations){
-  if(input.expandMenus&&operation.kind==='externalCall'&&['801ec20c','801ec830','801ec9c8','801ece50'].includes(operation.consumer)){
+  if(input.expandMenus&&operation.kind==='externalCall'&&['801ec20c','801ec830','801ec9c8','801ece50','801ecf18'].includes(operation.consumer)){
    // Apply at the original call position. In retirement63B4 the following
    // AD3C4 effect must stay after this entire menu initializer.
    const menu=prepareNativeRaceMenuInitializationUpdate(next,{consumer:operation.consumer},input);

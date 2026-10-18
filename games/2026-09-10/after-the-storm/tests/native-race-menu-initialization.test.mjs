@@ -1,3 +1,4 @@
+import {readFileSync} from 'node:fs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {prepareNativeRaceMenuInitialization as entry} from '../native-race-menu-initialization.js';
@@ -96,4 +97,16 @@ test('returning from name entry needs no templates or resources; late failures c
   assert.throws(()=>update(state,{consumer:'801ec9c8'},views,{expandResourceInitializers:true}));assert.deepEqual(state,before);
  }
  assert.throws(()=>update(fixture(),{consumer:'801ece50'},templates,{expandResourceInitializers:1}),TypeError);
+});
+
+
+test('Stunt result-menu entry matches 105 original executions with every ordered write and call',()=>{
+ const reference=JSON.parse(readFileSync(new URL('./fixtures/native-stunt-result-menu-reference.json',import.meta.url)));
+ assert.equal(reference.cases.length,105);
+ for(const c of reference.cases)assert.deepEqual(entry(c.value,c.input).operations,c.operations);
+ const q=update(fixture(42,11),{consumer:'801ecf18'},resources(),{expandResourceInitializers:true});
+ assert.equal(q.state.scene.gameStateAb24,56);assert.equal(q.state.scene.main638,22);
+ assert.equal(q.state.scene.phase650,0);assert.equal(q.state.scene.simulation648,1);
+ assert.deepEqual(q.diagnostic.expandedConsumers,['80096960','801e6fb0','801e6a4c']);
+ assert.deepEqual(q.diagnostic.pendingConsumers,['800c21f4','800c6ad0']);
 });

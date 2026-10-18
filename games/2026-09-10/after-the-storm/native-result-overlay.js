@@ -20,7 +20,7 @@ export function createNativeResultOverlay(){
   const result=state.nativeResult,versus=state.mode==='versus',dq=!!state.racers[0].dq;
   title.textContent=versus?(state.result.winner===null?'DRAW':`PLAYER ${state.result.winner+1} WINS`):dq?'RETIRED':'FINISH';
   detail.textContent=result?.canContinue?'Press Enter or Continue':dq?'Returning to race results…':
-   versus?'Race complete':`Race complete · ${(state.result.time??0).toFixed(3)} s`;
+   versus?'Race complete':state.mode==='stunt'?`${state.result.score.toLocaleString()} points · ${state.result.rings} rings`:`Race complete · ${(state.result.time??0).toFixed(3)} s`;
   button.hidden=!result?.canContinue;
   const fade=state.nativeHost.lastHUD?.fade;
   shade.style.opacity=String(fade?.kind===1?Math.max(0,Math.min(1,fade.alpha/255)):0);

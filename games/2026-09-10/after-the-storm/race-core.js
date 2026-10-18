@@ -5,6 +5,8 @@ import {createNativeRaceLaunchRuntime} from './native-race-launch-runtime.js';
 import {createNativeRaceContactAudio} from './native-race-contact-audio.js';
 import {prepareNativeHullStartFromMatrix} from './native-hull.js';
 import {createNativeRaceCourseRuntime} from './native-race-course-runtime.js';
+import {createNativeStuntCourseRuntime} from './native-stunt-course-runtime.js';
+import {createNativeStuntPresentation} from './native-stunt-presentation.js';
 import {capturePrimaryBuoyPresentation} from './primary-buoy-presentation.js';
 import {constrainSourceSphereRace} from './source-sphere-race.js';
 import {createRaceWater,stepRaceWater,setRaceWater} from './race-water.js';
@@ -67,8 +69,8 @@ export function settings(rider=0,tune={}){const r=RIDERS[rider];const engine=cla
 export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,difficulty=0,course=COVE,gridOrder=null,seaState='course',secondRider=1,secondTune={},handicap=false,swapColours=false,physics='modern',nativeTunes=[],nativeTuneModes=[],nativeInitialRaceState,nativeRecordSession,nativeObjectLayout='source'}={}){
  if(!['modern','native'].includes(physics))throw new RangeError('Unknown race physics');
  if(nativeRecordSession!==undefined&&physics!=='native')throw new RangeError('Native record sessions require native physics');
- if(physics==='native'&&(!['time','versus'].includes(mode)||seaState!=='course'||![1,2,7,8].includes(course.sourceWaterCourseIndex)))
-  throw new RangeError('Native integration preview requires Sunny Beach, Sunset Bay, Southern Island or Glacier Coast source-water Time trial or Two-player race');
+ if(physics==='native'&&(!['time','versus','stunt'].includes(mode)||seaState!=='course'||![1,2,7,8].includes(course.sourceWaterCourseIndex)))
+  throw new RangeError('Native integration preview requires Sunny Beach, Sunset Bay, Southern Island or Glacier Coast source-water Time trial, Two-player race or Stunt run');
  setRaceWater(null);
  const freeRide=mode==='practice'||mode==='versus'&&course.id==='practice';
  if(['race','championship'].includes(mode))course=racingStuntCourse(course);
@@ -77,8 +79,10 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
  if(course.geometryForPlayers)course={...course,...course.geometryForPlayers(mode==='versus'?2:1)};
  if(course.sourceObjectSelection){const playerCount=mode==='versus'?2:1;course={...course,playerCount,rocks:course.hazardsForPlayers(playerCount),sourceDecorations:course.decorationsForPlayers?course.decorationsForPlayers(playerCount):course.sourceDecorations};}
  if(course.contactVolumesForRamps)course={...course,contactVolumes:course.contactVolumesForRamps(course.ramps)};
- const nativeCourseRuntime=physics==='native'?createNativeRaceCourseRuntime({course,difficulty,players:mode==='versus'?2:1,objectLayout:nativeObjectLayout}):null;
- if(nativeCourseRuntime)course=nativeCourseRuntime.courseView;
+ if(physics==='native'&&mode==='stunt'&&nativeObjectLayout!=='source')throw new RangeError('Native Stunt requires the complete source object layout');
+ const nativeCourseRuntime=physics==='native'?(mode==='stunt'?createNativeStuntCourseRuntime({courseIndex:course.sourceWaterCourseIndex}):
+  createNativeRaceCourseRuntime({course,difficulty,players:mode==='versus'?2:1,objectLayout:nativeObjectLayout})):null;
+ if(nativeCourseRuntime)course=mode==='stunt'?{...course,...nativeCourseRuntime.courseView}:nativeCourseRuntime.courseView;
  const ids=mode==='versus'?[rider,secondRider]:[rider,...RIDERS.map((_,i)=>i).filter(i=>i!==rider)],g=course.gates[0];
  const racers=ids.slice(0,mode==='versus'?2:['race','championship'].includes(mode)?4:1).map((id,i)=>{const grid=mode==='versus'?i:gridOrder?gridOrder.indexOf(id):i===0?3:i-1,lateral=(grid%2?1:-1)*2.4,back=7+Math.floor(grid/2)*5;return {id,grid,human:i===0||mode==='versus',player:i===0?0:mode==='versus'?1:null,stats:settings(id,i===0?tune:mode==='versus'?secondTune:{}),x:g.x-g.tx*back+g.tz*lateral,z:g.z-g.tz*back-g.tx*lateral,heading:Math.atan2(g.tx,g.tz),vx:0,vz:0,speed:0,turn:0,throttle:0,power:freeRide||mode==='stunt'?5:0,misses:0,next:1,passed:0,lap:1,lapStart:0,lapTimes:[],finishTime:null,dq:'',out:0,collision:0,recover:0,event:'',eventTime:0,previousWave:0,hydro:createHydro(),stunt:createStunt(course),raceTime:0};});
  if(course.sourceBuoyLayout&&!freeRide&&mode!=='stunt')for(const r of racers)if(r.human){
@@ -122,6 +126,12 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
   // Preview histories must not compete with saved modern-physics records.
   state.nativePreview=true;state.demoRun=true;
   state.nativeLaunch=nativeLaunch;
+  if(nativeLaunch.stunt){
+   state.nativeStuntDisplay=createNativeStuntPresentation({course,readState:nativeLaunch.snapshot,scale:nativeScale});
+   course={...course,nativeStuntLayout:state.nativeStuntDisplay.layout};state.course=course;
+   const initial=state.nativeStuntDisplay.snapshot();state.nativeStuntWorld=initial.world;state.nativeStuntHud=initial.hud;
+   Object.defineProperty(racers[0],'stunt',{enumerable:true,configurable:true,get:()=>state.nativeStuntHud});
+  }
   state.nativeContactAudio=createNativeRaceContactAudio({players:racers.length,courseIndex:course.sourceWaterCourseIndex,difficultyWord:nativeCourseRuntime.sourceDifficulty});
   // The fresh web launch skips resource-loading presentation, but still enters
   // racing audio through the source main-configuration call before its clock.
@@ -151,7 +161,13 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
      const r=racers[op.racerIndex];announce(r,state,r.power===5?'ROCKET START · MAX POWER':'START BOOST · POWER '+r.power);
     }
    }
-   if(state.nativeLaunch.ordinary&&state.phase!=='countdown'){
+   if(state.nativeLaunch.stunt){
+    const next=state.nativeStuntDisplay.snapshot(),previous=state.nativeStuntHud;
+    state.nativeStuntWorld=next.world;state.nativeStuntHud=next.hud;
+    if(next.hud.rings>previous.rings)announce(racers[0],state,'Ring '+next.hud.chain);
+    for(const award of host.lastStuntDisplay.transfers)announce(racers[0],state,(award.kind==='time'?'Time bonus':award.kind==='ring'?'Ring bonus':'Trick')+' +'+award.points);
+   }
+   if((state.nativeLaunch.ordinary||state.nativeLaunch.stunt)&&state.phase!=='countdown'){
     finishRaceStep(state,.05);
     state.nativeResult=state.nativeLaunch.resultView();
     if(state.nativeResult.exit)state.phase='results';
@@ -161,6 +177,7 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
   onFrame:(host,context,ordinary)=>{
    state.time=context.time;
    ordinary??=host.lastOrdinary;
+   if(state.nativeLaunch.stunt)return true;
    if(state.nativeLaunch.ordinary){
     observeNativeRace(state,host,ordinary);
     return true;
@@ -437,6 +454,13 @@ export function stepRace(s,input,dt,options={}){if(s.phase==='paused'||s.phase==
 }
 function finishRaceStep(s,dt){
  if(s.freeRide)return;
+ if(s.nativeLaunch?.stunt){
+  const human=s.racers[0];
+  if(human.dq||human.finishTime!==null){
+   s.phase='postrace';s.result={position:null,time:human.finishTime,dq:human.dq,lapTimes:[],score:human.stunt.score,rings:human.stunt.rings};
+  }
+  return;
+ }
  if(s.nativeLaunch?.ordinary&&s.result)return;
  if(s.mode==='versus'){
   const finished=s.racers.filter(r=>r.finishTime!==null),disqualified=s.racers.filter(r=>r.dq);
