@@ -120,6 +120,7 @@ export function createNativePrimaryCourseData({rows,courseIndex,mode620=0,initia
  const nodes=prepared.recordWordsBySourceRow.map((r,sourceRow)=>{
   const f=a=>float(r[a/4]),s=a=>r[a/4]|0,pair=(a,b)=>({x:f(a),z:f(b)});
   return {sourceRow,referenceNativeXZ:pair(0x24,0x28),centerNativeXZ:pair(0,8),forwardXZ:pair(0x70,0x74),rightXZ:pair(0x80,0x84),
+   apertureAxisXZ:pair(0x78,0x7c),
    endpointANativeXZ:pair(0x0c,0x14),endpointBNativeXZ:pair(0x18,0x20),halfWidthNative8c:f(0x8c),length88:f(0x88),
    classification98:s(0x98),checkpointFlag9c:s(0x9c),enabledC8:s(0xc8),nextSourceRowA0:s(0xa0),
    // The reset API's historical B4 name denotes the actualB4 word. B8 is

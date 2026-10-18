@@ -39,6 +39,7 @@ import {enqueueNativeStuntAward,displayNativeStuntAwards} from './native-stunt-a
 import {prepareNativeStuntRecords} from './native-stunt-records.js';
 import {createNativeStuntScoring,stepNativeStuntScoring} from './native-stunt-scoring.js';
 import {prepareNativeStuntPrelude} from './native-stunt-prelude.js';
+import {prepareNativeStuntCheckpoint} from './native-stunt-checkpoint.js';
 
 const MIN=-2147483648,MAX=2147483647,RACE_BASE=0x1f94,RACE_WORDS=1693,HUD_BASE=0x7788,HUD_WORDS=1442;
 const resourceOwnerWords={resourceWordsB330:20,resourceWordsB538:8,resourceWordsE73c:43};
@@ -220,6 +221,22 @@ export function prepareNativeRaceStuntPreludeUpdate(state,input){
  const next=copy(state);
  if(!stuntModeActive(next))return freeze({state:next,applied:false,effects:[],diagnostic:{earlyReturn:false,reason:null}});
  const prepared=prepareNativeStuntPrelude({raceWords1f94:next.raceWords1f94,globals:next.scene},input),effects=[];
+ for(const op of prepared.operations){
+  if(op.kind==='stuntAwardEnqueue')commitStuntAwards(next,enqueueNativeStuntAward(stuntAwardsView(next),op.award).state);
+  else effects.push(...apply(next,[op]));
+ }
+ return freeze({...prepared,state:next,applied:true,effects});
+}
+
+/** Reached geometry/checkpoint slice after move scoring. Current source node
+ * selection comes from2944; scratch3780/3788 already came from76378. Terminal
+ * finish/lap/visited-flag/unlock work is still required after continueFinish. */
+export function prepareNativeRaceStuntCheckpointUpdate(state,input={}){
+ const next=copy(state);
+ if(!stuntModeActive(next))return freeze({state:next,applied:false,effects:[],diagnostic:{crossed:false,continueFinish:false}});
+ const slot=integer(input.racerIndex,'racerIndex',0,3),row=next.raceWords1f94[ri(0x2944)+slot*222]|0;
+ if(!Array.isArray(input.nodes)||row<0||row>=input.nodes.length)throw new RangeError('Supply the actual primary node selected by2944');
+ const prepared=prepareNativeStuntCheckpoint({raceWords1f94:next.raceWords1f94,globals:next.scene},{...input,selectedNode:input.nodes[row]}),effects=[];
  for(const op of prepared.operations){
   if(op.kind==='stuntAwardEnqueue')commitStuntAwards(next,enqueueNativeStuntAward(stuntAwardsView(next),op.award).state);
   else effects.push(...apply(next,[op]));

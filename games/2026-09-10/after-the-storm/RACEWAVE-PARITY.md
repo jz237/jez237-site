@@ -19,6 +19,34 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — native stunt checkpoint geometry and time awards
+
+Stunt crossings now consume canonical scratch position and the actual selected
+primary node. The loader exposes its separate78/7C aperture axis; checkpoint
+passing direction80/84 is a different value and can be zero. Width is measured
+from endpoint B18/20 with inclusive0..twice-half-width bounds. Side/arming uses
+the unshifted current center and source70/74 forward axis. Crossing outside a
+checkpoint disarms it until the rider returns behind the plane.
+
+Qualified crossings advance the actual2944 route word even for finished/DQ
+riders, but those riders receive no bonus or repeat reset. Active checkpoints
+use the current and prior BE4/BEC plane distances for source interpolation,
+write the selected lap/checkpoint timing slot, enqueue the time award, and
+reload time from the actual course byte table. Nonfinish checkpoints reset
+repeat penalties after move settlement and emit their source notification.
+The finish checkpoint stores its own time award in39D4, preserves repeats and
+does not refill time.39D4 is not a cumulative checkpoint bonus.
+
+The original78B44..7903C slice was executed for308 synthetic cases in30,266
+instructions; all317 relevant exported instruction records match ROM bytes.
+Square root is represented by host sqrt rounded to float32; audio/award calls
+are intercepted. Public fixtures contain numeric synthetic states only.
+Canonical tests also check real loaded checkpoint axes, same-frame move/bonus
+order and atomic failure. Terminal finish, lap/visited flags and unlock work
+still follow separately; native Stunt mode remains unadmitted. Resolution is
+unchanged. All109 focused checks pass, including primary initialization and
+the existing ordinary launch and physical landing suites.
+
 ## Unpublished — native stunt timer and retirement prelude
 
 The shared Stunt state now includes the original783AC prelude: selected-player
