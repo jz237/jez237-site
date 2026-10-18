@@ -527,14 +527,29 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    const g=current.scene,i=a=>current.i1Words9440[(a-0x9440)/4]|0;
    return {gameState:g.gameStateAb24,active:[41,42,44].includes(g.gameStateAb24)&&!resultExit,
     delay:g.gameStateAb24===42?i(0x9504):0,waitingFrames:i(0x9508),
-    canContinue:g.gameStateAb24===42&&g.players===1&&g.mode608===0&&i(0x9504)===0&&i(0x9500)===0&&!resultExit,
+    canContinue:g.gameStateAb24===42&&g.players===1&&[0,4].includes(g.mode608)&&i(0x9504)===0&&i(0x9500)===0&&i(0x9510)===0&&!resultExit,
     exit:resultExit};
   },
-  advanceResult(){
+  advanceResult({bodyPositionsNativeBySlot,nodePositionsNative}={}){
    if(!courseRuntime)throw new Error('Source result schedule requires ordinary race');
    if(!runtime.resultView().active)return {effects:[],view:runtime.view(),result:runtime.resultView()};
+   let primaryRecordWordsBySourceRow;
+   //77F5C reads the primary record's current displaced center after this
+   // frame's motion. Its initialized links/tangents/segment lengths are kept.
+   if(championship){
+    if(!Array.isArray(nodePositionsNative)||nodePositionsNative.length!==courseRuntime.data.nodes.length)
+     throw new TypeError('Championship result needs completed primary positions');
+    primaryRecordWordsBySourceRow=courseRuntime.data.recordWordsBySourceRow.map(row=>[...row]);
+    const seen=new Set();
+    for(const p of nodePositionsNative){
+     integer(p.sourceRow,'result source row',0,primaryRecordWordsBySourceRow.length-1);
+     if(seen.has(p.sourceRow)||![p.x,p.z].every(Number.isFinite))throw new TypeError('Invalid championship result primary positions');
+     seen.add(p.sourceRow);const row=primaryRecordWordsBySourceRow[p.sourceRow];row[0]=floatBits(p.x);row[2]=floatBits(p.z);
+    }
+   }
    const prepared=prepareNativeRaceResultCPUDisplayUpdate(current,{
-    expandMenus:true,slotTemplateWords6c50:Array(11).fill(0),fadeTemplateWords6cc0:[0,0,0,0x10000,0,0,0,0,0x10000]});
+    expandMenus:true,expandEstimates:championship,primaryRecordWordsBySourceRow,bodyPositionsNativeBySlot,
+    avatarsA9b0:racers.map(r=>r.id),slotTemplateWords6c50:Array(11).fill(0),fadeTemplateWords6cc0:[0,0,0,0x10000,0,0,0,0,0x10000]});
    // Commit the actual numeric menu entry before the high-resolution handoff.
    // The race host stops here: resource installation, the subsequent menu loop
    // and cartridge persistence are still separate from this numeric entry.

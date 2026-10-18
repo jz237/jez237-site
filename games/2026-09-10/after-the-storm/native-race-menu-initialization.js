@@ -1,7 +1,7 @@
 // Independently reconstructed result-menu entry callers. Resources, fades and
 // audio are ordered call recipes here; no original assets or tables are embedded.
 const entries={
- '801ec20c':{game:50,main:3},'801ec830':{game:80,main:13},'801ec304':{game:60,main:7},
+ '801ec20c':{game:50,main:3},'801ec0d4':{game:52,main:9},'801ec830':{game:80,main:13},'801ec304':{game:60,main:7},
  '801ec9c8':{game:100,main:6},'801ece50':{game:54,main:18},'801ecf18':{game:56,main:22},
  '801e2b8c':{game:101,main:6},'801ec500':{game:66,main:12},'801ed004':{game:57,main:23}
 };
@@ -40,7 +40,16 @@ export function prepareNativeRaceMenuInitialization(value,input){
  write('previousGameState634',previous);write('returnState630',0);write('gameStateAb24',entry.game);
  for(const [field,v]of [['main638',entry.main],['initLatch63c',1],['field640',0],['field644',0],['fieldAb1c',0],['field461c',2],['players',1]])write(field,v);
  if(consumer!=='801ece50')phases();
- if(consumer==='801ec20c'){
+ if(consumer==='801ec0d4'){
+  const ids=[0,1,2,3],variant=word(scene.variant6f4,'scene.variant6f4');
+  if(variant!==0){
+   const primary=word(scene.primaryHumanIndex,'scene.primaryHumanIndex'),avatars=input.avatarsA9b0;
+   if(primary<0||primary>3||!Array.isArray(avatars)||avatars.length!==4)throw new RangeError('Championship results require the selected avatar slots');
+   const avatar=word(avatars[primary],'selected avatar');if(avatar<0||avatar>3)throw new RangeError('Invalid selected avatar');
+   ids[avatar]+=4;
+  }
+  call('80096960',[2,...ids]);fade();slots();
+ }else if(consumer==='801ec20c'){
   if(previous!==100){resources();fade();slots();}
  }else if(consumer==='801ec830'){
   const mode=word(scene.mode608,'scene.mode608'),curtain=mode===4?previous===67:previous!==50&&previous!==57;
@@ -53,7 +62,7 @@ export function prepareNativeRaceMenuInitialization(value,input){
  operations.push({kind:'hudWrite',byteOffset:0x7c80-0x7788,width:4,value:1});
  if(consumer==='801ec20c'||consumer==='801ecf18')call('800c21f4',[3,0]);
  else if(consumer==='801ec9c8')call('800c21f4',[12,0]);
- if(consumer==='801ece50'||consumer==='801ecf18')call('800c6ad0',[1]);
+ if(consumer==='801ece50'||consumer==='801ecf18'||consumer==='801ec0d4')call('800c6ad0',[1]);
  return freeze({operations,diagnostic:{consumer,targetGameState:entry.game,targetMain:entry.main,
   requiredExternalConsumers:operations.filter(o=>o.kind==='externalCall').map(o=>o.consumer),
   externalHelpersExecuted:false,menuLoopExecuted:false,resourceLoadingPerformed:false,recordsPersisted:false}});

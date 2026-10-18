@@ -277,7 +277,11 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
    // before5DF4. These are completed actor values, not the input-stage pose.
    host.lastCameraInput=sourceSchedule?raceRuntime.advanceCameraInput(host.world.adapters.map(a=>({
     actorStateC54:a.lastFrame.actorState,animationFrameC58:a.lastFrame.animationFrame}))):null;
-   const status=sourceSchedule?(raceRuntime.resultView().active?raceRuntime.advanceResult():
+   const resultActive=sourceSchedule&&raceRuntime.resultView().active;
+   const resultGeometry=resultActive&&raceRuntime.championshipLaunch?{
+    bodyPositionsNativeBySlot:host.world.adapters.map(a=>nativeRaceBodyFields(a).positionNative),
+    nodePositionsNative:primary.state.nodes.map(n=>({sourceRow:n.sourceRow,x:n.positionNative.x,z:n.positionNative.z}))}:undefined;
+   const status=sourceSchedule?(resultActive?raceRuntime.advanceResult(resultGeometry):
     raceRuntime.advanceStatus(host.world.adapters.map(a=>a.riderLifecycle.state.selectedActor))):null;
    const launch=status?{...judging,effects:[...judging.effects,...host.lastHUD.effects,...host.lastCameraInput.effects,...status.effects],view:status.view}:
     raceRuntime.advanceLaunch(host.world.adapters.map(a=>a.lastControls.pressedButtons));

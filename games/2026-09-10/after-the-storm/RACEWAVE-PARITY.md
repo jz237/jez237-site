@@ -1,5 +1,23 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — championship standings handoff
+
+Headless championship finish/retirement now runs the original unfinished-rider
+time estimates at its result-stage call, using completed physical bodies and
+the primary markers' current centers. It then initializes original state52,
+main9, once and stops the race host. The selected alternate-color avatar is
+preserved in the pending high-resolution resource request. This is the numeric
+standings entry; the standings screen, subsequent cup progression and final
+qualified-ending sequence remain separate unfinished work.
+
+All32 complete original EC0D4 caller executions match every ordered write and
+external-call argument (2,208 instructions; graphics/fade/VI callees retained
+as recipes). Live application tests inject finish or retirement after normal
+startup, then exercise the real result delay, Continue/fade, estimates and
+one-time menu transition. They do not claim a naturally completed cup. Missing
+estimate geometry fails atomically before any menu/record change. Existing
+ordinary result scheduling is regression-checked independently.
+
 ## Unpublished — championship application startup and qualification
 
 The headless native championship now uses the application race loop with four

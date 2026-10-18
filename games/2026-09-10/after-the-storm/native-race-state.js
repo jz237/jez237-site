@@ -1230,15 +1230,20 @@ export function prepareNativeRaceResultStageUpdate(state,consumer,input={}){
 }
 export function prepareNativeRaceResultCPUDisplayUpdate(state,input={}){
  if(input.expandMenus!==undefined&&typeof input.expandMenus!=='boolean')throw new TypeError('expandMenus must be boolean');
+ if(input.expandEstimates!==undefined&&typeof input.expandEstimates!=='boolean')throw new TypeError('expandEstimates must be boolean');
  const next=copy(state),prepared=prepareNativeRaceResultCPUDisplay({...resultInputView(next),
   expandTransitions:true,expandWidgets:true,fadeTemplateWords6cc0:input.fadeTemplateWords6cc0,
   slotTemplateWords6c50:input.slotTemplateWords6c50});
  const operations=[],effects=[],menus=[];
  for(const operation of prepared.operations){
-  if(input.expandMenus&&operation.kind==='externalCall'&&['801ec20c','801ec830','801ec9c8','801ece50','801ecf18'].includes(operation.consumer)){
+  if(input.expandEstimates&&operation.kind==='externalCall'&&operation.consumer==='80077f5c'){
+   const estimate=prepareNativePrimaryResultEstimates({...next,primaryRecordWordsBySourceRow:input.primaryRecordWordsBySourceRow,
+    bodyPositionsNativeBySlot:input.bodyPositionsNativeBySlot});
+   operations.push(...estimate.operations);effects.push(...apply(next,estimate.operations));
+  }else if(input.expandMenus&&operation.kind==='externalCall'&&['801ec0d4','801ec20c','801ec830','801ec9c8','801ece50','801ecf18'].includes(operation.consumer)){
    // Apply at the original call position. In retirement63B4 the following
    // AD3C4 effect must stay after this entire menu initializer.
-   const menu=prepareNativeRaceMenuInitializationUpdate(next,{consumer:operation.consumer},input);
+   const menu=prepareNativeRaceMenuInitializationUpdate(next,{consumer:operation.consumer,avatarsA9b0:input.avatarsA9b0},input);
    operations.push(...menu.operations);effects.push(...apply(next,menu.operations));
    menus.push({consumer:operation.consumer,gameState:menu.state.scene.gameStateAb24,main:menu.state.scene.main638,
     pendingConsumers:menu.diagnostic.pendingConsumers});
