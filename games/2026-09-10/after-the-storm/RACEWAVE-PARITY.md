@@ -5974,3 +5974,34 @@ This remains an inspection preview, selected using verify/nativePhysics query
 flags with the course sea state. It does not switch ordinary players to the
 native backend or claim complete original-game parity. Random-seed driver
 reliability and the remaining full audio/gameplay integrations remain open.
+
+
+### Native Stunt results and initials — 2026-10-18
+
+The opt-in native Stunt preview now presents the source time, trick and ring
+score breakdown in a responsive high-resolution panel. Its separate results
+phase, player-one confirmation edge, opposing panel offsets and three-tick exit
+follow the verified Stunt overlay. Qualifying scores enter the original numeric
+initials wheel; completion writes the selected course/rank name and hands off to
+state57. Nonqualifying scores go directly to state57. The current host then
+provides Restart race and Rider & mode select. The original state57 menu loop is
+still pending; this change does not claim that loop is implemented.
+
+Read-only Ghidra queries on EVO X2 identified the selected ROM overlay and the
+next-screen initializer without changing any of the nine project files. Complete
+original instruction execution matched 9,315 prepared results cases and all105
+next-screen initialization cases. Committed numeric fixtures contain no ROM
+instructions or original graphics. Focused tests verify controller ownership,
+first-display edge handling, exact slide/delay thresholds, ordered effects,
+invalid-input atomicity, all three Stunt name positions and warm retry retention.
+Ordinary results and name-entry regressions also pass. One existing record-session
+test expected an obsolete error phrase; it now matches the source-launch wording.
+
+Browser verification completed a full native Sunny Stunt run, displayed 945 time
+points and1,800 ring points (2,745 total), accepted AAA via the name wheel, and
+reached state57. A second unseeded run scored2,750 and displayed correctly at a
+512x844 viewport without horizontal overflow. Desktop rendering retained High
+quality and a1440x900 canvas. The local server reported missing-resource404s;
+no JavaScript or shader exception was observed. Records remain page-session
+records in this preview, not durable or global leaderboard submissions. The
+normal gameplay backend and its graphics quality settings are unchanged.

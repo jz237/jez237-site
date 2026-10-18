@@ -64,6 +64,6 @@ test('malformed or competing session inputs reject without altering a retained b
   {saveWordsB280:[]},{freshNameAb6c:65536}]){
   assert.throws(()=>restore(state,{...session,...corrupt}),RangeError);assert.deepEqual(state,before);
  }
- assert.throws(()=>create({nativeRecordSession:session,nativeInitialRaceState:state}),/fresh ordinary/);
+ assert.throws(()=>create({nativeRecordSession:session,nativeInitialRaceState:state}),/fresh source/);
  assert.throws(()=>createRace({nativeRecordSession:session}),/native physics/);
 });

@@ -20,6 +20,7 @@ import {prepareNativeRaceMenuInputAdvance,nativeRaceMenuInputView} from './nativ
 import {prepareNativeRaceResultCPUDisplayUpdate} from './native-race-state.js';
 import {prepareNativeNameMenuFrame,nativeNameMenuView} from './native-name-menu-runtime.js';
 import {prepareNativeResultsMenuFrame,nativeResultsMenuView} from './native-results-menu-runtime.js';
+import {prepareNativeStuntResultsMenuFrame,nativeStuntResultsMenuView} from './native-stunt-results-menu-runtime.js';
 import {prepareNativeContinuationMenuFrame,nativeContinuationMenuView} from './native-continuation-menu-runtime.js';
 import {nativeResultsRecordView} from './native-results-record-view.js';
 import {captureNativeRecordSession,restoreNativeRecordSession,copyNativeRecordSession} from './native-record-session.js';
@@ -100,7 +101,7 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    ...(courseRuntime?{menuWordsE658:Array(21).fill(0),deviceWords4308:Array(10).fill(0),
     // Fresh web profile policy: YOU initials for each rider/variant. No
     // cartridge save data; these14-byte entries cross u32 word boundaries.
-    saveWordsB280:(()=>{const bytes=new DataView(new ArrayBuffer(136));for(let i=0;i<8;i++){for(const [j,b]of [89,79,85].entries())bytes.setUint8(24+i*14+j,b);const tune=nativeMenuTune();for(const [j,key]of NATIVE_TUNE_KEYS.entries())bytes.setUint8(24+i*14+11+j,tune[key]);}return Array.from({length:34},(_,i)=>bytes.getUint32(i*4));})(),nameEntryWords61c4:Array(14).fill(0),resultsMenuWords6d30:Array(4).fill(0),
+    saveWordsB280:(()=>{const bytes=new DataView(new ArrayBuffer(136));for(let i=0;i<8;i++){for(const [j,b]of [89,79,85].entries())bytes.setUint8(24+i*14+j,b);const tune=nativeMenuTune();for(const [j,key]of NATIVE_TUNE_KEYS.entries())bytes.setUint8(24+i*14+11+j,tune[key]);}return Array.from({length:34},(_,i)=>bytes.getUint32(i*4));})(),nameEntryWords61c4:Array(14).fill(0),resultsMenuWords6d30:Array(4).fill(0),stuntResultsMenuWords5d80:Array(4).fill(0),
     continuationMenuWords61e0:Array(4).fill(0),
     // Fresh web menu selection/latch, plus verified numeric return tables.
     continuationDataWords60f0:Array.from({length:20},(_,i)=>[40,10,20,2,30,2][i-13]??0)}:{}),scene:{
@@ -283,6 +284,10 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
   recordSessionSnapshot:()=>captureNativeRecordSession(current),
   nameEntryView:()=>nativeNameMenuView(current),
   resultsMenuView:()=>nativeResultsMenuView(current),
+  stuntResultsMenuView:()=>nativeStuntResultsMenuView(current),
+  advanceStuntResultsMenu(rawControllers){
+   const prepared=prepareNativeStuntResultsMenuFrame(current,rawControllers);current=prepared.state;return prepared;
+  },
   continuationMenuView:()=>({...nativeContinuationMenuView(current),active:!continuationHandoff&&nativeContinuationMenuView(current).active}),
   advanceContinuationMenu(rawControllers){
    if(continuationHandoff)throw new Error('Continuation menu already handed off');

@@ -31,6 +31,7 @@ import {prepareNativeRaceMenuInitialization} from './native-race-menu-initializa
 import {prepareNativeNameEntryInitialization,prepareNativeNameEntryInput,prepareNativeNameEntryAnimationPhase,prepareNativeNameEntryRecordUpdate,prepareNativeNameEntryDisplay} from './native-name-entry.js';
 import {prepareNativeNameEntryPresentation} from './native-name-presentation.js';
 import {prepareNativeResultsMenuInitialization,prepareNativeResultsMenuInput,prepareNativeResultsMenuDisplay} from './native-results-menu.js';
+import {prepareNativeStuntResultsMenuInitialization,prepareNativeStuntResultsMenuInput,prepareNativeStuntResultsMenuDisplay} from './native-stunt-results-menu.js';
 import {prepareNativeContinuationMenuInitialization,prepareNativeContinuationMenuInput,prepareNativeContinuationMenuExit,prepareNativeContinuationMenuDisplay} from './native-continuation-menu.js';
 import {prepareNativeRaceRiderResourceConfiguration,prepareNativeRaceCourseResourceConfiguration} from './native-race-resource-configuration.js';
 import {prepareNativeRaceResultCodeSelection} from './native-race-body-fields.js';
@@ -116,6 +117,7 @@ function copy(value){
  if(value.deviceWords4308!==undefined)s.deviceWords4308=words(value.deviceWords4308,'deviceWords4308',10);
  if(value.nameEntryWords61c4!==undefined)s.nameEntryWords61c4=words(value.nameEntryWords61c4,'nameEntryWords61c4',14);
  if(value.resultsMenuWords6d30!==undefined)s.resultsMenuWords6d30=words(value.resultsMenuWords6d30,'resultsMenuWords6d30',4);
+ if(value.stuntResultsMenuWords5d80!==undefined)s.stuntResultsMenuWords5d80=words(value.stuntResultsMenuWords5d80,'stuntResultsMenuWords5d80',4);
  if(value.continuationMenuWords61e0!==undefined)s.continuationMenuWords61e0=words(value.continuationMenuWords61e0,'continuationMenuWords61e0',4);
  if(value.continuationDataWords60f0!==undefined)s.continuationDataWords60f0=words(value.continuationDataWords60f0,'continuationDataWords60f0',20);
  if(value.profileWordsB330!==undefined){
@@ -157,6 +159,8 @@ function copy(value){
  * Optional resultsMenuWords6d30[4] owns normal-results overlay phase, two
  * signed sliding offsets and delay at802C6D30..6D40, exclusive. It is separate
  * from the race overlay and reads the combined menu record's pressedE692.
+ * Optional stuntResultsMenuWords5d80[4] owns Stunt-results phase, delay and
+ * two signed sliding offsets at802C5D80..5D90, exclusive. It reads player1.
  * Optional continuationMenuWords61e0[4] owns ovl_i14 phase/offsets/count BSS.
  * continuationDataWords60f0[20] retains its loaded selection, numeric choice
  * tables and audio-once latch through6140, exclusive. Intervening untouched
@@ -549,8 +553,8 @@ function apply(s,operations){
    const bits=integer(op.value,'source halfword bits',0,65535);
    if(op.field==='pressed65a'&&s.menuWordsE658!==undefined)s.menuWordsE658[0]=((s.menuWordsE658[0]&0xffff0000)|bits)>>>0;
    else s.scene[op.field]=sceneRanges[op.field][0]<0?bits<<16>>16:bits;
-  }else if(op.kind==='i1Write'||op.kind==='profileWrite'||op.kind==='nameEntryWrite'||op.kind==='resultsMenuWrite'||op.kind==='continuationMenuWrite'||op.kind==='continuationDataWrite'){
-   const key=op.kind==='i1Write'?'i1Words9440':op.kind==='nameEntryWrite'?'nameEntryWords61c4':op.kind==='resultsMenuWrite'?'resultsMenuWords6d30':
+  }else if(op.kind==='i1Write'||op.kind==='profileWrite'||op.kind==='nameEntryWrite'||op.kind==='resultsMenuWrite'||op.kind==='stuntResultsMenuWrite'||op.kind==='continuationMenuWrite'||op.kind==='continuationDataWrite'){
+   const key=op.kind==='i1Write'?'i1Words9440':op.kind==='nameEntryWrite'?'nameEntryWords61c4':op.kind==='resultsMenuWrite'?'resultsMenuWords6d30':op.kind==='stuntResultsMenuWrite'?'stuntResultsMenuWords5d80':
     op.kind==='continuationMenuWrite'?'continuationMenuWords61e0':op.kind==='continuationDataWrite'?'continuationDataWords60f0':'profileWordsB330';
    if(!s[key])throw new TypeError(`Supply retained ${key} before applying its writes`);
    const width=op.width,count=s[key].length;
@@ -712,6 +716,24 @@ export function prepareNativeNameEntryRecordCommit(state,sourceViews={}){
 export function prepareNativeResultsMenuInitializationUpdate(state){
  const next=copy(state),prepared=prepareNativeResultsMenuInitialization(next),effects=apply(next,prepared.operations);
  return freeze({...prepared,state:next,effects});
+}
+
+export function prepareNativeStuntResultsMenuInitializationUpdate(state){
+ const next=copy(state),prepared=prepareNativeStuntResultsMenuInitialization(next),effects=apply(next,prepared.operations);
+ return freeze({...prepared,state:next,effects});
+}
+
+export function prepareNativeStuntResultsMenuDisplayUpdate(state,sourceViews={}, {expandInput=false,expandExit=false}={}){
+ if(typeof expandInput!=='boolean'||typeof expandExit!=='boolean'||expandExit&&!expandInput)throw new TypeError('Exit expansion requires input expansion');
+ const next=copy(state),prepared=prepareNativeStuntResultsMenuDisplay(next,sourceViews),operations=[],effects=[];
+ for(const op of prepared.operations){
+  const batch=expandInput&&op.kind==='externalCall'&&op.consumer==='802c5bd8'?prepareNativeStuntResultsMenuInput(next).operations:[op];
+  for(const entry of batch){
+   const expanded=expandExit&&entry.kind==='externalCall'&&['801ed004','801ec9c8'].includes(entry.consumer)?prepareNativeRaceMenuInitializationUpdate(next,{consumer:entry.consumer},sourceViews).operations:[entry];
+   operations.push(...expanded);effects.push(...apply(next,expanded));
+  }
+ }
+ return freeze({...prepared,state:next,operations,effects,diagnostic:{...prepared.diagnostic,inputExpanded:expandInput,exitExpanded:expandExit}});
 }
 
 function continuationResult(next,prepared,sourceViews,{expandInput=false,expandExit=false,expandFade=false}={}){

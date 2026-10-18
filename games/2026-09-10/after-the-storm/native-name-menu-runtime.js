@@ -15,20 +15,20 @@ function sourceViews(){
 export function nativeNameMenuView(state){
  const n=state.nameEntryWords61c4,h=state.hudWords7788,word=h[hi(0x88e8)]>>>0;
  const bytes=Array.from({length:4},(_,i)=>word>>>(24-i*8)&255),end=bytes.indexOf(0),initials=String.fromCharCode(...bytes.slice(0,end<0?4:end));
- return {active:state.scene.gameStateAb24===100&&state.scene.mode608===0,phase:n?.[1]??0,selected:n?.[0]??0,
+ return {active:state.scene.gameStateAb24===100&&[0,11].includes(state.scene.mode608),phase:n?.[1]??0,selected:n?.[0]??0,
   initials,length:n?.[8]??0,symbols:h.slice(hi(0x87e8),hi(0x87e8)+16),labels:h.slice(hi(0x87e8),hi(0x87e8)+16).map(v=>v===30?'END':v===29?'DEL':characters[v]??''),
   first:h[hi(0x87e0)],last:h[hi(0x87e4)]};
 }
 
-/** Browser menu boundary for admitted solo ordinary races. The original
+/** Browser menu boundary for admitted solo ordinary and Stunt races. The original
  * numeric update runs before display/input, with one canonical owner. Modern
  * drawing replaces the display-list callees; it does not invent their return
  * pointers. Source1E8C latch writes still precede2530 input. Phase5 expands
- * RAM records, the verified literal%s name copy, then C20C menu entry.
+ * RAM records, the verified literal%s name copy, then C20C or D004 menu entry.
  * GPU art, water disturbances, audio and durable saving are host effects.
  */
 export function prepareNativeNameMenuFrame(state,rawController){
- if(state.scene.gameStateAb24!==100||state.scene.mode608!==0)throw new RangeError('Name menu requires admitted solo result state100');
+ if(state.scene.gameStateAb24!==100||![0,11].includes(state.scene.mode608))throw new RangeError('Name menu requires admitted solo result state100');
  const constants=sourceViews(),sample=prepareNativeRaceMenuInputAdvance(state,{rawControllers:[rawController],controllerCount4344:1,
   connectedMask4340:1,controllerPorts4330:[0,1],neutralBytesAb10:Array(10).fill(0),thresholdXb400:50,thresholdYb401:35});
  const update=prepareNativeNameEntryUpdate(sample.state,constants),draw=nativeNameMenuView(update.state);
@@ -47,7 +47,7 @@ export function prepareNativeNameMenuFrame(state,rawController){
    for(let i=0;i<4;i++){const shift=24-i*8,byte=src>>>shift&255;dest=((dest&~(255<<shift))|(byte<<shift))>>>0;if(byte===0){terminated=true;break;}}
    if(!terminated)throw new RangeError('Name must terminate inside its four-byte owner');
    apply([{kind:'sourceWordWrite',field:'field700',value:dest}]);
-  }else if(op.kind==='externalCall'&&op.consumer==='801ec20c')apply(prepareNativeRaceMenuInitializationUpdate(current,{consumer:op.consumer}).operations);
+  }else if(op.kind==='externalCall'&&['801ec20c','801ed004'].includes(op.consumer))apply(prepareNativeRaceMenuInitializationUpdate(current,{consumer:op.consumer}).operations);
   else apply([op]);
  }
  return {state:current,operations,effects,matrices:update.matrices,draw,view:nativeNameMenuView(current),
