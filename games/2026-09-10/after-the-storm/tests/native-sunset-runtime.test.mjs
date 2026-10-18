@@ -11,6 +11,7 @@ import {getCourse} from '../courses.js';
 import {createRace} from '../race-core.js';
 
 const fixture=JSON.parse(readFileSync(new URL('./fixtures/native-sunset-regions.json',import.meta.url),'utf8'));
+const objectReference=JSON.parse(readFileSync(new URL('./fixtures/native-course-object-resources-reference.json',import.meta.url),'utf8'));
 function prepared(difficulty){
  const source=createSourceSunsetCourse(polygonDistance),reverse=difficulty===3;
  return {...source,sourceWaterCourseIndex:2,reverse,
@@ -24,7 +25,7 @@ test('Sunset course-out queries match original execution at 449 actual-table poi
  assert.deepEqual(sourceBuoyCourseRules(2).regionsNative,fixture.progressRegionsNative);
  assert.notDeepEqual(regions.allowedRegionsNative,fixture.progressRegionsNative);
  assert.throws(()=>regions.allowedRegionsNative[0].push(0),TypeError);
- assert.throws(()=>nativeRaceCourseRegions(3),/No verified/);
+ assert.throws(()=>nativeRaceCourseRegions(9),/No verified/);
 });
 
 test('prepared Sunset ordinary owners select their own course, 1200-unit slack, regions and linked primary/AI geometry',()=>{
@@ -36,7 +37,10 @@ test('prepared Sunset ordinary owners select their own course, 1200-unit slack, 
   assert.equal(runtime.staticContactGeometry.boxes,runtime.retirementGeometry.boxes);
   assert.equal(runtime.resetLayout.checkpointSlackNative,1200);assert.equal(runtime.sourceBuoyLayout.checkpointSlackNative,1200);
   assert.equal(runtime.directionFlag1f90,difficulty===3?1:0);assert.equal(runtime.sourceDifficulty,[0,1,2,2][difficulty]);
-  assert.equal(runtime.resetLayout.boundaryNativeXZ.length,81);assert.deepEqual(runtime.resetLayout.objectKinds4c,[1]);
+  // Canonical loading includes the hidden fixed rows, verified independently
+  // in native-course-object-resources-reference.json for both player counts.
+  const expected=objectReference.checks.find(c=>c.courseIndex===2&&c.players===players&&c.difficulty===Math.min(difficulty,2)&&c.reverseDab68===Number(difficulty===3));
+  assert.ok(expected);assert.equal(runtime.resetLayout.boundaryNativeXZ.length,expected.fixedSphereCountC938);assert.deepEqual(runtime.resetLayout.objectKinds4c,[1]);
   assert.deepEqual(runtime.allowedRegionsNative,course.sourceCourseOutRegions.allowedRegionsNative);
   for(const n of runtime.aiTargetTable.nodes){
    const row=runtime.data.nodes[n.sourceRow],words=runtime.data.recordWordsBySourceRow[n.sourceRow];

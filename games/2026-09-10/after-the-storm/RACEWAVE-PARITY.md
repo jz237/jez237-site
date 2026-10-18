@@ -6330,3 +6330,23 @@ three-axis analytic drift, five-substep latching and actual canonical flag
 consumption throughout a driven Drake run, including entry and exit. The
 existing sixteen-ring/four-checkpoint Drake route and47 hull/adapter/weed tests
 pass. Rendering resolution and modern physics are unchanged.
+
+### Ordinary Drake numeric course preparation — 2026-10-18
+
+Added the complete Normal/Hard/Expert/Reverse primary rows, including hidden
+AI navigation nodes:55/57/61/44 rows. Verified all eight solo/two-player ROM
+selectors and each raw row. Executing the original loading and735EC
+initialization produced28,210 expected state words across160,764 instructions;
+the prepared browser course runtime matches every word, including avatar links.
+The original one/two-player floor and shore pointers are identical. Both now
+reuse the existing22 finite faces and72 shoreline segments. Ordinary Drake
+uses its own object loading with no Stunt ramps or rings.
+
+This prepares ordinary numeric owners only. Live time/versus admission still
+requires the corresponding high-resolution scene, display bindings and driven
+race validation. The existing illustration-map scene is not silently enabled
+against these different coordinates. The new preparation tests and existing
+Sunset/object-loading tests pass, as do Southern/Glacier selection checks.
+Sunset's old fixed-count assertion was updated to the independently verified
+original object fixtures, covering hidden rows and difficulty/player variation;
+its runtime output was confirmed identical to the preceding commit.

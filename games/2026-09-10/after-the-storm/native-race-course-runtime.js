@@ -9,19 +9,20 @@ import {SUNNY_NATIVE_RETIREMENT_GEOMETRY} from './native-sunny-support.js';
 import {nativeSunsetRetirementGeometry} from './native-sunset-support.js';
 import {nativeSouthernRetirementGeometry} from './native-southern-support.js';
 import {nativeGlacierRetirementGeometry} from './native-glacier-support.js';
+import {nativeDrakeSupportGeometry} from './native-drake-support.js';
 import {GLACIER_NATIVE_ROUTE_ROWS_BY_CLASS} from './source-glacier-rows.js';
 import {nativeRaceShoreGeometry} from './native-shore-geometry.js';
 import {SOUTHERN_NATIVE_AI_ROWS_BY_CLASS} from './source-southern-ai-routes.js';
 import {createNativeCourseObjectStartup} from './native-course-object-startup.js';
 import {nativeCourseCheckpointSeconds} from './native-stunt-checkpoint-times.js';
 
-// Numeric course owners for Sunny/Sunset/Southern/Glacier integration.
+// Numeric course owners for Sunny/Sunset/Drake/Southern/Glacier integration.
 // Mode and source-water admission remain the race host's responsibility.
 export function createNativeRaceCourseRuntime({course,difficulty,players,objectLayout='source'}={}){
  if(!['source','authored'].includes(objectLayout))throw new RangeError('Select source objects or explicit authored diagnostics');
  const courseIndex=course?.sourceWaterCourseIndex;
- if(![1,2,7,8].includes(courseIndex)||!Number.isInteger(difficulty)||difficulty<0||difficulty>3||![1,2].includes(players))
-  throw new RangeError('Ordinary data preparation requires Sunny/Sunset/Southern/Glacier source rows and one/two players');
+ if(![1,2,4,7,8].includes(courseIndex)||!Number.isInteger(difficulty)||difficulty<0||difficulty>3||![1,2].includes(players))
+  throw new RangeError('Ordinary data preparation requires Sunny/Sunset/Drake/Southern/Glacier source rows and one/two players');
  // The native selection owns its route metadata. Do not activate a different
  // modern water/judging graph by modifying the shared authored course.
  if(courseIndex===8)course={...course,sourceRouteRowsByClass:GLACIER_NATIVE_ROUTE_ROWS_BY_CLASS,
@@ -31,8 +32,8 @@ export function createNativeRaceCourseRuntime({course,difficulty,players,objectL
   throw new TypeError('Selected source route rows and buoy layout are required');
  const mode620=players===2?1:0,scale=course.sourceBuoyLayout.scale,rules=sourceBuoyCourseRules(courseIndex,{reverse:!!course.reverse});
  const regions=nativeRaceCourseRegions(courseIndex);
- const retirementGeometry=courseIndex===1?SUNNY_NATIVE_RETIREMENT_GEOMETRY:courseIndex===2?nativeSunsetRetirementGeometry({players}):courseIndex===7?nativeSouthernRetirementGeometry({players}):nativeGlacierRetirementGeometry({players});
- const staticContactGeometry=Object.freeze({...retirementGeometry,shore:nativeRaceShoreGeometry({courseIndex,players})});
+ const retirementGeometry=courseIndex===1?SUNNY_NATIVE_RETIREMENT_GEOMETRY:courseIndex===2?nativeSunsetRetirementGeometry({players}):courseIndex===4?nativeDrakeSupportGeometry({players}):courseIndex===7?nativeSouthernRetirementGeometry({players}):nativeGlacierRetirementGeometry({players});
+ const staticContactGeometry=Object.freeze({...retirementGeometry,shore:retirementGeometry.shore??nativeRaceShoreGeometry({courseIndex,players})});
  const data=createNativePrimaryCourseData({rows:course.sourceRouteRowsByClass[difficulty],courseIndex,mode620});
  const sourceDifficulty=course.sourceMetadata.sourceNativeClassByDifficulty[difficulty];
  const objectStartup=objectLayout==='source'?createNativeCourseObjectStartup({courseIndex,players,mode620,difficulty:sourceDifficulty,reverseDab68:Number(!!course.reverse)}):null;
