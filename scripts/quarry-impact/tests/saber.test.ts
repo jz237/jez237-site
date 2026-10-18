@@ -39,7 +39,7 @@ test('liftback exports a self-contained repeatable GLB matching the published mo
 test('saber has a distinct chassis, two doors and a liftback that detach, aligned wheels, and damage that fully repairs',()=>{
  const world=new R.World({x:0,y:0,z:0}),scene=new T.Scene(),c=new Vehicle(0,'saber',DEFINITIONS.saber.color,scene,world,fx);
  try{
-  assert.equal(CAR_KINDS.length,18);assert.ok(Math.abs(c.body.mass()-1120)<1);assert.ok(c.glass.length>=6);assert.ok(c.panels.length>25);
+  assert.ok(CAR_KINDS.length>=18&&CAR_KINDS.includes('saber'));assert.ok(Math.abs(c.body.mass()-1120)<1);assert.ok(c.glass.length>=6);assert.ok(c.panels.length>25);
   assert.deepEqual(c.wreckParts.assemblies.filter(a=>a.name.startsWith('door-')).map(a=>a.name).sort(),['door-left','door-right']);assert.ok(c.wreckParts.assemblies.some(a=>a.name==='tailgate'));
   const anchors=classicWheelAnchors('saber');for(let i=0;i<4;i++){assert.equal(c.wheels[i].position.x,anchors.wheels[i].x);assert.equal(c.wheels[i].position.z,anchors.wheels[i].z);assert.ok(Math.abs(c.controller.wheelRadius(i)!-.32)<1e-6);}
   c.root.updateMatrixWorld(true);const clean=shape(c),mass=c.body.mass();

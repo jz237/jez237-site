@@ -542,8 +542,8 @@
     },
     {
       "path": "licenses/CREDITS.md",
-      "bytes": 25509,
-      "sha256": "cafb198d192d69072dda104e5705af90d359d9254509f9e00887b06c9bf330c8"
+      "bytes": 25665,
+      "sha256": "2e260c2275008894f364a40bff564d063f9bc3c7352f9a18d996758022143e9b"
     },
     {
       "path": "licenses/CarConcept-LICENSE.md",
@@ -599,6 +599,11 @@
       "path": "licenses/SABER-20GT.md",
       "bytes": 433,
       "sha256": "7a88f36f9dac10f5faa7051fd41df0bab0bd030795719cb684b120cd5c75f7b7"
+    },
+    {
+      "path": "licenses/STARFIN-58.md",
+      "bytes": 509,
+      "sha256": "cc7bded556b4bae061401c4ab938cda45168e071ad6fa2c8e596b2b5f07c68c5"
     },
     {
       "path": "licenses/TERN-1400.md",
@@ -1264,6 +1269,11 @@
       "path": "models/spruce3d.glb",
       "bytes": 244084,
       "sha256": "26f516877e2697486449e22583e9a21e1ec2f2de51118c5335a8756e81de467f"
+    },
+    {
+      "path": "models/starfin.glb",
+      "bytes": 3780988,
+      "sha256": "220e666a512ab59398b28b9480b2e4259879fb598e94f65f0238457037c4c668"
     },
     {
       "path": "models/tern-candidate.glb",
