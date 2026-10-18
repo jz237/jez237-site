@@ -8,7 +8,7 @@ import {createPlayerWindowRenderer} from './player-window-renderer.js';
 
 const $=id=>document.getElementById(id),params=new URLSearchParams(location.hash.slice(1)),session=params.get('session'),capability=params.get('capability');
 let port=null,generation=0,descriptor=null,viewer=null,keys={},frames=[],lastPacketAt=-Infinity,inputSequence=0,commandSequence=0,disposed=false,standby=true,lastHeartbeat=0,lastInput=0,primeButtons=true;
-const haptics=createGamepadRumble(),sample=createInputSampler(()=>descriptor?.controls),padPause=[false,false],padCamera=[false,false];
+const haptics=createGamepadRumble(),sample=createInputSampler(()=>descriptor?.controls,()=>!!descriptor?.initialFrame.racers[1]?.nativeRiderPose),padPause=[false,false],padCamera=[false,false];
 const send=(type,data={})=>{try{port?.postMessage(envelope(session,generation,type,data));}catch{hold('Primary window connection ended.');}};
 function hold(label){standby=true;keys={};resetGamepadRumble(haptics);$('standby').hidden=false;$('hud').hidden=true;$('message').textContent=label;}
 function clearInput(reprime=false){keys={};if(reprime)primeButtons=true;resetGamepadRumble(haptics);}

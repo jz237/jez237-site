@@ -19,6 +19,36 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — ordinary native gesture and idle actions
+
+Ordinary native time/versus hosts now admit the existing source gesture and
+idle dispatcher. Normal keyboard sequences enter actors8/9/17, run their real
+physical pose transitions and emit the existing primary-slot completion cue.
+Native digital steering reaches the original circle threshold; modern steering
+and analog input retain their existing mapping. Separate player windows use the
+host's native pose descriptor to select the same digital mapping.
+
+Action startup applies the original partial stores to explicitly zeroed fresh
+browser memory. Retained flag/quiet/idle-choice fields remain caller-owned.
+All racers share unsigned input clock1960, incremented after each outer frame,
+including simulation0; browser pause holds it. Idle actions consume the shared
+4640 gameplay RNG only when the source dispatcher requests it, in actor order.
+This is a fresh web session epoch, not emulation of cartridge menu lifetime.
+
+Two fresh read-only EVO X2 Ghidra queries preserved all9 project file hashes.
+All1,190 exported instruction records matched the ROM. Bounded original startup
+stores and clock-tail execution covered40 retained-state and8 unsigned-clock
+cases in3,120 instructions. Public fixtures contain numeric results only.
+126 focused tests pass, covering gestures, idle timing, shared RNG, clock wrap,
+pause, full races, native AI, postrace, controls and versus. Gesture physics,
+events and audio match at30/60/144Hz. Browser keyboard checks entered actor8
+solo and simultaneous actor9/17 in versus; the primary cue played successfully.
+High1280x720 and83,521 water vertices were unchanged in those browser checks.
+
+This supersedes the earlier disabled-host-action limitation below. Native
+backend/course admission remains opt-in. Pose anatomy/artwork remains authored;
+full original stunt scoring, landing triggers and all-mode parity are unfinished.
+
 ## Unpublished — original rider feedback audio bridge
 
 C3548/C35B4 now preserve their complete result gate, unsigned audio-random

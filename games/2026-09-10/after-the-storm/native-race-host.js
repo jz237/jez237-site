@@ -120,7 +120,13 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
   const initialHull=createNativeHullFromStart({prepared:hullStart,rider:adapterOptions.riderIndex,scale:water.scale,computerProfile});
   const bundle=recovery?createNativeLifecycleRider({initialHull,initializeStart:!!raceRuntime}):
    createAuthoredNativeRider({initialHull,poseProvider:poseProviders[i]});bundles.push(bundle);
+  // Fresh browser body memory is explicitly zero before the original partial
+  // startup stores. No cartridge-retained gesture/idle state is inferred.
+  const actionStart=raceRuntime?.ordinary?raceRuntime.riderActionStartup({gestureTick15f0:0,flag1600:0,
+   sequence15f8:0,sequence15fa:0,lastPressedDirections15fc:0,quietFrames15fe:0,idleFramesC6c:0,idleChoice16c4:0}):null;
+  const {idleFramesC6c,idleChoice16c4,...inputHistory}=actionStart??{};
   return createNativeRaceAdapter({...adapterOptions,
+   ...(actionStart?{riderActions:{inputHistory,idleFramesC6c,idleChoice16c4,source:()=>raceRuntime.riderActionContext(i)}}:{}),
    ...(sourceAI?{sourceAIInput:()=>{
     const prepared=raceRuntime.sampleAI(i,{bodiesBySlot:host.aiBodies,
      geometry:{selectionCircleNative:raceWaterAISelectionCircle(water),
@@ -128,7 +134,7 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
       proximityObjectCentersNative:ice?ice.state.nodes.map(o=>({x:o.position[0],z:o.position[2]})):(floating?.state.objects??[]).map(o=>({x:F(o.position.x/water.scale),z:F(o.position.z/water.scale)}))},waterField:water.field});
     host.lastAIInput=prepared;return {...prepared.controls,action16f4:prepared.action16f4};
    }}:{}),
-   hullStart,contacts,powerSteps:r.power,sourceState:raceRuntime?()=>({...raceRuntime.scene(),
+   hullStart,contacts,powerSteps:r.power,sourceState:raceRuntime?()=>({...raceRuntime.scene(),...(raceRuntime.ordinary?{sourceTick:raceRuntime.inputClock()}:{}),
     catchup:raceRuntime.catchupContext?.(i,host.world.adapters.map(a=>({x:F(a.hull.center.x/a.hull.scale),z:F(a.hull.center.z/a.hull.scale)})))}):sourceStates[i]??(recovery?{simulationState:3}:{actorState:22,simulationState:3}),...bundle,
    ...(recovery?{riderRecovery:{courseDatumNative:()=>water.field.datumNative,raceFinished:()=>r.finishTime!==null,...bundle.initialRiderRecovery}}:{})});
  });
@@ -137,7 +143,7 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
    initialHeight:hullStarts.length?'source-grid-transform':'course-datum',tuning:'explicit-native-indices; default5/5/5',
    hullStartup:'decoded packed16.16 transform; source point/frame/rest/damping recipe with authored local shape',
    clock:'five10ms hull ticks then one water update',controls:'digital-accelerator; brake-coasts; B-crouch; R-slide',
-   actorRecoveryAndTricks:false,riderRecovery:recovery,physicalRiderPresentation:true,
+   actorRecoveryAndTricks:false,nativeGestureAndIdleActions:!!raceRuntime?.ordinary,riderRecovery:recovery,physicalRiderPresentation:true,
    recoveryGeometry:'authored anatomy/remount; reconstructed procedural fall/stumble; explicit authored rest/circle/history policy',
    nativeRacerCollision:craftContacts,sourcePrimaryBuoyContacts:!!primary,sourceGenericIceContacts:!!ice,sourceAIInput:sourceAI})};
  if(raceRuntime?.ordinary){
@@ -215,6 +221,7 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
   if(raceRuntime?.ordinary)advanceRaceWaterRollers(water,{active:objectMotionActive,rollerState72c:raceRuntime.courseRollerState()});
   if(host.spray)host.spray.advance(raceRuntime.sprayInputs(),raceRuntime.cameraStorage.read());
   if(ice)ice.afterEffects(host.world,context);
+  let launchContinues=true;
   if(raceRuntime){
    host.lastHUD=raceRuntime.ordinary?raceRuntime.advanceHUD():null;
    // Original1DE3CC is after the completed world/camera/water frame and
@@ -225,9 +232,10 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
     raceRuntime.advanceStatus(host.world.adapters.map(a=>a.riderLifecycle.state.selectedActor))):null;
    const launch=status?{...ordinary,effects:[...ordinary.effects,...host.lastHUD.effects,...host.lastCameraInput.effects,...status.effects],view:status.view}:
     raceRuntime.advanceLaunch(host.world.adapters.map(a=>a.lastControls.pressedButtons));
-   if(onLaunchFrame&&onLaunchFrame(host,context,launch)===false)return false;
+   if(onLaunchFrame&&onLaunchFrame(host,context,launch)===false)launchContinues=false;
   }
-  return keepRunning;
+  if(raceRuntime?.ordinary)host.lastInputClock=raceRuntime.advanceInputClock();
+  return launchContinues?keepRunning:false;
  }});
  present(host);return host;
 }

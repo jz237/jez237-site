@@ -9,7 +9,8 @@ import {createNativeRaceCameraStorage} from './native-race-camera-storage.js';
 import {NATIVE_ANGLE_TABLE_WORDS,nativeSineTableWords} from './native-math-tables.js';
 import {sourceBuoyVisibleRow} from './source-buoy-progress.js';
 import {createNativeAIRouteState,stepNativeAIRoute} from './native-ai-route.js';
-import {prepareNativeAIInitialization} from './native-ai-initialization.js';
+import {prepareNativeAIInitialization,stepNativeAIRandom} from './native-ai-initialization.js';
+import {prepareNativeRiderActionStartup,NATIVE_RIDER_ACTION_LIMITS} from './native-rider-action-startup.js';
 import {prepareNativeAIDriver} from './native-ai-driver.js';
 import {NATIVE_AI_STORAGE_WORDS,nativeAIDriverStateFromWords,nativeAIDriverStateWrites} from './native-ai-storage.js';
 import {prepareNativeRaceWaterInitialization} from './native-race-state.js';
@@ -97,7 +98,7 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    mode620:players===2?1:0,mode608:players===2?1:0,main638:1,phase650:0,simulation648:1,
    clockStopped817c:1,activity624:-1,event628:0,gameStateAb24:40,specialAb64:0,ready6fc:0,
    missesEnabled72e:1,result6f0:0,ambientD4b00:0,field4964:0,field4970:Number(handicap),resultEffect393c:0,toggleD9914:0,
-   rngState4640:integer(rngSeed,'web shared RNG seed',0,0xffffffff),previousNavigationD9874:0,trainingSelectionDa9f8:0,
+   rngState4640:integer(rngSeed,'web shared RNG seed',0,0xffffffff),inputTick1960:0,previousNavigationD9874:0,trainingSelectionDa9f8:0,
    ...(courseRuntime?{primaryCount:courseRuntime.data.nodes.length,finishSourceRow:courseRuntime.data.finishSourceRow,
     cold8224:1,forceFirst8228:0,demoOffset5438:0,restart6f8:0,reverseDab68:Number(reverse),state600:0,
     freshNameAb6c:1,field700:0,fieldAb2c:0,titlePairSelectionA9fc:NATIVE_TITLE_INITIAL_PAIR,fieldA9ac:0,courseSelectionA9d0:0,pendingPlayers60c:players,
@@ -186,6 +187,27 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
  const runtime={
   ordinary:!!courseRuntime,
   scene:()=>({simulationState:current.scene.simulation648,phase650:current.scene.phase650}),
+  inputClock:()=>integer(current.scene.inputTick1960,'shared input clock',0,0xffffffff),
+  advanceInputClock(){
+   //46DA0 increments1960 after922E4 and display/resource work, including
+   // simulation0. Browser pause does not run an outer source frame.
+   const previous=runtime.inputClock(),value=(previous+1)>>>0;
+   commit([{kind:'sourceWordWrite',field:'inputTick1960',value}]);return {previous,value};
+  },
+  riderActionStartup(retained){return prepareNativeRiderActionStartup(retained,runtime.inputClock());},
+  riderActionContext(slot){
+   integer(slot,'rider action slot',0,racers.length-1);
+   const g=current.scene;
+   return {...NATIVE_RIDER_ACTION_LIMITS,state650:g.phase650,
+    poseCompletion:{finished2c2c:word(slot,189),record2c24:word(slot,187),racerIndex:slot,
+     primaryRacerIndex:g.primaryHumanIndex,gameMode648:g.simulation648},
+    randomUnsigned32:()=>{
+     // Called conditionally at the descending actor stage, not while the
+     // input view is captured. Other consumers share this same4640 word.
+     const next=stepNativeAIRandom(current.scene.rngState4640);
+     commit([{kind:'sourceWordWrite',field:'rngState4640',value:next.rngState}]);return next.value;
+    }};
+  },
   contactAudioInputs(){
    const slots=[current.scene.primaryHumanIndex,...(players===2?[current.scene.secondaryHumanIndex]:[])];
    return {slots,recordFlags318:slots.map(slot=>word(slot,0x318/4)),recordMotion2c8:slots.map(slot=>word(slot,0x2c8/4)),

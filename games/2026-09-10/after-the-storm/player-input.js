@@ -1,6 +1,6 @@
 import {steeringAxis} from './riding-controls.js';
 import {keyboardActions,mappedGamepad,playerControls} from './control-bindings.js';
-export function playerInput(keys,pad,player=0,split=false,out={},prefs=null,touchKeys=null){
+export function playerInput(keys,pad,player=0,split=false,out={},prefs=null,touchKeys=null,native=false){
  const key=keyboardActions(keys,prefs,player,split);
  // Touch buttons express fixed riding actions independently of keyboard rebinding.
  if(touchKeys&&player===0){const touch=keyboardActions(touchKeys,null,0,true);for(const action of Object.keys(key))key[action]||=touch[action];}
@@ -9,7 +9,9 @@ export function playerInput(keys,pad,player=0,split=false,out={},prefs=null,touc
  const padTrick=modifier?trickList.find(([action])=>buttons[action].pressed)?.[1]??'':'';
  const axis=mapped?steeringAxis(-mapped.axes[0],mapped.deadzone):0;
  out.throttle=Math.max(key.throttle?1:0,buttons?.throttle.value||0);
- out.steer=axis||.8*(Number(key.steerLeft)-Number(key.steerRight));
+ // Native circle gestures require raw stick magnitude above64. The modern
+ // keyboard's .8 turn strength maps to56 and cannot reach those directions.
+ out.steer=axis||(native?1:.8)*(Number(key.steerLeft)-Number(key.steerRight));
  out.brake=!!(key.brakeReverse||key.brake||buttons?.brake.pressed);
  out.rescue=!!(key.rescue||buttons?.rescue.pressed);
  out.slide=!!(key.slide||buttons?.slide.pressed);
@@ -37,12 +39,12 @@ export function splitRenderViewports(width,height,layout='horizontal',pixelRatio
 }
 
 // The same mutable records are consumed synchronously by the fixed-step loop.
-export function createInputSampler(getControls=()=>null){
+export function createInputSampler(getControls=()=>null,getNative=()=>false){
  const first={},second={},pair=[first,second];
  return (keys,touchKeys,pads,split=false)=>{
-  const controls=getControls();
-  playerInput(keys,pads[0],0,split,first,playerControls(controls,0),touchKeys);
+  const controls=getControls(),native=getNative();
+  playerInput(keys,pads[0],0,split,first,playerControls(controls,0),touchKeys,native);
   if(!split)return first;
-  playerInput(keys,pads[1],1,true,second,playerControls(controls,1));return pair;
+  playerInput(keys,pads[1],1,true,second,playerControls(controls,1),null,native);return pair;
  };
 }
