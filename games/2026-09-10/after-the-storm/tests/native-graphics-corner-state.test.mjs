@@ -9,6 +9,7 @@ import {createNativeRaceState,nativeRaceStateSnapshot,prepareNativeRaceStateOper
 import {createNativeRaceLaunchRuntime} from '../native-race-launch-runtime.js';
 import {createRace} from '../race-core.js';
 import {getCourse} from '../courses.js';
+import {stepNativeRaceHost} from '../native-race-host.js';
 const fixture=JSON.parse(readFileSync(new URL('./fixtures/native-graphics-corner-lifetime.json',import.meta.url)));
 const input={rngState:17,racerCount:1,primaryHumanIndex:0,hullProfilesB64:[0,1,2,3],avatarsB68:[3,2,1,0],
  sourceOrder:[0],retainedRoleWords:[0,0,0,0],adjacentRoleWord:0,objectTypes4c:[]};
@@ -84,7 +85,7 @@ test('canonical graphics operations preserve unrelated owners and reject late fa
 
 test('live launch consumes initializer patches in its canonical owner and retains restored coordinates',()=>{
  const race=create(),cold=race.nativeLaunch.snapshot();
- assert.deepEqual(cold.graphicsCorners,patchNativeGraphicsCornerState(createNativeGraphicsCornerBootState(),prepareNativeAIInitialization(input).cameraBytePatches));
+ assert.deepEqual(cold.graphicsCorners,patchNativeGraphicsCornerState(advanceNativeGraphicsCornerState(createNativeGraphicsCornerBootState()),prepareNativeAIInitialization(input).cameraBytePatches));
  const retained=structuredClone(cold);retained.graphicsCorners=structuredClone(fixture.cases[1].initial);
  const runtime=createNativeRaceLaunchRuntime({racers:structuredClone(race.racers),courseIndex:1,players:1,initialState:retained});
  const before=runtime.snapshot(),prepared=runtime.initializeAI(input);
@@ -95,4 +96,37 @@ test('live launch consumes initializer patches in its canonical owner and retain
  const missing=structuredClone(cold);delete missing.graphicsCorners;
  const old=createNativeRaceLaunchRuntime({racers:structuredClone(race.racers),courseIndex:1,players:1,initialState:missing});
  const untouched=old.snapshot();assert.throws(()=>old.initializeAI(input),/retained graphicsCorners/);assert.deepEqual(old.snapshot(),untouched);
+});
+
+test('source outer iterations switch before input even when hull simulation is stopped',()=>{
+ const initial=create().nativeLaunch.snapshot();initial.graphicsCorners=structuredClone(fixture.cases[0].initial);
+ Object.assign(initial.scene,{simulation648:0,activity624:0,phase650:3});
+ const race=createRace({mode:'time',physics:'native',course:getCourse('greyhaven'),seaState:'course',nativeInitialRaceState:initial});
+ const host=race.nativeHost,polls=[];
+ assert.equal(race.nativeLaunch.aiCameraCorners().renderBufferIndex,0,'restoring a launch does not repeat startup switching');
+ const provider=()=>{
+  const view=race.nativeLaunch.aiCameraCorners();polls.push(view.renderBufferIndex);
+  assert.deepEqual(view,host.lastGraphicsBuffer);
+  assert.deepEqual(view.cameraCornersNative,fixture.cases[0].frames[polls.length-1].cornerBuffersNative[view.renderBufferIndex]);
+  return {};
+ };
+ stepNativeRaceHost(host,.005,[provider]);assert.deepEqual(polls,[]);
+ stepNativeRaceHost(host,.005,[provider]);assert.deepEqual(polls,[1]);assert.equal(host.world.frames,0);
+ stepNativeRaceHost(host,.04,[provider]);assert.deepEqual(polls,[1]);assert.equal(host.world.frames,1);
+ stepNativeRaceHost(host,.10,[provider]);assert.deepEqual(polls,[1,0,1]);assert.equal(host.world.frames,3);
+ assert.equal(host.world.ticks,0);assert.deepEqual(race.nativeLaunch.snapshot().graphicsCorners.buffers,
+  patchNativeGraphicsCornerState(initial.graphicsCorners,prepareNativeAIInitialization(input).cameraBytePatches).buffers);
+ const before=race.nativeLaunch.snapshot();stepNativeRaceHost(host,1,[provider],{active:false});
+ assert.deepEqual(race.nativeLaunch.snapshot(),before);assert.deepEqual(polls,[1,0,1]);
+});
+
+test('startup switch and retained byte history do not depend on browser refresh frequency',()=>{
+ let expected;
+ for(const hz of [30,60,144]){
+  const race=create();assert.equal(race.nativeLaunch.aiCameraCorners().renderBufferIndex,1);
+  for(let i=0;i<hz;i++)stepNativeRaceHost(race.nativeHost,1/hz,[{}]);
+  assert.equal(race.nativeHost.world.frames,20);
+  const value=race.nativeLaunch.snapshot().graphicsCorners;
+  if(expected)assert.deepEqual(value,expected);else expected=value;
+ }
 });

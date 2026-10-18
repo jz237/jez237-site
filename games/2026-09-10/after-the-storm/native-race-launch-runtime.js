@@ -13,7 +13,7 @@ import {prepareNativeAIInitialization,stepNativeAIRandom} from './native-ai-init
 import {prepareNativeRiderActionStartup,NATIVE_RIDER_ACTION_LIMITS} from './native-rider-action-startup.js';
 import {prepareNativeAIDriver} from './native-ai-driver.js';
 import {NATIVE_AI_STORAGE_WORDS,nativeAIDriverStateFromWords,nativeAIDriverStateWrites} from './native-ai-storage.js';
-import {createNativeGraphicsCornerBootState,nativeGraphicsCornerView} from './native-graphics-corner-state.js';
+import {createNativeGraphicsCornerBootState,advanceNativeGraphicsCornerState,nativeGraphicsCornerView} from './native-graphics-corner-state.js';
 import {prepareNativeRaceWaterInitialization} from './native-race-state.js';
 import {prepareNativeRaceWidgetAdvance,prepareNativeRaceFadeAdvance,prepareNativeRaceFadePropertiesUpdate} from './native-race-state.js';
 import {prepareNativeWidgetPresentation,nativeWidgetDrawView} from './native-widget-presentation.js';
@@ -103,7 +103,9 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
     0x22c0+c*20,0x23b0+c*20])raceWords1f94[ri(base)]=599999;
   }
   current=createNativeRaceState({raceWords1f94,hudWords7788,profileWordsB330,i1Words9440,aiWords3c60:Array(NATIVE_AI_STORAGE_WORDS).fill(0),
-   graphicsCorners:createNativeGraphicsCornerBootState(),
+   //46DA0 performs one46D2C call after boot, before its first outer iteration.
+   // Restored initialState takes the separate branch above and keeps its index.
+   graphicsCorners:advanceNativeGraphicsCornerState(createNativeGraphicsCornerBootState()),
    ...courseRuntime?.objectStartup?.storage,
    ...(courseRuntime?{menuWordsE658:Array(21).fill(0),deviceWords4308:Array(10).fill(0),
     // Fresh web profile policy: YOU initials for each rider/variant. No

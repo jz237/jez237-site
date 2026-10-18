@@ -89,7 +89,7 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
  if(onAudioFrame!==null&&typeof onAudioFrame!=='function')throw new TypeError('onAudioFrame must be a function');
  if(raceRuntime&&(!recovery||sourceStates.length||poseProviders.length||['scene','advanceClock','advanceLaunch'].some(k=>typeof raceRuntime[k]!=='function')))
   throw new TypeError('Canonical launch requires recovered riders and its single scene owner');
- if(sourceSchedule&&['objectMotionActive','courseRollerState','waterDatumAfterPhysics','waterAmplitudeThreshold'].some(k=>typeof raceRuntime[k]!=='function'))
+ if(sourceSchedule&&['objectMotionActive','courseRollerState','waterDatumAfterPhysics','waterAmplitudeThreshold','advanceGraphicsBuffer','aiCameraCorners'].some(k=>typeof raceRuntime[k]!=='function'))
   throw new TypeError('Canonical source motion requires its activity and roller state owner');
  if(typeof floatingActive!=='boolean')throw new TypeError('floatingActive must be boolean');
  if(typeof primaryActive!=='boolean')throw new TypeError('primaryActive must be boolean');
@@ -151,7 +151,7 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
    ...(actionStart?{riderLanding:{landingTicks:0,localPointsNative:authoredNativeHullLocalPoints()}}:{}),
    ...(sourceAI?{sourceAIInput:()=>{
     const prepared=raceRuntime.sampleAI(i,{bodiesBySlot:host.aiBodies,
-     geometry:{selectionCircleNative:raceWaterAISelectionCircle(water),
+     geometry:{selectionCircleNative:raceWaterAISelectionCircle(water),cameraCornersNative:raceRuntime.aiCameraCorners().cameraCornersNative,
       nodePositionsNative:primary.state.nodes.map(n=>({sourceRow:n.sourceRow,x:n.positionNative.x,z:n.positionNative.z})),
       proximityObjectCentersNative:objects?objects.snapshot().map(o=>({x:o.positionNative[0],z:o.positionNative[2]})):ice?ice.state.nodes.map(o=>({x:o.position[0],z:o.position[2]})):(floating?.state.objects??[]).map(o=>({x:F(o.position.x/water.scale),z:F(o.position.z/water.scale)}))},waterField:water.field});
     host.lastAIInput=prepared;return {...prepared.controls,action16f4:prepared.action16f4};
@@ -184,6 +184,10 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
  beforeFrame:sourceSchedule?(world,context)=>{
   //47B00/BF370 precedes922E4 in46DA0's outer game loop.
   if(onAudioFrame)onAudioFrame(host,context);
+  //46D2C is after audio47B00 and before922E4, including simulation0.
+  // This callback starts one source outer frame, not each of its five hull
+  // ticks. Global browser suspension does not execute a source iteration.
+  host.lastGraphicsBuffer=raceRuntime.advanceGraphicsBuffer();
   //6A264 at922E4 entry precedes control/input and physical world work.
   host.lastSourceFrameCounter=raceRuntime.advanceSourceFrameCounter();
   const menu=typeof host.menuInputs==='function'?host.menuInputs(context.time,context.logicalFrame):host.menuInputs??[];

@@ -7077,8 +7077,17 @@ completed solo race handing control to source AI. After a snapshot-copy
 consistency adjustment, all five new tests and 15 canonical-state regressions
 pass. All 422 module hashes and four page preload sets are refreshed.
 
-The runtime exposes buffer advancement and a read-only AI corner view; the
-full outer-loop scheduling and four-rider caller integration remain separate
-work. Championship admission is unchanged. This storage does not derive a
+The runtime exposes buffer advancement and a read-only AI corner view. Fresh
+launches perform the original startup switch once. The physical host switches
+again after audio and before source input on every outer frame, including
+simulation0. Its AI producer reads the selected retained corner buffer. Four-rider
+caller integration remains separate work. Championship admission is unchanged.
+This storage does not derive a
 modern frustum or impose permanent zero coordinates, and it does not change
 rendering resolution.
+
+The scheduling checks cover fractional frame intervals, suspended browser
+updates, simulation0 without hull ticks, retained nonzero coordinates and
+identical 20-source-frame histories at 30/60/144 Hz. All 16 focused corner and
+live-input tests pass. Original main-loop call sites put audio at471D0, the
+buffer switch at471D8 and source input/world dispatch at471E0.
