@@ -17,7 +17,7 @@ test('canonical activity gates buoy and floating motion independently of frozen 
   for(const activity of [-32768,-1,0,1,32767])for(const simulation of [0,3]){
    const retained=structuredClone(initial);Object.assign(retained.scene,{activity624:activity,simulation648:simulation,phase650:3});
    const course={...getCourse('greyhaven'),dynamicObjectsForPlayers:()=>[{id:'gate-fixture',x:40,y:-.5,z:40}]};
-   const s=create({mode,course,nativeInitialRaceState:retained}),h=s.nativeHost;
+   const s=create({mode,course,nativeInitialRaceState:retained,nativeObjectLayout:'authored'}),h=s.nativeHost;
    const primary=h.primary.snapshot(),floating=h.floating.snapshot(),hulls=h.world.adapters.map(a=>structuredClone(a.hull));
    const input=s.racers.map(()=>({}));
    stepNativeRaceHost(h,.15,input);
@@ -41,7 +41,7 @@ test('canonical activity gates buoy and floating motion independently of frozen 
 test('explicit host object-motion switches still hold an active canonical scene',()=>{
  const retained=create().nativeLaunch.snapshot();Object.assign(retained.scene,{activity624:-1,simulation648:0,phase650:3});
  const course={...getCourse('greyhaven'),dynamicObjectsForPlayers:()=>[{id:'preview-gate',x:40,y:-.5,z:40}]};
- const s=create({course,nativeInitialRaceState:retained}),h=s.nativeHost;
+ const s=create({course,nativeInitialRaceState:retained,nativeObjectLayout:'authored'}),h=s.nativeHost;
  h.primaryActive=false;h.floatingActive=false;stepNativeRaceHost(h,.1,[{}]);
  assert.equal(h.primary.diagnostics().motionUpdates,0);assert.equal(h.floating.diagnostics().motionUpdates,0);
  h.primaryActive=true;h.floatingActive=true;stepNativeRaceHost(h,.05,[{}]);

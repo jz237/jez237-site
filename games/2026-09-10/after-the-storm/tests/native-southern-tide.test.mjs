@@ -61,7 +61,7 @@ test('prepared Southern host owns falling tide in solo and versus, with paused a
   assert.equal(host.world.frames,20);assert.equal(s.raceWater.field.datumNative,simulation?-20:0);
   assert.equal(host.world.ticks,simulation?100:0);
   s.raceWater.field.datumNative=-40;stepNativeRaceHost(host,.05,input);
-  for(const sphere of s.sourceSphereGrid.spheres)
-   assert.equal(sphere.y,sphere.runtimeTag===5?-1.25:activity===-1?(simulation?-41:-40)*.025:0);
+  for(const sphere of host.objects.fixedSnapshot())
+   assert.equal(sphere.position.y,sphere.runtimeTag===5?-1.25:activity===-1?(simulation?-41:-40)*.025:0);
  }
 });

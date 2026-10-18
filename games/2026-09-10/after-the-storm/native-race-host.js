@@ -100,13 +100,32 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
  const definitions=floatingDefinitions??course.dynamicObjectsForPlayers?.(humanIndices.length)??[];
  if(!Array.isArray(definitions))throw new TypeError('Expected selected floating definitions');
  const iceDefinitions=(course.rocks??[]).filter(q=>q.sourceGenericSphere&&q.runtimeKind===10);
- if(iceDefinitions.length&&definitions.length)throw new RangeError('Mixed floating and ice motion requires a unified original generic owner');
- const ice=iceDefinitions.length?createNativeIceWorld({definitions:iceDefinitions,water,
+ let objects=null;
+ if(raceRuntime?.canonicalObjects){
+  if(floatingDefinitions!==undefined||!floatingActive)throw new RangeError('Custom floating diagnostics require an authored object layout');
+  const initial=raceRuntime.snapshot(),raw=initial.objectWordsC940,bits=new DataView(new ArrayBuffer(4));
+  const read=i=>{bits.setUint32(0,raw[i]);return bits.getFloat32(0);};
+  const used=new Set(),ids=Array.from({length:initial.scene.objectCountFa40},(_,i)=>{
+   if((raw[i*49+0x4c/4]|0)!==10)return `native-object-${i}`;
+   const match=iceDefinitions.find(q=>!used.has(q)&&['x','y','z'].every((k,j)=>Math.abs(q[k]-read(i*49+j)*water.scale)<1e-6));
+   if(!match)throw new RangeError('Source ice presentation must match the complete initialized layout; select authored diagnostics for custom objects');
+   used.add(match);return match.id;
+  });
+  if(used.size!==iceDefinitions.length||definitions.length)throw new RangeError('Authored object overrides require an explicit authored object layout');
+  objects=raceRuntime.createObjectWorld({water,objectIds:ids});
+ }
+ if(!objects&&iceDefinitions.length&&definitions.length)throw new RangeError('Mixed floating and ice motion requires a unified original generic owner');
+ // Renderer compatibility is a detached view of the complete source array.
+ const ice=objects?(iceDefinitions.length?Object.freeze({snapshot:()=>objects.snapshot().filter(o=>o.runtimeKind===10),
+  presentationSnapshot:objects.presentationSnapshot,breakEvents:objects.breakEvents,diagnostics:objects.diagnostics}):null):iceDefinitions.length?createNativeIceWorld({definitions:iceDefinitions,water,
   fragmentBurst:raceRuntime?.ordinary?raceRuntime.spawnIceFragments:null,splashAdvance:raceRuntime?.ordinary?raceRuntime.advanceIceSplashes:null}):null;
- const floating=definitions.length?createNativeFloatingWorld({definitions,water}):null;
+ const floating=!objects&&definitions.length?createNativeFloatingWorld({definitions,water}):null;
  const primary=course.sourceBuoyLayout?createNativePrimaryBuoyWorld({layout:course.sourceBuoyLayout,water}):null;
- const courseContacts=createSourceNativeContacts(course,{scale:water.scale,fixedSphereGrid,staticGeometry});
- const contacts={...courseContacts,...(primary?{racingBuoys:primary.contact}:{}),...(floating?{primarySpheres:floating.contact}:ice?{primarySpheres:ice.contact}:{})};
+ const courseContacts=createSourceNativeContacts(course,{scale:water.scale,fixedSphereGrid:objects?null:fixedSphereGrid,staticGeometry});
+ const contacts={...courseContacts,...(primary?{racingBuoys:primary.contact}:{}),...(objects?{boxes:objects.boxContact,fixedSpheres:objects.fixedContact,primarySpheres:objects.contact,
+  provenance:Object.freeze({...courseContacts.provenance,fixedSpheres:'original binary32 grid/query/contact over canonical fixedSphereWordsB138',
+   dynamicAndPrimaryObjects:'complete canonical generic owner; separate primary buoy owner',objectOwner:objects.provenance}),
+  objectDiagnostics:objects.diagnostics}:floating?{primarySpheres:floating.contact}:ice?{primarySpheres:ice.contact}:{})};
  // A solo source race needs no unresolved multi-racer camera-corner predicate. Its
  // original61708 countdown, not a browser finish flag, selects this producer.
  const sourceAI=!!raceRuntime?.ordinary&&racers.length===1;
@@ -132,28 +151,29 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
     const prepared=raceRuntime.sampleAI(i,{bodiesBySlot:host.aiBodies,
      geometry:{selectionCircleNative:raceWaterAISelectionCircle(water),
       nodePositionsNative:primary.state.nodes.map(n=>({sourceRow:n.sourceRow,x:n.positionNative.x,z:n.positionNative.z})),
-      proximityObjectCentersNative:ice?ice.state.nodes.map(o=>({x:o.position[0],z:o.position[2]})):(floating?.state.objects??[]).map(o=>({x:F(o.position.x/water.scale),z:F(o.position.z/water.scale)}))},waterField:water.field});
+      proximityObjectCentersNative:objects?objects.snapshot().map(o=>({x:o.positionNative[0],z:o.positionNative[2]})):ice?ice.state.nodes.map(o=>({x:o.position[0],z:o.position[2]})):(floating?.state.objects??[]).map(o=>({x:F(o.position.x/water.scale),z:F(o.position.z/water.scale)}))},waterField:water.field});
     host.lastAIInput=prepared;return {...prepared.controls,action16f4:prepared.action16f4};
    }}:{}),
    hullStart,contacts,powerSteps:r.power,sourceState:raceRuntime?()=>({...raceRuntime.scene(),...(raceRuntime.ordinary?{sourceTick:raceRuntime.inputClock()}:{}),
     catchup:raceRuntime.catchupContext?.(i,host.world.adapters.map(a=>({x:F(a.hull.center.x/a.hull.scale),z:F(a.hull.center.z/a.hull.scale)})))}):sourceStates[i]??(recovery?{simulationState:3}:{actorState:22,simulationState:3}),...bundle,
    ...(recovery?{riderRecovery:{courseDatumNative:()=>water.field.datumNative,raceFinished:()=>r.finishTime!==null,...bundle.initialRiderRecovery}}:{})});
  });
- const host={racers,bundles,contacts,primary,primaryActive,ice,floating,floatingActive,presentations:[],onFrame,raceRuntime,onLaunchFrame,world:null,
+ const objectTransformResources=objects?raceRuntime.objectTransformResources:null;
+ const host={racers,bundles,contacts,primary,primaryActive,objects,ice,floating,floatingActive,presentations:[],onFrame,raceRuntime,onLaunchFrame,world:null,
   provenance:Object.freeze({status:'ordinary-source-solver-integration-preview',riderGeometry:'authored-modern-anatomy',
    initialHeight:hullStarts.length?'source-grid-transform':'course-datum',tuning:'explicit-native-indices; default5/5/5',
    hullStartup:'decoded packed16.16 transform; source point/frame/rest/damping recipe with authored local shape',
    clock:'five10ms hull ticks then one water update',controls:'digital-accelerator; brake-coasts; B-crouch; R-slide',
    actorRecoveryAndTricks:false,nativeGestureAndIdleActions:!!raceRuntime?.ordinary,riderRecovery:recovery,physicalRiderPresentation:true,
    recoveryGeometry:'authored anatomy/remount; reconstructed procedural fall/stumble; explicit authored rest/circle/history policy',
-   nativeRacerCollision:craftContacts,sourcePrimaryBuoyContacts:!!primary,sourceGenericIceContacts:!!ice,sourceAIInput:sourceAI})};
+   nativeRacerCollision:craftContacts,sourcePrimaryBuoyContacts:!!primary,sourceGenericIceContacts:!!ice,canonicalCourseObjects:!!objects,sourceAIInput:sourceAI})};
  if(raceRuntime?.ordinary){
   // Fresh browser inactive body slots are explicitly zero; active B64/B68
   // both come from the host's selected numeric rider profile. Retained AI
   // words are patched by890B4, never replaced with a neutral driver object.
   const profiles=Array.from({length:4},(_,i)=>adapters[i]?.hull.rider??0);
   host.aiInitialization=raceRuntime.initializeAI({hullProfilesB64:profiles,avatarsB68:profiles,
-   objectTypes4c:ice?ice.state.nodes.map(o=>o.kind):(floating?.state.objects??[]).map(o=>o.runtimeKind)});
+   objectTypes4c:objects?objects.snapshot().map(o=>o.runtimeKind):ice?ice.state.nodes.map(o=>o.kind):(floating?.state.objects??[]).map(o=>o.runtimeKind)});
   bindRaceWaterCameraStorage(water,raceRuntime.cameraStorage);
   host.spray=createNativeRaceSpray({adapters,field:water.field,courseIndex:course.sourceWaterCourseIndex});
  }
@@ -210,18 +230,20 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
   const objectMotionActive=!raceRuntime?.ordinary||raceRuntime.objectMotionActive();
   const keepRunning=host.onFrame?host.onFrame(host,context,ordinary):undefined;
   if(primary)primary.afterFrame(host.world,context,{active:host.primaryActive&&objectMotionActive});
-  if(ice)ice.afterFrame(host.world,context,{active:objectMotionActive});
+  if(objects){objects.afterFrame(host.world,context);objects.updateTransforms(host.world,context,objectTransformResources);}
+  else if(ice)ice.afterFrame(host.world,context,{active:objectMotionActive});
   if(floating)floating.afterFrame(host.world,context,{active:host.floatingActive&&objectMotionActive});
   //6E3A8 follows7DBC0 with Southern's generic fixed-sphere Y writes.
   // Tags1/4 follow datum; tag5 mast bases retain authored Y. This is an
   // activity-gated source frame operation, never a render-time correction.
-  if(course.sourceWaterCourseIndex===7&&objectMotionActive&&fixedSphereGrid)
+  if(!objects&&course.sourceWaterCourseIndex===7&&objectMotionActive&&fixedSphereGrid)
    for(const sphere of fixedSphereGrid.spheres)if(sphere.runtimeTag!==5)sphere.y=water.field.datumNative*water.scale;
   // The original caller stamps course rollers AFTER object motion. Read72c
   // here from the canonical state, not from the earlier water/input latch.
   if(raceRuntime?.ordinary)advanceRaceWaterRollers(water,{active:objectMotionActive,rollerState72c:raceRuntime.courseRollerState()});
   if(host.spray)host.spray.advance(raceRuntime.sprayInputs(),raceRuntime.cameraStorage.read());
-  if(ice)ice.afterEffects(host.world,context);
+  if(objects)objects.afterEffects(host.world,context);
+  else if(ice)ice.afterEffects(host.world,context);
   let launchContinues=true;
   if(raceRuntime){
    host.lastHUD=raceRuntime.ordinary?raceRuntime.advanceHUD():null;

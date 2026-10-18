@@ -31,7 +31,7 @@ test('native two-player setup uses both physical riders, the selected class obje
   assert.deepEqual(spheres.slice(-4).map(q=>[q.x,q.y,q.z]),
    [[7582,23,292],[7483,18,659],[-7136,20,779],[-7272,13,424]].map(p=>p.map(v=>v*.025)));
   assert.ok(spheres.slice(-4).every(q=>q.hidden&&q.runtimeTag===5));
-  assert.equal(s.sourceSphereGrid.spheres.length,[43,46,48,48][difficulty]);
+  assert.equal(s.sourceSphereGrid,null);assert.equal(s.nativeHost.objects.fixedSnapshot().length,[43,46,48,48][difficulty]);
   assert.deepEqual(s.course.sourceDecorations,[]);assert.deepEqual(s.course.ramps,[]);
   assert.equal(s.raceWater.players,2);assert.equal(s.raceWater.baseAmplitudeNative,
    sourceWaterConditions({courseIndex:1,players:2,stunt:false,reverse:!!s.course.reverse}).baseAmplitudeNative);

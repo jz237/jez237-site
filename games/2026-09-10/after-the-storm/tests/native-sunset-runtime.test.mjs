@@ -36,7 +36,7 @@ test('prepared Sunset ordinary owners select their own course, 1200-unit slack, 
   assert.equal(runtime.staticContactGeometry.boxes,runtime.retirementGeometry.boxes);
   assert.equal(runtime.resetLayout.checkpointSlackNative,1200);assert.equal(runtime.sourceBuoyLayout.checkpointSlackNative,1200);
   assert.equal(runtime.directionFlag1f90,difficulty===3?1:0);assert.equal(runtime.sourceDifficulty,[0,1,2,2][difficulty]);
-  assert.equal(runtime.resetLayout.boundaryNativeXZ.length,81);assert.deepEqual(runtime.resetLayout.objectKinds4c,[]);
+  assert.equal(runtime.resetLayout.boundaryNativeXZ.length,81);assert.deepEqual(runtime.resetLayout.objectKinds4c,[1]);
   assert.deepEqual(runtime.allowedRegionsNative,course.sourceCourseOutRegions.allowedRegionsNative);
   for(const n of runtime.aiTargetTable.nodes){
    const row=runtime.data.nodes[n.sourceRow],words=runtime.data.recordWordsBySourceRow[n.sourceRow];

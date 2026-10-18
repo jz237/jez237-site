@@ -19,6 +19,43 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — complete object owner connected to ordinary native races
+
+The admitted Sunny/Sunset/Southern/Glacier native time/versus previews now start
+from the complete selected generic-object, fixed-sphere, fixed-grid, collision
+plane and packed-matrix arrays. Fresh web storage begins at explicit zero;
+recovered71E70/73E6C/744EC numeric routines initialize it before75310 reset.
+Reset object kinds and890B4 AI proximity initialization use complete source
+indices, including ramps and decoration rows, rather than an ice-only subset.
+Retained diagnostic state must supply its own full storage; it is not reset.
+
+Physical7F700/7EF80/7E938 contacts now read those canonical arrays. The shared
+frame runs primary motion, generic7DBC0, Southern fixed tide and6E0F4 transforms,
+rollers, spray and ice splashes in order. Both riders share immediate contact
+writes and the existing random seed. Ice presentation/replay uses detached
+views with stable authored mesh IDs. The modern double-precision fixed grid is
+no longer constructed for these canonical races. Explicit authored diagnostic
+layouts retain the former custom-object hooks without claiming source parity.
+
+The startup factory matches all108 original ordinary resource fixtures. All32
+admitted course/class/player launches match the five full original buffer
+hashes and AI index prefixes. Live pause/activity tests cover broken-ice age and
+visibility with frozen hull simulation. Complete Glacier and Southern races,
+all four two-player classes, and30/60/144Hz histories pass. A1440x900 High browser
+check ran two-player Glacier without JavaScript errors; only the local favicon
+returned404. Resolution, mesh density, textures and modern mode admission are
+unchanged. Native Stunt, remaining courses and four-racer admission remain work
+in progress; this is not a claim of full gameplay parity.
+
+Sunset's forced-AI inspection now includes the source ramp proximity count and
+exact fixed-sphere response. Hard/Expert complete with2/3 total missed buoys;
+the former partial-world test bounds were1/2. Removing only ramp proximity in
+a private controlled comparison yields3/2, so the trajectory change cannot be
+attributed solely to that selector. Normal/Hard human-control inspection still
+finishes with zero misses. The AI runs use the authored hull and are completion
+checks, not original-ROM driving traces; no source rules were relaxed to meet
+the old approximate-world expectations.
+
 ## Unpublished — canonical moving collision surfaces
 
 Full7F700 box contacts now have a canonical entry point that decodes the latest

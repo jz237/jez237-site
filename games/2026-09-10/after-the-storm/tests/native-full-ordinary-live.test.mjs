@@ -60,5 +60,9 @@ test('source two-player simultaneous finishes choose a tie and apply the numeric
  for(const r of s.racers)r.finishTime=1.025;
  frames(s,1,[{},{}]);assert.equal(s.phase,'postrace');assert.equal(s.result.winner,null);assert.equal(s.result.time,1.025);
  const a=s.nativeLaunch.snapshot();assert.equal(a.scene.result6f0,3);assert.equal(a.profileWordsB330[48],0);assert.equal(a.profileWordsB330[49],0);
- frames(s,0,[{},{}]);stepRace(s,[{},{}],1);assert.deepEqual(s.nativeLaunch.snapshot(),a);
+ // The postrace presentation remains live; its next partial outer frame can
+ // advance ambientD4b00 without repeating the result/status consumer.
+ frames(s,0,[{},{}]);stepRace(s,[{},{}],1);const after=s.nativeLaunch.snapshot();
+ assert.deepEqual(after.raceWords1f94,a.raceWords1f94);assert.deepEqual(after.profileWordsB330,a.profileWordsB330);
+ assert.equal(after.scene.result6f0,a.scene.result6f0);
 });

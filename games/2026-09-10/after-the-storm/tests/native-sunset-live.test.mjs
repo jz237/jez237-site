@@ -44,7 +44,12 @@ for(const difficulty of [0,1,2,3])test(`native Sunset class${difficulty} origina
   stepRace(s,{},1/60);
  }
  const r=s.racers[0];assert.equal(s.phase,'postrace');assert.equal(r.dq,'');assert.equal(r.lapTimes.length,3);
- assert.equal(r.passed,s.course.gates.length*3);assert.ok(r.misses<=[0,1,2,2][difficulty]);
+ // Full source objects include the kind1 ramp in890B4's proximity count;
+ // exact fixed-sphere contacts also replace the earlier double solver. These
+ // authored-hull inspection bounds describe this configuration, not an
+ // original-ROM AI race trace. Ordinary human-control checks above stay clean.
+ assert.equal(s.nativeHost.aiInitialization.proximityCount,1);
+ assert.equal(r.passed,s.course.gates.length*3);assert.ok(r.misses<=[0,2,3,2][difficulty]);
  assert.ok(r.finishTime>60&&r.finishTime<180);assert.ok(s.nativeHost.lastAIInput);
 });
 

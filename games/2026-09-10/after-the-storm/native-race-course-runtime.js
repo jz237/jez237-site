@@ -12,10 +12,12 @@ import {nativeGlacierRetirementGeometry} from './native-glacier-support.js';
 import {GLACIER_NATIVE_ROUTE_ROWS_BY_CLASS} from './source-glacier-rows.js';
 import {nativeRaceShoreGeometry} from './native-shore-geometry.js';
 import {SOUTHERN_NATIVE_AI_ROWS_BY_CLASS} from './source-southern-ai-routes.js';
+import {createNativeCourseObjectStartup} from './native-course-object-startup.js';
 
 // Numeric course owners for Sunny/Sunset/Southern/Glacier integration.
 // Mode and source-water admission remain the race host's responsibility.
-export function createNativeRaceCourseRuntime({course,difficulty,players}={}){
+export function createNativeRaceCourseRuntime({course,difficulty,players,objectLayout='source'}={}){
+ if(!['source','authored'].includes(objectLayout))throw new RangeError('Select source objects or explicit authored diagnostics');
  const courseIndex=course?.sourceWaterCourseIndex;
  if(![1,2,7,8].includes(courseIndex)||!Number.isInteger(difficulty)||difficulty<0||difficulty>3||![1,2].includes(players))
   throw new RangeError('Ordinary data preparation requires Sunny/Sunset/Southern/Glacier source rows and one/two players');
@@ -31,8 +33,10 @@ export function createNativeRaceCourseRuntime({course,difficulty,players}={}){
  const retirementGeometry=courseIndex===1?SUNNY_NATIVE_RETIREMENT_GEOMETRY:courseIndex===2?nativeSunsetRetirementGeometry({players}):courseIndex===7?nativeSouthernRetirementGeometry({players}):nativeGlacierRetirementGeometry({players});
  const staticContactGeometry=Object.freeze({...retirementGeometry,shore:nativeRaceShoreGeometry({courseIndex,players})});
  const data=createNativePrimaryCourseData({rows:course.sourceRouteRowsByClass[difficulty],courseIndex,mode620});
+ const sourceDifficulty=course.sourceMetadata.sourceNativeClassByDifficulty[difficulty];
+ const objectStartup=objectLayout==='source'?createNativeCourseObjectStartup({courseIndex,players,mode620,difficulty:sourceDifficulty,reverseDab68:Number(!!course.reverse)}):null;
  const resetLayout=createNativeRaceResetLayout({nodes:data.nodes,
-  boundaryNativeXZ:course.boundaryMarkers.map(([x,z])=>({x:x/scale,z:z/scale})),objectKinds4c:[],
+  boundaryNativeXZ:course.boundaryMarkers.map(([x,z])=>({x:x/scale,z:z/scale})),objectKinds4c:objectStartup?.objectKinds4c??[],
   checkpointSeconds:15,checkpointSlackNative:rules.checkpointSlackNative,
   recordTimeTemplateWords:[599999,0,0,0,0x494e4900],stuntTemplateWords:[0,0,0,0x494e4900]});
  const primaryLayout=createNativePrimaryRacePhaseLayout({nodes:data.nodes,regionsNative:rules.regionsNative,fortressRegionsNative:[],
@@ -79,7 +83,7 @@ export function createNativeRaceCourseRuntime({course,difficulty,players}={}){
   const route=createNativeAIRoute({nodes,scale,courseIndex,family});
   aiFamilies[family]=Object.freeze({family,data:alternate,route,targetTable:createNativeAITargetTable({route,nodes})});
  }
- return Object.freeze({courseView,data,resetLayout,primaryLayout,sourceBuoyLayout,mode620,aiRoute,aiTargetTable,aiFamilies:Object.freeze(aiFamilies),retirementGeometry,staticContactGeometry,...regions,
-  sourceDifficulty:course.sourceMetadata.sourceNativeClassByDifficulty[difficulty],
+ return Object.freeze({courseView,data,resetLayout,objectStartup,primaryLayout,sourceBuoyLayout,mode620,aiRoute,aiTargetTable,aiFamilies:Object.freeze(aiFamilies),retirementGeometry,staticContactGeometry,...regions,
+  sourceDifficulty,
   directionFlag1f90:rules.checkpointSide,scale});
 }

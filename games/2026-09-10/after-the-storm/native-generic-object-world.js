@@ -115,6 +115,11 @@ export function createNativeGenericObjectWorld({water,readRaceState,commitRaceSt
      broken:kind===10&&raw[b+0xbc/4]!==0,collected:kind===8&&raw[b+0xbc/4]!==0,age:raw[b+0x6c/4]|0};
    });
   },
+  fixedSnapshot(){
+   const state=read(),raw=state.fixedSphereWordsB138;
+   return Array.from({length:state.scene.fixedSphereCountC938},(_,i)=>({sourceIndex:i,runtimeTag:raw[i*6+4]|0,
+    positionNative:axes.map((_,j)=>number(raw[i*6+j])),position:Object.fromEntries(axes.map((k,j)=>[k,number(raw[i*6+j])*scale]))}));
+  },
   breakEvents(){return events.map(e=>({...e,positionNative:[...e.positionNative],velocityNative:[...e.velocityNative]}));},
   fragmentSnapshot(){return fragments?structuredClone(fragments):null;},
   splashSnapshot(){return splashes?structuredClone(splashes):null;},

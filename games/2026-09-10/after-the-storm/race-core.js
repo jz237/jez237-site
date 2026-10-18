@@ -64,7 +64,7 @@ export const angleDelta=a=>Math.atan2(Math.sin(a),Math.cos(a));
 export function makeCoveCourse(){return getCourse('greyhaven');}
 export const COVE=makeCoveCourse();
 export function settings(rider=0,tune={}){const r=RIDERS[rider];const engine=clamp(Number(tune.engine)||0,-1,1),grip=clamp(Number(tune.grip)||0,-1,1),handling=clamp(Number(tune.handling)||0,-1,1);return {...r,speed:r.speed+engine*1.4-grip*.7,accel:r.accel-engine*.8,grip:r.grip+grip*1.4,handling:r.handling+handling*.35};}
-export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,difficulty=0,course=COVE,gridOrder=null,seaState='course',secondRider=1,secondTune={},handicap=false,swapColours=false,physics='modern',nativeTunes=[],nativeTuneModes=[],nativeInitialRaceState,nativeRecordSession}={}){
+export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,difficulty=0,course=COVE,gridOrder=null,seaState='course',secondRider=1,secondTune={},handicap=false,swapColours=false,physics='modern',nativeTunes=[],nativeTuneModes=[],nativeInitialRaceState,nativeRecordSession,nativeObjectLayout='source'}={}){
  if(!['modern','native'].includes(physics))throw new RangeError('Unknown race physics');
  if(nativeRecordSession!==undefined&&physics!=='native')throw new RangeError('Native record sessions require native physics');
  if(physics==='native'&&(!['time','versus'].includes(mode)||seaState!=='course'||![1,2,7,8].includes(course.sourceWaterCourseIndex)))
@@ -77,7 +77,7 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
  if(course.geometryForPlayers)course={...course,...course.geometryForPlayers(mode==='versus'?2:1)};
  if(course.sourceObjectSelection){const playerCount=mode==='versus'?2:1;course={...course,playerCount,rocks:course.hazardsForPlayers(playerCount),sourceDecorations:course.decorationsForPlayers?course.decorationsForPlayers(playerCount):course.sourceDecorations};}
  if(course.contactVolumesForRamps)course={...course,contactVolumes:course.contactVolumesForRamps(course.ramps)};
- const nativeCourseRuntime=physics==='native'?createNativeRaceCourseRuntime({course,difficulty,players:mode==='versus'?2:1}):null;
+ const nativeCourseRuntime=physics==='native'?createNativeRaceCourseRuntime({course,difficulty,players:mode==='versus'?2:1,objectLayout:nativeObjectLayout}):null;
  if(nativeCourseRuntime)course=nativeCourseRuntime.courseView;
  const ids=mode==='versus'?[rider,secondRider]:[rider,...RIDERS.map((_,i)=>i).filter(i=>i!==rider)],g=course.gates[0];
  const racers=ids.slice(0,mode==='versus'?2:['race','championship'].includes(mode)?4:1).map((id,i)=>{const grid=mode==='versus'?i:gridOrder?gridOrder.indexOf(id):i===0?3:i-1,lateral=(grid%2?1:-1)*2.4,back=7+Math.floor(grid/2)*5;return {id,grid,human:i===0||mode==='versus',player:i===0?0:mode==='versus'?1:null,stats:settings(id,i===0?tune:mode==='versus'?secondTune:{}),x:g.x-g.tx*back+g.tz*lateral,z:g.z-g.tz*back-g.tx*lateral,heading:Math.atan2(g.tx,g.tz),vx:0,vz:0,speed:0,turn:0,throttle:0,power:freeRide||mode==='stunt'?5:0,misses:0,next:1,passed:0,lap:1,lapStart:0,lapTimes:[],finishTime:null,dq:'',out:0,collision:0,recover:0,event:'',eventTime:0,previousWave:0,hydro:createHydro(),stunt:createStunt(course),raceTime:0};});
@@ -116,7 +116,7 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
  if(nativeLaunch)nativeLaunch.initializeWater(raceWater.field,raceWater.baseAmplitudeNative);
  setRaceWater(raceWater);setCoastalDepth(seaState==='course'?null:course);
  const sourceFixedSpheres=(course.rocks||[]).filter(q=>q.sourceFixedSphere&&!q.breakable);
- const sourceSphereGrid=sourceFixedSpheres.length?createSourceFixedSphereGrid(sourceFixedSpheres,{scale:nativeScale}):null;
+ const sourceSphereGrid=!nativeLaunch?.canonicalObjects&&sourceFixedSpheres.length?createSourceFixedSphereGrid(sourceFixedSpheres,{scale:nativeScale}):null;
  const state={sourceSphereGrid,raceWater,courseDatum:createCourseDatum(course),breakables:createBreakableState(),localWater,waterObstacles:obstacles,fixedPiles:(course.crossbars||[]).flatMap(barrierPiles),waveSeed:surfSeed.value,swapColours:!!swapColours,passageOpenedAt:Infinity,mode,freeRide,seaState,handicap:!!handicap,phase:freeRide?'running':'countdown',countdown:freeRide?0:3,time:0,course,racers,laps:configuredLaps,difficulty,events:[],result:null,weather:conditions(course,0),finishWait:0,physics,nativeHost:null};
  if(physics==='native'){
   // Preview histories must not compete with saved modern-physics records.

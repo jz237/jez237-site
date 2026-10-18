@@ -28,6 +28,7 @@ import {nativeCourseDatumAfterPhysics} from './native-course-datum.js';
 import {spawnNativeIceFragments} from './native-ice-fragments.js';
 import {stepNativeIceSplashes} from './native-ice-splashes.js';
 import {nextNativeSprayFrameCounter} from './native-spray-levels.js';
+import {createNativeGenericObjectWorld} from './native-generic-object-world.js';
 
 // Overlapping effect47FC, solo4800 and two-player4818 numeric entries. Ordinary
 // two-player place indices are0/1; other mode tables remain separate admission.
@@ -59,7 +60,7 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
  if(players>racers.length)throw new RangeError('Launch requires each human source slot');
  if(recordSession!==undefined&&(initialState||!courseRuntime))throw new RangeError('Record session requires a fresh ordinary launch');
  const retainedRecords=recordSession===undefined?null:copyNativeRecordSession(recordSession);
- let current,resultExit=null,continuationHandoff=null;
+ let current,resultExit=null,continuationHandoff=null,objectWorldCreated=false;
  // Browser commands are queued edges, consumed once at the source display stage.
  const cameraCommands=Array.from({length:players},()=>[]);
  const extra=racers.map(r=>({logicalTicks:r.sourceBuoys?.logicalTicks??0,missedCheckpoint:r.sourceBuoys?.missedCheckpoint??false,dqLabel:r.dq||''}));
@@ -87,6 +88,7 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
     0x22c0+c*20,0x23b0+c*20])raceWords1f94[ri(base)]=599999;
   }
   current=createNativeRaceState({raceWords1f94,hudWords7788,profileWordsB330,i1Words9440,aiWords3c60:Array(NATIVE_AI_STORAGE_WORDS).fill(0),
+   ...courseRuntime?.objectStartup?.storage,
    ...(courseRuntime?{menuWordsE658:Array(21).fill(0),deviceWords4308:Array(10).fill(0),
     // Fresh web profile policy: YOU initials for each rider/variant. No
     // cartridge save data; these14-byte entries cross u32 word boundaries.
@@ -95,6 +97,7 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
     // Fresh web menu selection/latch, plus verified numeric return tables.
     continuationDataWords60f0:Array.from({length:20},(_,i)=>[40,10,20,2,30,2][i-13]??0)}:{}),scene:{
    players,racerCount:racers.length,primaryHumanIndex:0,secondaryHumanIndex:1,courseIndex,
+   ...(courseRuntime?.objectStartup?{...courseRuntime.objectStartup.counts,forceStunt824c:0,rampFilterOverride8254:0,alternate8250:0}:{}),
    mode620:players===2?1:0,mode608:players===2?1:0,main638:1,phase650:0,simulation648:1,
    clockStopped817c:1,activity624:-1,event628:0,gameStateAb24:40,specialAb64:0,ready6fc:0,
    missesEnabled72e:1,result6f0:0,ambientD4b00:0,field4964:0,field4970:Number(handicap),resultEffect393c:0,toggleD9914:0,
@@ -126,6 +129,8 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
   throw new RangeError('Retained launch scene must match the live participants/course');
  if(courseRuntime&&(current.scene.primaryCount!==courseRuntime.data.nodes.length||current.scene.finishSourceRow!==courseRuntime.data.finishSourceRow))
   throw new RangeError('Retained ordinary state must match the initialized primary course');
+ if(courseRuntime?.objectStartup&&Object.keys(courseRuntime.objectStartup.storage).some(key=>!current[key]))
+  throw new RangeError('Source object layout requires all retained object, plane and fixed-grid owners');
  function setWord(slot,index,value,min=0,max=2147483647){integer(value,'record value',min,max);if(word(slot,index)!==value)commit([write(slot,index,value)]);}
  function sourceView(slot){
   const view={};
@@ -186,6 +191,15 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
  }
  const runtime={
   ordinary:!!courseRuntime,
+  canonicalObjects:!!courseRuntime?.objectStartup,
+  objectTransformResources:courseRuntime?.objectStartup?.transformResources??null,
+  createObjectWorld({water,objectIds}){
+   if(!runtime.canonicalObjects)throw new Error('Source object world requires initialized source storage');
+   if(objectWorldCreated)throw new Error('Source object world may be attached only once');
+   const world=createNativeGenericObjectWorld({water,objectIds,readRaceState:()=>current,
+    commitRaceState:next=>{current=createNativeRaceState(next);},fragmentBurst:runtime.spawnIceFragments,splashAdvance:runtime.advanceIceSplashes});
+   objectWorldCreated=true;return world;
+  },
   scene:()=>({simulationState:current.scene.simulation648,phase650:current.scene.phase650}),
   inputClock:()=>integer(current.scene.inputTick1960,'shared input clock',0,0xffffffff),
   advanceInputClock(){

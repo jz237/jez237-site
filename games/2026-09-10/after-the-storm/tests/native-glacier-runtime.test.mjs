@@ -15,7 +15,7 @@ test('Glacier native selection installs complete source rows, visible markers, s
   assert.equal(s.course.sourceRouteRowsByClass,rows);assert.equal(Object.keys(s.course.sourceVisibleGateIndices).length,17);
   assert.equal(s.nativeHost.primary.state.nodes.length,scene.primaryCount);
   assert.equal(s.nativeHost.ice.snapshot().length,12);assert.equal(s.nativeHost.floating,null);
-  assert.equal(s.sourceSphereGrid.spheres.length,108);assert.equal(s.raceWater.amplitudeThresholdNative,14730.544921875);
+  assert.equal(s.sourceSphereGrid,null);assert.equal(s.nativeHost.objects.fixedSnapshot().length,108);assert.equal(s.raceWater.amplitudeThresholdNative,14730.544921875);
   assert.equal(s.nativeContactAudio.snapshot().globals.courseIndex,8);
   assert.equal(course.sourceRouteRowsByClass,undefined);assert.equal(course.sourceBuoyLayout,undefined);assert.deepEqual(course.anchors,anchors);
   const modern=createRace({course,difficulty,mode});assert.equal(modern.physics,'modern');assert.equal(modern.course.sourceBuoyLayout,undefined);

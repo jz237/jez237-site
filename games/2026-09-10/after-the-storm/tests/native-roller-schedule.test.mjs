@@ -58,7 +58,7 @@ test('deferred course stage runs once, invalidates earlier snapshots, and reject
  const paused=structuredClone(s);stepRaceWater(s,crafts,1,{active:false});assert.deepEqual(s,paused);
 });
 
-const create=(options={})=>createRace({mode:'time',course:getCourse('greyhaven'),physics:'native',...options});
+const create=(options={})=>createRace({mode:'time',course:getCourse('greyhaven'),physics:'native',nativeObjectLayout:'authored',...options});
 const rollerCourse=()=>({...getCourse('greyhaven'),rollersForPlayers:()=>[{nativeRow:row}],
  dynamicObjectsForPlayers:()=>[{id:'roller-schedule-fixture',x:40,y:-.5,z:40}]});
 
