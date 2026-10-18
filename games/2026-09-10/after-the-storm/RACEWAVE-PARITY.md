@@ -19,6 +19,30 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — native stunt timer and retirement prelude
+
+The shared Stunt state now includes the original783AC prelude: selected-player
+event retirement, delayed finish-bonus enqueue, source clocks and timeout
+coasting. A timed-out rider may coast until native speed times1.8 is below10,
+or the expired counter exceeds200 calls. The existing numeric retirement
+consumer writes the actual status and shared DQ metric once. Event retirement
+returns before the delayed bonus; timeout retirement follows that enqueue.
+
+Clock gates preserve completed/retired records, stopped clocks and the shared
+finish latch. Lap/total increments retain signed arithmetic and299999 caps;
+the time-left counter, ambient sample and displayed-power approach follow the
+source order. The canonical wrapper consumes award recipes at their original
+position and reports early returns so later move/checkpoint work can be skipped.
+It includes the delayed-award producer, which must not be called again separately.
+
+A fresh read-only EVO X2 Ghidra query preserved all9 project files.338 prepared
+cases executed the original prefix and nested762D0 retirement in25,121
+instructions; all1,149 exported instruction records matched ROM bytes. Tests
+cover source gates, signed boundaries, exact timeout thresholds, queue order,
+unchanged neighboring words and late-input failure without partial writes.
+Full checkpoint progression, finish bookkeeping, rings and live Stunt admission
+remain incomplete. High-resolution rendering is unchanged.
+
 ## Unpublished — shared stunt scoring state
 
 Stunt queue, pulse, totals, move accumulation, repeat/completion flags and score

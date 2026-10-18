@@ -38,6 +38,7 @@ import {prepareNativePrimaryResultEstimates} from './native-primary-standings.js
 import {enqueueNativeStuntAward,displayNativeStuntAwards} from './native-stunt-awards.js';
 import {prepareNativeStuntRecords} from './native-stunt-records.js';
 import {createNativeStuntScoring,stepNativeStuntScoring} from './native-stunt-scoring.js';
+import {prepareNativeStuntPrelude} from './native-stunt-prelude.js';
 
 const MIN=-2147483648,MAX=2147483647,RACE_BASE=0x1f94,RACE_WORDS=1693,HUD_BASE=0x7788,HUD_WORDS=1442;
 const resourceOwnerWords={resourceWordsB330:20,resourceWordsB538:8,resourceWordsE73c:43};
@@ -211,6 +212,20 @@ const stuntRepeatWords={handstand:0x39d8,backwards:0x39dc,standing:0x39e0,dive:0
 const stuntCompletedWords={handstand:0x39e8,backwards:0x39ec,standing:0x39f0,somersault:0x39f4,dive:0x39f8,
  negativeRoll:0x39fc,positiveRoll:0x3a00,flip:0x3a04};
 const stuntModeActive=s=>sceneValue(s,'activity624')===-1&&sceneValue(s,'mode620')===11;
+
+/** Source783AC prelude in the shared state, including its delayed-award call.
+ * Do not also call prepareNativeRaceStuntDelayedAwardUpdate for this racer.
+ * On earlyReturn, skip that racer's later move AND checkpoint consumers. */
+export function prepareNativeRaceStuntPreludeUpdate(state,input){
+ const next=copy(state);
+ if(!stuntModeActive(next))return freeze({state:next,applied:false,effects:[],diagnostic:{earlyReturn:false,reason:null}});
+ const prepared=prepareNativeStuntPrelude({raceWords1f94:next.raceWords1f94,globals:next.scene},input),effects=[];
+ for(const op of prepared.operations){
+  if(op.kind==='stuntAwardEnqueue')commitStuntAwards(next,enqueueNativeStuntAward(stuntAwardsView(next),op.award).state);
+  else effects.push(...apply(next,[op]));
+ }
+ return freeze({...prepared,state:next,applied:true,effects});
+}
 
 /** Reached delayed-award slice78490..784D4, before the later clock/retirement
  * and move branches. The enclosing783AC event-retirement early return must
