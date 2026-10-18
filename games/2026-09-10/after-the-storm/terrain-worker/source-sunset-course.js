@@ -1,8 +1,8 @@
-import {nativeRaceCourseRegions} from './native-course-regions.js?v=22930fe0a660';
-import {nativeRollerStep} from './native-water-rollers.js?v=22930fe0a660';
-import {shoreLines} from './shore-contact.js?v=22930fe0a660';
-import {facetedSurface} from './faceted-surfaces.js?v=22930fe0a660';
-import {SUNSET_NATIVE_SCALE,sunsetRampVolumes,sunsetContactVolumes} from './source-sunset-boxes.js?v=22930fe0a660';
+import {nativeRaceCourseRegions} from './native-course-regions.js?v=1404a4f711f8';
+import {nativeRollerStep} from './native-water-rollers.js?v=1404a4f711f8';
+import {shoreLines} from './shore-contact.js?v=1404a4f711f8';
+import {facetedSurface} from './faceted-surfaces.js?v=1404a4f711f8';
+import {SUNSET_NATIVE_SCALE,sunsetRampVolumes,sunsetContactVolumes} from './source-sunset-boxes.js?v=1404a4f711f8';
 
 // Independent numeric source reconstruction, not original graphics or code.
 // The public registration supplies checked browser navigation. The standalone

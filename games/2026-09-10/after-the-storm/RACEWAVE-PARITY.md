@@ -6194,3 +6194,39 @@ existing presentation/Port geometry checks, Twilight regressions and the full
 physical Port run pass. All384 module hashes in four entry pages are refreshed.
 Native Dolphin, Drake and Fortress Stunt scenes remain outstanding, along with
 ordinary-course admission and the broader gameplay parity requirements.
+
+## Dolphin Park native Stunt scene — 2026-10-18
+
+Dolphin Park now has a source-aligned native Stunt scene alongside its unchanged
+modern Free Ride map. Its100 finite terrain triangles were reconstructed by
+solving the original plane intersections and checked against the selected
+numeric collision resource. Every centroid agrees with the binned display
+surface. Its55 shoreline edges retain their original endpoints and topology:
+four closed islands and one open three-edge chain. No closing collision edge
+is added. Tropical island elevation inside closed outlines remains authored
+scenery; the finite shallows and native physical support stay source-owned.
+
+All205 fixed spheres retain original order and centers:35 visible posts,
+144 boundary markers and26 hidden geometry contacts. The scene binds all ten
+rings, four jumps with24 finite surfaces, and twelve active decoration positions.
+Detailed wooden decking links the measured post clusters at the decoration
+height; its spans and furniture are authored visuals, not recovered artwork or
+new physical roofs. Terrain, depth-map and ramp tessellation resolutions remain
+unchanged. The terrain worker matches the foreground byte for byte and uses a
+distinct native scene cache identity.
+
+An authored helm drives the complete route using throttle and steering from
+the original start. The seed17 logical-frame-provider run collects all ten rings,
+crosses all four source checkpoints, drains awards, inserts the score and
+reaches the native result handoff with3,850 points. Recorded hull heights show
+physical climbs at all four jumps, reaching3.85 world metres; no scripted launch
+or position edits were used. Each checkpoint retains its15-second limit.
+
+A browser run at High quality on a1440x900 canvas independently finishes all
+four checkpoints and ten rings with3,835 points. Water, island shores, detailed
+craft and jump surfaces were inspected. There were no JavaScript or shader
+errors; one local missing-resource404 remained. Three scene tests, the full
+physical route test and eighteen existing Dolphin/presentation/Port/Twilight
+regressions pass. All386 module hashes in four entry pages are refreshed.
+Native Stunt is still opt-in. Drake and Fortress Stunt scenery, ordinary-course
+coverage, original AI and the wider parity objective remain incomplete.

@@ -92,6 +92,13 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
  }
  // Static source placements select independently authored beach furniture.
  // Their variants locate objects; their original artwork/identity is not used.
+ if(course.sceneryDecks){
+  const {height,width,path,branches,platforms}=course.sceneryDecks;
+  const plank=(x,z,w,d,angle=0)=>{const g=new T.Group();g.position.set(x,height-.12,z);g.rotation.y=angle;root.add(g);
+   box(0,0,0,w,.24,d,wood,g);for(let at=-d/2+.4;at<d/2;at+=.45)box(0,.125,at,w,.012,.018,black,g);};
+  for(const points of [path,...branches])for(let i=1;i<points.length;i++){const a=points[i-1],b=points[i];plank((a[0]+b[0])/2,(a[1]+b[1])/2,width,Math.hypot(b[0]-a[0],b[1]-a[1])+.2,Math.atan2(b[0]-a[0],b[1]-a[1]));}
+  for(const [x,z,w,d] of platforms)plank(x,z,w,d);
+ }
  for(const q of course.sourceDecorations||[]){
   const g=new T.Group();g.position.set(q.x,q.y,q.z);g.rotation.y=Math.atan2(q.tx,q.tz);root.add(g);
   const variant=q.sourceVariant%3;
