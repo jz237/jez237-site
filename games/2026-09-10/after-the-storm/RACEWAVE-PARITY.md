@@ -19,6 +19,27 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — original spray levels and physical reference motion
+
+The B08F8 scalar spray-level calculation is reconstructed from the original
+camera/scene gates, physical motion, wet transitions and retained side levels.
+It matches579 original-instruction cases, including alternating split-screen
+ticks and hidden/dry frames that retain the preceding levels. Renderer particle
+counts are not used. This is a prepared producer; its AE210 input assembly and
+post-world scheduling still need connection before original spray playback.
+
+The actual hull now retains624CC's per-tick physical reference point27 native
+units forward and2 above the center, its displacement, and the last tick's
+center displacement. Startup seeds the reference and clears displacement.
+Eighty original-instruction cases verify the arithmetic; live batched and
+individual hull ticks agree. All92 focused hull/start/adapter/world/audio tests
+pass. No force, rendering, quality or resolution settings changed.
+
+Read-only Ghidra inspection on EVO X2 preserved all nine analysis project files.
+C0044 writes spray IO6/IO1; sequence0 routes these to channel2/5 layer1 with
+bank4 percussion, leaving the landing/impact layer0 independent. Playback and
+source polling priority remain to be implemented.
+
 ## Unpublished — live original human engine audio
 
 Native one-human and two-human previews now connect the original engine loops

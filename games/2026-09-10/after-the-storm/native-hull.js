@@ -18,6 +18,7 @@
 // this does not claim exactly100 hull passes per physical wall second.
 
 import {prepareNativeRaceStartTransform} from './native-race-start-transform.js';
+import {prepareNativeSprayMotion} from './native-spray-levels.js';
 import {prepareNativeHullStart} from './native-hull-start.js';
 import {prepareNativeAudioLateralMotion} from './native-audio-packet.js';
 
@@ -88,6 +89,12 @@ function fitFrame(points,previous){
  * computerProfile selects the recovered16ce coefficient branch. It is separate
  * from the input caller: a human-profile craft may later receive AI controls.
  */
+function sprayPose(hull){return {center:Object.fromEntries(['x','y','z'].map(k=>[k,Math.fround(hull.center[k]/hull.scale)])),up:hull.frame.up,forward:hull.frame.forward};}
+function seedSprayMotion(hull){
+ //62E50 seeds the physical reference point and clears its displacement.
+ const {point}=prepareNativeSprayMotion(ZERO,sprayPose(hull));
+ hull.sprayMotionNative={point,velocity:vec(),centerVelocity:vec()};return hull;
+}
 export function createNativeHull({position=ZERO,velocity=ZERO,heading=0,pitch=0,roll=0,rider=0,scale=.025,computerProfile=false}={}){
   finiteVector(position,'position');finiteVector(velocity,'velocity');
   if(![heading,pitch,roll,scale].every(Number.isFinite)||scale<=0)throw new RangeError('Pose must be finite and scale positive');
@@ -107,12 +114,12 @@ export function createNativeHull({position=ZERO,velocity=ZERO,heading=0,pitch=0,
   const restLengths=PAIRS.map(([a,b])=>length(difference(points[b].position,points[a].position)));
   const frame={forward:rotatedLocal([0,0,1],heading,pitch,roll),
     up:rotatedLocal([0,1,0],heading,pitch,roll),right:rotatedLocal([1,0,0],heading,pitch,roll)};
-  return {
+  return seedSprayMotion({
     points,restLengths,frame,scale,rider,computerProfile,
     center:mean(points,'position'),velocity:copy(velocity),
     motionVelocity:copy(velocity),motionDirection:normalized(velocity)||vec(),lateralMotionBfc:0,
     remainder:0,ticks:0,simulationTime:0,stepsLast:0
-  };
+  });
 }
 
 /** Browser spawn adaptation: its authored shape and world pose are explicit
@@ -164,10 +171,10 @@ export function createNativeHullFromStart({prepared,rider=0,scale=.025,computerP
   for(const k of ['field1434','field1438','field143c','field1440']){
     const value=prepared.yawFrame?.[k];if(!Number.isFinite(value))throw new TypeError('Expected the prepared horizontal frame');yawFrame[k]=value;
   }
-  return {points,restLengths,frame,center,yawFrame,scale,rider,computerProfile,velocity:vec(),motionVelocity:vec(),motionDirection:vec(),lateralMotionBfc:0,
+  return seedSprayMotion({points,restLengths,frame,center,yawFrame,scale,rider,computerProfile,velocity:vec(),motionVelocity:vec(),motionDirection:vec(),lateralMotionBfc:0,
     remainder:0,ticks:0,simulationTime:0,stepsLast:0,
     initialization:Object.freeze({geometry:'caller-owned local shape',transform:'packed16.16 decode and physical refit',
-      source:'physical hull startup only; no actor/target/scene reset claim'})};
+      source:'physical hull startup only; no actor/target/scene reset claim'})});
 }
 
 /**
@@ -249,6 +256,7 @@ function integrateTick(hull,acceleration,beforeIntegrate){
   hull.frame=fitFrame(points,hull.frame);
   hull.lateralMotionBfc=prepareNativeAudioLateralMotion(hull.lateralMotionBfc,
     {velocity50Native,right84Native:hull.frame.right});
+  hull.sprayMotionNative={...prepareNativeSprayMotion(hull.sprayMotionNative.point,sprayPose(hull)),centerVelocity:velocity50Native};
   if(hull.yawFrame){
     const F=Math.fround,f=hull.frame.forward,horizontal=F(F(F(f.x)*F(f.x))+F(F(f.z)*F(f.z)));
     if(horizontal!==0){const reciprocal=F(1/F(Math.sqrt(horizontal))),x=F(F(f.x)*reciprocal),z=F(F(f.z)*reciprocal);
