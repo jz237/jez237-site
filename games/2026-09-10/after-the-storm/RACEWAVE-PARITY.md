@@ -6973,3 +6973,42 @@ late-failure atomicity, and inspect the ordinary/overview/reverse layouts at
 The menu phase, target60 initializer, live admission and actual rider/model
 consumers are still pending; this is a verified display component, not a claim
 that the full original records menu is already available in public gameplay.
+
+### Original records menu phase and return initialization — 2026-10-18
+
+`native-records-menu-runtime.js` now composes the records portion of an original
+20Hz frame:5800 panel update,5470/AFB4 widgets,71A8 fade, then5D24 drawing and
+controls. Controller sampling precedes this phase. Unlike the ending route,
+main12 does not require an intervening physical-world update. The initial
+state66 frame clears black and suppresses controls; later frames set the source
+clip before drawing, then accept input. Consequently the returned draw remains
+the pre-control view even when that tick changes a category or begins an exit.
+
+All three exit paths now expand their initializer exactly once: titleEB180,
+menu60EC304 and continuationEC830. EC304 preserves players and simulation
+fields, initializes its fade and slots in order, clears the separate byte at
+800E5134, then requests audio9. The canonical byte operation accepts only that
+declared byte owner and rejects word/halfword aliases. Its previous meaning is
+not inferred from an unrelated overlay or address suffix.
+
+Eleven original EC304 executions match every write and ordered call. Actual
+execution of93C44 verifies its three opaque-black clears, and actual6FB0 plus
+eight71A8 updates verifies every exit-fade stage/completion/alpha. These checks
+execute943 original instructions. The eight ticks comprise a start tick, six
+rate4 alpha ticks and a completion tick; this is not a64-frame alpha increment.
+
+`native-records-menu-data.js` supplies the verified course order, label tokens,
+transform constant and a fresh62-word overlay factory. All90 numeric words
+match the private ROM data inspection. The factory is for a fresh overlay load;
+it must not erase retained slide or post-race state each frame. Cartridge
+records, font artwork, rider assets and executable code are not included.
+
+Seven integration tests cover real controller edges, initial-frame input
+suppression, pre-control drawing, horizontal/vertical slides, record-type
+changes, reverse post-name entry, all three exits, exact original fade output,
+30/60/144Hz cadence, suspended time, retained records and atomic late failures.
+Existing records, canonical state, menu initialization and ending regression
+tests also pass.421 module hashes and all four page preload sets are verified.
+The live host still needs to install the overlay at its actual load boundary
+and consume the required audio, resource and rider presentation effects. This
+does not admit an unfinished championship mode or alter rendering resolution.

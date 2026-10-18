@@ -69,7 +69,7 @@ const hudInts={recordFlag8a98:0x8a98,placeChanged8a9c:0x8a9c};
 // reverse halfword is viewed as unsigned by progress and signed by reset.
 // metadataD9b0 is the one800DA9B0 owner for both record rider attribution and
 // fallback initials. A separate nameIndexA9b0 would diverge on rider changes.
-const sceneRanges={fieldAb0c:[-32768,32767],championshipCountAa00:[-32768,32767],primaryHumanIndex:[0,3],secondaryHumanIndex:[0,3],players:[1,2],courseIndex:[0,11],
+const sceneRanges={fieldE5134:[0,255],fieldAb0c:[-32768,32767],championshipCountAa00:[-32768,32767],primaryHumanIndex:[0,3],secondaryHumanIndex:[0,3],players:[1,2],courseIndex:[0,11],
  racerCount:[0,4],primaryCount:[0,64],finishSourceRow:[0,63],activity624:[-32768,32767],event628:[-32768,32767],
  pendingPlayers60c:[-32768,32767],participantCount60e:[-32768,32767],result6f0:[-32768,32767],field62a:[-32768,32767],specialAb64:[-32768,32767],ready6fc:[-32768,32767],field4964:[0,65535],
  reverseDab68:[0,65535],missesEnabled72e:[0,65535],seed6f00:[0,65535],rngState4640:[0,0xffffffff],inputTick1960:[0,0xffffffff],style6e28:[0,65535],
@@ -554,6 +554,11 @@ function apply(s,operations){
    if(op.field==='difficulty'&&s.profileWordsB330!==undefined)s.profileWordsB330[2]=bits;
    else{const value=op.field==='rngState4640'||op.field==='inputTick1960'?bits:bits|0;
     s.scene[op.field]=integer(value,`source word ${op.field}`,...(sceneRanges[op.field]??[MIN,MAX]));}
+  }else if(op.kind==='sourceByteWrite'){
+   //800E5134 is outside the retained race/HUD/profile spans. It is a byte,
+   // not an alias of a neighboring word or another overlay's loaded data.
+   if(op.field!=='fieldE5134')throw new RangeError(`Unsupported external source byte ${op.field}`);
+   s.scene[op.field]=integer(op.value,'source byte bits',0,255);
   }else if(op.kind==='sourceHalfwordWrite'){
    if(!sceneHalves.has(op.field))throw new RangeError(`Unsupported external source halfword ${op.field}`);
    const bits=integer(op.value,'source halfword bits',0,65535);
