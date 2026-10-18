@@ -6806,3 +6806,40 @@ four page preload sets are refreshed and verified.
 This supersedes the earlier unimplemented-scroll note. The visible ending HUD,
 matrix/drawing helpers, physical ceremony world and live championship loop are
 still unfinished. These preparations do not change public mode defaults.
+
+### Championship ending layout and vector view — 2026-10-18
+
+`native-ending-presentation.js` reconstructs the semantic layout of source 602C.
+It prepares ordered round panels, class/final-round labels, per-course winner
+and time (or missing-time placeholder), course labels and exact record flags.
+The final table reads the retained sorted racer slots, resolves their selected
+avatars and names, preserves competition ranking through ties, and highlights
+the primary player's rank and points. The original conditional class prompt,
+low-byte fade intensities, point alignment, clipping, depth/color handoff and
+four ordered rider preview requests remain explicit. It also preserves the
+source's reused outer loop counter after a summary panel and rejects traversal
+beyond the retained ten-panel owner rather than reading invented memory.
+
+274 executions of the original routine (235,111 instructions) match every
+semantic command. Renderer/font/model helpers are explicit call boundaries;
+the audit executes the caller and observes its arguments and direct clip/target
+writes. The private jump table and original executable/art remain private.
+Tests cover all three classes, round types, tied/zero/large point totals,
+selected slots, reverse and expert prompt gates, missing times, skipped panel
+types, late malformed data and summary counter reuse.
+
+`native-ending-view.js` renders that layout with scalable SVG shapes and text.
+Its 320x240 viewBox is a logical coordinate system, not a raster output size.
+The game's canvas, pixel ratio and resolution settings are untouched. Label
+text and rider artwork are supplied by explicit consumers; the view does not
+invent missing racers. It keeps the preceding frame on late failure, treats
+label/name text as literal text, isolates clip IDs across views and exposes
+the visible standings through its accessible description.
+
+A private browser harness rendered all 274 layouts at 3840x2160 and 390x844,
+then rechecked the final view at 1280x720. Atomic failure, literal text and unique
+clip IDs passed. Screenshots confirm the final table and a scrolling round
+panel with its record marker. Preview records/portraits are synthetic and stay
+outside the public game. The visible layout is implemented, but live ceremony
+timing, real rider previews, physical podium world and championship integration
+are still unfinished; this does not enable a public ending mode yet.
