@@ -2,13 +2,16 @@ import {stereoWidth} from './coastal-music.js';
 const base=new URL('./assets/audio/waverace64/contacts/',import.meta.url);
 const ids=[11,12,13,14,...Array.from({length:48},(_,i)=>i+16)];
 const files=new Set([11,12,13,14,...Array.from({length:12},(_,i)=>16+i*4)].map(i=>'contact-'+i.toString(16).padStart(2,'0')+'.wav'));
+files.add('ice-break.wav');
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 
 // Sequence0, channels2/5: BFFEC writes IO5 (velocity), then IO0 (note).
-// Both channels select bank0/percussion127 and restart layer0. Ice uses a
-// different dynamic channel and remains with the existing fallback for now.
+// Both channels select bank0/percussion127 and restart layer0. Ice's channel7
+// dynamic-call19 plays a separate three-layer bank5/instrument7 sequence.
 export function originalContactSelection(command){
  const a=command?.arguments;
+ if(command?.consumer==='c53d4'&&Array.isArray(a)&&a.length===2&&a[0]===0x06000700&&a[1]===19)
+  return {lane:7,key:'ice-break',velocity:127};
  if(command?.consumer!=='bffec'||!Array.isArray(a)||a.length!==3||
   ![2,5].includes(a[0])||!ids.includes(a[1])||!Number.isInteger(a[2])||a[2]<0||a[2]>127)return null;
  return {lane:a[0],key:String(a[1]),velocity:a[2]};
@@ -30,7 +33,7 @@ export class OriginalContactSound{
    if(!this.manifest){
     const m=JSON.parse(new TextDecoder().decode(await this.loader(new URL('manifest.json',base),controller.signal)));
     if(this.disposed||controller.signal.aborted)return false;
-    if(m.version!==1||!m.sounds||!m.files||ids.some(id=>{
+    if(m.version!==1||!m.sounds||!m.files||[...ids,'ice-break'].some(id=>{
      const s=m.sounds[id],f=m.files[s?.file];
      return !s||!files.has(s.file)||!Number.isFinite(s.rate)||s.rate<.9||s.rate>1||
       !Number.isInteger(s.pan)||s.pan<0||s.pan>127||!f||!Number.isFinite(f.duration)||f.duration<=0||f.duration>3;
@@ -57,6 +60,9 @@ export class OriginalContactSound{
  play(command,side=0){
   const selection=originalContactSelection(command);
   if(this.disposed||!selection)return false;
+  // Channel7 cannot poll IO0 during its dynamic call. Repeated ice hits retain
+  // one pending command; the clip includes the original routine/poll duration.
+  if(selection.lane===7&&this.voices.has(7)){this.pendingIce={command,side};return true;}
   this.stop(selection.lane);
   if(selection.velocity===0)return true;
   const sound=this.manifest?.sounds[selection.key],buffer=this.buffers.get(sound?.file);
@@ -69,10 +75,16 @@ export class OriginalContactSound{
   gain.gain.value=(selection.velocity/127)**2*.55;pan.pan.value=position*stereoWidth(this.mode);
   source.connect(gain).connect(pan).connect(this.destination);
   const voice={source,gain,pan,position};this.voices.set(selection.lane,voice);
-  source.onended=()=>{source.disconnect();gain.disconnect();pan.disconnect();if(this.voices.get(selection.lane)===voice)this.voices.delete(selection.lane);};
+  source.onended=()=>{
+   source.disconnect();gain.disconnect();pan.disconnect();
+   if(this.voices.get(selection.lane)!==voice)return;
+   this.voices.delete(selection.lane);
+   if(selection.lane===7&&this.pendingIce){const pending=this.pendingIce;this.pendingIce=null;this.play(pending.command,pending.side);}
+  };
   source.start(this.ctx.currentTime);return true;
  }
  stop(lane){
+  if(lane===undefined||lane===7)this.pendingIce=null;
   for(const [key,voice]of this.voices){
    if(lane!==undefined&&key!==lane)continue;
    this.voices.delete(key);voice.source.onended=null;voice.source.stop();

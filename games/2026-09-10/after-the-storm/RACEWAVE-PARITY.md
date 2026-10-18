@@ -19,6 +19,25 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — original ice-break sequence
+
+Native ice collisions now play the original channel7 ice-break cue. Sequence0
+resolves command19 through its dynamic table to bank5/instrument7: five notes
+on three layers, with recovered note starts and durations. The existing
+FluidSynth installation on EVO X2 rendered this cue into a separate WAV.
+Envelopes/reverb and presentation gain are documented browser adaptations.
+
+The shared channel retains one pending hit during the original194-tick call
+and8-tick poll wait (1.2625 seconds at tempo200). Repeated impacts coalesce;
+other landing/impact channels continue independently. Pause clears the cue and
+its pending command. A missing file retains the existing fallback.
+
+Thirty-six focused audio/contact/ice tests pass. Actual two-racer ice collision
+fields produce exactly one original cue for the first collider. Chrome decodes
+all17 effects, renders nonzero ice audio with the intended silent channel tail,
+and verifies that repeated commands wait for the first cue before playing the
+latest pending cue. Graphics, resolution and original music remain unchanged.
+
 ## Unpublished — original landing and impact samples
 
 The native preview now plays the original landing and material-impact samples
@@ -46,8 +65,8 @@ The browser remained1280×720, High quality, with83,521 water vertices.
 
 These are original samples with browser presentation: the offline envelopes,
 release tails, resampling, bus gain and stereo placement approximate the N64
-mixer. Ice's separate dynamic channel retains its fallback. Original engine
-loops, voice scheduling and full audio-thread emulation remain unfinished.
+mixer. The separate ice cue is covered by the checkpoint above. Original
+engine loops, voice scheduling and full audio-thread emulation remain unfinished.
 No raw ROM, soundbank or sequence is distributed with these standalone effects.
 
 ## Unpublished — live native audio motion inputs

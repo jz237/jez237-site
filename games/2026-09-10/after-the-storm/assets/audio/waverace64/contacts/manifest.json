@@ -835,6 +835,11 @@
         0
       ],
       "release": 16
+    },
+    "ice-break": {
+      "file": "ice-break.wav",
+      "rate": 1,
+      "pan": 64
     }
   },
   "files": {
@@ -949,6 +954,62 @@
       "bytes": 29954,
       "peak": 31671,
       "rms": 10447.060406260838
+    },
+    "ice-break.wav": {
+      "sha256": "31fbc73c4dbc6074fbb68d70f60992cb34ddcc0830fe50430f9811ef062db467",
+      "duration": 1.2625,
+      "bytes": 80844,
+      "peak": 27852,
+      "rms": 2722.0496427461158
     }
+  },
+  "iceSequence": {
+    "command": 100665088,
+    "value": 19,
+    "sequence": 0,
+    "bank": 5,
+    "program": 7,
+    "tempo": 200,
+    "ticksPerQuarter": 48,
+    "channelBusyTicks": 194,
+    "pollTicks": 8,
+    "notes": [
+      {
+        "layer": 0,
+        "tick": 0,
+        "note": 36,
+        "duration": 10,
+        "velocity": 127
+      },
+      {
+        "layer": 0,
+        "tick": 10,
+        "note": 39,
+        "duration": 120,
+        "velocity": 127
+      },
+      {
+        "layer": 1,
+        "tick": 14,
+        "note": 39,
+        "duration": 120,
+        "velocity": 127
+      },
+      {
+        "layer": 2,
+        "tick": 34,
+        "note": 43,
+        "duration": 10,
+        "velocity": 127
+      },
+      {
+        "layer": 2,
+        "tick": 44,
+        "note": 46,
+        "duration": 120,
+        "velocity": 127
+      }
+    ],
+    "presentationGain": 13.526930548810101
   }
 }

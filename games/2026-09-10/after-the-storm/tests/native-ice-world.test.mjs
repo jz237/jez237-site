@@ -10,6 +10,10 @@ import {createRace,stepRace} from '../race-core.js';
 import {getCourse} from '../courses.js';
 import {createNativeIceFragments,spawnNativeIceFragments,stepNativeIceFragments} from '../native-ice-fragments.js';
 import {createNativeIceSplashes,queueNativeIceSplash,stepNativeIceSplashes} from '../native-ice-splashes.js';
+import {nativeImpactAudioPacket,consumeNativeImpactAudio} from '../native-impact-audio.js';
+import {nativeContactAudioMaterials} from '../native-contact-audio.js';
+import {nativeRaceBodyFields} from '../native-race-body-fields.js';
+import {originalContactSelection} from '../original-contact-sound.js';
 const definition={id:'test-ice',runtimeKind:10,sourceGenericSphere:true,x:.4,y:0,z:.675,r:1.25};
 const v=(x=0,y=0,z=0)=>({x,y,z});
 const reference=JSON.parse(readFileSync(new URL('./fixtures/native-ice-owner-reference.json',import.meta.url)));
@@ -32,6 +36,20 @@ test('ice breaks through actual native contacts, is shared across racers, and hi
  assert.equal(s.adapters[1].objectHitKind16d8,2);assert.ok(s.adapters[1].impacts.objectImpactNative>0);
  assert.equal(s.adapters[0].impacts.objectImpactNative,0);
  stepNativeRaceWorld(s.world,.04,[{},{}]);assert.equal(s.ice.snapshot()[0].renderKind,0);assert.equal(s.ice.snapshot()[0].age,1);assert.equal(s.ice.diagnostics().outerFrames,1);
+});
+
+test('a real shared ice break produces one original ice cue for the racer that hit it first',()=>{
+ const s=make();
+ stepNativeRaceWorld(s.world,.05,[{},{}]);
+ const cues=s.adapters.flatMap((a,player)=>{
+  const impact=nativeImpactAudioPacket({impacts:a.impacts,objectHitKind16d8:a.objectHitKind16d8,
+   frameSpeedNative:nativeRaceBodyFields(a).speedB90Native,recordFlag318:0},0),packet=Array(32).fill(0);
+  [packet[18],packet[19],packet[20]]=[impact.type,impact.strength,impact.trigger];
+  return consumeNativeImpactAudio(packet,{...nativeContactAudioMaterials(8),mixerLane:player?3:0,channel:player,
+   pairedImpact:0,pairedVariant:0}).commands.map(c=>({...c,player}));
+ }).filter(c=>originalContactSelection(c)?.key==='ice-break');
+ assert.equal(s.ice.breakEvents().length,1);assert.equal(cues.length,1);assert.equal(cues[0].player,1);
+ assert.deepEqual(cues[0].arguments,[0x06000700,19]);
 });
 
 test('activity gating retains intact presentation while the broken collider remains absent',()=>{
