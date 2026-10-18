@@ -107,6 +107,108 @@
     }
   },
   {
+    "id": "2026-10-17-factual-infographic-factual-infographic-frog-fear-a-startle",
+    "title": "Factual infographic: Frog Fear — A Startle in the Reeds",
+    "tests": "factual_subtype: phobia-infographic; phobia: Fear of frogs (descriptive label); general specific-phobia evidence, not frog-specific trials; no subjective critic or automatic reroll; archive_slot=2026-10-17T20:08; concept=frog-fear-pond-encounter-avoidance; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create a finished factual educational infographic directly on the canvas, an artwork-led natural-history and clinical illustration, not a photo of a poster or a book, not UI. Prefer an organically flowing portrait composition with beautifully integrated readable type and generous breathing room, without a grid of boxed cards. Title: “FROG FEAR” with subtitle “A startle in the reeds”. Palette: luminous pond greens, slate-blue shadows, ochre highlights and warm ivory open annotation space; translucent watercolor washes, finely hatched technical ink, believable soft evening light.\n\nDominant scene: a dry public-park path beside a small pond, tangled rushes, fine grass seed heads, wet stone flecks and quiet reflected sky. An ordinary small naturalistically proportioned green-brown frog sits by the reeds, visibly separated from the person; no threatening pose, enormous teeth, monsters, slime horror or exaggerated danger. The scene is an illustrative example, not a clinical case or a claim about a named frog species. The hero protagonist is A fictional Black man in his early 60s, dark brown skin, broad face, closely cropped salt-and-pepper hair and short grey beard, stocky build, ochre field jacket and dark trousers; three-quarter side view on a dry pond-side path, pausing with tense shoulders. A new face, not the recurring woman from earlier phobia charts; keep this man consistent only within this chart. Keep his likeness consistent in the small supporting vignette only. Show tension with dignity: shoulders raised slightly, fingers held close, weight paused over his back foot; no cartoon screaming. Keep human and frog at plausible relative scale. Do not show touching, catching or confronting the animal. Let the branching path and rippling water carry the explanatory flow rather than artificial panels.\n\nBeneath the title, readable definition: “Intense fear of frogs can become a specific phobia when it is persistent, out of proportion to danger, and disrupts everyday life.” Small clarification: “Fear of frogs is a descriptive label; diagnosis needs professional assessment.” Do not invent a medical name or diagnostic statistics.\n\nThree organically placed annotated studies support the hero. Near the frog and a faint imagined path silhouette, two short labels: “Seeing the feared animal” and “Anticipating an encounter”; do not imply every person shares these triggers. Around the man's upper torso, restrained amber leader strokes point to “Racing heart”, “Tense muscles”, “Shaking”. A single caption: “The body's alarm can activate even when danger is overestimated.” No fake brain scan, invented neuroanatomy or physiological numbers.\n\nIn the curving path's lower-left open space, a delicate loop of ink arrows connects the words “Encounter or anticipation → Body alarm → Avoidance → Brief relief”, returning toward anticipation. Its explanatory caption reads “Avoidance can keep fear going by limiting chances to learn that you can cope.” A small faded vignette of the same man reconsidering a park visit supports this loop; no additional patient or recurring young woman. Keep the loop integrated into path contours with enough space for clear text. Nearby open note: “Feeling unsafe is not the same as being in danger. Consider the actual situation.” Do not label all frogs harmless or all encounters safe.\n\nAt the bottom, a brighter widening path resolves into an unobtrusive illustration of the same man in a calm conversation with a clinician, not approaching or handling wildlife. Set readable help text in open space, without boxes: “CBT can help challenge unhelpful thoughts.” “With professional guidance, gradual exposure uses small, manageable steps.” “Seek help when fear or avoidance affects daily life.” Add a concise safety/context footer: “General education, not diagnosis. No forced exposure or wildlife handling.” Do not turn this into a do-it-yourself exposure ladder. Do not claim frog-specific treatment trials, guaranteed cures or drug advice.\n\nMake the artwork visually compelling first, with elegant lettering and layered pond-edge textures, asymmetric scale changes and concise annotations. Essential text must be crisp and readable. No bibliography, URLs, tiny source citations, logos, watermark, frame or photographed-paper props. No extra factual claims, taxonomy, prevalence numbers or unsupported causal details. Omit secondary decoration if needed for breathing room, while preserving the definition, trigger examples, body alarm and avoidance mechanism, perceived/actual-danger distinction and evidence-based professional help.",
+    "image": "images/2026-10-17-factual-infographic-factual-infographic-frog-fear-a-startle.jpg",
+    "thumb": "thumbs/2026-10-17-factual-infographic-factual-infographic-frog-fear-a-startle.webp",
+    "color": "#b8ae8e",
+    "date": "2026-10-17",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "frog-fear-pond-encounter-avoidance",
+      "imageSha256": "8461cf7769f90b4a5d8352dd653d7f2c3308bb465ddd9106296f7617566c3a8c",
+      "imageDHash": "093b7838d7a95906"
+    },
+    "factualInfographic": {
+      "topic": "Fear of frogs: animal-related fear, anticipatory anxiety, body alarm, avoidance, and evidence-based support",
+      "description": "Artwork-led educational illustration of fear of frogs within the general animal-related specific-phobia framework, with clinical context and evidence-based support.",
+      "sourceNote": "Verified general animal/specific-phobia framework, symptoms, avoidance maintenance and CBT/graded-exposure care; frog encounter is illustrative, not a separately validated frog-specific diagnosis or treatment claim. NHS: https://www.nhs.uk/mental-health/conditions/phobias/; American Psychiatric Association: https://www.psychiatry.org/patients-families/anxiety-disorders/what-are-anxiety-disorders; NHS inform (NHS 24): https://www.nhsinform.scot/illnesses-and-conditions/mental-health/mental-health-self-help-guides/phobias-self-help-guide/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-18T00:09:29.837375+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          },
+          {
+            "id": "S2",
+            "publisher": "American Psychiatric Association",
+            "title": "What are Anxiety Disorders?",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.psychiatry.org/patients-families/anxiety-disorders/what-are-anxiety-disorders"
+          },
+          {
+            "id": "S3",
+            "publisher": "NHS inform (NHS 24)",
+            "title": "Phobias self-help guide",
+            "sourceType": "government-agency",
+            "url": "https://www.nhsinform.scot/illnesses-and-conditions/mental-health/mental-health-self-help-guides/phobias-self-help-guide/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Fear of frogs is used here as a descriptive fear label, not a separate established diagnostic category. Animal-related fears can fall within specific phobia when persistent, disproportionate and impairing; a clinician assesses diagnosis.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Seeing or anticipating the feared animal, and sometimes just thinking about it, can trigger anxiety; this illustration uses a frog encounter and an anticipated park visit as examples rather than universal frog-specific triggers.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Body alarm can include rapid heartbeat, shaking and tense muscles; fear is associated with a fight-or-flight response.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Phobic fear can be out of proportion to actual danger; the intensity of alarm is not itself evidence of danger, and contextual risk still matters.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Avoidance may reduce anxiety quickly but can maintain fear by preventing opportunities to revise beliefs and learn coping; avoiding places may interfere with everyday life.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "CBT can help people examine unhelpful thoughts and gradually face feared situations; graded exposure uses small manageable steps. A qualified professional can help tailor treatment, and this chart is not an instruction to handle wildlife or force exposure.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Seek professional help if fear or avoidance affects everyday life; this is general education, not a diagnosis.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-10-17-factual-infographic-factual-infographic-driving-fear-alarm-",
     "title": "Factual infographic: Driving Fear — Alarm Behind the Wheel",
     "tests": "factual_subtype: phobia-infographic; phobia: Driving fear (possible specific phobia or trauma-related presentation); clinician assessment and road-safety context; no subjective critic; archive_slot=2026-10-17T08:08; concept=driving-fear-road-anticipation-avoidance; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
