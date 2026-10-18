@@ -51,6 +51,9 @@ export class OriginalAnnouncerSound{
   return this.ready;
  }
  play(command){
+  if(command?.consumer==='c538c'&&command.arguments?.length===2&&command.arguments[0]===0x01000c00&&command.arguments[1]===0){
+   if(this.disposed)return false;this.stop();return true;
+  }
   const note=originalAnnouncerSelection(command);if(this.disposed||note===null)return false;
   this.stop();
   const sound=this.manifest?.sounds[note];if(sound===null)return true;

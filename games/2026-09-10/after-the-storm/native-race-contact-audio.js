@@ -9,6 +9,7 @@ import {createOriginalEffectPoll} from './original-effect-poll.js';
 import {consumeNativeRaceAudio} from './native-race-audio-consumer.js';
 import {prepareNativeAudioEvent} from './native-audio-events.js';
 import {freshNativeAnnouncer,prepareNativeAnnouncer,advanceNativeRaceAnnouncer} from './native-announcer.js';
+import {resetNativeRaceAudioTimers} from './native-audio-transition.js';
 const F=Math.fround;
 const channelEntries=new Set(['800bfdd0','800bfde4','800bfe70','800bfef8','800bffac','800bfd34','800bfd68','800bffcc']);
 const voiceEntries=new Set(['c32a0','c3320','c338c','c33c8','c3408','c3464','c36f8']);
@@ -68,6 +69,11 @@ export function createNativeRaceContactAudio({players,courseIndex}){
     }
     if(effect.kind!=='externalCall')continue;
     const {consumer,arguments:args}=effect;
+    if(consumer==='800c1f60'||consumer==='800c21f4'){
+     const reset=resetNativeRaceAudioTimers(consumer,args[0]|0,announcer,{...globals,audioMode});
+     announcer=reset.state;retain(reset.context);
+     if(reset.stopAnnouncer)enqueue({consumer:'c538c',arguments:[0x01000c00,0]},0);
+    }
     if(channelEntries.has(consumer)){
      const stop=['800bfd34','800bfd68','800bffcc'].includes(consumer);
      const index=stop?(consumer==='800bfd34'?0:1):args[0]===0x80192610?0:args[0]===0x80192630?1:-1;

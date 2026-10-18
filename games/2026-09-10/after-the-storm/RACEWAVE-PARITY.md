@@ -62,6 +62,18 @@ equal left/right output and a silent tail in OfflineAudioContext. High quality,
 1280x720 canvas and83,521 water vertices were retained. Browser presentation
 is verified here; this does not expand the native preview's admitted modes.
 
+Transition follow-up: the admitted race timers now apply C1F60's direct writes
+and C21F4's unconditional prefix. Mode entry discards the delayed slot while
+retaining the current hold; most exits also clear the hold, with the original
+same-mode1/10 exception. Racing exits stop the current announcer except when
+entering4/6. A fresh EVO X2 read-only query matched1,048 instructions;288 bounded
+original executions verify these writes and the stop command. Music/menu
+callees and the remainder of mode entry are still separate, not claimed here.
+All39 transition/playback/owner/results tests pass, including natural race
+completion and the full unattended1200-frame Continue timeout. Together with
+the announcer checkpoint,69 unique focused tests have passed. The four HTML
+import maps and preload hashes cover344 modules.
+
 ## Unpublished — original rider reactions and water-entry audio
 
 Native human races now run the original rider-audio tail after impact handling.

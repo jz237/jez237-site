@@ -121,6 +121,21 @@ test('physical rider water-entry schedules one delayed announcer cue and pause d
  assert.equal(a.snapshot().announcer.delay,10);a.clearPendingSounds();assert.equal(a.snapshot().announcer.delay,0);assert.deepEqual(a.drain(),[]);
 });
 
+test('source mode changes clear admitted race timers and voice slots before their new mode effects',()=>{
+ const a=createNativeRaceContactAudio({players:1,courseIndex:1});start(a);
+ const seed=()=>a.applyEffects([{kind:'audioEntry',consumer:'800c37f4',arguments:[0x23,0]},
+  {kind:'audioEntry',consumer:'800c37f4',arguments:[1,0]}]);
+ seed();a.drain();assert.equal(a.snapshot().announcer.delay,25);
+ a.applyEffects([call('800c21f4',7,1)]);const entry=a.snapshot();
+ assert.equal(entry.announcer.delay,0);assert.equal(entry.announcer.delayedHold,0);assert.equal(entry.announcer.hold,60,'entry prefix does not clear current hold');
+ assert.equal(entry.globals.delay7cd4,0);assert.equal(entry.globals.delay7cd8,0);assert.equal(entry.globals.engineGate7ca0,0);
+ seed();a.drain();a.applyEffects([call('800c1f60',4)]);const exit=a.snapshot();
+ assert.equal(exit.announcer.hold,0);assert.equal(exit.announcer.delay,0);assert.equal(exit.globals.delay7cd8,0);
+ assert.equal(exit.globals.delay7cd4,180,'C1F60 leaves the initial-place timer for the following entry to reset');assert.deepEqual(a.drain(),[],'mode4 exit retains current speech playback');
+ seed();a.drain();a.applyEffects([call('800c1f60',1)]);
+ assert.deepEqual(a.drain().map(c=>[c.consumer,...c.arguments]),[['c538c',0x01000c00,0]]);
+});
+
 test('120 original immersion executions preserve midpoint rounding and byte clamp thresholds',()=>{
  const reference=JSON.parse(readFileSync(new URL('./fixtures/native-contact-immersion-reference.json',import.meta.url)));
  for(const c of reference.cases)assert.equal(nativeContactImmersion(c.input),c.expected,JSON.stringify(c.input));

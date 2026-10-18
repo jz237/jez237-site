@@ -34,6 +34,8 @@ test('one centered voice replaces its predecessor and silent source slots stop s
  assert.equal(first.source.stopped,1);assert.equal(second.note,11);assert.equal(second.source.started,.5);late();assert.equal(bank.voice,second);
  assert.equal(bank.play(command(33)),true);assert.equal(second.source.stopped,1);assert.equal(bank.voice,null);
  bank.play(command());bank.voice.source.onended();assert.equal(bank.voice,null);await bank.load();assert.equal(requested.length,95);
+ bank.play(command());const transition=bank.voice;
+ assert.equal(bank.play({consumer:'c538c',arguments:[0x01000c00,0]}),true);assert.equal(transition.source.stopped,1);assert.equal(bank.voice,null);
 });
 test('missing clips retry without replaying stale requests or manufacturing substitute speech',async()=>{
  const f=setup();let fail=true;
