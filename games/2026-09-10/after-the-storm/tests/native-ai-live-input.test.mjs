@@ -1,8 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
 import {createRace,stepRace} from '../race-core.js';
 import {getCourse} from '../courses.js';
-import {nativeAIBodyFields} from '../native-ai-body-fields.js';
+import {nativeAIBodyFields,nativeAIStartupBodyFields} from '../native-ai-body-fields.js';
 import {createNativeRaceAdapter,stepNativeRaceAdapter,latchNativeRaceAdapterControls} from '../native-race-adapter.js';
 import {createNativeHull} from '../native-hull.js';
 import {createNativeLifecycleRider} from '../native-lifecycle-rider.js';
@@ -12,6 +13,44 @@ import {stepNativeRaceHost} from '../native-race-host.js';
 import {prepareNativeAIWaterTrim} from '../native-ai-actions.js';
 const F=Math.fround,base=(0x2938-0x1f94)/4;
 const make=options=>createRace({mode:'time',physics:'native',course:getCourse('greyhaven'),...options});
+
+test('fresh AI input uses original reset stores without inventing a completed driving sample',()=>{
+ const fixture=JSON.parse(readFileSync(new URL('./fixtures/native-ai-startup-input.json',import.meta.url),'utf8'));
+ for(const row of fixture.cases){
+  const a=make().nativeHost.world.adapters[0],before=structuredClone(a.controlState);
+  for(const phase650 of [0,1,2,4,-1,2147483647])assert.deepEqual(nativeAIStartupBodyFields(a,phase650),row.expected);
+  assert.deepEqual(a.controlState,before);assert.equal(a.lastControls,null);assert.equal(a.logicalFrames,0);
+  assert.throws(()=>nativeAIStartupBodyFields(a,3),/non-driving/);
+  a.actionState.override=4;assert.throws(()=>nativeAIStartupBodyFields(a,0),/source-cleared/);a.actionState.override=0;
+  latchNativeRaceAdapterControls(a,{});
+  assert.throws(()=>nativeAIStartupBodyFields(a,0),/fresh unsampled/);
+ }
+ const s=make(),a=s.nativeHost.world.adapters[0];stepNativeRaceHost(s.nativeHost,.05,[{}]);
+ assert.throws(()=>nativeAIStartupBodyFields(a,0),/fresh unsampled/);
+ assert.ok(nativeAIBodyFields(a));
+});
+
+test('both versus riders can hand off to source AI using one preceding snapshot without repolling devices',()=>{
+ for(const simulation648 of [0,3]){
+  const initial=make({mode:'versus'}).nativeLaunch.snapshot();Object.assign(initial.scene,{phase650:3,simulation648,activity624:0});
+  const s=make({mode:'versus',nativeInitialRaceState:initial}),h=s.nativeHost;
+  stepNativeRaceHost(h,.05,[{},{}]);
+  // Prepared source result completion: the real subsequent source navigation,
+  // input producers, control conditioning and physical host remain connected.
+  for(const a of h.world.adapters)a.riderLifecycle.state={...a.riderLifecycle.state,selectionCountdown:-1};
+  const bodies=h.world.adapters.map(nativeAIBodyFields),ticks=h.world.ticks;
+  const forbidden=()=>{throw new Error('Human device read after source takeover');};
+  stepNativeRaceHost(h,.05,[forbidden,forbidden]);
+  assert.deepEqual(h.aiBodies,bodies);assert.equal(h.lastAIInput.frame.phase,'driving');
+  for(const a of h.world.adapters){
+   assert.equal(a.lastControls.controlOrigin,'ai');assert.equal(a.logicalFrames,2);
+   assert.equal(a.controlOrigin,'human');assert.equal(a.computerProfile,false);
+   assert.ok(Number.isFinite(a.lastControls.basePowerFactor));
+  }
+  assert.equal(h.world.ticks-ticks,simulation648===0?0:5);
+  assert.deepEqual(h.raceRuntime.aiCameraCorners().cameraCornersNative,Array.from({length:4},()=>({x:0,z:0})));
+ }
+});
 
 test('AI body input reads solved motion, source controller gate and retained action owners',()=>{
  for(let rider=0;rider<4;rider++){

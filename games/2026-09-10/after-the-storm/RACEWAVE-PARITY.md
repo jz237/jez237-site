@@ -7091,3 +7091,30 @@ updates, simulation0 without hull ticks, retained nonzero coordinates and
 identical 20-source-frame histories at 30/60/144 Hz. All 16 focused corner and
 live-input tests pass. Original main-loop call sites put audio at471D0, the
 buffer switch at471D8 and source input/world dispatch at471E0.
+
+### Computer input dispatch and two-rider takeover — 2026-10-18
+
+The physical adapter now supports the original direct computer-input branch
+as well as61708's human countdown branch. A computer slot always selects its
+AI producer, including a nonnegative startup/result countdown; human takeover
+continues to preserve the human physical profile. Each producer is sampled
+once before five hull ticks. Conflicting frame overrides reject before polling.
+
+The source host connects AI for both versus riders after their result countdowns
+complete. All producers read one snapshot of the preceding bodies, captured
+before descending input sampling, and the selected retained graphics corners.
+This also works when simulation0 suppresses hull updates. The independent
+menu-device sample remains separate from rider control.
+
+First-frame non-driving AI uses the actual three reset inputs: B50 cleared,
+1578 set to1.0,16F4 cleared. Eight executions of the original reset stores with
+different byte canaries verify these values and that15DC is retained. The
+startup reader therefore cannot masquerade as a completed driving snapshot;
+after the first frame the regular physical body reader takes over.
+
+All 32 focused driver/live-input/graphics checks pass, including 25 combinations
+of computer countdown and source phase, the actual AI producer feeding the
+physical adapter, and both versus riders handing over without a device poll.
+The separate 27 driver/result checks also pass. Four-rider championship launch
+and its remaining resource/result dependencies are still gated. High-resolution
+rendering is unchanged.

@@ -9,7 +9,8 @@ import {getCourse} from '../courses.js';
 import {createNativeHull} from '../native-hull.js';
 import {createAuthoredNativeRider} from '../authored-native-rider.js';
 import {createNativeLifecycleRider} from '../native-lifecycle-rider.js';
-import {createNativeRaceAdapter,latchNativeRaceAdapterControls} from '../native-race-adapter.js';
+import {createNativeRaceAdapter,latchNativeRaceAdapterControls,prepareNativeRaceAdapterFrame,stepNativeRaceAdapter} from '../native-race-adapter.js';
+import {createNativeRiderRecovery} from '../native-rider-recovery.js';
 import {createNativeRaceWorld,stepNativeRaceWorld,nativeRaceWorldSnapshot} from '../native-race-world.js';
 import {createRaceWater,captureRaceWater} from '../race-water.js';
 const F=Math.fround;
@@ -48,6 +49,34 @@ test('negative human result countdown runs the actual prepared AI driver in both
   assert.equal(a.actionState.override,expected.action16f4);
   assert.equal(a.controlOrigin,'human');assert.equal(a.computerProfile,false);
   if(phase650===3)assert.notEqual(expected.controls.rawXNative,0);
+ }
+});
+
+test('computer slots call the real AI producer regardless of human takeover countdown, without polling a device',()=>{
+ for(const phase650 of [0,1,2,3,4])for(const selectionCountdown of [-32768,-1,0,10,32767]){
+  const q=input(),s=state();q.globals.state650=phase650;q.globals.chargeTimerNative=11;
+  const expected=prepareNativeAIDriver(table,s,q),initialHull=createNativeHull({rider:2,computerProfile:true});
+  const bundle=createNativeLifecycleRider({initialHull}),recovery=createNativeRiderRecovery({riderIndex:2,selectionCountdown,
+   hullDamping:initialHull.points.map(p=>F(p.damping))});let calls=0;
+  const a=createNativeRaceAdapter({riderIndex:2,computerProfile:true,controlOrigin:'ai',...bundle,
+   riderRecovery:{courseDatumNative:0,state:recovery},sourceState:{simulationState:3,phase650},
+   sourceAIInput:(hull,context)=>{
+    calls++;assert.equal(hull,a.hull);assert.equal(context.selectionCountdown,selectionCountdown);
+    const result=prepareNativeAIDriver(table,s,q);return {...result.controls,action16f4:result.action16f4};
+   }});
+  const forbidden=()=>{throw new Error('Computer slot polled a human device');},before=structuredClone(a.controlState),profile=a.water.profile;
+  assert.throws(()=>latchNativeRaceAdapterControls(a,forbidden,{controlOrigin:'human'}),/computer slot owns/);
+  assert.equal(calls,0);assert.deepEqual(a.controlState,before);
+  latchNativeRaceAdapterControls(a,forbidden);
+  assert.equal(calls,1);assert.equal(a.lastControls.controlOrigin,'ai');
+  assert.equal(a.lastControls.rawXNative,expected.controls.rawXNative);
+  assert.equal(a.lastControls.workingXNative,expected.controls.rawXNative);
+  assert.equal(a.lastControls.workingYNative,expected.controls.rawYNative);
+  assert.equal(a.lastControls.basePowerFactor,expected.controls.basePowerFactor);
+  assert.equal(a.actionState.override,expected.action16f4);
+  prepareNativeRaceAdapterFrame(a,forbidden);stepNativeRaceAdapter(a,.05,forbidden);
+  assert.equal(calls,1);assert.equal(a.logicalFrames,1);assert.equal(a.hull.ticks,5);
+  assert.equal(a.controlOrigin,'ai');assert.equal(a.computerProfile,true);assert.equal(a.water.profile,profile);
  }
 });
 

@@ -248,10 +248,11 @@ export function applyNativeRaceContact(hull,{kind,pointIndex,normal,penetration=
  * not implement an AI producer or navigation. computerProfile selects the
  * separate recovered physical coefficient branch; input takeover never
  * changes that constructor choice.
- * sourceAIInput explicitly enables the source61708 human dispatch wrapper.
- * It requires a physical lifecycle and a human default origin. Negative
- * lifecycle.selectionCountdown calls this producer instead of polling input;
- * nonnegative values poll input normally. The producer receives(hull,context)
+ * sourceAIInput enables source input dispatch and requires a physical lifecycle.
+ * With default origin ai, the computer slot calls616B0 directly on every frame.
+ * With default origin human,61708 calls this producer only for a negative
+ * lifecycle.selectionCountdown; nonnegative values poll input normally.
+ * The producer receives(hull,context)
  * and must return raw AI controls, retained basePowerFactor and any16f4 write.
  * Context includes the captured source scene, countdown and prior controls.
  * The caller owns the actual AI driver/context/history; no fallback producer,
@@ -294,8 +295,8 @@ export function createNativeRaceAdapter({riderIndex=0,tuneB6c=0,tuneB70=0,tuneB7
   if(riderRecovery!==undefined&&(!articulatedRider||!riderRecovery||typeof riderRecovery!=='object'))throw new TypeError('riderRecovery requires a physical rider and explicit course settings');
   if(riderRecovery)for(const key of Object.keys(riderRecovery))if(!['courseDatumNative','raceFinished','state','physicalMode'].includes(key))throw new TypeError(`Unsupported riderRecovery.${key}`);
   const lifecycle=riderRecovery===undefined?null:createNativeRiderLifecycle({...riderRecovery,hull,rider:articulatedRider});
-  if(sourceAIInput!==undefined&&(typeof sourceAIInput!=='function'||!lifecycle||controlOrigin!=='human'))
-    throw new TypeError('sourceAIInput requires a producer, physical rider lifecycle and human default origin');
+  if(sourceAIInput!==undefined&&(typeof sourceAIInput!=='function'||!lifecycle))
+    throw new TypeError('sourceAIInput requires a producer and physical rider lifecycle');
   const actions=createRiderActions(riderActions,lifecycle);
   const landing=createRiderLanding(riderLanding,actions,hull);
   if(landing)finite(bitsToFloat(action.field15ecBits),'retained landing arc');
@@ -361,9 +362,11 @@ function sampleFrameControls(adapter,input,options){
   let origin=options.controlOrigin===undefined?adapter.controlOrigin:options.controlOrigin;
   if(adapter.sourceAIInput){
     const selectionCountdown=adapter.riderLifecycle.state.selectionCountdown;
-    origin=nativeRiderControlOrigin(selectionCountdown);
+    //665B0 dispatches computer slots directly to616B0. Only61708's human
+    // branch reads1446; a computer's result/start countdown cannot select a device.
+    origin=adapter.controlOrigin==='ai'?'ai':nativeRiderControlOrigin(selectionCountdown);
     if(options.controlOrigin!==undefined&&options.controlOrigin!==origin)
-      throw new Error('The source rider countdown owns controlOrigin');
+      throw new Error(adapter.controlOrigin==='ai'?'The source computer slot owns controlOrigin':'The source rider countdown owns controlOrigin');
     requested=origin==='ai'?adapter.sourceAIInput(hull,{...frameContext,source:{...source},selectionCountdown,
       previousControls:adapter.lastControls?structuredClone(adapter.lastControls):null}):
       typeof input==='function'?input(logicalFrames*H*FRAME_TICKS,logicalFrames):input;

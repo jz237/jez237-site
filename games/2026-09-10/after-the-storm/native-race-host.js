@@ -13,14 +13,14 @@ import {createNativeIceWorld} from './native-ice-world.js';
 import {createNativeFloatingWorld} from './native-floating-world.js';
 import {createNativePrimaryBuoyWorld} from './native-primary-buoy-world.js';
 import {bindRaceWaterCameraStorage,bindRaceWaterAmplitudeThreshold,raceWaterAISelectionCircle,advanceRaceWaterRollers} from './race-water.js';
-import {nativeAIBodyFields} from './native-ai-body-fields.js';
+import {nativeAIBodyFields,nativeAIStartupBodyFields} from './native-ai-body-fields.js';
 import {nativeRaceBodyFields} from './native-race-body-fields.js';
 import {captureNativeCamera} from './native-camera-presentation.js';
 import {applyNativeRiderResultCodes} from './native-rider-lifecycle.js';
 
 // Runnable host bridge for the recovered hull and rider recovery. This remains
-// an integration preview: solo source input is connected, while multi-racer
-// AI, other actors/tricks and the complete result schedule remain incomplete.
+// an integration preview: source input is connected for admitted participants;
+// championship admission, other actors/tricks and full results remain incomplete.
 // The physical rider uses authored anatomy/remount art and recovered constraints.
 // Low-level native tune indices remain independent of the browser's three
 // modern settings; recovered profile defaults are 5/5/5, not zero.
@@ -128,9 +128,10 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
   provenance:Object.freeze({...courseContacts.provenance,fixedSpheres:'original binary32 grid/query/contact over canonical fixedSphereWordsB138',
    dynamicAndPrimaryObjects:'complete canonical generic owner; separate primary buoy owner',objectOwner:objects.provenance}),
   objectDiagnostics:objects.diagnostics}:floating?{primarySpheres:floating.contact}:ice?{primarySpheres:ice.contact}:{})};
- // A solo source race needs no unresolved multi-racer camera-corner predicate. Its
- // original61708 countdown, not a browser finish flag, selects this producer.
- const sourceAI=sourceSchedule&&racers.length===1;
+ //665B0 dispatches computer slots directly;61708 uses the human countdown.
+ // Every selected producer reads the same preceding body snapshot and the
+ // actual retained graphics corner buffer, including two-human result takeover.
+ const sourceAI=sourceSchedule;
  const bundles=[],adapters=racers.map((r,i)=>{
   const initial={position:{x:r.x,y:water.field.datumNative*water.scale,z:r.z},heading:r.heading,
    rider:r.id,scale:water.scale};
@@ -149,7 +150,7 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
   return createNativeRaceAdapter({...adapterOptions,
    ...(actionStart?{riderActions:{inputHistory,idleFramesC6c,idleChoice16c4,source:()=>raceRuntime.riderActionContext(i)}}:{}),
    ...(actionStart?{riderLanding:{landingTicks:0,localPointsNative:authoredNativeHullLocalPoints()}}:{}),
-   ...(sourceAI?{sourceAIInput:()=>{
+   ...(sourceAI?{controlOrigin:r.human?'human':'ai',sourceAIInput:()=>{
     const prepared=raceRuntime.sampleAI(i,{bodiesBySlot:host.aiBodies,
      geometry:{selectionCircleNative:raceWaterAISelectionCircle(water),cameraCornersNative:raceRuntime.aiCameraCorners().cameraCornersNative,
       nodePositionsNative:primary.state.nodes.map(n=>({sourceRow:n.sourceRow,x:n.positionNative.x,z:n.positionNative.z})),
@@ -203,8 +204,9 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
    nodePositions:primary.snapshot().map(n=>({sourceRow:n.sourceRow,x:n.position.x,z:n.position.z}))});
   // Capture every preceding body BEFORE any descending control latch. Later
   // selected producers must not observe another racer's new control frame.
-  if(sourceAI&&world.adapters.some(a=>a.riderLifecycle.state.selectionCountdown<0))
-   host.aiBodies=world.adapters.map(nativeAIBodyFields);
+  if(sourceAI&&world.adapters.some(a=>a.controlOrigin==='ai'||a.riderLifecycle.state.selectionCountdown<0))
+   host.aiBodies=world.adapters.map(a=>a.logicalFrames===0?
+    nativeAIStartupBodyFields(a,raceRuntime.scene().phase650):nativeAIBodyFields(a));
  }:null,
  beforeActor:sourceSchedule?(world,{racerIndex})=>{
   const a=world.adapters[racerIndex],lifecycles=world.adapters.map(q=>q.riderLifecycle),p=a.hull.points[0].position;
