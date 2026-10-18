@@ -7151,3 +7151,30 @@ championship/live-input tests pass, including248 original configuration cases;
 the separate spray and result-code regressions pass. This is physical-host
 integration, not complete championship progression, live menu/audio admission,
 or original-art equivalence. Rendering resolution is unchanged.
+
+### Fresh championship selection and shared web memory — 2026-10-18
+
+`native-race-memory.js` now provides the existing explicit fresh web memory
+policy before any main configuration, reset, physical world, water RNG or audio.
+Ordinary, versus, Stunt and Practice launches use the same constructor. A
+private before/after comparison of77 launch snapshots across courses, rider
+choices and modes found identical canonical state, hulls, rider lifecycle and
+initial water arrays; no gameplay behavior was changed by extracting this code.
+
+`prepareNativeChampionshipWebLaunch` creates a championship directly from
+selected racers and its initialized course. It restores the retained web
+record session, applies the current human Normal/Custom tuning choice, then
+runs championship main configuration/reset/prestart. CPU traits come from the
+selected source course. It does not create a solo race as an initialization
+shortcut or advance a second water/random stream. Resource/audio effects remain
+explicit for the application handoff.
+
+The four-rider host integration test now uses this real fresh selection path.
+Its three12-second30/60/144Hz runs still match all physical and canonical owners.
+New checks cover every rider choice, saved custom indices while Normal is
+selected, all eight course handoffs, reverse class selection, warm records,
+unchanged input objects and invalid selections. All seven fresh-selection/host
+tests pass. The17 tuning/record-session regressions also pass, including two
+actual three-lap solo races with correct Normal/Custom record attribution.
+Browser championship admission and renderer/audio handoff remain
+the next integration step; resolution is unchanged.

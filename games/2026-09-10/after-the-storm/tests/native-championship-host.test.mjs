@@ -4,22 +4,23 @@ import {createRace} from '../race-core.js';
 import {getCourse,conditions} from '../courses.js';
 import {nativeRaceScene} from '../native-race-scene.js';
 import {createNativeRaceCourseRuntime} from '../native-race-course-runtime.js';
-import {prepareNativeChampionshipLaunch} from '../native-championship-setup.js';
+import {prepareNativeChampionshipLaunch,prepareNativeChampionshipWebLaunch} from '../native-championship-setup.js';
 import {createNativeRaceLaunchRuntime} from '../native-race-launch-runtime.js';
 import {createNativeRaceHost,stepNativeRaceHost} from '../native-race-host.js';
 import {createRaceWater} from '../race-water.js';
 
-const seed=createRace({mode:'time',physics:'native',course:getCourse('greyhaven')}).nativeLaunch.snapshot();
 function setup({primaryHumanIndex=0,difficulty=0,selectedRider=0}={}){
  const avatarsBySlot=[selectedRider,...[0,1,2,3].filter(i=>i!==selectedRider)];
  const c={courseIndex:1,difficulty,primaryHumanIndex,avatarsBySlot},source=nativeRaceScene(getCourse('greyhaven',difficulty));
  const courseRuntime=createNativeRaceCourseRuntime({course:source,difficulty,players:1,raceMode:'championship'});
- const state=structuredClone(seed);state.profileWordsB330[2]=Math.min(difficulty,2);
- Object.assign(state.scene,{courseIndex:1,mode608:4,pendingPlayers60c:1,participantCount60e:4,field61c:0,
-  primaryHumanIndex,variant6f4:0,metadataCb32c:0,metadataD9b0:avatarsBySlot[primaryHumanIndex],
-  configuredLaps728:3,restart6f8:0,reverseDab68:Number(difficulty===3),cold8224:1});
- const prepared=prepareNativeChampionshipLaunch(state,{courseRuntime,avatarsBySlot:c.avatarsBySlot});
- const racers=createRace({mode:'championship',course:getCourse('greyhaven',difficulty),difficulty}).racers;
+ const racers=createRace({mode:'championship',rider:selectedRider,course:getCourse('greyhaven',difficulty),difficulty}).racers;
+ let prepared=prepareNativeChampionshipWebLaunch({racers,courseRuntime});
+ if(primaryHumanIndex!==0){
+  // Unsupported live mapping remains an explicit prepared diagnostic for the
+  // rejection check. Actual physical runs use the fresh application selector.
+  const state=structuredClone(prepared.state);state.scene.primaryHumanIndex=primaryHumanIndex;
+  prepared=prepareNativeChampionshipLaunch(state,{courseRuntime,avatarsBySlot:c.avatarsBySlot});
+ }
  const scale=courseRuntime.courseView.sourceMetadata?.nativeScale??.025;
  for(let i=0;i<4;i++){
   const r=racers[i],start=prepared.hullStarts[i].prepared;

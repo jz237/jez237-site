@@ -2,6 +2,10 @@ import {NATIVE_TITLE_MENU_DATA} from './native-title-menu-data.js';
 import {createNativeRaceState,prepareNativeRaceMainConfigurationUpdate,prepareNativeRaceStartup,
  prepareNativeRacePrestartInitializationUpdate,nativeRaceGridTransformView,nativeRaceComputerProfileView} from './native-race-state.js';
 import {prepareNativeHullStartFromMatrix} from './native-hull.js';
+import {createNativeRaceMemory} from './native-race-memory.js';
+import {prepareNativeRaceStateOperations} from './native-race-state.js';
+import {restoreNativeRecordSession} from './native-record-session.js';
+import {nativeTuneLaunchOperations} from './native-rider-tuning.js';
 
 const freeze=v=>{if(v&&typeof v==='object'&&!Object.isFrozen(v)){Object.values(v).forEach(freeze);Object.freeze(v);}return v;};
 const preparedCourses=new WeakMap();
@@ -25,6 +29,24 @@ function profiles(effects){
    throw new RangeError('Championship body profile requires a rider and three source tuning indices');
   return {riderIndex,tuneB6c,tuneB70,tuneB74};
  });
+}
+
+/** Application selection -> fresh championship handoff. No solo race is
+ * created to obtain memory. Install retained web records, then the current
+ * human tuning selection, before main configuration/reset/prestart. This
+ * constructs no physical world, performs no water RNG pass and plays no audio.
+ * Resource/audio dependencies remain explicit in the returned pendingEffects.
+ */
+export function prepareNativeChampionshipWebLaunch({racers,courseRuntime,recordSession,tunes=[],tuneModes=[],rngSeed=17}={}){
+ if(courseRuntime?.mode620!==4)throw new RangeError('Fresh championship selection requires its prepared mode4 course');
+ if(!Array.isArray(racers)||racers.length!==4||racers.some((r,i)=>r?.human!==(i===0)||i===0&&r.player!==0))
+  throw new RangeError('Fresh championship selection requires four racers with the primary human in slot0');
+ let state=createNativeRaceMemory({racers,courseRuntime,courseIndex:courseRuntime.courseIndex,players:1,mode620:4,
+  reverse:!!courseRuntime.courseView.reverse,rngSeed});
+ if(recordSession!==undefined)state=createNativeRaceState(restoreNativeRecordSession(state,recordSession));
+ state=createNativeRaceState({...state,scene:{...state.scene,participantCount60e:4,field61c:0,variant6f4:0}});
+ state=prepareNativeRaceStateOperations(state,nativeTuneLaunchOperations(racers,1,tunes,tuneModes)).state;
+ return prepareNativeChampionshipLaunch(state,{courseRuntime,avatarsBySlot:racers.map(r=>r.id)});
 }
 
 /** Prepared four-rider launch, before attaching any physical world or AI.
