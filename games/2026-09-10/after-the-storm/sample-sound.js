@@ -14,13 +14,13 @@ export class SampleSound{
   for(let player=2;player<5;player++)this.loop('fast',player);this.loop('wind',-1);if(this.buffers.music)this.loop('music',-1);return true;
  }
  loop(id,player){const c=this.ctx,source=c.createBufferSource(),gain=c.createGain(),filter=c.createBiquadFilter(),pan=c.createStereoPanner();source.buffer=this.buffers[id];source.loop=true;filter.type='lowpass';filter.frequency.value=16000;gain.gain.value=0;source.connect(filter).connect(gain).connect(pan).connect(id==='music'?this.musicBus:this.effects);source.start(c.currentTime,player===1?source.buffer.duration*.37:0);this.loops.push({id,player,source,gain,filter,pan});}
- update(speed,storm,wet,companion,throttle=0,music=false,mode='stereo',engineMuted=false,paused=false){
+ update(speed,storm,wet,companion,throttle=0,music=false,mode='stereo',engineMuted=false,paused=false,nativeEngines=false){
   this.mode=mode;if(!this.ready)return;const c=this.ctx.currentTime;
   for(const l of this.loops){if(l.player>=2)continue;const second=l.player===1,p=second?companion:{speed,wet,throttle},m=engineMix(p?.speed||0,p?.wet??1,p?.throttle??throttle);let gain=0,rate=1,cutoff=16000,pan=0;
    if(l.id==='wind'){gain=.08+storm*.38;cutoff=900+storm*6500;pan=.12;}
    else if(l.id==='music'){gain=music?.45:0;}
    else if(!second||companion){gain=m[l.id]*(companion?.72:1);rate=l.id==='idle'?m.idleRate:l.id==='fast'?m.fastRate:.85+clamp((p?.speed||0)/14)*.3;cutoff=l.id==='water'?12000:m.cutoff;pan=companion?(second?.45:-.45):0;}
-   if(paused&&l.id!=='music')gain=0;if(engineMuted&&l.player===0&&['idle','fast'].includes(l.id))gain=0;l.gain.gain.setTargetAtTime(gain,c,.12);l.source.playbackRate.setTargetAtTime(rate,c,.06);l.filter.frequency.setTargetAtTime(cutoff,c,.15);l.pan.pan.setTargetAtTime(pan*stereoWidth(mode),c,.08);
+   if(paused&&l.id!=='music')gain=0;if((engineMuted&&l.player===0||nativeEngines&&l.player>=0&&l.player<2)&&['idle','fast'].includes(l.id))gain=0;l.gain.gain.setTargetAtTime(gain,c,.12);l.source.playbackRate.setTargetAtTime(rate,c,.06);l.filter.frequency.setTargetAtTime(cutoff,c,.15);l.pan.pan.setTargetAtTime(pan*stereoWidth(mode),c,.08);
   }
  }
  updateRivals(listener,racers,paused=false,camera=null){if(!this.ready)return;const t=this.ctx.currentTime,near=racers.filter(r=>r!==listener&&r.mount!=='dolphin').sort((a,b)=>Math.hypot(a.x-listener.x,a.z-listener.z)-Math.hypot(b.x-listener.x,b.z-listener.z)).slice(0,3);
