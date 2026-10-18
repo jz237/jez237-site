@@ -1,4 +1,4 @@
-import {createNativeHullFromStart,prepareNativeHullStartFromPose} from './native-hull.js';
+import {createNativeHullFromStart,prepareNativeHullStartFromPose,authoredNativeHullLocalPoints} from './native-hull.js';
 import {createNativeRaceAdapter,nativeRaceSnapshot} from './native-race-adapter.js';
 import {createAuthoredNativeRider} from './authored-native-rider.js';
 import {createNativeLifecycleRider} from './native-lifecycle-rider.js';
@@ -127,6 +127,7 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
   const {idleFramesC6c,idleChoice16c4,...inputHistory}=actionStart??{};
   return createNativeRaceAdapter({...adapterOptions,
    ...(actionStart?{riderActions:{inputHistory,idleFramesC6c,idleChoice16c4,source:()=>raceRuntime.riderActionContext(i)}}:{}),
+   ...(actionStart?{riderLanding:{landingTicks:0,localPointsNative:authoredNativeHullLocalPoints()}}:{}),
    ...(sourceAI?{sourceAIInput:()=>{
     const prepared=raceRuntime.sampleAI(i,{bodiesBySlot:host.aiBodies,
      geometry:{selectionCircleNative:raceWaterAISelectionCircle(water),

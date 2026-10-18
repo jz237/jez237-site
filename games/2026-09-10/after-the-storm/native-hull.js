@@ -43,6 +43,7 @@ const COMPUTER_DAMPING_OUTER = [.57,.49,.60,.61];
 
 const vec = (x=0,y=0,z=0)=>({x,y,z});
 const copy = p=>vec(p.x,p.y,p.z);
+export const authoredNativeHullLocalPoints=()=>LOCAL_POINTS.map(([x,y,z])=>vec(x,y,z));
 const dot = (a,b)=>a.x*b.x+a.y*b.y+a.z*b.z;
 const length = p=>Math.hypot(p.x,p.y,p.z);
 const difference = (a,b)=>vec(a.x-b.x,a.y-b.y,a.z-b.z);
@@ -143,7 +144,7 @@ export function prepareNativeHullStartFromPose({position=ZERO,heading=0,pitch=0,
 export function prepareNativeHullStartFromMatrix({matrixWords,rider=0,computerProfile=false,retainedYawFrame}={}){
   if(!Number.isInteger(rider)||rider<0||rider>3)throw new RangeError('rider must be an index from0 to3');
   if(typeof computerProfile!=='boolean')throw new TypeError('computerProfile must be boolean');
-  return prepareNativeHullStart({matrixWords,localPointsNative:LOCAL_POINTS.map(([x,y,z])=>vec(x,y,z)),
+  return prepareNativeHullStart({matrixWords,localPointsNative:authoredNativeHullLocalPoints(),
     dampingInner:(computerProfile?COMPUTER_DAMPING_INNER:DAMPING_INNER)[rider],
     // Descriptor20=.4 gives the ordinary .5/(.4*10+1) pair gain.
     dampingOuter:(computerProfile?COMPUTER_DAMPING_OUTER:DAMPING_OUTER)[rider],constraint20:.4,retainedYawFrame});

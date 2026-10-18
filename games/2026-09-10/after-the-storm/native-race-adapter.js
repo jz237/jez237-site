@@ -10,6 +10,9 @@ import {createNativeImpactState,resetNativeImpacts,recordNativeImpact,nativeImpa
 import {createNativeRiderLifecycle,nativeRiderLifecycleSource,decideNativeRiderLifecycle,finishNativeRiderLifecycle,nativeRiderLifecycleSnapshot} from './native-rider-lifecycle.js';
 import {nextNativeDryContactFrames} from './native-race-body-fields.js';
 import {initialNativeHullWetState,completeNativeHullWetState} from './native-hull-wet-state.js';
+import {accumulateNativeStuntArc} from './native-stunt-scoring.js';
+import {prepareNativeRiderLanding} from './native-rider-landing.js';
+import {prepareNativeHullLandingShape} from './native-hull-landing-shape.js';
 import {createNativeRiderActionInputHistory,stepNativeRiderActionInputHistory,
   prepareNativeRiderInversion,finishNativeRiderArcState} from './native-rider-action-dispatch.js';
 
@@ -44,6 +47,9 @@ import {createNativeRiderActionInputHistory,stepNativeRiderActionInputHistory,
 // swept contact supplement, rescue, course boundary or collision discovery.
 
 const H=NATIVE_HULL_STEP,FRAME_TICKS=5;
+const floatWord=new DataView(new ArrayBuffer(4));
+function bitsToFloat(bits){floatWord.setUint32(0,bits);return floatWord.getFloat32(0);}
+function floatToBits(value){floatWord.setFloat32(0,value);return floatWord.getUint32(0);}
 const articulatedOwners=new WeakMap();
 const latchedControlFrames=new WeakMap();
 const busyAdapters=new WeakSet();
@@ -104,8 +110,8 @@ function actionState(value={},previous=initialAction()){
   integer(result.noWetNoContactFrames,'noWetNoContactFrames',-0x80000000,0x7fffffff);
   integer(result.turnCount16d4,'turnCount16d4',-0x80000000,0x7fffffff);
   for(const name of ['upsideDown16f0','previousUpsideDown16f2'])integer(result[name],name,0,0xffff);
-  // Retain the source entry writes without pretending that the later travel/
-  // result consumers are implemented here.15ec is represented as storage bits.
+  //15ec has one storage-bit owner. The optional landing path below consumes
+  // its arc; adapters without that explicit option retain entry writes only.
   integer(result.field15ecBits,'field15ecBits',0,0xffffffff);
   for(const name of ['field16e8','field16ec'])integer(result[name],name,-0x80000000,0x7fffffff);
   if(typeof result.arcActive!=='boolean')throw new TypeError('arcActive must be boolean');
@@ -149,6 +155,16 @@ function createRiderActions(value,lifecycle){
   // providers are captured once at the same input boundary as the controller.
   const source=typeof value.source==='function'?value.source:actionSource(value.source);
   return {inputHistory:history,idleFramesC6c:value.idleFramesC6c,idleChoice16c4:value.idleChoice16c4,source};
+}
+function createRiderLanding(value,actions,hull){
+  if(value===undefined)return null;
+  if(!actions)throw new TypeError('riderLanding requires the physical action and record owners');
+  record(value,'riderLanding');onlyKeys(value,['landingTicks','localPointsNative'],'riderLanding');
+  integer(value.landingTicks,'landingTicks',-32768,32767);
+  const local=value.localPointsNative;
+  const native=p=>Object.fromEntries(['x','y','z'].map(k=>[k,p[k]/hull.scale]));
+  prepareNativeHullLandingShape({pointsNative:hull.points.map(p=>native(p.position)),localPointsNative:local,centerNative:native(hull.center),frame:hull.frame});
+  return {landingTicks:value.landingTicks,localPointsNative:local.map(p=>({...p}))};
 }
 function riderActionSnapshot(adapter){
   const actions=adapter.riderActions;
@@ -248,10 +264,14 @@ export function applyNativeRaceContact(hull,{kind,pointIndex,normal,penetration=
  * optional actual shared randomUnsigned32 callback. poseCompletion contains
  * finished2c2c/record2c24/gameMode648 signed words and racerIndex/primaryRacerIndex
  * slots0..3. No source initialization or scene values are guessed.
+ * riderLanding additionally supplies retained signed16 landingTicks and the
+ * caller's twelve localPointsNative for51EC0 repair. It requires riderActions.
+ * The source last-tick50/54/58 displacement owns arc translation removal;
+ * physicalMode157c (not contactMode) owns the recovered landing classification.
  */
 export function createNativeRaceAdapter({riderIndex=0,tuneB6c=0,tuneB70=0,tuneB74=0,
   position,velocity,heading=0,pitch=0,roll=0,scale=.025,surface=0,contacts={},jointWorld,
-  contactFactor=1,powerSteps=5,sourceState={},articulatedRider,riderPose,riderRecovery,riderActions,controlOrigin='human',computerProfile=false,hullStart,sourceAIInput}={}){
+  contactFactor=1,powerSteps=5,sourceState={},articulatedRider,riderPose,riderRecovery,riderActions,riderLanding,controlOrigin='human',computerProfile=false,hullStart,sourceAIInput}={}){
   if(controlOrigin!=='human'&&controlOrigin!=='ai')throw new RangeError('controlOrigin must be human or ai');
   if(typeof computerProfile!=='boolean')throw new TypeError('computerProfile must be boolean');
   range(contactFactor,'contactFactor',0,1);range(powerSteps,'powerSteps',0,5);hookSet(contacts);
@@ -276,13 +296,15 @@ export function createNativeRaceAdapter({riderIndex=0,tuneB6c=0,tuneB70=0,tuneB7
   if(sourceAIInput!==undefined&&(typeof sourceAIInput!=='function'||!lifecycle||controlOrigin!=='human'))
     throw new TypeError('sourceAIInput requires a producer, physical rider lifecycle and human default origin');
   const actions=createRiderActions(riderActions,lifecycle);
+  const landing=createRiderLanding(riderLanding,actions,hull);
+  if(landing)finite(bitsToFloat(action.field15ecBits),'retained landing arc');
   if(articulatedRider)articulatedOwners.set(articulatedRider,hull);
   // The source reset seeds aggregate wet state to8/true before later water
   // samples establish point bits. Rear wet flags remain independently false.
   const wetState=initialNativeHullWetState();water.wetCount=wetState.wetCountC78;water.anyWet=wetState.wetFlagC7c!==0;
   const adapter={hull,water,wetState,rider,riderControlState,impacts,controlState:createNativeControlState(),surface,contacts,jointWorld,
     sourceState:typeof sourceState==='function'?sourceState:{...(lifecycle?sourceState:source),actionState:undefined},
-    actionState:action,articulatedRider,riderPose,riderLifecycle:lifecycle,riderActions:actions,
+    actionState:action,articulatedRider,riderPose,riderLifecycle:lifecycle,riderActions:actions,riderLanding:landing,
     contactFactor,powerSteps,remainder:0,logicalFrames:0,stepsLast:0,frame:null,
     preparedHullTick:null,pendingFrameCompletion:false,inactiveTicks:0,
     objectHitKind16d8:0,contactWindow:contactsZero(),contactDriveFrames:0,dryContactFrames16d0:0,lastControls:null,
@@ -434,6 +456,7 @@ function beginFrame(adapter,input,options){
   }
   // Everything that may reject missing trim input precedes these mutations.
   adapter.controlState=sampled.state;adapter.lastControls=forceControls;adapter.actionState=nextAction;
+  if(adapter.riderLanding&&decision.landingPending)adapter.riderLanding.landingTicks=-1;
   if(actionHistory)adapter.riderActions.inputHistory=actionHistory;
   latchedControlFrames.delete(adapter);
   adapter.riderControlState=physicalControls.state;
@@ -462,6 +485,12 @@ function endFrame(adapter,beforeActorDecision){
     {fieldC7c:adapter.wetState.wetFlagC7c,manipulationAction:adapter.actionState.action,...contactWindow});
   Object.assign(adapter.actionState,{turnCount16d4:arc.turnCount16d4,noWetNoContactFrames:arc.noWetNoContactFrames16dc,
     arcActive:arc.arcActive16e2!==0});
+  if(adapter.riderLanding){
+    const velocity=i=>Object.fromEntries(['x','y','z'].map(k=>[k,Math.fround(hull.points[i].velocity[k]*H/s)]));
+    adapter.actionState.field15ecBits=floatToBits(accumulateNativeStuntArc(bitsToFloat(adapter.actionState.field15ecBits),{
+      frontVelocityNative:velocity(4),rearVelocityNative:velocity(1),bodyDeltaNative:hull.sprayMotionNative.centerVelocity,rightY:hull.frame.right.y,
+      action:adapter.actionState.action,tracking:adapter.actionState.arcActive,simulationActive:!inactive}));
+  }
   adapter.logicalFrames++;
   adapter.lastFrame={logicalFrame:adapter.logicalFrames,clockUnits:adapter.logicalFrames*50,
     frameDisplacementNative:displacement,frameSpeedNative:speed,
@@ -519,6 +548,23 @@ function endFrame(adapter,beforeActorDecision){
     adapter.lastFrame.controlActorState=frame.actorState;adapter.lastFrame.controlAnimationFrame=frame.animationFrame;
     adapter.lastFrame.actorState=final.actorState;adapter.lastFrame.animationFrame=final.animationFrame;
     adapter.lastFrame.recovery=nativeRiderLifecycleSnapshot(adapter.riderLifecycle);
+  }
+  if(adapter.riderLanding){
+    const final=adapter.riderLifecycle.state,record=actionSource.poseCompletion;
+    const result=prepareNativeRiderLanding({landingTicks:adapter.riderLanding.landingTicks,arcNative:bitsToFloat(adapter.actionState.field15ecBits)},
+      {actorState:final.actorState,animationFrame:final.animationFrame,action:adapter.actionState.action,wetCount:water.wetCount,anyWet:water.anyWet,
+       airborneFrames:adapter.actionState.noWetNoContactFrames,floorContact:contactWindow.floorImpactNative!==0,boxContact:contactWindow.boxImpactNative!==0,
+       recoveryState:adapter.riderLifecycle.physicalMode,crash:final.crashCountdown!==0,partial:final.stumbleCountdown!==0,upY:hull.frame.up.y,
+       racerIndex:record.racerIndex,primaryRacerIndex:record.primaryRacerIndex});
+    adapter.riderLanding.landingTicks=result.landingTicks;
+    adapter.actionState.field15ecBits=floatToBits(result.arcNative);
+    if(result.settled){
+      const repair=prepareNativeHullLandingShape({pointsNative:hull.points.map(p=>Object.fromEntries(['x','y','z'].map(k=>[k,p.position[k]/s]))),
+       localPointsNative:adapter.riderLanding.localPointsNative,centerNative:Object.fromEntries(['x','y','z'].map(k=>[k,hull.center[k]/s])),frame:hull.frame});
+      if(repair.reset)repair.pointsNative.forEach((p,i)=>{for(const k of ['x','y','z'])hull.points[i].position[k]=p[k]*s;});
+      result.hullReset=repair.reset;
+    }
+    adapter.lastFrame.landing=result;
   }
   adapter.lastFrame.actionState={...adapter.actionState};
   if(actions)adapter.lastFrame.riderActions=riderActionSnapshot(adapter);
@@ -693,6 +739,7 @@ export function nativeRaceSnapshot(adapter){
       impacts:{...lastFrame.impacts,normal:copy(lastFrame.impacts.normal)},
       ...(lastFrame.recovery?{recovery:structuredClone(lastFrame.recovery)}:{}),
       ...(lastFrame.riderActions?{riderActions:structuredClone(lastFrame.riderActions)}:{}),
+      ...(lastFrame.landing?{landing:structuredClone(lastFrame.landing)}:{}),
       ...(lastFrame.physicalControls?{physicalControls:{...lastFrame.physicalControls}}:{}),
       actionState:{...lastFrame.actionState},jointWorld:lastFrame.jointWorld?copy(lastFrame.jointWorld):null},
     simulationTime:hull.simulationTime,remainder:adapter.remainder};

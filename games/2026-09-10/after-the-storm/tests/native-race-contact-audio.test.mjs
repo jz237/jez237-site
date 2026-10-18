@@ -54,11 +54,20 @@ test('pose feedback uses completed recipes even with engine channels muted, with
  assert.deepEqual(owner.drain(),[],'original result flag suppresses both feedback calls');
 });
 
-test('explicit original rider feedback calls reach cue playback, without inventing a landing trigger',()=>{
+test('explicit original rider feedback calls reach cue playback',()=>{
  const owner=createNativeRaceContactAudio({players:1,courseIndex:1});owner.applyEffects([call('800c21f4',7,1)]);owner.drain();
  owner.applyEffects([call('800c3548'),call('800c35b4')]);
  assert.deepEqual(owner.drain().map(c=>c.arguments),[[0x06000b00,9],[0x06000b00,19]]);
  owner.applyEffects([{kind:'recordWordWrite',consumer:'800c3548',arguments:[]}]);assert.deepEqual(owner.drain(),[]);
+});
+
+test('completed landing recipes reach feedback once even when source simulation0 holds hull ticks',()=>{
+ const owner=createNativeRaceContactAudio({players:1,courseIndex:1}),f=field();
+ owner.applyEffects([call('800c21f4',7,1)]);owner.drain();
+ const b=body(1,{simulation:0});b.lastFrame.landing={effects:[call('800c35b4')]};
+ advance(owner,[b],f,[0],[0]);const calls=owner.drain();assert.equal(calls.length,1);assert.equal(calls[0].arguments[0],0x06000b00);
+ advance(owner,[b],f,[0],[0]);assert.deepEqual(owner.drain(),[]);
+ b.logicalFrames=2;b.lastFrame.landing={effects:[]};advance(owner,[b],f,[0],[0]);assert.deepEqual(owner.drain(),[]);
 });
 
 test('completed primary-slot feedback preserves player attribution and the two-player cue base',()=>{

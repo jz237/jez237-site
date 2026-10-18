@@ -136,6 +136,10 @@ export function createNativeRaceContactAudio({players,courseIndex,difficultyWord
       submit({consumer:'c3548',arguments:[]},player);
      }
     }
+    //65C18's landing countdown follows the actor phase, including simulation0.
+    // Its result owner has already applied the primary-racer success gate.
+    for(const effect of adapter.lastFrame.landing?.effects??[])if(effect.kind==='externalCall'&&effect.consumer==='800c35b4')
+     submit({consumer:'c35b4',arguments:[]},player);
     const actorC54=adapter.lastFrame.actorState;
     let point6b4Native,waterQueryNative;
     if(actorC54===23||actorC54===5){

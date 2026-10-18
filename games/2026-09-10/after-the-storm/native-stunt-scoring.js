@@ -1,6 +1,7 @@
 // Independent reconstruction of a bounded Stunt scoring state machine.
-// Nothing here drives the live game, recognizes controller gestures, animates
-// a pose, discovers contacts, or substitutes rotation angles for point motion.
+// The optional native adapter consumes the arc and classifier helpers below.
+// Award progression is still separate from the live HUD/score owner. Nothing
+// here recognizes gestures, animates poses or discovers contacts.
 //
 // Future adapter order, once per source logical frame (50 native clock units):
 //   1. Accumulate the tracked point-motion arc using the post-hull velocities.
@@ -217,7 +218,7 @@ export function classifyNativeStuntFrame({actorState,animationFrame=0,action=0,w
   recoveryState=0,crash=false,partial=false,arcNative=0,upY=1}={}){
   integer(actorState,'actorState',0,255); integer(animationFrame,'animationFrame',0,65535);
   integer(action,'action',0,4); integer(wetCount,'wetCount',0,12);
-  integer(landingTicks,'landingTicks',-1,32767); integer(airborneFrames,'airborneFrames');
+  integer(landingTicks,'landingTicks',-32768,32767); integer(airborneFrames,'airborneFrames',-2147483648);
   integer(recoveryState,'recoveryState');
   for(const [name,value] of Object.entries({anyWet,floorContact,boxContact,crash,partial}))boolean(value,name);
   let arc=finiteFloat(arcNative,'arcNative');
@@ -244,7 +245,8 @@ export function classifyNativeStuntFrame({actorState,animationFrame=0,action=0,w
 /**
  * Native point-motion arc, not radians/degrees or airtime. All vectors use
  * native point-velocity/displacement units, not SI velocities. front/rear are
- * upper hull points4/1; bodyDelta is the stored post-hull center displacement.
+ * upper hull points4/1; bodyDelta is the last hull tick's stored50/54/58 center
+ * displacement, not the five-tick outer-frame displacement used by the HUD.
  * `tracking` and `simulationActive` are caller-owned source latches. The
  * source weights by1+abs(rightY)/2 and by2.8 during actions1/2; binary32 steps
  * matter at integer award thresholds. No tracking latch is invented here.

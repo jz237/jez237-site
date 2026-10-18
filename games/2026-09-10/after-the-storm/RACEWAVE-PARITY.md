@@ -19,6 +19,44 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — native rotation landing and hull repair
+
+Ordinary native time/versus now retains the source release countdown, accumulates
+the tracked point-motion arc, and classifies each completed rider frame. Released
+rotations arm the five-frame countdown on water contact or qualified floor/box
+contact. Successful, partial and failed settlement use the actual actor,
+physical mode157c and recovery flags. Only a successful primary-rider landing
+emits C35B4 feedback. An unarmed splash grants no stunt result. Source simulation0
+still advances this result countdown; a browser pause does not run the frame.
+
+The arc subtracts the last hull tick's50/54/58 center displacement from point4/1
+velocities, rather than the five-tick HUD displacement. Canonical15ec storage
+bits remain the sole arc owner. On settlement,51EC0 checks sixteen signed
+body-axis planes across the six end-section points; a folded hull rebuilds all
+twelve positions using the existing authored local shape. Velocities, frame,
+center, constraints and other point state remain untouched by that repair.
+
+A fresh read-only EVO X2 Ghidra query preserved all9 project files. All5,413
+exported instruction records matched the ROM. Complete51EC0 execution covered
+370 synthetic geometry cases and137,063 instructions, with all non-position
+body bytes checked unchanged. The original landing tail covered512 cases and
+8,888 instructions, capturing the ordered feedback/repair calls. Public
+fixtures contain synthetic numeric inputs/results, not original geometry/code.
+
+123 unique focused checks pass, including full Glacier/Southern races, postrace,
+gestures and audio. Prepared airborne runs use normal controls and actual hull/
+rider solvers thereafter: a short roll lands successfully, a held rotation
+fails, and secondary-player success stays quiet. Full physical histories,
+landing events and audio match at30/60/144Hz. Prepared simulation0 cases verify
+position-only repair and physical-mode attribution. A browser ordinary race
+reached9s without a runtime exception at High1280x720/83,521 water vertices.
+A separate prepared airborne browser adapter settled on frame24 and its cue19
+was accepted by the loaded original audio bank. This was not a naturally
+driven course-jump browser run; an unrelated resource404 remains in the preview.
+
+Native backend/course admission remains opt-in; original geometry/animation,
+native stunt award queue/HUD/results and all-mode parity remain incomplete.
+
 ## Unpublished — ordinary native gesture and idle actions
 
 Ordinary native time/versus hosts now admit the existing source gesture and
