@@ -1,19 +1,20 @@
-import {createSourceTwilightCourse} from './source-twilight-course.js?v=abdbcabcfe7a';
-import {polygonDistance} from './classic-courses.js?v=abdbcabcfe7a';
-import {twilightAnchors,twilightPilotAnchors,twilightStuntNavigation} from './source-twilight-navigation.js?v=abdbcabcfe7a';
-import {samplePolyline} from './courses.js?v=abdbcabcfe7a';
-import {createSourcePortCourse} from './source-port-course.js?v=abdbcabcfe7a';
-import {portStuntNavigation} from './source-port-navigation.js?v=abdbcabcfe7a';
-import {createSourceDolphinStuntCourse} from './source-dolphin-stunt-course.js?v=abdbcabcfe7a';
-import {createSourceFortressStuntCourse} from './source-fortress-stunt-course.js?v=abdbcabcfe7a';
+import {createSourceTwilightCourse} from './source-twilight-course.js?v=44ffcceb5a94';
+import {polygonDistance} from './classic-courses.js?v=44ffcceb5a94';
+import {twilightAnchors,twilightPilotAnchors,twilightStuntNavigation} from './source-twilight-navigation.js?v=44ffcceb5a94';
+import {samplePolyline} from './courses.js?v=44ffcceb5a94';
+import {createSourcePortCourse} from './source-port-course.js?v=44ffcceb5a94';
+import {portStuntNavigation} from './source-port-navigation.js?v=44ffcceb5a94';
+import {createSourceDolphinStuntCourse} from './source-dolphin-stunt-course.js?v=44ffcceb5a94';
+import {createSourceFortressStuntCourse} from './source-fortress-stunt-course.js?v=44ffcceb5a94';
+import {createSourceDrakeStuntCourse} from './source-drake-stunt-course.js?v=44ffcceb5a94';
 
 /** Source-aligned high-resolution scene for native Stunt. Course geometry and
  * decorative materials remain separate from the original physical owners.
  * Other modes keep their existing independently prepared course selections. */
 export function nativeStuntScene(base){
  const index=base.sourceWaterCourseIndex;
- if(![0,3,5,6].includes(index))return base;
- const source=index===0?createSourceDolphinStuntCourse(polygonDistance):index===3?createSourceFortressStuntCourse(polygonDistance):index===5?createSourcePortCourse(polygonDistance,{stuntNavigation:portStuntNavigation}):
+ if(![0,3,4,5,6].includes(index))return base;
+ const source=index===0?createSourceDolphinStuntCourse(polygonDistance):index===3?createSourceFortressStuntCourse(polygonDistance):index===4?createSourceDrakeStuntCourse(polygonDistance):index===5?createSourcePortCourse(polygonDistance,{stuntNavigation:portStuntNavigation}):
   createSourceTwilightCourse(polygonDistance,{anchorsByClass:twilightAnchors,
    pilotAnchorsByClass:twilightPilotAnchors,stuntNavigation:twilightStuntNavigation});
  return {...source,id:base.id,sky:base.sky,water:base.water,storm:base.storm,

@@ -6271,3 +6271,44 @@ and worker terrain match at361x361 heights and512x512 depth resolution. All388
 module hashes and the four entry pages are refreshed. Drake Lake's native
 Stunt scene, ordinary-course coverage, original AI and broader parity remain
 unfinished. Native physics remains opt-in.
+
+## Drake Lake native Stunt scene — 2026-10-18
+
+Drake Lake (source index4, web selection reed) completes the nine source-aligned
+Stunt scene selections in the opt-in native preview. Its22 finite floor faces
+and72 shoreline segments are reconstructed from the original numeric resources.
+The inner island and outer lake boundary retain their opposite water-side
+semantics. Finite source floor heights take precedence over authored woodland
+and bank elevations, so scenery does not raise those shallows.
+
+The complete source array contains three jumps with15 finite planes, sixteen
+rings and45 decorations. Although the raw decoration table has48 entries, the
+original64-object limit truncates its final three rows. Only loaded rows19–63
+receive meshes. All thirteen fixed post colliders retain source centers, radii,
+tags and order. Source checkpoint rows1/5/9/0 retain four15-second limits.
+
+Private inspection of the original common bank's0E0098B0 display list and its
+32x64 texture identifies the class2 decorations as reed clumps. Existing EVO
+Ghidra output for6D034 confirms their camera-facing source rendering; source
+initialization gives kinds3/4 no motion or collision. Their replacements are
+independently authored3D reeds with24 curved blades and1,152 triangles per clump,
+smooth shared normals, variation and source-relative height bounds. No original
+texture or display-list bytes are included. All loaded positions and visibility
+come from the canonical state, with detached replay capture and pause behavior.
+Old illustration-map reed and pier placements are omitted from this native map.
+
+The authored inspection driver collects all sixteen rings and completes four
+checkpoints using throttle/steering only, finishing with7,715 points. The full
+route test verifies award drain, record insertion and native result handoff.
+Hull samples show physical climbs at all three ramps, reaching3.89 metres.
+A real-time1440x900 High browser run independently completes four checkpoints
+and fifteen rings with7,070 points. The lake, banks, water and rider were
+visually checked; a separate close-up verified the detailed replacement reeds.
+No JavaScript or shader errors appeared; one local missing-resource404 remains.
+
+Five Drake scene tests, the full physical route and sixteen existing native
+presentation/Port/Fortress regressions pass. Terrain remains361x361 with512x512
+depth data and matches its worker byte for byte. All391 module hashes across
+four entry pages are refreshed. Nine admitted Stunt scenes do not establish
+full gameplay parity: ordinary native course coverage, original AI and further
+trick/alternate-line validation remain outstanding. Native physics is opt-in.

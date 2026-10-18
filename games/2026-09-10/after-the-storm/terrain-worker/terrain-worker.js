@@ -1,6 +1,6 @@
-import {getCourse} from './courses.js?v=abdbcabcfe7a';
-import {sampleTerrain} from './terrain-data.js?v=abdbcabcfe7a';
-import {nativeStuntScene} from './native-stunt-scene.js?v=abdbcabcfe7a';
+import {getCourse} from './courses.js?v=44ffcceb5a94';
+import {sampleTerrain} from './terrain-data.js?v=44ffcceb5a94';
+import {nativeStuntScene} from './native-stunt-scene.js?v=44ffcceb5a94';
 self.onmessage=({data:{id,difficulty,key,geometryPlayers=1,nativeSceneCourseIndex}})=>{
  try{
   const start=performance.now();let course=getCourse(id,difficulty);

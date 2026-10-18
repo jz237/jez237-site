@@ -1,6 +1,7 @@
 import {makeNativeIceSplashRenderer} from './native-ice-splash-render.js';
 import {nativeIceFragmentPose} from './native-ice-presentation.js';
 import {nativeStuntVolumePositions} from './native-stunt-presentation.js';
+import {nativeReedGeometry} from './native-reed-geometry.js';
 import {surfaceMeshPositions} from './faceted-surfaces.js';
 import {hazardBroken,breakableEvents,fragmentPose} from './breakable-hazards.js';
 import {terrainPreparation} from './terrain-preparation.js';
@@ -67,6 +68,18 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
   const rows=new Map(world?.floating?.map(q=>[q.id,q])??[]);
   for(const {id,g} of nativeFloatingMeshes){const q=rows.get(id);g.visible=!!q?.visible;if(q){g.matrix.fromArray(q.matrix);g.matrixWorldNeedsUpdate=true;}}
   root.userData.nativeFloating={count:nativeFloatingMeshes.length,visible:nativeFloatingMeshes.filter(q=>q.g.visible).length};
+ }
+ const reedMaterial=course.nativeStuntLayout?.decorations?.length?mat(0xffffff,.9):null;
+ if(reedMaterial){reedMaterial.vertexColors=true;reedMaterial.side=T.DoubleSide;}
+ const nativeDecorationMeshes=(course.nativeStuntLayout?.decorations??[]).map(definition=>{
+  const data=nativeReedGeometry(definition.sourceIndex),geometry=new T.BufferGeometry();
+  geometry.setAttribute('position',new T.BufferAttribute(data.positions,3));geometry.setAttribute('color',new T.BufferAttribute(data.colors,3));geometry.setIndex(data.indices);geometry.computeVertexNormals();
+  const mesh=add(geometry,reedMaterial);mesh.userData.dynamic=true;mesh.visible=false;return {id:definition.id,mesh};
+ });
+ function updateNativeDecorations(world){
+  const rows=new Map(world?.decorations?.map(q=>[q.id,q])??[]);
+  for(const {id,mesh} of nativeDecorationMeshes){const q=rows.get(id);mesh.visible=!!q?.visible;if(q)mesh.position.fromArray(q.position);}
+  root.userData.nativeDecorations={count:nativeDecorationMeshes.length,visible:nativeDecorationMeshes.filter(q=>q.mesh.visible).length};
  }
  const red=mat(0xef503e,.35),yellow=mat(0xf5ce46,.35),pink=mat(0xd06aa9,.4);for(const [index,g] of (freeRide||authoredStunts?[]:course.gates).entries()){if(g.side){const m=g.side>0?red:yellow,b=buoy(g.bx,g.bz,m,1.25);b.primarySourceRow=sourceRowByGate.get(index);if(b.primarySourceRow!==undefined){b.nativeSkirt=add(new T.CylinderGeometry(.75,.525,.875,16),m,0,-.4375,0,b.g);b.nativeSkirt.visible=false;}}if(!course.boundary)for(const side of [-1,1])buoy(g.x+g.tz*29*side,g.z-g.tx*29*side,pink,.6);}
  // Independently authored high-resolution bodies follow native centers. Align
@@ -241,7 +254,7 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
   if(theme==='island'&&!course.sourceShores){for(let i=0;i<6;i++){const a=i*1.04,x=Math.sin(a)*22,z=Math.cos(a)*24,y=building(x,z,8,7,3,wood);if(y)add(new T.ConeGeometry(6.5,3,5),sand,x,y+5,z);}if(visualGround(0,-10)>2)rock(0,-10,12);}
   if(theme==='park'&&!course.layoutRevision){for(let i=0;i<4;i++)pier(-100+i*16,105,0,15);label('PELICAN PARK / TRAINING WATER',-65,9,118,35);for(let i=0;i<10;i++){const x=-110+i*22,z=145,y=building(x,z,6,7,3,i%2?white:yellow);if(y)box(x,y+4,z,7,.3,8,steel);}}
  }
- if(theme==='lake'){
+ if(theme==='lake'&&!course.sourceShores){
 
   // Reed clumps are instanced to keep the shoreline detail inexpensive.
   const reeds=new T.InstancedMesh(new T.CylinderGeometry(.035,.045,1.4,4),green,700),dummy=new T.Object3D();root.add(reeds);geometries.push(reeds.geometry);for(let i=0;i<700;i++){const g=course.gates[i%course.gates.length],side=i%2?1:-1,x=g.x+g.tz*side*(39+random()*5)+(random()-.5)*9,z=g.z-g.tx*side*(39+random()*5)+(random()-.5)*9;dummy.position.set(x,visualGround(x,z)+.6,z);dummy.rotation.z=(random()-.5)*.3;dummy.updateMatrix();reeds.setMatrixAt(i,dummy.matrix);}pier(-125,120,.6,20);building(-155,140,16,12,7,wood);
@@ -321,7 +334,7 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
   for(const y of [.4,2.5,4.9])box(0,y,0,w*2,.16,.22,steel,gateMesh);
   const signal=mat(0xc65a32,.4,.1,0x8e3018);gateSignal=signal;cylinder(-w-.65,passage.clearance+.7,length*.31,.25,.5,signal,g);
   label(passage.kind==='gate'?(passage.enabled?'SLUICE / OPENS LAP 2':'SLUICE CLOSED'):(passage.enabled?'SHORT CHANNEL / LOW ROOF':'SERVICE CHANNEL CLOSED'),0,7.2,length*.32-.08,w*1.8,g).rotation.y=Math.PI;
-  label('MAIN CHANNEL →',-w-7,3,length*.29,10,g).rotation.y=Math.PI;for(const side of [-1,1])box(-w-7+side*3.8,-2,length*.29,.12,10,.12,steel,g);
+  label('MAIN CHANNEL â†’',-w-7,3,length*.29,10,g).rotation.y=Math.PI;for(const side of [-1,1])box(-w-7+side*3.8,-2,length*.29,.12,10,.12,steel,g);
  }
  // Render each stone arch as one continuous profile; contact interpolates the same sampled underside.
  for(const arch of new Set((course.crossbars||[]).filter(b=>b.kind==='stone-arch').map(b=>b.arch))){const parts=course.crossbars.filter(b=>b.kind==='stone-arch'&&b.arch===arch),first=parts[0],last=parts.at(-1),length=Math.hypot(last.x-first.x,last.z-first.z)+first.length,shape=new T.Shape();shape.moveTo(-length/2,first.top);if(arch==='dolphin')for(let i=0;i<parts.length;i++)shape.lineTo(-length/2+length*(i+.5)/parts.length,parts[i].top);shape.lineTo(length/2,last.top);shape.lineTo(length/2,-10);for(let i=parts.length-1;i>=0;i--)shape.lineTo(-length/2+length*(i+.5)/parts.length,parts[i].bottom);shape.lineTo(-length/2,-10);shape.closePath();const mesh=add(new T.ExtrudeGeometry(shape,{depth:first.depth,bevelEnabled:false,steps:1}),arch==='dolphin'?naturalRock:stone,(first.x+last.x)/2,0,(first.z+last.z)/2);mesh.rotation.y=Math.atan2(-first.tz,first.tx);mesh.geometry.translate(0,0,-first.depth/2);}
@@ -334,7 +347,7 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
  terrain.userData.dynamic=true;animated.forEach(a=>a.o.userData.dynamic=true);root.updateMatrixWorld(true);const batches=new Map(),remove=[];const pos=new T.Vector3(),normal=new T.Vector3(),normalMatrix=new T.Matrix3();
  root.traverse(o=>{if(!o.isMesh||o.isInstancedMesh)return;for(let p=o;p&&p!==root;p=p.parent)if(p.userData.dynamic)return;const geo=o.geometry,pa=geo.attributes.position,na=geo.attributes.normal,ua=geo.attributes.uv;if(!pa||!na)return;let batch=batches.get(o.material);if(!batch){batch={p:[],n:[],uv:[],indices:[]};batches.set(o.material,batch);}const offset=batch.p.length/3;normalMatrix.getNormalMatrix(o.matrixWorld);for(let i=0;i<pa.count;i++){pos.fromBufferAttribute(pa,i).applyMatrix4(o.matrixWorld);normal.fromBufferAttribute(na,i).applyMatrix3(normalMatrix).normalize();batch.p.push(pos.x,pos.y,pos.z);batch.n.push(normal.x,normal.y,normal.z);batch.uv.push(ua?ua.getX(i):0,ua?ua.getY(i):0);}if(geo.index)for(let i=0;i<geo.index.count;i++)batch.indices.push(geo.index.getX(i)+offset);else for(let i=0;i<pa.count;i++)batch.indices.push(i+offset);remove.push(o);});
  for(const o of remove)o.removeFromParent();for(const [m,b] of batches){const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(b.p,3));geo.setAttribute('normal',new T.Float32BufferAttribute(b.n,3));geo.setAttribute('uv',new T.Float32BufferAttribute(b.uv,2));geo.setIndex(b.indices);add(geo,m);}
- return {root,update(time,storm,stunt=null,openedAt=Infinity,racers=[],sceneryView=[1],breakables=null,primaryBuoys=null,nativeIce=null,nativeStuntWorld=null){updateNativeFloating(nativeStuntWorld);const nativeRings=new Map(nativeStuntWorld?.rings.map(r=>[r.index,r])??[]),nativeVolumes=new Map(nativeStuntWorld?.volumes.map(v=>[v.id,v])??[]);root.userData.nativeStunt=nativeStuntWorld?{rings:nativeStuntWorld.rings.length,visibleRings:nativeStuntWorld.rings.filter(r=>r.visible).length,volumes:nativeStuntWorld.volumes.length}:null;for(const item of nativeVolumeMeshes){
+ return {root,update(time,storm,stunt=null,openedAt=Infinity,racers=[],sceneryView=[1],breakables=null,primaryBuoys=null,nativeIce=null,nativeStuntWorld=null){updateNativeFloating(nativeStuntWorld);updateNativeDecorations(nativeStuntWorld);const nativeRings=new Map(nativeStuntWorld?.rings.map(r=>[r.index,r])??[]),nativeVolumes=new Map(nativeStuntWorld?.volumes.map(v=>[v.id,v])??[]);root.userData.nativeStunt=nativeStuntWorld?{rings:nativeStuntWorld.rings.length,visibleRings:nativeStuntWorld.rings.filter(r=>r.visible).length,volumes:nativeStuntWorld.volumes.length}:null;for(const item of nativeVolumeMeshes){
   const view=nativeVolumes.get(item.id);if(!view)continue;
   item.mesh.visible=view.visible;item.mesh.position.fromArray(view.origin);
   const shape=JSON.stringify([view.axes,view.spans]);

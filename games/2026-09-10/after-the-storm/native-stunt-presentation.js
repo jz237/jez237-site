@@ -39,11 +39,17 @@ export function captureNativeStuntWorld(value){
   floating=value.floating.map(v=>({id:name(v.id),sourceIndex:integer(v.sourceIndex,0,63),position:vector(v.position),matrix:matrix(v.matrix),visible:flag(v.visible)}));
   if(new Set(floating.map(v=>v.id)).size!==floating.length||new Set(floating.map(v=>v.sourceIndex)).size!==floating.length)throw new RangeError('Duplicate floating presentation identity');
  }
+ let decorations;
+ if(value.decorations!==undefined){
+  if(!Array.isArray(value.decorations)||value.decorations.length>64)throw new TypeError('Expected Stunt decoration display list');
+  decorations=value.decorations.map(v=>({id:name(v.id),sourceIndex:integer(v.sourceIndex,0,63),position:vector(v.position),visible:flag(v.visible)}));
+  if(new Set(decorations.map(v=>v.id)).size!==decorations.length||new Set(decorations.map(v=>v.sourceIndex)).size!==decorations.length)throw new RangeError('Duplicate decoration presentation identity');
+ }
  if(new Set(rings.map(r=>r.index)).size!==rings.length||new Set(rings.map(r=>r.sourceIndex)).size!==rings.length||new Set(volumes.map(v=>v.id)).size!==volumes.length)
   throw new RangeError('Duplicate Stunt presentation identity');
  if(volumes.some(v=>v.spans.some(s=>s<=0)))throw new RangeError('Invalid Stunt display span');
  if(rings.some(r=>r.scale!==undefined&&(r.scale<=0||r.scale>1)))throw new RangeError('Invalid Stunt ring scale');
- return {version:1,rings,volumes,...(floating?{floating}:{})};
+ return {version:1,rings,volumes,...(floating?{floating}:{}),...(decorations?{decorations}:{})};
 }
 // These independently tessellated wooden surfaces follow the same finite
 // planes as contact. The renderer retains its detailed materials and mesh count.
@@ -108,11 +114,23 @@ export function createNativeStuntPresentation({course,readState,scale=.025}){
   usedFloating.add(row);floating.push({id:definition.id,sourceIndex:row,radius:definition.radius,runtimeKind:kind});
  }
  if(usedFloating.size!==rows.filter(i=>[5,9].includes(raw[i*49+19])).length)throw new RangeError('Every source floating body needs its high-resolution mesh');
- const layout=freeze({version:1,courseIndex,rings,volumes,...(floating.length?{floating}:{})});
+ const decorations=[],usedDecorations=new Set();
+ for(const definition of course.sourceStaticObjects??[]){
+  const row=integer(definition.sourceIndex,0,63),b=row*49,kind=definition.runtimeKind;
+  if(!rows.includes(row)||![3,4].includes(kind)||raw[b+19]!==kind||raw[b+21]!==2||raw[b+22]!==0||raw[b+23]!==0||
+   usedDecorations.has(row)||definition.visual!=='reeds'||!keys.every((k,j)=>Math.abs(position(raw,row)[j]-definition[k])<1e-5))
+   throw new RangeError('Static decoration must match its loaded source row and center');
+  usedDecorations.add(row);decorations.push({id:name(definition.id),sourceIndex:row,runtimeKind:kind,visual:definition.visual});
+ }
+ if(usedDecorations.size!==rows.filter(i=>[3,4].includes(raw[i*49+19])).length)throw new RangeError('Every loaded source decoration needs its high-resolution mesh');
+ const layout=freeze({version:1,courseIndex,rings,volumes,...(floating.length?{floating}:{}),...(decorations.length?{decorations}:{})});
  function snapshot(){
   const s=readState(),a=s.objectWordsC940,w=s.raceWords1f94;
   if(s.scene.mode620!==11||s.scene.courseIndex!==courseIndex)throw new RangeError('Stunt display selection changed');
-  const world=captureNativeStuntWorld({version:1,...(floating.length?{floating:floating.map(v=>{
+  const world=captureNativeStuntWorld({version:1,...(decorations.length?{decorations:decorations.map(v=>{
+   const b=v.sourceIndex*49;if(a[b+19]!==v.runtimeKind)throw new RangeError('Static decoration source row changed');
+   return {id:v.id,sourceIndex:v.sourceIndex,position:position(a,v.sourceIndex),visible:a[b+21]===2};
+  })}:{}),...(floating.length?{floating:floating.map(v=>{
    const b=v.sourceIndex*49;if(a[b+19]!==v.runtimeKind)throw new RangeError('Floating source row changed');
    const transform=a.slice(b+29,b+45).map(float);for(let j=12;j<15;j++)transform[j]*=scale;
    return {id:v.id,sourceIndex:v.sourceIndex,position:position(a,v.sourceIndex),matrix:transform,visible:a[b+21]!==0};
