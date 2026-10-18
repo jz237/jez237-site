@@ -1,5 +1,5 @@
 const fields=['note','priority','hold','delayedNote','delayedPriority','delayedHold','delay'];
-const arities={c32a0:3,c3320:3,c338c:4,c33c8:4,c3408:3,c3464:4,c3494:0,c36f8:1,c3500:1,c3524:2};
+const arities={c32a0:3,c3320:3,c338c:4,c33c8:4,c3408:3,c3464:4,c3494:0,c36f8:1,c3500:1,c3524:2,c377c:1};
 function integer(v,min,max){if(!Number.isInteger(v)||v<min||v>max)throw new RangeError('Invalid original announcer field');return v;}
 export const freshNativeAnnouncer=()=>Object.fromEntries(fields.map(k=>[k,0]));
 
@@ -33,6 +33,7 @@ export function prepareNativeAnnouncer(input,command,context){
  if(consumer==='c32a0')remaining=now(...args);
  else if(consumer==='c3500')now(args[0],125,10);
  else if(consumer==='c3524')later(args[0],args[1],125,10);
+ else if(consumer==='c377c'){emit(0x06000c01,(args[0]<<24)>>24);emit(0x06000c00,127);}
  else if(consumer==='c3320'){if(gate)gatedNow(...args);}
  else if(consumer==='c338c')later(...args);
  else if(consumer==='c33c8'){if(gate)later(...args);}

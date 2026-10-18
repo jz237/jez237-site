@@ -52,6 +52,7 @@ export class Soundscape{
   if(!this.originalAnnouncer)this.originalAnnouncer=new OriginalAnnouncerSound(this.ctx,this.effects);
   this.nativeContactPrepared=true;
   this.originalContacts.setMode(this.mode);
+  this.originalAnnouncer.update(this.mode);
   if(typeof location!=='undefined'){this.originalContacts.load();this.originalAnnouncer.load();}
   for(const command of commands)this.nativeContact(command,players===2?(command.player===1?.4:-.4):0);
  }
@@ -61,7 +62,7 @@ export class Soundscape{
  }
  nativeContact(command,side=0){
   if(!this.ctx||!this.enabled)return;
-  if(command.consumer==='c53d4'&&command.arguments[0]===0x06000c00||command.consumer==='c538c'&&command.arguments[0]===0x01000c00){this.originalAnnouncer?.play(command);return;}
+  if(command.consumer==='c53d4'&&[0x06000c00,0x06000c01].includes(command.arguments[0])||command.consumer==='c538c'&&command.arguments[0]===0x01000c00){this.originalAnnouncer?.play(command);return;}
   if(this.originalContacts?.play(command,side))return;
   const args=command.arguments,hit=command.consumer==='bffec',spray=command.consumer==='c0044',ice=command.consumer==='c53d4'&&args[0]===0x06000700&&args[1]===0x13;
   if(!hit&&!ice&&!spray)return;

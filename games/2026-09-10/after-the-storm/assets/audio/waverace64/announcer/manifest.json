@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "sounds": {
     "0": {
       "file": "announcer-00.wav",
@@ -2197,6 +2197,195 @@
       "bytes": 86812,
       "peak": 32001,
       "rms": 9942.214612755773
+    },
+    "menu-00.wav": {
+      "sha256": "37ee0d3e2c5305340442af833bdb110aa0fb862d6f86bdac80dd0d366dad605f",
+      "duration": 1.915,
+      "bytes": 122604,
+      "peak": 32001,
+      "rms": 13096.101754977692
+    },
+    "menu-01.wav": {
+      "sha256": "bbb88e50449a7da6c8e0ed4cf6ea75a19eaa2fe14777d70d88cbe9603db9c6a6",
+      "duration": 3.852,
+      "bytes": 246572,
+      "peak": 32001,
+      "rms": 11823.98998134352
+    },
+    "menu-02.wav": {
+      "sha256": "0776f993aafe687a0b2b614c7c782412a280250459c0b8d3e98ee0a7e7a5cad2",
+      "duration": 3.544,
+      "bytes": 226860,
+      "peak": 32001,
+      "rms": 12147.504531164008
+    },
+    "menu-03.wav": {
+      "sha256": "b782d662dbda63d68c975794c1fb572eb7c9326c73b69682631661b73b8dde6f",
+      "duration": 4.967,
+      "bytes": 317932,
+      "peak": 32001,
+      "rms": 11768.350793891252
+    },
+    "menu-04.wav": {
+      "sha256": "ee996cfaf2f4db77d1badc8cc7ff38221cba0487270709068dc424148d71c69f",
+      "duration": 3.382,
+      "bytes": 216492,
+      "peak": 32001,
+      "rms": 12070.569623171525
+    },
+    "menu-05.wav": {
+      "sha256": "cbc24c043803d67875e0a6962304f49ce674b60b397795c56ba166ed4dde772d",
+      "duration": 5.75,
+      "bytes": 368044,
+      "peak": 32001,
+      "rms": 10854.577844888763
+    },
+    "menu-06.wav": {
+      "sha256": "68d51e40dc53bb16aa94b753525114d61dd016e33968b054d89dcbd800de7e89",
+      "duration": 5.495,
+      "bytes": 351724,
+      "peak": 32001,
+      "rms": 9998.481191845462
+    },
+    "menu-07.wav": {
+      "sha256": "c98fa488efb42491ec5f81122346414b7e1cbf1e500a932bfcfb525fcf9c6df1",
+      "duration": 5.387,
+      "bytes": 344812,
+      "peak": 32001,
+      "rms": 9521.253977451257
+    },
+    "menu-08.wav": {
+      "sha256": "eb14cb32eae67ab628ef0c3cd598319c9d28b4a4ffc748f4029ee7406be13459",
+      "duration": 5.419,
+      "bytes": 346860,
+      "peak": 32001,
+      "rms": 9131.085995979363
+    },
+    "menu-09.wav": {
+      "sha256": "26b04db755d32bc8290dcc6adae91f87b61dbf2c8d54dfa1a1a4d5666c0a8477",
+      "duration": 5.248,
+      "bytes": 335916,
+      "peak": 32001,
+      "rms": 9361.00121061271
+    },
+    "menu-0a.wav": {
+      "sha256": "f5c9014813323695815edd8bf681e355cfa7ac4128d0368e838f89dcde36f2fd",
+      "duration": 5.21,
+      "bytes": 333484,
+      "peak": 32001,
+      "rms": 10856.337638677696
+    },
+    "menu-0b.wav": {
+      "sha256": "bee1ceaa4f6aa4381fd39ef8b59f46fff4f5deb500bff08aa647aa599160b53d",
+      "duration": 0.764,
+      "bytes": 48940,
+      "peak": 32001,
+      "rms": 10545.20812528395
+    },
+    "menu-0c.wav": {
+      "sha256": "b62754a7179b9ca1b34e38c5b57c3cfe381b7f320a08a06e4bb1dbd7b25a0b54",
+      "duration": 1.771,
+      "bytes": 113388,
+      "peak": 32001,
+      "rms": 11119.022374367645
+    },
+    "menu-0d.wav": {
+      "sha256": "b711d039af6b0244da98fb58d75ac85c81ad1a718165e7f4d367a377ac48788a",
+      "duration": 1.916,
+      "bytes": 122668,
+      "peak": 32001,
+      "rms": 8292.134959519184
+    },
+    "menu-10.wav": {
+      "sha256": "58157e1c677f02017bb2956c37bc7edc883144b1d6c381e52ba217f5589b60b6",
+      "duration": 0.886,
+      "bytes": 56748,
+      "peak": 32001,
+      "rms": 11311.933934593628
+    },
+    "menu-11.wav": {
+      "sha256": "5c94babcab50d0c28af67cbfa08cd76a5f1439984b44d5a083c0dfac54e51228",
+      "duration": 0.932,
+      "bytes": 59692,
+      "peak": 32001,
+      "rms": 13322.440254541843
+    },
+    "menu-12.wav": {
+      "sha256": "db3ba130ed50bf150f12b59032bf12066eb011e09134f3ac0f8449dfbf44ebe5",
+      "duration": 0.999,
+      "bytes": 63980,
+      "peak": 32001,
+      "rms": 10639.136144939908
+    },
+    "menu-13.wav": {
+      "sha256": "c6c91dd7b335da5e6f6e4eac0c663d8e46f14f54377897914d019ba7f0107242",
+      "duration": 1.002,
+      "bytes": 64172,
+      "peak": 32001,
+      "rms": 13854.398776792146
+    },
+    "menu-14.wav": {
+      "sha256": "f0fc9d08e524b3a1455a8562d959391d2f0dca5f69663b4be502f256c7d259ff",
+      "duration": 1.205,
+      "bytes": 77164,
+      "peak": 32001,
+      "rms": 13216.416246577619
+    },
+    "menu-15.wav": {
+      "sha256": "52813eaed452d8f70271b42c12cc4ee6d8973e00c43a20cee4cbdec80b652b94",
+      "duration": 0.871,
+      "bytes": 55788,
+      "peak": 32001,
+      "rms": 10134.385852317466
+    },
+    "menu-16.wav": {
+      "sha256": "71349dc45112f97433472100564bf23fa33add854a5a65a780353bb878837b58",
+      "duration": 0.793,
+      "bytes": 50796,
+      "peak": 32001,
+      "rms": 14074.868787290809
+    },
+    "menu-17.wav": {
+      "sha256": "2f78d7cc592a2f87a1755296e9c11f99e42594ed2d40fe0dd1a5e09ad97e6a32",
+      "duration": 1.077,
+      "bytes": 68972,
+      "peak": 32001,
+      "rms": 9884.482734890044
+    },
+    "menu-18.wav": {
+      "sha256": "d84036a9b2536388283c15431abf78de70ccec5e003bc42e88555564ecf00420",
+      "duration": 0.979,
+      "bytes": 62700,
+      "peak": 32001,
+      "rms": 12671.533268497891
+    },
+    "menu-19.wav": {
+      "sha256": "f735894992172dd228baef7b84c2cf49a253bcb19d9e3bd92d58bcfa26d6e5d4",
+      "duration": 1.042,
+      "bytes": 66732,
+      "peak": 32001,
+      "rms": 12793.804634742934
+    },
+    "menu-1a.wav": {
+      "sha256": "94ec855a8632cf2e975063c5ef8bbf716b5f8cf6a79accc23e6643fbf9472dec",
+      "duration": 0.816,
+      "bytes": 52268,
+      "peak": 32001,
+      "rms": 15220.533204992224
+    },
+    "menu-1b.wav": {
+      "sha256": "505841f258fbbd1c1752b1aabd07f68811188ec05cab37657b3598f51299d0ef",
+      "duration": 0.807,
+      "bytes": 51692,
+      "peak": 32001,
+      "rms": 9854.930914545661
+    },
+    "menu-1c.wav": {
+      "sha256": "c78fbfc6bfc9756a633701838620c291286551bde04bc5abb16c509755c2abc2",
+      "duration": 0.604,
+      "bytes": 38700,
+      "peak": 32001,
+      "rms": 17877.22074509814
     }
   },
   "sequence": {
@@ -2204,6 +2393,454 @@
     "channel": 12,
     "logicalBank": 2,
     "bank": 2,
+    "tempo": 200,
+    "ticksPerQuarter": 48,
+    "pollTicks": 6,
+    "noteTicks": 1200,
+    "pan": 64
+  },
+  "menuSounds": {
+    "0": {
+      "file": "menu-00.wav",
+      "sourceBank": 6,
+      "sourceTuning": 0.5,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "1": {
+      "file": "menu-01.wav",
+      "sourceBank": 6,
+      "sourceTuning": 0.5,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "2": {
+      "file": "menu-02.wav",
+      "sourceBank": 6,
+      "sourceTuning": 0.5,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "3": {
+      "file": "menu-03.wav",
+      "sourceBank": 6,
+      "sourceTuning": 0.5,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "4": {
+      "file": "menu-04.wav",
+      "sourceBank": 6,
+      "sourceTuning": 0.5,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "5": {
+      "file": "menu-05.wav",
+      "sourceBank": 6,
+      "sourceTuning": 0.5,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "6": {
+      "file": "menu-06.wav",
+      "sourceBank": 6,
+      "sourceTuning": 0.5,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "7": {
+      "file": "menu-07.wav",
+      "sourceBank": 6,
+      "sourceTuning": 0.5,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "8": {
+      "file": "menu-08.wav",
+      "sourceBank": 6,
+      "sourceTuning": 0.5,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "9": {
+      "file": "menu-09.wav",
+      "sourceBank": 6,
+      "sourceTuning": 0.5,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "10": {
+      "file": "menu-0a.wav",
+      "sourceBank": 6,
+      "sourceTuning": 0.5,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "11": {
+      "file": "menu-0b.wav",
+      "sourceBank": 6,
+      "sourceTuning": 0.5,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "12": {
+      "file": "menu-0c.wav",
+      "sourceBank": 6,
+      "sourceTuning": 0.5,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "13": {
+      "file": "menu-0d.wav",
+      "sourceBank": 6,
+      "sourceTuning": 0.5,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "14": null,
+    "15": null,
+    "16": {
+      "file": "menu-10.wav",
+      "sourceBank": 6,
+      "sourceTuning": 0.5,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "17": {
+      "file": "menu-11.wav",
+      "sourceBank": 6,
+      "sourceTuning": 0.5,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "18": {
+      "file": "menu-12.wav",
+      "sourceBank": 6,
+      "sourceTuning": 0.5,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "19": {
+      "file": "menu-13.wav",
+      "sourceBank": 6,
+      "sourceTuning": 0.5,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "20": {
+      "file": "menu-14.wav",
+      "sourceBank": 6,
+      "sourceTuning": 0.5,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "21": {
+      "file": "menu-15.wav",
+      "sourceBank": 6,
+      "sourceTuning": 0.5,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "22": {
+      "file": "menu-16.wav",
+      "sourceBank": 6,
+      "sourceTuning": 0.5,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "23": {
+      "file": "menu-17.wav",
+      "sourceBank": 6,
+      "sourceTuning": 0.5,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "24": {
+      "file": "menu-18.wav",
+      "sourceBank": 6,
+      "sourceTuning": 0.5,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "25": {
+      "file": "menu-19.wav",
+      "sourceBank": 6,
+      "sourceTuning": 0.5,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "26": {
+      "file": "menu-1a.wav",
+      "sourceBank": 6,
+      "sourceTuning": 0.5,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "27": {
+      "file": "menu-1b.wav",
+      "sourceBank": 6,
+      "sourceTuning": 0.5,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "28": {
+      "file": "menu-1c.wav",
+      "sourceBank": 6,
+      "sourceTuning": 0.5,
+      "envelope": [
+        2,
+        32000,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 64
+    },
+    "29": null
+  },
+  "menuSequence": {
+    "sequence": 0,
+    "channel": 12,
+    "logicalBank": 6,
+    "bank": 6,
     "tempo": 200,
     "ticksPerQuarter": 48,
     "pollTicks": 6,

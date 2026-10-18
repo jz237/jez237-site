@@ -13,7 +13,7 @@ import {resetNativeRaceAudioTimers} from './native-audio-transition.js';
 import {prepareNativeAudioMode} from './native-audio-mode.js';
 const F=Math.fround;
 const channelEntries=new Set(['800bfdd0','800bfde4','800bfe70','800bfef8','800bffac','800bfd34','800bfd68','800bffcc']);
-const voiceEntries=new Set(['c32a0','c3320','c338c','c33c8','c3408','c3464','c36f8','c3500','c3524']);
+const voiceEntries=new Set(['c32a0','c3320','c338c','c33c8','c3408','c3464','c36f8','c3500','c3524','c377c']);
 
 // Engine/contact/rider owner for the admitted one-human and two-human races.
 // Fresh web sessions explicitly start packet storage/motion at zero, in racing
@@ -58,7 +58,7 @@ export function createNativeRaceContactAudio({players,courseIndex,difficultyWord
   if(command.consumer==='c37c0'){globals.delay7ce4=command.arguments[1]|0;globals.delayedCue7e1c=command.arguments[0]|0;return;}
   if(command.consumer==='c538c'&&command.arguments[0]===0x01000c00&&command.arguments[1]===0){enqueue(command,player);return;}
   if(effectPoll.submit({...command,frame,player},globals.raceMode))return;
-  if(command.consumer==='c53d4'&&[0x06000700,0x06000c00].includes(command.arguments[0]))enqueue(command,player);
+  if(command.consumer==='c53d4'&&[0x06000700,0x06000c00,0x06000c01].includes(command.arguments[0]))enqueue(command,player);
  }
  return {
   beforeFrame(next){
@@ -164,7 +164,7 @@ export function createNativeRaceContactAudio({players,courseIndex,difficultyWord
    for(const command of effectPoll.poll())enqueue(command,command.player);
   },
   drain(){return queue.splice(0);},
-  clearPendingSounds(){effectPoll.clear();queue.length=0;announcer.delay=announcer.delayedHold=0;},
+  clearPendingSounds(){effectPoll.clear();queue.length=0;announcer.delay=announcer.delayedHold=0;globals.delay7ce4=0;},
   engineChannels(){return globals.alternateEngine!==0?null:engineChannels.map((c,i)=>({...c,enabled:c.enabled&&audioMode===7&&globals[i?'secondaryMuted':'primaryMuted']===0}));},
   snapshot(){return {scope:'source-human-race-audio-and-announcer-controls; browser-audio-jitter-poll-phase-and-smoothing',frame,timerFrame,audioMode,globals:{...globals},announcer:{...announcer},
    engineChannels:engineChannels.map(c=>({...c})),effectPoll:effectPoll.snapshot(),riderPoll:effectPoll.riderSnapshot(),

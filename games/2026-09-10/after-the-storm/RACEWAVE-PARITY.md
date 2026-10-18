@@ -19,6 +19,44 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — original multi-part menu announcements
+
+The admitted native audio owner now dispatches C377C's ordered IO1 selector
+and IO0=127 command. Its mode-entry delay reaches playback through the outer
+source-frame timer, independently of the regular priority slot. Bank6 adds27
+standalone PCM clips (4.27MB), preserving tuning/envelope metadata and hashes.
+All30 menu selectors are supported:14/15 are null drums,28 is an empty layer,
+16..25 wait140 ticks before the preface and135 more before their second word,
+and26/27 move a single legato sample across the stereo field. Explicit channel
+waits retain only the latest pending IO0; IO1 is consumed when127 starts.
+
+Fresh read-only Ghidra inspection on EVO X2 left all9 project files unchanged.
+261 original C377C executions verify signed low-byte arguments and call order.
+A bounded walk of the supplied sequence verifies30 plans. The actual BD138
+layer interpreter, with prepared live-note storage and intercepted synthesis
+leaves, confirms one allocation across each legato script's pan changes.
+These checks execute15,351 instructions and match792 exported instructions.
+They are not a full audio-thread or RSP emulation.
+
+All78 focused tests pass, including source mode timers, render-rate histories,
+postrace/retirement, asset validation, interruption, missing-file retry and
+pause/mute/replay cleanup. Inactive presentation also discards the menu timer.
+The browser decoded all121 regular/menu clips with no asset failures. Actual
+Web Audio rendering of every menu selector produced27 audible selections and
+the3 expected silent selections. A prepared mode2 entry through live frame
+timers and Soundscape emitted selector16/127 at frame120 and scheduled notes16
+and17 at the source offsets. Pause cancelled both scheduled words. High quality
+remained1280x720 with83,521 water vertices. One unspecified resource404 remained;
+there were no JavaScript exceptions in the corrected native-preview run.
+
+This connects the source audio owner's menu sequences; it does not claim all
+modern browser menus use the reconstructed menu lifecycle. Special126,
+channel11/15 sequences, original bank-loading handshakes, reverb, tempo and
+credits processing remain unfinished. Outside explicit waits, command delivery
+still follows browser render drains rather than the source polling phase.
+Stereo/headphone width, gain and resampling remain documented web adaptations.
+All four HTML maps/preloads now cover346 modules. Resolution is unchanged.
+
 ## Unpublished — original course and finish audio-mode entry
 
 Native human launches now enter racing audio through the original C21F4 mode
@@ -53,9 +91,9 @@ the backend. It did not lose the finish messages or stop the race.
 This completes the direct mode-entry body and its regular announcer path,
 not the whole audio lifecycle. Soundtrack playback still has its browser owner.
 Sample-bank loading handshakes, reverb/tempo/credits processing, C1EB8 channel11
-cues, C377C special127 menu composites, special126 and channel15 event sequences
-remain separate work. The retained delayed menu cue is counted down, but its
-special sequence is not yet played. Source audio random variants still use
+cues, special126 and channel15 event sequences remain separate work. The
+C377C special127 gap from this checkpoint is resolved by the newer menu
+announcement checkpoint above. Source audio random variants still use
 the documented independent web pattern. Four HTML maps/preloads cover345
 modules; the native gameplay preview retains its existing mode admission.
 

@@ -106,6 +106,21 @@ test('announcer outer frame precedes the next physical packet and honors the ori
  a.applyEffects([call('800c21f4',-1,0)]);assert.equal(a.snapshot().audioMode,255);a.beforeFrame(61);
 });
 
+test('original delayed menu entries reach the live two-port queue once, outside the priority slot',()=>{
+ for(const [mode,parameter,delay,selector]of [[1,0,10,13],[10,0,15,12],[2,0,20,16],[2,1,80,17]]){
+  const a=createNativeRaceContactAudio({players:1,courseIndex:1}),f=field();
+  a.applyEffects([call('800c21f4',mode,parameter)]);a.drain();
+  assert.equal(a.snapshot().globals.delay7ce4,delay);
+  for(let frame=1;frame<=delay+2;frame++){
+   a.beforeFrame(frame);advance(a,[body(frame,{simulation:0})],f,[0],[0]);
+   const speech=a.drain().filter(c=>c.consumer==='c53d4'&&[0x06000c00,0x06000c01].includes(c.arguments[0]));
+   assert.deepEqual(speech.map(c=>c.arguments),frame===delay?[[0x06000c01,selector],[0x06000c00,127]]:[]);
+   assert.equal(a.snapshot().announcer.hold,0);
+  }
+  a.applyEffects([call('800c21f4',2,0)]);a.clearPendingSounds();assert.equal(a.snapshot().globals.delay7ce4,0,'inactive presentation discards menu delays too');
+ }
+});
+
 test('physical rider water-entry schedules one delayed announcer cue and pause discards it',()=>{
  const a=createNativeRaceContactAudio({players:1,courseIndex:1}),f=field();start(a);
  const q=queryNativeWaterField(f,64,0).sourcePlaneQueryNative;
