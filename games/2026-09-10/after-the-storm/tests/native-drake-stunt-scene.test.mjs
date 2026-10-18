@@ -51,7 +51,7 @@ test('Drake binds the complete64 loaded objects rather than spawning all48 raw d
   assert.deepEqual([v.x,v.y,v.z,v.r],row.slice(0,4).map(w=>float(w)*.025));assert.equal(v.runtimeTag,row[4]);
  });
  assert.deepEqual(c.checkpoints.map(q=>q.sourceRow),[1,5,9,0]);assert.deepEqual(c.checkpoints.map(q=>q.limit),[15,15,15,15]);
- assert.throws(()=>createRace({course:getCourse('reed'),mode:'time',physics:'native'}),/verified course/);
+ assert.equal(createRace({course:getCourse('reed'),mode:'time',physics:'native'}).course.nativeSceneMode,'race');
 });
 
 test('source reed positions survive physical updates, pause and detached instant replay',()=>{

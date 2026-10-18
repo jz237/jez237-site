@@ -69,9 +69,10 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
   for(const {id,g} of nativeFloatingMeshes){const q=rows.get(id);g.visible=!!q?.visible;if(q){g.matrix.fromArray(q.matrix);g.matrixWorldNeedsUpdate=true;}}
   root.userData.nativeFloating={count:nativeFloatingMeshes.length,visible:nativeFloatingMeshes.filter(q=>q.g.visible).length};
  }
- const reedMaterial=course.nativeStuntLayout?.decorations?.length?mat(0xffffff,.9):null;
+ const decorationLayout=course.nativeCourseLayout??course.nativeStuntLayout;
+ const reedMaterial=decorationLayout?.decorations?.length?mat(0xffffff,.9):null;
  if(reedMaterial){reedMaterial.vertexColors=true;reedMaterial.side=T.DoubleSide;}
- const nativeDecorationMeshes=(course.nativeStuntLayout?.decorations??[]).map(definition=>{
+ const nativeDecorationMeshes=(decorationLayout?.decorations??[]).map(definition=>{
   const data=nativeReedGeometry(definition.sourceIndex),geometry=new T.BufferGeometry();
   geometry.setAttribute('position',new T.BufferAttribute(data.positions,3));geometry.setAttribute('color',new T.BufferAttribute(data.colors,3));geometry.setIndex(data.indices);geometry.computeVertexNormals();
   const mesh=add(geometry,reedMaterial);mesh.userData.dynamic=true;mesh.visible=false;return {id:definition.id,mesh};

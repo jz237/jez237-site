@@ -1,4 +1,5 @@
 import {captureNativeIcePresentation,sampleNativeIcePresentation} from './native-ice-presentation.js';
+import {captureNativeStuntWorld} from './native-stunt-presentation.js';
 import {readNativeCamera} from './native-camera-presentation.js';
 import {readRaceWater} from './race-water.js';
 import {exportBreakablePresentation,importBreakablePresentation} from './breakable-hazards.js';
@@ -67,7 +68,7 @@ function copyNativeRacer(from,to={...from}){
  return to;
 }
 function copyNativeFrame(frame){
- return {...frame,racers:frame.racers.map(q=>copyNativeRacer(q)),...(own(frame,'nativeIce')?{nativeIce:captureNativeIcePresentation(frame.nativeIce)}:{}),...(own(frame,'primaryBuoys')?{primaryBuoys:primaryBuoys(frame.primaryBuoys)}:{})};
+ return {...frame,racers:frame.racers.map(q=>copyNativeRacer(q)),...(own(frame,'nativeCourseWorld')?{nativeCourseWorld:captureNativeStuntWorld(frame.nativeCourseWorld)}:{}),...(own(frame,'nativeIce')?{nativeIce:captureNativeIcePresentation(frame.nativeIce)}:{}),...(own(frame,'primaryBuoys')?{primaryBuoys:primaryBuoys(frame.primaryBuoys)}:{})};
 }
 function fields(value,max=96){
  if(!plain(value)||Object.keys(value).length>max)return null;
@@ -125,6 +126,7 @@ function launchPresentation(value){
 }
 export function captureWindowFrame(state,water,{includeLocal=true}={}){
  return {time:state.time,phase:state.phase,countdown:state.countdown,freeRide:!!state.freeRide,passageOpenedAt:Number.isFinite(state.passageOpenedAt)?state.passageOpenedAt:null,
+  ...(own(state,'nativeCourseWorld')?{nativeCourseWorld:captureNativeStuntWorld(state.nativeCourseWorld)}:{}),
   racers:state.racers.map(rider),weather:fields(state.weather,30),water:captureWindowWater(water,state.localWater,includeLocal),breakables:exportBreakablePresentation(state.breakables,state.time),
   ...(own(state,'nativeIce')?{nativeIce:captureNativeIcePresentation(state.nativeIce)}:{}),...(own(state,'primaryBuoys')?{primaryBuoys:primaryBuoys(state.primaryBuoys)}:{}),...launchPresentation(state)};
 }
@@ -133,8 +135,9 @@ export function readWindowFrame(value){
  const racers=value.racers.map(rider),water=validateWindowWater(value.water),weather=fields(value.weather,30),breakables=importBreakablePresentation(value.breakables);
  if(racers.some(r=>!r)||racers[0].player!==0||racers[1].player!==1||!water||!weather||!breakables)return null;
  if(value.passageOpenedAt!==null&&!finite(value.passageOpenedAt))return null;
- let primary,launch,ice;try{if(own(value,'nativeIce'))ice=captureNativeIcePresentation(value.nativeIce);if(own(value,'primaryBuoys'))primary=primaryBuoys(value.primaryBuoys);launch=launchPresentation(value);}catch{return null;}
+ let primary,launch,ice,courseWorld;try{if(own(value,'nativeCourseWorld'))courseWorld=captureNativeStuntWorld(value.nativeCourseWorld);if(own(value,'nativeIce'))ice=captureNativeIcePresentation(value.nativeIce);if(own(value,'primaryBuoys'))primary=primaryBuoys(value.primaryBuoys);launch=launchPresentation(value);}catch{return null;}
  return {time:value.time,phase:value.phase,countdown:value.countdown,freeRide:!!value.freeRide,passageOpenedAt:value.passageOpenedAt??Infinity,racers,weather,water,breakables,
+  ...(own(value,'nativeCourseWorld')?{nativeCourseWorld:courseWorld}:{}),
   ...(own(value,'nativeIce')?{nativeIce:ice}:{}),...(own(value,'primaryBuoys')?{primaryBuoys:primary}:{}),...launch};
 }
 export function interpolateWindowFrame(a,b,time){
@@ -157,6 +160,7 @@ export function interpolateWindowFrame(a,b,time){
   return p;
  })};
  const chosen=t<1?a:b;
+ if(own(chosen,'nativeCourseWorld'))f.nativeCourseWorld=captureNativeStuntWorld(chosen.nativeCourseWorld);else delete f.nativeCourseWorld;
  for(const k of ['nativeLaunchLabel','nativeCountdownCue']){if(own(chosen,k))f[k]=k==='nativeCountdownCue'&&chosen[k]?{...chosen[k]}:chosen[k];else delete f[k];}
  if(own(chosen,'nativeIce'))f.nativeIce=sampleNativeIcePresentation(a.nativeIce,b.nativeIce,t);
  if(own(chosen,'primaryBuoys')){

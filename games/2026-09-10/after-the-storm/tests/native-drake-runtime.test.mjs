@@ -44,8 +44,8 @@ test('Drake solo and versus reuse the complete immutable source shore/floor data
  assert.throws(()=>rows[0][0].push(0),TypeError);
 });
 
-test('numeric preparation keeps ordinary live admission separate from the legacy illustration scene',()=>{
+test('ordinary native admission replaces the legacy illustration scene with selected source geometry',()=>{
  assert.throws(()=>createNativeRaceCourseRuntime({course:getCourse('reed'),difficulty:0,players:1}),/source route rows/);
- for(const mode of ['time','versus'])assert.throws(()=>createRace({course:getCourse('reed'),physics:'native',mode}),/source-water/);
+ for(const mode of ['time','versus'])assert.equal(createRace({course:getCourse('reed'),physics:'native',mode}).course.nativeSceneMode,'race');
  assert.equal(createRace({course:getCourse('reed'),mode:'time'}).physics,'modern');
 });

@@ -20,7 +20,11 @@ export function validateOnlineDescriptor(value){
   ![3,4,5,6,9].includes(value.laps)||!['course','surf','calm','chop','storm'].includes(value.seaState)||typeof value.freeRide!=='boolean'||typeof value.swapColours!=='boolean'||
   !Number.isSafeInteger(value.waveSeed)||value.waveSeed<0||value.waveSeed>0xffffffff||!Array.isArray(value.roster)||value.roster.length!==2||value.roster.some(n=>!Number.isInteger(n)||n<0||n>3)||
   !Array.isArray(value.names)||value.names.length!==4||value.names.some(n=>typeof n!=='string'||n.length>64)||!readWindowFrame(value.initialFrame))return null;
+ const nativeScene=Object.hasOwn(value,'nativeSceneCourseIndex')||Object.hasOwn(value,'nativeSceneMode');
+ if(nativeScene&&(value.nativeSceneCourseIndex!==4||value.nativeSceneMode!=='race'||value.course!=='reed'||value.freeRide||value.seaState!=='course'||!value.initialFrame.nativeCourseWorld))return null;
+ if(value.initialFrame.nativeCourseWorld&&!nativeScene)return null;
  return {course:value.course,difficulty:value.difficulty,laps:value.laps,seaState:value.seaState,freeRide:value.freeRide,swapColours:value.swapColours,waveSeed:value.waveSeed,
+  ...(nativeScene?{nativeSceneCourseIndex:4,nativeSceneMode:'race'}:{}),
   roster:[...value.roster],names:[...value.names],initialFrame:value.initialFrame};
 }
 export function onlineEnvelope(session,type,data={}){if(!token(session))throw new TypeError('Invalid online session');return {v:ONLINE_VERSION,build:ONLINE_BUILD,session,type,...data};}

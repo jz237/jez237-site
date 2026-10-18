@@ -4,6 +4,7 @@ import * as T from './vendor/three.module.js';
 import {makeSky,makeOcean,shared,skyColors} from './ocean.js';
 import {makeCourseWorld} from './course-world.js';
 import {getCourse} from './courses.js';
+import {nativeDrakeRaceScene} from './source-drake-course.js';
 import {stuntCourse,rampCameraHeight} from './stunts.js';
 import {makeJetSki} from './jetski.js';
 import {makeStuntRider} from './stunt-rider.js';
@@ -91,6 +92,10 @@ export function createPlayerWindowRenderer(canvas){
  function init(value){
   if(!value||!['course','surf','calm','chop','storm'].includes(value.seaState)||!Array.isArray(value.roster)||value.roster.length!==2||value.roster.some(i=>!Number.isInteger(i)||i<0||i>3)||!Number.isInteger(value.difficulty)||value.difficulty<0||value.difficulty>3||!graphics(value.graphics))throw new Error('Invalid player view setup.');
   descriptor=value;course=getCourse(value.course,value.difficulty);if(course.id!==value.course)throw new Error('Unknown player view course.');if(value.freeRide)course=stuntCourse(course,{freeRide:true});
+  if(value.nativeSceneCourseIndex!==undefined){
+   if(value.nativeSceneCourseIndex!==4||course.sourceWaterCourseIndex!==4||value.nativeSceneMode!=='race'||value.freeRide)throw new Error('Invalid native player view course.');
+   course=nativeDrakeRaceScene(course);
+  }
   if(course.geometryForPlayers)course={...course,...course.geometryForPlayers(2)};
   if(course.sourceObjectSelection)course={...course,playerCount:2,rocks:course.hazardsForPlayers(2),sourceDecorations:course.decorationsForPlayers?course.decorationsForPlayers(2):course.sourceDecorations};
   if(course.contactVolumesForRamps)course={...course,contactVolumes:course.contactVolumesForRamps(course.ramps)};
@@ -117,7 +122,7 @@ export function createPlayerWindowRenderer(canvas){
   translateFollow(tracking,r,camera.position,look);const cf=chaseFrame(chase,r,dt,{orbit,zoom:r.nativeCamera?zoom:cameraMode===1?6:cameraMode===2?19:zoom,pitch});goal.set(cf.position.x,cf.position.y,cf.position.z);target.set(cf.target.x,cf.target.y,cf.target.z);camera.position.lerp(goal,first?1:1-Math.exp(-dt*4));look.lerp(target,first?1:1-Math.exp(-dt*5));camera.fov+=(cf.fov-camera.fov)*(first?1:1-Math.exp(-dt*2.5));camera.updateProjectionMatrix();
   camera.position.y=Math.max(camera.position.y,wave(camera.position.x,camera.position.z,time,storm)+.85,rampCameraHeight(camera.position,course,time,storm));camera.position.copy(barrierCamera(course.crossbars,{x:r.x,y:r.hydro.y+.15,z:r.z},passageCamera(course.passage,look,camera.position,time,frame.passageOpenedAt)));camera.position.copy(mooredBoatCamera(course.mooredBoats,{x:r.x,y:r.hydro.y+.15,z:r.z},camera.position,time,storm));camera.up.fromArray(r.nativeCamera?.up??[0,1,0]);camera.lookAt(look);
   sky.position.copy(camera.position);sun.position.set(r.x+skyColors.skySun.value.x*260,skyColors.skySun.value.y*260,r.z+skyColors.skySun.value.z*260);sun.target.position.set(r.x,0,r.z);renderer.shadowMap.needsUpdate=shadowDue(renderCount,quality);
-  world.update(time,storm,null,frame.passageOpenedAt,frame.racers,[1,camera.position,null],frame.breakables,frame.primaryBuoys??null,frame.nativeIce??null);
+  world.update(time,storm,null,frame.passageOpenedAt,frame.racers,[1,camera.position,null],frame.breakables,frame.primaryBuoys??null,frame.nativeIce??null,frame.nativeCourseWorld??null);
   finishing.update(time,storm,camera.position,quality);shoreWash.update(time,storm,camera.position,quality);crestSpray.update(time,storm,camera.position,quality);breakers.update(time,storm,camera.position,quality);beachBreak.update(time,storm,camera.position,quality,camera.getWorldDirection(forward));sheets.forEach((sheet,i)=>sheet.update(frame.racers[i],time,storm));
   if(renderCount%60===0)cloudScene(scene);rain.position.set(camera.position.x,0,camera.position.z);const rainFactor=Math.max(0,(storm-.45)/.55,front*.85);rainMat.opacity=rainFactor*.3;rainGeo.setDrawRange(0,Math.floor(rainCount*rainFactor)*2);
   for(let i=0;i<rainCount;i++){const k=i*6;rainPositions[k]-=dt*(4+storm*8);rainPositions[k+1]-=dt*25;rainPositions[k+2]+=dt*3;if(rainPositions[k+1]<0){rainPositions[k]=(Math.random()-.5)*65;rainPositions[k+1]=35;rainPositions[k+2]=(Math.random()-.5)*65;}rainPositions[k+3]=rainPositions[k]-.18;rainPositions[k+4]=rainPositions[k+1]+.45;rainPositions[k+5]=rainPositions[k+2]+.07;}rainGeo.attributes.position.needsUpdate=true;

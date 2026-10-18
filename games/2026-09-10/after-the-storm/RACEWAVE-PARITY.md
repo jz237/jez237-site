@@ -6350,3 +6350,34 @@ Sunset/object-loading tests pass, as do Southern/Glacier selection checks.
 Sunset's old fixed-count assertion was updated to the independently verified
 original object fixtures, covering hidden rows and difficulty/player variation;
 its runtime output was confirmed identical to the preceding commit.
+
+### Ordinary Drake Lake live scene — 2026-10-18
+
+Admitted native Time trial and Two-player race on all four Drake classes using
+its verified primary rows and shared source terrain. Normal/Hard load 24 reed
+clumps; Expert/Reverse load 48. Each visible replacement reads the original
+object's position and visibility, with detached replay and player-window data.
+The thirteen fixed posts, 22 finite faces and 72 shoreline segments remain
+source-aligned. Ordinary modes contain no Stunt ramps or rings. The modern
+course and opt-in status are unchanged.
+
+The authored inspection helm completes three laps through ordinary throttle
+and steering on all four classes. Times are 121.749 / 127.922 / 126.993 /
+131.849 seconds, with 0 / 0 / 0 / 1 missed buoys and no disqualifications.
+Expert corner waypoints and one Reverse exit waypoint keep that inspection
+line clear of banks; source judging links and collisions are unchanged.
+A two-input Normal versus run completes the winner's three laps in 122.568
+seconds with no misses; the second rider is on lap three at result handoff.
+These checks do not establish equivalence to the original game's AI.
+
+A real-time 1440x900 High browser race independently completes Normal in
+2:00.780 with zero misses. The main and separate player views were visually
+checked. The child view now receives the ordinary source-scene selection and
+canonical reeds instead of loading the older illustration layout. Online
+encoding, validation, interpolation and detached presentation are covered by
+25 passing window/protocol tests; this is not a new end-to-end network test.
+Eleven scene/runtime tests and four full physical race tests pass. Terrain
+remains 361x361 with 512x512 depth data and matches its worker byte for byte.
+All 395 module hashes and four page preloads are refreshed. Native ordinary
+Fortress, Port and Twilight coverage, original AI and further trick/alternate
+route validation remain outstanding.

@@ -1,8 +1,8 @@
-import {DRAKE_STUNT_GEOMETRY as G} from './source-drake-stunt-data.js?v=44ffcceb5a94';
-import {facetedSurface} from './faceted-surfaces.js?v=44ffcceb5a94';
-import {clippedVolume,clippedVolumes} from './clipped-volumes.js?v=44ffcceb5a94';
-import {shoreLines} from './shore-contact.js?v=44ffcceb5a94';
-import {orderSourceFixedSpheres} from './source-boundary-spheres.js?v=44ffcceb5a94';
+import {DRAKE_STUNT_GEOMETRY as G} from './source-drake-stunt-data.js?v=6fdabd848c37';
+import {facetedSurface} from './faceted-surfaces.js?v=6fdabd848c37';
+import {clippedVolume,clippedVolumes} from './clipped-volumes.js?v=6fdabd848c37';
+import {shoreLines} from './shore-contact.js?v=6fdabd848c37';
+import {orderSourceFixedSpheres} from './source-boundary-spheres.js?v=6fdabd848c37';
 const S=.025,xyz=p=>p.map(v=>v*S);
 const direction=heading=>{const a=(Math.trunc(heading*4096/360)&4095)*Math.PI*2/4096;return {tx:Math.sin(a),tz:Math.cos(a)};};
 
@@ -16,11 +16,9 @@ export const drakeStuntNavigation={anchors:[
  [10.2,121.025],[30.45,123.55],[49.3,114.375],[82,107],[108.4,70.975]
 ]};
 
-/** Drake solo Stunt, selected from the actual initialized64-row object array.
- * The raw list has48 decorative rows; only45 fit after3 ramps and16 rings.
- * All floor/shore/object coordinates are numeric reconstruction. Woodland and
+/** Shared original lake geometry. Woodland and
  * bank elevations beyond the finite source shallows are authored scenery. */
-export function createSourceDrakeStuntCourse(polygonDistance){
+export function createSourceDrakeTerrain(polygonDistance){
  if(typeof polygonDistance!=='function')throw new TypeError('Expected signed polygon distance');
  const staticSurfaces=G.floors.map(q=>facetedSurface(q.id,q.triangles.map(t=>t.map(xyz)),{kind:'sand',sourcePlaneIndices:[...q.indices]}));
  const sourceFloor=(x,z)=>{let y=null;for(const q of staticSurfaces){const h=q.heightAt(x,z);if(h!==null&&(y===null||h>y))y=h;}return y;};
@@ -35,6 +33,12 @@ export function createSourceDrakeStuntCourse(polygonDistance){
   }
   return y;
  };
+ return {sourceShores,shoreContacts:shoreLines(sourceShores),staticSurfaces,sourceFloor,ground,landGround:ground,renderGround,
+  authoredBackground:{seabedHeight:-8,status:'Authored bank elevations on the land side of closed source shore outlines.'}};
+}
+/** Solo Stunt uses64 loaded rows:3 ramps,16 rings and45 of48 raw reeds. */
+export function createSourceDrakeStuntCourse(polygonDistance){
+ const terrain=createSourceDrakeTerrain(polygonDistance);
  const fixed=G.fixed.map(([x,z,tag],i)=>({id:'drake-fixed-'+i,x:x*S,y:0,z:z*S,r:.625,probeRadius:.3,
   sourceIndex:i,runtimeTag:tag,type:'post',hidden:false,fixed:true,fixedSphere:true,floating:false,absoluteY:true}));
  const hazards=()=>orderSourceFixedSpheres(fixed);
@@ -61,8 +65,7 @@ export function createSourceDrakeStuntCourse(polygonDistance){
   sourceMetadata:{nativeCourseIndex:4,referenceRevision:'USA Rev1',nativeScale:S,sourceCollisionPlaneCount:22,sourceShoreSegmentCount:72,sourceStuntNativeClass:2},
   anchors,routeInterpolation:'linear',navigationDriver:'source-layout',stuntLayout:{anchors,routeInterpolation:'linear',driver:'source-layout',
    startGate:{...gates[0]},rocks:hazards(),ramps,rings,checkpoints,sourceNativeClass:2},
-  sourceShores,shoreContacts:shoreLines(sourceShores),staticSurfaces,sourceFloor,ground,landGround:ground,renderGround,
-  authoredBackground:{seabedHeight:-8,status:'Authored bank elevations on the land side of closed source shore outlines.'},
+  ...terrain,
   sourceObjectSelection:{singlePlayerIncludesStunt:true,stuntFixedSphereCount:13,stuntNativeClass:2},
   hazardsForPlayers:players=>{if(players!==1)throw new RangeError('Drake native Stunt scene is solo');return hazards();},
   sourceStaticObjects,contactVolumesForRamps,boundaryMetadata:{sourceOrderIsPolygon:false},resistance:[],raceRamps:[]};

@@ -1,8 +1,8 @@
-import {DOLPHIN_STUNT_GEOMETRY as G} from './source-dolphin-stunt-data.js?v=44ffcceb5a94';
-import {facetedSurface} from './faceted-surfaces.js?v=44ffcceb5a94';
-import {clippedVolume,clippedVolumes} from './clipped-volumes.js?v=44ffcceb5a94';
-import {shoreLines} from './shore-contact.js?v=44ffcceb5a94';
-import {sourceBoundarySpheres,orderSourceFixedSpheres} from './source-boundary-spheres.js?v=44ffcceb5a94';
+import {DOLPHIN_STUNT_GEOMETRY as G} from './source-dolphin-stunt-data.js?v=6fdabd848c37';
+import {facetedSurface} from './faceted-surfaces.js?v=6fdabd848c37';
+import {clippedVolume,clippedVolumes} from './clipped-volumes.js?v=6fdabd848c37';
+import {shoreLines} from './shore-contact.js?v=6fdabd848c37';
+import {sourceBoundarySpheres,orderSourceFixedSpheres} from './source-boundary-spheres.js?v=6fdabd848c37';
 const S=.025,xyz=p=>p.map(v=>v*S);
 const direction=heading=>{const a=(Math.trunc(heading*4096/360)&4095)*Math.PI*2/4096;return {tx:Math.sin(a),tz:Math.cos(a)};};
 
