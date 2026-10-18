@@ -14,7 +14,8 @@ const call=(consumer,...args)=>({kind:'externalCall',consumer,arguments:args});
 const start=owner=>owner.applyEffects([call('800bfdd0',0x80192610),call('800bfef8',0x80192630)]);
 const field=()=>createNativeWaterField({datumNative:20});
 function advance(owner,adapters,field,recordFlags318,recordMotion2c8,recordPower12c=adapters.map(()=>0),recordPlace4=adapters.map(()=>0)){
- owner.advance(adapters,field,{recordFlags318,recordMotion2c8,recordPower12c,recordPlace4});
+ owner.advance(adapters,field,{recordFlags318,recordMotion2c8,recordPower12c,recordPlace4,
+  sprayLeft1c5c:adapters.map(()=>0),sprayRight1c60:adapters.map(()=>0)});
 }
 function body(frame,{speed=50,vertical=0,wet=1,landing=0,simulation=3,impacts=createNativeImpactState(),rider=0}={}){
  return {logicalFrames:frame,pendingFrameCompletion:false,frame:{simulationState:simulation,startCenter:{x:0,y:-vertical,z:0},controls:{heldButtons:0}},
@@ -101,7 +102,7 @@ test('power and place come from canonical human slots and retain native byte sto
  const records=runtime.contactAudioInputs();assert.deepEqual(records.slots,[1,0]);
  assert.deepEqual(records.recordPower12c,[-1,259]);assert.deepEqual(records.recordPlace4,[258,-1]);
  const owner=createNativeRaceContactAudio({players:2,courseIndex:1});
- owner.advance([body(1,{rider:1}),body(1)],field(),records);
+ owner.advance([body(1,{rider:1}),body(1)],field(),{...records,sprayLeft1c5c:[0,0],sprayRight1c60:[0,0]});
  assert.deepEqual(owner.snapshot().packets.map(p=>[p[1],p[14],p[25]]),[[80,255,2],[40,3,255]]);
  records.recordPower12c[0]=12;assert.equal(runtime.contactAudioInputs().recordPower12c[0],-1);
  const before=owner.snapshot(),invalid={...runtime.contactAudioInputs(),recordPlace4:[0,NaN]};

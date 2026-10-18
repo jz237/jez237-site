@@ -19,6 +19,29 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — live source spray inputs and cadence
+
+The native human races now assemble AE210 spray inputs from actual completed
+hull motion, the per-tick physical reference, floor-impact maxima, alternate
+rider state and the source water query. The post-world spray owner reads the
+canonical cameras, scene and race records. It advances before the shared ice
+splash phase; the next frame's sound packet reads the retained side levels.
+
+The activity-gated6A264 counter now advances at the start of each native world
+frame. This restores original alternating spray cadence and the ambient record
+stamp that previously stayed zero. Browser pause advances neither. Original
+camera normalization, including its shared P1/P2 output, is preserved.
+
+Another216 original physical-input cases,4 camera cases and15 counter cases
+pass. All54 unique focused launch/grid/body/contact/spray/ice tests pass,
+including30/60/144Hz histories and direct prior-frame packet checks. Chrome's
+two-player race reached frame900 with independent nonzero side levels, the
+canonical counter at900 and all four original engine buffers ready. High
+quality,1280×720 and83,521 water vertices remain unchanged.
+
+This completes the live spray-level input path. Original bank4 spray samples,
+channel pitch/poll priority and independent layer1 playback remain unfinished.
+
 ## Unpublished — original spray levels and physical reference motion
 
 The B08F8 scalar spray-level calculation is reconstructed from the original

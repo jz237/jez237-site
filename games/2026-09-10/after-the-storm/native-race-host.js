@@ -5,6 +5,7 @@ import {createNativeLifecycleRider} from './native-lifecycle-rider.js';
 import {nativeRiderPresentation} from './native-rider-presentation.js';
 import {createSourceNativeContacts} from './source-native-contacts.js';
 import {createNativeRaceWorld,stepNativeRaceWorld} from './native-race-world.js';
+import {createNativeRaceSpray} from './native-race-spray.js';
 import {nativeRacerPresentation} from './native-racer-presentation.js';
 import {queryNativeWaterField} from './native-water-field.js';
 import {NATIVE_RIDER_TUNE_DEFAULTS} from './native-rider-controls.js';
@@ -146,9 +147,12 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
   host.aiInitialization=raceRuntime.initializeAI({hullProfilesB64:profiles,avatarsB68:profiles,
    objectTypes4c:ice?ice.state.nodes.map(o=>o.kind):(floating?.state.objects??[]).map(o=>o.runtimeKind)});
   bindRaceWaterCameraStorage(water,raceRuntime.cameraStorage);
+  host.spray=createNativeRaceSpray({adapters,field:water.field,courseIndex:course.sourceWaterCourseIndex});
  }
  host.world=createNativeRaceWorld({adapters,water,humanIndices,craftContacts,deferWaterRollers:!!raceRuntime?.ordinary,
  beforeFrame:raceRuntime?.ordinary?(world,context)=>{
+  //6A264 at922E4 entry precedes control/input and physical world work.
+  host.lastSourceFrameCounter=raceRuntime.advanceSourceFrameCounter();
   const menu=typeof host.menuInputs==='function'?host.menuInputs(context.time,context.logicalFrame):host.menuInputs??[];
   if(!Array.isArray(menu))throw new TypeError('Menu inputs must be a human-controller array');
   host.lastMenuInput=raceRuntime.advanceMenuInput(menu.map(value=>{
@@ -206,6 +210,7 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
   // The original caller stamps course rollers AFTER object motion. Read72c
   // here from the canonical state, not from the earlier water/input latch.
   if(raceRuntime?.ordinary)advanceRaceWaterRollers(water,{active:objectMotionActive,rollerState72c:raceRuntime.courseRollerState()});
+  if(host.spray)host.spray.advance(raceRuntime.sprayInputs(),raceRuntime.cameraStorage.read());
   if(ice)ice.afterEffects(host.world,context);
   if(raceRuntime){
    host.lastHUD=raceRuntime.ordinary?raceRuntime.advanceHUD():null;

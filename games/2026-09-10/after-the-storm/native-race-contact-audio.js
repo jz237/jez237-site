@@ -67,8 +67,8 @@ export function createNativeRaceContactAudio({players,courseIndex}){
    }
   },
   advance(adapters,field,records){
-   const {recordFlags318,recordMotion2c8,recordPower12c,recordPlace4}=records??{};
-   if(adapters.length!==players||[recordFlags318,recordMotion2c8,recordPower12c,recordPlace4].some(values=>
+   const {recordFlags318,recordMotion2c8,recordPower12c,recordPlace4,sprayLeft1c5c,sprayRight1c60}=records??{};
+   if(adapters.length!==players||[recordFlags318,recordMotion2c8,recordPower12c,recordPlace4,sprayLeft1c5c,sprayRight1c60].some(values=>
     !Array.isArray(values)||values.length!==players||values.some(v=>!Number.isInteger(v)||v< -2147483648||v>2147483647)))
     throw new RangeError('Contact audio needs every admitted human body and source record');
    const next=adapters[0].logicalFrames;
@@ -99,6 +99,7 @@ export function createNativeRaceContactAudio({players,courseIndex}){
     for(let i=0;i<4;i++)packet[i]=prefix[i];
     packet[4]=actorAudio.buttonByte;packet[21]=actorAudio.riderEvent;packet[28]=actorAudio.animationEvent;
     packet[14]=recordPower12c[player]&255;packet[25]=recordPlace4[player]&255;
+    packet[16]=1;packet[17]=Math.max(sprayLeft1c5c[player],sprayRight1c60[player])&255;
     packet[24]=Number(riderWater[player].bodyC84===0&&riderWater[player].bodyC86===1);
     packet[15]=nativeContactImmersion({waterQueryNative:query.sourcePlaneQueryNative,point90YNative:points[0].y,pointD0YNative:points[1].y});
     const impact=nativeImpactAudioPacket({impacts:adapter.impacts,objectHitKind16d8:adapter.objectHitKind16d8,

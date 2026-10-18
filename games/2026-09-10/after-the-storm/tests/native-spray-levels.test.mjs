@@ -1,9 +1,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {prepareNativeSprayLevels,prepareNativeSprayMotion} from '../native-spray-levels.js';
+import {prepareNativeSprayLevels,prepareNativeSprayMotion,prepareNativeSprayPhysicalInputs,normalizeNativeSprayCamera,nextNativeSprayFrameCounter} from '../native-spray-levels.js';
 import {createNativeHull,stepNativeHull} from '../native-hull.js';
 const fixture=JSON.parse(readFileSync(new URL('./fixtures/native-spray-levels-reference.json',import.meta.url)));
+const inputs=JSON.parse(readFileSync(new URL('./fixtures/native-spray-inputs-reference.json',import.meta.url)));
+test('216 original human physical preparations use floor impacts, source displacement and normalized water queries',()=>{
+ for(const [i,c]of inputs.cases.entries())assert.deepEqual(prepareNativeSprayPhysicalInputs(c.input),c.expected,'physical case '+i);
+});
+test('original shared camera normalization retains zero-axis output and activity counter wraps signed32',()=>{
+ for(const c of inputs.cameras)assert.deepEqual(normalizeNativeSprayCamera(c.previous,c.forward),c.expected);
+ for(const c of inputs.clocks)assert.equal(nextNativeSprayFrameCounter(c.previous,c.activity),c.expected);
+});
 test('579 original spray executions match camera gates, physical transitions and retained human levels',()=>{
  for(const [i,c]of fixture.cases.entries())assert.deepEqual(prepareNativeSprayLevels(c.previous,c.input),c.expected,'original case '+i);
 });

@@ -3,6 +3,36 @@ const float=v=>{if(!Number.isFinite(v)||!Number.isFinite(F(v)))throw new TypeErr
 const word=v=>{if(!Number.isInteger(v)||v< -2147483648||v>2147483647)throw new RangeError('Supply source spray integers');return v;};
 const vector=v=>Object.fromEntries(['x','y','z'].map(k=>[k,float(v?.[k])]));
 const length2=(x,z)=>F(Math.sqrt(F(F(x*x)+F(z*z))));
+const length3=v=>F(Math.sqrt(F(F(F(v.x*v.x)+F(v.y*v.y))+F(v.z*v.z))));
+
+// Human AE210 input branch. The normalized4D30C query is supplied at the
+// physical center's XZ. C4C is the original floor-impact maximum.
+export function prepareNativeSprayPhysicalInputs(input){
+ const position=vector(input.positionNative),velocity=vector(input.frameDisplacementNative),forward=vector(input.forwardNative);
+ const right=vector(input.rightNative),reference=vector(input.referenceVelocityNative),tick=vector(input.tickDisplacementNative);
+ const floor=float(input.floorImpactNative),waterQuery=float(input.waterQueryNative),course=word(input.courseIndex),alternate=word(input.alternate16cc);
+ if(floor<0||alternate<0||alternate>65535)throw new RangeError('Invalid source spray body field');
+ position.y=F(position.y-8);
+ const special=Number([0,1,2,6,7].includes(course)&&floor>0&&F(waterQuery+4)<position.y);
+ if(alternate!==0)position.y=F(position.y+2);
+ let water=waterQuery;
+ if(special){position.y=F(position.y-2);water=F(position.y+12);}
+ const difference=Object.fromEntries(['x','y','z'].map(k=>[k,F(reference[k]-tick[k])])),horizontal=length2(-right.x,-right.z);
+ let lateral=horizontal>0?F(F(velocity.x*F(-right.x/horizontal))+F(velocity.z*F(-right.z/horizontal))):length2(velocity.x,velocity.z);
+ if(lateral<0)lateral=-lateral;
+ return {position,velocity,forward,speed:length3(velocity),lateral,referenceMotion:length3(difference),water,special};
+}
+
+//801EDBD4 preserves the previous shared output on a zero-length camera axis.
+export function normalizeNativeSprayCamera(previous,forward){
+ const p=vector(previous),v=vector(forward),length=length3(v);
+ return length>0?Object.fromEntries(['x','y','z'].map(k=>[k,F(v[k]/length)])):p;
+}
+
+//6A264 runs at the start of922E4, before physical/world processing.
+export function nextNativeSprayFrameCounter(previous,activity624){
+ word(previous);word(activity624);return activity624===-1?(previous+1)|0:previous;
+}
 
 //624CC,62774..62830: displacement of the physical point27 units forward
 // and2 units above the center. AE210 compares this with the last hull tick's

@@ -26,6 +26,7 @@ import {NATIVE_RIDER_MENU_ORDER} from './native-rider-controls.js';
 import {nativeCourseDatumAfterPhysics} from './native-course-datum.js';
 import {spawnNativeIceFragments} from './native-ice-fragments.js';
 import {stepNativeIceSplashes} from './native-ice-splashes.js';
+import {nextNativeSprayFrameCounter} from './native-spray-levels.js';
 
 // Overlapping effect47FC, solo4800 and two-player4818 numeric entries. Ordinary
 // two-player place indices are0/1; other mode tables remain separate admission.
@@ -189,6 +190,18 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    const slots=[current.scene.primaryHumanIndex,...(players===2?[current.scene.secondaryHumanIndex]:[])];
    return {slots,recordFlags318:slots.map(slot=>word(slot,0x318/4)),recordMotion2c8:slots.map(slot=>word(slot,0x2c8/4)),
     recordPower12c:slots.map(slot=>word(slot,0x12c/4)),recordPlace4:slots.map(slot=>word(slot,1))};
+  },
+  sprayInputs(){
+   const g=current.scene;
+   return {players:g.players,primaryIndex:g.primaryHumanIndex,secondaryIndex:g.secondaryHumanIndex,
+    scene638:g.main638,activity624:g.activity624,frameCounter:g.ambientD4b00,racerCount:g.racerCount,
+    // This runtime admits actual human hulls; the extra spectator craft has
+    // a separate AE210 branch and is not constructed in these native previews.
+    extraRacer:0,records2f4:racers.map((_,slot)=>word(slot,0x2f4/4))};
+  },
+  advanceSourceFrameCounter(){
+   const g=current.scene,value=nextNativeSprayFrameCounter(g.ambientD4b00,g.activity624);
+   commit([{kind:'sourceWordWrite',field:'ambientD4b00',value:value>>>0}]);return value;
   },
   // Read the same source rank/checkpoint clock and human slot selectors used
   // by63C88. The host supplies preceding physical centers before any hull tick.
