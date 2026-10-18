@@ -10,6 +10,1878 @@
         "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
       },
       "visualProfile": {
+        "tone": "Stories, sound and color at home",
+        "motifs": [
+          "Amazon adventure map",
+          "Commodore 64 keyboard",
+          "color printer",
+          "music keyboard"
+        ],
+        "layout": "Dense warm newsprint with red and blue headers"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Crichton and Amazon dominate the illustrated front page",
+        "secondaryRail": "Color printing, C64 music, IBM and the modem desk",
+        "archiveNavigation": "Weekly archive and previous/next controls"
+      },
+      "currentDate": "2026-10-18",
+      "historicDate": "1985-02-11",
+      "displayDate": "Week of February 11-17, 1985",
+      "edition": "Issue 133 - Weekly 1985 Computer & Culture Chronicle",
+      "sources": [
+        {
+          "title": "COMPUTE!'s Gazette, vol. 3 no. 2, issue 20: February OCR (articles and advertisements)",
+          "url": "https://archive.org/stream/computes.gazette/Compute_Gazette_Issue_20_1985_Feb_djvu.txt",
+          "date": "1985-02"
+        },
+        {
+          "title": "Betsy Staples: Michael Crichton, Creative Computing vol. 11 no. 2 p. 26",
+          "url": "https://www.atarimagazines.com/creative/v11n2/26_Michael_Crichton.php",
+          "date": "1985-02"
+        },
+        {
+          "title": "Billboard rock chart archive; chart rows verified from HTML",
+          "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-16/",
+          "date": "1985-02-16"
+        },
+        {
+          "title": "The Numbers: domestic weekend chart",
+          "url": "https://www.the-numbers.com/box-office-chart/weekend/1985/02/15",
+          "date": "1985-02-15"
+        },
+        {
+          "title": "UPI, Samira Kawar: Palestinian leader Yasser Arafat and Jordan’s King Hussein agreed (search extract only)",
+          "url": "https://www.upi.com/Archives/1985/02/12/Palestinian-leader-Yasser-Arafat-and-Jordans-King-Hussein-agreed/7769477032400/",
+          "date": "1985-02-12"
+        },
+        {
+          "title": "Audio February cover, Pioneer CLD-900 (indexed cover extract only)",
+          "url": "https://www.worldradiohistory.com/Archive-All-Audio/Archive-Audio/80s/Audio-1985-02.pdf",
+          "date": "1985-02"
+        },
+        {
+          "title": "InfoWorld vol. 7 no. 6; bibliographic index only",
+          "url": "https://books.google.com/books?id=7S4EAAAAMBAJ",
+          "date": "1985-02-11"
+        },
+        {
+          "title": "IBM 3090 historical overview and model table; cites IBM announcement 185-014",
+          "url": "https://en.wikipedia.org/wiki/IBM_3090",
+          "date": "retrospective; event 1985-02-12"
+        },
+        {
+          "title": "Sierra Adds Power to I.B.M., The New York Times; title/date only",
+          "url": "https://www.nytimes.com/1985/02/13/business/sierra-adds-power-to-ibm.html",
+          "date": "1985-02-13"
+        },
+        {
+          "title": "Personal Computers; New Mouse Resides on the Floor, The New York Times; title/date only",
+          "url": "https://www.nytimes.com/1985/02/12/science/personal-computers-new-mouse-resides-on-the-floor.html",
+          "date": "1985-02-12"
+        }
+      ],
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Issue 133 - Weekly 1985 Computer & Culture Chronicle",
+        "dateline": "Week of February 11-17, 1985",
+        "price": "75 cents"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1985-02-11.jpg",
+        "alt": "Computer Chronicle newspaper front page for February 11-17, 1985",
+        "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Adventure, music and color give the home computer new work to do.",
+      "morningLine": "Crichton maps a different kind of adventure; the Commodore learns new tunes.",
+      "lead": {
+        "headline": "Michael Crichton trades the movie screen for the adventure game",
+        "dek": "In a February interview, the author behind Amazon explains why story should guide the player.",
+        "body": [
+          "Michael Crichton wants the computer adventure to tell a story, not merely conceal a solution. Interviewed by Betsy Staples in February’s Creative Computing, the novelist and filmmaker describes Amazon, his Trillium Software adventure made with programmer Stephen Warady, as a sequence of dramatic episodes.",
+          "A river crossing, a volcano climb and a journey to a Lost City form the expedition. Crichton compares the arrangement to beads on a string: individual challenges serve the trip. “My interest is not in creating a puzzle space; my interest is in trying to tell a story in a new way,” he says.",
+          "The author did more than supply a name for the package. He supplied a text flowchart, location map and color graphics frames, along with BASIC portions subsequently translated into machine language. His contributions included main-title graphics, in-game computer modules and sound effects.",
+          "Crichton sees room for an eventual family entertainment form between films and computer games, though he cautions that it will not arrive this year. His own collection ranges from an IBM PC/AT to a Commodore 64; for travel, he favors the TRS-80 Model 100. Amazon is a current adventure under discussion this month, not a newly announced release this week."
+        ],
+        "confidence": "same-month",
+        "sourceRefs": [
+          1
+        ]
+      },
+      "stories": [
+        {
+          "headline": "A $239 color printer meets the real-paper test",
+          "body": [
+            "Color printing reaches the Commodore desk at a quoted $239 with interface. Charles Brannon’s February Gazette review examines the Okimate-10, whose nine-wire thermal-transfer element melts waxlike ribbon ink onto paper. The process is quieter than impact printing.",
+            "The paper matters as much as the mechanism. Brannon reports unacceptable results on ordinary fanfold, photocopy and bond paper, while acetate gives clear, sharp images. The supplied glossy paper is acceptable but light. A bargain printer still asks the buyer to choose supplies carefully.",
+            "The $169.95 base unit requires its proprietary interface; a generic printer interface will not substitute. Black ribbons are quoted at $5.95 and rated by Okidata for roughly 75 average text pages. They cannot be reused. These are February review prices and manufacturer claims, not a nationwide store-price survey."
+          ],
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "headline": "The Commodore 64 becomes a music room for non-musicians",
+          "body": [
+            "The Commodore 64’s music circuit is finding new companions. February’s Gazette describes Sight & Sound’s work with jazz guitarist Ryo Kawasaki on software for its keyboard accessory. The series runs from $29.95 to $49.95.",
+            "Kawasaki Synthesizer makes the machine a programmable synthesizer and sound processor. Kawasaki Rhythm Rocker joins electronic rhythms, sound effects and high-resolution graphics. Music Processor handles composing, editing, recording and playback; 3001: A Sound Odyssey teaches, while Music Video Kit turns toward pictures.",
+            "Waveform’s Colortone Keyboard takes another approach: a $79.95 touch-sensitive membrane with 25 piano-like keys, a harp strip and 14 function keys. Its supplied software offers eight instrument sounds and 12 songs. These are products described in the February feature, not new weekly shipping announcements."
+          ],
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "headline": "IBM announces its 3090 mainframe family",
+          "body": [
+            "IBM announced the 3090 Models 200 and 400 on February 12. The new large-system family brings a two-central-processor Model 200 and a four-processor Model 400 configuration formed from two 200 systems.",
+            "The announcement sits far from the home-computer shelf, but marks the week’s clearest dated computing development. The New York Times followed on February 13 with “Sierra Adds Power to I.B.M.” No price is established here. The later 3090 vector facility is not part of this February announcement."
+          ],
+          "sourceRefs": [
+            7,
+            8
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Okimate-10",
+          "summary": "Thermal-transfer color printer; $239 with Commodore interface in Brannon’s February review.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Waveform Colortone Keyboard",
+          "summary": "25-key membrane musical accessory, $79.95 in February feature.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "IBM 3090 Models 200 and 400",
+          "summary": "February 12 announcement of two- and four-processor mainframes; historical secondary source read, contemporary NYT title/date corroborated. No verified price.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            7,
+            8
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Bank Street Writer",
+          "detail": "Broderbund C64 advertisement: $49.95 suggested retail, documentation and backup disk; prompts, menus, search/replace and page formatting.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "name": "WordPro 3 Plus/64 and SpellRight Plus",
+          "detail": "Professional Software advertisement offers both for $99.95; mail merge, column math and spell-checking. Treat feature and sales claims as advertising.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "name": "Address File",
+          "detail": "Robert D. Gunn’s VIC/C64 type-in filing program, p. 60, offers alphabetical sorting and instant searching.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games — editorial selections, not sales rankings",
+          "items": [
+            "Amazon — Current Trillium adventure discussed by Crichton and programmer Stephen Warady; story-led design, not a newly verified weekly release.",
+            "Raid on Bungeling Bay — Broderbund C64 advertisement describes helicraft attacks against factories on six islands and an enemy war machine that repairs and expands.",
+            "Championship Lode Runner — Broderbund advertisement offers fifty difficult Treasury Chambers; an advertised current title, not a new-release date.",
+            "The Forbidden Crypt — Ted Reynolds’s type-in action game begins p. 53; cover identifies versions for VIC-20, C64, Plus/4 and Commodore 16.",
+            "Break Street — Creative Software advertisement promotes break-dancing moves, slow motion, musical accompaniment and recording routines for replay on C64."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "label": "Top 5 Movies — February 15-17 domestic weekend box office",
+          "items": [
+            "1. Beverly Hills Cop",
+            "2. Witness",
+            "3. The Breakfast Club",
+            "4. The Killing Fields",
+            "5. Vision Quest"
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Okimate-10 with Commodore interface",
+          "price": "$239.00",
+          "note": "$239 review quotation; US dollars.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Okimate-10 replacement black ribbon",
+          "price": "$5.95",
+          "note": "$5.95; about 75 average text pages per manufacturer claim.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Bank Street Writer C64",
+          "price": "$49.95",
+          "note": "$49.95 suggested retail in Broderbund advertisement.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "WordPro/SpellRight bundle",
+          "price": "$99.95",
+          "note": "$99.95 advertised package.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Colortone Keyboard",
+          "price": "$79.95",
+          "note": "$79.95 in music feature.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "song": "Somebody",
+          "artist": "Bryan Adams",
+          "chart": "Billboard rock chart (archive currently labels it Mainstream Rock Airplay)",
+          "chartDate": "1985-02-16",
+          "confidence": "same-week",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-16/"
+          ],
+          "title": "Somebody"
+        },
+        {
+          "rank": 2,
+          "song": "The Old Man Down The Road",
+          "artist": "John Fogerty",
+          "chart": "Billboard rock chart (archive currently labels it Mainstream Rock Airplay)",
+          "chartDate": "1985-02-16",
+          "confidence": "same-week",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-16/"
+          ],
+          "title": "The Old Man Down The Road"
+        },
+        {
+          "rank": 3,
+          "song": "Only The Young",
+          "artist": "Journey",
+          "chart": "Billboard rock chart (archive currently labels it Mainstream Rock Airplay)",
+          "chartDate": "1985-02-16",
+          "confidence": "same-week",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-16/"
+          ],
+          "title": "Only The Young"
+        },
+        {
+          "rank": 4,
+          "song": "Just Another Night",
+          "artist": "Mick Jagger",
+          "chart": "Billboard rock chart (archive currently labels it Mainstream Rock Airplay)",
+          "chartDate": "1985-02-16",
+          "confidence": "same-week",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-16/"
+          ],
+          "title": "Just Another Night"
+        },
+        {
+          "rank": 5,
+          "song": "Can’t Fight This Feeling",
+          "artist": "REO Speedwagon",
+          "chart": "Billboard rock chart (archive currently labels it Mainstream Rock Airplay)",
+          "chartDate": "1985-02-16",
+          "confidence": "same-week",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-16/"
+          ],
+          "title": "Can’t Fight This Feeling"
+        },
+        {
+          "rank": 6,
+          "song": "Rock & Roll Girls",
+          "artist": "John Fogerty",
+          "chart": "Billboard rock chart (archive currently labels it Mainstream Rock Airplay)",
+          "chartDate": "1985-02-16",
+          "confidence": "same-week",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-16/"
+          ],
+          "title": "Rock & Roll Girls"
+        },
+        {
+          "rank": 7,
+          "song": "Radioactive",
+          "artist": "The Firm",
+          "chart": "Billboard rock chart (archive currently labels it Mainstream Rock Airplay)",
+          "chartDate": "1985-02-16",
+          "confidence": "same-week",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-16/"
+          ],
+          "title": "Radioactive"
+        },
+        {
+          "rank": 8,
+          "song": "The Heat Is On",
+          "artist": "Glenn Frey",
+          "chart": "Billboard rock chart (archive currently labels it Mainstream Rock Airplay)",
+          "chartDate": "1985-02-16",
+          "confidence": "same-week",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-16/"
+          ],
+          "title": "The Heat Is On"
+        },
+        {
+          "rank": 9,
+          "song": "California Girls",
+          "artist": "David Lee Roth",
+          "chart": "Billboard rock chart (archive currently labels it Mainstream Rock Airplay)",
+          "chartDate": "1985-02-16",
+          "confidence": "same-week",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-16/"
+          ],
+          "title": "California Girls"
+        },
+        {
+          "rank": 10,
+          "song": "High On You",
+          "artist": "Survivor",
+          "chart": "Billboard rock chart (archive currently labels it Mainstream Rock Airplay)",
+          "chartDate": "1985-02-16",
+          "confidence": "same-week",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-16/"
+          ],
+          "title": "High On You"
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Fifty rooms for expert runners",
+          "summary": "Broderbund’s February advertisement offers fifty Treasury Chambers in Championship Lode Runner.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "headline": "A filing cabinet on tape or disk",
+          "summary": "Robert D. Gunn’s Address File type-in for VIC and C64 offers alphabetical sorting and instant searching in February Gazette.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "worldAnchor": {
+        "headline": "Hussein and Arafat agree on joint action",
+        "summary": "King Hussein and Yasser Arafat agreed on joint action on February 11, according to UPI’s February 12 dispatch.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          4
+        ]
+      },
+      "gadgetWatch": {
+        "headline": "One deck for LaserDiscs and compact discs",
+        "summary": "February’s Audio cover spotlights the Pioneer CLD-900 as a unit that plays both LaserDiscs and compact discs.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          5
+        ]
+      },
+      "bbsNote": {
+        "headline": "Local boards versus metered online services",
+        "summary": "February Gazette explains the BBS economy and the difference between a membership charge, connect time and telephone tolls.",
+        "posts": [
+          {
+            "topic": "Finding a local board",
+            "platform": "US local BBS culture",
+            "text": "Editorial paraphrase, not an authentic BBS post: stores and user groups can point callers toward boards, and boards advertise other boards."
+          },
+          {
+            "topic": "Busy signals are a sign of success",
+            "platform": "Volunteer BBSs",
+            "text": "Editorial paraphrase: growing membership makes single-line boards harder to reach and can prompt membership fees to support the sysop."
+          },
+          {
+            "topic": "Budget the whole connection",
+            "platform": "CompuServe / The Source / Dow Jones / Delphi",
+            "text": "Editorial paraphrase: national-service connect time generally starts around $6 an hour or more; time, speed and telephone distance matter. No invented user handles or historical message transcripts."
+          }
+        ],
+        "sourceRefs": [
+          0
+        ]
+      },
+      "curiosity": {
+        "headline": "Break-dancing comes home to the Commodore",
+        "summary": "Creative Software sells a dancing program instead of another space battle.",
+        "detail": "The February Gazette ad for Break Street names moonwalk, backspin, windmill and tut, offers slow motion, and lets players string moves together and record them for replay. This is evidence of an advertised February product, not a release that week.",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "periodAd": {
+        "headline": "Bank Street Writer — $49.95",
+        "summary": "Broderbund’s C64 advertisement offers prompts, menus, search and replace, page formatting, documentation and a backup disk at $49.95 suggested retail.",
+        "tagline": "From the February advertising pages",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "market": {
+        "headline": "The cost of going online",
+        "summary": "February Gazette distinguishes mostly free local bulletin boards from metered commercial services, generally $6 or more per connected hour depending on time and speed. Long-distance telephone tolls remain a separate expense; even a free board can cost money to call.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "Exact-week IBM 3090 announcement verified from a retrospective model table citing IBM letter 185-014; original IBM URL redirects and contemporary NYT body is blocked. Gaming lead remains an explicitly same-month feature, not a weekly launch. InfoWorld February 11 bodies still unavailable.",
+          "World anchor is verified to headline/date/name level through a dated UPI search extract; full UPI article blocked, so do not embellish its diplomatic terms without further reading.",
+          "Gadget candidate is limited to verified February Audio cover text; PDF retrieval blocked. No product introduction date or price claimed.",
+          "Prices below are period advertisements or review quotations, not verified nationwide transaction prices. No named cracking crew or pirate board verified; underground item covers the contemporary copy-protection market only.",
+          "Additional primary-source attempts: February 12 NYT floor-mouse column blocked (403); April 1985 Datapro IBM 3090 PDF at Bitsavers blocked (403). These did not yield usable product detail. Status remains partial; inherited magazine/chart findings retained, Crichton interview independently re-read in this pass.",
+          "Game selections are editorial, not sales ranks. Monthly features are not weekly launch claims.",
+          "World bulletin is limited to the verified agreement headline; no diplomatic terms inferred."
+        ]
+      }
+    },
+    {
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+      },
+      "currentDate": "2026-10-17",
+      "historicDate": "1985-02-04",
+      "displayDate": "Week of February 4-10, 1985",
+      "edition": "Issue 132 - Weekly 1985 Computer & Culture Chronicle",
+      "sources": [
+        {
+          "title": "COMPUTE! issue 57 — February 1985, full issue OCR (interviews, reviews, ads, Telecomputing Today)",
+          "url": "https://archive.org/download/1985-02-compute-magazine/Compute_Issue_057_1985_Feb_djvu.txt",
+          "date": "1985-02"
+        },
+        {
+          "title": "COMPUTE! issue 57 scan and bibliographic record",
+          "url": "https://archive.org/details/1985-02-compute-magazine",
+          "date": "1985-02"
+        },
+        {
+          "title": "Kathleen Day — Wozniak Takes Leave at Apple to Start Firm, Los Angeles Times",
+          "url": "https://www.latimes.com/archives/la-xpm-1985-02-07-fi-5420-story.html",
+          "date": "1985-02-07"
+        },
+        {
+          "title": "Paul Richter — Commodore Woes Make an Industry Wince, Los Angeles Times",
+          "url": "https://www.latimes.com/archives/la-xpm-1985-02-01-fi-6052-story.html",
+          "date": "1985-02-01"
+        },
+        {
+          "title": "Billboard rock airplay chart, week of February 9",
+          "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-09/",
+          "date": "1985-02-09"
+        },
+        {
+          "title": "Box Office Mojo — domestic weekend February 8–10",
+          "url": "https://www.boxofficemojo.com/weekend/1985W06/",
+          "date": "1985-02-10"
+        },
+        {
+          "title": "David Barber — New Zealand makes waves for US Navy, Christian Science Monitor",
+          "url": "https://www.csmonitor.com/1985/0206/ozus1.html",
+          "date": "1985-02-06"
+        },
+        {
+          "title": "Computer Chronicles — Software Piracy (date ambiguous; excluded from weekly candidates)",
+          "url": "https://archive.org/details/Software1985",
+          "date": "1985-02 (archive metadata; broadcast date disputed)"
+        }
+      ],
+      "visualProfile": {
+        "tone": "Adventure and the living room",
+        "motifs": [
+          "Apple II adventure graphics",
+          "Commodore 64",
+          "modem",
+          "software disks"
+        ],
+        "layout": "Dense warm newsprint, red and blue headers"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Amazon adventure gaming gets the largest illustrated treatment; Wozniak exact-week news in a prominent adjacent column",
+        "secondaryRail": "Online games, PC-Write, music and cinema",
+        "archiveNavigation": "Weekly archive and previous/next controls"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Issue 132 - Weekly 1985 Computer & Culture Chronicle",
+        "dateline": "Week of February 4-10, 1985",
+        "price": "75 cents"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1985-02-04.jpg",
+        "alt": "GPT Image 2 newspaper artifact for February 4-10, 1985",
+        "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Adventure writers rethink puzzles while the home computer reaches outward through the telephone and toward the living room.",
+      "morningLine": "Amazon puts cleverness first; Wozniak sets his sights beyond the computer.",
+      "lead": {
+        "headline": "Michael Crichton wants adventure games to make sense",
+        "body": [
+          "Michael Crichton has a complaint familiar to anyone stranded at an adventure-game prompt: a sensible solution ought not to fail merely because the player has guessed the wrong words. In February’s COMPUTE!, the novelist discusses Amazon and argues for puzzles that answer to the logic of the situation rather than an arbitrary phrase.",
+          "His damaged boat offers an example. Players can patch it in three plausible ways, an invitation to think through the problem rather than hunt for a single approved command. Crichton favors cleverness over violence and has little affection for mazes. The interview treats the adventure as an existing game, not a new release this week.",
+          "The project began with scripting in 1982. Crichton knew BASIC, but brought in Steve Warrady to help realize the story in Apple assembly-language graphics and text. Development took about eighteen months, with writer, programmer and graphic designer working in a collaboration he compares to a film crew.",
+          "Trillium approached him about adventures based on novels while he was polishing Amazon. The timing was a coincidence: he already had a game under way. For home-computer players, the interesting promise is not simply a famous name on a box, but a story world that rewards a reasonable idea."
+        ],
+        "sourceRefs": [
+          0
+        ],
+        "confidence": "same-month",
+        "dek": "February’s COMPUTE! finds the novelist building adventures around believable solutions, not magic words."
+      },
+      "stories": [
+        {
+          "headline": "Wozniak leaves daily Apple duties for a living-room video venture",
+          "body": [
+            "Apple co-founder Stephen Wozniak is giving up his daily principal-engineer duties to pursue a self-financed business involving video in the living room. Kathleen Day’s February 7 Los Angeles Times report says Apple confirmed the change Wednesday, after employees were told in a Tuesday newsletter.",
+            "This is not a complete break with Apple. Wozniak remains on the payroll as a consultant. Joe Ennis, another key Apple engineer, is leaving with him, giving the new undertaking a second experienced designer.",
+            "Wozniak is withholding product details and hopes to have something ready by the fall. No price or technical specifications have been disclosed. The Apple II designer’s next direction is intriguing, but a proposed home-video business is not yet a product on the dealer’s shelf."
+          ],
+          "sourceRefs": [
+            2
+          ],
+          "confidence": "exact-date"
+        },
+        {
+          "headline": "Online games and conversation challenge the established services",
+          "body": [
+            "An evening online need not mean only messages or stock tables. February’s Telecomputing Today column in COMPUTE! describes Play/Net’s medium-resolution color games for the Commodore 64, reached with a proprietary terminal program at an introductory $2 an hour.",
+            "People/Link is courting callers at an introductory $2.95 an hour with conversation, special-interest activities and electronic mail. Its advertising names Partyline, Club-Link, Netmail and PeopleScan, as well as chess and bridge. These are connect-time offers, not a guarantee that every telephone or access charge is included.",
+            "Play/Net says IBM and Apple support will follow by spring; that remains a promise rather than present availability. Columnist Arlan R. Levitan also expects introductory prices to rise. The attraction is immediate nonetheless: the opponent or conversation partner can be at another keyboard."
+          ],
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "PC-Write turns copying into a sales channel",
+          "body": [
+            "Quicksoft’s PC-Write makes distribution part of the sales pitch. Sheldon Leemon’s February COMPUTE! review encourages owners to pass the word processor and its documentation to friends, user groups and bulletin boards. This is authorized sharing, not illicit copying.",
+            "Bob Wallace, formerly of Microsoft, designed the program. A $75 registration buys a personalized copy, bound manual, assistance, Pascal and machine-language source, and the next major update. When a personalized copy produces another registration, its owner receives $25.",
+            "The practical tools include search and replace, recoverable deletions, adjustable margins, help screens and macros, with special handling for the PCjr keyboard. Editing and printing are separate programs. Buyers should note a discrepancy in the review: its body quotes $10 for disk and postage, while the closing product box lists $20 for the program disk."
+          ],
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "same-month"
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Riteman R64",
+          "summary": "Advertisement specifies Commodore 64 compatibility, a second parallel interface, 120 characters/second and a one-year warranty; these are advertiser claims, not measured review results.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Atari development plans",
+          "summary": "COMPUTE! p. 30 interview with software president Sigmund Hartmann was conducted at November COMDEX, despite February cover date. Distinguish old promises of an upgraded 800XL, a 68000 machine and a 32-bit machine from actual February shipments.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Amiga",
+          "summary": "February 1 newspaper describes a future machine, analyst-estimated $800–$1,000; no target-week launch.",
+          "confidence": "period",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "PC-Write",
+          "detail": "Quicksoft shareware word processor for IBM PC/PCjr; $75 registration; conflicting $10/$20 disk-only figures in the same review.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "name": "Plus/Term",
+          "detail": "Gregg Peele’s BASIC/machine-language terminal listing, p. 88 onward: C64 or VIC-20 with at least 16K RAM and modem, up to 1200 bps, upload/download, key redefinition and word wrapping.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "name": "Math Blaster!",
+          "detail": "Davidson advertisement lists ages 6–12, two disks, $49.95; addition through percentages, over 600 problems and user-added problems. Ad names Apple, IBM and C64 product lines; verify individual version before making a version-specific claim.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games — editorial selections, not sales rankings",
+          "items": [
+            "Amazon — Crichton adventure profiled in February COMPUTE!",
+            "Acrobat — animated type-in for C64, VIC-20 and Atari",
+            "King’s Quest — Inside King’s Quest column in February COMPUTE!",
+            "Chess — People/Link advertisement lists online play",
+            "Bridge — People/Link advertisement lists online play"
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "label": "Top 5 Movies — February 8-10 domestic weekend box office",
+          "items": [
+            "1. Beverly Hills Cop",
+            "2. Witness",
+            "3. The Killing Fields",
+            "4. A Passage to India",
+            "5. Mischief"
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            5
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "PC-Write registration",
+          "price": "$75, plus $25 referral commission when a recipient registers",
+          "note": "$75, plus $25 referral commission when a recipient registers; disk-only price internally inconsistent at $10 vs. $20.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "People/Link",
+          "price": "$2.95/hour introductory connect-time charge",
+          "note": "$2.95/hour introductory connect-time charge; other charges not established.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Play/Net",
+          "price": "$2.00/hour introductory connect time",
+          "note": "$2.00/hour introductory connect time; proprietary terminal program separately required, price not established here.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Dow Jones last-trade quotations",
+          "price": "$12/month surcharge plus normal quotation connect time",
+          "note": "$12/month surcharge plus normal quotation connect time; The Source counterpart $20/month.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Davidson educational software",
+          "price": "Spell It!, Math Blaster! and Word Attack!: $49.95 each, two disks",
+          "note": "Spell It!, Math Blaster! and Word Attack!: $49.95 each, two disks; Speed Reader II: $69.95, two disks, in February advertisement.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Commodore 64",
+          "price": "Analyst-described planned reduction from about $200 toward $150",
+          "note": "Analyst-described planned reduction from about $200 toward $150; not verified retailer offer.",
+          "confidence": "period",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "item": "IBM PCjr package",
+          "price": "Analyst cited discounted $775 processor/monitor/disk-drive package",
+          "note": "Analyst cited discounted $775 processor/monitor/disk-drive package; specific retailer not named.",
+          "confidence": "period",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "The Old Man Down The Road",
+          "artist": "John Fogerty",
+          "chart": "Billboard Top Rock Tracks (archive now labeled Mainstream Rock Airplay)",
+          "chartDate": "1985-02-09",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-09/"
+          ]
+        },
+        {
+          "rank": 2,
+          "title": "Somebody",
+          "artist": "Bryan Adams",
+          "chart": "Billboard Top Rock Tracks (archive now labeled Mainstream Rock Airplay)",
+          "chartDate": "1985-02-09",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-09/"
+          ]
+        },
+        {
+          "rank": 3,
+          "title": "Only The Young",
+          "artist": "Journey",
+          "chart": "Billboard Top Rock Tracks (archive now labeled Mainstream Rock Airplay)",
+          "chartDate": "1985-02-09",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-09/"
+          ]
+        },
+        {
+          "rank": 4,
+          "title": "California Girls",
+          "artist": "David Lee Roth",
+          "chart": "Billboard Top Rock Tracks (archive now labeled Mainstream Rock Airplay)",
+          "chartDate": "1985-02-09",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-09/"
+          ]
+        },
+        {
+          "rank": 5,
+          "title": "The Heat Is On",
+          "artist": "Glenn Frey",
+          "chart": "Billboard Top Rock Tracks (archive now labeled Mainstream Rock Airplay)",
+          "chartDate": "1985-02-09",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-09/"
+          ]
+        },
+        {
+          "rank": 6,
+          "title": "Can’t Fight This Feeling",
+          "artist": "REO Speedwagon",
+          "chart": "Billboard Top Rock Tracks (archive now labeled Mainstream Rock Airplay)",
+          "chartDate": "1985-02-09",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-09/"
+          ]
+        },
+        {
+          "rank": 7,
+          "title": "Knocking At Your Back Door",
+          "artist": "Deep Purple",
+          "chart": "Billboard Top Rock Tracks (archive now labeled Mainstream Rock Airplay)",
+          "chartDate": "1985-02-09",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-09/"
+          ]
+        },
+        {
+          "rank": 8,
+          "title": "Rock & Roll Girls",
+          "artist": "John Fogerty",
+          "chart": "Billboard Top Rock Tracks (archive now labeled Mainstream Rock Airplay)",
+          "chartDate": "1985-02-09",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-09/"
+          ]
+        },
+        {
+          "rank": 9,
+          "title": "Sunset Grill",
+          "artist": "Don Henley",
+          "chart": "Billboard Top Rock Tracks (archive now labeled Mainstream Rock Airplay)",
+          "chartDate": "1985-02-09",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-09/"
+          ]
+        },
+        {
+          "rank": 10,
+          "title": "I Want To Know What Love Is",
+          "artist": "Foreigner",
+          "chart": "Billboard Top Rock Tracks (archive now labeled Mainstream Rock Airplay)",
+          "chartDate": "1985-02-09",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-02-09/"
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "BBS advice beats the hotel booklet",
+          "summary": "Levitan reports asking an unnamed local San Francisco BBS for restaurant recommendations while traveling, then enjoying Szechwan food based on a reply. Do not invent the board name or turn the account into a newly dated February event.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "headline": "Electronic airline searching",
+          "summary": "Levitan says an Official Airline Guide search took about 90 seconds and cost roughly $1.50. A separate CompuServe/TWA Travelshopper advertisement says customers can inspect flight availability and order tickets; distinguish these different offerings.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "worldAnchor": {
+        "headline": "New Zealand’s nuclear stance puts ANZUS under strain",
+        "summary": "New Zealand’s rejection of a USS Buchanan visit has put the ANZUS alliance under strain. A February 6 report describes cancellation of next month’s Sea Eagle exercises and an alliance review, as David Lange maintains his policy is directed at nuclear weapons rather than the United States.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          6
+        ]
+      },
+      "bbsNote": {
+        "headline": "At $2 an hour, online play joins a busy dial-up marketplace",
+        "summary": "February COMPUTE! supplies dated coverage of online games, chat, stock information, portable telecommuting and a new terminal listing. The posts below are research summaries, not fabricated historical BBS messages.",
+        "posts": [
+          {
+            "topic": "Games online",
+            "platform": "Play/Net / Commodore 64",
+            "text": "Introductory $2/hour color online games; proprietary terminal program; IBM and Apple support only promised for spring."
+          },
+          {
+            "topic": "Chat and clubs",
+            "platform": "American People/Link",
+            "text": "Introductory $2.95/hour; Partyline public/private live conversation, Club-Link interest groups, Netmail and PeopleScan advertised."
+          },
+          {
+            "topic": "A terminal you type in",
+            "platform": "Commodore 64 / expanded VIC-20",
+            "text": "Plus/Term supports up to 1200 bps, file transfers, key redefinition and word wrapping; VIC needs at least 16K RAM. No modem purchase price established."
+          },
+          {
+            "topic": "BBS travel culture",
+            "platform": "Unnamed San Francisco BBS",
+            "text": "Levitan’s travel column recounts requesting local restaurant tips; no named sysop or board in the account."
+          },
+          {
+            "topic": "More timely stock quotes",
+            "platform": "Dow Jones News/Retrieval / The Source",
+            "text": "Last-trade quote surcharges $12/month and $20/month respectively, on top of connect time; Source/Spears online trading described as a service, not a consumer how-to."
+          }
+        ]
+      },
+      "curiosity": {
+        "headline": "The word processor that pays you to give it away",
+        "summary": "PC-Write’s registered users can earn $25 each time a shared copy produces a new $75 registration.",
+        "detail": "COMPUTE!’s February review calls the referral system the software equivalent of a legal chain letter. Authorized copying is central to Quicksoft’s business model; this is not a piracy report. The review’s separate disk-only prices conflict ($10 in the body; $20 in its product box)."
+      },
+      "gadgetWatch": {
+        "headline": "Apple founder aims at the living room",
+        "summary": "Wozniak’s new self-financed home-video business is announced this week, with Joe Ennis joining him and an autumn product target. The February 7 contemporary report gives no product name, price or specifications; do not call the eventual CL 9 remote control a shipped 1985 product.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          2
+        ]
+      },
+      "periodAd": {
+        "headline": "Math Blaster! — $49.95",
+        "summary": "Davidson’s February advertisement offers two disks, ages 6–12, covering addition through percentages with over 600 problems and user-added problems.",
+        "tagline": "From the February advertising pages",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "market": {
+        "headline": "Commodore’s inventory hangover lingers",
+        "summary": "February 1 reporting provides the backdrop: quarterly profit fell 94 percent to $3.2 million, sales declined 21 percent to $338.7 million, and inventory stood near $400 million. Analyst forecasts for cheaper C64s and a forthcoming Amiga are not confirmed shelf offers.",
+        "confidence": "period",
+        "sourceRefs": [
+          3
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "February magazine coverage establishes publication month, not a launch this week.",
+          "Game selections are editorial, not a sales chart. Chess and bridge are advertised People/Link games.",
+          "Wozniak remains an Apple consultant; the home-video product has no disclosed specifications or price.",
+          "PC-Write authorized sharing is not piracy; disk-only prices conflict in the review.",
+          "Introductory online rates exclude any unverified additional charges.",
+          "February 1 Commodore figures are background, not breaking target-week news."
+        ]
+      }
+    },
+    {
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+      },
+      "currentDate": "2026-10-16",
+      "historicDate": "1985-01-28",
+      "displayDate": "Week of January 28-February 3, 1985",
+      "edition": "Issue 131 - Weekly 1985 Computer & Culture Chronicle",
+      "sources": [
+        {
+          "title": "Commodore Woes Make an Industry Wince — Paul Richter, Los Angeles Times",
+          "url": "https://www.latimes.com/archives/la-xpm-1985-02-01-fi-6052-story.html",
+          "date": "1985-02-01"
+        },
+        {
+          "title": "TurboTape — Harrie De Ceukelaire, COMPUTE! issue 56",
+          "url": "https://www.atarimagazines.com/compute/issue56/133_1_TurboTape.php",
+          "date": "1985-01"
+        },
+        {
+          "title": "JTERM For Atari — Frank C. Jones, COMPUTE! issue 56",
+          "url": "https://www.atarimagazines.com/compute/issue56/148_1_JTERM_For_Atari.php",
+          "date": "1985-01"
+        },
+        {
+          "title": "Telecomputing Today — Arlan R. Levitan, COMPUTE! issue 56",
+          "url": "https://www.atarimagazines.com/compute/issue56/159_1_TELECOMPUTING_TODAY.php",
+          "date": "1985-01"
+        },
+        {
+          "title": "Sequential Circuits Music Sequencer — Richard Mansfield, COMPUTE! issue 56",
+          "url": "https://www.atarimagazines.com/compute/issue56/124_1_Reviews_Sequential_Circuits_Music_Sequencer_For_Commodore_64.php",
+          "date": "1985-01"
+        },
+        {
+          "title": "Paratrooper — John Goetz, COMPUTE! issue 56",
+          "url": "https://www.atarimagazines.com/compute/issue56/113_1_Paratrooper.php",
+          "date": "1985-01"
+        },
+        {
+          "title": "COMPUTE! issue 56 original OCR, advertisements",
+          "url": "https://archive.org/stream/1985-01-compute-magazine/Compute_Issue_056_1985_Jan_djvu.txt",
+          "date": "1985-01"
+        },
+        {
+          "title": "Billboard volume 97 number 5 — Top Rock Tracks",
+          "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-02.pdf",
+          "date": "1985-02-02"
+        },
+        {
+          "title": "Domestic Weekend 5 — Box Office Mojo",
+          "url": "https://www.boxofficemojo.com/weekend/1985W05/",
+          "date": "1985-02-01/1985-02-03"
+        },
+        {
+          "title": "We Are the World — Britannica, retrospective",
+          "url": "https://www.britannica.com/topic/We-Are-the-World",
+          "date": null
+        },
+        {
+          "title": "We Are the World — Wikipedia, retrospective",
+          "url": "https://en.wikipedia.org/wiki/We_Are_the_World",
+          "date": null
+        },
+        {
+          "title": "LaserWriter 40th anniversary — MacRumors",
+          "url": "https://www.macrumors.com/2025/01/23/laserwriter-introduced-40-years-ago-today/",
+          "date": "2025-01-23"
+        },
+        {
+          "title": "David H. Ahl: 1985 Winter Consumer Electronic Show, Creative Computing volume 11 number 4, page 50",
+          "url": "https://www.atarimagazines.com/creative/v11n4/50_1985_Winter_Consumer_Elec.php",
+          "date": "1985-04"
+        }
+      ],
+      "visualProfile": {
+        "tone": "Home-computer crossroads",
+        "motifs": [
+          "Commodore 64",
+          "cassette deck",
+          "Atari modem",
+          "type-in games"
+        ],
+        "layout": "Dense warm newsprint with red and blue headers"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Commodore earnings lead with C64 halftone; Paratrooper and cassette feature illustration",
+        "secondaryRail": "Music studio, Atari terminals, games, rock and cinema",
+        "archiveNavigation": "Weekly archive and previous/next controls"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Issue 131 - Weekly 1985 Computer & Culture Chronicle",
+        "dateline": "Week of January 28-February 3, 1985",
+        "price": "75 cents"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1985-01-28.jpg",
+        "alt": "Newspaper front page for January 28-February 3, 1985",
+        "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "The home-computer trade takes stock while owners put their machines to work, play and music.",
+      "morningLine": "Commodore counts the cost; cassette users pick up speed.",
+      "lead": {
+        "headline": "Commodore earnings plunge 94%; home-computer boom faces its reckoning",
+        "dek": "Quarterly profit shrinks to $3.2 million as the industry searches for its next reason to buy.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0
+        ],
+        "body": [
+          "Commodore’s latest figures have put a hard number on the cooling home-computer boom. Paul Richter reports in the February 1 Los Angeles Times that quarterly profit fell 94 percent to $3.2 million. Sales for the quarter ended December 31 declined 21 percent from a year earlier, to $338.7 million.",
+          "Inventory exceeded $400 million. The results included a $30 million pretax charge connected with product pricing; analysts said it provided for compensation to retailers facing a planned Commodore 64 price cut. Their expectation was a move from roughly $200 to $150—not a confirmed new price at every counter.",
+          "The C64 remains a formidable installed base: the report credits Commodore with sales of more than three million machines. Yet an industry built on rapid expansion now has to persuade families that a computer offers enough beyond the first burst of curiosity. A strong dollar also hurt the company, which put the revenue effect at $35 million compared with year-earlier exchange rates.",
+          "New machines offer hope, but promises are not deliveries. The report anticipates the Commodore 128 in the first half, while analysts float an April arrival and an $800–$1,000 price for Amiga. Atari’s recently demonstrated ST is another challenger. For owners of today’s machines, the more immediate story is what can be done with the equipment already on the desk."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "TurboTape promises disk-like loading from ordinary Commodore cassettes",
+          "body": [
+            "A cassette deck need not condemn a Commodore owner to a long wait. January COMPUTE! publishes Harrie De Ceukelaire’s TurboTape for the C64 and VIC-20, offering what the magazine calls disk-like loading from ordinary tape hardware.",
+            "The utility handles BASIC and machine-language programs without modifying the computer or recorder. Saved tapes can subsequently load at accelerated speed without first loading TurboTape. On the C64 the resident utility takes 642 bytes; the VIC version uses 639.",
+            "The VIC listing needs at least 8K expansion for entry, although the resulting utility can run in any VIC memory configuration. This is a January magazine type-in, not a newly announced release this week, and the speed comparison remains the magazine’s claim."
+          ],
+          "sourceRefs": [
+            1
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "The C64 becomes a six-track music studio",
+          "body": [
+            "The Commodore 64 can be more than a game machine or household ledger. Richard Mansfield’s January COMPUTE! review describes Sequential Circuits Music Sequencer, a $225 package joining the computer to a compatible synthesizer over MIDI.",
+            "Six recorded tracks can be edited, looped, copied, erased or transposed separately. Tempo can change without changing pitch, and as many as eight sequences can be chained into a song and saved. Tape or disk storage is recommended alongside the required computer and synthesizer.",
+            "Timing autocorrection offers selectable resolutions, but six tracks do not mean every connected instrument produces six different sounds at once. The review distinguishes ordinary synthesizer limits from the Six-Trak’s multivoice capability with expansion software."
+          ],
+          "sourceRefs": [
+            4
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "JTERM’s new version brings 1200-bps access to Atari bulletin-board callers",
+          "body": [
+            "Atari callers have a fresh reason to examine their terminal software. Frank C. Jones’s JTERM 3.8, published in January COMPUTE!, adds 1200-bps modem support while retaining 300-bps operation. It requires at least 32K RAM and an Atari 850 Interface Module or equivalent.",
+            "Jones describes donating his terminal to a Washington, D.C. Atari user-group bulletin board operated by Frank Huband. Suggestions and complaints from callers helped shape its development—an example of software improving through a working community rather than a sealed retail box.",
+            "The BASIC and machine-language terminal serves bulletin boards, commercial information services, mainframe connections and file transfers. Jones reports extensive use, but his account is not an independently measured census of callers."
+          ],
+          "sourceRefs": [
+            2
+          ],
+          "confidence": "same-month"
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Commodore 128, Amiga and Atari ST on the horizon",
+          "summary": "February 1 reporting positions these machines as hopes for renewed consumer demand. All delivery and price projections must remain attributed forecasts.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Paratrooper",
+          "summary": "John Goetz’s January COMPUTE! type-in game gives ten parachutists per round, with wind, weight and altitude determining landing. Three pads score 25, 50 and 75 points; versions cover TI-99/4A, C64, VIC-20, Atari, Apple, IBM PC, PCjr, Plus/4 and Commodore 16. Publication timing, not a commercial release date.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "title": "MegaWars",
+          "summary": "January CompuServe advertisement promotes space-conflict gaming alongside airline reservations and financial information. Confirms active period marketing, not a new launch.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            6
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "TurboTape",
+          "detail": "C64/VIC cassette acceleration distributed as magazine type-in.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "name": "JTERM 3.8",
+          "detail": "Atari terminal software now supports 300 and 1200 bps.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "name": "Sequential Circuits Music Sequencer",
+          "detail": "Six-track MIDI sequencer for C64; review lists $225.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games — editorial selections, not sales rankings",
+          "items": [
+            "Paratrooper — January COMPUTE! multi-platform type-in.",
+            "MegaWars — advertised on CompuServe in January.",
+            "Racing Destruction Set — January CES showing, reported in April.",
+            "Adventure Construction Set — January CES showing, reported in April.",
+            "F-15 Strike Eagle — January CES showing, reported in April."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            5,
+            6,
+            12
+          ]
+        },
+        {
+          "label": "Top 5 Movies — February 1-3 domestic weekend box office",
+          "items": [
+            "1. Beverly Hills Cop",
+            "2. The Killing Fields",
+            "3. A Passage to India",
+            "4. Tuff Turf",
+            "5. The Falcon and the Snowman"
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            8
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Commodore 64",
+          "price": "About $150 projected",
+          "note": "Analysts expect reduction from about $200; not universal shelf pricing",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "PCjr system",
+          "price": "$775",
+          "note": "Processor-console, monitor and disk drive; analyst-reported discount",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Anchor Mark XII",
+          "price": "$265",
+          "note": "AB Computers January advertisement",
+          "confidence": "same-month",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "item": "Sequential Circuits Music Sequencer",
+          "price": "$225",
+          "note": "January review; computer and synthesizer extra",
+          "confidence": "same-month",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "artist": "John Fogerty",
+          "title": "The Old Man Down the Road",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-02-02",
+          "confidence": "same-week",
+          "sourceUrls": [
+            "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-02.pdf"
+          ]
+        },
+        {
+          "rank": 2,
+          "artist": "Foreigner",
+          "title": "I Want to Know What Love Is",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-02-02",
+          "confidence": "same-week",
+          "sourceUrls": [
+            "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-02.pdf"
+          ]
+        },
+        {
+          "rank": 3,
+          "artist": "David Lee Roth",
+          "title": "California Girls",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-02-02",
+          "confidence": "same-week",
+          "sourceUrls": [
+            "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-02.pdf"
+          ]
+        },
+        {
+          "rank": 4,
+          "artist": "Glenn Frey",
+          "title": "The Heat Is On",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-02-02",
+          "confidence": "same-week",
+          "sourceUrls": [
+            "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-02.pdf"
+          ]
+        },
+        {
+          "rank": 5,
+          "artist": "Giuffria",
+          "title": "Call to the Heart",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-02-02",
+          "confidence": "same-week",
+          "sourceUrls": [
+            "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-02.pdf"
+          ]
+        },
+        {
+          "rank": 6,
+          "artist": "Don Henley",
+          "title": "The Boys of Summer",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-02-02",
+          "confidence": "same-week",
+          "sourceUrls": [
+            "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-02.pdf"
+          ]
+        },
+        {
+          "rank": 7,
+          "artist": "Don Henley",
+          "title": "Sunset Grill",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-02-02",
+          "confidence": "same-week",
+          "sourceUrls": [
+            "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-02.pdf"
+          ]
+        },
+        {
+          "rank": 8,
+          "artist": "Bryan Adams",
+          "title": "Somebody",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-02-02",
+          "confidence": "same-week",
+          "sourceUrls": [
+            "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-02.pdf"
+          ]
+        },
+        {
+          "rank": 9,
+          "artist": "Deep Purple",
+          "title": "Knocking at Your Back Door",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-02-02",
+          "confidence": "same-week",
+          "sourceUrls": [
+            "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-02.pdf"
+          ]
+        },
+        {
+          "rank": 10,
+          "artist": "REO Speedwagon",
+          "title": "Can’t Fight This Feeling",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-02-02",
+          "confidence": "same-week",
+          "sourceUrls": [
+            "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-02.pdf"
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Home computers compete with VCRs",
+          "summary": "February 1 LA Times cites Electronics Industries Association estimates of 7.3 million VCRs sold in 1984, up 78% from 4.1 million in 1983. This is retrospective market context, not a weekly gadget launch.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "worldAnchor": {
+        "headline": "Stars assemble to record famine-relief song",
+        "summary": "The We Are the World recording session took place January 28, 1985, bringing artists together for African famine relief. The single was not yet released; do not place its March release or later sales in the week’s news.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          9,
+          10
+        ]
+      },
+      "bbsNote": {
+        "headline": "The 1200-bps middle ground and the user-group BBS",
+        "posts": [
+          {
+            "topic": "User feedback shapes terminal software",
+            "platform": "Washington, D.C. Atari user-group BBS",
+            "text": "Frank C. Jones identifies sysop Frank Huband and describes calls, suggestions and complaints after donating JTERM; version 3.8 supports 1200 bps."
+          },
+          {
+            "topic": "Is 2400 bps worth the premium?",
+            "platform": "COMPUTE! / Telecomputing Today",
+            "text": "Levitan compares $800–$1,500 high-speed units with sub-$300 300/1200-bps competition, stressing that value depends on service use and online charges."
+          },
+          {
+            "topic": "Online worlds advertised to home users",
+            "platform": "CompuServe",
+            "text": "January advertisement offers MegaWars, flight schedules and reservations, financial data and other remote services. No service tariff verified."
+          }
+        ],
+        "summary": "January magazine reports describe user-group collaboration and the cost of faster calls; these are editorial notes, not transcribed BBS posts."
+      },
+      "curiosity": {
+        "headline": "Your cassette deck can sprint without a hardware upgrade",
+        "summary": "TurboTape challenges the assumption that tape must mean minutes of waiting.",
+        "detail": "The January type-in occupies only 642 bytes on the C64; accelerated saved tapes can reload without the utility preinstalled. Disk-like performance is the magazine’s claim, not a fresh benchmark."
+      },
+      "periodAd": {
+        "headline": "Anchor Mark XII: $265 at AB Computers",
+        "summary": "January COMPUTE! advertisement lists the modem at $265; dealer offer, not manufacturer list price.",
+        "tagline": "From the January advertising pages",
+        "sourceRefs": [
+          6
+        ]
+      },
+      "market": {
+        "headline": "The home computer competes with the VCR",
+        "summary": "February 1 reporting cites 7.3 million VCRs sold in 1984, up 78 percent from 4.1 million in 1983, according to Electronics Industries Association estimates. Home computers must compete for the same household dollars.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "Week ends February 3. January cover dates are same-month evidence, not exact publication or launch days.",
+          "No milestone: the lead is an important earnings report, not an era-defining launch. LaserWriter announcement falls in the preceding week.",
+          "No gadgetCandidates: verified VCR data are annual market context rather than a breaking gadget announcement.",
+          "No exact-week commercial game debut verified; use sourced January magazine games and active online-game advertising without inventing release dates.",
+          "Game selections are not a sales chart; CES evidence is retrospective April reporting.",
+          "Amiga and C64 prices are forecasts, not verified launches or universal shelf prices."
+        ]
+      }
+    },
+    {
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+      },
+      "visualProfile": {
+        "tone": "Macintosh Office milestone edition",
+        "motifs": [
+          "LaserWriter",
+          "AppleTalk",
+          "game construction kits"
+        ],
+        "layout": "Dense warm newsprint with red and blue headers"
+      },
+      "layoutPlan": {
+        "leadPlacement": "LaserWriter and Macintosh Office milestone lead; game-construction feature with a substantial halftone block",
+        "secondaryRail": "Atari ST, Commodore 128, game construction, modem economics, rock and cinema",
+        "archiveNavigation": "Weekly archive and previous/next controls"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Issue 130 - Weekly 1985 Computer & Culture Chronicle",
+        "dateline": "Week of January 21-27, 1985",
+        "price": "75 cents"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1985-01-21.jpg",
+        "alt": "GPT Image 2 Computer Chronicle newspaper for January 21–27, 1985",
+        "caption": "Newspaper-style front page generated from structured Computer Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical",
+        "generation": {
+          "requestedModel": "openai/gpt-image-2",
+          "requestedQuality": "high",
+          "requestedSize": "auto",
+          "imageModelVerification": "unverified",
+          "backendImageModel": null,
+          "reportedQuality": null,
+          "width": 1024,
+          "height": 1536,
+          "sha256": "a6db7c7b861df94ba9da7b5592ec941758a1437d39d37db8f9e49ac78d45b61e",
+          "format": "jpeg",
+          "resized": false
+        }
+      },
+      "currentDate": "2026-10-15",
+      "historicDate": "1985-01-21",
+      "displayDate": "Week of January 21-27, 1985",
+      "edition": "Issue 130 - Weekly 1985 Computer & Culture Chronicle",
+      "sources": [
+        {
+          "title": "Donald Woutat: Apple’s Computer Will Soon Talk With IBM’s, Los Angeles Times",
+          "url": "https://www.latimes.com/archives/la-xpm-1985-01-24-fi-11417-story.html",
+          "date": "1985-01-24"
+        },
+        {
+          "title": "Pamela Pfiffner: How the Mac transformed publishing, Macworld; historical account first published January 2004",
+          "url": "https://www.macworld.com/article/669216/how-the-mac-transformed-publishing.html",
+          "date": "2014-01-23"
+        },
+        {
+          "title": "Hartley Charlton: Apple Introduced the LaserWriter 40 Years Ago Today, MacRumors",
+          "url": "https://www.macrumors.com/2025/01/23/laserwriter-introduced-40-years-ago-today/",
+          "date": "2025-01-23"
+        },
+        {
+          "title": "Tom R. Halfhill: The Next Generation, COMPUTE! issue 59, page 25",
+          "url": "https://www.atarimagazines.com/compute/issue59/next_generation.php",
+          "date": "1985-04"
+        },
+        {
+          "title": "David H. Ahl: 1985 Winter Consumer Electronic Show, Creative Computing volume 11 number 4, page 50",
+          "url": "https://www.atarimagazines.com/creative/v11n4/50_1985_Winter_Consumer_Elec.php",
+          "date": "1985-04"
+        },
+        {
+          "title": "Arlan R. Levitan: Smokey & The Modem—Part 8086, COMPUTE! issue 56, page 160",
+          "url": "https://www.atarimagazines.com/compute/issue56/159_1_TELECOMPUTING_TODAY.php",
+          "date": "1985-01"
+        },
+        {
+          "title": "Billboard Top Rock Tracks / Mainstream Rock Airplay archive; first five entries verified from chart HTML",
+          "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-01-26/",
+          "date": "1985-01-26"
+        },
+        {
+          "title": "The Numbers: Weekend Domestic Box Office",
+          "url": "https://www.the-numbers.com/box-office-chart/weekend/1985/01/25",
+          "date": "1985-01-25"
+        },
+        {
+          "title": "NASA STS-51C mission facts",
+          "url": "https://www.nasa.gov/mission/sts-51c/",
+          "date": "1985-01-24/1985-01-27"
+        },
+        {
+          "title": "Ronald Reagan White House diary",
+          "url": "https://www.reaganfoundation.org/ronald-reagan/white-house-diaries/diary-entry-01211985",
+          "date": "1985-01-21"
+        }
+      ],
+      "milestone": {
+        "title": "LaserWriter and AppleTalk unveiled, January 23, 1985",
+        "note": "Networked PostScript printing became a foundational component of the desktop-publishing revolution."
+      },
+      "editorNote": "A shared printer, a new office ambition, and games that hand the tools to their players.",
+      "morningLine": "Apple unveils LaserWriter and AppleTalk; the personal-computer contest gathers pace.",
+      "lead": {
+        "headline": "Apple puts a shared laser printer at the center of the Macintosh Office",
+        "dek": "January 23 unveiling pairs a $6,995 printer with a network; March availability is promised.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0,
+          1,
+          2
+        ],
+        "body": [
+          "Apple has placed a shared laser printer at the center of its new Macintosh Office strategy. At its January 23 shareholders meeting in Cupertino, the company presented a system intended to make the Macintosh a stronger contender for office work, with AppleTalk linking desks to a common printing resource.",
+          "The LaserWriter carries a $6,995 price tag, rounded to $7,000 in the contemporary newspaper account. AppleTalk connection equipment costs $50; that is a connection-device price, not a quotation for an entire office installation. Apple describes a network of up to 32 computers, or a printer shared by up to 31 Macintoshes.",
+          "Printer and networking equipment are scheduled for March, rather than being on sale this week. Links to IBM PCs are promised for the fall. The printer uses Adobe PostScript, putting sophisticated page description into the office-printing proposition.",
+          "Software remains a test of the plan. Lotus Jazz, previously expected in January, has slipped to March according to the January 24 report. Apple reports 275,000 Macintosh sales in the preceding year and hopes to sell 10,000 Macintosh Office bundles in 1985; turning that ambition into routine office use will require the applications as well as the wires."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Atari promises Macintosh-style computing without Macintosh prices",
+          "body": [
+            "Atari’s January CES prototypes put a new price challenge before the personal-computer buyer. The announced 520ST combines 512K of memory and an 8 MHz Motorola 68000 with a $599 show price; the 128K 130ST is announced at $399. These are preliminary promises, not machines established as available at the shop counter this week.",
+            "Digital Research GEM supplies the familiar vocabulary of icons, windows, menus and a mouse. Announced display choices range from 320 by 200 in 16 colors to 640 by 400 monochrome. MIDI, serial, parallel and disk connections suggest uses stretching from music and games to desk work.",
+            "The company promises second-quarter availability, while operating-system and language decisions remain unfinished in the show account. Alongside the ST, the eight-bit XE family seeks existing home-computer buyers: the 64K 65XE is priced at $99 and the 128K 130XE at about $150."
+          ],
+          "sourceRefs": [
+            3
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "Commodore 128 promises three computers in one",
+          "body": [
+            "Commodore’s January CES proposal is three operating personalities in one machine. The 128 offers Commodore 64 compatibility, a native 128K environment using an 8502 processor, and a Z80A route into CP/M 3.0.",
+            "Native mode adds 40- or 80-column text and BASIC 7.0; C64 operation retains BASIC 2.0 and its 40-column display. COMPUTE! staff ran SpeedScript 3.0 in C64 mode at the show, a useful demonstration rather than an exhaustive compatibility verdict.",
+            "Price remains unsettled. COMPUTE! records no firm Commodore price announcement, while suggesting under $300 and an April or May introduction. Buyers should treat estimates from the show floor as estimates, not a confirmed retail ticket."
+          ],
+          "sourceRefs": [
+            3,
+            4
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "Games invite players to build the tracks, creatures and adventures",
+          "body": [
+            "January’s CES game displays invite players to become designers. Electronic Arts showed Racing Destruction Set, with tracks to construct and cars to race, and Adventure Construction Set, extending the construction-kit idea into adventures. No exact-week release or price is established by the show report.",
+            "Creature construction also enters the combat arena in the product the report calls Mail Order Monster. The attraction is not simply another opponent: it is the ability to design a creature and send it into competition. The report describes three levels of combat.",
+            "Creative Software brings a different kind of player performance. Trolls and Tribulations sends trolls through dangerous caverns in search of treasure, while Break Street draws on consultation with Seattle’s DeRoxy Crew breakdancers. The home-computer shelf is making room for creation as well as reflexes."
+          ],
+          "sourceRefs": [
+            4
+          ],
+          "confidence": "same-month"
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "LaserWriter and AppleTalk",
+          "summary": "January 23 unveiling; March market availability promised. Printer $6,995; networking connection device $50.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "title": "Atari ST and XE prototypes",
+          "summary": "New January CES line with inexpensive 68000-based ST and compatible eight-bit XE families; announced prices are preliminary.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "title": "Commodore 128",
+          "summary": "C64, native 128K and CP/M modes; spring introduction expected, no firm price at CES in COMPUTE!’s account.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Lotus Jazz delayed",
+          "detail": "Contemporary January 24 report says the Macintosh business suite moved from an expected January date to March.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "name": "SkiWriter II",
+          "detail": "Ken Skier demonstrated the word processor at CES; built-in telecommunications could bring online material into documents. Listed platforms C64, PC, PCjr and Apple; $69.95.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "name": "The Print Shop Graphics Library",
+          "detail": "Ahl reports Cathy Carlston describing strong Print Shop sales and an add-on library of enhancements and fonts; no numerical sales claimed.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games — editorial CES selections, not a sales chart",
+          "items": [
+            "Racing Destruction Set — build tracks and race cars.",
+            "Adventure Construction Set — tools for making adventures.",
+            "Trolls and Tribulations — cavern treasure action.",
+            "Break Street — breakdancing with DeRoxy Crew consultation.",
+            "F-15 Strike Eagle — MicroProse flight title shown at CES."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "label": "Top 5 Movies — January 25–27 weekend domestic box office",
+          "items": [
+            "1. Beverly Hills Cop",
+            "2. The Falcon and the Snowman",
+            "3. A Passage to India",
+            "4. Micki + Maude",
+            "5. The Flamingo Kid"
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            7
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "LaserWriter",
+          "price": "$6,995",
+          "note": "Announced; March availability promised",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "item": "AppleTalk connection equipment",
+          "price": "$50",
+          "note": "Per connection equipment, not whole network",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "SkiWriter II",
+          "price": "$69.95",
+          "note": "CES word processor demonstration",
+          "confidence": "same-month",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "item": "2400 bps modem",
+          "price": "$800–$1,500",
+          "note": "January COMPUTE! price range",
+          "confidence": "same-month",
+          "sourceRefs": [
+            5
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "The Old Man Down The Road",
+          "artist": "John Fogerty",
+          "chart": "Billboard Top Rock Tracks (archive now labeled Mainstream Rock Airplay)",
+          "chartDate": "1985-01-26",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-01-26/"
+          ]
+        },
+        {
+          "rank": 2,
+          "title": "I Want To Know What Love Is",
+          "artist": "Foreigner",
+          "chart": "Billboard Top Rock Tracks (archive now labeled Mainstream Rock Airplay)",
+          "chartDate": "1985-01-26",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-01-26/"
+          ]
+        },
+        {
+          "rank": 3,
+          "title": "Call to the heart",
+          "artist": "Giuffria",
+          "chart": "Billboard Top Rock Tracks (archive now labeled Mainstream Rock Airplay)",
+          "chartDate": "1985-01-26",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-01-26/"
+          ]
+        },
+        {
+          "rank": 4,
+          "title": "The Boys Of Summer",
+          "artist": "Don Henley",
+          "chart": "Billboard Top Rock Tracks (archive now labeled Mainstream Rock Airplay)",
+          "chartDate": "1985-01-26",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-01-26/"
+          ]
+        },
+        {
+          "rank": 5,
+          "title": "Easy Lover",
+          "artist": "Philip Bailey With Phil Collins",
+          "chart": "Billboard Top Rock Tracks (archive now labeled Mainstream Rock Airplay)",
+          "chartDate": "1985-01-26",
+          "confidence": "exact-date",
+          "sourceUrls": [
+            "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-01-26/"
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Macintosh Office must wait for IBM links",
+          "summary": "Apple said office-network connections to IBM PCs would not be available until fall; do not present interoperability as already delivered.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "headline": "Online college credit at home",
+          "summary": "CES report describes Telelearning courses for Apple, IBM and C64 users: course disks and instructor access by modem, $35–$200, with proctored exams required for final credit.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "worldAnchor": {
+        "headline": "Cold moves Reagan’s public inauguration indoors",
+        "summary": "January 21 diary records moving the ceremony to the Capitol rotunda and canceling the outdoor parade because of below-zero cold; distinguish the public ceremony from January 20 constitutional swearing-in.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          9
+        ]
+      },
+      "bbsNote": {
+        "headline": "2400 bps is tempting—but the bulletin boards may get there first",
+        "summary": "Arlan R. Levitan’s January 1985 COMPUTE! column compares modem economics and reports prospective manufacturer support for selected BBS sysops. A January CES report supplies C64 online-game service details.",
+        "posts": [
+          {
+            "topic": "Speed versus price",
+            "platform": "COMPUTE! Telecomputing Today, January 1985",
+            "text": "300 bps modems cost $50–$280; Anchor Automation and Qubie had broken the $300 barrier for 300/1200 bps units; 2400 bps equipment still cost $800–$1,500."
+          },
+          {
+            "topic": "Online-service limits",
+            "platform": "CompuServe / The Source / Delphi / Dow Jones News-Retrieval",
+            "text": "Levitan reports none of the commercial information services then offered 2400 bps service. His Just Folks example and hourly charges are hypothetical, not real tariff evidence."
+          },
+          {
+            "topic": "Sysop seed programs",
+            "platform": "Hobbyist BBS systems",
+            "text": "The columnist reports several modem manufacturers working with selected popular-board operators on discounted 2400 bps seed programs. No manufacturers or board identities are specified; do not invent names or completed deployments."
+          },
+          {
+            "topic": "Modem games",
+            "platform": "PlayNet for Commodore 64",
+            "text": "Ahl’s January CES report lists email, CB chat, program transfer and online games including backgammon, checkers, chess, bridge and go; $40 initial fee and $6 monthly charge."
+          }
+        ],
+        "sourceRefs": [
+          5,
+          4
+        ]
+      },
+      "curiosity": {
+        "headline": "Infocom turns its CES party into a live murder mystery",
+        "summary": "Adventure-game culture stepped away from the keyboard at January CES.",
+        "detail": "David H. Ahl reports that New York’s Murder-To-Go troupe staged a participatory mystery for Infocom guests, who examined the scene and police reports. Nine guests solved it; the top winner received a trip to Bermuda. This is a CES party anecdote, not a game release.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          4
+        ]
+      },
+      "periodAd": {
+        "headline": "SkiWriter II brings telecommunications to the document",
+        "summary": "Ken Skier’s CES demonstration combines word processing with built-in telecommunications. Listed for C64, PC, PCjr and Apple at $69.95.",
+        "tagline": "Software-shelf spotlight",
+        "sourceRefs": [
+          4
+        ]
+      },
+      "market": {
+        "headline": "Faster modems need somewhere to call",
+        "summary": "January COMPUTE! places 300 bps modems at $50–$280 and 2400 bps units at $800–$1,500. Its survey reports no 2400 bps access yet at the major commercial information services; selected BBS sysops are the subject of manufacturer seed-program discussions.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          5
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "LaserWriter and AppleTalk unveiled January 23; March availability promised, not shipping this week.",
+          "CES items are same-month follow-ups supported by retrospective April magazine accounts.",
+          "Games are editorial selections, not ranked sales; movies use January 25–27 grosses.",
+          "No PageMaker January release claimed; Lotus Jazz delayed to March.",
+          "No verified underground or gadget item added."
+        ]
+      }
+    },
+    {
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+      },
+      "visualProfile": {
         "tone": "Winter CES home-computing newspaper",
         "motifs": [
           "Nintendo Advanced Video System",

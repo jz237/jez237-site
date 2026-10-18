@@ -2,6 +2,70 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-10-18",
+      "historicDate": "1985-02-11",
+      "displayDate": "Week of February 11-17, 1985",
+      "edition": "Issue 133 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Crichton maps a different kind of adventure; the Commodore learns new tunes.",
+      "leadHeadline": "Michael Crichton trades the movie screen for the adventure game",
+      "storyHeadlines": [
+        "A $239 color printer meets the real-paper test",
+        "The Commodore 64 becomes a music room for non-musicians",
+        "IBM announces its 3090 mainframe family"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-02-11.jpg",
+      "thumb": "media/thumbs/1985-02-11.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-10-17",
+      "historicDate": "1985-02-04",
+      "displayDate": "Week of February 4-10, 1985",
+      "edition": "Issue 132 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Amazon puts cleverness first; Wozniak sets his sights beyond the computer.",
+      "leadHeadline": "Michael Crichton wants adventure games to make sense",
+      "storyHeadlines": [
+        "Wozniak leaves daily Apple duties for a living-room video venture",
+        "Online games and conversation challenge the established services",
+        "PC-Write turns copying into a sales channel"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-02-04.jpg",
+      "thumb": "media/thumbs/1985-02-04.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-10-16",
+      "historicDate": "1985-01-28",
+      "displayDate": "Week of January 28-February 3, 1985",
+      "edition": "Issue 131 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Commodore counts the cost; cassette users pick up speed.",
+      "leadHeadline": "Commodore earnings plunge 94%; home-computer boom faces its reckoning",
+      "storyHeadlines": [
+        "TurboTape promises disk-like loading from ordinary Commodore cassettes",
+        "The C64 becomes a six-track music studio",
+        "JTERM’s new version brings 1200-bps access to Atari bulletin-board callers"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-01-28.jpg",
+      "thumb": "media/thumbs/1985-01-28.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-10-15",
+      "historicDate": "1985-01-21",
+      "displayDate": "Week of January 21-27, 1985",
+      "edition": "Issue 130 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Apple unveils LaserWriter and AppleTalk; the personal-computer contest gathers pace.",
+      "leadHeadline": "Apple puts a shared laser printer at the center of the Macintosh Office",
+      "storyHeadlines": [
+        "Atari promises Macintosh-style computing without Macintosh prices",
+        "Commodore 128 promises three computers in one",
+        "Games invite players to build the tracks, creatures and adventures"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-01-21.jpg",
+      "thumb": "media/thumbs/1985-01-21.webp",
+      "milestone": true
+    },
+    {
       "currentDate": "2026-10-14",
       "historicDate": "1985-01-14",
       "displayDate": "Week of January 14-20, 1985",
