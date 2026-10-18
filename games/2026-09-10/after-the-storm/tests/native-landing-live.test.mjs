@@ -6,6 +6,7 @@ import {createNativeRiderRecovery} from '../native-rider-recovery.js';
 import {createNativeRaceAdapter,stepNativeRaceAdapter,nativeRaceSnapshot} from '../native-race-adapter.js';
 import {createNativeRaceContactAudio} from '../native-race-contact-audio.js';
 import {createNativeWaterField} from '../native-water-field.js';
+import {nativeRaceBodyFields} from '../native-race-body-fields.js';
 import {createNativeRaceState,prepareNativeRaceStuntMoveUpdate,prepareNativeRaceStuntAwardDisplay,
  nativeRaceStuntAwardsView} from '../native-race-state.js';
 // Prepared airborne start; all subsequent roll, release, water contact and
@@ -94,8 +95,11 @@ test('actual physical landing results feed canonical Stunt scoring and later HUD
   const input=(_,frame)=>frame===0?{rawXNative:-70,heldButtons:0x8000}:frame<=heldFrames?{rawXNative:70,heldButtons:0x8000}:{};
   for(let frame=1;frame<=60;frame++){
    stepNativeRaceAdapter(a,.05,input);
-   const actual=a.lastFrame.landing;
-   const scored=prepareNativeRaceStuntMoveUpdate(state,{racerIndex:0,move:actual.move,primaryArcNative:actual.arcNative});
+   const actual=nativeRaceBodyFields(a),retained=new DataView(new ArrayBuffer(4));
+   retained.setUint32(0,a.actionState.field15ecBits);
+   assert.equal(actual.stuntMove1604,a.lastFrame.landing.move);
+   assert.equal(actual.stuntArc15ecNative,retained.getFloat32(0),'scoring reads the retained action owner');
+   const scored=prepareNativeRaceStuntMoveUpdate(state,{racerIndex:0,move:actual.stuntMove1604,primaryArcNative:actual.stuntArc15ecNative});
    awards.push(...scored.awards.map(award=>({frame,...award})));
    state=prepareNativeRaceStuntAwardDisplay(scored.state).state;
    if(firstPaid===null&&nativeRaceStuntAwardsView(state).totals.total>0)firstPaid=frame;

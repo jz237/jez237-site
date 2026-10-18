@@ -19,6 +19,35 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — complete native Stunt judging and HUD update
+
+The canonical race owner now composes the complete Stunt79528 numeric update:
+each racer's scratch context and Stunt judgment in ascending slot order, one
+queue-drained record check, then the shared eight HUD consumers. Award insertion
+is immediate, so a newly queued bonus prevents premature final record insertion.
+The conditional countdown checks the fresh post-prelude flags. Later boundary
+retirement is visible to the following ring stage and next update.
+
+Direction warnings read ring positions from the retained object array. The
+completed physical body sample now exposes the landing classifier's move and
+the retained action-state arc; all racers use the selected primary body's arc,
+matching the source. Physical successful/failed landing tests verify that these
+fields feed scoring and the later display transfer.
+
+All85 prepared scenarios match complete original79528 execution, including
+0/1/2/4 racers, selected human slots, countdown phases, delayed/occupied award
+queues, final records, checkpoint crossings, boundary retirement and ring-object
+warning suppression. The audit executed236,548 instructions and matched2,171
+exported instruction records to ROM. All canonical race/HUD words, scene changes,
+audio recipes and consumer order are compared; profiling words are excluded.
+Numeric helpers and immediateFB488 execute original instructions; sqrt uses
+host arithmetic rounded to float32 and audio remains an explicit entry boundary.
+
+This verifies prepared numeric composition, not original startup or complete
+live Stunt races. Native Stunt admission still needs course/object initialization
+and world scheduling. The subsequent ring stage, display transfer, physics,
+rendering and saving remain separate. Resolution and rendering are unchanged.
+
 ## Unpublished — native ring commentary entry
 
 Ring collection'sC3628 audio recipe now reaches the existing announcer owner.

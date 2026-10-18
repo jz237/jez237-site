@@ -3,6 +3,7 @@
 // source body fields. New web adapters explicitly start the counter at0.
 import {queryNativeSupportFloor,queryNativeSupportBoxes} from './native-support-queries.js';
 const F=Math.fround;
+const sourceFloat=new DataView(new ArrayBuffer(4));
 function integer(v,n){if(!Number.isInteger(v)||v< -2147483648||v>2147483647)throw new RangeError(`Invalid ${n}`);return v;}
 export function nextNativeDryContactFrames(previous,{anyWet,impacts}={}){
  integer(previous,'dry-contact counter16d0');
@@ -20,6 +21,17 @@ export function nativeRaceBodyFields(adapter){
   throw new TypeError('Source race samples require a completed native outer frame');
  const scale=adapter.hull.scale,toNative=p=>Object.fromEntries(['x','y','z'].map(k=>[k,F(p[k]/scale)]));
  const position=toNative(adapter.hull.center),previous=toNative(adapter.frame.startCenter),profile=adapter.water.profile;
+ let stunt={};
+ if(adapter.riderLanding){
+  //1604 comes from the completed classifier;15EC retains its one action-state
+  // storage owner after settlement's Up.y adjustment. Rendered turns are not
+  // a substitute, and ordinary adapters without this source path omit both.
+  const move=integer(adapter.lastFrame.landing?.move,'completed stunt move1604'),bits=adapter.actionState?.field15ecBits;
+  if(move<0||move>11||!Number.isInteger(bits)||bits<0||bits>0xffffffff)throw new RangeError('Invalid completed Stunt source fields');
+  sourceFloat.setUint32(0,bits);const arc=sourceFloat.getFloat32(0);
+  if(!Number.isFinite(arc))throw new RangeError('Invalid retained Stunt arc15ec');
+  stunt={stuntMove1604:move,stuntArc15ecNative:arc};
+ }
  const displacement=['x','y','z'].map(k=>F(position[k]-previous[k]));
  return {positionNative:position,positionNativeXZ:{x:position.x,z:position.z},priorBodyPointNative:previous,
   forwardXZ:{x:F(adapter.hull.frame.forward.x),z:F(adapter.hull.frame.forward.z)},
@@ -28,7 +40,7 @@ export function nativeRaceBodyFields(adapter){
   frameSpeedB98:F(adapter.water.forceNative),speedBbc:F(profile.contactForceNative),
   speedBc0:F(F(profile.peakForceNative)*F(profile.lowSpeedForceRatio)),
   field16d0:integer(adapter.dryContactFrames16d0,'dry-contact counter16d0'),
-  actorState:adapter.lastFrame.actorState,
+  actorState:adapter.lastFrame.actorState,...stunt,
   field15c0:nativeBodyHudPosture(adapter.lastFrame.actorState,adapter.riderLifecycle?.physicalMode??0)};
 }
 

@@ -1145,7 +1145,13 @@ export function prepareNativeRaceOrdinaryUpdate(layout,state,input={}){
  const pending=['overlayFc39c','overlayEf504','overlayF23a0'],prefix=primary.effects.slice(0,-3);
  if(!primary.effects.slice(-3).every((op,i)=>op.kind==='externalCall'&&op.consumer===pending[i])||primary.effects.length<3)
   throw new RangeError('Missing ordinary source prelude recipes');
- const effects=[...prefix],tailOperations=[];
+ return consumeNativeRaceHudTail(next,input,currentPrimaryNodes(layout,input.primary),prefix,diagnostic);
+}
+
+/** Shared79528 presentation tail. Each consumer receives the preceding writes;
+ * ordinary and Stunt mode use the same actual eight source routines. */
+function consumeNativeRaceHudTail(next,input,primaryNodes,effectPrefix,diagnostic){
+ const effects=[...effectPrefix],tailOperations=[];
  function consume(consumer,result){
   next=result.state;effects.push(...result.effects);tailOperations.push(...result.operations);
   diagnostic.consumers.push({consumer,diagnostic:result.diagnostic??null});
@@ -1153,7 +1159,7 @@ export function prepareNativeRaceOrdinaryUpdate(layout,state,input={}){
  consume('overlayFc39c',prepareNativeRaceStatusPreludeUpdate(next));
  consume('overlayEf504',prepareNativeRaceDirectionWarningUpdate(next,{
   bodiesBySlot:input.bodiesBySlot,cameraIndicesByView:input.cameraIndicesByView,
-  primaryNodesBySourceRow:currentPrimaryNodes(layout,input.primary),angleTableWords6f08:input.angleTableWords6f08,
+  primaryNodesBySourceRow:primaryNodes,angleTableWords6f08:input.angleTableWords6f08,
   warningSuppressionRegionsNative:input.warningSuppressionRegionsNative,
   genericObjectCountFa40:input.genericObjectCountFa40,genericObjects:input.genericObjects}));
  consume('overlayF23a0',prepareNativeRaceSpeedDisplayUpdate(next,{bodyFieldsBySlot:input.bodiesBySlot}));
@@ -1167,4 +1173,46 @@ export function prepareNativeRaceOrdinaryUpdate(layout,state,input={}){
  consume('overlayF0e7c',prepareNativeRaceMissFeedbackUpdate(next));
  consume('overlayF1cfc',prepareNativeRaceBoundaryWarningUpdate(next,{bodiesBySlot:input.bodiesBySlot,allowedRegionsNative:input.allowedRegionsNative}));
  return freeze({state:next,applied:true,effects,tailOperations,diagnostic});
+}
+
+/** Complete Stunt79528 numeric update through the shared HUD consumers.
+ * bodiesBySlot is one completed physical sample: positionNative, prior body
+ * point, classifier stuntMove1604 and retained stuntArc15ecNative. Every racer
+ * scores against the PRIMARY body's arc, as the original does. Scratch layout,
+ * full primary nodes and checkpoint refill bytes come from selected course
+ * initialization. The later6E3A8 ring stage and display transfer are separate.
+ * Profiling clocks, physics, object motion, rendering and persistence are not
+ * advanced here. All preparation is atomic with respect to the supplied state.
+ */
+export function prepareNativeRaceStuntUpdate(state,input={}){
+ let next=copy(state);const diagnostic={racers:[],records:null,consumers:[],conditionalStart:false},effects=[];
+ if(!stuntModeActive(next))return freeze({state:next,applied:false,effects,tailOperations:[],diagnostic});
+ record(input,'Stunt source update input');
+ for(const key of ['camerasByIndex','genericObjects','genericObjectCountFa40'])
+  if(Object.hasOwn(input,key))throw new RangeError(`${key} overlaps canonical native state`);
+ const count=integer(sceneValue(next,'racerCount'),'racerCount',0,4),primary=sceneValue(next,'primaryHumanIndex');
+ if(!Array.isArray(input.bodiesBySlot)||input.bodiesBySlot.length<count||input.bodiesBySlot.length>4)
+  throw new RangeError('Supply actual completed Stunt bodiesBySlot');
+ const bodies=input.bodiesBySlot.map(b=>{
+  record(b,'completed Stunt body');const p=record(b.positionNative,'completed body position');
+  return {...b,positionNativeXZ:{x:p.x,z:p.z}};
+ });
+ const nodes=currentPrimaryNodes({nodes:input.nodes},input);
+ for(let slot=0;slot<count;slot++){
+  const body=bodies[slot],out=prepareNativeRaceStuntRacerUpdate(next,{
+   racerIndex:slot,primaryScratchLayout:input.primaryScratchLayout,nodes,nodePositionsNative:input.nodePositionsNative,
+   bodyPositionNative:body.positionNative,alternatePositionNativeXZ:body.alternatePositionNativeXZ,
+   priorBodyPointNativeXZ:body.priorBodyPointNative,speedB90Native:body.speedB90Native,
+   move:body.stuntMove1604,primaryArcNative:bodies[primary]?.stuntArc15ecNative,
+   checkpointSecondsByIndex:input.checkpointSecondsByIndex});
+  next=out.state;effects.push(...out.effects);diagnostic.racers.push({racerIndex:slot,...out.diagnostic});
+ }
+ const records=prepareNativeRaceStuntRecords(next);next=records.state;diagnostic.records={applied:records.applied,...records.diagnostic};
+ const objectCount=integer(sceneValue(next,'objectCountFa40'),'objectCountFa40',-2147483648,64);
+ if(objectCount>0&&!next.objectWordsC940)throw new TypeError('Supply retained objectWordsC940 for Stunt direction warnings');
+ const genericObjects=Array.from({length:Math.max(0,objectCount)},(_,i)=>{
+  const base=i*49,kind=next.objectWordsC940[base+0x4c/4]|0;
+  return {runtimeType4c:kind,...(kind===8?{centerNativeXZ:{x:readFloat(next.objectWordsC940[base]),z:readFloat(next.objectWordsC940[base+2])}}:{})};
+ });
+ return consumeNativeRaceHudTail(next,{...input,bodiesBySlot:bodies,genericObjectCountFa40:objectCount,genericObjects},nodes,effects,diagnostic);
 }
