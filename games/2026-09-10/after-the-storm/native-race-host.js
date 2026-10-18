@@ -80,6 +80,10 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
  raceRuntime=null,onLaunchFrame=null,onContactFrame=null,onAudioFrame=null,hullStarts=[],staticGeometry=null,
  floatingDefinitions,floatingActive=true,primaryActive=true,recovery=true,craftContacts=true}={}){
  const sourceSchedule=!!(raceRuntime?.ordinary||raceRuntime?.stunt);
+ if(raceRuntime?.championshipLaunch){
+  if(hullStarts.length||tunes.length)throw new RangeError('Prepared championship owns physical starts and profiles');
+  hullStarts=raceRuntime.championshipLaunch.hullStarts;tunes=raceRuntime.championshipLaunch.bodyProfiles;
+ }
  if(raceRuntime?.stunt&&(!staticGeometry?.floor||!staticGeometry?.shore))throw new RangeError('Physical Stunt host requires verified source shore and floor geometry');
  if(!Array.isArray(racers)||racers.length<1||racers.some(r=>!r?.hydro||!Number.isInteger(r.id)||r.id<0||r.id>3))throw new TypeError('Expected initialized browser racers');
  if(!water?.field||!finite(water.scale))throw new TypeError('Expected host source water');
@@ -152,9 +156,11 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
    ...(actionStart?{riderLanding:{landingTicks:0,localPointsNative:authoredNativeHullLocalPoints()}}:{}),
    ...(sourceAI?{controlOrigin:r.human?'human':'ai',sourceAIInput:()=>{
     const prepared=raceRuntime.sampleAI(i,{bodiesBySlot:host.aiBodies,
-     geometry:{selectionCircleNative:raceWaterAISelectionCircle(water),cameraCornersNative:raceRuntime.aiCameraCorners().cameraCornersNative,
+     //80630's startup branch does not read driving geometry. In particular,
+     // the first source input precedes the first completed water/camera frame.
+     geometry:raceRuntime.scene().phase650===3?{selectionCircleNative:raceWaterAISelectionCircle(water),cameraCornersNative:raceRuntime.aiCameraCorners().cameraCornersNative,
       nodePositionsNative:primary.state.nodes.map(n=>({sourceRow:n.sourceRow,x:n.positionNative.x,z:n.positionNative.z})),
-      proximityObjectCentersNative:objects?objects.snapshot().map(o=>({x:o.positionNative[0],z:o.positionNative[2]})):ice?ice.state.nodes.map(o=>({x:o.position[0],z:o.position[2]})):(floating?.state.objects??[]).map(o=>({x:F(o.position.x/water.scale),z:F(o.position.z/water.scale)}))},waterField:water.field});
+      proximityObjectCentersNative:objects?objects.snapshot().map(o=>({x:o.positionNative[0],z:o.positionNative[2]})):ice?ice.state.nodes.map(o=>({x:o.position[0],z:o.position[2]})):(floating?.state.objects??[]).map(o=>({x:F(o.position.x/water.scale),z:F(o.position.z/water.scale)}))}:undefined,waterField:water.field});
     host.lastAIInput=prepared;return {...prepared.controls,action16f4:prepared.action16f4};
    }}:{}),
    hullStart,contacts,powerSteps:r.power,sourceState:raceRuntime?()=>({...raceRuntime.scene(),...raceRuntime.riderForceContext(i),...(sourceSchedule?{sourceTick:raceRuntime.inputClock()}:{}),
@@ -163,7 +169,7 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
  });
  const objectTransformResources=objects?raceRuntime.objectTransformResources:null;
  const host={sourceSchedule,racers,bundles,contacts,primary,primaryActive,objects,ice,floating,floatingActive,presentations:[],onFrame,raceRuntime,onLaunchFrame,world:null,
-  provenance:Object.freeze({status:raceRuntime?.stunt?'stunt-source-solver-integration-preview':'ordinary-source-solver-integration-preview',riderGeometry:'authored-modern-anatomy',
+  provenance:Object.freeze({status:raceRuntime?.championshipLaunch?'championship-source-solver-integration-preview':raceRuntime?.stunt?'stunt-source-solver-integration-preview':'ordinary-source-solver-integration-preview',riderGeometry:'authored-modern-anatomy',
    initialHeight:hullStarts.length?'source-grid-transform':'course-datum',tuning:'explicit-native-indices; default5/5/5',
    hullStartup:'decoded packed16.16 transform; source point/frame/rest/damping recipe with authored local shape',
    clock:'five10ms hull ticks then one water update',controls:'digital-accelerator; brake-coasts; B-crouch; R-slide',

@@ -7118,3 +7118,36 @@ physical adapter, and both versus riders handing over without a device poll.
 The separate 27 driver/result checks also pass. Four-rider championship launch
 and its remaining resource/result dependencies are still gated. High-resolution
 rendering is unchanged.
+
+### Prepared four-rider physical championship — 2026-10-18
+
+The prepared championship setup can now hand its exact course, canonical
+state, four body profiles and four grid transforms to the real launch runtime
+and physical host. The host consumes those profiles/starts directly and runs
+three source AI producers alongside the human controller. Public menu admission
+remains unchanged: the browser's native championship option is still gated.
+The prepared resource/audio effects remain explicit for the application layer.
+
+The handoff requires the original prepared packet and its initialized course;
+competing state/profile inputs and mismatched avatar/human mappings reject.
+Physical admission uses the normal primary human slot0. Other human-slot
+arrangements remain prepared diagnostics: the original random-role scan can
+repeat without finding an eligible slot for those arrangements. It is not
+silently repaired or assigned different AI roles.
+
+Startup AI no longer requests driving geometry before the first completed
+water frame. Spray ownership now includes all four physical craft while
+keeping one human camera and the original human-only audio-level writes.
+Original AE210 branches separately only for an extra spectator craft; ordinary
+computer racers use the same physical inputs. The existing mode4 result-code
+selector now receives its selected source support geometry from the host.
+
+All four rider choices pass profile/grid and first-input integration checks.
+Three 12-second runs at30/60/144 Hz each reach actual driving through the
+original startup schedule, with exactly240 source frames and240 human polls,
+and identical canonical state, hull points, rider points, controls, spray and
+water arrays. Suspended browser steps retain the state. The 18 combined
+championship/live-input tests pass, including248 original configuration cases;
+the separate spray and result-code regressions pass. This is physical-host
+integration, not complete championship progression, live menu/audio admission,
+or original-art equivalence. Rendering resolution is unchanged.

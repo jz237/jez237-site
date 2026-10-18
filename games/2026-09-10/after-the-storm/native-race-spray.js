@@ -12,18 +12,20 @@ function physical(adapter,field,courseIndex){
   waterQueryNative:queryNativeWaterField(field,positionNative.x,positionNative.z).sourcePlaneQueryNative});
 }
 
-// AE7C4 startup and B2ABC's admitted human spray owners. The post-world
+// AE7C4 startup and B2ABC's physical-racer spray owners. The post-world
 // producer runs after water/cameras/object motion.52480 observes these levels
 // on the FOLLOWING physical frame. No render refresh advances this state.
 export function createNativeRaceSpray({adapters,field,courseIndex}){
- if(!Array.isArray(adapters)||![1,2].includes(adapters.length))throw new RangeError('Expected admitted human spray owners');
+ if(!Array.isArray(adapters)||adapters.length<1||adapters.length>4)throw new RangeError('Expected one to four physical spray owners');
  let frame=0,cameraForward={x:0,y:0,z:0};
  let states=adapters.map(a=>{const p=physical(a,field,courseIndex);return {wet:Number(p.position.y<=p.water),dryFrames:0,cooldown:0,left:0,right:0,intensity:0,previousSpeed:0,previousVertical:0};});
  return {
   advance(context,cameras){
    const next=adapters[0].logicalFrames;
    if(next!==frame+1||adapters.some(a=>a.logicalFrames!==next||a.pendingFrameCompletion))throw new Error('Spray requires successive completed physical frames');
-   if(context.players!==adapters.length||!Array.isArray(cameras)||cameras.length!==context.players||!Array.isArray(context.records2f4)||context.records2f4.length!==adapters.length)throw new TypeError('Supply canonical spray scene, records and cameras');
+   if(![1,2].includes(context.players)||context.racerCount!==adapters.length||context.extraRacer!==0||
+      !Array.isArray(cameras)||cameras.length!==context.players||!Array.isArray(context.records2f4)||context.records2f4.length!==adapters.length)
+    throw new TypeError('Supply canonical spray scene, records and human cameras');
    // B2ABC normalizes P1 then P2 into the SAME global7974 vector before
    // selecting each racer's camera eye. Preserve that source behavior.
    for(const camera of cameras)cameraForward=normalizeNativeSprayCamera(cameraForward,xyz(camera.forward));

@@ -4,6 +4,10 @@ import {createNativeRaceState,prepareNativeRaceMainConfigurationUpdate,prepareNa
 import {prepareNativeHullStartFromMatrix} from './native-hull.js';
 
 const freeze=v=>{if(v&&typeof v==='object'&&!Object.isFrozen(v)){Object.values(v).forEach(freeze);Object.freeze(v);}return v;};
+const preparedCourses=new WeakMap();
+// A prepared handoff belongs to the exact initialized course used to create
+// its reset/grid/profile data. Rebuild from retained state after serialization.
+export const isNativeChampionshipLaunch=(value,courseRuntime)=>!!value&&preparedCourses.get(value)===courseRuntime&&!!courseRuntime;
 // Numeric defaults copied by original91F50 from A988 into the three B308 rows.
 // Runtime menu settings may replace these rows; they are not difficulty guesses.
 export const NATIVE_CHAMPIONSHIP_SETUP_DATA=freeze({
@@ -62,8 +66,9 @@ export function prepareNativeChampionshipLaunch(state,{courseRuntime,avatarsBySl
   const computerProfile=nativeRaceComputerProfileView(initialized.state,racerIndex);
   return {grid,computerProfile,prepared:prepareNativeHullStartFromMatrix({matrixWords:grid.transform.matrixWords,rider:profile.riderIndex,computerProfile})};
  });
- return freeze({state:initialized.state,bodyProfiles,hullStarts,
+ const launch=freeze({state:initialized.state,bodyProfiles,hullStarts,
   pendingEffects:[...configured.effects.filter(o=>o.kind!=='bodyTuneWordWrite'),...reset.effects,...initialized.effects],
   diagnostic:{sourceMain:configured.diagnostic,reset:reset.diagnostic,physicalWorldCreated:false,
    liveAIAdmitted:false,bodyTuneWritesConsumed:16,gridTransformsPrepared:4}});
+ preparedCourses.set(launch,courseRuntime);return launch;
 }

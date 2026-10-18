@@ -10,6 +10,7 @@ import {NATIVE_ANGLE_TABLE_WORDS,nativeSineTableWords} from './native-math-table
 import {sourceBuoyVisibleRow} from './source-buoy-progress.js';
 import {createNativeAIRouteState,stepNativeAIRoute} from './native-ai-route.js';
 import {prepareNativeAIInitialization,stepNativeAIRandom} from './native-ai-initialization.js';
+import {isNativeChampionshipLaunch} from './native-championship-setup.js';
 import {prepareNativeRiderActionStartup,NATIVE_RIDER_ACTION_LIMITS} from './native-rider-action-startup.js';
 import {prepareNativeAIDriver} from './native-ai-driver.js';
 import {NATIVE_AI_STORAGE_WORDS,nativeAIDriverStateFromWords,nativeAIDriverStateWrites} from './native-ai-storage.js';
@@ -59,9 +60,21 @@ function readFloat(v){numberBits.setUint32(0,v);return numberBits.getFloat32(0);
  * Current physical time/versus previews use source modes0/1. Prepared solo
  * Stunt course runtimes also own numeric startup/scoring, before host admission.
  * A retained canonical state may instead be supplied for exact prepared tests. */
-export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initialState,recordSession,tunes=[],tuneModes=[],courseRuntime,course,laps=3,reverse=false,rngSeed=17,handicap=false}={}){
- if(courseRuntime?.mode620===4)throw new RangeError('Championship physical launch remains prepared; use prepareNativeChampionshipLaunch before live AI admission');
+export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initialState,recordSession,tunes=[],tuneModes=[],courseRuntime,course,laps=3,reverse=false,rngSeed=17,handicap=false,championshipLaunch}={}){
+ const championship=courseRuntime?.mode620===4;
+ if(championship&&!isNativeChampionshipLaunch(championshipLaunch,courseRuntime))
+  throw new RangeError('Championship physical launch remains prepared; supply its exact prepareNativeChampionshipLaunch handoff');
+ if(!championship&&championshipLaunch!==undefined)throw new RangeError('Championship handoff requires its prepared mode4 course');
+ if(championship&&(initialState!==undefined||recordSession!==undefined||tunes.length||tuneModes.length))
+  throw new RangeError('Championship handoff owns the selected state, body profiles and grid');
  if(!Array.isArray(racers)||racers.length<1||racers.length>4)throw new TypeError('Launch requires one to four initialized racers');
+ if(championship){
+  const g=championshipLaunch.state.scene;
+  if(players!==1||racers.length!==4||courseIndex!==courseRuntime.courseIndex||g.mode620!==4||g.primaryHumanIndex!==0||
+     racers.some((r,i)=>r.id!==championshipLaunch.bodyProfiles[i].riderIndex||r.human!==(i===g.primaryHumanIndex)||r.human&&r.player!==0))
+   throw new RangeError('Championship participants must match its four prepared avatars and primary human in slot0');
+  course=courseRuntime.courseView;
+ }
  const stunt=courseRuntime?.mode620===11,practice=courseRuntime?.courseView?.nativeSceneMode==='practice',mode620=stunt?11:players===2?1:0;
  integer(players,'players',1,2);integer(courseIndex,'courseIndex',stunt||practice?0:1,stunt?8:9);
  if(practice&&(stunt||courseIndex!==0||courseRuntime.courseIndex!==0||courseRuntime.sourceDifficulty!==0||players!==1||racers.length!==1||reverse))
@@ -79,7 +92,8 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
  const extra=racers.map(r=>({logicalTicks:r.sourceBuoys?.logicalTicks??0,missedCheckpoint:r.sourceBuoys?.missedCheckpoint??false,dqLabel:r.dq||''}));
  function word(slot,index){integer(slot,'source slot',0,racers.length-1);return current.raceWords1f94[BASE+slot*STRIDE+index]|0;}
  function commit(operations){if(operations.length)current=prepareNativeRaceStateOperations(current,operations).state;}
- if(initialState)current=createNativeRaceState(initialState);
+ if(championship)current=createNativeRaceState(championshipLaunch.state);
+ else if(initialState)current=createNativeRaceState(initialState);
  else{
   const raceWords1f94=Array(1693).fill(0),hudWords7788=Array(1442).fill(0),profileWordsB330=Array(52).fill(0),i1Words9440=Array(168).fill(0);
   raceWords1f94[ri(0x39b0)]=floatBits(100000);raceWords1f94[ri(0x39b4)]=floatBits(-100000);
@@ -217,6 +231,7 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
   }
  }
  const runtime={
+  championshipLaunch:championship?championshipLaunch:null,
   ordinary:!!courseRuntime&&!stunt,
   stunt,
   canonicalObjects:!!courseRuntime?.objectStartup,
@@ -262,7 +277,7 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    const g=current.scene;
    return {players:g.players,primaryIndex:g.primaryHumanIndex,secondaryIndex:g.secondaryHumanIndex,
     scene638:g.main638,activity624:g.activity624,frameCounter:g.ambientD4b00,racerCount:g.racerCount,
-    // This runtime admits actual human hulls; the extra spectator craft has
+    // This runtime admits actual racer hulls; the extra spectator craft has
     // a separate AE210 branch and is not constructed in these native previews.
     extraRacer:0,records2f4:racers.map((_,slot)=>word(slot,0x2f4/4))};
   },
@@ -436,7 +451,7 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    commit(operations);return {operations,diagnostics};
   },
   resultCodeFor(racerIndex,{bodyResultCodes16c8,point90Native,datum2458}){
-   if(!courseRuntime?.retirementGeometry||courseRuntime.courseIndex!==current.scene.courseIndex||![0,1,11].includes(current.scene.mode620))
+   if(!courseRuntime?.retirementGeometry||courseRuntime.courseIndex!==current.scene.courseIndex||![0,1,4,11].includes(current.scene.mode620))
     throw new Error('Rider results require selected source support geometry');
    //5E2A0 calls7FAE4 on the CURRENT FD78 rows. Ramps can move after startup;
    // an ordinary-course box snapshot would also select the wrong Stunt layout.

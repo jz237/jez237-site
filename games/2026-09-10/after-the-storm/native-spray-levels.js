@@ -5,7 +5,8 @@ const vector=v=>Object.fromEntries(['x','y','z'].map(k=>[k,float(v?.[k])]));
 const length2=(x,z)=>F(Math.sqrt(F(F(x*x)+F(z*z))));
 const length3=v=>F(Math.sqrt(F(F(F(v.x*v.x)+F(v.y*v.y))+F(v.z*v.z))));
 
-// Human AE210 input branch. The normalized4D30C query is supplied at the
+// Physical-racer AE210 input branch (including computer racers, excluding
+// the separate extra spectator). The normalized4D30C query is supplied at the
 // physical center's XZ. C4C is the original floor-impact maximum.
 export function prepareNativeSprayPhysicalInputs(input){
  const position=vector(input.positionNative),velocity=vector(input.frameDisplacementNative),forward=vector(input.forwardNative);
