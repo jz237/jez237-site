@@ -8,7 +8,7 @@ const ordinary=freeze([{"1":{"rampRows":[[-1142,4199,0,0,115],[1441,3619,0,0,91]
  * Reverse/difficulty filtering happens in the original loading/initialization
  * stages, not by mutating or reordering these source tables. */
 export function nativeCourseObjectResources({courseIndex,players,mode620}={}){
- if(![0,1,11].includes(mode620))throw new RangeError('Select ordinary or Stunt object resources');
+ if(![0,1,4,11].includes(mode620))throw new RangeError('Select ordinary, championship or Stunt object resources');
  const shared=nativeStuntObjectResources({courseIndex,players});
  if(mode620===11)return shared;
  return freeze({...shared,...ordinary[courseIndex][players],ringRows:[]});

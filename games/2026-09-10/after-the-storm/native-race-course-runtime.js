@@ -25,7 +25,10 @@ import {nativeCourseCheckpointSeconds} from './native-stunt-checkpoint-times.js'
 
 // Numeric ordinary-course owners. Twilight has no original Normal route.
 // Mode and source-water admission remain the race host's responsibility.
-export function createNativeRaceCourseRuntime({course,difficulty,players,objectLayout='source'}={}){
+export function createNativeRaceCourseRuntime({course,difficulty,players,objectLayout='source',raceMode='ordinary'}={}){
+ if(!['ordinary','championship'].includes(raceMode))throw new RangeError('Select an ordinary or prepared championship course');
+ if(raceMode==='championship'&&(players!==1||course?.sourceWaterCourseIndex===0||objectLayout!=='source'))
+  throw new RangeError('Prepared championship requires one human, a race course and canonical objects');
  if(!['source','authored'].includes(objectLayout))throw new RangeError('Select source objects or explicit authored diagnostics');
  const courseIndex=course?.sourceWaterCourseIndex;
  if(![0,1,2,3,4,5,6,7,8].includes(courseIndex)||!Number.isInteger(difficulty)||difficulty<0||difficulty>3||![1,2].includes(players))
@@ -41,7 +44,7 @@ export function createNativeRaceCourseRuntime({course,difficulty,players,objectL
   sourceBuoyLayout:createSourceBuoyLayout({rows:GLACIER_NATIVE_ROUTE_ROWS_BY_CLASS[difficulty],courseIndex,scale:.025,reverse:!!course.reverse})};
  if(!course.sourceRouteRowsByClass?.[difficulty]||course.sourceBuoyLayout?.courseIndex!==courseIndex)
   throw new TypeError('Selected source route rows and buoy layout are required');
- const mode620=players===2?1:0,scale=course.sourceBuoyLayout.scale,rules=sourceBuoyCourseRules(courseIndex,{reverse:!!course.reverse});
+ const mode620=raceMode==='championship'?4:players===2?1:0,scale=course.sourceBuoyLayout.scale,rules=sourceBuoyCourseRules(courseIndex,{reverse:!!course.reverse});
  const regions=nativeRaceCourseRegions(courseIndex);
  const retirementGeometry=courseIndex===0?nativeAdditionalStuntSupportGeometry({courseIndex,players}):courseIndex===1?SUNNY_NATIVE_RETIREMENT_GEOMETRY:courseIndex===2?nativeSunsetRetirementGeometry({players}):courseIndex===3?nativeFortressSupportGeometry({players}):courseIndex===4?nativeDrakeSupportGeometry({players}):courseIndex===5?nativePortSupportGeometry({players}):courseIndex===6?nativeTwilightSupportGeometry({players}):courseIndex===7?nativeSouthernRetirementGeometry({players}):nativeGlacierRetirementGeometry({players});
  const data=createNativePrimaryCourseData({rows:course.sourceRouteRowsByClass[difficulty],courseIndex,mode620});

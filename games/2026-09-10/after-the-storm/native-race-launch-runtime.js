@@ -59,6 +59,7 @@ function readFloat(v){numberBits.setUint32(0,v);return numberBits.getFloat32(0);
  * Stunt course runtimes also own numeric startup/scoring, before host admission.
  * A retained canonical state may instead be supplied for exact prepared tests. */
 export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initialState,recordSession,tunes=[],tuneModes=[],courseRuntime,course,laps=3,reverse=false,rngSeed=17,handicap=false}={}){
+ if(courseRuntime?.mode620===4)throw new RangeError('Championship physical launch remains prepared; use prepareNativeChampionshipLaunch before live AI admission');
  if(!Array.isArray(racers)||racers.length<1||racers.length>4)throw new TypeError('Launch requires one to four initialized racers');
  const stunt=courseRuntime?.mode620===11,practice=courseRuntime?.courseView?.nativeSceneMode==='practice',mode620=stunt?11:players===2?1:0;
  integer(players,'players',1,2);integer(courseIndex,'courseIndex',stunt||practice?0:1,stunt?8:9);

@@ -6669,3 +6669,46 @@ native launch and loading checks pass, and411 module hashes/four page preload
 sets are refreshed. Resolution remains unchanged. Native physics remains
 opt-in; original training lessons, championship warm-up flow, original computer
 driving and the remaining trick/alternate-route work are still pending.
+
+### Original four-rider championship setup preparation — 2026-10-18
+
+A fresh read-only Ghidra query on EVO X2 inspected existing race startup,
+computer-profile, grid and reset functions and relevant configuration references.
+All nine saved project files remained unchanged. Its1,828 exported instruction
+records match the local verified ROM. The existing Ghidra project has no
+function entry at9345C (its main body is split); the separate bounded original
+instruction interpreter executes the complete9345C caller for the comparisons.
+
+The boot copy at920D0..9211C selects the nine A988 words as three initial
+wave/miss/lap rows: all are[0,5,3]. They are runtime settings, not different
+default lap or miss counts inferred from difficulty. Default human profiles
+are5/5/5; the original nine-course CPU table selects avatar-specific0/0/11,
+1/0/11,5/2/9 and11/0/11. Normal/Custom human tuning reads the selected avatar,
+independently of its source slot. The existing title resource-pair and CPU
+trait tables are reused, and the numeric wave/fade defaults are verified.
+
+`prepareNativeChampionshipLaunch` now composes main configuration, selected
+ordinary object owners, source reset and prestart initialization. It consumes
+all16 body-profile writes and prepares four source grid transforms, including
+their16.16 decoding, separate computer damping selection and authored hull
+geometry. Retained lap configuration is preserved on ordinary entry and copied
+from the selected wave-settings row on restart, as in the source. Caller-owned
+records/profile/save state is detached and unchanged. Course preparation now
+supports explicit mode4 with one human and canonical objects; its primary and
+object images match the corresponding ordinary solo selection.
+
+Actual9345C execution produced248 cases across all admitted race courses and
+classes, all four human avatars/slots, Normal/Custom tuning and restart paths:
+412,956 instructions and3,968 exact body tuning words. Four new tests compare
+those profiles, final main settings, original table values, four distinct
+quantized grids, computer selectors, retained dependencies and invalid-mode
+rejection. The42 main/grid/Practice regressions and six ordinary-resource/live
+object checks also pass (52 distinct checks total).
+
+This is prepared startup, not live four-rider AI admission. Resource/audio
+initializers remain explicit pending effects, and the existing live launch
+rejects a mode4 course instead of silently treating it as mode0. The source
+80D20 multi-racer traffic test still requires the actual selected camera-corner
+producer/lifetime; a fabricated frustum or permanent zero corners is not supplied.
+Championship progression, original AI traffic and training/warm-up integration
+remain unfinished. No rendering resolution or public mode default changes.
