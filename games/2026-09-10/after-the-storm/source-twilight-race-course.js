@@ -22,7 +22,8 @@ export function nativeTwilightRaceScene(base){
  // The southern wall ends at z=-210 opposite a narrow quay. Keep the
  // inspection path south of the wall, then north of that quay, in both
  // directions. These steering targets never alter the collision geometry.
- const corner=[[55,-215],[46,-218],[32,-218],[28,-211],[27,-200],[20,-197],[0,-194]];
+ const corner=difficulty===1?[[55,-213],[46,-215],[39,-215],[33,-213],[30,-207],[27,-200],[20,-197],[0,-194]]:
+  [[55,-215],[46,-218],[32,-218],[28,-211],[27,-200],[20,-197],[0,-194]];
  const anchors=twilightAnchors[difficulty].flatMap((p,i)=>{
   if(difficulty===3){if(i===4)return [...corner].reverse().map(p=>[...p]);if(i===5||i===6)return [];}
   else {const start=difficulty===2?51:50,end=53;if(i===start)return corner.map(p=>[...p]);if(i>start&&i<=end)return [];}

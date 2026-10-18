@@ -1,9 +1,9 @@
-import {southernAnchors,southernPilotAnchors,southernStuntNavigation} from './source-southern-navigation.js?v=0de61eeb1bd1';
-import {southernContactVolumes,southernRampVolumes} from './source-southern-boxes.js?v=0de61eeb1bd1';
-import {shoreLines} from './shore-contact.js?v=0de61eeb1bd1';
-import {triangleWalls} from './triangle-walls.js?v=0de61eeb1bd1';
-import {facetedSurface} from './faceted-surfaces.js?v=0de61eeb1bd1';
-import {sourceBoundarySpheres,orderSourceFixedSpheres} from './source-boundary-spheres.js?v=0de61eeb1bd1';
+import {southernAnchors,southernPilotAnchors,southernStuntNavigation} from './source-southern-navigation.js?v=c69bdfad4cd7';
+import {southernContactVolumes,southernRampVolumes} from './source-southern-boxes.js?v=c69bdfad4cd7';
+import {shoreLines} from './shore-contact.js?v=c69bdfad4cd7';
+import {triangleWalls} from './triangle-walls.js?v=c69bdfad4cd7';
+import {facetedSurface} from './faceted-surfaces.js?v=c69bdfad4cd7';
+import {sourceBoundarySpheres,orderSourceFixedSpheres} from './source-boundary-spheres.js?v=c69bdfad4cd7';
 // Independent numeric reconstruction from the user's USA Rev1 reference.
 // No original graphics, display lists, textures or executable code are included.
 // .025 metres/native remains conditional on the native HUD/clock calibration.

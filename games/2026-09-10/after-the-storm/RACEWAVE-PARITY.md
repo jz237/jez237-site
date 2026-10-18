@@ -6561,3 +6561,41 @@ still contains361x361 terrain vertices and512x512 depth data. Twenty-one combine
 Twilight scene/runtime, Port runtime and AI context checks pass. Ordinary-input
 driving and browser/remote presentation validation remain in progress; native
 Twilight ordinary races are not yet admitted by the public host.
+
+### Ordinary Twilight live integration — 2026-10-18
+
+Twilight Hard, Expert and Reverse now join the opt-in native Time trial and
+Two-player preview. The original Normal route is absent, so the native runtime
+and incoming player descriptors reject that class; the existing modern Normal
+fallback remains available. The main view, terrain worker, separate player
+renderer and online setup select the same source scene and class. Online setup
+requires course index6/neon, ordinary mode and source water.
+
+Ordinary-input tests complete three canonical laps in all three original classes
+without disqualification, with fewer than five misses. A two-player Hard test
+finishes through ordinary controls with independent source records. Expert and
+Reverse private runs finish in177.895 and181.592 seconds respectively; the
+browser Expert run finishes in177.258 seconds with zero misses. Hard required
+a smoother authored steering path around the southern wall/quay S bend. A6m
+local inspection lookahead follows that passage; the explicit caller policy
+still takes precedence and Stunt is unaffected. Tests verify that steering
+reads leave source state untouched. No collision, lap or miss values are forced.
+
+The actual main view and player renderer were inspected at1440x900 High.
+The second-player Expert scene carries41 primary nodes, four canonical ramp
+surfaces,16 fixed spheres,78 shoreline segments and two physically articulated
+riders. The main view logged one local404 and no JavaScript/shader errors;
+the child renderer logged no errors. A temporary inspection canvas sizing
+issue was corrected in the diagnostic page before the full-viewport screenshot;
+product display sizing was unchanged. This verifies rendering and detached
+protocol data, not a full internet-connected race.
+
+The39 online/window checks,14 bounded pilot checks and22 native host/object/
+Fortress/Drake checks pass after updating the old admission assertion to reflect
+Twilight's class-specific availability. All four Twilight driven cases pass
+(Expert/Reverse on the first integrated run, solo/two-player Hard after its
+class-only steering correction). Worker geometry and scene tests pass after
+that correction. All407 module hashes and four page preload sets are refreshed.
+Resolution remains unchanged. Native physics remains opt-in; ordinary Dolphin
+Practice, original computer driving, additional tricks and alternate-route
+physical validation are still pending.

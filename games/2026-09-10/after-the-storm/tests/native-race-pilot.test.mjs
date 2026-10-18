@@ -60,6 +60,17 @@ test('overshooting a steering anchor advances its private cursor without awardin
  assert.equal(f.racer.sourceBuoys.nextSourceRow,5);assert.equal(f.racer.passed,0);assert.equal(f.racer.lap,1);
 });
 
+test('Twilight wall clearance uses a local inspection lookahead while explicit caller policy and Stunt remain independent',()=>{
+ for(const [courseIndex,stunt,x,z,policy,look] of [
+  [6,false,35,-215,{},6],[6,false,80,-215,{},16],[6,false,35,-170,{},16],
+  [5,false,35,-215,{},16],[6,true,35,-215,{},16],
+  [6,false,35,-215,{minLookaheadWorld:12},12],[6,false,35,-215,{lookaheadSeconds:1},16]]){
+  const f=fixture({x,z});Object.assign(f.course,{sourceWaterCourseIndex:courseIndex,stunt,difficulty:2});
+  const before=structuredClone(f.state),p=createNativeRacePilot({course:f.course,policy});p.input(f.state);
+  assert.equal(p.diagnostics().last.lookaheadWorld,look);assert.deepEqual(f.state,before);
+ }
+});
+
 test('each logical frame holds one decision and returned objects cannot mutate that decision',()=>{
  const f=fixture({heading:-.2}),pilot=createNativeRacePilot({course:f.course});
  const c=pilot.input(f.state);c.steer=999;

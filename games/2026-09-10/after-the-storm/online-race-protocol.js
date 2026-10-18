@@ -21,7 +21,7 @@ export function validateOnlineDescriptor(value){
   !Number.isSafeInteger(value.waveSeed)||value.waveSeed<0||value.waveSeed>0xffffffff||!Array.isArray(value.roster)||value.roster.length!==2||value.roster.some(n=>!Number.isInteger(n)||n<0||n>3)||
   !Array.isArray(value.names)||value.names.length!==4||value.names.some(n=>typeof n!=='string'||n.length>64)||!readWindowFrame(value.initialFrame))return null;
  const nativeScene=Object.hasOwn(value,'nativeSceneCourseIndex')||Object.hasOwn(value,'nativeSceneMode');
- if(nativeScene&&(![3,4,5].includes(value.nativeSceneCourseIndex)||value.nativeSceneMode!=='race'||value.course!==({3:'citadel',4:'reed',5:'port'})[value.nativeSceneCourseIndex]||value.freeRide||value.seaState!=='course'||!value.initialFrame.nativeCourseWorld))return null;
+ if(nativeScene&&(![3,4,5,6].includes(value.nativeSceneCourseIndex)||value.nativeSceneMode!=='race'||value.course!==({3:'citadel',4:'reed',5:'port',6:'neon'})[value.nativeSceneCourseIndex]||value.nativeSceneCourseIndex===6&&value.difficulty===0||value.freeRide||value.seaState!=='course'||!value.initialFrame.nativeCourseWorld))return null;
  if(value.initialFrame.nativeCourseWorld&&!nativeScene)return null;
  return {course:value.course,difficulty:value.difficulty,laps:value.laps,seaState:value.seaState,freeRide:value.freeRide,swapColours:value.swapColours,waveSeed:value.waveSeed,
   ...(nativeScene?{nativeSceneCourseIndex:value.nativeSceneCourseIndex,nativeSceneMode:'race'}:{}),

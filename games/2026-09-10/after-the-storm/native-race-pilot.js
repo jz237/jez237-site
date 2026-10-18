@@ -64,7 +64,7 @@ export function createNativeRacePilot({course,policy={},traceLimit=256}={}){
  // Stunt routes retain their own rings and ramps; ordinary class-specific
  // inspection corridors must not replace that selected route.
  const selectedAnchors=course?.stunt?course.anchors:course?.nativePilotAnchorsByClass?.[course.difficulty]??course?.anchors;
- if(!(course?.stunt?[0,1,2,3,4,5,6,7,8]:[1,2,3,4,5,7,8]).includes(course?.sourceWaterCourseIndex)||!Array.isArray(selectedAnchors)||selectedAnchors.length<3)
+ if(!(course?.stunt?[0,1,2,3,4,5,6,7,8]:[1,2,3,4,5,6,7,8]).includes(course?.sourceWaterCourseIndex)||!Array.isArray(selectedAnchors)||selectedAnchors.length<3)
   throw new TypeError('Native pilot requires an admitted course and its selected source navigation');
  // A wider authored Normal driving line clears Southern's exposed bow at
  // low tide. This changes only the inspection helm, never the source AI,
@@ -151,7 +151,11 @@ export function createNativeRacePilot({course,policy={},traceLimit=256}={}){
   // This affects only steering targets; explicit caller policy takes precedence.
   const portCanal=!course.stunt&&course.sourceWaterCourseIndex===5&&course.difficulty>0&&
    r.x>-42&&r.x<40&&r.z>-113&&r.z<17&&!Object.hasOwn(policy,'minLookaheadWorld')&&!Object.hasOwn(policy,'lookaheadSeconds');
-  const look=portCanal?8:Math.max(config.minLookaheadWorld,r.speed*config.lookaheadSeconds);
+  // City's southern wall and quay form a narrow S bend. Follow its authored
+  // clearance path closely; no source collision or progress state is changed.
+  const cityCorner=!course.stunt&&course.sourceWaterCourseIndex===6&&r.x>-25&&r.x<70&&r.z< -180&&
+   !Object.hasOwn(policy,'minLookaheadWorld')&&!Object.hasOwn(policy,'lookaheadSeconds');
+  const look=cityCorner?6:portCanal?8:Math.max(config.minLookaheadWorld,r.speed*config.lookaheadSeconds);
   let spare=look-Math.max(0,remaining),target=q;
   if(spare<0)target=[previous[0]+ux*(along+look),previous[1]+uz*(along+look)];
   else{

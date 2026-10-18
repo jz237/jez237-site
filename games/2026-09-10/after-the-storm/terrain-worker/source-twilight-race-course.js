@@ -1,10 +1,10 @@
-import {createSourceTwilightCourse,TWILIGHT_NATIVE_GEOMETRY as G,twilightRampsForSelection,twilightHazardsForSelection} from './source-twilight-course.js?v=0de61eeb1bd1';
-import {TWILIGHT_RACE_OBJECTS} from './source-twilight-race-objects.js?v=0de61eeb1bd1';
-import {twilightAnchors} from './source-twilight-navigation.js?v=0de61eeb1bd1';
-import {createSourceBuoyLayout} from './source-buoy-progress.js?v=0de61eeb1bd1';
-import {clippedVolume,clippedVolumes} from './clipped-volumes.js?v=0de61eeb1bd1';
-import {polygonDistance} from './classic-courses.js?v=0de61eeb1bd1';
-import {samplePolyline} from './courses.js?v=0de61eeb1bd1';
+import {createSourceTwilightCourse,TWILIGHT_NATIVE_GEOMETRY as G,twilightRampsForSelection,twilightHazardsForSelection} from './source-twilight-course.js?v=c69bdfad4cd7';
+import {TWILIGHT_RACE_OBJECTS} from './source-twilight-race-objects.js?v=c69bdfad4cd7';
+import {twilightAnchors} from './source-twilight-navigation.js?v=c69bdfad4cd7';
+import {createSourceBuoyLayout} from './source-buoy-progress.js?v=c69bdfad4cd7';
+import {clippedVolume,clippedVolumes} from './clipped-volumes.js?v=c69bdfad4cd7';
+import {polygonDistance} from './classic-courses.js?v=c69bdfad4cd7';
+import {samplePolyline} from './courses.js?v=c69bdfad4cd7';
 const S=.025,xyz=p=>p.map(v=>v*S);
 
 /** Original ordinary City geometry with separately authored inspection paths.
@@ -22,7 +22,8 @@ export function nativeTwilightRaceScene(base){
  // The southern wall ends at z=-210 opposite a narrow quay. Keep the
  // inspection path south of the wall, then north of that quay, in both
  // directions. These steering targets never alter the collision geometry.
- const corner=[[55,-215],[46,-218],[32,-218],[28,-211],[27,-200],[20,-197],[0,-194]];
+ const corner=difficulty===1?[[55,-213],[46,-215],[39,-215],[33,-213],[30,-207],[27,-200],[20,-197],[0,-194]]:
+  [[55,-215],[46,-218],[32,-218],[28,-211],[27,-200],[20,-197],[0,-194]];
  const anchors=twilightAnchors[difficulty].flatMap((p,i)=>{
   if(difficulty===3){if(i===4)return [...corner].reverse().map(p=>[...p]);if(i===5||i===6)return [];}
   else {const start=difficulty===2?51:50,end=53;if(i===start)return corner.map(p=>[...p]);if(i>start&&i<=end)return [];}

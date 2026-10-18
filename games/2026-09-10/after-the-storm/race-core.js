@@ -72,7 +72,7 @@ export function settings(rider=0,tune={}){const r=RIDERS[rider];const engine=cla
 export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,difficulty=0,course=COVE,gridOrder=null,seaState='course',secondRider=1,secondTune={},handicap=false,swapColours=false,physics='modern',nativeTunes=[],nativeTuneModes=[],nativeInitialRaceState,nativeRecordSession,nativeObjectLayout='source'}={}){
  if(!['modern','native'].includes(physics))throw new RangeError('Unknown race physics');
  if(nativeRecordSession!==undefined&&physics!=='native')throw new RangeError('Native record sessions require native physics');
- if(physics==='native'&&(!['time','versus','stunt'].includes(mode)||seaState!=='course'||!(mode==='stunt'?[0,1,2,3,4,5,6,7,8]:[1,2,3,4,5,7,8]).includes(course.sourceWaterCourseIndex)))
+ if(physics==='native'&&(!['time','versus','stunt'].includes(mode)||seaState!=='course'||!(mode==='stunt'?[0,1,2,3,4,5,6,7,8]:[1,2,3,4,5,6,7,8]).includes(course.sourceWaterCourseIndex)))
   throw new RangeError('Native integration preview requires a verified course and source-water Time trial, Two-player race or Stunt run');
  setRaceWater(null);
  if(physics==='native'&&mode==='stunt')course=nativeStuntScene(course);
@@ -137,8 +137,8 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
    const initial=state.nativeStuntDisplay.snapshot();state.nativeStuntWorld=initial.world;state.nativeStuntHud=initial.hud;
    Object.defineProperty(racers[0],'stunt',{enumerable:true,configurable:true,get:()=>state.nativeStuntHud});
   }
-  else if(course.sourceSolidObjects?.length||course.sourceStaticObjects?.length||course.nativeSceneMode==='race'&&course.nativeSceneCourseIndex===5){
-   const present=course.sourceSolidObjects?.length||course.nativeSceneCourseIndex===5?createNativeCourseObjectPresentation:createNativeCourseDecorationPresentation;
+  else if(course.sourceSolidObjects?.length||course.sourceStaticObjects?.length||course.nativeSceneMode==='race'&&[5,6].includes(course.nativeSceneCourseIndex)){
+   const present=course.sourceSolidObjects?.length||[5,6].includes(course.nativeSceneCourseIndex)?createNativeCourseObjectPresentation:createNativeCourseDecorationPresentation;
    state.nativeCourseDisplay=present({course,readState:nativeLaunch.snapshot,scale:nativeScale});
    course={...course,nativeCourseLayout:state.nativeCourseDisplay.layout};state.course=course;
    state.nativeCourseWorld=state.nativeCourseDisplay.snapshot();

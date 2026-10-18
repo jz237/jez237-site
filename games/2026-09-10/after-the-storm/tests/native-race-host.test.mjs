@@ -90,7 +90,9 @@ test('host adjudication reads current buoy centers before their once-per-frame m
 });
 
 test('native preview is restricted to its verified integration boundary',()=>{
- for(const options of [{mode:'race'},{seaState:'surf'},{course:getCourse('neon')}])assert.throws(()=>create(options),/source-water/);
+ for(const options of [{mode:'race'},{seaState:'surf'}])assert.throws(()=>create(options),/source-water/);
+ assert.throws(()=>create({course:getCourse('neon')}),/no original Normal/);
+ assert.equal(create({course:getCourse('neon',1),difficulty:1}).nativeLaunch.snapshot().scene.courseIndex,6);
  assert.equal(create({mode:'stunt'}).nativeLaunch.snapshot().scene.mode620,11);
  assert.equal(create({mode:'stunt',course:getCourse('neon')}).nativeLaunch.snapshot().scene.mode620,11);
  assert.equal(create({mode:'versus'}).racers.length,2);
