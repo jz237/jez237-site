@@ -88,7 +88,9 @@ test('race recovery never reverses into the existing blocked rear scenery probe 
 });
 
 test('clear road, same-direction traffic, crossing traffic, disabled wrecks and derby retain exact predecessor controls and memory',()=>{
- const expected={clear:'2a94f09ecf1e5190277a4e02483e3cd2e3d3a58ea6bcfc58432f3c4fa3289f33',following:'7a0d2819e21c4d657f6b538f9c0db574fcd1fce8366cc80d1c74580abb4f4761',crossing:'7a0d2819e21c4d657f6b538f9c0db574fcd1fce8366cc80d1c74580abb4f4761',wreck:'18355e43400ad37946cc5cd1bc3740298b01ded36b9eb4693b10a11d3dad2524',derby:'6a3fb04d582cb03caebcfda89214581cec6888b9c2682f22d2893df6acbb2aa2'};
+ // Race digests regenerated for starting-side lanes, door-to-door spacing and the
+ // clearer-side swerve (pack-landmarks); the derby digest is the predecessor's.
+ const expected={clear:'ced10005f219b56920cb802ba15309f7bfe7cfec96dab8dcfbcff29cccfb752f',following:'14ca9337a930d18a87ff9fb7e5216f0e1b265d19dd1e59b5fbab4920269d3b70',crossing:'14ca9337a930d18a87ff9fb7e5216f0e1b265d19dd1e59b5fbab4920269d3b70',wreck:'c94899cc9f1516da478e148ee6147d0f919fd34917e88f4de7e6af53387af7ce',derby:'6a3fb04d582cb03caebcfda89214581cec6888b9c2682f22d2893df6acbb2aa2'};
  for(const [scenario,digest]of Object.entries(expected))assert.equal(unaffectedTrace(DrivingBrain,scenario),digest,scenario);
 });
 
