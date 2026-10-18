@@ -118,13 +118,21 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
  function building(x,z,w,d,h,m=stone){const y=visualGround(x,z);if(y<1)return;if(night){if(!facadeMaterials.has(m)){const facade=dressMaterial(m.clone(),'facade');materials.push(facade);facadeMaterials.set(m,facade);}m=facadeMaterials.get(m);}box(x,y+h/2,z,w,h,d,m);box(x,y+h+.2,z,w+.6,.4,d+.6,steel);return y;}
  function rock(x,z,r=5,ice=false){let y=visualGround(x,z);for(let j=0;j<8;j++){const a=j*Math.PI/4;y=Math.min(y,visualGround(x+Math.cos(a)*r*.55,z+Math.sin(a)*r*.55));}const geo=ice?new T.IcosahedronGeometry(r,2):new T.SphereGeometry(r,24,16),p=geo.attributes.position;for(let i=0;i<p.count;i++){const scale=.93+.11*Math.sin(p.getX(i)*.17+p.getZ(i)*.23)+.045*Math.sin(p.getY(i)*.7+p.getX(i)*.4);p.setXYZ(i,p.getX(i)*scale,p.getY(i)*scale*.65,p.getZ(i)*scale);}geo.computeVertexNormals();return add(geo,ice?iceMat:naturalRock,x,y+r*.15,z);}
  const sheetMat=dressMaterial(mat(0xc7e6ee,.28,.04),'ice');
+ // Drake's overhangs retain full finite faces in separate detailed meshes.
+ // Its renderGround excludes these structures so the underside stays open.
+ for(const surface of course.scenerySurfaces??[]){
+  const positions=surfaceMeshPositions(surface.triangles),geometry=new T.BufferGeometry();
+  geometry.setAttribute('position',new T.BufferAttribute(positions,3));
+  geometry.setAttribute('uv',new T.Float32BufferAttribute(Array.from({length:positions.length/3},(_,i)=>[positions[i*3]*.2,(positions[i*3+1]+positions[i*3+2])*.2]).flat(),2));
+  geometry.computeVertexNormals();add(geometry,surface.kind==='rock'?naturalRock:wood);
+ }
  // The textured terrain already samples staticSurfaces through renderGround.
  // Rendering those contact planes again at the same height creates coplanar
  // depth fighting in the main, reflection and underwater refraction passes.
  const nativeVolumeIds=new Set(course.nativeStuntLayout?.volumes.map(v=>v.id)??[]),nativeVolumeMeshes=[];
  for(const volume of course.contactVolumes?.volumes||[]){
   if(volume.kind==='ship')continue; // Independently authored continuous hull below.
-  const geometry=new T.BufferGeometry(),positions=surfaceMeshPositions(volume.triangles);geometry.setAttribute('position',new T.BufferAttribute(positions,3));geometry.setAttribute('uv',new T.Float32BufferAttribute(Array.from({length:positions.length/3},(_,i)=>[positions[i*3]*.2,(positions[i*3+1]+positions[i*3+2])*.2]).flat(),2));geometry.computeVertexNormals();const mesh=add(geometry,volume.kind==='reef'?naturalRock:volume.kind==='finish'?steel:wood);
+  const geometry=new T.BufferGeometry(),positions=surfaceMeshPositions(volume.triangles);geometry.setAttribute('position',new T.BufferAttribute(positions,3));geometry.setAttribute('uv',new T.Float32BufferAttribute(Array.from({length:positions.length/3},(_,i)=>[positions[i*3]*.2,(positions[i*3+1]+positions[i*3+2])*.2]).flat(),2));geometry.computeVertexNormals();const mesh=add(geometry,volume.kind==='reef'?naturalRock:['finish','gate'].includes(volume.kind)?steel:wood);
   if(nativeVolumeIds.has(volume.id)){mesh.userData.dynamic=true;nativeVolumeMeshes.push({id:volume.id,mesh,shape:null});}
  }
  if(course.id==='tempest'&&course.sourceShores){
@@ -136,9 +144,9 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
    for(let i=0;i<shore.outline.length;i++){const a=shore.outline[i],b=shore.outline[(i+1)%shore.outline.length],n=Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])/8);for(let j=0;j<n;j++){const t=j/n;cylinder(a[0]+(b[0]-a[0])*t,-1.5,a[1]+(b[1]-a[1])*t,.15,4.65,wood);}}
   }
  }
- if((night||theme==='port')&&course.sourceShores){
+ if((night||theme==='port'||theme==='fortress')&&course.sourceShores){
   const top=course.authoredBackground?.quayHeight??course.authoredBackground?.visualQuayHeight??2.5;
-  for(const shore of course.sourceShores){const points=shore.outline,count=shore.sourceClosed===false?points.length-1:points.length;
+  for(const shore of course.sourceShores){if(theme==='fortress'&&shore.sourceClosed)continue;const points=shore.outline,count=shore.sourceClosed===false?points.length-1:points.length;
    for(let i=0;i<count;i++){const a=points[i],b=points[(i+1)%points.length],dx=b[0]-a[0],dz=b[1]-a[1],length=Math.hypot(dx,dz);if(length<.01)continue;
     const wall=box((a[0]+b[0])/2,(top-3)/2,(a[1]+b[1])/2,.4,top+3,length,stone);wall.rotation.y=Math.atan2(dx,dz);
     const coping=box((a[0]+b[0])/2,top+.04,(a[1]+b[1])/2,.65,.12,length,steel);coping.rotation.y=wall.rotation.y;
@@ -238,8 +246,19 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
   // Reed clumps are instanced to keep the shoreline detail inexpensive.
   const reeds=new T.InstancedMesh(new T.CylinderGeometry(.035,.045,1.4,4),green,700),dummy=new T.Object3D();root.add(reeds);geometries.push(reeds.geometry);for(let i=0;i<700;i++){const g=course.gates[i%course.gates.length],side=i%2?1:-1,x=g.x+g.tz*side*(39+random()*5)+(random()-.5)*9,z=g.z-g.tx*side*(39+random()*5)+(random()-.5)*9;dummy.position.set(x,visualGround(x,z)+.6,z);dummy.rotation.z=(random()-.5)*.3;dummy.updateMatrix();reeds.setMatrixAt(i,dummy.matrix);}pier(-125,120,.6,20);building(-155,140,16,12,7,wood);
  }
- if(theme==='fortress'&&!course.fortWalls){
+ if(theme==='fortress'&&!course.fortWalls&&!course.sourceShores){
   const y=visualGround(0,0);box(0,y+3,0,85,6,68,stone);for(const x of [-42,42])for(const z of [-34,34]){cylinder(x,y+11,z,8,22,stone);cylinder(x,y+22,z,8.5,1,black);for(let i=0;i<10;i++){const a=i*Math.PI*.2;box(x+Math.sin(a)*7.3,y+23,z+Math.cos(a)*7.3,2,2,2,stone);}}for(let i=-38;i<=38;i+=5)for(const z of [-34,34])box(i,y+7,z,2.6,2,3,stone);building(0,0,30,22,19,stone);for(let i=0;i<25;i++){const a=i/25*Math.PI*2;rock(Math.sin(a)*165,Math.cos(a)*177,4+random()*6);}label('CITADEL SOUND',0,y+10,35,28);
+ }
+ if(theme==='fortress'&&course.nativeSceneCourseIndex===3){
+  // Authored masonry stays on the selected land. The old illustration-map
+  // castle spans navigable source water and cannot be reused here.
+  for(const [x,z,w,d,h] of [[-35,140,18,20,10],[-5,120,16,22,7],[-25,-9,14,10,6]]){
+   if([-1,1].every(a=>[-1,1].every(b=>visualGround(x+a*w/2,z+b*d/2)>1.5))){
+    const y=building(x,z,w,d,h,stone);
+    if(y){for(let at=-w/2+1;at<w/2;at+=3)for(const side of [-1,1])box(x+at,y+h+.9,z+side*(d/2-.4),1.4,1.4,1,stone);}
+   }
+  }
+  label('MARINE FORTRESS',-35,10,129.9,16);
  }
  if(course.fortWalls){
   const path=course.fortWalls;for(let i=1;i<path.length;i++){const a=path[i-1],b=path[i],distance=Math.hypot(b[0]-a[0],b[1]-a[1]),steps=Math.ceil(distance/5);for(let j=0;j<steps;j++){const t=(j+.5)/steps,x=a[0]+(b[0]-a[0])*t,z=a[1]+(b[1]-a[1])*t,y=visualGround(x,z);if(y<1.5)continue;const wall=box(x,y+2,z,2.8,4,distance/steps+.08,stone);wall.rotation.y=Math.atan2(b[0]-a[0],b[1]-a[1]);box(x,y+4.1,z,3.3,.3,3.3,white);}}

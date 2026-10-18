@@ -5,14 +5,15 @@ import {samplePolyline} from './courses.js';
 import {createSourcePortCourse} from './source-port-course.js';
 import {portStuntNavigation} from './source-port-navigation.js';
 import {createSourceDolphinStuntCourse} from './source-dolphin-stunt-course.js';
+import {createSourceFortressStuntCourse} from './source-fortress-stunt-course.js';
 
 /** Source-aligned high-resolution scene for native Stunt. Course geometry and
  * decorative materials remain separate from the original physical owners.
  * Other modes keep their existing independently prepared course selections. */
 export function nativeStuntScene(base){
  const index=base.sourceWaterCourseIndex;
- if(![0,5,6].includes(index))return base;
- const source=index===0?createSourceDolphinStuntCourse(polygonDistance):index===5?createSourcePortCourse(polygonDistance,{stuntNavigation:portStuntNavigation}):
+ if(![0,3,5,6].includes(index))return base;
+ const source=index===0?createSourceDolphinStuntCourse(polygonDistance):index===3?createSourceFortressStuntCourse(polygonDistance):index===5?createSourcePortCourse(polygonDistance,{stuntNavigation:portStuntNavigation}):
   createSourceTwilightCourse(polygonDistance,{anchorsByClass:twilightAnchors,
    pilotAnchorsByClass:twilightPilotAnchors,stuntNavigation:twilightStuntNavigation});
  return {...source,id:base.id,sky:base.sky,water:base.water,storm:base.storm,

@@ -79,19 +79,41 @@ export function createNativeStuntPresentation({course,readState,scale=.025}){
   surfaces.forEach((v,i)=>volumes.push({id:v.id,sourceIndex:row,planeIndex:start+i}));
  }
  if(matchedRamps.size!==ramps.length)throw new RangeError('Every source Stunt ramp needs its high-resolution surfaces');
+ // Drake's gate and buoyant box bodies use the same canonical finite-plane
+ // array as the ramps. Bind their complete ranges rather than deriving a new
+ // collider from the visual object matrix:6E0F4 changes origins, not axes.
+ const solidRows=rows.filter(i=>[2,6,7].includes(raw[i*49+19])),matchedSolids=new Set();
+ for(const definition of course.sourceSolidObjects??[]){
+  const row=integer(definition.sourceIndex,0,63),kind=definition.runtimeKind,b=row*49;
+  if(!solidRows.includes(row)||matchedSolids.has(row)||raw[b+19]!==kind||
+   !keys.every((k,j)=>Math.abs(position(raw,row)[j]-definition[k])<1e-5))throw new RangeError('Native solid display must match its source kind and center');
+  const start=raw[b+25]|0,count=raw[b+26]|0;
+  const surfaces=course.contactVolumes?.volumes.filter(v=>v.sourceObjectIndex===row)??[];
+  if(surfaces.length!==count||start<0||start+count>initial.scene.collisionPlaneCount0578)throw new RangeError('Solid surfaces must cover its original collision plane range');
+  surfaces.forEach((v,i)=>{
+   const p=initial.collisionPlaneWordsFd78.slice((start+i)*16,(start+i+1)*16).map(float);
+   if(!v.origin.every((n,j)=>Math.abs(n-p[j]*scale)<1e-5)||!v.axes.every((a,j)=>a.every((n,k)=>Math.abs(n-p[3+j*3+k])<1e-6))||
+    !v.spans.every((n,j)=>Math.abs(n-p[12+j]*scale)<1e-5))throw new RangeError('Solid mesh must match selected source planes');
+   volumes.push({id:v.id,sourceIndex:row,planeIndex:start+i});
+  });
+  matchedSolids.add(row);
+ }
+ if(matchedSolids.size!==solidRows.length)throw new RangeError('Every source solid body needs its high-resolution surfaces');
  const floating=[],usedFloating=new Set();
  for(const definition of course.sourceDynamicObjects??[]){
-  const row=rows.find(i=>!usedFloating.has(i)&&raw[i*49+19]===9&&keys.every((k,j)=>Math.abs(position(raw,i)[j]-definition[k])<1e-5));
-  if(row===undefined||!Number.isFinite(definition.radius)||definition.radius<=0)throw new RangeError('Native floating display must match its source center and radius');
-  usedFloating.add(row);floating.push({id:definition.id,sourceIndex:row,radius:definition.radius});
+  const kind=definition.runtimeKind??9;
+  const row=rows.find(i=>!usedFloating.has(i)&&raw[i*49+19]===kind&&keys.every((k,j)=>Math.abs(position(raw,i)[j]-definition[k])<1e-5));
+  if(![5,9].includes(kind)||row===undefined||!Number.isFinite(definition.radius)||definition.radius<=0||
+   Math.abs(definition.radius-float(raw[row*49+16])*scale)>1e-5)throw new RangeError('Native floating display must match its source center and radius');
+  usedFloating.add(row);floating.push({id:definition.id,sourceIndex:row,radius:definition.radius,runtimeKind:kind});
  }
- if(usedFloating.size!==rows.filter(i=>raw[i*49+19]===9).length)throw new RangeError('Every source floating body needs its high-resolution mesh');
+ if(usedFloating.size!==rows.filter(i=>[5,9].includes(raw[i*49+19])).length)throw new RangeError('Every source floating body needs its high-resolution mesh');
  const layout=freeze({version:1,courseIndex,rings,volumes,...(floating.length?{floating}:{})});
  function snapshot(){
   const s=readState(),a=s.objectWordsC940,w=s.raceWords1f94;
   if(s.scene.mode620!==11||s.scene.courseIndex!==courseIndex)throw new RangeError('Stunt display selection changed');
   const world=captureNativeStuntWorld({version:1,...(floating.length?{floating:floating.map(v=>{
-   const b=v.sourceIndex*49;if(a[b+19]!==9)throw new RangeError('Floating source row changed');
+   const b=v.sourceIndex*49;if(a[b+19]!==v.runtimeKind)throw new RangeError('Floating source row changed');
    const transform=a.slice(b+29,b+45).map(float);for(let j=12;j<15;j++)transform[j]*=scale;
    return {id:v.id,sourceIndex:v.sourceIndex,position:position(a,v.sourceIndex),matrix:transform,visible:a[b+21]!==0};
   })}:{}),rings:rings.map(r=>{
@@ -104,6 +126,7 @@ export function createNativeStuntPresentation({course,readState,scale=.025}){
    const appearance=nativeStuntRingAppearance({renderClass:a[b+21]|0,age:a[b+27]|0,collected:a[b+47]|0});
    return {...r,position:position(a,r.sourceIndex),heading:Math.atan2(float(a[b+12]),float(a[b+13])),matrix:transform,collected,...appearance};
   }),volumes:volumes.map(v=>{
+   if(a[v.sourceIndex*49+19]!==raw[v.sourceIndex*49+19])throw new RangeError('Stunt solid source row changed');
    const p=s.collisionPlaneWordsFd78.slice(v.planeIndex*16,(v.planeIndex+1)*16).map(float);
    return {...v,origin:p.slice(0,3).map(n=>n*scale),axes:[p.slice(3,6),p.slice(6,9),p.slice(9,12)],spans:p.slice(12,15).map(n=>n*scale),visible:a[v.sourceIndex*49+21]!==0};
   })});

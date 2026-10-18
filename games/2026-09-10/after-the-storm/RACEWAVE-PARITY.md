@@ -6230,3 +6230,44 @@ physical route test and eighteen existing Dolphin/presentation/Port/Twilight
 regressions pass. All386 module hashes in four entry pages are refreshed.
 Native Stunt is still opt-in. Drake and Fortress Stunt scenery, ordinary-course
 coverage, original AI and the wider parity objective remain incomplete.
+
+## Marine Fortress native Stunt scene — 2026-10-18
+
+Marine Fortress (source index3, web selection citadel) now joins the opt-in
+native Stunt scenes. Drake Lake is source index4; earlier private audit notes
+had those names reversed. Runtime selection and exported numeric resources
+now explicitly agree with source-water-conditions.js.
+
+All78 finite faces and92 shore segments are reconstructed from the selected
+source collision resource. The22 vertical/downward faces remain part of the
+detailed rock meshes. Those meshes are separate from the heightfield so the
+rock undercuts do not become false solid terrain. Two authored terrain caps
+complete the central land silhouettes beside the gate; they add no collision
+edges. The original open shore chains retain their endpoints. Decorative
+masonry follows these shores and verified land footprints; the old map's
+large castle is excluded because it extended across navigable source water.
+
+All15 rings, two ramps,21 finite object volumes, three radius50-native floating
+spheres and112 fixed spheres match canonical startup. The nine non-ramp solid
+bodies include the gate and buoyant boxes. Their meshes follow the actual live
+plane origins while retaining original axes/spans, exactly as the source
+transform routine does. Sphere meshes use the canonical object matrices.
+There is no duplicate motion owner. Binding rejects missing objects, wrong
+centers/radii, or mismatched finite planes. Display capture is detached and
+pause holds it. The gate's source-flag test verifies its6-native-unit steps and
+original stop threshold; this does not claim a driven passage-unlock test.
+
+The inspection helm completes all four checkpoints with nine rings and1,870
+points using throttle/steering only. Its regression also verifies award drain,
+record insertion and native result handoff. It routes around the elevated first
+ring; that harder line and the remaining missed rings need further input-driven
+testing. Real-time1440x900 High browser runs complete four checkpoints with
+10–11 rings. The corrected scene retains detailed water, masonry, rings and
+craft, without JavaScript or shader errors; one local missing-resource404 remains.
+
+Five Fortress scene tests and the full driven route pass, together with the
+existing Dolphin/Port/Twilight and Stunt presentation regressions. Foreground
+and worker terrain match at361x361 heights and512x512 depth resolution. All388
+module hashes and the four entry pages are refreshed. Drake Lake's native
+Stunt scene, ordinary-course coverage, original AI and broader parity remain
+unfinished. Native physics remains opt-in.
