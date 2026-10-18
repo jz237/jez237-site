@@ -6118,3 +6118,44 @@ all four checkpoints, drain awards and reach their score results. Gesture,
 pause, source support and30/60/144Hz checks pass, along with ordinary launch,
 two-player clocks and online transport regression coverage. This changes the
 simulation's threshold ownership; rendering resolution remains unchanged.
+
+### Twilight native Stunt scene and physical admission — 2026-10-18
+
+The opt-in native Stunt preview now includes Twilight City. Its scene uses the
+reconstructed source canal outlines,16 finite floor planes, four fixed solids,
+four selected ramps and all17 rings. The detailed city materials, water, rider
+and scenery renderer remain in use. Ordinary modern Twilight and its other
+modes retain their existing course selection.
+
+Twilight has alternative paths sharing ring orders3/4/5. Display binding now
+matches both ordinal and center, preserving distinct source rows and individual
+collection/fade state for both branches. It rejects duplicate meshes at the
+same source center. Both branch choices are tested against the retained native
+ring and scoring owner; the course's original timers and checkpoints are intact.
+
+An authored inspection helm follows the outer canal branch using ordinary
+throttle and steering. From the original grid it crosses all four source
+checkpoint planes, collects six rings, drains its award queue, inserts the
+record and reaches the native score screen. The checked seed17 run scores1,590.
+This verifies a complete route, not collection of every ring or the central
+submerged branch. The helm's24/18 world-unit speed targets are inspection policy,
+not changes to original acceleration, timers, collision or scoring.
+
+Native Twilight has its own terrain cache identity. The terrain worker rebuilds
+the same source scene, and its361x361 height samples and512x512 depth map match
+the foreground byte for byte. The worker dependency graph and content hashes
+are regenerated. Source canals use their actual finite crossbars; the older
+decorative bridge's six-gate placement is excluded from this four-checkpoint
+scene, fixing a browser renderer exception.
+
+Browser verification completed four checkpoints with five rings and1,475 points
+at High quality on a1440x900 canvas. A second real-time run also finished;
+the canal, reflective water, rings and physical rider were visually inspected.
+No JavaScript or shader error remained; one local missing-resource404 was present.
+Focused scene/presentation, full driven-route, source geometry/volumes, terrain
+identity and admission regressions pass. Stale admission tests now explicitly
+accept the previously enabled Stunt modes while retaining unsupported-mode gates.
+
+Four native Stunt scenes remain to align and admit: Dolphin, Drake, Fortress and
+Port. Full original AI, ordinary course coverage and the broader parity work
+remain separate outstanding requirements; native physics remains opt-in.

@@ -55,8 +55,11 @@ export function createNativeStuntPresentation({course,readState,scale=.025}){
  const position=(a,row)=>keys.map((_,j)=>float(a[row*49+j])*scale);
  const rows=Array.from({length:initial.scene.objectCountFa40},(_,i)=>i),rings=[],volumes=[],used=new Set();
  for(const [index,ring]of course.rings.entries()){
-  const row=rows.find(i=>raw[i*49+19]===8&&raw[i*49+48]===(ring.order??index));
-  if(row===undefined||used.has(row)||keys.some((k,j)=>Math.abs(position(raw,row)[j]-ring[k])>1e-5))throw new RangeError('Authored ring must match selected source ordinal and center');
+  // Alternative paths can share an ordinal (Twilight3/4/5). Match the center
+  // as well, while keeping one mesh per source row rather than per score slot.
+  const row=rows.find(i=>!used.has(i)&&raw[i*49+19]===8&&raw[i*49+48]===(ring.order??index)&&
+   keys.every((k,j)=>Math.abs(position(raw,i)[j]-ring[k])<=1e-5));
+  if(row===undefined)throw new RangeError('Authored ring must match selected source ordinal and center');
   used.add(row);rings.push({index,sourceIndex:row});
  }
  if(used.size!==rows.filter(i=>raw[i*49+19]===8).length)throw new RangeError('Every source Stunt ring needs its high-resolution mesh');

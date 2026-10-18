@@ -12,7 +12,8 @@ test('Southern native preview selects original geometry and player mode in all f
   assert.equal(s.nativeHost.raceRuntime,s.nativeLaunch);assert.equal(s.raceWater.field.datumNative,0);
   assert.equal(s.sourceSphereGrid,null);assert.equal(s.nativeHost.objects.fixedSnapshot().length,mode==='versus'?105:107);
  }
- for(const options of [{mode:'race'},{mode:'stunt'},{mode:'practice'},{mode:'time',seaState:'surf'}])
+ assert.equal(createRace({course:getCourse('tempest'),mode:'stunt',physics:'native'}).nativeLaunch.snapshot().scene.mode620,11);
+ for(const options of [{mode:'race'},{mode:'practice'},{mode:'time',seaState:'surf'}])
   assert.throws(()=>createRace({course:getCourse('tempest'),physics:'native',...options}),/source-water/);
 });
 

@@ -6,6 +6,7 @@ import {createNativeRaceContactAudio} from './native-race-contact-audio.js';
 import {prepareNativeHullStartFromMatrix} from './native-hull.js';
 import {createNativeRaceCourseRuntime} from './native-race-course-runtime.js';
 import {createNativeStuntCourseRuntime} from './native-stunt-course-runtime.js';
+import {nativeStuntScene} from './native-stunt-scene.js';
 import {createNativeStuntPresentation} from './native-stunt-presentation.js';
 import {capturePrimaryBuoyPresentation} from './primary-buoy-presentation.js';
 import {constrainSourceSphereRace} from './source-sphere-race.js';
@@ -69,9 +70,10 @@ export function settings(rider=0,tune={}){const r=RIDERS[rider];const engine=cla
 export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,difficulty=0,course=COVE,gridOrder=null,seaState='course',secondRider=1,secondTune={},handicap=false,swapColours=false,physics='modern',nativeTunes=[],nativeTuneModes=[],nativeInitialRaceState,nativeRecordSession,nativeObjectLayout='source'}={}){
  if(!['modern','native'].includes(physics))throw new RangeError('Unknown race physics');
  if(nativeRecordSession!==undefined&&physics!=='native')throw new RangeError('Native record sessions require native physics');
- if(physics==='native'&&(!['time','versus','stunt'].includes(mode)||seaState!=='course'||![1,2,7,8].includes(course.sourceWaterCourseIndex)))
-  throw new RangeError('Native integration preview requires Sunny Beach, Sunset Bay, Southern Island or Glacier Coast source-water Time trial, Two-player race or Stunt run');
+ if(physics==='native'&&(!['time','versus','stunt'].includes(mode)||seaState!=='course'||!(mode==='stunt'?[1,2,6,7,8]:[1,2,7,8]).includes(course.sourceWaterCourseIndex)))
+  throw new RangeError('Native integration preview requires a verified course and source-water Time trial, Two-player race or Stunt run');
  setRaceWater(null);
+ if(physics==='native'&&mode==='stunt')course=nativeStuntScene(course);
  const freeRide=mode==='practice'||mode==='versus'&&course.id==='practice';
  if(['race','championship'].includes(mode))course=racingStuntCourse(course);
  frontEnabled.value=seaState==='surf'||seaState==='storm'?1:0;setWaterCharacter(course);surfSeed.value=((Math.floor(waveSeed)%997)+997)%997;surfStrength.value=seaState==='surf'?1:0;windSea.value=seaState==='chop'||seaState==='storm'?1:0;setCourseWaveTrain(course.waveTrain);setBoundaryWaves(course);clearImpacts();clearWakeTrail();waterLevel.value=conditions(course,0).seaLevel;

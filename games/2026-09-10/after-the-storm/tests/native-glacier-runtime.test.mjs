@@ -20,7 +20,8 @@ test('Glacier native selection installs complete source rows, visible markers, s
   assert.equal(course.sourceRouteRowsByClass,undefined);assert.equal(course.sourceBuoyLayout,undefined);assert.deepEqual(course.anchors,anchors);
   const modern=createRace({course,difficulty,mode});assert.equal(modern.physics,'modern');assert.equal(modern.course.sourceBuoyLayout,undefined);
  }
- for(const options of [{mode:'race'},{mode:'championship'},{mode:'stunt'},{mode:'practice'},{mode:'time',seaState:'surf'}])
+ assert.equal(createRace({course:getCourse('glacier'),mode:'stunt',physics:'native'}).nativeLaunch.snapshot().scene.mode620,11);
+ for(const options of [{mode:'race'},{mode:'championship'},{mode:'practice'},{mode:'time',seaState:'surf'}])
   assert.throws(()=>createRace({course:getCourse('glacier'),physics:'native',...options}),/source-water/);
 });
 

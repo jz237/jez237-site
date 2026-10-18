@@ -1,4 +1,4 @@
-// Authored inspection helm for opt-in Sunny/Sunset/Southern/Glacier native races.
+// Authored inspection helm for admitted native races, including Twilight Stunt.
 // Inspection paths can still miss buoys, especially in versus or Reverse.
 // This is not the original AI. It reads the actual native presentation pose
 // and the existing navigation anchors; it never changes a physical point,
@@ -64,7 +64,7 @@ export function createNativeRacePilot({course,policy={},traceLimit=256}={}){
  // Stunt routes retain their own rings and ramps; ordinary class-specific
  // inspection corridors must not replace that selected route.
  const selectedAnchors=course?.stunt?course.anchors:course?.nativePilotAnchorsByClass?.[course.difficulty]??course?.anchors;
- if(![1,2,7,8].includes(course?.sourceWaterCourseIndex)||!Array.isArray(selectedAnchors)||selectedAnchors.length<3)
+ if(!(course?.stunt?[1,2,6,7,8]:[1,2,7,8]).includes(course?.sourceWaterCourseIndex)||!Array.isArray(selectedAnchors)||selectedAnchors.length<3)
   throw new TypeError('Native pilot requires Sunny Beach, Sunset Bay, Southern Island or Glacier Coast source navigation');
  // A wider authored Normal driving line clears Southern's exposed bow at
  // low tide. This changes only the inspection helm, never the source AI,
@@ -79,7 +79,8 @@ export function createNativeRacePilot({course,policy={},traceLimit=256}={}){
  // Glacier's forward route needs earlier compensation for lateral hull drift
  // off the sloped ice. This is inspection-driver anticipation, not a force,
  // buoy rule or source-AI change. Explicit caller policy still takes precedence.
- const defaults=course.sourceWaterCourseIndex===8&&!course.reverse?{velocityPredictionSeconds:.5}:{};
+ const defaults=course.sourceWaterCourseIndex===8&&!course.reverse?{velocityPredictionSeconds:.5}:
+  course.sourceWaterCourseIndex===6&&course.stunt?{straightSpeedWorld:24,cornerSpeedWorld:18}:{};
  const config=drivingPolicy({...defaults,...policy}),sourceNodes=new Map((course.sourceBuoyLayout?.nodes??[]).map(n=>[n.sourceRow,n]));
  const visibleNodes=new Map(Object.entries(course.sourceVisibleGateIndices??{}).map(([row,index])=>[index,sourceNodes.get(Number(row))]));
  let binding=null,index=0,circuits=1,start=null,stamp=-1,held=neutral(),throttle=true,last=null,previousProgress=null;

@@ -7,7 +7,7 @@ import {playerInput} from '../player-input.js';
 const ri=a=>(a-0x1f94)/4;
 const create=id=>createRace({mode:'stunt',physics:'native',course:getCourse(id),waveSeed:17});
 
-for(const [id,minRings]of [['greyhaven',10],['amber',1],['tempest',10],['glacier',5]])test(`${id}: physical Stunt route crosses all checkpoints, drains awards and hands off its final score`,()=>{
+for(const [id,minRings]of [['greyhaven',10],['amber',1],['neon',6],['tempest',10],['glacier',5]])test(`${id}: physical Stunt route crosses all checkpoints, drains awards and hands off its final score`,()=>{
  const s=create(id),r=s.racers[0],pilot=createNativeRacePilot({course:s.course});
  const geometry=JSON.stringify({anchors:s.course.anchors,rings:s.course.rings,checkpoints:s.course.checkpoints,ramps:s.course.ramps});
  const checkpointRows=[...s.course.gates.slice(1),s.course.gates[0]].map(q=>q.sourceRow);

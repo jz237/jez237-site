@@ -1,4 +1,4 @@
-import {SUNSET_NATIVE_GEOMETRY} from './source-sunset-course.js?v=69ddbd394c71';
+import {SUNSET_NATIVE_GEOMETRY} from './source-sunset-course.js?v=4580da672e07';
 
 // Authored helm corridors around the recovered geometry. Five-metre passing
 // offsets (seven at Normal's northbound buoy, nine at Expert's northern turn) and lead distances are browser

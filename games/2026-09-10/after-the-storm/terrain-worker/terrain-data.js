@@ -2,9 +2,11 @@ export const TERRAIN_SEGMENTS=360,TERRAIN_MAP_SIZE=512,TERRAIN_SPAN=920;
 export function terrainIdentity(course){
  // Timed authored stunts can use the forward Normal passage in every class.
  return {id:course.id,difficulty:course.stunt&&course.stuntLayout?.forwardPassage?0:course.difficulty??0,
-  ...(course.geometryForPlayers?{geometryPlayers:course.sourceCollisionPlayerCount??1}:{})};
+  ...(course.geometryForPlayers?{geometryPlayers:course.sourceCollisionPlayerCount??1}:{}),
+  ...(course.nativeSceneCourseIndex!==undefined?{nativeSceneCourseIndex:course.nativeSceneCourseIndex}:{})};
 }
-export const terrainKey=course=>{const c=terrainIdentity(course);return c.id+':'+c.difficulty+(c.geometryPlayers?':p'+c.geometryPlayers:'');};
+export const terrainKey=course=>{const c=terrainIdentity(course);return c.id+':'+c.difficulty+(c.geometryPlayers?':p'+c.geometryPlayers:'')+
+ (c.nativeSceneCourseIndex!==undefined?':native-stunt-'+c.nativeSceneCourseIndex:'');};
 export function sampleTerrainHeights(heightFn){
  const segments=TERRAIN_SEGMENTS,side=segments+1,heights=new Float32Array(side*side),step=TERRAIN_SPAN/segments;
  // PlaneGeometry stores X/Z as float32 before calling the height function.

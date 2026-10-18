@@ -1,6 +1,14 @@
 // Generated asset content identities; never cache HTML or saves.
 export const assetVersions={
   "assets/audio/PROVENANCE.json": "32a5b7cf1d79",
+  "assets/audio/waverace64/announcer/manifest.json": "402bba179444",
+  "assets/audio/waverace64/announcer/PROVENANCE.json": "5c2a78d95878",
+  "assets/audio/waverace64/contacts/manifest.json": "52d432df2f6c",
+  "assets/audio/waverace64/contacts/PROVENANCE.json": "9ef9fc8cdb94",
+  "assets/audio/waverace64/cues/manifest.json": "a6035d812c5c",
+  "assets/audio/waverace64/cues/PROVENANCE.json": "7ee7ae1cb341",
+  "assets/audio/waverace64/engine/manifest.json": "77d37182a6a5",
+  "assets/audio/waverace64/engine/PROVENANCE.json": "aac778cdf5af",
   "assets/audio/waverace64/manifest.json": "012e97618777",
   "assets/audio/waverace64/PROVENANCE.json": "4483f4f04b68",
   "assets/coastal-rider-lod.bin": "eda6af63b060",
