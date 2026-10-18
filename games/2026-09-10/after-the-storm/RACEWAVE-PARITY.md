@@ -6934,6 +6934,42 @@ The public fixture contains synthetic state and observed semantic operations,
 not original executable or assets. Seven tests cover these comparisons, actual
 slide completion, blocked/re-enabled controls, retained neighboring data,
 reverse post-name initialization and atomic rejection of late invalid inputs.
-The visible records browser, matrix consumers and live menu integration are
-still pending. This work does not reduce rendering resolution or enable an
-unfinished public mode.
+The visible records browser was pending at this checkpoint; its subsequent
+layout verification is recorded below. Matrix consumers and live menu
+integration remain separate. This work does not reduce rendering resolution
+or enable an unfinished public mode.
+
+### Original records layout and vector display — 2026-10-18
+
+`native-records-presentation.js` independently reconstructs6750/6CC8/71AC:
+the category/course grid, both sliding panel groups, translated course headers,
+time/stunt/reverse tables, best laps, stored initials, rank and variant labels,
+record highlights and navigation hints. Rider previews select the avatar stored
+in each record and retain the original viewport indices. It preserves the
+source's three reverse rows but one rider preview, the clipped reverse lap-name
+placeholder, and the time-record flag used to highlight even a stunt row.
+The ordinary lap inherits the preceding row style outside post-race context.
+
+355 actual original-ROM caller executions (497,683 instructions) match every
+ordered semantic panel, style/color argument, label, text, time/score, fill,
+clip, rider preview and arrow rectangle. Cases cover all nine courses, all
+three categories, both selection stages plus retained nonzero stage values,
+normal/stunt/reverse styles, post-race and unlock flags, two-panel horizontal
+and vertical slides, ignored descriptor types, negative offsets and signed
+coordinate overflow. Public fixtures contain synthetic record and label data;
+original code, jump tables and graphical assets remain private.
+
+`native-records-view.js` renders the prepared layout as scalable SVG. Its
+320x240 viewBox is a coordinate system, not a raster-resolution setting. The
+host resolves label tokens with their font/variant context and supplies rider
+portraits; this component does not invent missing riders or records. New-record
+and disabled styling, clipping, literal text and per-instance clip IDs are
+preserved. Detached rendering makes a late invalid command atomic.
+
+Four new Node tests pass alongside the seven control/update tests. Browser
+checks render all355 fixture frames, verify literal text, unique clip IDs and
+late-failure atomicity, and inspect the ordinary/overview/reverse layouts at
+1440x900 and a390-pixel-wide host. No low-resolution canvas is introduced.
+The menu phase, target60 initializer, live admission and actual rider/model
+consumers are still pending; this is a verified display component, not a claim
+that the full original records menu is already available in public gameplay.
