@@ -3,6 +3,7 @@ import {prepareNativeMenuInput,prepareNativeDeviceSample,prepareNativeDeviceRese
 import {prepareNativeRaceResultCPUDisplay} from './native-race-prestart-stage.js';
 import {prepareNativeRaceWidgetUpdate,prepareNativeRaceHUDAnimationUpdate} from './native-race-widget-update.js';
 import {NATIVE_AI_STORAGE_WORDS} from './native-ai-storage.js';
+import {createNativeGraphicsCornerState,patchNativeGraphicsCornerState,advanceNativeGraphicsCornerState} from './native-graphics-corner-state.js';
 import {prepareNativeRaceCameraInput} from './native-race-camera-input.js';
 // Shared source race/HUD storage. Decoded leaf views are temporary, and all
 // overlapping records, tables, timers and flags return to these same owners.
@@ -111,6 +112,7 @@ function copy(value){
  if(value.collisionPlaneWordsFd78!==undefined)s.collisionPlaneWordsFd78=words(value.collisionPlaneWordsFd78,'collisionPlaneWordsFd78',512);
  if(value.packedObjectMatrixWords0cd0!==undefined)s.packedObjectMatrixWords0cd0=words(value.packedObjectMatrixWords0cd0,'packedObjectMatrixWords0cd0',1024);
  if(value.aiWords3c60!==undefined)s.aiWords3c60=words(value.aiWords3c60,'aiWords3c60',NATIVE_AI_STORAGE_WORDS);
+ if(value.graphicsCorners!==undefined)s.graphicsCorners=structuredClone(createNativeGraphicsCornerState(value.graphicsCorners));
  if(value.saveWordsB280!==undefined)s.saveWordsB280=words(value.saveWordsB280,'saveWordsB280',34);
  if(value.menuWordsE658!==undefined){
   if(Object.hasOwn(scene,'pressed65a'))throw new RangeError('pressed65a overlaps menuWordsE658');
@@ -535,6 +537,10 @@ function apply(s,operations){
    const offset=integer(op.byteOffset,`${key} byte offset`,0,s[key].length*4-1),shift=24-(offset&3)*8;
    const value=integer(op.value,'source byte bits',0,255),index=offset>>>2;
    s[key][index]=((s[key][index]&~(255<<shift))|(value<<shift))>>>0;
+  }
+  else if(op.kind==='graphicsCornerPatch'||op.kind==='graphicsBufferAdvance'){
+   if(!s.graphicsCorners)throw new TypeError('Supply retained graphicsCorners before applying graphics writes');
+   s.graphicsCorners=op.kind==='graphicsCornerPatch'?patchNativeGraphicsCornerState(s.graphicsCorners,op.patches):advanceNativeGraphicsCornerState(s.graphicsCorners);
   }
   else if(op.kind==='aiWordWrite'){
    if(!s.aiWords3c60)throw new TypeError('Supply retained aiWords3c60 before applying AI writes');

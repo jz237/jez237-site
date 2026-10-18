@@ -7050,3 +7050,35 @@ and scene equivalence remain unproven. Retained-state ownership and the live
 four-rider integration still need implementation; no unfinished mode is
 enabled by this evidence alone. All ROM bytes, memory snapshots and replay
 outputs remain private. Rendering resolution is unchanged.
+
+### Retained AI graphics-buffer ownership — 2026-10-18
+
+`native-graphics-corner-state.js` now owns both sets of 112 guest-order bytes:
+three prefix vertices followed by the four AI corner vertices. It separates
+explicit cold-boot clearing from restoration, preserves signed16 XZ values,
+accepts ordered byte writes and implements the original XOR buffer switch.
+The switch is an explicit outer-loop operation, including iterations that
+skip physics; it is not inferred from browser rendering or hull ticks.
+
+The canonical race state retains this owner through snapshots and updates.
+Fresh web launches create the declared boot state. AI initialization now
+consumes all 64 existing vertex-byte patches in the same transaction as its
+AI words and RNG state. Warm initialization preserves XZ, corner alpha,
+unwritten prefix bytes and the selected buffer. Restoring a state with this
+owner omitted does not silently invent it. Invalid late patches reject the
+whole transaction without changing the caller's state.
+
+Two sequences of original 46D2C executions, nine calls from each initial selector,
+verify every retained byte and selected corner using synthetic canaries.
+Five new tests cover those 18 comparisons, cold/warm boundaries, signed16
+limits, explicit coordinate writes, detached snapshots and live initializer
+integration. The 42 focused graphics/AI checks pass, including an actual
+completed solo race handing control to source AI. After a snapshot-copy
+consistency adjustment, all five new tests and 15 canonical-state regressions
+pass. All 422 module hashes and four page preload sets are refreshed.
+
+The runtime exposes buffer advancement and a read-only AI corner view; the
+full outer-loop scheduling and four-rider caller integration remain separate
+work. Championship admission is unchanged. This storage does not derive a
+modern frustum or impose permanent zero coordinates, and it does not change
+rendering resolution.

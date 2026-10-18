@@ -13,6 +13,7 @@ import {prepareNativeAIInitialization,stepNativeAIRandom} from './native-ai-init
 import {prepareNativeRiderActionStartup,NATIVE_RIDER_ACTION_LIMITS} from './native-rider-action-startup.js';
 import {prepareNativeAIDriver} from './native-ai-driver.js';
 import {NATIVE_AI_STORAGE_WORDS,nativeAIDriverStateFromWords,nativeAIDriverStateWrites} from './native-ai-storage.js';
+import {createNativeGraphicsCornerBootState,nativeGraphicsCornerView} from './native-graphics-corner-state.js';
 import {prepareNativeRaceWaterInitialization} from './native-race-state.js';
 import {prepareNativeRaceWidgetAdvance,prepareNativeRaceFadeAdvance,prepareNativeRaceFadePropertiesUpdate} from './native-race-state.js';
 import {prepareNativeWidgetPresentation,nativeWidgetDrawView} from './native-widget-presentation.js';
@@ -102,6 +103,7 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
     0x22c0+c*20,0x23b0+c*20])raceWords1f94[ri(base)]=599999;
   }
   current=createNativeRaceState({raceWords1f94,hudWords7788,profileWordsB330,i1Words9440,aiWords3c60:Array(NATIVE_AI_STORAGE_WORDS).fill(0),
+   graphicsCorners:createNativeGraphicsCornerBootState(),
    ...courseRuntime?.objectStartup?.storage,
    ...(courseRuntime?{menuWordsE658:Array(21).fill(0),deviceWords4308:Array(10).fill(0),
     // Fresh web profile policy: YOU initials for each rider/variant. No
@@ -351,9 +353,16 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    for(const p of prepared.inverseOrderPatches)put(0x4100+p.index*4,p.value);
    put(0x4110,prepared.proximityCount);
    prepared.proximityObjectIndicesPrefix.forEach((value,i)=>put(0x4118+i*4,value));
-   operations.push({kind:'sourceWordWrite',field:'rngState4640',value:prepared.rngState});
+   operations.push({kind:'graphicsCornerPatch',patches:prepared.cameraBytePatches},
+    {kind:'sourceWordWrite',field:'rngState4640',value:prepared.rngState});
    commit(operations);return prepared;
   },
+  // Explicit outer-loop operation; source scheduling must include iterations
+  // that skip physics. Do not call this once per browser render or hull tick.
+  advanceGraphicsBuffer(){
+   commit([{kind:'graphicsBufferAdvance'}]);return nativeGraphicsCornerView(current.graphicsCorners);
+  },
+  aiCameraCorners:()=>nativeGraphicsCornerView(current.graphicsCorners),
   aiDriverState:slot=>nativeAIDriverStateFromWords(current.aiWords3c60,slot),
   sampleAI(slot,{bodiesBySlot,geometry,waterField}){
    if(!courseRuntime)throw new Error('Live AI requires initialized source course geometry');
