@@ -19,6 +19,19 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — all nine native Stunt primary routes
+
+Readonly primary route resources now cover the nine Stunt entries selected by
+the800D653C table:83 four-short rows, including hidden guide rows. The existing
+primary loader/initializer matches every resulting word against actual selected
+71E70 loading and complete735EC execution, for both retained seeded memory and
+explicit fresh-web-zero storage:18 cases and63,414 original instructions. The
+existing rounded square-root boundary remains declared; actualED090 executes.
+Sunny and Sunset agree with their independently recovered course metadata.
+
+This supplies route data for the next native Stunt integration step. It does not
+enable Stunt admission or replace the modern routes, renderer, or resolution.
+
 ## Unpublished — complete object owner connected to ordinary native races
 
 The admitted Sunny/Sunset/Southern/Glacier native time/versus previews now start
