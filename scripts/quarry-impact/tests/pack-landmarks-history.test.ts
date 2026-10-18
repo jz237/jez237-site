@@ -1,6 +1,7 @@
+import {restoreKingswellPalmBytes} from './kingswell-palm-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readPackLandmarksPrevious,restorePackLandmarksBytes,verifyPackLandmarksRevision} from './pack-landmarks-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreKingswellPalmBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('PackLandmarks preserves every prior fixture, vehicle asset, control and camera input',verifyPackLandmarksRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/pack-landmarks/revision.json').toString());

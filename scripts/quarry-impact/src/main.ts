@@ -5,7 +5,7 @@ import {clubEngineLabel} from './club-engine-label';
 import {classEngineLabel} from './class-engine';
 import {programWarmupView} from './program-warmup';
 import {ReplayPuddles} from './replay-puddles';
-import {setSceneShadows} from './rendering';
+import {setSceneShadows,createPMREMGenerator} from './rendering';
 import {quarryReplayProps} from './quarry-tyres';
 import {colliderImpactMaterial,type ImpactMaterial} from './impact-material';
 import {demoRaceDirection} from './demo-session';
@@ -1789,7 +1789,7 @@ canvas.addEventListener('webglcontextlost', (e) => {
 canvas.addEventListener('webglcontextrestored', () => {
   // Render-target contents are lost with the context, unlike source HDR data.
   if (environmentTarget && scene.background instanceof T.Texture) {
-    const generator = new T.PMREMGenerator(renderer);
+    const generator = createPMREMGenerator(renderer);
     try {
       // A fresh PMREMGenerator needs to allocate its own filtering planes.
       // Passing an old target here skips that initialization in Three r181.

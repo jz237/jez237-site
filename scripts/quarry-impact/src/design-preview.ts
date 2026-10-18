@@ -5,6 +5,7 @@ import {loadCars,cloneCar,templates} from './assets';
 import {CAR_KINDS} from './rules';
 import {LiveryPaint} from './livery-paint';
 import type {PublishedDesign} from './design-client';
+import {createPMREMGenerator} from './rendering';
 let loading:Promise<void>|undefined;
 function ready(){if(CAR_KINDS.every(k=>templates.has(k)))return Promise.resolve();return loading??=loadCars(()=>{}).catch(e=>{loading=undefined;throw e})}
 /** Uses race models and the same body-space livery shader. Renders on changes
@@ -18,7 +19,7 @@ export function mountCarPreview(host:HTMLElement,design:PublishedDesign){
   renderer.domElement.setAttribute('aria-label','3D painted vehicle preview');renderer.domElement.style.touchAction='none';renderer.domElement.tabIndex=0;
   const scene=new T.Scene();scene.background=new T.Color(0x17221c);
   const camera=new T.PerspectiveCamera(36,1,.1,100),controls=new OrbitControls(camera,renderer.domElement);controls.enablePan=false;controls.enableDamping=false;controls.minPolarAngle=.18;controls.maxPolarAngle=Math.PI*.49;
-  const pmrem=new T.PMREMGenerator(renderer),room=new RoomEnvironment(),environment=pmrem.fromScene(room,.04);scene.environment=environment.texture;room.dispose();pmrem.dispose();
+  const pmrem=createPMREMGenerator(renderer),room=new RoomEnvironment(),environment=pmrem.fromScene(room,.04);scene.environment=environment.texture;room.dispose();pmrem.dispose();
   scene.add(new T.HemisphereLight(0xffffff,0x586347,2));const light=new T.DirectionalLight(0xfff1db,3);light.position.set(-4,7,5);scene.add(light);
   const model=cloneCar(design.kind,design.paint);model.traverse(o=>{if(o instanceof T.Mesh)for(const m of Array.isArray(o.material)?o.material:[o.material])if(m instanceof T.MeshStandardMaterial&&m.name.startsWith('paint'))m.color.setHex(m.name.includes('Paint 2')?design.trim:design.paint)});
   const paint=new LiveryPaint(model);paint.set(design.layers);scene.add(model);

@@ -44,6 +44,33 @@ export class QuarryAO extends GTAOPass {
   }
 }
 
+/** Three's PMREM shaders declare mediump. Mesa's AMD compiler (and many phone
+ * GPUs) really run mediump as 16-bit floats, so the bright sun in the sky HDR
+ * overflows to Inf while filtering and every lit surface renders black. Upgrade
+ * each internal material to highp as the generator creates it. */
+const PMREM_MATERIALS = ['_cubemapMaterial', '_equirectMaterial', '_blurMaterial', '_ggxMaterial'] as const;
+export function createPMREMGenerator(renderer: T.WebGLRenderer) {
+  const generator = new T.PMREMGenerator(renderer);
+  const fields = generator as unknown as Record<string, T.ShaderMaterial | null>;
+  for (const key of PMREM_MATERIALS) {
+    let material = fields[key] ?? null;
+    Object.defineProperty(generator, key, {
+      configurable: true,
+      get: () => material,
+      set: (value: T.ShaderMaterial | null) => {
+        if (value) {
+          value.vertexShader = value.vertexShader.replace(/precision mediump/g, 'precision highp');
+          value.fragmentShader = value.fragmentShader.replace(/precision mediump/g, 'precision highp');
+          value.needsUpdate = true;
+        }
+        material = value;
+      },
+    });
+    if (material) fields[key] = material;
+  }
+  return generator;
+}
+
 /** A rolling local reflection capture, filtered only after all six faces are
  * complete. One face per scheduled frame spreads the cost of moving scenery,
  * opponents and wrecks across time. Persistent targets avoid GPU allocations. */
@@ -60,7 +87,7 @@ export class LocalReflections {
   enabled = true;
   interval = 3;
   constructor(private renderer: T.WebGLRenderer, private scene: T.Scene) {
-    this.generator = new T.PMREMGenerator(renderer);
+    this.generator = createPMREMGenerator(renderer);
     this.generator.compileCubemapShader();
     this.camera.coordinateSystem = renderer.coordinateSystem;
     this.camera.updateCoordinateSystem();

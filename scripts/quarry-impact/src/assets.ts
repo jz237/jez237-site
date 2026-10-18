@@ -12,6 +12,7 @@ import { wreckTopology } from './wreck-topology';
 import { alignWreckSeams } from './wreck-seams';
 import {constructionRole,type ConstructionRole} from './vehicle-construction';
 import {prepareWheelPresentation,attachWheelPresentation} from './wheel-presentation';
+import { createPMREMGenerator } from './rendering';
 export const base = import.meta.env?.BASE_URL ?? './';
 export const url = (p: string) => base + p;
 export const templates = new Map<CarKind, THREE.Group>();
@@ -250,7 +251,7 @@ export async function environment(
   scene.background = hdr;
   scene.backgroundRotation.y = 1.1;
   scene.environmentRotation.y = 1.1;
-  const pmrem = new THREE.PMREMGenerator(renderer);
+  const pmrem = createPMREMGenerator(renderer);
   const target = pmrem.fromEquirectangular(hdr);
   scene.environment = target.texture;
   scene.environmentIntensity = 0.54;
