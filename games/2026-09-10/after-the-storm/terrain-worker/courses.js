@@ -1,6 +1,8 @@
-import {CLASSIC_COURSES,polygonDistance} from './classic-courses.js?v=0409f9dba1c4';
-import {configurePassage,passageDistance} from './course-passages.js?v=0409f9dba1c4';
-import {tideLevel} from './course-environment.js?v=0409f9dba1c4';
+import {sourceWaterConditions} from './source-water-conditions.js?v=edc570968f5a';
+import {createSourceBuoyLayout} from './source-buoy-progress.js?v=edc570968f5a';
+import {CLASSIC_COURSES,polygonDistance} from './classic-courses.js?v=edc570968f5a';
+import {configurePassage,passageDistance} from './course-passages.js?v=edc570968f5a';
+import {tideLevel} from './course-environment.js?v=edc570968f5a';
 // Course geometry is shared by navigation, collision, terrain and presentation.
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const definitions=[
@@ -16,11 +18,15 @@ const definitions=[
 ];
 function catmull(p0,p1,p2,p3,t){const t2=t*t,t3=t2*t;return [0,1].map(k=>.5*((2*p1[k])+(-p0[k]+p2[k])*t+(2*p0[k]-5*p1[k]+4*p2[k]-p3[k])*t2+(-p0[k]+3*p1[k]-3*p2[k]+p3[k])*t3));}
 export function sampleRoute(anchors,n=24){const dense=[];for(let i=0;i<anchors.length;i++)for(let j=0;j<24;j++)dense.push(catmull(anchors[(i+anchors.length-1)%anchors.length],anchors[i],anchors[(i+1)%anchors.length],anchors[(i+2)%anchors.length],j/24));let length=0;const distances=[0];for(let i=1;i<=dense.length;i++){const a=dense[i-1],b=dense[i%dense.length];length+=Math.hypot(b[0]-a[0],b[1]-a[1]);distances.push(length);}return Array.from({length:n},(_,i)=>{const target=i/n*length;let j=1;while(distances[j]<target)j++;const t=(target-distances[j-1])/(distances[j]-distances[j-1]),a=dense[j-1],b=dense[j%dense.length];return {x:a[0]+(b[0]-a[0])*t,z:a[1]+(b[1]-a[1])*t};});}
+export function samplePolyline(anchors,n=384){
+ const lengths=anchors.map((p,i)=>Math.hypot(anchors[(i+1)%anchors.length][0]-p[0],anchors[(i+1)%anchors.length][1]-p[1])),total=lengths.reduce((a,b)=>a+b,0);
+ return Array.from({length:n},(_,i)=>{let distance=i/n*total,index=0;while(index<lengths.length-1&&distance>lengths[index])distance-=lengths[index++];const a=anchors[index],b=anchors[(index+1)%anchors.length],t=lengths[index]?distance/lengths[index]:0;return {x:a[0]+(b[0]-a[0])*t,z:a[1]+(b[1]-a[1])*t};});
+}
 export function buildGates(points,difficulty=0){return points.map((p,i)=>{const prev=points[(i+points.length-1)%points.length],next=points[(i+1)%points.length],d=Math.hypot(next.x-prev.x,next.z-prev.z),tx=(next.x-prev.x)/d,tz=(next.z-prev.z)/d,side=i===0?0:i%2?1:-1,offset=7-difficulty*.75;return {...p,tx,tz,side,offset,bx:p.x+tz*side*offset,bz:p.z-tx*side*offset,width:23-difficulty*2};});}
 export function mappedGates(route,buoys){
  const finish=buildGates(route)[0];finish.routeIndex=0;
  return [finish,...buoys.map(b=>{let best=0;for(let i=1;i<route.length;i++)if(Math.hypot(route[i].x-b.x,route[i].z-b.z)<Math.hypot(route[best].x-b.x,route[best].z-b.z))best=i;
- const a=route[(best+route.length-1)%route.length],c=route[(best+1)%route.length],length=Math.hypot(c.x-a.x,c.z-a.z),tx=(c.x-a.x)/length,tz=(c.z-a.z)/length,offset=b.offset??7;
+ const a=route[(best+route.length-1)%route.length],c=route[(best+1)%route.length],length=Math.hypot(c.x-a.x,c.z-a.z),tx=b.tx??(c.x-a.x)/length,tz=b.tz??(c.z-a.z)/length,offset=b.offset??7;
  const x=b.x-tz*b.side*offset,z=b.z+tx*b.side*offset;
  const approach=b.approach?.back?{...b.approach,x:x-tx*b.approach.back,z:z-tz*b.approach.back}:b.approach;
  return {x,z,tx,tz,side:b.side,offset,bx:b.x,bz:b.z,width:b.width??23,routeIndex:best,approach,recoverWrongSide:b.recoverWrongSide};})];
@@ -40,18 +46,28 @@ export function terrainHeight(course,x,z){if(CLASSIC_COURSES[course.id])return C
  const erosion=(coastNoise(x*.075,z*.075)-.5)*3.8+(coastNoise(x*.21,z*.21)-.5)*1.2;
  return Math.min(theme==='ice'?65:theme==='lake'?45:22,h)+erosion*clamp((d-45)/24,0,1);
 }
-export const COURSES=definitions.map(original=>{const d={...original,...CLASSIC_COURSES[original.id]};return {...d,gates:buildGates(sampleRoute(d.anchors)),rocks:[],laps:3};});
-export function getCourse(id='greyhaven',difficulty=0){const base=COURSES.find(c=>c.id===id)||COURSES[0],reverse=difficulty===3,level=Math.min(2,difficulty),anchors=base.anchorsByClass?.[difficulty]||(level===2&&base.expertAnchors?base.expertAnchors:base.anchors);let points=sampleRoute(anchors,24+level*4);if(reverse)points=[points[0],...points.slice(1).reverse()];
- let route=sampleRoute(anchors,384);if(reverse)route=[route[0],...route.slice(1).reverse()];const course={...base,anchors,resistance:base.resistanceByClass?.[difficulty]||base.resistance||[],closedAreas:level===2?base.expertClosedAreas||[]:[],requiredPassage:level===2&&!!base.expertAnchors,difficulty,reverse,route,gates:buildGates(points,level),rocks:(base.obstaclesByClass?.[difficulty]||[...(base.obstacles||[]),...(level?(base.extraObstacles||[]).slice(0,level===1?4:99):[])]).map(o=>({...o})),ramps:(base.raceRampsByClass?.[difficulty]||base.raceRamps||[]).map(r=>({...r,solidBack:true}))};
+export const COURSES=definitions.map(original=>{const d={...original,...CLASSIC_COURSES[original.id]};return {...d,sourceWaterCourseIndex:sourceWaterConditions({courseId:d.id}).courseIndex,waterModelRevision:1,layoutRevision:(d.layoutRevision??0)+1,gates:buildGates(sampleRoute(d.anchors)),rocks:[],laps:3};});
+export function getCourse(id='greyhaven',difficulty=0){const base=COURSES.find(c=>c.id===id)||COURSES[0],reverse=difficulty===3,level=Math.min(2,difficulty),anchors=base.anchorsByClass?.[difficulty]||(level===2&&base.expertAnchors?base.expertAnchors:base.anchors),sample=base.routeInterpolation==='linear'?samplePolyline:sampleRoute;let points=sample(anchors,24+level*4);if(reverse&&!base.directedAnchorsByClass)points=[points[0],...points.slice(1).reverse()];
+ let route=sample(anchors,384);if(reverse&&!base.directedAnchorsByClass)route=[route[0],...route.slice(1).reverse()];const course={...base,anchors,resistance:base.resistanceByClass?.[difficulty]||base.resistance||[],closedAreas:level===2?base.expertClosedAreas||[]:[],requiredPassage:level===2&&!!base.expertAnchors,difficulty,reverse,route,gates:buildGates(points,level),rocks:(base.obstaclesByClass?.[difficulty]||[...(base.obstacles||[]),...(level?(base.extraObstacles||[]).slice(0,level===1?4:99):[])]).map(o=>({...o})),ramps:(base.raceRampsByClass?.[difficulty]||base.raceRamps||[]).map(r=>({...r,solidBack:true}))};
  if(base.buoysByClass?.[difficulty]){
   const mapped=mappedGates(route,base.buoysByClass[difficulty]);
   if(base.retainRouteControls){const controls=mappedGates(route,(reverse?[...sampleRoute(anchors,24)].slice(1).reverse():sampleRoute(anchors,24).slice(1)).map(p=>({...p,side:0,offset:0,width:23}))).slice(1);course.gates=[mapped[0],...[...mapped.slice(1),...controls.filter(g=>(base.routeControlMinZ===undefined||g.z>base.routeControlMinZ)&&mapped.slice(1).every(b=>Math.hypot(b.x-g.x,b.z-g.z)>20))].sort((a,b)=>a.routeIndex-b.routeIndex)];}
   else course.gates=mapped;
  }
+ if(base.finishGatesByClass?.[difficulty])Object.assign(course.gates[0],base.finishGatesByClass[difficulty]);
  const finishLine=base.finishLinesByClass?.[difficulty]||base.finishLine;
  if(finishLine){const g=course.gates[0],[a,b]=finishLine,dx=b[0]-a[0],dz=b[1]-a[1],length=Math.hypot(dx,dz),direction=reverse?-1:1;g.tx=dz/length*direction;g.tz=-dx/length*direction;g.z=a[1];const sides=[a,b].map(p=>-(p[0]-g.x)*g.tz+(p[1]-g.z)*g.tx);g.spanMin=Math.min(...sides);g.spanMax=Math.max(...sides);course.finishBypass=reverse?0:base.finishBypass;}
  // Navigation obstacles grow with difficulty, but keep a safe central racing line.
  for(let i=3;!CLASSIC_COURSES[id]&&i<course.gates.length;i+=level===2?3:5){const g=course.gates[i],side=i%2?1:-1;course.rocks.push({x:g.x+g.tz*side*(15-level),z:g.z-g.tx*side*(15-level),r:level?1.6:1.1,type:base.theme==='ice'?'ice':base.theme==='lake'?'post':'float'});}
+ if(base.sourceRouteRowsByClass&&base.sourceMetadata){
+  course.sourceBuoyLayout=createSourceBuoyLayout({rows:base.sourceRouteRowsByClass[difficulty],courseIndex:base.sourceMetadata.nativeCourseIndex,scale:base.sourceMetadata.nativeScale,reverse});
+  course.sourceVisibleGateIndices=Object.fromEntries(course.sourceBuoyLayout.nodes.filter(n=>n.enabled).map(n=>{
+   const index=course.gates.findIndex((g,i)=>n.classification===3?i===0:g.side&&Math.abs(g.bx-n.x)<1e-6&&Math.abs(g.bz-n.z)<1e-6);
+   if(index<0)throw new Error('Source scored node has no display gate: '+id+'/'+difficulty+'/'+n.sourceRow);
+   return [n.sourceRow,index];
+  }));
+  course.sourceBuoyPolicy={human:'source-primary-50ms',ai:'browser-swept',finish:'source-one-sided',lapLegality:'host-lap-counter',missDQ:'host-five-miss'};
+ }
  configurePassage(course);const passageFloor=(x,z)=>course.passage&&course.passage.kind!=='jump-dive'?-5.8+Math.max(0,passageDistance(course.passage,x,z)-course.passage.width-2)*.8:Infinity;const closure=(x,z)=>course.closedAreas.some(area=>polygonDistance(area,x,z)<0)?6:-Infinity;course.ground=(x,z)=>Math.max(closure(x,z),Math.min(terrainHeight(course,x,z),passageFloor(x,z)));if(base.renderGround)course.renderGround=(x,z)=>Math.min(base.renderGround(x,z),passageFloor(x,z));return course;
 }
 export function conditions(course,time,lap=1){const rising=course.id==='tempest'?Math.min(.5,(lap-1)*.20+time*.0005):Math.sin(time*.018)*.035;return {seaLevel:tideLevel(course,time),storm:clamp(course.storm+rising,0,1),fog:course.theme==='lake'?Math.max(.003,.017-time*.00011):course.theme==='ice'?.0035:course.theme==='city'?.002:.0018,night:course.theme==='city'};}

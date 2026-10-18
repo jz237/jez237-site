@@ -1,3 +1,7 @@
+import {sourceStuntInput} from './source-stunt-pilot.js';
+import {createNativeRacePilot} from './native-race-pilot.js';
+import {nativeRecoveryVerificationInput} from './native-recovery-verification.js';
+import {nativePracticeVerificationInput} from './native-practice-verification.js';
 import {wave} from './simulation.js';
 import {aiInput,angleDelta,clamp} from './race-core.js';
 // A full park routine using only helm, throttle, trim and stunt inputs.
@@ -13,7 +17,7 @@ export function parkMasteryInput(state,r){
  else{const p=state.course.checkpoints[section];target={x:p.x+p.tx*5,z:p.z+p.tz*5};desiredSpeed=12;}
  const error=angleDelta(Math.atan2(target.x-r.x-r.vx*.25,target.z-r.z-r.vz*.25)-r.heading);
  const input={throttle:clamp(.53+(desiredSpeed-r.speed)*.12,0,1),steer:clamp(error*2.4-(r.yawVelocity||0)*.12,-1,1),brake:Math.abs(error)>1.15,dampen:true};
- if(h.airborne&&h.vy<0)input.dive=true;
+ if(h.diveRemaining>0||h.airborne&&h.vy<0)input.dive=true;
  const kind=['flip','left','right','flip'][section];if(h.airborne&&(h.y-h.waterHeight>1.5||s.trick)&&Math.abs(s.angle)<6.2)input.trick=s.trick||kind;
  if(!h.airborne&&h.wet>.5&&(s.ringStatus[diveIndex]||along< -22)){
   const done=s.completedTricks;
@@ -25,7 +29,17 @@ export function parkMasteryInput(state,r){
 }
 // Verification issues the same inputs available to a rider. It does not move
 // craft, award scores, or mark objectives complete.
+const nativeVerificationPilots=new WeakMap();
 export function verificationInput(state,r){
+ if(state.nativeHost){
+  if(state.verifyNativeRecovery)return nativeRecoveryVerificationInput(state,r);
+  if(state.course.nativeSceneMode==='practice')return nativePracticeVerificationInput(state,r);
+  let pilots=nativeVerificationPilots.get(state);
+  if(!pilots){pilots=new WeakMap();nativeVerificationPilots.set(state,pilots);}
+  let pilot=pilots.get(r);
+  if(!pilot){pilot=createNativeRacePilot({course:state.course});pilots.set(r,pilot);}
+  return pilot.input(state,r);
+ }
  if(state.verifyFortressRidge&&state.course.id==='citadel'&&!state.course.reverse&&r.lap===1){
   const z=r.z/.8+300;
   if(z<195&&!r.fortressRidge)r.fortressRidge={waitAt:null,done:false};
@@ -47,58 +61,6 @@ export function verificationInput(state,r){
   if(guide?.lap===r.lap&&guide.stage<path.length){const p=path[guide.stage],x=(p[0]-200)*.75,z=(p[1]-240)*.75,anticipation=state.course.reverse?.25:.15,error=angleDelta(Math.atan2(x-r.x-r.vx*anticipation,z-r.z-r.vz*anticipation)-r.heading);
    if(Math.hypot(x-r.x,z-r.z)<2)guide.stage++;
    return {throttle:.32,steer:clamp(error*2.4-(r.yawVelocity||0)*.12,-1,1),brake:Math.abs(error)>1.1,dampen:true};
-  }
- }
-
- if(state.verifySunsetShortcut&&state.course.id==='amber'&&!state.course.reverse&&r.lap===state.laps){
-  if(r.next===state.course.gates.length-4&&r.z<(455-275)*.75&&r.x>(445-245)*.75)r.sunsetShortcut=true;
-  if(r.sunsetShortcut){const x=(410-245)*.75,z=(290-275)*.75,error=angleDelta(Math.atan2(x-r.x-r.vx*.18,z-r.z-r.vz*.18)-r.heading);return {throttle:1,steer:clamp(error*2.4-(r.yawVelocity||0)*.12,-1,1),brake:Math.abs(error)>1.1,dampen:true};}
- }
-
- if(state.verifyPierSurface&&r.lap>1){
-  if(r.next===state.course.gates.findIndex(g=>g.width===110)&&r.pierSurface?.lap!==r.lap)r.pierSurface={lap:r.lap,stage:0};
-  const guide=r.pierSurface,path=state.course.reverse?[[355,580],[310,602],[260,602],[236,590],[236,560],[236,495],[210,470],[170,455]]:[[160,450],[168,484],[236,495],[236,542],[260,580],[310,602],[355,580]];
-  if(guide&&guide.lap===r.lap&&guide.stage<path.length){
-   const point=path[guide.stage],x=(point[0]-210)*.8,z=(point[1]-325)*.8;
-   if(guide.stage===(state.course.reverse?4:2)&&Math.hypot(x-r.x,z-r.z)<(state.course.reverse?5:3)){
-    const samples=state.course.reverse?[1.5,2,2.5,3,3.5]:[2,2.5,3,3.5,4];
-    const clear=samples.every(t=>wave(x,(526-325)*.8,state.time+t,state.weather.storm)<-.7);
-    if(!clear)return {throttle:0,brake:true,dampen:true};
-   }
-   if(Math.hypot(x-r.x,z-r.z)<(guide.stage===(state.course.reverse?4:2)?2:5))guide.stage++;
-   const error=angleDelta(Math.atan2(x-r.x-r.vx*.15,z-r.z-r.vz*.15)-r.heading);
-   const desiredSpeed=state.course.reverse&&guide.stage>=4&&guide.stage<=5?12:guide.stage===2?7:guide.stage===3?10:14;
-   return {throttle:state.course.reverse&&guide.stage<4?.65:clamp(.53+(desiredSpeed-r.speed)*.16,0,1),steer:clamp(error*2.4-(r.yawVelocity||0)*.12,-1,1),brake:Math.abs(error)>1.1||(!state.course.reverse||guide.stage>=4)&&r.speed>desiredSpeed+2,dampen:true};
-  }
- }
-
- if(state.verifyPierDive&&r.pierDiveStage!==5){
-  const a=state.course.ramps.find(a=>a.id===151);
-  if(a&&(r.next===state.course.gates.findIndex(g=>g.width===110)&&!state.course.reverse&&r.lap===1||r.pierDiveStage!==undefined)){
-   r.pierDiveStage??=0;const stage=r.pierDiveStage,h=r.hydro;
-   // Line up before the ramp, then aim between the two rows of pier supports.
-   const path=[{x:a.x-a.tx*25,z:a.z-a.tz*25},{x:(242-210)*.8,z:(540-325)*.8},{x:(260-210)*.8,z:(580-325)*.8},{x:(310-210)*.8,z:(602-325)*.8},{x:(355-210)*.8,z:(580-325)*.8}];
-   const target=path[stage];if(Math.hypot(target.x-r.x,target.z-r.z)<(stage===0?3:6)){r.pierDiveStage++;if(r.pierDiveStage===5)return aiInput(state,r);}
-   const error=angleDelta(Math.atan2(target.x-r.x-r.vx*.15,target.z-r.z-r.vz*.15)-r.heading);
-   const desiredSpeed=stage===0?12:stage===1?24:25;
-   return {throttle:clamp(.53+(desiredSpeed-r.speed)*.16,0,1),steer:clamp(error*2.4-(r.yawVelocity||0)*.12,-1,1),brake:Math.abs(error)>1.1||r.speed>desiredSpeed+2,dampen:true,dive:stage===1&&h.airborne&&h.vy<0&&h.y-h.waterHeight<.6};
-  }
- }
-
- if(state.verifyShipJump&&r.shipJumpStage!==2){
-  if(r.hydro.onRamp)r.shipJumpLanding=r.hydro.landingId;
-  if(r.shipJumpLanding!==undefined&&r.hydro.landingId>r.shipJumpLanding){r.shipJumpStage=2;return aiInput(state,r);}
-  const a=state.course.ramps.find(a=>a.id===150);
-  // Stay on the race line until the first two buoys are cleared and the
-  // northern island tip has been rounded. Distance alone cuts across land.
-  if(a&&(r.next===3&&r.x<72&&r.z< -180||r.shipJumpStage!==undefined)){
-   r.shipJumpStage??=0;
-   // Cross the lower forward hull on a westward takeoff line, avoiding the cabin.
-   const heading=Math.atan2(a.tx,a.tz)-(r.shipJumpStage===1?.4:0),along=r.shipJumpStage===0?-30:60,x=a.x+Math.sin(heading)*along,z=a.z+Math.cos(heading)*along;
-   if(r.shipJumpStage===0&&Math.hypot(r.x-x,r.z-z)<3)r.shipJumpStage=1;
-   const error=angleDelta(Math.atan2(x-r.x-r.vx*.15,z-r.z-r.vz*.15)-r.heading);
-   // Keep the inspection approach below the new full-throttle top end.
-   return {throttle:.95,steer:clamp(error*2.4-(r.yawVelocity||0)*.12,-1,1),brake:Math.abs(error)>1.1,dampen:true};
   }
  }
 
@@ -135,15 +97,17 @@ function authoredParkInput(state,r){
  const along=(r.x-q.x)*q.tx+(r.z-q.z)*q.tz;
  if(q.kind==='ramp'&&along> -10&&along<8)driver.activeRamp=q.rampIndex;
  if(along>(q.kind==='ramp'?q.length/2:1)&&driver.index<targets.length-1){driver.index++;q=targets[driver.index];}
- const aim=q.kind==='ramp'?q.length/2+5:5,error=angleDelta(Math.atan2(q.x+q.tx*aim-r.x-r.vx*.15,q.z+q.tz*aim-r.z-r.vz*.15)-r.heading),desired=q.kind==='ramp'?12:13;
+ const aim=q.kind==='ramp'?q.length/2+5:5,error=angleDelta(Math.atan2(q.x+q.tx*aim-r.x-r.vx*.15,q.z+q.tz*aim-r.z-r.vz*.15)-r.heading),desired=q.kind==='ramp'?(q.rampIndex===3?18:12):driver.activeRamp===3&&(h.airborne||h.diveRemaining>0)?18:13;
  const input={throttle:clamp(.53+(desired-r.speed)*.15,0,1),steer:clamp(error*2.5-(r.yawVelocity||0)*.15,-1,1),brake:Math.abs(error)>1.2,dampen:true,lean:q.kind==='ramp'?-1:0};
  if(h.airborne&&driver.activeRamp>=0){const kind=['flip','left','right','flip'][driver.activeRamp];if(h.y-h.waterHeight>1.2||s.trick){if(Math.abs(s.angle)<6.2)input.trick=s.trick||kind;}if(driver.activeRamp===3&&h.vy<0)input.dive=true;}
+ if(driver.activeRamp===3&&h.diveRemaining>0)input.dive=true;
  if(!h.airborne&&h.wet>.5){const done=s.completedTricks;if(!done.somersault)input.trick=s.pose==='stand'&&s.poseTime>1?'somersault':s.pose==='somersault'?'':'stand';else if(!done.handstand)input.trick=s.pose==='handstand'&&s.poseTime>2?'':'handstand';else if(!done.backwards)input.trick=s.pose==='backwards'&&s.poseTime>2?'':'backwards';}
  return input;
 }
 
 // Authored stunt routes have different object counts and spacing per venue.
 function authoredStuntInput(state,r){
+ if(state.course.stuntLayout.driver==='source-layout')return sourceStuntInput(state,r);
  if(state.phase==='countdown')return {};
  const targets=state.verifyStuntOuter?state.course.stuntLayout.outerVerificationTargets:state.course.stuntLayout.verificationTargets,v=r.authoredStuntDriver||={index:0},h=r.hydro,s=r.stunt;
  if(h.onRamp){v.rampJump=true;v.rampLanding=h.landingId;v.diveJump=!!state.course.ramps.find(a=>a.diveJump&&Math.hypot(a.x-r.x,a.z-r.z)<a.length)?.diveJump;}else if(h.landingId>v.rampLanding)v.rampJump=v.diveJump=false;
@@ -156,13 +120,14 @@ function authoredStuntInput(state,r){
  // Keep the aim beyond velocity anticipation until the target plane is crossed.
  // A fixed 1.3 m lookahead fell behind a moving ski and induced a last-metre
  // brake/steer oscillation, particularly across closely spaced dive rings.
- const aim=q.kind==='ramp'?q.length/2+4:city?Math.max(3.4,r.speed*.18):1.3,error=angleDelta(Math.atan2(q.x+q.tx*aim-r.x-r.vx*.12,q.z+q.tz*aim-r.z-r.vz*.12)-r.heading);
+ const aim=q.kind==='ramp'?q.length/2+4:city?Math.max(3.4,r.speed*.18):state.course.id==='port'?2.5:1.3,error=angleDelta(Math.atan2(q.x+q.tx*aim-r.x-r.vx*.12,q.z+q.tz*aim-r.z-r.vz*.12)-r.heading);
  // Settle heading and yaw while still on water: a steering correction after
  // leaving a ramp cannot redirect the airborne hull onto the next ring.
  const rampMisaligned=q.kind==='ramp'&&!h.onRamp&&!h.airborne&&(Math.abs(angleDelta(Math.atan2(q.tx,q.tz)-r.heading))>(city?.07:.2)||Math.abs(r.yawVelocity||0)>(city?.16:.4));
  const desired=rampMisaligned?Math.min(q.speed??13,7):q.speed??13;
- const input={throttle:clamp(.53+(desired-r.speed)*.16,0,1),steer:clamp(error*(city?2.2:2.5)-(r.yawVelocity||0)*(city?.55:.15),-1,1),brake:Math.abs(error)>(city?.85:1.1)||r.speed>desired+2,dampen:true,lean:q.kind==='ramp'?-1:0};
- if(v.diveJump&&h.airborne&&h.vy<0&&h.y-h.waterHeight<.45)input.dive=true;
+ const input={throttle:clamp(.53+(desired-r.speed)*.16,0,1),steer:clamp(error*(city?2.2:2.5)-(r.yawVelocity||0)*(city?.55:.15),-1,1),brake:Math.abs(error)>(city?.85:1.1)||r.speed>desired+2,dampen:true,lean:q.kind==='ramp'?(q.diveJump?1:-1):0};
+ if(v.diveJump&&h.airborne&&h.vy<0&&h.y-h.waterHeight<1.2){input.dive=true;v.holdingDive=true;}
+ if(v.holdingDive&&h.diveRemaining>0&&q.kind==='dive')input.dive=true;else if(!input.dive)v.holdingDive=false;
  const flightRemaining=(h.vy+Math.sqrt(h.vy*h.vy+19.62*Math.max(0,h.y-h.waterHeight)))/9.81;
  if(v.rampJump&&!v.diveJump&&h.airborne&&(!city||s.trick||flightRemaining>1.15)&&(h.y-h.waterHeight>1.2||s.trick)&&Math.abs(s.angle)<6.2)input.trick=s.trick||'flip';
  else if(!h.airborne&&h.wet>.5&&q.kind!=='ramp')input.trick=s.pose==='handstand'&&s.poseTime>2?'':'handstand';
