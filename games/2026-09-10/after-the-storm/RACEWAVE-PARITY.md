@@ -19,6 +19,24 @@ The online build identifier changes to2.38.0 so peers must use the same release.
 The detailed checkpoint evidence and limitations below apply to this release;
 their historical “Unreleased” headings describe work since2.37.0.
 
+## Unpublished — shared object effects and presentation
+
+The complete-object bridge can now own ice fragments and splash pools while
+reading object visibility/age/positions directly from canonical object words.
+Ice break events preserve their full source-array index even among ramps,
+rings and floating objects. Shared-seed callbacks reuse the existing verified
+fragment/splash routines: one16-draw burst per break, fragments after6E0F4,
+and the separate splash phase after roller/spray work. Object activity holds
+fragments; splashes continue on reached frames. Browser pause holds both.
+
+Stable object IDs and fragment/splash generation IDs produce existing replay
+and second-player display snapshots without a second mutable object array.
+Physical two-rider tests compare full object/body/impact/random/effect histories
+at30/60/144 render updates, validate held/resumed phases and seed sequencing,
+and verify that changing a snapshot cannot change simulation state. Duplicate
+effect phases and incomplete preceding frames reject. The browser host still
+uses its existing ice/floating owners until startup/contact integration lands.
+
 ## Unpublished — ordinary course object resources
 
 Readonly object resources now cover ordinary modes0/1 as well as Stunt11 for

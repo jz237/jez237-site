@@ -4,11 +4,14 @@ import {createNativeGenericObjectWorld} from '../native-generic-object-world.js'
 import {createNativeRaceAdapter} from '../native-race-adapter.js';
 import {createNativeRaceWorld,stepNativeRaceWorld} from '../native-race-world.js';
 import {createRaceWater} from '../race-water.js';
-import {createNativeRaceState,nativeRaceStateSnapshot,prepareNativeRaceObjectLoading,prepareNativeRaceObjectInitialization} from '../native-race-state.js';
+import {createNativeRaceState,nativeRaceStateSnapshot,prepareNativeRaceObjectLoading,prepareNativeRaceObjectInitialization,prepareNativeRaceStateOperations} from '../native-race-state.js';
 import {nativeStuntObjectResources} from '../native-stunt-object-resources.js';
 import {nativeSineTableWords} from '../native-math-tables.js';
+import {createNativeIceFragments,spawnNativeIceFragments,stepNativeIceFragments} from '../native-ice-fragments.js';
+import {createNativeIceSplashes,queueNativeIceSplash,stepNativeIceSplashes} from '../native-ice-splashes.js';
+import {captureNativeIcePresentation} from '../native-ice-presentation.js';
 
-function make({near=false,activity624=-1,courseIndex=1}={}){
+function make({near=false,activity624=-1,courseIndex=1,effects=false}={}){
  const adapters=Array.from({length:2},()=>createNativeRaceAdapter({position:{x:near?.75:0,y:0,z:0}}));
  const water=createRaceWater({crafts:adapters.map(a=>({x:a.hull.center.x,y:a.hull.center.y,z:a.hull.center.z,sourceForwardXZ:[a.hull.frame.forward.x,a.hull.frame.forward.z]})),baseAmplitudeNative:20,initialNoise:false});
  const resource=nativeStuntObjectResources({courseIndex,players:1});
@@ -16,10 +19,13 @@ function make({near=false,activity624=-1,courseIndex=1}={}){
  let current=createNativeRaceState({raceWords1f94:Array(1693).fill(0),hudWords7788:Array(1442).fill(0),objectWordsC940:Array(3136).fill(0),
   collisionPlaneWordsFd78:Array(512).fill(0),packedObjectMatrixWords0cd0:Array(1024).fill(0),
   fixedSphereWordsB138,fixedSphereGridWords1ce8:Array(166).fill(0x12340000),
-  scene:{courseIndex,players:1,difficulty:2,mode620:11,objectCountFa40:0,ringCountB134:0,fixedSphereCountC938:2,forceStunt824c:0,rampFilterOverride8254:0,reverseDab68:0,alternate8250:0,activity624,simulation648:0}});
+  scene:{courseIndex,players:1,difficulty:2,mode620:11,objectCountFa40:0,ringCountB134:0,fixedSphereCountC938:2,forceStunt824c:0,rampFilterOverride8254:0,reverseDab68:0,alternate8250:0,activity624,simulation648:0,seed6f00:65535}});
  current=prepareNativeRaceObjectLoading(current,{rampRows:[[4000,4000,0,0,0]],ringRows:[[3000,64,3000,0,0,90]],genericRows:[[near?0:1200,0,near?0:1200,8,0],[near?1:1800,0,near?0:1800,9,0]]}).state;
  current=prepareNativeRaceObjectInitialization(current,{sineTableWords4350:nativeSineTableWords(),planeTemplatesByAddress:resource.planeTemplatesByAddress}).state;
- const fragments=[],hits=[[],[]],objects=createNativeGenericObjectWorld({water,readRaceState:()=>current,commitRaceState:s=>current=s,onFragment:e=>fragments.push(e)});
+ const draws=[],saveSeed=(kind,result)=>{draws.push({kind,seed:result.seed6f00,draws:result.randomDraws});current=prepareNativeRaceStateOperations(current,[{kind:'sourceHalfwordWrite',field:'seed6f00',value:result.seed6f00}]).state;return result;};
+ const fragments=[],hits=[[],[]],objects=createNativeGenericObjectWorld({water,readRaceState:()=>current,commitRaceState:s=>current=s,onFragment:e=>fragments.push(e),objectIds:['ramp','ring','floating','ice'],
+  ...(effects?{fragmentBurst:(pool,event)=>saveSeed('fragment',spawnNativeIceFragments(pool,{...event,seed6f00:current.scene.seed6f00})),
+   splashAdvance:pool=>saveSeed('splash',stepNativeIceSplashes(pool,current.scene.seed6f00))}:{})});
  adapters.forEach((a,i)=>{a.contacts={primarySpheres:(h,c)=>{const r=objects.contact(h,c);hits[i].push(...r.contacts);}};if(near)for(const p of a.hull.points)p.velocity.x=-30;});
  const motion=[],transforms=[];
  const world=createNativeRaceWorld({adapters,water,humanIndices:[0,1],craftContacts:false,afterFrame:(w,c)=>{
@@ -28,8 +34,10 @@ function make({near=false,activity624=-1,courseIndex=1}={}){
   // and motion. The bridge must read fresh state rather than cache a copy.
   const changed=nativeRaceStateSnapshot(current);changed.raceWords1f94[0]=c.logicalFrame;current=createNativeRaceState(changed);
   motion.push(objects.afterFrame(w,c));transforms.push(objects.updateTransforms(w,c,{sineTableWords4350:nativeSineTableWords(),planeTemplatesByAddress:resource.planeTemplatesByAddress}));
+  objects.afterEffects(w,c);
  }});
- return {adapters,water,world,objects,fragments,hits,motion,transforms,state:()=>current};
+ return {adapters,water,world,objects,fragments,hits,motion,transforms,draws,state:()=>current,
+  setActivity:v=>current=prepareNativeRaceStateOperations(current,[{kind:'sourceHalfwordWrite',field:'activity624',value:v&65535}]).state};
 }
 
 test('two physical riders share mixed object contacts, one ice break and later recoil-driven motion',()=>{
@@ -83,4 +91,42 @@ test('completed shared water reaches Southern fixed spheres before transforms an
    if(reached)assert.equal(q.transforms.at(-1).applied,true);
   }
  }
+});
+
+test('shared mixed objects produce one canonical-seed burst and independent splash phase with read-only presentation',()=>{
+ const q=make({near:true,activity624:0,effects:true}),seed=q.state().scene.seed6f00;
+ stepNativeRaceWorld(q.world,.01,[{},{}]);
+ assert.equal(q.objects.breakEvents().length,1);assert.equal(q.fragments.length,1);
+ const event=q.objects.breakEvents()[0];assert.equal(event.sourceIndex,3);assert.equal(event.id,'ice');
+ const burst=spawnNativeIceFragments(createNativeIceFragments(),{...event,seed6f00:seed}),queued=queueNativeIceSplash(createNativeIceSplashes(),burst.splashPositionNative);
+ assert.deepEqual(q.objects.fragmentSnapshot(),burst.state);assert.deepEqual(q.objects.splashSnapshot(),queued);
+ assert.equal(q.state().scene.seed6f00,burst.seed6f00);assert.deepEqual(q.draws,[{kind:'fragment',seed:burst.seed6f00,draws:16}]);
+ assert.throws(()=>q.objects.afterEffects(q.world,{logicalFrame:0,step:.05}),/completed transform/);
+ const display=q.objects.presentationSnapshot();assert.equal(display.objects.length,1);assert.equal(display.objects[0].id,'ice');assert.equal(display.objects[0].visible,true);
+ assert.deepEqual(display.fragments.filter(f=>f.active).map(f=>f.generation),[1,2,3,4,5,6,7,8]);
+ assert.deepEqual(captureNativeIcePresentation(display),display);
+ display.objects[0].position.x=98765;display.fragments[0].position.x=98765;
+ assert.notEqual(q.objects.presentationSnapshot().objects[0].position.x,98765);assert.notEqual(q.objects.presentationSnapshot().fragments[0].position.x,98765);
+ const first=stepNativeIceSplashes(queued,burst.seed6f00);stepNativeRaceWorld(q.world,.04,[{},{}]);
+ assert.deepEqual(q.objects.fragmentSnapshot(),burst.state,'activity holds fragments');assert.deepEqual(q.objects.splashSnapshot(),first.state);
+ assert.equal(q.state().scene.seed6f00,first.seed6f00);assert.equal(q.objects.presentationSnapshot().splashes[0].generation,1);
+ assert.equal(q.objects.presentationSnapshot().objects[0].visible,true);
+ q.setActivity(-1);const second=stepNativeIceSplashes(first.state,first.seed6f00);stepNativeRaceWorld(q.world,.05,[{},{}]);
+ assert.deepEqual(q.objects.fragmentSnapshot(),stepNativeIceFragments(burst.state));assert.deepEqual(q.objects.splashSnapshot(),second.state);
+ assert.equal(q.state().scene.seed6f00,second.seed6f00);assert.equal(q.objects.presentationSnapshot().objects[0].visible,false);
+ assert.equal(q.objects.snapshot()[3].age,1);assert.equal(q.objects.diagnostics().effectsFrames,2);
+ const before={state:q.state(),fragments:q.objects.fragmentSnapshot(),splashes:q.objects.splashSnapshot(),display:q.objects.presentationSnapshot(),draws:q.draws.slice()};
+ stepNativeRaceWorld(q.world,1,[{},{}],{active:false});
+ assert.deepEqual({state:q.state(),fragments:q.objects.fragmentSnapshot(),splashes:q.objects.splashSnapshot(),display:q.objects.presentationSnapshot(),draws:q.draws},before);
+ assert.throws(()=>q.objects.afterEffects(q.world,{logicalFrame:q.world.frames,step:.05}),/once/);
+});
+
+test('mixed contact, object, fragment, splash and random histories match at30,60 and144 render updates',()=>{
+ const runs=[];
+ for(const hz of [30,60,144]){
+  const q=make({near:true,effects:true});for(let i=0;i<hz;i++)stepNativeRaceWorld(q.world,1/hz,[{},{}]);
+  runs.push({state:q.state(),objects:q.objects.snapshot(),events:q.objects.breakEvents(),fragments:q.objects.fragmentSnapshot(),splashes:q.objects.splashSnapshot(),presentation:q.objects.presentationSnapshot(),draws:q.draws,
+   riders:q.adapters.map(a=>({points:a.hull.points,impacts:a.impacts,hitKind:a.objectHitKind16d8}))});
+ }
+ assert.deepEqual(runs[0],runs[1]);assert.deepEqual(runs[1],runs[2]);assert.equal(runs[0].events.length,1);
 });
