@@ -24,6 +24,13 @@ import {prepareNativeAudioLateralMotion} from './native-audio-packet.js';
 
 export const NATIVE_HULL_STEP = .01;
 const INTEGRATION_GAIN = .992;
+//63C88 copies4AC4/4AC8 into body+C once per outer frame. The selected
+// displacement gain is consumed on EACH of the five4B1B4 hull passes.
+// Keep the kernel's existing decimal-coefficient arithmetic convention.
+export function nativeHullIntegrationGain(weed2c50=0){
+  if(!Number.isInteger(weed2c50)||weed2c50 < -2147483648||weed2c50>2147483647)throw new RangeError('weed2c50 must be a signed source word');
+  return weed2c50===0?INTEGRATION_GAIN:.973;
+}
 const CONSTRAINT_GAIN = .1;
 const ZERO = Object.freeze({x:0,y:0,z:0});
 const LOCAL_POINTS = Object.freeze([
@@ -116,7 +123,7 @@ export function createNativeHull({position=ZERO,velocity=ZERO,heading=0,pitch=0,
   const frame={forward:rotatedLocal([0,0,1],heading,pitch,roll),
     up:rotatedLocal([0,1,0],heading,pitch,roll),right:rotatedLocal([1,0,0],heading,pitch,roll)};
   return seedSprayMotion({
-    points,restLengths,frame,scale,rider,computerProfile,
+    points,restLengths,frame,scale,rider,computerProfile,integrationGain:INTEGRATION_GAIN,
     center:mean(points,'position'),velocity:copy(velocity),
     motionVelocity:copy(velocity),motionDirection:normalized(velocity)||vec(),lateralMotionBfc:0,
     remainder:0,ticks:0,simulationTime:0,stepsLast:0
@@ -173,7 +180,7 @@ export function createNativeHullFromStart({prepared,rider=0,scale=.025,computerP
     const value=prepared.yawFrame?.[k];if(!Number.isFinite(value))throw new TypeError('Expected the prepared horizontal frame');yawFrame[k]=value;
   }
   return seedSprayMotion({points,restLengths,frame,center,yawFrame,scale,rider,computerProfile,velocity:vec(),motionVelocity:vec(),motionDirection:vec(),lateralMotionBfc:0,
-    remainder:0,ticks:0,simulationTime:0,stepsLast:0,
+    integrationGain:INTEGRATION_GAIN,remainder:0,ticks:0,simulationTime:0,stepsLast:0,
     initialization:Object.freeze({geometry:'caller-owned local shape',transform:'packed16.16 decode and physical refit',
       source:'physical hull startup only; no actor/target/scene reset claim'})});
 }
@@ -221,9 +228,9 @@ function integrateTick(hull,acceleration,beforeIntegrate){
   if(beforeIntegrate)beforeIntegrate(hull,h);
   const snapshots=points.map(point=>copy(point.position));
   for(const point of points){
-    point.position.x+=INTEGRATION_GAIN*point.velocity.x*h;
-    point.position.y+=INTEGRATION_GAIN*point.velocity.y*h;
-    point.position.z+=INTEGRATION_GAIN*point.velocity.z*h;
+    point.position.x+=hull.integrationGain*point.velocity.x*h;
+    point.position.y+=hull.integrationGain*point.velocity.y*h;
+    point.position.z+=hull.integrationGain*point.velocity.z*h;
   }
   const corrections=points.map(()=>vec());
   // One Jacobi pass: accumulate all 66 pairs before changing any positions.

@@ -219,6 +219,9 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    objectWorldCreated=true;return world;
   },
   scene:()=>({simulationState:current.scene.simulation648,phase650:current.scene.phase650}),
+  //76378 writes this during the preceding79528 judging pass;63C88 reads
+  // that retained per-racer word before the following five hull substeps.
+  riderForceContext:slot=>({weed2c50:word(slot,0x318/4)}),
   inputClock:()=>integer(current.scene.inputTick1960,'shared input clock',0,0xffffffff),
   advanceInputClock(){
    //46DA0 increments1960 after922E4 and display/resource work, including

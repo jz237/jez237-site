@@ -156,7 +156,7 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
       proximityObjectCentersNative:objects?objects.snapshot().map(o=>({x:o.positionNative[0],z:o.positionNative[2]})):ice?ice.state.nodes.map(o=>({x:o.position[0],z:o.position[2]})):(floating?.state.objects??[]).map(o=>({x:F(o.position.x/water.scale),z:F(o.position.z/water.scale)}))},waterField:water.field});
     host.lastAIInput=prepared;return {...prepared.controls,action16f4:prepared.action16f4};
    }}:{}),
-   hullStart,contacts,powerSteps:r.power,sourceState:raceRuntime?()=>({...raceRuntime.scene(),...(sourceSchedule?{sourceTick:raceRuntime.inputClock()}:{}),
+   hullStart,contacts,powerSteps:r.power,sourceState:raceRuntime?()=>({...raceRuntime.scene(),...raceRuntime.riderForceContext(i),...(sourceSchedule?{sourceTick:raceRuntime.inputClock()}:{}),
     catchup:raceRuntime.catchupContext?.(i,host.world.adapters.map(a=>({x:F(a.hull.center.x/a.hull.scale),z:F(a.hull.center.z/a.hull.scale)})))}):sourceStates[i]??(recovery?{simulationState:3}:{actorState:22,simulationState:3}),...bundle,
    ...(recovery?{riderRecovery:{courseDatumNative:()=>water.field.datumNative,raceFinished:()=>r.finishTime!==null,...bundle.initialRiderRecovery}}:{})});
  });

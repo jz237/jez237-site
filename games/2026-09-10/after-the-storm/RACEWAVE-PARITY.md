@@ -6312,3 +6312,21 @@ depth data and matches its worker byte for byte. All391 module hashes across
 four entry pages are refreshed. Nine admitted Stunt scenes do not establish
 full gameplay parity: ordinary native course coverage, original AI and further
 trick/alternate-line validation remain outstanding. Native physics is opt-in.
+
+### Drake Lake weed drag — 2026-10-18
+
+Connected the canonical per-racer weed flag to the native hull's displacement
+gain. The original63C88 selects .992 outside weeds and .973 inside them,
+consumed on each of the five physical substeps. Detection remains owned by
+76378: the following force frame reads its retained flag, without a second
+distance query or an extra modern resistance force. Leaving weeds restores
+ordinary drag. The solver retains its existing decimal-coefficient arithmetic;
+this is not a claim of complete binary32 trajectory equivalence.
+
+A private original-instruction check executes63CE0..63D5C for24 cases covering
+four racer slots, zero, positive and negative flags. All stored coefficient
+bits match and other racer slots remain untouched. Public tests verify
+three-axis analytic drift, five-substep latching and actual canonical flag
+consumption throughout a driven Drake run, including entry and exit. The
+existing sixteen-ring/four-checkpoint Drake route and47 hull/adapter/weed tests
+pass. Rendering resolution and modern physics are unchanged.

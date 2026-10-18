@@ -1,4 +1,4 @@
-import {createNativeHull,createNativeHullFromStart,stepNativeHull,NATIVE_HULL_STEP} from './native-hull.js';
+import {createNativeHull,createNativeHullFromStart,stepNativeHull,NATIVE_HULL_STEP,nativeHullIntegrationGain} from './native-hull.js';
 import {createNativeWaterProfile,createNativeWaterState,applyNativeWaterForces} from './native-water.js';
 import {createNativeRiderProfile,prepareNativeRiderFrame,applyNativeTrimForces,
   applyNativeAuxiliaryYawForces,decideNativeRiderAction,applyNativeManipulationForces} from './native-rider-forces.js';
@@ -174,7 +174,8 @@ function riderActionSnapshot(adapter){
 function sourceSettings(value={}){
   if(!value||typeof value!=='object'||Array.isArray(value))throw new TypeError('sourceState must be an object or frame provider');
   const result={actorState:value.actorState??22,animationFrame:value.animationFrame??0,
-    simulationState:value.simulationState??3,crash:value.crash??false,contactMode:value.contactMode??0};
+    simulationState:value.simulationState??3,crash:value.crash??false,contactMode:value.contactMode??0,
+    weed2c50:integer(value.weed2c50??0,'weed2c50',-2147483648,2147483647)};
   integer(result.actorState,'actorState',-1,255);integer(result.animationFrame,'animationFrame',0,65535);
   integer(result.simulationState,'simulationState',0,3);
   integer(result.contactMode,'contactMode',0,65535);
@@ -455,6 +456,7 @@ function beginFrame(adapter,input,options){
     }
   }
   // Everything that may reject missing trim input precedes these mutations.
+  hull.integrationGain=nativeHullIntegrationGain(source.weed2c50);
   adapter.controlState=sampled.state;adapter.lastControls=forceControls;adapter.actionState=nextAction;
   if(adapter.riderLanding&&decision.landingPending)adapter.riderLanding.landingTicks=-1;
   if(actionHistory)adapter.riderActions.inputHistory=actionHistory;
@@ -463,7 +465,7 @@ function beginFrame(adapter,input,options){
   adapter.frame={iceStabilityNative:nativePreparedIceStability(adapter.rider.riderIndex,source.actorState),startCenter:copy(hull.center),startReference:referencePoint(hull),prepared,
     controls:forceControls,physicalControls,previousContacts,action:decision,actorState:source.actorState,
     simulationState:source.simulationState,animationFrame:source.animationFrame,riderPose:poseProvider,
-    actionHistory,actionSource:capturedActionSource,phase650,catchup};
+    actionHistory,actionSource:capturedActionSource,phase650,catchup,weed2c50:source.weed2c50};
   resetNativeImpacts(adapter.impacts,{simulationState:source.simulationState});
   if(source.simulationState!==0)adapter.contactWindow=contactsZero();
 }
