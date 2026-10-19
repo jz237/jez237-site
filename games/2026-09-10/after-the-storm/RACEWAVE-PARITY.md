@@ -1,6 +1,6 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
-## Unpublished — original wake and spray in live Dolphin Park
+## v2.42.0 — original wake and spray in live Dolphin Park
 
 Live Dolphin Park Free Ride (Normal, Venue conditions) now runs the complete
 original scene-effects owner. AE7C4 starts after the course actors and before
