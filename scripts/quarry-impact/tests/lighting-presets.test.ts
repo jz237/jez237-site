@@ -21,3 +21,9 @@ test('saved choices are validated and random never repeats the previous mood',()
  for(let i=0;i<50;i++){const r=()=>((i*7919)%101)/101;for(const prev of ['midday','afternoon','overcast']as const)assert.notEqual(resolveLighting('random',prev,r),prev);}
  assert.equal(resolveLighting('overcast','overcast'),'overcast');assert.ok(['midday','afternoon','overcast'].includes(resolveLighting('random',null,()=>.999)));
 });
+import {readDemoOptions} from '../src/demo-session';
+test('demo setup keeps a valid lighting override and drops unknown values',()=>{
+ assert.equal(readDemoOptions(JSON.stringify({version:1,field:8,lineup:'mixed',setups:'stock',loop:'stop',camera:'director',laps:1,duration:120,lighting:'overcast'})).lighting,'overcast');
+ assert.equal(readDemoOptions(JSON.stringify({version:1,field:8,lineup:'mixed',setups:'stock',loop:'stop',camera:'director',laps:1,duration:120,lighting:'night'})).lighting,undefined);
+ assert.equal(readDemoOptions(JSON.stringify({version:1,field:8,lineup:'mixed',setups:'stock',loop:'stop',camera:'director',laps:1,duration:120})).lighting,undefined);
+});

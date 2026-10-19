@@ -624,8 +624,8 @@ let staticShadows: StaticQuarryShadows | undefined;
 /** Chosen per event; 'random' never repeats the previous mood. */
 let eventLighting: LightingMood | null = null;
 let clearSky: T.Texture | null = null, overcastSky: T.Texture | null = null;
-function applyEventLighting(fresh: boolean) {
-  if (fresh || !eventLighting) eventLighting = resolveLighting(settings.lighting, eventLighting);
+function applyEventLighting(fresh: boolean, choice = settings.lighting) {
+  if (fresh || !eventLighting) eventLighting = resolveLighting(choice, eventLighting);
   if (!clearSky && scene.background instanceof T.Texture) clearSky = scene.background;
   overcastSky ??= createOvercastSky();
   const preset = applyLighting({ sun: quarry.sun, hemisphere: scene.children.find((o): o is T.HemisphereLight => o instanceof T.HemisphereLight), scene, renderer, skies: { clear: clearSky, overcast: overcastSky } }, eventLighting);
@@ -839,7 +839,7 @@ async function start(watch=demo) {
   bankRun(false);telemetry=null;
   if(watch){activeChallenge=undefined;activeTimeTrial=null;}
   timeTrialOpen=false;timeTrialInvalidReason='';timeTrialResult=null;
-  applyEventLighting(true);
+  applyEventLighting(true, watch ? demoOptions.lighting ?? settings.lighting : settings.lighting);
   demo=watch;demoRestart=0;director.reset();if(watch)director.select(demoOptions.camera);keys.clear();testInput=null;
   wreckHold = 0;
   if(online?.active) {if(online.network.isHost){online.network.start(mode);return true;}return false;}

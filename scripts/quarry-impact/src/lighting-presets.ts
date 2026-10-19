@@ -13,6 +13,7 @@ export const LIGHTING_PRESETS={
 export type LightingMood=keyof typeof LIGHTING_PRESETS;
 export type LightingChoice=LightingMood|'random';
 export const LIGHTING_CHOICES:Record<LightingChoice,string>={midday:'Clear midday',afternoon:'Warm late afternoon',overcast:'Overcast',random:'Vary every event'};
+export const isLightingChoice=(value:unknown):value is LightingChoice=>typeof value==='string'&&Object.hasOwn(LIGHTING_CHOICES,value);
 export const readLighting=(value:unknown):LightingChoice=>typeof value==='string'&&Object.hasOwn(LIGHTING_CHOICES,value)?value as LightingChoice:'midday';
 const MOODS=Object.keys(LIGHTING_PRESETS) as LightingMood[];
 /** Random picks a different mood from the previous event when it can. */

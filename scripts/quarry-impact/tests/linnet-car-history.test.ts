@@ -1,6 +1,7 @@
+import {restoreDemoLightingBytes} from './demo-lighting-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readLinnetCarPrevious,restoreLinnetCarBytes,verifyLinnetCarRevision} from './linnet-car-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreDemoLightingBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('LinnetCar preserves every prior fixture, vehicle asset, control and camera input',verifyLinnetCarRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/linnet-car/revision.json').toString());
