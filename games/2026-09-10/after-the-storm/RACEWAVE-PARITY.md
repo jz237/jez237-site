@@ -1,5 +1,37 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — original wake and spray in live Dolphin Park
+
+Live Dolphin Park Free Ride (Normal, Venue conditions) now runs the complete
+original scene-effects owner. AE7C4 starts after the course actors and before
+computer-racer startup; B2ABC runs where the human spray owner did, after water
+and object motion and before actor motion; B305C follows the actor display.
+The first dolphin occupies the original extra effect slot, so its wake and
+spray come from its own animated pose. It never becomes another rider or audio
+participant. The rider's audio spray levels now come from this owner; across
+400 live frames they match the separate human spray reconstruction exactly,
+which no longer runs in this scene. Other native modes keep that owner.
+
+Fresh browser storage starts from the ROM's loaded effect controls (palette and
+startup latch, exported by a private script); bodies, boundary drift and plane
+queries are the actual completed physical owners. The browser clock stands in
+for osGetTime (time since load at 46.875 MHz); headless runs use the shared
+outer clock, so canonical state stays identical at 30, 60 and 144 Hz.
+High-resolution textures draw the original geometry over the unchanged water.
+Replay holds each completed effect frame without advancing effects or clocks.
+
+Canonical state copies now validate words with tight loops, offsetting the extra
+storage: a live Practice frame costs about the same as v2.41.0 did without
+effects (about 30 ms headless versus 28 ms). Validation: eight new effect-host/live
+tests, ten replay tests, 66 existing actor/effect/state tests, and browser checks
+at full 1440-by-900 resolution covering visible wake ribbons, pause, replay,
+restart, quit and re-entry without console errors. The full suite passes 3,406
+of 3,424 tests; the same 18 older modern/course expectations also fail on
+v2.41.0 and are unrelated to this change. Some wake vertices follow
+the source water plane slightly below the rendered surface and are partly
+hidden there. Other native modes and the remaining actor families still lack
+the full effects owner.
+
 ## v2.41.0 — Dolphin Park and original scene reconstruction
 
 - Normal Dolphin Park Free Ride with Venue conditions now uses the recovered

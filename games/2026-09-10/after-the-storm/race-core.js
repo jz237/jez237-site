@@ -167,12 +167,15 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
   let launchCueSequence=0;
   state.nativeHost=createNativeRaceHost({racers,water:raceWater,course,fixedSphereGrid:sourceSphereGrid,staticGeometry:nativeCourseRuntime.staticContactGeometry,raceRuntime:state.nativeLaunch,
   ...(nativeCourseActors?{courseActors:{...nativeCourseActors,audioContext:()=>{const s=state.nativeContactAudio.snapshot();return {...s.globals,audioMode:s.audioMode};},
-   onEffects:effects=>state.nativeContactAudio.applyEffects(effects)}}:{}),
+   onEffects:effects=>state.nativeContactAudio.applyEffects(effects)},
+   // Headless callers draw nothing, but B2ABC/B305C still own their state.
+   courseEffects:{onDisplay:nativeCourseActors.onEffectsDisplay??(()=>{}),
+    ...(nativeCourseActors.sourceClock!==undefined?{sourceClock:nativeCourseActors.sourceClock}:{})}}:{}),
   ...(championshipLaunch?{}:{tunes:racers.map((_,i)=>effectiveNativeTune(nativeTunes[i],nativeTuneModes[i])),hullStarts:nativeStarts}),
   onAudioFrame:(host,context)=>state.nativeContactAudio.beforeFrame(context.logicalFrame+1),
   onContactFrame:(host,world)=>{
    const input=state.nativeLaunch.contactAudioInputs();
-   const levels=host.spray.levels();
+   const levels=host.sprayLevels();
    state.nativeContactAudio.advance(input.slots.map(slot=>world.adapters[slot]),raceWater.field,{...input,
     sprayLeft1c5c:input.slots.map(slot=>levels[slot].left),sprayRight1c60:input.slots.map(slot=>levels[slot].right)});
   },

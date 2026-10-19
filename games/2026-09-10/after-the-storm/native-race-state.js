@@ -129,9 +129,17 @@ const sceneHalves=new Set(['fieldAb0c','championshipCountAa00','activity624','ev
  'field4970','field72c','fieldA9ac','pressed65a','unlockAb60','freshNameAb6c','variant6f4','variant6f6']);
 function record(v,n){if(!v||typeof v!=='object'||Array.isArray(v))throw new TypeError(`Expected ${n}`);return v;}
 function integer(v,n,min=MIN,max=MAX){if(!Number.isInteger(v)||v<min||v>max)throw new RangeError(`Invalid ${n}`);return v||0;}
+// Every canonical copy validates each owned word; keep these loops tight.
 function words(v,n,count){if(!Array.isArray(v)||v.length!==count)throw new RangeError(`${n} requires${count} unsigned words`);
- return Array.from(v,x=>integer(x,n,0,0xffffffff));}
-function freeze(v){if(v&&typeof v==='object'&&!Object.isFrozen(v)){Object.values(v).forEach(freeze);Object.freeze(v);}return v;}
+ // A fresh packed array, not a slice of a frozen one: V8 keeps it unboxed.
+ const r=[];for(let i=0;i<count;i++){const x=v[i];if(!Number.isInteger(x)||x<0||x>0xffffffff)throw new RangeError(`Invalid ${n}`);r.push(x||0);}return r;}
+function freeze(v){
+ if(v&&typeof v==='object'&&!Object.isFrozen(v)){
+  if(Array.isArray(v)){for(let i=0;i<v.length;i++){const x=v[i];if(x&&typeof x==='object')freeze(x);}}else for(const x of Object.values(v))freeze(x);
+  Object.freeze(v);
+ }
+ return v;
+}
 const ri=a=>(a-RACE_BASE)/4,hi=a=>(a-HUD_BASE)/4;
 function readFloat(v){floatBits.setUint32(0,v,false);return floatBits.getFloat32(0,false);}
 function floatWord(v){if(!Number.isFinite(v)||!Number.isFinite(Math.fround(v)))throw new RangeError('Canonical float write must fit finite float32');

@@ -38,6 +38,7 @@ import {stepNativeIceSplashes} from './native-ice-splashes.js';
 import {prepareNativeSceneGraphicsFrameUpdate} from './native-race-state.js';
 import {createNativeGenericObjectWorld} from './native-generic-object-world.js';
 import {createNativeCourseActorHost} from './native-course-actor-host.js';
+import {createNativeCourseEffectsHost} from './native-course-effects-host.js';
 import {snapshotNativeCourseActorRoutes} from './native-course-actor-routes.js';
 import {prepareNativeRaceStuntUpdate,prepareNativeRaceStuntRingUpdate,prepareNativeRaceStuntAwardDisplay,nativeRaceStuntAwardsView} from './native-race-state.js';
 
@@ -91,7 +92,7 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
  if(players>racers.length)throw new RangeError('Launch requires each human source slot');
  if(recordSession!==undefined&&(initialState||!courseRuntime))throw new RangeError('Record session requires a fresh source launch');
  const retainedRecords=recordSession===undefined?null:copyNativeRecordSession(recordSession);
- let current,resultExit=null,continuationHandoff=null,objectWorldCreated=false,courseActorHostCreated=false;
+ let current,resultExit=null,continuationHandoff=null,objectWorldCreated=false,courseActorHostCreated=false,courseEffectsHostCreated=false;
  // Browser commands are queued edges, consumed once at the source display stage.
  const cameraCommands=Array.from({length:players},()=>[]);
  const extra=racers.map(r=>({logicalTicks:r.sourceBuoys?.logicalTicks??0,missedCheckpoint:r.sourceBuoys?.missedCheckpoint??false,dqLabel:r.dq||''}));
@@ -206,6 +207,13 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
     commitRaceState:next=>{current=createNativeRaceState(next);}});
    courseActorHostCreated=true;return actorHost;
   },
+  createCourseEffectsHost({graphicsBuffers,worldScale}={}){
+   if(!courseRuntime)throw new Error('Scene effects require an initialized source course');
+   if(courseEffectsHostCreated)throw new Error('Scene effects host may be attached only once');
+   const effectsHost=createNativeCourseEffectsHost({graphicsBuffers,worldScale,readRaceState:()=>current,
+    commitRaceState:next=>{current=createNativeRaceState(next);}});
+   courseEffectsHostCreated=true;return effectsHost;
+  },
   createObjectWorld({water,objectIds}){
    if(!runtime.canonicalObjects)throw new Error('Source object world requires initialized source storage');
    if(objectWorldCreated)throw new Error('Source object world may be attached only once');
@@ -247,8 +255,8 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    const g=current.scene;
    return {players:g.players,primaryIndex:g.primaryHumanIndex,secondaryIndex:g.secondaryHumanIndex,
     scene638:g.main638,activity624:g.activity624,frameCounter:g.ambientD4b00,racerCount:g.racerCount,
-    // This runtime admits actual racer hulls; the extra spectator craft has
-    // a separate AE210 branch and is not constructed in these native previews.
+    // Human-only spray owner for scenes without the full effects host. Live
+    // Dolphin Practice uses that host instead, including its extra AE210 slot.
     extraRacer:0,records2f4:racers.map((_,slot)=>word(slot,0x2f4/4))};
   },
   advanceSourceFrameCounter(){

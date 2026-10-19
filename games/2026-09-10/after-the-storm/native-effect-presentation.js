@@ -1,8 +1,10 @@
 import {decodeNativeRaceStartTransform} from './native-race-start-transform.js';
 const BYTES=0xb2f0,b=new DataView(new ArrayBuffer(4));
-const freeze=v=>{if(v&&typeof v==='object'&&!Object.isFrozen(v)){Object.values(v).forEach(freeze);Object.freeze(v);}return v;};
+const freeze=v=>{if(v&&typeof v==='object'&&!Object.isFrozen(v)){if(Array.isArray(v)){for(const x of v)if(x&&typeof x==='object')freeze(x);}else Object.values(v).forEach(freeze);Object.freeze(v);}return v;};
 function integer(v,n,min,max){if(!Number.isInteger(v)||v<min||v>max)throw new RangeError(`Invalid ${n}`);return v;}
-function buffers(value){if(!Array.isArray(value)||value.length!==2)throw new RangeError('Supply both retained scene graphics buffers');return value.map(a=>{if(!Array.isArray(a)||a.length!==BYTES)throw new RangeError('Supply B2F0-byte scene buffer');return a.map(v=>integer(v,'scene buffer byte',0,255));});}
+// Copied every live frame: a fresh packed array keeps the validation cheap.
+function bytes(a){if(!Array.isArray(a)||a.length!==BYTES)throw new RangeError('Supply B2F0-byte scene buffer');const r=[];for(let i=0;i<BYTES;i++){const v=a[i];if(!Number.isInteger(v)||v<0||v>255)throw new RangeError('Invalid scene buffer byte');r.push(v);}return r;}
+function buffers(value){if(!Array.isArray(value)||value.length!==2)throw new RangeError('Supply both retained scene graphics buffers');return value.map(bytes);}
 const float=w=>{b.setUint32(0,w);return b.getFloat32(0);},identity=()=>[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1];
 const rgba=a=>{if(!Array.isArray(a)||a.length!==4)throw new RangeError('Supply four effect color bytes');return a.map(v=>integer(v,'effect color byte',0,255));};
 // Numeric quad at source01051540, drawn by01051580. Original texture artwork
