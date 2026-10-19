@@ -36,7 +36,7 @@ export const marineBehavior:Record<MarineSpecies,MarineBehavior>={
  * with short excursions; retreat: back to it when a larger fish comes close. */
 export type MarineHabits={
  graze?:{chance:number;bites:[number,number];interval:[number,number];stroke:number;range?:number};
- rivals?:MarineSpecies[];display?:'broadside'|'chase'|'spines';
+ rivals?:MarineSpecies[];display?:'broadside'|'chase'|'spines';displayGap?:number;displayCooldown?:[number,number];
  sails?:boolean;labriform?:boolean;home?:number;retreat?:boolean;camouflage?:boolean;cocoon?:boolean;
 };
 export const marineHabits:Partial<Record<MarineSpecies,MarineHabits>>={
@@ -44,7 +44,7 @@ export const marineHabits:Partial<Record<MarineSpecies,MarineHabits>>={
  // Bristle-toothed: nearly constant, rapid scraping of film from rock.
  strigosus:{graze:{chance:.88,bites:[7,13],interval:[.22,.42],stroke:.25},rivals:['tang','rostratum','strigosus'],display:'broadside',sails:true,labriform:true},
  // Algae grazer; threatened, it raises venomous spines toward the intruder and darkens.
- vulpinus:{graze:{chance:.55,bites:[3,6],interval:[.7,1.4],stroke:.3},rivals:['tang','rostratum','strigosus','vulpinus'],display:'spines',sails:true,labriform:true,camouflage:true},
+ vulpinus:{graze:{chance:.55,bites:[3,6],interval:[.7,1.4],stroke:.3},rivals:['tang','rostratum','strigosus','vulpinus'],display:'spines',displayGap:.35,displayCooldown:[30,50],sails:true,labriform:true,camouflage:true},
  // Dwarf angels graze around their own rockwork and spar with other Centropyge.
  bispinosa:{graze:{chance:.72,bites:[2,5],interval:[.45,.9],stroke:.35,range:1.5},rivals:['bispinosa','loricula'],display:'chase',labriform:true,home:1.6,retreat:true},
  loricula:{graze:{chance:.72,bites:[2,5],interval:[.45,.9],stroke:.35,range:1.5},rivals:['bispinosa','loricula'],display:'chase',labriform:true,home:1.6,retreat:true},

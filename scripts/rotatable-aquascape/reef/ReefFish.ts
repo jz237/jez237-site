@@ -13,6 +13,8 @@ const descriptions:Record<Species,string>={tang:'A laterally compressed body let
 const specs:Record<Species,{h:number;w:number;size:number;color:string}>={tang:{h:.32,w:.095,size:.83,color:'#285deb'},rostratum:{h:.36,w:.08,size:.84,color:'#1c1916'},strigosus:{h:.34,w:.085,size:.68,color:'#4b3a33'},vulpinus:{h:.36,w:.09,size:.8,color:'#f4d21a'},bispinosa:{h:.36,w:.1,size:.42,color:'#33287a'},loricula:{h:.36,w:.1,size:.42,color:'#f2441c'},hexataenia:{h:.2,w:.08,size:.34,color:'#7a49c9'},cinctus:{h:.16,w:.1,size:.44,color:'#f1cf22'},semilarvatus:{h:.35,w:.09,size:.72,color:'#ffd800'},clown:{h:.21,w:.12,size:.4664,color:'#f68210'},anthias:{h:.16,w:.075,size:.47,color:'#f8783c'},chromis:{h:.19,w:.085,size:.41,color:'#59bde0'},gramma:{h:.16,w:.07,size:.49,color:'#b951df'},goby:{h:.19,w:.133,size:.59,color:'#ef7623'}};
 const v=(x:number,y:number,z=0)=>new T.Vector3(x,y,z);
 const UP=v(0,1,0);
+// The watchman stands on its splayed pelvic fins: their reach sets its stance.
+const footReach=((metadata as Record<string,{footDepth?:number}>).cinctus?.footDepth??.14)*.85;
 const large=(s:Species)=>s==='tang'||s==='rostratum'||s==='semilarvatus'||s==='strigosus'||s==='vulpinus';
 // Shared, lazily built pieces for the watchman goby burrow and wrasse cocoon.
 let burrowParts:{mouth:T.MeshBasicMaterial;pebble:T.BufferGeometry;rock:T.MeshStandardMaterial[]}|null=null,cocoonShape:T.SphereGeometry|null=null;
@@ -27,7 +29,10 @@ function camouflageShader(shader:{uniforms:Record<string,unknown>;fragmentShader
 `+shader.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
   {vec2 q=vMapUv*vec2(30.,20.);float n=.55*camoNoise(q)+.3*camoNoise(q*2.13+7.1)+.15*camoNoise(q*4.7+3.3);
    float pale=smoothstep(.55,.72,n),lum=dot(diffuseColor.rgb,vec3(.3,.55,.15));
-   vec3 camo=mix(vec3(.15,.11,.07),vec3(.46,.41,.31),pale)*mix(.22,1.,smoothstep(.04,.32,lum));
+   // Fading in or out the fish only dulls and darkens evenly; the pale
+   // reticulation appears near full strength, so partial states are not blotchy.
+   float shade=mix(.22,1.,smoothstep(.04,.32,lum));
+   vec3 camo=mix(vec3(.15,.11,.07),mix(vec3(.15,.11,.07),vec3(.46,.41,.31),pale),smoothstep(.55,.95,mottle))*shade;
    diffuseColor.rgb=mix(diffuseColor.rgb,camo,mottle);}`);
 }
 /** Established display stocking; pages may extend it with gallery-only species. */
@@ -112,7 +117,7 @@ export class ReefFish{
      }
     }});
     const size=specs[s].size*(.83+Math.random()*.17);group.scale.setScalar(size);group.userData.note={title:names[s],description:descriptions[s]};this.scene.add(group);this.notes.push(group);
-    let position=release?release.clone():this.destination(s,i);const radius=size*(s==='goby'?.87:s==='cinctus'?.36:large(s)?.4:.31),clearance=s==='goby'?size*.20:s==='cinctus'?size*.12:radius;if(!release)for(let attempt=0;attempt<500;attempt++){if(this.free(position,radius,clearance)&&this.fish.every(o=>position.distanceTo(o.position)>radius+o.radius+.06))break;position=this.destination(s,i);}
+    let position=release?release.clone():this.destination(s,i);const radius=size*(s==='goby'?.87:s==='cinctus'?.36:large(s)?.4:.31),clearance=s==='goby'?size*.20:s==='cinctus'?size*footReach:radius;if(!release)for(let attempt=0;attempt<500;attempt++){if(this.free(position,radius,clearance)&&this.fish.every(o=>position.distanceTo(o.position)>radius+o.radius+.06))break;position=this.destination(s,i);}
     if(added&&!(this.free(position,radius,clearance)&&this.fish.every(o=>position.distanceTo(o.position)>radius+o.radius+.06))){group.removeFromParent();this.notes.splice(this.notes.indexOf(group),1);return;}
     const fish:Fish={group,species:s,finFold,mottle,cocoon:null,burrow:null,hidden:false,homeYaw:0,look:0,graze:null,rival:null,displayUntil:0,chaseUntil:0,displayCooldown:6,position,velocity:v(0,0,0),goal:position.clone(),radius,clearance,home:position.clone(),gobyCycle:0,pecks:0,yaw:Math.random()*6.28,yawVelocity:0,pitch:0,clock,effort,waveGain,turnBend,mouthOpening,gillOpening,respiration:Math.random()*Math.PI*2,until:0,phase:Math.random()*6.28,pectoral:group.children.filter(o=>o.name==='pectoral') as T.Group[],mouth:group.getObjectByName('mouth') as T.Group,eyes:group.getObjectByName('eyes') as T.Group,mode:'exploring',progressPosition:position.clone(),progressAt:0,blockedTime:0,recoverUntil:0,hostLeg:i%3,hostHold:0,hostVisits:0,individuality:.88+Math.random()*.24,drive:Math.random(),strokeUntil:Math.random()*3,coasting:false,tailRest:1,feedingUntil:0,energy:.72+Math.random()*.25,hunger:.55+Math.random()*.3,memory:null,shelter:position.clone(),social:v(0,0,0),holdUntil:0,food:null};group.position.copy(position);this.fish.push(fish);
     // A released fish keeps its habitat: it swims down to that home rather than
@@ -155,7 +160,7 @@ export class ReefFish{
  count(s:Species){return this.fish.reduce((n,f)=>n+(f.species===s?1:0),0);}
  /** The nearest tang close enough to provoke a display, measured between bodies. */
  private rivalNear(f:Fish){
-  const rivals=marineHabits[f.species]?.rivals??[];let rival:Fish|null=null,best=.7;
+  const habit=marineHabits[f.species],rivals=habit?.rivals??[];let rival:Fish|null=null,best=habit?.displayGap??.7;
   for(const o of this.fish)if(o!==f&&!o.hidden&&rivals.includes(o.species)){const gap=o.position.distanceTo(f.position)-o.radius-f.radius;if(gap<best){best=gap;rival=o;}}
   return rival;
  }
@@ -176,12 +181,12 @@ export class ReefFish{
   for(let j=0;j<250;j++){
    let p:T.Vector3;
    if(s==='goby'){const x=(Math.random()-.5)*7.5,z=.9+Math.random()*.7;p=v(x,sandHeight(x,z)+.23,z);}
-   else if(s==='cinctus'){const x=(Math.random()-.5)*7.2,z=.5+Math.random()*1.1;p=v(x,sandHeight(x,z)+.08,z);}
+   else if(s==='cinctus'){const x=(Math.random()-.5)*7.2,z=.5+Math.random()*1.1;p=v(x,sandHeight(x,z)+specs.cinctus.size*footReach+.012,z);}
    else if(s==='clown')p=this.hosts[0].clone().add(v((Math.random()-.5)*1.9,.15+Math.random()*1.15,(Math.random()-.3)*1.1));
    else if(s==='anthias')p=v(-2.2+(Math.random()-.5)*3,3.55+Math.random()*1.35,(Math.random()-.5)*3);
    else if(s==='chromis')p=v(2.8+(Math.random()-.5)*2.5,3.65+Math.random()*1.25,(Math.random()-.5)*3);
    else p=v((Math.random()-.5)*8.5,.8+Math.random()*3.6,(Math.random()-.5)*3.6);
-   if(this.free(p,s==='goby'?.45:s==='cinctus'?.2:large(s)?.36:.2,s==='goby'?.154:s==='cinctus'?.053:large(s)?.36:.2))return p;
+   if(this.free(p,s==='goby'?.45:s==='cinctus'?.2:large(s)?.36:.2,s==='goby'?.154:s==='cinctus'?specs.cinctus.size*footReach:large(s)?.36:.2))return p;
   }
   return v((index%7-3)*.5,4.8,1.3);
  }
@@ -232,7 +237,10 @@ export class ReefFish{
    const site=previousGraze&&previousGraze.shifts>0?this.grazeSite(f,previousGraze):Math.random()<habit.graze.chance?this.grazeSite(f):undefined;
    if(site){f.graze=site;chosen=site.stand.clone();}
   }
-  if(!recover){
+  // A territorial fish well outside its range heads straight back to cover,
+  // including after a stall, rather than wandering on from wherever it stopped.
+  if(habit?.home&&!f.graze&&f.position.distanceTo(f.shelter)>habit.home*1.3&&this.clearSegment(f.position,f.shelter,f.radius))chosen=f.shelter.clone();
+  if(!recover&&!chosen){
    if(this.isNight&&(f.species==='tang'||f.species==='rostratum'||f.species==='strigosus'||f.species==='vulpinus'||f.species==='anthias'||f.species==='chromis')){
     if(this.clearSegment(f.position,f.shelter,f.radius))chosen=f.shelter.clone();
     else{chosen=this.reefPatch(f,3.4);if(chosen)f.shelter.copy(chosen);}
@@ -339,7 +347,7 @@ export class ReefFish{
    if(display&&!target&&!night&&now>=f.recoverUntil&&!f.rival&&now>f.displayCooldown){
     const rival=this.rivalNear(f);
     if(rival){
-     f.rival=rival;f.displayCooldown=now+13+Math.random()*12;f.holdUntil=0;f.graze=null;
+     const cool=habit!.displayCooldown??[13,25];f.rival=rival;f.displayCooldown=now+cool[0]+Math.random()*(cool[1]-cool[0]);f.holdUntil=0;f.graze=null;
      if(display==='chase'){f.displayUntil=now;f.chaseUntil=now+1+Math.random()*.7;f.mode='chasing rival';}
      else{f.displayUntil=now+1.5+Math.random();f.chaseUntil=display==='broadside'&&Math.random()<.4?f.displayUntil+.9+Math.random()*.9:0;f.mode=display==='spines'?'raising venomous spines':'fin display';}
      f.until=Math.max(f.displayUntil,f.chaseUntil);
@@ -508,7 +516,7 @@ export class ReefFish{
    }
    if(habit?.camouflage){
     // Foxface coloration changes within seconds: dark when threatened or asleep.
-    const dark=night||displaying;f.mottle.value=T.MathUtils.damp(f.mottle.value,dark?1:0,dark?1.6:.7,dt);
+    const dark=night||displaying;f.mottle.value=T.MathUtils.damp(f.mottle.value,dark?1:0,dark?1.6:1.3,dt);if(f.mottle.value<.002)f.mottle.value=0;
    }
    if(f.cocoon){
     // A mucus cocoon forms slowly around the sleeping wrasse in its cavity.
@@ -781,7 +789,8 @@ export class ReefFish{
    const p=f.pectoral[j],angle=this.attachFin(f,p),pelvic=Boolean(p.userData.pelvic),side=Math.sign(p.userData.restZ);
    p.userData.flutterTime=(p.userData.flutterTime??f.phase+j*.87)+dt*2*Math.PI*profile.finHz*(pelvic?.25:1+moving*.4)*(1+j*.035);
    const phase=p.userData.flutterTime;
-   p.rotation.y=angle+side*(pelvic?.12+.02*Math.sin(phase):.3+.14*Math.sin(phase));p.rotation.x=Math.cos(phase*.9)*(pelvic?.01:.06);
+   // Pelvic fins splay outward and forward like feet that prop the goby up.
+   p.rotation.y=angle+side*(pelvic?.22+.02*Math.sin(phase):.3+.14*Math.sin(phase));p.rotation.x=pelvic?-side*(.55+.03*Math.sin(phase)):Math.cos(phase*.9)*.06;
   }
   f.respiration+=dt*Math.PI*2*(night?.7:1);this.breathe(f,bite);
  }

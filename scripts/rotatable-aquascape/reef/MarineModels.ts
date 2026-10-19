@@ -43,6 +43,15 @@ export async function loadMarineModels(species:MarineSpecies[]=baseMarineSpecies
    // to retain orange chroma under the aquarium's intense overhead illumination.
    material.color.setScalar(species==='anthias'?.40:.72);
    if(species==='anthias'&&!label.startsWith('eye'))material.color.setRGB(.68,.34,.17);
+   // The vivid aquarium coral beauty: keep its orange luminous under blue light.
+   if((species==='bispinosa'||species==='cinctus')&&!label.startsWith('eye'))material.color.setScalar(1.05);
+   if(species==='strigosus'&&!label.startsWith('eye')){
+    // Brown skin under blue reef light reads near black; lift it so the fine
+    // iridescent lines and dots carry, with relief from the plate's own scales.
+    const skin=label==='body'||label.startsWith('gill');
+    material.color.setScalar(skin?1.45:1.25);material.roughness=skin?.48:.55;
+    if(skin&&material.map){material.bumpMap=material.map;material.bumpScale=1.1;material.sheen=.35;material.sheenRoughness=.35;material.sheenColor.set('#6f86d8');}
+   }
    if(species==='rostratum'&&!label.startsWith('eye')){
     // A near-black plate needs more reflected light for its scales and rays to
     // read. Velvet sheen and relief from the plate's own scale pattern stand in

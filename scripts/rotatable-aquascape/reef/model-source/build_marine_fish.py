@@ -107,7 +107,10 @@ for species,s in DATA.items():
  colorLayer=body.data.color_attributes.new(name='Oral depth',type='FLOAT_COLOR',domain='POINT')
  for i,color in enumerate(colors):colorLayer.data[i].color=color
  objects.append(body)
- def fin_mesh(name,polygon,side=0,pivot=None):
+ def fin_mesh(name,polygon,side=0,pivot=None,remap=None):
+  # Optional texture source: {'from':root px,'to':source px,'scale':k} maps a fin
+  # the plate shows folded onto a matching region of another fin's membrane.
+  uvAt=(lambda x,y:uv(remap['to'][0]+(x-remap['from'][0])*remap['scale'],remap['to'][1]+(y-remap['from'][1])*remap['scale'])) if remap else uv
   # Concave fins are tessellated without a fan crossing the fork/edge.
   control=[Vector((float(x),float(y),0)) for x,y in polygon];p=[]
   # Rounded free margins retain the traced locations without angular cardboard corners.
@@ -129,7 +132,7 @@ for species,s in DATA.items():
      p3=pos(px,py,depth)
      if pivot:
       anchor=pos(pivot[0],pivot[1],side*(surface(pivot[0],pivot[1])+.0005));p3=tuple(p3[k]-anchor[k] for k in range(3))
-     v.append(p3);tex.append(uv(px,py))
+     v.append(p3);tex.append(uvAt(px,py))
     f.append((n,n+1,n+2))
   for t in triangles:tri(*[p[q] if isinstance(q,int) else q for q in t],2 if not side else 1)
   ob=make_mesh(name,v,f,tex,pectoralFin if side else fin)
@@ -155,7 +158,7 @@ for species,s in DATA.items():
   if i!=1:objects.append(fin_mesh('fin_'+str(i),polygon))
  for side in [-1,1]:
   objects.append(fin_mesh('pectoral_'+str(side),s['pec'],side,s['pec'][0]))
-  if 'pelvic' in s:objects.append(fin_mesh('pelvic_'+str(side),s['pelvic'],side,s['pelvic'][0]))
+  if 'pelvic' in s:objects.append(fin_mesh('pelvic_'+str(side),s['pelvic'],side,s['pelvic'][0],s.get('pelvicTexture')))
   # Thin conformed operculum over the same UV detail; opens subtly at runtime.
   gx,gy0,gy1=s['gill'];v=[];tex=[];f=[]
   for row in range(19):
@@ -169,13 +172,29 @@ for species,s in DATA.items():
   # A shallow, UV-matched corneal dome retains the reference iris instead of
   # bulging generic spheres. Both sides are fully modeled.
   ex,ey,er=s['eye'];v=[];tex=[];f=[]
-  for row in range(9):
-   rr=row/8
-   for col in range(33):
-    a=col/32*2*math.pi;px=ex+er*rr*math.cos(a);py=ey+er*rr*math.sin(a)
-    v.append(pos(px,py,side*(surface(px,py)+.001+s.get('eyeDome',.0025)*(1-rr*rr))));tex.append(uv(px,py))
-    if row<8 and col<32:
-     a0=row*33+col;ids=(a0,a0+1,a0+34,a0+33);f.append(ids if side>0 else tuple(reversed(ids)))
+  if 'eyeTop' in s:
+   # Eyes that bulge from the top of the head (gobies): a raised spherical cap
+   # set into the head surface, facing up and outward, textured radially from
+   # the plate's own eye. tilt is the facing angle above horizontal-lateral.
+   # lateral: the eyes' spacing as a fraction of the head's half-width there.
+   tilt,bulge,lateral=math.radians(s['eyeTop'][0]),s['eyeTop'][1],s['eyeTop'][2];R=er/length
+   base=Vector(pos(ex,ey+er*.35,side*lateral*trunk_thickness((ex-begin)/length)));n=Vector((0,math.sin(tilt),side*math.cos(tilt)));t1=Vector((1,0,0));t2=n.cross(t1)
+   for row in range(13):
+    rr=row/12
+    for col in range(41):
+     a=col/40*2*math.pi;c=math.cos(a);d=math.sin(a)
+     q=base+t1*(R*rr*c)+t2*(R*rr*d*side)+n*(R*bulge*math.sqrt(max(0,1-rr*rr)))
+     v.append(tuple(q));tex.append(uv(ex+er*rr*c,ey-er*rr*d))
+     if row<12 and col<40:
+      a0=row*41+col;ids=(a0,a0+1,a0+42,a0+41);f.append(tuple(reversed(ids)) if side>0 else ids)
+  else:
+   for row in range(9):
+    rr=row/8
+    for col in range(33):
+     a=col/32*2*math.pi;px=ex+er*rr*math.cos(a);py=ey+er*rr*math.sin(a)
+     v.append(pos(px,py,side*(surface(px,py)+.001+s.get('eyeDome',.0025)*(1-rr*rr))));tex.append(uv(px,py))
+     if row<8 and col<32:
+      a0=row*33+col;ids=(a0,a0+1,a0+34,a0+33);f.append(ids if side>0 else tuple(reversed(ids)))
   objects.append(make_mesh('eye_'+str(side),v,f,tex,eyeMat))
  # Export each species at origin; one editable master stores all six collections.
  bpy.ops.object.select_all(action='DESELECT')
@@ -184,6 +203,8 @@ for species,s in DATA.items():
  bpy.ops.export_scene.gltf(filepath=str(OUT/(species+'.glb')),export_format='GLB',use_selection=True,export_yup=True,export_apply=True,export_animations=False,export_cameras=False,export_lights=False,export_image_format='JPEG',export_jpeg_quality=95,export_vertex_color='ACTIVE')
  triangles=sum(sum(len(p.vertices)-2 for p in o.data.polygons) for o in objects)
  metadata[species]={'mouth':pos(*s['mouth']),'triangles':triangles,'meshes':len(objects),'reference':reference+'.png','authoring':'Blender '+bpy.app.version_string,'bodyLength':1,'width':width,'upper':[pos(x,y)[:2] for x,y in s['top']],'lower':[pos(x,y)[:2] for x,y in s['bottom']]}
+ # Lowest reach of the paired pelvic fins, so bottom-dwellers can stand on them.
+ if 'pelvic' in s and s.get('perch'):metadata[species]['footDepth']=-min(pos(x,y)[1] for x,y in s['pelvic'])
  collection=bpy.data.collections.new(species);scene.collection.children.link(collection)
  for obj in objects:
   for coll in list(obj.users_collection):coll.objects.unlink(obj)

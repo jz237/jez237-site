@@ -91,7 +91,7 @@
   "references": [],
   "mask": null,
   "prompt": "Use case: photorealistic-natural. Asset: precise side-profile reference photograph for sculpting and texturing an interactive Blender fish model. A single LIVE fish photographed underwater through clean aquarium glass: whole body and every fin visible and fully spread, perfectly lateral side view with no perspective foreshortening, nose pointing RIGHT, tail LEFT, horizontally level, body straight. Plain, even medium neutral-gray background of empty water, uniform tone with no gradient and no vignette. No other animals, no plants, no rocks, no sand, no text, no labels. The fish fills about 78 percent of the frame width with generous empty margins; every fin is uncropped and clearly separated from the background. Real macro aquarium photography under soft neutral white diffused light, sharp focus across the whole fish, anatomically correct proportions. Skin: wet living fish skin with tiny natural scales and a soft satin sheen; fins: thin translucent membranes with slender rays. NOT a painting, NOT an illustration, NOT a sculpture or taxidermy specimen, no plastic look, no glassy bulging cartoon eyes: small natural eyes flush with the head.\n\nSubject: Centropyge bispinosa, adult coral beauty (twospined angelfish). Small, deep, compressed oval dwarf-angelfish body with a short snout, a small mouth and a strong spine at the lower corner of the preopercle. Dark purplish-blue head, back and belly; the middle of the flank glows orange-red to golden orange and is crossed by many fine, irregular, dark purple-blue vertical bars. Dorsal, anal and rounded caudal fins dark purplish-blue with a bright electric-blue margin. Near-side translucent pectoral fin held close to the flank behind the gill cover; orange-yellow pelvic fin below the chest with blue streaks.",
-  "note": "Rejected: posterized, painterly skin at full resolution. Replaced with a prompt asking for a macro photograph with smooth tonal gradation."
+  "note": "Rejected: posterized, painterly skin at full resolution. Replaced with a prompt asking for a macro photograph with smooth tonal gradation. Replaced on October 19 by the vivid color form the user asked for."
  },
  {
   "saved": "loricula-attempt-1 (not kept)",
@@ -116,7 +116,7 @@
   "note": "Rejected: posterized, painterly skin at full resolution. Replaced with a prompt asking for a macro photograph with smooth tonal gradation."
  },
  {
-  "saved": "cinctus.png",
+  "saved": "cinctus v1 (replaced)",
   "endpoint": "openai/gpt-image-2",
   "request_id": "01a15632-f8b0-7a10-bb43-ce0f8c30ac8f",
   "created": "2026-10-19T22:07:19+00:00",
@@ -124,7 +124,7 @@
   "references": [],
   "mask": null,
   "prompt": "Use case: photorealistic-natural. Asset: precise side-profile reference photograph for sculpting and texturing an interactive Blender fish model. A single LIVE fish photographed underwater through clean aquarium glass: whole body and every fin visible and fully spread, perfectly lateral side view with no perspective foreshortening, nose pointing RIGHT, tail LEFT, horizontally level, body straight. Plain, even medium neutral-gray background of empty water, uniform tone with no gradient and no vignette. No other animals, no plants, no rocks, no sand, no text, no labels. The fish fills about 78 percent of the frame width with generous empty margins; every fin is uncropped and clearly separated from the background. Real macro aquarium photography under soft neutral white diffused light, sharp focus across the whole fish, anatomically correct proportions. Skin: wet living fish skin with tiny natural scales and a soft satin sheen; fins: thin translucent membranes with slender rays. NOT a painting, NOT an illustration, NOT a sculpture or taxidermy specimen, no plastic look, no glassy bulging cartoon eyes: small natural eyes flush with the head.\n\nSubject: Cryptocentrus cinctus, adult yellow watchman goby (yellow prawn-goby). Elongate, nearly cylindrical goby body; large head with big eyes set high on top and a large, slightly oblique mouth. Bright lemon-yellow body with faint, slightly darker saddle bars and many small iridescent pale-blue spots on the head, cheeks, gill covers and along the body. Two separate dorsal fins, the first tall and spiny, the second long; long anal fin; rounded caudal fin; all fins yellow with fine blue spots and thin blue margins. Near-side fan-shaped translucent yellow pectoral fin; pelvic fins below the chest fused into a small cup-shaped disc. The fish is suspended level in open water, not resting on any surface.",
-  "note": "Accepted lateral plate."
+  "note": "Accepted lateral plate. Replaced on October 19: the user asked to start the watchman over."
  },
  {
   "saved": "vulpinus.png",
@@ -149,7 +149,7 @@
   "note": "Accepted lateral plate."
  },
  {
-  "saved": "bispinosa.png",
+  "saved": "bispinosa v2 (replaced)",
   "endpoint": "openai/gpt-image-2",
   "request_id": "01a15635-7ae1-7e23-979f-7006da8dc7d3",
   "created": "2026-10-19T22:10:03+00:00",
@@ -157,7 +157,7 @@
   "references": [],
   "mask": null,
   "prompt": "Use case: photorealistic-natural. Asset: precise side-profile reference photograph for sculpting and texturing an interactive Blender fish model. A single LIVE fish photographed underwater through clean aquarium glass: whole body and every fin visible and fully spread, perfectly lateral side view with no perspective foreshortening, nose pointing RIGHT, tail LEFT, horizontally level, body straight. Plain, even medium neutral-gray background of empty water, uniform tone with no gradient and no vignette. No other animals, no plants, no rocks, no sand, no text, no labels. The fish fills about 78 percent of the frame width with generous empty margins; every fin is uncropped and clearly separated from the background. Real macro aquarium photography under soft neutral white diffused light, sharp focus across the whole fish, anatomically correct proportions. Skin: wet living fish skin with tiny natural scales and a soft satin sheen; fins: thin translucent membranes with slender rays. NOT a painting, NOT an illustration, NOT a sculpture or taxidermy specimen, no plastic look, no glassy bulging cartoon eyes: small natural eyes flush with the head.\n\nCamera: full-frame DSLR with a 100 mm macro lens at f/11, flash diffused through a large softbox; a true photograph with natural, smooth tonal gradation. Individual scales and their soft edges are visible; color varies naturally across the body. NO posterization, NO oil-paint, watercolor or painterly texture, NO engraved or etched lines, NO vector-art flat color.\n\nSubject: Centropyge bispinosa, adult coral beauty (twospined angelfish). Small, deep, compressed oval dwarf-angelfish body with a short snout, a small mouth and a strong spine at the lower corner of the preopercle. Dark purplish-blue head, back and belly; the middle of the flank glows orange-red to golden orange and is crossed by many fine, irregular, dark purple-blue vertical bars. Dorsal, anal and rounded caudal fins dark purplish-blue with a bright electric-blue margin. Near-side translucent pectoral fin held close to the flank behind the gill cover; orange-yellow pelvic fin below the chest with blue streaks.",
-  "note": "Accepted lateral plate."
+  "note": "Accepted lateral plate. Replaced on October 19 by the vivid color form the user asked for."
  },
  {
   "saved": "strigosus.png",
@@ -184,7 +184,7 @@
   "note": "Width profile; stored as JPEG q92."
  },
  {
-  "saved": "cinctus-dorsal.jpg",
+  "saved": "cinctus-dorsal v1 (replaced)",
   "endpoint": "openai/gpt-image-2/edit",
   "request_id": "01a15635-dd64-7761-9fc5-19b6fce32c42",
   "created": "2026-10-19T22:10:20+00:00",
@@ -194,7 +194,7 @@
   ],
   "mask": null,
   "prompt": "Use case: scientific reference, multi-view modeling sheet for a Blender 3D model. The supplied image is a side view of this exact adult yellow watchman goby, Cryptocentrus cinctus. Create a matching DORSAL view of the same individual: a live fish photographed from directly above, with its back toward the camera and both eyes visible on top of the head. The body is perfectly straight and horizontal across the frame, nose pointing RIGHT, tail LEFT, at the same scale as the side view, so the snout tip and tail tip span the same horizontal extent of the frame. Show the true goby body seen from above: nearly cylindrical and rounded, widest at the head and gill covers, with the large eyes bulging upward on top of the head, tapering gradually toward the tail. The dorsal fin is seen edge-on along the midline, the caudal fin edge-on at the left, both pectoral fins slightly spread to either side. Same coloration, markings, scale texture and soft neutral diffused lighting as the reference. Plain even medium neutral-gray background, no shadow, no other objects, no text, no labels. A true photograph: no illustration, no posterization, no painterly texture.",
-  "note": "Width profile; stored as JPEG q92."
+  "note": "Width profile; stored as JPEG q92. Replaced on October 19: the user asked to start the watchman over."
  },
  {
   "saved": "hexataenia-front.jpg",
@@ -210,7 +210,7 @@
   "note": "Cross-section check; stored as JPEG q92."
  },
  {
-  "saved": "cinctus-front.jpg",
+  "saved": "cinctus-front v1 (replaced)",
   "endpoint": "openai/gpt-image-2/edit",
   "request_id": "01a15635-df47-7e92-99e4-80bb2762ce21",
   "created": "2026-10-19T22:10:33+00:00",
@@ -220,7 +220,7 @@
   ],
   "mask": null,
   "prompt": "Use case: scientific reference, multi-view modeling sheet for a Blender 3D model. The supplied image is a side view of this exact adult yellow watchman goby, Cryptocentrus cinctus. Create a matching FRONT view of the same individual: a live fish facing directly toward the camera, nose pointing straight at the viewer, perfectly symmetric head-on view, body upright and level, one eye on each side of the head. The large head is broad and rounded, with big eyes on top; the body behind is nearly round in cross-section. The dorsal fin above and anal fin below are seen edge-on as thin vertical blades, the pectoral fins slightly spread to each side, the pelvic fins below the chest. Same coloration, markings, scale texture and soft neutral diffused lighting as the reference. Centered; the fish's full height including fins fills about 80 percent of the frame height. Plain even medium neutral-gray background, no shadow, no other objects, no text, no labels. A true photograph: no illustration, no posterization, no painterly texture.",
-  "note": "Cross-section check; stored as JPEG q92."
+  "note": "Cross-section check; stored as JPEG q92. Replaced on October 19: the user asked to start the watchman over."
  },
  {
   "saved": "hexataenia-skin-raw (not kept)",
@@ -236,7 +236,7 @@
   "note": "Masked edit; composited into hexataenia-skin.png only inside hexataenia-fin-mask.png."
  },
  {
-  "saved": "cinctus-skin-raw (not kept)",
+  "saved": "cinctus-skin-raw v1 (replaced)",
   "endpoint": "openai/gpt-image-2/edit",
   "request_id": "01a15636-8ebe-7ee3-8778-addad1d3c6ff",
   "created": "2026-10-19T22:11:05+00:00",
@@ -246,7 +246,7 @@
   ],
   "mask": "cinctus-edit-mask.png",
   "prompt": "Use case: precise-object-edit. Edit this exact fish reference plate to create its clean skin texture for a Blender 3D model. Remove ONLY two paired fins on the near side: (1) the translucent pectoral fin, the fan-shaped fin on the flank whose base meets the body just behind the gill cover, and (2) the small pelvic fin hanging below the chest. Fill the pectoral fin's former area with continuous lemon-yellow skin with fine scales and small pale-blue spots matched to the neighboring flank, joining the gill-cover edge naturally. Where the pelvic fin hung below the belly, continue the smooth lower body outline and fill outside it with the same plain gray background. Preserve the entire fish's position, size, silhouette, all other fins, mouth, eye, colors, markings, lighting and background pixel-aligned. Do not move, resize or redesign anything else. The removed fins will be separately animated meshes. No new fins or markings.",
-  "note": "Masked edit; composited into cinctus-skin.png only inside cinctus-fin-mask.png."
+  "note": "Masked edit; composited into cinctus-skin.png only inside cinctus-fin-mask.png. Replaced on October 19: the user asked to start the watchman over."
  },
  {
   "saved": "vulpinus-dorsal.jpg",
@@ -275,7 +275,7 @@
   "note": "Width profile; stored as JPEG q92."
  },
  {
-  "saved": "bispinosa-dorsal.jpg",
+  "saved": "bispinosa-dorsal v2 (replaced)",
   "endpoint": "openai/gpt-image-2/edit",
   "request_id": "01a15638-4038-7c82-bc18-bff9c2a7d87b",
   "created": "2026-10-19T22:12:48+00:00",
@@ -285,7 +285,7 @@
   ],
   "mask": null,
   "prompt": "Use case: scientific reference, multi-view modeling sheet for a Blender 3D model. The supplied image is a side view of this exact adult coral beauty angelfish, Centropyge bispinosa. Create a matching DORSAL view of the same individual: a live fish photographed from directly above, with its back toward the camera and both eyes visible on top of the head. The body is perfectly straight and horizontal across the frame, nose pointing RIGHT, tail LEFT, at the same scale as the side view, so the snout tip and tail tip span the same horizontal extent of the frame. Show the true compressed dwarf-angelfish body seen from above: a narrow lens, widest just behind the head, tapering to the short snout and to the caudal peduncle. The dorsal fin is seen edge-on along the midline, the caudal fin edge-on at the left, both pectoral fins slightly spread to either side. Same coloration, markings, scale texture and soft neutral diffused lighting as the reference. Plain even medium neutral-gray background, no shadow, no other objects, no text, no labels. A true photograph: no illustration, no posterization, no painterly texture.",
-  "note": "Width profile; stored as JPEG q92."
+  "note": "Width profile; stored as JPEG q92. Replaced on October 19 by the vivid color form the user asked for."
  },
  {
   "saved": "strigosus-dorsal.jpg",
@@ -340,7 +340,7 @@
   "note": "Cross-section check; stored as JPEG q92."
  },
  {
-  "saved": "bispinosa-front.jpg",
+  "saved": "bispinosa-front v2 (replaced)",
   "endpoint": "openai/gpt-image-2/edit",
   "request_id": "01a15638-44c3-7c11-8c6a-2d2e11340e44",
   "created": "2026-10-19T22:13:14+00:00",
@@ -350,7 +350,7 @@
   ],
   "mask": null,
   "prompt": "Use case: scientific reference, multi-view modeling sheet for a Blender 3D model. The supplied image is a side view of this exact adult coral beauty angelfish, Centropyge bispinosa. Create a matching FRONT view of the same individual: a live fish facing directly toward the camera, nose pointing straight at the viewer, perfectly symmetric head-on view, body upright and level, one eye on each side of the head. Behind the short snout the compressed deep body appears as a tall narrow lens. The dorsal fin above and anal fin below are seen edge-on as thin vertical blades, the pectoral fins slightly spread to each side, the pelvic fins below the chest. Same coloration, markings, scale texture and soft neutral diffused lighting as the reference. Centered; the fish's full height including fins fills about 80 percent of the frame height. Plain even medium neutral-gray background, no shadow, no other objects, no text, no labels. A true photograph: no illustration, no posterization, no painterly texture.",
-  "note": "Cross-section check; stored as JPEG q92."
+  "note": "Cross-section check; stored as JPEG q92. Replaced on October 19 by the vivid color form the user asked for."
  },
  {
   "saved": "vulpinus-skin-raw (not kept)",
@@ -402,10 +402,10 @@
   ],
   "mask": "bispinosa-edit-mask.png",
   "prompt": "Use case: precise-object-edit. Edit this exact fish reference plate to create its clean skin texture for a Blender 3D model. Remove ONLY two paired fins on the near side: (1) the translucent pectoral fin, the fan-shaped fin on the flank whose base meets the body just behind the gill cover, and (2) the small pelvic fin hanging below the chest. Fill the pectoral fin's former area with continuous dark purplish-blue skin with fine scales, matched to the neighboring flank and the edge of the orange barred area, joining the gill-cover edge naturally. Where the pelvic fin hung below the belly, continue the smooth lower body outline and fill outside it with the same plain gray background. Preserve the entire fish's position, size, silhouette, all other fins, mouth, eye, colors, markings, lighting and background pixel-aligned. Do not move, resize or redesign anything else. The removed fins will be separately animated meshes. No new fins or markings.",
-  "note": "Masked edit; composited into bispinosa-skin.png only inside bispinosa-fin-mask.png."
+  "note": "Masked edit; composited into bispinosa-skin.png only inside bispinosa-fin-mask.png. Replaced on October 19 by the vivid color form the user asked for."
  },
  {
-  "saved": "cinctus-skin-fix (not kept)",
+  "saved": "cinctus-skin-fix v1 (replaced)",
   "endpoint": "openai/gpt-image-2/edit",
   "request_id": "01a1563c-8f1a-7cf2-8100-812aaa02e181",
   "created": "2026-10-19T22:17:31+00:00",
@@ -415,7 +415,7 @@
   ],
   "mask": "cinctus-fix-mask.png",
   "prompt": "Use case: precise-object-edit. This fish plate should show NO near-side pectoral fin and NO pelvic fin. Inside the masked area, remove completely every remaining trace of fin: faint translucent rays, fin outlines, thin streaks and colored slivers. Replace them with smooth lemon-yellow belly skin continuing the body outline, and the same plain gray background below the belly. Preserve everything else pixel-aligned: the fish's position, size, silhouette, all other fins, markings, colors, lighting and background. No new fins or markings.",
-  "note": "Second masked pass removing remaining fin traces; composited into cinctus-skin.png."
+  "note": "Second masked pass removing remaining fin traces; composited into cinctus-skin.png. Replaced on October 19: the user asked to start the watchman over."
  },
  {
   "saved": "hexataenia-skin-fix (not kept)",
@@ -480,6 +480,117 @@
   ],
   "mask": "bispinosa-fix-mask.png",
   "prompt": "Use case: precise-object-edit. This fish plate should show NO near-side pectoral fin and NO pelvic fin. Inside the masked area, remove completely every remaining trace of fin: faint translucent rays, fin outlines, spines, thin streaks and colored slivers. Replace them with dark purplish-blue skin with fine scales matched to the neighboring flank, and the same plain gray background below the belly. Preserve everything else pixel-aligned: the fish's position, size, silhouette, the dorsal, anal and caudal fins, markings, colors, lighting and background. No new fins or markings.",
-  "note": "Second masked pass removing remaining fin traces; composited into bispinosa-skin.png."
+  "note": "Second masked pass removing remaining fin traces; composited into bispinosa-skin.png. Replaced on October 19 by the vivid color form the user asked for."
+ },
+ {
+  "saved": "bispinosa.png",
+  "endpoint": "openai/gpt-image-2",
+  "request_id": "01a15670-ecce-76a2-8e5a-f774de502bcf",
+  "created": "2026-10-19T23:14:55+00:00",
+  "quality": "high",
+  "references": [],
+  "mask": null,
+  "prompt": "Use case: photorealistic-natural. Asset: precise side-profile reference photograph for sculpting and texturing an interactive Blender fish model. A single LIVE fish photographed underwater through clean aquarium glass: whole body and every fin visible and fully spread, perfectly lateral side view with no perspective foreshortening, nose pointing RIGHT, tail LEFT, horizontally level, body straight. Plain, even medium neutral-gray background of empty water, uniform tone with no gradient and no vignette. No other animals, no plants, no rocks, no sand, no text, no labels. The fish fills about 78 percent of the frame width with generous empty margins; every fin is uncropped and clearly separated from the background. Real macro aquarium photography under soft neutral white diffused light, sharp focus across the whole fish, anatomically correct proportions. Skin: wet living fish skin with tiny natural scales and a soft satin sheen; fins: thin translucent membranes with slender rays. NOT a painting, NOT an illustration, NOT a sculpture or taxidermy specimen, no plastic look, no glassy bulging cartoon eyes: small natural eyes flush with the head.\n\nCamera: full-frame DSLR with a 100 mm macro lens at f/11, flash diffused through a large softbox; a true photograph with natural, smooth tonal gradation. Individual scales and their soft edges are visible; color varies naturally across the body. NO posterization, NO oil-paint, watercolor or painterly texture, NO engraved or etched lines, NO vector-art flat color.\n\nSubject: Centropyge bispinosa, adult coral beauty angelfish, the vivid aquarium color form. Small, deep, compressed oval dwarf-angelfish body with a short rounded snout, small mouth and a spine at the lower corner of the gill cover. Coloration exactly like this: a large, brilliant orange to golden-orange area covering the middle of the flank, the belly, the throat, the chest and the lower cheek, crossed by many fine, closely spaced, slightly wavy dark royal-blue to purple vertical bars that run from the back down across the orange. The forehead, top of the head, nape and the whole upper back are deep electric royal blue to violet, blending into the orange along the mid-flank. Dark eye with a thin bright blue ring. The dorsal fin and the anal fin are deep royal blue-violet with bright electric-blue margins. The rounded caudal fin is BRIGHT YELLOW, translucent, with fine rays. The pelvic fins under the chest are bright yellow-orange with a blue leading edge. Near-side pectoral fin translucent orange-yellow, held close to the flank behind the gill cover. Saturated, luminous colors of a healthy fish under aquarium light, not dark, not muddy.",
+  "note": "Accepted lateral plate (v3): the vivid aquarium form matching the photo the user supplied in chat (described in the prompt; the photo itself was not sent)."
+ },
+ {
+  "saved": "bispinosa-dorsal.jpg",
+  "endpoint": "openai/gpt-image-2/edit",
+  "request_id": "01a15673-2090-7cb1-8712-f576162043d3",
+  "created": "2026-10-19T23:17:11+00:00",
+  "quality": "high",
+  "references": [
+   "bispinosa.png"
+  ],
+  "mask": null,
+  "prompt": "Use case: scientific reference, multi-view modeling sheet for a Blender 3D model. The supplied image is a side view of this exact adult coral beauty angelfish, Centropyge bispinosa. Create a matching DORSAL view of the same individual: a live fish photographed from directly above, with its back toward the camera and both eyes visible on top of the head. The body is perfectly straight and horizontal across the frame, nose pointing RIGHT, tail LEFT, at the same scale as the side view, so the snout tip and tail tip span the same horizontal extent of the frame. Show the true compressed dwarf-angelfish body seen from above: a narrow lens, widest just behind the head, tapering to the short snout and to the caudal peduncle. The dorsal fin is seen edge-on along the midline, the caudal fin edge-on at the left, both pectoral fins slightly spread to either side. Same vivid orange flank with fine blue bars, deep electric-blue head, back and fin margins, yellow tail and pelvic fins, same scale texture and soft neutral diffused lighting as the reference. Plain even medium neutral-gray background, no shadow, no other objects, no text, no labels. A true photograph: no illustration, no posterization, no painterly texture.",
+  "note": "Width profile (v3); stored as JPEG q92."
+ },
+ {
+  "saved": "bispinosa-skin-raw (not kept)",
+  "endpoint": "openai/gpt-image-2/edit",
+  "request_id": "01a15673-6652-7ce1-a870-1aaeac64a414",
+  "created": "2026-10-19T23:17:28+00:00",
+  "quality": "high",
+  "references": [
+   "bispinosa.png"
+  ],
+  "mask": "bispinosa-edit-mask.png",
+  "prompt": "Use case: precise-object-edit. Edit this exact fish reference plate to create its clean skin texture for a Blender 3D model. Remove ONLY two paired fins on the near side: (1) the translucent pectoral fin, the fan-shaped fin on the flank whose base meets the body just behind the gill cover, and (2) the small pelvic fin hanging below the chest. Fill the pectoral fin's former area with continuous brilliant orange skin with fine scales and the slightly wavy dark royal-blue vertical bars continued exactly from the neighboring flank, joining the gill-cover edge naturally. Where the pelvic fin hung below the belly, continue the smooth lower body outline and fill outside it with the same plain gray background. Preserve the entire fish's position, size, silhouette, all other fins, mouth, eye, colors, markings, lighting and background pixel-aligned. Do not move, resize or redesign anything else. The removed fins will be separately animated meshes. No new fins or markings.",
+  "note": "Masked edit (v3); composited into bispinosa-skin.png inside bispinosa-fin-mask.png; a pelvic sliver below the belly was replaced with the fitted backdrop."
+ },
+ {
+  "saved": "bispinosa-front.jpg",
+  "endpoint": "openai/gpt-image-2/edit",
+  "request_id": "01a15673-25f4-73a3-b193-6ca980838e9b",
+  "created": "2026-10-19T23:17:33+00:00",
+  "quality": "high",
+  "references": [
+   "bispinosa.png"
+  ],
+  "mask": null,
+  "prompt": "Use case: scientific reference, multi-view modeling sheet for a Blender 3D model. The supplied image is a side view of this exact adult coral beauty angelfish, Centropyge bispinosa. Create a matching FRONT view of the same individual: a live fish facing directly toward the camera, nose pointing straight at the viewer, perfectly symmetric head-on view, body upright and level, one eye on each side of the head. Behind the short snout the compressed deep body appears as a tall narrow lens. The dorsal fin above and anal fin below are seen edge-on as thin vertical blades, the pectoral fins slightly spread to each side, the pelvic fins below the chest. Same vivid orange flank with fine blue bars, deep electric-blue head, back and fin margins, yellow tail and pelvic fins, same scale texture and soft neutral diffused lighting as the reference. Centered; the fish's full height including fins fills about 80 percent of the frame height. Plain even medium neutral-gray background, no shadow, no other objects, no text, no labels. A true photograph: no illustration, no posterization, no painterly texture.",
+  "note": "Cross-section check (v3); stored as JPEG q92."
+ },
+ {
+  "saved": "cinctus-v2 (not kept)",
+  "endpoint": "openai/gpt-image-2",
+  "request_id": "01a1567e-4ad1-7d00-8ec3-5d16df1bde29",
+  "created": "2026-10-19T23:29:40+00:00",
+  "quality": "high",
+  "references": [],
+  "mask": null,
+  "prompt": "Use case: photorealistic-natural. Asset: precise side-profile reference photograph for sculpting and texturing an interactive Blender fish model. A single LIVE fish photographed underwater through clean aquarium glass: whole body and every fin visible and fully spread, perfectly lateral side view with no perspective foreshortening, nose pointing RIGHT, tail LEFT, horizontally level, body straight, perched naturally with all fins raised and spread. Plain, even medium neutral-gray background of empty water, uniform tone with no gradient and no vignette. No other animals, no plants, no rocks, no sand, no text, no labels. The fish fills about 78 percent of the frame width with generous empty margins; every fin is uncropped and clearly separated from the background. Real macro aquarium photography under soft neutral white diffused light, sharp focus across the whole fish, anatomically correct proportions. Skin: wet living fish skin with tiny natural scales and a soft satin sheen; fins: thin translucent membranes with slender rays. NOT a painting, NOT an illustration, NOT a sculpture or taxidermy specimen, no plastic look, no glassy bulging cartoon eyes: small natural eyes flush with the head.\n\nCamera: full-frame DSLR with a 100 mm macro lens at f/11, flash diffused through a large softbox; a true photograph with natural, smooth tonal gradation. Individual scales and their soft edges are visible; color varies naturally across the body. NO posterization, NO oil-paint, watercolor or painterly texture, NO engraved or etched lines, NO vector-art flat color.\n\nSubject: Cryptocentrus cinctus, adult yellow watchman goby, exactly like a studio reference sheet of this species. Bright canary-yellow fish. Large, broad, rounded head with very thick, fleshy lips and a wide, slightly down-turned mouth, giving a grumpy expression. Big round eyes that bulge up on the very top of the head, set high and close together: glossy black pupil, golden-yellow iris ring. Nearly cylindrical body tapering evenly to the tail, slightly compressed toward the caudal peduncle. Many small iridescent pale-blue to white speckles scattered densely over the head, cheeks, gill cover and the whole body, and in rows on the first dorsal fin. First dorsal fin tall and rounded-triangular, with slender spines and translucent yellow membrane with blue spots; second dorsal fin long and low with fine rays; long anal fin; large rounded oval caudal fin; all fins translucent lemon-yellow with fine visible rays. Large rounded fan-shaped pectoral fin, translucent yellow with fine rays, spread on the near side. The pelvic fins below the chest are spread forward and down like small yellow feet with visible rays, propping the fish up. No sand, no burrow, no shadow.",
+  "note": "Rejected: body tilted head-up and speckles too large and evenly spaced."
+ },
+ {
+  "saved": "cinctus.png",
+  "endpoint": "openai/gpt-image-2",
+  "request_id": "01a15680-163e-7512-a3ca-88c78d03acd0",
+  "created": "2026-10-19T23:31:25+00:00",
+  "quality": "high",
+  "references": [],
+  "mask": null,
+  "prompt": "Use case: photorealistic-natural. Asset: precise side-profile reference photograph for sculpting and texturing an interactive Blender fish model. A single LIVE fish photographed underwater through clean aquarium glass: whole body and every fin visible and fully spread, perfectly lateral side view with no perspective foreshortening, nose pointing RIGHT, tail LEFT, PERFECTLY HORIZONTAL: the body axis from snout to tail is level and parallel to the frame edges, not tilted head-up; body straight; all fins raised and spread. Plain, even medium neutral-gray background of empty water, uniform tone with no gradient and no vignette. No other animals, no plants, no rocks, no sand, no text, no labels. The fish fills about 78 percent of the frame width with generous empty margins; every fin is uncropped and clearly separated from the background. Real macro aquarium photography under soft neutral white diffused light, sharp focus across the whole fish, anatomically correct proportions. Skin: wet living fish skin with tiny natural scales and a soft satin sheen; fins: thin translucent membranes with slender rays. NOT a painting, NOT an illustration, NOT a sculpture or taxidermy specimen, no plastic look, no glassy bulging cartoon eyes: small natural eyes flush with the head.\n\nCamera: full-frame DSLR with a 100 mm macro lens at f/11, flash diffused through a large softbox; a true photograph with natural, smooth tonal gradation. Individual scales and their soft edges are visible; color varies naturally across the body. NO posterization, NO oil-paint, watercolor or painterly texture, NO engraved or etched lines, NO vector-art flat color.\n\nSubject: Cryptocentrus cinctus, adult yellow watchman goby, exactly like a studio reference sheet of this species. Bright canary-yellow fish. Large, broad, rounded head with very thick, fleshy lips and a wide, slightly down-turned mouth, giving a grumpy expression. Big round eyes that bulge up on the very top of the head, set high and close together: glossy black pupil, golden-yellow iris ring. Nearly cylindrical body tapering evenly to the tail, slightly compressed toward the caudal peduncle. Hundreds of tiny, fine iridescent pale-blue to white speckles, each much smaller than the pupil, densely and irregularly scattered over the head, cheeks, gill cover and the whole body, sparser fine speckles on the first dorsal fin. Not large dots, not evenly spaced rows. First dorsal fin tall and rounded-triangular, with slender spines and translucent yellow membrane with blue spots; second dorsal fin long and low with fine rays; long anal fin; large rounded oval caudal fin; all fins translucent lemon-yellow with fine visible rays. Large rounded fan-shaped pectoral fin, translucent yellow with fine rays, spread on the near side. The pelvic fins below the chest are spread forward and down like small yellow feet with visible rays, propping the fish up. No sand, no burrow, no shadow.",
+  "note": "Accepted lateral plate (v3), written from the user's reference sheet (described in the prompt; the sheet itself was not sent)."
+ },
+ {
+  "saved": "cinctus-front.jpg",
+  "endpoint": "openai/gpt-image-2/edit",
+  "request_id": "01a15682-0771-74b2-bb37-7a9ca38a3e4a",
+  "created": "2026-10-19T23:33:40+00:00",
+  "quality": "high",
+  "references": [
+   "cinctus.png"
+  ],
+  "mask": null,
+  "prompt": "Use case: scientific reference, multi-view modeling sheet for a Blender 3D model. The supplied image is a side view of this exact adult yellow watchman goby, Cryptocentrus cinctus. Create a matching FRONT view of the same individual: a live fish facing directly toward the camera, nose pointing straight at the viewer, perfectly symmetric head-on view, body upright and level, one eye on each side of the head. The large head is broad and rounded, with big eyes on top; the body behind is nearly round in cross-section. The dorsal fin above and anal fin below are seen edge-on as thin vertical blades, the pectoral fins slightly spread to each side, the pelvic fins below the chest. Same canary-yellow coloration with hundreds of tiny iridescent pale-blue speckles, same thick lips and same scale texture and soft neutral diffused lighting as the reference. Centered; the fish's full height including fins fills about 80 percent of the frame height. Plain even medium neutral-gray background, no shadow, no other objects, no text, no labels. A true photograph: no illustration, no posterization, no painterly texture.",
+  "note": "Cross-section check (v3); stored as JPEG q92."
+ },
+ {
+  "saved": "cinctus-dorsal.jpg",
+  "endpoint": "openai/gpt-image-2/edit",
+  "request_id": "01a15682-03a9-7481-bf9b-03aafb0522e0",
+  "created": "2026-10-19T23:33:43+00:00",
+  "quality": "high",
+  "references": [
+   "cinctus.png"
+  ],
+  "mask": null,
+  "prompt": "Use case: scientific reference, multi-view modeling sheet for a Blender 3D model. The supplied image is a side view of this exact adult yellow watchman goby, Cryptocentrus cinctus. Create a matching DORSAL view of the same individual: a live fish photographed from directly above, with its back toward the camera and both eyes visible on top of the head. The body is perfectly straight and horizontal across the frame, nose pointing RIGHT, tail LEFT, at the same scale as the side view, so the snout tip and tail tip span the same horizontal extent of the frame. Show the true goby body seen from above: nearly cylindrical and rounded, widest at the head and gill covers, with the large eyes bulging upward on top of the head, tapering gradually toward the tail. The dorsal fin is seen edge-on along the midline, the caudal fin edge-on at the left, both pectoral fins slightly spread to either side. Same canary-yellow coloration with hundreds of tiny iridescent pale-blue speckles, same thick lips and same scale texture and soft neutral diffused lighting as the reference. Plain even medium neutral-gray background, no shadow, no other objects, no text, no labels. A true photograph: no illustration, no posterization, no painterly texture.",
+  "note": "Width profile (v3); stored as JPEG q92."
+ },
+ {
+  "saved": "cinctus-skin-raw (not kept)",
+  "endpoint": "openai/gpt-image-2/edit",
+  "request_id": "01a15682-4e93-7ef3-8fc6-1fff15ae767d",
+  "created": "2026-10-19T23:33:46+00:00",
+  "quality": "high",
+  "references": [
+   "cinctus.png"
+  ],
+  "mask": "cinctus-edit-mask.png",
+  "prompt": "Use case: precise-object-edit. Edit this exact fish reference plate to create its clean skin texture for a Blender 3D model. Remove ONLY two paired fins on the near side: (1) the translucent pectoral fin, the fan-shaped fin on the flank whose base meets the body just behind the gill cover, and (2) the pair of foot-like pelvic fins hanging below the chest. Fill the pectoral fin's former area with continuous canary-yellow skin with fine scales and hundreds of tiny iridescent pale-blue speckles matched to the neighboring flank and cheek, joining the gill-cover edge naturally. Where the pelvic fin hung below the belly, continue the smooth lower body outline and fill outside it with the same plain gray background. Preserve the entire fish's position, size, silhouette, all other fins, mouth, eye, colors, markings, lighting and background pixel-aligned. Do not move, resize or redesign anything else. The removed fins will be separately animated meshes. No new fins or markings.",
+  "note": "Masked edit (v3); composited inside cinctus-fin-mask.png. Remaining pelvic fin pieces below the belly were replaced with the fitted backdrop."
  }
 ]

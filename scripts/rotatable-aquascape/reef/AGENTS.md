@@ -17,5 +17,5 @@ not authorize further paid generations.
 
 Reef options (October 19, 2026): kole tang, foxface, coral beauty, flame angel,
 six-line wrasse and yellow watchman goby are gallery-only Add & remove fish
-options, loaded on demand. Their 34 fal generations were made at the user's
+options, loaded on demand. Their 43 fal generations were made at the user's
 request ("full set, highest quality"); that does not authorize further spending.

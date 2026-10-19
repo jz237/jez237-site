@@ -51,16 +51,13 @@ def trace(k):
         # A dark face against a dark backdrop needs a lower threshold; keep the
         # normal one elsewhere so backdrop noise cannot fill a forked tail.
         near, x0 = spec['headDistance']; mask[:, x0:] |= fish_mask(side, None, near)[:, x0:]
+    if 'tailDistance' in spec:
+        # Translucent caudal rays fade into the backdrop; trace them more finely.
+        near, x1 = spec['tailDistance']; mask[:, :x1] |= fish_mask(side, None, near)[:, :x1]
     begin, end = spec['range']
     top = merged_edge(mask, 'top', spec['top'], 'top'); bottom = merged_edge(mask, 'bottom', spec['bottom'], 'bottom')
     top = [p for p in top if begin <= p[0] <= end]; bottom = [p for p in bottom if begin <= p[0] <= end]
     top.append([end, spec['endGap'][0]]); bottom.append([end, spec['endGap'][1]])
-    # Dorsal ribbon: silhouette top inside fin spans, the body edge between them.
-    d0, d1 = spec['dorsal'][0][0], spec['dorsal'][-1][1]; dorsal = []
-    for x in list(range(d0, d1, 20)) + [d1]:
-        inside = any(a <= x <= b for a, b in spec['dorsal'])
-        e = column_edges(mask, x)
-        dorsal.append([x, e[0] if inside and e else round(interp(top, x)) + 3])
     # Caudal fin: silhouette left of the peduncle, closed at the fin root.
     xs = np.where(mask.any(0))[0]; tail = int(xs.min()); root = begin + 18
     rt, rb = round(interp(top, begin)), round(interp(bottom, begin))
@@ -85,9 +82,21 @@ def trace(k):
     lo, hi = upper[-1][1], lower[0][1]
     trailing = [[int(np.where(mask[y, :root])[0].min()), y] for y in range(lo + 20, hi - 19, 30) if mask[y, :root].any()]
     caudal = [[root, rt]] + upper + trailing + lower + [[root, rb]]
-    # Anal fin: root along the body bottom, outer edge from the silhouette.
-    a0, a1 = spec['anal']
-    anal = [[x, round(interp(bottom, x))] for x in list(range(a0, a1, 50)) + [a1]]
+    # Dorsal ribbon: silhouette top inside fin spans, the body edge between them.
+    # Soft rear lobes overhanging the peduncle start at 'lobes' and root along
+    # the peduncle line, so each fin ends in its real trailing margin instead of
+    # a vertical cut where the body outline ends.
+    lobe_d, lobe_a = spec.get('lobes', [None, None])
+    d0, d1 = (lobe_d or spec['dorsal'][0][0]), spec['dorsal'][-1][1]; dorsal = []
+    for x in list(range(d0, d1, 20)) + [d1]:
+        inside = x < begin or any(a <= x <= b for a, b in spec['dorsal'])
+        e = column_edges(mask, x)
+        dorsal.append([x, e[0] if inside and e else round(interp(top, x)) + 3])
+    # Anal fin: root along the body bottom, outer edge from the silhouette. A rear
+    # lobe behind the body end roots along the peduncle line.
+    a0, a1 = spec['anal']; a0 = lobe_a or a0; anal = []
+    anal = [[x, rb] for x in range(a0, begin, 25)] if lobe_a else []
+    anal += [[x, round(interp(bottom, x))] for x in list(range(begin if lobe_a else a0, a1, 50)) + [a1]]
     anal += [[x, e[1]] for x in range(a1, a0 - 1, -40) if (e := column_edges(mask, x))]
     # Width along the body from the top view.
     top_view = Image.open(REF / f'{k}-dorsal.jpg').convert('RGB'); tm = fish_mask(top_view, None, spec.get('dorsalDistance', 40))
@@ -106,6 +115,9 @@ def trace(k):
                'pec': spec['pec'], 'pelvic': spec['pelvic'], 'top': top, 'bottom': bottom, 'dorsal': dorsal,
                'fins': [caudal, [], anal], 'rings': spec.get('rings', 120), 'sides': spec.get('sides', 64),
                'dorsalFade': spec.get('dorsalFade', [.045, .045])}
+    if 'pelvicTexture' in spec: profile['pelvicTexture'] = spec['pelvicTexture']
+    for key in ('eyeTop', 'perch'):
+        if key in spec: profile[key] = spec[key]
     data = json.loads((ROOT / 'profiles.json').read_bytes().decode('utf-8')); data[k] = profile
     (ROOT / 'profiles.json').write_bytes((json.dumps(data, indent=2) + '\n').replace('\n', '\r\n').encode('utf-8'))
     im = Image.open(REF / f'{k}.png').convert('RGB'); d = ImageDraw.Draw(im)
