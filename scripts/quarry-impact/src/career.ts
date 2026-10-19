@@ -43,6 +43,7 @@ export const CAREER_GROUPS:readonly CareerGroup[]=[
  {id:'hot-hatch-weekend',title:'Hot Hatch Weekend',discipline:'racing',description:'Work the Kite’s front tyres on club asphalt, forest gravel and a reverse coastal sprint.',cost:3,events:['kite-westmere','kite-hazelwood','kite-seabrook']},
  {id:'ashcombe-club-day',title:'Ashcombe Club Day',discipline:'racing',description:'A flat club circuit of tight corners: the wedge on its own, the brick saloon the wrong way round and two laps in the finned hardtop.',cost:3,events:['ashcombe-saber','ashcombe-tordal','ashcombe-starfin']},
  {id:'round-the-island',title:'Round the Island',discipline:'impact',description:'Kestrel Ring has a walled island in the middle, so every run-up picks a side: hit, finish and survive.',cost:3,events:['kestrel-damage','kestrel-knockouts','kestrel-survivor']},
+ {id:'thornby-hill-day',title:'Thornby Hill Day',discipline:'racing',description:'Twelve metres of climb to a rolling hilltop: the hot hatch up it, the wedge down it backwards and two laps in the V8.',cost:3,events:['thornby-kite','thornby-saber','thornby-morrow']},
 ];
 export const CAREER_SERIES:readonly ClubSeriesId[]=['club','sprint','tour','gauntlet','dirt','road-rally','woodland','county-weekender','airfield-rally','banger-weekend','demolition-tour','freight-speed','heath-canyon','club-ridge','coastal-tour','park-dunes-tour','canal-pass-tour','mud-mayhem'];
 export function normalizeCareerPodiums(value:unknown):Partial<Record<ClubSeriesId,number>>{

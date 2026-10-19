@@ -138,6 +138,9 @@ export const CHALLENGES:readonly Challenge[]=[
   {...event('kestrel-damage','Island traffic','linnet','damage',90,[60,115,180],'Pick a side of the island and keep the roadster hitting heavier cars.'),arena:'kestrel-ring-v1'},
   {...event('kestrel-knockouts','Ring of steel','tordal','knockouts',150,[1,2,4],'Finish weakened opponents as they come round the island.'),arena:'kestrel-ring-v1'},
   {...event('kestrel-survivor','Hold the ring','starfin','condition',75,[15,35,60],'Stay alive for 75 seconds on the ring and deal at least 15 damage.'),arena:'kestrel-ring-v1'},
+  {...race('thornby-kite','Hot hatch hill climb','kite',1,[150,108,80],40),course:'thornby-hill-v1'},
+  {...race('thornby-saber','Over the crest backwards','saber',1,[165,120,90],40),course:'thornby-hill-v1',direction:'reverse'},
+  {...race('thornby-morrow','V8 up the hill twice','morrow',2,[300,220,165],35),course:'thornby-hill-v1'},
 ];
 /** Race and playground challenges retain their own fixed venue; derbies use their listed arena, otherwise Quarry. */
 export const challengeCourse=(c:Challenge):CourseId=>c.mode!=='derby'?resolveCourseId(c.course):'quarry-v1';
