@@ -40,7 +40,7 @@ test('serves FilmCraft and rejects mismatched app paths', async () => {
  assert.equal((await worker.fetch(new Request(url.replace('/filmcraft/','/photocraft/'),{method:'HEAD'}),env)).status,404);
 });
 
-for (const app of ['PDFCraft','WordCraft']) {
+for (const app of ['PDFCraft','WordCraft','VoiceStudio']) {
  test(`serves ${app} only at its matching noindex download path`, async () => {
   const url=`https://jez237.com/software-downloads/${app.toLowerCase()}/${'d'.repeat(64)}/${app}-0.9.0-Setup-x64.exe`;
   const env={INSTALLERS:{head:async()=>({size:123,httpEtag:'abc'})}};
