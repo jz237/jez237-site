@@ -163,6 +163,8 @@ import {dailyChallenge,dailyLighting} from './daily-event';
 import {EventAwards,awardsHtml} from './event-awards';
 import {bankAchievements} from './achievements';
 import {attachCarLights,type CarLights} from './car-lights';
+import {createRain} from './rain';
+import {setWetness} from './driving-surface';
 import {ELIMINATION_INTERVAL,eliminationActive,nextElimination} from './elimination-race';
 import {dailyKey,dailyStreak,dailyWeek,isDailyChallenge,DAILY_PREFIX} from './daily-record';
 import {EVENT_KEY,readEventOptions,circuitRoute,raceGridSlot,derbyGridSlot,checkRoute,lapProgress,CombatScoreboard,eventDerbyOrder,stepScoreRespawns} from './event-rules';
@@ -329,6 +331,7 @@ let profile=readProfile();
 try{profile=readProfile(localStorage.getItem(PROFILE_KEY));}catch{}
 let profileStorageWarning='';
 let activeChallenge:Challenge|undefined;
+let rain:ReturnType<typeof createRain>|null=null;
 const eventAwards=new EventAwards();let slowMoUntil=0;
 /** Brief Burnout-style slow motion when the player wrecks an opponent (local events only). */
 const TAKEDOWN_SLOWMO={scale:.3,seconds:.9};const carLights=new Map<Vehicle,CarLights>();let lastBadges:string[]=[];
@@ -675,6 +678,7 @@ function applyEventLighting(fresh: boolean, choice = settings.lighting) {
   overcastSky ??= createOvercastSky();
   const preset = applyLighting({ sun: quarry.sun, hemisphere: scene.children.find((o): o is T.HemisphereLight => o instanceof T.HemisphereLight), scene, renderer, skies: { clear: clearSky, overcast: overcastSky } }, eventLighting);
   if (staticShadows) staticShadows.intensity = preset.shadow;
+  const raining=eventLighting==='rain';rain??=createRain(scene);rain.setActive(raining);setWetness(raining&&!online?.active?1:0);sound.rain(raining&&state!=='menu');
 }
 let environmentTarget: T.WebGLRenderTarget | undefined;
 let online:OnlineView, onlineUI:OnlineUI, onlinePhase='';
@@ -1705,6 +1709,7 @@ function frame(now: number) {
   updateRumble(now);
   clock += dt;
   if (!physics || state === 'loading'||preparingOnline) return;
+  rain?.update(camera,state==='paused'?0:dt);
   if(state!=='paused')activeVenue.update?.(clock);
   if(adaptiveGraphics.sample(raw*1000,!document.hidden&&!preparingEvent&&!studio&&state==='playing'))applyQuality();
   // Include long stalls in the sustained benchmark, including event restarts.
