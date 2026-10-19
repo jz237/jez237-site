@@ -1,10 +1,11 @@
 import {normalizeCareerUnlocks,normalizeCareerPodiums} from './career';
 import {DAILY_PREFIX,isDailyChallenge,normalizeDaily,type DailyRecord} from './daily-record';
+import {normalizeBadges,normalizeJourney,type Journey} from './achievements';
 import { CHALLENGES, challengeMedal, challengeValue, lowerIsBetter, type Challenge, type Discipline } from './challenges';
 import type {RunStats} from './session-telemetry';
 export const PROFILE_KEY='quarry-impact-driver-v1';
 export type ChallengeRecord={medal:number;best:number|null;attempts:number};
-export type DriverProfile={version:1;career?:{unlocked:string[];podiums?:Partial<Record<import('./club-cup').ClubSeriesId,number>>};xp:Record<Discipline,number>;events:number;wins:number;distance:number;damage:number;knockouts:number;challenges:Record<string,ChallengeRecord>;settled:string[];daily?:Record<string,DailyRecord>};
+export type DriverProfile={version:1;career?:{unlocked:string[];podiums?:Partial<Record<import('./club-cup').ClubSeriesId,number>>};xp:Record<Discipline,number>;events:number;wins:number;distance:number;damage:number;knockouts:number;challenges:Record<string,ChallengeRecord>;settled:string[];daily?:Record<string,DailyRecord>;badges?:string[];journey?:Journey};
 export type Award={xp:Record<Discipline,number>;medal:number;improved:boolean;duplicate:boolean;qualified:boolean};
 const num=(v:unknown,max=1e9)=>typeof v==='number'&&Number.isFinite(v)?Math.max(0,Math.min(max,v)):0;
 const obj=(v:unknown):Record<string,any>=>v&&typeof v==='object'&&!Array.isArray(v)?v as any:{};
@@ -15,6 +16,7 @@ export function readProfile(json?:string|null):DriverProfile {
     challenges:Object.fromEntries(CHALLENGES.flatMap(c=>{const r=obj(records[c.id]);return Object.keys(r).length?[[c.id,{medal:Math.floor(num(r.medal,3)),best:typeof r.best==='number'&&Number.isFinite(r.best)&&r.best>=0?r.best:null,attempts:Math.floor(num(r.attempts))}]]:[];})),
     settled:Array.isArray(raw.settled)?raw.settled.filter((id:unknown)=>typeof id==='string'&&id.length<100).slice(-256):[]};
   const daily=normalizeDaily(raw.daily);if(daily&&Object.keys(daily).length)profile.daily=daily;
+  const badges=normalizeBadges(raw.badges),journey=normalizeJourney(raw.journey);if(badges)profile.badges=badges;if(journey)profile.journey=journey;
   if(raw.career!==undefined){const career=obj(raw.career);profile.career={unlocked:[],...(career.podiums!==undefined?{podiums:normalizeCareerPodiums(career.podiums)}:{})};profile.career.unlocked=normalizeCareerUnlocks(career.unlocked,profile);}
   return profile;
 }
