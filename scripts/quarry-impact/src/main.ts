@@ -57,6 +57,8 @@ import {KESTREL_RING_ARENA,buildKestrelRingPhysics,kestrelRingGround} from './ke
 import {createKestrelRingWorld} from './kestrel-ring-world';
 import {GULLHAVEN_ARENA,buildGullhavenPhysics,gullhavenGround} from './gullhaven-yard-arena';
 import {createGullhavenWorld} from './gullhaven-yard-world';
+import {MOORFIELD_ARENA,buildMoorfieldPhysics,moorfieldGround} from './moorfield-speedbowl-arena';
+import {createMoorfieldWorld} from './moorfield-speedbowl-world';
 import {createWrenfordPitWorld} from './wrenford-pit-world';
 import {createCountyWorld} from './county-world';
 import {createPinecrestWorld} from './pinecrest-world';
@@ -635,11 +637,11 @@ function ensureVenue(id:CourseId,arenaId:ArenaId='quarry-arena-v1'):VenueContext
     const world=new R.World({x:0,y:-9.81,z:0});world.timestep=1/60;
     let artwork:{root:T.Group;update?:(time:number)=>void;dispose():void}|undefined;
     try{
-      const yard=arenaId==='gullhaven-yard-v1',ring=arenaId==='kestrel-ring-v1',mud=arenaId==='wrenford-pit-v1',briarhill=arenaId==='briarhill-bowl-v1',foundry=arenaId==='foundry-yard-v1';
-      (yard?buildGullhavenPhysics:ring?buildKestrelRingPhysics:mud?buildWrenfordPitPhysics:foundry?buildFoundryPhysics:briarhill?buildBriarhillPhysics:buildHarrowPhysics)(R,world);artwork=yard?createGullhavenWorld():ring?createKestrelRingWorld():mud?createWrenfordPitWorld():foundry?createFoundryWorld():briarhill?createBriarhillWorld():createHarrowWorld();
-      const course:RaceCourse={...getRaceCourse(),...(yard?gullhavenGround:ring?kestrelRingGround:mud?wrenfordPitGround:foundry?foundryGround:briarhill?briarhillGround:harrowGround),name:ARENA_NAMES[arenaId]};
+      const bowl=arenaId==='moorfield-speedbowl-v1',yard=arenaId==='gullhaven-yard-v1',ring=arenaId==='kestrel-ring-v1',mud=arenaId==='wrenford-pit-v1',briarhill=arenaId==='briarhill-bowl-v1',foundry=arenaId==='foundry-yard-v1';
+      (bowl?buildMoorfieldPhysics:yard?buildGullhavenPhysics:ring?buildKestrelRingPhysics:mud?buildWrenfordPitPhysics:foundry?buildFoundryPhysics:briarhill?buildBriarhillPhysics:buildHarrowPhysics)(R,world);artwork=bowl?createMoorfieldWorld():yard?createGullhavenWorld():ring?createKestrelRingWorld():mud?createWrenfordPitWorld():foundry?createFoundryWorld():briarhill?createBriarhillWorld():createHarrowWorld();
+      const course:RaceCourse={...getRaceCourse(),...(bowl?moorfieldGround:yard?gullhavenGround:ring?kestrelRingGround:mud?wrenfordPitGround:foundry?foundryGround:briarhill?briarhillGround:harrowGround),name:ARENA_NAMES[arenaId]};
       const checkpoint=new T.Group();checkpoint.visible=false;artwork.root.add(checkpoint);artwork.root.visible=false;scene.add(artwork.root);
-      const venue:VenueContext={arenaId,arena:yard?GULLHAVEN_ARENA:ring?KESTREL_RING_ARENA:mud?WRENFORD_PIT_ARENA:foundry?FOUNDRY_ARENA:briarhill?BRIARHILL_ARENA:HARROW_ARENA,course,physics:world,root:artwork.root,checkpoint,props:[],puddles:[],update:artwork.update,dispose:()=>{artwork!.dispose();world.free();}};
+      const venue:VenueContext={arenaId,arena:bowl?MOORFIELD_ARENA:yard?GULLHAVEN_ARENA:ring?KESTREL_RING_ARENA:mud?WRENFORD_PIT_ARENA:foundry?FOUNDRY_ARENA:briarhill?BRIARHILL_ARENA:HARROW_ARENA,course,physics:world,root:artwork.root,checkpoint,props:[],puddles:[],update:artwork.update,dispose:()=>{artwork!.dispose();world.free();}};
       arenaVenues[arenaId]=venue;return venue;
     }catch(error){artwork?.dispose();world.free();throw error;}
   }
