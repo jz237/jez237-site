@@ -1,6 +1,7 @@
 /** Persistent identities are independent of scenery, physics and browser APIs. */
 export const COURSE_NAMES={
  'millbrook-canal-v1':'Millbrook Canal Circuit',
+ 'ashcombe-lanes-v1':'Ashcombe Lanes',
  'granite-pass-v1':'Granite Pass Rally',
  'kingswell-park-v1':'Kingswell Park Circuit',
  'copperfield-dunes-v1':'Copperfield Dunes Rally',
@@ -18,10 +19,12 @@ export const COURSE_NAMES={
  'rookvale-yard-v1':'Rookvale Freight Yard',
  'fenwick-oval-v1':'Fenwick Banger Oval',
  'fenwick-eight-v1':'Fenwick Figure Eight',
+ 'alderwick-cross-v1':'Alderwick Double Cross',
  'alderwick-stunt-v1':'Alderwick Stunt Park',
  'millhaven-rally-v1':'Millhaven Rally Park',
  'merefield-airfield-v1':'Merefield Airfield',
  'dockside-loop-v1':'Dockside Loop',
+ 'wrenford-mud-v1':'Wrenford Mud Oval',
  'fairground-scramble-v1':'Fairground Scramble',
  'pinecrest-ridge-v1':'Pinecrest Ridge',
  'quarry-v1':'Blackridge Quarry',
