@@ -136,3 +136,15 @@ test('an explicit browser clock seeds the separate effect stream; an invalid clo
  assert.throws(()=>make({sourceClock:()=>1}),/unsigned64/);assert.throws(()=>make({sourceClock:()=>1n<<64n}),/unsigned64/);
  assert.throws(()=>make({onEffectsDisplay:1}),/display consumer/);
 });
+
+test('native Time trial runs the scene-effects owner without course actors and keeps one spray owner',()=>{
+ let shown=0;const s=createRace({mode:'time',physics:'native',course:getCourse('amber',1),difficulty:1,nativeSceneEffects:{onDisplay:()=>shown++}}),h=s.nativeHost;
+ assert.equal(h.spray,undefined);assert.equal(h.courseActors,undefined);assert.equal(h.effectStartup.state.effectWords0790[0],1);assert.equal(h.effectStartup.state.effectWords0790[e(0x7a08)],0);
+ const spray=createNativeRaceSpray({adapters:h.world.adapters,field:s.raceWater.field,courseIndex:s.course.sourceWaterCourseIndex}),advance=h.advanceSceneEffects;let audible=0;
+ h.advanceSceneEffects=()=>{spray.advance(s.nativeLaunch.sprayInputs(),s.nativeLaunch.cameraStorage.read());advance();assert.deepEqual(h.sprayLevels(),spray.levels());if(spray.levels()[0].left)audible++;};
+ for(let i=0;i<900;i++)stepRace(s,{throttle:1,steer:i%240<120?.4:-.3},1/60);
+ assert.equal(shown,h.world.frames);assert.ok(audible>20);
+ for(const options of [{mode:'time',course:getCourse('amber',1)},{mode:'versus',physics:'native',course:getCourse('amber',1)},{mode:'practice',physics:'native',course:getCourse('practice'),nativeCourseActors:{assets,onDisplay(){}}}])
+  assert.throws(()=>createRace({...options,nativeSceneEffects:{onDisplay(){}}}),/Separate scene effects/);
+ assert.throws(()=>createRace({mode:'time',physics:'native',course:getCourse('amber',1),difficulty:1,nativeSceneEffects:{onDisplay:1}}),/display consumer/);
+});
