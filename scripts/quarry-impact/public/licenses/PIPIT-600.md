@@ -1,0 +1,3 @@
+# Pipit 600
+
+Original fictional Quarry Impact 1960s European two-door microcar, authored in 2026 using the shared original formed-panel tooling: rounded egg-shaped body, short front luggage lid, big round headlamps in body-colour pods, framed bubble glasshouse with a domed roof and roll-back fabric sunroof, slim chrome bumpers with overriders, painted dash with a single dial, and a louvred rear engine lid over an air-cooled twin driving the rear wheels. Road wheels reuse the original Marten assemblies at a smaller scale. No real vehicle branding, badges or designs are reproduced. Source: src/pipit-asset.ts; generator: tools/build-pipit.ts. No external images or vehicle models.
