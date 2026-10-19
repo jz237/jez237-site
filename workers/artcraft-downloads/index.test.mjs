@@ -51,3 +51,16 @@ for (const app of ['PDFCraft','WordCraft','VoiceStudio']) {
   assert.equal((await worker.fetch(new Request(url.replace('/'+app.toLowerCase()+'/', '/filmcraft/'),{method:'HEAD'}),env)).status,404);
  });
 }
+
+test('Ledger calendar previews stay scoped to Ledger downloads', async () => {
+ const env={INSTALLERS:{head:async()=>({size:123,httpEtag:'abc'})}};
+ const base='https://jez237.com/software-downloads/ledgerreborn/'+ 'e'.repeat(64) + '/LedgerReborn-';
+ for (const ver of ['2026.10.12-preview.1','2026.10.12']) {
+  const url=base+ver+'-Setup-x64.exe';
+  const r=await worker.fetch(new Request(url,{method:'HEAD'}),env);
+  assert.equal(r.status,200);assert.match(r.headers.get('X-Robots-Tag'),/noindex/);
+  assert.equal((await worker.fetch(new Request(url.replaceAll('ledgerreborn','photocraft').replaceAll('LedgerReborn','PhotoCraft'),{method:'HEAD'}),env)).status,ver.includes('preview')?404:200);
+  assert.equal((await worker.fetch(new Request(url.replace('/ledgerreborn/','/voicestudio/'),{method:'HEAD'}),env)).status,404);
+ }
+ assert.equal((await worker.fetch(new Request(base+'2026.10.12-beta.1-Setup-x64.exe',{method:'HEAD'}),env)).status,404);
+});
