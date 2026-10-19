@@ -35,3 +35,7 @@ test('the biggest hit keeps its time for the replay shortcut',()=>{
  const a=new EventAwards();assert.equal(a.biggestHit,null);a.hit(1,2,10,false,4.5);a.hit(3,4,8,false,9);a.hit(5,6,20,true,Number.NaN);
  assert.deepEqual(a.biggestHit,{attacker:5,victim:6,damage:20,time:0});a.hit(7,8,25,false,12.25);assert.equal(a.biggestHit!.time,12.25);
 });
+test('the live rival is whoever has hurt the player most so far',()=>{
+ const a=new EventAwards();assert.equal(a.rivalOf(0),null);a.hit(3,0,4);assert.equal(a.rivalOf(0),null,'below 5 damage');a.hit(5,0,6);a.hit(3,0,3);
+ assert.deepEqual(a.rivalOf(0),{id:3,damage:7});a.hit(0,3,50);assert.deepEqual(a.rivalOf(0),{id:3,damage:7});assert.equal(a.rivalOf(9),null);
+});

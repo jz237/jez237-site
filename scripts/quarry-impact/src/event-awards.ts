@@ -18,6 +18,8 @@ export class EventAwards{
   return wrecked;
  }
  takedownsFor(id:number){return this.takedowns.get(id)??0;}
+ /** Live rival: the opponent who has dealt the given driver the most damage so far (5+). */
+ rivalOf(playerId:number){let id=-1,most=0;for(const [pair,damage] of this.dealt){const [a,v]=pair.split('>').map(Number);if(v===playerId&&a!==playerId&&(damage>most||(damage===most&&a<id))){id=a;most=damage;}}return most>=5?{id,damage:most}:null;}
  /** The single biggest impact so far (for the replay shortcut on results). */
  get biggestHit(){return this.biggest?{...this.biggest}:null;}
  /** Starting order (car ids, leader first); only the first call counts. */
