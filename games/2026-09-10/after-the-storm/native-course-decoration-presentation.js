@@ -5,7 +5,8 @@ import {captureNativeStuntWorld} from './native-stunt-presentation.js';
 export function createNativeCourseDecorationPresentation({course,readState,scale=.025}){
  if(typeof readState!=='function'||!Number.isFinite(scale)||scale<=0)throw new TypeError('Expected canonical decoration owner');
  const initial=readState(),d=new DataView(new ArrayBuffer(4)),mode=initial.scene.mode620,index=initial.scene.courseIndex;
- if(![0,1].includes(mode)||index!==course.sourceWaterCourseIndex)throw new RangeError('Select an ordinary source course');
+ // Time trial, two-player and championship share the ordinary decorations.
+ if(![0,1,4].includes(mode)||index!==course.sourceWaterCourseIndex)throw new RangeError('Select an ordinary source course');
  const float=w=>{d.setUint32(0,w);const v=d.getFloat32(0);if(!Number.isFinite(v))throw new RangeError('Invalid decoration position');return v;};
  const position=(a,i)=>a.slice(i*49,i*49+3).map(w=>float(w)*scale);
  const a=initial.objectWordsC940,used=new Set();

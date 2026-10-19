@@ -65,7 +65,8 @@ function createNativeObjectPresentation({course,readState,scale=.025},ordinary){
  if(typeof readState!=='function'||!Number.isFinite(scale)||scale<=0)throw new TypeError('Expected selected Stunt display owner');
  const initial=readState(),raw=initial.objectWordsC940,courseIndex=initial.scene.courseIndex,d=new DataView(new ArrayBuffer(4));
  const mode=initial.scene.mode620;
- if(!(ordinary?[0,1].includes(mode):mode===11)||course.sourceWaterCourseIndex!==courseIndex)throw new RangeError('Object display requires its selected course and mode');
+ // Championship (mode4) races the same ordinary object layout.
+ if(!(ordinary?[0,1,4].includes(mode):mode===11)||course.sourceWaterCourseIndex!==courseIndex)throw new RangeError('Object display requires its selected course and mode');
  const float=w=>{d.setUint32(0,w);return scalar(d.getFloat32(0));};
  const position=(a,row)=>keys.map((_,j)=>float(a[row*49+j])*scale);
  const rows=Array.from({length:initial.scene.objectCountFa40},(_,i)=>i),rings=[],volumes=[],used=new Set();
