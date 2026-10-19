@@ -687,3 +687,4 @@ kbd {
 @media(max-width:850px){#venue-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:560px){#venue-browser{padding:18px}#venue-grid{grid-template-columns:1fr}.venue-tools{flex-direction:column;gap:12px}.venue-panel header{gap:8px}}
 
 .venue-watch{display:flex;align-items:center;gap:10px;font-size:14px;color:#e1bd71;margin:14px 0}.venue-watch input{width:18px;height:18px;accent-color:#d9bd7a}.venue-watch:has(input:disabled){opacity:.5}
+.event-awards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0}.event-award{padding:12px 14px;border:1px solid #76877766;background:#1d3129cc}.event-award .eyebrow{display:block;font-size:9px;letter-spacing:1.6px;color:#ddc489}.event-award b{display:block;font-size:15px;margin:6px 0 4px;color:#f1ebd9}.event-award small{display:block;font-size:10px;line-height:1.5;color:#bdc6b8}.event-award-you{border-color:#ddc489;background:#3a3a22cc}.event-award-you b{color:#f1ce78}

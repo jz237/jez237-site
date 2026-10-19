@@ -158,6 +158,7 @@ import { CHALLENGES, challengeCourse, challengeValue, formatChallengeValue, chal
 import { PROFILE_KEY, readProfile, settleRun, type Award } from './progression';
 import { showDriverProfile, awardText, MEDALS } from './profile-ui';
 import {dailyChallenge} from './daily-event';
+import {EventAwards,awardsHtml} from './event-awards';
 import {dailyKey,dailyStreak,isDailyChallenge,DAILY_PREFIX} from './daily-record';
 import {EVENT_KEY,readEventOptions,circuitRoute,raceGridSlot,derbyGridSlot,checkRoute,lapProgress,CombatScoreboard,eventDerbyOrder,stepScoreRespawns} from './event-rules';
 import {showEventSetup} from './event-ui';
@@ -321,6 +322,7 @@ let profile=readProfile();
 try{profile=readProfile(localStorage.getItem(PROFILE_KEY));}catch{}
 let profileStorageWarning='';
 let activeChallenge:Challenge|undefined;
+const eventAwards=new EventAwards();
 let stuntProgress:StuntChallengeProgress|null=null;
 let telemetry:SessionTelemetry|null=null,runId='',runSettled=true,lastAward:Award|null=null;
 const raceLaps=()=>clubRound()?.laps??(online?.active?onlineRules()?.laps??3:activeTimeTrial?1:activeChallenge?.laps??(demo?demoOptions.laps:eventOptions.laps));
@@ -889,7 +891,7 @@ async function start(watch=demo) {
     camera.position.copy(cars[0].current).add(new T.Vector3(0, 4, -8));
     hud();
     sound.pause(false);
-    telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
+    eventAwards.reset();telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
     beginReplay();
     if(preparationInterrupted||document.hidden)pause();
     return true;
@@ -1354,6 +1356,7 @@ function finish(title: string) {
   }
   ui.innerHTML = `<div class="overlay"><div class="dialog"><div class="eyebrow">${pursuit?'CHASE · ':''}${eventLabel()} / RESULTS${customEvent()&&mode!=='playground'?' · '+AI_DIFFICULTIES[drivers.difficulty].label.toUpperCase()+' AI':''}</div><h2>${title}</h2>${customEvent()&&mode!=='playground'?`<p>${GRID_LINEUPS[eventOptions.lineup??'mixed']} · ${GRID_PERFORMANCE[eventOptions.performance??'open']} · ${classLimitLabel(eventOptions.classLimit)} · ${DAMAGE_RULES[damageRule()].label}</p>`:''}<p>${pursuit?(pursuitTeamWon(pursuit,cars[0].id)?'YOUR TEAM WINS':'YOUR TEAM LOSES'):'Placed '+rank+' of '+cars.length} · ${Math.ceil(cars[0].health)}% condition<br>${pursuit?formatTime(elapsed)+' chase · No recoveries':mode === 'derby' ? scoreDerby()?combat.points(cars[0].id)+' points · '+combat.get(cars[0].id).knockouts+' knockouts · '+(combat.get(cars[0].id).spins??0)+' spin-outs · '+(combat.get(cars[0].id).bonus??0)+' bonus points'+(combat.get(cars[0].id).rivalHits?' · '+combat.get(cars[0].id).rivalHits+' rival hits':''):Math.round(cars[0].inflicted) + ' damage inflicted'+(combat.rivals?' · '+(combat.get(cars[0].id).bonus??0)+' bonus points · '+(combat.get(cars[0].id).rivalHits??0)+' rival hits':'') : raceTimeLimit()?timedRaceResult(cars[0])+' · '+formatTime(raceTimeLimit())+' timed race':cars[0].finished?formatTime(cars[0].finishTime)+' including recovery penalties':cars[0].health<=0?'RETIRED · CAR WRECKED':'DNF · RACE NOT FINISHED'}</p>${ordered.map((c, i) => `<div class="results-row ${isPlayer(c) ? 'player' : ''}"><span>${pursuit?(pursuit.role(c.id)==='runner'?'RUNNER':'PURSUER'):String(i + 1).padStart(2, '0')} &nbsp; ${resultDriverLabel(displayedDriver(c),isPlayer(c))}</span><span>${pursuit?(pursuit.role(c.id)==='runner'?(pursuit.result(c.id)?.outcome==='escaped'?'ESCAPED · '+formatTime(c.finishTime):c.health<=0?'WRECKED':'TIME EXPIRED'):Math.ceil(c.health)+'% CONDITION'):mode === 'derby' ? scoreDerby()?combat.points(c.id)+' PTS':Math.ceil(c.health) + '%' : raceTimeLimit()?timedRaceResult(c):c.finished ? formatTime(c.finishTime) : (c.health<=0?'RETIRED':'DNF')+' · '+(waypointRace?'STATIONS '+c.passed:'LAP '+Math.min(raceLaps(), c.lap))}</span></div>`).join('')}<p class="award-summary">${awardText(lastAward)}</p><button class="primary" id="again">RUN IT BACK ↗</button><button class="small-button" id="back">RETURN TO QUARRY</button></div></div>`;
   if(!demo&&!online?.active&&!pursuit&&mode==='race'&&cars[0].finished&&cars.length>=2)globalScoresButton(ui.querySelector('.dialog'),{rank,field:cars.length,condition:Math.max(0,Math.min(100,cars[0].health)),course:activeVenue.course.id});
+  if(!online?.active&&!pursuit&&(mode==='race'||mode==='derby')){const name=(id:number)=>{const c=cars.find(v=>v.id===id);return c?`#${id+1} ${DEFINITIONS[c.kind].name}`:`#${id+1}`;};const html=awardsHtml(eventAwards.awards(mode,cars,mode==='race'?rankRace().map(c=>c.id):[]),name,cars[0].id);if(html)ui.querySelector('.dialog button')?.insertAdjacentHTML('beforebegin',html);}
   studioButtons(ui.querySelector('.dialog'));
   document.querySelector<HTMLButtonElement>('#again')!.onclick = () => start();
   document.querySelector<HTMLButtonElement>('#back')!.onclick = () => {
@@ -1375,6 +1378,7 @@ function step(dt: number) {
   }
   if (state !== 'playing') return;
   elapsed += dt;
+  if(mode==='race'&&!eventAwards.started&&elapsed>.5&&!online?.active)eventAwards.grid(rankRace().map(c=>c.id));
   if(demo||autopilot||testInput){telemetry=null;if(activeTimeTrial)timeTrialInvalidReason='ASSISTED OR TEST INPUT';}
   for (const c of cars) {
     c.input = pursuit&&(c.health<=0||pursuit.result(c.id)?.outcome==='escaped')?{throttle:0,steer:0,brake:1,handbrake:false}:raceTimeLimit()&&c.id===0&&c.finished&&!demo ? ai(c,dt) : c.id===0&&activeClubRound!==null&&clubPlayerStopped ? clubRetired||!c.finished?{throttle:0,steer:0,brake:1,handbrake:false}:ai(c,dt) : c.id === 0 && !autopilot && !demo ? input() : ai(c, dt);
@@ -1411,13 +1415,13 @@ function step(dt: number) {
     if(a){
       const before=a.health;
       a.collisionHit(point1,vb.clone().sub(va).normalize(),damage,elapsed,b?.paintColor);
-      if(b){b.inflicted+=before-a.health;combat.hit(b.id,a.id,before,a.health,elapsed);if(mode==='derby')combat.contact(scoreMotion[b.id],scoreMotion[a.id],before-a.health,elapsed);}
+      if(b){b.inflicted+=before-a.health;eventAwards.hit(b.id,a.id,before-a.health);combat.hit(b.id,a.id,before,a.health,elapsed);if(mode==='derby')combat.contact(scoreMotion[b.id],scoreMotion[a.id],before-a.health,elapsed);}
       if(b?.id===0)telemetry?.impact(a.id,before,a.health);
     }
     if(b){
       const before=b.health;
       b.collisionHit(point2,va.clone().sub(vb).normalize(),damage,elapsed,a?.paintColor);
-      if(a){a.inflicted+=before-b.health;combat.hit(a.id,b.id,before,b.health,elapsed);if(mode==='derby')combat.contact(scoreMotion[a.id],scoreMotion[b.id],before-b.health,elapsed);}
+      if(a){a.inflicted+=before-b.health;eventAwards.hit(a.id,b.id,before-b.health);combat.hit(a.id,b.id,before,b.health,elapsed);if(mode==='derby')combat.contact(scoreMotion[a.id],scoreMotion[b.id],before-b.health,elapsed);}
       if(a?.id===0)telemetry?.impact(b.id,before,b.health);
     }
     if(feedback){

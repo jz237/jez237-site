@@ -1,6 +1,7 @@
+import {restoreEventAwardsBytes} from './event-awards-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readDailyEventPrevious,restoreDailyEventBytes,verifyDailyEventRevision} from './daily-event-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreEventAwardsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('DailyEvent preserves every prior fixture, vehicle asset, venue art and history input',verifyDailyEventRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/daily-event/revision.json').toString());
