@@ -8,20 +8,40 @@ import {type MarineSpecies} from './MarineModels.ts';
 import {type Obstacle} from './ReefScene.ts';
 
 type Species=MarineSpecies;
-const names:Record<Species,string>={tang:'Blue tang',semilarvatus:'Golden butterflyfish',clown:'Clownfish',anthias:'Anthias',chromis:'Blue-green chromis',gramma:'Royal gramma',goby:'Mandarin dragonet'};
-const descriptions:Record<Species,string>={tang:'A laterally compressed body lets this blue tang turn between reef structures. It alternates fin-powered cruising with short tail-driven bursts, exploring the open channel and rock edges.',semilarvatus:'Chaetodon semilarvatus, the golden or bluecheek butterflyfish, has fine orange vertical stripes and a blue-gray patch behind the eye. Watch its independent fins, gentle cruising and pauses near the reef. This Red Sea species feeds on coral polyps and other small invertebrates; this mixed display is illustrative, not a coral-safe stocking recommendation.',clown:'The two clownfish stay close to their host anemone. They make short foraging trips into the water and return to shelter, rather than joining the open-water school.',anthias:'These female lyretail anthias hold feeding stations above the reef, facing the gently changing current. Watch for short prey-directed darts and returns, independent fin strokes, and quieter visits toward shelter at night.',chromis:'Blue-green chromis coordinate with nearby schoolmates above the reef: matching headings, drawing together and keeping space. Each fish has its own stroke-and-glide timing and can leave briefly for food before rejoining. At night they seek reachable water near reef shelter.',goby:'Synchiropus splendidus hovers close to reef rubble with fluttering pectoral fins, rests on its broad lower fins, and pecks at tiny crustaceans. Short moves and flexible turns interrupt its pauses. It is a dragonet, often called a mandarin goby; it does not sift mouthfuls of sand. The tiny food items here illustrate prey capture, not a living copepod population.',gramma:'The royal gramma keeps a persistent shelter near the reef. It makes short exploratory forays, pauses nearby and retreats when a larger fish approaches. Feeding stays local to its home instead of taking it on laps of the tank.'};
-const specs:Record<Species,{h:number;w:number;size:number;color:string}>={tang:{h:.32,w:.095,size:.83,color:'#285deb'},semilarvatus:{h:.35,w:.09,size:.72,color:'#ffd800'},clown:{h:.21,w:.12,size:.4664,color:'#f68210'},anthias:{h:.16,w:.075,size:.47,color:'#f8783c'},chromis:{h:.19,w:.085,size:.41,color:'#59bde0'},gramma:{h:.16,w:.07,size:.49,color:'#b951df'},goby:{h:.19,w:.133,size:.59,color:'#ef7623'}};
+const names:Record<Species,string>={tang:'Blue tang',rostratum:'Black tang',semilarvatus:'Golden butterflyfish',clown:'Clownfish',anthias:'Anthias',chromis:'Blue-green chromis',gramma:'Royal gramma',goby:'Mandarin dragonet'};
+const descriptions:Record<Species,string>={tang:'A laterally compressed body lets this blue tang turn between reef structures. It alternates fin-powered cruising with short tail-driven bursts, exploring the open channel and rock edges.',rostratum:'Zebrasoma rostratum, the black or longnose tang, uses its long snout to pick algae from crevices in the reef. Watch it patrol by rowing with its pectoral fins, stop to graze with quick bites, and fold its tall sails when it speeds up. When another tang comes close it turns broadside, raises its dorsal and anal fins and sweeps the white scalpel beside its tail, sometimes following with a short chase. Behavior here is illustrative, not a stocking or compatibility guide.',semilarvatus:'Chaetodon semilarvatus, the golden or bluecheek butterflyfish, has fine orange vertical stripes and a blue-gray patch behind the eye. Watch its independent fins, gentle cruising and pauses near the reef. This Red Sea species feeds on coral polyps and other small invertebrates; this mixed display is illustrative, not a coral-safe stocking recommendation.',clown:'The two clownfish stay close to their host anemone. They make short foraging trips into the water and return to shelter, rather than joining the open-water school.',anthias:'These female lyretail anthias hold feeding stations above the reef, facing the gently changing current. Watch for short prey-directed darts and returns, independent fin strokes, and quieter visits toward shelter at night.',chromis:'Blue-green chromis coordinate with nearby schoolmates above the reef: matching headings, drawing together and keeping space. Each fish has its own stroke-and-glide timing and can leave briefly for food before rejoining. At night they seek reachable water near reef shelter.',goby:'Synchiropus splendidus hovers close to reef rubble with fluttering pectoral fins, rests on its broad lower fins, and pecks at tiny crustaceans. Short moves and flexible turns interrupt its pauses. It is a dragonet, often called a mandarin goby; it does not sift mouthfuls of sand. The tiny food items here illustrate prey capture, not a living copepod population.',gramma:'The royal gramma keeps a persistent shelter near the reef. It makes short exploratory forays, pauses nearby and retreats when a larger fish approaches. Feeding stays local to its home instead of taking it on laps of the tank.'};
+const specs:Record<Species,{h:number;w:number;size:number;color:string}>={tang:{h:.32,w:.095,size:.83,color:'#285deb'},rostratum:{h:.36,w:.08,size:.84,color:'#1c1916'},semilarvatus:{h:.35,w:.09,size:.72,color:'#ffd800'},clown:{h:.21,w:.12,size:.4664,color:'#f68210'},anthias:{h:.16,w:.075,size:.47,color:'#f8783c'},chromis:{h:.19,w:.085,size:.41,color:'#59bde0'},gramma:{h:.16,w:.07,size:.49,color:'#b951df'},goby:{h:.19,w:.133,size:.59,color:'#ef7623'}};
 const v=(x:number,y:number,z=0)=>new T.Vector3(x,y,z);
-type Fish={group:T.Group;species:Species;position:T.Vector3;velocity:T.Vector3;goal:T.Vector3;radius:number;yaw:number;yawVelocity:number;pitch:number;clock:{value:number};effort:{value:number};waveGain:{value:number};turnBend:{value:number};mouthOpening:{value:number};gillOpening:{value:number};respiration:number;until:number;phase:number;pectoral:T.Group[];mouth:T.Group;eyes:T.Group;mode:string;progressPosition:T.Vector3;progressAt:number;blockedTime:number;recoverUntil:number;hostLeg:number;hostHold:number;hostVisits:number;clearance:number;home:T.Vector3;gobyCycle:number;pecks:number;individuality:number;drive:number;strokeUntil:number;coasting:boolean;tailRest:number;feedingUntil:number;energy:number;hunger:number;memory:T.Vector3|null;shelter:T.Vector3;social:T.Vector3;holdUntil:number;food:Food|null};
+const UP=v(0,1,0);
+const large=(s:Species)=>s==='tang'||s==='rostratum'||s==='semilarvatus';
+const wrap=(a:number)=>Math.atan2(Math.sin(a),Math.cos(a));
+/** Established display stocking; pages may extend it with gallery-only species. */
+export const defaultPopulation:[Species,number][]=[['tang',1],['semilarvatus',1],['clown',2],['anthias',7],['chromis',8],['gramma',1],['goby',1]];
+/** A reef face the black tang works over: stand-off water, the proxy surface and its bite plan. */
+type Graze={obstacle:Obstacle;normal:T.Vector3;stand:T.Vector3;point:T.Vector3;bites:number;next:number;biteAt:number;shifts:number};
+type Fish={group:T.Group;species:Species;finFold:{value:number};graze:Graze|null;rival:Fish|null;displayUntil:number;chaseUntil:number;displayCooldown:number;position:T.Vector3;velocity:T.Vector3;goal:T.Vector3;radius:number;yaw:number;yawVelocity:number;pitch:number;clock:{value:number};effort:{value:number};waveGain:{value:number};turnBend:{value:number};mouthOpening:{value:number};gillOpening:{value:number};respiration:number;until:number;phase:number;pectoral:T.Group[];mouth:T.Group;eyes:T.Group;mode:string;progressPosition:T.Vector3;progressAt:number;blockedTime:number;recoverUntil:number;hostLeg:number;hostHold:number;hostVisits:number;clearance:number;home:T.Vector3;gobyCycle:number;pecks:number;individuality:number;drive:number;strokeUntil:number;coasting:boolean;tailRest:number;feedingUntil:number;energy:number;hunger:number;memory:T.Vector3|null;shelter:T.Vector3;social:T.Vector3;holdUntil:number;food:Food|null};
 export type Food={position:T.Vector3;alive:boolean;age:number;sinkRate?:number};
 export class ReefFish{
  readonly fish:Fish[]=[];readonly foods:Food[]=[];readonly notes:T.Object3D[]=[];private clock=0;private shoalGoal=v(2.5,4.15,.2);private nextShoalMove=0;private isNight=false;private templates=new Map<Species,T.Group>();private eatCount=0;private foodMesh:T.InstancedMesh;private dummy=new T.Object3D();
- constructor(private scene:T.Scene,private obstacles:Obstacle[],private hosts:T.Vector3[],templates:Map<Species,T.Group>,private hostScale=1){
+ constructor(private scene:T.Scene,private obstacles:Obstacle[],private hosts:T.Vector3[],templates:Map<Species,T.Group>,private hostScale=1,population=defaultPopulation){
   this.templates=templates;
   this.foodMesh=new T.InstancedMesh(new T.SphereGeometry(.022,6,4),new T.MeshStandardMaterial({color:'#cf9d67',roughness:.8}),48);this.foodMesh.count=0;this.foodMesh.name="Food morsels";this.foodMesh.userData.note=foodNote;this.notes.push(this.foodMesh);scene.add(this.foodMesh);
-  for(const [s,count] of [['tang',1],['semilarvatus',1],['clown',2],['anthias',7],['chromis',8],['gramma',1],['goby',1]] as [Species,number][]){
-   for(let i=0;i<count;i++){
-    const group=this.templates.get(s)!.clone(true),clock={value:Math.random()*7},effort={value:.5},waveGain={value:s==='goby'?.2:1},turnBend={value:0},mouthOpening={value:0},gillOpening={value:0};
+  for(const [s,count] of population)for(let i=0;i<count;i++)this.spawn(s,i);
+ }
+ /** Release water near the surface, clear of rock and every other animal. */
+ private releasePoint(s:Species){
+  const radius=specs[s].size*(large(s)?.4:.31);
+  for(let attempt=0;attempt<80;attempt++){
+   const p=v((Math.random()-.5)*6.4,4.45+Math.random()*.35,-.4+Math.random()*1.9);
+   if(this.free(p,radius)&&this.fish.every(o=>p.distanceTo(o.position)>radius+o.radius+.12))return p;
+  }
+ }
+ /** Builds one inhabitant. Without a release point it uses the validated habitat
+  * placement of the original stocking, with the same sequence of random draws. */
+ private spawn(s:Species,i:number,release?:T.Vector3,added=false){
+  {
+   {
+    const group=this.templates.get(s)!.clone(true),clock={value:Math.random()*7},effort={value:.5},waveGain={value:s==='goby'?.2:1},turnBend={value:0},mouthOpening={value:0},gillOpening={value:0},finFold={value:0};
     // Parts with the same imported material and deformation share one material
     // within this animal. Uniforms remain independent between inhabitants;
     // transparent meshes and their depth ordering remain separate draws.
@@ -38,7 +58,7 @@ export class ReefFish{
       };mat.customProgramCacheKey=()=> 'reef-attached-operculum-v1';
      }
      if(o.name==='body'||o.name==='fin'){
-      const isBody=o.name==='body',isPectoral=Boolean(o.userData.pectoral);mat.onBeforeCompile=shader=>{shader.uniforms.swimTime=clock;shader.uniforms.swimEffort=effort;shader.uniforms.waveGain=waveGain;shader.uniforms.turnBend=turnBend;shader.uniforms.mouthOpening=mouthOpening;shader.uniforms.mouthY={value:metadata[s].mouth[1]};shader.uniforms.jawRadius={value:(metadata[s].upper.at(-1)![1]-metadata[s].lower.at(-1)![1])*1.2};shader.vertexShader='uniform float swimTime,swimEffort,waveGain,turnBend,mouthOpening,mouthY,jawRadius;\n'+(isBody?'':'attribute float finFlex; attribute vec3 finGradient;\n')+shader.vertexShader;
+      const isBody=o.name==='body',isPectoral=Boolean(o.userData.pectoral);mat.onBeforeCompile=shader=>{shader.uniforms.swimTime=clock;shader.uniforms.swimEffort=effort;shader.uniforms.waveGain=waveGain;shader.uniforms.turnBend=turnBend;shader.uniforms.mouthOpening=mouthOpening;shader.uniforms.finFold=finFold;shader.uniforms.mouthY={value:metadata[s].mouth[1]};shader.uniforms.jawRadius={value:(metadata[s].upper.at(-1)![1]-metadata[s].lower.at(-1)![1])*1.2};shader.vertexShader='uniform float swimTime,swimEffort,waveGain,turnBend,mouthOpening,mouthY,jawRadius,finFold;\n'+(isBody?'':'attribute float finFlex,finHeight; attribute vec3 finGradient;\n')+shader.vertexShader;
        shader.vertexShader=shader.vertexShader.replace('#include <beginnormal_vertex>',`#include <beginnormal_vertex>
         float tail=clamp((.3-position.x)/.9,0.,1.),dTail=position.x>-.6&&position.x<.3?-1./.9:0.;
         float slope=(2.*tail*dTail*sin(swimTime*7.5-position.x*7.)-7.*tail*tail*cos(swimTime*7.5-position.x*7.))*(.018+swimEffort*.075)*waveGain;
@@ -58,6 +78,7 @@ export class ReefFish{
         objectNormal=normalize(objectNormal);`);
        shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>
         ${isBody?'transformed.y+=jawY*jawWeight*mouthOpening*jawFalloff;':''}
+        ${!isBody&&!isPectoral?'transformed.y-=finFold*finHeight*.55;':''}
         float rear=clamp((.3-position.x)/.9,0.,1.);
         ${isPectoral?'':'transformed.z+=rear*rear*sin(swimTime*7.5-position.x*7.)*(.018+swimEffort*.075)*waveGain;'}
         ${isBody?'':'transformed.z+=sin(swimTime*9.-position.x*8.)*finFlex*(.015+abs(position.y)*.11);'}
@@ -70,16 +91,49 @@ export class ReefFish{
         reflectedLight.directSpecular*=oralExposure;
         reflectedLight.indirectSpecular*=oralExposure;
        `);
-      };mat.customProgramCacheKey=()=>`reef-${isBody?'body':isPectoral?'pectoral':'fin'}-curved-localized-respiration-flex-v8`;
+      };mat.customProgramCacheKey=()=>`reef-${isBody?'body':isPectoral?'pectoral':'fin'}-curved-localized-respiration-flex-fold-v9`;
      }
     }});
-    const size=specs[s].size*(.83+Math.random()*.17);group.scale.setScalar(size);group.userData.note={title:names[s],description:descriptions[s]};scene.add(group);this.notes.push(group);
-    let position=this.destination(s,i);const radius=size*(s==='goby'?.87:s==='tang'||s==='semilarvatus'?.4:.31),clearance=s==='goby'?size*.20:radius;for(let attempt=0;attempt<500;attempt++){if(this.free(position,radius,clearance)&&this.fish.every(o=>position.distanceTo(o.position)>radius+o.radius+.06))break;position=this.destination(s,i);}
-    const fish:Fish={group,species:s,position,velocity:v(0,0,0),goal:position.clone(),radius,clearance,home:position.clone(),gobyCycle:0,pecks:0,yaw:Math.random()*6.28,yawVelocity:0,pitch:0,clock,effort,waveGain,turnBend,mouthOpening,gillOpening,respiration:Math.random()*Math.PI*2,until:0,phase:Math.random()*6.28,pectoral:group.children.filter(o=>o.name==='pectoral') as T.Group[],mouth:group.getObjectByName('mouth') as T.Group,eyes:group.getObjectByName('eyes') as T.Group,mode:'exploring',progressPosition:position.clone(),progressAt:0,blockedTime:0,recoverUntil:0,hostLeg:i%3,hostHold:0,hostVisits:0,individuality:.88+Math.random()*.24,drive:Math.random(),strokeUntil:Math.random()*3,coasting:false,tailRest:1,feedingUntil:0,energy:.72+Math.random()*.25,hunger:.55+Math.random()*.3,memory:null,shelter:position.clone(),social:v(0,0,0),holdUntil:0,food:null};group.position.copy(position);this.fish.push(fish);
-    if(s==='gramma'){fish.home.copy(this.reefPatch(fish,2.1)??position);fish.shelter.copy(fish.home);fish.position.copy(fish.home);fish.group.position.copy(fish.position);fish.goal.copy(fish.home);fish.progressPosition.copy(fish.home);}
+    const size=specs[s].size*(.83+Math.random()*.17);group.scale.setScalar(size);group.userData.note={title:names[s],description:descriptions[s]};this.scene.add(group);this.notes.push(group);
+    let position=release?release.clone():this.destination(s,i);const radius=size*(s==='goby'?.87:large(s)?.4:.31),clearance=s==='goby'?size*.20:radius;if(!release)for(let attempt=0;attempt<500;attempt++){if(this.free(position,radius,clearance)&&this.fish.every(o=>position.distanceTo(o.position)>radius+o.radius+.06))break;position=this.destination(s,i);}
+    if(added&&!(this.free(position,radius,clearance)&&this.fish.every(o=>position.distanceTo(o.position)>radius+o.radius+.06))){group.removeFromParent();this.notes.splice(this.notes.indexOf(group),1);return;}
+    const fish:Fish={group,species:s,finFold,graze:null,rival:null,displayUntil:0,chaseUntil:0,displayCooldown:6,position,velocity:v(0,0,0),goal:position.clone(),radius,clearance,home:position.clone(),gobyCycle:0,pecks:0,yaw:Math.random()*6.28,yawVelocity:0,pitch:0,clock,effort,waveGain,turnBend,mouthOpening,gillOpening,respiration:Math.random()*Math.PI*2,until:0,phase:Math.random()*6.28,pectoral:group.children.filter(o=>o.name==='pectoral') as T.Group[],mouth:group.getObjectByName('mouth') as T.Group,eyes:group.getObjectByName('eyes') as T.Group,mode:'exploring',progressPosition:position.clone(),progressAt:0,blockedTime:0,recoverUntil:0,hostLeg:i%3,hostHold:0,hostVisits:0,individuality:.88+Math.random()*.24,drive:Math.random(),strokeUntil:Math.random()*3,coasting:false,tailRest:1,feedingUntil:0,energy:.72+Math.random()*.25,hunger:.55+Math.random()*.3,memory:null,shelter:position.clone(),social:v(0,0,0),holdUntil:0,food:null};group.position.copy(position);this.fish.push(fish);
+    // A released fish keeps its habitat: it swims down to that home rather than
+    // treating the surface release water as its station or shelter.
+    if(release&&s!=='gramma'){fish.home.copy(this.destination(s,i));fish.shelter.copy(fish.home);fish.mode='entering the tank';}
+    if(s==='gramma'&&release){fish.home.copy(this.reefPatch(fish,2.1)??this.destination(s,i));fish.shelter.copy(fish.home);fish.mode='entering the tank';}
+    else if(s==='gramma'){fish.home.copy(this.reefPatch(fish,2.1)??position);fish.shelter.copy(fish.home);fish.position.copy(fish.home);fish.group.position.copy(fish.position);fish.goal.copy(fish.home);fish.progressPosition.copy(fish.home);}
+    return fish;
    }
   }
  }
+ /** Adds one animal of a loaded species. Open-water species are released near
+  * the surface; the mandarin is placed on validated bottom ground. */
+ add(s:Species){
+  if(!this.templates.has(s))return;
+  const release=s==='goby'?undefined:this.releasePoint(s);
+  if(s!=='goby'&&!release)return;
+  return this.spawn(s,this.fish.filter(f=>f.species===s).length,release,true);
+ }
+ /** Removes the most recently added animal of a species. Geometry and textures
+  * stay shared with the template; only this animal's materials are released. */
+ remove(s:Species){
+  let index=-1;for(let i=this.fish.length-1;i>=0;i--)if(this.fish[i].species===s){index=i;break;}
+  if(index<0)return;
+  const [f]=this.fish.splice(index,1);f.group.removeFromParent();this.notes.splice(this.notes.indexOf(f.group),1);
+  const released=new Set<T.Material>();
+  f.group.traverse(o=>{if(o instanceof T.Mesh)for(const m of Array.isArray(o.material)?o.material:[o.material])if(!released.has(m)){released.add(m);m.dispose();}});
+  for(const other of this.fish)if(other.rival===f){other.rival=null;other.displayUntil=other.chaseUntil=0;other.until=0;}
+  return f;
+ }
+ count(s:Species){return this.fish.reduce((n,f)=>n+(f.species===s?1:0),0);}
+ /** The nearest tang close enough to provoke a display, measured between bodies. */
+ private rivalNear(f:Fish){
+  let rival:Fish|null=null,best=.7;
+  for(const o of this.fish)if(o!==f&&(o.species==='tang'||o.species==='rostratum')){const gap=o.position.distanceTo(f.position)-o.radius-f.radius;if(gap<best){best=gap;rival=o;}}
+  return rival;
+ }
+ has(s:Species){return this.templates.has(s);}
  private free(p:T.Vector3,r:number,clearance=r){return p.x>-4.7+r&&p.x<4.7-r&&p.z>-2.09+r&&p.z<2.09-r&&p.y>Math.max(clearance===r?.3:0,sandHeight(p.x,p.z)+(clearance===r?.035:.003))+clearance&&p.y<5.12-r&&this.obstacles.every(o=>p.distanceToSquared(o.center)>(o.radius+r)**2);}
  private clearSegment(a:T.Vector3,b:T.Vector3,r:number,clearance=r){
   if(!this.free(b,r,clearance))return false;const dx=b.x-a.x,dy=b.y-a.y,dz=b.z-a.z,l=dx*dx+dy*dy+dz*dz;
@@ -100,7 +154,7 @@ export class ReefFish{
    else if(s==='anthias')p=v(-2.2+(Math.random()-.5)*3,3.55+Math.random()*1.35,(Math.random()-.5)*3);
    else if(s==='chromis')p=v(2.8+(Math.random()-.5)*2.5,3.65+Math.random()*1.25,(Math.random()-.5)*3);
    else p=v((Math.random()-.5)*8.5,.8+Math.random()*3.6,(Math.random()-.5)*3.6);
-   if(this.free(p,s==='goby'?.45:s==='tang'||s==='semilarvatus'?.36:.2,s==='goby'?.154:s==='tang'||s==='semilarvatus'?.36:.2))return p;
+   if(this.free(p,s==='goby'?.45:large(s)?.36:.2,s==='goby'?.154:large(s)?.36:.2))return p;
   }
   return v((index%7-3)*.5,4.8,1.3);
  }
@@ -118,12 +172,39 @@ export class ReefFish{
   }
   return chosen;
  }
+ /** A visible reef face for the black tang's snout. The stand-off point stays
+  * outside every collision proxy; only the snout reaches toward the surface.
+  * With a previous face, the next site is a short shift along the same face. */
+ private grazeSite(f:Fish,previous?:Graze){
+  const reach=f.radius+.07;let chosen:Graze|undefined,best=Infinity;
+  for(let j=0;j<40;j++){
+   let o:Obstacle|undefined,normal:T.Vector3;
+   if(previous){o=previous.obstacle;normal=previous.normal.clone().applyAxisAngle(UP,(Math.random()<.5?-1:1)*(.3+Math.random()*.35));normal.y+=(Math.random()-.5)*.25;normal.normalize();}
+   else{
+    o=this.obstacles[Math.floor(Math.random()*this.obstacles.length)];
+    // Prefer faces turned toward the viewer, where algae grazing is visible.
+    const a=Math.random()*Math.PI;normal=v(Math.cos(a)*.85,(Math.random()-.4)*.9,Math.sin(a)*.85+.15).normalize();
+   }
+   if(!o||o.radius<.14)continue;
+   const stand=o.center.clone().addScaledVector(normal,o.radius+reach);
+   if(stand.y<.6||stand.y>4.3||!this.clearSegment(f.position,stand,f.radius)||this.fish.some(other=>other!==f&&stand.distanceToSquared(other.position)<(f.radius+other.radius+.1)**2))continue;
+   const score=(previous?0:stand.distanceToSquared(f.position))+Math.random()*.6;
+   if(score<best){best=score;chosen={obstacle:o,normal,stand,point:o.center.clone().addScaledVector(normal,o.radius),bites:3+Math.floor(Math.random()*5),next:0,biteAt:-1,shifts:previous?previous.shifts-1:Math.random()<.6?1+Math.floor(Math.random()*2):0};}
+  }
+  return chosen;
+ }
  private planSwim(f:Fish,index:number,recover:boolean){
   if(f.species==='clown'&&!recover&&this.planHostVisit(f))return;
   let chosen:T.Vector3|undefined;
   f.holdUntil=0;
+  // Grazing is a plan of its own; any new plan replaces an unfinished one.
+  const previousGraze=f.graze;f.graze=null;
+  if(!recover&&f.species==='rostratum'&&!this.isNight){
+   const site=previousGraze&&previousGraze.shifts>0?this.grazeSite(f,previousGraze):Math.random()<.62?this.grazeSite(f):undefined;
+   if(site){f.graze=site;chosen=site.stand.clone();}
+  }
   if(!recover){
-   if(this.isNight&&(f.species==='tang'||f.species==='anthias'||f.species==='chromis')){
+   if(this.isNight&&(f.species==='tang'||f.species==='rostratum'||f.species==='anthias'||f.species==='chromis')){
     if(this.clearSegment(f.position,f.shelter,f.radius))chosen=f.shelter.clone();
     else{chosen=this.reefPatch(f,3.4);if(chosen)f.shelter.copy(chosen);}
    }
@@ -156,7 +237,7 @@ export class ReefFish{
   const refuge=this.isNight&&f.species!=='semilarvatus';
   const travelTime=refuge?Math.min(55,10+f.position.distanceTo(f.goal)/(f.group.scale.x*marineBehavior[f.species].cruiseBL[0]*marineBehavior[f.species].night*.7)):5+Math.random()*7;
   f.until=this.clock+(recover?3:travelTime);
-  f.mode=recover?'exploring':refuge?'seeking shelter':f.species==='gramma'&&f.goal.distanceTo(f.shelter)<.4?'returning to shelter':'cruising';
+  f.mode=recover?'exploring':refuge?'seeking shelter':f.graze?'heading to graze':f.species==='gramma'&&f.goal.distanceTo(f.shelter)<.4?'returning to shelter':'cruising';
  }
  private planHostVisit(f:Fish){
   const host=this.hosts[0],relative=f.position.clone().sub(host),far=relative.length()>1.45*this.hostScale;
@@ -187,7 +268,7 @@ export class ReefFish{
    this.isNight=night;
    for(const f of this.fish){
     f.until=0;f.holdUntil=0;f.hostHold=0;
-    if(night&&(f.species==='tang'||f.species==='anthias'||f.species==='chromis')){
+    if(night&&(f.species==='tang'||f.species==='rostratum'||f.species==='anthias'||f.species==='chromis')){
      f.shelter.copy(this.reefPatch(f,3.4)??f.position);f.goal.copy(f.shelter);
     }
     if(night&&f.species==='gramma')f.goal.copy(f.shelter);
@@ -214,19 +295,34 @@ export class ReefFish{
     if(score<dist&&this.clearSegment(f.position,food.position,f.radius)){dist=score;target=food;}
    }
    f.food=target??null;
+   const blackTang=f.species==='rostratum';
+   // Another tang close by draws a broadside display, sometimes a short chase.
+   // A meal, the night refuge or blocked-path recovery always take priority.
+   if(blackTang&&!target&&!night&&now>=f.recoverUntil&&!f.rival&&now>f.displayCooldown){
+    const rival=this.rivalNear(f);
+    if(rival){f.rival=rival;f.displayUntil=now+1.5+Math.random();f.chaseUntil=Math.random()<.4?f.displayUntil+.9+Math.random()*.9:0;f.displayCooldown=now+13+Math.random()*12;f.until=Math.max(f.displayUntil,f.chaseUntil);f.holdUntil=0;f.graze=null;f.mode='fin display';}
+   }
+   if(f.rival&&(target||night||now<f.recoverUntil||now>=Math.max(f.displayUntil,f.chaseUntil))){f.rival=null;f.displayUntil=f.chaseUntil=0;f.until=Math.min(f.until,now);}
+   const displaying=f.rival!==null&&now<f.displayUntil,chasing=f.rival!==null&&!displaying;
+   if(chasing)f.mode='chasing rival';
    if(target){
     // Seek the prey itself; capture is tested at the articulated mouth.
     // Offsetting a waypoint along an unclamped 3D ray strands the fish below
     // steep prey because its real body stays within a natural pitch limit.
     f.goal.copy(target.position);
-    f.mode='feeding';f.holdUntil=0;
+    f.mode='feeding';f.holdUntil=0;f.graze=null;
     if(mouth.distanceTo(target.position)<Math.max(.065,.16*size)){
      target.alive=false;this.eatCount++;f.hunger=Math.max(0,f.hunger-.13);f.energy=Math.min(1,f.energy+.055);f.memory=target.position.clone();
      f.feedingUntil=now+.4+Math.random()*.3;f.holdUntil=f.feedingUntil;f.until=f.feedingUntil;f.goal.copy(f.position);f.mode='inspecting reef';target=undefined;f.food=null;
     }
-   }else if(now>=f.feedingUntil){
+   }else if(now>=f.feedingUntil&&!f.rival){
     const arrived=f.position.distanceTo(f.goal)<(f.species==='clown'?.14:.19);
     if(f.species==='clown'&&arrived&&!f.hostHold){f.hostHold=now+.3+Math.random()*.75;f.until=f.hostHold;f.hostVisits++;f.mode='sheltering';}
+    if(blackTang&&f.graze&&arrived&&!f.holdUntil&&now>=f.recoverUntil){
+     // A bout of bites at one face, then a short shift along it or a new patrol.
+     const g=f.graze;g.next=now+.3+Math.random()*.3;g.biteAt=-1;
+     f.holdUntil=now+.6+g.bites*(.75+Math.random()*.3);f.until=f.holdUntil;f.goal.copy(f.position);f.mode='grazing algae';
+    }
     if(f.species!=='clown'&&arrived&&!f.holdUntil&&now>=f.recoverUntil&&Math.random()<(night&&f.species!=='semilarvatus'?1:profile.restChance)){
      f.holdUntil=now+(night&&f.species!=='semilarvatus'?20+Math.random()*25:profile.rest[0]+Math.random()*(profile.rest[1]-profile.rest[0]));
      f.until=f.holdUntil;f.goal.copy(f.position);
@@ -263,6 +359,23 @@ export class ReefFish{
     const currentYaw=.22*Math.sin(now*.12+f.home.z*.5);
     desired.set(Math.cos(currentYaw),0,-Math.sin(currentYaw));
    }
+   const grazing=blackTang&&holding&&f.mode==='grazing algae'&&f.graze!==null;let jab=0;
+   if(grazing){
+    // Face the surface and pick: a short forward snout stroke with the mouth
+    // open, then back. The stand-off margin keeps every stroke collision-free.
+    const g=f.graze!;
+    if(now>=g.next&&g.bites>0){g.biteAt=now;g.bites--;g.next=now+.55+Math.random()*.6;}
+    const t=now-g.biteAt;jab=g.biteAt>=0&&t<.42?Math.sin(Math.PI*2*t/.42):0;
+    desired.copy(g.point).sub(f.position).normalize();
+   }
+   if(displaying){
+    // Broadside to the rival, on whichever flank needs the smaller turn.
+    const away=f.position.clone().sub(f.rival!.position),a=Math.atan2(-away.z,away.x)+Math.PI/2,b=a+Math.PI,heading=Math.abs(wrap(a-f.yaw))<Math.abs(wrap(b-f.yaw))?a:b;
+    desired.set(Math.cos(heading),0,-Math.sin(heading));speed=size*.14;
+   }else if(chasing){
+    const gap=f.rival!.position.clone().sub(f.position),l=gap.length();
+    desired.copy(gap).normalize();speed=size*profile.burstBL*.8*f.individuality*Math.min(1,l/(size*1.1));
+   }
    if(!target&&!holding&&!night&&profile.schooling){
     const center=v(0,0,0),alignment=v(0,0,0);let neighbors=0;
     const perception=size*(profile.schooling==='shoal'?5:3.5);
@@ -283,11 +396,22 @@ export class ReefFish{
    for(const o of this.obstacles){const x=f.position.x-o.center.x,y=f.position.y-o.center.y,z=f.position.z-o.center.z,limit=o.radius+f.radius+.38,d2=x*x+y*y+z*z;if(d2<limit*limit&&d2>.000001){const d=Math.sqrt(d2),gain=(limit-d)/.38/d*2;avoidance.x+=x*gain;avoidance.y+=y*gain;avoidance.z+=z*gain;}}
    // Honor the validated escape route: soft rock repulsion can otherwise push
    // a fish back into glass indefinitely. Swept collision checks still apply.
+   // A grazer works right beside the rock it is facing; soft repulsion would
+   // turn it away. Approaching its stand-off point, repulsion eases off.
+   if(grazing)avoidance.set(0,0,0);else if(f.graze&&distance<.7)avoidance.multiplyScalar(distance/.7);
    if(now>=f.recoverUntil)desired.add(avoidance.clampLength(0,f.species==='clown'?.28:.65));
    const wantedYaw=desired.lengthSq()>.00001?Math.atan2(-desired.z,desired.x):f.yaw,turn=Math.atan2(Math.sin(wantedYaw-f.yaw),Math.cos(wantedYaw-f.yaw));
    this.flexTurn(f,turn,dt,profile.turnRate,profile.curve);
-   const pitch=T.MathUtils.clamp(Math.atan2(desired.y,Math.hypot(desired.x,desired.z)),-.28,.28);f.pitch=T.MathUtils.damp(f.pitch,pitch,2.5,dt);
+   if(displaying){
+    // Sweep the tail, and the white scalpel beside it, toward the rival.
+    const rel=f.rival!.position.clone().sub(f.position),side=Math.sign(rel.x*Math.sin(f.yaw)+rel.z*Math.cos(f.yaw))||1;
+    f.turnBend.value=T.MathUtils.damp(f.turnBend.value,side*(.5+.55*Math.max(0,Math.sin(now*5.5+f.phase))),8,dt);
+   }
+   const pitchLimit=grazing?.48:.28,pitch=T.MathUtils.clamp(Math.atan2(desired.y,Math.hypot(desired.x,desired.z)),-pitchLimit,pitchLimit);f.pitch=T.MathUtils.damp(f.pitch,pitch,grazing?3.5:2.5,dt);
    speed*=Math.max(.17,Math.cos(turn));const forward=v(Math.cos(f.yaw)*Math.cos(f.pitch),Math.sin(f.pitch),-Math.sin(f.yaw)*Math.cos(f.pitch)).multiplyScalar(speed);
+   // Settle onto the validated stand-off point (arrival is only approximate),
+   // then add each bite's snout stroke on top of that small correction.
+   if(grazing)forward.copy(f.graze!.stand).sub(f.position).multiplyScalar(1.6).clampLength(0,size*.25).addScaledVector(desired,jab*size*.4);
    if(night&&!target&&!holding&&f.mode==='seeking shelter'){
     // A refuge can be well below the feeding station. Paired-fin descent
     // remains gentle while the body stays upright; pitch alone at night cruise
@@ -310,21 +434,38 @@ export class ReefFish{
    if(!collision&&this.clearSegment(f.position,next,f.radius)){f.position.copy(next);f.blockedTime=Math.max(0,f.blockedTime-dt);}else{f.velocity.multiplyScalar(.65);f.blockedTime+=dt;
     if(f.blockedTime>.65&&now>f.recoverUntil){f.recoverUntil=now+3;this.planSwim(f,i,true);f.blockedTime=0;}
    }
-   const swimming=f.velocity.length()/size,thrust=target?1:holding?.3:f.coasting?.22:.65;
+   const swimming=f.velocity.length()/size,thrust=target||chasing?1:displaying?.85:holding?.3:f.coasting?.22:.65;
    f.tailRest=T.MathUtils.damp(f.tailRest,thrust,3.5,dt);
    f.group.position.copy(f.position);f.group.rotation.set(0,f.yaw,f.pitch,'YXZ');
    f.clock.value+=dt*2*Math.PI*profile.tailHz*f.individuality*(.48+f.tailRest*.52+Math.min(2,swimming)*.26)/7.5;
    f.effort.value=T.MathUtils.damp(f.effort.value,Math.min(1.7,swimming*.65),5,dt);
-   f.waveGain.value=T.MathUtils.damp(f.waveGain.value,profile.wave*(.38+.72*f.tailRest),5,dt);
+   // The black tang's tail stays quiet on pectoral-rowed patrols and joins in
+   // fully for bursts, chases and the broadside display.
+   f.waveGain.value=T.MathUtils.damp(f.waveGain.value,blackTang&&(target||chasing||displaying)?1.05:profile.wave*(.38+.72*f.tailRest),5,dt);
+   if(blackTang){
+    // Sails stand fully raised to graze, hover and display; they fold partly
+    // against the body as speed rises and most of the way in a burst.
+    const fold=displaying||grazing||holding?0:target||chasing?.62:f.coasting?.1:.14+.3*Math.min(1,swimming/1.4);
+    f.finFold.value=T.MathUtils.damp(f.finFold.value,fold,displaying?9:3.5,dt);
+   }
    for(let j=0;j<f.pectoral.length;j++){
     const p=f.pectoral[j],angle=this.attachFin(f,p),pelvic=Boolean(p.userData.pelvic),side=Math.sign(p.userData.restZ);
-    p.userData.flutterTime=(p.userData.flutterTime??f.phase+j*.87)+dt*2*Math.PI*profile.finHz*f.individuality*(pelvic?.4:1+swimming*.18)*(1+j*.035);
-    const phase=p.userData.flutterTime,amplitude=pelvic?.055:.13+.065*(holding?1:f.tailRest);
+    p.userData.flutterTime=(p.userData.flutterTime??f.phase+j*.87)+dt*2*Math.PI*profile.finHz*f.individuality*(pelvic?.4:1+swimming*(blackTang?.35:.18))*(1+j*.035);
+    const phase=p.userData.flutterTime;
+    if(blackTang){
+     // Labriform rowing: a quick power stroke and a slower, feathered recovery.
+     // Paired fins tuck for bursts and flare broadside during the display.
+     const [restAngle,sweep]=pelvic?(displaying?[.36,.05]:[.14,.055]):target||chasing?[.12,.06]:displaying?[.42,.1]:holding?[.3,.16]:[.3,.22];
+     p.userData.rest=T.MathUtils.damp(p.userData.rest??restAngle,restAngle,6,dt);p.userData.sweep=T.MathUtils.damp(p.userData.sweep??sweep,sweep,6,dt);
+     p.rotation.y=angle+side*(p.userData.rest+p.userData.sweep*Math.sin(phase+.45*Math.sin(phase)));p.rotation.x=Math.cos(phase)*(pelvic?.025:.13);
+     continue;
+    }
+    const amplitude=pelvic?.055:.13+.065*(holding?1:f.tailRest);
     p.rotation.y=angle+side*((pelvic?.14:.24)+amplitude*Math.sin(phase));p.rotation.x=Math.cos(phase*.91)* (pelvic?.025:.055);
    }
-   const base=f.species==='tang'||f.species==='semilarvatus'?.88:1.12;
+   const base=large(f.species)?.88:1.12;
    f.respiration+=dt*2*Math.PI*(base*(night?.78:1)+Math.min(f.effort.value,1.7)*.20)*(.93+.07*Math.sin(f.phase));
-   this.breathe(f,target?.alive?Math.max(0,1-mouth.distanceTo(target.position))*Math.max(0,Math.sin(now*18))*1.35:0);
+   this.breathe(f,target?.alive?Math.max(0,1-mouth.distanceTo(target.position))*Math.max(0,Math.sin(now*18))*1.35:grazing?Math.max(0,jab)*1.4:0);
   }
   let n=0;for(const f of this.foods)if(f.alive){this.dummy.position.copy(f.position);this.dummy.updateMatrix();this.foodMesh.setMatrixAt(n++,this.dummy.matrix);}this.foodMesh.count=n;if(n)this.foodMesh.instanceMatrix.needsUpdate=true;
  }
@@ -452,6 +593,6 @@ export class ReefFish{
  }
  /** Isolated rendered respiration study: navigation/fin pose stays fixed. */
  respirationStudy(species:Species,phase:number){const f=this.fish.find(f=>f.species===species)!;f.respiration=phase;this.breathe(f);}
- anatomySnapshot(){return this.fish.map(f=>({species:f.species,model:f.group.userData.model,phase:f.clock.value,pectoral:f.pectoral.filter(p=>!p.userData.pelvic).map(p=>[p.rotation.x,p.rotation.y]),pelvic:f.pectoral.filter(p=>p.userData.pelvic).map(p=>[p.rotation.x,p.rotation.y]),gills:f.group.children.filter(o=>o.name==='gill').map(g=>g.userData.opening),mouth:f.mouth.scale.y,mouthOpening:f.mouthOpening.value}));}
+ anatomySnapshot(){return this.fish.map(f=>({species:f.species,model:f.group.userData.model,phase:f.clock.value,pectoral:f.pectoral.filter(p=>!p.userData.pelvic).map(p=>[p.rotation.x,p.rotation.y]),pelvic:f.pectoral.filter(p=>p.userData.pelvic).map(p=>[p.rotation.x,p.rotation.y]),gills:f.group.children.filter(o=>o.name==='gill').map(g=>g.userData.opening),mouth:f.mouth.scale.y,mouthOpening:f.mouthOpening.value,finFold:f.finFold.value}));}
  snapshot(){return {fish:this.fish.length,sandGrains:0,bites:this.eatCount,food:this.foods.filter(f=>f.alive).length,positions:this.fish.map(f=>({species:f.species,x:f.position.x,y:f.position.y,z:f.position.z,mode:f.mode,hostVisits:f.hostVisits,speed:f.velocity.length(),speedBL:f.velocity.length()/f.group.scale.x,energy:f.energy,hunger:f.hunger,coasting:f.coasting,heightAboveSand:f.position.y-sandHeight(f.position.x,f.position.z),pecks:f.pecks})),obstacleOverlaps:this.fish.filter(f=>!this.free(f.position,f.radius,f.clearance)).length,fishOverlaps:this.fish.reduce((n,f,i)=>n+this.fish.slice(i+1).filter(o=>f.position.distanceToSquared(o.position)<(f.radius+o.radius-.01)**2).length,0)};}
 }

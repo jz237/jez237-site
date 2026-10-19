@@ -1,6 +1,8 @@
+/** True inside a Hidden Reef storefront. Gallery-only features stay off there. */
+export function reefShowroomEmbedded(){return new URLSearchParams(location.search).get('showroom')==='hidden-reef'||/\/showroom\/reef\/?$/.test(location.pathname);}
 /** Same-origin store bridge. Suspension is independent of the visitor's pause. */
 export function installReefShowroom(actions:{visibility:(visible:boolean)=>void;explore:(subject:string)=>void}){
- const embedded=new URLSearchParams(location.search).get('showroom')==='hidden-reef'||/\/showroom\/reef\/?$/.test(location.pathname);
+ const embedded=reefShowroomEmbedded();
  const send=(data:object)=>{if(embedded&&parent!==window)parent.postMessage({channel:'hidden-reef-aquarium',...data},location.origin);};
  if(embedded){
   document.body.classList.add('store-showroom');

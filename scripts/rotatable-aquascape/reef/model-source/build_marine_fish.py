@@ -44,10 +44,12 @@ metadata=json.loads((OUT/'model-info.json').read_text()) if ONLY and (OUT/'model
 for species,s in DATA.items():
  # Every species has its own traced silhouette, rather than scaling one oval.
  reference=s.get('reference',species)
- original=bpy.data.images.load(str(ROOT/'references'/(reference+'.png')),check_existing=True)
+ # Plates shot on a light backdrop may supply edge-padded texture copies, so
+ # fin margins sample the fish's own color instead of the backdrop.
+ original=bpy.data.images.load(str(ROOT/'references'/s.get('texture',reference+'.png')),check_existing=True)
  iw,ih=original.size;original.file_format='JPEG';original.filepath_raw=str(OUT/(species+'-reference.jpg'));original.save()
  original=bpy.data.images.load(str(OUT/(species+'-reference.jpg')),check_existing=False)
- clean=ROOT/'references'/(reference+'-skin.png')
+ clean=ROOT/'references'/s.get('skinTexture',reference+'-skin.png')
  if not clean.exists():raise RuntimeError('Missing clean-flank image: '+str(clean))
  skinimg=bpy.data.images.load(str(clean),check_existing=True)
  # Force lazy pixel loading before changing filepath for the JPEG export.
@@ -58,20 +60,27 @@ for species,s in DATA.items():
  begin,end=s['range'];length=end-begin;cy=s['cy'];width=s['width'];objects=[]
  def pos(px,py,depth=0):return ((px-begin)/length-.5,(cy-py)/length,depth)
  def uv(px,py):return (px/iw,1-py/ih)
+ # Optional lens-shaped section: a power above 1 narrows the dorsal and ventral keels.
+ cross=s.get('crossPower',1)
+ def section(q):return max(0,1-q*q)**(cross/2)
  def trunk_thickness(t):
   # A narrow continuous peduncle meets the thin tail membrane. Keep the
   # head and full trunk dimensions; remove only the abrupt rear end-cap lip.
   u=max(0,min(1,t/.12));u=u*u*(3-2*u)
+  if 'thickness' in s:
+   # Width traced from a dorsal plate, closed smoothly at the tail end-cap.
+   w=float(np.interp(begin+t*length,[p[0] for p in s['thickness']],[p[1] for p in s['thickness']]))
+   v=max(0,min(1,t/.06));return width*w*(.02+.98*v*v*(3-2*v))
   return width*(.004+.096*u+.90*math.sin(math.pi*t)**.62)
  def surface(px,py):
   top=interp(s['top'],px);bottom=interp(s['bottom'],px);mid=(top+bottom)/2;radius=max(1,(bottom-top)/2)
   t=max(0,min(1,(px-begin)/length));thickness=trunk_thickness(t)
-  return thickness*math.sqrt(max(0,1-((py-mid)/radius)**2))
- vertices=[];uvs=[];faces=[];rings=88;sides=48
+  return thickness*section((py-mid)/radius)
+ vertices=[];uvs=[];faces=[];rings=s.get("rings",88);sides=s.get("sides",48)
  for i in range(rings+1):
   px=begin+length*i/rings;top=interp(s['top'],px);bottom=interp(s['bottom'],px);mid=(top+bottom)/2;radius=(bottom-top)/2
   for j in range(sides):
-   a=2*math.pi*j/sides;py=mid-radius*math.sin(a);t=i/rings;depth=math.cos(a)*trunk_thickness(t)
+   a=2*math.pi*j/sides;py=mid-radius*math.sin(a);t=i/rings;depth=math.copysign(section(math.sin(a)),math.cos(a))*trunk_thickness(t)
    vertices.append(pos(px,py,depth));uvs.append(uv(px,py))
    if i<rings:
     n=i*sides+j;nn=i*sides+(j+1)%sides;faces.append((n,n+sides,nn+sides,nn))
@@ -134,7 +143,9 @@ for species,s in DATA.items():
   px=dorsal[0][0]+(dorsal[-1][0]-dorsal[0][0])*i/cols
   lower=interp(s['top'],px)+3
   upper=float(np.interp(px,[p[0] for p in dorsal],[p[1] for p in dorsal]))
-  fade=min(1,i/cols/.045,(1-i/cols)/.045);fade=fade*fade*(3-2*fade);upper=lower+(upper-lower)*fade
+  # A rear lobe that overhangs the peduncle needs a shorter rear fade.
+  rearFade,frontFade=s.get('dorsalFade',[.045,.045])
+  fade=min(1,i/cols/rearFade,(1-i/cols)/frontFade);fade=fade*fade*(3-2*fade);upper=lower+(upper-lower)*fade
   for j in range(rows+1):
    t=j/rows;py=lower+(upper-lower)*t;v.append(pos(px,py,math.sin(t*math.pi)*.002));tex.append(uv(px,py))
    if i<cols and j<rows:

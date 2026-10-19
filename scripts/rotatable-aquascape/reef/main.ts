@@ -1,5 +1,5 @@
-import {installReefShowroom} from './ReefShowroom.ts';
-import {installReefLearning} from './ReefLearning.ts';
+import {installReefShowroom,reefShowroomEmbedded} from './ReefShowroom.ts';
+import {installReefLearning,type Stocking} from './ReefLearning.ts';
 import {ReefTourCamera} from './ReefTour.ts';
 import {stabilizeFishPasses} from './StableFishPasses.ts';
 import {yieldBuild} from './BuildYield.ts';
@@ -19,12 +19,12 @@ import {CaptureScheduler} from '../lib/CaptureScheduler.ts';
 import {AdaptiveEffects,effectProfiles} from '../lib/AdaptiveEffects.ts';
 import {installFullscreen} from '../lib/Fullscreen.ts';
 import {buildReef,loadReefAssets,reefClock} from './ReefScene.ts';
-import {ReefFish} from './ReefFish.ts';
+import {ReefFish,defaultPopulation} from './ReefFish.ts';
 import {reefSuspension} from './ReefSuspension.ts';
 import {applyReefOptics} from './ReefOptics.ts';
 import {configureReefWater} from './ReefWater.ts';
 import {ReefFishShadows} from './ReefFishShadows.ts';
-import {loadMarineModels} from './MarineModels.ts';
+import {loadMarineModels,baseMarineSpecies,type MarineSpecies} from './MarineModels.ts';
 import {ReefCleaners,loadCleanerModel,cleanerRockSurface,cleanerNote} from './ReefCleaners.ts';
 
 const app=document.querySelector<HTMLElement>('#app')!,container=document.querySelector<HTMLElement>('#scene')!;
@@ -40,7 +40,11 @@ const key=new T.SpotLight('#dceaff',245,26,.91,.52,1.7);key.position.set(-1.8,7.
 const blue=new T.SpotLight('#5087ff',115,24,.9,.6,1.7);blue.position.set(3,7.5,-.3);blue.target.position.set(1.5,1,0);scene.add(blue,blue.target);
 const fill=new T.DirectionalLight('#b1cbea',.45);fill.position.set(1,4,7);scene.add(fill);
 const reflections=new ReefReflections(),water=new AquariumWater(reflections);configureReefWater(water);scene.add(water);const glassStart=scene.children.length;buildAquariumGlass(scene,reflections);const glassObjects=scene.children.slice(glassStart);
-const fishModelsPending=loadMarineModels();
+// The black tang and fish stocking are gallery-only until reviewed for Hidden Reef.
+const gallery=!reefShowroomEmbedded(),stockLimit=36;
+const fishSpecies:MarineSpecies[]=gallery?[...baseMarineSpecies,'rostratum']:baseMarineSpecies;
+const population:[MarineSpecies,number][]=gallery?[defaultPopulation[0],['rostratum',1],...defaultPopulation.slice(1)]:defaultPopulation;
+const fishModelsPending=loadMarineModels(fishSpecies);
 const cleanerModelPending=loadCleanerModel();
 const reefAssets=loadReefAssets();
 const bakeRockLife=new URLSearchParams(location.search).has('bakeRockLife');
@@ -60,9 +64,9 @@ for(const object of reef.group.children){await yieldBuild();const stats=accelera
 performance.measure('reef-picking','reef-picking-start');
 const fishModels=await fishModelsPending.catch(error=>{document.querySelector('#loading')!.textContent='The fish models could not load. Please reload to try again.';throw error;});
 const cleaners=new ReefCleaners(scene,await cleanerModelPending,cleanerRockSurface(reef.group.getObjectByName('Porous living reef rock') as T.Mesh));
-const fish=new ReefFish(scene,[...reef.obstacles,...cleaners.obstacles],reef.anemone.behavior.hosts.map(h=>h.center),fishModels,reef.anemone.behavior.hosts[0].scale);
+const fish=new ReefFish(scene,[...reef.obstacles,...cleaners.obstacles],reef.anemone.behavior.hosts.map(h=>h.center),fishModels,reef.anemone.behavior.hosts[0].scale,population);
 const anemoneVisitors=fish.fish.filter(f=>f.species==='clown');
-const reefDaylight={value:1};const fishShadows=new ReefFishShadows(fish,key.position,reefDaylight);scene.add(fishShadows.mesh);scene.add(reefSuspension(reefClock,reefDaylight));
+const reefDaylight={value:1};const fishShadows=new ReefFishShadows(fish,key.position,reefDaylight,gallery?stockLimit:fish.fish.length);scene.add(fishShadows.mesh);scene.add(reefSuspension(reefClock,reefDaylight));
 const applyOptics=(o:T.Object3D)=>{if(o instanceof T.Mesh)for(const material of Array.isArray(o.material)?o.material:[o.material])if(material instanceof T.MeshStandardMaterial)applyReefOptics(material,reefClock,reefDaylight);};
 reef.group.traverse(applyOptics);for(const inhabitant of fish.fish)inhabitant.group.traverse(applyOptics);
 for(const cleaner of cleaners.animals)cleaner.root.traverse(applyOptics);
@@ -99,9 +103,30 @@ const inspectReef=(subject:string)=>{
   controls.target.copy(center);camera.position.copy(center).add(new T.Vector3(.22,.43,1.65));controls.update();scheduler.invalidate();wake();return;
  }
  const methods:Record<string,string>={anemones:'inspectAnemones',corals:'inspectCorals',outcrops:'inspectOutcrops',sand:'inspectSand',water:'inspectWater',polyps:'inspectPolyps',plates:'inspectPlates'};
- if(methods[subject])qa[methods[subject]]();else if(['clown','tang','semilarvatus','anthias','chromis','gramma','goby'].includes(subject))qa.inspectFish(subject);wake();
+ if(methods[subject])qa[methods[subject]]();else if(subject in fishNames&&fish.count(subject as MarineSpecies))qa.inspectFish(subject);wake();
 };
-const learning=installReefLearning({inspect:inspectReef,note:subject=>subject==='cleaners'?cleanerNote:fish.fish.find(f=>f.species===subject)?.group.userData.note,view:()=>document.querySelector<HTMLButtonElement>('[data-view="front"]')!.click(),feed:()=>document.querySelector<HTMLButtonElement>('#feed')!.click(),light:value=>{if(night!==value)document.querySelector<HTMLButtonElement>('#light')!.click();},night:()=>night,tour:visitTourStop,cancelTour:cancelTourCamera});
+const fishNames:Record<MarineSpecies,string>={rostratum:'Black tang',tang:'Blue tang',semilarvatus:'Golden butterflyfish',clown:'Clownfish',anthias:'Anthias',chromis:'Blue-green chromis',gramma:'Royal gramma',goby:'Mandarin dragonet'};
+const stockInfo:[MarineSpecies,string,number][]=[['rostratum','Zebrasoma rostratum',3],['tang','Paracanthurus hepatus',3],['semilarvatus','Chaetodon semilarvatus',3],['clown','Amphiprion ocellaris',4],['anthias','Pseudanthias squamipinnis',12],['chromis','Chromis viridis',14],['gramma','Gramma loreto',3],['goby','Synchiropus splendidus',2]];
+/** New animals join every per-scene system the original stocking was wired into. */
+function restock(){
+ anemoneVisitors.splice(0,anemoneVisitors.length,...fish.fish.filter(f=>f.species==='clown'));
+ solidTargets.splice(0,solidTargets.length,...fish.notes,...cleaners.notes,...reef.notes,cabinet,lower,lightBar,emitter);
+ fishShadows.update();$('#status').textContent=`${fish.fish.length} fish · 2 cleaner shrimp · Living coral gardens`;wake();
+}
+function addFish(s:MarineSpecies){const f=fish.add(s);if(f){f.group.traverse(applyOptics);stabilizeFishPasses(f.group);restock();}return f;}
+const stocking:Stocking|undefined=gallery?{
+ limit:stockLimit,total:()=>fish.fish.length,
+ rows:()=>stockInfo.map(([id,latin,max])=>({id,name:fishNames[id],latin,count:fish.count(id),max})),
+ add:id=>{const s=id as MarineSpecies,max=stockInfo.find(x=>x[0]===s)![2],name=fishNames[s].toLowerCase();
+  if(fish.fish.length>=stockLimit)return `The display holds up to ${stockLimit} fish.`;
+  if(fish.count(s)>=max)return `Up to ${max} × ${name} in this display.`;
+  return addFish(s)?`Added a ${name}. Look for it near the surface.`:`No clear water near the surface right now. Try again in a moment.`;},
+ remove:id=>{const s=id as MarineSpecies;if(!fish.remove(s))return `No ${fishNames[s].toLowerCase()} to remove.`;restock();return `Removed a ${fishNames[s].toLowerCase()}.`;},
+ reset:()=>{let missing=0;
+  for(const [s] of stockInfo){const target=population.find(x=>x[0]===s)?.[1]??0;while(fish.count(s)>target)fish.remove(s);for(let n=fish.count(s);n<target;n++)if(!addFish(s))missing++;}
+  restock();return missing?`Original stocking restored except ${missing} fish waiting for clear water.`:'Original stocking restored.';}
+}:undefined;
+const learning=installReefLearning({stocking,present:subject=>!(subject in fishNames)||fish.count(subject as MarineSpecies)>0,inspect:inspectReef,note:subject=>subject==='cleaners'?cleanerNote:fish.fish.find(f=>f.species===subject)?.group.userData.note,view:()=>document.querySelector<HTMLButtonElement>('[data-view="front"]')!.click(),feed:()=>document.querySelector<HTMLButtonElement>('#feed')!.click(),light:value=>{if(night!==value)document.querySelector<HTMLButtonElement>('#light')!.click();},night:()=>night,tour:visitTourStop,cancelTour:cancelTourCamera});
 const showroom=installReefShowroom({visibility:visible=>{suspended=!visible;last=performance.now();sampleMs.length=0;wake();},explore:subject=>{
  inspectReef(subject);
 }});
@@ -132,7 +157,7 @@ label(back,'Reflective rear glass','The back pane shows a subdued reflection of 
 for(const o of [cabinet,lower])label(o,'Aquarium base and trim','The dark support and lower trim frame the glass aquarium.');
 label(floor,'Surrounding room','The dark surface outside the aquarium provides a quiet backdrop for the illuminated reef.');
 for(const o of [lightBar,emitter])label(o,'Reef aquarium light','An overhead light fixture illuminates the coral canopy and sends rippled light across the sand.');
-const solidTargets=[...fish.notes,...cleaners.notes,...reef.notes,cabinet,lower,lightBar,emitter];
+const solidTargets:T.Object3D[]=[...fish.notes,...cleaners.notes,...reef.notes,cabinet,lower,lightBar,emitter];
 const transparentTargets=[water,back,...glassObjects,floor];
 const raycaster=new T.Raycaster(),pointer=new T.Vector2();
 let gesture:{id:number;x:number;y:number;dragged:boolean}|null=null;
@@ -176,5 +201,5 @@ function animate(now:number){raf=0;const elapsed=now-last;last=now;if(document.h
  if(frame%120===0&&fish.snapshot().food===0)$('#status').textContent=`${fish.fish.length} fish \u00b7 2 cleaner shrimp \u00b7 Living coral gardens`;
 }
 // Release diagnostics. Close-up inspection changes only the camera, not scene detail.
-Object.assign(window,{reefQA:{snapshot:()=>({...fish.snapshot(),cleaners:cleaners.snapshot(),tourCamera:{moving:tourCamera.active,position:camera.position.toArray(),target:controls.target.toArray()},time,paused,suspended,renderFrames:frame,ready,triangles,drawOrderStats,pickingStats,fishPassStats,effects:effectProfiles[adaptive.level].name,fps:1000/(sampleMs.reduce((a,b)=>a+b,0)/sampleMs.length),drawCalls:renderer.info.render.calls,shadows:fishShadows.snapshot(),anemoneTentacles:reef.anemone.tentacles,hosts:reef.anemone.behavior.hosts.map(h=>({x:h.center.x,y:h.center.y,z:h.center.z,scale:h.scale})),rearGlass:{visible:back.visible,width:back.getRenderTarget().width,height:back.getRenderTarget().height},anemoneBehavior:reef.anemone.behavior.snapshot(),anemoneBackdropStats:reef.anemoneBackdropStats,rockLifeStats:reef.rockLifeStats,microLifeStats:reef.microLifeStats,footStats:reef.footStats,canopyStats:reef.canopyStats,polypStats:reef.polypStats,buttressStats:reef.buttressStats,rockStats:reef.rockStats,crustStats:reef.crustStats,flankStats:reef.flankStats,infillStats:reef.infillStats,optics:{time:reefClock.value,daylight:reefDaylight.value},anatomy:fish.anatomySnapshot()}),feed:feedReef,anemoneContactStudy:()=>{const b=reef.anemone.behavior,s=b.hosts[0].strands[40],p=b.tipAt(0,s,time,new T.Vector3());fish.foods.push({position:p,alive:true,age:0});},respirationStudy:(species='tang',phase=0,isolate=false)=>{if(isolate){const subject=fish.fish.find(f=>f.species===species)!;for(const f of fish.fish)f.group.visible=f===subject;reef.group.visible=false;fishShadows.mesh.visible=false;subject.position.set(0,3,1);subject.group.position.copy(subject.position);subject.yaw=subject.pitch=0;subject.group.rotation.set(0,0,0);cameraGoal=null;controls.minDistance=.5;controls.target.copy(subject.position);camera.position.copy(subject.position).add(new T.Vector3(0,.08,1.8));controls.update();scheduler.invalidate();}paused=true;$('#pause').textContent='Resume';$('#pause').setAttribute('aria-pressed','true');fish.respirationStudy(species as Parameters<typeof fish.respirationStudy>[0],phase);},inspectFish:(species='clown')=>{const subject=fish.fish.find(f=>f.species===species)!;cameraGoal=null;controls.minDistance=.55;controls.target.copy(subject.position);camera.position.copy(subject.position).add(new T.Vector3(Math.sin(subject.yaw)*1.6,.19,Math.cos(subject.yaw)*1.6));controls.update();scheduler.invalidate();},inspectAnemones:()=>{cameraGoal=null;controls.minDistance=2;controls.target.set(3.05,1.56,.82);camera.position.set(3.15,2.45,4.8);controls.update();scheduler.invalidate();},inspectOutcrops:()=>{cameraGoal=null;controls.minDistance=.5;controls.target.set(2.92,.48,1.56);camera.position.set(2.92,1.65,3.5);controls.update();scheduler.invalidate();},inspectPolyps:()=>{cameraGoal=null;controls.minDistance=.5;controls.target.set(2.18,.88,1.63);camera.position.set(2.18,1.8,3.4);controls.update();scheduler.invalidate();},inspectWater:()=>{cameraGoal=null;controls.minDistance=1;controls.target.set(0,4.6,0);camera.position.set(7,9,10);controls.update();scheduler.invalidate();},inspectSand:()=>{cameraGoal=null;controls.minDistance=1;controls.target.set(0,.2,1);camera.position.set(.1,2.9,4.8);controls.update();scheduler.invalidate();},inspectRear:()=>{cameraGoal=null;controls.minDistance=1;controls.target.set(-.45,1.2,-1.6);camera.position.set(-.35,2.6,3.4);controls.update();scheduler.invalidate();},inspectFlanks:()=>{cameraGoal=null;controls.minDistance=.5;controls.target.set(-3.02,2.68,-.1);camera.position.set(-2.7,3.25,2.1);controls.update();scheduler.invalidate();},inspectPlates:()=>{cameraGoal=null;controls.minDistance=.5;controls.target.set(-2.9,1.94,.48);camera.position.set(-2.9,1.62,3.35);controls.update();scheduler.invalidate();},inspectCorals:()=>{cameraGoal=null;controls.minDistance=3;controls.target.set(-2.85,2.6,-.1);camera.position.set(-2.85,3.45,4.9);controls.update();scheduler.invalidate();}}});
+Object.assign(window,{reefQA:{snapshot:()=>({...fish.snapshot(),cleaners:cleaners.snapshot(),tourCamera:{moving:tourCamera.active,position:camera.position.toArray(),target:controls.target.toArray()},time,paused,suspended,renderFrames:frame,ready,triangles,drawOrderStats,pickingStats,fishPassStats,effects:effectProfiles[adaptive.level].name,fps:1000/(sampleMs.reduce((a,b)=>a+b,0)/sampleMs.length),drawCalls:renderer.info.render.calls,shadows:fishShadows.snapshot(),anemoneTentacles:reef.anemone.tentacles,hosts:reef.anemone.behavior.hosts.map(h=>({x:h.center.x,y:h.center.y,z:h.center.z,scale:h.scale})),rearGlass:{visible:back.visible,width:back.getRenderTarget().width,height:back.getRenderTarget().height},anemoneBehavior:reef.anemone.behavior.snapshot(),anemoneBackdropStats:reef.anemoneBackdropStats,rockLifeStats:reef.rockLifeStats,microLifeStats:reef.microLifeStats,footStats:reef.footStats,canopyStats:reef.canopyStats,polypStats:reef.polypStats,buttressStats:reef.buttressStats,rockStats:reef.rockStats,crustStats:reef.crustStats,flankStats:reef.flankStats,infillStats:reef.infillStats,optics:{time:reefClock.value,daylight:reefDaylight.value},anatomy:fish.anatomySnapshot()}),feed:feedReef,anemoneContactStudy:()=>{const b=reef.anemone.behavior,s=b.hosts[0].strands[40],p=b.tipAt(0,s,time,new T.Vector3());fish.foods.push({position:p,alive:true,age:0});},respirationStudy:(species='tang',phase=0,isolate=false)=>{if(isolate){const subject=fish.fish.find(f=>f.species===species)!;for(const f of fish.fish)f.group.visible=f===subject;reef.group.visible=false;fishShadows.mesh.visible=false;subject.position.set(0,3,1);subject.group.position.copy(subject.position);subject.yaw=subject.pitch=0;subject.group.rotation.set(0,0,0);cameraGoal=null;controls.minDistance=.5;controls.target.copy(subject.position);camera.position.copy(subject.position).add(new T.Vector3(0,.08,1.8));controls.update();scheduler.invalidate();}paused=true;$('#pause').textContent='Resume';$('#pause').setAttribute('aria-pressed','true');fish.respirationStudy(species as Parameters<typeof fish.respirationStudy>[0],phase);},stock:()=>stocking?.rows(),addFish:(species:string)=>stocking?.add(species),removeFish:(species:string)=>stocking?.remove(species),resetStock:()=>stocking?.reset(),inspectFish:(species='clown')=>{const subject=fish.fish.find(f=>f.species===species);if(!subject)return;cameraGoal=null;controls.minDistance=.55;controls.target.copy(subject.position);camera.position.copy(subject.position).add(new T.Vector3(Math.sin(subject.yaw)*1.6,.19,Math.cos(subject.yaw)*1.6));controls.update();scheduler.invalidate();},inspectAnemones:()=>{cameraGoal=null;controls.minDistance=2;controls.target.set(3.05,1.56,.82);camera.position.set(3.15,2.45,4.8);controls.update();scheduler.invalidate();},inspectOutcrops:()=>{cameraGoal=null;controls.minDistance=.5;controls.target.set(2.92,.48,1.56);camera.position.set(2.92,1.65,3.5);controls.update();scheduler.invalidate();},inspectPolyps:()=>{cameraGoal=null;controls.minDistance=.5;controls.target.set(2.18,.88,1.63);camera.position.set(2.18,1.8,3.4);controls.update();scheduler.invalidate();},inspectWater:()=>{cameraGoal=null;controls.minDistance=1;controls.target.set(0,4.6,0);camera.position.set(7,9,10);controls.update();scheduler.invalidate();},inspectSand:()=>{cameraGoal=null;controls.minDistance=1;controls.target.set(0,.2,1);camera.position.set(.1,2.9,4.8);controls.update();scheduler.invalidate();},inspectRear:()=>{cameraGoal=null;controls.minDistance=1;controls.target.set(-.45,1.2,-1.6);camera.position.set(-.35,2.6,3.4);controls.update();scheduler.invalidate();},inspectFlanks:()=>{cameraGoal=null;controls.minDistance=.5;controls.target.set(-3.02,2.68,-.1);camera.position.set(-2.7,3.25,2.1);controls.update();scheduler.invalidate();},inspectPlates:()=>{cameraGoal=null;controls.minDistance=.5;controls.target.set(-2.9,1.94,.48);camera.position.set(-2.9,1.62,3.35);controls.update();scheduler.invalidate();},inspectCorals:()=>{cameraGoal=null;controls.minDistance=3;controls.target.set(-2.85,2.6,-.1);camera.position.set(-2.85,3.45,4.9);controls.update();scheduler.invalidate();}}});
 Promise.all([reef.assetsReady,lighting.prepare(renderer)]).then(()=>{ready=true;$('#loading').remove();last=performance.now();learning.ready();showroom.ready();resumeEntry();}).catch(e=>{$('#loading').textContent='The reef could not start. Please reload with WebGL enabled.';console.error(e);});

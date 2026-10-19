@@ -33,6 +33,30 @@ and [Oregon Coast Aquarium](https://aquarium.org/animals/bubble-tip-anemone/).
 The reference guides the artistic appearance; flow and tissue shading are illustrative,
 not a species-calibrated fluid or subsurface-scattering simulation.
 
+## Black tang and fish stocking (jez237 gallery only)
+
+The jez237 gallery adds a *Zebrasoma rostratum* black tang to the original
+stocking (22 fish) and an **Add & remove fish** panel. Each species has a count,
+a per-species limit and a 36-fish tank limit; **Restore the original stocking**
+returns to the reviewed population. New open-water fish are released near the
+surface and swim to their own habitat; the mandarin is placed on validated
+bottom ground. Removing an animal releases its materials and every reference
+to it (picking, shadows, anemone contact, rival displays).
+
+The Hidden Reef storefront (`?showroom=hidden-reef` or `/showroom/reef/`) keeps
+the reviewed 21-fish stocking, does not download the black tang and has no
+stocking panel until the user approves both for the store.
+
+Black tang behavior: labriform pectoral rowing with a quiet tail on patrols;
+grazing bouts at visible reef faces (stand-off water, short snout strokes with
+the mouth open, short shifts along the same face); sails that fold as speed
+rises and stand fully for grazing, hovering and display; and a broadside
+fin display toward another tang that sweeps the white scalpel toward it,
+sometimes followed by a short chase, with a cooldown. These rhythms are
+illustrative. `qa/black-tang.mjs` checks them with three seeds, together with
+adding and removing fish. Reference provenance and the paid GPT Image requests
+are in `model-source/references/rostratum-prompts.md`.
+
 ## Marine fish detail
 
 Six Blender-authored species now use generated photographic-style references, individually traced volumetric bodies, fine skin/fin textures, shallow eyes and body-conforming gills. Rooted fin flex and separate pectoral pivots preserve attachments during swimming; mouth positions follow each species anatomy for food contact. Geometry/textures are shared across 20 inhabitants.

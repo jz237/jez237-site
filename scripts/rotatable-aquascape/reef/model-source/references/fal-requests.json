@@ -1,0 +1,63 @@
+[
+ {
+  "saved": "rostratum-attempt-1 (not kept)",
+  "endpoint": "openai/gpt-image-2",
+  "request_id": "01a155fa-f76e-7043-b397-42e5179e3886",
+  "created": "2026-10-19T21:06:25+00:00",
+  "quality": "high",
+  "references": [],
+  "mask": null,
+  "prompt": "Use case: photorealistic-natural. Asset: precise side-profile reference photograph for sculpting and texturing an interactive Blender fish model. A single living fish, whole body and every fin visible, perfectly lateral side view with no perspective foreshortening, nose pointing RIGHT, tail LEFT, horizontally level. Plain uniform medium neutral-gray studio background, even mid gray with no gradient and no vignette. No other animals, no plants, no rocks, no text, no labels. The fish fills about 78 percent of the frame width with generous empty margins; every fin is uncropped and clearly separated from the background. Photorealistic macro aquarium photography under neutral white diffused light: anatomically correct proportions, restrained natural highlights, tiny real scales, shallow natural eye, operculum and small mouth, fine translucent fin membranes and visible supporting rays. Avoid stylization, cartoon eyes, plastic surface, glossy or metallic sheen, illustrative outlines, extra fins, duplicate fish, motion blur. True natural specimen quality; sharp focus across the whole fish.\n\nSubject: Zebrasoma rostratum, adult black tang (black longnose tang). Deep, strongly laterally compressed, nearly disc-shaped body. Uniform deep sooty black-brown coloration with soft velvety matte skin; very fine, closely spaced, slightly lighter longitudinal scale lines visible only on close inspection. Characteristic long, narrow, protruding snout ending in a small terminal puckered grazing mouth, with a concave forehead profile above the snout. Small dark eye set high and well back from the snout tip. Tall sail-like dorsal and anal fins with smoothly rounded outlines, dark membranes with fine visible rays and a slightly lighter translucent margin. A bright white bony caudal spine (scalpel) lies along the side of the caudal peduncle, with a small patch of bristle-like setae just in front of it. Slightly emarginate dark caudal fin. Near-side dark translucent pectoral fin held close to the flank just behind the gill opening; small dark pelvic fin below the chest. No yellow, no blue, no stripes or bars.",
+  "note": "Rejected: carved-wood/fabric skin and fins, glassy taxidermy eye, exaggerated spine. Replaced by the next request with a live-fish prompt."
+ },
+ {
+  "saved": "rostratum.png",
+  "endpoint": "openai/gpt-image-2",
+  "request_id": "01a155fd-5286-7f70-a149-3ac7237b80c7",
+  "created": "2026-10-19T21:08:39+00:00",
+  "quality": "high",
+  "references": [],
+  "mask": null,
+  "prompt": "Use case: photorealistic-natural. Asset: precise side-profile reference photograph for sculpting and texturing an interactive Blender fish model. A single LIVE fish photographed underwater through clean aquarium glass: whole body and every fin visible, perfectly lateral side view with no perspective foreshortening, nose pointing RIGHT, tail LEFT, horizontally level. Plain, even, medium neutral-gray background of empty water, uniform tone with no gradient and no vignette. No other animals, no plants, no rocks, no text, no labels. The fish fills about 78 percent of the frame width with generous empty margins; every fin is uncropped and clearly separated from the background. Real macro aquarium photography under soft neutral white diffused light, sharp focus across the whole fish, anatomically correct proportions.\n\nSubject: Zebrasoma rostratum, adult male black tang (black longnose tang). Deep, strongly laterally compressed, nearly disc-shaped body. Uniform deep sooty black-brown coloration. Skin: smooth wet fish skin with tiny, closely spaced natural scales and a soft satin sheen, with very faint slightly lighter longitudinal scale rows on the flank. NOT fabric, NOT carved wood, NOT engraved, NOT a sculpture or taxidermy specimen. Characteristic long, narrow, protruding snout ending in a small terminal puckered grazing mouth, with a concave forehead profile above the snout. Small natural fish eye set high and well back from the snout tip: dark pupil, narrow dark-bronze iris, flush with the head, not bulging and not glassy. Subtle gill-cover edge. Tall sail-like dorsal and anal fins with smoothly rounded outlines: thin translucent smoky-black membranes with slender rays, becoming slightly see-through toward the margins. A short white bony caudal spine (scalpel) lies flat in a groove along the side of the caudal peduncle, with a small velvety dark patch of fine short bristles directly in front of it. Slightly emarginate translucent dark caudal fin. Near-side translucent dark pectoral fin held close to the flank just behind the gill opening; small dark pelvic fin on the chest directly below the pectoral base. No yellow, no blue, no stripes or bars.",
+  "note": "Accepted lateral plate."
+ },
+ {
+  "saved": "rostratum-skin-raw.png (not kept)",
+  "endpoint": "openai/gpt-image-2/edit",
+  "request_id": "01a15601-38a2-7280-a0b9-774261b35825",
+  "created": "2026-10-19T21:12:50+00:00",
+  "quality": "high",
+  "references": [
+   "rostratum.png"
+  ],
+  "mask": "rostratum-edit-mask.png",
+  "prompt": "Use case: precise-object-edit. Edit this exact fish reference plate to create its clean skin texture for a Blender 3D model. Remove ONLY two paired fins on the near side: (1) the dark pectoral fin, the fan-shaped fin on the middle-right flank whose base meets the body just behind the gill cover, and (2) the small dark pelvic fin hanging below the chest. Fill the pectoral fin's former area with continuous velvety black-brown skin and fine scale rows matched exactly to the neighboring flank and the curved gill-cover edge. Where the pelvic fin hung below the belly, continue the smooth lower body outline and fill outside it with the same plain gray background. Preserve the entire fish's position, size, silhouette, the dorsal, anal and caudal fins, mouth, eye, gill-cover groove, white caudal spine and bristle patch, colors, lighting and background pixel-aligned. Do not move, resize or redesign anything else. The removed fins will be separately animated meshes. No new fins or markings.",
+  "note": "Masked edit; composited into rostratum-skin.png only inside rostratum-fin-mask.png (zero-pixel shift measured outside the mask)."
+ },
+ {
+  "saved": "rostratum-dorsal.jpg",
+  "endpoint": "openai/gpt-image-2/edit",
+  "request_id": "01a15601-4066-7772-913d-4a0e4a716deb",
+  "created": "2026-10-19T21:13:12+00:00",
+  "quality": "high",
+  "references": [
+   "rostratum.png"
+  ],
+  "mask": null,
+  "prompt": "Use case: scientific reference, multi-view modeling sheet for a Blender 3D model. The supplied image is a side view of this exact adult black tang, Zebrasoma rostratum. Create a matching DORSAL view of the same individual: a live fish photographed from directly above, with its back toward the camera and both eyes visible on top of the head. The body is perfectly straight and horizontal across the frame, nose pointing RIGHT, tail LEFT, at the same scale as the side view, so the snout tip and tail tip span the same horizontal extent of the frame. Show the true thin, strongly laterally compressed body: seen from above the trunk is a narrow lens, widest just behind the eyes, tapering forward to the long narrow snout and backward to the slender caudal peduncle. The dorsal fin is seen edge-on as a thin dark line along the midline, the caudal fin edge-on as a thin line at the left, both pectoral fins slightly spread to either side, small white caudal spines on both sides of the peduncle. Same velvety black-brown coloration, scale texture and soft neutral diffused lighting as the reference. Plain even medium-gray background, no shadow, no other objects, no text, no labels.",
+  "note": "Width profile measurement; stored as JPEG q92."
+ },
+ {
+  "saved": "rostratum-front.jpg",
+  "endpoint": "openai/gpt-image-2/edit",
+  "request_id": "01a15601-5010-72b1-a660-914b74f338bd",
+  "created": "2026-10-19T21:13:04+00:00",
+  "quality": "high",
+  "references": [
+   "rostratum.png"
+  ],
+  "mask": null,
+  "prompt": "Use case: scientific reference, multi-view modeling sheet for a Blender 3D model. The supplied image is a side view of this exact adult black tang, Zebrasoma rostratum. Create a matching FRONT view of the same individual: a live fish facing directly toward the camera, nose pointing straight at the viewer, perfectly symmetric head-on view, body upright and level. Show the long narrow snout foreshortened toward the viewer with the small puckered mouth at the center, one eye on each side of the head, and behind them the very thin, laterally compressed body as a tall narrow lens-shaped silhouette. The tall dorsal fin above and anal fin below are seen edge-on as thin dark vertical blades, the pectoral fins are slightly spread to each side, the small pelvic fins hang below the chest. Same velvety black-brown coloration, scale texture and soft neutral diffused lighting as the reference. Centered, the fish's full height including fins fills about 80 percent of the frame height. Plain even medium-gray background, no shadow, no other objects, no text, no labels.",
+  "note": "Cross-section shape check; stored as JPEG q92."
+ }
+]

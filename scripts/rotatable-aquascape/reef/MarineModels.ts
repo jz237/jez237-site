@@ -1,10 +1,11 @@
 import * as T from 'three';
-import {finField} from './MarineFinFlex.ts';
+import {bodyEdge,finField} from './MarineFinFlex.ts';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import metadata from './assets/fish/model-info.json';
-export type MarineSpecies='tang'|'semilarvatus'|'clown'|'anthias'|'chromis'|'gramma'|'goby';
-const urls={
+export type MarineSpecies='tang'|'rostratum'|'semilarvatus'|'clown'|'anthias'|'chromis'|'gramma'|'goby';
+const urls:Record<MarineSpecies,string>={
  tang:new URL('./assets/fish/tang.glb',import.meta.url).href,
+ rostratum:new URL('./assets/fish/rostratum.glb',import.meta.url).href,
  semilarvatus:new URL('./assets/fish/semilarvatus.glb',import.meta.url).href,
  clown:new URL('./assets/fish/clown.glb',import.meta.url).href,
  anthias:new URL('./assets/fish/anthias.glb',import.meta.url).href,
@@ -12,11 +13,13 @@ const urls={
  gramma:new URL('./assets/fish/gramma.glb',import.meta.url).href,
  goby:new URL('./assets/fish/goby.glb',import.meta.url).href
 };
+/** The established display population. The black tang is gallery-only for now. */
+export const baseMarineSpecies:MarineSpecies[]=['tang','semilarvatus','clown','anthias','chromis','gramma','goby'];
 /** Geometry and embedded textures are shared between inhabitants. Vertex waves,
  * fin pivots and respiration remain independent per animal at runtime. */
-export async function loadMarineModels(){
+export async function loadMarineModels(species:MarineSpecies[]=baseMarineSpecies){
  const loader=new GLTFLoader(),templates=new Map<MarineSpecies,T.Group>();
- await Promise.all((Object.keys(urls) as MarineSpecies[]).map(async species=>{
+ await Promise.all(species.map(async species=>{
   const gltf=await loader.loadAsync(urls[species]);gltf.scene.updateMatrixWorld(true);
   const group=new T.Group(),eyes=new T.Group();eyes.name='eyes';group.add(eyes);
   gltf.scene.traverse(node=>{
@@ -32,6 +35,14 @@ export async function loadMarineModels(){
    // to retain orange chroma under the aquarium's intense overhead illumination.
    material.color.setScalar(species==='anthias'?.40:.72);
    if(species==='anthias'&&!label.startsWith('eye'))material.color.setRGB(.68,.34,.17);
+   if(species==='rostratum'&&!label.startsWith('eye')){
+    // A near-black plate needs more reflected light for its scales and rays to
+    // read. Velvet sheen and relief from the plate's own scale pattern stand in
+    // for the soft skin of the living fish; no extra texture is downloaded.
+    const skin=label==='body'||label.startsWith('gill');
+    material.color.setScalar(skin?1.5:1.3);material.roughness=skin?.52:.56;
+    if(skin&&material.map){material.bumpMap=material.map;material.bumpScale=1.4;material.sheen=.55;material.sheenRoughness=.45;material.sheenColor.set('#5b544c');}
+   }
    if(material.map)material.map.anisotropy=8;
    const mesh=new T.Mesh(geometry,material);mesh.castShadow=true;mesh.receiveShadow=true;
    if(label.startsWith('pectoral')||label.startsWith('pelvic')){
@@ -63,9 +74,12 @@ export async function loadMarineModels(){
   });
   // Fin flex grows from a pinned insertion to a freely moving margin.
   group.traverse(node=>{if(!(node instanceof T.Mesh)||node.name!=='fin')return;
-   const p=node.geometry.getAttribute('position'),flex=new Float32Array(p.count),gradient=new Float32Array(p.count*3);
-   for(let i=0;i<p.count;i++){const [f,dx,dy,dz]=finField(metadata[species],p.getX(i),p.getY(i),p.getZ(i),Boolean(node.userData.pectoral));flex[i]=f;gradient[i*3]=dx;gradient[i*3+1]=dy;gradient[i*3+2]=dz;}
-   node.geometry.setAttribute('finFlex',new T.BufferAttribute(flex,1));node.geometry.setAttribute('finGradient',new T.BufferAttribute(gradient,3));
+   const p=node.geometry.getAttribute('position'),flex=new Float32Array(p.count),gradient=new Float32Array(p.count*3),height=new Float32Array(p.count),profile=metadata[species];
+   for(let i=0;i<p.count;i++){const [f,dx,dy,dz]=finField(profile,p.getX(i),p.getY(i),p.getZ(i),Boolean(node.userData.pectoral));flex[i]=f;gradient[i*3]=dx;gradient[i*3+1]=dy;gradient[i*3+2]=dz;
+    // Signed membrane height beyond the dorsal or ventral body edge. Median
+    // fins fold toward their insertion by this amount; tail and paired fins do not.
+    const x=p.getX(i),y=p.getY(i);if(!node.userData.pectoral&&x>=-.5)height[i]=Math.max(0,y-bodyEdge(profile.upper,x))+Math.min(0,y-bodyEdge(profile.lower,x));}
+   node.geometry.setAttribute('finFlex',new T.BufferAttribute(flex,1));node.geometry.setAttribute('finGradient',new T.BufferAttribute(gradient,3));node.geometry.setAttribute('finHeight',new T.BufferAttribute(height,1));
   });
   const mouth=new T.Group();mouth.name='mouth';mouth.position.fromArray(metadata[species].mouth);
   // The mouth group marks the bite target; lips and cavity now belong to the body.

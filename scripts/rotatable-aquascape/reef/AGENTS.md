@@ -7,3 +7,10 @@ Keep habitat selection and on-demand loading in the storefront wrapper. Preserve
 Use shared water/glass/lighting components without changing freshwater behavior.
 Run the reef behavior/browser checks and inspect front, oblique and mobile images
 before publishing. Do not spend money. Reef behavior parameters are illustrative.
+
+Gallery-only additions (October 19, 2026): the black tang (`rostratum`) and the
+Add & remove fish panel run on jez237 only. `reefShowroomEmbedded()` keeps the
+Hidden Reef storefront on its reviewed 21-fish stocking with no stocking panel.
+Do not enable them in the store until the user approves. The black tang's five
+fal GPT Image generations were made at the user's request; that request does
+not authorize further paid generations.

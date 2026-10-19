@@ -20,3 +20,14 @@
 .reef-tour-invite{padding-bottom:14px;margin-bottom:16px;border-bottom:1px solid #2d4c60}.reef-tour-invite .reef-primary{margin-top:0!important}.reef-tour-invite p{margin:7px 0 0!important}.reef-tour-progress{display:flex;gap:5px;margin:10px 0 18px}.reef-tour-progress span{flex:1;height:4px;border-radius:3px;background:#294657}.reef-tour-progress .visited{background:#73e7ef}#reef-learning .reef-tour-count{color:#82e5e9;font-size:12px;letter-spacing:.05em;margin:0}.reef-tour-navigation .reef-primary{margin-top:0!important;width:auto!important}.reef-tour-panel #reef-tour-title{margin:12px 0}.reef-tour-panel #reef-tour-title:focus{outline:none}.reef-tour-panel .reef-pair button{min-height:44px!important}@media(max-width:700px){.reef-tour-panel h2{font-size:22px!important}.reef-tour-panel .reef-panel-body>p:not(.reef-fine){line-height:1.5}.reef-tour-progress{margin:7px 0 12px}}
 
 .reef-filter-link{flex:1;min-width:0;max-width:190px;min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10px 12px;border:1px solid #70dbe0;border-radius:9px;background:#153c4b;color:#d3fff7;font-size:12px;font-weight:700;line-height:1.25}.reef-filter-link:hover{background:#235666}.reef-filter-link small{font-size:9px}.reef-filter-lesson{display:block;text-align:center;padding:12px;border-radius:7px}@media(max-width:1200px){.reef-filter-link{max-width:none}}@media(max-width:700px){.reef-tools{flex-wrap:wrap}.reef-tools>button,.reef-tools>.reef-filter-link{flex:1 1 calc(50% - 6px);max-width:none;min-height:44px;padding:8px;font-size:11px}.reef-filter-link small{font-size:8px}}
+.reef-stock-total{display:flex;justify-content:space-between;align-items:baseline;gap:10px;border-left:3px solid #67dce9;background:#112f44;padding:9px 12px;color:#dcf7ff!important}
+.reef-stock-total small{color:#93afc3;font-size:11px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.reef-stock{list-style:none;margin:14px 0;padding:0;display:grid;gap:6px}
+.reef-stock li{display:grid;grid-template-columns:minmax(0,1fr) 44px 30px 44px;align-items:center;gap:6px;padding:4px 6px 4px 10px;border:1px solid #28485e;border-radius:9px;background:#0b2233}
+#reef-learning .reef-stock-name{text-align:left;border:0;padding:4px 0;background:none;color:#e6fbff;min-width:0}
+#reef-learning .reef-stock-name:disabled{opacity:.55;cursor:default}
+.reef-stock-name strong,.reef-stock-name small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.reef-stock-name strong{font-size:13px}
+.reef-stock-name small{font-size:10px;font-style:italic;color:#8fb0c3;margin-top:2px}
+.reef-stock output{text-align:center;font-size:16px;font-weight:700;color:#f0fcff;font-variant-numeric:tabular-nums}
+#reef-learning [data-stock-add],#reef-learning [data-stock-remove]{padding:0;font-size:20px;line-height:1;background:#0f3247;color:#d7ffff}

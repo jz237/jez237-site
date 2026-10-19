@@ -10,9 +10,10 @@ export class ReefFishShadows {
  private dummy=new T.Object3D();
  private updates=0;
  private opacity:T.InstancedBufferAttribute;
- constructor(private fish:ReefFish,private light:T.Vector3,daylight:{value:number}){
+ /** Capacity covers fish added after load; the drawn count follows the tank. */
+ constructor(private fish:ReefFish,private light:T.Vector3,daylight:{value:number},capacity=fish.fish.length){
   const geometry=new T.PlaneGeometry(1,1,12,8);geometry.rotateX(-Math.PI/2);
-  this.opacity=new T.InstancedBufferAttribute(new Float32Array(fish.fish.length),1);
+  this.opacity=new T.InstancedBufferAttribute(new Float32Array(capacity),1);
   geometry.setAttribute('shadowOpacity',this.opacity);
   const material=new T.ShaderMaterial({transparent:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1,
    uniforms:{daylight},vertexShader:`attribute float shadowOpacity;varying vec2 v;varying vec3 world;varying float strength;
@@ -34,11 +35,11 @@ export class ReefFishShadows {
     vec2 p=(v-.5)*2.;float shape=exp(-dot(p,p)*4.5)*(1.-smoothstep(.64,1.,length(p)));
     gl_FragColor=vec4(.025,.045,.075,shape*strength*daylight);
    }`});
-  this.mesh=new T.InstancedMesh(geometry,material,fish.fish.length);this.mesh.name='Continuous soft fish penumbras';this.mesh.frustumCulled=false;
+  this.mesh=new T.InstancedMesh(geometry,material,capacity);this.mesh.name='Continuous soft fish penumbras';this.mesh.frustumCulled=false;
   this.update();
  }
  snapshot(){const a=this.mesh.instanceMatrix.array;return {updates:this.updates,centers:this.fish.fish.map((_,i)=>[a[i*16+12],a[i*16+14]])};}
- update(){this.updates++;for(let i=0;i<this.fish.fish.length;i++){
+ update(){this.updates++;this.mesh.count=Math.min(this.fish.fish.length,this.opacity.count);for(let i=0;i<this.mesh.count;i++){
   const f=this.fish.fish[i],p=f.position,h=Math.max(0,p.y-sandHeight(p.x,p.z)),size=f.group.scale.x;
   const projection=h/Math.max(1,this.light.y-p.y);
   this.dummy.position.set(p.x+(p.x-this.light.x)*projection,0,p.z+(p.z-this.light.z)*projection);

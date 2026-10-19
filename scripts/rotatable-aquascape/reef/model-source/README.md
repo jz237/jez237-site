@@ -1,5 +1,26 @@
 # Marine fish reference and Blender sources
 
+## Black tang (jez237 gallery only) — October 19, 2026
+
+`rostratum.glb` is *Zebrasoma rostratum*, authored from fal `openai/gpt-image-2`
+plates generated at the user's request: a lateral plate, a masked clean-flank
+edit, and dorsal and front views. `references/rostratum-prompts.md` has every
+prompt, the rejected first plate and the modeling choices;
+`references/fal-requests.json` has the request ids. Rebuild only this model:
+
+```powershell
+python reef/model-source/prepare_rostratum_plates.py <raw clean-flank edit.png>  # only after a new edit
+python reef/model-source/trace_rostratum.py
+& 'C:/Program Files/Blender Foundation/Blender 5.2/blender.exe' --background --python reef/model-source/build_marine_fish.py -- --only rostratum
+```
+
+Its profile uses optional keys that other species leave unset, so their builds
+are unchanged: `texture`/`skinTexture` (edge-padded copies of plates shot on
+gray), `thickness` (traced width along the body), `crossPower` (lens-shaped
+section), `dorsalFade` and `rings`/`sides` (26,672 source triangles). At runtime
+the near-black skin gets brighter albedo, relief from its own scale texture and
+a soft velvet sheen. `rostratum.blend` is the editable source.
+
 ## Golden butterflyfish replacement — September 27, 2026
 
 The former yellow tang slot now loads `semilarvatus.glb`, a separately authored
