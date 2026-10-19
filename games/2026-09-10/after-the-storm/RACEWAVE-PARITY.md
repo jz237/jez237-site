@@ -1,5 +1,18 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — Original Stunt mode from the normal menu
+
+Stunt run now shares the Physics choice on all nine source venues, including
+Dolphin Park. Original runs the recovered stunt scene: rings and chains,
+checkpoint timer, tricks, gestures and original scoring and results. Modern
+stays the default. Stunt records now also use the persistent original record
+region, which carries correctly between Stunt and Time trial sessions.
+
+The verification helm cleared all four checkpoints on every venue without a
+disqualification or stall (scores 545 to 7,535, 1 to 16 rings). Browser runs
+on Sunny Beach and Dolphin Park were clean at 60 fps. The full wake/spray
+owner is not used in Stunt yet; its special scene uses the human spray owner.
+
 ## v2.43.0 — Original Time trial and Dolphin Park fish
 
 Time trial now offers Physics: Modern or Original · Wave Race 64 on the eight
