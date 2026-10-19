@@ -13,6 +13,9 @@ import {CombatScoreboard,DEFAULT_EVENT,RACE_NAMES,type EventOptions} from './eve
 import {WaypointRace,waypointSequence,type WaypointOrder} from './waypoint-race';
 import type {Mode} from './rules';
 
+/** Arenas the deployed online protocol knows; later arenas stay offline until peers negotiate them. */
+export const ONLINE_ARENA_IDS=['quarry-arena-v1','harrow-bowl-v1','briarhill-bowl-v1','foundry-yard-v1','wrenford-pit-v1'] as const satisfies readonly ArenaId[];
+export const isOnlineArenaId=(v:unknown):v is ArenaId=>isArenaId(v)&&(ONLINE_ARENA_IDS as readonly string[]).includes(v);
 export type OnlineEventRules=Pick<EventOptions,'version'|'laps'|'direction'|'race'|'derby'|'duration'|'raceDuration'>&{classLimit?:ClassLimit;course?:CourseId;arena?:ArenaId;chase?:ChaseRules};
 export const DEFAULT_ONLINE_EVENT:OnlineEventRules=(({field,...rules})=>rules)(DEFAULT_EVENT);
 export type WaypointRecord={id:number;round:number;visited:number[];passed:number;finished:boolean};
@@ -22,7 +25,7 @@ const integer=(v:unknown,min:number,max:number):v is number=>typeof v==='number'
 const object=(v:unknown):v is Record<string,unknown>=>!!v&&typeof v==='object'&&!Array.isArray(v);
 /** Network rules are rejected rather than silently clamped to a different event. */
 export function validOnlineEventRules(v:unknown):v is OnlineEventRules{
-  return object(v)&&Object.keys(v).length===6+Number(v.classLimit!==undefined)+Number(v.chase!==undefined)+Number(v.raceDuration!==undefined)+Number(v.course!==undefined)+Number(v.arena!==undefined)&&Object.keys(v).every(k=>['classLimit','version','laps','direction','race','derby','duration','raceDuration','course','arena','chase'].includes(k))&&(v.classLimit===undefined||isClassLimit(v.classLimit))&&(v.chase===undefined||validChaseRules(v.chase,24)&&v.race==='laps'&&v.direction!=='opposing'&&v.raceDuration===undefined)&&(v.arena===undefined||isArenaId(v.arena))&&(v.course===undefined||isCourseId(v.course))&&(v.raceDuration===undefined||v.race==='laps'&&integer(v.raceDuration,60,1200))&&v.version===1&&integer(v.laps,1,20)&&integer(v.duration,60,1200)&&
+  return object(v)&&Object.keys(v).length===6+Number(v.classLimit!==undefined)+Number(v.chase!==undefined)+Number(v.raceDuration!==undefined)+Number(v.course!==undefined)+Number(v.arena!==undefined)&&Object.keys(v).every(k=>['classLimit','version','laps','direction','race','derby','duration','raceDuration','course','arena','chase'].includes(k))&&(v.classLimit===undefined||isClassLimit(v.classLimit))&&(v.chase===undefined||validChaseRules(v.chase,24)&&v.race==='laps'&&v.direction!=='opposing'&&v.raceDuration===undefined)&&(v.arena===undefined||isOnlineArenaId(v.arena))&&(v.course===undefined||isCourseId(v.course))&&(v.raceDuration===undefined||v.race==='laps'&&integer(v.raceDuration,60,1200))&&v.version===1&&integer(v.laps,1,20)&&integer(v.duration,60,1200)&&
     ['forward','reverse','opposing'].includes(v.direction as string)&&['laps','ordered','free','random'].includes(v.race as string)&&['survival','score','score-no-respawn'].includes(v.derby as string);
 }
 export function copyOnlineEventRules(v:OnlineEventRules):OnlineEventRules{return{...(v.classLimit?{classLimit:v.classLimit}:{}),...(v.chase?{chase:structuredClone(v.chase)}:{}),...(v.arena===undefined||v.arena==='quarry-arena-v1'?{}:{arena:v.arena}),version:1,laps:v.laps,direction:v.direction,race:v.race,derby:v.derby,duration:v.duration,...(v.course===undefined||v.course==='quarry-v1'?{}:{course:v.course}),...(v.raceDuration===undefined?{}:{raceDuration:v.raceDuration})};}
