@@ -19,6 +19,7 @@ import './stable-fish-passes.mjs';
 import './fish-navigation.mjs';
 import './species-motion.mjs';
 import './black-tang.mjs';
+import './reef-options.mjs';
 import './night-refuge.mjs';
 import './fin-motion.mjs';
 import './water-capture.mjs';
@@ -107,8 +108,24 @@ try{
  for(let i=0;i<2;i++)await page.getByRole('button',{name:'Remove a black tang'}).click();
  assert.equal(await stockCount('rostratum'),0);assert.ok(await page.getByRole('button',{name:'Remove a black tang'}).isDisabled());
  await page.getByRole('button',{name:'Explore & identify'}).click();assert.equal(await page.locator('#reef-subject option[value="rostratum"]').count(),0,'absent species leave the close-up list');
+ // Gallery options start empty; the first add downloads that model only.
+ await page.getByRole('button',{name:/Add & remove fish/}).click();
+ const options=[['strigosus','kole tang'],['vulpinus','foxface rabbitfish'],['bispinosa','coral beauty angelfish'],['loricula','flame angelfish'],['hexataenia','six-line wrasse'],['cinctus','yellow watchman goby']];
+ for(const [id] of options)assert.equal(await stockCount(id),0,`${id} is not stocked by default`);
+ for(const [id,name] of options){
+  const download=page.waitForResponse(r=>r.url().includes(`/${id}-`)&&r.url().endsWith('.glb'));
+  await page.getByRole('button',{name:`Add a ${name}`}).click();assert.equal((await download).status(),200,`${id} model downloads on first use`);
+  await page.locator('.reef-stock-total').filter({hasText:/Added a|Look for/}).waitFor({timeout:30000});assert.equal(await stockCount(id),1,`${id} added`);
+ }
+ report.options=await page.evaluate(()=>window.reefQA.snapshot().positions.filter(p=>['strigosus','vulpinus','bispinosa','loricula','hexataenia','cinctus'].includes(p.species)).map(p=>p.species+':'+p.mode));
+ await page.getByRole('button',{name:'Close reef guide'}).click();await page.getByRole('button',{name:'Resume',exact:true}).click();await page.waitForTimeout(12000);await page.getByRole('button',{name:'Pause',exact:true}).click();
+ stocked=await page.evaluate(()=>window.reefQA.snapshot());assert.equal(stocked.fish,28,"22 original, an extra chromis, both black tangs removed, six options added");assert.equal(stocked.obstacleOverlaps,0,'options stay clear of the reef');assert.equal(stocked.fishOverlaps,0,'options stay clear of other fish');
+ await page.screenshot({path:resolve(out,'options-tank.png')});
+ for(const [id] of options){await page.evaluate(s=>window.reefQA.inspectFish(s),id);await page.waitForTimeout(400);await page.screenshot({path:resolve(out,`fish-${id}.png`)});}
+ await page.getByRole('button',{name:'Front',exact:true}).click();await page.waitForTimeout(1500);
  await page.getByRole('button',{name:/Add & remove fish/}).click();await page.getByRole('button',{name:'Restore the original stocking'}).click();
- assert.equal((await page.evaluate(()=>window.reefQA.snapshot())).fish,22);assert.equal(await stockCount('rostratum'),1);await page.screenshot({path:resolve(out,'stocking.png')});
+ await page.locator('.reef-stock-total').filter({hasText:/restored/}).waitFor({timeout:30000});
+ assert.equal((await page.evaluate(()=>window.reefQA.snapshot())).fish,22);assert.equal(await stockCount('rostratum'),1);for(const [id] of options)assert.equal(await stockCount(id),0,`${id} removed by restore`);await page.screenshot({path:resolve(out,'stocking.png')});
  await page.getByRole('button',{name:'Close reef guide'}).click();
  await page.setViewportSize({width:390,height:844});await page.waitForTimeout(500);await page.screenshot({path:resolve(out,'mobile.png')});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'no horizontal overflow');
  const mobileCanvas=await page.locator('canvas').boundingBox();assert.ok(mobileCanvas.width<=390&&mobileCanvas.x>=0,'canvas must fit the phone width');

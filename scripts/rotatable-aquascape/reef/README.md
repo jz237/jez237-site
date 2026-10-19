@@ -57,6 +57,34 @@ illustrative. `qa/black-tang.mjs` checks them with three seeds, together with
 adding and removing fish. Reference provenance and the paid GPT Image requests
 are in `model-source/references/rostratum-prompts.md`.
 
+## Reef options: six more species (jez237 gallery only)
+
+The Add & remove fish panel also offers a kole tang (*Ctenochaetus strigosus*),
+foxface rabbitfish (*Siganus vulpinus*), coral beauty (*Centropyge bispinosa*),
+flame angelfish (*C. loricula*), six-line wrasse (*Pseudocheilinus hexataenia*)
+and yellow watchman goby (*Cryptocentrus cinctus*). They start at zero; each
+model (2-2.8 MB) downloads only when a visitor first adds one, so the first
+load is unchanged. Habits come from `marineHabits` in `MarineBehavior.ts`:
+
+- Kole tang: near-constant rapid scraping of rock film, sails, pectoral rowing,
+  broadside displays to other tangs.
+- Foxface: slower grazing; when crowded by a large fish it raises its venomous
+  spines toward it and darkens to mottled brown, as it does at night.
+- Coral beauty and flame angel: grazing bouts within their own rockwork, short
+  excursions from a shelter, retreat from larger fish, chases of rival
+  *Centropyge*.
+- Six-line wrasse: quick pecks for prey among the rock, close to cover; sleeps
+  in a cavity inside a faint mucus cocoon at night.
+- Yellow watchman goby: perches at a sand burrow scanning the tank, sifts
+  sand, hops out to pick or snap passing food, dives into the burrow when a
+  large or fast fish comes close, peeks out, emerges, sleeps inside at night.
+  The burrow's shrimp partner is not modeled.
+
+`qa/reef-options.mjs` checks these habits with three seeds plus controlled
+rival encounters; the browser check adds all six by real clicks, verifies each
+model downloads on first use and that restoring the stocking removes them.
+Provenance and the 34 paid GPT Image requests: `model-source/references/reef-options-prompts.md`.
+
 ## Marine fish detail
 
 Six Blender-authored species now use generated photographic-style references, individually traced volumetric bodies, fine skin/fin textures, shallow eyes and body-conforming gills. Rooted fin flex and separate pectoral pivots preserve attachments during swimming; mouth positions follow each species anatomy for food contact. Geometry/textures are shared across 20 inhabitants.

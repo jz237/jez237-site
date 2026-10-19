@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import * as T from 'three';
 const metadata=JSON.parse(fs.readFileSync(new URL('../assets/fish/model-info.json',import.meta.url)));
-const species=['tang','rostratum','semilarvatus','clown','anthias','chromis','gramma','goby'];
+const species=['tang','rostratum','semilarvatus','clown','anthias','chromis','gramma','goby','strigosus','vulpinus','bispinosa','loricula','hexataenia','cinctus'];
 let totalTriangles=0;
 for(const s of species){
  const buffer=fs.readFileSync(new URL(`../assets/fish/${s}.glb`,import.meta.url));assert.equal(buffer.readUInt32LE(0),0x46546c67);assert.equal(buffer.readUInt32LE(4),2);
@@ -14,6 +14,7 @@ for(const s of species){
  const bodyImage=imageFor(bodyPrimitive);
  const nodes=gltf.nodes.map(n=>n.name);assert.ok(nodes.includes(s+'__body'));assert.equal(nodes.filter(n=>n.startsWith(s+'__gill')).length,2);assert.equal(nodes.filter(n=>n.startsWith(s+'__pectoral')).length,2);
  if(s==='goby'){assert.equal(metadata[s].reference,'mandarin.png');assert.equal(nodes.filter(n=>n.startsWith(s+'__pelvic')).length,2,'mandarin has two independent pelvic fans');}
+ if(['strigosus','vulpinus','bispinosa','loricula','hexataenia','cinctus'].includes(s)){assert.equal(metadata[s].reference,s+'.png');assert.equal(nodes.filter(n=>n.startsWith(s+'__pelvic')).length,2,s+' has independent paired pelvic fins');}
  if(s==='rostratum'){assert.equal(metadata[s].reference,'rostratum.png');assert.equal(nodes.filter(n=>n.startsWith(s+'__pelvic')).length,2,'black tang has independent paired pelvic fins');}
  if(s==='semilarvatus'){assert.equal(metadata[s].reference,'semilarvatus.png');assert.equal(nodes.filter(n=>n.startsWith(s+'__pelvic')).length,2,'butterflyfish retains independent paired pelvic fins');assert.ok(!metadata.yellow,'the retired yellow tang is not an active species');}
  for(const mesh of gltf.meshes)for(const primitive of mesh.primitives){
@@ -38,4 +39,4 @@ for(const s of species){
   }
  }
 }
-console.log(`Blender fish geometry passed: eight species, closed bodies, paired gills/fins, embedded skin textures, ${totalTriangles} source triangles.`);
+console.log(`Blender fish geometry passed: ${species.length} species, closed bodies, paired gills/fins, embedded skin textures, ${totalTriangles} source triangles.`);

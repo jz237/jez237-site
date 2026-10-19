@@ -18,7 +18,7 @@ Five paid generations were made in total. These are generated illustrations of
 | `rostratum-front.jpg` | Cross-section check: tall lens with narrow keels |
 
 The fish was shot on mid gray so its black silhouette could be traced.
-`prepare_rostratum_plates.py` composites the clean flank and pads the fish's own
+`prepare_plates.py rostratum --luminance 105` composites the clean flank and pads the fish's own
 colors outward into the backdrop, so fin margins never pick up a light fringe.
 `trace_rostratum.py` writes the `profiles.json` entry and a review overlay.
 

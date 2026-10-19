@@ -14,3 +14,8 @@ Hidden Reef storefront on its reviewed 21-fish stocking with no stocking panel.
 Do not enable them in the store until the user approves. The black tang's five
 fal GPT Image generations were made at the user's request; that request does
 not authorize further paid generations.
+
+Reef options (October 19, 2026): kole tang, foxface, coral beauty, flame angel,
+six-line wrasse and yellow watchman goby are gallery-only Add & remove fish
+options, loaded on demand. Their 34 fal generations were made at the user's
+request ("full set, highest quality"); that does not authorize further spending.

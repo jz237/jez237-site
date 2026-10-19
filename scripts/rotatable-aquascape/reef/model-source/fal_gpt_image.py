@@ -98,13 +98,25 @@ def main():
     if not images:
         print('no images', json.dumps(result)[:2000]); sys.exit(1)
     download(images[0]['url'], args.out)
-    log = json.loads(LOG.read_text(encoding='utf-8')) if LOG.exists() else []
-    log.append({'saved': Path(args.out).name, 'endpoint': endpoint, 'request_id': request_id,
-                'created': datetime.now(timezone.utc).isoformat(timespec='seconds'),
-                'quality': args.quality,
-                'references': [Path(p).name for p in args.ref], 'mask': Path(args.mask).name if args.mask else None,
-                'prompt': prompt})
-    LOG.write_text(json.dumps(log, indent=1) + '\n', encoding='utf-8', newline='\n')
+    # Parallel generations share one log; serialize its read-modify-write.
+    lock = LOG.with_suffix('.lock')
+    for _ in range(600):
+        try:
+            handle = os.open(lock, os.O_CREAT | os.O_EXCL); break
+        except FileExistsError:
+            time.sleep(.1)
+    else:
+        raise SystemExit('Provenance log is locked')
+    try:
+        log = json.loads(LOG.read_text(encoding='utf-8')) if LOG.exists() else []
+        log.append({'saved': Path(args.out).name, 'endpoint': endpoint, 'request_id': request_id,
+                    'created': datetime.now(timezone.utc).isoformat(timespec='seconds'),
+                    'quality': args.quality,
+                    'references': [Path(p).name for p in args.ref], 'mask': Path(args.mask).name if args.mask else None,
+                    'prompt': prompt})
+        LOG.write_text(json.dumps(log, indent=1) + '\n', encoding='utf-8', newline='\n')
+    finally:
+        os.close(handle); lock.unlink()
     print('saved', args.out, images[0].get('width'), images[0].get('height'), f'{time.time() - started:.0f}s')
 
 if __name__ == '__main__':

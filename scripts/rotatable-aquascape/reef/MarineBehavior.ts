@@ -19,4 +19,35 @@ export const marineBehavior:Record<MarineSpecies,MarineBehavior>={
  chromis:{cruiseBL:[.65,1.25],burstBL:2.7,finHz:2.25,tailHz:1.65,rest:[.5,1.6],restChance:.14,night:.3,turnRate:2.3,curve:1.15,wave:1,perceptionBL:5.8,stroke:[1.1,2.8],coast:[.4,1],schooling:'shoal'},
  gramma:{cruiseBL:[.28,.6],burstBL:2.15,finHz:1.9,tailHz:1.2,rest:[1.8,4.5],restChance:.85,night:.35,turnRate:2.1,curve:1.2,wave:.88,perceptionBL:3.4,stroke:[.9,2.1],coast:[.45,1.2],schooling:null},
  goby:{cruiseBL:[.22,.5],burstBL:1.2,finHz:2.3,tailHz:.55,rest:[4.5,8.5],restChance:.9,night:.6,turnRate:1.65,curve:1.6,wave:.55,perceptionBL:2.8,stroke:[.5,1.2],coast:[.7,1.5],schooling:null},
+ // Gallery options. Rhythms are illustrative, chosen from published natural history.
+ strigosus:{cruiseBL:[.4,.85],burstBL:2.2,finHz:1.85,tailHz:.95,rest:[.5,1.4],restChance:.2,night:.4,turnRate:1.7,curve:.85,wave:.45,perceptionBL:4.4,stroke:[2,4.5],coast:[.6,1.4],schooling:null},
+ vulpinus:{cruiseBL:[.28,.62],burstBL:1.9,finHz:1.4,tailHz:.8,rest:[1.5,3.5],restChance:.55,night:.35,turnRate:1.4,curve:.8,wave:.6,perceptionBL:4,stroke:[2,4],coast:[.9,2],schooling:null},
+ bispinosa:{cruiseBL:[.35,.8],burstBL:2.6,finHz:2.4,tailHz:1.3,rest:[.6,1.6],restChance:.5,night:.35,turnRate:2.4,curve:1.2,wave:.7,perceptionBL:3.6,stroke:[.8,2],coast:[.4,.9],schooling:null},
+ loricula:{cruiseBL:[.35,.8],burstBL:2.6,finHz:2.4,tailHz:1.3,rest:[.6,1.6],restChance:.5,night:.35,turnRate:2.4,curve:1.2,wave:.7,perceptionBL:3.6,stroke:[.8,2],coast:[.4,.9],schooling:null},
+ hexataenia:{cruiseBL:[.5,1.1],burstBL:3.2,finHz:2.9,tailHz:1.5,rest:[.3,.9],restChance:.45,night:.3,turnRate:3,curve:1.5,wave:.8,perceptionBL:3.4,stroke:[.5,1.4],coast:[.3,.7],schooling:null},
+ cinctus:{cruiseBL:[.3,.7],burstBL:3,finHz:2.2,tailHz:1.6,rest:[3,8],restChance:.9,night:.5,turnRate:2,curve:1.4,wave:1,perceptionBL:3.2,stroke:[.4,.9],coast:[.5,1.2],schooling:null},
+};
+/** Species habits beyond the shared swimming profile. Species without an entry
+ * keep their established behavior exactly. Values are illustrative.
+ * graze: bouts of bites at reef faces (range limits sites to a home territory).
+ * rivals/display: who provokes a broadside fin display, a short chase, or a
+ * defensive spine display with camouflage. sails: median fins fold with speed.
+ * labriform: pectoral rowing carries patrols. home: a persistent reef shelter
+ * with short excursions; retreat: back to it when a larger fish comes close. */
+export type MarineHabits={
+ graze?:{chance:number;bites:[number,number];interval:[number,number];stroke:number;range?:number};
+ rivals?:MarineSpecies[];display?:'broadside'|'chase'|'spines';
+ sails?:boolean;labriform?:boolean;home?:number;retreat?:boolean;camouflage?:boolean;cocoon?:boolean;
+};
+export const marineHabits:Partial<Record<MarineSpecies,MarineHabits>>={
+ rostratum:{graze:{chance:.62,bites:[3,7],interval:[.55,1.15],stroke:.4},rivals:['tang','rostratum','strigosus'],display:'broadside',sails:true,labriform:true},
+ // Bristle-toothed: nearly constant, rapid scraping of film from rock.
+ strigosus:{graze:{chance:.88,bites:[7,13],interval:[.22,.42],stroke:.25},rivals:['tang','rostratum','strigosus'],display:'broadside',sails:true,labriform:true},
+ // Algae grazer; threatened, it raises venomous spines toward the intruder and darkens.
+ vulpinus:{graze:{chance:.55,bites:[3,6],interval:[.7,1.4],stroke:.3},rivals:['tang','rostratum','strigosus','vulpinus'],display:'spines',sails:true,labriform:true,camouflage:true},
+ // Dwarf angels graze around their own rockwork and spar with other Centropyge.
+ bispinosa:{graze:{chance:.72,bites:[2,5],interval:[.45,.9],stroke:.35,range:1.5},rivals:['bispinosa','loricula'],display:'chase',labriform:true,home:1.6,retreat:true},
+ loricula:{graze:{chance:.72,bites:[2,5],interval:[.45,.9],stroke:.35,range:1.5},rivals:['bispinosa','loricula'],display:'chase',labriform:true,home:1.6,retreat:true},
+ // Secretive pod hunter among the rock; sleeps in a mucus cocoon in a cavity.
+ hexataenia:{graze:{chance:.8,bites:[1,3],interval:[.35,.7],stroke:.45,range:1.1},rivals:['hexataenia'],display:'chase',labriform:true,home:1.2,retreat:true,cocoon:true},
 };

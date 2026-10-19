@@ -1,5 +1,23 @@
 # Marine fish reference and Blender sources
 
+## Reef options — October 19, 2026
+
+Six more species (`strigosus`, `vulpinus`, `bispinosa`, `loricula`,
+`hexataenia`, `cinctus`) follow the black tang's route, now generalized:
+`prepare_plates.py <species> [--edit <raw edit>]` composites a clean flank and
+pads textures (backdrop removed by a fitted color model), and
+`trace_profiles.py [species]` writes profiles from the hand-read landmarks in
+`references/trace-specs.json`, with review overlays in `proofs/`. Rebuild one:
+
+```powershell
+python reef/model-source/trace_profiles.py loricula
+& 'C:/Program Files/Blender Foundation/Blender 5.2/blender.exe' --background --python reef/model-source/build_marine_fish.py -- --only loricula
+```
+
+Prompts and request ids: `references/reef-options-prompts.md` and
+`references/fal-requests.json`. Each species' editable `<species>.blend` is saved
+beside the build script.
+
 ## Black tang (jez237 gallery only) — October 19, 2026
 
 `rostratum.glb` is *Zebrasoma rostratum*, authored from fal `openai/gpt-image-2`
@@ -9,7 +27,7 @@ prompt, the rejected first plate and the modeling choices;
 `references/fal-requests.json` has the request ids. Rebuild only this model:
 
 ```powershell
-python reef/model-source/prepare_rostratum_plates.py <raw clean-flank edit.png>  # only after a new edit
+python reef/model-source/prepare_plates.py rostratum --edit <raw clean-flank edit.png> --luminance 105  # only after a new edit
 python reef/model-source/trace_rostratum.py
 & 'C:/Program Files/Blender Foundation/Blender 5.2/blender.exe' --background --python reef/model-source/build_marine_fish.py -- --only rostratum
 ```

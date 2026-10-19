@@ -2,7 +2,7 @@ import * as T from 'three';
 import {bodyEdge,finField} from './MarineFinFlex.ts';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import metadata from './assets/fish/model-info.json';
-export type MarineSpecies='tang'|'rostratum'|'semilarvatus'|'clown'|'anthias'|'chromis'|'gramma'|'goby';
+export type MarineSpecies='tang'|'rostratum'|'semilarvatus'|'clown'|'anthias'|'chromis'|'gramma'|'goby'|'strigosus'|'vulpinus'|'bispinosa'|'loricula'|'hexataenia'|'cinctus';
 const urls:Record<MarineSpecies,string>={
  tang:new URL('./assets/fish/tang.glb',import.meta.url).href,
  rostratum:new URL('./assets/fish/rostratum.glb',import.meta.url).href,
@@ -11,8 +11,16 @@ const urls:Record<MarineSpecies,string>={
  anthias:new URL('./assets/fish/anthias.glb',import.meta.url).href,
  chromis:new URL('./assets/fish/chromis.glb',import.meta.url).href,
  gramma:new URL('./assets/fish/gramma.glb',import.meta.url).href,
- goby:new URL('./assets/fish/goby.glb',import.meta.url).href
+ goby:new URL('./assets/fish/goby.glb',import.meta.url).href,
+ strigosus:new URL('./assets/fish/strigosus.glb',import.meta.url).href,
+ vulpinus:new URL('./assets/fish/vulpinus.glb',import.meta.url).href,
+ bispinosa:new URL('./assets/fish/bispinosa.glb',import.meta.url).href,
+ loricula:new URL('./assets/fish/loricula.glb',import.meta.url).href,
+ hexataenia:new URL('./assets/fish/hexataenia.glb',import.meta.url).href,
+ cinctus:new URL('./assets/fish/cinctus.glb',import.meta.url).href
 };
+/** Gallery options, downloaded only when a visitor first adds one. */
+export const optionalMarineSpecies:MarineSpecies[]=['strigosus','vulpinus','bispinosa','loricula','hexataenia','cinctus'];
 /** The established display population. The black tang is gallery-only for now. */
 export const baseMarineSpecies:MarineSpecies[]=['tang','semilarvatus','clown','anthias','chromis','gramma','goby'];
 /** Geometry and embedded textures are shared between inhabitants. Vertex waves,

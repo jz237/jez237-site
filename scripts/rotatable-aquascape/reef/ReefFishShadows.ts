@@ -47,6 +47,7 @@ export class ReefFishShadows {
   // Higher fish have wider, fainter footprints; no sharp jumping silhouette.
   this.dummy.scale.set(size*(1+projection)+h*.25,.1,size*.34*(1+projection)+h*.25);
   this.dummy.updateMatrix();this.mesh.setMatrixAt(i,this.dummy.matrix);
-  this.opacity.setX(i,.28/(1+h*.65));
+  // A goby inside its burrow casts no shadow on the sand above it.
+  this.opacity.setX(i,f.hidden?0:.28/(1+h*.65));
  }this.mesh.instanceMatrix.needsUpdate=true;this.opacity.needsUpdate=true;}
 }
