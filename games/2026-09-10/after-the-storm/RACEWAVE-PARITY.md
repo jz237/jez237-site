@@ -1,5 +1,20 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — Dolphin Park tropical fish
+
+Live Dolphin Park's eight original swimmers (actor types 7, 8 and 9, resource
+bank 2) were already moving with their recovered motion but were never drawn.
+Each is one fish made of three side-view slices (head, middle, tail) that the
+original animation bends. A continuous high-resolution 3D fish now lives in
+the middle slice's frame and is skinned to the head and tail transforms, so it
+bends exactly with the original poses without seams. The three species follow
+the original palettes: magenta clownfish with white bands, pale striped
+butterflyfish, and royal blue tang with a yellow tail. Slice lengths and
+heights come from the original geometry; shapes and paint are authored and no
+cartridge pixels ship. Tests check every nose and tail-fin vertex against its
+live head/tail slice transform. The fish swim about 2.5 m deep, so they are
+mostly seen through the water.
+
 ## v2.42.0 — original wake and spray in live Dolphin Park
 
 Live Dolphin Park Free Ride (Normal, Venue conditions) now runs the complete
