@@ -2,7 +2,7 @@ import {createSourceFixedSphereGrid} from './source-boundary-spheres.js';
 import {createNativeRaceHost,stepNativeRaceHost,nativeHostMenuInput} from './native-race-host.js';
 import {effectiveNativeTune} from './native-rider-tuning.js';
 import {createNativeRaceLaunchRuntime} from './native-race-launch-runtime.js';
-import {prepareNativeChampionshipWebLaunch} from './native-championship-setup.js';
+import {prepareNativeChampionshipWebLaunch,prepareNativeChampionshipConfiguredLaunch} from './native-championship-setup.js';
 import {createNativeRaceContactAudio} from './native-race-contact-audio.js';
 import {prepareNativeHullStartFromMatrix} from './native-hull.js';
 import {createNativeRaceCourseRuntime} from './native-race-course-runtime.js';
@@ -71,7 +71,7 @@ export const angleDelta=a=>Math.atan2(Math.sin(a),Math.cos(a));
 export function makeCoveCourse(){return getCourse('greyhaven');}
 export const COVE=makeCoveCourse();
 export function settings(rider=0,tune={}){const r=RIDERS[rider];const engine=clamp(Number(tune.engine)||0,-1,1),grip=clamp(Number(tune.grip)||0,-1,1),handling=clamp(Number(tune.handling)||0,-1,1);return {...r,speed:r.speed+engine*1.4-grip*.7,accel:r.accel-engine*.8,grip:r.grip+grip*1.4,handling:r.handling+handling*.35};}
-export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,difficulty=0,course=COVE,gridOrder=null,seaState='course',secondRider=1,secondTune={},handicap=false,swapColours=false,physics='modern',nativeTunes=[],nativeTuneModes=[],nativeInitialRaceState,nativeRecordSession,nativeObjectLayout='source',nativeCourseActors,nativeSceneEffects}={}){
+export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,difficulty=0,course=COVE,gridOrder=null,seaState='course',secondRider=1,secondTune={},handicap=false,swapColours=false,physics='modern',nativeTunes=[],nativeTuneModes=[],nativeInitialRaceState,nativeRecordSession,nativeObjectLayout='source',nativeCourseActors,nativeSceneEffects,nativeChampionshipContinuation}={}){
  if(!['modern','native'].includes(physics))throw new RangeError('Unknown race physics');
  if(nativeRecordSession!==undefined&&physics!=='native')throw new RangeError('Native record sessions require native physics');
  const nativePractice=physics==='native'&&mode==='practice'&&course.sourceWaterCourseIndex===0&&difficulty===0&&!course.reverse;
@@ -80,6 +80,9 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
  if(nativeSceneEffects!==undefined&&(nativeCourseActors!==undefined||physics!=='native'||mode!=='time'))
   throw new RangeError('Separate scene effects are for native Time trial; Dolphin Practice supplies them with its actors');
  const nativeChampionship=physics==='native'&&mode==='championship';
+ if(nativeChampionshipContinuation!==undefined&&(!nativeChampionship||course.sourceWaterCourseIndex!==nativeChampionshipContinuation?.courseIndex||
+   Math.min(difficulty,2)!==nativeChampionshipContinuation.sourceDifficulty||!!course.reverse!==nativeChampionshipContinuation.reverse||nativeRecordSession!==undefined))
+  throw new RangeError('A championship continuation selects its own next course, class and retained records');
  if(nativeChampionship&&nativeInitialRaceState!==undefined)throw new RangeError('Fresh championship selection owns its initial race state');
  if(physics==='native'&&(seaState!=='course'||!nativePractice&&(!['time','versus','stunt','championship'].includes(mode)||!(mode==='stunt'?[0,1,2,3,4,5,6,7,8]:[1,2,3,4,5,6,7,8]).includes(course.sourceWaterCourseIndex))))
   throw new RangeError('Native integration preview requires a verified course and source-water Time trial, Two-player race, Stunt run, Championship or solo Dolphin Practice');
@@ -109,8 +112,12 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
  // The single canonical race owner selects the source grid before water follow
  // lag or previous positions are seeded. Prepared numeric state is diagnostic
  // input, not a complete saved physical/water history.
- const championshipLaunch=nativeChampionship?prepareNativeChampionshipWebLaunch({racers,courseRuntime:nativeCourseRuntime,
-  recordSession:nativeRecordSession,tunes:nativeTunes,tuneModes:nativeTuneModes,rngSeed:surfSeed.value}):null;
+ // A later round consumes the original introduction's configuration: points,
+ // records, profiles and RNG continue rather than being selected afresh.
+ const championshipLaunch=!nativeChampionship?null:nativeChampionshipContinuation?prepareNativeChampionshipConfiguredLaunch(nativeChampionshipContinuation.configuration,
+  {courseRuntime:nativeCourseRuntime,configurationEffectsPending:nativeChampionshipContinuation.configurationEffectsPending}):
+  prepareNativeChampionshipWebLaunch({racers,courseRuntime:nativeCourseRuntime,
+  recordSession:nativeRecordSession,tunes:nativeTunes,tuneModes:nativeTuneModes,rngSeed:surfSeed.value});
  const nativeLaunch=physics==='native'?createNativeRaceLaunchRuntime({racers,courseIndex:course.sourceWaterCourseIndex,
   players:mode==='versus'?2:1,handicap:mode==='versus'&&!!handicap,courseRuntime:nativeCourseRuntime,course,laps:configuredLaps,reverse:!!course.reverse,
   ...(championshipLaunch?{championshipLaunch}:{initialState:nativeInitialRaceState,recordSession:nativeRecordSession,tunes:nativeTunes,tuneModes:nativeTuneModes}),rngSeed:surfSeed.value}):null;

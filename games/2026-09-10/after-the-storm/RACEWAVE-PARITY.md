@@ -1,5 +1,19 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — native Championship continues round to round
+
+After the original standings hand back to the championship, the new
+continuation runs the original return (801EB91C) and the i3 course
+introduction, pressing the player's skip, until it hands off the next race.
+That already-executed configuration starts the next course through the
+original configured launch, so points, records, rider profiles and the shared
+RNG carry forward instead of being selected afresh. A headless two-round cup
+(Sunny Beach, then Sunset Bay, with three original AI riders) accumulates the
+original 7/4/2/1 points exactly, and the following course is Drake Lake as in
+the original order. The browser still shows its own screen in place of the
+course preview, and the final round, elimination and ending are not yet
+connected; native Championship is not on the menu yet.
+
 ## Unpublished — native Championship races on every cup course
 
 A headless audit drove native Championship rounds (four racers, original AI)
