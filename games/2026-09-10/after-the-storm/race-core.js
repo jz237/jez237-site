@@ -71,12 +71,14 @@ export const angleDelta=a=>Math.atan2(Math.sin(a),Math.cos(a));
 export function makeCoveCourse(){return getCourse('greyhaven');}
 export const COVE=makeCoveCourse();
 export function settings(rider=0,tune={}){const r=RIDERS[rider];const engine=clamp(Number(tune.engine)||0,-1,1),grip=clamp(Number(tune.grip)||0,-1,1),handling=clamp(Number(tune.handling)||0,-1,1);return {...r,speed:r.speed+engine*1.4-grip*.7,accel:r.accel-engine*.8,grip:r.grip+grip*1.4,handling:r.handling+handling*.35};}
-export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,difficulty=0,course=COVE,gridOrder=null,seaState='course',secondRider=1,secondTune={},handicap=false,swapColours=false,physics='modern',nativeTunes=[],nativeTuneModes=[],nativeInitialRaceState,nativeRecordSession,nativeObjectLayout='source',nativeCourseActors}={}){
+export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,difficulty=0,course=COVE,gridOrder=null,seaState='course',secondRider=1,secondTune={},handicap=false,swapColours=false,physics='modern',nativeTunes=[],nativeTuneModes=[],nativeInitialRaceState,nativeRecordSession,nativeObjectLayout='source',nativeCourseActors,nativeSceneEffects}={}){
  if(!['modern','native'].includes(physics))throw new RangeError('Unknown race physics');
  if(nativeRecordSession!==undefined&&physics!=='native')throw new RangeError('Native record sessions require native physics');
  const nativePractice=physics==='native'&&mode==='practice'&&course.sourceWaterCourseIndex===0&&difficulty===0&&!course.reverse;
  if(nativeCourseActors!==undefined&&(!nativePractice||nativeInitialRaceState!==undefined||typeof nativeCourseActors?.onDisplay!=='function'))
   throw new RangeError('Course actor presentation requires fresh solo native Practice');
+ if(nativeSceneEffects!==undefined&&(nativeCourseActors!==undefined||physics!=='native'||mode!=='time'))
+  throw new RangeError('Separate scene effects are for native Time trial; Dolphin Practice supplies them with its actors');
  const nativeChampionship=physics==='native'&&mode==='championship';
  if(nativeChampionship&&nativeInitialRaceState!==undefined)throw new RangeError('Fresh championship selection owns its initial race state');
  if(physics==='native'&&(seaState!=='course'||!nativePractice&&(!['time','versus','stunt','championship'].includes(mode)||!(mode==='stunt'?[0,1,2,3,4,5,6,7,8]:[1,2,3,4,5,6,7,8]).includes(course.sourceWaterCourseIndex))))
@@ -170,7 +172,8 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
    onEffects:effects=>state.nativeContactAudio.applyEffects(effects)},
    // Headless callers draw nothing, but B2ABC/B305C still own their state.
    courseEffects:{onDisplay:nativeCourseActors.onEffectsDisplay??(()=>{}),
-    ...(nativeCourseActors.sourceClock!==undefined?{sourceClock:nativeCourseActors.sourceClock}:{})}}:{}),
+    ...(nativeCourseActors.sourceClock!==undefined?{sourceClock:nativeCourseActors.sourceClock}:{})}}:
+   nativeSceneEffects?{courseEffects:nativeSceneEffects}:{}),
   ...(championshipLaunch?{}:{tunes:racers.map((_,i)=>effectiveNativeTune(nativeTunes[i],nativeTuneModes[i])),hullStarts:nativeStarts}),
   onAudioFrame:(host,context)=>state.nativeContactAudio.beforeFrame(context.logicalFrame+1),
   onContactFrame:(host,world)=>{
