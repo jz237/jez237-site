@@ -15,6 +15,7 @@ import type { Vehicle } from './vehicle';
 import * as T from 'three';
 import type { ThermalAudio } from './vehicle-fire';
 type Loop = { source: AudioBufferSourceNode; gain: GainNode; pan: PannerNode };
+import {CrowdRoar} from './crowd-roar';
 export class Sound {
   private acousticProbe=new TrackAcousticProbe();
   private reflections?:TrackReflections;
@@ -31,6 +32,8 @@ export class Sound {
   activeVoices = 0;
   private activeShots = new Set<AudioBufferSourceNode>();
   private shotPanners=new Map<AudioBufferSourceNode,PannerNode>();
+  private crowdRoar?:CrowdRoar;
+  private rainHiss?:{source:AudioBufferSourceNode;gain:GainNode};
   output:AudioOutput='speakers';
   setOutput(value:unknown){
     this.output=readAudioOutput(value);
@@ -110,6 +113,21 @@ export class Sound {
       // A request made before Pause may only resolve on a later user gesture.
       if(this.paused&&this.ctx===ctx)return this.pause(true);
     }).catch(()=>{});
+  }
+  /** Crowd reaction to a big moment (0..1); silent until audio is unlocked, and when muted or paused. */
+  crowd(intensity:number){
+    if(!this.ready||this.muted||this.paused||!this.ctx||!this.ambientBus||this.ctx.state!=='running')return false;
+    this.crowdRoar??=new CrowdRoar(this.ctx,this.ambientBus);
+    return this.crowdRoar.roar(intensity);
+  }
+  /** A soft looping rain hiss on the ambience bus while it rains. */
+  rain(on:boolean){
+    const c=this.ctx;if(!c||!this.ambientBus||!this.ready)return;
+    if(on&&!this.rainHiss){
+      const length=c.sampleRate*3,buffer=c.createBuffer(1,length,c.sampleRate),data=buffer.getChannelData(0);let b=0;for(let i=0;i<length;i++){b=.6*b+(Math.random()*2-1)*.4;data[i]=b*.5;}
+      const source=c.createBufferSource();source.buffer=buffer;source.loop=true;const high=c.createBiquadFilter();high.type='highpass';high.frequency.value=900;const gain=c.createGain();gain.gain.value=0;gain.gain.setTargetAtTime(.16,c.currentTime,.8);
+      source.connect(high);high.connect(gain);gain.connect(this.ambientBus);source.start();this.rainHiss={source,gain};
+    }else if(!on&&this.rainHiss){const {source,gain}=this.rainHiss;gain.gain.setTargetAtTime(0,c.currentTime,.4);source.stop(c.currentTime+2);this.rainHiss=undefined;}
   }
   setLevels() {
     if (this.engineBus) this.engineBus.gain.value = this.levels.engine;
