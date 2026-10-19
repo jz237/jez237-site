@@ -3,6 +3,7 @@ export const COURSE_NAMES={
  'millbrook-canal-v1':'Millbrook Canal Circuit',
  'ashcombe-lanes-v1':'Ashcombe Lanes',
  'thornby-hill-v1':'Thornby Hill',
+ 'ravensmoor-rally-v1':'Ravensmoor Moor Rally',
  'granite-pass-v1':'Granite Pass Rally',
  'kingswell-park-v1':'Kingswell Park Circuit',
  'copperfield-dunes-v1':'Copperfield Dunes Rally',
