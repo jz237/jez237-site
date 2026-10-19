@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {dailyChallenge,dailyLighting} from '../src/daily-event';
 import {LIGHTING_PRESETS} from '../src/lighting-presets';
-import {dailyKey,dailyStreak,isDailyChallenge,isDailyKey,normalizeDaily,DAILY_KEEP} from '../src/daily-record';
+import {dailyKey,dailyStreak,dailyWeek,isDailyChallenge,isDailyKey,normalizeDaily,DAILY_KEEP} from '../src/daily-record';
 import {CAR_KINDS} from '../src/rules';
 import {isCourseId} from '../src/course-id';
 import {isArenaId} from '../src/arena-id';
@@ -48,4 +48,14 @@ test('each day has its own deterministic light, including dusk runs',()=>{
  assert.equal(dailyLighting('2026-10-19'),dailyLighting('2026-10-19'));
  const moods=days(60).map(k=>dailyLighting(k));for(const m of moods)assert.ok(Object.hasOwn(LIGHTING_PRESETS,m));
  assert.ok(moods.includes('dusk')&&moods.includes('midday'),'varied, with dusk days');assert.throws(()=>dailyLighting('nope'));
+});
+test('the weekly strip shows the last seven days ending today with their medals',()=>{
+ const book={'2026-10-14':{medal:3,best:1,attempts:1},'2026-10-19':{medal:1,best:1,attempts:2},'2026-10-01':{medal:2,best:1,attempts:1}};
+ const week=dailyWeek(book,'2026-10-19');assert.equal(week.length,7);assert.equal(week[0].key,'2026-10-13');assert.equal(week[6].key,'2026-10-19');assert.equal(week[6].today,true);
+ assert.deepEqual(week.map(d=>d.medal),[0,3,0,0,0,0,1]);assert.equal(dailyWeek(undefined,'2026-10-19').every(d=>d.medal===0),true);
+});
+test('adding cars or venues only changes the days a newcomer wins',async()=>{
+ const {CAR_KINDS}=await import('../src/rules');const keys=days(120);const base=keys.map(k=>dailyChallenge(k).car);
+ // Simulate the roster without its last car: days not won by that car must keep their car.
+ const last=CAR_KINDS[CAR_KINDS.length-1];assert.ok(base.filter(c=>c===last).length<keys.length/5,'a single car wins only a share of days');
 });

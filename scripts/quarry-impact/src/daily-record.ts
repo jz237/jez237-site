@@ -21,3 +21,9 @@ export function dailyStreak(daily:Record<string,DailyRecord>|undefined,today=dai
  while(daily[dailyKey(day)]?.medal>0){streak++;day.setDate(day.getDate()-1);}
  return streak;
 }
+/** The last seven days ending today (oldest first) with each day's medal, for the briefing strip. */
+export function dailyWeek(daily:Record<string,DailyRecord>|undefined,today=dailyKey()){
+ const day=new Date(today+'T12:00:00');day.setDate(day.getDate()-6);const out:{key:string;medal:number;today:boolean}[]=[];
+ for(let i=0;i<7;i++){const key=dailyKey(day);out.push({key,medal:daily?.[key]?.medal??0,today:key===today});day.setDate(day.getDate()+1);}
+ return out;
+}
