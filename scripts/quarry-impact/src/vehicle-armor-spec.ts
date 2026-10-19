@@ -13,6 +13,7 @@ type Fit={front:number;rear:number;frontY:number;rearY:number;frontWidth:number;
 // coordinates. The three modern bodies are asymmetric and wider than their
 // simple chassis boxes, so nominal halfLength/halfWidth cannot fit their kits.
 const fits:Record<CarKind,Fit>={
+ hollins:{front:2.64,rear:-2.62,frontY:.58,rearY:.58,frontWidth:.92,rearWidth:.92,sideX:1.05,sideY:.62,rearRise:0},
  cornet:{front:2.50,rear:-2.50,frontY:.45,rearY:.45,frontWidth:.90,rearWidth:.90,sideX:1.0,sideY:.46,rearRise:0},
  fernleigh:{front:2.38,rear:-2.35,frontY:.46,rearY:.46,frontWidth:.86,rearWidth:.86,sideX:.95,sideY:.40,rearRise:.10},
  ravenhill:{front:2.95,rear:-2.95,frontY:.48,rearY:.48,frontWidth:.96,rearWidth:.96,sideX:1.02,sideY:.44,rearRise:.10},

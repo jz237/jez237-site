@@ -226,3 +226,5 @@ Ravenhill Hearse: original fictional 1960s funeral-coach bodywork and original M
 Fernleigh MPV: original fictional 1990s people-carrier bodywork and original Tern road-wheel assemblies at a larger scale with plastic trims. See [FERNLEIGH-MPV.md](FERNLEIGH-MPV.md).
 
 Cornet Ice Cream Van: original fictional 1980s ice-cream van bodywork, livery and decals and original Tern road-wheel assemblies at a larger scale with chrome trims. See [CORNET-ICE-CREAM-VAN.md](CORNET-ICE-CREAM-VAN.md).
+
+Hollins Pickup: original fictional 1990s full-size pickup bodywork, load bed and roll bar and original Tern road-wheel assemblies at a larger scale with chrome trims. See [HOLLINS-PICKUP.md](HOLLINS-PICKUP.md).

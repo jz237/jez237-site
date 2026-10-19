@@ -5,6 +5,8 @@ export class LiveryPaint {
  readonly atlas={value:null as T.Texture|null};readonly finishAtlas={value:null as T.Texture|null};readonly enabled={value:0};
  readonly minimum={value:new T.Vector3()};readonly size={value:new T.Vector3(1,1,1)};
  private canvas?:HTMLCanvasElement;private finishCanvas?:HTMLCanvasElement;private signature='';private prepared=false;
+ /** Called once when panels first gain livery attributes, so render-only copies can rebuild. */
+ onPrepared?:()=>void;
  constructor(private root:T.Group){}
  private prepare(root:T.Group){
   const meshes:T.Mesh[]=[],bounds=new T.Box3();
@@ -35,7 +37,7 @@ if(liveryEnabled>.5){
  }
  set(input:readonly LiveryLayer[]){const layers=normalizeLivery(input),signature=JSON.stringify(layers);if(signature===this.signature)return;this.signature=signature;
   if(!layers.some(l=>!l.hidden&&l.opacity>0)){this.enabled.value=0;this.atlas.value?.dispose();this.atlas.value=null;this.canvas=undefined;this.finishAtlas.value?.dispose();this.finishAtlas.value=null;this.finishCanvas=undefined;return;}
-  if(!this.prepared){this.prepare(this.root);this.prepared=true;}
+  if(!this.prepared){this.prepare(this.root);this.prepared=true;this.onPrepared?.();}
   // Headless physics tests do not instantiate a renderer or browser canvas.
   if(typeof document==='undefined')return;
   if(!this.canvas){this.canvas=document.createElement('canvas');this.canvas.width=1536;this.canvas.height=1024;const t=new T.CanvasTexture(this.canvas);t.colorSpace=T.SRGBColorSpace;t.generateMipmaps=false;t.minFilter=T.LinearFilter;t.magFilter=T.LinearFilter;this.atlas.value=t;this.finishCanvas=document.createElement('canvas');this.finishCanvas.width=768;this.finishCanvas.height=512;const wear=new T.CanvasTexture(this.finishCanvas);wear.generateMipmaps=false;wear.minFilter=T.LinearFilter;wear.magFilter=T.LinearFilter;this.finishAtlas.value=wear;}

@@ -717,7 +717,7 @@ function openGarage() {
   showGarage(ui,kind,garage.cars[kind],{
     ...designGarageCallbacks(ui,kind),
     preview:(setup:Setup)=>{if(cars[0]?.setup.armor!==setup.armor)createCars(true,setup);cars[0]?.setPaint(setup.paint,setup.trim);cars[0]?.livery.set(setup.livery);},
-    view:face=>{garageFace=face;},
+    view:face=>{garageFace=face;},badges:profile.badges??[],
     save:car=>{garage.cars[kind]=car;try{localStorage.setItem(GARAGE_KEY,JSON.stringify(garage));return true;}catch{return false;}},
     close:()=>{garageOpen=false;createCars(true);menu();},
   });

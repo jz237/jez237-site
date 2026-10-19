@@ -66,6 +66,8 @@ export class WreckAttachments {
         pivot.set(0,a.bounds.max.y-.02,a.bounds.max.z-.03);euler.x=a.loose*.48+flutter;
       }else if(a.name==='tailgate'){
         pivot.set(0,a.bounds.max.y-.025,a.bounds.max.z-.025);euler.x=a.loose*.38+flutter;euler.z=a.side*a.loose*.018;
+      }else if(a.name==='drop-tailgate'){
+        pivot.set(0,a.bounds.min.y+.01,a.bounds.min.z+.02);euler.x=-a.loose*1.05+flutter;
       }else if(a.name==='hatch'){
         const side=pivot.x<0?-1:1;
         pivot.set(side<0?a.bounds.max.x:a.bounds.min.x,a.bounds.max.y-.01,pivot.z);euler.z=-side*a.loose*.55+flutter;

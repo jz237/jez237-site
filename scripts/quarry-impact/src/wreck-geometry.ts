@@ -41,7 +41,8 @@ export function prepareWreckGeometry(root: T.Group) {
     object.userData.detachAssembly = name.includes('mirror') ? (bounds.getCenter(new T.Vector3()).x < 0 ? 'mirror-left' : 'mirror-right')
       : /bumper_front|bumper_grille|bumper_intake|bodyhoodunder/.test(name) ? 'front-bumper'
       : /bumper_rear/.test(name) ? 'rear-bumper'
-      : /panel_hood\d*|bodyhood(topgrill|interior02)/.test(name) ? 'hood' : null;
+      : /panel_hood\d*|bodyhood(topgrill|interior02)/.test(name) ? 'hood'
+      : /^panel_tailgatehollins/.test(name) ? 'drop-tailgate' : null;
   });
 }
 

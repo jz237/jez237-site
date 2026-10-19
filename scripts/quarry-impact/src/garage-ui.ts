@@ -3,6 +3,7 @@ import {performanceLabel} from './performance-class';
 import {EASY_TUNE_FIELDS,applyEasyTune,customSuspension,type EasyTuneKey} from './easy-tuning';
 import {mountSetupBenchmark} from './setup-benchmark-ui';
 import {mountLiveryEditor} from './livery-ui';
+import {trophyDecals} from './badge-decals';
 import {normalizeGroups,type LiveryFace} from './livery';
 import { DEFINITIONS, type CarKind } from './rules';
 import { TUNE_FIELDS, exportSetup, importSetup, normalizeSetup, setupPhysics, stockSetup, type GarageCar, type Setup } from './garage';
@@ -11,7 +12,7 @@ const hex = (value: number) => '#' + value.toString(16).padStart(6, '0');
 const escape = (s: string) => s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 export function showGarage(ui: HTMLElement, kind: CarKind, car: GarageCar, callbacks: {
   preview: (setup: Setup) => void; view:(face:LiveryFace)=>void; save: (car: GarageCar) => boolean; close: () => void;
-  ownsDesign?:(id:string)=>boolean; browseDesigns?:(setup:Setup,apply:(setup:Setup)=>void)=>void;
+  ownsDesign?:(id:string)=>boolean; badges?:readonly string[]; browseDesigns?:(setup:Setup,apply:(setup:Setup)=>void)=>void;
 }) {
   let tuningMode:'easy'|'advanced'='easy';
   let benchmark:ReturnType<typeof mountSetupBenchmark>|undefined;
@@ -68,7 +69,7 @@ export function showGarage(ui: HTMLElement, kind: CarKind, car: GarageCar, callb
     ui.querySelector<HTMLButtonElement>('#setup-import')!.onclick=()=>{try{draft=importSetup(ui.querySelector<HTMLTextAreaElement>('#setup-data')!.value,kind);render();feedback('Imported. Apply changes to keep this setup.');}catch(error){feedback((error as Error).message);}};
     ui.querySelector<HTMLButtonElement>('#garage-reset')!.onclick=()=>{draft=stockSetup(kind);render();feedback('Stock setup restored in preview. Apply changes to keep it.');};
     ui.querySelector<HTMLButtonElement>('#garage-apply')!.onclick=()=>{if(callbacks.save({setup:normalizeSetup(draft,kind),presets,groups})){close();}else feedback('Browser storage is unavailable. Your setup works for this session; free storage and try again to save it.');};
-    if(editable)mountLiveryEditor(ui.querySelector('#livery-editor')!,draft.livery,groups,(layers,savedGroups)=>{draft.livery=layers;groups=savedGroups;update();},callbacks.view);
+    if(editable)mountLiveryEditor(ui.querySelector('#livery-editor')!,draft.livery,groups,(layers,savedGroups)=>{draft.livery=layers;groups=savedGroups;update();},callbacks.view,trophyDecals(callbacks.badges));
     else ui.querySelector('#livery-editor')!.textContent='The creator allows this design to be used as published. Remove the downloaded design to start your own paintwork.';
     benchmark=mountSetupBenchmark(ui.querySelector('#garage-benchmark')!,kind,()=>normalizeSetup(draft,kind));
     update();

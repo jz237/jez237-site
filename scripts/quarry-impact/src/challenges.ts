@@ -153,6 +153,9 @@ export const CHALLENGES:readonly Challenge[]=[
   {...event('moorfield-damage','Down the long straight','muscle','damage',120,[100,190,290],'Use the Speedbowl straights to build speed and deliver heavy hits for two minutes.'),arena:'moorfield-speedbowl-v1'},
   {...event('moorfield-knockouts','Turn-one pile-up','regent','knockouts',150,[1,2,4],'Finish weakened cars as they bunch up in the turns.'),arena:'moorfield-speedbowl-v1'},
   {...event('moorfield-survivor','Last lap of the oval','kite','condition',75,[15,35,60],'Keep the hot hatch alive for 75 seconds on the dirt and deal at least 15 damage.'),arena:'moorfield-speedbowl-v1'},
+  {...event('hollins-wrenford','Mud in the bed','hollins','damage',120,[100,190,290],'Put the full-size pickup into the field across a two-minute derby in the mud pit.'),arena:'wrenford-pit-v1'},
+  {...event('hollins-harrow','Tailgate down','hollins','knockouts',150,[1,2,4],'Deliver the final impact to weakened opponents in the breaker bowl.'),arena:'harrow-bowl-v1'},
+  {...event('hollins-foundry','Last truck standing','hollins','condition',75,[15,35,60],'Stay alive for 75 seconds in the foundry yard and deal at least 15 damage.'),arena:'foundry-yard-v1'},
 ];
 /** Race and playground challenges retain their own fixed venue; derbies use their listed arena, otherwise Quarry. */
 export const challengeCourse=(c:Challenge):CourseId=>c.mode!=='derby'?resolveCourseId(c.course):'quarry-v1';

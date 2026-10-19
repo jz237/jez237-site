@@ -177,7 +177,7 @@ export class Vehicle {
     if(kind==='buggy')this.suspension=new BuggySuspension(this.model);
     this.tireContacts=this.wheels.map(w=>new TireContact(w,kind,vehicleWheelRadius(kind)));
     this.surfaceFinish=new VehicleSurface(this.model,id);
-    this.livery=new LiveryPaint(this.model);this.livery.set(this.setup.livery);
+    this.livery=new LiveryPaint(this.model);this.livery.onPrepared=()=>{this.drawBatch?.dispose();this.drawBatch=undefined;};this.livery.set(this.setup.livery);
     if(setup)this.setPaint(this.setup.paint,this.setup.trim);
   }
   setPaint(paint: number, trim: number) {
@@ -384,7 +384,7 @@ export class Vehicle {
     if (local.x < 0) this.damageLeft += damage;
     else this.damageRight += damage;
     const contact = this.model.worldToLocal(point.clone());
-    const zone=contact.y>(this.kind==='trail'?1.85:this.kind==='shuttle'?2.30:this.kind==='van'?1.76:this.kind==='cornet'?2.28:1.35)?'roof':contact.z>DEFINITIONS[this.kind].halfLength*.35?'front':contact.z<-DEFINITIONS[this.kind].halfLength*.35?'rear':contact.x<0?'left':'right';
+    const zone=contact.y>(this.kind==='trail'?1.85:this.kind==='shuttle'?2.30:this.kind==='van'?1.76:this.kind==='cornet'?2.28:this.kind==='hollins'?1.66:1.35)?'roof':contact.z>DEFINITIONS[this.kind].halfLength*.35?'front':contact.z<-DEFINITIONS[this.kind].halfLength*.35?'rear':contact.x<0?'left':'right';
     this.damageZones[zone]+=damage;
     const dentDamage=bodyworkDentDamage(damage);
     const impactDirection = direction.clone().transformDirection(this.model.matrixWorld.clone().invert());
