@@ -1,6 +1,7 @@
+import {restoreEliminationRaceBytes} from './elimination-race-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readAchievementsPrevious,restoreAchievementsBytes,verifyAchievementsRevision} from './achievements-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreEliminationRaceBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('Achievements preserves every prior fixture, vehicle asset, venue art and history input',verifyAchievementsRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/achievements/revision.json').toString());

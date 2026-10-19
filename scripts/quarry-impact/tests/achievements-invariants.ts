@@ -1,3 +1,4 @@
+import {restoreEliminationRaceBytes} from './elimination-race-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readAchievementsPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreAchievementsBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreEliminationRaceBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readAchievementsPrevious(file);
 }
 export function verifyAchievementsRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'0f94a2219e1230cc23cd34e626b131d826eedb6c');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreEliminationRaceBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreAchievementsBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the Achievements release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreEliminationRaceBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the Achievements release');
  assert.equal(manifest.previousFixtureCount,4691);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,4691);
 }
