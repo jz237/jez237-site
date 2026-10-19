@@ -541,14 +541,24 @@
       "sha256": "c8041334a99cb48852b2139253cbde5f8ac87e27f124aed51223e0d5bf0080eb"
     },
     {
+      "path": "licenses/CORNET-ICE-CREAM-VAN.md",
+      "bytes": 1244,
+      "sha256": "5374dfcf90777ba5ced5fce0835b24cfaa76e90ef708ea798c03233bc1092861"
+    },
+    {
       "path": "licenses/CREDITS.md",
-      "bytes": 25941,
-      "sha256": "0e344ab875bca5616631985905dd8e900c7f326992544985b184e737e1dc03b1"
+      "bytes": 26676,
+      "sha256": "7f51b90885fa0fbd663377eacfce4769201df3f693589179eaf9b84913f3b6b4"
     },
     {
       "path": "licenses/CarConcept-LICENSE.md",
       "bytes": 943,
       "sha256": "e11477f29eab33d1a5c9fc8534f931556faeb2e11a7fee9e4723d917fcfaee50"
+    },
+    {
+      "path": "licenses/FERNLEIGH-MPV.md",
+      "bytes": 935,
+      "sha256": "180d8763ae78742c5f1289e2d74281004e46423d4628f389e12e2734f1130de4"
     },
     {
       "path": "licenses/First-Light-PROVENANCE.md",
@@ -581,9 +591,19 @@
       "sha256": "bf23d62c9dd6be7c0a77f772437394d8f70da56fcf65b03185ffc782cbbf4b63"
     },
     {
+      "path": "licenses/PIPIT-600.md",
+      "bytes": 686,
+      "sha256": "21a1631807052aa383ce23cc2ceb96c6fb9812707f049088be6ae8a7c612634b"
+    },
+    {
       "path": "licenses/RAPIER-LICENSE.txt",
       "bytes": 11347,
       "sha256": "ceacfa4d7fa67df64ab09a56fe248c50a3bfc9bc00374d69bd74ad763b14b89c"
+    },
+    {
+      "path": "licenses/RAVENHILL-HEARSE.md",
+      "bytes": 852,
+      "sha256": "6da8b547c203ec995d968790c04bad37bb3740ffe0dbdb40fd874c692c4faa0a"
     },
     {
       "path": "licenses/RAVINE-1800.md",
@@ -771,6 +791,11 @@
       "sha256": "fc78037ae276f629104c738f9fb1ced6de64805ed66674c97803c4145357259e"
     },
     {
+      "path": "models/cornet.glb",
+      "bytes": 3903788,
+      "sha256": "5b9dea0afd61e8baa3aff903484604215c781c028dbbc95ae4e00d5e03109984"
+    },
+    {
       "path": "models/coupe.glb",
       "bytes": 11355504,
       "sha256": "dc3bae23e49b8d4e5f80de5973bd38ed87b485ad40af5aee0a14d9ebf10e32ea"
@@ -799,6 +824,11 @@
       "path": "models/estate-candidate.glb",
       "bytes": 2361052,
       "sha256": "39a162f66e03d73ff9d9e4e91efbb77d63b56a4fbcf57b77d9bb390b2f098fce"
+    },
+    {
+      "path": "models/fernleigh.glb",
+      "bytes": 3793676,
+      "sha256": "cf426bce54546d74bbd77f2203aaa48f75339b522a0fae5beabebe7f9f4b3467"
     },
     {
       "path": "models/fir-medium-a.glb",
@@ -1146,6 +1176,11 @@
       "sha256": "37c678546de6a69af6b4a4a9782d4236461f9989fce44fc72b7e3869f99203d5"
     },
     {
+      "path": "models/pipit.glb",
+      "bytes": 3490032,
+      "sha256": "106ec1af855e99ee765ce7ca85144a66e1d8cbcd2bb3e5e555c4a6b5ed67fb67"
+    },
+    {
       "path": "models/quarry-cut.glb",
       "bytes": 4363444,
       "sha256": "a5af7b9f507242426c812930db9b6233691bb6b9c2b203f38076d9317c82b4dd"
@@ -1199,6 +1234,11 @@
       "path": "models/quarry-workyard.glb",
       "bytes": 12715352,
       "sha256": "df98a724dedf3b64c05a7a3043a5e6d18a0eb3acd132051956a58a429ad0eb61"
+    },
+    {
+      "path": "models/ravenhill.glb",
+      "bytes": 3820700,
+      "sha256": "603f82f61963ca925920f6b278d6277c2ba7310029b76542b78a272959df6f43"
     },
     {
       "path": "models/regent.glb",

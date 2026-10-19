@@ -9,11 +9,13 @@ import {ReplayRecorder,decodeReplay,encodeReplay,replayFile,readReplayFile,repla
 import {ReplayLibrary,defaultReplayName} from '../src/replay-library';
 
 const course='redbank-jump-v1' as const;
+// A full field: replays hold at most 24 cars, so a longer roster records its first 24 kinds.
+const FIELD=CAR_KINDS.slice(0,24);
 function recording(reverse=false,tyreModel?:1){
- const recorder=new ReplayRecorder({version:1,mode:'race',reverse,cars:CAR_KINDS.map((kind,id)=>({id,kind,setup:stockSetup(kind)})),props:0,created:'2026-10-02T17:00:00Z',...(tyreModel?{tyreModel}:{}),courseId:course});
+ const recorder=new ReplayRecorder({version:1,mode:'race',reverse,cars:FIELD.map((kind,id)=>({id,kind,setup:stockSetup(kind)})),props:0,created:'2026-10-02T17:00:00Z',...(tyreModel?{tyreModel}:{}),courseId:course});
  const stride=replayCarStride(recorder.meta),frame=(x:number)=>{
   const values=new Float32Array(recorder.stride);
-  for(let i=0;i<CAR_KINDS.length;i++){
+  for(let i=0;i<FIELD.length;i++){
    const o=i*stride;values[o]=x+i*4;values[o+1]=.9;values[o+6]=1;values[o+14]=100;
    for(let j=0;j<4;j++){values[o+21+j*8]=1;if(tyreModel){values[o+57+j*6]=1;values[o+60+j*6]=1;values[o+61+j*6]=1;}}
   }
@@ -39,9 +41,9 @@ test('Redbank recordings retain all eleven cars, direction and wheel data throug
  for(const reverse of [false,true])for(const model of [undefined,1] as const){
   const doc=recording(reverse,model),raw=encodeReplay(doc),loaded=await readReplayFile(new File([await replayFile(doc)],'redbank.qir'));
   assert.deepEqual(loaded,doc);assert.deepEqual(encodeReplay(decodeReplay(raw)),raw);assert.equal(replayCourseId(loaded.meta),course);
-  assert.equal(loaded.frames[0].values.length,CAR_KINDS.length*(model?80:56));
+  assert.equal(loaded.frames[0].values.length,FIELD.length*(model?80:56));
   assert.equal(defaultReplayName(loaded),'Redbank Jump Circuit · Race · 2026-10-02 17:00:00');
-  assert.deepEqual(loaded.meta.cars.map(c=>c.kind),CAR_KINDS);
+  assert.deepEqual(loaded.meta.cars.map(c=>c.kind),FIELD);
  }
 });
 
