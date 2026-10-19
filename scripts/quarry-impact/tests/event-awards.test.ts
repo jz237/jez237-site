@@ -23,3 +23,11 @@ test('takedowns count only hits that wreck the victim and earn the MOST TAKEDOWN
  assert.deepEqual(cards.find(c=>c.key==='takedowns'),{key:'takedowns',title:'MOST TAKEDOWNS',id:0,value:2,detail:'2 cars wrecked'});
  a.reset();assert.equal(a.takedownsFor(0),0);
 });
+test('nemesis names who hurt the player most and notes revenge',()=>{
+ const a=new EventAwards();a.hit(2,0,12);a.hit(2,0,10);a.hit(3,0,15);a.hit(0,2,40,true);a.hit(4,1,90);
+ const cars=[{id:0,inflicted:40,health:55},{id:1,inflicted:0,health:0},{id:2,inflicted:22,health:0},{id:3,inflicted:15,health:80},{id:4,inflicted:90,health:70}];
+ const n=a.nemesis(0,cars,'derby')!;assert.equal(n.id,2);assert.equal(n.value,22);assert.equal(n.title,'NEMESIS · REVENGE TAKEN');assert.match(n.detail,/dealt you 22 damage · you outlasted them/);
+ const b=new EventAwards();b.hit(3,0,20);
+ assert.equal(b.nemesis(0,cars,'race',[3,0])!.title,'NEMESIS');assert.equal(b.nemesis(0,cars,'race',[0,3])!.title,'NEMESIS · REVENGE TAKEN');
+ const c=new EventAwards();c.hit(3,0,2);assert.equal(c.nemesis(0,cars,'race'),null,'glancing contact is not a nemesis');
+});

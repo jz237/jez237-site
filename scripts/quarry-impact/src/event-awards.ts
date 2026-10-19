@@ -2,16 +2,18 @@
  * the biggest climber (for derbies, the toughest survivor). Pure bookkeeping; the caller
  * reports hits and the starting order and supplies names when rendering. */
 export type AwardCar={id:number;inflicted:number;health:number};
-export type EventAward={key:'hit'|'destroyer'|'takedowns'|'climber'|'toughest';title:string;id:number;detail:string;victim?:number;value:number};
+export type EventAward={key:'hit'|'destroyer'|'takedowns'|'climber'|'toughest'|'nemesis';title:string;id:number;detail:string;victim?:number;value:number};
 export class EventAwards{
  private biggest:{attacker:number;victim:number;damage:number}|null=null;
  private start:number[]|null=null;
  private takedowns=new Map<number,number>();
- reset(){this.biggest=null;this.start=null;this.takedowns.clear();}
+ private dealt=new Map<string,number>();
+ reset(){this.biggest=null;this.start=null;this.takedowns.clear();this.dealt.clear();}
  /** Returns true when this hit wrecked the victim (a takedown). */
  hit(attacker:number,victim:number,damage:number,wrecked=false){
   if(!(damage>0)||!Number.isFinite(damage)||attacker===victim)return false;
   if(wrecked)this.takedowns.set(attacker,(this.takedowns.get(attacker)??0)+1);
+  const pair=attacker+'>'+victim;this.dealt.set(pair,(this.dealt.get(pair)??0)+damage);
   if(!this.biggest||damage>this.biggest.damage)this.biggest={attacker,victim,damage};
   return wrecked;
  }
@@ -36,6 +38,16 @@ export class EventAwards{
    if(tough)out.push({key:'toughest',title:'TOUGHEST',id:tough.id,value:tough.health,detail:`${Math.ceil(tough.health)}% condition left`});
   }
   return out;
+ }
+ /** The opponent who dealt the given driver the most damage, and whether they got even:
+  * finished ahead of it (races), outlasted it (derbies) or wrecked it. */
+ nemesis(playerId:number,cars:readonly AwardCar[],mode:string,finishOrder:readonly number[]=[]):EventAward|null{
+  let id=-1,most=0;for(const [pair,damage] of this.dealt){const [a,v]=pair.split('>').map(Number);if(v===playerId&&a!==playerId&&(damage>most||(damage===most&&a<id))){id=a;most=damage;}}
+  if(most<5)return null;
+  const me=cars.find(c=>c.id===playerId),them=cars.find(c=>c.id===id);if(!them)return null;
+  const wrecked=them.health<=0&&(me?.health??0)>0,ahead=mode==='race'&&finishOrder.indexOf(playerId)>=0&&finishOrder.indexOf(playerId)<finishOrder.indexOf(id);
+  const even=wrecked||ahead||(mode==='derby'&&(me?.health??0)>0&&them.health<=0);
+  return{key:'nemesis',title:even?'NEMESIS · REVENGE TAKEN':'NEMESIS',id,value:most,detail:`dealt you ${Math.round(most)} damage${even?wrecked?' · you outlasted them':' · you finished ahead':''}`};
  }
 }
 const escapeText=(s:string)=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]!));
