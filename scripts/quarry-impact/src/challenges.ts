@@ -144,6 +144,9 @@ export const CHALLENGES:readonly Challenge[]=[
   {...event('ravenhill-harrow','Heavy procession','ravenhill','damage',120,[100,190,290],'Put two tonnes of funeral coach into the field across a two-minute derby in the bowl.'),arena:'harrow-bowl-v1'},
   {...event('ravenhill-foundry','Last call','ravenhill','knockouts',150,[1,2,4],'Deliver the final impact to weakened opponents among the breaker-yard stacks.'),arena:'foundry-yard-v1'},
   {...event('ravenhill-wrenford','Slow cortege','ravenhill','condition',75,[15,35,60],'Stay alive for 75 seconds in the mud and deal at least 15 damage.'),arena:'wrenford-pit-v1'},
+  {...race('fernleigh-holloway','Stadium school run','fernleigh',1,[122,88,67],35),course:'holloway-stadium-v1'},
+  {...race('fernleigh-bramblebrook','Reservoir lanes in reverse','fernleigh',1,[194,140,107],40),course:'bramblebrook-reservoir-v1',direction:'reverse'},
+  {...race('fernleigh-saltmarsh','Port rallycross, twice round','fernleigh',2,[374,271,206],30),course:'saltmarsh-port-v1'},
 ];
 /** Race and playground challenges retain their own fixed venue; derbies use their listed arena, otherwise Quarry. */
 export const challengeCourse=(c:Challenge):CourseId=>c.mode!=='derby'?resolveCourseId(c.course):'quarry-v1';

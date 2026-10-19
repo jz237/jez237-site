@@ -67,8 +67,9 @@ test('ravenhill drives the rear wheels from a front V8, is heavy but slow, stays
  const setup=stockSetup('ravenhill');setup.engine=2;setup.armor=2;assert.deepEqual(importSetup(exportSetup('ravenhill',setup),'ravenhill'),setup);
 });
 test('last-rites career is an appended impact group of three derbies in three named arenas with heavy-car medal tiers',()=>{
- const group=CAREER_GROUPS.find(g=>g.id==='last-rites')!;assert.equal(group.discipline,'impact');assert.equal(group.events.length,3);assert.equal(CAREER_GROUPS.at(-1),group,'appended after every existing group');
- assert.deepEqual(CHALLENGES.slice(-3).map(c=>c.id),[...group.events],'challenges appended after every existing challenge');
+ const group=CAREER_GROUPS.find(g=>g.id==='last-rites')!;assert.equal(group.discipline,'impact');assert.equal(group.events.length,3);// Appended after every group and challenge that existed when it shipped (later cars append after it).
+ const g=CAREER_GROUPS.indexOf(group),c0=CHALLENGES.findIndex(c=>c.id===group.events[0]);assert.equal(CAREER_GROUPS[g-1].id,'thornby-hill-day','appended after every existing group');
+ assert.deepEqual(CHALLENGES.slice(c0-1,c0+3).map(c=>c.id),['thornby-morrow',...group.events],'challenges appended after every existing challenge');
  const events=group.events.map(id=>CHALLENGES.find(c=>c.id===id)!);assert.ok(events.every(c=>c&&c.car==='ravenhill'&&c.mode==='derby'&&c.discipline==='impact'&&isArenaId(c.arena)&&challengeCourse(c)==='quarry-v1'));
  assert.equal(new Set(events.map(c=>c.arena)).size,3);assert.ok(events.every(c=>c.arena!=='quarry-arena-v1'&&challengeVenueName(c)!=='Blackridge Quarry'));
  assert.deepEqual(events.map(c=>c.metric),['damage','knockouts','condition']);for(const c of events)assert.ok(c.medals[0]<c.medals[1]&&c.medals[1]<c.medals[2]);

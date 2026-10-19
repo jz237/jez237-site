@@ -542,13 +542,18 @@
     },
     {
       "path": "licenses/CREDITS.md",
-      "bytes": 26268,
-      "sha256": "ab610a15aa43b4fecd687cc1c1f4dac039b14f51cd3c1fada44ff6526be960f1"
+      "bytes": 26453,
+      "sha256": "994b46a704e7ac545fb3c1770490e5ecc1368e2d4b9ed59027577534e41428e0"
     },
     {
       "path": "licenses/CarConcept-LICENSE.md",
       "bytes": 943,
       "sha256": "e11477f29eab33d1a5c9fc8534f931556faeb2e11a7fee9e4723d917fcfaee50"
+    },
+    {
+      "path": "licenses/FERNLEIGH-MPV.md",
+      "bytes": 935,
+      "sha256": "180d8763ae78742c5f1289e2d74281004e46423d4628f389e12e2734f1130de4"
     },
     {
       "path": "licenses/First-Light-PROVENANCE.md",
@@ -809,6 +814,11 @@
       "path": "models/estate-candidate.glb",
       "bytes": 2361052,
       "sha256": "39a162f66e03d73ff9d9e4e91efbb77d63b56a4fbcf57b77d9bb390b2f098fce"
+    },
+    {
+      "path": "models/fernleigh.glb",
+      "bytes": 3793676,
+      "sha256": "cf426bce54546d74bbd77f2203aaa48f75339b522a0fae5beabebe7f9f4b3467"
     },
     {
       "path": "models/fir-medium-a.glb",

@@ -11,6 +11,9 @@ import {drivingObstacleClearance} from '../src/driving-probe';
 import {RaceRecovery,freeRecoverySlot} from '../src/race-recovery';
 import {createVehicleDrive} from '../src/drivetrain/chassis';
 import {createVehiclePhysics,vehicleSpecification,rotateVehicleVector,type PhysicsState} from '../src/vehicle-physics';
+// Fixed 24-car field (the first 23 roster cars plus a second coupe) so later roster additions do not
+// silently reshuffle this congestion regression; opposing-traffic outcomes are sensitive to field order.
+const FIELD=[...CAR_KINDS.slice(0,23),CAR_KINDS[0]];
 await R.init();
 const dt=1/60;
 const driver=(id:number,x:number,z:number,yaw:number,next:number):DriverCar=>({id,kind:'sedan',current:{x,y:.6,z},velocity:{x:0,y:0,z:0},forward:{x:Math.sin(yaw),y:0,z:Math.cos(yaw)},right:{x:Math.cos(yaw),y:0,z:-Math.sin(yaw)},speed:0,health:100,finished:false,nextCheckpoint:next,surface:'asphalt'});
@@ -45,7 +48,7 @@ test('a driver door to door with a car slightly ahead eases away and gives way',
 function race(direction:'forward'|'opposing'){
  const world=new R.World({x:0,y:-9.81,z:0});world.timestep=dt;SALTMARSH.buildPhysics(R,world);
  const brain=new DrivingBrain(),recovery=new RaceRecovery();
- const cars=Array.from({length:24},(_,id)=>{const kind=CAR_KINDS[id%CAR_KINDS.length],spec=vehicleSpecification(kind,stockSetup(kind)),body=createVehiclePhysics(R,world,kind,spec.mass),grid=courseGridSlot(SALTMARSH,id,direction);
+ const cars=Array.from({length:24},(_,id)=>{const kind=FIELD[id],spec=vehicleSpecification(kind,stockSetup(kind)),body=createVehiclePhysics(R,world,kind,spec.mass),grid=courseGridSlot(SALTMARSH,id,direction);
   body.body.setTranslation({x:grid.x,y:SALTMARSH.height(grid.x,grid.z)+.89,z:grid.z},true);body.body.setRotation({x:0,y:Math.sin(grid.yaw/2),z:0,w:Math.cos(grid.yaw/2)},true);
   const s:PhysicsState={health:100,damageLeft:0,damageRight:0,steering:0,speed:0,slip:0,surface:'asphalt',gear:1,rpm:850,input:{throttle:0,steer:0,brake:1,handbrake:false}};
   const d=Object.assign(driver(id,grid.x,grid.z,grid.yaw,grid.next),{kind,passed:grid.passed,last:Infinity,off:0});
