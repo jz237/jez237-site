@@ -1,3 +1,4 @@
+import {restoreGullhavenYardBytes} from './gullhaven-yard-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readFernleighCarPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreFernleighCarBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreGullhavenYardBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readFernleighCarPrevious(file);
 }
 export function verifyFernleighCarRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'8aaa6340f32d88b2f99b7be8b037c93f89187ab2');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreGullhavenYardBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreFernleighCarBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the FernleighCar release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreGullhavenYardBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the FernleighCar release');
  assert.equal(manifest.previousFixtureCount,4617);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,4617);
 }

@@ -6,6 +6,7 @@ import {BRIARHILL_ARENA,briarhillGround,buildBriarhillPhysics} from './briarhill
 import {FOUNDRY_ARENA,foundryGround,buildFoundryPhysics} from './foundry-arena';
 import {WRENFORD_PIT_ARENA,wrenfordPitGround,buildWrenfordPitPhysics} from './wrenford-pit-arena';
 import {KESTREL_RING_ARENA,kestrelRingGround,buildKestrelRingPhysics} from './kestrel-ring-arena';
+import {GULLHAVEN_ARENA,gullhavenGround,buildGullhavenPhysics} from './gullhaven-yard-arena';
 const legacy:ArenaLayout={x:0,z:0,radius:46,segments:66,spawnRadius:32,fenceRadius:50};
 const entries={
  'quarry-arena-v1':{layout:legacy,ground:getRaceCourse()},
@@ -14,5 +15,6 @@ const entries={
  'foundry-yard-v1':{layout:FOUNDRY_ARENA,ground:{...getRaceCourse(),...foundryGround,name:ARENA_NAMES['foundry-yard-v1'],buildPhysics:buildFoundryPhysics}},
  'wrenford-pit-v1':{layout:WRENFORD_PIT_ARENA,ground:{...getRaceCourse(),...wrenfordPitGround,name:ARENA_NAMES['wrenford-pit-v1'],buildPhysics:buildWrenfordPitPhysics}},
  'kestrel-ring-v1':{layout:KESTREL_RING_ARENA,ground:{...getRaceCourse(),...kestrelRingGround,name:ARENA_NAMES['kestrel-ring-v1'],buildPhysics:buildKestrelRingPhysics}},
+ 'gullhaven-yard-v1':{layout:GULLHAVEN_ARENA,ground:{...getRaceCourse(),...gullhavenGround,name:ARENA_NAMES['gullhaven-yard-v1'],buildPhysics:buildGullhavenPhysics}},
 } satisfies Record<ArenaId,{layout:ArenaLayout;ground:RaceCourse}>;
 export const onlineArena=(id:ArenaId='quarry-arena-v1')=>entries[id];

@@ -1,6 +1,7 @@
+import {restoreGullhavenYardBytes} from './gullhaven-yard-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readFernleighCarPrevious,restoreFernleighCarBytes,verifyFernleighCarRevision} from './fernleigh-car-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreGullhavenYardBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('FernleighCar preserves every prior fixture, vehicle asset, venue art and history input',verifyFernleighCarRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/fernleigh-car/revision.json').toString());

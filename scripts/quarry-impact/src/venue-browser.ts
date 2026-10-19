@@ -8,10 +8,11 @@ import {BRIARHILL_ARENA} from './briarhill-arena';
 import {FOUNDRY_ARENA} from './foundry-arena';
 import {WRENFORD_PIT_ARENA} from './wrenford-pit-arena';
 import {KESTREL_RING_ARENA} from './kestrel-ring-arena';
+import {GULLHAVEN_ARENA} from './gullhaven-yard-arena';
 import type {EventOptions} from './event-rules';
 import type {Mode} from './rules';
 export type VenueCard={id:string;name:string;kind:'course'|'arena';detail:string;path:string;start:[number,number]};
-const arenas:Record<ArenaId,ArenaLayout>={'quarry-arena-v1':DERBY_ARENA,'harrow-bowl-v1':HARROW_ARENA,'briarhill-bowl-v1':BRIARHILL_ARENA,'foundry-yard-v1':FOUNDRY_ARENA,'wrenford-pit-v1':WRENFORD_PIT_ARENA,'kestrel-ring-v1':KESTREL_RING_ARENA};
+const arenas:Record<ArenaId,ArenaLayout>={'quarry-arena-v1':DERBY_ARENA,'harrow-bowl-v1':HARROW_ARENA,'briarhill-bowl-v1':BRIARHILL_ARENA,'foundry-yard-v1':FOUNDRY_ARENA,'wrenford-pit-v1':WRENFORD_PIT_ARENA,'kestrel-ring-v1':KESTREL_RING_ARENA,'gullhaven-yard-v1':GULLHAVEN_ARENA};
 /** Fit the real route/arena outline to a shared card without distorting its shape. */
 export function venueOutline(points:readonly {x:number;z:number}[]){
  const xs=points.map(p=>p.x),zs=points.map(p=>p.z),minX=Math.min(...xs),maxX=Math.max(...xs),minZ=Math.min(...zs),maxZ=Math.max(...zs),scale=Math.min(220/Math.max(1,maxX-minX),104/Math.max(1,maxZ-minZ));
