@@ -1,6 +1,7 @@
+import {restoreWetLookBytes} from './wet-look-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readRainWeatherPrevious,restoreRainWeatherBytes,verifyRainWeatherRevision} from './rain-weather-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreWetLookBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('RainWeather preserves every prior fixture, vehicle asset, venue art and history input',verifyRainWeatherRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/rain-weather/revision.json').toString());

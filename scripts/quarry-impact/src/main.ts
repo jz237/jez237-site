@@ -164,6 +164,7 @@ import {EventAwards,awardsHtml} from './event-awards';
 import {bankAchievements} from './achievements';
 import {attachCarLights,type CarLights} from './car-lights';
 import {createRain} from './rain';
+import {applyWetLook} from './wet-look';
 import {setWetness} from './driving-surface';
 import {ELIMINATION_INTERVAL,eliminationActive,nextElimination} from './elimination-race';
 import {dailyKey,dailyStreak,dailyWeek,isDailyChallenge,DAILY_PREFIX} from './daily-record';
@@ -331,7 +332,7 @@ let profile=readProfile();
 try{profile=readProfile(localStorage.getItem(PROFILE_KEY));}catch{}
 let profileStorageWarning='';
 let activeChallenge:Challenge|undefined;
-let rain:ReturnType<typeof createRain>|null=null;
+let rain:ReturnType<typeof createRain>|null=null,wetRoot:T.Object3D|undefined,wetOn=false;
 const eventAwards=new EventAwards();let slowMoUntil=0;
 /** Brief Burnout-style slow motion when the player wrecks an opponent (local events only). */
 const TAKEDOWN_SLOWMO={scale:.3,seconds:.9};const carLights=new Map<Vehicle,CarLights>();let lastBadges:string[]=[];
@@ -1710,6 +1711,7 @@ function frame(now: number) {
   clock += dt;
   if (!physics || state === 'loading'||preparingOnline) return;
   rain?.update(camera,state==='paused'?0:dt);
+  {const wet=eventLighting==='rain';if(wet!==wetOn||activeVenue.root!==wetRoot){applyWetLook(wetRoot,false);wetRoot=activeVenue.root;wetOn=wet;applyWetLook(wetRoot,wet);}}
   if(state!=='paused')activeVenue.update?.(clock);
   if(adaptiveGraphics.sample(raw*1000,!document.hidden&&!preparingEvent&&!studio&&state==='playing'))applyQuality();
   // Include long stalls in the sustained benchmark, including event restarts.
