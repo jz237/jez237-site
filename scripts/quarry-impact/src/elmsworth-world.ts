@@ -1,3 +1,4 @@
+import {withBarrierBoards,boardSeed} from './barrier-boards';
 import {createSpeedwaySpectators} from './elmsworth-spectators';
 import {createSpeedwayArchitecture} from './elmsworth-architecture';
 import {addCourseGroundDetail} from './course-materials';
@@ -6,7 +7,7 @@ import {ELMSWORTH} from './elmsworth-course';
 import {freezeSceneryTransforms} from './render-work';
 export function createElmsworthWorld(){
  const id='elmsworth-speedway-v1',course=ELMSWORTH,root=new T.Group();root.name=id;
- const materials={concrete:new T.MeshStandardMaterial({color:0xc9c3ac,roughness:.95}),stripe:new T.MeshStandardMaterial({color:0xd99033,roughness:.9}),steel:new T.MeshStandardMaterial({color:0x344553,roughness:.7,metalness:.4}),grass:new T.MeshStandardMaterial({color:0x687858,roughness:1}),seat:new T.MeshStandardMaterial({color:0xc7c0a4,roughness:.8}),blue:new T.MeshStandardMaterial({color:0x3e6c81,roughness:.85}),red:new T.MeshStandardMaterial({color:0x9f4b3e,roughness:.9})};
+ const materials=withBarrierBoards({concrete:new T.MeshStandardMaterial({color:0xc9c3ac,roughness:.95}),stripe:new T.MeshStandardMaterial({color:0xd99033,roughness:.9}),steel:new T.MeshStandardMaterial({color:0x344553,roughness:.7,metalness:.4}),grass:new T.MeshStandardMaterial({color:0x687858,roughness:1}),seat:new T.MeshStandardMaterial({color:0xc7c0a4,roughness:.8}),blue:new T.MeshStandardMaterial({color:0x3e6c81,roughness:.85}),red:new T.MeshStandardMaterial({color:0x9f4b3e,roughness:.9})},boardSeed(course.id));
  const floorMaterial=new T.MeshStandardMaterial({color:0x75855e,roughness:.98}),groundGeometry=new T.BufferGeometry(),boxGeometry=new T.BoxGeometry(1,1,1),textures:T.Texture[]=[];
  const {spanX,spanZ}=course.terrain;
  if(typeof document!=='undefined'){
@@ -30,7 +31,7 @@ export function createElmsworthWorld(){
  const ground=new T.Mesh(groundGeometry,floorMaterial);ground.name=id+'_ground';ground.receiveShadow=true;root.add(ground);
  const batches=new Map<keyof typeof materials,T.Matrix4[]>(),matrix=new T.Matrix4(),q=new T.Quaternion();
  function box(x:number,y:number,z:number,w:number,h:number,d:number,material:keyof typeof materials,yaw=0){q.setFromAxisAngle(new T.Vector3(0,1,0),yaw);matrix.compose(new T.Vector3(x,y,z),q,new T.Vector3(w,h,d));const batch=batches.get(material)??[];batch.push(matrix.clone());batches.set(material,batch);}
- for(const s of course.solids)box(s.x,s.y,s.z,s.half[0]*2,s.half[1]*2,s.half[2]*2,s.material,s.yaw);
+ for(const s of course.solids)box(s.x,s.y,s.z,s.half[0]*2,s.half[1]*2,s.half[2]*2,s.material==='stripe'?'boards':s.material,s.yaw);
  // Grandstands and pit buildings stay behind the continuous safety walls.
  for(const side of [-1,1])for(let row=0;row<8;row++){
   const z=side*(105+row*3),h=1+row*.65;

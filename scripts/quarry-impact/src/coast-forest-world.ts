@@ -1,3 +1,4 @@
+import {withBarrierBoards,boardSeed} from './barrier-boards';
 import {createSeabrookCompound} from './seabrook-headland';
 import {createHazelwoodLookout} from './hazelwood-lookout';
 import {createCourseScenery} from './course-scenery';
@@ -7,7 +8,7 @@ import {SEABROOK,HAZELWOOD} from './coast-forest-courses';
 import {freezeSceneryTransforms} from './render-work';
 export function createCoastForestWorld(id:'seabrook-coast-v1'|'hazelwood-forest-v1'){
  const paved=id==='seabrook-coast-v1',course=paved?SEABROOK:HAZELWOOD,root=new T.Group();root.name=id;
- const materials={concrete:new T.MeshStandardMaterial({color:paved?0xc9c3ac:0x9c9a84,roughness:.95}),stripe:new T.MeshStandardMaterial({color:paved?0xd99033:0xc28b37,roughness:.9}),steel:new T.MeshStandardMaterial({color:0x344553,roughness:.7,metalness:.4}),grass:new T.MeshStandardMaterial({color:0x687858,roughness:1}),seat:new T.MeshStandardMaterial({color:0x687b48,roughness:.8}),blue:new T.MeshStandardMaterial({color:0x3e6c81,roughness:.85}),red:new T.MeshStandardMaterial({color:0x9f4b3e,roughness:.9})};
+ const materials=withBarrierBoards({concrete:new T.MeshStandardMaterial({color:paved?0xc9c3ac:0x9c9a84,roughness:.95}),stripe:new T.MeshStandardMaterial({color:paved?0xd99033:0xc28b37,roughness:.9}),steel:new T.MeshStandardMaterial({color:0x344553,roughness:.7,metalness:.4}),grass:new T.MeshStandardMaterial({color:0x687858,roughness:1}),seat:new T.MeshStandardMaterial({color:0x687b48,roughness:.8}),blue:new T.MeshStandardMaterial({color:0x3e6c81,roughness:.85}),red:new T.MeshStandardMaterial({color:0x9f4b3e,roughness:.9})},boardSeed(course.id));
  const floorMaterial=new T.MeshStandardMaterial({color:paved?0x777771:0x899467,roughness:.98}),groundGeometry=new T.BufferGeometry(),boxGeometry=new T.BoxGeometry(1,1,1),textures:T.Texture[]=[];
  const {spanX,spanZ}=course.terrain;
  if(typeof document!=='undefined'){
@@ -36,7 +37,7 @@ export function createCoastForestWorld(id:'seabrook-coast-v1'|'hazelwood-forest-
  const ground=new T.Mesh(groundGeometry,floorMaterial);ground.name=id+'_ground';ground.receiveShadow=true;root.add(ground);
  const batches=new Map<keyof typeof materials,T.Matrix4[]>(),matrix=new T.Matrix4(),q=new T.Quaternion();
  function box(x:number,y:number,z:number,w:number,h:number,d:number,material:keyof typeof materials,yaw=0){q.setFromAxisAngle(new T.Vector3(0,1,0),yaw);matrix.compose(new T.Vector3(x,y,z),q,new T.Vector3(w,h,d));const batch=batches.get(material)??[];batch.push(matrix.clone());batches.set(material,batch);}
- for(const s of course.solids)box(s.x,s.y,s.z,s.half[0]*2,s.half[1]*2,s.half[2]*2,s.material,s.yaw);
+ for(const s of course.solids)box(s.x,s.y,s.z,s.half[0]*2,s.half[1]*2,s.half[2]*2,s.material==='stripe'?'boards':s.material,s.yaw);
  const compound=paved?createSeabrookCompound():null;if(compound)root.add(compound.root);
  const lookout=paved?null:createHazelwoodLookout();if(lookout)root.add(lookout.root);
  const scenery=createCourseScenery(course,paved?'coast':'forest');root.add(scenery.root);

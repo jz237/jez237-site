@@ -1,3 +1,4 @@
+import {withBarrierBoards,boardSeed} from './barrier-boards';
 import {addCourseGroundDetail} from './course-materials';
 import {PINECREST_TERRAIN} from './pinecrest-course';
 import {createPinecrestRoadsideTrees} from './pinecrest-roadside-trees';
@@ -9,7 +10,7 @@ import {freezeSceneryTransforms} from './render-work';
 /** Original wooded ridge circuit with gravel hills and a paved starting straight. All reachable barriers share the physics records. */
 export function createPinecrestWorld(){
  const root=new T.Group();root.name='pinecrest_ridge';
- const materials={concrete:new T.MeshStandardMaterial({color:0xb9b9af,roughness:.96}),stripe:new T.MeshStandardMaterial({color:0x486957,roughness:.9}),steel:new T.MeshStandardMaterial({color:0x313b44,roughness:.7,metalness:.35}),grass:new T.MeshStandardMaterial({color:0x6f7551,roughness:1}),seat:new T.MeshStandardMaterial({color:0x9da6b2,roughness:.8})};
+ const materials=withBarrierBoards({concrete:new T.MeshStandardMaterial({color:0xb9b9af,roughness:.96}),stripe:new T.MeshStandardMaterial({color:0x486957,roughness:.9}),steel:new T.MeshStandardMaterial({color:0x313b44,roughness:.7,metalness:.35}),grass:new T.MeshStandardMaterial({color:0x6f7551,roughness:1}),seat:new T.MeshStandardMaterial({color:0x9da6b2,roughness:.8})},boardSeed('pinecrest-ridge-v1'));
  const groundMaterial=new T.MeshStandardMaterial({color:0xffffff,roughness:.92}),groundGeometry=new T.BufferGeometry(),boxGeometry=new T.BoxGeometry(1,1,1),textures:T.Texture[]=[];
  if(typeof document!=='undefined'){
   const canvas=document.createElement('canvas');canvas.width=2048;canvas.height=1820;const ctx=canvas.getContext('2d');
@@ -33,7 +34,7 @@ export function createPinecrestWorld(){
  const batches=new Map<keyof typeof materials,T.Matrix4[]>();
  const matrix=new T.Matrix4(),q=new T.Quaternion();
  function box(x:number,y:number,z:number,w:number,h:number,d:number,material:keyof typeof materials,yaw=0){q.setFromAxisAngle(new T.Vector3(0,1,0),yaw);matrix.compose(new T.Vector3(x,y,z),q,new T.Vector3(w,h,d));const batch=batches.get(material)??[];batch.push(matrix.clone());batches.set(material,batch);}
- for(const s of PINECREST_SOLIDS)box(s.x,s.y,s.z,s.half[0]*2,s.half[1]*2,s.half[2]*2,s.material,s.yaw);
+ for(const s of PINECREST_SOLIDS)box(s.x,s.y,s.z,s.half[0]*2,s.half[1]*2,s.half[2]*2,s.material==='stripe'?'boards':s.material,s.yaw);
  // Spectator terraces and pit garages stay outside the continuous barrier.
  for(let row=0;row<5;row++){const h=.6+row*.55,z=-127-row*2;box(0,h/2,z,150,h,2,'concrete');for(let x=-70;x<=70;x+=3)box(x,h+.2,z,2.2,.2,.65,'seat');}
  box(0,5.6,-134,158,.25,14,'steel');for(const x of [-75,-25,25,75])box(x,2.8,-140,.2,5.6,.2,'steel');

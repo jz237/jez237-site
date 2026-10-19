@@ -1,3 +1,4 @@
+import {withBarrierBoards,boardSeed} from './barrier-boards';
 import {createFenwickBoundary} from './fenwick-boundary';
 import {createFenwickGarages} from './fenwick-garages';
 import {createFenwickService} from './fenwick-service';
@@ -10,7 +11,7 @@ import {freezeSceneryTransforms} from './render-work';
 /** Both layouts share the fairground setting; each opens only its selected road. */
 export function createFenwickWorld(id:FenwickId){
  const course=getFenwickCourse(id),root=new T.Group();root.name=id;
- const materials={concrete:new T.MeshStandardMaterial({color:0xc7bfa7,roughness:1}),stripe:new T.MeshStandardMaterial({color:0x953e34,roughness:.9}),steel:new T.MeshStandardMaterial({color:0x3c4643,roughness:.7,metalness:.4}),timber:new T.MeshStandardMaterial({color:0x776146,roughness:1}),roof:new T.MeshStandardMaterial({color:0x526b5e,roughness:.9}),seat:new T.MeshStandardMaterial({color:0xaf8c52,roughness:.95})};
+ const materials=withBarrierBoards({concrete:new T.MeshStandardMaterial({color:0xc7bfa7,roughness:1}),stripe:new T.MeshStandardMaterial({color:0x953e34,roughness:.9}),steel:new T.MeshStandardMaterial({color:0x3c4643,roughness:.7,metalness:.4}),timber:new T.MeshStandardMaterial({color:0x776146,roughness:1}),roof:new T.MeshStandardMaterial({color:0x526b5e,roughness:.9}),seat:new T.MeshStandardMaterial({color:0xaf8c52,roughness:.95})},boardSeed(course.id));
  const floorMaterial=new T.MeshStandardMaterial({color:0x817851,roughness:1}),floorGeometry=new T.PlaneGeometry(440,360),boxGeometry=new T.BoxGeometry(),textures:T.Texture[]=[];
  if(typeof document!=='undefined'){
   const canvas=document.createElement('canvas');canvas.width=2200;canvas.height=1800;const ctx=canvas.getContext('2d');
@@ -29,7 +30,7 @@ export function createFenwickWorld(id:FenwickId){
  const floor=new T.Mesh(floorGeometry,floorMaterial);floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;floor.name='fenwick_clay_ground';root.add(floor);
  const batches=new Map<keyof typeof materials,T.Matrix4[]>();
  const box=(x:number,y:number,z:number,w:number,h:number,d:number,finish:keyof typeof materials,yaw=0)=>{const list=batches.get(finish)??[];list.push(new T.Matrix4().compose(new T.Vector3(x,y,z),new T.Quaternion().setFromAxisAngle(new T.Vector3(0,1,0),yaw),new T.Vector3(w,h,d)));batches.set(finish,list);};
- for(const s of course.solids)box(s.x,s.y,s.z,s.half[0]*2,s.half[1]*2,s.half[2]*2,s.material,s.yaw);
+ for(const s of course.solids)box(s.x,s.y,s.z,s.half[0]*2,s.half[1]*2,s.half[2]*2,s.material==='stripe'?'boards':s.material,s.yaw);
  for(const x of [-90,0,90]){
   for(let row=0;row<6;row++){const y=.6+row*.6,z=-140-row*2;box(x,y/2,z,68,y,2,'timber');for(let seat=-30;seat<=30;seat+=3)box(x+seat,y+.2,z,2.2,.2,.7,'seat');}
   box(x,6.3,-146,72,.35,17,'roof');for(const dx of [-34,34])box(x+dx,3,-152,.3,6,.3,'steel');

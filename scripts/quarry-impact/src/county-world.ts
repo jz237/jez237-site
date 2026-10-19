@@ -1,3 +1,4 @@
+import {withBarrierBoards,boardSeed} from './barrier-boards';
 import {createWrenfordWindpump} from './wrenford-windpump';
 import {createVenueCrowd,type SpectatorPlace} from './venue-crowd';
 import {WRENFORD} from './wrenford-course';
@@ -9,7 +10,7 @@ import {DOCKSIDE,FAIRGROUND} from './county-courses';
 import {freezeSceneryTransforms} from './render-work';
 export function createCountyWorld(id:'dockside-loop-v1'|'fairground-scramble-v1'|'alderwick-cross-v1'|'wrenford-mud-v1'){
  const mud=id==='wrenford-mud-v1',cross=id==='alderwick-cross-v1',dock=id==='dockside-loop-v1',course=mud?WRENFORD:cross?ALDERWICK_CROSS:dock?DOCKSIDE:FAIRGROUND,root=new T.Group();root.name=id;
- const materials={concrete:new T.MeshStandardMaterial({color:dock?0xc9c3ac:0xd2c5a1,roughness:.95}),stripe:new T.MeshStandardMaterial({color:dock?0xd99033:0x9b3e38,roughness:.9}),steel:new T.MeshStandardMaterial({color:0x344553,roughness:.7,metalness:.4}),grass:new T.MeshStandardMaterial({color:0x687858,roughness:1}),seat:new T.MeshStandardMaterial({color:0xc7c0a4,roughness:.8}),blue:new T.MeshStandardMaterial({color:0x3e6c81,roughness:.85}),red:new T.MeshStandardMaterial({color:0x9f4b3e,roughness:.9})};
+ const materials=withBarrierBoards({concrete:new T.MeshStandardMaterial({color:dock?0xc9c3ac:0xd2c5a1,roughness:.95}),stripe:new T.MeshStandardMaterial({color:dock?0xd99033:0x9b3e38,roughness:.9}),steel:new T.MeshStandardMaterial({color:0x344553,roughness:.7,metalness:.4}),grass:new T.MeshStandardMaterial({color:0x687858,roughness:1}),seat:new T.MeshStandardMaterial({color:0xc7c0a4,roughness:.8}),blue:new T.MeshStandardMaterial({color:0x3e6c81,roughness:.85}),red:new T.MeshStandardMaterial({color:0x9f4b3e,roughness:.9})},boardSeed(course.id));
  const floorMaterial=new T.MeshStandardMaterial({color:dock?0x777771:0x847b53,roughness:.98}),groundGeometry=new T.BufferGeometry(),boxGeometry=new T.BoxGeometry(1,1,1),textures:T.Texture[]=[];
  const {spanX,spanZ}=course.terrain;
  if(typeof document!=='undefined'){
@@ -35,7 +36,7 @@ export function createCountyWorld(id:'dockside-loop-v1'|'fairground-scramble-v1'
  const spectators:SpectatorPlace[]=[];
  const batches=new Map<keyof typeof materials,T.Matrix4[]>(),matrix=new T.Matrix4(),q=new T.Quaternion();
  function box(x:number,y:number,z:number,w:number,h:number,d:number,material:keyof typeof materials,yaw=0){q.setFromAxisAngle(new T.Vector3(0,1,0),yaw);matrix.compose(new T.Vector3(x,y,z),q,new T.Vector3(w,h,d));const batch=batches.get(material)??[];batch.push(matrix.clone());batches.set(material,batch);}
- for(const s of course.solids)box(s.x,s.y,s.z,s.half[0]*2,s.half[1]*2,s.half[2]*2,s.material,s.yaw);
+ for(const s of course.solids)box(s.x,s.y,s.z,s.half[0]*2,s.half[1]*2,s.half[2]*2,s.material==='stripe'?'boards':s.material,s.yaw);
  // Decorations are beyond continuous collision barriers, never on the driveable road.
  if(dock){
   for(let x=-160;x<=160;x+=32)for(let row=0;row<2;row++){const z=-140-row*17;box(x,2.7,z,27,5.4,12,(x+row)%3?'blue':'red');for(let dx=-12;dx<=12;dx+=2)box(x+dx,2.7,z+6.1,.15,5.4,.15,'steel');}
