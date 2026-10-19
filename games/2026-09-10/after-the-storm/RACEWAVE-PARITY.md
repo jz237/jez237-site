@@ -1,0 +1,9162 @@
+# RaceWave46 / Wave Race 64 gameplay reconstruction
+
+## v2.42.0 — original wake and spray in live Dolphin Park
+
+Live Dolphin Park Free Ride (Normal, Venue conditions) now runs the complete
+original scene-effects owner. AE7C4 starts after the course actors and before
+computer-racer startup; B2ABC runs where the human spray owner did, after water
+and object motion and before actor motion; B305C follows the actor display.
+The first dolphin occupies the original extra effect slot, so its wake and
+spray come from its own animated pose. It never becomes another rider or audio
+participant. The rider's audio spray levels now come from this owner; across
+400 live frames they match the separate human spray reconstruction exactly,
+which no longer runs in this scene. Other native modes keep that owner.
+
+Fresh browser storage starts from the ROM's loaded effect controls (palette and
+startup latch, exported by a private script); bodies, boundary drift and plane
+queries are the actual completed physical owners. The browser clock stands in
+for osGetTime (time since load at 46.875 MHz); headless runs use the shared
+outer clock, so canonical state stays identical at 30, 60 and 144 Hz.
+High-resolution textures draw the original geometry over the unchanged water.
+Replay holds each completed effect frame without advancing effects or clocks.
+
+Canonical state copies now validate words with tight loops, offsetting the extra
+storage: a live Practice frame costs about the same as v2.41.0 did without
+effects (about 30 ms headless versus 28 ms). Validation: eight new effect-host/live
+tests, ten replay tests, 66 existing actor/effect/state tests, and browser checks
+at full 1440-by-900 resolution covering visible wake ribbons, pause, replay,
+restart, quit and re-entry without console errors. The full suite passes 3,406
+of 3,424 tests; the same 18 older modern/course expectations also fail on
+v2.41.0 and are unrelated to this change. Some wake vertices follow
+the source water plane slightly below the rendered surface and are partly
+hidden there. Other native modes and the remaining actor families still lack
+the full effects owner.
+
+## v2.41.0 — Dolphin Park and original scene reconstruction
+
+- Normal Dolphin Park Free Ride with Venue conditions now uses the recovered
+  original physical scene and dolphin behavior from the ordinary menu.
+- A continuous detailed dolphin model follows the original animation poses,
+  with original water-transition effects, distance gain and stereo placement.
+- Audio content versions prevent a cached older manifest from disabling effects.
+- Instant replay records complete dolphin display poses and restores the live
+  pose on exit, without advancing physics or audio. Failed initial downloads
+  show a visible title-screen message and allow retry after reconnecting.
+- Championship standings, course introductions, course actors, and spray/wake
+  reconstruction have expanded reference coverage and prepared scene adapters.
+  Several remain integration work; this release does not claim full parity.
+- High-resolution terrain, water, textures and output settings are retained.
+  Existing music settings and custom-wave Free Ride remain available.
+
+The chronological development checkpoints below record their state when written;
+later entries above supersede earlier pending-work statements. Remaining major
+work includes full championship introduction/next-race integration, other detailed
+actor families, source effects display attachment and dolphin wake integration.
+Additional multiplayer work remains last.
+
+Release checks: 54 actor/audio integration tests, 25 terrain/loading/existing
+online-compatibility tests, and nine replay tests passed. Browser checks cover
+normal-menu entry, custom-sea switching, high-resolution rendering, real dolphin
+audio playback, offline download failure/retry, and replay pose restoration with
+an unchanged physical clock. All513 module versions and four page import graphs
+were independently checked.
+
+## Unpublished — original dolphin effects reach browser playback
+
+The original dolphin's expanded mixer calls now enter the existing audio owner.
+Channel5 retains the latest pending note and velocity, keeps contact priority
+over its spray layer, and applies the source distance gain and stereo position
+to current and future voices. Its lap cue also reaches the existing cue player.
+Three standalone effects (drums8/9/10) were decoded from the same local ROM;
+all43 contact-bank files have verified hashes, PCM headers and duration checks.
+
+Pause discards pending notes; a new race resets spatial controls. Contact bank
+manifests and samples now use content-versioned URLs, fixing an observed stale
+browser manifest that otherwise prevented the added sounds from loading.
+Fifty-four focused tests pass. A browser with the old manifest already cached
+loaded all43 files and played actual live dolphin water transitions without
+failed assets. Existing music settings and rendering resolution are unchanged.
+The Web Audio mix remains an adaptation, not bit-exact N64 audio output.
+
+## Unpublished — original Dolphin Park actor scene in live Free Ride
+
+Solo Dolphin Park Free Ride with Normal difficulty and Venue conditions now
+starts the recovered physical Practice scene from the ordinary menu. The
+original actor startup runs before computer-racer initialization. Motion reads
+the completed physical craft, primary buoy and water owners; actor motion and
+display each advance once per logical frame in their original order. The
+high-resolution dolphin model consumes the resulting original animation poses.
+Custom sea conditions retain their existing authored Free Ride behavior.
+
+New browser resource, route-padding and retained-vertex allocations are explicit;
+there is no artificial water warm-up or claim of a restored cartridge snapshot.
+Asset loading precedes scene construction and preserves retry/mode-change safety.
+Pause freezes actor evolution; restart reconstructs the scene; quitting disposes
+the models. The separate authored guide is hidden while original actors run.
+
+Validation: 35 focused integration tests pass, including complete actor startup,
+485 reference poses, physical Practice ramp launches, and identical live actor
+state/presentation at 30, 60 and 144 Hz. Browser checks confirmed normal-menu
+admission, visible dolphin placement, pause/restart/quit/re-entry, full-resolution
+1440-by-900 rendering, and no console or shader errors.
+
+Remaining: other actor families have numeric motion/display but no new detailed
+models; the additional dolphin wake body and original lighting/fog material bridge
+are not yet connected. Startup graphics effects
+remain retained metadata while the browser uses its high-resolution scene.
+
+## Unpublished — current physical route inputs for course actors
+
+The actor route adapter reads the actual primary buoy owner's positions,
+velocities, fixed endpoints and independent physics/render flags. It combines
+those with the selected route records and explicitly supplied unused records.
+Secondary/tertiary routes and padding keep their own values; no extra buoy
+simulation is created. This preserves the original dolphin's cross-record reads
+when the primary and secondary counts differ.
+
+The physical host can now explicitly capture these route words together with
+the completed craft body words, actual stored water vertices, water field and
+collision geometry. Capture rejects partial frames or mismatched body/water/
+buoy clocks and does not advance any owner. Startup body sampling separately
+reads the fresh physical body without synthesizing a physics frame. Body
+direction comes from the last physical movement, preserving held simulation.
+
+Thirty-nine prepared snapshots match all 12,480 words from original primary
+motion executions (25,258 instructions), including displaced buoy motion at
+three water levels. All nine Stunt selections also retain their exact initialized
+geometry and absent families. Body adaptation preserves complete original outer
+actor frame results in 20 reference cases. Live Practice checks confirm that
+capturing inputs leaves the physical, water and canonical owners unchanged.
+Automatic live actor startup, scheduling and rendering remain pending.
+Resolution remains unchanged.
+
+## Unpublished — separate original dolphin route and count
+
+Practice now prepares its original 64-point secondary dolphin route separately
+from the 60-point primary navigation route. Both original dolphin nearest-point
+searches read the secondary count at B124, including the search over primary
+records. The canonical adapter now supplies that count rather than B120.
+Stunt explicitly selects no secondary route. Computer-racer route selection and
+high-resolution rendering settings are unchanged.
+
+Evidence: two complete original secondary loader/735EC executions match all
+4,160 words under both zero and retained-memory policies (50,042 instructions).
+Ten original motion executions with unequal primary/secondary counts match
+every ordered operation and actor hash (39,015 instructions). All 61 targeted
+checks pass, including 1,186 existing dolphin motion cases, 32 complete frames,
+Practice setup, Stunt launches, and live launch/frame-rate regression checks.
+Live actor scheduling remains pending; this does not yet enable the new dolphin
+animation during gameplay.
+
+## Unpublished — canonical actor host and stored water inputs
+
+The prepared course actor host now shares the actual race state. Asset binding
+and startup commit together, motion uses the selected animation provider, and
+display preparation commits only after its renderer accepts the geometry. Stale
+or reused display tickets cannot overwrite newer race state. All nine original
+startup pools and 485 prepared dolphin poses are covered by reference checks.
+The water adapter exposes the actual stored center and first outer vertices,
+including their original signed-coordinate conversion. These bridges still
+require live startup/frame scheduling and remaining high-resolution families.
+
+## Unpublished — original course selection bound to high-resolution resources
+
+Course actor setup now uses original9684C selection, the verified descriptor
+and byte-length tables, and original96048 part identities/count/table writes.
+It binds the selected data-only animation assets at their actual segment8 load
+positions and returns the new canonical state plus the matching provider as one
+preparation. Static banks retain their old animation pointer; empty slots retain
+their resource records. Missing late assets leave the original state untouched.
+
+The geometry adaptation deliberately substitutes high-resolution model bindings
+for the low-resolution display lists. The complete original list-relocation
+implementation remains separately tested; this browser setup does not pretend
+to load or execute cartridge graphics commands.
+
+Evidence: all nine actual banks in both slots reproduce every original resource
+metadata operation and final resource owner. Nine complete original main40
+loader executions (405,748 instructions, with prepared transfer/decompression
+boundaries) also match both complete retained course resource owners. All 79
+focused/regression checks pass, including all course selections, static/empty
+scenes, selected providers, late failures, animation data, drawing and skin.
+Live course initialization/frame scheduling and the remaining high-resolution
+actor families still need attachment. No resolution setting changes.
+
+## Unpublished — browser-ready original numeric animation resources
+
+Seven data-only animation assets now contain the original transform rows,
+signed frame keys, descriptors, pointer tables and alignment padding: 49,024
+bytes total, covering all 18 animations. Their geometry, textures, display lists
+and executable instructions are excluded. Original segment8 pointer operands
+remain intact; the existing recovered animation parsers apply their 126 pointer
+stores using the host's selected loaded placement. Readers receive only the
+animation data span, with no synthetic geometry prefix exposed to lookups.
+
+The browser loader fetches only selected animated banks through the existing
+content-versioned asset cache and checks their complete SHA-256 identities.
+Static and absent banks require no download. Binding prepares both selected
+resource slots before returning a provider and rejects mismatched retained table
+ownership; selectors and canonical memory are never silently replaced.
+
+Evidence: all seven extracted blocks exactly match the corresponding original
+pre-parser inputs. Their complete relocated spans and all 18 decoded animation
+hashes match the actual original loaded banks. Thirty-two focused/regression
+checks pass, including distinct slot placement, stale metadata, late failures,
+subarray offsets, asset integrity, actor drawing and high-resolution skin.
+The browser's downloaded dolphin asset reproduced all 485 original prepared
+draw frames and rendered the detailed model; the second load hit the cache
+without another download. Browser console and shader checks were clean.
+
+Live course actor setup and frame scheduling, other high-resolution actor
+families and source lighting/fog adaptation remain pending. Original raw memory
+snapshots and extraction/preview tools remain private. Resolution is unchanged.
+
+## Unpublished — smooth dolphin geometry driven by original animation parts
+
+The original dolphin's recovered body, tail and fin transforms now drive an
+authored high-resolution model in a private browser preview. A continuous dense
+body blends the original front/rear transforms to eliminate their rigid overlap
+seam. Head and eyes stay with the front transform; posterior weights blend
+gradually. Flukes and the two pectoral fins retain their independent source
+tracks. The 14,944-triangle model keeps physical skin, clearcoat and smooth fins.
+No replacement animation clock, cartridge mesh or lowered-resolution setting
+was added to the game.
+
+The dolphin renderer identifies bank0 in either retained resource slot, binds
+each actor's complete five-part draw list and owns independent skin uniforms.
+All reached poses validate before visible changes; retired models are released.
+The former rear mesh now supplies the skin transform, so the generic adapter
+also accepts explicitly empty transform-only parts.
+
+Evidence: side and three-quarter poses were visually inspected after correcting
+the overlap seam. All 485 frames in the eight actual loaded-bank animations
+render through the complete dolphin adapter with no shader/runtime errors.
+Geometry allocation remains stable and returns to its previous count after
+disposal. The private preview's sole failed request was its absent favicon.
+All 57 focused/regression checks pass, including outward normals, continuous
+skin weights, matrix conversion, independent actors, late-failure atomicity and
+resource disposal. Original loaded memory and preview frames stay private.
+
+Live course-host installation, selected animation resources in the browser,
+other actor families and source lighting/fog material adaptation remain pending.
+This is a verified rendering component, not yet a newly visible production
+feature. Race resolution, terrain and water settings remain unchanged.
+
+## Unpublished — retained actor presentation and high-resolution renderer adapter
+
+Actor graphics effects now retain both matrix/light buffers and prepare ordered
+part draws, including root/child stack composition, type13 retained matrix
+multiplication, surface changes, light snapshots and signed fog coefficients.
+Native coordinates are scaled once after composition. The canonical display
+frame prepares animation state and renderer buffers together; failed preparation
+leaves both input owners unchanged.
+
+The Three adapter accepts explicit high-resolution geometry, materials and
+model-to-native conversion matrices from a read-only part resolver. It preserves
+the existing geometry, textures and physical material objects, reuses meshes,
+and cancels scene-parent transforms to maintain absolute native world placement.
+It preserves projective retained matrix values instead of forcing an affine
+matrix, and relies on the original visibility decision rather than Three's
+affine bounding-sphere test. Resource owners retain disposal responsibility.
+Late resource or transform failure leaves the previous visible frame intact.
+
+Evidence: all 96 original complete display cases pass through the canonical
+frame and retained presentation with exact ordered operations, pool hashes,
+matrix-buffer hashes and light bytes. All 96 also pass through the Three adapter
+with exact final matrices. Hand-calculated transform/light/fog checks and
+full-resolution geometry/material retention tests pass. All 51 focused and
+regression checks pass. Actual per-course high-resolution part/material bindings
+(including lighting/fog interpretation) and live scene installation remain
+pending; these adapter checks do not establish a visible complete introduction.
+
+## Unpublished — retained animation banks connected to motion and drawing
+
+Loaded banks now take one detached byte snapshot and sample selected descriptor,
+track and frame data lazily. Immutable descriptor/sample caches avoid repeating
+decoding work without imposing a guessed frame range. Original raw-frame and
+signed-key behavior remains available; static banks never read stale animation
+pointers. The provider verifies that the selected retained slot still describes
+the same loaded bank before serving it.
+
+Dolphin root motion, bird drawing, all articulated drawing and special animated
+drawing now consume this provider directly. Canonical adapters pass current
+resource metadata, preventing caller overrides or an old scene's provider from
+silently selecting another bank. Existing normalized fixture resources remain
+supported for independent source comparisons.
+
+Evidence: the loaded-bank path reproduces all 1,186 original dolphin motion
+cases, 1,008 whole actor draws and 32 complete dolphin/swimmer course frames,
+including every ordered operation and final actor hash. Canonical stale-provider
+failures leave state unchanged. All 72 focused and regression checks pass.
+The live host still needs to install selected banks and render the resulting
+retained actors with high-resolution geometry; no visible completion is claimed.
+
+## Unpublished — full course-bank assembly and canonical preparation
+
+96048 now composes original part-list relocation, retained resource metadata
+and animation-pointer parsing in source order. Repeated parts observe prior
+operand writes; static banks retain their previous animation pointer and avoid
+unused segment data. The canonical adapter reads authoritative slot descriptors
+and prepares metadata plus the loaded bank together. Hosts must install both
+together; the large immutable bank remains outside per-frame state copies.
+
+Evidence: 72 complete original runs / 32,756 instructions match all ordered
+operations, metadata and complete loaded-span hashes. Private checks of every
+actual original bank in both slots also match: 18 runs, 28,418 instructions and
+714 stores. Public fixtures contain synthetic lists and banks. Seventeen
+focused relocation/resource-state/reader checks pass, including late-failure
+atomicity and caller-override rejection. Live resource installation and renderer
+attachment remain pending; resolution and geometry are unchanged.
+
+## Unpublished — complete course animation pointer relocation
+
+All five original animation parsers now prepare the pointer updates for the
+seven animated course banks. They expand 94088 address resolution, retain the
+bank-specific table sizes and field counts, and reread earlier writes when
+descriptors alias. Static banks do not enter these parsers. The loaded owner
+remains unchanged until its complete prepared operation list is accepted.
+
+Evidence: 42 whole original parser executions / 13,211 instructions match every
+ordered store, returned table address and complete loaded-span hash. Private
+checks against all seven actual original banks also match: 2,182 instructions
+and 126 pointer stores. The public fixture uses synthetic data only. Thirteen
+focused reader, animation-relocation and rider-relocation tests pass.
+
+The outer 96048 course resource assembly, its canonical loaded-resource owner,
+and live renderer attachment remain pending. No resolution or geometry changes.
+
+## Unpublished — bounded loaded animation-resource reader
+
+The animation reader now consumes an already-relocated big-endian memory span:
+the selected descriptor, signed frame count, explicit frame/track requests,
+signed transform keys, signed position halfwords and signed direction bytes.
+It preserves original 32-bit pointer arithmetic and raw frame access. Display
+and motion retain their separate frame-selection rules. Returned views are
+detached and immutable; malformed or missing reached bytes reject without
+changing the loaded resource. Geometry and display lists are outside this reader.
+
+Evidence: 144 full original 9D6B0 selections / 6,894 instructions locate exactly
+the rows returned by this reader in a synthetic loaded span. Tests cover negative
+keys and frames, high frames, pointer wrap, typed-array offsets and late missing
+data. A private check also decodes all 18 animations across the seven animated
+original banks; the two static banks require none. Original loaded bytes remain
+private. Four focused reader/root tests pass.
+
+This supplies the resource-reading boundary for the retained actor pipeline.
+Loading the selected resources into the live host and consuming their transforms
+with high-resolution geometry still require integration and browser checks.
+
+## Unpublished — complete course0 dolphin motion and shoreline point probe
+
+A68A4 now implements the original animation-root height, retained sound packet,
+pursuit and pacing, formation followers, route-triggered unlocks, camera recovery,
+action updates, and sequential collision probes. The source's distinct four- and
+eight-probe paths preserve their original scratch reads and Float32 operation
+order. The new 51CB4 shoreline query retains the strict 32-unit band and segment
+boundaries, ordered cell candidates and normal writes without changing hull
+collision response.
+
+The canonical course frame now executes dolphin motion automatically. Actor,
+resource, camera, phase, course count and auxiliary control owners remain
+authoritative. An unlocked follower is dispatched later in the same frame;
+audio commands stay ordered and are collected once. Held dolphins still update
+their pose and sound packet, while unused movement resources remain unread.
+
+Evidence: 1,186 complete dolphin executions / 1,950,824 instructions, including
+540 carried frames; 32 complete mixed dolphin/swimmer course frames / 134,874
+instructions; and 1,890 shoreline probes / 125,651 instructions. Every ordered
+operation, actor-pool hash and auxiliary control result matches original code.
+Only audio enqueue boundaries are external. Fifty focused and regression tests
+pass, including unchanged hull shoreline behavior and atomic late failures.
+
+All course motion consumers are now implemented numerically. Actual animation
+resource decoding, retained rendering consumers and live physical scene hosting
+still need integration and browser verification. These tests do not establish
+visible completion. High-resolution presentation and multiplayer priority are
+unchanged.
+
+## Unpublished — dolphin region and animation-root dependencies
+
+The existing A6684 region helper received additional original-code boundary
+checks; its implementation and earlier565-case fixture remain intact.
+9D6B0 root selection now resolves the retained
+resource selector, actor-specific track and signed transform key for all eight
+supported animated types. It preserves the raw animation/frame lookup rather
+than importing the display routine's modulo behavior.
+
+Evidence:360 complete region executions /112,572 instructions and144 complete
+animation-root executions /6,894 instructions match their source results.
+Five focused checks pass, including invalid-resource rejection and immutable
+caller data. These are dependencies for the main dolphin routine, which is
+still pending; no visible dolphin completion is claimed. Resolution is unchanged.
+
+## Unpublished — complete mirrored and formation followers
+
+A9130 now preserves final-lap role changes, mirrored leader poses and waypoint
+triggered jumps. AB25C preserves moving formation targets, separate follower
+timings, original steering and speed response, and mandatory action updates.
+Both execute automatically in the retained course frame, using authoritative
+phase, lap configuration, activity, camera, reverse direction and frame clock.
+
+Evidence:1,686 complete source executions /1,015,512 instructions include720
+carried frames;32 full course2/7 frames /61,880 instructions verify sequential
+leader/follower ownership. Ordered stores, commands and entire actor-pool
+hashes agree. Gates avoid unused resources; late failures preserve caller
+state. Twenty-two focused tests pass. The main course0 dolphin handler and
+live actor attachment remain pending. Render resolution is unchanged.
+
+## Unpublished — complete course5 and course8 actor handlers
+
+A93C8 and AB890 now execute their complete route, action and audio dependencies
+inside the retained course frame. Course5 distance sound continues while
+movement is held. Course8 retains its phase gate, separate waiting-frame
+increment and animation-before-route ordering. The canonical owner supplies
+phase, activity, camera, reverse direction, control clock and shared audio latch.
+
+Evidence:192 complete leaf executions /31,546 original instructions and32 complete
+course frames /71,210 instructions match ordered stores, commands and actor-pool
+hashes. Shared sound state advances between actors; unused gated resources are
+not required, and late failures leave caller state unchanged. All numeric
+callees execute original instructions; only audio enqueue is external. Eighteen
+focused tests pass. Live actor attachment remains pending the final course
+handlers; render resolution is unchanged.
+
+## Unpublished — complete shared actor route movement
+
+A52D8 now follows the selected route or negative-index orbit target, applies
+the original type-dependent steering, bank and speed smoothing, and executes
+the complete A2B24 action update afterward. Arrival preserves its rider-distance
+gate, speed sentinels, action timing and teleport order. Type5 reverse travel
+uses the alternate link; a teleport still uses the forward link first, matching
+the source. Orbit-target and movement sine phases retain their different
+floating-point operation orders.
+
+Evidence:1,143 full original executions /860,686 instructions include810 carried
+frames, three actor types, reverse and forward links, orbit paths, route actions,
+camera sound cues and actual source water queries. Every ordered store, command
+and final actor-pool hash matches. Only sound enqueue is external. These numeric
+dependencies are ready for the remaining course wrappers; live attachment and
+full gameplay parity remain pending. Render resolution is unchanged.
+
+## Unpublished — complete shared actor action animation
+
+A2B24 now implements all twenty action selectors, including the original idle
+selector. Water-following actions retain their distinct vertical impulses,
+damping, jump and roll timings, signed timer remainder and animation changes.
+Fixed-height actions, oscillating depth targets and camera-distance splash
+commands preserve their original ordering. The caller remains responsible for
+activity gating; this routine does not invent an additional pause rule.
+
+Evidence:3,228 complete original executions /1,210,055 instructions cover every
+selector, signed timer extremes, both cameras, flat and nonuniform immutable
+water, and1,800 carried frames. Ordered actor stores, audio commands and complete
+pool hashes agree. Original water, math and splash-control callees execute;
+only audio enqueue is external. Missing late camera data fails without changing
+the caller's state. Live integration still requires the shared route helper
+and remaining course wrappers; render resolution is unchanged.
+
+## Unpublished — actor splash cue dependency
+
+BF784 now emits the original four splash commands, retaining the audio-mode
+gate, strict128-unit cutoff,12-unit full-volume range and signed low pan byte.
+It changes neither random state nor the shared audio latch.162 complete source
+executions /2,430 instructions match all commands and empty gated results.
+Only enqueue is external. This prepares the sound dependency for the pending
+A2B24 actor-action routine; it is not yet attached to live actor playback.
+
+## Unpublished — original actor distance gain, pan and pitch
+
+C1BD8 now prepares the exact distance-audio commands from the shared latch and
+actual audio-owner halfwords. It preserves the48/256 distance thresholds,
+context-dependent attenuation and pan, pitch sign selection, and the duplicate
+gain command outside audio raceMode1. A cleared latch emits the existing stop
+sequence without reading unused context or distance inputs.
+
+Evidence:441 complete original executions /18,382 instructions match every
+command and latch store, including maximum unsigned halfwords and threshold
+boundaries. Audio enqueue is the only intercepted operation. This dependency
+is ready for A93C8; that actor wrapper and its shared route/animation routines
+remain pending. It is not yet a live audible feature.
+
+## Unpublished — complete ice actor movement and course4 composition
+
+AAAC8 now implements perched water sampling, proximity-triggered group takeoff,
+individual delays, initial flight and route following. It preserves the original
+caller-local stores inside the group loop, two random draws per awakened actor,
+signed timer arithmetic, banking, speed smoothing and landing sound order.
+Water uses the existing source-plane query without advancing the field. Route
+rows come from the actual selected course owner rather than invented waypoints.
+
+The canonical course4 frame now expands all selected motion and audio routines.
+Live host attachment and selected resource loading still depend on the remaining
+course handlers; this change does not claim a visible completed introduction.
+High-resolution rendering remains unchanged, and multiplayer remains last.
+
+Evidence:320 complete AAAC8 executions /81,416 original instructions include240
+carried frames. Another16 full AD418 frames /42,564 instructions combine ice
+actors, swimmers and audio, matching all ordered stores, pool hashes, RNG and
+shared audio latches. Fixtures use synthetic routes and immutable water grids;
+the original water, math, random and sound-control instructions all execute.
+Only audio enqueue is intercepted. Invalid late route data cannot partially
+commit the actor pool, and water remains unchanged after preparation.
+
+## Unpublished — complete ice actor distance audio
+
+A5C74 now scans all thirty type1 actors against the selected retained camera,
+then applies the original distance gain and shared audio latch. C1DA8, C1DEC,
+C1B98 and C1E0C preserve their command and latch-write order, including two
+stop sequences when the nearest actor is beyond the original cutoff. The
+canonical actor frame expands this pass automatically and collects effects once.
+
+Evidence:438 original executions /16,597 instructions and16 complete AD418
+frames /25,880 instructions match every command, actor write, pool hash and RNG
+state. Only audio command enqueue is external. The frame fixture includes
+swimmers and submitted ice actors; it does not execute AAAC8 ice actor motion.
+That motion and live actor attachment remain pending. Resolution is unchanged.
+
+## Unpublished — complete dolphin audio packet consumption
+
+C1268 and its BFFEC command producer now consume the retained dolphin packet,
+acknowledge state changes and eligible cues, and emit the original volume and
+pan commands. Byte writes preserve their neighboring packet fields. The audio
+owner supplies its actual mode, course and race mode independently of the
+physical scene, preserving transition gates and pending cues.
+
+The canonical course0 frame expands this handler automatically and collects
+its raw sound commands once as effects. Full dolphin movement and live actor
+attachment remain pending; no render-resolution or artwork changes accompany
+this numeric implementation.
+
+Evidence:432 complete original executions /8,394 instructions cover context
+gates, signed packet bytes, cue handling and distance-volume boundaries. Another
+16 AD418 frames /25,532 instructions execute this handler with swimming actors,
+matching ordered byte stores, commands, actor hashes and gameplay RNG. Those
+frames contain no dolphin motion actors; they do not claim that motion complete.
+Only C538C/C53D4 command enqueue is an external boundary.
+
+## Unpublished — original bird ambience timing in the actor frame
+
+BF8C8 now expands automatically into its original five C53D4 byte commands when
+the low four bits of the actual audio timing word are zero. Its timing value is
+an explicit input from the existing audio owner, separate from gameplay RNG.
+The canonical frame collects the ordered commands once as effects and does not
+play audio while preparing state. Course1 and course3 numeric actor consumers
+are now implemented; their live rendering/audio attachment remains pending the
+rest of the shared course-actor integration.
+
+Evidence:262 complete BF8C8 executions /2,795 instructions cover the timing gate
+and parameter masks. Another16 complete AD418 frames /25,136 instructions run
+BF8C8 and swimmer motion together, matching every store, command and final RNG.
+C53D4 enqueue is the explicit external boundary; BF8C8 is now executed rather
+than skipped. Tests also verify that effects are collected exactly once.
+
+## Unpublished — complete perching bird movement and course3 composition
+
+A9D48 now handles perched birds, rider-triggered takeoff, acceleration bursts
+and returning to a perch. It reads actual home coordinates or the selected buoy
+or generic-object record, retaining the original course/mode height offsets.
+Both human positions are checked in source order, including two random heading
+choices when both trigger a course3 bird. Animation timers, actor-type changes,
+landing and immediate rider avoidance remain ordered as in the original.
+
+The speed limits preserve the source's sequential X/Z normalization, where Z
+uses the already updated X velocity. Return flight retains float32 arithmetic,
+double-precision smoothing, near-perch slowing and the original strict distance
+thresholds. The canonical course3 frame now expands this routine against shared
+actor and random state. Other missing handlers still prevent live attachment;
+this numeric step does not change high-resolution graphics or artwork.
+
+Evidence:480 full A9D48 executions /78,970 instructions include320 carried
+steps, all four movement modes, held paths, course and record variations, and
+both rider reactions. A further16 complete AD418 frames /27,103 instructions
+update twelve birds together. Every ordered store, final actor hash and RNG
+state matches. Numeric callees execute original instructions without interception;
+BF8C8 remains the explicit audio boundary in the composed-frame evidence.
+
+## Unpublished — complete course1/7 bird motion and mixed actor frames
+
+A9494 now implements both original bird movement modes: target flight and timed
+bursts, including the course targets, odd/even turnaround choice, bank and speed
+smoothing, rider-proximity target switching, animation-counter reset and shared
+random draws. It preserves the unusual burst-speed check that uses velocityZ
+twice, signed counter overflow/remainder, and source store order. Unsupported
+courses retain their target scratch as the original routine does.
+
+The canonical course actor frame automatically expands this bird consumer as
+well as swimming actors. It retains one shared RNG and applies earlier actor
+writes before later consumers. Missing consumers still reject the prepared
+frame atomically; full live attachment remains pending other course movement
+and audio consumers. No live graphics or render-resolution settings changed.
+
+Evidence:588 complete A9494 executions /149,198 instructions include480 carried
+steps, both modes, odd/even actor slots, inactive paths, target changes, bursts
+and random transitions. A further16 complete AD418 frames /38,144 instructions
+combine six birds and six swimmers. All numeric callees execute original code;
+BF8C8 is the explicitly retained audio boundary in those mixed-frame tests.
+Every ordered store, final actor hash and random state matches.
+
+## Unpublished — actual actor water inputs and dolphin movement regions
+
+The race-water owner now exposes the original patch0 circle as float words for
+actor motion, together with its actual relocation radius. This detached reader
+uses the existing completed water mesh; it rejects startup and stale menu state
+and does not create a second camera, circle or random-stream owner. Tests cover
+native units, retained snapshots, inactive simulation and patch generation order.
+
+The complete A6684 dolphin movement-exclusion predicate is also recovered,
+including all ten circles and the original A6628/9D4A8 binary32 distance and
+strict boundary comparison. It matches565 original executions /191,401
+instructions with no intercepted numeric callees, including centers, edge probes
+and a course-wide grid. These numeric constraints do not change scenery or
+resolution. The full A68A4 dolphin motion and shared A2B24/A52D8 dependencies
+remain pending; neither this predicate nor the course actor frame is live yet.
+
+## Unpublished — complete swimming actor motion and shared frame composition
+
+A5D70 now implements the full swimming-actor routine: orbiting, approaching or
+following an actor, fleeing the rider, type-specific turn rates, speed smoothing,
+mode changes and relocation outside the active water range. Camera selection,
+linked-actor positions and primary-body scratch come from retained owners. The
+original heading lookup, two different sine-index evaluation orders, binary32
+arithmetic and binary64 smoothing/range calculations are preserved. Relocation
+uses two draws from the shared47E50 stream, including the original modulus4095.
+
+The canonical AD418 frame now expands this recovered consumer automatically.
+Later actors see earlier actor and RNG writes. Other motion/audio consumers are
+still mandatory explicit dependencies; a missing late consumer rejects the
+whole prepared frame without committing earlier movement or RNG advancement.
+The live host is not switched to this frame until the remaining consumers and
+actual water-range inputs are available. No visible artwork or resolution has
+changed in this step.
+
+Evidence:376 original A5D70 executions /138,828 instructions include248 carried
+steps, all four swimmer types, orbit/approach/flee/held paths, linked targets,
+both camera selectors and relocation. Every numeric callee executes original
+instructions without interception. An additional16 complete AD418 frames /
+24,716 instructions execute the selected swimmers together and match all stores,
+final actor hashes and shared RNG. Those composed cases explicitly leave BF8C8
+as the audio boundary and contain no bird actors; they do not claim the remaining
+course consumers are complete.
+
+## Unpublished — course actor frame coordination recovered
+
+The complete AD418 outer frame now prepares shared body/record/water-vertex
+scratch and dispatches every course's motion consumers in source order. The
+primary direction normalization uses body5C and the change in positionZ, with
+the original binary64 threshold and binary32 replacement. The secondary
+direction remains unnormalized, while both stored speeds intentionally use
+primary X/Z movement and cap their retained maxima at70. Counter overflow,
+record selection and ordered stores remain exact.
+
+Course4's activity guard, unconditional type10 update and subsequent fresh
+type1/2 test are preserved. The other courses honor their submitted-row guards.
+Consumers receive frozen current actor snapshots; their prepared writes are
+applied before subsequent dispatch. Missing consumers fail rather than producing
+an apparently complete frame with stationary actors. This coordinator is not
+yet attached to the live host: motion leaves and their route/audio dependencies
+must be supplied first.
+
+Evidence:220 original AD418 executions /99,852 instructions match the complete
+outer-frame write stream, resulting actor hashes and state at every consumer
+boundary. The numeric square-root callees execute original instructions. Motion
+leaves are explicit test boundaries with synthetic writes that change actor
+type/submission, so these tests prove coordination and do not claim recovered
+leaf behavior. Render resolution and live artwork are unchanged.
+
+## Unpublished — complete course actor startup in shared state
+
+AC184 now has a complete numeric initializer for all nine course branches,
+sharing the verified body/record/water-vertex scratch and matrix startup with
+the introduction path. It preserves source allocation counts, untouched fields,
+unlock thresholds, reverse-course selection and the original random call order.
+Dolphin Park installs its extra wake actor from the actual first course node;
+main0 retains the original inactive swimmer slots and reserved count. Other
+courses include their swimming, bird and special actor placements. Introduction
+and main21 bypass course creation; the original two-player guard clears counts.
+
+Canonical startup reads retained selection, records, profileB340 and shared
+RNG rather than caller duplicates. Auxiliary controls62D0/D4 have a distinct
+two-word owner, and actor byte stores preserve neighboring bytes. The verified
+loaded defaults for62D0/D4 and audio7C9C are zero. Course5's audio initialization
+retains the numeric scene write and ordered C53D4 command for its audio consumer.
+
+Evidence:156 complete original AC184 executions /294,448 instructions match
+every ordered store, final actor hash, control word and RNG result, including
+unlock boundary cases and reversed courses. C53D4 is the explicit audio queue
+boundary; all other numeric callees execute their original instructions. Only
+numeric observations are shipped in the fixture. This prepares the shared scene
+owner for retained effects; live actor motion and renderer attachment remain
+pending. Rendering resolution and visible artwork have not changed.
+
+## Unpublished — fresh effects input and complete scene graphics setup
+
+A separate initial effects capture now reads the unsampled physical startup
+owners for AE7C4. It preserves the actual floor-contact field and requires the
+caller's applied startup BF0/BF4. It neither advances controls nor fabricates a
+completed frame. The engine field is absent because AE210 does not read it and
+the original body reset retains C66; completed-frame capture supplies the later
+sampled engine value. Startup, completed and partial-frame captures have distinct
+admission checks, with immutable detached results.
+
+Evidence: compact numeric observations from20 full original6390C/62E50 runs,
+covering205,321 instructions, match every captured field. The recorded write
+coverage proves that floor contact and engine survive reset while displacement,
+reference velocity, tick velocity, wrap drift and stumble count are initialized.
+A real prepared race body seeds the complete verified AE7C4 routine without
+changing hull, rider, water, controls or shared RNG.
+
+The playable race and championship standings now execute all of6A264 at the
+original outer-frame boundary. Its independent scene buffer alternates, the
+graphics frame counter advances, the latch clears and the matrix/list allocator
+resets even when gameplay activity is held. Ambient timing remains activity
+gated. Loaded startup values800D4B04/08/0C were verified as0/1/0. Warm menus retain
+these owners and the separate AI/actor graphics selector remains independent.
+Live-host tests cover both selectors, held/active simulation and activity, pause,
+fractional intervals, signed overflow and original call order. Render resolution,
+ocean geometry and artwork are unchanged; retained-effect renderer attachment
+remains the next integration stage.
+
+## Unpublished — physical world wrapping connected before frame motion
+
+The playable source host now applies the original water-owned world bounds
+after all fifth hull ticks and before each descending body summary and actor
+update. Held simulation runs the same boundary stage; browser pause does not.
+Current hull and rider positions, auxiliary anchors, previous body center and
+the retained frame reference move together. The canonical camera owner applies
+only the original selected human eye X/Z writes. Follow lag, contact proxies,
+the160C spray reference, velocities and stored rider deltas remain untouched.
+Effects can now capture the actual completed BF0/BF4 correction, with startup,
+partial-frame and stale-frame reads rejected.
+
+The physical rig is still an authored adaptation: its history targets are
+rebuilt from retained physical positions, and animation targets are regenerated
+in the hull frame. It does not invent three raw eighteen-joint pose blocks.
+Crossed axes use original binary32 addition; zero-drift frames and unchanged
+axes retain existing browser double precision. Source water setup exposes its
+six verified bound words without resetting noise or consuming randomness.
+Menu scene installation validates its replacement bounds before any mutation.
+The loaded camera selectors at ROM0F1F60/64 were checked as0/1; the second
+selector is now retained in fresh memory rather than missing on shared paths.
+
+Evidence: all160 original composed body/camera cases still match every ordered
+write and output hash, including the extracted camera stage. New physical tests
+compare translated owners against the verified618F4 kernel, check unchanged
+dynamics, prove wrap-before-motion/actor order, and match real crossing histories
+at30/60/144Hz. All86 focused body/world/host/water-entry/effect, championship
+application and water setup/menu/field checks pass. No render resolution, mesh, artwork or multiplayer
+options changed. Attaching the complete retained-effects renderer remains pending.
+
+## Unpublished — explicit physical fields for the retained effects pipeline
+
+AE210, full AE7C4 initialization, full B2ABC frame updates and the canonical
+spray adapter now accept structured physical fields as an alternative to a
+complete1478-word body. Reads retain their original branch order and binary32
+rounding. Missing reached fields reject; extra scene actors need no physical
+body. Conflicting views for the same slot reject instead of silently choosing.
+
+The capture helper reads actual completed hull, retained frame, last-tick
+reference motion, recovery and sampled engine owners. It returns detached,
+immutable values and rejects startup or a partially prepared following frame.
+Applied boundary drift must be supplied explicitly: neither terrain bounds nor
+an assumed zero translation can substitute for BF0/BF4. No synthetic full body
+array is constructed. Live wrap ownership is connected in the entry above;
+renderer attachment remains pending.
+
+Evidence: structured inputs reproduce every original ordered operation and
+retained output in160 input cases,48 initialization cases and84 complete frame
+cases, including both graphics buffers and twenty carried frames. All21 focused
+checks pass, with canonical ownership and actual physical capture coverage.
+Resolution and graphics assets are unchanged.
+
+## Unpublished — rider water entry belongs to the physical frame
+
+The 662E0..6633C rider-water stage now runs after each completed rider pose,
+before the shared water field advances and before landing settlement. All four
+physical racers retain C84/C86, including held simulation frames. Falling
+actors23/5 query their actual joint2 through the original scalar water plane;
+other actors clear the current flag without querying. Equality remains dry.
+
+Audio now consumes these completed flags. Previously it sampled the following
+water frame in a separate human-only audio owner, which could move a water-entry
+edge or omit rival state. Audio snapshots retain only detached observations.
+
+Evidence: the physical bridge matches all108 existing original-instruction
+cases. All77 focused physics-world, championship, audio, landing and action
+checks pass. Four-racer tests establish descending pose/query order before
+water evolution, held-frame history, pause behavior and identical30/60/144Hz
+results. Graphics, resolution and multiplayer options are unchanged.
+
+## Unpublished — retained body speed and computer-profile contact state
+
+Canonical body samples now read the completed B90 speed owner. They no longer
+recalculate it from positions after held simulation or a later physical
+relocation. Audio and race consumers therefore observe the retained source
+field. The audio test fixture now supplies that completed field explicitly.
+
+The original 66278..662AC contact-mode stage now runs before rider recovery.
+For a nonzero physical profile16CE it writes1602 from racer impact C40;
+human-profile bodies retain1602. This is independent of current human/AI input
+ownership and also runs when the following actor dispatcher is held by648.
+Preparation remains atomic if later actor input is invalid.
+
+Evidence: 84 original executions / 504 instructions match every contact store,
+including signed zero, subnormal impacts and retained nonboolean halfwords.
+All 77 focused body, audio, ice, landing, lifecycle, action and championship
+checks pass. Four-rider physical and canonical histories still match at
+30/60/144 Hz. No rendering or resolution settings changed.
+
+## Unpublished — original frame motion integrated into playable physics
+
+The complete 65DDC..65FF8 movement stage now drives the physical adapter's
+completed-frame outputs. Displacement, displacement change, speed and retained
+maximum use the original binary32 stores and arithmetic order. The offset
+reference point retains the source double constants, rounded inputs and final
+binary32 store. Its position, displacement and change persist between completed
+frames instead of deriving a replacement starting reference each frame.
+
+Held simulation retains those histories while contact-drive counting still
+reads the actual floor/box impact owner and sampled engine mask. Snapshot
+vectors are detached from retained physics state. The change does not alter
+render resolution, textures, water geometry or multiplayer behavior.
+
+Evidence: 288 original executions / 22,164 instructions match all output fields
+and ordered body writes. All 89 focused adapter, source-fixture, race-host,
+championship, landing, action and spray checks pass, including matching physical
+histories at 30/60/144 Hz. Full wrapping and the remaining post-hull presentation
+stages still require integration.
+
+## Unpublished — original body wrapping and retained histories
+
+The original 65C18 boundary stage through 65DDC is reconstructed, including
+the complete 618F4 translation routine. It selects the strict world-wrap
+correction, writes body BF0/BF4, shifts the selected human camera anchor and
+translates current positions and retained histories together. Frame velocity,
+orientation and point coefficients stay intact. The canonical adapter shares
+the actual HUD owner and returns validated physical writes for the body owner.
+
+The six wrapping fields belong to water setup at 801924AC, independently of
+race records at 801C1F94. The view reads the existing verified water initializer;
+it never derives limits from visible terrain or a matching low address.
+
+Evidence: 784 original boundary-prefix executions / 33,264 instructions,
+48 complete translation executions / 51,816 instructions, and 160 composed
+boundary/camera executions / 196,824 instructions. Every ordered write and
+full body/HUD hash matches. Tests cover strict edges, signed zero, lower-bound
+priority, retained histories, lazy camera selectors, owner separation and late
+failure without partial updates. All 30 focused checks pass. Physical-host
+commit and the rest of 65C18 remain pending; this does not yet change live
+wrapping or attach the new spray renderer. High-resolution rendering is unchanged.
+
+## Unpublished — retained effects and high-resolution GPU consumer
+
+The renderer now consumes the verified initialization, frame and display
+requests. It retains both scene vertex/matrix buffers, decodes signed positions
+and packed transforms, preserves draw order and source frame choices, and
+applies world scale once. Texture coordinates retain the original half-scale
+setting. Environment RGB and vertex alpha remain separate. Transient quads
+use their original numeric corners, including retained coincident-camera
+matrices. Surface effects test depth; shared droplets bypass depth testing.
+
+Authored textures are 512 × 512, with 512 × 1024 wake maps. Existing seven-frame
+mist artwork is reused without changing the existing ice renderer. Only
+adjacent compatible draws merge. Dynamic geometry is reused, transparent
+surfaces render in one unculled pass, and resources have explicit disposal.
+All draw validation finishes before visible geometry changes.
+
+Evidence: retained initialization/frame/display data matches all 48/84/126
+original fixture cases, plus 48 transient-display cases and twenty carried
+frames. Independent tests cover UVs, color/alpha, matrices, batch order, reuse,
+disposal and late failures. All 37 focused checks pass. A browser composition
+of initialization, one original numeric frame and its display rendered 62
+triangles in two effect batches at 1600 × 650. GPU pixel checks confirmed
+texture × vertex alpha, surface occlusion, droplet depth bypass and blending
+order; the preview was visually inspected. This verifies the graphics adapter,
+not the complete playable scene. The physical-owner bridge and main8 host
+integration remain pending. Resolution, ocean density and existing assets
+are preserved.
+
+## Unpublished — complete original spray-and-wake display pass
+
+B305C now prepares triangle spray in four texture passes, compact splash quads,
+seven-quad wake strips, primary-rider droplets in five-triangle batches, and
+the complete transient-splash display. It preserves source color overrides,
+view-dependent visibility, vertex offsets, distinct splash age defaults,
+shared matrix allocation, retained display cursor and 64-bit timing maxima.
+Graphics commands become validated material, texture, vertex and primitive
+requests. The adapter derives actual scene-buffer and camera owners.
+
+Evidence: 126 whole original executions / 955,136 instructions, including
+AF798 and every numeric callee. All 29,332 original graphics commands were decoded
+and validated against their complete state-setting words; no command is ignored.
+Every semantic request, retained/control write, clock boundary, matrix-region
+hash and final allocator/cursor matches. Explicit tests cover every droplet
+batch remainder, late invalid particle counts, prefix exhaustion and canonical
+ownership. Browser GPU consumption remains pending. Resolution, ocean density
+and existing high-resolution assets are unchanged.
+
+## Unpublished — independent scene graphics frame
+
+The full 6A264 graphics setup now advances the outer frame counter, conditionally
+advances the gameplay counter, clears the latch, selects the incoming 4B0C
+buffer, toggles the next selector, installs both original buffer pointers, and
+resets shared matrix allocation. Effect geometry, the composed effect update
+and transient display now derive their buffer from 801AE948. This corrects an
+adapter mistake: the AI/actor graphics selector is an independent owner and
+cannot select these B2F0-byte scene buffers.
+
+Evidence: 162 complete original executions / 5,076 instructions, covering
+counter overflow, both selectors, held activity and latch values. Canonical
+checks deliberately set the AI selector to the opposite buffer, and verify
+that it remains untouched. Optional scene owners must be supplied explicitly;
+the live host's existing frame counter is not advanced twice or silently reset.
+
+## Unpublished — original transient-splash display
+
+AF798 now prepares the original palette material, camera-facing and uniform
+scale matrices, shared scene-matrix allocation, seven texture-frame choices,
+and splash-quad draws. A splash exactly at the camera preserves its previous
+facing matrix while still binding it and advancing allocation. The shared
+matrixCountE950 owner remains separate from actor matrices and effect RNG.
+The original display-list groups become validated renderer requests.
+
+Evidence: 48 complete original executions / 133,464 instructions, including
+48854, scale construction and both matrix packers without interception. All
+ordered matrix writes, allocator changes, verified command groups and complete
+graphics-buffer hashes match for empty, sparse and full pools, both selected
+buffers, camera selectors, degenerate directions, signed scale and age limits.
+Late conversion/capacity errors preserve caller state. Browser consumption of
+these requests is still pending; no resolution or ocean-detail change.
+
+## Unpublished — complete original scene-effects update
+
+B2ABC now composes camera-axis preparation, every participant's physical or
+extra-actor inputs, activity-gated spray evolution, unconditional geometry and
+wake aging, 64-bit timing statistics, and unconditional transient emission.
+The canonical adapter derives retained owners, scene controls, score records,
+graphics buffer and both original camera selectors. The second selector has
+its own optional scene field; it is never guessed from the first camera.
+
+Evidence: 84 complete original executions / 689,147 instructions, including
+all numeric children. Only two clock samples and source-plane query returns
+are explicit external inputs. Every ordered write, query and clock boundary,
+complete pool/control/random result, and both full vertex buffers match.
+Coverage includes held activity, empty/negative effect counts, zero/vertical
+camera axes, both buffers, Dolphin's extra actor, unsigned timing rollover,
+and 20 successive frames carrying effect and graphics state forward.
+Late failure leaves caller state untouched. GPU consumption and browser scene
+integration remain pending; resolution and ocean detail are unchanged.
+
+## Unpublished — complete original spray update
+
+B08F8 now combines visibility and wet-state decisions, existing particle
+motion, spray audio levels, new triangle/droplet/quad emission, separate16-bit
+random draws and final wake insertion. It preserves full-pool scans, emission
+gates, both shared-droplet passes, ring advancement before suppressed emission,
+single/double precision arithmetic and every retained pointer/store order.
+The canonical adapter derives scene controls, record2F4, camera storage and
+seed from their actual owners; physical bodyC66 comes from the supplied body.
+
+Evidence:248 complete original executions/1,145,506 instructions, with every
+numeric callee executed and the actual initialized sine table supplied. All
+ordered stores, complete effect hashes, controls and final seeds match. Cases
+include visibility boundaries, zero axes, special scenes, extra actors, all
+participant slots, full pools and32 successive updates carrying state forward.
+Scalar audio results agree with the existing audio dependency, and late failed
+table reads cannot commit earlier motion or random draws. Parent B2ABC is now
+composed and verified above; high-resolution browser consumption remains pending.
+
+## Unpublished — retained particle motion dependency
+
+B08F8's B0F10..B1390 phase now updates existing spray triangles, primary-rider
+droplets, four short-lived quads and all eight wake-history rows. It preserves
+source growth caps, special-surface motion, gravity, retirement order, signed
+age overflow, drift and inactive records. Wake movement changes horizontal
+coordinates while retaining vertical history and velocity fields. All work
+prepares atomically against the existing effect/control owners.
+
+Evidence:72 original instruction-range executions/252,612 instructions with
+the exact incoming constants and pointers established by B08F8's prefix.
+All ordered writes, complete owner hashes and control-pointer results match.
+This is explicitly a dependency phase: visibility/wet-state preparation,
+new-particle emission and final wake insertion still require full composition
+and whole-routine verification. No browser frame or GPU integration is claimed.
+Resolution and ocean detail remain unchanged.
+
+## Unpublished — retained wake and spray geometry
+
+AFBD0 now prepares the original compact triangle and quad vertices, camera-facing
+spray orientation, age-based alpha, Dolphin scale rules and eight-row wake strip.
+Inactive particle vertices remain untouched; wake history ages in original
+circular order. The canonical adapter uses retained effect pointers, HUD cameras
+and selected graphics buffer, leaving physical, scoring and random state intact.
+
+Evidence:96 complete original executions/870,640 instructions, including every
+square-root and normalized-cross call without interception. All ordered owner
+and vertex writes, complete effect hashes, control pointers and both full buffer
+hashes match across all four effect slots, buffer choices and activity patterns.
+Failure checks cover late invalid history and camera pointers. Vertex writes are
+validated renderer requests; browser GPU consumption and the complete B08F8
+particle lifecycle remain pending. High-resolution rendering is unchanged.
+
+## Unpublished — original transient effect emission and aging
+
+AF51C now executes the three countdown-controlled emitters, AF4A0's eight-slot
+ring and the original signed-age expiry. New rows age during the same update;
+inactive rows retain their storage. Each FloatRand draw advances the separate
+seed6f00 stream with original single-precision rounding and ordered writes.
+Canonical preparation owns the retained pool and seed, preserves gameplay RNG
+and physical state, and rejects invalid late emission data atomically.
+
+Evidence:160 complete original executions/45,148 instructions, including both
+numeric callees without interception. All ordered stores, pool hashes and final
+seeds match, including circular overwrite, inactive emitters and signed overflow.
+Additional checks cover same-frame aging, eight-update expiry and canonical
+ownership. Parent scene-update composition and browser particle rendering remain
+pending. Resolution, ocean detail and high-resolution assets are unchanged.
+
+## Unpublished — complete scene-effects initialization
+
+AE7C4 now initializes retained particle records, eight wake-history rows per
+selected participant, course colors, Dolphin's optional extra actor, shared
+effect scratch and both original graphics buffers. It composes the complete
+AE210 input routine before seeding each history and preserves the original
+later flag resets. Inactive entries and untouched vertex positions/alpha bytes
+survive. The two original B2F0-byte graphics buffers receive ordered byte and
+halfword attribute requests; these remain explicit renderer effects.
+
+Math_srand uses the low16 bits of the supplied osGetTime low word and updates
+the existing seed6f00 owner once. It does not draw from or reseed shared gameplay
+rngState4640. Optional effectControlWords6d60[22] owns the actual800E6D60..6DB8
+pointer/color/palette/latch region, distinct from ending-menu overlay storage.
+Canonical preparation derives course/count/owners from retained state, preserves
+championship points and fails atomically on late missing physical or water data.
+
+Evidence:48 complete original AE7C4 executions/1,711,709 instructions, with
+all reached numeric callees executed. osGetTime and4D30C source-water queries
+are explicit supplied external results. Every ordered owner/vertex store,
+water query and its place among stores, complete effect-owner hash, control
+owner, final seed and both entire graphics-buffer hashes match across twelve
+course selections and one through four physical racers.44 focused/regression
+checks pass, including introduction transitions and existing spray audio math.
+
+Remaining: compose main8's complete physical initialization and frame lifecycle,
+consume retained particle/actor rendering and real animation resources, and
+verify naturally played championship progression before browser admission.
+Resolution, ocean density and high-resolution assets remain unchanged.
+
+## Unpublished — complete retained wake and spray inputs
+
+AE210 now prepares its actual scene-effects storage for both physical riders
+and Dolphin's additional scene actor. It preserves the distinct position,
+velocity, facing and sideways-motion rules, floor/alternate-state branches,
+wet/dry history writes and exact water-query count/order. The source plane-query
+callback remains explicit and pure; rendered wave height is not substituted.
+The extra actor does not require a nonexistent physical rider body.
+
+Canonical effectWords0790[7415] owns801D0790..801D7B6C, adjacent to the actor
+pool and distinct from overlay championship menu storage. Updates consume
+retained actor selection and physical racer count, leave physics/points/RNG
+untouched and reject malformed late inputs atomically. Storage remains optional
+until the physical presentation host supplies it; no particle emission is claimed.
+
+Evidence:160 complete original AE210 executions/30,656 instructions, with square
+roots executed and4D30C water results supplied at the sole external boundary.
+All numeric stores, query coordinates, query positions among stores and full
+effect-owner hashes match. Physical outputs also agree with the existing spray
+audio dependency when supplied the same source plane.30 focused/regression
+checks pass. AE7C4 initialization, particle/wake evolution and retained renderer
+consumption remain pending; resolution and ocean density are unchanged.
+
+## Unpublished — original introduction actor initialization
+
+AC184's complete main8 path now initializes the shared actor/body scratch from
+the selected physical racers, their retained records and actual active-water
+vertices. It advances the shared frame counter, clears motion deltas, initializes
+previous positions and preserves nonnegative warm speed maxima. Single-player
+uses the primary body/vertex for both references. All30 actor rows receive the
+original selective9D5C0 reset, retaining padding and both allocation counters.
+The actual6280 matrix reverses Z;47EE0 installs its packed integer/fraction halves
+in descending source order. It is not an identity-matrix substitute.
+
+The canonical adapter owns player selection, records and actor storage; physical
+body poses and selected water vertices remain explicit host inputs. Packed
+halfword writes preserve adjacent data and fail atomically on malformed input.
+The ordinary-racing branch of AC184 is not represented by this main8 initializer.
+Main8 hosting still needs AE7C4's separate retained presentation effects, the
+remaining scene lifecycle and live renderer integration before cup admission.
+
+Evidence:128 complete original AC184 main8 executions,209,728 instructions,
+including reset, square-root and matrix-packing callees without interception.
+All ordered stores, full actor hashes and allocation/control words match across
+all selected human slots, one/two-player references, warm counters/maxima and
+signed counter rollover.49 focused/regression tests pass, including complete
+actor display, camera scripts/frames, actor submission and canonical storage.
+High resolution and ocean density remain unchanged.
+
+## Unpublished — complete actor display sequence, lighting and fog
+
+ADF90 now composes the retained display-phase toggle,916B4 lighting/fog,
+ADD14 bounds, matrix-counter reset, all30 actor slots, visibility, all twelve
+implemented draw routines and AE148 temporary-actor retirement. Its192-matrix
+capacity estimate runs before visibility; actual draws determine allocation.
+Retirement still runs after an early capacity exit. Original signed resource
+selectors, active-frame rules, partial matrix writes and graphics-list order
+are preserved. Canonical adapters derive selectors from retained scene storage
+and prepare all changes atomically, including failures in a late actor.
+
+Lighting builds both retained24-byte lights, preserving padding. The lighting
+view is independent of the visibility camera. Course6 chooses one or two lights
+from its retained AI activity and updates the actual AI-context pointer. Fog
+color and packed factors preserve signed32-bit arithmetic and division traps.
+Fresh memory initializes the original display phase to0; warm scenes retain it.
+
+Evidence:252 complete original lighting executions/81,008 instructions and96
+whole original actor-display executions/3,218,034 instructions. Every numeric
+callee executes original instructions. Comparisons cover ordered operations,
+full actor/control storage, both complete matrix buffers, both light buffers,
+all draw families, capacity-before-culling, empty pools and retirement. The
+animation descriptors in these display fixtures are synthetic; this proves
+the routines, not decoding of the game's actual animation assets. Private GPU
+command groups are checked in final display-list order and represented publicly
+as semantic renderer effects. Original executable bytes are not published.
+
+All93 focused/regression tests pass, including camera scripts, course actors,
+championship application/startup, introduction transitions and canonical state.
+The original actor drawing components and this complete dispatcher still emit
+renderer effects: browser GPU consumption, real animation-resource decoding,
+physical introduction initialization/update and complete browser cup progression
+remain unfinished. Resolution, ocean mesh density and detailed assets are held.
+
+## Unpublished — original introduction course actors and shared flock motion
+
+The main8 branch of DD6B4 now reconstructs all six selected course callbacks:
+Dolphin, Sunny Expert, Sunset, Drake, Port and Southern. Other course/class
+branches clear the actor count without inventing scene actors. Script cursor
+and timer values are consumed after the camera-script step, matching the
+original dispatch order. The course callbacks retain original first-frame
+initialization, delayed motion, animation counters, vector normalization,
+angle wrapping and exact sine-table lookup. Sunny's target displacement uses
+the original integer quotient, not a substituted smooth interpolation.
+
+Common DB284/DB430 flock initialization/movement includes AFB8/B024 animation
+and the shared47E50 random stream. Southern's two leaders and two flock groups
+preserve their ordering and reused angle storage. Drake's24 actors retain
+leader/follower update order and speed decay. All actor positions, headings,
+up vectors, counters, scale and scratch values return to canonical HUD storage;
+RNG returns to the same scene owner used by the rest of the game. Atomic
+adapters take course/class and RNG from canonical state and preserve cup points.
+
+Evidence:524 complete original common-flock executions,373,782 instructions,
+including three actual templates, consecutive frames, animation thresholds and
+angle-wrap cases. Another3,766 original DD6B4 executions cover every course,
+Sunny's three classes, both camera slots and each active shot's counters,
+executing5,265,786 instructions. Every ordered numeric write, random-state write
+and full HUD hash matches. AB92C pool reset, AB95C scene production and AC098
+actor submission are explicit external boundaries in that second audit;
+their storage and rendering are not claimed executed. All other reached numeric
+callees execute original ROM instructions. Public fixtures contain numeric
+inputs/writes/hashes, never executable ROM data.
+
+Eight new tests cover original comparisons, canonical camera-script -> actor ->
+auxiliary composition, class selection, detached storage and atomic late errors.
+Forty existing camera, introduction, standings and canonical-state tests also
+pass. The composition test uses real fresh-memory camera links; its initial
+synthetic actor-only fixture correctly failed the script-pointer guard before
+being replaced with actual boot storage. All452 module hashes/four preload
+sets are refreshed. High resolution, ocean density and detailed models remain.
+
+Remaining: implement/retain the shared presentation-actor pool, consume the
+three explicit external boundaries, assemble the complete type6 camera frame,
+and connect physical main8 initialization/hosting and high-resolution course
+panels. Full browser championship remains gated; this is not a visible live
+flyover or completed cup claim.
+
+## Unpublished — complete introduction camera scripts and auxiliary motion
+
+All eleven original course/class introduction scripts now have decoded numeric
+resources and a complete DFCB8 runner with all eight reached callbacks. The
+runner preserves callback-before-timer order, same-frame zero-duration commands,
+path reset ordering, signed counters and terminal hold/stop behavior. Its
+canonical adapter preserves championship points and fails atomically on missing
+late resources. Two camera slots retain independent script/path state.
+
+DFC48 auxiliary motion now includes Cartesian type1 and spherical types2/3,
+with original float32 smoothing, truncated angle phases and the exact source
+sine table. Target/eye, up vector, FOV and projection offsets follow the original
+write order. Unsupported motion branches reject rather than approximating.
+
+Evidence:22 complete original script sequences (eleven scripts in both slots),
+5,160 frames and 3,887,572 instructions. Every ordered HUD write and per-frame
+HUD hash matches. Another120 original auxiliary-motion cases execute20,760
+instructions, covering types1/2/3, both slots, multiple rates and wrapping angles.
+Numeric callees execute without interception. Public resources/fixtures contain
+numeric data and checksums, not executable ROM instructions. Forty focused and
+regression tests pass, including all scripts composed with auxiliary motion.
+
+This completes script/path/auxiliary components, not the complete physical
+introduction frame. Course-specific actor effects still run between scripts
+and smoothing in the original; these, main-camera copy/basis integration,
+physical scene initialization and live presentation remain to be connected.
+Full championship admission remains gated. Resolution and ocean density are
+unchanged. The four page import maps/preloads are refreshed for449 modules.
+
+## Unpublished — introduction camera initialization and original path sampling
+
+The main8 course introduction now has its own numeric camera initializer.
+It reconstructs DDA24/DDAB8's selected type5 branch, which switches to scripted
+type6 and selects the actual course camera resource. Sunny's Normal, Hard and
+Expert classes select three different sequences. Other courses select their
+own sequence. DFD94 resets only the script cursor and timer; retained auxiliary
+camera values and owner links survive. E0F8C/E0FF0 produce the original camera
+basis and both graphics-buffer matrix requests. The canonical adapter reads
+the retained course/class, preserves championship scores and prepares writes
+atomically. It does not execute a camera script or initialize the live scene.
+
+Original DD85C camera boot is reconstructed with all three pointer setters.
+Fresh web memory installs both camera slots' auxiliary, path-counter, body-view
+and water-datum links once. Warm scene transitions keep them. This also supplies
+the original camera slot index and initial zoom selection instead of leaving
+the second camera's identity zero. Cursor/timer, path counters and auxiliary
+contents remain untouched by boot, matching the source.
+
+DE690's scalar spline evaluator and DEB08/DEC00's scalar/XYZ path sampling are
+reconstructed with the source's five endpoint/interior weight cases and exact
+single-precision grouping. Sampling preserves zero-duration skips, sample-before-
+increment order, signed frame rollover and terminal segment=-1. It neither
+substitutes a generic cubic spline nor silently restarts a finished path.
+
+Evidence:324 whole original camera-initializer executions (108,648 instructions),
+four complete boot executions (796 instructions),1,404 spline evaluations and
+384 complete scalar/vector sampler executions (168,268 combined instructions).
+Initializer graphics matrix generation is the explicit boundary; the boot and
+sampling checks execute all numeric callees without interception. Public fixtures
+contain numeric inputs/writes and hashes, not original executable ROM bytes.
+
+All59 focused/regression tests pass, including four-rider championship driving,
+ordinary race physics, all nine Stunt hosts, canonical cameras and menu transitions.
+The physical histories remain identical across30/60/144Hz. All446 module hashes
+and the four pages' preloads validate. These checks do not prove live cup flow.
+
+Remaining: decode/consume introduction camera command resources and callbacks,
+advance the scripted camera with its course-specific scene effects, and connect
+main8's physical initializer/host and high-resolution panels. Full browser cup
+progression remains gated. No live introduction animation or complete cup is
+claimed by these component tests. Resolution and ocean mesh density are unchanged.
+
+## Unpublished — championship introduction controls and configured race handoff
+
+The original i3 display controls are now reconstructed and composed with the
+existing update, widget and fade stages. The first latched state30 display
+clears its latch and stays black without advancing panels, input or RNG. The
+class-title panel retains both opacity ramps, hold periods and its transition
+to the course panel. The course panel enables skipping on its original final
+fade-in frame. These writes precede the caller's input check on that same frame.
+
+The caller uses pressed buttons from the combined third menu record. A pressed
+skip button that is not yet accepted does not fall through to the automatic
+timeout. Ordinary displayed state30 frames make one shared RNG draw, including
+an accepted exit; the re-entry branch skips that extra draw while EB91C itself
+retains its own random selection. The20-frame exit, delayed sound, one-frame
+fade-completion pulse and main-configuration call preserve source order. The
+post-callback tail reads the newly selected scene, not a stale pre-exit copy.
+
+The new introduction phase prepares detached canonical state and returns the
+already-executed9345C configuration as its race handoff. The shared configured
+championship loader consumes that result, installs the selected course objects,
+resets race records and prepares four physical grids without configuring twice
+or clearing cumulative points. Callers explicitly declare whether configuration
+effects have already been delivered, preventing duplicate resource/audio effects.
+Fresh web setup uses the same loader and retains its existing behavior.
+
+A separate eight-word6F64 panel owner complements the43-word6F84 introduction
+owner. The verified original loader table at800E4F30 copies data through7020
+and clears7020..7030; fresh introduction storage follows that recipe. It never
+reads the next ROM overlay's bytes as scratch defaults. The loaded codeseg
+word80223938 is1 and initializes the display-enable owner only in fresh memory.
+Warm frames retain all owners.
+
+Evidence includes780 complete original panel executions, with drawing helpers
+as explicit GPU boundaries,600 complete display callers with prepared panel/
+target-call results, and five complete exit callers with fade/audio boundaries.
+All ordered numeric writes and final panel/menu owners match. GPU command writes
+were observed privately to distinguish them from numeric state; original GPU
+rendering is not claimed. Composed tests verify109 displayed frames through the
+first class-title/skip sequence,40 for a later round's panel, automatic timeout,
+restart RNG, retained points, one configuration, and four prepared next-course
+grids.41 distinct focused/regression checks pass, including existing physical
+startup/driving equality at30/60/144Hz.443 module hashes/four page preloads pass.
+
+Remaining: the main8 physical introduction scene initializer/host, its camera
+and course-diagram presentation, resource consumption and live scene transfer.
+This numeric phase runs after physical scene updates; it does not substitute
+standings' water-only loop for the original animated introduction. Full browser
+championship remains gated, and no natural complete cup is claimed. Resolution,
+ocean mesh density and detailed assets remain unchanged.
+
+## Unpublished — original championship course-introduction update
+
+The next-round destination is main8/state30, an animated course introduction,
+not an immediately playable racing state. Its complete i3 update5800 and both
+subordinate stages5AE8/5AF0 now have a detached reconstruction. The source's
+loaded first-round table is [1,0,0]: Normal clears totals at its first race after
+Dolphin warmup; Hard and Expert clear them at round0. Later rounds retain total
+points, all per-round awards and cumulative ranks. Reset writes preserve their
+original interleaving and leave adjacent profile words untouched.
+
+Qualification is recomputed after the conditional reset, including the source
+scratch writes and signed overflow behavior. The first-race introduction selects
+stage0 and240 frames; later introductions select stage1 and180 frames. Resource
+transform requests, reverse selector writes and stage1 geometry assembly stay
+in source order. The three graphics helpers69740/6977C/69798 remain explicit
+pending effects; no GPU work or physical scene is claimed executed.
+
+The separate canonical championshipSelectionWords6f84[43] owner retains i3 data
+and controls through7030. It is supplied as loaded/retained storage, not allocated
+from standings7A00 or recreated on every frame. Its entry latch is released by
+the later display caller, not this update. Malformed late resource/buffer inputs
+cannot commit earlier resets or qualification writes.
+
+336 complete original update executions (49,096 instructions), including both
+subordinate stage functions, match every ordered operation, resulting menu and
+profile word, and the full race-record digest. Cases cover all classes/rounds,
+primary slots, warmup, entry latch/state combinations, signed stage values and
+point extremes. The original ROM is local/private; fixtures contain numeric
+inputs, operations and checksums. Display5B40, panels5D54/6344, exit6E9C and the
+physical introduction scene lifecycle still need composition before continued
+cup progression can be enabled. Rendering resolution is unchanged.
+
+All37 focused selection, canonical-state, qualification, standings, setup and
+result-entry checks pass. Two stale setup assertions now verify the later-added
+course/last-round tables against their existing original-ROM fixture and the
+already-supported four-racer application startup. The unprepared-launch guard
+remains tested. All440 module hashes and four page preloads validate.
+
+## Unpublished — high-resolution browser championship standings
+
+The browser now consumes the automatic standings scene with a scalable SVG
+layout, round results and overall totals. Rider portraits render the existing
+detailed craft/rider geometry at display pixel size. They share materials and
+geometry without cloning gameplay userData, changing the main canvas size or
+disposing live assets. Temporary render targets restore renderer state.
+
+The actual retained menu camera supplies position, target, up, lens and near
+plane. The ordinary racing terrain and craft hide during standings, leaving
+its animated water backdrop. Continue, Enter and gamepad Start feed the source
+menu loop. The Continue affordance uses the source's next-frame acceptance
+threshold; it never advances scoring itself. Menu pause freezes both standings
+and water. Automatic quality changes are held during the menu, and the racing
+near plane is restored with its projection on the first subsequent frame.
+
+A private browser probe exercises ordinary championship startup followed by an
+injected finish, the actual result delay, automatic standings entry, round
+confirmation, overall standings, pause/resume and the next-round handoff.
+It verifies unchanged physical-frame counts, once-only points, matching source
+camera values and held 1440x900 rendering with 83,521 ocean vertices. A narrow
+512x900 viewport retains full mesh density without horizontal overflow. Detailed
+portraits and both layouts were visually inspected; the successful run has no
+console warnings/errors. The probe is not shipped or claimed as a natural cup.
+
+Fifteen focused host/runtime/presentation checks pass, including both confirmation
+threshold boundaries. All 439 module hashes and four page preloads validate.
+The label wording is authored from semantic layout tokens, not recovered font
+or texture artwork. Original common GPU/environment graphics and fancy fades
+remain gaps. Fresh web-memory names currently remain YOU for all riders under
+the existing initialization policy. Championship browser admission stays gated:
+next-scene ownership, retained-profile selection and continued physical rounds
+must be completed before claiming a playable full cup or persisted ending records.
+
+## Unpublished — automatic championship standings scene host
+
+The application's actual championship result transition now enters a dedicated
+20Hz standings loop. It samples the human device once, initializes the latched
+scene, adapts menu input, updates the canonical menu camera and special water,
+then runs standings, widgets, fades and display input. The shared input clock
+advances afterward. Original dispatcher traces verify the ordering for52/53
+with both latch values;53's initializer call does not reseed the water. Graphics
+buffer selection and the ambient counter retain their original outer ordering.
+
+The existing runtime remains the sole canonical state owner. It prepares all
+numeric stages before installing or advancing the existing live water field.
+First entry awards points once, while subsequent frames retain totals and
+water motion. Invalid late camera/display data cannot partly commit earlier
+state preparation. Physical hulls, ordinary forcing and course rollers remain
+stopped. Type1 camera lens values now come from the retained menu camera, so
+the view does not reuse racing projection metadata. Human control adaptation
+is shared with racing and preserves held/pressed/released button behavior.
+
+Confirmation now reaches the original next-round or game-over handoff through
+the application loop. Next-round setup receives the retained avatar order,
+verified class order and all twelve signed wave values read by801EB91C from
+800EABEC. It retains accumulated scores and only increments the round at the
+source exit boundary. The announcer's outer clock continues during menus,
+including delayed speech, without producing or overwriting physical rider
+sound packets. Returning to physical audio requires an explicit scene handoff.
+
+Application finish/retirement checks cover automatic entry, one-time scoring,
+controller polling, live camera/water updates, pause/resume, confirmation and
+both destination handoffs. Full menu preparation matches at30/60/144Hz.
+These tests use controlled finish/retirement injection after ordinary startup;
+they do not claim a naturally completed championship. Browser standings
+presentation, remaining common graphics consumers, destination scene ownership
+transfer and continued cup progression remain unfinished. No browser mode is
+newly admitted, no record-save effect is claimed persisted, and rendering
+resolution, ocean mesh density and detailed assets remain unchanged.
+
+## Unpublished — special menu water and live field ownership
+
+The main9 standings water is not ordinary race forcing. Original51238 moves a
+retained disturbance by51.2 native units using its angle/turn, changes course
+with exactly three shared RNG draws when it crosses the extent, and overwrites
+the selected triangle's three heights at-50 with zero velocity. It then updates
+one fixed radius16 patch at the origin. Main6 omits the disturbance; simulation0
+holds the patch kernel but does not suppress main9's disturbance. No ordinary
+forcing line, tide decrement, hull update or course roller runs in this path.
+
+`native-special-water-update.js` reconstructs that caller and4EFB4, including
+mixed double/float arithmetic, toroidal triangle selection, ordered stores and
+retained motion/RNG.48 original caller cases and nine separate seam/stamp cases
+match all operations over5,826 instructions. Eight further full original runs
+cover three consecutive frames each:51238,47E50,4EFB4,50F8C and4EAA4 execute,
+with only50204 graphics generation external. All49,152 height/velocity pairs
+match after every frame (991,056 instructions), including untouched canaries.
+The sine input in this audit is explicit regenerated float32 data; this does
+not claim bit identity to the cartridge's runtime sine table.
+
+The canonical state retains motionWords47C4 and consumes the shared RNG, with
+numeric loaded defaults allocated only for fresh web memory. Warm scene entry
+retains both. Camera updates from the preceding checkpoint are also complete;
+the remaining integration dependency is the outer live menu scene host.
+
+`installRaceWaterMenuScene` now installs prepared noise into the existing live
+field once, preserving field identity and forcing phase. `advanceRaceWaterMenuFrame`
+applies the prepared disturbance and kernel with a separate menu-frame count.
+Race/hull/roller counters stay stopped. Ordinary water/world advancement rejects
+while the menu owns the field; resuming an ending or race requires its explicit
+scene transition. Invalid installation/late field writes cannot partly mutate
+live storage. Presentation snapshots see the updated revision without a lower
+resolution mesh or replacement camera.
+
+Actual finish and retirement integration checks now compose scene setup,
+camera update, live menu water, then standings scoring/display. They verify one
+score award, two menu frames, unchanged physical clocks/rollers and preserved
+phase. This is tested component integration; the browser's automatic menu host,
+graphics consumption, exit ownership transfer and continuous cup remain pending.
+
+## Unpublished — course display setup and composed standings scene entry
+
+The complete8E4B0 course-display initializer now copies the selected environment
+parameters to both retained rows, applies the main21 ending override to the
+first row only, converts its three lighting components with original signed
+truncation and prepares the original partial vertex patches for both buffers.
+The ending source atA404 is row10 of the same parameter table, not a competing
+copy. Loaded rows contain numeric environment parameters; no texture, executable
+or guest-pointer data is included. The new canonical ownersB058 and4160 are
+separate from race, HUD and saved-name storage.
+
+Seventy-two full original executions (56,880 instructions, no intercepted
+callees) match all ordered writes, both final parameter rows, light components
+and the complete canary-filled graphics-buffer digests. Tests span all twelve
+row selections, normal/ending branches and three water extents. Vertex X/Z
+and all other unwritten bytes survive. Invalid conversions, malformed ending
+rows and late bad writes leave caller state unchanged; unused rows are unread.
+
+Standings scene-entry preparation now composes the actual926F4 path: water at
+datum0, course display, then selected menu cameras. It executes only for latched
+state52/main9; later state52 and exiting state53 do not reseed the water. The
+latch remains set for scoring and the first black display to consume. Actual
+application finish/retirement tests use this combined entry before standings.
+A late camera error cannot commit earlier RNG or display changes.
+
+Twenty-nine focused course-display, canonical-state, standings-runtime and
+result-entry checks pass. Water installation and graphics consumption remain
+explicit host responsibilities: no live standings scene, complete camera-update
+loop or continued championship cup is claimed. The next dependency is the
+selected1DDEDC camera update and its common helpers, followed by the scene host.
+Rendering resolution and detailed course assets remain unchanged.
+
+## Unpublished — complete scene-water initialization preparation
+
+The outer4F9E0 initializer now has an independent reconstruction, including
+4E614's generated simulation-patch coordinates and vertex offsets. It selects
+the original field shifts/radius, clears saved camera-patch values, installs
+the numeric edge descriptors and datum, requests noise initialization at its
+actual call position, calculates the original float32 spatial extents and
+prepares both graphics buffers' color/UV writes. These source simulation and
+buffer recipes do not replace or downsample the detailed browser ocean mesh.
+
+Twenty-four full original4F9E0 executions, with4E614 and all reached arithmetic
+callees executed, match every ordered operation over585,786 instructions. They
+cover each variant/player branch and negative/zero/positive datums. Compact
+public fixtures retain the exact ordered-operation digests and numeric setup
+writes; the full comparison traces remain private.4F790 is the explicit boundary
+in this audit; its existing independently verified full noise/RNG implementation
+is composed into the new scene preparation without skipping random draws.
+
+Crucially,4F9E0 does not reset the forcing phase at47C0. A nonzero original-memory
+canary confirms retention. The eventual field host must preserve that phase
+while replacing noise and resetting camera-patch history. Reusing the fresh
+web field's default phase0 would be incorrect for this scene transition.
+
+The canonical adapter takes variant, player count, wave amplitude and RNG from
+retained scene state. It prepares the replacement sea and next RNG state as one
+detached transaction. Actual application finish/retirement tests compose this
+water setup before the menu camera and standings phase; they preserve records
+and the once-only scoring latch. Fourteen focused scene-water, noise and result
+checks pass, including all-grid original noise digests, simulation-patch order,
+invalid input atomicity and unchanged caller state. No live field is mutated yet.
+Course-display setup8E4B0, the menu-camera update and the complete scene host
+remain required before enabling the browser standings loop or continued cup.
+
+## Unpublished — original fixed menu-camera initialization
+
+The type1 camera selected by actual championship result entry now has its own
+numeric initializer. It reconstructs DDA24/DDAB8's selected branch, DF008's
+auxiliary template setup, E0F8C's endpoint/lens copies and E0FF0's complete
+float32 basis calculation. Near/far planes, shared water datum8108, horizontal
+direction, orthogonal up vector and eye/target distances retain original write
+order. The two E11B4 graphics requests remain explicit ordered effects; no
+original matrix buffer or live scene is falsely reported as consumed.
+
+Thirty actual original executions, including numeric callees and the C7010
+sqrt instruction, match every write and matrix request over12,825 instructions.
+They cover both camera counts, signed datum limits and varied nondegenerate
+templates. The default thirty-value numeric template and far plane also match
+loaded data. Degenerate inputs and unsupported selected camera types reject
+without partially changing caller storage. Canonical HUD storage remains the
+sole camera owner; prepared views are detached and immutable.
+
+The canonical adapter composes this initializer from actual championship finish
+and retirement handoffs before the tested standings phase. It preserves the
+race records and once-only scoring latch. The initialized basis matches the
+existing source water camera representation without importing a race-follow
+snapshot. All21 focused camera, result-entry and canonical-state tests pass.
+This is initialization, not the subsequent camera-update loop or live menu:
+4F9E0 water setup,8E4B0 course display setup and the complete host remain pending.
+High-resolution presentation and multiplayer feature scope are unchanged.
+
+## Unpublished — actual standings handoff data and camera-only dispatch
+
+The application's real EC0D4 result handoff now installs fresh semantic i5
+standings storage once. Its initial slide, viewport metadata, qualifying-place
+tokens and last-round values match the loaded ROM's numeric fields. Unused
+guest code/string/pointer slots remain explicit placeholders; this is not a
+copied executable overlay. Digit widths and all qualification point rows were
+also checked against resident ROM data.
+
+Standings source views decode the four retained base-avatar names from
+saveWordsB280 and use the selected slot-to-avatar mapping. Names stop before
+the adjacent tuning bytes; malformed encodings and unterminated names reject.
+Alternate model colors do not switch to an unrelated saved-name record.
+Application finish and retirement tests feed their actual menu-entry state
+into the standings phase and layout, checking the first black frame, once-only
+awards, retained names and four correctly sourced portrait requests. Eleven
+focused data/result/standings checks pass. This still stops at the prepared
+menu handoff: no live menu camera/water loop or continued cup is claimed.
+
+Correction to earlier wording: original main9 standings do not run the race
+physical world. Eight original common-dispatch runs (466 instructions), compared
+with race main1 and ending main21, confirm that main9 calls menu input, camera
+update1DDE48, water51238 and display8E794, but omits navigation86148, hulls665B0,
+judging/object motion6E3A8 and spray/object-effect updates B2ABC/AD418.
+The runtime contract now states this explicitly. Do not resume the ordinary
+race world to animate a standings screen.
+
+Eight additional original926F4 executions (132 instructions) confirm that the
+first state52 frame initializes water4F9E0 at datum0 with retained wave49B0,
+then course display8E4B0 and cameras1DDA24. State53 performs none of those
+initializers. These helper bodies and their live host integration are the next
+dependency; simply retaining the race camera/water would omit real setup.
+High-resolution rendering and multiplayer scope are unchanged.
+
+## Unpublished — championship standings layout and vector display
+
+The complete original i5 5DC0 draw caller is now represented as independent
+semantic commands: round/total headers, alternating panel offsets, ranked
+rows, retained rider names, point alignment, retirement markers, race times,
+per-round history, qualification footer and avatar-ordered rider previews.
+Round ranks remain sequential, while total-point ties use competition ranks.
+The original persistent six-unit rank offset after a retired row is preserved.
+Round and total sorting come from the canonical state owners, not view copies.
+
+280 complete original executions match every ordered command over 528,744
+instructions. Cases cover all reached panel phases, every primary slot,
+qualification outcomes, record highlights, classes/rounds, disqualification
+masks, tied totals and signed panel extremes. Font, text-formatting and drawing
+callees are intercepted; original GPU execution and font artwork are not claimed.
+Only synthetic names, numeric inputs and semantic outputs enter public fixtures.
+
+The standings frame now prepares its layout before processing input and target
+handoffs, with no layout on the original first black frame. Nine focused
+presentation/runtime tests pass, including unchanged caller state on malformed
+data, avatar identity, tied ranks, pre-input coordinates, retained next-round
+totals, failure/ending transitions and 30/60/144Hz scheduling.
+
+A dedicated SVG view renders at the full host size with clipped rider-preview
+consumers, vector text, literal labels, isolated gradient/clip IDs and atomic
+frame replacement. Browser verification rendered all 280 layouts and checked
+late failures, text handling, unique IDs and avatar order. Round/retired and
+total panels were visually inspected at 1280x720 with synthetic labels and
+portraits. Logical 320x240 coordinates do not reduce canvas resolution.
+Original label resolution, live detailed rider consumers, loaded menu data,
+scene integration, the game-over loop and a complete continued cup remain.
+
+## Unpublished — championship standings frame and return handoffs
+
+The standings portion of an original20Hz frame now composes source5800 score/
+outcome setup, the scalar opposite-panel offset, shared widgets/fade and5C1C
+display control. The first black display clears the same entry latch that gates
+scoring, so later displays cannot award again. Draw snapshots precede input;
+holding confirm through a delay does not produce a new press edge. After exit
+fade completion, the original round increment and maximum-progress save word
+precede the championship-selection initializer. Reverse progress uses its
+separate save word. Totals remain retained rather than reseeding a fresh cup.
+
+Ending and title destinations expand their existing initializers at the actual
+call positions. The previously missingEC944 failed-qualification entry now
+selects game90/main15 and audio5 without altering the physical or HUD phase.
+The source7C494 save effect is scheduled after the destination has changed
+main638. All handoffs end this menu phase; invoking it on the new destination
+rejects instead of incrementing a second round or reinitializing the target.
+
+264 complete original update/display callers and offset-prefix cases match
+11,016 executed instructions; graphics calls are intercepted and target-main
+effects are supplied explicitly. Seven complete originalEC944 callers match
+217 instructions. The expanded common-dispatch audit documented above corrects
+the earlier interpretation: input, cameras, water and display precede this phase
+in52/53, but the physical race world does not advance. Then5800 precedes
+5470/AFB4/71A8. The phase requires those earlier updates; it does not replace
+their host or execute original GPU drawing.
+
+Thirty focused frame/control/entry/return checks pass. They cover once-only
+awards, both panel confirmations, next-round progress in forward/reverse modes,
+final Expert winner unlocks and ending entry, qualification failure/game over,
+atomic late target errors, held/second-player inputs, suspended time and matching
+30/60/144Hz menu schedules. The original5850 matrix/viewport/vertex work and
+5DC0 standings drawing remain explicit presentation boundaries. The visible
+standings layout, live scene integration, game-over loop and complete continued
+cup are still pending. Canvas resolution, terrain and detailed models are intact.
+
+## Unpublished — championship scoring and standings controls
+
+The complete resident94ACC score invocation now applies original7/4/2/1
+awards, disqualification zeroes, signed total wrapping and both four-slot
+pairwise ordering passes. Cumulative ties use the current race place, not the
+selected avatar. The source still orders all four slots when fewer participants
+receive awards, and preserves old round cells for unrecognized places. Final
+rank writes update the existing racer2C70 words. Round and cumulative order
+arrays have separate canonical owners; fresh championship selection allocates
+them without changing other modes' memory. Reinvocation awards again, just as
+the original does: the enclosing standings entry must schedule it once.
+
+All604 complete original94ACC executions match every ordered write and final
+race/profile/order word (359,572 instructions, no intercepted callees). Cases
+include every finishing permutation/disqualification mask, partial and negative
+participant counts, duplicate/missing places, signed overflow and retained ties.
+The independent i5 outcome initializer5A98 matches537 full original executions
+(23,438 instructions): qualification failure90, next-round selection30, ending102,
+original last-round lookup, class unlock bits and Expert winner bit. Save writes
+preserve adjacent bytes. Source audio remains an ordered host effect.
+
+Standings input6CC4 and exit6F84 match700 complete original executions (20,908
+instructions). Both sliding panels preserve signed16 wrapping, original clamps,
+confirmation masks and counter thresholds. Qualified audio is emitted at its
+source tick; failed qualification slides towardEC944. Other exits initialize
+state53 and its actual destination-specific shared fade, preserving field640.
+The canonical adapters expand exit/fade once at their call positions and reject
+late invalid data without partly committing earlier writes.
+
+Twelve focused score/control/fresh-launch checks pass, including cumulative-tie
+winner unlocks, unchanged neighboring storage and expanded fade errors. These
+are numeric components. The complete5800/5C1C frame, one-shot entry scheduling,
+standings layout, renderer, next-round retained profile and complete cup remain
+unfinished. No visible championship admission or durable save is claimed.
+High-resolution rendering and multiplayer feature scope are unchanged.
+
+## v2.40.0 — source gameplay checkpoint
+
+Publishes the tested source gameplay, audio, object, stunt and championship
+foundations accumulated since v2.39.0. High-resolution presentation is preserved.
+Native championship remains headless/verification work: browser standings and
+continued cup progression are unfinished. The newer, untested championship
+points implementation is saved privately and excluded from this release.
+Multiplayer feature work is deferred until single-player work is finished.
+
+## v2.40.0 — championship standings handoff
+
+Headless championship finish/retirement now runs the original unfinished-rider
+time estimates at its result-stage call, using completed physical bodies and
+the primary markers' current centers. It then initializes original state52,
+main9, once and stops the race host. The selected alternate-color avatar is
+preserved in the pending high-resolution resource request. This is the numeric
+standings entry; the standings screen, subsequent cup progression and final
+qualified-ending sequence remain separate unfinished work.
+
+All32 complete original EC0D4 caller executions match every ordered write and
+external-call argument (2,208 instructions; graphics/fade/VI callees retained
+as recipes). Live application tests inject finish or retirement after normal
+startup, then exercise the real result delay, Continue/fade, estimates and
+one-time menu transition. They do not claim a naturally completed cup. Missing
+estimate geometry fails atomically before any menu/record change. Existing
+ordinary result scheduling is regression-checked independently.
+
+## v2.40.0 — championship application startup and qualification
+
+The headless native championship now uses the application race loop with four
+prepared hulls/riders, three original AI inputs, one human audio channel and the
+selected source grid/tunes. Startup audio executes once. Source result entry
+owns the finish; the modern40-second rival-disqualification rule is bypassed.
+Pending rider/course resource requests and128 HUD-buffer writes remain explicit.
+Browser championship admission, those presentation consumers, full result/menu
+handoffs and continued cup progression still require work. Resolution and the
+high-resolution models, water and renderer are unchanged.
+
+Fresh isolated rounds now initialize the actual course/round profile instead of
+accidentally selecting Dolphin warmup. The original class course-order and
+last-round tables are installed before startup. The selection screen's retained
+qualification limits are derived from its numeric calculation;116 bounded
+original i3 runs (11,400 instructions) verify all primary slots, classes, rounds,
+warmup and signed-overflow cases. This projection does not run the complete
+selection menu or its scratch/graphics consumers. An isolated later round has
+empty previous standings; it is not a restored cup.
+
+Application tests cover four avatars/custom tuning, startup audio, retained
+presentation dependencies and source finish entry. Twelve-second application
+runs at30/60/144Hz match canonical state, hull points, water and audio histories.
+
+## v2.38.0 — shallow water, native ice and contact audio
+
+Custom-wave troughs now respect the shallow course floor, fixing broad exposed
+seabed patches without reducing resolution, mesh density or texture detail.
+Spray ribbons and shore film are refined, and Glacier scenery is grounded.
+
+The opt-in native preview adds Southern Island and Glacier Coast, recovered
+course geometry/routes, Southern tide and marker timing, shared breakable ice,
+fragments and splashes across live/replay/player views, and source-timed human
+landing/impact sounds using the authored sample backend. The native wet flag
+now correctly distinguishes a submerged-point count from an in-water boolean.
+Original sound-packet/channel reconstruction is included as groundwork; full
+original engine, mixer and voice playback remains unfinished. Existing music
+defaults and high-resolution presentation are preserved.
+
+The online build identifier changes to2.38.0 so peers must use the same release.
+The detailed checkpoint evidence and limitations below apply to this release;
+their historical “Unreleased” headings describe work since2.37.0.
+
+## v2.40.0 — full-start native aerial gesture coverage
+
+Sunny Stunt verification now drives from the original grid to the unchanged
+ramp, supplies ordinary keyboard gestures while airborne, and observes the
+original action, landing classifier and queued scoring. Brief opposite-steer
+gestures earn47/50 points for the two roll categories; forward/rearward trim
+earns79 for the flip category; rearward/forward trim held into the dive earns
+680. These are the original judge's awards for those brief gestures, not a
+claim that each performs a complete360-degree rotation. No body placement,
+action override or scoring field is injected.
+
+The longer-held flip receives the original failed-landing classification,
+without a success cue, completed-flip flag or trick points. The successful flip
+has exactly matching source state, physical hull/rider, action and scoring
+histories at30 and144Hz. All six checks pass. They cover the previously missing full-start
+roll/flip/dive integration alongside the existing pose and course-finish checks.
+
+## v2.40.0 — original collected-ring disappearance
+
+Collected rings in the native Stunt preview now stay full size through source
+age8, shrink by one eighth per logical frame at ages9–15, and disappear at16.
+Their original spin continues during the shrink. Rendering reads the age owned
+by the original collection stage, so pause, finish and retirement retain its
+exact stopped state. Replay preserves the recorded scale without advancing
+collection, changing the collider or awarding another score. Older replay
+snapshots without scale keep their existing size.
+
+EVO X2 Ghidra confirmed draw routine6D494 in read-only mode with all nine
+project files unchanged.1,620 prepared executions of the complete original
+routine cover signed age boundaries, collection flags, visibility classes,
+camera visibility and three environment branches:516,780 instructions,
+612 exported instructions matched against the private ROM. Environment setup
+and matrix-packing callees are intercepted; the visibility and scale arithmetic
+execute unchanged. Three retains its own camera frustum culling and detailed
+materials. The public fixture contains540 distinct numeric cases only.
+
+All12 presentation/collection checks pass. A real browser collection retains
+scale1 through frames156–164 and reaches.875 at165. The replay camera visibly
+shows that shrinking ring, then returns to the live half-size ring at time8.4
+with the live-state fingerprint unchanged. High remains1440x900, with about
+1.08 million triangles in the live view and no JavaScript or shader errors.
+
+## v2.40.0 — native Stunt ring rotation
+
+High-resolution Stunt rings now use their actual source object matrices,
+including the alternating four-degree spin per logical frame. Translation
+converts to world metres while the ring's existing radius, segments, materials
+and mesh detail remain unchanged. Pause freezes the source rotation; replay
+captures detached matrices and holds the earlier logical sample. Existing
+version1 replay snapshots without matrices retain their heading fallback.
+
+Six presentation checks pass across the four admitted courses, covering source
+matrix equality, scale, pause, replay ownership and malformed matrix rejection.
+A1440x900 High browser run shows intact detailed rings and water without
+JavaScript or shader errors. The original collected-ring fade remains pending;
+collected rings still hide immediately in this preview.
+
+## v2.40.0 — complete native Stunt drives and physical pose awards
+
+The four admitted native Stunt courses now have complete physical driving
+checks from the original grid through all four checkpoints and the scoring
+finish. The inspection helm supplies only ordinary controls; the original
+judge, finite apertures, timers, ring collection, award queue and record
+insertion decide the outcome. Seed17 runs score2,720/11 rings on Sunny,
+615/1 on Sunset,4,135/10 on Southern and1,550/5 on Glacier. Optional rings can
+still be missed. The finished source score table and web result agree after
+pending awards drain, and the original fade reaches result entry801ECF18.
+
+The native inspection helm now selects the Stunt route instead of inheriting
+ordinary class-specific navigation (which affected Sunset), and excludes the
+ordinary Southern low-tide detour from Stunt navigation. This is an inspection
+control correction, with no changes to the physical course or original rules.
+The earlier source-stunt-pilot starting-waypoint experiment was not retained:
+that modern helm is not the native browser's verification controller.
+
+Ordinary keyboard gestures also complete physical handstand, backwards-riding
+and standing poses and transfer310,556 and135 points in the timed fixtures.
+Holding rearward trim after the standing gesture performs a somersault and
+transfers542 points, marking both standing and somersault completion. These
+checks use playerInput and the actual body/rider lifecycle rather than injecting
+action states or scoring fields. Standing-gesture owner, hull, rider and score
+snapshots match at30 and144Hz. Aerial flips/rolls and diving still need equivalent
+full-start integration coverage; numeric and prepared-body tests alone do not
+establish that remaining scope.
+
+A browser run with its random seed independently finishes Sunny with2,440
+points,10 rings and4/4 checkpoints, then displays the score dialog. High remains
+1440x900 with roughly1.21 million rendered triangles. The preview footer now
+shows its actual throttle, coast, trim, crouch and slide controls; returning to
+modern racing restores its existing shortcut hints. No JavaScript or shader
+error was observed; the local server's favicon404 remains unrelated.
+
+Validation: all21 selected helm, ordinary three-lap, complete Stunt-route and
+physical-gesture checks pass, plus the six presentation checks above.
+
+## v2.40.0 — native Stunt presentation and result handoff
+
+The opt-in native preview now admits solo Stunt runs on Sunny Beach, Sunset Bay,
+Southern Island and Glacier Coast with venue sea conditions. The high-resolution
+course remains intact. Its rings bind to actual source row ordinals; wooden ramp
+surfaces use the current canonical finite collision planes. Moving ramps reuse
+their detailed mesh and update its position, rebuilding only when plane shape
+changes. The existing 1.5 m tessellation, materials and rendering quality remain.
+
+Score, timer, checkpoint count, ring streak and completed-trick flags are detached
+reads of the native owner. Rendering cannot advance awards. Replay captures ring
+visibility and ramp geometry without retaining an owner. A fresh Sunny start,
+driven with ordinary helm inputs, physically collects a ring, hides it and
+transfers its 50 points only at the original display stage. This is one ring,
+not a completed Stunt run: the existing authored inspection driver still fails
+to finish the native course and needs separate route/control work.
+
+The original Stunt result initializer801ECF18 now expands at the completed fade,
+so a scoring finish reaches game state56/main22 instead of remaining in the
+post-race phase.105 prepared original executions match every ordered write and
+resource/fade/audio call recipe (5,565 instructions). EVO X2 Ghidra independently
+confirmed the initializer using a temporary read-only block; all nine project
+files were unchanged. This reconstructs the entry boundary, not its subsequent
+original result-menu loop or textured UI. The web result presents Stunt points
+and rings and refreshes awards until handoff.
+
+Browser checks cover all four course starts and Glacier timer expiry through
+the retirement/results dialog. High remains1440x900, with approximately0.88–1.17
+million rendered triangles in these views. No JavaScript/shader error was
+observed; the local server has its existing favicon404. Focused checks cover
+source binding, finite surfaces, immutable HUD reads, pause/award ordering,
+replay detachment and finish handoff.44 ordinary launch/object/camera/result
+regression checks pass. This remains a verify/nativePhysics integration preview;
+full driven checkpoint/finish/gesture validation and the other five native
+physical Stunt courses remain open. Original ring collection fade is not yet
+reproduced; collected rings currently disappear immediately.
+
+## v2.40.0 — physical Stunt host and moving support queries
+
+The internal native host now runs prepared solo Stunt races on Sunny, Sunset,
+Southern and Glacier using their verified shore and floor resources. The five
+hull steps, rider gesture/landing classifier, navigation, cameras, source water,
+spray and actor recovery share the existing source schedule. Stunt79528 consumes
+the actual completed body, then6A748 collects rings before primary and generic
+object motion. Award9328C advances once at the later source display stage,
+before camera input/status; independent rendering only reads the resulting view.
+
+Stunt result poses use the source provisional score ranking. Dry-support checks
+now read the current canonical FD78 collision planes in both ordinary and Stunt
+hosts. This fixes the previous use of an ordinary startup box snapshot after
+objects had moved. Stunt static-contact initialization also uses the selected
+Stunt plane rows; its live box pass belongs exclusively to the object owner.
+
+Eight physical-host checks cover the four source starts, stage ordering, an
+actual physical ring contact and23-call score transfer, identical source/body/
+water snapshots at30/60/144Hz, timer expiry through the retirement actor/menu,
+and simulation/activity gates.141 support probes on actual hull points and
+prepared plane interiors after0/1/60 physical frames match29,775 instructions
+of original5DD04 with complete nested7F448/7FAE4 execution.19 focused Stunt
+checks and44 ordinary launch/object/camera/result regression checks pass.
+
+This is an internal integration milestone. Public native Stunt admission stays
+closed until the score/result HUD, ring/ramp render views, driven completion and
+browser checks are connected. Five other courses still need verified physical
+support resources. No completed Stunt lap or full gameplay parity is claimed;
+high-resolution assets, meshes and graphics settings are unchanged.
+
+## v2.40.0 — selected Stunt startup and canonical scoring runtime
+
+All nine normal solo Stunt courses now compile their selected primary route,
+complete object/fixed storage, reset layout, coarse/allowed/warning regions,
+checkpoint refill bytes and AI navigation table. Source9345C selection fixes
+one lap, full starting power, forward routes and difficulty2 (Port uses0).
+The reset bounds include the full C938 fixed family, including hidden objects.
+Fresh ring-order/streak words follow6AACC; cartridge saves, trail resources and
+the remainder of that initialization program are still separate boundaries.
+
+The existing launch owner accepts this prepared mode11 state. Separate reached
+methods execute79528 scoring/HUD, then6A748 ring contacts, and later9328C award
+transfer. Timer, collected flags, delayed bonuses, score queue and record writes
+all use that single canonical owner. Reading a presentation snapshot never
+advances the award queue. Retained mode/lap/direction and object storage must
+match; ordinary updates cannot run on a Stunt owner.
+
+Verification compares63 selected start/checkpoint/finish/delayed-bonus/record
+transitions against127,654 actual original instructions: complete race/HUD
+words and ordered effects agree. Nine selected75310→EED70/EE9C0 reset cases
+also agree, as do all nine normal-difficulty object startup images (339,261
+original instructions). Prepared route completion is a numeric consumer test,
+not a physically driven lap. Tests additionally cover ring collection/transfer,
+timeouts, inactive gates, retained-state rejection and immutable presentation.
+
+A Port warning discrepancy exposed omitted readonly numeric constants in the
+fresh web HUD storage.7A24..7A50 now contains its verified numeric values; the
+existing numeric warning implementation is unchanged. Ghidra on EVO X2 was
+used with read-only temporary overlay analysis; the saved project is unchanged.
+
+Physical Stunt admission remains closed. The next step is to connect these
+stages to the actual rider/body/world schedule, selected support geometry,
+Stunt HUD/result presentation and driven completion checks. No resolution,
+rendering, music, public mode selection or online scoring changes are implied.
+
+## v2.40.0 — all nine native Stunt primary routes
+
+Readonly primary route resources now cover the nine Stunt entries selected by
+the800D653C table:83 four-short rows, including hidden guide rows. The existing
+primary loader/initializer matches every resulting word against actual selected
+71E70 loading and complete735EC execution, for both retained seeded memory and
+explicit fresh-web-zero storage:18 cases and63,414 original instructions. The
+existing rounded square-root boundary remains declared; actualED090 executes.
+Sunny and Sunset agree with their independently recovered course metadata.
+
+This supplies route data for the next native Stunt integration step. It does not
+enable Stunt admission or replace the modern routes, renderer, or resolution.
+
+## v2.40.0 — complete object owner connected to ordinary native races
+
+The admitted Sunny/Sunset/Southern/Glacier native time/versus previews now start
+from the complete selected generic-object, fixed-sphere, fixed-grid, collision
+plane and packed-matrix arrays. Fresh web storage begins at explicit zero;
+recovered71E70/73E6C/744EC numeric routines initialize it before75310 reset.
+Reset object kinds and890B4 AI proximity initialization use complete source
+indices, including ramps and decoration rows, rather than an ice-only subset.
+Retained diagnostic state must supply its own full storage; it is not reset.
+
+Physical7F700/7EF80/7E938 contacts now read those canonical arrays. The shared
+frame runs primary motion, generic7DBC0, Southern fixed tide and6E0F4 transforms,
+rollers, spray and ice splashes in order. Both riders share immediate contact
+writes and the existing random seed. Ice presentation/replay uses detached
+views with stable authored mesh IDs. The modern double-precision fixed grid is
+no longer constructed for these canonical races. Explicit authored diagnostic
+layouts retain the former custom-object hooks without claiming source parity.
+
+The startup factory matches all108 original ordinary resource fixtures. All32
+admitted course/class/player launches match the five full original buffer
+hashes and AI index prefixes. Live pause/activity tests cover broken-ice age and
+visibility with frozen hull simulation. Complete Glacier and Southern races,
+all four two-player classes, and30/60/144Hz histories pass. A1440x900 High browser
+check ran two-player Glacier without JavaScript errors; only the local favicon
+returned404. Resolution, mesh density, textures and modern mode admission are
+unchanged. Native Stunt, remaining courses and four-racer admission remain work
+in progress; this is not a claim of full gameplay parity.
+
+Sunset's forced-AI inspection now includes the source ramp proximity count and
+exact fixed-sphere response. Hard/Expert complete with2/3 total missed buoys;
+the former partial-world test bounds were1/2. Removing only ramp proximity in
+a private controlled comparison yields3/2, so the trajectory change cannot be
+attributed solely to that selector. Normal/Hard human-control inspection still
+finishes with zero misses. The AI runs use the authored hull and are completion
+checks, not original-ROM driving traces; no source rules were relaxed to meet
+the old approximate-world expectations.
+
+## v2.40.0 — canonical moving collision surfaces
+
+Full7F700 box contacts now have a canonical entry point that decodes the latest
+collision-plane owner, including origins moved by6E0F4. These temporary rows
+are discarded after the contact pass; no separate mutable geometry is created.
+The physical object bridge reports ordered box impacts through the adapter's
+existing C48/shared-normal/marked-box owner, preserving the source flagged-box
+attenuation and point-velocity/whole-hull response.
+
+All439 existing original7F700 cases match through the canonical entry point.
+A loaded/initialized gate collides when closed, rises through the original
+object update, then clears the same test position. Two physical riders exercise
+the actual adapter callback and shared frame schedule with its rising collision
+origin. Invalid later rows reject without changing the canonical or body inputs.
+Live host startup/selection remains to be connected; resolution is unchanged.
+
+## v2.40.0 — complete fixed-sphere numeric contact phase
+
+Full7EF80 now consumes the canonical fixed-sphere and spatial-grid words via
+the original741A4 query and front/rear7ED2C contact sequence. Grid selection uses
+float32 subtraction/division/multiplication before signed truncation. Candidate
+bytes retain their stored order and are visited descending for each cached
+probe; the first overlap applies full penetration to all12 positions and three
+velocities, including separating contacts. C3C has its own strict impact maximum.
+The collision extent is the source constant37, independent of stored tag/radius.
+Fixed storage and grid never change during contact. Coincident centers remain
+explicitly unresolved; unsupported conversion/list spans reject atomically.
+
+An EVO X2 read-only/no-analysis Ghidra query recovered all three functions and
+241 instruction records, each matched to the private ROM. The existing analysis
+database is unchanged. All98 prepared cases match36,428 original instructions,
+including original6243C translation; sqrt alone is host-rounded float32. Cases
+cover cell-edge rounding, separating/approaching motion, equal/retained impacts,
+candidate order/duplicates, all256 sphere indices and fractional coordinates.
+
+The shared-object physical bridge exposes this fixed phase using the adapter's
+existing C3C/shared-normal owner. Two-rider checks retain raw geometry, separate
+fixed/generic impacts and identical full histories at30/60/144 render updates.
+This bridge is prepared for live startup selection; the existing browser host
+still selects the older fixed-sphere bridge. No resolution or visual changes.
+
+## v2.40.0 — shared object effects and presentation
+
+The complete-object bridge can now own ice fragments and splash pools while
+reading object visibility/age/positions directly from canonical object words.
+Ice break events preserve their full source-array index even among ramps,
+rings and floating objects. Shared-seed callbacks reuse the existing verified
+fragment/splash routines: one16-draw burst per break, fragments after6E0F4,
+and the separate splash phase after roller/spray work. Object activity holds
+fragments; splashes continue on reached frames. Browser pause holds both.
+
+Stable object IDs and fragment/splash generation IDs produce existing replay
+and second-player display snapshots without a second mutable object array.
+Physical two-rider tests compare full object/body/impact/random/effect histories
+at30/60/144 render updates, validate held/resumed phases and seed sequencing,
+and verify that changing a snapshot cannot change simulation state. Duplicate
+effect phases and incomplete preceding frames reject. The browser host still
+uses its existing ice/floating owners until startup/contact integration lands.
+
+## v2.40.0 — ordinary course object resources
+
+Readonly object resources now cover ordinary modes0/1 as well as Stunt11 for
+all nine source courses and both player counts. Ordinary ramps and fixed XZ
+spheres use their own tables; generic objects, markers, hidden XYZ obstacles
+and collision templates share the existing source resources. Difficulty and
+reverse filtering remain in the source loading/initialization stages. These
+selectors cover normal main1 with warm-up/force overrides disabled.
+
+The original72818..72B80 selector matches324 prepared combinations;218 exported
+instruction records match the private ROM. Original selected row loading plus
+complete744EC and73E6C initialization match all108 ordinary layouts across
+three native difficulties, one/two players and forward/reverse. The audit runs
+2,506,198 instructions. Public tests compare every resulting object, plane,
+packed matrix, fixed sphere and spatial-grid word by digest; Sunny/Sunset rows
+also agree with independently recovered resources. Stunt resources are shared
+without copying or modification. This prepares live startup integration; it
+does not change host mode/course admission or rendering resolution.
+
+## v2.40.0 — shared fixed-sphere tide update
+
+The shared object bridge now follows generic motion with Southern Island's
+fixed-sphere height update, then object transforms, using the completed water
+field's datum. Original6E3F4..6E468 writes the signed datum as float32 to every
+fixed sphere except tag5, which retains its loaded hidden-obstacle height.
+Sphere X/Z, radii, tags, flags and spatial-grid words remain intact. The activity
+gate is independent of simulation648; other courses skip this stage.
+
+All52 prepared comparisons match5,336 original instructions and29 ROM-checked
+exported records, including signed integer rounding, negative/empty counts,
+all256 spheres and nonstandard tags. Physical two-rider tests verify consecutive
+water-level changes reach this same canonical storage before transforms, while
+inactive frames and other courses preserve it. Invalid datum/overflow rejects
+atomically. Browser-host selection remains separate; resolution is unchanged.
+
+## v2.40.0 — complete generic-object post-motion update
+
+Full numeric6E0F4 now updates the same canonical object and collision-plane
+owners used by loading, contact and buoyancy. Broken ice hides and ages even
+when its motion flag is zero. Moving rings rotate4 degrees by ordinal parity,
+with the original single wrap; their collection axes remain unchanged. Opened
+Fortress gates rise6 while their prior height is below128, without an added
+height clamp. Moving objects update float matrices and plane origins only;
+plane directions/metadata and the separate packed-matrix array are retained.
+
+All208 prepared cases match complete original6E0F4 with originalEE6F4/EDC60:
+50,960 instructions and171 exported records matched to ROM, without numeric
+helper stubs. Cases include signed fade ages, ring wrap boundaries, gate height
+boundaries, all source kinds, retained/overlapping plane destinations and large
+float positions that require no packed conversion. Existing matrix-packing and
+initialization comparisons still pass after separating the float-only helper.
+Out-of-span plane writes reject atomically.
+
+The shared physical bridge exposes the ordered transform stage after motion
+and fixed-sphere tide writes. Two-rider physical tests now verify
+ice disappearance and ring spin as well as contact/motion, with identical object
+state at30/60/144 render updates. All18 actual course/player resource scenarios
+also match the original post-initialization object update; the extended numeric
+resource audit executes628,927 instructions. This is still prepared stage
+coverage, not full native boot or browser-host admission. Live host startup and
+presentation selection remain to be connected. Resolution is unchanged.
+
+## v2.40.0 — shared generic-object contact and motion bridge
+
+The canonical object span now supports the original7E938 sphere-contact
+selection and the generic half of7DBC0 free motion. Intact kind10 ice ignores
+the general collision flag; other kinds require collision5C=2 and use floating
+recoil. Contact writes only the source position/velocity or newly broken words.
+Rings, ramps and other retained fields remain in the same array. The motion
+pass follows motion58=4 independently of kind/render/broken flags, retains the
+source float32/double operation order, and samples the old X/Z through the
+physics-plane water query. Its activity gate is independent of simulation648.
+
+All103 mixed contact cases match complete original7E938 with original6243C:
+26,220 instructions and224 exported instruction records matched to ROM.
+sqrt is host-rounded float32; fragment entry arguments remain an explicit
+boundary. Motion matches46 original cases and120 consecutive retained steps:
+35,713 instructions and227 exported records matched. The motion audit supplies
+prepared4D30C returns and sets primaryCount=0; it does not claim primary motion.
+
+A physical bridge reads and commits the caller's canonical owner immediately
+for each rider, then advances free motion once after shared water/adjudication
+and primary motion. Two actual physical adapters share floating recoil and one
+ice break; the later rider sees the break immediately. Tests also compose
+loading, initialization, contact, motion and ring collection, and verify equal
+object state across30/60/144 render updates with five hull ticks per water frame.
+There is no second saved object-position or collected/broken-state array.
+
+The bridge is tested with the physical world but is not yet selected by the
+live browser host. Host startup/resource selection and the source transform
+stage described above must be connected before replacing its separate adapters or
+enabling native Stunt mode. Graphics quality and resolution are unchanged.
+
+## v2.40.0 — fixed-sphere startup and collision grid
+
+The selected fixed-sphere tail of71E70 now loads generic XZ obstacles, boundary
+markers and hidden XYZ points in source order, with original difficulty,
+reverse/alternate filters and per-family capacity checks. Full73E6C then sets
+radius/flags and Y, preserves tag5 height, and builds the float32 grid with
+ascending byte indices and the shared511-entry cap. Empty grids retain the
+original sentinel bounds. Unwritten record words and grid bytes survive.
+
+The canonical race state owns both the256-record sphere span and its grid.
+All96 synthetic retained-state cases match626,177 original instructions;
+381 exported instruction records match ROM. The source's missing decompiler
+switch cases were decoded directly from the original instructions. Late
+out-of-span writes reject atomically; full hidden lists stop before an unread
+row as the source does.
+
+The real nine-course Stunt resource comparison now includes both fixed-sphere
+stages as well as generic loading/initialization:18 scenarios,581,541 original
+instructions, and full-buffer hashes for all five output spans. Ring collection
+preserves both fixed-sphere spans. Sunny/Sunset fixed rows, markers and hidden
+XYZ lists match their separately recovered existing resource files. Earlier
+71E70 selection/reset/primary stages, complete startup scheduling and live Stunt
+admission remain unfinished. Resolution and rendering are unchanged.
+
+## v2.40.0 — native object rows and actual Stunt course resources
+
+The reached generic-object section of71E70 now loads selected ramp, ring and
+obstacle rows into the canonical object array. It preserves the source's write
+order, difficulty/player filtering, retained rejected-ramp fields, ring totals
+and per-group capacity behavior. Earlier pointer selection/count resets and
+primary loading remain separate unfinished parts of the enclosing startup
+routine; the later fixed-sphere work is described above. Writes beyond the object
+span reject atomically.
+
+All102 prepared cases match original72EBC..73278 execution:89,520 instructions
+and238 exported instruction records matched to ROM. The selected numeric Stunt
+rows for all9 courses, both player counts, and actual collision templates now
+feed the full744EC initializer. Eighteen combined comparisons execute243,953
+original instructions and match every object, collision-plane and packed-matrix
+word by full-buffer hashes. These comparisons explicitly start with zeroed
+buffers; they do not establish original BSS initialization or the omitted stages.
+Each course's first ring also collects once through the same canonical state,
+queues its50-point award and preserves the initialized collision geometry.
+Recovered Sunny/Sunset rows agree with the existing independent resource files.
+
+The resource selector describes normal main638=1,mode620=11 with the warm-up
+override disabled. Two-player resource coverage does not admit a two-player
+Stunt menu. Live native Stunt startup/scheduling remains unfinished; graphics,
+resolution and the live mode guards are unchanged.
+
+## v2.40.0 — native object initialization and transforms
+
+The full numeric744EC initializer now prepares the shared generic-object array,
+including live positions, heading axes, collection/fade flags, type-specific
+motion/collision fields, float and packed matrices, transformed collision planes
+and the selected course's fixed-plane tail. Retained words outside the actual
+writes are preserved. The canonical race state owns the separate plane and
+packed-matrix spans; initialized rings feed the existing collection/award stage
+without a second position or collected-state owner.
+
+All100 prepared cases match complete original744EC execution with original
+EE6F4/EDD90/EDC60/EDD04 callees:179,465 instructions and864 exported initializer
+instruction records matched to ROM. Cases cover all9 courses, both player counts,
+ordinary/Stunt selection, all supported object kinds, mixed arrays,64 rings and
+the source's repeated plane-cap check. Another564 direct transform cases match
+59,784 original instructions. The object Euler routine uses degree division,
+truncation and its own float32 product order; the HUD Euler helper is different.
+
+The Ghidra project on EVO X2 was inspected read-only and its9 files stayed
+unchanged. Its existing database has no functions at the four overlay transform
+entries; those routines were independently decoded and executed from the private
+ROM. Numeric tests use synthetic collision templates, not original scene assets.
+Out-of-span plane writes are rejected atomically. The later course-resource
+work above adds actual selected generic rows/templates; the rest of71E70,
+75274/6AACC startup scheduling and live native Stunt admission remain unfinished.
+Resolution and rendering quality are unchanged.
+
+## v2.40.0 — complete native Stunt judging and HUD update
+
+The canonical race owner now composes the complete Stunt79528 numeric update:
+each racer's scratch context and Stunt judgment in ascending slot order, one
+queue-drained record check, then the shared eight HUD consumers. Award insertion
+is immediate, so a newly queued bonus prevents premature final record insertion.
+The conditional countdown checks the fresh post-prelude flags. Later boundary
+retirement is visible to the following ring stage and next update.
+
+Direction warnings read ring positions from the retained object array. The
+completed physical body sample now exposes the landing classifier's move and
+the retained action-state arc; all racers use the selected primary body's arc,
+matching the source. Physical successful/failed landing tests verify that these
+fields feed scoring and the later display transfer.
+
+All85 prepared scenarios match complete original79528 execution, including
+0/1/2/4 racers, selected human slots, countdown phases, delayed/occupied award
+queues, final records, checkpoint crossings, boundary retirement and ring-object
+warning suppression. The audit executed236,548 instructions and matched2,171
+exported instruction records to ROM. All canonical race/HUD words, scene changes,
+audio recipes and consumer order are compared; profiling words are excluded.
+Numeric helpers and immediateFB488 execute original instructions; sqrt uses
+host arithmetic rounded to float32 and audio remains an explicit entry boundary.
+
+This verifies prepared numeric composition, not original startup or complete
+live Stunt races. Native Stunt admission still needs course/object initialization
+and world scheduling. The subsequent ring stage, display transfer, physics,
+rendering and saving remain separate. Resolution and rendering are unchanged.
+
+## v2.40.0 — native ring commentary entry
+
+Ring collection'sC3628 audio recipe now reaches the existing announcer owner.
+Its4/8/12 streak cues and course-completion cue use the original delayed slot,
+priority and hold rules. The course-completion cue follows the12-ring cue on
+Sunny Beach and can replace it through the same priority rules. Finish mode
+entry clears the pending ring voice. A full owner test advances outer-frame
+timers and physical frames, confirming one final-ring announcement at frame20.
+
+The complete original entry was executed for270 inputs across all9 course
+targets, including signed and byte-wrap cases:8,190 instructions, with all52
+exported records matched to ROM. Sequence15 receives the signed low byte;
+milestone comparisons retain the full incoming register, so260 does not announce
+a4-ring streak. The standalone ring-tone sequence remains unconnected to the
+browser sound backend; this update connects its spoken commentary and preserves
+the separate tone commands in the numeric entry. Native Stunt admission still
+requires the remaining course/startup integration. High resolution is unchanged.
+
+## v2.40.0 — native stunt ring contacts
+
+The shared state can now retain the original64-object array and its separate
+ring-chain words. Ring collection uses the selected primary body's44/48/4C
+position with the original+8 vertical offset, each type8 object's two axes,
+an inclusive32-unit plane slab and a strict112-unit radial bound. It iterates
+the full object array in source order. Collection flags prevent repeat awards;
+already collected rings advance their retained fade counter up to255.
+
+Consecutive source ordinals increase the chain; a different ordinal resets it
+to one. Ring count and chain updates enqueue into the existing four-slot HUD
+queue and emit the original ring-audio entry recipe. They do not immediately
+change the displayed total. Finished/DQ primary riders skip collection and
+fade. The source world caller places this stage after79528 judging/record
+checks and before7DBC0 object motion, once per world update, not per racer.
+
+Two fresh read-only Ghidra queries on EVO X2 preserved all9 project files.
+The complete6A748 contact consumer passed154 synthetic cases in28,640 original
+instructions, including ordered queue-call replay; all194 exported ring
+instruction records match ROM. Tests compare entire race/HUD/object spans,
+check primary-slot selection, exact geometry edges, signed counters, mixed
+object kinds, queue overflow, repeated calls and atomic late-input rejection.
+Square root is represented by host sqrt rounded to float32 and the ring audio
+entry is intercepted. Course object loading, reset6AACC, ring graphics and the
+audio entry's live execution still require integration before native Stunt
+admission. No rendering resolution, texture or mesh detail was reduced.
+
+## v2.40.0 — native stunt finish and combined racer update
+
+Stunt finish processing now writes the original lap and visited-node flags,
+settles a held pose into the delayed bonus, recomputes the recorded time and
+selects the provisional result cue. The provisional result includes the pending
+trick and finish-checkpoint bonuses; final record insertion still waits for
+their queue transfer. Dolphin Park mastery checks the actual ring count and
+all eight move-completion words, including its special finish-cue flag.
+
+The combined racer entry runs existing primary scratch/context selection,
+retirement and clocks, move settlement, checkpoint crossing and finish/mastery
+in source order on one canonical race/HUD state. Retirement returns before the
+later scoring branches. Scratch nearest-node and course-region writes still
+occur before that return. Display transfer and final record checks retain their
+separate original stages; callers must not also run the delayed-bonus leaf.
+
+The original finish tail passed242 prepared cases in28,925 instructions, with
+312 exported instruction records matched to ROM. A further160 combined cases
+executed the complete783AC function plus retirement, then replayed its ordered
+award calls through the original queue consumer:67,028 instructions and1,143
+matching exported records. Those combined cases prepare caller scratch and
+synthetic primary nodes; they do not execute76378, physics or ring contacts.
+Square root uses host sqrt rounded to float32 and audio calls are intercepted.
+Public fixtures contain only synthetic numeric states. Integration checks cover
+the final bonus draining once into the saved record, early-return ordering and
+scratch side effects. Native Stunt admission, live HUD and ring/course setup
+remain unfinished. Rendering resolution and detail are unchanged.
+
+## v2.40.0 — native stunt checkpoint geometry and time awards
+
+Stunt crossings now consume canonical scratch position and the actual selected
+primary node. The loader exposes its separate78/7C aperture axis; checkpoint
+passing direction80/84 is a different value and can be zero. Width is measured
+from endpoint B18/20 with inclusive0..twice-half-width bounds. Side/arming uses
+the unshifted current center and source70/74 forward axis. Crossing outside a
+checkpoint disarms it until the rider returns behind the plane.
+
+Qualified crossings advance the actual2944 route word even for finished/DQ
+riders, but those riders receive no bonus or repeat reset. Active checkpoints
+use the current and prior BE4/BEC plane distances for source interpolation,
+write the selected lap/checkpoint timing slot, enqueue the time award, and
+reload time from the actual course byte table. Nonfinish checkpoints reset
+repeat penalties after move settlement and emit their source notification.
+The finish checkpoint stores its own time award in39D4, preserves repeats and
+does not refill time.39D4 is not a cumulative checkpoint bonus.
+
+The original78B44..7903C slice was executed for308 synthetic cases in30,266
+instructions; all317 relevant exported instruction records match ROM bytes.
+Square root is represented by host sqrt rounded to float32; audio/award calls
+are intercepted. Public fixtures contain numeric synthetic states only.
+Canonical tests also check real loaded checkpoint axes, same-frame move/bonus
+order and atomic failure. Terminal finish, lap/visited flags and unlock work
+still follow separately; native Stunt mode remains unadmitted. Resolution is
+unchanged. All109 focused checks pass, including primary initialization and
+the existing ordinary launch and physical landing suites.
+
+## v2.40.0 — native stunt timer and retirement prelude
+
+The shared Stunt state now includes the original783AC prelude: selected-player
+event retirement, delayed finish-bonus enqueue, source clocks and timeout
+coasting. A timed-out rider may coast until native speed times1.8 is below10,
+or the expired counter exceeds200 calls. The existing numeric retirement
+consumer writes the actual status and shared DQ metric once. Event retirement
+returns before the delayed bonus; timeout retirement follows that enqueue.
+
+Clock gates preserve completed/retired records, stopped clocks and the shared
+finish latch. Lap/total increments retain signed arithmetic and299999 caps;
+the time-left counter, ambient sample and displayed-power approach follow the
+source order. The canonical wrapper consumes award recipes at their original
+position and reports early returns so later move/checkpoint work can be skipped.
+It includes the delayed-award producer, which must not be called again separately.
+
+A fresh read-only EVO X2 Ghidra query preserved all9 project files.338 prepared
+cases executed the original prefix and nested762D0 retirement in25,121
+instructions; all1,149 exported instruction records matched ROM bytes. Tests
+cover source gates, signed boundaries, exact timeout thresholds, queue order,
+unchanged neighboring words and late-input failure without partial writes.
+Full checkpoint progression, finish bookkeeping, rings and live Stunt admission
+remain incomplete. High-resolution rendering is unchanged.
+
+## v2.40.0 — shared stunt scoring state
+
+Stunt queue, pulse, totals, move accumulation, repeat/completion flags and score
+records now have adapters into the existing canonical race/HUD spans. There is
+no second saved score bank. Ordered award events, display transfer and record
+checks observe each other's writes directly. Tests check all12 course tables
+and all4 selected-primary slots, and verify unrelated words stay intact.
+
+The result gate is explicitly the pending finish-bonus AMOUNT39cc; its signed
+countdown lives at39d0. Independent raw execution covers both fields varying
+separately. The reached delayed-award consumer decrements only positive counts,
+enqueues at one, and clears the amount. The later move consumer does not tick
+that clock. Existing source startup clears only the four award type words,
+retaining payload and pulse words, which the shared-state tests preserve.
+
+A prepared airborne test then uses normal inputs and the real hull/rider
+solvers: the successful roll settles on frame24, queues58 points and transfers
+them on frame46. The over-rotated failure earns no points. This is a composed
+physics/state test, not a naturally driven browser course jump or live Stunt
+admission. Move consumers currently require reset-normalized0/1 flags and
+explicit actual move/primary arc inputs. Full783AC event retirement, clock,
+checkpoint/ring qualification, finish bookkeeping and live HUD remain pending.
+
+The additional delayed-award audit executes24 signed/count/amount cases in108
+original instructions; all17 relevant exported instructions match ROM bytes.
+All94 focused checks pass, including shared storage, source startup, physical
+landings, ordinary live launches and30/60/144Hz invariance.
+
+## v2.40.0 — native stunt award queue and numeric records
+
+The independent stunt scoring consumer now reproduces the four-slot award
+queue, popup motion/fade, pulse clock and delayed transfer to capped total,
+time, ring and trick scores. A full queue replaces slot zero without paying the
+evicted award. Each surviving award transfers after23 source display calls.
+Enqueueing alone leaves the total unchanged. These calls belong to the source
+world-display stage, after gameplay updates, with the original HUD gates.
+
+The selected-course record consumer waits for every slot to empty and for the
+pending finish award amount39cc to clear (its countdown is separately39d0).
+It then inserts strictly higher scores
+into the three retained rows, preserving source metadata and untouched row
+words. Ties retain their earlier place. Since the record check precedes display,
+a final transfer can unblock recording only on the next gameplay update.
+
+Fresh read-only EVO X2 Ghidra queries preserved all9 project files. Queue audit:
+96 enqueue and120 advance cases,19,716 original instructions,715 exported
+instruction records matched to ROM bytes. Caller/record audit:72 display gates
+and200 result cases,17,056 original instructions,1,583 matched exported records.
+Rendering callees were intercepted for the caller audit; graphics commands,
+save storage and unrelated message timers are not reconstructed here. Public
+fixtures contain synthetic numeric state only. All38 focused scoring, award
+and record tests pass, including delayed finish composition and repeat safety.
+
+Native Stunt mode remains unadmitted in the live host: source course setup,
+canonical state wiring, HUD and full result flow are still required. Ordinary
+native time/versus gains no stunt points from these standalone consumers.
+Resolution, geometry detail and music defaults are unchanged.
+
+## v2.40.0 — native rotation landing and hull repair
+
+Ordinary native time/versus now retains the source release countdown, accumulates
+the tracked point-motion arc, and classifies each completed rider frame. Released
+rotations arm the five-frame countdown on water contact or qualified floor/box
+contact. Successful, partial and failed settlement use the actual actor,
+physical mode157c and recovery flags. Only a successful primary-rider landing
+emits C35B4 feedback. An unarmed splash grants no stunt result. Source simulation0
+still advances this result countdown; a browser pause does not run the frame.
+
+The arc subtracts the last hull tick's50/54/58 center displacement from point4/1
+velocities, rather than the five-tick HUD displacement. Canonical15ec storage
+bits remain the sole arc owner. On settlement,51EC0 checks sixteen signed
+body-axis planes across the six end-section points; a folded hull rebuilds all
+twelve positions using the existing authored local shape. Velocities, frame,
+center, constraints and other point state remain untouched by that repair.
+
+A fresh read-only EVO X2 Ghidra query preserved all9 project files. All5,413
+exported instruction records matched the ROM. Complete51EC0 execution covered
+370 synthetic geometry cases and137,063 instructions, with all non-position
+body bytes checked unchanged. The original landing tail covered512 cases and
+8,888 instructions, capturing the ordered feedback/repair calls. Public
+fixtures contain synthetic numeric inputs/results, not original geometry/code.
+
+123 unique focused checks pass, including full Glacier/Southern races, postrace,
+gestures and audio. Prepared airborne runs use normal controls and actual hull/
+rider solvers thereafter: a short roll lands successfully, a held rotation
+fails, and secondary-player success stays quiet. Full physical histories,
+landing events and audio match at30/60/144Hz. Prepared simulation0 cases verify
+position-only repair and physical-mode attribution. A browser ordinary race
+reached9s without a runtime exception at High1280x720/83,521 water vertices.
+A separate prepared airborne browser adapter settled on frame24 and its cue19
+was accepted by the loaded original audio bank. This was not a naturally
+driven course-jump browser run; an unrelated resource404 remains in the preview.
+
+Native backend/course admission remains opt-in; original geometry/animation,
+native stunt award queue/HUD/results and all-mode parity remain incomplete.
+
+## v2.40.0 — ordinary native gesture and idle actions
+
+Ordinary native time/versus hosts now admit the existing source gesture and
+idle dispatcher. Normal keyboard sequences enter actors8/9/17, run their real
+physical pose transitions and emit the existing primary-slot completion cue.
+Native digital steering reaches the original circle threshold; modern steering
+and analog input retain their existing mapping. Separate player windows use the
+host's native pose descriptor to select the same digital mapping.
+
+Action startup applies the original partial stores to explicitly zeroed fresh
+browser memory. Retained flag/quiet/idle-choice fields remain caller-owned.
+All racers share unsigned input clock1960, incremented after each outer frame,
+including simulation0; browser pause holds it. Idle actions consume the shared
+4640 gameplay RNG only when the source dispatcher requests it, in actor order.
+This is a fresh web session epoch, not emulation of cartridge menu lifetime.
+
+Two fresh read-only EVO X2 Ghidra queries preserved all9 project file hashes.
+All1,190 exported instruction records matched the ROM. Bounded original startup
+stores and clock-tail execution covered40 retained-state and8 unsigned-clock
+cases in3,120 instructions. Public fixtures contain numeric results only.
+126 focused tests pass, covering gestures, idle timing, shared RNG, clock wrap,
+pause, full races, native AI, postrace, controls and versus. Gesture physics,
+events and audio match at30/60/144Hz. Browser keyboard checks entered actor8
+solo and simultaneous actor9/17 in versus; the primary cue played successfully.
+High1280x720 and83,521 water vertices were unchanged in those browser checks.
+
+This supersedes the earlier disabled-host-action limitation below. Native
+backend/course admission remains opt-in. Pose anatomy/artwork remains authored;
+full original stunt scoring, landing triggers and all-mode parity are unfinished.
+
+## v2.40.0 — original rider feedback audio bridge
+
+C3548/C35B4 now preserve their complete result gate, unsigned audio-random
+selection and ordered commentary/cue calls. Commentary uses the existing
+C3408 race-mode/priority consumer; the channel11 cue remains independent.
+The audio owner consumes actual actionPoseCue completion recipes once per
+physical frame, including with engine packets muted. A held rendered pose
+does not produce a new event. Duplicate completions and inactive frames cannot
+replay a recipe, and the original nonzero result flag suppresses both calls.
+Explicit external C3548/C35B4 calls use the same consumer; no unverified landing
+trigger was added. Player attribution and solo/versus cue bases are retained.
+
+A fresh read-only EVO X2 Ghidra query left all9 project files unchanged.
+All56 exported instruction records matched the ROM. The original routines
+executed740 prepared cases and7,548 instructions, including unsigned32 RNG
+boundaries and signed result flags. Public fixtures contain numeric commands.
+72 focused tests pass across feedback, source actor completion, announcer/cue
+playback, live contact frames and audio options. Three real physical action
+runs each emit one cue; their complete physical histories and gameplay RNG
+reads are identical with and without audio enabled. Existing30/60/144Hz audio
+history tests still pass.
+
+Browser verification used an explicitly prepared actor8 request with real hull,
+pose and rider solving: frame35/animation30 emitted cue8 once, and Web Audio
+started its original program8 successfully. High remains1280x720 with83,521
+water vertices. The normal native launch was also checked at time9/frame180;
+its additional gesture/idle adapter remains disabled. This checkpoint connects
+the prepared physical action path to sound; it does not claim ordinary native
+gesture admission. Supplying that launch state and its shared RNG/record inputs
+is the next gameplay integration. Special126 and channel15 audio remain open.
+
+## v2.40.0 — original cue instruments and race audio preparation
+
+Native solo/versus launches and finish events now route the original C1EB8
+retained-base selectors into sequence0/channel11. This channel has16 looping
+instruments across20 slots, rendered as standalone PCM (5.36MB). Original
+instruction execution supplies their complete ADSR curves, backward envelope
+branches, vibrato and natural release tails. Missing program selectors use the
+source default instrument;127 selects an empty drum table. Special16 starts
+two copies of instrument15, discards incoming writes during its1200-tick wait,
+and then resumes its8-tick poll. Layer1's release tail can coexist with a later
+layer0 cue. Cue playback remains independent of announcer12 and contact audio.
+
+Fresh read-only EVO X2 Ghidra inspection left9 project files unchanged.
+846 C1EB8 cases and128 actual short-note layer executions verify selectors,
+fallbacks, note length, gate and tuning (44,888 instructions). Rendering executes
+the NTSC initialization prefix and BC4B0/BC24C/BC208/BC5B8 routines:734,161
+instructions with811 exported instruction matches. Its fixed configuration
+uses4 updates per60Hz audio frame. The mode-history audit now also executes
+C1EB8, with73,144 instructions overall. RSP resampling/reverb, hardware sample
+jitter and complete note stealing/interruption tails remain adaptations.
+
+A cold browser test exposed a missing frame0 cue because assets were still
+loading. Native launches now prepare all four original sound banks before
+advancing their source clock or draining initial commands. The screen shows
+PREPARING RACE. A failed bank, mute or8-second timeout releases the race so an
+offline asset cannot trap it; late loading never replays consumed commands.
+This is a browser resource barrier, not the cartridge's bank-loading protocol.
+Modern physics launches retain their existing start path.
+
+75 unique focused tests pass, covering source state/history, postrace and
+retirement, all audio backends, silent/fallback selectors, two-layer timing,
+loading failure, timeout and mute. Browser Web Audio rendered all20 cue
+selections plus silent127; special16 has exactly four times the energy of its
+single program15 layer. A fresh launch started with zero decoded buffers,
+then played frame0 cue16 and every course/countdown voice after preparation.
+An injected1200ms loader delay held frame/time at0 with the preparation label;
+140ms after readiness the race was at time0.13/frame2, with both cue layers
+playing. A two-player restart played program6. All checks retain High quality,
+1280x720 and83,521 water vertices. Four HTML maps/preloads cover348 modules.
+
+Original soundtrack ownership/defaults are preserved. Special126/channel15,
+credits/tempo processing, complete native menu admission and the full original
+bank-loading/mixer lifecycle remain unfinished; this checkpoint does not claim
+complete audio parity.
+
+## v2.40.0 — original multi-part menu announcements
+
+The admitted native audio owner now dispatches C377C's ordered IO1 selector
+and IO0=127 command. Its mode-entry delay reaches playback through the outer
+source-frame timer, independently of the regular priority slot. Bank6 adds27
+standalone PCM clips (4.27MB), preserving tuning/envelope metadata and hashes.
+All30 menu selectors are supported:14/15 are null drums,28 is an empty layer,
+16..25 wait140 ticks before the preface and135 more before their second word,
+and26/27 move a single legato sample across the stereo field. Explicit channel
+waits retain only the latest pending IO0; IO1 is consumed when127 starts.
+
+Fresh read-only Ghidra inspection on EVO X2 left all9 project files unchanged.
+261 original C377C executions verify signed low-byte arguments and call order.
+A bounded walk of the supplied sequence verifies30 plans. The actual BD138
+layer interpreter, with prepared live-note storage and intercepted synthesis
+leaves, confirms one allocation across each legato script's pan changes.
+These checks execute15,351 instructions and match792 exported instructions.
+They are not a full audio-thread or RSP emulation.
+
+All78 focused tests pass, including source mode timers, render-rate histories,
+postrace/retirement, asset validation, interruption, missing-file retry and
+pause/mute/replay cleanup. Inactive presentation also discards the menu timer.
+The browser decoded all121 regular/menu clips with no asset failures. Actual
+Web Audio rendering of every menu selector produced27 audible selections and
+the3 expected silent selections. A prepared mode2 entry through live frame
+timers and Soundscape emitted selector16/127 at frame120 and scheduled notes16
+and17 at the source offsets. Pause cancelled both scheduled words. High quality
+remained1280x720 with83,521 water vertices. One unspecified resource404 remained;
+there were no JavaScript exceptions in the corrected native-preview run.
+
+This connects the source audio owner's menu sequences; it does not claim all
+modern browser menus use the reconstructed menu lifecycle. Special126,
+channel11/15 sequences, original bank-loading handshakes, reverb, tempo and
+credits processing remain unfinished. Outside explicit waits, command delivery
+still follows browser render drains rather than the source polling phase.
+Stereo/headphone width, gain and resampling remain documented web adaptations.
+All four HTML maps/preloads now cover346 modules. Resolution is unchanged.
+
+## v2.40.0 — original course and finish audio-mode entry
+
+Native human launches now enter racing audio through the original C21F4 mode
+handler before the first source frame. Its complete direct body preserves mode
+exceptions, nine recovered material rows, retained music/stage fields, channel
+mutes and ordered leaf calls. Source difficulty comes from the course runtime.
+The original C3500/C3524 wrappers now feed the live priority/delayed voice slot:
+solo course introductions use their source selector (Southern maps7 to9),
+while the two-player entry retains its original behavior. Finish entry selects
+the source solo/versus messages and delayed follow-up. No display or physics
+resolution settings change.
+
+The existing read-only EVO X2 export was checked against744 complete original
+C21F4 executions. Eleven additional sequential transitions actually execute
+the nested C32A0/C338C/C3500/C3524/C37C0 callees; the live owner matches their
+retained globals, voice slot and emitted announcer commands. These checks
+execute73,063 original instructions. The priority fixture now adds240 wrapper
+cases (1,200 calls plus94 history and180 timer cases). BF370's delayed music
+and menu-cue timers advance before its pause gate, preserving source order.
+
+All74 unique focused tests pass, including physical recovery, render-rate
+independence, results, retirement and the full unattended Continue timeout.
+A natural pilot run finished with zero misses or disqualification, entered
+audio mode6 at frame2216, emitted finish14/14 then delayed15 at2255, and reached
+mode12/results at3523. Browser verification independently completed the race
+and played the finish sequence, retaining High quality,1280x720 and83,521 water
+vertices. A normal-speed loaded-bank run played course intro1 and every
+countdown/start cue. An accelerated cold-load run outran loading for its first
+three cues; they were discarded rather than replayed late, as documented by
+the backend. It did not lose the finish messages or stop the race.
+
+This completes the direct mode-entry body and its regular announcer path,
+not the whole audio lifecycle. Soundtrack playback still has its browser owner.
+Sample-bank loading handshakes, reverb/tempo/credits processing, C1EB8 channel11
+cues, special126 and channel15 event sequences remain separate work. The
+C377C special127 gap from this checkpoint is resolved by the newer menu
+announcement checkpoint above. Source audio random variants still use
+the documented independent web pattern. Four HTML maps/preloads cover345
+modules; the native gameplay preview retains its existing mode admission.
+
+## v2.40.0 — original announcer and live race audio events
+
+Native human races now connect C37F4 events and the complete mode7 C010C packet
+consumer to original announcer playback. Countdown, start, rank, maximum-power,
+missed-buoy and rider-water requests share the recovered priority/hold and
+single delayed slot. The delayed slot does not retry automatically if blocked.
+Source start/rank/event timers run at47B00/BF370 before922E4's frame increment,
+including inactive simulation0 frames, independently of browser rendering.
+Source course/mode gates remain intact. Standalone mode4 and nearest-rival
+audio routing remain outside the admitted human preview.
+
+Fresh read-only REA/Ghidra inspection on EVO X2 verified the caller order and
+828 instructions against the supplied ROM. The private evaluator executes960
+priority/dispatch cases,94 sequential-history cases and180 BF370 race-timer
+cases (33,163 instructions), including actual nested voice calls. Unrelated
+menu/tempo timers are explicitly zero in the BF370 comparison; this is not a
+claim of complete mixer or audio-thread emulation. Existing773 event-handler,
+336 complete packet-consumer and216 rider-tail reference cases still pass.
+
+Sequence0/channel12 uses physical bank2 with112 slots:95 populated selectors
+and17 silent entries, rendered to94 standalone PCM files (9.89MB). Original
+tuning, source envelope metadata and per-file hashes are retained. One centered
+voice replaces its predecessor. Pause, mute, replay and a changed race owner
+stop playback; pending delayed speech is discarded on inactive presentation.
+Missing files retry after30 seconds without replaying stale requests. Original
+soundtrack ownership/defaults and graphics resolution are unchanged.
+
+The browser's bus gain, approximate envelope steps/end fades, resampling and
+render-time delivery remain adaptations. Original sequence polling is37.5ms;
+its phase and reverb are not emulated. Special announcer commands126/127 and
+event channel15 sequences remain unfinished. Audio random variants continue
+to use a separate deterministic web pattern, never the gameplay RNG.
+
+All61 focused tests pass, including one/two-human frame histories at30/60/144Hz,
+source countdown/rider-entry scheduling, asset hashes and playback cleanup.
+Browser solo recovery emitted notes13/12/11/10 at source frames12/27/42/57,
+water-entry commentary82 at167 and initial-position commentary40 at236.
+Two-player launch emitted13/12/11/10 at64/79/94/109. All94 files loaded with
+no asset failures; every95 populated selector rendered nonzero audio with
+equal left/right output and a silent tail in OfflineAudioContext. High quality,
+1280x720 canvas and83,521 water vertices were retained. Browser presentation
+is verified here; this does not expand the native preview's admitted modes.
+
+Transition follow-up: the admitted race timers now apply C1F60's direct writes
+and C21F4's unconditional prefix. Mode entry discards the delayed slot while
+retaining the current hold; most exits also clear the hold, with the original
+same-mode1/10 exception. Racing exits stop the current announcer except when
+entering4/6. A fresh EVO X2 read-only query matched1,048 instructions;288 bounded
+original executions verify these writes and the stop command. Music/menu
+callees and the remainder of mode entry are still separate, not claimed here.
+All39 transition/playback/owner/results tests pass, including natural race
+completion and the full unattended1200-frame Continue timeout. Together with
+the announcer checkpoint,69 unique focused tests have passed. The four HTML
+import maps and preload hashes cover344 modules.
+
+## v2.40.0 — original rider reactions and water-entry audio
+
+Native human races now run the original rider-audio tail after impact handling.
+Actual crash/remount event edges choose the character's reaction; a sustained
+nonzero event does not replay it. The physical rider joint entering water emits
+original bank0 drum1 once, acknowledges its packet flag, and preserves the
+prior-speed commit order. Engine remount audio remains separately owned.
+
+Sixteen reaction selectors resolve logical bank8 to physical bank7, following
+the ROM's reversed bank set with its final two entries swapped. Their original
+ADPCM samples and tuning are rendered into standalone PCM; the identical source
+selectors2/3 remain identical. Channel10 uses centered solo P1 or left P1/right
+P2 layers. IO0 has priority over IO1 on their shared layer, and IO2 remains
+independent. Its poll uses the same documented physical-frame phase adaptation
+as the effect channels. Original reverb sends and delayed announcer commentary
+are not yet reproduced; no substituted speech is generated for missing clips.
+
+All73 focused tests pass. The new192 original dispatcher executions verify
+the routed ports and every admitted selector. Existing216 rider-tail reference
+cases and the full336-case consumer comparison also pass. Ordinary grid input
+hits a real buoy, emits one reaction and one rider-entry splash, then completes
+recovery and emits/acknowledges the remount starter cue. Physical and emitted
+audio histories agree at30/60/144Hz. This updates an older recovery assertion
+that still expected the animation event to remain unconsumed after the engine
+was connected.
+
+Chrome's live solo recovery played the reaction at source frame151 and water
+entry at158, then returned to actor22. All40 effect files loaded without failure.
+All16 rider selectors rendered through OfflineAudioContext with the expected
+solo/split stereo energy and silent final tails. A two-player inspection loaded
+and ran, but did not trigger a physical rider reaction during that drive; the
+independent two-player layers are covered by the dispatch and playback tests.
+High1280×720 and83,521 water vertices remain unchanged. One local resource404
+remains; no observed JavaScript exception. Full native gameplay parity is open.
+
+## v2.40.0 — original spray playback and effect-channel polling
+
+The native human audio owner now consumes original spray levels after engine
+controls and before impacts. Five separately extracted bank4 PCM effects use
+sequence0's selector-to-note/pan tables and independent layer1 on channels2/5.
+Landings and impacts retain layer0. Source frequency commands update both
+layers and remain in force for subsequent notes, with separate player channels.
+
+The effect poll retains the latest IO writes, gives contact IO0 priority, and
+defers spray IO1 until a poll without a contact. Its eight-tick interval equals
+50ms at200BPM/48PPQN; the browser anchors that poll to completed physical frames.
+This phase choice is a browser adaptation. Original audio-derived random values
+still use the previously documented independent deterministic browser jitter.
+
+The bank now contains23 standalone PCM files. The five spray renders preserve
+source half-rate tuning, loop ranges and all three envelope stages. Envelopes,
+release, pitch smoothing and the pitched offline note tail approximate the
+original mixer; they are not bit-exact RSP output. Missing samples use fallback.
+Pause/mute clear pending sounds, replay stops live layers, and a fresh race
+resets channel pitch while a pause retains it.
+
+All57 focused audio, source-consumer, polling and live spray tests pass, including
+30/60/144Hz command histories. A Chrome two-player run through1300 physical
+frames loaded all23 files without failures and issued1252 spray notes for both
+humans alongside12 contact notes. Separate effect-bus measurement recorded
+nonzero output and up to four concurrent layers; holding stopped all voices.
+All five drums also rendered through OfflineAudioContext with centered stereo,
+nonzero signal and silent final tails. High1280×720 and83,521 water vertices
+remain unchanged. One local missing-resource404 remains; no observed JavaScript
+exception. Native AI/voice scheduling and full gameplay parity remain open.
+
+## v2.40.0 — live source spray inputs and cadence
+
+The native human races now assemble AE210 spray inputs from actual completed
+hull motion, the per-tick physical reference, floor-impact maxima, alternate
+rider state and the source water query. The post-world spray owner reads the
+canonical cameras, scene and race records. It advances before the shared ice
+splash phase; the next frame's sound packet reads the retained side levels.
+
+The activity-gated6A264 counter now advances at the start of each native world
+frame. This restores original alternating spray cadence and the ambient record
+stamp that previously stayed zero. Browser pause advances neither. Original
+camera normalization, including its shared P1/P2 output, is preserved.
+
+Another216 original physical-input cases,4 camera cases and15 counter cases
+pass. All54 unique focused launch/grid/body/contact/spray/ice tests pass,
+including30/60/144Hz histories and direct prior-frame packet checks. Chrome's
+two-player race reached frame900 with independent nonzero side levels, the
+canonical counter at900 and all four original engine buffers ready. High
+quality,1280×720 and83,521 water vertices remain unchanged.
+
+This completes the live spray-level input path. Original bank4 spray samples,
+channel pitch/poll priority and independent layer1 playback remain unfinished.
+
+## v2.40.0 — original spray levels and physical reference motion
+
+The B08F8 scalar spray-level calculation is reconstructed from the original
+camera/scene gates, physical motion, wet transitions and retained side levels.
+It matches579 original-instruction cases, including alternating split-screen
+ticks and hidden/dry frames that retain the preceding levels. Renderer particle
+counts are not used. This is a prepared producer; its AE210 input assembly and
+post-world scheduling still need connection before original spray playback.
+
+The actual hull now retains624CC's per-tick physical reference point27 native
+units forward and2 above the center, its displacement, and the last tick's
+center displacement. Startup seeds the reference and clears displacement.
+Eighty original-instruction cases verify the arithmetic; live batched and
+individual hull ticks agree. All92 focused hull/start/adapter/world/audio tests
+pass. No force, rendering, quality or resolution settings changed.
+
+Read-only Ghidra inspection on EVO X2 preserved all nine analysis project files.
+C0044 writes spray IO6/IO1; sequence0 routes these to channel2/5 layer1 with
+bank4 percussion, leaving the landing/impact layer0 independent. Playback and
+source polling priority remain to be implemented.
+
+## v2.40.0 — live original human engine audio
+
+Native one-human and two-human previews now connect the original engine loops
+to completed physical frames and canonical race records. Envelope preparation
+precedes wet-state consumption, followed by original pitch/volume/IO controls
+and then impacts. Source launch event23 enables the running-engine gate; source
+channel starts, stops, mode changes and canonical power remain authoritative.
+The original starter effect15 is a separate PCM asset, bringing the effect bank
+to18 files covering53 drum selectors plus the ice sequence.
+
+Both human fallback engines become silent only after all original loops are
+ready. Water, wind and rival sound retain their existing owners. Paused, held,
+muted and replay frames stop the original voices; missing assets retain fallback.
+The source's mixed-audio-derived random pitch variation is represented by a
+separate deterministic browser jitter pattern, without consuming gameplay RNG.
+This is an explicit presentation adaptation, not bit-exact source audio RNG.
+
+All49 focused engine/contact/options/sample tests pass. Actual launch and audio
+state agree at30,60 and144 render Hz. Chrome's live two-human race loaded all
+four engine buffers without failures, played four independent loop voices with
+distinct pitch/pan, silenced both authored human engines and retained audible
+water/wind. Holding stopped all original voices and tails. The check retained
+High quality,1280×720 and83,521 water vertices. No graphics settings changed.
+Original voice/rank scheduling and source spray playback remain unfinished.
+
+## v2.40.0 — original engine samples and playback support
+
+Four original engine waveforms are extracted as standalone PCM loops, retaining
+their source loop boundaries and low/middle/high sample ranges. Sequence0's
+base layer uses instrument0 at velocity117; the second layer uses instrument1
+on water or the detuned instrument2 out of water. The prepared browser adapter
+accepts the recovered channel0/3 pitch, expression, volume, pan and IO controls.
+It preserves the source's primary-channel-only transpose command behavior.
+
+Fourteen focused engine tests pass, including the existing original-instruction
+comparisons, asset hashes/loops, both players, wet/dry sample selection, bounded
+sample crossfades and fallback loading. Captured human mixer traces produce
+valid playback plans; deliberate negative-pitch stress cases are rejected.
+Chrome decodes all four loops and renders separate wet/dry stereo engines,
+identical mono channels and silence when stopped, with no output clipping.
+
+This prepared checkpoint is connected to the live owner by the section above.
+Original portamento,
+RSP interpolation and envelopes are approximated by Web Audio smoothing and
+short crossfades; this does not claim a complete hardware audio emulation.
+
+## v2.40.0 — original ice-break sequence
+
+Native ice collisions now play the original channel7 ice-break cue. Sequence0
+resolves command19 through its dynamic table to bank5/instrument7: five notes
+on three layers, with recovered note starts and durations. The existing
+FluidSynth installation on EVO X2 rendered this cue into a separate WAV.
+Envelopes/reverb and presentation gain are documented browser adaptations.
+
+The shared channel retains one pending hit during the original194-tick call
+and8-tick poll wait (1.2625 seconds at tempo200). Repeated impacts coalesce;
+other landing/impact channels continue independently. Pause clears the cue and
+its pending command. A missing file retains the existing fallback.
+
+Thirty-six focused audio/contact/ice tests pass. Actual two-racer ice collision
+fields produce exactly one original cue for the first collider. Chrome decodes
+all17 effects, renders nonzero ice audio with the intended silent channel tail,
+and verifies that repeated commands wait for the first cue before playing the
+latest pending cue. Graphics, resolution and original music remain unchanged.
+
+## v2.40.0 — original landing and impact samples
+
+The native preview now plays the original landing and material-impact samples
+from the supplied ROM. Sequence0's human channels2/5 select bank0 percussion
+and restart layer0 with the physics command's sound ID and velocity. Sixteen
+standalone WAV effects cover52 source selectors, including the original pitch
+and pan variants. Velocity follows the original squared response; each human
+channel replaces its own preceding effect without interrupting the other.
+
+The bank loads on native play, caches decoded effects, retries missing assets,
+and uses the existing authored fallback until each effect is ready. Pause and
+inactive frames stop effects and drain pending commands so they cannot replay
+on resume. Stereo, headphones and mono remain available. Original music and
+all rendering quality, water geometry and resolution settings are unchanged.
+
+Private sequence-byte and bank-set checks establish the mappings. Public tests
+verify all exported PCM hashes, selector variants, separate player voices,
+fallback/retry, late disposal, and Soundscape routing. Chrome's actual audio
+decoder accepts all16 files; offline rendering verifies stereo separation,
+narrowed headphones, equal mono channels and silence after stopping.
+All40 focused audio/contact tests pass. A live two-human browser race produced
+original effects on both channels at physical frame834; all16 buffers were
+ready with no bank failures. Holding the race left zero active contact voices.
+The browser remained1280×720, High quality, with83,521 water vertices.
+
+These are original samples with browser presentation: the offline envelopes,
+release tails, resampling, bus gain and stereo placement approximate the N64
+mixer. The separate ice cue is covered by the checkpoint above. Original
+engine loops, voice scheduling and full audio-thread emulation remain unfinished.
+No raw ROM, soundbank or sequence is distributed with these standalone effects.
+
+## v2.40.0 — live native audio motion inputs
+
+The contact-audio owner now receives all four original sound-prefix bytes.
+The canonical race record supplies2C8; each physical hull tick supplies BFC
+from the fitted right axis and last-tick center displacement in native units.
+This value is lateral slip, not pitch, world velocity or the five-tick HUD
+speed. A singular right axis retains the preceding BFC. Startup seeds zero.
+Existing source-timed contact playback remains unchanged; the complete engine
+and voice mixer is still unfinished. These additional bytes are groundwork
+for that mixer, not a claim of new original engine playback.
+
+The scalar kernel retains its81 original-instruction comparison cases.
+Integration checks cover actual tick units, contact translation, batched ticks,
+separate player records/slip bytes and incomplete-input rejection. No physics
+forces, water geometry, graphics quality or resolution settings changed.
+
+## v2.40.0 — physical rider-water audio edge
+
+The live native sound owner now follows the original65C18 rider-water edge:
+C84 retains the prior C86, and only actors5/23 compare the completed physical
+joint2 against the normalized source-water query. Equality is dry. This is
+independent of hull wetness, landing spray and the rendered rider pose. The
+result feeds sound packet byte24. The separate mode4 consumer remains disabled
+until its retained secondary-channel lane is verified; no guessed lane is used.
+
+The numeric transition matches108 original-instruction runs. The live owner
+checks a sloped source cell, strict equality, held immersion, return to actor7,
+packet production while muted and detached diagnostics. A read-only EVO X2
+REA/Ghidra query identified the original fields without changing any of its
+nine project files;7,573 exported instructions matched the supplied private ROM.
+The additional1C5C/1C60 audio levels come from the original spray producer;
+modern particle counts cannot substitute for those values. Full original
+spray/audio scheduling and engine/voice playback remain unfinished.
+
+## v2.40.0 — original engine and spray command consumers
+
+`native-engine-audio.js` reconstructs C010C's envelope preparation, throttle
+edge/surge, power announcement, speed/power pitch table, retained pitch smoothing
+and three-channel mixer commands. The adjacent spray consumer uses the original
+level threshold, wet/channel gates, course-dependent variants and alternate
+engine behavior. All commands retain original argument bits and call order.
+
+The arithmetic matches842 original-instruction executions:56 envelope cases,
+474 engine cases covering every speed and surge entry,108 consecutive frames,
+132 spray cases and72 continuous envelope/wet/engine/spray executions. These
+include signed byte behavior and float32 rounding. The ROM and Ghidra listing
+remain private; public fixtures contain prepared numeric inputs and outputs.
+
+These are prepared consumers, not live original engine playback. Full source
+packet ownership, channel lifecycle, mixer/voice callees and sample playback
+still need integration. The source gate at7CA0 retains its address-based name
+until its owner is established. Existing music, live contact sounds and all
+rendering/resolution settings remain unchanged.
+
+## v2.40.0 — complete race sound-packet control flow
+
+`native-race-audio-consumer.js` now composes the complete C010C routine: outer
+mode gates, rank announcements and cooldown writes, course/mode power override,
+channel place latches, envelope, wet transition, engine, spray, impacts, rider
+voices, water-entry acknowledgement and final prior-speed commit. All336
+complete prepared original executions and216 isolated rider-tail executions
+match packet state, global fields and ordered leaf-call arguments.
+
+The separate mode4 secondary cue requires the actual retained caller-stack
+byte. The prepared consumer accepts that explicit input; live mode4 playback
+remains disabled until the caller's stack lifetime is established. No secondary
+lane is guessed. Mixer/voice callees remain captured commands rather than
+executed sample playback, so complete original audio parity is still unfinished.
+
+The live packet owner now connects raw B56 buttons, completed C54/C58 actor
+state and physical crash countdown1608. This countdown is already owned by the
+recovered rider lifecycle. The packet reports the crash before actor23 begins,
+clears its rider-event signal at remount frame56, and latches frame58 until
+acknowledged. The full52480 producer and live subset share this actor kernel.
+
+Two fresh read-only REA/Ghidra queries on EVO X2 leave all nine project files
+unchanged;1,773 exported instructions match the supplied ROM. They identify
+the engine-start gate's event writer, audio-thread rank-delay decrement and
+the separate audio random stream, which depends on mixer output. Gameplay RNG
+cannot substitute for that stream. All46 focused tests pass, including a real
+buoy-triggered fall/remount and identical physical histories at30/60/144Hz.
+Rendering resolution, water geometry and existing music playback are unchanged.
+
+## v2.40.0 — canonical audio records and event state
+
+The live audio packet now receives power12C and place4 from the canonical race
+records, using the actual primary/secondary human slot selectors. Raw signed
+record words retain the source byte-store conversion. This does not read HUD
+labels or assume that player one is always racer slot zero. Missing or invalid
+record arrays reject before advancing the audio owner.
+
+`native-audio-events.js` reconstructs the complete C37F4 handler, including
+countdown/start cues, finish branches, power-dependent event selection, per-player
+flags, rank delays and repeated-event counters. All773 prepared executions of
+the original routine match its global writes and ordered leaf calls. The start
+event's engine gate and delays feed the complete packet consumer through shared
+context fields; packet processing does not decrement audio-thread timers.
+
+This event handler remains prepared logic. Original voice scheduling, mixer
+output and audio-thread cadence still require integration before full original
+audio playback can be claimed. Existing music, live contact playback and high
+resolution remain unchanged.
+
+## Current preview scope
+
+Native source-water Time trial and Two-player previews admit Sunny Beach,
+Sunset Bay, Southern Island and Glacier Coast. Ordinary play retains the modern
+backend. Ice contacts, fragments, splashes and the human contact-audio subset
+are connected. Earlier checkpoint descriptions below record their state at
+that time; the later Glacier admission and live contact-audio sections supersede
+their closed/unconnected status. Full original-game parity remains incomplete.
+
+## Unreleased — complete source sound-control packet
+
+The prepared52480 producer now reconstructs all original packet writes, including
+button state, rider/actor cues, rank, record power, two spray levels, the rider
+water-entry edge and the latched animation-frame58 event. It preserves consumer
+timers, prior speed and unacknowledged events. It takes actual source fields and
+an explicit normalized4D30C water query; missing fields reject rather than being
+inferred from the renderer. All150 prepared full-routine executions match.
+
+A fresh read-only Ghidra query on EVO X2 identifies BFC as the horizontal
+velocity projection onto the right axis, rather than an Euler pitch angle.
+Its original624CC arithmetic retains the previous value when that axis is
+vertical. All81 prepared executions match, including the singular boundary.
+The231 original cases execute25,355 instructions. All622 exported instruction
+records match ROM bytes; all nine Ghidra project files remain unchanged.
+Eighteen focused tests pass, including the existing wet/impact consumers.
+
+This is a prerequisite for full engine and rider-sound integration. The live
+contact owner still produces its existing subset; connecting all source body
+and rider fields and the remaining mixer/voice consumers is unfinished. No
+new original-engine playback or complete retained mixer state is claimed.
+Rendering resolution and existing music settings are unchanged.
+
+## Unreleased — shared native ice splash simulation
+
+Ice breaks now queue AF43C's two four-update emitters. AF51C populates the
+shared eight-slot splash pool in original slot order, consumes four ED338
+draws per active ice emitter, ages new particles immediately and retires
+them at age8. The separate global emitter's three draws and scale arithmetic
+are reconstructed numerically; its other gameplay producer is not connected.
+All544 prepared original executions match (77,984 instructions), including
+overwriting active emitters/particles, shared seed order and retained states.
+Two fresh read-only EVO X2 Ghidra queries match1,620 instruction records and
+leave nine project files unchanged in each query. Public fixtures are numeric.
+
+The ordinary host queues splashes at contact time, then advances them once
+after the object/roller phase and before HUD processing. Unlike solid-fragment
+motion, this effect update is not gated by activity624. Six bounded original
+922E4 call-order slices and the complete B2ABC listing establish that order;
+they do not execute the full main loop or its other effect callees. Browser
+pause still stops the shared world, including these effects. The canonical
+halfword seed is committed only when a draw occurs.
+
+All54 focused splash, fragment, owner, presentation, host, speed-display and
+loading checks pass, including shared two-racer contacts, activity/pause and
+30/60/144Hz histories. Private Glacier probes retain solo Normal146.114s with
+two misses and versus Reverse139.069s (winner two misses, other racer four).
+Three/five breaks respectively produce and retire their splash pools without
+runtime errors. The changed final seeds reflect the newly connected draws.
+
+Splash visuals remain pending. Other native spray/effect producers may also
+consume this shared seed and are outside this checkpoint; this is not a
+complete original-game random-stream claim. Glacier native admission remains
+closed, and rendering resolution/detail are unchanged.
+
+## Unreleased — native ice presentation in live, replay and second-player views
+
+The detailed course renderer now consumes native block visibility/position and
+fragment snapshots. Eight authored angular shard variants retain the existing
+mesh vertex count and ice materials. Source position and the B4ABC spin axis
+(-vz,0,vx) and signed angle(-age*8) drive their transforms. Fifteen prepared
+original display-producer executions (6,678 instructions) match the captured
+transform arguments. EE46C matrix construction and original display-list
+rendering are not executed; the meshes remain authored high-resolution assets.
+A fresh EVO X2 read-only Ghidra query matches390 instruction records and
+leaves all nine project files unchanged.
+
+Bounded detached snapshots carry only display fields. Fragment generations
+prevent interpolation across pool-slot reuse. Removal, birth and retirement
+remain discrete until the recorded boundary; replay and the second-player
+wire frame preserve historical states without changing the live pool or RNG.
+All45 focused owner, presentation, replay, player-window and loading checks
+pass. A private browser fixture visibly transitions12 blocks/zero fragments
+to11 blocks/eight fragments; the actual second-player renderer independently
+draws the validated snapshot. Both retain1280x720 High; main-view water keeps
+83,521 vertices. The final child view reports632,647 triangles and no console
+errors/warnings after reload. These are held presentation fixtures, not a
+full native race or performance acceptance run.
+
+The newer checkpoint above connects AF43C's numerical producer and following
+draws. Splash rendering, the sound consumer and Glacier course validation
+remain pending.
+Glacier native admission remains closed. No resolution was reduced.
+
+## Unreleased — native ice fragment pool and shared random state
+
+Ice impacts now populate the original sixteen-slot fragment pool, eight pieces
+per break, replacing older live slots in ring order. Each piece consumes both
+original random draws, including the discarded ED338 result, through the
+canonical shared halfword seed used by the speed display. Binary32 position,
+launch velocity, gravity, age, strict Y<-128 retirement and retained-field
+reset match715 prepared original executions (197,927 instructions).
+
+The reference executes B4750/B4788/B490C/B49C4 and both random leaves. Square
+root is explicitly intercepted and AF43C event arguments are captured; the
+separate splash sprite lifecycle and original rendering are not executed.
+A fresh read-only EVO X2 Ghidra query verifies230 instruction records and
+leaves nine project files unchanged. Its existing database has no function
+entries for the two overlay random leaves; those are checked from raw ROM.
+Only numeric fixtures are included in the repository.
+
+The host creates fragments at contact time and advances them after the shared
+water/object phase, under its canonical activity gate. Actual two-racer
+contact tests verify one burst, shared seed consumption, pause, snapshot
+isolation and matching fragment/random histories at30/60/144Hz. All54 focused
+fragment, owner, speed-display, host, floating and loading checks pass.
+Private Glacier runs retain the previous solo Normal146.114s/two misses and
+versus Reverse139.069s (winner two misses, other racer four); three and five
+breaks respectively populate and retire the pool without runtime errors.
+The newer checkpoint above connects high-resolution fragment meshes to these
+snapshots. Splash presentation remains pending. Glacier native admission
+remains closed; no resolution or rendering detail was reduced.
+
+## Unreleased — shared native ice owner
+
+The native host now connects selected runtime10 ice to the generic contact
+kernel, prepared rider stability, retained C50 impact maximum and16D8 hit kind.
+Every racer sees the same broken flags immediately. Display removal and its
+saturating age follow the shared water frame and original object-activity gate.
+Snapshots and immutable break events are ready for the presentation layer;
+the newer checkpoint above connects the numeric fragment pool, while
+fragment rendering is now connected by the newer checkpoint; the sound
+consumer remains unconnected. Mixed floating
+and ice definitions are explicitly rejected pending a unified ordered owner.
+
+An additional288 prepared original executions verify28 rider/actor stability
+states and260 display updates, executing23,539 instructions. The display
+reference explicitly disables the external matrix/motion branch; it is not
+evidence for that branch. The64 unique focused checks pass, including actual
+two-racer contacts and identical histories at30/60/144Hz.
+
+Private native Glacier solo probes finish Normal/Hard/Expert in146.114s with
+two misses and Reverse in133.589s with three, each breaking three blocks.
+The Normal versus probe disqualifies P2 for five misses; Reverse finishes.
+With only ice contact disabled, both Normal and Reverse disqualify P2, so the
+Normal failure also exists without ice collision. This control does not
+establish its root cause or validate the pilot. Glacier native admission
+remains closed pending presentation and complete-course acceptance. The
+earlier modern Reverse two-player route regression is a separate issue.
+Resolution, terrain and water detail are unchanged.
+
+## Unreleased — native generic ice contact kernel
+
+The original generic sphere phase now has a binary32 numeric reconstruction
+for runtime9 floating objects and runtime10 breakable ice. It preserves the
+descending candidate order, two latched hull probes, full ice translation,
+floating-object recoil, three-point velocity response, and twelve-point
+position translation. Ice breaks only when the incoming normal velocity both
+raises the retained C50 maximum and reaches half the prepared16A0 stability.
+The shared broken flag excludes it immediately from subsequent probes/racers.
+
+All186 prepared executions of original7E938 match the reconstructed outputs
+bit for bit, including the effect call's position and incoming velocity.
+They execute46,946 original instructions, with6243C translation executed and
+square root/effect calls explicitly intercepted. The effect's actual register
+and stack ABI supplies six floats; the decompiler's inferred extra integer
+arguments are not used. This evidence does not execute the fragment pool.
+Four tests cover these comparisons, shared removal/reinitialization, explicit
+coincident-center handling, and unsupported inputs.
+
+A fresh read-only query using EVO X2's installed Ghidra matches1,395 instruction
+records to the local ROM and leaves nine project files unchanged. Only numeric
+fixtures enter the repository. The shared host owner and stability/C50/hit-kind
+connection are now covered by the newer checkpoint above. Fragment
+presentation and complete-course validation remain pending. Glacier's native
+preview remains closed; the Reverse two-player route regression also remains
+unresolved. No renderer resolution or detail changed.
+
+## Unreleased — custom-wave shallow-water depth correction
+
+The reported Sunny Beach image was reproduced with Big Surf: custom troughs
+could fall below the1.25m-deep course floor, exposing broad strips of seabed.
+Custom seas now compress deep troughs against a conservative terrain envelope,
+retaining20% of resting depth. Positive crests and sufficiently deep water
+remain unchanged. CPU hull queries and GPU water heights/normals share the
+same correction; original venue water and its tides bypass it.
+
+In the reproduced scene, all2,311 shallow samples remain covered after the
+fix. An actual64-sample GPU readback agrees with CPU heights within0.000004m
+and slopes within0.000001. High1280x720 keeps83,521 water vertices, and both
+solo and horizontal split-screen views were inspected. Eight complete custom
+sea runs finish without DQ across solo/versus and Calm/Big Surf/Chop/Storm;
+Big Surf still produces some verification-pilot misses. The58 unique focused
+checks pass. Older custom-water ghosts remain importable but use a separate
+water revision; original venue ghosts remain compatible. These are authored
+custom-wave improvements, not additional original-ROM physics parity.
+
+## Unreleased — prepared Glacier native geometry and route graph
+
+Glacier's prepared native owner now retains the complete original primary
+route graph:59 rows in Normal/Hard/Expert and48 in Reverse, identical between
+player selections. These rows remain separate from the live modern course.
+Its judging, water forcing, visible16 buoys, navigation and revision are unchanged.
+
+Prepared native geometry retains165 ordered contact planes,127 shore lines,
+16 allowed regions and an empty separate box list, as original744EC specifies.
+Ice ramps belong to the planes. All29,250 initialized route words match the
+original. In total3,673 prepared original executions cover loading, support,
+retirement, full floor/shore response and region boundaries, executing1,772,589
+instructions. A fresh EVO X2 read-only Ghidra query matches1,541 instructions
+and leaves all nine project files unchanged. Public fixtures contain numeric
+states/results; ROM and tool outputs remain private.
+
+The focused comparisons cover all original contact responses and every route
+word. One stale Southern admission assertion was corrected to reflect its
+already-open native preview. An experimental live source-graph activation
+passed four solo runs, but regressed the Reverse two-player inspection from
+a finish to a course-out DQ. That activation was removed; preparation cannot
+mutate the live course. Modern versus Normal finished with no misses under
+either setup. Full source-graph activation requires further driver/water work.
+After removal, all20 focused Glacier/geography/loading checks pass; the
+unchanged host/Southern regression previously passed22 checks. No full-suite
+or complete native gameplay claim is made.
+
+Before removing that experimental activation, local Chrome completed Glacier's
+venue-water Time Trial in431.481s,51 passes and zero misses. High1280x720 and
+about60FPS were measured, with876,769 triangles in the finishing sample. This
+is diagnostic evidence, not a browser acceptance run of the final checkpoint.
+The only console404 was the preview favicon. The finishing view contains a
+dark overhead polygon requiring separate visual diagnosis.
+
+Private native-hull probes finish Normal/Hard/Expert in137.863s with three
+misses and Reverse in132.901s with four. Those probes temporarily admit the
+course only in private module copies. Glacier native admission remains closed:
+its twelve runtime-kind10 breakable ice blocks do not yet have a native
+generic-object collision phase. These runs are not complete-course native
+parity evidence. Renderer resolution and terrain detail are unchanged.
+
+## Unreleased — spray and shallow-water overlay cleanup
+
+The Southern low-tide follow-up isolated two transparent effects producing
+hard-edged pale shapes. The chine spray used row number as age even when
+render intervals changed. It now uses actual emission age, breaks up sooner
+into the existing droplets, and fades near the camera. Shore runoff now uses
+the actual local wave height to limit its film to exposed wet ground; it no
+longer draws a second flat water surface over submerged banks. Restart clears
+the old film immediately. The runoff solver and original water remain intact.
+
+All29 focused spray, runoff, immersion and native-surface checks pass, as do
+the6 loading checks. Coverage includes sparse/dense spray refresh, paused
+effects, expired packets, flooding/retained runoff and course reset. Local
+Chrome inspections cover native Southern at the-150 datum, modern Sunny calm
+water and horizontal two-player Sunny. High quality remains selected with a
+1280x720 drawing buffer; the native ocean retains83,521 vertices. Both spray
+and runoff retain their geometry counts. No shader/runtime errors were seen;
+the private server's missing favicon is the only console404. This is a local
+visual repair, not a complete course-art or hardware-performance sign-off.
+
+## Unreleased — Southern native preview admission
+
+Southern Island is now available through the existing opt-in native-physics
+verification route for source-water Time Trial and Two-player race, in all four
+classes. Other modes retain their prior admission gates. Its Normal inspection
+helm takes a wider line around the exposed ship bow; this is authored guidance,
+not a change to original AI, collision geometry, human judging or modern routes.
+The ordinary-input solo regression finishes all three laps with zero misses,
+passes both falling-tide stages and reaches-150 without changing course anchors.
+
+The admission/host/tide/Sunset checks and complete existing pilot/loading suite
+pass62 tests. A separate two-player diagnostic with a14/8 world-speed inspection
+policy for P2 reaches a genuine P1 finish in126.039s, zero misses; P2 reaches lap3
+with four misses before the source result wait ends. The default heavy-rider
+guide still can miss five buoys; automated inspection is not original CPU AI.
+
+An isolated local browser completes Southern Normal in126.773s with zero misses
+and datum-150. It uses High quality, a1280x720 drawing buffer and860,340 displayed
+triangles in the sampled solo view. Native versus starts with two source cameras
+and two1280x360 views inside the same1280x720 buffer. Console404s are favicon
+requests only. No renderer/detail/resolution setting was reduced. The low-tide
+view still exhibits hard-edged water highlights; shading remains a separate
+visual follow-up. This checkpoint is not a claim of complete native art parity.
+
+## Unreleased — native Southern tide schedule
+
+The native host now applies51238's exact course/simulation/main-state gates and
+shared1FCC stage. It lowers the water one native unit per completed outer frame
+at stage1 toward-100, or at exactly stage2 toward-150. Other stages hold. The
+922E4 call order places this after all hull/actor work and before water selection
+and ordinary lap judging. The field owns datum; weather is a presentation view.
+Render updates cannot reset it or advance it. Southern fixed-sphere tags1/4
+follow datum after object motion under activity624, while tag5 stays fixed.
+The ship, land, floors, shorelines and ramps retain their authored heights.
+
+All2,160 prepared original tide-block executions match (16,342 instructions).
+A fresh read-only EVO Ghidra query exported446 ROM-matching instructions and
+left all nine project files unchanged. The prior6E3A8 export supplies the
+generic-sphere placement/order evidence. Focused checks cover30/60/144Hz,
+pause, inactive simulation, solo/versus, shared-stage ownership, stale incoming
+datum options, marker activity gates, host physics, buoy motion and loading.
+The regression/follow-up runs pass62 unique checks. Two initial new-test
+assertions were corrected: signed zero and taking a snapshot before a deliberate
+canonical lap write. No runtime behavior was weakened to pass them.
+
+Private ordinary-input probes now reach the actual-150 datum. Solo Normal,
+Hard and Expert finish with zero misses; Reverse finishes with two. Normal's
+inspection helm stalls near the exposed ship and finishes in279.310s; Hard,
+Expert and Reverse finish in127.243s,131.128s and133.988s. In the two-player
+probe P2 finishes in143.673s with four misses while P1 remains near the ship.
+This exposes an authored inspection-path limitation requiring further work;
+Southern public native admission remains gated. Resolution/detail are unchanged.
+
+## Unreleased — Southern alternate navigation families
+
+Southern's native owner now initializes its separate secondary and tertiary
+routes and selects them from the canonical retained record. Navigation and
+AI aiming use the same selected family. Alternate centers stay independent of
+moving primary buoys; human judging keeps its primary graph. Original main21
+and two-player mode force primary without rewriting the retained family.
+
+All50,180 initialized words match16 prepared original executions. Another48
+original selector cases match across all four avatars and both override gates.
+A fresh read-only EVO X2 Ghidra query exported714 matching instruction records
+and left all nine project files unchanged. The initializer/selector oracle
+executed297,924 instructions; this is numeric prepared-state evidence.
+All49 focused family, contact, live-AI, host, Sunset and loading checks pass
+across the regression and follow-up runs. One existing test's error-message
+match was updated for the generalized route-family validation.
+
+Private full-race probes no longer fail at the lap-one family switch. Normal,
+Hard and Expert finish three laps with zero misses; Reverse finishes with two.
+However, inspection then found that the native branch never advances Southern's
+water datum: these probes run at zero water level. They do not prove the
+falling-tide course. Original51238's gated discrete decrement, its exact place
+in the native frame, and the resulting complete-course runs remain to integrate
+and verify. Southern public native admission stays gated. Rendering and
+resolution remain unchanged.
+
+## Unreleased — native Southern Island geometry
+
+The prepared native Southern runtime now selects its original 305 floor planes,
+59 shoreline segments, 28 allowed regions, and 20 ordinary collision volumes.
+Original744EC initializes three ramp volumes followed by17 fixed ship volumes;
+Stunt selects six ramp volumes and the same17 ship volumes. The1P/2P floor and
+shore grid/list/record bytes are verified identical in both loaded images.
+Original ordering, binary32 coefficients and the retirement support owner are
+preserved. The renderer and quality settings are unchanged.
+
+The numeric implementation matches7,736 prepared original executions:3,226
+floor/box queries,1,409 complete support scans,380 shoreline passes,1,249 region
+queries and1,472 full floor/box contact passes. These execute4,388,258 original
+instructions including initialization. Existing EVO Ghidra exports were
+revalidated against the private ROM; Ghidra was not relaunched for this chunk.
+Only the display-only packed matrix conversion is intercepted in initialization;
+the contact/query arithmetic runs directly. This is prepared-state evidence,
+not whole-console equivalence. Public fixtures contain numeric states/results.
+
+Sixty focused checks pass across the new geometry, existing native contact,
+support, host, Southern course and loading suites. One old host test still
+expected native catch-up to be rejected; it now checks the enabled source flag,
+matching the previously published assistance behavior.
+
+Full-race diagnostic admission remains private. All four solo classes finish
+lap one with zero misses, then encounter the retained-primary navigation guard:
+Southern's original progression selects the secondary/tertiary AI routes as its
+lap/tide state advances. Those route families still need host integration.
+The Normal two-player probe reaches a legal three-lap first-to-finish result
+in177.792s, but its second rider remains on lap two near the ship. This does not
+establish complete Southern playability. Public native admission remains
+Sunny/Sunset until the course's remaining runtime behavior is verified.
+
+## v2.37.0 — native two-player assistance
+
+Catch-up assistance is now available in the opt-in native Two-player preview.
+It uses the original zero-based placement, physical separation, rider-specific
+power caps and steering divisors. The preceding checkpoint-clock gate remains
+active, and both players read the same preceding physical frame. Ordinary
+modern handling is unchanged. Preview access remains
+`?verify=1&qa=1&nativePhysics=1`, on Sunny Beach and Sunset Bay with venue conditions.
+
+A fresh read-only Ghidra query on EVO X2 matched 1,101 exported instructions to
+the private ROM and left all nine project files unchanged. A bounded original
+64100..642D8 execution, including its square-root helper, produced 532 prepared
+cases and 15,774 executed instructions. Both output words match the new helper
+exactly. These are numeric prepared-state results, not whole-console trajectory
+equivalence; no original executable bytes are included in the public fixture.
+
+All 127 focused checks pass: ten assistance checks, 85 existing native physics,
+adapter, versus, Sunset and live-AI checks, and 32 online/window/loading checks.
+Assisted full three-lap matches complete on all four Sunny classes and Normal/
+Hard Sunset. The authored inspection driver keeps its jet engaged longer through
+assisted turns; original assistance coefficients and judging are unchanged.
+The integrated state is identical at 30/60/144Hz on both admitted venues.
+
+Browser inspection confirms assisted Sunny and Sunset results, the actual
+1920x1080 High canvas and two 1920x540 player views. The final inspection-driver
+threshold was subsequently checked across all six course/class combinations
+in the physical simulation. Ocean, terrain and render budgets are unchanged.
+Full native handling/AI/art parity, remaining venues and modes, and the original
+multi-racer camera-corner producer remain unfinished.
+
+## v2.36.0 — native Sunset Bay preview
+
+The opt-in native preview now accepts Sunset Bay Time trial and Two-player race
+with venue conditions in all four classes. It selects the recovered source grid,
+primary rows, 11 allowed course regions, floor/box/shore contact owners, player
+geometry (63/47 shore edges), fixed spheres and original roller/water simulation.
+The ordinary menu continues to use the modern craft. Preview access remains
+`?verify=1&qa=1&nativePhysics=1`; this does not enable native championship, Stunt,
+catch-up assistance or the other venues.
+
+Normal and Hard default-rider inspection runs complete three laps with zero
+misses in solo and versus. Hard's native inspection guide begins the northern
+bend earlier; its separate anchors leave the modern route, original buoy rows,
+judging and contact geometry untouched. Expert/Reverse authored inspection
+guidance still needs tuning and can disqualify; it is not original AI.
+
+A separate diagnostic explicitly selects the existing source AI branch on the
+single human slot. All four classes finish through the physical solver and
+human buoy judge, with zero/one/two/two misses. This setup changes only input
+selection; it never supplies positions, progress, clocks, power or scores.
+It is evidence for the integrated course, not proof of original demo scheduling
+or four-rider AI. The unresolved multi-racer camera-corner producer remains.
+
+Thirteen Sunset runtime/live checks pass after correcting test-only references
+to internal geometry metadata: original region oracle, selected numeric owners,
+four complete human-control runs, four AI diagnostics, matching two-player
+physics/water/progress at 30/60/144Hz, presentation transport, and admission gates.
+Browser native Hard completes three legal laps in114.153s with zero misses and
+reaches the source result/name-entry flow at1920x1080 High, approximately60fps.
+Two-player Hard reaches the first-to-finish result in111.698s with zero misses
+and keeps the1920x1080 canvas and two1920x540 views. All61 existing native host,
+Sunny pilot, player-window and loading checks also pass. Rendering budgets,
+ocean and terrain detail remain unchanged. Full native handling/AI/art parity
+across the whole game is still unfinished.
+
+## v2.35.1 — tunnel contact recovery
+
+Port Blue's Hard race could stall permanently at the tunnel bend: rider-to-rider
+separation ran after world contact and pushed the player just inside a solid
+wall. Every later movement then rolled back to that embedded position. Rider
+separation now checks passage walls and raised slabs before moving either hull.
+When one rider is blocked, the other takes the available separation; if neither
+has room, both retain their valid positions. The ordinary mass-based collision
+impulse remains active. Checkpoints and course geometry are unchanged.
+
+All 29 course, championship, passage, slab and rider-action checks pass, including
+the previously failing 36 venue/class runs with three laps and zero misses,
+all four championship classes, and a regression for the actual Port Blue bend.
+All 34 online and separate-player-window checks also pass with the new build.
+Resolution, render budgets, water and terrain detail are unchanged. This repairs
+the modern race solver; original native AI and complete native venue integration
+remain separate unfinished work.
+
+## v2.35.0 release candidate — public source Sunset Bay
+
+Sunset now selects recovered numeric geography through the normal course selector:
+63 one-player shore edges (including two static craft) or47 two-player edges,
+32 finite floor faces, the original fixed ramp/pier volumes, all four buoy
+sequences,16 higher-class visible spheres,81 boundary spheres and six hidden
+fixed spheres. Venue conditions use four/five original roller generators, or
+three in Stunt. The old map wave train is removed rather than layered over them.
+Stunt retains nine rings, two ramps and15/15/10/10 checkpoint limits. This is
+public geometry/roller integration with the existing modern craft, not a native
+handling or final visual-parity sign-off. Native Sunset gameplay remains gated.
+
+Public layout revision7 separates old revision6 local times, Stunt scores,
+ghost matching and global boards while retaining archived saves. The online
+compatibility version advances so peers cannot combine different layouts.
+Expert's authored northern approach gives slower-turning craft room to reach
+the next red buoy; it changes helm targets, not scoring or collision geometry.
+The recovered finish uses its original one-sided extent. The obsolete map-only
+three-buoy shortcut hook and inspection button are removed.
+
+The new championship order exposed an existing Twilight City overlap trap:
+a descending hull could enter the raised wall, then every movement rolled back
+to the same overlapping X/Z. Overlapping slab recovery now selects the nearest
+clear edge. Ordinary surface approaches remain blocked, and original jump/dive
+clearance tests pass. All four championship classes complete through controls.
+
+Validation:137 focused source geometry, roller, collision, gameplay, records,
+terrain/loading and music checks pass (136 on the broad run, then the updated
+public native-admission check and its two neighbours pass). All34 online/window
+checks pass. Browser Expert finishes three laps with51 scored gates, zero misses
+and272.327s; actual canvas1920x1080, High, approximately60fps. Two-player view
+retains1920x1080 split into two1920x540 views. Water/terrain sampling and render
+budget remain unchanged. The only browser request failure was local favicon404.
+
+The broad all-course guide test still stalls at Port Blue/Hard. Exact pre-change
+and current race owners reproduce the same596.983s state (lap1, next13, position
+4.482951544775993,-51.73286469523773); this is recorded as remaining work, not a
+passing all-course result. Other rider/seed/surf guidance, complete native race
+owners, source AI/course-out behavior and final visual comparisons remain open.
+
+This release also includes the original shoreline pass checkpoint below.
+
+## Unpublished checkpoint — original shoreline grid and contact pass
+
+Ordinary native race data now selects the original shoreline grid, signed
+halfword cell offsets, byte candidate lists and eight-float line records.
+Sunny's49 lines are shared by both player counts; their bytes were checked in
+both loaded course images. Sunset selects63 lines for one player, including
+its two static craft outlines, or47 for two players. The render geometry and
+source retirement support data retain their separate consumers.
+
+The complete51740 pass visits points11-to0, selects each point's grid cell
+once, and continues the selected list after a response moves the hull. Depth
+and finite-line endpoints are strict; only incoming horizontal velocity is
+removed. All twelve positions receive the horizontal push, while vertical
+position and velocity remain untouched. Original binary32 arithmetic feeds
+the existing impact owner in contact order. The world bridge preserves even
+non-binary32 vertical values without an unnecessary round trip.
+
+Fresh read-only Ghidra on EVO X2 left all nine project files unchanged; all210
+exported instructions match the local ROM. Complete original execution of
+1,148 prepared cases runs423,098 instructions without intercepted arithmetic
+or callees. Tests compare every point position/velocity, impact and normal bit,
+including strict edge neighbours, intersecting lines, retained impact maxima,
+signed-zero vertical fields, asymmetric grids and source shift masking.
+Public files contain numeric geometry and expected results, not ROM executables.
+
+Prepared Sunset native rider0/seed17 trials retain Normal's zero-miss123.178s
+finish and Hard's three-miss112.797s finish. Expert and Reverse retire at five
+misses; guidance and public source-course admission remain open. This change
+does not alter the renderer, water/terrain detail, textures or resolution.
+
+Validation:99 contact/host/launch/result/driving tests passed, including all16
+Sunny rider/class runs and matching three-lap results at30/60/144Hz for rider0
+in each class. Another24 impact, bridge and prepared-Sunset tests passed,
+including vertical-value preservation and actual adapter cadence. All11 loading
+checks passed; generated terrain and depth remain byte-identical to their
+full-resolution references. Packaging now contains311 module identities.
+
+## v2.34.0 release candidate — original numeric floor and box contact passes
+
+This release packages the contact changes and prepared Sunset retirement
+geometry below. Historical unpublished labels describe their original checkpoints.
+
+The ordinary native host now supplies the selected original floor/grid/list
+and box records to complete7F030/7F700 contact passes. Floor selection retains
+the point's initial cell while continuing its candidate list after each push.
+Boxes visit rows last-to-first and points11-to0, preserve non-upward exclusions
+for points1/8/11, and apply outgoing overlap response and marked-ramp flags.
+Each response moves all twelve positions before the next candidate; only the
+contacted point's velocity changes. Impact maxima and the shared normal remain
+owned by the existing adapter and receive contacts in their original order.
+
+Fresh read-only Ghidra queries on EVO X2 left all nine project files unchanged.
+All510 exported instructions match the local ROM. Complete original execution
+of540 prepared floor/box cases runs1,467,850 instructions without intercepted
+contact arithmetic or callees. JavaScript matches every position, velocity,
+impact, normal and marked-box bit. Cases include recovered Sunset ramp/pier/floor
+positions, all-point overlaps, retained impacts and outgoing marked contacts.
+The public fixture contains numeric inputs/results, not executable ROM bytes.
+
+The bridge converts the existing world-unit hull to native binary32 scratch
+values per pass and commits actual contacts once. A no-contact pass preserves
+the world hull exactly. It neither installs a second persistent hull owner nor
+claims original precision for the surrounding integrator, shores or spheres.
+Standalone reconstructed contact users retain their explicit previous path.
+The renderer, terrain/water meshes, textures and resolution are unchanged.
+
+Private prepared Sunset host trials now run through these passes: rider0,
+seed17 Normal finishes three laps with zero misses; Hard finishes with three.
+Expert/Reverse still retire for missed buoys, so public native Sunset admission
+remains pending. A Normal two-player trial reaches the winner's result stage
+with zero misses for player1 and one for the unfinished player2. These trials
+are evidence for further integration work, not complete course/AI parity.
+
+Validation:93 focused static-contact, native host/launch/results and driving
+tests passed. This includes all16 Sunny rider/class combinations, three-lap
+finishes at30/60/144Hz for each class with rider0, and matching physical/water
+history across refresh rates. A final26-test bridge/host/loading run and22
+impact/support/prepared-Sunset tests passed. The terrain worker and renderer
+remain unchanged; packaging refreshes309 module identities.
+
+## Unpublished checkpoint — Sunset retirement support geometry
+
+Prepared Sunset ordinary race owners now select the recovered course floor and
+player-specific ramp/pier support records for retirement decisions. The floor
+has32 original planes,168 grid cells and189 list halfwords. Ordinary single-player
+uses six ramp boxes followed by two piers; two-player uses only the six ramps.
+The separate prepared Stunt selection has twelve ramp boxes followed by two
+piers. Original row ordering, binary32 coefficients and signed zeros are retained.
+
+Read-only Ghidra queries on EVO X2 left all nine project files unchanged;
+2,722 disassembled instructions match the local ROM. The private oracle executes
+the original744EC box initializer and its floating-point transform helpers,
+intercepting only display-only packed matrix conversion. Original7F448/7FAE4
+execution supplies916 query cases; complete5DD04 execution supplies216 support
+scans. Initialization/query/scan instruction counts are6,320/219,076/142,617.
+The inputs are recovered course tables in a prepared harness, not full bootstrap.
+Public data contains numeric records and expected results, not executable bytes.
+
+All54 focused support, result, launch, host and Sunset runtime tests pass,
+including binary32 normal signs, single-player-only piers, all four ordinary
+classes and actual canonical result selection. Public map-based Sunset and live
+native admission are unchanged; further host validation remains necessary.
+The user's full-resolution requirement remains mandatory: this checkpoint
+changes no renderer, mesh density, texture, render target or quality setting.
+
+## v2.33.0 release candidate — source course preparation and roller scheduling
+
+This release packages the six Sunset preparation checkpoints below and the
+ordinary native roller scheduling correction. The prepared Sunset definitions
+remain separate from public map-based Sunset, and native host admission remains
+Sunny time/versus only. Packaging tested source work does not enable an
+unverified course or claim complete original gameplay parity. The historical
+unpublished labels below describe each checkpoint when it was written.
+
+The ordinary host now defers course rollers until after79528 adjudication and
+the primary/generic object-motion pass. The original6E3A8 caller reads signed
+activity624 after judging;4CC7C reads signed72c when stamping. Simulation648
+does not directly gate either roller phase or stamping. Thus frozen hulls can
+still have moving rollers, while activity other than-1 or72c equal1 retains
+the prior roller phase. Browser pause consumes no stage. The state is read from
+the canonical owner rather than a frame-start copy. Standalone modern water
+retains its existing immediate course-generator bridge.
+
+The stage is consumed exactly once per completed water frame, including held
+and terminal frames. Missing or repeated completion is rejected; a native
+callback that leaves its stage pending faults the world before another tick.
+A stamp invalidates any earlier display snapshot revision. This changes no
+terrain segments, water mesh resolution, texture size, render target, pixel
+ratio, quality level, model detail or visual-effect setting.
+
+Read-only Ghidra on EVO X2 recovered the caller and roller functions with all
+nine project files unchanged;1,437 disassembled instructions match the local
+ROM. Independent original-instruction execution covers32 prepared cases,
+303,424 caller/roller instructions plus4,032 initialization instructions,
+zero/one/two rollers, signed state edges, changed boundary values, both modes
+and both simulation states. Full height/velocity hashes and phases match JS.
+Judging and object/effect callees are explicitly intercepted in this oracle;
+it is not a complete gameplay replay. No executable ROM material is published.
+
+Validation:68 focused water/host/ordinary/AI tests passed, then57 world,
+launch/reset, prepared Sunset, loading and terrain tests passed (including
+the additional missing-stage test). Twenty-four actual native host setups
+exercise independent simulation/activity/72c gates and browser pause. The
+terrain worker remains byte-identical to the original full-resolution build.
+The broader parity and guide limitations recorded below remain open.
+
+## Unpublished checkpoint — complete default-rider Sunset Stunt traversal
+
+The prepared source Sunset guide now collects all nine rings, physically crosses
+both pier underpasses, launches from both recovered ramp-volume families, lands
+two clean flips, and completes all four checkpoints. Tests cover all four
+classes with rider0, seed17 and60Hz. The run scores3,809 points in43.283333s;
+its last checkpoint uses0.6s of the existing coast allowance. No ring, ramp,
+shore, checkpoint, timer, scoring or physical response was changed.
+
+Two optional authored passing headings let the guide intercept a line through
+each final ring while beginning its turn early. The selected air-trick command
+arms only on actual ramp contact, checks available flight time, stops after one
+rotation, and cannot carry its permission through a landing. These are ordinary
+steering/throttle/stunt inputs, not original AI or source stunt-physics parity.
+The physical test checks the finite checkpoint spans, ramp launches, overhead
+clearances, unchanged geometry and scores/timers untouched by guide calls.
+
+A private fixed-seed fixture using the real race renderer reproduced the exact
+time, nine-ring chain, score, two tricks and zero crashes. It ran at1920x1080,
+High quality and1536x864 refraction. A jump-apex inspection showed the flip,
+rings, pier, static boat and shoreline. Resolution and detail settings remain
+unchanged. No game-script error or warning appeared; the local fixture's sole
+network error was its missing favicon.
+
+Eleven focused integration checks passed. A broader34-test group passed33;
+the all-venue Stunt check still fails on Marine Fortress. Previous committed
+and edited guides produce identical5,586 input frames and the same90.083333s
+timeout with11 rings/two checkpoints there. Its input SHA256 is
+`a7c82b8c7600cb65bddc1ec7909d252fe825c096f84a1b21251ee33798fc4821`.
+The existing Glacier physical checkpoint check passes.
+
+Broader admission remains open. Riders1/2/3 do not complete this authored guide;
+an independently seeded browser run finishes with eight rings and two clean
+flips. Public Sunset still uses the older map-based definition, and native
+Sunset host admission remains disabled. The new traversal proves the prepared
+default-rider route is physically feasible, not that all driving conditions or
+all original mechanics are complete. Nothing in this checkpoint is published.
+
+## Unpublished checkpoint — Sunset ordinary course-out regions
+
+Recovered Sunset's eleven allowed-region rectangles, three separate progress
+regions, and empty warning-suppression table from the original initializer.
+The allowed regions are independent of the pink markers and the authored
+browser envelope. A read-only query of the Rea-installed Ghidra project on
+EVO X2 matched 1,519 instructions against the local ROM; all nine project files
+retained their hashes. Executing the original query against its actual ROM
+table pointers checked 449 positions and 36,508 instructions, including the
+binary32 neighbours at every rectangle edge. Public fixtures contain numeric
+inputs and results, with no original executable bytes.
+
+The ordinary data factory can now prepare Sunset's selected primary/AI links,
+regions, course index, and original 1,200-unit checkpoint slack for all four
+classes and both player counts. Sunny retains its seven allowed rectangles
+and 256-unit slack. The live native race gate remains Sunny-only: preparing
+these data does not verify Sunset's complete host, physical traversal, or
+result lifecycle. Public Sunset still uses its older map-based course.
+
+Rendering resolution, terrain and water detail, textures, and model detail
+are unchanged. All four page import maps include the new module (306 total).
+The remaining final-ring and full Stunt traversal work is still open; private
+guidance experiments did not produce a retained gameplay change.
+
+All 94 focused checks pass: 62 native host, reset, launch, unfinished-estimate,
+Sunset data and two-player checks, plus 32 source geometry, live AI input,
+asset loading and full-resolution terrain checks. Two-player coverage includes
+three-lap finishes in all four classes and matching physical finishes at
+30/60/144 Hz. All four import maps have verified current content hashes.
+This is a local checkpoint, pending publication.
+
+## Unpublished checkpoint — visible source Sunset static hulls
+
+The two recovered boat-shaped shore outlines now have independently authored
+launch models: tapered hulls, inset deck seams, bevelled cabins/roofs, glazing,
+rails, fenders and antennas. Their deck corners match every recovered outline
+vertex. The artwork stays static, like the source shore contacts; it adds no
+collision deck, bobbing physics or guessed source height. Vertical dimensions
+and finishes are explicitly authored. The models are absent in the two-player
+geometry, along with the source's omitted crossbars.
+
+A local full-course browser fixture checked both close views, shoreline and
+overview, and switched one-player/two-player worlds. It rendered at 1920×1080
+with high quality, 130,321 terrain vertices, 83,521 water vertices, 1536×864
+refraction and 1024×1024 reflection. No resolution or detail setting was lowered.
+The fixture and ordinary race page loaded without console errors or warnings.
+Nineteen focused tests pass, including exact footprint alignment, finite mesh
+data, geometry disposal without destroying shared materials, source geometry,
+four complete solo race classes, and the prepared Stunt route. All four import
+maps now include the new module (305 modules).
+
+Public Sunset still uses the older map definition. The prepared source course
+still needs final-ring/complete Stunt traversal and broader gameplay admission;
+these visuals do not establish full source mechanics parity or publication.
+
+## Unpublished checkpoint — prepared Sunset Stunt finish
+
+The authored Sunset Stunt guide now completes four physical checkpoints and
+eight of nine rings at rider 0 / seed 17 / 60 Hz, finishing in 43.8 seconds.
+It slows and aims before the second ring's roller crossing, starts waypoint
+turns 15 metres ahead, and takes a shorter water corridor around the east cape.
+The third checkpoint aim remains inside its unchanged finite span. Only helm
+guidance changed: source ring/checkpoint positions, timers, water, collisions,
+scoring, and hull physics are untouched. Render resolution and terrain/model/
+texture detail are unchanged.
+
+The last checkpoint uses 1.117 seconds of the existing coast-to-checkpoint rule
+after its ten-second section expires; this is not a claim of finishing every
+section before expiry. The final ring is still missed. A regression run checks
+actual forward plane crossings inside the checkpoint spans, unmodified geometry
+and timers, bounded controls without position/score mutations, all eight ring
+awards, and the real final miss. This is bounded evidence for the prepared
+modern-hull route, not original AI or complete Stunt parity. Public Sunset still
+uses the map-based course; final-ring guidance, broader conditions, source hull
+admission and high-resolution scenery validation remain outstanding.
+
+The existing Glacier inspection test also exposed an older guide regression:
+its third section took 21.25 seconds against a 20-second allowance and it reached
+seven rings. Running the committed and edited drivers produced identical input
+hashes and outcomes, confirming this preceded the new optional bend setting.
+An eight-metre bend lead now lets Glacier's ordinary-input inspection complete
+all four sections before expiry (13.0 / 16.6 / 16.25 / 13.233 seconds), collecting
+nine rings. The existing physical-crossing, unmodified-geometry, no-wipeout test
+is retained without weakening its assertions. Other courses retain their
+existing five-metre bend lead.
+
+All 35 focused checks pass: prepared Sunset and Glacier steering/source geometry
+18, Glacier ordinary races/geography and full-resolution loading 17. Generated
+worker modules and all four import maps were refreshed. This checkpoint is
+committed locally for continued development; no publication is claimed.
+
+## Unpublished checkpoint — source Sunset routes and player geometry
+
+Four prepared source Sunset Time Trial classes now complete three laps using
+ordinary helm controls, the source buoy judge, fixed-sphere contacts, source
+floors/ramps, and the recovered roller field. At rider0/seed17/60Hz they finish
+in223.2/227.6/301.2/293.8 seconds with zero misses or disqualifications.
+The steering corridors are authored browser navigation; they are not the
+original AI. A seven-metre clearance at the Normal northbound buoy addresses
+wave-driven drift without changing the buoy or collision rules.
+
+The host and separate player renderer now select geometryForPlayers before
+building the course. Source Sunset uses63 shoreline edges and two static hull
+outlines in1P,47 edges and no static hull outlines in2P. The complete visible,
+81-marker, six-hidden-sphere ordering reaches the existing rigid-hull collision
+bridge. The source's finite crossbar solids remain1P-only. Terrain worker
+requests and cache keys now distinguish player geometry; worker heights and
+water-depth data match the selected course exactly. Generated worker files and
+all four304-module import maps are refreshed.33 focused tests pass, including
+four full solo races, full-resolution terrain, asset loading and GPU-world
+reuse checks.
+
+Additional prepared runs exercise four-rider races and2P for every class.
+They finish, but do not prove every rider's perfect traversal: Expert four-rider
+human misses1 buoy and Expert P2 misses3 before P1 finishes. At this earlier
+checkpoint, the Stunt guide's bounded run hit6/9 rings and3/4 checkpoints,
+then coasts to a timeout at45.633s. No limits, scoring, collision, or positions
+were changed to pass that run. Public Sunset still uses the older map-based
+course while Stunt guidance and high-resolution scenery are validated. Neither
+this checkpoint nor the preceding roller checkpoint has been published.
+
+
+## Unpublished checkpoint — Sunset Bay roller-water generator
+
+The reconstructed course roller generator now runs on the host triangular
+height/velocity field after ordinary patch evolution. It retains binary32
+coordinate accumulation, the reconstructed source sine initializer, inclusive
+phase windows, signed16 storage, velocity clearing, and later-generator
+priority. The original initializer showed that the previous source-course
+metadata had its crest/travel headings reversed; those fields are corrected.
+The host selects independent generator phases using class and Stunt rows,
+steps them once per outer water frame even with two human cameras, and exposes
+the resulting surface through existing read-only replay/window snapshots.
+
+Evidence: a read-only Rea-installed Ghidra query on EVO X2 exported 1,864
+instructions matching the local ROM; all nine saved project files remained
+unchanged. A private bounded execution audit covered 1,592,469 original
+instructions, 22 prepared cases, and six frames of overlapping generators.
+Every compared grid height, velocity, initialized axis and stored phase matched.
+These are function-level comparisons using the previously audited source sine
+initializer, not a claim of a complete original-game replay. Public tests retain
+numeric inputs and output hashes, with no original executable data. All 88
+focused tests passed: roller/source selection/host water34, field/surface37,
+original grid start3, and online14.
+
+**Live integration remains incomplete.** The public Amber/Sunset definition in
+classic-courses.js still uses the older map-based layout. The source-course
+factory is separate and cannot place its original-coordinate waves into that
+unrelated geometry. The new host hook is exercised with a prepared source
+course; its stationary diagnostic anchors do not establish navigability.
+Admitting the source shoreline/floors/ramps, player-specific geometry, marker
+contacts, racing routes and Stunt route is the next required work. Original
+hull admission beyond Sunny Beach also needs its source course-out and result
+support rules. No public course switch or publication is claimed here.
+
+
+## v2.32.0 — original rider setup modes and tuning
+
+The original-physics Sunny Beach Time Trial/Versus preview now connects its
+12-position controls, two player banks, portable saves and live physical
+profiles. Each player explicitly chooses Normal or Custom. Normal uses the
+factory profile without overwriting saved Custom indices; Custom at the
+factory positions still produces a Custom record. Switching riders retains
+that player's mode and loads the corresponding saved Custom profile.
+
+This supersedes the previous checkpoint's inferred Standard/Custom policy.
+The original transition loop802C85B4–802C8660 selects immutable profiles at
+800DA950 or saved profiles at801CB298, with player stride56 and rider stride14.
+A private execution of the original loop covers128 combinations,4,992
+instructions and576 physical-profile stores, including nontrivial human slot
+mapping. All four original factory profiles contain indices5/5/5. The original
+confirmation paths802C5FB8/802C5FEC set the primary record flag from the chosen
+mode, independently of the slider values. Whole original menu-loop parity is
+not claimed; this is the web menu connected to those recovered choices.
+
+All29 focused save, grid, record and tuning tests pass. Two tests complete
+three genuine laps through the recovered hull and source buoy judge, using
+Normal and Custom with engine index11, and verify the resulting record flag.
+Browser checks confirm Normal locks the controls at factory values, Custom
+restores retained values, both players choose independently, and resetting
+Custom retains the selected mode. No JavaScript errors were observed.
+The high-resolution renderer and ordinary modern controls are unchanged.
+Publication is prepared through the mandatory whole-site deployment wrapper;
+a successful live receipt and asset verification are required before reporting
+this version live. Earlier historical unpublished notes below are superseded
+by their later release receipts; the unrelated document blocker was resolved.
+
+## Earlier checkpoint — original tuning connected to the playable preview
+
+The Sunny Beach original-physics Time Trial and Versus preview now offers
+separate twelve-position Handling, Engine and Grip controls. Eight profiles
+(two players by four riders) persist through validated browser saves and
+portable export/import. Old saves receive standard defaults; modern tuning
+remains independent. Both players can select the same rider with different
+settings. Position6 is the recovered default index5.
+
+The selected indices reach the actual water/steering profile and the canonical
+save-profile bytes after retained records are restored. New profiles initialize
+all three traits to5. Initials, unselected profiles and old record attribution
+survive retries and rider changes. The web adapter marks a current run Custom
+when any index differs from5; this is an explicit web policy, not a recreation
+of the original Normal/Custom menu toggle or the complete rider-selection loop.
+
+The byte layout and twelve-position bounds were checked against the original
+rider-menu helpers at802C676C/802C67E4. A private instruction audit covers576
+valid-domain cases,15,648 instructions and624 stores; a read-only EVO X2 Ghidra
+query exported595 matching instructions without changing its nine project files.
+The new web code applies selected values directly; it does not claim to execute
+those original menu helpers. Seven integration tests cover saved profiles,
+malformed imports, all positions/riders, two-player coefficients, actual motion,
+and Standard/Custom record preservation. Together with existing launch, host,
+record and save checks,37 focused tests pass. This checkpoint is not yet live.
+
+## Next checkpoint — rider model relocation after decompression
+
+The bounded 80095CE8 rider fixup and its complete 800967EC display-list callee
+are reconstructed in `native-rider-resource-relocation.js`. Existing canonical
+resource selectors choose part0 or parts1+2. Riders2/6 also process the five
+extra lists. All five resource kinds select their original base bank, including
+eight slots for rider selection. Vertex and texture operands relocate modulo32;
+other commands remain unchanged and the first B8 terminates each list. Shared
+or overlapping lists execute repeatedly against prior writes in source order.
+Missing terminators or invalid supplied spans reject without caller mutation.
+
+The input is an explicit decoded asset word span and readonly lookup/base views.
+No original artwork, decoded assets, DMA, decompression or rendering is bundled
+or executed. The returned writes belong to that same supplied asset span. A
+test feeds all eight selectors directly from the existing kind3 initializer.
+The live loading path and high-resolution renderer connection remain pending.
+
+Read-only Ghidra on EVO X2 exported134 matching instructions with all nine saved
+project files unchanged. Its decompiler omitted jump-table arms, so those were
+checked by executing the complete raw bodies separately. The implementation
+matches704 rider cases and1,024 command cases:1,056,168 original instructions
+and27,992 ordered writes. Nine new focused tests pass. This checkpoint is local
+and unpublished; it does not establish end-to-end menu rendering parity.
+
+## Next checkpoint — title and rider-selection resource preparation
+
+The numeric 80096960 resource preparer now supports all five valid modes.
+Title/demo mode1 reads only two rider arguments and two base addresses, writes
+two descriptors plus their terminator, and retains the untouched tail. Rider
+selection mode3 builds eight variants: the four supplied riders followed by
+the same identities plus4. It uses eight descriptors, eight presentation blocks
+and the original last-match special selectors. Negative arguments clamp before
+variant selection; unavailable positive lookup rows reject atomically.
+
+The existing canonical resourceWordsB330 owner now accepts its original20-word
+form or an explicit36-word form for the eight-rider list and terminator. It is
+never silently grown or given a parallel owner. Mode3 reads the eight-word
+ABA0 span, including its adjacent ABC0 bank; mode2 can reuse that span while
+reading only its first four words. Menu-return preparation can explicitly
+expand both resource helpers at their original positions, provided the actual
+retained storage and readonly tables are supplied. Replaced calls are removed
+from pending effects. Default live callers still leave resource loading pending.
+
+Read-only Ghidra on EVO X2 exported1,345 instructions that matched the ROM;
+all nine saved project files were unchanged. Complete raw execution of modes1/3
+matched1,496 cases,1,897,644 instructions,431,704 ordered writes and2,287,384
+canonical owner words, reaching69 non-stack store instructions. The previous
+2,308 mode0/4/course cases and260 mode2 cases still match. All144 focused
+resource, menu, state, fade and record tests pass.
+
+This completes the bounded numeric descriptor preparation, not loading,
+decompression, original selection-model rendering or attract-mode physics.
+Those runtime consumers still need integration with the high-resolution game.
+This checkpoint is local and unpublished.
+
+## Next checkpoint — connect title return and reset connected controllers
+
+Main menu now executes the original 801EB180 return initialization after the
+record-save boundary and hands back once to the high-resolution setup. The
+original 8004A208 helper clears only connected controllers' held, pressed,
+released, previous-button and stick fields in the shared device owner. Menu
+input history and disconnected controller records remain unchanged. Neither
+expanded entry remains queued for replay. Fresh web launch seeds the title pair
+counter with the verified initial value 3; the existing training selection
+remains a retained web selection. Physical demo setup and resource/audio effects
+remain pending, so this does not claim the original attract-mode race is live.
+
+Read-only Ghidra on EVO X2 confirmed all 43 controller-reset instructions against
+the local ROM, with all nine saved project files unchanged. Full original
+execution matched 768 cases, 36,096 instructions and 9,216 ordered writes,
+covering all 12 store instructions and comparing all 7,680 canonical device
+words. The title tables were independently checked: 26 signed halfwords and
+109 raw words, including the initial pair counter. Only the nine actual course
+tuning rows are included; following unrelated data is not treated as more rows.
+
+All 108 focused tests pass, including every title pair, two sampled controllers,
+disconnected byte neighbors, save-before-handoff order and atomic rejection of
+missing connection masks. The 12,664-case title/championship caller comparison
+still matches. The original title/demo loop and championship return integration
+remain incomplete. Browser verification completed a clean 1:49.597 race
+with a 0:35.155 best lap, accepted blank initials as YOU, continued through
+records, and returned through Main menu with Start time trial focused and no
+console errors. This checkpoint is local and unpublished.
+
+## Next checkpoint — original title and championship return initialization
+
+Direct callers 801EB180 and 801EB91C now have independent numeric ports and a
+canonical adapter. Title return advances the two demo counters with the source
+increment/reset order, reads the existing saved unlock flag, configures demo
+riders, and resets its exact scene/HUD fields. Championship return selects the
+profile's next course, preserves the temporary fortress profile write, advances
+the signed 16-bit counter only below 9999, consumes the shared RNG once, and
+reads signed rider traits from the existing save owner. Aliased body slots keep
+every intermediate write. Rider identity uses metadataD9b0 rather than a second
+copy of the same source word.
+
+The complete original callers and their shared RNG were executed against the
+local ROM in 12,664 prepared cases: 2,569,798 instructions and 648,256 ordered
+operations matched, covering all 91 non-stack store instructions. This includes
+the raw championship body beyond the gap in Ghidra's exported listing. All 98
+focused menu, fade, state, configuration and record tests pass. The adapter
+expands both fade helpers into the existing HUD owner; resource loads, physical
+tunes, audio and title bootstrap 8004A208 remain explicit pending effects.
+
+These two new destinations are not connected to the live preview yet. Their
+selection loops, original demo runtime, resource/bootstrap effects and durable
+save transport remain incomplete. The previously connected course/rider return
+flow is retained. This checkpoint is local and unpublished; v2.31.2 publication
+still awaits approval for the concurrent site documents.
+
+## Next checkpoint — correct rider attribution in preview records
+
+An alternate-rider browser run exposed a live metadata bug: Eli's record was
+labeled Mara. Fresh launch now seeds800DA9B0 from the selected rider, and record
+ranking, result-name fallback and initials commit use its single canonical
+metadataD9b0 owner. The overlapping nameIndexA9b0 alias is rejected. Session
+record transport version2 retains the record book and initials but excludes
+current rider identity, so selecting another rider cannot misattribute the next
+result. Fresh web profiles provide YOU initials for all eight14-byte slots.
+
+Tests drive the actual primary record phase for all four riders, retain Eli's
+record while inserting Nia's faster run, and verify a rider-specific fallback
+name against that same owner. Original name-record/display and result-update/
+dispatcher comparisons were regenerated:5,812 cases,415,262 instructions and
+52,255 ordered operations matched, including complete canonical spans in the
+dispatcher check. These checks do not establish durable cartridge saving.
+All129 distinct focused tests after the ownership fix pass. Browser verification
+then completed Eli's clean1:51.230 run with a0:35.446 best lap. Both record rows
+correctly showed Eli North and blank-name fallback supplied YOU.
+Continuing through Choose rider then focused Eli's selected card, with no
+browser console errors across the corrected result/name/continuation flow.
+
+## Next checkpoint — connect original rider return to the preview
+
+Choose rider now executes the verified numeric801EBD28 caller and expands its
+fade setup before returning to the modern rider cards. Fresh web launch stores
+the selected rider's actual menu position using the verified0,2,3,1 order;
+the source fresh-menu latch still resets positions to0/3 when set. The handoff
+selects the final primary-slot avatar from the original ordered body writes,
+including the last write when human slots alias, instead of confusing a menu
+position with a rider ID. The replaced target call is removed from pending
+effects. The original resource load and selection-model body writes remain
+explicit effects; they do not mutate the finished race's physical hull.
+
+The four order words and12 signed default-trait bytes were compared directly
+with the local ROM. Defaults reuse the existing5/5/5 physical-profile values.
+All46 focused continuation, return, retained-record, rider-control and live
+launch tests pass, including every rider with both retained and fresh selection.
+Title/championship return initialization and original selection-menu loops
+remain separate incomplete work.
+
+## Next checkpoint — original course and rider return initialization
+
+Direct callers801EBFE4 and801EBD28 are independently reconstructed. They
+preserve previous game state, reset the exact scene fields, select source
+player counts, initialize fade/HUD state and request mode-specific audio in
+source order. Rider return reads supplied selection/trait tables, preserves
+signed trait bytes and both writes when human slots alias, and resets both
+selection/flag pairs only for the original fresh-menu latch.
+
+Read-only Ghidra on EVO X2 exported all four return entries: all714 exported
+instructions matched the local ROM bytes and all nine saved project files were unchanged.
+Complete execution of the rider/course callers matched2,900 cases,
+387,086 instructions and103,691 ordered operations, covering all52 non-stack
+store instructions. The canonical adapter expands both existing fade helpers
+into the same HUD owner; resource/body/audio effects remain explicit.
+
+The live solo continuation now executes the course initializer after its
+qualified save request, removes the replaced target call from pending effects,
+and hands off once to the high-resolution setup. Rider initialization has a
+tested canonical adapter but still needs its original selection-table inputs
+connected at the browser boundary. Title/championship return initializers,
+original selection-menu loops, resource loading and durable cartridge saves
+remain incomplete. All93 focused return/menu/fade/state/live-launch tests pass.
+Browser verification completed a clean1:48.039 three-lap race, entered initials,
+continued through the record table, and selected Choose course. The transition
+returned to setup with the venue selector focused and no console errors.
+
+## Next checkpoint — retain preview records between races
+
+Native preview restarts now transfer the retained record/setup region1FF0..2938
+and name-profile fields into the next canonical owner before the original75310
+warm reset. This preserves time, reverse and stunt tables, per-course flags,
+setup order and the cold latch. The reset still clears its own result flags,
+selects best-time caches from the retained book, and initializes new race clocks.
+Fresh web sessions initialize empty times for all12 record-table course slots;
+the original cold reset still installs its own numeric tail templates.
+
+The transport is a detached, validated, immutable handoff snapshot. It carries
+no physical simulation, water, HUD animation or controller history. Restart,
+return to setup and later native races retain records within the same page
+session; reloading/closing the page clears them. These preview records remain
+separate from permanent local saves and global ranked scores. The existing
+original-ROM reset audit covers126 cases and318,237 instructions with every
+canonical word/write footprint equal; the reset implementation is unchanged.
+Four new tests exercise real name commit followed by fresh launch, cached best
+times, inherited initials, original warm/cold tails, retained setup order,
+detached owners, malformed payloads and competing initial-state rejection.
+All58 focused session/reset/start/menu and global-score tests pass. A browser
+run followed by the original continuation menu's Restart choice retained both
+1:49.635 and1:48.427 under initials A, with the new best lap0:34.606. The second
+name-entry screen restored A and selected END. These are local preview checks;
+publication remains pending the separate full-site document approval.
+
+## v2.31.2 â€” post-race continuation preview
+
+The original ovl_i14 follow-up menu now has independently reconstructed
+5800/5840 initialization,5F60 input,5E5C exit and the complete5924 display
+caller. It preserves four ordinary choices and two championship choices,
+retained selection/audio latch, alternating slide offsets, first-controller
+input, confirmation/up/down precedence and signed32 wrapping. Confirmation
+initializes game81 and its numeric fade; after signed fade completion1 the
+display caller requests qualified record saving before the selected return.
+Championship continuation retains the separate zero/one profile stores.
+
+Read-only EVO X2 Ghidra export matched536 instructions against the ROM with
+all nine project files unchanged. Complete ROM execution then matched3,378
+cases,90,943 instructions and11,783 ordered operations, covering all31
+non-stack store instructions in these control bodies. Canonical adapters
+expand input, exit and numeric fade initialization without replaying replaced
+calls. Graphics, durable record-saving effects and destination menu bodies
+remain explicit dependencies.
+
+The admitted native solo preview now continues from the record table into
+Restart race, Choose rider, Choose course and Main menu. The browser samples
+the original first controller at20Hz, initializes the retained menu owner,
+updates widgets and fade, then runs the numeric display suffix. Clicks queue
+physical down/confirm edges; keyboard and gamepad navigation use the same
+controller path. Options/hidden-tab pauses discard elapsed menu time. The
+original kind5 fade takes twelve updates before requesting the chosen target;
+the host consumes that request once, then uses its existing race/setup routes.
+
+Curtain matrix recipes can now address explicit logical projection/curtain
+slots. The default guest-address path remains byte-identical across655 original
+cases and31,222 instructions. The high-resolution CSS curtain uses source
+motion/timing; original GPU artwork and its projection-normal write are not
+claimed as rendered. The destination initializers and durable cartridge saving
+remain unexecuted effects, and these preview runs remain excluded from ranked
+records. All247 focused menu/fade/result/start/online/window tests pass,
+including identical complete handoffs at30/60/144Hz and single-use routing.
+Browser checks completed two clean three-lap runs (1:47.636 and1:46.898),
+passed through initials and records into the four-choice menu, retained course
+selection while Options was open, and returned to the focused venue selector.
+Arrow navigation also moves keyboard focus with the selection.
+
+
+## v2.31.1 â€” normal results preview
+
+The normal-results overlay now has its own four-word phase/offset/delay owner.
+The numeric802C5800..58A8 initialization prefix, complete802C6B34 controller
+dispatcher and complete802C5B74 display caller preserve signed wrapping,
+strict slide thresholds, the combined third controller record atE692, and
+ordered drawing/input/menu calls. Direct entry skips its first input frame;
+returning from name entry slides in before accepting confirmation. Three delay
+ticks after slide-out enter the numeric801EC830 continuation at game80.
+
+The private original-ROM comparison matches3,909 cases,82,956 instructions
+and7,742 ordered operations, including complete retained owners and supplied
+display-list return heads. The browser runtime boundary also passes a complete
+name-entry exit, results slide, either-controller confirmation and continuation.
+It uses modern presentation without inventing GPU addresses. All200 focused
+name/input/results/state/host/start/widget regression tests pass, plus26
+online/window transport tests with the release identifier.
+
+The admitted native time trial now continues from initials into a readable
+high-resolution record table. Its rows use the existing canonical race book:
+top three, an unranked current run when applicable, best lap, reverse-course
+placeholders and record highlighting. Alternating rows slide in and out with
+the original offsets. Keyboard, on-screen Continue and either gamepad feed
+physical menu edges; Options and hidden-tab pauses retain the menu position.
+The browser completed three laps in1:49.287 with zero misses, enteredAAA,
+displayed that same total and0:35.363 best lap in their highlighted record
+rows, and opened Options without consuming confirmation. A second run restored
+the blank name toYOU and displayed1:48.837 /0:34.568. Continue reads current
+Options state at the input event, so closing Options does not require waiting
+for another rendered frame before confirming. Full5800 matrix/
+viewport generation,5C2C GPU drawing, the subsequent game80 loop and durable
+record storage remain outside this checkpoint. The game80 boundary returns
+to the existing web Restart race / Rider & mode select controls.
+
+## v2.31.0 â€” original name-entry preview
+
+The admitted Sunny Beach native time trial now continues from its actual
+game100 result handoff into an interactive initials wheel. A separate20Hz
+menu clock keeps race physics stopped. Original initialization, animation,
+physical menu sampling, input precedence, record RAM updates and normal menu
+exit share the existing canonical owner. High-resolution SVG glyphs use the
+original packed-matrix positions. Keyboard, gamepad and on-screen controls
+select letters, delete, seek END after three initials and finish the menu.
+The verified%s name copy preserves bytes beyond its terminating zero.
+
+This remains a native-physics preview: initials update the current run's RAM
+records, while preview times stay excluded from saved/global competitive
+records. Cartridge graphics, the menu water-disturbance callees and EEPROM
+storage are not executed. Championship/stunt browser menu admission remains
+pending. The normal modern-physics record form keeps its existing behavior.
+All153 focused tests pass, including a complete three-letter input/END/exit
+sequence, blank-name restoration, byte preservation, atomic failure and menu
+clock agreement at30/60/144Hz. Automated verification runs now continue when
+unfocused; ordinary interactive races retain their focus-loss pause.
+The local browser completed three laps in1:48.995 with zero misses, reached
+the wheel through the normal result schedule, accepted/deleted initials,
+automatically selected END, returned ABB to the results screen, and restarted
+without retaining the old menu. No browser errors were reported. Fourteen
+online/window transport tests also pass with the new release identifier.
+
+The shared801E1BA8 numeric initializer now retains its own14-word scratch,
+the existing HUD wheel/name bytes, fresh-name halfword and four-byte previous
+name. It preserves restoration, float32 angle rounding and mode-specific
+record qualification, including championship warm-up exclusion and every
+qualifying-round write. Original-instruction execution matches624 cases,
+114,433 counted instructions and20,856 ordered writes.
+
+The complete801E2530 control dispatcher and numeric31A0 analog helper now
+use the sampled menu/device owners and explicit selected physical port.
+They preserve confirm/delete precedence, the three-character limit, circular
+31-symbol wheel, digital/analog priority, queued movement and intermediate
+wrap stores. Exit keeps ordered pending save, format and menu calls.
+Original execution matches1,386 control cases plus1,280 analog-speed cases,
+116,885 counted instructions and5,298 writes; complete retained owners match.
+
+The801E12E0..183C animation prefix now handles31-update intro/outro,
+16-update confirmation, insertion/delete/END, speed refresh, angle wrapping,
+automatic END seeking after the third initial and the visible wheel window.
+Float32 state and float64 confirmation arithmetic remain distinct. All3,890
+original-execution cases match191,782 instructions and17,680 ordered writes,
+complete retained owners and transient confirmation poses. All134 focused
+name-entry, menu/input, canonical state, result and matrix tests pass, including
+a full numeric three-initial entry, automatic END selection and exit sequence.
+
+The complete2C14 record-name updater restores blank input from the selected
+profile and applies exact bytes to race, lap, reverse or stunt records. It
+preserves the source's fifth terminating-byte stores and includes championship
+round0. All1,288 original cases match147,832 instructions and14,120 writes.
+The complete1E8C display caller preserves latch clearing, graphics return
+heads, input timing and the championship storage-call schedule. All498 direct
+and expanded input/record cases match45,090 instructions and6,057 operations.
+The2B8C/C500 exit callers preserve their distinct phase/player/fade behavior;
+64 direct/expanded cases match6,832 instructions and2,144 operations. The
+1290 outer initialization gate plus numeric animation prefix matches72 cases,
+7,784 instructions and1,100 writes. Existing420 result-menu cases still match.
+
+The complete801E1290 numeric update now includes its16 wheel matrices and
+water-crossing call schedule. Independent affine composition49EB8 and packed
+matrix conversion47EE0 preserve source float32 rounding and store order.
+The183C..1BA8 projection tail matches216 original cases,5,900,171 counted
+instructions and14,682 operations. The entire1290 routine, including nested
+initialization, animation and matrix helpers, matches144 cases,3,962,385
+instructions and11,259 operations. Both comparisons include every packed
+matrix, crossing request, retained position and final owner. Water-disturbance
+callees remain pending effects; these checks do not execute original graphics
+microcode or claim that the wheel is already visible in the browser.
+
+EVO X2's installed Ghidra supplied another read-only query of five save/exit
+functions. All634 exported instruction bytes match the local original ROM,
+and all9 saved analysis-project files have unchanged hashes. Full raw function
+bodies supply the execution comparisons; Ghidra's inferred bodies alone are
+not taken as proof of complete branch coverage.
+
+The outer initialization latch is connected to the browser display boundary.
+Original textured presentation, water-disturbance callees and durable storage
+remain pending. These modules do not claim to render the complete original
+screen or persist preview records. Source
+constants and character bytes are explicit caller views; no ROM strings or
+tables are embedded in the new implementation.
+
+## v2.30.1 â€” original result-menu entry
+
+The four original result-menu entry callers C20C, C830, C9C8 and CE50 now have
+independent numeric implementations and a shared-state adapter. They preserve
+previous/current state, one-player menu selection, phase initialization, HUD
+camera mode and ordered resource/fade/audio requests. Returning from record
+name entry skips the normal results resource/fade reset. Retirement retains
+its mode-specific curtain predicate; name entry retains its separate resource
+and fade predicates. Versus initializes its phase fields after both fade calls.
+
+Resource96960 kind2 now prepares four unshifted rider descriptors and four
+leading presentation blocks using a supplied mode2 base bank. It preserves
+ordered variant clears, the last special-avatar physical slot, partial/full
+relocation and unsigned wrapping. No original tables or assets are embedded.
+The canonical menu adapter expands fade initialization and optionally resource
+preparation at their call positions, with atomic rejection of invalid inputs.
+
+Private original-instruction comparisons match all420 direct caller cases
+(22,193 counted instructions,5,880 stores), plus96 cases executing the actual
+nested resource and fade bodies (49,426 instructions,13,006 ordered operations).
+Kind2 separately matches260 cases and44,000 writes; all2,308 existing resource
+cases still match. All46 focused menu/resource/main-state tests pass.
+
+The ordinary live host now commits these numeric menu entries at their actual
+CPU call positions before the browser handoff. Retirement retains its final
+AD3C4 cleanup after the expanded menu calls. The race host stops once, including
+when the original menu switches two-player race state back to one-player menu
+state. Repeated result calls cannot reinitialize the menu. The QA snapshot now
+reports the target menu and pending consumers explicitly.
+
+All14 focused post-race/menu tests pass, including a naturally completed race
+through the1200-frame unattended timeout. All34 host/launch/input tests and34
+online/player-window tests pass. The684 existing direct result CPU cases still
+match7,728 ordered stores. These test groups overlap earlier validation.
+Browser verification completed three laps with zero misses and no retirement,
+waited the full1200-frame timeout, entered gameState100/main6, and stopped at
+source frame3552 with the high-resolution results dialog visible.
+Audio and resource loading remain explicit pending effects at the high-resolution
+handoff. Subsequent original menu loops, textured presentation and record
+persistence remain unfinished. This is numeric menu entry, not full menu parity.
+
+## v2.30.0 â€” live post-race sequence
+
+The admitted ordinary native Sunny time-trial and versus host now continues
+its physical world after finish or retirement. Each source frame samples the
+physical menu input, runs world/AI updates, advances widgets and fade, then
+runs the result CPU dispatcher. Result entry remains one-shot. The next frame
+clears its initialization latch; two-player retirement advances6B38 before
+63B4. Solo Continue consumes actual pressed edges after the body-specific
+result delay, with the original1200-frame unattended timeout. Menu requests
+end the host exactly once. Final browser result data stays fixed while riders
+continue moving. Pause holds both physical and menu/result histories.
+
+The CPU result portion matches684 existing original-ROM dispatch fixtures and
+7,728 ordered writes after excluding the explicit drawing boundaries. Five
+live tests cover source ordering, early held buttons, pause, finish/retirement/
+tie routing,30/60/144Hz timing and a naturally completed race through the full
+unattended timeout. Browser verification found and fixed an older AI validation
+bug: aggregateC7C can count all12 hull points, not just8 lower points. Motion,
+steering and floor escape now accept9..12;88 fresh original-instruction cases
+match their public outputs. The natural finish regression reaches those upper
+contacts without faulting. The browser finished three laps without misses or
+DQ, accepted Continue, and reached its results screen with no simulation error.
+
+The high-resolution finish panel, keyboard Enter, controller Start and Continue
+button are modern presentation/input adapters. Original numeric widget animation
+continues, but the original textured widget drawing is still unimplemented.
+The source menu/resource initializers and cartridge persistence remain explicit
+unexecuted boundaries. A fresh web profile supplies YOU initials; native preview
+records remain separate from modern/global records. Online/second-window frames
+accept postrace and continue drawing until the final results handoff. The normal
+modern-physics modes retain their existing result path. This checkpoint does
+not claim original menu/save parity or complete native physics admission.
+
+Final verification passes61 full-race/AI/host/versus checks,54 post-race and AI
+contact checks,47 transport/player-window checks, and40 release/input/result
+checks (overlapping selections). The broader565-test run initially passed562;
+its three finish-observation tests now explicitly stop at the finish source
+frame, preserving their exact physical comparisons while production continues
+post-race. All three pass in the final61-test run.
+
+## Physical menu input â€” local October 16 checkpoint
+
+The ordinary native host now samples a separate menu-controller input before
+navigation and descending rider input selection. Source8004A2F0..A394 prepares
+held/pressed/released/prior device records; source80092938 copies the three menu
+histories, merges the updated second player's buttons into the shared record,
+and applies signed-axis thresholds and hold counters. Neither stage reads
+AI-selected rider buttons. Full device and menu words have canonical owners;
+pressed65a is a temporary view of menu storage, never a duplicate scene field.
+The outer source threshold setup is35 on both axes, with horizontal50 for
+state100 and60 for state10. Browser sampling and disconnected-device policy
+remain explicit host boundaries rather than emulated N64 hardware I/O.
+
+Independent ROM execution matches530 menu cases (94,639 counted instructions,
+21,176 ordered writes) and192 device cases (14,400 instructions,2,304 writes).
+Seven focused tests cover button merging, release/history behavior, signed
+counter wrap, atomic failure, result-delay input and30/60/144Hz cadence. The
+live AI regression confirms menu sampling continues after rider AI takeover;
+pause leaves the stored input untouched. Existing host/launch/result checks
+also pass. The broad native suite passes all520 tests. A local browser trial finished three laps without misses or disqualification; the only console failures were missing favicon requests. Browser controls feed menu input separately; verification pilots
+may provide an explicit menu input source rather than being polled twice.
+
+The following live post-race checkpoint connects this physical menu owner to
+result timing. Original menu/save integration and textured banners remain open.
+
+## v2.29.1 â€” music enabled by default
+
+Original course and result music is enabled for new saves and legacy saves
+without audio preferences. Existing saved audio preferences are preserved.
+All24 audio, soundtrack, save and record tests pass. Published October16 and
+confirmed in a fresh browser session with Background music checked.
+
+## v2.29.0 â€” result HUD numeric animation and matrix preparation
+
+The five shared HUD slots now have the reconstructed numeric update for all
+four widget kinds: finish banner, record banner, menu marker and retirement
+banner. This includes the finish-to-record allocation, ascending slot order,
+float32 motion, retirement bounce and signed counter behavior. The following
+four-frame HUD animation clock also updates the same canonical storage. The
+original outer update calls these two routines before the fade update; the
+later display dispatcher consumes result timing after that fade update.
+
+Independent execution of the ROM instructions matches 1,535 prepared cases,
+162,269 counted instructions, 7,924 ordered HUD writes and all 2,213,470 final
+HUD words. Cases include complete widget trajectories, allocation reuse,
+counter boundaries and unsigned float conversion failure paths. Matrix and
+audio callees remain ordered effects: their parameters are compared, but their
+rendering/playback is not proved by this check. Caller-local temporary matrix
+arguments are explicitly represented as null, not fabricated RAM pointers.
+Seven focused tests pass, including complete finish-to-record and retirement
+sequences using the original 0.7 bounce damping, allocation reuse and atomic
+failure on missing inputs. All 499 selected native-race regressions pass.
+
+The ordinary native host now schedules widget animation and fade advancement
+after world updates and before display-stage camera/status consumers. Matrix
+recipes resolve into five logical renderer slots, using reconstructed scaled
+basis and Euler consumers and the original sine lookup and angle periods.
+Independent ROM execution matches another 522 matrix cases, 150,674 counted
+instructions and 18,652 ordered writes. Four presentation tests cover packed
+scale/translation, negative-angle lookup, full banner trajectories, allocation
+draw suppression and rejection of invalid destinations without input mutation.
+All 43 focused host, live-launch, AI storage, widget and presentation tests pass.
+
+Read-only widget drawing data and fade values are available to the host; actual
+high-resolution widget drawing is still unfinished. The browser still stops at
+its result overlay. Connecting the complete result/world/HUD/fade loop, continue
+input and menu/save transitions remains required. This checkpoint does not
+claim a visible post-race fix. Modern racing and online modes retain their
+existing presentation and scoring; native preview remains isolated from records.
+
+## v2.28.0 â€” solo source AI input and shared startup state
+
+This checkpoint includes the earlier October16 local result-entry, navigation,
+water-perception and display-cadence changes documented below. The ordinary
+Sunny solo host now connects the complete selected source driver to the real
+rider control-selection countdown. It samples actual preceding hull/contact/
+controller fields, the live navigation row, current buoy centers and water
+lattice. Once selected, it bypasses the human device and commits retained AI
+history, shared navigation history, controls and the action word to their owners.
+
+The canonical AI span retains four contexts plus adjacent target/order/proximity
+storage. Initialization patches only source-written words, including the actual
+slot4 scratch alias. Water noise and subsequent AI setup consume one retained
+unsigned32 random stream. Fresh browser startup explicitly zeros unused memory
+and inactive body profiles and seeds that stream from the selected wave seed;
+this does not claim original boot/menu history or full scene initialization.
+The initializer's camera color/Y patches remain diagnostic output; multi-racer
+camera-corner geometry and its AI handoff are still pending.
+
+Validation:252 focused AI/canonical-state/water tests and35 host/launch/input
+checks pass. All33 pilot tests pass, including every rider/class three-lap finish
+and equal30/60/144Hz results. An additional complete solo race continues its
+actual host after finishing and reaches source AI through the rider animation
+countdown, with no further human polling. Seventeen live post-finish snapshots
+match57,984 original driver/callee instructions using the same actual water
+lattice (host float32 sqrt); this is prepared-input numeric equivalence, not
+original whole-game trajectory equivalence.
+
+The browser still opens its results overlay and stops stepping the race there.
+Visible post-finish continuation, complete result widgets/fade/menu/restart,
+multi-racer AI and broader course admission remain unfinished. High-resolution
+art and modern-mode simulation are unchanged by this integration checkpoint.
+
+## Shared AI button cadence â€” local October 16 checkpoint
+
+The live ordinary host now retains the original four-step display counter in
+the canonical scene. All racers sample its prior value; it advances once after
+the shared hull/camera/water frame, before ordinary judging. Simulation0 still
+advances it; browser pause does not. Retained state preserves its supplied value
+and rejects missing history. A fresh web race explicitly starts at zero; this
+does not reproduce the original menu's prior frame count.
+
+Original display-prefix execution matches136 prepared values, including signed
+word extremes, across1,224 instructions. The original dispatcher table sends
+states40â€“45 through the same input/world/display/judging sequence. All35 focused
+live-input, host and launch tests pass, including descending two-player polling,
+partial frames, pause, simulation0 and30/60/144Hz history equality. This change is
+included in v2.28.0. Full result scheduling remains pending.
+
+## Solo AI traffic dependency â€” local October 16 checkpoint
+
+The reconstructed80D20 traffic routine now skips camera-corner validation when
+there are no other racers. Original instruction execution confirms zero camera
+predicate calls for zero/one racer and one call per other slot when all tested
+racers are outside the camera:44 prepared cases,2,576 executed instructions.
+The multi-racer predicate in this focused audit was explicitly intercepted as
+always outside; this is a call-count check, not a camera-geometry runtime proof.
+All33 action/driver tests pass, including the complete prepared solo driver
+without camera corners and continued rejection of missing multi-racer corners.
+This removes one integration dependency; live post-finish AI remains unfinished.
+
+Active objective, October 14, 2026: incorporate the installed RaceWave46 game's
+mechanics and features into this browser game while preserving its detailed
+Blender craft/riders, water, scenery and high-resolution rendering. This document
+supersedes any claim that the earlier broad gameplay audit established complete
+parity. The work remains in progress; it is not a course-parity sign-off.
+
+## Reference identity and reproducible analysis
+
+- Installed reference: `D:/Games/RaceWave46`, Windows v1.0.0. Its README and release
+  notes describe the original game plus ghosts, remappable controls, per-player
+  rumble, enhanced two-player detail, Dolphin Park free ride, and multiple display
+  layouts.
+- User-provided ROM: Wave Race 64 USA revision 1, 8,388,608 bytes, cartridge NWRE.
+  Input SHA-256: `aa2e8aa8d10c6abc38333b277fe5e3933973a402f8b795d3578133ec193590b2`.
+  Its actual format is 16-bit byte-swapped, despite the `.n64` extension.
+- Normalized big-endian SHA-256:
+  `f35d2423ebcb86eaf86fa935b613c7532b123a7bc50fb74996984c3b02fc3999`.
+- The initial EVO X2 REA6.4.0 ELF analysis rejected this ROM's ISA revision.
+  On October16, the installed REA6.5.0 checks still admit specified MIPS32
+  profiles, while its raw-binary CLI lists6502/x86/x86_64/arm/arm64. This is
+  a limitation of those REA import routes, not a claim that REA cannot help
+  this project or was not used by the RaceWave46 author. Its public README
+  credits N64Recomp/RT64 and AI assistance without naming REA. Ghidra12.1.4
+  remains installed and in use on EVO X2. Direct Ghidra analysis used
+  `MIPS:BE:64:64-32addr` with the o32 compiler convention, without changing REA's
+  admission checks. A separately identified ELF loader carrier maps the initial
+  ROM image at its real entry address.
+- ROM `0x1000` maps to RAM `0x80046800`. Initialized memory ends at
+  `0x800eedd0`; the entry stub clears 967,120 BSS bytes. Ghidra recovered
+  pseudocode for 896 initial-image functions. That is static analysis, not proof
+  of all runtime behavior. Other code overlays have separate mappings.
+- Private scripts/evidence are retained outside this public tree in
+  `D:/Projects/.tmp/racewave-parity`. The Ghidra project is on EVO X2 at
+  `/home/jez237/racewave-analysis-20261014/GhidraWaveRace`. Raw ROM bytes,
+  decompressed reference graphics, and recovered pseudocode are not part of this
+  website change.
+
+## Source-confirmed numeric rules
+
+`FUN_80094acc` reads the signed 16-bit points table at RAM `0x800eabb0` /
+ROM `0xa53b0`: **7, 4, 2, 1**; the disqualification field produces zero. The
+browser championship already uses those values.
+
+Qualification data starts at ROM `0xa53bc`. Overlay instructions at ROM
+`0x1b5e90`â€“`0x1b5eb4` index it with a 16-byte class stride and a two-byte round
+stride. Normal includes a zero-point warm-up slot; the competitive thresholds
+are **1/2/4/8/12/16**, **2/4/6/10/14/21/28**, and
+**2/4/8/12/16/23/30/37**. These match the existing competitive rules.
+
+The stunt timer table is unsigned bytes at ROM `0x93a80` / RAM `0x800d9280`.
+`FUN_80075310` initializes milliseconds from the first byte; `FUN_800783ac`
+resets the timer from the corresponding checkpoint byte. Time remaining does
+not carry into the next section.
+
+| Course slot | Inferred venue | Section allowances, seconds | Stunt ramps | Rings |
+| --- | --- | --- | ---: | ---: |
+| 0 | Dolphin Park | 15 / 15 / 15 / 15 | 4 | 10 |
+| 1 | Sunny Beach | 15 / 15 / 15 / 10 | 1 | 12 |
+| 2 | Sunset Bay | 15 / 15 / 10 / 10 | 2 | 9 |
+| 3 | Marine Fortress | 20 / 15 / 15 / 15 | 2 | 15 |
+| 4 | Drake Lake | 15 / 15 / 15 / 15 | 3 | 16 |
+| 5 | Port Blue | 15 / 25 / 10 / 15 | 4 | 16 |
+| 6 | Twilight City | 20 / 15 / 15 / 15 | 5 | 17 |
+| 7 | Southern Island | 20 / 15 / 20 / 15 | 2 | 10 |
+| 8 | Glacier Coast | 20 / 20 / 20 / 20 | 0 | 14 |
+
+Numeric slots, allowances and object counts are directly observed. Venue labels
+are strongly supported inferences from independent behavior, circuit order and
+object arrangements; the original title bitmaps have not been decoded. Slot 7
+lowers actual water vertices over successive laps. Slot 4 contains weed slowdown
+zones and the fog-clear trigger. These resolve the earlier 3/4 and 7/8 ordering
+assumptions; do not interchange the Southern and Glacier rules.
+
+`FUN_80095050` selects per-course descriptors. `FUN_80095a28` decompresses kind 5
+geometry to `0x802d6800` and directly copies kind 6 companion data to
+`0x80306800`. `FUN_80071e70` reads the stunt route, ramp and ring pointer tables
+at ROM `0x90d3c`, `0x90ecc`, and `0x91084`. All nine companion structures were
+extracted with bounded range and sentinel checks. Applying the initial-image
+mapping to these pointers produces invalid coordinates. Physical scale, heading
+conversion, obstacle contact and ordinary-input traversal still need calibration.
+
+## Implemented feature pass
+
+| Feature | Implementation and verification boundary |
+| --- | --- |
+| Best complete time-trial ghost | Measured hull position/heading/attitude at 20 Hz, bounded compressed storage, interpolation, compatible course revision/class/laps/rider/tuning/sea/seed, best total-time retention. Visual only: no physics, wakes, collision or progress. Matching starts reuse the recorded wave seed. |
+| Ghost persistence and visibility | Portable saves include a bounded library of nine setups, visibility preference, erase/undo. Old saves gain defaults; malformed imports are rejected before replacement. |
+| Horizontal and vertical two-player display | Exact physical-pixel partitions, matching cameras/refraction/HUD/pointer orbit and independently clipped lens effects. No graphics quality reduction is forced by the layout. |
+| Separate player windows | One authoritative host, full-resolution Player 2 presentation and controls, shared pause/restart, bounded snapshot delivery, reconnect and safe paused split fallback. Actual OS minimization and physical controllers remain unverified. |
+| Online two-player extension | Private WebRTC invite link/return code, one host simulation, independent full-resolution views and local controls, shared pause/restart, stale-input release and paused recovery. Free STUN without a paid relay; restrictive-network support and physical controller hardware remain unverified. See [ONLINE-MULTIPLAYER.md](ONLINE-MULTIPLAYER.md). |
+| Two-player Dolphin Park | Untimed exploration with normal water/stunt physics, both riders, same-rider alternate livery, independent cameras, pause/restart. No racing gate/DQ/lap-finish logic. |
+| Independent Player 2 stunts and dive | Gamepad modifier controls and numpad 1â€“7 / apostrophe defaults; both riders can use the same mechanics. |
+| Remappable controls | Bounded per-player keyboard/button/axis settings, inversion, 0â€“35% deadzone with 5% default, conflict checks, safe key capture and defaults reset. Touch actions remain independent of physical-key rebinding. |
+| Per-player rumble | Actual collision, landing and hull-load transitions; 25% default, independent strengths, throttled calls and cancellation. Fake actuators cover failure handling; physical hardware remains unverified. |
+| Stunt water conditions | Stunts consistently use venue conditions and permit their normal score saving; ordinary race/free-ride sea preferences are retained. |
+| Global scoring | Published worldwide race-time and stunt-score boards, separated by event, course, class, laps, sea state, tuning category and layout revision. Explicit posting, local records retained, previews/demos/free ride/versus/DQ excluded. See [GLOBAL-SCORING.md](GLOBAL-SCORING.md). |
+
+The initial integrated full run checked **471 tests: 467 passed, four failed**.
+One cache test needed its mode expectations updated for two-player Dolphin
+Park. The other failures reproduced on unchanged source: the cornering fixture
+omitted actual yaw, and the detailed-model fixture installed its fetch mock
+after the asset store captured the native fetch. Their assertions were retained
+and the fixtures repaired. The subsequent affected-feature run passed **97/97**,
+including these repairs, existing competitive two-player routes, controls,
+ghosts, rumble, portable records, model geometry and camera/lens tests. The
+entire long suite has not been rerun after those focused repairs.
+
+A direct full three-lap simulation produced a valid
+192.550-second ghost containing 3,852 samples (58,159 serialized bytes), with all
+42 checkpoints, no DQ, and no missing recording section.
+
+Local browser verification at High graphics confirmed:
+
+- Vertical Dolphin Park views each used 640Ã—720 pixels on a 1280Ã—720 canvas,
+  with matching HUDs, separate cameras and a 512Ã—576 refraction target. Both
+  riders remained in untimed free ride; Player 2 input moved its own craft.
+- A normal-condition Sunny Beach time trial finished in 193.000 seconds with
+  42 checkpoints and zero misses, saving 3,861 samples in 58,885 serialized bytes.
+  Reload/start reused seed 52, displayed the ghost, and recorded a fresh run.
+- The first ghost clone attempt exposed an oversized Three.js LOD-cache copy.
+  The display clone now shares detailed geometry and omits runtime metadata;
+  its regression verifies that metadata is never serialized and original
+  geometry/material ownership is preserved.
+- Rebinding throttle from W to K drove the live craft; portable export included
+  the binding and ghost. Restoring defaults and cancelling capture with Escape
+  retained the paused modal state and left no held input.
+- Simultaneous Player 1 driving and Player 2 Right Ctrl braking worked after
+  removing capture-only shortcut filtering from active gameplay. Recognized
+  gameplay chords prevent browser shortcut handling during play.
+- Stunt mode selects and locks venue water conditions. Physical gamepads and
+  actuators remain untested; unit tests use independent fake devices.
+
+## Required remaining work
+
+1. Use the extracted original stunt structures and units to calibrate all nine
+   routes, rings, jumps, checkpoints and section schedules. Current City uses
+   48/27/27/35 rather than 20/15/15/15; most other schedules are still estimates.
+   Faster steering-driver probes alone cannot traverse the current City geometry
+   within the original schedule while retaining all rings. Do not conceal that
+   mismatch with longer timers or simply make the route impossible.
+2. Complete source-course comparison after the integrated Southern and Glacier
+   replacements. Both now use recovered geometry and source Stunt schedules;
+   exact handling and visual sign-off remain outstanding, as does Glacier
+   full-ring mastery.
+3. Calibrate exact scoring/penalties and motion against the recovered control
+   transitions, training lesson progression, dolphin unlock timing,
+   race conditions, course hazards, opponent behavior and handling against the
+   recovered code and actual reference play. Existing broad coverage is not proof
+   of exact parity.
+4. Assess any remaining relevant installed enhancements and physical-controller
+   verification. Separate-window suspension has controlled-visibility and real
+   event-loop-stall coverage; OS minimization controls are unavailable here.
+   Account-backed achievements need
+   separate scope/access assessment; no credentials or paid service are assumed.
+5. Complete all-class ordinary-input course comparison, full regression checks,
+   browser save/reload/control/ghost flows and hardware verification where
+   available. Then follow the existing committed/pushed deployment wrapper.
+
+Keep the ongoing goal active until those requirements have concrete evidence.
+No purchases or new paid services are authorized.
+
+## ROM motion and buoy pass â€” October 14, 2026
+
+The same private ROM now supplies all nine single-player race marker tables,
+with separate class, multiplayer and alternate route groups. Marker centers
+are the authored x/z fields; a derived 142-unit offset controls orientation,
+not the physical buoy position. Suppressed raw types and alternate branches
+were distinguished before comparing them to the browser maps.
+
+Marine Fortress Hard and Expert each omitted a red marker present in their
+native tables at `[3244,887]` (ROM `0x2b7f50` and `0x2b82c0`). The already
+authored Normal marker at world `(120,-24.8)` matches its fitted position.
+Both classes now retain it before the final red, restoring seven colored
+markers. Fortress layout revision is 7, separating older times and ghosts.
+The later Glacier collision pass resolves its 16-versus-15 Reverse marker
+discrepancy. Port's ordered markers and Twilight Normal's empty original table need consumer
+interpretation before further changes.
+
+`FUN_80063c88`, `FUN_80064c0c` and `FUN_80065c18` establish submarine entry,
+hold, release, wet contact and buoyancy suppression. The flat-body native
+coefficient changes from 0.03 to 0.003. Entry requires accelerator, sufficient
+speed and an airborne stick gesture; continued holding has a 30-update wet
+contact allowance. Releasing ends the action. The speed HUD multiplies native
+speed by 1.8; the browser expresses the entry threshold as 60 km/h. Dedicated
+trick keys represent the source stick gesture. The 60 Hz distributed-pressure
+solver remains a reconstruction: its damping and resurfacing trajectory are
+not a port of the native solver.
+
+The browser now suppresses support while dive is held, counts immersed time,
+and restores buoyancy on release or allowance exhaustion. It preserves actual
+position and momentum through the return to the surface. Existing Twilight
+and Southern verification drivers hold and release the same input a player
+uses. Their ramp approaches were adjusted for the speed requirement; no ring
+completion or hull position is injected.
+
+`FUN_800783ac` leaves an expired stunt timer at zero while momentum lasts;
+`FUN_80063c88` cuts thrust. A valid next checkpoint resets both allowance and
+coast counter. The browser now permits that rescue and ends the coast below
+10 km/h or after approximately ten seconds. Previous immediate retirement
+was incorrect.
+
+Native move recognition is not restricted to stunt mode; scoring dispatch is.
+All racing modes now share the held flips, left/right rolls, standing,
+handstand, backwards and rider-somersault transitions. Regular races show
+the movement and landing result without stunt points. Demo riders release a
+rotation before landing instead of receiving an automatic completed flip.
+Ring contact accepts either side, missed timed rings remain available, and
+only consecutive ring numbers extend the timed score chain. Free ride retains
+its existing returning-ring scoring. Swept contact now includes the thin
+aperture volume, including vertical entry, using the source 32/112 ratio of
+slab half-depth to radius. Existing ring dimensions, probe height, floating
+offsets and exact scoring/pose timings still need calibration. Shore recovery
+cancels unfinished rotations and poses while preserving earned progress.
+
+The initial source-layout fit exposed shared geography errors: Glacier's
+northern crossing intersected over 71 metres of the former solid floor, outside
+its ice support. Southern's ring 3 intersects the current ship. Fits against independently authored buoys
+have RMS residuals of roughly 4.4/6.0 metres, so they locate discrepancies but
+do not prove exact terrain. That audit also identified twelve stationary breakable Glacier spheres,
+replacing the former ten drifting obstacles in the collision pass below.
+Do not lengthen the original section schedules to conceal these mismatches.
+
+Private decoding recovered Glacier's 165 collision planes and 127 shoreline
+segments. All 124 upward-triangle interior checks agreed with the native
+spatial grid; reconstructed vertices were within 0.0131 native units of integer
+coordinates. The north has an open western water channel followed by an
+eastern ice shelf at native Y=30, with submerged slopes to Y=-60. The narrowest
+measured water cross-section is 267.204 native units. This establishes the
+required kind of shoreline correction. The collision pass below applies one
+shared unrotated coordinate convention; native handling remains separate work.
+
+The initial complete motion run passed 482/485. Its three dive regressions
+were repaired: the city driver now enters fast enough with forward trim and
+holds the input, the park driver maintains accelerator through the submarine,
+and the two-player fixture supplies the required speed/accelerator. The city
+test retains actual under-wall clearance and verifies a real dive on each lap;
+the wet allowance may expire before a still-submerged hull crosses the wall.
+All 43 affected integration checks then passed. The final complete regression
+run passed **487/487 in 442.55 seconds**. Independent review found no remaining
+issue in the contact/recovery fixes; 4,000 deterministic ring segments matched
+a separate finite-cylinder intersection check.
+
+High-quality browser verification completed the corrected Twilight inner
+routine with all 14 selected rings, four checkpoints, no crash or DQ and a
+final 60 FPS reading. Dolphin mastery completed all ten rings and eight moves
+in 53.717 seconds, scoring 10,277 without a crash. A manual time-trial
+handstand retained zero stunt points and the detailed rider/craft. Vertical
+two-player racing showed an independent P1 handstand and P2 standing ride,
+both at zero stunt points, using two 640Ã—720 High views. This is functional
+rendering evidence, not a claim of constant 60 FPS in every split-screen scene.
+Mode switching exposed a stale cached rank display, which now uses the same
+HUD cache in stunt and race modes. Shore recovery also cancels unfinished
+rotations and poses while retaining earned progress. No gameplay/runtime
+console errors were observed; the existing missing favicon request remains.
+
+## Glacier collision and breakable-ice pass â€” October 15, 2026
+
+Glacier now uses a single unrotated `.025` scale for the recovered numeric
+object and collision families, rather than fitting each family to the earlier
+illustrated-map reconstruction. Relative geometry is source-derived; the SI
+interpretation remains conditional on the logical-clock and HUD calibration.
+No original rendered meshes, textures, ROM segments or decompiler output are
+shipped. Independently tessellated modern scenery follows the recovered planes.
+
+The two shoreline chains contain 127 segments. Their peninsula is closed;
+the distant northern mainland endpoints use an explicitly inferred closure.
+The contact mesh has 124 upward triangles in ten components and 41 finite
+vertical side/rear faces. Submerged skirts remain submerged; the western water
+channel is open, followed by the eastern Y=30 ice shelf. There are no separate
+Glacier ramp objects: the three western launches and central wedge are static
+floor geometry. Backside wall contacts cannot grant ramp lift, and a swept
+crossing above the finite wall stays clear. Background land heights and distant
+scenery are still independently authored.
+
+All four classes now retain sixteen visible markers. The first three share
+the same source rows; Reverse restores the omitted `[-3518,-132]` marker.
+Source headings use the 4096-step angular conversion, and the finish half-span
+is 500 native units. Existing steering offsets and colored-buoy finite spans
+remain reconstruction choices, not proven native scoring rules. Glacier layout
+revision 3 separates these records and ghosts from the former course.
+
+Twelve ice blocks use fixed XYZ positions and radius 50 native units. Eighteen
+hidden boundary spheres retain fixed XYZ and radius 25. Fixed-sphere contact
+uses the two source-derived hull-axis probes with radius 12; static floors and
+walls use the twelve observed hull points. Fast swept contact prevents tunneling.
+Breakage uses approach normal speed, explicit numeric rider-slot stability and
+stance factors. Breaking contact still resolves; every later racer sees the
+same broken obstacle. Eight varied procedural fragments per impact are bounded
+to two recent events. Replay captures preserve intact/broken state and analytic
+fragments across clock rewind without changing live collision state.
+
+Glacier Stunt now has fourteen source rings at absolute Y=60, half-depth 32,
+radius 112 and probe offset 8, with four actual checkpoint limits of 20 seconds.
+Raw type-8 navigation guides award no checkpoint. The ordinary-input inspection
+controller may leave a missed optional ring behind and recover an overshot
+steering guide; it cannot move craft, grant objective progress, or extend time.
+The inspected run crossed four finite checkpoint planes at 12.850, 29.983,
+45.483 and 58.650 seconds, collecting nine actual rings with no wipeout or DQ.
+This proves a traversable course under the source limits, not all-ring mastery.
+All four race classes also completed three laps with 51 gate passes, zero
+misses and no DQ using ordinary helm inputs.
+
+The live water solver remains the modern pressure reconstruction. Faceted
+contact preserves its actual wet samples, including mixed water/floor contact;
+it does not globally disable water because the center lies over an ice polygon.
+The interim solid response distributes translation and rotation using the
+observed equal-point geometry; it is not the original point-constraint engine.
+The former arbitrary sustained-steering ice timer is unused by source facets.
+The new independent `native-hull.js` kernel reproduces the twelve equal-weight
+points, 66 pair constraints, one Jacobi pass, radius-dependent point damping,
+and source frame fit. The separate `native-water.js` component implements
+ordinary numeric rider profiles, the two rear jets, lower-point gravity,
+flat-water buoyancy, wet-group drag, and five-substep state timing. Modern
+wave-gradient pressure is explicitly approximate; source stunt/joint/recovery
+forces are not yet ported. Neither component is connected to live racing.
+The kernel tests distinguish a one-point velocity projection
+from a whole-hull positional correction. Live force/control integration remains
+required before claiming native handling.
+
+The native HUD reads **whole logical-frame displacement**, accumulated across
+five body substeps. It does not read a point velocity or the final substep's
+speed. Conditional on km/h and 50 ms logical frames, `.025` units/mapping and
+100 Hz substeps agree with HUD factor 1.8. The observed integration gain is
+`.992` without a division by five. Source lower-point gravity corresponds to
+an arcade mean near 32 m/sÂ² before water and damping; it must not silently be
+replaced with an assumed 9.81 calibration in the future source-physics port.
+The logical clock has not yet been compared to measured reference wall time.
+
+Southern's numeric reconstruction is now integrated; the October 15 section below
+supersedes the earlier disabled module and illustrated geography. The source
+selector previously called race/stunt in intermediate private notes is **player
+count**. Southern has two additional fixed mast-base spheres in single player,
+including Stunt, absent in two player; its 26 hidden XZ spheres follow the water
+datum in both layouts. Reverse retains the ordinary pier ramp.
+
+
+
+Independent review also corrected the interim contact response's conversion
+between body angular impulses and the rendered hull's Y-X-Z Euler rates.
+Finite-difference probes verify that a banked contact actually stops entering
+the plane without adding kinetic energy. The final Stunt checkpoint now keeps
+its scored remaining time instead of resetting an absent fifth section to the
+old generic 38-second default, consistent with the source finish exception.
+The current High-quality browser run finished in 58.650 seconds with nine rings,
+2,605 points, four checkpoints, zero crashes or DQ, and 6.833 seconds remaining.
+Its final measurement window reported approximately 60 FPS and 884,000 triangles.
+No gameplay console errors occurred; the existing favicon 404 remains.
+
+
+Final complete regression after the contact and finish-timer review: **567/567
+passed in 294.72 seconds**. This includes all nine venues/classes, championship
+progression, original-allowance Glacier inspection, breakable shared/replay
+state, source geometry, prepared hull/water components and Southern numeric
+fixtures. Source parity and production publication remain pending the remaining
+items above; these tests do not establish original runtime equivalence.
+
+
+## Southern source integration and player windows â€” October 15, 2026
+
+The live Southern course uses the unrotated conditional .025 scale for every
+source center, direction, plane, fixed volume and Stunt item. It replaces the
+illustrated-map shoreline, floating above-water ship box, authored 4.2 m BOAT JUMP
+and generic 38-second Stunt route. Layout revision 2 separates its records and
+ghosts. No original rendered assets, raw executable or recovered pseudocode
+are distributed.
+
+All 59 finite shoreline edges were independently matched to their raw source
+rows and outward normals. Their consumer is height-independent: XZ hull points
+collide even while airborne. They are separate from sea datum and rendering.
+The long 45-edge ribbon is a narrow raised structure at observed top Y=50, with
+small island accents. Modern vegetation,
+materials, distant scenery and detailed riders remain in use.
+
+All 305 source planes remain: 287 upward faces and 18 side/downward bow faces.
+A further 17 fixed runtime projection volumes supply the submerged ship hull,
+full deck, pier sections and finish posts. This corrects the earlier inference
+that no grid plane beneath ring3 meant no deck collision. The deck volume spans
+native X=125..450, Z=-5150..-4550, Y=-700..-50. The visible deck is fixed at Y=-50;
+it does not follow the tide. Independent modern hull/cabin/mast artwork uses
+these measured bounds without copying the original display list.
+
+The ordinary ramp has three finite projection volumes and keeps raw heading 45
+in every class including Reverse. Stunt uses the source 33/308-degree pair.
+The source axes are slightly nonorthogonal; dual-coordinate intersections
+preserve all interval tests instead of assuming a perfect rotation matrix.
+The three source upper-point side-contact exclusions are retained. Flagged
+ramp/reef contacts retain physical response while reporting 40% impact strength.
+The live impulse remains an explicitly interim rigid-craft response; native
+pointwise projection, including outgoing velocity in volumes, is not claimed.
+
+Source tide starts at zero and follows a shared **human** completed-lap latch:
+first lap completion lowers toward -100, second toward -150, in discrete one-unit
+outer updates. AI laps cannot trigger it; either human can in two player. Stunt
+retains initial water. The browser maps the outer update to its conditional 20 Hz
+logical-clock policy; reference wall-time calibration remains outstanding.
+Source mainstate 0x66/67 initializes -150 for a special post-race four-rider
+Southern presentation, not ordinary Time Trial. It must not alter Time Trial's
+initial datum. Recovery rejects source shores, shallow floors and solid volumes
+without deleting earned race/Stunt progress.
+
+The Southern Stunt layout has ten source rings at absolute Y=0/60, four actual
+checkpoint rows 1/2/5/0 and 20/15/20/15-second allowances. Raw type 8 guides are
+unscored. Authored steering targets only issue helm inputs. A default-grid,
+rider 0/seed 17/course-sea run physically collected all ten rings and four
+checkpoints in 54.716667 s. Section times 13.616667/12.233333/16.250000/12.616667 s
+remain below their allowances, with no overtime, crash or DQ. Ring 6/9 navigation
+lines shift along the actual apertures; physical ring centers and radii do not
+move. Independent raw-floor/volume checks cover all 47 route targets.
+
+The same run was rendered at High, 1280x720, approximately 923k triangles and 55 FPS
+in the final measurement window. The partly submerged deck/masts were also
+inspected at 18.583 s after four actual rings, with zero collision. No gameplay
+console errors occurred; the existing favicon 404 remains. Later modern artwork
+changes require the normal final asset/browser refresh.
+
+`native-rider-forces.js` is an isolated preparation for native handling: explicit
+previous-frame joint trim, auxiliary yaw, roll/flip point impulses and held-action
+decisions, with raw arithmetic comparisons. It does not fabricate a physical
+joint or connect itself to live racing. A future adapter must interleave these
+stages with jet, gravity, water and contact in the observed order; appending the
+whole helper after a water pass is not equivalent. Full rider constraints,
+wave-cell data/input conditioning and source action/scoring integration remain.
+
+Separate player windows now keep one authoritative race in the main window and
+give Player 2 its own full-resolution camera, water rendering, HUD and input.
+The child receives bounded presentation snapshots through a checked same-origin
+MessagePort; it cannot step physics or write records. Closing or reloading the
+child pauses the race and restores the split display. Reopening preserves the
+same race, while restarting creates a fresh presentation generation. Replay
+temporarily shows a standby screen in Player 2 and restores its live state.
+
+Browser checks verified two 1280x720 High canvases, independent throttle,
+pause/resume, close/reload, reconnect, restart and replay. A real 1.1-second
+host event-loop stall paused without advancing simulation time or position.
+Controlled visibility tests covered visible-child pumping and suspension when
+both windows are hidden. Actual OS minimization and physical gamepad/rumble
+hardware remain unverified because those controls are unavailable here. Idle
+menu/replay connections now remain healthy beyond the former 20-second timeout;
+fake-clock tests also cover finite loading timeouts and stale-child recovery.
+
+The isolated `native-stunt-scoring.js` state machine reproduces observed pose
+entry/hold/release values, checkpoint-local repeat flags, standing-to-somersault
+transition, landing arc coefficients, ring streaks, checkpoint time rounding
+and delayed finish settlement. Its 26 focused tests and 1,513 private numeric
+comparisons passed. It emits queued awards rather than claiming native popup
+display timing. It is not yet connected to live Stunt scoring: the required
+articulated motion, landing and arc inputs must be supplied first.
+
+The final Southern race pilot passed all four solo classes, all four four-rider
+classes, and the boosted rider 2 Normal championship fixture. Each human
+completed three laps with every gate, zero misses and no DQ. The pilot only
+chooses throttle, steering, braking, trim and damping; choosing inputs leaves
+position, velocity and progress unchanged. Source floor contact and racer
+contact remain active during these checks.
+
+The refreshed browser Stunt run retained all ten rings and four checkpoints in
+54.716667 seconds, with 3,500 points, no crash/DQ/overtime and 2.383333 seconds
+remaining. High 1280x720 reported about 60 FPS and 926k triangles in the final
+window. The ordinary-race tide inspection reached datum -2.5 at 78.4 seconds,
+after the human entered lap 2 with zero misses. The earlier deck/mast inspection
+was repeated after the artwork refresh. No gameplay console errors occurred.
+
+Complete regression initially passed 631/632: the source-route dispatch skipped
+the shared exhibition traffic controller, so Southern's demo pack crowded.
+Restoring the common control-only traffic/flip wrapper fixed that existing
+regression. The targeted demo passed, followed by **632/632 tests in 294.00
+seconds**. This is a checked implementation milestone, not full reference parity
+or a production deployment.
+
+
+## Sunny source geometry and handling preparation â€” October 15, 2026
+
+Sunny Beach now uses slot 1's four source buoy tables and quantized headings,
+20 closed sandbar edges plus 29 open outer-coast edges, 231 finite upward floor
+faces and 39 open-chain boundary markers. The outer coast receives no invented
+closing contact edge. The small source sandbar is horizontal in the shared
+world frame. Four hidden fixed XYZ spheres remain in every player/class family;
+visible static balls number 0/3/5/5 in ordinary classes and 4 in Stunt. All remain
+physical. Sixteen single-player render-only placements select independently
+authored beach furniture; their original identities/artwork are not claimed.
+Two-player selection omits those decorations while retaining its source solids.
+
+The fixed Stunt ramp uses six finite projection volumes at native Yâˆ’24. No
+scripted takeoff impulse is added. Twelve absolute-Y rings retain the source
+112-unit radius, 32-unit depth and 8-unit probe offset. Checkpoints 5/10/16/0 use
+the original 15/15/15/10-second limits. Layout revision 6 separates new records
+from the earlier geometry and admission rules. Sunny ordinary races have no
+ramp: the older helper that inserted a displaced Stunt ramp is disabled for
+source venues. The browser course-out envelope remains authored; the native
+course-out rule is unresolved.
+
+Authored ordinary-input paths passed all four solo classes, all four four-rider
+classes and the boosted rider 2 Normal fixture at seed 17/60 Hz. The refreshed
+Normal championship fixture won 39 points and unlocked Hard. Its Sunny round
+finished second by 0.400667 seconds, with zero human misses and no ordinary ramp.
+Source navigation remains a browser controller; the Surf profile permits faster
+exhibition inputs without changing the source venue-condition path. Tests also
+retain the opening exhibition's speed and completion checks for seeds 23/619.
+These are bounded checks, not all-seed or native-handling guarantees.
+
+Browser High 1280Ã—720 collected all 12 rings and 4 checkpoints in 43.733333 s,
+scoring 4,450 points with no crash/DQ/overtime and 1.433333 s remaining. Calm
+finished in 43.466667 s in simulation. An apex inspection at 26.783333 s showed
+six collected rings and a hull 6.216760 m above water. Camera suspension now
+keeps the tall-launch rider fully in frame; framing checks cover 30/60/144 Hz.
+The final held apex frame reported about 60 FPS and 1.143 million triangles.
+High-resolution craft, rider, water, reflections and scenery remain active.
+
+A refreshed browser time trial using the source human admission rules finished
+three laps in 202.415 s with 42 visible passes, no misses/DQ and no ramp landings.
+The final High 1280Ã—720 window reported about 60 FPS and 1.365 million triangles.
+The only browser console error in the checks was the existing favicon 404.
+
+Human admission on Sunny and Southern now follows the recovered primary source
+graph at 20 Hz, including real unscored guide planes. Colored buoys have the
+25-native-unit wrong-side tolerance and coarse region admission, with current
+sample/armed/side history rather than a local swept-width rule. Ordinary finish
+admission preserves the source one-sided bound and course slack. Source crossing
+offsets provide millisecond lap adjustment. Visible passed counts remain separate
+from raw node progress. AI admission remains the browser swept rule; host lap
+legality and five-miss DQ are explicit policies. Southern record revision is now
+3. All four classes on both live source venues still finish with zero human
+misses. The source leaf passes 61 tests, including 51 raw-backed fixture cases;
+four additional live tests cover scheduling, pause, ownership and remote planes.
+
+The native handling adapter now conditions raw controls, interleaves trim,
+gravity, yaw, manipulation and water in observed order, and supports explicit
+source actor/action states. Its optional 19-point articulated rider uses 22 links
+and eight constraint passes, latching physical torsoRoot/joint 2 after tick 5 for
+the next logical frame. Caller-authored pose/rest/history and actual auxiliary
+grip anchors remain mandatory. No constant joint or visual-bone substitute is
+fabricated. Ninety-seven focused handling tests pass; 2,780 captured default-water
+numeric values remain unchanged. This adapter is separate from live race-core.
+
+The isolated triangular water field reproduces signed Q8.8 storage, finite hex
+patch updates, field queries and sine-line forcing. Twenty-one focused tests
+pass; private raw checks match 1,655 prepared kernel vertices exactly. Amplitude
+20 scales forcing (conditionally Â±0.5 m), without a global height cap. Original
+camera selection, phase/RNG history and special wakes remain separate work;
+the live browser still uses its modern water/pressure model.
+
+The ring scoring preparation now distinguishes object identity from chain order:
+City's repeated 3/4/5 orders can each score once as separate objects. The existing
+live ring loop already retains separate object status. Native score popup
+settlement and articulated arc inputs remain to be connected to live scoring.
+
+Port static preparation includes its genuinely different 1P/2P companion data:
+117/109 shore edges, an open 29-edge coast, no active 3D grid floors, source ramp
+volumes and the 16-ring Stunt layout. Twelve objects are defined as dynamic,
+never falsely frozen as source solids. The isolated floating-object kernel has
+15 focused tests for springs, buoyancy, contact order and craft/object recoil.
+Neither Port module is live yet. Recovered source evidence stays private.
+
+The first full regression found 19 failures: synthetic open-water/ice fixtures
+inherited Sunny's new source solids, the old ramp helper inserted a race ramp,
+and the conservative source pilot reduced Surf exhibition pace. Independent
+synthetic fixtures now isolate those physics checks; the optional-ramp traversal
+check uses an explicit authored circuit, source races retain their real ramp
+selection, and the Surf controller keeps the existing speed checks. Corrected
+focused checks pass. Final complete regression is recorded below when finished.
+
+
+The completed regression passed **842/842 tests in 312.12 seconds**. The exact
+Normal cup and refreshed source-gate browser run were checked after removing
+the spurious ordinary Sunny ramp. Independent physics fixtures preserve their
+original assertions without inheriting live venue collision data.
+
+Auxiliary rider anchors and a modern anatomy provider are also prepared. The
+recovered pivot/history/semicircle mechanics supply actual physical grip outputs
+to the 19-point rider solve. Twenty-two new focused tests passed. The default
+geometry comes from the existing modern rider rig; it does not claim original
+pose/radius equivalence. Actor animation, special crouch and live integration
+remain pending. These preparations do not replace the live handling model.
+
+
+## Source water and boundary collision integration â€” October 15, 2026 (in progress)
+
+The live venue sea now uses the reconstructed signed Q8.8 triangular field,
+with source noise, sine forcing and finite camera-selected hex updates. Shared
+ordinary gameplay selects variant 0, including Stunt. Course slots 0..8 use
+1P amplitudes 20/20/20/40/10/30/20/25/25 and forward 2P amplitudes
+15/15/15/35/5/20/15/20/20. Reverse and Stunt use the 1P table. These are
+initialization/forcing amplitudes, never global height limits. Private raw
+checks cover 288 gameplay setup combinations, 62 amplitude cases, eight mode
+cases, three initialization-camera cases and 80 PRNG steps.
+
+The source random primitive is a 32-bit LCG, multiplier 0x41c64e6d and increment
+0x3039. Water consumes its low 15 bits. Browser initialization uses the normalized
+stored wave seed with that algorithm; it does not reproduce the original shared
+global PRNG history. The browser resets forcing phase for reproducible seeded
+ghosts. The original field initializer does not reset global phase, so original
+cross-course phase history remains unimplemented. Restart/ghost metadata and
+field initialization now use the same normalized seed, including API values
+outside the UI's seed range.
+
+Field setup performs two noise passes, clears previous patch centers to zero,
+and does not stamp/update a patch. Initial source camera basis comes from eye
+[1,1,1], target [0,0,0], FOV75, up [0,1,0], near10, offsets [0,3]. The first
+post-hull frame solves the ordinary virtual follow camera. Subsequent forcing
+uses the previous snapped center and camera orientation; patches select the
+updated camera, P2 before P1, including double evolution in overlap. The virtual
+source camera selects water independently of the high-resolution modern camera.
+The source camera obstacle correction and scripted per-racer scene modes remain
+unimplemented. The explicit host logical clock remains 20 Hz pending wall-time
+calibration against actual reference play.
+
+A host-owned water state now feeds CPU height queries and the existing High mesh,
+reflections, refraction and detailed materials. Render interpolation uses source
+triangles and signed whole-height/datum wrapping. It does not add modern swell
+or impose original low-resolution image/mesh output. Actual Radeon GLES3 vertex
+and fragment shaders each passed 2,084 numeric fixtures, including negative
+coordinates, torus seams, non-flat gradients and extreme datums. Maximum observed
+error was 0.0000366 world units at the extreme datum fixtures. Explicit reciprocal
+multiplication/float rounding removes real GPU seam mismatches found in the
+first implementation. Modern custom sea choices remain separate enhancements.
+
+Replays and player-window packets carry bounded copies of the rendered height
+field, datum and revision. They do not contain field velocity, forcing phase,
+RNG or source camera history, and cannot step the host water. Pause/replay,
+independent races, source phase, P2/P1 ordering, seed reconstruction and snapshot
+bounds have dedicated checks. The separate native handling adapter can now
+consume raw cell impulses through createNativeWaterCellSurface(field), preserving
+the distinction between the source plane query and rendered surface height.
+The live craft still uses the modern pressure/rigid-body solver; this is an
+incomplete integration, not native handling parity. Extra wave airborne/landing
+events expose that dependency. Native pointwise course contact hooks and a shared
+100 Hz hull/20 Hz water host are the next integration requirement.
+
+Boundary markers are now recovered physical fixed spheres: radius25 plus probe12
+native, stored absolute Y0 except Southern's non-tag5 tide overwrite. Sunny has
+39 markers, Southern79 and Glacier90. Glacier's18 hidden XYZ spheres are a
+distinct family with no marker-center duplicates. Port51 and Sunset81 are also
+prepared. Loaded source order is visible XZ, markers, hidden XYZ; contacts query
+the native 4x4 grid, visit candidates descending, and stop at the first overlap
+for each latched +27/âˆ’9 probe. Full penetration shifts all12 hull points and
+kicks three velocities even for separating motion, without sphere recoil. The
+exact isolated kernel has raw fixtures. Its live bridge currently retains the
+translation and mean kick in the modern rigid craft; native pointwise constraint
+response remains separate. Marker artwork now shares its fixed/tidal datum rather
+than bobbing on modern waves. Their spheres do not establish a course-out rule.
+
+The modern steering bridge now permits jet yaw at low speed, so a wet craft can
+turn while thrust presses against a shore. This fixes the Southern Reverse solo
+stall without moving course geometry or awarding progress. The older City
+Normal shortcut requires pullback lean like Hard to clear its actual finite
+crossbar under the new water; ordinary input alone completes 81 gates with no
+misses. Port's older Stunt controller uses a 2.5m lookahead and physically clears
+all16 rings/four checkpoints/three ramps. Its extra wave landings remain an
+unresolved native-hull dependency; the existing exact three-landings test has not
+been weakened.
+
+Sunny's jump/ring steering speed was recalibrated through controls only. A fresh
+browser run using the source seed primitive finished in45.366667 seconds with
+12/12 rings, chain12, all4 checkpoints, 4,370 points and no misses/DQ/crash/overtime.
+The final allowance was0.933333 seconds. High1280x720 remained near60FPS. A held
+apex at26.95 seconds had hull clearance4.651159m, all of the rider in frame,
+1.086 million triangles and near60FPS. These results supersede the earlier
+45.60-second run using the interim RNG. The browser console had only the existing
+favicon404. This browser evidence does not establish all-course/full-native parity.
+
+All standard record/ghost layout revisions advance for the new water. Marker
+changes additionally advance Sunny/Southern/Glacier's geometry revisions. Existing
+saved records remain archived in their prior scopes. Identical Glacier1P/2P
+object families retain the same GPU-world cache key.
+
+The first integrated regression was924/953. After source-seed, camera, marker,
+controller and factual-fixture corrections, a second checkpoint was960/980.
+That checkpoint still had20 failures: some stale revision assertions and actual
+legacy-course/native-water/modern-hull traversal failures. Subsequent focused
+checks pass Sunny12-ring traversal in all four class selections, source sphere
+integration, source water/window/replay, and cache behavior. Full parity and
+production deployment remain pending. No failed dynamic assertion, physical
+ring, source timer or wave amplitude has been relaxed to hide these gaps.
+
+
+The source-water browser replay returned to the held26.95s apex with live
+racer/time fingerprint unchanged; host water remained frame539/phase19. A real
+separate-window Sunny check used two1280x720 High canvases. At paused44.816667s,
+both49,152-sample fields had revision896, datum0 and full-array hash4144679575;
+three world-space queries also matched exactly. The child held display-only
+storage while the host retained its solver. No child console errors occurred.
+
+
+The latest complete released-feature regression is **974/985 in56.68 seconds**
+(private full-tests-native-water-after-controls.tap). Eleven failures remain:
+beach-break frequency under the new field; two City dive/ring checks; Port Hard
+ordinary traversal and the aggregate course/cup checks it blocks; Fortress ridge
+and aggregate Stunt traversal; Southern boosted-pilot placing; Glacier timed
+Stunt navigation; and Port's extra wave landings. Port now collects all16 rings
+and four checkpoints in80.983333s, but the unchanged three-landings assertion
+correctly reports27. These are unresolved integration gaps, not a green milestone.
+No new commit, push or deployment is being claimed for this work in progress.
+
+## Native ordinary handling preview â€” October 15, 2026 (in progress)
+
+The source point solver now has a runnable integration preview. Explicit
+`createRace({physics:'native',mode:'time',course:getCourse('greyhaven')})`
+attaches the twelve-point hull, physical auxiliary anchors, nineteen-point
+rider, source cell water impulses, finite shore/floor/box responses and fixed
+sphere contacts. It bypasses the modern pressure solver, rigid contacts,
+kinematic ramp launches, rescue and rider-collision mutation. The default game
+continues to use the existing physics while the native integration is incomplete.
+The preview is currently restricted to Sunny Beach source-water time trials;
+it is marked unranked and cannot replace existing time-trial ghosts or records.
+The local verification page can select it with `verify&nativePhysics`.
+
+`native-race-world.js` owns one clock for up to four adapters: prepare ALL
+riders, then five hull ticks visiting racers in descending order on each tick,
+then complete ALL physical rider solves, then advance shared water and any
+floating objects. Input, physical coefficients and water options are sampled
+once per outer frame. Independent render-rate accumulators cannot move water
+between opponents' hull passes. Source cameras receive the hull's actual XZ
+forward components including pitch, rather than a normalized heading vector.
+Pause preserves the fractional tick. Failed hooks fault the owner explicitly
+instead of continuing with unequal racer clocks. The .025 world scale and
+browser wall-time accumulation remain explicit host choices; the later timer
+audit below establishes10ms/50ms of source game time.
+
+The pure `native-racer-presentation.js` bridge copies physical pose/velocity,
+point wet flags and separate integer source HUD telemetry. Its wet fractions
+and rate estimates are display policy. It does not infer native landing,
+wipeout, ramp, trick or scoring decisions from those display values. The
+physical rider retains independently authored modern anatomy and steering
+supports; the original animation/actor machine has not been reconstructed.
+Collision candidate bins and derived clipping normals retain the explicit
+precision/order limitations exported by `source-native-contacts.js`.
+
+Recovered B/R controls are now in the adapter. B starts only on its qualified
+fresh edge, changes final selected gravity before all five hull ticks, then
+compresses the nineteen physical rider targets and adds its manipulation delta
+before the negative-up projection. The factor recovers across eleven binary32
+updates; release still affects its current frame before resetting. R raises
+lateral velocity retention, preserves the prior roll-balance value while held,
+and slews back by .01 per logical frame on release. Actor23 cuts an existing
+engine immediately. The source A/Z accelerator is digital; the browser brake
+releases it and coasts. No reverse thrust was invented. Native tuning defaults
+are explicit5/5/5 from the recovered human profile; the modern tuning sliders
+have not been silently remapped to mechanically coupled native fields.
+The private bounded B/R/control audit covers1,845 raw instruction cases.
+
+`native-floating-world.js` also connects the existing runtime-kind9 object
+kernel to the shared clock and actual field. Its after-water motion samples
+the source4d30c normalized plane expression, not the rendered triangle height.
+Contacts retain per-hull, per-frame impact maxima and object recoil without
+inventing a floor contact or activating contact-drive. Twelve Port definitions
+produce identical shared two-player object/water histories at30/60/144Hz.
+This is a host integration component; Port's source scene and native gameplay
+are still pending and are not enabled by this preview.
+
+The first complete regression after the ordinary native bridge and B/R
+integration is **1,057/1,068 in56.58s** (private
+`full-tests-native-world-preview.tap`). The same eleven integration failures
+remain. The subsequent floating-object and beach-presentation changes still
+require a new complete regression. The beach shaders now share native water
+heights, and crest history records actual field revisions rather than querying
+an analytic past that the field does not contain. Its unchanged frequency test
+still fails at12 course /34 surf breakers; thresholds and waves were retained.
+
+In the browser, the native preview rendered High1280x720 at about60FPS with
+roughly1.14 million triangles. At111.48s, hull tick11148 and water frame2229 were
+consistent with a partial outer frame. Actual keyboard B produced gravity
+âˆ’.3360000550746918 and factor.8999999761581421; held R produced retention
+.974081814289093 with the default rider0 profile. Ghost recording remained
+disabled. Replay returned to paused221.25s with hull tick22125 and water
+frame4425 unchanged. Only the existing favicon404 was reported. Full-course
+native handling, starts, recovery, named gestures/tricks, native AI and native
+racer contacts remain required before parity or production publication.
+
+The subsequent cadence audit confirms source game time: shared race setup
+requests three video interrupts per logical update; the rider loop performs
+five hull passes; active ordinary/Stunt timers increment50, and the actual HUD
+divides that counter by1000 and60. Thus20 outer updates and100 hull passes
+equal one displayed source second. Forty-eight bounded raw scheduler/timer
+fixtures pass. The original update queue holds one message and drops excess
+sends under load, so this does not assert exact20Hz hardware wall time or the
+browser accumulator's catch-up policy as original behavior.
+
+Review also caught a control-facing derivative bug: refreshing presentation
+history on both outer frames and render calls gave yaw-feedback controllers
+different rates at different host refresh rates. History now updates only on
+the world's physical tick callback. Native human input providers are sampled
+inside frame preparation, and terminal race results stop on the outer boundary
+without consuming a render-dependent extra hull tick. Fixed-time closed-loop
+hull, source progression and complete water states now match exactly across
+30/60/144Hz. The authored verification driver is separate from original AI.
+
+The completed driver check covers all sixteen Sunny rider/class combinations;
+fourteen are clean. Jonas retains one actual miss in Hard (raw row47) and one
+in Expert (raw row46). The balanced rider clears all four classes cleanly with
+identical physical/progression/water/driver histories at30/60/144Hz, both at a
+common40s sample and at the final result. Seed17 balanced finish times are
+108.329,106.577,107.092 and107.446s for Normal/Hard/Expert/Reverse. These are
+authored steering/throttle runs through the unchanged source human judge,
+not original AI, teleports, alternate gate admission or modified navigation.
+
+The final browser run used source seed783 and completed three Normal laps
+with zero misses/DQ at outer frame2207 /hull tick11035 /game time110.35s.
+High1280x720 remained around60FPS, with unranked ghost recording disabled.
+The49,152 field heights had revision2207, phase7, datum0 and Int16LE FNV1a
+hash3294072020. Both native beach programs compiled during actual rendering;
+after explicit helper-result initialization only the existing favicon404
+remained in that browser navigation's console.
+
+The latest complete regression is **1,102/1,113 in58.23s** (private
+`full-tests-native-world-final-verified.tap`), retaining the same eleven
+integration failures listed above. A later83-check focused pass verifies the
+new empty `racingBuoys` hook and established handling/contact/world behavior.
+Raw contact order is primary route7e8c8, hidden/boundary fixed7ef80, then generic
+objects7ecbc. The legacy `primarySpheres` API name denotes that final GENERIC
+phase; racing-route contacts have their own earlier hook. That route-buoy
+kernel and original wipeout/recovery state remain active reconstruction work.
+No production deployment or full-parity completion is claimed.
+
+The subsequent native-preview milestone implements primary racing buoy contacts
+and shared motion. All selected primary rows retain their source array order,
+with descending first-overlap searches for the two cached hull probes. Movable
+buoys use the checked binary32 30/70 penetration split; fixed checkpoint/finish
+endpoints retain full craft separation and their distinct radii. Point velocity
+uses the10ms hull clock while buoy recoil velocity uses the50ms object clock.
+The kernel matches80 private prepared contact fixtures and63 motion steps.
+Coincident centers remain explicit unresolved contacts rather than invented
+normals. Initial loaderY0/zero velocity, separate physics/render flags and the
+absence of original countdown/route-activation history are documented limits.
+
+The host now orders completed hulls, shared water, current-center adjudication,
+then one ascending buoy-motion pass. Buoyancy uses the recovered normalized
+source plane query, including its datum exactly once. The immutable admission
+layout accepts the current node position for heading/side/region decisions;
+checkpoint spans continue to use their fixed endpoint geometry. A prepared
+Sunny core regression produces an actual collision where a static judge would
+award power but the displaced-center source judge correctly records a miss.
+All riders share one mutable primary array; there are no per-rider buoy copies.
+
+Seven independently accumulated native impact channels and a shared normal
+are now connected to the native adapter. The normal follows each family's own
+strict maximum increase in traversal order, including fixed/primary endpoints
+and generic floaters. Equal impacts preserve it; simulation0 preparation
+preserves all channels/normal/box latch. Marked boxes attenuate only their
+recorded impact by source float32(.4), retaining their full physical response.
+The legacy three-field contact-drive report remains separate and cannot supply
+a missing normal. Completed snapshots and browser telemetry copy all channels.
+
+Existing high-resolution buoy bodies follow these physical positions, with an
+authored submerged lower body to meet the waterline without snapping physics
+to a rendered surface. Fixed endpoint bodies are native-preview-only display
+objects. Bounded replay snapshots contain copied positions/endpoints/visibility,
+without velocities or simulation ownership; replay interpolates those display
+values and never advances native motion. The browser replay check held hull
+tick10820, water frame2164 and buoy motion2164 while viewing recorded103.10s,
+then returned to live result108.20s with all three clocks unchanged.
+
+One High1280x720 browser run completed three Sunny Normal laps in107.70s with
+zero misses/DQ, hull tick10770, water/buoy frame2154. A normal-speed run completed
+in108.10s with zero misses, holding about60FPS during active play; both runs
+remained unranked with saved ghost recording disabled. Their differing browser
+seeds are not a same-seed determinism comparison. Native time-trial scope and
+the authored verification driver remain distinct from original AI and full
+ordinary race integration.
+
+Two additional isolated modules reconstruct the post-hull recovery lifecycle
+and procedural actor23 falling pose. Recovery matches892 applicable private
+prepared instruction fixtures, including severe/stumble thresholds, five-frame
+staging, joint2-versus-datum recognition, recovery input edges and deferred
+actor blending. The procedural pose/history helpers match260 producer and240
+history comparisons using independently authored prepared rigs. Their fixed
+native dimensions do not establish original artwork or arbitrary modern-rig
+equivalence. They are not yet bound into the playable host: actor7 needs an
+independently authored85-frame recovery provider, compatible rig/history
+integration and actual physical rider presentation before that lifecycle can
+be enabled. No source animation records are published.
+
+The complete regression after this milestone is **1,176/1,187 in58.60s**
+(`full-tests-native-primary-final.tap` privately). The same eleven integration
+failures remain; all74 newly added checks since the preceding1,113-test run
+pass. Full native course/actor/stunt/AI/racer-contact integration and production
+publication remain outstanding.
+
+## Native physical rider and recovery â€” October 15, 2026
+
+The Sunny native preview now binds the recovered post-hull lifecycle to the
+actual twelve-point hull and nineteen-point rider. Completed impacts decide
+after all five hull ticks. The preceding actor/countdown still controls those
+ticks; input muting and actor23 engine clearing apply on their proper later
+frames. Crash effects change actual velocities/damping once, retain the twelve
+saved float32 coefficients, and restore them through actor7's recovered gates.
+The recovery datum test reads the previous solved physical joint2, never a pose
+target. Persistent actor joint types, auxiliary mode, B completion and body/link
+solves follow the recovered decision/evaluation/completion ordering. Scene0
+skips physical pose work without inventing missed animation updates. The water
+follow camera receives the completed actor/frame after these solves.
+
+Procedural actor23 falling and the common actor24 stumble now supply physical
+targets. Actor24 uses the actual previous auxiliary pivot/history and retained
+yaw-only basis; its numeric producer matches18 private whole-source fixtures at
+both native and host scales,36 exact comparisons. The alternate record-dependent
+actor24 branch explicitly rejects instead of silently selecting the common
+geometry. Actor7 uses new authored water/stern/climb/seated poses with recovered
+85-frame playback,56 damping restoration and77 ordinary-return timing. It captures
+the actual fallen entry pose once. Current and pending providers evaluate without
+stepping physics; exactly one auxiliary and one body solve follow each active
+frame, including blends.
+
+This retains the declared authored rest anatomy, steering-circle radius,
+endpoint-history lengths and imported-target blend. Those choices and the new
+remount art are not original pose-record or geometry parity. Original normalized
+pose-block blending, the alternate stumble records and the remaining actors
+still require equivalent integration. No source animation, mesh or texture data
+is published.
+
+The detailed rider now follows all15 anatomical segments derived from actual
+solved world points. The complete hull basis transforms them once; modern extra
+bank, stunt rotations and wipeout root offsets are bypassed for this path. Mesh
+geometry, materials, shadows and LOD stay intact. If detailed assets fail, the
+existing built-in rider meshes receive the same explicit targets. Repeated
+rendering cannot run modern rider springs/IK or pump physical history. Replay
+copies and interpolates endpoint positions only, keeping solved-frame provenance
+discrete; incompatible/native-modern boundaries select recorded states.
+
+A repeatable development inspector drives from Sunny's ordinary grid into the
+real first enabled colored buoy using accelerator/steering only, then releases
+controls. With wave seed17 it records C38=10.117209434509277 at5.55s, enters23
+at5.80s,7 at7.15s, restores damping at9.90s and returns22 at11.25s. It changes
+no spawn, collision flag, physical point, actor, timer or progress. The collision
+correctly retains its actual missed buoy. Complete collision/recovery/hull/rider/
+water/buoy histories match at30/60/144Hz. Separate prepared qualified-impact
+traces cover severe entry for all four ordinals, moderate24 recovery, prior-joint
+datum admission, a scene0 gap and independent rider ownership.
+
+High1280x720 browser checks held the real fall at hull tick580/body and auxiliary
+solve116/water frame116, climbed at920/184/184, and returned to ordinary at
+1125/225/225. A separate full three-lap run completed in108.85s with no misses/DQ,
+tick10885/frame2177 and physical detailed-rider rendering enabled. These are
+functional browser checks, not source full-game trajectory or artwork sign-off.
+Paused replay held recorded7.3833s while live time11.25s, hull tick1125,
+water/body/auxiliary frame225 and buoy-motion225 remained fixed. Returning to
+the held inspection restored the exact live pose/progress/telemetry/water
+fingerprint. The console contained only the existing favicon404.
+
+The complete regression is **1,237/1,248 in61.68s** (private
+`full-tests-native-recovery-final.tap`). All61 additions since the preceding
+1,187-test run pass. The same eleven previously listed integration failures
+remain. One older primary-contact fixture was updated to replace its complete
+prepared physical bundle, including the recovery owner; its literal contact,
+current-center judge and motion assertions remain unchanged. Native racing
+outside Sunny time-trial preview, remaining actors/stunts, original AI, racer
+contacts, course sign-offs and production publication are still outstanding.
+
+## Native craft contacts and two-player races â€” October 15, 2026
+
+`native-craft-contact.js` now reconstructs the global craft-pair kernel. Four
+cached probes per craft retain binary32 positions and previous-refit deltas.
+All total craft participate, independently of the human-camera count. Ascending
+craft pairs and probe pairs use the recovered 78-unit center admission and strict
+24-unit probe overlap. Centers/probes remain frozen for the complete pass;
+every overlap translates all twelve hull points and changes the proper three
+point velocities. Zero or separating incoming motion still receives physical
+separation, while only a strict positive family maximum replaces C40 and the
+shared impact normal. Native work arrays retain float32 accumulation across
+all overlaps before conversion back to world units.
+
+The world prepares every racer, runs one global contact pass before each of
+the five descending hull groups, and refreshes each individual craft's probes
+immediately after its actual hull refit. Reset seeds zero deltas; ordinary
+refresh and recovered world-wrap history remain distinct. Proxy ownership is
+atomic across construction failures, including a later preowned hull or an
+invalid water surface. Snapshots, rendering, pause and result display cannot
+consume a pass or advance its history. Actual closing hulls now produce C40
+and enter actors 23, 7 and 22 through the existing recovery lifecycle without synthetic
+impact injection. Coincident admitted probe centers remain explicitly
+unsupported: the leaf rejects the entire pass before contact mutation rather
+than guessing source exception behavior or a normal.
+
+The private comparison checks **2,007 exact prepared-source comparisons**,
+including 1,251 consumer responses with 10,953 ordered contacts and independent
+cold/reset/refit producers. This establishes the declared leaf arithmetic,
+not complete-game bit-identical trajectories: the surrounding host hull still
+uses its documented SI/double fitting and authored rig choices.
+
+A separate bounded 27-case source audit confirms that the contact flag defaults
+to 1 and that no human-count condition surrounds its observed reader. The
+global scene words gate the entire five-hull loop. Simulation0 still has input,
+retained-pose, camera and water-selection work outside that loop; it is not a
+complete original pause contract. Main-state21 can admit water with no hull
+ticks. At this checkpoint these frontend schedules remained unported; the
+October 16 simulation0 checkpoint below adds the ordinary zero-physics outer
+schedule. Browser pause retains its explicit inactive-host policy. Numeric setups distinguish total craft from human count,
+including 4/1, 1/1 and 2/2. The direct-reference scan does not exclude every
+unidentified indirect writer or prove a time-trial frontend count.
+
+The opt-in native preview now admits Sunny Beach **two-player races** alongside
+time trials, with both independently controlled physical riders, the 2P source
+water amplitudes, selected class object families and actual shared contacts.
+Normal/Hard/Expert/Reverse have 43/46/48/48 fixed-sphere definitions in the checked
+source-family order and no 2P decorative colliders. Seed 17 riders 0/2 complete
+all four three-lap matches cleanly at 109.65/106.75/107.60/108.20 game seconds;
+their actual contact counts are 13/115/115/48. Complete physical/progress/water
+finish histories match at 30/60/144 Hz. These steering providers are authored
+verification controls, not original AI. Single input objects or logical-frame
+providers apply only to P1; arrays supply independent player streams.
+
+Native versus uses the normal winner/result display and stays unranked.
+Unsupported native catch-up assistance is disabled with an explanation, while
+its saved modern preference is retained. Ordinary race/championship AI, native
+Free Ride/Stunt, other native venues and source starts remain outside admission.
+
+Separate player windows now transport bounded physical 15-segment target poses,
+integer HUD/actor/frame telemetry and primary-buoy display rows. They carry no
+solver ownership or mutable physics buffers. Recorded endpoints interpolate;
+native actor/frame metadata and fixed spans remain discrete. Detailed and
+fallback meshes use the actual full hull transform once, bypassing modern
+extra bank/stunt/wipeout offsets. The child no longer imports race-core merely
+to obtain display colors.
+
+High 1280Ã—720 browser verification completed the Normal match with 42/39 actual
+passes, zero misses/DQ and the correct Player 1 winner at 109.648 s. Separate
+High 1280Ã—720 views held the first genuine contact at 11.05 s, hull tick 1105 and
+water/body/auxiliary frame 221. Both windows agreed on racer coordinates, native
+HUD values, source frames, 59 primary rows and all 49,152 water heights
+(Int16LE FNV1a 2879715165), including identical sampled heights. Pausing from P2
+left the complete exposed physical/water fingerprint unchanged. Browser keyboard
+events in P2 drove only that rider:4.2s of accelerator moved it about 78 m while
+P1 remained neutral. The saved enabled assistance preference also survived
+normal native Start, reload and the contact inspector. Parent console had only
+the existing favicon 404; the child console was clear. OS minimization and
+physical-controller verification remain outstanding.
+
+The final complete regression is **1,284/1,295 in 69.09 s** (private
+`full-tests-native-craft-contact-final.tap`). All 47 additions since 1,248 pass;
+the same eleven integration failures remain, with their names compared exactly
+to the preceding full run. No source ROM, original art or raw disassembly is
+published. Remaining native actors/tricks, original AI, course geometry and
+mode integration, the existing failures and full course sign-offs still block
+parity and production publication. The ongoing goal remains active.
+
+## Original AI foundations and input phases â€” October 15, 2026
+
+Three isolated original-opponent kernels are now reconstructed. They are
+prerequisites for a complete native AI controller; ordinary race/championship
+AI is still outside native admission.
+
+`native-ai-route.js` compiles the separate four-avatar navigation graphs and
+advances their persistent navigation index using the recovered binary32 plane
+tests. Branch selection follows selected avatar B68, independently of grid
+slot and physical profile. These links differ from the primary buoy judge's
+links and award no power, laps or finishes. Current movable node centers can
+be supplied explicitly. Detached graph/state snapshots permit an explicit
+caller-selected table change without inventing course-family policy. The
+private comparison covers 54 nonempty compatible 1P table/class records,
+2,681 nodes, 21,448 forward/backward links, 48 plane decisions and 24 initial
+windows. This does not establish menu reachability or the distinct 2P loader.
+
+`native-ai-steering.js` reproduces the bounded steering/trim calculation with
+explicit target, body axes, predicted motion, turn budget and recovery state.
+Its binary32 thresholds, asymmetric recovery clearing, two-stage 35-unit
+steering update, wrong-way flag, sharp-turn trim and stuck override match all
+595 prepared raw-source cases. The upstream target/correction producers remain
+external inputs; the initial route target is not a substitute for final aim.
+
+`native-ai-power.js` reproduces the power selector before shared actor factors.
+All 3,664 prepared raw/public cases agree, including difficulty/role tables,
+relative slot-zero progress, strict steering thresholds, marked contact,
+counter and course overrides, retained prior values, and the final 0.5â€“1.2
+clamp. Unknown state semantics retain explicit native field names. Reverse
+class is not guessed to be another difficulty index. These leaves consume
+caller-supplied producer state and do not fabricate ranking or flags.
+
+The adapter now separates human identity, input dispatch and computer physical
+profile. Trusted frame options can apply source AI takeover to a human craft
+without changing its physical coefficients or resetting button history. Raw AI
+input requires its explicit power baseline and bypasses only the human stick
+curve. The recovered shared button edges, slew, gesture thresholds, actor
+factors and mute behavior remain in place. Private comparison covers 1,664 AI
+shared-input cases, 441 human curve cases and 48 human gate cases. Original
+circle/stunt history fields and their stunt consumers remain unported; this
+is not a complete 61184 or native stunt implementation.
+
+The independently selected computer profile uses the recovered four families
+of steering, engine, contact, lateral, roll and pivot coefficients and hull
+damping. Its tuning dependencies differ from human interpolation. All 108
+prepared computer-profile cases and 1,296 public numeric field comparisons
+agree. The source 1.2 baseline reaches the actual jet without an invented cap
+of 1. The surrounding hull retains its documented SI/double fitting; exact
+whole-craft trajectories and the other 16ce consumers are not established.
+
+The multi-craft world now offers a pre-frame hook, then samples ALL inputs in
+descending order before preparing ANY craft's forces. Captured source/action
+state and controller history are consumed once. An explicit sample survives a
+failed force preparation without polling again; implicit standalone preparation
+still validates before committing. Adapter re-entry during sampling, force
+preparation, hull stepping or deferred body completion rejects without a second
+history update or solve. An independent review reproduced and verified those
+boundaries. No navigation hook is yet installed in the playable native host.
+
+Native result/finish-wait updates now belong solely to completed 50 ms frames.
+The render-facing step previously advanced finish-wait a second time. A prepared
+two-game-second fixture now advances it by exactly two seconds at 30/60/144 Hz;
+this check does not admit native championship. Mixed computer/human physical
+profiles also retain identical source histories across those render rates.
+
+The final complete regression is **1,358/1,369 in 69.26 s** (private
+`full-tests-native-ai-foundation-final.tap`). All 74 additions since 1,295 pass.
+The same eleven failure names match both preceding full runs exactly. Final
+High 1280Ã—720 browser checks retain the 11.05 s contact at hull tick 1105,
+source frame 221 and C40 1.861451268196106 on both craft. Separate windows
+match all 49,152 water heights (Int16LE FNV1a 2879715165), sampled water values,
+native HUD and coordinates. Pausing from P2 preserves the entire exposed
+physical/water/racer state. Continuing completes the Normal match with the
+expected Player 1 win at 109.648 s, 42/39 passes and zero misses/DQ. The child
+console is clear; the parent retains one resource 404. Detailed riders and full
+resolution remain in both views. Verification pilots remain authored controls.
+
+Remaining original AI work includes lookahead/final aim, body-motion prediction,
+course/obstacle/floor/proximity corrections, water trim, throttle/actors,
+initialization and RNG history, shared primary judgment, ranking and finishes.
+These must be composed with explicit source ownership before native race or
+championship admission. The existing course/mode failures, remaining actors and
+tricks, other native venues, full course sign-offs and hardware verification
+also remain open. ROM bytes, raw disassembly and recovered art stay private.
+The goal is active; this local milestone is not production publication.
+
+## Original AI input producer â€” October 15, 2026
+
+The selected-racer AI input producer is now composed as an isolated numeric
+module, `native-ai-driver.js`. Prepared source state passes through motion
+prediction, two-pass lookahead and final aim, course/floor/player corrections,
+steering, two actual triangular-plane water queries, water trim, conditional
+traffic/button selection, power, and the final action-request tail, in source
+order. Source phase 650 selects the full driving routine only at 3; other
+phases run the separate start-input routine and preserve AI history, actions
+and prior power. This is ready for prepared-state use. Initialization,
+ranking, geometry producers and action consumers still block playable native
+race/championship AI admission.
+
+`native-ai-target.js` keeps the four-avatar navigation window separate from
+temporary lookahead. It recomputes metrics between both target advances, then
+selects near aim and the final segment. Current buoy centers can move while
+their initialized gate endpoints stay fixed. The recovered finite-line side
+test's degenerate arithmetic, previous-color fallback, division versus rounded
+reciprocal normalization and Southern Island lap-dependent skips are retained.
+An all-skipped invalid cycle rejects atomically. The private raw/public
+comparison passes all 1,467 fixtures, including 501 full target pipelines,
+78,183 exact binary32 fields, 11,169 segments and 32,523 integer/window fields.
+All 53 inventoried conditional branches take both outcomes in that audit.
+
+`native-ai-motion.js` predicts from the preceding actual normalized body
+movement, tracks source recovery phases and signed slow/dry/behind counters,
+and evaluates proximity and the selected water circle. Proximity scans the
+first explicit count of the raw generic-object table. Its supported capacity
+of 64 is corroborated by three original loader bounds, independently of the
+consumer. Nearby-object flag 98, circle flag A4, dry-contact latch 9c and
+retained flag 94 remain distinct. Human identity and source slot zero are also
+distinct selectors. All 1,094 bounded raw/public cases agree. The downstream
+steering input now accepts negative signed-counter overflow, matching the
+source's signed comparison instead of treating it as a stuck override.
+
+`native-ai-corrections.js` implements all 65 ordinary and 36 Reverse escape
+rectangles, including open boundaries, later-overlap precedence, lap/height
+gates and signed counters. The delayed floor correction and primary-human
+avoidance follow afterward. Course/floor overrides change direction without
+inventing a new point or distance; actual player avoidance replaces the point
+and rebuilds the segment. All 10,221 isolated cases and 404 composed correction
+plus steering cases match the original execution. Every one of the 101
+independently inventoried positive region-store locations is dynamically
+covered. Source escape vectors are not silently normalized, and player
+avoidance has no added distance gate.
+
+`native-ai-actions.js` preserves center/512-forward native water sampling,
+datum-aware raw plane heights, actor-specific button handling, source camera
+quad degeneracies, strict traffic-speed comparisons, training triggers and
+the final course-specific action requests. Its 8,464 prepared raw/public cases
+agree. Power reads the pre-tail steering value; a later action may change the
+returned axes. The last-steering AI field retains the pre-tail value. The
+previous-navigation word is one shared global passed between selected racers
+in actual input order. An action request is returned explicitly for its real
+consumer; it is not a completed actor or substitute animation. The independent
+start leaf passes all 1,470 prepared cases and leaves retained AI/power fields
+untouched.
+
+The assembled producer agrees on all 253 prepared executions of the original
+driving/start routines and their numeric callees: 205 driving and 48 start
+cases, with 14,364 compared output fields. These executions include the actual
+water-query instructions against the same prepared lattice. Only square root
+is intercepted with a host result rounded to binary32. An independently
+reviewed moved-center execution adds a persisted regression for fixed
+endpoints, persistent navigation 0 versus temporary target 2, full corrected
+segment and exact controls. Three independent integration reviews found no
+concrete composition defects. These are bounded prepared-field comparisons,
+not a complete original-game trajectory or R4300 floating-point-environment
+proof.
+
+A separate integration fixture sends four prepared AI streams through the
+real mixed human/computer physical profiles, hull solvers, articulated rider
+solvers, navigation and common input path. All-racer navigation precedes
+descending input sampling. Twenty outer frames produce 100 hull ticks and
+exactly 80 AI samples, with identical complete control/state/physical/water
+histories at 30/60/144 Hz. Pause and snapshots consume no samples. Starts,
+rank records, camera/circle geometry and retained state are explicit fixture
+inputs; this does not establish the native grid, rank producer or a completed
+original-opponent race.
+
+The complete regression run passes **1,455/1,466 in 89.68 s** (private
+`full-tests-native-ai-driver-final.tap`). All 97 additions in that run pass;
+the eleven failure names match the preceding foundation run exactly. The
+subsequently added moved-center regression also passes in the **11/11** driver
+test run, bringing this milestone's additions to 98 without further runtime
+changes. All 218 module versions are present in the three HTML import maps.
+
+The updated browser build loads and executes the assembled producer against
+an isolated prepared input without changing the playable world. High
+1280Ã—720 separate player views retain the 11.05 s contact at hull tick 1105,
+source frame 221 and C40 1.861451268196106 on both craft. They agree on racer
+coordinates, native HUD, all 49,152 water heights (Int16LE FNV1a 2879715165)
+and sampled heights. Pausing from P2 preserves the exposed complete
+physical/water/racer fingerprint. The authored verification controls finish
+the Normal match with the expected Player 1 win at 109.648 s, 42/39 passes,
+zero misses/DQ and 13 contacts. The child console is clear. This parent run
+records two favicon 404s and the existing foam shader's compiler warning about
+potentially uninitialized fragment variables; no AI module request fails.
+
+Remaining live integration includes original cold/reset/retained-state and
+role/RNG initialization, course-family/context selection, all-racer legal-lap
+progress and ranking/finishes, native camera/circle/raw-object producers, and
+the actual action/actor consumers. Complete frontend scheduling, remaining
+native actors/tricks, other native modes/venues, existing course failures,
+course sign-offs and hardware checks remain open. ROM bytes, disassembly and
+original art stay private. Default gameplay remains modern; native admission
+remains Sunny Beach time trials and two-player races. No production release
+or spending occurred. The goal remains active.
+
+## AI setup, source standings and action history â€” October 15, 2026
+
+Five further numeric components now close source dependencies around the
+selected-racer input producer. They remain isolated from playable admission
+until the earlier primary lap/finish logic, source geometry/context producers
+and complete action-pose lifecycle are composed.
+
+`native-ai-initialization.js` returns exact partial setup writes and the shared
+unsigned32 RNG step. It distinguishes source slot, selected avatar, physical
+profile, source setup order, rank order and human identity. All four stored
+slots receive the source's actual setup mask, including when active count is
+zero. Unwritten motion history, slow/contact flags, prior raw input and action
+phase remain retained. Unknown physical-profile words leave the turn budget
+untouched. Nested motion patches must be merged explicitly with actual prior
+state; the initializer supplies no fabricated cold/reset history or seed.
+
+The role/trait selector preserves actual two-draw consumption and its unusual
+modulo fallback, including explicit reads/writes of the adjacent slot-four
+scratch word. Repeating prepared scans reject atomically; no wrap correction
+or fifth racer is invented. The field-60 setup loop writes only the retained
+slot-three context. Setup also returns exact inverse-order stores, the
+qualifying runtime-type index prefix and camera byte masks. Those indices are
+separate from the later raw-prefix proximity scan. Camera XZ/alpha and omitted
+words remain retained. Private comparison covers **992 exact returning cases**,
+**130 matching deterministic source-repeat rejections**, **10,062 RNG words**
+and 509,950 serialized field entries. Boot memory clearing and the external
+boot seed word are recorded separately as provenance, not later setup defaults.
+
+`native-ai-context.js` selects and refreshes the actual target-table window.
+Setup state 21 or source mode 1 forces primary. Port Blue's avatar-one branch
+selects secondary except at source difficulty 2. Ordinary Twilight City keeps
+its native variant selector, five ordered open regions, retained route flag
+and late finished override; Reverse retains the record's family. Table
+overrides never overwrite the record family or persistent navigation row.
+Compiled table/window ownership and current source row validity are explicit.
+All **12,120** prepared original context/helper executions agree, including
+**96,960** window fields. No arithmetic helper is intercepted in this audit.
+
+`native-primary-standings.js` reconstructs the final ordinary primary tail's
+legal-lap/finish-plane history, selected progress row, projection distance and
+ranking metric. It consumes the earlier judge's retained row, actual lap and
+the separate primary next/previous links, with complete current displaced
+centers. Coarse region sharing preserves only the first/last matches; course 2
+uses its longer finish neighborhood. Previous-link traversal is bounded by
+the actual primary count. The Fortress alternate branch changes the segment
+reference while retaining the craft-to-selected-node delta. Signed32 prefix
+arithmetic precedes binary32 conversion; only the upper fraction is clamped.
+Finished/DQ records retain metric and distance while legal history and the
+selected row still update. All **2,638** prepared original tail executions
+agree, including actual region helpers and rounded host square root.
+
+`native-race-ranking.js` provides the separate finish reconciliation and
+ordinary sort, in source order after all ascending primary tails. Finish
+reconciliation can displace a metric through signed integer truncation and
+adjust equal finish times using old places and the selected primary human.
+The rank phase uses immediate nested strict comparisons, so equal metrics can
+change relative order after another swap. Activity, main-state, mode, phase,
+finish flag and count gates preserve inactive fields and array suffixes.
+All **1,429** prepared original-prefix/public comparisons agree. Prior timing
+and primary calls are supplied as completed inputs in that audit; persistent
+record saving and later versus finalization remain outside its scope. The
+later versus branch can overwrite the two human places without rewriting the
+order array, so their inverse relationship is only a sort-boundary guarantee.
+
+A coherent synthetic integration fixture now passes four actual primary
+metrics through one native rank phase and then the next full AI input calls.
+Source places [3,0,1,2] drive the expected role-dependent power values while
+selected human slot 2 remains independent of slot zero. It preserves the
+separate primary and AI tables/rows and explicit retained state. This verifies
+producer boundaries, not a source-initialized grid or complete race.
+
+`native-rider-action-dispatch.js` supplies the missing common-input gesture
+history tail, conditional eligible post-hull action dispatch, inversion/arc
+history, numeric actor initializers and the dive-return request. Raw and
+pre-curve axes, filtered held bits and the actual engine mask stay distinct.
+There must be one direction-history owner when it is wired into input latching.
+Short counters wrap; exact diagonal edges are not decomposed. Source action
+clearing precedes scene/alternate rejection, manipulation-three retains its
+request, and idle RNG is consumed only on its actual eligible branch. The
+private comparison passes **5,036** cases plus **2,237** conditional RNG checks
+and eight pose-dispatch argument checks. Returned actor requests and joint
+type/mode recipes are numeric consumers, not completed physical poses.
+
+Three independent reviews found no concrete defects within these contracts.
+The complete suite is **1,533/1,544 in 71.14 s** (private
+`full-tests-native-ai-context-standings-final.tap`). All **77** new tests pass;
+the eleven failure names match both preceding full runs exactly. The prior
+milestone's additional moved-center test is also included in this full run.
+All 223 module versions are regenerated in the three HTML import maps.
+
+Fresh browser imports execute prepared samples of all five new modules at
+High 1280Ã—720. Both player windows retain the same 11.05 s contact, tick 1105,
+frame 221, C40 values and all 49,152 water heights/hash 2879715165. Their native
+HUD, coordinates, sampled heights and physical rider rendering agree. The
+child console is clear; the reloaded parent records only the favicon 404.
+The playable host is unchanged from the preceding completed Normal match.
+
+Remaining integration is concrete: the earlier ordinary primary lap/finish/
+timing and table-family effects; source setup and shared RNG scheduling;
+native camera/circle/object coordinate producers; one latched action/history
+owner; and equivalent physical targets plus post-pose completion for actors
+8/9/17/10/25. Ordinary Sunny race has no direct Stunt-tail request 1/2, but
+gesture sequences and idle selection are alternate actor triggers, so their
+absence is not a reachability proof. Unsupported actions must be implemented
+before admission. Other native modes/venues, course geometry/sign-offs, the
+eleven existing failures and hardware checks remain open. No original bytes
+or art are published, no money was spent, and production remains unchanged.
+
+## Physical action lifecycle integration â€” October 15, 2026
+
+The additional action path now composes with the actual five-tick hull and
+nineteen-point rider adapter. It is explicitly enabled with retained
+`riderActions` history, idle fields and scene/RNG context. The playable host
+keeps its existing admission while complete source setup and shared scheduling
+are assembled; this does not establish a complete original-AI race.
+
+The input latch has one owner for direction mask15f6 and six separate retained
+gesture words. It captures raw/pre-curve input, actual engine mask and source
+context once before any racer prepares forces. An explicit latch survives a
+failed preparation without polling again; an implicit failed preparation
+commits neither history. Rendering, paused calls and snapshot reads cannot
+advance it. Optional `sourceState.sourceTick` supplies the actual shared
+unsigned clock, including a retained nonzero epoch. Omitting it retains the
+declared preview logical-frame clock; no epoch is inferred from old history.
+
+An AI producer's unsigned `action16f4` can now travel beside its raw controls
+through the same word consumed by manipulation and post-hull actor selection.
+Conflicting explicit writes reject before latching. Preparation counts actual
+hull-up sign transitions, applies the source new-arc resets, and preserves an
+already-active arc. Completed dry/no-contact frames now wrap signed32 rather
+than saturating; wet contact does not clear that counter. A real driver-tail
+request2 reaches an actual pending actor9 pose in the integrated test.
+
+`native-rider-action-pose-lifecycle.js` provides the numeric completion rules
+for actors8/9/17/10/25: evaluator-frame holds/jumps, ordered grip changes,
+physical-mode changes and ordinary-return requests. Actor10 preserves the
+49-frame idle wrapper and its four actual choices; actor25 evaluates its fixed
+sample and stores frame0. All **5,273** prepared original/public leaf cases
+agree. A further **104** prepared integration cases execute the actual common
+request and initializer consumers, checking eligibility/priority, request
+clearing before scene rejection, same-pending no-ops and completion returns.
+These are bounded source executions, not observed full gameplay replays.
+
+The source common request clears C6c on every successful immediate or pending
+request. The adapter now owns that single idle counter, committing decision
+and completion resets; the old reset-only recovery alias is removed. Recovery
+snapshots use schema v2 and reject the old duplicate-field representation.
+Restoring any active blend or actor17 requires its actual physical mode beside
+already-restored physical points/types. A peer review caught and fixed an
+actor8 exit-blend restore that otherwise inferred the wrong auxiliary mode.
+
+`authored-native-action-poses.js` supplies new, length-preserving anatomical
+paths for the five actors using the high-resolution rig's rest dimensions and
+actual hull frame. It preserves the recovered evaluator bounds, including
+actor17's next38 stop, idle restarts and actor25's alternate fixed4/8 samples.
+Current and pending targets evaluate independently. Holds, grip changes and
+initialization remain lifecycle-owned, followed by one auxiliary solve, rider
+preprocessing and one nineteen-point solve. Actor9's authored auxiliary grip
+ordering follows the final actual point types after source completion writes.
+Geometry, imported-point blend and that grip adaptation are explicitly authored;
+they do not prove original animation-target geometry parity.
+
+Physical tests cover handstand hold/release and crash/remount, backwards hold
+and skip, standing normal/fast release, all four idle choices/cancellation,
+both dive branches, current/pending action blending and retained-clock history.
+Four actual action riders produce identical hull, rider and water state at
+30/60/144 Hz, retaining descending input/completion and conditional shared-RNG
+order. No fixed joint, ordinary-pose fallback or suppressed request is used.
+
+Feedback cue recipes remain visible effects. The bounded synchronous cue
+callgraph consumes zero shared game-PRNG draws; its separate audio selector
+and downstream audio thread are not reconstructed by this milestone. No
+invented game-RNG draw is added for a cue.
+
+The final complete suite is **1,592/1,603 in 122.21 s** (private
+`full-tests-native-rider-actions-final.tap`). All **59** added tests pass; the
+eleven failure names match the preceding 1,544-test baseline exactly. Three
+independent reviews cover numeric leaves, adapter ownership/order and physical
+pose integration. The active-blend restore finding is included in this final
+run. All **225** module versions are regenerated in the three HTML import maps.
+
+High-resolution browser review rendered twelve actual solved action samples
+using the unchanged detailed Blender craft and rider (47 meshes / 347,340
+vertices per rider), with no collapsed presentation segments or console
+warnings/errors. The temporary review page is private and removed from the
+served tree. Fresh native two-player windows remain High 1280Ã—720 at the same
+11.05 s contact: tick 1105, frame 221, both C40 impacts 1.861451268196106, matching
+positions/HUD and all 49,152 water heights/hash 2879715165. Both visible riders
+use solved physical poses. The child console is clear; the parent has only
+the existing favicon 404. These checks preserve presentation and the admitted
+host preview; they do not enable the additional path with invented scene/RNG
+defaults.
+
+Remaining integration includes earlier primary lap/finish/timing and record
+effects; full source setup/retained history/shared-RNG scheduling; actual native
+camera/circle/object producers; feedback/audio and stunt scoring; then a full
+native Sunny opponent race. Other native modes/venues, course geometry and
+sign-offs, the eleven existing course failures and hardware checks remain
+open. Default gameplay remains modern, and native admission remains Sunny
+time trials and two-player races. No original bytes/art are published, no
+money was spent, and this milestone is not pushed or deployed.
+
+## Ordinary race update composition â€” October 15, 2026
+
+The primary judge now has the preceding source scratch/nearest-node producer,
+complete ordinary lap/timing/finish routine, and following result bookkeeping.
+These remain prepared numeric consumers; a complete source-initialized race is
+not admitted by this milestone.
+
+`native-primary-gate-judge.js` preserves the actual source side history,
+checkpoint endpoint projection, directional one-sided bound and first/last
+coarse-region sharing. Its **2,688** raw/public cases agree. The complete
+`native-primary-scratch-context.js` then matches **2,337** original executions,
+including **518,814** retained record words. It selects actual body or alternate
+XYZ, compares only previous/current/next with source tie priority, updates the
+separate retained 2c48 row, and produces Drake weeds and Port/City region cues.
+No AI navigation cursor or broad nearest-route search is substituted.
+
+`native-primary-race-progress.js` matches **5,568** complete prepared source
+executions, including **1,236,096** record words, scoped shared globals and
+ordered audio entry arguments. It covers 50 ms signed timers and saturation,
+side awards, human misses/DQ, fractional checkpoint timing, nine-slot rolling
+lap/miss history, best-lap flags, finish allocation and course-family changes.
+Crossing interpolation consumes the actual previous body center (+BE4/BEC),
+whose producer stores the center before the five hull ticks. Timing words
+2a9c..2c20 have one 98-word owner, stopping before status 2c24. An independent
+17-case source review found no concrete defect.
+
+`native-race-finalization.js` matches **327** prepared original ordinary result
+updates. Record saving precedes ranking; split feedback, versus final-time
+place overrides, primary-route gap and finish-wait counting follow it. Full
+five-word record rows shift while four replacement words retain the fifth.
+Versus places may differ from the independently sorted order3990. External
+overlays remain ordered recipes, and their continuation reads fresh flags
+after the three prelude calls rather than caching their eligibility.
+
+`native-primary-race-phase.js` composes the actual ascending scratchâ†’judge pairs,
+finish-metric reconciliation, record saving, old-place capture, one rank pass
+and finalization. Its canonical state retains all 222 unsigned bit-pattern
+words per racer, including untouched navigation/unknown fields. Typed leaf
+views are temporary; finish-time reconciliation writes back into timing[14]
+before records run. Projection39a0 is the separate per-slot source array.
+Comparison splits, reverse bits, player count and difficulty metadata share
+their original owners. Zero active count retains scratch XYZ, and invalid
+prepared input rejects atomically. All **135** prepared original outer numeric
+updates agree, including **116,328** record words and all scoped globals,
+tables, scratch, order and effects. This executes the actual paired numeric
+callees, not completed-tail stubs.
+
+`native-ai-perception.js` matches **354** prepared comparisons for procedural
+water-mesh XZ/snap/selection-circle arithmetic, the literal current-object
+prefix and retained graphics-buffer corner selection. It preserves the
+radius16 center-index quirk and stored signed16 vertices. Active AI reads the
+preceding circle; camera/water patch production happens after the hull phase.
+The actual camera-corner XZ writer remains unknown after bounded resident,
+common-overlay and nineteen scene-overlay searches. Nine original buffer-toggle
+executions establish its selector lifetime, not its missing producer. No
+modern frustum, assumed zero corners or player-index buffer choice is supplied.
+
+All **86** added tests pass. The complete suite is **1,678/1,689 in 94.63 s**
+(private `full-tests-native-primary-phase-private.tap`), with the same eleven
+failure names as the preceding completed run. All **231** module versions are
+regenerated in the three HTML import maps. Fresh browser imports reproduce
+the prepared four-racer phase's 888 words and ordered effects. The existing
+native two-player preview remains High 1280Ã—720 at 11.05 s, tick1105/frame221,
+with matching positions, both contact impacts and all 49,152 water heights
+(hash2879715165). Detailed physical riders, water and shoreline remain visible;
+the child console is clear and the parent retains only its favicon404.
+
+Source reset/startup, coherent shared RNG scheduling, native camera/patch and
+current-object producers, overlay/audio consumers, mode11 stunt scoring and a
+full source opponent race remain open. Other native venues/modes, course
+geometry/sign-offs, the eleven existing failures and hardware checks also
+remain. The live preview admission and high-resolution rendering are unchanged.
+No original executable bytes or artwork are published, no money was spent,
+and this milestone is not pushed or deployed.
+
+## Race startup and canonical shared state â€” October 15, 2026
+
+The new prepared startup path composes selective reset75310 and its complete
+EED70/EE9C0 terminal, source prestart stages, countdown/launch boost and the
+ordinary numeric race update. Additional ordinary consumers now implement
+status counters, native speed display and its separate16-bit random sequence,
+wrong-way warnings, missed-buoy power feedback and both retirement paths.
+These are verified source consumers and canonical adapters; complete original
+initialization and a live source opponent race remain open.
+
+`native-race-state.js` retains one1693-word race window1f94..3a04 and one
+1442-word HUD window7788..8e0c. All four222-word records, persistent course
+tables, setup order26c0, ranking3990, per-slot projection39a0, shared scratch
+and HUD byte latches derive from those owners. The optional168-word i1 and
+50-word profile spans retain their own memory. ProfileB338 supplies difficulty
+when present; a duplicate scene difficulty is rejected. Signed reset and
+unsigned progress views share the same reverse halfword. The old phase DTO
+exists only as a detached compatibility view and is committed back immediately.
+Missing raw words reject rather than becoming guessed zero state.
+
+Reset retains unwritten timing/history, inactive slots, setup/rank arrays and
+unselected course records. It uses reference+24/+28 rather than moving buoy
+centers, exact A0/A4/B4 links and source search-budget exhaustion. Cold reset
+touches the actual course9..11 table tails only. The terminal reads prior HUD
+palette history before clearing it, preserves opaque supplied presentation
+words, and writes only active latch bytes. No original palettes/artwork are
+embedded in these modules.
+
+The prestart counter advances on source display-stage calls, after the CPU
+update: ten ordinary solo calls, fifty other solo calls or forty-six two-player
+calls. Phase650 and simulation648 remain distinct. Countdown retraction precedes
+charge decrement, and launch power uses actual pressedB58 edges and independent
+latch bytes. The new charge15 transition opens the clock after that frame's
+earlier timing pass; the following pass adds50ms. No high-resolution render
+callback advances these numeric producers.
+
+Prepared original-instruction comparisons for the new consumers:
+
+| Consumer | Exact cases |
+| --- | ---: |
+| Selective reset75310 before its terminal | 126 |
+| Complete EED70 terminal and EE9C0 palette | 870 |
+| Original i1 initializer, dispatcher and complete status body | 6,970 |
+| Countdown/start-boost F03E0 | 6,976 |
+| Status/timer prelude FC39C | 196 |
+| Speed display F23A0 and separate Math_Rand ED304 | 561 |
+| Direction/wrong-way EF504 | 6,196, plus1,834 readonly helper cases |
+| Missed-buoy/power F0E7C with real retirement | 880 |
+| Separate adjacent palette counter block | 210 |
+| Allowed-area warning F1CFC with real retirement | 860 |
+
+The ordinary79528 adapter additionally matches135 complete prepared executions
+over all1693 race and1442 HUD words, including previously untyped retained
+history. The canonical prestart adapters reproduce the same6,970 original
+stage fixtures over23,370,410 owner words; these reuse the stage evidence,
+not additional unique source cases. Nine original resetâ†’terminalâ†’countdown
+sequences cover1,080 repeated source calls with complete state hashes and
+ordered operations. Initial phase1 is an explicit prepared input in that
+sequence proof, not a claim that main initialization has been reconstructed.
+An independent30-case ownership/table-offset/halfword/roundtrip review found
+no further concrete defect.
+
+F1CFC's actual eligibility halfword is missesEnabled72e, not configuredLaps728.
+Its counter1 reaches0 before retirement on the next call; source actors23/7
+freeze an existing warning. F0E7C animates allowed misses through the configured
+limit and can retire after its actual17-call feedback delay. It also preserves
+the separate power1 interruption and power0 expiration. EF504 reads prior2c60
+before its later wrong-way increment/audio. Its exact512-word readonly angle
+table remains an explicit input, without an acos/atan2 replacement. F23A0
+updates canonical2c00/2c04 and carries its own16-bit seed6f00 in racer order;
+it does not consume the32-bit AI initialization RNG.
+
+All144 added tests pass. The complete suite is1,822/1,833 in117.97s, with the
+same eleven failure names as the preceding completed run. All241 module
+versions are regenerated in the three HTML import maps. Browser imports
+reproduce a prepared120-call startup sequence, ending with phase3, clock open
+and independently timed powers[5,4,1,0]. The retained native two-player preview
+is still High1280Ã—720 at11.05s, tick1105/frame221, with matching positions,
+both contact impacts and all49,152 water heights (hash2879715165). Detailed
+physical riders, water and shoreline remain visible; the child console is
+clear and the parent retains only its existing favicon404.
+
+The new leaves are connected through canonical prepared-state adapters, not
+enabled as a complete live startup. Required source-stage transition recipes,
+remaining retained placement/indicator consumers, original main/update
+initialization, physical grid/start actor15, source camera/current-object
+producers and shared32-bit RNG/AI scheduling remain open. The adjacent palette
+helper covers its numeric counter block only, not original drawing. Mode11
+stunt scoring, all venue/mode sign-offs, the eleven existing course failures
+and hardware checks also remain. The modern high-resolution renderer and
+existing native preview admission are unchanged. No original executable bytes
+or artwork are published, no money was spent, and this checkpoint is local.
+
+## Shared water initialization, grid placement and ordinary HUD composition â€” October 15, 2026
+
+The prepared ordinary race update now expands all eight numeric HUD consumers
+in their original order: status, direction, speed, conditional countdown,
+placement, rivals, missed-buoy feedback and boundary warnings. The conditional
+countdown gate reads fresh canonical status after the first three consumers.
+Each consumer's writes reach the following consumer immediately. A later
+failure cannot partially commit earlier state. Physical updates and the i1
+update/display stages remain separate source-frame calls.
+
+The combined coordinator matches63 complete prepared original79528 executions
+with all eight numeric bodies expanded. Checks include473 source consumers'
+entry/exit states,4,526 ordered tail operations, complete final race/HUD words and
+2,965,710 intermediate owner words. The actual selected angle table is supplied
+privately; sine samples remain explicit prepared RAM data. Audio entry and
+profiling calls retain their stated boundaries. These are prepared numeric
+composition checks, without source startup or complete-race admission.
+
+Placement feedback includes source row easing, actual body15c0 offsets,
+proximity pulses and the1â†’2â†’3â†’0 place-change animation. Rival indicators
+retain the original signed-place filter, inclusive1024-unit/135-degree bounds,
+unnormalized cameraF0/F4 axis and supplied angle/sine lookups. The complete
+placement/rival bodies match4,540 original prepared cases and564 additional
+ED154 helper cases, covering all32+5 store sites and complete race/HUD words.
+Original sine-table generation is not established by these prepared lookups.
+
+Both native camera records are inside the1442-word HUD owner. Direction and
+rival adapters derive temporary views from its current7c80+index*10c records;
+a duplicate caller camera view is rejected. Direction uses64/6c, whereas
+rivals use rawF0/F4. The reached rival corner coefficient7a50 also comes from
+the canonical HUD word, without assuming its usual2/3 value. Independent review
+found and resolved an additional duplicate camera view in the Fortress gate
+cue: primary judging now derives the same selected HUD coordinates. Near,
+far and swapped-camera regressions produce cue counts1/0/1 and reject a
+conflicting caller view.
+
+The new complete water-noise preparation returns all49,152 height/velocity
+pairs and the next unsigned32-bit RNG word together. Four complete original
+4F790 executions compare every cell and final RNG state, including amplitude0,
+1,20 and127. Each executes98,316 actual47E50 calls and98,304 actual rounding
+helpers: zero amplitude still advances the stream. The shared800D4640 owner
+is distinct from the speed display's16-bit6f00 seed. This closes4F790 only;
+the surrounding field-template setup, boot seed and intervening RNG consumers
+remain explicit initialization dependencies.
+
+The bounded948DC wave selector matches803 actual cases, including its genuine
+shared RNG call. Pending player half60c is separate from active playersDab28.
+Complete6AC84 placement selection matches2,459 prepared original cases over
+22,131 packedF32 matrix arguments, including ordinary, demo and training
+branches. The separate67E40 computer-profile selector matches2,052 bounded
+flag-loop cases. These include the prior accepted32 wave/168 placement cases.
+The grid adapter reads canonical26c0 rather than ranking3990 and returns the
+actual matrix-constructor arguments. It does not yet evaluate48854, initialize
+the physical hull/rider, select the actor15 launch pose or copy camera history.
+
+All62 added tests pass. The full suite is1,884/1,895 in103.52s, with the same
+eleven existing failure names. All246 module versions are regenerated in the
+three HTML maps. Browser and Node agree on an authored47-call full ordinary
+sequence, ending phase2, clock open, next-frame time50 and launch power5, plus
+the complete water initializer. This is prepared numeric execution, not a
+complete live source startup. The retained native two-player preview remains
+High1280Ã—720 at11.05s, tick1105/frame221, with matching racer positions and all
+49,152 water heights (hash2879715165). Detailed riders, water and shoreline
+remain visible; child console is clear, parent retains its favicon404.
+
+The isolated offline original-ROM CPU host now builds and completes one
+neutral30-second boot. It records1,157 original87134 reader calls; every sampled
+corner X/Z remains zero. Its graphics-free runtime cannot identify the missing
+coordinate producer or establish an ordinary controller-driven race. No
+installed executable/profile was changed. This runtime observation is separate
+from the prepared original-instruction proofs and is not console/GPU timing.
+
+Full main/update initialization, actor15/rest-pose and physical bootstrap,
+course0 sequence progression, camera/current-object producers, all shared RNG
+callers, result-stage transitions and a live source opponent race remain open.
+Mode11 scoring, venue/mode sign-offs, eleven existing course failures and
+hardware checks remain. High-resolution rendering and live preview admission
+are unchanged. No original executable bytes/artwork are published, no money was
+spent, and this checkpoint is local.
+
+## Course-zero sequence and packed starting transforms â€” October 15, 2026
+
+The prepared i1 update now composes its first-update initializer with the
+course-zero sequence in the actual source order. The initializer retains the
+one-shot latch until the following logical display. Sequence setup copies the
+retained template, keeps noncompacted sentinel slots, accumulates signed widths
+and emits its audio entry before advancing the row. The display expansion
+preserves shared style writes, paused movement, strict expiry and the final
+glyph before clearing the active flag. Its new high-resolution draw recipes
+use logical screen coordinates and do not replay the original numeric routine.
+
+The sequence leaf matches856 original prepared initializer/update/display
+executions. The canonical outer update additionally matches162 complete5800
+cases, checking543,186 owner words and129 ordered operations. A separate full
+5AE4/5DF4 comparison expands actual6BD8 and its three reached drawing helpers:
+554/554 cases match1,857,562 complete owner words and9,902 ordered operations.
+This includes396 source-derived graphics-head advancements,38 first-display
+early returns and118 paused displays whose later continuation restores
+activity. Earlier graphics/resource/result entries retain their explicit
+prepared-return or pending-effect boundaries. No original images or text are
+embedded in the new recipes, and their modern presentation remains separate.
+
+Grid placement can now continue through the complete numeric matrix
+constructor, signed16.16 packing and actual physical decoder. The transient
+decoded axes retain quantization; physics must not substitute the pre-pack
+floats. All source arithmetic and write order are retained, including the
+signed32-to-float rounding before decoding fixed-point elements. Degenerate
+constructors return only their reached scratch writes, without inventing a
+prior packed destination. The adapter leaves decoded output null on those
+bounded partial paths; this does not claim the original physical initializer
+skips decoding its own retained matrix.
+
+Constructor/packer and decoder match952 original-instruction cases over22,080
+whole scratch/packed words and27,506 ordered writes. A further128 combined
+6AC84â†’constructorâ†’packerâ†’decoder executions match the canonical grid adapter,
+including ordinary, reverse, two-player, secondary-row, demo, training and
+degenerate branches. These check4,096 scratch/packed words,2,016 decoded words
+and401,280 unchanged canonical owner words. These are transient numeric views;
+they do not create a second physical matrix owner or initialize a hull/rider.
+
+All41 added tests pass. The full suite is1,925/1,936 in109.23s, with the same
+eleven existing failure names. All248 module versions are refreshed in the
+three HTML maps. Browser and Node agree on400 prepared update/display steps
+for each of one-player and two-player mode, plus packed-grid/training/partial
+matrix checks. The retained live preview remains High1280Ã—720 at11.05s,
+tick1105/frame221, with matching racer positions and all49,152 water heights
+(hash2879715165). Detailed riders, water and shoreline remain visible; child
+console is clear and parent retains its existing favicon404.
+
+Complete live source startup still requires main configuration, physical
+6390C/62E50 ownership and actor15/frame56 pose evaluation. The source transforms
+its local centroid separately before its points and refits its final hull
+axes; existing preview initialization is not that bootstrap. Camera/current-
+object producers, complete shared RNG history, result transitions, mode11
+scoring, venue/hardware sign-offs and the eleven course failures remain open.
+High-resolution rendering and live preview admission are unchanged. This
+checkpoint is local, no original executable bytes/artwork are published, and
+no money was spent.
+
+## Main configuration, startup fades and rider start-pose math â€” October 15, 2026
+
+The prepared main configuration now preserves the original order of wave
+selection, class changes, lap retention, player counts, rider traits and both
+camera mode words. Stunt can consume a random wave before its fixed override;
+Reverse changes the class after the earlier wave choice. The mode4 profile
+view extends its existing owner from50 to52 words for the four adjacent rider
+flags, while bounded older paths continue to accept50 words. No overlapping
+flag or physical-body owner is added. Activity, event and the misses switch
+retain their actual earlier values.
+
+The shared-state adapter expands both reached fade initializers at their call
+positions. Mixed byte, halfword and word stores return to the existing HUD
+owner. All five fade slots copy the supplied retained template; supported
+properties retain their source store order and distinctions between fade types.
+The required resource descriptor, body-tune and final audio effects remain
+ordered pending consumers. Their later effects are not silently omitted from a
+complete-startup claim. Invalid late dependencies leave every supplied owner
+unchanged, including RNG, HUD and profile flags.
+
+Direct configuration matches1,880 original prepared executions. An independent
+complete main/fade composition matches another1,350 actual-source cases over
+4,598,526 canonical owner values and155,043 ordered operations. The proof
+separately replays356,839 actual resource stores at their source positions;
+the resulting complete-before-audio state is intentionally distinct from the
+adapter's resource-pending state. Standalone fades match396 original cases,
+checking571,032 complete HUD words and6,744 ordered stores. These checks do not
+replace the remaining resource consumers with neutral results.
+
+The new start-pose kernel selects descriptor7's85-frame range and evaluates
+the supplied18 signed bone records through the reached body transforms,
+shoulder passes, arm IK and nineteen plus six physical targets. Full hull axes
+and retained yaw remain independent inputs. Frame84 returns the source's
+terminal result; later requests evaluate84. All130 original-instruction cases
+match30,810 pose/target words, including bent-arm and fallback branches,
+noncardinal yaw, tilted hulls and guarded zero directions. Frame records must
+be supplied as original private views or independently authored compatible
+data; no original animation/rest table is embedded in public code. The live
+actor15 initializer, phase completion, histories and physical bootstrap remain
+separate integration work.
+
+All49 new tests pass. The full suite is1,974/1,985 in94.71s, with the same eleven
+existing failure names. All251 module versions are regenerated in the three
+HTML maps. Browser and Node agree on the new configuration/fade/pose cases in
+both windows, and the400-step one-player/two-player sequence regression still
+matches. The retained preview remains High1280Ã—720 at11.05s, tick1105/frame221,
+with four craft contacts, matching racer positions and49,152 matching water
+heights (hash2879715165). Detailed riders, water and shoreline remain visible;
+the child console is clear and the parent retains its existing favicon404.
+
+A fresh read-only query used EVO X2's installed Ghidra12.1.4 and existing
+analysis project. All2,113 exported instruction words across42 functions match
+the private normalized ROM; the project's nine files remain byte-identical.
+The inspected audio call graph has no direct shared-LCG call, but startup
+audio reaches blocking message queues and scheduler resumption. This static
+finding does not close asynchronous audio/scheduling effects or justify a
+no-op replacement. No software was installed or purchased.
+
+Complete live main/update and physical startup, resource consumers, actor15
+admission, camera/current-object producers, full RNG/AI scheduling, result
+transitions, mode11 scoring, venue/hardware checks and the eleven existing
+course failures remain open. High-resolution presentation is retained. This
+checkpoint is local; no original executable bytes/artwork are published and no
+money was spent.
+
+## Resource descriptor setup and actor15 completion â€” October 15, 2026
+
+The two resource initializers reached by main configuration can now expand at
+their source call positions. Their descriptor and selector writes use three
+disjoint retained owners, alongside the existing HUD. Resource800DB330 is
+distinct from profile801CB330; logical avatar IDs remain separate from the
+shifted descriptor-template indices. Duplicate special IDs retain the last
+matching selector, and lookup relocation preserves every repeated store and
+unsigned overflow. Course sentinels retain descriptor prefixes, while present
+entries preserve full cursor words separately from low24 descriptor addresses.
+Duplicate course IDs update their slot map twice in order.
+
+Expansion is explicit through expandResourceInitializers. The previous default
+contract still returns required pending resource entries and needs no new
+descriptor owners/tables. When expanded, neither initializer remains pending
+for replay. These helpers perform no transfer, queue operation or RNG draw.
+Later loading/decompression, post-load HUD fixups, physical body tune consumers
+and final audio remain separate startup work. No loaded-resource count, return
+value or original table is invented.
+
+The complete reached resource leaves match2,308 original-instruction cases,
+293,660 ordered operations and3,492,004 complete owner words. A fresh complete
+main execution additionally seeds all three resource spans before each of1,350
+actual runs. Both adapter options match2,700 complete canonical states over
+9,388,752 owner values and664,225 ordered operations. Actual356,839 resource
+stores and98,550 fade stores remain at their original call positions. Nine
+unsupported count cases reject under both options; seven late-dependency
+checks confirm atomicity, and default no-owner/no-table compatibility passes.
+
+Actor15 now has its exact type/mode initializer and its own post-pose completion
+branch. A nonnegative result advances the stored frame only in actual phase2
+or3; other phases hold the frame. A negative result still queues the earlier
+ordinary22 blend, while active blends bypass the actor-specific phase branch.
+Phase650 is transient caller context, separate from simulation648 and action
+completion records. Restoring an actor label does not reinitialize physical
+points. The existing lifecycle's fourth argument is preserved, with phase in
+the fifth context argument. Source comparisons match48 supported post-pose
+records and two initializer type/mode recipes. This does not claim complete
+immediate actor requests, pose blending, physical bootstrap or live admission;
+the explicit frame/yaw provider and canonical phase latch still need wiring.
+
+All38 added tests pass. The full suite is2,012/2,023 in97.87s with the same
+eleven existing failure names. All252 module versions are refreshed in the
+three HTML maps. Both browser windows match Node on prepared resource and
+actor15 completion cases, and the400-step sequence regression still matches
+for one and two players. The retained preview remains High1280Ã—720 at11.05s,
+tick1105/frame221, with matching racer positions and49,152 water heights
+(hash2879715165). The child console is clear; the parent retains its favicon404.
+This is another local checkpoint, with no original executable bytes/artwork
+published and no money spent. Complete live startup and the other listed
+gameplay, venue and hardware gaps remain open.
+
+## Physical hull startup and separate-window recovery â€” October 15, 2026
+
+The native Sunny Beach preview now prepares its twelve physical points from
+the decoded packed16.16 starting transform. The source transforms its descending
+local centroid separately, then refits the hull axes and horizontal yaw frame.
+The new recipe preserves that order, source Float32 rounding, all66 pair rests
+and coefficients, radius-dependent damping, extrema and four proxy centers.
+A vertical forward requires the actual retained yaw values. Caller-owned local
+shape and selected damping values remain explicit; unsupported degenerate
+arithmetic rejects before installation.
+
+The existing live hull owner receives the prepared points, center, frame,
+rests, damping and cleared velocities. The initial physical rider is seeded
+from the same prepared start. No packed matrix, raw body buffer or second set
+of physical points is retained. Browser pose conversion and independently
+authored hull geometry are adaptation choices. The subsequent hull solver is
+not claimed to be bit-identical to all original simulation ticks, and actor,
+target, resource and scene initialization remain separate integration work.
+
+The authored verification helm now reads the HUD's next visible buoy and its
+current physical center. Its steering target follows bounded lateral movement
+and allows contact clearance; route geometry, physical buoys, controls mapping,
+source judging and progress remain unchanged. It holds its established steering
+correction through the final approach. This is driving policy, not the original
+AI. A detached observation records the judge's actual sampled center before
+the subsequent buoy-motion pass, so diagnostics no longer compare a preceding
+decision against a later or static center.
+
+Twenty recorded original-instruction executions match4,440 exact Float32
+words, plus2,120 existing-owner world-unit conversion checks, with zero errors.
+All66 focused hull/start/host/helm tests pass, including sixteen rider/class
+finishes and exact30/60/144Hz comparisons. Additional ordinary-input probes
+finish heavy Expert/Reverse time trials and Normal/Reverse two-player races
+without misses or disqualification. These checks do not establish parity on
+other venues or admit original AI/main startup into the live preview.
+
+A browser rendering stall exposed a separate-window recovery gap: reopening
+the surviving named Player2 document does not reload it, so its initial hello
+was not repeated. Explicit reopening now requests an authenticated handshake
+from that same document and rebuilds the private channel. A healthy view keeps
+its port; stale controls and old generations remain rejected. The existing
+finite loading timeout and paused fallback are retained. All20 focused window
+transport and physical-presentation tests pass, including this reproduction.
+
+The local browser reproduces that stale-link pause and reconnects the same
+document without navigation, at the unchanged11.05s, hull tick1105 and water
+frame221. The new channel advances from generation1 to2 and returns both views
+to High1280x720. The physical rider poses and craft positions agree in both
+windows, with zero misses and no console errors. The four recorded craft
+contacts and both impact values remain the same across recovery.
+
+The full suite checks2,049 tests:2,038 pass, with the same eleven existing
+course/wave/competition calibration failures. All255 module hashes are refreshed
+in the three HTML maps. High-resolution craft, riders, water and scenery remain
+the existing presentation. Complete parity and physical-controller/OS-window
+sign-off remain open; no original executable bytes/artwork are published and
+no money was spent.
+
+## Online two-player extension â€” October 15, 2026
+
+Version2.20.0 adds private online racing beyond the reference game's local
+multiplayer. A host invite link and guest return code establish genuine WebRTC
+data channels using free STUN. No paid relay, Worker, database or billing resource
+was added. Networks requiring TURN remain unsupported; this is private invitation
+play. Joining instructions and the connection limitations are documented in
+[ONLINE-MULTIPLAYER.md](ONLINE-MULTIPLAYER.md).
+
+The existing host simulation owns both riders, collisions, source water, buoy
+judging, laps and results. The guest supplies bounded Player2 controls only and
+renders its own detailed scene with local camera, graphics, audio, rumble and
+keyboard/gamepad/touch preferences. It has no race/physics owner. The existing
+versus rules exclude online results from solo worldwide scores, records, ghosts
+and championship unlocks. Local layouts remain available.
+
+The wire codec preserves detached signed16 source-water and Float32 surface/pose
+arrays exactly, with bounded gzip, fragments, reassembly and validation. Active
+snapshots are limited to20Hz with one in-flight capture; paused/results views
+use1Hz. Input goes neutral after250ms. Missing heartbeat, loading failure or a
+stopped peer pauses the host. Reconnection retains the actual paused state and
+requires explicit resume; fresh invitations request a current descriptor.
+
+All12 new online tests pass: exact modern/native snapshots and array detachment,
+fragment ordering/duplicates/expiry, decompression limits, signal expiry/build/
+session validation, Player2-only authority, descriptor/capability bounds, stale
+input/generation rejection, paused traffic pacing, interruption state retention
+and role-specific data channels. The full suite checks2,061 tests:2,050 pass,
+with the same eleven existing gameplay calibration failures. The260 root module
+hashes are refreshed across four HTML import maps.
+
+Two isolated browser contexts established three real data channels. High graphics
+rendered both full1280x720 views. Normal keyboard input moved only its assigned
+rider. Both pause/resume controls agreed at21.016666666666755s, with identical
+positions and all49,152 source-water heights (hash2881229044). A new invitation
+retained that race in generation2; Restart created generation3. Online Dolphin
+Park Free Ride loaded in a390px phone viewport, and its normal Auto throttle
+control moved Player2. This is emulation, not physical-phone certification.
+
+The optional native Sunny preview also rendered both physical riders and the
+59-node source buoy presentation, with exact host/guest positions and source
+water at1.03s, hull tick103/water frame20 (hash2102279823). Evo X2's installed
+Chrome155 and Node24 then provided a real second-computer peer on the same LAN.
+It received that physical scene and drove Player2 through normal controls;
+both views paused at57.91s/water frame1158 with matching positions and source
+water (hash2900909254). Suspending only that guest tab paused the host at73s.
+Two subsequent host samples retained the same positions, time and water
+(hash4144957531); reactivation restored readiness while preserving the pause.
+Evo's headless software renderer required Low for responsive input; the separate
+High1280x720 checks remain the graphics evidence. This does not establish
+arbitrary WAN/NAT connectivity, physical-controller support or complete original
+gameplay parity. Only favicon404s appeared in the valid desktop browser flows;
+no original executable bytes/artwork were added and no money was spent.
+
+## Source launch phase coupling â€” October 15, 2026 (integration in progress)
+
+The physical adapter now accepts the actual signed launch phase650 separately
+from simulation648. It captures that word with each five-tick control frame and
+passes it to rider pose completion. The existing action-source phase can supply
+the same value; conflicting writers reject before controls or physics change.
+An active unblended starting actor15 requires this explicit phase. Simulation1
+can run hull physics with muted engine input while phase0/1 holds the animation;
+phase2/3 releases its advancement. No browser phase is substituted.
+
+The actual ordinary outer caller completes the physical riders before the
+launch controller and the later i1 race-status update. A read-only Ghidra query
+on Evo X2 matches5,426 instruction words in five existing scheduling functions,
+with all nine project files unchanged. Its analyzed program lacks a function
+at the requested9345C entry; that omission was recorded without creating or
+reanalyzing it. Separate original-instruction checks cover3,072 prepared
+physical-scheduling cases and eight prepared launch sequences for four modes
+with one/two players. Controller, individual hull/pose, primary progress,
+graphics, camera/audio/OS and other overlay entries remain explicit boundaries.
+
+The existing canonical countdown and status implementations match all3,375
+retained words/scene fields across890 recorded frames, including launch-power
+writes and cue order, with zero differences. All eight new phase tests and all
+84 affected checks pass, including shared two-rider completion and exact
+30/60/144Hz comparisons. The full suite checks2,069 tests:2,058 pass, with the
+same eleven existing calibration failures. No assertion was relaxed.
+
+This is local integration work. The normal native preview still begins with
+actor22 after its browser countdown. Installing equivalent high-resolution
+starting artwork and connecting the verified sequence to the live shared race
+owner remain pending; these checks do not establish complete startup or
+gameplay parity.
+
+## Physical starting-pose provider â€” October 15, 2026 (local integration)
+
+The lifecycle can now evaluate actor15 through the reconstructed numeric
+evaluator using eighteen explicitly supplied selected records. The bridge
+reads the current physical hull and four separately supplied retained yaw
+words, selects the requested descriptor7 frame, and converts its nineteen
+body plus six auxiliary goals to world units once. It owns no animation clock,
+frame cache or source scene. It does not resize the selected anatomy.
+
+Optional startup seeds the actual25 physical positions from evaluated frame56,
+clears their stored deltas, and installs actor15/frame56, its exact19 point
+types and physical mode1. Initialization runs no auxiliary or body solve.
+Independent rest lengths and circle radius remain their existing inputs;
+they are not inferred from the launch pose. Subsequent pose completion and
+the outgoing ordinary-riding blend use the existing lifecycle and once-per-
+frame physical solvers. This is the pose/type portion of startup, not the
+whole original retained-body initializer.
+
+Private read-only ROM sampling now covers all85 actual descriptor7 frames
+both level and tilted:170 cases,27,540 pose words and12,750 mapped point
+words match the numeric implementation exactly. The bridge's12,750 converted
+world values also match. Original animation records and derived samples stay
+private; none are included in the public provider or its authored fixtures.
+
+All eleven new provider/physical tests and118 affected checks pass, covering
+held/advancing phases, the real outgoing blend, zero initialization solves,
+independent rest mechanics, two riders and exact30/60/144Hz physical outcomes.
+The full suite checks2,080 tests:2,069 pass, with the same eleven existing
+calibration failures and no relaxed assertions. Equivalent high-resolution
+start artwork and live shared countdown ownership remain pending. The normal
+native host still starts22; this local checkpoint is not a new live release.
+
+The refreshed261-module browser build renders at High1280x720 in the ordinary
+game and optional native preview. Its existing native recovery inspection
+reaches5.8s/hull tick580 with116 body and116 auxiliary solves and the detailed
+physical rider visible. Only a favicon404 appears; no game exception was
+observed. This checks the current presentation after integration, not new
+high-resolution actor15 artwork or original-ROM gameplay equivalence.
+
+## Detailed rider launch geometry â€” October 15, 2026 (local integration)
+
+The physical lifecycle can now create newly authored boarding records for
+ordinary starting frames56..84 from the detailed rider's neutral anatomy and
+steering supports. It reads the actual prepared hull's retained yaw owner.
+The recovered hybrid placement, three shoulder passes, arm IK and point
+mapping evaluate those records with twelve explicit modern anatomical
+dimensions. The original fixed-dimension mode remains the default numeric
+API and still matches both170 original-record and130 synthetic comparisons.
+The adapted mode does not assert original pose-coordinate or body-force
+calibration equality.
+
+The authored rider boards from the rear, lifts its legs clear of the larger
+modern saddle/foot decks, and settles into normal riding. The final target
+pose matches the neutral model within5mm in the tested level scene. A rendered
+inspection exposed seat intersection in the initial authored path; that path
+was corrected before the final checks. No original animation records or mesh
+assets were included. Record generation owns no private frame clock, phase,
+input processing or blend. The separate physical rest lengths, grip-circle
+radius and histories keep their existing owners.
+
+All eleven new detailed-launch checks and129 affected checks pass. Real
+physical holds, advancement and the outgoing ordinary blend agree exactly
+across30/60/144Hz for all four numeric rider profiles; two starting riders
+observe the same phase until the after-water boundary. The full suite checks
+2,091 tests:2,080 pass, with the same eleven existing calibration failures.
+The original calibration assertions were not relaxed.
+
+An isolated local1280x720 inspection uses the actual detailed craft/rider,
+physical points and renderer:198,068 triangles, nine sampled physical frames,
+equal body/auxiliary solve counts, and a completed actor15-to22 blend, with
+no console errors or warnings. Its prepared phase inputs are a test fixture;
+it is not a live race/countdown claim. The temporary inspection page/helper
+were moved out of the public source after checking. The normal native host
+still begins22 after its browser countdown; connecting the verified canonical
+race/HUD/i1 sequence and migrating live power ownership remain the next work.
+This checkpoint is local, not a new live release.
+
+## Live shared native start â€” October 15, 2026 (v2.21.0)
+
+This supersedes the earlier pending live-start notes. The opt-in native Sunny
+Beach Time trial/Two-player host now initializes actor15/frame56 and one
+canonical race/HUD/i1 owner. The actual physical adapter reads that owner's
+simulation648 and phase650. Each logical frame completes five hull/rider ticks,
+water, primary judging, and the primary/floating object pass before countdown
+and prestart-status operations run. The normal simulation1 prestart evolves
+water and physical history with muted engine input. The source phase2 release
+opens the record clocks; its following physical frame advances the starting
+pose. There is no independent browser countdown epoch for this path.
+
+Power, misses and the overlapping source-judge fields are read/write views of
+that canonical owner. A source boost write therefore reaches the actual next
+physical control frame, and a genuine wrong-side crossing increments the miss
+counter once. Per-racer lap/total milliseconds use the factored original clock
+block; the HUD, online view, lap/finish times and versus DQ result read those
+record clocks. Physical/presentation time continues to drive waves and scenery.
+Finished/DQ records stop independently; pause stops both physical and canonical
+owners. Separate windows and online snapshots carry bounded labels/cues and
+display values, with no simulation owner transferred.
+
+The live runtime entry matches all3,375 retained words/scene fields and ordered
+cues against eight prepared original-instruction sequences,890 total frames.
+Factoring the clock preserves the existing full primary-progress comparison:
+5,568 cases/1,236,096 record words and17 independent review cases/3,774 words.
+These are bounded prepared comparisons; physics, original graphics/audio/OS,
+other overlay calls and several enclosing handlers remain declared boundaries.
+
+Thirteen new live-start checks cover actual start-edge sampling, per-player
+boosts/clocks, one-count misses, independent finish/DQ, pause, exact30/60/144Hz
+state and online codec/interpolation. The final focused start/online selection
+passes25 checks. The inspection helm waits until the boost window closes and
+continues following a buoy's actual displacement near its crossing plane.
+Its sixteen real three-lap rider/class cases retain their existing zero/one
+miss limits. The heavy Hard diagnostic moves from old browser-start row47 to
+row29 under actual prestart water phasing; Expert remains row46. Both are
+genuine wrong-side observations, not forgiven passes or a parity sign-off.
+The final full suite checks2,104 tests:2,093 pass with exactly the same eleven
+existing course-calibration failures. The new DQ display check uses an explicit
+prepared record flag; it is not presented as an ordinary-input DQ playthrough.
+
+An ordinary local keyboard start renders High1280x720, holds the stopwatch at
+zero before GO and earns maximum power from a timed fresh throttle edge. Two
+isolated local browsers then complete a real WebRTC start/restart. Both show
+READY/3/2/1/GO, source boarding/riding poses and independent keyboard input.
+Their differently timed edges produce power5 and3. Shared pause holds each
+record at3.000s with exact host/guest positions and source water
+(frame168/hash560161409); both views render High1280x720. Only favicon404s
+appear. This adds local two-browser evidence; the earlier Evo X2 second-PC
+check applies to v2.20.0, and arbitrary WAN/NAT/hardware coverage remains open.
+
+Fresh browser memory still uses an explicit zero-word policy before the actual
+startup writes, plus existing browser grid/progress initialization. It is not
+proof of a cold-ROM memory image. Full primary reset/navigation/progress/result
+integration, prestart judging, original AI, special outer states, remaining
+venues/modes, source force calibration with modern anatomy, and the eleven
+existing course-calibration failures remain unfinished. Default modern play,
+worldwide solo scoring and the high-resolution artwork stay available. The
+native inspection remains opt-in and excluded from competitive records.
+
+To inspect the current native path, open `race.html?verify=1&nativePhysics=1`
+and choose Sunny Beach, Venue conditions, Time trial or Two players. The
+equivalent online host entry is `online.html?verify=1&nativePhysics=1`; its guest
+needs only the normal invite flow. These remain reconstruction inspection
+entries while the full objective is unfinished.
+
+## Live source lap and race rules â€” October 15, 2026 (v2.22.0)
+
+This replaces the v2.21 browser progress/lap initialization and its split
+clock/judge/countdown schedule. The admitted Sunny Beach Time trial and
+Two-player preview now loads the selected raw primary rows through the recovered
+numeric initializer, runs the complete numeric race reset and startup HUD, then
+calls the complete ordinary primary race update and all eight numeric HUD
+consumers. The order is five physical hull/rider ticks, source camera/water,
+primary scratch/progress/ranking/records and the ordered HUD consumers
+(including countdown), primary/floating object motion, then numeric i1 status.
+Prestart judging is active. There is no second browser lap judge or clock.
+
+The initial finish crossing moves source lap0 to lap1 without awarding a
+completed lap. The final completed race retains lap3 and three saved lap times;
+its finish flag and reconciled record time own completion. Legal-lap/checkpoint
+counters, delayed missed-buoy power loss/retirement, allowed-region warnings,
+wrong-direction counters, versus order/gaps and numeric record saving share the
+same canonical race/HUD owner. Source results/menu transition callees are still
+pending dependencies; the high-resolution host consumes the resulting finish
+or DQ status and stops the race. In-memory numeric record insertion is covered;
+native record-book persistence is not implemented.
+
+Water and HUD consumers now read the same canonical camera eye, target and
+basis fields. Only projection metadata remains outside those admitted fields.
+The ordinary body view reads the actual hull center, its pre-hull retained
+center, completed actor/mode and impacts. The source dry-contact counter16D0 is
+separate from the airborne/no-contact counter16DC. The field named B98 by the
+speed overlay receives applied jet force, not displacement speed. High-resolution
+boundary countdown and wrong-way text use the source fields, including in
+Player2's online/separate view. Equal simultaneous source finishes display a tie.
+
+New source evidence includes the EVO X2 read-only Ghidra query of six existing
+functions: 3,834 instruction words match the supplied ROM and all nine project
+files remain unchanged. The complete original sine initialization matches all
+4,096 output words; using ordinary Math.sin would differ at 413 stores.
+Row loading plus primary initialization match 32 bounded cases/58,890 words,
+including preserved unused words and all source types. This found and corrected
+the Dolphin Park type26 route group. The dry-contact/posture helpers match
+1,944/33 isolated original-instruction cases.
+
+Fifty-two actual browser-host physical/camera/object samples, spanning starts,
+passes, a miss, lap changes and finishes, match the original whole ordinary
+race routine and all eight numeric overlays: 163,020 final canonical words,
+ordered effects and overlay stores agree. This compares bounded numeric calls
+on supplied physical inputs, not original-game trajectories or full boot.
+
+The full suite checks 2,117 tests: 2,106 pass, with the same eleven existing
+course-calibration failures. All sixteen native rider/class three-lap runs and
+four native two-player class matches retain their previous zero/one-miss limits;
+the heavy profile's Hard/Expert diagnostic rows remain29/46. The prepared recoil
+test now supplies a complete lap1/row2 numeric state; its exact physical contact,
+moving-versus-static side decision and buoy-motion assertions are preserved.
+Online scalar display values canonicalize signed zero at serialization; physical
+float words, hull/rider arrays and source water data are unchanged.
+
+A fresh ordinary keyboard browser run shows source lap0 then lap1, zero
+pre-GO record time, a timed start boost, one genuine miss with delayed power
+loss, and a paused 8.200-second record at source frame220. Its 204 observed
+frames render High1280x720. Two isolated local browsers establish actual WebRTC,
+start with independent controls, enter lap1 and pause with identical positions,
+speeds, 4.600-second record clocks and source water frame200/hash2595691067.
+Both views render High1280x720. This is local two-browser evidence; it does not
+extend the earlier v2.20 second-PC result to arbitrary WAN/NAT or hardware.
+
+Fresh web memory is an explicit policy: zero unwritten words, three confirmed
+readonly numeric HUD constants and empty selected-course record times, followed
+by the actual reset/startup writes. Physical grid placement still uses the
+browser's prepared grid; this is not a source cold-boot/EEPROM claim. Original
+AI, remaining venues/modes, result/menu transitions, record persistence, shared
+RNG/camera special branches, source force calibration with modern anatomy and
+the eleven existing calibration failures remain unfinished. Default modern
+play, global solo scoring and the high-resolution assets remain available.
+The native preview stays opt-in and excluded from competitive records.
+
+## Source physical starting grid â€” October 15, 2026 (v2.23.0)
+
+The admitted Sunny Beach native Time trial and two-player previews now consume
+the recovered grid placement and packed16.16 transform through the physical
+hull initializer. The one canonical race owner selects the grid before the
+water follow lag, previous craft positions or starting rider are created.
+The high-resolution renderer receives the resulting physical pose. Its visible
+gate art cannot move that spawn. Reverse uses its selected source finish row
+and forward direction; the two players retain the source lateral offsets.
+
+Grid placement reads the initialized tangent78/7C. The judging consumer's
+color-aligned80/84 fields are distinct and are zero at the finish. The source
+computer-profile selector reads canonical scene half4964 and simulation state;
+fresh web play explicitly initializes the halfword to zero. Packed matrices
+are consumed directly, without converting the decoded basis back into Euler
+angles and packing it again. No second mutable physical or camera owner is added.
+
+Fifty-two bounded startup cases cover all four Sunny classes, all four rider
+choices, one/two players and retained profile-selection branches. Original
+numeric grid, matrix and physical-start routines match 1,664 packed/decoded
+words and 6,760 live physical field words. Their original numeric execution
+uses 571,819 counted instructions under the retained interpreter convention.
+Prior frozen evidence is unchanged. Authored local shape, prepared actor data
+and the documented arithmetic boundaries remain explicit inputs; this is not
+an original cold-boot, animation-asset or whole-trajectory equivalence claim.
+
+The recovery inspection now steers toward the actual moving buoy and damps yaw
+over the logical control interval. The ordinary inspection helm anticipates
+150ms of measured hull drift while steering, with a 3m buoy-clearance target.
+Neither changes physical state, buoys, progress or the judge. The existing zero/one-miss acceptance limits and
+severe-impact recovery assertions remain in force.
+
+The final complete suite checks 2,120 tests: 2,109 pass, with exactly the same
+eleven existing failures. All sixteen native rider/class three-lap runs and
+four native two-player class matches pass, including the unchanged cadence,
+collision/recovery and zero/one-miss assertions.
+
+An ordinary solo keyboard run enters source lap1 and pauses at frame 220 with
+8.200s on the source record clock. Two isolated local browsers establish actual
+WebRTC, accept independent throttle inputs and pause at frame 200 with matching
+positions, speeds, 4.600s clocks and source water hash4048089368. Solo and both
+online views render High1280x720; a running online view was visually checked.
+Only the development favicon returns 404. These are local browser checks, not
+an additional second-computer/WAN compatibility claim.
+
+The full gameplay objective remains active: original AI, other native venues
+and modes, result/menu bodies, persistence, shared RNG/camera special branches,
+force calibration with the authored anatomy and the existing course failures
+still require work. Native preview admission and competitive-record exclusion
+remain unchanged; global solo scoring and online two-player play stay available.
+
+## Shoreline surface overlap â€” October 15, 2026 (v2.24.0)
+
+A reported online view showed striped sand, flat pale patches and a broken
+boundary through the water. The course renderer drew the finite contact floors
+as a second mesh over the photographic terrain, which already sampled those
+same floors. Coplanar surfaces with different materials competed in the depth
+buffer, including the underwater refraction image.
+
+The textured terrain now owns that visible surface. The duplicate floor draw
+is removed; source floor arrays, physical contacts, height queries and source
+water simulation are unchanged. Glacier's separate ice sheets and vertical
+contact walls retain their own rendering. Sunny retains all 231 contact
+triangles while removing 149,887 duplicated tessellated render triangles.
+
+Fresh local online browsers establish WebRTC, drive and steer independently,
+and render clean shore and seabed views at High1280x720 on both players. The
+moving view was visually checked; only the development favicon returns404.
+This fixes rendering overlap without reducing water or terrain resolution.
+The 48 focused surface/contact checks pass. The complete suite remains at
+2,109 passes out of 2,120 tests, with the same eleven existing failures.
+
+## Source result entry â€” October 15, 2026 (prepared integration)
+
+The complete numeric result-entry routines6DCC,6FE0 and7394 now have an
+explicit implementation and a canonical status entry that expands the chosen
+routine at its original call site. They preserve previous/current game states,
+initialization flags, result delays, selected-body16C8 timing, signed cup
+qualification flags, winner counters, menu choices and external-call order.
+The four cup qualification halfwords use the existing extended profile owner;
+there is no separate copy of the flags. Subsequent winner-HUD writes follow the
+transition, including source ties and disqualifications.
+
+Private execution of the original overlay instructions matches1,200 prepared
+entry cases and96 combined finish-status/entry cases:23,731 ordered operations
+and the resulting canonical scene, race, HUD, profile and overlay storage.
+All57 non-stack store sites in the three entry routines are reached. The
+416-instruction source interval has412 visited instruction addresses across
+these cases; this is bounded numeric evidence with explicit prepared inputs.
+Audio, fade and menu-widget callees remain ordered dependencies. Six new tests
+cover finish/tie/DQ ownership, timing, signed qualification and atomic failure.
+All450 selected native race regression tests pass, including driven three-lap
+and render-cadence checks. The previously recorded full-suite baseline above
+is separate from this selected regression run.
+
+This checkpoint is not connected to the live race scheduler or published as a
+new gameplay release. The next result updates63B4/6550/6B00 also handle record
+initials and save/menu routing. Those consumers, their canonical storage and
+zero-simulation scheduling must be integrated before replacing the current
+live result flow. Native persistence, other venues/modes, original AI and the
+remaining whole-game parity items above remain incomplete.
+
+## Source result updates â€” October 15, 2026 (prepared integration)
+
+The original DQ, finish and tie update bodies63B4/6550/6B00 now have numeric
+implementations against the shared state. They retain the source delay and
+button gates, signed timer wrapping, cup-round updates, three-byte record
+initials and terminator, normal/reverse/best-lap/stunt record destinations,
+unlock bit, and ordered requests to persistence and menu routines.
+
+The optional saveWordsB280 owner ends atB308, before the separate wave rows
+andB32C metadata. Byte writes preserve adjacent data in the canonical record
+and save spans. A later best-lap flag read observes earlier name stores even
+in an explicit prepared memory-alias case. No second record book is created.
+
+An explicit transition-expansion option runs numeric7570, the fade property
+initializer and its reached slot reset at the call site, before the caller's
+later HUD test. This matters when starting a fade resets the completion flag:
+the same call must not also enter the next menu based on the old flag.
+
+Private original-instruction comparison matches3,170 prepared cases, including
+192 with those real nested transition/fade bodies. All481 instructions and all
+26 non-stack store sites in the three update bodies are reached. The comparison
+checks ordered operations and resulting scene/race/HUD/profile/save storage.
+Seven new focused tests and457 selected native regression tests pass; the final
+memory-read ordering adjustment also passes the original comparison and28
+focused checks. These checks do not claim a new full-suite baseline.
+
+A fresh read-only EVO X2 Ghidra query confirms the result-pose producer in
+5DE24; all2,780 exported instruction words match the provided ROM and all nine
+analysis-project files retain their hashes. A separate save-routine query
+reported a missing analyzed function and was not counted as successful merely
+because the headless process exited zero. The existing database was preserved.
+
+This remains local prepared integration. Original77F5C unfinished-racer time
+estimation, further fade/menu/save callees, the live16C8 result-pose producer,
+zero-simulation scheduling and actual durable record storage still require
+integration. The public game remains on the verifiedv2.24 shoreline release;
+the full gameplay parity objective remains incomplete.
+
+## Source rider result selection â€” October 15, 2026 (prepared integration)
+
+The result-code subsection of5DE24 now preserves the retained16C8 gate,
+finish-before-retirement priority, record and mode11 choices, signed cup
+qualification tests, overlapping effect/solo/versus tables, and ordered writes
+to both selected bodies. Ties write the secondary body before the primary;
+aliased selected slots retain both writes. A solo table result4 is stored
+before its source overwrite to3. The canonical state exposes a read-only view
+and bypasses this subsection for actual simulation0, as the original caller
+does. No second body or race owner is created.
+
+The complete numeric5DD04 support scan uses actual hull point90 and datum2458:
+start ten native units below the point, check floor then box, descend sixteen
+units after misses, and stop at the strict lower bound. Its reached geometry
+query returns remain explicit inputs. The original7F448/7FAE4 geometry
+consumers are not replaced with rendered terrain or reconstructed contact
+normals. Their exact integration remains required before admitting live use.
+
+Private execution of the original selector gate and nested5DD04 matches2,984
+prepared cases,2,783 ordered operations and all four resulting body words.
+All21 result-code store sites are reached. There are557 observed geometry
+queries; their positions, order and return consumption match. The comparison
+also checks every case through the canonical view and verifies input owners
+remain unchanged. The preceding motion arithmetic is an explicit prepared
+carry, with its gate-delay store checked separately; the whole5DE24 actor is
+not claimed. All48 focused body/state/result regression tests pass.
+
+This checkpoint is local and unpublished. Body16C8 lifetime and actor-phase
+scheduling, the exact geometry query producers, source result/menu scheduling
+and persistence remain unfinished. The live site remainsv2.24.0; full gameplay
+parity remains incomplete.
+
+## Source retirement support queries â€” October 15, 2026 (prepared integration)
+
+Numeric7F448 floor and7FAE4 box queries now consume original-layout native
+geometry directly. The floor query retains truncated coordinate selection,
+signed grid bounds, axis order and masked shifts, original cell/list offsets,
+one-based candidate order, three clip predicates, and inclusive0..16 depth.
+Its first accepted surface returns immediately even at zero depth. Runtime
+boxes are visited last-to-first, preserve their original nonorthogonal axes,
+exclude each far interval endpoint, and retain earlier faces on distance ties.
+Returned normals preserve float32 arithmetic and signed zero.
+
+The5DD04 retirement scan can now execute these queries against supplied
+geometry. The prepared-return input remains available for bounded audits;
+ambiguous inputs supplying both forms reject. This removes the query-return
+boundary when actual geometry is supplied, without substituting render meshes
+or reconstructed collision bins for the source records.
+
+Private execution of both complete original query functions matches2,606
+cases, including924 Sunny Beach record checks and162 original ramp-profile
+boundary checks. Penetration and normal float32 bits match, including zero-depth
+hits and negative-zero normals. All seven output-store sites are reached.
+A separate comparison executes complete5DD04 with actual nested7F448/7FAE4:
+967cases and5,125query calls match scan results, positions, order and returns.
+No geometry query return is intercepted in that composed comparison.
+
+All53 focused support/body/state/result tests pass. The earlier2,984result
+selector cases still match. These are numeric consumer and integration checks
+against prepared geometry owners, not evidence of original course bootstrap
+or live retirement animation. Live geometry installation, body16C8 lifetime,
+descending actor scheduling and remaining source result/menu flow still need
+integration. The public game remainsv2.24.0 and full parity is incomplete.
+
+## Local rider result ownership â€” October 15, 2026
+
+The ordinary Sunny Time/Versus runtime now installs the verified floor-query
+records and invokes result selection inside each descending actor phase, after
+the completed hull summary and before its decision/pose. The query uses actual
+hull point0 and the current water datum. There is no parallel body16C8 owner:
+the existing lifecycle selectedActor field is that source word. Cross-player
+writes reach the following rider before its decision, and all operations are
+validated before any owner changes. The selected code persists across frames.
+
+The original62F44..631F0 initialization also exposes a previous gap:1446 starts
+at10, not the generic lifecycle's disabled-1. The native race start now installs
+that delay. It holds while16C8 is negative and the existing eligible actor
+branch consumes it after selection. Generic prepared recovery fixtures retain
+their explicit caller-selected timing.
+
+Four local runtime tests cover partial/paused calls, actual-point retirement,
+descending tie writes before judging, retained codes and atomic invalid-target
+rejection. A private comparison captures15 actual actor boundaries following
+130ordinary frames with explicitly prepared finish/DQ flags. The original
+selector and complete nested5DD04/7F448/7FAE4 match ordered operations and final
+body words, including six actual geometry queries. These fixtures establish
+integration ordering, not driven-finish or complete post-race replay fidelity.
+
+The selected native regression run passes670tests. It began before the final
+startup-delay correction;38 focused lifecycle/start/result tests pass after
+that correction, and the captured original-instruction comparison was repeated
+on the final code. This is separate from the earlier full-game suite baseline.
+
+This checkpoint is local and unpublished. The browser still stops ordinary
+updates on its result screen; a finish first detected by later primary judging
+does not yet receive the next source actor phase. Continuing the original
+result schedule, equivalent result-actor poses/completion, zero-simulation
+dispatch, fades/menus and persistence remain required. Full gameplay parity
+and the complete native result flow remain unfinished.
+
+## Result rider lifecycle and numeric poses â€” October 15, 2026
+
+The existing rider lifecycle now handles the six result actors' original
+initializers and post-pose transitions. Successful entry applies each actor's
+actual nineteen point types. A negative evaluator return outside an active
+blend clears the selection countdown while retaining the selected result code
+and current animation frame. Actor5 additionally clears the recovery input
+lock and requests actor7/frame0 with float32 .05/hold1; the other result actors
+request ordinary22/frame0 with .15/hold0. Active blends skip these consumers.
+The shared request owner still controls initialization, frame holds and blends.
+
+The shared selected-record pose evaluator now includes the six original result
+descriptors, with counts89/100/54/79/40/54 and their terminal/clamp behavior.
+Actors1/4/6 use yaw-relative free arms,2/3 retain the second fitted arm, and5
+uses full-hull decoding without shoulder fitting or head replacement. Physical
+nineteen-point and six auxiliary goals use the existing original numeric mapping.
+No pose clock, original animation assets or second body owner is introduced.
+
+Original-instruction comparison matches720 prepared post-pose cases and18
+initializer cases. A separate comparison executes original5CD24 dispatch,
+54130/52E90 evaluation, reached helpers and both25-point copy routines against
+144 synthetic selected-record/body cases: all23,328 pose words and10,800 target
+words match exactly, including terminal frames, four rider slots and tilted
+noncardinal hulls. Only the existing float32 square-root boundary is intercepted.
+The shared actor15 evaluator still matches its prior130 original-code fixtures.
+All259 selected rider/lifecycle/authored-rig/result-owner regression tests pass.
+
+This is a local, unpublished numeric implementation. The lifecycle's browser
+pose provider still needs equivalent high-resolution result motion records;
+it must not replace them with a neutral pose or reuse startup artwork as a
+finished result animation. Normal driven finishes, post-result world updates,
+original61708 result-input handling, result/menu scheduling, fades and persistent
+records remain unfinished. Publicv2.24.0 and the broader parity gaps are unchanged.
+
+## Detailed result motion integration â€” October 15, 2026
+
+The native lifecycle now supplies high-resolution record poses for all six
+result actors. Private inspection of all416 original motion frames established
+the distinct two-hand/one-hand celebrations, slump, low crouch, backward fall
+and disappointed gesture. The public implementation contains newly authored
+angular/root keyframes on the existing detailed anatomy, with original frame
+counts and numeric evaluation. It includes no original animation record arrays.
+These are authored motion interpretations, not coordinate-exact original art.
+
+Start and result providers share record decoding, anatomy measurement and
+world conversion. Current/pending result poses use the existing held blend;
+one auxiliary solve and one actual nineteen-point solve follow each active
+logical frame. Freed hands do not drag the craft's auxiliary handlebar goals.
+Actor5 follows the full hull without reading retained yaw and returns through
+the actual7 remount path. The crouch is adapted to the taller modern saddle:
+the rider moves above the rear step before lowering and rises before returning.
+This explicit geometry policy prevents the initial visible saddle intersection.
+
+Ten new tests cover all416 authored samples, endpoint dimensions, fixed craft
+supports, distinct gestures, final rest alignment, pure seeking, the source
+delay/held blend, all six physical sequences for all four riders, and30/60/144Hz equality.
+The selected rider/lifecycle suite passes269 tests;34 additional ordinary
+race/grid/host/world regression tests pass. Prepared result selections are
+used here; they are not evidence of normal driven-finish scheduling.
+
+A fresh local browser inspected the actual detailed Blender rider and craft
+at1500x900 using default result providers and actual physical solves. All six
+completed without console warnings/errors, returned to22, and only5 entered7.
+Body and auxiliary solve counts agreed for every sequence. The inspection is
+a separate studio scene, not a full-game results screen or original-trajectory
+comparison. Final module hashes and screenshots are retained privately.
+
+This checkpoint remains local and unpublished. Browser race results still
+stop normal world updates; source61708 result-input handling and the original
+result/menu update sequence, fades, unfinished-place estimation and persistence
+remain open. The broader full-game parity objective is still incomplete.
+
+## Result input handoff â€” October 15, 2026
+
+The adapter can now run the original human-input dispatch decision against
+the actual rider lifecycle's signed1446 countdown. Zero still polls human
+input; negative values invoke an explicitly supplied source AI producer.
+Original61708 calls616B0, which runs80400 then common61184 and skips the final
+human stick curve. Actor number, finished record, scene phase and computer
+physical profile do not select this branch. No parallel finish timer is added.
+
+The explicit sourceAIInput option requires a physical lifecycle and human
+default origin. It polls only the selected producer, captures the prior
+controls and scene at the logical boundary, transports raw AI axes/power/16f4
+through the existing consumers, and retains held-button/direction history.
+The source input latch samples once before physical preparation and all five
+hull ticks. Conflicting caller origins reject. The human identity and fixed
+physical profile survive takeover. Existing prepared callers without this
+option retain their explicit dispatch; a missing AI context is not fabricated.
+
+Private execution of original61708/616B0/61184/61644 matches148 prepared cases
+(22,762 executed instructions under the existing evaluator's counting rule).
+These cover signed countdown boundaries, two racer slots, mapped controller
+records, missing controllers, result/remount/riding actors, scene gates and
+crash muting. The80400 output is prepared at its call boundary; this audit
+does not claim original AI execution. Original six-byte device-copy tails
+were also checked privately; the browser still supplies adapted controls.
+
+Tests connect the actual reconstructed AI driver in both phase3 and phase4,
+and all six complete physical result sequences switch on the following frame
+without polling a human device. Button releases and one input sample per
+frame are checked. Celebration and fall/remount control history and physical
+state agree at30/60/144Hz at the same exact simulation instant. The cadence
+fixture now clips its final render interval, avoiding a comparison against
+a partially begun next frame. All560 selected control/AI/rider/lifecycle/
+adapter/host/world/grid/ordinary-result regression tests pass.
+
+A fresh local browser also ran all six actual physical result sequences and
+verified the input switch using the checked source module hashes. It reported
+no console errors or warnings. This was a prepared numeric browser probe,
+not a full-game UI or driven-finish replay. The first probe lacked the required
+retained yaw from prepared hull startup; the final probe uses that actual owner.
+
+This checkpoint remains unpublished. The normal host still needs complete
+retained AI context/history initialization and the original result/world/menu
+schedule before enabling this option. Shared RNG/camera context, zero-simulation
+dispatch, fades, unfinished-place estimation and persistent native records
+remain open, alongside the broader gameplay parity gaps. Livev2.24.0 is unchanged.
+
+## Unfinished-rider result estimates â€” October 15, 2026
+
+Original77F5C is now reconstructed in the primary standings module and exposed
+through the canonical race state. It sets the actual1FD4 one-shot latch,
+projects the rider against the previous primary node, walks initialized A0
+links and length88 fields through the final finish, and estimates remaining
+time with original float32 operation order and place-dependent speed. It then
+clamps times in slot order, performs the original nested strict place swaps,
+and copies place words to26C0 on nonzero courses. Finished/DQ slots retain
+their places but still receive the source time clamp. No finish flag is invented.
+
+prepareNativeRaceResultStageUpdate can expand the77F5C call with explicit
+expandEstimates:true and actual primary records/body positions, committing
+its writes at the existing finish/DQ caller boundary. Default dependency
+recipes remain unchanged. Repeated calls skip without requiring geometry.
+The same canonical latch stops subsequent primary clock updates.
+
+Private whole-routine execution matches220 prepared cases,35,672 counted
+instructions, all ordered writes and all1,693 final race words per case.
+There are no intercepted arithmetic callees. Seven tests cover remaining laps,
+projection clamps, strict ties, place swaps, DQ/finish exclusions, one-shot
+reads, source stage expansion, initialization from all four Sunny classes and
+the canonical clock consumer. All174 selected primary/state/result/host/world
+regression tests pass. These are prepared numeric cases, not a driven finish.
+Malformed walks, nonfinite arithmetic and out-of-range signed conversions
+reject without committing state; no substitute estimate is produced.
+
+The normal host still needs its complete result/world/menu schedule, fades,
+AI context and persistence before this can be enabled through ordinary play.
+This checkpoint is local and unpublished; the broader parity goal remains open.
+The user additionally requested the original music from the existing locally
+provided Wave Race64 ROM; soundtrack extraction and integration are now active.
+
+
+## Original soundtrack files (v2.25.0)
+
+The supplied USA Rev1 ROM's sequence and instrument banks were extracted
+privately and rendered offline on EVO X2 with seq64 and FluidSynth. Fifteen
+standalone stereo MP3 files provide the title theme, nine course themes and
+five finish/retirement cues. The browser downloads only the selected music
+when Background music or Preview music is enabled. Course/result selection
+works in the race view and the online guest; host playback uses the race view.
+Pause/mute preserves playback position, new races reset it, stereo/mono/
+headphones use the existing sound options, and only two decoded tracks stay
+cached. The original sequence loop boundaries preserve introductions.
+
+This uses the original melodies and instrument samples, rendered through
+MIDI/SoundFont synthesis: envelopes and reverb approximate the N64 audio
+engine. It is not a bit-exact hardware recording. Final-lap variants were
+added in v2.26.0 below. The public assets contain MP3s, hashes and provenance; the ROM,
+raw banks, MIDI sequences and extraction tools remain private. No paid service
+or soundtrack download was used.
+
+Validation: all fifteen files decode as stereo in Chrome with exact manifest
+durations. The 28 focused music, audio and online tests pass. The full suite
+(before two additional focused tests) reports 2,172 passes and the same eleven
+pre-existing course/gameplay failures out of 2,183 tests. Native result work
+above remains opt-in; this release does not claim complete gameplay parity.
+
+
+## Original fade progression - October 16, 2026
+
+The earlier native result checkpoints through unfinished-rider estimates were
+included as source in published v2.25.0. Their historical unpublished notes
+above describe the state at each checkpoint; ordinary result scheduling remains
+unfinished and those routines are still opt-in.
+
+New native-race-fade-update.js reconstructs 1E71A8 and the numeric state changes
+of 7280/73A0/74BC/76C0. prepareNativeRaceFadeAdvance commits them to the existing
+canonical HUD owner, preserving signed halfword wrap, alpha float32 ordering,
+curtain position thresholds, alternating frame selection and the original
+one-update completion pulse. Completion restores the supplied nine-word
+template before writing the pulse. A following inactive update clears it.
+Unknown types preserve storage except for that required pulse clear.
+
+The existing EVO X2 Ghidra export of 800922E4 establishes its call after CPU
+world/overlay updates and before the separate display/results dispatcher.
+It must not be advanced from interpolated rendering. The curtain projection/
+view matrix calls (including their HUD8A34 perspective-normal write) and sound
+remain explicit ordered effects requiring their own consumers. Their execution
+and high-resolution curtain rendering are not claimed by this checkpoint.
+Nonfinite division inputs reject without mutating caller state.
+
+Private execution of the original routine and all four numeric callees matches
+655 prepared cases, 31,222 counted instructions, 2,671 ordered writes and all
+944,510 compared HUD words. Graphics matrix and audio calls are intercepted
+boundaries with exact argument comparison. Canonical transport also preserves
+all other state owners and supplied inputs. Five new tests cover complete fade
+sequences, the real tie-result completion consumer, curtain thresholds/calls,
+signed wrap and atomic invalid-input rejection. All 124 selected fade, main,
+state, result, launch, host and world regression tests pass.
+
+This fade checkpoint is local. Complete normal post-race world/menu scheduling,
+source AI initialization/history, presentation effects and native persistence
+remain required before normal driven finishes can use the full source sequence.
+
+## Original simulation0 outer updates - October 16, 2026
+
+The ordinary native world now separates its outer clock from actual hull ticks.
+Shared simulation0 continues descending input sampling, control preparation and
+rider summaries while skipping the five contact/hull passes and physical rider
+solves. Motion-summary fields retain their prior values, as in source65C18.
+The six result actors retain their lifecycle and physical pose, then resume
+without skipping an animation solve. Standalone adapters also support fractional
+and deferred inactive frames. Host pause (active:false) still holds all clocks.
+
+Water still selects camera patches in player2/player1 order, but suppresses
+forcing and evolution during simulation0. This exposes the required ordinary
+world capability; it does not enable complete normal post-race UI scheduling,
+scripted main21, or exact source camera trajectories. Complete retained AI
+history/shared RNG, fade presentation consumers and menu/reset sequencing remain
+required before enabling the original result sequence in ordinary driven races.
+
+A fresh read-only Ghidra query on EVO X2 verified the gates in665B0,65C18,
+5DE24,50F8C and51238 without changing the nine project files. Private execution
+of the original665B0 caller through its camera-call boundary covers80 cases and
+7,483 counted instructions. Inputs/preparation/contact/hull/summary callees are
+explicit intercepted boundaries. All40 ordinary-world comparisons match caller
+order and gating; the40 scripted main21 cases are excluded from browser parity.
+Input call types are normalized for order comparison, not proof of AI outputs.
+
+New tests cover active/inactive/resumed physics, 30/60/144Hz equality, standalone
+and deferred frames, and all six result actors. An isolated Chrome numeric probe
+also froze and resumed all six actors without console errors. This is numeric
+browser verification, not a completed visual result-flow test. The full run
+reported2,182 passes out of2,194, the eleven existing course/gameplay failures,
+and one obsolete assertion requiring simulation0 to reject. That assertion was
+updated to verify the new zero-hull schedule and its contact suite passed9/9.
+The final focused regression run passes70/70, including the added deferred-frame test.
+This checkpoint remains local and does not change the published soundtrack.
+
+## Post-adjudication object-motion gate - October 16, 2026
+
+The canonical launch runtime now exposes its actual signed activity624 value as
+the object-motion gate. The host reads that gate after ordinary adjudication,
+before the shared primary/generic motion pass. Simulation648 is independent:
+simulation0 can retain every hull and physical rider while free objects continue
+moving. An activity value other than -1 suppresses both object motion families.
+Both bridges still observe each outer frame, so their scheduling stays aligned
+when motion resumes. Explicit preview motion switches and host pause retain
+their existing behavior. This does not add motion for unsupported object kinds.
+
+A fresh read-only EVO X2 Ghidra query of6E3A8,7DBC0,6E0F4 and8E794 left all nine
+project files unchanged. Original6E3A8 execution covers150 prepared cases and
+2,590 counted instructions, with empty course effect arrays and explicit callee
+boundaries. The intercepted79528 changes activity to test that the caller reads
+the post-adjudication value. All100 mode0/1 cases match20 distinct actual host
+configurations;50 mode11 cases remain outside the admitted native host modes.
+This verifies schedule gates, not the intercepted callee bodies or full original
+trajectories. The39 selected host, ordinary race, grid start, result owner,
+floating and primary-object regression tests pass, including20 combinations of
+activity, simulation and player count plus explicit pause/resume checks.
+
+Normal finish-to-menu integration still needs the complete logical display
+dispatcher, source AI context, fade presentation consumers and menu/reset/save
+effects. The current browser stop-at-results policy has not been removed.
+This checkpoint is local; live remains v2.25.0 ORIGINAL MUSIC.
+
+## Composed result display dispatcher - October 16, 2026
+
+prepareNativeRaceResultDisplayUpdate now composes the actual5AE4 dispatcher
+with the previously recovered5DF4 status,6DCC/6FE0/7394 result initialization,
+and63B4/6550/6B00 result updates. These execute at their selected call sites
+against the same local state, preserving later winner-HUD writes and same-call
+fade predicates. Entering a result state does not dispatch its update again in
+that frame. The old pending-call APIs retain their contracts.
+
+The new composition also executes6B38, which despite its position among display
+calls draws nothing and always returns its input head. In two-player state41,
+it stops the race clock when the retained counter is below30, increments with
+signed32 wrap, and arms the fade after counter60. The immediately following
+63B4 sees that new flag and initializes the fade on the same call. Other states
+leave those fields untouched. No fabricated graphics return is needed for6B38.
+
+Optional transition expansion consumes retained fade/slot templates. Optional
+unfinished estimates expand77F5C at its ordered canonical boundary; course-zero
+glyph movement/style writes continue to expand before status/result entry.
+The dispatcher must run once after the CPU world and fade update, never once
+per interpolated render. Prepared world/fade/display sequences agree exactly
+at30/60/144Hz and consume the fade completion pulse before it clears.
+
+Private execution of original5AE4 and its reached numeric callees covers856
+prepared cases,110,406 counted instructions,18,693 ordered operations and
+2,900,984 canonical words, all matching. That includes actual6B38, entry/update
+bodies,7570, fade properties and the reached zero-argument slot reset. Graphics
+heads are explicit prepared return fixtures; menu/audio/storage,77F5C in this
+particular source audit, and nonzero slot/widget branches remain intercepted
+boundaries. Existing entry/update evidence also still matches1,296 and3,170
+cases respectively after the shared-function refactor.
+
+Eleven new tests cover solo and two-player entry, tie pulse routing, retirement
+delay/wrap, course-zero ordering, estimate integration, atomic failure and frame
+cadence. The broad regression run passed507 tests before the final6B38 addition;
+the final focused dispatcher/entry/update/i1/prestart regression passed49 tests.
+This is prepared numeric integration, not a verified visible finish-to-menu
+flow. Original9328C world drawing,1E5554 HUD drawing,1DE3CC retained effects,
+nonzero6A4C widgets, fade presentation, menu/reset/save consumers and complete
+source AI context still need their appropriate high-resolution integration.
+The live host's stop-at-results policy is unchanged. This checkpoint is local.
+
+## Display-stage camera inputs - October 16, 2026
+
+native-race-camera-input.js reconstructs the numeric1DE3CC routine that precedes
+5DF4 status. It updates the canonical camera and auxiliary HUD records, with
+per-view controller mapping, bitwise camera toggles, four-mode wrap, ordered
+sound cues and float32 blending. Body states remain indexed by view ordinal,
+independently of controller remapping. Actors23/24 use their special blend rate;
+actor25 shares their near/far target rule, and actor7 switches at frame56.
+The unchanged-mode blend rate is the fixed word6020, not a mode-indexed lookup.
+Source instruction comparison caught and corrected an initial addressing error.
+
+The sixteen mode words3940..3980 and four blend words6018..6028 are explicit
+retained readonly dependencies. No duplicate persistent camera state is added.
+prepareNativeRaceCameraInputUpdate commits the writes to the existing HUD owner;
+prepareNativeRaceResultDisplayUpdate can expand the call with
+expandCameraInput:true and a cameraInput sample. The call remains in its original
+game40 position before result selection. Other result states do not consume
+camera input. Water-camera transport preserves these mode/toggle/blend and
+auxiliary fields rather than replacing them with a rendered camera snapshot.
+
+Original1DE3CC execution, with only audio intercepted, matches1,382 prepared
+cases,213,466 counted instructions,22,215 ordered operations and1,989,960
+canonical HUD words. A second composition audit executes actual5AE4 plus1DE3CC
+and the previously recovered result routines:135 cases,53,379 counted
+instructions,9,474 operations and457,515 canonical words all match. Graphics,
+menu/save calls and other documented dispatcher boundaries remain external.
+These are prepared finite numeric inputs, not complete original camera or
+gameplay trajectories.
+
+Seven new tests cover mode wrapping, raw toggle bits, actor targets, remapped
+controllers, water-camera ownership, dispatcher ordering and atomic rejection.
+All92 selected camera, result, state, ordinary-race and world tests pass. No
+visible camera-mode or finish-to-menu flow is claimed yet: original camera
+transform production, source AI context, remaining drawing/widget effects and
+menu/reset/save consumers still need live integration. This checkpoint is local.
+
+## Final-lap soundtrack (v2.26.1)
+
+Eight additional stereo files follow the original course sequences' variation1
+branches, including their faster tempos and distinct musical entry sections.
+The private converter linearizes each reachable root path before SEQ64 MIDI
+export, which otherwise ignores sequence branches. An independent raw-byte
+walk of all eight original roots matches322 instructions, ordered commands,
+durations and loop starts. Original channel/layer definitions and instrument
+banks remain unchanged in private extraction files. EVO X2's installed
+FluidSynth and FFmpeg rendered and packaged the tracks; no money was spent.
+
+Each file includes the original1A final-lap fanfare before the accelerated
+theme. C37F4(21,80), BF370 and C1540 show the fanfare,18 outer-frame delay and
+variation1 restart. The offline mix uses the recovered50ms game step for a
+.9s delay. Its2s fade is a documented presentation approximation of the
+original audio engine's120-unit fade, not a bit-exact audio-engine port.
+Loop points exclude the fanfare and retain the settled second traversal.
+There are now23 standalone soundtrack files, with hashes in the manifest.
+
+Race and championship use the human's final lap; local/online versus use
+either human, so the guest receives the same selection as the host. AI laps,
+Free Ride, Stunt and Time Trial do not select this variation. Once selected,
+the final-lap theme remains latched for that race even if a later snapshot or
+disqualification no longer meets the trigger. Restart/course change clears
+the latch and results select the appropriate existing finish/retirement cue.
+Enabled race music preloads only the current course's upcoming variation;
+the decoded cache remains bounded to two tracks. Pause/mute preserves position,
+and an in-flight prefetch can become the selected track without a duplicate
+download. Results and new races invalidate stale requests.
+
+All33 focused soundtrack, audio, sample and online tests pass, including actual
+modern/native presentation snapshots through the online codec. Chrome decoded
+all eight new files as stereo within.03s of manifest duration. Browser playback
+verified a P2-triggered switch at playbackRate1, pause/resume at the identical
+position, and the v2.26.0 game page loading successfully. The full suite reports
+2,209 passes out of2,220 tests; all11 failure names match the pre-existing
+shoreline/gameplay baseline, with no new failures. Publication uses the mandatory
+site wrapper and its preview/production checks.
+The broader gameplay parity gaps documented above remain open.
+
+The v2.26.1 follow-up keys online music sessions by both connection and race
+generation; a new pairing cannot inherit the previous pairing's final-lap latch.
+
+
+## v2.27.0 â€” ordinary source camera controls and shared water selection
+
+The opt-in native Sunny time/versus integration now consumes the recovered
+1DE3CC numeric camera input after the completed world/water frame and before
+5DF4. Browser camera commands queue explicit edges per human view; mode,
+toggle, lift, follow lag and current/target radius, pitch and FOV use the same
+canonical HUD/camera owner. The ordinary type5 admitted numeric subset has
+explicit fresh-web initialization; this does not restore an opaque source
+camera template or claim complete source startup memory. Input reads each
+completed actor and animation timer and blends lift exactly once per frame.
+The four original modes and wrap/change coefficients reach the next water
+frame, including independent P2/P1 patch selection. Pause consumes no edge.
+
+High-resolution local, split, separate-window and online renderers consume
+bounded read-only world-unit camera endpoints. Mouse orbit/zoom and existing
+modern obstruction guards remain presentation adjustments; source camera
+collision corrections and scripted/result cameras are still incomplete.
+Remote camera messages use the ordered control channel, current generation
+and monotonic sequence; guests can change only Player 2. The remote view never
+creates a water/camera solver. Modern physics retains its existing cameras.
+
+The125 targeted tests pass. The full suite reports2,215 passes out of2,226;
+all11 failure names exactly match the preceding full-suite baseline. New
+coverage checks next-frame timing, four-mode wrap, independent views, completed
+actor/lift cadence, pause, atomic invalid writes, exact online DTO transport,
+and duplicate/stale/old-generation guest command rejection. Chrome local split
+views confirmed independent keyboard mode changes and matching source FOVs.
+The broader parity gaps above remain open.
+
+Actual Chrome WebRTC host/guest testing also confirmed a guest camera-button
+press changes host modes from[1,1] to[1,2], leaves P1 at75 degrees and renders
+P2 at90 degrees with the high-resolution solved rider. No JavaScript errors
+were observed; the isolated local preview reports only its missing favicon.
+
+## Ordinary source result entry and HUD slots (local checkpoint)
+
+The native Sunny time/versus host now executes the selected original result
+initializer after status judging, instead of leaving it as an unconsumed call.
+Solo finish uses the completed rider's actual selectedActor/16C8 value to set
+the result delay. Finish, retirement and tie enter source states42,41 and44;
+the original fade and HUD initialization share the canonical race owner.
+The winner write retains its original order after initialization. Repeated
+status calls after entry cannot reset the result or award another versus win.
+
+The full numeric1E6A4C widget initializer and1E6F6C first-free allocator now
+support all five HUD slots, all source kinds and selectors, low16 argument
+truncation, template retention, and a full slot pool. EVO X2's existing Ghidra
+project was queried read-only; its nine project files remained unchanged.
+An independent original-instruction execution checked1,840 cases comprising
+128,244 instructions and25,892 HUD stores. Every ordered store and resulting
+canonical HUD hash matches the implementation. ROM/tool output stays private.
+
+The84 focused tests pass, including live finish/retirement/tie entry and
+repeat-call protection. All33 pilot tests also pass: genuine three-lap finishes
+across all four riders and four classes enter source state42 with the actual
+body-dependent delay and finish widget. Rider0 finishes in all four classes
+have identical complete canonical result state at30/60/144Hz.
+These changes are local, pending the next publication. This is result entry,
+not complete post-race parity: the browser still opens results immediately.
+The subsequent physical rider animation, AI takeover, source widget animation,
+results-menu schedule and persistence still need full live integration.
+
+The private original-ROM CPU diagnostic now reaches a genuine four-racer Sunny
+championship through ordinary Start/A/Down menu inputs, including skipping
+warm-up. The fifth bounded30-second run reaches main638=1, gameState40,
+phase650=3 and simulation648=3. It records621 camera-predicate calls during
+driving loops513..581 with changing racer coordinates. Both watched corner
+buffers retain zero XZ throughout; the160 observed overlapping stores are
+startup clears and the known Y/RGB initialization. This supersedes the earlier
+neutral-boot-only coverage, but does not establish a universal zero-corner
+rule: the host executes original CPU code and audio microcode, while graphics
+tasks provide bounded metadata without executing graphics microcode or GPU.
+All logs parse with matching hashes, zero observer errors and a clean joined
+shutdown; the1,477 existing diagnostic files retain their previous hashes.
+
+## Live AI navigation and water perception (local checkpoint)
+
+The Sunny ordinary host now runs the source86148 navigation prepass for every
+rider in ascending slot order before descending input sampling. The canonical
+record2948 owns the navigation row; human buoy progress2944, lap, power and
+finish records remain separate. Simulation0 still performs navigation, while
+browser pause performs no frame. The selected class's initialized source
+records supply avatar links, axes, fixed target endpoints and passing axes.
+The retained table is checked with the original main21/mode1 primary override.
+
+The actual after-hull water pass now retains its source50F8C expanded-mesh
+selection circles for the next input frame. It preserves camera record order
+despite P2-before-P1 patch generation. AI reads patch0 in either player mode;
+there is no invented circle before the first completed water frame. Inactive
+simulation still refreshes selection geometry without evolving water. These
+numeric snapshots do not change the high-resolution renderer or wire format.
+
+The new body-input reader uses actual preceding hull motion, controller mute
+gate, profile, actor/blend, contact and action owners. It rejects startup and
+an already-latched next input. In particular, coasting can retain15DC=1 even
+with no accelerator held. The complete live post-finish driver is not yet
+connected: retained AI setup/shared RNG and result-world sequencing remain.
+
+Validation:254 focused AI/water/ordinary/launch tests passed, followed by all6
+live-input tests after adding the main21 context case; all33 race-pilot tests
+passed, including genuine three-lap finishes and render-cadence comparisons.
+The existing14 host tests also passed. Private original-instruction comparison
+matched291 live navigation samples (211 driving,123 changed rows), executing
+19,998 instructions, and all18 live water mesh/circle samples. Separately,
+1,344 retained original61184 cases confirm the15DC/control-mute relationship.
+These are bounded numeric comparisons, not whole-game trajectory equivalence.
+No new full-suite claim is made; prior unrelated failures remain tracked.
+
+
+## Native ice splash display checkpoint
+
+The shared ice owner now exports the eight AF4A0/AF51C splash particles into
+live, replay and separate-player presentation. Positions and uniform scales
+come from the recovered numeric pool. AF798 selects seven discrete frames at
+ages 1 through 7; retirement at age 8, emitter replacement and generation
+identity remain simulation-owned. Rendering consumes detached data and never
+advances the pool or random seed. Legacy display snapshots without splashes
+remain readable.
+
+The separately ROM-verified Ghidra AF798 listing supplies camera-eye facing,
+frame selection and the 01051580 display-list reference. A unique raw display
+list at ROM 147610 references quad vertices spanning 32 native units in X/Y.
+That bounded decoding establishes the rendered extent; it does not execute the
+whole segment loader or original graphics pipeline. Seven authored 512-pixel
+mist textures replace the low-resolution artwork. Original textures are not
+copied, and original global RGB tint is not yet reproduced.
+
+Validation: 35 focused tests passed across ice presentation, shared owner,
+splash arithmetic, player windows and full-resolution loading. Replay and
+second-player snapshots preserve the same discrete ages and slot identities.
+Browser checks rendered four splashes through both live world and actual
+second-player renderer at High, 1280x720, with the live 83,521-vertex water mesh
+unchanged. Seven distinct 512-pixel frames, three camera-facing orientations
+(including directly above), retirement and snapshot immutability were checked.
+The browser reported one resource 404 and no shader/runtime errors in this check.
+
+Native Glacier admission remains closed: existing course acceptance and
+scenery problems are unresolved. The other global splash producer and native
+impact sound consumer also remain separate work. This checkpoint is not full
+Glacier or whole-game parity.
+
+
+## Glacier snowbank presentation repair
+
+Raycasts identified the large grey surfaces in the eastern Glacier inspection
+as the intended snowbank terrain, rather than displaced ice sheets. All
+130,321 terrain vertices matched the render heightfield within 0.000002 metres.
+The flat appearance came from the snow material replacing textured colour;
+decorative rocks also retained a world-upright pose on steep banks.
+
+Snow now retains photographic grain and procedural drift/ice layering. The
+254 venue-dressing rocks tilt to the rendered slope and embed their underside
+vertices into the local heightfield. This affects scenery only: source ice
+obstacles, terrain heights, contact planes, gates and course physics are
+unchanged. Non-snow venues retain their existing placement and shading paths.
+
+Eleven focused checks passed: nine venue-placement tests and two grounding
+tests covering steep/curved banks and every Glacier dressing rock. Browser
+before/after inspection retained High 1280x720, 83,521 water vertices and the
+130,321-vertex terrain; shaders compiled with no runtime/shader errors (one
+resource404 remains). The inspected bank and rock undersides improved; this
+does not prove every Glacier camera or the separate native course acceptance
+requirements. Native Glacier admission remains closed.
+
+
+## Native collision audio packet arithmetic
+
+`native-impact-audio.js` now reconstructs the impact portion of52480 and its
+C010C consumer as detached numeric operations. Priority is racer, primary buoy,
+generic object, shore, floor, box, then fixed sphere. Generic hit kind2 selects
+the separate ice-break command. Source float32 scaling, integer conversion,
+127-volume ceiling, retained type, signed packet-byte interpretation, cooldown,
+previous-speed bands and paired crash voice commands are preserved.
+
+The ice-break consumer issues command06000700/13 and clears both type and
+strength, including when the incoming strength is zero. This prevents a stale
+break code from firing again after contact ends. Ordinary repeated contacts
+follow the source cooldown and reduced retrigger strength, rather than a new
+wall-clock debounce.
+
+Evidence: four read-only queries through EVO X2's REA-installed Ghidra left all
+nine project files unchanged; 2,195 instruction records matched the local ROM.
+The private bounded evaluator executed1,004 producer cases (21,705 instructions)
+and2,600 consumer cases (67,383 instructions). Public fixtures contain only
+numeric inputs, results and command arguments. Six new tests and ten existing
+impact-state tests passed, including repeated producer/consumer frames and
+non-repeating ice breaks.
+
+These are verified kernels, not a claim of audible native integration. The
+consumer's earlier mode gates, retained packet context, material-bank globals,
+nearest-rival routing and downstream sample/voice mixer are not yet connected
+to the live host. Leaf audio calls were captured, not executed. The actual
+665B0 caller places packet production after all actor completions and before
+later camera/water work; live integration must preserve that boundary and the
+consumer's retained state. Existing browser audio is unchanged at this stage.
+
+## Native contact materials and landing audio preparation
+
+`native-contact-audio.js` adds the nine source-course contact palettes, the
+first four52480 packet bytes, and C010C's preceding wet-transition consumer.
+The packet preserves source float32 speed conversion, signed pitch clamping,
+landing arithmetic and byte storage. The wet consumer selects landing commands
+by intensity and prior speed, updates its dry timer, and establishes packet7
+before that latch gates marked-box impact sounds. Both consumers retain the
+previous-speed byte until the full audio caller finishes its other branches.
+
+Two further read-only Ghidra queries on EVO X2 identified the material globals'
+single initialization writer and decoded C21F4. All nine project files remained
+unchanged, and830 additional instruction records matched ROM bytes. A private
+bounded evaluator executed156 packet-prefix cases,1,170 wet-consumer cases and
+all nine material selections (49,132 instructions). Thirteen focused tests
+passed across the two audio modules, including landing-to-steady-water frames,
+marked-box ordering and previous-speed retention. Fixtures contain numeric
+prepared inputs, outputs and captured leaf command arguments only.
+
+Live audio integration is still pending. C78/C7E now have a completed-frame
+owner as described below; the full packet schedule, mode gates, nearest-rival
+selection and downstream playback remain separate work. These kernels do not replace the
+existing browser audio or embed original sound samples. Rendering resolution,
+water geometry and course admission are unaffected.
+
+## Completed hull wet flags and live AI trim correction
+
+The live AI bridge incorrectly supplied the submerged-point count as C7C.
+Original65C18 stores that count in C78 and a separate zero/one flag in C7C.
+AI water-trim branches that require C7C exactly1 therefore failed for hulls
+with several submerged points. The bridge now supplies the actual wet flag.
+
+`native-hull-wet-state.js` reconstructs the twelve-point bit0 recount and its
+C7E landing, C80 takeoff and C82 preceding-flag stores. The adapter runs this
+once at completed-frame boundaries, before contact/arc/actor consumers, even
+when source simulation648 holds physical motion. Source62E50 initializes
+count8/current1/previous1 with no edges, while4B0F8 clears the individual point
+flags; the first inactive completion consequently recounts zero. Display
+snapshots retain immutable completed values. Physical count-dependent buoyancy
+and rider rules still receive the actual count. The audio prefix now names
+its C7C input `wetFlagC7c`, independently of the count supplied through C78.
+
+Three read-only EVO X2 Ghidra queries left all nine project files unchanged.
+All2,312 exported instruction records matched ROM bytes. The private evaluator
+executed all4,096 wet masks with both preceding flags, plus eight unsigned16
+edge cases:8,200 executions and680,594 instructions. Public fixtures contain
+only prepared numeric cases and results. The focused suites passed328 unique
+checks, including the live AI trim regression, startup/inactive transitions,
+landing audio preparation, rendering-cadence independence, two-player world
+coordination and a driven complete solo race followed by source AI takeover.
+
+This corrects live source state and AI behavior; it does not claim that native
+sound playback, every venue, or the full original game is complete. Rendering
+resolution and mesh density are unchanged.
+
+## Native engine channel lifecycle and retained packets
+
+`native-audio-channels.js` reconstructs the complete primary, secondary,
+alternate, wrapper and stop entries around BFDD0/BFE70/BFEF8, plus BFD9C's
+selective packet reset. The actual BFDD0 entry begins five instructions before
+the existing Ghidra function at BFDE4: that prefix enables the primary channel
+and starts the400-frame rank-change delay. Entering BFDE4 directly preserves
+those globals. The distinction is checked against original instructions.
+
+Packet reset preserves cooldown, previous impact type, previous speed and all
+other unlisted bytes. Alternate startup can select the secondary mixer while
+resetting the caller's original packet; channel choice does not redirect the
+packet pointer. Mode2 suppresses secondary startup, and the course-zero
+alternate retains its companion flag and rank-delay state. Mixer commands are
+captured in their original order with raw argument bits.
+
+Five read-only queries on EVO X2 left all nine Ghidra project files unchanged.
+All555 exported instruction records matched ROM bytes. The private evaluator
+executed864 channel cases and256 packet resets (31,050 instructions), including
+the raw BFDD0 prefix and nested original reset/secondary routines. Twenty
+focused tests passed across the channel, contact and impact audio modules.
+They include restart suppression, correct packet ownership and retained-state
+validation; public fixtures contain only numeric cases and command arguments.
+
+The subsequent contact-playback checkpoint below connects these entries to
+the admitted live native races. The complete downstream mixer remains separate.
+
+## Unreleased — live native contact audio
+
+The one-human and two-human native previews now produce and consume landing
+and impact packets once per completed physics frame, after all actors and
+before water advancement. Human slots and record318 come from the canonical
+race owner. Float32 source motion, actual C78/C7C/C7E wet fields, impact priority,
+course material codes, prior-speed volume bands and retained cooldowns drive
+the commands. Inactive simulation retains motion. Wet transitions run before
+impact consumption, and the previous-speed byte changes only afterward.
+
+The ordinary startup now initializes the verified6FB0(2,4,0) fade. Its completion
+pulse enables the actual BFDD0/BFEF8 channel starts; result effects stop them.
+The contact owner observes the relevant C21F4/C1F60 mode/mute changes. Fresh web
+packet/motion storage explicitly starts at zero; diagnostic retained race
+states keep their supplied HUD fade. This is not restored cartridge audio RAM.
+
+A fresh read-only EVO X2 query confirms that52480's immersion byte uses4D30C's
+normalized physics query at the point90/D0 midpoint, not rendered wave height.
+All120 original midpoint/clamp executions match (4,455 instructions). Human
+channels no longer require an unread rival-voice random value; channel2 still
+requires it when its paired-voice branch is reached.
+
+The Web Audio adapter uses existing authored splash/impact recordings, with
+source volume and timing plus synthesized fallbacks. It bypasses the modern
+landing debounce and suppresses the duplicate render-triggered landing sound.
+A bounded queue drains once, discards muted/held events, and clears on replay
+entry. Snapshots and replay never advance audio state. Existing music settings
+and continuous engine/water sound remain under their existing owners.
+
+All114 focused tests pass across contact kernels/runtime, sound options, live
+launch/host/results, fade initialization/update, body fields and asset loading.
+A browser two-player native run reaches120.85s/frame2417 and results mode6:
+nine commands reach playback exactly once, including paired impacts on lanes2/5
+and a player-two landing; none are dropped or left pending. A five-second replay
+returns with the live state unchanged and no additional contact playback.
+The AudioContext is running and authored samples loaded. High graphics remains
+1280x720 with83,521 water vertices.
+
+This completes the contact subset for current human native previews, not the
+full original mixer, engine pitch/control, voice/rank scheduler, mode4 rider
+water cue, nearest-rival routing, or original SFX bank playback. Native venue
+admission at that checkpoint was courses1/2/7; the subsequent Glacier preview
+is described below.
+
+## Unreleased — native Glacier Coast preview
+
+Glacier Coast now admits the opt-in native source-water Time trial and Two-player
+preview. The native race owns a separate course view containing all59 forward
+or48 reverse source rows, the17 visible marker mappings, original static
+contact geometry and twelve shared breakable ice blocks. Modern course objects
+retain their existing navigation and water metadata. Numeric preparation also
+continues to accept fixtures without rendered gates.
+
+The authored inspection driver anticipates forward Glacier lateral drift by
+half a second; Reverse retains its existing0.15-second policy, and explicit
+caller overrides take precedence. This changes driver inputs only. Source
+forces, buoy judging, five-miss disqualification and original AI are unchanged.
+All four classes finish three-lap seed17 runs in both solo and versus probes.
+Solo runs have three misses; versus runs have two per player forward and two/four
+in Reverse. These are completion checks, not claims of perfect driving. A random
+seed436 browser versus run still disqualified player two after five misses.
+
+Focused runtime tests verify admission, modern-course isolation, complete route
+ownership, ice contacts/fragments/splashes, source contact audio, paused-state
+retention and a genuine third-finish/result handoff. The final focused checks
+pass89 unique tests, including existing Sunny driver/cadence, Southern/Sunset
+runtime, modern Glacier geography and loading regressions. A seed17 browser solo run
+finishes in151.494 seconds with three misses, five ice breaks and an active
+source result sequence. Its authored audio samples are loaded and playing;
+the High setting retains1280x720 output and83,521 water vertices. A split-screen
+browser run confirms both rendered views share the ice world. The browser has
+one local missing-resource404 and no observed JavaScript or shader exception.
+
+This remains an inspection preview, selected using verify/nativePhysics query
+flags with the course sea state. It does not switch ordinary players to the
+native backend or claim complete original-game parity. Random-seed driver
+reliability and the remaining full audio/gameplay integrations remain open.
+
+
+### Native Stunt results and initials — 2026-10-18
+
+The opt-in native Stunt preview now presents the source time, trick and ring
+score breakdown in a responsive high-resolution panel. Its separate results
+phase, player-one confirmation edge, opposing panel offsets and three-tick exit
+follow the verified Stunt overlay. Qualifying scores enter the original numeric
+initials wheel; completion writes the selected course/rank name and hands off to
+state57. Nonqualifying scores go directly to state57. The current host then
+provides Restart race and Rider & mode select. The original state57 menu loop is
+still pending; this change does not claim that loop is implemented.
+
+Read-only Ghidra queries on EVO X2 identified the selected ROM overlay and the
+next-screen initializer without changing any of the nine project files. Complete
+original instruction execution matched 9,315 prepared results cases and all105
+next-screen initialization cases. Committed numeric fixtures contain no ROM
+instructions or original graphics. Focused tests verify controller ownership,
+first-display edge handling, exact slide/delay thresholds, ordered effects,
+invalid-input atomicity, all three Stunt name positions and warm retry retention.
+Ordinary results and name-entry regressions also pass. One existing record-session
+test expected an obsolete error phrase; it now matches the source-launch wording.
+
+Browser verification completed a full native Sunny Stunt run, displayed 945 time
+points and1,800 ring points (2,745 total), accepted AAA via the name wheel, and
+reached state57. A second unseeded run scored2,750 and displayed correctly at a
+512x844 viewport without horizontal overflow. Desktop rendering retained High
+quality and a1440x900 canvas. The local server reported missing-resource404s;
+no JavaScript or shader exception was observed. Records remain page-session
+records in this preview, not durable or global leaderboard submissions. The
+normal gameplay backend and its graphics quality settings are unchanged.
+
+
+### Native Stunt record screen and continuation — 2026-10-18
+
+The previously pending state57 records screen now follows both qualified name
+entry and unqualified Stunt results. It shows the source top three scores with
+rider, standard/custom tune, initials and rank highlight; an unranked current
+run gets its own fourth row. Original slide-in/out timing, player-one input,
+entry/confirm cues and delay lead to the four-choice continuation menu. Restart,
+rider, course and title destinations run their existing numeric fade/return
+flow in Stunt mode. Source Stunt save calls remain ordered effects, and preview
+records remain page-session storage rather than cartridge or global saves.
+
+A read-only EVO X2 Ghidra query with the actual jump table resolved the complete
+input switch; all nine project files were unchanged. Independent numeric control
+matches3,534 complete original-input/display-caller or initialization-prefix
+cases. The original drawing body also ran for all48 prepared course/rank cases:
+score, rider, initials pointer, tuning and highlight selection matched the web
+record view. Original GPU, font and formatting helper calls were intercepted;
+this verifies data selection without claiming cartridge graphics emulation.
+
+Focused tests cover all four record outcomes and all four continuation choices,
+12-tick fade completion, source save-before-handoff ordering, atomic failures,
+30/60/144Hz menu cadence and ordinary-results regressions. Browser verification
+completed a native Sunny Stunt run, entered AAA, displayed the first-place2,770
+score, continued to all four choices and restarted into a fresh native Stunt
+countdown. The High setting retained a1440x900 canvas. The native backend remains
+an opt-in preview on the four admitted physical courses.
+
+An ordinary native time-trial regression run also reached its unchanged time
+record table (1:48.303 total,0:33.785 best lap, AAA initials), then returned
+through Choose course. This exposed a collapsed setup panel that prevented
+the target selector from receiving focus; rider/course handoffs now open it
+before focusing their target. No JavaScript or shader
+exception appeared; the local test server still had missing-resource404s.
+
+A fresh Stunt browser pass verifies that Choose course opens Race setup, keeps
+Stunt selected and focuses the now-visible course selector at High quality.
+
+
+### Ordinary source reset extents and initial checkpoint time — 2026-10-18
+
+The ordinary native course factory now gives75310 the complete initialized
+fixed-object family for extent calculation. Previously it passed only visible
+authored boundary markers. Original execution exposed different bounds in Sunny
+and Sunset, including Sunset's two hidden two-player rows; these are retained
+exactly rather than clipped to the visible course. Explicit authored diagnostic
+layouts continue to use their own marker family.
+
+The reset also reads the first unsigned byte of the original course checkpoint
+table shared with Stunt setup. This corrects Southern and Glacier's initial
+checkpoint allowance from15,000 to20,000ms. Sunny and Sunset remain15,000ms.
+
+Complete original75310 plus EED70/EE9C0 startup execution now matches every one
+of the1,693 race words and1,442 HUD words for all32 combinations of four admitted
+courses, four classes and one/two players (257,087 interpreted instructions).
+Committed reference hashes cover the selected source objects and actual primary
+rows. Source reset, independent launch clocks, wrong-side judging, pause,
+online transport and30/60/144Hz live cadence checks all pass (27 focused tests).
+This corrects numeric setup; it does not change graphics resolution or admit
+additional native physical courses.
+
+### Remaining solo Stunt collision resources — 2026-10-18
+
+Prepared native Stunt runtimes now select the original solo floor and shoreline
+resources for Dolphin, Drake, Marine Fortress, Port and Twilight. Together with
+the existing four selections, all nine prepared Stunt courses have support and
+static-contact geometry. The recovered71E70 selection uses player count for
+these tables, including Dolphin and Port's distinct one/two-player selections.
+Only the solo resources are added here. Live box planes remain owned by the
+canonical initialized Stunt objects.
+
+The five courses contain100/78/22/0/16 floor planes and55/92/72/117/78 shoreline
+segments respectively. Port's original floor header has zero width and depth:
+both original consumers reject every point before accessing its stale candidate
+lists. Those lists are retained without inventing collision triangles.
+
+Complete original7F448,7F030,51740 and5DD04 execution supplied5,391 comparisons:
+1,143 floor queries,1,116 full floor-contact passes,2,682 full shoreline passes
+and450 retirement scans, totaling2,004,032 interpreted instructions. All match
+the web consumers, including binary32 results, ordered normal stores, all twelve
+hull points, retained impacts and query sequences. Retirement fixtures explicitly
+use empty boxes to isolate floor selection; the live runtime continues to read
+its current canonical box owner. Reference fixtures contain numeric states,
+not original executable code or rendering assets.
+
+All nine internal physical Stunt hosts now pass60 source frames with the actual
+rider, camera, water, input, objects, ring and score schedule. This is a startup
+integration check, not a complete driven route or visual alignment check.
+Public physical admission remains limited to the four previously verified
+courses pending those checks. High-resolution rendering is unchanged.
+
+### Canonical water amplitude threshold — 2026-10-18
+
+Native water now reads1FB4 directly from the canonical race owner. Previously
+the water host calculated a second threshold from authored/visible boundary
+markers, which could omit initialized fixed objects. The bound value therefore
+uses the already verified75310 extent, including hidden source rows and retained
+prepared histories. Standalone modern water keeps its selected threshold.
+
+All32 ordinary course/class/player selections and all nine internal Stunt hosts
+read the canonical value. Sunset two-player now exposes48,388.50390625 rather
+than10,390.365234375, but original66A48's two-player branch does not consume this
+parameter: no change to two-player waves is claimed. Direct original execution
+confirms that fact and the solo effect: at radius9,000, Dolphin's correct
+12,937.33984375 threshold keeps amplitude20, while the old prepared-host
+8,140.37353515625 threshold incorrectly produces28.
+
+The four admitted Stunt courses still complete physically driven runs, cross
+all four checkpoints, drain awards and reach their score results. Gesture,
+pause, source support and30/60/144Hz checks pass, along with ordinary launch,
+two-player clocks and online transport regression coverage. This changes the
+simulation's threshold ownership; rendering resolution remains unchanged.
+
+### Twilight native Stunt scene and physical admission — 2026-10-18
+
+The opt-in native Stunt preview now includes Twilight City. Its scene uses the
+reconstructed source canal outlines,16 finite floor planes, four fixed solids,
+four selected ramps and all17 rings. The detailed city materials, water, rider
+and scenery renderer remain in use. Ordinary modern Twilight and its other
+modes retain their existing course selection.
+
+Twilight has alternative paths sharing ring orders3/4/5. Display binding now
+matches both ordinal and center, preserving distinct source rows and individual
+collection/fade state for both branches. It rejects duplicate meshes at the
+same source center. Both branch choices are tested against the retained native
+ring and scoring owner; the course's original timers and checkpoints are intact.
+
+An authored inspection helm follows the outer canal branch using ordinary
+throttle and steering. From the original grid it crosses all four source
+checkpoint planes, collects six rings, drains its award queue, inserts the
+record and reaches the native score screen. The checked seed17 run scores1,590.
+This verifies a complete route, not collection of every ring or the central
+submerged branch. The helm's24/18 world-unit speed targets are inspection policy,
+not changes to original acceleration, timers, collision or scoring.
+
+Native Twilight has its own terrain cache identity. The terrain worker rebuilds
+the same source scene, and its361x361 height samples and512x512 depth map match
+the foreground byte for byte. The worker dependency graph and content hashes
+are regenerated. Source canals use their actual finite crossbars; the older
+decorative bridge's six-gate placement is excluded from this four-checkpoint
+scene, fixing a browser renderer exception.
+
+Browser verification completed four checkpoints with five rings and1,475 points
+at High quality on a1440x900 canvas. A second real-time run also finished;
+the canal, reflective water, rings and physical rider were visually inspected.
+No JavaScript or shader error remained; one local missing-resource404 was present.
+Focused scene/presentation, full driven-route, source geometry/volumes, terrain
+identity and admission regressions pass. Stale admission tests now explicitly
+accept the previously enabled Stunt modes while retaining unsupported-mode gates.
+
+Four native Stunt scenes remain to align and admit: Dolphin, Drake, Fortress and
+Port. Full original AI, ordinary course coverage and the broader parity work
+remain separate outstanding requirements; native physics remains opt-in.
+
+## Port Blue native Stunt scene and floating presentation — 2026-10-18
+
+Port Blue now joins the opt-in native Stunt selections. Its high-resolution
+scene uses the reconstructed117 solo shore segments, sixteen source rings,
+four source ramps with twenty finite surfaces, and the original checkpoint
+sequence1/4/5/0 with15/25/10/15 second limits. The inactive3D floor remains
+inactive. Only closed quays receive filled terrain; open shore chains stay
+open. Detailed concrete edges follow the selected lines, and the authored
+cranes and building sign are placed on the corrected quay layout.
+
+All twelve floating bodies remain owned by the complete canonical object
+array. Their independently authored40x28 metal sphere meshes follow source
+positions and matrices, including actual buoyancy and contact recoil, without
+starting another spring simulation. Display reads cannot change source state;
+pause and instant replay preserve the captured transforms. Binding checks
+reject missing, duplicate or mismatched bodies. The original visual identity
+of these objects is not claimed by the authored metal float design.
+
+The authored inspection helm drives from the original grid through all sixteen
+rings and four source checkpoints using throttle and steering only. The
+seed17 logical-frame-provider regression finishes with7,795 points, drains all
+awards, inserts its record and reaches the original result handoff. A real-time
+browser run independently finishes with16 rings and7,810 points at High quality
+on a1440x900 canvas; accelerated browser control sampling collected13 rings and
+also completed all checkpoints. These runs do not claim identical browser
+control sampling or original AI. Water, rider, ring and floating-body rendering
+were visually checked without JavaScript or shader errors; one local404 remains.
+
+The native scene has a separate terrain cache identity. Worker and foreground
+361x361 heights and512x512 depth maps match exactly. The three new scene tests,
+existing presentation/Port geometry checks, Twilight regressions and the full
+physical Port run pass. All384 module hashes in four entry pages are refreshed.
+Native Dolphin, Drake and Fortress Stunt scenes remain outstanding, along with
+ordinary-course admission and the broader gameplay parity requirements.
+
+## Dolphin Park native Stunt scene — 2026-10-18
+
+Dolphin Park now has a source-aligned native Stunt scene alongside its unchanged
+modern Free Ride map. Its100 finite terrain triangles were reconstructed by
+solving the original plane intersections and checked against the selected
+numeric collision resource. Every centroid agrees with the binned display
+surface. Its55 shoreline edges retain their original endpoints and topology:
+four closed islands and one open three-edge chain. No closing collision edge
+is added. Tropical island elevation inside closed outlines remains authored
+scenery; the finite shallows and native physical support stay source-owned.
+
+All205 fixed spheres retain original order and centers:35 visible posts,
+144 boundary markers and26 hidden geometry contacts. The scene binds all ten
+rings, four jumps with24 finite surfaces, and twelve active decoration positions.
+Detailed wooden decking links the measured post clusters at the decoration
+height; its spans and furniture are authored visuals, not recovered artwork or
+new physical roofs. Terrain, depth-map and ramp tessellation resolutions remain
+unchanged. The terrain worker matches the foreground byte for byte and uses a
+distinct native scene cache identity.
+
+An authored helm drives the complete route using throttle and steering from
+the original start. The seed17 logical-frame-provider run collects all ten rings,
+crosses all four source checkpoints, drains awards, inserts the score and
+reaches the native result handoff with3,850 points. Recorded hull heights show
+physical climbs at all four jumps, reaching3.85 world metres; no scripted launch
+or position edits were used. Each checkpoint retains its15-second limit.
+
+A browser run at High quality on a1440x900 canvas independently finishes all
+four checkpoints and ten rings with3,835 points. Water, island shores, detailed
+craft and jump surfaces were inspected. There were no JavaScript or shader
+errors; one local missing-resource404 remained. Three scene tests, the full
+physical route test and eighteen existing Dolphin/presentation/Port/Twilight
+regressions pass. All386 module hashes in four entry pages are refreshed.
+Native Stunt is still opt-in. Drake and Fortress Stunt scenery, ordinary-course
+coverage, original AI and the wider parity objective remain incomplete.
+
+## Marine Fortress native Stunt scene — 2026-10-18
+
+Marine Fortress (source index3, web selection citadel) now joins the opt-in
+native Stunt scenes. Drake Lake is source index4; earlier private audit notes
+had those names reversed. Runtime selection and exported numeric resources
+now explicitly agree with source-water-conditions.js.
+
+All78 finite faces and92 shore segments are reconstructed from the selected
+source collision resource. The22 vertical/downward faces remain part of the
+detailed rock meshes. Those meshes are separate from the heightfield so the
+rock undercuts do not become false solid terrain. Two authored terrain caps
+complete the central land silhouettes beside the gate; they add no collision
+edges. The original open shore chains retain their endpoints. Decorative
+masonry follows these shores and verified land footprints; the old map's
+large castle is excluded because it extended across navigable source water.
+
+All15 rings, two ramps,21 finite object volumes, three radius50-native floating
+spheres and112 fixed spheres match canonical startup. The nine non-ramp solid
+bodies include the gate and buoyant boxes. Their meshes follow the actual live
+plane origins while retaining original axes/spans, exactly as the source
+transform routine does. Sphere meshes use the canonical object matrices.
+There is no duplicate motion owner. Binding rejects missing objects, wrong
+centers/radii, or mismatched finite planes. Display capture is detached and
+pause holds it. The gate's source-flag test verifies its6-native-unit steps and
+original stop threshold; this does not claim a driven passage-unlock test.
+
+The inspection helm completes all four checkpoints with nine rings and1,870
+points using throttle/steering only. Its regression also verifies award drain,
+record insertion and native result handoff. It routes around the elevated first
+ring; that harder line and the remaining missed rings need further input-driven
+testing. Real-time1440x900 High browser runs complete four checkpoints with
+10–11 rings. The corrected scene retains detailed water, masonry, rings and
+craft, without JavaScript or shader errors; one local missing-resource404 remains.
+
+Five Fortress scene tests and the full driven route pass, together with the
+existing Dolphin/Port/Twilight and Stunt presentation regressions. Foreground
+and worker terrain match at361x361 heights and512x512 depth resolution. All388
+module hashes and the four entry pages are refreshed. Drake Lake's native
+Stunt scene, ordinary-course coverage, original AI and broader parity remain
+unfinished. Native physics remains opt-in.
+
+## Drake Lake native Stunt scene — 2026-10-18
+
+Drake Lake (source index4, web selection reed) completes the nine source-aligned
+Stunt scene selections in the opt-in native preview. Its22 finite floor faces
+and72 shoreline segments are reconstructed from the original numeric resources.
+The inner island and outer lake boundary retain their opposite water-side
+semantics. Finite source floor heights take precedence over authored woodland
+and bank elevations, so scenery does not raise those shallows.
+
+The complete source array contains three jumps with15 finite planes, sixteen
+rings and45 decorations. Although the raw decoration table has48 entries, the
+original64-object limit truncates its final three rows. Only loaded rows19–63
+receive meshes. All thirteen fixed post colliders retain source centers, radii,
+tags and order. Source checkpoint rows1/5/9/0 retain four15-second limits.
+
+Private inspection of the original common bank's0E0098B0 display list and its
+32x64 texture identifies the class2 decorations as reed clumps. Existing EVO
+Ghidra output for6D034 confirms their camera-facing source rendering; source
+initialization gives kinds3/4 no motion or collision. Their replacements are
+independently authored3D reeds with24 curved blades and1,152 triangles per clump,
+smooth shared normals, variation and source-relative height bounds. No original
+texture or display-list bytes are included. All loaded positions and visibility
+come from the canonical state, with detached replay capture and pause behavior.
+Old illustration-map reed and pier placements are omitted from this native map.
+
+The authored inspection driver collects all sixteen rings and completes four
+checkpoints using throttle/steering only, finishing with7,715 points. The full
+route test verifies award drain, record insertion and native result handoff.
+Hull samples show physical climbs at all three ramps, reaching3.89 metres.
+A real-time1440x900 High browser run independently completes four checkpoints
+and fifteen rings with7,070 points. The lake, banks, water and rider were
+visually checked; a separate close-up verified the detailed replacement reeds.
+No JavaScript or shader errors appeared; one local missing-resource404 remains.
+
+Five Drake scene tests, the full physical route and sixteen existing native
+presentation/Port/Fortress regressions pass. Terrain remains361x361 with512x512
+depth data and matches its worker byte for byte. All391 module hashes across
+four entry pages are refreshed. Nine admitted Stunt scenes do not establish
+full gameplay parity: ordinary native course coverage, original AI and further
+trick/alternate-line validation remain outstanding. Native physics is opt-in.
+
+### Drake Lake weed drag — 2026-10-18
+
+Connected the canonical per-racer weed flag to the native hull's displacement
+gain. The original63C88 selects .992 outside weeds and .973 inside them,
+consumed on each of the five physical substeps. Detection remains owned by
+76378: the following force frame reads its retained flag, without a second
+distance query or an extra modern resistance force. Leaving weeds restores
+ordinary drag. The solver retains its existing decimal-coefficient arithmetic;
+this is not a claim of complete binary32 trajectory equivalence.
+
+A private original-instruction check executes63CE0..63D5C for24 cases covering
+four racer slots, zero, positive and negative flags. All stored coefficient
+bits match and other racer slots remain untouched. Public tests verify
+three-axis analytic drift, five-substep latching and actual canonical flag
+consumption throughout a driven Drake run, including entry and exit. The
+existing sixteen-ring/four-checkpoint Drake route and47 hull/adapter/weed tests
+pass. Rendering resolution and modern physics are unchanged.
+
+### Ordinary Drake numeric course preparation — 2026-10-18
+
+Added the complete Normal/Hard/Expert/Reverse primary rows, including hidden
+AI navigation nodes:55/57/61/44 rows. Verified all eight solo/two-player ROM
+selectors and each raw row. Executing the original loading and735EC
+initialization produced28,210 expected state words across160,764 instructions;
+the prepared browser course runtime matches every word, including avatar links.
+The original one/two-player floor and shore pointers are identical. Both now
+reuse the existing22 finite faces and72 shoreline segments. Ordinary Drake
+uses its own object loading with no Stunt ramps or rings.
+
+This prepares ordinary numeric owners only. Live time/versus admission still
+requires the corresponding high-resolution scene, display bindings and driven
+race validation. The existing illustration-map scene is not silently enabled
+against these different coordinates. The new preparation tests and existing
+Sunset/object-loading tests pass, as do Southern/Glacier selection checks.
+Sunset's old fixed-count assertion was updated to the independently verified
+original object fixtures, covering hidden rows and difficulty/player variation;
+its runtime output was confirmed identical to the preceding commit.
+
+### Ordinary Drake Lake live scene — 2026-10-18
+
+Admitted native Time trial and Two-player race on all four Drake classes using
+its verified primary rows and shared source terrain. Normal/Hard load 24 reed
+clumps; Expert/Reverse load 48. Each visible replacement reads the original
+object's position and visibility, with detached replay and player-window data.
+The thirteen fixed posts, 22 finite faces and 72 shoreline segments remain
+source-aligned. Ordinary modes contain no Stunt ramps or rings. The modern
+course and opt-in status are unchanged.
+
+The authored inspection helm completes three laps through ordinary throttle
+and steering on all four classes. Times are 121.749 / 127.922 / 126.993 /
+131.849 seconds, with 0 / 0 / 0 / 1 missed buoys and no disqualifications.
+Expert corner waypoints and one Reverse exit waypoint keep that inspection
+line clear of banks; source judging links and collisions are unchanged.
+A two-input Normal versus run completes the winner's three laps in 122.568
+seconds with no misses; the second rider is on lap three at result handoff.
+These checks do not establish equivalence to the original game's AI.
+
+A real-time 1440x900 High browser race independently completes Normal in
+2:00.780 with zero misses. The main and separate player views were visually
+checked. The child view now receives the ordinary source-scene selection and
+canonical reeds instead of loading the older illustration layout. Online
+encoding, validation, interpolation and detached presentation are covered by
+25 passing window/protocol tests; this is not a new end-to-end network test.
+Eleven scene/runtime tests and four full physical race tests pass. Terrain
+remains 361x361 with 512x512 depth data and matches its worker byte for byte.
+All 395 module hashes and four page preloads are refreshed. Native ordinary
+Fortress, Port and Twilight coverage, original AI and further trick/alternate
+route validation remain outstanding.
+
+
+### Ordinary Marine Fortress numeric preparation — 2026-10-18
+
+Verified all eight solo/two-player primary route selections and four solo
+secondary families against the provided ROM. The Normal/Hard/Expert/Reverse
+primary arrays contain 55/54/54/30 rows; alternate families preserve those
+counts. Original loading and initialization executions cover 215,664
+instructions. The prepared runtime matches all 25,090 primary and 12,545
+secondary initialized state words, including per-avatar navigation links.
+Two-player navigation retains its source primary-family selection.
+
+Fortress reuses its verified 78 finite faces and 92 shore segments for both
+player counts. Its ordinary object startup selects 4/7/12/12 objects and
+1/4/9/9 collision planes across the four classes: the gate, three floating
+spheres, and difficulty-selected floating boxes. All 112 fixed sphere records
+are retained; no Stunt rings are loaded. The two original warning regions also
+supply the Fortress-specific standings branch through the same 1F88 table.
+Dynamic planes remain owned by canonical object state after startup.
+
+Three new preparation tests pass, as do eleven Drake, Sunset and Southern
+runtime/navigation regressions. All 398 module hashes and four page preloads
+are refreshed. This is numeric preparation only: ordinary Fortress remains
+unavailable in the native preview until its matching high-resolution scene,
+gate presentation and full physical lap routes have been verified. The
+existing Stunt and modern modes are unchanged.
+
+
+### Ordinary Marine Fortress live scene and gate — 2026-10-18
+
+Admitted native Time trial and Two-player race on all four Fortress classes.
+The scene shares the verified 78 finite faces and 92 shore segments with Stunt,
+while ordinary loading selects its own gate, three floating spheres and
+class-dependent boxes. Each mesh reads canonical object transforms or finite
+plane origins, preserving their axes and spans. The original illustration
+map's arches, walls and shortcut are excluded. Rock undercuts remain separate
+meshes so the heightfield does not fill their navigable water.
+
+The ordinary update now reads gate position from the canonical object selected
+by39C0, alongside its existing canonical camera coordinates. External gate or
+camera replacements are rejected. Normal retains the closed gate; Hard, Expert
+and Reverse lift it through the source lap rule. Physical probes observe the
+original rise from -1.5 to 3.3 metres. The same gate and floating-body snapshots
+are detached for replay, the separate player window and online presentation.
+Plain JSON transform numbers treat signed zero as equivalent; typed water
+arrays retain their existing exact binary encoding.
+
+Four complete physical tests finish three laps without disqualification using
+ordinary throttle and steering, and check the final gate state. Expert and
+Reverse probes finish in147.727 and166.691 seconds with zero misses. A Hard
+versus probe completes the winner in136.024 seconds with zero misses while the
+second independently controlled rider is on lap three with four misses; the
+gate is open. Inspection paths remain authored driving choices rather than
+the original AI, and no hull, judge, buoy or lap state is overridden.
+
+A real-time1440x900 High browser run independently completes Expert in
+2:23.685 with zero misses. The water, source terrain and detailed rider were
+visually checked. The corrected separate player view was also inspected at
+1440x900 High with both physical riders. One local404 occurred in the main
+view; there were no JavaScript or shader errors. These checks do not claim a
+new end-to-end internet race test.
+
+Three ordinary scene tests cover every class/player selection, exact obstacle
+bindings, canonical motion, detached snapshots and full-resolution worker
+identity. Three online/window tests cover the scene selection, bounded
+transforms and interpolation. Thirty primary/ordinary update regressions and
+existing Stunt, Drake, online and player-window tests pass. Terrain remains
+361x361 with512x512 depth data; all401 module hashes and four page preloads are
+refreshed. Native physics remains opt-in. Ordinary Port/Twilight integration,
+original AI and remaining trick/alternate-route validation are still pending.
+
+
+### Ordinary Port Blue preparation — 2026-10-18
+
+The ordinary Port runtime now prepares all four primary routes from the
+correct player-selected companion images: 45/46/46/55 rows in both solo and
+two-player modes. An older raw-ROM lookup used the solo address range for the
+two-player Reverse pointer and misread collision data as route rows. Repeating
+the original loading and initialization in the selected image gives 24,960
+matching initialized words across eight cases (147,318 executed instructions).
+Human buoy judging retains the primary family. The independent computer-racer
+context selector chooses secondary for avatar1 outside source difficulty2 in
+solo ordinary racing; two-player mode forces primary. The secondary family is
+prepared separately, and original computer-racer driving is not yet integrated.
+
+Two-player support retains 109 shoreline segments rather than solo's 117.
+Both original three-dimensional floor grids are disabled; stale cell-list
+bytes do not create extra physical floors. All 436 complete two-player shore
+contact cases and 45 floor probes match the original floating-point words,
+including point velocities, impacts, normals and output stores (185,652
+executed instructions). Solo support reuses the already verified Stunt resource.
+
+The prepared high-resolution ordinary scene selects the canonical objects
+and markers independently for each player count. Solo retains 12 floating
+bodies and 51 boundary spheres; two-player has no floating spheres and has
+33 boundary spheres, with a kind6 solid in Hard/Expert/Reverse. Each mode has
+three ramps with its original class/reverse profile. Canonical startup owns
+all finite planes, including the supplementary static quay volumes. Shared
+original startup fixtures cover these selections, and the scene checks every
+rendered shore edge, solid plane, floating binding and marker against that
+selected physical data. Display reads do not advance object motion.
+
+The ordinary scene excludes the older illustration map and has its own
+worker/cache identity. Terrain remains 361x361 with 512x512 depth data, with
+identical worker output for selected two-player geometry. Eight new runtime
+and scene tests pass alongside the existing Port Stunt, Fortress, Drake and
+native host regressions. A private Normal physical drive completes three laps
+in 134.581 seconds with zero misses, using only ordinary input. Hard/Expert/
+Reverse driving, browser presentation and separate-window admission remain
+under validation. Ordinary Port is not yet admitted by the public race host.
+
+
+### Ordinary Port Blue live integration — 2026-10-18
+
+Port Blue is admitted to the opt-in native Time trial and Two-player preview
+in all four classes, with source water and its player-selected high-resolution
+scene. Main rendering, the terrain worker, separate player renderer and online
+setup select the same scene. The online descriptor validates course index5
+against Port, ordinary mode and source water; mismatched selections are rejected.
+The release identifier must be advanced before publishing these new descriptors.
+
+The inspection helm follows an authored centre line through the narrow inner
+canal, using an eight-metre lookahead there and its existing wider anticipation
+outside. Explicit caller lookahead settings take precedence. Stunt navigation
+is unaffected. This changes only throttle/steering decisions, not source route
+links, hull points, contact geometry, buoy judgement, lap state or scoring.
+
+All four full physical driving tests complete three canonical laps without
+disqualification. Private Normal/Hard/Expert probes finish in134.581/138.563/
+138.882 seconds with zero misses. Reverse finishes in149.198 seconds with
+three misses, which remain visible in the source record. A Normal two-player
+probe finishes the winner in132.072 seconds with zero misses; the independently
+controlled second rider is on lap three with zero misses at that moment.
+This does not claim both riders finished or that the inspection helm is the
+original AI.
+
+The actual browser's Expert run at1440x900 High finishes in2:22.567 with one
+miss and no disqualification. Detailed water, rider and harbour geometry were
+visually checked. The actual separate player renderer also displays the Expert
+two-player capture at1440x900 High:46 primary nodes,16 object-owned ramp/solid
+planes,33 fixed markers and109 shoreline segments, with two native rider meshes.
+It correctly has no solo floating bodies. The main run logged one local404 and
+no JavaScript or shader errors; the player-renderer inspection logged no errors.
+This is presentation and protocol validation, not an end-to-end internet race.
+
+Four complete-lap tests, three Port window/codec tests,37 combined online/window
+checks and13 bounded pilot regressions pass. The broader Sunny endurance suite
+was stopped in favour of these relevant checks; it was not reported as a new
+pass. Full terrain density and texture resolution remain unchanged, and all404
+module hashes/four page preload sets match. Ordinary Twilight/Dolphin integration,
+original AI and the remaining feature-level parity work are still pending.
+
+### Ordinary Twilight preparation and alternate AI tables — 2026-10-18
+
+The original selected Twilight companion image has identical floor and shore
+selectors for both player counts. Ordinary support shares the already verified
+16 finite floor triangles and78 shoreline segments. No Normal primary route
+exists in that image; the native runtime explicitly rejects class0 rather than
+silently borrowing Hard. Hard/Expert/Reverse primary initialization matches
+15,860 original words across both player counts (91,970 executed instructions).
+The three solo secondary families match7,930 original words (46,030 instructions).
+The separately prepared Port secondary families match12,480 original words
+(74,435 instructions). Both retain the original per-avatar navigation links.
+
+Human judging remains primary. The independent original AI selector can choose
+Port's secondary family for avatar1 outside source difficulty2, or Twilight's
+secondary family through its variant, position/height and retained-route rules.
+Two-player mode forces primary. These tables prepare later original AI driving;
+they do not claim that the source AI driver already controls live opponents.
+
+The ordinary Twilight scene now has four canonical ramps, eight finite collision
+planes and10/16/10 fixed spheres by class. Both player counts share those source
+selections. Every displayed shore edge, plane, sphere and primary marker matches
+its selected numeric geometry; the four object-owned ramp surfaces bind directly
+to the canonical object state. The four supplementary walls remain static.
+Stunt objects and the older illustration map are not inherited. Worker output
+still contains361x361 terrain vertices and512x512 depth data. Twenty-one combined
+Twilight scene/runtime, Port runtime and AI context checks pass. Ordinary-input
+driving and browser/remote presentation validation remain in progress; native
+Twilight ordinary races are not yet admitted by the public host.
+
+### Ordinary Twilight live integration — 2026-10-18
+
+Twilight Hard, Expert and Reverse now join the opt-in native Time trial and
+Two-player preview. The original Normal route is absent, so the native runtime
+and incoming player descriptors reject that class; the existing modern Normal
+fallback remains available. The main view, terrain worker, separate player
+renderer and online setup select the same source scene and class. Online setup
+requires course index6/neon, ordinary mode and source water.
+
+Ordinary-input tests complete three canonical laps in all three original classes
+without disqualification, with fewer than five misses. A two-player Hard test
+finishes through ordinary controls with independent source records. Expert and
+Reverse private runs finish in177.895 and181.592 seconds respectively; the
+browser Expert run finishes in177.258 seconds with zero misses. Hard required
+a smoother authored steering path around the southern wall/quay S bend. A6m
+local inspection lookahead follows that passage; the explicit caller policy
+still takes precedence and Stunt is unaffected. Tests verify that steering
+reads leave source state untouched. No collision, lap or miss values are forced.
+
+The actual main view and player renderer were inspected at1440x900 High.
+The second-player Expert scene carries41 primary nodes, four canonical ramp
+surfaces,16 fixed spheres,78 shoreline segments and two physically articulated
+riders. The main view logged one local404 and no JavaScript/shader errors;
+the child renderer logged no errors. A temporary inspection canvas sizing
+issue was corrected in the diagnostic page before the full-viewport screenshot;
+product display sizing was unchanged. This verifies rendering and detached
+protocol data, not a full internet-connected race.
+
+The39 online/window checks,14 bounded pilot checks and22 native host/object/
+Fortress/Drake checks pass after updating the old admission assertion to reflect
+Twilight's class-specific availability. All four Twilight driven cases pass
+(Expert/Reverse on the first integrated run, solo/two-player Hard after its
+class-only steering correction). Worker geometry and scene tests pass after
+that correction. All407 module hashes and four page preload sets are refreshed.
+Resolution remains unchanged. Native physics remains opt-in; ordinary Dolphin
+Practice, original computer driving, additional tricks and alternate-route
+physical validation are still pending.
+
+### Dolphin solo Practice preparation — 2026-10-18
+
+The actual one- and two-player resource descriptors select the same Dolphin
+companion image, but their route and collision pointers differ. Solo ordinary
+Normal/Hard/Expert all select the same60 primary rows. Two-player and Reverse
+select an eight-row fallback outside that companion; all eight floor/shore
+selectors also differ. Consequently the prepared full Dolphin Practice scene
+is explicitly solo and forward Normal. It does not substitute the full solo
+park for an unverified two-player source layout.
+
+Executing the original primary loading/initialization on the selected solo
+rows produced3,900 exact initialized words in23,558 instructions. The prepared
+runtime retains all60 rows, including hidden navigation, and the original
+370-unit finish half-width. Canonical ordinary object startup supplies two
+jumps with12 planes,12 beach decorations and205 fixed spheres. It has no Stunt
+rings and does not inherit the four Stunt jumps. Floor and shore support share
+the verified solo100 finite faces and55 segments. Every fixed sphere, jump
+plane, decoration center and shore endpoint is checked against canonical data.
+
+The direct main-configuration and primary-progress implementations establish
+the next integration boundary: ordinary course0 starts in phase3/simulation3,
+reset gives full power, and course0 skips ordinary lap/finish bookkeeping.
+The Practice scene and numeric owners are prepared, but live Practice admission,
+free-riding controls, rendering and physical traversal still require validation.
+No timed-race or two-player admission is enabled by this preparation.
+
+Fifteen focused Practice, Dolphin Stunt, Port and Twilight runtime checks pass;
+terrain remains361x361 with512x512 depth data. The scene has a distinct Practice
+identity, while worker and live-mode wiring remain pending. This preparation
+does not implement the original training-lesson or championship warm-up loops.
+
+### Dolphin solo Practice live integration — 2026-10-18
+
+The opt-in native preview now admits solo forward Normal Dolphin Practice with
+venue water. It starts in the original phase3/simulation3 with full power and
+no countdown. Canonical ordinary reset, primary navigation, physical rider,
+water, camera and object owners remain active; course0 does not acquire timed
+laps or a fabricated finish. The tested fresh Practice launch retains the
+source stopped record clock. Two-player, Reverse, other classes and custom
+sea selections remain outside this particular native admission.
+
+The live scene preserves the prepared two ordinary jumps,12 ramp planes,
+12 decorations,205 fixed spheres and60 primary nodes. It bypasses the modern
+Free Ride Stunt conversion, and its terrain worker explicitly selects the
+same Practice geometry. Worker heights and depth bytes exactly match the main
+thread at361x361 and512x512. The HUD identifies Practice and full-power free
+exploration instead of displaying inactive Stunt points/rings; its airborne
+label reads the source no-wet/no-contact counter.
+
+Five live tests cover immediate physical movement, pause freezing all owners,
+restart restoring the initial source state, retained-mode/class rejection,
+full-resolution worker equality, and a control-driven jump/landing. The finite
+authored inspection route reaches jump2, rises to3.7768978313658654 world metres,
+leaves all water points dry and returns to water without modifying positions,
+collision data, lap state or scores. This inspection drive uses ordinary helm
+inputs and coasts after24 seconds; it is not original AI or a training lesson.
+The Practice verification button fixes seed17 for repeatable inspection;
+ordinary human launches retain their varied wave seeds.
+
+The browser confirmed the same3.7768978313658654 maximum height, airborne state
+and return to water at1440x900 on High. Real-time inspection was needed to
+observe the short jump between rendered frames; accelerated sampling initially
+skipped it. Keyboard throttle, pause and restart also work in the browser.
+There were no JavaScript or shader errors; the local server reported an
+unrelated missing-resource404. All29 distinct bounded Practice, Dolphin Stunt,
+native launch and loading checks pass, and411 module hashes/four page preload
+sets are refreshed. Resolution remains unchanged. Native physics remains
+opt-in; original training lessons, championship warm-up flow, original computer
+driving and the remaining trick/alternate-route work are still pending.
+
+### Original four-rider championship setup preparation — 2026-10-18
+
+A fresh read-only Ghidra query on EVO X2 inspected existing race startup,
+computer-profile, grid and reset functions and relevant configuration references.
+All nine saved project files remained unchanged. Its1,828 exported instruction
+records match the local verified ROM. The existing Ghidra project has no
+function entry at9345C (its main body is split); the separate bounded original
+instruction interpreter executes the complete9345C caller for the comparisons.
+
+The boot copy at920D0..9211C selects the nine A988 words as three initial
+wave/miss/lap rows: all are[0,5,3]. They are runtime settings, not different
+default lap or miss counts inferred from difficulty. Default human profiles
+are5/5/5; the original nine-course CPU table selects avatar-specific0/0/11,
+1/0/11,5/2/9 and11/0/11. Normal/Custom human tuning reads the selected avatar,
+independently of its source slot. The existing title resource-pair and CPU
+trait tables are reused, and the numeric wave/fade defaults are verified.
+
+`prepareNativeChampionshipLaunch` now composes main configuration, selected
+ordinary object owners, source reset and prestart initialization. It consumes
+all16 body-profile writes and prepares four source grid transforms, including
+their16.16 decoding, separate computer damping selection and authored hull
+geometry. Retained lap configuration is preserved on ordinary entry and copied
+from the selected wave-settings row on restart, as in the source. Caller-owned
+records/profile/save state is detached and unchanged. Course preparation now
+supports explicit mode4 with one human and canonical objects; its primary and
+object images match the corresponding ordinary solo selection.
+
+Actual9345C execution produced248 cases across all admitted race courses and
+classes, all four human avatars/slots, Normal/Custom tuning and restart paths:
+412,956 instructions and3,968 exact body tuning words. Four new tests compare
+those profiles, final main settings, original table values, four distinct
+quantized grids, computer selectors, retained dependencies and invalid-mode
+rejection. The42 main/grid/Practice regressions and six ordinary-resource/live
+object checks also pass (52 distinct checks total).
+
+This is prepared startup, not live four-rider AI admission. Resource/audio
+initializers remain explicit pending effects, and the existing live launch
+rejects a mode4 course instead of silently treating it as mode0. The source
+80D20 multi-racer traffic test still requires the actual selected camera-corner
+producer/lifetime; a fabricated frustum or permanent zero corners is not supplied.
+Championship progression, original AI traffic and training/warm-up integration
+remain unfinished. No rendering resolution or public mode default changes.
+
+### Original championship ending entry preparation — 2026-10-18
+
+The complete 801ECB98 entry now has an independent numeric implementation and
+canonical state adapter. It selects source dispatcher 102, main state 21 and
+course 7, with one human, four racers, simulation state 2, phase 3 and no finish.
+This is distinct from Dolphin Practice. All four body profiles use the selected
+avatars and course 7 CPU traits; the human variant changes the resource avatar
+without changing its physical profile. The retained primary final-rank word selects
+the audio argument after resource and fade initialization, including 32-bit wrap.
+
+The original instruction interpreter executed the entire caller and its reached
+resource/fade helpers for 288 cases (351,696 instructions). The numeric fixture
+compares every ordered direct write and call across all 24 avatar permutations,
+four primary slots and three variant values. It also covers signed/raw trait
+words and rank word boundaries. The canonical adapter expands the existing
+fade routines and retains explicit physical-profile, resource and audio effects.
+Three new tests and nine title/championship return regressions pass, including
+unchanged caller state and rejection of sparse or missing consumed data.
+Another 26 menu-entry, fade, resource-state and loading checks pass (38 distinct
+checks total); all 412 module hashes and four page preload sets are refreshed.
+
+This prepares entry only: it does not expose a playable ending ceremony, run the
+ceremony overlay, initialize its physical world or claim completed warm-up flow.
+High-resolution rendering and public mode defaults remain unchanged.
+
+The initial training label for this entry was incorrect and is superseded here.
+The reference project identifies main21/dispatchers102–103 as the championship
+ending HUD, and original callers reach it from the final championship results.
+The numeric implementation is unchanged; its API, tests and fixture now use
+ending-ceremony names. Training and warm-up remain separate unfinished work.
+
+### Championship ending panel control — 2026-10-18
+
+The ovl_i15 source is the championship ending, confirmed by the reference
+project's ending HUD implementation and the original result-screen callers.
+The retained record2C70 is the final rank in this context. Main21 grid placement
+now exposes ending-rank and ending-anchor names; earlier diagnostic input names
+remain accepted for compatibility. A fresh read-only Ghidra query on EVO X2
+exported 427 entry/grid instructions, all matched to the ROM, with all nine
+saved project files unchanged.
+
+The original 5CE8 panel initializer, 5EE4 first-free allocation, 6C1C controls
+and 6CAC exit entry are reconstructed. A canonical 126-word ending owner retains
+the loaded tables and BSS, including ten four-word panels. Initialization selects
+the original rank/class message delay and maps each course's saved avatar to
+its original row, preserving the missing-avatar sentinel. Allocation preserves
+the original panel height and initial position, and a full pool leaves it alone.
+
+Exit input is gated by the original ready flag. A/Z/Start or the incremented
+601-frame counter selects the title or records route from the retained record
+flags. The counter keeps signed wrapping. Canonical fade writes precede the
+optional original music-stop call; missing late fade data cannot partially
+change the caller's scene, timer or panel owner.
+
+846 prepared executions of the original overlay and reached fade helper cover
+420 initialization cases, 66 allocation cases and 360 control cases, totaling
+108,412 instructions. Every ordered write and call matches. Eight entry/control
+tests and 42 grid, fade, championship and return regressions pass (50 distinct
+checks). This does not yet run the scrolling display producer, draw ending
+panels, construct the podium world or complete the championship loop.
+
+### Championship ending scroll and display control — 2026-10-18
+
+The numeric 5800 update now composes initialization, record-flag collection,
+first-free panel allocation, the original two-pixel scroll, final-standings
+settling and readiness fade. Signed counters and multiplication keep 32-bit
+wrapping. Full panel pools still advance the source schedule. Multiple active
+standings rows share the original timers in ascending slot order. Four rider
+viewport records retain their exact word/halfword results and operation order;
+matrix construction remains an explicit presentation boundary. Source panel
+coordinates do not lower the high-resolution output.
+
+The 5F50 display controller clears the entry latch, presents the initial white
+frame, then orders scene/HUD drawing before controls. Its numeric suffix can be
+used by the modern renderer without guest display-list addresses. Expanded
+controls prepare the existing fade and optional music stop after drawing. Only
+fade completion exactly 1 dispatches the title or records handoff; those target
+menu calls remain explicit effects. Supplied render returns preserve the source
+display head even when subsequent control/handoff calls clobber registers.
+
+Original-ROM execution covers 184 scroll cases, a successive 650-update ceremony
+and 144 display cases: 208,037 instructions. The full-sequence trace, including
+every ordered numeric write and viewport recipe, matches its original digest;
+the final standings become ready at frame 541 (the 542nd update) and emit the cue once. Cases
+cover record collection, first/full allocations, signed overflow, shared fades,
+entry/exit states and returned display heads. Seven new tests also verify
+canonical integration and atomic rejection of late invalid data. All 52 ending,
+continuation-runtime, fade and canonical-state tests pass; 413 module hashes and
+four page preload sets are refreshed and verified.
+
+This supersedes the earlier unimplemented-scroll note. The visible ending HUD,
+matrix/drawing helpers, physical ceremony world and live championship loop are
+still unfinished. These preparations do not change public mode defaults.
+
+### Championship ending layout and vector view — 2026-10-18
+
+`native-ending-presentation.js` reconstructs the semantic layout of source 602C.
+It prepares ordered round panels, class/final-round labels, per-course winner
+and time (or missing-time placeholder), course labels and exact record flags.
+The final table reads the retained sorted racer slots, resolves their selected
+avatars and names, preserves competition ranking through ties, and highlights
+the primary player's rank and points. The original conditional class prompt,
+low-byte fade intensities, point alignment, clipping, depth/color handoff and
+four ordered rider preview requests remain explicit. It also preserves the
+source's reused outer loop counter after a summary panel and rejects traversal
+beyond the retained ten-panel owner rather than reading invented memory.
+
+274 executions of the original routine (235,111 instructions) match every
+semantic command. Renderer/font/model helpers are explicit call boundaries;
+the audit executes the caller and observes its arguments and direct clip/target
+writes. The private jump table and original executable/art remain private.
+Tests cover all three classes, round types, tied/zero/large point totals,
+selected slots, reverse and expert prompt gates, missing times, skipped panel
+types, late malformed data and summary counter reuse.
+
+`native-ending-view.js` renders that layout with scalable SVG shapes and text.
+Its 320x240 viewBox is a logical coordinate system, not a raster output size.
+The game's canvas, pixel ratio and resolution settings are untouched. Label
+text and rider artwork are supplied by explicit consumers; the view does not
+invent missing racers. It keeps the preceding frame on late failure, treats
+label/name text as literal text, isolates clip IDs across views and exposes
+the visible standings through its accessible description.
+
+A private browser harness rendered all 274 layouts at 3840x2160 and 390x844,
+then rechecked the final view at 1280x720. Atomic failure, literal text and unique
+clip IDs passed. Screenshots confirm the final table and a scrolling round
+panel with its record marker. Preview records/portraits are synthetic and stay
+outside the public game. The visible layout is implemented, but live ceremony
+timing, real rider previews, physical podium world and championship integration
+are still unfinished; this does not enable a public ending mode yet.
+
+### Championship ending frame composition — 2026-10-18
+
+`native-ending-menu-runtime.js` composes the ending portion of each 20Hz frame:
+scroll update, shared widgets/animation, fade, semantic drawing, then controls.
+The initial white frame clears the entry latch and defers controls. Draw data
+captures the state before controls, including on the frame that starts an exit.
+At fade completion the title or records initializer is expanded exactly once;
+the replaced entry call is not also returned as an effect. Records entry from
+state103 uses its original white fade and preserves championship resources.
+Title return resets sampled controllers and retains its resource/audio effects.
+
+A private execution of the original common dispatcher covers both ending states
+with and without the initialization latch (four cases, 262 instructions). It
+establishes that input and physical world updates precede the ending portion;
+main21 skips the ordinary camera update. Its callees are boundaries in that
+audit, so this does not establish completed physical ceremony behavior. The new
+API explicitly consumes state after those updates and cannot substitute for
+the original world. It does not resample controllers after the world or invent
+display-list addresses, renderer output, or retained scene data.
+
+Five integration tests cover the full original 542-update readiness schedule,
+one readiness cue, held-button edges, player-two rejection, the exact 601-tick
+automatic acceptance, A/Z/Start, both record flags, 24-tick exit fades, and
+title/records initialization. 30/60/144Hz presentation schedules and suspended
+menus produce the same final state. Late invalid layout or target data cannot
+partially mutate state. Real rider previews, physical podium world, live
+championship integration and championship name-menu completion remain pending.
+Resolution and public mode defaults are unchanged.
+
+### Championship initials and record-exit phase — 2026-10-18
+
+The shared name-menu runtime now also prepares the championship portion of
+states100/101. It consumes state after controller sampling and the main6 scene
+updates, then runs the original wheel animation, shared widgets and fade before
+drawing and controls. The original dispatcher was executed for both states and
+both latch values (four cases, 201 instructions); its scene callees remain
+explicit boundaries. This phase does not replace those scene updates.
+
+Championship END confirmation commits the name to qualifying RAM record rows
+and immediately enters state101, preserving the original distinction from the
+solo wheel's outro. Blank input restores the selected profile name first. The
+delayed fade completes after 38 updates; only then does the display suffix emit
+normal or reverse course-save calls, including warm-up and repeated courses,
+before initializing the records browser at state66. Initializers and the literal name copy
+expand once, in source order, without leaving duplicate pending entry calls.
+The numeric display suffix is shared with the existing graphics caller; all
+498 cached original executions still match (45,090 instructions, 6,057 ordered
+operations). The existing solo runtime retains its admission and behavior.
+
+Six integration tests cover actual button edges through three-letter entry and
+END, white entry fade, immediate championship confirmation, RAM record targets,
+blank-name restoration and the fifth null byte, delayed save ordering, normal
+versus reverse storage, warm-up qualification versus saving, repeated rounds,
+30/60/144Hz cadence, suspended time and atomic late failures. Required storage,
+resource, audio and scene effects remain host responsibilities. This is not a
+claim of durable persistence or a new live championship admission. High-resolution
+drawing, canvas size and public mode defaults are unchanged.
+
+### Original records-browser controls and slides — 2026-10-18
+
+The recovered ovl_i9 menu at state66/67 is the records browser, not championship
+standings. Its renderer selects the ordinary-time, reverse-time, stunt-score and
+best-lap record tables. This corrects the prior name-menu handoff label; that
+handoff now explicitly reports `records-browser`. Its numeric destination and
+entry sequence are unchanged.
+
+`native-records-browser.js` reconstructs input5E5C, descriptor helper7194,
+exit802C, the numeric update5800 and the post-draw portion of5D24. It includes
+category/course navigation, the irregular course grid, distinct course wrap
+rules, normal/stunt/reverse record-type changes, unlock gating, button priority,
+context-sensitive confirm/back actions and their ordered sound cues. Horizontal
+slides take eleven updates; vertical slides take eight. Controls are gated
+during slides and resume on the settling frame. Post-name entry initializes
+the original locked browsing context and reverse record style when appropriate.
+
+The canonical state retains the explicit62-word80C0..81B8 owner. Its writes do
+not alias another overlay merely because both load at802C5800. Loaded record
+data, course-order views and transform constants are supplied, never invented.
+Viewport recipes preserve the caller's exact descriptor/axis arithmetic and
+word/halfword packing. Matrix helpers and renderer bodies remain separate.
+The post-display suffix dispatches only the three original return destinations
+after signed fade completion exactly1; expanded controls initialize the shared
+fade before later effects, without replaying the entry call.
+
+2,532 original-ROM executions (171,788 instructions) match the input writes,
+descriptor/exit calls, update writes, viewport recipes and post-display gates.
+The public fixture contains synthetic state and observed semantic operations,
+not original executable or assets. Seven tests cover these comparisons, actual
+slide completion, blocked/re-enabled controls, retained neighboring data,
+reverse post-name initialization and atomic rejection of late invalid inputs.
+The visible records browser was pending at this checkpoint; its subsequent
+layout verification is recorded below. Matrix consumers and live menu
+integration remain separate. This work does not reduce rendering resolution
+or enable an unfinished public mode.
+
+### Original records layout and vector display — 2026-10-18
+
+`native-records-presentation.js` independently reconstructs6750/6CC8/71AC:
+the category/course grid, both sliding panel groups, translated course headers,
+time/stunt/reverse tables, best laps, stored initials, rank and variant labels,
+record highlights and navigation hints. Rider previews select the avatar stored
+in each record and retain the original viewport indices. It preserves the
+source's three reverse rows but one rider preview, the clipped reverse lap-name
+placeholder, and the time-record flag used to highlight even a stunt row.
+The ordinary lap inherits the preceding row style outside post-race context.
+
+355 actual original-ROM caller executions (497,683 instructions) match every
+ordered semantic panel, style/color argument, label, text, time/score, fill,
+clip, rider preview and arrow rectangle. Cases cover all nine courses, all
+three categories, both selection stages plus retained nonzero stage values,
+normal/stunt/reverse styles, post-race and unlock flags, two-panel horizontal
+and vertical slides, ignored descriptor types, negative offsets and signed
+coordinate overflow. Public fixtures contain synthetic record and label data;
+original code, jump tables and graphical assets remain private.
+
+`native-records-view.js` renders the prepared layout as scalable SVG. Its
+320x240 viewBox is a coordinate system, not a raster-resolution setting. The
+host resolves label tokens with their font/variant context and supplies rider
+portraits; this component does not invent missing riders or records. New-record
+and disabled styling, clipping, literal text and per-instance clip IDs are
+preserved. Detached rendering makes a late invalid command atomic.
+
+Four new Node tests pass alongside the seven control/update tests. Browser
+checks render all355 fixture frames, verify literal text, unique clip IDs and
+late-failure atomicity, and inspect the ordinary/overview/reverse layouts at
+1440x900 and a390-pixel-wide host. No low-resolution canvas is introduced.
+The menu phase, target60 initializer, live admission and actual rider/model
+consumers are still pending; this is a verified display component, not a claim
+that the full original records menu is already available in public gameplay.
+
+### Original records menu phase and return initialization — 2026-10-18
+
+`native-records-menu-runtime.js` now composes the records portion of an original
+20Hz frame:5800 panel update,5470/AFB4 widgets,71A8 fade, then5D24 drawing and
+controls. Controller sampling precedes this phase. Unlike the ending route,
+main12 does not require an intervening physical-world update. The initial
+state66 frame clears black and suppresses controls; later frames set the source
+clip before drawing, then accept input. Consequently the returned draw remains
+the pre-control view even when that tick changes a category or begins an exit.
+
+All three exit paths now expand their initializer exactly once: titleEB180,
+menu60EC304 and continuationEC830. EC304 preserves players and simulation
+fields, initializes its fade and slots in order, clears the separate byte at
+800E5134, then requests audio9. The canonical byte operation accepts only that
+declared byte owner and rejects word/halfword aliases. Its previous meaning is
+not inferred from an unrelated overlay or address suffix.
+
+Eleven original EC304 executions match every write and ordered call. Actual
+execution of93C44 verifies its three opaque-black clears, and actual6FB0 plus
+eight71A8 updates verifies every exit-fade stage/completion/alpha. These checks
+execute943 original instructions. The eight ticks comprise a start tick, six
+rate4 alpha ticks and a completion tick; this is not a64-frame alpha increment.
+
+`native-records-menu-data.js` supplies the verified course order, label tokens,
+transform constant and a fresh62-word overlay factory. All90 numeric words
+match the private ROM data inspection. The factory is for a fresh overlay load;
+it must not erase retained slide or post-race state each frame. Cartridge
+records, font artwork, rider assets and executable code are not included.
+
+Seven integration tests cover real controller edges, initial-frame input
+suppression, pre-control drawing, horizontal/vertical slides, record-type
+changes, reverse post-name entry, all three exits, exact original fade output,
+30/60/144Hz cadence, suspended time, retained records and atomic late failures.
+Existing records, canonical state, menu initialization and ending regression
+tests also pass.421 module hashes and all four page preload sets are verified.
+The live host still needs to install the overlay at its actual load boundary
+and consume the required audio, resource and rider presentation effects. This
+does not admit an unfinished championship mode or alter rendering resolution.
+
+### Original graphics writes and retained AI corners — 2026-10-18
+
+The original-ROM diagnostic now captures complete command streams: all 582
+lists reached their end markers, with 4,238,735 commands and no observer
+truncation. The sampled Sunny race contains 621 actual AI traffic readers;
+their corner XZ values retain the boot zeros. The observed CPU writes to the
+two blocks remain boot clearing and the ordinary initializer's Y/RGB patches.
+
+The microcode audit covers all graphics overlays. It identifies three shared
+DMA-write callers: the graphics FIFO, matrix stack and yield-save path. The
+last was absent from the earlier core-only caller enumeration. Captured
+MoveWord/MoveMem commands do not overwrite those destination pointers, and
+their configured ranges are separate from both AI corner blocks.
+
+A separate private offline replay now executes the original graphics boot,
+core and overlays against three captured active-race task snapshots. It uses
+the existing project's Ares-derived vector instruction implementation. The
+snapshots' command words match the diagnostic metadata, and their graphics
+code matches the verified ROM. Branch-delay, DMA alignment/wrap, instruction
+memory loading, write journaling and vector dispatch checks pass before replay.
+
+All three replays reach BREAK: 5,374,790 scalar/vector instructions,
+2,718,601 vector instructions, 24,627 DMA transfers and 19,601 writes. Every
+write is inside the configured matrix stack or graphics FIFO; neither AI
+corner block is written. Parsing the complete generated RDP packet streams
+also confirms only the expected color/depth targets. Matrix writes use the
+actual length register 64, producing 72-byte rounded transfers; the nearby
+T4=63 assignment must not be mistaken for that length register.
+
+This supports retained boot-zero corner coordinates for the sampled Sunny
+path. It is not an unconditional zero producer for every scene. The offline
+replay models immediate DMA/DPC completion, does not rasterize RDP pixels and
+does not feed graphics writes back into the running CPU. Broader scheduling
+and scene equivalence remain unproven. Retained-state ownership and the live
+four-rider integration still need implementation; no unfinished mode is
+enabled by this evidence alone. All ROM bytes, memory snapshots and replay
+outputs remain private. Rendering resolution is unchanged.
+
+### Retained AI graphics-buffer ownership — 2026-10-18
+
+`native-graphics-corner-state.js` now owns both sets of 112 guest-order bytes:
+three prefix vertices followed by the four AI corner vertices. It separates
+explicit cold-boot clearing from restoration, preserves signed16 XZ values,
+accepts ordered byte writes and implements the original XOR buffer switch.
+The switch is an explicit outer-loop operation, including iterations that
+skip physics; it is not inferred from browser rendering or hull ticks.
+
+The canonical race state retains this owner through snapshots and updates.
+Fresh web launches create the declared boot state. AI initialization now
+consumes all 64 existing vertex-byte patches in the same transaction as its
+AI words and RNG state. Warm initialization preserves XZ, corner alpha,
+unwritten prefix bytes and the selected buffer. Restoring a state with this
+owner omitted does not silently invent it. Invalid late patches reject the
+whole transaction without changing the caller's state.
+
+Two sequences of original 46D2C executions, nine calls from each initial selector,
+verify every retained byte and selected corner using synthetic canaries.
+Five new tests cover those 18 comparisons, cold/warm boundaries, signed16
+limits, explicit coordinate writes, detached snapshots and live initializer
+integration. The 42 focused graphics/AI checks pass, including an actual
+completed solo race handing control to source AI. After a snapshot-copy
+consistency adjustment, all five new tests and 15 canonical-state regressions
+pass. All 422 module hashes and four page preload sets are refreshed.
+
+The runtime exposes buffer advancement and a read-only AI corner view. Fresh
+launches perform the original startup switch once. The physical host switches
+again after audio and before source input on every outer frame, including
+simulation0. Its AI producer reads the selected retained corner buffer. Four-rider
+caller integration remains separate work. Championship admission is unchanged.
+This storage does not derive a
+modern frustum or impose permanent zero coordinates, and it does not change
+rendering resolution.
+
+The scheduling checks cover fractional frame intervals, suspended browser
+updates, simulation0 without hull ticks, retained nonzero coordinates and
+identical 20-source-frame histories at 30/60/144 Hz. All 16 focused corner and
+live-input tests pass. Original main-loop call sites put audio at471D0, the
+buffer switch at471D8 and source input/world dispatch at471E0.
+
+### Computer input dispatch and two-rider takeover — 2026-10-18
+
+The physical adapter now supports the original direct computer-input branch
+as well as61708's human countdown branch. A computer slot always selects its
+AI producer, including a nonnegative startup/result countdown; human takeover
+continues to preserve the human physical profile. Each producer is sampled
+once before five hull ticks. Conflicting frame overrides reject before polling.
+
+The source host connects AI for both versus riders after their result countdowns
+complete. All producers read one snapshot of the preceding bodies, captured
+before descending input sampling, and the selected retained graphics corners.
+This also works when simulation0 suppresses hull updates. The independent
+menu-device sample remains separate from rider control.
+
+First-frame non-driving AI uses the actual three reset inputs: B50 cleared,
+1578 set to1.0,16F4 cleared. Eight executions of the original reset stores with
+different byte canaries verify these values and that15DC is retained. The
+startup reader therefore cannot masquerade as a completed driving snapshot;
+after the first frame the regular physical body reader takes over.
+
+All 32 focused driver/live-input/graphics checks pass, including 25 combinations
+of computer countdown and source phase, the actual AI producer feeding the
+physical adapter, and both versus riders handing over without a device poll.
+The separate 27 driver/result checks also pass. Four-rider championship launch
+and its remaining resource/result dependencies are still gated. High-resolution
+rendering is unchanged.
+
+### Prepared four-rider physical championship — 2026-10-18
+
+The prepared championship setup can now hand its exact course, canonical
+state, four body profiles and four grid transforms to the real launch runtime
+and physical host. The host consumes those profiles/starts directly and runs
+three source AI producers alongside the human controller. Public menu admission
+remains unchanged: the browser's native championship option is still gated.
+The prepared resource/audio effects remain explicit for the application layer.
+
+The handoff requires the original prepared packet and its initialized course;
+competing state/profile inputs and mismatched avatar/human mappings reject.
+Physical admission uses the normal primary human slot0. Other human-slot
+arrangements remain prepared diagnostics: the original random-role scan can
+repeat without finding an eligible slot for those arrangements. It is not
+silently repaired or assigned different AI roles.
+
+Startup AI no longer requests driving geometry before the first completed
+water frame. Spray ownership now includes all four physical craft while
+keeping one human camera and the original human-only audio-level writes.
+Original AE210 branches separately only for an extra spectator craft; ordinary
+computer racers use the same physical inputs. The existing mode4 result-code
+selector now receives its selected source support geometry from the host.
+
+All four rider choices pass profile/grid and first-input integration checks.
+Three 12-second runs at30/60/144 Hz each reach actual driving through the
+original startup schedule, with exactly240 source frames and240 human polls,
+and identical canonical state, hull points, rider points, controls, spray and
+water arrays. Suspended browser steps retain the state. The 18 combined
+championship/live-input tests pass, including248 original configuration cases;
+the separate spray and result-code regressions pass. This is physical-host
+integration, not complete championship progression, live menu/audio admission,
+or original-art equivalence. Rendering resolution is unchanged.
+
+### Fresh championship selection and shared web memory — 2026-10-18
+
+`native-race-memory.js` now provides the existing explicit fresh web memory
+policy before any main configuration, reset, physical world, water RNG or audio.
+Ordinary, versus, Stunt and Practice launches use the same constructor. A
+private before/after comparison of77 launch snapshots across courses, rider
+choices and modes found identical canonical state, hulls, rider lifecycle and
+initial water arrays; no gameplay behavior was changed by extracting this code.
+
+`prepareNativeChampionshipWebLaunch` creates a championship directly from
+selected racers and its initialized course. It restores the retained web
+record session, applies the current human Normal/Custom tuning choice, then
+runs championship main configuration/reset/prestart. CPU traits come from the
+selected source course. It does not create a solo race as an initialization
+shortcut or advance a second water/random stream. Resource/audio effects remain
+explicit for the application handoff.
+
+The four-rider host integration test now uses this real fresh selection path.
+Its three12-second30/60/144Hz runs still match all physical and canonical owners.
+New checks cover every rider choice, saved custom indices while Normal is
+selected, all eight course handoffs, reverse class selection, warm records,
+unchanged input objects and invalid selections. All seven fresh-selection/host
+tests pass. The17 tuning/record-session regressions also pass, including two
+actual three-lap solo races with correct Normal/Custom record attribution.
+Browser championship admission and renderer/audio handoff remain
+the next integration step; resolution is unchanged.
+
+### Standings camera frame reconstruction — 2026-10-18 (unpublished)
+
+`native-menu-camera-update.js` now reconstructs the complete main9/type1
+camera frame through DDE48/DDEDC, DFC48/DF128/DEEC4, E0F8C, 9CB68,
+9CCE8 and E0FF0. Type1 enters the common update directly. Target and eye
+coordinates, up vector, FOV and projection offsets use the original ordered
+float32 smoothing. Camera velocity is the new eye minus the retained eye;
+the direction/up basis is then rebuilt. E11B4 remains an explicit request
+for the host's actual active graphics buffer, rather than both buffers.
+
+The original 9CB68 body has no side effects. In main9, 9CCE8 clears only
+the environment byte selected by camera.E8. The canonical state now retains
+those two camera bytes, with zero allocation only in declared fresh web
+memory. Warm updates preserve the neighbor. Other main modes and auxiliary
+camera types are rejected rather than treated as equivalent. Shared basis
+helpers preserve every previously verified initialization write.
+
+A private interpreter executed 80 complete original camera frames (43,800
+instructions), with E11B4 as the sole external graphics boundary. Cases cover
+one/two cameras, both buffer choices, asymmetric targets, zero/intermediate/
+unit position smoothing, lens/up smoothing, swapped environment indices and
+five consecutive frames. The public fixture contains synthetic numeric input,
+ordered writes and whole-HUD hashes; no executable ROM data. Every operation
+and final HUD hash matches. Invalid late inputs leave caller storage unchanged.
+Actual championship finish and retirement tests compose scene initialization,
+these camera updates, then standings scoring/display; race records remain
+unchanged by camera updates. This is verified numeric integration, not yet a
+live standings scene host or completed continuous cup. Physical hulls must
+remain stopped in main9. Menu water installation, frame ownership, matrix
+consumption and browser admission remain outstanding; resolution is unchanged.
+
+### Retained introduction actors and complete camera frame — 2026-10-18 (unpublished)
+
+`native-presentation-actor-pool.js` consumes the three previously explicit
+introduction actor boundaries: AB92C/9D5C0 reset, AC098 submission and complete
+AB95C(1,0) Sunset production. The canonical state retains all 1484 words from
+801CF060 through 801D0790 and the frame/permanent/current counters at 800E62C4.
+Fresh web memory allocates these owners once; warm resets preserve the original
+unselected row fields and adjacent body/record scratch. Submission preserves
+the original capacity behavior: reaching slot30 returns before updating the
+current count. Sunset uses the actual selected physical body poses, canonical
+racer records and retained water-vertex XZ inputs. Its original second-speed
+calculation rereads the primary body's horizontal deltas; that is retained.
+The separate generic AB95C request-list branch remains unimplemented.
+
+`native-introduction-camera-update.js` now composes the whole main8/type6
+DDE48/DDEDC numeric frame: water datum, camera script, course actors and pool
+operations, auxiliary motion, camera copy, environment-byte clear, eye velocity,
+view basis and a matrix request for the actual active graphics buffer. The
+canonical adapter applies all numeric writes atomically and preserves cup
+points/race records. Camera storage exposes original type6 FOV, near distance
+and projection offsets to the high-resolution view, as it already does for
+type1 standings cameras. Ordinary follow-camera projection is unchanged.
+
+The original-code interpreter ran 162 complete pool operations (40,293
+instructions, no intercepted callees), and 2602 complete introduction camera
+frames in 44 sequences (6,331,744 instructions). Camera coverage includes every
+course, all three Sunny classes, one/two cameras, both graphics buffers, complete
+single-camera scripts and retained consecutive frames. E11B4 GPU matrix
+production is the only intercepted camera callee. All ordered writes, complete
+HUD/pool hashes, counts, RNG and environment bytes match. These camera sequences
+deliberately exclude the later actor display/cleanup stage and physical scene;
+they are not evidence of an end-to-end animated introduction. Synthetic numeric
+fixtures are gzip-compressed below the hosting per-file limit.
+
+The pool also implements the complete ADD14 pre-display position bounds and
+isolated AE148..AE1EC post-display retirement. Retirement restores the permanent
+count and clears only temporary type words, retaining all other row data. Its
+ordered unrolled writes match the original. Bounds preserve the original
+Y-limit stores to Z rather than changing Y. Another 110 original executions
+(9227 instructions) match all stores and pool hashes. A 100-cycle submission/
+retirement check confirms temporary slots can be reused without damaging the
+three permanent rows. These boundaries must surround actual drawing, never
+run before camera submission. The enclosing ADF90 culling/draw dispatch remains
+pending; the boundaries alone do not claim a complete display stage.
+
+All 66 camera/introduction/state/championship-host regression checks passed,
+including unchanged four-racer results at30/60/144Hz. The added lifecycle checks
+and the focused camera/pool/state suite passed26/26. Invalid late camera,
+water-vertex and retirement inputs leave retained state unchanged. Physical
+main8 initialization/update, actor drawing, outer display scheduling and public
+continuous championship admission remain pending. No render-resolution change.
+
+### Original actor visibility and root transforms — 2026-10-18 (unpublished)
+
+`native-presentation-actor-visibility.js` implements the complete ADE14
+visibility decision, 9D3AC vector heading and ADC8C matrix-capacity estimate.
+Headings use the actual ED090 angle table, float32 reciprocal normalization
+and integer truncation. Submitted rows bypass culling, empty rows are skipped,
+type6 remains visible after its angle scratch writes, and other active rows
+use the original strict100-degree cutoff. The actual display camera selector
+80223930 now has a retained canonical field, initialized to0 only for fresh web
+memory. The state adapter reads that selector and the shared HUD camera rather
+than external projection or camera overrides. Capacity estimation does not
+allocate matrices; the draw producer still owns the used counter.
+
+`native-presentation-actor-transform.js` implements 9D96C's complete numeric
+root-matrix production and allocation increment. Submitted actors use their
+retained forward/up/scale through48A88. Other actors use type-dependent angle
+adjustments, source circular normalization and49C9C's scaled degree-based Euler
+matrix. The new49C9C implementation shares47EE0 packing but retains its own
+truncation, scale grouping and store order; it does not substitute49A94's radian
+and half-step policy. The state adapter selects the actual retained graphics
+buffer. Ordered matrix writes and binding are explicit effects for that buffer
+and matrix slot. Partial zero-axis matrices keep unvisited destination words;
+the original bind and used-count increment still occur. No identity matrix or
+zero-filled replacement is supplied for those unvisited words.
+
+Private execution of the original functions and every numeric callee produced
+528 visibility cases,368 heading cases and200 capacity estimates (73,313
+instructions), plus720 complete root transforms (237,366 instructions). These
+cover both cameras/buffers, angular cutoff/quadrants, submitted and empty rows,
+type6, signed capacity wrapping, all13 actor types plus out-of-dispatch values,
+negative/wrapping Euler angles, zero/negative scales, allocation slots0/37/191,
+and degenerate basis vectors. All ordered numeric writes, retained pool hashes
+and final matrices match. No callee was intercepted. The root's two graphics
+command stores were verified privately and represented in public numeric
+fixtures by a semantic bind, with no executable command bytes exported.
+
+The35 focused camera/pool/visibility/transform/state checks passed; another25
+live-camera, fresh-championship, widget/name-presentation and transform checks
+passed. Late invalid inputs preserve caller state. Remaining work includes
+ADF90 dispatch and numeric effects inside animated model draw routines (which
+also advance animation frames and generate child matrices), retained renderer
+matrix consumption, physical main8 initialization/update and public continuous
+championship integration. This is not yet a complete visible actor renderer.
+High-resolution output and multiplayer priority remain unchanged.
+
+### Original bird animation and static actor draws — 2026-10-18 (unpublished)
+
+The E4C60 animation-part matrix routine now preserves the original signed
+component conversion, binary64 division by127 followed by float32 rounding,
+unnormalized forward axis, separately normalized right/up axes, packing and
+store order. Degenerate axes leave unvisited destination words unchanged.
+The complete routine matches185 original executions (40,130 instructions).
+
+`native-presentation-wing-animation.js` implements both complete9DC10 and
+9E814 numeric draws, including their different root scales, signed frame
+increment/remainder, seven selected animation tracks, all child matrices,
+real matrix allocation increments and ordered material/bind/draw/pop effects.
+The activity flag controls frame advancement even for submitted actors. The
+canonical adapter derives draw type from retained type plus variant, selects
+the signed E774/E76E resource index from its actual halfword, and reads the
+retained activity and graphics buffer. Caller overrides cannot replace these
+owners. Animation frame counts, keys and transform rows must come from the
+selected resource view; no browser-time animation substitute is introduced.
+
+`native-presentation-static-actor.js` implements complete9DB90 and9E794.
+These select the same resource families but draw part+18 with one root matrix,
+without advancing frames or allocating animated children. Submitted rows retain
+their own basis/scale; other rows use the routine's original scale. Canonical
+selection again consumes type plus variant and the actual resource halfword.
+
+Whole original execution covers448 bird draws (1,092,288 instructions) and192
+static draws (68,640 instructions), with no intercepted callees. Every ordered
+effect, final actor-pool hash and retained matrix matches, including both
+buffers, boundary allocations, degenerate axes, signed frame wrap, inactive
+holds, both resource selectors and submitted rows. Graphics command words are
+checked privately and exported only as semantic effects; public fixtures use
+synthetic animation resources and contain no executable ROM instructions.
+The new semantic effects are validated atomically by the canonical state owner.
+
+All60 focused and regression checks pass, covering actor drawing, camera
+composition, canonical state, fresh championship launch, introduction control,
+standings hosting and widget presentation. All458 module hashes and the four
+page preload sets are refreshed and independently verified.
+
+Remaining: other animated draw types, complete ADF90 dispatch, actual selected
+animation-resource decoding, retained matrix consumption by the high-resolution
+renderer, physical main8 setup/update and continuous championship admission.
+These tested draw routines alone do not claim a visible complete introduction.
+Resolution and ocean detail are unchanged; multiplayer remains last.
+
+### Six additional original animated actor draws — 2026-10-18 (unpublished)
+
+`native-presentation-articulated-actor.js` now implements numeric9F398,
+9FCB0, A10E4, A16F0, A1CFC and A2308 (dispatch types5 through10). The shared
+root/child matrix sequence is factored into `native-presentation-animation-parts.js`;
+the existing two bird routines still match their complete original fixtures.
+
+Type5 selects animation74 modulo3, advances frame78 modulo the selected frame
+count when active, and resets animation74 only when that new frame is zero.
+Type6 selects modulo8, advances only nonsubmitted active rows, and compares the
+OLD frame with count-1 before resetting both stored animation/frame. Both draw
+with the descriptor selected before those writes. Signed wrap, negative table
+indices and retained frames are preserved. The original special actor tag,
+course and signed championship count control their different root scales.
+Their five child-track/geometry mappings and all six matrix allocations match.
+
+Types7/8/9 use the E76C resource family; type10 uses E770. Type8 selects its
+second animation, while7/9/10 select the first without changing retained74.
+All four advance active frames even for submitted actors. Types7/8/9 use the
+original actor-index12 size boundary; type10 has its own scale. Each draws three
+parts with its original mapping and the distinct6CF8 material boundary, recorded
+as `actor-alternate`. Canonical adapters read actual type-plus-variant,
+resource halfwords, scene activity, course/count and active graphics buffer;
+caller overrides cannot replace them. Selected animation resources remain
+explicit input rather than inferred timing or generated frame counts.
+
+Evidence:672 complete original five-part executions (1,284,848 instructions)
+and448 complete three-part executions (591,088 instructions), without numeric
+callee interception. Both buffers, slot11/12 boundaries, last legal allocation,
+submitted/ordinary bases, negative animation/frame indices, signed overflow,
+animation end/hold/reset and championship scale branches are covered. All
+ordered writes/effects, actor hashes and retained matrices match. Test resources
+are synthetic and graphics words are verified privately; public fixtures contain
+numeric results and semantic effects, not executable ROM data.
+
+All67 focused/regression checks pass, including original bird/static draws,
+whole camera updates, canonical state, championship launch/introduction,
+standings hosting and widget presentation. All460 module hashes and four page
+preload sets have been refreshed and independently verified.
+
+Remaining draw routines are type12/A28F4 and type13/A063C; type11 intentionally
+does not draw. Complete ADF90 dispatch, selected real animation resources,
+renderer matrix/effect consumption, physical main8 hosting and browser cup
+admission remain pending. No visible complete flyover is claimed by these
+numeric tests. Resolution and multiplayer priority remain unchanged.
+
+### Final special actor draw routines — 2026-10-18 (unpublished)
+
+`native-presentation-special-actor.js` implements the complete numeric A28F4
+and A063C routines (types12/13). Type12 advances its signed two-frame counter
+only while active, uses its original root scale and selects the second geometry
+from zero versus nonzero retained frame state. The original surface transitions
+before the root and between the two draws remain explicit ordered effects.
+
+Type13 selects animation74 modulo2, resets expired active frames without
+incrementing them, and keeps the selected descriptor. Its subtype-dependent
+root scale and six sibling child transforms use the original tracks and part
+mapping. Before its final part, it changes surface state and multiplies the
+actual retained0678 matrix without another push; the final pop therefore still
+returns to the root. Matrix words are copied from canonical actor storage,
+never invented as identity or supplied as a caller override. Canonical adapters
+derive type-plus-variant, signed E776/E778 resource index, activity and buffer.
+
+448 whole original executions (600,934 instructions) match every numeric write,
+pool hash, retained matrix and normalized graphics effect. No numeric callees
+are intercepted. The fixture covers signed animation/frame extremes, active
+and held rows, submitted actors, both scales/selectors/buffers and final legal
+matrix slots. Surface command groups are checked privately in display-list
+address order, including CPU writes that complete later commands before earlier
+ones. Public output uses surface presets and retained numeric matrix effects,
+not raw executable graphics commands. Missing late tracks and malformed
+surface/matrix effects fail without committing prior frame or allocation writes.
+
+All70 focused/regression checks pass, including every implemented draw family,
+whole camera composition, canonical state, championship launch/introduction,
+standings hosting and widget presentation. All461 module hashes and all four
+page preload sets are refreshed and independently verified.
+
+Numeric draw implementations now exist for every dispatched type; type11 has
+no draw. Complete ADF90 composition still requires its916B4 setup, including
+47F90 light construction, course6 special lighting, fog color and fog factors.
+That setup must not be discarded as an opaque graphics call. Retained rendering
+consumers, real selected animation-resource decoding, physical main8 hosting
+and full browser championship remain pending. These comparisons do not prove
+a complete visible introduction. High-resolution presentation is preserved.
