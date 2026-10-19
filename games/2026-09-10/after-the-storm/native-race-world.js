@@ -56,6 +56,8 @@ function optionsAt(value,time,frame,index){
  * beforeFrame(world,context) runs before ALL descending input samples. It is
  * the explicit owner hook for ascending navigation/global source updates;
  * rendering, inactive calls and fractional intervals cannot invoke it.
+ * beforeBody runs after all fifth hull ticks, immediately before each body's
+ * summary. World wrapping belongs here, ahead of frame displacement and actors.
  * beforeActor(world,context) runs within each descending completed-frame body,
  * after its hull summary and before its actor decision/pose. Cross-body writes
  * therefore reach the following rider before that rider's decision.
@@ -70,7 +72,7 @@ function optionsAt(value,time,frame,index){
  * Returning false from afterFrame ends this step at that frame and discards
  * unused elapsed time; it supports terminal race results, not a pause timer.
  */
-export function createNativeRaceWorld({adapters,water,humanIndices=[0],beforeFrame=null,beforeActor=null,beforeWater=null,afterFrame=null,afterTick=null,craftContacts=true,deferWaterRollers=false}={}){
+export function createNativeRaceWorld({adapters,water,humanIndices=[0],beforeFrame=null,beforeBody=null,beforeActor=null,beforeWater=null,afterFrame=null,afterTick=null,craftContacts=true,deferWaterRollers=false}={}){
  if(!Array.isArray(adapters)||adapters.length<1||adapters.length>4||new Set(adapters).size!==adapters.length)
   throw new TypeError('Expected one to four distinct native race adapters');
  if(!isHostRaceWater(water))throw new TypeError('Native world requires host water, not a presentation snapshot');
@@ -78,6 +80,7 @@ export function createNativeRaceWorld({adapters,water,humanIndices=[0],beforeFra
  if(!Array.isArray(humanIndices)||humanIndices.length!==water.players||new Set(humanIndices).size!==humanIndices.length||
   humanIndices.some(i=>!Number.isInteger(i)||i<0||i>=adapters.length))throw new RangeError('Human indices must match the water cameras');
  if(beforeFrame!==null&&typeof beforeFrame!=='function')throw new TypeError('beforeFrame must be a function');
+ if(beforeBody!==null&&typeof beforeBody!=='function')throw new TypeError('beforeBody must be a function');
  if(beforeActor!==null&&typeof beforeActor!=='function')throw new TypeError('beforeActor must be a function');
  if(beforeWater!==null&&typeof beforeWater!=='function')throw new TypeError('beforeWater must be a function');
  if(afterFrame!==null&&typeof afterFrame!=='function')throw new TypeError('afterFrame must be a function');
@@ -96,7 +99,7 @@ export function createNativeRaceWorld({adapters,water,humanIndices=[0],beforeFra
  const surface=createNativeWaterCellSurface(water.field);
  const craftContactStates=createNativeCraftContactStates(adapters.map(a=>a.hull));
  const world={adapters:adapters.slice(),water,
-  humanIndices:humanIndices.slice(),surface,beforeFrame,beforeActor,beforeWater,afterFrame,afterTick,ticks,clockTicks:ticks,frames:water.frames,remainder:0,
+  humanIndices:humanIndices.slice(),surface,beforeFrame,beforeBody,beforeActor,beforeWater,afterFrame,afterTick,ticks,clockTicks:ticks,frames:water.frames,remainder:0,
   craftContacts,deferWaterRollers,craftContactStates,craftContactPasses:0,craftContactCount:0,frameCraftContacts:[],
   stepsLast:0,framesLast:0,frame:null,busy:false,fault:null};
  for(const a of adapters){a.surface=surface;adapterOwners.set(a,world);}
@@ -120,6 +123,7 @@ export function stepNativeRaceWorld(world,dt,inputs,{active=true,adapterOptions=
  if(world.fault)throw new Error('Native world is faulted; reset is required',{cause:world.fault});
  aligned(world);world.stepsLast=0;world.framesLast=0;
  if(!active||dt===0)return world;
+ if(world.water.menuActive)throw new Error('Native race world cannot advance while the menu owns water');
  if(!Array.isArray(inputs)||inputs.length!==world.adapters.length||inputs.some(v=>!v||!['object','function'].includes(typeof v)))
   throw new TypeError('Inputs must contain one control object or provider per adapter');
  if(!Array.isArray(adapterOptions)||adapterOptions.length>world.adapters.length)throw new TypeError('adapterOptions must be a per-racer array');
@@ -161,8 +165,12 @@ export function stepNativeRaceWorld(world,dt,inputs,{active=true,adapterOptions=
    }
    world.clockTicks++;world.remainder=Math.max(0,world.remainder-H);
    if(world.clockTicks%TICKS_PER_FRAME===0){
-    for(let i=world.adapters.length-1;i>=0;i--)(inactive?completeNativeRaceAdapterInactiveFrame:completeNativeRaceAdapterFrame)(world.adapters[i],{
-     beforeActorDecision:world.beforeActor?()=>world.beforeActor(world,{racerIndex:i,logicalFrame:world.frames+1,time:world.clockTicks*H,step:H*TICKS_PER_FRAME}):undefined});
+    for(let i=world.adapters.length-1;i>=0;i--){
+     const context={racerIndex:i,logicalFrame:world.frames+1,time:world.clockTicks*H,step:H*TICKS_PER_FRAME};
+     if(world.beforeBody)world.beforeBody(world,context);
+     (inactive?completeNativeRaceAdapterInactiveFrame:completeNativeRaceAdapterFrame)(world.adapters[i],{
+      beforeActorDecision:world.beforeActor?()=>world.beforeActor(world,context):undefined});
+    }
     if(world.beforeWater)world.beforeWater(world,{logicalFrame:world.frames+1,time:world.clockTicks*H,step:H*TICKS_PER_FRAME});
     advanceRaceWaterFrame(world.water,world.humanIndices.map(i=>cameraCraft(world.adapters[i])),{...world.frame.water,simulationActive:!inactive,deferRollers:world.deferWaterRollers});
     world.frames++;world.framesLast++;

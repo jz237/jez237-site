@@ -3,7 +3,7 @@ import {nativeIceSplashPose} from './native-ice-presentation.js';
 
 // Authored 512px mist artwork. Original AF798 supplies the seven frame ages,
 // 32-unit quad, scale and stationary position; no original texture is copied.
-function mistTexture(frame){
+export function makeNativeMistTexture(frame){
  const canvas=document.createElement('canvas');canvas.width=canvas.height=512;
  const ctx=canvas.getContext('2d'),age=frame/6;
  function puff(x,y,r,alpha){
@@ -24,7 +24,7 @@ function mistTexture(frame){
  return texture;
 }
 export function makeNativeIceSplashRenderer(root){
- const textures=Array.from({length:7},(_,i)=>mistTexture(i)),geometry=new T.PlaneGeometry(1,1),eye=new T.Vector3();
+ const textures=Array.from({length:7},(_,i)=>makeNativeMistTexture(i)),geometry=new T.PlaneGeometry(1,1),eye=new T.Vector3();
  const sprites=Array.from({length:8},()=>{
   const material=new T.MeshBasicMaterial({map:textures[0],transparent:true,depthWrite:false,depthTest:true,alphaTest:.005,fog:true});
   const sprite=new T.Mesh(geometry,material);sprite.visible=false;sprite.userData.dynamic=true;

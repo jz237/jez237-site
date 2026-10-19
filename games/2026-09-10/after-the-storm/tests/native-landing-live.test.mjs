@@ -5,22 +5,23 @@ import {createNativeLifecycleRider} from '../native-lifecycle-rider.js';
 import {createNativeRiderRecovery} from '../native-rider-recovery.js';
 import {createNativeRaceAdapter,stepNativeRaceAdapter,nativeRaceSnapshot} from '../native-race-adapter.js';
 import {createNativeRaceContactAudio} from '../native-race-contact-audio.js';
-import {createNativeWaterField} from '../native-water-field.js';
+import {createNativeWaterField,queryNativeWaterField} from '../native-water-field.js';
 import {nativeRaceBodyFields} from '../native-race-body-fields.js';
 import {createNativeRaceState,prepareNativeRaceStuntMoveUpdate,prepareNativeRaceStuntAwardDisplay,
  nativeRaceStuntAwardsView} from '../native-race-state.js';
 // Prepared airborne start; all subsequent roll, release, water contact and
 // recovery use ordinary input and the actual hull/rider solvers.
-function make({slot=0,landingTicks=0,enabled=true,sourceState={},recoveryMode}={}){
+function make({slot=0,landingTicks=0,enabled=true,sourceState={},recoveryMode,riderWaterField=createNativeWaterField({datumNative:0})}={}){
  const options={position:{x:0,y:8,z:0},velocity:{x:0,y:0,z:25}},initialHull=createNativeHull(options),bundle=createNativeLifecycleRider({initialHull});
  const recovery=recoveryMode===undefined?{}:{physicalMode:recoveryMode,state:createNativeRiderRecovery({riderIndex:0,actorState:7,contactMode:1-recoveryMode,hullDamping:initialHull.points.map(p=>p.damping)})};
  return createNativeRaceAdapter({...options,...bundle,surface:0,sourceState,riderRecovery:{courseDatumNative:0,...recovery},
+  riderWaterQuery:(x,z)=>queryNativeWaterField(riderWaterField,x,z).sourcePlaneQueryNative,
   riderActions:{inputHistory:{gestureTick15f0:0,flag1600:0,sequence15f8:0,sequence15fa:0,lastPressedDirections15fc:2048,quietFrames15fe:0},idleFramesC6c:0,idleChoice16c4:0,
    source:{state650:3,gestureWindowNative:3,idleThresholdNative:1000,poseCompletion:{finished2c2c:0,record2c24:0,racerIndex:slot,primaryRacerIndex:0,gameMode648:3}}},
   ...(enabled?{riderLanding:{landingTicks,localPointsNative:authoredNativeHullLocalPoints()}}:{})});
 }
 function run(heldFrames=1,hz=20,options={}){
- const a=make(options),audio=createNativeRaceContactAudio({players:1,courseIndex:1}),field=createNativeWaterField({datumNative:0}),events=[];
+ const field=createNativeWaterField({datumNative:0}),a=make({...options,riderWaterField:field}),audio=createNativeRaceContactAudio({players:1,courseIndex:1}),events=[];
  audio.applyEffects([{kind:'externalCall',consumer:'800c21f4',arguments:[7,1]}]);audio.drain();
  const input=(_,frame)=>frame===0?{rawXNative:-70,heldButtons:0x8000}:frame<=heldFrames?{rawXNative:70,heldButtons:0x8000}:{};
  for(let i=0;i<hz*3;i++){

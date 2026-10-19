@@ -1,10 +1,54 @@
+import {prepareNativeChampionshipSelectionUpdate} from './native-championship-selection.js';
+import {prepareNativeCourseResourceRelocation} from './native-course-resource-relocation.js';
 import {prepareNativeRaceFadeUpdate} from './native-race-fade-update.js';
 import {prepareNativeMenuInput,prepareNativeDeviceSample,prepareNativeDeviceReset} from './native-menu-input.js';
 import {prepareNativeRaceResultCPUDisplay} from './native-race-prestart-stage.js';
+import {prepareNativeChampionshipScore} from './native-championship-score.js';
+import {prepareNativeChampionshipStandingsInitialization,prepareNativeChampionshipStandingsInput,prepareNativeChampionshipStandingsExit} from './native-championship-standings.js';
 import {prepareNativeRaceWidgetUpdate,prepareNativeRaceHUDAnimationUpdate} from './native-race-widget-update.js';
 import {NATIVE_AI_STORAGE_WORDS} from './native-ai-storage.js';
 import {createNativeGraphicsCornerState,patchNativeGraphicsCornerState,advanceNativeGraphicsCornerState} from './native-graphics-corner-state.js';
 import {prepareNativeRaceCameraInput} from './native-race-camera-input.js';
+import {prepareNativeMenuCameraInitialization} from './native-menu-camera-initialization.js';
+import {prepareNativeIntroductionCameraInitialization} from './native-introduction-camera-initialization.js';
+import {prepareNativeIntroductionCameraScript} from './native-introduction-camera-script.js';
+import {prepareNativeCameraAuxiliaryMotion} from './native-camera-auxiliary-motion.js';
+import {prepareNativeIntroductionFlock} from './native-introduction-flock.js';
+import {prepareNativeIntroductionCourseEffects} from './native-introduction-course-effects.js';
+import {prepareNativeIntroductionActors,prepareNativeIntroductionActorInitialization,prepareNativeCourseActorInitialization,prepareNativePresentationActorBounds,prepareNativePresentationActorRetirement,NATIVE_PRESENTATION_ACTOR_WORDS} from './native-presentation-actor-pool.js';
+import {prepareNativeIntroductionCameraUpdate} from './native-introduction-camera-update.js';
+import {prepareNativePresentationActorVisibility} from './native-presentation-actor-visibility.js';
+import {prepareNativePresentationActorRootMatrix} from './native-presentation-actor-transform.js';
+import {prepareNativePresentationWingAnimation} from './native-presentation-wing-animation.js';
+import {prepareNativePresentationStaticActor} from './native-presentation-static-actor.js';
+import {prepareNativePresentationArticulatedActor} from './native-presentation-articulated-actor.js';
+import {prepareNativePresentationSpecialActor} from './native-presentation-special-actor.js';
+import {prepareNativeSwimmingActorMotion} from './native-swimming-actor-motion.js';
+import {prepareNativeCourseBirdMotion,prepareNativeCourseBirdAudio} from './native-course-bird-motion.js';
+import {prepareNativePerchingBirdMotion} from './native-perching-bird-motion.js';
+import {prepareNativeDolphinAudio} from './native-dolphin-audio.js';
+import {prepareNativeDolphinActorMotion} from './native-dolphin-actor-motion.js';
+import {prepareNativeIceActorAudio} from './native-ice-actor-audio.js';
+import {prepareNativeIceActorMotion} from './native-ice-actor-motion.js';
+import {prepareNativeSpecialCourseActorMotion} from './native-special-course-actor-motion.js';
+import {prepareNativeFollowingActorMotion} from './native-following-actor-motion.js';
+import {prepareNativeCourseActorFrame} from './native-course-actor-frame.js';
+import {prepareNativePresentationLighting} from './native-presentation-lighting.js';
+import {prepareNativePresentationActorDisplay} from './native-presentation-actor-display.js';
+import {prepareNativePresentationEffectInputs,prepareNativeTransientEffects,NATIVE_PRESENTATION_EFFECT_WORDS} from './native-presentation-effects.js';
+import {nativeEffectEngineMask} from './native-effect-body-view.js';
+import {prepareNativePresentationEffectsInitialization} from './native-presentation-effects-initialization.js';
+import {prepareNativeEffectGeometry} from './native-effect-geometry.js';
+import {prepareNativeSprayUpdate} from './native-spray-update.js';
+import {prepareNativePresentationEffectsFrame} from './native-presentation-effects-frame.js';
+import {prepareNativeTransientDisplay} from './native-transient-display.js';
+import {prepareNativePresentationEffectsDisplay} from './native-presentation-effects-display.js';
+import {prepareNativeSceneGraphicsFrame,nativeSceneGraphicsBufferIndex} from './native-scene-graphics-frame.js';
+import {prepareNativeBodyWrap} from './native-body-wrap.js';
+import {prepareNativeMenuCameraUpdate} from './native-menu-camera-update.js';
+import {prepareNativeSpecialWaterUpdate} from './native-special-water-update.js';
+import {prepareNativeWaterSceneInitialization} from './native-water-scene-initialization.js';
+import {prepareNativeCourseDisplayInitialization} from './native-course-display-initialization.js';
 // Shared source race/HUD storage. Decoded leaf views are temporary, and all
 // overlapping records, tables, timers and flags return to these same owners.
 import {createNativeRaceResetState,prepareNativeRaceReset} from './native-race-reset.js';
@@ -71,15 +115,16 @@ const hudInts={recordFlag8a98:0x8a98,placeChanged8a9c:0x8a9c};
 // metadataD9b0 is the one800DA9B0 owner for both record rider attribution and
 // fallback initials. A separate nameIndexA9b0 would diverge on rider changes.
 const sceneRanges={fieldE5134:[0,255],fieldAb0c:[-32768,32767],championshipCountAa00:[-32768,32767],primaryHumanIndex:[0,3],secondaryHumanIndex:[0,3],players:[1,2],courseIndex:[0,11],
- racerCount:[0,4],primaryCount:[0,64],finishSourceRow:[0,63],activity624:[-32768,32767],event628:[-32768,32767],
+ racerCount:[0,4],primaryCount:[0,64],secondaryCount:[0,64],finishSourceRow:[0,63],activity624:[-32768,32767],event628:[-32768,32767],
  pendingPlayers60c:[-32768,32767],participantCount60e:[-32768,32767],result6f0:[-32768,32767],field62a:[-32768,32767],specialAb64:[-32768,32767],ready6fc:[-32768,32767],field4964:[0,65535],
  reverseDab68:[0,65535],missesEnabled72e:[0,65535],seed6f00:[0,65535],rngState4640:[0,0xffffffff],inputTick1960:[0,0xffffffff],style6e28:[0,65535],
  field4970:[0,65535],field72c:[0,65535],fieldA9ac:[0,65535],pressed65a:[0,65535],unlockAb60:[-32768,32767],freshNameAb6c:[-32768,32767],variant6f4:[-32768,32767],variant6f6:[-32768,32767]};
-const sceneWords=new Set(['fixedSphereCountC938','forceStunt824c','rampFilterOverride8254','collisionPlaneCount0578','alternate8250','ringNext0cb0','ringStreak0cb4','objectCountFa40','ringCountB134','titlePairSelectionA9fc','fieldAa08','fortressCourse3a10','cold8224','clockStopped817c','phase650','simulation648','main638','mode620','state600',
+const sceneWords=new Set(['secondaryCount','field3938','fixedSphereCountC938','forceStunt824c','rampFilterOverride8254','collisionPlaneCount0578','alternate8250','ringNext0cb0','ringStreak0cb4','objectCountFa40','ringCountB134','titlePairSelectionA9fc','fieldAa08','fortressCourse3a10','cold8224','clockStopped817c','phase650','simulation648','main638','mode620','state600',
  'missLimit8174','noFinish8178','configuredLaps728','difficulty','directionFlag1f90','ambientD4b00','fortressD8240',
  'metadataD9b0','metadataCb32c','restart6f8','initLatch63c','gameStateAb24','mode608','returnState630','forceFirst8228','demoOffset5438','rngState4640','inputTick1960','style6e2c',
  'previousGameState634','field640','field644','fieldAb1c','fieldAb2c','field461c','field700','field704','field708','field70c','field710','field714','resultEffect393c','wave610','missLimit614','lapCount618','field61c','wave49b0','field64c','players','racerCount','toggleD9914','previousNavigationD9874','trainingSelectionDa9f8',
- 'riderSelectionA9c0','secondRiderSelectionA9c4','riderFlagA9c8','secondRiderFlagA9cc','courseSelectionA9d0','courseIndex']);
+ 'riderSelectionA9c0','secondRiderSelectionA9c4','riderFlagA9c8','secondRiderFlagA9cc','courseSelectionA9d0','courseIndex','displayCamera3930','displayCamera3934','aiContextPointer3c58','actorDisplayPhase62c0','matrixCountE950',
+ 'graphicsFrame4b04','graphicsLatch4b08','graphicsSelector4b0c','graphicsPointerE948','graphicsPointerE94c','audioScene7c9c']);
 const sceneHalves=new Set(['fieldAb0c','championshipCountAa00','activity624','event628','field62a','pendingPlayers60c','participantCount60e','result6f0','specialAb64','ready6fc','reverseDab68','missesEnabled72e','seed6f00','field4964','style6e28',
  'field4970','field72c','fieldA9ac','pressed65a','unlockAb60','freshNameAb6c','variant6f4','variant6f6']);
 function record(v,n){if(!v||typeof v!=='object'||Array.isArray(v))throw new TypeError(`Expected ${n}`);return v;}
@@ -125,6 +170,22 @@ function copy(value){
  if(value.continuationMenuWords61e0!==undefined)s.continuationMenuWords61e0=words(value.continuationMenuWords61e0,'continuationMenuWords61e0',4);
  if(value.endingMenuWords6d50!==undefined)s.endingMenuWords6d50=words(value.endingMenuWords6d50,'endingMenuWords6d50',126);
  if(value.recordsBrowserWords80c0!==undefined)s.recordsBrowserWords80c0=words(value.recordsBrowserWords80c0,'recordsBrowserWords80c0',62);
+ for(const key of ['roundOrderE718','racerOrderA9dc'])if(value[key]!==undefined)s[key]=words(value[key],key,4);
+ if(value.championshipIntroPanelWords6f64!==undefined)s.championshipIntroPanelWords6f64=words(value.championshipIntroPanelWords6f64,'championshipIntroPanelWords6f64',8);
+ if(value.championshipSelectionWords6f84!==undefined)s.championshipSelectionWords6f84=words(value.championshipSelectionWords6f84,'championshipSelectionWords6f84',43);
+ if(value.championshipMenuWords7a00!==undefined)s.championshipMenuWords7a00=words(value.championshipMenuWords7a00,'championshipMenuWords7a00',68);
+ if(value.courseDisplayWordsB058!==undefined)s.courseDisplayWordsB058=words(value.courseDisplayWordsB058,'courseDisplayWordsB058',136);
+ if(value.courseLightWords4160!==undefined)s.courseLightWords4160=words(value.courseLightWords4160,'courseLightWords4160',3);
+ if(value.menuWaterMotionWords47c4!==undefined)s.menuWaterMotionWords47c4=words(value.menuWaterMotionWords47c4,'menuWaterMotionWords47c4',4);
+ if(value.actorWordsF060!==undefined)s.actorWordsF060=words(value.actorWordsF060,'actorWordsF060',NATIVE_PRESENTATION_ACTOR_WORDS);
+ if(value.actorControlWords62c4!==undefined)s.actorControlWords62c4=words(value.actorControlWords62c4,'actorControlWords62c4',3);
+ if(value.actorControlWords62d0!==undefined)s.actorControlWords62d0=words(value.actorControlWords62d0,'actorControlWords62d0',2);
+ if(value.effectWords0790!==undefined)s.effectWords0790=words(value.effectWords0790,'effectWords0790',NATIVE_PRESENTATION_EFFECT_WORDS);
+ if(value.effectControlWords6d60!==undefined)s.effectControlWords6d60=words(value.effectControlWords6d60,'effectControlWords6d60',22);
+ if(value.cameraEnvironmentBytesEaa4!==undefined){
+  if(!Array.isArray(value.cameraEnvironmentBytesEaa4)||value.cameraEnvironmentBytesEaa4.length!==2)throw new RangeError('Supply cameraEnvironmentBytesEaa4[2]');
+  s.cameraEnvironmentBytesEaa4=value.cameraEnvironmentBytesEaa4.map(v=>integer(v,'camera environment byte',0,255));
+ }
  if(value.continuationDataWords60f0!==undefined)s.continuationDataWords60f0=words(value.continuationDataWords60f0,'continuationDataWords60f0',20);
  if(value.profileWordsB330!==undefined){
   if(Object.hasOwn(scene,'difficulty'))throw new RangeError('difficulty overlaps profileWordsB330');
@@ -177,6 +238,26 @@ function copy(value){
  * The extended view includes the four adjacent B3F8..B3FE rider halfwords;
  * no second flag owner is accepted. Older bounded leaves retain50-word input.
  * When supplied, difficulty comes from itsB338 word, never scene.difficulty.
+ * Optional roundOrderE718[4] and racerOrderA9dc[4] own the independent round
+ * and cumulative slot-order arrays at801CE718 and800DA9DC. They store racer
+ * slots, not avatar IDs. Championship94ACC rebuilds both and writes each
+ * cumulative rank into its existing race-record2C70 word.
+ * championshipMenuWords7a00[68] retains ovl_i5 802C7A00..7B10, exclusive,
+ * including its loaded last-round table and outcome/slide controls. Opaque
+ * presentation words remain retained data, not an executed graphics pipeline.
+ * Optional effectWords0790 owns scene effects801D0790..801D7B6C, exclusive,
+ * including four1C74-byte rider-effect entries and shared wake/spray scratch.
+ * It is adjacent to actorWordsF060, distinct from the overlay menu at802C7A00.
+ * Retained allocation and particle history are not inferred from audio levels.
+ * effectControlWords6d60[22] owns800E6D60..6DB8, exclusive, including retained
+ * pointers, selected colors, the course palette and initialization latch. It
+ * does not overlap802C6D50 ending-menu storage despite similar low addresses.
+ * championshipSelectionWords6f84[43] retains the separate ovl_i3 introduction
+ * owner6F84..7030, including first-round data and its stage/timer controls.
+ * Supply loaded/retained words explicitly; this is not standings7A00 storage.
+ * championshipIntroPanelWords6f64[8] owns its adjacent panel phase, timers,
+ * opacities and diagram flag through6F84, exclusive. field3938 retains the
+ * independent codeseg display-enable word, initialized only in fresh memory.
  * Optional saveWordsB280[34] owns801CB280..B308, ending before the wave-row
  * regionB308 and metadataB32C. Result initials and unlock bytes share it.
  * Optional resourceWordsB330[20|36] owns800DB330..B380 or..B3C0, distinct from profile
@@ -189,6 +270,45 @@ function copy(value){
  */
 export function createNativeRaceState(value){return freeze(copy(value));}
 export function nativeRaceStateSnapshot(value){return copy(value);}
+
+/** Detached original course-introduction numeric update; resources/GPU remain effects. */
+export function prepareNativeChampionshipSelectionFrameUpdate(state,sourceViews={}){
+ const current=createNativeRaceState(state),q=prepareNativeChampionshipSelectionUpdate(current,sourceViews);
+ return freeze({...prepareNativeRaceStateOperations(current,q.operations),operations:q.operations,diagnostic:q.diagnostic});
+}
+
+/** Apply94ACC to the actual profile/racer/order owners. The standings entry
+ * latch must schedule it once; renderers must use read-only views afterward. */
+export function prepareNativeChampionshipScoreUpdate(state){
+ const next=copy(state),prepared=prepareNativeChampionshipScore(next),effects=apply(next,prepared.operations);
+ return freeze({...prepared,state:next,effects});
+}
+export function prepareNativeChampionshipStandingsInitializationUpdate(state){
+ const next=copy(state),prepared=prepareNativeChampionshipStandingsInitialization(next),effects=apply(next,prepared.operations);
+ return freeze({...prepared,state:next,effects});
+}
+function championshipStandingsControlResult(next,prepared,sourceViews,expandExit){
+ const operations=[],effects=[],pending=[...prepared.operations];
+ while(pending.length){
+  const op=pending.shift();let batch=[op];
+  if(expandExit&&op.kind==='externalCall'&&op.consumer==='802c6f84'){
+   pending.unshift(...prepareNativeChampionshipStandingsExit(next,op.arguments[0]|0).operations);continue;
+  }
+  if(expandExit&&op.kind==='externalCall'&&op.consumer==='801e6fb0'){
+   const [type,rate,selector]=op.arguments;
+   batch=prepareNativeRaceFadePropertiesInitialization({fadeTemplateWords6cc0:sourceViews.fadeTemplateWords6cc0,type,rate,selector}).operations;
+  }
+  operations.push(...batch);effects.push(...apply(next,batch));
+ }
+ return freeze({...prepared,state:next,operations,effects});
+}
+export function prepareNativeChampionshipStandingsInputUpdate(state,sourceViews={}, {expandExit=false}={}){
+ if(typeof expandExit!=='boolean')throw new TypeError('expandExit must be boolean');
+ const next=copy(state);return championshipStandingsControlResult(next,prepareNativeChampionshipStandingsInput(next),sourceViews,expandExit);
+}
+export function prepareNativeChampionshipStandingsExitUpdate(state,destination,sourceViews={}){
+ const next=copy(state);return championshipStandingsControlResult(next,prepareNativeChampionshipStandingsExit(next,destination),sourceViews,true);
+}
 
 /** Selected71E70 fixed-sphere rows use one retained sphere span. The enclosing
  * loader supplies already selected rows and canonical reset/prefix counts. */
@@ -406,6 +526,17 @@ export function prepareNativeRaceFixedSphereContacts(state,input={}){
  return freeze({...result,state:next,effects:[]});
 }
 
+/** Source65C18 boundary stage shares actual HUD cameras with the race owner.
+ * The physical host must commit returned bodyWords with state. Body writes
+ * remain validated effects; they never create another canonical body copy.
+ */
+export function prepareNativeRaceBodyWrap(state,input={}){
+ const next=copy(state),prepared=prepareNativeBodyWrap({...input,hudWords7788:next.hudWords7788,
+  players:sceneValue(next,'players'),primaryHumanIndex:sceneValue(next,'primaryHumanIndex'),secondaryHumanIndex:next.scene.secondaryHumanIndex,
+  displayCamera3930:next.scene.displayCamera3930,displayCamera3934:next.scene.displayCamera3934});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
 /** Reached7E938 front/rear probe calls. Body/impact are prepared views of the
  * current physical rider; object contacts commit to the same owner used by
  * loading, initialization, rings and motion. Fragment events remain an ordered
@@ -530,6 +661,12 @@ function apply(s,operations){
    for(let j=0;j<width;j++){const at=offset+j,index=at>>>2,shift=24-(at&3)*8,bits=(value>>>((width-j-1)*8))&255;
     s[key][index]=((s[key][index]&~(255<<shift))|(bits<<shift))>>>0;}
   }
+  else if(op.kind==='saveWordWrite'){
+   if(!s.saveWordsB280)throw new TypeError('Supply retained saveWordsB280 before applying its writes');
+   if(op.width!==4)throw new RangeError('Invalid save word width');
+   const offset=integer(op.byteOffset,'save word offset',0,132);if(offset%4)throw new RangeError('Invalid save word alignment');
+   s.saveWordsB280[offset/4]=integer(op.value,'save word bits',0,0xffffffff);
+  }
   else if(op.kind==='raceByteWrite'||op.kind==='saveByteWrite'){
    const key=op.kind==='raceByteWrite'?'raceWords1f94':'saveWordsB280';
    if(!s[key])throw new TypeError(`Supply retained ${key} before applying its writes`);
@@ -581,6 +718,11 @@ function apply(s,operations){
    const value=integer(op.value,`${key} bits`,0,width===2?65535:0xffffffff),index=offset>>>2;
    if(width===4)s[key][index]=value;
    else{const shift=offset&2?0:16;s[key][index]=((s[key][index]&~(65535<<shift))|(value<<shift))>>>0;}
+  }else if(op.kind==='bodyWordWrite'){
+   integer(op.racerIndex,'physical body racerIndex',0,3);
+   const at=integer(op.byteOffset,'physical body offset',0,0x1718-4);
+   if(op.width!==4||at%4)throw new RangeError('Invalid physical body word alignment');
+   integer(op.value,'physical body bits',0,0xffffffff);effects.push(structuredClone(op));
   }else if(op.kind==='bodyTuneWordWrite'){
    integer(op.racerIndex,'body tune racerIndex',0,3);integer(op.wordIndex,'body tune wordIndex',0,3);
    integer(op.value,'body tune raw word',0,0xffffffff);effects.push(structuredClone(op));
@@ -594,6 +736,25 @@ function apply(s,operations){
    const value=integer(op.value,'resource bits',0,width===2?65535:0xffffffff),index=offset>>>2;
    if(width===4)s[key][index]=value;
    else{const shift=offset&2?0:16;s[key][index]=((s[key][index]&~(65535<<shift))|(value<<shift))>>>0;}
+  }else if(op.kind==='championshipIntroPanelWrite'){
+   const key='championshipIntroPanelWords6f64';if(!s[key])throw new TypeError('Supply retained championshipIntroPanelWords6f64 before its writes');
+   if(op.width!==4)throw new RangeError('Invalid championship panel width');
+   const offset=integer(op.byteOffset,'championship panel offset',0,28);if(offset%4)throw new RangeError('Unaligned championship panel write');
+   s[key][offset>>>2]=integer(op.value,'championship panel bits',0,0xffffffff);
+  }else if(op.kind==='championshipSelectionWrite'){
+   const key='championshipSelectionWords6f84';if(!s[key])throw new TypeError('Supply retained championshipSelectionWords6f84 before its writes');
+   if(op.width!==4)throw new RangeError('Invalid championship introduction width');
+   const offset=integer(op.byteOffset,'championship introduction offset',0,168);if(offset%4)throw new RangeError('Unaligned championship introduction write');
+   s[key][offset>>>2]=integer(op.value,'championship introduction bits',0,0xffffffff);
+  }else if(op.kind==='championshipMenuWrite'){
+   const key='championshipMenuWords7a00';if(!s[key])throw new TypeError('Supply retained championshipMenuWords7a00 before its writes');
+   const width=integer(op.width,'championship menu width',2,4);if(width!==2&&width!==4)throw new RangeError('Invalid championship menu width');
+   const offset=integer(op.byteOffset,'championship menu offset',0,272-width);if(offset%width)throw new RangeError('Unaligned championship menu write');
+   const bits=integer(op.value,'championship menu bits',0,width===2?65535:0xffffffff),index=offset>>>2;
+   if(width===4)s[key][index]=bits;else{const shift=offset&2?0:16;s[key][index]=((s[key][index]&~(65535<<shift))|(bits<<shift))>>>0;}
+  }else if(op.kind==='championshipOrderWrite'){
+   const key=op.owner;if(!['roundOrderE718','racerOrderA9dc'].includes(key)||!s[key])throw new TypeError('Supply the selected championship order owner');
+   const index=integer(op.wordIndex,'championship order index',0,3);s[key][index]=integer(op.value,'championship order slot',0,3);
   }else if(op.kind==='presentationBufferWrite'){
    integer(op.bufferIndex,'presentation bufferIndex',0,1);integer(op.byteOffset,'presentation byteOffset',0,252);
    if(op.width!==4||op.byteOffset%4)throw new RangeError('Invalid presentation buffer word');
@@ -602,6 +763,119 @@ function apply(s,operations){
    integer(op.address,'presentation address',0,0xffffffff);
    if(op.width!==4||op.address%4)throw new RangeError('Invalid presentation memory word');
    integer(op.value,'presentation word bits',0,0xffffffff);effects.push(structuredClone(op));
+  }else if(op.kind==='courseDisplayWrite'||op.kind==='courseLightWrite'){
+   const key=op.kind==='courseDisplayWrite'?'courseDisplayWordsB058':'courseLightWords4160',count=op.kind==='courseDisplayWrite'?136:3;
+   if(!s[key])throw new TypeError(`Supply retained ${key} before applying display writes`);
+   const offset=integer(op.byteOffset,'course display offset',0,count*4-4);
+   if(op.width!==4||offset%4)throw new RangeError('Invalid course display word alignment');
+   s[key][offset/4]=integer(op.value,'course display bits',0,0xffffffff);
+  }else if(op.kind==='courseDisplayGraphicsWrite'){
+   integer(op.bufferIndex,'course graphics buffer',0,1);
+   if(op.width!==1&&op.width!==2)throw new RangeError('Invalid course graphics width');
+   const offset=integer(op.byteOffset,'course graphics byte offset',0xe0,0x1c0-op.width);
+   if(offset%op.width)throw new RangeError('Invalid course graphics alignment');
+   integer(op.value,'course graphics bits',0,op.width===1?255:65535);effects.push(structuredClone(op));
+  }else if(op.kind==='presentationEffectWrite'||op.kind==='presentationEffectControlWrite'){
+   const key=op.kind==='presentationEffectWrite'?'effectWords0790':'effectControlWords6d60',count=op.kind==='presentationEffectWrite'?NATIVE_PRESENTATION_EFFECT_WORDS:22;
+   if(!s[key])throw new TypeError(`Supply retained ${key} before effect updates`);
+   if(op.width!==4)throw new RangeError('Invalid presentation effect width');
+   const offset=integer(op.byteOffset,'effect owner offset',0,count*4-4);
+   if(offset%4)throw new RangeError('Invalid presentation effect alignment');
+   s[key][offset/4]=integer(op.value,'effect owner word',0,0xffffffff);
+  }else if(op.kind==='presentationSceneMatrixWrite'||op.kind==='presentationSceneMatrixBind'){
+   integer(op.bufferIndex,'scene matrix buffer',0,1);integer(op.matrixIndex,'scene matrix index',0,Math.floor((0xb2f0-0x4140)/64)-1);
+   if(op.kind==='presentationSceneMatrixWrite'){
+    if(op.width!==2)throw new RangeError('Invalid scene matrix width');const offset=integer(op.byteOffset,'scene matrix offset',0,62);
+    if(offset%2)throw new RangeError('Invalid scene matrix alignment');integer(op.value,'scene matrix bits',0,65535);
+   }else if(!['load','multiply'].includes(op.mode))throw new RangeError('Invalid scene matrix binding');
+   effects.push(structuredClone(op));
+  }else if(op.kind==='presentationEffectListBegin'){
+   integer(op.bufferIndex,'effect list buffer',0,1);const offset=integer(op.byteOffset,'effect list offset',0,0x4140-8);
+   if(offset%8)throw new RangeError('Invalid effect list alignment');effects.push(structuredClone(op));
+  }else if(op.kind==='presentationEffectListEnd'){
+   effects.push(structuredClone(op));
+  }else if(op.kind==='presentationEffectPipeline'){
+   if(!['surface','droplet'].includes(op.mode))throw new RangeError('Invalid effect pipeline');effects.push(structuredClone(op));
+  }else if(op.kind==='presentationEffectTexture'){
+   const frames={spray:4,splash:7,wake:4,droplet:1};if(!Object.hasOwn(frames,op.family))throw new RangeError('Invalid effect texture family');
+   integer(op.textureFrame,'effect texture frame',0,frames[op.family]-1);effects.push(structuredClone(op));
+  }else if(op.kind==='presentationEffectVertices'){
+   integer(op.bufferIndex,'effect vertex buffer',0,1);const count=integer(op.vertexCount,'effect vertex count',1,16),offset=integer(op.byteOffset,'effect vertex offset',0,0xb2f0-count*16);
+   if(offset%16)throw new RangeError('Invalid effect vertex alignment');effects.push(structuredClone(op));
+  }else if(op.kind==='presentationEffectPrimitive'){
+   if(!Array.isArray(op.indices)||![3,4].includes(op.indices.length))throw new RangeError('Invalid effect primitive');op.indices.forEach(v=>integer(v,'effect primitive index',0,15));effects.push(structuredClone(op));
+  }else if(op.kind==='presentationTransientMaterial'||op.kind==='presentationEffectColor'){
+   if(!Array.isArray(op.rgba)||op.rgba.length!==4)throw new RangeError('Invalid transient material');op.rgba.forEach(v=>integer(v,'transient color',0,255));effects.push(structuredClone(op));
+  }else if(op.kind==='presentationTransientDraw'){
+   integer(op.slot,'transient slot',0,7);integer(op.textureFrame,'transient texture frame',0,6);effects.push(structuredClone(op));
+  }else if(op.kind==='presentationEffectVertexWrite'){
+   integer(op.bufferIndex,'effect vertex buffer',0,1);if(op.width!==1&&op.width!==2)throw new RangeError('Invalid effect vertex width');
+   const offset=integer(op.byteOffset,'effect vertex offset',0,0xb2f0-op.width);if(offset%op.width)throw new RangeError('Invalid effect vertex alignment');
+   integer(op.value,'effect vertex bits',0,op.width===1?255:65535);effects.push(structuredClone(op));
+  }else if(op.kind==='presentationActorWrite'||op.kind==='presentationActorControlWrite'||op.kind==='presentationActorAuxControlWrite'){
+   const key=op.kind==='presentationActorWrite'?'actorWordsF060':op.kind==='presentationActorControlWrite'?'actorControlWords62c4':'actorControlWords62d0',count=op.kind==='presentationActorWrite'?NATIVE_PRESENTATION_ACTOR_WORDS:op.kind==='presentationActorControlWrite'?3:2;
+   if(!s[key])throw new TypeError(`Supply retained ${key} before actor updates`);
+   if(op.width!==4&&(op.kind!=='presentationActorWrite'||![1,2].includes(op.width)))throw new RangeError('Invalid actor owner width');
+   const offset=integer(op.byteOffset,'actor owner offset',0,count*4-op.width);
+   if(offset%op.width)throw new RangeError('Invalid actor owner alignment');
+   if(op.width===4)s[key][offset/4]=integer(op.value,'actor owner word',0,0xffffffff);
+   else{const mask=op.width===1?255:65535,value=integer(op.value,'actor owner bits',0,mask),i=offset>>>2,shift=(4-op.width-(offset&3))*8;s[key][i]=((s[key][i]&~(mask<<shift))|(value<<shift))>>>0;}
+  }else if(op.kind==='presentationLightByteWrite'||op.kind==='presentationLightBind'){
+   integer(op.bufferIndex,'light buffer',0,1);integer(op.viewIndex,'light view',0,1);integer(op.lightIndex,'light index',0,1);
+   if(op.kind==='presentationLightByteWrite'){
+    if(op.width!==1)throw new RangeError('Invalid light byte width');integer(op.byteOffset,'light byte offset',0,23);integer(op.value,'light byte',0,255);
+   }else{integer(op.slot,'light slot',0,2);if(op.byteOffset!==0&&op.byteOffset!==8)throw new RangeError('Invalid light bind offset');}
+   effects.push(structuredClone(op));
+  }else if(op.kind==='presentationLightCount'){
+   integer(op.count,'light count',1,2);effects.push(structuredClone(op));
+  }else if(op.kind==='presentationGraphicsSync'){
+   effects.push(structuredClone(op));
+  }else if(op.kind==='presentationFogColor'){
+   if(!Array.isArray(op.rgba)||op.rgba.length!==4)throw new RangeError('Supply fog RGBA');op.rgba.forEach(v=>integer(v,'fog byte',0,255));effects.push(structuredClone(op));
+  }else if(op.kind==='presentationFogFactors'){
+   integer(op.packedWord,'fog coefficient bits',0,0xffffffff);effects.push(structuredClone(op));
+  }else if(op.kind==='presentationActorSurface'){
+   if(!['actor12-base','actor12-overlay','actor13-final'].includes(op.preset))throw new RangeError('Invalid actor surface preset');effects.push(structuredClone(op));
+  }else if(op.kind==='presentationActorRetainedMatrixMultiply'){
+   integer(op.bufferIndex,'retained actor matrix buffer',0,1);integer(op.actorIndex,'retained actor matrix index',0,29);
+   words(op.matrixWords,'retained actor matrix words',16);effects.push(structuredClone(op));
+  }else if(op.kind==='presentationActorMaterial'){
+   if(!['actor','actor-alternate'].includes(op.preset))throw new RangeError('Invalid actor material preset');effects.push(structuredClone(op));
+  }else if(op.kind==='presentationActorPartDraw'){
+   integer(op.bufferIndex,'actor draw buffer',0,1);integer(op.actorIndex,'actor draw index',0,29);
+   integer(op.resourceIndex,'actor draw resource',0,32767);
+   if(![8,12,16,20,24,28,32,36,40].includes(op.partOffset))throw new RangeError('Invalid actor resource part');effects.push(structuredClone(op));
+  }else if(op.kind==='presentationActorMatrixPop'){
+   integer(op.bufferIndex,'actor pop buffer',0,1);effects.push(structuredClone(op));
+  }else if(op.kind==='presentationActorMatrixWrite'||op.kind==='presentationActorMatrixBind'||op.kind==='presentationActorPartBind'){
+   integer(op.bufferIndex,'actor matrix buffer',0,1);integer(op.matrixIndex,'actor matrix index',0,191);
+   if(op.kind==='presentationActorMatrixWrite'){
+    if(op.width!==2&&op.width!==4)throw new RangeError('Invalid actor matrix width');
+    const offset=integer(op.byteOffset,'actor matrix offset',0,64-op.width);
+    if(offset%op.width)throw new RangeError('Invalid actor matrix alignment');
+    integer(op.value,'actor matrix bits',0,op.width===2?65535:0xffffffff);
+   }else{
+    integer(op.actorIndex,'actor matrix bind index',0,29);
+    if(op.kind==='presentationActorPartBind')integer(op.parentMatrixIndex,'actor parent matrix index',0,191);
+   }
+   effects.push(structuredClone(op));
+  }else if(op.kind==='menuWaterMotionWrite'){
+   if(!s.menuWaterMotionWords47c4)throw new TypeError('Supply retained menuWaterMotionWords47c4');
+   const offset=integer(op.byteOffset,'menu water motion offset',0,12);
+   if(op.width!==4||offset%4)throw new RangeError('Invalid menu water motion alignment');
+   s.menuWaterMotionWords47c4[offset/4]=integer(op.value,'menu water motion bits',0,0xffffffff);
+  }else if(op.kind==='waterCellWrite'){
+   integer(op.index,'water cell index',0,49151);integer(op.value,'water cell bits',0,65535);
+   if(!['heightQ','velocityQ'].includes(op.field))throw new RangeError('Invalid water cell field');effects.push(structuredClone(op));
+  }else if(op.kind==='waterPatchRequest'){
+   if(op.playerIndex!==0||op.xNative!==0||op.zNative!==0||op.radius!==16||typeof op.evolve!=='boolean')throw new RangeError('Invalid special water patch');
+   effects.push(structuredClone(op));
+  }else if(op.kind==='cameraEnvironmentWrite'){
+   if(!s.cameraEnvironmentBytesEaa4)throw new TypeError('Supply retained cameraEnvironmentBytesEaa4 before camera updates');
+   if(op.width!==1)throw new RangeError('Invalid camera environment write width');
+   s.cameraEnvironmentBytesEaa4[integer(op.byteOffset,'camera environment offset',0,1)]=integer(op.value,'camera environment byte',0,255);
+  }else if(op.kind==='cameraMatrixRequest'){
+   integer(op.bufferIndex,'camera matrix buffer',0,1);integer(op.cameraIndex,'camera matrix index',0,1);effects.push(structuredClone(op));
   }else if(op.kind==='nameEntryMatrix'){
    integer(op.slot,'name matrix slot',0,15);words(op.matrixWords,'name matrix words',16);effects.push(structuredClone(op));
   }else if(op.kind==='audioEntry'||op.kind==='externalCall')effects.push(structuredClone(op));
@@ -623,14 +897,28 @@ export function prepareNativeRaceStateOperations(state,operations){
  * precede source menu adaptation and are independent of61708's AI selection.
  * All writes, including prior records and counters, commit atomically. */
 export function prepareNativeRaceMenuInputAdvance(state,input={}){
- const next=copy(state);
- if(!next.deviceWords4308||!next.menuWordsE658)throw new TypeError('Supply retained deviceWords4308 and menuWordsE658');
- const deviceBytes4308=Array.from({length:4},(_,port)=>Array.from({length:10},(_,i)=>{
+ const sample=prepareNativeRaceDeviceSampleUpdate(state,input),adapted=prepareNativeRaceMenuInputUpdate(sample.state,input);
+ return freeze({state:adapted.state,operations:[...sample.operations,...adapted.operations],effects:[...sample.effects,...adapted.effects]});
+}
+function deviceBytes(next){
+ return Array.from({length:4},(_,port)=>Array.from({length:10},(_,i)=>{
   const a=port*10+i;return (next.deviceWords4308[a>>>2]>>>(24-(a&3)*8))&255;
  }));
- const sampled=prepareNativeDeviceSample({...input,deviceBytes4308});
- const adapted=prepareNativeMenuInput({...input,deviceBytes4308:sampled.deviceBytes4308,menuWordsE658:next.menuWordsE658});
- const operations=[...sampled.operations,...adapted.operations],effects=apply(next,operations);
+}
+/**4A2B4 sampling is separate from92938 adaptation: scene setup can occur
+ * between them in the common dispatcher without polling a controller twice. */
+export function prepareNativeRaceDeviceSampleUpdate(state,input={}){
+ const next=copy(state);
+ if(!next.deviceWords4308||!next.menuWordsE658)throw new TypeError('Supply retained deviceWords4308 and menuWordsE658');
+ const sampled=prepareNativeDeviceSample({...input,deviceBytes4308:deviceBytes(next)});
+ const operations=sampled.operations,effects=apply(next,operations);
+ return freeze({state:next,operations,effects});
+}
+export function prepareNativeRaceMenuInputUpdate(state,input={}){
+ const next=copy(state);
+ if(!next.deviceWords4308||!next.menuWordsE658)throw new TypeError('Supply retained deviceWords4308 and menuWordsE658');
+ const adapted=prepareNativeMenuInput({...input,deviceBytes4308:deviceBytes(next),menuWordsE658:next.menuWordsE658});
+ const operations=adapted.operations,effects=apply(next,operations);
  return freeze({state:next,operations,effects});
 }
 
@@ -685,6 +973,16 @@ export function prepareNativeRaceRiderResourceConfigurationUpdate(state,input,so
 }
 export function prepareNativeRaceCourseResourceConfigurationUpdate(state,input,sourceViews={}){
  const next=copy(state),prepared=prepareNativeRaceCourseResourceConfiguration(next,input,sourceViews),effects=apply(next,prepared.operations);
+ return freeze({...prepared,state:next,effects});
+}
+
+/** Prepare metadata and its loaded bank as one detached result. The host must
+ * install state and loadedAssetWords together. Large immutable loaded banks
+ * stay outside the per-frame canonical state, which copies retained variables.
+ */
+export function prepareNativeCourseResourceRelocationUpdate(state,input,sourceViews={}){
+ const next=copy(state),prepared=prepareNativeCourseResourceRelocation({resourceWordsE73c:next.resourceWordsE73c,loadedAssetWords:input?.loadedAssetWords},input,sourceViews);
+ const effects=apply(next,prepared.operations.filter(op=>op.kind==='resourceWrite'));
  return freeze({...prepared,state:next,effects});
 }
 
@@ -1014,6 +1312,28 @@ export function prepareNativeRaceWaterInitialization(state,input={}){
   diagnostic:{rngCalls:water.rngCalls}});
 }
 
+/** Full4F9E0 preparation uses retained scene selection and the shared random
+ * stream. Commit returned waterScene together with state at the scene boundary.
+ * Unlike fresh web startup,4F9E0 does not reset forcing phase47C0: the field
+ * host must retain it. Display buffers and the live field are not mutated here.
+ */
+export function prepareNativeRaceWaterSceneInitialization(state,{datumNative}={}){
+ const next=copy(state),waterScene=prepareNativeWaterSceneInitialization({variant:sceneValue(next,'field64c'),
+  players:sceneValue(next,'players'),amplitudeNative:sceneValue(next,'wave49b0'),datumNative,rngState4640:sceneValue(next,'rngState4640')});
+ const operations=[{kind:'sourceWordWrite',field:'rngState4640',value:waterScene.noise.rngState4640}],effects=apply(next,operations);
+ return freeze({state:next,waterScene,operations,effects,diagnostic:{rngCalls:waterScene.noise.rngCalls,liveFieldUpdated:false,forcingPhase47c0Retained:true}});
+}
+
+/** Original course display setup fully overwrites these new owners. It runs
+ * after water setup and before menu cameras; only graphics-buffer consumption
+ * remains external. Supplied scene/HUD aliases cannot override retained state.
+ */
+export function prepareNativeCourseDisplayInitializationUpdate(state,input={}){
+ const next=copy(state),prepared=prepareNativeCourseDisplayInitialization({...input,courseIndex:sceneValue(next,'courseIndex'),main638:sceneValue(next,'main638')});
+ next.courseDisplayWordsB058=Array(136).fill(0);next.courseLightWords4160=Array(3).fill(0);
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
 /** One actual948DC wave-kind selection. Pending60c and the shared32-bit RNG
  * come from canonical scene storage; course tables are explicit readonly data.
  * The enclosing main initializer still owns selecting kind and committing the
@@ -1300,6 +1620,352 @@ export function prepareNativeRaceCourseZeroSequenceDisplayUpdate(state){
  * back into these retained selection/auxiliary/blend fields. */
 export function prepareNativeRaceCameraInputUpdate(state,input={}){
  const next=copy(state),prepared=prepareNativeRaceCameraInput({...input,players:sceneValue(next,'players'),hudWords7788:next.hudWords7788});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
+/** Selected type1 menu-camera setup after water initialization supplies datum.
+ * Canonical scene/player and HUD storage are authoritative. Matrix requests
+ * remain ordered effects; this does not initialize water or advance a frame.
+ */
+export function prepareNativeMenuCameraInitializationUpdate(state,input={}){
+ const next=copy(state),prepared=prepareNativeMenuCameraInitialization({...input,players:sceneValue(next,'players'),hudWords7788:next.hudWords7788});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
+/** Main8 type5 setup consumes the retained class and camera owners. The source
+ * scene initializer calls this after water initialization and body placement.
+ * Effects are prepared atomically; no live physical or graphics owner changes.
+ */
+export function prepareNativeIntroductionCameraInitializationUpdate(state,input={}){
+ const next=copy(state),prepared=prepareNativeIntroductionCameraInitialization({...input,
+  players:sceneValue(next,'players'),main638:sceneValue(next,'main638'),courseIndex:sceneValue(next,'courseIndex'),
+  difficulty:next.profileWordsB330?.[2],hudWords7788:next.hudWords7788});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
+/** DFCB8 script phase only. The main8 host must follow with course effects,
+ * auxiliary camera smoothing and environment/basis/matrix updates in order.
+ */
+export function prepareNativeIntroductionCameraScriptUpdate(state,input={}){
+ const next=copy(state);
+ if(sceneValue(next,'main638')!==8)throw new RangeError('Introduction camera script requires main8');
+ const prepared=prepareNativeIntroductionCameraScript({...input,hudWords7788:next.hudWords7788});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
+export function prepareNativeCameraAuxiliaryMotionUpdate(state,input={}){
+ const next=copy(state),prepared=prepareNativeCameraAuxiliaryMotion({...input,hudWords7788:next.hudWords7788});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
+export function prepareNativeIntroductionFlockUpdate(state,input={}){
+ const next=copy(state);
+ if(sceneValue(next,'main638')!==8)throw new RangeError('Introduction flock requires main8');
+ const prepared=prepareNativeIntroductionFlock({...input,hudWords7788:next.hudWords7788,rngState4640:next.scene.rngState4640});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
+export function prepareNativeIntroductionCourseEffectsUpdate(state,input={}){
+ const next=copy(state);
+ if(sceneValue(next,'main638')!==8)throw new RangeError('Introduction course effects require main8');
+ const prepared=prepareNativeIntroductionCourseEffects({...input,hudWords7788:next.hudWords7788,rngState4640:next.scene.rngState4640,
+  courseIndex:sceneValue(next,'courseIndex'),difficulty:next.profileWordsB330[2]|0});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
+export function prepareNativeIntroductionActorInitializationUpdate(state,input={}){
+ const next=copy(state),prepared=prepareNativeIntroductionActorInitialization({...input,
+  main638:sceneValue(next,'main638'),actorWordsF060:next.actorWordsF060,actorControlWords62c4:next.actorControlWords62c4,
+  players:sceneValue(next,'players'),primaryHumanIndex:sceneValue(next,'primaryHumanIndex'),secondaryHumanIndex:sceneValue(next,'secondaryHumanIndex'),
+  racerRecordWordsBySlot:Array.from({length:4},(_,slot)=>[0,4,0xc,0x2f4].map(offset=>next.raceWords1f94[ri(0x2938+slot*0x378+offset)]))});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
+export function prepareNativeCourseActorInitializationUpdate(state,input={}){
+ const next=copy(state);
+ if(!next.profileWordsB330)throw new TypeError('Supply retained profile before course actor startup');
+ const prepared=prepareNativeCourseActorInitialization({...input,
+  main638:sceneValue(next,'main638'),courseIndex:sceneValue(next,'courseIndex'),mode620:sceneValue(next,'mode620'),
+  profileB340:next.profileWordsB330[4]|0,reverseAB68:sceneValue(next,'reverseDab68')<<16>>16,
+  rngState4640:sceneValue(next,'rngState4640'),audioScene7c9c:sceneValue(next,'audioScene7c9c')>>>0,
+  actorWordsF060:next.actorWordsF060,actorControlWords62c4:next.actorControlWords62c4,actorControlWords62d0:next.actorControlWords62d0,
+  players:sceneValue(next,'players'),primaryHumanIndex:sceneValue(next,'primaryHumanIndex'),secondaryHumanIndex:sceneValue(next,'secondaryHumanIndex'),
+  racerRecordWordsBySlot:Array.from({length:4},(_,slot)=>[0,4,0xc,0x2f4].map(offset=>next.raceWords1f94[ri(0x2938+slot*0x378+offset)]))});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
+export function prepareNativeIntroductionActorsUpdate(state,input={}){
+ const next=copy(state);
+ if(sceneValue(next,'main638')!==8)throw new RangeError('Introduction actors require main8');
+ const prepared=prepareNativeIntroductionActors({...input,hudWords7788:next.hudWords7788,rngState4640:next.scene.rngState4640,
+  actorWordsF060:next.actorWordsF060,actorControlWords62c4:next.actorControlWords62c4,
+  courseIndex:sceneValue(next,'courseIndex'),difficulty:next.profileWordsB330[2]|0,
+  players:sceneValue(next,'players'),primaryHumanIndex:sceneValue(next,'primaryHumanIndex'),secondaryHumanIndex:sceneValue(next,'secondaryHumanIndex'),
+  racerRecordWordsBySlot:Array.from({length:4},(_,slot)=>[0,4,0xc,0x2f4].map(offset=>next.raceWords1f94[ri(0x2938+slot*0x378+offset)]))});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
+export function prepareNativeIntroductionCameraFrameUpdate(state,input={}){
+ const next=copy(state),prepared=prepareNativeIntroductionCameraUpdate({...input,
+  main638:sceneValue(next,'main638'),players:sceneValue(next,'players'),hudWords7788:next.hudWords7788,rngState4640:next.scene.rngState4640,
+  actorWordsF060:next.actorWordsF060,actorControlWords62c4:next.actorControlWords62c4,cameraEnvironmentBytesEaa4:next.cameraEnvironmentBytesEaa4,
+  courseIndex:sceneValue(next,'courseIndex'),difficulty:next.profileWordsB330[2]|0,
+  primaryHumanIndex:sceneValue(next,'primaryHumanIndex'),secondaryHumanIndex:sceneValue(next,'secondaryHumanIndex'),
+  racerRecordWordsBySlot:Array.from({length:4},(_,slot)=>[0,4,0xc,0x2f4].map(offset=>next.raceWords1f94[ri(0x2938+slot*0x378+offset)]))});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
+/** Numeric boundaries around actor drawing. The display scheduler must call
+ * bounds before drawing and retirement after it, not during camera submission.
+ */
+export function prepareNativePresentationActorDisplayBoundary(state,{phase}={}){
+ const next=copy(state),prepare=phase==='bounds'?prepareNativePresentationActorBounds:phase==='retire'?prepareNativePresentationActorRetirement:null;
+ if(!prepare)throw new RangeError('Supply actor display boundary bounds or retire');
+ const prepared=prepare({actorWordsF060:next.actorWordsF060,actorControlWords62c4:next.actorControlWords62c4});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
+export function prepareNativePresentationActorVisibilityUpdate(state,input={}){
+ const next=copy(state),prepared=prepareNativePresentationActorVisibility({...input,
+  actorWordsF060:next.actorWordsF060,hudWords7788:next.hudWords7788,cameraIndex:next.scene.displayCamera3930});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
+export function prepareNativePresentationActorRootMatrixUpdate(state,input={}){
+ const next=copy(state),prepared=prepareNativePresentationActorRootMatrix({...input,
+  actorWordsF060:next.actorWordsF060,bufferIndex:next.graphicsCorners?.renderBufferIndex});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
+/** Original bird animation uses the retained signed E774/E76E resource selector,
+ * E624 activity flag and active graphics buffer. The host supplies decoded
+ * animation resources by index, not substitute frame timing or selection.
+ */
+export function prepareNativePresentationWingAnimationUpdate(state,input={}){
+ const next=copy(state);
+ if(!next.resourceWordsE73c)throw new TypeError('Supply retained resourceWordsE73c before wing animation');
+ if(!next.actorWordsF060)throw new TypeError('Supply retained actorWordsF060 before wing animation');
+ const actorIndex=integer(input.actorIndex,'wing actor index',0,29),base=actorIndex*47;
+ const drawType=(next.actorWordsF060[base]+next.actorWordsF060[base+1])|0;
+ if(drawType!==1&&drawType!==3)throw new RangeError('Actor does not select a wing draw type');
+ const resourceIndex=drawType===1?next.resourceWordsE73c[14]>>16:(next.resourceWordsE73c[12]<<16)>>16;
+ const prepared=prepareNativePresentationWingAnimation({...input,
+  actorIndex,drawType,actorWordsF060:next.actorWordsF060,resourceWordsE73c:next.resourceWordsE73c,bufferIndex:next.graphicsCorners?.renderBufferIndex,
+  activity624:sceneValue(next,'activity624'),resourceIndex,animation:input.animationResourcesByIndex?.[resourceIndex]});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
+export function prepareNativePresentationStaticActorUpdate(state,input={}){
+ const next=copy(state);
+ if(!next.resourceWordsE73c||!next.actorWordsF060)throw new TypeError('Supply retained resource and actor owners before static drawing');
+ const actorIndex=integer(input.actorIndex,'static actor index',0,29),base=actorIndex*47;
+ const drawType=(next.actorWordsF060[base]+next.actorWordsF060[base+1])|0;
+ if(drawType!==2&&drawType!==4)throw new RangeError('Actor does not select a static draw type');
+ const resourceIndex=drawType===2?next.resourceWordsE73c[14]>>16:(next.resourceWordsE73c[12]<<16)>>16;
+ const prepared=prepareNativePresentationStaticActor({...input,actorIndex,drawType,resourceIndex,
+  actorWordsF060:next.actorWordsF060,bufferIndex:next.graphicsCorners?.renderBufferIndex});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
+/** The selected resource owns several animations. Selection uses retained74
+ * before any reset, while draw type, activity, course and count remain canonical.
+ */
+export function prepareNativePresentationArticulatedActorUpdate(state,input={}){
+ const next=copy(state);
+ if(!next.resourceWordsE73c||!next.actorWordsF060)throw new TypeError('Supply retained resource and actor owners before articulated drawing');
+ const actorIndex=integer(input.actorIndex,'articulated actor index',0,29),base=actorIndex*47;
+ const drawType=(next.actorWordsF060[base]+next.actorWordsF060[base+1])|0;
+ if(drawType<5||drawType>10)throw new RangeError('Actor does not select an articulated draw type');
+ const resourceIndex=drawType===5?(next.resourceWordsE73c[11]<<16)>>16:next.resourceWordsE73c[drawType===6?11:drawType===10?13:12]>>16;
+ const prepared=prepareNativePresentationArticulatedActor({...input,actorIndex,drawType,resourceIndex,
+  actorWordsF060:next.actorWordsF060,resourceWordsE73c:next.resourceWordsE73c,bufferIndex:next.graphicsCorners?.renderBufferIndex,
+  activity624:sceneValue(next,'activity624'),courseIndex:sceneValue(next,'courseIndex'),championshipCountAa00:next.scene.championshipCountAa00,
+  animationsByIndex:input.animationsByResourceIndex?.[resourceIndex]});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
+export function prepareNativePresentationSpecialActorUpdate(state,input={}){
+ const next=copy(state);
+ if(!next.resourceWordsE73c||!next.actorWordsF060)throw new TypeError('Supply retained resource and actor owners before special drawing');
+ const actorIndex=integer(input.actorIndex,'special actor index',0,29),base=actorIndex*47;
+ const drawType=(next.actorWordsF060[base]+next.actorWordsF060[base+1])|0;
+ if(drawType!==12&&drawType!==13)throw new RangeError('Actor does not select a special draw type');
+ const resourceIndex=drawType===12?(next.resourceWordsE73c[14]<<16)>>16:next.resourceWordsE73c[15]>>16;
+ const prepared=prepareNativePresentationSpecialActor({...input,actorIndex,drawType,resourceIndex,
+  actorWordsF060:next.actorWordsF060,resourceWordsE73c:next.resourceWordsE73c,bufferIndex:next.graphicsCorners?.renderBufferIndex,
+  activity624:sceneValue(next,'activity624'),animationsByIndex:input.animationsByResourceIndex?.[resourceIndex]});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
+export function prepareNativePresentationEffectsInitializationUpdate(state,input={}){
+ const next=copy(state),prepared=prepareNativePresentationEffectsInitialization({...input,
+  effectWords0790:next.effectWords0790,effectControlWords6d60:next.effectControlWords6d60,actorWordsF060:next.actorWordsF060,
+  courseIndex:sceneValue(next,'courseIndex'),racerCount:sceneValue(next,'racerCount')});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
+export function prepareNativeSceneGraphicsFrameUpdate(state){
+ const next=copy(state),prepared=prepareNativeSceneGraphicsFrame(next.scene);
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
+export function prepareNativePresentationEffectsFrameUpdate(state,input={}){
+ const next=copy(state),prepared=prepareNativePresentationEffectsFrame({...input,
+  effectWords0790:next.effectWords0790,effectControlWords6d60:next.effectControlWords6d60,actorWordsF060:next.actorWordsF060,hudWords7788:next.hudWords7788,
+  players:sceneValue(next,'players'),racerCount:sceneValue(next,'racerCount'),main638:sceneValue(next,'main638'),activity624:sceneValue(next,'activity624'),
+  primaryHumanIndex:sceneValue(next,'primaryHumanIndex'),secondaryHumanIndex:sceneValue(next,'secondaryHumanIndex'),
+  displayCamera3930:next.scene.displayCamera3930,displayCamera3934:next.scene.displayCamera3934,
+  frameCounter:sceneValue(next,'ambientD4b00'),seed6f00:sceneValue(next,'seed6f00'),bufferIndex:nativeSceneGraphicsBufferIndex(next.scene.graphicsPointerE948),
+  record2f4BySlot:Array.from({length:4},(_,slot)=>next.raceWords1f94[ri(0x2938+slot*0x378+0x2f4)]|0)});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
+export function prepareNativePresentationEffectsDisplayUpdate(state,input={}){
+ const next=copy(state),prepared=prepareNativePresentationEffectsDisplay({...input,
+  effectWords0790:next.effectWords0790,effectControlWords6d60:next.effectControlWords6d60,hudWords7788:next.hudWords7788,
+  bufferIndex:nativeSceneGraphicsBufferIndex(next.scene.graphicsPointerE948),graphicsPointerE94c:next.scene.graphicsPointerE94c,
+  matrixCountE950:sceneValue(next,'matrixCountE950'),fieldAb2c:sceneValue(next,'fieldAb2c'),players:sceneValue(next,'players'),main638:sceneValue(next,'main638'),
+  primaryHumanIndex:sceneValue(next,'primaryHumanIndex'),frameCounter:sceneValue(next,'ambientD4b00'),
+  displayCamera3930:next.scene.displayCamera3930,displayCamera3934:next.scene.displayCamera3934});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
+export function prepareNativeTransientDisplayUpdate(state){
+ const next=copy(state),prepared=prepareNativeTransientDisplay({effectWords0790:next.effectWords0790,effectControlWords6d60:next.effectControlWords6d60,
+  hudWords7788:next.hudWords7788,bufferIndex:nativeSceneGraphicsBufferIndex(next.scene.graphicsPointerE948),fieldAb2c:sceneValue(next,'fieldAb2c'),
+  displayCamera3930:next.scene.displayCamera3930,displayCamera3934:next.scene.displayCamera3934,matrixCountE950:sceneValue(next,'matrixCountE950')});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
+export function prepareNativeTransientEffectsUpdate(state){
+ const next=copy(state),prepared=prepareNativeTransientEffects({effectWords0790:next.effectWords0790,seed6f00:sceneValue(next,'seed6f00')});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
+export function prepareNativeSprayUpdateState(state,input={}){
+ const next=copy(state),slot=integer(input.racerIndex,'spray racer',0,3),prepared=prepareNativeSprayUpdate({...input,
+  effectWords0790:next.effectWords0790,effectControlWords6d60:next.effectControlWords6d60,hudWords7788:next.hudWords7788,
+  players:sceneValue(next,'players'),racerCount:sceneValue(next,'racerCount'),main638:sceneValue(next,'main638'),
+  primaryHumanIndex:sceneValue(next,'primaryHumanIndex'),secondaryHumanIndex:sceneValue(next,'secondaryHumanIndex'),
+  frameCounter:sceneValue(next,'ambientD4b00'),seed6f00:sceneValue(next,'seed6f00'),record2f4:next.raceWords1f94[ri(0x2938+slot*0x378+0x2f4)]|0,
+  bodyC66:nativeEffectEngineMask(input,slot)});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
+export function prepareNativeEffectGeometryUpdate(state,input={}){
+ const next=copy(state),prepared=prepareNativeEffectGeometry({...input,effectWords0790:next.effectWords0790,
+  effectControlWords6d60:next.effectControlWords6d60,hudWords7788:next.hudWords7788,bufferIndex:nativeSceneGraphicsBufferIndex(next.scene.graphicsPointerE948),
+  players:sceneValue(next,'players'),racerCount:sceneValue(next,'racerCount'),primaryHumanIndex:sceneValue(next,'primaryHumanIndex')});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
+export function prepareNativePresentationEffectInputsUpdate(state,input={}){
+ const next=copy(state),prepared=prepareNativePresentationEffectInputs({...input,
+  effectWords0790:next.effectWords0790,actorWordsF060:next.actorWordsF060,racerCount:sceneValue(next,'racerCount')});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
+export function prepareNativePresentationLightingUpdate(state){
+ const next=copy(state),viewIndex=integer(sceneValue(next,'fieldAb2c'),'lighting view',0,1),courseIndex=sceneValue(next,'courseIndex');
+ if(courseIndex===6&&!next.aiWords3c60)throw new TypeError('Supply retained aiWords3c60 for course lighting');
+ const prepared=prepareNativePresentationLighting({bufferIndex:next.graphicsCorners?.renderBufferIndex,viewIndex,courseIndex,
+  courseDisplayWordsB058:next.courseDisplayWordsB058,aiLightActive78:next.aiWords3c60?.[(viewIndex*0xe8+0x78)/4]});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
+export function prepareNativeSwimmingActorMotionUpdate(state,input={}){
+ const next=copy(state),prepared=prepareNativeSwimmingActorMotion({...input,
+  actorWordsF060:next.actorWordsF060,hudWords7788:next.hudWords7788,
+  cameraIndex:sceneValue(next,'displayCamera3930'),activity624:sceneValue(next,'activity624'),rngState4640:sceneValue(next,'rngState4640')});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
+/** Compose recovered motion against a detached canonical owner. Every actor
+ * sees prior actors' RNG writes; pending consumers must provide their real
+ * prepared operations. The live host must not admit an incomplete registry.
+ */
+export function prepareNativeCourseActorFrameUpdate(state,input={}){
+ const next=copy(state),prepared=prepareNativeCourseActorFrame({...input,
+  actorWordsF060:next.actorWordsF060,actorControlWords62c4:next.actorControlWords62c4,
+  courseIndex:sceneValue(next,'courseIndex'),activity624:sceneValue(next,'activity624'),players:sceneValue(next,'players'),
+  primaryHumanIndex:sceneValue(next,'primaryHumanIndex'),secondaryHumanIndex:sceneValue(next,'secondaryHumanIndex'),
+  racerRecordWordsBySlot:Array.from({length:4},(_,slot)=>[0,4,0xc,0x2f4].map(offset=>next.raceWords1f94[ri(0x2938+slot*0x378+offset)])),
+  consumeMotion:call=>{
+   next.actorWordsF060=[...call.actorWordsF060];next.actorControlWords62c4=[...call.actorControlWords62c4];
+   let motion;
+   if(call.consumer==='800bf8c8')motion=prepareNativeCourseBirdAudio({random4562c:input.random4562c});
+   else if(call.consumer==='800c1268')motion=prepareNativeDolphinAudio({actorWordsF060:next.actorWordsF060,audioContext:input.audioContext});
+   else if(call.consumer==='800a68a4')motion=prepareNativeDolphinActorMotion({...input,actorIndex:call.actorIndex,
+    actorWordsF060:next.actorWordsF060,actorControlWords62c4:next.actorControlWords62c4,actorControlWords62d0:next.actorControlWords62d0,
+    hudWords7788:next.hudWords7788,resourceWordsE73c:next.resourceWordsE73c,
+    cameraIndex:sceneValue(next,'displayCamera3930'),state650:sceneValue(next,'phase650'),activity624:sceneValue(next,'activity624'),
+    mode620:sceneValue(next,'mode620'),championshipCountAa00:next.scene.championshipCountAa00,secondaryCount:next.scene.secondaryCount});
+   else if(call.consumer==='800a5c74')motion=prepareNativeIceActorAudio({entry:call.consumer,
+    actorWordsF060:next.actorWordsF060,hudWords7788:next.hudWords7788,cameraIndex:sceneValue(next,'displayCamera3930'),
+    audioScene7c9c:sceneValue(next,'audioScene7c9c')});
+   else if(call.consumer==='800aaac8')motion=prepareNativeIceActorMotion({...input,actorIndex:call.actorIndex,
+    actorWordsF060:next.actorWordsF060,audioScene7c9c:sceneValue(next,'audioScene7c9c'),
+    activity624:sceneValue(next,'activity624'),rngState4640:sceneValue(next,'rngState4640')});
+   else if(call.consumer==='800a93c8'||call.consumer==='800ab890')motion=prepareNativeSpecialCourseActorMotion({...input,entry:call.consumer,actorIndex:call.actorIndex,
+    actorWordsF060:next.actorWordsF060,actorControlWords62c4:next.actorControlWords62c4,hudWords7788:next.hudWords7788,
+    cameraIndex:sceneValue(next,'displayCamera3930'),state650:sceneValue(next,'phase650'),activity624:sceneValue(next,'activity624'),
+    reverse:sceneValue(next,'reverseDab68')<<16>>16,audioScene7c9c:sceneValue(next,'audioScene7c9c')});
+   else if(call.consumer==='800a9130'||call.consumer==='800ab25c')motion=prepareNativeFollowingActorMotion({...input,entry:call.consumer,actorIndex:call.actorIndex,
+    actorWordsF060:next.actorWordsF060,actorControlWords62c4:next.actorControlWords62c4,hudWords7788:next.hudWords7788,
+    cameraIndex:sceneValue(next,'displayCamera3930'),state650:sceneValue(next,'phase650'),activity624:sceneValue(next,'activity624'),
+    configuredLaps728:sceneValue(next,'configuredLaps728'),reverse:sceneValue(next,'reverseDab68')<<16>>16});
+   else if(call.consumer==='800a5d70')motion=prepareNativeSwimmingActorMotion({...input,actorIndex:call.actorIndex,
+    actorWordsF060:next.actorWordsF060,hudWords7788:next.hudWords7788,cameraIndex:sceneValue(next,'displayCamera3930'),
+    activity624:sceneValue(next,'activity624'),rngState4640:sceneValue(next,'rngState4640')});
+   else if(call.consumer==='800a9494')motion=prepareNativeCourseBirdMotion({...input,actorIndex:call.actorIndex,
+    actorWordsF060:next.actorWordsF060,courseIndex:sceneValue(next,'courseIndex'),
+    activity624:sceneValue(next,'activity624'),rngState4640:sceneValue(next,'rngState4640')});
+   else if(call.consumer==='800a9d48')motion=prepareNativePerchingBirdMotion({...input,actorIndex:call.actorIndex,
+    actorWordsF060:next.actorWordsF060,objectWordsC940:next.objectWordsC940,
+    courseIndex:sceneValue(next,'courseIndex'),mode620:sceneValue(next,'mode620'),
+    activity624:sceneValue(next,'activity624'),rngState4640:sceneValue(next,'rngState4640')});
+   else{
+    if(typeof input.consumeMotion!=='function')throw new TypeError(`Missing recovered actor consumer ${call.consumer}`);
+    motion=input.consumeMotion({...call,state:freeze(copy(next))});
+    if(!motion||!Array.isArray(motion.operations))throw new TypeError(`Invalid recovered actor consumer ${call.consumer}`);
+   }
+   apply(next,motion.operations);return motion;
+  }});
+ // Replay absolute numeric stores into the detached owner and collect effects
+ // once. No audio/render command executes during either preparation phase.
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
+export function prepareNativePresentationActorDisplayUpdate(state,input={}){
+ const next=copy(state),viewIndex=integer(sceneValue(next,'fieldAb2c'),'actor lighting view',0,1),courseIndex=sceneValue(next,'courseIndex');
+ if(courseIndex===6&&!next.aiWords3c60)throw new TypeError('Supply retained aiWords3c60 for actor lighting');
+ const prepared=prepareNativePresentationActorDisplay({...input,bufferIndex:next.graphicsCorners?.renderBufferIndex,viewIndex,courseIndex,
+  courseDisplayWordsB058:next.courseDisplayWordsB058,aiLightActive78:next.aiWords3c60?.[(viewIndex*0xe8+0x78)/4],
+  actorDisplayPhase62c0:sceneValue(next,'actorDisplayPhase62c0'),actorWordsF060:next.actorWordsF060,actorControlWords62c4:next.actorControlWords62c4,
+  resourceWordsE73c:next.resourceWordsE73c,hudWords7788:next.hudWords7788,cameraIndex:next.scene.displayCamera3930,
+  activity624:sceneValue(next,'activity624'),championshipCountAa00:next.scene.championshipCountAa00});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
+/** One original main9 camera frame. Camera/environment owners come from the
+ * retained state; the host supplies the actual water datum and active buffer.
+ * No ordinary race input, physical world or water clock advances here.
+ */
+export function prepareNativeMenuCameraFrameUpdate(state,input={}){
+ const next=copy(state),prepared=prepareNativeMenuCameraUpdate({...input,
+  players:sceneValue(next,'players'),main638:sceneValue(next,'main638'),hudWords7788:next.hudWords7788,
+  cameraEnvironmentBytesEaa4:next.cameraEnvironmentBytesEaa4});
+ const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
+}
+
+/** Special menu motion and shared RNG preparation. The returned field effects
+ * must be committed with this state before standings consumes the frame.
+ * This does not run the race water/physics coordinator or course rollers.
+ */
+export function prepareNativeSpecialWaterFrameUpdate(state,input={}){
+ const next=copy(state),prepared=prepareNativeSpecialWaterUpdate({...input,
+  main638:sceneValue(next,'main638'),simulation648:sceneValue(next,'simulation648'),field64c:sceneValue(next,'field64c'),
+  motionWords47c4:next.menuWaterMotionWords47c4,rngState4640:next.scene.rngState4640});
  const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});
 }
 

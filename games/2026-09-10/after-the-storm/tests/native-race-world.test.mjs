@@ -20,6 +20,24 @@ function make(count=1,{humanIndices=[0],contacts=[],initialNoise=true,afterFrame
 }
 const near=(a,b,e=1e-10)=>assert.ok(Math.abs(a-b)<e,`${a} != ${b}`);
 
+test('body boundary stage precedes each descending summary and actor, including simulation0',()=>{
+ for(const simulationState of [0,3]){
+  const w=make(4,{sourceState:{simulationState}}),calls=[];
+  w.beforeBody=(world,{racerIndex,logicalFrame})=>{
+   assert.equal(world.adapters[racerIndex].logicalFrames,logicalFrame-1);
+   assert.ok(world.adapters.every(a=>a.hull.ticks===(simulationState?5:0)));calls.push(`body:${racerIndex}`);
+  };
+  w.beforeActor=(world,{racerIndex,logicalFrame})=>{
+   assert.equal(world.adapters[racerIndex].logicalFrames,logicalFrame);calls.push(`actor:${racerIndex}`);
+  };
+  w.beforeWater=()=>calls.push('water');
+  stepNativeRaceWorld(w,.04,[{},{},{},{}]);assert.deepEqual(calls,[]);
+  stepNativeRaceWorld(w,1,null,{active:false});assert.deepEqual(calls,[]);
+  stepNativeRaceWorld(w,.01,[{},{},{},{}]);
+  assert.deepEqual(calls,[...[3,2,1,0].flatMap(i=>[`body:${i}`,`actor:${i}`]),'water']);
+ }
+});
+
 test('course tide runs after every actor and before water once per50ms, independent of rendering',()=>{
  const histories=[];
  for(const hz of [30,60,144]){

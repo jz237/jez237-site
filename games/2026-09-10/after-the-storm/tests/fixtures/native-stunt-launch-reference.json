@@ -7,7 +7,7 @@
       "stage": "start-cross",
       "hashes": {
         "raceWords1f94": "21edb64a43cf050c7fd0a78fe1fe348f596296bcf0667c3ab4ed4bc8a17a865a",
-        "hudWords7788": "2cbdc76d8e691fbc176548eb7b5774d95afa1764a0d67fbe20c78ec653a48fb0"
+        "hudWords7788": "75e317097c38de439b4ea3eedd38a07b4daaace967a77ce03b22b4b17f72d6e4"
       },
       "effects": [],
       "instructions": 1665
@@ -18,7 +18,7 @@
       "stage": "checkpoint",
       "hashes": {
         "raceWords1f94": "7bf80c951ff0af6a05b2bdfe18deb94934b0a74eacb8247b9b7cc15eeb5d462d",
-        "hudWords7788": "d2f856b01b8030b18bf5714e4aef8f8ebcb9c540b0f5e325ad805cd71e3189c1"
+        "hudWords7788": "c85d4d46ce210a0d088fd6696f2350cbfacb3735bdf1bf1dd9dc855538243da6"
       },
       "effects": [
         {
@@ -38,7 +38,7 @@
       "stage": "checkpoint",
       "hashes": {
         "raceWords1f94": "d4ed97fd7e44972f051c9a23f012c5f519fd247ccc22dd2b788fb4cf2ed22c94",
-        "hudWords7788": "37cef10f503cdfcefe9c199eb96f3a72967757fef8605d53f091f353a4720a67"
+        "hudWords7788": "33f3dce929515767364e0f1da4d53ce3b26bd069df426eecbafcd960067dfc59"
       },
       "effects": [
         {
@@ -58,7 +58,7 @@
       "stage": "checkpoint",
       "hashes": {
         "raceWords1f94": "10cbdf6a6c12e6eeeca612b5facc648a74c496dc1e1c4c69def81ee3c9845a25",
-        "hudWords7788": "0e59fa8ee5eb7a772aea2c993b5786bf650fbe4a78c9d11a9dbb9010aa3a08a4"
+        "hudWords7788": "f16e4a288b41c48a7673837ad2a313bfa3c1a011b510cf525daabb66ada695f0"
       },
       "effects": [
         {
@@ -78,7 +78,7 @@
       "stage": "finish",
       "hashes": {
         "raceWords1f94": "338401a21ce6e0297edd560ad7643f6d43b7327fa32e892b526102fd19925354",
-        "hudWords7788": "c8510114749889f7ec7b9ab861a862caf3823a17b0a6a7abcc5124eab8f9ed9e"
+        "hudWords7788": "b8b35ffe49eebb57b81e61c7662fc5a675636151154712c2b1c22af28b5bef8a"
       },
       "effects": [
         {
@@ -105,7 +105,7 @@
       "stage": "delayed-bonus",
       "hashes": {
         "raceWords1f94": "dc8db0cd7d6f227a3fac8ac6a0c495f70f41853102a42798761b5b53d9c8cec6",
-        "hudWords7788": "7c73fc513e4c778bbe7cd9c3a9956a1a73c35a827cdc3846781cb74c13fb3969"
+        "hudWords7788": "aedf58e58630ae058cb09310e9806a72afec451cc267c0a58c7da15a88958267"
       },
       "effects": [],
       "instructions": 1479
@@ -116,7 +116,7 @@
       "stage": "record",
       "hashes": {
         "raceWords1f94": "0f2f1a321e2bce95243f7a611cf37ab6e05cb05d473b0a8b1f44cb660b9669e8",
-        "hudWords7788": "b894e90ff2d1b6278878d3622b207a5153b95238719ffc0dcd665163e8ad299a"
+        "hudWords7788": "1b2196011d74b91fd862f47704fb9ebc1dc96869cfa167d306830f3088f3e515"
       },
       "effects": [],
       "instructions": 1427
@@ -127,7 +127,7 @@
       "stage": "start-cross",
       "hashes": {
         "raceWords1f94": "14e0b8abd11d68c941eb85f4f3c8e825b66377f124f45d93e9b8a620fd2058bc",
-        "hudWords7788": "49d19c3cf4d572b75a8362f56dd4d5ddf42562493972e6969c0c55523cf7ced4"
+        "hudWords7788": "721fe3393be4fd6e5ebfb3d0f891bbcc94f30a88d4e64b4d8fa3ce0b40f4db7a"
       },
       "effects": [],
       "instructions": 1811
@@ -138,7 +138,7 @@
       "stage": "checkpoint",
       "hashes": {
         "raceWords1f94": "3fea268ccacc63bba726905736ad425ae5da3aaa167b6d2cdeadb216c835a4ac",
-        "hudWords7788": "df15039bafa7698fcd0557c09e63e27774ed02d721f1bf7e9383f732f1e57680"
+        "hudWords7788": "82a7f1bead26bb30584db2f2b455dbce774a69e657336f68217e2fdf474b8b3e"
       },
       "effects": [
         {
@@ -158,7 +158,7 @@
       "stage": "checkpoint",
       "hashes": {
         "raceWords1f94": "6dcf7f126df7c16a971898f7c15a7b46669d133f2acc35aa63e2ffad43eba272",
-        "hudWords7788": "ecfbe441cff257231ffab7af245b33e3e85d6ee89223f4c2490803295dda4f4a"
+        "hudWords7788": "68f71b4413582e525b6f873b71e01b54bb9fda58be41b071c650aca3e1ccc525"
       },
       "effects": [
         {
@@ -178,7 +178,7 @@
       "stage": "checkpoint",
       "hashes": {
         "raceWords1f94": "0045751f052522239d9743c403d6e408174f78de05e0c05449028696bb8ea192",
-        "hudWords7788": "0b5cec8f16cbe8db920facc8facd85ec0e24bf3200fedb9685e6a8b6117d951e"
+        "hudWords7788": "5d5f27c8d52047368c4cf8508c790cb849ff349467a55bfebfb583d3deb32848"
       },
       "effects": [
         {
@@ -198,7 +198,7 @@
       "stage": "finish",
       "hashes": {
         "raceWords1f94": "364e0db1687f3a5b17c301015bced9290a31820dc12a9445cec7f35e98ac36f5",
-        "hudWords7788": "69804f1d7e83090e598a1c011b4b0b245a6e7a9a64fe2efc5957187d72ed25b4"
+        "hudWords7788": "b132dc5d79d7350950440552db3f56bc56cebb157bef0fd9d78b081776f530b1"
       },
       "effects": [
         {
@@ -225,7 +225,7 @@
       "stage": "delayed-bonus",
       "hashes": {
         "raceWords1f94": "dece31503c3487cdc7ecb4445e3f8575595380c3ad50e596eb3fbaf1563b5f07",
-        "hudWords7788": "8a3a4cf459137f5b4fa80a22ef3de3da8f6c8248f5902035aef41e9ab22e9fe8"
+        "hudWords7788": "e88dbfdce192ef0e9ef6bb7b0bacbd10d25162184dcf504178687bde92841359"
       },
       "effects": [],
       "instructions": 1481
@@ -236,7 +236,7 @@
       "stage": "record",
       "hashes": {
         "raceWords1f94": "40eebaa9359d02b72d6254594a0ab8e32f40b7fb2f98f91b55ed3589f07e3420",
-        "hudWords7788": "148518a16e237063af5021474bb7b1d01ae730ec0916f3f0d9bdf364f190c9ac"
+        "hudWords7788": "3e15f815cae38c7a26ab4a07f025bd79d494b66f2007252f6ec1270495546efc"
       },
       "effects": [],
       "instructions": 1429
@@ -247,7 +247,7 @@
       "stage": "start-cross",
       "hashes": {
         "raceWords1f94": "f863dfdf6c5884dd00091bd3849f9856e764930ac6bcbdd4512f322f1938bbcf",
-        "hudWords7788": "7797239e1a7b5f78e84402f400a60d4b169b935fb7824f9420b6b783d489d0f1"
+        "hudWords7788": "1de4933216c450fca1710dc2d134fd6e3671bd2c532eafbd1d7c1bedf00a2ad6"
       },
       "effects": [],
       "instructions": 1729
@@ -258,7 +258,7 @@
       "stage": "checkpoint",
       "hashes": {
         "raceWords1f94": "86c38c213fa0395d35506965b709710bd39711935ff4d3cdd8941a9ef3683900",
-        "hudWords7788": "313b519384a47edb7b0446c7b876144d2111c2ddb75fa20bbac0817d294599e1"
+        "hudWords7788": "c95c0708636292239dd4fc588ab1dfde6d1f0eba5ff0a5a067390ee56f7c3aca"
       },
       "effects": [
         {
@@ -278,7 +278,7 @@
       "stage": "checkpoint",
       "hashes": {
         "raceWords1f94": "1caaf36f5dd14e189695c1ba55247f3c22dd2cd2abcff8b4b8a2231036015687",
-        "hudWords7788": "6be03e0a50f3b7eb69e5858722ff5a2a178be7ed9d818207fc7a9deae46defa9"
+        "hudWords7788": "6b2cedbe71547bb54b234e55fced07231f510bfc703f24c136ad87bbca67a33e"
       },
       "effects": [
         {
@@ -298,7 +298,7 @@
       "stage": "checkpoint",
       "hashes": {
         "raceWords1f94": "8aa0cbff77de2b1a8848b5f42c25a9dce950e877841571a527cd0bacca6b750a",
-        "hudWords7788": "4a4c11f2450bd7d254de2db4662361886587df0b97146426a58360c8c590af60"
+        "hudWords7788": "b713d1695dadc98c243ede239c12154947acac0c4ac6b567a91618aafb5f1601"
       },
       "effects": [
         {
@@ -318,7 +318,7 @@
       "stage": "finish",
       "hashes": {
         "raceWords1f94": "445753d4449d89b694d28349a1ebbd166956e0472f72f14c725972359c6563b0",
-        "hudWords7788": "aab5ad25a95fd6be462a2a9131cd4e80e234618bb115ae2815601f0cf7d45c01"
+        "hudWords7788": "c67279359c1c9d00b16200140723edab78d714cb821cc480368b3a031f21307f"
       },
       "effects": [
         {
@@ -345,7 +345,7 @@
       "stage": "delayed-bonus",
       "hashes": {
         "raceWords1f94": "4d7a195a9937b4270f2b14e8964c9c8a2d6a13f850b4a820c1fe64d3a75c96f9",
-        "hudWords7788": "29c9e9e150df8ba271503362821bcf86e6469c21cf81a4d1c326b7be318b9903"
+        "hudWords7788": "9fdca6aba54d00feed72748c544492dc47ce320670399a77316600824010fd3c"
       },
       "effects": [],
       "instructions": 1474
@@ -356,7 +356,7 @@
       "stage": "record",
       "hashes": {
         "raceWords1f94": "8a4e958d8a31e874bcd5844042cce118e2c183ee400e689eb47720e3f85a1971",
-        "hudWords7788": "df38f442469e2fb4d8459c85f0ff14ec615caf858a2890b216beeaabcb0ad8dc"
+        "hudWords7788": "bc7a301060d1f26b75ea6eca6453ffdc9e0c98044c7559e5df574f36700a888a"
       },
       "effects": [],
       "instructions": 1425
@@ -367,7 +367,7 @@
       "stage": "start-cross",
       "hashes": {
         "raceWords1f94": "fea3d8ec855c3a140639bb512e3e00e07e3d39e26ac7f08e7e073fc7c43ffc0c",
-        "hudWords7788": "fe0855b361c654e9038cf863b4a3e454800f772118f9dabbaf7bc9ea5aa78503"
+        "hudWords7788": "4433732b4261418d82f0360862e1a690db114439a6100955c5ccf47432746e97"
       },
       "effects": [],
       "instructions": 1773
@@ -378,7 +378,7 @@
       "stage": "checkpoint",
       "hashes": {
         "raceWords1f94": "63964a573be119ff422442a73d26ed053606e9f49c9393c06f07a18225f86be1",
-        "hudWords7788": "b0a97f55bfca4452f8bf6ce19009831c10e306b9373a24009c09545e51b71192"
+        "hudWords7788": "00732e1dda18f6229b66b792e1489b22d2272682d70dc1e038e41f47e8f35503"
       },
       "effects": [
         {
@@ -398,7 +398,7 @@
       "stage": "checkpoint",
       "hashes": {
         "raceWords1f94": "92c46bfa6e728c14685b3e2eb3933ee1b8ec042ce3f8c78fe59f5642066ed10d",
-        "hudWords7788": "a10978b318a58c9629088eb079e7c61f055d850e10626c455c98dea61211372f"
+        "hudWords7788": "b6a761658e32bfddbef7fe2bb113e41c697de6b6fb5cd4aff90b0ee54dda924d"
       },
       "effects": [
         {
@@ -418,7 +418,7 @@
       "stage": "checkpoint",
       "hashes": {
         "raceWords1f94": "3b60102701211fa2af61ed4f0ce5b3888c817303ae4cb595c95c903609940e82",
-        "hudWords7788": "c5fb69c6b5835fe1e8d9facb2ccb3193e58a67773b65bd26aee93fb168bb6b38"
+        "hudWords7788": "04a0d254b047104ca1ec4e0d6ccdf94591c7dedcea73c8d30e3fe7cfc369cd2c"
       },
       "effects": [
         {
@@ -438,7 +438,7 @@
       "stage": "finish",
       "hashes": {
         "raceWords1f94": "a9b6b401ab692ff471a5efce19044838eff83481a8e478498ab909560479b336",
-        "hudWords7788": "2a888d6ab4b27dd43f17303653089696aa3aa5a7adfa289764b30e7b36e54015"
+        "hudWords7788": "571fd1cf39e482b5265f7dffa6ecfbb13d20a338642ce937f67cd556b2a76f43"
       },
       "effects": [
         {
@@ -465,7 +465,7 @@
       "stage": "delayed-bonus",
       "hashes": {
         "raceWords1f94": "77212e563bebcbab551b178d6d3bbd944df2b287a4fd499c7a8308381d9c8d9d",
-        "hudWords7788": "1fa7cce830323e93ca7296a145e73cef7584ed4d05e35e1f6f458cb7fb8ac6cf"
+        "hudWords7788": "ad8789ae3fb47afc509a883552c798ce68c65a0e0574858121bbd821839b8f3f"
       },
       "effects": [],
       "instructions": 1507
@@ -476,7 +476,7 @@
       "stage": "record",
       "hashes": {
         "raceWords1f94": "c66dd526fa27c8ad7c679c5928649fee5b46540f9d7fa2dee89ec59d899ffb14",
-        "hudWords7788": "b4ba8ddb0f0b3e116030ff80cea56f6f01ec79827c4243962bc1d687ca61291f"
+        "hudWords7788": "2a49edc52b5edf20a2a414f0c6539dadcd4405ebe9d09c47ac3f40aef84f6f84"
       },
       "effects": [],
       "instructions": 1458
@@ -487,7 +487,7 @@
       "stage": "start-cross",
       "hashes": {
         "raceWords1f94": "ba15048722ab1ee0bb679476559f4bd32e097c05a41335a7c246aceffa7b343b",
-        "hudWords7788": "6374ff51d11f9deaa56df0692accf6e43803f4625215beb4b71d9968de62a2f5"
+        "hudWords7788": "2bf5479e972c4949404ed5743a0d32a634ab13e0c2a1e03f43017172c8d3d12a"
       },
       "effects": [],
       "instructions": 1864
@@ -498,7 +498,7 @@
       "stage": "checkpoint",
       "hashes": {
         "raceWords1f94": "748add06d921e56a35f633a639d59b42477bd64bc6e32c6dd2e88a5b9e197d51",
-        "hudWords7788": "ae64caac980feef28f2bc0bb36278a4ecd92951d6ae3bb4d81d54a4f3a3b41b8"
+        "hudWords7788": "f041e59c817f8ac548b4b04617917b5a1d118e87511535826ba78ea389291eee"
       },
       "effects": [
         {
@@ -518,7 +518,7 @@
       "stage": "checkpoint",
       "hashes": {
         "raceWords1f94": "ae71e517d75c52516d7167968045555ac3dbce575dfab52b62bcf1401be057f9",
-        "hudWords7788": "537c8ca2549db5142e187b91408bb3f3f5c5b26f0f6462e37f9e2493c10494a7"
+        "hudWords7788": "e659327891b6bf93c5e3e5147f97d11071407827b66accfe4d87d1131775c53c"
       },
       "effects": [
         {
@@ -538,7 +538,7 @@
       "stage": "checkpoint",
       "hashes": {
         "raceWords1f94": "e11eee05b1fc20cfd2be2ad59621a8d0ede4c4813a46f06b339ac9719355d1fd",
-        "hudWords7788": "cfed99522419ae4d1dd8c50ac4c782d7b698aebdb395664bc685d105d58e4a09"
+        "hudWords7788": "43b7cfde6f519127cc4a30cde25f11af452b107a34bf7e350387b7392ac769bf"
       },
       "effects": [
         {
@@ -558,7 +558,7 @@
       "stage": "finish",
       "hashes": {
         "raceWords1f94": "afa383e1cdcc34e183cf8fc19c7f5e16bb0f9a4a62dc7e9a9b966509f4a5fff4",
-        "hudWords7788": "915d507959d6d48b28df9513b60a3d5d3f4867329c61ca2608a274053959d410"
+        "hudWords7788": "bed07cdb47e34202b54ee375561a309ddfebac7ace8b0c14d54d60ea84e21b40"
       },
       "effects": [
         {
@@ -585,7 +585,7 @@
       "stage": "delayed-bonus",
       "hashes": {
         "raceWords1f94": "cb8f0c16d62195c165635093a74d18873d82850c8b79b4fa03dce33e639af22e",
-        "hudWords7788": "5d0c55d3183e57162dccddb35c566c5bee9b9fa9f2a6cd1e19509ed5cf7ba914"
+        "hudWords7788": "d0a6745d42a6c3ea4f1eca57461893158821826c8507f9828a5c1ddf4da360ea"
       },
       "effects": [],
       "instructions": 1637
@@ -596,7 +596,7 @@
       "stage": "record",
       "hashes": {
         "raceWords1f94": "2fd0030bf960d82cffa409b4a08e11ab1ac7bbe90dc54a438df9c99f2c6755dd",
-        "hudWords7788": "b299a433229d4ba22c64cce40b7b851eb9f5abd1213357b50b76ceb1adb07949"
+        "hudWords7788": "3a605ab58f0a34f7dab136d53871a4726bdcfded2597c903af22e950f9feec39"
       },
       "effects": [],
       "instructions": 1588
@@ -607,7 +607,7 @@
       "stage": "start-cross",
       "hashes": {
         "raceWords1f94": "270ac02c4484155130d077d7035255d937ae09713133c0165095abc99fd4c17c",
-        "hudWords7788": "c661c0e35e8afa79f5e0d6a644f5785cbf16339321be3b915597a4532264fe2a"
+        "hudWords7788": "8d93b14644fb1ed086788191b84efc7e2b2be0b92e37cca866e2a85d078bf653"
       },
       "effects": [],
       "instructions": 2547
@@ -618,7 +618,7 @@
       "stage": "checkpoint",
       "hashes": {
         "raceWords1f94": "c33028d9229f5e70b387427a7cb86f0da5730042167c85f625cadceec48a5071",
-        "hudWords7788": "57118ffaa404416710379eded6462a7e55722db4e2cace957b905c09b5109082"
+        "hudWords7788": "bf0c3e46e39242a6528f7d4f0f84ae98a5223a9d1ff4c93c8d0abec45d38c7c5"
       },
       "effects": [
         {
@@ -638,7 +638,7 @@
       "stage": "checkpoint",
       "hashes": {
         "raceWords1f94": "37b60261a5fd0e37d1c528681bcd04472aef091e8628406e9694c524a539ef41",
-        "hudWords7788": "dba8bf1ca4ab0ef5e88d298a4ffb33584fffb8881c5aff06997bc24fabc801b8"
+        "hudWords7788": "03fdce426c377a9eb06298546eb1b97a112530d55c5893515f1c056be926630d"
       },
       "effects": [
         {
@@ -658,7 +658,7 @@
       "stage": "checkpoint",
       "hashes": {
         "raceWords1f94": "4014aa98855bffec4f11c2e835b63726a1f20457b4f154fa0cfb4ae33918f96f",
-        "hudWords7788": "22ee6516f1cb3e98b7325cf087f9bbd4eac41ffb5851080e3f7c26464e2ef91c"
+        "hudWords7788": "c0921b4caae112c3ad2cd9a70dc028f78c91cd5d92321ad390f41ce9f1aac537"
       },
       "effects": [
         {
@@ -678,7 +678,7 @@
       "stage": "finish",
       "hashes": {
         "raceWords1f94": "3c159b77c8a56fb8cb9412c90dcecf9545df97bd7ed6b17669971da8e1c9eb41",
-        "hudWords7788": "fd153cf58f532ab03bb566d40f60270bb0dbba9480cf40e4af67a5d83ee5f790"
+        "hudWords7788": "0780ae2db05e71239e872674bddeb64835141626c7d6363d359515d60db77c73"
       },
       "effects": [
         {
@@ -705,7 +705,7 @@
       "stage": "delayed-bonus",
       "hashes": {
         "raceWords1f94": "1f09e49a2c329c1578940ca0665355dad86beef632c092f6e1c0735e46ecadd7",
-        "hudWords7788": "0eae62bf54a62a16cee0a25dee46e23f70620306e9e82f90257c285d1088ffb4"
+        "hudWords7788": "e1d8e19488c70dad495ba49224aeb4396961c9dd01b11faff935c03884e7b493"
       },
       "effects": [],
       "instructions": 2301
@@ -716,7 +716,7 @@
       "stage": "record",
       "hashes": {
         "raceWords1f94": "add48436b0a0215e296d97b0fd4a2ce820b1787db5b275fa911ac3f080f7dbe8",
-        "hudWords7788": "01a69cf188ae21d6b3c8531d2c6072b5fda5e6b76cfa2203f7ae0937d599a447"
+        "hudWords7788": "0c0f1c21e70bae16c2d2597f20a27a346d19a8365ffd9a0c6aeac6121f5d4896"
       },
       "effects": [],
       "instructions": 2249
@@ -727,7 +727,7 @@
       "stage": "start-cross",
       "hashes": {
         "raceWords1f94": "4b29deeee8bbbe4743dbc32a2d27314639830fde294e72f547d995b5c2adbdfa",
-        "hudWords7788": "371096fdffebf730cad5837feaa2a230bc94b2d6ae32d31c10df34fad21b5b1f"
+        "hudWords7788": "715f5a2fe68cde2599e53f537e36ce133ef0bab7c06c051e792d25a9edad2d3e"
       },
       "effects": [],
       "instructions": 2469
@@ -738,7 +738,7 @@
       "stage": "checkpoint",
       "hashes": {
         "raceWords1f94": "7854f7fe77f63d8416316e22d4793af2d7719ea6694b3d34806f01a4ccc0bbad",
-        "hudWords7788": "59f3a06fd2b2c52beee32f41ce6d85a04f6a932a097802e19691c5653d082cc7"
+        "hudWords7788": "2111b565956b0ee220e89343149a8b229873e9057e91ed654c047d1d2820d80d"
       },
       "effects": [
         {
@@ -758,7 +758,7 @@
       "stage": "checkpoint",
       "hashes": {
         "raceWords1f94": "15550fd2ca2e928b36a23836b3ee0f7a21fd6682dc46138f0ae2da4bb30ae0aa",
-        "hudWords7788": "b1967968a9e60c89fd58ccaf3e525f88f5c65b3dca727340528d54bcd6fe777f"
+        "hudWords7788": "8362497f6d5100121ca195634e422a3ea4bc4ef7646a1e6086268960e6f0d0bc"
       },
       "effects": [
         {
@@ -778,7 +778,7 @@
       "stage": "checkpoint",
       "hashes": {
         "raceWords1f94": "c140193312ea9c169610c1dd27022b783398f13cde5ac9ee64b7ad205087aa09",
-        "hudWords7788": "357308087f461c55050223ec5a849fad623dcfa0ec2897ca4937d9f9fc41d800"
+        "hudWords7788": "d6efd1fc2077bb6357bca0af6776f371190326daa8d83244b8933bd90aac780f"
       },
       "effects": [
         {
@@ -798,7 +798,7 @@
       "stage": "finish",
       "hashes": {
         "raceWords1f94": "2cb95b74bd717b6fed976871e166fbf00440d589e3ac06e697e7c96b924207df",
-        "hudWords7788": "1c854f5cd956c3f0322a97ecac2899f24807fd461ffd9b2ddc61c1f8e4150544"
+        "hudWords7788": "87f9c467f38dc04e49742ce5688af7375413492e85a80a7fd3352ea6fc18a072"
       },
       "effects": [
         {
@@ -825,7 +825,7 @@
       "stage": "delayed-bonus",
       "hashes": {
         "raceWords1f94": "6fd005ab426244e7b5e09309471831fc666c3fee6af71921a3b6b0b2108fc83b",
-        "hudWords7788": "79eddbda2123391ca0d698e8a353a2402026bac3c57d61248c4e5bbd3970ba3c"
+        "hudWords7788": "93f2edef3e2452ae8be8909a9950f5879f3e688e0dd4203d6e60d87326578229"
       },
       "effects": [],
       "instructions": 2257
@@ -836,7 +836,7 @@
       "stage": "record",
       "hashes": {
         "raceWords1f94": "c4db4f7930a3e44429334d0dc06fd73a3632cccc40bb0d9c4e4aebf2135f5c51",
-        "hudWords7788": "96d15bd32400d8f8707b8566725df5cadcc49e0fc94c58c9480ed070145f1ffc"
+        "hudWords7788": "9b116272db4434776e00d420b7df493c9cc443a0b402728e5b5ff3c5808acf70"
       },
       "effects": [],
       "instructions": 2206
@@ -847,7 +847,7 @@
       "stage": "start-cross",
       "hashes": {
         "raceWords1f94": "d0ba40cc70ba349281f5c6b193af9da9f2a459321dcb3bfbe8ee7d3596c7fa31",
-        "hudWords7788": "a5ee88b4347cc54f519ae44b48890ea4451e5280e9eddccfbaf74db480d74172"
+        "hudWords7788": "ccb8ca1b80ce4fffaa3233e8f893ee6f5004f6d2ed469d12671fdc87ce31e1d6"
       },
       "effects": [],
       "instructions": 1872
@@ -858,7 +858,7 @@
       "stage": "checkpoint",
       "hashes": {
         "raceWords1f94": "3ddeb03f45bc3ae5e9c73048375d321e8f8d4087cf3917618517a8852eaa7bb6",
-        "hudWords7788": "c36b4b40be7c3cd4bf792b3a8a73ef204d546d49ffa3265403d929b0dfd3ee0b"
+        "hudWords7788": "52df30a89260ec3802c64a15e73e7beb5a34919849325e5f60cc9503983b8950"
       },
       "effects": [
         {
@@ -878,7 +878,7 @@
       "stage": "checkpoint",
       "hashes": {
         "raceWords1f94": "feab0d2aa0347798a47334759ae8cece5d44b1731c3543f40d0fbc3b09246cec",
-        "hudWords7788": "2a4a2725010b6069cd72306bb6c64b5b03f20962b08a525f5bfe218af6ad06e3"
+        "hudWords7788": "ce5e0bf147bfc88bae81af07c0acc2296e2a03981875cb31ef264e5d5add44f6"
       },
       "effects": [
         {
@@ -898,7 +898,7 @@
       "stage": "checkpoint",
       "hashes": {
         "raceWords1f94": "30ff1cda2946d6102e1cc2e82ab564c3d331b0bf38561147ce409d81ceaecb42",
-        "hudWords7788": "0dd174edc986aaedc6d8c7fbf632bb8b2abc82de44fbdb88068e3e78873e0af9"
+        "hudWords7788": "f10ee4992f861a7b849131e9d263c6d054753fa7be0e73932b30acad983911b5"
       },
       "effects": [
         {
@@ -918,7 +918,7 @@
       "stage": "finish",
       "hashes": {
         "raceWords1f94": "83b25fd36c11ac063b9e5f72da94a84a3efa87c3b44b4de2ceb59f8d7321a72b",
-        "hudWords7788": "88fc16ca7b1c29924208e420bd66ff6a00230e1cef3fb58c878de51bab75990a"
+        "hudWords7788": "cd3dd525e733d19cce877ed5daeb7855a27c7c7cb7a80a7f4f87c9614ad95382"
       },
       "effects": [
         {
@@ -945,7 +945,7 @@
       "stage": "delayed-bonus",
       "hashes": {
         "raceWords1f94": "bbbf80222d56dc8eaf7bfd16c21e218594e9b06266246e244a3d18033a289a2a",
-        "hudWords7788": "170d7b7885e6f0ac53cc689c342b3e43f4462bed01b9309c860e5d285592c2cf"
+        "hudWords7788": "d35abd29afd1788368fb8e90e2c5c1e7268d5718a49fec3f314a30ca3a73954d"
       },
       "effects": [],
       "instructions": 1502
@@ -956,7 +956,7 @@
       "stage": "record",
       "hashes": {
         "raceWords1f94": "c07318e179aa4d83be347aa81a83e328b69a55f9cc0e8f5c2b358d9585016eb2",
-        "hudWords7788": "e5b32518962e78d55dcaa35bf1c37523d967f3a02c9232892d4af0f86f505f4e"
+        "hudWords7788": "f7fcfc60af84bb964852559b92ed23ecb160ae9d5626d64ddb7aa93780d1719d"
       },
       "effects": [],
       "instructions": 1450
@@ -967,7 +967,7 @@
       "stage": "start-cross",
       "hashes": {
         "raceWords1f94": "10fabf92db53f8f998754e3124b383a6af387ab71c47bb598b2a323f85f3222b",
-        "hudWords7788": "5ead84072c41e7df86ce55492c9fe569fe5f8449cc55be1e66aaf8edf6e1136f"
+        "hudWords7788": "7382921c50bacc57fe324668ef713dfd71167e56cdcb265e2ab388fc633f2666"
       },
       "effects": [],
       "instructions": 1697
@@ -978,7 +978,7 @@
       "stage": "checkpoint",
       "hashes": {
         "raceWords1f94": "0a3e77dac849ec92cc39616ce21500168522b693e4aae17160bb6a034eceadc2",
-        "hudWords7788": "7099376bf78393326329610dc49623a76f64b6fdebbf8544d1eafca4c4984537"
+        "hudWords7788": "3586273bb873807adb91d0623425673f0835daebbabf5ccde3d4fa3ae30b673c"
       },
       "effects": [
         {
@@ -998,7 +998,7 @@
       "stage": "checkpoint",
       "hashes": {
         "raceWords1f94": "79e7734653a94e5e48ec15a988e17a8fb4f73176567b1dcbbe2d059b236d34aa",
-        "hudWords7788": "948ba11fae1865eaa65dbff0e3db22f726b245dc2231749b2ca347a53592193d"
+        "hudWords7788": "465799aa9ef6ddc71ee0611c47e96dfb6047ca09d15902e397e55ddc7d35c1da"
       },
       "effects": [
         {
@@ -1018,7 +1018,7 @@
       "stage": "checkpoint",
       "hashes": {
         "raceWords1f94": "a135518d2c2db5dd701d6bd6e84c25cf3d600f0f0c35defa95d5b8dd9f1854f7",
-        "hudWords7788": "713d57e9ac5b1a21a7029044e73b3673decd1f9d3514e9e9a759afd18485bec2"
+        "hudWords7788": "8e03ef34849ecc4b6de91fd677c4a7e2953b25757f66759a068196a1748ba6fb"
       },
       "effects": [
         {
@@ -1038,7 +1038,7 @@
       "stage": "finish",
       "hashes": {
         "raceWords1f94": "ef7dee77c8cea1f9bb89b73dbc342175e430d859cb7373ad25f8f598e4bbbc5a",
-        "hudWords7788": "b9b49b4052aaf6adb7bf29c9a5cf37d52a63b5b14feb50de2a1f5b14663dae59"
+        "hudWords7788": "fbcccde4e79ccf06948d72cf069300e5213818a89ccadb992c9afe81026842d3"
       },
       "effects": [
         {
@@ -1065,7 +1065,7 @@
       "stage": "delayed-bonus",
       "hashes": {
         "raceWords1f94": "cca4fb41b44d17cd892b69fabf78505a8567a6069cc0a86074d5b63c4bb9e5ac",
-        "hudWords7788": "ab404e267e5a0eba5001a7e684e9555127dc4fb4864936e431b7e0ffc96e4ace"
+        "hudWords7788": "83f9f2e30169efa5c0ab2ea47b0494b3caaff5a119636fae1baa99841fe8c949"
       },
       "effects": [],
       "instructions": 1470
@@ -1076,7 +1076,7 @@
       "stage": "record",
       "hashes": {
         "raceWords1f94": "80683c51e21e4bda26339d2909f671934f7484e0669fdf9738ec3ec64e9f5aa5",
-        "hudWords7788": "c4699ac6d389ef0acf83b8f10dd3beef6bb0c7dbef6797ad260f9986aab39d9b"
+        "hudWords7788": "9c43dc78c1a3a72375b8c8f8afea45307a085a1f2236d591b86ab16db05c5ed9"
       },
       "effects": [],
       "instructions": 1420

@@ -92,3 +92,47 @@ export function prepareNativePackedMatrix(input){
  }
  return freeze({matrixWords:Array.from({length:16},(_,i)=>packed.getUint32(i*4)),operations});
 }
+
+/** Original49C9C scaled Euler producer, with degree phases truncated without
+ *49A94's half-step rounding. Scale applies to each finished basis component
+ *before47EE0 packing; translation and the homogeneous column stay unscaled.
+ */
+export function prepareNativeScaledEulerMatrix(input){
+ const angles=vector(input?.anglesDegrees,'anglesDegrees'),scale=finite(input.scale,'matrix scale'),table=input.sineTableWords4350;
+ if(!Array.isArray(table)||table.length!==4096)throw new RangeError('sineTableWords4350 requires4096 words');
+ const operations=[],scratch=Array(16),indices=[];
+ const write=(i,v)=>{scratch[i]=bits(v);operations.push({kind:'scratchFloatWrite',wordIndex:i,value:scratch[i]});};
+ function axis(k){const phase=finite(F(mul(angles[k],4096)/360),'matrix degree phase'),n=fixed(phase);indices.push(n&4095);return [float(table[n&4095]),float(table[(n+1024)&4095])];}
+ const [sx,cx]=axis('x');write(9,mul(F(-sx),scale));
+ const [sy,cy]=axis('y');write(8,mul(mul(cx,sy),scale));write(10,mul(mul(cy,cx),scale));
+ const [sz,cz]=axis('z');write(1,mul(mul(sz,cx),scale));write(5,mul(mul(cz,cx),scale));
+ const sySz=mul(sy,sz),cyCz=mul(cy,cz);write(0,mul(add(cyCz,mul(sx,sySz)),scale));
+ const syCz=mul(sy,cz),szCy=mul(sz,cy);write(4,mul(sub(mul(sx,syCz),szCy),scale));write(2,mul(sub(mul(sx,szCy),syCz),scale));
+ const p=vector(input.positionNative,'positionNative');write(12,p.x);write(13,p.y);write(14,p.z);write(15,1);
+ write(6,mul(add(mul(sx,cyCz),sySz),scale));write(11,0);write(7,0);write(3,0);
+ const packed=prepareNativePackedMatrix({floatWords:scratch});operations.push(...packed.operations);
+ return freeze({complete:true,floatWords:scratch,matrixWords:packed.matrixWords,operations,diagnostic:{sineIndices:indices}});
+}
+
+/** E4C60 animation-part basis: signed animation components are divided by127
+ *in binary64 then rounded toF32. Unlike48A88 the supplied forward is not
+ *normalized. The right and reconstructed up use different source scale order.
+ */
+export function prepareNativeAnimationPartMatrix(input){
+ const divided=(v,name)=>{const p=vector(v,name);return Object.fromEntries(['x','y','z'].map(k=>[k,F(p[k]/127)]));};
+ const forward=divided(input?.forwardUnits,'forwardUnits'),up=divided(input.upUnits,'upUnits'),factor=mul(finite(input.scale,'matrix scale'),65536),operations=[],packed=Array(16);
+ const write=(index,value)=>{packed[index]=value>>>0;operations.push({kind:'matrixWordWrite',wordIndex:index,value:value>>>0});};
+ const pair=(x,y)=>((x&0xffff0000)|(y>>>16))>>>0,frac=(x,y)=>((x<<16)|(y&65535))>>>0;
+ const [fx,fy,fz]=['x','y','z'].map(k=>fixed(mul(forward[k],factor)));
+ write(4,pair(fx,fy));write(12,frac(fx,fy));write(5,fz&0xffff0000);write(13,fz<<16);
+ const right=cross(up,forward),length=squared(right);
+ if(length===0)return freeze({complete:false,matrixWords:null,operations,diagnostic:{stage:'zero-right'}});
+ const ratio=finite(F(factor/F(Math.sqrt(length))),'animation right ratio'),[rx,ry,rz]=['x','y','z'].map(k=>fixed(mul(right[k],ratio)));
+ write(0,pair(rx,ry));write(8,frac(rx,ry));write(1,rz&0xffff0000);write(9,rz<<16);
+ const actualUp=cross(forward,right),inverse=finite(F(1/F(Math.sqrt(squared(actualUp)))),'animation up inverse');
+ const [ux,uy,uz]=['x','y','z'].map(k=>fixed(mul(mul(actualUp[k],inverse),factor)));
+ write(2,pair(ux,uy));write(3,uz&0xffff0000);write(10,frac(ux,uy));write(11,uz<<16);
+ const position=vector(input.positionNative,'positionNative'),[x,y,z]=['x','y','z'].map(k=>fixed(mul(65536,position[k])));
+ write(6,pair(x,y));write(14,frac(x,y));write(7,(z&0xffff0000)|1);write(15,z<<16);
+ return freeze({complete:true,matrixWords:packed,operations,diagnostic:{stage:'complete'}});
+}

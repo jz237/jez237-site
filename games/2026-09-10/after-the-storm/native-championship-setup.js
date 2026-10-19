@@ -52,7 +52,8 @@ export function prepareNativeChampionshipWebLaunch({racers,courseRuntime,recordS
  let state=createNativeRaceMemory({racers,courseRuntime,courseIndex:courseRuntime.courseIndex,players:1,mode620:4,
   reverse:!!courseRuntime.courseView.reverse,rngSeed});
  if(recordSession!==undefined)state=createNativeRaceState(restoreNativeRecordSession(state,recordSession));
- state=createNativeRaceState({...state,scene:{...state.scene,participantCount60e:4,field61c:0,variant6f4:0}});
+ state=createNativeRaceState({...state,roundOrderE718:[0,0,0,0],racerOrderA9dc:[0,0,0,0],
+  scene:{...state.scene,participantCount60e:4,field61c:0,variant6f4:0}});
  // This is an isolated selected round with empty prior standings. Leaving
  // B330 atzero incorrectly routes a completed race through Dolphin warmup.
  // A full cup must carry its existing profile/standings instead of reseeding.
@@ -90,10 +91,29 @@ export function prepareNativeChampionshipLaunch(state,{courseRuntime,avatarsBySl
  const customRiderTraits=Array.from({length:4},(_,i)=>Array.from({length:3},(_,j)=>byte(24+i*14+11+j)<<24>>24));
  const configured=prepareNativeRaceMainConfigurationUpdate(initial,{...NATIVE_CHAMPIONSHIP_SETUP_DATA,
   waveRowsB308:waveRowsByClass,avatarsA9b0:avatarsBySlot,customRiderTraits});
+ return prepareNativeChampionshipConfiguredLaunch(configured,{courseRuntime,configurationEffectsPending:true});
+}
+
+/** Consume the9345C result produced by the original introduction display exit.
+ * This loads/resets the selected course and prepares its physical grid without
+ * reconfiguring the scene, reseeding championship points or replaying9345C.
+ * The caller must explicitly state whether configuration effects are pending.
+ * An introduction phase already returns them in its effects; consuming that
+ * phase uses false here so resources/audio do not play twice. Fresh setup
+ * uses true because no separate phase has delivered those effects.
+ */
+export function prepareNativeChampionshipConfiguredLaunch(configured,{courseRuntime,configurationEffectsPending}={}){
+ if(typeof configurationEffectsPending!=='boolean')throw new TypeError('Specify whether configuration effects are still pending');
+ const initial=createNativeRaceState(configured?.state),g=initial.scene;
+ if(courseRuntime?.mode620!==4||!courseRuntime.objectStartup||courseRuntime.courseIndex<1||courseRuntime.courseIndex>8||
+  g.mode608!==4||g.mode620!==4||g.players!==1||g.racerCount!==4||g.courseIndex!==courseRuntime.courseIndex||
+  initial.profileWordsB330?.length!==52||initial.profileWordsB330[2]!==courseRuntime.sourceDifficulty||
+  !!g.reverseDab68!==!!courseRuntime.courseView.reverse||!Array.isArray(configured.effects))
+  throw new RangeError('Configured championship handoff must match its prepared course and four-rider solo state');
  const bodyProfiles=profiles(configured.effects);
  // Main selection precedes course loading/reset. Install this selected numeric
  // startup, not a previous race's moving objects or record navigation counts.
- const loaded=createNativeRaceState({...configured.state,...courseRuntime.objectStartup.storage,scene:{...configured.state.scene,
+ const loaded=createNativeRaceState({...initial,...courseRuntime.objectStartup.storage,scene:{...initial.scene,
   ...courseRuntime.objectStartup.counts,primaryCount:courseRuntime.data.nodes.length,finishSourceRow:courseRuntime.data.finishSourceRow,
   directionFlag1f90:courseRuntime.directionFlag1f90}});
  const reset=prepareNativeRaceStartup(courseRuntime.resetLayout,loaded);
@@ -109,7 +129,7 @@ export function prepareNativeChampionshipLaunch(state,{courseRuntime,avatarsBySl
   return {grid,computerProfile,prepared:prepareNativeHullStartFromMatrix({matrixWords:grid.transform.matrixWords,rider:profile.riderIndex,computerProfile})};
  });
  const launch=freeze({state:initialized.state,bodyProfiles,hullStarts,
-  pendingEffects:[...configured.effects.filter(o=>o.kind!=='bodyTuneWordWrite'),...reset.effects,...initialized.effects],
+  pendingEffects:[...(configurationEffectsPending?configured.effects.filter(o=>o.kind!=='bodyTuneWordWrite'):[]),...reset.effects,...initialized.effects],
   diagnostic:{sourceMain:configured.diagnostic,reset:reset.diagnostic,physicalWorldCreated:false,
    liveAIAdmitted:false,bodyTuneWritesConsumed:16,gridTransformsPrepared:4}});
  preparedCourses.set(launch,courseRuntime);return launch;

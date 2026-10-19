@@ -18,6 +18,27 @@ function cellOffset(p,g){
  return integer(g.cellHalfwords?.[cell],'signed shore cell offset',-32768,32767);
 }
 
+/** Complete51CB4 point probe. It uses the original signed cell offsets and
+ * ordered byte lists, a strict32-unit depth band, and strict segment ends.
+ * Unlike hull response, it returns the first matching normal without moving
+ * any point or requiring an incoming velocity. */
+export function queryNativeShorePoint(positionNative,shore){
+ const p={x:number(positionNative?.x,'shore point.x'),z:number(positionNative?.z,'shore point.z')};
+ if(!shore||typeof shore!=='object')throw new TypeError('Supply original shoreline grid');
+ const start=cellOffset(p,shore),empty=()=>Object.freeze({penetrationNative:0,normalNative:null});
+ if(start===null)return empty();
+ for(let offset=start;;offset++){
+  const sourceIndex=integer(shore.listBytes?.[offset],'shore candidate byte',0,255);if(sourceIndex===0)return empty();
+  const row=shore.lines?.[sourceIndex];if(!Array.isArray(row)||row.length!==8)throw new TypeError('Supply reached original8-float shore row');
+  const at=i=>number(row[i],`shore field${i}`),nx=at(2),nz=at(3);
+  const depth=F(F(F(at(0)-p.x)*nx)+F(F(at(1)-p.z)*nz));
+  if(depth<=0||depth>=32)continue;
+  const along=F(F(F(p.x-at(0))*at(4))+F(F(p.z-at(1))*at(5)));
+  if(along<=0||along>=at(6))continue;
+  return Object.freeze({penetrationNative:depth,normalNative:Object.freeze({x:nx,z:nz})});
+ }
+}
+
 export function prepareNativeShoreContacts(input,shore){
  if(!Array.isArray(input?.pointsNative)||input.pointsNative.length!==12)throw new TypeError('Supply twelve native hull points');
  if(!shore||typeof shore!=='object')throw new TypeError('Supply original shoreline grid');

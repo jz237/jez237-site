@@ -16,6 +16,27 @@ function make(){const hull=createNativeHull({velocity:v(10,-2,3)}),bundle=create
 const controls={throttle:true,pressedButtons:0,releasedButtons:0,heldButtons:0x8000};
 function frame(impact){return {frameSpeedNative:30,wetCount:8,impacts:impact};}
 
+test('physical profile refreshes contact mode before actor decisions even when simulation is held',()=>{
+ for(const computerProfile of [false,true])for(const simulationState of [0,3])for(const incomingNative of [0,.1]){
+  const hull=createNativeHull({computerProfile}),bundle=createAuthoredNativeRider({initialHull:hull});
+  const lifecycle=createNativeRiderLifecycle({hull,rider:bundle.articulatedRider,courseDatumNative:0,
+   state:{riderIndex:0,hullDamping:hull.points.map(p=>Math.fround(p.damping)),contactMode:2}});
+  const impacts=createNativeImpactState();recordNativeImpact(impacts,{channel:'racer',incomingNative,normal:v(1)});
+  const q=decideNativeRiderLifecycle(lifecycle,{completedFrame:frame(nativeImpactSnapshot(impacts)),simulationState,controls,manipulationAction:0});
+  assert.equal(q.state.contactMode,computerProfile?Number(incomingNative!==0):2);
+  assert.equal(q.skipped,simulationState===0);
+  assert.equal(nativeRiderLifecycleSnapshot(lifecycle).state.contactMode,q.state.contactMode);
+ }
+});
+
+test('invalid downstream actor input cannot partially commit the profile contact update',()=>{
+ const hull=createNativeHull({computerProfile:true}),bundle=createAuthoredNativeRider({initialHull:hull});
+ const lifecycle=createNativeRiderLifecycle({hull,rider:bundle.articulatedRider,courseDatumNative:0,
+  state:{riderIndex:0,hullDamping:hull.points.map(p=>Math.fround(p.damping)),contactMode:2}}),before=nativeRiderLifecycleSnapshot(lifecycle);
+ assert.throws(()=>decideNativeRiderLifecycle(lifecycle,{completedFrame:{...frame(nativeImpactSnapshot(createNativeImpactState())),frameSpeedNative:NaN},simulationState:3,controls,manipulationAction:0}),/frameSpeed/);
+ assert.deepEqual(nativeRiderLifecycleSnapshot(lifecycle),before);
+});
+
 test('lifecycle writes the actual twelve damping/velocity fields without integrating another position',()=>{
  const {hull,bundle,lifecycle}=make(),p=hull.points.map(p=>({...p.position})),motion=structuredClone({frame:hull.frame,center:hull.center,motionVelocity:hull.motionVelocity,motionDirection:hull.motionDirection});
  const impacts=createNativeImpactState();recordNativeImpact(impacts,{channel:'racer',incomingNative:12,normal:v(1)});

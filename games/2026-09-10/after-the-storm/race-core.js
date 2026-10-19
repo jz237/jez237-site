@@ -1,5 +1,5 @@
 import {createSourceFixedSphereGrid} from './source-boundary-spheres.js';
-import {createNativeRaceHost,stepNativeRaceHost} from './native-race-host.js';
+import {createNativeRaceHost,stepNativeRaceHost,nativeHostMenuInput} from './native-race-host.js';
 import {effectiveNativeTune} from './native-rider-tuning.js';
 import {createNativeRaceLaunchRuntime} from './native-race-launch-runtime.js';
 import {prepareNativeChampionshipWebLaunch} from './native-championship-setup.js';
@@ -71,10 +71,12 @@ export const angleDelta=a=>Math.atan2(Math.sin(a),Math.cos(a));
 export function makeCoveCourse(){return getCourse('greyhaven');}
 export const COVE=makeCoveCourse();
 export function settings(rider=0,tune={}){const r=RIDERS[rider];const engine=clamp(Number(tune.engine)||0,-1,1),grip=clamp(Number(tune.grip)||0,-1,1),handling=clamp(Number(tune.handling)||0,-1,1);return {...r,speed:r.speed+engine*1.4-grip*.7,accel:r.accel-engine*.8,grip:r.grip+grip*1.4,handling:r.handling+handling*.35};}
-export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,difficulty=0,course=COVE,gridOrder=null,seaState='course',secondRider=1,secondTune={},handicap=false,swapColours=false,physics='modern',nativeTunes=[],nativeTuneModes=[],nativeInitialRaceState,nativeRecordSession,nativeObjectLayout='source'}={}){
+export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,difficulty=0,course=COVE,gridOrder=null,seaState='course',secondRider=1,secondTune={},handicap=false,swapColours=false,physics='modern',nativeTunes=[],nativeTuneModes=[],nativeInitialRaceState,nativeRecordSession,nativeObjectLayout='source',nativeCourseActors}={}){
  if(!['modern','native'].includes(physics))throw new RangeError('Unknown race physics');
  if(nativeRecordSession!==undefined&&physics!=='native')throw new RangeError('Native record sessions require native physics');
  const nativePractice=physics==='native'&&mode==='practice'&&course.sourceWaterCourseIndex===0&&difficulty===0&&!course.reverse;
+ if(nativeCourseActors!==undefined&&(!nativePractice||nativeInitialRaceState!==undefined||typeof nativeCourseActors?.onDisplay!=='function'))
+  throw new RangeError('Course actor presentation requires fresh solo native Practice');
  const nativeChampionship=physics==='native'&&mode==='championship';
  if(nativeChampionship&&nativeInitialRaceState!==undefined)throw new RangeError('Fresh championship selection owns its initial race state');
  if(physics==='native'&&(seaState!=='course'||!nativePractice&&(!['time','versus','stunt','championship'].includes(mode)||!(mode==='stunt'?[0,1,2,3,4,5,6,7,8]:[1,2,3,4,5,6,7,8]).includes(course.sourceWaterCourseIndex))))
@@ -164,6 +166,8 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
   state.nativeLaunchLabel=state.nativeLaunch.view().label;state.nativeCountdownCue=null;
   let launchCueSequence=0;
   state.nativeHost=createNativeRaceHost({racers,water:raceWater,course,fixedSphereGrid:sourceSphereGrid,staticGeometry:nativeCourseRuntime.staticContactGeometry,raceRuntime:state.nativeLaunch,
+  ...(nativeCourseActors?{courseActors:{...nativeCourseActors,audioContext:()=>{const s=state.nativeContactAudio.snapshot();return {...s.globals,audioMode:s.audioMode};},
+   onEffects:effects=>state.nativeContactAudio.applyEffects(effects)}}:{}),
   ...(championshipLaunch?{}:{tunes:racers.map((_,i)=>effectiveNativeTune(nativeTunes[i],nativeTuneModes[i])),hullStarts:nativeStarts}),
   onAudioFrame:(host,context)=>state.nativeContactAudio.beforeFrame(context.logicalFrame+1),
   onContactFrame:(host,world)=>{
@@ -197,9 +201,13 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
    if((state.nativeLaunch.ordinary||state.nativeLaunch.stunt)&&state.phase!=='countdown'){
     finishRaceStep(state,.05);
     state.nativeResult=state.nativeLaunch.resultView();
-    if(state.nativeResult.exit)state.phase='results';
+    if(state.nativeResult.exit){
+     if(state.nativeLaunch.championshipLaunch&&state.nativeResult.exit.consumer==='801ec0d4'){
+      state.phase='standings';state.nativeStandings={remainder:0,frames:0,draw:null,view:null,handoff:null};
+     }else state.phase='results';
+    }
    }
-   return state.phase!=='results';
+   return !['results','standings'].includes(state.phase);
   },
   onFrame:(host,context,ordinary)=>{
    state.time=context.time;
@@ -405,6 +413,24 @@ export function handicapBoost(s,r){if(s.mode!=='versus'||s.freeRide||!s.handicap
 export function raceWeather(s,time=s.time){const w=conditions(s.course,time,s.racers[0].lap);if(s.nativeHost)w.seaLevel=s.raceWater.field.datumNative*s.raceWater.scale;else if(s.courseDatum)w.seaLevel=s.courseDatum.value;if(s.seaState!=='course')w.storm=({calm:0,chop:.45,storm:.95})[s.seaState]??w.storm;return w;}
 export function stepRace(s,input,dt,options={}){if(s.phase==='paused'||s.phase==='results')return;dt=clamp(dt,0,1/30);
  setRaceWater(s.raceWater??null);setCoastalDepth(s.seaState==='course'?null:s.course);
+ if(s.phase==='standings'){
+  const menu=s.nativeStandings;
+  if(!menu||menu.handoff)throw new Error('Missing active championship standings owner');
+  menu.remainder+=dt;
+  while(menu.remainder+1e-12>=.05){
+   const supplied=options.menuInputs??(Array.isArray(input)?input:[input??{}]);
+   const controls=typeof supplied==='function'?supplied(menu.frames*.05,menu.frames):supplied;
+   if(!Array.isArray(controls))throw new TypeError('Menu inputs must be a human-controller array');
+   const raw=controls.map(value=>nativeHostMenuInput(typeof value==='function'?value(menu.frames*.05,menu.frames):value));
+   const q=s.nativeLaunch.advanceChampionshipStandings(s.raceWater,raw);
+   s.nativeContactAudio.advanceMenuFrame();
+   menu.remainder=Math.max(0,menu.remainder-.05);menu.frames++;menu.draw=q.draw;menu.view=q.view;menu.handoff=q.handoff;
+   menu.effects=q.effects;menu.diagnostic=q.diagnostic;
+   s.nativeContactAudio.applyEffects(q.effects);
+   if(q.handoff){menu.remainder=0;s.phase='results';break;}
+  }
+  s.weather=raceWeather(s);waterLevel.value=s.weather.seaLevel;return;
+ }
  if(s.phase==='countdown'&&!s.nativeHost){for(const r of s.racers)if(r.human){const c=Array.isArray(input)?input[r.player]||{}:input||{};rocketStart(r,c.throttle||0,-s.countdown);}s.countdown-=dt;if(s.countdown<=0){s.phase='running';s.racers.forEach(r=>announce(r,s,'GO'));}return;}
  if(s.nativeHost){
   s.weather=raceWeather(s);waterLevel.value=s.weather.seaLevel;

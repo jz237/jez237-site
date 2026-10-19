@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createRaceWater,createRaceWaterRandom,advanceRaceWaterFrame,stepRaceWater,captureRaceWater,readRaceWater,
- setRaceWater,currentRaceWater,activeRaceWaterHeight,raceWaterHeight,raceWaterAISelectionCircle} from '../race-water.js';
+ setRaceWater,currentRaceWater,activeRaceWaterHeight,raceWaterHeight,raceWaterAISelectionCircle,raceWaterActorMotionInputs} from '../race-water.js';
 import {sourceWaterConditions} from '../source-water-conditions.js';
 import {createNativeWaterField,forceNativeWaterLine,createNativeWaterPatch,stepNativeWaterPatch} from '../native-water-field.js';
 import {createRace,stepRace} from '../race-core.js';
@@ -64,6 +64,27 @@ test('selection preparation failure cannot partially evolve the field or replace
  s.selectionRadiusNative=NaN;const before=structuredClone(s);
  assert.throws(()=>advanceRaceWaterFrame(s,[c]),/selectionRadiusNative/);
  assert.deepEqual(s,before);
+});
+test('actor water inputs expose completed native patch0 words and the owned relocation radius',()=>{
+ const crafts=[craft(12,-24),craft(100,50)],s=make(crafts,{selectionRadiusNative:1024,initialNoise:false});
+ assert.throws(()=>raceWaterActorMotionInputs(s),/completed source water frame/);
+ advanceRaceWaterFrame(s,crafts,{simulationActive:false});
+ const before=structuredClone(s),a=raceWaterActorMotionInputs(s),bits=new DataView(new ArrayBuffer(4));
+ const values=a.waterRangeWords2428.map(w=>{bits.setUint32(0,w);return bits.getFloat32(0);});
+ const circle=raceWaterAISelectionCircle(s);
+ assert.deepEqual(values,[circle.x,circle.z,circle.radiusSquared]);assert.equal(a.radius4720,1024);
+ assert.deepEqual(s,before);assert.ok(Object.isFrozen(a)&&Object.isFrozen(a.waterRangeWords2428));
+ assert.throws(()=>{a.waterRangeWords2428[0]=0;},TypeError);
+ crafts[0].x+=100;crafts[0].heading=1;advanceRaceWaterFrame(s,crafts,{simulationActive:false});
+ assert.notDeepEqual(raceWaterActorMotionInputs(s),a);
+ assert.deepEqual(a.waterRangeWords2428.map(w=>{bits.setUint32(0,w);return bits.getFloat32(0);}),values);
+ assert.throws(()=>raceWaterActorMotionInputs({...s}),/host race water/);
+});
+test('actor water inputs reject display snapshots, stale menu circles and invalid relocation data',()=>{
+ const c=craft(),s=make([c]);advanceRaceWaterFrame(s,[c]);
+ assert.throws(()=>raceWaterActorMotionInputs(captureRaceWater(s)),/host race water/);
+ s.menuActive=true;assert.throws(()=>raceWaterActorMotionInputs(s),/race water scene/);
+ s.menuActive=false;s.selectionRadiusNative=NaN;assert.throws(()=>raceWaterActorMotionInputs(s),/signed32/);
 });
 test('race water seed matches normalized ghost setup metadata',()=>{
  const a=createRace({mode:'time',waveSeed:1014}),b=createRace({mode:'time',waveSeed:a.waveSeed});

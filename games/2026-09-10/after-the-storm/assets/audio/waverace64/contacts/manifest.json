@@ -1272,6 +1272,57 @@
       "release": 64,
       "sourceBank": 7,
       "sourceTuning": 0.5612310171127319
+    },
+    "8": {
+      "file": "contact-08.wav",
+      "rate": 1,
+      "pan": 64,
+      "envelope": [
+        1,
+        32000,
+        960,
+        24000,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16,
+      "sourceTuning": 0.75
+    },
+    "9": {
+      "file": "contact-09.wav",
+      "rate": 1,
+      "pan": 64,
+      "envelope": [
+        1,
+        32000,
+        1640,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "release": 16,
+      "sourceTuning": 0.75
+    },
+    "10": {
+      "file": "contact-0a.wav",
+      "rate": 1,
+      "pan": 64,
+      "envelope": [
+        1,
+        32000,
+        240,
+        24000,
+        300,
+        0,
+        0,
+        0
+      ],
+      "release": 127,
+      "sourceTuning": 0.75
     }
   },
   "files": {
@@ -1554,6 +1605,27 @@
       "bytes": 25532,
       "peak": 32001,
       "rms": 15006.866506722727
+    },
+    "contact-08.wav": {
+      "sha256": "fc662f467fa99ec4168e8f65f123731d0178399d2200559e108b230b909c0e57",
+      "duration": 0.7086875,
+      "bytes": 45400,
+      "peak": 30422,
+      "rms": 6465.920331415121
+    },
+    "contact-09.wav": {
+      "sha256": "ac714778fc265747a05bf378366676bf4dea7c911d1b3b4222750df4258c66ee",
+      "duration": 1.0826875,
+      "bytes": 69336,
+      "peak": 31919,
+      "rms": 12678.893775753468
+    },
+    "contact-0a.wav": {
+      "sha256": "9cf2ea9f2a266d9ce4c13af16da9deb0a7bec2d59b04c3941b75e9c0b01f6b3b",
+      "duration": 0.678,
+      "bytes": 43436,
+      "peak": 29954,
+      "rms": 6685.791026007063
     }
   },
   "iceSequence": {
@@ -1665,5 +1737,22 @@
       32,
       96
     ]
+  },
+  "dolphinSequence": {
+    "sequence": 0,
+    "bank": 0,
+    "channel": 5,
+    "layer": 0,
+    "notes": [
+      8,
+      9,
+      10
+    ],
+    "notePort": 0,
+    "velocityPort": 5,
+    "pollTicks": 8,
+    "noteTicks": 320,
+    "tempo": 200,
+    "ticksPerQuarter": 48
   }
 }

@@ -99,7 +99,7 @@ export function prepareNativeAISelectionCircle({radius,selectionRadiusNative,pat
   return freeze({x:short(short(storedCenter.x+truncWord(arithmetic(ratio*F(inner.x-storedCenter.x))))+shift.x),
    z:short(short(storedCenter.z+truncWord(arithmetic(ratio*F(inner.z-storedCenter.z))))+shift.z)});
  });
- return freeze({patchIndex:slot,snappedCenterNative:center,snapOffsetNative:offset,outerVerticesNative:freeze(outer),
+ return freeze({patchIndex:slot,snappedCenterNative:center,storedCenterVertexNative:freeze(storedCenter),snapOffsetNative:offset,outerVerticesNative:freeze(outer),
   selectionCircleNative:nativeAISelectionCircleFromMesh({oppositeOuterVerticesNative:[outer[0],outer[3]],snapOffsetNative:offset,selectionRadiusNative:selectionRadius})});
 }
 

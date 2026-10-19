@@ -1,5 +1,1645 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## v2.41.0 — Dolphin Park and original scene reconstruction
+
+- Normal Dolphin Park Free Ride with Venue conditions now uses the recovered
+  original physical scene and dolphin behavior from the ordinary menu.
+- A continuous detailed dolphin model follows the original animation poses,
+  with original water-transition effects, distance gain and stereo placement.
+- Audio content versions prevent a cached older manifest from disabling effects.
+- Instant replay records complete dolphin display poses and restores the live
+  pose on exit, without advancing physics or audio. Failed initial downloads
+  show a visible title-screen message and allow retry after reconnecting.
+- Championship standings, course introductions, course actors, and spray/wake
+  reconstruction have expanded reference coverage and prepared scene adapters.
+  Several remain integration work; this release does not claim full parity.
+- High-resolution terrain, water, textures and output settings are retained.
+  Existing music settings and custom-wave Free Ride remain available.
+
+The chronological development checkpoints below record their state when written;
+later entries above supersede earlier pending-work statements. Remaining major
+work includes full championship introduction/next-race integration, other detailed
+actor families, source effects display attachment and dolphin wake integration.
+Additional multiplayer work remains last.
+
+Release checks: 54 actor/audio integration tests, 25 terrain/loading/existing
+online-compatibility tests, and nine replay tests passed. Browser checks cover
+normal-menu entry, custom-sea switching, high-resolution rendering, real dolphin
+audio playback, offline download failure/retry, and replay pose restoration with
+an unchanged physical clock. All513 module versions and four page import graphs
+were independently checked.
+
+## Unpublished — original dolphin effects reach browser playback
+
+The original dolphin's expanded mixer calls now enter the existing audio owner.
+Channel5 retains the latest pending note and velocity, keeps contact priority
+over its spray layer, and applies the source distance gain and stereo position
+to current and future voices. Its lap cue also reaches the existing cue player.
+Three standalone effects (drums8/9/10) were decoded from the same local ROM;
+all43 contact-bank files have verified hashes, PCM headers and duration checks.
+
+Pause discards pending notes; a new race resets spatial controls. Contact bank
+manifests and samples now use content-versioned URLs, fixing an observed stale
+browser manifest that otherwise prevented the added sounds from loading.
+Fifty-four focused tests pass. A browser with the old manifest already cached
+loaded all43 files and played actual live dolphin water transitions without
+failed assets. Existing music settings and rendering resolution are unchanged.
+The Web Audio mix remains an adaptation, not bit-exact N64 audio output.
+
+## Unpublished — original Dolphin Park actor scene in live Free Ride
+
+Solo Dolphin Park Free Ride with Normal difficulty and Venue conditions now
+starts the recovered physical Practice scene from the ordinary menu. The
+original actor startup runs before computer-racer initialization. Motion reads
+the completed physical craft, primary buoy and water owners; actor motion and
+display each advance once per logical frame in their original order. The
+high-resolution dolphin model consumes the resulting original animation poses.
+Custom sea conditions retain their existing authored Free Ride behavior.
+
+New browser resource, route-padding and retained-vertex allocations are explicit;
+there is no artificial water warm-up or claim of a restored cartridge snapshot.
+Asset loading precedes scene construction and preserves retry/mode-change safety.
+Pause freezes actor evolution; restart reconstructs the scene; quitting disposes
+the models. The separate authored guide is hidden while original actors run.
+
+Validation: 35 focused integration tests pass, including complete actor startup,
+485 reference poses, physical Practice ramp launches, and identical live actor
+state/presentation at 30, 60 and 144 Hz. Browser checks confirmed normal-menu
+admission, visible dolphin placement, pause/restart/quit/re-entry, full-resolution
+1440-by-900 rendering, and no console or shader errors.
+
+Remaining: other actor families have numeric motion/display but no new detailed
+models; the additional dolphin wake body and original lighting/fog material bridge
+are not yet connected. Startup graphics effects
+remain retained metadata while the browser uses its high-resolution scene.
+
+## Unpublished — current physical route inputs for course actors
+
+The actor route adapter reads the actual primary buoy owner's positions,
+velocities, fixed endpoints and independent physics/render flags. It combines
+those with the selected route records and explicitly supplied unused records.
+Secondary/tertiary routes and padding keep their own values; no extra buoy
+simulation is created. This preserves the original dolphin's cross-record reads
+when the primary and secondary counts differ.
+
+The physical host can now explicitly capture these route words together with
+the completed craft body words, actual stored water vertices, water field and
+collision geometry. Capture rejects partial frames or mismatched body/water/
+buoy clocks and does not advance any owner. Startup body sampling separately
+reads the fresh physical body without synthesizing a physics frame. Body
+direction comes from the last physical movement, preserving held simulation.
+
+Thirty-nine prepared snapshots match all 12,480 words from original primary
+motion executions (25,258 instructions), including displaced buoy motion at
+three water levels. All nine Stunt selections also retain their exact initialized
+geometry and absent families. Body adaptation preserves complete original outer
+actor frame results in 20 reference cases. Live Practice checks confirm that
+capturing inputs leaves the physical, water and canonical owners unchanged.
+Automatic live actor startup, scheduling and rendering remain pending.
+Resolution remains unchanged.
+
+## Unpublished — separate original dolphin route and count
+
+Practice now prepares its original 64-point secondary dolphin route separately
+from the 60-point primary navigation route. Both original dolphin nearest-point
+searches read the secondary count at B124, including the search over primary
+records. The canonical adapter now supplies that count rather than B120.
+Stunt explicitly selects no secondary route. Computer-racer route selection and
+high-resolution rendering settings are unchanged.
+
+Evidence: two complete original secondary loader/735EC executions match all
+4,160 words under both zero and retained-memory policies (50,042 instructions).
+Ten original motion executions with unequal primary/secondary counts match
+every ordered operation and actor hash (39,015 instructions). All 61 targeted
+checks pass, including 1,186 existing dolphin motion cases, 32 complete frames,
+Practice setup, Stunt launches, and live launch/frame-rate regression checks.
+Live actor scheduling remains pending; this does not yet enable the new dolphin
+animation during gameplay.
+
+## Unpublished — canonical actor host and stored water inputs
+
+The prepared course actor host now shares the actual race state. Asset binding
+and startup commit together, motion uses the selected animation provider, and
+display preparation commits only after its renderer accepts the geometry. Stale
+or reused display tickets cannot overwrite newer race state. All nine original
+startup pools and 485 prepared dolphin poses are covered by reference checks.
+The water adapter exposes the actual stored center and first outer vertices,
+including their original signed-coordinate conversion. These bridges still
+require live startup/frame scheduling and remaining high-resolution families.
+
+## Unpublished — original course selection bound to high-resolution resources
+
+Course actor setup now uses original9684C selection, the verified descriptor
+and byte-length tables, and original96048 part identities/count/table writes.
+It binds the selected data-only animation assets at their actual segment8 load
+positions and returns the new canonical state plus the matching provider as one
+preparation. Static banks retain their old animation pointer; empty slots retain
+their resource records. Missing late assets leave the original state untouched.
+
+The geometry adaptation deliberately substitutes high-resolution model bindings
+for the low-resolution display lists. The complete original list-relocation
+implementation remains separately tested; this browser setup does not pretend
+to load or execute cartridge graphics commands.
+
+Evidence: all nine actual banks in both slots reproduce every original resource
+metadata operation and final resource owner. Nine complete original main40
+loader executions (405,748 instructions, with prepared transfer/decompression
+boundaries) also match both complete retained course resource owners. All 79
+focused/regression checks pass, including all course selections, static/empty
+scenes, selected providers, late failures, animation data, drawing and skin.
+Live course initialization/frame scheduling and the remaining high-resolution
+actor families still need attachment. No resolution setting changes.
+
+## Unpublished — browser-ready original numeric animation resources
+
+Seven data-only animation assets now contain the original transform rows,
+signed frame keys, descriptors, pointer tables and alignment padding: 49,024
+bytes total, covering all 18 animations. Their geometry, textures, display lists
+and executable instructions are excluded. Original segment8 pointer operands
+remain intact; the existing recovered animation parsers apply their 126 pointer
+stores using the host's selected loaded placement. Readers receive only the
+animation data span, with no synthetic geometry prefix exposed to lookups.
+
+The browser loader fetches only selected animated banks through the existing
+content-versioned asset cache and checks their complete SHA-256 identities.
+Static and absent banks require no download. Binding prepares both selected
+resource slots before returning a provider and rejects mismatched retained table
+ownership; selectors and canonical memory are never silently replaced.
+
+Evidence: all seven extracted blocks exactly match the corresponding original
+pre-parser inputs. Their complete relocated spans and all 18 decoded animation
+hashes match the actual original loaded banks. Thirty-two focused/regression
+checks pass, including distinct slot placement, stale metadata, late failures,
+subarray offsets, asset integrity, actor drawing and high-resolution skin.
+The browser's downloaded dolphin asset reproduced all 485 original prepared
+draw frames and rendered the detailed model; the second load hit the cache
+without another download. Browser console and shader checks were clean.
+
+Live course actor setup and frame scheduling, other high-resolution actor
+families and source lighting/fog adaptation remain pending. Original raw memory
+snapshots and extraction/preview tools remain private. Resolution is unchanged.
+
+## Unpublished — smooth dolphin geometry driven by original animation parts
+
+The original dolphin's recovered body, tail and fin transforms now drive an
+authored high-resolution model in a private browser preview. A continuous dense
+body blends the original front/rear transforms to eliminate their rigid overlap
+seam. Head and eyes stay with the front transform; posterior weights blend
+gradually. Flukes and the two pectoral fins retain their independent source
+tracks. The 14,944-triangle model keeps physical skin, clearcoat and smooth fins.
+No replacement animation clock, cartridge mesh or lowered-resolution setting
+was added to the game.
+
+The dolphin renderer identifies bank0 in either retained resource slot, binds
+each actor's complete five-part draw list and owns independent skin uniforms.
+All reached poses validate before visible changes; retired models are released.
+The former rear mesh now supplies the skin transform, so the generic adapter
+also accepts explicitly empty transform-only parts.
+
+Evidence: side and three-quarter poses were visually inspected after correcting
+the overlap seam. All 485 frames in the eight actual loaded-bank animations
+render through the complete dolphin adapter with no shader/runtime errors.
+Geometry allocation remains stable and returns to its previous count after
+disposal. The private preview's sole failed request was its absent favicon.
+All 57 focused/regression checks pass, including outward normals, continuous
+skin weights, matrix conversion, independent actors, late-failure atomicity and
+resource disposal. Original loaded memory and preview frames stay private.
+
+Live course-host installation, selected animation resources in the browser,
+other actor families and source lighting/fog material adaptation remain pending.
+This is a verified rendering component, not yet a newly visible production
+feature. Race resolution, terrain and water settings remain unchanged.
+
+## Unpublished — retained actor presentation and high-resolution renderer adapter
+
+Actor graphics effects now retain both matrix/light buffers and prepare ordered
+part draws, including root/child stack composition, type13 retained matrix
+multiplication, surface changes, light snapshots and signed fog coefficients.
+Native coordinates are scaled once after composition. The canonical display
+frame prepares animation state and renderer buffers together; failed preparation
+leaves both input owners unchanged.
+
+The Three adapter accepts explicit high-resolution geometry, materials and
+model-to-native conversion matrices from a read-only part resolver. It preserves
+the existing geometry, textures and physical material objects, reuses meshes,
+and cancels scene-parent transforms to maintain absolute native world placement.
+It preserves projective retained matrix values instead of forcing an affine
+matrix, and relies on the original visibility decision rather than Three's
+affine bounding-sphere test. Resource owners retain disposal responsibility.
+Late resource or transform failure leaves the previous visible frame intact.
+
+Evidence: all 96 original complete display cases pass through the canonical
+frame and retained presentation with exact ordered operations, pool hashes,
+matrix-buffer hashes and light bytes. All 96 also pass through the Three adapter
+with exact final matrices. Hand-calculated transform/light/fog checks and
+full-resolution geometry/material retention tests pass. All 51 focused and
+regression checks pass. Actual per-course high-resolution part/material bindings
+(including lighting/fog interpretation) and live scene installation remain
+pending; these adapter checks do not establish a visible complete introduction.
+
+## Unpublished — retained animation banks connected to motion and drawing
+
+Loaded banks now take one detached byte snapshot and sample selected descriptor,
+track and frame data lazily. Immutable descriptor/sample caches avoid repeating
+decoding work without imposing a guessed frame range. Original raw-frame and
+signed-key behavior remains available; static banks never read stale animation
+pointers. The provider verifies that the selected retained slot still describes
+the same loaded bank before serving it.
+
+Dolphin root motion, bird drawing, all articulated drawing and special animated
+drawing now consume this provider directly. Canonical adapters pass current
+resource metadata, preventing caller overrides or an old scene's provider from
+silently selecting another bank. Existing normalized fixture resources remain
+supported for independent source comparisons.
+
+Evidence: the loaded-bank path reproduces all 1,186 original dolphin motion
+cases, 1,008 whole actor draws and 32 complete dolphin/swimmer course frames,
+including every ordered operation and final actor hash. Canonical stale-provider
+failures leave state unchanged. All 72 focused and regression checks pass.
+The live host still needs to install selected banks and render the resulting
+retained actors with high-resolution geometry; no visible completion is claimed.
+
+## Unpublished — full course-bank assembly and canonical preparation
+
+96048 now composes original part-list relocation, retained resource metadata
+and animation-pointer parsing in source order. Repeated parts observe prior
+operand writes; static banks retain their previous animation pointer and avoid
+unused segment data. The canonical adapter reads authoritative slot descriptors
+and prepares metadata plus the loaded bank together. Hosts must install both
+together; the large immutable bank remains outside per-frame state copies.
+
+Evidence: 72 complete original runs / 32,756 instructions match all ordered
+operations, metadata and complete loaded-span hashes. Private checks of every
+actual original bank in both slots also match: 18 runs, 28,418 instructions and
+714 stores. Public fixtures contain synthetic lists and banks. Seventeen
+focused relocation/resource-state/reader checks pass, including late-failure
+atomicity and caller-override rejection. Live resource installation and renderer
+attachment remain pending; resolution and geometry are unchanged.
+
+## Unpublished — complete course animation pointer relocation
+
+All five original animation parsers now prepare the pointer updates for the
+seven animated course banks. They expand 94088 address resolution, retain the
+bank-specific table sizes and field counts, and reread earlier writes when
+descriptors alias. Static banks do not enter these parsers. The loaded owner
+remains unchanged until its complete prepared operation list is accepted.
+
+Evidence: 42 whole original parser executions / 13,211 instructions match every
+ordered store, returned table address and complete loaded-span hash. Private
+checks against all seven actual original banks also match: 2,182 instructions
+and 126 pointer stores. The public fixture uses synthetic data only. Thirteen
+focused reader, animation-relocation and rider-relocation tests pass.
+
+The outer 96048 course resource assembly, its canonical loaded-resource owner,
+and live renderer attachment remain pending. No resolution or geometry changes.
+
+## Unpublished — bounded loaded animation-resource reader
+
+The animation reader now consumes an already-relocated big-endian memory span:
+the selected descriptor, signed frame count, explicit frame/track requests,
+signed transform keys, signed position halfwords and signed direction bytes.
+It preserves original 32-bit pointer arithmetic and raw frame access. Display
+and motion retain their separate frame-selection rules. Returned views are
+detached and immutable; malformed or missing reached bytes reject without
+changing the loaded resource. Geometry and display lists are outside this reader.
+
+Evidence: 144 full original 9D6B0 selections / 6,894 instructions locate exactly
+the rows returned by this reader in a synthetic loaded span. Tests cover negative
+keys and frames, high frames, pointer wrap, typed-array offsets and late missing
+data. A private check also decodes all 18 animations across the seven animated
+original banks; the two static banks require none. Original loaded bytes remain
+private. Four focused reader/root tests pass.
+
+This supplies the resource-reading boundary for the retained actor pipeline.
+Loading the selected resources into the live host and consuming their transforms
+with high-resolution geometry still require integration and browser checks.
+
+## Unpublished — complete course0 dolphin motion and shoreline point probe
+
+A68A4 now implements the original animation-root height, retained sound packet,
+pursuit and pacing, formation followers, route-triggered unlocks, camera recovery,
+action updates, and sequential collision probes. The source's distinct four- and
+eight-probe paths preserve their original scratch reads and Float32 operation
+order. The new 51CB4 shoreline query retains the strict 32-unit band and segment
+boundaries, ordered cell candidates and normal writes without changing hull
+collision response.
+
+The canonical course frame now executes dolphin motion automatically. Actor,
+resource, camera, phase, course count and auxiliary control owners remain
+authoritative. An unlocked follower is dispatched later in the same frame;
+audio commands stay ordered and are collected once. Held dolphins still update
+their pose and sound packet, while unused movement resources remain unread.
+
+Evidence: 1,186 complete dolphin executions / 1,950,824 instructions, including
+540 carried frames; 32 complete mixed dolphin/swimmer course frames / 134,874
+instructions; and 1,890 shoreline probes / 125,651 instructions. Every ordered
+operation, actor-pool hash and auxiliary control result matches original code.
+Only audio enqueue boundaries are external. Fifty focused and regression tests
+pass, including unchanged hull shoreline behavior and atomic late failures.
+
+All course motion consumers are now implemented numerically. Actual animation
+resource decoding, retained rendering consumers and live physical scene hosting
+still need integration and browser verification. These tests do not establish
+visible completion. High-resolution presentation and multiplayer priority are
+unchanged.
+
+## Unpublished — dolphin region and animation-root dependencies
+
+The existing A6684 region helper received additional original-code boundary
+checks; its implementation and earlier565-case fixture remain intact.
+9D6B0 root selection now resolves the retained
+resource selector, actor-specific track and signed transform key for all eight
+supported animated types. It preserves the raw animation/frame lookup rather
+than importing the display routine's modulo behavior.
+
+Evidence:360 complete region executions /112,572 instructions and144 complete
+animation-root executions /6,894 instructions match their source results.
+Five focused checks pass, including invalid-resource rejection and immutable
+caller data. These are dependencies for the main dolphin routine, which is
+still pending; no visible dolphin completion is claimed. Resolution is unchanged.
+
+## Unpublished — complete mirrored and formation followers
+
+A9130 now preserves final-lap role changes, mirrored leader poses and waypoint
+triggered jumps. AB25C preserves moving formation targets, separate follower
+timings, original steering and speed response, and mandatory action updates.
+Both execute automatically in the retained course frame, using authoritative
+phase, lap configuration, activity, camera, reverse direction and frame clock.
+
+Evidence:1,686 complete source executions /1,015,512 instructions include720
+carried frames;32 full course2/7 frames /61,880 instructions verify sequential
+leader/follower ownership. Ordered stores, commands and entire actor-pool
+hashes agree. Gates avoid unused resources; late failures preserve caller
+state. Twenty-two focused tests pass. The main course0 dolphin handler and
+live actor attachment remain pending. Render resolution is unchanged.
+
+## Unpublished — complete course5 and course8 actor handlers
+
+A93C8 and AB890 now execute their complete route, action and audio dependencies
+inside the retained course frame. Course5 distance sound continues while
+movement is held. Course8 retains its phase gate, separate waiting-frame
+increment and animation-before-route ordering. The canonical owner supplies
+phase, activity, camera, reverse direction, control clock and shared audio latch.
+
+Evidence:192 complete leaf executions /31,546 original instructions and32 complete
+course frames /71,210 instructions match ordered stores, commands and actor-pool
+hashes. Shared sound state advances between actors; unused gated resources are
+not required, and late failures leave caller state unchanged. All numeric
+callees execute original instructions; only audio enqueue is external. Eighteen
+focused tests pass. Live actor attachment remains pending the final course
+handlers; render resolution is unchanged.
+
+## Unpublished — complete shared actor route movement
+
+A52D8 now follows the selected route or negative-index orbit target, applies
+the original type-dependent steering, bank and speed smoothing, and executes
+the complete A2B24 action update afterward. Arrival preserves its rider-distance
+gate, speed sentinels, action timing and teleport order. Type5 reverse travel
+uses the alternate link; a teleport still uses the forward link first, matching
+the source. Orbit-target and movement sine phases retain their different
+floating-point operation orders.
+
+Evidence:1,143 full original executions /860,686 instructions include810 carried
+frames, three actor types, reverse and forward links, orbit paths, route actions,
+camera sound cues and actual source water queries. Every ordered store, command
+and final actor-pool hash matches. Only sound enqueue is external. These numeric
+dependencies are ready for the remaining course wrappers; live attachment and
+full gameplay parity remain pending. Render resolution is unchanged.
+
+## Unpublished — complete shared actor action animation
+
+A2B24 now implements all twenty action selectors, including the original idle
+selector. Water-following actions retain their distinct vertical impulses,
+damping, jump and roll timings, signed timer remainder and animation changes.
+Fixed-height actions, oscillating depth targets and camera-distance splash
+commands preserve their original ordering. The caller remains responsible for
+activity gating; this routine does not invent an additional pause rule.
+
+Evidence:3,228 complete original executions /1,210,055 instructions cover every
+selector, signed timer extremes, both cameras, flat and nonuniform immutable
+water, and1,800 carried frames. Ordered actor stores, audio commands and complete
+pool hashes agree. Original water, math and splash-control callees execute;
+only audio enqueue is external. Missing late camera data fails without changing
+the caller's state. Live integration still requires the shared route helper
+and remaining course wrappers; render resolution is unchanged.
+
+## Unpublished — actor splash cue dependency
+
+BF784 now emits the original four splash commands, retaining the audio-mode
+gate, strict128-unit cutoff,12-unit full-volume range and signed low pan byte.
+It changes neither random state nor the shared audio latch.162 complete source
+executions /2,430 instructions match all commands and empty gated results.
+Only enqueue is external. This prepares the sound dependency for the pending
+A2B24 actor-action routine; it is not yet attached to live actor playback.
+
+## Unpublished — original actor distance gain, pan and pitch
+
+C1BD8 now prepares the exact distance-audio commands from the shared latch and
+actual audio-owner halfwords. It preserves the48/256 distance thresholds,
+context-dependent attenuation and pan, pitch sign selection, and the duplicate
+gain command outside audio raceMode1. A cleared latch emits the existing stop
+sequence without reading unused context or distance inputs.
+
+Evidence:441 complete original executions /18,382 instructions match every
+command and latch store, including maximum unsigned halfwords and threshold
+boundaries. Audio enqueue is the only intercepted operation. This dependency
+is ready for A93C8; that actor wrapper and its shared route/animation routines
+remain pending. It is not yet a live audible feature.
+
+## Unpublished — complete ice actor movement and course4 composition
+
+AAAC8 now implements perched water sampling, proximity-triggered group takeoff,
+individual delays, initial flight and route following. It preserves the original
+caller-local stores inside the group loop, two random draws per awakened actor,
+signed timer arithmetic, banking, speed smoothing and landing sound order.
+Water uses the existing source-plane query without advancing the field. Route
+rows come from the actual selected course owner rather than invented waypoints.
+
+The canonical course4 frame now expands all selected motion and audio routines.
+Live host attachment and selected resource loading still depend on the remaining
+course handlers; this change does not claim a visible completed introduction.
+High-resolution rendering remains unchanged, and multiplayer remains last.
+
+Evidence:320 complete AAAC8 executions /81,416 original instructions include240
+carried frames. Another16 full AD418 frames /42,564 instructions combine ice
+actors, swimmers and audio, matching all ordered stores, pool hashes, RNG and
+shared audio latches. Fixtures use synthetic routes and immutable water grids;
+the original water, math, random and sound-control instructions all execute.
+Only audio enqueue is intercepted. Invalid late route data cannot partially
+commit the actor pool, and water remains unchanged after preparation.
+
+## Unpublished — complete ice actor distance audio
+
+A5C74 now scans all thirty type1 actors against the selected retained camera,
+then applies the original distance gain and shared audio latch. C1DA8, C1DEC,
+C1B98 and C1E0C preserve their command and latch-write order, including two
+stop sequences when the nearest actor is beyond the original cutoff. The
+canonical actor frame expands this pass automatically and collects effects once.
+
+Evidence:438 original executions /16,597 instructions and16 complete AD418
+frames /25,880 instructions match every command, actor write, pool hash and RNG
+state. Only audio command enqueue is external. The frame fixture includes
+swimmers and submitted ice actors; it does not execute AAAC8 ice actor motion.
+That motion and live actor attachment remain pending. Resolution is unchanged.
+
+## Unpublished — complete dolphin audio packet consumption
+
+C1268 and its BFFEC command producer now consume the retained dolphin packet,
+acknowledge state changes and eligible cues, and emit the original volume and
+pan commands. Byte writes preserve their neighboring packet fields. The audio
+owner supplies its actual mode, course and race mode independently of the
+physical scene, preserving transition gates and pending cues.
+
+The canonical course0 frame expands this handler automatically and collects
+its raw sound commands once as effects. Full dolphin movement and live actor
+attachment remain pending; no render-resolution or artwork changes accompany
+this numeric implementation.
+
+Evidence:432 complete original executions /8,394 instructions cover context
+gates, signed packet bytes, cue handling and distance-volume boundaries. Another
+16 AD418 frames /25,532 instructions execute this handler with swimming actors,
+matching ordered byte stores, commands, actor hashes and gameplay RNG. Those
+frames contain no dolphin motion actors; they do not claim that motion complete.
+Only C538C/C53D4 command enqueue is an external boundary.
+
+## Unpublished — original bird ambience timing in the actor frame
+
+BF8C8 now expands automatically into its original five C53D4 byte commands when
+the low four bits of the actual audio timing word are zero. Its timing value is
+an explicit input from the existing audio owner, separate from gameplay RNG.
+The canonical frame collects the ordered commands once as effects and does not
+play audio while preparing state. Course1 and course3 numeric actor consumers
+are now implemented; their live rendering/audio attachment remains pending the
+rest of the shared course-actor integration.
+
+Evidence:262 complete BF8C8 executions /2,795 instructions cover the timing gate
+and parameter masks. Another16 complete AD418 frames /25,136 instructions run
+BF8C8 and swimmer motion together, matching every store, command and final RNG.
+C53D4 enqueue is the explicit external boundary; BF8C8 is now executed rather
+than skipped. Tests also verify that effects are collected exactly once.
+
+## Unpublished — complete perching bird movement and course3 composition
+
+A9D48 now handles perched birds, rider-triggered takeoff, acceleration bursts
+and returning to a perch. It reads actual home coordinates or the selected buoy
+or generic-object record, retaining the original course/mode height offsets.
+Both human positions are checked in source order, including two random heading
+choices when both trigger a course3 bird. Animation timers, actor-type changes,
+landing and immediate rider avoidance remain ordered as in the original.
+
+The speed limits preserve the source's sequential X/Z normalization, where Z
+uses the already updated X velocity. Return flight retains float32 arithmetic,
+double-precision smoothing, near-perch slowing and the original strict distance
+thresholds. The canonical course3 frame now expands this routine against shared
+actor and random state. Other missing handlers still prevent live attachment;
+this numeric step does not change high-resolution graphics or artwork.
+
+Evidence:480 full A9D48 executions /78,970 instructions include320 carried
+steps, all four movement modes, held paths, course and record variations, and
+both rider reactions. A further16 complete AD418 frames /27,103 instructions
+update twelve birds together. Every ordered store, final actor hash and RNG
+state matches. Numeric callees execute original instructions without interception;
+BF8C8 remains the explicit audio boundary in the composed-frame evidence.
+
+## Unpublished — complete course1/7 bird motion and mixed actor frames
+
+A9494 now implements both original bird movement modes: target flight and timed
+bursts, including the course targets, odd/even turnaround choice, bank and speed
+smoothing, rider-proximity target switching, animation-counter reset and shared
+random draws. It preserves the unusual burst-speed check that uses velocityZ
+twice, signed counter overflow/remainder, and source store order. Unsupported
+courses retain their target scratch as the original routine does.
+
+The canonical course actor frame automatically expands this bird consumer as
+well as swimming actors. It retains one shared RNG and applies earlier actor
+writes before later consumers. Missing consumers still reject the prepared
+frame atomically; full live attachment remains pending other course movement
+and audio consumers. No live graphics or render-resolution settings changed.
+
+Evidence:588 complete A9494 executions /149,198 instructions include480 carried
+steps, both modes, odd/even actor slots, inactive paths, target changes, bursts
+and random transitions. A further16 complete AD418 frames /38,144 instructions
+combine six birds and six swimmers. All numeric callees execute original code;
+BF8C8 is the explicitly retained audio boundary in those mixed-frame tests.
+Every ordered store, final actor hash and random state matches.
+
+## Unpublished — actual actor water inputs and dolphin movement regions
+
+The race-water owner now exposes the original patch0 circle as float words for
+actor motion, together with its actual relocation radius. This detached reader
+uses the existing completed water mesh; it rejects startup and stale menu state
+and does not create a second camera, circle or random-stream owner. Tests cover
+native units, retained snapshots, inactive simulation and patch generation order.
+
+The complete A6684 dolphin movement-exclusion predicate is also recovered,
+including all ten circles and the original A6628/9D4A8 binary32 distance and
+strict boundary comparison. It matches565 original executions /191,401
+instructions with no intercepted numeric callees, including centers, edge probes
+and a course-wide grid. These numeric constraints do not change scenery or
+resolution. The full A68A4 dolphin motion and shared A2B24/A52D8 dependencies
+remain pending; neither this predicate nor the course actor frame is live yet.
+
+## Unpublished — complete swimming actor motion and shared frame composition
+
+A5D70 now implements the full swimming-actor routine: orbiting, approaching or
+following an actor, fleeing the rider, type-specific turn rates, speed smoothing,
+mode changes and relocation outside the active water range. Camera selection,
+linked-actor positions and primary-body scratch come from retained owners. The
+original heading lookup, two different sine-index evaluation orders, binary32
+arithmetic and binary64 smoothing/range calculations are preserved. Relocation
+uses two draws from the shared47E50 stream, including the original modulus4095.
+
+The canonical AD418 frame now expands this recovered consumer automatically.
+Later actors see earlier actor and RNG writes. Other motion/audio consumers are
+still mandatory explicit dependencies; a missing late consumer rejects the
+whole prepared frame without committing earlier movement or RNG advancement.
+The live host is not switched to this frame until the remaining consumers and
+actual water-range inputs are available. No visible artwork or resolution has
+changed in this step.
+
+Evidence:376 original A5D70 executions /138,828 instructions include248 carried
+steps, all four swimmer types, orbit/approach/flee/held paths, linked targets,
+both camera selectors and relocation. Every numeric callee executes original
+instructions without interception. An additional16 complete AD418 frames /
+24,716 instructions execute the selected swimmers together and match all stores,
+final actor hashes and shared RNG. Those composed cases explicitly leave BF8C8
+as the audio boundary and contain no bird actors; they do not claim the remaining
+course consumers are complete.
+
+## Unpublished — course actor frame coordination recovered
+
+The complete AD418 outer frame now prepares shared body/record/water-vertex
+scratch and dispatches every course's motion consumers in source order. The
+primary direction normalization uses body5C and the change in positionZ, with
+the original binary64 threshold and binary32 replacement. The secondary
+direction remains unnormalized, while both stored speeds intentionally use
+primary X/Z movement and cap their retained maxima at70. Counter overflow,
+record selection and ordered stores remain exact.
+
+Course4's activity guard, unconditional type10 update and subsequent fresh
+type1/2 test are preserved. The other courses honor their submitted-row guards.
+Consumers receive frozen current actor snapshots; their prepared writes are
+applied before subsequent dispatch. Missing consumers fail rather than producing
+an apparently complete frame with stationary actors. This coordinator is not
+yet attached to the live host: motion leaves and their route/audio dependencies
+must be supplied first.
+
+Evidence:220 original AD418 executions /99,852 instructions match the complete
+outer-frame write stream, resulting actor hashes and state at every consumer
+boundary. The numeric square-root callees execute original instructions. Motion
+leaves are explicit test boundaries with synthetic writes that change actor
+type/submission, so these tests prove coordination and do not claim recovered
+leaf behavior. Render resolution and live artwork are unchanged.
+
+## Unpublished — complete course actor startup in shared state
+
+AC184 now has a complete numeric initializer for all nine course branches,
+sharing the verified body/record/water-vertex scratch and matrix startup with
+the introduction path. It preserves source allocation counts, untouched fields,
+unlock thresholds, reverse-course selection and the original random call order.
+Dolphin Park installs its extra wake actor from the actual first course node;
+main0 retains the original inactive swimmer slots and reserved count. Other
+courses include their swimming, bird and special actor placements. Introduction
+and main21 bypass course creation; the original two-player guard clears counts.
+
+Canonical startup reads retained selection, records, profileB340 and shared
+RNG rather than caller duplicates. Auxiliary controls62D0/D4 have a distinct
+two-word owner, and actor byte stores preserve neighboring bytes. The verified
+loaded defaults for62D0/D4 and audio7C9C are zero. Course5's audio initialization
+retains the numeric scene write and ordered C53D4 command for its audio consumer.
+
+Evidence:156 complete original AC184 executions /294,448 instructions match
+every ordered store, final actor hash, control word and RNG result, including
+unlock boundary cases and reversed courses. C53D4 is the explicit audio queue
+boundary; all other numeric callees execute their original instructions. Only
+numeric observations are shipped in the fixture. This prepares the shared scene
+owner for retained effects; live actor motion and renderer attachment remain
+pending. Rendering resolution and visible artwork have not changed.
+
+## Unpublished — fresh effects input and complete scene graphics setup
+
+A separate initial effects capture now reads the unsampled physical startup
+owners for AE7C4. It preserves the actual floor-contact field and requires the
+caller's applied startup BF0/BF4. It neither advances controls nor fabricates a
+completed frame. The engine field is absent because AE210 does not read it and
+the original body reset retains C66; completed-frame capture supplies the later
+sampled engine value. Startup, completed and partial-frame captures have distinct
+admission checks, with immutable detached results.
+
+Evidence: compact numeric observations from20 full original6390C/62E50 runs,
+covering205,321 instructions, match every captured field. The recorded write
+coverage proves that floor contact and engine survive reset while displacement,
+reference velocity, tick velocity, wrap drift and stumble count are initialized.
+A real prepared race body seeds the complete verified AE7C4 routine without
+changing hull, rider, water, controls or shared RNG.
+
+The playable race and championship standings now execute all of6A264 at the
+original outer-frame boundary. Its independent scene buffer alternates, the
+graphics frame counter advances, the latch clears and the matrix/list allocator
+resets even when gameplay activity is held. Ambient timing remains activity
+gated. Loaded startup values800D4B04/08/0C were verified as0/1/0. Warm menus retain
+these owners and the separate AI/actor graphics selector remains independent.
+Live-host tests cover both selectors, held/active simulation and activity, pause,
+fractional intervals, signed overflow and original call order. Render resolution,
+ocean geometry and artwork are unchanged; retained-effect renderer attachment
+remains the next integration stage.
+
+## Unpublished — physical world wrapping connected before frame motion
+
+The playable source host now applies the original water-owned world bounds
+after all fifth hull ticks and before each descending body summary and actor
+update. Held simulation runs the same boundary stage; browser pause does not.
+Current hull and rider positions, auxiliary anchors, previous body center and
+the retained frame reference move together. The canonical camera owner applies
+only the original selected human eye X/Z writes. Follow lag, contact proxies,
+the160C spray reference, velocities and stored rider deltas remain untouched.
+Effects can now capture the actual completed BF0/BF4 correction, with startup,
+partial-frame and stale-frame reads rejected.
+
+The physical rig is still an authored adaptation: its history targets are
+rebuilt from retained physical positions, and animation targets are regenerated
+in the hull frame. It does not invent three raw eighteen-joint pose blocks.
+Crossed axes use original binary32 addition; zero-drift frames and unchanged
+axes retain existing browser double precision. Source water setup exposes its
+six verified bound words without resetting noise or consuming randomness.
+Menu scene installation validates its replacement bounds before any mutation.
+The loaded camera selectors at ROM0F1F60/64 were checked as0/1; the second
+selector is now retained in fresh memory rather than missing on shared paths.
+
+Evidence: all160 original composed body/camera cases still match every ordered
+write and output hash, including the extracted camera stage. New physical tests
+compare translated owners against the verified618F4 kernel, check unchanged
+dynamics, prove wrap-before-motion/actor order, and match real crossing histories
+at30/60/144Hz. All86 focused body/world/host/water-entry/effect, championship
+application and water setup/menu/field checks pass. No render resolution, mesh, artwork or multiplayer
+options changed. Attaching the complete retained-effects renderer remains pending.
+
+## Unpublished — explicit physical fields for the retained effects pipeline
+
+AE210, full AE7C4 initialization, full B2ABC frame updates and the canonical
+spray adapter now accept structured physical fields as an alternative to a
+complete1478-word body. Reads retain their original branch order and binary32
+rounding. Missing reached fields reject; extra scene actors need no physical
+body. Conflicting views for the same slot reject instead of silently choosing.
+
+The capture helper reads actual completed hull, retained frame, last-tick
+reference motion, recovery and sampled engine owners. It returns detached,
+immutable values and rejects startup or a partially prepared following frame.
+Applied boundary drift must be supplied explicitly: neither terrain bounds nor
+an assumed zero translation can substitute for BF0/BF4. No synthetic full body
+array is constructed. Live wrap ownership is connected in the entry above;
+renderer attachment remains pending.
+
+Evidence: structured inputs reproduce every original ordered operation and
+retained output in160 input cases,48 initialization cases and84 complete frame
+cases, including both graphics buffers and twenty carried frames. All21 focused
+checks pass, with canonical ownership and actual physical capture coverage.
+Resolution and graphics assets are unchanged.
+
+## Unpublished — rider water entry belongs to the physical frame
+
+The 662E0..6633C rider-water stage now runs after each completed rider pose,
+before the shared water field advances and before landing settlement. All four
+physical racers retain C84/C86, including held simulation frames. Falling
+actors23/5 query their actual joint2 through the original scalar water plane;
+other actors clear the current flag without querying. Equality remains dry.
+
+Audio now consumes these completed flags. Previously it sampled the following
+water frame in a separate human-only audio owner, which could move a water-entry
+edge or omit rival state. Audio snapshots retain only detached observations.
+
+Evidence: the physical bridge matches all108 existing original-instruction
+cases. All77 focused physics-world, championship, audio, landing and action
+checks pass. Four-racer tests establish descending pose/query order before
+water evolution, held-frame history, pause behavior and identical30/60/144Hz
+results. Graphics, resolution and multiplayer options are unchanged.
+
+## Unpublished — retained body speed and computer-profile contact state
+
+Canonical body samples now read the completed B90 speed owner. They no longer
+recalculate it from positions after held simulation or a later physical
+relocation. Audio and race consumers therefore observe the retained source
+field. The audio test fixture now supplies that completed field explicitly.
+
+The original 66278..662AC contact-mode stage now runs before rider recovery.
+For a nonzero physical profile16CE it writes1602 from racer impact C40;
+human-profile bodies retain1602. This is independent of current human/AI input
+ownership and also runs when the following actor dispatcher is held by648.
+Preparation remains atomic if later actor input is invalid.
+
+Evidence: 84 original executions / 504 instructions match every contact store,
+including signed zero, subnormal impacts and retained nonboolean halfwords.
+All 77 focused body, audio, ice, landing, lifecycle, action and championship
+checks pass. Four-rider physical and canonical histories still match at
+30/60/144 Hz. No rendering or resolution settings changed.
+
+## Unpublished — original frame motion integrated into playable physics
+
+The complete 65DDC..65FF8 movement stage now drives the physical adapter's
+completed-frame outputs. Displacement, displacement change, speed and retained
+maximum use the original binary32 stores and arithmetic order. The offset
+reference point retains the source double constants, rounded inputs and final
+binary32 store. Its position, displacement and change persist between completed
+frames instead of deriving a replacement starting reference each frame.
+
+Held simulation retains those histories while contact-drive counting still
+reads the actual floor/box impact owner and sampled engine mask. Snapshot
+vectors are detached from retained physics state. The change does not alter
+render resolution, textures, water geometry or multiplayer behavior.
+
+Evidence: 288 original executions / 22,164 instructions match all output fields
+and ordered body writes. All 89 focused adapter, source-fixture, race-host,
+championship, landing, action and spray checks pass, including matching physical
+histories at 30/60/144 Hz. Full wrapping and the remaining post-hull presentation
+stages still require integration.
+
+## Unpublished — original body wrapping and retained histories
+
+The original 65C18 boundary stage through 65DDC is reconstructed, including
+the complete 618F4 translation routine. It selects the strict world-wrap
+correction, writes body BF0/BF4, shifts the selected human camera anchor and
+translates current positions and retained histories together. Frame velocity,
+orientation and point coefficients stay intact. The canonical adapter shares
+the actual HUD owner and returns validated physical writes for the body owner.
+
+The six wrapping fields belong to water setup at 801924AC, independently of
+race records at 801C1F94. The view reads the existing verified water initializer;
+it never derives limits from visible terrain or a matching low address.
+
+Evidence: 784 original boundary-prefix executions / 33,264 instructions,
+48 complete translation executions / 51,816 instructions, and 160 composed
+boundary/camera executions / 196,824 instructions. Every ordered write and
+full body/HUD hash matches. Tests cover strict edges, signed zero, lower-bound
+priority, retained histories, lazy camera selectors, owner separation and late
+failure without partial updates. All 30 focused checks pass. Physical-host
+commit and the rest of 65C18 remain pending; this does not yet change live
+wrapping or attach the new spray renderer. High-resolution rendering is unchanged.
+
+## Unpublished — retained effects and high-resolution GPU consumer
+
+The renderer now consumes the verified initialization, frame and display
+requests. It retains both scene vertex/matrix buffers, decodes signed positions
+and packed transforms, preserves draw order and source frame choices, and
+applies world scale once. Texture coordinates retain the original half-scale
+setting. Environment RGB and vertex alpha remain separate. Transient quads
+use their original numeric corners, including retained coincident-camera
+matrices. Surface effects test depth; shared droplets bypass depth testing.
+
+Authored textures are 512 × 512, with 512 × 1024 wake maps. Existing seven-frame
+mist artwork is reused without changing the existing ice renderer. Only
+adjacent compatible draws merge. Dynamic geometry is reused, transparent
+surfaces render in one unculled pass, and resources have explicit disposal.
+All draw validation finishes before visible geometry changes.
+
+Evidence: retained initialization/frame/display data matches all 48/84/126
+original fixture cases, plus 48 transient-display cases and twenty carried
+frames. Independent tests cover UVs, color/alpha, matrices, batch order, reuse,
+disposal and late failures. All 37 focused checks pass. A browser composition
+of initialization, one original numeric frame and its display rendered 62
+triangles in two effect batches at 1600 × 650. GPU pixel checks confirmed
+texture × vertex alpha, surface occlusion, droplet depth bypass and blending
+order; the preview was visually inspected. This verifies the graphics adapter,
+not the complete playable scene. The physical-owner bridge and main8 host
+integration remain pending. Resolution, ocean density and existing assets
+are preserved.
+
+## Unpublished — complete original spray-and-wake display pass
+
+B305C now prepares triangle spray in four texture passes, compact splash quads,
+seven-quad wake strips, primary-rider droplets in five-triangle batches, and
+the complete transient-splash display. It preserves source color overrides,
+view-dependent visibility, vertex offsets, distinct splash age defaults,
+shared matrix allocation, retained display cursor and 64-bit timing maxima.
+Graphics commands become validated material, texture, vertex and primitive
+requests. The adapter derives actual scene-buffer and camera owners.
+
+Evidence: 126 whole original executions / 955,136 instructions, including
+AF798 and every numeric callee. All 29,332 original graphics commands were decoded
+and validated against their complete state-setting words; no command is ignored.
+Every semantic request, retained/control write, clock boundary, matrix-region
+hash and final allocator/cursor matches. Explicit tests cover every droplet
+batch remainder, late invalid particle counts, prefix exhaustion and canonical
+ownership. Browser GPU consumption remains pending. Resolution, ocean density
+and existing high-resolution assets are unchanged.
+
+## Unpublished — independent scene graphics frame
+
+The full 6A264 graphics setup now advances the outer frame counter, conditionally
+advances the gameplay counter, clears the latch, selects the incoming 4B0C
+buffer, toggles the next selector, installs both original buffer pointers, and
+resets shared matrix allocation. Effect geometry, the composed effect update
+and transient display now derive their buffer from 801AE948. This corrects an
+adapter mistake: the AI/actor graphics selector is an independent owner and
+cannot select these B2F0-byte scene buffers.
+
+Evidence: 162 complete original executions / 5,076 instructions, covering
+counter overflow, both selectors, held activity and latch values. Canonical
+checks deliberately set the AI selector to the opposite buffer, and verify
+that it remains untouched. Optional scene owners must be supplied explicitly;
+the live host's existing frame counter is not advanced twice or silently reset.
+
+## Unpublished — original transient-splash display
+
+AF798 now prepares the original palette material, camera-facing and uniform
+scale matrices, shared scene-matrix allocation, seven texture-frame choices,
+and splash-quad draws. A splash exactly at the camera preserves its previous
+facing matrix while still binding it and advancing allocation. The shared
+matrixCountE950 owner remains separate from actor matrices and effect RNG.
+The original display-list groups become validated renderer requests.
+
+Evidence: 48 complete original executions / 133,464 instructions, including
+48854, scale construction and both matrix packers without interception. All
+ordered matrix writes, allocator changes, verified command groups and complete
+graphics-buffer hashes match for empty, sparse and full pools, both selected
+buffers, camera selectors, degenerate directions, signed scale and age limits.
+Late conversion/capacity errors preserve caller state. Browser consumption of
+these requests is still pending; no resolution or ocean-detail change.
+
+## Unpublished — complete original scene-effects update
+
+B2ABC now composes camera-axis preparation, every participant's physical or
+extra-actor inputs, activity-gated spray evolution, unconditional geometry and
+wake aging, 64-bit timing statistics, and unconditional transient emission.
+The canonical adapter derives retained owners, scene controls, score records,
+graphics buffer and both original camera selectors. The second selector has
+its own optional scene field; it is never guessed from the first camera.
+
+Evidence: 84 complete original executions / 689,147 instructions, including
+all numeric children. Only two clock samples and source-plane query returns
+are explicit external inputs. Every ordered write, query and clock boundary,
+complete pool/control/random result, and both full vertex buffers match.
+Coverage includes held activity, empty/negative effect counts, zero/vertical
+camera axes, both buffers, Dolphin's extra actor, unsigned timing rollover,
+and 20 successive frames carrying effect and graphics state forward.
+Late failure leaves caller state untouched. GPU consumption and browser scene
+integration remain pending; resolution and ocean detail are unchanged.
+
+## Unpublished — complete original spray update
+
+B08F8 now combines visibility and wet-state decisions, existing particle
+motion, spray audio levels, new triangle/droplet/quad emission, separate16-bit
+random draws and final wake insertion. It preserves full-pool scans, emission
+gates, both shared-droplet passes, ring advancement before suppressed emission,
+single/double precision arithmetic and every retained pointer/store order.
+The canonical adapter derives scene controls, record2F4, camera storage and
+seed from their actual owners; physical bodyC66 comes from the supplied body.
+
+Evidence:248 complete original executions/1,145,506 instructions, with every
+numeric callee executed and the actual initialized sine table supplied. All
+ordered stores, complete effect hashes, controls and final seeds match. Cases
+include visibility boundaries, zero axes, special scenes, extra actors, all
+participant slots, full pools and32 successive updates carrying state forward.
+Scalar audio results agree with the existing audio dependency, and late failed
+table reads cannot commit earlier motion or random draws. Parent B2ABC is now
+composed and verified above; high-resolution browser consumption remains pending.
+
+## Unpublished — retained particle motion dependency
+
+B08F8's B0F10..B1390 phase now updates existing spray triangles, primary-rider
+droplets, four short-lived quads and all eight wake-history rows. It preserves
+source growth caps, special-surface motion, gravity, retirement order, signed
+age overflow, drift and inactive records. Wake movement changes horizontal
+coordinates while retaining vertical history and velocity fields. All work
+prepares atomically against the existing effect/control owners.
+
+Evidence:72 original instruction-range executions/252,612 instructions with
+the exact incoming constants and pointers established by B08F8's prefix.
+All ordered writes, complete owner hashes and control-pointer results match.
+This is explicitly a dependency phase: visibility/wet-state preparation,
+new-particle emission and final wake insertion still require full composition
+and whole-routine verification. No browser frame or GPU integration is claimed.
+Resolution and ocean detail remain unchanged.
+
+## Unpublished — retained wake and spray geometry
+
+AFBD0 now prepares the original compact triangle and quad vertices, camera-facing
+spray orientation, age-based alpha, Dolphin scale rules and eight-row wake strip.
+Inactive particle vertices remain untouched; wake history ages in original
+circular order. The canonical adapter uses retained effect pointers, HUD cameras
+and selected graphics buffer, leaving physical, scoring and random state intact.
+
+Evidence:96 complete original executions/870,640 instructions, including every
+square-root and normalized-cross call without interception. All ordered owner
+and vertex writes, complete effect hashes, control pointers and both full buffer
+hashes match across all four effect slots, buffer choices and activity patterns.
+Failure checks cover late invalid history and camera pointers. Vertex writes are
+validated renderer requests; browser GPU consumption and the complete B08F8
+particle lifecycle remain pending. High-resolution rendering is unchanged.
+
+## Unpublished — original transient effect emission and aging
+
+AF51C now executes the three countdown-controlled emitters, AF4A0's eight-slot
+ring and the original signed-age expiry. New rows age during the same update;
+inactive rows retain their storage. Each FloatRand draw advances the separate
+seed6f00 stream with original single-precision rounding and ordered writes.
+Canonical preparation owns the retained pool and seed, preserves gameplay RNG
+and physical state, and rejects invalid late emission data atomically.
+
+Evidence:160 complete original executions/45,148 instructions, including both
+numeric callees without interception. All ordered stores, pool hashes and final
+seeds match, including circular overwrite, inactive emitters and signed overflow.
+Additional checks cover same-frame aging, eight-update expiry and canonical
+ownership. Parent scene-update composition and browser particle rendering remain
+pending. Resolution, ocean detail and high-resolution assets are unchanged.
+
+## Unpublished — complete scene-effects initialization
+
+AE7C4 now initializes retained particle records, eight wake-history rows per
+selected participant, course colors, Dolphin's optional extra actor, shared
+effect scratch and both original graphics buffers. It composes the complete
+AE210 input routine before seeding each history and preserves the original
+later flag resets. Inactive entries and untouched vertex positions/alpha bytes
+survive. The two original B2F0-byte graphics buffers receive ordered byte and
+halfword attribute requests; these remain explicit renderer effects.
+
+Math_srand uses the low16 bits of the supplied osGetTime low word and updates
+the existing seed6f00 owner once. It does not draw from or reseed shared gameplay
+rngState4640. Optional effectControlWords6d60[22] owns the actual800E6D60..6DB8
+pointer/color/palette/latch region, distinct from ending-menu overlay storage.
+Canonical preparation derives course/count/owners from retained state, preserves
+championship points and fails atomically on late missing physical or water data.
+
+Evidence:48 complete original AE7C4 executions/1,711,709 instructions, with
+all reached numeric callees executed. osGetTime and4D30C source-water queries
+are explicit supplied external results. Every ordered owner/vertex store,
+water query and its place among stores, complete effect-owner hash, control
+owner, final seed and both entire graphics-buffer hashes match across twelve
+course selections and one through four physical racers.44 focused/regression
+checks pass, including introduction transitions and existing spray audio math.
+
+Remaining: compose main8's complete physical initialization and frame lifecycle,
+consume retained particle/actor rendering and real animation resources, and
+verify naturally played championship progression before browser admission.
+Resolution, ocean density and high-resolution assets remain unchanged.
+
+## Unpublished — complete retained wake and spray inputs
+
+AE210 now prepares its actual scene-effects storage for both physical riders
+and Dolphin's additional scene actor. It preserves the distinct position,
+velocity, facing and sideways-motion rules, floor/alternate-state branches,
+wet/dry history writes and exact water-query count/order. The source plane-query
+callback remains explicit and pure; rendered wave height is not substituted.
+The extra actor does not require a nonexistent physical rider body.
+
+Canonical effectWords0790[7415] owns801D0790..801D7B6C, adjacent to the actor
+pool and distinct from overlay championship menu storage. Updates consume
+retained actor selection and physical racer count, leave physics/points/RNG
+untouched and reject malformed late inputs atomically. Storage remains optional
+until the physical presentation host supplies it; no particle emission is claimed.
+
+Evidence:160 complete original AE210 executions/30,656 instructions, with square
+roots executed and4D30C water results supplied at the sole external boundary.
+All numeric stores, query coordinates, query positions among stores and full
+effect-owner hashes match. Physical outputs also agree with the existing spray
+audio dependency when supplied the same source plane.30 focused/regression
+checks pass. AE7C4 initialization, particle/wake evolution and retained renderer
+consumption remain pending; resolution and ocean density are unchanged.
+
+## Unpublished — original introduction actor initialization
+
+AC184's complete main8 path now initializes the shared actor/body scratch from
+the selected physical racers, their retained records and actual active-water
+vertices. It advances the shared frame counter, clears motion deltas, initializes
+previous positions and preserves nonnegative warm speed maxima. Single-player
+uses the primary body/vertex for both references. All30 actor rows receive the
+original selective9D5C0 reset, retaining padding and both allocation counters.
+The actual6280 matrix reverses Z;47EE0 installs its packed integer/fraction halves
+in descending source order. It is not an identity-matrix substitute.
+
+The canonical adapter owns player selection, records and actor storage; physical
+body poses and selected water vertices remain explicit host inputs. Packed
+halfword writes preserve adjacent data and fail atomically on malformed input.
+The ordinary-racing branch of AC184 is not represented by this main8 initializer.
+Main8 hosting still needs AE7C4's separate retained presentation effects, the
+remaining scene lifecycle and live renderer integration before cup admission.
+
+Evidence:128 complete original AC184 main8 executions,209,728 instructions,
+including reset, square-root and matrix-packing callees without interception.
+All ordered stores, full actor hashes and allocation/control words match across
+all selected human slots, one/two-player references, warm counters/maxima and
+signed counter rollover.49 focused/regression tests pass, including complete
+actor display, camera scripts/frames, actor submission and canonical storage.
+High resolution and ocean density remain unchanged.
+
+## Unpublished — complete actor display sequence, lighting and fog
+
+ADF90 now composes the retained display-phase toggle,916B4 lighting/fog,
+ADD14 bounds, matrix-counter reset, all30 actor slots, visibility, all twelve
+implemented draw routines and AE148 temporary-actor retirement. Its192-matrix
+capacity estimate runs before visibility; actual draws determine allocation.
+Retirement still runs after an early capacity exit. Original signed resource
+selectors, active-frame rules, partial matrix writes and graphics-list order
+are preserved. Canonical adapters derive selectors from retained scene storage
+and prepare all changes atomically, including failures in a late actor.
+
+Lighting builds both retained24-byte lights, preserving padding. The lighting
+view is independent of the visibility camera. Course6 chooses one or two lights
+from its retained AI activity and updates the actual AI-context pointer. Fog
+color and packed factors preserve signed32-bit arithmetic and division traps.
+Fresh memory initializes the original display phase to0; warm scenes retain it.
+
+Evidence:252 complete original lighting executions/81,008 instructions and96
+whole original actor-display executions/3,218,034 instructions. Every numeric
+callee executes original instructions. Comparisons cover ordered operations,
+full actor/control storage, both complete matrix buffers, both light buffers,
+all draw families, capacity-before-culling, empty pools and retirement. The
+animation descriptors in these display fixtures are synthetic; this proves
+the routines, not decoding of the game's actual animation assets. Private GPU
+command groups are checked in final display-list order and represented publicly
+as semantic renderer effects. Original executable bytes are not published.
+
+All93 focused/regression tests pass, including camera scripts, course actors,
+championship application/startup, introduction transitions and canonical state.
+The original actor drawing components and this complete dispatcher still emit
+renderer effects: browser GPU consumption, real animation-resource decoding,
+physical introduction initialization/update and complete browser cup progression
+remain unfinished. Resolution, ocean mesh density and detailed assets are held.
+
+## Unpublished — original introduction course actors and shared flock motion
+
+The main8 branch of DD6B4 now reconstructs all six selected course callbacks:
+Dolphin, Sunny Expert, Sunset, Drake, Port and Southern. Other course/class
+branches clear the actor count without inventing scene actors. Script cursor
+and timer values are consumed after the camera-script step, matching the
+original dispatch order. The course callbacks retain original first-frame
+initialization, delayed motion, animation counters, vector normalization,
+angle wrapping and exact sine-table lookup. Sunny's target displacement uses
+the original integer quotient, not a substituted smooth interpolation.
+
+Common DB284/DB430 flock initialization/movement includes AFB8/B024 animation
+and the shared47E50 random stream. Southern's two leaders and two flock groups
+preserve their ordering and reused angle storage. Drake's24 actors retain
+leader/follower update order and speed decay. All actor positions, headings,
+up vectors, counters, scale and scratch values return to canonical HUD storage;
+RNG returns to the same scene owner used by the rest of the game. Atomic
+adapters take course/class and RNG from canonical state and preserve cup points.
+
+Evidence:524 complete original common-flock executions,373,782 instructions,
+including three actual templates, consecutive frames, animation thresholds and
+angle-wrap cases. Another3,766 original DD6B4 executions cover every course,
+Sunny's three classes, both camera slots and each active shot's counters,
+executing5,265,786 instructions. Every ordered numeric write, random-state write
+and full HUD hash matches. AB92C pool reset, AB95C scene production and AC098
+actor submission are explicit external boundaries in that second audit;
+their storage and rendering are not claimed executed. All other reached numeric
+callees execute original ROM instructions. Public fixtures contain numeric
+inputs/writes/hashes, never executable ROM data.
+
+Eight new tests cover original comparisons, canonical camera-script -> actor ->
+auxiliary composition, class selection, detached storage and atomic late errors.
+Forty existing camera, introduction, standings and canonical-state tests also
+pass. The composition test uses real fresh-memory camera links; its initial
+synthetic actor-only fixture correctly failed the script-pointer guard before
+being replaced with actual boot storage. All452 module hashes/four preload
+sets are refreshed. High resolution, ocean density and detailed models remain.
+
+Remaining: implement/retain the shared presentation-actor pool, consume the
+three explicit external boundaries, assemble the complete type6 camera frame,
+and connect physical main8 initialization/hosting and high-resolution course
+panels. Full browser championship remains gated; this is not a visible live
+flyover or completed cup claim.
+
+## Unpublished — complete introduction camera scripts and auxiliary motion
+
+All eleven original course/class introduction scripts now have decoded numeric
+resources and a complete DFCB8 runner with all eight reached callbacks. The
+runner preserves callback-before-timer order, same-frame zero-duration commands,
+path reset ordering, signed counters and terminal hold/stop behavior. Its
+canonical adapter preserves championship points and fails atomically on missing
+late resources. Two camera slots retain independent script/path state.
+
+DFC48 auxiliary motion now includes Cartesian type1 and spherical types2/3,
+with original float32 smoothing, truncated angle phases and the exact source
+sine table. Target/eye, up vector, FOV and projection offsets follow the original
+write order. Unsupported motion branches reject rather than approximating.
+
+Evidence:22 complete original script sequences (eleven scripts in both slots),
+5,160 frames and 3,887,572 instructions. Every ordered HUD write and per-frame
+HUD hash matches. Another120 original auxiliary-motion cases execute20,760
+instructions, covering types1/2/3, both slots, multiple rates and wrapping angles.
+Numeric callees execute without interception. Public resources/fixtures contain
+numeric data and checksums, not executable ROM instructions. Forty focused and
+regression tests pass, including all scripts composed with auxiliary motion.
+
+This completes script/path/auxiliary components, not the complete physical
+introduction frame. Course-specific actor effects still run between scripts
+and smoothing in the original; these, main-camera copy/basis integration,
+physical scene initialization and live presentation remain to be connected.
+Full championship admission remains gated. Resolution and ocean density are
+unchanged. The four page import maps/preloads are refreshed for449 modules.
+
+## Unpublished — introduction camera initialization and original path sampling
+
+The main8 course introduction now has its own numeric camera initializer.
+It reconstructs DDA24/DDAB8's selected type5 branch, which switches to scripted
+type6 and selects the actual course camera resource. Sunny's Normal, Hard and
+Expert classes select three different sequences. Other courses select their
+own sequence. DFD94 resets only the script cursor and timer; retained auxiliary
+camera values and owner links survive. E0F8C/E0FF0 produce the original camera
+basis and both graphics-buffer matrix requests. The canonical adapter reads
+the retained course/class, preserves championship scores and prepares writes
+atomically. It does not execute a camera script or initialize the live scene.
+
+Original DD85C camera boot is reconstructed with all three pointer setters.
+Fresh web memory installs both camera slots' auxiliary, path-counter, body-view
+and water-datum links once. Warm scene transitions keep them. This also supplies
+the original camera slot index and initial zoom selection instead of leaving
+the second camera's identity zero. Cursor/timer, path counters and auxiliary
+contents remain untouched by boot, matching the source.
+
+DE690's scalar spline evaluator and DEB08/DEC00's scalar/XYZ path sampling are
+reconstructed with the source's five endpoint/interior weight cases and exact
+single-precision grouping. Sampling preserves zero-duration skips, sample-before-
+increment order, signed frame rollover and terminal segment=-1. It neither
+substitutes a generic cubic spline nor silently restarts a finished path.
+
+Evidence:324 whole original camera-initializer executions (108,648 instructions),
+four complete boot executions (796 instructions),1,404 spline evaluations and
+384 complete scalar/vector sampler executions (168,268 combined instructions).
+Initializer graphics matrix generation is the explicit boundary; the boot and
+sampling checks execute all numeric callees without interception. Public fixtures
+contain numeric inputs/writes and hashes, not original executable ROM bytes.
+
+All59 focused/regression tests pass, including four-rider championship driving,
+ordinary race physics, all nine Stunt hosts, canonical cameras and menu transitions.
+The physical histories remain identical across30/60/144Hz. All446 module hashes
+and the four pages' preloads validate. These checks do not prove live cup flow.
+
+Remaining: decode/consume introduction camera command resources and callbacks,
+advance the scripted camera with its course-specific scene effects, and connect
+main8's physical initializer/host and high-resolution panels. Full browser cup
+progression remains gated. No live introduction animation or complete cup is
+claimed by these component tests. Resolution and ocean mesh density are unchanged.
+
+## Unpublished — championship introduction controls and configured race handoff
+
+The original i3 display controls are now reconstructed and composed with the
+existing update, widget and fade stages. The first latched state30 display
+clears its latch and stays black without advancing panels, input or RNG. The
+class-title panel retains both opacity ramps, hold periods and its transition
+to the course panel. The course panel enables skipping on its original final
+fade-in frame. These writes precede the caller's input check on that same frame.
+
+The caller uses pressed buttons from the combined third menu record. A pressed
+skip button that is not yet accepted does not fall through to the automatic
+timeout. Ordinary displayed state30 frames make one shared RNG draw, including
+an accepted exit; the re-entry branch skips that extra draw while EB91C itself
+retains its own random selection. The20-frame exit, delayed sound, one-frame
+fade-completion pulse and main-configuration call preserve source order. The
+post-callback tail reads the newly selected scene, not a stale pre-exit copy.
+
+The new introduction phase prepares detached canonical state and returns the
+already-executed9345C configuration as its race handoff. The shared configured
+championship loader consumes that result, installs the selected course objects,
+resets race records and prepares four physical grids without configuring twice
+or clearing cumulative points. Callers explicitly declare whether configuration
+effects have already been delivered, preventing duplicate resource/audio effects.
+Fresh web setup uses the same loader and retains its existing behavior.
+
+A separate eight-word6F64 panel owner complements the43-word6F84 introduction
+owner. The verified original loader table at800E4F30 copies data through7020
+and clears7020..7030; fresh introduction storage follows that recipe. It never
+reads the next ROM overlay's bytes as scratch defaults. The loaded codeseg
+word80223938 is1 and initializes the display-enable owner only in fresh memory.
+Warm frames retain all owners.
+
+Evidence includes780 complete original panel executions, with drawing helpers
+as explicit GPU boundaries,600 complete display callers with prepared panel/
+target-call results, and five complete exit callers with fade/audio boundaries.
+All ordered numeric writes and final panel/menu owners match. GPU command writes
+were observed privately to distinguish them from numeric state; original GPU
+rendering is not claimed. Composed tests verify109 displayed frames through the
+first class-title/skip sequence,40 for a later round's panel, automatic timeout,
+restart RNG, retained points, one configuration, and four prepared next-course
+grids.41 distinct focused/regression checks pass, including existing physical
+startup/driving equality at30/60/144Hz.443 module hashes/four page preloads pass.
+
+Remaining: the main8 physical introduction scene initializer/host, its camera
+and course-diagram presentation, resource consumption and live scene transfer.
+This numeric phase runs after physical scene updates; it does not substitute
+standings' water-only loop for the original animated introduction. Full browser
+championship remains gated, and no natural complete cup is claimed. Resolution,
+ocean mesh density and detailed assets remain unchanged.
+
+## Unpublished — original championship course-introduction update
+
+The next-round destination is main8/state30, an animated course introduction,
+not an immediately playable racing state. Its complete i3 update5800 and both
+subordinate stages5AE8/5AF0 now have a detached reconstruction. The source's
+loaded first-round table is [1,0,0]: Normal clears totals at its first race after
+Dolphin warmup; Hard and Expert clear them at round0. Later rounds retain total
+points, all per-round awards and cumulative ranks. Reset writes preserve their
+original interleaving and leave adjacent profile words untouched.
+
+Qualification is recomputed after the conditional reset, including the source
+scratch writes and signed overflow behavior. The first-race introduction selects
+stage0 and240 frames; later introductions select stage1 and180 frames. Resource
+transform requests, reverse selector writes and stage1 geometry assembly stay
+in source order. The three graphics helpers69740/6977C/69798 remain explicit
+pending effects; no GPU work or physical scene is claimed executed.
+
+The separate canonical championshipSelectionWords6f84[43] owner retains i3 data
+and controls through7030. It is supplied as loaded/retained storage, not allocated
+from standings7A00 or recreated on every frame. Its entry latch is released by
+the later display caller, not this update. Malformed late resource/buffer inputs
+cannot commit earlier resets or qualification writes.
+
+336 complete original update executions (49,096 instructions), including both
+subordinate stage functions, match every ordered operation, resulting menu and
+profile word, and the full race-record digest. Cases cover all classes/rounds,
+primary slots, warmup, entry latch/state combinations, signed stage values and
+point extremes. The original ROM is local/private; fixtures contain numeric
+inputs, operations and checksums. Display5B40, panels5D54/6344, exit6E9C and the
+physical introduction scene lifecycle still need composition before continued
+cup progression can be enabled. Rendering resolution is unchanged.
+
+All37 focused selection, canonical-state, qualification, standings, setup and
+result-entry checks pass. Two stale setup assertions now verify the later-added
+course/last-round tables against their existing original-ROM fixture and the
+already-supported four-racer application startup. The unprepared-launch guard
+remains tested. All440 module hashes and four page preloads validate.
+
+## Unpublished — high-resolution browser championship standings
+
+The browser now consumes the automatic standings scene with a scalable SVG
+layout, round results and overall totals. Rider portraits render the existing
+detailed craft/rider geometry at display pixel size. They share materials and
+geometry without cloning gameplay userData, changing the main canvas size or
+disposing live assets. Temporary render targets restore renderer state.
+
+The actual retained menu camera supplies position, target, up, lens and near
+plane. The ordinary racing terrain and craft hide during standings, leaving
+its animated water backdrop. Continue, Enter and gamepad Start feed the source
+menu loop. The Continue affordance uses the source's next-frame acceptance
+threshold; it never advances scoring itself. Menu pause freezes both standings
+and water. Automatic quality changes are held during the menu, and the racing
+near plane is restored with its projection on the first subsequent frame.
+
+A private browser probe exercises ordinary championship startup followed by an
+injected finish, the actual result delay, automatic standings entry, round
+confirmation, overall standings, pause/resume and the next-round handoff.
+It verifies unchanged physical-frame counts, once-only points, matching source
+camera values and held 1440x900 rendering with 83,521 ocean vertices. A narrow
+512x900 viewport retains full mesh density without horizontal overflow. Detailed
+portraits and both layouts were visually inspected; the successful run has no
+console warnings/errors. The probe is not shipped or claimed as a natural cup.
+
+Fifteen focused host/runtime/presentation checks pass, including both confirmation
+threshold boundaries. All 439 module hashes and four page preloads validate.
+The label wording is authored from semantic layout tokens, not recovered font
+or texture artwork. Original common GPU/environment graphics and fancy fades
+remain gaps. Fresh web-memory names currently remain YOU for all riders under
+the existing initialization policy. Championship browser admission stays gated:
+next-scene ownership, retained-profile selection and continued physical rounds
+must be completed before claiming a playable full cup or persisted ending records.
+
+## Unpublished — automatic championship standings scene host
+
+The application's actual championship result transition now enters a dedicated
+20Hz standings loop. It samples the human device once, initializes the latched
+scene, adapts menu input, updates the canonical menu camera and special water,
+then runs standings, widgets, fades and display input. The shared input clock
+advances afterward. Original dispatcher traces verify the ordering for52/53
+with both latch values;53's initializer call does not reseed the water. Graphics
+buffer selection and the ambient counter retain their original outer ordering.
+
+The existing runtime remains the sole canonical state owner. It prepares all
+numeric stages before installing or advancing the existing live water field.
+First entry awards points once, while subsequent frames retain totals and
+water motion. Invalid late camera/display data cannot partly commit earlier
+state preparation. Physical hulls, ordinary forcing and course rollers remain
+stopped. Type1 camera lens values now come from the retained menu camera, so
+the view does not reuse racing projection metadata. Human control adaptation
+is shared with racing and preserves held/pressed/released button behavior.
+
+Confirmation now reaches the original next-round or game-over handoff through
+the application loop. Next-round setup receives the retained avatar order,
+verified class order and all twelve signed wave values read by801EB91C from
+800EABEC. It retains accumulated scores and only increments the round at the
+source exit boundary. The announcer's outer clock continues during menus,
+including delayed speech, without producing or overwriting physical rider
+sound packets. Returning to physical audio requires an explicit scene handoff.
+
+Application finish/retirement checks cover automatic entry, one-time scoring,
+controller polling, live camera/water updates, pause/resume, confirmation and
+both destination handoffs. Full menu preparation matches at30/60/144Hz.
+These tests use controlled finish/retirement injection after ordinary startup;
+they do not claim a naturally completed championship. Browser standings
+presentation, remaining common graphics consumers, destination scene ownership
+transfer and continued cup progression remain unfinished. No browser mode is
+newly admitted, no record-save effect is claimed persisted, and rendering
+resolution, ocean mesh density and detailed assets remain unchanged.
+
+## Unpublished — special menu water and live field ownership
+
+The main9 standings water is not ordinary race forcing. Original51238 moves a
+retained disturbance by51.2 native units using its angle/turn, changes course
+with exactly three shared RNG draws when it crosses the extent, and overwrites
+the selected triangle's three heights at-50 with zero velocity. It then updates
+one fixed radius16 patch at the origin. Main6 omits the disturbance; simulation0
+holds the patch kernel but does not suppress main9's disturbance. No ordinary
+forcing line, tide decrement, hull update or course roller runs in this path.
+
+`native-special-water-update.js` reconstructs that caller and4EFB4, including
+mixed double/float arithmetic, toroidal triangle selection, ordered stores and
+retained motion/RNG.48 original caller cases and nine separate seam/stamp cases
+match all operations over5,826 instructions. Eight further full original runs
+cover three consecutive frames each:51238,47E50,4EFB4,50F8C and4EAA4 execute,
+with only50204 graphics generation external. All49,152 height/velocity pairs
+match after every frame (991,056 instructions), including untouched canaries.
+The sine input in this audit is explicit regenerated float32 data; this does
+not claim bit identity to the cartridge's runtime sine table.
+
+The canonical state retains motionWords47C4 and consumes the shared RNG, with
+numeric loaded defaults allocated only for fresh web memory. Warm scene entry
+retains both. Camera updates from the preceding checkpoint are also complete;
+the remaining integration dependency is the outer live menu scene host.
+
+`installRaceWaterMenuScene` now installs prepared noise into the existing live
+field once, preserving field identity and forcing phase. `advanceRaceWaterMenuFrame`
+applies the prepared disturbance and kernel with a separate menu-frame count.
+Race/hull/roller counters stay stopped. Ordinary water/world advancement rejects
+while the menu owns the field; resuming an ending or race requires its explicit
+scene transition. Invalid installation/late field writes cannot partly mutate
+live storage. Presentation snapshots see the updated revision without a lower
+resolution mesh or replacement camera.
+
+Actual finish and retirement integration checks now compose scene setup,
+camera update, live menu water, then standings scoring/display. They verify one
+score award, two menu frames, unchanged physical clocks/rollers and preserved
+phase. This is tested component integration; the browser's automatic menu host,
+graphics consumption, exit ownership transfer and continuous cup remain pending.
+
+## Unpublished — course display setup and composed standings scene entry
+
+The complete8E4B0 course-display initializer now copies the selected environment
+parameters to both retained rows, applies the main21 ending override to the
+first row only, converts its three lighting components with original signed
+truncation and prepares the original partial vertex patches for both buffers.
+The ending source atA404 is row10 of the same parameter table, not a competing
+copy. Loaded rows contain numeric environment parameters; no texture, executable
+or guest-pointer data is included. The new canonical ownersB058 and4160 are
+separate from race, HUD and saved-name storage.
+
+Seventy-two full original executions (56,880 instructions, no intercepted
+callees) match all ordered writes, both final parameter rows, light components
+and the complete canary-filled graphics-buffer digests. Tests span all twelve
+row selections, normal/ending branches and three water extents. Vertex X/Z
+and all other unwritten bytes survive. Invalid conversions, malformed ending
+rows and late bad writes leave caller state unchanged; unused rows are unread.
+
+Standings scene-entry preparation now composes the actual926F4 path: water at
+datum0, course display, then selected menu cameras. It executes only for latched
+state52/main9; later state52 and exiting state53 do not reseed the water. The
+latch remains set for scoring and the first black display to consume. Actual
+application finish/retirement tests use this combined entry before standings.
+A late camera error cannot commit earlier RNG or display changes.
+
+Twenty-nine focused course-display, canonical-state, standings-runtime and
+result-entry checks pass. Water installation and graphics consumption remain
+explicit host responsibilities: no live standings scene, complete camera-update
+loop or continued championship cup is claimed. The next dependency is the
+selected1DDEDC camera update and its common helpers, followed by the scene host.
+Rendering resolution and detailed course assets remain unchanged.
+
+## Unpublished — complete scene-water initialization preparation
+
+The outer4F9E0 initializer now has an independent reconstruction, including
+4E614's generated simulation-patch coordinates and vertex offsets. It selects
+the original field shifts/radius, clears saved camera-patch values, installs
+the numeric edge descriptors and datum, requests noise initialization at its
+actual call position, calculates the original float32 spatial extents and
+prepares both graphics buffers' color/UV writes. These source simulation and
+buffer recipes do not replace or downsample the detailed browser ocean mesh.
+
+Twenty-four full original4F9E0 executions, with4E614 and all reached arithmetic
+callees executed, match every ordered operation over585,786 instructions. They
+cover each variant/player branch and negative/zero/positive datums. Compact
+public fixtures retain the exact ordered-operation digests and numeric setup
+writes; the full comparison traces remain private.4F790 is the explicit boundary
+in this audit; its existing independently verified full noise/RNG implementation
+is composed into the new scene preparation without skipping random draws.
+
+Crucially,4F9E0 does not reset the forcing phase at47C0. A nonzero original-memory
+canary confirms retention. The eventual field host must preserve that phase
+while replacing noise and resetting camera-patch history. Reusing the fresh
+web field's default phase0 would be incorrect for this scene transition.
+
+The canonical adapter takes variant, player count, wave amplitude and RNG from
+retained scene state. It prepares the replacement sea and next RNG state as one
+detached transaction. Actual application finish/retirement tests compose this
+water setup before the menu camera and standings phase; they preserve records
+and the once-only scoring latch. Fourteen focused scene-water, noise and result
+checks pass, including all-grid original noise digests, simulation-patch order,
+invalid input atomicity and unchanged caller state. No live field is mutated yet.
+Course-display setup8E4B0, the menu-camera update and the complete scene host
+remain required before enabling the browser standings loop or continued cup.
+
+## Unpublished — original fixed menu-camera initialization
+
+The type1 camera selected by actual championship result entry now has its own
+numeric initializer. It reconstructs DDA24/DDAB8's selected branch, DF008's
+auxiliary template setup, E0F8C's endpoint/lens copies and E0FF0's complete
+float32 basis calculation. Near/far planes, shared water datum8108, horizontal
+direction, orthogonal up vector and eye/target distances retain original write
+order. The two E11B4 graphics requests remain explicit ordered effects; no
+original matrix buffer or live scene is falsely reported as consumed.
+
+Thirty actual original executions, including numeric callees and the C7010
+sqrt instruction, match every write and matrix request over12,825 instructions.
+They cover both camera counts, signed datum limits and varied nondegenerate
+templates. The default thirty-value numeric template and far plane also match
+loaded data. Degenerate inputs and unsupported selected camera types reject
+without partially changing caller storage. Canonical HUD storage remains the
+sole camera owner; prepared views are detached and immutable.
+
+The canonical adapter composes this initializer from actual championship finish
+and retirement handoffs before the tested standings phase. It preserves the
+race records and once-only scoring latch. The initialized basis matches the
+existing source water camera representation without importing a race-follow
+snapshot. All21 focused camera, result-entry and canonical-state tests pass.
+This is initialization, not the subsequent camera-update loop or live menu:
+4F9E0 water setup,8E4B0 course display setup and the complete host remain pending.
+High-resolution presentation and multiplayer feature scope are unchanged.
+
+## Unpublished — actual standings handoff data and camera-only dispatch
+
+The application's real EC0D4 result handoff now installs fresh semantic i5
+standings storage once. Its initial slide, viewport metadata, qualifying-place
+tokens and last-round values match the loaded ROM's numeric fields. Unused
+guest code/string/pointer slots remain explicit placeholders; this is not a
+copied executable overlay. Digit widths and all qualification point rows were
+also checked against resident ROM data.
+
+Standings source views decode the four retained base-avatar names from
+saveWordsB280 and use the selected slot-to-avatar mapping. Names stop before
+the adjacent tuning bytes; malformed encodings and unterminated names reject.
+Alternate model colors do not switch to an unrelated saved-name record.
+Application finish and retirement tests feed their actual menu-entry state
+into the standings phase and layout, checking the first black frame, once-only
+awards, retained names and four correctly sourced portrait requests. Eleven
+focused data/result/standings checks pass. This still stops at the prepared
+menu handoff: no live menu camera/water loop or continued cup is claimed.
+
+Correction to earlier wording: original main9 standings do not run the race
+physical world. Eight original common-dispatch runs (466 instructions), compared
+with race main1 and ending main21, confirm that main9 calls menu input, camera
+update1DDE48, water51238 and display8E794, but omits navigation86148, hulls665B0,
+judging/object motion6E3A8 and spray/object-effect updates B2ABC/AD418.
+The runtime contract now states this explicitly. Do not resume the ordinary
+race world to animate a standings screen.
+
+Eight additional original926F4 executions (132 instructions) confirm that the
+first state52 frame initializes water4F9E0 at datum0 with retained wave49B0,
+then course display8E4B0 and cameras1DDA24. State53 performs none of those
+initializers. These helper bodies and their live host integration are the next
+dependency; simply retaining the race camera/water would omit real setup.
+High-resolution rendering and multiplayer scope are unchanged.
+
+## Unpublished — championship standings layout and vector display
+
+The complete original i5 5DC0 draw caller is now represented as independent
+semantic commands: round/total headers, alternating panel offsets, ranked
+rows, retained rider names, point alignment, retirement markers, race times,
+per-round history, qualification footer and avatar-ordered rider previews.
+Round ranks remain sequential, while total-point ties use competition ranks.
+The original persistent six-unit rank offset after a retired row is preserved.
+Round and total sorting come from the canonical state owners, not view copies.
+
+280 complete original executions match every ordered command over 528,744
+instructions. Cases cover all reached panel phases, every primary slot,
+qualification outcomes, record highlights, classes/rounds, disqualification
+masks, tied totals and signed panel extremes. Font, text-formatting and drawing
+callees are intercepted; original GPU execution and font artwork are not claimed.
+Only synthetic names, numeric inputs and semantic outputs enter public fixtures.
+
+The standings frame now prepares its layout before processing input and target
+handoffs, with no layout on the original first black frame. Nine focused
+presentation/runtime tests pass, including unchanged caller state on malformed
+data, avatar identity, tied ranks, pre-input coordinates, retained next-round
+totals, failure/ending transitions and 30/60/144Hz scheduling.
+
+A dedicated SVG view renders at the full host size with clipped rider-preview
+consumers, vector text, literal labels, isolated gradient/clip IDs and atomic
+frame replacement. Browser verification rendered all 280 layouts and checked
+late failures, text handling, unique IDs and avatar order. Round/retired and
+total panels were visually inspected at 1280x720 with synthetic labels and
+portraits. Logical 320x240 coordinates do not reduce canvas resolution.
+Original label resolution, live detailed rider consumers, loaded menu data,
+scene integration, the game-over loop and a complete continued cup remain.
+
+## Unpublished — championship standings frame and return handoffs
+
+The standings portion of an original20Hz frame now composes source5800 score/
+outcome setup, the scalar opposite-panel offset, shared widgets/fade and5C1C
+display control. The first black display clears the same entry latch that gates
+scoring, so later displays cannot award again. Draw snapshots precede input;
+holding confirm through a delay does not produce a new press edge. After exit
+fade completion, the original round increment and maximum-progress save word
+precede the championship-selection initializer. Reverse progress uses its
+separate save word. Totals remain retained rather than reseeding a fresh cup.
+
+Ending and title destinations expand their existing initializers at the actual
+call positions. The previously missingEC944 failed-qualification entry now
+selects game90/main15 and audio5 without altering the physical or HUD phase.
+The source7C494 save effect is scheduled after the destination has changed
+main638. All handoffs end this menu phase; invoking it on the new destination
+rejects instead of incrementing a second round or reinitializing the target.
+
+264 complete original update/display callers and offset-prefix cases match
+11,016 executed instructions; graphics calls are intercepted and target-main
+effects are supplied explicitly. Seven complete originalEC944 callers match
+217 instructions. The expanded common-dispatch audit documented above corrects
+the earlier interpretation: input, cameras, water and display precede this phase
+in52/53, but the physical race world does not advance. Then5800 precedes
+5470/AFB4/71A8. The phase requires those earlier updates; it does not replace
+their host or execute original GPU drawing.
+
+Thirty focused frame/control/entry/return checks pass. They cover once-only
+awards, both panel confirmations, next-round progress in forward/reverse modes,
+final Expert winner unlocks and ending entry, qualification failure/game over,
+atomic late target errors, held/second-player inputs, suspended time and matching
+30/60/144Hz menu schedules. The original5850 matrix/viewport/vertex work and
+5DC0 standings drawing remain explicit presentation boundaries. The visible
+standings layout, live scene integration, game-over loop and complete continued
+cup are still pending. Canvas resolution, terrain and detailed models are intact.
+
+## Unpublished — championship scoring and standings controls
+
+The complete resident94ACC score invocation now applies original7/4/2/1
+awards, disqualification zeroes, signed total wrapping and both four-slot
+pairwise ordering passes. Cumulative ties use the current race place, not the
+selected avatar. The source still orders all four slots when fewer participants
+receive awards, and preserves old round cells for unrecognized places. Final
+rank writes update the existing racer2C70 words. Round and cumulative order
+arrays have separate canonical owners; fresh championship selection allocates
+them without changing other modes' memory. Reinvocation awards again, just as
+the original does: the enclosing standings entry must schedule it once.
+
+All604 complete original94ACC executions match every ordered write and final
+race/profile/order word (359,572 instructions, no intercepted callees). Cases
+include every finishing permutation/disqualification mask, partial and negative
+participant counts, duplicate/missing places, signed overflow and retained ties.
+The independent i5 outcome initializer5A98 matches537 full original executions
+(23,438 instructions): qualification failure90, next-round selection30, ending102,
+original last-round lookup, class unlock bits and Expert winner bit. Save writes
+preserve adjacent bytes. Source audio remains an ordered host effect.
+
+Standings input6CC4 and exit6F84 match700 complete original executions (20,908
+instructions). Both sliding panels preserve signed16 wrapping, original clamps,
+confirmation masks and counter thresholds. Qualified audio is emitted at its
+source tick; failed qualification slides towardEC944. Other exits initialize
+state53 and its actual destination-specific shared fade, preserving field640.
+The canonical adapters expand exit/fade once at their call positions and reject
+late invalid data without partly committing earlier writes.
+
+Twelve focused score/control/fresh-launch checks pass, including cumulative-tie
+winner unlocks, unchanged neighboring storage and expanded fade errors. These
+are numeric components. The complete5800/5C1C frame, one-shot entry scheduling,
+standings layout, renderer, next-round retained profile and complete cup remain
+unfinished. No visible championship admission or durable save is claimed.
+High-resolution rendering and multiplayer feature scope are unchanged.
+
 ## v2.40.0 — source gameplay checkpoint
 
 Publishes the tested source gameplay, audio, object, stunt and championship
@@ -8,9 +1648,6 @@ Native championship remains headless/verification work: browser standings and
 continued cup progression are unfinished. The newer, untested championship
 points implementation is saved privately and excluded from this release.
 Multiplayer feature work is deferred until single-player work is finished.
-
-Publication/pause cutoff changed by the user to 40% used on 2026-10-18;
-the account already reported 45% used, so feature work stopped for publication.
 
 ## v2.40.0 — championship standings handoff
 
@@ -7232,3 +8869,262 @@ tests pass. The17 tuning/record-session regressions also pass, including two
 actual three-lap solo races with correct Normal/Custom record attribution.
 Browser championship admission and renderer/audio handoff remain
 the next integration step; resolution is unchanged.
+
+### Standings camera frame reconstruction — 2026-10-18 (unpublished)
+
+`native-menu-camera-update.js` now reconstructs the complete main9/type1
+camera frame through DDE48/DDEDC, DFC48/DF128/DEEC4, E0F8C, 9CB68,
+9CCE8 and E0FF0. Type1 enters the common update directly. Target and eye
+coordinates, up vector, FOV and projection offsets use the original ordered
+float32 smoothing. Camera velocity is the new eye minus the retained eye;
+the direction/up basis is then rebuilt. E11B4 remains an explicit request
+for the host's actual active graphics buffer, rather than both buffers.
+
+The original 9CB68 body has no side effects. In main9, 9CCE8 clears only
+the environment byte selected by camera.E8. The canonical state now retains
+those two camera bytes, with zero allocation only in declared fresh web
+memory. Warm updates preserve the neighbor. Other main modes and auxiliary
+camera types are rejected rather than treated as equivalent. Shared basis
+helpers preserve every previously verified initialization write.
+
+A private interpreter executed 80 complete original camera frames (43,800
+instructions), with E11B4 as the sole external graphics boundary. Cases cover
+one/two cameras, both buffer choices, asymmetric targets, zero/intermediate/
+unit position smoothing, lens/up smoothing, swapped environment indices and
+five consecutive frames. The public fixture contains synthetic numeric input,
+ordered writes and whole-HUD hashes; no executable ROM data. Every operation
+and final HUD hash matches. Invalid late inputs leave caller storage unchanged.
+Actual championship finish and retirement tests compose scene initialization,
+these camera updates, then standings scoring/display; race records remain
+unchanged by camera updates. This is verified numeric integration, not yet a
+live standings scene host or completed continuous cup. Physical hulls must
+remain stopped in main9. Menu water installation, frame ownership, matrix
+consumption and browser admission remain outstanding; resolution is unchanged.
+
+### Retained introduction actors and complete camera frame — 2026-10-18 (unpublished)
+
+`native-presentation-actor-pool.js` consumes the three previously explicit
+introduction actor boundaries: AB92C/9D5C0 reset, AC098 submission and complete
+AB95C(1,0) Sunset production. The canonical state retains all 1484 words from
+801CF060 through 801D0790 and the frame/permanent/current counters at 800E62C4.
+Fresh web memory allocates these owners once; warm resets preserve the original
+unselected row fields and adjacent body/record scratch. Submission preserves
+the original capacity behavior: reaching slot30 returns before updating the
+current count. Sunset uses the actual selected physical body poses, canonical
+racer records and retained water-vertex XZ inputs. Its original second-speed
+calculation rereads the primary body's horizontal deltas; that is retained.
+The separate generic AB95C request-list branch remains unimplemented.
+
+`native-introduction-camera-update.js` now composes the whole main8/type6
+DDE48/DDEDC numeric frame: water datum, camera script, course actors and pool
+operations, auxiliary motion, camera copy, environment-byte clear, eye velocity,
+view basis and a matrix request for the actual active graphics buffer. The
+canonical adapter applies all numeric writes atomically and preserves cup
+points/race records. Camera storage exposes original type6 FOV, near distance
+and projection offsets to the high-resolution view, as it already does for
+type1 standings cameras. Ordinary follow-camera projection is unchanged.
+
+The original-code interpreter ran 162 complete pool operations (40,293
+instructions, no intercepted callees), and 2602 complete introduction camera
+frames in 44 sequences (6,331,744 instructions). Camera coverage includes every
+course, all three Sunny classes, one/two cameras, both graphics buffers, complete
+single-camera scripts and retained consecutive frames. E11B4 GPU matrix
+production is the only intercepted camera callee. All ordered writes, complete
+HUD/pool hashes, counts, RNG and environment bytes match. These camera sequences
+deliberately exclude the later actor display/cleanup stage and physical scene;
+they are not evidence of an end-to-end animated introduction. Synthetic numeric
+fixtures are gzip-compressed below the hosting per-file limit.
+
+The pool also implements the complete ADD14 pre-display position bounds and
+isolated AE148..AE1EC post-display retirement. Retirement restores the permanent
+count and clears only temporary type words, retaining all other row data. Its
+ordered unrolled writes match the original. Bounds preserve the original
+Y-limit stores to Z rather than changing Y. Another 110 original executions
+(9227 instructions) match all stores and pool hashes. A 100-cycle submission/
+retirement check confirms temporary slots can be reused without damaging the
+three permanent rows. These boundaries must surround actual drawing, never
+run before camera submission. The enclosing ADF90 culling/draw dispatch remains
+pending; the boundaries alone do not claim a complete display stage.
+
+All 66 camera/introduction/state/championship-host regression checks passed,
+including unchanged four-racer results at30/60/144Hz. The added lifecycle checks
+and the focused camera/pool/state suite passed26/26. Invalid late camera,
+water-vertex and retirement inputs leave retained state unchanged. Physical
+main8 initialization/update, actor drawing, outer display scheduling and public
+continuous championship admission remain pending. No render-resolution change.
+
+### Original actor visibility and root transforms — 2026-10-18 (unpublished)
+
+`native-presentation-actor-visibility.js` implements the complete ADE14
+visibility decision, 9D3AC vector heading and ADC8C matrix-capacity estimate.
+Headings use the actual ED090 angle table, float32 reciprocal normalization
+and integer truncation. Submitted rows bypass culling, empty rows are skipped,
+type6 remains visible after its angle scratch writes, and other active rows
+use the original strict100-degree cutoff. The actual display camera selector
+80223930 now has a retained canonical field, initialized to0 only for fresh web
+memory. The state adapter reads that selector and the shared HUD camera rather
+than external projection or camera overrides. Capacity estimation does not
+allocate matrices; the draw producer still owns the used counter.
+
+`native-presentation-actor-transform.js` implements 9D96C's complete numeric
+root-matrix production and allocation increment. Submitted actors use their
+retained forward/up/scale through48A88. Other actors use type-dependent angle
+adjustments, source circular normalization and49C9C's scaled degree-based Euler
+matrix. The new49C9C implementation shares47EE0 packing but retains its own
+truncation, scale grouping and store order; it does not substitute49A94's radian
+and half-step policy. The state adapter selects the actual retained graphics
+buffer. Ordered matrix writes and binding are explicit effects for that buffer
+and matrix slot. Partial zero-axis matrices keep unvisited destination words;
+the original bind and used-count increment still occur. No identity matrix or
+zero-filled replacement is supplied for those unvisited words.
+
+Private execution of the original functions and every numeric callee produced
+528 visibility cases,368 heading cases and200 capacity estimates (73,313
+instructions), plus720 complete root transforms (237,366 instructions). These
+cover both cameras/buffers, angular cutoff/quadrants, submitted and empty rows,
+type6, signed capacity wrapping, all13 actor types plus out-of-dispatch values,
+negative/wrapping Euler angles, zero/negative scales, allocation slots0/37/191,
+and degenerate basis vectors. All ordered numeric writes, retained pool hashes
+and final matrices match. No callee was intercepted. The root's two graphics
+command stores were verified privately and represented in public numeric
+fixtures by a semantic bind, with no executable command bytes exported.
+
+The35 focused camera/pool/visibility/transform/state checks passed; another25
+live-camera, fresh-championship, widget/name-presentation and transform checks
+passed. Late invalid inputs preserve caller state. Remaining work includes
+ADF90 dispatch and numeric effects inside animated model draw routines (which
+also advance animation frames and generate child matrices), retained renderer
+matrix consumption, physical main8 initialization/update and public continuous
+championship integration. This is not yet a complete visible actor renderer.
+High-resolution output and multiplayer priority remain unchanged.
+
+### Original bird animation and static actor draws — 2026-10-18 (unpublished)
+
+The E4C60 animation-part matrix routine now preserves the original signed
+component conversion, binary64 division by127 followed by float32 rounding,
+unnormalized forward axis, separately normalized right/up axes, packing and
+store order. Degenerate axes leave unvisited destination words unchanged.
+The complete routine matches185 original executions (40,130 instructions).
+
+`native-presentation-wing-animation.js` implements both complete9DC10 and
+9E814 numeric draws, including their different root scales, signed frame
+increment/remainder, seven selected animation tracks, all child matrices,
+real matrix allocation increments and ordered material/bind/draw/pop effects.
+The activity flag controls frame advancement even for submitted actors. The
+canonical adapter derives draw type from retained type plus variant, selects
+the signed E774/E76E resource index from its actual halfword, and reads the
+retained activity and graphics buffer. Caller overrides cannot replace these
+owners. Animation frame counts, keys and transform rows must come from the
+selected resource view; no browser-time animation substitute is introduced.
+
+`native-presentation-static-actor.js` implements complete9DB90 and9E794.
+These select the same resource families but draw part+18 with one root matrix,
+without advancing frames or allocating animated children. Submitted rows retain
+their own basis/scale; other rows use the routine's original scale. Canonical
+selection again consumes type plus variant and the actual resource halfword.
+
+Whole original execution covers448 bird draws (1,092,288 instructions) and192
+static draws (68,640 instructions), with no intercepted callees. Every ordered
+effect, final actor-pool hash and retained matrix matches, including both
+buffers, boundary allocations, degenerate axes, signed frame wrap, inactive
+holds, both resource selectors and submitted rows. Graphics command words are
+checked privately and exported only as semantic effects; public fixtures use
+synthetic animation resources and contain no executable ROM instructions.
+The new semantic effects are validated atomically by the canonical state owner.
+
+All60 focused and regression checks pass, covering actor drawing, camera
+composition, canonical state, fresh championship launch, introduction control,
+standings hosting and widget presentation. All458 module hashes and the four
+page preload sets are refreshed and independently verified.
+
+Remaining: other animated draw types, complete ADF90 dispatch, actual selected
+animation-resource decoding, retained matrix consumption by the high-resolution
+renderer, physical main8 setup/update and continuous championship admission.
+These tested draw routines alone do not claim a visible complete introduction.
+Resolution and ocean detail are unchanged; multiplayer remains last.
+
+### Six additional original animated actor draws — 2026-10-18 (unpublished)
+
+`native-presentation-articulated-actor.js` now implements numeric9F398,
+9FCB0, A10E4, A16F0, A1CFC and A2308 (dispatch types5 through10). The shared
+root/child matrix sequence is factored into `native-presentation-animation-parts.js`;
+the existing two bird routines still match their complete original fixtures.
+
+Type5 selects animation74 modulo3, advances frame78 modulo the selected frame
+count when active, and resets animation74 only when that new frame is zero.
+Type6 selects modulo8, advances only nonsubmitted active rows, and compares the
+OLD frame with count-1 before resetting both stored animation/frame. Both draw
+with the descriptor selected before those writes. Signed wrap, negative table
+indices and retained frames are preserved. The original special actor tag,
+course and signed championship count control their different root scales.
+Their five child-track/geometry mappings and all six matrix allocations match.
+
+Types7/8/9 use the E76C resource family; type10 uses E770. Type8 selects its
+second animation, while7/9/10 select the first without changing retained74.
+All four advance active frames even for submitted actors. Types7/8/9 use the
+original actor-index12 size boundary; type10 has its own scale. Each draws three
+parts with its original mapping and the distinct6CF8 material boundary, recorded
+as `actor-alternate`. Canonical adapters read actual type-plus-variant,
+resource halfwords, scene activity, course/count and active graphics buffer;
+caller overrides cannot replace them. Selected animation resources remain
+explicit input rather than inferred timing or generated frame counts.
+
+Evidence:672 complete original five-part executions (1,284,848 instructions)
+and448 complete three-part executions (591,088 instructions), without numeric
+callee interception. Both buffers, slot11/12 boundaries, last legal allocation,
+submitted/ordinary bases, negative animation/frame indices, signed overflow,
+animation end/hold/reset and championship scale branches are covered. All
+ordered writes/effects, actor hashes and retained matrices match. Test resources
+are synthetic and graphics words are verified privately; public fixtures contain
+numeric results and semantic effects, not executable ROM data.
+
+All67 focused/regression checks pass, including original bird/static draws,
+whole camera updates, canonical state, championship launch/introduction,
+standings hosting and widget presentation. All460 module hashes and four page
+preload sets have been refreshed and independently verified.
+
+Remaining draw routines are type12/A28F4 and type13/A063C; type11 intentionally
+does not draw. Complete ADF90 dispatch, selected real animation resources,
+renderer matrix/effect consumption, physical main8 hosting and browser cup
+admission remain pending. No visible complete flyover is claimed by these
+numeric tests. Resolution and multiplayer priority remain unchanged.
+
+### Final special actor draw routines — 2026-10-18 (unpublished)
+
+`native-presentation-special-actor.js` implements the complete numeric A28F4
+and A063C routines (types12/13). Type12 advances its signed two-frame counter
+only while active, uses its original root scale and selects the second geometry
+from zero versus nonzero retained frame state. The original surface transitions
+before the root and between the two draws remain explicit ordered effects.
+
+Type13 selects animation74 modulo2, resets expired active frames without
+incrementing them, and keeps the selected descriptor. Its subtype-dependent
+root scale and six sibling child transforms use the original tracks and part
+mapping. Before its final part, it changes surface state and multiplies the
+actual retained0678 matrix without another push; the final pop therefore still
+returns to the root. Matrix words are copied from canonical actor storage,
+never invented as identity or supplied as a caller override. Canonical adapters
+derive type-plus-variant, signed E776/E778 resource index, activity and buffer.
+
+448 whole original executions (600,934 instructions) match every numeric write,
+pool hash, retained matrix and normalized graphics effect. No numeric callees
+are intercepted. The fixture covers signed animation/frame extremes, active
+and held rows, submitted actors, both scales/selectors/buffers and final legal
+matrix slots. Surface command groups are checked privately in display-list
+address order, including CPU writes that complete later commands before earlier
+ones. Public output uses surface presets and retained numeric matrix effects,
+not raw executable graphics commands. Missing late tracks and malformed
+surface/matrix effects fail without committing prior frame or allocation writes.
+
+All70 focused/regression checks pass, including every implemented draw family,
+whole camera composition, canonical state, championship launch/introduction,
+standings hosting and widget presentation. All461 module hashes and all four
+page preload sets are refreshed and independently verified.
+
+Numeric draw implementations now exist for every dispatched type; type11 has
+no draw. Complete ADF90 composition still requires its916B4 setup, including
+47F90 light construction, course6 special lighting, fog color and fog factors.
+That setup must not be discarded as an opaque graphics call. Retained rendering
+consumers, real selected animation-resource decoding, physical main8 hosting
+and full browser championship remain pending. These comparisons do not prove
+a complete visible introduction. High-resolution presentation is preserved.

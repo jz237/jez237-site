@@ -22,7 +22,8 @@ test('ordinary throttle advances a complete hull/water craft and exposes source 
   assert.equal(q.source.wetCount,8);assert.equal(q.source.anyWet,true);
   assert.ok(q.source.hudSpeed>70&&q.source.hudSpeed<130);
   const delta=q.source.frameDisplacementNative;
-  close(q.source.frameSpeedNative,Math.hypot(delta.x,delta.y,delta.z));
+  const f=Math.fround;
+  assert.equal(q.source.frameSpeedNative,f(Math.sqrt(f(f(f(delta.x*delta.x)+f(delta.y*delta.y))+f(delta.z*delta.z)))));
   assert.ok(Math.abs(q.heading)<1e-9&&Math.abs(q.roll)<1e-9);
   assert.equal(driving.water.profile.riderIndex,0);
 });
@@ -43,21 +44,49 @@ test('HUD uses five center displacements and truncates before the display conver
   }}});
   stepNativeRaceAdapter(a,.05,{});
   close(a.hull.center.z,5*.992*25*.01);
-  close(a.lastFrame.frameDisplacementNative.z,49.6);
-  close(a.lastFrame.frameSpeedNative,49.6);
+  assert.equal(a.lastFrame.frameDisplacementNative.z,Math.fround(49.6));
+  assert.equal(a.lastFrame.frameSpeedNative,Math.fround(49.6));
   assert.equal(a.lastFrame.hudSpeed,88);
   assert.equal(Math.trunc(49.6*1.8),89); //One combined conversion is different.
 });
 
 test('roll reference follows the hull frame and needs no articulated joint',()=>{
-  const a=createNativeRaceAdapter(),before=nativeRaceSnapshot(a),s=a.hull.scale;
-  const reference=q=>({x:q.position.x+s*(.1806645*q.frame.up.x-26.9998535*q.frame.forward.x),
-    y:q.position.y+s*(.1806645*q.frame.up.y-26.9998535*q.frame.forward.y),
-    z:q.position.z+s*(.1806645*q.frame.up.z-26.9998535*q.frame.forward.z)});
+  const a=createNativeRaceAdapter(),before=nativeRaceSnapshot(a),s=a.hull.scale,f=Math.fround;
+  const reference=q=>Object.fromEntries(['x','y','z'].map(k=>[k,
+    f((f(q.position[k]/s)+.1806645*f(q.frame.up[k]))-26.9998535*f(q.frame.forward[k]))]));
   const first=reference(before);stepNativeRaceAdapter(a,.05,{throttle:true,steer:.5});
   const last=reference(nativeRaceSnapshot(a)),delta=a.lastFrame.referenceDisplacementNative;
-  vectorClose(delta,{x:(last.x-first.x)/s,y:(last.y-first.y)/s,z:(last.z-first.z)/s});
+  assert.deepEqual(delta,{x:f(last.x-first.x),y:f(last.y-first.y),z:f(last.z-first.z)});
   assert.equal(a.frame.prepared.jointWorld,null);
+});
+
+test('completed reference and maximum speed survive held frames and a between-frame relocation',()=>{
+  let scene=3;const a=createNativeRaceAdapter({sourceState:()=>({actorState:22,simulationState:scene})});
+  stepNativeRaceAdapter(a,.1,{throttle:true});const previous=structuredClone(a.lastFrame);
+  // Recovery can move the physical owner between outer frames. The previous
+  // completed reference remains the history owner until simulation resumes.
+  a.hull.center.x+=2;for(const point of a.hull.points)point.position.x+=2;
+  scene=0;stepNativeRaceAdapter(a,.05,{});
+  for(const key of ['frameDisplacementNative','frameDisplacementChangeNative','frameSpeedNative','maxFrameSpeedNative',
+    'referencePositionNative','referenceDisplacementNative','referenceChangeNative'])assert.deepEqual(a.lastFrame[key],previous[key],key);
+  scene=3;stepNativeRaceAdapter(a,.05,{throttle:true});const next=a.lastFrame,f=Math.fround;
+  for(const k of ['x','y','z']){
+    assert.equal(next.referenceDisplacementNative[k],f(next.referencePositionNative[k]-previous.referencePositionNative[k]));
+    assert.equal(next.referenceChangeNative[k],f(next.referenceDisplacementNative[k]-previous.referenceDisplacementNative[k]));
+    assert.equal(next.frameDisplacementChangeNative[k],f(next.frameDisplacementNative[k]-previous.frameDisplacementNative[k]));
+  }
+  assert.ok(next.referenceDisplacementNative.x>70);
+  assert.equal(next.maxFrameSpeedNative,Math.max(previous.maxFrameSpeedNative,next.frameSpeedNative));
+});
+
+test('kinematic snapshot vectors never expose retained owners',()=>{
+  const a=createNativeRaceAdapter();
+  for(const advance of [false,true]){
+    if(advance)stepNativeRaceAdapter(a,.05,{throttle:true});
+    const before=structuredClone(a.lastFrame),snapshot=nativeRaceSnapshot(a);
+    for(const key of ['frameDisplacementNative','frameDisplacementChangeNative','referencePositionNative','referenceDisplacementNative','referenceChangeNative'])snapshot.source[key].x+=100;
+    assert.deepEqual(a.lastFrame,before);
+  }
 });
 
 test('native axis roundtrip through normalized water controls never loses an integer step',()=>{

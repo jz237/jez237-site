@@ -22,6 +22,7 @@ import {nativeRaceShoreGeometry} from './native-shore-geometry.js';
 import {SOUTHERN_NATIVE_AI_ROWS_BY_CLASS} from './source-southern-ai-routes.js';
 import {createNativeCourseObjectStartup} from './native-course-object-startup.js';
 import {nativeCourseCheckpointSeconds} from './native-stunt-checkpoint-times.js';
+import {DOLPHIN_SECONDARY_ROWS} from './source-dolphin-secondary-rows.js';
 
 // Numeric ordinary-course owners. Twilight has no original Normal route.
 // Mode and source-water admission remain the race host's responsibility.
@@ -111,7 +112,12 @@ export function createNativeRaceCourseRuntime({course,difficulty,players,objectL
   const route=createNativeAIRoute({nodes,scale,courseIndex,family});
   aiFamilies[family]=Object.freeze({family,data:alternate,route,targetTable:createNativeAITargetTable({route,nodes})});
  }
+ // Solo Practice's animal route has64 rows, unlike its60 primary rows.
+ // It must not be admitted as an equal-count alternate computer-racer route.
+ const courseActorRoutes=courseIndex===0?Object.freeze({primary:data,
+  secondary:createNativePrimaryCourseData({rows:DOLPHIN_SECONDARY_ROWS,courseIndex,mode620}),tertiary:null}):undefined;
  return Object.freeze({courseView,data,resetLayout,objectStartup,primaryLayout,sourceBuoyLayout,mode620,aiRoute,aiTargetTable,aiFamilies:Object.freeze(aiFamilies),retirementGeometry,staticContactGeometry,...regions,
+  ...(courseActorRoutes?{courseActorRoutes}:{}),
   sourceDifficulty,
   directionFlag1f90:rules.checkpointSide,scale});
 }

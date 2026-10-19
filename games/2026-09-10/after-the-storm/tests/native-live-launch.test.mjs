@@ -16,6 +16,17 @@ const data=r=>({power:0,misses:0,lap:1,grid:r,finishTime:null,dq:'',sourceBuoys:
  power:0,lapMisses:0,totalMisses:0,missLimitReached:false,missedCheckpoint:false,logicalTicks:0}});
 const rawClock={main638:1,finished2c2c:0,record2c24:0,clockStopped817c:0,flag1fd4:0,courseIndex:1,lapMs:0,totalMs:0,ambientWord:9,ambientD4b00:-1};
 
+test('source runtime attaches one actor host without advancing race, water or presentation state',()=>{
+ const s=create('time'),runtime=s.nativeLaunch,before=runtime.snapshot(),water=captureRaceWater(s.raceWater);
+ assert.throws(()=>runtime.createCourseActorHost({buffers:{},worldScale:.025}),/matrix buffers/);
+ const host=runtime.createCourseActorHost({buffers:{matrixBuffers:Array.from({length:2},()=>Array(192*16).fill(0)),lightBuffers:Array.from({length:2},()=>Array(96).fill(0))},worldScale:.025});
+ assert.deepEqual(runtime.snapshot(),before);assert.deepEqual(captureRaceWater(s.raceWater),water);
+ assert.throws(()=>host.advanceMotion({}),/Initialize course actors/);
+ assert.throws(()=>runtime.createCourseActorHost(),/only once/);
+ const legacy=createNativeRaceLaunchRuntime({racers:[data(0)],players:1,courseIndex:1});
+ assert.throws(()=>legacy.createCourseActorHost(),/initialized source course/);
+});
+
 test('source timing block retains gates,50ms stores, unsigned ambient and terminal-store order',()=>{
  assert.deepEqual(prepareNativePrimaryRaceClock(rawClock),{advanced:true,totalLimit:false,lapMs:50,totalMs:50,ambientWord:65535});
  for(const patch of [{main638:8},{finished2c2c:1},{record2c24:1},{clockStopped817c:1},{flag1fd4:1}]){

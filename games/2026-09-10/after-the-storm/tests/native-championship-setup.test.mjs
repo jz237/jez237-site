@@ -8,6 +8,7 @@ import {nativeRaceScene} from '../native-race-scene.js';
 import {createRace} from '../race-core.js';
 import {getCourse} from '../courses.js';
 const fixture=JSON.parse(readFileSync(new URL('./fixtures/native-championship-setup.json',import.meta.url),'utf8'));
+const qualification=JSON.parse(readFileSync(new URL('./fixtures/native-championship-qualification.json',import.meta.url),'utf8'));
 const ids=['practice','greyhaven','amber','citadel','reed','port','neon','tempest','glacier'],cache=new Map();
 const seed=createRace({mode:'time',physics:'native',course:getCourse('greyhaven')}).nativeLaunch.snapshot();
 function course(index,difficulty){const key=index+':'+difficulty;if(!cache.has(key))cache.set(key,createNativeRaceCourseRuntime({
@@ -25,7 +26,8 @@ function initial(c){
 }
 
 test('championship startup defaults match original boot, wave, rider and fade data',()=>{
- assert.deepEqual(data,fixture.data);assert.ok(Object.isFrozen(data.courseRiderTraits[0][0]));
+ assert.deepEqual(data,{...fixture.data,courseOrderAc14:qualification.courseOrderAc14,lastRound9514:qualification.lastRound9514});
+ assert.ok(Object.isFrozen(data.courseRiderTraits[0][0]));
  assert.deepEqual(data.waveRowsByClass,[[0,5,3],[0,5,3],[0,5,3]]);
 });
 
@@ -49,13 +51,16 @@ test('248 original main-configuration cases select3968 exact physical profile wo
  assert.equal(compared,3968);
 });
 
-test('four-rider setup retains resource/audio dependencies and refuses premature live AI admission',()=>{
+test('four-rider preparation retains dependencies and the application consumes a validated physical launch',()=>{
  const c=fixture.cases[0],runtime=course(c.courseIndex,c.difficulty),p=prepareNativeChampionshipLaunch(initial(c),{courseRuntime:runtime,avatarsBySlot:c.avatarsBySlot});
  assert.deepEqual(p.pendingEffects.filter(o=>o.kind==='externalCall').map(o=>o.consumer),['80096960','8009684c','800c21f4']);
  assert.equal(p.pendingEffects.some(o=>o.kind==='bodyTuneWordWrite'),false);
  assert.equal(p.diagnostic.liveAIAdmitted,false);assert.equal(p.diagnostic.physicalWorldCreated,false);
  assert.throws(()=>createNativeRaceLaunchRuntime({courseRuntime:runtime}),/remains prepared/);
- assert.throws(()=>createRace({mode:'championship',physics:'native',course:getCourse('greyhaven')}),/verified course/);
+ const application=createRace({mode:'championship',physics:'native',course:getCourse('greyhaven')});
+ assert.equal(application.nativeHost.world.adapters.length,4);
+ assert.equal(application.nativeHost.world.frames,0);
+ assert.deepEqual(application.nativeHost.world.adapters.map(a=>a.controlOrigin),['human','ai','ai','ai']);
 });
 
 test('prepared mode4 objects remain the exact ordinary selection and invalid physical setup rejects atomically',()=>{

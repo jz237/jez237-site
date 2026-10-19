@@ -16,6 +16,17 @@ export function nativeBodyHudPosture(actorState,physicalMode){
  integer(actorState,'actorC54');integer(physicalMode,'physicalMode157c');
  return actorState===23?2:actorState===24?1:actorState===7?(physicalMode===0?2:1):0;
 }
+
+/** Complete66278..662AC. The retained physical profile16CE, independently of
+ * input origin and simulation state, selects this pre-actor contact write.
+ * Human-profile bodies retain1602 and do not read racer impact C40 here.
+ */
+export function prepareNativeProfileContactMode(value){
+ const profile=bounded(value?.profile16ce,'profile16ce',0,65535),previous=bounded(value?.contactMode1602,'contactMode1602',0,65535);
+ if(profile===0)return frozen({contactMode1602:previous,bodyWrites:[]});
+ const next=float(value.racerImpactC40,'racerImpactC40')===0?0:1;
+ return frozen({contactMode1602:next,bodyWrites:[{byteOffset:0x1602,width:2,value:next}]});
+}
 export function nativeRaceBodyFields(adapter){
  if(!adapter?.frame||adapter.pendingFrameCompletion||!adapter.lastFrame||adapter.logicalFrames<1)
   throw new TypeError('Source race samples require a completed native outer frame');
@@ -32,10 +43,10 @@ export function nativeRaceBodyFields(adapter){
   if(!Number.isFinite(arc))throw new RangeError('Invalid retained Stunt arc15ec');
   stunt={stuntMove1604:move,stuntArc15ecNative:arc};
  }
- const displacement=['x','y','z'].map(k=>F(position[k]-previous[k]));
+ const frameSpeed=float(adapter.lastFrame.frameSpeedNative,'completed speedB90');
  return {positionNative:position,positionNativeXZ:{x:position.x,z:position.z},priorBodyPointNative:previous,
   forwardXZ:{x:F(adapter.hull.frame.forward.x),z:F(adapter.hull.frame.forward.z)},
-  speedB90Native:F(Math.sqrt(F(F(F(displacement[0]*displacement[0])+F(displacement[1]*displacement[1]))+F(displacement[2]*displacement[2])))),
+  speedB90Native:frameSpeed,
   // F23A0 calls B98 "speed", but it is the actual applied jet force.
   frameSpeedB98:F(adapter.water.forceNative),speedBbc:F(profile.contactForceNative),
   speedBc0:F(F(profile.peakForceNative)*F(profile.lowSpeedForceRatio)),

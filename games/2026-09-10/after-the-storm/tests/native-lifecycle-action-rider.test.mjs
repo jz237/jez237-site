@@ -9,7 +9,7 @@ import {NATIVE_RIDER_LINKS} from '../native-articulated-rider.js';
 import {createAuthoredNativeActionPoses} from '../authored-native-action-poses.js';
 import {stepNativeArticulatedRider} from '../native-articulated-rider.js';
 import {createNativeRaceContactAudio} from '../native-race-contact-audio.js';
-import {createNativeWaterField} from '../native-water-field.js';
+import {createNativeWaterField,queryNativeWaterField} from '../native-water-field.js';
 
 // Independently prepared source requests/scene inputs exercise the ACTUAL
 // hull, auxiliary and nineteen-point solvers with authored equivalent art.
@@ -29,6 +29,7 @@ function harness({actor,choice=0,alternate=0,fastRelease=false,skipReverseHold=f
   bundle.articulatedRider.points.forEach((p,i)=>{p.type=init.riderJointTypes[i];});
  }
  const adapter=createNativeRaceAdapter({...bundle,
+  ...(feedbackAudio?{riderWaterQuery:(x,z)=>queryNativeWaterField(audioField,x,z).sourcePlaneQueryNative}:{}),
   riderPose:(h,c)=>{const p=bundle.riderPose(h,c);samples.push({logicalFrame:c.logicalFrame,
    request:structuredClone(c.poseRequest),outcome:structuredClone(p.animationOutcome),targets:p.targets.map(copy)});return p;},
   riderRecovery:{courseDatumNative:0,...(restore?{state:restore}:{})},

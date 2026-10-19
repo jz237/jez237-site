@@ -13,15 +13,31 @@ import {createNativeRaceLaunchRuntime} from '../native-race-launch-runtime.js';
 const call=(consumer,...args)=>({kind:'externalCall',consumer,arguments:args});
 const start=owner=>owner.applyEffects([call('800bfdd0',0x80192610),call('800bfef8',0x80192630)]);
 const field=()=>createNativeWaterField({datumNative:20});
+
+test('original dolphin external mixer writes reach the existing owner and logical poll once',()=>{
+ const owner=createNativeRaceContactAudio({players:1,courseIndex:0}),f=field();
+ owner.applyEffects([call('800c53d4',0x06000505,127),call('800c53d4',0x06000500,8),
+  call('800c538c',0x01000500,0x3f000000),call('800c53d4',0x03000500,32)]);
+ assert.deepEqual(owner.drain(),[],'the actor does not create a render-clock poll');
+ owner.beforeFrame(1);advance(owner,[body(1)],f,[0],[0]);
+ assert.deepEqual(owner.drain().map(c=>[c.consumer,...c.arguments]),[
+  ['c538c',0x01000500,0x3f000000],['c53d4',0x03000500,32],['bffec',5,8,127]]);
+ owner.beforeFrame(2);advance(owner,[body(2)],f,[0],[0]);assert.deepEqual(owner.drain(),[]);
+ owner.applyEffects([call('800c53d4',0x06000500,9)]);owner.clearPendingSounds();
+ owner.beforeFrame(3);advance(owner,[body(3)],f,[0],[0]);assert.deepEqual(owner.drain(),[]);
+ owner.applyEffects([call('800c53d4',0x06000b00,2)]);
+ assert.deepEqual(owner.drain().map(c=>[c.consumer,...c.arguments]),[['c53d4',0x06000b00,2]],'actor lap cue uses the same raw command bridge');
+});
 function advance(owner,adapters,field,recordFlags318,recordMotion2c8,recordPower12c=adapters.map(()=>0),recordPlace4=adapters.map(()=>0)){
  owner.advance(adapters,field,{recordFlags318,recordMotion2c8,recordPower12c,recordPlace4,
   sprayLeft1c5c:adapters.map(()=>0),sprayRight1c60:adapters.map(()=>0)});
 }
 function body(frame,{speed=50,vertical=0,wet=1,landing=0,simulation=3,impacts=createNativeImpactState(),rider=0}={}){
+ const f=Math.fround,frameSpeedNative=f(Math.sqrt(f(f(f(speed)*f(speed))+f(f(vertical)*f(vertical)))));
  return {logicalFrames:frame,pendingFrameCompletion:false,frame:{simulationState:simulation,startCenter:{x:0,y:-vertical,z:0},controls:{heldButtons:0}},
   hull:{scale:1,rider,lateralMotionBfc:0,center:{x:speed,y:0,z:0},frame:{forward:{x:0,y:0,z:1}},points:[0,1,2].map(()=>({position:{x:64,y:0,z:0}}))},
   water:{profile:{contactForceNative:1,peakForceNative:1,lowSpeedForceRatio:1},forceNative:0},dryContactFrames16d0:0,
-  lastFrame:{actorState:22,animationFrame:0},riderLifecycle:{state:{crashCountdown:0}},wetState:{wetCountC78:wet?12:0,wetFlagC7c:wet,landingC7e:landing},impacts,objectHitKind16d8:0};
+  lastFrame:{actorState:22,animationFrame:0,frameSpeedNative,riderWater:{bodyC84:0,bodyC86:0}},riderLifecycle:{state:{crashCountdown:0}},wetState:{wetCountC78:wet?12:0,wetFlagC7c:wet,landingC7e:landing},impacts,objectHitKind16d8:0};
 }
 
 test('native ring commentary reaches playback once after its twenty outer-frame delay',()=>{
@@ -36,6 +52,22 @@ test('native ring commentary reaches playback once after its twenty outer-frame 
  assert.deepEqual(spoken,[{frame:20,note:107}]);
  assert.equal(owner.snapshot().announcer.delayedHold,0);
  assert.equal(owner.snapshot().announcer.hold,25);
+});
+
+test('menu outer frames deliver delayed speech without updating retained physical packets',()=>{
+ const owner=createNativeRaceContactAudio({players:1,courseIndex:1}),f=field();
+ owner.beforeFrame(1);advance(owner,[body(1)],f,[0],[0]);
+ owner.applyEffects([call('800c21f4',2,1)]);owner.drain();
+ const before=owner.snapshot(),spoken=[];
+ for(let i=1;i<=82;i++){
+  owner.advanceMenuFrame();
+  for(const c of owner.drain())if(c.consumer==='c53d4'&&[0x06000c00,0x06000c01].includes(c.arguments[0]))spoken.push([i,...c.arguments]);
+ }
+ assert.deepEqual(spoken,[[80,0x06000c01,17],[80,0x06000c00,127]]);
+ const after=owner.snapshot();assert.equal(after.frame,83);assert.equal(after.timerFrame,83);assert.equal(after.menuFrames,82);
+ for(const key of ['packets','motion','riderWater'])assert.deepEqual(after[key],before[key]);
+ assert.throws(()=>advance(owner,[body(84)],f,[0],[0]),/Menu owns audio/);
+ assert.deepEqual(owner.snapshot(),after);
 });
 
 test('live actor audio reads raw buttons, completed recovery and retained animation events',()=>{
@@ -115,6 +147,7 @@ test('a physical rider water-entry edge emits drum1 once and acknowledges its so
  const q=queryNativeWaterField(f,64,0).sourcePlaneQueryNative;
  for(let i=0;i<4;i++){
   const b=body(i+1);b.lastFrame.actorState=23;b.articulatedRider={jointWorld:{x:64,y:i===2?q:q-1,z:0}};
+  b.lastFrame.riderWater={bodyC84:i===1||i===2?1:0,bodyC86:i===2?0:1};
   advance(owner,[b],f,[0],[0]);const hits=owner.drain().filter(c=>c.consumer==='bffec'&&c.arguments[1]===1);
   assert.equal(hits.length,i===0||i===3?1:0);if(hits.length)assert.deepEqual(hits[0].arguments,[2,1,127]);
   assert.equal(owner.snapshot().packets[0][24],0);assert.equal(owner.snapshot().packets[0][31],owner.snapshot().packets[0][0]);
@@ -182,13 +215,15 @@ test('physical rider water-entry schedules one delayed announcer cue and pause d
  const q=queryNativeWaterField(f,64,0).sourcePlaneQueryNative;
  for(let frame=1;frame<=11;frame++){
   a.beforeFrame(frame);const b=body(frame);b.lastFrame.actorState=23;b.articulatedRider={jointWorld:{x:64,y:q-1,z:0}};
+  b.lastFrame.riderWater={bodyC84:Number(frame>1),bodyC86:1};
   advance(a,[b],f,[0],[0]);const speech=a.drain().filter(c=>c.arguments[0]===0x06000c00);
   assert.equal(speech.length,frame===11?1:0);
   if(frame===11)assert.equal(speech[0].arguments[1],((Math.imul(1,1664525)+1013904223)>>>0)%3+0x50);
  }
  const b=body(12);b.lastFrame.actorState=23;b.articulatedRider={jointWorld:{x:64,y:q,z:0}};
+ b.lastFrame.riderWater={bodyC84:1,bodyC86:0};
  a.beforeFrame(12);advance(a,[b],f,[0],[0]);
- b.logicalFrames=13;b.articulatedRider.jointWorld.y=q-1;a.beforeFrame(13);advance(a,[b],f,[0],[0]);
+ b.logicalFrames=13;b.articulatedRider.jointWorld.y=q-1;b.lastFrame.riderWater={bodyC84:0,bodyC86:1};a.beforeFrame(13);advance(a,[b],f,[0],[0]);
  assert.equal(a.snapshot().announcer.delay,10);a.clearPendingSounds();assert.equal(a.snapshot().announcer.delay,0);assert.deepEqual(a.drain(),[]);
 });
 
@@ -274,21 +309,24 @@ test('power and place come from canonical human slots and retain native byte sto
  assert.throws(()=>owner.advance([body(2),body(2)],field(),invalid),/source record/);assert.deepEqual(owner.snapshot(),before);
 });
 
-test('rider-water events follow the physical joint and strict source query, independently of hull wetness',()=>{
+test('rider-water audio consumes completed physical edges without re-querying the later water field',()=>{
  const a=createNativeRaceContactAudio({players:1,courseIndex:1}),f=field(),cell=queryNativeWaterField(f,64,0);
  cell.indices.forEach((index,i)=>f.heightQ[index]=i*25*256);
  const query=queryNativeWaterField(f,64,0);assert.notEqual(query.sourcePlaneQueryNative,query.renderHeightNative);
- const fall=(frame,y,actor=23)=>{
-  const b=body(frame,{wet:0});b.lastFrame.actorState=actor;
-  b.articulatedRider={jointWorld:{x:64,y,z:0}};return b;
+ const fall=(frame,previous,current)=>{
+  const b=body(frame,{wet:0});b.lastFrame.actorState=23;
+  // Deliberately dry current pose: audio must consume the earlier physical
+  // stage's flags even if another stage has since moved water or the joint.
+  b.articulatedRider={jointWorld:{x:64,y:query.sourcePlaneQueryNative+100,z:0}};
+  b.lastFrame.riderWater={bodyC84:previous,bodyC86:current};return b;
  };
- advance(a,[fall(1,query.sourcePlaneQueryNative-1)],f,[0],[0]);
+ advance(a,[fall(1,0,1)],f,[0],[0]);
  assert.deepEqual(a.snapshot().riderWater,[{bodyC84:0,bodyC86:1}]);
  assert.equal(a.snapshot().packets[0][24],1);assert.equal(a.snapshot().packets[0][3],0);
- advance(a,[fall(2,query.sourcePlaneQueryNative-1)],f,[0],[0]);assert.equal(a.snapshot().packets[0][24],0);
- advance(a,[fall(3,query.sourcePlaneQueryNative)],f,[0],[0]);
+ advance(a,[fall(2,1,1)],f,[0],[0]);assert.equal(a.snapshot().packets[0][24],0);
+ advance(a,[fall(3,1,0)],f,[0],[0]);
  assert.deepEqual(a.snapshot().riderWater,[{bodyC84:1,bodyC86:0}]);
- advance(a,[fall(4,query.sourcePlaneQueryNative-1,7)],f,[0],[0]);assert.equal(a.snapshot().riderWater[0].bodyC86,0);
+ advance(a,[fall(4,0,0)],f,[0],[0]);assert.equal(a.snapshot().riderWater[0].bodyC86,0);
  assert.deepEqual(a.drain(),[],'unimplemented mode4 playback must not invent a mixer lane');
  const copy=a.snapshot();copy.riderWater[0].bodyC86=1;assert.equal(a.snapshot().riderWater[0].bodyC86,0);
 });

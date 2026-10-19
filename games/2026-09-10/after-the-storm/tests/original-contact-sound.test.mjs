@@ -4,6 +4,7 @@ import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {OriginalContactSound,originalContactSelection} from '../original-contact-sound.js';
 import {Soundscape} from '../audio.js';
+import {assetVersions} from '../asset-versions.js';
 const base=new URL('../assets/audio/waverace64/contacts/',import.meta.url);
 const manifest=JSON.parse(readFileSync(new URL('manifest.json',base)));
 const command=(key=11,velocity=127,lane=2)=>({consumer:'bffec',arguments:[lane,key,velocity]});
@@ -16,12 +17,32 @@ class Node{constructor(){for(const key of ['gain','pan','playbackRate'])this[key
 function setup(options={}){
  const ctx={currentTime:0,createBufferSource:()=>new Node(),createGain:()=>new Node(),createStereoPanner:()=>new Node(),
   decodeAudioData:async bytes=>{const view=new DataView(bytes);return {duration:view.getUint32(40,true)/view.getUint32(28,true)};}};
- const requested=[],loader=async url=>{requested.push(url.pathname);const data=readFileSync(url);return data.buffer.slice(data.byteOffset,data.byteOffset+data.byteLength);};
+ const requested=[],loader=async url=>{requested.push(url.href);const data=readFileSync(url);return data.buffer.slice(data.byteOffset,data.byteOffset+data.byteLength);};
  return {ctx,requested,loader,bank:new OriginalContactSound(ctx,new Node(),{loader:options.loader??loader})};
 }
 
-test('40 standalone PCM files cover54 contacts, five spray drums,16 rider reactions and ice',()=>{
- assert.equal(Object.keys(manifest.files).length,40);assert.equal(Object.keys(manifest.sounds).length,76);
+test('original dolphin notes keep channel distance gain and pan through playback, mute and mode changes',async()=>{
+ const {bank}=setup();await bank.load();
+ const gain={consumer:'c538c',arguments:[0x01000500,0x3f000000]},pan={consumer:'c53d4',arguments:[0x03000500,96]};
+ bank.play(gain);bank.play(pan);bank.play(command(8,127,5));bank.play(command(11,127,2));
+ const dolphin=bank.voices.get(5),rider=bank.voices.get(2);
+ assert.equal(dolphin.source.buffer,bank.buffers.get('contact-08.wav'));
+ assert.equal(dolphin.gain.gain.value,.275);assert.equal(dolphin.position,.5);assert.equal(rider.gain.gain.value,.55);
+ bank.play({consumer:'c538c',arguments:[0x01000500,0x3e800000]});
+ bank.play({consumer:'c53d4',arguments:[0x03000500,32]});
+ assert.equal(dolphin.gain.gain.value,.1375);assert.equal(dolphin.position,-.5);assert.equal(rider.position,0);
+ bank.setMode('mono');assert.equal(Math.abs(dolphin.pan.pan.value),0);
+ bank.setMode('headphones');assert.equal(dolphin.pan.pan.value,-.225);
+ bank.stop();bank.play(command(9,127,5));assert.equal(bank.voices.get(5).gain.gain.value,.1375);
+ assert.equal(bank.voices.get(5).source.buffer,bank.buffers.get('contact-09.wav'));
+ bank.resetChannels();bank.play(command(10,127,5));assert.equal(bank.voices.get(5).gain.gain.value,.55);
+ assert.equal(bank.voices.get(5).position,0);assert.equal(bank.voices.get(5).source.buffer,bank.buffers.get('contact-0a.wav'));
+ const s=manifest.dolphinSequence;assert.deepEqual([s.channel,s.notePort,s.velocityPort,s.pollTicks,s.noteTicks],[5,0,5,8,320]);
+ assert.deepEqual(s.notes,[8,9,10]);for(const n of s.notes)assert.equal(manifest.sounds[n].sourceTuning,.75);
+});
+
+test('43 standalone PCM files cover57 contact/dolphin notes, five spray drums,16 rider reactions and ice',()=>{
+ assert.equal(Object.keys(manifest.files).length,43);assert.equal(Object.keys(manifest.sounds).length,79);
  for(const [file,record]of Object.entries(manifest.files)){
   const bytes=readFileSync(new URL(file,base));assert.equal(createHash('sha256').update(bytes).digest('hex'),record.sha256);
   assert.equal(bytes.length,record.bytes);assert.equal(bytes.toString('ascii',0,4),'RIFF');assert.equal(bytes.toString('ascii',8,12),'WAVE');
@@ -42,12 +63,14 @@ test('only original human contact commands select this bank',()=>{
  for(const lane of [2,5])for(let key=0;key<20;key++)assert.deepEqual(originalContactSelection(spray(key,63,lane)),{lane,key:'spray-'+Math.floor(key/4),velocity:63,layer:1,pan:[0,64,127,0][key&3]});
  for(const c of [spray(-1),spray(20),spray(1,128),spray(1,-1),spray(1,80,7)])assert.equal(originalContactSelection(c),null);
  assert.deepEqual(originalContactSelection(ice()),{lane:7,key:'ice-break',velocity:127});
- for(const c of [command(10),command(64),command(11,128),command(11,-1),command(11,2.5),command(11,127,8),{consumer:'c53d4',arguments:[0x06000700,18]},{consumer:'c53d4',arguments:[0x06000701,19]},null])assert.equal(originalContactSelection(c),null);
+ for(const c of [command(7),command(64),command(11,128),command(11,-1),command(11,2.5),command(11,127,8),{consumer:'c53d4',arguments:[0x06000700,18]},{consumer:'c53d4',arguments:[0x06000701,19]},null])assert.equal(originalContactSelection(c),null);
 });
 
 test('lazy bank loads once; note restart replaces only that player, retaining source velocity and pan variants',async()=>{
  const {bank,ctx,requested}=setup();assert.equal(bank.play(command()),false);assert.equal(requested.length,0);
- const first=bank.load();assert.equal(bank.load(),first);assert.equal(await first,true);assert.equal(requested.length,41);
+ const first=bank.load();assert.equal(bank.load(),first);assert.equal(await first,true);assert.equal(requested.length,44);
+ assert.equal(new URL(requested[0]).searchParams.get('v'),assetVersions['assets/audio/waverace64/contacts/manifest.json']);
+ for(const href of requested.slice(1)){const url=new URL(href);assert.equal(url.searchParams.get('v'),manifest.files[url.pathname.split('/').at(-1)].sha256);}
  assert.equal(bank.play(command(17,127),-.4),true);const left=bank.voices.get(2);
  assert.equal(left.gain.gain.value,.55);assert.equal(left.pan.pan.value,-.4);
  bank.play(command(53,63,5),.4);const right=bank.voices.get(5);assert.equal(right.gain.gain.value,(63/127)**2*.55);
@@ -56,14 +79,14 @@ test('lazy bank loads once; note restart replaces only that player, retaining so
  assert.equal(replacement.source.playbackRate.value,manifest.sounds[19].rate);lateEnd();assert.equal(bank.voices.get(2),replacement);
  bank.setMode('mono');assert.ok([...bank.voices.values()].every(v=>v.pan.pan.value===0));bank.setMode('headphones');assert.equal(right.pan.pan.value,.4*.45);
  bank.play(command(19,0));assert.equal(bank.voices.has(2),false);assert.equal(bank.voices.has(5),true);
- right.source.onended();assert.equal(bank.voices.size,0);await bank.load();assert.equal(requested.length,41);
+ right.source.onended();assert.equal(bank.voices.size,0);await bank.load();assert.equal(requested.length,44);
 });
 
 test('a missing effect falls back without blocking the rest and retries only that file after30 seconds',async()=>{
  const fixture=setup();let fail=true;const bank=new OriginalContactSound(fixture.ctx,new Node(),{loader:async url=>{
   if(fail&&url.pathname.endsWith('contact-0b.wav'))throw Error('offline');return fixture.loader(url);
  }});
- assert.equal(await bank.load(),false);assert.equal(bank.buffers.size,39);assert.deepEqual(bank.failures,['contact-0b.wav']);
+ assert.equal(await bank.load(),false);assert.equal(bank.buffers.size,42);assert.deepEqual(bank.failures,['contact-0b.wav']);
  assert.equal(bank.play(command(11)),false);assert.equal(bank.play(command(12)),true);
  const count=fixture.requested.length;fail=false;await bank.load();assert.equal(fixture.requested.length,count);
  fixture.ctx.currentTime=30;assert.equal(await bank.load(),true);assert.equal(fixture.requested.length,count+1);assert.equal(bank.play(command(11)),true);

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {nativeHostInput,NATIVE_HOST_DEFAULT_TUNE,stepNativeRaceHost} from '../native-race-host.js';
+import {nativeHostInput,nativeHostMenuInput,NATIVE_HOST_DEFAULT_TUNE,stepNativeRaceHost} from '../native-race-host.js';
 import {nativeRaceSnapshot} from '../native-race-adapter.js';
 import {createRace,stepRace} from '../race-core.js';
 import {getCourse} from '../courses.js';
@@ -54,6 +54,9 @@ test('browser adaptation retains the digital A/B/R bits and native axis signs',(
   {rawXNative:-35,rawYNative:-35,heldButtons:0xc010});
  assert.equal(nativeHostInput({throttle:1,brake:true,dampen:true}).heldButtons,0x4000);
  assert.equal(nativeHostInput({throttle:false}).heldButtons,0);
+ assert.deepEqual(nativeHostMenuInput({throttle:1,continue:true,steer:.5}),{rawXNative:-35,rawYNative:0,heldButtons:0x9000});
+ assert.deepEqual(nativeHostMenuInput(),{rawXNative:0,rawYNative:0,heldButtons:0});
+ assert.throws(()=>nativeHostMenuInput({continue:1}),/boolean/);
  for(const input of [{steer:2},{lean:NaN},{throttle:-1},{brake:1},{slide:'R'},{dampen:1}])assert.throws(()=>nativeHostInput(input));
 });
 

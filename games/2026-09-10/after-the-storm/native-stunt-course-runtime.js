@@ -68,6 +68,8 @@ export function createNativeStuntCourseRuntime({courseIndex}={}){
  const courseView=Object.freeze({sourceWaterCourseIndex:courseIndex,reverse:false,gates,sourceVisibleGateIndices,sourceBuoyLayout});
  return Object.freeze({courseIndex,mode620,players,scale,sourceDifficulty,configuredLaps728:1,
   data,objectStartup,resetLayout,primaryScratchLayout,checkpointSecondsByIndex,sourceBuoyLayout,
+  // Original71E70 selects no secondary or tertiary route in Stunt mode.
+  courseActorRoutes:Object.freeze({primary:data,secondary:null,tertiary:null}),
   checkpointSourceRows:Object.freeze(checkpointSourceRows),courseView,aiRoute,aiTargetTable,aiFamilies,retirementGeometry,staticContactGeometry,
   ...nativeRaceCourseRegions(courseIndex),directionFlag1f90:rules.checkpointSide});
 }

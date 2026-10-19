@@ -1,5 +1,6 @@
 import {createNativeRiderRecovery,decideNativeActorAfterHull,finishNativeActorPose,nativeRecoveryEffectValues} from './native-rider-recovery.js';
 import {nativeRiderAnchorMode} from './native-rider-anchors.js';
+import {prepareNativeProfileContactMode} from './native-race-body-fields.js';
 
 // Own one rider's recovered decision -> pose-completion phases. Hull ticks and
 // pose evaluation stay external. Effects touch the ACTUAL12 point damping and
@@ -113,7 +114,9 @@ export function decideNativeRiderLifecycle(lifecycle,{completedFrame,simulationS
   preparedAction={...actionDispatch,...actionControls(controls)};
   integer(controls.engineMask,'engineMaskC66',0,65535);
  }
- const context={completedFrame,controls},decision=decideNativeActorAfterHull(lifecycle.state,{
+ const contact=prepareNativeProfileContactMode({profile16ce:Number(hull.computerProfile),
+  contactMode1602:lifecycle.state.contactMode,racerImpactC40:completedFrame.impacts?.racerImpactNative});
+ const context={completedFrame,controls},decision=decideNativeActorAfterHull({...lifecycle.state,contactMode:contact.contactMode1602},{
   simulationState,raceFinished:finished(lifecycle.raceFinished,hull,context),
   frameSpeedNative:completedFrame.frameSpeedNative,wetCount:completedFrame.wetCount,upY:hull.frame.up.y,
   physicalJoint2YNative:rider.jointWorld.y/hull.scale,courseDatumNative:datum(lifecycle.courseDatumNative,hull,context),

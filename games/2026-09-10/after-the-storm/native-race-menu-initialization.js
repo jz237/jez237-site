@@ -3,7 +3,7 @@
 const entries={
  '801ec20c':{game:50,main:3},'801ec0d4':{game:52,main:9},'801ec830':{game:80,main:13},'801ec304':{game:60,main:7},
  '801ec9c8':{game:100,main:6},'801ece50':{game:54,main:18},'801ecf18':{game:56,main:22},
- '801e2b8c':{game:101,main:6},'801ec500':{game:66,main:12},'801ed004':{game:57,main:23}
+ '801e2b8c':{game:101,main:6},'801ec500':{game:66,main:12},'801ed004':{game:57,main:23},'801ec944':{game:90,main:15}
 };
 function word(value,name){if(!Number.isInteger(value)||value<-2147483648||value>2147483647)throw new RangeError(`Invalid ${name}`);return value;}
 function freeze(v){if(v&&typeof v==='object'&&!Object.isFrozen(v)){Object.values(v).forEach(freeze);Object.freeze(v);}return v;}
@@ -25,14 +25,15 @@ export function prepareNativeRaceMenuInitialization(value,input){
  const fade=(type=4,rate=1)=>call('801e6fb0',[type,rate,0]);
  const slots=()=>call('801e6a4c',[0,0]);
  const resources=()=>call('80096960',[2,0,1,2,3]);
- if(consumer==='801e2b8c'||consumer==='801ec500'||consumer==='801ec304'){
+ if(consumer==='801e2b8c'||consumer==='801ec500'||consumer==='801ec304'||consumer==='801ec944'){
   write('previousGameState634',previous);write('returnState630',consumer==='801e2b8c'?word(input.returnState630,'returnState630'):0);
   write('gameStateAb24',entry.game);
   for(const [field,v]of [['main638',entry.main],['initLatch63c',1],['field640',0],['field644',0],['fieldAb1c',0],['field461c',2]])write(field,v);
   if(consumer==='801e2b8c')call('801e6fb0',[1,14,20]);
   else if(consumer==='801ec304'){
    fade(2,4);slots();operations.push({kind:'sourceByteWrite',field:'fieldE5134',value:0});call('800c21f4',[9,0]);
-  }else{write('players',1);resources();fade(2,4);slots();}
+  }else if(consumer==='801ec944')call('800c21f4',[5,0]);
+  else{write('players',1);resources();fade(2,4);slots();}
   return freeze({operations,diagnostic:{consumer,targetGameState:entry.game,targetMain:entry.main,
    requiredExternalConsumers:operations.filter(o=>o.kind==='externalCall').map(o=>o.consumer),
    externalHelpersExecuted:false,menuLoopExecuted:false,resourceLoadingPerformed:false,recordsPersisted:false}});

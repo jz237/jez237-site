@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {nextNativeDryContactFrames,nativeBodyHudPosture,nativeRaceBodyFields} from '../native-race-body-fields.js';
 import {createRace,stepRace} from '../race-core.js';
 import {getCourse} from '../courses.js';
+import {createNativeRaceAdapter,stepNativeRaceAdapter} from '../native-race-adapter.js';
 const impacts=(floor=0,box=0,shore=0,markedBox=false)=>({floorImpactNative:floor,boxImpactNative:box,shoreImpactNative:shore,markedBox});
 
 test('source dry-contact counter distinguishes solid support, marked boxes, wet hulls and free flight',()=>{
@@ -27,8 +28,22 @@ test('ordinary body samples read the physical hull history, applied jet and actu
   assert.equal(b.priorBodyPointNative[k],Math.fround(a.frame.startCenter[k]/scale));
  }
  assert.equal(b.frameSpeedB98,Math.fround(a.water.forceNative));
+ assert.equal(b.speedB90Native,a.lastFrame.frameSpeedNative);
  assert.notEqual(b.frameSpeedB98,a.lastFrame.frameSpeedNative,'applied force is not frame displacement speed');
  assert.equal(b.field16d0,a.dryContactFrames16d0);
  assert.equal(b.field15c0,nativeBodyHudPosture(a.lastFrame.actorState,a.riderLifecycle.physicalMode));
  const before=structuredClone(a.hull.center);b.positionNative.x=999;assert.deepEqual(a.hull.center,before);
+});
+
+test('body speed uses the retained completed field through held simulation and later hull relocation',()=>{
+ let simulationState=3;
+ const a=createNativeRaceAdapter({sourceState:()=>({simulationState})});
+ stepNativeRaceAdapter(a,.2,{throttle:true});const speed=a.lastFrame.frameSpeedNative;
+ assert.ok(speed>0);simulationState=0;stepNativeRaceAdapter(a,.05,{});
+ assert.equal(nativeRaceBodyFields(a).speedB90Native,speed);
+ assert.deepEqual(a.hull.center,a.frame.startCenter,'held hull has no new displacement');
+ a.hull.center.x+=1;
+ const sample=nativeRaceBodyFields(a);
+ assert.equal(sample.speedB90Native,speed,'a later positional change does not rewrite completed B90');
+ assert.equal(sample.positionNative.x,Math.fround(a.hull.center.x/a.hull.scale));
 });

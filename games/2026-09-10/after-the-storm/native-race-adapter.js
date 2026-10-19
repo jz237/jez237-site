@@ -9,6 +9,8 @@ import {createNativeRiderControlState,prepareNativeRiderControls,finishNativeRid
 import {createNativeImpactState,resetNativeImpacts,recordNativeImpact,nativeImpactSnapshot,nativePreparedIceStability} from './native-impact-state.js';
 import {createNativeRiderLifecycle,nativeRiderLifecycleSource,decideNativeRiderLifecycle,finishNativeRiderLifecycle,nativeRiderLifecycleSnapshot} from './native-rider-lifecycle.js';
 import {nextNativeDryContactFrames} from './native-race-body-fields.js';
+import {prepareNativeFrameKinematics,nativeFrameReferencePoint} from './native-frame-kinematics.js';
+import {prepareNativeRiderWaterState} from './native-rider-water-state.js';
 import {initialNativeHullWetState,completeNativeHullWetState} from './native-hull-wet-state.js';
 import {accumulateNativeStuntArc} from './native-stunt-scoring.js';
 import {prepareNativeRiderLanding} from './native-rider-landing.js';
@@ -57,7 +59,6 @@ function adapterOperation(adapter,operation){
   if(busyAdapters.has(adapter))throw new Error('Native adapter operation is not reentrant');
   busyAdapters.add(adapter);try{return operation();}finally{busyAdapters.delete(adapter);}
 }
-const CONTACT_DRIVE_SPEED=Math.fround(5/Math.fround(1.8));
 const contactPhases=['shore','floor','boxes','dynamicPlanes','racingBuoys','fixedSpheres','primarySpheres'];
 const vec=(x=0,y=0,z=0)=>({x,y,z});
 const copy=p=>vec(p.x,p.y,p.z);
@@ -72,11 +73,6 @@ const finite=(v,name)=>{if(!Number.isFinite(v))throw new TypeError(`${name} must
 function range(v,name,min,max){finite(v,name);if(v<min||v>max)throw new RangeError(`${name} must be from ${min} to ${max}`);return v;}
 function integer(v,name,min,max){if(!Number.isInteger(v)||v<min||v>max)throw new RangeError(`${name} must be an integer from ${min} to ${max}`);return v;}
 function vector(p,name){if(!p||![p.x,p.y,p.z].every(Number.isFinite))throw new TypeError(`${name} must have finite x, y and z`);return p;}
-function referencePoint(hull){
-  const {center:c,frame:{up:u,forward:f},scale:s}=hull;
-  return vec(c.x+s*(.1806645*u.x-26.9998535*f.x),c.y+s*(.1806645*u.y-26.9998535*f.y),
-    c.z+s*(.1806645*u.z-26.9998535*f.z));
-}
 function meanVelocity(hull){
   const v=vec();for(const p of hull.points){v.x+=p.velocity.x/12;v.y+=p.velocity.y/12;v.z+=p.velocity.z/12;}
   hull.velocity=v;
@@ -270,12 +266,17 @@ export function applyNativeRaceContact(hull,{kind,pointIndex,normal,penetration=
  * caller's twelve localPointsNative for51EC0 repair. It requires riderActions.
  * The source last-tick50/54/58 displacement owns arc translation removal;
  * physicalMode157c (not contactMode) owns the recovered landing classification.
+ * riderWaterQuery supplies the pure source scalar plane in native units. When
+ * supplied, every completed frame owns C84/C86 after the physical rider pose,
+ * including simulation0. Source hosts supply it for every racer, before water
+ * evolution; audio consumes the completed fields without another rider query.
  */
 export function createNativeRaceAdapter({riderIndex=0,tuneB6c=0,tuneB70=0,tuneB74=0,
   position,velocity,heading=0,pitch=0,roll=0,scale=.025,surface=0,contacts={},jointWorld,
-  contactFactor=1,powerSteps=5,sourceState={},articulatedRider,riderPose,riderRecovery,riderActions,riderLanding,controlOrigin='human',computerProfile=false,hullStart,sourceAIInput}={}){
+  contactFactor=1,powerSteps=5,sourceState={},articulatedRider,riderPose,riderRecovery,riderActions,riderLanding,riderWaterQuery,controlOrigin='human',computerProfile=false,hullStart,sourceAIInput}={}){
   if(controlOrigin!=='human'&&controlOrigin!=='ai')throw new RangeError('controlOrigin must be human or ai');
   if(typeof computerProfile!=='boolean')throw new TypeError('computerProfile must be boolean');
+  if(riderWaterQuery!==undefined&&typeof riderWaterQuery!=='function')throw new TypeError('riderWaterQuery must supply the source scalar plane');
   range(contactFactor,'contactFactor',0,1);range(powerSteps,'powerSteps',0,5);hookSet(contacts);
   if(jointWorld!==undefined&&typeof jointWorld!=='function')vector(jointWorld,'jointWorld');
   if(hullStart!==undefined&&velocity&&[velocity.x,velocity.y,velocity.z].some(v=>v!==0))throw new RangeError('Prepared native startup clears velocity');
@@ -307,17 +308,19 @@ export function createNativeRaceAdapter({riderIndex=0,tuneB6c=0,tuneB70=0,tuneB7
   const adapter={hull,water,wetState,rider,riderControlState,impacts,controlState:createNativeControlState(),surface,contacts,jointWorld,
     sourceState:typeof sourceState==='function'?sourceState:{...(lifecycle?sourceState:source),actionState:undefined},
     actionState:action,articulatedRider,riderPose,riderLifecycle:lifecycle,riderActions:actions,riderLanding:landing,
+    riderWaterState:Object.freeze({bodyC84:0,bodyC86:0}),
     contactFactor,powerSteps,remainder:0,logicalFrames:0,stepsLast:0,frame:null,
     preparedHullTick:null,pendingFrameCompletion:false,inactiveTicks:0,
     objectHitKind16d8:0,contactWindow:contactsZero(),contactDriveFrames:0,dryContactFrames16d0:0,lastControls:null,
-    lastFrame:{objectHitKind16d8:0,logicalFrame:0,clockUnits:0,frameDisplacementNative:vec(),frameSpeedNative:0,
-      hudSpeed:0,referenceDisplacementNative:vec(),referenceChangeNative:vec(),
+    lastFrame:{objectHitKind16d8:0,logicalFrame:0,clockUnits:0,frameDisplacementNative:vec(),frameDisplacementChangeNative:vec(),frameSpeedNative:0,maxFrameSpeedNative:0,
+      hudSpeed:0,referencePositionNative:nativeFrameReferencePoint(Object.fromEntries(['x','y','z'].map(k=>[k,hull.center[k]/scale])),hull.frame.up,hull.frame.forward),
+      referenceDisplacementNative:vec(),referenceChangeNative:vec(),
       wetCount:8,anyWet:true,wetState,contacts:contactsZero(),impacts:nativeImpactSnapshot(impacts),actorState:lifecycle?.state.actorState??source.actorState??22,
       animationFrame:lifecycle?.state.animationFrame??source.animationFrame??0,actionState:{...action},jointWorld:articulatedRider?copy(articulatedRider.jointWorld):null,
       ...(lifecycle?{recovery:nativeRiderLifecycleSnapshot(lifecycle)}:{})}};
   if(actions)adapter.lastFrame.riderActions=riderActionSnapshot(adapter);
   Object.defineProperties(adapter,{controlOrigin:{value:controlOrigin,enumerable:true},computerProfile:{value:computerProfile,enumerable:true},
-    sourceAIInput:{value:sourceAIInput,enumerable:true},
+    sourceAIInput:{value:sourceAIInput,enumerable:true},riderWaterQuery:{value:riderWaterQuery,enumerable:true},
     sampledHullTick:{get:()=>latchedControlFrames.get(adapter)?.hullTick??null,enumerable:true}});return adapter;
 }
 
@@ -465,7 +468,7 @@ function beginFrame(adapter,input,options){
   if(actionHistory)adapter.riderActions.inputHistory=actionHistory;
   latchedControlFrames.delete(adapter);
   adapter.riderControlState=physicalControls.state;
-  adapter.frame={iceStabilityNative:nativePreparedIceStability(adapter.rider.riderIndex,source.actorState),startCenter:copy(hull.center),startReference:referencePoint(hull),prepared,
+  adapter.frame={iceStabilityNative:nativePreparedIceStability(adapter.rider.riderIndex,source.actorState),startCenter:copy(hull.center),prepared,
     controls:forceControls,physicalControls,previousContacts,action:decision,actorState:source.actorState,
     simulationState:source.simulationState,animationFrame:source.animationFrame,riderPose:poseProvider,
     actionHistory,actionSource:capturedActionSource,phase650,catchup,weed2c50:source.weed2c50};
@@ -478,13 +481,19 @@ function endFrame(adapter,beforeActorDecision){
   adapter.wetState=completeNativeHullWetState(adapter.wetState.wetFlagC7c,water.wet.map(Number));
   water.wetCount=adapter.wetState.wetCountC78;water.anyWet=adapter.wetState.wetFlagC7c!==0;
   adapter.dryContactFrames16d0=nextNativeDryContactFrames(adapter.dryContactFrames16d0,{anyWet:water.anyWet,impacts:adapter.impacts});
-  const movement=difference(hull.center,frame.startCenter),reference=difference(referencePoint(hull),frame.startReference);
   const inactive=frame.simulationState===0;
-  const displacement=inactive?copy(lastFrame.frameDisplacementNative):vec(movement.x/s,movement.y/s,movement.z/s),speed=inactive?lastFrame.frameSpeedNative:magnitude(displacement);
-  const referenceDisplacement=inactive?copy(lastFrame.referenceDisplacementNative):vec(reference.x/s,reference.y/s,reference.z/s);
-  const referenceChange=inactive?copy(lastFrame.referenceChangeNative):difference(referenceDisplacement,lastFrame.referenceDisplacementNative);
-  if((contactWindow.floorImpactNative===0&&contactWindow.boxImpactNative===0)||!frame.controls.throttle)adapter.contactDriveFrames=0;
-  else if(adapter.contactDriveFrames<40&&speed<CONTACT_DRIVE_SPEED)adapter.contactDriveFrames++;
+  // Preserve the actual completed reference history and original binary32
+  // stores. Recomputing a new starting reference each frame loses that owner.
+  const nativePosition=p=>Object.fromEntries(['x','y','z'].map(k=>[k,p[k]/s]));
+  const motion=prepareNativeFrameKinematics({displacementNative:lastFrame.frameDisplacementNative,
+    displacementChangeNative:lastFrame.frameDisplacementChangeNative,speedNative:lastFrame.frameSpeedNative,maxSpeedNative:lastFrame.maxFrameSpeedNative,
+    referencePositionNative:lastFrame.referencePositionNative,referenceDisplacementNative:lastFrame.referenceDisplacementNative,
+    referenceChangeNative:lastFrame.referenceChangeNative,contactDriveFrames:adapter.contactDriveFrames},
+   {simulation648:frame.simulationState,positionNative:nativePosition(hull.center),priorPositionNative:nativePosition(frame.startCenter),
+    upNative:hull.frame.up,forwardNative:hull.frame.forward,floorImpactNative:adapter.impacts.floorImpactNative,
+    boxImpactNative:adapter.impacts.boxImpactNative,engineMaskC66:frame.controls.engineMask}).state;
+  const displacement=motion.displacementNative,speed=motion.speedNative;
+  adapter.contactDriveFrames=motion.contactDriveFrames;
   const arc=finishNativeRiderArcState({turnCount16d4:adapter.actionState.turnCount16d4,
     noWetNoContactFrames16dc:adapter.actionState.noWetNoContactFrames,arcActive16e2:Number(adapter.actionState.arcActive)},
     {fieldC7c:adapter.wetState.wetFlagC7c,manipulationAction:adapter.actionState.action,...contactWindow});
@@ -498,9 +507,9 @@ function endFrame(adapter,beforeActorDecision){
   }
   adapter.logicalFrames++;
   adapter.lastFrame={logicalFrame:adapter.logicalFrames,clockUnits:adapter.logicalFrames*50,
-    frameDisplacementNative:displacement,frameSpeedNative:speed,
+    frameDisplacementNative:displacement,frameDisplacementChangeNative:motion.displacementChangeNative,frameSpeedNative:speed,maxFrameSpeedNative:motion.maxSpeedNative,
     hudSpeed:inactive?lastFrame.hudSpeed:Math.trunc(Math.fround(Math.trunc(Math.fround(speed))*Math.fround(1.8))),
-    referenceDisplacementNative:referenceDisplacement,referenceChangeNative:referenceChange,
+    referencePositionNative:motion.referencePositionNative,referenceDisplacementNative:motion.referenceDisplacementNative,referenceChangeNative:motion.referenceChangeNative,
     wetCount:water.wetCount,anyWet:water.anyWet,wetState:adapter.wetState,contacts:{...contactWindow},impacts:nativeImpactSnapshot(adapter.impacts),objectHitKind16d8:adapter.objectHitKind16d8,
     actorState:frame.actorState,animationFrame:frame.animationFrame,actionState:{...adapter.actionState},jointWorld:frame.prepared.jointWorld?copy(frame.prepared.jointWorld):null};
   if(beforeActorDecision)beforeActorDecision();
@@ -553,6 +562,11 @@ function endFrame(adapter,beforeActorDecision){
     adapter.lastFrame.controlActorState=frame.actorState;adapter.lastFrame.controlAnimationFrame=frame.animationFrame;
     adapter.lastFrame.actorState=final.actorState;adapter.lastFrame.animationFrame=final.animationFrame;
     adapter.lastFrame.recovery=nativeRiderLifecycleSnapshot(adapter.riderLifecycle);
+  }
+  if(adapter.riderWaterQuery){
+    adapter.riderWaterState=prepareNativeRiderWaterState(adapter.riderWaterState,{actorState:adapter.lastFrame.actorState,
+      jointWorld:adapter.articulatedRider?.jointWorld,scale:s,queryNative:adapter.riderWaterQuery});
+    adapter.lastFrame.riderWater=adapter.riderWaterState;
   }
   if(adapter.riderLanding){
     const final=adapter.riderLifecycle.state,record=actionSource.poseCompletion;
@@ -741,12 +755,15 @@ export function nativeRaceSnapshot(adapter){
     frame:{forward:copy(f),right:copy(r),up:copy(u)},heading:Math.atan2(f.x,f.z),
     pitch:-Math.asin(Math.max(-1,Math.min(1,f.y))),roll:Math.atan2(r.y,u.y),
     source:{...lastFrame,frameDisplacementNative:copy(lastFrame.frameDisplacementNative),
+      frameDisplacementChangeNative:copy(lastFrame.frameDisplacementChangeNative),
+      referencePositionNative:copy(lastFrame.referencePositionNative),
       referenceDisplacementNative:copy(lastFrame.referenceDisplacementNative),
       referenceChangeNative:copy(lastFrame.referenceChangeNative),contacts:{...lastFrame.contacts},
       impacts:{...lastFrame.impacts,normal:copy(lastFrame.impacts.normal)},
       ...(lastFrame.recovery?{recovery:structuredClone(lastFrame.recovery)}:{}),
       ...(lastFrame.riderActions?{riderActions:structuredClone(lastFrame.riderActions)}:{}),
       ...(lastFrame.landing?{landing:structuredClone(lastFrame.landing)}:{}),
+      ...(lastFrame.riderWater?{riderWater:{...lastFrame.riderWater}}:{}),
       ...(lastFrame.physicalControls?{physicalControls:{...lastFrame.physicalControls}}:{}),
       actionState:{...lastFrame.actionState},jointWorld:lastFrame.jointWorld?copy(lastFrame.jointWorld):null},
     simulationTime:hull.simulationTime,remainder:adapter.remainder};

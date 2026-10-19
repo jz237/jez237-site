@@ -1,8 +1,11 @@
 import {stereoWidth} from './coastal-music.js';
-import {originalEffectPitch} from './original-effect-poll.js';
+import {assetVersions} from './asset-versions.js';
+import {originalEffectPitch,originalEffectSpatial} from './original-effect-poll.js';
 const base=new URL('./assets/audio/waverace64/contacts/',import.meta.url);
-const ids=[1,11,12,13,14,15,...Array.from({length:48},(_,i)=>i+16)];
-const files=new Set([1,11,12,13,14,15,...Array.from({length:12},(_,i)=>16+i*4)].map(i=>'contact-'+i.toString(16).padStart(2,'0')+'.wav'));
+const manifestURL=new URL('manifest.json',base);
+manifestURL.searchParams.set('v',assetVersions['assets/audio/waverace64/contacts/manifest.json']);
+const ids=[1,8,9,10,11,12,13,14,15,...Array.from({length:48},(_,i)=>i+16)];
+const files=new Set([1,8,9,10,11,12,13,14,15,...Array.from({length:12},(_,i)=>16+i*4)].map(i=>'contact-'+i.toString(16).padStart(2,'0')+'.wav'));
 files.add('ice-break.wav');
 const sprayKeys=Array.from({length:5},(_,i)=>'spray-'+i);
 for(const key of sprayKeys)files.add(key+'.wav');
@@ -37,6 +40,7 @@ export class OriginalContactSound{
   this.ctx=ctx;this.destination=destination;this.loader=loader;this.buffers=new Map();this.voices=new Map();
   this.mode='stereo';this.ready=false;this.disposed=false;this.retryAt=0;this.failures=[];
   this.channelPitch=new Map([[2,1],[5,1]]);
+  this.channelSpatial=new Map();
  }
  load(){
   if(this.disposed||this.ready||this.ctx.currentTime<this.retryAt)return Promise.resolve(this.ready);
@@ -47,7 +51,7 @@ export class OriginalContactSound{
   const controller=this.controller=new AbortController();this.failures=[];
   try{
    if(!this.manifest){
-    const m=JSON.parse(new TextDecoder().decode(await this.loader(new URL('manifest.json',base),controller.signal)));
+    const m=JSON.parse(new TextDecoder().decode(await this.loader(manifestURL,controller.signal)));
     if(this.disposed||controller.signal.aborted)return false;
     if(m.version!==1||!m.sounds||!m.files||[...ids,'ice-break',...sprayKeys,...riderKeys].some(id=>{
      const s=m.sounds[id],f=m.files[s?.file];
@@ -58,7 +62,8 @@ export class OriginalContactSound{
    }
    await Promise.all([...files].filter(file=>!this.buffers.has(file)).map(async file=>{
     try{
-     const buffer=await this.ctx.decodeAudioData(await this.loader(new URL(file,base),controller.signal));
+     const url=new URL(file,base);url.searchParams.set('v',this.manifest.files[file].sha256);
+     const buffer=await this.ctx.decodeAudioData(await this.loader(url,controller.signal));
      if(!Number.isFinite(buffer.duration)||Math.abs(buffer.duration-this.manifest.files[file].duration)>.025)throw Error('Truncated contact asset');
      if(!this.disposed&&!controller.signal.aborted)this.buffers.set(file,buffer);
     }catch{if(!controller.signal.aborted)this.failures.push(file);}
@@ -74,8 +79,17 @@ export class OriginalContactSound{
   for(const voice of this.voices.values())voice.pan.pan.setTargetAtTime(voice.position*stereoWidth(mode),this.ctx.currentTime,.025);
  }
  play(command,side=0){
-  const pitch=originalEffectPitch(command);
+  const pitch=originalEffectPitch(command),spatial=originalEffectSpatial(command);
   if(this.disposed)return false;
+  if(spatial){
+   const current={volume:1,...this.channelSpatial.get(spatial.lane),...spatial};this.channelSpatial.set(spatial.lane,current);
+   for(const voice of this.voices.values())if(voice.lane===spatial.lane){
+    voice.gain.gain.setTargetAtTime(voice.level*current.volume,this.ctx.currentTime,.01);
+    voice.position=current.pan===undefined?voice.basePosition:clamp((current.pan-64)/64,-1,1);
+    voice.pan.pan.setTargetAtTime(voice.position*stereoWidth(this.mode),this.ctx.currentTime,.01);
+   }
+   return true;
+  }
   if(pitch){
    this.channelPitch.set(pitch.lane,pitch.rate);
    for(const voice of this.voices.values())if(voice.lane===pitch.lane)
@@ -93,13 +107,15 @@ export class OriginalContactSound{
   const sound=this.manifest?.sounds[selection.key],buffer=this.buffers.get(sound?.file);
   if(!buffer)return false;
   const source=this.ctx.createBufferSource(),gain=this.ctx.createGain(),pan=this.ctx.createStereoPanner();
-  const position=clamp(((selection.pan??sound.pan)-64)/64+(!selection.fixedPan&&Number.isFinite(side)?side:0),-1,1);
+  const basePosition=clamp(((selection.pan??sound.pan)-64)/64+(!selection.fixedPan&&Number.isFinite(side)?side:0),-1,1);
+  const spatialState=this.channelSpatial.get(selection.lane),position=spatialState?.pan===undefined?basePosition:clamp((spatialState.pan-64)/64,-1,1);
   source.buffer=buffer;source.playbackRate.value=sound.rate*(this.channelPitch.get(selection.lane)??1);
   // The source note interpreter squares velocity. Bus gain, stereo placement,
   // resampling and the offline envelopes are browser presentation adaptations.
-  gain.gain.value=(selection.velocity/127)**2*.55;pan.pan.value=position*stereoWidth(this.mode);
+  const level=(selection.velocity/127)**2*.55;
+  gain.gain.value=level*(spatialState?.volume??1);pan.pan.value=position*stereoWidth(this.mode);
   source.connect(gain).connect(pan).connect(this.destination);
-  const voice={source,gain,pan,position,lane:selection.lane,rate:sound.rate};this.voices.set(key,voice);
+  const voice={source,gain,pan,position,basePosition,level,lane:selection.lane,rate:sound.rate};this.voices.set(key,voice);
   source.onended=()=>{
    source.disconnect();gain.disconnect();pan.disconnect();
    if(this.voices.get(key)!==voice)return;
@@ -120,6 +136,6 @@ export class OriginalContactSound{
   this.voices.delete(key);voice.source.onended=null;voice.source.stop();
   voice.source.disconnect();voice.gain.disconnect();voice.pan.disconnect();
  }
- resetChannels(){this.stop();this.channelPitch.set(2,1);this.channelPitch.set(5,1);}
+ resetChannels(){this.stop();this.channelPitch.set(2,1);this.channelPitch.set(5,1);this.channelSpatial.clear();}
  dispose(){this.disposed=true;this.controller?.abort();this.stop();this.buffers.clear();this.ready=false;}
 }

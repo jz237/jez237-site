@@ -3,9 +3,9 @@ import {nativeImpactAudioPacket} from './native-impact-audio.js';
 import {prepareNativeAudioChannel} from './native-audio-channels.js';
 import {nativeRaceBodyFields} from './native-race-body-fields.js';
 import {queryNativeWaterField} from './native-water-field.js';
-import {prepareNativeRiderWaterAudio,prepareNativeActorAudioFields} from './native-audio-packet.js';
+import {prepareNativeActorAudioFields} from './native-audio-packet.js';
 import {createOriginalEngineChannels,applyOriginalEngineCommands} from './original-engine-sound.js';
-import {createOriginalEffectPoll} from './original-effect-poll.js';
+import {createOriginalEffectPoll,originalEffectSpatial} from './original-effect-poll.js';
 import {consumeNativeRaceAudio} from './native-race-audio-consumer.js';
 import {prepareNativeAudioEvent} from './native-audio-events.js';
 import {freshNativeAnnouncer,prepareNativeAnnouncer,advanceNativeRaceAnnouncer} from './native-announcer.js';
@@ -40,7 +40,7 @@ export function createNativeRaceContactAudio({players,courseIndex,difficultyWord
  const packets=[Array(32).fill(0),Array(32).fill(0)],motion=Array.from({length:players},()=>({speed:0,vertical:0})),queue=[];
  const riderWater=Array.from({length:players},()=>({bodyC84:0,bodyC86:0}));
  const effectPoll=createOriginalEffectPoll();
- let emitted=0,dropped=0;
+ let emitted=0,dropped=0,menuFrames=0;
  function enqueue(command,player){
   // Continuous engine controls retain their latest state, not a render queue.
   // Limit transient backlog when rendering is suspended.
@@ -69,19 +69,33 @@ export function createNativeRaceContactAudio({players,courseIndex,difficultyWord
   }
   if(command.consumer==='c37c0'){globals.delay7ce4=command.arguments[1]|0;globals.delayedCue7e1c=command.arguments[0]|0;return;}
   if(command.consumer==='c538c'&&[0x01000b00,0x01000c00].includes(command.arguments[0])&&command.arguments[1]===0){enqueue(command,player);return;}
-  if(effectPoll.submit({...command,frame,player},globals.raceMode))return;
+  // Existing rider channels keep their established spatial presentation.
+  // Only explicit actor mixer effects below admit the new channel controls.
+  if(!originalEffectSpatial(command)&&effectPoll.submit({...command,frame,player},globals.raceMode))return;
   if(command.consumer==='c53d4'&&[0x06000700,0x06000b00,0x06000c00,0x06000c01].includes(command.arguments[0]))enqueue(command,player);
  }
- return {
-  beforeFrame(next){
+ function beforeFrame(next){
    if(!Number.isInteger(next)||next!==timerFrame+1||next!==frame+1)throw new RangeError('Announcer requires successive outer game frames');
    timerFrame=next;
    const result=advanceNativeRaceAnnouncer(announcer,{...globals,audioMode,paused7cc4:0,random4562c:jitter()});
    announcer=result.state;retain(result.context);
    for(const command of result.commands)submit(command);
+ }
+ return {
+  beforeFrame,
+  // Menus still run the outer announcer clock, but do not produce physical
+  // rider packets. A later physical scene needs an explicit audio handoff.
+  advanceMenuFrame(){
+   beforeFrame(frame+1);frame++;menuFrames++;
+   for(const command of effectPoll.poll())enqueue(command,command.player);
   },
   applyEffects(effects){
    for(const effect of effects){
+    if(effect.kind==='externalCall'&&['800c538c','800c53d4'].includes(effect.consumer)){
+     const command={consumer:effect.consumer.slice(3),arguments:effect.arguments};
+     if(originalEffectSpatial(command))effectPoll.submit({...command,frame,player:0},globals.raceMode);
+     else submit(command);continue;
+    }
     if(effect.kind==='externalCall'&&['800c3548','800c35b4','800c3628'].includes(effect.consumer)){
      submit({consumer:effect.consumer.slice(3),arguments:effect.arguments});continue;
     }
@@ -121,6 +135,7 @@ export function createNativeRaceContactAudio({players,courseIndex,difficultyWord
    }
   },
   advance(adapters,field,records){
+   if(menuFrames!==0)throw new Error('Menu owns audio; physical playback requires an explicit scene handoff');
    const {recordFlags318,recordMotion2c8,recordPower12c,recordPlace4,sprayLeft1c5c,sprayRight1c60}=records??{};
    if(adapters.length!==players||[recordFlags318,recordMotion2c8,recordPower12c,recordPlace4,sprayLeft1c5c,sprayRight1c60].some(values=>
     !Array.isArray(values)||values.length!==players||values.some(v=>!Number.isInteger(v)||v< -2147483648||v>2147483647)))
@@ -145,14 +160,12 @@ export function createNativeRaceContactAudio({players,courseIndex,difficultyWord
     for(const effect of adapter.lastFrame.landing?.effects??[])if(effect.kind==='externalCall'&&effect.consumer==='800c35b4')
      submit({consumer:'c35b4',arguments:[]},player);
     const actorC54=adapter.lastFrame.actorState;
-    let point6b4Native,waterQueryNative;
-    if(actorC54===23||actorC54===5){
-     const joint=adapter.articulatedRider?.jointWorld;
-     if(!joint)throw new TypeError('Rider water audio requires the completed physical joint2');
-     point6b4Native=Object.fromEntries(['x','y','z'].map(k=>[k,F(joint[k]/adapter.hull.scale)]));
-     waterQueryNative=queryNativeWaterField(field,point6b4Native.x,point6b4Native.z).sourcePlaneQueryNative;
-    }
-    riderWater[player]=prepareNativeRiderWaterAudio(riderWater[player].bodyC86,{actorC54,point6b4Native,waterQueryNative});
+    // These physical flags were sampled after this rider's pose and BEFORE
+    // water evolution. Re-querying here would observe the following water frame.
+    const observed=adapter.lastFrame.riderWater;
+    if(!observed||!['bodyC84','bodyC86'].every(k=>Number.isInteger(observed[k])&&observed[k]>=0&&observed[k]<=65535))
+     throw new TypeError('Audio requires completed physical rider water fields');
+    riderWater[player]={bodyC84:observed.bodyC84,bodyC86:observed.bodyC86};
     if(adapter.frame.simulationState!==0)motion[player]={speed:body.speedB90Native,vertical:F(body.positionNative.y-body.priorBodyPointNative.y)};
     const packet=packets[player],prefix=nativeHullAudioPrefix({frameSpeedNative:motion[player].speed,verticalFrameB7c:motion[player].vertical,
      record2c8:recordMotion2c8[player],bodyBfc:adapter.hull.lateralMotionBfc,
@@ -194,7 +207,7 @@ export function createNativeRaceContactAudio({players,courseIndex,difficultyWord
   drain(){return queue.splice(0);},
   clearPendingSounds(){effectPoll.clear();queue.length=0;announcer.delay=announcer.delayedHold=0;globals.delay7ce4=0;},
   engineChannels(){return globals.alternateEngine!==0?null:engineChannels.map((c,i)=>({...c,enabled:c.enabled&&audioMode===7&&globals[i?'secondaryMuted':'primaryMuted']===0}));},
-  snapshot(){return {scope:'source-human-race-audio-and-announcer-controls; browser-audio-jitter-poll-phase-and-smoothing',frame,timerFrame,audioMode,globals:{...globals},announcer:{...announcer},
+  snapshot(){return {scope:'source-human-race-audio-and-announcer-controls; browser-audio-jitter-poll-phase-and-smoothing',frame,timerFrame,menuFrames,audioMode,globals:{...globals},announcer:{...announcer},
    engineChannels:engineChannels.map(c=>({...c})),effectPoll:effectPoll.snapshot(),riderPoll:effectPoll.riderSnapshot(),
    packets:packets.map(p=>p.slice()),motion:motion.map(m=>({...m})),riderWater:riderWater.map(w=>({...w})),pending:queue.length,emitted,dropped};}
  };

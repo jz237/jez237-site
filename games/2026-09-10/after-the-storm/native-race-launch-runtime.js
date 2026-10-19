@@ -6,11 +6,15 @@ import {createNativeRaceState,nativeRaceStateSnapshot,prepareNativeRaceStateOper
 import {prepareNativeRaceStartupOverlay} from './native-race-startup-overlay.js';
 import {prepareNativePrimaryRaceClock} from './native-primary-race-clock.js';
 import {createNativeRaceCameraStorage} from './native-race-camera-storage.js';
+import {prepareNativeBodyWrapCamera} from './native-body-wrap.js';
 import {NATIVE_ANGLE_TABLE_WORDS,nativeSineTableWords} from './native-math-tables.js';
 import {sourceBuoyVisibleRow} from './source-buoy-progress.js';
 import {createNativeAIRouteState,stepNativeAIRoute} from './native-ai-route.js';
 import {prepareNativeAIInitialization,stepNativeAIRandom} from './native-ai-initialization.js';
-import {isNativeChampionshipLaunch} from './native-championship-setup.js';
+import {isNativeChampionshipLaunch,NATIVE_CHAMPIONSHIP_SETUP_DATA} from './native-championship-setup.js';
+import {createNativeChampionshipStandingsMenuWords,nativeChampionshipStandingsSourceViews} from './native-championship-standings-data.js';
+import {prepareNativeChampionshipStandingsFrame} from './native-championship-standings-host.js';
+import {isHostRaceWater,installRaceWaterMenuScene,advanceRaceWaterMenuFrame} from './race-water.js';
 import {prepareNativeRiderActionStartup,NATIVE_RIDER_ACTION_LIMITS} from './native-rider-action-startup.js';
 import {prepareNativeAIDriver} from './native-ai-driver.js';
 import {nativeAIDriverStateFromWords,nativeAIDriverStateWrites} from './native-ai-storage.js';
@@ -31,8 +35,10 @@ import {captureNativeRecordSession,restoreNativeRecordSession,copyNativeRecordSe
 import {nativeCourseDatumAfterPhysics} from './native-course-datum.js';
 import {spawnNativeIceFragments} from './native-ice-fragments.js';
 import {stepNativeIceSplashes} from './native-ice-splashes.js';
-import {nextNativeSprayFrameCounter} from './native-spray-levels.js';
+import {prepareNativeSceneGraphicsFrameUpdate} from './native-race-state.js';
 import {createNativeGenericObjectWorld} from './native-generic-object-world.js';
+import {createNativeCourseActorHost} from './native-course-actor-host.js';
+import {snapshotNativeCourseActorRoutes} from './native-course-actor-routes.js';
 import {prepareNativeRaceStuntUpdate,prepareNativeRaceStuntRingUpdate,prepareNativeRaceStuntAwardDisplay,nativeRaceStuntAwardsView} from './native-race-state.js';
 
 // Overlapping effect47FC, solo4800 and two-player4818 numeric entries. Ordinary
@@ -85,7 +91,7 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
  if(players>racers.length)throw new RangeError('Launch requires each human source slot');
  if(recordSession!==undefined&&(initialState||!courseRuntime))throw new RangeError('Record session requires a fresh source launch');
  const retainedRecords=recordSession===undefined?null:copyNativeRecordSession(recordSession);
- let current,resultExit=null,continuationHandoff=null,objectWorldCreated=false;
+ let current,resultExit=null,continuationHandoff=null,objectWorldCreated=false,courseActorHostCreated=false;
  // Browser commands are queued edges, consumed once at the source display stage.
  const cameraCommands=Array.from({length:players},()=>[]);
  const extra=racers.map(r=>({logicalTicks:r.sourceBuoys?.logicalTicks??0,missedCheckpoint:r.sourceBuoys?.missedCheckpoint??false,dqLabel:r.dq||''}));
@@ -186,6 +192,20 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
   stunt,
   canonicalObjects:!!courseRuntime?.objectStartup,
   objectTransformResources:courseRuntime?.objectStartup?.transformResources??null,
+  courseActorRouteWords(primaryState,retainedWordsEe20){
+   const routes=courseRuntime?.courseActorRoutes;
+   if(!routes)throw new Error('This course has no prepared actor route selection');
+   if(current.scene.primaryCount!==routes.primary.nodes.length||current.scene.secondaryCount!==(routes.secondary?.nodes.length??0))
+    throw new Error('Course actor route counts changed; prepare the selected course again');
+   return snapshotNativeCourseActorRoutes({routes,primaryState,retainedWordsEe20});
+  },
+  createCourseActorHost({buffers,worldScale}={}){
+   if(!courseRuntime)throw new Error('Course actors require an initialized source course');
+   if(courseActorHostCreated)throw new Error('Course actor host may be attached only once');
+   const actorHost=createNativeCourseActorHost({buffers,worldScale,readRaceState:()=>current,
+    commitRaceState:next=>{current=createNativeRaceState(next);}});
+   courseActorHostCreated=true;return actorHost;
+  },
   createObjectWorld({water,objectIds}){
    if(!runtime.canonicalObjects)throw new Error('Source object world requires initialized source storage');
    if(objectWorldCreated)throw new Error('Source object world may be attached only once');
@@ -232,8 +252,10 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
     extraRacer:0,records2f4:racers.map((_,slot)=>word(slot,0x2f4/4))};
   },
   advanceSourceFrameCounter(){
-   const g=current.scene,value=nextNativeSprayFrameCounter(g.ambientD4b00,g.activity624);
-   commit([{kind:'sourceWordWrite',field:'ambientD4b00',value:value>>>0}]);return value;
+   // Full6A264, not just its activity-gated ambient counter. The scene
+   // vertex/matrix buffer has its own selector, retained across warm menus.
+   const prepared=prepareNativeSceneGraphicsFrameUpdate(current);current=prepared.state;
+   return current.scene.ambientD4b00;
   },
   // Read the same source rank/checkpoint clock and human slot selectors used
   // by63C88. The host supplies preceding physical centers before any hull tick.
@@ -262,6 +284,25 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
   waterDatumAfterPhysics:datumNative=>nativeCourseDatumAfterPhysics(datumNative,{
    ...current.scene,southernLap1fcc:current.raceWords1f94[ri(0x1fcc)]|0}),
   snapshot:()=>nativeRaceStateSnapshot(current),
+  championshipStandingsSourceViews(){
+   if(!championship||![52,53].includes(current.scene.gameStateAb24))throw new Error('Standings data requires the championship result handoff');
+   return nativeChampionshipStandingsSourceViews(current,racers.map(r=>r.id));
+  },
+  advanceChampionshipStandings(water,rawControllers=[],sourceViews={}){
+   if(!championship||!isHostRaceWater(water))throw new Error('Standings require the championship host water');
+   const entering=current.scene.gameStateAb24===52&&current.scene.initLatch63c!==0;
+   if(entering===water.menuActive)throw new Error('Standings scene and live water ownership disagree');
+   const prepared=prepareNativeChampionshipStandingsFrame(current,{rawControllers,
+    waterDatumNative:water.field.datumNative,waterExtentNative:water.field.parameters.radius*64},
+    {championshipCourseOrderAc14:NATIVE_CHAMPIONSHIP_SETUP_DATA.courseOrderAc14,
+     otherAvatarsA9b4:racers.slice(1).map(r=>r.id),
+     ...nativeChampionshipStandingsSourceViews(current,racers.map(r=>r.id)),...sourceViews});
+   // Every numeric phase, including a possible exit initializer, validates
+   // before live water changes. This runtime remains the sole canonical owner.
+   if(prepared.waterScene)installRaceWaterMenuScene(water,prepared.waterScene);
+   advanceRaceWaterMenuFrame(water,prepared.waterOperations);current=prepared.state;
+   return prepared;
+  },
   recordSessionSnapshot:()=>captureNativeRecordSession(current),
   nameEntryView:()=>nativeNameMenuView(current),
   resultsMenuView:()=>nativeResultsMenuView(current),
@@ -512,6 +553,11 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    if(!courseRuntime)throw new Error('Source camera controls require ordinary race');
    if(cameraCommands[view].length<16)cameraCommands[view].push(mask);
   },
+  advanceBodyWrapCamera(racerIndex,driftNative){
+   if(!courseRuntime)throw new Error('Body wrap requires the canonical course camera owner');
+   const q=prepareNativeBodyWrapCamera({...current.scene,racerIndex,driftNative,hudWords7788:current.hudWords7788});
+   commit(q.operations);return {cameraIndex:q.cameraIndex,operations:q.operations};
+  },
   advanceCameraInput(bodyStatesBySlot){
    if(!courseRuntime)throw new Error('Source camera controls require ordinary race');
    if(current.scene.gameStateAb24!==40)return {effects:[],diagnostic:{views:[]}};
@@ -554,7 +600,8 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    // The race host stops here: resource installation, the subsequent menu loop
    // and cartridge persistence are still separate from this numeric entry.
    const menu=prepared.menus[0];
-   current=prepared.state;
+   current=menu?.consumer==='801ec0d4'?createNativeRaceState({...prepared.state,
+    championshipMenuWords7a00:createNativeChampionshipStandingsMenuWords()}):prepared.state;
    if(menu)resultExit=menu;
    return {effects:prepared.effects,view:runtime.view(),result:runtime.resultView()};
   },

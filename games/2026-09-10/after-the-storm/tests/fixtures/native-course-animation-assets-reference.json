@@ -1,0 +1,173 @@
+[
+  {
+    "bank": 0,
+    "bytes": 32060,
+    "pointerFields": 56,
+    "sourceInputExact": true,
+    "relocatedSpanSHA256": "afb45eeed738b9300cbeea5b182293fb63ba477bb60e91aacca2a338db3a89f2",
+    "animations": [
+      {
+        "frameCount": 16,
+        "tracks": 5,
+        "transforms": 80,
+        "sha256": "26e230e87c9720f7933e7ea716bc8790a85f72b9b368e80e0da191c9066d7a63"
+      },
+      {
+        "frameCount": 54,
+        "tracks": 5,
+        "transforms": 269,
+        "sha256": "42f96e04d764e8236da88748f9146e0c577627e6c8c52cf9f451c3f5d6d0a32d"
+      },
+      {
+        "frameCount": 59,
+        "tracks": 5,
+        "transforms": 295,
+        "sha256": "6c08210a71fb9e457e28624a8122878b12ae8ff2dd5dde017f3e5cbf95c96913"
+      },
+      {
+        "frameCount": 16,
+        "tracks": 5,
+        "transforms": 80,
+        "sha256": "de829e85d99e4d6048d4562a9a8b4a47eac46a94177676d66d4c66d472988d4d"
+      },
+      {
+        "frameCount": 85,
+        "tracks": 5,
+        "transforms": 366,
+        "sha256": "bb1d2b97516f31ab5ad9e87f83b7386cdb88d938c5dcfd15983741141ba6f671"
+      },
+      {
+        "frameCount": 85,
+        "tracks": 5,
+        "transforms": 362,
+        "sha256": "c3cbf62fa446743bebad4c143c01776706d4f230876f09e8c091cfb8155b62cd"
+      },
+      {
+        "frameCount": 85,
+        "tracks": 5,
+        "transforms": 392,
+        "sha256": "cc6d399967909cd9f882979d4bb8db80152aae43dc681f3de649cac46d918c04"
+      },
+      {
+        "frameCount": 85,
+        "tracks": 5,
+        "transforms": 398,
+        "sha256": "43b800edd18a7f428dc5750573134ce21f8dfd44bfef11bad28778d66931fb7a"
+      }
+    ]
+  },
+  {
+    "bank": 1,
+    "bytes": 6396,
+    "pointerFields": 21,
+    "sourceInputExact": true,
+    "relocatedSpanSHA256": "53e2f24a5bb2d9c33432575048dec72515c74edf99b33c45631f7f712ddcc1bc",
+    "animations": [
+      {
+        "frameCount": 20,
+        "tracks": 5,
+        "transforms": 100,
+        "sha256": "5b6e82bc02cab15e1d31274e4818e64ba3ac9d8173f2b0ef76298ede8d4b4e68"
+      },
+      {
+        "frameCount": 20,
+        "tracks": 5,
+        "transforms": 100,
+        "sha256": "f3d3bca387249e61bb63264ca90d27f5b49b1ae950b3116f7b556a46370ea916"
+      },
+      {
+        "frameCount": 50,
+        "tracks": 5,
+        "transforms": 250,
+        "sha256": "f719d034bc73f7071215fd253d4cfdba9942e3df054c0e58029425621f9acae5"
+      }
+    ]
+  },
+  {
+    "bank": 2,
+    "bytes": 1728,
+    "pointerFields": 10,
+    "sourceInputExact": true,
+    "relocatedSpanSHA256": "2d86fee61f754bc8ae77563e7c0554f1266e24cdca2610aab437cb893a4da312",
+    "animations": [
+      {
+        "frameCount": 20,
+        "tracks": 3,
+        "transforms": 60,
+        "sha256": "7fabda891f5e65e260970eb8dffc7aa3980a4b7f6ee4497d8eca6c8939eb1fac"
+      },
+      {
+        "frameCount": 20,
+        "tracks": 3,
+        "transforms": 60,
+        "sha256": "e51beef3f2d3c201d74acbf7b35c83a610b07da718322db014ab398de581295b"
+      }
+    ]
+  },
+  {
+    "bank": 3,
+    "bytes": 4748,
+    "pointerFields": 9,
+    "sourceInputExact": true,
+    "relocatedSpanSHA256": "1ba4c4b8da17bc6e8f73f9ca87ab6aefb7cf693fc185f73fafea6d8c5a1f9fec",
+    "animations": [
+      {
+        "frameCount": 55,
+        "tracks": 7,
+        "transforms": 327,
+        "sha256": "0246ca64ffb673e733ae91b7bbc044f933e5f4153aebe6d36f398a21ae65dc5b"
+      }
+    ]
+  },
+  {
+    "bank": 4,
+    "bytes": 864,
+    "pointerFields": 5,
+    "sourceInputExact": true,
+    "relocatedSpanSHA256": "785fb76d2d70f123b965c893f53a9aab239f748d7fb03450284089abe28b61a2",
+    "animations": [
+      {
+        "frameCount": 20,
+        "tracks": 3,
+        "transforms": 60,
+        "sha256": "a711b157cb5da8310600aa4ad4e6a90ed1a8e85d9c166ed92d3a31d937393d37"
+      }
+    ]
+  },
+  {
+    "bank": 6,
+    "bytes": 972,
+    "pointerFields": 9,
+    "sourceInputExact": true,
+    "relocatedSpanSHA256": "36f6d3d0b92e99cda792c05f65cdc91e1e98dc65b248a78e4915c42d03a74f92",
+    "animations": [
+      {
+        "frameCount": 10,
+        "tracks": 7,
+        "transforms": 66,
+        "sha256": "8918e8705e267924d6f59d2f3143fd4397956a61f274071eae0656a580fefafa"
+      }
+    ]
+  },
+  {
+    "bank": 8,
+    "bytes": 2256,
+    "pointerFields": 16,
+    "sourceInputExact": true,
+    "relocatedSpanSHA256": "17ffc964a44efcc779305133be5512e2b636f46db04697ee5f057ccbf3b5c001",
+    "animations": [
+      {
+        "frameCount": 10,
+        "tracks": 6,
+        "transforms": 60,
+        "sha256": "d217c72d91d2579dbe6f240717fdf4abe3a1dd467dcd5d6a05d4addd55de9f2d"
+      },
+      {
+        "frameCount": 16,
+        "tracks": 6,
+        "transforms": 96,
+        "sha256": "98bb3c1e2ec94d2a15095a4b104139cac215d8dd454963d403487fb2c5ab805e"
+      }
+    ]
+  }
+]

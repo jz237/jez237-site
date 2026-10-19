@@ -1,6 +1,6 @@
 // The water scheduler and ordinary HUD consumers share these actual numeric
-// fields of the canonical80227C80+i*10C camera records. Projection parameters
-// stay explicit browser metadata; no duplicate eye/target/basis is retained.
+// fields of the canonical80227C80+i*10C camera records. Type1/type6 projection
+// comes from the same records; ordinary follow projection is browser metadata.
 import {readNativeWaterFollowCamera,nativeWaterFollowProfile} from './native-water-schedule.js';
 const F=Math.fround,bits=new DataView(new ArrayBuffer(4)),hi=a=>(a-0x7788)/4;
 const fields={eyeNative:[0x4c,0x50,0x54],forward:[0x64,0x68,0x6c],up:[0x70,0x74,0x78],
@@ -72,8 +72,13 @@ export function createNativeRaceCameraStorage({players,readState,commit}={}){
   read(){
    if(!metadata)throw new Error('Source cameras have not been initialized');
    const hud=readState().hudWords7788;
-   return metadata.map((projection,index)=>({...projection,...Object.fromEntries(Object.entries(fields).map(([key,offsets])=>
-    [key,offsets.map(offset=>number(hud[hi(0x7c80+index*0x10c+offset)]))]))}));
+   return metadata.map((projection,index)=>{
+    const base=0x7c80+index*0x10c;
+    const lens=[1,6].includes(hud[hi(base)])?{fovDegrees:number(hud[hi(base+0x88)]),nearNative:number(hud[hi(base+0x9c)]),
+     projectionOffset:[number(hud[hi(base+0x94)]),number(hud[hi(base+0x98)])]}:projection;
+    return {...lens,...Object.fromEntries(Object.entries(fields).map(([key,offsets])=>
+     [key,offsets.map(offset=>number(hud[hi(base+offset)]))]))};
+   });
   }
  });
 }
