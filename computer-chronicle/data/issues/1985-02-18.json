@@ -1,0 +1,495 @@
+{
+  "currentDate": "2026-10-19",
+  "historicDate": "1985-02-18",
+  "displayDate": "Week of February 18-24, 1985",
+  "edition": "Issue 134 - Weekly 1985 Computer & Culture Chronicle",
+  "visualProfile": {
+    "tone": "The costly kingdom of computer adventure",
+    "motifs": [
+      "PCjr adventure landscape",
+      "floppy disks",
+      "video capture board"
+    ],
+    "layout": "Dense warm newsprint with red and blue headers"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Issue 134 - Weekly 1985 Computer & Culture Chronicle",
+    "dateline": "Week of February 18-24, 1985",
+    "price": "75 cents"
+  },
+  "layoutPlan": {
+    "leadPlacement": "King’s Quest kingdom dominates front page",
+    "secondaryRail": "Amazon, PC-EYE, PC-Write and modem games",
+    "archiveNavigation": "Weekly archive and previous/next controls"
+  },
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1985-02-18.jpg",
+    "alt": "Newspaper front page for February 18-24, 1985, featuring King’s Quest",
+    "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "February magazine features join this week’s dated reviews and charts.",
+  "morningLine": "An animated kingdom, a novelist’s adventure, and video on the desktop.",
+  "lead": {
+    "headline": "Inside King's Quest: the $700,000 adventure behind the PCjr's animated kingdom",
+    "dek": "February reporting opens the workshop behind Sierra’s ambitious adventure.",
+    "body": [
+      "A kingdom of 80 scenes comes at a very real price. Donald B. Trivette’s February COMPUTE! account puts the cost of Sierra’s King’s Quest above $700,000, with Roberta Williams and six programmers and artists working for 18 months. IBM supplied a prototype PCjr and asked for a game that could show its color graphics before the machine was announced.",
+      "The landscape is assembled rather than simply copied from disk. Artists made drawings and traced them on a Calcomp graphics tablet, producing instructions that tell the computer how to draw each scene. The castle needs 2,400 bytes of instructions; the simplest room takes only 470. A PCjr spends about four seconds drawing and coloring a room.",
+      "Forty-eight connected outdoor scenes and 32 other scenes make the kingdom feel continuous. Hidden boundary lines and object priorities let the hero appear to pass behind trees or in front of scenery. Yet four save areas for animated objects impose practical limits. The illusion of a living world is built from careful compromises.",
+      "The February column quotes $49 and calls for 128K and a disk drive. Its account lists IBM’s PCjr edition and Sierra versions for the PC, Apple IIc/IIe and Tandy 1000; that is the magazine’s platform report, not a fresh shipping announcement. A larger sequel is forecast for February or March, but its arrival remains a forecast. The production story alone shows how ambitious the home-computer adventure has become."
+    ],
+    "confidence": "same-month",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Michael Crichton takes storytelling from the cinema to Amazon",
+      "body": [
+        "Michael Crichton’s Amazon brings a filmmaker’s concern for pacing to the keyboard. In Kathy Yakal’s February COMPUTE! interview, the author describes beginning the script in 1982 and hiring Steve Warrady to turn the story into Apple assembly-language graphics and text. The project occupied 18 months.",
+        "Crichton wants solutions that would work outside the computer. A damaged boat can be patched in three practical ways, rather than rescued by a magic spell. Cleverness matters more than violence, and choices must give the player expectations and consequences. Amazon is an existing game under discussion, not a newly established release for this week."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "headline": "PC-EYE brings video capture and pixel retouching to the IBM PC",
+      "body": [
+        "Video frames are finding a place on the IBM PC’s disks. Jim Forney’s review in the February 19 PC Magazine examines Chorus Data’s PC-EYE expansion board, which captures images from a camera or VCR. Its companion IMiGET software lets an operator retouch individual pixels and add graphics or titles before retrieving or printing the picture.",
+        "The menu-driven system still asks the user to make careful tonal adjustments. Forney stresses setting the black and white ends of the image scale. He reports a CGA file exceeding 16K appearing in under a second, while a 640-by-400, four-bit Tecmar image exceeds 131K and takes several seconds. He favors a composite display for grayscale work. These are review observations, not claims of a product launch on the issue date."
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        8
+      ]
+    },
+    {
+      "headline": "PC-Write asks users to share the software—and pays registered referrers",
+      "body": [
+        "Bob Wallace’s PC-Write takes a different route to the word-processing customer: copy it and pass it along. Sheldon Leemon’s February COMPUTE! review describes distribution through user groups and bulletin boards. Quicksoft charges $10 for a disk with postage and handling; voluntary registration costs $75.",
+        "Registration brings a personalized copy, a bound manual, telephone support, Pascal and machine-language source code, and the next major update. The review describes a $25 commission when another user registers a copy carrying an existing registrant’s number. Separate editing and printing programs conserve memory, though leaving the editor for some tasks is a drawback. Search-and-replace, macros and customizable commands give this shareable program serious office ambitions."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "PC-EYE Video Capture System",
+      "summary": "Chorus Data IBM PC expansion board reviewed February 19; capture and store video frames, with IMiGET editing.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        8
+      ]
+    },
+    {
+      "title": "Atari 600XL memory expansions",
+      "summary": "RC Systems plug-in modules: AM2 adds 32K, $79.95; AM1 adds 48K, $99.95; AM64 adds 64K, $119.95. The item says AM64 works with Atari Translator Disk and the module does not obstruct cartridges.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        7
+      ]
+    },
+    {
+      "title": "Atari 1030 modem",
+      "summary": "Direct-connect, autodial, autoanswer modem. Reader reports an unnamed national chain sale at $69.96; this is not a universal list price.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "PC-Write",
+      "detail": "Quicksoft $10 disk / $75 voluntary registration; distributed through copying, user groups and BBSs.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "name": "RMODEM",
+      "detail": "Howard Stebbins describes an AMODEM 4.8 derivative for Atari modems, available from BBSs and CompuServe; compiled program provides a 22K buffer. Attribute compatibility and buffer claims to the reader letter.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "name": "IMiGET",
+      "detail": "Chorus Data companion software for PC-EYE video-image retouching and graphics overlays.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        8
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games — editorial selections, not sales rankings",
+      "items": [
+        "King’s Quest — $49 in February’s behind-the-scenes feature.",
+        "Amazon — Michael Crichton discusses realistic adventure puzzles.",
+        "Suspect — Infocom’s reporter faces a murder accusation.",
+        "The Hitchhiker’s Guide to the Galaxy — Arthur Dent and Ford Prefect in an Infocom adventure.",
+        "Break Street — $24.95 suggested retail for C64 break dancing."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        0,
+        1,
+        5,
+        6
+      ]
+    },
+    {
+      "label": "Top 5 Movies — February 22-24 domestic weekend box office",
+      "items": [
+        "1. Beverly Hills Cop — $5,857,274",
+        "2. Witness — $5,163,819",
+        "3. The Breakfast Club — $4,263,383",
+        "4. The Killing Fields — $2,227,148",
+        "5. Vision Quest — $2,108,450"
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        10
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "PC-Write disk",
+      "price": "$10.00",
+      "note": "publisher disk/postage/handling; US dollars.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "item": "PC-Write registration",
+      "price": "$75.00",
+      "note": "voluntary registration; US dollars.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "item": "Break Street C64 disk",
+      "price": "$24.95",
+      "note": "suggested retail; US dollars.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "item": "King's Quest",
+      "price": "$49.00",
+      "note": "magazine-listed price; US dollars.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Atari 1030",
+      "price": "$69.96",
+      "note": "reader-reported sale; retailer unnamed; US dollars.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "item": "Play/Net",
+      "price": "$2.00",
+      "note": "introductory hourly connect charge, not total cost; US dollars.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "item": "People/Link",
+      "price": "$2.95",
+      "note": "introductory hourly connect charge; US dollars.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "item": "Pioneer CLD-900",
+      "price": "$1200.00",
+      "note": "approximate reviewed price; US dollars.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        11
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "PC Magazine compares 25 video boards",
+      "summary": "The February 19 cover package includes Adapted for the Screen on p. 116 and Video Board Reviews on p. 121; distinguish issue publication from product announcements.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        8
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Somebody",
+      "artist": "Bryan Adams",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-02-23",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-23.pdf"
+      ],
+      "song": "Somebody",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "Just Another Night",
+      "artist": "Mick Jagger",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-02-23",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-23.pdf"
+      ],
+      "song": "Just Another Night",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "Only the Young",
+      "artist": "Journey",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-02-23",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-23.pdf"
+      ],
+      "song": "Only the Young",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "rank": 4,
+      "title": "Radioactive",
+      "artist": "The Firm",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-02-23",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-23.pdf"
+      ],
+      "song": "Radioactive",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "rank": 5,
+      "title": "Rock and Roll Girls",
+      "artist": "John Fogerty",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-02-23",
+      "confidence": "same-week",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-23.pdf"
+      ],
+      "song": "Rock and Roll Girls",
+      "sourceRefs": [
+        9
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "Break Street — $24.95 suggested retail",
+    "summary": "February product news describes Creative Software’s C64 disk game: head spins, moonwalks and recorded routines.",
+    "tagline": "From the February product pages",
+    "sourceRefs": [
+      6
+    ]
+  },
+  "market": {
+    "headline": "Online services compete on $2 games and faster stock quotations",
+    "summary": "Arlan R. Levitan's February COMPUTE! Telecomputing Today column reports Play/Net introductory connect time of $2.00 an hour and People/Link at $2.95 an hour. Play/Net offers online games with color graphics using proprietary terminal software; the Commodore 64 is the supported machine at the time of writing. IBM and Apple support is promised for spring, not confirmed. People/Link offers chat, special-interest forums and electronic mail. The introductory hourly prices are not total lifetime costs or guarantees of permanent rates. Dow Jones News/Retrieval is reported to have reduced general-service and ordinary stock-quote rates by 25 percent and introduced last-trade quotations. The last-trade quote surcharge is $12 monthly at Dow Jones and $20 at The Source, additional to connect charges. The column contrasts these with traditional quotes delayed 15–20 minutes. The Source's arrangement with discount brokerage Spears permits online orders, which Spears says are generally executed within two minutes; preserve that attribution and do not promise execution times.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      3
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Iberia airliner crashes near Bilbao",
+    "summary": "UPI reported that an Iberia Boeing 727 approaching Bilbao struck a mountain and burned, killing all 148 aboard. The aircraft-accident archive corroborates the date and death toll. Avoid importing later causal conclusions into contemporary copy.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      13,
+      14
+    ]
+  },
+  "gadgetWatch": {
+    "headline": "One Pioneer player handles both Compact Disc and LaserDisc",
+    "summary": "Audio's February equipment profile examines the CLD-900 combination CD/LaserVision player, approximately $1,200 and 35 lb 3 oz. It discusses digital CD-format audio on compatible videodiscs and a shared remote. The profile describes a fall-1984 Japanese demonstration and early-1985 U.S. marketing; do not call it a February 18–24 launch.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      11,
+      12
+    ]
+  },
+  "bbsNote": {
+    "headline": "A hotel-room BBS guide, $2 online gaming and a bargain Atari modem",
+    "summary": "February 1985 reporting captures both the uses and costs of home telecomputing. These are sourced editorial reconstructions of reported topics, not invented verbatim historical BBS messages.",
+    "posts": [
+      {
+        "topic": "BBSs as local knowledge networks",
+        "platform": "Unnamed San Francisco-area BBS",
+        "text": "Levitan recounts asking local users for restaurant recommendations during a business trip, returning to read responses and finding a Szechwan restaurant missing from hotel guides. No board or sysop name is supplied."
+      },
+      {
+        "topic": "Color modem games",
+        "platform": "Play/Net / Commodore 64",
+        "text": "The February column reports $2/hour introductory connect time, proprietary terminal software and C64 support; IBM/Apple versions are only forecast."
+      },
+      {
+        "topic": "Public-domain terminal software",
+        "platform": "Atari BBSs and CompuServe",
+        "text": "Reader Howard Stebbins points to RMODEM for Atari 835/1030 and 850-connected modems, a 22K buffer and a reported $69.96 Atari 1030 sale. COMPUTE! cautions that older software written for the 850 interface does not automatically work unchanged with the 1030."
+      },
+      {
+        "topic": "Online airline schedules",
+        "platform": "Electronic Official Airline Guide via commercial information services",
+        "text": "Levitan says a flight search took roughly 90 seconds and cost about $1.50. His prediction of wider online booking by year-end is a prediction, not evidence that all services already book tickets."
+      }
+    ]
+  },
+  "curiosity": {
+    "headline": "The word processor that pays you for passing it along",
+    "summary": "Quicksoft turns sharing PC-Write into a referral business.",
+    "detail": "COMPUTE! reports that a $75 registrant receives a personalized number; when a recipient of that personalized copy registers, the original registrant gets $25. Reviewer Sheldon Leemon likens it to a legal chain letter. This is a February review, not a newly dated launch."
+  },
+  "accuracyLedger": {
+    "items": [
+      "Most computing material is February issue coverage, not evidence of events on an exact day this week. Lead is a reported feature, not a fabricated launch.",
+      "Original Billboard PDF was downloaded and text extracted. Its Top Rock Tracks ranks differ from Tunecaster: Bryan Adams is number one, Mick Jagger number two; do not substitute another chart.",
+      "PC Magazine transcription contains OCR errors. Use source-normalized names only where clear; do not reproduce OCR corruption as quotations.",
+      "No verified contemporary crew/handle/warez-board story was established. Omit Underground rather than borrow the July 1985 Private Sector seizure; the library description of the year is not February evidence.",
+      "No era-defining event established for the week; milestone intentionally omitted.",
+      "Gadget coverage is a same-month review, not breaking news of an exact-week announcement."
+    ]
+  },
+  "sources": [
+    {
+      "title": "COMPUTE! no. 57: Inside King's Quest — Donald B. Trivette",
+      "url": "https://www.atarimagazines.com/compute/issue57/kings_quest.html",
+      "date": "1985-02",
+      "datePrecision": "month"
+    },
+    {
+      "title": "COMPUTE! no. 57: Michael Crichton: Reflections of a New Designer — Kathy Yakal",
+      "url": "https://www.atarimagazines.com/compute/issue57/new_designer.html",
+      "date": "1985-02",
+      "datePrecision": "month"
+    },
+    {
+      "title": "COMPUTE! no. 57: PC-Write Word Processor — Sheldon Leemon",
+      "url": "https://www.atarimagazines.com/compute/issue57/review_pc_write.html",
+      "date": "1985-02",
+      "datePrecision": "month"
+    },
+    {
+      "title": "COMPUTE! no. 57: Telecomputing Today — Arlan R. Levitan",
+      "url": "https://www.atarimagazines.com/compute/issue57/telecomputing_today.html",
+      "date": "1985-02",
+      "datePrecision": "month"
+    },
+    {
+      "title": "COMPUTE! no. 57: Readers' Feedback: Atari Modem Update",
+      "url": "https://www.atarimagazines.com/compute/issue57/feedback_modem_update.html",
+      "date": "1985-02",
+      "datePrecision": "month"
+    },
+    {
+      "title": "COMPUTE! no. 57: New Text Adventures",
+      "url": "https://www.atarimagazines.com/compute/issue57/news_text_adventures.html",
+      "date": "1985-02",
+      "datePrecision": "month"
+    },
+    {
+      "title": "COMPUTE! no. 57: Commodore 64 Break Dancing",
+      "url": "https://www.atarimagazines.com/compute/issue57/news_break_dancing.html",
+      "date": "1985-02",
+      "datePrecision": "month"
+    },
+    {
+      "title": "COMPUTE! no. 57: Atari 600XL Memory Expansion",
+      "url": "https://www.atarimagazines.com/compute/issue57/news_memory_expansion.html",
+      "date": "1985-02",
+      "datePrecision": "month"
+    },
+    {
+      "title": "PC Magazine vol. 4 no. 4: Video Wizardry with PC-EYE, Jim Forney, pp. 173 onward",
+      "url": "https://archive.org/stream/PC-Mag-1985-02-19/PC-Mag-1985-02-19_djvu.txt",
+      "date": "1985-02-19"
+    },
+    {
+      "title": "Billboard vol. 97 no. 8: Top Rock Tracks (original printed chart)",
+      "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-23.pdf",
+      "date": "1985-02-23"
+    },
+    {
+      "title": "The Numbers: domestic weekend box office February 22, 1985",
+      "url": "https://www.the-numbers.com/box-office-chart/weekend/1985/02/22",
+      "date": "1985-02-22"
+    },
+    {
+      "title": "Audio: Pioneer CLD-900 equipment profile (transcription)",
+      "url": "https://www.gammaelectronics.xyz/audio_02_1985_pioneer.html",
+      "date": "1985-02",
+      "datePrecision": "month"
+    },
+    {
+      "title": "Audio, February 1985, original issue",
+      "url": "https://www.worldradiohistory.com/Archive-All-Audio/Archive-Audio/80s/Audio-1985-02.pdf",
+      "date": "1985-02"
+    },
+    {
+      "title": "UPI: Iberia Boeing 727 crashes near Bilbao",
+      "url": "https://www.upi.com/Archives/1985/02/19/An-Iberia-Boeing-727-preparing-to-land-crashed-into/4769477637200/",
+      "date": "1985-02-19"
+    },
+    {
+      "title": "Bureau of Aircraft Accidents Archives: Boeing 727-256 near Bilbao",
+      "url": "https://www.baaa-acro.com/crash/crash-boeing-727-256-near-bilbao-148-killed",
+      "date": "1985-02-19"
+    }
+  ]
+}
