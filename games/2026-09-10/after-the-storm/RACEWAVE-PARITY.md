@@ -1,6 +1,6 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
-## Unpublished — Original Time trial from the normal menu
+## v2.43.0 — Original Time trial and Dolphin Park fish
 
 Time trial now offers Physics: Modern or Original · Wave Race 64 on the eight
 verified source courses (Twilight from Hard upward, since the original has no
@@ -22,7 +22,7 @@ Browser checks covered the menu rules, a live Original run at 1440 by 900 with
 original wake/spray, and records surviving a reload. The full suite passes
 3,410 of 3,428; the 18 failures are the same older ones as in v2.41.0.
 
-## Unpublished — Dolphin Park tropical fish
+### Dolphin Park tropical fish
 
 Live Dolphin Park's eight original swimmers (actor types 7, 8 and 9, resource
 bank 2) were already moving with their recovered motion but were never drawn.
