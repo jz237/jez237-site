@@ -1,5 +1,42 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## v2.43.0 — Original Time trial and Dolphin Park fish
+
+Time trial now offers Physics: Modern or Original · Wave Race 64 on the eight
+verified source courses (Twilight from Hard upward, since the original has no
+Normal route there). Original runs the recovered physics, buoy power and miss
+rules, and the full original wake/spray owner in Venue conditions. Modern
+remains the default, and its records, ghosts and global scores are unchanged.
+Original runs keep the original-style records and initials, now saved on this
+device in a separate validated key instead of lasting only for the page.
+
+Before opening it, a scripted helm drove three laps on every course and class:
+28 of 31 finished (seven with a few misses). The three that didn't are helm
+limitations, not traps: Amber Expert and Reverse missed five buoys, and on
+Tempest Hard the helm circled by a boundary marker until steered away by hand.
+The effects owner now runs without course actors on courses other than
+Dolphin Park. On all eight courses its rider spray levels matched the separate
+reconstruction for 1,200 frames each, at about 22 ms per headless frame.
+Two-player, Stunt and Championship keep their current physics for now.
+Browser checks covered the menu rules, a live Original run at 1440 by 900 with
+original wake/spray, and records surviving a reload. The full suite passes
+3,410 of 3,428; the 18 failures are the same older ones as in v2.41.0.
+
+### Dolphin Park tropical fish
+
+Live Dolphin Park's eight original swimmers (actor types 7, 8 and 9, resource
+bank 2) were already moving with their recovered motion but were never drawn.
+Each is one fish made of three side-view slices (head, middle, tail) that the
+original animation bends. A continuous high-resolution 3D fish now lives in
+the middle slice's frame and is skinned to the head and tail transforms, so it
+bends exactly with the original poses without seams. The three species follow
+the original palettes: magenta clownfish with white bands, pale striped
+butterflyfish, and royal blue tang with a yellow tail. Slice lengths and
+heights come from the original geometry; shapes and paint are authored and no
+cartridge pixels ship. Tests check every nose and tail-fin vertex against its
+live head/tail slice transform. The fish swim about 2.5 m deep, so they are
+mostly seen through the water.
+
 ## v2.42.0 — original wake and spray in live Dolphin Park
 
 Live Dolphin Park Free Ride (Normal, Venue conditions) now runs the complete
