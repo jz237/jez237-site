@@ -547,8 +547,8 @@
     },
     {
       "path": "licenses/CREDITS.md",
-      "bytes": 26676,
-      "sha256": "7f51b90885fa0fbd663377eacfce4769201df3f693589179eaf9b84913f3b6b4"
+      "bytes": 26888,
+      "sha256": "75fa551b80cf15ccfada445c011d54e817b2740986ca01596f4f938181d79131"
     },
     {
       "path": "licenses/CarConcept-LICENSE.md",
@@ -569,6 +569,11 @@
       "path": "licenses/HARTWELL-REGENT.md",
       "bytes": 339,
       "sha256": "5352d1fdcb2f58588abe4119d50f1a9e4da92b374d0deeac435c321b415be185"
+    },
+    {
+      "path": "licenses/HOLLINS-PICKUP.md",
+      "bytes": 1289,
+      "sha256": "ad7427e9d3e4f07ce43ad5f06f6ad407d1ac9a3f87e903a6e2a87b9be9ba8e21"
     },
     {
       "path": "licenses/KITE-2000.md",
@@ -859,6 +864,11 @@
       "path": "models/hemlock.webp",
       "bytes": 171084,
       "sha256": "04a9aa8be677b859ffc686347a512fa59e8733ae538d5521639a8564bad6c86f"
+    },
+    {
+      "path": "models/hollins.glb",
+      "bytes": 3098040,
+      "sha256": "9038584c41a910466cd7b1d57103286b2bd97845b5f8b2ce2f28420e39352a9f"
     },
     {
       "path": "models/kite.glb",

@@ -107,7 +107,7 @@ function batchRigidChildren(group: THREE.Object3D) {
 
 export async function loadCars(progress: (s: string) => void) {
   const loader = new GLTFLoader();
-  const loadedKinds: CarKind[] = ['coupe', 'sedan', 'hatch', 'muscle', 'wagon', 'utility', 'compact', 'van', 'tern', 'marten', 'buggy', 'shuttle', 'regent', 'trail', 'kite', 'morrow', 'alder', 'saber', 'starfin', 'tordal', 'linnet', 'pipit', 'ravenhill', 'fernleigh', 'cornet'];
+  const loadedKinds: CarKind[] = ['coupe', 'sedan', 'hatch', 'muscle', 'wagon', 'utility', 'compact', 'van', 'tern', 'marten', 'buggy', 'shuttle', 'regent', 'trail', 'kite', 'morrow', 'alder', 'saber', 'starfin', 'tordal', 'linnet', 'pipit', 'ravenhill', 'fernleigh', 'cornet', 'hollins'];
   const kinds: CarKind[] = loadedKinds;
   // Start independent transfers together; preserve template processing order.
   const [loaded] = await Promise.all([Promise.all(loadedKinds.map(kind => loader.loadAsync(url('models/' + kind + '.glb')))),prepareWheelPresentation()]);
@@ -167,10 +167,10 @@ export function cloneCar(kind: CarKind, color: number, armor = 0) {
     if (old.name.startsWith('paint')) {
       const trim = old.name.includes('Paint 2');
       m.color.setHex(trim ? 0x202529 : color);
-      m.metalness = trim ? .18 : (kind==='cornet'||kind==='fernleigh'||kind==='ravenhill'||kind==='pipit'||kind==='linnet'||kind==='tordal'||kind==='starfin'||kind==='saber'||kind==='alder'||kind==='morrow'||kind==='kite'||kind==='trail'||kind==='regent'||kind==='shuttle'||kind==='van'||kind==='tern'||kind==='marten'||kind==='buggy')?.12:.48;
-      m.roughness = trim ? .38 : (kind==='cornet'||kind==='fernleigh'||kind==='ravenhill'||kind==='pipit'||kind==='linnet'||kind==='tordal'||kind==='starfin'||kind==='saber'||kind==='alder'||kind==='morrow'||kind==='kite'||kind==='trail'||kind==='regent'||kind==='shuttle'||kind==='van'||kind==='tern'||kind==='marten'||kind==='buggy')?.36:.24;
+      m.metalness = trim ? .18 : (kind==='hollins'||kind==='cornet'||kind==='fernleigh'||kind==='ravenhill'||kind==='pipit'||kind==='linnet'||kind==='tordal'||kind==='starfin'||kind==='saber'||kind==='alder'||kind==='morrow'||kind==='kite'||kind==='trail'||kind==='regent'||kind==='shuttle'||kind==='van'||kind==='tern'||kind==='marten'||kind==='buggy')?.12:.48;
+      m.roughness = trim ? .38 : (kind==='hollins'||kind==='cornet'||kind==='fernleigh'||kind==='ravenhill'||kind==='pipit'||kind==='linnet'||kind==='tordal'||kind==='starfin'||kind==='saber'||kind==='alder'||kind==='morrow'||kind==='kite'||kind==='trail'||kind==='regent'||kind==='shuttle'||kind==='van'||kind==='tern'||kind==='marten'||kind==='buggy')?.36:.24;
       m.normalScale.setScalar(.055);
-      if ('clearcoat' in m) { m.clearcoat = trim ? .45 : (kind==='cornet'||kind==='fernleigh'||kind==='ravenhill'||kind==='pipit'||kind==='linnet'||kind==='tordal'||kind==='starfin'||kind==='saber'||kind==='alder'||kind==='morrow'||kind==='kite'||kind==='trail'||kind==='regent'||kind==='shuttle'||kind==='van'||kind==='tern'||kind==='marten'||kind==='buggy')?.85:1; m.clearcoatRoughness = (kind==='cornet'||kind==='fernleigh'||kind==='ravenhill'||kind==='pipit'||kind==='linnet'||kind==='tordal'||kind==='starfin'||kind==='saber'||kind==='alder'||kind==='morrow'||kind==='kite'||kind==='trail'||kind==='regent'||kind==='shuttle'||kind==='van'||kind==='tern'||kind==='marten'||kind==='buggy')?.18:.12; }
+      if ('clearcoat' in m) { m.clearcoat = trim ? .45 : (kind==='hollins'||kind==='cornet'||kind==='fernleigh'||kind==='ravenhill'||kind==='pipit'||kind==='linnet'||kind==='tordal'||kind==='starfin'||kind==='saber'||kind==='alder'||kind==='morrow'||kind==='kite'||kind==='trail'||kind==='regent'||kind==='shuttle'||kind==='van'||kind==='tern'||kind==='marten'||kind==='buggy')?.85:1; m.clearcoatRoughness = (kind==='hollins'||kind==='cornet'||kind==='fernleigh'||kind==='ravenhill'||kind==='pipit'||kind==='linnet'||kind==='tordal'||kind==='starfin'||kind==='saber'||kind==='alder'||kind==='morrow'||kind==='kite'||kind==='trail'||kind==='regent'||kind==='shuttle'||kind==='van'||kind==='tern'||kind==='marten'||kind==='buggy')?.18:.12; }
       if(!animated)finishPaint(m, kind !== 'coupe');
     }
     if (o.name.startsWith('panel_')) {
