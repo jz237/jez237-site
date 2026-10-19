@@ -1,10 +1,17 @@
+import {withBarrierBoards,boardSeed} from './barrier-boards';
+import {createFenwickBoundary} from './fenwick-boundary';
+import {createFenwickGarages} from './fenwick-garages';
+import {createFenwickService} from './fenwick-service';
 import * as T from 'three';
+import {addFenwickGroundDetail} from './fenwick-ground';
+import {createFenwickLandscape} from './fenwick-landscape';
+import {createFenwickFairground} from './fenwick-fairground';
 import {getFenwickCourse,type FenwickId} from './fenwick-course';
 import {freezeSceneryTransforms} from './render-work';
 /** Both layouts share the fairground setting; each opens only its selected road. */
 export function createFenwickWorld(id:FenwickId){
  const course=getFenwickCourse(id),root=new T.Group();root.name=id;
- const materials={concrete:new T.MeshStandardMaterial({color:0xc7bfa7,roughness:1}),stripe:new T.MeshStandardMaterial({color:0x953e34,roughness:.9}),steel:new T.MeshStandardMaterial({color:0x3c4643,roughness:.7,metalness:.4}),timber:new T.MeshStandardMaterial({color:0x776146,roughness:1}),roof:new T.MeshStandardMaterial({color:0x526b5e,roughness:.9}),seat:new T.MeshStandardMaterial({color:0xaf8c52,roughness:.95})};
+ const materials=withBarrierBoards({concrete:new T.MeshStandardMaterial({color:0xc7bfa7,roughness:1}),stripe:new T.MeshStandardMaterial({color:0x953e34,roughness:.9}),steel:new T.MeshStandardMaterial({color:0x3c4643,roughness:.7,metalness:.4}),timber:new T.MeshStandardMaterial({color:0x776146,roughness:1}),roof:new T.MeshStandardMaterial({color:0x526b5e,roughness:.9}),seat:new T.MeshStandardMaterial({color:0xaf8c52,roughness:.95})},boardSeed(course.id));
  const floorMaterial=new T.MeshStandardMaterial({color:0x817851,roughness:1}),floorGeometry=new T.PlaneGeometry(440,360),boxGeometry=new T.BoxGeometry(),textures:T.Texture[]=[];
  if(typeof document!=='undefined'){
   const canvas=document.createElement('canvas');canvas.width=2200;canvas.height=1800;const ctx=canvas.getContext('2d');
@@ -19,17 +26,23 @@ export function createFenwickWorld(id:FenwickId){
    const tex=new T.CanvasTexture(canvas);tex.flipY=false;tex.colorSpace=T.SRGBColorSpace;tex.anisotropy=8;textures.push(tex);floorMaterial.map=tex;floorMaterial.color.set(0xffffff);
   }
  }
+ const groundDetail=addFenwickGroundDetail(floorMaterial,course);
  const floor=new T.Mesh(floorGeometry,floorMaterial);floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;floor.name='fenwick_clay_ground';root.add(floor);
  const batches=new Map<keyof typeof materials,T.Matrix4[]>();
  const box=(x:number,y:number,z:number,w:number,h:number,d:number,finish:keyof typeof materials,yaw=0)=>{const list=batches.get(finish)??[];list.push(new T.Matrix4().compose(new T.Vector3(x,y,z),new T.Quaternion().setFromAxisAngle(new T.Vector3(0,1,0),yaw),new T.Vector3(w,h,d)));batches.set(finish,list);};
- for(const s of course.solids)box(s.x,s.y,s.z,s.half[0]*2,s.half[1]*2,s.half[2]*2,s.material,s.yaw);
+ for(const s of course.solids)box(s.x,s.y,s.z,s.half[0]*2,s.half[1]*2,s.half[2]*2,s.material==='stripe'?'boards':s.material,s.yaw);
  for(const x of [-90,0,90]){
   for(let row=0;row<6;row++){const y=.6+row*.6,z=-140-row*2;box(x,y/2,z,68,y,2,'timber');for(let seat=-30;seat<=30;seat+=3)box(x+seat,y+.2,z,2.2,.2,.7,'seat');}
   box(x,6.3,-146,72,.35,17,'roof');for(const dx of [-34,34])box(x+dx,3,-152,.3,6,.3,'steel');
  }
- for(const x of [-120,-40,40,120]){box(x,2.8,140,42,5.6,18,'timber');box(x,5.8,140,44,.4,20,'roof');for(const dx of [-12,0,12])box(x+dx,2,130.9,8,4,.2,'steel');}
+ for(const x of [-120,-40,40,120]){for(const dx of [-12,0,12])box(x+dx,2,130.9,8,4,.2,'steel');}
  for(const [x,z]of [[-202,-110],[202,-110],[-202,110],[202,110]]){box(x,8,z,.4,16,.4,'steel');box(x,16,z,5,.7,1,'concrete');}
  for(const [finish,list]of batches){const mesh=new T.InstancedMesh(boxGeometry,materials[finish],list.length);list.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.name='fenwick_'+finish;mesh.castShadow=mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
+ const boundary=createFenwickBoundary();root.add(boundary.root);
+ const landscape=createFenwickLandscape();root.add(landscape.root);
+ const garages=createFenwickGarages();root.add(garages.root);
+ const service=createFenwickService();root.add(service.root);
+ const fairground=createFenwickFairground();root.add(fairground.root);
  root.userData.solidRecords=course.solids;freezeSceneryTransforms(root);let disposed=false;
- return{root,dispose(){if(disposed)return;disposed=true;root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});floorGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
+ return{root,update:fairground.update,dispose(){if(disposed)return;disposed=true;boundary.dispose();garages.dispose();service.dispose();groundDetail.dispose();landscape.dispose();fairground.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});floorGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
 }

@@ -1,10 +1,12 @@
+import {withBarrierBoards,boardSeed} from './barrier-boards';
+import {createCourseScenery} from './course-scenery';
 import {addCourseGroundDetail} from './course-materials';
 import * as T from 'three';
 import {SALTMARSH,DUNMERE} from './port-farm-courses';
 import {freezeSceneryTransforms} from './render-work';
 export function createPortFarmWorld(id:'saltmarsh-port-v1'|'dunmere-farm-v1'){
  const paved=id==='saltmarsh-port-v1',course=paved?SALTMARSH:DUNMERE,root=new T.Group();root.name=id;
- const materials={concrete:new T.MeshStandardMaterial({color:paved?0xc9c3ac:0x9c9a84,roughness:.95}),stripe:new T.MeshStandardMaterial({color:paved?0xd99033:0xc28b37,roughness:.9}),steel:new T.MeshStandardMaterial({color:0x344553,roughness:.7,metalness:.4}),grass:new T.MeshStandardMaterial({color:0x687858,roughness:1}),seat:new T.MeshStandardMaterial({color:0x687b48,roughness:.8}),blue:new T.MeshStandardMaterial({color:0x3e6c81,roughness:.85}),red:new T.MeshStandardMaterial({color:0x9f4b3e,roughness:.9})};
+ const materials=withBarrierBoards({concrete:new T.MeshStandardMaterial({color:paved?0xc9c3ac:0x9c9a84,roughness:.95}),stripe:new T.MeshStandardMaterial({color:paved?0xd99033:0xc28b37,roughness:.9}),steel:new T.MeshStandardMaterial({color:0x344553,roughness:.7,metalness:.4}),grass:new T.MeshStandardMaterial({color:0x687858,roughness:1}),seat:new T.MeshStandardMaterial({color:0x687b48,roughness:.8}),blue:new T.MeshStandardMaterial({color:0x3e6c81,roughness:.85}),red:new T.MeshStandardMaterial({color:0x9f4b3e,roughness:.9})},boardSeed(course.id));
  const floorMaterial=new T.MeshStandardMaterial({color:paved?0x777771:0x899467,roughness:.98}),groundGeometry=new T.BufferGeometry(),boxGeometry=new T.BoxGeometry(1,1,1),textures:T.Texture[]=[];
  const {spanX,spanZ}=course.terrain;
  if(typeof document!=='undefined'){
@@ -33,29 +35,10 @@ export function createPortFarmWorld(id:'saltmarsh-port-v1'|'dunmere-farm-v1'){
  const ground=new T.Mesh(groundGeometry,floorMaterial);ground.name=id+'_ground';ground.receiveShadow=true;root.add(ground);
  const batches=new Map<keyof typeof materials,T.Matrix4[]>(),matrix=new T.Matrix4(),q=new T.Quaternion();
  function box(x:number,y:number,z:number,w:number,h:number,d:number,material:keyof typeof materials,yaw=0){q.setFromAxisAngle(new T.Vector3(0,1,0),yaw);matrix.compose(new T.Vector3(x,y,z),q,new T.Vector3(w,h,d));const batch=batches.get(material)??[];batch.push(matrix.clone());batches.set(material,batch);}
- for(const s of course.solids)box(s.x,s.y,s.z,s.half[0]*2,s.half[1]*2,s.half[2]*2,s.material,s.yaw);
- // Original dock/farm landmarks stay clear of the racing and recovery lanes.
- const clear=(x:number,z:number,r:number)=>course.distance(x,z)>r;
- if(paved){
-  // Stacked containers, with raised crane booms framing the northern waterfront.
-  for(let i=0;i<24;i++){
-   const x=-135+(i%6)*48,z=-25+Math.floor(i/6)*39;
-   if(!clear(x,z,36))continue;
-   for(let layer=0;layer<2;layer++){box(x,1.5+layer*3,z,22,3,8,i%2?'red':'blue');for(let rib=-10;rib<=10;rib+=2)box(x+rib,1.5+layer*3,z-4.08,.18,2.7,.16,'steel');}
-  }
-  box(0,-.3,220,600,.3,90,'blue');box(0,.1,177,440,.4,9,'concrete');
-  for(const x of [-115,105]){for(const side of [-1,1])box(x+side*13,12,166,1.2,24,1.2,'stripe');box(x,25,176,30,2,55,'stripe');box(x,15,192,.3,19,.3,'steel');box(x,5,192,5,1,2,'steel');}
- }else{
-  // Barns and crop rows provide a recognizable working-farm setting.
-  for(const x of [-200,200]){box(x,4,0,14,8,22,'red');box(x,8.2,0,17,1,25,'steel');box(x,2,-11.1,7,4,.2,'concrete');}
-  for(let x=-100;x<=100;x+=9)for(let z=-50;z<=110;z+=16){if(!clear(x,z,32))continue;const y=course.height(x,z);box(x,y+.65,z,1.3,1.3,11,'seat');}
-  for(let i=0;i<25;i++){const x=-190+i*16,z=151;if(clear(x,z,26)){box(x,course.height(x,z)+1,z,3,2,3,'stripe');}}
-  for(const x of [-35,35]){box(x,6,-158,9,12,9,'concrete');box(x,12.4,-158,10,.8,10,'steel');}
- }
- // Service paddock and spectator terraces stay behind the southern wall.
- for(const x of [-65,0,65]){box(x,2,-157,45,4,14,'red');box(x,4.3,-157,47,.6,16,'steel');}
+ for(const s of course.solids)box(s.x,s.y,s.z,s.half[0]*2,s.half[1]*2,s.half[2]*2,s.material==='stripe'?'boards':s.material,s.yaw);
+ const scenery=createCourseScenery(course,paved?'port':'farm');root.add(scenery.root);
  for(const x of [-192,192]){box(x,7,-85,.6,14,.6,'steel');box(x,14,-85,5,.8,1,'seat');}
  for(const [finish,matrices]of batches){const mesh=new T.InstancedMesh(boxGeometry,materials[finish],matrices.length);matrices.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.name=id+'_'+finish;mesh.castShadow=mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
  root.userData.solidRecords=course.solids;freezeSceneryTransforms(root);
- let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;surfaceDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
+ let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;scenery?.dispose();surfaceDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
 }

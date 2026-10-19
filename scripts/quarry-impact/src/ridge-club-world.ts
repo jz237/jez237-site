@@ -1,10 +1,12 @@
+import {withBarrierBoards,boardSeed} from './barrier-boards';
+import {createCourseScenery,paintCourseGround} from './course-scenery';
 import {addCourseGroundDetail} from './course-materials';
 import * as T from 'three';
 import {WESTMERE,HARROWSTONE} from './ridge-club-courses';
 import {freezeSceneryTransforms} from './render-work';
 export function createRidgeClubWorld(id:'westmere-club-v1'|'harrowstone-ridge-v1'){
  const paved=id==='westmere-club-v1',course=paved?WESTMERE:HARROWSTONE,root=new T.Group();root.name=id;
- const materials={concrete:new T.MeshStandardMaterial({color:paved?0xc9c3ac:0x9c9a84,roughness:.95}),stripe:new T.MeshStandardMaterial({color:paved?0xd99033:0xc28b37,roughness:.9}),steel:new T.MeshStandardMaterial({color:0x344553,roughness:.7,metalness:.4}),grass:new T.MeshStandardMaterial({color:0x687858,roughness:1}),seat:new T.MeshStandardMaterial({color:0x687b48,roughness:.8}),blue:new T.MeshStandardMaterial({color:0x3e6c81,roughness:.85}),red:new T.MeshStandardMaterial({color:0x9f4b3e,roughness:.9})};
+ const materials=withBarrierBoards({concrete:new T.MeshStandardMaterial({color:paved?0xc9c3ac:0x9c9a84,roughness:.95}),stripe:new T.MeshStandardMaterial({color:paved?0xd99033:0xc28b37,roughness:.9}),steel:new T.MeshStandardMaterial({color:0x344553,roughness:.7,metalness:.4}),grass:new T.MeshStandardMaterial({color:0x687858,roughness:1}),seat:new T.MeshStandardMaterial({color:0x687b48,roughness:.8}),blue:new T.MeshStandardMaterial({color:0x3e6c81,roughness:.85}),red:new T.MeshStandardMaterial({color:0x9f4b3e,roughness:.9})},boardSeed(course.id));
  const floorMaterial=new T.MeshStandardMaterial({color:paved?0x777771:0x899467,roughness:.98}),groundGeometry=new T.BufferGeometry(),boxGeometry=new T.BoxGeometry(1,1,1),textures:T.Texture[]=[];
  const {spanX,spanZ}=course.terrain;
  if(typeof document!=='undefined'){
@@ -12,6 +14,7 @@ export function createRidgeClubWorld(id:'westmere-club-v1'|'harrowstone-ridge-v1
   if(ctx){
    ctx.fillStyle=paved?'#777771':'#778960';ctx.fillRect(0,0,canvas.width,canvas.height);let seed=paved?438:842;
    for(let i=0;i<32000;i++){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const x=seed%canvas.width;seed=(Math.imul(seed,1664525)+1013904223)>>>0;ctx.fillStyle=paved?(i%2?'#84817a':'#6b6e69'):(i%2?'#8a9b72':'#647650');ctx.fillRect(x,seed%canvas.height,3,3);}
+   paintCourseGround(ctx,canvas.width,canvas.height,paved?'club':'ridge');
    const scale=canvas.width/spanX,x=(v:number)=>(v+spanX/2)*scale,z=(v:number)=>(spanZ/2-v)*canvas.height/spanZ;
    const route=()=>{ctx.beginPath();course.samples.forEach((p,i)=>i?ctx.lineTo(x(p.x),z(p.z)):ctx.moveTo(x(p.x),z(p.z)));ctx.closePath();};
    ctx.lineJoin='round';route();ctx.strokeStyle=paved?'#90918c':'#b09266';ctx.lineWidth=31*scale;ctx.stroke();
@@ -33,19 +36,10 @@ export function createRidgeClubWorld(id:'westmere-club-v1'|'harrowstone-ridge-v1
  const ground=new T.Mesh(groundGeometry,floorMaterial);ground.name=id+'_ground';ground.receiveShadow=true;root.add(ground);
  const batches=new Map<keyof typeof materials,T.Matrix4[]>(),matrix=new T.Matrix4(),q=new T.Quaternion();
  function box(x:number,y:number,z:number,w:number,h:number,d:number,material:keyof typeof materials,yaw=0){q.setFromAxisAngle(new T.Vector3(0,1,0),yaw);matrix.compose(new T.Vector3(x,y,z),q,new T.Vector3(w,h,d));const batch=batches.get(material)??[];batch.push(matrix.clone());batches.set(material,batch);}
- for(const s of course.solids)box(s.x,s.y,s.z,s.half[0]*2,s.half[1]*2,s.half[2]*2,s.material,s.yaw);
- // Low stands at the club; sparse rock banks on the ridge, all outside walls.
- for(let i=0;i<75;i++){
-  const x=-202+(i*67.13%404),z=-151+(i*41.71%302);
-  if(course.distance(x,z)<32||z< -85)continue;
-  const y=course.height(x,z);
-  if(paved){if(i%3===0){box(x,y+1,z,9,2,4,'blue');box(x,y+2.2,z,10,.4,5,'steel');}}
-  else{box(x,y+1.5,z,7+i%4,3,6+i%3,'concrete',i*.37);box(x,y+3,z,4,3,4,'grass',i*.61);}
- }
- // Small service paddock and spectator terraces stay behind the southern wall.
- for(const x of [-65,0,65]){box(x,2,-157,45,4,14,'red');box(x,4.3,-157,47,.6,16,'steel');}
+ for(const s of course.solids)box(s.x,s.y,s.z,s.half[0]*2,s.half[1]*2,s.half[2]*2,s.material==='stripe'?'boards':s.material,s.yaw);
  for(const x of [-192,192]){box(x,7,-85,.6,14,.6,'steel');box(x,14,-85,5,.8,1,'seat');}
  for(const [finish,matrices]of batches){const mesh=new T.InstancedMesh(boxGeometry,materials[finish],matrices.length);matrices.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.name=id+'_'+finish;mesh.castShadow=mesh.receiveShadow=true;mesh.computeBoundingSphere();root.add(mesh);}
+ const venue=createCourseScenery(course,paved?'club':'ridge');if(venue)root.add(venue.root);
  root.userData.solidRecords=course.solids;freezeSceneryTransforms(root);
- let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;surfaceDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
+ let disposed=false;return{root,dispose(){if(disposed)return;disposed=true;venue?.dispose();surfaceDetail.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});groundGeometry.dispose();boxGeometry.dispose();floorMaterial.dispose();Object.values(materials).forEach(m=>m.dispose());textures.forEach(t=>t.dispose());root.clear();}};
 }

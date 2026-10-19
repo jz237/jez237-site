@@ -1,9 +1,10 @@
+import {withBarrierBoards,boardSeed} from './barrier-boards';
 import * as T from 'three';
 import {MILLHAVEN} from './millhaven-course';
 import {freezeSceneryTransforms} from './render-work';
 export function createMillhavenWorld(){
  const id='millhaven-rally-v1',dock=false,course=MILLHAVEN,root=new T.Group();root.name=id;
- const materials={concrete:new T.MeshStandardMaterial({color:dock?0xc9c3ac:0xd2c5a1,roughness:.95}),stripe:new T.MeshStandardMaterial({color:dock?0xd99033:0x9b3e38,roughness:.9}),steel:new T.MeshStandardMaterial({color:0x344553,roughness:.7,metalness:.4}),grass:new T.MeshStandardMaterial({color:0x687858,roughness:1}),seat:new T.MeshStandardMaterial({color:0xc7c0a4,roughness:.8}),blue:new T.MeshStandardMaterial({color:0x3e6c81,roughness:.85}),red:new T.MeshStandardMaterial({color:0x9f4b3e,roughness:.9})};
+ const materials=withBarrierBoards({concrete:new T.MeshStandardMaterial({color:dock?0xc9c3ac:0xd2c5a1,roughness:.95}),stripe:new T.MeshStandardMaterial({color:dock?0xd99033:0x9b3e38,roughness:.9}),steel:new T.MeshStandardMaterial({color:0x344553,roughness:.7,metalness:.4}),grass:new T.MeshStandardMaterial({color:0x687858,roughness:1}),seat:new T.MeshStandardMaterial({color:0xc7c0a4,roughness:.8}),blue:new T.MeshStandardMaterial({color:0x3e6c81,roughness:.85}),red:new T.MeshStandardMaterial({color:0x9f4b3e,roughness:.9})},boardSeed(course.id));
  const floorMaterial=new T.MeshStandardMaterial({color:dock?0x777771:0x847b53,roughness:.98}),groundGeometry=new T.BufferGeometry(),boxGeometry=new T.BoxGeometry(1,1,1),textures:T.Texture[]=[];
  const {spanX,spanZ}=course.terrain;
  if(typeof document!=='undefined'){
@@ -30,7 +31,7 @@ export function createMillhavenWorld(){
  const ground=new T.Mesh(groundGeometry,floorMaterial);ground.name=id+'_ground';ground.receiveShadow=true;root.add(ground);
  const batches=new Map<keyof typeof materials,T.Matrix4[]>(),matrix=new T.Matrix4(),q=new T.Quaternion();
  function box(x:number,y:number,z:number,w:number,h:number,d:number,material:keyof typeof materials,yaw=0){q.setFromAxisAngle(new T.Vector3(0,1,0),yaw);matrix.compose(new T.Vector3(x,y,z),q,new T.Vector3(w,h,d));const batch=batches.get(material)??[];batch.push(matrix.clone());batches.set(material,batch);}
- for(const s of course.solids)box(s.x,s.y,s.z,s.half[0]*2,s.half[1]*2,s.half[2]*2,s.material,s.yaw);
+ for(const s of course.solids)box(s.x,s.y,s.z,s.half[0]*2,s.half[1]*2,s.half[2]*2,s.material==='stripe'?'boards':s.material,s.yaw);
  // The sawmill and timber stacks sit in the enclosed infield, beyond the barriers.
  box(15,4,-28,66,8,34,'red');box(15,8.3,-28,70,.6,38,'steel');
  for(let x=-10;x<=42;x+=13){box(x,3,-10.8,9,6,.25,'blue');box(x,7,-10.5,9,.65,.3,'seat');}

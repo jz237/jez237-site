@@ -1,3 +1,5 @@
+import {withBarrierBoards,boardSeed} from './barrier-boards';
+import {createCinderbankSurroundings} from './cinderbank-surroundings';
 import * as T from 'three';
 import {CINDERBANK,CINDERBANK_SOLIDS} from './cinderbank-course';
 import {freezeSceneryTransforms} from './render-work';
@@ -20,11 +22,11 @@ export function createCinderbankWorld(){
  }
  const map=new T.DataTexture(pixels,width,height);map.colorSpace=T.SRGBColorSpace;map.generateMipmaps=true;map.minFilter=T.LinearMipmapLinearFilter;map.magFilter=T.LinearFilter;map.anisotropy=8;map.needsUpdate=true;
  const groundMaterial=new T.MeshStandardMaterial({map,roughness:1}),groundGeometry=new T.PlaneGeometry(spanX,spanZ),ground=new T.Mesh(groundGeometry,groundMaterial);ground.name='cinderbank_ground';ground.rotation.x=-Math.PI/2;ground.receiveShadow=true;root.add(ground);
- const materials={concrete:new T.MeshStandardMaterial({color:0xc1b8a0,roughness:.95}),stripe:new T.MeshStandardMaterial({color:0x965340,roughness:.91}),steel:new T.MeshStandardMaterial({color:0x3d4744,roughness:.74,metalness:.25}),roof:new T.MeshStandardMaterial({color:0x606859,roughness:.85}),earth:new T.MeshStandardMaterial({color:0x797259,roughness:1}),seat:new T.MeshStandardMaterial({color:0x8f613d,roughness:.9})};
+ const materials=withBarrierBoards({concrete:new T.MeshStandardMaterial({color:0xc1b8a0,roughness:.95}),stripe:new T.MeshStandardMaterial({color:0x965340,roughness:.91}),steel:new T.MeshStandardMaterial({color:0x3d4744,roughness:.74,metalness:.25}),roof:new T.MeshStandardMaterial({color:0x606859,roughness:.85}),earth:new T.MeshStandardMaterial({color:0x797259,roughness:1}),seat:new T.MeshStandardMaterial({color:0x8f613d,roughness:.9})},boardSeed('cinderbank-oval-v1'));
  type Finish=keyof typeof materials;
  const batches=new Map<Finish,T.Matrix4[]>(),matrix=new T.Matrix4(),rotation=new T.Quaternion(),boxGeometry=new T.BoxGeometry(1,1,1);
  function box(x:number,y:number,z:number,w:number,h:number,d:number,material:Finish,yaw=0){rotation.setFromAxisAngle(new T.Vector3(0,1,0),yaw);matrix.compose(new T.Vector3(x,y,z),rotation,new T.Vector3(w,h,d));const instances=batches.get(material)??[];instances.push(matrix.clone());batches.set(material,instances);}
- for(const solid of CINDERBANK_SOLIDS)box(solid.x,solid.y,solid.z,solid.half[0]*2,solid.half[1]*2,solid.half[2]*2,solid.material,solid.yaw);
+ for(const solid of CINDERBANK_SOLIDS)box(solid.x,solid.y,solid.z,solid.half[0]*2,solid.half[1]*2,solid.half[2]*2,solid.material==='stripe'?'boards':solid.material,solid.yaw);
  // Low bleachers, a race-control cabin and tire-coloured paddock roofs sit
  // outside the continuous outer barrier, never hiding a drivable obstruction.
  for(const centre of [-38,38])for(let row=0;row<6;row++){
@@ -45,6 +47,7 @@ export function createCinderbankWorld(){
   const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=128;const ctx=canvas.getContext('2d');
   if(ctx){ctx.fillStyle='#433e31';ctx.fillRect(0,0,1024,128);ctx.fillStyle='#e6d9b4';ctx.font='bold 66px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('CINDERBANK SPEEDWAY',512,64,990);const signMap=new T.CanvasTexture(canvas);signMap.colorSpace=T.SRGBColorSpace;textures.push(signMap);const material=new T.MeshStandardMaterial({map:signMap,roughness:.9,side:T.DoubleSide}),geometry=new T.PlaneGeometry(44,5.5);extras.push(material);extraGeometry.push(geometry);const sign=new T.Mesh(geometry,material);sign.name='cinderbank_title';sign.position.set(0,8,-82.9);root.add(sign);}
  }
+ const surroundings=createCinderbankSurroundings();root.add(surroundings.root);
  root.userData.solidRecords=CINDERBANK_SOLIDS;freezeSceneryTransforms(root);let disposed=false;
- return{root,groundCoverage:{width,height,spanX,spanZ,road},dispose(){if(disposed)return;disposed=true;root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});for(const g of [groundGeometry,boxGeometry,apronGeometry,...extraGeometry])g.dispose();for(const m of [groundMaterial,...Object.values(materials),...extras])m.dispose();textures.forEach(t=>t.dispose());root.clear();}};
+ return{root,update:surroundings.update,groundCoverage:{width,height,spanX,spanZ,road},dispose(){if(disposed)return;disposed=true;surroundings.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose();});for(const g of [groundGeometry,boxGeometry,apronGeometry,...extraGeometry])g.dispose();for(const m of [groundMaterial,...Object.values(materials),...extras])m.dispose();textures.forEach(t=>t.dispose());root.clear();}};
 }
