@@ -1,5 +1,17 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — native Championship races on every cup course
+
+A headless audit drove native Championship rounds (four racers, original AI)
+on eight cup courses across all three classes. Marine Fortress, Port Blue and
+Drake Lake failed to start because their read-only object/decoration views
+accepted only Time trial and Two-player modes; they now accept Championship,
+which races the same ordinary layout. Every audited race reached the original
+standings stage with all three AI riders finishing three laps at competitive
+times. Twilight is not in the Normal cup (its slot is Southern Island).
+Native Championship is still not offered from the menu: the multi-round
+handoff (points carried into the next course and its introduction) is next.
+
 ## Unpublished — Original Stunt mode from the normal menu
 
 Stunt run now shares the Physics choice on all nine source venues, including
