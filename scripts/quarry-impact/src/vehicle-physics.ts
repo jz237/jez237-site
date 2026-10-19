@@ -94,6 +94,8 @@ export function createVehiclePhysics(api:typeof R,world:R.World,kind:CarKind,mas
   api.ColliderDesc.cuboid(kind==='compact'?.60:classic?.70:.65,classic?.22:.24,classic?(utility?.56:estate?1.195:kind==='compact'?.73:.72):.65)
    .setTranslation(0,classic?.43:kind==='coupe'?.12:.2,classic?(utility?-.16:estate?-.98:kind==='compact'?-.25:-.40):-.1);
  const roof=world.createCollider(roofDesc.setMass(0).setFriction(.5).setActiveEvents(api.ActiveEvents.CONTACT_FORCE_EVENTS).setContactForceEventThreshold(0),body);
+ // The Cornet's roof cone sign gets a small massless box so an upturned van rests on it instead of sinking it into the ground.
+ if(kind==='cornet')world.createCollider(api.ColliderDesc.cuboid(.22,.3,.22).setTranslation(0,1.86,.62).setMass(0).setFriction(.45).setRestitution(.03).setActiveEvents(api.ActiveEvents.CONTACT_FORCE_EVENTS).setContactForceEventThreshold(0),body);
  // Compound utility shell leaves the cargo opening empty above its floor.
  // All pieces share the chassis body, so suspension rays exclude them together.
  if(utility){
