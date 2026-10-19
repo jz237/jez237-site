@@ -19,14 +19,14 @@ const FIELD_KINDS=Object.freeze([...CLUB_KINDS,'shuttle'] as const);
 const CLASS_KINDS=Object.freeze([...FIELD_KINDS,'regent','trail'] as const);
 const CLASS_ENGINE_KINDS=Object.freeze([...CLASS_KINDS,'kite','morrow','alder','saber','starfin','tordal','linnet','pipit','ravenhill'] as const);
 export const CLUB_POINTS=Object.freeze([25,20,16,13,11,9,7,5,3,2,1] as const);
-export type ClubRoundId='quarry-circuit'|'ironfield-circuit'|'quarry-survival'|'cinderbank-sprint'|'cinderbank-reverse'|'bracken-sprint'|'cinderbank-circuit'|'bracken-circuit'|'ironfield-opposing'|'quarry-opposing'|'bracken-reverse'|'quarry-finale'|'redbank-sprint'|'redbank-reverse'|'ashford-sprint'|'ashford-reverse'|'pinecrest-climb'|'pinecrest-return'|'dockside-sprint'|'dockside-return'|'fairground-sprint'|'fairground-return'|'merefield-sprint'|'merefield-return'|'millhaven-sprint'|'millhaven-return'|'fenwick-oval'|'fenwick-eight'|'alderwick-sprint'|'fenwick-return'|'harrow-survival'|'briarhill-survival'|'foundry-survival'|'rookvale-route'|'elmsworth-sprint'|'rookvale-dispatch'|'elmsworth-return'|'sable-sprint'|'willowbank-sprint'|'sable-return'|'willowbank-return'|'westmere-sprint'|'harrowstone-sprint'|'westmere-return'|'harrowstone-return'|'seabrook-sprint'|'hazelwood-sprint'|'seabrook-return'|'hazelwood-return'|'kingswell-sprint'|'copperfield-sprint'|'kingswell-return'|'copperfield-return'|'millbrook-sprint'|'granite-sprint'|'millbrook-return'|'granite-return'|'wrenford-sprint'|'alderwick-cross-sprint'|'wrenford-return'|'wrenford-survival';
+export type ClubRoundId='quarry-circuit'|'ironfield-circuit'|'quarry-survival'|'cinderbank-sprint'|'cinderbank-reverse'|'bracken-sprint'|'cinderbank-circuit'|'bracken-circuit'|'ironfield-opposing'|'quarry-opposing'|'bracken-reverse'|'quarry-finale'|'redbank-sprint'|'redbank-reverse'|'ashford-sprint'|'ashford-reverse'|'pinecrest-climb'|'pinecrest-return'|'dockside-sprint'|'dockside-return'|'fairground-sprint'|'fairground-return'|'merefield-sprint'|'merefield-return'|'millhaven-sprint'|'millhaven-return'|'fenwick-oval'|'fenwick-eight'|'alderwick-sprint'|'fenwick-return'|'harrow-survival'|'briarhill-survival'|'foundry-survival'|'rookvale-route'|'elmsworth-sprint'|'rookvale-dispatch'|'elmsworth-return'|'sable-sprint'|'willowbank-sprint'|'sable-return'|'willowbank-return'|'westmere-sprint'|'harrowstone-sprint'|'westmere-return'|'harrowstone-return'|'seabrook-sprint'|'hazelwood-sprint'|'seabrook-return'|'hazelwood-return'|'kingswell-sprint'|'copperfield-sprint'|'kingswell-return'|'copperfield-return'|'millbrook-sprint'|'granite-sprint'|'millbrook-return'|'granite-return'|'wrenford-sprint'|'alderwick-cross-sprint'|'wrenford-return'|'wrenford-survival'|'ashcombe-sprint'|'thornby-climb'|'ashcombe-return'|'kestrel-survival';
 export type ClubRound=Readonly<{race?:'ordered'|'free'|'random';seed?:number;index:number;id:ClubRoundId;name:string;mode:Mode;course:CourseId;arena?:ArenaId;laps:number;duration:number;stock:true;direction?:'forward'|'reverse'|'opposing'}>;
 export const CLUB_ROUNDS:readonly ClubRound[]=Object.freeze([
  Object.freeze({index:0,id:'quarry-circuit',name:'Quarry Circuit',mode:'race',course:'quarry-v1',laps:2,duration:0,stock:true} as const),
  Object.freeze({index:1,id:'ironfield-circuit',name:'Ironfield Raceway',mode:'race',course:'ironfield-figure-eight-v1',laps:2,duration:0,stock:true} as const),
  Object.freeze({index:2,id:'quarry-survival',name:'Quarry Survival',mode:'derby',course:'quarry-v1',laps:0,duration:90,stock:true} as const),
 ]);
-export type ClubSeriesId='club'|'sprint'|'tour'|'gauntlet'|'dirt'|'road-rally'|'woodland'|'county-weekender'|'airfield-rally'|'banger-weekend'|'demolition-tour'|'freight-speed'|'heath-canyon'|'club-ridge'|'coastal-tour'|'park-dunes-tour'|'canal-pass-tour'|'mud-mayhem';
+export type ClubSeriesId='club'|'sprint'|'tour'|'gauntlet'|'dirt'|'road-rally'|'woodland'|'county-weekender'|'airfield-rally'|'banger-weekend'|'demolition-tour'|'freight-speed'|'heath-canyon'|'club-ridge'|'coastal-tour'|'park-dunes-tour'|'canal-pass-tour'|'mud-mayhem'|'newcomers-cup';
 export type ClubSeries=Readonly<{id:ClubSeriesId;name:string;description:string;rounds:readonly ClubRound[]}>;
 const round=(index:number,id:ClubRoundId,name:string,course:CourseId,laps=1,direction:ClubRound['direction']='forward'):ClubRound=>Object.freeze({index,id,name,course,laps,direction,mode:'race',duration:0,stock:true});
 export const CLUB_SERIES:readonly ClubSeries[]=Object.freeze([
@@ -130,6 +130,12 @@ export const CLUB_SERIES:readonly ClubSeries[]=Object.freeze([
   round(1,'alderwick-cross-sprint','Alderwick Double-Cross','alderwick-cross-v1'),
   round(2,'wrenford-return','Wrenford Reverse','wrenford-mud-v1',2,'reverse'),
   Object.freeze({index:3,id:'wrenford-survival',name:'Wrenford Mud Pit Finale',mode:'derby',course:'quarry-v1',arena:'wrenford-pit-v1',laps:0,duration:90,stock:true} as const),
+ ])}),
+ Object.freeze({id:'newcomers-cup',name:'Newcomers Cup',description:'The newest venues in four stock rounds: Ashcombe Lanes, the Thornby Hill climb, Ashcombe in reverse and a Kestrel Ring survival finale around the island.',rounds:Object.freeze([
+  round(0,'ashcombe-sprint','Ashcombe Lanes Sprint','ashcombe-lanes-v1'),
+  round(1,'thornby-climb','Thornby Hill Climb','thornby-hill-v1'),
+  round(2,'ashcombe-return','Ashcombe Lanes Reverse','ashcombe-lanes-v1',1,'reverse'),
+  Object.freeze({index:3,id:'kestrel-survival',name:'Kestrel Ring Finale',mode:'derby',course:'quarry-v1',arena:'kestrel-ring-v1',laps:0,duration:90,stock:true} as const),
  ])}),
 ]);
 export function clubRoster(kind:CarKind,lineup:GridLineup='mixed',field=11,classLimit?:ClassLimit,enginePolicy?:'class-v1'){

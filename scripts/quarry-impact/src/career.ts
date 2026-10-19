@@ -46,7 +46,7 @@ export const CAREER_GROUPS:readonly CareerGroup[]=[
  {id:'thornby-hill-day',title:'Thornby Hill Day',discipline:'racing',description:'Twelve metres of climb to a rolling hilltop: the hot hatch up it, the wedge down it backwards and two laps in the V8.',cost:3,events:['thornby-kite','thornby-saber','thornby-morrow']},
  {id:'last-rites',title:'Last Rites',discipline:'impact',description:'Two tonnes of long-wheelbase funeral coach go to the breakers: lean on the field in the bowl, finish rivals in the yard and outlast the mud pit.',cost:3,events:['ravenhill-harrow','ravenhill-foundry','ravenhill-wrenford']},
 ];
-export const CAREER_SERIES:readonly ClubSeriesId[]=['club','sprint','tour','gauntlet','dirt','road-rally','woodland','county-weekender','airfield-rally','banger-weekend','demolition-tour','freight-speed','heath-canyon','club-ridge','coastal-tour','park-dunes-tour','canal-pass-tour','mud-mayhem'];
+export const CAREER_SERIES:readonly ClubSeriesId[]=['club','sprint','tour','gauntlet','dirt','road-rally','woodland','county-weekender','airfield-rally','banger-weekend','demolition-tour','freight-speed','heath-canyon','club-ridge','coastal-tour','park-dunes-tour','canal-pass-tour','mud-mayhem','newcomers-cup'];
 export function normalizeCareerPodiums(value:unknown):Partial<Record<ClubSeriesId,number>>{
  const v=value&&typeof value==='object'&&!Array.isArray(value)?value as Record<string,unknown>:{};
  return Object.fromEntries(CAREER_SERIES.flatMap(id=>Number.isInteger(v[id])&&(v[id] as number)>=1&&(v[id] as number)<=3?[[id,v[id]]]:[]));
