@@ -31,3 +31,7 @@ test('nemesis names who hurt the player most and notes revenge',()=>{
  assert.equal(b.nemesis(0,cars,'race',[3,0])!.title,'NEMESIS');assert.equal(b.nemesis(0,cars,'race',[0,3])!.title,'NEMESIS · REVENGE TAKEN');
  const c=new EventAwards();c.hit(3,0,2);assert.equal(c.nemesis(0,cars,'race'),null,'glancing contact is not a nemesis');
 });
+test('the biggest hit keeps its time for the replay shortcut',()=>{
+ const a=new EventAwards();assert.equal(a.biggestHit,null);a.hit(1,2,10,false,4.5);a.hit(3,4,8,false,9);a.hit(5,6,20,true,Number.NaN);
+ assert.deepEqual(a.biggestHit,{attacker:5,victim:6,damage:20,time:0});a.hit(7,8,25,false,12.25);assert.equal(a.biggestHit!.time,12.25);
+});

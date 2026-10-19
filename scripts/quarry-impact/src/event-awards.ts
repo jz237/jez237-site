@@ -4,20 +4,22 @@
 export type AwardCar={id:number;inflicted:number;health:number};
 export type EventAward={key:'hit'|'destroyer'|'takedowns'|'climber'|'toughest'|'nemesis';title:string;id:number;detail:string;victim?:number;value:number};
 export class EventAwards{
- private biggest:{attacker:number;victim:number;damage:number}|null=null;
+ private biggest:{attacker:number;victim:number;damage:number;time:number}|null=null;
  private start:number[]|null=null;
  private takedowns=new Map<number,number>();
  private dealt=new Map<string,number>();
  reset(){this.biggest=null;this.start=null;this.takedowns.clear();this.dealt.clear();}
  /** Returns true when this hit wrecked the victim (a takedown). */
- hit(attacker:number,victim:number,damage:number,wrecked=false){
+ hit(attacker:number,victim:number,damage:number,wrecked=false,time=0){
   if(!(damage>0)||!Number.isFinite(damage)||attacker===victim)return false;
   if(wrecked)this.takedowns.set(attacker,(this.takedowns.get(attacker)??0)+1);
   const pair=attacker+'>'+victim;this.dealt.set(pair,(this.dealt.get(pair)??0)+damage);
-  if(!this.biggest||damage>this.biggest.damage)this.biggest={attacker,victim,damage};
+  if(!this.biggest||damage>this.biggest.damage)this.biggest={attacker,victim,damage,time:Number.isFinite(time)?time:0};
   return wrecked;
  }
  takedownsFor(id:number){return this.takedowns.get(id)??0;}
+ /** The single biggest impact so far (for the replay shortcut on results). */
+ get biggestHit(){return this.biggest?{...this.biggest}:null;}
  /** Starting order (car ids, leader first); only the first call counts. */
  grid(order:readonly number[]){if(!this.start&&order.length)this.start=[...order];}
  get started(){return this.start!==null;}
