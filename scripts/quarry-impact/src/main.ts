@@ -157,6 +157,8 @@ import { SessionTelemetry } from './session-telemetry';
 import { CHALLENGES, challengeCourse, challengeValue, formatChallengeValue, challengeVenueName, type Challenge, type Discipline } from './challenges';
 import { PROFILE_KEY, readProfile, settleRun, type Award } from './progression';
 import { showDriverProfile, awardText, MEDALS } from './profile-ui';
+import {dailyChallenge} from './daily-event';
+import {dailyKey,dailyStreak,isDailyChallenge,DAILY_PREFIX} from './daily-record';
 import {EVENT_KEY,readEventOptions,circuitRoute,raceGridSlot,derbyGridSlot,checkRoute,lapProgress,CombatScoreboard,eventDerbyOrder,stepScoreRespawns} from './event-rules';
 import {showEventSetup} from './event-ui';
 import {classTimeTrial,copyTimeTrialConfig,timeTrialSetup,timeTrialBuildLabel,loadTimeTrialRecords,saveTimeTrialRecords,isTimeTrialConfig,timeTrialBest,formatTrialTime,finishTimeTrialRecord,type TimeTrialConfig,type TimeTrialResult} from './time-trial';
@@ -329,6 +331,16 @@ function bankRun(completed:boolean){
   const run=telemetry.stats;run.completed=completed;
   lastAward=settleRun(profile,runId,run,activeChallenge);
   try{localStorage.setItem(PROFILE_KEY,JSON.stringify(profile));profileStorageWarning='';}catch{profileStorageWarning='Progress is available for this session, but browser storage could not save it.';}
+}
+/** Today's event briefing: one fixed car, venue and rule set per local day, with a streak. */
+function openDaily(){
+  keys.clear();const key=dailyKey(),challenge=dailyChallenge(key),record=profile.daily?.[key],streak=dailyStreak(profile.daily,key);
+  const overlay=document.createElement('div');overlay.className='overlay daily-overlay';
+  overlay.innerHTML=`<section class="dialog daily-event" role="dialog" aria-modal="true" aria-labelledby="daily-title"><div class="eyebrow">DAILY EVENT · ${key} · ${challengeVenueName(challenge)}</div><h2 id="daily-title">${challenge.title.toUpperCase()}</h2><p><b>${DEFINITIONS[challenge.car].name}</b> · ${challenge.mode==='race'?'Race':'Demolition derby'}</p><p>${challenge.description}</p><div class="medal-targets">${challenge.medals.map((v,i)=>`<span class="medal-${i+1}">${MEDALS[i+1]}<b>${challenge.metric==='time'?'≤ ':''}${formatChallengeValue(challenge,v)}</b></span>`).join('')}</div><p id="daily-record">${record?.medal?`Today: ${MEDALS[record.medal]} · best ${formatChallengeValue(challenge,record.best??0)} · ${record.attempts} ${record.attempts===1?'attempt':'attempts'}`:record?.attempts?`Today: no medal yet · ${record.attempts} ${record.attempts===1?'attempt':'attempts'}`:'Not attempted today.'}</p><p id="daily-streak">${streak?`Medal streak: ${streak} ${streak===1?'day':'days'}. Medal today to keep it going.`:'Win any medal on consecutive days to build a streak.'}</p><button id="daily-start" class="primary">START TODAY'S EVENT ↗</button><button id="daily-close" class="small-button">BACK</button></section>`;
+  ui.append(overlay);
+  overlay.querySelector<HTMLButtonElement>('#daily-close')!.onclick=()=>{overlay.remove();};
+  overlay.querySelector<HTMLButtonElement>('#daily-start')!.onclick=()=>{overlay.remove();careerRun=false;activeTimeTrial=null;activeChallenge=challenge;mode=challenge.mode;kind=challenge.car;void start(false);};
+  overlay.querySelector<HTMLButtonElement>('#daily-start')!.focus();
 }
 function openProfile(initialDiscipline:Discipline='racing'){
   profileOpen=true;keys.clear();
@@ -709,6 +721,7 @@ function menu() {
   replayMenu();
   const garageButton=document.createElement('button');garageButton.id='garage';garageButton.className='small-button';garageButton.textContent='GARAGE & TUNING';garageButton.onclick=openGarage;ui.querySelector('.intro')!.append(garageButton);
   const profileButton=document.createElement('button');profileButton.id='driver-profile';profileButton.className='small-button';profileButton.textContent='DRIVER PROFILE & CHALLENGES';profileButton.onclick=()=>openProfile();ui.querySelector('.intro')!.append(profileButton);
+  const dailyButton=document.createElement('button');dailyButton.id='daily-event';dailyButton.className='small-button';{const streak=dailyStreak(profile.daily);dailyButton.textContent=`TODAY'S EVENT${streak?` · ${streak}-DAY STREAK`:''}`;}dailyButton.onclick=()=>openDaily();ui.querySelector('.intro')!.append(dailyButton);
   const trialButton=document.createElement('button');trialButton.id='time-trial';trialButton.className='small-button';trialButton.textContent='TIME TRIAL · PERSONAL BESTS';trialButton.onclick=()=>openTimeTrialSetup();ui.querySelector('.intro')!.append(trialButton);
   const cupButton=document.createElement('button');cupButton.id='club-cup';cupButton.className='small-button';cupButton.textContent=clubCup?.phase==='complete'?'CHAMPIONSHIPS · FINAL STANDINGS':clubCup?'CONTINUE '+clubSeries(clubCup).name.toUpperCase():`CHAMPIONSHIPS · ${CLUB_SERIES.length} SERIES`;cupButton.onclick=()=>openClubCup();ui.querySelector('.intro')!.append(cupButton);
   if(lastAward?.qualified){const note=document.createElement('p');note.className='last-award';note.textContent=awardText(lastAward);ui.querySelector('.intro')!.append(note);}
@@ -1306,10 +1319,10 @@ function finish(title: string) {
   if(activeChallenge&&telemetry){
     const medal=lastAward?.medal??0;
     const detail=activeChallenge.mode==='race'&&!cars[0].finished?'Race not finished':formatChallengeValue(activeChallenge,challengeValue(activeChallenge,telemetry.stats));
-    ui.innerHTML=`<div class="overlay"><section class="dialog challenge-result" aria-label="Challenge result"><div class="eyebrow">${challengeVenueName(activeChallenge)} / ${activeChallenge.title.toUpperCase()} / CHALLENGE</div><h2>${medal?MEDALS[medal]+' MEDAL':'TRY AGAIN'}</h2><p>${detail} · ${Math.ceil(cars[0].health)}% condition</p><p>${activeChallenge.description}</p><p class="award-summary">${awardText(lastAward)}</p>${careerRun?`<p>${careerStatus(profile).available} unlock points available · Best medals count once.</p>`:''}<p>${profileStorageWarning}</p><button id="challenge-retry" class="primary">RETRY CHALLENGE ↗</button><button id="challenge-board" class="small-button">${careerRun?'CAREER BOARD':'CHALLENGE BOARD'}</button><button id="challenge-menu" class="small-button">RETURN TO QUARRY</button></section></div>`;
+    ui.innerHTML=`<div class="overlay"><section class="dialog challenge-result" aria-label="Challenge result"><div class="eyebrow">${challengeVenueName(activeChallenge)} / ${activeChallenge.title.toUpperCase()} / ${isDailyChallenge(activeChallenge)?'DAILY EVENT':'CHALLENGE'}</div><h2>${medal?MEDALS[medal]+' MEDAL':'TRY AGAIN'}</h2><p>${detail} · ${Math.ceil(cars[0].health)}% condition</p><p>${activeChallenge.description}</p><p class="award-summary">${awardText(lastAward)}</p>${careerRun?`<p>${careerStatus(profile).available} unlock points available · Best medals count once.</p>`:''}${isDailyChallenge(activeChallenge)?`<p id="daily-result-streak">Medal streak: ${dailyStreak(profile.daily)} · today's best medal: ${MEDALS[profile.daily?.[activeChallenge.id.slice(DAILY_PREFIX.length)]?.medal??0]??'none'}</p>`:''}<p>${profileStorageWarning}</p><button id="challenge-retry" class="primary">RETRY CHALLENGE ↗</button><button id="challenge-board" class="small-button">${careerRun?'CAREER BOARD':isDailyChallenge(activeChallenge)?'TODAY\'S EVENT':'CHALLENGE BOARD'}</button><button id="challenge-menu" class="small-button">RETURN TO QUARRY</button></section></div>`;
     studioButtons(ui.querySelector('.challenge-result'));
     ui.querySelector<HTMLButtonElement>('#challenge-retry')!.onclick=()=>{void start(false);};
-    ui.querySelector<HTMLButtonElement>('#challenge-board')!.onclick=()=>{const discipline=activeChallenge!.discipline,returnToCareer=careerRun;createCars(true);menu();if(returnToCareer)openCareer(discipline);else openProfile(discipline);};
+    ui.querySelector<HTMLButtonElement>('#challenge-board')!.onclick=()=>{const discipline=activeChallenge!.discipline,returnToCareer=careerRun,daily=isDailyChallenge(activeChallenge);createCars(true);menu();if(daily)openDaily();else if(returnToCareer)openCareer(discipline);else openProfile(discipline);};
     ui.querySelector<HTMLButtonElement>('#challenge-menu')!.onclick=()=>{createCars(true);menu();};
     return;
   }
