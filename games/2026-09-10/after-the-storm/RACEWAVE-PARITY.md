@@ -1,5 +1,27 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — Original Time trial from the normal menu
+
+Time trial now offers Physics: Modern or Original · Wave Race 64 on the eight
+verified source courses (Twilight from Hard upward, since the original has no
+Normal route there). Original runs the recovered physics, buoy power and miss
+rules, and the full original wake/spray owner in Venue conditions. Modern
+remains the default, and its records, ghosts and global scores are unchanged.
+Original runs keep the original-style records and initials, now saved on this
+device in a separate validated key instead of lasting only for the page.
+
+Before opening it, a scripted helm drove three laps on every course and class:
+28 of 31 finished (seven with a few misses). The three that didn't are helm
+limitations, not traps: Amber Expert and Reverse missed five buoys, and on
+Tempest Hard the helm circled by a boundary marker until steered away by hand.
+The effects owner now runs without course actors on courses other than
+Dolphin Park. On all eight courses its rider spray levels matched the separate
+reconstruction for 1,200 frames each, at about 22 ms per headless frame.
+Two-player, Stunt and Championship keep their current physics for now.
+Browser checks covered the menu rules, a live Original run at 1440 by 900 with
+original wake/spray, and records surviving a reload. The full suite passes
+3,410 of 3,428; the 18 failures are the same older ones as in v2.41.0.
+
 ## Unpublished — Dolphin Park tropical fish
 
 Live Dolphin Park's eight original swimmers (actor types 7, 8 and 9, resource

@@ -3,7 +3,7 @@ import {validateGhostLibrary} from './ghost-library.js';
 import {initialControls,validateControls} from './control-bindings.js';
 import {initialNativeSettings,validateNativeSettings,validateNativeTuneModes} from './native-rider-tuning.js';
 const KEY='after-the-storm-racing-v1';
-export const initialSave=()=>({version:1,dolphin:false,records:{},scores:{},ghosts:[],controls:initialControls(),settings:{},nativeSettings:initialNativeSettings(),nativeTuneModes:['normal','normal'],names:[],unlocked:0,reached:['greyhaven','practice'],audio:{mode:'stereo',music:true,volume:.8,enabled:true},rumble:{enabled:true,strength:[.25,.25]},preferences:{graphics:'auto',laps:3,seaState:'surf',ghost:true}});
+export const initialSave=()=>({version:1,dolphin:false,records:{},scores:{},ghosts:[],controls:initialControls(),settings:{},nativeSettings:initialNativeSettings(),nativeTuneModes:['normal','normal'],names:[],unlocked:0,reached:['greyhaven','practice'],audio:{mode:'stereo',music:true,volume:.8,enabled:true},rumble:{enabled:true,strength:[.25,.25]},preferences:{graphics:'auto',laps:3,seaState:'surf',ghost:true,physics:'modern'}});
 export const MAX_SAVE_BYTES=2000000;
 const layoutSuffix=({course,layoutRevision})=>{const revision=layoutRevision??COURSES.find(c=>c.id===course)?.layoutRevision??0;return revision?'/layout-'+revision:'';};
 export const recordKey=(entry)=>`${entry.course}/${entry.difficulty??0}/${entry.laps??3}${layoutSuffix(entry)}`;
@@ -42,7 +42,7 @@ export function validateSave(value){
  if(value.names!==undefined){if(!Array.isArray(value.names)||value.names.length>4||value.names.some(n=>typeof n!=='string'))fail('Invalid rider names.');out.names=value.names.map(cleanName);}
  if(value.versus!==undefined){const v=value.versus;if(!object(v)||!integer(v.rider,0,3))fail('Invalid second player.');out.versus={rider:v.rider,tune:tuning(v.tune??{}),handicap:!!v.handicap};if(v.swapColours!==undefined){if(typeof v.swapColours!=='boolean')fail('Invalid colour choice.');out.versus.swapColours=v.swapColours;}if(v.layout!==undefined){if(!['horizontal','vertical','separate'].includes(v.layout))fail('Invalid two-player display.');out.versus.layout=v.layout;}}
  if(value.audio!==undefined){const a=value.audio;if(!object(a)||!['stereo','mono','headphones'].includes(a.mode)||!number(a.volume,0,1)||typeof a.music!=='boolean'||typeof a.enabled!=='boolean')fail('Invalid audio options.');out.audio={mode:a.mode,music:a.music,volume:a.volume,enabled:a.enabled};}
- if(value.preferences!==undefined){const p=value.preferences;if(!object(p)||!['auto','high','medium','low'].includes(p.graphics)||![3,4,5,6,9].includes(p.laps)||!['surf','course','calm','chop','storm'].includes(p.seaState)||p.ghost!==undefined&&typeof p.ghost!=='boolean')fail('Invalid display or sea preferences.');out.preferences={graphics:p.graphics,laps:p.laps,seaState:p.seaState,ghost:p.ghost??true};}
+ if(value.preferences!==undefined){const p=value.preferences;if(!object(p)||!['auto','high','medium','low'].includes(p.graphics)||![3,4,5,6,9].includes(p.laps)||!['surf','course','calm','chop','storm'].includes(p.seaState)||p.ghost!==undefined&&typeof p.ghost!=='boolean'||p.physics!==undefined&&!['modern','original'].includes(p.physics))fail('Invalid display or sea preferences.');out.preferences={graphics:p.graphics,laps:p.laps,seaState:p.seaState,ghost:p.ghost??true,physics:p.physics??'modern'};}
  return out;
 }
 export function exportSave(save){return JSON.stringify({format:'after-the-storm-save',version:1,data:validateSave(save)},null,2);}
