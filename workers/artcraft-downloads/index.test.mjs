@@ -39,3 +39,28 @@ test('serves FilmCraft and rejects mismatched app paths', async () => {
  assert.equal(response.headers.get('Content-Disposition'),'attachment; filename="FilmCraft-0.5.0-Setup-x64.exe"');
  assert.equal((await worker.fetch(new Request(url.replace('/filmcraft/','/photocraft/'),{method:'HEAD'}),env)).status,404);
 });
+
+for (const app of ['PDFCraft','WordCraft','VoiceStudio']) {
+ test(`serves ${app} only at its matching noindex download path`, async () => {
+  const url=`https://jez237.com/software-downloads/${app.toLowerCase()}/${'d'.repeat(64)}/${app}-0.9.0-Setup-x64.exe`;
+  const env={INSTALLERS:{head:async()=>({size:123,httpEtag:'abc'})}};
+  const response=await worker.fetch(new Request(url,{method:'HEAD'}),env);
+  assert.equal(response.status,200);
+  assert.match(response.headers.get('X-Robots-Tag'),/noindex/);
+  assert.equal(response.headers.get('Content-Disposition'),`attachment; filename="${app}-0.9.0-Setup-x64.exe"`);
+  assert.equal((await worker.fetch(new Request(url.replace('/'+app.toLowerCase()+'/', '/filmcraft/'),{method:'HEAD'}),env)).status,404);
+ });
+}
+
+test('Ledger calendar previews stay scoped to Ledger downloads', async () => {
+ const env={INSTALLERS:{head:async()=>({size:123,httpEtag:'abc'})}};
+ const base='https://jez237.com/software-downloads/ledgerreborn/'+ 'e'.repeat(64) + '/LedgerReborn-';
+ for (const ver of ['2026.10.12-preview.1','2026.10.12']) {
+  const url=base+ver+'-Setup-x64.exe';
+  const r=await worker.fetch(new Request(url,{method:'HEAD'}),env);
+  assert.equal(r.status,200);assert.match(r.headers.get('X-Robots-Tag'),/noindex/);
+  assert.equal((await worker.fetch(new Request(url.replaceAll('ledgerreborn','photocraft').replaceAll('LedgerReborn','PhotoCraft'),{method:'HEAD'}),env)).status,ver.includes('preview')?404:200);
+  assert.equal((await worker.fetch(new Request(url.replace('/ledgerreborn/','/voicestudio/'),{method:'HEAD'}),env)).status,404);
+ }
+ assert.equal((await worker.fetch(new Request(base+'2026.10.12-beta.1-Setup-x64.exe',{method:'HEAD'}),env)).status,404);
+});
