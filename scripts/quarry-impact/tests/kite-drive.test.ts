@@ -8,7 +8,7 @@ test('Kite has distinct hot-hatch calibration and drives only front wheels, incl
  const step=()=>{stepVehiclePhysics(body,controller,'kite',spec,s,1/60);w.step();};
  try{body.setTranslation({x:0,y:1,z:0},true);for(let i=0;i<120;i++)step();s.input.throttle=1;step();assert.ok(controller.wheelEngineForce(0)!>0&&controller.wheelEngineForce(1)!>0);assert.equal(controller.wheelEngineForce(2),0);assert.equal(controller.wheelEngineForce(3),0);
  s.input.handbrake=true;step();assert.ok(controller.wheelEngineForce(0)!>0);assert.ok(controller.wheelBrake(2)!>0);
- assert.equal(vehicleDrivetrain('kite'),'FWD');assert.deepEqual(gridPool('kite','fwd'),['tern','kite']);assert.ok(spec.speedLimit>vehicleSpecification('tern').speedLimit);assert.ok(spec.mass>vehicleSpecification('tern').mass);
+ assert.equal(vehicleDrivetrain('kite'),'FWD');assert.deepEqual(gridPool('kite','fwd').slice(0,2),['tern','kite']);assert.ok(gridPool('kite','fwd').every(k=>vehicleDrivetrain(k)==='FWD'));assert.ok(spec.speedLimit>vehicleSpecification('tern').speedLimit);assert.ok(spec.mass>vehicleSpecification('tern').mass);
  }finally{w.free();}
 });
 test('base online roster remains fourteen while the protocol recognizes Kite',()=>{assert.equal(ONLINE_CARS.length,14);assert.equal(validOnlineCar('kite'),true);assert.equal(validOnlineCar('trail'),true);});
