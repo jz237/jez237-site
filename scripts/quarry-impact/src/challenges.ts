@@ -2,9 +2,10 @@ import type {StuntTask} from './stunt-challenge';
 import type {CarKind,Mode} from './rules';
 import type {RunStats} from './session-telemetry';
 import {COURSE_NAMES,resolveCourseId,type CourseId} from './course-id';
+import {ARENA_NAMES,type ArenaId} from './arena-id';
 export type Discipline='racing'|'impact'|'stunts';
 export type ChallengeMetric='time'|'position'|'damage'|'knockouts'|'condition'|'drift'|'distance'|'speed'|'airtime'|'combo';
-export type Challenge={race?:'ordered'|'free'|'random';direction?:'forward'|'reverse';seed?:number;id:string;title:string;description:string;discipline:Discipline;mode:Mode;car:CarKind;metric:ChallengeMetric;limit:number;medals:[number,number,number];laps?:number;minHealth?:number;minDamage?:number;traffic?:boolean;course?:CourseId;stunt?:StuntTask};
+export type Challenge={race?:'ordered'|'free'|'random';direction?:'forward'|'reverse';seed?:number;id:string;title:string;description:string;discipline:Discipline;mode:Mode;car:CarKind;metric:ChallengeMetric;limit:number;medals:[number,number,number];laps?:number;minHealth?:number;minDamage?:number;traffic?:boolean;course?:CourseId;arena?:ArenaId;stunt?:StuntTask};
 const race=(id:string,title:string,car:CarKind,laps:number,medals:[number,number,number],minHealth=0):Challenge=>({id,title,car,laps,medals,metric:'time',mode:'race',discipline:'racing',limit:medals[0],minHealth,description:`Finish ${laps} ${laps===1?'lap':'laps'}${minHealth?` with at least ${minHealth}% condition`:''}. No recoveries.`});
 const event=(id:string,title:string,car:CarKind,metric:Exclude<ChallengeMetric,'time'|'position'>,limit:number,medals:[number,number,number],description:string):Challenge=>({id,title,car,metric,limit,medals,description,mode:['damage','knockouts','condition'].includes(metric)?'derby':'playground',discipline:['damage','knockouts','condition'].includes(metric)?'impact':'stunts',traffic:false,...(metric==='condition'?{minDamage:15}:{})});
 export const CHALLENGES:readonly Challenge[]=[
@@ -67,6 +68,7 @@ export const CHALLENGES:readonly Challenge[]=[
   {...event('ravine-alderwick-speed','Loop run-up','buggy','speed',30,[80,100,110],'Build ground speed on the painted loop approach in the stock Ravine. Finish with at least 20% condition. No recovery.'),course:'alderwick-stunt-v1',minHealth:20},
   {id:'ravine-alderwick-loop',title:'Full circle',car:'buggy',metric:'time',mode:'playground',discipline:'stunts',limit:45,medals:[45,25,16],minHealth:50,traffic:false,course:'alderwick-stunt-v1',stunt:'loop',description:'Follow the painted approach into the loop, pass over its top and exit upright. Finish with at least 50% condition. No recovery.'},
   {id:'ravine-alderwick-gap',title:'Clear the gap',car:'buggy',metric:'time',mode:'playground',discipline:'stunts',limit:45,medals:[45,25,16],minHealth:50,traffic:false,course:'alderwick-stunt-v1',stunt:'gap',description:'Use the gold jump lane: launch, clear the 20-metre gap and land upright on the far ramp. Aim for 90–110 km/h. Keep at least 50% condition. No recovery.'},
+  {id:'ravine-alderwick-double-loop',title:'Double jeopardy',car:'buggy',metric:'time',mode:'playground',discipline:'stunts',limit:60,medals:[60,35,24],minHealth:50,traffic:false,course:'alderwick-stunt-v1',stunt:'double-loop',description:'Take the western double-loop lane. Complete both inversions and exit upright with at least 50% condition. Build 110–120 km/h on the approach. No recovery.'},
   {...race('carrier-rookvale','Freight delivery','van',1,[150,110,80],30),course:'rookvale-yard-v1',race:'ordered',seed:237,description:'Visit five freight stations in order, then return to FINISH. Keep at least 30% condition. No recoveries.'},
   {...race('ravine-rookvale','Yard shortcuts','buggy',1,[125,90,65],30),course:'rookvale-yard-v1',race:'free',seed:237,description:'Choose your route through all five stations, then return to FINISH. Keep at least 30% condition. No recoveries.'},
   {...race('regent-rookvale','Dispatch changes','regent',1,[170,130,100],30),course:'rookvale-yard-v1',race:'random',seed:237,description:'Follow the revealed station targets across the yard, then return to FINISH. The route stays fixed on Retry. Keep at least 30% condition. No recoveries.'},
@@ -106,10 +108,37 @@ export const CHALLENGES:readonly Challenge[]=[
   {...race('trail-granite','Granite patrol climb','trail',1,[160,110,78],40),course:'granite-pass-v1'},
   {...race('shuttle-granite','Mountain return service','shuttle',1,[175,120,85],35),course:'granite-pass-v1',direction:'reverse',description:'Finish one reverse lap with at least 35% condition. Brake before the tighter turns and surface changes. No recoveries.'},
   {...race('bramble-granite','Granite V8 endurance','muscle',2,[310,215,155],30),course:'granite-pass-v1'},
+  {...race('linnet-seabrook','Coast road top-down','linnet',1,[160,115,88],35),course:'seabrook-coast-v1'},
+  {...race('linnet-willowbank','Heathland hood-down','linnet',1,[175,125,95],35),course:'willowbank-heath-v1'},
+  {...race('linnet-kingswell','Park lanes in reverse','linnet',1,[170,125,95],40),course:'kingswell-park-v1',direction:'reverse'},
+  {...race('tordal-rookvale','Freight-yard commute','tordal',1,[170,125,95],35),course:'rookvale-yard-v1'},
+  {...race('tordal-pinecrest','Ridge-road estate run','tordal',1,[175,125,95],35),course:'pinecrest-ridge-v1'},
+  {...race('tordal-ashford','Autodrome in reverse','tordal',1,[165,120,90],40),course:'ashford-autodrome-v1',direction:'reverse'},
+  {...race('starfin-millbrook','Canal-side cruise','starfin',1,[175,125,95],35),course:'millbrook-canal-v1'},
+  {...race('starfin-elmsworth','Drive-in speedway dash','starfin',1,[150,110,85],35),course:'elmsworth-speedway-v1'},
+  {...race('starfin-dunmere','Harvest-moon run','starfin',1,[175,125,95],40),course:'dunmere-farm-v1',direction:'reverse'},
+  {...race('saber-granite','Pop-up pass','saber',1,[165,120,90],35),course:'granite-pass-v1'},
+  {...race('saber-merefield','Runway wedge','saber',1,[150,110,85],35),course:'merefield-airfield-v1'},
+  {...race('saber-harrowstone','Ridge liftback run','saber',1,[170,125,95],40),course:'harrowstone-ridge-v1',direction:'reverse'},
+  {...race('alder-hazelwood','Estate forest run','alder',1,[175,125,95],35),course:'hazelwood-forest-v1'},
+  {...race('alder-seabrook','Family holiday scramble','alder',1,[165,120,90],35),course:'seabrook-coast-v1'},
+  {...race('alder-kingswell','Estate return trip','alder',1,[180,130,100],40),course:'kingswell-park-v1',direction:'reverse'},
+  {...race('morrow-ironfield','Notchback speedway debut','morrow',2,[240,170,125],35),course:'ironfield-figure-eight-v1'},
+  {...race('morrow-seabrook','Coastal V8 sprint','morrow',1,[160,115,85],40),course:'seabrook-coast-v1'},
+  {...race('morrow-hazelwood','Forest torque return','morrow',1,[170,120,90],35),course:'hazelwood-forest-v1',direction:'reverse'},
+  {...race('kite-westmere','Hot hatch club sprint','kite',1,[160,110,80],40),course:'westmere-club-v1'},
+  {...race('kite-hazelwood','Front-drive forest dash','kite',1,[160,110,80],35),course:'hazelwood-forest-v1'},
+  {...race('kite-seabrook','Seaside hot hatch return','kite',1,[150,105,75],40),course:'seabrook-coast-v1',direction:'reverse'},
+  {...race('ashcombe-saber','Club day wedge','saber',1,[170,125,95],35),course:'ashcombe-lanes-v1'},
+  {...race('ashcombe-tordal','Lanes in reverse','tordal',1,[175,128,97],40),course:'ashcombe-lanes-v1',direction:'reverse'},
+  {...race('ashcombe-starfin','Fins down the long straight','starfin',2,[330,240,182],35),course:'ashcombe-lanes-v1'},
+  {...event('kestrel-damage','Island traffic','linnet','damage',90,[60,115,180],'Pick a side of the island and keep the roadster hitting heavier cars.'),arena:'kestrel-ring-v1'},
+  {...event('kestrel-knockouts','Ring of steel','tordal','knockouts',150,[1,2,4],'Finish weakened opponents as they come round the island.'),arena:'kestrel-ring-v1'},
+  {...event('kestrel-survivor','Hold the ring','starfin','condition',75,[15,35,60],'Stay alive for 75 seconds on the ring and deal at least 15 damage.'),arena:'kestrel-ring-v1'},
 ];
-/** Race and playground challenges retain their own fixed venue; derbies stay at Quarry. */
+/** Race and playground challenges retain their own fixed venue; derbies use their listed arena, otherwise Quarry. */
 export const challengeCourse=(c:Challenge):CourseId=>c.mode!=='derby'?resolveCourseId(c.course):'quarry-v1';
-export const challengeVenueName=(c:Challenge)=>COURSE_NAMES[challengeCourse(c)];
+export const challengeVenueName=(c:Challenge)=>c.mode==='derby'&&c.arena?ARENA_NAMES[c.arena]:COURSE_NAMES[challengeCourse(c)];
 export function challengeValue(c:Challenge,r:RunStats){
   switch(c.metric){case'time':return r.seconds;case'position':return r.rank;case'damage':return r.damage;case'knockouts':return r.knockouts;case'condition':return r.health;case'drift':return r.drift;case'distance':return r.distance;case'speed':return r.maxSpeed*3.6;case'airtime':return r.airtime;case'combo':return r.drift+r.airtime*60;}
 }
