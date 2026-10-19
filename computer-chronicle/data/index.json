@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-10-19",
+      "historicDate": "1985-02-18",
+      "displayDate": "Week of February 18-24, 1985",
+      "edition": "Issue 134 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "An animated kingdom, a novelist’s adventure, and video on the desktop.",
+      "leadHeadline": "Inside King's Quest: the $700,000 adventure behind the PCjr's animated kingdom",
+      "storyHeadlines": [
+        "Michael Crichton takes storytelling from the cinema to Amazon",
+        "PC-EYE brings video capture and pixel retouching to the IBM PC",
+        "PC-Write asks users to share the software—and pays registered referrers"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-02-18.jpg",
+      "thumb": "media/thumbs/1985-02-18.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-10-18",
       "historicDate": "1985-02-11",
       "displayDate": "Week of February 11-17, 1985",

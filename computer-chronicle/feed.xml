@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Sun, 18 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 19 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of February 18-24, 1985 — Inside King&apos;s Quest: the $700,000 adventure behind the PCjr&apos;s animated kingdom</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-02-18</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-02-18</guid>
+      <pubDate>Mon, 19 Oct 2026 12:00:00 GMT</pubDate>
+      <description>February reporting opens the workshop behind Sierra’s ambitious adventure. A kingdom of 80 scenes comes at a very real price. Donald B. Trivette’s February COMPUTE! account puts the cost of Sierra’s King’s Quest above $700,000, with Roberta Williams and six programmers and artists working for 18 months. IBM supplied a prototype PCjr and asked for a game that could show its color graphics before the machine was announced. Also this week: Michael Crichton takes storytelling from the cinema to Amazon · PC-EYE brings video capture and pixel retouching to the IBM PC · PC-Write asks users to share the software—and pays registered referrers.</description>
+    </item>
     <item>
       <title>Week of February 11-17, 1985 — Michael Crichton trades the movie screen for the adventure game</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-02-11</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-10-08</guid>
       <pubDate>Mon, 28 Sep 2026 12:00:00 GMT</pubDate>
       <description>Election simulations, adventures and strategy titles make the home computer the liveliest game machine in October’s magazine racks. Electronic Games puts the changing game market on its October cover: President Elect and Campaign ’84 turn the American campaign season into computer play. Its fall software preview ranges across strategy and adventure titles, a field the magazine now treats as the center of electronic gaming. These are October magazine features, not claims that either title was released during this particular week. Also this week: IBM Tries to Rescue the PCjr Before Christmas · Macintosh Owners Begin Looking Under the Hood · Home-Computer Forecasts Outrun the Console Market.</description>
-    </item>
-    <item>
-      <title>Week of October 1-7, 1984 — Sundog Opens a Galaxy Behind the Apple II Screen</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-10-01</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-10-01</guid>
-      <pubDate>Sun, 27 Sep 2026 12:00:00 GMT</pubDate>
-      <description>FTL’s $40 space adventure turns icons, trade and survival into a living star map. October’s Computer Gaming World gives its gaming spotlight to Sundog: Frozen Legacy, an Apple II adventure from FTL Games of San Diego. Reviewer Ken Ryall credits Bruce Webster with a remarkably broad design: the player must supply and settle a colony, but the route runs across twelve star systems, eighteen planets and more than fifty cities. This is the magazine’s October appraisal, not a claim of a launch this week. Also this week: Game Designers Take Questions Over the Modem · Spy Hunter and Tapper Head for the Home Screen · Commodore Aims the Plus/4 at the Household Desk · Atari’s New Owner Confronts the Next Machine.</description>
     </item>
   </channel>
 </rss>
