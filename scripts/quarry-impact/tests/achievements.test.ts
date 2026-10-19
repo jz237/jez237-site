@@ -32,3 +32,11 @@ test('badges and journey are sanitised and survive a profile reload; old saves s
  const back=readProfile(JSON.stringify(p));assert.deepEqual(back.badges,p.badges);assert.deepEqual(back.journey,p.journey);
  const old=readProfile(JSON.stringify({version:1}));assert.ok(!Object.hasOwn(old,'badges')&&!Object.hasOwn(old,'journey'));
 });
+test('feature badges: elimination win, dusk win and an ice-cream-van wreck',()=>{
+ const p=readProfile();
+ const ids=(c:any)=>bankAchievements(p,c,all).map(a=>a.id);
+ assert.ok(ids({run:run({won:true,rank:1}),kind:'tern',mode:'race',course:'a',elimination:true}).includes('last-car-running'));
+ assert.ok(ids({run:run({won:true}),kind:'tern',mode:'derby',arena:'k',lighting:'dusk'}).includes('night-owl'));
+ assert.ok(!ids({run:run(),kind:'cornet',mode:'race',course:'b'}).includes('ice-cream-scream'),'driving it is not enough');
+ assert.ok(ids({run:run(),kind:'cornet',mode:'derby',arena:'k',wrecks:1}).includes('ice-cream-scream'));
+});

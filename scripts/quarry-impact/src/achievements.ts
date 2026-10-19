@@ -5,7 +5,7 @@ import {dailyStreak} from './daily-record';
  * saves are untouched until the first banked event. */
 export type Journey={kinds:string[];courses:string[];arenas:string[];takedowns:number};
 type ProfileLike={events:number;wins:number;distance:number;knockouts:number;challenges:Record<string,{medal:number}>;daily?:Record<string,{medal:number}>;career?:{podiums?:Partial<Record<string,number>>};badges?:string[];journey?:Journey};
-export type RunContext={run:RunStats;kind:string;mode:string;course?:string;arena?:string;takedowns?:number;daily?:boolean;dailyMedal?:number};
+export type RunContext={run:RunStats;kind:string;mode:string;course?:string;arena?:string;takedowns?:number;daily?:boolean;dailyMedal?:number;elimination?:boolean;lighting?:string;wrecks?:number};
 export type Achievement={id:string;name:string;description:string;done:(p:ProfileLike,c:RunContext|null,all:{kinds:number;courses:number;arenas:number})=>boolean};
 const golds=(p:ProfileLike)=>Object.values(p.challenges).filter(r=>r.medal>=3).length;
 export const ACHIEVEMENTS:readonly Achievement[]=[
@@ -25,6 +25,9 @@ export const ACHIEVEMENTS:readonly Achievement[]=[
  {id:'habit-forming',name:'Habit forming',description:'Reach a 3-day Daily Event medal streak.',done:p=>dailyStreak(p.daily as never)>=3},
  {id:'goldsmith',name:'Goldsmith',description:'Win 10 gold challenge medals.',done:p=>golds(p)>=10},
  {id:'long-haul',name:'Long haul',description:'Drive 500 km in total.',done:p=>p.distance>=500000},
+ {id:'last-car-running',name:'Last car running',description:'Win an elimination race.',done:(p,c)=>!!c&&c.mode==='race'&&!!c.elimination&&!!c.run.won},
+ {id:'night-owl',name:'Night owl',description:'Win a race or derby at dusk.',done:(p,c)=>!!c&&c.lighting==='dusk'&&(!!c.run.won||(c.mode==='race'&&c.run.finished&&c.run.rank===1))},
+ {id:'ice-cream-scream',name:'Ice cream, you scream',description:'Wreck an opponent while driving the Cornet ice cream van.',done:(p,c)=>!!c&&c.kind==='cornet'&&((c.wrecks??0)>0||(c.takedowns??0)>0||c.run.knockouts>0)},
  {id:'silverware',name:'Silverware',description:'Earn a podium in a career championship.',done:p=>Object.values(p.career?.podiums??{}).some(v=>(v??0)>0)},
 ];
 const ids=new Set(ACHIEVEMENTS.map(a=>a.id));

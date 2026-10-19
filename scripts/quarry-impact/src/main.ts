@@ -344,7 +344,7 @@ function bankRun(completed:boolean){
   runSettled=true;
   const run=telemetry.stats;run.completed=completed;
   lastAward=settleRun(profile,runId,run,activeChallenge);
-  const fresh=bankAchievements(profile,{run,kind,mode,course:activeVenue.course.id,arena:resolveArenaId(activeVenue.arenaId),takedowns:mode==='race'?eventAwards.takedownsFor(cars[0]?.id??0):0},{kinds:CAR_KINDS.length,courses:Object.keys(COURSE_NAMES).length,arenas:Object.keys(ARENA_NAMES).length});
+  const fresh=bankAchievements(profile,{run,kind,mode,course:activeVenue.course.id,arena:resolveArenaId(activeVenue.arenaId),takedowns:mode==='race'?eventAwards.takedownsFor(cars[0]?.id??0):0,wrecks:eventAwards.takedownsFor(cars[0]?.id??0),elimination:eliminationRace(),lighting:eventLighting??undefined},{kinds:CAR_KINDS.length,courses:Object.keys(COURSE_NAMES).length,arenas:Object.keys(ARENA_NAMES).length});
   lastBadges=fresh.map(a=>a.name.toUpperCase());if(fresh.length)toast(`ACHIEVEMENT${fresh.length>1?'S':''} UNLOCKED · ${fresh.map(a=>a.name.toUpperCase()).join(' · ')}`,4);
   try{localStorage.setItem(PROFILE_KEY,JSON.stringify(profile));profileStorageWarning='';}catch{profileStorageWarning='Progress is available for this session, but browser storage could not save it.';}
 }
