@@ -150,6 +150,9 @@ export const CHALLENGES:readonly Challenge[]=[
   {...event('cornet-gullhaven','Container round','cornet','damage',120,[100,190,290],'Put two tonnes of ice-cream van into the field across a two-minute derby among the container stacks.'),arena:'gullhaven-yard-v1'},
   {...event('cornet-briarhill','Last chimes','cornet','knockouts',150,[1,2,4],'Deliver the final impact to weakened opponents in the dirt bowl.'),arena:'briarhill-bowl-v1'},
   {...event('cornet-kestrel','Melt-proof','cornet','condition',75,[15,35,60],'Stay alive for 75 seconds round the island and deal at least 15 damage.'),arena:'kestrel-ring-v1'},
+  {...event('moorfield-damage','Down the long straight','muscle','damage',120,[100,190,290],'Use the Speedbowl straights to build speed and deliver heavy hits for two minutes.'),arena:'moorfield-speedbowl-v1'},
+  {...event('moorfield-knockouts','Turn-one pile-up','regent','knockouts',150,[1,2,4],'Finish weakened cars as they bunch up in the turns.'),arena:'moorfield-speedbowl-v1'},
+  {...event('moorfield-survivor','Last lap of the oval','kite','condition',75,[15,35,60],'Keep the hot hatch alive for 75 seconds on the dirt and deal at least 15 damage.'),arena:'moorfield-speedbowl-v1'},
 ];
 /** Race and playground challenges retain their own fixed venue; derbies use their listed arena, otherwise Quarry. */
 export const challengeCourse=(c:Challenge):CourseId=>c.mode!=='derby'?resolveCourseId(c.course):'quarry-v1';

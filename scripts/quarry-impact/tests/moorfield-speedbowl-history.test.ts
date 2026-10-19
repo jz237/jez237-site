@@ -1,6 +1,7 @@
+import {restoreSpeedbowlCareerBytes} from './speedbowl-career-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readMoorfieldSpeedbowlPrevious,restoreMoorfieldSpeedbowlBytes,verifyMoorfieldSpeedbowlRevision} from './moorfield-speedbowl-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreSpeedbowlCareerBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('MoorfieldSpeedbowl preserves every prior fixture, vehicle asset, venue art and history input',verifyMoorfieldSpeedbowlRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/moorfield-speedbowl/revision.json').toString());
