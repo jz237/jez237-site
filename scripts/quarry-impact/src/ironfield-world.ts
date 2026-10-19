@@ -1,3 +1,4 @@
+import {withBarrierBoardsOf,boardSeed} from './barrier-boards';
 import * as T from 'three';
 import {IRONFIELD,IRONFIELD_SOLIDS} from './ironfield-course';
 import {createIronfieldGround} from './ironfield-ground';
@@ -8,7 +9,7 @@ import {freezeSceneryTransforms} from './render-work';
 export function createIronfieldWorld(){
  const root=new T.Group();root.name='ironfield_world';
  const ground=createIronfieldGround();root.add(ground.ground);
- const materials={
+ const materials=withBarrierBoardsOf({
   concrete:new T.MeshStandardMaterial({color:0xa6a495,roughness:.93}),
   steel:new T.MeshStandardMaterial({color:0x34494b,roughness:.73,metalness:.35}),
   ochre:new T.MeshStandardMaterial({color:0xab703c,roughness:.85}),
@@ -19,7 +20,7 @@ export function createIronfieldWorld(){
   lamp:new T.MeshStandardMaterial({color:0xd6d5ba,roughness:.64,emissive:0x25281f}),
   hinterland:new T.MeshStandardMaterial({color:0x77745e,roughness:1}),
   foliage:new T.MeshStandardMaterial({color:0x58684d,roughness:1}),
- };
+ },'ochre',boardSeed('ironfield-figure-eight-v1'));
  type Finish=keyof typeof materials;
  const boxes=new Map<Finish,T.Matrix4[]>(),tubes=new Map<Finish,T.Matrix4[]>(),up=new T.Vector3(0,1,0),geometries:T.BufferGeometry[]=[],textures:T.Texture[]=[];
  const matrix=new T.Matrix4(),quaternion=new T.Quaternion();
@@ -34,7 +35,7 @@ export function createIronfieldWorld(){
  function tube(a:T.Vector3,b:T.Vector3,radius:number,finish:Finish){
   const direction=b.clone().sub(a);quaternion.setFromUnitVectors(up,direction.clone().normalize());matrix.compose(a.clone().add(b).multiplyScalar(.5),quaternion,new T.Vector3(radius,direction.length(),radius));const batch=tubes.get(finish)||[];batch.push(matrix.clone());tubes.set(finish,batch);
  }
- for(const solid of IRONFIELD_SOLIDS)box(solid.x,solid.y,solid.z,solid.half[0]*2,solid.half[1]*2,solid.half[2]*2,solid.material,solid.yaw);
+ for(const solid of IRONFIELD_SOLIDS)box(solid.x,solid.y,solid.z,solid.half[0]*2,solid.half[1]*2,solid.half[2]*2,solid.material==='ochre'?'boards':solid.material,solid.yaw);
 
  // The north stand has three banks and open aisle breaks. Tier fronts, bench
  // backs, a thin pitched canopy and exposed roof trusses read at race distance.
