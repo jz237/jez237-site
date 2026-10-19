@@ -220,3 +220,5 @@ Tordal 244: original fictional 1980s boxy saloon bodywork and original Marten ro
 Linnet 1300: original fictional 1960s roadster bodywork and original Marten road-wheel assemblies. See [LINNET-1300.md](LINNET-1300.md).
 
 Pipit 600: original fictional 1960s microcar bodywork and original Marten road-wheel assemblies at a smaller scale. See [PIPIT-600.md](PIPIT-600.md).
+
+Ravenhill Hearse: original fictional 1960s funeral-coach bodywork and original Marten road-wheel assemblies at a larger scale. See [RAVENHILL-HEARSE.md](RAVENHILL-HEARSE.md).

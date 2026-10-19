@@ -542,8 +542,8 @@
     },
     {
       "path": "licenses/CREDITS.md",
-      "bytes": 26092,
-      "sha256": "53a2d1e810d4dd21f06ff98a1855bbd372e92828b66483effa72250135650670"
+      "bytes": 26268,
+      "sha256": "ab610a15aa43b4fecd687cc1c1f4dac039b14f51cd3c1fada44ff6526be960f1"
     },
     {
       "path": "licenses/CarConcept-LICENSE.md",
@@ -589,6 +589,11 @@
       "path": "licenses/RAPIER-LICENSE.txt",
       "bytes": 11347,
       "sha256": "ceacfa4d7fa67df64ab09a56fe248c50a3bfc9bc00374d69bd74ad763b14b89c"
+    },
+    {
+      "path": "licenses/RAVENHILL-HEARSE.md",
+      "bytes": 852,
+      "sha256": "6da8b547c203ec995d968790c04bad37bb3740ffe0dbdb40fd874c692c4faa0a"
     },
     {
       "path": "licenses/RAVINE-1800.md",
@@ -1209,6 +1214,11 @@
       "path": "models/quarry-workyard.glb",
       "bytes": 12715352,
       "sha256": "df98a724dedf3b64c05a7a3043a5e6d18a0eb3acd132051956a58a429ad0eb61"
+    },
+    {
+      "path": "models/ravenhill.glb",
+      "bytes": 3820700,
+      "sha256": "603f82f61963ca925920f6b278d6277c2ba7310029b76542b78a272959df6f43"
     },
     {
       "path": "models/regent.glb",

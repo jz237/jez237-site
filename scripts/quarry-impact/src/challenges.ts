@@ -141,6 +141,9 @@ export const CHALLENGES:readonly Challenge[]=[
   {...race('thornby-kite','Hot hatch hill climb','kite',1,[150,108,80],40),course:'thornby-hill-v1'},
   {...race('thornby-saber','Over the crest backwards','saber',1,[165,120,90],40),course:'thornby-hill-v1',direction:'reverse'},
   {...race('thornby-morrow','V8 up the hill twice','morrow',2,[300,220,165],35),course:'thornby-hill-v1'},
+  {...event('ravenhill-harrow','Heavy procession','ravenhill','damage',120,[100,190,290],'Put two tonnes of funeral coach into the field across a two-minute derby in the bowl.'),arena:'harrow-bowl-v1'},
+  {...event('ravenhill-foundry','Last call','ravenhill','knockouts',150,[1,2,4],'Deliver the final impact to weakened opponents among the breaker-yard stacks.'),arena:'foundry-yard-v1'},
+  {...event('ravenhill-wrenford','Slow cortege','ravenhill','condition',75,[15,35,60],'Stay alive for 75 seconds in the mud and deal at least 15 damage.'),arena:'wrenford-pit-v1'},
 ];
 /** Race and playground challenges retain their own fixed venue; derbies use their listed arena, otherwise Quarry. */
 export const challengeCourse=(c:Challenge):CourseId=>c.mode!=='derby'?resolveCourseId(c.course):'quarry-v1';

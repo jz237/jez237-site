@@ -1,6 +1,7 @@
+import {restoreRavenhillCarBytes} from './ravenhill-car-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readThornbyHillPrevious,restoreThornbyHillBytes,verifyThornbyHillRevision} from './thornby-hill-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreRavenhillCarBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('ThornbyHill preserves every prior fixture, vehicle asset, venue art and history input',verifyThornbyHillRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/thornby-hill/revision.json').toString());
