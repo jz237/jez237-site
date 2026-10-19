@@ -323,6 +323,8 @@ try{profile=readProfile(localStorage.getItem(PROFILE_KEY));}catch{}
 let profileStorageWarning='';
 let activeChallenge:Challenge|undefined;
 const eventAwards=new EventAwards();
+/** Race feedback for the player's own impacts; derbies already have their score feed. */
+function callout(kind:'TAKEDOWN'|'BIG HIT',victim:Vehicle){if(mode!=='race'||demo||online?.active||pursuit)return;toast(kind==='TAKEDOWN'?`TAKEDOWN · #${victim.id+1} ${DEFINITIONS[victim.kind].name}`:`BIG HIT · #${victim.id+1} ${DEFINITIONS[victim.kind].name}`,kind==='TAKEDOWN'?2.5:1.2);}
 let stuntProgress:StuntChallengeProgress|null=null;
 let telemetry:SessionTelemetry|null=null,runId='',runSettled=true,lastAward:Award|null=null;
 const raceLaps=()=>clubRound()?.laps??(online?.active?onlineRules()?.laps??3:activeTimeTrial?1:activeChallenge?.laps??(demo?demoOptions.laps:eventOptions.laps));
@@ -1415,13 +1417,13 @@ function step(dt: number) {
     if(a){
       const before=a.health;
       a.collisionHit(point1,vb.clone().sub(va).normalize(),damage,elapsed,b?.paintColor);
-      if(b){b.inflicted+=before-a.health;eventAwards.hit(b.id,a.id,before-a.health);combat.hit(b.id,a.id,before,a.health,elapsed);if(mode==='derby')combat.contact(scoreMotion[b.id],scoreMotion[a.id],before-a.health,elapsed);}
+      if(b){b.inflicted+=before-a.health;if(eventAwards.hit(b.id,a.id,before-a.health,before>0&&a.health<=0)&&b.id===0)callout('TAKEDOWN',a);else if(b.id===0&&before-a.health>=12)callout('BIG HIT',a);combat.hit(b.id,a.id,before,a.health,elapsed);if(mode==='derby')combat.contact(scoreMotion[b.id],scoreMotion[a.id],before-a.health,elapsed);}
       if(b?.id===0)telemetry?.impact(a.id,before,a.health);
     }
     if(b){
       const before=b.health;
       b.collisionHit(point2,va.clone().sub(vb).normalize(),damage,elapsed,a?.paintColor);
-      if(a){a.inflicted+=before-b.health;eventAwards.hit(a.id,b.id,before-b.health);combat.hit(a.id,b.id,before,b.health,elapsed);if(mode==='derby')combat.contact(scoreMotion[a.id],scoreMotion[b.id],before-b.health,elapsed);}
+      if(a){a.inflicted+=before-b.health;if(eventAwards.hit(a.id,b.id,before-b.health,before>0&&b.health<=0)&&a.id===0)callout('TAKEDOWN',b);else if(a.id===0&&before-b.health>=12)callout('BIG HIT',b);combat.hit(a.id,b.id,before,b.health,elapsed);if(mode==='derby')combat.contact(scoreMotion[a.id],scoreMotion[b.id],before-b.health,elapsed);}
       if(a?.id===0)telemetry?.impact(b.id,before,b.health);
     }
     if(feedback){

@@ -1,6 +1,7 @@
+import {restoreRaceTakedownsBytes} from './race-takedowns-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readEventAwardsPrevious,restoreEventAwardsBytes,verifyEventAwardsRevision} from './event-awards-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreRaceTakedownsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('EventAwards preserves every prior fixture, vehicle asset, venue art and history input',verifyEventAwardsRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/event-awards/revision.json').toString());

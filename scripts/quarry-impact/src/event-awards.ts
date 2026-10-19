@@ -2,15 +2,20 @@
  * the biggest climber (for derbies, the toughest survivor). Pure bookkeeping; the caller
  * reports hits and the starting order and supplies names when rendering. */
 export type AwardCar={id:number;inflicted:number;health:number};
-export type EventAward={key:'hit'|'destroyer'|'climber'|'toughest';title:string;id:number;detail:string;victim?:number;value:number};
+export type EventAward={key:'hit'|'destroyer'|'takedowns'|'climber'|'toughest';title:string;id:number;detail:string;victim?:number;value:number};
 export class EventAwards{
  private biggest:{attacker:number;victim:number;damage:number}|null=null;
  private start:number[]|null=null;
- reset(){this.biggest=null;this.start=null;}
- hit(attacker:number,victim:number,damage:number){
-  if(!(damage>0)||!Number.isFinite(damage)||attacker===victim)return;
+ private takedowns=new Map<number,number>();
+ reset(){this.biggest=null;this.start=null;this.takedowns.clear();}
+ /** Returns true when this hit wrecked the victim (a takedown). */
+ hit(attacker:number,victim:number,damage:number,wrecked=false){
+  if(!(damage>0)||!Number.isFinite(damage)||attacker===victim)return false;
+  if(wrecked)this.takedowns.set(attacker,(this.takedowns.get(attacker)??0)+1);
   if(!this.biggest||damage>this.biggest.damage)this.biggest={attacker,victim,damage};
+  return wrecked;
  }
+ takedownsFor(id:number){return this.takedowns.get(id)??0;}
  /** Starting order (car ids, leader first); only the first call counts. */
  grid(order:readonly number[]){if(!this.start&&order.length)this.start=[...order];}
  get started(){return this.start!==null;}
@@ -19,6 +24,8 @@ export class EventAwards{
   if(this.biggest&&this.biggest.damage>=1)out.push({key:'hit',title:'BIGGEST HIT',id:this.biggest.attacker,victim:this.biggest.victim,value:this.biggest.damage,detail:`${Math.round(this.biggest.damage)} damage in one impact`});
   const destroyer=[...cars].sort((a,b)=>b.inflicted-a.inflicted||a.id-b.id)[0];
   if(destroyer&&destroyer.inflicted>=1)out.push({key:'destroyer',title:'MOST DESTRUCTIVE',id:destroyer.id,value:destroyer.inflicted,detail:`${Math.round(destroyer.inflicted)} damage dealt`});
+  const taker=[...this.takedowns].sort((a,b)=>b[1]-a[1]||a[0]-b[0])[0];
+  if(taker)out.push({key:'takedowns',title:'MOST TAKEDOWNS',id:taker[0],value:taker[1],detail:`${taker[1]} ${taker[1]===1?'car':'cars'} wrecked`});
   if(mode==='race'&&this.start&&finishOrder.length){
    let bestId=-1,bestGain=0;
    finishOrder.forEach((id,place)=>{const from=this.start!.indexOf(id),gain=from<0?0:from-place;if(gain>bestGain||(gain===bestGain&&gain>0&&id<bestId)){bestId=id;bestGain=gain;}});

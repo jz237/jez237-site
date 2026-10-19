@@ -15,3 +15,11 @@ test('award cards name cars, highlight the player and escape names',()=>{
  const html=awardsHtml(a.awards('derby',[{id:0,inflicted:25,health:50},{id:1,inflicted:0,health:10}]),id=>id===1?'#2 <b>RIVAL</b>':'#1',0);
  assert.match(html,/event-award event-award-you" data-award="hit"><span class="eyebrow">BIGGEST HIT<\/span><b>YOU<\/b>/);assert.match(html,/on #2 &lt;b&gt;RIVAL&lt;\/b&gt;/);assert.equal(awardsHtml([],String),'');
 });
+test('takedowns count only hits that wreck the victim and earn the MOST TAKEDOWNS card',()=>{
+ const a=new EventAwards();
+ assert.equal(a.hit(0,1,20,true),true);assert.equal(a.hit(0,2,5,false),false);assert.equal(a.hit(3,2,15,true),true);assert.equal(a.hit(0,4,9,true),true);assert.equal(a.hit(0,0,50,true),false);
+ assert.equal(a.takedownsFor(0),2);assert.equal(a.takedownsFor(3),1);
+ const cards=a.awards('derby',[{id:0,inflicted:34,health:60},{id:3,inflicted:15,health:10}]);
+ assert.deepEqual(cards.find(c=>c.key==='takedowns'),{key:'takedowns',title:'MOST TAKEDOWNS',id:0,value:2,detail:'2 cars wrecked'});
+ a.reset();assert.equal(a.takedownsFor(0),0);
+});
