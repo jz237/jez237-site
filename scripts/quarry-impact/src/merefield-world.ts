@@ -1,9 +1,10 @@
+import {withBarrierBoardsOf,boardSeed} from './barrier-boards';
 import * as T from 'three';
 import {MEREFIELD,MEREFIELD_BARRIERS,MEREFIELD_RUNWAYS} from './merefield-course';
 import {freezeSceneryTransforms} from './render-work';
 export function createMerefieldWorld(){
  const root=new T.Group();root.name='merefield_airfield';
- const materials={concrete:new T.MeshStandardMaterial({color:0xd3c8ae,roughness:.98}),yellow:new T.MeshStandardMaterial({color:0xd8ab49,roughness:.9}),steel:new T.MeshStandardMaterial({color:0x3c4e55,roughness:.75,metalness:.3}),wall:new T.MeshStandardMaterial({color:0x8a9994,roughness:.95}),glass:new T.MeshStandardMaterial({color:0x43657a,roughness:.35,metalness:.2})};
+ const materials=withBarrierBoardsOf({concrete:new T.MeshStandardMaterial({color:0xd3c8ae,roughness:.98}),yellow:new T.MeshStandardMaterial({color:0xd8ab49,roughness:.9}),steel:new T.MeshStandardMaterial({color:0x3c4e55,roughness:.75,metalness:.3}),wall:new T.MeshStandardMaterial({color:0x8a9994,roughness:.95}),glass:new T.MeshStandardMaterial({color:0x43657a,roughness:.35,metalness:.2})},'yellow',boardSeed('merefield-airfield-v1'));
  const floorMaterial=new T.MeshStandardMaterial({color:0xa39574,roughness:1}),floorGeometry=new T.PlaneGeometry(500,420),boxGeometry=new T.BoxGeometry(),textures:T.Texture[]=[];
  if(typeof document!=='undefined'){
   const canvas=document.createElement('canvas');canvas.width=2500;canvas.height=2100;const ctx=canvas.getContext('2d');
@@ -26,7 +27,7 @@ export function createMerefieldWorld(){
  const floor=new T.Mesh(floorGeometry,floorMaterial);floor.name='merefield_runways';floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;root.add(floor);
  const batches=new Map<keyof typeof materials,T.Matrix4[]>(),matrix=new T.Matrix4(),q=new T.Quaternion();
  function box(x:number,y:number,z:number,w:number,h:number,d:number,finish:keyof typeof materials,yaw=0){q.setFromAxisAngle(new T.Vector3(0,1,0),yaw);matrix.compose(new T.Vector3(x,y,z),q,new T.Vector3(w,h,d));const batch=batches.get(finish)??[];batch.push(matrix.clone());batches.set(finish,batch);}
- MEREFIELD_BARRIERS.forEach((s,i)=>box(s.x,s.y,s.z,s.half[0]*2,s.half[1]*2,s.half[2]*2,i%16<8?'concrete':'yellow',s.yaw));
+ MEREFIELD_BARRIERS.forEach((s,i)=>box(s.x,s.y,s.z,s.half[0]*2,s.half[1]*2,s.half[2]*2,i%16<8?'concrete':'boards',s.yaw));
  // All buildings remain beyond the perimeter wall, leaving freely crossable infields.
  for(const x of [-150,-75,0,75,150]){box(x,7,194,52,14,28,'wall');box(x,14.3,194,55,.6,31,'steel');box(x,5.5,179.9,38,11,.2,'steel');for(let dx=-23;dx<=23;dx+=4)box(x+dx,7,179.7,.18,14,.15,'concrete');}
  box(-237,9,15,13,18,15,'concrete');box(-237,21,15,24,6,24,'glass');box(-237,24.4,15,27,.8,27,'steel');box(-237,28,15,.3,7,.3,'steel');

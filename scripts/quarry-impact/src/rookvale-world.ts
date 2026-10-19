@@ -1,3 +1,4 @@
+import {withBarrierBoardsOf,boardSeed} from './barrier-boards';
 import {createRookvaleFreight} from './rookvale-freight';
 import {createRookvaleHoists} from './rookvale-hoists';
 import * as T from 'three';
@@ -9,7 +10,7 @@ import {ROOKVALE,ROOKVALE_BARRIERS,ROOKVALE_LANES} from './rookvale-course';
 import {freezeSceneryTransforms} from './render-work';
 export function createRookvaleWorld(){
  const root=new T.Group();root.name='rookvale_freight_yard';
- const materials={concrete:new T.MeshStandardMaterial({color:0xbfc4bd,roughness:.98}),yellow:new T.MeshStandardMaterial({color:0xd6a344,roughness:.9}),steel:new T.MeshStandardMaterial({color:0x35454b,roughness:.7,metalness:.4}),red:new T.MeshStandardMaterial({color:0x934b3e,roughness:.9}),blue:new T.MeshStandardMaterial({color:0x456c78,roughness:.85})};
+ const materials=withBarrierBoardsOf({concrete:new T.MeshStandardMaterial({color:0xbfc4bd,roughness:.98}),yellow:new T.MeshStandardMaterial({color:0xd6a344,roughness:.9}),steel:new T.MeshStandardMaterial({color:0x35454b,roughness:.7,metalness:.4}),red:new T.MeshStandardMaterial({color:0x934b3e,roughness:.9}),blue:new T.MeshStandardMaterial({color:0x456c78,roughness:.85})},'yellow',boardSeed('rookvale-yard-v1'));
  const floorMaterial=new T.MeshStandardMaterial({color:0xa28f74,roughness:1}),floorGeometry=new T.BufferGeometry(),boxGeometry=new T.BoxGeometry(),textures:T.Texture[]=[];
  const {spanX,spanZ}=ROOKVALE.terrain;
  if(typeof document!=='undefined'){
@@ -36,7 +37,7 @@ export function createRookvaleWorld(){
  const floor=new T.Mesh(floorGeometry,floorMaterial);floor.name='rookvale_loading_apron';floor.receiveShadow=true;root.add(floor);
  const batches=new Map<keyof typeof materials,T.Matrix4[]>(),matrix=new T.Matrix4(),q=new T.Quaternion();
  function box(x:number,y:number,z:number,w:number,h:number,d:number,finish:keyof typeof materials,yaw=0){q.setFromAxisAngle(new T.Vector3(0,1,0),yaw);matrix.compose(new T.Vector3(x,y,z),q,new T.Vector3(w,h,d));const batch=batches.get(finish)??[];batch.push(matrix.clone());batches.set(finish,batch);}
- ROOKVALE_BARRIERS.forEach((s,i)=>box(s.x,s.y,s.z,s.half[0]*2,s.half[1]*2,s.half[2]*2,i%16<8?'concrete':'yellow',s.yaw));
+ ROOKVALE_BARRIERS.forEach((s,i)=>box(s.x,s.y,s.z,s.half[0]*2,s.half[1]*2,s.half[2]*2,i%16<8?'concrete':'boards',s.yaw));
  // Freight buildings, rails and cranes are beyond the containing walls.
  for(const x of [-150,-90,-30,30,90,150]){box(x,5.5,186,48,11,30,'blue');box(x,11.4,186,50,.8,32,'steel');for(const dx of [-15,0,15]){box(x+dx,3.2,170.9,10,6.4,.2,'steel');box(x+dx,6.6,170.7,10,.25,.3,'yellow');}}
  for(let x=-165;x<=165;x+=30)for(let row=0;row<2;row++){const z=-181-row*14;box(x,2.5,z,26,5,11,row?'blue':'red');for(let dx=-12;dx<=12;dx+=3)box(x+dx,2.5,z+5.6,.15,5,.15,'steel');}

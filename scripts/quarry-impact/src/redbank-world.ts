@@ -1,3 +1,4 @@
+import {withBarrierBoards,boardSeed} from './barrier-boards';
 import {createRedbankSurroundings} from './redbank-surroundings';
 import * as T from 'three';
 import { REDBANK, REDBANK_SOLIDS, REDBANK_TERRAIN, redbankTerrainPatch, redbankGroundSample } from './redbank-course';
@@ -43,7 +44,7 @@ export function createRedbankWorld() {
     ground.name = 'redbank_ground';
     ground.receiveShadow = true;
     root.add(ground);
-    const materials = { concrete: new T.MeshStandardMaterial({ color: 0xbdbca9, roughness: .96 }), stripe: new T.MeshStandardMaterial({ color: 0xb84d2d, roughness: .95 }), steel: new T.MeshStandardMaterial({ color: 0x384943, roughness: .76, metalness: .2 }), wood: new T.MeshStandardMaterial({ color: 0x65503b, roughness: 1 }), roof: new T.MeshStandardMaterial({ color: 0x484747, roughness: .9 }), foliage: new T.MeshStandardMaterial({ color: 0x426144, roughness: 1 }), foliageLight: new T.MeshStandardMaterial({ color: 0x786548, roughness: 1 }), seat: new T.MeshStandardMaterial({ color: 0xa08858, roughness: .9 }) };
+    const materials = withBarrierBoards({ concrete: new T.MeshStandardMaterial({ color: 0xbdbca9, roughness: .96 }), stripe: new T.MeshStandardMaterial({ color: 0xb84d2d, roughness: .95 }), steel: new T.MeshStandardMaterial({ color: 0x384943, roughness: .76, metalness: .2 }), wood: new T.MeshStandardMaterial({ color: 0x65503b, roughness: 1 }), roof: new T.MeshStandardMaterial({ color: 0x484747, roughness: .9 }), foliage: new T.MeshStandardMaterial({ color: 0x426144, roughness: 1 }), foliageLight: new T.MeshStandardMaterial({ color: 0x786548, roughness: 1 }), seat: new T.MeshStandardMaterial({ color: 0xa08858, roughness: .9 }) },boardSeed('redbank-jump-v1'));
     type Finish = keyof typeof materials;
     const batches = new Map<string, {
         geometry: T.BufferGeometry;
@@ -53,7 +54,7 @@ export function createRedbankWorld() {
     function instance(geometry: T.BufferGeometry, finish: Finish, x: number, y: number, z: number, w: number, h: number, d: number, yaw = 0) { rotation.setFromAxisAngle(new T.Vector3(0, 1, 0), yaw); matrix.compose(new T.Vector3(x, y, z), rotation, new T.Vector3(w, h, d)); const key = geometry.uuid + finish, batch = batches.get(key) ?? { geometry, finish, matrices: [] }; batch.matrices.push(matrix.clone()); batches.set(key, batch); }
     const box = (x: number, y: number, z: number, w: number, h: number, d: number, finish: Finish, yaw = 0) => instance(boxGeometry, finish, x, y, z, w, h, d, yaw);
     for (const s of REDBANK_SOLIDS)
-        box(s.x, s.y, s.z, s.half[0] * 2, s.half[1] * 2, s.half[2] * 2, s.material, s.yaw);
+        box(s.x, s.y, s.z, s.half[0] * 2, s.half[1] * 2, s.half[2] * 2, s.material==='stripe'?'boards':s.material, s.yaw);
     // Terraced stands and service containers lie outside the safety wall.
     for(const centre of [-44,44])for(let row=0;row<6;row++){
       const z=-68-row*1.6,top=.7+row*.5;

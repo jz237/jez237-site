@@ -1,6 +1,7 @@
+import {restoreBoardsEverywhereBytes} from './boards-everywhere-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readVenueChallengesPrevious,restoreVenueChallengesBytes,verifyVenueChallengesRevision} from './venue-challenges-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreBoardsEverywhereBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('VenueChallenges preserves every prior fixture, vehicle asset, challenge, career and history input',verifyVenueChallengesRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/venue-challenges/revision.json').toString());

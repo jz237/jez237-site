@@ -50,3 +50,5 @@ export function barrierBoardMaterial(stripe:T.MeshStandardMaterial,seed=0){
 export const boardSeed=(id:string)=>{let h=7;for(const c of id)h=(h*31+c.charCodeAt(0))%9973;return h%16;};
 /** Adds a `boards` finish beside a world's existing `stripe` material. */
 export function withBarrierBoards<M extends {stripe:T.MeshStandardMaterial}>(materials:M,seed=0):M&{boards:T.MeshStandardMaterial}{return {...materials,boards:barrierBoardMaterial(materials.stripe,seed)};}
+/** As withBarrierBoards, for venues whose barrier finish has another name (yellow, ochre…). */
+export function withBarrierBoardsOf<M extends Record<K,T.MeshStandardMaterial>,K extends keyof M>(materials:M,key:K,seed=0):M&{boards:T.MeshStandardMaterial}{return {...materials,boards:barrierBoardMaterial(materials[key],seed)};}
