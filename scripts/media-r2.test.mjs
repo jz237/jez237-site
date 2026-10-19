@@ -17,6 +17,7 @@ test('all catalog tracks are in the verified R2 manifest', () => {
 test('old public URLs redirect to exact objects without losing query strings', () => {
   for (const object of manifest.objects) {
     const response = migratedMediaResponse(new Request('https://jez237.com/' + encodeURI(object.path) + '?download=1'));
+    assert.ok(response, `Missing media redirect for ${object.path}`);
     assert.equal(response.status, 301);
     assert.equal(response.headers.get('location'), object.url + '?download=1');
     assert.match(object.sha256, /^[a-f0-9]{64}$/);

@@ -1187,7 +1187,11 @@ const targets = {
   "/multimedia/port-richmond-el-kensington-walk/port-richmond-el-kensington-walk-b12-720p.mp4": "https://media.jez237.com/multimedia/port-richmond-el-kensington-walk/port-richmond-el-kensington-walk-b13-720p.mp4",
   "/multimedia/port-richmond-frankford-rec-walk/port-richmond-frankford-rec-walk-b12-720p.mp4": "https://media.jez237.com/multimedia/port-richmond-frankford-rec-walk/port-richmond-frankford-rec-walk-b13-720p.mp4",
   "/multimedia/port-richmond-rowhomes-joyce-walk/port-richmond-rowhomes-joyce-walk-b12-720p.mp4": "https://media.jez237.com/multimedia/port-richmond-rowhomes-joyce-walk/port-richmond-rowhomes-joyce-walk-b13-720p.mp4",
-  "/multimedia/port-richmond-weikel-tulip-walk/port-richmond-weikel-tulip-walk-b12-720p.mp4": "https://media.jez237.com/multimedia/port-richmond-weikel-tulip-walk/port-richmond-weikel-tulip-walk-b13-720p.mp4"
+  "/multimedia/port-richmond-weikel-tulip-walk/port-richmond-weikel-tulip-walk-b12-720p.mp4": "https://media.jez237.com/multimedia/port-richmond-weikel-tulip-walk/port-richmond-weikel-tulip-walk-b13-720p.mp4",
+  "/multimedia/port-richmond-halloween-intro/hide-review-1080p.mp4": "https://media.jez237.com/multimedia/port-richmond-halloween-intro/hide-review-1080p.mp4",
+  "/multimedia/port-richmond-halloween-intro/hide-review-720p.mp4": "https://media.jez237.com/multimedia/port-richmond-halloween-intro/hide-review-720p.mp4",
+  "/multimedia/port-richmond-halloween-intro/preview-hide.mp4": "https://media.jez237.com/multimedia/port-richmond-halloween-intro/preview-hide.mp4",
+  "/multimedia/port-richmond-halloween-intro/hide-review-1080p-v2.mp4": "https://media.jez237.com/multimedia/port-richmond-halloween-intro/hide-review-1080p-v2.mp4"
 };
 export function migratedMediaResponse(request) {
   if (!['GET', 'HEAD'].includes(request.method)) return null;
