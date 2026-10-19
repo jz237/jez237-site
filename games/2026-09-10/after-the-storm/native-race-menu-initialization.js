@@ -1,0 +1,70 @@
+// Independently reconstructed result-menu entry callers. Resources, fades and
+// audio are ordered call recipes here; no original assets or tables are embedded.
+const entries={
+ '801ec20c':{game:50,main:3},'801ec0d4':{game:52,main:9},'801ec830':{game:80,main:13},'801ec304':{game:60,main:7},
+ '801ec9c8':{game:100,main:6},'801ece50':{game:54,main:18},'801ecf18':{game:56,main:22},
+ '801e2b8c':{game:101,main:6},'801ec500':{game:66,main:12},'801ed004':{game:57,main:23},'801ec944':{game:90,main:15}
+};
+function word(value,name){if(!Number.isInteger(value)||value<-2147483648||value>2147483647)throw new RangeError(`Invalid ${name}`);return value;}
+function freeze(v){if(v&&typeof v==='object'&&!Object.isFrozen(v)){Object.values(v).forEach(freeze);Object.freeze(v);}return v;}
+
+/** Direct result-menu, records-return and name-exit initialization in source order.
+ * input.consumer selects the original entry; value.scene supplies gameStateAb24
+ * and, only for C830/C9C8, mode608.2B8C also takes input.returnState630.
+ * Effects are recipes, not executed callbacks.
+ * These callers initialize menus; their subsequent loops, resource transfers,
+ * rendering and record persistence are separate responsibilities.
+ */
+export function prepareNativeRaceMenuInitialization(value,input){
+ const consumer=input?.consumer;
+ if(!Object.hasOwn(entries,consumer))throw new RangeError('Unsupported result-menu consumer');
+ const scene=value?.scene,previous=word(scene?.gameStateAb24,'scene.gameStateAb24'),entry=entries[consumer],operations=[];
+ const write=(field,value)=>operations.push({kind:'sourceWordWrite',field,value:value>>>0});
+ const call=(consumer,args)=>operations.push({kind:'externalCall',consumer,arguments:args});
+ const phases=()=>{write('simulation648',1);write('field64c',1);write('phase650',0);};
+ const fade=(type=4,rate=1)=>call('801e6fb0',[type,rate,0]);
+ const slots=()=>call('801e6a4c',[0,0]);
+ const resources=()=>call('80096960',[2,0,1,2,3]);
+ if(consumer==='801e2b8c'||consumer==='801ec500'||consumer==='801ec304'||consumer==='801ec944'){
+  write('previousGameState634',previous);write('returnState630',consumer==='801e2b8c'?word(input.returnState630,'returnState630'):0);
+  write('gameStateAb24',entry.game);
+  for(const [field,v]of [['main638',entry.main],['initLatch63c',1],['field640',0],['field644',0],['fieldAb1c',0],['field461c',2]])write(field,v);
+  if(consumer==='801e2b8c')call('801e6fb0',[1,14,20]);
+  else if(consumer==='801ec304'){
+   fade(2,4);slots();operations.push({kind:'sourceByteWrite',field:'fieldE5134',value:0});call('800c21f4',[9,0]);
+  }else if(consumer==='801ec944')call('800c21f4',[5,0]);
+  else{write('players',1);resources();fade(2,4);slots();}
+  return freeze({operations,diagnostic:{consumer,targetGameState:entry.game,targetMain:entry.main,
+   requiredExternalConsumers:operations.filter(o=>o.kind==='externalCall').map(o=>o.consumer),
+   externalHelpersExecuted:false,menuLoopExecuted:false,resourceLoadingPerformed:false,recordsPersisted:false}});
+ }
+ write('previousGameState634',previous);write('returnState630',0);write('gameStateAb24',entry.game);
+ for(const [field,v]of [['main638',entry.main],['initLatch63c',1],['field640',0],['field644',0],['fieldAb1c',0],['field461c',2],['players',1]])write(field,v);
+ if(consumer!=='801ece50')phases();
+ if(consumer==='801ec0d4'){
+  const ids=[0,1,2,3],variant=word(scene.variant6f4,'scene.variant6f4');
+  if(variant!==0){
+   const primary=word(scene.primaryHumanIndex,'scene.primaryHumanIndex'),avatars=input.avatarsA9b0;
+   if(primary<0||primary>3||!Array.isArray(avatars)||avatars.length!==4)throw new RangeError('Championship results require the selected avatar slots');
+   const avatar=word(avatars[primary],'selected avatar');if(avatar<0||avatar>3)throw new RangeError('Invalid selected avatar');
+   ids[avatar]+=4;
+  }
+  call('80096960',[2,...ids]);fade();slots();
+ }else if(consumer==='801ec20c'){
+  if(previous!==100){resources();fade();slots();}
+ }else if(consumer==='801ec830'){
+  const mode=word(scene.mode608,'scene.mode608'),curtain=mode===4?previous===67:previous!==50&&previous!==57;
+  if(curtain){fade();call('800c6ad0',[1]);}slots();
+ }else if(consumer==='801ec9c8'){
+  const mode=word(scene.mode608,'scene.mode608');if(mode===0||mode===11)resources();
+  if(previous===103)fade(7,20);else if(previous===42)fade();slots();
+ }else if(consumer==='801ecf18'){resources();fade();slots();}
+ else if(consumer!=='801ed004'){fade();slots();phases();}
+ operations.push({kind:'hudWrite',byteOffset:0x7c80-0x7788,width:4,value:1});
+ if(consumer==='801ec20c'||consumer==='801ecf18')call('800c21f4',[3,0]);
+ else if(consumer==='801ec9c8')call('800c21f4',[12,0]);
+ if(consumer==='801ece50'||consumer==='801ecf18'||consumer==='801ec0d4')call('800c6ad0',[1]);
+ return freeze({operations,diagnostic:{consumer,targetGameState:entry.game,targetMain:entry.main,
+  requiredExternalConsumers:operations.filter(o=>o.kind==='externalCall').map(o=>o.consumer),
+  externalHelpersExecuted:false,menuLoopExecuted:false,resourceLoadingPerformed:false,recordsPersisted:false}});
+}

@@ -1,0 +1,328 @@
+import {createNativeWaterField,seedNativeWaterNoise,queryNativeWaterField,
+ createNativeWaterPatch,stepNativeWaterPatch,forceNativeWaterLine} from './native-water-field.js';
+import {createNativeWaterFollowCamera,stepNativeWaterFollowCamera,nativeWaterCameraBasis,
+ nativeWaterAmplitudeThreshold,planNativeWaterFrame} from './native-water-schedule.js';
+import {createNativeWaterRoller,stampNativeWaterRoller} from './native-water-rollers.js';
+import {prepareNativeAISelectionCircle} from './native-ai-perception.js';
+import {applyNativeSpecialWaterField} from './native-special-water-update.js';
+import {nativeWaterWrapBounds} from './native-water-scene-initialization.js';
+import {prepareNativeBodyBoundaryDrift} from './native-body-boundary-drift.js';
+
+// Host-owned source water. The source camera below selects simulation cells;
+// the high-resolution view consumes read-only endpoints; its mesh and optional
+// orbit/obstruction adjustments remain independently owned.
+// The50ms outer step is recovered source GAME time; .025 world scale and
+// browser wall-time accumulation remain explicit host policy.
+// Standalone water uses reproducible browser history. The native race supplies
+// noise from its canonical shared RNG before AI setup; its boot seed remains
+// explicit web policy. No unrecorded warm-up, modern swell or height cap is added.
+export const RACE_WATER_STEP=.05;
+const SIZE=128*384;
+const F=Math.fround,presentationVelocity=new Int16Array(SIZE),presentationFields=new WeakMap();
+const finite=n=>typeof n==='number'&&Number.isFinite(n);
+const tuple=p=>p&&[p.x,p.y,p.z].every(finite);
+const copy=p=>({x:p.x,y:p.y,z:p.z});
+const known=new WeakSet();
+function datum(value){
+ if(!Number.isInteger(value)||value< -32768||value>32767)throw new RangeError('Native water datum must be signed16');
+ return value;
+}
+function craftPose(craft,scale){
+ const h=craft.hydro;
+ const position={x:craft.x/scale,y:(h?.y??craft.y??0)/scale,z:craft.z/scale};
+ if(!tuple(position))throw new TypeError('Water camera needs finite craft XYZ');
+ const sourcePoseState=craft.sourcePoseState??0,sourcePoseTimer=craft.sourcePoseTimer??0;
+ if(!Number.isInteger(sourcePoseState)||sourcePoseState<0||sourcePoseState>255||
+  !Number.isInteger(sourcePoseTimer)||sourcePoseTimer<0||sourcePoseTimer>0x7fffffff)throw new RangeError('Invalid source water pose state/timer');
+ // The point hull supplies its actual body+6c/+74 forward components. Their
+ // horizontal magnitude includes pitch; normalizing them or rebuilding them
+ // from heading changes the source camera lag and consequently the water.
+ const forward=craft.sourceForwardXZ;
+ if(forward!==undefined){
+  if(!Array.isArray(forward)||forward.length!==2||!forward.every(finite)||Math.hypot(...forward)===0)
+   throw new TypeError('sourceForwardXZ must be finite and nonzero');
+  return {position,forward:forward.slice(),sourcePoseState,sourcePoseTimer};
+ }
+ if(!finite(craft.heading))throw new TypeError('Water camera needs heading or sourceForwardXZ');
+ return {position,forward:[Math.sin(craft.heading),Math.cos(craft.heading)],sourcePoseState,sourcePoseTimer};
+}
+export const isHostRaceWater=state=>known.has(state);
+const boundCameraStores=new WeakSet();
+/** Transfer the admitted numeric camera fields to the canonical HUD owner.
+ * Water subsequently reads/writes that store directly. No retained second
+ * eye/direction/target array is synchronized once per presentation frame. */
+export function bindRaceWaterCameraStorage(state,store){
+ if(!known.has(state)||state.frames!==0||boundCameraStores.has(state)||typeof store?.read!=='function'||typeof store?.write!=='function')
+  throw new TypeError('Camera storage binds once, before the first source water frame');
+ store.write(state.cameras);
+ Object.defineProperty(state,'cameras',{enumerable:true,configurable:false,get:()=>store.read(),set:value=>store.write(value)});
+ if(typeof store.initializeFollow==='function'){
+  store.initializeFollow(state.follows);
+  Object.defineProperty(state,'follows',{enumerable:true,configurable:false,get:()=>store.readFollow(),set:value=>store.writeFollow(value)});
+  Object.defineProperty(state,'followControls',{enumerable:true,configurable:false,get:()=>store.readFollowControls()});
+ }
+ boundCameraStores.add(state);return state;
+}
+
+/** Original75310 owns1FB4; native66A48 reads that value when choosing wave
+ * forcing. Authored/visible boundary markers must not replace hidden source
+ * fixed rows. Standalone modern water keeps its independently selected value. */
+export function bindRaceWaterAmplitudeThreshold(state,readThreshold){
+ if(!known.has(state)||state.frames!==0||typeof readThreshold!=='function'||
+    Object.getOwnPropertyDescriptor(state,'amplitudeThresholdNative')?.get)
+  throw new TypeError('Water amplitude threshold binds once before its first source frame');
+ const value=readThreshold();
+ if(!finite(value)||value<=0)throw new RangeError('Source water threshold must be positive and finite');
+ Object.defineProperty(state,'amplitudeThresholdNative',{enumerable:true,configurable:false,get:readThreshold});
+ return state;
+}
+export function createRaceWaterRandom(seed){
+ // Separate from scenery, physics and driver RNG. Captured initialization
+ // therefore survives restart without consuming another subsystem's history.
+ if(!Number.isInteger(seed)||seed<0||seed>0xffffffff)throw new RangeError('Source random seed must be uint32');
+ let value=seed>>>0;
+ // The source water consumer masks the LOW15 bits of this full32-bit LCG.
+ // Other source consumers share its global state; the browser owns an explicit
+ // isolated initialization seed so stored ghosts can reproduce their water.
+ const next=()=>{value=(Math.imul(value,0x41c64e6d)+0x3039)>>>0;return value&0x7fff;};
+ Object.defineProperty(next,'state',{get:()=>value});return next;
+}
+
+/** Create only after class/mode/player-count selection has chosen source rows. */
+export function createRaceWater({crafts,variant=0,scale=.025,baseAmplitudeNative,
+ primaryPointsNative=[],boundaryPointsNative=[],amplitudeThresholdNative,
+ datumNative=0,period=20,seed=17,phaseCounter=0,random15,
+ initialNoise=true,zoomIndex=1,cameraProvider=null,selectionRadiusNative=1500,rollerRows=[]}={}){
+ if(!Array.isArray(crafts)||crafts.length<1||crafts.length>2)throw new TypeError('Expected one or two human water cameras');
+ if(!finite(scale)||scale<=0)throw new RangeError('Water scale must be positive');
+ if(!Number.isInteger(baseAmplitudeNative)||baseAmplitudeNative<0||baseAmplitudeNative>127)throw new RangeError('Explicit source amplitude is required');
+ if(variant===1)throw new RangeError('Special random-disturbance water needs its separate producer');
+ if(!Number.isInteger(period)||period<1||period>65535)throw new RangeError('Invalid source water period');
+ if(!Number.isSafeInteger(seed))throw new TypeError('Water seed must be an integer');
+ if(cameraProvider!==null&&typeof cameraProvider!=='function')throw new TypeError('cameraProvider must be a function');
+ if(!Number.isInteger(selectionRadiusNative)||selectionRadiusNative< -2147483648||selectionRadiusNative>2147483647)
+  throw new RangeError('selectionRadiusNative must be signed32');
+ if(!Array.isArray(rollerRows)||rollerRows.length>8)throw new TypeError('Expected at most eight source rollers');
+ const rollers=rollerRows.map(createNativeWaterRoller);
+ const field=createNativeWaterField({variant,players:crafts.length,datumNative:datum(datumNative),phaseCounter});
+ const poses=crafts.map(c=>craftPose(c,scale));
+ const follows=poses.map(p=>createNativeWaterFollowCamera({positionNative:Object.values(p.position),forwardXZ:p.forward,zoomIndex,datumNative}));
+ // Field setup clears saved patch centers without stamping or evolving them.
+ // Camera mode3 copies its unit-eye template and produces a basis, then mode4
+ // first solves ordinary type5 AFTER the first five hull ticks (also in Stunt).
+ const cameras=poses.map(()=>nativeWaterCameraBasis({eyeNative:[1,1,1],targetNative:[0,0,0],up:[0,1,0],fovDegrees:75,nearNative:10,projectionOffset:[0,3]}));
+ if(initialNoise)seedNativeWaterNoise(field,{amplitudeNative:baseAmplitudeNative,random15:random15??createRaceWaterRandom(seed>>>0)});
+ const state={field,rollers,scale,variant,players:crafts.length,baseAmplitudeNative,period,seed,zoomIndex,
+  amplitudeThresholdNative:amplitudeThresholdNative??nativeWaterAmplitudeThreshold({primaryPointsNative,boundaryPointsNative}),
+  follows,cameras,previousPositions:poses.map(p=>copy(p.position)),boundaryWords24ac:nativeWaterWrapBounds(),
+  previousPatchCentersNative:crafts.map(()=>({xNative:0,zNative:0})),
+  cameraProvider,selectionRadiusNative,selectionMeshesNative:Object.freeze(crafts.map(()=>null)),
+  remainder:0,frames:0,rollerFrames:0,menuActive:false,menuFrames:0,stepsLast:0,revision:0,lastPlan:null};
+ known.add(state);return state;
+}
+
+/**
+ * One AFTER-hull outer boundary. The native hull host should call this after
+ * the outer update of every craft. simulationActive:false retains the ordinary patches
+ * while selecting camera patches, as source simulation0 does. Browser pause
+ * should skip this call entirely. A modern 60Hz rigid hull can also call the
+ * accumulator below; that scheduling bridge does not make its hull native.
+ * Previous snapped camera centers/orientation select forcing; the new camera
+ * selects P2 then P1 patches. Paused callers must not consume elapsed time.
+ */
+export function advanceRaceWaterFrame(state,crafts,{datumNative=state?.field.datumNative,zoomIndex=state?.zoomIndex,simulationActive=true,rollerState72c=0,deferRollers=false}={}){
+ if(!known.has(state))throw new TypeError('Expected host race water');
+ if(state.menuActive)throw new Error('Menu water requires its scene owner before racing resumes');
+ if(typeof simulationActive!=='boolean')throw new TypeError('simulationActive must be boolean');
+ if(typeof deferRollers!=='boolean')throw new TypeError('deferRollers must be boolean');
+ if(state.rollerFrames!==state.frames)throw new Error('Complete the pending course roller stage before another water frame');
+ if(!Number.isInteger(rollerState72c)||rollerState72c< -32768||rollerState72c>32767)throw new RangeError('Invalid roller state72c');
+ if(!Array.isArray(crafts)||crafts.length!==state.players)throw new TypeError('Human camera count changed');
+ datum(datumNative);
+ const poses=crafts.map(c=>craftPose(c,state.scale));
+ const follows=state.follows,controls=state.followControls;
+ const updates=poses.map((p,i)=>stepNativeWaterFollowCamera(follows[i],{
+  positionNative:Object.values(p.position),forwardXZ:p.forward,
+  velocityXZ:[p.position.x-state.previousPositions[i].x,p.position.z-state.previousPositions[i].z],
+  datumNative,zoomIndex:controls?.[i].zoomIndex??zoomIndex,followControl:controls?.[i],sourcePoseState:p.sourcePoseState,sourcePoseTimer:p.sourcePoseTimer}));
+ const cameras=updates.map((q,i)=>state.cameraProvider?state.cameraProvider(crafts[i],q.camera,{playerIndex:i,frame:state.frames+1}):q.camera);
+ const plan=planNativeWaterFrame({variant:state.variant,players:state.players,
+  camerasBeforeUpdate:state.cameras,camerasAfterUpdate:cameras,
+  previousPatchCentersNative:state.previousPatchCentersNative,
+  craftPositionsNative:poses.map(p=>[p.position.x,p.position.z]),
+  baseAmplitudeNative:state.baseAmplitudeNative,period:state.period,
+  amplitudeThresholdNative:state.amplitudeThresholdNative,datumNative,simulationActive});
+ // Source50F8C stores the expanded mesh's selection circle after the hull
+ // phase, including simulation0. Keep it for the NEXT frame's AI input.
+ // Camera record order is independent of the P2-then-P1 patch call order.
+ const horizontalForwardsNative=cameras.map(c=>({x:c.horizontalForward[0],z:c.horizontalForward[1]}));
+ const selectionMeshesNative=Array(state.players);
+ for(const spec of plan.patches)selectionMeshesNative[spec.playerIndex]=prepareNativeAISelectionCircle({
+  radius:spec.radius,selectionRadiusNative:state.selectionRadiusNative,patchIndex:spec.playerIndex,
+  requestedCenterNative:{x:spec.xNative,z:spec.zNative},horizontalForwardsNative});
+ // The plan is pure. No phase is consumed until every camera input validated.
+ state.field.datumNative=datumNative;
+ for(const forcing of plan.forcing)forceNativeWaterLine(state.field,forcing);
+ const centers=state.previousPatchCentersNative.slice();
+ for(const spec of plan.patches){
+  const patch=createNativeWaterPatch(state.field,spec);
+  if(spec.evolve)stepNativeWaterPatch(state.field,patch);
+  centers[spec.playerIndex]={xNative:patch.snappedCenterNative.x,zNative:patch.snappedCenterNative.z};
+ }
+ state.follows=updates.map(q=>q.state);state.cameras=cameras;
+ state.previousPositions=poses.map(p=>copy(p.position));state.previousPatchCentersNative=centers;
+ state.selectionMeshesNative=Object.freeze(selectionMeshesNative);
+ state.zoomIndex=zoomIndex;state.frames++;state.revision++;state.lastPlan=plan;
+ // Standalone/modern water has no canonical adjudication owner. The native
+ // ordinary host defers this stage until AFTER79528 and object motion6E3A8.
+ if(!deferRollers)advanceRaceWaterRollers(state,{rollerState72c});
+ return state;
+}
+
+/** Transfer a completed race water boundary into the prepared special menu
+ * scene. Keep the same live field object and forcing phase; replace all noise
+ * once, using the caller's already prepared shared-RNG transaction. Race and
+ * roller counters are suspended, never fabricated to keep up with menu time.
+ * The caller commits the matching canonical scene state at this boundary.
+ */
+export function installRaceWaterMenuScene(state,scene){
+ if(!known.has(state)||state.menuActive||state.remainder!==0||state.frames!==state.rollerFrames)
+  throw new Error('Menu water installation requires an unowned completed race boundary');
+ const p=scene?.parameters,noise=scene?.noise;
+ if(p?.radius!==16||p.restoringShift!==10||p.couplingShift!==4||p.dampingShift!==5)throw new RangeError('Prepared menu water must use variant1');
+ const nextDatum=datum(scene.datumNative),amplitude=scene.amplitudeNative;
+ if(!Number.isInteger(amplitude)||amplitude<0||amplitude>127)throw new RangeError('Invalid prepared menu wave amplitude');
+ for(const key of ['heightQ','velocityQ'])if(!Array.isArray(noise?.[key])||noise[key].length!==SIZE||noise[key].some(v=>!Number.isInteger(v)||v< -32768||v>32767))
+  throw new RangeError('Supply complete prepared menu water noise');
+ const boundaryWords24ac=Object.freeze(Array.from({length:6},(_,i)=>scene.setupWords?.[0x8c+i*4]));
+ prepareNativeBodyBoundaryDrift({boundsWords24ac:boundaryWords24ac,positionNativeXZ:{x:0,z:0}});
+ // Allocate before changing any live owner. The forcing counter/phase and
+ // ordinary roller objects are retained, as4F9E0 does not reset those owners.
+ const height=Int16Array.from(noise.heightQ),velocity=Int16Array.from(noise.velocityQ);
+ state.field.heightQ.set(height);state.field.velocityQ.set(velocity);
+ state.field.parameters=Object.freeze({...p});state.field.datumNative=nextDatum;
+ state.variant=1;state.baseAmplitudeNative=amplitude;state.boundaryWords24ac=boundaryWords24ac;
+ state.previousPatchCentersNative=Array.from({length:state.players},()=>({xNative:0,zNative:0}));
+ state.menuActive=true;state.menuFrames=0;state.lastPlan=null;state.revision++;
+ return state;
+}
+
+/** One special menu water frame after the canonical camera update. The
+ * original main9 scene has no hull, forcing-line or course-roller stage.
+ * Graphics mesh requests remain the renderer's responsibility.
+ */
+export function advanceRaceWaterMenuFrame(state,operations){
+ if(!known.has(state)||!state.menuActive||state.remainder!==0||state.frames!==state.rollerFrames)
+  throw new Error('Expected installed menu water at a completed race boundary');
+ const result=applyNativeSpecialWaterField(state.field,operations);
+ state.previousPatchCentersNative[0]={xNative:result.patch.snappedCenterNative.x,zNative:result.patch.snappedCenterNative.z};
+ state.menuFrames++;state.revision++;state.lastPlan={kind:'special-menu',patch:result.patch};
+ return state;
+}
+
+/** Finish one water frame's course generators. activity624 gates the entire
+ * source6E3A8 motion section;4CC7C then reads signed72c for each roller. Neither
+ * gate is simulation648. A held stage still consumes its scheduling slot, but
+ * never the generator's phase. Browser pause must skip the whole water frame.
+ * A second revision invalidates any display snapshot captured before stamping. */
+export function advanceRaceWaterRollers(state,{active=true,rollerState72c=0}={}){
+ if(!known.has(state))throw new TypeError('Expected host race water');
+ if(typeof active!=='boolean')throw new TypeError('Roller activity must be boolean');
+ if(!Number.isInteger(rollerState72c)||rollerState72c< -32768||rollerState72c>32767)throw new RangeError('Invalid roller state72c');
+ if(state.frames===0||state.rollerFrames!==state.frames-1)throw new Error('Course rollers require one pending completed water frame');
+ if(active)for(const roller of state.rollers)stampNativeWaterRoller(state.field,roller,{state72c:rollerState72c});
+ state.rollerFrames=state.frames;
+ if(active&&rollerState72c!==1&&state.rollers.length)state.revision++;
+ return state;
+}
+
+/** AI86DA8 always reads patch0, even in two-player mode. Before the first
+ * completed water frame there is no produced circle; do not substitute the
+ * requested center, the rendered camera, or an invented startup circle. */
+export function raceWaterAISelectionCircle(state){
+ if(!known.has(state))throw new TypeError('Expected host race water');
+ const circle=state.selectionMeshesNative[0]?.selectionCircleNative;
+ if(!circle)throw new Error('AI selection circle requires a completed source water frame');
+ return circle;
+}
+
+/** A5D70 reads the same patch0 circle as AI86DA8, plus the actual4720
+ * relocation radius. Capture only completed race water; a menu transition
+ * retains the old race mesh and must not expose it as a new actor input.
+ * AD418 also reads graphics vertices selected by2460/2464. Both indices
+ * address patch0: its stored center and first extended outer vertex. The
+ * latter is not the second camera's center. Neither has its snap subtracted.
+ * This is a detached numeric view, with no extra circle/RNG/camera owner. */
+export function raceWaterActorMotionInputs(state){
+ if(!known.has(state))throw new TypeError('Expected host race water');
+ if(state.menuActive)throw new Error('Actor water inputs require a race water scene');
+ const circle=raceWaterAISelectionCircle(state),radius4720=state.selectionRadiusNative;
+ if(!Number.isInteger(radius4720)||radius4720< -2147483648||radius4720>2147483647)
+  throw new RangeError('selectionRadiusNative must be signed32');
+ const bits=new DataView(new ArrayBuffer(4));
+ const waterRangeWords2428=[circle.x,circle.z,circle.radiusSquared].map(value=>{
+  if(!finite(value))throw new RangeError('Actor water circle must be finite');
+  bits.setFloat32(0,value);return bits.getUint32(0);
+ });
+ const mesh=state.selectionMeshesNative[0],selectedWaterVertexXZ=[mesh.storedCenterVertexNative,mesh.outerVerticesNative[0]].map(p=>{
+  if(!p||![p.x,p.z].every(v=>Number.isInteger(v)&&v>=-32768&&v<=32767))throw new RangeError('Supply stored signed16 actor water vertices');
+  return Object.freeze([p.x,p.z]);
+ });
+ return Object.freeze({waterRangeWords2428:Object.freeze(waterRangeWords2428),radius4720,selectedWaterVertexXZ:Object.freeze(selectedWaterVertexXZ)});
+}
+
+export function stepRaceWater(state,crafts,dt,{active=true,...options}={}){
+ if(!known.has(state))throw new TypeError('Expected host race water');
+ if(!finite(dt)||dt<0||dt>1)throw new RangeError('Water interval must be from0 to1 second');
+ if(typeof active!=='boolean')throw new TypeError('active must be boolean');
+ if(active&&state.menuActive)throw new Error('Menu water requires its scene owner before racing resumes');
+ state.stepsLast=0;if(!active)return state;
+ state.remainder+=dt;
+ while(state.remainder+1e-12>=RACE_WATER_STEP){
+  advanceRaceWaterFrame(state,crafts,options);
+  state.remainder=Math.max(0,state.remainder-RACE_WATER_STEP);state.stepsLast++;
+ }
+ return state;
+}
+
+/** Exact rendered triangle height in world units, including the signed datum. */
+export function raceWaterHeight(state,x,z){
+ if(!known.has(state))throw new TypeError('Expected host race water');
+ return queryNativeWaterField(state.field,F(F(x)*F(1/state.scale)),F(F(z)*F(1/state.scale))).renderHeightNative*state.scale;
+}
+
+/** Display-only bounded snapshots contain no field velocity, RNG or camera state. */
+export function captureRaceWater(state){
+ if(!state)return null;
+ if(!known.has(state))throw new TypeError('Expected host race water');
+ return {heightQ:state.field.heightQ.slice(),datumNative:state.field.datumNative,scale:state.scale,revision:state.revision};
+}
+export function readRaceWater(value){
+ if(value===null||value===undefined)return null;
+ if(!validPresentation(value))return false;
+ return {heightQ:value.heightQ.slice(),datumNative:value.datumNative,scale:value.scale,revision:value.revision};
+}
+function validPresentation(value){
+ return !!value&&value.heightQ instanceof Int16Array&&value.heightQ.length===SIZE&&
+  Number.isInteger(value.datumNative)&&value.datumNative>= -32768&&value.datumNative<=32767&&
+  finite(value.scale)&&value.scale>0&&value.scale<=1&&
+  Number.isSafeInteger(value.revision)&&value.revision>=0;
+}
+
+// The surrounding game already has one active water context for its analytic
+// ocean. Switching that context to a race or a read-only replay never steps it.
+let activeWater=null;
+export function setRaceWater(state){
+ if(state!==null&&!known.has(state)&&!validPresentation(state))throw new TypeError('Invalid race water context');
+ activeWater=state;
+}
+export const currentRaceWater=()=>activeWater;
+export function activeRaceWaterHeight(x,z){
+ if(!activeWater)return null;
+ let field=activeWater.field;
+ if(!field){
+  field=presentationFields.get(activeWater);
+  if(!field){field={heightQ:activeWater.heightQ,datumNative:activeWater.datumNative,velocityQ:presentationVelocity};presentationFields.set(activeWater,field);}
+ }
+ return queryNativeWaterField(field,F(F(x)*F(1/activeWater.scale)),F(F(z)*F(1/activeWater.scale))).renderHeightNative*activeWater.scale;
+}
