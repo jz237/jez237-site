@@ -147,6 +147,9 @@ export const CHALLENGES:readonly Challenge[]=[
   {...race('fernleigh-holloway','Stadium school run','fernleigh',1,[122,88,67],35),course:'holloway-stadium-v1'},
   {...race('fernleigh-bramblebrook','Reservoir lanes in reverse','fernleigh',1,[194,140,107],40),course:'bramblebrook-reservoir-v1',direction:'reverse'},
   {...race('fernleigh-saltmarsh','Port rallycross, twice round','fernleigh',2,[374,271,206],30),course:'saltmarsh-port-v1'},
+  {...event('cornet-gullhaven','Container round','cornet','damage',120,[100,190,290],'Put two tonnes of ice-cream van into the field across a two-minute derby among the container stacks.'),arena:'gullhaven-yard-v1'},
+  {...event('cornet-briarhill','Last chimes','cornet','knockouts',150,[1,2,4],'Deliver the final impact to weakened opponents in the dirt bowl.'),arena:'briarhill-bowl-v1'},
+  {...event('cornet-kestrel','Melt-proof','cornet','condition',75,[15,35,60],'Stay alive for 75 seconds round the island and deal at least 15 damage.'),arena:'kestrel-ring-v1'},
 ];
 /** Race and playground challenges retain their own fixed venue; derbies use their listed arena, otherwise Quarry. */
 export const challengeCourse=(c:Challenge):CourseId=>c.mode!=='derby'?resolveCourseId(c.course):'quarry-v1';

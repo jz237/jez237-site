@@ -75,11 +75,12 @@ test('fernleigh drives the front wheels from a transverse four, is a modest midd
  const setup=stockSetup('fernleigh');setup.engine=2;setup.armor=2;assert.deepEqual(importSetup(exportSetup('fernleigh',setup),'fernleigh'),setup);
 });
 test('school-run career is an appended racing group of three fernleigh races on fresh circuits with AI-lap medal tiers',()=>{
- const group=CAREER_GROUPS.find(g=>g.id==='school-run')!;assert.equal(group.discipline,'racing');assert.equal(group.events.length,3);assert.equal(CAREER_GROUPS.at(-1),group,'appended after every existing group');
- assert.deepEqual(CHALLENGES.slice(-3).map(c=>c.id),[...group.events],'challenges appended after every existing challenge');
+ const group=CAREER_GROUPS.find(g=>g.id==='school-run')!;assert.equal(group.discipline,'racing');assert.equal(group.events.length,3);// Appended after every group and challenge that existed when it shipped (later cars append after it).
+ const g=CAREER_GROUPS.indexOf(group),c0=CHALLENGES.findIndex(c=>c.id===group.events[0]);assert.equal(CAREER_GROUPS[g-1].id,'last-rites','appended after every existing group');
+ assert.deepEqual(CHALLENGES.slice(c0-1,c0+3).map(c=>c.id),['ravenhill-wrenford',...group.events],'challenges appended after every existing challenge');
  const events=group.events.map(id=>CHALLENGES.find(c=>c.id===id)!);assert.ok(events.every(c=>c&&c.car==='fernleigh'&&c.mode==='race'&&c.metric==='time'));
  const courses=events.map(challengeCourse);assert.deepEqual(courses,['holloway-stadium-v1','bramblebrook-reservoir-v1','saltmarsh-port-v1']);
- assert.ok(CHALLENGES.slice(0,-3).every(c=>c.mode==='derby'||!courses.includes(challengeCourse(c))),'circuits not used by any earlier challenge');
+ assert.ok(CHALLENGES.slice(0,c0).every(c=>c.mode==='derby'||!courses.includes(challengeCourse(c))),'circuits not used by any earlier challenge');
  assert.deepEqual(events.map(c=>c.direction??'forward'),['forward','reverse','forward']);assert.deepEqual(events.map(c=>c.laps),[1,1,2]);
  // Bronze/silver/gold = 2.934/2.121/1.616 x the solo AI time, the Linnet's ratios.
  for(const c of events){assert.equal(c.limit,c.medals[0]);assert.ok(c.medals[0]>c.medals[1]&&c.medals[1]>c.medals[2]);assert.ok(Math.abs(c.medals[0]/c.medals[2]-2.934/1.616)<.03&&Math.abs(c.medals[1]/c.medals[2]-2.121/1.616)<.03,c.id);}

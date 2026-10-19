@@ -9,7 +9,7 @@ export function armorWearMultiplier(kind:CarKind,structure:unknown,point:Vec,dir
  const length=Math.hypot(direction.x,direction.y,direction.z);if(length<1e-8)return 1;
  const d=DEFINITIONS[kind],edge=(p:number,span:number)=>Math.max(0,Math.min(1,(p/span-.3)/.45));
  const x=direction.x/length,y=direction.y/length,z=direction.z/length;
- const weights=[edge(point.z,d.halfLength)*Math.max(0,-z),edge(-point.z,d.halfLength)*Math.max(0,z),edge(-point.x,d.halfWidth)*Math.max(0,x),edge(point.x,d.halfWidth)*Math.max(0,-x),edge(point.y,kind==='trail'?1.1:kind==='shuttle'?1.6:kind==='van'?1.1:.7)*Math.max(0,-y)];
+ const weights=[edge(point.z,d.halfLength)*Math.max(0,-z),edge(-point.z,d.halfLength)*Math.max(0,z),edge(-point.x,d.halfWidth)*Math.max(0,x),edge(point.x,d.halfWidth)*Math.max(0,-x),edge(point.y,kind==='trail'?1.1:kind==='shuttle'?1.6:kind==='van'?1.1:kind==='cornet'?1.55:.7)*Math.max(0,-y)];
  const sum=weights.reduce((a,b)=>a+b,0);if(sum<1e-8)return 1;
  const wear=weights.reduce((a,w,i)=>a+w*Math.max(0,(structure[i]-.35)/.65),0)/sum;
  return 1+(1/damageScale-1)*wear;

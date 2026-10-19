@@ -541,9 +541,14 @@
       "sha256": "c8041334a99cb48852b2139253cbde5f8ac87e27f124aed51223e0d5bf0080eb"
     },
     {
+      "path": "licenses/CORNET-ICE-CREAM-VAN.md",
+      "bytes": 1244,
+      "sha256": "5374dfcf90777ba5ced5fce0835b24cfaa76e90ef708ea798c03233bc1092861"
+    },
+    {
       "path": "licenses/CREDITS.md",
-      "bytes": 26453,
-      "sha256": "994b46a704e7ac545fb3c1770490e5ecc1368e2d4b9ed59027577534e41428e0"
+      "bytes": 26676,
+      "sha256": "7f51b90885fa0fbd663377eacfce4769201df3f693589179eaf9b84913f3b6b4"
     },
     {
       "path": "licenses/CarConcept-LICENSE.md",
@@ -784,6 +789,11 @@
       "path": "models/compact.glb",
       "bytes": 2298076,
       "sha256": "fc78037ae276f629104c738f9fb1ced6de64805ed66674c97803c4145357259e"
+    },
+    {
+      "path": "models/cornet.glb",
+      "bytes": 3903788,
+      "sha256": "5b9dea0afd61e8baa3aff903484604215c781c028dbbc95ae4e00d5e03109984"
     },
     {
       "path": "models/coupe.glb",

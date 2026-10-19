@@ -27,7 +27,7 @@ export class WreckAttachments {
       const door=(rearDoor||/bodydoor[lr]/.test(name))&&!name.includes('mirror');
       const bounds=new T.Box3().setFromBufferAttribute(o.userData.wreckRest);
       const cargo=/^panel_cargodoorvan[lr]/.test(name);
-      const group=/^panel_enginelidmarten/.test(name)?'engine-lid':cargo?('cargo-'+(name.includes('cargodoorvanl')?'left':'right')):door?`door-${rearDoor?'rear-':''}${bounds.getCenter(new T.Vector3()).x<0?'left':'right'}`:/^(?:panel_tailgate(?:estate|rearwindow|tern|trail|kite|alder|saber|ravenhill|fernleigh)|glass_tailgate(?:rear$|tern|trail|kite|alder|saber|ravenhill|fernleigh))/.test(name)?'tailgate':o.userData.detachAssembly;
+      const group=/^panel_enginelidmarten/.test(name)?'engine-lid':cargo?('cargo-'+(name.includes('cargodoorvanl')?'left':'right')):door?`door-${rearDoor?'rear-':''}${bounds.getCenter(new T.Vector3()).x<0?'left':'right'}`:/^(?:panel_tailgate(?:estate|rearwindow|tern|trail|kite|alder|saber|ravenhill|fernleigh|cornet)|glass_tailgate(?:rear$|tern|trail|kite|alder|saber|ravenhill|fernleigh|cornet))/.test(name)?'tailgate':/^panel_servinghatchcornet/.test(name)?'hatch':o.userData.detachAssembly;
       if(!group||group.startsWith('mirror'))return;
       let a=map.get(group);if(!a){a={name:group,members:[],bounds:new T.Box3(),damage:0,side:1,loose:0};map.set(group,a);}
       a.bounds.union(bounds);
@@ -66,6 +66,9 @@ export class WreckAttachments {
         pivot.set(0,a.bounds.max.y-.02,a.bounds.max.z-.03);euler.x=a.loose*.48+flutter;
       }else if(a.name==='tailgate'){
         pivot.set(0,a.bounds.max.y-.025,a.bounds.max.z-.025);euler.x=a.loose*.38+flutter;euler.z=a.side*a.loose*.018;
+      }else if(a.name==='hatch'){
+        const side=pivot.x<0?-1:1;
+        pivot.set(side<0?a.bounds.max.x:a.bounds.min.x,a.bounds.max.y-.01,pivot.z);euler.z=-side*a.loose*.55+flutter;
       }else if(a.name.startsWith('door')){
         const side=a.name.endsWith('left')?-1:1;
         pivot.set(side*this.width,a.bounds.min.y+.45,a.bounds.max.z-.06);euler.y=-side*a.loose*.075;euler.x=-a.loose*.025;

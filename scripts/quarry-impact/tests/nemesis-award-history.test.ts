@@ -1,6 +1,7 @@
+import {restoreCornetCarBytes} from './cornet-car-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readNemesisAwardPrevious,restoreNemesisAwardBytes,verifyNemesisAwardRevision} from './nemesis-award-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreCornetCarBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('NemesisAward preserves every prior fixture, vehicle asset, venue art and history input',verifyNemesisAwardRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/nemesis-award/revision.json').toString());
