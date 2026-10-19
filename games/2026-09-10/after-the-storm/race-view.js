@@ -138,7 +138,7 @@ let state=createTitleScene(),selectedRider=0,selectedMode='practice',cup=null,se
 // key; a malformed or older entry is ignored rather than partly installed.
 const NATIVE_RECORDS_KEY='after-the-storm-native-records-v2';
 let nativeRecordSession=(()=>{try{const raw=localStorage.getItem(NATIVE_RECORDS_KEY);return raw?copyNativeRecordSession(JSON.parse(raw)):undefined;}catch{return undefined;}})();
-function retainNativeRecords(){if(!state.nativeLaunch?.ordinary)return;nativeRecordSession=state.nativeLaunch.recordSessionSnapshot();try{localStorage.setItem(NATIVE_RECORDS_KEY,JSON.stringify(nativeRecordSession));}catch{}}
+function retainNativeRecords(){if(!state.nativeLaunch?.ordinary&&!state.nativeLaunch?.stunt)return;nativeRecordSession=state.nativeLaunch.recordSessionSnapshot();try{localStorage.setItem(NATIVE_RECORDS_KEY,JSON.stringify(nativeRecordSession));}catch{}}
 let recorder=createRecorder(),replay=null;
 let chaseMemory=[{},{}],cameraTracking=[{},{}],splitLayout=onlineCapability?'separate':saved.versus?.layout??'horizontal',renderViews=[];
 const secondCamera=camera.clone(),secondLook=new T.Vector3(),secondGoal=new T.Vector3(),secondTarget=new T.Vector3();let secondCameraMode=0,secondOrbit=0,secondPitch=.22,secondZoom=8,orbitPlayer=0;const padPause=[false,false],padCamera=[false,false];
@@ -160,16 +160,16 @@ playerWindowReconnect.onclick=playerWindowButton.onclick=()=>{const connected=pl
 window.addEventListener('pagehide',()=>playerWindow.dispose());
 
 let nativeTuningView=null;
-function selectedSeaState(){return ['championship','stunt'].includes(selectedMode)||selectedOriginalTimeTrial()?'course':$('seaState').value;}
+function selectedSeaState(){return ['championship','stunt'].includes(selectedMode)||selectedOriginalPhysics()?'course':$('seaState').value;}
 function trialSeed(){return selectedMode==='time'?trials.waveSeed({course:selectedCourse,layoutRevision:getCourse(selectedCourse,selectedDifficulty).layoutRevision??0,difficulty:selectedDifficulty,laps:Number($('laps').value),seaState:selectedSeaState(),rider:selectedRider,tune:Object.fromEntries(['engine','grip','handling'].map(k=>[k,Number($(k).value)]))},Math.floor(Math.random()*997)):Math.floor(Math.random()*997);}
 function selectedFreeRide(){return selectedMode==='practice'||selectedMode==='versus'&&selectedCourse==='practice';}
-// Original Time trial needs a verified source course and class route (Twilight
-// has no original Normal route) and always runs in Venue conditions.
-const ORIGINAL_TIME_COURSES=['greyhaven','amber','citadel','reed','port','neon','tempest','glacier'];
-function originalTimeTrialAvailable(){return selectedMode==='time'&&ORIGINAL_TIME_COURSES.includes(selectedCourse)&&(selectedCourse!=='neon'||selectedDifficulty>0);}
-function selectedOriginalTimeTrial(){return originalTimeTrialAvailable()&&saved.preferences.physics==='original';}
+// Original physics needs a verified source course: Time trial also needs a
+// class route (Twilight has no original Normal route). Both use Venue conditions.
+const ORIGINAL_TIME_COURSES=['greyhaven','amber','citadel','reed','port','neon','tempest','glacier'],ORIGINAL_STUNT_COURSES=['practice',...ORIGINAL_TIME_COURSES];
+function originalPhysicsAvailable(){return selectedMode==='time'&&ORIGINAL_TIME_COURSES.includes(selectedCourse)&&(selectedCourse!=='neon'||selectedDifficulty>0)||selectedMode==='stunt'&&ORIGINAL_STUNT_COURSES.includes(selectedCourse);}
+function selectedOriginalPhysics(){return originalPhysicsAvailable()&&saved.preferences.physics==='original';}
 function selectedNativePhysics(){
- if(selectedOriginalTimeTrial())return true;
+ if(selectedOriginalPhysics())return true;
  if(selectedMode==='practice'&&selectedCourse==='practice'&&selectedDifficulty===0&&selectedSeaState()==='course')return true;
  if(!isVerify||!new URLSearchParams(location.search).has('nativePhysics')||selectedSeaState()!=='course')return false;
  if(selectedMode==='practice')return selectedCourse==='practice'&&selectedDifficulty===0;
@@ -179,10 +179,10 @@ const nativeCatchupNote=document.createElement('small');nativeCatchupNote.textCo
 function updateCatchupOption(){const native=selectedMode==='versus'&&selectedNativePhysics();$('handicap').disabled=selectedMode==='versus'&&(selectedFreeRide());nativeCatchupNote.hidden=!native;nativeTuningView?.refresh();}
 function updateStartLabel(){$('start').textContent=selectedMode==='practice'?'Ride the water →':selectedMode==='championship'?'Start championship →':selectedMode==='versus'?(selectedFreeRide()?'Start two-player Free Ride →':'Start two-player race →'):selectedMode==='time'?'Start time trial →':selectedMode==='stunt'?'Start stunt run →':'Start race →';}
 function refreshCourses(){updatePlayerWindowStatus();updateColourChoice();$('playerTwoOptions').hidden=selectedMode!=='versus';saved.reached??=['greyhaven','practice'];const select=$('course');select.disabled=selectedMode==='championship';$('seaState').disabled=['championship','stunt'].includes(selectedMode);$('seaState').value=selectedSeaState()==='course'&&['championship','stunt'].includes(selectedMode)?'course':saved.preferences.seaState;select.replaceChildren();for(const c of COURSES){const option=document.createElement('option');option.value=c.id;const reached=saved.reached.includes(c.id);option.textContent=c.name+(!reached&&selectedMode!=='practice'?' · reach in championship':'');option.disabled=!isVerify&&!reached&&selectedMode!=='practice';if(!['practice','stunt','versus'].includes(selectedMode)&&c.id==='practice')option.disabled=true;select.append(option);}if(selectedCourse==='practice'&&!['practice','stunt','versus'].includes(selectedMode))selectedCourse='greyhaven';select.value=selectedCourse;for(const o of $('difficulty').options)o.disabled=!isVerify&&Number(o.value)>(saved.unlocked||0);$('laps').disabled=selectedFreeRide();updateCatchupOption();$('courseNote').textContent=selectedMode==='championship'?'Complete the circuit, meet each points target, and unlock the next class. Normal begins with an optional warm-up in Dolphin Park.':selectedMode==='practice'&&selectedCourse==='practice'&&selectedDifficulty===0?'Explore Dolphin Park with its original dolphin guide and two jumps in Venue conditions. Choose a custom sea for wave jumps, ramps and rings.':getCourse(selectedCourse).description+(selectedMode==='versus'&&selectedFreeRide()?' Two-player Free Ride · open exploration, ramps and rings · no timer.':'');updatePhysicsChoice();updateStartLabel();}
-function updatePhysicsChoice(){const available=originalTimeTrialAvailable(),original=selectedOriginalTimeTrial();
+function updatePhysicsChoice(){const available=originalPhysicsAvailable(),original=selectedOriginalPhysics();
  $('physicsField').hidden=!available;$('physicsChoice').value=saved.preferences.physics;
  $('seaState').disabled=['championship','stunt'].includes(selectedMode)||original;if(original)$('seaState').value='course';
- if(original)$('courseNote').textContent+=' Original physics: Wave Race 64 handling, buoys, wake and spray in Venue conditions. Records stay on this device.';
+ if(original)$('courseNote').textContent+=selectedMode==='stunt'?' Original physics: Wave Race 64 handling, rings, tricks and scoring. Records stay on this device.':' Original physics: Wave Race 64 handling, buoys, wake and spray in Venue conditions. Records stay on this device.';
  updateCatchupOption();}
 $('course').onchange=()=>{selectedCourse=$('course').value;state=createRace({mode:selectedMode,seaState:selectedSeaState(),course:getCourse(selectedCourse,selectedDifficulty)});loadCourse(state.course);refreshCourses();};
 $('physicsChoice').onchange=()=>{saved.preferences.physics=$('physicsChoice').value;writeSave(localStorage,saved);refreshCourses();};
@@ -221,7 +221,7 @@ function start(nextRound=false,skipWarmup=false,inspection={}){
  }
  clearNativeDolphins();
  // osGetTime is time since boot at46.875MHz; the page clock is time since load.
- const sourceClock=()=>BigInt(Math.floor(performance.now()*46875)),originalTime=!demo&&selectedOriginalTimeTrial();
+ const sourceClock=()=>BigInt(Math.floor(performance.now()*46875)),originalTime=!demo&&selectedMode==='time'&&selectedOriginalPhysics();
  const nativeCourseActors=dolphinScene?{assets:nativeDolphinAssets,onDisplay:(presentation,resources)=>nativeDolphinRenderer.update(presentation,resources),
   onEffectsDisplay:presentation=>nativeEffectRenderer.update(presentation),sourceClock}:undefined;
  const nativeSceneEffects=originalTime?{onDisplay:presentation=>nativeEffectRenderer.update(presentation),sourceClock}:undefined;
@@ -316,7 +316,7 @@ const sampleControls=createInputSampler(()=>saved.controls,()=>!!state.nativeHos
 function input(pads){if(onlineCapability&&state.mode==='versus'){runtimeProbe?.consume(performance.now());return [touch.apply(sampleControls(keys,touch.keys(),pads,false)),playerWindow.remoteControls()[1]];}if(separatePlayerView()&&playerWindow.remoteFocused)return playerWindow.remoteControls();runtimeProbe?.consume(performance.now());const controls=sampleControls(keys,touch.keys(),pads,state.mode==='versus');if(Array.isArray(controls)){touch.apply(controls[0]);return controls;}return touch.apply(controls);}
 function controllerButtons(pads){if(options.opened)return;for(let i=0;i<(state.mode==='versus'&&!onlineCapability?2:1);i++){const p=mappedGamepad(pads[i],playerControls(saved.controls,i)),press=!!p?.actions.pause.pressed,cam=!!p?.actions.camera.pressed&&!p?.actions.modifier.pressed;if(press&&!padPause[i]){if(['postrace','standings'].includes(state.phase))nativeContinueQueued=true;else pause();}if(cam&&!padCamera[i]){cyclePlayerCamera(i);}padPause[i]=press;padCamera[i]=cam;}}
 
-function startNativeStuntRecords(){nativeStuntResultsMenu.reset();nativeNameMenu.reset();retainNativeRecords();$('dialogtitle').textContent='Stunt records';$('dialogbody').textContent=state.result.score.toLocaleString()+' points · preview records last until this page closes';nativeStuntRecordMenu.start(state.nativeLaunch);}
+function startNativeStuntRecords(){nativeStuntResultsMenu.reset();nativeNameMenu.reset();retainNativeRecords();$('dialogtitle').textContent='Stunt records';$('dialogbody').textContent=state.result.score.toLocaleString()+' points · original records are saved on this device';nativeStuntRecordMenu.start(state.nativeLaunch);}
 function startNativeContinuationMenu(){nativeResultsMenu.reset();nativeStuntRecordMenu.reset();$('dialogtitle').textContent='Your next race';$('restart').hidden=true;$('quit').hidden=true;nativeContinuationMenu.start(state.nativeLaunch);}
 const nativeStuntRecordMenu=createNativeResultsMenuView({before:$('results'),riderName,stunt:true,isActive:()=>started&&state.phase==='results'&&!options.opened&&!document.hidden,onSelect:()=>audio.signal('countdown'),onComplete:startNativeContinuationMenu});
 const nativeStuntResultsMenu=createNativeStuntResultsMenuView({before:$('results'),isActive:()=>started&&state.phase==='results'&&!options.opened&&!document.hidden,onSelect:()=>audio.signal('countdown'),onComplete:()=>{nativeStuntResultsMenu.reset();if(state.nativeLaunch.nameEntryView().active){$('dialogtitle').textContent='Enter your initials';nativeNameMenu.start(state.nativeLaunch);}else startNativeStuntRecords();}});
