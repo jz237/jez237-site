@@ -27,6 +27,9 @@ export function recordMoment(rec,state,water,beads=[]){
  if(state.primaryBuoys)frame.primaryBuoys=capturePrimaryBuoyPresentation(state.primaryBuoys);
  const actorDisplay=state.nativeHost?.lastCourseActorDisplay;
  if(actorDisplay)frame.nativeCourseActors={presentation:{draws:clone(actorDisplay.presentation.draws)},resourceWords:clone(actorDisplay.state.resourceWordsE73c)};
+ // Only completed B305C geometry: never effect storage, scene buffers or clocks.
+ const effectDisplay=state.nativeHost?.lastSceneEffectDisplay;
+ if(effectDisplay)frame.nativeSceneEffects={draws:clone(effectDisplay.presentation.draws)};
  rec.frames.push(frame);rec.last=state.time;rec.previous=frame;
  while(rec.frames.length>201||rec.frames[0].time<state.time-10)rec.frames.shift();
 }
@@ -75,6 +78,8 @@ export function replaySample(clip,time){
  // Keep each completed articulated pose intact. Matrix interpolation would
  // shear the skin, and replay must never rerun the original actor dispatcher.
  if(Object.hasOwn(a,'nativeCourseActors')||Object.hasOwn(b,'nativeCourseActors'))frame.nativeCourseActors=clone((t<1?a:b).nativeCourseActors??null);
+ // Particle sets differ between display frames; hold each one until the next.
+ if(Object.hasOwn(a,'nativeSceneEffects')||Object.hasOwn(b,'nativeSceneEffects'))frame.nativeSceneEffects=clone((t<1?a:b).nativeSceneEffects??null);
  // World-aligned samples survive patch recentering without moving the waves.
  if(a.localWater&&b.localWater){const f=a.localWater,g=b.localWater,h=f.h.slice(),dx=Math.round((f.x-g.x)/f.cell),dz=Math.round((f.z-g.z)/f.cell);for(let j=0;j<f.size;j++)for(let k=0;k<f.size;k++){const x=k+dx,z=j+dz;if(x>=0&&z>=0&&x<g.size&&z<g.size)h[j*f.size+k]=mix(h[j*f.size+k],g.h[z*g.size+x],t);}frame.localWater={...f,h,version:time};}
  return frame;

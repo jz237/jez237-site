@@ -17,8 +17,9 @@ import {nativeAIBodyFields,nativeAIStartupBodyFields} from './native-ai-body-fie
 import {nativeRaceBodyFields} from './native-race-body-fields.js';
 import {captureNativeCamera} from './native-camera-presentation.js';
 import {applyNativeRiderResultCodes} from './native-rider-lifecycle.js';
-import {prepareNativePhysicalBodyWrap} from './native-physical-body-wrap.js';
+import {prepareNativePhysicalBodyWrap,captureNativePhysicalBoundaryDrift} from './native-physical-body-wrap.js';
 import {nativeCourseActorBodyPoseWords} from './native-course-actor-body.js';
+import {captureNativeInitialEffectBody,captureNativeEffectBody} from './native-effect-body-view.js';
 import {nativeSineTableWords,NATIVE_ANGLE_TABLE_WORDS} from './native-math-tables.js';
 
 // Runnable host bridge for the recovered hull and rider recovery. This remains
@@ -88,11 +89,15 @@ function present(host){
  */
 export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,tunes=[],sourceStates=[],poseProviders=[],onFrame=null,
  raceRuntime=null,onLaunchFrame=null,onContactFrame=null,onAudioFrame=null,hullStarts=[],staticGeometry=null,
- floatingDefinitions,floatingActive=true,primaryActive=true,recovery=true,craftContacts=true,courseActors}={}){
+ floatingDefinitions,floatingActive=true,primaryActive=true,recovery=true,craftContacts=true,courseActors,courseEffects}={}){
  const sourceSchedule=!!(raceRuntime?.ordinary||raceRuntime?.stunt);
  if(courseActors!==undefined&&(!sourceSchedule||!raceRuntime.ordinary||course.nativeSceneMode!=='practice'||
    typeof courseActors?.onDisplay!=='function'||typeof courseActors?.audioContext!=='function'||typeof courseActors?.onEffects!=='function'))
   throw new TypeError('Live course actors require solo Practice and explicit display/audio consumers');
+ // AE7C4 reads the initialized actor pool for Dolphin's extra effect slot.
+ if(courseEffects!==undefined&&(courseActors===undefined||typeof courseEffects?.onDisplay!=='function'||
+   courseEffects.sourceClock!==undefined&&typeof courseEffects.sourceClock!=='function'))
+  throw new TypeError('Live scene effects require initialized course actors and an explicit display consumer');
  if(raceRuntime?.championshipLaunch){
   if(hullStarts.length||tunes.length)throw new RangeError('Prepared championship owns physical starts and profiles');
   hullStarts=raceRuntime.championshipLaunch.hullStarts;tunes=raceRuntime.championshipLaunch.bodyProfiles;
@@ -226,6 +231,34 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
     courseActors.onDisplay(ticket.presentation,ticket.state.resourceWordsE73c);
     host.lastCourseActorDisplay=host.courseActors.commitDisplay(ticket);
    };
+   if(courseEffects){
+    // osGetTime counts at46.875MHz. Headless callers use the shared outer
+    // clock (468750 counts per10ms tick); the browser supplies its own time.
+    // Profiling reads bracket no guest instructions, so start equals end.
+    const sourceClock=courseEffects.sourceClock??(()=>BigInt(host.world?.clockTicks??0)*468750n);
+    const clockWords=()=>{
+     const value=sourceClock();
+     if(typeof value!=='bigint'||value<0n||value>=1n<<64n)throw new RangeError('Scene effect clock must be an unsigned64 count');
+     return [Number(value>>32n),Number(value&0xffffffffn)];
+    };
+    const queryNative=(x,z)=>queryNativeWaterField(water.field,x,z).sourcePlaneQueryNative;
+    host.sceneEffects=raceRuntime.createCourseEffectsHost({worldScale:water.scale,
+     graphicsBuffers:Array.from({length:2},()=>Array(0xb2f0).fill(0))});
+    //62E50(a2=0) wrote BF0/BF4 zero during the fresh physical body startup.
+    host.effectStartup=host.sceneEffects.initialize({clockLow32:clockWords()[1],queryNative,
+     bodyFieldsBySlot:adapters.map(a=>captureNativeInitialEffectBody(a,{boundaryDriftNative:{x:0,z:0}}))},{freshWebScene:true});
+    host.advanceSceneEffects=()=>{
+     const clock=clockWords();
+     host.lastSceneEffects=host.sceneEffects.advanceMotion({clockStartWords:clock,clockEndWords:clock,queryNative,
+      sineTableWords4350,angleTableWords6f08:NATIVE_ANGLE_TABLE_WORDS,
+      bodyFieldsBySlot:adapters.map(a=>captureNativeEffectBody(a,{boundaryDriftNative:captureNativePhysicalBoundaryDrift(a)}))});
+    };
+    host.displaySceneEffects=()=>{
+     const clock=clockWords(),ticket=host.sceneEffects.prepareDisplay({clockStartWords:clock,clockEndWords:clock});
+     courseEffects.onDisplay(ticket.presentation);
+     host.lastSceneEffectDisplay=host.sceneEffects.commitDisplay(ticket);
+    };
+   }
   }
   // Fresh browser inactive body slots are explicitly zero; active B64/B68
   // both come from the host's selected numeric rider profile. Retained AI
@@ -235,8 +268,11 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
    objectTypes4c:objects?objects.snapshot().map(o=>o.runtimeKind):ice?ice.state.nodes.map(o=>o.kind):(floating?.state.objects??[]).map(o=>o.runtimeKind)});
   bindRaceWaterCameraStorage(water,raceRuntime.cameraStorage);
   bindRaceWaterAmplitudeThreshold(water,raceRuntime.waterAmplitudeThreshold);
-  host.spray=createNativeRaceSpray({adapters,field:water.field,courseIndex:course.sourceWaterCourseIndex});
+  // The complete scene-effects owner already holds the human B2ABC levels;
+  // never run the separate human-only spray state machine beside it.
+  if(!host.sceneEffects)host.spray=createNativeRaceSpray({adapters,field:water.field,courseIndex:course.sourceWaterCourseIndex});
  }
+ host.sprayLevels=()=>(host.sceneEffects??host.spray).levels();
  host.world=createNativeRaceWorld({adapters,water,humanIndices,craftContacts,deferWaterRollers:sourceSchedule,
  beforeFrame:sourceSchedule?(world,context)=>{
   //47B00/BF370 precedes922E4 in46DA0's outer game loop.
@@ -321,7 +357,10 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
   // The original caller stamps course rollers AFTER object motion. Read72c
   // here from the canonical state, not from the earlier water/input latch.
   if(sourceSchedule)advanceRaceWaterRollers(water,{active:objectMotionActive,rollerState72c:raceRuntime.courseRollerState()});
-  if(host.spray)host.spray.advance(raceRuntime.sprayInputs(),raceRuntime.cameraStorage.read());
+  //922E4 calls B2ABC here, reading the completed bodies and AD418's
+  // preceding actor pose. It replaces, never accompanies, the spray owner.
+  if(host.sceneEffects)host.advanceSceneEffects();
+  else if(host.spray)host.spray.advance(raceRuntime.sprayInputs(),raceRuntime.cameraStorage.read());
   if(objects)objects.afterEffects(host.world,context);
   else if(ice)ice.afterEffects(host.world,context);
   //922E4 calls AD418 after B2ABC and before the overlay/HUD update.
@@ -331,6 +370,8 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
    host.lastHUD=sourceSchedule?raceRuntime.advanceHUD():null;
    //9328C runs ADF90 in the source display stage, once per logical frame.
    if(host.courseActors)host.displayCourseActors();
+   //9328C then runs B305C over the scene buffer6A264 selected this frame.
+   if(host.sceneEffects)host.displaySceneEffects();
    //9328C is a source display-stage update before1DE3CC/status, including
    // result frames. Browser presentation reads cannot advance award transfers.
    host.lastStuntDisplay=raceRuntime.stunt?raceRuntime.advanceStuntDisplay():null;

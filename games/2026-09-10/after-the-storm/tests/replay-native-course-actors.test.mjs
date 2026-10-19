@@ -44,3 +44,20 @@ test('actor absence boundaries never borrow the current live pose and recorder r
  for(let i=3;i<230;i++){state.time=i*.05;recordMoment(rec,state,null);}
  assert.ok(rec.frames.length<=201);assert.ok(rec.frames[0].time>=state.time-10);
 });
+
+test('replay holds detached completed scene-effect geometry without effect storage, buffers or clocks',()=>{
+ const state=createRace({mode:'practice',physics:'native',course:getCourse('practice'),nativeCourseActors:{assets,onDisplay(){}}});
+ const rec=createRecorder();
+ for(let i=0;i<90;i++){stepRace(state,{throttle:1,steer:.4},1/60);recordMoment(rec,state,null);}
+ const frames=rec.frames.filter(f=>f.nativeSceneEffects?.draws.length),a=frames.at(-2),b=frames.at(-1);
+ assert.ok(frames.length>20);assert.deepEqual(Object.keys(a.nativeSceneEffects),['draws']);
+ assert.ok(a.nativeSceneEffects.draws.every(d=>['spray','splash','wake','droplet'].includes(d.family)&&!('graphicsBuffers' in d)));
+ const canonical=state.nativeLaunch.snapshot(),effects=state.nativeHost.sceneEffects.snapshot(),copy=structuredClone(a.nativeSceneEffects),clip={frames:[a,b]};
+ const middle=replaySample(clip,(a.time+b.time)/2),end=replaySample(clip,b.time);
+ assert.deepEqual(middle.nativeSceneEffects,a.nativeSceneEffects);assert.deepEqual(end.nativeSceneEffects,b.nativeSceneEffects);
+ middle.nativeSceneEffects.draws.length=0;assert.deepEqual(a.nativeSceneEffects,copy);
+ assert.notEqual(b.nativeSceneEffects.draws,state.nativeHost.lastSceneEffectDisplay.presentation.draws);
+ assert.deepEqual(state.nativeLaunch.snapshot(),canonical);assert.deepEqual(state.nativeHost.sceneEffects.snapshot(),effects);
+ const plain=createRecorder(),modern=createRace({mode:'practice',course:getCourse('practice')});modern.phase='running';recordMoment(plain,modern,null);
+ assert.equal(Object.hasOwn(plain.frames[0],'nativeSceneEffects'),false);
+});
