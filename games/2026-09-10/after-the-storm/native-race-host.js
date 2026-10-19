@@ -94,10 +94,12 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
  if(courseActors!==undefined&&(!sourceSchedule||!raceRuntime.ordinary||course.nativeSceneMode!=='practice'||
    typeof courseActors?.onDisplay!=='function'||typeof courseActors?.audioContext!=='function'||typeof courseActors?.onEffects!=='function'))
   throw new TypeError('Live course actors require solo Practice and explicit display/audio consumers');
- // AE7C4 reads the initialized actor pool for Dolphin's extra effect slot.
- if(courseEffects!==undefined&&(courseActors===undefined||typeof courseEffects?.onDisplay!=='function'||
+ // AE7C4 reads the initialized actor pool for Dolphin's extra effect slot;
+ // other courses have none. Two-player views and Stunt scenes stay separate.
+ if(courseEffects!==undefined&&(!sourceSchedule||!raceRuntime.ordinary||racers.filter(r=>r.human).length!==1||
+   course.sourceWaterCourseIndex===0&&courseActors===undefined||typeof courseEffects?.onDisplay!=='function'||
    courseEffects.sourceClock!==undefined&&typeof courseEffects.sourceClock!=='function'))
-  throw new TypeError('Live scene effects require initialized course actors and an explicit display consumer');
+  throw new TypeError('Live scene effects require a solo ordinary race, Dolphin\'s course actors and an explicit display consumer');
  if(raceRuntime?.championshipLaunch){
   if(hullStarts.length||tunes.length)throw new RangeError('Prepared championship owns physical starts and profiles');
   hullStarts=raceRuntime.championshipLaunch.hullStarts;tunes=raceRuntime.championshipLaunch.bodyProfiles;
@@ -207,12 +209,12 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
    recoveryGeometry:'authored anatomy/remount; reconstructed procedural fall/stumble; explicit authored rest/circle/history policy',
    nativeRacerCollision:craftContacts,sourcePrimaryBuoyContacts:!!primary,sourceGenericIceContacts:!!ice,canonicalCourseObjects:!!objects,sourceAIInput:sourceAI})};
  if(sourceSchedule){
+  const sineTableWords4350=nativeSineTableWords();
   if(courseActors){
    // New browser scene: unused route records and retained graphics X/Z begin
    // at zero. Do not evolve water to fabricate a startup vertex history.
    const retainedWordsEe20=Object.freeze(Array(192*65).fill(0)),segmentWordsE6b0=Array(16).fill(0);
    segmentWordsE6b0[8]=0x316800;
-   const sineTableWords4350=nativeSineTableWords();
    host.courseActors=raceRuntime.createCourseActorHost({worldScale:water.scale,
     buffers:{matrixBuffers:Array.from({length:2},()=>Array(192*16).fill(0)),lightBuffers:Array.from({length:2},()=>Array(96).fill(0))}});
    host.actorStartup=host.courseActors.initialize({
@@ -231,34 +233,34 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
     courseActors.onDisplay(ticket.presentation,ticket.state.resourceWordsE73c);
     host.lastCourseActorDisplay=host.courseActors.commitDisplay(ticket);
    };
-   if(courseEffects){
-    // osGetTime counts at46.875MHz. Headless callers use the shared outer
-    // clock (468750 counts per10ms tick); the browser supplies its own time.
-    // Profiling reads bracket no guest instructions, so start equals end.
-    const sourceClock=courseEffects.sourceClock??(()=>BigInt(host.world?.clockTicks??0)*468750n);
-    const clockWords=()=>{
-     const value=sourceClock();
-     if(typeof value!=='bigint'||value<0n||value>=1n<<64n)throw new RangeError('Scene effect clock must be an unsigned64 count');
-     return [Number(value>>32n),Number(value&0xffffffffn)];
-    };
-    const queryNative=(x,z)=>queryNativeWaterField(water.field,x,z).sourcePlaneQueryNative;
-    host.sceneEffects=raceRuntime.createCourseEffectsHost({worldScale:water.scale,
-     graphicsBuffers:Array.from({length:2},()=>Array(0xb2f0).fill(0))});
-    //62E50(a2=0) wrote BF0/BF4 zero during the fresh physical body startup.
-    host.effectStartup=host.sceneEffects.initialize({clockLow32:clockWords()[1],queryNative,
-     bodyFieldsBySlot:adapters.map(a=>captureNativeInitialEffectBody(a,{boundaryDriftNative:{x:0,z:0}}))},{freshWebScene:true});
-    host.advanceSceneEffects=()=>{
-     const clock=clockWords();
-     host.lastSceneEffects=host.sceneEffects.advanceMotion({clockStartWords:clock,clockEndWords:clock,queryNative,
-      sineTableWords4350,angleTableWords6f08:NATIVE_ANGLE_TABLE_WORDS,
-      bodyFieldsBySlot:adapters.map(a=>captureNativeEffectBody(a,{boundaryDriftNative:captureNativePhysicalBoundaryDrift(a)}))});
-    };
-    host.displaySceneEffects=()=>{
-     const clock=clockWords(),ticket=host.sceneEffects.prepareDisplay({clockStartWords:clock,clockEndWords:clock});
-     courseEffects.onDisplay(ticket.presentation);
-     host.lastSceneEffectDisplay=host.sceneEffects.commitDisplay(ticket);
-    };
-   }
+  }
+  if(courseEffects){
+   // osGetTime counts at46.875MHz. Headless callers use the shared outer
+   // clock (468750 counts per10ms tick); the browser supplies its own time.
+   // Profiling reads bracket no guest instructions, so start equals end.
+   const sourceClock=courseEffects.sourceClock??(()=>BigInt(host.world?.clockTicks??0)*468750n);
+   const clockWords=()=>{
+    const value=sourceClock();
+    if(typeof value!=='bigint'||value<0n||value>=1n<<64n)throw new RangeError('Scene effect clock must be an unsigned64 count');
+    return [Number(value>>32n),Number(value&0xffffffffn)];
+   };
+   const queryNative=(x,z)=>queryNativeWaterField(water.field,x,z).sourcePlaneQueryNative;
+   host.sceneEffects=raceRuntime.createCourseEffectsHost({worldScale:water.scale,
+    graphicsBuffers:Array.from({length:2},()=>Array(0xb2f0).fill(0))});
+   //62E50(a2=0) wrote BF0/BF4 zero during the fresh physical body startup.
+   host.effectStartup=host.sceneEffects.initialize({clockLow32:clockWords()[1],queryNative,
+    bodyFieldsBySlot:adapters.map(a=>captureNativeInitialEffectBody(a,{boundaryDriftNative:{x:0,z:0}}))},{freshWebScene:true});
+   host.advanceSceneEffects=()=>{
+    const clock=clockWords();
+    host.lastSceneEffects=host.sceneEffects.advanceMotion({clockStartWords:clock,clockEndWords:clock,queryNative,
+     sineTableWords4350,angleTableWords6f08:NATIVE_ANGLE_TABLE_WORDS,
+     bodyFieldsBySlot:adapters.map(a=>captureNativeEffectBody(a,{boundaryDriftNative:captureNativePhysicalBoundaryDrift(a)}))});
+   };
+   host.displaySceneEffects=()=>{
+    const clock=clockWords(),ticket=host.sceneEffects.prepareDisplay({clockStartWords:clock,clockEndWords:clock});
+    courseEffects.onDisplay(ticket.presentation);
+    host.lastSceneEffectDisplay=host.sceneEffects.commitDisplay(ticket);
+   };
   }
   // Fresh browser inactive body slots are explicitly zero; active B64/B68
   // both come from the host's selected numeric rider profile. Retained AI
