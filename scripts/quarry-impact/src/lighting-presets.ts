@@ -9,10 +9,11 @@ export const LIGHTING_PRESETS={
  midday:{label:'Clear midday',overcastSky:false,sun:QUARRY_DAYLIGHT.sun,sunColor:QUARRY_DAYLIGHT.sunColor,shadow:1,ambient:QUARRY_DAYLIGHT.ambient,skyColor:QUARRY_DAYLIGHT.skyColor,groundColor:QUARRY_DAYLIGHT.groundColor,sky:.54,background:1,fog:QUARRY_DAYLIGHT.fog,fogColor:0xb3bdc9,exposure:QUARRY_DAYLIGHT.exposure},
  afternoon:{label:'Warm late afternoon',overcastSky:false,sun:3.0,sunColor:0xffad63,shadow:.95,ambient:.33,skyColor:0xf2c194,groundColor:0x6e5039,sky:.42,background:.8,fog:.0012,fogColor:0xdcb48f,exposure:.99},
  overcast:{label:'Overcast',overcastSky:true,sun:1.15,sunColor:0xdfe3e8,shadow:.42,ambient:.62,skyColor:0xc3ccd6,groundColor:0x6d6a63,sky:.78,background:.92,fog:.0017,fogColor:0xb2b7bc,exposure:1.08},
+ dusk:{label:'Dusk · headlights on',overcastSky:false,sun:.75,sunColor:0xff7a3c,shadow:.65,ambient:.16,skyColor:0x6a6fa8,groundColor:0x2e2628,sky:.13,background:.16,fog:.0018,fogColor:0x4f4660,exposure:1.05},
 } as const satisfies Record<string,LightingPreset>;
 export type LightingMood=keyof typeof LIGHTING_PRESETS;
 export type LightingChoice=LightingMood|'random';
-export const LIGHTING_CHOICES:Record<LightingChoice,string>={midday:'Clear midday',afternoon:'Warm late afternoon',overcast:'Overcast',random:'Vary every event'};
+export const LIGHTING_CHOICES:Record<LightingChoice,string>={midday:'Clear midday',afternoon:'Warm late afternoon',overcast:'Overcast',dusk:'Dusk · headlights on',random:'Vary every event'};
 export const isLightingChoice=(value:unknown):value is LightingChoice=>typeof value==='string'&&Object.hasOwn(LIGHTING_CHOICES,value);
 export const readLighting=(value:unknown):LightingChoice=>typeof value==='string'&&Object.hasOwn(LIGHTING_CHOICES,value)?value as LightingChoice:'midday';
 const MOODS=Object.keys(LIGHTING_PRESETS) as LightingMood[];

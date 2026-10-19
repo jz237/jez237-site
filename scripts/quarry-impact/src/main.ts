@@ -160,6 +160,7 @@ import { showDriverProfile, awardText, MEDALS } from './profile-ui';
 import {dailyChallenge} from './daily-event';
 import {EventAwards,awardsHtml} from './event-awards';
 import {bankAchievements} from './achievements';
+import {attachCarLights,type CarLights} from './car-lights';
 import {ELIMINATION_INTERVAL,eliminationActive,nextElimination} from './elimination-race';
 import {dailyKey,dailyStreak,isDailyChallenge,DAILY_PREFIX} from './daily-record';
 import {EVENT_KEY,readEventOptions,circuitRoute,raceGridSlot,derbyGridSlot,checkRoute,lapProgress,CombatScoreboard,eventDerbyOrder,stepScoreRespawns} from './event-rules';
@@ -326,7 +327,7 @@ let profile=readProfile();
 try{profile=readProfile(localStorage.getItem(PROFILE_KEY));}catch{}
 let profileStorageWarning='';
 let activeChallenge:Challenge|undefined;
-const eventAwards=new EventAwards();let lastBadges:string[]=[];
+const eventAwards=new EventAwards();const carLights=new Map<Vehicle,CarLights>();let lastBadges:string[]=[];
 const badgeLine=()=>lastBadges.length?`<p class="badge-unlock">★ ACHIEVEMENT${lastBadges.length>1?'S':''} UNLOCKED · ${lastBadges.join(' · ')}</p>`:'';
 /** Race feedback for the player's own impacts; derbies already have their score feed. */
 function callout(kind:'TAKEDOWN'|'BIG HIT',victim:Vehicle){if(mode!=='race'||demo||online?.active||pursuit)return;toast(kind==='TAKEDOWN'?`TAKEDOWN · #${victim.id+1} ${DEFINITIONS[victim.kind].name}`:`BIG HIT · #${victim.id+1} ${DEFINITIONS[victim.kind].name}`,kind==='TAKEDOWN'?2.5:1.2);}
@@ -811,7 +812,7 @@ function createCars(attract = false, previewSetup?:Setup) {
   sound.clearCars();
   vehicleFire?.reset();
   puddleSplashes?.reset();
-  for (const c of cars) c.dispose();
+  for (const c of cars){carLights.get(c)?.dispose();carLights.delete(c);c.dispose();}
   cars = [];
   fx.reset();
   activateVenue(targetVenue);fx.world=physics;fx.groundHeight=activeVenue.course.height;events.clear();setQuarryMode();
@@ -837,6 +838,7 @@ function createCars(attract = false, previewSetup?:Setup) {
       ratedGrid?ratedGrid.at(i):!attract&&activeClubRound!==null?clubCup!.roster[i].kind:demo&&!attract?demoCarKind(i,kind,demoOptions.lineup):i === 0 ? kind : activeChallenge?(['coupe','sedan','hatch']as CarKind[])[i%3]:!attract&&customEvent()&&mode!=='playground'?gridCarKind(i,kind,eventOptions.lineup):CAR_KINDS[i%CAR_KINDS.length];
     const setup=!attract&&activeTimeTrial?timeTrialSetup(activeTimeTrial):!attract&&activeClubRound!==null?clubVehicleSetup(clubCup!,type):demo&&!attract?demoVehicleSetup(type,demoOptions,garage,kind):!attract&&customEvent()&&mode!=='playground'?eventGridSetup(type,kind,garage,eventOptions.performance,i===0,colors[i%colors.length],eventOptions.classLimit):i===0 && (attract || !demo) && !activeChallenge ? previewSetup??garage.cars[type].setup : undefined;
     const car = new Vehicle(i, type, setup?.paint ?? colors[i%colors.length], scene, physics, fx, setup,activeVenue.course,online?.active?'legacy':'angular-v1');
+    carLights.set(car,attachCarLights(car.root,DEFINITIONS[type].halfLength));
     car.waters=activeVenue.puddles;
     if(mode==='derby'&&!online?.active&&activeVenue===quarryVenue)car.arenaSurface=DERBY_ARENA;
     cars.push(car);
@@ -1386,6 +1388,7 @@ function step(dt: number) {
     }
     return;
   }
+  {const dusk=eventLighting==='dusk';for(const c of cars)carLights.get(c)?.set(dusk&&c.health>0,dusk&&c.health>0&&(c.input?.brake??0)>.2&&Math.abs(c.speed)>1);}
   if (state !== 'playing') return;
   elapsed += dt;
   if(mode==='race'&&!eventAwards.started&&elapsed>.5&&!online?.active)eventAwards.grid(rankRace().map(c=>c.id));

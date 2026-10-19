@@ -18,8 +18,8 @@ test('afternoon and overcast regrade light, haze and sky; overcast swaps only th
 });
 test('saved choices are validated and random never repeats the previous mood',()=>{
  assert.equal(readLighting(undefined),'midday');assert.equal(readLighting('bogus'),'midday');for(const k of Object.keys(LIGHTING_CHOICES))assert.equal(readLighting(k),k);
- for(let i=0;i<50;i++){const r=()=>((i*7919)%101)/101;for(const prev of ['midday','afternoon','overcast']as const)assert.notEqual(resolveLighting('random',prev,r),prev);}
- assert.equal(resolveLighting('overcast','overcast'),'overcast');assert.ok(['midday','afternoon','overcast'].includes(resolveLighting('random',null,()=>.999)));
+ for(let i=0;i<50;i++){const r=()=>((i*7919)%101)/101;for(const prev of ['midday','afternoon','overcast','dusk']as const)assert.notEqual(resolveLighting('random',prev,r),prev);}
+ assert.equal(resolveLighting('overcast','overcast'),'overcast');assert.ok(['midday','afternoon','overcast','dusk'].includes(resolveLighting('random',null,()=>.999)));
 });
 import {readDemoOptions} from '../src/demo-session';
 test('demo setup keeps a valid lighting override and drops unknown values',()=>{
