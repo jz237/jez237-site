@@ -1,3 +1,4 @@
+import {tagImpactMaterial} from './impact-material';
 import * as T from 'three';
 import R from '@dimforge/rapier3d-compat';
 import {landscapeHeight} from './quarry-layout';
@@ -6,7 +7,7 @@ import {landscapeHeight} from './quarry-layout';
 // outside the barrier, while leaving longer run-ups through the central floor.
 export const DERBY_ARENA={x:18,z:14,radius:64,segments:96,spawnRadius:43,fenceRadius:70} as const;
 export const LEGACY_ARENA={x:0,z:0,radius:46,segments:66,spawnRadius:29,fenceRadius:50} as const;
-export type ArenaLayout={x:number;z:number;radius:number;segments:number;spawnRadius:number;fenceRadius:number;outline?:readonly {x:number;z:number}[]};
+export type ArenaLayout={x:number;z:number;radius:number;segments:number;spawnRadius:number;fenceRadius:number;outline?:readonly {x:number;z:number}[];island?:number};
 export function arenaBarrier(i:number,layout:ArenaLayout=DERBY_ARENA){
   const yaw=i/layout.segments*Math.PI*2,x=layout.x+Math.sin(yaw)*layout.radius,z=layout.z+Math.cos(yaw)*layout.radius;
   return {x,z,y:landscapeHeight(x,z),yaw};
@@ -31,7 +32,7 @@ export class DerbyArenaPhysics {
     for(let i=0;i<DERBY_ARENA.segments;i++){
       const p=arenaBarrier(i),q={x:0,y:Math.sin(p.yaw/2),z:0,w:Math.cos(p.yaw/2)};
       const collider=world.createCollider(R.ColliderDesc.cuboid(2.22,.58,.375).setTranslation(p.x,p.y+.58,p.z).setRotation(q).setFriction(.6).setRestitution(.02));
-      collider.setEnabled(false);this.walls.push(collider);
+      tagImpactMaterial(collider,'concrete');collider.setEnabled(false);this.walls.push(collider);
     }
     for(const [id,collider]of statics)if(id.startsWith('fence-'))this.fences.push({collider,spec:{id,p:{...collider.translation()},half:{...collider.halfExtents()}}});
   }
