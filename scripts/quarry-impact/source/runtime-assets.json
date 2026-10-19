@@ -542,8 +542,8 @@
     },
     {
       "path": "licenses/CREDITS.md",
-      "bytes": 25941,
-      "sha256": "0e344ab875bca5616631985905dd8e900c7f326992544985b184e737e1dc03b1"
+      "bytes": 26092,
+      "sha256": "53a2d1e810d4dd21f06ff98a1855bbd372e92828b66483effa72250135650670"
     },
     {
       "path": "licenses/CarConcept-LICENSE.md",
@@ -579,6 +579,11 @@
       "path": "licenses/MORROW-420.md",
       "bytes": 380,
       "sha256": "bf23d62c9dd6be7c0a77f772437394d8f70da56fcf65b03185ffc782cbbf4b63"
+    },
+    {
+      "path": "licenses/PIPIT-600.md",
+      "bytes": 686,
+      "sha256": "21a1631807052aa383ce23cc2ceb96c6fb9812707f049088be6ae8a7c612634b"
     },
     {
       "path": "licenses/RAPIER-LICENSE.txt",
@@ -1144,6 +1149,11 @@
       "path": "models/pine3d.glb",
       "bytes": 181604,
       "sha256": "37c678546de6a69af6b4a4a9782d4236461f9989fce44fc72b7e3869f99203d5"
+    },
+    {
+      "path": "models/pipit.glb",
+      "bytes": 3490032,
+      "sha256": "106ec1af855e99ee765ce7ca85144a66e1d8cbcd2bb3e5e555c4a6b5ed67fb67"
     },
     {
       "path": "models/quarry-cut.glb",

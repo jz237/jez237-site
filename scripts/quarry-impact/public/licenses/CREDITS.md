@@ -218,3 +218,5 @@ Starfin 58: original fictional late-1950s hardtop bodywork, original Marten road
 Tordal 244: original fictional 1980s boxy saloon bodywork and original Marten road-wheel assemblies. See [TORDAL-244.md](TORDAL-244.md).
 
 Linnet 1300: original fictional 1960s roadster bodywork and original Marten road-wheel assemblies. See [LINNET-1300.md](LINNET-1300.md).
+
+Pipit 600: original fictional 1960s microcar bodywork and original Marten road-wheel assemblies at a smaller scale. See [PIPIT-600.md](PIPIT-600.md).

@@ -39,7 +39,7 @@ test('liftback exports a self-contained repeatable GLB matching the published mo
 test('linnet has a distinct chassis, two detachable doors, aligned wheels, and damage that fully repairs',()=>{
  const world=new R.World({x:0,y:0,z:0}),scene=new T.Scene(),c=new Vehicle(0,'linnet',DEFINITIONS.linnet.color,scene,world,fx);
  try{
-  assert.equal(CAR_KINDS.length,21);assert.ok(Math.abs(c.body.mass()-860)<1);assert.ok(c.glass.length>=1);assert.ok(c.panels.length>25);
+  assert.ok(CAR_KINDS.length>=21&&CAR_KINDS.includes('linnet'));assert.ok(Math.abs(c.body.mass()-860)<1);assert.ok(c.glass.length>=1);assert.ok(c.panels.length>25);
   assert.deepEqual(c.wreckParts.assemblies.filter(a=>a.name.startsWith('door-')).map(a=>a.name).sort(),['door-left','door-right']);
   const anchors=classicWheelAnchors('linnet');for(let i=0;i<4;i++){assert.equal(c.wheels[i].position.x,anchors.wheels[i].x);assert.equal(c.wheels[i].position.z,anchors.wheels[i].z);assert.ok(Math.abs(c.controller.wheelRadius(i)!-.32)<1e-6);}
   c.root.updateMatrixWorld(true);const clean=shape(c),mass=c.body.mass();
