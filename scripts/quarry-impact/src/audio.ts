@@ -15,6 +15,7 @@ import type { Vehicle } from './vehicle';
 import * as T from 'three';
 import type { ThermalAudio } from './vehicle-fire';
 type Loop = { source: AudioBufferSourceNode; gain: GainNode; pan: PannerNode };
+import {CrowdRoar} from './crowd-roar';
 export class Sound {
   private acousticProbe=new TrackAcousticProbe();
   private reflections?:TrackReflections;
@@ -31,6 +32,7 @@ export class Sound {
   activeVoices = 0;
   private activeShots = new Set<AudioBufferSourceNode>();
   private shotPanners=new Map<AudioBufferSourceNode,PannerNode>();
+  private crowdRoar?:CrowdRoar;
   output:AudioOutput='speakers';
   setOutput(value:unknown){
     this.output=readAudioOutput(value);
@@ -110,6 +112,12 @@ export class Sound {
       // A request made before Pause may only resolve on a later user gesture.
       if(this.paused&&this.ctx===ctx)return this.pause(true);
     }).catch(()=>{});
+  }
+  /** Crowd reaction to a big moment (0..1); silent until audio is unlocked, and when muted or paused. */
+  crowd(intensity:number){
+    if(!this.ready||this.muted||this.paused||!this.ctx||!this.ambientBus||this.ctx.state!=='running')return false;
+    this.crowdRoar??=new CrowdRoar(this.ctx,this.ambientBus);
+    return this.crowdRoar.roar(intensity);
   }
   setLevels() {
     if (this.engineBus) this.engineBus.gain.value = this.levels.engine;
