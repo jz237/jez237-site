@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {dailyChallenge} from '../src/daily-event';
+import {dailyChallenge,dailyLighting} from '../src/daily-event';
+import {LIGHTING_PRESETS} from '../src/lighting-presets';
 import {dailyKey,dailyStreak,isDailyChallenge,isDailyKey,normalizeDaily,DAILY_KEEP} from '../src/daily-record';
 import {CAR_KINDS} from '../src/rules';
 import {isCourseId} from '../src/course-id';
@@ -42,4 +43,9 @@ test('streak counts consecutive medal days ending today or yesterday; history is
  const clean=normalizeDaily(big)!;assert.equal(Object.keys(clean).length,DAILY_KEEP);assert.ok(!('not-a-date' in clean));
  for(const r of Object.values(clean)){assert.ok(r.medal>=0&&r.medal<=3&&r.attempts>=0);}
  assert.equal(normalizeDaily([]),undefined);
+});
+test('each day has its own deterministic light, including dusk runs',()=>{
+ assert.equal(dailyLighting('2026-10-19'),dailyLighting('2026-10-19'));
+ const moods=days(60).map(k=>dailyLighting(k));for(const m of moods)assert.ok(Object.hasOwn(LIGHTING_PRESETS,m));
+ assert.ok(moods.includes('dusk')&&moods.includes('midday'),'varied, with dusk days');assert.throws(()=>dailyLighting('nope'));
 });

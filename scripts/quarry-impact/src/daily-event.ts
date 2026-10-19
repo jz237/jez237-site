@@ -4,6 +4,7 @@ import {ARENA_NAMES,type ArenaId} from './arena-id';
 import {getRaceCourse} from './race-course';
 import type {Challenge} from './challenges';
 import {DAILY_PREFIX,dailyKey,isDailyKey} from './daily-record';
+import type {LightingMood} from './lighting-presets';
 /** One fixed event per local calendar day: the same car, venue and rules for everyone on
  * that date, a medal to chase and a streak for coming back. Records live in profile.daily. */
 function seeded(key:string){let h=2166136261;for(const ch of key){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)>>>0;}return()=>{h=(Math.imul(h^(h>>>15),2246822507)+0x6d2b79f5)>>>0;h^=h>>>13;return (h>>>0)/4294967296;};}
@@ -26,4 +27,10 @@ export function dailyChallenge(key=dailyKey()):Challenge{
  const tiers={damage:{limit:90,medals:[70,130,200] as [number,number,number],text:'Deal as much damage as you can in 90 seconds.'},knockouts:{limit:150,medals:[1,2,4] as [number,number,number],text:'Score the final blow on as many opponents as you can in two and a half minutes.'},condition:{limit:75,medals:[15,35,60] as [number,number,number],text:'Survive 75 seconds with as much condition as you can keep, dealing at least 15 damage.'}}[metric];
  return{id,title:`${pick(r,DERBY_TITLES[metric])}: ${ARENA_NAMES[arena]}`,car,metric,limit:tiers.limit,medals:tiers.medals,mode:'derby',discipline:'impact',traffic:false,arena,...(metric==='condition'?{minDamage:15}:{}),
   description:`Today's event in ${ARENA_NAMES[arena]} with the ${spec.name}. ${tiers.text} A new event starts at midnight.`};
+}
+/** Each day also has its own light: mostly clear, sometimes a warm afternoon, overcast or a dusk run with headlights. */
+export function dailyLighting(key=dailyKey()):LightingMood{
+ if(!isDailyKey(key))throw Error('Invalid daily key');
+ const r=seeded('quarry-daily-light:'+key)(),moods:LightingMood[]=['midday','midday','afternoon','overcast','dusk','dusk'];
+ return moods[Math.floor(r*moods.length)%moods.length];
 }

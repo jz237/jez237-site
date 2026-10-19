@@ -157,7 +157,7 @@ import { SessionTelemetry } from './session-telemetry';
 import { CHALLENGES, challengeCourse, challengeValue, formatChallengeValue, challengeVenueName, type Challenge, type Discipline } from './challenges';
 import { PROFILE_KEY, readProfile, settleRun, type Award } from './progression';
 import { showDriverProfile, awardText, MEDALS } from './profile-ui';
-import {dailyChallenge} from './daily-event';
+import {dailyChallenge,dailyLighting} from './daily-event';
 import {EventAwards,awardsHtml} from './event-awards';
 import {bankAchievements} from './achievements';
 import {attachCarLights,type CarLights} from './car-lights';
@@ -348,7 +348,7 @@ function bankRun(completed:boolean){
 function openDaily(){
   keys.clear();const key=dailyKey(),challenge=dailyChallenge(key),record=profile.daily?.[key],streak=dailyStreak(profile.daily,key);
   const overlay=document.createElement('div');overlay.className='overlay daily-overlay';
-  overlay.innerHTML=`<section class="dialog daily-event" role="dialog" aria-modal="true" aria-labelledby="daily-title"><div class="eyebrow">DAILY EVENT · ${key} · ${challengeVenueName(challenge)}</div><h2 id="daily-title">${challenge.title.toUpperCase()}</h2><p><b>${DEFINITIONS[challenge.car].name}</b> · ${challenge.mode==='race'?'Race':'Demolition derby'}</p><p>${challenge.description}</p><div class="medal-targets">${challenge.medals.map((v,i)=>`<span class="medal-${i+1}">${MEDALS[i+1]}<b>${challenge.metric==='time'?'≤ ':''}${formatChallengeValue(challenge,v)}</b></span>`).join('')}</div><p id="daily-record">${record?.medal?`Today: ${MEDALS[record.medal]} · best ${formatChallengeValue(challenge,record.best??0)} · ${record.attempts} ${record.attempts===1?'attempt':'attempts'}`:record?.attempts?`Today: no medal yet · ${record.attempts} ${record.attempts===1?'attempt':'attempts'}`:'Not attempted today.'}</p><p id="daily-streak">${streak?`Medal streak: ${streak} ${streak===1?'day':'days'}. Medal today to keep it going.`:'Win any medal on consecutive days to build a streak.'}</p><button id="daily-start" class="primary">START TODAY'S EVENT ↗</button><button id="daily-close" class="small-button">BACK</button></section>`;
+  overlay.innerHTML=`<section class="dialog daily-event" role="dialog" aria-modal="true" aria-labelledby="daily-title"><div class="eyebrow">DAILY EVENT · ${key} · ${challengeVenueName(challenge)}</div><h2 id="daily-title">${challenge.title.toUpperCase()}</h2><p><b>${DEFINITIONS[challenge.car].name}</b> · ${challenge.mode==='race'?'Race':'Demolition derby'} · ${LIGHTING_CHOICES[dailyLighting(key)]}</p><p>${challenge.description}</p><div class="medal-targets">${challenge.medals.map((v,i)=>`<span class="medal-${i+1}">${MEDALS[i+1]}<b>${challenge.metric==='time'?'≤ ':''}${formatChallengeValue(challenge,v)}</b></span>`).join('')}</div><p id="daily-record">${record?.medal?`Today: ${MEDALS[record.medal]} · best ${formatChallengeValue(challenge,record.best??0)} · ${record.attempts} ${record.attempts===1?'attempt':'attempts'}`:record?.attempts?`Today: no medal yet · ${record.attempts} ${record.attempts===1?'attempt':'attempts'}`:'Not attempted today.'}</p><p id="daily-streak">${streak?`Medal streak: ${streak} ${streak===1?'day':'days'}. Medal today to keep it going.`:'Win any medal on consecutive days to build a streak.'}</p><button id="daily-start" class="primary">START TODAY'S EVENT ↗</button><button id="daily-close" class="small-button">BACK</button></section>`;
   ui.append(overlay);
   overlay.querySelector<HTMLButtonElement>('#daily-close')!.onclick=()=>{overlay.remove();};
   overlay.querySelector<HTMLButtonElement>('#daily-start')!.onclick=()=>{overlay.remove();careerRun=false;activeTimeTrial=null;activeChallenge=challenge;mode=challenge.mode;kind=challenge.car;void start(false);};
@@ -871,7 +871,7 @@ async function start(watch=demo) {
   bankRun(false);telemetry=null;
   if(watch){activeChallenge=undefined;activeTimeTrial=null;}
   timeTrialOpen=false;timeTrialInvalidReason='';timeTrialResult=null;
-  applyEventLighting(true, watch ? demoOptions.lighting ?? settings.lighting : settings.lighting);
+  applyEventLighting(true, watch ? demoOptions.lighting ?? settings.lighting : isDailyChallenge(activeChallenge) ? dailyLighting(activeChallenge!.id.slice(DAILY_PREFIX.length)) : settings.lighting);
   demo=watch;demoRestart=0;director.reset();if(watch)director.select(demoOptions.camera);keys.clear();testInput=null;
   wreckHold = 0;
   if(online?.active) {if(online.network.isHost){online.network.start(mode);return true;}return false;}
