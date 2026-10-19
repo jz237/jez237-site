@@ -40,6 +40,8 @@ export const CAREER_GROUPS:readonly CareerGroup[]=[
  {id:'estate-escapades',title:'Estate Escapades',discipline:'racing',description:'A rear-drive family wagon takes the scenic route through forest, coast and parkland.',cost:3,events:['alder-hazelwood','alder-seabrook','alder-kingswell']},
  {id:'notchback-nights',title:'Notchback Nights',discipline:'racing',description:'Take the Morrow V8 from speedway asphalt to the coast and a reverse forest run.',cost:3,events:['morrow-ironfield','morrow-seabrook','morrow-hazelwood']},
  {id:'hot-hatch-weekend',title:'Hot Hatch Weekend',discipline:'racing',description:'Work the Kite’s front tyres on club asphalt, forest gravel and a reverse coastal sprint.',cost:3,events:['kite-westmere','kite-hazelwood','kite-seabrook']},
+ {id:'ashcombe-club-day',title:'Ashcombe Club Day',discipline:'racing',description:'A flat club circuit of tight corners: the wedge on its own, the brick saloon the wrong way round and two laps in the finned hardtop.',cost:3,events:['ashcombe-saber','ashcombe-tordal','ashcombe-starfin']},
+ {id:'round-the-island',title:'Round the Island',discipline:'impact',description:'Kestrel Ring has a walled island in the middle, so every run-up picks a side: hit, finish and survive.',cost:3,events:['kestrel-damage','kestrel-knockouts','kestrel-survivor']},
 ];
 export const CAREER_SERIES:readonly ClubSeriesId[]=['club','sprint','tour','gauntlet','dirt','road-rally','woodland','county-weekender','airfield-rally','banger-weekend','demolition-tour','freight-speed','heath-canyon','club-ridge','coastal-tour','park-dunes-tour','canal-pass-tour','mud-mayhem'];
 export function normalizeCareerPodiums(value:unknown):Partial<Record<ClubSeriesId,number>>{

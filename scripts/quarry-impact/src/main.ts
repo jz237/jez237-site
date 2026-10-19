@@ -778,7 +778,7 @@ function receiveOnline() {
 }
 function createCars(attract = false, previewSetup?:Setup) {
   offroadMarker.reset();
-  const targetVenue=ensureVenue(attract?'quarry-v1':preferredCourse(),!attract&&mode==='derby'?resolveArenaId(clubRound()?.arena??(customEvent()?(demo?demoOptions.arena:eventOptions.arena):undefined)):'quarry-arena-v1');
+  const targetVenue=ensureVenue(attract?'quarry-v1':preferredCourse(),!attract&&mode==='derby'?resolveArenaId((activeChallenge?.mode==='derby'?activeChallenge.arena:undefined)??clubRound()?.arena??(customEvent()?(demo?demoOptions.arena:eventOptions.arena):undefined)):'quarry-arena-v1');
   archiveReplay();bankRun(false);
   drivers.difficulty=attract?'amateur':aiDifficulty();pursuit=null;pursuitDriving.reset();combat.reset(true);derbyFeed.reset();waypointRace=!attract&&mode==='race'&&raceFormat()!=='laps'?new WaypointRace(raceFormat() as 'ordered'|'free'|'random',raceLaps(),clubRound()?.seed??activeChallenge?.seed??Math.floor(Math.random()*0xffffffff),targetVenue.course.checkpoints,targetVenue.course.waypointStations):null;
   sound.clearCars();

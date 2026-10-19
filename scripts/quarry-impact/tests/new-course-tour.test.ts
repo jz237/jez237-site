@@ -41,7 +41,7 @@ test('new course championships portable saves retain every interrupted round, st
 });
 
 test('new lap medals require the complete declared route, a living finish, retained condition and no recovery',()=>{
- for(const c of CHALLENGES.slice(86)){
+ for(const c of CHALLENGES.slice(86).filter(c=>c.mode==='race')){
   const run={...emptyRun(),seconds:c.medals[2],health:100,checkpoints:24*c.laps!,finished:true,completed:true};assert.equal(challengeMedal(c,run),3);
   for(const patch of [{checkpoints:run.checkpoints-1},{finished:false},{completed:false},{recovered:true},{health:c.minHealth!-1},{health:0},{seconds:c.limit+1}])assert.equal(challengeMedal(c,{...run,...patch}),0);
   assert.equal(challengeMedal(c,{...run,seconds:c.medals[1]}),2);assert.equal(challengeMedal(c,{...run,seconds:c.medals[0]}),1);

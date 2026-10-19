@@ -2,9 +2,10 @@ import type {StuntTask} from './stunt-challenge';
 import type {CarKind,Mode} from './rules';
 import type {RunStats} from './session-telemetry';
 import {COURSE_NAMES,resolveCourseId,type CourseId} from './course-id';
+import {ARENA_NAMES,type ArenaId} from './arena-id';
 export type Discipline='racing'|'impact'|'stunts';
 export type ChallengeMetric='time'|'position'|'damage'|'knockouts'|'condition'|'drift'|'distance'|'speed'|'airtime'|'combo';
-export type Challenge={race?:'ordered'|'free'|'random';direction?:'forward'|'reverse';seed?:number;id:string;title:string;description:string;discipline:Discipline;mode:Mode;car:CarKind;metric:ChallengeMetric;limit:number;medals:[number,number,number];laps?:number;minHealth?:number;minDamage?:number;traffic?:boolean;course?:CourseId;stunt?:StuntTask};
+export type Challenge={race?:'ordered'|'free'|'random';direction?:'forward'|'reverse';seed?:number;id:string;title:string;description:string;discipline:Discipline;mode:Mode;car:CarKind;metric:ChallengeMetric;limit:number;medals:[number,number,number];laps?:number;minHealth?:number;minDamage?:number;traffic?:boolean;course?:CourseId;arena?:ArenaId;stunt?:StuntTask};
 const race=(id:string,title:string,car:CarKind,laps:number,medals:[number,number,number],minHealth=0):Challenge=>({id,title,car,laps,medals,metric:'time',mode:'race',discipline:'racing',limit:medals[0],minHealth,description:`Finish ${laps} ${laps===1?'lap':'laps'}${minHealth?` with at least ${minHealth}% condition`:''}. No recoveries.`});
 const event=(id:string,title:string,car:CarKind,metric:Exclude<ChallengeMetric,'time'|'position'>,limit:number,medals:[number,number,number],description:string):Challenge=>({id,title,car,metric,limit,medals,description,mode:['damage','knockouts','condition'].includes(metric)?'derby':'playground',discipline:['damage','knockouts','condition'].includes(metric)?'impact':'stunts',traffic:false,...(metric==='condition'?{minDamage:15}:{})});
 export const CHALLENGES:readonly Challenge[]=[
@@ -128,10 +129,16 @@ export const CHALLENGES:readonly Challenge[]=[
   {...race('kite-westmere','Hot hatch club sprint','kite',1,[160,110,80],40),course:'westmere-club-v1'},
   {...race('kite-hazelwood','Front-drive forest dash','kite',1,[160,110,80],35),course:'hazelwood-forest-v1'},
   {...race('kite-seabrook','Seaside hot hatch return','kite',1,[150,105,75],40),course:'seabrook-coast-v1',direction:'reverse'},
+  {...race('ashcombe-saber','Club day wedge','saber',1,[170,125,95],35),course:'ashcombe-lanes-v1'},
+  {...race('ashcombe-tordal','Lanes in reverse','tordal',1,[175,128,97],40),course:'ashcombe-lanes-v1',direction:'reverse'},
+  {...race('ashcombe-starfin','Fins down the long straight','starfin',2,[330,240,182],35),course:'ashcombe-lanes-v1'},
+  {...event('kestrel-damage','Island traffic','linnet','damage',90,[60,115,180],'Pick a side of the island and keep the roadster hitting heavier cars.'),arena:'kestrel-ring-v1'},
+  {...event('kestrel-knockouts','Ring of steel','tordal','knockouts',150,[1,2,4],'Finish weakened opponents as they come round the island.'),arena:'kestrel-ring-v1'},
+  {...event('kestrel-survivor','Hold the ring','starfin','condition',75,[15,35,60],'Stay alive for 75 seconds on the ring and deal at least 15 damage.'),arena:'kestrel-ring-v1'},
 ];
-/** Race and playground challenges retain their own fixed venue; derbies stay at Quarry. */
+/** Race and playground challenges retain their own fixed venue; derbies use their listed arena, otherwise Quarry. */
 export const challengeCourse=(c:Challenge):CourseId=>c.mode!=='derby'?resolveCourseId(c.course):'quarry-v1';
-export const challengeVenueName=(c:Challenge)=>COURSE_NAMES[challengeCourse(c)];
+export const challengeVenueName=(c:Challenge)=>c.mode==='derby'&&c.arena?ARENA_NAMES[c.arena]:COURSE_NAMES[challengeCourse(c)];
 export function challengeValue(c:Challenge,r:RunStats){
   switch(c.metric){case'time':return r.seconds;case'position':return r.rank;case'damage':return r.damage;case'knockouts':return r.knockouts;case'condition':return r.health;case'drift':return r.drift;case'distance':return r.distance;case'speed':return r.maxSpeed*3.6;case'airtime':return r.airtime;case'combo':return r.drift+r.airtime*60;}
 }
