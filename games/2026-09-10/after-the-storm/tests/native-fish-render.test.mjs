@@ -67,3 +67,14 @@ test('fish renderer validates all actors before posing and releases departed or 
  assert.deepEqual(view.update({draws:p.draws.filter(d=>d.resourceIndex!==1)},r),{parts:0,actors:0});assert.equal(view.snapshot().actors,0);
  view.dispose();assert.throws(()=>view.update(p,r),/disposed/);assert.equal(root.children.length,0);
 });
+
+test('Drake Lake lake fish use bank4 with the long trout slices and the shared skinned model',()=>{
+ assert.equal(nativeFishSpeciesForPart(8,{bank:4}),'trout');assert.equal(nativeFishSpeciesForPart(8),'clown');assert.equal(nativeFishSpeciesForPart(24,{bank:4}),undefined);
+ const m=makeNativeFishParts('trout',{map:null}),g=m.part(8).geometry;g.computeBoundingBox();
+ assert.ok(Math.abs(g.boundingBox.min.x+150)<1.5&&Math.abs(g.boundingBox.max.x-250)<1.5);m.dispose();
+ const frames=[];const s=createRace({mode:'time',physics:'native',course:getCourse('reed',0),difficulty:0,
+  nativeCourseActors:{assets:{6:new Uint8Array(readFileSync(new URL('../assets/actor-animations/bank-6.bin',import.meta.url))),4:new Uint8Array(readFileSync(new URL('../assets/actor-animations/bank-4.bin',import.meta.url)))},onDisplay:(p,r)=>{if(p.draws.some(d=>d.resourceIndex===1))frames.push({p,r});}}});
+ for(let i=0;i<600&&!frames.length;i++)stepRace(s,{throttle:1,steer:.3},1/30);
+ assert.ok(frames.length);const {p,r}=frames[0],root=new T.Group(),view=makeNativeFishRenderer(root,{map:null});
+ view.update(p,r);assert.ok(view.snapshot().species.every(k=>k==='trout'));assert.ok(view.snapshot().actors>0);view.dispose();
+});

@@ -1,5 +1,15 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — Drake Lake lake fish
+
+Bank 4, Drake Lake's swimmers, is one long silvery lake fish built like the
+reef fish: three side-view slices (head 12, middle 8, tail 16; 150/150/100
+long). It now renders through the same skinned high-resolution fish model as
+a trout-like species after the original palette (speckled blue-grey back,
+faint rose band, pale belly, forked tail). Species selection is now
+bank-aware, because the trout reuses the clownfish's part offsets. Glacier
+Coast's special actors (bank 8, likely penguins) remain unmodelled.
+
 ## Unpublished — Sunny Beach gulls and Drake Lake mallards
 
 Banks 3 and 6 are birds: a flying body (part 8), two wings of three flat

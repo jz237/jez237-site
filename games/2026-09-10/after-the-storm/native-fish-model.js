@@ -9,9 +9,12 @@ import * as T from './vendor/three.module.js';
 export const NATIVE_FISH_SPECIES=Object.freeze({
  clown:Object.freeze({parts:Object.freeze({head:12,middle:8,tail:16}),lengths:Object.freeze([70,70,60])}),
  butterfly:Object.freeze({parts:Object.freeze({head:24,middle:20,tail:28}),lengths:Object.freeze([55,55,40])}),
- tang:Object.freeze({parts:Object.freeze({head:36,middle:32,tail:40}),lengths:Object.freeze([70,70,60])})
+ tang:Object.freeze({parts:Object.freeze({head:36,middle:32,tail:40}),lengths:Object.freeze([70,70,60])}),
+ // Bank4 (Drake Lake): one silvery lake fish whose slices reuse offsets12/8/16.
+ trout:Object.freeze({parts:Object.freeze({head:12,middle:8,tail:16}),lengths:Object.freeze([150,150,100]),bank:4})
 });
-export function nativeFishSpeciesForPart(partOffset){return Object.keys(NATIVE_FISH_SPECIES).find(k=>Object.values(NATIVE_FISH_SPECIES[k].parts).includes(partOffset));}
+export function nativeFishSpeciesForPart(partOffset,{bank=2}={}){return bank===4?(Object.values(NATIVE_FISH_SPECIES.trout.parts).includes(partOffset)?'trout':undefined):
+ Object.keys(NATIVE_FISH_SPECIES).find(k=>!NATIVE_FISH_SPECIES[k].bank&&Object.values(NATIVE_FISH_SPECIES[k].parts).includes(partOffset));}
 
 // Sections are [x from nose, half height, half width]; fins are side outlines.
 const DESIGNS={
@@ -26,7 +29,11 @@ const DESIGNS={
  tang:{body:[[0,3,1.5],[10,15,4.5],[28,27,7.5],[52,38,9.5],[84,42,10],[116,40,9],[140,31,7],[158,14,4],[168,9,3]],
   fins:[[[40,30],[60,44],[100,48],[134,44],[156,30],[158,14],[100,40]],[[52,-34],[80,-46],[120,-48],[150,-36],[158,-14],[110,-40]],
    [[164,0],[172,-10],[198,-34],[192,-12],[200,0],[192,12],[198,34],[172,10]]],
-  pectoral:[40,-4,15,9],eye:[14,5,4]}
+  pectoral:[40,-4,15,9],eye:[14,5,4]},
+ trout:{body:[[0,6,3],[15,22,10],[40,33,15],[90,39,17],[150,40,17],[220,36,15],[280,27,11],[320,15,6],[345,10,4],[356,8,3.5]],
+  fins:[[[118,34],[132,45],[158,45],[174,33],[140,36]],[[252,24],[259,32],[270,30],[274,22]],[[248,-25],[262,-40],[280,-36],[288,-21]],
+   [[352,0],[362,-11],[385,-36],[398,-38],[392,-9],[397,0],[392,9],[398,38],[385,36],[362,11]]],
+  pectoral:[70,-18,26,12],eye:[24,9,5]}
 };
 
 // Authored high-resolution side paint (u=x/length, v=(y+50)/100). Colors follow
@@ -49,6 +56,13 @@ function paint(species,length){
   gradient([[0,'#f1c8d6'],[40,'#e6e2f2'],[100,'#d8d2ec'],[130,'#7c6ab0'],[150,'#2a2a86']]);
   for(const x of [30,52,74,96,114])band(x,5,'rgba(210,90,120,.0)','rgba(196,96,128,.75)');
   band(18,7,'rgba(0,0,0,0)','#2c2c6a');shade();
+ }else if(species==='trout'){
+  // Silvery lake fish: dark blue-grey back fading to a pale belly, with a
+  // faint rose lateral band and scattered dark spots, after the original palette.
+  const q=g.createLinearGradient(0,0,0,H);q.addColorStop(0,'#2e4674');q.addColorStop(.32,'#6f82b4');q.addColorStop(.55,'#c3cbe6');q.addColorStop(.62,'#d9b9cf');q.addColorStop(.7,'#dfe4f2');q.addColorStop(1,'#f4f6fb');
+  g.fillStyle=q;g.fillRect(0,0,W,H);g.fillStyle='rgba(28,34,60,.55)';
+  for(let i=0;i<140;i++){const x=(i*97%400)/400*W,y=(.08+((i*53)%30)/100)*H;g.beginPath();g.arc(x,y,2+(i%3),0,Math.PI*2);g.fill();}
+  const tail=g.createLinearGradient(X(340),0,W,0);tail.addColorStop(0,'rgba(80,100,170,0)');tail.addColorStop(1,'rgba(70,90,170,.8)');g.fillStyle=tail;g.fillRect(X(340),0,W-X(340),H);
  }else{
   gradient([[0,'#f6d77a'],[18,'#ee9ac8'],[40,'#2a52e6'],[120,'#2448e0'],[160,'#1d3ac8'],[163,'#f8f7a2'],[200,'#f4ec80']]);shade();
   g.strokeStyle='rgba(18,22,110,.9)';g.lineWidth=H*.035;g.beginPath();g.moveTo(X(40),Y(30));g.bezierCurveTo(X(80),Y(46),X(120),Y(46),X(156),Y(22));g.stroke();
