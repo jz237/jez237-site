@@ -19,6 +19,13 @@ export function slickGrip(kind:FluidKind,d:number,radius:number,strength:number)
   const cover=1-T.MathUtils.smoothstep(d/radius,.55,1),loss=1-(kind===0?SLICK.oil.grip:SLICK.coolant.grip);
   return 1-loss*cover*clamp01(strength);
 }
+/** HUD line: what is leaking, and whether the tyres are on (or carrying) oil. */
+export function fluidWarning(rates:{oil:number;coolant:number},slickGrip:ArrayLike<number>,oily:ArrayLike<number>){
+  const parts:string[]=[];
+  if(rates.oil>0)parts.push('OIL LEAK');if(rates.coolant>0)parts.push('COOLANT LEAK');
+  if(Math.min(...Array.from(slickGrip))<.9)parts.push('ON OIL');else if(Math.max(0,...Array.from(oily))>.3)parts.push('OILY TYRES');
+  return parts.join(' · ');
+}
 export class FluidSlicks{
   readonly capacity=256;
   readonly mesh:T.InstancedMesh;

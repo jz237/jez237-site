@@ -7,6 +7,8 @@ export type DiagramState={
   engine:number;misfiring:boolean;rearEngine:boolean;wrecked:boolean;
   /** Bolt-on parts: intact, hanging loose or gone (omitted parts are not drawn). */
   parts?:{frontBumper?:PartState;rearBumper?:PartState;hood?:PartState};
+  /** Leak severity 0..1: drops under the radiator (coolant) and the engine (oil). */
+  leaks?:{oil:number;coolant:number};
 };
 export type PartState='ok'|'loose'|'gone';
 const clamp01=(v:number)=>Math.max(0,Math.min(1,Number.isFinite(v)?v:0));
@@ -18,6 +20,11 @@ function partShape(cls:string,shape:string,s:PartState|undefined){
   if(!s)return '';
   if(s==='gone')return shape.replace('/>',` class="${cls} dd-gone" fill="none" stroke="${DIAGRAM_COLORS[3]}" stroke-dasharray="2 2"/>`);
   return shape.replace('/>',` class="${cls}${s==='loose'?' dd-loose':''}" fill="${s==='loose'?DIAGRAM_COLORS[2]:'#5d6a59'}"/>`);
+}
+const drop=(cls:string,x:number,y:number,fill:string)=>`<path class="${cls}" d="M${x} ${y-3.2} Q${x+2.4} ${y} ${x+2.2} ${y+.9} A2.2 2.2 0 1 1 ${x-2.2} ${y+.9} Q${x-2.4} ${y} ${x} ${y-3.2} Z" fill="${fill}" stroke="#101410" stroke-width=".6"/>`;
+function leaks(state:DiagramState){
+  const l=state.leaks;if(!l)return '';const ey=state.rearEngine?90:20;
+  return (l.coolant>0?drop('dd-leak dd-leak-coolant',22,15,'#4fbf74'):'')+(l.oil>0?drop('dd-leak dd-leak-oil',38,ey+3,'#141210'):'');
 }
 function parts(state:DiagramState){
   const p=state.parts;if(!p)return '';
@@ -38,5 +45,5 @@ export function damageDiagramSvg(state:DiagramState){
     `<rect class="dd-left" x="15" y="31" width="6" height="48" fill="${z(2,'left')}"/>`+
     `<rect class="dd-right" x="39" y="31" width="6" height="48" fill="${z(3,'right')}"/>`+
     `<rect class="dd-roof" x="22" y="37" width="16" height="36" rx="2" fill="${z(4,'roof')}"/>`+
-    parts(state)+wheels+engine+`</svg>`;
+    parts(state)+wheels+engine+leaks(state)+`</svg>`;
 }

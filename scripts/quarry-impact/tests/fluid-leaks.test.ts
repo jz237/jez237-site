@@ -67,3 +67,15 @@ test('a car with a crushed front drips coolant offline only, and tyres on a slic
  assert.ok(off.drips[0]===0&&off.drips[1]===0&&off.stats.count===0,'online-style cars never leak');
  assert.ok(off.grip.every(g=>g===1),'and never read slicks');
 });
+test('the HUD names each leak and warns about oil under or on the tyres; the diagram drips under radiator and engine',async()=>{
+ const {fluidWarning}=await import('../src/fluid-leaks');const {damageDiagramSvg}=await import('../src/damage-diagram');
+ assert.equal(fluidWarning({oil:0,coolant:0},[1,1,1,1],[0,0,0,0]),'');
+ assert.equal(fluidWarning({oil:.4,coolant:.2},[1,1,1,1],[0,0,0,0]),'OIL LEAK · COOLANT LEAK');
+ assert.equal(fluidWarning({oil:0,coolant:0},[1,.6,1,1],[0,1,0,0]),'ON OIL');
+ assert.equal(fluidWarning({oil:0,coolant:0},[1,1,1,1],[0,.5,0,0]),'OILY TYRES');
+ const base={zones:{front:0,rear:0,left:0,right:0,roof:0},wheelDamage:[0,0,0,0],wheelLost:[0,0,0,0],tyreFailure:[0,0,0,0],engine:0,misfiring:false,rearEngine:false,wrecked:false};
+ assert.ok(!damageDiagramSvg(base).includes('dd-leak'));
+ const svg=damageDiagramSvg({...base,leaks:{oil:.5,coolant:.5}});
+ assert.ok(svg.includes('dd-leak-oil')&&svg.includes('dd-leak-coolant')&&!/NaN|undefined/.test(svg));
+ assert.ok(damageDiagramSvg({...base,leaks:{oil:0,coolant:.3}}).includes('dd-leak-coolant')&&!damageDiagramSvg({...base,leaks:{oil:0,coolant:.3}}).includes('dd-leak-oil'));
+});
