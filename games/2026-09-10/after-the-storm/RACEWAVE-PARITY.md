@@ -1,5 +1,15 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — Original Stunt mastery unlocks the dolphin ride
+
+Original Stunt on Dolphin Park grants mastery (race word 2930) once every ring
+and trick is complete, and its result then sets save bit B280|0x10 through
+7C494, the original dolphin-ride unlock. That bit was kept in the saved
+original records but did nothing in the browser. It now unlocks the existing
+Dolphin Park ride (the same one the modern stunt challenge opens), the result
+dialog announces it, and saved records that already carry the bit unlock it
+on the next load.
+
 ## Unpublished — Dolphin Park warm-up opens the Normal cup
 
 The original Normal cup order starts at course 0. Its main configuration
