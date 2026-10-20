@@ -24,6 +24,9 @@ export const BADGE_DECALS:readonly BadgeDecal[]=[
  set('last-car-running','Last car running',sides('LAST CAR',{shape:'text',color:0xffffff,text:'LAST CAR RUNNING',x:.5,y:.3,width:.86,height:.15})),
  set('night-owl','Night owl',sides('NIGHT OWL',{shape:'text',color:0x9b6bff,text:'NIGHT OWL',x:.5,y:.62,width:.6,height:.17}),sides('MOON',{shape:'circle',color:0xf3eecf,x:.82,y:.3,width:.1,height:.25})),
  set('ice-cream-scream','Ninety-nine',sides('CONE',{shape:'circle',color:0xf5a3c7,x:.5,y:.45,width:.22,height:.55}),sides('99',{shape:'number',color:0x7a3b1f,text:'99',x:.5,y:.45,width:.15,height:.4})),
+ set('wheel-snatcher','Wheel snatcher',sides('TYRE',{shape:'circle',color:0x1b1b1a,x:.75,y:.55,width:.16,height:.42}),sides('HUB',{shape:'circle',color:0xc9c9c4,x:.75,y:.55,width:.07,height:.18})),
+ set('scrapyard','Scrapyard',sides('RUST',{shape:'rust',x:.5,y:.6,width:.9,height:.7}),sides('CHIPS',{shape:'chips',x:.4,y:.35,width:.6,height:.4})),
+ set('banger-king','Banger king',sides('BANGER',{shape:'text',color:0xffd23a,text:'BANGER KING',x:.5,y:.3,width:.7,height:.16}),sides('STAR',{shape:'star',color:0xffd23a,x:.88,y:.3,width:.1,height:.25})),
  set('silverware','Champion’s crest',sides('CHAMPION',{shape:'text',color:0xd9dde0,text:'CHAMPION',x:.5,y:.3,width:.6,height:.16}),[layer('ROOF STAR',{shape:'star',face:'top',color:0xd9dde0,x:.5,y:.5,width:.26,height:.26})]),
 ];
 export const badgeName=(id:string)=>ACHIEVEMENTS.find(a=>a.id===id)?.name??id;

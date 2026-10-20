@@ -1,6 +1,7 @@
+import {restoreWreckBadgesBytes} from './wreck-badges-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readBangerRacePrevious,restoreBangerRaceBytes,verifyBangerRaceRevision} from './banger-race-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreWreckBadgesBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('BangerRace preserves every prior fixture, vehicle asset, venue art and history input',verifyBangerRaceRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/banger-race/revision.json').toString());

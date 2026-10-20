@@ -3,9 +3,9 @@ import {dailyStreak} from './daily-record';
 /** Long-term goals. Progress lives in profile.journey (cars driven, circuits raced, arenas
  * fought in, takedowns) and unlocked badges in profile.badges; both are optional so older
  * saves are untouched until the first banked event. */
-export type Journey={kinds:string[];courses:string[];arenas:string[];takedowns:number};
+export type Journey={kinds:string[];courses:string[];arenas:string[];takedowns:number;wheels?:number;parts?:number};
 type ProfileLike={events:number;wins:number;distance:number;knockouts:number;challenges:Record<string,{medal:number}>;daily?:Record<string,{medal:number}>;career?:{podiums?:Partial<Record<string,number>>};badges?:string[];journey?:Journey};
-export type RunContext={run:RunStats;kind:string;mode:string;course?:string;arena?:string;takedowns?:number;daily?:boolean;dailyMedal?:number;elimination?:boolean;lighting?:string;wrecks?:number};
+export type RunContext={run:RunStats;kind:string;mode:string;course?:string;arena?:string;takedowns?:number;daily?:boolean;dailyMedal?:number;elimination?:boolean;lighting?:string;wrecks?:number;wheels?:number;parts?:number;banger?:boolean};
 export type Achievement={id:string;name:string;description:string;done:(p:ProfileLike,c:RunContext|null,all:{kinds:number;courses:number;arenas:number})=>boolean};
 const golds=(p:ProfileLike)=>Object.values(p.challenges).filter(r=>r.medal>=3).length;
 export const ACHIEVEMENTS:readonly Achievement[]=[
@@ -29,20 +29,24 @@ export const ACHIEVEMENTS:readonly Achievement[]=[
  {id:'night-owl',name:'Night owl',description:'Win a race or derby at dusk.',done:(p,c)=>!!c&&c.lighting==='dusk'&&(!!c.run.won||(c.mode==='race'&&c.run.finished&&c.run.rank===1))},
  {id:'ice-cream-scream',name:'Ice cream, you scream',description:'Wreck an opponent while driving the Cornet ice cream van.',done:(p,c)=>!!c&&c.kind==='cornet'&&((c.wrecks??0)>0||(c.takedowns??0)>0||c.run.knockouts>0)},
  {id:'silverware',name:'Silverware',description:'Earn a podium in a career championship.',done:p=>Object.values(p.career?.podiums??{}).some(v=>(v??0)>0)},
+ {id:'wheel-snatcher',name:'Wheel snatcher',description:'Tear 5 wheels off rivals.',done:p=>(p.journey?.wheels??0)>=5},
+ {id:'scrapyard',name:'Scrapyard',description:'Knock 50 parts off rivals.',done:p=>(p.journey?.parts??0)>=50},
+ {id:'banger-king',name:'Banger king',description:'Win a banger race.',done:(p,c)=>!!c&&c.mode==='race'&&!!c.banger&&c.run.finished&&(c.run.won??c.run.rank===1)},
 ];
 const ids=new Set(ACHIEVEMENTS.map(a=>a.id));
 const strings=(v:unknown,max:number)=>Array.isArray(v)?[...new Set(v.filter((s):s is string=>typeof s==='string'&&s.length>0&&s.length<64))].slice(0,max):[];
 export function normalizeBadges(v:unknown){const list=strings(v,ACHIEVEMENTS.length).filter(id=>ids.has(id));return list.length?list:undefined;}
 export function normalizeJourney(v:unknown):Journey|undefined{
  if(!v||typeof v!=='object'||Array.isArray(v))return undefined;const o=v as Record<string,unknown>;
- return{kinds:strings(o.kinds,200),courses:strings(o.courses,200),arenas:strings(o.arenas,100),takedowns:typeof o.takedowns==='number'&&Number.isFinite(o.takedowns)?Math.max(0,Math.min(1e7,Math.floor(o.takedowns))):0};
+ const tally=(v:unknown)=>typeof v==='number'&&Number.isFinite(v)?Math.max(0,Math.min(1e7,Math.floor(v))):0;
+ return{kinds:strings(o.kinds,200),courses:strings(o.courses,200),arenas:strings(o.arenas,100),takedowns:tally(o.takedowns),...(o.wheels!==undefined?{wheels:tally(o.wheels)}:{}),...(o.parts!==undefined?{parts:tally(o.parts)}:{})};
 }
 /** Record the banked event and unlock anything newly earned (in list order). Returns the new badges. */
 export function bankAchievements(profile:ProfileLike,context:RunContext|null,all:{kinds:number;courses:number;arenas:number}):Achievement[]{
  if(context&&(context.run.completed||context.run.distance>10)){
   const j=profile.journey??{kinds:[],courses:[],arenas:[],takedowns:0};
   const add=(list:string[],v:string|undefined)=>v&&!list.includes(v)?[...list,v]:list;
-  profile.journey={kinds:add(j.kinds,context.kind),courses:context.mode==='race'?add(j.courses,context.course):j.courses,arenas:context.mode==='derby'?add(j.arenas,context.arena):j.arenas,takedowns:Math.min(1e7,j.takedowns+Math.max(0,Math.floor(context.takedowns??0)))};
+  profile.journey={kinds:add(j.kinds,context.kind),courses:context.mode==='race'?add(j.courses,context.course):j.courses,arenas:context.mode==='derby'?add(j.arenas,context.arena):j.arenas,takedowns:Math.min(1e7,j.takedowns+Math.max(0,Math.floor(context.takedowns??0))),...(context.wheels||j.wheels?{wheels:Math.min(1e7,(j.wheels??0)+Math.max(0,Math.floor(context.wheels??0)))}:{}),...(context.parts||j.parts?{parts:Math.min(1e7,(j.parts??0)+Math.max(0,Math.floor(context.parts??0)))}:{})};
  }
  const have=new Set(profile.badges??[]),fresh:Achievement[]=[];
  for(const a of ACHIEVEMENTS)if(!have.has(a.id)&&a.done(profile,context,all)){have.add(a.id);fresh.push(a);}
