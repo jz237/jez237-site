@@ -8,6 +8,7 @@ import {reefFlankShelves} from './ReefFlankShelves.ts';
 import * as T from 'three';
 import {reefButtresses} from './ReefButtress.ts';
 import {reefAnemoneBackdrop} from './ReefAnemoneBackdrop.ts';
+import {finishSandMaterial} from './ReefSand.ts';
 import {reefFootGardens} from './ReefFootGardens.ts';
 import {plateSurfaceMaps,finishPlateMaterial} from './PlateSurface.ts';
 import {encrustingSurfaceMaps,finishEncrustingMaterial} from './EncrustingSurface.ts';
@@ -295,7 +296,7 @@ export async function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments,ass
  rockStats.bufferBytes=Object.values(rockMesh.geometry.attributes).reduce((n,a)=>n+a.array.byteLength,0)+rockMesh.geometry.index!.array.byteLength;
  rockStats.expandedBufferBytes=rockMesh.geometry.index!.count*11*4;
  const buttressStats=buttress.stats;
- const sand:T.Mesh<T.BufferGeometry,T.MeshStandardMaterial>=new T.Mesh(new T.PlaneGeometry(10.06,4.61,160,74),new T.MeshStandardMaterial({map:sandTex,bumpMap:sandTex,bumpScale:.018,roughness:1,color:'#e4e8f0',vertexColors:true}));sand.rotation.x=-Math.PI/2;const sandPositions=sand.geometry.getAttribute('position'),sandColors=new Float32Array(sandPositions.count*3);
+ const sand:T.Mesh<T.BufferGeometry,T.MeshStandardMaterial>=new T.Mesh(new T.PlaneGeometry(10.06,4.61,160,74),finishSandMaterial(new T.MeshStandardMaterial({map:sandTex,bumpMap:sandTex,bumpScale:.018,roughness:1,color:'#bcc4de',vertexColors:true})));sand.rotation.x=-Math.PI/2;const sandPositions=sand.geometry.getAttribute('position'),sandColors=new Float32Array(sandPositions.count*3);
  for(let i=0;i<sandPositions.count;i++){
   const x=sandPositions.getX(i),z=-sandPositions.getY(i),bank=sandBank(x,z);
   sandPositions.setZ(i,sandHeight(x,z));
