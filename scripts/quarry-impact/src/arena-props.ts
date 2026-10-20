@@ -13,6 +13,9 @@ export const ARENA_PROP_SPOTS:Record<string,readonly PropSpot[]>={
   // Flat classic bowls (floor + ring wall only). They also host online derbies, where props are switched off.
   'harrow-bowl-v1':[...ring(8,4,Math.PI/4).map(p=>({kind:'tyres' as const,...p})),...ring(43,10).map(p=>({kind:'drum' as const,...p}))],
   'wrenford-pit-v1':[...ring(7,3).map(p=>({kind:'tyres' as const,...p})),...ring(35,8,Math.PI/8).map(p=>({kind:'drum' as const,...p}))],
+  // Heightfield arenas, placed on their flat bands (Foundry yard r < 38, Briarhill between crest and banks 20–40 m).
+  'foundry-yard-v1':[...ring(10,4,Math.PI/4).map(p=>({kind:'tyres' as const,...p})),...ring(24,8,Math.PI/8).map(p=>({kind:'drum' as const,...p}))],
+  'briarhill-bowl-v1':[...ring(22,5).map(p=>({kind:'tyres' as const,...p})),...ring(28,8,Math.PI/8).map(p=>({kind:'drum' as const,...p}))],
   'moorfield-speedbowl-v1':[...[-24,-12,0,12,24].flatMap(x=>[{kind:'drum' as const,x,z:31},{kind:'drum' as const,x,z:-31}]),...[[60,8],[60,-8],[-60,8],[-60,-8]].map(([x,z])=>({kind:'tyres' as const,x,z}))],
 };
 export const TYRES_PER_STACK=3;

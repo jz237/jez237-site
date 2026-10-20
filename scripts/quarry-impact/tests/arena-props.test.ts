@@ -21,7 +21,7 @@ test('loose arena props stand still until struck, fly when hit, and reset for th
    if(online){loose.reset(false);assert.ok(loose.props.every(p=>!p.mesh.visible&&!p.body.isEnabled()),arena+' online events switch props off');loose.reset(true);assert.ok(loose.props.every(p=>p.mesh.visible&&p.body.isEnabled()));}
   }finally{loose.dispose();world.free();}
  }
- assert.equal(arenaPropCount('foundry-yard-v1'),0);assert.equal(arenaPropCount(undefined),0);
+ assert.equal(arenaPropCount('quarry-arena-v1'),0,'the Quarry keeps its own barrels and tyres');assert.equal(arenaPropCount(undefined),0);
 });
 test('replays recorded before an arena had loose props still load with none',()=>{
  assert.deepEqual(quarryReplayProps([1,2,3],0),[]);assert.deepEqual(quarryReplayProps([1,2,3],3),[1,2,3]);assert.throws(()=>quarryReplayProps([1,2,3],2));
