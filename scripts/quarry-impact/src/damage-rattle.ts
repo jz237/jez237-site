@@ -3,7 +3,7 @@
  * metallic clanks (a few inharmonic damped partials over a click) and a low rubbery thump. */
 const clamp01=(v:number)=>Math.max(0,Math.min(1,Number.isFinite(v)?v:0));
 const smooth=(x:number,a:number,b:number)=>{const t=clamp01((x-a)/(b-a));return t*t*(3-2*t);};
-export const RATTLE={onset:.12,full:.9,maxRate:9,thumpOnset:.25,hearing:45,variants:4} as const;
+export const RATTLE={onset:.12,full:.9,maxRate:9,thumpOnset:.18,hearing:45,variants:4} as const;
 /** Clanks per second from the loosest hanging part, speed (m/s) and surface roughness (0 tarmac … 1 gravel). */
 export function rattleRate(loose:number,speed:number,rough=0){
   const l=smooth(loose,RATTLE.onset,RATTLE.full);if(l<=0)return 0;

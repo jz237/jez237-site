@@ -40,7 +40,7 @@ import {puddleDepth,type Puddle} from './puddle-splashes';
 import {wheelResponse,TireContact} from './wheel-mechanics';
 import {wheelTearsOff} from './wheel-physics';
 import {EngineMisfire} from './engine-misfire';
-import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowoutImpulse} from './damage-handling';
+import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowoutImpulse,bentRimTyre} from './damage-handling';
 import {leakRates,dripInterval} from './fluid-leaks';
 /** Panels hanging at least this loose build wind load above this speed (m/s) until they tear away. */
 export const WIND_RIP={loose:.25,speed:16} as const;
@@ -368,7 +368,7 @@ export class Vehicle {
     this.gearLimit=this.extendedDamage?gearLimit(this.structuralDamage,isFrontDriveKind(this.kind)?'front':(this.kind==='coupe'||isClassicKind(this.kind)&&this.kind!=='trail')?'rear':'all'):5;
     for(let i=0;i<4;i++){this.brakeBias[i]=this.extendedDamage?brakeFactor(this.wreckParts.wheelDamage[i]):1;this.damperBias[i]=this.extendedDamage?damperFactor(this.wreckParts.wheelDamage[i]):1;}
     if(this.extendedDamage)this.fluids(dt);
-    if(this.extendedDamage&&this.tyreDamage)for(let i=0;i<4;i++)if(!this.wreckParts.wheelLost[i])this.tyreDamage[i]=leakTyre(this.tyreDamage[i],this.speed,dt);
+    if(this.extendedDamage&&this.tyreDamage)for(let i=0;i<4;i++)if(!this.wreckParts.wheelLost[i])this.tyreDamage[i]=leakTyre(bentRimTyre(this.tyreDamage[i],this.wreckParts.wheelDamage[i]),this.speed,dt);
     if(this.extendedDamage&&this.tyreDamage)for(let i=0;i<4;i++){
       // Only a sudden failure (a hit) bursts; a slow puncture going flat just sags.
       const failure=tyreFailure(this.tyreDamage[i]),was=this.lastFailure[i];this.lastFailure[i]=failure;

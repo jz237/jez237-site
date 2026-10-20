@@ -20,6 +20,13 @@ export function leakTyre(damage:number,speed:number,dt:number){
   const severity=(damage-LEAK.onset)/(LEAK.flat-LEAK.onset),rolling=Math.min(1,Math.abs(Number.isFinite(speed)?speed:0)/15);
   return Math.min(LEAK.flat,damage+dt*LEAK.rate*(.35+severity)*rolling);
 }
+/** A rim bent past BENT_RIM.onset breaks the tyre's bead seal: the tyre is at least at the slow-puncture onset,
+ * more the worse the bend, and leakTyre takes it from there. */
+export const BENT_RIM={onset:.18,gain:.4} as const;
+export function bentRimTyre(tyreDamage:number,wheelDamage:number){
+  if(!Number.isFinite(wheelDamage)||wheelDamage<BENT_RIM.onset)return tyreDamage;
+  return Math.max(Number.isFinite(tyreDamage)?tyreDamage:0,LEAK.onset+(Math.min(1,wheelDamage)-BENT_RIM.onset)*BENT_RIM.gain);
+}
 /** A damaged corner's damper loses up to DAMPER_LOSS of its damping, so it bounces and wallows. */
 /** Gearbox damage: crushing the driven end of the car past GEARBOX.onset strips the top gear, then more,
  * down to GEARBOX.min gears, which caps top speed. */
