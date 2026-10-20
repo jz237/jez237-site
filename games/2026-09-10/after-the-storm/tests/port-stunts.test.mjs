@@ -27,6 +27,7 @@ test('ordinary controls clear every Port ring, three jumps and the roofed tunnel
  if(passageDistance({path:s.course.passage.structurePath},r.x,r.z)<s.course.passage.width&&r.hydro.y+1.1<s.course.passage.clearance)inside++;
  if(r.hydro.onRamp)ramps.add(s.course.ramps.reduce((a,b)=>Math.hypot(r.x-a.x,r.z-a.z)<Math.hypot(r.x-b.x,r.z-b.z)?a:b).id);
  }
- assert.equal(s.phase,'results');assert.equal(r.dq,'');assert.equal(r.stunt.rings,16);assert.equal(r.stunt.chain,16);assert.equal(r.stunt.nextCheckpoint,4);assert.equal(r.stunt.crashes,0);assert.equal(r.stunt.completedTricks.flip,true);assert.equal(ramps.size,3);assert.equal(r.hydro.landingId,3);assert.equal(impacts,0);assert.ok(inside>600);
+ assert.equal(s.phase,'results');assert.equal(r.dq,'');assert.equal(r.stunt.rings,16);assert.equal(r.stunt.chain,16);assert.equal(r.stunt.nextCheckpoint,4);assert.equal(r.stunt.crashes,0);assert.equal(r.stunt.completedTricks.flip,true);assert.equal(ramps.size,3);// Venue water is the original swell: wave hops land too, beyond the three ramp jumps.
+ assert.ok(r.hydro.landingId>=3);assert.equal(impacts,0);assert.ok(inside>600);
  }
 });

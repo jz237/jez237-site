@@ -1,16 +1,17 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import {getCourse} from '../courses.js';import {createRace,stepRace} from '../race-core.js';import {verificationInput} from '../race-verification.js';
 test('a timed wave carries the hull across the northern Fortress ridge without impacts or phantom buoy misses',()=>{
- // Recalibrated for the current acceleration: the supporting crest arrives
- // after roughly six seconds at the holding point, not the old 4.5-second trough.
- for(const ridgeWait of [5.9,6,6.1]){const c=getCourse('citadel'),s=createRace({course:c}),r=s.racers[0];s.verifyFortressRidge=true;s.ridgeWait=ridgeWait;let ridgeFrames=0,hits=0,clearance=Infinity;
+ // On the default Big surf sea the supporting crest arrives after about a
+ // second at the holding point (clean from 0.3 to 1.9 s). Venue water is the
+ // original swell, which this Modern hull cannot ride over the ridge.
+ for(const ridgeWait of [.9,1,1.1]){const c=getCourse('citadel'),s=createRace({course:c,seaState:'surf'}),r=s.racers[0];s.verifyFortressRidge=true;s.ridgeWait=ridgeWait;let ridgeFrames=0,hits=0,clearance=Infinity;
  for(let i=0;i<36000&&s.phase!=='results';i++){
   stepRace(s,verificationInput(s,r),1/60);
   if(r.fortressRidge&&!r.fortressRidge.done){hits+=r.collision>0;const bed=c.ground(r.x,r.z);if(bed>0){ridgeFrames++;clearance=Math.min(clearance,r.hydro.y-.2-bed);}}
-  if(ridgeWait!==6&&r.fortressRidge?.done)break;
+  if(ridgeWait!==1&&r.fortressRidge?.done)break;
  }
  assert.ok(r.fortressRidge?.done);assert.ok(ridgeFrames>20);assert.ok(clearance>.15);assert.equal(hits,0);assert.equal(r.misses,0);assert.equal(r.dq,'');
- if(ridgeWait===6){assert.equal(s.phase,'results');assert.equal(r.passed,c.gates.length*3);}
+ if(ridgeWait===1){assert.equal(s.phase,'results');assert.equal(r.passed,c.gates.length*3);}
  }
 });
 

@@ -33,7 +33,9 @@ test('whitewater bores run in and stop at the waterline, then swash up a bounded
 
 test('exposed beaches break often, swell size sets breaker height, and walled venues stay calm',()=>{
  const calm=ride('greyhaven','course',40),surf=ride('greyhaven','surf',40),city=ride('neon','course',20);
- assert.ok(calm.b.stats.emitted>15&&surf.b.stats.emitted>15,`${calm.b.stats.emitted} ${surf.b.stats.emitted}`);
+ // Venue water is the original swell (amplitude 20 here): it breaks about every
+ // three seconds; Big surf breaks far more often.
+ assert.ok(calm.b.stats.emitted>=10&&surf.b.stats.emitted>2*calm.b.stats.emitted,`${calm.b.stats.emitted} ${surf.b.stats.emitted}`);
  const median=h=>h[h.length>>1];assert.ok(median(surf.heights)>median(calm.heights));
  assert.ok(surf.heights.every(h=>h>=.18&&h<=2.2));
  assert.ok(NO_BEACH.includes('city'));assert.equal(city.b.stats.emitted,0);

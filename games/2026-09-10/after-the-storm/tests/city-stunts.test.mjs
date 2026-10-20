@@ -15,7 +15,8 @@ test('Twilight opening branches collect their separate rings through ordinary co
  // Isolate the mutually exclusive opening rings; complete inner and outer
  // routes, including checkpoint timing, are checked separately below.
  for(const outer of [false,true]){
-  const s=createRace({mode:'stunt',course:getCourse('neon')}),r=s.racers[0];
+  // Layout check on calm water: the venue swell is not what this pilot is testing.
+  const s=createRace({mode:'stunt',course:getCourse('neon'),seaState:'calm'}),r=s.racers[0];
   s.verifyStuntOuter=outer;
   const wanted=outer?[6,7,8]:[0,1,2,3,4,5],other=outer?[0,1,2,3,4,5]:[6,7,8];
   for(let i=0;i<2400&&!wanted.every(j=>r.stunt.ringStatus[j]==='hit')&&s.phase!=='results';i++)stepRace(s,verificationInput(s,r),1/60);
@@ -47,7 +48,8 @@ test('Twilight finish metal floats stop a surface hull and survive course conver
 
 test('Twilight inner route clears all fourteen selected rings and four checkpoints',()=>{
  for(let difficulty=0;difficulty<4;difficulty++){
-  const s=createRace({mode:'stunt',course:getCourse('neon',difficulty)}),r=s.racers[0];
+  // Layout check on calm water: the venue swell is not what this pilot is testing.
+  const s=createRace({mode:'stunt',course:getCourse('neon',difficulty),seaState:'calm'}),r=s.racers[0];
   for(let i=0;i<10000&&s.phase!=='results';i++)stepRace(s,verificationInput(s,r),1/60);
   assert.equal(s.phase,'results');assert.equal(r.dq,'');
   assert.equal(r.stunt.rings,14);assert.equal(r.stunt.nextCheckpoint,4);
