@@ -1,6 +1,12 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
-## Unpublished — Dolphin Park preview before the Normal warm-up
+## v2.44.0 — Original Championship, Stunt wildlife and Original two-player races
+
+Original physics now covers the whole cup (warm-up, flyovers, ending and record
+initials), Stunt with its wildlife and effects, and two-player races in split
+screen, Player 2's own window and online. The entries below record each step.
+
+### Dolphin Park preview before the Normal warm-up
 
 The Normal cup's round 0 is course 0. The original reaches it like every
 round, through the championship return (801EB91C) and the course
@@ -12,7 +18,7 @@ about 10.7 s, a rising shot that tilts from 17 to 41 degrees up towards the
 sky, with the one dolphin its script spawns. It can be skipped like the
 other flyovers.
 
-## Unpublished — original effects in Player 2's own window
+### original effects in Player 2's own window
 
 In the separate-window layout the host now sends Player 2's view of the
 original effects (933C4 view 1, already placed on the rendered water) with
@@ -26,7 +32,7 @@ renderer instead of its own spray. Two-browser checks on Sunset Bay showed 13
 original effect batches in Player 2's window and 9 to 12 on an online guest
 while both riders raced; a packed online frame stays well under 64 KB.
 
-## Unpublished — Original two-player races online
+### Original two-player races online
 
 Online two-player races now offer Original physics too. The host already owns
 both riders and streams the same window frames, which carry native rider poses,
@@ -37,7 +43,7 @@ Blue counted down and ran at 60 fps on the host for more than 20 s with the
 guest connected and never on hold. The guest also receives the original
 per-view effects (see the next entry).
 
-## Unpublished — Original two-player races in Player 2's own window
+### Original two-player races in Player 2's own window
 
 The separate-window layout (Player 2 on a second screen) now offers Original
 physics too. Its frames already carried native rider poses and telemetry; the
@@ -47,7 +53,7 @@ and its source countdown counts as running. Race start now restarts that stall
 clock. Player 2's window draws its own spray: the original per-view effects
 are shown in the main window's view only. Online play stays modern.
 
-## Unpublished — original wake and spray in two-player races
+### original wake and spray in two-player races
 
 The original display stage (9328C) draws once with one player. With two it
 sets AB2C to 0, runs the per-view display 933C4 (which includes ADF90 and the
@@ -60,7 +66,7 @@ screen. Both riders' audio spray levels match the earlier spray reconstruction
 on every frame, and the split screen holds about 60 fps. Replay records the
 first view's effects.
 
-## Unpublished — Original physics for local two-player races
+### Original physics for local two-player races
 
 The native two-player race (mode 1: original countdown, catch-up assistance,
 missed-buoy rules and results) was only reachable from verification links. It
@@ -71,7 +77,7 @@ faults (Sunny Beach, Sunset Bay, Marine Fortress, Port Blue, Twilight City,
 Glacier Coast, Southern Island, Drake Lake); the browser split screen runs at
 60 fps. Online play and the separate-window layout stay modern.
 
-## Unpublished — round 1 enters through the original course introduction
+### round 1 enters through the original course introduction
 
 Every original cup round starts through the championship return (801EB91C),
 which picks the course from the class order at the current round, then the i3
@@ -90,7 +96,7 @@ only what its camera script spawns: Sunset Bay's three dolphins, none on Sunny
 Beach. This game's own finish arch sits close to the original path, so the
 Sunny Beach flyover briefly passes right by its banner.
 
-## Unpublished — course wildlife in the cup-round flyover
+### course wildlife in the cup-round flyover
 
 The main8 course introduction now loads the next course's actor banks and runs
 AC184 on its own state copy, using the same startup inputs as the race, then
@@ -101,7 +107,7 @@ second shot. In main8 AC184 returns before spawning course actors, and the
 reconstructed main8 frame order (86148, 665B0, DDE48, water, 8E794, 6E3A8,
 B2ABC, overlay) has no AD418, so only script-driven actors appear.
 
-## Unpublished — Original Stunt mastery unlocks the dolphin ride
+### Original Stunt mastery unlocks the dolphin ride
 
 Original Stunt on Dolphin Park grants mastery (race word 2930) once every ring
 and trick is complete, and its result then sets save bit B280|0x10 through
@@ -111,7 +117,7 @@ Dolphin Park ride (the same one the modern stunt challenge opens), the result
 dialog announces it, and saved records that already carry the bit unlock it
 on the next load.
 
-## Unpublished — Dolphin Park warm-up opens the Normal cup
+### Dolphin Park warm-up opens the Normal cup
 
 The original Normal cup order starts at course 0. Its main configuration
 (9345C) enters Dolphin Park in free play (phase 3, simulation 3) for every mode
@@ -125,7 +131,7 @@ round 1 at Sunny Beach, and Restart repeats the warm-up. Not reconstructed: the
 warm-up's own exit through the championship return (801EB91C), which would also
 give round 1 its course introduction; round 1 still uses the direct launch.
 
-## Unpublished — original wake drawn on the high-resolution water
+### original wake drawn on the high-resolution water
 
 The original places wake, spray and splash against its physics water plane
 (4D30C queries), but the high-resolution water draws the exact rendered
@@ -137,7 +143,7 @@ their own X/Z before drawing, live and in replay (replay restores the frame's
 water first). Droplets in the air keep their geometry, and canonical effect
 state is unchanged. The wake now reads as continuous foam on the surface.
 
-## Unpublished — championship record initials after the ending
+### championship record initials after the ending
 
 When the ending exits to the records screen (a course record flag is set), the
 browser now runs the original championship initials entry: state 100/101 on
@@ -149,7 +155,7 @@ the records browser (state 66, main12), which the browser does not host yet;
 it shows the completion dialog with the initials instead. The main6 scene
 updates that precede each phase are not reconstructed.
 
-## Unpublished — default rider names in a fresh save
+### default rider names in a fresh save
 
 The original's default save gives each base avatar a name in the form
 "R.HAYAMI" (initial and surname in capitals, 11 bytes, then default tuning
@@ -160,7 +166,7 @@ rider's name). As in the original, record name entry starts from the first
 three characters (for example "M.V"), which the name wheel's "." supports.
 Saved record sessions keep the names they already hold.
 
-## Unpublished — original championship ending after the final round
+### original championship ending after the final round
 
 After a qualified final round the result offers "Watch the ending →". It runs
 the original 94ACC round awards once (the final round skips the standings,
@@ -187,7 +193,7 @@ Fixed in the same change: a continued Championship round kept the previous
 course's alternate-route count. Southern Island then refused its wildlife. A
 continued round now installs its own count, as a fresh launch does.
 
-## Unpublished — original course-introduction flyover between cup rounds
+### original course-introduction flyover between cup rounds
 
 Before each native Championship round after the first, the browser now plays
 the original main8 course introduction: the type5→6 camera initialization and
@@ -210,7 +216,7 @@ resources"). A continued round now loads its course's banks into the actor and
 effect storage the previous round retained, and still runs the course display
 setup, which overwrites its owners on every course load.
 
-## Unpublished — course wildlife in Original Stunt, including Dolphin Park
+### course wildlife in Original Stunt, including Dolphin Park
 
 The original startup (926F4) runs AC184, then AE7C4, for every scene, and its
 banks load by course, so Stunt (mode 11) has the same wildlife as a race.
@@ -224,7 +230,7 @@ separate effects owner. In headless software rendering, Dolphin Park Stunt
 runs at about 46–52 fps, close to the existing Dolphin Practice scene (about
 51–58); Drake Lake and Twilight City hold 59–60.
 
-## Unpublished — original wake and spray in Original Stunt
+### original wake and spray in Original Stunt
 
 Original Stunt (mode 11) now runs the same B2ABC/B305C scene-effects owner as
 Time Trial and Championship on all eight stunt courses outside Dolphin Park,
@@ -235,7 +241,7 @@ Glacier Coast hold 60 fps. The Dolphin Park venue still uses the simpler owner,
 because its effect slot needs the dolphin actor pool. High-resolution
 presentation is preserved.
 
-## Unpublished — Port Blue submarine; every course actor modelled
+### Port Blue submarine; every course actor modelled
 
 Port Blue's special actor (bank 7) is a red submarine cruising 3–10 m below
 the surface: a 45 m hull along +Z with viewports, a sail and stern fins, plus
@@ -246,7 +252,7 @@ rigid-part renderer; in game it held 56–60 fps. Every original course actor
 on every course now has a high-resolution model: dolphins, three reef-fish
 species, gulls, mallards, lake fish, king penguins and the submarine.
 
-## Unpublished — course actors on Marine Fortress, Port Blue and Southern Island
+### course actors on Marine Fortress, Port Blue and Southern Island
 
 The original secondary/tertiary actor-route pointers for these courses select
 exactly the rows the course runtime already loads as alternate route families
@@ -259,7 +265,7 @@ rival-engine channel, so the value is 0 on both paths. Every course except
 Twilight City (which has no course actors) now runs its original actors in
 Original Time trial and Championship.
 
-## Unpublished — Glacier Coast king penguins
+### Glacier Coast king penguins
 
 Glacier Coast's five special actors (bank 8, draw type 13) are swimming king
 penguins: a torpedo body (part 12, back +Y), a head with a long bill (part 8),
@@ -273,7 +279,7 @@ Sunny Beach, Sunset Bay, Drake Lake and Glacier Coast has a high-resolution
 model; Marine Fortress, Port Blue and Southern Island still need their extra
 actor route families.
 
-## Unpublished — Drake Lake lake fish
+### Drake Lake lake fish
 
 Bank 4, Drake Lake's swimmers, is one long silvery lake fish built like the
 reef fish: three side-view slices (head 12, middle 8, tail 16; 150/150/100
@@ -283,7 +289,7 @@ faint rose band, pale belly, forked tail). Species selection is now
 bank-aware, because the trout reuses the clownfish's part offsets. Glacier
 Coast's special actors (bank 8, likely penguins) remain unmodelled.
 
-## Unpublished — Sunny Beach gulls and Drake Lake mallards
+### Sunny Beach gulls and Drake Lake mallards
 
 Banks 3 and 6 are birds: a flying body (part 8), two wings of three flat
 slices (parts 12/16/20, joint at x=0, leading edge +Y) and a sitting body
@@ -295,7 +301,7 @@ In game, Sunny Beach showed five gulls and six fish together and Drake Lake
 six mallards, at 58–60 fps. Drake Lake's swimmers (bank 4) and Glacier
 Coast's special actors (bank 8) still have no models.
 
-## Unpublished — original course wildlife beyond Dolphin Park
+### original course wildlife beyond Dolphin Park
 
 Original Time trial and Championship now run the original course actors on
 Sunny Beach, Sunset Bay, Drake Lake and Glacier Coast. In the original their
@@ -312,7 +318,7 @@ Browser checks: Sunset Bay and Sunny Beach Time trials held 60 fps with
 actors and wake; a Championship round with actors, four effect slots and
 four racers ran 33–40 fps for its first nine seconds, then held 60.
 
-## Unpublished — original wake and spray in Championship; cheaper state copies
+### original wake and spray in Championship; cheaper state copies
 
 Original Championship now runs the full scene-effects owner with four slots,
 one per racer, replacing the human-only spray owner as in Time trial. Spray
@@ -326,7 +332,7 @@ the browser it holds 59–60 fps. The full suite passes 3,415 of 3,433 with
 only the 18 known older failures. A sustained check of round 2 showed 53–60
 fps, so the earlier 28 fps reading was transient.
 
-## Unpublished — Original Championship from the normal menu
+### Original Championship from the normal menu
 
 Championship now offers Physics: Original · Wave Race 64. An original cup
 starts at its class's first course (Normal skips the Dolphin warm-up), races
@@ -343,7 +349,7 @@ original 7/4/2/1 points and started round 2 there. Four racers ran at 54–60
 fps in round 1; a brief 28 fps reading early in round 2 still needs checking.
 The original wake/spray owner is not yet used in Championship.
 
-## Unpublished — full native Normal cup and its final round
+### full native Normal cup and its final round
 
 A complete Normal cup now runs headlessly from Sunny Beach to Southern Island
 in the original order, chaining every round through the continuation. The
@@ -356,7 +362,7 @@ final-round state (7 KB) keeps this tested. Not yet connected: the browser
 cup screens, elimination (the standings' game-over destination), the
 original ending ceremony scene and unlocks.
 
-## Unpublished — native Championship continues round to round
+### native Championship continues round to round
 
 After the original standings hand back to the championship, the new
 continuation runs the original return (801EB91C) and the i3 course
@@ -370,7 +376,7 @@ the original order. The browser still shows its own screen in place of the
 course preview, and the final round, elimination and ending are not yet
 connected; native Championship is not on the menu yet.
 
-## Unpublished — native Championship races on every cup course
+### native Championship races on every cup course
 
 A headless audit drove native Championship rounds (four racers, original AI)
 on eight cup courses across all three classes. Marine Fortress, Port Blue and
@@ -382,7 +388,7 @@ times. Twilight is not in the Normal cup (its slot is Southern Island).
 Native Championship is still not offered from the menu: the multi-round
 handoff (points carried into the next course and its introduction) is next.
 
-## Unpublished — Original Stunt mode from the normal menu
+### Original Stunt mode from the normal menu
 
 Stunt run now shares the Physics choice on all nine source venues, including
 Dolphin Park. Original runs the recovered stunt scene: rings and chains,
