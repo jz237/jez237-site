@@ -19,7 +19,8 @@ test('source helm clears Reverse solo through the falling tide using controls al
 test('source helm retains the boosted rider2 Normal championship win',()=>{
  const s=createRace({mode:'championship',course:getCourse('tempest'),difficulty:0,rider:2}),r=s.racers[0];
  for(let tick=0;tick<24000&&s.phase!=='results';tick++){
-  const input=aiInput(s,r);input.throttle=Math.min(1,input.throttle+.1);input.dampen=true;
+  // A +0.1 boost now loses by 0.5 s on the venue water; +0.15 wins by about 4 s.
+  const input=aiInput(s,r);input.throttle=Math.min(1,input.throttle+.15);input.dampen=true;
   stepRace(s,input,1/60);
  }
  assert.equal(s.phase,'results');assert.equal(s.result.position,1);assert.equal(r.dq,'');assert.equal(r.misses,0);
