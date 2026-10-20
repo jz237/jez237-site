@@ -1,6 +1,7 @@
 import * as T from 'three';
 import type {Vehicle} from './vehicle';
 import type {GlassState} from './car-materials';
+import {updateCrumple} from './wreck-normals';
 
 const attributes=['position','normal','impactWear','impactAxis','transferPaint'] as const;
 const scalars=['health','engineDamage','engineStall','damageLeft','damageRight','lastHit','lastDamage','impactSerial','scraping'] as const;
@@ -44,6 +45,7 @@ export function captureReplayCheckpoint(cars:readonly Vehicle[],limit:number){
    for(const m of s.meshes){
     m.mesh.userData.damage=m.damage;if(m.shift)m.mesh.userData.engineShift=m.shift.clone();else delete m.mesh.userData.engineShift;
     for(const b of m.buffers){const a=m.mesh.geometry.getAttribute(b.name) as T.BufferAttribute;a.array.set(b.array);a.needsUpdate=true;}
+    updateCrumple(m.mesh); // derived from the restored positions, so it is not stored
     m.mesh.geometry.boundingBox=m.box?.clone()??null;m.mesh.geometry.boundingSphere=m.sphere?.clone()??null;
     (m.mesh.material as T.Material).opacity=m.opacity;
     const glass=(m.mesh.material as T.Material).userData.glassState as GlassState|undefined;

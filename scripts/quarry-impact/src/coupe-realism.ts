@@ -57,7 +57,7 @@ float scrapeLines=mix(smoothstep(.65,.92,abs(sin(across+bodySilt(vBodyPosition*2
         // remove it from scraped metal after that assignment, before lighting.
         s.fragmentShader = s.fragmentShader.replace('#include <lights_physical_fragment>', '#include <lights_physical_fragment>\n#ifdef USE_CLEARCOAT\nmaterial.clearcoat *= 1.-clamp(bareMetal+scratch*.5+dust*.7,0.,1.);\nmaterial.clearcoatRoughness=clamp(material.clearcoatRoughness+dust*.42+scratch*.24,.04,1.);\n#endif');
       };
-      m.customProgramCacheKey = () => 'coupe-paint-contact-wear-1';
+      m.customProgramCacheKey = () => 'coupe-paint-contact-wear-crumple-1';
     } else if (o.name.startsWith('glass_')) {
       m.color.setHex(0x34404c); m.opacity = .24; m.metalness = .04;
       m.roughness = .065; m.envMapIntensity = .9;

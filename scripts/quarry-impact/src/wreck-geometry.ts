@@ -1,10 +1,10 @@
 import {queueWreckNormals,cancelWreckNormals} from './wreck-batch';
-import {computeWreckNormals,computeWreckBounds} from './wreck-normals';
+import {computeWreckNormals,computeWreckBounds,updateCrumple} from './wreck-normals';
 import * as T from 'three';
 import { finishCoupeNormals,stampCoupeImpact } from './coupe-realism';
 import {constructionResponse,type ConstructionRole} from './vehicle-construction';
 const impactBounds = new T.Box3();
-const finishNormals=(mesh:T.Mesh)=>{computeWreckNormals(mesh.geometry);finishCoupeNormals(mesh);};
+const finishNormals=(mesh:T.Mesh)=>{computeWreckNormals(mesh.geometry);finishCoupeNormals(mesh);updateCrumple(mesh);};
 
 /** Every skin, seal, window and inner panel is bent in metres in the same
  * vehicle frame. Mesh origins and export transforms must not open seams. */
@@ -36,6 +36,7 @@ export function prepareWreckGeometry(root: T.Group) {
     object.geometry.setAttribute('restPosition',new T.BufferAttribute(new Float32Array(object.userData.original),3));
     object.geometry.setAttribute('impactAxis',new T.BufferAttribute(new Float32Array(rest.count*3),3));
     object.geometry.setAttribute('transferPaint',new T.BufferAttribute(new Float32Array(rest.count*4),4));
+    object.geometry.setAttribute('crumple',new T.BufferAttribute(new Float32Array(rest.count*3),3));
     const bounds = new T.Box3().setFromBufferAttribute(rest);
     const name = object.name.toLowerCase();
     object.userData.detachAssembly = name.includes('mirror') ? (bounds.getCenter(new T.Vector3()).x < 0 ? 'mirror-left' : 'mirror-right')
@@ -137,6 +138,7 @@ export function repairWreckGeometry(mesh: T.Mesh) {
   if (g.attributes.impactWear) { (g.attributes.impactWear.array as Float32Array).fill(0); g.attributes.impactWear.needsUpdate = true; }
   if (g.attributes.impactAxis) { (g.attributes.impactAxis.array as Float32Array).fill(0); g.attributes.impactAxis.needsUpdate = true; }
   if(g.attributes.transferPaint){(g.attributes.transferPaint.array as Float32Array).fill(0);g.attributes.transferPaint.needsUpdate=true;}
+  if(g.attributes.crumple){(g.attributes.crumple.array as Float32Array).fill(0);g.attributes.crumple.needsUpdate=true;}
   mesh.userData.engineShift?.set(0,0,0);
   computeWreckBounds(g);
 }

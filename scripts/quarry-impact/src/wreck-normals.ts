@@ -45,3 +45,10 @@ export function computeWreckBounds(g:T.BufferGeometry){
  for(let i=0;i<p.length;i+=3){const dx=x-p[i],dy=y-p[i+1],dz=z-p[i+2];radiusSquared=Math.max(radiusSquared,dx*dx+dy*dy+dz*dz);}
  sphere.radius=Math.sqrt(radiusSquared);
 }
+/** Per-vertex displacement from the authored shape (mesh space), read by the paint shader to draw
+ * creases, wrinkles and cracked paint where the metal has actually moved. Zero when absent. */
+export function updateCrumple(mesh:T.Mesh){
+  const g=mesh.geometry,crumple=g.attributes.crumple as T.BufferAttribute|undefined,original=mesh.userData.original as Float32Array|undefined;
+  if(!crumple||!original)return;const p=g.attributes.position.array as ArrayLike<number>,c=crumple.array as Float32Array;
+  for(let i=0;i<c.length;i++)c[i]=p[i]-original[i];crumple.needsUpdate=true;
+}
