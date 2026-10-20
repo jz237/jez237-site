@@ -191,7 +191,7 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
    ...(recovery?{riderRecovery:{courseDatumNative:()=>water.field.datumNative,raceFinished:()=>r.finishTime!==null,...bundle.initialRiderRecovery}}:{})});
  });
  const objectTransformResources=objects?raceRuntime.objectTransformResources:null;
- const host={sourceSchedule,racers,bundles,contacts,primary,primaryActive,objects,ice,floating,floatingActive,presentations:[],onFrame,raceRuntime,onLaunchFrame,world:null,
+ const host={ceremony:false,sourceSchedule,racers,bundles,contacts,primary,primaryActive,objects,ice,floating,floatingActive,presentations:[],onFrame,raceRuntime,onLaunchFrame,world:null,
   courseActorMotionInputs({retainedWordsEe20}={}){
    if(!sourceSchedule||!primary||!host.world||water.frames<1||
      primary.diagnostics().outerFrames!==water.frames||adapters.some(a=>a.logicalFrames!==water.frames))
@@ -303,19 +303,24 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
  host.world=createNativeRaceWorld({adapters,water,humanIndices,craftContacts,deferWaterRollers:sourceSchedule,
  beforeFrame:sourceSchedule?(world,context)=>{
   //47B00/BF370 precedes922E4 in46DA0's outer game loop.
-  if(onAudioFrame)onAudioFrame(host,context);
+  // During the ending the overlay keeps menu-owned audio (no physical handoff).
+  if(onAudioFrame&&!host.ceremony)onAudioFrame(host,context);
   //46D2C is after audio47B00 and before922E4, including simulation0.
   // This callback starts one source outer frame, not each of its five hull
   // ticks. Global browser suspension does not execute a source iteration.
   host.lastGraphicsBuffer=raceRuntime.advanceGraphicsBuffer();
   //6A264 at922E4 entry precedes control/input and physical world work.
   host.lastSourceFrameCounter=raceRuntime.advanceSourceFrameCounter();
-  const menu=typeof host.menuInputs==='function'?host.menuInputs(context.time,context.logicalFrame):host.menuInputs??[];
-  if(!Array.isArray(menu))throw new TypeError('Menu inputs must be a human-controller array');
-  host.lastMenuInput=raceRuntime.advanceMenuInput(menu.map(value=>{
-   const controls=typeof value==='function'?value(context.time,context.logicalFrame):value;
-   return nativeHostMenuInput(controls);
-  }));
+  // The championship ending's own phase samples the controller after the
+  // world (main21); the ceremony world frame must not sample it again.
+  if(!host.ceremony){
+   const menu=typeof host.menuInputs==='function'?host.menuInputs(context.time,context.logicalFrame):host.menuInputs??[];
+   if(!Array.isArray(menu))throw new TypeError('Menu inputs must be a human-controller array');
+   host.lastMenuInput=raceRuntime.advanceMenuInput(menu.map(value=>{
+    const controls=typeof value==='function'?value(context.time,context.logicalFrame):value;
+    return nativeHostMenuInput(controls);
+   }));
+  }
   host.lastNavigation=raceRuntime.advanceNavigation({
    bodiesBySlot:world.adapters.map(a=>({avatar:a.hull.rider,position:{x:a.hull.center.x,z:a.hull.center.z}})),
    nodePositions:primary.snapshot().map(n=>({sourceRow:n.sourceRow,x:n.position.x,z:n.position.z}))});
@@ -341,7 +346,7 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
   applyNativeRiderResultCodes(lifecycles,selected.operations);
   a.lastResultCodeOperations=selected.operations;
  }:null,beforeWater:sourceSchedule?world=>{
-  if(onContactFrame)onContactFrame(host,world);
+  if(onContactFrame&&!host.ceremony)onContactFrame(host,world);
   //51238 observes the preceding lap judge's shared stage after all actors.
   // The water field owns datum; a render-time option cannot reset its tide.
   world.frame.water.datumNative=raceRuntime.waterDatumAfterPhysics(water.field.datumNative);
@@ -350,8 +355,13 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
  },afterFrame:(_,context)=>{
   if(sourceSchedule)host.lastDisplayClock=raceRuntime.advanceDisplayClock();
   present(host);
+  // Championship ending (main21): 922E4 runs the physical world and its
+  // object, effect and actor stages, but skips 6E3A8 judging; the ending
+  // overlay replaces the HUD, status and result stages.
+  const ceremony=host.ceremony;
   let judging=null;
-  if(raceRuntime?.ordinary)judging=raceRuntime.advanceOrdinary({
+  if(ceremony)judging=null;
+  else if(raceRuntime?.ordinary)judging=raceRuntime.advanceOrdinary({
    bodiesBySlot:host.world.adapters.map(nativeRaceBodyFields),
    nodePositionsNative:primary.state.nodes.map(n=>({sourceRow:n.sourceRow,x:n.positionNative.x,z:n.positionNative.z})),
    pressedButtonsB58BySlot:host.world.adapters.map(a=>a.lastControls.pressedButtons)});
@@ -360,18 +370,18 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
    nodePositionsNative:primary.state.nodes.map(n=>({sourceRow:n.sourceRow,x:n.positionNative.x,z:n.positionNative.z})),
    pressedButtonsB58BySlot:host.world.adapters.map(a=>a.lastControls.pressedButtons)});
   else if(raceRuntime)raceRuntime.advanceClock();
-  host.lastStunt=raceRuntime?.stunt?judging:null;
+  host.lastStunt=raceRuntime?.stunt&&!ceremony?judging:null;
   //6A748 observes the completed primary body after79528 and before7DBC0.
-  host.lastStuntRings=raceRuntime?.stunt?raceRuntime.advanceStuntRings(nativeRaceBodyFields(host.world.adapters[0]).positionNative):null;
+  host.lastStuntRings=raceRuntime?.stunt&&!ceremony?raceRuntime.advanceStuntRings(nativeRaceBodyFields(host.world.adapters[0]).positionNative):null;
   if(host.lastStuntRings)judging={...judging,effects:[...judging.effects,...host.lastStuntRings.effects]};
   // Adjudication observes contact-displaced current centers BEFORE the source
   // primary array's one motion pass. All craft share that mutable array.
-  host.lastOrdinary=raceRuntime?.ordinary?judging:null;
+  host.lastOrdinary=raceRuntime?.ordinary&&!ceremony?judging:null;
   // Source6E3A8 reads activity624 after adjudication, before7DBC0. Free
   // objects still move in simulation0 when activity is -1; a browser pause
   // never reaches this frame callback. Keep explicit preview gates as well.
   const objectMotionActive=!sourceSchedule||raceRuntime.objectMotionActive();
-  const keepRunning=host.onFrame?host.onFrame(host,context,judging):undefined;
+  const keepRunning=host.onFrame&&!ceremony?host.onFrame(host,context,judging):undefined;
   if(primary)primary.afterFrame(host.world,context,{active:host.primaryActive&&objectMotionActive});
   if(objects){objects.afterFrame(host.world,context);objects.updateTransforms(host.world,context,objectTransformResources);}
   else if(ice)ice.afterFrame(host.world,context,{active:objectMotionActive});
@@ -393,7 +403,10 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
   //922E4 calls AD418 after B2ABC and before the overlay/HUD update.
   if(host.courseActors)host.advanceCourseActors();
   let launchContinues=true;
-  if(raceRuntime){
+  if(raceRuntime&&ceremony){
+   if(host.courseActors)host.displayCourseActors();
+   if(host.sceneEffects)host.displaySceneEffects();
+  }else if(raceRuntime){
    host.lastHUD=sourceSchedule?raceRuntime.advanceHUD():null;
    //9328C runs ADF90 in the source display stage, once per logical frame.
    if(host.courseActors)host.displayCourseActors();

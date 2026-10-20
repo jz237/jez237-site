@@ -69,7 +69,13 @@ test('a qualified final round enters the original ending state and completes the
  assert.equal(s.phase,'ending');assert.deepEqual([entered.scene.main638,entered.scene.gameStateAb24,entered.scene.courseIndex],[21,102,7]);
  assert.deepEqual(entered.profileWordsB330.slice(4,8),done.totals,'94ACC applies the final round once');
  assert.deepEqual(entered.profileWordsB330.slice(32,36),places.map(p=>POINTS[p]),'final round award slots');
+ const worldFrames=s.nativeHost.world.frames,before=s.racers.map(q=>({x:q.x,z:q.z,lap:q.lap,passed:q.passed,misses:q.misses,finishTime:q.finishTime}));
  assert.equal(fastForwardNativeEnding(s),681,'the ceremony waits 680 frames before the first panel');
+ // Main21 keeps the final race's world running under the overlay, one world
+ // frame per ending frame, without judging: results stay exactly as finished.
+ assert.equal(s.nativeHost.world.frames,worldFrames+681);
+ assert.ok(s.racers.some((q,i)=>Math.hypot(q.x-before[i].x,q.z-before[i].z)>5),'riders keep moving');
+ assert.deepEqual(s.racers.map(q=>({lap:q.lap,passed:q.passed,misses:q.misses,finishTime:q.finishTime})),before.map(({x,z,...rest})=>rest));
  const tokens=new Set();let readyAt=null;
  for(let f=0;f<3000&&s.phase==='ending';f++){
   const a=readyAt!==null&&f%2===0;stepRace(s,{},.05,{menuInputs:[{continue:a}]});

@@ -482,13 +482,20 @@ export function beginNativeChampionshipEnding(s){
  if(s.phase!=='results'||!s.nativeChampionshipComplete||g?.gameStateAb24!==45||g.returnState630!==102)
   throw new Error('The ending follows a completed native championship');
  const q=s.nativeLaunch.advanceChampionshipEnding();s.nativeContactAudio.applyEffects(q.effects);
+ // ECB98 does not restart the world: main21 keeps the final race's water and
+ // riders running (no judging) under the ending overlay.
+ s.nativeHost.ceremony=true;
  s.phase='ending';s.nativeEnding={remainder:0,frames:0,draw:null,view:q.view,handoff:null};
 }
 function advanceNativeEndingFrame(s,raw){
+ // One main21 frame: the physical world first, then the ending overlay.
+ stepNativeRaceHost(s.nativeHost,.05,s.racers.map(r=>()=>aiInput(s,r)),{menuInputs:[]});
+ s.time=s.nativeHost.world.ticks*.01;s.weather=raceWeather(s);waterLevel.value=s.weather.seaLevel;
+ if(s.courseDatum)s.courseDatum.value=s.weather.seaLevel;
  const menu=s.nativeEnding,q=s.nativeLaunch.advanceChampionshipEnding(raw);
  s.nativeContactAudio.advanceMenuFrame();s.nativeContactAudio.applyEffects(q.effects);
  menu.frames++;menu.draw=q.draw;menu.view=q.view;menu.handoff=q.handoff;
- if(q.handoff){menu.remainder=0;s.phase='results';}
+ if(q.handoff){menu.remainder=0;s.phase='results';s.nativeHost.ceremony=false;}
 }
 /** Run the ending's ceremony wait at full speed, frame by frame with neutral
  * input, until its first results panel. The frames are the original ones. */

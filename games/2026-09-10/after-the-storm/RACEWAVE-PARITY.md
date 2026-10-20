@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+### original championship ending world and camera
+
+ECB98 does not restart the world: the startup dispatch skips state 102, so
+main21 keeps running the final race's world under the ending. Each 922E4 frame
+runs the physical scene (riders, water, objects), the B2ABC effects and the
+AD418 course actors, but skips 6E3A8's judging, while the ending overlay
+replaces the HUD, status and result stages. The browser now steps one such
+world frame before each 20 Hz ending frame: riders ride on (results stay
+exactly as finished), the water stays live and Southern Island's gulls keep
+flying. ECB98's camera type 8 runs DD6B4 but skips DFC48's follow copy, so the
+view holds the final race's camera; the orbiting stand-in camera is gone.
+Not reconstructed: DD6B4's ceremony flybys (801DC0AC/801DB8F0/801DBF68, timed
+type-3 rows from frame 600), the 9CD50 camera offsets, and rider engine sound
+during the ending (audio stays with the ending's menu owner).
+
 ### original water option
 
 Options now has a Water setting with the original's four choices: venue water,
