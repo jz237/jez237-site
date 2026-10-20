@@ -15,8 +15,10 @@ export function makeNativeFishRenderer(root,{map}={}){
    if(!Array.isArray(presentation?.draws))throw new TypeError('Supply prepared actor presentation');
    if(!Array.isArray(resourceWordsE73c)||resourceWordsE73c.length!==43||resourceWordsE73c.some(w=>!Number.isInteger(w)||w<0||w>0xffffffff))throw new RangeError('Supply retained swimmer resource metadata');
    const slots=new Set();
-   for(let slot=0;slot<2;slot++)if((resourceWordsE73c[(0x9c+slot*8)/4]|0)===2){
-    if(resourceWordsE73c[(0x44+slot*44)/4]!==9)throw new RangeError('Swimmer bank requires all nine loaded geometry slots');slots.add(slot);
+   // Bank2 reef fish need nine loaded geometry slots; bank4's lake fish three.
+   const banks=new Map();
+   for(let slot=0;slot<2;slot++){const bank=resourceWordsE73c[(0x9c+slot*8)/4]|0;if(bank!==2&&bank!==4)continue;
+    if(resourceWordsE73c[(0x44+slot*44)/4]!==(bank===2?9:3))throw new RangeError(bank===2?'Swimmer bank requires all nine loaded geometry slots':'Lake fish bank requires all three loaded geometry slots');slots.add(slot);banks.set(slot,bank);
    }
    const draws=[],groups=new Map();
    for(const draw of presentation.draws){
@@ -27,8 +29,8 @@ export function makeNativeFishRenderer(root,{map}={}){
    const staged=new Map(),fresh=[],poses=new Map();
    try{
     for(const [actorIndex,parts]of groups){
-     const species=nativeFishSpeciesForPart(parts[0].partOffset);
-     if(!species||parts.some(d=>nativeFishSpeciesForPart(d.partOffset)!==species))throw new RangeError('Swimmer draws must select one fish species');
+     const bank=banks.get(parts[0].resourceIndex),species=nativeFishSpeciesForPart(parts[0].partOffset,{bank});
+     if(!species||parts.some(d=>nativeFishSpeciesForPart(d.partOffset,{bank:banks.get(d.resourceIndex)})!==species))throw new RangeError('Swimmer draws must select one fish species');
      // A changed species for the same actor slot receives a new model.
      let model=models.get(actorIndex);if(model?.species!==species){model=makeNativeFishParts(species,{map});fresh.push(model);}
      poses.set(actorIndex,model.preparePose(parts));staged.set(actorIndex,model);
