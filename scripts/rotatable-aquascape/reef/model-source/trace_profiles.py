@@ -97,7 +97,10 @@ def trace(k):
     a0, a1 = spec['anal']; a0 = lobe_a or a0; anal = []
     anal = [[x, rb] for x in range(a0, begin, 25)] if lobe_a else []
     anal += [[x, round(interp(bottom, x))] for x in list(range(begin if lobe_a else a0, a1, 50)) + [a1]]
-    anal += [[x, e[1]] for x in range(a1, a0 - 1, -40) if (e := column_edges(mask, x))]
+    # Outer edge only where the fin is actually below its root: at a tapering end
+    # an edge point above the root folds the outline back on itself, and the
+    # triangulation then drops the membrane along the root.
+    anal += [[x, e[1]] for x in range(a1, a0 - 1, -40) if (e := column_edges(mask, x)) and e[1] > interp(bottom, x) + 6]
     # Width along the body from the top view.
     top_view = Image.open(REF / f'{k}-dorsal.jpg').convert('RGB'); tm = fish_mask(top_view, None, spec.get('dorsalDistance', 40))
     txs = np.where(tm.any(0))[0]; t_tail, t_snout = int(txs.min()), int(txs.max()); snout = int(xs.max())
@@ -116,6 +119,9 @@ def trace(k):
                'fins': [caudal, [], anal], 'rings': spec.get('rings', 120), 'sides': spec.get('sides', 64),
                'dorsalFade': spec.get('dorsalFade', [.045, .045])}
     if 'pelvicTexture' in spec: profile['pelvicTexture'] = spec['pelvicTexture']
+    # The build roots the anal fin as a ribbon along the belly (see analRibbon).
+    edge = sorted(p for p in anal if p[1] > interp(bottom, p[0]) + 6)
+    profile['analRibbon'] = [[a0, round(interp(bottom, a0))]] + edge + [[a1, round(interp(bottom, a1))]]
     for key in ('eyeTop', 'perch'):
         if key in spec: profile[key] = spec[key]
     data = json.loads((ROOT / 'profiles.json').read_bytes().decode('utf-8')); data[k] = profile

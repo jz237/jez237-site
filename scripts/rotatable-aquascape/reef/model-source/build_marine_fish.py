@@ -154,8 +154,24 @@ for species,s in DATA.items():
    if i<cols and j<rows:
     a=i*(rows+1)+j;f.append((a,a+1,a+rows+2,a+rows+1))
  objects.append(make_mesh('fin_1',v,f,tex,fin))
+ if 'analRibbon' in s:
+  # Anal ribbon rooted continuously along the belly, like the dorsal: columns
+  # run from just inside the body edge to the traced outer margin, so the fin
+  # stays attached whatever the outline's shape.
+  anal=s['analRibbon'];v=[];tex=[];f=[];cols=220;rows=9
+  rearFade,frontFade=s.get('analFade',[.045,.045])
+  for i in range(cols+1):
+   px=anal[0][0]+(anal[-1][0]-anal[0][0])*i/cols
+   root=interp(s['bottom'],px)-3
+   edge=float(np.interp(px,[p[0] for p in anal],[p[1] for p in anal]))
+   fade=min(1,i/cols/rearFade,(1-i/cols)/frontFade);fade=fade*fade*(3-2*fade);edge=root+(edge-root)*fade
+   for j in range(rows+1):
+    t=j/rows;py=root+(edge-root)*t;v.append(pos(px,py,math.sin(t*math.pi)*.002));tex.append(uv(px,py))
+    if i<cols and j<rows:
+     a=i*(rows+1)+j;f.append((a,a+rows+1,a+rows+2,a+1))
+  objects.append(make_mesh('fin_2',v,f,tex,fin))
  for i,polygon in enumerate(s['fins']):
-  if i!=1:objects.append(fin_mesh('fin_'+str(i),polygon))
+  if i!=1 and not (i==2 and 'analRibbon' in s):objects.append(fin_mesh('fin_'+str(i),polygon))
  for side in [-1,1]:
   objects.append(fin_mesh('pectoral_'+str(side),s['pec'],side,s['pec'][0]))
   if 'pelvic' in s:objects.append(fin_mesh('pelvic_'+str(side),s['pelvic'],side,s['pelvic'][0],s.get('pelvicTexture')))
