@@ -2,6 +2,7 @@
  * the biggest climber (for derbies, the toughest survivor). Pure bookkeeping; the caller
  * reports hits and the starting order and supplies names when rendering. */
 export type AwardCar={id:number;inflicted:number;health:number};
+export type EventMoment={kind:'hit'|'takedown'|'wheel';attacker:number;victim:number;time:number;score:number};
 export type EventAward={key:'hit'|'destroyer'|'takedowns'|'climber'|'toughest'|'nemesis'|'wheels'|'scrap';title:string;id:number;detail:string;victim?:number;value:number};
 export class EventAwards{
  private biggest:{attacker:number;victim:number;damage:number;time:number}|null=null;
@@ -9,10 +10,15 @@ export class EventAwards{
  private takedowns=new Map<number,number>();
  private dealt=new Map<string,number>();
  private stripping=new Map<number,{wheels:number;parts:number}>();
- reset(){this.biggest=null;this.start=null;this.takedowns.clear();this.dealt.clear();this.stripping.clear();}
+ private moments:EventMoment[]=[];
+ reset(){this.biggest=null;this.start=null;this.takedowns.clear();this.dealt.clear();this.stripping.clear();this.moments=[];}
+ /** The most spectacular moments for a highlights reel: best first by score, at most `max`, at least
+  * two seconds apart, then in the order they happened. */
+ highlights(max=5){const out:EventMoment[]=[];for(const m of [...this.moments].sort((a,b)=>b.score-a.score||a.time-b.time)){if(out.length>=max)break;if(out.every(o=>Math.abs(o.time-m.time)>=2))out.push(m);}return out.sort((a,b)=>a.time-b.time).map(m=>({...m}));}
  /** Credit the attacker for wheels torn off and parts knocked off the victim by one hit. */
- stripped(attacker:number,victim:number,wheels:number,parts:number){
+ stripped(attacker:number,victim:number,wheels:number,parts:number,time=0){
   if(attacker===victim||!(wheels>0||parts>0))return;
+  if(wheels>0)this.moments.push({kind:'wheel',attacker,victim,time:Number.isFinite(time)?time:0,score:28+wheels*4});
   const s=this.stripping.get(attacker)??{wheels:0,parts:0};s.wheels+=Math.max(0,Math.floor(wheels));s.parts+=Math.max(0,Math.floor(parts));this.stripping.set(attacker,s);
  }
  strippedBy(id:number){return{...(this.stripping.get(id)??{wheels:0,parts:0})};}
@@ -22,6 +28,7 @@ export class EventAwards{
   if(wrecked)this.takedowns.set(attacker,(this.takedowns.get(attacker)??0)+1);
   const pair=attacker+'>'+victim;this.dealt.set(pair,(this.dealt.get(pair)??0)+damage);
   if(!this.biggest||damage>this.biggest.damage)this.biggest={attacker,victim,damage,time:Number.isFinite(time)?time:0};
+  if(wrecked||damage>=10)this.moments.push({kind:wrecked?'takedown':'hit',attacker,victim,time:Number.isFinite(time)?time:0,score:(wrecked?30:0)+damage});
   return wrecked;
  }
  takedownsFor(id:number){return this.takedowns.get(id)??0;}

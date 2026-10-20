@@ -48,3 +48,10 @@ test('wheels torn off and parts knocked off rivals earn the snatcher and scrap a
  const quiet=new EventAwards();quiet.stripped(1,2,0,2);assert.ok(!quiet.awards('race',[]).some(x=>x.key==='scrap'||x.key==='wheels'),'two parts is not yet a merchant');
  a.reset();assert.deepEqual(a.strippedBy(2),{wheels:0,parts:0});
 });
+test('highlights keep the best spread-out moments in time order',()=>{
+ const a=new EventAwards();a.hit(1,2,4,false,1);a.hit(1,2,12,false,5);a.hit(3,4,40,true,6);a.stripped(5,6,1,0,20);a.hit(7,8,11,false,20.5);a.hit(2,3,15,false,30);a.hit(9,2,10,false,40);a.hit(2,9,14,false,50);
+ const h=a.highlights(4);assert.equal(h.length,4);assert.deepEqual(h.map(m=>m.kind),['takedown','wheel','hit','hit']);
+ assert.ok(h.every((m,i)=>i===0||m.time>h[i-1].time),'in time order');assert.ok(!h.some(m=>m.time===20.5),'a moment within 2 s of a better one is dropped');
+ assert.ok(!h.some(m=>m.time===1),'small hits are not highlights');
+ a.reset();assert.equal(a.highlights().length,0);
+});

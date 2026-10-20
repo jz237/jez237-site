@@ -530,6 +530,22 @@ function replayBiggestHit(container:Element|null){
     studio?.seek(Math.max(0,hit.time-1.5));ui.querySelector<HTMLButtonElement>('#studio-play')?.click();};
   container.append(button);
 }
+/** WATCH HIGHLIGHTS: the event's best moments back to back, slowed down, following the attacker. */
+let highlightTimer=0;
+function highlightsButton(container:Element|null){
+  const moments=eventAwards.highlights(5),frames=recorder?.frames.length??lastReplay?.frames.length??0;
+  if(!container||online?.active||moments.length<2||frames<2)return;
+  const button=document.createElement('button');button.className='small-button studio-link';button.id='watch-highlights';button.textContent='WATCH HIGHLIGHTS ▶';
+  button.onclick=()=>{if(!openStudio())return;clearTimeout(highlightTimer);
+    const pick=(id:string,value:string)=>{const s=ui.querySelector<HTMLSelectElement>('#'+id);if(s&&Array.from(s.options).some(o=>o.value===value)){s.value=value;s.dispatchEvent(new Event('change'));}};
+    const label={hit:'BIG HIT',takedown:'TAKEDOWN',wheel:'WHEEL OFF'} as const;
+    const show=(k:number)=>{if(!studio||k>=moments.length)return;const m=moments[k],index=cars.findIndex(c=>c.id===m.attacker);
+      if(index>=0)pick('studio-car',String(index));pick('studio-camera','chase');pick('studio-speed','0.25');
+      studio.seek(Math.max(0,m.time-1.2));if(ui.querySelector('#studio-play')?.textContent?.includes('PLAY'))ui.querySelector<HTMLButtonElement>('#studio-play')?.click();
+      let caption=ui.querySelector<HTMLElement>('#studio-highlight');if(!caption){caption=document.createElement('div');caption.id='studio-highlight';caption.className='studio-highlight';(ui.querySelector('.studio')??ui).append(caption);}caption.textContent=`HIGHLIGHT ${k+1}/${moments.length} · ${label[m.kind]}`;highlightTimer=window.setTimeout(()=>{if(k+1<moments.length)show(k+1);else ui.querySelector('#studio-highlight')?.remove();},7000);};
+    show(0);};
+  container.append(button);
+}
 function studioButtons(container:Element|null){
   if(!container||online?.active)return;
   const photo=document.createElement('button');photo.className='small-button studio-link';photo.id='photo-mode';photo.textContent='PHOTO MODE';photo.onclick=()=>openStudio(true);container.append(photo);
@@ -1347,7 +1363,7 @@ function shockwave(origin:T.Vector3,source:number){
 }
 /** Wheels lost and panels gone, to credit whoever tears them off. */
 function stripCount(c:Vehicle){let wheels=0;for(const v of c.wreckParts.wheelLost)wheels+=v;return{wheels,parts:c.panels.reduce((n,m)=>n+(m.visible?0:1),0)};}
-function creditStrip(attacker:Vehicle,victim:Vehicle,before:{wheels:number;parts:number}){const after=stripCount(victim),wheels=after.wheels-before.wheels,parts=after.parts-before.parts;if(wheels<=0&&parts<=0)return;eventAwards.stripped(attacker.id,victim.id,wheels,parts);if(attacker.id===0&&!demo&&!online?.active&&wheels>0)toast(`WHEEL OFF · #${victim.id+1} ${DEFINITIONS[victim.kind].name}`,1.4);if(wheels>0&&mode==='derby'&&!online?.active)derbyFeed.note(attacker.id,displayedDriver(attacker),'wheel',elapsed);}
+function creditStrip(attacker:Vehicle,victim:Vehicle,before:{wheels:number;parts:number}){const after=stripCount(victim),wheels=after.wheels-before.wheels,parts=after.parts-before.parts;if(wheels<=0&&parts<=0)return;eventAwards.stripped(attacker.id,victim.id,wheels,parts,elapsed);if(attacker.id===0&&!demo&&!online?.active&&wheels>0)toast(`WHEEL OFF · #${victim.id+1} ${DEFINITIONS[victim.kind].name}`,1.4);if(wheels>0&&mode==='derby'&&!online?.active)derbyFeed.note(attacker.id,displayedDriver(attacker),'wheel',elapsed);}
 function currentTeamScores(){return teamScores(rankRace().map(c=>({slot:cars.indexOf(c),scores:c.finished||c.health>0})));}
 function rankRace(){const order=rankRaceBase();return eliminationRace()?[...order.filter(c=>c.finished),...order.filter(c=>!c.finished&&c.health>0),...order.filter(c=>!c.finished&&c.health<=0).sort((a,b)=>eliminatedOrder.indexOf(b.id)-eliminatedOrder.indexOf(a.id))]:order;}
 function rankRaceBase() {
@@ -1430,7 +1446,7 @@ function finish(title: string) {
   if(teamRace())ui.querySelector('.dialog h2')?.insertAdjacentHTML('afterend',`<p class="team-result">${teamVerdict(currentTeamScores(),demo?undefined:0)}</p>`);
   if(!demo&&!online?.active&&!pursuit&&mode==='race'&&cars[0].finished&&cars.length>=2)globalScoresButton(ui.querySelector('.dialog'),{rank,field:cars.length,condition:Math.max(0,Math.min(100,cars[0].health)),course:activeVenue.course.id});
   if(!online?.active&&!pursuit&&(mode==='race'||mode==='derby')){const name=(id:number)=>{const c=cars.find(v=>v.id===id);return c?`#${id+1} ${DEFINITIONS[c.kind].name}`:`#${id+1}`;};const order=mode==='race'?rankRace().map(c=>c.id):[],list=eventAwards.awards(mode,cars,order),nemesis=eventAwards.nemesis(cars[0].id,cars,mode,order);if(nemesis)list.push(nemesis);const html=awardsHtml(list,name,cars[0].id);if(html)ui.querySelector('.dialog button')?.insertAdjacentHTML('beforebegin',html);}
-  studioButtons(ui.querySelector('.dialog'));replayBiggestHit(ui.querySelector('.dialog'));
+  studioButtons(ui.querySelector('.dialog'));replayBiggestHit(ui.querySelector('.dialog'));highlightsButton(ui.querySelector('.dialog'));
   document.querySelector<HTMLButtonElement>('#again')!.onclick = () => start();
   document.querySelector<HTMLButtonElement>('#back')!.onclick = () => {
     if(online?.active){leaveOnline();return;}

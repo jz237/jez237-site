@@ -1,3 +1,4 @@
+import {restoreHighlightsBytes} from './highlights-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readShockwavePrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreShockwaveBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreHighlightsBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readShockwavePrevious(file);
 }
 export function verifyShockwaveRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'2218d86c622a292b80cafa23a57af8d3fef033dd');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreHighlightsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreShockwaveBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the Shockwave release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreHighlightsBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the Shockwave release');
  assert.equal(manifest.previousFixtureCount,5161);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,5161);
 }
