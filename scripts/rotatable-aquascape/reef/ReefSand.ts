@@ -17,20 +17,20 @@ export function finishSandMaterial(material:T.MeshStandardMaterial){
    float sandTrough=smoothstep(.15,-.85,sandRipple);
    vec3 grainTo,grainId;float grainF1,grainF2;
    reefNodules(vec3(sandXZ*95.,reefSandP.y*95.),grainF1,grainF2,grainTo,grainId);
-   float grain=.78+.4*grainId.x-.22*smoothstep(.12,0.,grainF2-grainF1);
+   float grain=mix(.92,.78+.4*grainId.x-.22*smoothstep(.12,0.,grainF2-grainF1),reefDetailFade(vec3(sandXZ*95.,reefSandP.y*95.)));
    diffuseColor.rgb*=grain*mix(vec3(1.),vec3(.5,.55,.86),sandTrough*.8);
    // Coloured grit: pink and purple coralline, tan shell, dark grains.
    vec3 gritTo,gritId;float gritF1,gritF2;
    reefNodules(vec3(sandXZ*38.,reefSandP.y*38.+3.),gritF1,gritF2,gritTo,gritId);
-   float grit=step(.8,gritId.z)*smoothstep(.4,.18,gritF1);
+   float grit=step(.8,gritId.z)*smoothstep(.4,.18,gritF1)*mix(.35,1.,reefDetailFade(vec3(sandXZ*38.,reefSandP.y*38.)));
    vec3 gritColor=gritId.x<.3?vec3(.78,.4,.6):gritId.x<.55?vec3(.5,.36,.72):gritId.x<.8?vec3(.8,.66,.5):vec3(.28,.27,.33);
    diffuseColor.rgb=mix(diffuseColor.rgb,gritColor,grit*.85);`);
   shader.fragmentShader=shader.fragmentShader.replace('#include <normal_fragment_maps>',`#include <normal_fragment_maps>
    // Ripple flanks tilt along the ripple direction; grains add a fine roughness.
-   vec3 sandSlope=vec3(.32,0.,.95)*cos(sandPhase)*.55+vec3(grainTo.x,0.,grainTo.y)*.35*grainF1;
+   vec3 sandSlope=vec3(.32,0.,.95)*cos(sandPhase)*.55+vec3(grainTo.x,0.,grainTo.y)*.35*grainF1*reefDetailFade(vec3(sandXZ*95.,reefSandP.y*95.));
    vec3 sandTilt=normalMatrix*sandSlope;
    normal=normalize(normal+sandTilt-normal*dot(sandTilt,normal));`);
  };
- material.customProgramCacheKey=()=>'reef-sand-ripples-grain-grit-v2';
+ material.customProgramCacheKey=()=>'reef-sand-ripples-grain-grit-v3';
  return material;
 }

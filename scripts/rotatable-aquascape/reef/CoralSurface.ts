@@ -15,16 +15,21 @@ export function finishCoralMaterial(material:T.MeshStandardMaterial){
   shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
    vec3 cupTo,cupId;float cupF1,cupF2;
    reefNodules(reefCoralP*52.,cupF1,cupF2,cupTo,cupId);
+   // Cups smaller than a few pixels would shimmer as noise: fade them out
+   // with distance, toward their average tone, keeping them in close-ups.
+   float cupFade=reefDetailFade(reefCoralP*52.);
+   vec3 coralBase=diffuseColor.rgb;
    float cupPit=1.-smoothstep(.04,.2,cupF1),cupRim=smoothstep(.16,.34,cupF1)*(1.-smoothstep(.5,.78,cupF1)),cupGap=smoothstep(.0,.13,cupF2-cupF1);
    float coralLuma=dot(diffuseColor.rgb,vec3(.3,.59,.11));
    diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*.55+vec3(coralLuma*.62),.32*cupRim);
-   diffuseColor.rgb*=mix(.66,1.,cupGap)*(1.-.5*cupPit)*(.94+.12*cupId.x);`);
+   diffuseColor.rgb*=mix(.66,1.,cupGap)*(1.-.5*cupPit)*(.94+.12*cupId.x);
+   diffuseColor.rgb=mix(coralBase*.86,diffuseColor.rgb,cupFade);`);
   shader.fragmentShader=shader.fragmentShader.replace('#include <normal_fragment_maps>',`#include <normal_fragment_maps>
-   vec3 cupSlope=normalMatrix*(-cupTo*(1.5*cupF1)*(1.-2.2*cupPit));
+   vec3 cupSlope=normalMatrix*(-cupTo*(1.5*cupF1)*(1.-2.2*cupPit))*cupFade;
    normal=normalize(normal+cupSlope-normal*dot(cupSlope,normal));`);
   shader.fragmentShader=shader.fragmentShader.replace('#include <emissivemap_fragment>',reefFluorescence(.42));
  };
- material.customProgramCacheKey=()=>'reef-coral-corallite-skin-fluorescent-v2';
+ material.customProgramCacheKey=()=>'reef-coral-corallite-skin-fluorescent-v3';
  return material;
 }
 /** Locally baked, shared full-resolution corallite maps. Regenerate with the

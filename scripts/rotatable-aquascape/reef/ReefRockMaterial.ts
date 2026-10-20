@@ -14,6 +14,9 @@ export const rubbleNodules=`
   }
   f1=sqrt(f1);f2=sqrt(f2);
  }
+ // 1 while a cell of this cellular pattern spans several pixels, falling to 0
+ // as it shrinks toward one: sub-pixel detail would only shimmer as noise.
+ float reefDetailFade(vec3 p){vec3 w=fwidth(p);return 1.-smoothstep(.2,.55,max(w.x,max(w.y,w.z)));}
  float reefNodeField(vec3 p){vec3 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
   return mix(mix(mix(reefHash3(i).x,reefHash3(i+vec3(1,0,0)).x,f.x),mix(reefHash3(i+vec3(0,1,0)).x,reefHash3(i+vec3(1,1,0)).x,f.x),f.y),
    mix(mix(reefHash3(i+vec3(0,0,1)).x,reefHash3(i+vec3(1,0,1)).x,f.x),mix(reefHash3(i+vec3(0,1,1)).x,reefHash3(i+vec3(1,1,1)).x,f.x),f.y),f.z);}
@@ -48,15 +51,17 @@ export function finishRockMaterial(material:T.MeshStandardMaterial){
    float nodePatch=fract(reefNodeField(reefRockP*2.4+7.)*2.7+reefNodeField(reefRockP*5.3+19.)*1.3+nodeId.x*.16);
    vec3 nodeColor=reefNodeColor(nodePatch)*(.55+.5*nodeId.y);
    float coverage=.82*smoothstep(.05,.45,reefNodeField(reefRockP*1.7));
-   vec3 living=mix(diffuseColor.rgb,nodeColor*(.6+.55*fineId.z),.8);
+   float nodeFade=reefDetailFade(reefRockP*18.),fineFade=reefDetailFade(reefRockP*46.);
+   float fineShade=mix(.9,(.66+.42*fineDome)*mix(.75,1.,fineCrevice),fineFade);
+   vec3 living=mix(diffuseColor.rgb,nodeColor*mix(.88,.6+.55*fineId.z,fineFade),.8);
    diffuseColor.rgb=mix(diffuseColor.rgb,living,coverage);
    // Rounded bumps: lit crowns, shaded flanks and dark gaps between them.
-   diffuseColor.rgb*=mix(1.,(.12+1.*nodeDome)*mix(.1,1.,nodeCrevice)*(.66+.42*fineDome)*mix(.75,1.,fineCrevice),.45+.55*coverage);
+   diffuseColor.rgb*=mix(1.,mix(.6,(.12+1.*nodeDome)*mix(.1,1.,nodeCrevice),nodeFade)*fineShade,.45+.55*coverage);
    // A share of the nodules carry a small living frag in a bright fluorescent
    // color on their crown, crowded most densely low on the rock.
    float fragPick=step(.9,nodeId.z)*coverage*(.5+.5*(1.-smoothstep(1.,2.8,reefRockP.y)))*smoothstep(.62,.3,nodeF1);
    vec3 fragColor=reefFragColor(nodeId.y);
-   diffuseColor.rgb=mix(diffuseColor.rgb,fragColor*(.3+.75*nodeDome)*(.66+.42*fineDome),fragPick);`);
+   diffuseColor.rgb=mix(diffuseColor.rgb,fragColor*(.3+.75*nodeDome)*fineShade,fragPick);`);
   shader.fragmentShader=shader.fragmentShader.replace('#include <emissivemap_fragment>',`#include <emissivemap_fragment>
    totalEmissiveRadiance+=fragColor*fragPick*(.12+.3*nodeDome);`);
   shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',`
@@ -87,9 +92,9 @@ export function finishRockMaterial(material:T.MeshStandardMaterial){
    }
    // Domed nodules tilt away from their own centres, the finer crowd more gently.
    // A spherical profile: the tilt grows toward each nodule's rim.
-   slope+=(-nodeTo*2.4*nodeF1-fineTo*1.1*fineF1)*(.35+.65*coverage);
+   slope+=(-nodeTo*2.4*nodeF1*nodeFade-fineTo*1.1*fineF1*fineFade)*(.35+.65*coverage);
    normal=normalize(normalMatrix*normalize(stoneN+slope-stoneN*dot(slope,stoneN)));`);
  };
- material.customProgramCacheKey=()=> 'reef-porous-rock-triplanar-lower-micropores-rubble-frags-v7';
+ material.customProgramCacheKey=()=> 'reef-porous-rock-triplanar-lower-micropores-rubble-frags-v8';
  return material;
 }
