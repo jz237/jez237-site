@@ -25,7 +25,8 @@ import {prepareNativeWidgetPresentation,nativeWidgetDrawView} from './native-wid
 import {prepareNativeRaceMenuInputAdvance,nativeRaceMenuInputView,prepareNativeMenuReturnUpdate,prepareNativeChampionshipScoreUpdate} from './native-race-state.js';
 import {prepareNativeEndingMenuPhase,nativeEndingMenuView} from './native-ending-menu-runtime.js';
 import {NATIVE_ENDING_MENU_LOADED_WORDS} from './source-ending-menu-words.js';
-import {NATIVE_RECORDS_MENU_DATA} from './native-records-menu-data.js';
+import {NATIVE_RECORDS_MENU_DATA,createNativeRecordsMenuWords} from './native-records-menu-data.js';
+import {prepareNativeRecordsMenuPhase,nativeRecordsMenuView} from './native-records-menu-runtime.js';
 import {prepareNativeRaceResultCPUDisplayUpdate} from './native-race-state.js';
 import {prepareNativeNameMenuFrame,nativeNameMenuView,prepareNativeChampionshipNameMenuPhase,nativeChampionshipNameMenuView} from './native-name-menu-runtime.js';
 import {prepareNativeResultsMenuFrame,nativeResultsMenuView} from './native-results-menu-runtime.js';
@@ -378,6 +379,20 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
     controllerPorts4330:[0,1],neutralBytesAb10:Array(10).fill(0),thresholdXb400:g.gameStateAb24===100?50:35,thresholdYb401:35});
    const prepared=prepareNativeChampionshipNameMenuPhase(sample.state,{championshipCourseRowsAc14:NATIVE_CHAMPIONSHIP_SETUP_DATA.courseOrderAc14,
     fadeTemplateWords6cc0:NATIVE_CHAMPIONSHIP_SETUP_DATA.fadeTemplateWords6cc0,slotTemplateWords6c50:NATIVE_CHAMPIONSHIP_SETUP_DATA.slotTemplateWords6c50});
+   current=prepared.state;
+   return Object.freeze({...prepared,operations:[...sample.operations,...prepared.operations],effects:[...sample.effects,...prepared.effects]});
+  },
+  recordsBrowserView:()=>nativeRecordsMenuView(current),
+  /** One original 20Hz records-browser frame (state66/67, main12): menu input,
+   * then 5800/5470/AFB4/71A8 and the 5D24 draw. Entering state66 loads ovl_i9
+   * freshly; later frames keep the retained owner (slides, post-race context). */
+  advanceRecordsBrowser(rawController){
+   const g=current.scene;
+   if(g.main638!==12||![66,67].includes(g.gameStateAb24))throw new Error('No records browser is active');
+   if(g.gameStateAb24===66&&g.initLatch63c!==0)current=createNativeRaceState({...current,recordsBrowserWords80c0:createNativeRecordsMenuWords()});
+   const sample=prepareNativeRaceMenuInputAdvance(current,{rawControllers:[rawController],controllerCount4344:1,connectedMask4340:1,
+    controllerPorts4330:[0,1],neutralBytesAb10:Array(10).fill(0),thresholdXb400:35,thresholdYb401:35});
+   const prepared=prepareNativeRecordsMenuPhase(sample.state,{connectedMask4340:1});
    current=prepared.state;
    return Object.freeze({...prepared,operations:[...sample.operations,...prepared.operations],effects:[...sample.effects,...prepared.effects]});
   },

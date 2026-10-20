@@ -1,5 +1,27 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unreleased
+
+### original records browser after the championship initials
+
+Confirming the championship initials hands off to the records browser
+(state 66, main12). The browser now hosts it: entering state 66 loads ovl_i9's
+62 records words fresh, and each original 20 Hz frame runs menu input, then
+5800/5470/AFB4/71A8 and the 5D24 draw. The first frame clears to black; the
+next shows the cup's course in the original post-race context, with the new
+initials highlighted in its time table and best lap. Its exit runs the
+original return initializer (the title after a championship), and the
+browser then shows its completion dialog.
+
+The layout is drawn as full-resolution SVG with a rendered portrait of each
+record's rider. Course names come from the game's course list; the other ovl_i9
+labels are pre-rendered images that are not decoded, so the words are authored
+from each token's role in its font bank (RANK, CLASS, NAME, TIME, BEST LAP,
+the record titles, and the Normal/Hard/Expert/Reverse class that each row's
+record stores). Arrow keys, Enter and Backspace, the on-screen buttons and a
+gamepad's d-pad, stick, A and B drive the original controller word. Not yet
+reachable from the title menu as a standalone screen.
+
 ## v2.44.0 — Original Championship, Stunt wildlife and Original two-player races
 
 Original physics now covers the whole cup (warm-up, flyovers, ending and record

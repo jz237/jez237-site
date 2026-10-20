@@ -87,6 +87,14 @@ test('a qualified final round enters the original ending state and completes the
   assert.equal(q.handoff.destination,'records-browser');assert.equal(initials,'AAA');
   assert.deepEqual([L.snapshot().scene.main638,L.snapshot().scene.gameStateAb24],[12,66]);
   assert.notDeepEqual(L.recordSessionSnapshot(),before,'initials commit the championship records');
+  // The records browser loads ovl_i9 fresh, clears black once, then shows the cup's course in its post-race context.
+  q=L.advanceRecordsBrowser(neutral);assert.equal(q.draw.kind,'black');assert.equal(L.recordsBrowserView().postRace,true);
+  q=L.advanceRecordsBrowser(neutral);assert.equal(q.draw.kind,'records');
+  assert.ok(q.draw.records.commands.some(c=>c.kind==='text'&&c.text==='AAA'),'the new initials are listed');
+  assert.ok(q.draw.records.commands.some(c=>c.kind==='riderPreview'));
+  for(let f=0;f<200&&!q.handoff;f++)q=L.advanceRecordsBrowser({...neutral,heldButtons:f%10===0?0x8000:0});
+  assert.equal(q.handoff.destination,'title');assert.equal(L.recordsBrowserView().active,false);
+  assert.throws(()=>L.advanceRecordsBrowser(neutral),/No records browser/);
  }
 });
 
