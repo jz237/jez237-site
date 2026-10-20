@@ -39,3 +39,19 @@ test('course actors are identical at30 and60Hz and also run in a native champion
  assert.throws(()=>createRace({mode:'time',physics:'native',course:getCourse('neon',1),difficulty:1,nativeCourseActors:{assets:{},onDisplay(){}}}),/original actor course/);
  assert.equal(run('tempest').s.nativeLaunch.snapshot().scene.secondaryCount,47);
 });
+
+test('native Stunt runs the original course actors, with Dolphin Park reading no secondary route',()=>{
+ for(const id of ['reed','glacier']){
+  const {s,displays}=run(id,{mode:'stunt'}),w=s.nativeLaunch.snapshot().actorWordsF060;let count=0;
+  for(let a=0;a<30;a++){const t=w[a*47];if(t){count++;assert.ok(COURSES[id].families.includes(t),id+' family '+t);}}
+  assert.equal(count,COURSES[id].count,id);assert.equal(displays.length,s.nativeHost.world.frames,id);assert.ok(s.nativeHost.lastStunt,id+' Stunt judging still runs');
+ }
+ // 71E70's Stunt branch selects no alternate routes, even for the dolphins.
+ let effects=0;const s=createRace({mode:'stunt',physics:'native',course:getCourse('practice'),
+  nativeCourseActors:{assets:{0:bank(0),2:bank(2)},onDisplay(){},onEffectsDisplay:()=>effects++}});
+ for(let i=0;i<180;i++)stepRace(s,{throttle:1,steer:.2},1/30);
+ const snap=s.nativeLaunch.snapshot();
+ assert.equal(snap.scene.secondaryCount,0);assert.equal(snap.effectWords0790[0],2,'Dolphin extra effect slot');
+ assert.ok(snap.actorWordsF060.some((_,i)=>i%47===0&&snap.actorWordsF060[i]===6),'dolphins swim');assert.equal(effects,s.nativeHost.world.frames);
+ assert.throws(()=>createRace({mode:'stunt',physics:'native',course:getCourse('neon',1),difficulty:1,nativeCourseActors:{assets:{},onDisplay(){}}}),/original actor course/);
+});

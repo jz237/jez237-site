@@ -75,9 +75,11 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
  if(!['modern','native'].includes(physics))throw new RangeError('Unknown race physics');
  if(nativeRecordSession!==undefined&&physics!=='native')throw new RangeError('Native record sessions require native physics');
  const nativePractice=physics==='native'&&mode==='practice'&&course.sourceWaterCourseIndex===0&&difficulty===0&&!course.reverse;
- const actorCourse=nativePractice||physics==='native'&&['time','championship'].includes(mode)&&NATIVE_ACTOR_COURSES.includes(course.sourceWaterCourseIndex);
+ // Startup runs AC184 for every scene; mode11's 71E70 branch selects only primary routes.
+ const actorCourse=nativePractice||physics==='native'&&(['time','championship'].includes(mode)&&NATIVE_ACTOR_COURSES.includes(course.sourceWaterCourseIndex)||
+  mode==='stunt'&&(course.sourceWaterCourseIndex===0||NATIVE_ACTOR_COURSES.includes(course.sourceWaterCourseIndex)));
  if(nativeCourseActors!==undefined&&(!actorCourse||nativeInitialRaceState!==undefined||typeof nativeCourseActors?.onDisplay!=='function'))
-  throw new RangeError('Course actor presentation requires fresh solo native Practice, or a native Time trial or Championship on an original actor course');
+  throw new RangeError('Course actor presentation requires fresh solo native Practice, or a native Time trial, Stunt run or Championship on an original actor course');
  if(nativeSceneEffects!==undefined&&(nativeCourseActors!==undefined||physics!=='native'||!['time','stunt','championship'].includes(mode)||mode==='stunt'&&course.sourceWaterCourseIndex===0))
   throw new RangeError('Separate scene effects are for native Time trial, Stunt and Championship; Dolphin Practice supplies them with its actors');
  const nativeChampionship=physics==='native'&&mode==='championship';

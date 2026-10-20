@@ -1,5 +1,19 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — course wildlife in Original Stunt, including Dolphin Park
+
+The original startup (926F4) runs AC184, then AE7C4, for every scene, and its
+banks load by course, so Stunt (mode 11) has the same wildlife as a race.
+Original Stunt now runs the course actors on Dolphin Park, Sunny Beach, Sunset
+Bay, Marine Fortress, Drake Lake, Port Blue, Southern Island and Glacier Coast.
+Routes come from the Stunt course runtime's existing 71E70 selection (primary
+only, no alternates), so Dolphin Park's dolphins read a secondary count of 0,
+which the verified A68A4 count cases already cover. Dolphin Park also gets its
+extra dolphin effect slot. Twilight City has no actor bank and keeps the
+separate effects owner. In headless software rendering, Dolphin Park Stunt
+runs at about 46–52 fps, close to the existing Dolphin Practice scene (about
+51–58); Drake Lake and Twilight City hold 59–60.
+
 ## Unpublished — original wake and spray in Original Stunt
 
 Original Stunt (mode 11) now runs the same B2ABC/B305C scene-effects owner as

@@ -249,10 +249,10 @@ function start(nextRound=false,skipWarmup=false,inspection={}){
  $('error').textContent='';
  const dolphinScene=!demo&&selectedMode==='practice'&&selectedCourse==='practice'&&selectedNativePhysics();
  const originalTime=!demo&&['time','championship'].includes(selectedMode)&&selectedOriginalPhysics();
- // Mode11 runs the same B2ABC owner; the Dolphin Park venue needs its actors.
- const originalStunt=!demo&&selectedMode==='stunt'&&selectedCourse!=='practice'&&selectedOriginalPhysics();
+ // Mode11 runs the same AC184 actors and B2ABC owner as a race.
+ const originalStunt=!demo&&selectedMode==='stunt'&&selectedOriginalPhysics();
  // A cup round's course comes from its continuation, or the class's first course.
- const actorCourse=dolphinScene?0:!originalTime?null:selectedMode==='time'?getCourse(selectedCourse).sourceWaterCourseIndex:
+ const actorCourse=dolphinScene?0:originalStunt?getCourse(selectedCourse).sourceWaterCourseIndex:!originalTime?null:selectedMode==='time'?getCourse(selectedCourse).sourceWaterCourseIndex:
   nextRound&&nativeCup?.continuation?nativeCup.continuation.courseIndex:NATIVE_CHAMPIONSHIP_SETUP_DATA.courseOrderAc14[Math.min(selectedDifficulty,2)].find(i=>i>0);
  const actorBanks=actorCourse===null?null:NATIVE_COURSE_ACTOR_BANKS[actorCourse]??null,actorKey=actorBanks?.join(',');
  if(actorBanks&&!nativeActorAssets.has(actorKey)){
