@@ -6,7 +6,17 @@ export type CoralGrowth='canopy'|'bushy'|'antler';
 /** Rounded, irregular fork growth. Polyps are fine normal/color detail; a coral
  * skeleton stays rigid, unlike the soft anemone tissue elsewhere in the scene. */
 export function branchingColony(base:T.Vector3,size:number,hue:number,random:Random,surface?:(x:number,z:number)=>number|null,growth:CoralGrowth='canopy',basalGeometry?:T.BufferGeometry){
- const geometries:T.BufferGeometry[]=[],baseColor=new T.Color().setHSL(hue,.52,.29),tipColor=baseColor.clone().lerp(new T.Color('#e5e3cc'),.31);
+ // Aquarium Acropora read pastel under reef light: lavender, pink, lime, tan
+ // and salmon colonies with pale, nearly white growing tips.
+ const geometries:T.BufferGeometry[]=[],baseColor=new T.Color().setHSL(hue,hue>.12&&hue<.32?.82:hue>.4&&hue<.55?.7:.6,hue>.12&&hue<.32?.4:.42),tipColor=baseColor.clone().lerp(new T.Color('#f6f0f6'),.62).multiplyScalar(1.12);
+ // Thick, sturdy branches as in the reference's colonies (no added triangles).
+ const girth=1.4;
+ // Compact, rounded bushes: shorter, wider growth than a tall spray. Scales
+ // only distances, so random draws, branch counts and attachments are unchanged.
+ const squat=.8,widen=1.15;
+ // Light reaches the crown; the trunks and inner forks inside a dense bush
+ // stay in shade, giving the colony depth (dark interior, bright tips).
+ const interior=(level:number,t:number)=>level===0?.32+.43*t:level===1?.55+.35*t:.85+.15*t;
  let growthRandom=random;
  const choice=(a:number,b:number)=>a+(b-a)*growthRandom();
  function branch(start:T.Vector3,end:T.Vector3,radius:number,level:number,seed:number){
@@ -26,7 +36,7 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
     const i=j*(sides+1)+k,angle=k/sides*Math.PI*2;
     const polypRidges=1+.075*Math.sin(angle*3+t*13+seed)+.04*Math.sin(angle*5-t*19)+.075*Math.sin(t*12+seed)*Math.sin(Math.PI*t);
     p.setXYZ(i,center.x+(p.getX(i)-center.x)*taper*polypRidges,center.y+(p.getY(i)-center.y)*taper*polypRidges,center.z+(p.getZ(i)-center.z)*taper*polypRidges);
-    const c=baseColor.clone().lerp(tipColor,T.MathUtils.smoothstep(t,terminal?.68:.87,1)*.85).multiplyScalar(.76+.18*t+.055*Math.sin(seed+t*5+angle*2));colors.set([c.r,c.g,c.b],i*3);
+    const c=baseColor.clone().lerp(tipColor,T.MathUtils.smoothstep(t,terminal?.68:.87,1)*.85).multiplyScalar((.76+.18*t+.055*Math.sin(seed+t*5+angle*2))*interior(level,t));colors.set([c.r,c.g,c.b],i*3);
    }
   }
   g.setAttribute('color',new T.BufferAttribute(colors,3));const uv=g.getAttribute('uv');for(let j=0;j<=steps;j++)for(let k=0;k<=sides;k++)uv.setXY(j*(sides+1)+k,k/sides*2*Math.PI*radius/.135,j/steps*delta.length()/.135);geometries.push(g);
@@ -45,18 +55,18 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
     shoot.setAttribute('color',new T.BufferAttribute(sc,3));const uv=shoot.getAttribute('uv');for(let row=0;row<=3;row++)for(let k=0;k<=6;k++)uv.setXY(row*7+k,k/6*2*Math.PI*radius*.49/.135,row/3*len/.135);
     const shootCap=axialCorallite(shoot,tipColor,true);finishBranch(shoot,shootCap,[]);shoot.name='Offset terminal growth';geometries.push(shoot,shootCap);junctions.push(t);
    }
-   finishBranch(g,cap,junctions);geometries.push(...radialCorallites(g,level,seed,baseColor,tipColor));return;
+   finishBranch(g,cap,junctions);geometries.push(...radialCorallites(g,level,seed,baseColor.clone().multiplyScalar(interior(level,.6)),tipColor.clone().multiplyScalar(interior(level,.6))));return;
   }
   const count=level===0?choice(3,4):choice(2,3);
   for(let j=0;j<count;j++){
-   const t=.32+(j/count)*.57+.085*Math.sin(seed*2.7+j*4.1),root=curve.getPointAt(t),angle=seed+j*2.4+.33*Math.sin(seed*1.7+j*3.8)+choice(-.4,.4),out=choice(.12,.25)*size*(level===0?1:.58);
+   const t=.32+(j/count)*.57+.085*Math.sin(seed*2.7+j*4.1),root=curve.getPointAt(t),angle=seed+j*2.4+.33*Math.sin(seed*1.7+j*3.8)+choice(-.4,.4),out=choice(.12,.25)*size*(level===0?1:.58)*widen;
    junctions.push(t);
-   const direction=curve.getTangentAt(t),rise=choice(.15,.34)*size*(level===0?1:.47),tip=root.clone().add(new T.Vector3(Math.cos(angle)*out,rise,Math.sin(angle)*out));
+   const direction=curve.getTangentAt(t),rise=choice(.15,.34)*size*(level===0?1:.47)*squat,tip=root.clone().add(new T.Vector3(Math.cos(angle)*out,rise,Math.sin(angle)*out));
    // Branches inherit a local exposure direction. Neighboring forks form
    // unequal terraces instead of every child reaching one circular rim.
    const exposure=.5+.5*Math.cos(seed*.83-hue*19),curl=Math.sin(seed*2.13+j*1.9);
    if(growth==='canopy'&&level===0){
-    tip.y=Math.max(root.y+.08*size,base.y+size*(.34+.28*exposure+.10*curl));
+    tip.y=Math.max(root.y+.08*size,base.y+size*(.34+.28*exposure+.10*curl)*squat);
     tip.x+=Math.cos(seed)*out*.24;tip.z+=Math.sin(seed)*out*.24;
    }
    if(level===1){tip.x+=Math.cos(seed+.6)*out*.20;tip.z+=Math.sin(seed+.6)*out*.20;tip.y+=size*.035*curl;}
@@ -73,7 +83,7 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
     tip.set(root.x+Math.cos(heading)*reach,root.y+lift+size*.018*(1+curl),root.z+Math.sin(heading)*reach);
     tip.addScaledVector(direction,size*(level===0?.075:.035));
    }
-   branch(root,tip,Math.max(radius*(1-(1-endScale)*t)*.72,(level===0?.018:growth==='antler'?.013:.014)*size),level+1,seed+j*1.73);
+   branch(root,tip,Math.max(radius*(1-(1-endScale)*t)*.72,(level===0?.018:growth==='antler'?.013:.014)*size*girth),level+1,seed+j*1.73);
   }
   if(level===0&&size>=.6){
    // Interleaved lower scaffolds fill the bare trunk intervals. A local stream
@@ -91,11 +101,11 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
    }
    growthRandom=sceneRandom;
   }
-  finishBranch(g,cap,junctions);geometries.push(...radialCorallites(g,level,seed,baseColor,tipColor));
+  finishBranch(g,cap,junctions);geometries.push(...radialCorallites(g,level,seed,baseColor.clone().multiplyScalar(interior(level,.6)),tipColor.clone().multiplyScalar(interior(level,.6))));
  }
  const count=7+Math.floor(random()*3);
  for(let i=0;i<count;i++){
-  const angle=i*2.399+choice(-.32,.32),exposure=.5+.5*Math.cos(angle-hue*19),rad=choice(.35,.67)*size*(growth==='bushy'?.78:growth==='antler'?.65:1)*(.82+.40*exposure),height=choice(.38,.9)*size*(growth==='canopy'?.55:growth==='bushy'?.72:1)*(.74+.42*exposure);
+  const angle=i*2.399+choice(-.32,.32),exposure=.5+.5*Math.cos(angle-hue*19),rad=choice(.35,.67)*size*(growth==='bushy'?.78:growth==='antler'?.65:1)*(.82+.40*exposure)*widen,height=choice(.38,.9)*size*(growth==='canopy'?.55:growth==='bushy'?.72:1)*(.74+.42*exposure)*squat;
   // Separate attachment points across the living crust; keep each stem sunk
   // into the actual support rather than suspending a radial bouquet above it.
   const broad=size>=.6;
@@ -112,7 +122,7 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
    }
    if(!anchored)root.copy(base);
   }
-  const end=base.clone().add(new T.Vector3(Math.cos(angle)*rad,height,Math.sin(angle)*rad));branch(root,end,choice(.037,.057)*size,0,angle+random()*2);
+  const end=base.clone().add(new T.Vector3(Math.cos(angle)*rad,height,Math.sin(angle)*rad));branch(root,end,choice(.037,.057)*size*girth,0,angle+random()*2);
  }
  // Prefer clipped triangles from the actual support, including its curved relief.
  if(basalGeometry){basalGeometry.name='Rock-conforming colony base';geometries.push(basalGeometry);return geometries;}
@@ -137,7 +147,9 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
 /** A closed, thin skeleton with independent upper tissue and lower ridges. */
 export function platingColony(x:number,y:number,z:number,r:number,seed:number){
  const sides=192,rings=36,positions:number[]=[],colors:number[]=[],uv:number[]=[],indices:number[]=[],tissue:number[]=[],underside:number[]=[];
- const top=new T.Color('#b74423'),rim=new T.Color('#e6aa75'),bottom=new T.Color('#ffe7c8');
+ // Dusty peach-tan tissue in concentric growth bands, with a broad pale
+ // growing margin (the reference's tiered Montipora plates).
+ const top=new T.Color('#c4563a'),rim=new T.Color('#f0cdb2'),bottom=new T.Color('#d8a27a');
  // Unequal growth fans and narrow retreating bays replace a circular bowl.
  // Each fan raises a different fold; its valley continues into the older
  // tissue, so the edge reads as a grown shelf rather than a corrugated disc.
@@ -152,8 +164,12 @@ export function platingColony(x:number,y:number,z:number,r:number,seed:number){
  for(let layer=0;layer<2;layer++)for(let j=0;j<=rings;j++)for(let i=0;i<=sides;i++){
   const a=i/sides*Math.PI*2,t=j/rings,{outline,fold}=margins[i];
   const rr=r*t*outline,scallop=r*(Math.sin(a*19+Math.sin(a*5)*.8+seed)*.012*t**5+Math.sin(a*37-seed)*.005*t**8);
+  // A ruffled, wavy growing margin rising and dipping around the rim, as on
+  // the reference's frilly tiered plates (the underside follows it).
+  const ruffle=r*(.045*Math.sin(a*9+Math.sin(a*4+seed)*1.1+seed)+.02*Math.sin(a*23-seed*1.3))*T.MathUtils.smoothstep(t,.55,1)**1.6;
   // A low spreading fan with local upturned lobes, not one continuous cup.
-  const raised=r*(.035*t*t+fold*T.MathUtils.smoothstep(t,.25,1)+.045*Math.sin(a+seed)*t+.025*Math.sin(t*11+a*3+seed)*t*t),groove=Math.sin(a*67+Math.sin(t*18)*.7)*r*(layer?.006:.003)*t;
+  const band=Math.sin(t*Math.PI*2*8.5+Math.sin(a*3+seed)*.7+Math.sin(a*7-seed)*.25);
+  const raised=r*(.035*t*t+fold*T.MathUtils.smoothstep(t,.25,1)+.045*Math.sin(a+seed)*t+.025*Math.sin(t*11+a*3+seed)*t*t+.006*band*t*(1-T.MathUtils.smoothstep(t,.9,1)))+ruffle,groove=Math.sin(a*67+Math.sin(t*18)*.7)*r*(layer?.006:.003)*t;
   const tissueRelief=r*.016*(.6*Math.sin(a*37+Math.sin(t*17+seed))+.4*Math.sin(a*61-t*13+seed))*Math.sin(t*43+a*5)*t*(1-T.MathUtils.smoothstep(t,.92,1));
   // Older underside grows load-bearing, uneven radial ridges. The scaffold
   // deepens toward its attachment and thins smoothly into the growing margin;
@@ -163,7 +179,7 @@ export function platingColony(x:number,y:number,z:number,r:number,seed:number){
   const ribs=(.040*rib+.015*secondary)*Math.sin(Math.PI*t)**.65;
   const thickness=r*(.010+.090*(1-t)**1.6+ribs),py=y+raised+scallop+(groove+tissueRelief)*(layer?T.MathUtils.smoothstep(t,.65,.88):1)-(layer?thickness:0);
   positions.push(x+Math.cos(a)*rr,py,z+Math.sin(a)*rr*.76);tissue.push(Math.round(255*(layer?.12:1-T.MathUtils.smoothstep(t,.955,1))));underside.push(layer?255:0);
-  const c=layer?bottom.clone().multiplyScalar(.84+.13*rib+.03*Math.sin(a*7+t*11+seed)):top.clone().lerp(rim,T.MathUtils.smoothstep(t,.969+.009*Math.sin(a*7+seed),1));c.multiplyScalar(.94+.025*Math.sin(a*37+t*61)+.015*Math.sin(a*91-t*19));colors.push(c.r,c.g,c.b);uv.push(Math.cos(a)*rr/.32,Math.sin(a)*rr*.76/.32);
+  const c=layer?bottom.clone().multiplyScalar(.84+.13*rib+.03*Math.sin(a*7+t*11+seed)):top.clone().multiplyScalar(1-.17*(.5+.5*band)*T.MathUtils.smoothstep(t,.12,.85)).lerp(rim,.9*T.MathUtils.smoothstep(t,.91+.025*Math.sin(a*7+seed),.995));c.multiplyScalar(.94+.025*Math.sin(a*37+t*61)+.015*Math.sin(a*91-t*19));colors.push(c.r,c.g,c.b);uv.push(Math.cos(a)*rr/.32,Math.sin(a)*rr*.76/.32);
   if(j<rings&&i<sides){const n=layer*(rings+1)*(sides+1)+j*(sides+1)+i;const ids=j?[n,n+1,n+sides+1,n+1,n+sides+2,n+sides+1]:[n+1,n+sides+2,n+sides+1];indices.push(...(layer?ids.map((v,k)=>k%3===1?ids[k+1]:k%3===2?ids[k-1]:v):ids));}
  }
  const offset=(rings+1)*(sides+1);for(let i=0;i<sides;i++){const n=rings*(sides+1)+i;indices.push(n,n+offset,n+1,n+1,n+offset,n+offset+1);}
