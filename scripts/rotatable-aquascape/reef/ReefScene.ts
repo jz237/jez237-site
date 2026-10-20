@@ -30,15 +30,16 @@ const random=seeded(81412),pick=(a:number,b:number)=>a+(b-a)*random();
 function texture(kind:'rock'|'sand'|'coral'){
  const c=document.createElement('canvas');c.width=c.height=512;const ctx=c.getContext('2d')!,im=ctx.createImageData(512,512);
  for(let y=0;y<512;y++)for(let x=0;x<512;x++){
-  const i=(y*512+x)*4,n=random(),large=Math.sin(x*.027+Math.sin(y*.042))*Math.sin(y*.024),grain=n*.25;
-  const base=kind==='sand'?[.88,.87,.80]:kind==='rock'?[.58,.54,.46]:[.96,.94,.92];
+  const i=(y*512+x)*4,n=random(),large=Math.sin(x*.027+Math.sin(y*.042))*Math.sin(y*.024),grain=n*.25;
+  // Reef sand is bright aragonite, white to faintly blue under actinic light.
+  const base=kind==='sand'?[.93,.94,.96]:kind==='rock'?[.58,.54,.46]:[.96,.94,.92];
   const factor=kind==='rock'?.58+large*.3+grain:kind==='sand'?.78+grain:.72+grain;
   for(let k=0;k<3;k++)im.data[i+k]=255*base[k]*factor;im.data[i+3]=255;
  }
  ctx.putImageData(im,0,0);
  if(kind==='sand'){
   // Independent stream: detailing sand must not reshuffle reef inhabitants.
-  const grainRandom=seeded(2309230740),palette=['#e5dfc9','#bcb5a2','#d1cbb4','#f0e9d4','#a39d89'];
+  const grainRandom=seeded(2309230740),palette=['#eef0f4','#c9ccd4','#e2e0dc','#ffffff','#adb2bd'];
   for(let i=0;i<14500;i++){
    const x=grainRandom()*512,y=grainRandom()*512,r=.55+grainRandom()*1.7,aspect=.45+grainRandom()*.5,angle=grainRandom()*6.28;
    ctx.fillStyle=palette[Math.floor(grainRandom()*palette.length)];
@@ -294,20 +295,20 @@ export async function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments,ass
  rockStats.bufferBytes=Object.values(rockMesh.geometry.attributes).reduce((n,a)=>n+a.array.byteLength,0)+rockMesh.geometry.index!.array.byteLength;
  rockStats.expandedBufferBytes=rockMesh.geometry.index!.count*11*4;
  const buttressStats=buttress.stats;
- const sand:T.Mesh<T.BufferGeometry,T.MeshStandardMaterial>=new T.Mesh(new T.PlaneGeometry(10.06,4.61,160,74),new T.MeshStandardMaterial({map:sandTex,bumpMap:sandTex,bumpScale:.018,roughness:1,color:'#ccc6b5',vertexColors:true}));sand.rotation.x=-Math.PI/2;const sandPositions=sand.geometry.getAttribute('position'),sandColors=new Float32Array(sandPositions.count*3);
+ const sand:T.Mesh<T.BufferGeometry,T.MeshStandardMaterial>=new T.Mesh(new T.PlaneGeometry(10.06,4.61,160,74),new T.MeshStandardMaterial({map:sandTex,bumpMap:sandTex,bumpScale:.018,roughness:1,color:'#e4e8f0',vertexColors:true}));sand.rotation.x=-Math.PI/2;const sandPositions=sand.geometry.getAttribute('position'),sandColors=new Float32Array(sandPositions.count*3);
  for(let i=0;i<sandPositions.count;i++){
   const x=sandPositions.getX(i),z=-sandPositions.getY(i),bank=sandBank(x,z);
   sandPositions.setZ(i,sandHeight(x,z));
   const patch=.5+.5*Math.sin(x*4.1+Math.sin(z*2.3))*Math.sin(z*3.7+x*.8),slopeX=(sandHeight(x+.025,z)-sandHeight(x-.025,z))/.05,slopeZ=(sandHeight(x,z+.025)-sandHeight(x,z-.025))/.05;
   // Deposited grain variation makes the bank flanks readable under broad tank lighting.
   const shade=1-bank*(.055+patch*.09)-Math.min(.14,Math.max(0,slopeX*.09+slopeZ*.15));
-  sandColors.set([shade,shade*.995,shade*.975],i*3);
+  sandColors.set([shade*.985,shade*.995,shade],i*3);
  }
  sand.geometry.setAttribute('color',new T.BufferAttribute(sandColors,3));sand.geometry.computeVertexNormals();
  // Seal the irregular substrate rim against the front and side glass. These
  // faces share its material and batch; the visible sand edge follows the dunes.
  const rimPositions:number[]=[],rimColors:number[]=[],rimUv:number[]=[],rimIndices:number[]=[];
- const rim=(x:number,z:number)=>{const h=sandHeight(x,z),i=rimPositions.length/3;rimPositions.push(x,-z,.18,x,-z,h);rimColors.push(.72,.70,.66,.91,.895,.86);rimUv.push(x/2,z/2,x/2,z/2+(h-.18)/2);if(i){rimIndices.push(i-2,i,i-1,i,i+1,i-1);}};
+ const rim=(x:number,z:number)=>{const h=sandHeight(x,z),i=rimPositions.length/3;rimPositions.push(x,-z,.18,x,-z,h);rimColors.push(.74,.75,.79,.93,.94,.96);rimUv.push(x/2,z/2,x/2,z/2+(h-.18)/2);if(i){rimIndices.push(i-2,i,i-1,i,i+1,i-1);}};
  for(let i=0;i<=160;i++)rim(-5.03+10.06*i/160,2.305);
  for(let i=1;i<=74;i++)rim(5.03,2.305-4.61*i/74);
  for(let i=1;i<=160;i++)rim(5.03-10.06*i/160,-2.305);
@@ -318,7 +319,7 @@ export async function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments,ass
  for(let i=0;i<1600;i++){
   const x=pick(-4.94,4.94),z=pick(-2.23,2.23),bank=sandBank(x,z),patch=.5+.5*Math.sin(x*7.1+z*2.3)*Math.sin(z*5.7-x*1.8);
   const s=pick(.006,.032)*(.7+bank*.6+patch*.25),height=pick(.4,1)*s;
-  dummy.position.set(x,sandHeight(x,z)-height*.12,z);dummy.scale.set(s*(.8+patch*.5),height,s*(.75+bank*.2));dummy.rotation.set(random()*3,random()*3,random()*3);dummy.updateMatrix();rubble.setMatrixAt(i,dummy.matrix);rubble.setColorAt(i,new T.Color().setHSL(.11,.12,pick(.37,.83)));
+  dummy.position.set(x,sandHeight(x,z)-height*.12,z);dummy.scale.set(s*(.8+patch*.5),height,s*(.75+bank*.2));dummy.rotation.set(random()*3,random()*3,random()*3);dummy.updateMatrix();rubble.setMatrixAt(i,dummy.matrix);rubble.setColorAt(i,new T.Color().setHSL(.6,.06,pick(.45,.9)));
  }rubble.receiveShadow=true;group.add(rubble);rubble.name='Coral rubble and coarse sand';addNote(rubble,'Coral rubble and coarse sand','Small pale fragments collect between the sand grains at the foot of the reef. They represent worn pieces of coral skeleton and other carbonate material.');
  return {group,obstacles,notes,hosts,anemone,microLifeStats:microLife.stats,anemoneBackdropStats,rockLifeStats,footStats,canopyStats,polypStats,rockStats,crustStats,infillStats,buttressStats,flankStats:flankShelves.stats,assetsReady:Promise.all([rockMaps.ready,coralMaps.ready,crustMaps.ready,plateMaps.ready])};
 }

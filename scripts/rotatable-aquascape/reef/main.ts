@@ -8,6 +8,7 @@ import {accelerateReefPicking} from './ReefPicking.ts';
 import './style.css';
 import {reefDrawOrderReady,optimizeReefDrawOrder} from './ReefDrawOrder.ts';
 import * as T from 'three';
+import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {installRoomLighting} from '../lib/RoomLighting.ts';
 import {AquariumWater} from '../lib/AquariumWater.ts';
@@ -40,6 +41,20 @@ const key=new T.SpotLight('#dceaff',245,26,.91,.52,1.7);key.position.set(-1.8,7.
 const blue=new T.SpotLight('#5087ff',115,24,.9,.6,1.7);blue.position.set(3,7.5,-.3);blue.target.position.set(1.5,1,0);scene.add(blue,blue.target);
 const fill=new T.DirectionalLight('#b1cbea',.45);fill.position.set(1,4,7);scene.add(fill);
 const reflections=new ReefReflections(),water=new AquariumWater(reflections);configureReefWater(water);scene.add(water);const glassStart=scene.children.length;buildAquariumGlass(scene,reflections);const glassObjects=scene.children.slice(glassStart);
+// Under actinic reef light the polished pane edges and joints glow blue, as in
+// a rimless reef tank. Reef-only copies leave the planted aquarium unchanged.
+{const glow=new Map<T.Material,T.Material>(),actinic=(m:T.Material)=>{let g=glow.get(m);if(!g){const c=(m as T.MeshPhysicalMaterial).clone();c.color.set('#a9c8ff');c.emissive.set('#2f6dff');c.emissiveIntensity=1.6;c.attenuationColor.set('#5d8cff');glow.set(m,c);g=c;}return g;};
+ for(const o of glassObjects)if(o instanceof T.Mesh){if(Array.isArray(o.material))o.material=o.material.map((m,i)=>i<4?actinic(m):m);else if(o.geometry instanceof T.BoxGeometry)o.material=actinic(o.material);}
+ // Light piped along the glass makes every outer edge a bright blue line with
+ // a soft halo: one merged core and two merged additive halo shells.
+ const shells=[[.011,'#8ab8ff',1],[.032,'#3d78ff',.2],[.07,'#2a5cff',.08]] as const,X=5.125,Z=2.385,low=.03,high=5.57;
+ const corners=[[-X,-Z],[X,-Z],[X,Z],[-X,Z]],segments:[T.Vector3,T.Vector3][]=[];
+ for(let i=0;i<4;i++){const [x,z]=corners[i],[nx,nz]=corners[(i+1)%4];segments.push([new T.Vector3(x,low,z),new T.Vector3(x,high,z)]);for(const y of [low,high])segments.push([new T.Vector3(x,y,z),new T.Vector3(nx,y,nz)]);}
+ for(const [radius,color,opacity] of shells){
+  const parts=segments.map(([a,b])=>{const g=new T.CylinderGeometry(radius,radius,a.distanceTo(b)+radius*2,10,1,true),mid=a.clone().add(b).multiplyScalar(.5);g.applyQuaternion(new T.Quaternion().setFromUnitVectors(new T.Vector3(0,1,0),b.clone().sub(a).normalize()));g.translate(mid.x,mid.y,mid.z);return g;});
+  const line=new T.Mesh(mergeGeometries(parts),new T.MeshBasicMaterial({color,transparent:opacity<1,opacity,blending:opacity<1?T.AdditiveBlending:T.NormalBlending,depthWrite:opacity===1,side:T.DoubleSide}));
+  for(const g of parts)g.dispose();line.name='Actinic glass edge glow';line.renderOrder=9;scene.add(line);
+ }}
 // The black tang and fish stocking run in the gallery and in Hidden Reef alike.
 const stockLimit=36;
 const fishSpecies:MarineSpecies[]=[...baseMarineSpecies,'rostratum'];
