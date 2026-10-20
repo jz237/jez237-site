@@ -69,3 +69,11 @@ test('signed pre-vibration save files still import, while new backups preserve v
  store.setItem(CONTROLS_KEY,JSON.stringify({...readControls(store.getItem(CONTROLS_KEY)),rumble:0}));
  const current=await readSave(await exportSave(store));assert.equal(readControls(current.entries[CONTROLS_KEY]).rumble,0);
 });
+test('bent wheels shake the weak motor at speed and a misfiring engine pulses the strong motor',()=>{
+ const asphalt:RumbleMotion={...road,surface:'asphalt'};
+ const f=fixture(),r=f.rumble;r.update(f.pad,0,1,asphalt);assert.equal(f.effects.length,0,'smooth asphalt is quiet');
+ r.update(f.pad,60,1,{...asphalt,wobble:1});assert.ok(f.effects.at(-1)!.weakMagnitude!>.2,'a wrecked wheel shakes');
+ r.update(f.pad,120,1,{...asphalt,wobble:1,speed:2});assert.ok(f.effects.at(-1)!.weakMagnitude!<.05,'barely at walking pace');
+ r.update(f.pad,180,1,{...asphalt,misfire:true});assert.ok(f.effects.at(-1)!.strongMagnitude!>.25,'a misfire thumps');
+ const g=fixture();g.rumble.update(g.pad,0,1,{...asphalt,wobble:1,grounded:false});assert.equal(g.effects.length,0,'nothing in the air');
+});

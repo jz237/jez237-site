@@ -3,6 +3,11 @@ import * as T from 'three';
 type Member={mesh:T.Mesh;matrix:T.Matrix4;position:T.Vector3;quaternion:T.Quaternion;scale:T.Vector3;auto:boolean;toModel:T.Matrix4;fromParent:T.Matrix4};
 type Assembly={name:string;members:Member[];bounds:T.Box3;damage:number;side:number;loose:number};
 
+/** Extra bonnet lift (radians) from airflow: none below 14 m/s or for a barely loose bonnet. */
+export function hoodWindLift(speed:number,loose:number){
+  const s=T.MathUtils.smoothstep(Math.abs(speed),14,30),l=T.MathUtils.smoothstep(loose,.3,.9);
+  return .55*s*l;
+}
 /** Visual hinge failures around the authored bodywork. No extra rigid bodies. */
 export class WreckAttachments {
   readonly assemblies:Assembly[]=[];
@@ -62,7 +67,9 @@ export class WreckAttachments {
       const flutter=Math.sin(this.time*7.1+a.side)*Math.min(.025,Math.abs(speed)*.0013)*a.loose;
       const pivot=a.bounds.getCenter(new T.Vector3()),euler=new T.Euler();
       if(a.name==='hood'){
-        pivot.set(0,a.bounds.max.y-.04,a.bounds.min.z+.08);euler.x=-a.loose*.42+flutter;euler.z=a.side*a.loose*.045;
+        // At speed the airflow gets under a loose bonnet and lifts it, shaking, toward the screen.
+        const lift=hoodWindLift(speed,a.loose);
+        pivot.set(0,a.bounds.max.y-.04,a.bounds.min.z+.08);euler.x=-a.loose*.42-lift+flutter*(1+lift*4);euler.z=a.side*a.loose*.045;
       }else if(a.name.startsWith('cargo-')){
         const side=a.name.endsWith('left')?-1:1;
         pivot.set(side<0?a.bounds.min.x:a.bounds.max.x,pivot.y,a.bounds.max.z);euler.y=-side*a.loose*.45+flutter;

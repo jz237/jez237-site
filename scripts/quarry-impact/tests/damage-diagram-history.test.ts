@@ -1,6 +1,7 @@
+import {restoreDamageRumbleBytes} from './damage-rumble-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readDamageDiagramPrevious,restoreDamageDiagramBytes,verifyDamageDiagramRevision} from './damage-diagram-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreDamageRumbleBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('DamageDiagram preserves every prior fixture, vehicle asset, venue art and history input',verifyDamageDiagramRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/damage-diagram/revision.json').toString());

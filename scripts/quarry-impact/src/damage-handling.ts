@@ -12,3 +12,11 @@ export function overheat(engineDamage:number,frontCompression:number,throttle:nu
   if(crushed<=0||!(dt>0)||engineDamage>=RADIATOR.cap)return engineDamage;
   return Math.min(RADIATOR.cap,engineDamage+dt*RADIATOR.rate*crushed*(.35+.65*clamp01(Math.abs(throttle))));
 }
+/** Slow puncture: a tyre damaged past LEAK.onset but not yet failed loses air while it rolls, faster
+ * the more damaged it is, until it fails (tyreFailure starts at 0.72, fully flat by 0.92). */
+export const LEAK={onset:.35,rate:.006,flat:.92} as const;
+export function leakTyre(damage:number,speed:number,dt:number){
+  if(!(dt>0)||!Number.isFinite(damage)||damage<LEAK.onset||damage>=LEAK.flat)return damage;
+  const severity=(damage-LEAK.onset)/(LEAK.flat-LEAK.onset),rolling=Math.min(1,Math.abs(Number.isFinite(speed)?speed:0)/15);
+  return Math.min(LEAK.flat,damage+dt*LEAK.rate*(.35+severity)*rolling);
+}

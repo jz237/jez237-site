@@ -30,3 +30,17 @@ test('bent steering widens the turn and a weak front-left brake pulls the car un
  const even=brake([1,1,1,1]),weak=brake([brakeFactor(1),1,1,1]);console.log(JSON.stringify({even,weak}));
  assert.ok(Math.abs(weak.x)>Math.abs(even.x)+.15||Math.abs(weak.yaw)>Math.abs(even.yaw)+.02,'braking pulls off line');
 });
+test('a loose bonnet lifts in the airflow at speed but not when crawling or barely loose',async()=>{
+ const {hoodWindLift}=await import('../src/wreck-attachments');
+ assert.equal(hoodWindLift(10,1),0);assert.equal(hoodWindLift(40,.2),0);
+ assert.ok(hoodWindLift(30,1)>.5&&hoodWindLift(30,1)<=.55);assert.ok(hoodWindLift(22,1)>0&&hoodWindLift(22,1)<hoodWindLift(30,1));
+ assert.equal(hoodWindLift(-30,1),hoodWindLift(30,1),'reversing too');
+});
+test('a damaged tyre leaks while rolling until it fails, and the HUD calls it a slow puncture',async()=>{
+ const {leakTyre,LEAK}=await import('../src/damage-handling');const {tyreWarning}=await import('../src/tyre-feedback');const {tyreFailure}=await import('../src/tyre-condition');
+ assert.equal(leakTyre(.2,20,1),.2,'light scuffs hold air');assert.equal(leakTyre(.6,0,10),.6,'no leak while parked');assert.equal(leakTyre(LEAK.flat,20,10),LEAK.flat);
+ let d=.6,t=0;while(tyreFailure(d)<.9&&t<600){d=leakTyre(d,20,1/10);t+=1/10;}assert.ok(t>40&&t<200,`a 0.6 tyre goes flat in ${t.toFixed(0)} s at speed`);
+ let worse=.68,t2=0;while(tyreFailure(worse)<.9&&t2<600){worse=leakTyre(worse,20,1/10);t2+=1/10;}assert.ok(t2<t,'worse damage leaks faster');
+ assert.equal(tyreWarning([.5,0,0,0]),'','not shown unless enabled');assert.equal(tyreWarning([.5,0,0,0],true),'SLOW PUNCTURE · FL');
+ assert.match(tyreWarning([1,.5,0,0],true),/FLAT TYRE · FL/,'a real flat takes precedence');
+});

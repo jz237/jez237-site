@@ -1052,7 +1052,7 @@ function updateHud() {
   text('surface', player.surface.toUpperCase());
   text('engine-status', player.engineStall!>0&&player.health>0?'ENGINE STALLED':engineStatus(player.health,player.engineDamage));
   if(elapsed-damageDiagramAt>.2||elapsed<damageDiagramAt){damageDiagramAt=elapsed;const svg=damageDiagramSvg({zones:player.damageZones,structure:player.structuralDamage,wheelDamage:player.wreckParts.wheelDamage,wheelLost:player.wreckParts.wheelLost,tyreFailure:[0,1,2,3].map(i=>tyreFailureLevel(player.tyreDamage?.[i])),engine:player.engineDamage??Math.max(0,(40-player.health)/40),misfiring:player.misfireFactor<1,rearEngine:isRearEngineKind(player.kind),wrecked:player.health<=0});const el=document.getElementById('damage-diagram');if(el&&svg!==damageDiagramSvgLast){el.innerHTML=svg;damageDiagramSvgLast=svg;}}
-  text('tyre-status', tyreWarning(player.tyreDamage));
+  text('tyre-status', tyreWarning(player.tyreDamage,player.extendedDamage));
   text('armor-status',online?.active?'':armorWearWarning(player.setup.armor,player.structuralDamage));
   text('engine-restart', stallHint(player.health,player.engineStall,player.input.throttle));
   text(
@@ -1723,6 +1723,7 @@ function updateRumble(now:number){
   const p=cars[0],active=state==='playing'&&!demo&&!studio&&!preparingEvent&&!document.hidden&&(!online?.active||online.network.connected)&&!!p&&!p.finished&&!clubPlayerStopped;
   controllerRumble.update(selectedPad(drivingControls,navigator.getGamepads?.()??[]),now,drivingControls.rumble,active?{
     speed:p.health>0?p.speed:0,slip:p.slip,surface:p.surface,scraping:p.scraping,
+    ...(p.extendedDamage?{wobble:Math.max(...p.wreckParts.wheelDamage),misfire:p.misfireFactor<1}:{}),
     grounded:online?.active?!!p.remoteGrounded:[0,1,2,3].some(i=>p.controller.wheelIsInContact(i)),
   }:null);
 }
