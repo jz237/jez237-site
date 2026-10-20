@@ -40,3 +40,12 @@ test('feature badges: elimination win, dusk win and an ice-cream-van wreck',()=>
  assert.ok(!ids({run:run(),kind:'cornet',mode:'race',course:'b'}).includes('ice-cream-scream'),'driving it is not enough');
  assert.ok(ids({run:run(),kind:'cornet',mode:'derby',arena:'k',wrecks:1}).includes('ice-cream-scream'));
 });
+test('destruction goals: wheels and parts tallied across events, and winning a banger race',()=>{
+ const p:any={events:0,wins:0,distance:0,knockouts:0,challenges:{}};
+ const ctx=(over:any)=>({run:{finished:true,completed:true,won:false,rank:3,distance:500,health:60,knockouts:0},kind:'coupe',mode:'derby',...over});
+ bankAchievements(p,ctx({wheels:3,parts:20}),{kinds:99,courses:99,arenas:99});assert.equal(p.journey.wheels,3);assert.equal(p.journey.parts,20);assert.ok(!(p.badges??[]).includes('wheel-snatcher'));
+ const fresh=bankAchievements(p,ctx({wheels:2,parts:31}),{kinds:99,courses:99,arenas:99});assert.deepEqual(fresh.map(a=>a.id).filter(id=>id==='wheel-snatcher'||id==='scrapyard'),['wheel-snatcher','scrapyard']);
+ const win=bankAchievements(p,ctx({mode:'race',banger:true,run:{finished:true,completed:true,won:true,rank:1,distance:900,health:40,knockouts:0}}),{kinds:99,courses:99,arenas:99});assert.ok(win.some(a=>a.id==='banger-king'));
+ const plain:any={events:0,wins:0,distance:0,knockouts:0,challenges:{}};bankAchievements(plain,ctx({}),{kinds:99,courses:99,arenas:99});assert.ok(!('wheels' in plain.journey)&&!('parts' in plain.journey),'saves without stripping keep their old shape');
+ assert.deepEqual(normalizeJourney({kinds:[],courses:[],arenas:[],takedowns:1,wheels:-3,parts:'x'}),{kinds:[],courses:[],arenas:[],takedowns:1,wheels:0,parts:0});
+});
