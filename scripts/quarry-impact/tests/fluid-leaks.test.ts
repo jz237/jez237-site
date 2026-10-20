@@ -56,7 +56,7 @@ test('a car with a crushed front drips coolant offline only, and tyres on a slic
    // Pour oil under every tyre and read the grip back.
    for(let i=0;i<4;i++){const p=car.controller.wheelContactPoint(i);if(p)for(let k=0;k<6;k++)slicks.drip(p.x,0,p.z,0,.3);}
    car.preStep(1/60);world.step();car.postStep(1/60,10);
-   return{front,drips,stats,grip:car.slickGrip.slice(),oily:car.oily.slice()};
+   return{front,drips,stats,grip:car.slickGrip.slice(),oily:car.oily.slice(),steam:car.steamPuffs};
   }finally{car.dispose();world.free();slicks.mesh.geometry.dispose();}
  };
  const on=await run(true),off=await run(false);console.log(JSON.stringify({on,off}));
@@ -66,6 +66,7 @@ test('a car with a crushed front drips coolant offline only, and tyres on a slic
  assert.ok(on.grip.every(g=>g<.75)&&on.oily.every(o=>o>.5),'oil under the tyres');
  assert.ok(off.drips[0]===0&&off.drips[1]===0&&off.stats.count===0,'online-style cars never leak');
  assert.ok(off.grip.every(g=>g===1),'and never read slicks');
+ assert.ok(on.steam>=20&&off.steam===0,'the leaking radiator steams while the engine runs, offline only');
 });
 test('the HUD names each leak and warns about oil under or on the tyres; the diagram drips under radiator and engine',async()=>{
  const {fluidWarning}=await import('../src/fluid-leaks');const {damageDiagramSvg}=await import('../src/damage-diagram');

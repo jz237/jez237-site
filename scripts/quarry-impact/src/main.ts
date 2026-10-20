@@ -2206,7 +2206,7 @@ async function boot() {
         wheelLost: Array.from(c.wreckParts.wheelLost),
         rips: c.rips,
         backfires: c.backfires,
-        drips: c.drips.slice(), slickGrip: c.slickGrip.slice(), oily: c.oily.slice(), blownOut: c.blownOut.slice(), gearLimit: c.gearLimit,
+        drips: c.drips.slice(), slickGrip: c.slickGrip.slice(), oily: c.oily.slice(), blownOut: c.blownOut.slice(), gearLimit: c.gearLimit, steamPuffs: c.steamPuffs,
         engineDamage: c.engineDamage,
         tyreDamage: c.tyreDamage?.slice(), structure: c.structuralDamage?.slice(),
         partDamage: Object.fromEntries([...new Set(c.panels.map(m=>m.userData.detachAssembly as string|null).filter((v):v is string=>!!v))].map(n=>[n,Math.round(Math.max(0,...c.panels.filter(m=>m.userData.detachAssembly===n&&m.visible).map(m=>m.userData.damage??0)))])),

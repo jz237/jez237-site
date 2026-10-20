@@ -140,6 +140,9 @@ export class Vehicle {
   /** How oily each tyre is after rolling through a slick; it lays dark tread marks until it wears off. */
   readonly oily = [0,0,0,0];
   private dripClock = [0,0];
+  private steamClock = 0;
+  /** Steam puffs from a leaking radiator (QA). */
+  steamPuffs = 0;
   private dripSeed = 1;
   /** Fluid drips this car has left (oil, coolant). */
   readonly drips = [0,0];
@@ -274,7 +277,7 @@ export class Vehicle {
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
-    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.drips.fill(0);this.dripSeed=this.id*7919+1;
+    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.drips.fill(0);this.steamClock=0;this.steamPuffs=0;this.dripSeed=this.id*7919+1;
     if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
@@ -340,6 +343,12 @@ export class Vehicle {
     }
     if(!contacts||!this.structuralDamage)return;
     const rates=leakRates(this.structuralDamage[0],this.engineDamage??0),half=DEFINITIONS[this.kind].halfLength,ground=groundSum/contacts;
+    // A hot engine boils the leaking coolant off the radiator: steam out of the grille while it runs.
+    if(rates.coolant>0&&this.health>0&&!(this.engineStall!>0)){
+      this.steamClock+=dt*(2.5+5*rates.coolant)*(.6+.4*Math.min(1,Math.abs(this.input.throttle)));
+      if(this.steamClock>=1){this.steamClock-=1;this.steamPuffs++;
+        const p=new T.Vector3(0,.62,half*.78).applyQuaternion(this.previousQ).add(this.previous);this.fx.emit(p,1,5,.55);}
+    }else this.steamClock=0;
     for(const kind of [0,1] as const){
       const interval=dripInterval(kind===0?rates.oil:rates.coolant);if(!Number.isFinite(interval)){this.dripClock[kind]=0;continue;}
       this.dripClock[kind]+=dt;if(this.dripClock[kind]<interval)continue;this.dripClock[kind]-=interval;
