@@ -25,12 +25,12 @@ export function configureReefWater(water:T.Group){
    .replace('float z=-.37+float(strip)*.2;', 'float z=-.4166667+float(strip)*.1666667;')
    .replace('.0525-aa.y,.0525+aa.y','.0833333-aa.y,.0833333+aa.y')
    .replace('vec3(.745,.947,.855)*3.3', 'vec3(.49,.68,1.)*3.3')
-   .replace('reflection=attenuateWater(reflection,opticalDistance,illumination);',`vec3 transmission=exp(-opticalDistance*vec3(.038,.017,.007));
-      reflection=reflection*transmission+vec3(.012,.047,.095)*(1.-transmission)*illumination;`)
-   .replace('reflection*vec3(.96,1.,.97)+meniscus*vec3(.65,.84,.72)', 'reflection*(underside>.5?1.1:1.)+meniscus*vec3(.47,.72,1.)+reefSheen')
+   .replace('reflection=attenuateWater(reflection,opticalDistance,illumination);',`vec3 transmission=exp(-opticalDistance*vec3(.024,.014,.007));
+      reflection=reflection*transmission+vec3(.022,.042,.11)*(1.-transmission)*illumination;`)
+   .replace('reflection*vec3(.96,1.,.97)+meniscus*vec3(.65,.84,.72)', 'reflection*(underside>.5?.95:1.)+meniscus*vec3(.47,.72,1.)+reefSheen')
    // Seen from below, tilted ripple faces catch the lamps above: a bright,
    // shimmering band along the top of the tank, as in the reference photo.
-   .replace('float meniscus=', 'vec3 reefSheen=underside>.5?illumination*(vec3(.02,.09,.3)+vec3(.35,.6,1.)*1.4*pow(smoothstep(.1,.32,length(rippleNormal.xz)),3.)):vec3(0.);float meniscus=');
+   .replace('float meniscus=', 'vec3 reefSheen=underside>.5?illumination*(vec3(.02,.06,.22)+vec3(.3,.55,1.)*1.05*pow(smoothstep(.1,.32,length(rippleNormal.xz)),3.)):vec3(0.);float meniscus=');
   material.needsUpdate=true;
  });
 }

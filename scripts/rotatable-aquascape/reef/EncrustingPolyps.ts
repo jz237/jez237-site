@@ -1,5 +1,6 @@
 import {identifyGeometry,polypNotes} from './ReefIdentification.ts';
 import * as T from 'three';
+import {reefFluorescence} from './CoralSurface.ts';
 
 type Surface=(x:number,z:number)=>{point:T.Vector3;normal:T.Vector3}|null;
 type Random=()=>number;
@@ -81,6 +82,6 @@ export function animatePolypMaterial(material:T.MeshStandardMaterial,clock:{valu
  float surge=sin(polypTime*1.25+position.x*2.1+position.z*1.7);
  float flutter=sin(polypTime*(1.65+.18*sin(polypPhase))+polypPhase);
  transformed.x+=polypFlex*.0036*(surge*.7+flutter*.3);
- transformed.z+=polypFlex*.0025*sin(polypTime*1.13+polypPhase*.7+position.x*3.7);`);};
- material.customProgramCacheKey=()=> 'rooted-polyp-fringes-v2';
+ transformed.z+=polypFlex*.0025*sin(polypTime*1.13+polypPhase*.7+position.x*3.7);`);shader.fragmentShader=shader.fragmentShader.replace('#include <emissivemap_fragment>',reefFluorescence(.55));};
+ material.customProgramCacheKey=()=> 'rooted-polyp-fringes-fluorescent-v3';
 }

@@ -42,8 +42,8 @@ export function applyReefOptics(material:T.MeshStandardMaterial,clock:{value:num
    vec3 waterExit=mix(vec3(-5.03,.16,-2.33),vec3(5.03,5.65,2.33),step(vec3(0.),waterRay));
    vec3 waterLengths=(waterExit-vReefWorld)/(sign(waterRay)*max(abs(waterRay),vec3(.00001))+vec3(.000001));
    float waterPath=clamp(min(min(waterLengths.x,waterLengths.y),waterLengths.z),0.,length(cameraPosition-vReefWorld));
-   vec3 transmittance=exp(-waterPath*vec3(.038,.017,.007));
-   outgoingLight=outgoingLight*transmittance+vec3(.012,.047,.095)*(1.-transmittance)*reefDaylight;
+   vec3 transmittance=exp(-waterPath*vec3(.024,.014,.007));
+   outgoingLight=outgoingLight*transmittance+vec3(.022,.042,.11)*(1.-transmittance)*reefDaylight;
    #include <opaque_fragment>`);
  };
  material.customProgramCacheKey=()=>cacheKey+'-reef-optics-wave-focus-v3';

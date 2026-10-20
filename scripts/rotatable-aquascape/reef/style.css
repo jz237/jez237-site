@@ -31,3 +31,14 @@
 .reef-stock-name small{font-size:10px;font-style:italic;color:#8fb0c3;margin-top:2px}
 .reef-stock output{text-align:center;font-size:16px;font-weight:700;color:#f0fcff;font-variant-numeric:tabular-nums}
 #reef-learning [data-stock-add],#reef-learning [data-stock-remove]{padding:0;font-size:20px;line-height:1;background:#0f3247;color:#d7ffff}
+
+/* Phones and small tablets: full screen shows the tank alone, with one small
+   exit button. Tapping an animal still opens its field note. */
+@media (max-width:900px),(max-height:560px){
+#app.aquarium-fullscreen{min-height:0;height:100%;grid-template-columns:minmax(0,1fr);grid-template-rows:0 minmax(0,1fr) 0}
+#app.aquarium-fullscreen>header,#app.aquarium-fullscreen .views,#app.aquarium-fullscreen .caption,#app.aquarium-fullscreen .actions>:not(#fullscreen),#app.aquarium-fullscreen #reef-learning{display:none}
+#app.aquarium-fullscreen>footer{position:absolute;grid-area:auto;top:max(8px,env(safe-area-inset-top));right:max(8px,env(safe-area-inset-right));padding:0;z-index:5}
+#app.aquarium-fullscreen>footer>.actions{padding:0;border:0;background:none}
+#app.aquarium-fullscreen #fullscreen{padding:7px 11px;font-size:11px;color:#d7f3ff;background:#06182acc;border:1px solid #46718a99;backdrop-filter:blur(6px)}
+#app.aquarium-fullscreen #detail{top:auto;bottom:max(12px,env(safe-area-inset-bottom));max-height:45%;overflow-y:auto}
+}

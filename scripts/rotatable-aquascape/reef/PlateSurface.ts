@@ -1,5 +1,6 @@
 import * as T from 'three';
 import {rubbleNodules} from './ReefRockMaterial.ts';
+import {reefFluorescence} from './CoralSurface.ts';
 /** Separate upper tissue from porous lower skeleton without another material
  * batch. One packed normal/occlusion lookup only on lower faces. */
 export function finishPlateMaterial(material:T.MeshStandardMaterial,skeleton:T.Texture){
@@ -25,8 +26,9 @@ diffuseColor *= sampledDiffuseColor;`));
 mapN.xy *= normalScale*mix(vPlateTissue,.92,vPlateUnderside);`)+`
    vec3 cupSlope=normalMatrix*(cupTo*(1.4*cupF1)*(1.-cupRidge*.4))*cupLive;
    normal=normalize(normal+cupSlope-normal*dot(cupSlope,normal));`);
+  shader.fragmentShader=shader.fragmentShader.replace('#include <emissivemap_fragment>',reefFluorescence(.3));
  };
- material.customProgramCacheKey=()=> 'reef-plate-skeleton-corallites-v3';
+ material.customProgramCacheKey=()=> 'reef-plate-skeleton-corallites-fluorescent-v4';
  return material;
 }
 /** Immersed cups, asymmetric hoods and fine tissue ridges, baked offline rather than evaluated per pixel

@@ -8,7 +8,7 @@ export type CoralGrowth='canopy'|'bushy'|'antler';
 export function branchingColony(base:T.Vector3,size:number,hue:number,random:Random,surface?:(x:number,z:number)=>number|null,growth:CoralGrowth='canopy',basalGeometry?:T.BufferGeometry){
  // Aquarium Acropora read pastel under reef light: lavender, pink, lime, tan
  // and salmon colonies with pale, nearly white growing tips.
- const geometries:T.BufferGeometry[]=[],baseColor=new T.Color().setHSL(hue,.5,.41),tipColor=baseColor.clone().lerp(new T.Color('#f1e9f0'),.52);
+ const geometries:T.BufferGeometry[]=[],baseColor=new T.Color().setHSL(hue,.6,.42),tipColor=baseColor.clone().lerp(new T.Color('#f1e9f0'),.52);
  // Thick, sturdy branches as in the reference's colonies (no added triangles).
  const girth=1.4;
  let growthRandom=random;

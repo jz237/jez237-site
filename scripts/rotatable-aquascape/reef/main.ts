@@ -36,9 +36,9 @@ renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFShadowMap;renderer.
 container.appendChild(renderer.domElement);const camera=new T.PerspectiveCamera(31,1,.1,120);camera.position.set(0,3.25,17.7);
 const controls=new OrbitControls(camera,renderer.domElement);controls.target.set(0,2.67,0);controls.enableDamping=true;controls.dampingFactor=.08;controls.minDistance=7;controls.maxDistance=30;controls.minPolarAngle=.52;controls.maxPolarAngle=1.69;controls.maxAzimuthAngle=1.75;controls.minAzimuthAngle=-1.75;controls.enablePan=false;
 installRoomLighting(renderer,scene,.04);scene.environmentIntensity=.24;
-const ambient=new T.HemisphereLight('#b1d5ff','#202c43',.34);scene.add(ambient);
-const key=new T.SpotLight('#dceaff',245,26,.91,.52,1.7);key.position.set(-1.8,7.2,.15);key.target.position.set(-1,1,0);key.castShadow=true;key.shadow.mapSize.set(1536,1536);key.shadow.bias=-.00015;key.shadow.normalBias=.018;key.shadow.radius=4.5;key.shadow.intensity=.82;scene.add(key,key.target);
-const blue=new T.SpotLight('#5087ff',115,24,.9,.6,1.7);blue.position.set(3,7.5,-.3);blue.target.position.set(1.5,1,0);scene.add(blue,blue.target);
+const ambient=new T.HemisphereLight('#c3d0ff','#202c43',.38);scene.add(ambient);
+const key=new T.SpotLight('#eef2ff',300,26,.91,.52,1.7);key.position.set(-1.8,7.2,.15);key.target.position.set(-1,1,0);key.castShadow=true;key.shadow.mapSize.set(1536,1536);key.shadow.bias=-.00015;key.shadow.normalBias=.018;key.shadow.radius=4.5;key.shadow.intensity=.82;scene.add(key,key.target);
+const blue=new T.SpotLight('#5087ff',90,24,.9,.6,1.7);blue.position.set(3,7.5,-.3);blue.target.position.set(1.5,1,0);scene.add(blue,blue.target);
 const fill=new T.DirectionalLight('#b1cbea',.45);fill.position.set(1,4,7);scene.add(fill);
 const reflections=new ReefReflections(),water=new AquariumWater(reflections);configureReefWater(water);scene.add(water);const glassStart=scene.children.length;buildAquariumGlass(scene,reflections);const glassObjects=scene.children.slice(glassStart);
 // Under actinic reef light the polished pane edges and joints glow blue, as in
@@ -96,7 +96,7 @@ const emitter=new T.Mesh(new T.BoxGeometry(9.35,.014,.5),new T.MeshBasicMaterial
 // Soft volume shafts only: no solid cones or opaque blue overlay over the corals.
 const shaftGroup=new T.Group();scene.add(shaftGroup);
 for(let i=0;i<9;i++){
- const geo=new T.PlaneGeometry(.4+Math.random()*.3,4.75);const mat=new T.ShaderMaterial({transparent:true,depthWrite:false,blending:T.AdditiveBlending,side:T.DoubleSide,uniforms:{time:reefClock,daylight:reefDaylight,phase:{value:i*2.399}},vertexShader:'varying vec2 v;void main(){v=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:'varying vec2 v;uniform float time,daylight,phase;void main(){float center=.5+.08*sin(v.y*3.+time*.20+phase)*(1.-v.y);float envelope=exp(-pow((v.x-center)*4.,2.))*(1.-smoothstep(.30,.5,abs(v.x-.5)));float pulse=.73+.27*sin(v.y*5.-time*.28+phase);float a=envelope*smoothstep(0.,.9,v.y)*.065*pulse*daylight;gl_FragColor=vec4(.23,.47,.92,a);}' });
+ const geo=new T.PlaneGeometry(.4+Math.random()*.3,4.75);const mat=new T.ShaderMaterial({transparent:true,depthWrite:false,blending:T.AdditiveBlending,side:T.DoubleSide,uniforms:{time:reefClock,daylight:reefDaylight,phase:{value:i*2.399}},vertexShader:'varying vec2 v;void main(){v=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:'varying vec2 v;uniform float time,daylight,phase;void main(){float center=.5+.08*sin(v.y*3.+time*.20+phase)*(1.-v.y);float envelope=exp(-pow((v.x-center)*4.,2.))*(1.-smoothstep(.30,.5,abs(v.x-.5)));float pulse=.73+.27*sin(v.y*5.-time*.28+phase);float a=envelope*smoothstep(0.,.9,v.y)*.1*pulse*daylight;gl_FragColor=vec4(.3,.5,.95,a);}' });
  const mesh=new T.Mesh(geo,mat);mesh.position.set(-4.2+i,3.06,-1.92);mesh.rotation.z=-.17;shaftGroup.add(mesh);
 }
 const lighting=new AquariumLighting(scene,camera),scheduler=new CaptureScheduler(),adaptive=new AdaptiveEffects();let paused=false,night=false,time=0,last=performance.now(),revision=0,frame=0,ready=false,effectMode='auto';let cameraGoal:T.Vector3|null=null;let suspended=false,contextLost=false,raf=0,idleFrames=6;

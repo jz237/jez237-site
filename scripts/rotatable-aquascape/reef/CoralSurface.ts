@@ -1,5 +1,10 @@
 import * as T from 'three';
 import {rubbleNodules} from './ReefRockMaterial.ts';
+// Reef pigments fluoresce under actinic light: saturated tissue emits a share
+// of its own color, so greens, pinks and oranges stay vivid in blue water.
+export const reefFluorescence=(strength:number)=>`#include <emissivemap_fragment>
+ vec3 reefPigment=diffuseColor.rgb;float reefChroma=max(reefPigment.r,max(reefPigment.g,reefPigment.b))-min(reefPigment.r,min(reefPigment.g,reefPigment.b));
+ totalEmissiveRadiance+=reefPigment*${strength.toFixed(3)}*(.15+.85*smoothstep(.04,.3,reefChroma));`;
 /** Branch skin of densely set corallites at world scale: each a small raised
  * cup with a pale rim and a dark central pit, the rough "bottlebrush" surface of
  * Acropora branches. Adds no geometry; the baked maps keep their own detail. */
@@ -17,8 +22,9 @@ export function finishCoralMaterial(material:T.MeshStandardMaterial){
   shader.fragmentShader=shader.fragmentShader.replace('#include <normal_fragment_maps>',`#include <normal_fragment_maps>
    vec3 cupSlope=normalMatrix*(-cupTo*(1.5*cupF1)*(1.-2.2*cupPit));
    normal=normalize(normal+cupSlope-normal*dot(cupSlope,normal));`);
+  shader.fragmentShader=shader.fragmentShader.replace('#include <emissivemap_fragment>',reefFluorescence(.42));
  };
- material.customProgramCacheKey=()=>'reef-coral-corallite-skin-v1';
+ material.customProgramCacheKey=()=>'reef-coral-corallite-skin-fluorescent-v2';
  return material;
 }
 /** Locally baked, shared full-resolution corallite maps. Regenerate with the

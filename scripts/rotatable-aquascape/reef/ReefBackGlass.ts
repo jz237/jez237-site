@@ -40,7 +40,7 @@ export function reefBackGlass(pool:ReefReflections,time:{value:number},daylight:
     }
     void main(){
      float glow=pow(max(0.,1.-length((v-vec2(.5,.83))*vec2(1.,.65))),2.);
-     vec3 blue=mix(vec3(.004,.02,.065),vec3(.02,.12,.36),glow)*(.25+.75*daylight);
+     vec3 blue=mix(vec3(.008,.02,.07),vec3(.04,.11,.37),glow)*(.25+.75*daylight);
      vec3 toPane=world-cameraPosition;
      // Two depths: a hazier reef farther back, a nearer one in front of it.
      for(int layer=0;layer<2;layer++){
