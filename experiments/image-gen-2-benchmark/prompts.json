@@ -23437,5 +23437,115 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-20-factual-infographic-factual-infographic-eyed-click-beetle-f",
+    "title": "Factual infographic: Eyed Click Beetle — False Eyes and a Loaded Hinge",
+    "tests": "Three independent university sources fetched and read; seven supporting studies, three-plus biological macros; general hinge schematic qualified; full factual archive scanned for uniqueness.; archive_slot=2026-10-20T04:20; concept=alaus-oculatus-click-hinge-hardwood; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: bizarre-insect-life",
+    "prompt": "Render a finished direct-canvas substantial scientific entomological plate, never a photographed poster, tray, room, book or mockup. Title “EYED CLICK BEETLE”, italic scientific subtitle “Alaus oculatus”, thematic line “False eyes • a loaded hinge • a hunter in dead wood”. Naturalistic macro-photography detail blended with precise scientific illustration, warm opaque ivory background, charcoal chitin, chalk-white scales, amber-brown wood and larva, graphite leaders, selective rust-orange arrows. Crisp typography, short readable captions, clear hierarchy, sophisticated structure, no tiny paragraphs, citations, logos or watermarks.\nDOMINANT WHOLE-INSECT HERO: enormous dorsal three-quarter adult centered slightly left, almost half the canvas. Show entire elongated body, complete head, two antennae, six jointed thoracic legs, paired elytra, fine scale texture and believable macro light. Black body mottled white; two white-ringed velvet-black eyespots sit on pronotum BEHIND the small head, not on the head. True eyes are much smaller, on the head. Realistic anatomy, surface grooves, fine claws and tactile scales. Keep the insect and its close-up biology the main visual mass, controlled depth of field preserving detail.\nArrange EXACTLY SEVEN substantial supporting panels around it as a richly illustrated structured scientific plate, with ample readable gutters and varied study sizes. Preserve all studies; do not recompose into a sparse artistic atlas. At least three additional large close-ups/cutaways plus process sequence, developmental comparison, habitat and scale:\n1 “FALSE EYES / TRUE EYES”: large oblique macro of head and pronotum, separate leaders label “True eye” on small head eye and “Eyespot — not an eye” on giant pronotal spot. Do not assert predator-deterrence as proven.\n2 “WHITE IN MINIATURE”: large texture magnification of minute pale scales over black cuticle; label “Minute scales create the mottling”. No invented cellular ultrastructure.\n3 “THE THORACIC LATCH”: large simplified side cutaway just behind head; peg latched against lip, deformable soft tissue region. Exact labels “Peg”, “Lip”, “Deforming soft tissue”; caption “General click-beetle mechanism — schematic”. It is conceptual family-level mechanics, not measured Alaus-specific geometry. Never draw metal springs, gears or pistons.\n4 “LATCH → LOAD → RELEASE”: three-stage inverted-beetle side-view strip. Labels “Latch holds” → “Soft tissue deforms” → “Release + elastic recoil”. Restrained launch arc, “Click!” near rapid unbending thorax. Show body-powered launch, not leg-powered takeoff. No numerical acceleration, height, or guaranteed upright landing.\n5 “LARVA: ARMORED HUNTER”: substantial whole segmented sclerotized yellowish-brown larva, nearly black head, dark rear segments, short appropriate thoracic legs. Additional LARGE terminal-abdomen macro with conical tubercles and paired forked terminal teeth; label “Forked terminal teeth”. A discreet larva/adult comparison line reads “Larval form / Adult form”. No invented egg, pupa, duration or relative growth ratio.\n6 “IN THE ROTTING HARDWOOD”: ecological oak-stump cutaway vignette with damp fibrous decomposing wood and galleries; Alaus larva approaching generic wood-boring beetle larva. Label “Predator of wood-boring larvae”. Believable relative scale, no gore or crop-pest claim. This is a scientific habitat cutaway, not the surrounding prop composition.\n7 “WOODLAND SCALE & RANGE”: small adult side silhouette against inch ruler, caption “Adult: about 1–1¾ inches”. Scale applies only to this small silhouette, not enlarged studies. Plain geographic label “Eastern U.S. • southern Ontario & Quebec”, a subdued hardwood bark swatch, “Wooded habitats”. No invented precise range boundaries.\nPrecise leaders connect diagrams to hero anatomy. Maintain the seven distinct substantive panels, the three-plus prominent biological close-ups, mechanism sequence, larval comparison, habitat interaction and scale. White-ringed false eyes and the distinction from real eyes must be unmistakable. Fine macro textures and sophisticated editorial balance, not generic school graphics. No unsupported claims, sensational monsters, extra legs, filler paragraphs or invented statistics. Medium quality, auto size, opaque background.",
+    "image": "images/2026-10-20-factual-infographic-factual-infographic-eyed-click-beetle-f.jpg",
+    "thumb": "thumbs/2026-10-20-factual-infographic-factual-infographic-eyed-click-beetle-f.webp",
+    "color": "#afa18d",
+    "date": "2026-10-20",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "alaus-oculatus-click-hinge-hardwood",
+      "imageSha256": "e97075063937ea85d2c5219305f0a2ca455b064b0d4d4eeec6961311e8b3d47f",
+      "imageDHash": "8c8ee49595a89e96"
+    },
+    "factualInfographic": {
+      "topic": "How the eyed click beetle (Alaus oculatus) combines false eyespots, a click-jump thoracic hinge, and predatory larvae in decaying hardwood",
+      "description": "Species-specific false eyes, scale patterns, range and larval ecology, with explicitly schematic family-level click-jump mechanics.",
+      "sourceNote": "University of Florida IFAS https://ask.ifas.ufl.edu/publication/IN242; University of Minnesota Extension https://apps.extension.umn.edu/garden/diagnose/insect/general-curiosity-insects/beetles/large/eyed-click-beetle.html; University of Illinois https://news.illinois.edu/latch-load-and-release-elastic-motion-makes-click-beetles-click-study-finds/. Directly fetched and read; species facts distinguished from general click-beetle mechanics; no jump-performance quantities.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-20T08:22:47.274153+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "University of Florida IFAS",
+            "title": "Click Beetles, Alaus spp.",
+            "sourceType": "university",
+            "url": "https://ask.ifas.ufl.edu/publication/IN242"
+          },
+          {
+            "id": "S2",
+            "publisher": "University of Minnesota Extension",
+            "title": "Eyed click beetle",
+            "sourceType": "university",
+            "url": "https://apps.extension.umn.edu/garden/diagnose/insect/general-curiosity-insects/beetles/large/eyed-click-beetle.html"
+          },
+          {
+            "id": "S3",
+            "publisher": "University of Illinois Urbana-Champaign",
+            "title": "Latch, load and release: Elastic motion makes click beetles click",
+            "sourceType": "university",
+            "url": "https://news.illinois.edu/latch-load-and-release-elastic-motion-makes-click-beetles-click-study-finds/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Eyed click beetle is Alaus oculatus, family Elateridae, with elongated black adult body, white scale mottling, six legs, antennae and paired elytra.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Large white-ringed black eyespots sit on the prothorax behind the head; they are not eyes. The much smaller true eyes are on the head.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Minute scales form the mottled surface pattern.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The species occurs in eastern United States and southern Ontario and Quebec, in wooded habitats associated with hardwoods.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Adults are about 1 to 1 3/4 inches long.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Larvae are sclerotized, yellowish to dark brown, with nearly black head and dark terminal abdominal segments. The last dorsal abdominal segment has conical tubercles and paired forked teeth.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Larvae prey on wood-boring beetle larvae in decaying hardwood, including rotting oak, cherry and apple stumps.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Larval and adult forms are documented; no duration or intermediate morphology is claimed.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "General click-beetle mechanics: a thoracic hinge behind the head allows jumping without leg-powered takeoff. A peg holds against a lip while soft tissue deforms; release causes elastic recoil, rapid unbending and an audible click. Diagram is a family-level schematic, not measured species-specific internal geometry.",
+            "sourceIds": [
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
