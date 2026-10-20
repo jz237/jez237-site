@@ -23547,5 +23547,102 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-20-factual-infographic-factual-infographic-ferrofluid-a-liquid",
+    "title": "Factual infographic: Ferrofluid — A Liquid Shaped by Fields",
+    "tests": "Two independent university pages fetched and read; all 165 factual archive entries scanned with no ferrofluid overlap; coating studies qualified as one formulation and enlarged schematic.; archive_slot=2026-10-20T08:20; concept=ferrofluid-magnetic-spikes-colloidal-suspension; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: factual-infographic",
+    "prompt": "Create the finished factual science infographic directly on the canvas, not a photographed poster, mockup, book, exhibition or UI. Title: “FERROFLUID” in confident elegant large typography, subtitle “A liquid shaped by fields”. An artwork-led magnetic-materials atlas: luminous technical ink and exquisitely shaded naturalistic macro illustration, cool ivory negative space, obsidian-black liquid, restrained copper and teal annotations. Asymmetric organic composition with readable open callouts, no framed panels, grids, detached cards, boxes or bibliography.\n\nDominant central-to-lower hero: a shallow transparent circular dish in oblique macro view holding glossy black oil-based ferrofluid, a sweeping forest of tapered smooth conical spikes rising from one continuous wet liquid surface. Describe convincingly the dark menisci, tiny silver edge highlights, reflected copper rim light, broad fluid valleys and precise surface reflections. Let a few broad overlapping rows of peaks suggest a regular approximately hexagonal arrangement, not random stalagmites or solid metal crystals. A small clean partial side cutaway beneath one edge reveals a simple magnet below the dish, labelled “Magnet beneath the dish”. Sparse teal curved field lines through the diagram are explicitly labelled “Magnetic field — schematic”; they must read as explanatory ink, not real threads inside the liquid. The hero should occupy more than half of the canvas with generous quiet areas around its silhouette.\n\nA fine curved leader from the liquid opens into a large freely integrated particle magnification at upper left. Show just a few separated round dark magnetite cores with sparse outward brushlike molecular tails, suspended against a pale amber wash of carrier oil. Label “Magnetite nanoparticles”, “Surfactant coating”, and “Carrier oil”. The short explanation reads “Magnetic solid particles suspended in liquid.” One larger coating study connects naturally below it: dark spherical core, polar heads at its surface, flexible hydrocarbon tails extending outward. Exact labels: “Magnetite (Fe₃O₄)”, “Oleic-acid heads attach to the surface”, “Tails extend into oil”, and “The coating helps keep particles apart.” Caption this study “One oil-based formulation • enlarged schematic”. Do not show atomic lattices, invented chemistry, visible micron-sized grains in the hero, or a numerical scale.\n\nAcross the open upper-right space, a delicate curved two-stage process follows a flowing ink path: a small flat liquid profile labelled “Weaker field”, then a peaked profile labelled “Sufficiently strong vertical field”. Title the pathway “NORMAL-FIELD INSTABILITY” and secondary line “Also called Rosensweig instability”. Beneath in two concise readable lines: “Magnetic effects favor surface peaks.” / “Gravity and surface tension resist deformation.” A leader returns to the central forest with the short label “Spikes form along the field”. At a quiet margin show a small top-view patch of rounded peak tips in an approximately hexagonal arrangement, label “A regular spike pattern can be hexagonal”. Keep this a light integrated observation, not an extra card.\n\nMake the main labels large and short; supporting type remains clean, purposeful and legible. Use fine varied line weights and delicate curved leaders that never obscure the surface details. Footnote only “Studies are schematic; scales differ.” Retain the liquid/particle distinction and scientifically faithful mechanism. No preparation instructions, safety claims, applications, exact particle sizes, or unsupported numerical thresholds. No URLs, citations, logos, watermarks or filler text. The result is a beautiful, information-rich science artwork with breathing room rather than a rigid classroom chart. Request medium quality, auto size, opaque background.",
+    "image": "images/2026-10-20-factual-infographic-factual-infographic-ferrofluid-a-liquid.jpg",
+    "thumb": "thumbs/2026-10-20-factual-infographic-factual-infographic-ferrofluid-a-liquid.webp",
+    "color": "#a6a196",
+    "date": "2026-10-20",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "ferrofluid-magnetic-spikes-colloidal-suspension",
+      "imageSha256": "becc37db4fac42b052bdb397d9000360acb37b434c26bcc85073e9bf0f3344df",
+      "imageDHash": "e48a9a83f8eae8cc"
+    },
+    "factualInfographic": {
+      "topic": "How magnetic nanoparticles suspended in a carrier liquid respond to magnetic fields",
+      "description": "An oil-based magnetite suspension and the normal-field instability that creates surface spikes.",
+      "sourceNote": "University of Wisconsin–Madison: https://education.mrsec.wisc.edu/ferrofluids-background/ ; University of California, Santa Cruz: https://ucscphysicsdemo.sites.ucsc.edu/physics-5c6c-demos/magnetism/ferrofluid/ . Fetched and read both sources; verified suspension, example surfactant structure and normal-field spike mechanism. No numerical thresholds; enlarged studies explicitly schematic.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-20T12:21:34.195916+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "University of Wisconsin–Madison",
+            "title": "Ferrofluids – MRSEC Education Group",
+            "sourceType": "university",
+            "url": "https://education.mrsec.wisc.edu/ferrofluids-background/"
+          },
+          {
+            "id": "S2",
+            "publisher": "University of California, Santa Cruz",
+            "title": "Ferrofluid | UCSC Physics Demonstration Room",
+            "sourceType": "university",
+            "url": "https://ucscphysicsdemo.sites.ucsc.edu/physics-5c6c-demos/magnetism/ferrofluid/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Ferrofluid contains tiny magnetic solid particles suspended in a liquid carrier.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "An oil-based magnetite ferrofluid can contain magnetite (Fe3O4) nanoparticles coated with an oleic-acid surfactant in oil.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The surfactant polar heads attach to magnetite surfaces and hydrocarbon tails extend into the oil; the coating helps keep particles apart and prevents clumping.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "A magnet beneath a shallow dish can cause the ferrofluid surface to rise into spikes oriented along the magnetic field.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Normal-field instability is also called Rosensweig instability.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "In a sufficiently strong vertical magnetic field, magnetic effects overcome the stabilizing effects of gravity and surface tension and the flat surface develops spikes.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "A regular spike pattern may have hexagonal arrangement.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Field lines and enlarged particles in the illustration are explanatory schematics, not visible structures or a shared physical scale.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
