@@ -21,6 +21,10 @@ export const rubbleNodules=`
  vec3 reefNodeColor(float k){
   return k<.22?vec3(.24,.07,.33):k<.36?vec3(.34,.15,.48):k<.52?vec3(.30,.27,.08):k<.64?vec3(.42,.23,.06):k<.76?vec3(.15,.25,.08):k<.88?vec3(.46,.14,.25):k<.95?vec3(.12,.22,.21):vec3(.46,.38,.26);
  }
+ // Small colonies on the rubble: orange, lime, pink, teal, gold and violet.
+ vec3 reefFragColor(float k){
+  return k<.2?vec3(.9,.32,.08):k<.38?vec3(.45,.82,.16):k<.54?vec3(.92,.32,.5):k<.68?vec3(.14,.62,.58):k<.84?vec3(.88,.66,.14):vec3(.55,.28,.9);
+ }
 `;
 export function finishRockMaterial(material:T.MeshStandardMaterial){
  material.onBeforeCompile=shader=>{
@@ -31,16 +35,25 @@ export function finishRockMaterial(material:T.MeshStandardMaterial){
   // each its own color, with dark crevices between (two scales).
   shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
    vec3 nodeTo,nodeId,fineTo,fineId;float nodeF1,nodeF2,fineF1,fineF2;
-   reefNodules(reefRockP*13.,nodeF1,nodeF2,nodeTo,nodeId);
-   reefNodules(reefRockP*34.+vec3(17.3,5.1,9.7),fineF1,fineF2,fineTo,fineId);
-   float nodeCrevice=smoothstep(.0,.16,nodeF2-nodeF1),fineCrevice=smoothstep(.0,.14,fineF2-fineF1);
-   float nodeDome=1.-smoothstep(.12,.82,nodeF1),fineDome=1.-smoothstep(.08,.78,fineF1);
-   vec3 nodeColor=reefNodeColor(nodeId.x)*(.7+.6*nodeId.y);
+   reefNodules(reefRockP*18.,nodeF1,nodeF2,nodeTo,nodeId);
+   reefNodules(reefRockP*46.+vec3(17.3,5.1,9.7),fineF1,fineF2,fineTo,fineId);
+   float nodeCrevice=smoothstep(.0,.22,nodeF2-nodeF1),fineCrevice=smoothstep(.0,.16,fineF2-fineF1);
+   // Spherical crowns: brightness falls off toward each nodule's rim, so the
+   // surface reads as rounded popcorn rather than flat polygonal tiles.
+   float nodeDome=sqrt(max(0.,1.-nodeF1*nodeF1*1.25)),fineDome=sqrt(max(0.,1.-fineF1*fineF1*1.2));
+   vec3 nodeColor=reefNodeColor(nodeId.x)*(.55+.5*nodeId.y);
    float coverage=.82*smoothstep(.05,.45,reefNodeField(reefRockP*1.7));
    vec3 living=mix(diffuseColor.rgb,nodeColor*(.6+.55*fineId.z),.8);
    diffuseColor.rgb=mix(diffuseColor.rgb,living,coverage);
    // Rounded bumps: lit crowns, shaded flanks and dark gaps between them.
-   diffuseColor.rgb*=mix(1.,(.36+.82*nodeDome)*mix(.3,1.,nodeCrevice)*(.72+.36*fineDome)*mix(.9,1.,fineCrevice),.35+.65*coverage);`);
+   diffuseColor.rgb*=mix(1.,(.18+.95*nodeDome)*mix(.22,1.,nodeCrevice)*(.66+.42*fineDome)*mix(.8,1.,fineCrevice),.35+.65*coverage);
+   // A share of the nodules carry a small living frag in a bright fluorescent
+   // color on their crown, crowded most densely low on the rock.
+   float fragPick=step(.84,nodeId.z)*coverage*(.5+.5*(1.-smoothstep(1.,2.8,reefRockP.y)))*smoothstep(.62,.3,nodeF1);
+   vec3 fragColor=reefFragColor(nodeId.y);
+   diffuseColor.rgb=mix(diffuseColor.rgb,fragColor*(.3+.75*nodeDome)*(.66+.42*fineDome),fragPick);`);
+  shader.fragmentShader=shader.fragmentShader.replace('#include <emissivemap_fragment>',`#include <emissivemap_fragment>
+   totalEmissiveRadiance+=fragColor*fragPick*(.12+.3*nodeDome);`);
   shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',`
    vec3 stoneN=normalize(reefRockN),stoneSign=sign(stoneN+vec3(.000001));
    vec3 stoneWeight=pow(abs(stoneN),vec3(4.));stoneWeight/=dot(stoneWeight,vec3(1.));
@@ -72,6 +85,6 @@ export function finishRockMaterial(material:T.MeshStandardMaterial){
    slope+=(-nodeTo*2.4*nodeF1-fineTo*1.1*fineF1)*(.35+.65*coverage);
    normal=normalize(normalMatrix*normalize(stoneN+slope-stoneN*dot(slope,stoneN)));`);
  };
- material.customProgramCacheKey=()=> 'reef-porous-rock-triplanar-lower-micropores-rubble-v3';
+ material.customProgramCacheKey=()=> 'reef-porous-rock-triplanar-lower-micropores-rubble-frags-v4';
  return material;
 }
