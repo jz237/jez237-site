@@ -23,19 +23,20 @@ const mix=(a,b,t)=>a+(b-a)*t;
 function cleanSetup(value){
  if(!object(value)||typeof value.course!=='string'||! /^[a-z][a-z0-9-]{0,47}$/.test(value.course)||!integer(value.layoutRevision,0,999)||!integer(value.difficulty,0,3)||![3,4,5,6,9].includes(value.laps)||!SEA_STATES.has(value.seaState)||!integer(value.waveSeed,0,996)||!integer(value.rider,0,3)||!object(value.tune))fail('Invalid time-trial ghost setup.');
  if(!integer(value.waterRevision??0,0,999))fail('Invalid ghost water revision.');
+ if(!integer(value.water??0,0,3))fail('Invalid ghost water option.');
  const tune={};for(const key of ['engine','grip','handling']){const v=value.tune[key]??0;if(!number(v,-1,1))fail('Invalid time-trial ghost tuning.');tune[key]=Object.is(v,-0)?0:v;}
- return Object.freeze({...(value.waterRevision?{waterRevision:value.waterRevision}:{}),course:value.course,layoutRevision:value.layoutRevision,difficulty:value.difficulty,laps:value.laps,seaState:value.seaState,waveSeed:value.waveSeed,rider:value.rider,tune:Object.freeze(tune)});
+ return Object.freeze({...(value.waterRevision?{waterRevision:value.waterRevision}:{}),...(value.water?{water:value.water}:{}),course:value.course,layoutRevision:value.layoutRevision,difficulty:value.difficulty,laps:value.laps,seaState:value.seaState,waveSeed:value.waveSeed,rider:value.rider,tune:Object.freeze(tune)});
 }
 
 // createRace keeps the applied stats rather than the tune sliders. Pass the
 // numeric tune used to create that race; omitted sliders mean their zero value.
 export function ghostMetadata(state,{tune={}}={}){
  if(!object(state)||!object(state.course)||!Array.isArray(state.racers)||!state.racers[0])fail('Invalid time-trial state.');
- return cleanSetup({waterRevision:ghostWaterRevision(state.seaState),course:state.course.id,layoutRevision:state.course.layoutRevision??0,difficulty:state.difficulty,laps:state.laps,seaState:state.seaState,waveSeed:state.waveSeed,rider:state.racers[0].id,tune});
+ return cleanSetup({waterRevision:ghostWaterRevision(state.seaState),water:state.waterChoice??0,course:state.course.id,layoutRevision:state.course.layoutRevision??0,difficulty:state.difficulty,laps:state.laps,seaState:state.seaState,waveSeed:state.waveSeed,rider:state.racers[0].id,tune});
 }
 
 export function ghostKey(setup){
- const s=cleanSetup(setup);return JSON.stringify([s.course,s.layoutRevision,s.difficulty,s.laps,s.seaState,s.waveSeed,s.rider,s.tune.engine,s.tune.grip,s.tune.handling,s.waterRevision??0]);
+ const s=cleanSetup(setup);return JSON.stringify([s.course,s.layoutRevision,s.difficulty,s.laps,s.seaState,s.waveSeed,s.rider,s.tune.engine,s.tune.grip,s.tune.handling,s.waterRevision??0,...(s.water?[s.water]:[])]);
 }
 
 function pose(state){

@@ -1,5 +1,18 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unreleased
+
+### original water option
+
+Options now has a Water setting with the original's four choices: venue water,
+Calm (amplitude 10), Rough (40) or Random (10 to 40, drawn from the original
+random stream). As in the original's water selection (948DC, used by 9345C and
+by the custom-sea rule), it applies to Original-physics Time trials and
+two-player races; Championship, Stunt and Reverse keep each venue's water.
+Modern physics keeps its own Sea choice in race setup. Ghosts record the water
+choice, so a calm-water ghost never replays on venue water, and ghosts saved
+before this option keep their keys.
+
 ## v2.45.0 — Original records browser
 
 The original records browser now opens after the championship initials and,
