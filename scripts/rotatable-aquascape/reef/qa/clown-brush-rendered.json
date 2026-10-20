@@ -1,10 +1,10 @@
 {
   "samples": [
     {
-      "time": 0.35279999985694943,
+      "time": 0.3616999999761592,
       "behavior": {
         "brushing": 8,
-        "maxBrush": 0.1503076564794386,
+        "maxBrush": 0.12082421613267144,
         "captured": 0,
         "swallowed": 0,
         "carried": 0,
@@ -17,29 +17,41 @@
       "clowns": [
         {
           "species": "clown",
-          "x": 2.791311784006119,
-          "y": 2.0238811814074684,
-          "z": 0.6020116034887408,
+          "x": 3.7218096789197688,
+          "y": 1.9072451681329121,
+          "z": 1.026193267466621,
           "mode": "sheltering",
           "hostVisits": 1,
-          "speed": 0
+          "speed": 0,
+          "speedBL": 0,
+          "energy": 0.8053059135176777,
+          "hunger": 0.826162250466379,
+          "coasting": false,
+          "heightAboveSand": 1.5957455272536163,
+          "pecks": 0
         },
         {
           "species": "clown",
-          "x": 3.3113376467326527,
-          "y": 1.1901838660156208,
-          "z": 1.561711591882323,
+          "x": 2.700104845498019,
+          "y": 1.6111839266222476,
+          "z": 0.6107129486670313,
           "mode": "sheltering",
           "hostVisits": 1,
-          "speed": 0
+          "speed": 0,
+          "speedBL": 0,
+          "energy": 0.803082562236571,
+          "hunger": 0.5704326945449,
+          "coasting": false,
+          "heightAboveSand": 1.1695149687742157,
+          "pecks": 0
         }
       ]
     },
     {
-      "time": 0.986399999856949,
+      "time": 0.978399999976158,
       "behavior": {
-        "brushing": 8,
-        "maxBrush": 0.1620733603488897,
+        "brushing": 5,
+        "maxBrush": 0.15335602236876017,
         "captured": 0,
         "swallowed": 0,
         "carried": 0,
@@ -52,29 +64,417 @@
       "clowns": [
         {
           "species": "clown",
-          "x": 2.791768431564812,
-          "y": 2.023595850984198,
-          "z": 0.6030031235638285,
-          "mode": "darting from anemone",
+          "x": 3.5905078199536438,
+          "y": 1.8997947419077112,
+          "z": 1.0655431620619007,
+          "mode": "circling anemone",
           "hostVisits": 1,
-          "speed": 0.04412109998271903
+          "speed": 0.48519467364569707,
+          "speedBL": 1.1086070498998295,
+          "energy": 0.8071112431385372,
+          "hunger": 0.8269022904663784,
+          "coasting": false,
+          "heightAboveSand": 1.5764956659961848,
+          "pecks": 0
         },
         {
           "species": "clown",
-          "x": 3.292797582114598,
-          "y": 1.1950102047709883,
-          "z": 1.563054338579413,
+          "x": 2.5598802285530438,
+          "y": 1.647068901431001,
+          "z": 0.8730397557036382,
           "mode": "returning to anemone",
           "hostVisits": 1,
-          "speed": 0.3185432023199649
+          "speed": 0.7209269318439289,
+          "speedBL": 1.8233498387218208,
+          "energy": 0.8007901024373044,
+          "hunger": 0.5711727345448994,
+          "coasting": false,
+          "heightAboveSand": 1.2157000112825034,
+          "pecks": 0
         }
       ]
     },
     {
-      "time": 1.6197999998569503,
+      "time": 1.59519999997616,
+      "behavior": {
+        "brushing": 5,
+        "maxBrush": 0.09619164926890543,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 3.4229784928153206,
+          "y": 1.8263278109296077,
+          "z": 1.3671150675850081,
+          "mode": "circling anemone",
+          "hostVisits": 1,
+          "speed": 0.5215458795865483,
+          "speedBL": 1.1916648519890087,
+          "energy": 0.8052586774729988,
+          "hunger": 0.827642450466378,
+          "coasting": false,
+          "heightAboveSand": 1.5043656150560658,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 2.3978091496940808,
+          "y": 1.698315893497198,
+          "z": 1.0411705274279943,
+          "mode": "returning to anemone",
+          "hostVisits": 1,
+          "speed": 0.11928104996786816,
+          "speedBL": 0.3016825611788433,
+          "energy": 0.7996077625073292,
+          "hunger": 0.5719128945448989,
+          "coasting": false,
+          "heightAboveSand": 1.2005299677189802,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 2.2284999999761586,
+      "behavior": {
+        "brushing": 4,
+        "maxBrush": 0.09298189951838921,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 3.4882637744720646,
+          "y": 1.7678278659924755,
+          "z": 1.56237039681517,
+          "mode": "circling anemone",
+          "hostVisits": 1,
+          "speed": 0.13309974795785648,
+          "speedBL": 0.3041157022958566,
+          "energy": 0.8063395129205271,
+          "hunger": 0.8284024104663773,
+          "coasting": false,
+          "heightAboveSand": 1.4655249552149185,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 2.350881437884637,
+          "y": 1.7226109747676124,
+          "z": 0.9892275466528289,
+          "mode": "returning to anemone",
+          "hostVisits": 1,
+          "speed": 0.22640959394558047,
+          "speedBL": 0.5726293170236536,
+          "energy": 0.801507662507329,
+          "hunger": 0.5726728545448982,
+          "coasting": false,
+          "heightAboveSand": 1.2251066245856324,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 2.8452999999761586,
+      "behavior": {
+        "brushing": 3,
+        "maxBrush": 0.08533093728180785,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 3.5408882826550716,
+          "y": 1.7500918372807583,
+          "z": 1.5590721780583556,
+          "mode": "circling anemone",
+          "hostVisits": 1,
+          "speed": 0.08296862181050009,
+          "speedBL": 0.18957256551987473,
+          "energy": 0.8093905129205271,
+          "hunger": 0.8291425704663767,
+          "coasting": true,
+          "heightAboveSand": 1.4519933942737964,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 2.358374454717388,
+          "y": 1.7370213078086978,
+          "z": 0.9412699112945466,
+          "mode": "sheltering",
+          "hostVisits": 2,
+          "speed": 0.005668141902682485,
+          "speedBL": 0.014335718597270957,
+          "energy": 0.8078589625073285,
+          "hunger": 0.5734130145448977,
+          "coasting": false,
+          "heightAboveSand": 1.2549837776630808,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 3.4619999999761557,
+      "behavior": {
+        "brushing": 3,
+        "maxBrush": 0.02238759372854691,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 3.4921042741129362,
+          "y": 1.7124272899957693,
+          "z": 1.4540442881412956,
+          "mode": "circling anemone",
+          "hostVisits": 1,
+          "speed": 0.31687640272730094,
+          "speedBL": 0.7240215795668572,
+          "energy": 0.8134906129205267,
+          "hunger": 0.8298826104663761,
+          "coasting": false,
+          "heightAboveSand": 1.391922453865529,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 2.4576930761919202,
+          "y": 1.7565399259181889,
+          "z": 0.7528279435897969,
+          "mode": "circling anemone",
+          "hostVisits": 2,
+          "speed": 0.4603224184574825,
+          "speedBL": 1.1642356116558463,
+          "energy": 0.8089545693470075,
+          "hunger": 0.5741530545448971,
+          "coasting": false,
+          "heightAboveSand": 1.2971893713265608,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 4.095399999976156,
+      "behavior": {
+        "brushing": 3,
+        "maxBrush": 0.10663658864087715,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 3.363218181323507,
+          "y": 1.6704735172588774,
+          "z": 1.4472436079349875,
+          "mode": "circling anemone",
+          "hostVisits": 1,
+          "speed": 0.13853697465739392,
+          "speedBL": 0.316539061781069,
+          "energy": 0.8153908129205267,
+          "hunger": 0.8306426904663757,
+          "coasting": false,
+          "heightAboveSand": 1.3383884478911217,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 2.5945150432241024,
+          "y": 1.7966065511652556,
+          "z": 0.48199513661231475,
+          "mode": "circling anemone",
+          "hostVisits": 2,
+          "speed": 0.5276404666441241,
+          "speedBL": 1.3344946863033076,
+          "energy": 0.8083704668252413,
+          "hunger": 0.5749131345448967,
+          "coasting": false,
+          "heightAboveSand": 1.3395710332154196,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 4.7287999999761645,
+      "behavior": {
+        "brushing": 4,
+        "maxBrush": 0.0919384408594524,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 3.3739393781473193,
+          "y": 1.6428904224803949,
+          "z": 1.5261356009146043,
+          "mode": "circling anemone",
+          "hostVisits": 1,
+          "speed": 0.1361039597231489,
+          "speedBL": 0.3109799374643309,
+          "energy": 0.8207425129205265,
+          "hunger": 0.8314027704663752,
+          "coasting": true,
+          "heightAboveSand": 1.3218433436333208,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 2.720944742183024,
+          "y": 1.8123703866701308,
+          "z": 0.23122283132120677,
+          "mode": "sheltering",
+          "hostVisits": 3,
+          "speed": 0.12126613291186318,
+          "speedBL": 0.30670318186300205,
+          "energy": 0.8098046420990898,
+          "hunger": 0.5756732145448962,
+          "coasting": true,
+          "heightAboveSand": 1.4093763744568282,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 5.3621999999761725,
+      "behavior": {
+        "brushing": 2,
+        "maxBrush": 0.02080423353530932,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 3.452168689522313,
+          "y": 1.6154524143937183,
+          "z": 1.5059235565348141,
+          "mode": "sheltering",
+          "hostVisits": 2,
+          "speed": 0.08873153634829802,
+          "speedBL": 0.2027400795747349,
+          "energy": 0.825792712920526,
+          "hunger": 0.8321628504663746,
+          "coasting": false,
+          "heightAboveSand": 1.2984994779575068,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 2.726211467966097,
+          "y": 1.8082151640478397,
+          "z": 0.15329496641305762,
+          "mode": "returning to anemone",
+          "hostVisits": 3,
+          "speed": 0.16441268663254766,
+          "speedBL": 0.415828334902844,
+          "energy": 0.8127551420990897,
+          "hunger": 0.5764332945448956,
+          "coasting": false,
+          "heightAboveSand": 1.3953206180969422,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 5.678799999976176,
+      "behavior": {
+        "brushing": 4,
+        "maxBrush": 0.06384150279016997,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 3.458865084938884,
+          "y": 1.6123334844372852,
+          "z": 1.4982544717293005,
+          "mode": "sheltering",
+          "hostVisits": 2,
+          "speed": 0.009673743556931473,
+          "speedBL": 0.022103252341076872,
+          "energy": 0.8267425129205259,
+          "hunger": 0.8325427704663743,
+          "coasting": false,
+          "heightAboveSand": 1.294683205093438,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 2.692709372029423,
+          "y": 1.8009190416579386,
+          "z": 0.11890214863856201,
+          "mode": "returning to anemone",
+          "hostVisits": 3,
+          "speed": 0.14951712580036328,
+          "speedBL": 0.378154865871014,
+          "energy": 0.8137049420990896,
+          "hunger": 0.5768132145448952,
+          "coasting": false,
+          "heightAboveSand": 1.382207094240432,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 5.99549999997618,
       "behavior": {
         "brushing": 9,
-        "maxBrush": 0.1503578159507771,
+        "maxBrush": 0.053928849870195535,
         "captured": 0,
         "swallowed": 0,
         "carried": 0,
@@ -87,99 +487,88 @@
       "clowns": [
         {
           "species": "clown",
-          "x": 2.560600200283883,
-          "y": 1.9259060809656927,
-          "z": 0.8142345871933453,
-          "mode": "darting from anemone",
-          "hostVisits": 1,
-          "speed": 0.9777135645631487
-        },
-        {
-          "species": "clown",
-          "x": 2.9304278254380693,
-          "y": 1.3288841398007953,
-          "z": 1.2632475163926316,
-          "mode": "returning to anemone",
-          "hostVisits": 1,
-          "speed": 1.0134653482609741
-        }
-      ]
-    },
-    {
-      "time": 2.2530999998569516,
-      "behavior": {
-        "brushing": 6,
-        "maxBrush": 0.10450717018140776,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 1.9028282266827545,
-          "y": 1.7402729799116172,
-          "z": 0.9168714685125595,
-          "mode": "darting from anemone",
-          "hostVisits": 1,
-          "speed": 1.191583209121991
-        },
-        {
-          "species": "clown",
-          "x": 2.591876665087224,
-          "y": 1.4586408204375418,
-          "z": 0.9790834444797434,
-          "mode": "returning to anemone",
-          "hostVisits": 1,
-          "speed": 0.19548087568544514
-        }
-      ]
-    },
-    {
-      "time": 2.9197999998569495,
-      "behavior": {
-        "brushing": 5,
-        "maxBrush": 0.09691686077815344,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 1.6654828344157473,
-          "y": 1.694708631995678,
-          "z": 0.9580400484632148,
+          "x": 3.4463953516078982,
+          "y": 1.6134313977178436,
+          "z": 1.4659387538210984,
           "mode": "returning to anemone",
           "hostVisits": 2,
-          "speed": 0.15445831226829668
+          "speed": 0.31102784537270783,
+          "speedBL": 0.7106583827569515,
+          "energy": 0.8276926129205258,
+          "hunger": 0.832922810466374,
+          "coasting": false,
+          "heightAboveSand": 1.2899412655771239,
+          "pecks": 0
         },
         {
           "species": "clown",
-          "x": 2.6459698226535417,
-          "y": 1.5175441570689483,
-          "z": 1.1070330363380432,
-          "mode": "sheltering",
-          "hostVisits": 2,
-          "speed": 0.26809267813083115
+          "x": 2.6074184788384978,
+          "y": 1.7859187914734214,
+          "z": 0.13687927465695415,
+          "mode": "returning to anemone",
+          "hostVisits": 3,
+          "speed": 0.4518897358964001,
+          "speedBL": 1.1429078879870758,
+          "energy": 0.8146070414835697,
+          "hunger": 0.5771932545448949,
+          "coasting": false,
+          "heightAboveSand": 1.3616207817756218,
+          "pecks": 0
         }
       ]
     },
     {
-      "time": 3.619899999856947,
+      "time": 6.312299999976185,
+      "behavior": {
+        "brushing": 9,
+        "maxBrush": 0.051133935482503404,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 3.3410674844282537,
+          "y": 1.623364953526755,
+          "z": 1.3572797072926175,
+          "mode": "returning to anemone",
+          "hostVisits": 2,
+          "speed": 0.612794746078757,
+          "speedBL": 1.4001567052250152,
+          "energy": 0.8291158001161179,
+          "hunger": 0.8333029704663737,
+          "coasting": true,
+          "heightAboveSand": 1.2975599918134133,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 2.4969961435615473,
+          "y": 1.7558691422744388,
+          "z": 0.2734838749508303,
+          "mode": "returning to anemone",
+          "hostVisits": 3,
+          "speed": 0.6375277288866836,
+          "speedBL": 1.6124187213717176,
+          "energy": 0.8131680195675547,
+          "hunger": 0.5775734145448946,
+          "coasting": false,
+          "heightAboveSand": 1.336239844836103,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 6.628799999976186,
       "behavior": {
         "brushing": 7,
-        "maxBrush": 0.11434757534558736,
+        "maxBrush": 0.1090718714636235,
         "captured": 0,
         "swallowed": 0,
         "carried": 0,
@@ -192,29 +581,41 @@
       "clowns": [
         {
           "species": "clown",
-          "x": 2.0363151232837664,
-          "y": 1.7190730724920706,
-          "z": 1.0204920248728793,
+          "x": 3.1304505550989914,
+          "y": 1.6398736673408623,
+          "z": 1.2843061455393365,
           "mode": "returning to anemone",
           "hostVisits": 2,
-          "speed": 0.9606491476199965
+          "speed": 0.7876403738331308,
+          "speedBL": 1.7996563413529338,
+          "energy": 0.8294810287146536,
+          "hunger": 0.8336827704663735,
+          "coasting": true,
+          "heightAboveSand": 1.294077885208432,
+          "pecks": 0
         },
         {
           "species": "clown",
-          "x": 2.677269397473315,
-          "y": 1.5289028633000084,
-          "z": 1.119734316926856,
-          "mode": "circling anemone",
-          "hostVisits": 2,
-          "speed": 0.06101240024209121
+          "x": 2.4534413964057977,
+          "y": 1.721780803168738,
+          "z": 0.47211289035498094,
+          "mode": "returning to anemone",
+          "hostVisits": 3,
+          "speed": 0.6588190362280051,
+          "speedBL": 1.6662681478422765,
+          "energy": 0.8103934470467884,
+          "hunger": 0.5779532145448945,
+          "coasting": false,
+          "heightAboveSand": 1.2527195575330414,
+          "pecks": 0
         }
       ]
     },
     {
-      "time": 4.219999999856951,
+      "time": 6.9288999999761876,
       "behavior": {
         "brushing": 10,
-        "maxBrush": 0.11100912143708323,
+        "maxBrush": 0.10604412657337937,
         "captured": 0,
         "swallowed": 0,
         "carried": 0,
@@ -227,29 +628,323 @@
       "clowns": [
         {
           "species": "clown",
-          "x": 2.4453750014913123,
-          "y": 1.7158764025258093,
-          "z": 0.7057338968818601,
+          "x": 2.8756421720772734,
+          "y": 1.6529098666637365,
+          "z": 1.263137594827026,
           "mode": "returning to anemone",
           "hostVisits": 2,
-          "speed": 0.7876003419403531
+          "speed": 0.8799456130918368,
+          "speedBL": 2.010561869676224,
+          "energy": 0.8280097287214813,
+          "hunger": 0.8340428904663733,
+          "coasting": true,
+          "heightAboveSand": 1.263290767124686,
+          "pecks": 0
         },
         {
           "species": "clown",
-          "x": 2.552597713673048,
-          "y": 1.5771671780774053,
-          "z": 0.9669913437246201,
-          "mode": "circling anemone",
-          "hostVisits": 2,
-          "speed": 0.4257833033819342
+          "x": 2.4733495534434953,
+          "y": 1.6933189421426624,
+          "z": 0.6618078307546271,
+          "mode": "returning to anemone",
+          "hostVisits": 3,
+          "speed": 0.5727878605621409,
+          "speedBL": 1.4486803128668435,
+          "energy": 0.8078214281729396,
+          "hunger": 0.5783133345448942,
+          "coasting": true,
+          "heightAboveSand": 1.2252884947307576,
+          "pecks": 0
         }
       ]
     },
     {
-      "time": 4.836699999856958,
+      "time": 7.245599999976193,
+      "behavior": {
+        "brushing": 9,
+        "maxBrush": 0.09803642256451696,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 2.696205312564379,
+          "y": 1.6536161328430445,
+          "z": 1.2539247673874023,
+          "mode": "sheltering",
+          "hostVisits": 3,
+          "speed": 0.2104857406171717,
+          "speedBL": 0.48093268254214033,
+          "energy": 0.8266396901187121,
+          "hunger": 0.834422930466373,
+          "coasting": false,
+          "heightAboveSand": 1.2298680276018419,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 2.4994522890315376,
+          "y": 1.6813862532373611,
+          "z": 0.7493757081996686,
+          "mode": "sheltering",
+          "hostVisits": 4,
+          "speed": 0.08838657178412382,
+          "speedBL": 0.2235450422077528,
+          "energy": 0.8110198219318835,
+          "hunger": 0.5786933745448939,
+          "coasting": true,
+          "heightAboveSand": 1.2287909753935506,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 7.562399999976195,
+      "behavior": {
+        "brushing": 10,
+        "maxBrush": 0.09681009471335672,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 2.6709914193735713,
+          "y": 1.6533976040764211,
+          "z": 1.2523706895124052,
+          "mode": "sheltering",
+          "hostVisits": 3,
+          "speed": 0.022915600205121976,
+          "speedBL": 0.05235918141722061,
+          "energy": 0.8275900901187124,
+          "hunger": 0.8348030904663727,
+          "coasting": false,
+          "heightAboveSand": 1.2245230257993605,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 2.5025463759221824,
+          "y": 1.6800232527906134,
+          "z": 0.759430732323212,
+          "mode": "sheltering",
+          "hostVisits": 4,
+          "speed": 0.00962265347081216,
+          "speedBL": 0.024337367462753744,
+          "energy": 0.8148214219318833,
+          "hunger": 0.5790735345448936,
+          "coasting": true,
+          "heightAboveSand": 1.229779833735231,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 7.8622999999762,
+      "behavior": {
+        "brushing": 9,
+        "maxBrush": 0.07810135068346662,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 2.6500685015565995,
+          "y": 1.6539148097632907,
+          "z": 1.2476882917541343,
+          "mode": "circling anemone",
+          "hostVisits": 3,
+          "speed": 0.10536938217250962,
+          "speedBL": 0.240755404510755,
+          "energy": 0.8284897901187129,
+          "hunger": 0.8351629704663724,
+          "coasting": false,
+          "heightAboveSand": 1.2201973045025853,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 2.502878080210534,
+          "y": 1.6798771311368945,
+          "z": 0.760508689969244,
+          "mode": "sheltering",
+          "hostVisits": 4,
+          "speed": 0.00117918091215839,
+          "speedBL": 0.0029823540098697673,
+          "energy": 0.8166202219318838,
+          "hunger": 0.5794334145448934,
+          "coasting": false,
+          "heightAboveSand": 1.2298876659332438,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 8.1789999999762,
+      "behavior": {
+        "brushing": 8,
+        "maxBrush": 0.06713227522610844,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 2.622913956859434,
+          "y": 1.6570210625855648,
+          "z": 1.2272438856245131,
+          "mode": "circling anemone",
+          "hostVisits": 3,
+          "speed": 0.10750252839406135,
+          "speedBL": 0.2456293676190275,
+          "energy": 0.829439890118713,
+          "hunger": 0.8355430104663721,
+          "coasting": false,
+          "heightAboveSand": 1.2151082068683199,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 2.5216539505222832,
+          "y": 1.6796459719916843,
+          "z": 0.7988556615760442,
+          "mode": "circling anemone",
+          "hostVisits": 4,
+          "speed": 0.4422075494563391,
+          "speedBL": 1.1184199512709292,
+          "energy": 0.8175567688925036,
+          "hunger": 0.5798134545448931,
+          "coasting": false,
+          "heightAboveSand": 1.2395300730945478,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 8.512399999976193,
+      "behavior": {
+        "brushing": 10,
+        "maxBrush": 0.05831296631573044,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 2.6165027010312203,
+          "y": 1.6611589243247287,
+          "z": 1.1971168842875315,
+          "mode": "circling anemone",
+          "hostVisits": 3,
+          "speed": 0.060780801965483786,
+          "speedBL": 0.13887626805793216,
+          "energy": 0.830440090118713,
+          "hunger": 0.8359430904663718,
+          "coasting": false,
+          "heightAboveSand": 1.2146969929199383,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 2.5849215028636445,
+          "y": 1.681537511120818,
+          "z": 0.9412960503250385,
+          "mode": "circling anemone",
+          "hostVisits": 4,
+          "speed": 0.1326739935991112,
+          "speedBL": 0.33555564946475025,
+          "energy": 0.8167973737905838,
+          "hunger": 0.5802135345448928,
+          "coasting": false,
+          "heightAboveSand": 1.2393252020836043,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 8.81239999997619,
+      "behavior": {
+        "brushing": 8,
+        "maxBrush": 0.09938172514194854,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 2.616784948881754,
+          "y": 1.6612012436972323,
+          "z": 1.196794916134211,
+          "mode": "circling anemone",
+          "hostVisits": 3,
+          "speed": 0.033090870179490965,
+          "speedBL": 0.07560835672959589,
+          "energy": 0.8313400901187132,
+          "hunger": 0.8363030904663715,
+          "coasting": false,
+          "heightAboveSand": 1.2147629630745236,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 2.5849215028636445,
+          "y": 1.681537511120818,
+          "z": 0.9412960503250385,
+          "mode": "circling anemone",
+          "hostVisits": 4,
+          "speed": 0.01599786547394634,
+          "speedBL": 0.0404613895574764,
+          "energy": 0.817697373790584,
+          "hunger": 0.5805735345448925,
+          "coasting": false,
+          "heightAboveSand": 1.2393252020836043,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 9.12899999997619,
       "behavior": {
         "brushing": 6,
-        "maxBrush": 0.13397155607720657,
+        "maxBrush": 0.07205815035652981,
         "captured": 0,
         "swallowed": 0,
         "carried": 0,
@@ -262,379 +957,41 @@
       "clowns": [
         {
           "species": "clown",
-          "x": 2.726371362369912,
-          "y": 1.7366065020479935,
-          "z": 0.5353483625660082,
-          "mode": "returning to anemone",
-          "hostVisits": 2,
-          "speed": 0.3700820091235169
-        },
-        {
-          "species": "clown",
-          "x": 2.218030551910443,
-          "y": 1.551696212551462,
-          "z": 0.862596215214266,
-          "mode": "circling anemone",
-          "hostVisits": 2,
-          "speed": 0.6886054559316868
-        }
-      ]
-    },
-    {
-      "time": 5.453399999856962,
-      "behavior": {
-        "brushing": 1,
-        "maxBrush": 0.13555767954510003,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.7677289015258113,
-          "y": 1.7327867166262332,
-          "z": 0.5616845971233586,
-          "mode": "sheltering",
-          "hostVisits": 3,
-          "speed": 0.004937329645022729
-        },
-        {
-          "species": "clown",
-          "x": 2.010743910059368,
-          "y": 1.52837077746605,
-          "z": 0.672478503835049,
-          "mode": "sheltering",
-          "hostVisits": 3,
-          "speed": 0.07387234122440897
-        }
-      ]
-    },
-    {
-      "time": 5.770099999856966,
-      "behavior": {
-        "brushing": 1,
-        "maxBrush": 0.11796176644024622,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.742694965127308,
-          "y": 1.7162588296824328,
-          "z": 0.6282295155593608,
+          "x": 2.6806753770053207,
+          "y": 1.6652245338325058,
+          "z": 1.2093390600640084,
           "mode": "circling anemone",
           "hostVisits": 3,
-          "speed": 0.5271398056952697
+          "speed": 0.3661840345490953,
+          "speedBL": 0.8366831383609314,
+          "energy": 0.8345389901187131,
+          "hunger": 0.8366830104663713,
+          "coasting": true,
+          "heightAboveSand": 1.232236580192532,
+          "pecks": 0
         },
         {
           "species": "clown",
-          "x": 2.0043761011512724,
-          "y": 1.5277300300683483,
-          "z": 0.666343451619832,
-          "mode": "sheltering",
-          "hostVisits": 3,
-          "speed": 0.008048119686939947
-        }
-      ]
-    },
-    {
-      "time": 6.07009999985697,
-      "behavior": {
-        "brushing": 4,
-        "maxBrush": 0.09551273009310036,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.6625409936930633,
-          "y": 1.6806906593235724,
-          "z": 0.798268324283457,
+          "x": 2.598130569208378,
+          "y": 1.6846556165431856,
+          "z": 0.9416569765388079,
           "mode": "circling anemone",
-          "hostVisits": 3,
-          "speed": 0.6918477484030202
-        },
-        {
-          "species": "clown",
-          "x": 1.9974042806866381,
-          "y": 1.5284396415905188,
-          "z": 0.660709723315341,
-          "mode": "darting from anemone",
-          "hostVisits": 3,
-          "speed": 0.10827350245040085
+          "hostVisits": 4,
+          "speed": 0.07169176759137448,
+          "speedBL": 0.18132097318249984,
+          "energy": 0.8186471737905845,
+          "hunger": 0.5809534545448922,
+          "coasting": false,
+          "heightAboveSand": 1.2442053928785097,
+          "pecks": 0
         }
       ]
     },
     {
-      "time": 6.38679999985697,
-      "behavior": {
-        "brushing": 5,
-        "maxBrush": 0.10266572816528692,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.5864830768373577,
-          "y": 1.6441400196863656,
-          "z": 1.004944752915513,
-          "mode": "circling anemone",
-          "hostVisits": 3,
-          "speed": 0.7035907049537069
-        },
-        {
-          "species": "clown",
-          "x": 1.9467261262389841,
-          "y": 1.5324122212206097,
-          "z": 0.6589094632758448,
-          "mode": "darting from anemone",
-          "hostVisits": 3,
-          "speed": 0.2821557656797929
-        }
-      ]
-    },
-    {
-      "time": 6.703499999856973,
-      "behavior": {
-        "brushing": 5,
-        "maxBrush": 0.17072692145734575,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.5175443056760467,
-          "y": 1.6104977533875933,
-          "z": 1.2066121260545826,
-          "mode": "circling anemone",
-          "hostVisits": 3,
-          "speed": 0.6545180741149851
-        },
-        {
-          "species": "clown",
-          "x": 1.8707159476464552,
-          "y": 1.5425940140092191,
-          "z": 0.8295607080562172,
-          "mode": "darting from anemone",
-          "hostVisits": 3,
-          "speed": 0.8819225046791597
-        }
-      ]
-    },
-    {
-      "time": 7.003699999856976,
-      "behavior": {
-        "brushing": 2,
-        "maxBrush": 0.09050955604973954,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.461376524430991,
-          "y": 1.5929846419657665,
-          "z": 1.369433705477604,
-          "mode": "circling anemone",
-          "hostVisits": 3,
-          "speed": 0.45512114054559816
-        },
-        {
-          "species": "clown",
-          "x": 1.884985865174823,
-          "y": 1.5583142036991222,
-          "z": 1.142362022298551,
-          "mode": "darting from anemone",
-          "hostVisits": 3,
-          "speed": 1.1540064884045564
-        }
-      ]
-    },
-    {
-      "time": 7.320199999856978,
-      "behavior": {
-        "brushing": 2,
-        "maxBrush": 0.08874465914617097,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.4401953336835303,
-          "y": 1.5900055912837603,
-          "z": 1.428813381379742,
-          "mode": "sheltering",
-          "hostVisits": 4,
-          "speed": 0.057905747124291466
-        },
-        {
-          "species": "clown",
-          "x": 1.8783252671735922,
-          "y": 1.5719056413652897,
-          "z": 1.4302771311049038,
-          "mode": "sheltering",
-          "hostVisits": 4,
-          "speed": 0.394064067582841
-        }
-      ]
-    },
-    {
-      "time": 7.63689999985698,
-      "behavior": {
-        "brushing": 2,
-        "maxBrush": 0.08040816786735255,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.4378625317201124,
-          "y": 1.5896808231471689,
-          "z": 1.4353513920294154,
-          "mode": "sheltering",
-          "hostVisits": 4,
-          "speed": 0.006308618025280554
-        },
-        {
-          "species": "clown",
-          "x": 1.8764348210341733,
-          "y": 1.5736285143538695,
-          "z": 1.4774998786559017,
-          "mode": "sheltering",
-          "hostVisits": 4,
-          "speed": 0.04293182979804104
-        }
-      ]
-    },
-    {
-      "time": 7.9368999998569825,
-      "behavior": {
-        "brushing": 2,
-        "maxBrush": 0.0710043838342749,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.429822763619301,
-          "y": 1.5897306831696776,
-          "z": 1.4472983224601645,
-          "mode": "darting from anemone",
-          "hostVisits": 4,
-          "speed": 0.1291850701805794
-        },
-        {
-          "species": "clown",
-          "x": 1.850113004586627,
-          "y": 1.5705698325821627,
-          "z": 1.468449689639772,
-          "mode": "returning to anemone",
-          "hostVisits": 4,
-          "speed": 0.15115874498013745
-        }
-      ]
-    },
-    {
-      "time": 8.253599999856979,
-      "behavior": {
-        "brushing": 4,
-        "maxBrush": 0.05225472719333191,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.307340264581192,
-          "y": 1.6063228656935127,
-          "z": 1.4565738649341502,
-          "mode": "darting from anemone",
-          "hostVisits": 4,
-          "speed": 0.7712585188586064
-        },
-        {
-          "species": "clown",
-          "x": 1.8474951485217446,
-          "y": 1.5731128920031097,
-          "z": 1.397630662308971,
-          "mode": "returning to anemone",
-          "hostVisits": 4,
-          "speed": 0.47261468299890647
-        }
-      ]
-    },
-    {
-      "time": 8.570299999856976,
+      "time": 9.445799999976185,
       "behavior": {
         "brushing": 6,
-        "maxBrush": 0.05019569657529489,
+        "maxBrush": 0.07896444217354377,
         "captured": 0,
         "swallowed": 0,
         "carried": 0,
@@ -647,169 +1004,41 @@
       "clowns": [
         {
           "species": "clown",
-          "x": 2.192269678322621,
-          "y": 1.6315531069915412,
-          "z": 1.3900554648654762,
-          "mode": "darting from anemone",
-          "hostVisits": 4,
-          "speed": 0.14372171871790662
+          "x": 2.796777719022571,
+          "y": 1.6735855893577067,
+          "z": 1.2860756325826932,
+          "mode": "circling anemone",
+          "hostVisits": 3,
+          "speed": 0.4776416254125449,
+          "speedBL": 1.0913493119766378,
+          "energy": 0.8381660178254209,
+          "hunger": 0.837063170466371,
+          "coasting": true,
+          "heightAboveSand": 1.2747867436127869,
+          "pecks": 0
         },
         {
           "species": "clown",
-          "x": 1.9330191994480244,
-          "y": 1.5885170761704783,
-          "z": 1.277946081687205,
-          "mode": "returning to anemone",
+          "x": 2.618230604251942,
+          "y": 1.6905630747458789,
+          "z": 0.9308605174624502,
+          "mode": "circling anemone",
           "hostVisits": 4,
-          "speed": 0.423291730938355
+          "speed": 0.07701802694618236,
+          "speedBL": 0.19479201124004597,
+          "energy": 0.8210978737905844,
+          "hunger": 0.581333614544892,
+          "coasting": true,
+          "heightAboveSand": 1.2557419331199713,
+          "pecks": 0
         }
       ]
     },
     {
-      "time": 8.870299999856973,
-      "behavior": {
-        "brushing": 3,
-        "maxBrush": 0.11243791451368904,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.306117721077751,
-          "y": 1.6951843059416296,
-          "z": 1.1700551810914752,
-          "mode": "darting from anemone",
-          "hostVisits": 4,
-          "speed": 1.256278025006004
-        },
-        {
-          "species": "clown",
-          "x": 1.9627892616375577,
-          "y": 1.598753290463525,
-          "z": 1.072428803870944,
-          "mode": "returning to anemone",
-          "hostVisits": 4,
-          "speed": 0.7608004979457136
-        }
-      ]
-    },
-    {
-      "time": 9.18719999985697,
-      "behavior": {
-        "brushing": 4,
-        "maxBrush": 0.07024895646437326,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.3058307025260976,
-          "y": 1.8025771041781549,
-          "z": 0.8051195817688808,
-          "mode": "darting from anemone",
-          "hostVisits": 4,
-          "speed": 1.315642871022606
-        },
-        {
-          "species": "clown",
-          "x": 2.0940860053202393,
-          "y": 1.5895144200624354,
-          "z": 0.9433312625617001,
-          "mode": "returning to anemone",
-          "hostVisits": 4,
-          "speed": 0.47150213914931066
-        }
-      ]
-    },
-    {
-      "time": 9.48699999985697,
-      "behavior": {
-        "brushing": 5,
-        "maxBrush": 0.07572635998950367,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 1.989076911695681,
-          "y": 1.8982843315849485,
-          "z": 0.6267580366420614,
-          "mode": "darting from anemone",
-          "hostVisits": 4,
-          "speed": 1.1281427193701687
-        },
-        {
-          "species": "clown",
-          "x": 2.25579759659111,
-          "y": 1.5582551320530487,
-          "z": 0.9882836954468911,
-          "mode": "returning to anemone",
-          "hostVisits": 4,
-          "speed": 0.6687762900796055
-        }
-      ]
-    },
-    {
-      "time": 9.80369999985697,
-      "behavior": {
-        "brushing": 5,
-        "maxBrush": 0.1463171063688331,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 1.749416106551963,
-          "y": 1.9097547741577452,
-          "z": 0.7737333546938555,
-          "mode": "darting from anemone",
-          "hostVisits": 4,
-          "speed": 0.8694938051666525
-        },
-        {
-          "species": "clown",
-          "x": 2.4766799177606336,
-          "y": 1.5298212663825788,
-          "z": 1.026295366958234,
-          "mode": "returning to anemone",
-          "hostVisits": 4,
-          "speed": 0.7523178325052281
-        }
-      ]
-    },
-    {
-      "time": 10.12049999985697,
+      "time": 9.762499999976182,
       "behavior": {
         "brushing": 6,
-        "maxBrush": 0.10169554356419908,
+        "maxBrush": 0.052246974343473584,
         "captured": 0,
         "swallowed": 0,
         "carried": 0,
@@ -822,29 +1051,88 @@
       "clowns": [
         {
           "species": "clown",
-          "x": 1.7883745554492954,
-          "y": 1.8719686844731045,
-          "z": 1.0100330919317035,
-          "mode": "darting from anemone",
-          "hostVisits": 4,
-          "speed": 0.6393716492462164
+          "x": 2.9153509176143406,
+          "y": 1.686627840666105,
+          "z": 1.3764353774963551,
+          "mode": "circling anemone",
+          "hostVisits": 3,
+          "speed": 0.47563742997265934,
+          "speedBL": 1.0867699847195198,
+          "energy": 0.8389520669158631,
+          "hunger": 0.8374432104663707,
+          "coasting": false,
+          "heightAboveSand": 1.31949209974017,
+          "pecks": 0
         },
         {
           "species": "clown",
-          "x": 2.7286183180233903,
-          "y": 1.5333054298873197,
-          "z": 1.0580985251377004,
-          "mode": "returning to anemone",
+          "x": 2.638361407711059,
+          "y": 1.6951166955092571,
+          "z": 0.917393149313914,
+          "mode": "circling anemone",
           "hostVisits": 4,
-          "speed": 0.8522467910864807
+          "speed": 0.0792515491126877,
+          "speedBL": 0.20044097801073218,
+          "energy": 0.8248982737905844,
+          "hunger": 0.5817136545448917,
+          "coasting": true,
+          "heightAboveSand": 1.2664000021479356,
+          "pecks": 0
         }
       ]
     },
     {
-      "time": 10.420399999856967,
+      "time": 10.079199999976172,
+      "behavior": {
+        "brushing": 9,
+        "maxBrush": 0.13506787751666421,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 3.074526069086034,
+          "y": 1.710922581009684,
+          "z": 1.4264397804386553,
+          "mode": "circling anemone",
+          "hostVisits": 3,
+          "speed": 0.5984102567878536,
+          "speedBL": 1.3672900084056088,
+          "energy": 0.8386975312961452,
+          "hunger": 0.8378232504663704,
+          "coasting": false,
+          "heightAboveSand": 1.3569800498759226,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 2.679126818483761,
+          "y": 1.6985347144069358,
+          "z": 0.9240414469277368,
+          "mode": "circling anemone",
+          "hostVisits": 4,
+          "speed": 0.24610836336785194,
+          "speedBL": 0.622450937582688,
+          "energy": 0.8274980737905845,
+          "hunger": 0.5820936945448913,
+          "coasting": false,
+          "heightAboveSand": 1.2731153528936523,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 10.379199999976171,
       "behavior": {
         "brushing": 7,
-        "maxBrush": 0.07860889368104428,
+        "maxBrush": 0.14937217025216623,
         "captured": 0,
         "swallowed": 0,
         "carried": 0,
@@ -857,29 +1145,41 @@
       "clowns": [
         {
           "species": "clown",
-          "x": 1.9253134382233006,
-          "y": 1.8341662122956335,
-          "z": 1.0542711469869805,
-          "mode": "darting from anemone",
-          "hostVisits": 4,
-          "speed": 0.4920859130719665
+          "x": 3.266850313818011,
+          "y": 1.7472611207798654,
+          "z": 1.4156445070820654,
+          "mode": "circling anemone",
+          "hostVisits": 3,
+          "speed": 0.696158736200734,
+          "speedBL": 1.590632636179875,
+          "energy": 0.8369786365233928,
+          "hunger": 0.8381832504663701,
+          "coasting": false,
+          "heightAboveSand": 1.4090834709819346,
+          "pecks": 0
         },
         {
           "species": "clown",
-          "x": 2.962107704225928,
-          "y": 1.5468751938350016,
-          "z": 1.1187612439888397,
-          "mode": "sheltering",
-          "hostVisits": 5,
-          "speed": 0.56656141210646
+          "x": 2.7546641756264516,
+          "y": 1.702616682032861,
+          "z": 1.012190663125375,
+          "mode": "circling anemone",
+          "hostVisits": 4,
+          "speed": 0.5079239477491978,
+          "speedBL": 1.284628174234922,
+          "energy": 0.8280501377302356,
+          "hunger": 0.582453694544891,
+          "coasting": false,
+          "heightAboveSand": 1.2688755186715113,
+          "pecks": 0
         }
       ]
     },
     {
-      "time": 10.73719999985696,
+      "time": 10.695899999976168,
       "behavior": {
         "brushing": 6,
-        "maxBrush": 0.12227505922824511,
+        "maxBrush": 0.09905823081228934,
         "captured": 0,
         "swallowed": 0,
         "carried": 0,
@@ -892,64 +1192,41 @@
       "clowns": [
         {
           "species": "clown",
-          "x": 2.0094486881668425,
-          "y": 1.7914708408159432,
-          "z": 0.9448543232478382,
-          "mode": "darting from anemone",
+          "x": 3.476812674492305,
+          "y": 1.796946296075035,
+          "z": 1.3701499172898202,
+          "mode": "circling anemone",
+          "hostVisits": 3,
+          "speed": 0.6202076617086063,
+          "speedBL": 1.4170942582814297,
+          "energy": 0.834505801400124,
+          "hunger": 0.8385632904663698,
+          "coasting": false,
+          "heightAboveSand": 1.477906298448798,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 2.7997727317055543,
+          "y": 1.704887249871564,
+          "z": 1.193014416323546,
+          "mode": "circling anemone",
           "hostVisits": 4,
-          "speed": 0.44994299449293
-        },
-        {
-          "species": "clown",
-          "x": 3.0248382314881015,
-          "y": 1.5491132218003694,
-          "z": 1.1449060079210733,
-          "mode": "sheltering",
-          "hostVisits": 5,
-          "speed": 0.061681588374646476
+          "speed": 0.647069931378344,
+          "speedBL": 1.6365526142888802,
+          "energy": 0.8262781819675589,
+          "hunger": 0.5828337345448907,
+          "coasting": false,
+          "heightAboveSand": 1.2907646103311317,
+          "pecks": 0
         }
       ]
     },
     {
-      "time": 11.037199999856957,
-      "behavior": {
-        "brushing": 4,
-        "maxBrush": 0.09721109507145631,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.0023892828520164,
-          "y": 1.7694634270584222,
-          "z": 0.8736946982767941,
-          "mode": "sheltering",
-          "hostVisits": 5,
-          "speed": 0.08285131234164686
-        },
-        {
-          "species": "clown",
-          "x": 3.036599577601337,
-          "y": 1.5467791444117336,
-          "z": 1.166712939619848,
-          "mode": "darting from anemone",
-          "hostVisits": 5,
-          "speed": 0.18768442979619987
-        }
-      ]
-    },
-    {
-      "time": 11.353899999856951,
+      "time": 11.012599999976162,
       "behavior": {
         "brushing": 6,
-        "maxBrush": 0.12734300247667055,
+        "maxBrush": 0.07752122376376597,
         "captured": 0,
         "swallowed": 0,
         "carried": 0,
@@ -962,834 +1239,41 @@
       "clowns": [
         {
           "species": "clown",
-          "x": 2.0011274815481985,
-          "y": 1.766537756839189,
-          "z": 0.8642758757660959,
+          "x": 3.572747694449937,
+          "y": 1.8219525759628443,
+          "z": 1.3442258900211246,
           "mode": "sheltering",
-          "hostVisits": 5,
-          "speed": 0.00902634554277934
+          "hostVisits": 4,
+          "speed": 0.10072229724181797,
+          "speedBL": 0.2301374167308438,
+          "energy": 0.8349013592918294,
+          "hunger": 0.8389433304663695,
+          "coasting": false,
+          "heightAboveSand": 1.5126964522396527,
+          "pecks": 0
         },
         {
           "species": "clown",
-          "x": 2.9627020359344125,
-          "y": 1.5529892321383627,
-          "z": 1.2738602228431246,
-          "mode": "darting from anemone",
-          "hostVisits": 5,
-          "speed": 0.8272343867950976
-        }
-      ]
-    },
-    {
-      "time": 11.653899999856947,
-      "behavior": {
-        "brushing": 3,
-        "maxBrush": 0.08086175284400231,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.0009920966721335,
-          "y": 1.7662238472728913,
-          "z": 0.8632652839126694,
-          "mode": "sheltering",
-          "hostVisits": 5,
-          "speed": 0.0011053340353459815
-        },
-        {
-          "species": "clown",
-          "x": 2.666229733489608,
-          "y": 1.6027684624060505,
-          "z": 1.2925893975971638,
-          "mode": "darting from anemone",
-          "hostVisits": 5,
-          "speed": 1.1655856426685351
-        }
-      ]
-    },
-    {
-      "time": 11.970599999856942,
-      "behavior": {
-        "brushing": 4,
-        "maxBrush": 0.0906685799761491,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 1.9676899735514741,
-          "y": 1.7594410453919944,
-          "z": 0.859003611061276,
-          "mode": "returning to anemone",
-          "hostVisits": 5,
-          "speed": 0.15722523025604382
-        },
-        {
-          "species": "clown",
-          "x": 2.340384670026273,
-          "y": 1.6861873865964283,
-          "z": 1.1092592949552609,
-          "mode": "darting from anemone",
-          "hostVisits": 5,
-          "speed": 1.1967689466804847
-        }
-      ]
-    },
-    {
-      "time": 12.287299999856938,
-      "behavior": {
-        "brushing": 1,
-        "maxBrush": 0.029497075596201742,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 1.9181735537462858,
-          "y": 1.7515655034732176,
-          "z": 0.6935813824714001,
-          "mode": "returning to anemone",
-          "hostVisits": 5,
-          "speed": 0.8868521732285592
-        },
-        {
-          "species": "clown",
-          "x": 2.1100811019158554,
-          "y": 1.7523526750916627,
-          "z": 0.9849789882508003,
-          "mode": "darting from anemone",
-          "hostVisits": 5,
-          "speed": 0.48731785682974704
-        }
-      ]
-    },
-    {
-      "time": 12.603999999856935,
-      "behavior": {
-        "brushing": 0,
-        "maxBrush": 0.00995157871785865,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.05891883357458,
-          "y": 1.7559503913123282,
-          "z": 0.4454024335811836,
-          "mode": "returning to anemone",
-          "hostVisits": 5,
-          "speed": 0.935887816178847
-        },
-        {
-          "species": "clown",
-          "x": 1.903268731124524,
-          "y": 1.8131253445166542,
-          "z": 1.0187997365599155,
-          "mode": "darting from anemone",
-          "hostVisits": 5,
-          "speed": 0.7036113532249734
-        }
-      ]
-    },
-    {
-      "time": 12.903999999856929,
-      "behavior": {
-        "brushing": 0,
-        "maxBrush": 0.0014819163246272047,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.31121608284371,
-          "y": 1.7688054048716477,
-          "z": 0.3291623003196104,
-          "mode": "returning to anemone",
-          "hostVisits": 5,
-          "speed": 0.9059765461420687
-        },
-        {
-          "species": "clown",
-          "x": 1.725630247771653,
-          "y": 1.8821272158057796,
-          "z": 0.8946032082694955,
-          "mode": "darting from anemone",
-          "hostVisits": 5,
-          "speed": 0.8579137176604983
-        }
-      ]
-    },
-    {
-      "time": 13.220699999856922,
-      "behavior": {
-        "brushing": 0,
-        "maxBrush": 0.0002957460301961542,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.5648109363438145,
-          "y": 1.7844148046064268,
-          "z": 0.2698870063812008,
-          "mode": "returning to anemone",
-          "hostVisits": 5,
-          "speed": 0.6744409789908771
-        },
-        {
-          "species": "clown",
-          "x": 1.7182725656991316,
-          "y": 1.9435899392299378,
-          "z": 0.7107926678982258,
-          "mode": "darting from anemone",
-          "hostVisits": 5,
-          "speed": 0.44579420896450517
-        }
-      ]
-    },
-    {
-      "time": 13.520799999856916,
-      "behavior": {
-        "brushing": 0,
-        "maxBrush": 0.0001135441952905963,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.6548352243065865,
-          "y": 1.791563689276212,
-          "z": 0.2542473487943345,
-          "mode": "sheltering",
-          "hostVisits": 6,
-          "speed": 0.0957314067233733
-        },
-        {
-          "species": "clown",
-          "x": 1.8031742477882207,
-          "y": 1.978552382444733,
-          "z": 0.6681180803820271,
-          "mode": "darting from anemone",
-          "hostVisits": 5,
-          "speed": 0.3348981096078877
-        }
-      ]
-    },
-    {
-      "time": 13.837499999856911,
-      "behavior": {
-        "brushing": 0,
-        "maxBrush": 0.000016415415864962293,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.6661186153256424,
-          "y": 1.792463955561992,
-          "z": 0.2522797292827883,
-          "mode": "sheltering",
-          "hostVisits": 6,
-          "speed": 0.010429584420078734
-        },
-        {
-          "species": "clown",
-          "x": 1.8708668340041457,
-          "y": 2.0138029834752356,
-          "z": 0.7420764664708476,
-          "mode": "darting from anemone",
-          "hostVisits": 5,
-          "speed": 0.3688325364093494
-        }
-      ]
-    },
-    {
-      "time": 14.154199999856907,
-      "behavior": {
-        "brushing": 0,
-        "maxBrush": 0.000002960390565379006,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.670583507266931,
-          "y": 1.7936789447589423,
-          "z": 0.247507091244073,
+          "x": 2.8061309847590863,
+          "y": 1.7041835095392672,
+          "z": 1.4072359953240228,
           "mode": "circling anemone",
-          "hostVisits": 6,
-          "speed": 0.060675666697182946
-        },
-        {
-          "species": "clown",
-          "x": 1.8292275372052447,
-          "y": 2.049481114792325,
-          "z": 0.8372650881150185,
-          "mode": "darting from anemone",
-          "hostVisits": 5,
-          "speed": 0.358811690727232
+          "hostVisits": 4,
+          "speed": 0.6929624408656224,
+          "speedBL": 1.7526227679702575,
+          "energy": 0.8232021192258003,
+          "hunger": 0.5832137745448904,
+          "coasting": false,
+          "heightAboveSand": 1.3224657624719547,
+          "pecks": 0
         }
       ]
     },
     {
-      "time": 14.470899999856906,
-      "behavior": {
-        "brushing": 0,
-        "maxBrush": 0.0000011049106308708494,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.670420006190419,
-          "y": 1.7959628947200523,
-          "z": 0.2226483957480134,
-          "mode": "circling anemone",
-          "hostVisits": 6,
-          "speed": 0.09294846928180374
-        },
-        {
-          "species": "clown",
-          "x": 1.7689048046666223,
-          "y": 2.070501165727419,
-          "z": 0.8596043585935434,
-          "mode": "sheltering",
-          "hostVisits": 6,
-          "speed": 0.06890141812062363
-        }
-      ]
-    },
-    {
-      "time": 14.770899999856903,
-      "behavior": {
-        "brushing": 0,
-        "maxBrush": 1.8148906280479314e-7,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.608022516500984,
-          "y": 1.7923504770708585,
-          "z": 0.2065263613806449,
-          "mode": "circling anemone",
-          "hostVisits": 6,
-          "speed": 0.413726797368537
-        },
-        {
-          "species": "clown",
-          "x": 1.761510791784615,
-          "y": 2.0730234018023554,
-          "z": 0.8619039061012931,
-          "mode": "sheltering",
-          "hostVisits": 6,
-          "speed": 0.008437421564616852
-        }
-      ]
-    },
-    {
-      "time": 15.087599999856895,
-      "behavior": {
-        "brushing": 0,
-        "maxBrush": 2.9621689826962113e-8,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.4623870157538796,
-          "y": 1.772251887766134,
-          "z": 0.30724752276501394,
-          "mode": "circling anemone",
-          "hostVisits": 6,
-          "speed": 0.6665591184617702
-        },
-        {
-          "species": "clown",
-          "x": 1.760591415268455,
-          "y": 2.073337018325956,
-          "z": 0.8621898333792347,
-          "mode": "sheltering",
-          "hostVisits": 6,
-          "speed": 0.0009192260252714033
-        }
-      ]
-    },
-    {
-      "time": 15.387599999856892,
-      "behavior": {
-        "brushing": 0,
-        "maxBrush": 1.2483581812162849e-8,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.343178611193127,
-          "y": 1.7399148501821793,
-          "z": 0.46682013621957474,
-          "mode": "circling anemone",
-          "hostVisits": 6,
-          "speed": 0.6062474758019699
-        },
-        {
-          "species": "clown",
-          "x": 1.7673928546904143,
-          "y": 2.0758166753131673,
-          "z": 0.849080530494209,
-          "mode": "returning to anemone",
-          "hostVisits": 6,
-          "speed": 0.13709969285098605
-        }
-      ]
-    },
-    {
-      "time": 15.70429999985689,
-      "behavior": {
-        "brushing": 2,
-        "maxBrush": 0.0690618970513115,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.289077305424058,
-          "y": 1.7201104010765065,
-          "z": 0.5498635007468334,
-          "mode": "sheltering",
-          "hostVisits": 7,
-          "speed": 0.09958397483298523
-        },
-        {
-          "species": "clown",
-          "x": 1.8816306472506177,
-          "y": 2.0717025968620955,
-          "z": 0.8261432761953589,
-          "mode": "returning to anemone",
-          "hostVisits": 6,
-          "speed": 0.5876114404223781
-        }
-      ]
-    },
-    {
-      "time": 16.020999999856883,
-      "behavior": {
-        "brushing": 2,
-        "maxBrush": 0.11847282020437343,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.2827111904570154,
-          "y": 1.7177422337275872,
-          "z": 0.5596969514951898,
-          "mode": "sheltering",
-          "hostVisits": 7,
-          "speed": 0.010849307536123688
-        },
-        {
-          "species": "clown",
-          "x": 2.0919237320551174,
-          "y": 2.0377845618035617,
-          "z": 0.9048874267026058,
-          "mode": "returning to anemone",
-          "hostVisits": 6,
-          "speed": 0.805654272556155
-        }
-      ]
-    },
-    {
-      "time": 16.32109999985687,
-      "behavior": {
-        "brushing": 3,
-        "maxBrush": 0.1139773111543709,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.264607592924135,
-          "y": 1.6919907323725423,
-          "z": 0.7205675611081994,
-          "mode": "darting from anemone",
-          "hostVisits": 7,
-          "speed": 0.9171056038780465
-        },
-        {
-          "species": "clown",
-          "x": 2.318121584931818,
-          "y": 1.981945156643237,
-          "z": 1.0232578489955495,
-          "mode": "returning to anemone",
-          "hostVisits": 6,
-          "speed": 0.9283243904187738
-        }
-      ]
-    },
-    {
-      "time": 16.63769999985686,
-      "behavior": {
-        "brushing": 3,
-        "maxBrush": 0.05831963798741296,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.2272028722177377,
-          "y": 1.6685074955097545,
-          "z": 1.0335347572312497,
-          "mode": "darting from anemone",
-          "hostVisits": 7,
-          "speed": 1.03689396301023
-        },
-        {
-          "species": "clown",
-          "x": 2.5767549459303467,
-          "y": 1.904649154074799,
-          "z": 1.1799535164995134,
-          "mode": "returning to anemone",
-          "hostVisits": 6,
-          "speed": 1.0275499164358894
-        }
-      ]
-    },
-    {
-      "time": 16.954399999856847,
-      "behavior": {
-        "brushing": 1,
-        "maxBrush": 0.08365036130149299,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.2336586510907757,
-          "y": 1.6802495575988086,
-          "z": 1.3632534459084935,
-          "mode": "darting from anemone",
-          "hostVisits": 7,
-          "speed": 1.0908942504600532
-        },
-        {
-          "species": "clown",
-          "x": 2.8919722207039147,
-          "y": 1.8155525016367822,
-          "z": 1.2144425822997678,
-          "mode": "returning to anemone",
-          "hostVisits": 6,
-          "speed": 1.0709865123206634
-        }
-      ]
-    },
-    {
-      "time": 17.25459999985684,
-      "behavior": {
-        "brushing": 0,
-        "maxBrush": 0.013499874096366498,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.341774972485887,
-          "y": 1.7343432000321655,
-          "z": 1.6864803048483923,
-          "mode": "darting from anemone",
-          "hostVisits": 7,
-          "speed": 1.0805308352491163
-        },
-        {
-          "species": "clown",
-          "x": 3.08334337327807,
-          "y": 1.7580905559871163,
-          "z": 1.1640978944285276,
-          "mode": "returning to anemone",
-          "hostVisits": 6,
-          "speed": 0.324891838292612
-        }
-      ]
-    },
-    {
-      "time": 17.571099999856845,
-      "behavior": {
-        "brushing": 0,
-        "maxBrush": 0.006925881341469726,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.434223004647055,
-          "y": 1.7697378875332865,
-          "z": 1.8174377255578034,
-          "mode": "darting from anemone",
-          "hostVisits": 7,
-          "speed": 0.2834626442464767
-        },
-        {
-          "species": "clown",
-          "x": 3.107661365752104,
-          "y": 1.7370488335615835,
-          "z": 1.1145329180289434,
-          "mode": "returning to anemone",
-          "hostVisits": 6,
-          "speed": 0.1743829917716546
-        }
-      ]
-    },
-    {
-      "time": 17.88779999985685,
-      "behavior": {
-        "brushing": 0,
-        "maxBrush": 0.0009007330952718927,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.5019291379859605,
-          "y": 1.7957901708106976,
-          "z": 1.7842567247379981,
-          "mode": "darting from anemone",
-          "hostVisits": 7,
-          "speed": 0.4456180621218853
-        },
-        {
-          "species": "clown",
-          "x": 3.005327874261527,
-          "y": 1.7014590213039495,
-          "z": 1.0857124881153721,
-          "mode": "returning to anemone",
-          "hostVisits": 6,
-          "speed": 0.5100069708649997
-        }
-      ]
-    },
-    {
-      "time": 18.18779999985685,
-      "behavior": {
-        "brushing": 0,
-        "maxBrush": 0.00012560928950080505,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.4704199261712283,
-          "y": 1.8542921633804201,
-          "z": 1.597215964783265,
-          "mode": "darting from anemone",
-          "hostVisits": 7,
-          "speed": 0.7301966574716539
-        },
-        {
-          "species": "clown",
-          "x": 2.896954882158189,
-          "y": 1.6569488819335088,
-          "z": 1.1678811571141976,
-          "mode": "returning to anemone",
-          "hostVisits": 6,
-          "speed": 0.43611612098035724
-        }
-      ]
-    },
-    {
-      "time": 18.504499999856847,
-      "behavior": {
-        "brushing": 4,
-        "maxBrush": 0.07851014231990007,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.326977728572533,
-          "y": 1.9088277256625736,
-          "z": 1.5160177123208627,
-          "mode": "darting from anemone",
-          "hostVisits": 7,
-          "speed": 0.4571894463687482
-        },
-        {
-          "species": "clown",
-          "x": 2.8935930815382473,
-          "y": 1.6294092756146166,
-          "z": 1.2462168283084567,
-          "mode": "returning to anemone",
-          "hostVisits": 6,
-          "speed": 0.1914919750290864
-        }
-      ]
-    },
-    {
-      "time": 18.821199999856834,
+      "time": 11.312599999976158,
       "behavior": {
         "brushing": 5,
-        "maxBrush": 0.11468407724547634,
+        "maxBrush": 0.0774251688807759,
         "captured": 0,
         "swallowed": 0,
         "carried": 0,
@@ -1802,449 +1286,41 @@
       "clowns": [
         {
           "species": "clown",
-          "x": 2.236108106900996,
-          "y": 1.9479947850673849,
-          "z": 1.5831999608533571,
+          "x": 3.5838773520336913,
+          "y": 1.8248689594266936,
+          "z": 1.3411687610351062,
           "mode": "sheltering",
-          "hostVisits": 8,
-          "speed": 0.22941194674200713
+          "hostVisits": 4,
+          "speed": 0.012334092765668202,
+          "speedBL": 0.028181806060227178,
+          "energy": 0.8358013592918299,
+          "hunger": 0.8393033304663692,
+          "coasting": false,
+          "heightAboveSand": 1.5167878642515782,
+          "pecks": 0
         },
         {
           "species": "clown",
-          "x": 2.9525523619679936,
-          "y": 1.6079233729910507,
-          "z": 1.2584602391300694,
-          "mode": "sheltering",
-          "hostVisits": 7,
-          "speed": 0.15131631419120248
+          "x": 2.801890260318478,
+          "y": 1.7018169095859395,
+          "z": 1.6100685980451714,
+          "mode": "circling anemone",
+          "hostVisits": 4,
+          "speed": 0.6067957662497179,
+          "speedBL": 1.5346922325382455,
+          "energy": 0.8215499714262662,
+          "hunger": 0.5835737745448901,
+          "coasting": true,
+          "heightAboveSand": 1.3307253888442767,
+          "pecks": 0
         }
       ]
     },
     {
-      "time": 19.12119999985683,
-      "behavior": {
-        "brushing": 2,
-        "maxBrush": 0.100516002184923,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.221779478790456,
-          "y": 1.956524776995285,
-          "z": 1.6045809325735538,
-          "mode": "sheltering",
-          "hostVisits": 8,
-          "speed": 0.02809296759658951
-        },
-        {
-          "species": "clown",
-          "x": 2.9693397411057965,
-          "y": 1.6023443576932606,
-          "z": 1.255830687362647,
-          "mode": "sheltering",
-          "hostVisits": 7,
-          "speed": 0.01852965537226065
-        }
-      ]
-    },
-    {
-      "time": 19.437899999856825,
-      "behavior": {
-        "brushing": 2,
-        "maxBrush": 0.14041054399422417,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.219997860635424,
-          "y": 1.9575853941293049,
-          "z": 1.6072394374279668,
-          "mode": "sheltering",
-          "hostVisits": 8,
-          "speed": 0.0030606254226036543
-        },
-        {
-          "species": "clown",
-          "x": 2.9714270797691067,
-          "y": 1.601650664279971,
-          "z": 1.2555037295316323,
-          "mode": "sheltering",
-          "hostVisits": 7,
-          "speed": 0.002018737753832393
-        }
-      ]
-    },
-    {
-      "time": 19.75459999985682,
-      "behavior": {
-        "brushing": 2,
-        "maxBrush": 0.15273851794155566,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.227919407216606,
-          "y": 1.9593098260228043,
-          "z": 1.6086700184375875,
-          "mode": "returning to anemone",
-          "hostVisits": 8,
-          "speed": 0.1271617905086084
-        },
-        {
-          "species": "clown",
-          "x": 2.970684584031628,
-          "y": 1.6011022125044057,
-          "z": 1.2539545967185382,
-          "mode": "darting from anemone",
-          "hostVisits": 7,
-          "speed": 0.11191062930880673
-        }
-      ]
-    },
-    {
-      "time": 20.054599999856816,
-      "behavior": {
-        "brushing": 4,
-        "maxBrush": 0.06990540896097824,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.3252121062946176,
-          "y": 1.9622404765097352,
-          "z": 1.5493696667658725,
-          "mode": "returning to anemone",
-          "hostVisits": 8,
-          "speed": 0.6125533384364236
-        },
-        {
-          "species": "clown",
-          "x": 2.752204830384895,
-          "y": 1.569644343885533,
-          "z": 1.1137260517743688,
-          "mode": "darting from anemone",
-          "hostVisits": 7,
-          "speed": 1.3349002747561662
-        }
-      ]
-    },
-    {
-      "time": 20.371299999856806,
-      "behavior": {
-        "brushing": 4,
-        "maxBrush": 0.09583349916583286,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.4271312327835344,
-          "y": 1.9346642960204734,
-          "z": 1.330775345921639,
-          "mode": "returning to anemone",
-          "hostVisits": 8,
-          "speed": 0.8743397225046934
-        },
-        {
-          "species": "clown",
-          "x": 2.330868023325363,
-          "y": 1.5909315367779604,
-          "z": 0.9261645765277231,
-          "mode": "darting from anemone",
-          "hostVisits": 7,
-          "speed": 1.4835716846063889
-        }
-      ]
-    },
-    {
-      "time": 20.688099999856796,
-      "behavior": {
-        "brushing": 2,
-        "maxBrush": 0.050510029273700525,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.524843962671592,
-          "y": 1.8755505749780916,
-          "z": 1.0523412724866892,
-          "mode": "returning to anemone",
-          "hostVisits": 8,
-          "speed": 1.0085037830482604
-        },
-        {
-          "species": "clown",
-          "x": 1.9127960598264768,
-          "y": 1.6642656907310083,
-          "z": 0.7718884546040831,
-          "mode": "darting from anemone",
-          "hostVisits": 7,
-          "speed": 1.3584321946163251
-        }
-      ]
-    },
-    {
-      "time": 20.98809999985679,
-      "behavior": {
-        "brushing": 1,
-        "maxBrush": 0.014704178180970959,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.628826377967695,
-          "y": 1.8003745845416792,
-          "z": 0.7643264121698471,
-          "mode": "returning to anemone",
-          "hostVisits": 8,
-          "speed": 1.0795081100095496
-        },
-        {
-          "species": "clown",
-          "x": 1.619135277781735,
-          "y": 1.7327996903045,
-          "z": 0.6826742655178147,
-          "mode": "darting from anemone",
-          "hostVisits": 7,
-          "speed": 0.5426357530770134
-        }
-      ]
-    },
-    {
-      "time": 21.304699999856798,
-      "behavior": {
-        "brushing": 2,
-        "maxBrush": 0.04034056084991068,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.6863766118178662,
-          "y": 1.7327591513081213,
-          "z": 0.5181357131791736,
-          "mode": "returning to anemone",
-          "hostVisits": 8,
-          "speed": 0.3914048203458087
-        },
-        {
-          "species": "clown",
-          "x": 1.5362680569592793,
-          "y": 1.757583844029608,
-          "z": 0.6986903934553301,
-          "mode": "darting from anemone",
-          "hostVisits": 7,
-          "speed": 0.1856107593075104
-        }
-      ]
-    },
-    {
-      "time": 21.621499999856795,
-      "behavior": {
-        "brushing": 1,
-        "maxBrush": 0.01608446364324702,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.667115211206126,
-          "y": 1.7127502850190115,
-          "z": 0.46337750071060774,
-          "mode": "returning to anemone",
-          "hostVisits": 8,
-          "speed": 0.16421647327049138
-        },
-        {
-          "species": "clown",
-          "x": 1.5796148736167528,
-          "y": 1.7935173120459866,
-          "z": 0.7972757547951163,
-          "mode": "darting from anemone",
-          "hostVisits": 7,
-          "speed": 0.5752833388960901
-        }
-      ]
-    },
-    {
-      "time": 21.921499999856792,
-      "behavior": {
-        "brushing": 1,
-        "maxBrush": 0.01917802175722433,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.598913640404271,
-          "y": 1.685976504734025,
-          "z": 0.503447858166467,
-          "mode": "returning to anemone",
-          "hostVisits": 8,
-          "speed": 0.3758664793715224
-        },
-        {
-          "species": "clown",
-          "x": 1.738419587918665,
-          "y": 1.8454444390714653,
-          "z": 0.8322527917943772,
-          "mode": "darting from anemone",
-          "hostVisits": 7,
-          "speed": 0.5224602728277059
-        }
-      ]
-    },
-    {
-      "time": 22.23809999985678,
-      "behavior": {
-        "brushing": 2,
-        "maxBrush": 0.10392368031568515,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.5862182972415813,
-          "y": 1.6551866495740408,
-          "z": 0.596008891296839,
-          "mode": "returning to anemone",
-          "hostVisits": 8,
-          "speed": 0.2486524722785573
-        },
-        {
-          "species": "clown",
-          "x": 1.8211170050724803,
-          "y": 1.8875997240301026,
-          "z": 0.7447992690645239,
-          "mode": "darting from anemone",
-          "hostVisits": 7,
-          "speed": 0.4557836989776331
-        }
-      ]
-    },
-    {
-      "time": 22.55479999985677,
-      "behavior": {
-        "brushing": 3,
-        "maxBrush": 0.12392831529732533,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.6224974900017313,
-          "y": 1.6379885415051287,
-          "z": 0.6315647056682101,
-          "mode": "sheltering",
-          "hostVisits": 9,
-          "speed": 0.06464734978814325
-        },
-        {
-          "species": "clown",
-          "x": 1.7162030626737925,
-          "y": 1.948847886129317,
-          "z": 0.5926378882699609,
-          "mode": "darting from anemone",
-          "hostVisits": 7,
-          "speed": 0.6532397656251864
-        }
-      ]
-    },
-    {
-      "time": 22.854899999856755,
+      "time": 11.629299999976158,
       "behavior": {
         "brushing": 5,
-        "maxBrush": 0.12380024816140231,
+        "maxBrush": 0.04135287684269787,
         "captured": 0,
         "swallowed": 0,
         "carried": 0,
@@ -2257,484 +1333,41 @@
       "clowns": [
         {
           "species": "clown",
-          "x": 2.6283332226616656,
-          "y": 1.6355658288359958,
-          "z": 0.6358618939695104,
-          "mode": "sheltering",
-          "hostVisits": 9,
-          "speed": 0.007910943951677303
-        },
-        {
-          "species": "clown",
-          "x": 1.575508534851791,
-          "y": 1.9968759515934957,
-          "z": 0.5880207696061104,
+          "x": 3.593186799171027,
+          "y": 1.8273098944191906,
+          "z": 1.3392831913788927,
           "mode": "darting from anemone",
-          "hostVisits": 7,
-          "speed": 0.4324544186372571
-        }
-      ]
-    },
-    {
-      "time": 23.171499999856753,
-      "behavior": {
-        "brushing": 4,
-        "maxBrush": 0.13077550194047646,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
+          "hostVisits": 4,
+          "speed": 0.1123545813845712,
+          "speedBL": 0.2567156808947884,
+          "energy": 0.8393020592918298,
+          "hunger": 0.839683370466369,
+          "coasting": true,
+          "heightAboveSand": 1.520105759350599,
+          "pecks": 0
+        },
         {
           "species": "clown",
-          "x": 2.629058228309605,
-          "y": 1.6352648417156435,
-          "z": 0.636395757662426,
+          "x": 2.7991212907438605,
+          "y": 1.7024765680397465,
+          "z": 1.7156955822429065,
           "mode": "sheltering",
-          "hostVisits": 9,
-          "speed": 0.0008624717460248645
-        },
-        {
-          "species": "clown",
-          "x": 1.521061061781239,
-          "y": 2.0296043174472,
-          "z": 0.6673359445165823,
-          "mode": "sheltering",
-          "hostVisits": 8,
-          "speed": 0.1324688055017527
+          "hostVisits": 5,
+          "speed": 0.10770245941551208,
+          "speedBL": 0.2723982879970018,
+          "energy": 0.8244975757346041,
+          "hunger": 0.5839538145448899,
+          "coasting": true,
+          "heightAboveSand": 1.3591191222630434,
+          "pecks": 0
         }
       ]
     },
     {
-      "time": 23.488299999856746,
-      "behavior": {
-        "brushing": 4,
-        "maxBrush": 0.12479559607651736,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.6302263899066944,
-          "y": 1.6347924162390441,
-          "z": 0.6350867594388164,
-          "mode": "circling anemone",
-          "hostVisits": 9,
-          "speed": 0.04093834562789808
-        },
-        {
-          "species": "clown",
-          "x": 1.5510300810656603,
-          "y": 2.0431268100418984,
-          "z": 0.6960801241215266,
-          "mode": "returning to anemone",
-          "hostVisits": 8,
-          "speed": 0.5415350302785817
-        }
-      ]
-    },
-    {
-      "time": 23.788299999856747,
-      "behavior": {
-        "brushing": 1,
-        "maxBrush": 0.11256946561143334,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.652310673831884,
-          "y": 1.6310513775250692,
-          "z": 0.6255615303786705,
-          "mode": "circling anemone",
-          "hostVisits": 9,
-          "speed": 0.10231076801353216
-        },
-        {
-          "species": "clown",
-          "x": 1.7569479957551297,
-          "y": 2.0608604631837646,
-          "z": 0.7946810805411831,
-          "mode": "returning to anemone",
-          "hostVisits": 8,
-          "speed": 0.8369631183609768
-        }
-      ]
-    },
-    {
-      "time": 24.10489999985674,
-      "behavior": {
-        "brushing": 3,
-        "maxBrush": 0.0867300703156023,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.685478755322476,
-          "y": 1.6307136469225172,
-          "z": 0.6564923591113242,
-          "mode": "circling anemone",
-          "hostVisits": 9,
-          "speed": 0.3000593432816858
-        },
-        {
-          "species": "clown",
-          "x": 1.9931119096848675,
-          "y": 2.038988410438756,
-          "z": 0.8947525178740511,
-          "mode": "returning to anemone",
-          "hostVisits": 8,
-          "speed": 0.7819828730764367
-        }
-      ]
-    },
-    {
-      "time": 24.421699999856727,
-      "behavior": {
-        "brushing": 3,
-        "maxBrush": 0.06907179958854688,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.650408676049974,
-          "y": 1.6416210639236581,
-          "z": 0.8069487621864829,
-          "mode": "circling anemone",
-          "hostVisits": 9,
-          "speed": 0.6206752525009501
-        },
-        {
-          "species": "clown",
-          "x": 2.213049269675524,
-          "y": 1.9946652828955347,
-          "z": 0.9748658527400091,
-          "mode": "returning to anemone",
-          "hostVisits": 8,
-          "speed": 0.7345056571551265
-        }
-      ]
-    },
-    {
-      "time": 24.72169999985671,
-      "behavior": {
-        "brushing": 3,
-        "maxBrush": 0.0952036935364949,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.5574284246548595,
-          "y": 1.660230055199947,
-          "z": 0.9726458970562629,
-          "mode": "circling anemone",
-          "hostVisits": 9,
-          "speed": 0.6254591256057221
-        },
-        {
-          "species": "clown",
-          "x": 2.4101774552495585,
-          "y": 1.9426274644864445,
-          "z": 1.0566468040136108,
-          "mode": "returning to anemone",
-          "hostVisits": 8,
-          "speed": 0.7406518282034054
-        }
-      ]
-    },
-    {
-      "time": 25.038399999856715,
-      "behavior": {
-        "brushing": 3,
-        "maxBrush": 0.12650576673032665,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.53479352272089,
-          "y": 1.6625586059865014,
-          "z": 1.026312624589122,
-          "mode": "circling anemone",
-          "hostVisits": 9,
-          "speed": 0.09157916052437547
-        },
-        {
-          "species": "clown",
-          "x": 2.464996907812888,
-          "y": 1.928037967718511,
-          "z": 1.0980568698883653,
-          "mode": "returning to anemone",
-          "hostVisits": 8,
-          "speed": 0.23729313228884993
-        }
-      ]
-    },
-    {
-      "time": 25.3550999998567,
-      "behavior": {
-        "brushing": 5,
-        "maxBrush": 0.09842576485205641,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.4650179845098226,
-          "y": 1.6462866063019133,
-          "z": 1.0732669272185602,
-          "mode": "circling anemone",
-          "hostVisits": 9,
-          "speed": 0.4271578423290643
-        },
-        {
-          "species": "clown",
-          "x": 2.641539986049757,
-          "y": 1.9469181132689828,
-          "z": 1.2116760517225298,
-          "mode": "returning to anemone",
-          "hostVisits": 8,
-          "speed": 0.8773322376378914
-        }
-      ]
-    },
-    {
-      "time": 25.655199999856688,
-      "behavior": {
-        "brushing": 3,
-        "maxBrush": 0.054618239684503224,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.3685080834297194,
-          "y": 1.6238613163400561,
-          "z": 1.154947473693862,
-          "mode": "circling anemone",
-          "hostVisits": 9,
-          "speed": 0.40150915578577495
-        },
-        {
-          "species": "clown",
-          "x": 2.9190081844125175,
-          "y": 1.9586435827919293,
-          "z": 1.21833993075589,
-          "mode": "returning to anemone",
-          "hostVisits": 8,
-          "speed": 0.9972167445783868
-        }
-      ]
-    },
-    {
-      "time": 25.971799999856692,
-      "behavior": {
-        "brushing": 3,
-        "maxBrush": 0.07142026259900362,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.317235784459155,
-          "y": 1.6237012766029928,
-          "z": 1.2516214816876137,
-          "mode": "circling anemone",
-          "hostVisits": 9,
-          "speed": 0.30087532961349545
-        },
-        {
-          "species": "clown",
-          "x": 3.118300789903369,
-          "y": 1.9383674465206182,
-          "z": 1.0991043566646705,
-          "mode": "returning to anemone",
-          "hostVisits": 8,
-          "speed": 0.3562265750438832
-        }
-      ]
-    },
-    {
-      "time": 26.288599999856675,
-      "behavior": {
-        "brushing": 3,
-        "maxBrush": 0.10639698952228722,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.30348482644236,
-          "y": 1.62670718643302,
-          "z": 1.284876675685427,
-          "mode": "sheltering",
-          "hostVisits": 10,
-          "speed": 0.032756322327541325
-        },
-        {
-          "species": "clown",
-          "x": 3.1237984812201702,
-          "y": 1.9233953558540378,
-          "z": 1.03641853455,
-          "mode": "returning to anemone",
-          "hostVisits": 8,
-          "speed": 0.26249909146937983
-        }
-      ]
-    },
-    {
-      "time": 26.588599999856665,
-      "behavior": {
-        "brushing": 3,
-        "maxBrush": 0.13762214145830132,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.3017784949429894,
-          "y": 1.6273671402557297,
-          "z": 1.289730634389378,
-          "mode": "darting from anemone",
-          "hostVisits": 10,
-          "speed": 0.056881498903006256
-        },
-        {
-          "species": "clown",
-          "x": 2.987494153459041,
-          "y": 1.8841359765292895,
-          "z": 1.0362559080302833,
-          "mode": "returning to anemone",
-          "hostVisits": 8,
-          "speed": 0.6485451284858877
-        }
-      ]
-    },
-    {
-      "time": 26.90519999985665,
-      "behavior": {
-        "brushing": 4,
-        "maxBrush": 0.05951165496137255,
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      },
-      "clowns": [
-        {
-          "species": "clown",
-          "x": 2.2678336905943204,
-          "y": 1.6426630714291854,
-          "z": 1.332573277722919,
-          "mode": "darting from anemone",
-          "hostVisits": 10,
-          "speed": 0.2785125083112423
-        },
-        {
-          "species": "clown",
-          "x": 2.8800413076232743,
-          "y": 1.837640360688669,
-          "z": 1.1482237908516806,
-          "mode": "returning to anemone",
-          "hostVisits": 8,
-          "speed": 0.2894529028848085
-        }
-      ]
-    },
-    {
-      "time": 27.221999999856635,
+      "time": 11.945899999976152,
       "behavior": {
         "brushing": 2,
-        "maxBrush": 0.09057876433946341,
+        "maxBrush": 0.050754775720000186,
         "captured": 0,
         "swallowed": 0,
         "carried": 0,
@@ -2747,29 +1380,135 @@
       "clowns": [
         {
           "species": "clown",
-          "x": 2.0591278491569964,
-          "y": 1.7049126203416467,
-          "z": 1.2734775608181308,
+          "x": 3.6408894473624125,
+          "y": 1.8398837725207258,
+          "z": 1.3424839250485243,
           "mode": "darting from anemone",
-          "hostVisits": 10,
-          "speed": 1.1548970319443725
+          "hostVisits": 4,
+          "speed": 0.1721809435437481,
+          "speedBL": 0.39341117749035803,
+          "energy": 0.8416018592918301,
+          "hunger": 0.8400632904663686,
+          "coasting": false,
+          "heightAboveSand": 1.5350783717952372,
+          "pecks": 0
         },
         {
           "species": "clown",
-          "x": 2.926758121846233,
-          "y": 1.8059026759653578,
-          "z": 1.2217846263296204,
-          "mode": "returning to anemone",
-          "hostVisits": 8,
-          "speed": 0.41280154634779903
+          "x": 2.79878694312047,
+          "y": 1.7026038684327178,
+          "z": 1.7286151476313203,
+          "mode": "sheltering",
+          "hostVisits": 5,
+          "speed": 0.01174200307708841,
+          "speedBL": 0.029697571933011386,
+          "energy": 0.8275470757346042,
+          "hunger": 0.5843337345448896,
+          "coasting": false,
+          "heightAboveSand": 1.36248475077519,
+          "pecks": 0
         }
       ]
     },
     {
-      "time": 27.521999999856625,
+      "time": 12.26269999997615,
+      "behavior": {
+        "brushing": 1,
+        "maxBrush": 0.07890119121223094,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 3.680354111971828,
+          "y": 1.8541196025647244,
+          "z": 1.3754121138234314,
+          "mode": "darting from anemone",
+          "hostVisits": 4,
+          "speed": 0.17273013455763442,
+          "speedBL": 0.3946660078972157,
+          "energy": 0.8425522592918302,
+          "hunger": 0.8404434504663684,
+          "coasting": false,
+          "heightAboveSand": 1.5479055296974378,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 2.8025328905108084,
+          "y": 1.7072924645437133,
+          "z": 1.7516546097330077,
+          "mode": "darting from anemone",
+          "hostVisits": 5,
+          "speed": 0.14332211188850366,
+          "speedBL": 0.36248659615028445,
+          "energy": 0.8284974757346043,
+          "hunger": 0.5847138945448893,
+          "coasting": false,
+          "heightAboveSand": 1.3734281908659771,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 12.579399999976147,
+      "behavior": {
+        "brushing": 1,
+        "maxBrush": 0.02091362799267734,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 3.6660663842358807,
+          "y": 1.8844468728689405,
+          "z": 1.481784059987365,
+          "mode": "darting from anemone",
+          "hostVisits": 4,
+          "speed": 0.6359112075142692,
+          "speedBL": 1.4529748285642259,
+          "energy": 0.843174470891794,
+          "hunger": 0.8408234904663682,
+          "coasting": false,
+          "heightAboveSand": 1.5837681694665213,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 2.845116966160848,
+          "y": 1.724851045859676,
+          "z": 1.8058632994967496,
+          "mode": "darting from anemone",
+          "hostVisits": 5,
+          "speed": 0.4024414626098039,
+          "speedBL": 1.0178445880329738,
+          "energy": 0.8294475757346043,
+          "hunger": 0.5850939345448891,
+          "coasting": false,
+          "heightAboveSand": 1.4094004953184083,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 12.912699999976141,
       "behavior": {
         "brushing": 0,
-        "maxBrush": 0.060920854945827316,
+        "maxBrush": 0.002808400907915142,
         "captured": 0,
         "swallowed": 0,
         "carried": 0,
@@ -2782,21 +1521,2242 @@
       "clowns": [
         {
           "species": "clown",
-          "x": 1.8619011898872226,
-          "y": 1.7964570108888074,
-          "z": 0.9371476440547852,
+          "x": 3.439967237073357,
+          "y": 1.964426785523436,
+          "z": 1.6835741423164288,
           "mode": "darting from anemone",
-          "hostVisits": 10,
-          "speed": 1.4334000083363858
+          "hostVisits": 4,
+          "speed": 1.1933778545643714,
+          "speedBL": 2.726713986416261,
+          "energy": 0.8374661906026457,
+          "hunger": 0.8412234504663679,
+          "coasting": false,
+          "heightAboveSand": 1.68241926292938,
+          "pecks": 0
         },
         {
           "species": "clown",
-          "x": 3.029722481041924,
-          "y": 1.7725645191191597,
-          "z": 1.2191829590452847,
+          "x": 3.056805817537461,
+          "y": 1.7796584026669557,
+          "z": 1.8420094201731843,
+          "mode": "darting from anemone",
+          "hostVisits": 5,
+          "speed": 0.9037513959757065,
+          "speedBL": 2.2857447673402547,
+          "energy": 0.8265436998516179,
+          "hunger": 0.5854938945448889,
+          "coasting": false,
+          "heightAboveSand": 1.4941284423910928,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 13.212699999976136,
+      "behavior": {
+        "brushing": 0,
+        "maxBrush": 0.0010352219956568627,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 3.2912967350251914,
+          "y": 1.9998771214920428,
+          "z": 1.7437729872463765,
+          "mode": "darting from anemone",
+          "hostVisits": 4,
+          "speed": 0.20116243403190667,
+          "speedBL": 0.45963013333825137,
+          "energy": 0.83357602385618,
+          "hunger": 0.8415834504663676,
+          "coasting": false,
+          "heightAboveSand": 1.7175184609200307,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 3.147400674208259,
+          "y": 1.7999797479970563,
+          "z": 1.823616480317151,
+          "mode": "darting from anemone",
+          "hostVisits": 5,
+          "speed": 0.21059599004975996,
+          "speedBL": 0.5326339571065168,
+          "energy": 0.8243492956956366,
+          "hunger": 0.5858538945448886,
+          "coasting": false,
+          "heightAboveSand": 1.5198188004359277,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 13.529399999976134,
+      "behavior": {
+        "brushing": 0,
+        "maxBrush": 0.0002037369263528939,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 3.2806030046812102,
+          "y": 2.0032815698451465,
+          "z": 1.736196595278401,
+          "mode": "darting from anemone",
+          "hostVisits": 4,
+          "speed": 0.4203707300817219,
+          "speedBL": 0.9604927264317838,
+          "energy": 0.8345261238561804,
+          "hunger": 0.8419634904663673,
+          "coasting": false,
+          "heightAboveSand": 1.7182569856293883,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 3.147400674208259,
+          "y": 1.7999797479970563,
+          "z": 1.823616480317151,
+          "mode": "darting from anemone",
+          "hostVisits": 5,
+          "speed": 0.23670097380504843,
+          "speedBL": 0.598658010054986,
+          "energy": 0.825299395695637,
+          "hunger": 0.5862339345448883,
+          "coasting": false,
+          "heightAboveSand": 1.5198188004359277,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 13.84609999997613,
+      "behavior": {
+        "brushing": 0,
+        "maxBrush": 0.000029198892307508594,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 3.042738028637536,
+          "y": 2.0913084230780346,
+          "z": 1.5112850692848376,
+          "mode": "darting from anemone",
+          "hostVisits": 4,
+          "speed": 1.1815220956945114,
+          "speedBL": 2.6996251114162915,
+          "energy": 0.8277421249844731,
+          "hunger": 0.842343530466367,
+          "coasting": false,
+          "heightAboveSand": 1.7327526257383532,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 3.2875360469397337,
+          "y": 1.760252114150786,
+          "z": 1.6872439090870632,
+          "mode": "darting from anemone",
+          "hostVisits": 5,
+          "speed": 1.1141448367005706,
+          "speedBL": 2.817866441908044,
+          "energy": 0.8226713261349523,
+          "hunger": 0.586613974544888,
+          "coasting": false,
+          "heightAboveSand": 1.4649791584483631,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 14.162899999976128,
+      "behavior": {
+        "brushing": 1,
+        "maxBrush": 0.00817742264702353,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 2.7870102945906963,
+          "y": 2.154490153136858,
+          "z": 1.3418990237346449,
+          "mode": "darting from anemone",
+          "hostVisits": 4,
+          "speed": 0.9143594005269271,
+          "speedBL": 2.0891929211624864,
+          "energy": 0.8219572592319367,
+          "hunger": 0.8427236904663669,
+          "coasting": true,
+          "heightAboveSand": 1.7644922461956152,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 3.660417176110035,
+          "y": 1.7101309290636186,
+          "z": 1.4860880194186041,
+          "mode": "darting from anemone",
+          "hostVisits": 5,
+          "speed": 1.4445679692052096,
+          "speedBL": 3.6535641232546476,
+          "energy": 0.8102370555749078,
+          "hunger": 0.5869941345448878,
+          "coasting": true,
+          "heightAboveSand": 1.409640361041749,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 14.479499999976127,
+      "behavior": {
+        "brushing": 3,
+        "maxBrush": 0.047127252471995555,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 2.4857514614969283,
+          "y": 2.1504890813354596,
+          "z": 1.359757451975456,
+          "mode": "darting from anemone",
+          "hostVisits": 4,
+          "speed": 1.0528662288755077,
+          "speedBL": 2.4056631025285506,
+          "energy": 0.8186989092304952,
+          "hunger": 0.8431036104663665,
+          "coasting": false,
+          "heightAboveSand": 1.7030366491318325,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 3.7923562337991603,
+          "y": 1.7125998406055478,
+          "z": 1.4261610136747347,
+          "mode": "darting from anemone",
+          "hostVisits": 5,
+          "speed": 0.23810419988756518,
+          "speedBL": 0.602207013342605,
+          "energy": 0.8080360712853125,
+          "hunger": 0.5873740545448874,
+          "coasting": true,
+          "heightAboveSand": 1.4158843863666615,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 14.79619999997612,
+      "behavior": {
+        "brushing": 2,
+        "maxBrush": 0.04848641689388082,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 2.213536869475229,
+          "y": 2.097035951557757,
+          "z": 1.5584141987444697,
+          "mode": "darting from anemone",
+          "hostVisits": 4,
+          "speed": 1.092612536466255,
+          "speedBL": 2.4964782725952475,
+          "energy": 0.8112340404500751,
+          "hunger": 0.8434836504663662,
+          "coasting": false,
+          "heightAboveSand": 1.6138600220665573,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 3.7923562337991603,
+          "y": 1.7125998406055478,
+          "z": 1.4261610136747347,
+          "mode": "darting from anemone",
+          "hostVisits": 5,
+          "speed": 0.2056739017831864,
+          "speedBL": 0.520185138161611,
+          "energy": 0.8107861712853126,
+          "hunger": 0.5877540945448871,
+          "coasting": false,
+          "heightAboveSand": 1.4158843863666615,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 15.096299999976118,
+      "behavior": {
+        "brushing": 2,
+        "maxBrush": 0.08094235575027367,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 2.0280557953241805,
+          "y": 2.0320950414781005,
+          "z": 1.7841879595755072,
+          "mode": "sheltering",
+          "hostVisits": 5,
+          "speed": 0.6871702250086458,
+          "speedBL": 1.5700950511301903,
+          "energy": 0.8049400274163862,
+          "hunger": 0.8438437704663659,
+          "coasting": false,
+          "heightAboveSand": 1.610655643006694,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 3.7933924079139723,
+          "y": 1.7128914803652397,
+          "z": 1.4254961233210681,
+          "mode": "exploring",
+          "hostVisits": 5,
+          "speed": 0.03955373593637921,
+          "speedBL": 0.10003829078208942,
+          "energy": 0.8116864712853129,
+          "hunger": 0.5881142145448869,
+          "coasting": false,
+          "heightAboveSand": 1.416204845525339,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 15.412899999976112,
+      "behavior": {
+        "brushing": 3,
+        "maxBrush": 0.06144014826313666,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 1.9797390579189733,
+          "y": 2.0130964476519004,
+          "z": 1.8482572096573742,
+          "mode": "sheltering",
+          "hostVisits": 5,
+          "speed": 0.07491709047614309,
+          "speedBL": 0.17117585820920142,
+          "energy": 0.8054948808104525,
+          "hunger": 0.8442236904663657,
+          "coasting": false,
+          "heightAboveSand": 1.6157405834722445,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 3.7933924079139723,
+          "y": 1.7128914803652397,
+          "z": 1.4254961233210681,
+          "mode": "exploring",
+          "hostVisits": 5,
+          "speed": 0.04736896241721574,
+          "speedBL": 0.1198043604265686,
+          "energy": 0.8126362712853133,
+          "hunger": 0.5884941345448866,
+          "coasting": false,
+          "heightAboveSand": 1.416204845525339,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 15.72959999997611,
+      "behavior": {
+        "brushing": 3,
+        "maxBrush": 0.05312796324405315,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 1.9744711950577534,
+          "y": 2.0110250746203757,
+          "z": 1.8552425327809525,
+          "mode": "sheltering",
+          "hostVisits": 5,
+          "speed": 0.008161941272684126,
+          "speedBL": 0.01864897973379938,
+          "energy": 0.8064449808104529,
+          "hunger": 0.8446037304663654,
+          "coasting": false,
+          "heightAboveSand": 1.6162903121549186,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 3.775514465993004,
+          "y": 1.7153906598764725,
+          "z": 1.3681207542170708,
+          "mode": "exploring",
+          "hostVisits": 5,
+          "speed": 0.5954991474678868,
+          "speedBL": 1.5061211151002125,
+          "energy": 0.8133152052420489,
+          "hunger": 0.5888741745448863,
+          "coasting": false,
+          "heightAboveSand": 1.4164777621553182,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 16.046299999976103,
+      "behavior": {
+        "brushing": 7,
+        "maxBrush": 0.1030896033424285,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 1.9716547004169271,
+          "y": 2.0106505358290154,
+          "z": 1.8594229930184993,
           "mode": "returning to anemone",
+          "hostVisits": 5,
+          "speed": 0.0772190635453907,
+          "speedBL": 0.1764355688199386,
+          "energy": 0.8073950808104534,
+          "hunger": 0.8449837704663651,
+          "coasting": false,
+          "heightAboveSand": 1.6175004767042478,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 3.6057835226398756,
+          "y": 1.721710271948135,
+          "z": 1.1497920827883825,
+          "mode": "exploring",
+          "hostVisits": 5,
+          "speed": 1.0634749181247454,
+          "speedBL": 2.6897133881346558,
+          "energy": 0.8076287033842741,
+          "hunger": 0.589254214544886,
+          "coasting": false,
+          "heightAboveSand": 1.4150516335059027,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 16.362999999976104,
+      "behavior": {
+        "brushing": 6,
+        "maxBrush": 0.08520917215675625,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 1.9557960671278705,
+          "y": 2.0078092356726067,
+          "z": 1.9005597262754315,
+          "mode": "returning to anemone",
+          "hostVisits": 5,
+          "speed": 0.1696050375931508,
+          "speedBL": 0.38752556568993585,
+          "energy": 0.8093945808104537,
+          "hunger": 0.8453638104663649,
+          "coasting": true,
+          "heightAboveSand": 1.6302528415644966,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 3.6057835226398756,
+          "y": 1.721710271948135,
+          "z": 1.1497920827883825,
+          "mode": "exploring",
+          "hostVisits": 5,
+          "speed": 0.23142879337660924,
+          "speedBL": 0.5853237470259721,
+          "energy": 0.8077654170687183,
+          "hunger": 0.5896342545448858,
+          "coasting": false,
+          "heightAboveSand": 1.4150516335059027,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 16.679699999976105,
+      "behavior": {
+        "brushing": 6,
+        "maxBrush": 0.11161078998191629,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 1.9676398592504003,
+          "y": 2.00243027775309,
+          "z": 1.954131916724688,
+          "mode": "returning to anemone",
+          "hostVisits": 5,
+          "speed": 0.19885890901922199,
+          "speedBL": 0.45436687673756654,
+          "energy": 0.8131949808104539,
+          "hunger": 0.8457438504663646,
+          "coasting": true,
+          "heightAboveSand": 1.642968400480097,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 3.6057835226398756,
+          "y": 1.721710271948135,
+          "z": 1.1497920827883825,
+          "mode": "exploring",
+          "hostVisits": 5,
+          "speed": 0.2532885500275387,
+          "speedBL": 0.6406108808580027,
+          "energy": 0.8100655170687183,
+          "hunger": 0.5900142945448855,
+          "coasting": true,
+          "heightAboveSand": 1.4150516335059027,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 16.97979999997611,
+      "behavior": {
+        "brushing": 6,
+        "maxBrush": 0.12412963670006147,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 1.9755719900034823,
+          "y": 2.0015334216417893,
+          "z": 1.9542203798370779,
+          "mode": "returning to anemone",
+          "hostVisits": 5,
+          "speed": 0.26471062008884433,
+          "speedBL": 0.6048295159730898,
+          "energy": 0.8151455808104541,
+          "hunger": 0.8461039704663643,
+          "coasting": false,
+          "heightAboveSand": 1.642397877195373,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 3.6057835226398756,
+          "y": 1.721710271948135,
+          "z": 1.1497920827883825,
+          "mode": "exploring",
+          "hostVisits": 5,
+          "speed": 0.2598008042103314,
+          "speedBL": 0.6570815065059306,
+          "energy": 0.8136667170687185,
+          "hunger": 0.5903744145448853,
+          "coasting": true,
+          "heightAboveSand": 1.4150516335059027,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 17.296399999976106,
+      "behavior": {
+        "brushing": 7,
+        "maxBrush": 0.12657184828804283,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 2.178720019868902,
+          "y": 1.9771110496693782,
+          "z": 1.8967851139386307,
+          "mode": "returning to anemone",
+          "hostVisits": 5,
+          "speed": 0.8483895237730548,
+          "speedBL": 1.93846028862792,
+          "energy": 0.8131880907664145,
+          "hunger": 0.8464838904663641,
+          "coasting": false,
+          "heightAboveSand": 1.613312806604492,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 3.6057835226398756,
+          "y": 1.721710271948135,
+          "z": 1.1497920827883825,
+          "mode": "exploring",
+          "hostVisits": 5,
+          "speed": 0.24727933778725975,
+          "speedBL": 0.6254125359423354,
+          "energy": 0.8165659170687185,
+          "hunger": 0.590754334544885,
+          "coasting": false,
+          "heightAboveSand": 1.4150516335059027,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 17.596399999976096,
+      "behavior": {
+        "brushing": 7,
+        "maxBrush": 0.12321206986044503,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 2.395920472818764,
+          "y": 1.9474510302373067,
+          "z": 1.7642835400975547,
+          "mode": "returning to anemone",
+          "hostVisits": 5,
+          "speed": 0.8349464008967423,
+          "speedBL": 1.9077444922623723,
+          "energy": 0.8089271393715849,
+          "hunger": 0.846843890466364,
+          "coasting": false,
+          "heightAboveSand": 1.5638869412304806,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 3.6057835226398756,
+          "y": 1.721710271948135,
+          "z": 1.1497920827883825,
+          "mode": "exploring",
+          "hostVisits": 5,
+          "speed": 0.22323143578164098,
+          "speedBL": 0.5645912012040243,
+          "energy": 0.817465917068719,
+          "hunger": 0.5911143345448849,
+          "coasting": false,
+          "heightAboveSand": 1.4150516335059027,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 17.913099999976083,
+      "behavior": {
+        "brushing": 7,
+        "maxBrush": 0.11732904007339556,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 2.592765343170735,
+          "y": 1.918289068407509,
+          "z": 1.6100751995950406,
+          "mode": "returning to anemone",
+          "hostVisits": 5,
+          "speed": 0.7628865736182735,
+          "speedBL": 1.7430971107583255,
+          "energy": 0.8051733444201191,
+          "hunger": 0.8472239304663637,
+          "coasting": false,
+          "heightAboveSand": 1.515767567686956,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 3.6057835226398756,
+          "y": 1.721710271948135,
+          "z": 1.1497920827883825,
+          "mode": "exploring",
+          "hostVisits": 5,
+          "speed": 0.19494693087638257,
+          "speedBL": 0.49305475946585625,
+          "energy": 0.8184160170687195,
+          "hunger": 0.5914943745448846,
+          "coasting": false,
+          "heightAboveSand": 1.4150516335059027,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 18.229799999976084,
+      "behavior": {
+        "brushing": 7,
+        "maxBrush": 0.1110997842733731,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 2.7642673324782217,
+          "y": 1.8922554375815044,
+          "z": 1.4680555175518548,
+          "mode": "returning to anemone",
+          "hostVisits": 5,
+          "speed": 0.5861867543331283,
+          "speedBL": 1.3393608868965963,
+          "energy": 0.802482569502415,
+          "hunger": 0.8476039704663634,
+          "coasting": false,
+          "heightAboveSand": 1.5022962848851102,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 3.6057835226398756,
+          "y": 1.721710271948135,
+          "z": 1.1497920827883825,
+          "mode": "exploring",
+          "hostVisits": 5,
+          "speed": 0.10379619695715422,
+          "speedBL": 0.26251866953797903,
+          "energy": 0.8193661170687195,
+          "hunger": 0.5918744145448843,
+          "coasting": false,
+          "heightAboveSand": 1.4150516335059027,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 18.52979999997608,
+      "behavior": {
+        "brushing": 7,
+        "maxBrush": 0.1371738872553807,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 2.8214901580632965,
+          "y": 1.8835211252638713,
+          "z": 1.4202412968670848,
+          "mode": "sheltering",
+          "hostVisits": 6,
+          "speed": 0.07778905347435053,
+          "speedBL": 0.17773792205656586,
+          "energy": 0.803141856100656,
+          "hunger": 0.8479639704663632,
+          "coasting": false,
+          "heightAboveSand": 1.5035667345019372,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 3.566062014258554,
+          "y": 1.726134882917537,
+          "z": 1.1522547249499593,
+          "mode": "exploring",
+          "hostVisits": 5,
+          "speed": 0.43763129990755945,
+          "speedBL": 1.106845818708873,
+          "energy": 0.8202586570729903,
+          "hunger": 0.5922344145448841,
+          "coasting": false,
+          "heightAboveSand": 1.4146860022419956,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 18.846499999976082,
+      "behavior": {
+        "brushing": 3,
+        "maxBrush": 0.10018367137958586,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 2.828605220817344,
+          "y": 1.8824351044388246,
+          "z": 1.4142960962023219,
+          "mode": "sheltering",
+          "hostVisits": 6,
+          "speed": 0.008474831070989302,
+          "speedBL": 0.019363892438088767,
+          "energy": 0.806042256100656,
+          "hunger": 0.8483440104663629,
+          "coasting": true,
+          "heightAboveSand": 1.50362452626845,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 3.376638423180168,
+          "y": 1.7515589495658621,
+          "z": 1.190991171226883,
+          "mode": "exploring",
+          "hostVisits": 5,
+          "speed": 0.712350119750399,
+          "speedBL": 1.8016575863496058,
+          "energy": 0.8182316650267071,
+          "hunger": 0.5926144545448838,
+          "coasting": false,
+          "heightAboveSand": 1.4223154520020302,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 19.163199999976065,
+      "behavior": {
+        "brushing": 0,
+        "maxBrush": 0.022273648421717467,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 2.8339867132354755,
+          "y": 1.8823793963294042,
+          "z": 1.4096070545574853,
+          "mode": "darting from anemone",
+          "hostVisits": 6,
+          "speed": 0.11513980139480523,
+          "speedBL": 0.2630795482383163,
+          "energy": 0.8098426561006558,
+          "hunger": 0.8487240504663626,
+          "coasting": true,
+          "heightAboveSand": 1.5044103990928084,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 3.142978870989447,
+          "y": 1.788530222284849,
+          "z": 1.258314326969588,
+          "mode": "exploring",
+          "hostVisits": 5,
+          "speed": 0.828311304963053,
+          "speedBL": 2.094943631045821,
+          "energy": 0.8137725704904909,
+          "hunger": 0.5929944945448835,
+          "coasting": false,
+          "heightAboveSand": 1.4400626950163664,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 19.46329999997606,
+      "behavior": {
+        "brushing": 0,
+        "maxBrush": 0.0031903882382226935,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 2.852300089998758,
+          "y": 1.8835407812605174,
+          "z": 1.3904807601695173,
+          "mode": "darting from anemone",
+          "hostVisits": 6,
+          "speed": 0.04727828970011312,
+          "speedBL": 0.10802477462278448,
+          "energy": 0.8116429561006561,
+          "hunger": 0.8490841704663623,
+          "coasting": false,
+          "heightAboveSand": 1.50817813559079,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 3.070071247963396,
+          "y": 1.7997818262144512,
+          "z": 1.2796649108179876,
+          "mode": "exploring",
+          "hostVisits": 5,
+          "speed": 0.029704546375572325,
+          "speedBL": 0.07512797407176065,
+          "energy": 0.812907118023672,
+          "hunger": 0.5933546145448833,
+          "coasting": true,
+          "heightAboveSand": 1.4446268689511248,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 19.77989999997604,
+      "behavior": {
+        "brushing": 0,
+        "maxBrush": 0.0011803726344496678,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 2.8495141375392152,
+          "y": 1.8849152628225023,
+          "z": 1.384569922471981,
+          "mode": "darting from anemone",
+          "hostVisits": 6,
+          "speed": 0.12887082363150404,
+          "speedBL": 0.2944531573910239,
+          "energy": 0.8125927561006566,
+          "hunger": 0.849464090466362,
+          "coasting": false,
+          "heightAboveSand": 1.5090504741881987,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 3.0693047007880905,
+          "y": 1.7995661031199888,
+          "z": 1.2787626941094192,
+          "mode": "exploring",
+          "hostVisits": 5,
+          "speed": 0.07249283591859468,
+          "speedBL": 0.18334701457549682,
+          "energy": 0.8167063180236716,
+          "hunger": 0.5937345345448829,
+          "coasting": true,
+          "heightAboveSand": 1.4441370166445309,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 20.096599999976032,
+      "behavior": {
+        "brushing": 0,
+        "maxBrush": 0.00024304907094354635,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 2.7245015408082685,
+          "y": 1.9223753203476188,
+          "z": 1.2947536241109832,
+          "mode": "darting from anemone",
+          "hostVisits": 6,
+          "speed": 0.889342306286291,
+          "speedBL": 2.03203209778661,
+          "energy": 0.8120297870321773,
+          "hunger": 0.8498441304663616,
+          "coasting": false,
+          "heightAboveSand": 1.5118184753572985,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 3.0406119225273964,
+          "y": 1.7830780060280182,
+          "z": 1.2068185228572081,
+          "mode": "exploring",
+          "hostVisits": 5,
+          "speed": 0.24743162350759604,
+          "speedBL": 0.6257976930662406,
+          "energy": 0.8205067180236715,
+          "hunger": 0.5941145745448826,
+          "coasting": true,
+          "heightAboveSand": 1.4086073743286593,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 20.396699999976022,
+      "behavior": {
+        "brushing": 0,
+        "maxBrush": 0.00003327570360952145,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 2.4124952512954483,
+          "y": 1.999710740662353,
+          "z": 1.268601810275798,
+          "mode": "darting from anemone",
+          "hostVisits": 6,
+          "speed": 1.1416478656798748,
+          "speedBL": 2.608517655162901,
+          "energy": 0.8051090283405421,
+          "hunger": 0.8502042504663614,
+          "coasting": false,
+          "heightAboveSand": 1.5166800141319725,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 3.0322446724775136,
+          "y": 1.7719600272593057,
+          "z": 1.147971388501473,
+          "mode": "exploring",
+          "hostVisits": 5,
+          "speed": 0.17785778538968955,
+          "speedBL": 0.44983333259065517,
+          "energy": 0.8221567180236715,
+          "hunger": 0.5944746945448823,
+          "coasting": false,
+          "heightAboveSand": 1.3870826000789276,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 20.713299999976027,
+      "behavior": {
+        "brushing": 0,
+        "maxBrush": 0.000012112146813382142,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 2.083143882974023,
+          "y": 2.0459033652370677,
+          "z": 1.3904354862815804,
+          "mode": "darting from anemone",
+          "hostVisits": 6,
+          "speed": 1.1084731075434207,
+          "speedBL": 2.532717625305914,
+          "energy": 0.7970625900064999,
+          "hunger": 0.8505841704663613,
+          "coasting": false,
+          "heightAboveSand": 1.501015697705943,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 2.997070356977562,
+          "y": 1.7720282004745165,
+          "z": 1.0959621035268674,
+          "mode": "exploring",
+          "hostVisits": 5,
+          "speed": 0.31253456405318136,
+          "speedBL": 0.7904543744867751,
+          "energy": 0.8231065180236716,
+          "hunger": 0.5948546145448822,
+          "coasting": false,
+          "heightAboveSand": 1.3762531949256513,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 21.02999999997602,
+      "behavior": {
+        "brushing": 3,
+        "maxBrush": 0.06233232138431722,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 1.8564267414396503,
+          "y": 2.0610104099805726,
+          "z": 1.5560760448792477,
+          "mode": "sheltering",
+          "hostVisits": 7,
+          "speed": 0.4279279114554514,
+          "speedBL": 0.9777599080464073,
+          "energy": 0.79167088858065,
+          "hunger": 0.850964210466361,
+          "coasting": false,
+          "heightAboveSand": 1.5015587907806562,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 2.8573903074642817,
+          "y": 1.7900409602951755,
+          "z": 1.06487438954251,
+          "mode": "darting from anemone",
+          "hostVisits": 5,
+          "speed": 0.42349139395380814,
+          "speedBL": 1.07108353254435,
+          "energy": 0.8230016326563482,
+          "hunger": 0.5952346545448819,
+          "coasting": false,
+          "heightAboveSand": 1.3714726298375983,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 21.32999999997602,
+      "behavior": {
+        "brushing": 4,
+        "maxBrush": 0.09717260212891858,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 1.8171382145938828,
+          "y": 2.0636441164103236,
+          "z": 1.5878169939968254,
+          "mode": "sheltering",
+          "hostVisits": 7,
+          "speed": 0.052402523586592864,
+          "speedBL": 0.11973298602832703,
+          "energy": 0.7925708885806501,
+          "hunger": 0.8513242104663609,
+          "coasting": false,
+          "heightAboveSand": 1.5101454813282476,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 2.7824390802938033,
+          "y": 1.8005951798191442,
+          "z": 1.0842148078382103,
+          "mode": "darting from anemone",
+          "hostVisits": 5,
+          "speed": 0.18956774722288805,
+          "speedBL": 0.4794498666343902,
+          "energy": 0.8238799709191481,
+          "hunger": 0.5955946545448818,
+          "coasting": false,
+          "heightAboveSand": 1.3725365767278515,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 21.646799999976018,
+      "behavior": {
+        "brushing": 3,
+        "maxBrush": 0.09305405762049754,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 1.8122527093203482,
+          "y": 2.063971616260394,
+          "z": 1.5917639624059396,
+          "mode": "sheltering",
+          "hostVisits": 7,
+          "speed": 0.005705067130575357,
+          "speedBL": 0.013035340214237575,
+          "energy": 0.7935212885806503,
+          "hunger": 0.8517043704663608,
+          "coasting": true,
+          "heightAboveSand": 1.511525770706327,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 2.760334905127536,
+          "y": 1.8050302418019246,
+          "z": 1.1342780375904407,
+          "mode": "darting from anemone",
+          "hostVisits": 5,
+          "speed": 0.24388253860381284,
+          "speedBL": 0.6168214388841814,
+          "energy": 0.8248303709191483,
+          "hunger": 0.5959748145448818,
+          "coasting": false,
+          "heightAboveSand": 1.3782543232232178,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 21.980199999976005,
+      "behavior": {
+        "brushing": 2,
+        "maxBrush": 0.04226617590458453,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 1.8046792464248513,
+          "y": 2.063701644230203,
+          "z": 1.5998333984689268,
+          "mode": "returning to anemone",
+          "hostVisits": 7,
+          "speed": 0.10979432865986839,
+          "speedBL": 0.25086583469016294,
+          "energy": 0.7975220885806501,
+          "hunger": 0.8521044504663607,
+          "coasting": true,
+          "heightAboveSand": 1.5140226032840318,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 2.866957268468503,
+          "y": 1.8101566546208396,
+          "z": 1.2759621262013991,
+          "mode": "darting from anemone",
+          "hostVisits": 5,
+          "speed": 0.8286104808934813,
+          "speedBL": 2.095700299108007,
+          "energy": 0.8235879740703722,
+          "hunger": 0.5963748945448817,
+          "coasting": false,
+          "heightAboveSand": 1.4217005208592457,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 22.280199999976,
+      "behavior": {
+        "brushing": 1,
+        "maxBrush": 0.017429721870653753,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 1.7842758701647414,
+          "y": 2.059540692750155,
+          "z": 1.6391043203343316,
+          "mode": "returning to anemone",
+          "hostVisits": 7,
+          "speed": 0.1691613984571914,
+          "speedBL": 0.38651190766677457,
+          "energy": 0.80082148858065,
+          "hunger": 0.8524644504663605,
+          "coasting": false,
+          "heightAboveSand": 1.5288172979863177,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 3.157981236792783,
+          "y": 1.8143268431014956,
+          "z": 1.3807855399083868,
+          "mode": "darting from anemone",
+          "hostVisits": 5,
+          "speed": 1.1959814360374332,
+          "speedBL": 3.0248454624042767,
+          "energy": 0.8159621160939448,
+          "hunger": 0.5967348945448815,
+          "coasting": false,
+          "heightAboveSand": 1.472156159520443,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 22.596899999975996,
+      "behavior": {
+        "brushing": 1,
+        "maxBrush": 0.022799629564953742,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 1.7981813547181387,
+          "y": 2.0486471137293645,
+          "z": 1.700402424072469,
+          "mode": "returning to anemone",
+          "hostVisits": 7,
+          "speed": 0.3359899267526908,
+          "speedBL": 0.7676935088643541,
+          "energy": 0.8017715885806502,
+          "hunger": 0.8528444904663603,
+          "coasting": false,
+          "heightAboveSand": 1.557482926244322,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 3.5740856909861134,
+          "y": 1.8262367494864036,
+          "z": 1.3983523138004068,
+          "mode": "darting from anemone",
+          "hostVisits": 5,
+          "speed": 1.4088163667736595,
+          "speedBL": 3.5631420906626876,
+          "energy": 0.8064827854685203,
+          "hunger": 0.5971149345448813,
+          "coasting": true,
+          "heightAboveSand": 1.5110295914975,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 22.913599999975975,
+      "behavior": {
+        "brushing": 1,
+        "maxBrush": 0.03479603222311022,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 1.9612762290812502,
+          "y": 2.0104106807989512,
+          "z": 1.7884834657822588,
+          "mode": "returning to anemone",
+          "hostVisits": 7,
+          "speed": 0.8160388407877153,
+          "speedBL": 1.8645431638640755,
+          "energy": 0.8006482553823286,
+          "hunger": 0.85322453046636,
+          "coasting": false,
+          "heightAboveSand": 1.5842326325597433,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 4.007000640256977,
+          "y": 1.8673466652824025,
+          "z": 1.3847615365388541,
+          "mode": "sheltering",
+          "hostVisits": 6,
+          "speed": 0.9732327800140106,
+          "speedBL": 2.4614752953375594,
+          "energy": 0.7952411201915011,
+          "hunger": 0.597494974544881,
+          "coasting": false,
+          "heightAboveSand": 1.5855403234043823,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 23.213599999975962,
+      "behavior": {
+        "brushing": 2,
+        "maxBrush": 0.04400674182051213,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 2.223746350160111,
+          "y": 1.954889870457382,
+          "z": 1.7770490719066212,
+          "mode": "returning to anemone",
+          "hostVisits": 7,
+          "speed": 0.9309027995649628,
+          "speedBL": 2.1269924474125723,
+          "energy": 0.7959031430955309,
+          "hunger": 0.8535845304663598,
+          "coasting": false,
+          "heightAboveSand": 1.5533181400585265,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 4.121192422164485,
+          "y": 1.8799588880993885,
+          "z": 1.3789767859956337,
+          "mode": "sheltering",
+          "hostVisits": 6,
+          "speed": 0.11917861009923579,
+          "speedBL": 0.3014234728999913,
+          "energy": 0.7944725343729377,
+          "hunger": 0.5978549745448808,
+          "coasting": false,
+          "heightAboveSand": 1.6070788833977399,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 23.53029999997594,
+      "behavior": {
+        "brushing": 2,
+        "maxBrush": 0.04517123222948597,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 2.486034141494922,
+          "y": 1.8963537833246926,
+          "z": 1.6826148244712194,
+          "mode": "returning to anemone",
+          "hostVisits": 7,
+          "speed": 0.8609266718948559,
+          "speedBL": 1.967106049903561,
+          "energy": 0.7907723399196948,
+          "hunger": 0.8539645704663595,
+          "coasting": false,
+          "heightAboveSand": 1.4989305572720535,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 4.135391032903685,
+          "y": 1.8815270923899519,
+          "z": 1.3782575098812362,
+          "mode": "sheltering",
+          "hostVisits": 6,
+          "speed": 0.012984070929714847,
+          "speedBL": 0.032838977973947386,
+          "energy": 0.7954226343729376,
+          "hunger": 0.5982350145448805,
+          "coasting": false,
+          "heightAboveSand": 1.610222537892703,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 23.830299999975935,
+      "behavior": {
+        "brushing": 1,
+        "maxBrush": 0.053674018316053465,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 2.7003551544542606,
+          "y": 1.8464767258000874,
+          "z": 1.576449724679383,
+          "mode": "returning to anemone",
+          "hostVisits": 7,
+          "speed": 0.7772705845519718,
+          "speedBL": 1.7759627145934134,
+          "energy": 0.7869657226313133,
+          "hunger": 0.8543245704663596,
+          "coasting": false,
+          "heightAboveSand": 1.4530820466550987,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 4.150799034144974,
+          "y": 1.884944292907902,
+          "z": 1.377172868134949,
+          "mode": "returning to anemone",
+          "hostVisits": 6,
+          "speed": 0.10862990287622078,
+          "speedBL": 0.27474395412460995,
+          "energy": 0.7963226343729372,
+          "hunger": 0.5985950145448805,
+          "coasting": false,
+          "heightAboveSand": 1.615406847150772,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 24.146899999975933,
+      "behavior": {
+        "brushing": 4,
+        "maxBrush": 0.04624513513328999,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 2.905407245375426,
+          "y": 1.7982292813870946,
+          "z": 1.4681028127715687,
+          "mode": "returning to anemone",
+          "hostVisits": 7,
+          "speed": 0.7023519761548025,
+          "speedBL": 1.6047833881310707,
+          "energy": 0.7853208659045628,
+          "hunger": 0.8547044904663595,
+          "coasting": true,
+          "heightAboveSand": 1.4249138636619612,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 4.186203755276103,
+          "y": 1.8943834672397992,
+          "z": 1.386255152734608,
+          "mode": "returning to anemone",
+          "hostVisits": 6,
+          "speed": 0.121221876978255,
+          "speedBL": 0.3065912508949072,
+          "energy": 0.797272434372937,
+          "hunger": 0.5989749345448805,
+          "coasting": false,
+          "heightAboveSand": 1.6289698029450306,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 24.46369999997592,
+      "behavior": {
+        "brushing": 3,
+        "maxBrush": 0.09188389624313517,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 3.0192848942112778,
+          "y": 1.7713861983118173,
+          "z": 1.4071806568888745,
+          "mode": "sheltering",
           "hostVisits": 8,
-          "speed": 0.22011783963419437
+          "speed": 0.14116709330990793,
+          "speedBL": 0.32254854259078464,
+          "energy": 0.7879474549616856,
+          "hunger": 0.8550846504663595,
+          "coasting": true,
+          "heightAboveSand": 1.4144441782130879,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 4.2068604355899435,
+          "y": 1.904434672084828,
+          "z": 1.4140891412275027,
+          "mode": "returning to anemone",
+          "hostVisits": 6,
+          "speed": 0.11366714411511411,
+          "speedBL": 0.28748401500296733,
+          "energy": 0.7982228343729368,
+          "hunger": 0.5993550945448805,
+          "coasting": false,
+          "heightAboveSand": 1.6419954943799162,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 24.76359999997591,
+      "behavior": {
+        "brushing": 4,
+        "maxBrush": 0.09846943711648504,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 3.103538590549886,
+          "y": 1.7648391036972555,
+          "z": 1.3627961952148202,
+          "mode": "darting from anemone",
+          "hostVisits": 8,
+          "speed": 0.8480746647564329,
+          "speedBL": 1.9377408765145743,
+          "energy": 0.7896064832579271,
+          "hunger": 0.8554445304663594,
+          "coasting": false,
+          "heightAboveSand": 1.4193025415631277,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 4.183167464900885,
+          "y": 1.9244142723242748,
+          "z": 1.4761577426227563,
+          "mode": "returning to anemone",
+          "hostVisits": 6,
+          "speed": 0.40526514552901893,
+          "speedBL": 1.024986174188153,
+          "energy": 0.8009225343729368,
+          "hunger": 0.5997149745448803,
+          "coasting": true,
+          "heightAboveSand": 1.6627976096634511,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 25.080399999975903,
+      "behavior": {
+        "brushing": 4,
+        "maxBrush": 0.04155535959271294,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 3.4384170950033344,
+          "y": 1.7857059247437304,
+          "z": 1.219881630444208,
+          "mode": "darting from anemone",
+          "hostVisits": 8,
+          "speed": 1.341621113462604,
+          "speedBL": 3.0654306517906926,
+          "energy": 0.7815701697114567,
+          "hunger": 0.8558246904663593,
+          "coasting": false,
+          "heightAboveSand": 1.4702810685478238,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 4.029796545336427,
+          "y": 1.9767501413458932,
+          "z": 1.567775748076571,
+          "mode": "returning to anemone",
+          "hostVisits": 6,
+          "speed": 0.7359574071472935,
+          "speedBL": 1.861364529961342,
+          "energy": 0.8020925411756784,
+          "hunger": 0.6000951345448803,
+          "coasting": true,
+          "heightAboveSand": 1.7165837410726872,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 25.396999999975883,
+      "behavior": {
+        "brushing": 5,
+        "maxBrush": 0.07900228409730596,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 3.884164193364252,
+          "y": 1.8625048386567746,
+          "z": 1.1211462191956434,
+          "mode": "darting from anemone",
+          "hostVisits": 8,
+          "speed": 1.54521899184015,
+          "speedBL": 3.5306254603363767,
+          "energy": 0.7692880521242317,
+          "hunger": 0.856204610466359,
+          "coasting": false,
+          "heightAboveSand": 1.585532253864247,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 3.776408981685606,
+          "y": 2.0439240721994842,
+          "z": 1.6018721761208945,
+          "mode": "returning to anemone",
+          "hostVisits": 6,
+          "speed": 0.9129661146407421,
+          "speedBL": 2.3090503965928413,
+          "energy": 0.7983056933256366,
+          "hunger": 0.6004750545448799,
+          "coasting": false,
+          "heightAboveSand": 1.7724875909218136,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 25.69719999997587,
+      "behavior": {
+        "brushing": 1,
+        "maxBrush": 0.04642513786732553,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 4.263695248971002,
+          "y": 1.9479658896039962,
+          "z": 1.0770415825925281,
+          "mode": "sheltering",
+          "hostVisits": 9,
+          "speed": 0.6571046938016315,
+          "speedBL": 1.5013992025038336,
+          "energy": 0.7588791254250514,
+          "hunger": 0.8565648504663589,
+          "coasting": false,
+          "heightAboveSand": 1.7121281608573187,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 3.490111204650822,
+          "y": 2.0873399275291145,
+          "z": 1.5929433618160243,
+          "mode": "returning to anemone",
+          "hostVisits": 6,
+          "speed": 1.0064310717002352,
+          "speedBL": 2.5454395601169226,
+          "energy": 0.7914679974626907,
+          "hunger": 0.6008352945448798,
+          "coasting": false,
+          "heightAboveSand": 1.7912242935425733,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 26.013799999975863,
+      "behavior": {
+        "brushing": 1,
+        "maxBrush": 0.03949574651288051,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 4.342882325959332,
+          "y": 1.9663716430396347,
+          "z": 1.0688667893663868,
+          "mode": "returning to anemone",
+          "hostVisits": 9,
+          "speed": 0.13617046122366028,
+          "speedBL": 0.3111318847883645,
+          "energy": 0.7595037094863851,
+          "hunger": 0.856944770466359,
+          "coasting": false,
+          "heightAboveSand": 1.7404665298672382,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 3.1759310801180667,
+          "y": 2.076011899906542,
+          "z": 1.5546005672376093,
+          "mode": "returning to anemone",
+          "hostVisits": 6,
+          "speed": 0.8858958527165781,
+          "speedBL": 2.2405849869467676,
+          "energy": 0.7835864447793783,
+          "hunger": 0.6012152145448799,
+          "coasting": false,
+          "heightAboveSand": 1.7394085532913903,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 26.330399999975857,
+      "behavior": {
+        "brushing": 1,
+        "maxBrush": 0.022058045550332434,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 4.389213973217824,
+          "y": 1.9746239369954384,
+          "z": 1.0759557558509314,
+          "mode": "returning to anemone",
+          "hostVisits": 9,
+          "speed": 0.15178476949199374,
+          "speedBL": 0.34680855884481554,
+          "energy": 0.760453509486385,
+          "hunger": 0.8573246904663588,
+          "coasting": false,
+          "heightAboveSand": 1.755225965320665,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 3.0313355729911544,
+          "y": 2.0573738445691823,
+          "z": 1.5273392581428822,
+          "mode": "sheltering",
+          "hostVisits": 7,
+          "speed": 0.14867074404740419,
+          "speedBL": 0.37601421892804593,
+          "energy": 0.782103569762616,
+          "hunger": 0.6015951345448798,
+          "coasting": false,
+          "heightAboveSand": 1.6993495364169384,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 26.63049999997584,
+      "behavior": {
+        "brushing": 1,
+        "maxBrush": 0.015649245293088518,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 4.419916803768234,
+          "y": 1.979813432608807,
+          "z": 1.1039153429171993,
+          "mode": "returning to anemone",
+          "hostVisits": 9,
+          "speed": 0.1348986888199445,
+          "speedBL": 0.3082260494006147,
+          "energy": 0.761353809486385,
+          "hunger": 0.8576848104663586,
+          "coasting": false,
+          "heightAboveSand": 1.765820541129646,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 3.014240061480564,
+          "y": 2.0550672471379645,
+          "z": 1.5239892017119787,
+          "mode": "sheltering",
+          "hostVisits": 7,
+          "speed": 0.0181929487793004,
+          "speedBL": 0.046013137749989136,
+          "energy": 0.7830038697626159,
+          "hunger": 0.6019552545448795,
+          "coasting": false,
+          "heightAboveSand": 1.6946934965238605,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 26.94719999997582,
+      "behavior": {
+        "brushing": 2,
+        "maxBrush": 0.02397153530182655,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 4.411770101117819,
+          "y": 1.9845771496460323,
+          "z": 1.1746314051413311,
+          "mode": "returning to anemone",
+          "hostVisits": 9,
+          "speed": 0.35866680963887,
+          "speedBL": 0.8195072520954448,
+          "energy": 0.7629042094863849,
+          "hunger": 0.8580648504663583,
+          "coasting": true,
+          "heightAboveSand": 1.7697033646694131,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 3.0121159770020127,
+          "y": 2.0547806568362423,
+          "z": 1.5235729636331858,
+          "mode": "sheltering",
+          "hostVisits": 7,
+          "speed": 0.0019820548097885574,
+          "speedBL": 0.005012962005070652,
+          "energy": 0.7839539697626158,
+          "hunger": 0.6023352945448792,
+          "coasting": false,
+          "heightAboveSand": 1.6941189558080607,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 27.2637999999758,
+      "behavior": {
+        "brushing": 2,
+        "maxBrush": 0.04483902346429021,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 4.288290988892124,
+          "y": 1.9810535225397035,
+          "z": 1.2784680380952493,
+          "mode": "returning to anemone",
+          "hostVisits": 9,
+          "speed": 0.6399561231565732,
+          "speedBL": 1.4622169374349074,
+          "energy": 0.7653834575346868,
+          "hunger": 0.8584447704663579,
+          "coasting": false,
+          "heightAboveSand": 1.7382198622672846,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 2.887581397074436,
+          "y": 2.0451535165608696,
+          "z": 1.485779137284029,
+          "mode": "darting from anemone",
+          "hostVisits": 7,
+          "speed": 0.8285819632313193,
+          "speedBL": 2.0956281729709367,
+          "energy": 0.7830917243160713,
+          "hunger": 0.6027152145448789,
+          "coasting": false,
+          "heightAboveSand": 1.6691544174212742,
+          "pecks": 0
+        }
+      ]
+    },
+    {
+      "time": 27.563899999975792,
+      "behavior": {
+        "brushing": 1,
+        "maxBrush": 0.06339507992859639,
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      },
+      "clowns": [
+        {
+          "species": "clown",
+          "x": 4.077035409778626,
+          "y": 1.9775431961356043,
+          "z": 1.325887564932764,
+          "mode": "returning to anemone",
+          "hostVisits": 9,
+          "speed": 0.7924710676004645,
+          "speedBL": 1.810693851567409,
+          "energy": 0.7628409402870865,
+          "hunger": 0.8588048904663578,
+          "coasting": false,
+          "heightAboveSand": 1.7041367077584653,
+          "pecks": 0
+        },
+        {
+          "species": "clown",
+          "x": 2.6240062378060633,
+          "y": 2.0038349627722734,
+          "z": 1.3958577844770188,
+          "mode": "darting from anemone",
+          "hostVisits": 7,
+          "speed": 0.9920635383300193,
+          "speedBL": 2.5091015645500088,
+          "energy": 0.7781954261789968,
+          "hunger": 0.6030753345448787,
+          "coasting": true,
+          "heightAboveSand": 1.5916438143671663,
+          "pecks": 0
         }
       ]
     }
