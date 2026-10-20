@@ -3,32 +3,32 @@
     {
       "oblique": false,
       "z": -1.9,
-      "green": 50
+      "green": 76
     },
     {
       "oblique": false,
       "z": 0,
-      "green": 24
+      "green": 45
     },
     {
       "oblique": false,
       "z": 1.8,
-      "green": 12
+      "green": 27
     },
     {
       "oblique": true,
       "z": -1.9,
-      "green": 50
+      "green": 76
     },
     {
       "oblique": true,
       "z": 0,
-      "green": 24
+      "green": 45
     },
     {
       "oblique": true,
       "z": 1.8,
-      "green": 12
+      "green": 28
     }
   ],
   "glError": 0

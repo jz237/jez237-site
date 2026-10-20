@@ -104,18 +104,32 @@ const emitter=new T.Mesh(new T.BoxGeometry(9.35,.014,.5),new T.MeshBasicMaterial
 // Soft volume shafts only: no solid cones or opaque blue overlay over the corals.
 const shaftGroup=new T.Group();scene.add(shaftGroup);
 // Light rays fan out from the lamp above the centre of the tank: a deep rear
-// set, and a fainter, shorter set nearer the glass. Each widens with depth.
-// The rear set keeps its nine Math.random width draws, so seeded fish replays
-// are unchanged.
+// set, and a fainter, shorter set nearer the glass. Each is a soft volume of
+// light, not a flat card: its quad turns about its own axis to face the
+// camera (a flat plane read as a ruled line on phones and from the side), and
+// it shimmers as surface ripples pass, fading out with depth. Spacing is
+// irregular. The rear set keeps its nine Math.random width draws, so seeded
+// fish replays are unchanged.
 const rayFocus=new T.Vector2(0,10.5);
 const ray=(width:number,height:number,x:number,y:number,z:number,phase:number,strength:number,reach:number)=>{
- const geo=new T.PlaneGeometry(width,height),p=geo.getAttribute('position');
+ const geo=new T.PlaneGeometry(width,height,1,12),p=geo.getAttribute('position');
  for(let j=0;j<p.count;j++)p.setX(j,p.getX(j)*(.45+.55*(.5-p.getY(j)/height)));
- const mat=new T.ShaderMaterial({transparent:true,depthWrite:false,blending:T.AdditiveBlending,side:T.DoubleSide,uniforms:{time:reefClock,daylight:reefDaylight,phase:{value:phase}},vertexShader:'varying vec2 v;void main(){v=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:`varying vec2 v;uniform float time,daylight,phase;void main(){float center=.5+.08*sin(v.y*3.+time*.20+phase)*(1.-v.y);float envelope=exp(-pow((v.x-center)*4.,2.))*(1.-smoothstep(.30,.5,abs(v.x-.5)));float pulse=.73+.27*sin(v.y*5.-time*.28+phase);float a=envelope*smoothstep(${(1-reach).toFixed(2)},1.,v.y)*(.6+.8*v.y*v.y)*${strength.toFixed(3)}*pulse*daylight;gl_FragColor=vec4(.32,.52,.96,a);}`});
+ const mat=new T.ShaderMaterial({transparent:true,depthWrite:false,blending:T.AdditiveBlending,side:T.DoubleSide,uniforms:{time:reefClock,daylight:reefDaylight,phase:{value:phase}},
+  vertexShader:`varying vec2 v;void main(){v=uv;
+   vec3 axis=normalize((modelMatrix*vec4(0.,1.,0.,0.)).xyz),centre=(modelMatrix*vec4(0.,position.y,0.,1.)).xyz;
+   vec3 side=cross(axis,normalize(cameraPosition-centre));float l=length(side);side=l>1e-4?side/l:vec3(1.,0.,0.);
+   gl_Position=projectionMatrix*viewMatrix*vec4(centre+side*position.x,1.);}`,
+  fragmentShader:`varying vec2 v;uniform float time,daylight,phase;void main(){
+   float across=(v.x-.5)*2.,core=exp(-across*across*3.4);
+   float streak=.55+.45*sin(v.x*21.+sin(v.y*2.3+time*.33+phase)*1.7+time*.55+phase*2.);
+   float travel=.62+.38*sin(v.y*8.5-time*1.05+phase*1.7);
+   float flicker=.55+.45*sin(time*.47+phase*3.1)*sin(time*.21+phase);
+   float fade=pow(smoothstep(${(1-reach).toFixed(2)},1.,v.y),1.7);
+   gl_FragColor=vec4(.42,.62,1.,core*mix(1.,streak,.5)*travel*flicker*fade*${strength.toFixed(3)}*daylight);}`});
  const mesh=new T.Mesh(geo,mat);mesh.position.set(x,y,z);mesh.rotation.z=Math.atan2(x-rayFocus.x,rayFocus.y-y);shaftGroup.add(mesh);
 };
-for(let i=0;i<9;i++)ray(.4+Math.random()*.3,4.75,-4.2+i*1.05,3.06,-1.92,i*2.399,.12,1);
-for(let i=0;i<8;i++)ray(.3+.12*(.5+.5*Math.sin(i*1.7)),2.9,-3.5+i,3.98,.15,i*1.73+.6,.045,.85);
+for(let i=0;i<9;i++)ray(.4+Math.random()*.3,4.75,-4.2+i*1.05+.28*Math.sin(i*2.7),3.06,-1.92,i*2.399,.1,1);
+for(let i=0;i<8;i++)ray(.3+.12*(.5+.5*Math.sin(i*1.7)),2.9,-3.5+i+.3*Math.sin(i*3.9),3.98,.15,i*1.73+.6,.04,.85);
 const lighting=new AquariumLighting(scene,camera),scheduler=new CaptureScheduler(),adaptive=new AdaptiveEffects();let paused=false,night=false,time=0,last=performance.now(),revision=0,frame=0,ready=false,effectMode='auto';let cameraGoal:T.Vector3|null=null;let suspended=false,contextLost=false,raf=0,idleFrames=6;
 function requestFrame(){if(ready&&!raf&&!suspended&&!contextLost&&!document.hidden)raf=requestAnimationFrame(animate);}
 function wake(){idleFrames=6;requestFrame();}

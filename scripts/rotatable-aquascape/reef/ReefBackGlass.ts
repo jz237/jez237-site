@@ -16,7 +16,7 @@ export function reefBackGlass(pool:ReefReflections,time:{value:number},daylight:
    fragmentShader:`uniform sampler2D tDiffuse,reflectionDepth;uniform mat4 reflectionInverseProjection,reflectionWorld;uniform float time,daylight;varying vec4 reflectedUv;varying vec2 v;varying vec3 world;
     void main(){
      float glow=pow(max(0.,1.-length((v-vec2(.5,.83))*vec2(1.,.65))),2.);
-     vec3 blue=mix(vec3(.008,.02,.07),vec3(.04,.11,.37),glow)*(.25+.75*daylight);
+     vec3 blue=mix(vec3(.002,.008,.018),vec3(.008,.055,.16),glow)*(.25+.75*daylight);
      float grazing=pow(1.-abs(normalize(cameraPosition-world).z),3.);
      vec2 sampleUv=reflectedUv.xy/reflectedUv.w;
      vec3 reflected=texture2D(tDiffuse,sampleUv).rgb;
@@ -26,10 +26,12 @@ export function reefBackGlass(pool:ReefReflections,time:{value:number},daylight:
      vec3 subject=(reflectionWorld*captured).xyz;
      // Additional out-and-back water path grows as a fish leaves the rear pane.
      float distanceToPane=max(0.,subject.z+2.325);
-     float pathFade=depth<.999999?exp(-.40*distanceToPane):.12;
+     float pathFade=depth<.999999?exp(-.28*distanceToPane):.12;
      // Attenuate warm wavelengths across the longer reflected water path.
      reflected*=vec3(.53,.72,.90);
-     gl_FragColor=vec4(mix(blue,reflected,(.32+.16*grazing)*pathFade),1.);
+     // The deep navy behind the pane keeps the reef's mirror image readable;
+     // a brighter blue washed it out (most visibly on phones).
+     gl_FragColor=vec4(mix(blue,reflected,(.46+.2*grazing)*pathFade),1.);
      #include <tonemapping_fragment>
      #include <colorspace_fragment>
     }`
