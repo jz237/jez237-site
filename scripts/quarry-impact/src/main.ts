@@ -169,6 +169,7 @@ import {applyWetLook} from './wet-look';
 import {setWetness} from './driving-surface';
 import {ELIMINATION_INTERVAL,eliminationActive,nextElimination} from './elimination-race';
 import {TEAMS,teamOf,teamRaceActive,teamScores,teamLine,teamVerdict} from './team-race';
+import {BangerAggression,bangerRaceActive} from './banger-race';
 import {damageDiagramSvg} from './damage-diagram';
 import {wreckReport} from './wreck-report';
 import {createArenaProps,ARENA_PROP_SPOTS,arenaPropCount} from './arena-props';
@@ -250,6 +251,8 @@ const damageRule=()=>sessionDamageRule(customEvent()&&mode!=='playground',demo,e
 let nextEliminationAt=0,eliminatedOrder:number[]=[];
 let damageDiagramAt=-1,damageDiagramSvgLast='';
 let propsVenue:VenueContext|undefined,propsOnline=false;
+const bangerRace=()=>!online?.active&&!pursuitSelected()&&activeClubRound===null&&!activeChallenge&&!activeTimeTrial&&bangerRaceActive(mode,customEvent(),demo,raceFormat(),eventOptions,demoOptions);
+const bangerAggression=new BangerAggression();
 const teamRace=()=>!online?.active&&!pursuitSelected()&&activeClubRound===null&&!activeChallenge&&!activeTimeTrial&&teamRaceActive(mode,customEvent(),demo,raceFormat(),eventOptions,demoOptions);
 const eliminationRace=()=>!online?.active&&!pursuitSelected()&&activeClubRound===null&&!activeChallenge&&!activeTimeTrial&&eliminationActive(mode,customEvent(),demo,raceFormat(),eventOptions,demoOptions);
 const raceTimeLimit=()=>online?.active?(mode==='race'&&onlineRules()?.race==='laps'?onlineRules()?.raceDuration??0:0):pursuitSelected()?0:timedRaceLimit(mode,customEvent(),demo,raceFormat(),eventOptions,demoOptions);
@@ -952,7 +955,7 @@ async function start(watch=demo) {
     camera.position.copy(cars[0].current).add(new T.Vector3(0, 4, -8));
     hud();
     sound.pause(false);
-    eventAwards.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
+    eventAwards.reset();bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
     beginReplay();
     if(preparationInterrupted||document.hidden)pause();
     return true;
@@ -1352,6 +1355,7 @@ function ai(car: Vehicle, dt: number): Input {
     const y=Math.max(car.current.y,activeVenue.course.height(car.current.x,car.current.z)+.55);
     return [-1,0,1].every(side=>!physics.castRay(new R.Ray({x:car.current.x+dz/length*side*(halfWidth+.35),y,z:car.current.z-dx/length*side*(halfWidth+.35)},{x:dx/length,y:0,z:dz/length}),length,true,undefined,undefined,undefined,car.body,c=>(activeVenue.course.isDrivingObstacle?.(c)??true)&&!cars.some(v=>v.body.handle===c.parent()?.handle)));
   });
+  if(bangerRace()){const id=bangerAggression.target(car,cars,elapsed),rival=id>=0?cars.find(c=>c.id===id):undefined;if(rival)return drivers.update(car,cars,'race',dt,probe,raceRoute(car.id),{id:rival.id,point:{x:rival.current.x,z:rival.current.z}});}
   return drivers.update(car,cars,practiceTraffic?'race':mode,dt,probe,raceRoute(car.id));
 }
 /** Diagram states for the bolt-on parts: gone when every panel has left, loose while it hangs. */
@@ -1509,7 +1513,7 @@ function step(dt: number) {
     a?.scar(point1,scarDirection,b?.paintColor);
     b?.scar(point2,scarDirection.clone().negate(),a?.paintColor);
   }
-  for(const {contact:{a,b,point,point1,point2,va,vb,impulse,material},damage,feedback} of impactAdjudicator.adjudicate(contacts,elapsed,collisionDamageMultiplier(mode==='race',damageRule()))){
+  for(const {contact:{a,b,point,point1,point2,va,vb,impulse,material},damage,feedback} of impactAdjudicator.adjudicate(contacts,elapsed,collisionDamageMultiplier(mode==='race'&&!bangerRace(),damageRule()))){
     // A feedback-only contact still clears stale glass/debris flags in hit().
     if(a){
       const before=a.health;
