@@ -1,5 +1,19 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — original wake and spray in Championship; cheaper state copies
+
+Original Championship now runs the full scene-effects owner with four slots,
+one per racer, replacing the human-only spray owner as in Time trial. Spray
+levels matched the separate reconstruction exactly. The first measurement
+showed the cost was mostly not the effects themselves (about 9 ms) but every
+other canonical commit copying and validating the 7,415 effect words. The
+effect, effect-control and actor-pool arrays are now copy-on-write: a frozen
+array this module already validated is shared, and only their two writers
+take a private copy. A headless four-racer frame fell from 54 to 36 ms; in
+the browser it holds 59–60 fps. The full suite passes 3,415 of 3,433 with
+only the 18 known older failures. A sustained check of round 2 showed 53–60
+fps, so the earlier 28 fps reading was transient.
+
 ## Unpublished — Original Championship from the normal menu
 
 Championship now offers Physics: Original · Wave Race 64. An original cup

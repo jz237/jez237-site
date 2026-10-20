@@ -148,3 +148,13 @@ test('native Time trial runs the scene-effects owner without course actors and k
   assert.throws(()=>createRace({...options,nativeSceneEffects:{onDisplay(){}}}),/Separate scene effects/);
  assert.throws(()=>createRace({mode:'time',physics:'native',course:getCourse('amber',1),difficulty:1,nativeSceneEffects:{onDisplay:1}}),/display consumer/);
 });
+
+test('native Championship runs one four-slot scene-effects owner and shares its effect storage between commits',()=>{
+ let shown=0;const s=createRace({mode:'championship',physics:'native',course:getCourse('amber',0),difficulty:0,nativeSceneEffects:{onDisplay:()=>shown++}}),h=s.nativeHost;
+ assert.equal(h.spray,undefined);assert.equal(h.effectStartup.state.effectWords0790[0],4);assert.equal(h.sprayLevels().length,4);
+ for(let i=0;i<90;i++)stepRace(s,{throttle:1},1/30);
+ assert.equal(shown,h.world.frames);
+ // Copy-on-write: unrelated commits reuse the frozen effect array instead of copying it.
+ const a=s.nativeLaunch.snapshot().effectWords0790;s.nativeLaunch.advanceInputClock();
+ assert.equal(s.nativeLaunch.snapshot().effectWords0790,a);assert.ok(Object.isFrozen(a));
+});

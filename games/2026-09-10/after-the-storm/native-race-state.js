@@ -133,6 +133,12 @@ function integer(v,n,min=MIN,max=MAX){if(!Number.isInteger(v)||v<min||v>max)thro
 function words(v,n,count){if(!Array.isArray(v)||v.length!==count)throw new RangeError(`${n} requires${count} unsigned words`);
  // A fresh packed array, not a slice of a frozen one: V8 keeps it unboxed.
  const r=[];for(let i=0;i<count;i++){const x=v[i];if(!Number.isInteger(x)||x<0||x>0xffffffff)throw new RangeError(`Invalid ${n}`);r.push(x||0);}return r;}
+// Large presentation owners are copy-on-write: a frozen array this module
+// already validated is shared by later copies, and only apply() writes take
+// a private copy first. Every other owner is still copied and validated.
+const sharedWords=new WeakSet();
+function shared(v,n,count){if(sharedWords.has(v)&&Object.isFrozen(v)&&v.length===count)return v;const r=words(v,n,count);sharedWords.add(r);return r;}
+function own(s,key){const v=s[key];if(!Object.isFrozen(v))return v;const r=[];for(let i=0;i<v.length;i++)r.push(v[i]);sharedWords.add(r);return s[key]=r;}
 function freeze(v){
  if(v&&typeof v==='object'&&!Object.isFrozen(v)){
   if(Array.isArray(v)){for(let i=0;i<v.length;i++){const x=v[i];if(x&&typeof x==='object')freeze(x);}}else for(const x of Object.values(v))freeze(x);
@@ -185,10 +191,10 @@ function copy(value){
  if(value.courseDisplayWordsB058!==undefined)s.courseDisplayWordsB058=words(value.courseDisplayWordsB058,'courseDisplayWordsB058',136);
  if(value.courseLightWords4160!==undefined)s.courseLightWords4160=words(value.courseLightWords4160,'courseLightWords4160',3);
  if(value.menuWaterMotionWords47c4!==undefined)s.menuWaterMotionWords47c4=words(value.menuWaterMotionWords47c4,'menuWaterMotionWords47c4',4);
- if(value.actorWordsF060!==undefined)s.actorWordsF060=words(value.actorWordsF060,'actorWordsF060',NATIVE_PRESENTATION_ACTOR_WORDS);
+ if(value.actorWordsF060!==undefined)s.actorWordsF060=shared(value.actorWordsF060,'actorWordsF060',NATIVE_PRESENTATION_ACTOR_WORDS);
  if(value.actorControlWords62c4!==undefined)s.actorControlWords62c4=words(value.actorControlWords62c4,'actorControlWords62c4',3);
  if(value.actorControlWords62d0!==undefined)s.actorControlWords62d0=words(value.actorControlWords62d0,'actorControlWords62d0',2);
- if(value.effectWords0790!==undefined)s.effectWords0790=words(value.effectWords0790,'effectWords0790',NATIVE_PRESENTATION_EFFECT_WORDS);
+ if(value.effectWords0790!==undefined)s.effectWords0790=shared(value.effectWords0790,'effectWords0790',NATIVE_PRESENTATION_EFFECT_WORDS);
  if(value.effectControlWords6d60!==undefined)s.effectControlWords6d60=words(value.effectControlWords6d60,'effectControlWords6d60',22);
  if(value.cameraEnvironmentBytesEaa4!==undefined){
   if(!Array.isArray(value.cameraEnvironmentBytesEaa4)||value.cameraEnvironmentBytesEaa4.length!==2)throw new RangeError('Supply cameraEnvironmentBytesEaa4[2]');
@@ -789,7 +795,7 @@ function apply(s,operations){
    if(op.width!==4)throw new RangeError('Invalid presentation effect width');
    const offset=integer(op.byteOffset,'effect owner offset',0,count*4-4);
    if(offset%4)throw new RangeError('Invalid presentation effect alignment');
-   s[key][offset/4]=integer(op.value,'effect owner word',0,0xffffffff);
+   own(s,key)[offset/4]=integer(op.value,'effect owner word',0,0xffffffff);
   }else if(op.kind==='presentationSceneMatrixWrite'||op.kind==='presentationSceneMatrixBind'){
    integer(op.bufferIndex,'scene matrix buffer',0,1);integer(op.matrixIndex,'scene matrix index',0,Math.floor((0xb2f0-0x4140)/64)-1);
    if(op.kind==='presentationSceneMatrixWrite'){
@@ -826,6 +832,7 @@ function apply(s,operations){
    if(op.width!==4&&(op.kind!=='presentationActorWrite'||![1,2].includes(op.width)))throw new RangeError('Invalid actor owner width');
    const offset=integer(op.byteOffset,'actor owner offset',0,count*4-op.width);
    if(offset%op.width)throw new RangeError('Invalid actor owner alignment');
+   own(s,key);
    if(op.width===4)s[key][offset/4]=integer(op.value,'actor owner word',0,0xffffffff);
    else{const mask=op.width===1?255:65535,value=integer(op.value,'actor owner bits',0,mask),i=offset>>>2,shift=(4-op.width-(offset&3))*8;s[key][i]=((s[key][i]&~(mask<<shift))|(value<<shift))>>>0;}
   }else if(op.kind==='presentationLightByteWrite'||op.kind==='presentationLightBind'){

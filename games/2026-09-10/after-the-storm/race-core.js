@@ -77,8 +77,8 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
  const nativePractice=physics==='native'&&mode==='practice'&&course.sourceWaterCourseIndex===0&&difficulty===0&&!course.reverse;
  if(nativeCourseActors!==undefined&&(!nativePractice||nativeInitialRaceState!==undefined||typeof nativeCourseActors?.onDisplay!=='function'))
   throw new RangeError('Course actor presentation requires fresh solo native Practice');
- if(nativeSceneEffects!==undefined&&(nativeCourseActors!==undefined||physics!=='native'||mode!=='time'))
-  throw new RangeError('Separate scene effects are for native Time trial; Dolphin Practice supplies them with its actors');
+ if(nativeSceneEffects!==undefined&&(nativeCourseActors!==undefined||physics!=='native'||!['time','championship'].includes(mode)))
+  throw new RangeError('Separate scene effects are for native Time trial and Championship; Dolphin Practice supplies them with its actors');
  const nativeChampionship=physics==='native'&&mode==='championship';
  if(nativeChampionshipContinuation!==undefined&&(!nativeChampionship||course.sourceWaterCourseIndex!==nativeChampionshipContinuation?.courseIndex||
    Math.min(difficulty,2)!==nativeChampionshipContinuation.sourceDifficulty||!!course.reverse!==nativeChampionshipContinuation.reverse||nativeRecordSession!==undefined))
