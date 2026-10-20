@@ -83,7 +83,7 @@ load is unchanged. Habits come from `marineHabits` in `MarineBehavior.ts`:
 `qa/reef-options.mjs` checks these habits with three seeds plus controlled
 rival encounters; the browser check adds all six by real clicks, verifies each
 model downloads on first use and that restoring the stocking removes them.
-Provenance and the 43 paid GPT Image requests: `model-source/references/reef-options-prompts.md`.
+Provenance and the 44 paid GPT Image requests: `model-source/references/reef-options-prompts.md`.
 
 ## Marine fish detail
 

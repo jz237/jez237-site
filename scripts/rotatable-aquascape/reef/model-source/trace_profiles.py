@@ -110,7 +110,7 @@ def trace(k):
     to_side = lambda x: tail + (x - t_tail) * (snout - tail) / (t_snout - t_tail)
     thickness = [[round(to_side(x)), round(w / peak, 3)] for x, w in zip(wx, wv) if begin - 40 <= to_side(x) <= end + 40]
     profile = {'range': [begin, end], 'cy': spec['cy'], 'width': spec['width'], 'crossPower': spec.get('crossPower', 1),
-               'thickness': thickness, 'texture': f'{k}-texture.png', 'skinTexture': f'{k}-skin-texture.png',
+               'thickness': thickness, 'texture': spec.get('texture', f'{k}-texture.png'), 'skinTexture': f'{k}-skin-texture.png',
                'eye': spec['eye'], 'eyeDome': spec.get('eyeDome', .0018), 'mouth': spec['mouth'], 'gill': spec['gill'],
                'pec': spec['pec'], 'pelvic': spec['pelvic'], 'top': top, 'bottom': bottom, 'dorsal': dorsal,
                'fins': [caudal, [], anal], 'rings': spec.get('rings', 120), 'sides': spec.get('sides', 64),

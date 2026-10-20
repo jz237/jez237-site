@@ -184,7 +184,9 @@ for species,s in DATA.items():
     for col in range(41):
      a=col/40*2*math.pi;c=math.cos(a);d=math.sin(a)
      q=base+t1*(R*rr*c)+t2*(R*rr*d*side)+n*(R*bulge*math.sqrt(max(0,1-rr*rr)))
-     v.append(tuple(q));tex.append(uv(ex+er*rr*c,ey-er*rr*d))
+     # The cap maps to the iris and pupil; the fleshy rim stays on the head.
+     k=s['eyeTop'][3] if len(s['eyeTop'])>3 else 1
+     v.append(tuple(q));tex.append(uv(ex+er*k*rr*c,ey-er*k*rr*d))
      if row<12 and col<40:
       a0=row*41+col;ids=(a0,a0+1,a0+42,a0+41);f.append(tuple(reversed(ids)) if side>0 else ids)
   else:

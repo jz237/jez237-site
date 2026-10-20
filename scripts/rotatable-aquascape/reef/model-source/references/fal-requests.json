@@ -592,5 +592,18 @@
   "mask": "cinctus-edit-mask.png",
   "prompt": "Use case: precise-object-edit. Edit this exact fish reference plate to create its clean skin texture for a Blender 3D model. Remove ONLY two paired fins on the near side: (1) the translucent pectoral fin, the fan-shaped fin on the flank whose base meets the body just behind the gill cover, and (2) the pair of foot-like pelvic fins hanging below the chest. Fill the pectoral fin's former area with continuous canary-yellow skin with fine scales and hundreds of tiny iridescent pale-blue speckles matched to the neighboring flank and cheek, joining the gill-cover edge naturally. Where the pelvic fin hung below the belly, continue the smooth lower body outline and fill outside it with the same plain gray background. Preserve the entire fish's position, size, silhouette, all other fins, mouth, eye, colors, markings, lighting and background pixel-aligned. Do not move, resize or redesign anything else. The removed fins will be separately animated meshes. No new fins or markings.",
   "note": "Masked edit (v3); composited inside cinctus-fin-mask.png. Remaining pelvic fin pieces below the belly were replaced with the fitted backdrop."
+ },
+ {
+  "saved": "vulpinus-fins.png",
+  "endpoint": "openai/gpt-image-2/edit",
+  "request_id": "01a15698-9afe-7933-8039-7b4700f59af0",
+  "created": "2026-10-19T23:58:08+00:00",
+  "quality": "high",
+  "references": [
+   "vulpinus.png"
+  ],
+  "mask": "vulpinus-finplate-mask.png",
+  "prompt": "Use case: precise-object-edit. Edit this exact foxface rabbitfish reference plate, Siganus vulpinus, so its two near-side paired fins are shown fully SPREAD, as in a typical aquarium photograph of this species. Change ONLY the masked area.\n(1) Pectoral fin: currently folded flat into a thin sliver behind the gill cover. Show it fully spread instead: a large, rounded, fan-shaped, clear translucent pale-yellow fin with many fine straight rays radiating from its base. The base sits at the gill opening just behind the black band of the gill cover, at mid-body height; the fan sweeps backward and slightly upward over the white chest and the front of the yellow flank, reaching about a fifth of the body length behind its base. The flank and chest colors show through the clear membrane.\n(2) Pelvic fin: currently a thin silvery edge-on strip under the chest. Replace it with the pelvic fin seen from the side: a single solid, opaque, bright lemon-yellow pointed fin attached under the white chest, slanting backward and downward to a sharp point, with a spine along its leading edge and fine rays.\nKeep everything else pixel-aligned and unchanged: the fish's position, size, body outline, the black face band and breast patch, eye, mouth, dorsal, anal and caudal fins, colors, lighting and the plain dark gray background. Photographic realism, soft studio light, no new markings.",
+  "note": "Masked edit showing the near-side pectoral spread as a clear fan and the pelvic as a solid yellow pointed fin (the user's photo showed them; the lateral plate had them folded). Composited inside vulpinus-fins-mask.png; the padded copy textures only the paired fins."
  }
 ]

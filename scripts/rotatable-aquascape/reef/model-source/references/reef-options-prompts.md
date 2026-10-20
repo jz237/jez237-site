@@ -1,7 +1,7 @@
 # Reef option fish: reference provenance
 
 Generated October 19, 2026 through fal with `openai/gpt-image-2` (quality high), at
-the user's request for the highest quality. 43 paid generations for six species (four remade the coral beauty and five the watchman goby);
+the user's request for the highest quality. 44 paid generations for six species (four remade the coral beauty, five the watchman goby, one the foxface's paired fins);
 `fal-requests.json` records every request id, including four rejected plates.
 These are generated illustrations, not photographs of measured specimens.
 
@@ -121,6 +121,15 @@ Use case: precise-object-edit. This fish plate should show NO near-side pectoral
 Use case: scientific reference, multi-view modeling sheet for a Blender 3D model. The supplied image is a side view of this exact adult foxface rabbitfish, Siganus vulpinus. Create a matching DORSAL view of the same individual: a live fish photographed from directly above, with its back toward the camera and both eyes visible on top of the head. The body is perfectly straight and horizontal across the frame, nose pointing RIGHT, tail LEFT, at the same scale as the side view, so the snout tip and tail tip span the same horizontal extent of the frame. Show the true strongly laterally compressed rabbitfish body seen from above: a narrow lens, widest just behind the eyes, tapering forward to the short tubular snout and backward to the slender caudal peduncle. The dorsal fin is seen edge-on along the midline, the caudal fin edge-on at the left, both pectoral fins slightly spread to either side. Same coloration, markings, scale texture and soft neutral diffused lighting as the reference. Plain even medium neutral-gray background, no shadow, no other objects, no text, no labels. A true photograph: no illustration, no posterization, no painterly texture.
 
 Use case: scientific reference, multi-view modeling sheet for a Blender 3D model. The supplied image is a side view of this exact adult foxface rabbitfish, Siganus vulpinus. Create a matching FRONT view of the same individual: a live fish facing directly toward the camera, nose pointing straight at the viewer, perfectly symmetric head-on view, body upright and level, one eye on each side of the head. Behind the short tubular snout the very thin, compressed body appears as a tall narrow lens. The dorsal fin above and anal fin below are seen edge-on as thin vertical blades, the pectoral fins slightly spread to each side, the pelvic fins below the chest. Same coloration, markings, scale texture and soft neutral diffused lighting as the reference. Centered; the fish's full height including fins fills about 80 percent of the frame height. Plain even medium neutral-gray background, no shadow, no other objects, no text, no labels. A true photograph: no illustration, no posterization, no painterly texture.
+
+### Foxface paired-fin edit (later)
+
+The lateral plate showed the pectoral folded and the pelvic edge-on, so the model's paired fins were wrong. A masked edit shows both spread, as in the user's photo; only the paired fins take their texture from it (`vulpinus-fins-texture.png`).
+
+Use case: precise-object-edit. Edit this exact foxface rabbitfish reference plate, Siganus vulpinus, so its two near-side paired fins are shown fully SPREAD, as in a typical aquarium photograph of this species. Change ONLY the masked area.
+(1) Pectoral fin: currently folded flat into a thin sliver behind the gill cover. Show it fully spread instead: a large, rounded, fan-shaped, clear translucent pale-yellow fin with many fine straight rays radiating from its base. The base sits at the gill opening just behind the black band of the gill cover, at mid-body height; the fan sweeps backward and slightly upward over the white chest and the front of the yellow flank, reaching about a fifth of the body length behind its base. The flank and chest colors show through the clear membrane.
+(2) Pelvic fin: currently a thin silvery edge-on strip under the chest. Replace it with the pelvic fin seen from the side: a single solid, opaque, bright lemon-yellow pointed fin attached under the white chest, slanting backward and downward to a sharp point, with a spine along its leading edge and fine rays.
+Keep everything else pixel-aligned and unchanged: the fish's position, size, body outline, the black face band and breast patch, eye, mouth, dorsal, anal and caudal fins, colors, lighting and the plain dark gray background. Photographic realism, soft studio light, no new markings.
 
 ## Flame angelfish (Centropyge loricula)
 

@@ -21,6 +21,39 @@ const urls:Record<MarineSpecies,string>={
 };
 /** Gallery options, downloaded only when a visitor first adds one. */
 export const optionalMarineSpecies:MarineSpecies[]=['strigosus','vulpinus','bispinosa','loricula','hexataenia','cinctus'];
+/** Tangent-space normals for small imbricate scales, laid out over the whole
+ * reference plate at half resolution: offset rows of scales whose free rear
+ * margin (toward the tail, -u) stands above the scale behind it. Relief fades
+ * out ahead of headX (plate px), so a scaleless head stays smooth. */
+function scaleNormalMap(plateW:number,plateH:number,scalePx:number,headX:[number,number]){
+ const w=Math.round(plateW/2),h=Math.round(plateH/2),s=scalePx/2,height=new Float32Array(w*h);
+ for(let y=0;y<h;y++){
+  const row=Math.floor(y/s);
+  for(let x=0;x<w;x++){
+   let top=0;
+   for(let r=row-1;r<=row+1;r++){
+    const shift=(r&1)*.5,col=Math.floor(x/s-shift);
+    for(let c=col-1;c<=col+1;c++){
+     const dx=(x-(c+.5+shift)*s)/(s*.66),dy=(y-(r+.5)*s)/(s*.58),q=Math.hypot(dx,dy);
+     if(q<1)top=Math.max(top,(1-q*q)*(.55-.45*dx));
+    }
+   }
+   const px=x*2,fade=1-Math.min(1,Math.max(0,(px-headX[0])/(headX[1]-headX[0])));
+   height[y*w+x]=top*fade*fade*(3-2*fade);
+  }
+ }
+ const data=new Uint8Array(w*h*4),at=(i:number,j:number)=>height[Math.min(h-1,Math.max(0,j))*w+Math.min(w-1,Math.max(0,i))];
+ for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+  // glTF textures keep the plate's top-down rows (flipY false), so +v runs down
+  // the plate and the slopes follow the derivative tangent frame directly.
+  const nx=-(at(x+1,y)-at(x-1,y))*2.2,ny=-(at(x,y+1)-at(x,y-1))*2.2,l=Math.hypot(nx,ny,1),k=(y*w+x)*4;
+  data[k]=Math.round((nx/l*.5+.5)*255);data[k+1]=Math.round((ny/l*.5+.5)*255);data[k+2]=Math.round((1/l*.5+.5)*255);data[k+3]=255;
+ }
+ const tex=new T.DataTexture(data,w,h);tex.flipY=false;
+ tex.magFilter=T.LinearFilter;tex.minFilter=T.LinearMipmapLinearFilter;tex.generateMipmaps=true;tex.anisotropy=8;tex.needsUpdate=true;
+ return tex;
+}
+let scaleNormals:T.DataTexture|undefined;
 /** The established display population. The black tang is gallery-only for now. */
 export const baseMarineSpecies:MarineSpecies[]=['tang','semilarvatus','clown','anthias','chromis','gramma','goby'];
 /** Geometry and embedded textures are shared between inhabitants. Vertex waves,
@@ -45,6 +78,17 @@ export async function loadMarineModels(species:MarineSpecies[]=baseMarineSpecies
    if(species==='anthias'&&!label.startsWith('eye'))material.color.setRGB(.68,.34,.17);
    // The vivid aquarium coral beauty: keep its orange luminous under blue light.
    if((species==='bispinosa'||species==='cinctus')&&!label.startsWith('eye'))material.color.setScalar(1.05);
+   if(species==='cinctus'){
+    if(label.startsWith('eye')){
+     // A wet, glossy goby eye: a sharp highlight over the black pupil and
+     // golden iris, with the plate's own fleshy yellow rim around it.
+     material.color.setScalar(1);material.roughness=.1;material.clearcoat=1;material.clearcoatRoughness=.03;material.envMapIntensity=.6;
+    }else if((label==='body'||label.startsWith('gill'))&&material.map){
+     // Fine overlapping scales in relief, sized to the plate (about 30 px each).
+     const {width,height}=material.map.image as {width:number;height:number};
+     material.normalMap=scaleNormals??=scaleNormalMap(width,height,30,[1690,1790]);material.normalScale.set(.55,.55);material.roughness=.5;
+    }
+   }
    if(species==='strigosus'&&!label.startsWith('eye')){
     // Brown skin under blue reef light reads near black; lift it so the fine
     // iridescent lines and dots carry, with relief from the plate's own scales.
