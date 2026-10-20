@@ -19,7 +19,8 @@ test('every selected rider owns both total and best-lap records through the real
   const state=finish(race),rows=nativeResultsRecordView(state).rows;
   assert.equal(rows[0].timeMs,110000);assert.equal(rows[0].rider,rider);assert.equal(rows.at(-1).rider,rider);
   const named=prepareNativeNameEntryRecordCommit(state),namedRows=nativeResultsRecordView(named.state).rows;
-  assert.equal(namedRows[0].initials,'YOU');assert.equal(namedRows.at(-1).initials,'YOU');
+  // Default initials come from each rider's default save name.
+  const initials=['M.V','J.R','N.S','E.N'][rider];assert.equal(namedRows[0].initials,initials);assert.equal(namedRows.at(-1).initials,initials);
  }
 });
 test('switching riders retains old record attribution while new results use the newly selected rider',()=>{

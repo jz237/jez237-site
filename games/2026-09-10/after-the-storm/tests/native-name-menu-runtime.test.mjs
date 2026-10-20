@@ -36,7 +36,7 @@ test('physical edges enter three letters, seek END, update records and leave the
  assert.throws(()=>tick(),/state100/);
 });
 test('blank exit restores profile initials before name copy and short names retain trailing destination bytes',()=>{
- for(const [name,previous,expected]of [[0,0,0x594f5500],[0x41000000,0x12345678,0x41005678],[0x41420000,0x12345678,0x41420078]]){
+ for(const [name,previous,expected]of [[0,0,0x4d2e5600],[0x41000000,0x12345678,0x41005678],[0x41420000,0x12345678,0x41420078]]){
   const {state}=fixture();state.scene.initLatch63c=0;state.scene.field700=previous;state.nameEntryWords61c4[1]=5;state.hudWords7788[hi(0x88e8)]=name;
   const q=step(state,neutral);assert.equal(q.state.scene.field700,expected);assert.equal(q.state.scene.gameStateAb24,50);
  }

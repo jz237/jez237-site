@@ -60,7 +60,7 @@ test('application finish and retirement reach original standings entry once, usi
   assert.equal(s.nativeResult.exit.consumer,'801ec0d4');assert.equal(s.nativeResult.exit.gameState,52);assert.equal(s.nativeResult.exit.main,9);
   assert.deepEqual(s.nativeLaunch.snapshot().championshipMenuWords7a00,createNativeChampionshipStandingsMenuWords());
   const sourceViews=s.nativeLaunch.championshipStandingsSourceViews();
-  assert.deepEqual(sourceViews.riderNamesB298,['YOU','YOU','YOU','YOU']);
+  assert.deepEqual(sourceViews.riderNamesB298,['M.VALE','J.REED','N.SOL','E.NORTH']);
   assert.deepEqual(sourceViews.avatarsA9b0,s.racers.map(r=>r.id));
   const before=s.nativeLaunch.snapshot(),water=s.raceWater,field=water.field,phase=field.phaseCounter;
   const at=s.nativeHost.world.frames,rollers=structuredClone(water.rollers);

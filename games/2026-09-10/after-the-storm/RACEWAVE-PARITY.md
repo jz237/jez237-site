@@ -1,5 +1,16 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — default rider names in a fresh save
+
+The original's default save gives each base avatar a name in the form
+"R.HAYAMI" (initial and surname in capitals, 11 bytes, then default tuning
+5/5/5). A fresh browser save had "YOU" for every rider, so the standings and
+the ending listed "YOU" four times. Fresh saves now use the same form for this
+game's riders: M.VALE, J.REED, N.SOL and E.NORTH (variants repeat their
+rider's name). As in the original, record name entry starts from the first
+three characters (for example "M.V"), which the name wheel's "." supports.
+Saved record sessions keep the names they already hold.
+
 ## Unpublished — original championship ending after the final round
 
 After a qualified final round the result offers "Watch the ending →". It runs

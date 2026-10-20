@@ -103,5 +103,5 @@ test('a naturally completed race survives the full unattended Continue timeout w
  assert.ok(postraceFrames>=1300,'wait for the actual1200-frame Continue timeout after the body-specific delay');
  assert.equal(w.fault,null);assert.deepEqual(s.result,finished);assert.equal(s.nativeResult.exit.consumer,'801ec9c8');
  const words=s.nativeLaunch.snapshot().raceWords1f94;
- assert.ok(words.includes(0x594f5500),'the explicit fresh web profile supplies YOU initials at the source save boundary');
+ assert.ok(words.includes(0x4d2e5600),'the fresh web profile supplies the default M.V initials of rider 0 at the source save boundary');
 });
