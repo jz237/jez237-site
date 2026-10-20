@@ -1,3 +1,4 @@
+import {restoreBlownDampersBytes} from './blown-dampers-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readPartShowersPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restorePartShowersBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreBlownDampersBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readPartShowersPrevious(file);
 }
 export function verifyPartShowersRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'a4cc135b8bd554b87c016806d4c99cf7a29b0132');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreBlownDampersBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restorePartShowersBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the PartShowers release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreBlownDampersBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the PartShowers release');
  assert.equal(manifest.previousFixtureCount,5074);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,5074);
 }

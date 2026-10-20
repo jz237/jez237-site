@@ -20,3 +20,6 @@ export function leakTyre(damage:number,speed:number,dt:number){
   const severity=(damage-LEAK.onset)/(LEAK.flat-LEAK.onset),rolling=Math.min(1,Math.abs(Number.isFinite(speed)?speed:0)/15);
   return Math.min(LEAK.flat,damage+dt*LEAK.rate*(.35+severity)*rolling);
 }
+/** A damaged corner's damper loses up to DAMPER_LOSS of its damping, so it bounces and wallows. */
+export const DAMPER_LOSS=.6;
+export function damperFactor(wheelDamage:number){return 1-DAMPER_LOSS*clamp01(wheelDamage);}

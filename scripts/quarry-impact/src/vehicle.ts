@@ -40,7 +40,7 @@ import {puddleDepth,type Puddle} from './puddle-splashes';
 import {wheelResponse,TireContact} from './wheel-mechanics';
 import {wheelTearsOff} from './wheel-physics';
 import {EngineMisfire} from './engine-misfire';
-import {steeringLimit,brakeFactor,overheat,leakTyre} from './damage-handling';
+import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor} from './damage-handling';
 /** Panels hanging at least this loose build wind load above this speed (m/s) until they tear away. */
 export const WIND_RIP={loose:.25,speed:16} as const;
 /** Deceleration (m/s²) from a part dragging along the ground at full scrape, applied where it drags. */
@@ -127,6 +127,7 @@ export class Vehicle {
   misfireFactor = 1;
   steerLimit = 1;
   readonly brakeBias = [1,1,1,1];
+  readonly damperBias = [1,1,1,1];
   onBackfire?:(point:T.Vector3)=>void;
   onWheelLost?:(wheel:number)=>void;
   private windLoad=new Map<string,number>();
@@ -250,7 +251,7 @@ export class Vehicle {
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
-    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();this.wasGrounded.fill(true);this.steerLimit=1;this.brakeBias.fill(1);
+    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();this.wasGrounded.fill(true);this.steerLimit=1;this.brakeBias.fill(1);this.damperBias.fill(1);
     if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
@@ -317,7 +318,7 @@ export class Vehicle {
     if(running&&this.engineDamage!==undefined&&this.structuralDamage)this.engineDamage=overheat(this.engineDamage,this.structuralDamage[0],this.input.throttle,dt);
     this.misfireFactor=running?this.engineMisfire.update(dt,this.engineDamage??0,this.input.throttle):1;
     this.steerLimit=this.extendedDamage?steeringLimit(this.structuralDamage):1;
-    for(let i=0;i<4;i++)this.brakeBias[i]=this.extendedDamage?brakeFactor(this.wreckParts.wheelDamage[i]):1;
+    for(let i=0;i<4;i++){this.brakeBias[i]=this.extendedDamage?brakeFactor(this.wreckParts.wheelDamage[i]):1;this.damperBias[i]=this.extendedDamage?damperFactor(this.wreckParts.wheelDamage[i]):1;}
     if(this.extendedDamage&&this.tyreDamage)for(let i=0;i<4;i++)if(!this.wreckParts.wheelLost[i])this.tyreDamage[i]=leakTyre(this.tyreDamage[i],this.speed,dt);
     if(this.extendedDamage&&this.dragLoad>0&&Math.abs(this.speed)>1){
       // The dragging part acts as a brake where it touches the ground, so it also pulls to that side.

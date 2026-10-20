@@ -16,6 +16,8 @@ import * as T from 'three';
 import type { ThermalAudio } from './vehicle-fire';
 type Loop = { source: AudioBufferSourceNode; gain: GainNode; pan: PannerNode };
 import {CrowdRoar} from './crowd-roar';
+/** Engine-layer level during a misfire cut. */
+export const MISFIRE_AUDIO=.3;
 export class Sound {
   private acousticProbe=new TrackAcousticProbe();
   private reflections?:TrackReflections;
@@ -321,6 +323,8 @@ export class Sound {
       const rpm = car.rpm,
         level = car === focused ? 0.38 : 0.22;
       const scrapeMix=scrapeSurfaceMix(car.scraping??0,this.contactScraping.level(car.id),car.surface,car.speed);
+      // A misfire cut drops the combustion layers and lets the damaged rattle through: an audible stutter.
+      const cut=(car.misfireFactor??1)<1?MISFIRE_AUDIO:1;
       for (const [name, l] of loops) {
         if(name.startsWith('fire-'))continue;
         l.pan.positionX.value = car.current.x;
@@ -334,7 +338,7 @@ export class Sound {
           high: 6500,
         };
         if (name in centers) {
-          v = Math.max(0, 1 - Math.abs(Math.min(rpm,6500) - centers[name]) / 2100) * level;
+          v = Math.max(0, 1 - Math.abs(Math.min(rpm,6500) - centers[name]) / 2100) * level * cut;
           if (car.health === 0) v = 0;
           l.source.playbackRate.setTargetAtTime(
             Math.max(0.72, Math.min(1.4, (rpm / centers[name]) * doppler))*classicEngineVoice(car.kind).pitch,
@@ -343,9 +347,9 @@ export class Sound {
           );
         } else if (name === 'gear-grind') v=car.health>0?.16*Math.min(1,(car.transmission?.grind??0)/.3):0;
         else if (name === 'starter') v=car.health>0&&car.engineStall!>0&&car.rpm>0?.13:0;
-        else if (name === 'load') v = Math.abs(car.input.throttle) * 0.07;
+        else if (name === 'load') v = Math.abs(car.input.throttle) * 0.07 * cut;
         else if (name === 'damaged')
-          v = engineDamageLevel(car.health,car.engineDamage) * 0.18;
+          v = engineDamageLevel(car.health,car.engineDamage) * 0.18 * (cut<1?1.6:1);
         else if (name === 'tires')
           v =
             Math.min(0.35, car.slip * 0.06) *

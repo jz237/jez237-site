@@ -44,3 +44,13 @@ test('a damaged tyre leaks while rolling until it fails, and the HUD calls it a 
  assert.equal(tyreWarning([.5,0,0,0]),'','not shown unless enabled');assert.equal(tyreWarning([.5,0,0,0],true),'SLOW PUNCTURE · FL');
  assert.match(tyreWarning([1,.5,0,0],true),/FLAT TYRE · FL/,'a real flat takes precedence');
 });
+test('a damaged damper lets its corner bounce longer after a drop',async()=>{
+ const {damperFactor,DAMPER_LOSS}=await import('../src/damage-handling');
+ assert.equal(damperFactor(0),1);assert.equal(damperFactor(1),1-DAMPER_LOSS);
+ const settle=(bias:number[])=>{const world=new R.World({x:0,y:-9.81,z:0});world.timestep=1/60;world.createCollider(R.ColliderDesc.cuboid(80,.5,80).setTranslation(0,-.5,0));
+  const spec=vehicleSpecification('sedan'),{body,controller}=createVehiclePhysics(R,world,'sedan',spec.mass),dt=createVehicleDrive(body,controller,'sedan');
+  const state:PhysicsState={health:100,damageLeft:0,damageRight:0,steering:0,speed:0,slip:0,surface:'asphalt',gear:1,rpm:850,damperBias:bias,input:{throttle:0,brake:0,steer:0,handbrake:false}};
+  try{body.setTranslation({x:0,y:1.6,z:0},true);let motion=0;for(let i=0;i<240;i++){dt.step(spec,state,1/60);world.step();if(i>60)motion+=Math.abs(body.linvel().y)/60;}return motion;}finally{world.free();}};
+ const healthy=settle([1,1,1,1]),blown=settle([1-DAMPER_LOSS,1-DAMPER_LOSS,1-DAMPER_LOSS,1-DAMPER_LOSS]);console.log(JSON.stringify({healthy,blown}));
+ assert.ok(blown>healthy*1.2,'more vertical motion after landing');
+});
