@@ -12,14 +12,16 @@ export function validTransmissionInput(value:unknown):value is TransmissionInput
 export function validTransmissionState(value:unknown):value is TransmissionState{
  const v=value as TransmissionState;return !!v&&(v.mode==='manual'||v.mode==='clutch')&&typeof v.up==='boolean'&&typeof v.down==='boolean'&&typeof v.delay==='number'&&Number.isFinite(v.delay)&&v.delay>=0&&v.delay<=.25&&typeof v.notice==='number'&&Number.isFinite(v.notice)&&v.notice>=0&&v.notice<=1&&(v.pending===null||gears.includes(v.pending))&&(v.grind===undefined||typeof v.grind==='number'&&Number.isFinite(v.grind)&&v.grind>=0&&v.grind<=.45);
 }
-export type TransmissionVehicle={gear:number;rpm:number;speed:number;transmission?:TransmissionState;input:{throttle:number;transmission?:TransmissionInput}};
+export type TransmissionVehicle={gear:number;rpm:number;speed:number;gearLimit?:number;transmission?:TransmissionState;input:{throttle:number;transmission?:TransmissionInput}};
 export const automaticGear=(speed:number,step:number)=>speed<-.5?0:clamp(1+Math.floor(Math.max(0,speed)/step),1,5);
 /** Directional drive, shift interruption, clutch coupling and gear-dependent
  * operating range. The automatic assist retains established event calibration.
  * Manual torque is relative to that assist's selected ratio at the same speed. */
 export function stepTransmission(car:TransmissionVehicle,spec:{gearStep:number;speedLimit:number},dt:number,running:boolean):number{
- const input=car.input.transmission,speed=Math.abs(car.speed),automatic=automaticGear(car.speed,spec.gearStep);
- if(!input){delete car.transmission;car.gear=automatic;return car.input.throttle;}
+ const input=car.input.transmission,speed=Math.abs(car.speed),top=car.gearLimit===undefined?5:clamp(Math.floor(car.gearLimit),1,5),automatic=Math.min(top,automaticGear(car.speed,spec.gearStep));
+ if(!input){delete car.transmission;car.gear=automatic;
+  // With gears stripped the assist runs out of road speed at the top of the highest gear left.
+  return top<5?car.input.throttle*clamp((spec.gearStep*(top+.05)-speed)/Math.max(.6,spec.gearStep*.12),0,1):car.input.throttle;}
  if(!car.transmission||car.transmission.mode!==input.mode){
   car.transmission={mode:input.mode,up:false,down:false,delay:0,pending:null,notice:0};
   car.gear=automatic;
@@ -30,8 +32,11 @@ export function stepTransmission(car:TransmissionVehicle,spec:{gearStep:number;s
   const next=gears[clamp(gears.indexOf(car.gear)+(up?1:-1),0,gears.length-1)];
   // Prevent reverse/forward selection against substantial road motion.
   if((next===0&&car.speed>1.5)||(next>0&&car.speed<-1.5))t.notice=1;
+  else if(next>top){t.notice=1;t.grind=.45;}
   else if(next!==car.gear){t.pending=next;t.delay=.2;}
  }
+ // A gear stripped by damage pops out into the highest one left, with a grind.
+ if(car.gear>top&&t.pending===null){t.pending=top;t.delay=.2;t.grind=.45;}
  if(t.pending!==null){
   t.delay=Math.max(0,t.delay-dt);
   if(t.delay===0){
