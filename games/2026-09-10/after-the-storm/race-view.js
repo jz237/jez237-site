@@ -191,7 +191,8 @@ function beginNativeFlyover(){
  const finished=nativeCup?.finished;if(nativeCup)nativeCup.finished=null;
  if(!finished||!state.nativeLaunch?.championshipLaunch||!state.nativeHost?.introductionInputs)return;
  try{
-  const q=prepareNativeChampionshipFlyover(finished,{avatarsBySlot:nativeCup.avatars,...state.nativeHost.introductionInputs()});
+  const actors=state.nativeHost.courseActors&&state.nativeHost.introductionActorInputs?.();
+  const q=prepareNativeChampionshipFlyover(finished,{avatarsBySlot:nativeCup.avatars,...state.nativeHost.introductionInputs(),...(actors?{actors}:{})});
   nativeFlyover={frames:q.frames,time:0,scale:state.raceWater.scale,padHeld:true};
   flyoverCaption.children[0].textContent='ROUND '+nativeCup.round+' · '+DIFFICULTIES[nativeCup.difficulty].toUpperCase();
   flyoverCaption.children[1].textContent=getCourse(nativeCourseId(q.courseIndex)).name;
@@ -213,6 +214,8 @@ function advanceNativeFlyover(wall,pads){
 }
 function nativeFlyoverView(){
  const f=nativeFlyover.frames,t=Math.min(f.length-1,nativeFlyover.time/.05),i=Math.floor(t),a=f[i],b=f[Math.min(f.length-1,i+1)],k=t-i;
+ // The introduction's own actor frames (course actors and script-spawned ones).
+ if(a.actors&&nativeDolphinRenderer&&nativeFlyover.actorFrame!==i){nativeDolphinRenderer.update(a.actors.presentation,a.actors.resourceWordsE73c);nativeFlyover.actorFrame=i;}
  // Interpolate between 20 Hz source frames for high-refresh displays, never across a cut.
  const cut=Math.hypot(...a.eyeNative.map((v,j)=>v-b.eyeNative[j]))>200,mix=(p,q)=>cut?p:p.map((v,j)=>v+(q[j]-v)*k);
  return captureNativeCamera({eyeNative:mix(a.eyeNative,b.eyeNative),targetNative:mix(a.targetNative,b.targetNative),up:mix(a.up,b.up),fovDegrees:a.fovDegrees},nativeFlyover.scale);

@@ -229,11 +229,15 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
    segmentWordsE6b0[8]=0x316800;
    host.courseActors=raceRuntime.createCourseActorHost({worldScale:water.scale,
     buffers:{matrixBuffers:Array.from({length:2},()=>Array(192*16).fill(0)),lightBuffers:Array.from({length:2},()=>Array(96).fill(0))}});
-   host.actorStartup=host.courseActors.initialize({
+   const actorStartupInput=Object.freeze({
     bodyPoseWordsBySlot:adapters.map(a=>nativeCourseActorBodyPoseWords(a,{startup:true})),
     selectedWaterVertexXZ:[[0,0],[0,0]],sineTableWords4350,
-    firstCourseNodeWords:raceRuntime.courseActorRouteWords(primary.state,retainedWordsEe20).slice(0,3)
-   },{assets:courseActors.assets,segmentWordsE6b0},{freshWebScene:!retainedActorStorage,courseLoad:true,waterExtent2498:water.field.parameters.radius*64});
+    firstCourseNodeWords:raceRuntime.courseActorRouteWords(primary.state,retainedWordsEe20).slice(0,3)});
+   // The main8 course introduction loads and initializes this course's actors the same way.
+   host.introductionActorInputs=()=>Object.freeze({input:actorStartupInput,resources:{assets:courseActors.assets,segmentWordsE6b0:[...segmentWordsE6b0]},
+    waterExtent2498:water.field.parameters.radius*64,worldScale:water.scale});
+   host.actorStartup=host.courseActors.initialize(actorStartupInput,{assets:courseActors.assets,segmentWordsE6b0},
+    {freshWebScene:!retainedActorStorage,courseLoad:true,waterExtent2498:water.field.parameters.radius*64});
    courseActors.onEffects(host.actorStartup.effects);
    host.advanceCourseActors=()=>{
     // Birds (BF8C8) read the audio timing word and ice actors the audio mode

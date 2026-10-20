@@ -4,6 +4,8 @@ import {prepareNativeChampionshipIntroductionPhase} from './native-championship-
 import {createNativeChampionshipIntroductionStorage} from './native-championship-introduction-data.js';
 import {NATIVE_CHAMPIONSHIP_SETUP_DATA as setup} from './native-championship-setup.js';
 import {NATIVE_CHAMPIONSHIP_STANDINGS_DATA as standings} from './native-championship-standings-data.js';
+import {createNativeCourseActorHost} from './native-course-actor-host.js';
+import {NATIVE_ANGLE_TABLE_WORDS} from './native-math-tables.js';
 
 // Arguments the original introduction passes to its course-preview graphics
 // helpers (loaded transforms at800E9870 + 64*course, scene buffer81010000),
@@ -63,21 +65,33 @@ const triple=(hud,base,offsets)=>offsets.map(o=>float(hud[hi(base+o)]));
  * from prepareNativeChampionshipContinuation. Returns world-free native camera
  * records, one per main8 frame, until the introduction hands off the race.
  */
-export function prepareNativeChampionshipFlyover(finishedState,{avatarsBySlot,datumNative,bodyPoseWordsBySlot,selectedWaterVertexXZ,maxFrames=900}={}){
+export function prepareNativeChampionshipFlyover(finishedState,{avatarsBySlot,datumNative,bodyPoseWordsBySlot,selectedWaterVertexXZ,actors,maxFrames=900}={}){
  let state=createNativeRaceState(finishedState);
  if(state.scene.mode608!==4)throw new RangeError('Championship flyover requires a finished championship round');
  const sourceViews=views(state,avatarsBySlot);
  if(state.championshipSelectionWords6f84===undefined)state=createNativeRaceState({...state,...createNativeChampionshipIntroductionStorage()});
  state=prepareNativeMenuReturnUpdate(state,'championship',sourceViews).state;
  if(state.scene.main638!==8)throw new Error('Championship return did not enter the course introduction');
+ // Main8 entry loads this course's actor banks and runs AC184 as a race scene
+ // does (the caller supplies the same startup inputs). The camera script then
+ // spawns and moves its introduction actors in that pool; ADF90 draws them.
+ let actorHost=null;
+ if(actors){
+  actorHost=createNativeCourseActorHost({readRaceState:()=>state,commitRaceState:next=>{state=createNativeRaceState(next);},worldScale:actors.worldScale,
+   buffers:{matrixBuffers:Array.from({length:2},()=>Array(192*16).fill(0)),lightBuffers:Array.from({length:2},()=>Array(96).fill(0))}});
+  actorHost.initialize(actors.input,actors.resources,{freshWebScene:state.resourceWordsE73c===undefined,courseLoad:true,waterExtent2498:actors.waterExtent2498});
+ }
  state=prepareNativeIntroductionCameraInitializationUpdate(state,{datumNative}).state;
  const frames=[],physical={datumNative,bodyPoseWordsBySlot,selectedWaterVertexXZ};
  let q=null;
  while(frames.length<maxFrames){
   state=prepareNativeIntroductionCameraFrameUpdate(state,{...physical,bufferIndex:frames.length&1}).state;
   const hud=state.hudWords7788,c=0x7c80;
+  let actorDisplay=null;
+  if(actorHost){const ticket=actorHost.prepareDisplay({angleTableWords6f08:NATIVE_ANGLE_TABLE_WORDS});actorHost.commitDisplay(ticket);
+   actorDisplay=Object.freeze({presentation:ticket.presentation,resourceWordsE73c:ticket.state.resourceWordsE73c});}
   frames.push(Object.freeze({eyeNative:Object.freeze(triple(hud,c,[0x4c,0x50,0x54])),targetNative:Object.freeze(triple(hud,c,[0x7c,0x80,0x84])),
-   up:Object.freeze(triple(hud,c,[0x70,0x74,0x78])),fovDegrees:float(hud[hi(0x7e98+0x38)])}));
+   up:Object.freeze(triple(hud,c,[0x70,0x74,0x78])),fovDegrees:float(hud[hi(0x7e98+0x38)]),actors:actorDisplay}));
   const next=structuredClone(state);next.menuWordsE658[14]&=0xffff0000;
   q=prepareNativeChampionshipIntroductionPhase(next,sourceViews);state=q.state;
   if(q.handoff||state.scene.main638!==8)break;

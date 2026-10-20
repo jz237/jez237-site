@@ -37,13 +37,15 @@ test('a native cup continues from the original standings into the next course wi
  assert.equal(second.nativeLaunch.snapshot().actorWordsF060.filter((w,i)=>i%47===0&&w===6).length,3,'Sunset Bay dolphins');
  assert.deepEqual(second.racers.map(r=>r.id),avatars);
  // The unskipped main8 introduction runs Sunset Bay's original flyover script on a copy.
- const inputs=second.nativeHost.introductionInputs(),fly=prepareNativeChampionshipFlyover(finished,{avatarsBySlot:avatars,...inputs});
+ const inputs={...second.nativeHost.introductionInputs(),actors:second.nativeHost.introductionActorInputs()},fly=prepareNativeChampionshipFlyover(finished,{avatarsBySlot:avatars,...inputs});
  assert.equal(fly.courseIndex,2);assert.ok(fly.frames.length>next.frames+100,'natural introduction outlasts the skipped one');
  assert.deepEqual(finished,before,'flyover leaves the finished round untouched');
  assert.ok(fly.frames.every(q=>[...q.eyeNative,...q.targetNative,...q.up].every(Number.isFinite)&&q.fovDegrees===60));
  const step=fly.frames.slice(1).map((q,i)=>Math.hypot(...q.eyeNative.map((v,j)=>v-fly.frames[i].eyeNative[j])));
  assert.equal(step.filter(d=>d>200).length,1,'one cut between the two Sunset Bay shots');assert.ok(step.some(d=>d>0&&d<200),'the camera moves within a shot');
- assert.deepEqual(prepareNativeChampionshipFlyover(finished,{avatarsBySlot:avatars,...inputs}),fly,'deterministic');assert.deepEqual(second.nativeLaunch.snapshot().profileWordsB330.slice(4,8),next.points);
+ assert.deepEqual(prepareNativeChampionshipFlyover(finished,{avatarsBySlot:avatars,...inputs}),fly,'deterministic');
+ // Main8 loads Sunset Bay's actors (AC184) and ADF90 draws its three dolphins every frame.
+ assert.ok(fly.frames.every(q=>q.actors.presentation.draws.length===15));assert.deepEqual(second.nativeLaunch.snapshot().profileWordsB330.slice(4,8),next.points);
  const places2=raceToHandoff(second);
  assert.deepEqual(second.nativeLaunch.snapshot().profileWordsB330.slice(4,8),places1.map((p,i)=>POINTS[p]+POINTS[places2[i]]));
  const third=prepareNativeChampionshipContinuation(second.nativeLaunch.snapshot(),{avatarsBySlot:avatars});
