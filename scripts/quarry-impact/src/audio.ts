@@ -8,7 +8,8 @@ import {gearboxGrindSamples} from './transmission';
 import {audioListenerPosition,AudioListenerMotion,type AudioPerspective} from './audio-perspective';
 import {starterSamples} from './engine-stall';
 import {engineDamageLevel} from './engine-condition';
-import {classicEngineVoice} from './classic-vehicle-specs';
+import {classicEngineVoice,vehicleWheelRadius} from './classic-vehicle-specs';
+import {RATTLE,rattleRate,thumpRate,EventClock,synthClank,synthThump} from './damage-rattle';
 import {impactSoundLayers} from './impact-response';
 import { url } from './assets';
 import type { Vehicle } from './vehicle';
@@ -35,6 +36,9 @@ export class Sound {
   private activeShots = new Set<AudioBufferSourceNode>();
   private shotPanners=new Map<AudioBufferSourceNode,PannerNode>();
   private crowdRoar?:CrowdRoar;
+  private rattleClock=new EventClock();
+  /** Damage sounds played so far (QA). */
+  readonly damageSounds={rattle:0,thump:0};
   private rainHiss?:{source:AudioBufferSourceNode;gain:GainNode};
   output:AudioOutput='speakers';
   setOutput(value:unknown){
@@ -306,6 +310,7 @@ export class Sound {
         if (grounded && !prior.grounded)
           this.shot('suspension', car.current, 0.22);
       }
+      if(!wreckInspection)this.damageRattle(car,p,dt,car===focused);
       this.history.set(car.id, {
         throttle: car.input.throttle,
         slip: car.slip,
@@ -382,6 +387,34 @@ export class Sound {
       if(!this.paused)this.unlock();
     }
     else this.unlock();
+  }
+  /** Synthesized on first use, so they never count among (or delay) the decoded clips. */
+  private damageBuffers(){
+    if(this.buffers.has('thump'))return true;
+    const c=this.ctx;if(!c||typeof c.createBuffer!=='function')return false;
+    const synth=(id:string,data:Float32Array<ArrayBuffer>)=>{const b=c.createBuffer(1,data.length,c.sampleRate);b.copyToChannel(data,0);this.buffers.set(id,b);};
+    for(let k=0;k<RATTLE.variants;k++)synth('rattle-'+k,synthClank(c.sampleRate,k));
+    synth('thump',synthThump(c.sampleRate));
+    return true;
+  }
+  /** Loose panels clank and bent wheels thump, for cars within earshot. */
+  private damageRattle(car:Vehicle,listener:T.Vector3,dt:number,focused:boolean){
+    if(!car.wreckParts||!car.current||car.current.distanceTo(listener)>RATTLE.hearing)return;
+    const clock=this.rattleClock,volume=focused?.42:.26,radius=vehicleWheelRadius(car.kind);
+    let loose=0;for(const a of car.wreckParts.assemblies)if(a.loose>loose&&a.members.some(m=>m.mesh.visible))loose=a.loose;
+    const rough=car.surface==='asphalt'?0:car.surface==='gravel'?1:.6,rattle=rattleRate(loose,car.speed,rough);
+    const thumps=[0,1,2,3].map(i=>car.wreckParts.wheelLost[i]?0:car.wreckParts.wheelDamage[i]);
+    if(rattle<=0&&thumps.every(d=>thumpRate(d,car.speed,radius)<=0)){clock.step(car.id+':rattle',0,dt);for(let i=0;i<4;i++)clock.step(car.id+':thump'+i,0,dt);return;}
+    if(!this.damageBuffers())return;
+    for(let n=clock.step(car.id+':rattle',rattle,dt);n>0;n--){
+      this.damageSounds.rattle++;
+      this.shot('rattle-'+Math.floor(clock.random()*RATTLE.variants),car.current,volume*(.55+.45*clock.random()),{rate:.85+clock.random()*.35,delay:clock.random()*.03,duration:.26});
+    }
+    thumps.forEach((damage,i)=>{
+      for(let n=clock.step(car.id+':thump'+i,thumpRate(damage,car.speed,radius),dt,.08);n>0;n--){
+        this.damageSounds.thump++;this.shot('thump',car.current,volume*Math.min(1,.4+damage),{rate:.9+clock.random()*.2,delay:0,duration:.18});
+      }
+    });
   }
   mute() {
     this.muted = !this.muted;

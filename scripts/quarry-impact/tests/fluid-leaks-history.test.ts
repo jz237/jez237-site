@@ -1,6 +1,7 @@
+import {restoreDamageRattleBytes} from './damage-rattle-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readFluidLeaksPrevious,restoreFluidLeaksBytes,verifyFluidLeaksRevision} from './fluid-leaks-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreDamageRattleBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('FluidLeaks preserves every prior fixture, vehicle asset, venue art and history input',verifyFluidLeaksRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/fluid-leaks/revision.json').toString());

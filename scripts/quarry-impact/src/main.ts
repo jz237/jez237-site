@@ -2054,7 +2054,7 @@ async function boot() {
         staticShadows: staticShadows?.stats};
     },
     get impactState() { const p=cars[0];return p?{offset:{...p.impactResponse.offset},velocity:{...p.impactResponse.velocity},roll:p.impactResponse.roll,pitch:p.impactResponse.pitch,effects:{...p.impactEffects}}:null; },
-    get audioState() { return {state:sound.ctx?.state,muted:sound.muted,master:sound.master?.gain.value,voices:sound.activeVoices,buffers:sound.buffers.size,levels:{...sound.levels}}; },
+    get audioState() { return {state:sound.ctx?.state,muted:sound.muted,master:sound.master?.gain.value,voices:sound.activeVoices,buffers:sound.buffers.size,levels:{...sound.levels},damage:{...sound.damageSounds}}; },
     get fireState() { return vehicleFire?.stats; },
     get splashState(){return puddleSplashes?.stats;},
     get slicks(){return fx.slicks.stats;},
