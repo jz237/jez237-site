@@ -39,9 +39,11 @@ export function finishRockMaterial(material:T.MeshStandardMaterial){
   // Living rubble: every face is crowded with small domed coralline nodules,
   // each its own color, with dark crevices between (two scales).
   shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
-   vec3 nodeTo,nodeId,fineTo,fineId;float nodeF1,nodeF2,fineF1,fineF2;
+   vec3 nodeTo,nodeId,fineTo=vec3(0.),fineId=vec3(0.);float nodeF1,nodeF2,fineF1=0.,fineF2=0.;
+   float nodeFade=reefDetailFade(reefRockP*18.),fineFade=reefDetailFade(reefRockP*46.);
    reefNodules(reefRockP*18.,nodeF1,nodeF2,nodeTo,nodeId);
-   reefNodules(reefRockP*46.+vec3(17.3,5.1,9.7),fineF1,fineF2,fineTo,fineId);
+   // Every fine-pore term is weighted by fineFade: at 0 its cells cannot show.
+   if(fineFade>0.)reefNodules(reefRockP*46.+vec3(17.3,5.1,9.7),fineF1,fineF2,fineTo,fineId);
    float nodeCrevice=smoothstep(.0,.22,nodeF2-nodeF1),fineCrevice=smoothstep(.0,.16,fineF2-fineF1);
    // Spherical crowns: brightness falls off toward each nodule's rim, so the
    // surface reads as rounded popcorn rather than flat polygonal tiles.
@@ -51,7 +53,6 @@ export function finishRockMaterial(material:T.MeshStandardMaterial){
    float nodePatch=fract(reefNodeField(reefRockP*2.4+7.)*2.7+reefNodeField(reefRockP*5.3+19.)*1.3+nodeId.x*.16);
    vec3 nodeColor=reefNodeColor(nodePatch)*(.55+.5*nodeId.y);
    float coverage=.82*smoothstep(.05,.45,reefNodeField(reefRockP*1.7));
-   float nodeFade=reefDetailFade(reefRockP*18.),fineFade=reefDetailFade(reefRockP*46.);
    float fineShade=mix(.9,(.66+.42*fineDome)*mix(.75,1.,fineCrevice),fineFade);
    vec3 living=mix(diffuseColor.rgb,nodeColor*mix(.88,.6+.55*fineId.z,fineFade),.8);
    diffuseColor.rgb=mix(diffuseColor.rgb,living,coverage);

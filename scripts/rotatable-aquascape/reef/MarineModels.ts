@@ -1,6 +1,7 @@
 import * as T from 'three';
 import {bodyEdge,finField} from './MarineFinFlex.ts';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 import metadata from './assets/fish/model-info.json';
 export type MarineSpecies='tang'|'rostratum'|'semilarvatus'|'clown'|'anthias'|'chromis'|'gramma'|'goby'|'strigosus'|'vulpinus'|'bispinosa'|'loricula'|'hexataenia'|'cinctus';
 const urls:Record<MarineSpecies,string>={
@@ -198,6 +199,20 @@ export async function loadMarineModels(species:MarineSpecies[]=baseMarineSpecies
     mesh.userData.side=pivot.userData.side;mesh.name='operculum';material.side=T.DoubleSide;pivot.add(mesh);group.add(pivot);
    }else {mesh.name=label==='body'?'body':'fin';if(mesh.name==='fin'){material.side=T.DoubleSide;material.depthWrite=false;}group.add(mesh);}
   });
+  // Rigid pairs draw once per animal. Both eyes sit fixed in one head group;
+  // both opercula share one hinge line and one breathing value, so their side
+  // sign moves into the flex attributes and the pair opens exactly as before.
+  if(eyes.children.length===2){const [left,right]=eyes.children as T.Mesh[],merged=mergeGeometries([left.geometry,right.geometry]);
+   if(merged){left.geometry.dispose();right.geometry.dispose();left.geometry=merged;eyes.remove(right);}}
+  const gills=group.children.filter(o=>o.name==='gill');
+  if(gills.length===2&&Math.abs(gills[0].position.x-gills[1].position.x)<1e-6&&Math.abs(gills[0].position.y-gills[1].position.y)<1e-6&&gills[0].userData.side===-gills[1].userData.side){
+   const parts=gills.map(pivot=>{const part=(pivot.children[0] as T.Mesh).geometry.clone().translate(0,0,pivot.position.z);
+    for(const name of ['gillFlex','gillGradient']){const values=(part.getAttribute(name) as T.BufferAttribute).array;for(let i=0;i<values.length;i++)values[i]*=pivot.userData.side;}
+    return part;});
+   const merged=mergeGeometries(parts);for(const part of parts)part.dispose();
+   if(merged){const [hinge,other]=gills,mesh=hinge.children[0] as T.Mesh;mesh.geometry.dispose();(other.children[0] as T.Mesh).geometry.dispose();
+    mesh.geometry=merged;mesh.userData.side=hinge.userData.side=1;hinge.position.z=hinge.userData.restZ=0;group.remove(other);}
+  }
   // Fin flex grows from a pinned insertion to a freely moving margin.
   group.traverse(node=>{if(!(node instanceof T.Mesh)||node.name!=='fin')return;
    const p=node.geometry.getAttribute('position'),flex=new Float32Array(p.count),gradient=new Float32Array(p.count*3),height=new Float32Array(p.count),profile=metadata[species];

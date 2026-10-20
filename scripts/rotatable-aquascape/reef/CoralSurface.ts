@@ -13,11 +13,12 @@ export function finishCoralMaterial(material:T.MeshStandardMaterial){
   shader.vertexShader='varying vec3 reefCoralP;\n'+shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nreefCoralP=position;');
   shader.fragmentShader='varying vec3 reefCoralP; uniform mat3 normalMatrix;\n'+rubbleNodules+shader.fragmentShader;
   shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
-   vec3 cupTo,cupId;float cupF1,cupF2;
-   reefNodules(reefCoralP*52.,cupF1,cupF2,cupTo,cupId);
    // Cups smaller than a few pixels would shimmer as noise: fade them out
    // with distance, toward their average tone, keeping them in close-ups.
+   // Fully faded cups contribute nothing, so their cells are not evaluated.
    float cupFade=reefDetailFade(reefCoralP*52.);
+   vec3 cupTo=vec3(0.),cupId=vec3(0.);float cupF1=0.,cupF2=0.;
+   if(cupFade>0.)reefNodules(reefCoralP*52.,cupF1,cupF2,cupTo,cupId);
    vec3 coralBase=diffuseColor.rgb;
    float cupPit=1.-smoothstep(.04,.2,cupF1),cupRim=smoothstep(.16,.34,cupF1)*(1.-smoothstep(.5,.78,cupF1)),cupGap=smoothstep(.0,.13,cupF2-cupF1);
    float coralLuma=dot(diffuseColor.rgb,vec3(.3,.59,.11));
