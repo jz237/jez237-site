@@ -1,6 +1,7 @@
 import * as T from 'three';
 import {tissueFlow} from './AnemoneFlow.ts';
 import type {Food} from './ReefFish.ts';
+const brushSamples=[.4,.7,1];
 
 export type AnemoneStrand={tip:T.Vector3;samples:T.Vector3[];brushIndex:number;phase:number;arc:number;scale:number;angle:number};
 export type AnemoneHost={center:T.Vector3;scale:number;strands:AnemoneStrand[]};
@@ -13,7 +14,7 @@ export class AnemoneBehavior{
  readonly brushTexture:T.DataTexture;
  private brushVelocity:Float32Array;
  private brushTime=-1;private brushing=0;private maxBrush=0;
- private brushPoint=new T.Vector3();private brushAxis=new T.Vector3();private brushDelta=new T.Vector3();
+ private brushPoints=[new T.Vector3(),new T.Vector3(),new T.Vector3()];private brushAxes:T.Vector3[]=[];private brushDelta=new T.Vector3();
  readonly anchors:{value:T.Vector4[]};
  readonly feeding={value:Array.from({length:3},()=>new T.Vector4())};
  readonly morsels=new T.InstancedMesh(new T.SphereGeometry(.024,8,6),new T.MeshStandardMaterial({color:'#d29c65',roughness:.85}),3);
@@ -53,20 +54,27 @@ export class AnemoneBehavior{
   if(time===this.brushTime)return;
   const dt=this.brushTime<0?1/60:Math.min(.033,Math.max(0,time-this.brushTime));this.brushTime=time;
   this.brushing=0;this.maxBrush=0;
-  for(const h of this.hosts){
+  for(let hostIndex=0;hostIndex<this.hosts.length;hostIndex++){
+   const h=this.hosts[hostIndex],feed=this.feeding.value[hostIndex];
    const near=visitors.filter(f=>f.position.distanceToSquared(h.center)<(1.6*h.scale+.4)**2);
+   // Body terms do not depend on the strand, and a strand's three displaced
+   // samples do not depend on the body: compute each once, not per pair.
+   const bodies=near.map((fish,i)=>{const size=fish.group.scale.x;return {fish,axis:(this.brushAxes[i]??=new T.Vector3()).set(1,0,0).applyQuaternion(fish.group.quaternion),halfBody:size*.29,skinRadius:size*.19+.032*h.scale};});
    for(const strand of h.strands){
     const index=strand.brushIndex*4,vindex=strand.brushIndex*3,scale=Math.min(strand.scale,strand.arc*.85);
     const limit=Math.min(h.scale,strand.arc)*.18;let tx=0,ty=0,tz=0,best=0;
-    for(const fish of near){
-     this.brushAxis.set(1,0,0).applyQuaternion(fish.group.quaternion);
-     const size=fish.group.scale.x,halfBody=size*.29,skinRadius=size*.19+.032*h.scale;
+    if(bodies.length){
+     const weight=T.MathUtils.smoothstep(Math.cos(strand.angle)*feed.y+Math.sin(strand.angle)*feed.z,.05,.8);
      for(let j=0;j<3;j++){
-      const t=[.4,.7,1][j],e=t*t*(3-2*t),flow=tissueFlow(time,t,strand.phase);
-      this.brushPoint.copy(strand.samples[j]);this.brushPoint.x+=flow[0]*t*t*scale;this.brushPoint.z+=flow[1]*t*t*scale;
-      const feed=this.feeding.value[this.hosts.indexOf(h)],weight=T.MathUtils.smoothstep(Math.cos(strand.angle)*feed.y+Math.sin(strand.angle)*feed.z,.05,.8);this.brushPoint.lerp(h.center,feed.x*weight*e);
-      this.brushDelta.copy(this.brushPoint).sub(fish.position);
-      const along=T.MathUtils.clamp(this.brushDelta.dot(this.brushAxis),-halfBody,halfBody);this.brushDelta.addScaledVector(this.brushAxis,-along);
+      const t=brushSamples[j],e=t*t*(3-2*t),flow=tissueFlow(time,t,strand.phase),point=this.brushPoints[j];
+      point.copy(strand.samples[j]);point.x+=flow[0]*t*t*scale;point.z+=flow[1]*t*t*scale;point.lerp(h.center,feed.x*weight*e);
+     }
+    }
+    for(const {fish,axis,halfBody,skinRadius} of bodies){
+     for(let j=0;j<3;j++){
+      const e=brushSamples[j]*brushSamples[j]*(3-2*brushSamples[j]);
+      this.brushDelta.copy(this.brushPoints[j]).sub(fish.position);
+      const along=T.MathUtils.clamp(this.brushDelta.dot(axis),-halfBody,halfBody);this.brushDelta.addScaledVector(axis,-along);
       const distance=this.brushDelta.length(),penetration=skinRadius-distance;
       if(penetration<=best)continue;best=penetration;
       // The touched strand follows the passing body, not a tank-wide pulse.
