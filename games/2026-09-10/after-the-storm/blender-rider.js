@@ -23,7 +23,7 @@ const up=new T.Vector3(0,1,0),skinTones=[0xbf8967,0xd9a88a,0x815237,0xad7959];
 export function makeBlenderRider(parent,{color=null,riderIndex=0}={}){
  if(!asset)return null;
  const root=new T.Group();root.name='Blender / adult coastal rider';parent.add(root);
- const groups=Object.fromEntries(Object.keys(asset.meta.bones).map(name=>{const g=new T.Group();g.name=name;root.add(g);return [name,g];}));
+ const groups=Object.fromEntries(Object.keys(asset.meta.bones).map(name=>{const g=new T.Group();g.name=name;g.userData.restLength=asset.meta.bones[name].length;root.add(g);return [name,g];}));
  const materials=Object.fromEntries(Object.entries(asset.meta.materials).map(([name,spec])=>{
   const m=new T.MeshPhysicalMaterial({...spec,side:T.DoubleSide});m.name=name;
   if(name==='Skin')m.color.setHex(skinTones[riderIndex%4]);

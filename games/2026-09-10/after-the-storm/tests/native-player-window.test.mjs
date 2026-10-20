@@ -165,7 +165,8 @@ test('child detailed meshes place solved physical endpoints through the actual f
  assert.deepEqual(v.rider.position.toArray(),[0,0,0]);assert.deepEqual(v.rider.rotation.toArray().slice(0,3),[0,0,0]);assert.deepEqual(v.ridingMotion,{});
  near(v.boat.rotation.y,heading);near(v.body.rotation.x,pitch);near(v.body.rotation.y,0);near(v.body.rotation.z,roll);
  for(const [bone,index]of [['head',0],['forearmL',5],['handL',6],['thighL',8],['shinL',9],['footL',10],['forearmR',13],['handR',14],['thighR',16],['shinR',17],['footR',18]]){
-  const group=v.rider.getObjectByName(bone),endpoint=new T.Vector3(0,meshMetadata.bones[bone].length,0).applyMatrix4(group.matrixWorld);
+  // Each rig scales its own rest length; the built-in fallback's differ from the detailed mesh.
+  const group=v.rider.getObjectByName(bone),endpoint=new T.Vector3(0,group.userData.restLength??meshMetadata.bones[bone].length,0).applyMatrix4(group.matrixWorld);
   nearPoint(endpoint,Object.values(bundle.articulatedRider.points[index].position));
  }
  const held=v.rider.children.map(g=>g.matrix.clone());for(let i=0;i<60;i++)updatePlayerWindowCraft(v,q,{time:100+i,dt:.2});
