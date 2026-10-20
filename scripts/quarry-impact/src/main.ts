@@ -1071,7 +1071,7 @@ function updateHud() {
     clamp((player.rpm / 7000) * 100, 0, 100) + '%';
   text('surface', player.surface.toUpperCase());
   text('engine-status', player.engineStall!>0&&player.health>0?'ENGINE STALLED':engineStatus(player.health,player.engineDamage));
-  if(elapsed-damageDiagramAt>.2||elapsed<damageDiagramAt){damageDiagramAt=elapsed;const svg=damageDiagramSvg({zones:player.damageZones,structure:player.structuralDamage,wheelDamage:player.wreckParts.wheelDamage,wheelLost:player.wreckParts.wheelLost,tyreFailure:[0,1,2,3].map(i=>tyreFailureLevel(player.tyreDamage?.[i])),engine:player.engineDamage??Math.max(0,(40-player.health)/40),misfiring:player.misfireFactor<1,rearEngine:isRearEngineKind(player.kind),wrecked:player.health<=0});const el=document.getElementById('damage-diagram');if(el&&svg!==damageDiagramSvgLast){el.innerHTML=svg;damageDiagramSvgLast=svg;}}
+  if(elapsed-damageDiagramAt>.2||elapsed<damageDiagramAt){damageDiagramAt=elapsed;const svg=damageDiagramSvg({zones:player.damageZones,structure:player.structuralDamage,wheelDamage:player.wreckParts.wheelDamage,wheelLost:player.wreckParts.wheelLost,tyreFailure:[0,1,2,3].map(i=>tyreFailureLevel(player.tyreDamage?.[i])),engine:player.engineDamage??Math.max(0,(40-player.health)/40),misfiring:player.misfireFactor<1,rearEngine:isRearEngineKind(player.kind),wrecked:player.health<=0,parts:partStates(player)});const el=document.getElementById('damage-diagram');if(el&&svg!==damageDiagramSvgLast){el.innerHTML=svg;damageDiagramSvgLast=svg;}}
   text('tyre-status', tyreWarning(player.tyreDamage,player.extendedDamage));
   text('armor-status',online?.active?'':armorWearWarning(player.setup.armor,player.structuralDamage));
   text('engine-restart', stallHint(player.health,player.engineStall,player.input.throttle));
@@ -1354,6 +1354,8 @@ function ai(car: Vehicle, dt: number): Input {
   });
   return drivers.update(car,cars,practiceTraffic?'race':mode,dt,probe,raceRoute(car.id));
 }
+/** Diagram states for the bolt-on parts: gone when every panel has left, loose while it hangs. */
+function partStates(c:Vehicle){const state=(name:string):'ok'|'loose'|'gone'|undefined=>{const a=c.wreckParts.assemblies.find(x=>x.name===name);if(!a)return undefined;return a.members.every(m=>!m.mesh.visible)?'gone':a.loose>.05?'loose':'ok';};return{frontBumper:state('front-bumper'),rearBumper:state('rear-bumper'),hood:state('hood')};}
 /** An exploding car shoves everything near it: cars and loose props within SHOCKWAVE.radius are thrown
  * outward and up, harder the closer they are (offline only; replays show it through recorded poses). */
 const SHOCKWAVE={radius:9,speed:7,lift:3.5};

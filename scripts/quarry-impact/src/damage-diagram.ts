@@ -5,12 +5,25 @@ export type DiagramState={
   structure?:readonly number[];
   wheelDamage:ArrayLike<number>;wheelLost:ArrayLike<number>;tyreFailure:readonly number[];
   engine:number;misfiring:boolean;rearEngine:boolean;wrecked:boolean;
+  /** Bolt-on parts: intact, hanging loose or gone (omitted parts are not drawn). */
+  parts?:{frontBumper?:PartState;rearBumper?:PartState;hood?:PartState};
 };
+export type PartState='ok'|'loose'|'gone';
 const clamp01=(v:number)=>Math.max(0,Math.min(1,Number.isFinite(v)?v:0));
 /** Severity colours: intact, worn, damaged, critical. */
 export const DIAGRAM_COLORS=['#7f8c7a','#d9c35a','#e08a3c','#d8412f'] as const;
 export function severityColor(level:number){const s=clamp01(level);return DIAGRAM_COLORS[s<.2?0:s<.45?1:s<.75?2:3];}
 const zoneLevel=(state:DiagramState,i:number,key:keyof DiagramState['zones'])=>Math.max(clamp01((state.structure?.[i]??0)*1.6),clamp01(state.zones[key]/45));
+function partShape(cls:string,shape:string,s:PartState|undefined){
+  if(!s)return '';
+  if(s==='gone')return shape.replace('/>',` class="${cls} dd-gone" fill="none" stroke="${DIAGRAM_COLORS[3]}" stroke-dasharray="2 2"/>`);
+  return shape.replace('/>',` class="${cls}${s==='loose'?' dd-loose':''}" fill="${s==='loose'?DIAGRAM_COLORS[2]:'#5d6a59'}"/>`);
+}
+function parts(state:DiagramState){
+  const p=state.parts;if(!p)return '';
+  return partShape('dd-bumper-front','<rect x="17" y="2.5" width="26" height="4" rx="1.5"/>',p.frontBumper)+partShape('dd-bumper-rear','<rect x="17" y="103.5" width="26" height="4" rx="1.5"/>',p.rearBumper)+
+    (p.hood&&p.hood!=='ok'?partShape('dd-hood','<rect x="20" y="11" width="20" height="16" rx="2"/>',p.hood):'');
+}
 export function damageDiagramSvg(state:DiagramState){
   const z=(i:number,key:keyof DiagramState['zones'])=>state.wrecked?DIAGRAM_COLORS[3]:severityColor(zoneLevel(state,i,key));
   const wheels=[[5,17],[49,17],[5,75],[49,75]].map(([x,y],i)=>{
@@ -25,5 +38,5 @@ export function damageDiagramSvg(state:DiagramState){
     `<rect class="dd-left" x="15" y="31" width="6" height="48" fill="${z(2,'left')}"/>`+
     `<rect class="dd-right" x="39" y="31" width="6" height="48" fill="${z(3,'right')}"/>`+
     `<rect class="dd-roof" x="22" y="37" width="16" height="36" rx="2" fill="${z(4,'roof')}"/>`+
-    wheels+engine+`</svg>`;
+    parts(state)+wheels+engine+`</svg>`;
 }

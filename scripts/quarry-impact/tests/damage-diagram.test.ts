@@ -16,3 +16,9 @@ test('torn-off wheels show as dashed outlines and flats as dark tyres; rear engi
  assert.ok(/class="dd-engine"[^>]*cy="90"/.test(svg));
  const wrecked=damageDiagramSvg({...base,wrecked:true});assert.equal(fill(wrecked,'dd-roof'),DIAGRAM_COLORS[3]);
 });
+test('bumpers and the bonnet show as intact, loose or gone',()=>{
+ const svg=damageDiagramSvg({...base,parts:{frontBumper:'loose',rearBumper:'gone',hood:'gone'}});
+ assert.ok(/class="dd-bumper-front dd-loose"/.test(svg));assert.ok(/class="dd-bumper-rear dd-gone"[^>]*stroke-dasharray/.test(svg));assert.ok(/class="dd-hood dd-gone"/.test(svg));
+ const intact=damageDiagramSvg({...base,parts:{frontBumper:'ok',hood:'ok'}});assert.ok(/class="dd-bumper-front"/.test(intact));assert.ok(!intact.includes('dd-hood'),'an intact bonnet is just the front zone');assert.ok(!intact.includes('dd-bumper-rear'),'unknown parts are not drawn');
+ assert.ok(!damageDiagramSvg(base).includes('dd-bumper'),'old callers without parts draw none');
+});
