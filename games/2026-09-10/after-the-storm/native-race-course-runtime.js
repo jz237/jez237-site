@@ -1,4 +1,7 @@
 export const NATIVE_PRIMARY_ONLY_ACTOR_COURSES=Object.freeze([1,2,4,8]);
+// Courses3,5 and7 select their loaded alternate families as actor routes too.
+export const NATIVE_FAMILY_ACTOR_COURSES=Object.freeze([3,5,7]);
+export const NATIVE_ACTOR_COURSES=Object.freeze([...NATIVE_PRIMARY_ONLY_ACTOR_COURSES,...NATIVE_FAMILY_ACTOR_COURSES]);
 import {createNativePrimaryCourseData} from './native-primary-initialization.js';
 import {createNativeRaceResetLayout} from './native-race-reset.js';
 import {createNativePrimaryRacePhaseLayout} from './native-primary-race-phase.js';
@@ -119,7 +122,9 @@ export function createNativeRaceCourseRuntime({course,difficulty,players,objectL
  // so their actors read only the primary rows. Others need their own families.
  const courseActorRoutes=courseIndex===0?Object.freeze({primary:data,
   secondary:createNativePrimaryCourseData({rows:DOLPHIN_SECONDARY_ROWS,courseIndex,mode620}),tertiary:null}):
-  players===1&&NATIVE_PRIMARY_ONLY_ACTOR_COURSES.includes(courseIndex)?Object.freeze({primary:data,secondary:null,tertiary:null}):undefined;
+  players===1&&NATIVE_PRIMARY_ONLY_ACTOR_COURSES.includes(courseIndex)?Object.freeze({primary:data,secondary:null,tertiary:null}):
+  // 800D635C/800D6384 select the same rows already loaded as alternate families.
+  players===1&&NATIVE_FAMILY_ACTOR_COURSES.includes(courseIndex)?Object.freeze({primary:data,secondary:aiFamilies.secondary?.data??null,tertiary:aiFamilies.tertiary?.data??null}):undefined;
  return Object.freeze({courseView,data,resetLayout,objectStartup,primaryLayout,sourceBuoyLayout,mode620,aiRoute,aiTargetTable,aiFamilies:Object.freeze(aiFamilies),retirementGeometry,staticContactGeometry,...regions,
   ...(courseActorRoutes?{courseActorRoutes}:{}),
   sourceDifficulty,

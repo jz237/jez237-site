@@ -1,5 +1,18 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — course actors on Marine Fortress, Port Blue and Southern Island
+
+The original secondary/tertiary actor-route pointers for these courses select
+exactly the rows the course runtime already loads as alternate route families
+(55, 45, and 47+47 rows), so their actors now read those families. Marine
+Fortress's perched gulls and Southern Island's flying gulls render with the
+existing gull model; Port Blue's single special actor (bank 7, a large static
+model, most likely the harbour ship) runs but has no model yet. The actor
+distance audio reads the audio owner's rival gate (7DE8); that owner has no
+rival-engine channel, so the value is 0 on both paths. Every course except
+Twilight City (which has no course actors) now runs its original actors in
+Original Time trial and Championship.
+
 ## Unpublished — Glacier Coast king penguins
 
 Glacier Coast's five special actors (bank 8, draw type 13) are swimming king

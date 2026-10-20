@@ -105,9 +105,9 @@ let nativeDolphinRenderer=null,nativeEffectRenderer=null,nativeActorLoading=null
 // One display consumer per loaded bank: bank0 dolphins, bank2 swimmers, banks3/6 birds.
 function makeNativeCourseActorView(root){const dolphins=makeNativeDolphinRenderer(root),fish=makeNativeFishRenderer(root),birds=makeNativeBirdRenderer(root);
  return {update(presentation,resources){dolphins.update(presentation,resources);fish.update(presentation,resources);birds.update(presentation,resources);},fish:fish.snapshot,birds:birds.snapshot,dispose(){dolphins.dispose();fish.dispose();birds.dispose();}};}
-// Loaded actor banks by course: Dolphin Park, and the courses whose original
-// actors read only the primary route (Sunny Beach, Sunset Bay, Drake Lake, Glacier).
-const NATIVE_COURSE_ACTOR_BANKS=Object.freeze({0:[0,2],1:[3,2],2:[0],4:[6,4],8:[8]}),nativeActorAssets=new Map();
+// Animated actor banks to load by course (Port Blue's bank7 actor is static).
+// Twilight City has no course actors.
+const NATIVE_COURSE_ACTOR_BANKS=Object.freeze({0:[0,2],1:[3,2],2:[0],3:[3],4:[6,4],5:[],7:[1,3],8:[8]}),nativeActorAssets=new Map();
 function clearNativeDolphins(){nativeDolphinRenderer?.dispose();nativeDolphinRenderer=null;nativeDolphinRoot.visible=false;nativeEffectRenderer?.dispose();nativeEffectRenderer=null;nativeEffectRoot.visible=false;}
 
 const vesselFor=r=>vessels[riderColourIndex(r,state?.mode==='versus'&&state.swapColours,state?.mode==='versus'&&state.racers[0].id===state.racers[1].id)];
