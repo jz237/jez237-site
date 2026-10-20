@@ -4,6 +4,7 @@ import {effectiveNativeTune} from './native-rider-tuning.js';
 import {createNativeRaceLaunchRuntime} from './native-race-launch-runtime.js';
 import {prepareNativeChampionshipWebLaunch,prepareNativeChampionshipWebSelection,prepareNativeChampionshipConfiguredLaunch} from './native-championship-setup.js';
 import {prepareNativeChampionshipContinuation} from './native-championship-continuation.js';
+import {prepareNativeRaceStateOperations,createNativeRaceState} from './native-race-state.js';
 import {createNativeRaceContactAudio} from './native-race-contact-audio.js';
 import {prepareNativeHullStartFromMatrix} from './native-hull.js';
 import {createNativeRaceCourseRuntime,NATIVE_ACTOR_COURSES} from './native-race-course-runtime.js';
@@ -452,6 +453,22 @@ export function handicapBoost(s,r){if(s.mode!=='versus'||s.freeRide||!s.handicap
  const other=s.racers.find(q=>q!==r);if(!other||other.dq||other.finishTime!==null)return 0;return clamp((progress(other)-progress(r))*.075,0,.12);
 }
 export function raceWeather(s,time=s.time){const w=conditions(s.course,time,s.racers[0].lap);if(s.nativeHost)w.seaLevel=s.raceWater.field.datumNative*s.raceWater.scale;else if(s.courseDatum)w.seaLevel=s.courseDatum.value;if(s.seaState!=='course')w.storm=({calm:0,chop:.45,storm:.95})[s.seaState]??w.storm;return w;}
+/** The Normal cup's round0 selection (course0, the Dolphin Park warm-up),
+ * stopped before 9345C. The original enters it through the championship
+ * return and course introduction like every round; the browser plays that
+ * introduction's flyover before the warm-up free ride. Selection only: the
+ * cup's first race still starts from its own fresh selection after the warm-up.
+ */
+export function prepareNativeCupWarmupSelection({rider=0,tunes=[],tuneModes=[],recordSession,rngSeed=17}={}){
+ const courseRuntime=createNativeRaceCourseRuntime({course:getCourse('greyhaven',0),difficulty:0,players:1,raceMode:'championship'});
+ const ids=[rider,...RIDERS.map((_,i)=>i).filter(i=>i!==rider)];
+ const racers=ids.map((id,i)=>({id,human:i===0,player:i===0?0:null,grid:i===0?3:i-1,lap:0,power:0,misses:0}));
+ const selection=prepareNativeChampionshipWebSelection({racers,courseRuntime,recordSession,tunes,tuneModes,rngSeed});
+ // Round0 of the Normal order is course0, the warm-up. Its return counts
+ // warm-up entries in AA00, which a fresh web scene starts at0.
+ const counted=createNativeRaceState({...selection,scene:{...selection.scene,championshipCountAa00:selection.scene.championshipCountAa00??0}});
+ return prepareNativeRaceStateOperations(counted,[{kind:'profileWrite',byteOffset:0,width:4,value:0},{kind:'profileWrite',byteOffset:4,width:4,value:0}]).state;
+}
 /** Enter the original championship ending after a qualified final round. */
 export function beginNativeChampionshipEnding(s){
  const g=s.nativeLaunch?.snapshot().scene;

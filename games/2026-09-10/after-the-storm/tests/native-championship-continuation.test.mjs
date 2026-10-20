@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createRace,stepRace,beginNativeChampionshipEnding,fastForwardNativeEnding} from '../race-core.js';
+import {createRace,stepRace,beginNativeChampionshipEnding,fastForwardNativeEnding,prepareNativeCupWarmupSelection} from '../race-core.js';
 import {getCourse,COURSES} from '../courses.js';
 import {createNativeRacePilot} from '../native-race-pilot.js';
 import {prepareNativeChampionshipContinuation,prepareNativeChampionshipFlyover} from '../native-championship-continuation.js';
@@ -102,4 +102,15 @@ test('a fresh cup round enters through the original championship return and cour
  assert.ok(new Set(fly.frames.map(q=>q.eyeNative.join())).size>10,'the camera flies');
  for(let i=0;i<300;i++)stepRace(s,{throttle:1},1/30);assert.equal(s.phase,'running');
  assert.throws(()=>createRace({mode:'time',physics:'native',course:getCourse('greyhaven',1),difficulty:1,nativeChampionshipIntroduction:true}),/fresh native championship/);
+});
+
+test('the Normal cup previews Dolphin Park through the original return before its warm-up',()=>{
+ const selection=prepareNativeCupWarmupSelection({rider:1});
+ assert.deepEqual([selection.scene.mode608,selection.profileWordsB330[0],selection.profileWordsB330[1],selection.profileWordsB330[2]],[4,0,0,0]);
+ const p=createRace({mode:'practice',physics:'native',course:getCourse('practice'),rider:1,nativeCourseActors:actors([0,2])});
+ const fly=prepareNativeChampionshipFlyover(selection,{avatarsBySlot:[1,0,2,3],...p.nativeHost.introductionInputs(),actors:p.nativeHost.introductionActorInputs()});
+ assert.equal(fly.courseIndex,0);assert.ok(fly.frames.length>100);
+ // AC184 spawns nothing in main8; the Dolphin Park script brings its own dolphin.
+ assert.ok(fly.frames.filter(q=>q.actors.presentation.draws.length===5).length>fly.frames.length*.9,'one dolphin for nearly all frames');
+ assert.ok(new Set(fly.frames.map(q=>q.eyeNative.join())).size>10,'the camera moves');
 });

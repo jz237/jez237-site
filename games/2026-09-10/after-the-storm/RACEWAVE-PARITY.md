@@ -1,5 +1,17 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — Dolphin Park preview before the Normal warm-up
+
+The Normal cup's round 0 is course 0. The original reaches it like every
+round, through the championship return (801EB91C) and the course
+introduction. Starting a Normal Original Championship now builds the cup's
+round 0 selection (prepareNativeCupWarmupSelection; the return's warm-up
+counter AA00 starts at 0 in a fresh web scene) and plays that introduction's
+Dolphin Park flyover over the warm-up scene before the free ride: 214 frames,
+about 10.7 s, a rising shot that tilts from 17 to 41 degrees up towards the
+sky, with the one dolphin its script spawns. It can be skipped like the
+other flyovers.
+
 ## Unpublished — original effects in Player 2's own window
 
 In the separate-window layout the host now sends Player 2's view of the
