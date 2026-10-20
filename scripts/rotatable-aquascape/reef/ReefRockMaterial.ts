@@ -2,11 +2,45 @@ import * as T from 'three';
 /** World-scale projections keep pores round on steep walls and undercuts. The
  * normal perturbation is projected onto the actual curved surface, so blending
  * projection axes never replaces the rock's geometric shading normal. */
+const rubbleNodules=`
+ vec3 reefHash3(vec3 p){p=fract(p*vec3(.1031,.1030,.0973));p+=dot(p,p.yxz+33.33);return fract((p.xxy+p.yxx)*p.zyx);}
+ // Cellular (Worley) nodules: nearest and second-nearest centre distances, the
+ // vector to the nearest centre and that nodule's random identity.
+ void reefNodules(vec3 p,out float f1,out float f2,out vec3 toCenter,out vec3 id){
+  vec3 i=floor(p),f=fract(p);f1=8.;f2=8.;toCenter=vec3(0.);id=vec3(0.);
+  for(int z=-1;z<=1;z++)for(int y=-1;y<=1;y++)for(int x=-1;x<=1;x++){
+   vec3 g=vec3(float(x),float(y),float(z)),h=reefHash3(i+g),o=g+.12+.76*h-f;float d=dot(o,o);
+   if(d<f1){f2=f1;f1=d;toCenter=o;id=h;}else if(d<f2)f2=d;
+  }
+  f1=sqrt(f1);f2=sqrt(f2);
+ }
+ float reefNodeField(vec3 p){vec3 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
+  return mix(mix(mix(reefHash3(i).x,reefHash3(i+vec3(1,0,0)).x,f.x),mix(reefHash3(i+vec3(0,1,0)).x,reefHash3(i+vec3(1,1,0)).x,f.x),f.y),
+   mix(mix(reefHash3(i+vec3(0,0,1)).x,reefHash3(i+vec3(1,0,1)).x,f.x),mix(reefHash3(i+vec3(0,1,1)).x,reefHash3(i+vec3(1,1,1)).x,f.x),f.y),f.z);}
+ // Coralline purples and violets, olive and ochre crusts, moss green, rose.
+ vec3 reefNodeColor(float k){
+  return k<.22?vec3(.24,.07,.33):k<.36?vec3(.34,.15,.48):k<.52?vec3(.30,.27,.08):k<.64?vec3(.42,.23,.06):k<.76?vec3(.15,.25,.08):k<.88?vec3(.46,.14,.25):k<.95?vec3(.12,.22,.21):vec3(.46,.38,.26);
+ }
+`;
 export function finishRockMaterial(material:T.MeshStandardMaterial){
  material.onBeforeCompile=shader=>{
   shader.vertexShader='varying vec3 reefRockP,reefRockN;\n'+shader.vertexShader;
   shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nreefRockP=position;reefRockN=normal;');
-  shader.fragmentShader='varying vec3 reefRockP,reefRockN; uniform mat3 normalMatrix;\n'+shader.fragmentShader;
+  shader.fragmentShader='varying vec3 reefRockP,reefRockN; uniform mat3 normalMatrix;\n'+rubbleNodules+shader.fragmentShader;
+  // Living rubble: every face is crowded with small domed coralline nodules,
+  // each its own color, with dark crevices between (two scales).
+  shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
+   vec3 nodeTo,nodeId,fineTo,fineId;float nodeF1,nodeF2,fineF1,fineF2;
+   reefNodules(reefRockP*13.,nodeF1,nodeF2,nodeTo,nodeId);
+   reefNodules(reefRockP*34.+vec3(17.3,5.1,9.7),fineF1,fineF2,fineTo,fineId);
+   float nodeCrevice=smoothstep(.0,.16,nodeF2-nodeF1),fineCrevice=smoothstep(.0,.14,fineF2-fineF1);
+   float nodeDome=1.-smoothstep(.12,.82,nodeF1),fineDome=1.-smoothstep(.08,.78,fineF1);
+   vec3 nodeColor=reefNodeColor(nodeId.x)*(.7+.6*nodeId.y);
+   float coverage=.82*smoothstep(.05,.45,reefNodeField(reefRockP*1.7));
+   vec3 living=mix(diffuseColor.rgb,nodeColor*(.6+.55*fineId.z),.8);
+   diffuseColor.rgb=mix(diffuseColor.rgb,living,coverage);
+   // Rounded bumps: lit crowns, shaded flanks and dark gaps between them.
+   diffuseColor.rgb*=mix(1.,(.36+.82*nodeDome)*mix(.3,1.,nodeCrevice)*(.72+.36*fineDome)*mix(.9,1.,fineCrevice),.35+.65*coverage);`);
   shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',`
    vec3 stoneN=normalize(reefRockN),stoneSign=sign(stoneN+vec3(.000001));
    vec3 stoneWeight=pow(abs(stoneN),vec3(4.));stoneWeight/=dot(stoneWeight,vec3(1.));
@@ -33,8 +67,11 @@ export function finishRockMaterial(material:T.MeshStandardMaterial){
     vec2 mx=microX.xy/max(.25,microX.z),my=microY.xy/max(.25,microY.z),mz=microZ.xy/max(.25,microZ.z);
     slope+=(vec3(0.,mx.y,-stoneSign.x*mx.x)*stoneWeight.x+vec3(my.x,0.,-stoneSign.y*my.y)*stoneWeight.y+vec3(stoneSign.z*mz.x,mz.y,0.)*stoneWeight.z)*lowerDetail*.62;
    }
+   // Domed nodules tilt away from their own centres, the finer crowd more gently.
+   // A spherical profile: the tilt grows toward each nodule's rim.
+   slope+=(-nodeTo*2.4*nodeF1-fineTo*1.1*fineF1)*(.35+.65*coverage);
    normal=normalize(normalMatrix*normalize(stoneN+slope-stoneN*dot(slope,stoneN)));`);
  };
- material.customProgramCacheKey=()=> 'reef-porous-rock-triplanar-lower-micropores-v2';
+ material.customProgramCacheKey=()=> 'reef-porous-rock-triplanar-lower-micropores-rubble-v3';
  return material;
 }

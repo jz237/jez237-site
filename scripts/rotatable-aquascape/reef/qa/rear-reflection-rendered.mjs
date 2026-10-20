@@ -10,14 +10,16 @@ try{
   const scene=new T.Scene();scene.background=new T.Color(0);const pool=new ReefReflections(),pane=reefBackGlass(pool,{value:0},{value:1});scene.add(pane);
   const subject=new T.Mesh(new T.SphereGeometry(.22,24,16),new T.MeshBasicMaterial({color:0x00ff00}));scene.add(subject);
   const camera=new T.PerspectiveCamera(40,1,.1,50),renderer=new T.WebGLRenderer({antialias:false});renderer.setSize(512,512);renderer.toneMapping=T.NoToneMapping;
-  const rt=new T.WebGLRenderTarget(512,512),pixels=new Uint8Array(512*512*4),results=[];
+  const rt=new T.WebGLRenderTarget(512,512),pixels=new Uint8Array(512*512*4),empty=new Uint8Array(512*512*4),results=[];
+  // The reflected sphere's green over the same pane without it: the pane's own
+  // blue water and distant reef are not mistaken for reflection strength.
+  const capture=(visible,into)=>{subject.visible=visible;pane.forceUpdate=true;scene.updateMatrixWorld(true);renderer.setRenderTarget(null);pool.prepare(renderer,scene,camera);
+   subject.visible=false;renderer.setRenderTarget(rt);renderer.render(scene,camera);renderer.readRenderTargetPixels(rt,0,0,512,512,into);};
   for(const oblique of [false,true]){
    camera.position.set(oblique?4:0,2.8,7);camera.lookAt(0,2.8,-2.325);camera.updateMatrixWorld();
    for(const z of [-1.9,0,1.8]){
-    subject.position.set(0,2.8,z);subject.visible=true;pane.forceUpdate=true;scene.updateMatrixWorld(true);
-    renderer.setRenderTarget(null);pool.prepare(renderer,scene,camera);
-    subject.visible=false;renderer.setRenderTarget(rt);renderer.render(scene,camera);renderer.readRenderTargetPixels(rt,0,0,512,512,pixels);
-    let green=0;for(let i=0;i<pixels.length;i+=4)green=Math.max(green,pixels[i+1]-pixels[i+2]);
+    subject.position.set(0,2.8,z);capture(false,empty);capture(true,pixels);
+    let green=0;for(let i=0;i<pixels.length;i+=4)green=Math.max(green,pixels[i+1]-empty[i+1]);
     results.push({oblique,z,green});
    }
   }
