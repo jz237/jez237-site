@@ -1664,6 +1664,8 @@ function updateCamera(dt: number) {
   if(!hood){camera.position.copy(clearChasePosition(chaseAnchor,camera.position,chaseObstruction));cameraImpactOffset.copy(camera.position).sub(beforeShake);camera.lookAt(look);}
   camera.rotateZ(response.roll * (hood ? .6 : 1)*settings.camera.shake);
   camera.rotateX(response.pitch*settings.camera.shake);
+  // Damage you can feel: bent wheels and a dragging hub shimmy the view at speed (offline, scaled by the shake setting).
+  if(p.extendedDamage&&state==='playing'){const bent=Math.max(0,Math.max(...p.wreckParts.wheelDamage)-.15),hub=p.wreckParts.wheelLost.some(v=>v)?1:0,amp=(bent*.004+hub*.006)*Math.min(1,Math.abs(p.speed)/20)*settings.camera.shake;if(amp>0){const w=clock*38;camera.rotateZ(Math.sin(w)*amp);camera.rotateX(Math.sin(w*1.37+1)*amp*.6);}}
   camera.fov = T.MathUtils.damp(
     camera.fov,
     hood ? 66 : settings.camera.fov + Math.min(5, Math.abs(p.speed) * 0.12),
