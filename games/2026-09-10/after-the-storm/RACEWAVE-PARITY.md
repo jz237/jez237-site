@@ -1,6 +1,9 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
-## Unreleased
+## v2.45.0 — Original records browser
+
+The original records browser now opens after the championship initials and,
+with Original physics preferred, from the menu's Course records button.
 
 ### original records browser from the menu
 
