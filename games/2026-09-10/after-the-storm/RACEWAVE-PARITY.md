@@ -4,12 +4,15 @@
 
 In the separate-window layout the host now sends Player 2's view of the
 original effects (933C4 view 1, already placed on the rendered water) with
-each window frame. The window validates them (families, texture frames,
-matching vertex arrays, at most 256 draws and 16,384 vertices), draws them
-with the same effects renderer, and skips its own spray while they arrive. A
-two-browser check on Sunset Bay showed 13 original effect batches in Player
-2's window during the race. Online guests still draw their own spray: these
-effects are about 14 KB per frame, beyond the online snapshot budget.
+each window frame, packed as per-draw metadata and four typed arrays
+(Float32 positions and texture coordinates, 8-bit colours and alphas; the
+original vertex colours are 8-bit, so nothing is lost). The same packed frame
+goes to an online guest through the bounded binary codec. The reader validates
+families, texture frames, vertex counts (at most 256 draws, 16,384 vertices)
+and array types, then the window or guest draws them with the same effects
+renderer instead of its own spray. Two-browser checks on Sunset Bay showed 13
+original effect batches in Player 2's window and 9 to 12 on an online guest
+while both riders raced; a packed online frame stays well under 64 KB.
 
 ## Unpublished — Original two-player races online
 
@@ -19,8 +22,8 @@ telemetry and, on Marine Fortress, Drake Lake, Port Blue and Twilight City, the
 native course world. Two separate local headless browsers connected over the
 existing invite and return-code flow; Original races on Sunny Beach and Port
 Blue counted down and ran at 60 fps on the host for more than 20 s with the
-guest connected and never on hold. As in Player 2's own window, the guest
-draws its own spray rather than the original per-view effects.
+guest connected and never on hold. The guest also receives the original
+per-view effects (see the next entry).
 
 ## Unpublished — Original two-player races in Player 2's own window
 

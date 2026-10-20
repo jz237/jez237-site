@@ -125,18 +125,39 @@ function launchPresentation(value){
  return out;
 }
 // Player 2's view of the original effects (933C4 view1), already on the
-// rendered water. Bounded plain copies; the renderer validates materials again.
-const EFFECT_FRAMES={spray:4,splash:7,wake:4,droplet:1};
+// rendered water. Packed into four typed arrays so the same frame fits both
+// Player 2's window and the bounded online codec; the original vertex colors
+// and alphas are 8-bit, so their byte form loses nothing.
+const EFFECT_FAMILIES=['spray','splash','wake','droplet'],EFFECT_FRAMES=[4,7,4,1];
+export function packWindowEffects(draws){
+ if(!Array.isArray(draws)||draws.length>256)throw new RangeError('Supply bounded effect draws');
+ let total=0;for(const d of draws)total+=d.positions.length/3;
+ if(total>16384)throw new RangeError('Too many effect vertices for a window frame');
+ const positions=new Float32Array(total*3),uvs=new Float32Array(total*2),colors=new Uint8Array(total*3),alphas=new Uint8Array(total),meta=[];let v=0;
+ for(const d of draws){
+  const n=d.positions.length/3,family=EFFECT_FAMILIES.indexOf(d.family);if(family<0)throw new RangeError('Unknown effect family');
+  meta.push([family,d.textureFrame,d.depthTest?1:0,n]);positions.set(d.positions,v*3);uvs.set(d.uvs,v*2);
+  for(let i=0;i<n*3;i++)colors[v*3+i]=Math.round(Math.min(1,Math.max(0,d.colors[i]))*255);
+  for(let i=0;i<n;i++)alphas[v+i]=Math.round(Math.min(1,Math.max(0,d.alphas[i]))*255);v+=n;
+ }
+ return {draws:meta,positions,uvs,colors,alphas};
+}
 export function readWindowEffects(value){
- if(!Array.isArray(value)||value.length>256)return null;let total=0;
- const out=[];
- for(const d of value){
-  if(!plain(d)||!Object.hasOwn(EFFECT_FRAMES,d.family)||!Number.isInteger(d.textureFrame)||d.textureFrame<0||d.textureFrame>=EFFECT_FRAMES[d.family]||typeof d.depthTest!=='boolean')return null;
-  const p=d.positions,n=Array.isArray(p)?p.length/3:0;
-  if(!n||!Number.isInteger(n/3)||(total+=n)>16384)return null;
-  for(const [key,size,lo,hi]of [['positions',n*3,-1e9,1e9],['uvs',n*2,-1e9,1e9],['colors',n*3,0,1],['alphas',n,0,1]])
-   if(!Array.isArray(d[key])||d[key].length!==size||d[key].some(v=>typeof v!=='number'||!(v>=lo&&v<=hi)))return null;
-  out.push({family:d.family,textureFrame:d.textureFrame,depthTest:d.depthTest,positions:[...d.positions],uvs:[...d.uvs],colors:[...d.colors],alphas:[...d.alphas]});
+ if(!plain(value)||!Array.isArray(value.draws)||value.draws.length>256)return null;
+ let total=0;
+ for(const m of value.draws){
+  if(!Array.isArray(m)||m.length!==4||!m.every(Number.isInteger))return null;
+  const [family,frame,depth,n]=m;
+  if(family<0||family>=EFFECT_FAMILIES.length||frame<0||frame>=EFFECT_FRAMES[family]||![0,1].includes(depth)||n<3||n%3||(total+=n)>16384)return null;
+ }
+ const {positions,uvs,colors,alphas}=value;
+ if(!(positions instanceof Float32Array)||positions.length!==total*3||!(uvs instanceof Float32Array)||uvs.length!==total*2||
+  !(colors instanceof Uint8Array)||colors.length!==total*3||!(alphas instanceof Uint8Array)||alphas.length!==total)return null;
+ for(const a of [positions,uvs])for(const x of a)if(!(x>=-1e9&&x<=1e9))return null;
+ const out=[];let v=0;
+ for(const [family,frame,depth,n]of value.draws){
+  out.push({family:EFFECT_FAMILIES[family],textureFrame:frame,depthTest:depth===1,positions:Array.from(positions.subarray(v*3,(v+n)*3)),uvs:Array.from(uvs.subarray(v*2,(v+n)*2)),
+   colors:Array.from(colors.subarray(v*3,(v+n)*3),c=>c/255),alphas:Array.from(alphas.subarray(v,v+n),a=>a/255)});v+=n;
  }
  return out;
 }
