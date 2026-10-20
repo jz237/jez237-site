@@ -13,6 +13,11 @@ export function configureReefWater(water:T.Group){
  water.traverse(object=>{
   if(!(object instanceof T.Mesh)||!(object.material instanceof T.ShaderMaterial))return;
   const material=object.material;
+  // The underside shows only while the camera is below the waterline, and then
+  // everything in the tank lies in front of it. Draw it first among transparent
+  // surfaces: drawn after the fish, it painted over their fins (which write no
+  // depth) wherever they crossed it on screen, so tails vanished near the top.
+  if(material.uniforms.underside?.value===1)object.renderOrder=-1;
   material.vertexShader=material.vertexShader.replace(rippleHeightShader,reefRipples(rippleHeightShader));
   material.fragmentShader=material.fragmentShader.replace(rippleSlopeShader,reefRipples(rippleSlopeShader))
    .replace('(6.326-world.y)','(5.835-world.y)')

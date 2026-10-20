@@ -2,7 +2,7 @@ import {ReefChemistryLab,reefReference,metricInfo,type ReefMetric,type LabAction
 import {reefTourStops} from './ReefTour.ts';
 type Mode='learn'|'explore'|'chemistry'|'tour'|'stock';
 export type StockRow={id:string;name:string;latin:string;count:number;max:number};
-/** Gallery-only controls for adding and removing animated fish. */
+/** Controls for adding and removing animated fish. */
 export type Stocking={rows:()=>StockRow[];total:()=>number;limit:number;add:(id:string)=>string|Promise<string>;remove:(id:string)=>string;reset:()=>string|Promise<string>};
 type Actions={inspect:(subject:string)=>void;note:(subject:string)=>{title:string;description:string}|undefined;present:(subject:string)=>boolean;stocking?:Stocking;view:()=>void;feed:()=>void;light:(night:boolean)=>void;night:()=>boolean;tour:(stop:number)=>void;cancelTour:()=>void};
 const subjects=[['clown','Clownfish'],['goby','Mandarin dragonet'],['tang','Blue tang'],['rostratum','Black tang'],['strigosus','Kole tang'],['vulpinus','Foxface rabbitfish'],['bispinosa','Coral beauty angelfish'],['loricula','Flame angelfish'],['hexataenia','Six-line wrasse'],['cinctus','Yellow watchman goby'],['semilarvatus','Golden butterflyfish'],['anthias','Anthias'],['chromis','Blue-green chromis'],['gramma','Royal gramma'],['cleaners','Cleaner shrimp pair'],['anemones','Host anemones'],['corals','Branching corals'],['plates','Plating corals'],['polyps','Colorful polyps'],['outcrops','Live-rock gardens'],['sand','Sand & rubble'],['water','Water surface']];

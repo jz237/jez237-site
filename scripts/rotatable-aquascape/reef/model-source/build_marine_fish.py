@@ -31,12 +31,12 @@ def make_material(name,image=None,rough=.43,alpha=1):
   tex=n.new('ShaderNodeTexImage');tex.image=image;mat.node_tree.links.new(tex.outputs['Color'],p.inputs['Base Color'])
  return mat
 
-def make_mesh(name,vertices,faces,uvs,material):
+def make_mesh(name,vertices,faces,uvs,material,flat=()):
  name=species+'__'+name;mesh=bpy.data.meshes.new(name);mesh.from_pydata([xyz(v) for v in vertices],[],faces);mesh.update()
  obj=bpy.data.objects.new(name,mesh);scene.collection.objects.link(obj);obj.data.materials.append(material)
  layer=mesh.uv_layers.new(name='Reference projection')
  for face in mesh.polygons:
-  face.use_smooth=True
+  face.use_smooth=face.index not in flat
   for li in face.loop_indices:layer.data[li].uv=uvs[mesh.loops[li].vertex_index]
  return obj
 
@@ -85,16 +85,21 @@ for species,s in DATA.items():
    if i<rings:
     n=i*sides+j;nn=i*sides+(j+1)%sides;faces.append((n,n+sides,nn+sides,nn))
  # Close the tail; the head instead folds into a real recessed oral cavity.
+ # Behind a tail fin centred in the peduncle (finDepth 0) the cap is flat
+ # shaded: smoothed with the body it tilted the last ring's normals backward,
+ # a dark band where the fin begins.
  px=begin;py=(interp(s['top'],px)+interp(s['bottom'],px))/2;center=len(vertices);vertices.append(pos(px,py));uvs.append(uv(px,py))
+ cap=range(len(faces),len(faces)+sides) if not s.get('finDepth',.001) else ()
  for j in range(sides):faces.append((center,j,(j+1)%sides))
  colors=[(1,1,1,1)]*len(vertices)
  top=interp(s['top'],end);bottom=interp(s['bottom'],end);mid=(top+bottom)/2;radius=(bottom-top)/2
  previous=rings*sides
- # Lip rim, inward fold and oral cavity: offset beyond the snout, radius ratio, shade.
- for offset,ratio,shade in s.get('lipRings',[( .005,.88,1),(.002,.59,.55),(-.023,.28,.065)]):
-  start=len(vertices)
+ # Lip rim, inward fold and oral cavity: offset beyond the snout, radius ratio,
+ # shade and an optional height ratio (below 1, pursed lips meet in a slit).
+ for offset,ratio,shade,*squash in s.get('lipRings',[( .005,.88,1),(.002,.59,.55),(-.023,.28,.065)]):
+  start=len(vertices);squash=squash[0] if squash else 1
   for j in range(sides):
-   a=2*math.pi*j/sides;py=mid-radius*ratio*math.sin(a)
+   a=2*math.pi*j/sides;py=mid-radius*ratio*squash*math.sin(a)
    vertices.append(pos(end+offset*length,py,math.cos(a)*trunk_thickness(1)*ratio));uvs.append(uv(end-7,mid-radius*.85*math.sin(a)));colors.append((shade,shade,shade,1))
    faces.append((previous+j,start+j,start+(j+1)%sides,previous+(j+1)%sides))
   previous=start
@@ -104,7 +109,7 @@ for species,s in DATA.items():
  vertex=nodes.new('ShaderNodeVertexColor');vertex.layer_name='Oral depth'
  texture=next(n for n in nodes if n.type=='TEX_IMAGE');mix=nodes.new('ShaderNodeMixRGB');mix.blend_type='MULTIPLY';mix.inputs[0].default_value=1
  bodySkin.node_tree.links.new(texture.outputs['Color'],mix.inputs[1]);bodySkin.node_tree.links.new(vertex.outputs['Color'],mix.inputs[2]);bodySkin.node_tree.links.new(mix.outputs[0],nodes.get('Principled BSDF').inputs['Base Color'])
- body=make_mesh('body',vertices,faces,uvs,bodySkin)
+ body=make_mesh('body',vertices,faces,uvs,bodySkin,set(cap))
  colorLayer=body.data.color_attributes.new(name='Oral depth',type='FLOAT_COLOR',domain='POINT')
  for i,color in enumerate(colors):colorLayer.data[i].color=color
  objects.append(body)
@@ -127,7 +132,9 @@ for species,s in DATA.items():
    else:
     n=len(v)
     for q in [a,b,c]:
-     px,py=q.x,q.y;depth=.001
+     # finDepth 0 centres a tail fin in the peduncle, which then tapers into it
+     # evenly from both sides instead of ending in an edge in front of it on one.
+     px,py=q.x,q.y;depth=s.get('finDepth',.001)
      if side:
       depth=side*max(surface(px,py)+.0005,surface(pivot[0],pivot[1])+.0005+max(0,pivot[0]-px)/length*.15)
      p3=pos(px,py,depth)

@@ -35,7 +35,7 @@ function camouflageShader(shader:{uniforms:Record<string,unknown>;fragmentShader
    vec3 camo=mix(vec3(.15,.11,.07),mix(vec3(.15,.11,.07),vec3(.46,.41,.31),pale),smoothstep(.55,.95,mottle))*shade;
    diffuseColor.rgb=mix(diffuseColor.rgb,camo,mottle);}`);
 }
-/** Established display stocking; pages may extend it with gallery-only species. */
+/** Established display stocking; pages may extend it with more species. */
 export const defaultPopulation:[Species,number][]=[['tang',1],['semilarvatus',1],['clown',2],['anthias',7],['chromis',8],['gramma',1],['goby',1]];
 /** A reef face the black tang works over: stand-off water, the proxy surface and its bite plan. */
 type Graze={obstacle:Obstacle;normal:T.Vector3;stand:T.Vector3;point:T.Vector3;bites:number;next:number;biteAt:number;shifts:number};

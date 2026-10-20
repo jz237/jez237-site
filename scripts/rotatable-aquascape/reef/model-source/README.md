@@ -18,7 +18,37 @@ Prompts and request ids: `references/reef-options-prompts.md` and
 `references/fal-requests.json`. Each species' editable `<species>.blend` is saved
 beside the build script.
 
-## Black tang (jez237 gallery only) — October 19, 2026
+Plate preparation settings (rerun after a trace change that `--tint-fins` reads):
+
+```powershell
+python reef/model-source/prepare_plates.py vulpinus --distance 16 --tint-fins --extend-patch 2116,2190,810,870
+python reef/model-source/prepare_plates.py strigosus --saturation 1.5
+python reef/model-source/prepare_plates.py loricula   # likewise bispinosa, hexataenia, cinctus
+```
+
+Close-up pass (October 19, 2026), against the user's foxface reference sheet:
+
+- Foxface snout traced as a taper to small pursed lips (`lipRings`, with an
+  optional fourth value: the ring's height ratio, below 1 a pressed slit). The
+  dark lips come from `--extend-patch`, which repeats the skin behind the
+  plate's pale snout tip over it. The dome covers the whole iris, centred on
+  the pupil.
+- Its back and belly near the tail follow the real peduncle: the plate's soft
+  dorsal and anal lobes overhang it with backdrop between, which the old trace
+  had counted as body (a deep peduncle with blue-gray patches).
+  `--tint-fins` recolors dorsal, anal and caudal membranes from the dark backdrop's
+  olive to the body's yellow; short `dorsalFade`/`analFade` keep the lobes'
+  near-vertical trailing margins.
+- `finDepth: 0` (foxface, coral beauty, flame angel, kole tang) centres the tail
+  fin in the peduncle and drops the flat tail cap, whose normals shaded a dark
+  band where the fin begins; these species' unpaired fins render opaque.
+- `bridgeMargin` widens the top-view spans skipped for spread pectorals and
+  eyes, and fills each gap with a slope-matched cubic plus light smoothing. A
+  sample just outside a span had made a one-column width spike: the vertical
+  line on the coral beauty (and flame angel, goby, kole tang). `width` was
+  rescaled by the old/new peak so overall thickness is unchanged.
+
+## Black tang — October 19, 2026
 
 `rostratum.glb` is *Zebrasoma rostratum*, authored from fal `openai/gpt-image-2`
 plates generated at the user's request: a lateral plate, a masked clean-flank

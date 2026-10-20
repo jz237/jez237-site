@@ -104,12 +104,30 @@ def trace(k):
     # Width along the body from the top view.
     top_view = Image.open(REF / f'{k}-dorsal.jpg').convert('RGB'); tm = fish_mask(top_view, None, spec.get('dorsalDistance', 40))
     txs = np.where(tm.any(0))[0]; t_tail, t_snout = int(txs.min()), int(txs.max()); snout = int(xs.max())
-    widths = {}
+    # Spread pectorals and eyes begin a little outside the hand-read spans: a
+    # sample there makes a one-column spike, a ridge across the flank.
+    widths = {}; margin = spec.get('bridgeMargin', 0)
     for x in range(t_tail, t_snout, 12):
-        if any(a <= x <= b for a, b in spec.get('bridge', [])): continue
+        if any(a - margin <= x <= b + margin for a, b in spec.get('bridge', [])): continue
         ys = np.where(tm[:, x])[0]
         if len(ys): widths[x] = int(ys.max() - ys.min())
-    wx = sorted(widths); wv = [widths[x] for x in wx]; peak = max(wv)
+    wx = sorted(widths); wv = [widths[x] for x in wx]
+    if margin:
+        # Straight lines across a bridged span still kink against the measured
+        # slopes (a crease in the shading): fill each gap with a cubic that keeps
+        # the slopes on both sides, then smooth lightly over 12-px samples.
+        fx, fv = [wx[0]], [wv[0]]
+        for i in range(len(wx) - 1):
+            x0, x1, v0, v1 = wx[i], wx[i + 1], wv[i], wv[i + 1]; h = x1 - x0
+            m0 = (v0 - wv[i - 1]) / (x0 - wx[i - 1]) if i > 0 else 0
+            m1 = (wv[i + 2] - v1) / (wx[i + 2] - x1) if i + 2 < len(wx) else 0
+            for x in range(x0 + 12, x1, 12):
+                t = (x - x0) / h
+                fx.append(x); fv.append((2*t**3 - 3*t*t + 1) * v0 + (t**3 - 2*t*t + t) * h * m0 + (-2*t**3 + 3*t*t) * v1 + (t**3 - t*t) * h * m1)
+            fx.append(x1); fv.append(v1)
+        kernel = np.exp(-.5 * (np.arange(-4, 5) / 1.5) ** 2); kernel /= kernel.sum()
+        wx, wv = fx, list(np.convolve(np.pad(fv, 4, mode='edge'), kernel, mode='valid'))
+    peak = max(wv); print(k, 'peak top-view width', round(float(peak), 1), 'px')
     to_side = lambda x: tail + (x - t_tail) * (snout - tail) / (t_snout - t_tail)
     thickness = [[round(to_side(x)), round(w / peak, 3)] for x, w in zip(wx, wv) if begin - 40 <= to_side(x) <= end + 40]
     profile = {'range': [begin, end], 'cy': spec['cy'], 'width': spec['width'], 'crossPower': spec.get('crossPower', 1),
@@ -122,7 +140,7 @@ def trace(k):
     # The build roots the anal fin as a ribbon along the belly (see analRibbon).
     edge = sorted(p for p in anal if p[1] > interp(bottom, p[0]) + 6)
     profile['analRibbon'] = [[a0, round(interp(bottom, a0))]] + edge + [[a1, round(interp(bottom, a1))]]
-    for key in ('eyeTop', 'perch'):
+    for key in ('eyeTop', 'perch', 'lipRings', 'finDepth', 'analFade'):
         if key in spec: profile[key] = spec[key]
     data = json.loads((ROOT / 'profiles.json').read_bytes().decode('utf-8')); data[k] = profile
     (ROOT / 'profiles.json').write_bytes((json.dumps(data, indent=2) + '\n').replace('\n', '\r\n').encode('utf-8'))

@@ -33,9 +33,9 @@ and [Oregon Coast Aquarium](https://aquarium.org/animals/bubble-tip-anemone/).
 The reference guides the artistic appearance; flow and tissue shading are illustrative,
 not a species-calibrated fluid or subsurface-scattering simulation.
 
-## Black tang and fish stocking (jez237 gallery only)
+## Black tang and fish stocking
 
-The jez237 gallery adds a *Zebrasoma rostratum* black tang to the original
+The reef adds a *Zebrasoma rostratum* black tang to the original
 stocking (22 fish) and an **Add & remove fish** panel. Each species has a count,
 a per-species limit and a 36-fish tank limit; **Restore the original stocking**
 returns to the reviewed population. New open-water fish are released near the
@@ -43,9 +43,9 @@ surface and swim to their own habitat; the mandarin is placed on validated
 bottom ground. Removing an animal releases its materials and every reference
 to it (picking, shadows, anemone contact, rival displays).
 
-The Hidden Reef storefront (`?showroom=hidden-reef` or `/showroom/reef/`) keeps
-the reviewed 21-fish stocking, does not download the black tang and has no
-stocking panel until the user approves both for the store.
+Since October 19, 2026 the Hidden Reef storefront (`?showroom=hidden-reef` or
+`/showroom/reef/`) runs the same stocking, black tang and panel, at the user's
+request.
 
 Black tang behavior: labriform pectoral rowing with a quiet tail on patrols;
 grazing bouts at visible reef faces (stand-off water, short snout strokes with
@@ -57,7 +57,7 @@ illustrative. `qa/black-tang.mjs` checks them with three seeds, together with
 adding and removing fish. Reference provenance and the paid GPT Image requests
 are in `model-source/references/rostratum-prompts.md`.
 
-## Reef options: six more species (jez237 gallery only)
+## Reef options: six more species
 
 The Add & remove fish panel also offers a kole tang (*Ctenochaetus strigosus*),
 foxface rabbitfish (*Siganus vulpinus*), coral beauty (*Centropyge bispinosa*),

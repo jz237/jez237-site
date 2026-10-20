@@ -80,7 +80,7 @@ function scaleNormalTile(cells:number){
  tex.magFilter=T.LinearFilter;tex.minFilter=T.LinearMipmapLinearFilter;tex.generateMipmaps=true;tex.anisotropy=8;tex.needsUpdate=true;
  return tex;
 }
-/** The established display population. The black tang is gallery-only for now. */
+/** The established display population. The page adds the black tang. */
 export const baseMarineSpecies:MarineSpecies[]=['tang','semilarvatus','clown','anthias','chromis','gramma','goby'];
 /** Geometry and embedded textures are shared between inhabitants. Vertex waves,
  * fin pivots and respiration remain independent per animal at runtime. */
@@ -115,12 +115,20 @@ export async function loadMarineModels(species:MarineSpecies[]=baseMarineSpecies
      material.normalMap=scaleNormals??=scaleNormalMap(width,height,30,[1690,1790]);material.normalScale.set(.55,.55);material.roughness=.5;
     }
    }
+   if(species==='strigosus'&&label.startsWith('eye')){
+    // A wet eye whose golden ring catches the light.
+    material.color.setScalar(1.15);material.roughness=.12;material.clearcoat=.5;material.clearcoatRoughness=.05;material.envMapIntensity=.28;
+   }
    if(species==='strigosus'&&!label.startsWith('eye')){
     // Brown skin under blue reef light reads near black; lift it so the fine
     // iridescent lines and dots carry, with relief from the plate's own scales.
+    // The plates are saturated at preparation (--saturation); a thin, deep-blue
+    // sheen adds iridescence, and a softer reflection keeps the gray haze of
+    // the water's light off the brown; a slightly warm lift keeps the brown
+    // from turning lavender under the blue-white light.
     const skin=label==='body'||label.startsWith('gill');
-    material.color.setScalar(skin?1.45:1.25);material.roughness=skin?.48:.55;
-    if(skin&&material.map){material.bumpMap=material.map;material.bumpScale=1.1;material.sheen=.35;material.sheenRoughness=.35;material.sheenColor.set('#6f86d8');}
+    if(skin)material.color.setRGB(1.6,1.42,1.36);else material.color.setScalar(1.25);material.roughness=skin?.48:.55;
+    if(skin&&material.map){material.bumpMap=material.map;material.bumpScale=1.1;material.sheen=.12;material.sheenRoughness=.35;material.sheenColor.set('#3f63ff');material.envMapIntensity=.14;material.specularIntensity=.7;}
    }
    if(species==='rostratum'&&label.startsWith('eye')){
     // A wet, rounded dark eye with a crisp highlight (a soft coat, not chrome).
@@ -138,6 +146,28 @@ export async function loadMarineModels(species:MarineSpecies[]=baseMarineSpecies
      tile.repeat.set(width/(16*11),height/(16*11));material.normalMap=tile;material.normalScale.set(.16,.16);
      material.sheen=.3;material.sheenRoughness=.4;material.sheenColor.set('#433d37');
     }
+   }
+   if(species==='vulpinus'){
+    if(label.startsWith('eye')){
+     // The same wet, rounded eye as the black tang: a crisp highlight over the
+     // dark iris and its copper pupil ring.
+     material.color.setScalar(1);material.roughness=.12;material.clearcoat=.55;material.clearcoatRoughness=.05;material.envMapIntensity=.28;
+    }else if(label==='body'||label.startsWith('gill')){
+     // Minute rabbitfish scales (about 7 plate px) give the velvety skin of the
+     // living fish a fine relief, kept shallow on the bright yellow, with a
+     // faint warm sheen.
+     if(material.map){
+      const {width,height}=material.map.image as {width:number;height:number},tile=scaleNormalTile(16);
+      tile.repeat.set(width/(16*7),height/(16*7));material.normalMap=tile;material.normalScale.set(.06,.06);
+      material.roughness=.55;material.sheen=.2;material.sheenRoughness=.45;material.sheenColor.set('#4d4630');
+     }
+    }
+   }
+   if(label.startsWith('fin')&&(species==='vulpinus'||species==='bispinosa'||species==='loricula'||species==='strigosus')){
+    // Unpaired fins centred in the peduncle (finDepth 0): at the export's 0.9
+    // opacity the dark water dimmed the tail fin against the body and left a
+    // seam where they meet. They still draw after the body, as before.
+    material.opacity=1;
    }
    if(material.map)material.map.anisotropy=8;
    const mesh=new T.Mesh(geometry,material);mesh.castShadow=true;mesh.receiveShadow=true;
