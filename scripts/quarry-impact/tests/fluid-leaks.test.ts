@@ -56,7 +56,7 @@ test('a car with a crushed front drips coolant offline only, and tyres on a slic
    // Pour oil under every tyre and read the grip back.
    for(let i=0;i<4;i++){const p=car.controller.wheelContactPoint(i);if(p)for(let k=0;k<6;k++)slicks.drip(p.x,0,p.z,0,.3);}
    car.preStep(1/60);world.step();car.postStep(1/60,10);
-   return{front,drips,stats,grip:car.slickGrip.slice(),oily:car.oily.slice(),steam:car.steamPuffs};
+   return{front,drips,stats,grip:car.slickGrip.slice(),oily:car.oily.slice(),steam:car.steamPuffs,oilSmoke:car.oilSmoke};
   }finally{car.dispose();world.free();slicks.mesh.geometry.dispose();}
  };
  const on=await run(true),off=await run(false);console.log(JSON.stringify({on,off}));
