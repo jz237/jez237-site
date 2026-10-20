@@ -1,5 +1,17 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — championship record initials after the ending
+
+When the ending exits to the records screen (a course record flag is set), the
+browser now runs the original championship initials entry: state 100/101 on
+main6, one original 20 Hz frame at a time (menu input, the 1290 wheel,
+widgets, fade, then 1E8C controls). The existing name wheel shows it. After
+three letters the cursor moves to END as in the original. Confirming commits
+the championship records, which are saved on this device, and hands off to
+the records browser (state 66, main12), which the browser does not host yet;
+it shows the completion dialog with the initials instead. The main6 scene
+updates that precede each phase are not reconstructed.
+
 ## Unpublished — default rider names in a fresh save
 
 The original's default save gives each base avatar a name in the form

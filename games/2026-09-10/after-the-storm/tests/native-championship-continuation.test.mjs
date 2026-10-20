@@ -77,4 +77,13 @@ test('a qualified final round enters the original ending state and completes the
  assert.equal(s.phase,'results');assert.ok(['records','title'].includes(s.nativeEnding.handoff.destination));
  assert.ok([...tokens].every(t=>t===0||t>=8&&t<=16||[31,32,38,49,58,87,98,99].includes(t)||t>=71&&t<=78||t>=93&&t<=96),[...tokens].join());
  assert.ok([10,11,12,13,15].every(t=>tokens.has(t)),'course rows name their courses');
+ // The records exit opens the original championship initials (state100, main6), then the records browser.
+ if(s.nativeEnding.handoff.destination==='records'){
+  const L=s.nativeLaunch,before=L.recordSessionSnapshot(),neutral={heldButtons:0,rawXNative:0,rawYNative:0};
+  assert.equal(L.championshipNameEntryView().active,true);let q,initials='';
+  for(let f=0;f<1500;f++){q=L.advanceChampionshipNameEntry({...neutral,heldButtons:f>40&&f%20===0?0x8000:0});initials=q.view.initials||initials;if(q.handoff)break;}
+  assert.equal(q.handoff.destination,'records-browser');assert.equal(initials,'AAA');
+  assert.deepEqual([L.snapshot().scene.main638,L.snapshot().scene.gameStateAb24],[12,66]);
+  assert.notDeepEqual(L.recordSessionSnapshot(),before,'initials commit the championship records');
+ }
 });

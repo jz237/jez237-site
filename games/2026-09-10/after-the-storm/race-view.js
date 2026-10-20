@@ -227,7 +227,13 @@ function nativeCupResult(){
  if(done||handoff?.destination==='ending'){
   const totals=done?.totals??points(),rank=1+totals.filter(t=>t>totals[0]).length;
   if(state.nativeEnding?.handoff){
-   show('CHAMPIONSHIP COMPLETE',rank===1?'Champion!':'Finished '+rank+['','st','nd','rd','th'][rank]+' overall.',DIFFICULTIES[nativeCup.difficulty]+' cup · original Wave Race 64 rules',totals);nativeCup=null;return;
+   // The ending's records exit opens the original championship initials entry.
+   if(state.nativeEnding.handoff.destination==='records'&&nativeCup.named===undefined&&state.nativeLaunch.championshipNameEntryView().active){
+    show('NEW CHAMPIONSHIP RECORD','Enter your initials.',DIFFICULTIES[nativeCup.difficulty]+' cup · original records are saved on this device',totals);
+    nativeCup.naming=true;nativeNameMenu.start({advanceNameEntry:raw=>{const q=state.nativeLaunch.advanceChampionshipNameEntry(raw);return {...q,matrices:q.draw.matrices,draw:q.draw.view};}});return;
+   }
+   show('CHAMPIONSHIP COMPLETE',rank===1?'Champion!':'Finished '+rank+['','st','nd','rd','th'][rank]+' overall.',
+    (nativeCup.named!==undefined?nativeCup.named+' · ':'')+DIFFICULTIES[nativeCup.difficulty]+' cup · original Wave Race 64 rules',totals);nativeCup=null;return;
   }
   if(nativeCup.difficulty<3){saved.unlocked=Math.max(saved.unlocked||0,nativeCup.difficulty+1);writeSave(localStorage,saved);refreshCourses();}
   show('CHAMPIONSHIP COMPLETE',rank===1?'Champion!':'Finished '+rank+['','st','nd','rd','th'][rank]+' overall.',DIFFICULTIES[nativeCup.difficulty]+' cup · original Wave Race 64 rules',totals);
@@ -426,7 +432,7 @@ const nativeContinuationMenu=createNativeContinuationMenuView({before:$('results
  if(handoff.destination==='retry')$('restart').click();
   else{$('quit').click();if(['course','rider'].includes(handoff.destination))$('raceSetup').open=true;if(handoff.destination==='rider')selectRider(handoff.selectedRider);const target=handoff.destination==='course'?$('course'):handoff.destination==='rider'?document.querySelector('#riders .selected'):$('start');target?.focus();target?.scrollIntoView({block:'nearest'});}
 }});
-const nativeNameMenu=createNativeNameMenuView({before:$('results'),onSelect:()=>audio.signal('countdown'),onComplete:initials=>{if(state.nativeLaunch?.stunt){startNativeStuntRecords();return;}$('dialogbody').textContent=initials+' · '+format(state.result.time)+' total · original records are saved on this device';startNativeResultsMenu();}});
+const nativeNameMenu=createNativeNameMenuView({before:$('results'),onSelect:()=>audio.signal('countdown'),onComplete:initials=>{if(nativeCup?.naming){nativeCup.naming=false;nativeCup.named=initials;retainNativeRecords();nativeNameMenu.reset();nativeCupResult();return;}if(state.nativeLaunch?.stunt){startNativeStuntRecords();return;}$('dialogbody').textContent=initials+' · '+format(state.result.time)+' total · original records are saved on this device';startNativeResultsMenu();}});
 const nativeResultOverlay=createNativeResultOverlay();
 const standingsPortraits=createNativeRiderPortraits({renderer,vesselForAvatar:id=>vesselFor(state.racers.find(r=>r.id===id)).boat,environment:()=>scene.environment});
 const nativeStandingsOverlay=createNativeChampionshipStandingsOverlay({portrait:standingsPortraits.portrait,onContinue:()=>{nativeContinueQueued=true;canvas.focus();}});

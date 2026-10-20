@@ -27,7 +27,7 @@ import {prepareNativeEndingMenuPhase,nativeEndingMenuView} from './native-ending
 import {NATIVE_ENDING_MENU_LOADED_WORDS} from './source-ending-menu-words.js';
 import {NATIVE_RECORDS_MENU_DATA} from './native-records-menu-data.js';
 import {prepareNativeRaceResultCPUDisplayUpdate} from './native-race-state.js';
-import {prepareNativeNameMenuFrame,nativeNameMenuView} from './native-name-menu-runtime.js';
+import {prepareNativeNameMenuFrame,nativeNameMenuView,prepareNativeChampionshipNameMenuPhase,nativeChampionshipNameMenuView} from './native-name-menu-runtime.js';
 import {prepareNativeResultsMenuFrame,nativeResultsMenuView} from './native-results-menu-runtime.js';
 import {prepareNativeStuntResultsMenuFrame,nativeStuntResultsMenuView} from './native-stunt-results-menu-runtime.js';
 import {prepareNativeStuntRecordMenuFrame,nativeStuntRecordMenuView} from './native-stunt-record-menu-runtime.js';
@@ -366,6 +366,20 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
   resultsRecordView:()=>nativeResultsRecordView(current,{ridersBySlot:racers.map(r=>r.id)}),
   advanceResultsMenu(rawControllers){
    const prepared=prepareNativeResultsMenuFrame(current,rawControllers);current=prepared.state;return prepared;
+  },
+  championshipNameEntryView:()=>nativeChampionshipNameMenuView(current),
+  /** After the ending's records exit (state100, main6): one original 20Hz
+   * frame of championship initials. The main6 scene consumers before the
+   * phase are not reconstructed; the phase hands off to the records browser. */
+  advanceChampionshipNameEntry(rawController){
+   const g=current.scene;
+   if(!championship||g.mode608!==4||g.main638!==6||![100,101].includes(g.gameStateAb24))throw new Error('No championship name entry is active');
+   const sample=prepareNativeRaceMenuInputAdvance(current,{rawControllers:[rawController],controllerCount4344:1,connectedMask4340:1,
+    controllerPorts4330:[0,1],neutralBytesAb10:Array(10).fill(0),thresholdXb400:g.gameStateAb24===100?50:35,thresholdYb401:35});
+   const prepared=prepareNativeChampionshipNameMenuPhase(sample.state,{championshipCourseRowsAc14:NATIVE_CHAMPIONSHIP_SETUP_DATA.courseOrderAc14,
+    fadeTemplateWords6cc0:NATIVE_CHAMPIONSHIP_SETUP_DATA.fadeTemplateWords6cc0,slotTemplateWords6c50:NATIVE_CHAMPIONSHIP_SETUP_DATA.slotTemplateWords6c50});
+   current=prepared.state;
+   return Object.freeze({...prepared,operations:[...sample.operations,...prepared.operations],effects:[...sample.effects,...prepared.effects]});
   },
   advanceNameEntry(rawController){
    const prepared=prepareNativeNameMenuFrame(current,rawController);current=prepared.state;return prepared;
