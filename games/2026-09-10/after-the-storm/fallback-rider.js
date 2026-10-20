@@ -34,7 +34,7 @@ export function installFallbackRider(v,{bindings}={}){
   for(const name of RIDER_TARGET_BONES){
    const [a,b]=REST[name],start=new T.Vector3(...a),direction=new T.Vector3(...b).sub(start),length=direction.length();
    const restMatrix=new T.Matrix4().compose(start,new T.Quaternion().setFromUnitVectors(up,direction.normalize()),new T.Vector3(1,1,1));
-   const g=new T.Group();g.name=name;nativeRoot.add(g);groups[name]=g;bones[name]={length,inverse:restMatrix.invert()};
+   const g=new T.Group();g.name=name;g.userData.restLength=length;nativeRoot.add(g);groups[name]=g;bones[name]={length,inverse:restMatrix.invert()};
   }
   for(const {bone,mesh:original}of bindings){
    original.updateMatrix();const mesh=original.clone(false);mesh.name=original.name||'Built-in / '+bone;
