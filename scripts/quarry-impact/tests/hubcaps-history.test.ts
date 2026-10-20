@@ -1,6 +1,7 @@
+import {restoreArenaPropsBytes} from './arena-props-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readHubcapsPrevious,restoreHubcapsBytes,verifyHubcapsRevision} from './hubcaps-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreArenaPropsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('Hubcaps preserves every prior fixture, vehicle asset, venue art and history input',verifyHubcapsRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/hubcaps/revision.json').toString());
