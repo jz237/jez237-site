@@ -15,7 +15,7 @@ export class EngineMisfire {
     const n=(offset:number)=>unitNoise(this.seed+this.count*1.618+offset);
     if(this.cut>0){
       this.cut-=dt;
-      if(this.cut<=0){this.factor=1;this.backfire=n(.41)<.45+.45*level;}
+      if(this.cut<=0){this.factor=1;this.backfire=n(.41)<.2+.35*level;}
       return this.factor;
     }
     if(this.time>=this.next){

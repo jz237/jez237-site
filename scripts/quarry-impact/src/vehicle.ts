@@ -47,6 +47,8 @@ export const WIND_RIP={loose:.25,speed:16} as const;
 export const PART_DRAG=1.2;
 /** A wheel touching down faster than speed (m/s, vertical) takes a hit from below: (fall - speed) * gain. */
 export const HARD_LANDING={speed:7,gain:2.2,gap:.5} as const;
+/** Offline part release: assembly thresholds scale and the smallest blow that can release a part. */
+export const DETACH={threshold:.27,blow:4} as const;
 import {VehicleSurface} from './vehicle-surface';
 import { normalizeSetup, setupPhysics, stockSetup, type Setup } from './garage';
 export type VehicleGround = {height:(x:number,z:number)=>number;surface:(x:number,z:number)=>DrivingSurface};
@@ -478,8 +480,9 @@ export class Vehicle {
     // Finish deforming every member before releasing any of them. Grilles,
     // mirror inserts and bonnet vents cannot remain suspended over a wreck.
     for (const [name, group] of assemblies) {
-      const threshold = name === 'hood' ? 48 : name.startsWith('mirror') ? 22 : name==='rear-bumper' ? 28 : 32;
-      if (group.damage <= threshold || damage <= 7 || group.weight <= .18) continue;
+      // Offline destruction lets parts break away sooner (DETACH): Wreckfest-style showers of panels.
+      const threshold = (name === 'hood' ? 48 : name.startsWith('mirror') ? 22 : name==='rear-bumper' ? 28 : 32)*(this.extendedDamage?DETACH.threshold:1);
+      if (group.damage <= threshold || damage <= (this.extendedDamage?DETACH.blow:7) || group.weight <= .18) continue;
       for (const panel of group.panels) {
         if (quiet) panel.visible = false;
         else this.fx.detach(panel, this.velocity.clone().multiplyScalar(.65));

@@ -2152,6 +2152,8 @@ async function boot() {
         rips: c.rips,
         backfires: c.backfires,
         engineDamage: c.engineDamage,
+        tyreDamage: c.tyreDamage?.slice(),
+        partDamage: Object.fromEntries([...new Set(c.panels.map(m=>m.userData.detachAssembly as string|null).filter((v):v is string=>!!v))].map(n=>[n,Math.round(Math.max(0,...c.panels.filter(m=>m.userData.detachAssembly===n&&m.visible).map(m=>m.userData.damage??0)))])),
         detached: c.panels.filter((p) => !p.visible).length,
         glass: c.glass.filter((p) => !p.visible).length,
         position: c.current.toArray(),
