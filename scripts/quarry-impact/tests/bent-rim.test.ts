@@ -41,3 +41,8 @@ test('side hits that bend a wheel give it a slow puncture offline, which deflate
  assert.ok(/SLOW PUNCTURE|TYRE/.test(on.warning),'the HUD says so');
  assert.ok(off.late<LEAK.onset,'online-style tyres are unaffected by the bend');
 });
+test('a bent rim wobbles as it turns; a straight one runs true',async()=>{
+ const {rimWobble}=await import('../src/damage-handling');
+ assert.equal(rimWobble(0),0);assert.equal(rimWobble(BENT_RIM.onset-.01),0);
+ assert.ok(rimWobble(.4)>rimWobble(BENT_RIM.onset)&&rimWobble(1)<=.12);assert.equal(rimWobble(NaN),0);
+});

@@ -27,6 +27,8 @@ export function bentRimTyre(tyreDamage:number,wheelDamage:number){
   if(!Number.isFinite(wheelDamage)||wheelDamage<BENT_RIM.onset)return tyreDamage;
   return Math.max(Number.isFinite(tyreDamage)?tyreDamage:0,LEAK.onset+(Math.min(1,wheelDamage)-BENT_RIM.onset)*BENT_RIM.gain);
 }
+/** Visual runout of a bent rim (radians of tilt in the wheel's spinning frame): none below BENT_RIM.onset. */
+export function rimWobble(wheelDamage:number){return Number.isFinite(wheelDamage)&&wheelDamage>=BENT_RIM.onset?Math.min(.12,(wheelDamage-.1)*.18):0;}
 /** A damaged corner's damper loses up to DAMPER_LOSS of its damping, so it bounces and wallows. */
 /** Gearbox damage: crushing the driven end of the car past GEARBOX.onset strips the top gear, then more,
  * down to GEARBOX.min gears, which caps top speed. */

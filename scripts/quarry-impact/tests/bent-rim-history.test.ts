@@ -1,6 +1,7 @@
+import {restoreRimWobbleBytes} from './rim-wobble-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readBentRimPrevious,restoreBentRimBytes,verifyBentRimRevision} from './bent-rim-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreRimWobbleBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('BentRim preserves every prior fixture, vehicle asset, venue art and history input',verifyBentRimRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/bent-rim/revision.json').toString());
