@@ -6,11 +6,18 @@ import * as T from 'three';
 export function finishPaint(material: T.MeshPhysicalMaterial, contactWear = false) {
   material.onBeforeCompile = (shader) => {
     shader.vertexShader = shader.vertexShader
-      .replace('#include <common>', '#include <common>\nattribute vec2 impactWear; varying vec3 vBodyPosition; varying vec2 vImpactWear;')
-      .replace('#include <begin_vertex>', '#include <begin_vertex>\nvBodyPosition = position; vImpactWear = impactWear;');
+      .replace('#include <common>', '#include <common>\nattribute vec2 impactWear; varying vec3 vBodyPosition; varying vec2 vImpactWear;\nattribute vec3 crumple; varying vec3 vCrumple; varying vec3 vCrumpleRest; varying vec4 vCrumpleFold;')
+      .replace('#include <begin_vertex>', '#include <begin_vertex>\nvBodyPosition = position; vImpactWear = impactWear;\nvCrumple = crumple; vCrumpleRest = position - crumple;\nvec3 crumpleAlong=crumple-dot(crumple,objectNormal)*objectNormal; float crumpleAlongLen=length(crumpleAlong);\nvCrumpleFold=vec4(crumpleAlongLen>1e-5?crumpleAlong/crumpleAlongLen:vec3(0.,0.,1.),crumpleAlongLen/max(length(crumple),1e-5));');
     shader.fragmentShader = shader.fragmentShader
       .replace('#include <common>', `#include <common>
-varying vec3 vBodyPosition; varying vec2 vImpactWear;
+varying vec3 vBodyPosition; varying vec2 vImpactWear; varying vec3 vCrumple; varying vec3 vCrumpleRest; varying vec4 vCrumpleFold;
+// Bump from a height in metres, using unnormalised screen derivatives so the creases keep their
+// real size at any distance (Mikkelsen's surface-gradient form, as in three's bumpmap chunk).
+vec3 crumpleBump(vec3 pos,vec3 n,vec2 dh,float face){
+  vec3 sx=dFdx(pos),sy=dFdy(pos),r1=cross(sy,n),r2=cross(n,sx);
+  float det=dot(sx,r1)*face;
+  return normalize(abs(det)*n-sign(det)*(dh.x*r1+dh.y*r2));
+}
 float bodyNoise(vec3 p) { return fract(sin(dot(floor(p),vec3(127.1,311.7,74.7)))*43758.5453); }
 // Interpolate deposited dust across cell boundaries; unfiltered floor noise
 // makes the lower body look like a coarse checkerboard at chase distance.
@@ -34,15 +41,43 @@ float bareMetal=clamp(vImpactWear.y,0.,1.)*max(scrapeLines,smoothstep(.65,.92,gr
 diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.19,.16,.12),dust);
 diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.22,.24,.24),bareMetal*.9);
 diffuseColor.rgb*=1.-scratch*.15;
+// Crumpled metal: a panel squeezed along its surface folds into an accordion of creases across the
+// push; one pushed straight in creases in rings around the dent (contours of how far it moved). The paint cracks along the sharpest folds and loses its gloss.
+float crumpleMove=length(vCrumple);
+float crumpleAmt=smoothstep(.015,.2,crumpleMove);
+// Screen-space footprints stay outside the branch; the noise only runs where metal has moved.
+float crumplePix=length(fwidth(vCrumpleRest)),crumpleRingPix=fwidth(crumpleMove)*52.;
+float crumpleHeight=0.,crumpleCrack=0.,crumpleCavity=0.;
+if(crumpleAmt>0.){
+  vec3 crumpleDir=normalize(vCrumpleFold.xyz+vec3(1e-5));float crumpleAlong=smoothstep(.15,.5,vCrumpleFold.w);
+  vec3 crumpleWarp=vec3(bodySilt(vCrumpleRest*3.),bodySilt(vCrumpleRest*3.+11.),bodySilt(vCrumpleRest*3.+23.))-.5;
+  float crumpleNoise=bodySilt(vCrumpleRest*6.)*1.6;
+  float crumplePhase=dot(vCrumpleRest+crumpleWarp*.16,crumpleDir)*15.+crumpleNoise,crumpleRing=crumpleMove*52.+crumpleWarp.x*2.2+crumpleNoise;
+  float crumpleSide=dot(vCrumpleRest+crumpleWarp*.12,normalize(cross(crumpleDir,vec3(.31,.83,.46))))*24.+bodySilt(vCrumpleRest*8.)*2.;
+  float crumpleFold=mix(1.-abs(sin(crumpleRing)),1.-abs(sin(crumplePhase)),crumpleAlong),crumpleWrinkle=1.-abs(sin(crumpleSide));
+  float crumpleFade=1.-clamp(max(mix(crumpleRingPix,crumplePix*15.,crumpleAlong),crumplePix*14.)*.7,0.,1.);
+  float crumpleBuckle=smoothstep(.2,.75,bodySilt(vCrumpleRest*4.3+crumpleDir*floor(mix(crumpleRing,crumplePhase,step(.5,crumpleAlong))/3.14159+.5)));
+  crumpleHeight=crumpleAmt*crumpleFade*(.018*crumpleFold*crumpleFold*crumpleFold*(.35+.65*crumpleBuckle)+.004*pow(crumpleWrinkle,8.)*crumpleBuckle*crumpleAlong*smoothstep(.6,1.,crumpleAmt));
+  crumpleCrack=smoothstep(.55,1.,crumpleAmt)*crumpleBuckle*smoothstep(.91,.99,crumpleFold)*crumpleFade*crumpleFade;
+  crumpleCavity=crumpleAmt*smoothstep(.55,1.,1.-crumpleFold)*.12;
+}
+vec2 crumpleSlope=vec2(dFdx(crumpleHeight),dFdy(crumpleHeight));
+diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.34,.35,.35),crumpleCrack*.7);
+diffuseColor.rgb*=1.-crumpleCavity;
 `)
       .replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
 roughnessFactor=clamp(mix(roughnessFactor,.88,dust)+scratch*.35+grain*.016,.04,.98);
 roughnessFactor=mix(roughnessFactor,.43,bareMetal);
+roughnessFactor=clamp(roughnessFactor+crumpleAmt*.12+crumpleCrack*.35,.04,.98);
 `)
       .replace('#include <metalnessmap_fragment>', `#include <metalnessmap_fragment>
 metalnessFactor=mix(metalnessFactor,.02,dust);
 metalnessFactor=mix(metalnessFactor,.95,bareMetal);
-`);
+metalnessFactor=mix(metalnessFactor,.6,crumpleCrack);
+`)
+      .replace('#include <normal_fragment_maps>', '#include <normal_fragment_maps>\nnormal=crumpleBump(-vViewPosition,normal,crumpleSlope,faceDirection);')
+      .replace('#include <clearcoat_normal_fragment_begin>', '#include <clearcoat_normal_fragment_begin>\n#ifdef USE_CLEARCOAT\nclearcoatNormal=crumpleBump(-vViewPosition,clearcoatNormal,crumpleSlope,faceDirection);\n#endif')
+      .replace('#include <lights_physical_fragment>', '#include <lights_physical_fragment>\n#ifdef USE_CLEARCOAT\nmaterial.clearcoat *= 1.-clamp(crumpleCrack+crumpleAmt*.35,0.,1.);\n#endif');
     if (contactWear) {
       shader.vertexShader=shader.vertexShader
         .replace('attribute vec2 impactWear;', 'attribute vec2 impactWear; attribute vec3 restPosition; attribute vec3 impactAxis; varying vec3 vImpactAxis;')
@@ -57,7 +92,7 @@ float scrapeLines=mix(smoothstep(.65,.92,abs(sin(across+bodySilt(vBodyPosition*2
         .replace('#include <lights_physical_fragment>', '#include <lights_physical_fragment>\n#ifdef USE_CLEARCOAT\nmaterial.clearcoat *= 1.-clamp(bareMetal+scratch*.5+dust*.7,0.,1.);\n#endif');
     }
   };
-  material.customProgramCacheKey = () => contactWear ? 'quarry-contact-paint-v1' : 'quarry-layered-paint-v3';
+  material.customProgramCacheKey = () => contactWear ? 'quarry-contact-paint-crumple-v1' : 'quarry-layered-paint-crumple-v1';
 }
 
 export type GlassState = { damage: { value: number }; impact: { value: T.Vector3 }; axes: { value: T.Vector3 }; };

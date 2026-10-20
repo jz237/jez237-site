@@ -1,10 +1,10 @@
 import {queueWreckNormals,cancelWreckNormals} from './wreck-batch';
-import {computeWreckNormals,computeWreckBounds} from './wreck-normals';
+import {computeWreckNormals,computeWreckBounds,updateCrumple} from './wreck-normals';
 import * as T from 'three';
 import { finishCoupeNormals,stampCoupeImpact } from './coupe-realism';
 import {constructionResponse,type ConstructionRole} from './vehicle-construction';
 const impactBounds = new T.Box3();
-const finishNormals=(mesh:T.Mesh)=>{computeWreckNormals(mesh.geometry);finishCoupeNormals(mesh);};
+const finishNormals=(mesh:T.Mesh)=>{computeWreckNormals(mesh.geometry);finishCoupeNormals(mesh);updateCrumple(mesh);};
 
 /** Every skin, seal, window and inner panel is bent in metres in the same
  * vehicle frame. Mesh origins and export transforms must not open seams. */
@@ -36,12 +36,14 @@ export function prepareWreckGeometry(root: T.Group) {
     object.geometry.setAttribute('restPosition',new T.BufferAttribute(new Float32Array(object.userData.original),3));
     object.geometry.setAttribute('impactAxis',new T.BufferAttribute(new Float32Array(rest.count*3),3));
     object.geometry.setAttribute('transferPaint',new T.BufferAttribute(new Float32Array(rest.count*4),4));
+    object.geometry.setAttribute('crumple',new T.BufferAttribute(new Float32Array(rest.count*3),3));
     const bounds = new T.Box3().setFromBufferAttribute(rest);
     const name = object.name.toLowerCase();
     object.userData.detachAssembly = name.includes('mirror') ? (bounds.getCenter(new T.Vector3()).x < 0 ? 'mirror-left' : 'mirror-right')
       : /bumper_front|bumper_grille|bumper_intake|bodyhoodunder/.test(name) ? 'front-bumper'
       : /bumper_rear/.test(name) ? 'rear-bumper'
-      : /panel_hood\d*|bodyhood(topgrill|interior02)/.test(name) ? 'hood' : null;
+      : /panel_hood\d*|bodyhood(topgrill|interior02)/.test(name) ? 'hood'
+      : /^panel_tailgatehollins/.test(name) ? 'drop-tailgate' : null;
   });
 }
 
@@ -136,6 +138,43 @@ export function repairWreckGeometry(mesh: T.Mesh) {
   if (g.attributes.impactWear) { (g.attributes.impactWear.array as Float32Array).fill(0); g.attributes.impactWear.needsUpdate = true; }
   if (g.attributes.impactAxis) { (g.attributes.impactAxis.array as Float32Array).fill(0); g.attributes.impactAxis.needsUpdate = true; }
   if(g.attributes.transferPaint){(g.attributes.transferPaint.array as Float32Array).fill(0);g.attributes.transferPaint.needsUpdate=true;}
+  if(g.attributes.crumple){(g.attributes.crumple.array as Float32Array).fill(0);g.attributes.crumple.needsUpdate=true;}
   mesh.userData.engineShift?.set(0,0,0);
   computeWreckBounds(g);
 }
+
+/** Whole-body crush (metres at full compression): ends shorten and the bonnet tents, sides bow in
+ * along the cabin, the roof sags. Offline cars only (Vehicle.extendedDamage). */
+export const CRUSH={end:.5,tent:.12,side:.3,roof:.3,limit:1.1} as const;
+export type CrushFrame={x:number;z:number;top:number};
+/** Apply one hit's increase in structural compression [front, rear, left, right, roof] on top of the
+ * local dents, in the shared vehicle frame so skins, glass and inner panels stay together. */
+export function crushGeometry(mesh:T.Mesh,delta:readonly number[],frame:CrushFrame,deferNormals=false){
+  if(!delta.some(d=>d>.002))return false;
+  const g=mesh.geometry,position=g.attributes.position,rest=mesh.userData.wreckRest as T.BufferAttribute|undefined;
+  const toModel=mesh.userData.wreckToModel as T.Matrix4|undefined,fromModel=mesh.userData.wreckFromModel as T.Matrix4|undefined;
+  if(!rest||!toModel||!fromModel)return false;
+  const orig=new T.Vector3(),current=new T.Vector3(),offset=new T.Vector3();
+  const zf=frame.z*.3,xs=frame.x*.35,yr=frame.top*.62,[front=0,rear=0,left=0,right=0,roof=0]=delta;let moved=false;
+  // Skip meshes lying wholly outside every region this hit compresses (rest bounds cached per mesh).
+  const box=(mesh.userData.crushBounds??=new T.Box3().setFromBufferAttribute(rest)) as T.Box3;
+  if(!(front>0&&box.max.z>zf)&&!(rear>0&&box.min.z< -zf)&&!(left>0&&box.min.x< -xs)&&!(right>0&&box.max.x>xs)&&!(roof>0&&box.max.y>yr))return false;
+  for(let i=0;i<position.count;i++){
+    orig.fromBufferAttribute(rest,i);
+    let dx=0,dy=0,dz=0;
+    if(front>0&&orig.z>zf){const t=Math.min(1,(orig.z-zf)/(frame.z-zf));dz-=front*CRUSH.end*t;dy+=front*CRUSH.tent*Math.sin(Math.PI*t)*T.MathUtils.smoothstep(orig.y,frame.top*.45,frame.top*.75);}
+    if(rear>0&&orig.z< -zf){const t=Math.min(1,(-orig.z-zf)/(frame.z-zf));dz+=rear*CRUSH.end*t;}
+    const bow=Math.cos(Math.PI/2*Math.min(1,Math.abs(orig.z)/frame.z));
+    if(left>0&&orig.x< -xs)dx+=left*CRUSH.side*Math.min(1,(-orig.x-xs)/(frame.x-xs))*bow;
+    if(right>0&&orig.x>xs)dx-=right*CRUSH.side*Math.min(1,(orig.x-xs)/(frame.x-xs))*bow;
+    if(roof>0&&orig.y>yr)dy-=roof*CRUSH.roof*Math.min(1,(orig.y-yr)/Math.max(.05,frame.top-yr));
+    if(!dx&&!dy&&!dz)continue;
+    current.fromBufferAttribute(position,i).applyMatrix4(toModel);current.x+=dx;current.y+=dy;current.z+=dz;
+    offset.copy(current).sub(orig);if(offset.lengthSq()>CRUSH.limit**2)current.copy(orig).add(offset.setLength(CRUSH.limit));
+    current.applyMatrix4(fromModel);position.setXYZ(i,current.x,current.y,current.z);moved=true;
+  }
+  if(moved){position.needsUpdate=true;if(!deferNormals)queueWreckNormals(mesh,finishNormals);}
+  return moved;
+}
+/** Recompute a crushed mesh's normals later (live cars spread this over a few frames). */
+export function refreshWreckNormals(mesh:T.Mesh){queueWreckNormals(mesh,finishNormals);}

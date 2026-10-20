@@ -1,10 +1,10 @@
 import * as T from 'three';
 import {constructionResponse,type ConstructionRole} from './vehicle-construction';
 import {queueWreckNormals} from './wreck-batch';
-import {computeWreckNormals,computeWreckBounds} from './wreck-normals';
+import {computeWreckNormals,computeWreckBounds,updateCrumple} from './wreck-normals';
 import {finishCoupeNormals,stampCoupeImpact} from './coupe-realism';
 const bounds=new T.Box3();
-const finish=(mesh:T.Mesh)=>{computeWreckNormals(mesh.geometry);finishCoupeNormals(mesh);};
+const finish=(mesh:T.Mesh)=>{computeWreckNormals(mesh.geometry);finishCoupeNormals(mesh);updateCrumple(mesh);};
 /** Light contacts use one smooth shallow compression, not the eight-stage fold
  * integration used for structural crashes. Paint and wear share this pass. */
 export function scuffGeometry(mesh:T.Mesh,contact:T.Vector3,direction:T.Vector3,paint?:T.Color){
