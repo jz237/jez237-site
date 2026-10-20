@@ -2159,6 +2159,8 @@ async function boot() {
         forward: c.forward.toArray(),
         health: c.health,
       })),
+    /** QA: a hit at a car-local point travelling along a car-local direction. */
+    hitCar:(id:number,local:number[],dir:number[],damage:number)=>{const c=cars[id];if(!c)return false;c.root.updateMatrixWorld(true);const p=new T.Vector3().fromArray(local).applyMatrix4(c.root.matrixWorld),d=new T.Vector3().fromArray(dir).applyQuaternion(c.root.quaternion).normalize();c.hit(p,d,damage,elapsed);return true;},
     velocity: (id: number, x: number, y: number, z: number) =>
       cars[id].body.setLinvel({ x, y, z }, true),
     setHealth: (id: number, h: number) => {

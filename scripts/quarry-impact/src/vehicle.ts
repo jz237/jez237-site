@@ -32,7 +32,7 @@ import { Effects } from './effects';
 import { landscapeHeight } from './quarry-layout';
 import type { GlassState } from './car-materials';
 import { repairCoupePanel } from './coupe-realism';
-import { dentGeometry, repairWreckGeometry } from './wreck-geometry';
+import { dentGeometry,crushGeometry,refreshWreckNormals,type CrushFrame, repairWreckGeometry } from './wreck-geometry';
 import { WreckFinish } from './wreck-finish';
 import { WreckAttachments } from './wreck-attachments';
 import {bodyworkDentDamage} from './bodywork-response';
@@ -130,6 +130,8 @@ export class Vehicle {
   private windLoad=new Map<string,number>();
   private readonly tyreBurst=[false,false,false,false];
   private dragLoad=0;private readonly dragPoint=new T.Vector3();
+  private crushFrame?:CrushFrame;
+  private readonly crushPending=new Set<T.Mesh>();
   private lastLanding=-10;private readonly wasGrounded=[true,true,true,true];
   /** Live counts for diagnostics. */
   rips=0;backfires=0;
@@ -246,7 +248,7 @@ export class Vehicle {
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
-    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.dragLoad=0;this.lastLanding=-10;this.wasGrounded.fill(true);this.steerLimit=1;this.brakeBias.fill(1);
+    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();this.wasGrounded.fill(true);this.steerLimit=1;this.brakeBias.fill(1);
     if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
@@ -355,6 +357,8 @@ export class Vehicle {
     if (time - this.lastFx > 0.06) {
       this.lastFx = time;
       this.scraping=0;this.dragLoad=0;
+      // A few crushed panels per tick get fresh normals, so a big crush never costs one long frame.
+      const budget=performance.now()+1.2;let refreshed=0;for(const mesh of this.crushPending){this.crushPending.delete(mesh);if(mesh.visible)refreshWreckNormals(mesh);if(++refreshed>=3||performance.now()>budget)break;}
       for (let i = 0; i < 4; i++) {
         const point = this.controller.wheelContactPoint(i);
         if (!point || !this.controller.wheelIsInContact(i)) continue;
@@ -447,7 +451,7 @@ export class Vehicle {
     const q=this.root.quaternion,p=this.root.position,inverse={x:-q.x,y:-q.y,z:-q.z,w:q.w};
     const local=rotateVehicleVector({x:point.x-p.x,y:point.y-p.y,z:point.z-p.z},inverse);
     const components={structure:this.structuralDamage,engineDamage:this.engineDamage,tyreDamage:this.tyreDamage,wheelDamage:Array.from(this.wreckParts.wheelDamage),wheelShift:this.wreckParts.wheelShift.map(v=>({x:v.x,y:v.y,z:v.z}))};
-    const worn=Array.from(this.wreckParts.wheelDamage);
+    const worn=Array.from(this.wreckParts.wheelDamage),structureBefore=this.extendedDamage?this.structuralDamage?.slice():undefined;
     applyComponentImpact(components,this.kind,local,rotateVehicleVector(direction,inverse),damage);
     if (local.x < 0) this.damageLeft += damage;
     else this.damageRight += damage;
@@ -512,6 +516,11 @@ export class Vehicle {
     this.wreckParts.wheelDamage.set(components.wheelDamage);
     components.wheelShift.forEach((v,i)=>this.wreckParts.wheelShift[i].copy(v));
     if(this.extendedDamage)for(let i=0;i<4;i++){const w=this.wheels[i];if(w&&!this.wreckParts.wheelLost[i]&&wheelTearsOff(worn[i],damage,this.wreckParts.wheelReach(i,contact)))this.tearOffWheel(i,direction,quiet);}
+    if(structureBefore&&this.structuralDamage){
+      // Whole-body crush grows with structural compression, on top of the local dents.
+      const delta=this.structuralDamage.map((v,i)=>Math.max(0,v-structureBefore[i]));
+      if(delta.some(d=>d>.002)){const frame=this.crushFrame??=this.measureCrushFrame();for(const mesh of [...this.panels,...this.glass])if(mesh.visible&&crushGeometry(mesh,delta,frame,!quiet)&&!quiet)this.crushPending.add(mesh);}
+    }
     this.structure.update(this.structuralDamage,this.health);
     if (!quiet) {
       this.fx.impact?.(point, direction, damage);
@@ -528,6 +537,10 @@ export class Vehicle {
     }
     if(!quiet){this.impactEffects.debris=true;this.rips++;}
     return true;
+  }
+  private measureCrushFrame():CrushFrame{
+    const box=new T.Box3();for(const mesh of this.panels){const rest=mesh.userData.wreckRest as T.BufferAttribute|undefined;if(rest)box.union(new T.Box3().setFromBufferAttribute(rest));}
+    return{x:Math.max(.5,Math.abs(box.min.x),Math.abs(box.max.x)),z:Math.max(1,Math.abs(box.min.z),Math.abs(box.max.z)),top:Math.max(.8,box.max.y)};
   }
   private tearOffWheel(i:number,direction:T.Vector3,quiet:boolean){
     const w=this.wheels[i],contact=this.tireContacts[i];this.wreckParts.wheelLost[i]=1;
