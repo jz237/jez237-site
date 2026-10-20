@@ -1,6 +1,7 @@
+import {restoreDamageDiagramBytes} from './damage-diagram-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readSmashedLampsPrevious,restoreSmashedLampsBytes,verifySmashedLampsRevision} from './smashed-lamps-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreDamageDiagramBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('SmashedLamps preserves every prior fixture, vehicle asset, venue art and history input',verifySmashedLampsRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/smashed-lamps/revision.json').toString());
