@@ -5,7 +5,7 @@ import {COURSE_NAMES,resolveCourseId,type CourseId} from './course-id';
 import {ARENA_NAMES,type ArenaId} from './arena-id';
 export type Discipline='racing'|'impact'|'stunts';
 export type ChallengeMetric='time'|'position'|'damage'|'knockouts'|'condition'|'drift'|'distance'|'speed'|'airtime'|'combo';
-export type Challenge={race?:'ordered'|'free'|'random';direction?:'forward'|'reverse';seed?:number;id:string;title:string;description:string;discipline:Discipline;mode:Mode;car:CarKind;metric:ChallengeMetric;limit:number;medals:[number,number,number];laps?:number;minHealth?:number;minDamage?:number;traffic?:boolean;course?:CourseId;arena?:ArenaId;stunt?:StuntTask};
+export type Challenge={race?:'ordered'|'free'|'random';direction?:'forward'|'reverse';seed?:number;id:string;title:string;description:string;discipline:Discipline;mode:Mode;car:CarKind;metric:ChallengeMetric;limit:number;medals:[number,number,number];laps?:number;minHealth?:number;minDamage?:number;traffic?:boolean;course?:CourseId;arena?:ArenaId;stunt?:StuntTask;banger?:true};
 const race=(id:string,title:string,car:CarKind,laps:number,medals:[number,number,number],minHealth=0):Challenge=>({id,title,car,laps,medals,metric:'time',mode:'race',discipline:'racing',limit:medals[0],minHealth,description:`Finish ${laps} ${laps===1?'lap':'laps'}${minHealth?` with at least ${minHealth}% condition`:''}. No recoveries.`});
 const event=(id:string,title:string,car:CarKind,metric:Exclude<ChallengeMetric,'time'|'position'>,limit:number,medals:[number,number,number],description:string):Challenge=>({id,title,car,metric,limit,medals,description,mode:['damage','knockouts','condition'].includes(metric)?'derby':'playground',discipline:['damage','knockouts','condition'].includes(metric)?'impact':'stunts',traffic:false,...(metric==='condition'?{minDamage:15}:{})});
 export const CHALLENGES:readonly Challenge[]=[
@@ -156,6 +156,9 @@ export const CHALLENGES:readonly Challenge[]=[
   {...event('hollins-wrenford','Mud in the bed','hollins','damage',120,[100,190,290],'Put the full-size pickup into the field across a two-minute derby in the mud pit.'),arena:'wrenford-pit-v1'},
   {...event('hollins-harrow','Tailgate down','hollins','knockouts',150,[1,2,4],'Deliver the final impact to weakened opponents in the breaker bowl.'),arena:'harrow-bowl-v1'},
   {...event('hollins-foundry','Last truck standing','hollins','condition',75,[15,35,60],'Stay alive for 75 seconds in the foundry yard and deal at least 15 damage.'),arena:'foundry-yard-v1'},
+  {id:'banger-saltmarsh',title:'Dock brawl',car:'muscle',laps:2,medals:[3,2,1],metric:'position',mode:'race',discipline:'racing',limit:300,course:'saltmarsh-port-v1',banger:true,description:'A banger race round the port: the whole field rams each other. Finish two laps on the podium; gold takes the win.'},
+  {id:'banger-ashcombe',title:'Lane rage',car:'sedan',laps:2,medals:[3,2,1],metric:'position',mode:'race',discipline:'racing',limit:300,minHealth:15,course:'ashcombe-lanes-v1',banger:true,description:'A banger race through the lanes. Finish two laps on the podium with at least 15% condition; gold takes the win.'},
+  {id:'banger-ravensmoor',title:'Moor mayhem',car:'hollins',laps:1,medals:[3,2,1],metric:'position',mode:'race',discipline:'racing',limit:300,course:'ravensmoor-rally-v1',banger:true,description:'A banger race over the moor in the pickup: tarmac, gravel and nobody playing nice. Finish on the podium; gold takes the win.'},
 ];
 /** Race and playground challenges retain their own fixed venue; derbies use their listed arena, otherwise Quarry. */
 export const challengeCourse=(c:Challenge):CourseId=>c.mode!=='derby'?resolveCourseId(c.course):'quarry-v1';

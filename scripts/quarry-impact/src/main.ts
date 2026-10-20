@@ -251,7 +251,7 @@ const damageRule=()=>sessionDamageRule(customEvent()&&mode!=='playground',demo,e
 let nextEliminationAt=0,eliminatedOrder:number[]=[];
 let damageDiagramAt=-1,damageDiagramSvgLast='';
 let propsVenue:VenueContext|undefined,propsOnline=false;
-const bangerRace=()=>!online?.active&&!pursuitSelected()&&activeClubRound===null&&!activeChallenge&&!activeTimeTrial&&bangerRaceActive(mode,customEvent(),demo,raceFormat(),eventOptions,demoOptions);
+const bangerRace=()=>!online?.active&&!pursuitSelected()&&activeClubRound===null&&!activeTimeTrial&&(activeChallenge?activeChallenge.banger===true&&mode==='race':bangerRaceActive(mode,customEvent(),demo,raceFormat(),eventOptions,demoOptions));
 const bangerAggression=new BangerAggression();
 const teamRace=()=>!online?.active&&!pursuitSelected()&&activeClubRound===null&&!activeChallenge&&!activeTimeTrial&&teamRaceActive(mode,customEvent(),demo,raceFormat(),eventOptions,demoOptions);
 const eliminationRace=()=>!online?.active&&!pursuitSelected()&&activeClubRound===null&&!activeChallenge&&!activeTimeTrial&&eliminationActive(mode,customEvent(),demo,raceFormat(),eventOptions,demoOptions);
