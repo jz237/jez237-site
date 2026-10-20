@@ -19,7 +19,9 @@ export const rubbleNodules=`
    mix(mix(reefHash3(i+vec3(0,0,1)).x,reefHash3(i+vec3(1,0,1)).x,f.x),mix(reefHash3(i+vec3(0,1,1)).x,reefHash3(i+vec3(1,1,1)).x,f.x),f.y),f.z);}
  // Coralline purples and violets, olive and ochre crusts, moss green, rose.
  vec3 reefNodeColor(float k){
-  return k<.22?vec3(.24,.07,.33):k<.36?vec3(.34,.15,.48):k<.52?vec3(.30,.27,.08):k<.64?vec3(.42,.23,.06):k<.76?vec3(.15,.25,.08):k<.88?vec3(.46,.14,.25):k<.95?vec3(.12,.22,.21):vec3(.46,.38,.26);
+  // Fewer purples: the reference rock is a mix of olive, ochre, moss and rose
+  // crusts with violet coralline, reading more neutral than blue.
+  return k<.16?vec3(.24,.07,.33):k<.26?vec3(.34,.15,.48):k<.44?vec3(.30,.27,.08):k<.56?vec3(.42,.23,.06):k<.70?vec3(.15,.25,.08):k<.82?vec3(.46,.14,.25):k<.9?vec3(.12,.22,.21):vec3(.46,.38,.26);
  }
  // Small colonies on the rubble: orange, lime, pink, teal, gold and violet.
  vec3 reefFragColor(float k){
@@ -85,6 +87,6 @@ export function finishRockMaterial(material:T.MeshStandardMaterial){
    slope+=(-nodeTo*2.4*nodeF1-fineTo*1.1*fineF1)*(.35+.65*coverage);
    normal=normalize(normalMatrix*normalize(stoneN+slope-stoneN*dot(slope,stoneN)));`);
  };
- material.customProgramCacheKey=()=> 'reef-porous-rock-triplanar-lower-micropores-rubble-frags-v4';
+ material.customProgramCacheKey=()=> 'reef-porous-rock-triplanar-lower-micropores-rubble-frags-v5';
  return material;
 }

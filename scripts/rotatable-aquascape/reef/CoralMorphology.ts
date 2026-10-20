@@ -8,7 +8,7 @@ export type CoralGrowth='canopy'|'bushy'|'antler';
 export function branchingColony(base:T.Vector3,size:number,hue:number,random:Random,surface?:(x:number,z:number)=>number|null,growth:CoralGrowth='canopy',basalGeometry?:T.BufferGeometry){
  // Aquarium Acropora read pastel under reef light: lavender, pink, lime, tan
  // and salmon colonies with pale, nearly white growing tips.
- const geometries:T.BufferGeometry[]=[],baseColor=new T.Color().setHSL(hue,.6,.42),tipColor=baseColor.clone().lerp(new T.Color('#f1e9f0'),.52);
+ const geometries:T.BufferGeometry[]=[],baseColor=new T.Color().setHSL(hue,hue>.12&&hue<.32?.82:hue>.4&&hue<.55?.7:.6,hue>.12&&hue<.32?.4:.42),tipColor=baseColor.clone().lerp(new T.Color('#f1e9f0'),.52);
  // Thick, sturdy branches as in the reference's colonies (no added triangles).
  const girth=1.4;
  // Compact, rounded bushes: shorter, wider growth than a tall spray. Scales
@@ -146,7 +146,7 @@ export function platingColony(x:number,y:number,z:number,r:number,seed:number){
  const sides=192,rings=36,positions:number[]=[],colors:number[]=[],uv:number[]=[],indices:number[]=[],tissue:number[]=[],underside:number[]=[];
  // Dusty peach-tan tissue in concentric growth bands, with a broad pale
  // growing margin (the reference's tiered Montipora plates).
- const top=new T.Color('#c4563a'),rim=new T.Color('#f0cdb2'),bottom=new T.Color('#ffe7c8');
+ const top=new T.Color('#c4563a'),rim=new T.Color('#f0cdb2'),bottom=new T.Color('#d8a27a');
  // Unequal growth fans and narrow retreating bays replace a circular bowl.
  // Each fan raises a different fold; its valley continues into the older
  // tissue, so the edge reads as a grown shelf rather than a corrugated disc.
