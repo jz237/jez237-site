@@ -29,6 +29,7 @@ import {weatherUniforms,cloudScene} from './weather-light.js';
 import {shadowDue,refractionSize} from './render-budget.js';
 import {updateCraftLOD} from './mesh-lod.js';
 import {makeFinishingEffects} from './finishing-effects.js';
+import {makeNativeEffectRenderer} from './native-effect-render.js';
 import {makeShoreWash} from './shore-wash.js';
 import {makeCrestSpray} from './crest-spray.js';
 import {makeCurlingBreakers} from './curling-breakers.js';
@@ -67,6 +68,8 @@ export function createPlayerWindowRenderer(canvas){
  renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;renderer.shadowMap.autoUpdate=false;
  const scene=new T.Scene();scene.fog=new T.FogExp2(0xa3b7b6,.0018);
  const camera=new T.PerspectiveCamera(58,16/9,.15,1800),look=new T.Vector3(),goal=new T.Vector3(),target=new T.Vector3();
+ // The host's original per-view effects for Player 2 (933C4 view1), when sent.
+ const nativeEffectRoot=new T.Group();nativeEffectRoot.visible=false;let nativeEffects=null;
  const sun=new T.DirectionalLight(0xffedcc,3),ambient=new T.HemisphereLight(0xbad6e0,0x565039,1.25);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-125,right:125,top:125,bottom:-125,near:1,far:450});sun.shadow.bias=-.0003;sun.shadow.normalBias=.15;scene.add(sun,sun.target,ambient);
  const sky=makeSky(scene),envScene=new T.Scene();envScene.add(sky.clone());const pmrem=new T.PMREMGenerator(renderer);
  const ocean=makeOcean(renderer,scene,camera),finishing=makeFinishingEffects(scene),shoreWash=makeShoreWash(scene),crestSpray=makeCrestSpray(scene),breakers=makeCurlingBreakers(scene),beachBreak=makeBeachBreak(scene,ocean),forward=new T.Vector3();breakers.nearshore=false;
@@ -112,11 +115,14 @@ export function createPlayerWindowRenderer(canvas){
   scene.fog.density=weather.fog+front*.0009;scene.fog.color.setHex(course.sky[0]);sun.color.setHex(course.theme==='resort'?0xffc782:0xffedcc);sun.intensity=weather.night?.22:(3.5-storm*2)*(1-front*.32);ambient.intensity=weather.night?.66:.78-storm*.12-front*.08;scene.environmentIntensity=weather.night?.45:.62;renderer.toneMappingExposure=weather.night?1.4:1.06;
   if(!environment||Math.abs(storm-environmentStorm)>.12||time-environmentTime>45){environment?.dispose();environment=pmrem.fromScene(envScene,.04,.1,2000);scene.environment=environment.texture;environmentTime=time;environmentStorm=storm;}
   for(const v of vessels.values())v.boat.visible=false;
+  const original=Array.isArray(frame.nativeEffects);
+  if(original){if(!nativeEffectRoot.parent)scene.add(nativeEffectRoot);nativeEffects??=makeNativeEffectRenderer(nativeEffectRoot);nativeEffects.update({draws:frame.nativeEffects});}
+  nativeEffectRoot.visible=original;
   for(const q of frame.racers){
    const v=vessel(q),h=q.hydro;updatePlayerWindowCraft(v,q,{time,dt});v.beads.update(q,storm,dt);v.updateDash(q.speed,100);
    updateCraftLOD(v.boat,Math.hypot(camera.position.x-q.x,camera.position.y-h.y,camera.position.z-q.z),quality);
-   if(v.landingId!==null&&v.landingId!==h.landingId&&dt>0){for(let i=0;i<Math.min(180,h.impact*22);i++)spawn(q,i%3===0?'landingMist':'impact',Math.random()<.5?-1:1);finishing.landing(q,camera.position,0);}v.landingId=h.landingId;
-   if(dt>0&&q.speed>2&&frame.phase==='running'&&h.wet>.1){const n=Math.min(quality==='low'?18:40,Math.ceil(dt*q.speed*(quality==='low'?20:30)*h.wet));for(let i=0;i<n;i++){const jet=i%3===0;if(jet&&h.intake<.1)continue;spawn(q,jet?'jet':i%5===0?'mist':'chine',Math.random()<.5?-1:1);}}
+   if(!original&&v.landingId!==null&&v.landingId!==h.landingId&&dt>0){for(let i=0;i<Math.min(180,h.impact*22);i++)spawn(q,i%3===0?'landingMist':'impact',Math.random()<.5?-1:1);finishing.landing(q,camera.position,0);}v.landingId=h.landingId;
+   if(!original&&dt>0&&q.speed>2&&frame.phase==='running'&&h.wet>.1){const n=Math.min(quality==='low'?18:40,Math.ceil(dt*q.speed*(quality==='low'?20:30)*h.wet));for(let i=0;i<n;i++){const jet=i%3===0;if(jet&&h.intake<.1)continue;spawn(q,jet?'jet':i%5===0?'mist':'chine',Math.random()<.5?-1:1);}}
   }
   if(first){camera.position.set(r.x-Math.sin(r.heading)*11,4,r.z-Math.cos(r.heading)*11);look.set(r.x+Math.sin(r.heading)*4,1,r.z+Math.cos(r.heading)*4);}
   translateFollow(tracking,r,camera.position,look);const cf=chaseFrame(chase,r,dt,{orbit,zoom:r.nativeCamera?zoom:cameraMode===1?6:cameraMode===2?19:zoom,pitch});goal.set(cf.position.x,cf.position.y,cf.position.z);target.set(cf.target.x,cf.target.y,cf.target.z);camera.position.lerp(goal,first?1:1-Math.exp(-dt*4));look.lerp(target,first?1:1-Math.exp(-dt*5));camera.fov+=(cf.fov-camera.fov)*(first?1:1-Math.exp(-dt*2.5));camera.updateProjectionMatrix();
@@ -131,6 +137,6 @@ export function createPlayerWindowRenderer(canvas){
  }
  return {init,graphics,draw,reset:clearEffects,camera(){cameraMode=(cameraMode+1)%3;orbit=0;},orbit(dx,dy){orbit-=dx*.005;pitch=Math.max(.08,Math.min(.9,pitch+dy*.003));},zoom(delta){zoom=Math.max(6,Math.min(25,zoom+delta*.01));},
   get details(){return {width:canvas.width,height:canvas.height,quality,course:course?.id,camera:camera.position.toArray(),drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles,
-   primaryBuoys:world?.root.userData.primaryBuoys??null,nativeIce:world?.root.userData.nativeIce??null,riders:[...vessels.entries()].filter(([,v])=>v.boat.visible).map(([color,v])=>({color,nativePhysical:!!v.rider.userData.nativePhysical}))};},
-  dispose(){world?.dispose();finishing.dispose();ocean.dispose();environment?.dispose();pmrem.dispose();scene.traverse(o=>{o.geometry?.dispose();if(o.material){for(const m of Array.isArray(o.material)?o.material:[o.material])m.dispose?.();}});renderer.dispose();}};
+   primaryBuoys:world?.root.userData.primaryBuoys??null,nativeIce:world?.root.userData.nativeIce??null,nativeEffectBatches:nativeEffectRoot.visible?nativeEffectRoot.children.reduce((n,g)=>n+g.children.filter(m=>m.visible).length,0):null,riders:[...vessels.entries()].filter(([,v])=>v.boat.visible).map(([color,v])=>({color,nativePhysical:!!v.rider.userData.nativePhysical}))};},
+  dispose(){nativeEffects?.dispose();world?.dispose();finishing.dispose();ocean.dispose();environment?.dispose();pmrem.dispose();scene.traverse(o=>{o.geometry?.dispose();if(o.material){for(const m of Array.isArray(o.material)?o.material:[o.material])m.dispose?.();}});renderer.dispose();}};
 }
