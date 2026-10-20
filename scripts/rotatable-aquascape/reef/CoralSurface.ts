@@ -1,4 +1,26 @@
 import * as T from 'three';
+import {rubbleNodules} from './ReefRockMaterial.ts';
+/** Branch skin of densely set corallites at world scale: each a small raised
+ * cup with a pale rim and a dark central pit, the rough "bottlebrush" surface of
+ * Acropora branches. Adds no geometry; the baked maps keep their own detail. */
+export function finishCoralMaterial(material:T.MeshStandardMaterial){
+ material.onBeforeCompile=shader=>{
+  shader.vertexShader='varying vec3 reefCoralP;\n'+shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nreefCoralP=position;');
+  shader.fragmentShader='varying vec3 reefCoralP; uniform mat3 normalMatrix;\n'+rubbleNodules+shader.fragmentShader;
+  shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
+   vec3 cupTo,cupId;float cupF1,cupF2;
+   reefNodules(reefCoralP*52.,cupF1,cupF2,cupTo,cupId);
+   float cupPit=1.-smoothstep(.04,.2,cupF1),cupRim=smoothstep(.16,.34,cupF1)*(1.-smoothstep(.5,.78,cupF1)),cupGap=smoothstep(.0,.13,cupF2-cupF1);
+   float coralLuma=dot(diffuseColor.rgb,vec3(.3,.59,.11));
+   diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*.55+vec3(coralLuma*.62),.32*cupRim);
+   diffuseColor.rgb*=mix(.66,1.,cupGap)*(1.-.5*cupPit)*(.94+.12*cupId.x);`);
+  shader.fragmentShader=shader.fragmentShader.replace('#include <normal_fragment_maps>',`#include <normal_fragment_maps>
+   vec3 cupSlope=normalMatrix*(-cupTo*(1.5*cupF1)*(1.-2.2*cupPit));
+   normal=normalize(normal+cupSlope-normal*dot(cupSlope,normal));`);
+ };
+ material.customProgramCacheKey=()=>'reef-coral-corallite-skin-v1';
+ return material;
+}
 /** Locally baked, shared full-resolution corallite maps. Regenerate with the
  * source in model-source; no texture synthesis or remote service at startup. */
 export function coralSurfaceMaps(){

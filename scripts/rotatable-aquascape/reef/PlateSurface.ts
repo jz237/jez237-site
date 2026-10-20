@@ -1,21 +1,32 @@
 import * as T from 'three';
+import {rubbleNodules} from './ReefRockMaterial.ts';
 /** Separate upper tissue from porous lower skeleton without another material
  * batch. One packed normal/occlusion lookup only on lower faces. */
 export function finishPlateMaterial(material:T.MeshStandardMaterial,skeleton:T.Texture){
  material.onBeforeCompile=shader=>{
   shader.uniforms.plateSkeleton={value:skeleton};
-  shader.vertexShader='attribute float plateTissue;attribute float plateUnderside;varying float vPlateTissue;varying float vPlateUnderside;\n'+shader.vertexShader;
-  shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nvPlateTissue=plateTissue;vPlateUnderside=plateUnderside;');
-  shader.fragmentShader='uniform sampler2D plateSkeleton;varying float vPlateTissue;varying float vPlateUnderside;\n'+shader.fragmentShader;
+  shader.vertexShader='attribute float plateTissue;attribute float plateUnderside;varying float vPlateTissue;varying float vPlateUnderside;varying vec3 vPlateP;\n'+shader.vertexShader;
+  shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nvPlateTissue=plateTissue;vPlateUnderside=plateUnderside;vPlateP=position;');
+  shader.fragmentShader='uniform sampler2D plateSkeleton;varying float vPlateTissue;varying float vPlateUnderside;varying vec3 vPlateP;uniform mat3 normalMatrix;\n'+rubbleNodules+shader.fragmentShader;
+  // Living upper tissue: a maze of raised, pale ridges between shallow cups
+  // with dark pits, as on the reference's ruffled plates.
+  shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
+   vec3 cupTo,cupId;float cupF1,cupF2;
+   reefNodules(vPlateP*40.,cupF1,cupF2,cupTo,cupId);
+   float cupLive=vPlateTissue*(1.-vPlateUnderside);
+   float cupPit=1.-smoothstep(.04,.18,cupF1),cupRidge=1.-smoothstep(.0,.11,cupF2-cupF1);
+   diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*(.72+.55*cupRidge)*(1.-.5*cupPit)*(.92+.16*cupId.x),cupLive);`);
   shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',`vec4 skeletonSample=vec4(.5,.5,1.,1.);
 if(vPlateUnderside>.001) skeletonSample=texture2D(plateSkeleton,vMapUv*1.6);
 `+T.ShaderChunk.map_fragment.replace('diffuseColor *= sampledDiffuseColor;',`sampledDiffuseColor.rgb=mix(vec3(.76,.72,.67),sampledDiffuseColor.rgb,vPlateTissue);
 sampledDiffuseColor.rgb=mix(sampledDiffuseColor.rgb,vec3(skeletonSample.a),vPlateUnderside);
 diffuseColor *= sampledDiffuseColor;`));
   shader.fragmentShader=shader.fragmentShader.replace('#include <normal_fragment_maps>',T.ShaderChunk.normal_fragment_maps.replace('mapN.xy *= normalScale;',`mapN=mix(mapN,skeletonSample.rgb*2.-1.,vPlateUnderside);
-mapN.xy *= normalScale*mix(vPlateTissue,.92,vPlateUnderside);`));
+mapN.xy *= normalScale*mix(vPlateTissue,.92,vPlateUnderside);`)+`
+   vec3 cupSlope=normalMatrix*(cupTo*(1.4*cupF1)*(1.-cupRidge*.4))*cupLive;
+   normal=normalize(normal+cupSlope-normal*dot(cupSlope,normal));`);
  };
- material.customProgramCacheKey=()=> 'reef-plate-skeleton-v2';
+ material.customProgramCacheKey=()=> 'reef-plate-skeleton-corallites-v3';
  return material;
 }
 /** Immersed cups, asymmetric hoods and fine tissue ridges, baked offline rather than evaluated per pixel

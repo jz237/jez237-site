@@ -6,7 +6,11 @@ export type CoralGrowth='canopy'|'bushy'|'antler';
 /** Rounded, irregular fork growth. Polyps are fine normal/color detail; a coral
  * skeleton stays rigid, unlike the soft anemone tissue elsewhere in the scene. */
 export function branchingColony(base:T.Vector3,size:number,hue:number,random:Random,surface?:(x:number,z:number)=>number|null,growth:CoralGrowth='canopy',basalGeometry?:T.BufferGeometry){
- const geometries:T.BufferGeometry[]=[],baseColor=new T.Color().setHSL(hue,.52,.29),tipColor=baseColor.clone().lerp(new T.Color('#e5e3cc'),.31);
+ // Aquarium Acropora read pastel under reef light: lavender, pink, lime, tan
+ // and salmon colonies with pale, nearly white growing tips.
+ const geometries:T.BufferGeometry[]=[],baseColor=new T.Color().setHSL(hue,.5,.41),tipColor=baseColor.clone().lerp(new T.Color('#f1e9f0'),.52);
+ // Thick, sturdy branches as in the reference's colonies (no added triangles).
+ const girth=1.4;
  let growthRandom=random;
  const choice=(a:number,b:number)=>a+(b-a)*growthRandom();
  function branch(start:T.Vector3,end:T.Vector3,radius:number,level:number,seed:number){
@@ -73,7 +77,7 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
     tip.set(root.x+Math.cos(heading)*reach,root.y+lift+size*.018*(1+curl),root.z+Math.sin(heading)*reach);
     tip.addScaledVector(direction,size*(level===0?.075:.035));
    }
-   branch(root,tip,Math.max(radius*(1-(1-endScale)*t)*.72,(level===0?.018:growth==='antler'?.013:.014)*size),level+1,seed+j*1.73);
+   branch(root,tip,Math.max(radius*(1-(1-endScale)*t)*.72,(level===0?.018:growth==='antler'?.013:.014)*size*girth),level+1,seed+j*1.73);
   }
   if(level===0&&size>=.6){
    // Interleaved lower scaffolds fill the bare trunk intervals. A local stream
@@ -112,7 +116,7 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
    }
    if(!anchored)root.copy(base);
   }
-  const end=base.clone().add(new T.Vector3(Math.cos(angle)*rad,height,Math.sin(angle)*rad));branch(root,end,choice(.037,.057)*size,0,angle+random()*2);
+  const end=base.clone().add(new T.Vector3(Math.cos(angle)*rad,height,Math.sin(angle)*rad));branch(root,end,choice(.037,.057)*size*girth,0,angle+random()*2);
  }
  // Prefer clipped triangles from the actual support, including its curved relief.
  if(basalGeometry){basalGeometry.name='Rock-conforming colony base';geometries.push(basalGeometry);return geometries;}
@@ -137,7 +141,9 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
 /** A closed, thin skeleton with independent upper tissue and lower ridges. */
 export function platingColony(x:number,y:number,z:number,r:number,seed:number){
  const sides=192,rings=36,positions:number[]=[],colors:number[]=[],uv:number[]=[],indices:number[]=[],tissue:number[]=[],underside:number[]=[];
- const top=new T.Color('#b74423'),rim=new T.Color('#e6aa75'),bottom=new T.Color('#ffe7c8');
+ // Dusty peach-tan tissue in concentric growth bands, with a broad pale
+ // growing margin (the reference's tiered Montipora plates).
+ const top=new T.Color('#c4563a'),rim=new T.Color('#f0cdb2'),bottom=new T.Color('#ffe7c8');
  // Unequal growth fans and narrow retreating bays replace a circular bowl.
  // Each fan raises a different fold; its valley continues into the older
  // tissue, so the edge reads as a grown shelf rather than a corrugated disc.
@@ -153,7 +159,8 @@ export function platingColony(x:number,y:number,z:number,r:number,seed:number){
   const a=i/sides*Math.PI*2,t=j/rings,{outline,fold}=margins[i];
   const rr=r*t*outline,scallop=r*(Math.sin(a*19+Math.sin(a*5)*.8+seed)*.012*t**5+Math.sin(a*37-seed)*.005*t**8);
   // A low spreading fan with local upturned lobes, not one continuous cup.
-  const raised=r*(.035*t*t+fold*T.MathUtils.smoothstep(t,.25,1)+.045*Math.sin(a+seed)*t+.025*Math.sin(t*11+a*3+seed)*t*t),groove=Math.sin(a*67+Math.sin(t*18)*.7)*r*(layer?.006:.003)*t;
+  const band=Math.sin(t*Math.PI*2*8.5+Math.sin(a*3+seed)*.7+Math.sin(a*7-seed)*.25);
+  const raised=r*(.035*t*t+fold*T.MathUtils.smoothstep(t,.25,1)+.045*Math.sin(a+seed)*t+.025*Math.sin(t*11+a*3+seed)*t*t+.006*band*t*(1-T.MathUtils.smoothstep(t,.9,1))),groove=Math.sin(a*67+Math.sin(t*18)*.7)*r*(layer?.006:.003)*t;
   const tissueRelief=r*.016*(.6*Math.sin(a*37+Math.sin(t*17+seed))+.4*Math.sin(a*61-t*13+seed))*Math.sin(t*43+a*5)*t*(1-T.MathUtils.smoothstep(t,.92,1));
   // Older underside grows load-bearing, uneven radial ridges. The scaffold
   // deepens toward its attachment and thins smoothly into the growing margin;
@@ -163,7 +170,7 @@ export function platingColony(x:number,y:number,z:number,r:number,seed:number){
   const ribs=(.040*rib+.015*secondary)*Math.sin(Math.PI*t)**.65;
   const thickness=r*(.010+.090*(1-t)**1.6+ribs),py=y+raised+scallop+(groove+tissueRelief)*(layer?T.MathUtils.smoothstep(t,.65,.88):1)-(layer?thickness:0);
   positions.push(x+Math.cos(a)*rr,py,z+Math.sin(a)*rr*.76);tissue.push(Math.round(255*(layer?.12:1-T.MathUtils.smoothstep(t,.955,1))));underside.push(layer?255:0);
-  const c=layer?bottom.clone().multiplyScalar(.84+.13*rib+.03*Math.sin(a*7+t*11+seed)):top.clone().lerp(rim,T.MathUtils.smoothstep(t,.969+.009*Math.sin(a*7+seed),1));c.multiplyScalar(.94+.025*Math.sin(a*37+t*61)+.015*Math.sin(a*91-t*19));colors.push(c.r,c.g,c.b);uv.push(Math.cos(a)*rr/.32,Math.sin(a)*rr*.76/.32);
+  const c=layer?bottom.clone().multiplyScalar(.84+.13*rib+.03*Math.sin(a*7+t*11+seed)):top.clone().multiplyScalar(1-.17*(.5+.5*band)*T.MathUtils.smoothstep(t,.12,.85)).lerp(rim,.9*T.MathUtils.smoothstep(t,.91+.025*Math.sin(a*7+seed),.995));c.multiplyScalar(.94+.025*Math.sin(a*37+t*61)+.015*Math.sin(a*91-t*19));colors.push(c.r,c.g,c.b);uv.push(Math.cos(a)*rr/.32,Math.sin(a)*rr*.76/.32);
   if(j<rings&&i<sides){const n=layer*(rings+1)*(sides+1)+j*(sides+1)+i;const ids=j?[n,n+1,n+sides+1,n+1,n+sides+2,n+sides+1]:[n+1,n+sides+2,n+sides+1];indices.push(...(layer?ids.map((v,k)=>k%3===1?ids[k+1]:k%3===2?ids[k-1]:v):ids));}
  }
  const offset=(rings+1)*(sides+1);for(let i=0;i<sides;i++){const n=rings*(sides+1)+i;indices.push(n,n+offset,n+1,n+1,n+offset,n+offset+1);}

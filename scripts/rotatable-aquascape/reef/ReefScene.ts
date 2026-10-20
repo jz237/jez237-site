@@ -15,7 +15,7 @@ import {surfaceColony} from './SurfaceColony.ts';
 import {coralCrust} from './CoralCrust.ts';
 import {erodedRock} from './ReefRock.ts';
 import {sandHeight,sandBank} from './ReefOptics.ts';
-import {coralSurfaceMaps} from './CoralSurface.ts';
+import {coralSurfaceMaps,finishCoralMaterial} from './CoralSurface.ts';
 import {topSurfaceSampler} from './RockSurface.ts';
 import {encrustingGarden,animatePolypMaterial} from './EncrustingPolyps.ts';
 import {buildAnemones} from './Anemones.ts';
@@ -68,7 +68,7 @@ export async function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments,ass
  const group=new T.Group();scene.add(group);const obstacles:Obstacle[]=[],notes:T.Object3D[]=[];
  const {rockMaps,coralMaps,crustMaps,plateMaps}=assets,sandTex=texture('sand'),coralTex=texture('coral');sandTex.repeat.set(7,4);
  const rockMat=finishRockMaterial(new T.MeshStandardMaterial({...rockMaps.maps,normalScale:new T.Vector2(1.1,1.1),roughness:.96,vertexColors:true}));
- const coralMat=new T.MeshStandardMaterial({...coralMaps.maps,normalScale:new T.Vector2(.9,.9),roughness:.9,vertexColors:true});
+ const coralMat=finishCoralMaterial(new T.MeshStandardMaterial({...coralMaps.maps,normalScale:new T.Vector2(.9,.9),roughness:.9,vertexColors:true}));
  const rocks:T.BufferGeometry[]=[],corals:T.BufferGeometry[]=[],massiveCorals:T.BufferGeometry[]=[],plates:T.BufferGeometry[]=[];
  const addNote=(mesh:T.Object3D,title:string,description:string)=>{mesh.userData.note={title,description};notes.push(mesh);};
  const rock=(x:number,y:number,z:number,sx:number,sy:number,sz:number,rng:()=>number=random,ground=false)=>{

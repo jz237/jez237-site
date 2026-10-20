@@ -2,7 +2,7 @@ import * as T from 'three';
 /** World-scale projections keep pores round on steep walls and undercuts. The
  * normal perturbation is projected onto the actual curved surface, so blending
  * projection axes never replaces the rock's geometric shading normal. */
-const rubbleNodules=`
+export const rubbleNodules=`
  vec3 reefHash3(vec3 p){p=fract(p*vec3(.1031,.1030,.0973));p+=dot(p,p.yxz+33.33);return fract((p.xxy+p.yxx)*p.zyx);}
  // Cellular (Worley) nodules: nearest and second-nearest centre distances, the
  // vector to the nearest centre and that nodule's random identity.
