@@ -7,6 +7,8 @@ import {createNativeGraphicsCornerBootState,advanceNativeGraphicsCornerState} fr
 import {NATIVE_SPECIAL_WATER_DATA} from './native-special-water-update.js';
 import {prepareNativeCameraBoot} from './native-camera-boot.js';
 import {NATIVE_PRESENTATION_ACTOR_WORDS} from './native-presentation-actor-pool.js';
+// Default save names for this game's riders (race-core RIDERS order).
+const NATIVE_DEFAULT_RIDER_NAMES=['M.VALE','J.REED','N.SOL','E.NORTH'];
 
 const BASE=(0x2938-0x1f94)/4,STRIDE=222,hi=a=>(a-0x7788)/4,ri=a=>(a-0x1f94)/4;
 const sourceFields={nextSourceRow:3,side:7,armed:8,power:75,lapMisses:76,totalMisses:77,missLimitReached:79};
@@ -68,9 +70,11 @@ export function createNativeRaceMemory({racers,courseIndex,players,courseRuntime
    graphicsCorners:advanceNativeGraphicsCornerState(createNativeGraphicsCornerBootState()),
    ...courseRuntime?.objectStartup?.storage,
    ...(courseRuntime?{menuWordsE658:Array(21).fill(0),deviceWords4308:Array(10).fill(0),
-    // Fresh web profile policy: YOU initials for each rider/variant. No
+    // Fresh web profile: the original default save names each base avatar
+    // "R.HAYAMI"-style (initial.SURNAME, 11 bytes, then tuning). This game's
+    // riders take the same form; variants repeat their base rider's name. No
     // cartridge save data; these14-byte entries cross u32 word boundaries.
-    saveWordsB280:(()=>{const bytes=new DataView(new ArrayBuffer(136));for(let i=0;i<8;i++){for(const [j,b]of [89,79,85].entries())bytes.setUint8(24+i*14+j,b);const tune=nativeMenuTune();for(const [j,key]of NATIVE_TUNE_KEYS.entries())bytes.setUint8(24+i*14+11+j,tune[key]);}return Array.from({length:34},(_,i)=>bytes.getUint32(i*4));})(),nameEntryWords61c4:Array(14).fill(0),resultsMenuWords6d30:Array(4).fill(0),stuntResultsMenuWords5d80:Array(4).fill(0),
+    saveWordsB280:(()=>{const bytes=new DataView(new ArrayBuffer(136));for(let i=0;i<8;i++){for(const [j,c]of [...NATIVE_DEFAULT_RIDER_NAMES[i%4]].entries())bytes.setUint8(24+i*14+j,c.charCodeAt(0));const tune=nativeMenuTune();for(const [j,key]of NATIVE_TUNE_KEYS.entries())bytes.setUint8(24+i*14+11+j,tune[key]);}return Array.from({length:34},(_,i)=>bytes.getUint32(i*4));})(),nameEntryWords61c4:Array(14).fill(0),resultsMenuWords6d30:Array(4).fill(0),stuntResultsMenuWords5d80:Array(4).fill(0),
     continuationMenuWords61e0:Array(4).fill(0),
     // Fresh web menu selection/latch, plus verified numeric return tables.
     continuationDataWords60f0:Array.from({length:20},(_,i)=>[40,10,20,2,30,2][i-13]??0)}:{}),scene:{

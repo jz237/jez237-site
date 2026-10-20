@@ -72,12 +72,12 @@ test('changed engine tuning alters actual motion after the original countdown',(
 
 test('custom records keep attribution when restarting or resetting tuning, without relabeling old rows',()=>{
  const tune={tuneB6c:1,tuneB70:8,tuneB74:11},first=finish(create({rider:3,nativeTunes:[tune]}),110000),session=captureNativeRecordSession(first),before=structuredClone(session);
- let rows=nativeResultsRecordView(first).rows;assert.equal(rows[0].tuned,true);assert.equal(rows.at(-1).tuned,true);assert.equal(rows[0].initials,'YOU');
+ let rows=nativeResultsRecordView(first).rows;assert.equal(rows[0].tuned,true);assert.equal(rows.at(-1).tuned,true);assert.equal(rows[0].initials,'E.N');
  const retry=create({rider:3,nativeTunes:[tune],nativeRecordSession:session});assert.deepEqual(traits(retry.nativeLaunch.snapshot(),0,3),[1,8,11]);
  assert.equal(retry.nativeLaunch.snapshot().scene.metadataCb32c,1);
  const standard=create({rider:3,nativeTunes:[nativeMenuTune()],nativeRecordSession:session}),final=finish(standard,100000);
  assert.equal(standard.nativeLaunch.snapshot().scene.metadataCb32c,0);assert.deepEqual(traits(standard.nativeLaunch.snapshot(),0,3),[5,5,5]);
- rows=nativeResultsRecordView(final).rows;assert.deepEqual(rows.slice(0,2).map(r=>[r.timeMs,r.rider,r.tuned,r.initials]),[[100000,3,false,'YOU'],[110000,3,true,'YOU']]);
+ rows=nativeResultsRecordView(final).rows;assert.deepEqual(rows.slice(0,2).map(r=>[r.timeMs,r.rider,r.tuned,r.initials]),[[100000,3,false,'E.N'],[110000,3,true,'E.N']]);
  const other=create({rider:0,nativeRecordSession:session});assert.deepEqual(traits(other.nativeLaunch.snapshot(),0,3),[1,8,11]);assert.deepEqual(session,before);
 });
 
