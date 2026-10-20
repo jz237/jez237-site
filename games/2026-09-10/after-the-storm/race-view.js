@@ -275,8 +275,8 @@ function selectedFreeRide(){return selectedMode==='practice'||selectedMode==='ve
 // class route (Twilight has no original Normal route). Both use Venue conditions.
 const ORIGINAL_TIME_COURSES=['greyhaven','amber','citadel','reed','port','neon','tempest','glacier'],ORIGINAL_STUNT_COURSES=['practice',...ORIGINAL_TIME_COURSES];
 function originalPhysicsAvailable(){return selectedMode==='time'&&ORIGINAL_TIME_COURSES.includes(selectedCourse)&&(selectedCourse!=='neon'||selectedDifficulty>0)||selectedMode==='stunt'&&ORIGINAL_STUNT_COURSES.includes(selectedCourse)||selectedMode==='championship'||
- // Local two-player versus, split screen or Player 2's own window; online stays modern.
- selectedMode==='versus'&&!onlineCapability&&ORIGINAL_TIME_COURSES.includes(selectedCourse)&&(selectedCourse!=='neon'||selectedDifficulty>0);}
+ // Two-player versus: split screen, Player 2's own window, or online.
+ selectedMode==='versus'&&ORIGINAL_TIME_COURSES.includes(selectedCourse)&&(selectedCourse!=='neon'||selectedDifficulty>0);}
 function selectedOriginalPhysics(){return originalPhysicsAvailable()&&saved.preferences.physics==='original';}
 function selectedNativePhysics(){
  if(selectedOriginalPhysics())return true;

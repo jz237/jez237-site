@@ -1,5 +1,16 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — Original two-player races online
+
+Online two-player races now offer Original physics too. The host already owns
+both riders and streams the same window frames, which carry native rider poses,
+telemetry and, on Marine Fortress, Drake Lake, Port Blue and Twilight City, the
+native course world. Two separate local headless browsers connected over the
+existing invite and return-code flow; Original races on Sunny Beach and Port
+Blue counted down and ran at 60 fps on the host for more than 20 s with the
+guest connected and never on hold. As in Player 2's own window, the guest
+draws its own spray rather than the original per-view effects.
+
 ## Unpublished — Original two-player races in Player 2's own window
 
 The separate-window layout (Player 2 on a second screen) now offers Original
