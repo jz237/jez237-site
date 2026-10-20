@@ -14,6 +14,8 @@ export function createQuarryTyres(api:typeof R,world:R.World){
 }
 export function quarryReplayProps<T>(props:readonly T[],count:number):readonly T[]{
  if(count===props.length)return props;
+ // Replays recorded before a venue gained loose props carry none of them.
+ if(count===0)return [];
  if(count===LEGACY_QUARRY_PROPS&&props.length===LEGACY_QUARRY_PROPS+QUARRY_TYRES.length)return props.slice(0,count);
  throw Error('This replay uses an unsupported course prop layout.');
 }
