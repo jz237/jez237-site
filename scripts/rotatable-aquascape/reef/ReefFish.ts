@@ -275,6 +275,21 @@ export class ReefFish{
   }
   return undefined;
  }
+ /** A blocked step slides along what blocks it: the part of the step pushing
+  * into each blocking proxy, schoolmate, glass pane, water surface or the sand is
+  * removed, and the rest is taken if clear. Social steering can press a fish
+  * gently into a proxy; stopping there pinned it for many seconds. */
+ private slide(f:Fish,step:T.Vector3){
+  const p=f.position,next=p.clone().add(step),r=f.radius,n=new T.Vector3();
+  const remove=(x:number,y:number,z:number)=>{n.set(x,y,z).normalize();const d=step.dot(n);if(d<0)step.addScaledVector(n,-d);};
+  for(const o of this.obstacles){const limit=o.radius+r+.01;if(next.distanceToSquared(o.center)<limit*limit)remove(p.x-o.center.x,p.y-o.center.y,p.z-o.center.z);}
+  for(const o of this.fish)if(o!==f){const limit=r+o.radius+.01;if(next.distanceToSquared(o.position)<limit*limit)remove(p.x-o.position.x,p.y-o.position.y,p.z-o.position.z);}
+  if(next.x>4.69-r)remove(-1,0,0);if(next.x<-4.69+r)remove(1,0,0);if(next.z>2.08-r)remove(0,0,-1);if(next.z<-2.08+r)remove(0,0,1);if(next.y>5.11-r)remove(0,-1,0);
+  if(next.y<Math.max(.3,sandHeight(next.x,next.z)+.035)+r+.01)remove(0,1,0);
+  if(step.lengthSq()<1e-12)return null;
+  const slid=p.clone().add(step);
+  return this.fish.some(o=>o!==f&&slid.distanceToSquared(o.position)<(r+o.radius)**2)||!this.clearSegment(p,slid,r)?null:slid;
+ }
  /** Tank walls and sand only; collision proxies are not considered. */
  private inWater(p:T.Vector3,r:number){return p.x>-4.7+r&&p.x<4.7-r&&p.z>-2.09+r&&p.z<2.09-r&&p.y>Math.max(.3,sandHeight(p.x,p.z)+.035)+r&&p.y<5.12-r;}
  /** No real reef surface within a fish's body and fins, at this position with the
@@ -528,7 +543,8 @@ export class ReefFish{
    }
    // A goal close by and off to the side: slow down and turn toward it, rather
    // than circling it at cruising speed and the maximum turn rate.
-   if(!target&&!f.rival&&!holding&&!f.backOut&&f.species!=='clown'&&distance<1.2&&goalBearing>.5)speed*=Math.max(.12,Math.cos(goalBearing));
+   // (A shoaling fish steers by its school, not its waypoint; it is not braked.)
+   if(!target&&!f.rival&&!holding&&!f.backOut&&f.species!=='clown'&&profile.schooling!=='shoal'&&distance<1.2&&goalBearing>.5)speed*=Math.max(.12,Math.cos(goalBearing));
    // A plankton strike is a short burst that brakes as the mouth reaches the particle.
    if(f.snap&&!target)speed=size*profile.burstBL*.7*f.individuality*Math.max(.2,Math.min(1,.3+(distance-size*.5)/(size*.6)));
    if(f.species==='clown'&&!target){
@@ -639,8 +655,14 @@ export class ReefFish{
    f.velocity.lerp(forward,1-Math.exp(-dt*(target?7:f.species==='clown'?7:holding?6:f.coasting&&distance>1.2?2:4)));
    const next=f.position.clone().addScaledVector(f.velocity,dt);
    const collision=this.fish.some(other=>other!==f&&next.distanceToSquared(other.position)<(f.radius+other.radius)**2);
-   if(!collision&&(this.clearSegment(f.position,next,f.radius)||this.inCorridor(f,next))){f.position.copy(next);f.blockedTime=Math.max(0,f.blockedTime-dt);}else{f.velocity.multiplyScalar(.65);f.blockedTime+=dt;
-    if(f.blockedTime>.65&&now>f.recoverUntil){f.recoverUntil=now+3;this.planSwim(f,i,true);f.blockedTime=0;}
+   if(!collision&&(this.clearSegment(f.position,next,f.radius)||this.inCorridor(f,next))){f.position.copy(next);f.blockedTime=Math.max(0,f.blockedTime-dt);}
+   else{
+    // Glide along whatever blocks the step rather than stopping dead against it.
+    const slid=f.corridor?null:this.slide(f,f.velocity.clone().multiplyScalar(dt));
+    if(slid){f.velocity.copy(slid).sub(f.position).divideScalar(dt);f.position.copy(slid);f.blockedTime=Math.max(0,f.blockedTime-dt*.5);}
+    else{f.velocity.multiplyScalar(.65);f.blockedTime+=dt;
+     if(f.blockedTime>.65&&now>f.recoverUntil){f.recoverUntil=now+3;this.planSwim(f,i,true);f.blockedTime=0;}
+    }
    }
    const swimming=f.velocity.length()/size,thrust=target||chasing?1:displaying?.85:holding?.3:f.coasting?.22:.65;
    f.tailRest=T.MathUtils.damp(f.tailRest,thrust,3.5,dt);
