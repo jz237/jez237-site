@@ -27,3 +27,10 @@ test('a misfire cut reaches the wheels through the drivetrain',async()=>{
   try{body.setTranslation({x:0,y:1.2,z:0},true);for(let i=0;i<90;i++){drive.step(spec,state,1/60);world.step();}state.input.throttle=1;for(let i=0;i<120;i++){drive.step(spec,state,1/60);world.step();}return state.speed;}finally{world.free();}};
  const full=run(1),cut=run(MISFIRE_POWER);assert.ok(cut<full*.6,`${cut} vs ${full}`);
 });
+test('a failing engine smokes in proportion to its damage, offline only',async()=>{
+ const {VehicleThermalState,ENGINE_SMOKE}=await import('../src/vehicle-thermal-state');
+ const smoke=(engine?:number)=>{const s=new VehicleThermalState(90,.5);for(let i=0;i<600;i++)s.advance(90,1/60,0,undefined,'front',true,engine);return s.smoke;};
+ assert.equal(smoke(undefined),0,'legacy/online callers see no change');assert.equal(smoke(ENGINE_SMOKE.onset),0);
+ assert.ok(smoke(.7)>.15&&smoke(1)>smoke(.7)&&smoke(1)<=ENGINE_SMOKE.max+1e-9);
+ const wreck=new VehicleThermalState(0,.5);for(let i=0;i<600;i++)wreck.advance(0,1/60,0,undefined,'front',true,1);assert.equal(wreck.smoke,0,'a dead engine stops smoking from strain');
+});

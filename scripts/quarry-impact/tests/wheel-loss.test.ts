@@ -8,7 +8,7 @@ import {createVehicleDrive} from '../src/drivetrain/chassis';
 import {wheelResponse,wheelTearsOff,WHEEL_TEAR} from '../src/wheel-physics';
 import {loadCarWithoutImages} from '../tools/car-asset-audit';
 import {loadCars} from '../src/assets';
-import {Vehicle,WIND_RIP,PART_DRAG} from '../src/vehicle';
+import {Vehicle,WIND_RIP,PART_DRAG,HARD_LANDING} from '../src/vehicle';
 import {ReplayRecorder,replayFile,readReplayFile,type VisualEvent} from '../src/replay-data';
 import {captureReplayFrame} from '../src/replay-scene';
 import {stockSetup} from '../src/garage';
@@ -104,4 +104,15 @@ test('a bumper dragging on the ground slows the car and pulls it toward that sid
    return{speed:car.speed,x:car.current.x};}finally{car.dispose();world.free();}};
  const clean=await run(false),dragging=await run(true);console.log(JSON.stringify({clean,dragging}));
  assert.ok(dragging.speed<clean.speed-1,'dragging costs speed');
+});
+test('a hard landing bottoms out a corner and hurts; a small drop does not',async()=>{
+ await ensureCars();assert.ok(HARD_LANDING.speed>0);
+ const drop=async(height:number,extended=true)=>{const scene=new T.Scene(),world=new R.World({x:0,y:-9.81,z:0});world.timestep=1/60;world.createCollider(R.ColliderDesc.cuboid(80,.5,80).setTranslation(0,-.5,0));
+  const fx={emit(){},mark(){},detach(m:T.Mesh){m.visible=false;}} as never,car=new Vehicle(0,'sedan',stockSetup('sedan').paint,scene,world,fx,stockSetup('sedan'),undefined,'angular-v1');
+  try{car.extendedDamage=extended;car.place(0,0,0);let t=0;const step=()=>{car.preStep(1/60);world.step();car.postStep(1/60,t);t+=1/60;};
+   for(let i=0;i<90;i++)step();car.body.setTranslation({x:0,y:car.current.y+height,z:0},true);car.body.setLinvel({x:0,y:0,z:0},true);
+   for(let i=0;i<180;i++)step();return{health:car.health,wheels:Math.max(...car.wreckParts.wheelDamage)};}finally{car.dispose();world.free();}};
+ const small=await drop(1),big=await drop(7),off=await drop(7,false);console.log(JSON.stringify({small,big,off}));
+ assert.ok(small.health===100,'a 1 m drop is harmless');assert.ok(big.health<100&&big.wheels>small.wheels,'a 7 m drop hurts the car and a wheel');
+ assert.ok(off.health===100,'online/legacy cars are unchanged');
 });

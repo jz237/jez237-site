@@ -7,7 +7,7 @@ import {loadCarWithoutImages} from '../tools/car-asset-audit';
 import {loadCars} from '../src/assets';
 import {Vehicle} from '../src/vehicle';
 import {CAR_KINDS,DEFINITIONS} from '../src/rules';
-import {attachCarLights} from '../src/car-lights';
+import {attachCarLights,LAMP_BREAK} from '../src/car-lights';
 import {LIGHTING_PRESETS} from '../src/lighting-presets';
 await R.init();
 const loader=GLTFLoader.prototype.loadAsync;
@@ -30,4 +30,21 @@ test('every car finds front headlamp and rear tail lamp meshes by material and p
 });
 test('dusk is a darker, warmer mood than midday',()=>{
  const d=LIGHTING_PRESETS.dusk,m=LIGHTING_PRESETS.midday;assert.ok(d.sun<m.sun&&d.ambient<m.ambient&&d.background<m.background);assert.equal(d.overcastSky,false);
+});
+test('a smashed or knocked-off lamp goes dark while the others stay lit',()=>{
+ const world=new R.World({x:0,y:0,z:0}),scene=new T.Scene();
+ try{
+  for(const kind of ['sedan','hollins'] as const){
+   const car=new Vehicle(0,kind,DEFINITIONS[kind].color,scene,world,fx),lights=attachCarLights(car.root,DEFINITIONS[kind].halfLength);
+   const heads:T.Mesh[]=[];car.root.traverse(o=>{if(o instanceof T.Mesh&&!Array.isArray(o.material)&&(o.material as T.MeshStandardMaterial).emissiveIntensity===2.4)heads.push(o);});
+   lights.set(true);heads.length=0;car.root.traverse(o=>{if(o instanceof T.Mesh&&!Array.isArray(o.material)&&(o.material as T.MeshStandardMaterial).emissiveIntensity===2.4)heads.push(o);});
+   assert.ok(heads.length===lights.head&&lights.working===lights.head,kind+' all headlamps lit');
+   heads[0].userData.damage=LAMP_BREAK+1;lights.set(true);
+   assert.ok((heads[0].material as T.MeshStandardMaterial).emissiveIntensity===0,kind+' the dented lamp is dark');
+   assert.ok(heads.slice(1).every(m=>(m.material as T.MeshStandardMaterial).emissiveIntensity===2.4),kind+' the rest stay lit');
+   assert.ok(lights.working===lights.head-1);
+   for(const m of heads)m.visible=false;lights.set(true);assert.ok(lights.working===0,kind+' all knocked off');
+   lights.dispose();car.dispose();
+  }
+ }finally{world.free();}
 });

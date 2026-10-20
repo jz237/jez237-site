@@ -1,5 +1,7 @@
 import {unitNoise} from './vehicle-fire-profile';
 export const FIRE_CHANCE=.24,EXPLOSION_CHANCE=.12;
+/** Engine-bay smoke from engine damage: none below onset, rising to max. */
+export const ENGINE_SMOKE={onset:.4,gain:.75,max:.42} as const;
 export type DamageZones={front:number;rear:number;left:number;right:number;roof:number};
 const noDamage:DamageZones={front:0,rear:0,left:0,right:0,roof:0};
 /** One ignition assessment per severe engine/fuel damage episode. */
@@ -9,7 +11,8 @@ export class VehicleThermalState {
   private episode=0;private eligible=false;private assessed=false;private explosive=false;
   private delay=5;private burstDelay=18;private fuelTime=40;
   constructor(health=100,private seed=Math.random()){this.health=health;}
-  advance(health:number,dt:number,_impactDamage=Math.max(0,this.health-health),zones:DamageZones=noDamage,engineZone:'front'|'rear'='front',waterCooled=true){
+  /** engineDamage (offline cars only) adds engine-bay smoke as a failing engine strains. */
+  advance(health:number,dt:number,_impactDamage=Math.max(0,this.health-health),zones:DamageZones=noDamage,engineZone:'front'|'rear'='front',waterCooled=true,engineDamage?:number){
     if(!(dt>0)||!Number.isFinite(dt))return false;
     health=Math.max(0,Math.min(100,Number.isFinite(health)?health:this.health));
     if(health>this.health+1)this.reset(health);
@@ -24,7 +27,8 @@ export class VehicleThermalState {
     if(burst){this.exploded=true;this.burst=1;}else this.burst=Math.max(0,this.burst-dt*1.65);
     const coolant=waterCooled&&zones[engineZone]>=12&&health<60?Math.min(.32,(60-health)/120):0,sootTarget=fuel>0?this.heat:0;
     this.soot+=(sootTarget-this.soot)*(1-Math.exp(-dt*.6));
-    const smokeTarget=Math.max(coolant,this.soot*(.65+n(3.18)*.35));this.smoke+=(smokeTarget-this.smoke)*(1-Math.exp(-dt*.85));
+    const strain=engineDamage!==undefined&&Number.isFinite(engineDamage)&&health>0?Math.min(ENGINE_SMOKE.max,Math.max(0,engineDamage-ENGINE_SMOKE.onset)*ENGINE_SMOKE.gain):0;
+    const smokeTarget=Math.max(coolant,strain,this.soot*(.65+n(3.18)*.35));this.smoke+=(smokeTarget-this.smoke)*(1-Math.exp(-dt*.85));
     this.health=health;this.age+=dt;return burst;
   }
   reset(health=100){this.health=health;this.heat=this.smoke=this.soot=this.burst=this.age=this.criticalTime=this.burnTime=this.ignitionTime=0;this.exploded=this.burning=this.assessed=this.eligible=this.explosive=false;this.episode++;}

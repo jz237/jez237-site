@@ -1,3 +1,4 @@
+import {restoreSmashedLampsBytes} from './smashed-lamps-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readPartDragPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restorePartDragBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreSmashedLampsBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readPartDragPrevious(file);
 }
 export function verifyPartDragRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'0c51c0411ca6adf1025e24c1f18584e8dacb613d');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreSmashedLampsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restorePartDragBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the PartDrag release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreSmashedLampsBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the PartDrag release');
  assert.equal(manifest.previousFixtureCount,5012);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,5012);
 }

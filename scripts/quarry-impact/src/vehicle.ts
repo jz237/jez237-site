@@ -45,6 +45,8 @@ import {steeringLimit,brakeFactor,overheat} from './damage-handling';
 export const WIND_RIP={loose:.25,speed:16} as const;
 /** Deceleration (m/s²) from a part dragging along the ground at full scrape, applied where it drags. */
 export const PART_DRAG=1.2;
+/** A wheel touching down faster than speed (m/s, vertical) takes a hit from below: (fall - speed) * gain. */
+export const HARD_LANDING={speed:7,gain:2.2,gap:.5} as const;
 import {VehicleSurface} from './vehicle-surface';
 import { normalizeSetup, setupPhysics, stockSetup, type Setup } from './garage';
 export type VehicleGround = {height:(x:number,z:number)=>number;surface:(x:number,z:number)=>DrivingSurface};
@@ -128,6 +130,7 @@ export class Vehicle {
   private windLoad=new Map<string,number>();
   private readonly tyreBurst=[false,false,false,false];
   private dragLoad=0;private readonly dragPoint=new T.Vector3();
+  private lastLanding=-10;private readonly wasGrounded=[true,true,true,true];
   /** Live counts for diagnostics. */
   rips=0;backfires=0;
   damageRight = 0;
@@ -243,7 +246,7 @@ export class Vehicle {
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
-    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.dragLoad=0;this.steerLimit=1;this.brakeBias.fill(1);
+    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.dragLoad=0;this.lastLanding=-10;this.wasGrounded.fill(true);this.steerLimit=1;this.brakeBias.fill(1);
     if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
@@ -334,12 +337,20 @@ export class Vehicle {
     this.rollTime = up.y < 0.2 ? this.rollTime + dt : 0;
     this.root.position.copy(this.current);
     this.root.quaternion.copy(this.currentQ);
+    const fall=-this.velocity.y;let landing=-1;
     for(let i=0;i<4;i++){
       const point=this.controller.wheelContactPoint(i);
+      this.wasGrounded[i]=this.groundedWheels[i];
       this.groundedWheels[i]=this.controller.wheelIsInContact(i);
+      if(this.extendedDamage&&!this.wasGrounded[i]&&this.groundedWheels[i]&&point&&fall>HARD_LANDING.speed&&landing<0)landing=i;
       this.wetWheels[i]=!!point&&this.groundedWheels[i]&&this.waters.some(w=>puddleDepth(w,point.x,point.y,point.z)>0);
     }
     this.surfaceFinish.advance(dt,this.speed,this.surface!=='asphalt',this.wetWheels,this.groundedWheels);
+    if(landing>=0&&time-this.lastLanding>HARD_LANDING.gap&&this.health>0){
+      // A heavy landing bottoms out that corner: the suspension, wheel and underside take the blow.
+      this.lastLanding=time;const p=this.controller.wheelContactPoint(landing)!,up=new T.Vector3(0,1,0).applyQuaternion(this.currentQ);
+      this.hit(new T.Vector3(p.x,p.y,p.z).addScaledVector(up,.3),up,(fall-HARD_LANDING.speed)*HARD_LANDING.gain,time);
+    }
     if (time - this.lastFx > 0.06) {
       this.lastFx = time;
       this.scraping=0;this.dragLoad=0;

@@ -3,6 +3,8 @@ import * as T from 'three';
  * under braking) and a soft additive pool of light sits on the road ahead. Lamp meshes are
  * found by their material names (Headlight / Lens; Brakelight / Tail Lens) and their position
  * along the car, so every model works without per-car tables. Off by default. */
+/** A lamp knocked off, or dented past this much damage, is smashed and stays dark. */
+export const LAMP_BREAK=10;
 const HEAD=/headlight|(^|\s)lens$/i,TAIL=/brakelight|tail lens/i,NOT_HEAD=/tail|amber|reverse|indicator|signal|brake/i;
 let poolTexture:T.Texture|null=null;
 function lightPool(){
@@ -12,7 +14,7 @@ function lightPool(){
  ctx.translate(64,26);ctx.scale(1,3.4);const g=ctx.createRadialGradient(0,0,2,0,0,60);g.addColorStop(0,'rgba(255,238,200,0.95)');g.addColorStop(.4,'rgba(255,228,175,0.42)');g.addColorStop(.75,'rgba(255,222,165,0.12)');g.addColorStop(1,'rgba(255,220,160,0)');
  ctx.fillStyle=g;ctx.fillRect(-64,-8,128,72);poolTexture=new T.CanvasTexture(c);poolTexture.colorSpace=T.SRGBColorSpace;return poolTexture;
 }
-export type CarLights={readonly head:number;readonly tail:number;set(on:boolean,braking?:boolean):void;dispose():void};
+export type CarLights={readonly head:number;readonly tail:number;readonly working:number;set(on:boolean,braking?:boolean):void;dispose():void};
 export function attachCarLights(root:T.Object3D,halfLength:number):CarLights{
  root.updateMatrixWorld(true);
  const inverse=root.matrixWorld.clone().invert(),centre=new T.Vector3(),box=new T.Box3();
@@ -30,13 +32,17 @@ export function attachCarLights(root:T.Object3D,halfLength:number):CarLights{
  const pool=lightPool(),poolMaterial=new T.MeshBasicMaterial({map:pool,color:0xffffff,transparent:true,opacity:0,blending:T.AdditiveBlending,depthWrite:false,toneMapped:false}),poolGeometry=new T.PlaneGeometry(4.6,11);
  const poolMesh=new T.Mesh(poolGeometry,poolMaterial);poolMesh.name='car_light_pool';poolMesh.rotation.x=-Math.PI/2;poolMesh.position.set(0,.06,halfLength+5.2);poolMesh.renderOrder=2;poolMesh.visible=false;poolMesh.frustumCulled=true;
  if(pool&&heads.length)root.add(poolMesh);
- let lit=false,brake=false;
- return{head:heads.length,tail:tails.length,
+ let lit=false,brake=false,broken=-1;
+ const smashed=(m:T.Mesh)=>!m.visible||(m.userData.damage??0)>LAMP_BREAK;
+ return{head:heads.length,tail:tails.length,get working(){return heads.filter(m=>!smashed(m)).length;},
   set(on,braking=false){
-   if(on===lit&&braking===brake)return;
-   if(on!==lit){for(const m of headMats)m.emissiveIntensity=on?2.4:0;poolMesh.visible=on&&!!pool;poolMaterial.opacity=on?.38:0;}
-   for(const m of tailMats)m.emissiveIntensity=on?(braking?3.2:1.1):(braking?.8:0);
-   lit=on;brake=braking;
+   let mask=0;heads.forEach((m,i)=>{if(smashed(m))mask|=1<<i;});tails.forEach((m,i)=>{if(smashed(m))mask|=1<<(i+16);});
+   if(on===lit&&braking===brake&&mask===broken)return;
+   const intact=heads.length?heads.filter((_,i)=>!(mask&1<<i)).length/heads.length:0;
+   headMats.forEach((m,i)=>{m.emissiveIntensity=on&&!(mask&1<<i)?2.4:0;});
+   poolMesh.visible=on&&!!pool&&intact>0;poolMaterial.opacity=on?.38*intact:0;
+   tailMats.forEach((m,i)=>{m.emissiveIntensity=mask&1<<(i+16)?0:on?(braking?3.2:1.1):(braking?.8:0);});
+   lit=on;brake=braking;broken=mask;
   },
   dispose(){poolMesh.removeFromParent();poolGeometry.dispose();poolMaterial.dispose();for(const m of owned)m.dispose();}};
 }
