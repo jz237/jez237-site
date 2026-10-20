@@ -76,9 +76,12 @@ export function buildAnemones(hosts:T.Vector3[],clock:{value:number},random:Rand
    const sector=angle+k*1.73,edgeDrape=T.MathUtils.smoothstep(radial,.38,1);
    const region=Math.sin(sector*3+.65)+.35*Math.cos(sector*5-1.2);
    const layer=.5+.5*Math.sin(radial*7.5+.4*Math.sin(sector)+region*.65);
+   // A rounded dome as in the reference: outer strands lie lower and inner ones
+   // rise, so the canopy forms a hemisphere rather than a brush. Their reach
+   // stays within the glass at every phase of the current.
    const spread=(.12+.25*radial+.04*edgeDrape)*scale*(1+.16*Math.sin(sector*2));
-   const sweep=(.065+.06*layer)*scale;
-   const height=length*(.94-.39*radial)*(.96+.13*Math.cos(sector*2+.5))+.035*scale*layer;
+   const sweep=(.03+.03*layer)*scale;
+   const height=length*(.94-.58*radial)*(.96+.13*Math.cos(sector*2+.5))+.035*scale*layer;
    const curl=scale*(.045*Math.sin(phase)+.055*region);
    const reach=new T.Vector3(Math.cos(angle)*spread+sweep-Math.sin(angle)*curl,height,Math.sin(angle)*spread+Math.cos(angle)*curl+.045*scale);
    const end=root.clone().add(reach);

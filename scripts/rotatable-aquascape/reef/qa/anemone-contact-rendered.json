@@ -2,37 +2,37 @@
   "samples": [
     {
       "seconds": 0.2,
-      "time": 1.252700000035764,
-      "brushing": 0,
-      "maxBrush": 0,
+      "time": 1.277300000023843,
+      "brushing": 6,
+      "maxBrush": 0.11783237588403934,
       "captured": 1,
       "swallowed": 0,
       "carried": 1,
       "fold": [
-        0.0020736000000000036,
+        0.003067831320652844,
         0,
         0
       ]
     },
     {
       "seconds": 1,
-      "time": 2.3694000000357653,
+      "time": 2.3774000000238433,
       "brushing": 0,
-      "maxBrush": 0,
+      "maxBrush": 0.010767279460582061,
       "captured": 1,
       "swallowed": 0,
       "carried": 1,
       "fold": [
-        0.10200388076894738,
+        0.10400704615157781,
         0,
         0
       ]
     },
     {
       "seconds": 3,
-      "time": 4.68630000003577,
+      "time": 4.694200000023845,
       "brushing": 0,
-      "maxBrush": 0,
+      "maxBrush": 0.00295471580605647,
       "captured": 1,
       "swallowed": 0,
       "carried": 1,
@@ -44,9 +44,9 @@
     },
     {
       "seconds": 5,
-      "time": 6.986500000035795,
+      "time": 6.9944000000238695,
       "brushing": 0,
-      "maxBrush": 0,
+      "maxBrush": 5.90676413346518e-8,
       "captured": 1,
       "swallowed": 0,
       "carried": 1,
@@ -58,9 +58,9 @@
     },
     {
       "seconds": 8.5,
-      "time": 10.803400000035772,
-      "brushing": 0,
-      "maxBrush": 0.0008438937684924581,
+      "time": 10.81140000002384,
+      "brushing": 8,
+      "maxBrush": 0.1024640506813086,
       "captured": 1,
       "swallowed": 1,
       "carried": 0,
@@ -72,23 +72,23 @@
     },
     {
       "seconds": 15,
-      "time": 17.604000000035693,
-      "brushing": 4,
-      "maxBrush": 0.0760416174917416,
+      "time": 17.578600000023727,
+      "brushing": 0,
+      "maxBrush": 0.00021678709128288373,
       "captured": 1,
       "swallowed": 1,
       "carried": 0,
       "fold": [
-        0.11066834875615271,
+        0.11102432807693186,
         0,
         0
       ]
     },
     {
       "seconds": 25,
-      "time": 27.93810000003542,
-      "brushing": 2,
-      "maxBrush": 0.03164036420997364,
+      "time": 27.8628000000234,
+      "brushing": 0,
+      "maxBrush": 0.0001587608598920605,
       "captured": 1,
       "swallowed": 1,
       "carried": 0,
