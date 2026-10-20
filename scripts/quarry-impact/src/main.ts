@@ -1337,6 +1337,14 @@ function ai(car: Vehicle, dt: number): Input {
   });
   return drivers.update(car,cars,practiceTraffic?'race':mode,dt,probe,raceRoute(car.id));
 }
+/** An exploding car shoves everything near it: cars and loose props within SHOCKWAVE.radius are thrown
+ * outward and up, harder the closer they are (offline only; replays show it through recorded poses). */
+const SHOCKWAVE={radius:9,speed:7,lift:3.5};
+function shockwave(origin:T.Vector3,source:number){
+  const push=(body:R.RigidBody,mass:number)=>{const p=body.translation(),dx=p.x-origin.x,dz=p.z-origin.z,d=Math.hypot(dx,dz,p.y-origin.y);if(d>=SHOCKWAVE.radius)return;const k=(1-d/SHOCKWAVE.radius)*mass,len=Math.hypot(dx,dz)||1;body.applyImpulse({x:dx/len*SHOCKWAVE.speed*k,y:SHOCKWAVE.lift*k,z:dz/len*SHOCKWAVE.speed*k},true);body.applyTorqueImpulse({x:(Math.random()-.5)*k*1.5,y:(Math.random()-.5)*k,z:(Math.random()-.5)*k*1.5},true);};
+  for(const c of cars)if(c.id!==source&&c.extendedDamage)push(c.body,c.specification.mass);
+  for(const prop of activeVenue.props)if(prop.body.isEnabled())push(prop.body,prop.body.mass());
+}
 /** Wheels lost and panels gone, to credit whoever tears them off. */
 function stripCount(c:Vehicle){let wheels=0;for(const v of c.wreckParts.wheelLost)wheels+=v;return{wheels,parts:c.panels.reduce((n,m)=>n+(m.visible?0:1),0)};}
 function creditStrip(attacker:Vehicle,victim:Vehicle,before:{wheels:number;parts:number}){const after=stripCount(victim),wheels=after.wheels-before.wheels,parts=after.parts-before.parts;if(wheels<=0&&parts<=0)return;eventAwards.stripped(attacker.id,victim.id,wheels,parts);if(attacker.id===0&&!demo&&!online?.active&&wheels>0)toast(`WHEEL OFF · #${victim.id+1} ${DEFINITIONS[victim.kind].name}`,1.4);if(wheels>0&&mode==='derby'&&!online?.active)derbyFeed.note(attacker.id,displayedDriver(attacker),'wheel',elapsed);}
@@ -1789,7 +1797,7 @@ function frame(now: number) {
   const effectsActive=['playing','countdown','wrecked'].includes(state)||(demo&&state==='result');
   if(!studio)vehicleFire?.update(cars,effectsActive?dt:0,camera);
   if(!studio)puddleSplashes?.update(cars,activeVenue.puddles,effectsActive?dt:0,state==='playing');
-  if(!studio&&state==='playing'){for(const burst of vehicleFire?.bursts??[])recorder?.burst({time:elapsed,position:burst.position.toArray()});captureReplay();}
+  if(!studio&&state==='playing'){for(const burst of vehicleFire?.bursts??[]){recorder?.burst({time:elapsed,position:burst.position.toArray()});if(!online?.active)shockwave(burst.position,burst.id);}captureReplay();}
   if(studio?.playing&&!studio.seeking){sound.update(cars,camera,dt,false,{id:cars[studio.follow]?.id??0,view:studio.view==='hood'?'hood':studio.view==='chase'?'chase':'orbit'},(from,to)=>cameraObstruction(physics,from,to,undefined,true));sound.thermal(replayThermal,[]);}
   if(effectsActive){sound.update(cars,camera,dt,state==='wrecked',{id:demo||scoreSpectating()?director.followed:cars[0]?.id??0,view:demo||scoreSpectating()?director.activeView:drivingCamera==='dashboard'?'hood':drivingCamera},(from,to)=>cameraObstruction(physics,from,to,undefined,true));if(vehicleFire)sound.thermal(vehicleFire.audio,vehicleFire.bursts);}
   if(activeVenue===quarryVenue)quarry.update(camera);
@@ -2171,6 +2179,8 @@ async function boot() {
         forward: c.forward.toArray(),
         health: c.health,
       })),
+    /** QA: the shockwave of an explosion at a car's position. */
+    shockwave:(id:number)=>{const c=cars[id];if(!c)return false;shockwave(c.current.clone(),id);return true;},
     /** QA: a hit at a car-local point travelling along a car-local direction. */
     hitCar:(id:number,local:number[],dir:number[],damage:number)=>{const c=cars[id];if(!c)return false;c.root.updateMatrixWorld(true);const p=new T.Vector3().fromArray(local).applyMatrix4(c.root.matrixWorld),d=new T.Vector3().fromArray(dir).applyQuaternion(c.root.quaternion).normalize();c.hit(p,d,damage,elapsed);return true;},
     velocity: (id: number, x: number, y: number, z: number) =>
