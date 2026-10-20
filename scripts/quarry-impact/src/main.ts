@@ -172,7 +172,7 @@ import {TEAMS,teamOf,teamRaceActive,teamScores,teamLine,teamVerdict} from './tea
 import {BangerAggression,bangerRaceActive} from './banger-race';
 import {damageDiagramSvg} from './damage-diagram';
 import {wreckReport} from './wreck-report';
-import {createArenaProps,ARENA_PROP_SPOTS,arenaPropCount} from './arena-props';
+import {createArenaProps,ARENA_PROP_SPOTS,arenaPropCount,courseCornerSpots} from './arena-props';
 import {isRearEngineKind} from './classic-vehicle-specs';
 import {tyreFailure as tyreFailureLevel} from './tyre-condition';
 import {dailyKey,dailyStreak,dailyWeek,isDailyChallenge,DAILY_PREFIX} from './daily-record';
@@ -491,8 +491,10 @@ function openStudio(photo=false,document?:ReplayDocument,savedName?:string):bool
   if(!photo&&(!doc||doc.frames.length<2)){if(document)throw Error('This replay needs at least two frames.');return false;}
   // Imported identity and layout must be accepted before recording or scene changes.
   const targetId=doc?replayCourseId(doc.meta):activeVenue.course.id;
-  if(doc){if(resolveArenaId(doc.meta.arenaId)==='quarry-arena-v1'&&targetId==='quarry-v1')quarryReplayProps(quarry.props,doc.meta.props);else if(doc.meta.props!==0&&doc.meta.props!==arenaPropCount(resolveArenaId(doc.meta.arenaId)))throw Error('This replay uses an unsupported course layout.');}
+  if(doc&&resolveArenaId(doc.meta.arenaId)==='quarry-arena-v1'&&targetId==='quarry-v1')quarryReplayProps(quarry.props,doc.meta.props);
   const targetVenue=doc?ensureVenue(targetId,resolveArenaId(doc.meta.arenaId)):activeVenue;
+  // Loose props: replays carry the venue's full set, or none if recorded before the venue had them.
+  if(doc&&!(resolveArenaId(doc.meta.arenaId)==='quarry-arena-v1'&&targetId==='quarry-v1')&&doc.meta.props!==0&&doc.meta.props!==targetVenue.props.length)throw Error('This replay uses an unsupported course layout.');
   captureReplay(true);if(!photo&&!document&&recorder)doc=recorder.document();
   const returnState=state,returnMode=mode,returnVenue=activeVenue,oldQuarryMode=quarryMode,oldCars=cars,oldNodes=Array.from(ui.childNodes);
   const savedCamera={p:camera.position.clone(),q:camera.quaternion.clone(),fov:camera.fov,exposure:renderer.toneMappingExposure,target:orbit.target.clone(),enabled:orbit.enabled,pan:orbit.enablePan,max:orbit.maxDistance,min:orbit.minDistance};
@@ -686,7 +688,8 @@ function ensureVenue(id:CourseId,arenaId:ArenaId='quarry-arena-v1'):VenueContext
   try{
     const course=getRaceCourse(id);course.buildPhysics!(R,world);artwork=id==='millbrook-canal-v1'||id==='granite-pass-v1'?createCanalPassWorld(id):id==='kingswell-park-v1'||id==='copperfield-dunes-v1'?createParkDunesWorld(id):id==='holloway-stadium-v1'||id==='bramblebrook-reservoir-v1'?createStadiumReservoirWorld(id):id==='saltmarsh-port-v1'||id==='dunmere-farm-v1'?createPortFarmWorld(id):id==='seabrook-coast-v1'||id==='hazelwood-forest-v1'?createCoastForestWorld(id):id==='ravensmoor-rally-v1'?createRavensmoorWorld():id==='thornby-hill-v1'?createThornbyWorld():id==='ashcombe-lanes-v1'?createAshcombeWorld():id==='westmere-club-v1'||id==='harrowstone-ridge-v1'?createRidgeClubWorld(id):id==='willowbank-heath-v1'?createWillowbankWorld():id==='sable-canyon-v1'?createSableWorld(()=>{if(activeVenue.course.id==='sable-canyon-v1')refreshVenueLighting();}):id==='elmsworth-speedway-v1'?createElmsworthWorld():id==='rookvale-yard-v1'?createRookvaleWorld():id==='fenwick-oval-v1'||id==='fenwick-eight-v1'?createFenwickWorld(id):id==='alderwick-stunt-v1'?createStuntWorld():id==='millhaven-rally-v1'?createMillhavenWorld():id==='merefield-airfield-v1'?createMerefieldWorld():id==='dockside-loop-v1'||id==='fairground-scramble-v1'||id==='alderwick-cross-v1'||id==='wrenford-mud-v1'?createCountyWorld(id):id==='pinecrest-ridge-v1'?createPinecrestWorld():id==='ashford-autodrome-v1'?createAshfordWorld():id==='redbank-jump-v1'?createRedbankWorld():id==='bracken-rallycross-v1'?createBrackenWorld():id==='cinderbank-oval-v1'?createCinderbankWorld():createIronfieldWorld();
     const checkpoint=quarry.checkpoint.clone(true);checkpoint.name=id+'_checkpoint';checkpoint.visible=false;artwork.root.add(checkpoint);artwork.root.visible=false;scene.add(artwork.root);
-    const venue:VenueContext={course,physics:world,root:artwork.root,checkpoint,props:[],puddles:[],update:artwork.update,dispose:()=>{checkpoint.removeFromParent();artwork!.dispose();world.free();}};
+    const corners=courseCornerSpots(R,world,course),loose=corners.length?createArenaProps(R,world,artwork.root,corners,(x,z)=>course.height(x,z)):undefined,art=artwork;
+    const venue:VenueContext={course,physics:world,root:artwork.root,checkpoint,props:loose?.props??[],puddles:[],update:loose?time=>{art.update?.(time);loose.update();}:artwork.update,resetProps:loose?.reset,dispose:()=>{loose?.dispose();checkpoint.removeFromParent();artwork!.dispose();world.free();}};
     raceVenues[id]=venue;return venue;
   }catch(error){artwork?.dispose();world.free();throw error;}
 }

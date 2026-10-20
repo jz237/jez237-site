@@ -26,3 +26,16 @@ test('loose arena props stand still until struck, fly when hit, and reset for th
 test('replays recorded before an arena had loose props still load with none',()=>{
  assert.deepEqual(quarryReplayProps([1,2,3],0),[]);assert.deepEqual(quarryReplayProps([1,2,3],3),[1,2,3]);assert.throws(()=>quarryReplayProps([1,2,3],2));
 });
+test('circuit corner props sit in real run-off: off the road, inside the barriers, on the ground',async()=>{
+ const {courseCornerSpots,RUNOFF}=await import('../src/arena-props');const {getRaceCourse}=await import('../src/race-course');const {COURSE_NAMES}=await import('../src/course-id');
+ let total=0,courses=0;
+ for(const id of Object.keys(COURSE_NAMES)){
+  if(id==='quarry-v1')continue;const course=getRaceCourse(id as never);if(!course.buildPhysics)continue;
+  const world=new R.World({x:0,y:-9.81,z:0});
+  try{course.buildPhysics(R,world);const spots=courseCornerSpots(R,world,course);total+=spots.length;if(spots.length)courses++;
+   for(const s of spots){const d=course.distance(s.x,s.z);assert.ok(d>=course.halfWidth+RUNOFF-1.6-.01,`${id} spot clear of the road (${d.toFixed(1)} m)`);assert.ok(!course.outside(s.x,course.height(s.x,s.z),s.z),id+' inside the venue');}
+   assert.ok(spots.length<=6);
+  }finally{world.free();}
+ }
+ console.log('corner stacks',total,'on',courses,'circuits');assert.ok(courses>=5,'several circuits have room for corner props');
+});
