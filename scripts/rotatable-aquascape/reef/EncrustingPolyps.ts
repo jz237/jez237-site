@@ -1,5 +1,6 @@
 import {identifyGeometry,polypNotes} from './ReefIdentification.ts';
 import * as T from 'three';
+import {reefFluorescence} from './CoralSurface.ts';
 
 type Surface=(x:number,z:number)=>{point:T.Vector3;normal:T.Vector3}|null;
 type Random=()=>number;
@@ -7,7 +8,7 @@ type Random=()=>number;
 export function encrustingGarden(x:number,z:number,radius:number,kind:'zoanthid'|'stony',sample:Surface,random:Random,overlay?:Surface){
  const positions:number[]=[],colors:number[]=[],uvs:number[]=[],flex:number[]=[],phases:number[]=[],indices:number[]=[],seams:[number,number][]=[];
  const base=kind==='zoanthid'?new T.Color('#504350'):new T.Color('#3e7569');
- const orange=new T.Color('#d46217'),green=new T.Color('#34774d'),cyan=new T.Color('#1b555c'),mouth=new T.Color('#243643');
+ const orange=new T.Color('#d46217'),green=new T.Color('#34774d'),cyan=new T.Color('#1b555c'),disc=new T.Color('#86c23a'),mouth=new T.Color('#243643');
  let polypCount=0,tentacleCount=0,attachmentError=0;
  function vertex(p:T.Vector3,c:T.Color,motion=0,phase=0){const id=positions.length/3;positions.push(p.x,p.y,p.z);colors.push(c.r,c.g,c.b);uvs.push(p.x*3,p.z*3);flex.push(motion);phases.push(phase);return id;}
  // Hexagonal packing with individual offsets and sizes avoids phyllotaxis spirals.
@@ -24,7 +25,8 @@ export function encrustingGarden(x:number,z:number,radius:number,kind:'zoanthid'
   const point=(u:number,h:number,v:number)=>center.clone().addScaledVector(tangent,u).addScaledVector(normal,h).addScaledVector(bitangent,v);
   const r=(kind==='zoanthid'?.046:.034)*(.79+random()*.3),height=(kind==='zoanthid'?.03:.009)*(.65+random()*.6),phase=random()*6.28;
   const rim=(kind==='zoanthid'?(random()<.72?orange:green):green).clone().multiplyScalar(.8+random()*.32);
-  const inner=(kind==='zoanthid'?cyan:base).clone().multiplyScalar(.75+random()*.4);
+  // Orange-rimmed zoanthids carry a bright lime oral disc, as in the reference colony.
+  const inner=(kind==='zoanthid'?disc:base).clone().multiplyScalar(.75+random()*.4);
   // Interleaved warm oral discs and cool skirts echo the mixed small colonies
   // in the reference; variation uses the existing phase, not more RNG draws.
   if(kind==='zoanthid'&&phase>2.1&&phase<5.65){
@@ -81,6 +83,6 @@ export function animatePolypMaterial(material:T.MeshStandardMaterial,clock:{valu
  float surge=sin(polypTime*1.25+position.x*2.1+position.z*1.7);
  float flutter=sin(polypTime*(1.65+.18*sin(polypPhase))+polypPhase);
  transformed.x+=polypFlex*.0036*(surge*.7+flutter*.3);
- transformed.z+=polypFlex*.0025*sin(polypTime*1.13+polypPhase*.7+position.x*3.7);`);};
- material.customProgramCacheKey=()=> 'rooted-polyp-fringes-v2';
+ transformed.z+=polypFlex*.0025*sin(polypTime*1.13+polypPhase*.7+position.x*3.7);`);shader.fragmentShader=shader.fragmentShader.replace('#include <emissivemap_fragment>',reefFluorescence(.55));};
+ material.customProgramCacheKey=()=> 'rooted-polyp-fringes-fluorescent-v3';
 }

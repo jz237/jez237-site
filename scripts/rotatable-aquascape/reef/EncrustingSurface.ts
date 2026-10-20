@@ -1,4 +1,6 @@
 import * as T from 'three';
+import {rubbleNodules} from './ReefRockMaterial.ts';
+import {reefFluorescence} from './CoralSurface.ts';
 /** Project the existing corallite maps around the whole living mantle. A single
  * frontal UV projection collapsed on steep flanks, stretching cups into long
  * plastic-looking streaks. Blend three surface-oriented projections instead;
@@ -7,23 +9,33 @@ export function finishEncrustingMaterial(material:T.MeshStandardMaterial){
  material.onBeforeCompile=shader=>{
   shader.vertexShader='varying vec3 crustP,crustN;\n'+shader.vertexShader;
   shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\ncrustP=position;crustN=normal;');
-  shader.fragmentShader='varying vec3 crustP,crustN; uniform mat3 normalMatrix;\n'+shader.fragmentShader;
+  shader.fragmentShader='varying vec3 crustP,crustN; uniform mat3 normalMatrix;\n'+rubbleNodules+shader.fragmentShader;
   shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',`
    vec3 tissueN=normalize(crustN),tissueSign=sign(tissueN+vec3(.000001));
    vec3 tissueWeight=pow(abs(tissueN),vec3(6.));tissueWeight/=dot(tissueWeight,vec3(1.));
    vec2 tissueX=vec2(-tissueSign.x*crustP.z,crustP.y)*3.2;
    vec2 tissueY=vec2(crustP.x,-tissueSign.y*crustP.z)*3.2;
    vec2 tissueZ=vec2(tissueSign.z*crustP.x,crustP.y)*3.2;
-   diffuseColor.rgb*=texture2D(map,tissueX).rgb*tissueWeight.x+texture2D(map,tissueY).rgb*tissueWeight.y+texture2D(map,tissueZ).rgb*tissueWeight.z;`);
+   diffuseColor.rgb*=texture2D(map,tissueX).rgb*tissueWeight.x+texture2D(map,tissueY).rgb*tissueWeight.y+texture2D(map,tissueZ).rgb*tissueWeight.z;
+   // A living polyp bed seen from viewing distance: crowded domed polyps with
+   // dark gaps, pale rims and a bright oral centre, each a slightly different tint.
+   vec3 polypTo,polypId;float polypF1,polypF2;
+   reefNodules(crustP*44.,polypF1,polypF2,polypTo,polypId);
+   float polypGap=smoothstep(.0,.15,polypF2-polypF1),polypDome=sqrt(max(0.,1.-polypF1*polypF1*1.3));
+   float polypMouth=1.-smoothstep(.05,.17,polypF1),polypRim=smoothstep(.22,.38,polypF1)*(1.-smoothstep(.48,.7,polypF1));
+   diffuseColor.rgb*=(.55+.6*polypDome)*mix(.3,1.,polypGap)*(.85+.3*polypId.x)*(1.+.35*polypRim);
+   diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*vec3(1.25,1.3,.9)+vec3(.05,.08,0.),polypMouth*.6);`);
   shader.fragmentShader=shader.fragmentShader.replace('#include <roughnessmap_fragment>',`
    float roughnessFactor=roughness*(texture2D(roughnessMap,tissueX).g*tissueWeight.x+texture2D(roughnessMap,tissueY).g*tissueWeight.y+texture2D(roughnessMap,tissueZ).g*tissueWeight.z);`);
   shader.fragmentShader=shader.fragmentShader.replace('#include <normal_fragment_maps>',`
    vec3 tissueNX=texture2D(normalMap,tissueX).xyz*2.-1.,tissueNY=texture2D(normalMap,tissueY).xyz*2.-1.,tissueNZ=texture2D(normalMap,tissueZ).xyz*2.-1.;
    vec2 tx=tissueNX.xy/max(.2,tissueNX.z)*normalScale,ty=tissueNY.xy/max(.2,tissueNY.z)*normalScale,tz=tissueNZ.xy/max(.2,tissueNZ.z)*normalScale;
    vec3 tissueSlope=vec3(0.,tx.y,-tissueSign.x*tx.x)*tissueWeight.x+vec3(ty.x,0.,-tissueSign.y*ty.y)*tissueWeight.y+vec3(tissueSign.z*tz.x,tz.y,0.)*tissueWeight.z;
+   tissueSlope-=polypTo*1.6*polypF1;
    normal=normalize(normal+normalMatrix*(tissueSlope-tissueN*dot(tissueSlope,tissueN))*faceDirection);`);
+  shader.fragmentShader=shader.fragmentShader.replace('#include <emissivemap_fragment>',reefFluorescence(.3));
  };
- material.customProgramCacheKey=()=> 'reef-encrusting-curved-corallites-v1';
+ material.customProgramCacheKey=()=> 'reef-encrusting-curved-corallites-polyps-v2';
  return material;
 }
 /** Fine cup walls and radial ribs, baked offline rather than evaluated per pixel
