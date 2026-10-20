@@ -23791,5 +23791,112 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-20-factual-infographic-factual-infographic-cave-pearls-stone-g",
+    "title": "Factual infographic: Cave Pearls — Stone Grown Around a Grain",
+    "tests": "Both independent institutional sources fetched and read; NSS PDF extracted with pdftotext. All 167 factual entries scanned, no cave-pearl overlap. Generalized texture labeled; no growth-rate or annual-band claims.; archive_slot=2026-10-20T16:20; concept=cave-pearls-carbonate-pool-growth; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: factual-infographic",
+    "prompt": "Create a finished artwork-led factual geology infographic, directly on the canvas, titled “CAVE PEARLS” with the elegant subtitle “Stone grown around a grain”. A luminous mineralogical painting with fine technical-ink annotations, smoky charcoal cave shadows, ivory calcite, pale amber banding and restrained aquamarine water. Opaque background. Asymmetric, flowing composition with generous quiet space and a confident readable type hierarchy. No rigid boxed grid, detached cards, poster photograph, book mockup, frame, logos, URLs or bibliography. Make the geology tactile and unusually beautiful without inventing features.\n\nThe dominant illustration fills the lower center and right: an intimate low oblique view of a shallow cave pool containing a nest of creamy rounded mineral concretions, a few irregular ones, and a carbonate-coated scalloped floor. Individual pearl surfaces vary subtly from dull chalk to softly lustrous wet stone; fine laminar mineral texture, meniscus, reflected light, crisp wet rock edges. A descending droplet and a few modest ripples at the far left establish incoming water; no spinning or tumbling arrows. Cave ceiling is only a dark suggestion, not an elaborate cavern panorama. The surrounding darkness opens into light neutral areas for readable explanatory labels.\n\nA large artistically integrated sectional study rises above the pool on the right, joined to one representative pearl by a delicate curved magnification leader. Show a small irregular sand-grain nucleus surrounded by many continuous nested ivory and pale-tan mineral growth bands. This is a generalized cut section, not an implied exact specimen. Label “Sand-grain nucleus” and “Concentric mineral layers” with precise fine leaders. In a small enlarged wedge of this cut section, show subtle radial calcite crystal growth texture; label “Crystals grow outward” and directly beneath it “Generalized calcite texture”. Keep the crystal texture secondary to the convincing concentric bands. No annual dates, no years-per-band, no numerical scale or growth-rate claim.\n\nAcross the upper left, weave a short causal explanation through an open curved water-to-stone pathway, not separate panels: a painted droplet labeled “Mineral-bearing water”; a delicate upward arrow at the pool air–water boundary labeled “CO₂ escapes to cave air”; then an arrow to the growth bands labeled “Carbonate precipitates around a particle”. These annotations show dissolved material becoming solid mineral, not bubbles trapped in the pearl. A lower open leader points to the cupped mineral floor with the label “Excess deposit builds a nest”. All the pool pearls are small geological concretions, never oysters, eggs, gemstones or living organisms.\n\nLet a graceful sequence of three progressively larger cut-section silhouettes follow the pool edge, each with the same tiny central grain and additional concentric layers. Label the sequence once: “Layer upon layer”. This is conceptual accretion, explicitly not a time scale. Integrate a concise fact beside this sequence: “Shallow cave pools can grow banded mineral pearls.” Preserve breathing room around the hero and the cut section.\n\nA final open note in a clean margin reads “Rounded by growth — not polished by tumbling” with the smaller qualification “Drips can agitate the pool; mineral growth builds the pearl.” Use no circular motion arrows, abrasive grinding, mollusks, exposed biological tissue, metal apparatus or unsupported chemistry equations. Shapes may vary; not every pearl is a perfect sphere. Render text cleanly and sparingly, readable main labels and short secondary lines, no filler microtext. The visual journey is incoming water → loss of CO₂ → mineral deposition → concentric pearl growth, grounded in a plausible shallow mineral pool. Richly rendered scientific illustration and clear source-backed explanation should feel like one cohesive artwork.",
+    "image": "images/2026-10-20-factual-infographic-factual-infographic-cave-pearls-stone-g.jpg",
+    "thumb": "thumbs/2026-10-20-factual-infographic-factual-infographic-cave-pearls-stone-g.webp",
+    "color": "#736550",
+    "date": "2026-10-20",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "cave-pearls-carbonate-pool-growth",
+      "imageSha256": "ae8c16f986cd615c69f1537b2af29b6fb958da304262bb43161a5ab41e614edb",
+      "imageDHash": "b3e7e69f861327e9"
+    },
+    "factualInfographic": {
+      "topic": "How concentric mineral deposits form cave pearls",
+      "description": "An artwork-led cave-pool study of particle nuclei, carbonate deposition, concentric bands and radial calcite growth texture.",
+      "sourceNote": "National Park Service https://www.nps.gov/subjects/caves/speleothems.htm ; National Speleological Society, Self and Hill (2003) https://www.caves.org/wp-content/uploads/Publications/JCKS/v65/v65n2-Self.pdf . Verified shallow-pool deposition, nuclei, bands, nest growth and generalized radial crystal texture; no annual chronology or polishing mechanism.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-20T20:21:20.534972+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "U.S. National Park Service",
+            "title": "Speleothems — Cave pearls",
+            "sourceType": "government-agency",
+            "url": "https://www.nps.gov/subjects/caves/speleothems.htm"
+          },
+          {
+            "id": "S2",
+            "publisher": "National Speleological Society",
+            "title": "How speleothems grow: An introduction to the ontogeny of cave minerals (Self and Hill, 2003)",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.caves.org/wp-content/uploads/Publications/JCKS/v65/v65n2-Self.pdf"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Cave pearls are concentrically banded mineral concretions that form in shallow cave pools.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Water dripping from above or slowly flowing into shallow pools supplies dissolved material for cave-pearl growth.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Loss of carbon dioxide to cave air promotes carbonate precipitation around particles in a cave pool.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "A grain of sand can act as the nucleus of a cave pearl.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Successive mineral deposits form concentric bands around the nucleus.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "A cave-pearl cross section can show crystals arranged radially outward from a central nucleus; the illustrated calcite texture is a generalized schematic.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Excess carbonate precipitate can coat the pool floor and build cups or nests around cave pearls.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Cave pearls vary in shape; some are rounded while others are irregular.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "In the NPS explanation, roundness results from growth of the outer layer in all directions in supersaturated water, not polishing by rotation.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Dripping water can agitate cave pearls; agitation is not equivalent to tumbling them smooth.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
