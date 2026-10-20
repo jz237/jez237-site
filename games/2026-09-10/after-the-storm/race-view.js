@@ -2,6 +2,7 @@ import {createTitleScene,advanceTitleScene,titleCameraFrame} from './title-scene
 import {loadNativeCourseAnimationAssets} from './native-course-animation-assets.js';
 import {makeNativeDolphinRenderer} from './native-dolphin-render.js';
 import {makeNativeFishRenderer} from './native-fish-render.js';
+import {makeNativeBirdRenderer} from './native-bird-render.js';
 import {copyNativeRecordSession} from './native-record-session.js';
 import {prepareNativeChampionshipContinuation} from './native-championship-continuation.js';
 import {NATIVE_CHAMPIONSHIP_SETUP_DATA} from './native-championship-setup.js';
@@ -101,9 +102,9 @@ const sky=makeSky(scene),envScene=new T.Scene();envScene.add(sky.clone());const 
 const vessels=Array.from({length:8},(_,i)=>{const r=RIDERS[i%4];const v=makeJetSki(scene,{salvage:false,riderIndex:i%4});v.cargo.visible=false;v.winch.visible=false;const materials=new Map();v.boat.traverse(o=>{if(o.isMesh&&o.material.color&&[0xd95b24,0xb9542d].includes(o.material.color.getHex())){if(!materials.has(o.material)){const m=o.material.clone();m.color.setHex(i>=4?new T.Color(r.color).offsetHSL(.5,0,0).getHex():r.color);materials.set(o.material,m);}o.material=materials.get(o.material);}});v.stuntRig=makeStuntRider(v.body,i>=4?new T.Color(r.color).offsetHSL(.5,0,0).getHex():r.color,i%4);v.childVisibility=v.body.children.map(o=>[o,o.visible]);v.dolphin=makeDolphin(v.body);v.dolphin.root.visible=false;v.beads=makeCraftBeads(v.boat);return v;});const parkGuide=makeDolphin(scene);parkGuide.root.visible=false;
 const nativeDolphinRoot=new T.Group(),nativeEffectRoot=new T.Group();scene.add(nativeDolphinRoot,nativeEffectRoot);
 let nativeDolphinRenderer=null,nativeEffectRenderer=null,nativeActorLoading=null,raceStartRequest=0;
-// One display consumer per loaded bank: bank0 dolphins and bank2 swimmers.
-function makeNativeCourseActorView(root){const dolphins=makeNativeDolphinRenderer(root),fish=makeNativeFishRenderer(root);
- return {update(presentation,resources){dolphins.update(presentation,resources);fish.update(presentation,resources);},fish:fish.snapshot,dispose(){dolphins.dispose();fish.dispose();}};}
+// One display consumer per loaded bank: bank0 dolphins, bank2 swimmers, banks3/6 birds.
+function makeNativeCourseActorView(root){const dolphins=makeNativeDolphinRenderer(root),fish=makeNativeFishRenderer(root),birds=makeNativeBirdRenderer(root);
+ return {update(presentation,resources){dolphins.update(presentation,resources);fish.update(presentation,resources);birds.update(presentation,resources);},fish:fish.snapshot,birds:birds.snapshot,dispose(){dolphins.dispose();fish.dispose();birds.dispose();}};}
 // Loaded actor banks by course: Dolphin Park, and the courses whose original
 // actors read only the primary route (Sunny Beach, Sunset Bay, Drake Lake, Glacier).
 const NATIVE_COURSE_ACTOR_BANKS=Object.freeze({0:[0,2],1:[3,2],2:[0],4:[6,4],8:[8]}),nativeActorAssets=new Map();

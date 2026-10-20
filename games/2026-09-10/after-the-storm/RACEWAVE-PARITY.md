@@ -1,5 +1,17 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — Sunny Beach gulls and Drake Lake mallards
+
+Banks 3 and 6 are birds: a flying body (part 8), two wings of three flat
+slices (parts 12/16/20, joint at x=0, leading edge +Y) and a sitting body
+(part 24). Their original textures identify a seagull (white, black wing
+tips) and a mallard drake (blue speculum edged white). High-resolution
+authored birds now draw in those original part frames: rigid parts shared by
+every bird of a species, so the original wing animation flaps them directly.
+In game, Sunny Beach showed five gulls and six fish together and Drake Lake
+six mallards, at 58–60 fps. Drake Lake's swimmers (bank 4) and Glacier
+Coast's special actors (bank 8) still have no models.
+
 ## Unpublished — original course wildlife beyond Dolphin Park
 
 Original Time trial and Championship now run the original course actors on
