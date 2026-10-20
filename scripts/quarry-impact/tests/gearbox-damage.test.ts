@@ -17,7 +17,7 @@ test('crushing the driven end strips gears from the top, never below two',()=>{
  assert.equal(gearLimit([0,GEARBOX.onset+.01,0,0,0],'rear'),4);
  assert.equal(gearLimit([1,0,0,0,0],'rear'),5,'a front crush leaves a rear-drive gearbox alone');
  assert.equal(gearLimit([1,0,0,0,0],'front'),GEARBOX.min);
- assert.ok(gearLimit([.8,.2,0,0,0],'all')<5&&gearLimit([.8,.2,0,0,0],'all')>gearLimit([.8,.2,0,0,0],'front'));
+ assert.ok(gearLimit([.6,.2,0,0,0],'all')<5&&gearLimit([.6,.2,0,0,0],'all')>gearLimit([.6,.2,0,0,0],'front'));
  for(let c=0;c<=1;c+=.01)assert.ok(gearLimit([c,c,0,0,0],'all')>=GEARBOX.min);
  assert.equal(gearboxWarning(5),'');assert.equal(gearboxWarning(3),'GEARBOX DAMAGED · 3 GEARS');
 });

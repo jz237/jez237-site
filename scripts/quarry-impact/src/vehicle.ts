@@ -40,7 +40,7 @@ import {puddleDepth,type Puddle} from './puddle-splashes';
 import {wheelResponse,TireContact} from './wheel-mechanics';
 import {wheelTearsOff} from './wheel-physics';
 import {EngineMisfire} from './engine-misfire';
-import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit} from './damage-handling';
+import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowoutImpulse} from './damage-handling';
 import {leakRates,dripInterval} from './fluid-leaks';
 /** Panels hanging at least this loose build wind load above this speed (m/s) until they tear away. */
 export const WIND_RIP={loose:.25,speed:16} as const;
@@ -149,6 +149,11 @@ export class Vehicle {
   onWheelLost?:(wheel:number)=>void;
   private windLoad=new Map<string,number>();
   private readonly tyreBurst=[false,false,false,false];
+  /** Tyres whose blowout has already snatched the car (offline only). */
+  readonly blownOut=[false,false,false,false];
+  /** Sound hook for a tyre bursting at speed. */
+  onBlowout?:(p:T.Vector3)=>void;
+  private readonly lastFailure=[0,0,0,0];
   private dragLoad=0;private readonly dragPoint=new T.Vector3();
   private crushFrame?:CrushFrame;
   private readonly poppedCaps:T.Mesh[]=[];
@@ -269,7 +274,7 @@ export class Vehicle {
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
-    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.drips.fill(0);this.dripSeed=this.id*7919+1;
+    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.drips.fill(0);this.dripSeed=this.id*7919+1;
     if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
@@ -364,6 +369,19 @@ export class Vehicle {
     for(let i=0;i<4;i++){this.brakeBias[i]=this.extendedDamage?brakeFactor(this.wreckParts.wheelDamage[i]):1;this.damperBias[i]=this.extendedDamage?damperFactor(this.wreckParts.wheelDamage[i]):1;}
     if(this.extendedDamage)this.fluids(dt);
     if(this.extendedDamage&&this.tyreDamage)for(let i=0;i<4;i++)if(!this.wreckParts.wheelLost[i])this.tyreDamage[i]=leakTyre(this.tyreDamage[i],this.speed,dt);
+    if(this.extendedDamage&&this.tyreDamage)for(let i=0;i<4;i++){
+      // Only a sudden failure (a hit) bursts; a slow puncture going flat just sags.
+      const failure=tyreFailure(this.tyreDamage[i]),was=this.lastFailure[i];this.lastFailure[i]=failure;
+      if(this.blownOut[i]||this.wreckParts.wheelLost[i]||failure<.9||was>=.65)continue;
+      this.blownOut[i]=true;
+      // The burst corner drags back and sideways at the moment it lets go: the car snatches toward it.
+      const {drag,side}=blowoutImpulse(this.specification.mass,this.speed),at=this.controller.wheelChassisConnectionPointCs(i);
+      if(drag>0&&at){
+        const p=new T.Vector3(at.x,at.y,at.z).applyQuaternion(this.previousQ).add(this.previous),back=-Math.sign(this.speed),out=i%2?1:-1;
+        this.body.applyImpulseAtPoint({x:this.forward.x*back*drag+this.right.x*out*side,y:0,z:this.forward.z*back*drag+this.right.z*out*side},{x:p.x,y:p.y,z:p.z},true);
+        this.onBlowout?.(p);
+      }
+    }
     if(this.extendedDamage&&this.dragLoad>0&&Math.abs(this.speed)>1){
       // The dragging part acts as a brake where it touches the ground, so it also pulls to that side.
       const k=-Math.sign(this.speed)*this.specification.mass*PART_DRAG*this.dragLoad*dt;

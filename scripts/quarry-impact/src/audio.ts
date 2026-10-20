@@ -219,6 +219,8 @@ export class Sound {
   }
   /** A misfire's exhaust pop: the burst sample, pitched up, cut short and muffled. */
   backfire(p:T.Vector3){this.shot('vehicle-burst',p,.5,{rate:2.1,delay:0,duration:.17,lowpass:2400});}
+  /** A tyre bursting at speed: a sharp, full bang (the burst sample, less pitched up than a backfire). */
+  blowout(p:T.Vector3){this.shot('vehicle-burst',p,.85,{rate:1.45,delay:0,duration:.32});}
   shot(id: string, p: T.Vector3, volume = 1, options?:{rate:number;delay:number;duration:number;lowpass?:number}) {
     if (!this.ready || this.activeVoices >= 18) return;
     const c = this.ctx!,

@@ -897,7 +897,7 @@ function createCars(attract = false, previewSetup?:Setup) {
     const team=!attract&&teamRace()?TEAMS[teamOf(i)]:null,teamSetup=team&&setup?{...setup,paint:team.color,trim:team.trim}:setup;
     const car = new Vehicle(i, type, team?.color ?? setup?.paint ?? colors[i%colors.length], scene, physics, fx, teamSetup,activeVenue.course,online?.active?'legacy':'angular-v1');
     carLights.set(car,attachCarLights(car.root,DEFINITIONS[type].halfLength));
-    car.extendedDamage=!attract&&!online?.active;if(car.extendedDamage)car.onBackfire=p=>sound.backfire(p);
+    car.extendedDamage=!attract&&!online?.active;if(car.extendedDamage){car.onBackfire=p=>sound.backfire(p);car.onBlowout=p=>sound.blowout(p);}
     if(car.extendedDamage)car.onWheelLost=w=>{sound.crowd(i===0?.8:.55);if(i===0&&!demo)toast(`WHEEL GONE · ${['FRONT LEFT','FRONT RIGHT','REAR LEFT','REAR RIGHT'][w]}`,1.6);};
     car.waters=activeVenue.puddles;
     if(mode==='derby'&&!online?.active&&activeVenue===quarryVenue)car.arenaSurface=DERBY_ARENA;
@@ -2206,9 +2206,9 @@ async function boot() {
         wheelLost: Array.from(c.wreckParts.wheelLost),
         rips: c.rips,
         backfires: c.backfires,
-        drips: c.drips.slice(), slickGrip: c.slickGrip.slice(), oily: c.oily.slice(),
+        drips: c.drips.slice(), slickGrip: c.slickGrip.slice(), oily: c.oily.slice(), blownOut: c.blownOut.slice(), gearLimit: c.gearLimit,
         engineDamage: c.engineDamage,
-        tyreDamage: c.tyreDamage?.slice(),
+        tyreDamage: c.tyreDamage?.slice(), structure: c.structuralDamage?.slice(),
         partDamage: Object.fromEntries([...new Set(c.panels.map(m=>m.userData.detachAssembly as string|null).filter((v):v is string=>!!v))].map(n=>[n,Math.round(Math.max(0,...c.panels.filter(m=>m.userData.detachAssembly===n&&m.visible).map(m=>m.userData.damage??0)))])),
         detached: c.panels.filter((p) => !p.visible).length,
         glass: c.glass.filter((p) => !p.visible).length,

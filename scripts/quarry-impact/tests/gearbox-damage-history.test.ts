@@ -1,6 +1,7 @@
+import {restoreTyreBlowoutBytes} from './tyre-blowout-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readGearboxDamagePrevious,restoreGearboxDamageBytes,verifyGearboxDamageRevision} from './gearbox-damage-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreTyreBlowoutBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('GearboxDamage preserves every prior fixture, vehicle asset, venue art and history input',verifyGearboxDamageRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/gearbox-damage/revision.json').toString());

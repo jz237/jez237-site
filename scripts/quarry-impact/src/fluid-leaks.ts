@@ -71,7 +71,9 @@ diffuseColor.rgb=vSlick.x<.5?vec3(.018,.015,.012):vec3(.025,.075,.04);`)
       // Pooling: area adds up, so the radius grows by the square root.
       s[o+2]=Math.min(LEAK.maxRadius,Math.sqrt(r*r+base*base*.6));s[o+4]=this.time.value;s[o+5]=1;this.write(i,y);return;
     }
-    const slot=this.cursor++%this.capacity,o=slot*7;
+    // Once full, reuse a spot that has faded away before overwriting the oldest one still showing.
+    let slot=-1;if(this.count===this.capacity)for(let i=0;i<this.capacity;i++)if(s[i*7+5]<=0){slot=i;break;}
+    if(slot<0)slot=this.cursor++%this.capacity;const o=slot*7;
     s.set([x,z,base*(.8+.4*(seed%1)),kind,this.time.value,1,seed%1],o);
     this.count=Math.min(this.capacity,this.count+1);this.mesh.count=this.count;this.write(slot,y);
   }

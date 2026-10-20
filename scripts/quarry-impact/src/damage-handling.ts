@@ -23,7 +23,7 @@ export function leakTyre(damage:number,speed:number,dt:number){
 /** A damaged corner's damper loses up to DAMPER_LOSS of its damping, so it bounces and wallows. */
 /** Gearbox damage: crushing the driven end of the car past GEARBOX.onset strips the top gear, then more,
  * down to GEARBOX.min gears, which caps top speed. */
-export const GEARBOX={onset:.45,step:.125,min:2} as const;
+export const GEARBOX={onset:.3,step:.15,min:2} as const;
 export type DriveLayout='front'|'rear'|'all';
 export function gearLimit(structure:readonly number[]|undefined,drive:DriveLayout){
   const front=clamp01(structure?.[0]??0),rear=clamp01(structure?.[1]??0);
@@ -31,5 +31,12 @@ export function gearLimit(structure:readonly number[]|undefined,drive:DriveLayou
   return Math.max(GEARBOX.min,5-Math.max(0,Math.floor((c-GEARBOX.onset)/GEARBOX.step)+1));
 }
 export function gearboxWarning(limit:number){return limit<5?`GEARBOX DAMAGED · ${limit} GEARS`:'';}
+/** A tyre that bursts at speed snatches the car toward that corner: a backward tug at the wheel (yaw) and a
+ * smaller sideways one, scaled by mass and speed (capped at 30 m/s). Nothing below BLOWOUT.minSpeed. */
+export const BLOWOUT={minSpeed:6,drag:.05,side:.018} as const;
+export function blowoutImpulse(mass:number,speed:number){
+  const v=Math.abs(Number.isFinite(speed)?speed:0);if(!(mass>0)||v<BLOWOUT.minSpeed)return{drag:0,side:0};
+  const s=Math.min(30,v);return{drag:mass*s*BLOWOUT.drag,side:mass*s*BLOWOUT.side};
+}
 export const DAMPER_LOSS=.6;
 export function damperFactor(wheelDamage:number){return 1-DAMPER_LOSS*clamp01(wheelDamage);}
