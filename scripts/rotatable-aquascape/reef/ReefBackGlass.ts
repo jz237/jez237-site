@@ -18,11 +18,13 @@ export function reefBackGlass(pool:ReefReflections,time:{value:number},daylight:
     float farNoise2(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);float n=i.x+i.y*57.;return mix(mix(farHash(n),farHash(n+1.),f.x),mix(farHash(n+57.),farHash(n+58.),f.x),f.y);}
     // A distant reef deep behind the pane: rock towers crowned with branching
     // coral, seen through blue water. q is the view ray's point on that plane.
-    vec4 farReef(vec2 q){
-     // Mounds with occasional tall pillars; the central channel stays a little lower.
+    vec4 farReef(vec2 q,float channel){
+     // Mounds with occasional tall pillars; a sand channel opens near the
+     // middle (channel is the distance from the tank's own channel line).
      float pillar=pow(farNoise(q.x*.85+5.3),2.2);
      float ridge=.35+.8*farNoise(q.x*.31+3.1)+1.9*pillar+.25*farNoise(q.x*2.9+1.3)+.08*farNoise(q.x*11.);
      ridge*=.72+.28*smoothstep(.3,2.8,abs(q.x));
+     ridge=mix(-.4,ridge,smoothstep(.12,.62,channel));
      float rock=smoothstep(.05,-.05,q.y-ridge-.14*farNoise2(q*5.)-.05*farNoise2(q*17.));
      // Branching crowns: upright, streaked bushes thinning toward their tips.
      float above=q.y-ridge;
@@ -34,7 +36,7 @@ export function reefBackGlass(pool:ReefReflections,time:{value:number},daylight:
      // water; rubble crowns catch light, recesses beneath them stay dark.
      float lit=(.45+.55*smoothstep(-.4,2.6,q.y))*(.55+.75*smoothstep(-.55,0.,above));
      vec3 stone=mix(vec3(.02,.03,.11),vec3(.10,.08,.26),smoothstep(.25,.8,lump))*lit;
-     vec3 coral=mix(vec3(.08,.08,.25),vec3(.15,.11,.33),farNoise2(q*5.+9.))*lit;
+     vec3 coral=mix(vec3(.09,.09,.28),vec3(.2,.14,.4),farNoise2(q*5.+9.))*lit*(1.+.6*smoothstep(.15,.6,above));
      float cover=max(rock,crown);
      return vec4(mix(coral,stone,rock),cover);
     }
@@ -42,13 +44,28 @@ export function reefBackGlass(pool:ReefReflections,time:{value:number},daylight:
      float glow=pow(max(0.,1.-length((v-vec2(.5,.83))*vec2(1.,.65))),2.);
      vec3 blue=mix(vec3(.008,.02,.07),vec3(.04,.11,.37),glow)*(.25+.75*daylight);
      vec3 toPane=world-cameraPosition;
+     // A pale sand floor continues past the glass, a lit channel winding away
+     // between the distant reefs, as in a deep aquascape photographed head on.
+     float floorZ=1e6;
+     if(toPane.y<-.0001){
+      vec3 floorP=cameraPosition+toPane*((.2-cameraPosition.y)/toPane.y);
+      if(floorP.z<-2.3){
+       floorZ=floorP.z;float away=-2.3-floorP.z,path=floorP.x+.25-.45*sin(away*.32);
+       float lit=exp(-path*path/.5),grain=farNoise2(floorP.xz*vec2(5.,3.))*.6+farNoise2(floorP.xz*vec2(17.,11.))*.4;
+       vec3 sand=mix(vec3(.05,.08,.2),vec3(.26,.34,.6),lit*(.75+.35*grain))*(.25+.75*daylight);
+       blue=mix(sand,blue,1.-exp(-away*.11));
+      }
+     }
      // Two depths: a hazier reef farther back, a nearer one in front of it.
+     // Each is hidden where the floor already lies in front of its plane.
      for(int layer=0;layer<2;layer++){
       float depthZ=layer==0?-10.5:-5.6;
+      if(floorZ<1e5&&floorZ>depthZ)continue;
       vec2 q=(cameraPosition+toPane*((depthZ-cameraPosition.z)/min(-.001,toPane.z))).xy;
-      vec4 far=farReef(q+(layer==0?vec2(13.7,-.25):vec2(0.)));
+      float channel=abs(q.x+.25-.45*sin((-2.3-depthZ)*.32));
+      vec4 far=farReef(q+(layer==0?vec2(13.7,-.25):vec2(0.)),channel*(layer==0?.8:1.));
       // Farther, higher structure fades into the water's own blue.
-      float haze=clamp((layer==0?.5:.16)+.13*q.y,0.,.88);
+      float haze=clamp((layer==0?.46:.06)+.12*q.y,0.,.85);
       blue=mix(blue,mix(far.rgb*(.25+.75*daylight),blue,haze),far.a);
      }
      float grazing=pow(1.-abs(normalize(cameraPosition-world).z),3.);

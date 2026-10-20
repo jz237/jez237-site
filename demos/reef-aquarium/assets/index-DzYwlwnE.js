@@ -4341,11 +4341,13 @@ void main(){
     float farNoise2(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);float n=i.x+i.y*57.;return mix(mix(farHash(n),farHash(n+1.),f.x),mix(farHash(n+57.),farHash(n+58.),f.x),f.y);}
     // A distant reef deep behind the pane: rock towers crowned with branching
     // coral, seen through blue water. q is the view ray's point on that plane.
-    vec4 farReef(vec2 q){
-     // Mounds with occasional tall pillars; the central channel stays a little lower.
+    vec4 farReef(vec2 q,float channel){
+     // Mounds with occasional tall pillars; a sand channel opens near the
+     // middle (channel is the distance from the tank's own channel line).
      float pillar=pow(farNoise(q.x*.85+5.3),2.2);
      float ridge=.35+.8*farNoise(q.x*.31+3.1)+1.9*pillar+.25*farNoise(q.x*2.9+1.3)+.08*farNoise(q.x*11.);
      ridge*=.72+.28*smoothstep(.3,2.8,abs(q.x));
+     ridge=mix(-.4,ridge,smoothstep(.12,.62,channel));
      float rock=smoothstep(.05,-.05,q.y-ridge-.14*farNoise2(q*5.)-.05*farNoise2(q*17.));
      // Branching crowns: upright, streaked bushes thinning toward their tips.
      float above=q.y-ridge;
@@ -4357,7 +4359,7 @@ void main(){
      // water; rubble crowns catch light, recesses beneath them stay dark.
      float lit=(.45+.55*smoothstep(-.4,2.6,q.y))*(.55+.75*smoothstep(-.55,0.,above));
      vec3 stone=mix(vec3(.02,.03,.11),vec3(.10,.08,.26),smoothstep(.25,.8,lump))*lit;
-     vec3 coral=mix(vec3(.08,.08,.25),vec3(.15,.11,.33),farNoise2(q*5.+9.))*lit;
+     vec3 coral=mix(vec3(.09,.09,.28),vec3(.2,.14,.4),farNoise2(q*5.+9.))*lit*(1.+.6*smoothstep(.15,.6,above));
      float cover=max(rock,crown);
      return vec4(mix(coral,stone,rock),cover);
     }
@@ -4365,13 +4367,28 @@ void main(){
      float glow=pow(max(0.,1.-length((v-vec2(.5,.83))*vec2(1.,.65))),2.);
      vec3 blue=mix(vec3(.008,.02,.07),vec3(.04,.11,.37),glow)*(.25+.75*daylight);
      vec3 toPane=world-cameraPosition;
+     // A pale sand floor continues past the glass, a lit channel winding away
+     // between the distant reefs, as in a deep aquascape photographed head on.
+     float floorZ=1e6;
+     if(toPane.y<-.0001){
+      vec3 floorP=cameraPosition+toPane*((.2-cameraPosition.y)/toPane.y);
+      if(floorP.z<-2.3){
+       floorZ=floorP.z;float away=-2.3-floorP.z,path=floorP.x+.25-.45*sin(away*.32);
+       float lit=exp(-path*path/.5),grain=farNoise2(floorP.xz*vec2(5.,3.))*.6+farNoise2(floorP.xz*vec2(17.,11.))*.4;
+       vec3 sand=mix(vec3(.05,.08,.2),vec3(.26,.34,.6),lit*(.75+.35*grain))*(.25+.75*daylight);
+       blue=mix(sand,blue,1.-exp(-away*.11));
+      }
+     }
      // Two depths: a hazier reef farther back, a nearer one in front of it.
+     // Each is hidden where the floor already lies in front of its plane.
      for(int layer=0;layer<2;layer++){
       float depthZ=layer==0?-10.5:-5.6;
+      if(floorZ<1e5&&floorZ>depthZ)continue;
       vec2 q=(cameraPosition+toPane*((depthZ-cameraPosition.z)/min(-.001,toPane.z))).xy;
-      vec4 far=farReef(q+(layer==0?vec2(13.7,-.25):vec2(0.)));
+      float channel=abs(q.x+.25-.45*sin((-2.3-depthZ)*.32));
+      vec4 far=farReef(q+(layer==0?vec2(13.7,-.25):vec2(0.)),channel*(layer==0?.8:1.));
       // Farther, higher structure fades into the water's own blue.
-      float haze=clamp((layer==0?.5:.16)+.13*q.y,0.,.88);
+      float haze=clamp((layer==0?.46:.06)+.12*q.y,0.,.85);
       blue=mix(blue,mix(far.rgb*(.25+.75*daylight),blue,haze),far.a);
      }
      float grazing=pow(1.-abs(normalize(cameraPosition-world).z),3.);
@@ -4904,21 +4921,33 @@ uniform float lensZoom;`).replace(`gl_FragColor = texture2D( tDiffuse, vUv );`,`
  vec3 reefNodeColor(float k){
   return k<.22?vec3(.24,.07,.33):k<.36?vec3(.34,.15,.48):k<.52?vec3(.30,.27,.08):k<.64?vec3(.42,.23,.06):k<.76?vec3(.15,.25,.08):k<.88?vec3(.46,.14,.25):k<.95?vec3(.12,.22,.21):vec3(.46,.38,.26);
  }
+ // Small colonies on the rubble: orange, lime, pink, teal, gold and violet.
+ vec3 reefFragColor(float k){
+  return k<.2?vec3(.9,.32,.08):k<.38?vec3(.45,.82,.16):k<.54?vec3(.92,.32,.5):k<.68?vec3(.14,.62,.58):k<.84?vec3(.88,.66,.14):vec3(.55,.28,.9);
+ }
 `;function If(e){return e.onBeforeCompile=e=>{e.vertexShader=`varying vec3 reefRockP,reefRockN;
 `+e.vertexShader,e.vertexShader=e.vertexShader.replace(`#include <begin_vertex>`,`#include <begin_vertex>
 reefRockP=position;reefRockN=normal;`),e.fragmentShader=`varying vec3 reefRockP,reefRockN; uniform mat3 normalMatrix;
 `+Ff+e.fragmentShader,e.fragmentShader=e.fragmentShader.replace(`#include <color_fragment>`,`#include <color_fragment>
    vec3 nodeTo,nodeId,fineTo,fineId;float nodeF1,nodeF2,fineF1,fineF2;
-   reefNodules(reefRockP*13.,nodeF1,nodeF2,nodeTo,nodeId);
-   reefNodules(reefRockP*34.+vec3(17.3,5.1,9.7),fineF1,fineF2,fineTo,fineId);
-   float nodeCrevice=smoothstep(.0,.16,nodeF2-nodeF1),fineCrevice=smoothstep(.0,.14,fineF2-fineF1);
-   float nodeDome=1.-smoothstep(.12,.82,nodeF1),fineDome=1.-smoothstep(.08,.78,fineF1);
-   vec3 nodeColor=reefNodeColor(nodeId.x)*(.7+.6*nodeId.y);
+   reefNodules(reefRockP*18.,nodeF1,nodeF2,nodeTo,nodeId);
+   reefNodules(reefRockP*46.+vec3(17.3,5.1,9.7),fineF1,fineF2,fineTo,fineId);
+   float nodeCrevice=smoothstep(.0,.22,nodeF2-nodeF1),fineCrevice=smoothstep(.0,.16,fineF2-fineF1);
+   // Spherical crowns: brightness falls off toward each nodule's rim, so the
+   // surface reads as rounded popcorn rather than flat polygonal tiles.
+   float nodeDome=sqrt(max(0.,1.-nodeF1*nodeF1*1.25)),fineDome=sqrt(max(0.,1.-fineF1*fineF1*1.2));
+   vec3 nodeColor=reefNodeColor(nodeId.x)*(.55+.5*nodeId.y);
    float coverage=.82*smoothstep(.05,.45,reefNodeField(reefRockP*1.7));
    vec3 living=mix(diffuseColor.rgb,nodeColor*(.6+.55*fineId.z),.8);
    diffuseColor.rgb=mix(diffuseColor.rgb,living,coverage);
    // Rounded bumps: lit crowns, shaded flanks and dark gaps between them.
-   diffuseColor.rgb*=mix(1.,(.36+.82*nodeDome)*mix(.3,1.,nodeCrevice)*(.72+.36*fineDome)*mix(.9,1.,fineCrevice),.35+.65*coverage);`),e.fragmentShader=e.fragmentShader.replace(`#include <map_fragment>`,`
+   diffuseColor.rgb*=mix(1.,(.18+.95*nodeDome)*mix(.22,1.,nodeCrevice)*(.66+.42*fineDome)*mix(.8,1.,fineCrevice),.35+.65*coverage);
+   // A share of the nodules carry a small living frag in a bright fluorescent
+   // color on their crown, crowded most densely low on the rock.
+   float fragPick=step(.84,nodeId.z)*coverage*(.5+.5*(1.-smoothstep(1.,2.8,reefRockP.y)))*smoothstep(.62,.3,nodeF1);
+   vec3 fragColor=reefFragColor(nodeId.y);
+   diffuseColor.rgb=mix(diffuseColor.rgb,fragColor*(.3+.75*nodeDome)*(.66+.42*fineDome),fragPick);`),e.fragmentShader=e.fragmentShader.replace(`#include <emissivemap_fragment>`,`#include <emissivemap_fragment>
+   totalEmissiveRadiance+=fragColor*fragPick*(.12+.3*nodeDome);`),e.fragmentShader=e.fragmentShader.replace(`#include <map_fragment>`,`
    vec3 stoneN=normalize(reefRockN),stoneSign=sign(stoneN+vec3(.000001));
    vec3 stoneWeight=pow(abs(stoneN),vec3(4.));stoneWeight/=dot(stoneWeight,vec3(1.));
    vec2 stoneX=vec2(-stoneSign.x*reefRockP.z,reefRockP.y)*.78;
@@ -4945,7 +4974,7 @@ reefRockP=position;reefRockN=normal;`),e.fragmentShader=`varying vec3 reefRockP,
    // Domed nodules tilt away from their own centres, the finer crowd more gently.
    // A spherical profile: the tilt grows toward each nodule's rim.
    slope+=(-nodeTo*2.4*nodeF1-fineTo*1.1*fineF1)*(.35+.65*coverage);
-   normal=normalize(normalMatrix*normalize(stoneN+slope-stoneN*dot(slope,stoneN)));`)},e.customProgramCacheKey=()=>`reef-porous-rock-triplanar-lower-micropores-rubble-v3`,e}function Lf(){let e=new zo,t=[],n=(n,r=!1)=>{let i,a;t.push(new Promise((e,t)=>{i=e,a=t}));let o=e.load(n,()=>i(),void 0,a);return o.colorSpace=r?Ue:``,o.wrapS=o.wrapT=c,o.repeat.set(2.4,1.6),o.anisotropy=8,o};return{maps:{map:n(new URL(``+new URL(`map-rahrN3k8.png`,import.meta.url).href,``+import.meta.url).href,!0),normalMap:n(new URL(``+new URL(`normalMap-DQPJoT0j.png`,import.meta.url).href,``+import.meta.url).href)},ready:Promise.all(t)}}function Rf(e,t,n){let r=Math.imul(e,374761393)^Math.imul(t,668265263)^Math.imul(n,1442695041);return r=Math.imul(r^r>>>13,1274126177),((r^r>>>16)>>>0)/4294967295}function zf(e,t,n){let r=Math.floor(e),i=Math.floor(t),a=Math.floor(n),o=e=>e*e*(3-2*e),s=o(e-r),c=o(t-i),l=o(n-a),u=G.lerp;return u(u(u(Rf(r,i,a),Rf(r+1,i,a),s),u(Rf(r,i+1,a),Rf(r+1,i+1,a),s),c),u(u(Rf(r,i,a+1),Rf(r+1,i,a+1),s),u(Rf(r,i+1,a+1),Rf(r+1,i+1,a+1),s),c),l)}var Bf=zf;function Vf(e){let t=e.getAttribute(`position`),n=e.getAttribute(`rockCavity`),r=new Float32Array(t.count*3),i=new Y(`#b5a789`).multiplyScalar(1.35),a=new Y(`#aa58b7`).multiplyScalar(1.7),o=new Y(`#c96599`).multiplyScalar(1.65),s=new Y(`#8c9563`).multiplyScalar(1.35),c=new Y(`#dfb5cd`),l=new Y,u=[`#d58943`,`#52aaa0`,`#a1ae55`].map(e=>new Y(e).multiplyScalar(1.55));for(let e=0;e<t.count;e++){let d=t.getX(e),f=t.getY(e),p=t.getZ(e),m=Bf(d*31,f*31,p*31),h=Bf(d*13,f*13,p*13),g=Bf(d*5.1+h*.6,f*5.1,p*5.1)*.72+h*.28,_=G.smoothstep(g,.32,.53),v=Bf(d*3.1,f*3.1,p*3.1);l.copy(i).lerp(s,G.smoothstep(v,.48,.71)*.42).lerp(v>.48?a:o,_*.9);let y=Bf(d*8.3+19,f*8.3-7,p*8.3+31),b=Bf(d*2.7-13,f*2.7+21,p*2.7);l.lerp(u[Math.min(2,Math.floor(b*3))],G.smoothstep(y,.56,.72)*.83);let x=Math.exp(-(((g-.39)/.016)**2))*.21;l.lerp(c,x).multiplyScalar(.78+.27*m+.12*h),l.multiplyScalar(1-(n?.getX(e)??0)*.28),r.set([l.r,l.g,l.b],e*3)}return e.setAttribute(`color`,new vr(r,3)),e.deleteAttribute(`rockCavity`),e}var Hf=`
+   normal=normalize(normalMatrix*normalize(stoneN+slope-stoneN*dot(slope,stoneN)));`)},e.customProgramCacheKey=()=>`reef-porous-rock-triplanar-lower-micropores-rubble-frags-v4`,e}function Lf(){let e=new zo,t=[],n=(n,r=!1)=>{let i,a;t.push(new Promise((e,t)=>{i=e,a=t}));let o=e.load(n,()=>i(),void 0,a);return o.colorSpace=r?Ue:``,o.wrapS=o.wrapT=c,o.repeat.set(2.4,1.6),o.anisotropy=8,o};return{maps:{map:n(new URL(``+new URL(`map-rahrN3k8.png`,import.meta.url).href,``+import.meta.url).href,!0),normalMap:n(new URL(``+new URL(`normalMap-DQPJoT0j.png`,import.meta.url).href,``+import.meta.url).href)},ready:Promise.all(t)}}function Rf(e,t,n){let r=Math.imul(e,374761393)^Math.imul(t,668265263)^Math.imul(n,1442695041);return r=Math.imul(r^r>>>13,1274126177),((r^r>>>16)>>>0)/4294967295}function zf(e,t,n){let r=Math.floor(e),i=Math.floor(t),a=Math.floor(n),o=e=>e*e*(3-2*e),s=o(e-r),c=o(t-i),l=o(n-a),u=G.lerp;return u(u(u(Rf(r,i,a),Rf(r+1,i,a),s),u(Rf(r,i+1,a),Rf(r+1,i+1,a),s),c),u(u(Rf(r,i,a+1),Rf(r+1,i,a+1),s),u(Rf(r,i+1,a+1),Rf(r+1,i+1,a+1),s),c),l)}var Bf=zf;function Vf(e){let t=e.getAttribute(`position`),n=e.getAttribute(`rockCavity`),r=new Float32Array(t.count*3),i=new Y(`#b5a789`).multiplyScalar(1.35),a=new Y(`#aa58b7`).multiplyScalar(1.7),o=new Y(`#c96599`).multiplyScalar(1.65),s=new Y(`#8c9563`).multiplyScalar(1.35),c=new Y(`#dfb5cd`),l=new Y,u=[`#d58943`,`#52aaa0`,`#a1ae55`].map(e=>new Y(e).multiplyScalar(1.55));for(let e=0;e<t.count;e++){let d=t.getX(e),f=t.getY(e),p=t.getZ(e),m=Bf(d*31,f*31,p*31),h=Bf(d*13,f*13,p*13),g=Bf(d*5.1+h*.6,f*5.1,p*5.1)*.72+h*.28,_=G.smoothstep(g,.32,.53),v=Bf(d*3.1,f*3.1,p*3.1);l.copy(i).lerp(s,G.smoothstep(v,.48,.71)*.42).lerp(v>.48?a:o,_*.9);let y=Bf(d*8.3+19,f*8.3-7,p*8.3+31),b=Bf(d*2.7-13,f*2.7+21,p*2.7);l.lerp(u[Math.min(2,Math.floor(b*3))],G.smoothstep(y,.56,.72)*.83);let x=Math.exp(-(((g-.39)/.016)**2))*.21;l.lerp(c,x).multiplyScalar(.78+.27*m+.12*h),l.multiplyScalar(1-(n?.getX(e)??0)*.28),r.set([l.r,l.g,l.b],e*3)}return e.setAttribute(`color`,new vr(r,3)),e.deleteAttribute(`rockCavity`),e}var Hf=`
 float reefCausticFocus(vec2 p,float depth,float time){
  vec2 q=p+vec2(sin(p.y*1.9+p.x*.7-time*.29),sin(p.x*1.3-p.y*.8+time*.23))*.09;
  vec3 phase=vec3(q.x*2.7+q.y*3.6-time*1.8,
