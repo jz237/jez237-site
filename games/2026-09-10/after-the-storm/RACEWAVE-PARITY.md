@@ -1,5 +1,16 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — original effects in Player 2's own window
+
+In the separate-window layout the host now sends Player 2's view of the
+original effects (933C4 view 1, already placed on the rendered water) with
+each window frame. The window validates them (families, texture frames,
+matching vertex arrays, at most 256 draws and 16,384 vertices), draws them
+with the same effects renderer, and skips its own spray while they arrive. A
+two-browser check on Sunset Bay showed 13 original effect batches in Player
+2's window during the race. Online guests still draw their own spray: these
+effects are about 14 KB per frame, beyond the online snapshot budget.
+
 ## Unpublished — Original two-player races online
 
 Online two-player races now offer Original physics too. The host already owns

@@ -124,6 +124,22 @@ function launchPresentation(value){
  }
  return out;
 }
+// Player 2's view of the original effects (933C4 view1), already on the
+// rendered water. Bounded plain copies; the renderer validates materials again.
+const EFFECT_FRAMES={spray:4,splash:7,wake:4,droplet:1};
+export function readWindowEffects(value){
+ if(!Array.isArray(value)||value.length>256)return null;let total=0;
+ const out=[];
+ for(const d of value){
+  if(!plain(d)||!Object.hasOwn(EFFECT_FRAMES,d.family)||!Number.isInteger(d.textureFrame)||d.textureFrame<0||d.textureFrame>=EFFECT_FRAMES[d.family]||typeof d.depthTest!=='boolean')return null;
+  const p=d.positions,n=Array.isArray(p)?p.length/3:0;
+  if(!n||!Number.isInteger(n/3)||(total+=n)>16384)return null;
+  for(const [key,size,lo,hi]of [['positions',n*3,-1e9,1e9],['uvs',n*2,-1e9,1e9],['colors',n*3,0,1],['alphas',n,0,1]])
+   if(!Array.isArray(d[key])||d[key].length!==size||d[key].some(v=>typeof v!=='number'||!(v>=lo&&v<=hi)))return null;
+  out.push({family:d.family,textureFrame:d.textureFrame,depthTest:d.depthTest,positions:[...d.positions],uvs:[...d.uvs],colors:[...d.colors],alphas:[...d.alphas]});
+ }
+ return out;
+}
 export function captureWindowFrame(state,water,{includeLocal=true}={}){
  return {time:state.time,phase:state.phase,countdown:state.countdown,freeRide:!!state.freeRide,passageOpenedAt:Number.isFinite(state.passageOpenedAt)?state.passageOpenedAt:null,
   ...(own(state,'nativeCourseWorld')?{nativeCourseWorld:captureNativeStuntWorld(state.nativeCourseWorld)}:{}),
@@ -135,10 +151,11 @@ export function readWindowFrame(value){
  const racers=value.racers.map(rider),water=validateWindowWater(value.water),weather=fields(value.weather,30),breakables=importBreakablePresentation(value.breakables);
  if(racers.some(r=>!r)||racers[0].player!==0||racers[1].player!==1||!water||!weather||!breakables)return null;
  if(value.passageOpenedAt!==null&&!finite(value.passageOpenedAt))return null;
+ let effects;if(own(value,'nativeEffects')&&!(effects=readWindowEffects(value.nativeEffects)))return null;
  let primary,launch,ice,courseWorld;try{if(own(value,'nativeCourseWorld'))courseWorld=captureNativeStuntWorld(value.nativeCourseWorld);if(own(value,'nativeIce'))ice=captureNativeIcePresentation(value.nativeIce);if(own(value,'primaryBuoys'))primary=primaryBuoys(value.primaryBuoys);launch=launchPresentation(value);}catch{return null;}
  return {time:value.time,phase:value.phase,countdown:value.countdown,freeRide:!!value.freeRide,passageOpenedAt:value.passageOpenedAt??Infinity,racers,weather,water,breakables,
   ...(own(value,'nativeCourseWorld')?{nativeCourseWorld:courseWorld}:{}),
-  ...(own(value,'nativeIce')?{nativeIce:ice}:{}),...(own(value,'primaryBuoys')?{primaryBuoys:primary}:{}),...launch};
+  ...(own(value,'nativeIce')?{nativeIce:ice}:{}),...(own(value,'primaryBuoys')?{primaryBuoys:primary}:{}),...(effects?{nativeEffects:effects}:{}),...launch};
 }
 export function interpolateWindowFrame(a,b,time){
  if(!a||a.time>=b.time||a.phase!==b.phase)return copyNativeFrame(b);
