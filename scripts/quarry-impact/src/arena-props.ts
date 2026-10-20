@@ -10,6 +10,9 @@ const ring=(r:number,n:number,phase=0)=>Array.from({length:n},(_,i)=>{const a=ph
 export const ARENA_PROP_SPOTS:Record<string,readonly PropSpot[]>={
   'kestrel-ring-v1':[...ring(17.5,6,Math.PI/6).map(p=>({kind:'tyres' as const,...p})),...ring(45,8).map(p=>({kind:'drum' as const,...p}))],
   'gullhaven-yard-v1':[...[-40,-20,0,20,40].flatMap(x=>[{kind:'drum' as const,x,z:40},{kind:'drum' as const,x,z:-40}]),...[-20,0,20].flatMap(z=>[{kind:'tyres' as const,x:54,z},{kind:'tyres' as const,x:-54,z}])],
+  // Flat classic bowls (floor + ring wall only). They also host online derbies, where props are switched off.
+  'harrow-bowl-v1':[...ring(8,4,Math.PI/4).map(p=>({kind:'tyres' as const,...p})),...ring(43,10).map(p=>({kind:'drum' as const,...p}))],
+  'wrenford-pit-v1':[...ring(7,3).map(p=>({kind:'tyres' as const,...p})),...ring(35,8,Math.PI/8).map(p=>({kind:'drum' as const,...p}))],
   'moorfield-speedbowl-v1':[...[-24,-12,0,12,24].flatMap(x=>[{kind:'drum' as const,x,z:31},{kind:'drum' as const,x,z:-31}]),...[[60,8],[60,-8],[-60,8],[-60,-8]].map(([x,z])=>({kind:'tyres' as const,x,z}))],
 };
 export const TYRES_PER_STACK=3;
@@ -32,7 +35,8 @@ export function createArenaProps(api:typeof R,world:R.World,root:T.Object3D,spot
   });
   return{props,
     update(){for(const p of props){p.mesh.position.copy(p.body.translation() as T.Vector3Like);p.mesh.quaternion.copy(p.body.rotation() as T.QuaternionLike);}},
-    reset(){for(const p of props){p.body.setRotation({x:0,y:0,z:0,w:1},true);p.body.setTranslation(p.start,true);p.body.setLinvel({x:0,y:0,z:0},true);p.body.setAngvel({x:0,y:0,z:0},true);p.mesh.position.copy(p.start);p.mesh.quaternion.identity();}},
+    /** enabled=false (online events) hides the props and takes them out of the simulation. */
+    reset(enabled=true){for(const p of props){p.body.setEnabled(enabled);p.mesh.visible=enabled;p.body.setRotation({x:0,y:0,z:0,w:1},true);p.body.setTranslation(p.start,true);p.body.setLinvel({x:0,y:0,z:0},true);p.body.setAngvel({x:0,y:0,z:0},true);p.mesh.position.copy(p.start);p.mesh.quaternion.identity();}},
     dispose(){for(const p of props)p.mesh.removeFromParent();tyreGeometry.dispose();drumGeometry.dispose();rubber.dispose();paints.forEach(m=>m.dispose());props.length=0;}};
 }
 /** How many prop bodies an arena records in replays (0 for arenas without loose props). */

@@ -248,6 +248,7 @@ const raceFormat=()=>pursuitSelected()?'laps':demo?(demoOptions.race??'laps'):on
 const damageRule=()=>sessionDamageRule(customEvent()&&mode!=='playground',demo,eventOptions.damage,demoOptions.damage);
 let nextEliminationAt=0,eliminatedOrder:number[]=[];
 let damageDiagramAt=-1,damageDiagramSvgLast='';
+let propsVenue:VenueContext|undefined,propsOnline=false;
 const teamRace=()=>!online?.active&&!pursuitSelected()&&activeClubRound===null&&!activeChallenge&&!activeTimeTrial&&teamRaceActive(mode,customEvent(),demo,raceFormat(),eventOptions,demoOptions);
 const eliminationRace=()=>!online?.active&&!pursuitSelected()&&activeClubRound===null&&!activeChallenge&&!activeTimeTrial&&eliminationActive(mode,customEvent(),demo,raceFormat(),eventOptions,demoOptions);
 const raceTimeLimit=()=>online?.active?(mode==='race'&&onlineRules()?.race==='laps'?onlineRules()?.raceDuration??0:0):pursuitSelected()?0:timedRaceLimit(mode,customEvent(),demo,raceFormat(),eventOptions,demoOptions);
@@ -635,7 +636,7 @@ orbit.maxDistance = 22;
 orbit.maxPolarAngle = Math.PI * 0.48;
 orbit.enableDamping = true;
 let physics: R.World, events: R.EventQueue, quarry: Quarry, fx: Effects;
-type VenueContext={arenaId?:ArenaId;arena?:ArenaLayout;course:RaceCourse;physics:R.World;root:T.Group;checkpoint:T.Group;props:Quarry['props'];puddles:Quarry['puddles'];update?:(time:number)=>void;resetProps?:()=>void;dispose?:()=>void};
+type VenueContext={arenaId?:ArenaId;arena?:ArenaLayout;course:RaceCourse;physics:R.World;root:T.Group;checkpoint:T.Group;props:Quarry['props'];puddles:Quarry['puddles'];update?:(time:number)=>void;resetProps?:(enabled?:boolean)=>void;dispose?:()=>void};
 let quarryVenue:VenueContext,activeVenue:VenueContext;
 const raceVenues:Partial<Record<Exclude<CourseId,'quarry-v1'>,VenueContext>>={};
 const arenaVenues:Partial<Record<ArenaId,VenueContext>>={};
@@ -845,7 +846,7 @@ function createCars(attract = false, previewSetup?:Setup) {
   cars = [];
   fx.reset();
   activateVenue(targetVenue);fx.world=physics;fx.groundHeight=activeVenue.course.height;events.clear();setQuarryMode();
-  if(activeVenue===quarryVenue)quarry.resetProps();else activeVenue.resetProps?.();
+  if(activeVenue===quarryVenue)quarry.resetProps();else activeVenue.resetProps?.(!online?.active);
   impactAdjudicator.clear();collisionScars.clear();
   collisions = 0;
   const count = attract ? 1 : activeTimeTrial ? 1 : activeClubRound!==null ? clubCup!.roster.length : mode === 'playground' ? ((activeChallenge?activeChallenge.traffic:traffic) ? 5 : 1) : activeChallenge?8:demo?demoOptions.field:eventOptions.field;
@@ -1747,6 +1748,8 @@ function frame(now: number) {
   if (!physics || state === 'loading'||preparingOnline) return;
   rain?.update(camera,state==='paused'?0:dt);
   {const wet=eventLighting==='rain';if(wet!==wetOn||activeVenue.root!==wetRoot){applyWetLook(wetRoot,false);wetRoot=activeVenue.root;wetOn=wet;applyWetLook(wetRoot,wet);}}
+  // Loose arena props are local physics: switch them off whenever this client is in an online event.
+  {const off=!!online?.active;if(activeVenue.resetProps&&propsVenue!==activeVenue||propsOnline!==off){propsVenue=activeVenue;propsOnline=off;if(off)activeVenue.resetProps?.(false);else if(activeVenue.props.some(p=>!p.body.isEnabled()))activeVenue.resetProps?.(true);}}
   if(state!=='paused')activeVenue.update?.(clock);
   if(adaptiveGraphics.sample(raw*1000,!document.hidden&&!preparingEvent&&!studio&&state==='playing'))applyQuality();
   // Include long stalls in the sustained benchmark, including event restarts.
