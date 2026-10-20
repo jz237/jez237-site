@@ -1,5 +1,29 @@
 [
   {
+    "id": "022",
+    "title": "The Living Reef",
+    "category": "3D · Living systems",
+    "description": "Explore a living coral reef in 3D. Orbit the rimless tank, watch reef fish graze, school and shelter among branching corals, plate corals and swaying anemones, and add or remove fish of your own. Feed the tank, switch to blue-hour light, or open the water chemistry lab.",
+    "url": "reef-aquarium/",
+    "image": "assets/reef-aquarium.jpg",
+    "imageAlt": "The 3D reef aquarium: two coral-covered live rock islands in blue-lit water, a sand channel between them, with tangs, clownfish and a school of anthias",
+    "source": "https://github.com/jz237/jez237-site/tree/main/scripts/rotatable-aquascape/reef",
+    "features": [
+      "Drag to orbit & zoom",
+      "Add & remove fish",
+      "Feed fish & blue-hour light",
+      "Identify corals & fish"
+    ],
+    "facts": [
+      "22 fish at launch",
+      "14 species",
+      "Mouse & touch"
+    ],
+    "note": "WebGL 2 · Desktop & touch · Artistic reef study",
+    "imageWidth": 1440,
+    "imageHeight": 900
+  },
+  {
     "id": "001",
     "title": "V8 Engine Laboratory",
     "category": "3D · Mechanics",
