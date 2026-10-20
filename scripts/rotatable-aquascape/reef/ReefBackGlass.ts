@@ -72,8 +72,8 @@ export function reefBackGlass(pool:ReefReflections,time:{value:number},daylight:
       if(floorP.z<-2.3){
        floorZ=floorP.z;float away=-2.3-floorP.z,path=floorP.x+.25-.45*sin(away*.32);
        float lit=exp(-path*path/.5),grain=farNoise2(floorP.xz*vec2(5.,3.))*.6+farNoise2(floorP.xz*vec2(17.,11.))*.4;
-       vec3 sand=mix(vec3(.05,.08,.2),vec3(.26,.34,.6),lit*(.75+.35*grain))*(.25+.75*daylight);
-       blue=mix(sand,blue,1.-exp(-away*.11));
+       vec3 sand=mix(vec3(.06,.09,.22),vec3(.42,.48,.74),lit*(.75+.35*grain))*(.25+.75*daylight);
+       blue=mix(sand,blue,1.-exp(-away*.075));
       }
      }
      // Two depths: a hazier reef farther back, a nearer one in front of it.
