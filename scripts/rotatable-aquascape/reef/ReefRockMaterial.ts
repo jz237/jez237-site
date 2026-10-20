@@ -51,7 +51,7 @@ export function finishRockMaterial(material:T.MeshStandardMaterial){
    vec3 living=mix(diffuseColor.rgb,nodeColor*(.6+.55*fineId.z),.8);
    diffuseColor.rgb=mix(diffuseColor.rgb,living,coverage);
    // Rounded bumps: lit crowns, shaded flanks and dark gaps between them.
-   diffuseColor.rgb*=mix(1.,(.18+.95*nodeDome)*mix(.22,1.,nodeCrevice)*(.66+.42*fineDome)*mix(.8,1.,fineCrevice),.35+.65*coverage);
+   diffuseColor.rgb*=mix(1.,(.12+1.*nodeDome)*mix(.1,1.,nodeCrevice)*(.66+.42*fineDome)*mix(.75,1.,fineCrevice),.45+.55*coverage);
    // A share of the nodules carry a small living frag in a bright fluorescent
    // color on their crown, crowded most densely low on the rock.
    float fragPick=step(.9,nodeId.z)*coverage*(.5+.5*(1.-smoothstep(1.,2.8,reefRockP.y)))*smoothstep(.62,.3,nodeF1);
@@ -90,6 +90,6 @@ export function finishRockMaterial(material:T.MeshStandardMaterial){
    slope+=(-nodeTo*2.4*nodeF1-fineTo*1.1*fineF1)*(.35+.65*coverage);
    normal=normalize(normalMatrix*normalize(stoneN+slope-stoneN*dot(slope,stoneN)));`);
  };
- material.customProgramCacheKey=()=> 'reef-porous-rock-triplanar-lower-micropores-rubble-frags-v6';
+ material.customProgramCacheKey=()=> 'reef-porous-rock-triplanar-lower-micropores-rubble-frags-v7';
  return material;
 }

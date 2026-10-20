@@ -41,6 +41,14 @@ const key=new T.SpotLight('#eef2ff',300,26,.91,.52,1.7);key.position.set(-1.8,7.
 const blue=new T.SpotLight('#5087ff',90,24,.9,.6,1.7);blue.position.set(3,7.5,-.3);blue.target.position.set(1.5,1,0);scene.add(blue,blue.target);
 const fill=new T.DirectionalLight('#b1cbea',.45);fill.position.set(1,4,7);scene.add(fill);
 const reflections=new ReefReflections(),water=new AquariumWater(reflections);configureReefWater(water);scene.add(water);const glassStart=scene.children.length;buildAquariumGlass(scene,reflections);const glassObjects=scene.children.slice(glassStart);
+// Seen through deep blue reef water, the side panes' internal reflection of the
+// reef is dimmer and hazier than in the planted tank. Each wall owns its
+// material, so this leaves the planted aquarium unchanged.
+for(const o of glassObjects)if(o instanceof T.Mesh&&(o.material as T.Material).name==='AquariumInternalGlass'){
+ const m=o.material as T.ShaderMaterial,source='gl_FragColor=vec4(reflected*vec3(.965,.993,.977),.025+.87*internal);';
+ if(!m.fragmentShader.includes(source))throw Error('Side-glass shader changed; update the reef reflection tint.');
+ m.fragmentShader=m.fragmentShader.replace(source,'gl_FragColor=vec4(mix(reflected*vec3(.6,.76,.98),vec3(.015,.05,.15),.3),.025+.62*internal);');m.needsUpdate=true;
+}
 // Under actinic reef light the polished pane edges and joints glow blue, as in
 // a rimless reef tank. Reef-only copies leave the planted aquarium unchanged.
 {const glow=new Map<T.Material,T.Material>(),actinic=(m:T.Material)=>{let g=glow.get(m);if(!g){const c=(m as T.MeshPhysicalMaterial).clone();c.color.set('#a9c8ff');c.emissive.set('#2f6dff');c.emissiveIntensity=1.6;c.attenuationColor.set('#5d8cff');glow.set(m,c);g=c;}return g;};
