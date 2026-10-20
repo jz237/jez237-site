@@ -1,5 +1,24 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — round 1 enters through the original course introduction
+
+Every original cup round starts through the championship return (801EB91C),
+which picks the course from the class order at the current round, then the i3
+course introduction, whose exit runs main configuration (9345C). After the
+Normal warm-up the round advances to 1; Hard, Expert and Reverse start at 0.
+The browser's first round used to skip this with a direct launch. A fresh cup
+now builds the same selection state that launch built, stopped before 9345C
+(prepareNativeChampionshipWebSelection), runs the original return and
+introduction from it, and starts round 1 from the configuration they produce,
+so round 1 gets its original flyover too (Sunny Beach: 274 frames, about
+13.7 s). With no scene before it, the flyover copy first sets up the type 1
+menu camera that the cup selection screen leaves (DDA24/DDAB8 template), which
+the introduction's camera setup copies. In main8 the original actor setup
+(AC184) returns before spawning course actors, so a course's introduction shows
+only what its camera script spawns: Sunset Bay's three dolphins, none on Sunny
+Beach. This game's own finish arch sits close to the original path, so the
+Sunny Beach flyover briefly passes right by its banner.
+
 ## Unpublished — course wildlife in the cup-round flyover
 
 The main8 course introduction now loads the next course's actor banks and runs

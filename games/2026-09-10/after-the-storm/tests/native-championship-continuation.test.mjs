@@ -89,3 +89,17 @@ test('a qualified final round enters the original ending state and completes the
   assert.notDeepEqual(L.recordSessionSnapshot(),before,'initials commit the championship records');
  }
 });
+
+test('a fresh cup round enters through the original championship return and course introduction',()=>{
+ const s=createRace({mode:'championship',physics:'native',course:getCourse('greyhaven',1),difficulty:1,rider:2,nativeChampionshipIntroduction:true,nativeCourseActors:actors([3,2])});
+ const g=s.nativeLaunch.snapshot();
+ assert.deepEqual([g.scene.courseIndex,g.profileWordsB330[1],g.profileWordsB330[2]],[1,0,1]);assert.deepEqual(g.profileWordsB330.slice(4,8),[0,0,0,0]);
+ assert.equal(s.nativeChampionshipSelection.scene.mode608,4);
+ const fly=prepareNativeChampionshipFlyover(s.nativeChampionshipSelection,{avatarsBySlot:s.racers.map(r=>r.id),...s.nativeHost.introductionInputs(),actors:s.nativeHost.introductionActorInputs()});
+ assert.equal(fly.courseIndex,1);assert.ok(fly.frames.length>100);
+ // AC184 returns early in main8; Sunny Beach's introduction script spawns no actors.
+ assert.ok(fly.frames.every(q=>q.actors.presentation.draws.length===0));
+ assert.ok(new Set(fly.frames.map(q=>q.eyeNative.join())).size>10,'the camera flies');
+ for(let i=0;i<300;i++)stepRace(s,{throttle:1},1/30);assert.equal(s.phase,'running');
+ assert.throws(()=>createRace({mode:'time',physics:'native',course:getCourse('greyhaven',1),difficulty:1,nativeChampionshipIntroduction:true}),/fresh native championship/);
+});

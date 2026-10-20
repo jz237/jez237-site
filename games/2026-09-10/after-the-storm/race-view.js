@@ -225,7 +225,9 @@ function nativeCupRace(nativeSceneEffects,nativeCourseActors){
  const c=nativeCup.continuation,order=NATIVE_CHAMPIONSHIP_SETUP_DATA.courseOrderAc14[Math.min(nativeCup.difficulty,2)];
  const id=nativeCourseId(c?c.courseIndex:order.find(i=>i>0));
  const race=createRace({mode:'championship',physics:'native',course:getCourse(id,nativeCup.difficulty),difficulty:nativeCup.difficulty,rider:nativeCup.rider,...(nativeCourseActors?{nativeCourseActors}:{nativeSceneEffects}),
-  ...(c?{nativeChampionshipContinuation:c}:{nativeRecordSession,nativeTunes:[saved.nativeSettings[0][nativeCup.rider]],nativeTuneModes:saved.nativeTuneModes})});
+  ...(c?{nativeChampionshipContinuation:c}:{nativeChampionshipIntroduction:true,nativeRecordSession,nativeTunes:[saved.nativeSettings[0][nativeCup.rider]],nativeTuneModes:saved.nativeTuneModes})});
+ // A fresh cup's first round also enters through the original course introduction.
+ if(!c&&race.nativeChampionshipSelection)nativeCup.finished=race.nativeChampionshipSelection;
  nativeCup.avatars??=race.racers.map(r=>r.id);return race;
 }
 function nativeCupResult(){

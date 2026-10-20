@@ -1,5 +1,5 @@
 import {createNativeRaceState,prepareNativeMenuReturnUpdate,prepareNativeIntroductionCameraInitializationUpdate,
- prepareNativeIntroductionCameraFrameUpdate} from './native-race-state.js';
+ prepareNativeIntroductionCameraFrameUpdate,prepareNativeMenuCameraInitializationUpdate} from './native-race-state.js';
 import {prepareNativeChampionshipIntroductionPhase} from './native-championship-introduction-runtime.js';
 import {createNativeChampionshipIntroductionStorage} from './native-championship-introduction-data.js';
 import {NATIVE_CHAMPIONSHIP_SETUP_DATA as setup} from './native-championship-setup.js';
@@ -70,6 +70,13 @@ export function prepareNativeChampionshipFlyover(finishedState,{avatarsBySlot,da
  if(state.scene.mode608!==4)throw new RangeError('Championship flyover requires a finished championship round');
  const sourceViews=views(state,avatarsBySlot);
  if(state.championshipSelectionWords6f84===undefined)state=createNativeRaceState({...state,...createNativeChampionshipIntroductionStorage()});
+ // A fresh selection has no preceding scene camera. The cup selection menu
+ // before it leaves a type1 menu camera (DDA24/DDAB8 template), which the
+ // introduction's type5 setup copies from; set that up first, on this copy.
+ if(state.hudWords7788[hi(0x7e98)]===0){
+  const hud=[...state.hudWords7788];hud[hi(0x7c80)]=1;
+  state=prepareNativeMenuCameraInitializationUpdate(createNativeRaceState({...state,hudWords7788:hud}),{datumNative}).state;
+ }
  state=prepareNativeMenuReturnUpdate(state,'championship',sourceViews).state;
  if(state.scene.main638!==8)throw new Error('Championship return did not enter the course introduction');
  // Main8 entry loads this course's actor banks and runs AC184 as a race scene

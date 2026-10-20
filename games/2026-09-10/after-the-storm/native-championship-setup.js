@@ -43,7 +43,16 @@ function profiles(effects){
  * constructs no physical world, performs no water RNG pass and plays no audio.
  * Resource/audio dependencies remain explicit in the returned pendingEffects.
  */
-export function prepareNativeChampionshipWebLaunch({racers,courseRuntime,recordSession,tunes=[],tuneModes=[],rngSeed=17}={}){
+export function prepareNativeChampionshipWebLaunch(options={}){
+ return prepareNativeChampionshipLaunch(prepareNativeChampionshipWebSelection(options),{courseRuntime:options.courseRuntime,avatarsBySlot:options.racers.map(r=>r.id)});
+}
+
+/** The same fresh selection, stopped before main configuration (9345C). The
+ * original enters each cup round through the championship return (801EB91C)
+ * and its course introduction, which then configure the race; a fresh cup's
+ * first round can start from this state the same way.
+ */
+export function prepareNativeChampionshipWebSelection({racers,courseRuntime,recordSession,tunes=[],tuneModes=[],rngSeed=17}={}){
  if(courseRuntime?.mode620!==4)throw new RangeError('Fresh championship selection requires its prepared mode4 course');
  if(!Array.isArray(racers)||racers.length!==4||racers.some((r,i)=>r?.human!==(i===0)||i===0&&r.player!==0))
   throw new RangeError('Fresh championship selection requires four racers with the primary human in slot0');
@@ -66,8 +75,7 @@ export function prepareNativeChampionshipWebLaunch({racers,courseRuntime,recordS
  state=prepareNativeRaceStateOperations(state,[
   ...qualification.requiredPlaceBySlot.map((value,i)=>({kind:'sourceWordWrite',field:['field708','field70c','field710','field714'][i],value})),
   {kind:'sourceWordWrite',field:'field704',value:qualification.primaryRequiredPlace}]).state;
- state=prepareNativeRaceStateOperations(state,nativeTuneLaunchOperations(racers,1,tunes,tuneModes)).state;
- return prepareNativeChampionshipLaunch(state,{courseRuntime,avatarsBySlot:racers.map(r=>r.id)});
+ return prepareNativeRaceStateOperations(state,nativeTuneLaunchOperations(racers,1,tunes,tuneModes)).state;
 }
 
 /** Prepared four-rider launch, before attaching any physical world or AI.
