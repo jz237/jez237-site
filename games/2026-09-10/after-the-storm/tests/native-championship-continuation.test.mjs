@@ -3,11 +3,13 @@ import assert from 'node:assert/strict';
 import {createRace,stepRace} from '../race-core.js';
 import {getCourse,COURSES} from '../courses.js';
 import {createNativeRacePilot} from '../native-race-pilot.js';
-import {prepareNativeChampionshipContinuation} from '../native-championship-continuation.js';
+import {prepareNativeChampionshipContinuation,prepareNativeChampionshipFlyover} from '../native-championship-continuation.js';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
 const courseFor=index=>COURSES.find(c=>getCourse(c.id).sourceWaterCourseIndex===index).id;
 const POINTS=[7,4,2,1];
+const bank=i=>new Uint8Array(readFileSync(new URL('../assets/actor-animations/bank-'+i+'.bin',import.meta.url)));
+const actors=banks=>({assets:Object.fromEntries(banks.map(i=>[i,bank(i)])),onDisplay(){}});
 
 function raceToHandoff(s){
  const r=s.racers[0],pilot=createNativeRacePilot({course:s.course});
@@ -20,7 +22,8 @@ function raceToHandoff(s){
 }
 
 test('a native cup continues from the original standings into the next course with points carried',()=>{
- const first=createRace({mode:'championship',physics:'native',course:getCourse('greyhaven',0),difficulty:0,rider:1});
+ // Wildlife in both rounds: round 2 loads its banks into the storage round 1 retained.
+ const first=createRace({mode:'championship',physics:'native',course:getCourse('greyhaven',0),difficulty:0,rider:1,nativeCourseActors:actors([3,2])});
  const avatars=first.racers.map(r=>r.id),places1=raceToHandoff(first),finished=first.nativeLaunch.snapshot();
  assert.deepEqual(finished.profileWordsB330.slice(4,8),places1.map(p=>POINTS[p]));
  const before=structuredClone(finished),next=prepareNativeChampionshipContinuation(finished,{avatarsBySlot:avatars});
@@ -29,8 +32,18 @@ test('a native cup continues from the original standings into the next course wi
  assert.throws(()=>prepareNativeChampionshipContinuation(finished,{avatarsBySlot:[0,0,1,2]}),/four championship avatars/);
  const id=courseFor(next.courseIndex);assert.equal(id,'amber');
  assert.throws(()=>createRace({mode:'championship',physics:'native',course:getCourse('reed',0),difficulty:0,rider:1,nativeChampionshipContinuation:next}),/continuation/);
- const second=createRace({mode:'championship',physics:'native',course:getCourse(id,0),difficulty:0,rider:1,nativeChampionshipContinuation:next});
- assert.deepEqual(second.racers.map(r=>r.id),avatars);assert.deepEqual(second.nativeLaunch.snapshot().profileWordsB330.slice(4,8),next.points);
+ assert.ok(finished.resourceWordsE73c&&finished.effectWords0790,'round 1 retains actor and effect storage');
+ const second=createRace({mode:'championship',physics:'native',course:getCourse(id,0),difficulty:0,rider:1,nativeChampionshipContinuation:next,nativeCourseActors:actors([0])});
+ assert.equal(second.nativeLaunch.snapshot().actorWordsF060.filter((w,i)=>i%47===0&&w===6).length,3,'Sunset Bay dolphins');
+ assert.deepEqual(second.racers.map(r=>r.id),avatars);
+ // The unskipped main8 introduction runs Sunset Bay's original flyover script on a copy.
+ const inputs=second.nativeHost.introductionInputs(),fly=prepareNativeChampionshipFlyover(finished,{avatarsBySlot:avatars,...inputs});
+ assert.equal(fly.courseIndex,2);assert.ok(fly.frames.length>next.frames+100,'natural introduction outlasts the skipped one');
+ assert.deepEqual(finished,before,'flyover leaves the finished round untouched');
+ assert.ok(fly.frames.every(q=>[...q.eyeNative,...q.targetNative,...q.up].every(Number.isFinite)&&q.fovDegrees===60));
+ const step=fly.frames.slice(1).map((q,i)=>Math.hypot(...q.eyeNative.map((v,j)=>v-fly.frames[i].eyeNative[j])));
+ assert.equal(step.filter(d=>d>200).length,1,'one cut between the two Sunset Bay shots');assert.ok(step.some(d=>d>0&&d<200),'the camera moves within a shot');
+ assert.deepEqual(prepareNativeChampionshipFlyover(finished,{avatarsBySlot:avatars,...inputs}),fly,'deterministic');assert.deepEqual(second.nativeLaunch.snapshot().profileWordsB330.slice(4,8),next.points);
  const places2=raceToHandoff(second);
  assert.deepEqual(second.nativeLaunch.snapshot().profileWordsB330.slice(4,8),places1.map((p,i)=>POINTS[p]+POINTS[places2[i]]));
  const third=prepareNativeChampionshipContinuation(second.nativeLaunch.snapshot(),{avatarsBySlot:avatars});

@@ -203,6 +203,13 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
    return Object.freeze({...raceWaterActorMotionInputs(water),bodyPoseWordsBySlot,courseWordsEe20,
     waterField:water.field,collisionGeometry:staticGeometry});
   },
+  // Main8 places these bodies on this course's water before its flyover. As
+  // at actor startup, a fresh browser scene has no water vertex history.
+  introductionInputs(){
+   if(!sourceSchedule)throw new Error('Course introduction inputs require a source race scene');
+   return Object.freeze({datumNative:water.field.datumNative,selectedWaterVertexXZ:[[0,0],[0,0]],
+    bodyPoseWordsBySlot:Object.freeze(adapters.map(a=>nativeCourseActorBodyPoseWords(a,{startup:true})))});
+  },
   provenance:Object.freeze({status:raceRuntime?.championshipLaunch?'championship-source-solver-integration-preview':raceRuntime?.stunt?'stunt-source-solver-integration-preview':'ordinary-source-solver-integration-preview',riderGeometry:'authored-modern-anatomy',
    initialHeight:hullStarts.length?'source-grid-transform':'course-datum',tuning:'explicit-native-indices; default5/5/5',
    hullStartup:'decoded packed16.16 transform; source point/frame/rest/damping recipe with authored local shape',
@@ -216,6 +223,9 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
    // New browser scene: unused route records and retained graphics X/Z begin
    // at zero. Do not evolve water to fabricate a startup vertex history.
    const retainedWordsEe20=Object.freeze(Array(192*65).fill(0)),segmentWordsE6b0=Array(16).fill(0);
+   // A continued championship round loads this course's banks into the
+   // resource storage the previous round left; only a new scene allocates it.
+   const retainedActorStorage=raceRuntime.snapshot().resourceWordsE73c!==undefined;
    segmentWordsE6b0[8]=0x316800;
    host.courseActors=raceRuntime.createCourseActorHost({worldScale:water.scale,
     buffers:{matrixBuffers:Array.from({length:2},()=>Array(192*16).fill(0)),lightBuffers:Array.from({length:2},()=>Array(96).fill(0))}});
@@ -223,7 +233,7 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
     bodyPoseWordsBySlot:adapters.map(a=>nativeCourseActorBodyPoseWords(a,{startup:true})),
     selectedWaterVertexXZ:[[0,0],[0,0]],sineTableWords4350,
     firstCourseNodeWords:raceRuntime.courseActorRouteWords(primary.state,retainedWordsEe20).slice(0,3)
-   },{assets:courseActors.assets,segmentWordsE6b0},{freshWebScene:true,waterExtent2498:water.field.parameters.radius*64});
+   },{assets:courseActors.assets,segmentWordsE6b0},{freshWebScene:!retainedActorStorage,courseLoad:true,waterExtent2498:water.field.parameters.radius*64});
    courseActors.onEffects(host.actorStartup.effects);
    host.advanceCourseActors=()=>{
     // Birds (BF8C8) read the audio timing word and ice actors the audio mode
@@ -256,7 +266,7 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
     graphicsBuffers:Array.from({length:2},()=>Array(0xb2f0).fill(0))});
    //62E50(a2=0) wrote BF0/BF4 zero during the fresh physical body startup.
    host.effectStartup=host.sceneEffects.initialize({clockLow32:clockWords()[1],queryNative,
-    bodyFieldsBySlot:adapters.map(a=>captureNativeInitialEffectBody(a,{boundaryDriftNative:{x:0,z:0}}))},{freshWebScene:true});
+    bodyFieldsBySlot:adapters.map(a=>captureNativeInitialEffectBody(a,{boundaryDriftNative:{x:0,z:0}}))},{freshWebScene:raceRuntime.snapshot().effectWords0790===undefined});
    host.advanceSceneEffects=()=>{
     const clock=clockWords();
     host.lastSceneEffects=host.sceneEffects.advanceMotion({clockStartWords:clock,clockEndWords:clock,queryNative,

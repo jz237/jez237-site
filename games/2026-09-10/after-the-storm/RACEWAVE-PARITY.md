@@ -1,5 +1,28 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — original course-introduction flyover between cup rounds
+
+Before each native Championship round after the first, the browser now plays
+the original main8 course introduction: the type5→6 camera initialization and
+the per-frame DDE48 camera (its course script, introduction actors and
+smoothing) before the i3 overlay, in the original 922E4 order, at the 20 Hz
+outer-frame rate, without the skip. Body poses and the water datum come from the
+freshly placed next race. Sunset Bay's 214 frames play for about 10.7 s, with
+the original cut between its two shots. Enter, Space, A or a click skips it.
+Frames are interpolated for high-refresh displays, never across a cut, and the
+race waits at its start. All nine cup courses produce camera paths. Four
+(Sunny Beach Expert, Drake Lake, Port Blue and Southern Island) consume the
+shared RNG in their introduction actors, so the flyover runs on a copy and the
+race configuration still comes from the continuation, which skips the camera.
+Still pending: the main8 physical scene (water, 8E794, B2ABC) and drawing the
+introduction actors, the round 1 introduction, and the ending ceremony.
+
+Fixed in the same change: a Championship round after a round with wildlife
+failed to start ("Fresh web actor allocation cannot replace retained
+resources"). A continued round now loads its course's banks into the actor and
+effect storage the previous round retained, and still runs the course display
+setup, which overwrites its owners on every course load.
+
 ## Unpublished — course wildlife in Original Stunt, including Dolphin Park
 
 The original startup (926F4) runs AC184, then AE7C4, for every scene, and its

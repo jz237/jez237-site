@@ -31,9 +31,10 @@ export function createNativeCourseActorHost({readRaceState,commitRaceState,buffe
  }
  function initialized(){if(!binding)throw new Error('Initialize course actors before their frame stages');return read();}
  return Object.freeze({
-  initialize(input,resources,{freshWebScene=false,waterExtent2498}={}){
+  initialize(input,resources,{freshWebScene=false,courseLoad=freshWebScene,waterExtent2498}={}){
    if(binding)throw new Error('Course actor startup may run only once');
    if(typeof freshWebScene!=='boolean')throw new TypeError('Fresh web actor allocation must be explicit');
+   if(typeof courseLoad!=='boolean'||freshWebScene&&!courseLoad)throw new TypeError('A fresh web scene is a course load');
    let state=read();
    if(freshWebScene){
     if(state.resourceWordsE73c!==undefined||state.resourceWordsB538!==undefined)
@@ -43,7 +44,9 @@ export function createNativeCourseActorHost({readRaceState,commitRaceState,buffe
      scene:{...state.scene,championshipCountAa00:state.scene.championshipCountAa00??0}};
    }
    const assets=prepareNativeCourseActorAssets(state,resources);
-   const display=freshWebScene?prepareNativeCourseDisplayInitializationUpdate(assets.state,{waterExtent2498}):null;
+   // Course display setup fully overwrites its owners on every course load,
+   // including a championship round that retains the previous resources.
+   const display=courseLoad?prepareNativeCourseDisplayInitializationUpdate(assets.state,{waterExtent2498}):null;
    const q=prepareNativeCourseActorInitializationUpdate(display?.state??assets.state,input);
    const nextBinding=Object.freeze({courseIndex:q.state.scene.courseIndex,words:Object.freeze([...q.state.resourceWordsE73c]),animationResources:assets.animationResources});
    commitRaceState(q.state);binding=nextBinding;generation++;
