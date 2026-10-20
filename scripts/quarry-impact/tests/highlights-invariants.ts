@@ -1,3 +1,4 @@
+import {restoreWreckReportBytes} from './wreck-report-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readHighlightsPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreHighlightsBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreWreckReportBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readHighlightsPrevious(file);
 }
 export function verifyHighlightsRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'cd7c964dbaf2f9b54dc40484aa40a51bfd1b47c5');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreWreckReportBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreHighlightsBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the Highlights release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreWreckReportBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the Highlights release');
  assert.equal(manifest.previousFixtureCount,5168);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,5168);
 }

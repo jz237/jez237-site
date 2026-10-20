@@ -698,3 +698,4 @@ kbd {
 @keyframes dd-blink{50%{opacity:.25}}
 @media(max-width:700px){.damage-diagram{left:auto;right:12px;bottom:150px;transform:scale(.8);transform-origin:bottom right}}
 .studio-highlight{position:absolute;top:18px;left:50%;transform:translateX(-50%);padding:8px 16px;background:#14241de8;border:1px solid #d7c48c66;color:#fff1bd;font:700 13px Montserrat,Arial,sans-serif;letter-spacing:2px;pointer-events:none;z-index:5}
+.wreck-report{font-size:11px;letter-spacing:1px;color:#e0b98a;margin:4px 0 8px}
