@@ -23345,5 +23345,97 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-20-factual-infographic-factual-infographic-coral-bleaching-the",
+    "title": "Factual infographic: Coral Bleaching — The Partnership Comes Apart",
+    "tests": "Two independent institutional sources fetched and read; no numerical thresholds; educational generalized comparison.; archive_slot=2026-10-20T00:20; concept=coral-bleaching-symbiosis-reef; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: factual-infographic",
+    "prompt": "Create a finished artwork-led scientific infographic, directly on the canvas, entitled \"CORAL BLEACHING\" with the subtitle \"When a living partnership comes apart\". A refined underwater gouache and translucent watercolor illustration with fine scientific ink lines, luminous sea-glass blue negative space, umber and ochre living coral, ivory bleached skeleton, and restrained warm coral-red annotations. No photographed print, frame, UI, grid of cards, bibliography, logos or watermarks. Make the dominant subject an exquisitely detailed reef-building branching coral colony sweeping diagonally from lower left toward upper right. Its subtly colored living branch and separate pale bleached branch form a comparative illustration, not a claim that bleaching literally travels along this branch. Distinct small polyp cups, delicate tentacles and finely textured skeleton reward close viewing, while an open blue-water background allows readable annotations. Do not add unsourced species names, species-specific claims, numbers, or unrelated reef animals.\n\nWeave the science into the coral contours, with asymmetrical nested magnifications connected by hairline curved leaders, not detached boxes. Near the lower living branch, show a magnified living polyp seated on its white skeletal cup: transparent tissue containing many tiny golden-brown algal cells, with clear labels \"Coral polyp — an animal\", \"Symbiotic algae in living tissue\", and \"Hard skeleton\". Make the cells inside tissue, not living inside the skeleton. A second more intimate tissue enlargement floats in surrounding blue negative space; a sunbeam and understated arrows explain the partnership with exact concise labels \"Algae: sunlight → food\" and \"Coral: a place to live\". Treat this as a conceptual relationship study, not fabricated cell ultrastructure; omit chloroplast organelle detail.\n\nAn airy warm-water current arcs behind the central colony with the annotation \"Heat stress can disrupt the partnership\". Continue the visual journey to a comparative magnification at the pale branch, showing the same thin living tissue with markedly fewer golden algal cells over the now-visible white skeleton. Label \"Algae and/or their pigments are lost\" and \"White skeleton shows through transparent tissue\". Do not depict tissue turning into bone, a chemical bleach bottle, acid dissolving skeleton, or a literal temperature threshold. Small unobtrusive line below the current: \"Heat is not the only stressor.\"\n\nAlong the lower open-water margin, a forked organic annotation path makes outcomes unmistakable: one short curved route points to a small returning golden-brown algal study beside a recoloring living coral tip, captioned \"Stress eases + algae return: recovery is possible\"; the other fades toward a bare skeletal twig, captioned \"Prolonged stress + algae loss: coral may die\". Dominant readable statement beside the large bleached branch: \"BLEACHED ≠ DEAD\" with the small explanation \"Still alive, but missing a major food source\". Do not suggest every coral recovers, that bleaching always kills, or that a bleached skeleton by itself proves death. This is a generalized explanatory comparison, not a quantified time course. Include only the described source-backed claims. Arrange graceful type hierarchies, short legible labels, generous breathing room, natural visual pathways and accurate text. Render rich coral material and tissue detail without clutter or detached equal-size panels. Request medium quality, auto size, opaque background.",
+    "image": "images/2026-10-20-factual-infographic-factual-infographic-coral-bleaching-the.jpg",
+    "thumb": "thumbs/2026-10-20-factual-infographic-factual-infographic-coral-bleaching-the.webp",
+    "color": "#6a8786",
+    "date": "2026-10-20",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "coral-bleaching-symbiosis-reef",
+      "imageSha256": "beb034e5c9b1852548801d6eb548a16340d3ee8f5a35252be8a196dcf53c79ff",
+      "imageDHash": "7f15a7cf4c4ebb19"
+    },
+    "factualInfographic": {
+      "topic": "How coral bleaching disrupts the partnership between reef-building coral polyps and their symbiotic algae",
+      "description": "Artwork-led comparison of coral–algal symbiosis, heat stress, bleaching, and conditional recovery or mortality.",
+      "sourceNote": "NOAA National Ocean Service: https://oceanservice.noaa.gov/facts/coral_bleach.html ; Woods Hole Oceanographic Institution: https://www.whoi.edu/ocean-learning-hub/ocean-facts/why-do-corals-bleach/ . Verified polyp/skeleton anatomy, algal food and pigmentation, stress-related bleaching and conditional outcomes.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-20T04:21:13.943460+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NOAA National Ocean Service",
+            "title": "What is coral bleaching?",
+            "sourceType": "government-agency",
+            "url": "https://oceanservice.noaa.gov/facts/coral_bleach.html"
+          },
+          {
+            "id": "S2",
+            "publisher": "Woods Hole Oceanographic Institution",
+            "title": "Why do corals bleach?",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.whoi.edu/ocean-learning-hub/ocean-facts/why-do-corals-bleach/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Reef-building coral is an animal colony of tiny tentacled polyps that build and cover a hard skeleton.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Microscopic symbiotic algae called zooxanthellae live within coral tissue; they provide much of its color and a major food source.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Algae use sunlight, carbon dioxide and water for photosynthesis; much of the food they produce feeds the coral, while coral provides a place to live.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Heat stress can disrupt the symbiosis and cause loss of algae and/or their coloration; bleaching is not limited to warm-water stress.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Loss of algae and their pigments leaves white skeleton visible through nearly transparent living coral tissue.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Bleached coral is not necessarily dead but has lost a major source of food and is vulnerable.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Recovery is possible if stress eases and algae return, but prolonged stress and algae loss can lead to death.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
