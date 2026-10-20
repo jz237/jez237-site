@@ -21,5 +21,15 @@ export function leakTyre(damage:number,speed:number,dt:number){
   return Math.min(LEAK.flat,damage+dt*LEAK.rate*(.35+severity)*rolling);
 }
 /** A damaged corner's damper loses up to DAMPER_LOSS of its damping, so it bounces and wallows. */
+/** Gearbox damage: crushing the driven end of the car past GEARBOX.onset strips the top gear, then more,
+ * down to GEARBOX.min gears, which caps top speed. */
+export const GEARBOX={onset:.45,step:.125,min:2} as const;
+export type DriveLayout='front'|'rear'|'all';
+export function gearLimit(structure:readonly number[]|undefined,drive:DriveLayout){
+  const front=clamp01(structure?.[0]??0),rear=clamp01(structure?.[1]??0);
+  const c=drive==='front'?front:drive==='rear'?rear:Math.max(front,rear)*.85;
+  return Math.max(GEARBOX.min,5-Math.max(0,Math.floor((c-GEARBOX.onset)/GEARBOX.step)+1));
+}
+export function gearboxWarning(limit:number){return limit<5?`GEARBOX DAMAGED · ${limit} GEARS`:'';}
 export const DAMPER_LOSS=.6;
 export function damperFactor(wheelDamage:number){return 1-DAMPER_LOSS*clamp01(wheelDamage);}

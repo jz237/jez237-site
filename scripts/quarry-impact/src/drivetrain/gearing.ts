@@ -4,7 +4,7 @@ export const freshAutoGear=():AutoGearState=>({gear:1,delay:0,cooldown:0,pending
 const ratios=[12,8.04,5.88,4.56,3.72];
 /** Road-speed hysteresis prevents stationary wheelspin from running up through
  * the gearbox. Direction changes require a nearly stopped chassis. */
-export function stepAutoGear(s:AutoGearState,speed:number,engineRPM:number,radius:number,throttle:number,dt:number,ratioScale=1){
+export function stepAutoGear(s:AutoGearState,speed:number,engineRPM:number,radius:number,throttle:number,dt:number,ratioScale=1,top=5){
  s.cooldown=Math.max(0,s.cooldown-dt);
  if(s.pending!==null){s.delay=Math.max(0,s.delay-dt);if(s.delay===0){s.gear=s.pending;s.pending=null;s.cooldown=.65;}}
  const desired=throttle<-.05?-1:throttle>.05?1:0;
@@ -12,7 +12,8 @@ export function stepAutoGear(s:AutoGearState,speed:number,engineRPM:number,radiu
  if(s.gear>0&&s.pending===null&&s.cooldown===0){
   const rpm=Math.abs(speed)/radius*ratios[s.gear-1]*ratioScale*60/(2*Math.PI);
   let next=s.gear;
-  if(rpm>5200&&engineRPM>5000&&s.gear<5)next++;
+  if(s.gear>top)next=top;
+  else if(rpm>5200&&engineRPM>5000&&s.gear<top)next++;
   else if(rpm<2100&&s.gear>1)next--;
   if(next!==s.gear){s.pending=next;s.delay=.18;}
  }

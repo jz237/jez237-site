@@ -31,7 +31,7 @@ export function createVehicleDrive(body:R.RigidBody,controller:R.DynamicRayCastV
   if(Math.abs(state.input.throttle)>.001)body.wakeUp();
   stepVehiclePhysics(body,controller,kind,spec,state,dt,condition.wheelDamage,condition.wheelShift,condition.engineDamage,condition.tyreDamage,true,condition.wheelLost);
   const calibration=calibrate(spec);
-  const gear=ratio===undefined?(state.input.transmission?manualDriveGear(state,calibration.ratioScale):stepAutoGear(gearbox,state.speed,engine.omega*60/(2*Math.PI),vehicleWheelRadius(kind),state.input.throttle,dt,calibration.ratioScale)):{ratio,clutch:1,allowThrottle:true};
+  const gear=ratio===undefined?(state.input.transmission?manualDriveGear(state,calibration.ratioScale):stepAutoGear(gearbox,state.speed,engine.omega*60/(2*Math.PI),vehicleWheelRadius(kind),state.input.throttle,dt,calibration.ratioScale,state.gearLimit??5)):{ratio,clutch:1,allowThrottle:true};
   if(state.input.transmission)Object.assign(gearbox,{gear:state.gear===0?-1:Math.max(1,state.gear),pending:null,delay:0,cooldown:.65});
   // Automatic opposite-direction input brakes to a stop before selecting gear.
   // Otherwise idle torque can keep the old gear creeping forever.
