@@ -1,3 +1,4 @@
+import {restoreTeamRaceBytes} from './team-race-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readTrophyDecalsPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreTrophyDecalsBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreTeamRaceBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readTrophyDecalsPrevious(file);
 }
 export function verifyTrophyDecalsRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'33630da355482e3ab77903325d171fe3a116f251');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreTeamRaceBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreTrophyDecalsBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the TrophyDecals release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreTeamRaceBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the TrophyDecals release');
  assert.equal(manifest.previousFixtureCount,4954);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,4954);
 }

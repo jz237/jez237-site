@@ -1,0 +1,14 @@
+/** How accumulated damage changes the way a car drives (offline events only).
+ * - Bent steering: front compression (structure[0]) cuts the available steering lock.
+ * - Brake bias: a damaged corner's brake loses force, so the car pulls under braking.
+ * - Overheating: a crushed front (radiator) keeps adding engine damage while the engine runs. */
+const clamp01=(v:number)=>Math.max(0,Math.min(1,Number.isFinite(v)?v:0));
+export const STEER_LOSS=.4,BRAKE_LOSS=.45,RADIATOR={onset:.35,rate:.006,cap:.85} as const;
+export function steeringLimit(structure:readonly number[]|undefined){return 1-STEER_LOSS*clamp01(structure?.[0]??0);}
+export function brakeFactor(wheelDamage:number){return 1-BRAKE_LOSS*clamp01(wheelDamage);}
+/** New engine damage after dt seconds of running with this front compression and throttle. */
+export function overheat(engineDamage:number,frontCompression:number,throttle:number,dt:number){
+  const crushed=clamp01((frontCompression-RADIATOR.onset)/(1-RADIATOR.onset));
+  if(crushed<=0||!(dt>0)||engineDamage>=RADIATOR.cap)return engineDamage;
+  return Math.min(RADIATOR.cap,engineDamage+dt*RADIATOR.rate*crushed*(.35+.65*clamp01(Math.abs(throttle))));
+}

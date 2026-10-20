@@ -29,7 +29,7 @@ export function captureReplayCheckpoint(cars:readonly Vehicle[],limit:number){
     opacity:(mesh.material as T.Material).opacity,glass:glass?{damage:glass.damage.value,impact:glass.impact.value.clone()}:undefined};
   });
   return {car,nodes,meshes,values:scalars.map(key=>car[key]),structure:car.structuralDamage?.slice(),tyres:car.tyreDamage?.slice(),
-   zones:{...car.damageZones},partZones:{...car.wreckParts.zones},wheelDamage:car.wreckParts.wheelDamage.slice(),wheelShift:car.wreckParts.wheelShift.map(v=>v.clone()),
+   zones:{...car.damageZones},partZones:{...car.wreckParts.zones},wheelDamage:car.wreckParts.wheelDamage.slice(),wheelLost:car.wreckParts.wheelLost.slice(),wheelShift:car.wreckParts.wheelShift.map(v=>v.clone()),
    assemblies:car.wreckParts.assemblies.map(a=>({damage:a.damage,side:a.side,loose:a.loose})),poseTime:car.wreckParts.poseTime};
  });
  return {bytes,restore(){
@@ -38,7 +38,7 @@ export function captureReplayCheckpoint(cars:readonly Vehicle[],limit:number){
    scalars.forEach((key,i)=>{(c as any)[key]=s.values[i];});
    c.structuralDamage=s.structure?.slice();c.structure.update(c.structuralDamage,c.health);c.tyreDamage=s.tyres?.slice();
    Object.assign(c.damageZones,s.zones);Object.assign(c.wreckParts.zones,s.partZones);
-   c.wreckParts.wheelDamage.set(s.wheelDamage);c.wreckParts.wheelShift.forEach((v,i)=>v.copy(s.wheelShift[i]));
+   c.wreckParts.wheelDamage.set(s.wheelDamage);c.wreckParts.wheelLost.set(s.wheelLost);c.wreckParts.wheelShift.forEach((v,i)=>v.copy(s.wheelShift[i]));
    c.wreckParts.assemblies.forEach((a,i)=>Object.assign(a,s.assemblies[i]));c.wreckParts.poseAt(s.poseTime,c.speed);
    for(const n of s.nodes){n.node.visible=n.visible;n.node.position.copy(n.position);n.node.quaternion.copy(n.quaternion);n.node.scale.copy(n.scale);n.node.matrix.copy(n.matrix);n.node.matrixAutoUpdate=n.auto;n.node.matrixWorldNeedsUpdate=true;}
    for(const m of s.meshes){

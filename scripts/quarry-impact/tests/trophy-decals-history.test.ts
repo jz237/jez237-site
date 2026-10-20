@@ -1,6 +1,7 @@
+import {restoreTeamRaceBytes} from './team-race-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readTrophyDecalsPrevious,restoreTrophyDecalsBytes,verifyTrophyDecalsRevision} from './trophy-decals-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreTeamRaceBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('TrophyDecals preserves every prior fixture, vehicle asset, venue art and history input',verifyTrophyDecalsRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/trophy-decals/revision.json').toString());

@@ -168,6 +168,7 @@ import {createRain} from './rain';
 import {applyWetLook} from './wet-look';
 import {setWetness} from './driving-surface';
 import {ELIMINATION_INTERVAL,eliminationActive,nextElimination} from './elimination-race';
+import {TEAMS,teamOf,teamRaceActive,teamScores,teamLine,teamVerdict} from './team-race';
 import {dailyKey,dailyStreak,dailyWeek,isDailyChallenge,DAILY_PREFIX} from './daily-record';
 import {EVENT_KEY,readEventOptions,circuitRoute,raceGridSlot,derbyGridSlot,checkRoute,lapProgress,CombatScoreboard,eventDerbyOrder,stepScoreRespawns} from './event-rules';
 import {showEventSetup} from './event-ui';
@@ -242,6 +243,7 @@ const onlineRules=()=>online?.active?online.network.snapshot?.event?.rules:undef
 const raceFormat=()=>pursuitSelected()?'laps':demo?(demoOptions.race??'laps'):onlineRules()?.race??clubRound()?.race??activeChallenge?.race??(customEvent()?eventOptions.race:'laps');
 const damageRule=()=>sessionDamageRule(customEvent()&&mode!=='playground',demo,eventOptions.damage,demoOptions.damage);
 let nextEliminationAt=0,eliminatedOrder:number[]=[];
+const teamRace=()=>!online?.active&&!pursuitSelected()&&activeClubRound===null&&!activeChallenge&&!activeTimeTrial&&teamRaceActive(mode,customEvent(),demo,raceFormat(),eventOptions,demoOptions);
 const eliminationRace=()=>!online?.active&&!pursuitSelected()&&activeClubRound===null&&!activeChallenge&&!activeTimeTrial&&eliminationActive(mode,customEvent(),demo,raceFormat(),eventOptions,demoOptions);
 const raceTimeLimit=()=>online?.active?(mode==='race'&&onlineRules()?.race==='laps'?onlineRules()?.raceDuration??0:0):pursuitSelected()?0:timedRaceLimit(mode,customEvent(),demo,raceFormat(),eventOptions,demoOptions);
 const sessionDirection=()=>demo?demoRaceDirection(demoOptions):eventOptions.direction;
@@ -468,7 +470,7 @@ function archiveReplay(){
 }
 function beginReplay(){
   lastReplay=null;replayEpochs=cars.map(()=>0);
-  recorder=new ReplayRecorder({version:1,tyreModel:1,engineModel:1,audioModel:1,thermalModel:1,...(activeVenue.arenaId?{arenaId:activeVenue.arenaId}:{}),...(activeVenue.course.id==='quarry-v1'?{}:{courseId:activeVenue.course.id}),mode,...(pursuit?{pursuit:true as const}:{}),...(scoreElimination()?{derbyFormat:'score-no-respawn' as const}:{}),reverse:mode==='race'&&(clubRound()?clubRound()!.direction==='reverse':activeTimeTrial?activeTimeTrial.direction==='reverse':activeChallenge?activeChallenge.direction==='reverse':customEvent()&&eventOptions.direction==='reverse'),cars:cars.map(c=>({id:c.id,kind:c.kind,setup:{...structuredClone(c.setup),paint:c.paintColor.getHex()}})),props:activeVenue.props.length,created:new Date().toISOString()});
+  recorder=new ReplayRecorder({version:1,tyreModel:1,engineModel:1,audioModel:1,thermalModel:1,...(online?.active?{}:{damageModel:1 as const}),...(activeVenue.arenaId?{arenaId:activeVenue.arenaId}:{}),...(activeVenue.course.id==='quarry-v1'?{}:{courseId:activeVenue.course.id}),mode,...(pursuit?{pursuit:true as const}:{}),...(scoreElimination()?{derbyFormat:'score-no-respawn' as const}:{}),reverse:mode==='race'&&(clubRound()?clubRound()!.direction==='reverse':activeTimeTrial?activeTimeTrial.direction==='reverse':activeChallenge?activeChallenge.direction==='reverse':customEvent()&&eventOptions.direction==='reverse'),cars:cars.map(c=>({id:c.id,kind:c.kind,setup:{...structuredClone(c.setup),paint:c.paintColor.getHex()}})),props:activeVenue.props.length,created:new Date().toISOString()});
   cars.forEach((car,i)=>car.onVisualEvent=e=>{if(e.kind==='jump'||e.kind==='repair')replayEpochs[i]++;recorder?.event(i,elapsed,e);});
   cars.forEach(c=>c.render(1));captureReplay(true);
 }
@@ -858,8 +860,11 @@ function createCars(attract = false, previewSetup?:Setup) {
     const type =
       ratedGrid?ratedGrid.at(i):!attract&&activeClubRound!==null?clubCup!.roster[i].kind:demo&&!attract?demoCarKind(i,kind,demoOptions.lineup):i === 0 ? kind : activeChallenge?(['coupe','sedan','hatch']as CarKind[])[i%3]:!attract&&customEvent()&&mode!=='playground'?gridCarKind(i,kind,eventOptions.lineup):CAR_KINDS[i%CAR_KINDS.length];
     const setup=!attract&&activeTimeTrial?timeTrialSetup(activeTimeTrial):!attract&&activeClubRound!==null?clubVehicleSetup(clubCup!,type):demo&&!attract?demoVehicleSetup(type,demoOptions,garage,kind):!attract&&customEvent()&&mode!=='playground'?eventGridSetup(type,kind,garage,eventOptions.performance,i===0,colors[i%colors.length],eventOptions.classLimit):i===0 && (attract || !demo) && !activeChallenge ? previewSetup??garage.cars[type].setup : undefined;
-    const car = new Vehicle(i, type, setup?.paint ?? colors[i%colors.length], scene, physics, fx, setup,activeVenue.course,online?.active?'legacy':'angular-v1');
+    const team=!attract&&teamRace()?TEAMS[teamOf(i)]:null,teamSetup=team&&setup?{...setup,paint:team.color,trim:team.trim}:setup;
+    const car = new Vehicle(i, type, team?.color ?? setup?.paint ?? colors[i%colors.length], scene, physics, fx, teamSetup,activeVenue.course,online?.active?'legacy':'angular-v1');
     carLights.set(car,attachCarLights(car.root,DEFINITIONS[type].halfLength));
+    car.extendedDamage=!attract&&!online?.active;if(car.extendedDamage)car.onBackfire=p=>sound.backfire(p);
+    if(car.extendedDamage&&i===0&&!demo)car.onWheelLost=w=>toast(`WHEEL GONE · ${['FRONT LEFT','FRONT RIGHT','REAR LEFT','REAR RIGHT'][w]}`,1.6);
     car.waters=activeVenue.puddles;
     if(mode==='derby'&&!online?.active&&activeVenue===quarryVenue)car.arenaSurface=DERBY_ARENA;
     cars.push(car);
@@ -953,6 +958,9 @@ async function start(watch=demo) {
 }
 let standingsExpanded=false,standingsUpdated=-Infinity;
 function currentStandings():StandingRow[]{
+ const rows=baseStandings();if(!teamRace())return rows;return rows.map(r=>{const slot=cars.findIndex(c=>c.id===r.id);return slot<0?r:{...r,detail:TEAMS[teamOf(slot)].name+' · '+r.detail};});
+}
+function baseStandings():StandingRow[]{
  const ranking=online?.active?online.network.snapshot?.ranking.map(id=>cars.find(c=>c.id===id)).filter((c):c is Vehicle=>!!c)??cars:mode==='derby'?derbyRanking():rankRace();
  return ranking.map(c=>({id:c.id,name:displayedDriver(c),health:c.health,player:!demo&&isPlayer(c),followed:demo&&c.id===director.followed,detail:pursuit?(pursuit.role(c.id)==='runner'?'RUNNER':'CHASER'):mode==='derby'?(scoreDerby()?combat.points(c.id)+' PTS':c.health>0?'RUNNING':'OUT'):raceTimeLimit()?(c.finished?Math.floor(c.passed/24)+' LAPS · '+formatTime(c.finishTime):c.health<=0?'RETIRED':'LAP '+c.lap):c.finished?formatTime(c.finishTime):eliminationRace()&&eliminatedOrder.includes(c.id)?'OUT '+(eliminatedOrder.indexOf(c.id)+1)+(eliminatedOrder.indexOf(c.id)===0?'ST':eliminatedOrder.indexOf(c.id)===1?'ND':eliminatedOrder.indexOf(c.id)===2?'RD':'TH'):c.health<=0?'RETIRED':eliminationRace()&&state==='result'?'SURVIVOR':state==='result'?'DNF':waypointRace?'GATES '+c.passed:'LAP '+Math.min(raceLaps(),c.lap)}));
 }
@@ -973,6 +981,7 @@ function hud() {
   if(pursuit)ui.querySelector('.hud-title')!.textContent=(pursuit.role(cars[0].id)==='chaser'?'CHASE · STOP THE RUNNERS':'CHASE · FINISH ALIVE')+' · NO RECOVERIES';
   if(onlineRules())ui.querySelector('.hud-title')!.textContent=onlineEventLabel(mode,onlineRules()!).toUpperCase();
   if(mode==='race'&&!demo&&!online?.active&&!pursuit)ui.querySelector('.hud')!.insertAdjacentHTML('beforeend','<div class="waypoint-status" id="rival-status"></div>');
+  if(teamRace())ui.querySelector('.hud')!.insertAdjacentHTML('beforeend','<div class="waypoint-status" id="team-status"></div>');
   if(mode==='derby'){ui.querySelector('.hud')!.insertAdjacentHTML('beforeend','<div class="waypoint-status" id="rival-status"></div><ol id="derby-event-feed" aria-label="Recent derby events"></ol>');derbyFeed.observe(cars.map(c=>({id:c.id,name:displayedDriver(c),record:combat.get(c.id)})),elapsed);}
   if(pursuit)ui.querySelector('.hud')!.insertAdjacentHTML('beforeend','<div class="waypoint-status" id="pursuit-status"></div>');
   if(waypointRace)ui.querySelector('.hud')!.insertAdjacentHTML('beforeend','<div class="waypoint-status" id="waypoint-status"></div>');
@@ -1042,7 +1051,11 @@ function updateHud() {
   text('engine-restart', stallHint(player.health,player.engineStall,player.input.throttle));
   text(
     'steer-status',
-    Math.abs(player.damageLeft - player.damageRight) > 16
+    player.wreckParts.wheelLost.some(v=>v)
+      ? 'WHEEL LOST'
+      : player.steerLimit < .8
+      ? 'STEERING BENT'
+      : Math.abs(player.damageLeft - player.damageRight) > 16
       ? 'STEERING PULL'
       : 'STEERING OK',
   );
@@ -1052,6 +1065,7 @@ function updateHud() {
   if(mode==='race'&&!demo&&!online?.active&&!pursuit){const r=eventAwards.rivalOf(player.id),opponent=r?cars.find(c=>c.id===r.id):undefined;let label='';
     if(r&&opponent){const order=rankRace(),me=order.indexOf(player),them=order.indexOf(opponent),gap=Math.abs(me-them);label=`RIVAL · ${DEFINITIONS[opponent.kind].name} #${opponent.id+1} · ${opponent.health<=0?'WRECKED':gap===0?'LEVEL':them<me?`${gap} ${gap===1?'PLACE':'PLACES'} AHEAD`:`${gap} ${gap===1?'PLACE':'PLACES'} BEHIND`} · DEALT YOU ${Math.round(r.damage)}`;}
     text('rival-status',label);}
+  if(teamRace()){const team=demo?undefined:teamOf(cars.indexOf(player));text('team-status',state==='result'?teamVerdict(currentTeamScores(),team):teamLine(currentTeamScores(),team));}
   if(mode==='derby'){
     const rival=combat.rival(player.id),opponent=cars.find(c=>c.id===rival),record=combat.get(player.id);
     const label=opponent&&opponent.health>0?'RIVAL · '+DEFINITIONS[opponent.kind].name+' #'+opponent.id+' · +25 FOR ATTACKING HITS':combat.rivals?'RIVAL · WAITING FOR CONTACT':'';
@@ -1314,6 +1328,7 @@ function ai(car: Vehicle, dt: number): Input {
   });
   return drivers.update(car,cars,practiceTraffic?'race':mode,dt,probe,raceRoute(car.id));
 }
+function currentTeamScores(){return teamScores(rankRace().map(c=>({slot:cars.indexOf(c),scores:c.finished||c.health>0})));}
 function rankRace(){const order=rankRaceBase();return eliminationRace()?[...order.filter(c=>c.finished),...order.filter(c=>!c.finished&&c.health>0),...order.filter(c=>!c.finished&&c.health<=0).sort((a,b)=>eliminatedOrder.indexOf(b.id)-eliminatedOrder.indexOf(a.id))]:order;}
 function rankRaceBase() {
   if(pursuit){const won=pursuit.winner==='runners';return [...cars].sort((a,b)=>(Number(pursuit!.role(b.id)==='runner')-Number(pursuit!.role(a.id)==='runner'))*(won?1:-1)||b.health-a.health||a.id-b.id);}
@@ -1392,6 +1407,7 @@ function finish(title: string) {
     return;
   }
   ui.innerHTML = `<div class="overlay"><div class="dialog"><div class="eyebrow">${pursuit?'CHASE · ':''}${eventLabel()} / RESULTS${customEvent()&&mode!=='playground'?' · '+AI_DIFFICULTIES[drivers.difficulty].label.toUpperCase()+' AI':''}</div><h2>${title}</h2>${customEvent()&&mode!=='playground'?`<p>${GRID_LINEUPS[eventOptions.lineup??'mixed']} · ${GRID_PERFORMANCE[eventOptions.performance??'open']} · ${classLimitLabel(eventOptions.classLimit)} · ${DAMAGE_RULES[damageRule()].label}</p>`:''}<p>${pursuit?(pursuitTeamWon(pursuit,cars[0].id)?'YOUR TEAM WINS':'YOUR TEAM LOSES'):'Placed '+rank+' of '+cars.length} · ${Math.ceil(cars[0].health)}% condition<br>${pursuit?formatTime(elapsed)+' chase · No recoveries':mode === 'derby' ? scoreDerby()?combat.points(cars[0].id)+' points · '+combat.get(cars[0].id).knockouts+' knockouts · '+(combat.get(cars[0].id).spins??0)+' spin-outs · '+(combat.get(cars[0].id).bonus??0)+' bonus points'+(combat.get(cars[0].id).rivalHits?' · '+combat.get(cars[0].id).rivalHits+' rival hits':''):Math.round(cars[0].inflicted) + ' damage inflicted'+(combat.rivals?' · '+(combat.get(cars[0].id).bonus??0)+' bonus points · '+(combat.get(cars[0].id).rivalHits??0)+' rival hits':'') : raceTimeLimit()?timedRaceResult(cars[0])+' · '+formatTime(raceTimeLimit())+' timed race':cars[0].finished?formatTime(cars[0].finishTime)+' including recovery penalties':cars[0].health<=0?'RETIRED · CAR WRECKED':'DNF · RACE NOT FINISHED'}</p>${ordered.map((c, i) => `<div class="results-row ${isPlayer(c) ? 'player' : ''}"><span>${pursuit?(pursuit.role(c.id)==='runner'?'RUNNER':'PURSUER'):String(i + 1).padStart(2, '0')} &nbsp; ${resultDriverLabel(displayedDriver(c),isPlayer(c))}</span><span>${pursuit?(pursuit.role(c.id)==='runner'?(pursuit.result(c.id)?.outcome==='escaped'?'ESCAPED · '+formatTime(c.finishTime):c.health<=0?'WRECKED':'TIME EXPIRED'):Math.ceil(c.health)+'% CONDITION'):mode === 'derby' ? scoreDerby()?combat.points(c.id)+' PTS':Math.ceil(c.health) + '%' : raceTimeLimit()?timedRaceResult(c):c.finished ? formatTime(c.finishTime) : (c.health<=0?'RETIRED':'DNF')+' · '+(waypointRace?'STATIONS '+c.passed:'LAP '+Math.min(raceLaps(), c.lap))}</span></div>`).join('')}<p class="award-summary">${awardText(lastAward)}</p>${badgeLine()}<button class="primary" id="again">RUN IT BACK ↗</button><button class="small-button" id="back">RETURN TO QUARRY</button></div></div>`;
+  if(teamRace())ui.querySelector('.dialog h2')?.insertAdjacentHTML('afterend',`<p class="team-result">${teamVerdict(currentTeamScores(),demo?undefined:0)}</p>`);
   if(!demo&&!online?.active&&!pursuit&&mode==='race'&&cars[0].finished&&cars.length>=2)globalScoresButton(ui.querySelector('.dialog'),{rank,field:cars.length,condition:Math.max(0,Math.min(100,cars[0].health)),course:activeVenue.course.id});
   if(!online?.active&&!pursuit&&(mode==='race'||mode==='derby')){const name=(id:number)=>{const c=cars.find(v=>v.id===id);return c?`#${id+1} ${DEFINITIONS[c.kind].name}`:`#${id+1}`;};const order=mode==='race'?rankRace().map(c=>c.id):[],list=eventAwards.awards(mode,cars,order),nemesis=eventAwards.nemesis(cars[0].id,cars,mode,order);if(nemesis)list.push(nemesis);const html=awardsHtml(list,name,cars[0].id);if(html)ui.querySelector('.dialog button')?.insertAdjacentHTML('beforebegin',html);}
   studioButtons(ui.querySelector('.dialog'));replayBiggestHit(ui.querySelector('.dialog'));
@@ -2125,6 +2141,10 @@ async function boot() {
         burn: c.wreckFinish.soot.value,
         loose: c.wreckParts.assemblies.filter(a=>a.loose>0&&a.members.some(p=>p.mesh.visible)).map(a=>({name:a.name,loose:a.loose})),
         wheelDamage: Array.from(c.wreckParts.wheelDamage),
+        wheelLost: Array.from(c.wreckParts.wheelLost),
+        rips: c.rips,
+        backfires: c.backfires,
+        engineDamage: c.engineDamage,
         detached: c.panels.filter((p) => !p.visible).length,
         glass: c.glass.filter((p) => !p.visible).length,
         position: c.current.toArray(),

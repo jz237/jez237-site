@@ -38,6 +38,11 @@ import { WreckAttachments } from './wreck-attachments';
 import {bodyworkDentDamage} from './bodywork-response';
 import {puddleDepth,type Puddle} from './puddle-splashes';
 import {wheelResponse,TireContact} from './wheel-mechanics';
+import {wheelTearsOff} from './wheel-physics';
+import {EngineMisfire} from './engine-misfire';
+import {steeringLimit,brakeFactor,overheat} from './damage-handling';
+/** Panels hanging at least this loose build wind load above this speed (m/s) until they tear away. */
+export const WIND_RIP={loose:.25,speed:16} as const;
 import {VehicleSurface} from './vehicle-surface';
 import { normalizeSetup, setupPhysics, stockSetup, type Setup } from './garage';
 export type VehicleGround = {height:(x:number,z:number)=>number;surface:(x:number,z:number)=>DrivingSurface};
@@ -110,6 +115,17 @@ export class Vehicle {
   remoteGrounded?: boolean;
   surface:DrivingSurface = 'gravel';
   damageLeft = 0;
+  /** Wrecked wheels can be torn off (offline events and replays recorded with wheelModel 1). */
+  extendedDamage = false;
+  readonly engineMisfire:EngineMisfire;
+  misfireFactor = 1;
+  steerLimit = 1;
+  readonly brakeBias = [1,1,1,1];
+  onBackfire?:(point:T.Vector3)=>void;
+  onWheelLost?:(wheel:number)=>void;
+  private windLoad=new Map<string,number>();
+  /** Live counts for diagnostics. */
+  rips=0;backfires=0;
   damageRight = 0;
   readonly damageZones={front:0,rear:0,left:0,right:0,roof:0};
   arenaSurface?:{x:number;z:number;radius:number};
@@ -156,6 +172,7 @@ export class Vehicle {
     this.specification = setupPhysics(kind, this.setup);
     const def = {...DEFINITIONS[kind], mass:this.specification.mass};
     this.aiPhase = id * 1.79;
+    this.engineMisfire = new EngineMisfire(id * 7.31 + 0.4);
     this.model = cloneCar(kind, color, this.setup.armor);
     this.paintColor=new T.Color(color);
     this.root.add(this.model);
@@ -222,6 +239,7 @@ export class Vehicle {
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
+    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.steerLimit=1;this.brakeBias.fill(1);
     if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
@@ -284,11 +302,21 @@ export class Vehicle {
     this.surface = this.ground.surface(this.previous.x, this.previous.z);
     if(this.arenaSurface&&Math.hypot(this.previous.x-this.arenaSurface.x,this.previous.z-this.arenaSurface.z)<this.arenaSurface.radius)this.surface='gravel';
     this.oldGear=this.gear;
+    const running=this.extendedDamage&&this.health>0&&!(this.engineStall!>0);
+    if(running&&this.engineDamage!==undefined&&this.structuralDamage)this.engineDamage=overheat(this.engineDamage,this.structuralDamage[0],this.input.throttle,dt);
+    this.misfireFactor=running?this.engineMisfire.update(dt,this.engineDamage??0,this.input.throttle):1;
+    this.steerLimit=this.extendedDamage?steeringLimit(this.structuralDamage):1;
+    for(let i=0;i<4;i++)this.brakeBias[i]=this.extendedDamage?brakeFactor(this.wreckParts.wheelDamage[i]):1;
+    if(this.engineMisfire.backfire&&this.extendedDamage){
+      // A misfire ends with unburnt fuel popping in the exhaust: a flash of sparks and a puff of smoke.
+      const exhaust=new T.Vector3(0,.32,-DEFINITIONS[this.kind].halfLength).applyQuaternion(this.previousQ).add(this.previous);
+      this.fx.emit(exhaust,7,1,.8);this.fx.emit(exhaust,2,2,.5);this.onBackfire?.(exhaust);this.backfires++;
+    }
     if(this.drivetrain){
-      const result=this.drivetrain.step(this.specification,this,dt,undefined,{wheelDamage:this.wreckParts.wheelDamage,wheelShift:this.wreckParts.wheelShift,engineDamage:this.engineDamage,tyreDamage:this.tyreDamage});
+      const result=this.drivetrain.step(this.specification,this,dt,undefined,{wheelDamage:this.wreckParts.wheelDamage,wheelShift:this.wreckParts.wheelShift,engineDamage:this.engineDamage,tyreDamage:this.tyreDamage,wheelLost:this.wreckParts.wheelLost});
       // Only grounded tire slip creates skid audio, marks and surface effects.
       this.wheelSlips.splice(0,4,...result.contactSlips);this.slip=Math.max(this.slip,...this.wheelSlips);
-    }else{stepVehiclePhysics(this.body,this.controller,this.kind,this.specification,this,dt,this.wreckParts.wheelDamage,this.wreckParts.wheelShift,this.engineDamage,this.tyreDamage);this.wheelSlips.fill(this.slip);}
+    }else{stepVehiclePhysics(this.body,this.controller,this.kind,this.specification,this,dt,this.wreckParts.wheelDamage,this.wreckParts.wheelShift,this.engineDamage,this.tyreDamage,false,this.wreckParts.wheelLost);this.wheelSlips.fill(this.slip);}
   }
   postStep(dt: number, time: number) {
     this.current.copy(this.body.translation());
@@ -311,6 +339,11 @@ export class Vehicle {
         if (!point || !this.controller.wheelIsInContact(i)) continue;
         const p = new T.Vector3().copy(point);
         const wet=this.surfaceFinish.water[i],yaw=Math.atan2(this.forward.x,this.forward.z);
+        if(this.wreckParts.wheelLost[i]){
+          // The bare hub grinds on the ground: sparks, a gouge and the scrape sound.
+          if(Math.abs(this.speed)>1.5){const s=Math.min(1,Math.abs(this.speed)/10);this.scraping=Math.max(this.scraping,s);this.fx.evidence?.add(p,yaw,Math.abs(this.speed)*.08,s,2);this.fx.emit(p,Math.ceil(s*3),1,.9);}
+          continue;
+        }
         if(wet>.035&&Math.abs(this.speed)>.5&&!this.wetWheels[i]&&Math.abs(p.y-this.ground.height(p.x,p.z))<.15)this.fx.evidence?.add(p,yaw,Math.abs(this.speed)*.07,wet,0);
         if(this.wetWheels[i])continue;
         const feedback=tyreFeedback(this.surface,this.speed,this.wheelSlips[i],this.input.handbrake,i,true);
@@ -330,6 +363,12 @@ export class Vehicle {
         this.fx.evidence?.add(p,Math.atan2(this.forward.x,this.forward.z),Math.abs(this.speed)*.08,this.scraping,2);
         if(this.scraping>.25)this.fx.emit(p,1,1,.8);
       }
+      if(this.extendedDamage)for(const a of this.wreckParts.assemblies){
+        if(a.loose<WIND_RIP.loose||!a.members.some(m=>m.mesh.visible))continue;
+        const speed=Math.abs(this.speed),before=this.windLoad.get(a.name)??0;
+        const load=speed>WIND_RIP.speed?before+.06*(speed-WIND_RIP.speed)/8*a.loose:Math.max(0,before-.06);
+        if(load>=1){this.windLoad.delete(a.name);this.ripAssembly(a.name);}else this.windLoad.set(a.name,load);
+      }
     }
   }
   render(alpha: number) {
@@ -338,7 +377,7 @@ export class Vehicle {
     for (const material of this.brakeLights) material.emissiveIntensity = this.input.brake > .05 || this.input.handbrake ? 3.5 : .8;
     for (let i = 0; i < 4; i++) {
       const w = this.wheels[i];
-      if (!w) continue;
+      if (!w||this.wreckParts.wheelLost[i]) continue;
       w.position.y =
         -this.model.position.y - 0.12 - (this.controller.wheelSuspensionLength(i) ?? vehicleSuspensionRestLength(this.kind));
       const tyre=this.tyreDamage?.[i],corner=wheelResponse(this.wreckParts.wheelDamage[i],i%2?1:-1,this.speed,vehicleWheelRadius(this.kind),tyre,vehicleFlatTyreRadius(this.kind));
@@ -380,6 +419,7 @@ export class Vehicle {
     const q=this.root.quaternion,p=this.root.position,inverse={x:-q.x,y:-q.y,z:-q.z,w:q.w};
     const local=rotateVehicleVector({x:point.x-p.x,y:point.y-p.y,z:point.z-p.z},inverse);
     const components={structure:this.structuralDamage,engineDamage:this.engineDamage,tyreDamage:this.tyreDamage,wheelDamage:Array.from(this.wreckParts.wheelDamage),wheelShift:this.wreckParts.wheelShift.map(v=>({x:v.x,y:v.y,z:v.z}))};
+    const worn=Array.from(this.wreckParts.wheelDamage);
     applyComponentImpact(components,this.kind,local,rotateVehicleVector(direction,inverse),damage);
     if (local.x < 0) this.damageLeft += damage;
     else this.damageRight += damage;
@@ -443,10 +483,34 @@ export class Vehicle {
     this.tyreDamage=components.tyreDamage;
     this.wreckParts.wheelDamage.set(components.wheelDamage);
     components.wheelShift.forEach((v,i)=>this.wreckParts.wheelShift[i].copy(v));
+    if(this.extendedDamage)for(let i=0;i<4;i++){const w=this.wheels[i];if(w&&!this.wreckParts.wheelLost[i]&&wheelTearsOff(worn[i],damage,this.wreckParts.wheelReach(i,contact)))this.tearOffWheel(i,direction,quiet);}
     this.structure.update(this.structuralDamage,this.health);
     if (!quiet) {
       this.fx.impact?.(point, direction, damage);
     }
+  }
+  /** Tear a whole loose assembly (hood, bumper, door, tailgate) away as debris. Replays pass quiet. */
+  ripAssembly(name:string,quiet=false){
+    const a=this.wreckParts.assemblies.find(x=>x.name===name);if(!a||!a.members.some(m=>m.mesh.visible))return false;
+    this.onVisualEvent?.({kind:'rip',pose:this.visualPose(),part:name});
+    this.model.updateWorldMatrix(true,true);
+    for(const m of a.members){
+      if(!m.mesh.visible)continue;
+      if(quiet)m.mesh.visible=false;else this.fx.detach(m.mesh,this.velocity.clone().multiplyScalar(.55).add(new T.Vector3(0,1.6,0)));
+    }
+    if(!quiet){this.impactEffects.debris=true;this.rips++;}
+    return true;
+  }
+  private tearOffWheel(i:number,direction:T.Vector3,quiet:boolean){
+    const w=this.wheels[i],contact=this.tireContacts[i];this.wreckParts.wheelLost[i]=1;
+    contact.active.value=0;contact.load.value=0;
+    if(!quiet){
+      const outward=new T.Vector3(i%2?1:-1,.35,0).applyQuaternion(this.root.quaternion).multiplyScalar(2.4).addScaledVector(direction,1.2);
+      const fx=this.fx as Effects&{detachWheel?:Effects['detachWheel']};
+      fx.detachWheel?.(w,this.velocity.clone().multiplyScalar(.85).add(outward),vehicleWheelRadius(this.kind),this.speed);
+      this.fx.emit(w.getWorldPosition(new T.Vector3()),16,1,1.3);this.impactEffects.debris=true;this.onWheelLost?.(i);
+    }
+    w.visible=false;
   }
   dispose() {
     this.drawBatch?.dispose();

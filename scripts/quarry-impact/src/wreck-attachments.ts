@@ -8,17 +8,21 @@ export class WreckAttachments {
   readonly assemblies:Assembly[]=[];
   readonly wheelDamage=new Float32Array(4);
   readonly wheelShift=Array.from({length:4},()=>new T.Vector3());
+  /** 1 where the wheel has been torn off and the car runs on the bare hub. */
+  readonly wheelLost=new Uint8Array(4);
   readonly zones={front:0,rear:0,left:0,right:0,roof:0};
   private time=0;
   private wheelTravel=0;
   private wheelSpeed=0;
   private wheelRest:T.Vector3[];
+  private wheelHub:T.Vector3[];
   private wheelBase:T.Quaternion[];
   private wheelApplied:T.Quaternion[];
   private wheelRotation=new T.Quaternion();
   private wheelEuler=new T.Euler();
   constructor(root:T.Group,private wheels:T.Object3D[],private width:number,private wheelRadius=.375){
-    this.wheelRest=wheels.map(w=>w.position.clone());this.wheelBase=wheels.map(w=>w.quaternion.clone());this.wheelApplied=wheels.map(w=>w.quaternion.clone());
+    this.wheelRest=wheels.map(w=>w.position.clone());
+    root.updateMatrixWorld(true);this.wheelHub=wheels.map(w=>root.worldToLocal(w.getWorldPosition(new T.Vector3())));this.wheelBase=wheels.map(w=>w.quaternion.clone());this.wheelApplied=wheels.map(w=>w.quaternion.clone());
     root.updateWorldMatrix(true,true);const inverse=root.matrixWorld.clone().invert(),map=new Map<string,Assembly>();
     root.traverse(o=>{
       if(!(o instanceof T.Mesh)||!o.userData.wreckRest)return;
@@ -100,10 +104,14 @@ export class WreckAttachments {
     if(Math.hypot(offset.x,offset.z)<3){offset.x=-4.2;offset.z=4.2;}
     return offset;
   }
+  /** Distance from a model-space point to a wheel's authored hub, vertical offsets weighted like
+   * wheel damage (independent of suspension travel, so replays judge it identically). */
+  wheelReach(i:number,point:T.Vector3){const h=this.wheelHub[i];return Math.hypot(point.x-h.x,(point.y-h.y)*.6,point.z-h.z);}
   reset(){
     this.time=this.wheelTravel=this.wheelSpeed=0;this.wheelDamage.fill(0);this.wheelShift.forEach(v=>v.set(0,0,0));
     for(const key of Object.keys(this.zones)as (keyof typeof this.zones)[])this.zones[key]=0;
     for(const a of this.assemblies){a.damage=a.loose=0;for(const p of a.members){p.mesh.position.copy(p.position);p.mesh.quaternion.copy(p.quaternion);p.mesh.scale.copy(p.scale);p.mesh.matrix.copy(p.matrix);p.mesh.matrixAutoUpdate=p.auto;p.mesh.matrixWorldNeedsUpdate=true;}}
-    this.wheels.forEach((w,i)=>{w.position.x=this.wheelRest[i].x;w.position.z=this.wheelRest[i].z;w.quaternion.copy(this.wheelBase[i]);this.wheelApplied[i].copy(w.quaternion);});
+    this.wheels.forEach((w,i)=>{if(this.wheelLost[i])w.visible=true;w.position.x=this.wheelRest[i].x;w.position.z=this.wheelRest[i].z;w.quaternion.copy(this.wheelBase[i]);this.wheelApplied[i].copy(w.quaternion);});
+    this.wheelLost.fill(0);
   }
 }

@@ -1,6 +1,13 @@
 import {tyreFailure} from './tyre-condition';
 const clamp=(n:number,min:number,max:number)=>Math.max(min,Math.min(max,n));
-export function wheelResponse(damage:number,side:number,speed:number,radius=.375,tyreDamage?:number,flatRadius=radius*.70){
+/** A torn-off wheel leaves the bare hub: the corner drops onto a small, hard, slippery disc that
+ * drags, barely drives and sparks. */
+export function hubResponse(side:number,speed:number,radius=.375){
+  return {stiffness:24,rest:.32,radius:Math.max(.18,radius*.56),force:11000,grip:.3,sideGrip:.38,toe:0,camber:-side*.3,
+    drag:10+Math.min(32,Math.abs(speed))*1.8,power:.08};
+}
+export function wheelResponse(damage:number,side:number,speed:number,radius=.375,tyreDamage?:number,flatRadius=radius*.70,lost=false){
+  if(lost)return hubResponse(side,speed,radius);
   const d=clamp(Number.isFinite(damage)?damage:0,0,1),failure=d*d;
   const response={stiffness:30*(1-.5*d),rest:.36*(1-.3*failure),radius:radius*(1-.13*failure),
     force:13000*(1-.42*d),grip:1-.38*d,sideGrip:1.1*(1-.44*d),
@@ -16,4 +23,10 @@ export function wheelResponse(damage:number,side:number,speed:number,radius=.375
     response.grip*=1-.68*flat;response.sideGrip*=1-.60*flat;
   }
   return response;
+}
+/** A wheel already knocked about (calibrated in production demo derbies: about three lost wheels in a
+ * 24-car, 150 s demo derby) tears off when another solid blow lands within reach of it. */
+export const WHEEL_TEAR={worn:.15,damage:6,reach:1.05} as const;
+export function wheelTearsOff(worn:number,damage:number,distance:number){
+  return worn>=WHEEL_TEAR.worn&&damage>=WHEEL_TEAR.damage&&distance<=WHEEL_TEAR.reach;
 }

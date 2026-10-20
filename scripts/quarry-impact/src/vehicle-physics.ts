@@ -16,7 +16,7 @@ import {vehicleArmorLayout,vehicleArmorCollisionHulls} from './vehicle-armor-spe
 type Vec={x:number;y:number;z:number};
 type Quat=Vec&{w:number};
 export type VehicleSpecification=ReturnType<typeof vehicleSpecification>;
-export type PhysicsState={health:number;engineStall?:number;damageLeft:number;damageRight:number;steering:number;speed:number;slip:number;surface:DrivingSurface;gear:number;rpm:number;transmission?:TransmissionState;input:{throttle:number;steer:number;brake:number;handbrake:boolean;assists?:DrivingAssists;transmission?:TransmissionInput}};
+export type PhysicsState={health:number;engineStall?:number;misfireFactor?:number;steerLimit?:number;brakeBias?:ArrayLike<number>;damageLeft:number;damageRight:number;steering:number;speed:number;slip:number;surface:DrivingSurface;gear:number;rpm:number;transmission?:TransmissionState;input:{throttle:number;steer:number;brake:number;handbrake:boolean;assists?:DrivingAssists;transmission?:TransmissionInput}};
 export function rotateVehicleVector(v:Vec,q:Quat):Vec{
  const tx=2*(q.y*v.z-q.z*v.y),ty=2*(q.z*v.x-q.x*v.z),tz=2*(q.x*v.y-q.y*v.x);
  return{x:v.x+q.w*tx+q.y*tz-q.z*ty,y:v.y+q.w*ty+q.z*tx-q.x*tz,z:v.z+q.w*tz+q.x*ty-q.y*tx};
@@ -174,20 +174,20 @@ export function createVehiclePhysics(api:typeof R,world:R.World,kind:CarKind,mas
 }
 const intact=new Float32Array(4),unshifted=[{x:0,y:0,z:0},{x:0,y:0,z:0},{x:0,y:0,z:0},{x:0,y:0,z:0}];
 /** No renderer, wall clock or networking state: both simulations execute this kernel. */
-export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastVehicleController,kind:CarKind,spec:VehicleSpecification,state:PhysicsState,dt:number,wheelDamage:ArrayLike<number>=intact,wheelShift:readonly Vec[]=unshifted,engineDamage?:number,tyreDamage?:ArrayLike<number>,externalLongitudinal=false){
+export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastVehicleController,kind:CarKind,spec:VehicleSpecification,state:PhysicsState,dt:number,wheelDamage:ArrayLike<number>=intact,wheelShift:readonly Vec[]=unshifted,engineDamage?:number,tyreDamage?:ArrayLike<number>,externalLongitudinal=false,wheelLost?:ArrayLike<number>){
  const q=body.rotation(),velocity=body.linvel(),forward=rotateVehicleVector({x:0,y:0,z:1},q),right=rotateVehicleVector({x:1,y:0,z:0},q),up=rotateVehicleVector({x:0,y:1,z:0},q),def=DEFINITIONS[kind],alive=state.health>0;
  const running=advanceEngineRestart(state,dt);
  state.speed=dot(velocity,forward);const lateralSpeed=dot(velocity,right);state.slip=Math.abs(lateralSpeed);
- const target=(alive?state.input.steer:0)*(.55*spec.steering*steeringSpeedScale(state.speed,lateralSpeed,state.input.steer,dot(body.angvel(),up)))+(state.damageRight-state.damageLeft)*.0007;
+ const target=(alive?state.input.steer:0)*(.55*spec.steering*steeringSpeedScale(state.speed,lateralSpeed,state.input.steer,dot(body.angvel(),up)))*(state.steerLimit??1)+(state.damageRight-state.damageLeft)*.0007;
  const alpha=1-Math.exp(-8*dt);state.steering=(1-alpha)*state.steering+alpha*target;
  const throttle=stepTransmission(state,spec,dt,running);
  // Brake priority also applies to manual pedals: Rapier ignores wheelBrake
  // whenever a wheel has engine force, even under full service braking.
- const force=running&&state.input.brake<=0?throttle*spec.force*enginePowerFactor(state.health,engineDamage)*clamp((spec.speedLimit-Math.abs(state.speed))/10,0,1):0;
+ const force=running&&state.input.brake<=0?throttle*spec.force*enginePowerFactor(state.health,engineDamage)*(state.misfireFactor??1)*clamp((spec.speedLimit-Math.abs(state.speed))/10,0,1):0;
  const engineBrake=running?manualEngineBrake(state,spec):0;
  const front=axleDrive(spec.differential,!!controller.wheelIsInContact(0),!!controller.wheelIsInContact(1)),rear=axleDrive(spec.differential,!!controller.wheelIsInContact(2),!!controller.wheelIsInContact(3));
  for(let i=0;i<4;i++){
-  const corner=wheelResponse(wheelDamage[i],i%2?1:-1,state.speed,vehicleWheelRadius(kind),tyreDamage?.[i],vehicleFlatTyreRadius(kind)),shift=wheelShift[i];
+  const corner=wheelResponse(wheelDamage[i],i%2?1:-1,state.speed,vehicleWheelRadius(kind),tyreDamage?.[i],vehicleFlatTyreRadius(kind),!!wheelLost?.[i]),shift=wheelShift[i];
   controller.setWheelSteering(i,(i<2?state.steering:0)+corner.toe);
   controller.setWheelChassisConnectionPointCs(i,{x:(isClassicKind(kind)?(i%2?1:-1)*classicWheelHalfTrack(kind):(i%2?1:-1)*(def.halfWidth-.04))+shift.x,y:-.12,z:(i<2?1:-1)*def.wheelbase/2+shift.z});
   controller.setWheelSuspensionRestLength(i,(kind==='buggy'?corner.rest*(.44/.36):kind==='trail'?corner.rest*(.40/.36):corner.rest)+spec.rideHeight);controller.setWheelSuspensionCompression(i,4.4*spec.damping*(spec.compression??1));controller.setWheelSuspensionRelaxation(i,5.4*spec.damping*(spec.rebound??1));
@@ -198,7 +198,7 @@ export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastV
   const contactMotion=state.input.assists?.traction||state.input.assists?.abs?wheelContactMotion(body,controller,i,forward,right):undefined;
   if(state.input.assists?.traction&&!state.input.handbrake)wheelForce=limitTractionForce(wheelForce,state.input.assists.traction,!!controller.wheelIsInContact(i),Math.min(corner.force,Math.max(0,controller.wheelSuspensionForce(i)??0)),contactMotion!.lateral,state.surface,corner.grip*spec.grip);
   controller.setWheelEngineForce(i,externalLongitudinal?0:wheelForce);
-  let serviceBrake=state.input.brake*90*(i<2?spec.frontBrake:spec.rearBrake);
+  let serviceBrake=state.input.brake*90*(i<2?spec.frontBrake:spec.rearBrake)*(state.brakeBias?.[i]??1);
   if(alive&&state.input.assists?.abs&&!(state.input.handbrake&&i>1))serviceBrake=limitBrakeImpulse(serviceBrake,state.input.assists.abs,!!controller.wheelIsInContact(i),Math.min(corner.force,Math.max(0,controller.wheelSuspensionForce(i)??0)),surfaceGrip(state.surface)*corner.grip*spec.grip,controller.wheelSideImpulse(i)??0,controller.wheelIsInContact(i)?contactMotion!.longitudinal:state.speed,dt);
   const driven=isFrontDriveKind(kind)?i<2:(kind==='coupe'||isClassicKind(kind)&&kind!=='trail')?i>1:true;
   controller.setWheelBrake(i,externalLongitudinal?0:!alive?18:serviceBrake+(state.input.handbrake&&i>1?100:0)+corner.drag+(driven?engineBrake:0));

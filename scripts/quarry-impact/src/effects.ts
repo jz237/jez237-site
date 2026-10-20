@@ -22,7 +22,7 @@ export class Effects {
   types: Float32Array;
   geometry: T.BufferGeometry;
   points: T.Points;
-  debris: { mesh: T.Mesh; body: R.RigidBody; age: number }[] = [];
+  debris: { mesh: T.Object3D; body: R.RigidBody; age: number; shared?: boolean }[] = [];
   marks: T.InstancedMesh;
   markCursor = 0;
   readonly evidence:GroundEvidence;
@@ -207,12 +207,39 @@ void main(){
     b.setAngvel({ x: 2, y: 1, z: 3 }, true);
     this.debris.push({ mesh, body: b, age: 0 });
   }
+  /** A torn-off wheel rolls away on its own cylinder body. The visual is a clone sharing the
+   * car's wheel geometry and materials, so removal only detaches it. */
+  detachWheel(source: T.Object3D, velocity: T.Vector3, radius: number, speed = 0) {
+    if (this.debris.length >= 36) this.removeDebris(0);
+    source.updateWorldMatrix(true, true);
+    const position = new T.Vector3(), quaternion = new T.Quaternion(), scale = new T.Vector3();
+    source.matrixWorld.decompose(position, quaternion, scale);
+    const visual = source.clone(true), holder = new T.Group();
+    visual.position.set(0, 0, 0); visual.quaternion.identity(); visual.scale.copy(scale); visual.visible = true;
+    holder.add(visual); holder.position.copy(position); holder.quaternion.copy(quaternion); holder.name = 'torn_wheel';
+    this.scene.add(holder);
+    const b = this.world.createRigidBody(
+      R.RigidBodyDesc.dynamic().setTranslation(position.x, position.y, position.z).setRotation(quaternion)
+        .setLinvel(velocity.x, velocity.y + 1.5, velocity.z).setAngularDamping(0.15).setCcdEnabled(true),
+    );
+    // Rapier cylinders run along Y; the wheel's axle is its local X.
+    this.world.createCollider(
+      R.ColliderDesc.cylinder(Math.max(0.08, radius * 0.5), radius).setRotation({ x: 0, y: 0, z: Math.SQRT1_2, w: Math.SQRT1_2 })
+        .setMass(18).setRestitution(0.35).setFriction(0.9),
+      b,
+    );
+    const axle = new T.Vector3(1, 0, 0).applyQuaternion(quaternion).multiplyScalar(-speed / Math.max(0.1, radius));
+    b.setAngvel({ x: axle.x, y: axle.y + 1.2, z: axle.z }, true);
+    this.debris.push({ mesh: holder, body: b, age: 0, shared: true });
+  }
   removeDebris(i: number) {
     const d = this.debris[i];
     this.world.removeRigidBody(d.body);
     this.scene.remove(d.mesh);
-    d.mesh.geometry.dispose();
-    (d.mesh.material as T.Material).dispose();
+    if (!d.shared && d.mesh instanceof T.Mesh) {
+      d.mesh.geometry.dispose();
+      (d.mesh.material as T.Material).dispose();
+    }
     this.debris.splice(i, 1);
   }
   update(dt: number) {

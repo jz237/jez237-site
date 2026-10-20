@@ -13,7 +13,7 @@ import {isFrontDriveKind,isClassicKind,vehicleWheelRadius} from '../classic-vehi
 import type {CarKind} from '../rules';
 import {stepDrive} from './drive';import {stepWheel} from './wheel';
 type Vec={x:number;y:number;z:number};
-export type DriveCondition={wheelDamage?:ArrayLike<number>;wheelShift?:readonly Vec[];engineDamage?:number;tyreDamage?:ArrayLike<number>};
+export type DriveCondition={wheelDamage?:ArrayLike<number>;wheelShift?:readonly Vec[];engineDamage?:number;tyreDamage?:ArrayLike<number>;wheelLost?:ArrayLike<number>};
 const dot=(a:Vec,b:Vec)=>a.x*b.x+a.y*b.y+a.z*b.z;
 export function effectiveInverseMass(body:R.RigidBody,point:Vec,d:Vec){
  if(!body.isDynamic())return 0;
@@ -29,7 +29,7 @@ export function createVehicleDrive(body:R.RigidBody,controller:R.DynamicRayCastV
 
  return{get engine(){return engine;},get wheels(){return wheels;},get gearbox(){return gearbox;},snapshot(){return captureDriveState({engine,wheels,gearbox});},restore(value:unknown){restoreDriveState({engine,wheels,gearbox},value);},reset(speed=0){if(!Number.isFinite(speed))throw new RangeError('Invalid reset speed');engine.omega=850*2*Math.PI/60;Object.assign(gearbox,freshAutoGear());for(const w of wheels){w.omega=speed/vehicleWheelRadius(kind);w.angle=0;}},step(spec:VehicleSpecification,state:PhysicsState,dt:number,ratio?:number,condition:DriveCondition={}){
   if(Math.abs(state.input.throttle)>.001)body.wakeUp();
-  stepVehiclePhysics(body,controller,kind,spec,state,dt,condition.wheelDamage,condition.wheelShift,condition.engineDamage,condition.tyreDamage,true);
+  stepVehiclePhysics(body,controller,kind,spec,state,dt,condition.wheelDamage,condition.wheelShift,condition.engineDamage,condition.tyreDamage,true,condition.wheelLost);
   const calibration=calibrate(spec);
   const gear=ratio===undefined?(state.input.transmission?manualDriveGear(state,calibration.ratioScale):stepAutoGear(gearbox,state.speed,engine.omega*60/(2*Math.PI),vehicleWheelRadius(kind),state.input.throttle,dt,calibration.ratioScale)):{ratio,clutch:1,allowThrottle:true};
   if(state.input.transmission)Object.assign(gearbox,{gear:state.gear===0?-1:Math.max(1,state.gear),pending:null,delay:0,cooldown:.65});
@@ -37,7 +37,7 @@ export function createVehicleDrive(body:R.RigidBody,controller:R.DynamicRayCastV
   // Otherwise idle torque can keep the old gear creeping forever.
   const directionBrake=!state.input.transmission&&ratio===undefined&&!gear.allowThrottle?Math.abs(state.input.throttle):0;
   // Brake torque competes with drive at each wheel; braking must not cut combustion.
-  const drive=stepDrive(engine,wheels,[1.5,1.5,1.5,1.5],weights,gear.ratio,state.health>0&&gear.allowThrottle?(state.input.transmission?Math.max(0,state.input.throttle):Math.abs(state.input.throttle)):0,gear.clutch,dt,{...calibration.engine,peakTorque:calibration.engine.peakTorque*enginePowerFactor(state.health,condition.engineDamage)},state.health>0&&!(state.engineStall!>0));
+  const drive=stepDrive(engine,wheels,[1.5,1.5,1.5,1.5],weights,gear.ratio,state.health>0&&gear.allowThrottle?(state.input.transmission?Math.max(0,state.input.throttle):Math.abs(state.input.throttle)):0,gear.clutch,dt,{...calibration.engine,peakTorque:calibration.engine.peakTorque*enginePowerFactor(state.health,condition.engineDamage)*(state.misfireFactor??1)},state.health>0&&!(state.engineStall!>0));
   for(const axle of [0,2])if(weights[axle]>0){const pair=axleTorques(wheels.slice(axle,axle+2),drive.torques.slice(axle,axle+2),[1.5,1.5],spec.differential,dt);drive.torques[axle]=pair[0];drive.torques[axle+1]=pair[1];}
   const q=body.rotation(),forward=rotateVehicleVector({x:0,y:0,z:1},q),right=rotateVehicleVector({x:1,y:0,z:0},q),radius=vehicleWheelRadius(kind),slips:number[]=[],contactSlips:number[]=[];
   for(let i=0;i<4;i++){
@@ -45,10 +45,10 @@ export function createVehicleDrive(body:R.RigidBody,controller:R.DynamicRayCastV
    const steer=controller.wheelSteering(i)??0,d={x:forward.x*Math.cos(steer)+right.x*Math.sin(steer),y:forward.y*Math.cos(steer)+right.y*Math.sin(steer),z:forward.z*Math.cos(steer)+right.z*Math.sin(steer)};
    if(normal){const n=dot(d,normal);d.x-=n*normal.x;d.y-=n*normal.y;d.z-=n*normal.z;}const length=Math.hypot(d.x,d.y,d.z);if(length>1e-8){d.x/=length;d.y/=length;d.z/=length;}
    const v=point?body.velocityAtPoint(point):body.linvel(),g=point&&ground?ground.velocityAtPoint(point):{x:0,y:0,z:0};
-   const corner=wheelResponse(condition.wheelDamage?.[i]??0,i%2?1:-1,state.speed,radius,condition.tyreDamage?.[i],vehicleFlatTyreRadius(kind));
+   const corner=wheelResponse(condition.wheelDamage?.[i]??0,i%2?1:-1,state.speed,radius,condition.tyreDamage?.[i],vehicleFlatTyreRadius(kind),!!condition.wheelLost?.[i]);
    const load=Math.min(controller.wheelMaxSuspensionForce(i)??0,Math.max(0,controller.wheelSuspensionForce(i)??0));
    const rollingTorque=grounded?tyreFailure(condition.tyreDamage?.[i])*.08*load*corner.radius:0;
-   const serviceBrake=Math.max(state.input.brake,directionBrake)*2000*(i<2?spec.frontBrake:spec.rearBrake);
+   const serviceBrake=Math.max(state.input.brake,directionBrake)*2000*(i<2?spec.frontBrake:spec.rearBrake)*(state.brakeBias?.[i]??1);
    const parameters={dt,radius:corner.radius,inertia:1.5,driveTorque:drive.torques[i]*corner.power,brakeTorque:rollingTorque+serviceBrake+(state.input.handbrake&&i>1?2500:0),grounded:grounded&&length>1e-8,speed:dot({x:v.x-g.x,y:v.y-g.y,z:v.z-g.z},d),inverseMass:point?effectiveInverseMass(body,point,d)+(ground?effectiveInverseMass(ground,point,d):0):0,normalLoad:load,friction:(state.surface==='asphalt'?.95:state.surface==='gravel'?.7:.55)*corner.grip*spec.grip,lateralImpulse:controller.wheelSideImpulse(i)??0};
    const result=stepWheel(wheels[i],assistedWheelStep(wheels[i],parameters,state.input.assists?.traction??0,state.input.assists?.abs??0,serviceBrake,state.input.handbrake));
    slips.push(result.slip);

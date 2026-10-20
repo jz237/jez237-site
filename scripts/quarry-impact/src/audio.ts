@@ -211,6 +211,8 @@ export class Sound {
       this.shot(layer.id,p,layer.volume*(body?profile.gain:1),body?{...layer,rate:layer.rate*profile.rate,duration:layer.duration*profile.duration,lowpass:profile.lowpass}:layer);
     }
   }
+  /** A misfire's exhaust pop: the burst sample, pitched up, cut short and muffled. */
+  backfire(p:T.Vector3){this.shot('vehicle-burst',p,.5,{rate:2.1,delay:0,duration:.17,lowpass:2400});}
   shot(id: string, p: T.Vector3, volume = 1, options?:{rate:number;delay:number;duration:number;lowpass?:number}) {
     if (!this.ready || this.activeVoices >= 18) return;
     const c = this.ctx!,

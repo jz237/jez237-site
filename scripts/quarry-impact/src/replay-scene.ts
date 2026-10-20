@@ -33,7 +33,7 @@ export class ReplayScene {
     for(const prop of sourceProps)if(!prop?.mesh)throw Error('This replay requires the recorded course prop set.');
     const silent={emit(){},mark(){},detach(){}} as unknown as Effects;
     try{
-      for(const c of doc.meta.cars){const car=new Vehicle(c.id,c.kind,c.setup.paint,scene,world,silent,c.setup,ground);this.cars.push(car);car.engineStall=doc.meta.engineModel===1?0:undefined;car.tyreDamage=doc.meta.tyreModel===1?[0,0,0,0]:undefined;car.body.setEnabled(false);}
+      for(const c of doc.meta.cars){const car=new Vehicle(c.id,c.kind,c.setup.paint,scene,world,silent,c.setup,ground);this.cars.push(car);car.engineStall=doc.meta.engineModel===1?0:undefined;car.tyreDamage=doc.meta.tyreModel===1?[0,0,0,0]:undefined;car.extendedDamage=doc.meta.damageModel===1;car.body.setEnabled(false);}
       for(const original of sourceProps){const mesh=original.mesh.clone();this.props.push(mesh);scene.add(mesh);}
     }catch(error){this.dispose();throw error;}
   }
@@ -62,6 +62,7 @@ export class ReplayScene {
     while(this.eventIndex<this.doc.events.length&&this.doc.events[this.eventIndex].time<=time){
       const e=this.doc.events[this.eventIndex++],c=this.cars[e.car];
       c.current.fromArray(e.pose);c.currentQ.fromArray(e.pose,3).normalize();c.root.position.copy(c.current);c.root.quaternion.copy(c.currentQ);c.root.updateMatrixWorld(true);
+      if(e.kind==='rip')c.ripAssembly(e.part!,true);
       if(e.kind==='repair'){c.repair();c.engineStall=this.doc.meta.engineModel===1?0:undefined;c.tyreDamage=this.doc.meta.tyreModel===1?[0,0,0,0]:undefined;}
       if(e.kind==='hit'){c.health=e.health!;const point=new T.Vector3().fromArray(e.point!).applyQuaternion(c.currentQ).add(c.current),direction=new T.Vector3().fromArray(e.direction!).applyQuaternion(c.currentQ),paint=e.paint===undefined?undefined:new T.Color(e.paint);if(e.scar)c.scar(point,direction,paint);else c.hit(point,direction,e.damage!,e.time,true,paint);}
       if(performance.now()-start>=budgetMs&&this.eventIndex<this.doc.events.length&&this.doc.events[this.eventIndex].time<=time){this.incomplete=true;this.show(false);return false;}
