@@ -1,5 +1,152 @@
 [
   {
+    "id": "2026-10-20-factual-infographic-factual-infographic-meadow-spittlebug-a",
+    "title": "Factual infographic: Meadow Spittlebug — A Nymph Inside a Bubble Shelter",
+    "tests": "Four authoritative sources fetched and read; complete 166-entry factual archive scan found no spittlebug/froghopper overlap. Seven supporting scientific studies, three-plus biological close-ups, anatomy qualified as generalized. Scheduled explicit insect plate exception retained.; archive_slot=2026-10-20T12:20; concept=philaenus-spumarius-nymph-xylem-foam-shelter; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: bizarre-insect-life",
+    "prompt": "Create a finished, deeply detailed natural-history scientific plate about the meadow spittlebug, Philaenus spumarius. Main title: “A NYMPH INSIDE A BUBBLE SHELTER”; subtitle “Meadow spittlebug · Philaenus spumarius”. A sophisticated adult science-museum graphic, direct canvas, no room, frame, desk, specimen tray or mockup. Follow the scheduled restored scientific-plate insect exception: one enormous naturalistic whole-insect macro hero plus SEVEN substantive supporting studies/panels. These are scientific studies, not sparse fact cards. Strong typographic hierarchy, airy margins, precise fine leaders, short genuinely readable labels. Highly realistic macro textures, moist translucent skin, glistening foam membranes, amber-green plant tissues, credible lighting and six-legged segmented anatomy. Cream-white background with sage green, pearly white, fine charcoal drawing and restrained coral-red eyes; subtle watercolor habitat pigment with crisp naturalistic specimen rendering. The whole insect and biological studies occupy most of the area, not prose. Never fabricate extra organs or decorative diagrams.\n\nHERO: a spectacular enlarged pale lime-green wingless nymph, reddish eyes, squat soft segmented body, six finely jointed legs gripping a fresh clover stem head downward; one side of its froth parted so the entire insect remains visible. Show a wet foam mound of differently sized pearly bubbles on the stem, with realistic thin-film reflections, not soap-bath props. Distinguish this magnified specimen from the small habitat scene. Label “Nymph — sheltered in foam”.\n\nSEVEN SUPPORTING SCIENTIFIC STUDIES, artfully balanced around the hero with varied dimensions, subtle fine open boundaries rather than a rigid equal-cell dashboard. Keep all seven substantial and explanatory, including the large internal-anatomy study and at least three large biological close-ups.\n1. PROMINENT INTERNAL ANATOMY: a large translucent lateral nymph silhouette with a deliberately simplified continuous digestive tract from mouth to anus, clearly distinguished from the opaque hero. Exact heading “Digestive route — generalized insect schematic”; readable labels “Foregut”, “Midgut — nutrient absorption”, “Hindgut”, “Anus”. Arrow for ingested sap toward the tract, then excess fluid leaving the rear, never exiting the mouth. Keep geometry visibly diagrammatic rather than a claimed exact dissection of this species. Do NOT invent filter-chamber geometry, vertebrate lungs, mammalian stomach, unnamed glands, a detailed nervous system or a false precise organ map.\n2. LARGE FEEDING CLOSE-UP: underside of head and downward-pointing piercing-sucking mouthparts on a translucent plant-stem detail, enlarged plant water-conducting tissue labelled “Xylem — water-carrying tissue”. Fine leader “Piercing-sucking mouthparts”. Caption “Dilute sap means high fluid throughput”. Diagram explicitly simplified; no invented exact stylet trajectory or vessel counts, no chewing teeth.\n3. LARGE FOAM-ORIGIN CLOSE-UP: rear abdomen at the foam boundary; fluid appearing at the anus, tiny air bubbles joining the fluid as the abdomen moves. Caption “Excess sap + stabilizing secretions + air”. Label “Not saliva”. Depict secretions as a conceptual mixing arrow, not as an unsupported anatomical gland dissection.\n4. MECHANISM SEQUENCE in three clear small but detailed sequential poses: “1 Excrete excess sap” → “2 Mix with air” → “3 Pull bubbles over the body”. Show abdominal movement and legs sweeping bubbles forward in the last pose. Keep stages nymphs, not adult beetles, no invented machinery. This sequence counts as one substantive supporting study.\n5. LARGE SHELTER CLOSE-UP: a side section of the foam showing a protected green nymph silhouette within wet bubbles, labelled “Concealment”, “Temperature buffer”, “Helps prevent drying”. Soft arrows showing environmental exposure around foam, not an impermeable force field or absolute protection claim.\n6. DEVELOPMENT STUDY: “Temperate seasonal cycle” with detailed small images of egg in a plant stem, green wingless nymph in foam, and compact tan-brown adult with folded wings. Concise progression “Overwintering eggs → Spring nymphs → Winged adults → Eggs”. Nymphs grow through molts; no pupa, cocoon or larval caterpillar. Do not give unsupported instar numbers or universal calendar dates.\n7. HABITAT AND SCALE: a small botanically believable clover-and-strawberry meadow margin with actual-scale foam on stems and a tiny tan-brown adult beside the same stem for intuitive scale. Caption “Herbaceous plants · including clover and strawberries”; “Common in the North American Midwest”; small adult label “Adult: under ¼ inch long”. Make clear this is the adult measurement, not a nymph scale bar. It is a tiny insect, not a monster. No map asserting an exhaustive range.\n\nKeep the macro hero, anatomy and close-ups exceptionally detailed: credible segment joints, tiny leg contact points, soft cuticle folds, clover veins and highlights on transparent bubble films. Every small diagram has a biological purpose. Use only the stated facts and labels, omit unrelated pest-control advice, jumping-record statistics, disease claims, unsupported foam chemistry, citations, URLs, logos or watermarks. Make all text accurate, concise and elegantly typeset; no wall of prose. Requested rendering: openai/gpt-image-2.5-sunburst, quality medium, automatic size, opaque background. Exactly one finished image.",
+    "image": "images/2026-10-20-factual-infographic-factual-infographic-meadow-spittlebug-a.jpg",
+    "thumb": "thumbs/2026-10-20-factual-infographic-factual-infographic-meadow-spittlebug-a.webp",
+    "color": "#c6c9a9",
+    "date": "2026-10-20",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "philaenus-spumarius-nymph-xylem-foam-shelter",
+      "imageSha256": "da0fcca9c47c0b43f61653fb9f74b60f79987be0a818def23bdf37030c0c854f",
+      "imageDHash": "989a3231c2c6dcc2"
+    },
+    "factualInfographic": {
+      "topic": "How meadow spittlebug (Philaenus spumarius) nymphs turn excess xylem sap into a protective foam shelter",
+      "description": "Macro scientific plate of nymph foam production with seven biological studies and a clearly qualified generalized digestive cutaway.",
+      "sourceNote": "Verified nymph foam production, xylem feeding, protection, temperate development, habitat and adult scale; internal gut explicitly generalized. University of Wisconsin–Madison: https://hort.extension.wisc.edu/articles/spittlebugs/; Washington State University: https://news.wsu.edu/press-release/2018/06/13/bubble-pooping-high-jumping-superhero-bug-yard-near/; North Carolina State University: https://genent.cals.ncsu.edu/bug-bytes/digestive-system/; CSIRO: https://www.ento.csiro.au/education/insects/hemiptera.html",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-20T16:21:49.878332+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "University of Wisconsin–Madison",
+            "title": "Spittlebugs",
+            "sourceType": "university",
+            "url": "https://hort.extension.wisc.edu/articles/spittlebugs/"
+          },
+          {
+            "id": "S2",
+            "publisher": "Washington State University",
+            "title": "Bubble-pooping, high-jumping superhero bug in a yard near you",
+            "sourceType": "university",
+            "url": "https://news.wsu.edu/press-release/2018/06/13/bubble-pooping-high-jumping-superhero-bug-yard-near/"
+          },
+          {
+            "id": "S3",
+            "publisher": "North Carolina State University",
+            "title": "Digestive and Excretory Systems",
+            "sourceType": "university",
+            "url": "https://genent.cals.ncsu.edu/bug-bytes/digestive-system/"
+          },
+          {
+            "id": "S4",
+            "publisher": "CSIRO",
+            "title": "Hemiptera: bugs, aphids and cicadas",
+            "sourceType": "government-agency",
+            "url": "https://www.ento.csiro.au/education/insects/hemiptera.html"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The meadow spittlebug, Philaenus spumarius, is a hemipteran; its adult is also called a froghopper.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Meadow spittlebug nymphs are pale green or yellow; lime-green nymphs can have red eyes. Adults are generally tan to brown or gray.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The meadow spittlebug occurs in the North American Midwest and feeds on many herbaceous plants including clover and strawberries.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Both adults and nymphs feed on water-carrying xylem sap; its low nutrient concentration requires processing large quantities.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Hemipteran piercing-sucking mouthparts extend below the head; hoppers have a down-and-back-pointing proboscis. A simplified feeding study can show mouthparts reaching plant sap tissues.",
+            "sourceIds": [
+              "S4",
+              "S1"
+            ]
+          },
+          {
+            "claim": "Nymphs feed head downward and excrete excess sap through the anus, not the mouth.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Epidermal gland secretions stabilize foam; air is mixed with excreted fluid as abdominal movements form bubbles.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Nymphs use their legs to pull forming bubbles forward over the body.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The foam conceals nymphs from predators, buffers temperature extremes and helps prevent drying. It is protective, not an invulnerable shield.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "In the described temperate life cycle eggs overwinter in plant stems, nymphs hatch in spring, molt as they grow, and become winged adults; females lay eggs in late summer to fall. There is no pupal stage in hemipteran incomplete metamorphosis.",
+            "sourceIds": [
+              "S1",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Adult spittlebugs are tiny, under a quarter inch long, and hop between plants; adult wings must not appear on the young nymph.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S4"
+            ]
+          },
+          {
+            "claim": "General insect digestive anatomy has a tube-like alimentary canal running mouth to anus with foregut, midgut and hindgut; midgut nutrient absorption is a generalized function, not a species-specific measured dissection.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "The insect body plan has six legs and distinct head, thorax and abdomen; small wingless hemipteran nymphs differ from winged adults.",
+            "sourceIds": [
+              "S4"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-10-20-factual-infographic-factual-infographic-ferrofluid-a-liquid",
     "title": "Factual infographic: Ferrofluid — A Liquid Shaped by Fields",
     "tests": "Two independent university pages fetched and read; all 165 factual archive entries scanned with no ferrofluid overlap; coating studies qualified as one formulation and enlarged schematic.; archive_slot=2026-10-20T08:20; concept=ferrofluid-magnetic-spikes-colloidal-suspension; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: factual-infographic",
