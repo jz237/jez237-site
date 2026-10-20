@@ -1334,6 +1334,9 @@ function ai(car: Vehicle, dt: number): Input {
   });
   return drivers.update(car,cars,practiceTraffic?'race':mode,dt,probe,raceRoute(car.id));
 }
+/** Wheels lost and panels gone, to credit whoever tears them off. */
+function stripCount(c:Vehicle){let wheels=0;for(const v of c.wreckParts.wheelLost)wheels+=v;return{wheels,parts:c.panels.reduce((n,m)=>n+(m.visible?0:1),0)};}
+function creditStrip(attacker:Vehicle,victim:Vehicle,before:{wheels:number;parts:number}){const after=stripCount(victim),wheels=after.wheels-before.wheels,parts=after.parts-before.parts;if(wheels<=0&&parts<=0)return;eventAwards.stripped(attacker.id,victim.id,wheels,parts);if(attacker.id===0&&!demo&&!online?.active&&wheels>0)toast(`WHEEL OFF · #${victim.id+1} ${DEFINITIONS[victim.kind].name}`,1.4);}
 function currentTeamScores(){return teamScores(rankRace().map(c=>({slot:cars.indexOf(c),scores:c.finished||c.health>0})));}
 function rankRace(){const order=rankRaceBase();return eliminationRace()?[...order.filter(c=>c.finished),...order.filter(c=>!c.finished&&c.health>0),...order.filter(c=>!c.finished&&c.health<=0).sort((a,b)=>eliminatedOrder.indexOf(b.id)-eliminatedOrder.indexOf(a.id))]:order;}
 function rankRaceBase() {
@@ -1477,13 +1480,13 @@ function step(dt: number) {
     // A feedback-only contact still clears stale glass/debris flags in hit().
     if(a){
       const before=a.health;
-      a.collisionHit(point1,vb.clone().sub(va).normalize(),damage,elapsed,b?.paintColor);
+      const strippedA=stripCount(a);a.collisionHit(point1,vb.clone().sub(va).normalize(),damage,elapsed,b?.paintColor);if(b)creditStrip(b,a,strippedA);
       if(b){b.inflicted+=before-a.health;const wreck=eventAwards.hit(b.id,a.id,before-a.health,before>0&&a.health<=0,elapsed);if(wreck)sound.crowd(b.id===0?1:.7);if(wreck&&b.id===0&&!demo&&!online?.active)slowMoUntil=clock+TAKEDOWN_SLOWMO.seconds;else if(before-a.health>=12)sound.crowd(b.id===0?.6:.4);if(wreck&&b.id===0)callout('TAKEDOWN',a);else if(b.id===0&&before-a.health>=12)callout('BIG HIT',a);combat.hit(b.id,a.id,before,a.health,elapsed);if(mode==='derby')combat.contact(scoreMotion[b.id],scoreMotion[a.id],before-a.health,elapsed);}
       if(b?.id===0)telemetry?.impact(a.id,before,a.health);
     }
     if(b){
       const before=b.health;
-      b.collisionHit(point2,va.clone().sub(vb).normalize(),damage,elapsed,a?.paintColor);
+      const strippedB=stripCount(b);b.collisionHit(point2,va.clone().sub(vb).normalize(),damage,elapsed,a?.paintColor);if(a)creditStrip(a,b,strippedB);
       if(a){a.inflicted+=before-b.health;const wreck=eventAwards.hit(a.id,b.id,before-b.health,before>0&&b.health<=0,elapsed);if(wreck)sound.crowd(a.id===0?1:.7);if(wreck&&a.id===0&&!demo&&!online?.active)slowMoUntil=clock+TAKEDOWN_SLOWMO.seconds;else if(before-b.health>=12)sound.crowd(a.id===0?.6:.4);if(wreck&&a.id===0)callout('TAKEDOWN',b);else if(a.id===0&&before-b.health>=12)callout('BIG HIT',b);combat.hit(a.id,b.id,before,b.health,elapsed);if(mode==='derby')combat.contact(scoreMotion[a.id],scoreMotion[b.id],before-b.health,elapsed);}
       if(a?.id===0)telemetry?.impact(b.id,before,b.health);
     }

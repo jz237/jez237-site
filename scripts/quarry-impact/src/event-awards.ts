@@ -2,13 +2,20 @@
  * the biggest climber (for derbies, the toughest survivor). Pure bookkeeping; the caller
  * reports hits and the starting order and supplies names when rendering. */
 export type AwardCar={id:number;inflicted:number;health:number};
-export type EventAward={key:'hit'|'destroyer'|'takedowns'|'climber'|'toughest'|'nemesis';title:string;id:number;detail:string;victim?:number;value:number};
+export type EventAward={key:'hit'|'destroyer'|'takedowns'|'climber'|'toughest'|'nemesis'|'wheels'|'scrap';title:string;id:number;detail:string;victim?:number;value:number};
 export class EventAwards{
  private biggest:{attacker:number;victim:number;damage:number;time:number}|null=null;
  private start:number[]|null=null;
  private takedowns=new Map<number,number>();
  private dealt=new Map<string,number>();
- reset(){this.biggest=null;this.start=null;this.takedowns.clear();this.dealt.clear();}
+ private stripping=new Map<number,{wheels:number;parts:number}>();
+ reset(){this.biggest=null;this.start=null;this.takedowns.clear();this.dealt.clear();this.stripping.clear();}
+ /** Credit the attacker for wheels torn off and parts knocked off the victim by one hit. */
+ stripped(attacker:number,victim:number,wheels:number,parts:number){
+  if(attacker===victim||!(wheels>0||parts>0))return;
+  const s=this.stripping.get(attacker)??{wheels:0,parts:0};s.wheels+=Math.max(0,Math.floor(wheels));s.parts+=Math.max(0,Math.floor(parts));this.stripping.set(attacker,s);
+ }
+ strippedBy(id:number){return{...(this.stripping.get(id)??{wheels:0,parts:0})};}
  /** Returns true when this hit wrecked the victim (a takedown). */
  hit(attacker:number,victim:number,damage:number,wrecked=false,time=0){
   if(!(damage>0)||!Number.isFinite(damage)||attacker===victim)return false;
@@ -32,6 +39,9 @@ export class EventAwards{
   if(destroyer&&destroyer.inflicted>=1)out.push({key:'destroyer',title:'MOST DESTRUCTIVE',id:destroyer.id,value:destroyer.inflicted,detail:`${Math.round(destroyer.inflicted)} damage dealt`});
   const taker=[...this.takedowns].sort((a,b)=>b[1]-a[1]||a[0]-b[0])[0];
   if(taker)out.push({key:'takedowns',title:'MOST TAKEDOWNS',id:taker[0],value:taker[1],detail:`${taker[1]} ${taker[1]===1?'car':'cars'} wrecked`});
+  const best=(key:'wheels'|'parts')=>[...this.stripping].filter(([,s])=>s[key]>0).sort((a,b)=>b[1][key]-a[1][key]||a[0]-b[0])[0];
+  const snatcher=best('wheels');if(snatcher)out.push({key:'wheels',title:'WHEEL SNATCHER',id:snatcher[0],value:snatcher[1].wheels,detail:`${snatcher[1].wheels} ${snatcher[1].wheels===1?'wheel':'wheels'} torn off`});
+  const scrap=best('parts');if(scrap&&scrap[1].parts>=3)out.push({key:'scrap',title:'SCRAP MERCHANT',id:scrap[0],value:scrap[1].parts,detail:`${scrap[1].parts} parts knocked off`});
   if(mode==='race'&&this.start&&finishOrder.length){
    let bestId=-1,bestGain=0;
    finishOrder.forEach((id,place)=>{const from=this.start!.indexOf(id),gain=from<0?0:from-place;if(gain>bestGain||(gain===bestGain&&gain>0&&id<bestId)){bestId=id;bestGain=gain;}});
