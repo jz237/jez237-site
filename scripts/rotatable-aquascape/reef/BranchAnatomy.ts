@@ -43,6 +43,9 @@ export function finishBranch(tube:T.TubeGeometry,cap:T.BufferGeometry,junctions:
 /** Sample the actual indexed tube skin, including its swollen junctions. The
  * triangle interpolation keeps a cup's footprint attached between axial rings. */
 function skinPoint(tube:T.TubeGeometry,t:number,angle:number){
+ // A cup's rim may reach past either end of a short, thick branch; sample the
+ // nearest end ring rather than reading before the first one (NaN positions).
+ t=Math.min(1,Math.max(0,t));
  const {radialSegments:s,tubularSegments:steps}=tube.parameters,p=tube.getAttribute('position');
  const row=Math.min(steps-1,Math.floor(t*steps)),u=t*steps-row,turn=((angle/(Math.PI*2))%1+1)%1*s,k=Math.floor(turn),v=turn-k,a=row*(s+1)+k,b=a+s+1,d=a+1,c=b+1;
  const out=new T.Vector3(),point=new T.Vector3();
