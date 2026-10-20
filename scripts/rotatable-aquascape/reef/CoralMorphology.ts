@@ -11,6 +11,9 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
  const geometries:T.BufferGeometry[]=[],baseColor=new T.Color().setHSL(hue,.6,.42),tipColor=baseColor.clone().lerp(new T.Color('#f1e9f0'),.52);
  // Thick, sturdy branches as in the reference's colonies (no added triangles).
  const girth=1.4;
+ // Compact, rounded bushes: shorter, wider growth than a tall spray. Scales
+ // only distances, so random draws, branch counts and attachments are unchanged.
+ const squat=.8,widen=1.15;
  let growthRandom=random;
  const choice=(a:number,b:number)=>a+(b-a)*growthRandom();
  function branch(start:T.Vector3,end:T.Vector3,radius:number,level:number,seed:number){
@@ -53,14 +56,14 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
   }
   const count=level===0?choice(3,4):choice(2,3);
   for(let j=0;j<count;j++){
-   const t=.32+(j/count)*.57+.085*Math.sin(seed*2.7+j*4.1),root=curve.getPointAt(t),angle=seed+j*2.4+.33*Math.sin(seed*1.7+j*3.8)+choice(-.4,.4),out=choice(.12,.25)*size*(level===0?1:.58);
+   const t=.32+(j/count)*.57+.085*Math.sin(seed*2.7+j*4.1),root=curve.getPointAt(t),angle=seed+j*2.4+.33*Math.sin(seed*1.7+j*3.8)+choice(-.4,.4),out=choice(.12,.25)*size*(level===0?1:.58)*widen;
    junctions.push(t);
-   const direction=curve.getTangentAt(t),rise=choice(.15,.34)*size*(level===0?1:.47),tip=root.clone().add(new T.Vector3(Math.cos(angle)*out,rise,Math.sin(angle)*out));
+   const direction=curve.getTangentAt(t),rise=choice(.15,.34)*size*(level===0?1:.47)*squat,tip=root.clone().add(new T.Vector3(Math.cos(angle)*out,rise,Math.sin(angle)*out));
    // Branches inherit a local exposure direction. Neighboring forks form
    // unequal terraces instead of every child reaching one circular rim.
    const exposure=.5+.5*Math.cos(seed*.83-hue*19),curl=Math.sin(seed*2.13+j*1.9);
    if(growth==='canopy'&&level===0){
-    tip.y=Math.max(root.y+.08*size,base.y+size*(.34+.28*exposure+.10*curl));
+    tip.y=Math.max(root.y+.08*size,base.y+size*(.34+.28*exposure+.10*curl)*squat);
     tip.x+=Math.cos(seed)*out*.24;tip.z+=Math.sin(seed)*out*.24;
    }
    if(level===1){tip.x+=Math.cos(seed+.6)*out*.20;tip.z+=Math.sin(seed+.6)*out*.20;tip.y+=size*.035*curl;}
@@ -99,7 +102,7 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
  }
  const count=7+Math.floor(random()*3);
  for(let i=0;i<count;i++){
-  const angle=i*2.399+choice(-.32,.32),exposure=.5+.5*Math.cos(angle-hue*19),rad=choice(.35,.67)*size*(growth==='bushy'?.78:growth==='antler'?.65:1)*(.82+.40*exposure),height=choice(.38,.9)*size*(growth==='canopy'?.55:growth==='bushy'?.72:1)*(.74+.42*exposure);
+  const angle=i*2.399+choice(-.32,.32),exposure=.5+.5*Math.cos(angle-hue*19),rad=choice(.35,.67)*size*(growth==='bushy'?.78:growth==='antler'?.65:1)*(.82+.40*exposure)*widen,height=choice(.38,.9)*size*(growth==='canopy'?.55:growth==='bushy'?.72:1)*(.74+.42*exposure)*squat;
   // Separate attachment points across the living crust; keep each stem sunk
   // into the actual support rather than suspending a radial bouquet above it.
   const broad=size>=.6;
