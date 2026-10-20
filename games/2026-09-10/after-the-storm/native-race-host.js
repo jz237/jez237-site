@@ -98,7 +98,7 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
  // AE7C4 reads the initialized actor pool for Dolphin's extra effect slot;
  // other courses have none. Solo Stunt (mode11) runs the same owner; two-
  // player views stay separate.
- if(courseEffects!==undefined&&(!sourceSchedule||racers.filter(r=>r.human).length!==1||
+ if(courseEffects!==undefined&&(!sourceSchedule||![1,raceRuntime.ordinary?2:1].includes(racers.filter(r=>r.human).length)||
    course.sourceWaterCourseIndex===0&&courseActors===undefined||typeof courseEffects?.onDisplay!=='function'||
    courseEffects.sourceClock!==undefined&&typeof courseEffects.sourceClock!=='function'))
   throw new TypeError('Live scene effects require a solo ordinary race, Dolphin\'s course actors and an explicit display consumer');
@@ -277,10 +277,14 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
      sineTableWords4350,angleTableWords6f08:NATIVE_ANGLE_TABLE_WORDS,
      bodyFieldsBySlot:adapters.map(a=>captureNativeEffectBody(a,{boundaryDriftNative:captureNativePhysicalBoundaryDrift(a)}))});
    };
+   const humanViews=racers.filter(r=>r.human).length;
    host.displaySceneEffects=()=>{
-    const clock=clockWords(),ticket=host.sceneEffects.prepareDisplay({clockStartWords:clock,clockEndWords:clock});
-    courseEffects.onDisplay(ticket.presentation);
-    host.lastSceneEffectDisplay=host.sceneEffects.commitDisplay(ticket);
+    //9328C: one display with one human; with two, 933C4 runs B305C per view.
+    for(let view=0;view<humanViews;view++){
+     const clock=clockWords(),ticket=host.sceneEffects.prepareDisplay({clockStartWords:clock,clockEndWords:clock,...(humanViews===2?{view}:{})});
+     courseEffects.onDisplay(ticket.presentation,view);
+     host.lastSceneEffectDisplay=host.sceneEffects.commitDisplay(ticket);
+    }
    };
   }
   // Fresh browser inactive body slots are explicitly zero; active B64/B68

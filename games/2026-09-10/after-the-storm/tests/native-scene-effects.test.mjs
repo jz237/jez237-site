@@ -144,7 +144,7 @@ test('native Time trial runs the scene-effects owner without course actors and k
  h.advanceSceneEffects=()=>{spray.advance(s.nativeLaunch.sprayInputs(),s.nativeLaunch.cameraStorage.read());advance();assert.deepEqual(h.sprayLevels(),spray.levels());if(spray.levels()[0].left)audible++;};
  for(let i=0;i<900;i++)stepRace(s,{throttle:1,steer:i%240<120?.4:-.3},1/60);
  assert.equal(shown,h.world.frames);assert.ok(audible>20);
- for(const options of [{mode:'time',course:getCourse('amber',1)},{mode:'stunt',course:getCourse('amber',1)},{mode:'versus',physics:'native',course:getCourse('amber',1)},{mode:'practice',physics:'native',course:getCourse('practice'),nativeCourseActors:{assets,onDisplay(){}}}])
+ for(const options of [{mode:'time',course:getCourse('amber',1)},{mode:'stunt',course:getCourse('amber',1)},{mode:'practice',physics:'native',course:getCourse('practice'),nativeCourseActors:{assets,onDisplay(){}}}])
   assert.throws(()=>createRace({...options,nativeSceneEffects:{onDisplay(){}}}),/Separate scene effects/);
  assert.throws(()=>createRace({mode:'time',physics:'native',course:getCourse('amber',1),difficulty:1,nativeSceneEffects:{onDisplay:1}}),/display consumer/);
 });
@@ -169,4 +169,16 @@ test('native Championship runs one four-slot scene-effects owner and shares its 
  // Copy-on-write: unrelated commits reuse the frozen effect array instead of copying it.
  const a=s.nativeLaunch.snapshot().effectWords0790;s.nativeLaunch.advanceInputClock();
  assert.equal(s.nativeLaunch.snapshot().effectWords0790,a);assert.ok(Object.isFrozen(a));
+});
+
+test('a native two-player race draws the effects once per view, as 933C4 does, with one shared owner',()=>{
+ const shown=[0,0],counts=[[],[]];
+ const s=createRace({mode:'versus',physics:'native',course:getCourse('amber',1),difficulty:1,rider:0,secondRider:2,nativeSceneEffects:{onDisplay:(p,view)=>{shown[view]++;counts[view].push(p.draws.length);}}}),h=s.nativeHost;
+ assert.equal(h.spray,undefined);assert.equal(h.effectStartup.state.effectWords0790[0],2);assert.equal(h.sprayLevels().length,2);
+ const spray=createNativeRaceSpray({adapters:h.world.adapters,field:s.raceWater.field,courseIndex:s.course.sourceWaterCourseIndex}),advance=h.advanceSceneEffects;let audible=0;
+ h.advanceSceneEffects=()=>{spray.advance(s.nativeLaunch.sprayInputs(),s.nativeLaunch.cameraStorage.read());advance();assert.deepEqual(h.sprayLevels(),spray.levels());if(spray.levels().some(l=>l.left))audible++;};
+ for(let i=0;i<600;i++)stepRace(s,[{throttle:1,steer:i%240<120?.4:-.3},{throttle:1,steer:i%200<100?-.3:.4}],1/30);
+ assert.deepEqual(shown,[h.world.frames,h.world.frames]);assert.ok(audible>20);
+ // Each view skips its own rider's effects, so the two lists differ.
+ assert.ok(counts[0].some((n,i)=>n!==counts[1][i]));assert.equal(s.nativeLaunch.snapshot().scene.fieldAb2c,0);
 });

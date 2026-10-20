@@ -1839,7 +1839,9 @@ export function prepareNativePresentationEffectsDisplayUpdate(state,input={}){
  const next=copy(state),prepared=prepareNativePresentationEffectsDisplay({...input,
   effectWords0790:next.effectWords0790,effectControlWords6d60:next.effectControlWords6d60,hudWords7788:next.hudWords7788,
   bufferIndex:nativeSceneGraphicsBufferIndex(next.scene.graphicsPointerE948),graphicsPointerE94c:next.scene.graphicsPointerE94c,
-  matrixCountE950:sceneValue(next,'matrixCountE950'),fieldAb2c:sceneValue(next,'fieldAb2c'),players:sceneValue(next,'players'),main638:sceneValue(next,'main638'),
+  // 9328C/933C4 set AB2C to each view around B305C and restore0 afterwards;
+  // a two-player host passes the view it is drawing while the stored word stays0.
+  matrixCountE950:sceneValue(next,'matrixCountE950'),fieldAb2c:input.view===undefined?sceneValue(next,'fieldAb2c'):(sceneValue(next,'fieldAb2c')===0&&[0,1].includes(input.view)?input.view:-1),players:sceneValue(next,'players'),main638:sceneValue(next,'main638'),
   primaryHumanIndex:sceneValue(next,'primaryHumanIndex'),frameCounter:sceneValue(next,'ambientD4b00'),
   displayCamera3930:next.scene.displayCamera3930,displayCamera3934:next.scene.displayCamera3934});
  const effects=apply(next,prepared.operations);return freeze({...prepared,state:next,effects});

@@ -1,5 +1,18 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — original wake and spray in two-player races
+
+The original display stage (9328C) draws once with one player. With two it
+sets AB2C to 0, runs the per-view display 933C4 (which includes ADF90 and the
+effects display B305C), sets AB2C to 1, runs it again, and restores 0. The
+effects display skips each view's own rider. Original two-player races now
+run the full effects owner: one B2ABC motion update per frame and one B305C
+display per view (the host passes the view while the stored word stays 0).
+The browser draws each view's effects only in its own half of the split
+screen. Both riders' audio spray levels match the earlier spray reconstruction
+on every frame, and the split screen holds about 60 fps. Replay records the
+first view's effects.
+
 ## Unpublished — Original physics for local two-player races
 
 The native two-player race (mode 1: original countdown, catch-up assistance,
