@@ -1,3 +1,4 @@
+import {restoreScrapeSparksBytes} from './scrape-sparks-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readStripAwardsPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreStripAwardsBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreScrapeSparksBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readStripAwardsPrevious(file);
 }
 export function verifyStripAwardsRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'20d40f1427842d2ace253a8c575cd7fc025ae432');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreScrapeSparksBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreStripAwardsBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the StripAwards release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreScrapeSparksBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the StripAwards release');
  assert.equal(manifest.previousFixtureCount,5094);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,5094);
 }

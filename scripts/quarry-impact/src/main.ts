@@ -868,7 +868,7 @@ function createCars(attract = false, previewSetup?:Setup) {
     const car = new Vehicle(i, type, team?.color ?? setup?.paint ?? colors[i%colors.length], scene, physics, fx, teamSetup,activeVenue.course,online?.active?'legacy':'angular-v1');
     carLights.set(car,attachCarLights(car.root,DEFINITIONS[type].halfLength));
     car.extendedDamage=!attract&&!online?.active;if(car.extendedDamage)car.onBackfire=p=>sound.backfire(p);
-    if(car.extendedDamage&&i===0&&!demo)car.onWheelLost=w=>toast(`WHEEL GONE · ${['FRONT LEFT','FRONT RIGHT','REAR LEFT','REAR RIGHT'][w]}`,1.6);
+    if(car.extendedDamage)car.onWheelLost=w=>{sound.crowd(i===0?.8:.55);if(i===0&&!demo)toast(`WHEEL GONE · ${['FRONT LEFT','FRONT RIGHT','REAR LEFT','REAR RIGHT'][w]}`,1.6);};
     car.waters=activeVenue.puddles;
     if(mode==='derby'&&!online?.active&&activeVenue===quarryVenue)car.arenaSurface=DERBY_ARENA;
     cars.push(car);
@@ -1472,7 +1472,9 @@ function step(dt: number) {
       damageScale:Math.max(a&&a.health>0?a.specification.damageScale:0,b&&b.health>0?b.specification.damageScale:0)});
   });
   sound.contactScraping.sample(contacts,elapsed);
-  for(const {a,b,point1,point2,scarDirection} of collisionScars.adjudicate(contacts,elapsed)){
+  for(const {a,b,point1,point2,scarDirection,speed,material} of collisionScars.adjudicate(contacts,elapsed)){
+    // Metal grinding on metal or concrete throws sparks along the scrape.
+    if(speed>4&&(material==='metal'||material==='concrete'))fx.emit(point1,Math.min(4,Math.ceil(speed/6)),1,.85);
     a?.scar(point1,scarDirection,b?.paintColor);
     b?.scar(point2,scarDirection.clone().negate(),a?.paintColor);
   }
