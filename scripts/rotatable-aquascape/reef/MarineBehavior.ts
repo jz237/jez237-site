@@ -33,21 +33,39 @@ export const marineBehavior:Record<MarineSpecies,MarineBehavior>={
  * rivals/display: who provokes a broadside fin display, a short chase, or a
  * defensive spine display with camouflage. sails: median fins fold with speed.
  * labriform: pectoral rowing carries patrols. home: a persistent reef shelter
- * with short excursions; retreat: back to it when a larger fish comes close. */
+ * with short excursions; retreat: back to it when a larger fish comes close.
+ * graze.surface limits sites to rock or to coral (default either); labels name
+ * the approach and the feeding bout. plankton: strikes at single drifting
+ * particles (interval in s, reach in body lengths). guard: a display or chase
+ * happens only within this distance of the fish's post (its shelter, or a
+ * clown's anemone), against intruders in it; chaseLabel names that chase. */
 export type MarineHabits={
- graze?:{chance:number;bites:[number,number];interval:[number,number];stroke:number;range?:number};
+ graze?:{chance:number;bites:[number,number];interval:[number,number];stroke:number;range?:number;surface?:'rock'|'coral';labels?:[string,string]};
+ plankton?:{interval:[number,number];reach:[number,number]};guard?:number;chaseLabel?:string;
  rivals?:MarineSpecies[];display?:'broadside'|'chase'|'spines';displayGap?:number;displayCooldown?:[number,number];
  sails?:boolean;labriform?:boolean;home?:number;retreat?:boolean;camouflage?:boolean;cocoon?:boolean;
 };
 export const marineHabits:Partial<Record<MarineSpecies,MarineHabits>>={
- rostratum:{graze:{chance:.62,bites:[3,7],interval:[.55,1.15],stroke:.4},rivals:['tang','rostratum','strigosus'],display:'broadside',sails:true,labriform:true},
+ // Blue tangs scrape algae from rock and take drifting plankton; meeting other
+ // tangs they spar with brief broadside displays.
+ tang:{graze:{chance:.5,bites:[2,5],interval:[.6,1.2],stroke:.3,surface:'rock'},plankton:{interval:[7,15],reach:[.3,.7]},rivals:['tang','rostratum','strigosus'],display:'broadside',displayCooldown:[30,55]},
+ // Golden butterflyfish work slowly over coral heads, nipping polyps.
+ semilarvatus:{graze:{chance:.75,bites:[3,6],interval:[.75,1.5],stroke:.3,surface:'coral',labels:['inspecting coral','picking at coral']}},
+ // Clownfish charge fish that come into their anemone, then return to it.
+ clown:{rivals:['tang','rostratum','semilarvatus','anthias','chromis','gramma','strigosus','vulpinus','bispinosa','loricula','hexataenia'],display:'chase',displayGap:.3,displayCooldown:[14,28],guard:1.1,chaseLabel:'defending its anemone'},
+ // Anthias and chromis hover near the reef and strike single drifting prey.
+ anthias:{plankton:{interval:[2.2,5.5],reach:[.4,.9]}},
+ chromis:{plankton:{interval:[3,8],reach:[.35,.8]}},
+ // The gramma picks plankton beside its ledge and chases small fish away from it.
+ gramma:{plankton:{interval:[4,9],reach:[.35,.7]},rivals:['chromis','anthias','clown','gramma','hexataenia'],display:'chase',displayGap:.4,displayCooldown:[16,32],guard:.75,chaseLabel:'guarding its ledge'},
+ rostratum:{graze:{chance:.62,bites:[3,7],interval:[.55,1.15],stroke:.4,surface:'rock'},rivals:['tang','rostratum','strigosus'],display:'broadside',sails:true,labriform:true},
  // Bristle-toothed: nearly constant, rapid scraping of film from rock.
- strigosus:{graze:{chance:.88,bites:[7,13],interval:[.22,.42],stroke:.25},rivals:['tang','rostratum','strigosus'],display:'broadside',sails:true,labriform:true},
+ strigosus:{graze:{chance:.88,bites:[7,13],interval:[.22,.42],stroke:.25,surface:'rock'},rivals:['tang','rostratum','strigosus'],display:'broadside',sails:true,labriform:true},
  // Algae grazer; threatened, it raises venomous spines toward the intruder and darkens.
- vulpinus:{graze:{chance:.55,bites:[3,6],interval:[.7,1.4],stroke:.3},rivals:['tang','rostratum','strigosus','vulpinus'],display:'spines',displayGap:.35,displayCooldown:[30,50],sails:true,labriform:true,camouflage:true},
+ vulpinus:{graze:{chance:.55,bites:[3,6],interval:[.7,1.4],stroke:.3,surface:'rock'},rivals:['tang','rostratum','strigosus','vulpinus'],display:'spines',displayGap:.35,displayCooldown:[30,50],sails:true,labriform:true,camouflage:true},
  // Dwarf angels graze around their own rockwork and spar with other Centropyge.
- bispinosa:{graze:{chance:.72,bites:[2,5],interval:[.45,.9],stroke:.35,range:1.5},rivals:['bispinosa','loricula'],display:'chase',labriform:true,home:1.6,retreat:true},
- loricula:{graze:{chance:.72,bites:[2,5],interval:[.45,.9],stroke:.35,range:1.5},rivals:['bispinosa','loricula'],display:'chase',labriform:true,home:1.6,retreat:true},
+ bispinosa:{graze:{chance:.72,bites:[2,5],interval:[.45,.9],stroke:.35,range:1.5,surface:'rock'},rivals:['bispinosa','loricula'],display:'chase',labriform:true,home:1.6,retreat:true},
+ loricula:{graze:{chance:.72,bites:[2,5],interval:[.45,.9],stroke:.35,range:1.5,surface:'rock'},rivals:['bispinosa','loricula'],display:'chase',labriform:true,home:1.6,retreat:true},
  // Secretive pod hunter among the rock; sleeps in a mucus cocoon in a cavity.
- hexataenia:{graze:{chance:.8,bites:[1,3],interval:[.35,.7],stroke:.45,range:1.1},rivals:['hexataenia'],display:'chase',labriform:true,home:1.2,retreat:true,cocoon:true},
+ hexataenia:{graze:{chance:.8,bites:[1,3],interval:[.35,.7],stroke:.45,range:1.1,surface:'rock'},rivals:['hexataenia'],display:'chase',labriform:true,home:1.2,retreat:true,cocoon:true},
 };

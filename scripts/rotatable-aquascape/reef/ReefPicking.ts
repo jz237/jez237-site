@@ -1,5 +1,8 @@
 import * as T from 'three';
 
+/** Each accelerated mesh's block bounds (local space), shared with the fish
+ * surface probe so it need not scan the geometry again. */
+export const reefPickingBlocks=new WeakMap<T.Mesh,{bounds:Float64Array;blockSize:number;count:number}>();
 /** Broad phase for the existing raycaster. Cache-ordered triangle blocks are
  * spatially compact; their bounds discard distant detail before Three performs
  * its exact face/UV intersection. No proxy mesh or extra vertex/index buffer. */
@@ -19,6 +22,7 @@ export function accelerateReefPicking(root:T.Object3D){
    }
    bounds.set([minX,minY,minZ,maxX,maxY,maxZ],block*6);
   }
+  reefPickingBlocks.set(object,{bounds,blockSize,count});
   const native=object.raycast,localRay=new T.Ray(),inverse=new T.Matrix4(),box=new T.Box3();
   const indexVersion=index.version,positionVersion=position.version;
   object.raycast=function(raycaster,hits){

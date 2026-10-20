@@ -24,7 +24,9 @@ import {limestoneMaps,encrustRock} from './ReefMaterials.ts';
 import {branchingColony,platingColony,plateCollisionVolumes} from './CoralMorphology.ts';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 
-export type Obstacle={center:T.Vector3;radius:number};
+/** A fish collision proxy. Coral proxies are tagged so feeding fish can tell
+ * coral colonies from bare rock; untagged proxies are rock or other hardscape. */
+export type Obstacle={center:T.Vector3;radius:number;kind?:'coral'};
 export const reefClock={value:0};
 export function seeded(seed:number){return ()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};}
 const random=seeded(81412),pick=(a:number,b:number)=>a+(b-a)*random();
@@ -211,6 +213,7 @@ export async function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments,ass
   corals.push(...colony.geometries);obstacles.push(colony.obstacle);newGrowth.push(colony.obstacle);
   crustStats.understoryColonies++;crustStats.understoryTriangles+=colony.triangles;
  }
+ for(let i=rockObstacleCount;i<obstacles.length;i++)obstacles[i].kind='coral';
  // Low living mantles occupy exposed faces beneath the branching canopy.
  // Each is clipped to its supporting stone, preserving cavities and existing
  // colonies. Own seeds and late insertion keep established scenery intact.
@@ -228,7 +231,7 @@ export async function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments,ass
   const mantle=coralCrust((hit.object as T.Mesh).geometry,hit.point,hit.face.normal,radius,.8,2309231804+i*3.71,{color:new T.Color(mantlePalette[i%mantlePalette.length]),thickness:.014,lobed:true});
   if(!mantle.index!.count){mantle.dispose();continue;}
   massiveCorals.push(mantle);mantleSurfaces.push(mantle);crustStats.colonies++;crustStats.triangles+=mantle.index!.count/3;crustStats.mantleColonies++;crustStats.mantleTriangles+=mantle.index!.count/3;
-  mantle.computeBoundingSphere();obstacles.push({center:mantle.boundingSphere!.center.clone(),radius:mantle.boundingSphere!.radius+.004});
+  mantle.computeBoundingSphere();obstacles.push({center:mantle.boundingSphere!.center.clone(),radius:mantle.boundingSphere!.radius+.004,kind:'coral'});
  }
  // Larger overlapping fans close broad gaps between the major crowns. These
  // are full detailed colonies anchored to rock, not miniature filler or cards.
@@ -239,7 +242,7 @@ export async function buildReef(scene:T.Scene,bakedLife?:RockLifeAttachments,ass
   const first=corals.length;branch(...b as [number,number,number,number,number],canopyRandom);canopyStats.colonies++;
   for(const g of corals.slice(first))canopyStats.triangles+=(g.index?.count??g.getAttribute('position').count)/3;
  }
- const flankShelves=reefFlankShelves(supports);plates.push(...flankShelves.geometries);obstacles.push(...flankShelves.obstacles);
+ const flankShelves=reefFlankShelves(supports);plates.push(...flankShelves.geometries);for(const o of flankShelves.obstacles as Obstacle[])o.kind='coral';obstacles.push(...flankShelves.obstacles);
  coralMat.side=T.DoubleSide;const hard=batch(corals,coralMat,group,'Branching and plating corals')!;addNote(hard,'Branching stony corals','Stony corals are colonies of polyps supported by a hard skeleton. Branching colonies and ruffled plates add different shapes and shelter. Their skeletons do not bend in the current. This scene is an artistic reef study, not a stocking plan.');
  const plateMaterial=finishPlateMaterial(new T.MeshStandardMaterial({...plateMaps.maps,normalScale:new T.Vector2(1.05,1.05),roughness:.88,vertexColors:true,side:T.DoubleSide}),plateMaps.skeleton);
  const shelves=batch(plates,plateMaterial,group,'Layered plate coral tissue')!;addNote(shelves,'Plating coral','Thin folded shelves carry small coral cups among irregular skeletal ridges. The pale growing margin remains finer and smoother. This is a Montipora-inspired artistic study, not an exact species reconstruction.');

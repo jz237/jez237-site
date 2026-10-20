@@ -5,6 +5,7 @@ import {stabilizeFishPasses} from './StableFishPasses.ts';
 import {yieldBuild} from './BuildYield.ts';
 import {pickNote} from './ReefIdentification.ts';
 import {accelerateReefPicking} from './ReefPicking.ts';
+import {reefSurfaceProbe,type SurfaceKind} from './ReefSurfaceProbe.ts';
 import './style.css';
 import {reefDrawOrderReady,optimizeReefDrawOrder} from './ReefDrawOrder.ts';
 import * as T from 'three';
@@ -95,6 +96,14 @@ performance.measure('reef-picking','reef-picking-start');
 const fishModels=await fishModelsPending.catch(error=>{document.querySelector('#loading')!.textContent='The fish models could not load. Please reload to try again.';throw error;});
 const cleaners=new ReefCleaners(scene,await cleanerModelPending,cleanerRockSurface(reef.group.getObjectByName('Porous living reef rock') as T.Mesh));
 const fish=new ReefFish(scene,[...reef.obstacles,...cleaners.obstacles],reef.anemone.behavior.hosts.map(h=>h.center),fishModels,reef.anemone.behavior.hosts[0].scale,population);
+// Feeding fish nip the real coral and rock, not the bounding spheres used for
+// collision, and check that body and fins clear the real surfaces when they
+// work in close: short rays on the accelerated picking blocks, at plan time.
+{const sources:{mesh:T.Mesh;kind:SurfaceKind}[]=[];
+ reef.group.traverse(o=>{if(!(o instanceof T.Mesh)||o instanceof T.InstancedMesh)return;
+  const kind:SurfaceKind|null=o.name==='Branching and plating corals'||o.name==='Layered plate coral tissue'||o.name==='Ridged encrusting colonies'?'coral':o.name==='Porous living reef rock'||o.name==='Rock-encrusting polyp gardens'?'rock':o.name==='Rooted flowing anemones'?'other':null;
+  if(kind)sources.push({mesh:o,kind});});
+ fish.surfaceProbe=reefSurfaceProbe(sources);}
 const anemoneVisitors=fish.fish.filter(f=>f.species==='clown');
 const reefDaylight={value:1};const fishShadows=new ReefFishShadows(fish,key.position,reefDaylight,stockLimit);scene.add(fishShadows.mesh);scene.add(reefSuspension(reefClock,reefDaylight));
 const applyOptics=(o:T.Object3D)=>{if(o instanceof T.Mesh)for(const material of Array.isArray(o.material)?o.material:[o.material])if(material instanceof T.MeshStandardMaterial)applyReefOptics(material,reefClock,reefDaylight);};

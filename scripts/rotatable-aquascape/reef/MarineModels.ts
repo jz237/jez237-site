@@ -211,7 +211,7 @@ export async function loadMarineModels(species:MarineSpecies[]=baseMarineSpecies
     return part;});
    const merged=mergeGeometries(parts);for(const part of parts)part.dispose();
    if(merged){const [hinge,other]=gills,mesh=hinge.children[0] as T.Mesh;mesh.geometry.dispose();(other.children[0] as T.Mesh).geometry.dispose();
-    mesh.geometry=merged;mesh.userData.side=hinge.userData.side=1;hinge.position.z=hinge.userData.restZ=0;group.remove(other);}
+    mesh.geometry=merged;mesh.userData.side=hinge.userData.side=1;hinge.userData.pair=true;hinge.position.z=hinge.userData.restZ=0;group.remove(other);}
   }
   // Fin flex grows from a pinned insertion to a freely moving margin.
   group.traverse(node=>{if(!(node instanceof T.Mesh)||node.name!=='fin')return;
