@@ -141,6 +141,8 @@ export class Vehicle {
   private dripSeed = 1;
   /** Fluid drips this car has left (oil, coolant). */
   readonly drips = [0,0];
+  /** Replay recording hook for each drip. */
+  onDrip?:(x:number,y:number,z:number,kind:0|1,seed:number)=>void;
   onBackfire?:(point:T.Vector3)=>void;
   onWheelLost?:(wheel:number)=>void;
   private windLoad=new Map<string,number>();
@@ -337,7 +339,7 @@ export class Vehicle {
       this.dripSeed=(Math.imul(this.dripSeed,1664525)+1013904223)>>>0;const r=this.dripSeed/4294967296;
       const z=(kind===1||!isRearEngineKind(this.kind)?1:-1)*half*(kind===1?.62:.42)+(r-.5)*.3,x=(r*7%1-.5)*.4;
       const p=new T.Vector3(x,0,z).applyQuaternion(this.previousQ).add(this.previous);
-      slicks.drip(p.x,ground,p.z,kind,r);this.drips[kind]++;
+      slicks.drip(p.x,ground,p.z,kind,r);this.drips[kind]++;this.onDrip?.(p.x,ground,p.z,kind,r);
     }
   }
   preStep(dt: number) {

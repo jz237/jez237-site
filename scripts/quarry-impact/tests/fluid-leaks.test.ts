@@ -79,3 +79,24 @@ test('the HUD names each leak and warns about oil under or on the tyres; the dia
  assert.ok(svg.includes('dd-leak-oil')&&svg.includes('dd-leak-coolant')&&!/NaN|undefined/.test(svg));
  assert.ok(damageDiagramSvg({...base,leaks:{oil:0,coolant:.3}}).includes('dd-leak-coolant')&&!damageDiagramSvg({...base,leaks:{oil:0,coolant:.3}}).includes('dd-leak-oil'));
 });
+test('replays carry the drips and rebuild the same slicks forwards and after seeking back',async()=>{
+ const {ReplayRecorder,encodeReplay,decodeReplay}=await import('../src/replay-data');const {ReplaySlicks}=await import('../src/replay-slicks');
+ const {stockSetup}=await import('../src/garage');
+ const rec=new ReplayRecorder({version:1,mode:'derby',reverse:false,cars:[{id:0,kind:'sedan',setup:stockSetup('sedan')}],props:0,created:'t'});
+ const stride=rec.stride;rec.capture(0,()=>{const v=new Float32Array(stride);v[6]=1;for(let j=0;j<4;j++)v[18+j*8+3]=1;return v;},true);rec.capture(30,()=>{const v=new Float32Array(stride);v[6]=1;for(let j=0;j<4;j++)v[18+j*8+3]=1;return v;},true);
+ for(let i=0;i<40;i++)rec.drip({time:i*.5,position:[i%2?0:6,0,0],kind:(i%3===0?1:0) as 0|1,seed:(i*.37)%1});
+ rec.drip({time:1,position:[NaN,0,0],kind:0,seed:.5});rec.drip({time:2,position:[0,0,0],kind:2 as never,seed:.5});
+ const doc=rec.document();assert.equal(doc.drips?.length,40,'invalid drips are dropped');
+ const back=decodeReplay(encodeReplay(doc));assert.deepEqual(back.drips,doc.drips);
+ const noDrips=new ReplayRecorder({version:1,mode:'derby',reverse:false,cars:[{id:0,kind:'sedan',setup:stockSetup('sedan')}],props:0,created:'t'}).document();
+ assert.ok(!('drips' in noDrips),'recordings without leaks are unchanged');
+ const scene=new (await import('three')).Scene(),play=new ReplaySlicks(back.drips!,scene);
+ try{
+  for(let t=0;t<=25;t+=1/30)play.update(t);
+  const forward=Array.from(play.slicks.spots);
+  play.update(3);play.update(25);
+  const reseek=Array.from(play.slicks.spots);
+  assert.ok(play.slicks.stats.count>0&&play.slicks.stats.count<40,'drips at the same spot pool');
+  const worst=forward.reduce((m,v,i)=>Math.max(m,Math.abs(v-reseek[i])),0);assert.ok(worst<.03,'seeking back and forth rebuilds the same slicks (worst '+worst+')');
+ }finally{play.dispose();}
+});

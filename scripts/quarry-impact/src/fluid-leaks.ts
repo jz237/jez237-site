@@ -92,12 +92,14 @@ diffuseColor.rgb=vSlick.x<.5?vec3(.018,.015,.012):vec3(.025,.075,.04);`)
   }
   /** Spots fade: oil slowly, coolant soon evaporates. */
   advance(dt:number){
-    if(!(dt>0)||!Number.isFinite(dt))return;this.time.value+=dt;
-    if(Math.floor(this.time.value)===Math.floor(this.time.value-dt))return; // fade once a second
+    if(!(dt>0)||!Number.isFinite(dt))return;const before=this.time.value;this.time.value+=dt;
+    // Fade once per whole second crossed, so one long step (a replay seek) fades like many short ones.
+    const seconds=Math.floor(this.time.value)-Math.floor(before);if(seconds<=0)return;
     const s=this.spots;let changed=false;
-    for(let i=0;i<this.count;i++){const o=i*7;if(s[o+5]<=0)continue;s[o+5]=Math.max(0,s[o+5]-(s[o+3]===0?1/SLICK.oil.life:1/SLICK.coolant.life));this.data[i*4+2]=s[o+5];changed=true;}
+    for(let i=0;i<this.count;i++){const o=i*7;if(s[o+5]<=0)continue;s[o+5]=Math.max(0,s[o+5]-seconds*(s[o+3]===0?1/SLICK.oil.life:1/SLICK.coolant.life));this.data[i*4+2]=s[o+5];changed=true;}
     if(changed)this.mesh.geometry.attributes.slickData.needsUpdate=true;
   }
+  dispose(){this.mesh.removeFromParent();this.mesh.geometry.dispose();(this.mesh.material as T.Material).dispose();this.mesh.dispose();}
   reset(){this.cursor=this.count=0;this.time.value=0;this.spots.fill(0);this.data.fill(0);this.mesh.count=0;this.mesh.geometry.attributes.slickData.needsUpdate=true;}
   get stats(){let oil=0,coolant=0;for(let i=0;i<this.count;i++){if(this.spots[i*7+5]<=0)continue;if(this.spots[i*7+3]===0)oil++;else coolant++;}return{count:this.count,oil,coolant};}
 }
