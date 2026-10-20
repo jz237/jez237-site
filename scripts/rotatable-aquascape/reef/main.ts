@@ -95,10 +95,19 @@ const lightBar=new T.Mesh(new T.BoxGeometry(9.7,.1,.64),new T.MeshStandardMateri
 const emitter=new T.Mesh(new T.BoxGeometry(9.35,.014,.5),new T.MeshBasicMaterial({color:'#b9d7ff'}));emitter.position.set(0,5.835,-.25);scene.add(emitter);
 // Soft volume shafts only: no solid cones or opaque blue overlay over the corals.
 const shaftGroup=new T.Group();scene.add(shaftGroup);
-for(let i=0;i<9;i++){
- const geo=new T.PlaneGeometry(.4+Math.random()*.3,4.75);const mat=new T.ShaderMaterial({transparent:true,depthWrite:false,blending:T.AdditiveBlending,side:T.DoubleSide,uniforms:{time:reefClock,daylight:reefDaylight,phase:{value:i*2.399}},vertexShader:'varying vec2 v;void main(){v=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:'varying vec2 v;uniform float time,daylight,phase;void main(){float center=.5+.08*sin(v.y*3.+time*.20+phase)*(1.-v.y);float envelope=exp(-pow((v.x-center)*4.,2.))*(1.-smoothstep(.30,.5,abs(v.x-.5)));float pulse=.73+.27*sin(v.y*5.-time*.28+phase);float a=envelope*smoothstep(0.,.9,v.y)*.1*pulse*daylight;gl_FragColor=vec4(.3,.5,.95,a);}' });
- const mesh=new T.Mesh(geo,mat);mesh.position.set(-4.2+i,3.06,-1.92);mesh.rotation.z=-.17;shaftGroup.add(mesh);
-}
+// Light rays fan out from the lamp above the centre of the tank: a deep rear
+// set, and a fainter, shorter set nearer the glass. Each widens with depth.
+// The rear set keeps its nine Math.random width draws, so seeded fish replays
+// are unchanged.
+const rayFocus=new T.Vector2(0,10.5);
+const ray=(width:number,height:number,x:number,y:number,z:number,phase:number,strength:number,reach:number)=>{
+ const geo=new T.PlaneGeometry(width,height),p=geo.getAttribute('position');
+ for(let j=0;j<p.count;j++)p.setX(j,p.getX(j)*(.45+.55*(.5-p.getY(j)/height)));
+ const mat=new T.ShaderMaterial({transparent:true,depthWrite:false,blending:T.AdditiveBlending,side:T.DoubleSide,uniforms:{time:reefClock,daylight:reefDaylight,phase:{value:phase}},vertexShader:'varying vec2 v;void main(){v=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:`varying vec2 v;uniform float time,daylight,phase;void main(){float center=.5+.08*sin(v.y*3.+time*.20+phase)*(1.-v.y);float envelope=exp(-pow((v.x-center)*4.,2.))*(1.-smoothstep(.30,.5,abs(v.x-.5)));float pulse=.73+.27*sin(v.y*5.-time*.28+phase);float a=envelope*smoothstep(${(1-reach).toFixed(2)},1.,v.y)*(.6+.8*v.y*v.y)*${strength.toFixed(3)}*pulse*daylight;gl_FragColor=vec4(.32,.52,.96,a);}`});
+ const mesh=new T.Mesh(geo,mat);mesh.position.set(x,y,z);mesh.rotation.z=Math.atan2(x-rayFocus.x,rayFocus.y-y);shaftGroup.add(mesh);
+};
+for(let i=0;i<9;i++)ray(.4+Math.random()*.3,4.75,-4.2+i*1.05,3.06,-1.92,i*2.399,.12,1);
+for(let i=0;i<8;i++)ray(.3+.12*(.5+.5*Math.sin(i*1.7)),2.9,-3.5+i,3.98,.15,i*1.73+.6,.045,.85);
 const lighting=new AquariumLighting(scene,camera),scheduler=new CaptureScheduler(),adaptive=new AdaptiveEffects();let paused=false,night=false,time=0,last=performance.now(),revision=0,frame=0,ready=false,effectMode='auto';let cameraGoal:T.Vector3|null=null;let suspended=false,contextLost=false,raf=0,idleFrames=6;
 function requestFrame(){if(ready&&!raf&&!suspended&&!contextLost&&!document.hidden)raf=requestAnimationFrame(animate);}
 function wake(){idleFrames=6;requestFrame();}
