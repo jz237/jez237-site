@@ -1,5 +1,18 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — full native Normal cup and its final round
+
+A complete Normal cup now runs headlessly from Sunny Beach to Southern Island
+in the original order, chaining every round through the continuation. The
+final round used to stall: a qualified final result enters the original
+ending state (802C7570, game state 45, return 102), which race-core did not
+recognise, so the post-race screen never closed. Race-core now treats that
+state as cup completion and records final places and totals (carried points
+plus the final race's 7/4/2/1, which the original ceremony applies). A saved
+final-round state (7 KB) keeps this tested. Not yet connected: the browser
+cup screens, elimination (the standings' game-over destination), the
+original ending ceremony scene and unlocks.
+
 ## Unpublished — native Championship continues round to round
 
 After the original standings hand back to the championship, the new

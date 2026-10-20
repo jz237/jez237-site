@@ -4,6 +4,8 @@ import {createRace,stepRace} from '../race-core.js';
 import {getCourse,COURSES} from '../courses.js';
 import {createNativeRacePilot} from '../native-race-pilot.js';
 import {prepareNativeChampionshipContinuation} from '../native-championship-continuation.js';
+import {readFileSync} from 'node:fs';
+import {gunzipSync} from 'node:zlib';
 const courseFor=index=>COURSES.find(c=>getCourse(c.id).sourceWaterCourseIndex===index).id;
 const POINTS=[7,4,2,1];
 
@@ -33,4 +35,15 @@ test('a native cup continues from the original standings into the next course wi
  assert.deepEqual(second.nativeLaunch.snapshot().profileWordsB330.slice(4,8),places1.map((p,i)=>POINTS[p]+POINTS[places2[i]]));
  const third=prepareNativeChampionshipContinuation(second.nativeLaunch.snapshot(),{avatarsBySlot:avatars});
  assert.equal(third.courseIndex,4);assert.equal(third.round,3);
+});
+
+// Prepared by chaining five pilot-driven Normal rounds through this runtime.
+const finalRound=JSON.parse(gunzipSync(readFileSync(new URL('./fixtures/native-championship-final-round.json.gz',import.meta.url))));
+test('a qualified final round enters the original ending state and completes the cup with final totals',()=>{
+ const {id,continuation}=finalRound;assert.equal(id,'tempest');assert.equal(continuation.round,6);
+ const s=createRace({mode:'championship',physics:'native',course:getCourse(id,0),difficulty:0,rider:0,nativeChampionshipContinuation:continuation}),r=s.racers[0],pilot=createNativeRacePilot({course:s.course});
+ for(let i=0;i<220*30&&!['standings','results'].includes(s.phase);i++)stepRace(s,()=>pilot.input(s,r),1/30);
+ assert.equal(s.phase,'results');assert.equal(s.nativeLaunch.snapshot().scene.gameStateAb24,45);
+ const done=s.nativeChampionshipComplete,places=s.racers.map(q=>q.nativePlace);
+ assert.deepEqual(done.places,places);assert.deepEqual(done.totals,continuation.points.map((p,i)=>p+POINTS[places[i]]));assert.equal(done.difficulty,0);
 });

@@ -218,6 +218,16 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
      if(state.nativeLaunch.championshipLaunch&&state.nativeResult.exit.consumer==='801ec0d4'){
       state.phase='standings';state.nativeStandings={remainder:0,frames:0,draw:null,view:null,handoff:null};
      }else state.phase='results';
+    }else if(state.nativeLaunch.championshipLaunch){
+     // A qualified final round's result enters802C7570's ending state45
+     // (return102). The browser has no ceremony scene; it ends the cup here.
+     const ending=state.nativeLaunch.snapshot();
+     if(ending.scene.gameStateAb24===45&&ending.scene.returnState630===102){
+      const places=state.racers.map(r=>r.nativePlace),before=ending.profileWordsB330.slice(4,8);
+      state.nativeChampionshipComplete=Object.freeze({difficulty:ending.profileWordsB330[2],places:Object.freeze(places),
+       totals:Object.freeze(before.map((p,i)=>p+[7,4,2,1][places[i]]))});
+      state.phase='results';
+     }
     }
    }
    return !['results','standings'].includes(state.phase);
