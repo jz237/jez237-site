@@ -43,7 +43,10 @@ export function finishRockMaterial(material:T.MeshStandardMaterial){
    // Spherical crowns: brightness falls off toward each nodule's rim, so the
    // surface reads as rounded popcorn rather than flat polygonal tiles.
    float nodeDome=sqrt(max(0.,1.-nodeF1*nodeF1*1.25)),fineDome=sqrt(max(0.,1.-fineF1*fineF1*1.2));
-   vec3 nodeColor=reefNodeColor(nodeId.x)*(.55+.5*nodeId.y);
+   // Colour comes in patches, as coralline and crusts grow: neighbouring nodules
+   // share a hue, with a little individual variation, not a confetti mix.
+   float nodePatch=fract(reefNodeField(reefRockP*2.4+7.)*2.7+reefNodeField(reefRockP*5.3+19.)*1.3+nodeId.x*.16);
+   vec3 nodeColor=reefNodeColor(nodePatch)*(.55+.5*nodeId.y);
    float coverage=.82*smoothstep(.05,.45,reefNodeField(reefRockP*1.7));
    vec3 living=mix(diffuseColor.rgb,nodeColor*(.6+.55*fineId.z),.8);
    diffuseColor.rgb=mix(diffuseColor.rgb,living,coverage);
@@ -51,7 +54,7 @@ export function finishRockMaterial(material:T.MeshStandardMaterial){
    diffuseColor.rgb*=mix(1.,(.18+.95*nodeDome)*mix(.22,1.,nodeCrevice)*(.66+.42*fineDome)*mix(.8,1.,fineCrevice),.35+.65*coverage);
    // A share of the nodules carry a small living frag in a bright fluorescent
    // color on their crown, crowded most densely low on the rock.
-   float fragPick=step(.84,nodeId.z)*coverage*(.5+.5*(1.-smoothstep(1.,2.8,reefRockP.y)))*smoothstep(.62,.3,nodeF1);
+   float fragPick=step(.9,nodeId.z)*coverage*(.5+.5*(1.-smoothstep(1.,2.8,reefRockP.y)))*smoothstep(.62,.3,nodeF1);
    vec3 fragColor=reefFragColor(nodeId.y);
    diffuseColor.rgb=mix(diffuseColor.rgb,fragColor*(.3+.75*nodeDome)*(.66+.42*fineDome),fragPick);`);
   shader.fragmentShader=shader.fragmentShader.replace('#include <emissivemap_fragment>',`#include <emissivemap_fragment>
@@ -87,6 +90,6 @@ export function finishRockMaterial(material:T.MeshStandardMaterial){
    slope+=(-nodeTo*2.4*nodeF1-fineTo*1.1*fineF1)*(.35+.65*coverage);
    normal=normalize(normalMatrix*normalize(stoneN+slope-stoneN*dot(slope,stoneN)));`);
  };
- material.customProgramCacheKey=()=> 'reef-porous-rock-triplanar-lower-micropores-rubble-frags-v5';
+ material.customProgramCacheKey=()=> 'reef-porous-rock-triplanar-lower-micropores-rubble-frags-v6';
  return material;
 }
