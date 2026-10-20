@@ -22,7 +22,10 @@ import {nativeGraphicsCornerView} from './native-graphics-corner-state.js';
 import {prepareNativeRaceWaterInitialization} from './native-race-state.js';
 import {prepareNativeRaceWidgetAdvance,prepareNativeRaceFadeAdvance,prepareNativeRaceFadePropertiesUpdate} from './native-race-state.js';
 import {prepareNativeWidgetPresentation,nativeWidgetDrawView} from './native-widget-presentation.js';
-import {prepareNativeRaceMenuInputAdvance,nativeRaceMenuInputView} from './native-race-state.js';
+import {prepareNativeRaceMenuInputAdvance,nativeRaceMenuInputView,prepareNativeMenuReturnUpdate,prepareNativeChampionshipScoreUpdate} from './native-race-state.js';
+import {prepareNativeEndingMenuPhase,nativeEndingMenuView} from './native-ending-menu-runtime.js';
+import {NATIVE_ENDING_MENU_LOADED_WORDS} from './source-ending-menu-words.js';
+import {NATIVE_RECORDS_MENU_DATA} from './native-records-menu-data.js';
 import {prepareNativeRaceResultCPUDisplayUpdate} from './native-race-state.js';
 import {prepareNativeNameMenuFrame,nativeNameMenuView} from './native-name-menu-runtime.js';
 import {prepareNativeResultsMenuFrame,nativeResultsMenuView} from './native-results-menu-runtime.js';
@@ -310,6 +313,36 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    if(prepared.waterScene)installRaceWaterMenuScene(water,prepared.waterScene);
    advanceRaceWaterMenuFrame(water,prepared.waterOperations);current=prepared.state;
    return prepared;
+  },
+  endingView:()=>nativeEndingMenuView(current),
+  /** A qualified final round's 802C7570 return102 enters ECB98 once, with
+   * ovl_i15 freshly loaded (tables plus zeroed BSS). Later calls run one
+   * original 20Hz ending frame each: menu input, then 5800/5470/AFB4/71A8 and
+   * the 5F50 draw. The main21 ceremony world (course7 podium) is not
+   * reconstructed, so no physical update precedes the phase here.
+   */
+  advanceChampionshipEnding(rawControllers=[]){
+   if(!championship)throw new Error('The ending follows a native championship');
+   const ids=racers.map(r=>r.id),g=current.scene;
+   if(g.gameStateAb24===45&&g.returnState630===102){
+    // The final round skips the standings, whose entry runs 94ACC. The ending
+    // reads that round's award slots and totals, so 94ACC runs once here; its
+    // exact caller inside the state45 wait is not reconstructed.
+    const scored=prepareNativeChampionshipScoreUpdate(current);
+    const loaded=createNativeRaceState({...scored.state,endingMenuWords6d50:[...NATIVE_ENDING_MENU_LOADED_WORDS]});
+    const entry=prepareNativeMenuReturnUpdate(loaded,'ending',{...NATIVE_CHAMPIONSHIP_SETUP_DATA,avatarsA9b0:ids});
+    current=entry.state;
+    return Object.freeze({entered:true,effects:[...scored.effects,...entry.effects],draw:null,view:nativeEndingMenuView(current),handoff:null});
+   }
+   if(g.main638!==21||![102,103].includes(g.gameStateAb24))throw new Error('No championship ending is active');
+   if(!Array.isArray(rawControllers)||rawControllers.length!==1)throw new RangeError('The ending reads the primary controller');
+   const sample=prepareNativeRaceMenuInputAdvance(current,{rawControllers,controllerCount4344:1,connectedMask4340:1,
+    controllerPorts4330:[0,1],neutralBytesAb10:Array(10).fill(0),thresholdXb400:35,thresholdYb401:35});
+   // 800EABB0 holds the 7/4/2/1 place points; i15 maps each round's points back to a place.
+   const prepared=prepareNativeEndingMenuPhase(sample.state,{...nativeChampionshipStandingsSourceViews(sample.state,ids),
+    courseOrderEac14:NATIVE_CHAMPIONSHIP_SETUP_DATA.courseOrderAc14,courseNameTokensAa10:NATIVE_RECORDS_MENU_DATA.courseNameTokensAa10,
+    racerOrderA9dc:sample.state.racerOrderA9dc,riderOrderEabb0:[7,4,2,1],connectedMask4340:1});
+   current=prepared.state;return prepared;
   },
   recordSessionSnapshot:()=>captureNativeRecordSession(current),
   nameEntryView:()=>nativeNameMenuView(current),

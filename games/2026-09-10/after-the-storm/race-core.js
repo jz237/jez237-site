@@ -225,7 +225,8 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
      }else state.phase='results';
     }else if(state.nativeLaunch.championshipLaunch){
      // A qualified final round's result enters802C7570's ending state45
-     // (return102). The browser has no ceremony scene; it ends the cup here.
+     // (return102). The wait before ECB98 is not reconstructed, so results
+     // show here and beginNativeChampionshipEnding enters the ending on request.
      const ending=state.nativeLaunch.snapshot();
      if(ending.scene.gameStateAb24===45&&ending.scene.returnState630===102){
       const places=state.racers.map(r=>r.nativePlace),before=ending.profileWordsB330.slice(4,8);
@@ -439,8 +440,39 @@ export function handicapBoost(s,r){if(s.mode!=='versus'||s.freeRide||!s.handicap
  const other=s.racers.find(q=>q!==r);if(!other||other.dq||other.finishTime!==null)return 0;return clamp((progress(other)-progress(r))*.075,0,.12);
 }
 export function raceWeather(s,time=s.time){const w=conditions(s.course,time,s.racers[0].lap);if(s.nativeHost)w.seaLevel=s.raceWater.field.datumNative*s.raceWater.scale;else if(s.courseDatum)w.seaLevel=s.courseDatum.value;if(s.seaState!=='course')w.storm=({calm:0,chop:.45,storm:.95})[s.seaState]??w.storm;return w;}
+/** Enter the original championship ending after a qualified final round. */
+export function beginNativeChampionshipEnding(s){
+ const g=s.nativeLaunch?.snapshot().scene;
+ if(s.phase!=='results'||!s.nativeChampionshipComplete||g?.gameStateAb24!==45||g.returnState630!==102)
+  throw new Error('The ending follows a completed native championship');
+ const q=s.nativeLaunch.advanceChampionshipEnding();s.nativeContactAudio.applyEffects(q.effects);
+ s.phase='ending';s.nativeEnding={remainder:0,frames:0,draw:null,view:q.view,handoff:null};
+}
+function advanceNativeEndingFrame(s,raw){
+ const menu=s.nativeEnding,q=s.nativeLaunch.advanceChampionshipEnding(raw);
+ s.nativeContactAudio.advanceMenuFrame();s.nativeContactAudio.applyEffects(q.effects);
+ menu.frames++;menu.draw=q.draw;menu.view=q.view;menu.handoff=q.handoff;
+ if(q.handoff){menu.remainder=0;s.phase='results';}
+}
+/** Run the ending's ceremony wait at full speed, frame by frame with neutral
+ * input, until its first results panel. The frames are the original ones. */
+export function fastForwardNativeEnding(s,maxFrames=1200){
+ if(s.phase!=='ending')return 0;let frames=0;
+ while(frames<maxFrames&&s.phase==='ending'&&!s.nativeEnding.draw?.ending?.panelSlots?.length){advanceNativeEndingFrame(s,[nativeHostMenuInput({})]);frames++;}
+ return frames;
+}
 export function stepRace(s,input,dt,options={}){if(s.phase==='paused'||s.phase==='results')return;dt=clamp(dt,0,1/30);
  setRaceWater(s.raceWater??null);setCoastalDepth(s.seaState==='course'?null:s.course);
+ if(s.phase==='ending'){
+  const menu=s.nativeEnding;menu.remainder+=dt;
+  while(menu.remainder+1e-12>=.05&&s.phase==='ending'){
+   const supplied=options.menuInputs??(Array.isArray(input)?input:[input??{}]);
+   const controls=typeof supplied==='function'?supplied(menu.frames*.05,menu.frames):supplied;
+   advanceNativeEndingFrame(s,[nativeHostMenuInput(typeof controls[0]==='function'?controls[0](menu.frames*.05,menu.frames):controls[0]??{})]);
+   menu.remainder=Math.max(0,menu.remainder-.05);
+  }
+  return;
+ }
  if(s.phase==='standings'){
   const menu=s.nativeStandings;
   if(!menu||menu.handoff)throw new Error('Missing active championship standings owner');

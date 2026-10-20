@@ -115,6 +115,9 @@ export function prepareNativeChampionshipConfiguredLaunch(configured,{courseRunt
  // startup, not a previous race's moving objects or record navigation counts.
  const loaded=createNativeRaceState({...initial,...courseRuntime.objectStartup.storage,scene:{...initial.scene,
   ...courseRuntime.objectStartup.counts,primaryCount:courseRuntime.data.nodes.length,finishSourceRow:courseRuntime.data.finishSourceRow,
+  // Course loading also installs this course's alternate-route row count, as
+  // a fresh launch does; a continued round must not keep the previous course's.
+  ...(courseRuntime.courseActorRoutes?{secondaryCount:courseRuntime.courseActorRoutes.secondary?.nodes.length??0}:{}),
   directionFlag1f90:courseRuntime.directionFlag1f90}});
  const reset=prepareNativeRaceStartup(courseRuntime.resetLayout,loaded);
  const initialized=prepareNativeRacePrestartInitializationUpdate(reset.state);

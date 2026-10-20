@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createRace,stepRace} from '../race-core.js';
+import {createRace,stepRace,beginNativeChampionshipEnding,fastForwardNativeEnding} from '../race-core.js';
 import {getCourse,COURSES} from '../courses.js';
 import {createNativeRacePilot} from '../native-race-pilot.js';
 import {prepareNativeChampionshipContinuation,prepareNativeChampionshipFlyover} from '../native-championship-continuation.js';
@@ -54,9 +54,27 @@ test('a native cup continues from the original standings into the next course wi
 const finalRound=JSON.parse(gunzipSync(readFileSync(new URL('./fixtures/native-championship-final-round.json.gz',import.meta.url))));
 test('a qualified final round enters the original ending state and completes the cup with final totals',()=>{
  const {id,continuation}=finalRound;assert.equal(id,'tempest');assert.equal(continuation.round,6);
+ // A continued round loads Southern Island's own alternate-route count, so its wildlife starts.
+ const wild=createRace({mode:'championship',physics:'native',course:getCourse(id,0),difficulty:0,rider:0,nativeChampionshipContinuation:continuation,nativeCourseActors:actors([1,3])});
+ assert.equal(wild.nativeLaunch.snapshot().scene.secondaryCount,47);
  const s=createRace({mode:'championship',physics:'native',course:getCourse(id,0),difficulty:0,rider:0,nativeChampionshipContinuation:continuation}),r=s.racers[0],pilot=createNativeRacePilot({course:s.course});
  for(let i=0;i<220*30&&!['standings','results'].includes(s.phase);i++)stepRace(s,()=>pilot.input(s,r),1/30);
  assert.equal(s.phase,'results');assert.equal(s.nativeLaunch.snapshot().scene.gameStateAb24,45);
  const done=s.nativeChampionshipComplete,places=s.racers.map(q=>q.nativePlace);
  assert.deepEqual(done.places,places);assert.deepEqual(done.totals,continuation.points.map((p,i)=>p+POINTS[places[i]]));assert.equal(done.difficulty,0);
+ // The original ending: final-round awards, ECB98 entry, the ceremony wait, the results scroll and its exit.
+ beginNativeChampionshipEnding(s);const entered=s.nativeLaunch.snapshot();
+ assert.equal(s.phase,'ending');assert.deepEqual([entered.scene.main638,entered.scene.gameStateAb24,entered.scene.courseIndex],[21,102,7]);
+ assert.deepEqual(entered.profileWordsB330.slice(4,8),done.totals,'94ACC applies the final round once');
+ assert.deepEqual(entered.profileWordsB330.slice(32,36),places.map(p=>POINTS[p]),'final round award slots');
+ assert.equal(fastForwardNativeEnding(s),681,'the ceremony waits 680 frames before the first panel');
+ const tokens=new Set();let readyAt=null;
+ for(let f=0;f<3000&&s.phase==='ending';f++){
+  const a=readyAt!==null&&f%2===0;stepRace(s,{},.05,{menuInputs:[{continue:a}]});
+  for(const c of s.nativeEnding.draw?.ending?.commands??[])if(c.kind==='label')tokens.add(c.token);
+  if(readyAt===null&&s.nativeEnding.view.ready)readyAt=f;
+ }
+ assert.equal(s.phase,'results');assert.ok(['records','title'].includes(s.nativeEnding.handoff.destination));
+ assert.ok([...tokens].every(t=>t===0||t>=8&&t<=16||[31,32,38,49,58,87,98,99].includes(t)||t>=71&&t<=78||t>=93&&t<=96),[...tokens].join());
+ assert.ok([10,11,12,13,15].every(t=>tokens.has(t)),'course rows name their courses');
 });

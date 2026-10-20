@@ -1,5 +1,32 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — original championship ending after the final round
+
+After a qualified final round the result offers "Watch the ending →". It runs
+the original 94ACC round awards once (the final round skips the standings,
+whose entry normally runs it; the ending's per-course rows and totals read
+those awards), loads ovl_i15's tables fresh (126 numeric words exported
+privately; BSS zeroed where the overlay file ends), and enters ECB98 (main21,
+state 102, Southern Island). Each 20 Hz frame then runs the original ending
+phase: menu input, then 5800/5470/AFB4/71A8 and the 5F50 draw. The browser
+shows it as a high-resolution overlay: a row per course (round, place by
+7/4/2/1 award, time, course name, record badge), then the summary with rank,
+rider preview, name and points. Enter exits through the original destination
+(the records screen when a record flag is set, otherwise the title); the
+browser then shows its completion dialog.
+
+Not reconstructed: the wait between state 45 and ECB98 (the browser enters on
+request); the main21 podium world, so an orbiting camera around the player's
+rider stands in during the original 680-frame ceremony wait, which "Skip
+ceremony" runs at full speed frame by frame; and the label images. RANK, RIDER
+and POINTS match the standings and course names come from the course list,
+but the round, place, badge, title and offer words are authored from each
+token's role. The records-screen destination is not hosted yet.
+
+Fixed in the same change: a continued Championship round kept the previous
+course's alternate-route count. Southern Island then refused its wildlife. A
+continued round now installs its own count, as a fresh launch does.
+
 ## Unpublished — original course-introduction flyover between cup rounds
 
 Before each native Championship round after the first, the browser now plays
