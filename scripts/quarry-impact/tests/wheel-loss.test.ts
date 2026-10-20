@@ -8,7 +8,7 @@ import {createVehicleDrive} from '../src/drivetrain/chassis';
 import {wheelResponse,wheelTearsOff,WHEEL_TEAR} from '../src/wheel-physics';
 import {loadCarWithoutImages} from '../tools/car-asset-audit';
 import {loadCars} from '../src/assets';
-import {Vehicle,WIND_RIP,PART_DRAG,HARD_LANDING} from '../src/vehicle';
+import {Vehicle,WIND_RIP,PART_DRAG,HARD_LANDING,HUBCAP_POP} from '../src/vehicle';
 import {ReplayRecorder,replayFile,readReplayFile,type VisualEvent} from '../src/replay-data';
 import {captureReplayFrame} from '../src/replay-scene';
 import {stockSetup} from '../src/garage';
@@ -115,4 +115,18 @@ test('a hard landing bottoms out a corner and hurts; a small drop does not',asyn
  const small=await drop(1),big=await drop(7),off=await drop(7,false);console.log(JSON.stringify({small,big,off}));
  assert.ok(small.health===100,'a 1 m drop is harmless');assert.ok(big.health<100&&big.wheels>small.wheels,'a 7 m drop hurts the car and a wheel');
  assert.ok(off.health===100,'online/legacy cars are unchanged');
+});
+test('a knocked wheel loses its centre cap once, and repair refits it',async()=>{
+ await ensureCars();const scene=new T.Scene(),world=new R.World({x:0,y:-9.81,z:0});let detached=0;
+ const fx={emit(){},mark(){},detach(m:T.Mesh){m.visible=false;detached++;}} as never;
+ const car=new Vehicle(0,'tern',stockSetup('tern').paint,scene,world,fx,stockSetup('tern'),undefined,'angular-v1');
+ try{
+  car.extendedDamage=true;car.place(0,0,0);car.render(1);car.root.updateMatrixWorld(true);
+  const wheel=car.model.getObjectByName('wheel_FL')!;let cap:T.Mesh|undefined;wheel.traverse(o=>{if(o instanceof T.Mesh&&/brushed chrome/i.test(o.name))cap=o;});assert.ok(!!cap,'the tern has a chrome centre cap');
+  const at=wheel.getWorldPosition(new T.Vector3()),inward=new T.Vector3().subVectors(car.root.position,at).setY(0).normalize();
+  let hits=0;while(car.wreckParts.wheelDamage[0]<HUBCAP_POP&&hits<20){car.health=100;car.hit(at.clone().addScaledVector(inward,-.15),inward,6,0);hits++;}
+  assert.ok(car.wreckParts.wheelDamage[0]>=HUBCAP_POP&&!cap!.visible&&detached>=1,'the cap flew off');
+  const after=detached;car.health=100;car.hit(at.clone().addScaledVector(inward,-.15),inward,6,0);assert.ok(detached===after||car.wreckParts.wheelLost[0]===1,'only once');
+  car.repair();assert.ok(cap!.visible,'repair refits it');
+ }finally{car.dispose();world.free();}
 });

@@ -49,6 +49,10 @@ export const PART_DRAG=1.2;
 export const HARD_LANDING={speed:7,gain:2.2,gap:.5} as const;
 /** Offline part release: assembly thresholds scale and the smallest blow that can release a part. */
 export const DETACH={threshold:.27,blow:4} as const;
+/** Wheel centre caps pop off the first time a wheel's damage passes this level (offline). */
+export const HUBCAP_POP=.3;
+/** Wheel meshes are merged by material at load: caps live in the chrome / trim pieces. */
+const HUBCAP=/brushed chrome|wheel trim|hub ?cap|centre ?cap|domed ?cap/i;
 import {VehicleSurface} from './vehicle-surface';
 import { normalizeSetup, setupPhysics, stockSetup, type Setup } from './garage';
 export type VehicleGround = {height:(x:number,z:number)=>number;surface:(x:number,z:number)=>DrivingSurface};
@@ -134,6 +138,7 @@ export class Vehicle {
   private readonly tyreBurst=[false,false,false,false];
   private dragLoad=0;private readonly dragPoint=new T.Vector3();
   private crushFrame?:CrushFrame;
+  private readonly poppedCaps:T.Mesh[]=[];
   private readonly crushPending=new Set<T.Mesh>();
   private lastLanding=-10;private readonly wasGrounded=[true,true,true,true];
   /** Live counts for diagnostics. */
@@ -251,7 +256,7 @@ export class Vehicle {
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
-    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();this.wasGrounded.fill(true);this.steerLimit=1;this.brakeBias.fill(1);this.damperBias.fill(1);
+    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.brakeBias.fill(1);this.damperBias.fill(1);
     if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
@@ -519,6 +524,12 @@ export class Vehicle {
     this.tyreDamage=components.tyreDamage;
     this.wreckParts.wheelDamage.set(components.wheelDamage);
     components.wheelShift.forEach((v,i)=>this.wreckParts.wheelShift[i].copy(v));
+    if(this.extendedDamage)for(let i=0;i<4;i++){
+      // A knock past HUBCAP_POP sends the wheel's centre cap spinning off.
+      const w=this.wheels[i];if(!w||worn[i]>=HUBCAP_POP||this.wreckParts.wheelDamage[i]<HUBCAP_POP)continue;
+      w.traverse(o=>{if(!(o instanceof T.Mesh)||!o.visible||!HUBCAP.test(o.name))return;this.poppedCaps.push(o);
+        if(quiet)o.visible=false;else{const out=new T.Vector3(i%2?1:-1,.4,0).applyQuaternion(this.root.quaternion).multiplyScalar(3);this.fx.detach(o,this.velocity.clone().multiplyScalar(.8).add(out));}});
+    }
     if(this.extendedDamage)for(let i=0;i<4;i++){const w=this.wheels[i];if(w&&!this.wreckParts.wheelLost[i]&&wheelTearsOff(worn[i],damage,this.wreckParts.wheelReach(i,contact)))this.tearOffWheel(i,direction,quiet);}
     if(structureBefore&&this.structuralDamage){
       // Whole-body crush grows with structural compression, on top of the local dents.
