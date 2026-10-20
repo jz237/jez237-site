@@ -2,6 +2,23 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-10-20",
+      "historicDate": "1985-02-25",
+      "displayDate": "Week of February 25-March 3, 1985",
+      "edition": "Issue 135 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "A kingdom drawn one instruction at a time; PCs rented one month at a time.",
+      "leadHeadline": "Inside King’s Quest: $700,000 buys a new kind of adventure",
+      "storyHeadlines": [
+        "Rent a PC for a month—but whose software license goes with it?",
+        "Michael Crichton takes storytelling from the cinema to Amazon",
+        "PC-Write asks users to share the software—and pays registered referrers",
+        "Online rivals bring games and conversation below three dollars an hour"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-02-25.jpg",
+      "thumb": "media/thumbs/1985-02-25.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-10-19",
       "historicDate": "1985-02-18",
       "displayDate": "Week of February 18-24, 1985",

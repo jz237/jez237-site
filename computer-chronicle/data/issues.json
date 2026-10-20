@@ -4,6 +4,492 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "currentDate": "2026-10-20",
+      "historicDate": "1985-02-25",
+      "displayDate": "Week of February 25-March 3, 1985",
+      "edition": "Issue 135 - Weekly 1985 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "The costly kingdom of computer adventure",
+        "motifs": [
+          "PCjr adventure landscape",
+          "floppy disks",
+          "rental IBM PC"
+        ],
+        "layout": "Dense warm newsprint with red and blue headers"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Issue 135 - Weekly 1985 Computer & Culture Chronicle",
+        "dateline": "Week of February 25-March 3, 1985",
+        "price": "75 cents"
+      },
+      "layoutPlan": {
+        "leadPlacement": "King’s Quest kingdom dominates front page",
+        "secondaryRail": "PC rental, Amazon, PC-Write and low-cost online games",
+        "archiveNavigation": "Weekly archive and previous/next controls"
+      },
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1985-02-25.jpg",
+        "alt": "Computer Chronicle newspaper front page for February 25-March 3, 1985, featuring King’s Quest",
+        "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "February magazine reporting joins the February 25 computer press and the March 1-3 movie weekend.",
+      "morningLine": "A kingdom drawn one instruction at a time; PCs rented one month at a time.",
+      "lead": {
+        "headline": "Inside King’s Quest: $700,000 buys a new kind of adventure",
+        "dek": "February reporting opens the workshop behind Sierra’s ambitious adventure.",
+        "body": [
+          "A kingdom of 80 scenes comes at a very real price. Donald B. Trivette’s February COMPUTE! account puts the cost of Sierra’s King’s Quest above $700,000, with Roberta Williams and six programmers and artists working for 18 months. IBM supplied a prototype PCjr and asked for a game that could show its color graphics before the machine was announced.",
+          "The landscape is assembled rather than simply copied from disk. Artists made drawings and traced them on a Calcomp graphics tablet, producing instructions that tell the computer how to draw each scene. The castle needs 2,400 bytes of instructions; the simplest room takes only 470. A PCjr spends about four seconds drawing and coloring a room.",
+          "Forty-eight connected outdoor scenes and 32 other scenes make the kingdom feel continuous. Hidden boundary lines and object priorities let the hero appear to pass behind trees or in front of scenery. Yet four save areas for animated objects impose practical limits. The illusion of a living world is built from careful compromises.",
+          "The February column quotes $49 and calls for 128K and a disk drive. Its account lists IBM’s PCjr edition and Sierra versions for the PC, Apple IIc/IIe and Tandy 1000; that is the magazine’s platform report, not a fresh shipping announcement. A larger sequel is forecast for February or March, but its arrival remains a forecast. The production story alone shows how ambitious the home-computer adventure has become."
+        ],
+        "confidence": "same-month",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Rent a PC for a month—but whose software license goes with it?",
+          "body": [
+            "A temporary workload need not mean buying another computer. Computerworld’s February 25 reporting finds short-term PC rental serving companies including TWA, American Express and Dime Savings. Rentals also offer a way to evaluate equipment before a longer commitment.",
+            "The convenience carries a premium. PC Services quotes $300 a month for a PC without software, against $100–$115 for a lease normally lasting at least six months. PC Computer Rental quotes $295 monthly for an IBM PC, $495 for an XT and $620 for an AT. These are named suppliers’ quotations, not universal market prices.",
+            "Software is the disputed passenger. Lotus regards rental by a licensee as violating its license, while Multimate’s terms forbid sublicenses and leases. Rental businesses contest the publishers’ interpretation. Multimate says it has not yet sued over such a violation; its spokesman’s charge that rentals encourage copying remains an allegation, not a court finding."
+          ],
+          "confidence": "exact-date",
+          "sourceRefs": [
+            9
+          ]
+        },
+        {
+          "headline": "Michael Crichton takes storytelling from the cinema to Amazon",
+          "body": [
+            "Michael Crichton’s Amazon brings a filmmaker’s concern for pacing to the keyboard. In Kathy Yakal’s February COMPUTE! interview, the author describes beginning the script in 1982 and hiring Steve Warrady to turn the story into Apple assembly-language graphics and text. The project occupied 18 months.",
+            "Crichton wants solutions that would work outside the computer. A damaged boat can be patched in three practical ways, rather than rescued by a magic spell. Cleverness matters more than violence, and choices must give the player expectations and consequences. Amazon is an existing game under discussion, not a newly established release for this week."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "headline": "PC-Write asks users to share the software—and pays registered referrers",
+          "body": [
+            "Bob Wallace’s PC-Write takes a different route to the word-processing customer: copy it and pass it along. Sheldon Leemon’s February COMPUTE! review describes distribution through user groups and bulletin boards. Quicksoft charges $10 for a disk with postage and handling; voluntary registration costs $75.",
+            "Registration brings a personalized copy, a bound manual, telephone support, Pascal and machine-language source code, and the next major update. The review describes a $25 commission when another user registers a copy carrying an existing registrant’s number. Separate editing and printing programs conserve memory, though leaving the editor for some tasks is a drawback. Search-and-replace, macros and customizable commands give this shareable program serious office ambitions."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "headline": "Online rivals bring games and conversation below three dollars an hour",
+          "body": [
+            "The home modem is becoming a games-room accessory. Arlan R. Levitan’s February COMPUTE! column reports Play/Net introductory access at $2 an hour, with proprietary terminal software bringing color-graphics online games to the Commodore 64. IBM and Apple support is promised for spring, not yet established.",
+            "People/Link’s introductory $2.95 hourly charge buys a different social gathering: CB-style conversation, special-interest forums and electronic mail. These are introductory connect charges, not promises about all the costs of getting online. The rivalry puts conversation and play alongside the modem’s familiar business chores."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "RC Systems Atari 600XL expansions",
+          "summary": "Rear-mounted modules: AM2 adds 32K ($79.95); AM1 adds 48K ($99.95); AM64 adds 64K ($119.95). Article says cartridges remain usable and AM64 is Translator Disk compatible.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            8
+          ]
+        },
+        {
+          "title": "Atari 1030 modem",
+          "summary": "Direct-connect autodial/autoanswer modem discussed in a February reader correction; RMODEM supports 835/1030 and 850-interface configurations.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            5
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "PC-Write",
+          "detail": "Quicksoft; $10 distribution disk, $75 registration; copying encouraged under its shareware model.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "name": "Plus/Term",
+          "detail": "Gregg Peele’s BASIC/machine-language terminal for C64 or VIC-20 with at least 16K; supports word wrapping, key redefinition, transfers and 1200 bps with suitable modem.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games — editorial selections, not sales rankings",
+          "items": [
+            "King’s Quest — Sierra/IBM graphical adventure; contemporary production feature, $49, 128K and disk drive.",
+            "Amazon — Michael Crichton’s adventure is discussed through its design principles; no exact-week release claim.",
+            "Suspect — Infocom mystery casts the player as a reporter accused of murder; $39.95 on Atari/C64, $44.95 on most other systems.",
+            "The Hitchhiker’s Guide to the Galaxy — Infocom adaptation starring Arthur Dent and Ford Prefect; Atari/C64 suggested $34.95, most other versions $39.95.",
+            "Break Street — Creative Software C64 break-dancing game; $24.95 disk; keyboard or joystick; record and replay dance sequences."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            0,
+            1,
+            6,
+            7
+          ]
+        },
+        {
+          "label": "Top 5 Movies — March 1-3 domestic weekend box office",
+          "items": [
+            "1. Beverly Hills Cop — $5,114,137",
+            "2. Witness — $4,791,953",
+            "3. Missing in Action 2: The Beginning — $3,868,515",
+            "4. The Breakfast Club — $3,622,950",
+            "5. The Sure Thing — $3,124,782"
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            11
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Atari 1030 reader-reported chain-store sale",
+          "price": "$69.96",
+          "note": "sale; unnamed retailer; US dollars.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "item": "PC-Write program disk",
+          "price": "$10.00",
+          "note": "distribution fee; US dollars.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "item": "PC-Write registration",
+          "price": "$75.00",
+          "note": "registration; US dollars.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "item": "Play/Net",
+          "price": "$2.00",
+          "note": "introductory USD/hour; US dollars.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "item": "People/Link",
+          "price": "$2.95",
+          "note": "introductory USD/hour; US dollars.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "item": "IBM PC rental",
+          "price": "$295.00",
+          "note": "USD/month; PC Computer Rental; US dollars.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            9
+          ]
+        },
+        {
+          "item": "IBM XT rental",
+          "price": "$495.00",
+          "note": "USD/month; PC Computer Rental; US dollars.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            9
+          ]
+        },
+        {
+          "item": "IBM AT rental",
+          "price": "$620.00",
+          "note": "USD/month; PC Computer Rental; US dollars.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            9
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Electronic mail still crosses back onto paper",
+          "summary": "Computerworld’s February 25 front-page analysis says hard-copy delivery options help public email services reach beyond traditional computer time-sharing customers; names MCI and Western Union.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            9
+          ]
+        },
+        {
+          "headline": "Mick Jagger leads the March 2 rock chart",
+          "summary": "Just Another Night is number one on Billboard’s Top Rock Tracks for March 2. The five-song Rock Radio panel preserves the separately verified February 23 chart, not unverified March 2 lower ranks.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            10
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Somebody",
+          "artist": "Bryan Adams",
+          "chart": "Billboard Top Rock Tracks — February 23 chart (previous week)",
+          "chartDate": "1985-02-23",
+          "confidence": "prior-week verified chart",
+          "sourceUrls": [
+            "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-23.pdf"
+          ],
+          "song": "Somebody",
+          "sourceRefs": [
+            13
+          ]
+        },
+        {
+          "rank": 2,
+          "title": "Just Another Night",
+          "artist": "Mick Jagger",
+          "chart": "Billboard Top Rock Tracks — February 23 chart (previous week)",
+          "chartDate": "1985-02-23",
+          "confidence": "prior-week verified chart",
+          "sourceUrls": [
+            "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-23.pdf"
+          ],
+          "song": "Just Another Night",
+          "sourceRefs": [
+            13
+          ]
+        },
+        {
+          "rank": 3,
+          "title": "Only the Young",
+          "artist": "Journey",
+          "chart": "Billboard Top Rock Tracks — February 23 chart (previous week)",
+          "chartDate": "1985-02-23",
+          "confidence": "prior-week verified chart",
+          "sourceUrls": [
+            "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-23.pdf"
+          ],
+          "song": "Only the Young",
+          "sourceRefs": [
+            13
+          ]
+        },
+        {
+          "rank": 4,
+          "title": "Radioactive",
+          "artist": "The Firm",
+          "chart": "Billboard Top Rock Tracks — February 23 chart (previous week)",
+          "chartDate": "1985-02-23",
+          "confidence": "prior-week verified chart",
+          "sourceUrls": [
+            "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-23.pdf"
+          ],
+          "song": "Radioactive",
+          "sourceRefs": [
+            13
+          ]
+        },
+        {
+          "rank": 5,
+          "title": "Rock and Roll Girls",
+          "artist": "John Fogerty",
+          "chart": "Billboard Top Rock Tracks — February 23 chart (previous week)",
+          "chartDate": "1985-02-23",
+          "confidence": "prior-week verified chart",
+          "sourceUrls": [
+            "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-23.pdf"
+          ],
+          "song": "Rock and Roll Girls",
+          "sourceRefs": [
+            13
+          ]
+        }
+      ],
+      "periodAd": {
+        "headline": "Break Street — $24.95 suggested retail",
+        "summary": "February product news describes Creative Software’s C64 disk game: head spins, moonwalks and recorded routines.",
+        "tagline": "From the February product pages",
+        "sourceRefs": [
+          7
+        ]
+      },
+      "market": {
+        "headline": "Online services compete on $2 games and faster stock quotations",
+        "summary": "Arlan R. Levitan's February COMPUTE! Telecomputing Today column reports Play/Net introductory connect time of $2.00 an hour and People/Link at $2.95 an hour. Play/Net offers online games with color graphics using proprietary terminal software; the Commodore 64 is the supported machine at the time of writing. IBM and Apple support is promised for spring, not confirmed. People/Link offers chat, special-interest forums and electronic mail. The introductory hourly prices are not total lifetime costs or guarantees of permanent rates. Dow Jones News/Retrieval is reported to have reduced general-service and ordinary stock-quote rates by 25 percent and introduced last-trade quotations. The last-trade quote surcharge is $12 monthly at Dow Jones and $20 at The Source, additional to connect charges. The column contrasts these with traditional quotes delayed 15–20 minutes. The Source's arrangement with discount brokerage Spears permits online orders, which Spears says are generally executed within two minutes; preserve that attribution and do not promise execution times.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          3
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Nine police officers killed at Newry",
+        "summary": "An IRA attack on Newry police station on February 28 killed nine police officers. The attack places this week’s home-computing news against a deadly turn in Northern Ireland.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          12
+        ]
+      },
+      "bbsNote": {
+        "headline": "Cheap online play, portable modems and BBS travel advice",
+        "summary": "February 1985 contemporary telecomputing coverage; the notes below paraphrase printed reports and are not invented historical BBS messages.",
+        "posts": [
+          {
+            "topic": "Online games",
+            "platform": "Play/Net / Commodore 64",
+            "text": "Levitan reports $2/hour introductory access and proprietary color-graphics terminal software; other platforms remain promised."
+          },
+          {
+            "topic": "Conversation and forums",
+            "platform": "People/Link",
+            "text": "The February column quotes $2.95/hour introductory pricing for conversation, forums and mail."
+          },
+          {
+            "topic": "Road-warrior culture",
+            "platform": "Unnamed San Francisco BBS",
+            "text": "Levitan says he posted a restaurant question while traveling, checked replies two days later and found a good Szechwan restaurant. No board name or original post text is supplied."
+          },
+          {
+            "topic": "Atari compatibility correction",
+            "platform": "CompuServe and Atari BBSs",
+            "text": "Reader Howard Stebbins says RMODEM is distributed on bulletin boards and CompuServe, supports Atari 835/1030 or the 850 interface, and can provide a 22K buffer when compiled. He reports a chain-store Atari 1030 sale at $69.96; the retailer is unnamed."
+          }
+        ]
+      },
+      "curiosity": {
+        "headline": "Your C64 can moonwalk—and remember the routine",
+        "summary": "Break Street turns break dancing into a $24.95 disk game.",
+        "detail": "Creative Software’s February product notice pits players against the fictional Stingrays in head spins, moonwalks, snaking and tut moves. Dance sequences can be strung together, recorded and replayed. The Stingrays are game characters, not a real hacker crew."
+      },
+      "accuracyLedger": {
+        "items": [
+          "No verified exact-week gaming launch established; monthly magazine features are valid same-month alternatives.",
+          "King’s Quest II spring timing is a period forecast, not a confirmed shipping date.",
+          "Only Billboard rock number one verified; do not assign Tunecaster rankings to Billboard.",
+          "No genuinely dated breaking gadget story found; gadgetCandidates omitted. No era-defining milestone claimed.",
+          "Rock Radio five-song panel is the verified February 23 chart, clearly labeled as previous-week coverage; March 2 number one is separately reported.",
+          "World anchor verified retrospectively in March 4 Hansard; no later events imported."
+        ]
+      },
+      "sources": [
+        {
+          "title": "COMPUTE! issue 57: Inside King’s Quest — Donald B. Trivette",
+          "url": "https://www.atarimagazines.com/compute/issue57/kings_quest.html",
+          "date": "1985-02",
+          "datePrecision": "month"
+        },
+        {
+          "title": "COMPUTE! issue 57: Michael Crichton: Reflections of a New Designer — Kathy Yakal",
+          "url": "https://www.atarimagazines.com/compute/issue57/new_designer.html",
+          "date": "1985-02",
+          "datePrecision": "month"
+        },
+        {
+          "title": "COMPUTE! issue 57: PC-Write Word Processor for PC & PCjr — Sheldon Leemon",
+          "url": "https://www.atarimagazines.com/compute/issue57/review_pc_write.html",
+          "date": "1985-02",
+          "datePrecision": "month"
+        },
+        {
+          "title": "COMPUTE! issue 57: Telecomputing Today — Arlan R. Levitan",
+          "url": "https://www.atarimagazines.com/compute/issue57/telecomputing_today.html",
+          "date": "1985-02",
+          "datePrecision": "month"
+        },
+        {
+          "title": "COMPUTE! issue 57: Plus/Term for VIC & 64 — Gregg Peele",
+          "url": "https://www.atarimagazines.com/compute/issue57/plus_term.html",
+          "date": "1985-02",
+          "datePrecision": "month"
+        },
+        {
+          "title": "COMPUTE! issue 57: Readers’ Feedback: Atari Modem Update",
+          "url": "https://www.atarimagazines.com/compute/issue57/feedback_modem_update.html",
+          "date": "1985-02",
+          "datePrecision": "month"
+        },
+        {
+          "title": "COMPUTE! issue 57: New Text Adventures",
+          "url": "https://www.atarimagazines.com/compute/issue57/news_text_adventures.html",
+          "date": "1985-02",
+          "datePrecision": "month"
+        },
+        {
+          "title": "COMPUTE! issue 57: Commodore 64 Break Dancing",
+          "url": "https://www.atarimagazines.com/compute/issue57/news_break_dancing.html",
+          "date": "1985-02",
+          "datePrecision": "month"
+        },
+        {
+          "title": "COMPUTE! issue 57: Atari 600XL Memory Expansion",
+          "url": "https://www.atarimagazines.com/compute/issue57/news_memory_expansion.html",
+          "date": "1985-02",
+          "datePrecision": "month"
+        },
+        {
+          "title": "Computerworld, volume XIX no. 8, especially pages 1–2",
+          "url": "https://archive.org/stream/computerworld198unse/computerworld198unse_djvu.txt",
+          "date": "1985-02-25"
+        },
+        {
+          "title": "Historical Billboard Mainstream Rock number-one chronology",
+          "url": "https://en.wikipedia.org/wiki/List_of_Billboard_Mainstream_Rock_number-one_songs_of_the_1980s",
+          "date": "1985-03-02",
+          "dateMeaning": "chart issue, not secondary page publication"
+        },
+        {
+          "title": "The Numbers: weekend domestic box office",
+          "url": "https://www.the-numbers.com/box-office-chart/weekend/1985/03/01",
+          "date": "1985-03-01",
+          "dateMeaning": "weekend beginning"
+        },
+        {
+          "title": "Hansard: Northern Ireland (Terrorist Killings), Douglas Hurd statement",
+          "url": "https://api.parliament.uk/historic-hansard/commons/1985/mar/04/northern-ireland-terrorist-killings",
+          "date": "1985-03-04"
+        },
+        {
+          "title": "Billboard vol. 97 no. 8: Top Rock Tracks (original printed chart)",
+          "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-02-23.pdf",
+          "date": "1985-02-23"
+        }
+      ]
+    },
+    {
       "currentDate": "2026-10-19",
       "historicDate": "1985-02-18",
       "displayDate": "Week of February 18-24, 1985",

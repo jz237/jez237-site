@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Mon, 19 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 20 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of February 25-March 3, 1985 — Inside King’s Quest: $700,000 buys a new kind of adventure</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-02-25</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-02-25</guid>
+      <pubDate>Tue, 20 Oct 2026 12:00:00 GMT</pubDate>
+      <description>February reporting opens the workshop behind Sierra’s ambitious adventure. A kingdom of 80 scenes comes at a very real price. Donald B. Trivette’s February COMPUTE! account puts the cost of Sierra’s King’s Quest above $700,000, with Roberta Williams and six programmers and artists working for 18 months. IBM supplied a prototype PCjr and asked for a game that could show its color graphics before the machine was announced. Also this week: Rent a PC for a month—but whose software license goes with it? · Michael Crichton takes storytelling from the cinema to Amazon · PC-Write asks users to share the software—and pays registered referrers · Online rivals bring games and conversation below three dollars an hour.</description>
+    </item>
     <item>
       <title>Week of February 18-24, 1985 — Inside King&apos;s Quest: the $700,000 adventure behind the PCjr&apos;s animated kingdom</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-02-18</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-10-15</guid>
       <pubDate>Tue, 29 Sep 2026 12:00:00 GMT</pubDate>
       <description>A $300 “productivity machine” promises an office in ROM, but the C64’s immense game library will not follow it. Commodore’s Plus/4 is moving toward the holiday counter with an unusual pitch for a home computer: useful software is already inside. An October COMPUTE! hands-on report lists the machine at $300 with 64K of RAM and four integrated applications collectively called 3-Plus-1. The magazine’s reporting predates this week, so an exact October 15 launch is not established. Also this week: Archon II and Skyfox broaden Electronic Arts’ games line · Spy Hunter and Tapper arrive on home computers · A color printer for the home desk at $239 · IBM tries a second act for the PCjr.</description>
-    </item>
-    <item>
-      <title>Week of October 8-14, 1984 — Computer Games Claim the Fall Spotlight</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-10-08</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-10-08</guid>
-      <pubDate>Mon, 28 Sep 2026 12:00:00 GMT</pubDate>
-      <description>Election simulations, adventures and strategy titles make the home computer the liveliest game machine in October’s magazine racks. Electronic Games puts the changing game market on its October cover: President Elect and Campaign ’84 turn the American campaign season into computer play. Its fall software preview ranges across strategy and adventure titles, a field the magazine now treats as the center of electronic gaming. These are October magazine features, not claims that either title was released during this particular week. Also this week: IBM Tries to Rescue the PCjr Before Christmas · Macintosh Owners Begin Looking Under the Hood · Home-Computer Forecasts Outrun the Console Market.</description>
     </item>
   </channel>
 </rss>
