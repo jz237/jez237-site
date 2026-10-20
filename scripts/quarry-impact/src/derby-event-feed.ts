@@ -1,7 +1,7 @@
 import type {CombatRecord} from './event-rules';
 export type DerbyFeedDriver={id:number;name:string;record:CombatRecord};
-export type DerbyFeedEntry={id:number;driver:number;name:string;kind:'massive'|'rival'|'spin'|'spin180'|'spin360'|'knockout';count:number;time:number};
-const labels={massive:'MASSIVE HIT',rival:'RIVAL HIT',spin:'90° SPIN ★',spin180:'180° SPIN ★★',spin360:'360° SPIN ★★★',knockout:'KNOCKOUT'} as const;
+export type DerbyFeedEntry={id:number;driver:number;name:string;kind:'massive'|'rival'|'spin'|'spin180'|'spin360'|'knockout'|'wheel';count:number;time:number};
+const labels={massive:'MASSIVE HIT',rival:'RIVAL HIT',spin:'90° SPIN ★',spin180:'180° SPIN ★★',spin360:'360° SPIN ★★★',knockout:'KNOCKOUT',wheel:'WHEEL OFF'} as const;
 const counts=(r:CombatRecord)=>({massive:r.impacts?.[2]??0,rival:r.rivalHits??0,spin:r.spins??0,spin180:r.spins180??0,spin360:r.spins360??0,knockout:r.knockouts});
 const escape=(s:string)=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 /** Observe cumulative awarded counters, never infer awards from vehicle damage.
@@ -19,6 +19,11 @@ export class DerbyEventFeed{
   }
   for(const id of this.previous.keys())if(!seen.has(id))this.previous.delete(id);
   this.ready=true;this.entries=this.entries.filter(entry=>time-entry.time<8).slice(-4);
+ }
+ /** Local (offline-only) moments that no combat counter carries, such as a wheel torn off. */
+ note(driver:number,name:string,kind:'wheel',time:number){
+  if(!Number.isFinite(time)||time<0)return;
+  this.entries.push({id:++this.sequence,driver,name,kind,count:1,time});this.entries=this.entries.filter(entry=>time-entry.time<8).slice(-4);
  }
  visible(time:number){return this.entries.filter(entry=>time>=entry.time&&time-entry.time<8).slice().reverse().map(entry=>({...entry}));}
 }

@@ -1338,7 +1338,7 @@ function ai(car: Vehicle, dt: number): Input {
 }
 /** Wheels lost and panels gone, to credit whoever tears them off. */
 function stripCount(c:Vehicle){let wheels=0;for(const v of c.wreckParts.wheelLost)wheels+=v;return{wheels,parts:c.panels.reduce((n,m)=>n+(m.visible?0:1),0)};}
-function creditStrip(attacker:Vehicle,victim:Vehicle,before:{wheels:number;parts:number}){const after=stripCount(victim),wheels=after.wheels-before.wheels,parts=after.parts-before.parts;if(wheels<=0&&parts<=0)return;eventAwards.stripped(attacker.id,victim.id,wheels,parts);if(attacker.id===0&&!demo&&!online?.active&&wheels>0)toast(`WHEEL OFF · #${victim.id+1} ${DEFINITIONS[victim.kind].name}`,1.4);}
+function creditStrip(attacker:Vehicle,victim:Vehicle,before:{wheels:number;parts:number}){const after=stripCount(victim),wheels=after.wheels-before.wheels,parts=after.parts-before.parts;if(wheels<=0&&parts<=0)return;eventAwards.stripped(attacker.id,victim.id,wheels,parts);if(attacker.id===0&&!demo&&!online?.active&&wheels>0)toast(`WHEEL OFF · #${victim.id+1} ${DEFINITIONS[victim.kind].name}`,1.4);if(wheels>0&&mode==='derby'&&!online?.active)derbyFeed.note(attacker.id,displayedDriver(attacker),'wheel',elapsed);}
 function currentTeamScores(){return teamScores(rankRace().map(c=>({slot:cars.indexOf(c),scores:c.finished||c.health>0})));}
 function rankRace(){const order=rankRaceBase();return eliminationRace()?[...order.filter(c=>c.finished),...order.filter(c=>!c.finished&&c.health>0),...order.filter(c=>!c.finished&&c.health<=0).sort((a,b)=>eliminatedOrder.indexOf(b.id)-eliminatedOrder.indexOf(a.id))]:order;}
 function rankRaceBase() {
