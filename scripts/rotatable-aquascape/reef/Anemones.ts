@@ -1,5 +1,6 @@
 import * as T from 'three';
 import {anemoneFlowGLSL} from './AnemoneFlow.ts';
+import {reefFluorescence} from './CoralSurface.ts';
 import {anemoneScatteringGLSL} from './AnemoneScattering.ts';
 import {AnemoneBehavior,type AnemoneHost} from './AnemoneBehavior.ts';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
@@ -45,7 +46,7 @@ export function buildAnemones(hosts:T.Vector3[],clock:{value:number},random:Rand
   const center=(k<2?hosts[k]:new T.Vector3(3.88,.52,1.73)).clone(),scale=k===0?1.25:k===1?.63:.46;
   const ground=supportHeight(center);center.y=Math.min(center.y,ground+.10*scale);
   anatomy.push({center:center.clone(),scale,strands:[]});
-  const base=new T.Color(k===2?'#65566b':'#746071'),shaft=new T.Color(k===2?'#ad7b99':'#938249'),tip=new T.Color(k===2?'#c8ddd5':'#b8d984');
+  const base=new T.Color(k===2?'#65566b':'#746071'),shaft=new T.Color(k===2?'#ad7b99':'#9c8853'),tip=new T.Color(k===2?'#bfeaa4':'#8fd85e');
   const footY=Math.min(center.y-.10*scale,ground-.025*scale),columnTop=center.y-.025*scale;
   const column=new T.CylinderGeometry(.57*scale,.31*scale,columnTop-footY,128,8,true),cp=column.getAttribute('position');
   for(let j=0;j<cp.count;j++){const a=Math.atan2(cp.getZ(j),cp.getX(j)),rib=1+.055*Math.sin(a*7+cp.getY(j)*4)+.022*Math.sin(a*17);const t=cp.getY(j)/(columnTop-footY)+.5,edge=discPoint(1,a,scale,k);cp.setXYZ(j,T.MathUtils.lerp(cp.getX(j)*rib,edge.x,t*t),cp.getY(j)+t*t*(edge.y+.025*scale),T.MathUtils.lerp(cp.getZ(j)*rib,edge.z,t*t));}
@@ -75,9 +76,12 @@ export function buildAnemones(hosts:T.Vector3[],clock:{value:number},random:Rand
    const sector=angle+k*1.73,edgeDrape=T.MathUtils.smoothstep(radial,.38,1);
    const region=Math.sin(sector*3+.65)+.35*Math.cos(sector*5-1.2);
    const layer=.5+.5*Math.sin(radial*7.5+.4*Math.sin(sector)+region*.65);
+   // A rounded dome as in the reference: outer strands lie lower and inner ones
+   // rise, so the canopy forms a hemisphere rather than a brush. Their reach
+   // stays within the glass at every phase of the current.
    const spread=(.12+.25*radial+.04*edgeDrape)*scale*(1+.16*Math.sin(sector*2));
-   const sweep=(.065+.06*layer)*scale;
-   const height=length*(.94-.39*radial)*(.96+.13*Math.cos(sector*2+.5))+.035*scale*layer;
+   const sweep=(.03+.03*layer)*scale;
+   const height=length*(.94-.58*radial)*(.96+.13*Math.cos(sector*2+.5))+.035*scale*layer;
    const curl=scale*(.045*Math.sin(phase)+.055*region);
    const reach=new T.Vector3(Math.cos(angle)*spread+sweep-Math.sin(angle)*curl,height,Math.sin(angle)*spread+Math.cos(angle)*curl+.045*scale);
    const end=root.clone().add(reach);
@@ -91,8 +95,8 @@ export function buildAnemones(hosts:T.Vector3[],clock:{value:number},random:Rand
    // color varies by region and individual without consuming extra scene RNG.
    const inflation=1.13+.38*(.5+.5*Math.sin(phase*2.7+angle));
    const pigment=.5+.5*Math.sin(phase*1.9+sector*.7);
-   const localShaft=shaft.clone().lerp(new T.Color(k===2?'#98728f':'#9b874d'),pigment*.46);
-   const localTip=tip.clone().lerp(new T.Color(k===2?'#cfbecd':'#e0e995'),(.5+.5*Math.sin(phase*3.1))*.34);
+   const localShaft=shaft.clone().lerp(new T.Color(k===2?'#98728f':'#a68f58'),pigment*.46);
+   const localTip=tip.clone().lerp(new T.Color(k===2?'#d6f2c4':'#b4ec72'),(.5+.5*Math.sin(phase*3.1))*.34);
    c1.add(new T.Vector3(-Math.sin(angle),0,Math.cos(angle)).multiplyScalar(.045*scale*Math.sin(phase*1.7)));
    c2.add(new T.Vector3(-Math.sin(angle),0,Math.cos(angle)).multiplyScalar(-.025*scale*Math.sin(phase*1.7)));
    const curve=new T.CubicBezierCurve3(root,c1,c2,end),steps=24,sides=12,frames=curve.computeFrenetFrames(steps,false),arcLength=curve.getLength();
@@ -229,8 +233,9 @@ export function buildAnemones(hosts:T.Vector3[],clock:{value:number},random:Rand
    float tissueDet=dot(tissueDx,tissueRx);
    if(abs(tissueDet)>1.e-12)normal=normalize(abs(tissueDet)*normal-sign(tissueDet)*(dFdx(tissueRelief)*tissueRx+dFdy(tissueRelief)*tissueRy));`);
   shader.fragmentShader=shader.fragmentShader.replace('#include <lights_physical_pars_fragment>', '#include <lights_physical_pars_fragment>\n'+anemoneScatteringGLSL);
+  shader.fragmentShader=shader.fragmentShader.replace('#include <emissivemap_fragment>',reefFluorescence(.32));
  };
- material.customProgramCacheKey=()=> 'reef-anemone-pleated-disc-v10';
+ material.customProgramCacheKey=()=> 'reef-anemone-pleated-disc-fluorescent-v11';
  const mesh=new T.Mesh(geometry,material);mesh.name='Rooted flowing anemones';mesh.receiveShadow=true;
  return {mesh,tentacles,behavior};
 }
