@@ -14,6 +14,9 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
  // Compact, rounded bushes: shorter, wider growth than a tall spray. Scales
  // only distances, so random draws, branch counts and attachments are unchanged.
  const squat=.8,widen=1.15;
+ // Light reaches the crown; the trunks and inner forks inside a dense bush
+ // stay in shade, giving the colony depth (dark interior, bright tips).
+ const interior=(level:number,t:number)=>level===0?.32+.43*t:level===1?.55+.35*t:.85+.15*t;
  let growthRandom=random;
  const choice=(a:number,b:number)=>a+(b-a)*growthRandom();
  function branch(start:T.Vector3,end:T.Vector3,radius:number,level:number,seed:number){
@@ -33,7 +36,7 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
     const i=j*(sides+1)+k,angle=k/sides*Math.PI*2;
     const polypRidges=1+.075*Math.sin(angle*3+t*13+seed)+.04*Math.sin(angle*5-t*19)+.075*Math.sin(t*12+seed)*Math.sin(Math.PI*t);
     p.setXYZ(i,center.x+(p.getX(i)-center.x)*taper*polypRidges,center.y+(p.getY(i)-center.y)*taper*polypRidges,center.z+(p.getZ(i)-center.z)*taper*polypRidges);
-    const c=baseColor.clone().lerp(tipColor,T.MathUtils.smoothstep(t,terminal?.68:.87,1)*.85).multiplyScalar(.76+.18*t+.055*Math.sin(seed+t*5+angle*2));colors.set([c.r,c.g,c.b],i*3);
+    const c=baseColor.clone().lerp(tipColor,T.MathUtils.smoothstep(t,terminal?.68:.87,1)*.85).multiplyScalar((.76+.18*t+.055*Math.sin(seed+t*5+angle*2))*interior(level,t));colors.set([c.r,c.g,c.b],i*3);
    }
   }
   g.setAttribute('color',new T.BufferAttribute(colors,3));const uv=g.getAttribute('uv');for(let j=0;j<=steps;j++)for(let k=0;k<=sides;k++)uv.setXY(j*(sides+1)+k,k/sides*2*Math.PI*radius/.135,j/steps*delta.length()/.135);geometries.push(g);
@@ -52,7 +55,7 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
     shoot.setAttribute('color',new T.BufferAttribute(sc,3));const uv=shoot.getAttribute('uv');for(let row=0;row<=3;row++)for(let k=0;k<=6;k++)uv.setXY(row*7+k,k/6*2*Math.PI*radius*.49/.135,row/3*len/.135);
     const shootCap=axialCorallite(shoot,tipColor,true);finishBranch(shoot,shootCap,[]);shoot.name='Offset terminal growth';geometries.push(shoot,shootCap);junctions.push(t);
    }
-   finishBranch(g,cap,junctions);geometries.push(...radialCorallites(g,level,seed,baseColor,tipColor));return;
+   finishBranch(g,cap,junctions);geometries.push(...radialCorallites(g,level,seed,baseColor.clone().multiplyScalar(interior(level,.6)),tipColor.clone().multiplyScalar(interior(level,.6))));return;
   }
   const count=level===0?choice(3,4):choice(2,3);
   for(let j=0;j<count;j++){
@@ -98,7 +101,7 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
    }
    growthRandom=sceneRandom;
   }
-  finishBranch(g,cap,junctions);geometries.push(...radialCorallites(g,level,seed,baseColor,tipColor));
+  finishBranch(g,cap,junctions);geometries.push(...radialCorallites(g,level,seed,baseColor.clone().multiplyScalar(interior(level,.6)),tipColor.clone().multiplyScalar(interior(level,.6))));
  }
  const count=7+Math.floor(random()*3);
  for(let i=0;i<count;i++){
