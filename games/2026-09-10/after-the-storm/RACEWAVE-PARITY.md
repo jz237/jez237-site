@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+### original records browser from the menu
+
+With Original physics preferred, "Course records" on the menu now opens the
+original records browser over this device's original record session. It is
+entered as from the original main menu: the menu60 initializer (EC304), then
+the records initializer (EC500: state 66, main12, previous state 60), so it
+opens on the overview with its three categories (time, stunt score, reverse)
+and nine courses. Selecting a course slides in its
+tables; left and right change the record type. Back on the overview runs the
+original exit to menu60, and the browser closes the screen. Modern physics keeps
+the existing records list.
+
 ### original records browser after the championship initials
 
 Confirming the championship initials hands off to the records browser
@@ -19,8 +31,7 @@ labels are pre-rendered images that are not decoded, so the words are authored
 from each token's role in its font bank (RANK, CLASS, NAME, TIME, BEST LAP,
 the record titles, and the Normal/Hard/Expert/Reverse class that each row's
 record stores). Arrow keys, Enter and Backspace, the on-screen buttons and a
-gamepad's d-pad, stick, A and B drive the original controller word. Not yet
-reachable from the title menu as a standalone screen.
+gamepad's d-pad, stick, A and B drive the original controller word.
 
 ## v2.44.0 — Original Championship, Stunt wildlife and Original two-player races
 

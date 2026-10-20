@@ -25,6 +25,7 @@ import {prepareNativeWidgetPresentation,nativeWidgetDrawView} from './native-wid
 import {prepareNativeRaceMenuInputAdvance,nativeRaceMenuInputView,prepareNativeMenuReturnUpdate,prepareNativeChampionshipScoreUpdate} from './native-race-state.js';
 import {prepareNativeEndingMenuPhase,nativeEndingMenuView} from './native-ending-menu-runtime.js';
 import {NATIVE_ENDING_MENU_LOADED_WORDS} from './source-ending-menu-words.js';
+import {prepareNativeRaceMenuInitializationUpdate} from './native-race-state.js';
 import {NATIVE_RECORDS_MENU_DATA,createNativeRecordsMenuWords} from './native-records-menu-data.js';
 import {prepareNativeRecordsMenuPhase,nativeRecordsMenuView} from './native-records-menu-runtime.js';
 import {prepareNativeRaceResultCPUDisplayUpdate} from './native-race-state.js';
@@ -381,6 +382,16 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
     fadeTemplateWords6cc0:NATIVE_CHAMPIONSHIP_SETUP_DATA.fadeTemplateWords6cc0,slotTemplateWords6c50:NATIVE_CHAMPIONSHIP_SETUP_DATA.slotTemplateWords6c50});
    current=prepared.state;
    return Object.freeze({...prepared,operations:[...sample.operations,...prepared.operations],effects:[...sample.effects,...prepared.effects]});
+  },
+  /** Free browsing as from the original main menu: EC304 (menu60) then the
+   * records initializer EC500 (state66, main12, previous state60). The
+   * browser's exit then returns to menu60. Resource loads stay host effects. */
+  enterRecordsBrowser(){
+   if(championship)throw new Error('Championship records open after its initials');
+   const views={fadeTemplateWords6cc0:NATIVE_CHAMPIONSHIP_SETUP_DATA.fadeTemplateWords6cc0,slotTemplateWords6c50:NATIVE_CHAMPIONSHIP_SETUP_DATA.slotTemplateWords6c50};
+   const menu=prepareNativeRaceMenuInitializationUpdate(current,{consumer:'801ec304'},views);
+   const records=prepareNativeRaceMenuInitializationUpdate(menu.state,{consumer:'801ec500'},views);
+   current=records.state;return Object.freeze({effects:[...menu.effects,...records.effects],view:nativeRecordsMenuView(current)});
   },
   recordsBrowserView:()=>nativeRecordsMenuView(current),
   /** One original 20Hz records-browser frame (state66/67, main12): menu input,
