@@ -25,9 +25,10 @@ The main8 course introduction now loads the next course's actor banks and runs
 AC184 on its own state copy, using the same startup inputs as the race, then
 draws the actor pool with ADF90 after every camera frame. The browser shows
 those frames through the existing course actor view while the race waits.
-Sunset Bay's three dolphins sit in the second shot. The reconstructed main8
-frame order (86148, 665B0, DDE48, water, 8E794, 6E3A8, B2ABC, overlay) has no
-AD418, so course actors hold their places unless the camera script moves them.
+Sunset Bay's three dolphins, spawned by its introduction script, sit in the
+second shot. In main8 AC184 returns before spawning course actors, and the
+reconstructed main8 frame order (86148, 665B0, DDE48, water, 8E794, 6E3A8,
+B2ABC, overlay) has no AD418, so only script-driven actors appear.
 
 ## Unpublished — Original Stunt mastery unlocks the dolphin ride
 
