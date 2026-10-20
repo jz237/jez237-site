@@ -16,7 +16,8 @@ import {createNativeResultOverlay} from './native-result-overlay.js';
 import {createNativeChampionshipStandingsOverlay} from './native-championship-standings-overlay.js';
 import {createNativeRiderPortraits} from './native-rider-portraits.js';
 import {captureNativeCamera} from './native-camera-presentation.js';
-import {captureRaceWater,setRaceWater} from './race-water.js';
+import {captureRaceWater,setRaceWater,raceWaterHeight} from './race-water.js';
+import {liftNativeEffectsToSurface} from './native-effect-surface.js';
 import {createPlayerWindowHost} from './player-window-host.js';
 import {createOnlineHostBridge,embeddedOnlineCapability} from './online-host-bridge.js';
 const onlineCapability=embeddedOnlineCapability();
@@ -323,8 +324,8 @@ function start(nextRound=false,skipWarmup=false,inspection={}){
  // osGetTime is time since boot at46.875MHz; the page clock is time since load.
  const sourceClock=()=>BigInt(Math.floor(performance.now()*46875));
  const nativeCourseActors=actorBanks?{assets:nativeActorAssets.get(actorKey),onDisplay:(presentation,resources)=>nativeDolphinRenderer.update(presentation,resources),
-  onEffectsDisplay:presentation=>nativeEffectRenderer.update(presentation),sourceClock}:undefined;
- const nativeSceneEffects=(originalTime||originalStunt)&&!nativeCourseActors?{onDisplay:presentation=>nativeEffectRenderer.update(presentation),sourceClock}:undefined;
+  onEffectsDisplay:presentation=>drawNativeEffects(presentation),sourceClock}:undefined;
+ const nativeSceneEffects=(originalTime||originalStunt)&&!nativeCourseActors?{onDisplay:presentation=>drawNativeEffects(presentation),sourceClock}:undefined;
  if(nativeCourseActors||nativeSceneEffects)nativeEffectRenderer=makeNativeEffectRenderer(nativeEffectRoot);
  if(nativeCourseActors)nativeDolphinRenderer=makeNativeCourseActorView(nativeDolphinRoot);
  try{const prepared=startPrepared(nextRound,skipWarmup,inspection,nativeCourseActors,nativeSceneEffects);beginNativeFlyover();return prepared;}
@@ -373,7 +374,13 @@ function beginReplay(){const clip=replayClip(recorder);if(!clip||replay)return;s
  const first=clip.frames[0].racers[clip.index];look.set(first.x,first.hydro.y+.4,first.z);clip.frames[0].racers.forEach(q=>vesselFor(q).landingId=q.hydro.landingId);$('replayPause').textContent='Pause replay';touch.setActive(false);last=performance.now();
 }
 function endReplay(){if(!replay)return;const old=replay;state=old.live;const actors=state.nativeHost?.lastCourseActorDisplay;if(actors)nativeDolphinRenderer?.update(actors.presentation,actors.state.resourceWordsE73c);nativeEffectRenderer?.update(state.nativeHost?.lastSceneEffectDisplay?.presentation??{draws:[]});clock=old.liveClock;restoreWater(old.water,state.localWater);replay=null;camera.position.copy(old.savedCamera);look.copy(old.savedLook);camera.fov=old.fov;chaseMemory=old.chase;cameraTracking=old.tracking;old.hidden.forEach(([id,hidden])=>$(id).hidden=hidden);replayBar.hidden=true;document.body.classList.remove('replaying');configureViews();clearReplayEffects();state.racers.forEach((q,i)=>{const v=vesselFor(q);v.landingId=q.hydro.landingId;Object.assign(v.beads.state,old.beads[i]);v.ridingMotion={};});keys={};accumulator=0;last=performance.now();canvas.focus();if(separatePlayerView())playerWindow.begin(playerWindowSetup());if(isVerify)$('verifyReplay').textContent=JSON.stringify({returned:true,time:state.time,unchanged:JSON.stringify([state.time,state.racers])===old.liveFingerprint&&state.localWater?.version===old.localVersion});}
-function renderReplay(wall){const dt=replay.paused?0:wall;replay.time=Math.min(replay.clip.end,replay.time+dt);const f=replaySample(replay.clip,replay.time);replay.sample=f;if(f.nativeCourseActors)nativeDolphinRenderer?.update(f.nativeCourseActors.presentation,f.nativeCourseActors.resourceWords);if(Object.hasOwn(f,'nativeSceneEffects'))nativeEffectRenderer?.update(f.nativeSceneEffects??{draws:[]});state={...replay.live,...f,phase:'running',sprayField:null};clock=f.time;restoreWater(f.water,f.localWater);visual(dt);$('replayLabel').textContent=replay.clip.label+' · REPLAY '+(replay.time-replay.clip.start).toFixed(1)+' / '+(replay.clip.end-replay.clip.start).toFixed(1)+' s';if(isVerify)$('verifyReplay').textContent=JSON.stringify({active:true,recordedTime:clock,liveTime:replay.live.time,frames:replay.clip.frames.length,camera:camera.position.toArray(),localEnergy:f.localWater?.h.reduce((sum,x)=>sum+x*x,0)});if(replay.time>=replay.clip.end)endReplay();}
+// Original effects sit on the physics water plane; draw them on the rendered surface.
+function drawNativeEffects(presentation){
+ const water=state?.raceWater;let lifted=presentation;
+ if(water?.field)try{lifted=liftNativeEffectsToSurface(presentation,(x,z)=>raceWaterHeight(water,x,z));}catch{lifted=presentation;}
+ return nativeEffectRenderer.update(lifted);
+}
+function renderReplay(wall){const dt=replay.paused?0:wall;replay.time=Math.min(replay.clip.end,replay.time+dt);const f=replaySample(replay.clip,replay.time);replay.sample=f;if(f.nativeCourseActors)nativeDolphinRenderer?.update(f.nativeCourseActors.presentation,f.nativeCourseActors.resourceWords);state={...replay.live,...f,phase:'running',sprayField:null};clock=f.time;restoreWater(f.water,f.localWater);if(Object.hasOwn(f,'nativeSceneEffects')&&nativeEffectRenderer)drawNativeEffects(f.nativeSceneEffects??{draws:[]});visual(dt);$('replayLabel').textContent=replay.clip.label+' · REPLAY '+(replay.time-replay.clip.start).toFixed(1)+' / '+(replay.clip.end-replay.clip.start).toFixed(1)+' s';if(isVerify)$('verifyReplay').textContent=JSON.stringify({active:true,recordedTime:clock,liveTime:replay.live.time,frames:replay.clip.frames.length,camera:camera.position.toArray(),localEnergy:f.localWater?.h.reduce((sum,x)=>sum+x*x,0)});if(replay.time>=replay.clip.end)endReplay();}
 replayButton.onclick=beginReplay;$('replayPause').onclick=pause;$('replayExit').onclick=endReplay;
 if(isVerify){const o=document.createElement('output');o.id='verifyReplay';document.body.append(o);}
 

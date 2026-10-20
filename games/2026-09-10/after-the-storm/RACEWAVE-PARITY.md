@@ -1,5 +1,17 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — original wake drawn on the high-resolution water
+
+The original places wake, spray and splash against its physics water plane
+(4D30C queries), but the high-resolution water draws the exact rendered
+triangles. In a Sunset Bay Time Trial, 72% of wake vertices (57% by more than
+5 cm), about half of the spray and 66% of the splash sat below the rendered
+surface, so the depth-tested wake showed only as faint streaks under the
+water. The browser now lifts those vertices 3 cm above the rendered water at
+their own X/Z before drawing, live and in replay (replay restores the frame's
+water first). Droplets in the air keep their geometry, and canonical effect
+state is unchanged. The wake now reads as continuous foam on the surface.
+
 ## Unpublished — championship record initials after the ending
 
 When the ending exits to the records screen (a course record flag is set), the
