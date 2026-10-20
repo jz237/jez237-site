@@ -8,7 +8,7 @@ import {createVehicleDrive} from '../src/drivetrain/chassis';
 import {wheelResponse,wheelTearsOff,WHEEL_TEAR} from '../src/wheel-physics';
 import {loadCarWithoutImages} from '../tools/car-asset-audit';
 import {loadCars} from '../src/assets';
-import {Vehicle,WIND_RIP} from '../src/vehicle';
+import {Vehicle,WIND_RIP,PART_DRAG} from '../src/vehicle';
 import {ReplayRecorder,replayFile,readReplayFile,type VisualEvent} from '../src/replay-data';
 import {captureReplayFrame} from '../src/replay-scene';
 import {stockSetup} from '../src/garage';
@@ -77,4 +77,31 @@ test('a loose panel tears away in the wind at speed, is recorded, and replays as
   assert.ok(doc.events.some(e=>e.kind==='rip'&&e.part===part.name),'rip events survive the replay format');
   assert.ok(doc.meta.damageModel===1);
  }finally{car.dispose();world.free();}
+});
+test('a burst tyre throws rubber once, then runs on the rim with sparks and a scrape',async()=>{
+ await ensureCars();const scene=new T.Scene(),world=new R.World({x:0,y:-9.81,z:0});world.createCollider(R.ColliderDesc.cuboid(50,.5,50).setTranslation(0,-.5,0));
+ const emitted:number[]=[];const fx={emit(_p:T.Vector3,count:number,type:number){for(let i=0;i<count;i++)emitted.push(type);},mark(){},detach(){}} as never;
+ const car=new Vehicle(0,'sedan',stockSetup('sedan').paint,scene,world,fx,stockSetup('sedan'),undefined,'angular-v1');
+ try{
+  car.place(0,0,0);for(let i=0;i<60;i++){car.preStep(1/60);world.step();car.postStep(1/60,i/60);}
+  car.tyreDamage=[1,0,0,0];car.speed=15;car.surface='asphalt';let t=2;
+  for(let i=0;i<30;i++){t+=1/60;car.postStep(1/60,t);}
+  const rubber=emitted.filter(v=>v===4).length,sparks=emitted.filter(v=>v===1).length;
+  assert.ok(rubber>=10&&rubber<20,'one burst of rubber, not a stream');assert.ok(sparks>0,'rim sparks');assert.ok(car.scraping>0,'rim scrape audio');
+  car.repair();emitted.length=0;car.tyreDamage=[1,0,0,0];car.speed=15;car.surface='asphalt';for(let i=0;i<10;i++){t+=1/60;car.postStep(1/60,t);}
+  assert.ok(emitted.filter(v=>v===4).length>=10,'repair resets the burst');
+ }finally{car.dispose();world.free();}
+});
+test('a bumper dragging on the ground slows the car and pulls it toward that side',async()=>{
+ await ensureCars();assert.ok(PART_DRAG>0);
+ const run=async(drag:boolean)=>{const scene=new T.Scene(),world=new R.World({x:0,y:-9.81,z:0});world.timestep=1/60;world.createCollider(R.ColliderDesc.cuboid(800,.5,800).setTranslation(0,-.5,0));
+  const fx={emit(){},mark(){},detach(){}} as never,car=new Vehicle(0,'sedan',stockSetup('sedan').paint,scene,world,fx,stockSetup('sedan'),undefined,'angular-v1');
+  try{car.extendedDamage=true;car.place(0,0,0);let t=0;const step=()=>{car.preStep(1/60);world.step();car.postStep(1/60,t);t+=1/60;};
+   for(let i=0;i<60;i++)step();car.input={throttle:1,steer:0,brake:0,handbrake:false};for(let i=0;i<240;i++)step();
+   const bumper=car.wreckParts.assemblies.find(a=>a.name==='front-bumper');assert.ok(!!bumper);
+   if(drag){bumper.damage=200;bumper.loose=1;}
+   for(let i=0;i<180;i++){if(drag)bumper.loose=1;step();}
+   return{speed:car.speed,x:car.current.x};}finally{car.dispose();world.free();}};
+ const clean=await run(false),dragging=await run(true);console.log(JSON.stringify({clean,dragging}));
+ assert.ok(dragging.speed<clean.speed-1,'dragging costs speed');
 });

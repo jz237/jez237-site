@@ -43,6 +43,8 @@ import {EngineMisfire} from './engine-misfire';
 import {steeringLimit,brakeFactor,overheat} from './damage-handling';
 /** Panels hanging at least this loose build wind load above this speed (m/s) until they tear away. */
 export const WIND_RIP={loose:.25,speed:16} as const;
+/** Deceleration (m/s²) from a part dragging along the ground at full scrape, applied where it drags. */
+export const PART_DRAG=1.2;
 import {VehicleSurface} from './vehicle-surface';
 import { normalizeSetup, setupPhysics, stockSetup, type Setup } from './garage';
 export type VehicleGround = {height:(x:number,z:number)=>number;surface:(x:number,z:number)=>DrivingSurface};
@@ -124,6 +126,8 @@ export class Vehicle {
   onBackfire?:(point:T.Vector3)=>void;
   onWheelLost?:(wheel:number)=>void;
   private windLoad=new Map<string,number>();
+  private readonly tyreBurst=[false,false,false,false];
+  private dragLoad=0;private readonly dragPoint=new T.Vector3();
   /** Live counts for diagnostics. */
   rips=0;backfires=0;
   damageRight = 0;
@@ -239,7 +243,7 @@ export class Vehicle {
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
-    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.steerLimit=1;this.brakeBias.fill(1);
+    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.dragLoad=0;this.steerLimit=1;this.brakeBias.fill(1);
     if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
@@ -307,6 +311,11 @@ export class Vehicle {
     this.misfireFactor=running?this.engineMisfire.update(dt,this.engineDamage??0,this.input.throttle):1;
     this.steerLimit=this.extendedDamage?steeringLimit(this.structuralDamage):1;
     for(let i=0;i<4;i++)this.brakeBias[i]=this.extendedDamage?brakeFactor(this.wreckParts.wheelDamage[i]):1;
+    if(this.extendedDamage&&this.dragLoad>0&&Math.abs(this.speed)>1){
+      // The dragging part acts as a brake where it touches the ground, so it also pulls to that side.
+      const k=-Math.sign(this.speed)*this.specification.mass*PART_DRAG*this.dragLoad*dt;
+      this.body.applyImpulseAtPoint({x:this.forward.x*k,y:0,z:this.forward.z*k},{x:this.dragPoint.x,y:this.dragPoint.y,z:this.dragPoint.z},true);
+    }
     if(this.engineMisfire.backfire&&this.extendedDamage){
       // A misfire ends with unburnt fuel popping in the exhaust: a flash of sparks and a puff of smoke.
       const exhaust=new T.Vector3(0,.32,-DEFINITIONS[this.kind].halfLength).applyQuaternion(this.previousQ).add(this.previous);
@@ -333,7 +342,7 @@ export class Vehicle {
     this.surfaceFinish.advance(dt,this.speed,this.surface!=='asphalt',this.wetWheels,this.groundedWheels);
     if (time - this.lastFx > 0.06) {
       this.lastFx = time;
-      this.scraping=0;
+      this.scraping=0;this.dragLoad=0;
       for (let i = 0; i < 4; i++) {
         const point = this.controller.wheelContactPoint(i);
         if (!point || !this.controller.wheelIsInContact(i)) continue;
@@ -345,6 +354,12 @@ export class Vehicle {
           continue;
         }
         if(wet>.035&&Math.abs(this.speed)>.5&&!this.wetWheels[i]&&Math.abs(p.y-this.ground.height(p.x,p.z))<.15)this.fx.evidence?.add(p,yaw,Math.abs(this.speed)*.07,wet,0);
+        const failure=tyreFailure(this.tyreDamage?.[i]);
+        if(failure>=.9&&!this.tyreBurst[i]){this.tyreBurst[i]=true;this.fx.emit(p,10,4,1.1);}
+        if(failure>=.9&&Math.abs(this.speed)>4&&this.surface==='asphalt'&&!this.wetWheels[i]){
+          // Running on the rim: a spray of sparks and a scrape.
+          const s=Math.min(1,Math.abs(this.speed)/18);this.scraping=Math.max(this.scraping,s*.55);this.fx.emit(p,Math.ceil(s*2),1,.7);
+        }
         if(this.wetWheels[i])continue;
         const feedback=tyreFeedback(this.surface,this.speed,this.wheelSlips[i],this.input.handbrake,i,true);
         if(feedback.count)this.fx.emit(p,feedback.count,feedback.type,feedback.force);
@@ -360,6 +375,7 @@ export class Vehicle {
         const ground=this.ground.height(p.x,p.z);
         if(p.y>ground+.07||Math.abs(this.speed)<1)continue;
         this.scraping=Math.min(1,a.loose*Math.abs(this.speed)/12);p.y=ground;
+        if(this.scraping>this.dragLoad){this.dragLoad=this.scraping;this.dragPoint.copy(p);}
         this.fx.evidence?.add(p,Math.atan2(this.forward.x,this.forward.z),Math.abs(this.speed)*.08,this.scraping,2);
         if(this.scraping>.25)this.fx.emit(p,1,1,.8);
       }

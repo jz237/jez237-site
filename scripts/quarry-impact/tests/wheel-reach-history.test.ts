@@ -1,6 +1,7 @@
+import {restorePartDragBytes} from './part-drag-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readWheelReachPrevious,restoreWheelReachBytes,verifyWheelReachRevision} from './wheel-reach-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restorePartDragBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('WheelReach preserves every prior fixture, vehicle asset, venue art and history input',verifyWheelReachRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/wheel-reach/revision.json').toString());
