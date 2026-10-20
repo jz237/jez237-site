@@ -14,7 +14,7 @@ import {BuggySuspension} from './buggy-suspension';
 import {applyComponentImpact} from './component-damage';
 import {tyreFailure,vehicleFlatTyreRadius} from './tyre-condition';
 import {vehicleSuspensionRestLength,vehicleSuspensionTravel} from './vehicle-physics';
-import {isClassicKind,classicWheelHalfTrack,vehicleWheelRadius} from './classic-vehicle-specs';
+import {isClassicKind,classicWheelHalfTrack,vehicleWheelRadius,isRearEngineKind} from './classic-vehicle-specs';
 import {createVehiclePhysics,stepVehiclePhysics,rotateVehicleVector} from './vehicle-physics';
 import {LiveryPaint} from './livery-paint';
 import type {VisualEvent} from './replay-data';
@@ -41,6 +41,7 @@ import {wheelResponse,TireContact} from './wheel-mechanics';
 import {wheelTearsOff} from './wheel-physics';
 import {EngineMisfire} from './engine-misfire';
 import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor} from './damage-handling';
+import {leakRates,dripInterval} from './fluid-leaks';
 /** Panels hanging at least this loose build wind load above this speed (m/s) until they tear away. */
 export const WIND_RIP={loose:.25,speed:16} as const;
 /** Deceleration (m/s²) from a part dragging along the ground at full scrape, applied where it drags. */
@@ -132,6 +133,14 @@ export class Vehicle {
   steerLimit = 1;
   readonly brakeBias = [1,1,1,1];
   readonly damperBias = [1,1,1,1];
+  /** Grip left under each tyre from oil or coolant on the ground (offline only). */
+  readonly slickGrip = [1,1,1,1];
+  /** How oily each tyre is after rolling through a slick; it lays dark tread marks until it wears off. */
+  readonly oily = [0,0,0,0];
+  private dripClock = [0,0];
+  private dripSeed = 1;
+  /** Fluid drips this car has left (oil, coolant). */
+  readonly drips = [0,0];
   onBackfire?:(point:T.Vector3)=>void;
   onWheelLost?:(wheel:number)=>void;
   private windLoad=new Map<string,number>();
@@ -256,7 +265,7 @@ export class Vehicle {
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
-    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.brakeBias.fill(1);this.damperBias.fill(1);
+    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.brakeBias.fill(1);this.damperBias.fill(1);this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.drips.fill(0);this.dripSeed=this.id*7919+1;
     if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
@@ -307,6 +316,30 @@ export class Vehicle {
       if (state) state.damage.value = 0;
     }
   }
+  /** Leaks drip onto the ground under the radiator (coolant) and the engine (oil); every tyre reads
+   * the slicks under its last contact point, and picks up oil that it then tracks along. */
+  private fluids(dt:number){
+    const slicks=this.fx.slicks;if(!slicks)return;
+    let contacts=0,groundSum=0;
+    for(let i=0;i<4;i++){
+      const point=this.wreckParts.wheelLost[i]?null:this.controller.wheelContactPoint(i);
+      if(!point||!this.controller.wheelIsInContact(i)){this.slickGrip[i]=1;continue;}
+      contacts++;groundSum+=point.y;
+      const grip=slicks.gripAt(point.x,point.z);this.slickGrip[i]=grip;
+      if(grip<.97)this.oily[i]=Math.max(this.oily[i],Math.min(1,(1-grip)*2));
+      else this.oily[i]=Math.max(0,this.oily[i]-Math.abs(this.speed)*dt/14);
+    }
+    if(!contacts||!this.structuralDamage)return;
+    const rates=leakRates(this.structuralDamage[0],this.engineDamage??0),half=DEFINITIONS[this.kind].halfLength,ground=groundSum/contacts;
+    for(const kind of [0,1] as const){
+      const interval=dripInterval(kind===0?rates.oil:rates.coolant);if(!Number.isFinite(interval)){this.dripClock[kind]=0;continue;}
+      this.dripClock[kind]+=dt;if(this.dripClock[kind]<interval)continue;this.dripClock[kind]-=interval;
+      this.dripSeed=(Math.imul(this.dripSeed,1664525)+1013904223)>>>0;const r=this.dripSeed/4294967296;
+      const z=(kind===1||!isRearEngineKind(this.kind)?1:-1)*half*(kind===1?.62:.42)+(r-.5)*.3,x=(r*7%1-.5)*.4;
+      const p=new T.Vector3(x,0,z).applyQuaternion(this.previousQ).add(this.previous);
+      slicks.drip(p.x,ground,p.z,kind,r);this.drips[kind]++;
+    }
+  }
   preStep(dt: number) {
     this.previous.copy(this.body.translation());
     this.previousQ.copy(this.body.rotation());
@@ -324,6 +357,7 @@ export class Vehicle {
     this.misfireFactor=running?this.engineMisfire.update(dt,this.engineDamage??0,this.input.throttle):1;
     this.steerLimit=this.extendedDamage?steeringLimit(this.structuralDamage):1;
     for(let i=0;i<4;i++){this.brakeBias[i]=this.extendedDamage?brakeFactor(this.wreckParts.wheelDamage[i]):1;this.damperBias[i]=this.extendedDamage?damperFactor(this.wreckParts.wheelDamage[i]):1;}
+    if(this.extendedDamage)this.fluids(dt);
     if(this.extendedDamage&&this.tyreDamage)for(let i=0;i<4;i++)if(!this.wreckParts.wheelLost[i])this.tyreDamage[i]=leakTyre(this.tyreDamage[i],this.speed,dt);
     if(this.extendedDamage&&this.dragLoad>0&&Math.abs(this.speed)>1){
       // The dragging part acts as a brake where it touches the ground, so it also pulls to that side.
@@ -378,6 +412,7 @@ export class Vehicle {
           continue;
         }
         if(wet>.035&&Math.abs(this.speed)>.5&&!this.wetWheels[i]&&Math.abs(p.y-this.ground.height(p.x,p.z))<.15)this.fx.evidence?.add(p,yaw,Math.abs(this.speed)*.07,wet,0);
+        else if(this.oily[i]>.05&&Math.abs(this.speed)>.5)this.fx.evidence?.add(p,yaw,Math.abs(this.speed)*.07,this.oily[i]*.9,0);
         const failure=tyreFailure(this.tyreDamage?.[i]);
         if(failure>=.9&&!this.tyreBurst[i]){this.tyreBurst[i]=true;this.fx.emit(p,10,4,1.1);}
         if(failure>=.9&&Math.abs(this.speed)>4&&this.surface==='asphalt'&&!this.wetWheels[i]){

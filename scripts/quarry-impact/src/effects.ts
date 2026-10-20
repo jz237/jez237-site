@@ -3,6 +3,7 @@ import {landscapeHeight} from './quarry-layout';
 import * as T from 'three';
 import R from '@dimforge/rapier3d-compat';
 import {GroundEvidence} from './ground-evidence';
+import {FluidSlicks} from './fluid-leaks';
 import {DAYLIGHT_DIRECTION} from './static-shadows';
 type Particle = {
   p: T.Vector3;
@@ -26,12 +27,14 @@ export class Effects {
   marks: T.InstancedMesh;
   markCursor = 0;
   readonly evidence:GroundEvidence;
+  readonly slicks:FluidSlicks;
   constructor(
     public scene: T.Scene,
     public world: R.World,
     public groundHeight:(x:number,z:number)=>number = landscapeHeight,
   ) {
     this.evidence=new GroundEvidence(scene);
+    this.slicks=new FluidSlicks(scene);
     const count = 1800;
     this.positions = new Float32Array(count * 3);
     this.colors = new Float32Array(count * 3);
@@ -243,7 +246,7 @@ void main(){
     this.debris.splice(i, 1);
   }
   update(dt: number) {
-    this.evidence.advance(dt);
+    this.evidence.advance(dt);this.slicks.advance(dt);
     (this.points.material as T.ShaderMaterial).uniforms.scale.value = window.innerHeight;
     for (let i = 0; i < this.particles.length; i++) {
       const p = this.particles[i];
@@ -269,7 +272,7 @@ void main(){
     }
   }
   reset() {
-    this.evidence.reset();
+    this.evidence.reset();this.slicks.reset();
     for (const p of this.particles) p.life = 0;
     // Menu frames do not advance this pool. Clear the uploaded attributes too,
     // otherwise the final sparks can remain visible over the new attract car.

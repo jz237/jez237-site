@@ -517,7 +517,7 @@ function openStudio(photo=false,document?:ReplayDocument,savedName?:string):bool
     keys.clear();replayAudio.reset();if(doc&&!sound.ready)void sound.init().catch(error=>console.warn('Replay audio unavailable',error));state='studio';
     if(doc){
       for(const car of oldCars)hide(car.root);for(const prop of returnVenue.props)hide(prop.mesh);for(const prop of targetVenue.props)hide(prop.mesh);
-      for(const o of [fx.points,fx.marks,...fx.debris.map(d=>d.mesh),vehicleFire?.mesh,...(vehicleFire?.lights??[]),puddleSplashes?.spray,puddleSplashes?.rings,fx.evidence.mesh])hide(o);
+      for(const o of [fx.points,fx.marks,...fx.debris.map(d=>d.mesh),vehicleFire?.mesh,...(vehicleFire?.lights??[]),puddleSplashes?.spray,puddleSplashes?.rings,fx.evidence.mesh,fx.slicks.mesh])hide(o);
       activateVenue(targetVenue);cars=view!.cars;mode=doc.meta.mode;setQuarryMode();view!.props.forEach(p=>staticShadows?.bindReceivers(p));
     }
     hide(activeVenue.checkpoint);studioRestore=restore;
@@ -2057,6 +2057,7 @@ async function boot() {
     get audioState() { return {state:sound.ctx?.state,muted:sound.muted,master:sound.master?.gain.value,voices:sound.activeVoices,buffers:sound.buffers.size,levels:{...sound.levels}}; },
     get fireState() { return vehicleFire?.stats; },
     get splashState(){return puddleSplashes?.stats;},
+    get slicks(){return fx.slicks.stats;},
     get surfaceState(){return{ground:fx.evidence.stats,cars:cars.map(c=>({id:c.id,...c.surfaceFinish.stats,scraping:c.scraping,paintVertices:c.panels.reduce((sum,p)=>sum+Array.from(p.geometry.attributes.transferPaint.array).filter((v,i)=>i%4===3&&v>0).length,0),wheels:Array.from(c.wreckParts.wheelDamage,(damage,i)=>({damage,rest:c.controller.wheelSuspensionRestLength(i),stiffness:c.controller.wheelSuspensionStiffness(i),brake:c.controller.wheelBrake(i),steering:c.controller.wheelSteering(i),contact:c.tireContacts[i].active.value,load:c.tireContacts[i].load.value}))}))};},
     get puddles(){return quarry.puddles;},
     get arenaState(){return{...quarry.arenaLayout,expanded:quarry.arenaPhysics.expanded,enabledWalls:quarry.arenaPhysics.walls.filter(c=>c.isEnabled()).length};},
@@ -2198,6 +2199,7 @@ async function boot() {
         wheelLost: Array.from(c.wreckParts.wheelLost),
         rips: c.rips,
         backfires: c.backfires,
+        drips: c.drips.slice(), slickGrip: c.slickGrip.slice(), oily: c.oily.slice(),
         engineDamage: c.engineDamage,
         tyreDamage: c.tyreDamage?.slice(),
         partDamage: Object.fromEntries([...new Set(c.panels.map(m=>m.userData.detachAssembly as string|null).filter((v):v is string=>!!v))].map(n=>[n,Math.round(Math.max(0,...c.panels.filter(m=>m.userData.detachAssembly===n&&m.visible).map(m=>m.userData.damage??0)))])),
@@ -2217,6 +2219,7 @@ async function boot() {
     setHealth: (id: number, h: number) => {
       cars[id].health = h;
     },
+    setEngineDamage: (id: number, v: number) => { if (cars[id]?.engineDamage !== undefined && Number.isFinite(v)) cars[id].engineDamage = Math.max(0, Math.min(1, v)); },
     keyboardInput: () => input(),
     clearTestInput: () => { testInput = null; },
     setInput: (v: Input) => {
