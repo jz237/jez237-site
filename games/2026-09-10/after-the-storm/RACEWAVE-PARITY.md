@@ -1,5 +1,22 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — Original Championship from the normal menu
+
+Championship now offers Physics: Original · Wave Race 64. An original cup
+starts at its class's first course (Normal skips the Dolphin warm-up), races
+the original AI riders, shows the original standings, then either continues
+to the next course with points carried, ends the cup on a missed points
+target, or completes it (unlocking the next class in the browser's own save).
+The course-preview introduction runs underneath and is skipped; the original
+podium ceremony is replaced by a cup-complete screen. Modern stays the default
+and keeps its own cup and records.
+
+Browser checks: a disqualified first round correctly eliminated the cup, and
+a completed first round showed "Round 1 complete · Next: Sunset Bay" with the
+original 7/4/2/1 points and started round 2 there. Four racers ran at 54–60
+fps in round 1; a brief 28 fps reading early in round 2 still needs checking.
+The original wake/spray owner is not yet used in Championship.
+
 ## Unpublished — full native Normal cup and its final round
 
 A complete Normal cup now runs headlessly from Sunny Beach to Southern Island
