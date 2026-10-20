@@ -6,8 +6,9 @@ import {ReefReflections} from './ReefReflections.ts';
  * Uses the existing capture budget, not an additional render on every frame. */
 export function reefBackGlass(pool:ReefReflections,time:{value:number},daylight:{value:number}){
  // Reach below the lowest sand edge: the old .2 bottom left a black slot at
- // the newly visible channel end. Keep the original upper pane and tint UVs.
- const pane=new Reflector(new T.PlaneGeometry(10.04,5.4).translate(0,-.1,0),{
+ // the newly visible channel end, and up past the waterline (5.45): stopping
+ // at 5.4 left a dark strip under the surface. Tint UVs are unchanged.
+ const pane=new Reflector(new T.PlaneGeometry(10.04,5.52).translate(0,-.04,0),{
   textureWidth:1024,textureHeight:768,multisample:2,clipBias:.002,
   shader:{name:'ReefRearGlass',uniforms:{color:{value:new T.Color(0xffffff)},tDiffuse:{value:null},textureMatrix:{value:new T.Matrix4()},time,daylight,reflectionDepth:{value:null},reflectionInverseProjection:{value:new T.Matrix4()},reflectionWorld:{value:new T.Matrix4()}},
    vertexShader:`uniform mat4 textureMatrix;varying vec4 reflectedUv;varying vec2 v;varying vec3 world;
