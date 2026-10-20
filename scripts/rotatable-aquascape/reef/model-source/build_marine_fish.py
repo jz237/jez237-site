@@ -31,12 +31,12 @@ def make_material(name,image=None,rough=.43,alpha=1):
   tex=n.new('ShaderNodeTexImage');tex.image=image;mat.node_tree.links.new(tex.outputs['Color'],p.inputs['Base Color'])
  return mat
 
-def make_mesh(name,vertices,faces,uvs,material):
+def make_mesh(name,vertices,faces,uvs,material,flat=()):
  name=species+'__'+name;mesh=bpy.data.meshes.new(name);mesh.from_pydata([xyz(v) for v in vertices],[],faces);mesh.update()
  obj=bpy.data.objects.new(name,mesh);scene.collection.objects.link(obj);obj.data.materials.append(material)
  layer=mesh.uv_layers.new(name='Reference projection')
  for face in mesh.polygons:
-  face.use_smooth=True
+  face.use_smooth=face.index not in flat
   for li in face.loop_indices:layer.data[li].uv=uvs[mesh.loops[li].vertex_index]
  return obj
 
@@ -44,10 +44,12 @@ metadata=json.loads((OUT/'model-info.json').read_text()) if ONLY and (OUT/'model
 for species,s in DATA.items():
  # Every species has its own traced silhouette, rather than scaling one oval.
  reference=s.get('reference',species)
- original=bpy.data.images.load(str(ROOT/'references'/(reference+'.png')),check_existing=True)
+ # Plates shot on a light backdrop may supply edge-padded texture copies, so
+ # fin margins sample the fish's own color instead of the backdrop.
+ original=bpy.data.images.load(str(ROOT/'references'/s.get('texture',reference+'.png')),check_existing=True)
  iw,ih=original.size;original.file_format='JPEG';original.filepath_raw=str(OUT/(species+'-reference.jpg'));original.save()
  original=bpy.data.images.load(str(OUT/(species+'-reference.jpg')),check_existing=False)
- clean=ROOT/'references'/(reference+'-skin.png')
+ clean=ROOT/'references'/s.get('skinTexture',reference+'-skin.png')
  if not clean.exists():raise RuntimeError('Missing clean-flank image: '+str(clean))
  skinimg=bpy.data.images.load(str(clean),check_existing=True)
  # Force lazy pixel loading before changing filepath for the JPEG export.
@@ -58,33 +60,46 @@ for species,s in DATA.items():
  begin,end=s['range'];length=end-begin;cy=s['cy'];width=s['width'];objects=[]
  def pos(px,py,depth=0):return ((px-begin)/length-.5,(cy-py)/length,depth)
  def uv(px,py):return (px/iw,1-py/ih)
+ # Optional lens-shaped section: a power above 1 narrows the dorsal and ventral keels.
+ cross=s.get('crossPower',1)
+ def section(q):return max(0,1-q*q)**(cross/2)
  def trunk_thickness(t):
   # A narrow continuous peduncle meets the thin tail membrane. Keep the
   # head and full trunk dimensions; remove only the abrupt rear end-cap lip.
   u=max(0,min(1,t/.12));u=u*u*(3-2*u)
+  if 'thickness' in s:
+   # Width traced from a dorsal plate, closed smoothly at the tail end-cap.
+   w=float(np.interp(begin+t*length,[p[0] for p in s['thickness']],[p[1] for p in s['thickness']]))
+   v=max(0,min(1,t/.06));return width*w*(.02+.98*v*v*(3-2*v))
   return width*(.004+.096*u+.90*math.sin(math.pi*t)**.62)
  def surface(px,py):
   top=interp(s['top'],px);bottom=interp(s['bottom'],px);mid=(top+bottom)/2;radius=max(1,(bottom-top)/2)
   t=max(0,min(1,(px-begin)/length));thickness=trunk_thickness(t)
-  return thickness*math.sqrt(max(0,1-((py-mid)/radius)**2))
- vertices=[];uvs=[];faces=[];rings=88;sides=48
+  return thickness*section((py-mid)/radius)
+ vertices=[];uvs=[];faces=[];rings=s.get("rings",88);sides=s.get("sides",48)
  for i in range(rings+1):
   px=begin+length*i/rings;top=interp(s['top'],px);bottom=interp(s['bottom'],px);mid=(top+bottom)/2;radius=(bottom-top)/2
   for j in range(sides):
-   a=2*math.pi*j/sides;py=mid-radius*math.sin(a);t=i/rings;depth=math.cos(a)*trunk_thickness(t)
+   a=2*math.pi*j/sides;py=mid-radius*math.sin(a);t=i/rings;depth=math.copysign(section(math.sin(a)),math.cos(a))*trunk_thickness(t)
    vertices.append(pos(px,py,depth));uvs.append(uv(px,py))
    if i<rings:
     n=i*sides+j;nn=i*sides+(j+1)%sides;faces.append((n,n+sides,nn+sides,nn))
  # Close the tail; the head instead folds into a real recessed oral cavity.
+ # Behind a tail fin centred in the peduncle (finDepth 0) the cap is flat
+ # shaded: smoothed with the body it tilted the last ring's normals backward,
+ # a dark band where the fin begins.
  px=begin;py=(interp(s['top'],px)+interp(s['bottom'],px))/2;center=len(vertices);vertices.append(pos(px,py));uvs.append(uv(px,py))
+ cap=range(len(faces),len(faces)+sides) if not s.get('finDepth',.001) else ()
  for j in range(sides):faces.append((center,j,(j+1)%sides))
  colors=[(1,1,1,1)]*len(vertices)
  top=interp(s['top'],end);bottom=interp(s['bottom'],end);mid=(top+bottom)/2;radius=(bottom-top)/2
  previous=rings*sides
- for offset,ratio,shade in [( .005,.88,1),(.002,.59,.55),(-.023,.28,.065)]:
-  start=len(vertices)
+ # Lip rim, inward fold and oral cavity: offset beyond the snout, radius ratio,
+ # shade and an optional height ratio (below 1, pursed lips meet in a slit).
+ for offset,ratio,shade,*squash in s.get('lipRings',[( .005,.88,1),(.002,.59,.55),(-.023,.28,.065)]):
+  start=len(vertices);squash=squash[0] if squash else 1
   for j in range(sides):
-   a=2*math.pi*j/sides;py=mid-radius*ratio*math.sin(a)
+   a=2*math.pi*j/sides;py=mid-radius*ratio*squash*math.sin(a)
    vertices.append(pos(end+offset*length,py,math.cos(a)*trunk_thickness(1)*ratio));uvs.append(uv(end-7,mid-radius*.85*math.sin(a)));colors.append((shade,shade,shade,1))
    faces.append((previous+j,start+j,start+(j+1)%sides,previous+(j+1)%sides))
   previous=start
@@ -94,11 +109,14 @@ for species,s in DATA.items():
  vertex=nodes.new('ShaderNodeVertexColor');vertex.layer_name='Oral depth'
  texture=next(n for n in nodes if n.type=='TEX_IMAGE');mix=nodes.new('ShaderNodeMixRGB');mix.blend_type='MULTIPLY';mix.inputs[0].default_value=1
  bodySkin.node_tree.links.new(texture.outputs['Color'],mix.inputs[1]);bodySkin.node_tree.links.new(vertex.outputs['Color'],mix.inputs[2]);bodySkin.node_tree.links.new(mix.outputs[0],nodes.get('Principled BSDF').inputs['Base Color'])
- body=make_mesh('body',vertices,faces,uvs,bodySkin)
+ body=make_mesh('body',vertices,faces,uvs,bodySkin,set(cap))
  colorLayer=body.data.color_attributes.new(name='Oral depth',type='FLOAT_COLOR',domain='POINT')
  for i,color in enumerate(colors):colorLayer.data[i].color=color
  objects.append(body)
- def fin_mesh(name,polygon,side=0,pivot=None):
+ def fin_mesh(name,polygon,side=0,pivot=None,remap=None):
+  # Optional texture source: {'from':root px,'to':source px,'scale':k} maps a fin
+  # the plate shows folded onto a matching region of another fin's membrane.
+  uvAt=(lambda x,y:uv(remap['to'][0]+(x-remap['from'][0])*remap['scale'],remap['to'][1]+(y-remap['from'][1])*remap['scale'])) if remap else uv
   # Concave fins are tessellated without a fan crossing the fork/edge.
   control=[Vector((float(x),float(y),0)) for x,y in polygon];p=[]
   # Rounded free margins retain the traced locations without angular cardboard corners.
@@ -114,13 +132,15 @@ for species,s in DATA.items():
    else:
     n=len(v)
     for q in [a,b,c]:
-     px,py=q.x,q.y;depth=.001
+     # finDepth 0 centres a tail fin in the peduncle, which then tapers into it
+     # evenly from both sides instead of ending in an edge in front of it on one.
+     px,py=q.x,q.y;depth=s.get('finDepth',.001)
      if side:
       depth=side*max(surface(px,py)+.0005,surface(pivot[0],pivot[1])+.0005+max(0,pivot[0]-px)/length*.15)
      p3=pos(px,py,depth)
      if pivot:
       anchor=pos(pivot[0],pivot[1],side*(surface(pivot[0],pivot[1])+.0005));p3=tuple(p3[k]-anchor[k] for k in range(3))
-     v.append(p3);tex.append(uv(px,py))
+     v.append(p3);tex.append(uvAt(px,py))
     f.append((n,n+1,n+2))
   for t in triangles:tri(*[p[q] if isinstance(q,int) else q for q in t],2 if not side else 1)
   ob=make_mesh(name,v,f,tex,pectoralFin if side else fin)
@@ -134,17 +154,35 @@ for species,s in DATA.items():
   px=dorsal[0][0]+(dorsal[-1][0]-dorsal[0][0])*i/cols
   lower=interp(s['top'],px)+3
   upper=float(np.interp(px,[p[0] for p in dorsal],[p[1] for p in dorsal]))
-  fade=min(1,i/cols/.045,(1-i/cols)/.045);fade=fade*fade*(3-2*fade);upper=lower+(upper-lower)*fade
+  # A rear lobe that overhangs the peduncle needs a shorter rear fade.
+  rearFade,frontFade=s.get('dorsalFade',[.045,.045])
+  fade=min(1,i/cols/rearFade,(1-i/cols)/frontFade);fade=fade*fade*(3-2*fade);upper=lower+(upper-lower)*fade
   for j in range(rows+1):
    t=j/rows;py=lower+(upper-lower)*t;v.append(pos(px,py,math.sin(t*math.pi)*.002));tex.append(uv(px,py))
    if i<cols and j<rows:
     a=i*(rows+1)+j;f.append((a,a+1,a+rows+2,a+rows+1))
  objects.append(make_mesh('fin_1',v,f,tex,fin))
+ if 'analRibbon' in s:
+  # Anal ribbon rooted continuously along the belly, like the dorsal: columns
+  # run from just inside the body edge to the traced outer margin, so the fin
+  # stays attached whatever the outline's shape.
+  anal=s['analRibbon'];v=[];tex=[];f=[];cols=220;rows=9
+  rearFade,frontFade=s.get('analFade',[.045,.045])
+  for i in range(cols+1):
+   px=anal[0][0]+(anal[-1][0]-anal[0][0])*i/cols
+   root=interp(s['bottom'],px)-3
+   edge=float(np.interp(px,[p[0] for p in anal],[p[1] for p in anal]))
+   fade=min(1,i/cols/rearFade,(1-i/cols)/frontFade);fade=fade*fade*(3-2*fade);edge=root+(edge-root)*fade
+   for j in range(rows+1):
+    t=j/rows;py=root+(edge-root)*t;v.append(pos(px,py,math.sin(t*math.pi)*.002));tex.append(uv(px,py))
+    if i<cols and j<rows:
+     a=i*(rows+1)+j;f.append((a,a+rows+1,a+rows+2,a+1))
+  objects.append(make_mesh('fin_2',v,f,tex,fin))
  for i,polygon in enumerate(s['fins']):
-  if i!=1:objects.append(fin_mesh('fin_'+str(i),polygon))
+  if i!=1 and not (i==2 and 'analRibbon' in s):objects.append(fin_mesh('fin_'+str(i),polygon))
  for side in [-1,1]:
   objects.append(fin_mesh('pectoral_'+str(side),s['pec'],side,s['pec'][0]))
-  if 'pelvic' in s:objects.append(fin_mesh('pelvic_'+str(side),s['pelvic'],side,s['pelvic'][0]))
+  if 'pelvic' in s:objects.append(fin_mesh('pelvic_'+str(side),s['pelvic'],side,s['pelvic'][0],s.get('pelvicTexture')))
   # Thin conformed operculum over the same UV detail; opens subtly at runtime.
   gx,gy0,gy1=s['gill'];v=[];tex=[];f=[]
   for row in range(19):
@@ -158,13 +196,31 @@ for species,s in DATA.items():
   # A shallow, UV-matched corneal dome retains the reference iris instead of
   # bulging generic spheres. Both sides are fully modeled.
   ex,ey,er=s['eye'];v=[];tex=[];f=[]
-  for row in range(9):
-   rr=row/8
-   for col in range(33):
-    a=col/32*2*math.pi;px=ex+er*rr*math.cos(a);py=ey+er*rr*math.sin(a)
-    v.append(pos(px,py,side*(surface(px,py)+.001+s.get('eyeDome',.0025)*(1-rr*rr))));tex.append(uv(px,py))
-    if row<8 and col<32:
-     a0=row*33+col;ids=(a0,a0+1,a0+34,a0+33);f.append(ids if side>0 else tuple(reversed(ids)))
+  if 'eyeTop' in s:
+   # Eyes that bulge from the top of the head (gobies): a raised spherical cap
+   # set into the head surface, facing up and outward, textured radially from
+   # the plate's own eye. tilt is the facing angle above horizontal-lateral.
+   # lateral: the eyes' spacing as a fraction of the head's half-width there.
+   tilt,bulge,lateral=math.radians(s['eyeTop'][0]),s['eyeTop'][1],s['eyeTop'][2];R=er/length
+   base=Vector(pos(ex,ey+er*.35,side*lateral*trunk_thickness((ex-begin)/length)));n=Vector((0,math.sin(tilt),side*math.cos(tilt)));t1=Vector((1,0,0));t2=n.cross(t1)
+   for row in range(13):
+    rr=row/12
+    for col in range(41):
+     a=col/40*2*math.pi;c=math.cos(a);d=math.sin(a)
+     q=base+t1*(R*rr*c)+t2*(R*rr*d*side)+n*(R*bulge*math.sqrt(max(0,1-rr*rr)))
+     # The cap maps to the iris and pupil; the fleshy rim stays on the head.
+     k=s['eyeTop'][3] if len(s['eyeTop'])>3 else 1
+     v.append(tuple(q));tex.append(uv(ex+er*k*rr*c,ey-er*k*rr*d))
+     if row<12 and col<40:
+      a0=row*41+col;ids=(a0,a0+1,a0+42,a0+41);f.append(tuple(reversed(ids)) if side>0 else ids)
+  else:
+   for row in range(9):
+    rr=row/8
+    for col in range(33):
+     a=col/32*2*math.pi;px=ex+er*rr*math.cos(a);py=ey+er*rr*math.sin(a)
+     v.append(pos(px,py,side*(surface(px,py)+.001+s.get('eyeDome',.0025)*(1-rr*rr))));tex.append(uv(px,py))
+     if row<8 and col<32:
+      a0=row*33+col;ids=(a0,a0+1,a0+34,a0+33);f.append(ids if side>0 else tuple(reversed(ids)))
   objects.append(make_mesh('eye_'+str(side),v,f,tex,eyeMat))
  # Export each species at origin; one editable master stores all six collections.
  bpy.ops.object.select_all(action='DESELECT')
@@ -173,6 +229,8 @@ for species,s in DATA.items():
  bpy.ops.export_scene.gltf(filepath=str(OUT/(species+'.glb')),export_format='GLB',use_selection=True,export_yup=True,export_apply=True,export_animations=False,export_cameras=False,export_lights=False,export_image_format='JPEG',export_jpeg_quality=95,export_vertex_color='ACTIVE')
  triangles=sum(sum(len(p.vertices)-2 for p in o.data.polygons) for o in objects)
  metadata[species]={'mouth':pos(*s['mouth']),'triangles':triangles,'meshes':len(objects),'reference':reference+'.png','authoring':'Blender '+bpy.app.version_string,'bodyLength':1,'width':width,'upper':[pos(x,y)[:2] for x,y in s['top']],'lower':[pos(x,y)[:2] for x,y in s['bottom']]}
+ # Lowest reach of the paired pelvic fins, so bottom-dwellers can stand on them.
+ if 'pelvic' in s and s.get('perch'):metadata[species]['footDepth']=-min(pos(x,y)[1] for x,y in s['pelvic'])
  collection=bpy.data.collections.new(species);scene.collection.children.link(collection)
  for obj in objects:
   for coll in list(obj.users_collection):coll.objects.unlink(obj)

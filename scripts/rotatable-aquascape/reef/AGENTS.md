@@ -7,3 +7,14 @@ Keep habitat selection and on-demand loading in the storefront wrapper. Preserve
 Use shared water/glass/lighting components without changing freshwater behavior.
 Run the reef behavior/browser checks and inspect front, oblique and mobile images
 before publishing. Do not spend money. Reef behavior parameters are illustrative.
+
+Black tang and stocking (October 19, 2026): the black tang (`rostratum`) and the
+Add & remove fish panel run on jez237 and, approved by the user the same day, in
+the Hidden Reef storefront too. The black tang's five
+fal GPT Image generations were made at the user's request; that request does
+not authorize further paid generations.
+
+Reef options (October 19, 2026): kole tang, foxface, coral beauty, flame angel,
+six-line wrasse and yellow watchman goby are Add & remove fish
+options, loaded on demand. Their 44 fal generations were made at the user's
+request ("full set, highest quality"); that does not authorize further spending.

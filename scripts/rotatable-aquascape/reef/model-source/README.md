@@ -1,5 +1,74 @@
 # Marine fish reference and Blender sources
 
+## Reef options — October 19, 2026
+
+Six more species (`strigosus`, `vulpinus`, `bispinosa`, `loricula`,
+`hexataenia`, `cinctus`) follow the black tang's route, now generalized:
+`prepare_plates.py <species> [--edit <raw edit>]` composites a clean flank and
+pads textures (backdrop removed by a fitted color model), and
+`trace_profiles.py [species]` writes profiles from the hand-read landmarks in
+`references/trace-specs.json`, with review overlays in `proofs/`. Rebuild one:
+
+```powershell
+python reef/model-source/trace_profiles.py loricula
+& 'C:/Program Files/Blender Foundation/Blender 5.2/blender.exe' --background --python reef/model-source/build_marine_fish.py -- --only loricula
+```
+
+Prompts and request ids: `references/reef-options-prompts.md` and
+`references/fal-requests.json`. Each species' editable `<species>.blend` is saved
+beside the build script.
+
+Plate preparation settings (rerun after a trace change that `--tint-fins` reads):
+
+```powershell
+python reef/model-source/prepare_plates.py vulpinus --distance 16 --tint-fins --extend-patch 2116,2190,810,870
+python reef/model-source/prepare_plates.py strigosus --saturation 1.5
+python reef/model-source/prepare_plates.py loricula   # likewise bispinosa, hexataenia, cinctus
+```
+
+Close-up pass (October 19, 2026), against the user's foxface reference sheet:
+
+- Foxface snout traced as a taper to small pursed lips (`lipRings`, with an
+  optional fourth value: the ring's height ratio, below 1 a pressed slit). The
+  dark lips come from `--extend-patch`, which repeats the skin behind the
+  plate's pale snout tip over it. The dome covers the whole iris, centred on
+  the pupil.
+- Its back and belly near the tail follow the real peduncle: the plate's soft
+  dorsal and anal lobes overhang it with backdrop between, which the old trace
+  had counted as body (a deep peduncle with blue-gray patches).
+  `--tint-fins` recolors dorsal, anal and caudal membranes from the dark backdrop's
+  olive to the body's yellow; short `dorsalFade`/`analFade` keep the lobes'
+  near-vertical trailing margins.
+- `finDepth: 0` (foxface, coral beauty, flame angel, kole tang) centres the tail
+  fin in the peduncle and drops the flat tail cap, whose normals shaded a dark
+  band where the fin begins; these species' unpaired fins render opaque.
+- `bridgeMargin` widens the top-view spans skipped for spread pectorals and
+  eyes, and fills each gap with a slope-matched cubic plus light smoothing. A
+  sample just outside a span had made a one-column width spike: the vertical
+  line on the coral beauty (and flame angel, goby, kole tang). `width` was
+  rescaled by the old/new peak so overall thickness is unchanged.
+
+## Black tang — October 19, 2026
+
+`rostratum.glb` is *Zebrasoma rostratum*, authored from fal `openai/gpt-image-2`
+plates generated at the user's request: a lateral plate, a masked clean-flank
+edit, and dorsal and front views. `references/rostratum-prompts.md` has every
+prompt, the rejected first plate and the modeling choices;
+`references/fal-requests.json` has the request ids. Rebuild only this model:
+
+```powershell
+python reef/model-source/prepare_plates.py rostratum --luminance 105 --paint-scalpel 626,836,42,16  # add --edit <raw> after a new edit
+python reef/model-source/trace_rostratum.py
+& 'C:/Program Files/Blender Foundation/Blender 5.2/blender.exe' --background --python reef/model-source/build_marine_fish.py -- --only rostratum
+```
+
+Its profile uses optional keys that other species leave unset, so their builds
+are unchanged: `texture`/`skinTexture` (edge-padded copies of plates shot on
+gray), `thickness` (traced width along the body), `crossPower` (lens-shaped
+section), `dorsalFade` and `rings`/`sides` (26,672 source triangles). At runtime
+the near-black skin gets brighter albedo, relief from its own scale texture and
+a soft velvet sheen. `rostratum.blend` is the editable source.
+
 ## Golden butterflyfish replacement — September 27, 2026
 
 The former yellow tang slot now loads `semilarvatus.glb`, a separately authored

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {stripTypeScriptTypes} from 'node:module';
 import vm from 'node:vm';
-const source=stripTypeScriptTypes(readFileSync(new URL('../reef/ReefShowroom.ts',import.meta.url),'utf8')).replace('export function','function')+';this.install=installReefShowroom;';
+const source=stripTypeScriptTypes(readFileSync(new URL('../reef/ReefShowroom.ts',import.meta.url),'utf8')).replaceAll('export function','function')+';this.install=installReefShowroom;';
 test('reef bridge validates origin, parent, channel and visibility type',()=>{
  const listeners={},sent=[],calls=[],parent={postMessage:m=>sent.push(m)};
  const context={URLSearchParams,location:{search:'?showroom=hidden-reef',origin:'https://reef.test'},parent,window:{addEventListener:(k,fn)=>listeners[k]=fn},document:{body:{classList:{add(){}}},querySelectorAll:()=>[],querySelector:()=>({setAttribute(){}})},addEventListener:(k,fn)=>listeners[k]=fn};
