@@ -29,3 +29,16 @@ test('the bird renderer draws live Sunny Beach gulls and validates their bank be
  assert.throws(()=>view.update(last.p,last.r.map((w,i)=>i===0x44/4?4:w)),/five loaded geometry/);
  view.dispose();assert.throws(()=>view.update(last.p,last.r),/disposed/);assert.equal(root.children.length,0);
 });
+
+test('Glacier Coast king penguins draw in their original part frames through the rigid renderer',async()=>{
+ const {makeNativePenguinParts}=await import('../native-penguin-model.js'),{createNativeRacePilot}=await import('../native-race-pilot.js');
+ const p=makeNativePenguinParts(),bounds={8:[[-19,132],[-59,26]],12:[[-120,181],[-71,54]],20:[[10,20],[-45,15]]};
+ for(const [o,[[x0,x1],[y0,y1]]]of Object.entries(bounds)){const g=p.part(Number(o)).geometry;g.computeBoundingBox();const b=g.boundingBox;
+  assert.ok(b.min.x>=x0-4&&b.max.x<=x1+4&&b.min.y>=y0-4&&b.max.y<=y1+4,'penguin part '+o);}
+ p.dispose();
+ let live=null;const s=createRace({mode:'time',physics:'native',course:getCourse('glacier',0),difficulty:0,nativeCourseActors:{assets:{8:bank(8)},onDisplay:(q,r)=>{if(!live&&q.draws.length)live={q,r};}}});
+ const r=s.racers[0],pilot=createNativeRacePilot({course:s.course});for(let i=0;i<120*30&&!live;i++)stepRace(s,()=>pilot.input(s,r),1/30);
+ assert.ok(live,'a penguin reached the display');const root=new T.Group(),view=makeNativeBirdRenderer(root);
+ assert.equal(view.update(live.q,live.r).parts,live.q.draws.length);assert.deepEqual(view.snapshot().species,['penguin']);
+ assert.throws(()=>view.update(live.q,live.r.map((w,i)=>i===0x44/4?5:w)),/four loaded geometry/);view.dispose();
+});

@@ -1,5 +1,19 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — Glacier Coast king penguins
+
+Glacier Coast's five special actors (bank 8, draw type 13) are swimming king
+penguins: a torpedo body (part 12, back +Y), a head with a long bill (part 8),
+flat flippers (16) and webbed feet (20). They already produced draws through
+the special-actor display path when in view; nothing rendered them. They now
+draw as rigid high-resolution penguins after the original palette (black
+back, white belly, yellow-orange chest and ear patches) through the shared
+rigid-part renderer that also draws gulls and mallards. In game all five
+were visible at 59–60 fps. With this, every original actor on Dolphin Park,
+Sunny Beach, Sunset Bay, Drake Lake and Glacier Coast has a high-resolution
+model; Marine Fortress, Port Blue and Southern Island still need their extra
+actor route families.
+
 ## Unpublished — Drake Lake lake fish
 
 Bank 4, Drake Lake's swimmers, is one long silvery lake fish built like the
