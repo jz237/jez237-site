@@ -144,9 +144,21 @@ test('native Time trial runs the scene-effects owner without course actors and k
  h.advanceSceneEffects=()=>{spray.advance(s.nativeLaunch.sprayInputs(),s.nativeLaunch.cameraStorage.read());advance();assert.deepEqual(h.sprayLevels(),spray.levels());if(spray.levels()[0].left)audible++;};
  for(let i=0;i<900;i++)stepRace(s,{throttle:1,steer:i%240<120?.4:-.3},1/60);
  assert.equal(shown,h.world.frames);assert.ok(audible>20);
- for(const options of [{mode:'time',course:getCourse('amber',1)},{mode:'versus',physics:'native',course:getCourse('amber',1)},{mode:'practice',physics:'native',course:getCourse('practice'),nativeCourseActors:{assets,onDisplay(){}}}])
+ for(const options of [{mode:'time',course:getCourse('amber',1)},{mode:'stunt',course:getCourse('amber',1)},{mode:'versus',physics:'native',course:getCourse('amber',1)},{mode:'practice',physics:'native',course:getCourse('practice'),nativeCourseActors:{assets,onDisplay(){}}}])
   assert.throws(()=>createRace({...options,nativeSceneEffects:{onDisplay(){}}}),/Separate scene effects/);
  assert.throws(()=>createRace({mode:'time',physics:'native',course:getCourse('amber',1),difficulty:1,nativeSceneEffects:{onDisplay:1}}),/display consumer/);
+});
+
+test('native Stunt runs the scene-effects owner in place of the human spray owner, away from Dolphin Park',()=>{
+ for(const id of ['citadel','port']){
+  let shown=0;const s=createRace({mode:'stunt',physics:'native',course:getCourse(id,1),difficulty:1,nativeSceneEffects:{onDisplay:()=>shown++}}),h=s.nativeHost;
+  assert.equal(h.spray,undefined);assert.equal(h.effectStartup.state.effectWords0790[0],1);assert.equal(h.sprayLevels().length,1);
+  const spray=createNativeRaceSpray({adapters:h.world.adapters,field:s.raceWater.field,courseIndex:s.course.sourceWaterCourseIndex}),advance=h.advanceSceneEffects;let audible=0;
+  h.advanceSceneEffects=()=>{spray.advance(s.nativeLaunch.sprayInputs(),s.nativeLaunch.cameraStorage.read());advance();assert.deepEqual(h.sprayLevels(),spray.levels());if(spray.levels()[0].left)audible++;};
+  for(let i=0;i<600;i++)stepRace(s,{throttle:1,steer:i%240<120?.4:-.3},1/60);
+  assert.equal(shown,h.world.frames);assert.ok(audible>20,id+' spray levels exercised '+audible);assert.ok(h.lastStunt,'Stunt judging still runs');
+ }
+ assert.throws(()=>createRace({mode:'stunt',physics:'native',course:getCourse('practice'),nativeSceneEffects:{onDisplay(){}}}),/Separate scene effects/);
 });
 
 test('native Championship runs one four-slot scene-effects owner and shares its effect storage between commits',()=>{

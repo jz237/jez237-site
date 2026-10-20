@@ -249,6 +249,8 @@ function start(nextRound=false,skipWarmup=false,inspection={}){
  $('error').textContent='';
  const dolphinScene=!demo&&selectedMode==='practice'&&selectedCourse==='practice'&&selectedNativePhysics();
  const originalTime=!demo&&['time','championship'].includes(selectedMode)&&selectedOriginalPhysics();
+ // Mode11 runs the same B2ABC owner; the Dolphin Park venue needs its actors.
+ const originalStunt=!demo&&selectedMode==='stunt'&&selectedCourse!=='practice'&&selectedOriginalPhysics();
  // A cup round's course comes from its continuation, or the class's first course.
  const actorCourse=dolphinScene?0:!originalTime?null:selectedMode==='time'?getCourse(selectedCourse).sourceWaterCourseIndex:
   nextRound&&nativeCup?.continuation?nativeCup.continuation.courseIndex:NATIVE_CHAMPIONSHIP_SETUP_DATA.courseOrderAc14[Math.min(selectedDifficulty,2)].find(i=>i>0);
@@ -267,7 +269,7 @@ function start(nextRound=false,skipWarmup=false,inspection={}){
  const sourceClock=()=>BigInt(Math.floor(performance.now()*46875));
  const nativeCourseActors=actorBanks?{assets:nativeActorAssets.get(actorKey),onDisplay:(presentation,resources)=>nativeDolphinRenderer.update(presentation,resources),
   onEffectsDisplay:presentation=>nativeEffectRenderer.update(presentation),sourceClock}:undefined;
- const nativeSceneEffects=originalTime&&!nativeCourseActors?{onDisplay:presentation=>nativeEffectRenderer.update(presentation),sourceClock}:undefined;
+ const nativeSceneEffects=(originalTime||originalStunt)&&!nativeCourseActors?{onDisplay:presentation=>nativeEffectRenderer.update(presentation),sourceClock}:undefined;
  if(nativeCourseActors||nativeSceneEffects)nativeEffectRenderer=makeNativeEffectRenderer(nativeEffectRoot);
  if(nativeCourseActors)nativeDolphinRenderer=makeNativeCourseActorView(nativeDolphinRoot);
  try{return startPrepared(nextRound,skipWarmup,inspection,nativeCourseActors,nativeSceneEffects);}

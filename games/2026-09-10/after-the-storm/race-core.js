@@ -78,8 +78,8 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
  const actorCourse=nativePractice||physics==='native'&&['time','championship'].includes(mode)&&NATIVE_ACTOR_COURSES.includes(course.sourceWaterCourseIndex);
  if(nativeCourseActors!==undefined&&(!actorCourse||nativeInitialRaceState!==undefined||typeof nativeCourseActors?.onDisplay!=='function'))
   throw new RangeError('Course actor presentation requires fresh solo native Practice, or a native Time trial or Championship on an original actor course');
- if(nativeSceneEffects!==undefined&&(nativeCourseActors!==undefined||physics!=='native'||!['time','championship'].includes(mode)))
-  throw new RangeError('Separate scene effects are for native Time trial and Championship; Dolphin Practice supplies them with its actors');
+ if(nativeSceneEffects!==undefined&&(nativeCourseActors!==undefined||physics!=='native'||!['time','stunt','championship'].includes(mode)||mode==='stunt'&&course.sourceWaterCourseIndex===0))
+  throw new RangeError('Separate scene effects are for native Time trial, Stunt and Championship; Dolphin Practice supplies them with its actors');
  const nativeChampionship=physics==='native'&&mode==='championship';
  if(nativeChampionshipContinuation!==undefined&&(!nativeChampionship||course.sourceWaterCourseIndex!==nativeChampionshipContinuation?.courseIndex||
    Math.min(difficulty,2)!==nativeChampionshipContinuation.sourceDifficulty||!!course.reverse!==nativeChampionshipContinuation.reverse||nativeRecordSession!==undefined))

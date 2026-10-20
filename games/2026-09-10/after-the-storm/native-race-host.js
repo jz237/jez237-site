@@ -96,8 +96,9 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
    typeof courseActors?.onDisplay!=='function'||typeof courseActors?.audioContext!=='function'||typeof courseActors?.onEffects!=='function'))
   throw new TypeError('Live course actors require a solo ordinary race and explicit display/audio consumers');
  // AE7C4 reads the initialized actor pool for Dolphin's extra effect slot;
- // other courses have none. Two-player views and Stunt scenes stay separate.
- if(courseEffects!==undefined&&(!sourceSchedule||!raceRuntime.ordinary||racers.filter(r=>r.human).length!==1||
+ // other courses have none. Solo Stunt (mode11) runs the same owner; two-
+ // player views stay separate.
+ if(courseEffects!==undefined&&(!sourceSchedule||racers.filter(r=>r.human).length!==1||
    course.sourceWaterCourseIndex===0&&courseActors===undefined||typeof courseEffects?.onDisplay!=='function'||
    courseEffects.sourceClock!==undefined&&typeof courseEffects.sourceClock!=='function'))
   throw new TypeError('Live scene effects require a solo ordinary race, Dolphin\'s course actors and an explicit display consumer');

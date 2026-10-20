@@ -11,5 +11,5 @@ test('native championship reuses the ordinary object and decoration displays on 
   for(let i=0;i<20;i++)stepRace(s,{throttle:1},1/30);
   assert.ok(s.nativeHost.world.frames>0,id);
  }
- assert.throws(()=>createRace({mode:'stunt',physics:'native',course:getCourse('greyhaven'),nativeSceneEffects:{onDisplay(){}}}),/Separate scene effects/);
+ assert.throws(()=>createRace({mode:'stunt',physics:'native',course:getCourse('practice'),nativeSceneEffects:{onDisplay(){}}}),/Separate scene effects/);
 });

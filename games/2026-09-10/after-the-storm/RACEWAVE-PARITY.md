@@ -1,5 +1,16 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — original wake and spray in Original Stunt
+
+Original Stunt (mode 11) now runs the same B2ABC/B305C scene-effects owner as
+Time Trial and Championship on all eight stunt courses outside Dolphin Park,
+replacing the simpler human-only spray reconstruction. Audio spray levels
+(52480) match that reconstruction on every frame across all eight courses,
+Stunt judging and rings are unchanged, and browser runs on Port Blue and
+Glacier Coast hold 60 fps. The Dolphin Park venue still uses the simpler owner,
+because its effect slot needs the dolphin actor pool. High-resolution
+presentation is preserved.
+
 ## Unpublished — Port Blue submarine; every course actor modelled
 
 Port Blue's special actor (bank 7) is a red submarine cruising 3–10 m below
