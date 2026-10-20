@@ -90,7 +90,8 @@ for species,s in DATA.items():
  colors=[(1,1,1,1)]*len(vertices)
  top=interp(s['top'],end);bottom=interp(s['bottom'],end);mid=(top+bottom)/2;radius=(bottom-top)/2
  previous=rings*sides
- for offset,ratio,shade in [( .005,.88,1),(.002,.59,.55),(-.023,.28,.065)]:
+ # Lip rim, inward fold and oral cavity: offset beyond the snout, radius ratio, shade.
+ for offset,ratio,shade in s.get('lipRings',[( .005,.88,1),(.002,.59,.55),(-.023,.28,.065)]):
   start=len(vertices)
   for j in range(sides):
    a=2*math.pi*j/sides;py=mid-radius*ratio*math.sin(a)

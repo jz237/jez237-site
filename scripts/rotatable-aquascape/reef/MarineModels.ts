@@ -54,6 +54,32 @@ function scaleNormalMap(plateW:number,plateH:number,scalePx:number,headX:[number
  return tex;
 }
 let scaleNormals:T.DataTexture|undefined;
+/** A seamless tile of the same imbricate scales (cells x cells per tile), for
+ * species scaled all over; each use gets its own repeat. */
+function scaleNormalTile(cells:number){
+ const n=256,s=n/cells,height=new Float32Array(n*n),wrap=(d:number)=>((d%n)+n*1.5)%n-n/2;
+ // Living scales are not a lattice: jitter each scale's centre, size and relief
+ // (deterministic, so every load matches) to read as an organic reticulation.
+ let seed=7;const rand=()=>((seed=Math.imul(seed,1664525)+1013904223>>>0)/4294967296);
+ const jitter=Array.from({length:cells*cells},()=>[(rand()-.5)*.36,(rand()-.5)*.3,.82+rand()*.3,.7+rand()*.5]);
+ for(let y=0;y<n;y++)for(let x=0;x<n;x++){
+  let top=0;
+  for(let r=0;r<cells;r++)for(let c=0;c<cells;c++){
+   const [jx,jy,size,relief]=jitter[r*cells+c];
+   const dx=wrap(x-(c+.5+(r&1)*.5+jx)*s)/(s*.66*size),dy=wrap(y-(r+.5+jy)*s)/(s*.58*size),q=Math.hypot(dx,dy);
+   if(q<1)top=Math.max(top,(1-q*q)*(.55-.45*dx)*relief);
+  }
+  height[y*n+x]=top;
+ }
+ const data=new Uint8Array(n*n*4),at=(i:number,j:number)=>height[((j+n)%n)*n+(i+n)%n];
+ for(let y=0;y<n;y++)for(let x=0;x<n;x++){
+  const nx=-(at(x+1,y)-at(x-1,y))*2.2,ny=-(at(x,y+1)-at(x,y-1))*2.2,l=Math.hypot(nx,ny,1),k=(y*n+x)*4;
+  data[k]=Math.round((nx/l*.5+.5)*255);data[k+1]=Math.round((ny/l*.5+.5)*255);data[k+2]=Math.round((1/l*.5+.5)*255);data[k+3]=255;
+ }
+ const tex=new T.DataTexture(data,n,n);tex.wrapS=tex.wrapT=T.RepeatWrapping;tex.flipY=false;
+ tex.magFilter=T.LinearFilter;tex.minFilter=T.LinearMipmapLinearFilter;tex.generateMipmaps=true;tex.anisotropy=8;tex.needsUpdate=true;
+ return tex;
+}
 /** The established display population. The black tang is gallery-only for now. */
 export const baseMarineSpecies:MarineSpecies[]=['tang','semilarvatus','clown','anthias','chromis','gramma','goby'];
 /** Geometry and embedded textures are shared between inhabitants. Vertex waves,
@@ -96,13 +122,22 @@ export async function loadMarineModels(species:MarineSpecies[]=baseMarineSpecies
     material.color.setScalar(skin?1.45:1.25);material.roughness=skin?.48:.55;
     if(skin&&material.map){material.bumpMap=material.map;material.bumpScale=1.1;material.sheen=.35;material.sheenRoughness=.35;material.sheenColor.set('#6f86d8');}
    }
+   if(species==='rostratum'&&label.startsWith('eye')){
+    // A wet, rounded dark eye with a crisp highlight (a soft coat, not chrome).
+    material.color.setScalar(1);material.roughness=.12;material.clearcoat=.55;material.clearcoatRoughness=.05;material.envMapIntensity=.28;
+   }
    if(species==='rostratum'&&!label.startsWith('eye')){
     // A near-black plate needs more reflected light for its scales and rays to
-    // read. Velvet sheen and relief from the plate's own scale pattern stand in
-    // for the soft skin of the living fish; no extra texture is downloaded.
+    // read. Fine imbricate scales in relief (about 11 plate px each, the whole
+    // body including the head) and a soft velvet sheen, kept low so the back
+    // stays dark from above; no extra texture is downloaded.
     const skin=label==='body'||label.startsWith('gill');
-    material.color.setScalar(skin?1.5:1.3);material.roughness=skin?.52:.56;
-    if(skin&&material.map){material.bumpMap=material.map;material.bumpScale=1.4;material.sheen=.55;material.sheenRoughness=.45;material.sheenColor.set('#5b544c');}
+    material.color.setScalar(skin?1.3:1.3);material.roughness=skin?.5:.56;
+    if(skin&&material.map){
+     const {width,height}=material.map.image as {width:number;height:number},tile=scaleNormalTile(16);
+     tile.repeat.set(width/(16*11),height/(16*11));material.normalMap=tile;material.normalScale.set(.16,.16);
+     material.sheen=.3;material.sheenRoughness=.4;material.sheenColor.set('#433d37');
+    }
    }
    if(material.map)material.map.anisotropy=8;
    const mesh=new T.Mesh(geometry,material);mesh.castShadow=true;mesh.receiveShadow=true;

@@ -59,10 +59,25 @@ def pad(img, mask, steps=48):
     a[~known] = a[mask].mean(0)
     return Image.fromarray(a.clip(0, 255).astype(np.uint8))
 
+def paint_scalpel(img, cx, cy, rx, ry):
+    """A surgeonfish's caudal spine sits in a white sheath (Zebrasoma rostratum:
+    'a white patch around the spine'). Plates often show only a sliver of it."""
+    a = np.asarray(img, dtype=np.float32).copy(); h, w, _ = a.shape
+    yy, xx = np.mgrid[0:h, 0:w]
+    # Teardrop: fuller toward the head, tapering toward the tail.
+    u = (xx - cx) / rx; ry_local = ry * (0.75 + 0.25 * np.clip(u, -1, 1))
+    q = np.sqrt(u ** 2 + ((yy - cy) / ry_local) ** 2)
+    alpha = np.clip((1 - q) / 0.18, 0, 1)
+    shade = 0.80 + 0.17 * np.clip(1 - q, 0, 1) - 0.08 * np.clip((yy - cy) / ry, 0, 1)
+    white = np.stack([238 * shade, 236 * shade, 228 * shade], -1)
+    a = a * (1 - alpha[..., None]) + white * alpha[..., None]
+    return Image.fromarray(a.clip(0, 255).astype(np.uint8))
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('species'); parser.add_argument('--edit')
     parser.add_argument('--luminance', type=float); parser.add_argument('--distance', type=float, default=40)
+    parser.add_argument('--paint-scalpel', help='cx,cy,rx,ry: paint the white caudal-spine sheath into the skin texture')
     args = parser.parse_args(); k = args.species
     if args.edit:
         original = Image.open(REF / f'{k}.png').convert('RGB')
@@ -70,5 +85,7 @@ if __name__ == '__main__':
         Image.composite(Image.open(args.edit).convert('RGB'), original, alpha).save(REF / f'{k}-skin.png', optimize=True)
     for source, target in [(f'{k}.png', f'{k}-texture.png'), (f'{k}-skin.png', f'{k}-skin-texture.png')]:
         img = Image.open(REF / source).convert('RGB')
-        pad(img, fish_mask(img, args.luminance, args.distance)).save(REF / target, optimize=True)
+        out = pad(img, fish_mask(img, args.luminance, args.distance))
+        if args.paint_scalpel and target.endswith('-skin-texture.png'): out = paint_scalpel(out, *map(float, args.paint_scalpel.split(',')))
+        out.save(REF / target, optimize=True)
     print(f'Prepared {k}: clean flank and padded textures.')

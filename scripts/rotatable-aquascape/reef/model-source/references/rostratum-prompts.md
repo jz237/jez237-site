@@ -68,3 +68,19 @@ Subject: Zebrasoma rostratum, adult black tang (black longnose tang). Deep, stro
 - Natural-history cross-check: https://en.wikipedia.org/wiki/Zebrasoma_rostratum
   (longer "beaked" snout, black body, white patch around the caudal spine and a
   bristle patch in front of it in males).
+
+## Close-up pass against the user's reference sheet (October 19, 2026)
+
+- Snout: the plate's generated fat, rounded lower lip made a bulbous tip; the
+  last snout points are re-traced to the sheet's straight lower jaw line and
+  pointed tip with a small mouth, with smaller lip rings (`lipRings`).
+- Scalpel: the plate showed only a sliver of the caudal spine; the white
+  sheath around it ("a white patch around the spine", Wikipedia) is painted
+  into the skin texture at the sheet's proportions
+  (`prepare_plates.py rostratum --luminance 105 --paint-scalpel 626,836,42,16`).
+- Skin: fine, irregular imbricate scales in relief (a generated tile, about
+  11 plate px per scale) replace bump from the plate's colors, which read as
+  woven fabric up close; the velvet sheen is lower so the back stays dark.
+- Eye: rounder cornea (`eyeDome` .0035) with a glossy wet coat.
+- Body: slightly sharper dorsal and ventral keels (`crossPower` 1.45).
+No new generations were needed.

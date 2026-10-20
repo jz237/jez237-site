@@ -27,7 +27,7 @@ prompt, the rejected first plate and the modeling choices;
 `references/fal-requests.json` has the request ids. Rebuild only this model:
 
 ```powershell
-python reef/model-source/prepare_plates.py rostratum --edit <raw clean-flank edit.png> --luminance 105  # only after a new edit
+python reef/model-source/prepare_plates.py rostratum --luminance 105 --paint-scalpel 626,836,42,16  # add --edit <raw> after a new edit
 python reef/model-source/trace_rostratum.py
 & 'C:/Program Files/Blender Foundation/Blender 5.2/blender.exe' --background --python reef/model-source/build_marine_fish.py -- --only rostratum
 ```
