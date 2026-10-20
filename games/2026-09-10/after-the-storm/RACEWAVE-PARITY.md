@@ -1,5 +1,19 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — Dolphin Park warm-up opens the Normal cup
+
+The original Normal cup order starts at course 0. Its main configuration
+(9345C) enters Dolphin Park in free play (phase 3, simulation 3) for every mode
+except Stunt, and the original object selector and initializers produce
+exactly the Practice objects there in mode 4 (private runs: same object count
+and identical object, collision and matrix hashes). The selector's 8248 flag,
+once taken for a warm-up override, is never written anywhere in the ROM.
+Original Normal Championship now opens with that solo Dolphin Park free ride,
+dolphins and fish included; "Begin championship →" in the pause dialog starts
+round 1 at Sunny Beach, and Restart repeats the warm-up. Not reconstructed: the
+warm-up's own exit through the championship return (801EB91C), which would also
+give round 1 its course introduction; round 1 still uses the direct launch.
+
 ## Unpublished — original wake drawn on the high-resolution water
 
 The original places wake, spray and splash against its physics water plane
