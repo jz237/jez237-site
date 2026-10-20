@@ -207,7 +207,7 @@ export function createNativeRaceContactAudio({players,courseIndex,difficultyWord
   drain(){return queue.splice(0);},
   clearPendingSounds(){effectPoll.clear();queue.length=0;announcer.delay=announcer.delayedHold=0;globals.delay7ce4=0;},
   engineChannels(){return globals.alternateEngine!==0?null:engineChannels.map((c,i)=>({...c,enabled:c.enabled&&audioMode===7&&globals[i?'secondaryMuted':'primaryMuted']===0}));},
-  snapshot(){return {scope:'source-human-race-audio-and-announcer-controls; browser-audio-jitter-poll-phase-and-smoothing',frame,timerFrame,menuFrames,audioMode,globals:{...globals},announcer:{...announcer},
+  snapshot(){return {scope:'source-human-race-audio-and-announcer-controls; browser-audio-jitter-poll-phase-and-smoothing',frame,timerFrame,menuFrames,audioMode,random4562c:jitter(),globals:{...globals},announcer:{...announcer},
    engineChannels:engineChannels.map(c=>({...c})),effectPoll:effectPoll.snapshot(),riderPoll:effectPoll.riderSnapshot(),
    packets:packets.map(p=>p.slice()),motion:motion.map(m=>({...m})),riderWater:riderWater.map(w=>({...w})),pending:queue.length,emitted,dropped};}
  };

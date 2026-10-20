@@ -1,5 +1,22 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — original course wildlife beyond Dolphin Park
+
+Original Time trial and Championship now run the original course actors on
+Sunny Beach, Sunset Bay, Drake Lake and Glacier Coast. In the original their
+secondary/tertiary actor-route pointers (800D635C/800D6384) are null, so
+their actors read only the primary route rows. The per-course actor route
+tables selected by 800E6C78 were exported from the ROM (numeric rows only, a
+private exporter keeps provenance); bird and ice-actor audio now receive the
+audio owner's timing word and mode. Sunset Bay's three dolphins and Sunny
+Beach's six fish render with the existing high-resolution models; Sunny
+Beach's and Drake Lake's birds, Drake Lake's swimmers and Glacier's special
+actors move and drive audio but have no detailed models yet. Marine Fortress,
+Port Blue and Southern Island need their extra route families first.
+Browser checks: Sunset Bay and Sunny Beach Time trials held 60 fps with
+actors and wake; a Championship round with actors, four effect slots and
+four racers ran 33–40 fps for its first nine seconds, then held 60.
+
 ## Unpublished — original wake and spray in Championship; cheaper state copies
 
 Original Championship now runs the full scene-effects owner with four slots,

@@ -5,7 +5,7 @@ import {createNativeRaceLaunchRuntime} from './native-race-launch-runtime.js';
 import {prepareNativeChampionshipWebLaunch,prepareNativeChampionshipConfiguredLaunch} from './native-championship-setup.js';
 import {createNativeRaceContactAudio} from './native-race-contact-audio.js';
 import {prepareNativeHullStartFromMatrix} from './native-hull.js';
-import {createNativeRaceCourseRuntime} from './native-race-course-runtime.js';
+import {createNativeRaceCourseRuntime,NATIVE_PRIMARY_ONLY_ACTOR_COURSES} from './native-race-course-runtime.js';
 import {createNativeStuntCourseRuntime} from './native-stunt-course-runtime.js';
 import {nativeStuntScene} from './native-stunt-scene.js';
 import {createNativeStuntPresentation,createNativeCourseObjectPresentation} from './native-stunt-presentation.js';
@@ -75,8 +75,9 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
  if(!['modern','native'].includes(physics))throw new RangeError('Unknown race physics');
  if(nativeRecordSession!==undefined&&physics!=='native')throw new RangeError('Native record sessions require native physics');
  const nativePractice=physics==='native'&&mode==='practice'&&course.sourceWaterCourseIndex===0&&difficulty===0&&!course.reverse;
- if(nativeCourseActors!==undefined&&(!nativePractice||nativeInitialRaceState!==undefined||typeof nativeCourseActors?.onDisplay!=='function'))
-  throw new RangeError('Course actor presentation requires fresh solo native Practice');
+ const actorCourse=nativePractice||physics==='native'&&['time','championship'].includes(mode)&&NATIVE_PRIMARY_ONLY_ACTOR_COURSES.includes(course.sourceWaterCourseIndex);
+ if(nativeCourseActors!==undefined&&(!actorCourse||nativeInitialRaceState!==undefined||typeof nativeCourseActors?.onDisplay!=='function'))
+  throw new RangeError('Course actor presentation requires fresh solo native Practice, or a native Time trial or Championship on a primary-route actor course');
  if(nativeSceneEffects!==undefined&&(nativeCourseActors!==undefined||physics!=='native'||!['time','championship'].includes(mode)))
   throw new RangeError('Separate scene effects are for native Time trial and Championship; Dolphin Practice supplies them with its actors');
  const nativeChampionship=physics==='native'&&mode==='championship';
@@ -175,7 +176,7 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
   state.nativeLaunchLabel=state.nativeLaunch.view().label;state.nativeCountdownCue=null;
   let launchCueSequence=0;
   state.nativeHost=createNativeRaceHost({racers,water:raceWater,course,fixedSphereGrid:sourceSphereGrid,staticGeometry:nativeCourseRuntime.staticContactGeometry,raceRuntime:state.nativeLaunch,
-  ...(nativeCourseActors?{courseActors:{...nativeCourseActors,audioContext:()=>{const s=state.nativeContactAudio.snapshot();return {...s.globals,audioMode:s.audioMode};},
+  ...(nativeCourseActors?{courseActors:{...nativeCourseActors,audioContext:()=>{const s=state.nativeContactAudio.snapshot();return {...s.globals,audioMode:s.audioMode,random4562c:s.random4562c};},
    onEffects:effects=>state.nativeContactAudio.applyEffects(effects)},
    // Headless callers draw nothing, but B2ABC/B305C still own their state.
    courseEffects:{onDisplay:nativeCourseActors.onEffectsDisplay??(()=>{}),

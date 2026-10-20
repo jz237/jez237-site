@@ -19,6 +19,7 @@ import {captureNativeCamera} from './native-camera-presentation.js';
 import {applyNativeRiderResultCodes} from './native-rider-lifecycle.js';
 import {prepareNativePhysicalBodyWrap,captureNativePhysicalBoundaryDrift} from './native-physical-body-wrap.js';
 import {nativeCourseActorBodyPoseWords} from './native-course-actor-body.js';
+import {NATIVE_COURSE_ACTOR_ROUTE_WORDS} from './source-course-actor-route-tables.js';
 import {captureNativeInitialEffectBody,captureNativeEffectBody} from './native-effect-body-view.js';
 import {nativeSineTableWords,NATIVE_ANGLE_TABLE_WORDS} from './native-math-tables.js';
 
@@ -91,9 +92,9 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
  raceRuntime=null,onLaunchFrame=null,onContactFrame=null,onAudioFrame=null,hullStarts=[],staticGeometry=null,
  floatingDefinitions,floatingActive=true,primaryActive=true,recovery=true,craftContacts=true,courseActors,courseEffects}={}){
  const sourceSchedule=!!(raceRuntime?.ordinary||raceRuntime?.stunt);
- if(courseActors!==undefined&&(!sourceSchedule||!raceRuntime.ordinary||course.nativeSceneMode!=='practice'||
+ if(courseActors!==undefined&&(!sourceSchedule||!raceRuntime.ordinary||racers.filter(r=>r.human).length!==1||
    typeof courseActors?.onDisplay!=='function'||typeof courseActors?.audioContext!=='function'||typeof courseActors?.onEffects!=='function'))
-  throw new TypeError('Live course actors require solo Practice and explicit display/audio consumers');
+  throw new TypeError('Live course actors require a solo ordinary race and explicit display/audio consumers');
  // AE7C4 reads the initialized actor pool for Dolphin's extra effect slot;
  // other courses have none. Two-player views and Stunt scenes stay separate.
  if(courseEffects!==undefined&&(!sourceSchedule||!raceRuntime.ordinary||racers.filter(r=>r.human).length!==1||
@@ -224,8 +225,13 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
    },{assets:courseActors.assets,segmentWordsE6b0},{freshWebScene:true,waterExtent2498:water.field.parameters.radius*64});
    courseActors.onEffects(host.actorStartup.effects);
    host.advanceCourseActors=()=>{
-    const input={...host.courseActorMotionInputs({retainedWordsEe20}),sineTableWords4350,
-     angleTableWords6f08:NATIVE_ANGLE_TABLE_WORDS,audioContext:courseActors.audioContext()};
+    // Birds (BF8C8) read the audio timing word and ice actors the audio mode
+    // from the same existing audio owner snapshot as the dolphin audio.
+    const audioContext=courseActors.audioContext();
+    //A52D8 and the ice actors read their course's800E6C78-selected route rows.
+    const input={...host.courseActorMotionInputs({retainedWordsEe20}),sineTableWords4350,routeWords:NATIVE_COURSE_ACTOR_ROUTE_WORDS[course.sourceWaterCourseIndex],
+     random4562c:audioContext.random4562c,audioMode:audioContext.audioMode,
+     angleTableWords6f08:NATIVE_ANGLE_TABLE_WORDS,audioContext};
     host.lastCourseActors=host.courseActors.advanceMotion(input);courseActors.onEffects(host.lastCourseActors.effects);
    };
    host.displayCourseActors=()=>{
