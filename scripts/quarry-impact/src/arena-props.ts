@@ -22,7 +22,7 @@ export function createArenaProps(api:typeof R,world:R.World,root:T.Object3D,spot
   const paints=DRUM_COLORS.map(color=>new T.MeshStandardMaterial({color,roughness:.6,metalness:.35}));
   const props:ArenaProp[]=[];
   const add=(mesh:T.Mesh,x:number,y:number,z:number,collider:R.ColliderDesc,material:'rubber'|'metal')=>{
-    const body=world.createRigidBody(api.RigidBodyDesc.dynamic().setTranslation(x,y,z).setLinearDamping(.15).setAngularDamping(.25).setCcdEnabled(true));
+    const body=world.createRigidBody(api.RigidBodyDesc.dynamic().setTranslation(x,y,z).setLinearDamping(.15).setAngularDamping(.25));
     tagImpactMaterial(world.createCollider(collider,body),material);
     mesh.castShadow=mesh.receiveShadow=true;mesh.position.set(x,y,z);root.add(mesh);props.push({mesh,body,start:new T.Vector3(x,y,z)});
   };
