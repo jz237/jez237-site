@@ -272,7 +272,9 @@ function selectedFreeRide(){return selectedMode==='practice'||selectedMode==='ve
 // Original physics needs a verified source course: Time trial also needs a
 // class route (Twilight has no original Normal route). Both use Venue conditions.
 const ORIGINAL_TIME_COURSES=['greyhaven','amber','citadel','reed','port','neon','tempest','glacier'],ORIGINAL_STUNT_COURSES=['practice',...ORIGINAL_TIME_COURSES];
-function originalPhysicsAvailable(){return selectedMode==='time'&&ORIGINAL_TIME_COURSES.includes(selectedCourse)&&(selectedCourse!=='neon'||selectedDifficulty>0)||selectedMode==='stunt'&&ORIGINAL_STUNT_COURSES.includes(selectedCourse)||selectedMode==='championship';}
+function originalPhysicsAvailable(){return selectedMode==='time'&&ORIGINAL_TIME_COURSES.includes(selectedCourse)&&(selectedCourse!=='neon'||selectedDifficulty>0)||selectedMode==='stunt'&&ORIGINAL_STUNT_COURSES.includes(selectedCourse)||selectedMode==='championship'||
+ // Local two-player versus on the same split screen; online and separate-window play stay modern.
+ selectedMode==='versus'&&!onlineCapability&&splitLayout!=='separate'&&ORIGINAL_TIME_COURSES.includes(selectedCourse)&&(selectedCourse!=='neon'||selectedDifficulty>0);}
 function selectedOriginalPhysics(){return originalPhysicsAvailable()&&saved.preferences.physics==='original';}
 function selectedNativePhysics(){
  if(selectedOriginalPhysics())return true;

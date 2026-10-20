@@ -1,5 +1,16 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — Original physics for local two-player races
+
+The native two-player race (mode 1: original countdown, catch-up assistance,
+missed-buoy rules and results) was only reachable from verification links. It
+is now on the physics choice for local split-screen two-player races on the
+same courses as Original Time trial (Twilight City from Hard). Headless races
+with two automated riders finished on all eight courses with a winner and no
+faults (Sunny Beach, Sunset Bay, Marine Fortress, Port Blue, Twilight City,
+Glacier Coast, Southern Island, Drake Lake); the browser split screen runs at
+60 fps. Online play and the separate-window layout stay modern.
+
 ## Unpublished — round 1 enters through the original course introduction
 
 Every original cup round starts through the championship return (801EB91C),
