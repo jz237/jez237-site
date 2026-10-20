@@ -33,8 +33,11 @@ test('race core judges actual primary recoil before the one50ms buoy-motion pass
  // Replace the complete prepared tick0 physical bundle, including its owner
  // of recovery effects. Keeping the old lifecycle would target another hull
  // and nineteen-point rider after this intentional fixture initialization.
+ // A human rider keeps the prepared selection countdown (10); a fresh -1 would
+ // hand this craft to source AI.
  const riderLifecycle=createNativeRiderLifecycle({hull,rider:bundle.articulatedRider,
-  courseDatumNative:()=>s.raceWater.field.datumNative,raceFinished:()=>r.finishTime!==null});
+  courseDatumNative:()=>s.raceWater.field.datumNative,raceFinished:()=>r.finishTime!==null,
+  state:{riderIndex:hull.rider,hullDamping:hull.points.map(p=>p.damping),selectionCountdown:a.riderLifecycle.state.selectionCountdown}});
  Object.assign(a,bundle,{hull,riderLifecycle});host.bundles[0]=bundle;
  host.world.craftContactStates[0]=createNativeCraftContactState(hull);
  r.sourceBuoys.armed=true;r.sourceBuoys.side=-1;r.sourceBuoyPrevious={x:initial.x,z:initial.z};
@@ -58,7 +61,7 @@ test('race core judges actual primary recoil before the one50ms buoy-motion pass
   // Literal outcomes make a missing current-center override fail this test.
   assert.equal(fixed.event.nativeEventCode,1);assert.equal(fixed.event.correct,true);
   assert.equal(moving.event.nativeEventCode,2);assert.equal(moving.event.correct,false);
-  near(r.x,51.54789335495203);near(r.z,31.01599596290714);
+  near(r.x,51.552672087356285);near(r.z,31.02827385818004);
   nearPoint(before,{x:49.82101745605469,y:-.11119134426116944,z:30.055233764648438});
   near(a.lastFrame.impacts.primaryBuoyImpactNative,3.913475751876831,1e-12);
   for(const channel of ['fixedSphere','shore','floor','box','object'])assert.equal(a.lastFrame.impacts[channel+'ImpactNative'],0);
@@ -78,7 +81,7 @@ test('race core judges actual primary recoil before the one50ms buoy-motion pass
  assert.ok(contacts.length>0);assert.ok(contacts.every(q=>q.sourceRow===2&&q.channel==='primaryBuoy'));
  assert.equal(host.primary.state.motionFrames,1);assert.equal(host.primary.diagnostics().motionUpdates,1);
  const after=host.primary.positionForSourceRow(2);
- nearPoint(after,{x:48.94972229003906,y:-.061263549327850345,z:29.659393310546875});
+ nearPoint(after,{x:48.94972229003906,y:-.06527613401412964,z:29.659393310546875});
  assert.notDeepEqual(after,observed);assert.deepEqual(primary.anchorNative,{x:2032,z:1220});
  assert.deepEqual(s.primaryBuoys.find(q=>q.sourceRow===2).position,after);
  assert.equal(s.phase,'running');near(s.time,.05);

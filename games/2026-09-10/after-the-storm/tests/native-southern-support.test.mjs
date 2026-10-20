@@ -68,7 +68,8 @@ test('prepared Southern runtime selects shared original geometry across classes 
   assert.equal(runtime.sourceDifficulty,[0,1,2,2][difficulty]);
   assert.equal(runtime.retirementGeometry,selections[`ordinary${players}`]);
   assert.equal(runtime.staticContactGeometry.floor,runtime.retirementGeometry.floor);assert.equal(runtime.staticContactGeometry.boxes,runtime.retirementGeometry.boxes);
-  assert.equal(runtime.staticContactGeometry.shore,shore);assert.equal(runtime.resetLayout.boundaryNativeXZ.length,79);
+  assert.equal(runtime.staticContactGeometry.shore,shore);// Reset bounds cover every initialized original fixed record (C938), hidden rows included.
+  assert.equal(runtime.resetLayout.boundaryNativeXZ.length,runtime.objectStartup.counts.fixedSphereCountC938);assert.ok(runtime.objectStartup.counts.fixedSphereCountC938>=79);
   for(const n of runtime.aiTargetTable.nodes){
    const row=runtime.data.nodes[n.sourceRow];assert.deepEqual(n.endpointPlusNativeXZ,row.endpointANativeXZ);assert.deepEqual(n.endpointMinusNativeXZ,row.endpointBNativeXZ);
    assert.equal(runtime.sourceBuoyLayout.nodes[n.sourceRow].nextSourceRow,row.nextSourceRowA0);

@@ -88,7 +88,8 @@ test('Glacier native runtime shares source geometry and route graphs without cha
   }
   assert.equal(runtime.courseIndex,8);assert.equal(runtime.sourceBuoyLayout.courseIndex,8);
   assert.equal(runtime.sourceDifficulty,[0,1,2,2][difficulty]);assert.equal(runtime.retirementGeometry,selections[`ordinary${players}`]);
-  assert.equal(runtime.staticContactGeometry.shore,shore);assert.equal(runtime.resetLayout.boundaryNativeXZ.length,90);
+  assert.equal(runtime.staticContactGeometry.shore,shore);// Reset bounds cover every initialized original fixed record (C938), hidden rows included.
+  assert.equal(runtime.resetLayout.boundaryNativeXZ.length,runtime.objectStartup.counts.fixedSphereCountC938);assert.ok(runtime.objectStartup.counts.fixedSphereCountC938>=79);
   assert.equal(runtime.staticContactGeometry.floor,runtime.retirementGeometry.floor);
   for(const n of runtime.aiTargetTable.nodes){
    const row=runtime.data.nodes[n.sourceRow];assert.deepEqual(n.endpointPlusNativeXZ,row.endpointANativeXZ);assert.deepEqual(n.endpointMinusNativeXZ,row.endpointBNativeXZ);

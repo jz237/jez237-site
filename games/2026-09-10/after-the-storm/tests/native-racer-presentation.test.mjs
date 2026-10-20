@@ -18,7 +18,7 @@ test('world position and instantaneous horizontal speed stay separate from the s
  const q=nativeRaceSnapshot(a),out=display(q,{wetFlags:a.water.wet});
  close(out.racer.x,4);close(out.racer.y,2);close(out.racer.z,-6+1.24);
  close(out.racer.vx,q.velocity.x);close(out.racer.vy,q.velocity.y);close(out.racer.vz,q.velocity.z);close(out.racer.speed,24.8);
- assert.equal(out.source.hudSpeed,88);close(out.source.frameSpeedNative,49.6);close(out.source.frameAverageVelocityWorld.z,24.8);
+ assert.equal(out.source.hudSpeed,88);assert.ok(Math.abs(out.source.frameSpeedNative-49.6)<1e-5,'binary32 source frame speed');assert.equal(out.source.frameSpeedNative,Math.fround(out.source.frameSpeedNative));assert.ok(Math.abs(out.source.frameAverageVelocityWorld.z-24.8)<1e-5,"binary32 source frame velocity");
  assert.notEqual(out.source.hudSpeed,out.racer.speed*3.6);assert.equal(out.racer.hydro.initialized,true);
 });
 

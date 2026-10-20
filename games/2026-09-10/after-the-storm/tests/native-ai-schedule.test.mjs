@@ -122,8 +122,9 @@ test('mixed computer/human profiles and sampled source inputs retain identical p
  }
 });
 
-test('prepared finish-wait advances once per native logical frame while championship admission remains unsupported',()=>{
- assert.throws(()=>createRace({mode:'championship',course:getCourse('greyhaven'),physics:'native'}));
+test('prepared finish-wait advances once per native logical frame',()=>{
+ // Native Championship is admitted now; its own launch owns the finish wait.
+ assert.ok(createRace({mode:'championship',course:getCourse('greyhaven'),physics:'native'}).nativeLaunch.championshipLaunch);
  for(const hz of [30,60,144]){
   // Isolate the future wait branch using two already-supported native human
   // adapters. This prepared state does not enable championship or invent AI.

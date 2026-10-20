@@ -21,8 +21,10 @@ test('Glacier native selection installs complete source rows, visible markers, s
   const modern=createRace({course,difficulty,mode});assert.equal(modern.physics,'modern');assert.equal(modern.course.sourceBuoyLayout,undefined);
  }
  assert.equal(createRace({course:getCourse('glacier'),mode:'stunt',physics:'native'}).nativeLaunch.snapshot().scene.mode620,11);
- for(const options of [{mode:'race'},{mode:'championship'},{mode:'practice'},{mode:'time',seaState:'surf'}])
+ for(const options of [{mode:'race'},{mode:'practice'},{mode:'time',seaState:'surf'}])
   assert.throws(()=>createRace({course:getCourse('glacier'),physics:'native',...options}),/source-water/);
+ // Native Championship is admitted; Glacier is not a Normal cup course.
+ assert.throws(()=>createRace({course:getCourse('glacier'),physics:'native',mode:'championship'}),/does not belong to this championship class/);
 });
 
 test('forward Glacier inspection anticipates drift without changing controls, route ownership or explicit policy',()=>{
