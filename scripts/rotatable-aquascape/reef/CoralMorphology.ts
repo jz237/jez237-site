@@ -164,9 +164,12 @@ export function platingColony(x:number,y:number,z:number,r:number,seed:number){
  for(let layer=0;layer<2;layer++)for(let j=0;j<=rings;j++)for(let i=0;i<=sides;i++){
   const a=i/sides*Math.PI*2,t=j/rings,{outline,fold}=margins[i];
   const rr=r*t*outline,scallop=r*(Math.sin(a*19+Math.sin(a*5)*.8+seed)*.012*t**5+Math.sin(a*37-seed)*.005*t**8);
+  // A ruffled, wavy growing margin rising and dipping around the rim, as on
+  // the reference's frilly tiered plates (the underside follows it).
+  const ruffle=r*(.045*Math.sin(a*9+Math.sin(a*4+seed)*1.1+seed)+.02*Math.sin(a*23-seed*1.3))*T.MathUtils.smoothstep(t,.55,1)**1.6;
   // A low spreading fan with local upturned lobes, not one continuous cup.
   const band=Math.sin(t*Math.PI*2*8.5+Math.sin(a*3+seed)*.7+Math.sin(a*7-seed)*.25);
-  const raised=r*(.035*t*t+fold*T.MathUtils.smoothstep(t,.25,1)+.045*Math.sin(a+seed)*t+.025*Math.sin(t*11+a*3+seed)*t*t+.006*band*t*(1-T.MathUtils.smoothstep(t,.9,1))),groove=Math.sin(a*67+Math.sin(t*18)*.7)*r*(layer?.006:.003)*t;
+  const raised=r*(.035*t*t+fold*T.MathUtils.smoothstep(t,.25,1)+.045*Math.sin(a+seed)*t+.025*Math.sin(t*11+a*3+seed)*t*t+.006*band*t*(1-T.MathUtils.smoothstep(t,.9,1)))+ruffle,groove=Math.sin(a*67+Math.sin(t*18)*.7)*r*(layer?.006:.003)*t;
   const tissueRelief=r*.016*(.6*Math.sin(a*37+Math.sin(t*17+seed))+.4*Math.sin(a*61-t*13+seed))*Math.sin(t*43+a*5)*t*(1-T.MathUtils.smoothstep(t,.92,1));
   // Older underside grows load-bearing, uneven radial ridges. The scaffold
   // deepens toward its attachment and thins smoothly into the growing margin;
