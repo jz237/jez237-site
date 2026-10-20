@@ -1,5 +1,16 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — Port Blue submarine; every course actor modelled
+
+Port Blue's special actor (bank 7) is a red submarine cruising 3–10 m below
+the surface: a 45 m hull along +Z with viewports, a sail and stern fins, plus
+bubble layers (propeller wash and a 35 m surface disc in part 12, an
+alternate disc in part 16). It now draws as rigid high-resolution parts after
+the original palette, with soft translucent bubbles, through the shared
+rigid-part renderer; in game it held 56–60 fps. Every original course actor
+on every course now has a high-resolution model: dolphins, three reef-fish
+species, gulls, mallards, lake fish, king penguins and the submarine.
+
 ## Unpublished — course actors on Marine Fortress, Port Blue and Southern Island
 
 The original secondary/tertiary actor-route pointers for these courses select

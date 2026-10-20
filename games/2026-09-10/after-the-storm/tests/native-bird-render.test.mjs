@@ -42,3 +42,16 @@ test('Glacier Coast king penguins draw in their original part frames through the
  assert.equal(view.update(live.q,live.r).parts,live.q.draws.length);assert.deepEqual(view.snapshot().species,['penguin']);
  assert.throws(()=>view.update(live.q,live.r.map((w,i)=>i===0x44/4?5:w)),/four loaded geometry/);view.dispose();
 });
+
+test('Port Blue submarine and its bubbles draw in the original part frames',async()=>{
+ const {makeNativeSubmarineParts}=await import('../native-submarine-model.js');
+ const p=makeNativeSubmarineParts({map:null}),box=o=>{const g=p.part(o).geometry;g.computeBoundingBox();return g.boundingBox;};
+ // Hull runs stern -Z to bow +Z below the surface origin; bubbles lie on the 35 m disc.
+ assert.ok(box(8).max.z===1457&&box(8).min.z<-3000&&box(8).max.y<=140&&box(8).min.y>=-1090);
+ assert.deepEqual([box(16).min.x,box(16).max.x].map(Math.round),[-1750,1750]);assert.ok(Math.abs(box(16).max.y)<1e-6);assert.ok(box(12).min.z<=-3220);
+ assert.ok(p.part(12).material.transparent&&!p.part(12).material.depthWrite);p.dispose();
+ let live=null;const s=createRace({mode:'time',physics:'native',course:getCourse('port',0),difficulty:0,nativeCourseActors:{assets:{},onDisplay:(q,r)=>{if(!live&&q.draws.length)live={q,r};}}});
+ for(let i=0;i<600&&!live;i++)stepRace(s,{throttle:1,steer:.1},1/30);
+ assert.ok(live,'the submarine reached the display');const root=new T.Group(),view=makeNativeBirdRenderer(root);
+ assert.equal(view.update(live.q,live.r).parts,live.q.draws.length);assert.deepEqual(view.snapshot().species,['submarine']);view.dispose();
+});
