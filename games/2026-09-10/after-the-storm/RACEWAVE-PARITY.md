@@ -1,5 +1,15 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unpublished — Original two-player races in Player 2's own window
+
+The separate-window layout (Player 2 on a second screen) now offers Original
+physics too. Its frames already carried native rider poses and telemetry; the
+race paused itself at once, because the native launch, created inside the
+Start click handler, took longer than the 0.7 s player-window stall threshold
+and its source countdown counts as running. Race start now restarts that stall
+clock. Player 2's window draws its own spray: the original per-view effects
+are shown in the main window's view only. Online play stays modern.
+
 ## Unpublished — original wake and spray in two-player races
 
 The original display stage (9328C) draws once with one player. With two it
