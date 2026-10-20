@@ -6,6 +6,7 @@ import {createRace} from '../race-core.js';
 import {getCourse} from '../courses.js';
 import {createNativeRaceCourseRuntime} from '../native-race-course-runtime.js';
 import {prepareNativeRaceStartup,createNativeRaceState} from '../native-race-state.js';
+import {prepareNativeCameraBoot} from '../native-camera-boot.js';
 function hash(words){const b=Buffer.alloc(words.length*4);words.forEach((v,i)=>b.writeUInt32BE(v,i*4));return createHash('sha256').update(b).digest('hex');}
 
 test('all32 ordinary course/class/player resets match complete original race and HUD words',()=>{
@@ -15,6 +16,12 @@ test('all32 ordinary course/class/player resets match complete original race and
   const course=getCourse(c.id,c.difficulty),before=structuredClone(course.boundaryMarkers),runtime=createNativeRaceCourseRuntime({course,difficulty:c.difficulty,players:c.players});
   const race=createRace({physics:'native',mode:c.players===2?'versus':'time',course,difficulty:c.difficulty}),s=race.nativeLaunch.snapshot();
   s.scene.cold8224=1;s.scene.clockStopped817c=0;
+  // The references predate the launch's DD85C camera bootstrap. The reset
+  // never writes those words, so compare against the same pre-boot input:
+  // both slots' pointer blocks, the second slot's index, and its solo flag.
+  for(const op of prepareNativeCameraBoot({hudWords7788:s.hudWords7788}).operations){
+   const a=0x7788+op.byteOffset;if(a>=0x8058&&a<0x80c8||a===0x7d8c+0xe8||c.players===1&&a===0x7d8c+0xec)s.hudWords7788[op.byteOffset/4]=0;
+  }
   const actual=prepareNativeRaceStartup(runtime.resetLayout,createNativeRaceState(s)).state;
   for(const key of ['raceWords1f94','hudWords7788'])assert.equal(hash(actual[key]),c.hashes[key],`${c.id}/${c.difficulty}/${c.players}/${key}`);
   assert.deepEqual(course.boundaryMarkers,before);
