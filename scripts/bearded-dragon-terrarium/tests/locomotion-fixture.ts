@@ -39,14 +39,16 @@ export function habitat() {
 
 export class Audit {
   maxSlide=0; maxAnchorError=0; maxJump=0; maxPenetration=0; maxFloat=0; maxLimbError=0;
-  steps=0; frames=0; worst:any={}; worstLimb:any={};
+  steps=0; frames=0; worst:any={}; worstLimb:any={}; worstJump:any={};
   private previous = new Map<any,THREE.Vector3>();
   private body:THREE.Vector3|null=null;
+  private previousPose:any=null;
   sample(rig:LizardRig, surface?:Surface) {
     const r=rig as any, model=rig.model;
     const pos=(bone:number)=>new THREE.Vector3().setFromMatrixPosition(model.bones[bone].matrix);
     const current=rig.spinePoints()[3];
-    if(this.body) this.maxJump=Math.max(this.maxJump,this.body.distanceTo(current));
+    if(this.body&&this.body.distanceTo(current)>this.maxJump){this.maxJump=this.body.distanceTo(current);this.worstJump={frame:this.frames,from:this.body.toArray(),to:current.toArray(),previous:this.previousPose,pose:{...r.accepted}};}
+    this.previousPose={...r.accepted};
     this.body=current.clone();this.frames++;
     for(const leg of r.legs) {
       const hand=pos(leg.data.bones.hand), shoulder=pos(leg.data.bones.upper), elbow=pos(leg.data.bones.lower);
@@ -66,7 +68,7 @@ export class Audit {
       }
     }
   }
-  report(){return {frames:this.frames,steps:this.steps,slide:this.maxSlide,anchor:this.maxAnchorError,jump:this.maxJump,penetration:this.maxPenetration,float:this.maxFloat,limbError:this.maxLimbError,worst:this.worst,worstLimb:this.worstLimb};}
+  report(){return {frames:this.frames,steps:this.steps,slide:this.maxSlide,anchor:this.maxAnchorError,jump:this.maxJump,worstJump:this.worstJump,penetration:this.maxPenetration,float:this.maxFloat,limbError:this.maxLimbError,worst:this.worst,worstLimb:this.worstLimb};}
 }
 
 /** Samples the rendered, skinned feet and limbs rather than only their IK targets. */

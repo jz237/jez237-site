@@ -406,12 +406,17 @@ export class LizardBrain {
   /** A reachable spot from which the head points at the prey, nearest the lizard first. */
   private standPoint(c: Cricket, target=c.pos): [number, number] | null {
     const I = this.rig.inputs;
-    const region = this.nav.region[this.nav.idx(I.x, I.z)] ?? -1;
+    const start=this.nav.nearestWalkable(I.x,I.z);
+    const region = start ? this.nav.region[this.nav.idx(...start)] : -1;
+    // A fleeing cricket can hide beneath the arch. Approach its opening from
+    // the sand; do not turn the sprawling animal sideways inside the doorway.
+    if(Math.abs(target.x-.475)<.11&&target.z<.15&&this.surface.heightAt(target.x,target.z)<.12)return [.485,.28];
     let best: [number, number] | null = null, bestScore = Infinity;
     for (let k = 0; k < 16; k++) {
       const a = (k / 16) * Math.PI * 2 + this.standTries * 0.7;
       const dx = Math.cos(a), dz = Math.sin(a);
       const sx = target.x + dx * 0.12, sz = target.z + dz * 0.12;
+      if(Math.abs(sx-.475)<.14&&sz<.26&&this.surface.heightAt(sx,sz)<.12)continue;
       const ki = this.nav.idx(sx, sz);
       if (ki < 0 || this.nav.region[ki] !== region || this.nav.isWet(sx, sz)) continue;
       // the head must have room to reach in
@@ -447,7 +452,7 @@ export class LizardBrain {
     this.retreatT=0;this.retreatLeft=0;this.backOutLeft=0;
     this.caveApproach=false;this.caveBacking=false;this.bowlExit=null;
     const I=this.rig.inputs;
-    this.caveExit=Math.abs(I.x-.475)<.11&&I.z<.11&&this.surface.heightAt(I.x,I.z)<.12
+    this.caveExit=Math.abs(I.x-.475)<.11&&I.z<.24&&this.surface.heightAt(I.x,I.z)<.12
       ? (Math.sin(I.heading)>0?-1:1):0;
     this.bowlExit=I.x>.43&&I.x<.52&&I.z>.30&&c.pos.x<.40
       ? {x:I.x-Math.cos(I.heading)*.075,z:I.z+Math.sin(I.heading)*.075,heading:I.heading,time:0}:null;
@@ -813,7 +818,8 @@ export class LizardBrain {
     // Its aligned forward/backward motion is still checked by actual body and
     // foot contacts; an inflated navigation cell must not stop it in the doorway.
     const alignedHide=(this.caveBacking||this.caveExit!==0)&&Math.abs(nx-.485)<.025&&nz>-.10&&nz<.31&&this.surface.heightAt(nx,nz)<.12;
-    if (Math.abs(this.speed) < 1e-4 || ((this.nav.walkable(nx, nz)||alignedHide) && this.nav.canTraverse(I.x, I.z, nx, nz)) || !this.nav.walkable(I.x, I.z)) {I.x = nx; I.z = nz; this.blockedT = 0;}
+    const huntDoorway=this.mode==='hunt'&&!this.caveExit&&Math.abs(nx-.475)<.14&&nz<.26&&this.surface.heightAt(nx,nz)<.12;
+    if (!huntDoorway&&(Math.abs(this.speed) < 1e-4 || ((this.nav.walkable(nx, nz)||alignedHide) && this.nav.canTraverse(I.x, I.z, nx, nz)) || !this.nav.walkable(I.x, I.z))) {I.x = nx; I.z = nz; this.blockedT = 0;}
     else {this.speed *= 0.5; this.blockedT += dt;}
     // The gait follows actual progress; an obstacle cannot make it paddle in place.
     I.speed = Math.sign(this.speed) * Math.hypot(I.x - oldX, I.z - oldZ) / Math.max(dt, 1e-6);
@@ -971,6 +977,7 @@ export class LizardBrain {
   private travel(dt: number) {
     const I = this.rig.inputs;
     if(this.stallT>1.5 && this.retreatT<=0){
+      if(this.mode==='hunt'&&!this.caveExit&&!this.bowlExit){this.nav.avoidApproach(I.x,I.z,I.heading);this.replan();}
       this.retreatSign=-Math.sign(this.speed||1);this.retreatLeft=.025;this.retreatT=2;
       this.stallT=0;this.pushedT=0;this.turnStallT=0;
     }
@@ -1009,7 +1016,9 @@ export class LizardBrain {
         const want=Math.atan2(-(.32-I.z),.485-I.x)+(this.caveExit<0?Math.PI:0),err=wrap(want-I.heading);
         return {speed:Math.abs(err)<.35 ? .035*this.caveExit : 0,turn:clamp(err*3,-.6,.6)};
       }
-      this.caveExit=0;this.replan();
+      this.caveExit=0;
+      if(this.mode==='hunt'){this.path=[];this.huntGoal=null;this.huntPrey=null;this.goal=null;return {speed:0,turn:0};}
+      this.replan();
     }
     if (!this.path.length || this.pathI >= this.path.length) {this.arrive(); return {speed: 0, turn: 0};}
     // Blocked or stalled: plan again from here, and give up if that keeps failing.
@@ -1129,10 +1138,13 @@ export class LizardBrain {
       case 'notice':
         this.status = 'Spotted a cricket';
         if (this.phaseT > 0.5 + rnd() * 0.02) {this.huntPhase = 'approach'; this.phaseT = 0;}
-        return {speed: 0, turn: Math.abs(err) > 0.6 ? this.turnToward(want) : 0};
+        return {speed: 0, turn: !this.caveExit&&!this.bowlExit&&Math.abs(err) > 0.6 ? this.turnToward(want) : 0};
       case 'approach': {
         this.status = 'Chasing a cricket';
         this.posePreset('walk');
+        // Finish leaving a confined stance before fixation, steering or a
+        // strike can take control. The tail and hind feet must clear it too.
+        if(this.caveExit||this.bowlExit)return this.travel(dt);
         // Keep closing during a hop, aiming at the reachable landing area.
         // Contact checks still govern every step; only a grounded cricket can
         // trigger the final fixation and strike.
@@ -1174,9 +1186,14 @@ export class LizardBrain {
           // At the stand-off point: face the prey, creep in, or strike from a little
           // further (the lunge and tongue add reach). If it cannot get close from
           // this side, try another side.
+          if(Math.abs(c.pos.x-.475)<.11&&c.pos.z<.15&&this.surface.heightAt(c.pos.x,c.pos.z)<.12){
+            this.status='Watching the cave entrance';return {speed:0,turn:clamp(wrap(Math.PI/2-I.heading)*3,-1,1)};
+          }
           if (Math.abs(err) > 0.3) return {speed: 0, turn: clamp(err * 5, -2.5, 2.5)};
           if (!c.airborne && mouthD < 0.06) {this.huntPhase = 'fix'; this.phaseT = 0; return {speed: 0, turn: 0};}
-          const ahead = this.nav.walkable(I.x + Math.cos(I.heading) * 0.02, I.z - Math.sin(I.heading) * 0.02) && this.pushedT < 0.3;
+          const ax=I.x+Math.cos(I.heading)*.02,az=I.z-Math.sin(I.heading)*.02;
+          const doorway=Math.abs(ax-.475)<.14&&az<.26&&this.surface.heightAt(ax,az)<.12;
+          const ahead = !doorway && this.nav.walkable(ax,az) && this.pushedT < 0.3;
           if (ahead) return {speed: c.airborne&&flat<.06?0:.10, turn: clamp(err * 5, -2.5, 2.5)};
           this.standTries++;
           this.huntPrey = null; // forces a new stand-off spot on another side
