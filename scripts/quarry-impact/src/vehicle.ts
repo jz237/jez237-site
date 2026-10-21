@@ -145,6 +145,9 @@ export class Vehicle {
   flameHeat = 0;
   private flameExposure = 0;
   igniteRequest = false;
+  /** Heat from a burning car touching this one (0..1) and who that is; main sets both every frame. */
+  contactHeat = 0;
+  contactBy = -1;
   /** Called when flames set this car alight, with the car whose fire it was (-1 when nobody lit it). */
   onSetAlight?:(by:number)=>void;
   private steamClock = 0;
@@ -287,7 +290,7 @@ export class Vehicle {
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
-    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=0;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
+    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=0;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
     if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
@@ -351,23 +354,27 @@ export class Vehicle {
       if(grip<.97)this.oily[i]=Math.max(this.oily[i],Math.min(1,(1-grip)*2));
       else this.oily[i]=Math.max(0,this.oily[i]-Math.abs(this.speed)*dt/14);
     }
-    // Sparks from scraping metal or a grinding hub light any fuel they touch; flames under the car burn it.
+    // Sparks from scraping metal or a grinding hub light any fuel they touch; flames under the car burn it,
+    // and so does a burning car leaning on this one (contactHeat, set each frame by main).
+    let heat=0,by=-1;
     if(slicks){
       const half0=DEFINITIONS[this.kind].halfLength,sample=[0,1,2,3].map(i=>this.controller.wheelContactPoint(i)).filter((p):p is NonNullable<typeof p>=>!!p);
       const centre=this.previous;
       if(this.scraping>.3){for(const p of sample)slicks.igniteAt(p.x,p.z,.25,true,this.id);slicks.igniteAt(centre.x,centre.z,half0*.5,true,this.id);}
-      let heat=slicks.heatAt(centre.x,centre.z),hottest={x:centre.x,z:centre.z};
+      heat=slicks.heatAt(centre.x,centre.z);let hottest={x:centre.x,z:centre.z};
       for(let i=0;i<4;i++){
         const p=this.wreckParts.wheelLost[i]?null:this.controller.wheelContactPoint(i);if(!p)continue;const h=slicks.heatAt(p.x,p.z);if(h>heat){heat=h;hottest={x:p.x,z:p.z};}
         // Rubber in the flames cooks: the tyre weakens towards a puncture and, in the end, a flat.
         if(h>0&&this.tyreDamage)this.tyreDamage[i]=Math.min(1,this.tyreDamage[i]+h*FLAME.tyre*dt);
       }
-      this.flameHeat=heat;
-      if(heat>0){
-        if(this.health>0)this.health=Math.max(0,this.health-FLAME.damage*heat*dt);
-        this.flameExposure+=dt*heat;if(this.flameExposure>=FLAME.ignite&&!this.igniteRequest){this.igniteRequest=true;this.flameExposure=-1e9;this.onSetAlight?.(slicks.ownerAt(hottest.x,hottest.z));}
-      }else if(this.flameExposure>0)this.flameExposure=Math.max(0,this.flameExposure-dt*FLAME.cool);
+      if(heat>0)by=slicks.ownerAt(hottest.x,hottest.z);
     }
+    if(this.contactHeat>heat){heat=this.contactHeat;by=this.contactBy;}
+    this.flameHeat=heat;
+    if(heat>0){
+      if(this.health>0)this.health=Math.max(0,this.health-FLAME.damage*heat*dt);
+      this.flameExposure+=dt*heat;if(this.flameExposure>=FLAME.ignite&&!this.igniteRequest){this.igniteRequest=true;this.flameExposure=-1e9;this.onSetAlight?.(by);}
+    }else if(this.flameExposure>0)this.flameExposure=Math.max(0,this.flameExposure-dt*FLAME.cool);
     if(!contacts)return;
     const rearEngine=isRearEngineKind(this.kind),tank=(rearEngine?this.structuralDamage?.[0]:this.structuralDamage?.[1])??0;
     const rates=leakRates(this.structuralDamage?.[0]??0,this.engineDamage??0,tank),half=DEFINITIONS[this.kind].halfLength,ground=groundSum/contacts;

@@ -7,7 +7,7 @@ import {programWarmupView} from './program-warmup';
 import {ReplayPuddles} from './replay-puddles';
 import {ReplaySlicks} from './replay-slicks';
 import {PropFires,propKind,DRUM_BLAST} from './prop-fires';
-import {avoidFires} from './fire-avoidance';
+import {avoidFires,contactHeat,CAR_FIRE} from './fire-avoidance';
 import {setSceneShadows,createPMREMGenerator} from './rendering';
 import {quarryReplayProps} from './quarry-tyres';
 import {colliderImpactMaterial,type ImpactMaterial} from './impact-material';
@@ -1861,6 +1861,12 @@ function frame(now: number) {
     vehicleFire.setGround(groundFires,fx.slicks.clock);vehicleFire.update(cars,effectsActive?dt:0,camera);
     // A burning car lights any oil or fuel it is standing in (offline cars only leak).
     for(const e of vehicleFire.emitters.values())if(e.car.extendedDamage&&e.state.heat>.45)fx.slicks.igniteAt(e.origin.x,e.origin.z,1,false,e.car.id);
+    // Burning cars set the cars pressed against them alight.
+    for(const c of cars){c.contactHeat=0;c.contactBy=-1;}
+    for(const e of vehicleFire.emitters.values()){
+      if(!e.car.extendedDamage||e.state.heat<CAR_FIRE.min)continue;const a={current:e.car.current,forward:e.car.forward,right:e.car.right,halfWidth:DEFINITIONS[e.car.kind].halfWidth,halfLength:DEFINITIONS[e.car.kind].halfLength};
+      for(const o of cars){if(o===e.car||!o.extendedDamage||o.health<=0)continue;const h=contactHeat(a,{current:o.current,forward:o.forward,right:o.right,halfWidth:DEFINITIONS[o.kind].halfWidth,halfLength:DEFINITIONS[o.kind].halfLength},e.state.heat);if(h>o.contactHeat){o.contactHeat=h;o.contactBy=e.car.id;}}
+    }
     let nearest:{p:T.Vector3;level:number}|null=null;
     for(const f of groundFires){const level=burnLevel(f,fx.slicks.clock)*Math.min(1.4,.6+f.radius),p=new T.Vector3(f.x,f.y,f.z);if(level>0&&(!nearest||p.distanceToSquared(camera.position)<nearest.p.distanceToSquared(camera.position)))nearest={p,level};}
     sound.groundFire(effectsActive?nearest:null);
