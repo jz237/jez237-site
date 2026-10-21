@@ -13,9 +13,16 @@ world frame before each 20 Hz ending frame: riders ride on (results stay
 exactly as finished), the water stays live and Southern Island's gulls keep
 flying. ECB98's camera type 8 runs DD6B4 but skips DFC48's follow copy, so the
 view holds the final race's camera; the orbiting stand-in camera is gone.
-Not reconstructed: DD6B4's ceremony flybys (801DC0AC/801DB8F0/801DBF68, timed
-type-3 rows from frame 600), the 9CD50 camera offsets, and rider engine sound
-during the ending (audio stays with the ending's menu owner).
+The type-8 camera also runs DD6B4's ceremony script each frame, then advances
+its frame counter (DE32C). A Normal or Hard top-three finish (801DC0AC) flies a
+gull from frame 600 to 800, another from 800 to 950, and two together from 950;
+Expert 2nd and 3rd (801DBF68) fly four or three gulls from frame 800. Each is a
+type-3 presentation row spawned at its window's start point (DB0E4/DAFB8) and
+moved toward its end point every frame with the original wing-beat cycle
+(DB1DC/DB024), then submitted through AC098 and drawn by the course actors'
+gull model. Not reconstructed: the Expert champion's random flock (801DB8F0),
+the 9CD50 camera offsets, and rider engine sound during the ending (audio stays
+with the ending's menu owner).
 
 ### original water option
 

@@ -76,6 +76,11 @@ test('a qualified final round enters the original ending state and completes the
  assert.equal(s.nativeHost.world.frames,worldFrames+681);
  assert.ok(s.racers.some((q,i)=>Math.hypot(q.x-before[i].x,q.z-before[i].z)>5),'riders keep moving');
  assert.deepEqual(s.racers.map(q=>({lap:q.lap,passed:q.passed,misses:q.misses,finishTime:q.finishTime})),before.map(({x,z,...rest})=>rest));
+ // Camera type 8 runs DD6B4's ceremony script every frame: a Normal top-three
+ // finish flies its first gull through frames 600-800 (counter 680 here).
+ const cam=s.nativeHost.lastEndingCamera,rank=s.nativeLaunch.snapshot().raceWords1f94[(0x2c70-0x1f94)/4];
+ assert.equal(s.nativeLaunch.snapshot().hudWords7788[(0x8060-0x7788)/4],681);
+ if(rank<3){assert.equal(cam.script,'podium');assert.equal(cam.counter,680);assert.equal(cam.submitted,1);}else assert.equal(cam.script,null);
  const tokens=new Set();let readyAt=null;
  for(let f=0;f<3000&&s.phase==='ending';f++){
   const a=readyAt!==null&&f%2===0;stepRace(s,{},.05,{menuInputs:[{continue:a}]});

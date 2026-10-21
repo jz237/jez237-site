@@ -404,6 +404,8 @@ export function createNativeRaceHost({racers,water,course,fixedSphereGrid=null,t
   if(host.courseActors)host.advanceCourseActors();
   let launchContinues=true;
   if(raceRuntime&&ceremony){
+   // DDE48's type-8 camera submits DD6B4's ceremony actors before display.
+   host.lastEndingCamera=raceRuntime.advanceEndingCamera?.()??null;
    if(host.courseActors)host.displayCourseActors();
    if(host.sceneEffects)host.displaySceneEffects();
   }else if(raceRuntime){

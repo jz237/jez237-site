@@ -28,6 +28,7 @@ import {NATIVE_ENDING_MENU_LOADED_WORDS} from './source-ending-menu-words.js';
 import {prepareNativeRaceMenuInitializationUpdate} from './native-race-state.js';
 import {NATIVE_RECORDS_MENU_DATA,createNativeRecordsMenuWords} from './native-records-menu-data.js';
 import {prepareNativeRecordsMenuPhase,nativeRecordsMenuView} from './native-records-menu-runtime.js';
+import {prepareNativeEndingCeremonyActors} from './native-ending-ceremony-actors.js';
 import {prepareNativeRaceResultCPUDisplayUpdate} from './native-race-state.js';
 import {prepareNativeNameMenuFrame,nativeNameMenuView,prepareNativeChampionshipNameMenuPhase,nativeChampionshipNameMenuView} from './native-name-menu-runtime.js';
 import {prepareNativeResultsMenuFrame,nativeResultsMenuView} from './native-results-menu-runtime.js';
@@ -345,6 +346,19 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
     courseOrderEac14:NATIVE_CHAMPIONSHIP_SETUP_DATA.courseOrderAc14,courseNameTokensAa10:NATIVE_RECORDS_MENU_DATA.courseNameTokensAa10,
     racerOrderA9dc:sample.state.racerOrderA9dc,riderOrderEabb0:[7,4,2,1],connectedMask4340:1});
    current=prepared.state;return prepared;
+  },
+  /** Camera type 8 during the ending (DDE48 -> DE32C): DD6B4's main21
+   * ceremony actors into the presentation pool, then the block frame counter.
+   * Runs inside the ceremony world frame, before the actor display. */
+  advanceEndingCamera(){
+   const g=current.scene,hud=current.hudWords7788;
+   if(!championship||g.main638!==21||![102,103].includes(g.gameStateAb24)||hud[(0x7c80-0x7788)/4]!==8)throw new Error('The ending camera runs in main21 with camera type 8');
+   const q=prepareNativeEndingCeremonyActors({hudWords7788:hud,rngState4640:g.rngState4640,actorWordsF060:current.actorWordsF060,
+    actorControlWords62c4:current.actorControlWords62c4,difficulty:current.profileWordsB330[2]|0,rank:current.raceWords1f94[(0x2c70-0x1f94)/4]|0});
+   const words=[...q.hudWords7788],counter=(0x8058+8-0x7788)/4;words[counter]=(words[counter]+1)>>>0;
+   current=createNativeRaceState({...current,hudWords7788:words,actorWordsF060:q.actorWordsF060,actorControlWords62c4:q.actorControlWords62c4,
+    scene:{...current.scene,rngState4640:q.rngState4640}});
+   return q.diagnostic;
   },
   recordSessionSnapshot:()=>captureNativeRecordSession(current),
   nameEntryView:()=>nativeNameMenuView(current),
