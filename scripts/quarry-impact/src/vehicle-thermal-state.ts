@@ -10,6 +10,8 @@ export class VehicleThermalState {
   burning=false;burnTime=0;ignitionTime=0;
   private episode=0;private eligible=false;private assessed=false;private explosive=false;
   private delay=5;private burstDelay=18;private fuelTime=40;
+  /** Seconds into the burn when a ruptured fuel tank goes up (undefined = no leaking tank). */
+  private fuelBlast?:number;
   constructor(health=100,private seed=Math.random()){this.health=health;}
   /** engineDamage (offline cars only) adds engine-bay smoke as a failing engine strains. */
   advance(health:number,dt:number,_impactDamage=Math.max(0,this.health-health),zones:DamageZones=noDamage,engineZone:'front'|'rear'='front',waterCooled=true,engineDamage?:number){
@@ -23,7 +25,7 @@ export class VehicleThermalState {
     const fuel=this.burning?Math.min(1,Math.max(0,(this.fuelTime-this.burnTime)/9)):0,target=fuel*(.62+n(2.13)*.32);
     this.heat+=(target-this.heat)*(1-Math.exp(-dt*(target>this.heat?1.45:.6)));
     if(this.burning&&this.heat>.65&&health<=6&&fuel>.5)this.criticalTime+=dt;
-    const burst=this.explosive&&!this.exploded&&this.criticalTime+1e-9>=this.burstDelay;
+    const burst=(this.explosive&&!this.exploded&&this.criticalTime+1e-9>=this.burstDelay)||(this.burning&&!this.exploded&&this.fuelBlast!==undefined&&this.burnTime+1e-9>=this.fuelBlast);
     if(burst){this.exploded=true;this.burst=1;}else this.burst=Math.max(0,this.burst-dt*1.65);
     const coolant=waterCooled&&zones[engineZone]>=12&&health<60?Math.min(.32,(60-health)/120):0,sootTarget=fuel>0?this.heat:0;
     this.soot+=(sootTarget-this.soot)*(1-Math.exp(-dt*.6));
@@ -31,10 +33,12 @@ export class VehicleThermalState {
     const smokeTarget=Math.max(coolant,strain,this.soot*(.65+n(3.18)*.35));this.smoke+=(smokeTarget-this.smoke)*(1-Math.exp(-dt*.85));
     this.health=health;this.age+=dt;return burst;
   }
+  /** A burning car leaking fuel blows up 6–12 s into the burn (once per damage episode; offline cars only). */
+  primeFuelBlast(){if(this.fuelBlast===undefined&&!this.exploded)this.fuelBlast=6+unitNoise(this.seed+this.episode*1.173+33.1)*6;}
   /** Set alight from outside (burning fuel or oil under the car): it burns like an engine fire. */
   ignite(){
     if(this.burning)return;
     this.burning=true;this.assessed=true;this.eligible=true;this.burnTime=0;this.fuelTime=25+unitNoise(this.seed+this.episode*1.173+21.7)*20;
   }
-  reset(health=100){this.health=health;this.heat=this.smoke=this.soot=this.burst=this.age=this.criticalTime=this.burnTime=this.ignitionTime=0;this.exploded=this.burning=this.assessed=this.eligible=this.explosive=false;this.episode++;}
+  reset(health=100){this.health=health;this.heat=this.smoke=this.soot=this.burst=this.age=this.criticalTime=this.burnTime=this.ignitionTime=0;this.exploded=this.burning=this.assessed=this.eligible=this.explosive=false;this.fuelBlast=undefined;this.episode++;}
 }

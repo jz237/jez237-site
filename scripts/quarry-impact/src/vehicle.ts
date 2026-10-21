@@ -147,6 +147,8 @@ export class Vehicle {
   igniteRequest = false;
   /** Heat from a burning car touching this one (0..1) and who that is; main sets both every frame. */
   contactHeat = 0;
+  /** Fuel leak severity 0..1 (offline): a burning car with a split tank blows up. */
+  fuelLeak = 0;
   contactBy = -1;
   /** Called when flames set this car alight, with the car whose fire it was (-1 when nobody lit it). */
   onSetAlight?:(by:number)=>void;
@@ -290,7 +292,7 @@ export class Vehicle {
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
-    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=0;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
+    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
     if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
@@ -377,7 +379,8 @@ export class Vehicle {
     }else if(this.flameExposure>0)this.flameExposure=Math.max(0,this.flameExposure-dt*FLAME.cool);
     if(!contacts)return;
     const rearEngine=isRearEngineKind(this.kind),tank=(rearEngine?this.structuralDamage?.[0]:this.structuralDamage?.[1])??0;
-    const rates=leakRates(this.structuralDamage?.[0]??0,this.engineDamage??0,tank),half=DEFINITIONS[this.kind].halfLength,ground=groundSum/contacts;
+    const rates=leakRates(this.structuralDamage?.[0]??0,this.engineDamage??0,tank);this.fuelLeak=rates.fuel;
+    const half=DEFINITIONS[this.kind].halfLength,ground=groundSum/contacts;
     // A hot engine boils the leaking coolant off the radiator: steam out of the grille while it runs.
     if(rates.coolant>0&&this.health>0&&!(this.engineStall!>0)){
       this.steamClock+=dt*(2.5+5*rates.coolant)*(.6+.4*Math.min(1,Math.abs(this.input.throttle)));

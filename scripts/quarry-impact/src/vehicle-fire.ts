@@ -182,6 +182,7 @@ export class VehicleFire {
       const impact=car.impactSerial!==e.impactSerial?car.lastDamage:Math.max(0,state.health-car.health);
       // A car left standing in burning oil or fuel catches fire itself (offline only).
       if(car.extendedDamage&&car.igniteRequest){car.igniteRequest=false;state.ignite();}
+      if(car.extendedDamage&&car.fuelLeak>.3)state.primeFuelBlast();
       const ignition=state.advance(car.health,dt,impact,zones,e.profile.engineZone,e.profile.waterCooled,car.extendedDamage?car.engineDamage:undefined);e.impactSerial=car.impactSerial;
       car.wreckFinish?.advance(state.heat,dt);
       if(ignition){for(let j=0;j<16;j++)this.spawn(e,2,true);for(let j=0;j<8;j++)this.spawn(e,0,true);this.spark(e.origin,32,1,4.5);this.bursts.push({id:car.id,position:e.origin.clone(),heat:state.heat,burst:1});}

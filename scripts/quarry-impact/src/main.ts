@@ -1391,10 +1391,15 @@ function drumBlast(origin:T.Vector3,index:number){
   // The drum itself rockets up, tumbling.
   const drum=activeVenue.props[index]?.body;if(drum?.isEnabled()){const m=drum.mass(),a=index*2.399;drum.applyImpulse({x:Math.cos(a)*m*1.6,y:m*9,z:Math.sin(a)*m*1.6},true);drum.applyTorqueImpulse({x:m*.35,y:m*.1,z:-m*.25},true);}fx.emit(origin,24,1,3);fx.emit(origin,6,2,1.2);sound.drumBlast(origin);sound.crowd(.8);
   recorder?.burst({time:elapsed,position:origin.toArray()});
+  blastDamage(origin,-1,DRUM_BLAST.radius,DRUM_BLAST.damage);
+}
+/** An exploding car blows in bodywork too: offline cars within reach take a hit on the side facing the blast. */
+const CAR_BLAST={radius:7,damage:18} as const;
+function blastDamage(origin:T.Vector3,source:number,radius:number,damage:number){
   for(const c of cars){
-    if(!c.extendedDamage||c.health<=0)continue;const to=c.current.clone().sub(origin),d=to.length();if(d>=DRUM_BLAST.radius)continue;
+    if(c.id===source||!c.extendedDamage||c.health<=0)continue;const to=c.current.clone().sub(origin),d=to.length();if(d>=radius)continue;
     const dir=to.normalize(),at=c.current.clone().addScaledVector(dir,-.9);at.y=c.current.y+.3;
-    c.hit(at,dir,DRUM_BLAST.damage*(1-d/DRUM_BLAST.radius),elapsed,false);
+    c.hit(at,dir,damage*(1-d/radius),elapsed,false);
   }
 }
 function shockwave(origin:T.Vector3,source:number){
@@ -1872,7 +1877,7 @@ function frame(now: number) {
     sound.groundFire(effectsActive?nearest:null);
   }
   if(!studio)puddleSplashes?.update(cars,activeVenue.puddles,effectsActive?dt:0,state==='playing');
-  if(!studio&&state==='playing'){for(const burst of vehicleFire?.bursts??[]){recorder?.burst({time:elapsed,position:burst.position.toArray()});if(!online?.active)shockwave(burst.position,burst.id);}captureReplay();}
+  if(!studio&&state==='playing'){for(const burst of vehicleFire?.bursts??[]){recorder?.burst({time:elapsed,position:burst.position.toArray()});if(!online?.active){shockwave(burst.position,burst.id);blastDamage(burst.position,burst.id,CAR_BLAST.radius,CAR_BLAST.damage);}}captureReplay();}
   if(studio?.playing&&!studio.seeking){sound.update(cars,camera,dt,false,{id:cars[studio.follow]?.id??0,view:studio.view==='hood'?'hood':studio.view==='chase'?'chase':'orbit'},(from,to)=>cameraObstruction(physics,from,to,undefined,true));sound.thermal(replayThermal,[]);}
   if(effectsActive){sound.update(cars,camera,dt,state==='wrecked',{id:demo||scoreSpectating()?director.followed:cars[0]?.id??0,view:demo||scoreSpectating()?director.activeView:drivingCamera==='dashboard'?'hood':drivingCamera},(from,to)=>cameraObstruction(physics,from,to,undefined,true));if(vehicleFire)sound.thermal(vehicleFire.audio,vehicleFire.bursts);}
   if(activeVenue===quarryVenue)quarry.update(camera);
@@ -2110,6 +2115,8 @@ async function boot() {
     igniteAt: (id: number, reach = 3) => { const c = cars.find(x => x.id === id); return c ? fx.slicks.igniteAt(c.current.x, c.current.z, reach, false) : 0; },
     get replaySlicks(){return replaySlicks?{...replaySlicks.slicks.stats,props:replaySlicks.props.burning.size}:null;},
     get propFires(){return propFires.burning.size;},
+    /** QA: set an offline car alight as if it had stood in flames. */
+    setCarAlight: (id: number) => { const c = cars.find(x => x.id === id); if (c?.extendedDamage) c.igniteRequest = true; return !!c?.extendedDamage; },
     /** QA: switch AI fire avoidance off to compare. */
     setFireAvoidance: (on: boolean) => { fireAvoidance = !!on; },
     get propFireState(){return{clock:fx.slicks.clock,burning:[...propFires.burning].map(([i,f])=>({i,...f}))};},
