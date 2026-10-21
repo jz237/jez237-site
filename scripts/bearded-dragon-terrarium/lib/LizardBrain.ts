@@ -56,6 +56,8 @@ export class LizardBrain {
   private drinkPitch = -0.55;
   private huntGoal: [number, number] | null = null;
   private huntPrey: [number, number] | null = null;
+  private huntReplanT=0;
+  private preyHiddenT=0;
   private standTries = 0;
   private misses = 0;
   private gapeT = 0;
@@ -402,18 +404,18 @@ export class LizardBrain {
   }
 
   /** A reachable spot from which the head points at the prey, nearest the lizard first. */
-  private standPoint(c: Cricket): [number, number] | null {
+  private standPoint(c: Cricket, target=c.pos): [number, number] | null {
     const I = this.rig.inputs;
     const region = this.nav.region[this.nav.idx(I.x, I.z)] ?? -1;
     let best: [number, number] | null = null, bestScore = Infinity;
     for (let k = 0; k < 16; k++) {
       const a = (k / 16) * Math.PI * 2 + this.standTries * 0.7;
       const dx = Math.cos(a), dz = Math.sin(a);
-      const sx = c.pos.x + dx * 0.12, sz = c.pos.z + dz * 0.12;
+      const sx = target.x + dx * 0.12, sz = target.z + dz * 0.12;
       const ki = this.nav.idx(sx, sz);
       if (ki < 0 || this.nav.region[ki] !== region || this.nav.isWet(sx, sz)) continue;
       // the head must have room to reach in
-      if (!this.nav.walkable(c.pos.x + dx * 0.035, c.pos.z + dz * 0.035)) continue;
+      if (!this.nav.walkable(target.x + dx * 0.035, target.z + dz * 0.035)) continue;
       const score = Math.hypot(sx - I.x, sz - I.z) + this.nav.costAt(sx, sz) * 0.02;
       if (score < bestScore) {bestScore = score; best = [sx, sz];}
     }
@@ -436,7 +438,23 @@ export class LizardBrain {
     this.path = [];
     this.huntGoal = null;
     this.huntPrey = null;
+    this.huntReplanT=0;this.preyHiddenT=0;
     this.standTries = 0;
+    // Pursuit must not inherit an exploration pause, a head-lead delay or a
+    // failed approach from the activity that the cricket interrupted.
+    this.pauseT=0;this.leadT=0;this.lickT=0;this.hurry=true;
+    this.blockedT=0;this.stallT=0;this.pushedT=0;this.turnStallT=0;
+    this.retreatT=0;this.retreatLeft=0;this.backOutLeft=0;
+    this.caveApproach=false;this.caveBacking=false;this.bowlExit=null;
+    const I=this.rig.inputs;
+    this.caveExit=Math.abs(I.x-.475)<.11&&I.z<.11&&this.surface.heightAt(I.x,I.z)<.12
+      ? (Math.sin(I.heading)>0?-1:1):0;
+    this.bowlExit=I.x>.43&&I.x<.52&&I.z>.30&&c.pos.x<.40
+      ? {x:I.x-Math.cos(I.heading)*.075,z:I.z+Math.sin(I.heading)*.075,heading:I.heading,time:0}:null;
+    this.backOutLeft=I.x>-.5&&I.x<-.34&&I.z>.29&&Math.cos(I.heading)<-.25
+      && (c.pos.x>-.35||this.surface.heightAt(c.pos.x,c.pos.z)>.15)?.09:0;
+    this.stallRef.set(I.x,I.z);this.stallHeading=I.heading;
+    this.misses=0;
     this.huntPhase = 'notice';
     this.phaseT = 0;
     this.setMode('hunt', 'Spotted a cricket');
@@ -1087,7 +1105,7 @@ export class LizardBrain {
     if (this.nav.isWet(I.x, I.z)) speed *= 0.6;
     const rise = this.surface.heightAt(I.x + Math.cos(I.heading) * .04, I.z - Math.sin(I.heading) * .04) - this.surface.heightAt(I.x, I.z);
     speed *= clamp(1 / (1 + Math.abs(rise) / .03), .35, 1);
-    const maxTurn = this.mode === 'startle' ? 2.0 : 1.15;
+    const maxTurn = this.mode === 'startle' ? 2.0 : this.mode==='hunt' ? 1.8 : 1.15;
     const turn = clamp(err * 3.3, -maxTurn, maxTurn);
     this.burstLeft -= this.speed * dt;
     if (this.burstLeft <= 0 && this.mode !== 'startle' && !this.hurry && remaining > 0.08) {
@@ -1113,45 +1131,60 @@ export class LizardBrain {
         if (this.phaseT > 0.5 + rnd() * 0.02) {this.huntPhase = 'approach'; this.phaseT = 0;}
         return {speed: 0, turn: Math.abs(err) > 0.6 ? this.turnToward(want) : 0};
       case 'approach': {
-        this.status = 'Stalking';
-        if (c.airborne) {this.posePreset('alert'); return {speed: 0, turn: 0};}
+        this.status = 'Chasing a cricket';
+        this.posePreset('walk');
+        // Keep closing during a hop, aiming at the reachable landing area.
+        // Contact checks still govern every step; only a grounded cricket can
+        // trigger the final fixation and strike.
+        const target=c.pos.clone();
+        if(c.airborne){
+          const height=Math.max(0,c.pos.y-this.surface.heightAt(c.pos.x,c.pos.z));
+          const flight=clamp((c.vel.y+Math.sqrt(c.vel.y*c.vel.y+19.6*height))/9.8,0,.3);
+          const x=c.pos.x+c.vel.x*flight,z=c.pos.z+c.vel.z*flight;
+          if(this.nav.dry(x,z))target.set(x,this.surface.heightAt(x,z),z);
+        }
         const mouthD = c.pos.distanceTo(this.rig.mouth);
-        if (mouthD < 0.055 && Math.abs(err) < 0.4) {this.huntPhase = 'fix'; this.phaseT = 0; this.path = []; return {speed: 0, turn: 0};}
-        if (this.phaseT > 14) {this.ignorePrey.set(c, this.t + 10); this.prey = null; this.boredom = 6; this.setMode('idle', 'Lost interest'); return {speed: 0, turn: 0};}
+        if (!c.airborne && mouthD < 0.055 && Math.abs(err) < 0.4) {this.huntPhase = 'fix'; this.phaseT = 0; this.path = []; return {speed: 0, turn: 0};}
+        if (this.phaseT > 50) {this.ignorePrey.set(c, this.t + 10); this.prey = null; this.boredom = 6; this.setMode('idle', 'Lost interest'); return {speed: 0, turn: 0};}
+        this.cruise=flat>.20?.24:flat>.09?.18:.10;
+        this.huntReplanT=Math.max(0,this.huntReplanT-dt);
         // Plan a route to a stand-off spot near the prey; replan if it moves.
-        const moved = !this.huntPrey || Math.hypot(this.huntPrey[0] - c.pos.x, this.huntPrey[1] - c.pos.z) > 0.03;
-        if (moved || !this.path.length) {
-          const stand = this.standPoint(c);
-          this.huntPrey = [c.pos.x, c.pos.z];
+        const moved = !this.huntPrey || Math.hypot(this.huntPrey[0] - target.x, this.huntPrey[1] - target.z) > 0.03;
+        if ((moved || !this.path.length) && this.huntReplanT<=0) {
+          this.huntReplanT=.20;
+          const stand = this.standPoint(c,target);
           const path = stand && this.nav.path(I.x, I.z, stand[0], stand[1]);
           if (!path) {
-            if (this.phaseT > 1.5) {this.ignorePrey.set(c, this.t + 8); this.prey = null; this.setMode('idle', 'Watching');}
-            return {speed: 0, turn: this.turnToward(want)};
+            // A hop can briefly hide the prey behind an edge. Keep the last
+            // supported approach instead of abandoning a long chase on the
+            // first temporarily unavailable landing point.
+            this.preyHiddenT+=.20;
+            if(this.preyHiddenT>5){this.ignorePrey.set(c,this.t+8);this.prey=null;this.setMode('idle','Watching');return {speed:0,turn:0};}
+          }else{
+            this.preyHiddenT=0;this.huntPrey=[target.x,target.z];
+            this.huntGoal = stand;
+            this.path = path;
+            this.pathI = 1;
+            this.goal = path[path.length - 1];
+            this.replans = 0;
           }
-          this.huntGoal = stand;
-          this.path = path;
-          this.pathI = 1;
-          this.goal = path[path.length - 1];
-          this.replans = 0;
-          this.cruise = flat > 0.25 ? 0.12 : 0.05;
-          this.burstLeft = 0.05 + rnd() * 0.05;
         }
+        if(!this.path.length)return {speed:0,turn:this.turnToward(want)};
         if (this.pathI >= this.path.length) {
           // At the stand-off point: face the prey, creep in, or strike from a little
           // further (the lunge and tongue add reach). If it cannot get close from
           // this side, try another side.
           if (Math.abs(err) > 0.3) return {speed: 0, turn: clamp(err * 5, -2.5, 2.5)};
-          if (mouthD < 0.085) {this.huntPhase = 'fix'; this.phaseT = 0; return {speed: 0, turn: 0};}
+          if (!c.airborne && mouthD < 0.06) {this.huntPhase = 'fix'; this.phaseT = 0; return {speed: 0, turn: 0};}
           const ahead = this.nav.walkable(I.x + Math.cos(I.heading) * 0.02, I.z - Math.sin(I.heading) * 0.02) && this.pushedT < 0.3;
-          if (ahead) return {speed: 0.035, turn: clamp(err * 5, -2.5, 2.5)};
+          if (ahead) return {speed: c.airborne&&flat<.06?0:.10, turn: clamp(err * 5, -2.5, 2.5)};
           this.standTries++;
-          if (this.standTries > 3) {this.ignorePrey.set(c, this.t + 10); this.prey = null; this.setMode('idle', 'Lost interest'); return {speed: 0, turn: 0};}
           this.huntPrey = null; // forces a new stand-off spot on another side
           this.path = [];
           return {speed: 0, turn: 0};
         }
         const r = this.travel(dt);
-        // stalking: look only at the prey, freeze often
+        // Keep the eyes on the prey while following the supported route.
         this.lookPoint.copy(c.pos);
         I.look = this.lookPoint;
         if (this.mode !== 'hunt') this.mode = 'hunt';
@@ -1159,8 +1192,9 @@ export class LizardBrain {
       }
       case 'fix':
         this.status = 'Fixating';
+        this.posePreset('walk');this.poseGoal.headPitch=-.25;
         if (c.pos.distanceTo(this.rig.mouth) > 0.085 || c.airborne) {this.huntPhase = 'approach'; this.phaseT = 0; return {speed: 0, turn: 0};}
-        if (this.phaseT > 0.35 + rnd() * 0.02) {
+        if (this.phaseT > 0.12 + rnd() * 0.02) {
           this.huntPhase = 'strike'; this.phaseT = 0;
           // close prey is often picked up with a flick of the sticky tongue
           this.tongueStrike = c.pos.distanceTo(this.rig.mouth) < 0.042 && rnd() < 0.75;
