@@ -901,7 +901,7 @@ function createCars(attract = false, previewSetup?:Setup) {
     const team=!attract&&teamRace()?TEAMS[teamOf(i)]:null,teamSetup=team&&setup?{...setup,paint:team.color,trim:team.trim}:setup;
     const car = new Vehicle(i, type, team?.color ?? setup?.paint ?? colors[i%colors.length], scene, physics, fx, teamSetup,activeVenue.course,online?.active?'legacy':'angular-v1');
     carLights.set(car,attachCarLights(car.root,DEFINITIONS[type].halfLength));
-    car.extendedDamage=!attract&&!online?.active;if(car.extendedDamage){car.onBackfire=p=>sound.backfire(p);car.onBlowout=p=>sound.blowout(p);car.onSetAlight=by=>eventAwards.setAlight(by,car.id,elapsed);}
+    car.extendedDamage=!attract&&!online?.active;if(car.extendedDamage){car.onBackfire=p=>sound.backfire(p);car.onBlowout=p=>sound.blowout(p);car.onSetAlight=by=>eventAwards.setAlight(by,car.id,elapsed);car.onDoused=()=>{const p=car.current.clone();p.y+=.4;fx.emit(p,14,5,1.4);if(car.id===0&&!demo)toast('FIRE OUT');};}
     if(car.extendedDamage)car.onWheelLost=w=>{sound.crowd(i===0?.8:.55);if(i===0&&!demo)toast(`WHEEL GONE · ${['FRONT LEFT','FRONT RIGHT','REAR LEFT','REAR RIGHT'][w]}`,1.6);};
     car.waters=activeVenue.puddles;
     if(mode==='derby'&&!online?.active&&activeVenue===quarryVenue)car.arenaSurface=DERBY_ARENA;

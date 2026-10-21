@@ -149,6 +149,9 @@ export class Vehicle {
   contactHeat = 0;
   /** Fuel leak severity 0..1 (offline): a burning car with a split tank blows up. */
   fuelLeak = 0;
+  /** Set while two or more wheels splash through water; VehicleFire puts a burning car out. */
+  douseRequest = false;
+  onDoused?:()=>void;
   contactBy = -1;
   /** Called when flames set this car alight, with the car whose fire it was (-1 when nobody lit it). */
   onSetAlight?:(by:number)=>void;
@@ -292,7 +295,7 @@ export class Vehicle {
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
-    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
+    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
     if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
@@ -356,6 +359,9 @@ export class Vehicle {
       if(grip<.97)this.oily[i]=Math.max(this.oily[i],Math.min(1,(1-grip)*2));
       else this.oily[i]=Math.max(0,this.oily[i]-Math.abs(this.speed)*dt/14);
     }
+    // Wheels in a water puddle: the splash douses a burning car and the flames under it.
+    const inWater=this.wetWheels.filter(Boolean).length;this.douseRequest=inWater>=2&&Math.abs(this.speed)>1.5;
+    if(inWater>=2){this.flameExposure=0;this.contactHeat=0;}
     // Sparks from scraping metal or a grinding hub light any fuel they touch; flames under the car burn it,
     // and so does a burning car leaning on this one (contactHeat, set each frame by main).
     let heat=0,by=-1;

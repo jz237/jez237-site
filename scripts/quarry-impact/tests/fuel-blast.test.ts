@@ -13,3 +13,10 @@ test('a burning car with a split fuel tank blows up 6–12 s into the burn, once
  }
  const s=new VehicleThermalState(70,.5);s.primeFuelBlast();for(let t=0;t<20;t+=1/30)s.advance(70,1/30);assert.ok(!s.exploded,'a leaking car that is not burning does not blow');
 });
+test('water puts a burning car out for good this episode, cancels a pending fuel blast, and a fresh fire can still start',()=>{
+ const s=new VehicleThermalState(70,.4);s.ignite();s.primeFuelBlast();for(let t=0;t<3;t+=1/30)s.advance(70,1/30);
+ assert.ok(s.burning&&s.heat>.2);assert.ok(s.douse());assert.ok(!s.burning&&!s.douse());
+ s.primeFuelBlast();let blew=false;for(let t=0;t<20;t+=1/30)blew||=s.advance(70,1/30);
+ assert.ok(!blew&&!s.exploded&&s.heat<.1,'no blast, the heat dies away');
+ s.ignite();for(let t=0;t<2;t+=1/30)s.advance(70,1/30);assert.ok(s.burning,'standing in flames again relights it');
+});

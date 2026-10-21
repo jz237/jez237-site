@@ -34,11 +34,15 @@ export class VehicleThermalState {
     this.health=health;this.age+=dt;return burst;
   }
   /** A burning car leaking fuel blows up 6–12 s into the burn (once per damage episode; offline cars only). */
-  primeFuelBlast(){if(this.fuelBlast===undefined&&!this.exploded)this.fuelBlast=6+unitNoise(this.seed+this.episode*1.173+33.1)*6;}
+  primeFuelBlast(){if(this.fuelBlast===undefined&&!this.exploded&&!this.doused)this.fuelBlast=6+unitNoise(this.seed+this.episode*1.173+33.1)*6;}
+  /** Put out by water (driving through a puddle): it stops burning, will not relight this damage episode, and a
+   * pending fuel-tank blast is cancelled. Heat and smoke die away as they would after the fuel runs out. */
+  douse(){if(!this.burning)return false;this.burning=false;this.eligible=false;this.assessed=true;this.ignitionTime=0;this.fuelBlast=undefined;this.doused=true;return true;}
+  doused=false;
   /** Set alight from outside (burning fuel or oil under the car): it burns like an engine fire. */
   ignite(){
-    if(this.burning)return;
+    if(this.burning)return;this.doused=false;
     this.burning=true;this.assessed=true;this.eligible=true;this.burnTime=0;this.fuelTime=25+unitNoise(this.seed+this.episode*1.173+21.7)*20;
   }
-  reset(health=100){this.health=health;this.heat=this.smoke=this.soot=this.burst=this.age=this.criticalTime=this.burnTime=this.ignitionTime=0;this.exploded=this.burning=this.assessed=this.eligible=this.explosive=false;this.fuelBlast=undefined;this.episode++;}
+  reset(health=100){this.health=health;this.heat=this.smoke=this.soot=this.burst=this.age=this.criticalTime=this.burnTime=this.ignitionTime=0;this.exploded=this.burning=this.assessed=this.eligible=this.explosive=false;this.fuelBlast=undefined;this.doused=false;this.episode++;}
 }

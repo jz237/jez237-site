@@ -1,6 +1,7 @@
+import {restoreWaterDouseBytes} from './water-douse-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readFuelBlastPrevious,restoreFuelBlastBytes,verifyFuelBlastRevision} from './fuel-blast-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreWaterDouseBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('FuelBlast preserves every prior fixture, vehicle asset, venue art and history input',verifyFuelBlastRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/fuel-blast/revision.json').toString());
