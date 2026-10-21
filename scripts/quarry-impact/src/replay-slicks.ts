@@ -14,7 +14,8 @@ export class ReplaySlicks{
     while(this.index<this.drips.length&&this.drips[this.index].time<=time){
       const d=this.drips[this.index++];
       this.slicks.advance(d.time-this.clock);this.clock=Math.max(this.clock,d.time);
-      if(d.kind===3)this.slicks.igniteAt(d.position[0],d.position[2],.05,false);
+      // An ignition's seed records whether it was raining (0.5) or dry (0), which sets how long it burns.
+      if(d.kind===3){this.slicks.wet=d.seed>=.5;this.slicks.igniteAt(d.position[0],d.position[2],.05,false);}
       else this.slicks.drip(d.position[0],d.position[1],d.position[2],d.kind,d.seed);
     }
     this.slicks.advance(time-this.clock);this.clock=time;

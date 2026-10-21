@@ -108,3 +108,28 @@ test('fire credit: puddles lit carry the lighter through the spread; setting a r
  assert.ok(fresh.includes('firestarter')&&fresh.includes('inferno'));
  for(const id of ['firestarter','inferno'])assert.ok(ACHIEVEMENTS.some(x=>x.id===id)&&BADGE_DECALS.some(d=>d.badge===id));
 });
+test('rain: sparks need to land closer, fires burn out sooner and creep slower; replays read the rain from each ignition',async()=>{
+ const {WET}=await import('../src/fluid-leaks');const {ReplaySlicks}=await import('../src/replay-slicks');
+ const dry=world().s,wet=world().s;wet.wet=true;
+ try{
+  for(const s of [dry,wet])s.drip(0,0,0,2,.5);
+  assert.equal(wet.igniteAt(.4,0,.2,true),0,'a wet spark at the edge does not catch');assert.equal(dry.igniteAt(.4,0,.2,true),1);
+  wet.igniteAt(0,0,.02,false);
+  const d=dry.fires()[0],w=wet.fires()[0];assert.ok(Math.abs((w.end-w.start)-(d.end-d.start)*WET.burn)<1e-6);
+  const events=[{time:0,position:[0,0,0],kind:2 as const,seed:.5},{time:.5,position:[0,0,0],kind:3 as const,seed:.5}];
+  const play=new ReplaySlicks(events,new T.Scene());try{play.update(1);const f=play.slicks.fires()[0];assert.ok(Math.abs((f.end-f.start)-(w.end-w.start))<1e-6,'the replay burns as long as the wet live fire');}finally{play.dispose();}
+ }finally{dry.dispose();wet.dispose();}
+});
+test('tyres in the flames cook towards a puncture',async()=>{
+ const original=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/([\w-]+)\.glb$/.exec(String(url))![1] as never);try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}
+ const scene=new T.Scene(),w=new R.World({x:0,y:-9.81,z:0}),slicks=new FluidSlicks(scene);w.createCollider(R.ColliderDesc.cuboid(80,.5,80).setTranslation(0,-.5,0));
+ const fx={emit(){},mark(){},detach(m:T.Mesh){m.visible=false;},slicks} as never;
+ const c=new Vehicle(0,'sedan',stockSetup('sedan').paint,scene,w,fx,stockSetup('sedan'),{height:()=>0,surface:()=>'asphalt'} as never,'angular-v1');
+ try{
+  c.extendedDamage=true;c.place(0,0,0);c.render(1);c.input.brake=1;
+  for(let k=0;k<30;k++){c.preStep(1/60);w.step();c.postStep(1/60,k/60);}
+  const p=c.controller.wheelContactPoint(0)!;slicks.drip(p.x,0,p.z,2,.5);slicks.igniteAt(p.x,p.z,.05,false);
+  for(let k=0;k<60*4;k++){c.preStep(1/60);w.step();slicks.advance(1/60);c.postStep(1/60,1+k/60);}
+  assert.ok((c.tyreDamage?.[0]??0)>.12&&(c.tyreDamage?.[3]??0)===0,`the tyre in the fire weakened (${c.tyreDamage?.map(v=>v.toFixed(2))})`);
+ }finally{c.dispose();w.free();slicks.dispose();}
+});

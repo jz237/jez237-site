@@ -17,7 +17,9 @@ export const fuelSpacing=(severity:number)=>FUEL.spacing+FUEL.sparse*(1-clamp01(
 export const BURN={fuel:{base:6,perRadius:7,spread:.3},oil:{base:14,perRadius:10,spread:1.1},reach:.45,rise:.4,fade:1.8,scorch:150} as const;
 export const burnDuration=(kind:number,radius:number)=>kind===2?BURN.fuel.base+BURN.fuel.perRadius*radius:BURN.oil.base+BURN.oil.perRadius*radius;
 /** Standing in flames: health lost per second at full strength, and seconds of exposure before the car catches. */
-export const FLAME={damage:4,ignite:1.4,cool:.5} as const;
+export const FLAME={damage:4,ignite:1.4,cool:.5,tyre:.06} as const;
+/** Rain: sparks catch less readily, fires burn out sooner and creep more slowly. */
+export const WET={sparkReach:.4,burn:.6,spread:1.6} as const;
 export type GroundFire={x:number;y:number;z:number;radius:number;start:number;end:number;kind:number;seed:number};
 /** Flame strength 0..1 of a fire at time t: flares over BURN.rise, dies over the last BURN.fade seconds. */
 export function burnLevel(f:Pick<GroundFire,'start'|'end'>,t:number){
@@ -52,6 +54,8 @@ export class FluidSlicks{
   readonly spots=new Float32Array(this.capacity*S);
   /** Fire runs from a burning spot to touching ones. Replays turn this off and apply the recorded ignitions. */
   spread=true;
+  /** Raining (offline events): set from the event's weather; replays read it from each recorded ignition. */
+  wet=false;
   /** Called for every ignition (centre of the spot), for replay recording and sound. */
   onIgnite?:(x:number,y:number,z:number,kind:FluidKind,owner:number)=>void;
   private readonly data=new Float32Array(this.capacity*4);
@@ -132,13 +136,13 @@ diffuseColor.rgb=mix(vSlick.x<.5?vec3(.018,.015,.012):vSlick.x<1.5?vec3(.025,.07
   }
   private ignite(i:number,owner=-1){
     const o=i*S,s=this.spots;if(this.lit(i)||s[o+3]===1||s[o+5]<.05)return false;
-    s[o+7]=this.time.value;s[o+8]=this.time.value+burnDuration(s[o+3],s[o+2]);s[o+10]=owner;this.burning++;this.write(i);
+    s[o+7]=this.time.value;s[o+8]=this.time.value+burnDuration(s[o+3],s[o+2])*(this.wet?WET.burn:1);s[o+10]=owner;this.burning++;this.write(i);
     this.onIgnite?.(s[o],s[o+9],s[o+1],s[o+3] as FluidKind,owner);return true;
   }
   /** Light the flammable spots touching (x, z) within reach. Sparks light fuel only; flames light fuel and oil.
    * The owner (the car whose sparks or flames did it) is passed on to the puddles the fire spreads to. */
   igniteAt(x:number,z:number,reach:number,fuelOnly:boolean,owner=-1){
-    let lit=0;const s=this.spots;
+    let lit=0;const s=this.spots;if(this.wet&&fuelOnly)reach*=WET.sparkReach;
     for(let i=0;i<this.count;i++){
       const o=i*S,kind=s[o+3];if(kind===1||(fuelOnly&&kind!==2)||this.lit(i)||s[o+5]<.05)continue;
       if(Math.hypot(s[o]-x,s[o+1]-z)<=s[o+2]+reach&&this.ignite(i,owner))lit++;
@@ -186,7 +190,7 @@ diffuseColor.rgb=mix(vSlick.x<.5?vec3(.018,.015,.012):vSlick.x<1.5?vec3(.025,.07
       for(let i=0;i<this.count;i++){
         const o=i*S;if(s[o+7]<0)continue;
         if(t>=s[o+8]){if(s[o+5]>0){s[o+5]=0;this.data[i*4+2]=0;this.mesh.geometry.attributes.slickData.needsUpdate=true;}continue;}
-        if(!this.spread||this.spreadDone[i]||t-s[o+7]<(s[o+3]===2?BURN.fuel.spread:BURN.oil.spread))continue;
+        if(!this.spread||this.spreadDone[i]||t-s[o+7]<(s[o+3]===2?BURN.fuel.spread:BURN.oil.spread)*(this.wet?WET.spread:1))continue;
         this.spreadDone[i]=1;
         for(let j=0;j<this.count;j++){
           if(j===i||this.lit(j))continue;const q=j*S;if(s[q+3]===1||s[q+5]<.05)continue;

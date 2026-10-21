@@ -1,6 +1,7 @@
+import {restoreWetFiresBytes} from './wet-fires-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readFireAwardsPrevious,restoreFireAwardsBytes,verifyFireAwardsRevision} from './fire-awards-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreWetFiresBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('FireAwards preserves every prior fixture, vehicle asset, venue art and history input',verifyFireAwardsRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/fire-awards/revision.json').toString());

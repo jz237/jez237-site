@@ -356,7 +356,12 @@ export class Vehicle {
       const half0=DEFINITIONS[this.kind].halfLength,sample=[0,1,2,3].map(i=>this.controller.wheelContactPoint(i)).filter((p):p is NonNullable<typeof p>=>!!p);
       const centre=this.previous;
       if(this.scraping>.3){for(const p of sample)slicks.igniteAt(p.x,p.z,.25,true,this.id);slicks.igniteAt(centre.x,centre.z,half0*.5,true,this.id);}
-      let heat=slicks.heatAt(centre.x,centre.z),hottest={x:centre.x,z:centre.z};for(const p of sample){const h=slicks.heatAt(p.x,p.z);if(h>heat){heat=h;hottest={x:p.x,z:p.z};}}
+      let heat=slicks.heatAt(centre.x,centre.z),hottest={x:centre.x,z:centre.z};
+      for(let i=0;i<4;i++){
+        const p=this.wreckParts.wheelLost[i]?null:this.controller.wheelContactPoint(i);if(!p)continue;const h=slicks.heatAt(p.x,p.z);if(h>heat){heat=h;hottest={x:p.x,z:p.z};}
+        // Rubber in the flames cooks: the tyre weakens towards a puncture and, in the end, a flat.
+        if(h>0&&this.tyreDamage)this.tyreDamage[i]=Math.min(1,this.tyreDamage[i]+h*FLAME.tyre*dt);
+      }
       this.flameHeat=heat;
       if(heat>0){
         if(this.health>0)this.health=Math.max(0,this.health-FLAME.damage*heat*dt);
