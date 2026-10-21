@@ -1,6 +1,10 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
-## Unreleased
+## v2.46.0 — Original ending world, water option and a clean test suite
+
+The championship ending keeps the final race running under its overlay with
+the original held camera and ceremony gulls; Options gains the original water
+setting; and all long-standing test failures are resolved.
 
 ### original championship ending world and camera
 
