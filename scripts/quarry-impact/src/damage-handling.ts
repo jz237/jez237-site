@@ -29,6 +29,13 @@ export function bentRimTyre(tyreDamage:number,wheelDamage:number){
 }
 /** Visual runout of a bent rim (radians of tilt in the wheel's spinning frame): none below BENT_RIM.onset. */
 export function rimWobble(wheelDamage:number){return Number.isFinite(wheelDamage)&&wheelDamage>=BENT_RIM.onset?Math.min(.12,(wheelDamage-.1)*.18):0;}
+/** A corner hit hard enough snaps its coil spring: the corner sags onto the bump stops (rest length and stiffness
+ * drop) and the car leans that way. Harder still, the driveshaft to that wheel snaps and it stops driving. Natural
+ * derby wheel damage tops out near 0.2 (wheels past 0.15 tend to be torn off), hence the low thresholds. */
+export const SPRING={snap:.16,sag:.6,stiffness:.35,shaft:.19} as const;
+export const springBias=(wheelDamage:number)=>wheelDamage>=SPRING.snap?SPRING.stiffness:1;
+export const sagBias=(wheelDamage:number)=>wheelDamage>=SPRING.snap?SPRING.sag:1;
+export const driveBias=(wheelDamage:number)=>wheelDamage>=SPRING.shaft?0:1;
 /** A damaged corner's damper loses up to DAMPER_LOSS of its damping, so it bounces and wallows. */
 /** Gearbox damage: crushing the driven end of the car past GEARBOX.onset strips the top gear, then more,
  * down to GEARBOX.min gears, which caps top speed. */
