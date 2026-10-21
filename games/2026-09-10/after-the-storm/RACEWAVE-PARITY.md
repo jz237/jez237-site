@@ -1,6 +1,10 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
-## Unreleased
+## v2.46.1 — Expert champion's ending flock
+
+Winning the Expert cup now gets the original ending flock; every ending gull
+script is verified frame by frame against the original, and finished riders
+poll an idle controller until the original AI takes over during the ending.
 
 ### Expert champion's ceremony flock, all ceremony scripts verified
 
