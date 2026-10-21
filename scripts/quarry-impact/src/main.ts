@@ -7,6 +7,7 @@ import {programWarmupView} from './program-warmup';
 import {ReplayPuddles} from './replay-puddles';
 import {ReplaySlicks} from './replay-slicks';
 import {PropFires,propKind,DRUM_BLAST} from './prop-fires';
+import {avoidFires} from './fire-avoidance';
 import {setSceneShadows,createPMREMGenerator} from './rendering';
 import {quarryReplayProps} from './quarry-tyres';
 import {colliderImpactMaterial,type ImpactMaterial} from './impact-material';
@@ -97,7 +98,7 @@ import {createIronfieldWorld} from './ironfield-world';
 import {createBrackenWorld} from './bracken-world';
 import {createCinderbankWorld} from './cinderbank-world';
 import {tyreWarning} from './tyre-feedback';
-import {fluidWarning,leakRates,burnLevel} from './fluid-leaks';
+import {fluidWarning,leakRates,burnLevel,type GroundFire} from './fluid-leaks';
 import {gearboxWarning} from './damage-handling';
 import {engineStatus} from './engine-condition';
 import {drivingObstacleClearance} from './driving-probe';
@@ -1330,7 +1331,16 @@ function input(): Input {
   const pads=Array.from(navigator.getGamepads?.()??[],pad=>pad?controllerInput.drivingPad(pad):null);
   return drivingInput(drivingControls,keys,pads,cars[0]?.speed??0,!online?.active||online.network.snapshot?.transmissionSupport===true,!online?.active||online.network.snapshot?.assistsSupport===true);
 }
+const aiFires:{clock:number;list:GroundFire[]}={clock:-1,list:[]};let fireAvoidance=true;
+/** Offline AI drivers also steer round burning puddles and props, and drive out of flames. */
 function ai(car: Vehicle, dt: number): Input {
+  const input=aiCore(car,dt);
+  if(!fireAvoidance||!car.extendedDamage||online?.active||car.health<=0)return input;
+  if(aiFires.clock!==fx.slicks.clock){aiFires.clock=fx.slicks.clock;aiFires.list=fx.slicks.burningCount()||propFires.burning.size?[...fx.slicks.fires(),...propFires.fires(fx.slicks.clock,propPoints(activeVenue.props))]:[];}
+  const fires=aiFires.list;
+  return fires.length?avoidFires(car,input,fires,fx.slicks.clock,car.flameHeat):input;
+}
+function aiCore(car: Vehicle, dt: number): Input {
   if(car.health<=0||(car.finished&&mode!=='race'))return {throttle:0,steer:0,brake:1,handbrake:false};
   const yaw=Math.atan2(car.forward.x,car.forward.z);
   const practiceTraffic=mode==='playground'&&activeVenue!==quarryVenue;
@@ -2094,6 +2104,8 @@ async function boot() {
     igniteAt: (id: number, reach = 3) => { const c = cars.find(x => x.id === id); return c ? fx.slicks.igniteAt(c.current.x, c.current.z, reach, false) : 0; },
     get replaySlicks(){return replaySlicks?{...replaySlicks.slicks.stats,props:replaySlicks.props.burning.size}:null;},
     get propFires(){return propFires.burning.size;},
+    /** QA: switch AI fire avoidance off to compare. */
+    setFireAvoidance: (on: boolean) => { fireAvoidance = !!on; },
     get propFireState(){return{clock:fx.slicks.clock,burning:[...propFires.burning].map(([i,f])=>({i,...f}))};},
     /** QA: set loose prop i alight (offline); returns its position. */
     burnProp: (i: number) => { const p = propPoints(activeVenue.props)[i]; if (!p?.kind) return null; propFires.ignite(i, p.kind, fx.slicks.clock, p); return [p.x, p.y, p.z, p.kind]; },

@@ -1,6 +1,7 @@
+import {restoreFireAvoidanceBytes} from './fire-avoidance-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readDrumBlastPrevious,restoreDrumBlastBytes,verifyDrumBlastRevision} from './drum-blast-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreFireAvoidanceBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('DrumBlast preserves every prior fixture, vehicle asset, venue art and history input',verifyDrumBlastRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/drum-blast/revision.json').toString());

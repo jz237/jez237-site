@@ -102,6 +102,8 @@ diffuseColor.rgb=mix(vSlick.x<.5?vec3(.018,.015,.012):vSlick.x<1.5?vec3(.025,.07
     this.mesh.instanceMatrix.setUsage(T.DynamicDrawUsage);scene.add(this.mesh);
   }
   get clock(){return this.time.value;}
+  /** How many spots are burning (0 means fires() is empty). */
+  burningCount(){return this.burning;}
   private lit(i:number){return this.spots[i*S+7]>=0;}
   /** A slot can be reused once its fluid has faded and any scorch mark has gone. */
   private spent(i:number){const o=i*S;return this.spots[o+5]<=0&&(this.spots[o+7]<0||this.time.value>this.spots[o+8]+BURN.scorch+30);}
