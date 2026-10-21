@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-10-21",
+      "historicDate": "1985-03-04",
+      "displayDate": "Week of March 4-10, 1985",
+      "edition": "Issue 136 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "A galaxy to conquer, a company to command, and a word processor to type yourself.",
+      "leadHeadline": "SSI sends strategy gamers into space and World War II",
+      "storyHeadlines": [
+        "SpeedScript 3.0 brings a 6K word processor to magazine readers",
+        "Color printing breaks below $300",
+        "2400-bps modems promise speed, but supply and service costs loom"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-03-04.jpg",
+      "thumb": "media/thumbs/1985-03-04.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-10-20",
       "historicDate": "1985-02-25",
       "displayDate": "Week of February 25-March 3, 1985",

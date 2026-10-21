@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Tue, 20 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 21 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of March 4-10, 1985 — SSI sends strategy gamers into space and World War II</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-03-04</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-03-04</guid>
+      <pubDate>Wed, 21 Oct 2026 12:00:00 GMT</pubDate>
+      <description>SSI puts diplomacy, conquest and battlefield command on the home computer. Strategy players have two very different maps to unfold. March COMPUTE! reports that Strategic Simulations has introduced Imperium Galactum and Field of Fire, pairing a contest for interstellar power with command of an infantry company in World War II. Each carries a suggested retail price of $39.95. Also this week: SpeedScript 3.0 brings a 6K word processor to magazine readers · Color printing breaks below $300 · 2400-bps modems promise speed, but supply and service costs loom.</description>
+    </item>
     <item>
       <title>Week of February 25-March 3, 1985 — Inside King’s Quest: $700,000 buys a new kind of adventure</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-02-25</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-10-22</guid>
       <pubDate>Wed, 30 Sep 2026 12:00:00 GMT</pubDate>
       <description>Activision turns the summer film sensation into an October home-computer game, giving the game shelf this week’s biggest name. Ghostbusters is crossing from the movie theater to the Commodore 64. Release listings place Activision’s North American C64 edition on Friday, October 26; a separate catalog confirms an October 1984 C64 release. The precise Friday date rests on the release listing rather than a contemporary day-of-sale advertisement, but the game plainly belongs on this October shelf. Also this week: Commodore Puts a $300 Office in the Plus/4 · The Neighborhood Bulletin Board Takes Shape · BYTE Measures the IBM PC/AT’s 6 MHz Pace.</description>
-    </item>
-    <item>
-      <title>Week of October 15-21, 1984 — Commodore Readies the Plus/4 for the Holiday Shelf</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-10-15</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-10-15</guid>
-      <pubDate>Tue, 29 Sep 2026 12:00:00 GMT</pubDate>
-      <description>A $300 “productivity machine” promises an office in ROM, but the C64’s immense game library will not follow it. Commodore’s Plus/4 is moving toward the holiday counter with an unusual pitch for a home computer: useful software is already inside. An October COMPUTE! hands-on report lists the machine at $300 with 64K of RAM and four integrated applications collectively called 3-Plus-1. The magazine’s reporting predates this week, so an exact October 15 launch is not established. Also this week: Archon II and Skyfox broaden Electronic Arts’ games line · Spy Hunter and Tapper arrive on home computers · A color printer for the home desk at $239 · IBM tries a second act for the PCjr.</description>
     </item>
   </channel>
 </rss>

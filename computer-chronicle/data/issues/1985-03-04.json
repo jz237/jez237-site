@@ -1,0 +1,561 @@
+{
+  "currentDate": "2026-10-21",
+  "historicDate": "1985-03-04",
+  "displayDate": "Week of March 4-10, 1985",
+  "edition": "Issue 136 - Weekly 1985 Computer & Culture Chronicle",
+  "visualProfile": {
+    "tone": "Strategy commands the home computer",
+    "motifs": [
+      "space strategy star map",
+      "WWII tactical map",
+      "joystick and floppy disks"
+    ],
+    "layout": "Dense warm newsprint with red and blue headers"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Issue 136 - Weekly 1985 Computer & Culture Chronicle",
+    "dateline": "Week of March 4-10, 1985",
+    "price": "75 cents"
+  },
+  "layoutPlan": {
+    "leadPlacement": "SSI space and WWII strategy games dominate front page",
+    "secondaryRail": "SpeedScript, color printers, 2400-bps modems",
+    "archiveNavigation": "Weekly archive and previous/next controls"
+  },
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1985-03-04.jpg",
+    "alt": "Computer Chronicle front page for March 4-10, 1985, featuring SSI strategy games",
+    "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "March computer-magazine reporting joins the March 5 letters page, March 9 rock chart and March 8-10 cinema weekend.",
+  "morningLine": "A galaxy to conquer, a company to command, and a word processor to type yourself.",
+  "lead": {
+    "headline": "SSI sends strategy gamers into space and World War II",
+    "dek": "SSI puts diplomacy, conquest and battlefield command on the home computer.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      0,
+      1
+    ],
+    "body": [
+      "Strategy players have two very different maps to unfold. March COMPUTE! reports that Strategic Simulations has introduced Imperium Galactum and Field of Fire, pairing a contest for interstellar power with command of an infantry company in World War II. Each carries a suggested retail price of $39.95.",
+      "Imperium Galactum, listed for Apple and Atari computers, offers four difficulty levels and room for as many as four human or computer players. Power can be pursued through negotiation as well as war. The attraction is the long view: building an empire, judging rivals and deciding when diplomacy has run its course.",
+      "Field of Fire trades the galactic map for the fortunes of Easy Company. Listed for Atari and Commodore 64, it puts the player in command through World War II battles. The two notices point to a broadening strategy shelf, where the same computer can host both empire building and tactical decisions.",
+      "These are March publication reports, not evidence of a particular launch during March 4-10. Alongside them, Arthur Leyenberger’s review of Sid Meier’s Solo Flight offers another kind of measured play: carrying mail through changing weather while balancing fuel and load. The home computer’s game room is making space for planning as well as reflexes."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "SpeedScript 3.0 brings a 6K word processor to magazine readers",
+      "body": [
+        "Charles Brannon’s SpeedScript 3.0 arrives in the March pages of COMPUTE! as a machine-language writing tool for the Commodore 64. It occupies about 6K while leaving more than 43K for text—described as enough for 20 to 40 printed pages.",
+        "Word wrap, search and replace, and the ability to move or copy words, sentences and paragraphs give the household computer serious manuscript duties. Tape or disk storage, margins, centering, headers and footers round out the writing desk.",
+        "The new version incorporates a year of enhancements and reader suggestions since the January 1984 Gazette original. Readers must enter it afresh with MLX rather than patch an old copy. An optional disk costs $12.95 plus $2 shipping in the US and Canada; versions for other machines are promised for later issues, not on sale here today."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "headline": "Color printing breaks below $300",
+      "body": [
+        "The printer shelf has two new prices worth a second look. March COMPUTE! lists Okidata’s Okimate 20 at $268 and its Microline 182 at $299, both published retail figures rather than verified store discounts.",
+        "The IBM-compatible Okimate 20 uses thermal transfer for color output and screen dumps. Its package includes Learn to Print and Color Screen Print software; rated speeds are 80 characters per second in draft and 40 in letter-quality mode.",
+        "The Microline 182 takes the dot-matrix route for IBM and Apple computers, with ratings of 120 characters per second in utility quality and 60 in enhanced quality. Buyers should compare the printing method as carefully as the price: these are two distinct approaches to putting computer work on paper."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "headline": "2400-bps modems promise speed, but supply and service costs loom",
+      "body": [
+        "Arlan R. Levitan’s March telecomputing column finds 2400-bps modems promising twice the data rate of 1200-bps equipment and eight times that of familiar 300-bps home units. The price band is still a formidable $800 to $900.",
+        "V.22 bis compatibility is central to the transition. These machines operate at 600 baud while carrying 2400 bits per second; baud and bit rate are not interchangeable. Levitan reports concerns about QAM-chip supplies and predicts scarcity until fall.",
+        "Commercial-service access is forecast for March and April, initially at three to four times base hourly rates. Those are contemporary expectations, not confirmed tariffs. Faster calls may save time, but buyers still have to reckon with equipment availability and the service bill."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Okimate 20",
+      "summary": "$268 IBM-compatible thermal-transfer color printer; 80 cps draft, 40 cps letter-quality.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "title": "Microline 182",
+      "summary": "$299 IBM/Apple dot-matrix printer; 120 cps utility, 60 cps enhanced.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "title": "Separated chroma/luma video",
+      "summary": "March technical explainer says Commodore 1701/1702 monitors accept separated signals, improving on standard composite; this is buying advice, not a new product launch.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        6
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "SpeedScript 3.0",
+      "detail": "Commodore 64 machine-language word processor; March listing and optional $12.95 disk; later platform versions only promised.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "name": "Magic Piano Learning System",
+      "detail": "EduSoft Apple II package: Magic Piano, Rhythm Game, Melody Game; $49.95.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        5
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games — editorial selections, not sales rankings",
+      "items": [
+        "Imperium Galactum — SSI space strategy; Apple and Atari; four difficulty levels; up to four human/computer players; $39.95 suggested retail.",
+        "Field of Fire — SSI World War II tactics; Atari and Commodore 64; Easy Company campaign framing; $39.95 suggested retail.",
+        "Solo Flight — Sid Meier/Microprose simulation reviewed by Arthur Leyenberger. Commodore 64 or Atari with at least 48K, disk drive, and joystick; $34.95. Flying practice and Mail Pilot modes; Kansas, Washington, Colorado terrain; 21 Mail Pilot airports. Five mail bags, fuel/load decisions, worsening weather and higher-level failures provide the game structure. Review does not prove new release.",
+        "King’s Quest — Sierra/IBM graphical adventure; February production coverage, carried forward as a shelf selection.",
+        "Amazon — Michael Crichton adventure; February design coverage, carried forward as a shelf selection."
+      ],
+      "confidence": "March coverage plus prior-month shelf selections",
+      "sourceRefs": [
+        0,
+        1,
+        12,
+        13
+      ]
+    },
+    {
+      "label": "Top 5 Movies — March 8-10 domestic weekend box office",
+      "items": [
+        "1. Witness — $4,506,587",
+        "2. Beverly Hills Cop — $4,427,390",
+        "3. The Breakfast Club — $3,298,436",
+        "4. The Sure Thing — $2,894,217",
+        "5. Into the Night — $2,574,438"
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        10
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Imperium Galactum",
+      "price": "$39.95",
+      "note": "suggested retail",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Field of Fire",
+      "price": "$39.95",
+      "note": "suggested retail",
+      "confidence": "same-month",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Solo Flight",
+      "price": "$34.95",
+      "note": "review-listed price",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "SpeedScript 3.0 disk",
+      "price": "$12.95",
+      "note": "direct-order price; add $2 US/Canada shipping, $3 outside US/Canada",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "item": "Okimate 20",
+      "price": "$268.00",
+      "note": "published retail",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "item": "Microline 182",
+      "price": "$299.00",
+      "note": "published retail",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "item": "Magic Piano Learning System",
+      "price": "$49.95",
+      "note": "published retail",
+      "confidence": "same-month",
+      "sourceRefs": [
+        5
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "BBS boom in Australia",
+      "summary": "Lloyd Borrett’s March Today’s Computers article reports more than 1,000 US systems and a growing Australian population; these are the contemporary author’s counts, not independently audited totals.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        8
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "artist": "Mick Jagger",
+      "title": "Just Another Night",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-03-09",
+      "confidence": "exact-date",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-03-09.pdf"
+      ],
+      "song": "Just Another Night",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "rank": 2,
+      "artist": "The Firm",
+      "title": "Radioactive",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-03-09",
+      "confidence": "exact-date",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-03-09.pdf"
+      ],
+      "song": "Radioactive",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "rank": 3,
+      "artist": "Bryan Adams",
+      "title": "Somebody",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-03-09",
+      "confidence": "exact-date",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-03-09.pdf"
+      ],
+      "song": "Somebody",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "rank": 4,
+      "artist": "Phil Collins",
+      "title": "One More Night",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-03-09",
+      "confidence": "exact-date",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-03-09.pdf"
+      ],
+      "song": "One More Night",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "rank": 5,
+      "artist": "Don Henley",
+      "title": "All She Wants to Do Is Dance",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-03-09",
+      "confidence": "exact-date",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-03-09.pdf"
+      ],
+      "song": "All She Wants to Do Is Dance",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "rank": 6,
+      "artist": "John Fogerty",
+      "title": "Rock & Roll Girls",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-03-09",
+      "confidence": "exact-date",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-03-09.pdf"
+      ],
+      "song": "Rock & Roll Girls",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "rank": 7,
+      "artist": "David Bowie/Pat Metheny",
+      "title": "This Is Not America",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-03-09",
+      "confidence": "exact-date",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-03-09.pdf"
+      ],
+      "song": "This Is Not America",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "rank": 8,
+      "artist": "Journey",
+      "title": "Only the Young",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-03-09",
+      "confidence": "exact-date",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-03-09.pdf"
+      ],
+      "song": "Only the Young",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "rank": 9,
+      "artist": "Foreigner",
+      "title": "That Was Yesterday",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-03-09",
+      "confidence": "exact-date",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-03-09.pdf"
+      ],
+      "song": "That Was Yesterday",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "rank": 10,
+      "artist": "Bruce Springsteen",
+      "title": "I’m on Fire",
+      "chart": "Billboard Top Rock Tracks",
+      "chartDate": "1985-03-09",
+      "confidence": "exact-date",
+      "sourceUrls": [
+        "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-03-09.pdf"
+      ],
+      "song": "I’m on Fire",
+      "sourceRefs": [
+        9
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "Magic Piano Learning System — $49.95",
+    "summary": "EduSoft Apple II package: Magic Piano, Rhythm Game, Melody Game; $49.95.",
+    "tagline": "From the March product pages",
+    "sourceRefs": [
+      5
+    ]
+  },
+  "market": {
+    "headline": "Faster communications carry a premium",
+    "summary": "March reporting places 2400-bps modems in an $800–$900 band. Levitan forecasts higher service rates and constrained supplies; neither forecast is a verified later outcome.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      4
+    ]
+  },
+  "worldAnchor": {
+    "headline": "British miners return after nearly yearlong strike",
+    "summary": "An Associated Press report published March 5 says most British striking miners returned after union leaders ordered an end to the nearly yearlong walkout, without concessions from Margaret Thatcher’s government. Holdouts in Scotland and Kent sought amnesty for dismissed miners.",
+    "confidence": "same-week",
+    "sourceRefs": [
+      11
+    ]
+  },
+  "bbsNote": {
+    "headline": "Fast modems, crowded boards, and the first irritation of junk e-mail",
+    "summary": "March 1985 evidence spans US commercial services and Australian hobbyist boards. Posts below are editorial summaries of published reporting, not invented or verbatim historical BBS messages.",
+    "posts": [
+      {
+        "topic": "2400-bps transition",
+        "platform": "V.22 bis modem market",
+        "text": "COMPUTE! reports an $800–$900 band, QAM-chip shortages, and forecast March/April service rollouts; qualify all forecasts."
+      },
+      {
+        "topic": "New online communities",
+        "platform": "CompuServe / The Source",
+        "text": "Levitan identifies Bob Walter as Health Forum sysop on CompuServe and Billiam Coronel as the creator of Comedy By Wire on The Source."
+      },
+      {
+        "topic": "Electronic junk mail",
+        "platform": "Commercial online services",
+        "text": "Levitan complains that unwanted promotional mail costs users connect time to retrieve, including when unattended terminal software collects it."
+      },
+      {
+        "topic": "Sysops and public-domain files",
+        "platform": "PC Connection Australia / HiSoft Australia / Computers Galore",
+        "text": "Borrett lists his own IBM-PC board at 300 baud with more than 400 public-domain files; HiSoft sysop is Richard Tolhurst; Computers Galore sysops are Bob Cooban and Martin Scerri. Three Melbourne IBM-compatible systems moved from open access to registration after abuse."
+      }
+    ]
+  },
+  "curiosity": {
+    "headline": "An Apple II turns keyboard play into printable music",
+    "summary": "EduSoft’s $49.95 Magic Piano Learning System mixes composition with rhythm and melody games.",
+    "detail": "March COMPUTE! says songs played on the keyboard are scored and displayed onscreen, and compositions can be played back, edited, saved, or printed. The notice does not identify a separate physical piano keyboard; do not invent one."
+  },
+  "accuracyLedger": {
+    "items": [
+      "No milestone: verified evidence does not establish an era-defining event in March 4–10.",
+      "Consumer-gadget search did not establish a breaking March 4–10 item; gadgetCandidates intentionally omitted. Sony D-50 material found concerned its 1984 introduction, not a new event this week.",
+      "April Antic Atari preview was inspected but excluded as out of period; do not backdate its forecasts or treat unshipped CES prototypes as March retail products.",
+      "Billboard chart is Top Rock Tracks (AOR playlists), not Hot 100 and not Tunecaster. Modern Billboard page extraction did not expose positions; positions below were read from the original March 9 magazine scan.",
+      "Computing stories use March publication evidence, not invented exact-week launches.",
+      "Games are editorial selections, not a sales chart; two carry forward February shelf coverage.",
+      "Modem posts are editorial paraphrases, not historical BBS transcripts."
+    ]
+  },
+  "sources": [
+    {
+      "title": "COMPUTE! 58: Strategy Games",
+      "url": "https://www.atarimagazines.com/compute/issue58/news_strategy_games.html",
+      "date": "1985-03",
+      "datePrecision": "month"
+    },
+    {
+      "title": "COMPUTE! 58: Solo Flight — Arthur Leyenberger",
+      "url": "https://www.atarimagazines.com/compute/issue58/review_solo_flight.html",
+      "date": "1985-03",
+      "datePrecision": "month"
+    },
+    {
+      "title": "COMPUTE! 58: SpeedScript 3.0 — Charles Brannon",
+      "url": "https://www.atarimagazines.com/compute/issue58/speed_script.html",
+      "date": "1985-03",
+      "datePrecision": "month"
+    },
+    {
+      "title": "COMPUTE! 58: New IBM, Apple Printers",
+      "url": "https://www.atarimagazines.com/compute/issue58/news_new_printers.html",
+      "date": "1985-03",
+      "datePrecision": "month"
+    },
+    {
+      "title": "COMPUTE! 58: The Race To Talk Fast — Arlan R. Levitan",
+      "url": "https://www.atarimagazines.com/compute/issue58/telecomputing_today.html",
+      "date": "1985-03",
+      "datePrecision": "month"
+    },
+    {
+      "title": "COMPUTE! 58: Apple Music Learning System",
+      "url": "https://www.atarimagazines.com/compute/issue58/news_apple_music_learning.html",
+      "date": "1985-03",
+      "datePrecision": "month"
+    },
+    {
+      "title": "COMPUTE! 58: RGB Versus Composite Video — Ottis Cowper",
+      "url": "https://www.atarimagazines.com/compute/issue58/computer_video.html",
+      "date": "1985-03",
+      "datePrecision": "month"
+    },
+    {
+      "title": "PC Magazine, March 5, 1985: Letters To PC, Afraid of Prolok Plus",
+      "url": "https://archive.org/stream/PC-Mag-1985-03-05/PC-Mag-1985-03-05_djvu.txt",
+      "date": "1985-03-05",
+      "datePrecision": "day"
+    },
+    {
+      "title": "Today’s Computers: Bulletin Boards Booming — Lloyd Borrett",
+      "url": "https://www.borrett.id.au/computing/art-1985-03-02.htm",
+      "date": "1985-03",
+      "datePrecision": "month"
+    },
+    {
+      "title": "Billboard, March 9, 1985: Top Rock Tracks",
+      "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-03-09.pdf",
+      "date": "1985-03-09",
+      "datePrecision": "day"
+    },
+    {
+      "title": "The Numbers: weekend domestic box office March 8, 1985",
+      "url": "https://www.the-numbers.com/box-office-chart/weekend/1985/03/08",
+      "date": "1985-03-08/1985-03-10",
+      "datePrecision": "day"
+    },
+    {
+      "title": "Associated Press / Los Angeles Times: British Miners Go Back to Work Minus Concessions",
+      "url": "https://www.latimes.com/archives/la-xpm-1985-03-05-mn-12440-story.html",
+      "date": "1985-03-05",
+      "datePrecision": "day"
+    },
+    {
+      "title": "COMPUTE! issue 57: Inside King’s Quest — Donald B. Trivette",
+      "url": "https://www.atarimagazines.com/compute/issue57/kings_quest.html",
+      "date": "1985-02",
+      "datePrecision": "month"
+    },
+    {
+      "title": "COMPUTE! issue 57: Michael Crichton: Reflections of a New Designer — Kathy Yakal",
+      "url": "https://www.atarimagazines.com/compute/issue57/new_designer.html",
+      "date": "1985-02",
+      "datePrecision": "month"
+    }
+  ],
+  "undergroundDesk": {
+    "headline": "Copy protection meets reader resistance",
+    "dek": "A March 5 letters-page protest asks who bears the risk of protecting a disk.",
+    "body": [
+      "Jere C. Batten of Pottstown, Pennsylvania objects to Prolok Plus in PC Magazine’s March 5 letters column. His concern is that protection could harm a legitimate buyer’s data or equipment; the letter is an allegation of risk, not proof of an actual damage incident.",
+      "Batten describes inexperienced church-office users who might make an innocent backup. His examples contrast a paid non-copy-protected Sidekick option with a signed-pledge approach for ProKey, as the correspondent describes them. No cracking crew or pirate board is named in this evidence."
+    ],
+    "groups": [],
+    "confidence": "same-week",
+    "sourceRefs": [
+      7
+    ]
+  }
+}
