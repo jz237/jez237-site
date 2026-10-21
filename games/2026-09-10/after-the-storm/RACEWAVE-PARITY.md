@@ -43,8 +43,11 @@ Expert 2nd and 3rd (801DBF68) fly four or three gulls from frame 800. Each is a
 type-3 presentation row spawned at its window's start point (DB0E4/DAFB8) and
 moved toward its end point every frame with the original wing-beat cycle
 (DB1DC/DB024), then submitted through AC098 and drawn by the course actors'
-gull model. Not reconstructed: the 9CD50 camera offsets, and rider engine sound during the ending (audio stays
-with the ending's menu owner).
+gull model. The 9CD50 offsets that main21's camera also reads are the camera
+shake accumulators (801CEBE0, six vectors per camera, zeroed by 9C8xx, pushed by
+98E90 only on shake events and decayed by 98DE0); nothing in the ending raises
+one, so they add nothing to the held view. Not reconstructed: rider engine
+sound during the ending (audio stays with the ending's menu owner).
 
 ### original water option
 
