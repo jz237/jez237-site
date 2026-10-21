@@ -5,6 +5,7 @@ import {fireProfile} from './vehicle-fire-profile';
 import {fireNoise} from './fire-noise';
 import {bakedVehicleFX,prepareBakedVehicleFX} from './baked-vehicle-fx';
 import {DAYLIGHT_DIRECTION} from './static-shadows';
+import {burnLevel,type GroundFire} from './fluid-leaks';
 
 type Puff = {p:T.Vector3;v:T.Vector3;anchor:T.Vector3;site:number;age:number;life:number;size:number;seed:number;kind:number;owner:number;strength:number;depth:number;heat:number;aspect:number;soot:number};
 type Emitter = {car:Vehicle;state:VehicleThermalState;origin:T.Vector3;smoke:number;flame:number;embers:number;impactSerial:number;profile:ReturnType<typeof fireProfile>;sites:{position:T.Vector3;weight:number;name:string}[]};
@@ -15,6 +16,11 @@ export type ThermalAudio = {id:number;position:T.Vector3;heat:number;burst:numbe
 export class VehicleFire {
   static loadBaked=prepareBakedVehicleFX;
   readonly capacity = 640;
+  /** Burning oil and fuel on the ground: rebuilt from the slick burn state every frame, live and in replays. */
+  readonly groundCapacity = 360;
+  readonly ground:Puff[] = [];
+  private groundFires:GroundFire[] = [];
+  private groundTime = 0;
   readonly emitters = new Map<number,Emitter>();
   readonly particles:Puff[] = [];
   readonly mesh:T.Mesh<T.InstancedBufferGeometry,T.ShaderMaterial>;
@@ -26,9 +32,9 @@ export class VehicleFire {
   private accumulator = 0;
   private quality = 'ultra';
   private seed=0;
-  private offsets = new Float32Array(this.capacity*3);
-  private data = new Float32Array(this.capacity*4);
-  private details = new Float32Array(this.capacity*4);
+  private offsets = new Float32Array((this.capacity+this.groundCapacity)*3);
+  private data = new Float32Array((this.capacity+this.groundCapacity)*4);
+  private details = new Float32Array((this.capacity+this.groundCapacity)*4);
   private visible:Puff[]=[];
   private noise:T.Data3DTexture;
   private fallbackAtlas=new T.DataTexture(new Uint8Array([0,0,0,0]),1,1);
@@ -120,6 +126,7 @@ export class VehicleFire {
         }`});
     this.mesh=new T.Mesh(g,material);this.mesh.name='vehicle-volumetric-fire-smoke';this.mesh.frustumCulled=false;this.mesh.renderOrder=4;scene.add(this.mesh);
     for(let i=0;i<this.capacity;i++)this.particles.push({p:new T.Vector3(),v:new T.Vector3(),anchor:new T.Vector3(),site:0,age:0,life:0,size:1,seed:noiseRandom()*31,kind:0,owner:-1,strength:1,depth:0,heat:0,aspect:1,soot:1});
+    for(let i=0;i<this.groundCapacity;i++)this.ground.push({p:new T.Vector3(),v:new T.Vector3(),anchor:new T.Vector3(),site:0,age:0,life:0,size:1,seed:0,kind:0,owner:-1,strength:1,depth:0,heat:0,aspect:.8,soot:1});
     for(let i=0;i<2;i++){const light=new T.PointLight(0xff7a24,0,10,2);light.name='vehicle-fire-light-'+i;scene.add(light);this.lights.push(light);}
   }
   setQuality(quality:string){this.quality=quality;this.mesh.material.uniforms.steps.value=quality==='ultra'?9:quality==='high'?7:5;}
@@ -173,6 +180,8 @@ export class VehicleFire {
       });
       const dominant=e.sites.reduce((a,b)=>a.weight>b.weight?a:b);e.origin.copy(dominant.position);
       const impact=car.impactSerial!==e.impactSerial?car.lastDamage:Math.max(0,state.health-car.health);
+      // A car left standing in burning oil or fuel catches fire itself (offline only).
+      if(car.extendedDamage&&car.igniteRequest){car.igniteRequest=false;state.ignite();}
       const ignition=state.advance(car.health,dt,impact,zones,e.profile.engineZone,e.profile.waterCooled,car.extendedDamage?car.engineDamage:undefined);e.impactSerial=car.impactSerial;
       car.wreckFinish?.advance(state.heat,dt);
       if(ignition){for(let j=0;j<16;j++)this.spawn(e,2,true);for(let j=0;j<8;j++)this.spawn(e,0,true);this.spark(e.origin,32,1,4.5);this.bursts.push({id:car.id,position:e.origin.clone(),heat:state.heat,burst:1});}
@@ -192,12 +201,38 @@ export class VehicleFire {
   }
   /** Upload externally reconstructed particles without advancing live thermal state. */
   renderRecorded(time:number,camera:T.Camera){this.time=time;this.prepare(camera);}
+  /** Ground fires to draw (from FluidSlicks.fires()) at that slick clock time. */
+  setGround(fires:GroundFire[],time:number){this.groundFires=fires;this.groundTime=time;}
+  /** Stateless flames and smoke for each burning puddle, nearest first, like the replay reconstruction. */
+  private fillGround(camera:T.Camera){
+    for(const p of this.ground)p.life=0;
+    const t=this.groundTime,cap=this.quality==='medium'?this.groundCapacity/2:this.groundCapacity;let cursor=0;
+    const fires=this.groundFires.filter(f=>burnLevel(f,t)>0).sort((a,b)=>(a.x-camera.position.x)**2+(a.z-camera.position.z)**2-(b.x-camera.position.x)**2-(b.z-camera.position.z)**2);
+    // Every burning puddle gets a fair share of the pool, so a long trail stays lit end to end.
+    const share=Math.max(8,Math.floor(cap/Math.max(1,fires.length)));
+    for(const f of fires){
+      let used=0;
+      for(const kind of [1,0]){
+        const hz=kind===1?20+40*f.radius:2+3*f.radius,life=kind===1?.55:3.6,limit=kind===1?Math.ceil(share*.72):share;
+        for(let tick=Math.floor(t*hz);tick>=(t-life)*hz&&used<limit;tick--){
+          const born=tick/hz,age=t-born;if(age<0||age>=life||born<f.start)continue;
+          const level=burnLevel(f,born);if(level<=.02)continue;
+          if(cursor>=cap)return;const p=this.ground[cursor++];used++;
+          const seed=((Math.imul(tick+1,1664525)^Math.imul(Math.floor(f.seed*1e6)+kind*7919,1013904223))>>>0)/4294967296,angle=seed*Math.PI*14,reach=Math.sqrt((seed*13.7)%1)*(f.radius*1.05+.1);
+          // Low, wide tongues of flame across the whole puddle, under a heavy sooty plume.
+          p.owner=-1;p.kind=kind;p.age=age;p.life=life;p.heat=level;p.soot=1;p.seed=seed*31;p.aspect=kind===1?1.2+seed*.5:.9;p.strength=level;
+          p.size=kind===1?(.16+.25*f.radius+seed*.1)*(f.kind===2?1.15:1):.55+.5*f.radius+seed*.2;
+          p.p.set(f.x+Math.cos(angle)*reach+(kind===0?age*.3:0),f.y+.05+age*(kind===1?1.1:1.4),f.z+Math.sin(angle)*reach);
+        }
+      }
+    }
+  }
   private prepare(camera:T.Camera){
-    camera.updateMatrixWorld();this.visible.length=0;
+    camera.updateMatrixWorld();this.visible.length=0;this.fillGround(camera);
     // Same calibrated HDRI sun as static-shadows.ts, guarded by the renderer test.
     this.mesh.material.uniforms.sunView.value.copy(DAYLIGHT_DIRECTION).transformDirection(camera.matrixWorldInverse);
     const view=camera.matrixWorldInverse.elements;
-    for(const p of this.particles){if(p.life<=0)continue;p.depth=-(view[2]*p.p.x+view[6]*p.p.y+view[10]*p.p.z+view[14]);if(p.depth<-.5||p.depth>190)continue;this.visible.push(p);}
+    for(const list of [this.particles,this.ground])for(const p of list){if(p.life<=0)continue;p.depth=-(view[2]*p.p.x+view[6]*p.p.y+view[10]*p.p.z+view[14]);if(p.depth<-.5||p.depth>190)continue;this.visible.push(p);}
     this.visible.sort((a,b)=>b.depth-a.depth);
     for(let i=0;i<this.visible.length;i++){
       const p=this.visible[i],age=p.age/p.life;
@@ -212,8 +247,17 @@ export class VehicleFire {
     this.mesh.geometry.instanceCount=this.visible.length;this.mesh.visible=this.visible.length>0;this.mesh.material.uniforms.clock.value=this.time;
     const nearest=[...this.emitters.values()].filter(e=>e.state.heat>.02).sort((a,b)=>a.origin.distanceToSquared(camera.position)-b.origin.distanceToSquared(camera.position));
     this.lights.forEach((light,i)=>{const e=nearest[i];light.intensity=0;if(!e)return;light.position.copy(e.origin).add(new T.Vector3(0,.35,0));light.intensity=(e.state.heat*(8+2*Math.sin(this.time*17+e.profile.pulse))+e.state.burst*75);});
+    this.lightGround(camera,nearest.length);
+  }
+  /** Fire lights left over by burning cars go to the nearest ground fires. */
+  lightGround(camera:T.Camera,used:number){
+    if(used>=this.lights.length)return;
+    const t=this.groundTime,fires=this.groundFires.map(f=>({f,level:burnLevel(f,t)})).filter(e=>e.level>0).sort((a,b)=>(a.f.x-camera.position.x)**2+(a.f.z-camera.position.z)**2-(b.f.x-camera.position.x)**2-(b.f.z-camera.position.z)**2);
+    for(let i=used,k=0;i<this.lights.length&&k<fires.length;i++,k++){
+      const {f,level}=fires[k];this.lights[i].position.set(f.x,f.y+.45,f.z);this.lights[i].intensity=level*(5+1.5*Math.sin(t*19+f.seed*30))*Math.min(1.6,.6+f.radius);
+    }
   }
   get stats(){return{baked:!!bakedVehicleFX(),atlasPixels:2048,atlasFrames:64,active:this.particles.filter(p=>p.life>0).length,visible:this.visible.length,capacity:this.capacity,emitters:[...this.emitters].map(([id,e])=>({id,health:e.state.health,heat:e.state.heat,smoke:e.state.smoke,exploded:e.state.exploded,criticalTime:e.state.criticalTime,origin:e.origin.toArray(),sites:e.sites.map(s=>({name:s.name,weight:s.weight,position:s.position.toArray()}))})),lights:this.lights.filter(l=>l.intensity>0).length};}
-  reset(){for(const p of this.particles)p.life=0;this.emitters.clear();this.audio.length=this.bursts.length=0;this.visible.length=0;this.cursor=0;this.accumulator=0;this.mesh.geometry.instanceCount=0;this.mesh.visible=false;this.lights.forEach(l=>l.intensity=0);}
+  reset(){for(const p of this.particles)p.life=0;for(const p of this.ground)p.life=0;this.groundFires=[];this.emitters.clear();this.audio.length=this.bursts.length=0;this.visible.length=0;this.cursor=0;this.accumulator=0;this.mesh.geometry.instanceCount=0;this.mesh.visible=false;this.lights.forEach(l=>l.intensity=0);}
   dispose(){this.reset();this.mesh.removeFromParent();this.mesh.geometry.dispose();this.mesh.material.dispose();this.noise.dispose();this.fallbackAtlas.dispose();for(const l of this.lights)l.removeFromParent();}
 }

@@ -29,8 +29,9 @@ export const replayCarStride=(meta:Pick<ReplayMeta,'tyreModel'|'engineModel'|'au
 export type ReplayFrame={time:number;values:Float32Array};
 export type ReplayImpact={time:number;severity:number;position:number[];glass:boolean;debris:boolean;material?:ImpactMaterial};
 export type ReplayBurst={time:number;position:number[]};
-/** One fluid drip (0 oil, 1 coolant) landing on the ground; only offline events leak. */
-export type ReplayDrip={time:number;position:number[];kind:0|1;seed:number};
+/** One fluid drip (0 oil, 1 coolant, 2 fuel) landing on the ground, or (3) a puddle catching fire at that
+ * point; only offline events leak. */
+export type ReplayDrip={time:number;position:number[];kind:0|1|2|3;seed:number};
 export type ReplayDocument={meta:ReplayMeta;frames:ReplayFrame[];events:ReplayEvent[];impacts?:ReplayImpact[];bursts?:ReplayBurst[];drips?:ReplayDrip[];limited:boolean};
 export class ReplayRecorder {
   readonly frames:ReplayFrame[]=[];readonly events:ReplayEvent[]=[];readonly impacts:ReplayImpact[]=[];readonly bursts:ReplayBurst[]=[];readonly drips:ReplayDrip[]=[];limited=false;
@@ -86,7 +87,7 @@ export function encodeReplay(doc:ReplayDocument):Uint8Array{
 }
 const fail=()=>{throw Error('This is not a supported Quarry Impact replay.');};
 const finiteArray=(v:unknown,n:number,max=1e7):v is number[]=>Array.isArray(v)&&v.length===n&&v.every(x=>typeof x==='number'&&Number.isFinite(x)&&Math.abs(x)<=max);
-const validReplayDrip=(e:any):e is ReplayDrip=>!!e&&typeof e.time==='number'&&Number.isFinite(e.time)&&e.time>=0&&e.time<=REPLAY_MAX_SECONDS&&finiteArray(e.position,3,1e4)&&(e.kind===0||e.kind===1)&&typeof e.seed==='number'&&e.seed>=0&&e.seed<1;
+const validReplayDrip=(e:any):e is ReplayDrip=>!!e&&typeof e.time==='number'&&Number.isFinite(e.time)&&e.time>=0&&e.time<=REPLAY_MAX_SECONDS&&finiteArray(e.position,3,1e4)&&(e.kind===0||e.kind===1||e.kind===2||e.kind===3)&&typeof e.seed==='number'&&e.seed>=0&&e.seed<1;
 const validReplayBurst=(e:any):e is ReplayBurst=>!!e&&typeof e.time==='number'&&Number.isFinite(e.time)&&e.time>=0&&e.time<=REPLAY_MAX_SECONDS&&finiteArray(e.position,3);
 const validReplayImpact=(e:any):e is ReplayImpact=>!!e&&typeof e.time==='number'&&Number.isFinite(e.time)&&e.time>=0&&e.time<=REPLAY_MAX_SECONDS&&typeof e.severity==='number'&&Number.isFinite(e.severity)&&e.severity>=0&&e.severity<=1000&&finiteArray(e.position,3)&&typeof e.glass==='boolean'&&typeof e.debris==='boolean'&&(e.material===undefined||isImpactMaterial(e.material));
 const validQuaternion=(v:ArrayLike<number>,i:number)=>{const n=v[i]**2+v[i+1]**2+v[i+2]**2+v[i+3]**2;return n>.99&&n<1.01;};

@@ -12,7 +12,7 @@ import {stockSetup} from '../src/garage';
 await R.init();
 // Boolean assertions only around Three.js objects.
 test('a crushed radiator leaks coolant and a wrecked engine leaks oil, faster the worse they are',()=>{
- assert.deepEqual(leakRates(RADIATOR.onset,LEAK.oilOnset),{coolant:0,oil:0});
+ assert.deepEqual(leakRates(RADIATOR.onset,LEAK.oilOnset),{coolant:0,oil:0,fuel:0});
  const bad=leakRates(.9,.95);assert.ok(bad.coolant>.8&&bad.oil>.8);
  assert.equal(dripInterval(0),Infinity);assert.ok(dripInterval(1)<dripInterval(.3)&&dripInterval(1)>=LEAK.fastest-1e-9);
  assert.ok(Number.isFinite(dripInterval(NaN))===false,'invalid severity never drips');

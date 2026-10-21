@@ -96,7 +96,7 @@ import {createIronfieldWorld} from './ironfield-world';
 import {createBrackenWorld} from './bracken-world';
 import {createCinderbankWorld} from './cinderbank-world';
 import {tyreWarning} from './tyre-feedback';
-import {fluidWarning,leakRates} from './fluid-leaks';
+import {fluidWarning,leakRates,burnLevel} from './fluid-leaks';
 import {gearboxWarning} from './damage-handling';
 import {engineStatus} from './engine-condition';
 import {drivingObstacleClearance} from './driving-probe';
@@ -1081,9 +1081,9 @@ function updateHud() {
     clamp((player.rpm / 7000) * 100, 0, 100) + '%';
   text('surface', player.surface.toUpperCase());
   text('engine-status', player.engineStall!>0&&player.health>0?'ENGINE STALLED':engineStatus(player.health,player.engineDamage));
-  if(elapsed-damageDiagramAt>.2||elapsed<damageDiagramAt){damageDiagramAt=elapsed;const svg=damageDiagramSvg({zones:player.damageZones,structure:player.structuralDamage,wheelDamage:player.wreckParts.wheelDamage,wheelLost:player.wreckParts.wheelLost,tyreFailure:[0,1,2,3].map(i=>tyreFailureLevel(player.tyreDamage?.[i])),engine:player.engineDamage??Math.max(0,(40-player.health)/40),misfiring:player.misfireFactor<1,rearEngine:isRearEngineKind(player.kind),leaks:player.extendedDamage?leakRates(player.structuralDamage?.[0]??0,player.engineDamage??0):undefined,wrecked:player.health<=0,parts:partStates(player)});const el=document.getElementById('damage-diagram');if(el&&svg!==damageDiagramSvgLast){el.innerHTML=svg;damageDiagramSvgLast=svg;}}
+  if(elapsed-damageDiagramAt>.2||elapsed<damageDiagramAt){damageDiagramAt=elapsed;const svg=damageDiagramSvg({zones:player.damageZones,structure:player.structuralDamage,wheelDamage:player.wreckParts.wheelDamage,wheelLost:player.wreckParts.wheelLost,tyreFailure:[0,1,2,3].map(i=>tyreFailureLevel(player.tyreDamage?.[i])),engine:player.engineDamage??Math.max(0,(40-player.health)/40),misfiring:player.misfireFactor<1,rearEngine:isRearEngineKind(player.kind),leaks:player.extendedDamage?leakRates(player.structuralDamage?.[0]??0,player.engineDamage??0,(isRearEngineKind(player.kind)?player.structuralDamage?.[0]:player.structuralDamage?.[1])??0):undefined,wrecked:player.health<=0,parts:partStates(player)});const el=document.getElementById('damage-diagram');if(el&&svg!==damageDiagramSvgLast){el.innerHTML=svg;damageDiagramSvgLast=svg;}}
   text('tyre-status', tyreWarning(player.tyreDamage,player.extendedDamage));
-  text('fluid-status', player.extendedDamage?fluidWarning(leakRates(player.structuralDamage?.[0]??0,player.engineDamage??0),player.slickGrip,player.oily):'');
+  text('fluid-status', player.extendedDamage?fluidWarning(leakRates(player.structuralDamage?.[0]??0,player.engineDamage??0,(isRearEngineKind(player.kind)?player.structuralDamage?.[0]:player.structuralDamage?.[1])??0),player.slickGrip,player.oily,player.flameHeat):'');
   text('gearbox-status', gearboxWarning(player.gearLimit));
   text('armor-status',online?.active?'':armorWearWarning(player.setup.armor,player.structuralDamage));
   text('engine-restart', stallHint(player.health,player.engineStall,player.input.throttle));
@@ -1827,10 +1827,17 @@ function frame(now: number) {
   if(demo&&state==='result'){demoRestart=Math.max(0,demoRestart-dt);fx.update(dt);if(demoRestart===0){const next=nextDemoMode(mode,demoOptions.loop);if(next){mode=next;state='loading';void start(true);}}}
   updateTrialGhost();
   updateCamera(dt);
-  if(studio&&!studio.seeking){replayFire?.update(studio.time,camera);replayPuddles?.update(studio.time);replaySlicks?.update(studio.time);}
+  if(studio&&!studio.seeking){replaySlicks?.update(studio.time);replayFire?.fire.setGround(replaySlicks?.slicks.fires()??[],studio.time);replayFire?.update(studio.time,camera);replayPuddles?.update(studio.time);}
   if(!studio)for(const car of cars){car.wreckParts.pose(['playing','countdown'].includes(state)?dt:0,car.speed);car.wreckParts.wheelsPose();car.syncSuspension();}
   const effectsActive=['playing','countdown','wrecked'].includes(state)||(demo&&state==='result');
-  if(!studio)vehicleFire?.update(cars,effectsActive?dt:0,camera);
+  if(!studio&&vehicleFire){
+    vehicleFire.setGround(fx.slicks.fires(),fx.slicks.clock);vehicleFire.update(cars,effectsActive?dt:0,camera);
+    // A burning car lights any oil or fuel it is standing in (offline cars only leak).
+    for(const e of vehicleFire.emitters.values())if(e.car.extendedDamage&&e.state.heat>.45)fx.slicks.igniteAt(e.origin.x,e.origin.z,1,false);
+    let nearest:{p:T.Vector3;level:number}|null=null;
+    for(const f of fx.slicks.fires()){const level=burnLevel(f,fx.slicks.clock)*Math.min(1.4,.6+f.radius),p=new T.Vector3(f.x,f.y,f.z);if(level>0&&(!nearest||p.distanceToSquared(camera.position)<nearest.p.distanceToSquared(camera.position)))nearest={p,level};}
+    sound.groundFire(effectsActive?nearest:null);
+  }
   if(!studio)puddleSplashes?.update(cars,activeVenue.puddles,effectsActive?dt:0,state==='playing');
   if(!studio&&state==='playing'){for(const burst of vehicleFire?.bursts??[]){recorder?.burst({time:elapsed,position:burst.position.toArray()});if(!online?.active)shockwave(burst.position,burst.id);}captureReplay();}
   if(studio?.playing&&!studio.seeking){sound.update(cars,camera,dt,false,{id:cars[studio.follow]?.id??0,view:studio.view==='hood'?'hood':studio.view==='chase'?'chase':'orbit'},(from,to)=>cameraObstruction(physics,from,to,undefined,true));sound.thermal(replayThermal,[]);}
@@ -1971,6 +1978,7 @@ async function boot() {
   physics.timestep = 1 / 60;
   events = new R.EventQueue(true);
   fx = new Effects(scene, physics);
+  fx.slicks.onIgnite=(x,y,z,kind)=>{if(!studio&&!online?.active)recorder?.drip({time:elapsed,position:[x,y,z],kind:3,seed:0});sound.groundIgnite(new T.Vector3(x,y,z),kind);};
   vehicleFire = new VehicleFire(scene,(p,n,type,force)=>fx.emit(p,n,type,force));
   vehicleFire.setQuality(adaptiveGraphics.quality);
   puddleSplashes=new PuddleSplashes(scene);puddleSplashes.setQuality(adaptiveGraphics.quality);
@@ -2064,6 +2072,8 @@ async function boot() {
     get fireState() { return vehicleFire?.stats; },
     get splashState(){return puddleSplashes?.stats;},
     get slicks(){return fx.slicks.stats;},
+    /** QA: light any oil or fuel within reach of a car. */
+    igniteAt: (id: number, reach = 3) => { const c = cars.find(x => x.id === id); return c ? fx.slicks.igniteAt(c.current.x, c.current.z, reach, false) : 0; },
     get replaySlicks(){return replaySlicks?.slicks.stats??null;},
     get surfaceState(){return{ground:fx.evidence.stats,cars:cars.map(c=>({id:c.id,...c.surfaceFinish.stats,scraping:c.scraping,paintVertices:c.panels.reduce((sum,p)=>sum+Array.from(p.geometry.attributes.transferPaint.array).filter((v,i)=>i%4===3&&v>0).length,0),wheels:Array.from(c.wreckParts.wheelDamage,(damage,i)=>({damage,rest:c.controller.wheelSuspensionRestLength(i),stiffness:c.controller.wheelSuspensionStiffness(i),brake:c.controller.wheelBrake(i),steering:c.controller.wheelSteering(i),contact:c.tireContacts[i].active.value,load:c.tireContacts[i].load.value}))}))};},
     get puddles(){return quarry.puddles;},
@@ -2206,7 +2216,7 @@ async function boot() {
         wheelLost: Array.from(c.wreckParts.wheelLost),
         rips: c.rips,
         backfires: c.backfires,
-        drips: c.drips.slice(), slickGrip: c.slickGrip.slice(), oily: c.oily.slice(), blownOut: c.blownOut.slice(), gearLimit: c.gearLimit, steamPuffs: c.steamPuffs, oilSmoke: c.oilSmoke,
+        drips: c.drips.slice(), slickGrip: c.slickGrip.slice(), oily: c.oily.slice(), blownOut: c.blownOut.slice(), gearLimit: c.gearLimit, steamPuffs: c.steamPuffs, flameHeat: c.flameHeat, oilSmoke: c.oilSmoke,
         engineDamage: c.engineDamage,
         tyreDamage: c.tyreDamage?.slice(), structure: c.structuralDamage?.slice(),
         partDamage: Object.fromEntries([...new Set(c.panels.map(m=>m.userData.detachAssembly as string|null).filter((v):v is string=>!!v))].map(n=>[n,Math.round(Math.max(0,...c.panels.filter(m=>m.userData.detachAssembly===n&&m.visible).map(m=>m.userData.damage??0)))])),

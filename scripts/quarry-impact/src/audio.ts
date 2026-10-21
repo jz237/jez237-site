@@ -219,6 +219,17 @@ export class Sound {
   }
   /** A misfire's exhaust pop: the burst sample, pitched up, cut short and muffled. */
   backfire(p:T.Vector3){this.shot('vehicle-burst',p,.5,{rate:2.1,delay:0,duration:.17,lowpass:2400});}
+  private groundFireLoop?:Loop;
+  /** Burning oil or fuel on the ground: one crackling loop at the nearest fire (null = none). */
+  groundFire(nearest:{p:T.Vector3;level:number}|null){
+    if(!this.ready||!this.fxBus)return;
+    this.groundFireLoop??=this.loop('fire-crackle',this.fxBus);const l=this.groundFireLoop;if(!l)return;
+    const now=this.ctx!.currentTime;
+    if(nearest){l.pan.positionX.value=nearest.p.x;l.pan.positionY.value=nearest.p.y+.4;l.pan.positionZ.value=nearest.p.z;}
+    l.gain.gain.setTargetAtTime(nearest?Math.min(.34,nearest.level*.24):0,now,.15);
+  }
+  /** A puddle catching: a soft whoomph, bigger for fuel. */
+  groundIgnite(p:T.Vector3,kind:number){this.shot('fire-roar',p,kind===2?.55:.35,{rate:kind===2?1.25:.95,delay:0,duration:.9,lowpass:1800});}
   /** A tyre bursting at speed: a sharp, full bang (the burst sample, less pitched up than a backfire). */
   blowout(p:T.Vector3){this.shot('vehicle-burst',p,.85,{rate:1.45,delay:0,duration:.32});}
   shot(id: string, p: T.Vector3, volume = 1, options?:{rate:number;delay:number;duration:number;lowpass?:number}) {

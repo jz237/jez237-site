@@ -31,5 +31,10 @@ export class VehicleThermalState {
     const smokeTarget=Math.max(coolant,strain,this.soot*(.65+n(3.18)*.35));this.smoke+=(smokeTarget-this.smoke)*(1-Math.exp(-dt*.85));
     this.health=health;this.age+=dt;return burst;
   }
+  /** Set alight from outside (burning fuel or oil under the car): it burns like an engine fire. */
+  ignite(){
+    if(this.burning)return;
+    this.burning=true;this.assessed=true;this.eligible=true;this.burnTime=0;this.fuelTime=25+unitNoise(this.seed+this.episode*1.173+21.7)*20;
+  }
   reset(health=100){this.health=health;this.heat=this.smoke=this.soot=this.burst=this.age=this.criticalTime=this.burnTime=this.ignitionTime=0;this.exploded=this.burning=this.assessed=this.eligible=this.explosive=false;this.episode++;}
 }

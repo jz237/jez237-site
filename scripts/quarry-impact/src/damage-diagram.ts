@@ -7,8 +7,8 @@ export type DiagramState={
   engine:number;misfiring:boolean;rearEngine:boolean;wrecked:boolean;
   /** Bolt-on parts: intact, hanging loose or gone (omitted parts are not drawn). */
   parts?:{frontBumper?:PartState;rearBumper?:PartState;hood?:PartState};
-  /** Leak severity 0..1: drops under the radiator (coolant) and the engine (oil). */
-  leaks?:{oil:number;coolant:number};
+  /** Leak severity 0..1: drops under the radiator (coolant), the engine (oil) and the fuel tank (fuel). */
+  leaks?:{oil:number;coolant:number;fuel?:number};
 };
 export type PartState='ok'|'loose'|'gone';
 const clamp01=(v:number)=>Math.max(0,Math.min(1,Number.isFinite(v)?v:0));
@@ -24,7 +24,7 @@ function partShape(cls:string,shape:string,s:PartState|undefined){
 const drop=(cls:string,x:number,y:number,fill:string)=>`<path class="${cls}" d="M${x} ${y-3.2} Q${x+2.4} ${y} ${x+2.2} ${y+.9} A2.2 2.2 0 1 1 ${x-2.2} ${y+.9} Q${x-2.4} ${y} ${x} ${y-3.2} Z" fill="${fill}" stroke="#101410" stroke-width=".6"/>`;
 function leaks(state:DiagramState){
   const l=state.leaks;if(!l)return '';const ey=state.rearEngine?90:20;
-  return (l.coolant>0?drop('dd-leak dd-leak-coolant',22,15,'#4fbf74'):'')+(l.oil>0?drop('dd-leak dd-leak-oil',38,ey+3,'#141210'):'');
+  return (l.coolant>0?drop('dd-leak dd-leak-coolant',22,15,'#4fbf74'):'')+(l.oil>0?drop('dd-leak dd-leak-oil',38,ey+3,'#141210'):'')+((l.fuel??0)>0?drop('dd-leak dd-leak-fuel',state.rearEngine?38:30,state.rearEngine?14:96,'#d9a441'):'');
 }
 function parts(state:DiagramState){
   const p=state.parts;if(!p)return '';

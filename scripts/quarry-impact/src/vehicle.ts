@@ -41,7 +41,7 @@ import {wheelResponse,TireContact} from './wheel-mechanics';
 import {wheelTearsOff} from './wheel-physics';
 import {EngineMisfire} from './engine-misfire';
 import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowoutImpulse,bentRimTyre,rimWobble} from './damage-handling';
-import {leakRates,dripInterval} from './fluid-leaks';
+import {leakRates,dripInterval,FLAME,fuelSpacing} from './fluid-leaks';
 /** Panels hanging at least this loose build wind load above this speed (m/s) until they tear away. */
 export const WIND_RIP={loose:.25,speed:16} as const;
 /** Deceleration (m/s²) from a part dragging along the ground at full scrape, applied where it drags. */
@@ -139,7 +139,12 @@ export class Vehicle {
   readonly slickGrip = [1,1,1,1];
   /** How oily each tyre is after rolling through a slick; it lays dark tread marks until it wears off. */
   readonly oily = [0,0,0,0];
-  private dripClock = [0,0];
+  private dripClock = [0,0,0];
+  private fuelTravel = 0;
+  /** Flames under the car now (0..1), seconds of exposure, and a request for VehicleFire to set it alight. */
+  flameHeat = 0;
+  private flameExposure = 0;
+  igniteRequest = false;
   private steamClock = 0;
   private oilSmokeClock = 0;
   /** Oil-smoke puffs from the exhaust (QA). */
@@ -148,9 +153,9 @@ export class Vehicle {
   steamPuffs = 0;
   private dripSeed = 1;
   /** Fluid drips this car has left (oil, coolant). */
-  readonly drips = [0,0];
+  readonly drips = [0,0,0];
   /** Replay recording hook for each drip. */
-  onDrip?:(x:number,y:number,z:number,kind:0|1,seed:number)=>void;
+  onDrip?:(x:number,y:number,z:number,kind:0|1|2,seed:number)=>void;
   onBackfire?:(point:T.Vector3)=>void;
   onWheelLost?:(wheel:number)=>void;
   private windLoad=new Map<string,number>();
@@ -280,7 +285,7 @@ export class Vehicle {
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
-    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.drips.fill(0);this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
+    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=0;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
     if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
@@ -344,8 +349,21 @@ export class Vehicle {
       if(grip<.97)this.oily[i]=Math.max(this.oily[i],Math.min(1,(1-grip)*2));
       else this.oily[i]=Math.max(0,this.oily[i]-Math.abs(this.speed)*dt/14);
     }
+    // Sparks from scraping metal or a grinding hub light any fuel they touch; flames under the car burn it.
+    if(slicks){
+      const half0=DEFINITIONS[this.kind].halfLength,sample=[0,1,2,3].map(i=>this.controller.wheelContactPoint(i)).filter((p):p is NonNullable<typeof p>=>!!p);
+      const centre=this.previous;
+      if(this.scraping>.3){for(const p of sample)slicks.igniteAt(p.x,p.z,.25,true);slicks.igniteAt(centre.x,centre.z,half0*.5,true);}
+      let heat=slicks.heatAt(centre.x,centre.z);for(const p of sample)heat=Math.max(heat,slicks.heatAt(p.x,p.z));
+      this.flameHeat=heat;
+      if(heat>0){
+        if(this.health>0)this.health=Math.max(0,this.health-FLAME.damage*heat*dt);
+        this.flameExposure+=dt*heat;if(this.flameExposure>=FLAME.ignite&&!this.igniteRequest){this.igniteRequest=true;this.flameExposure=-1e9;}
+      }else if(this.flameExposure>0)this.flameExposure=Math.max(0,this.flameExposure-dt*FLAME.cool);
+    }
     if(!contacts)return;
-    const rates=leakRates(this.structuralDamage?.[0]??0,this.engineDamage??0),half=DEFINITIONS[this.kind].halfLength,ground=groundSum/contacts;
+    const rearEngine=isRearEngineKind(this.kind),tank=(rearEngine?this.structuralDamage?.[0]:this.structuralDamage?.[1])??0;
+    const rates=leakRates(this.structuralDamage?.[0]??0,this.engineDamage??0,tank),half=DEFINITIONS[this.kind].halfLength,ground=groundSum/contacts;
     // A hot engine boils the leaking coolant off the radiator: steam out of the grille while it runs.
     if(rates.coolant>0&&this.health>0&&!(this.engineStall!>0)){
       this.steamClock+=dt*(2.5+5*rates.coolant)*(.6+.4*Math.min(1,Math.abs(this.input.throttle)));
@@ -359,11 +377,15 @@ export class Vehicle {
       if(this.oilSmokeClock>=1){this.oilSmokeClock-=1;this.oilSmoke++;
         const p=new T.Vector3(0,.32,-half).applyQuaternion(this.previousQ).add(this.previous);this.fx.emit(p,1,2,.4);}
     }else this.oilSmokeClock=Math.min(this.oilSmokeClock,.5);
-    for(const kind of [0,1] as const){
-      const interval=dripInterval(kind===0?rates.oil:rates.coolant);if(!Number.isFinite(interval)){this.dripClock[kind]=0;continue;}
-      this.dripClock[kind]+=dt;if(this.dripClock[kind]<interval)continue;this.dripClock[kind]-=interval;
+    for(const kind of [0,1,2] as const){
+      const interval=dripInterval(kind===0?rates.oil:kind===1?rates.coolant:rates.fuel);if(!Number.isFinite(interval)){this.dripClock[kind]=0;continue;}
+      // A split tank pours: on the move it lays a trail of touching drops, so fire can run along it.
+      this.dripClock[kind]+=dt;if(kind===2)this.fuelTravel+=Math.abs(this.speed)*dt;
+      if(kind===2&&this.fuelTravel>=fuelSpacing(rates.fuel)){this.fuelTravel=0;this.dripClock[kind]=0;}
+      else if(this.dripClock[kind]<interval)continue;else this.dripClock[kind]-=interval;
       this.dripSeed=(Math.imul(this.dripSeed,1664525)+1013904223)>>>0;const r=this.dripSeed/4294967296;
-      const z=(kind===1||!isRearEngineKind(this.kind)?1:-1)*half*(kind===1?.62:.42)+(r-.5)*.3,x=(r*7%1-.5)*.4;
+      // Coolant from the radiator up front, oil from the engine, fuel from the tank at the other end.
+      const z=(kind===2?(rearEngine?1:-1)*half*.55:(kind===1||!rearEngine?1:-1)*half*(kind===1?.62:.42))+(r-.5)*.3,x=(r*7%1-.5)*.4;
       const p=new T.Vector3(x,0,z).applyQuaternion(this.previousQ).add(this.previous);
       slicks?.drip(p.x,ground,p.z,kind,r);this.drips[kind]++;this.onDrip?.(p.x,ground,p.z,kind,r);
     }
@@ -409,7 +431,7 @@ export class Vehicle {
     if(this.engineMisfire.backfire&&this.extendedDamage){
       // A misfire ends with unburnt fuel popping in the exhaust: a flash of sparks and a puff of smoke.
       const exhaust=new T.Vector3(0,.32,-DEFINITIONS[this.kind].halfLength).applyQuaternion(this.previousQ).add(this.previous);
-      this.fx.emit(exhaust,7,1,.8);this.fx.emit(exhaust,2,2,.5);this.onBackfire?.(exhaust);this.backfires++;
+      this.fx.emit(exhaust,7,1,.8);this.fx.emit(exhaust,2,2,.5);this.onBackfire?.(exhaust);this.backfires++;this.fx.slicks?.igniteAt(exhaust.x,exhaust.z,.6,true);
     }
     if(this.drivetrain){
       const result=this.drivetrain.step(this.specification,this,dt,undefined,{wheelDamage:this.wreckParts.wheelDamage,wheelShift:this.wreckParts.wheelShift,engineDamage:this.engineDamage,tyreDamage:this.tyreDamage,wheelLost:this.wreckParts.wheelLost});
