@@ -87,3 +87,24 @@ test('a car parked in burning fuel loses health and catches fire offline; online
  assert.ok(on.lit>0&&on.health<100-FLAME.damage*.5&&on.ignite,'lit by the sparks, scorched, set alight');
  assert.ok(off.lit===0&&off.health===100&&!off.ignite,'no leaks, sparks or flames online');
 });
+test('fire credit: puddles lit carry the lighter through the spread; setting a rival alight is a highlight, an award and a badge',async()=>{
+ const {EventAwards}=await import('../src/event-awards');const {bankAchievements,ACHIEVEMENTS}=await import('../src/achievements');const {BADGE_DECALS}=await import('../src/badge-decals');
+ const {s}=world();const owners:number[]=[];s.onIgnite=(_x,_y,_z,_k,o)=>owners.push(o);
+ try{
+  for(let i=0;i<5;i++)s.drip(i*.32,0,0,2,i*.17);
+  s.igniteAt(0,0,.02,true,3);for(let k=0;k<10;k++)s.advance(.25);
+  assert.ok(owners.length===5&&owners.every(o=>o===3),'every puddle in the trail is credited to car 3');
+  assert.equal(s.ownerAt(.64,0),3);assert.equal(s.ownerAt(20,20),-1);
+ }finally{s.dispose();}
+ const a=new EventAwards();for(let i=0;i<5;i++)a.ignited(3);a.ignited(-1);a.setAlight(3,7,12);a.setAlight(4,4,1);
+ assert.deepEqual(a.firesBy(3),{puddles:5,cars:1});
+ const award=a.awards('derby',[{id:3,inflicted:0,health:50},{id:7,inflicted:0,health:20}]).find(x=>x.key==='firestarter');
+ assert.ok(award&&award.id===3&&/set 1 car alight/.test(award.detail));
+ assert.ok(a.highlights().some(m=>m.kind==='fire'&&m.attacker===3&&m.victim===7));
+ const quiet=new EventAwards();quiet.ignited(2);quiet.ignited(2);assert.ok(!quiet.awards('derby',[]).some(x=>x.key==='firestarter'),'two puddles are not an award');
+ const p={events:1,wins:0,distance:0,knockouts:0,challenges:{}} as never;
+ const run={finished:false,completed:true,won:false,rank:3,distance:900,health:40,knockouts:0} as never;
+ const fresh=bankAchievements(p,{run,kind:'sedan',mode:'derby',setAlight:1,puddlesLit:12},{kinds:99,courses:99,arenas:99}).map(x=>x.id);
+ assert.ok(fresh.includes('firestarter')&&fresh.includes('inferno'));
+ for(const id of ['firestarter','inferno'])assert.ok(ACHIEVEMENTS.some(x=>x.id===id)&&BADGE_DECALS.some(d=>d.badge===id));
+});

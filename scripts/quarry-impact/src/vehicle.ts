@@ -145,6 +145,8 @@ export class Vehicle {
   flameHeat = 0;
   private flameExposure = 0;
   igniteRequest = false;
+  /** Called when flames set this car alight, with the car whose fire it was (-1 when nobody lit it). */
+  onSetAlight?:(by:number)=>void;
   private steamClock = 0;
   private oilSmokeClock = 0;
   /** Oil-smoke puffs from the exhaust (QA). */
@@ -353,12 +355,12 @@ export class Vehicle {
     if(slicks){
       const half0=DEFINITIONS[this.kind].halfLength,sample=[0,1,2,3].map(i=>this.controller.wheelContactPoint(i)).filter((p):p is NonNullable<typeof p>=>!!p);
       const centre=this.previous;
-      if(this.scraping>.3){for(const p of sample)slicks.igniteAt(p.x,p.z,.25,true);slicks.igniteAt(centre.x,centre.z,half0*.5,true);}
-      let heat=slicks.heatAt(centre.x,centre.z);for(const p of sample)heat=Math.max(heat,slicks.heatAt(p.x,p.z));
+      if(this.scraping>.3){for(const p of sample)slicks.igniteAt(p.x,p.z,.25,true,this.id);slicks.igniteAt(centre.x,centre.z,half0*.5,true,this.id);}
+      let heat=slicks.heatAt(centre.x,centre.z),hottest={x:centre.x,z:centre.z};for(const p of sample){const h=slicks.heatAt(p.x,p.z);if(h>heat){heat=h;hottest={x:p.x,z:p.z};}}
       this.flameHeat=heat;
       if(heat>0){
         if(this.health>0)this.health=Math.max(0,this.health-FLAME.damage*heat*dt);
-        this.flameExposure+=dt*heat;if(this.flameExposure>=FLAME.ignite&&!this.igniteRequest){this.igniteRequest=true;this.flameExposure=-1e9;}
+        this.flameExposure+=dt*heat;if(this.flameExposure>=FLAME.ignite&&!this.igniteRequest){this.igniteRequest=true;this.flameExposure=-1e9;this.onSetAlight?.(slicks.ownerAt(hottest.x,hottest.z));}
       }else if(this.flameExposure>0)this.flameExposure=Math.max(0,this.flameExposure-dt*FLAME.cool);
     }
     if(!contacts)return;
@@ -431,7 +433,7 @@ export class Vehicle {
     if(this.engineMisfire.backfire&&this.extendedDamage){
       // A misfire ends with unburnt fuel popping in the exhaust: a flash of sparks and a puff of smoke.
       const exhaust=new T.Vector3(0,.32,-DEFINITIONS[this.kind].halfLength).applyQuaternion(this.previousQ).add(this.previous);
-      this.fx.emit(exhaust,7,1,.8);this.fx.emit(exhaust,2,2,.5);this.onBackfire?.(exhaust);this.backfires++;this.fx.slicks?.igniteAt(exhaust.x,exhaust.z,.6,true);
+      this.fx.emit(exhaust,7,1,.8);this.fx.emit(exhaust,2,2,.5);this.onBackfire?.(exhaust);this.backfires++;this.fx.slicks?.igniteAt(exhaust.x,exhaust.z,.6,true,this.id);
     }
     if(this.drivetrain){
       const result=this.drivetrain.step(this.specification,this,dt,undefined,{wheelDamage:this.wreckParts.wheelDamage,wheelShift:this.wreckParts.wheelShift,engineDamage:this.engineDamage,tyreDamage:this.tyreDamage,wheelLost:this.wreckParts.wheelLost});

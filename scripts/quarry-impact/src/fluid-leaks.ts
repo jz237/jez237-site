@@ -44,8 +44,8 @@ export function fluidWarning(rates:{oil:number;coolant:number;fuel?:number},slic
   if(Math.min(...Array.from(slickGrip))<.9)parts.push('ON OIL');else if(Math.max(0,...Array.from(oily))>.3)parts.push('OILY TYRES');
   return parts.join(' · ');
 }
-/** Spot layout: x, z, radius, kind, born, strength, seed, ignited (-1 = never), burnEnd, ground y. */
-const S=10;
+/** Spot layout: x, z, radius, kind, born, strength, seed, ignited (-1 = never), burnEnd, ground y, owner (car that lit it, -1). */
+const S=11;
 export class FluidSlicks{
   readonly capacity=384;
   readonly mesh:T.InstancedMesh;
@@ -53,14 +53,14 @@ export class FluidSlicks{
   /** Fire runs from a burning spot to touching ones. Replays turn this off and apply the recorded ignitions. */
   spread=true;
   /** Called for every ignition (centre of the spot), for replay recording and sound. */
-  onIgnite?:(x:number,y:number,z:number,kind:FluidKind)=>void;
+  onIgnite?:(x:number,y:number,z:number,kind:FluidKind,owner:number)=>void;
   private readonly data=new Float32Array(this.capacity*4);
   private readonly fire=new Float32Array(this.capacity*2);
   private cursor=0;private count=0;private time={value:0};private pose=new T.Object3D();private burning=0;
   /** Burning spots that have already passed their fire on to the puddles touching them. */
   private readonly spreadDone=new Uint8Array(this.capacity);
   constructor(scene:T.Scene){
-    for(let i=0;i<this.capacity;i++){this.spots[i*S+7]=-1;this.fire[i*2]=-1;}
+    for(let i=0;i<this.capacity;i++){this.spots[i*S+7]=-1;this.spots[i*S+10]=-1;this.fire[i*2]=-1;}
     const geometry=new T.CircleGeometry(1,28);geometry.rotateX(-Math.PI/2);
     geometry.setAttribute('slickData',new T.InstancedBufferAttribute(this.data,4).setUsage(T.DynamicDrawUsage));
     geometry.setAttribute('slickFire',new T.InstancedBufferAttribute(this.fire,2).setUsage(T.DynamicDrawUsage));
@@ -115,12 +115,12 @@ diffuseColor.rgb=mix(vSlick.x<.5?vec3(.018,.015,.012):vSlick.x<1.5?vec3(.025,.07
     let slot=-1;if(this.count===this.capacity)for(let i=0;i<this.capacity;i++)if(this.spent(i)){slot=i;break;}
     if(slot<0)slot=this.cursor++%this.capacity;const o=slot*S;
     if(this.lit(slot)&&this.time.value<s[o+8])this.burning=Math.max(0,this.burning-1);
-    s.set([x,z,base*(.8+.4*(seed%1)),kind,this.time.value,1,seed%1,-1,0,y],o);this.spreadDone[slot]=0;
+    s.set([x,z,base*(.8+.4*(seed%1)),kind,this.time.value,1,seed%1,-1,0,y,-1],o);this.spreadDone[slot]=0;
     this.count=Math.min(this.capacity,this.count+1);this.mesh.count=this.count;this.write(slot);
     // Fuel or oil landing on a fire flares straight away.
     if(this.spread&&kind!==1&&this.burning)for(let i=0;i<this.count;i++){
       const q=i*S;if(i===slot||s[q+7]<0||this.time.value>=s[q+8])continue;
-      if(Math.hypot(s[q]-x,s[q+1]-z)<=s[q+2]+s[o+2]+BURN.reach){this.ignite(slot);break;}
+      if(Math.hypot(s[q]-x,s[q+1]-z)<=s[q+2]+s[o+2]+BURN.reach){this.ignite(slot,s[q+10]);break;}
     }
   }
   private write(i:number){
@@ -130,17 +130,18 @@ diffuseColor.rgb=mix(vSlick.x<.5?vec3(.018,.015,.012):vSlick.x<1.5?vec3(.025,.07
     this.data.set([s[o+3],s[o+4],s[o+5],s[o+6]],i*4);this.mesh.geometry.attributes.slickData.needsUpdate=true;
     this.fire[i*2]=s[o+7];this.fire[i*2+1]=s[o+8];this.mesh.geometry.attributes.slickFire.needsUpdate=true;
   }
-  private ignite(i:number){
+  private ignite(i:number,owner=-1){
     const o=i*S,s=this.spots;if(this.lit(i)||s[o+3]===1||s[o+5]<.05)return false;
-    s[o+7]=this.time.value;s[o+8]=this.time.value+burnDuration(s[o+3],s[o+2]);this.burning++;this.write(i);
-    this.onIgnite?.(s[o],s[o+9],s[o+1],s[o+3] as FluidKind);return true;
+    s[o+7]=this.time.value;s[o+8]=this.time.value+burnDuration(s[o+3],s[o+2]);s[o+10]=owner;this.burning++;this.write(i);
+    this.onIgnite?.(s[o],s[o+9],s[o+1],s[o+3] as FluidKind,owner);return true;
   }
-  /** Light the flammable spots touching (x, z) within reach. Sparks light fuel only; flames light fuel and oil. */
-  igniteAt(x:number,z:number,reach:number,fuelOnly:boolean){
+  /** Light the flammable spots touching (x, z) within reach. Sparks light fuel only; flames light fuel and oil.
+   * The owner (the car whose sparks or flames did it) is passed on to the puddles the fire spreads to. */
+  igniteAt(x:number,z:number,reach:number,fuelOnly:boolean,owner=-1){
     let lit=0;const s=this.spots;
     for(let i=0;i<this.count;i++){
       const o=i*S,kind=s[o+3];if(kind===1||(fuelOnly&&kind!==2)||this.lit(i)||s[o+5]<.05)continue;
-      if(Math.hypot(s[o]-x,s[o+1]-z)<=s[o+2]+reach&&this.ignite(i))lit++;
+      if(Math.hypot(s[o]-x,s[o+1]-z)<=s[o+2]+reach&&this.ignite(i,owner))lit++;
     }
     return lit;
   }
@@ -158,6 +159,15 @@ diffuseColor.rgb=mix(vSlick.x<.5?vec3(.018,.015,.012):vSlick.x<1.5?vec3(.025,.07
       if(Math.hypot(s[o]-x,s[o+1]-z)<=s[o+2]*1.1)heat=Math.max(heat,burnLevel({start:s[o+7],end:s[o+8]},t));
     }
     return heat;
+  }
+  /** The car whose fire is burning hardest at (x, z), or -1. */
+  ownerAt(x:number,z:number){
+    let best=0,owner=-1;const s=this.spots,t=this.time.value;if(!this.burning)return -1;
+    for(let i=0;i<this.count;i++){
+      const o=i*S;if(s[o+7]<0||t>=s[o+8]||Math.hypot(s[o]-x,s[o+1]-z)>s[o+2]*1.1)continue;
+      const level=burnLevel({start:s[o+7],end:s[o+8]},t);if(level>best){best=level;owner=s[o+10];}
+    }
+    return owner;
   }
   /** Grip multiplier (≤ 1) for a tyre at (x, z): the worst spot under it wins. */
   gripAt(x:number,z:number){
@@ -180,7 +190,7 @@ diffuseColor.rgb=mix(vSlick.x<.5?vec3(.018,.015,.012):vSlick.x<1.5?vec3(.025,.07
         this.spreadDone[i]=1;
         for(let j=0;j<this.count;j++){
           if(j===i||this.lit(j))continue;const q=j*S;if(s[q+3]===1||s[q+5]<.05)continue;
-          if(Math.hypot(s[o]-s[q],s[o+1]-s[q+1])<=s[o+2]+s[q+2]+BURN.reach)this.ignite(j);
+          if(Math.hypot(s[o]-s[q],s[o+1]-s[q+1])<=s[o+2]+s[q+2]+BURN.reach)this.ignite(j,s[o+10]);
         }
       }
       let burning=0;for(let i=0;i<this.count;i++){const o=i*S;if(s[o+7]>=0&&t<s[o+8])burning++;}this.burning=burning;
@@ -194,7 +204,7 @@ diffuseColor.rgb=mix(vSlick.x<.5?vec3(.018,.015,.012):vSlick.x<1.5?vec3(.025,.07
   dispose(){this.mesh.removeFromParent();this.mesh.geometry.dispose();(this.mesh.material as T.Material).dispose();this.mesh.dispose();}
   reset(){
     this.cursor=this.count=this.burning=0;this.time.value=0;this.spots.fill(0);this.data.fill(0);this.spreadDone.fill(0);
-    for(let i=0;i<this.capacity;i++){this.spots[i*S+7]=-1;this.fire[i*2]=-1;this.fire[i*2+1]=0;}
+    for(let i=0;i<this.capacity;i++){this.spots[i*S+7]=-1;this.spots[i*S+10]=-1;this.fire[i*2]=-1;this.fire[i*2+1]=0;}
     this.mesh.count=0;this.mesh.geometry.attributes.slickData.needsUpdate=true;this.mesh.geometry.attributes.slickFire.needsUpdate=true;
   }
   get stats(){

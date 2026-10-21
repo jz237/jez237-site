@@ -5,7 +5,7 @@ import {dailyStreak} from './daily-record';
  * saves are untouched until the first banked event. */
 export type Journey={kinds:string[];courses:string[];arenas:string[];takedowns:number;wheels?:number;parts?:number};
 type ProfileLike={events:number;wins:number;distance:number;knockouts:number;challenges:Record<string,{medal:number}>;daily?:Record<string,{medal:number}>;career?:{podiums?:Partial<Record<string,number>>};badges?:string[];journey?:Journey};
-export type RunContext={run:RunStats;kind:string;mode:string;course?:string;arena?:string;takedowns?:number;daily?:boolean;dailyMedal?:number;elimination?:boolean;lighting?:string;wrecks?:number;wheels?:number;parts?:number;banger?:boolean};
+export type RunContext={run:RunStats;kind:string;mode:string;course?:string;arena?:string;takedowns?:number;daily?:boolean;dailyMedal?:number;elimination?:boolean;lighting?:string;wrecks?:number;wheels?:number;parts?:number;banger?:boolean;setAlight?:number;puddlesLit?:number};
 export type Achievement={id:string;name:string;description:string;done:(p:ProfileLike,c:RunContext|null,all:{kinds:number;courses:number;arenas:number})=>boolean};
 const golds=(p:ProfileLike)=>Object.values(p.challenges).filter(r=>r.medal>=3).length;
 export const ACHIEVEMENTS:readonly Achievement[]=[
@@ -31,6 +31,8 @@ export const ACHIEVEMENTS:readonly Achievement[]=[
  {id:'silverware',name:'Silverware',description:'Earn a podium in a career championship.',done:p=>Object.values(p.career?.podiums??{}).some(v=>(v??0)>0)},
  {id:'wheel-snatcher',name:'Wheel snatcher',description:'Tear 5 wheels off rivals.',done:p=>(p.journey?.wheels??0)>=5},
  {id:'scrapyard',name:'Scrapyard',description:'Knock 50 parts off rivals.',done:p=>(p.journey?.parts??0)>=50},
+ {id:'firestarter',name:'Firestarter',description:'Set a rival alight with burning fuel or oil.',done:(p,c)=>(c?.setAlight??0)>0},
+ {id:'inferno',name:'Inferno',description:'Light 10 puddles of fuel or oil in one event.',done:(p,c)=>(c?.puddlesLit??0)>=10},
  {id:'banger-king',name:'Banger king',description:'Win a banger race.',done:(p,c)=>!!c&&c.mode==='race'&&!!c.banger&&c.run.finished&&(c.run.won??c.run.rank===1)},
 ];
 const ids=new Set(ACHIEVEMENTS.map(a=>a.id));

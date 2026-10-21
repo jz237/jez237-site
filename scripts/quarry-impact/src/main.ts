@@ -364,7 +364,7 @@ function bankRun(completed:boolean){
   runSettled=true;
   const run=telemetry.stats;run.completed=completed;
   lastAward=settleRun(profile,runId,run,activeChallenge);
-  const fresh=bankAchievements(profile,{run,kind,mode,course:activeVenue.course.id,arena:resolveArenaId(activeVenue.arenaId),takedowns:mode==='race'?eventAwards.takedownsFor(cars[0]?.id??0):0,wrecks:eventAwards.takedownsFor(cars[0]?.id??0),wheels:eventAwards.strippedBy(cars[0]?.id??0).wheels,parts:eventAwards.strippedBy(cars[0]?.id??0).parts,banger:bangerRace(),elimination:eliminationRace(),lighting:eventLighting??undefined},{kinds:CAR_KINDS.length,courses:Object.keys(COURSE_NAMES).length,arenas:Object.keys(ARENA_NAMES).length});
+  const fresh=bankAchievements(profile,{run,kind,mode,course:activeVenue.course.id,arena:resolveArenaId(activeVenue.arenaId),takedowns:mode==='race'?eventAwards.takedownsFor(cars[0]?.id??0):0,wrecks:eventAwards.takedownsFor(cars[0]?.id??0),wheels:eventAwards.strippedBy(cars[0]?.id??0).wheels,parts:eventAwards.strippedBy(cars[0]?.id??0).parts,banger:bangerRace(),elimination:eliminationRace(),lighting:eventLighting??undefined,setAlight:eventAwards.firesBy(cars[0]?.id??0).cars,puddlesLit:eventAwards.firesBy(cars[0]?.id??0).puddles},{kinds:CAR_KINDS.length,courses:Object.keys(COURSE_NAMES).length,arenas:Object.keys(ARENA_NAMES).length});
   lastBadges=fresh.map(a=>a.name.toUpperCase());if(fresh.length)toast(`ACHIEVEMENT${fresh.length>1?'S':''} UNLOCKED · ${fresh.map(a=>a.name.toUpperCase()).join(' · ')}`,4);
   try{localStorage.setItem(PROFILE_KEY,JSON.stringify(profile));profileStorageWarning='';}catch{profileStorageWarning='Progress is available for this session, but browser storage could not save it.';}
 }
@@ -548,7 +548,7 @@ function highlightsButton(container:Element|null){
   const button=document.createElement('button');button.className='small-button studio-link';button.id='watch-highlights';button.textContent='WATCH HIGHLIGHTS ▶';
   button.onclick=()=>{if(!openStudio())return;clearTimeout(highlightTimer);
     const pick=(id:string,value:string)=>{const s=ui.querySelector<HTMLSelectElement>('#'+id);if(s&&Array.from(s.options).some(o=>o.value===value)){s.value=value;s.dispatchEvent(new Event('change'));}};
-    const label={hit:'BIG HIT',takedown:'TAKEDOWN',wheel:'WHEEL OFF'} as const;
+    const label={hit:'BIG HIT',takedown:'TAKEDOWN',wheel:'WHEEL OFF',fire:'SET ALIGHT'} as const;
     const show=(k:number)=>{if(!studio||k>=moments.length)return;const m=moments[k],index=cars.findIndex(c=>c.id===m.attacker);
       if(index>=0)pick('studio-car',String(index));pick('studio-camera','chase');pick('studio-speed','0.25');
       studio.seek(Math.max(0,m.time-1.2));if(ui.querySelector('#studio-play')?.textContent?.includes('PLAY'))ui.querySelector<HTMLButtonElement>('#studio-play')?.click();
@@ -897,7 +897,7 @@ function createCars(attract = false, previewSetup?:Setup) {
     const team=!attract&&teamRace()?TEAMS[teamOf(i)]:null,teamSetup=team&&setup?{...setup,paint:team.color,trim:team.trim}:setup;
     const car = new Vehicle(i, type, team?.color ?? setup?.paint ?? colors[i%colors.length], scene, physics, fx, teamSetup,activeVenue.course,online?.active?'legacy':'angular-v1');
     carLights.set(car,attachCarLights(car.root,DEFINITIONS[type].halfLength));
-    car.extendedDamage=!attract&&!online?.active;if(car.extendedDamage){car.onBackfire=p=>sound.backfire(p);car.onBlowout=p=>sound.blowout(p);}
+    car.extendedDamage=!attract&&!online?.active;if(car.extendedDamage){car.onBackfire=p=>sound.backfire(p);car.onBlowout=p=>sound.blowout(p);car.onSetAlight=by=>eventAwards.setAlight(by,car.id,elapsed);}
     if(car.extendedDamage)car.onWheelLost=w=>{sound.crowd(i===0?.8:.55);if(i===0&&!demo)toast(`WHEEL GONE · ${['FRONT LEFT','FRONT RIGHT','REAR LEFT','REAR RIGHT'][w]}`,1.6);};
     car.waters=activeVenue.puddles;
     if(mode==='derby'&&!online?.active&&activeVenue===quarryVenue)car.arenaSurface=DERBY_ARENA;
@@ -1833,7 +1833,7 @@ function frame(now: number) {
   if(!studio&&vehicleFire){
     vehicleFire.setGround(fx.slicks.fires(),fx.slicks.clock);vehicleFire.update(cars,effectsActive?dt:0,camera);
     // A burning car lights any oil or fuel it is standing in (offline cars only leak).
-    for(const e of vehicleFire.emitters.values())if(e.car.extendedDamage&&e.state.heat>.45)fx.slicks.igniteAt(e.origin.x,e.origin.z,1,false);
+    for(const e of vehicleFire.emitters.values())if(e.car.extendedDamage&&e.state.heat>.45)fx.slicks.igniteAt(e.origin.x,e.origin.z,1,false,e.car.id);
     let nearest:{p:T.Vector3;level:number}|null=null;
     for(const f of fx.slicks.fires()){const level=burnLevel(f,fx.slicks.clock)*Math.min(1.4,.6+f.radius),p=new T.Vector3(f.x,f.y,f.z);if(level>0&&(!nearest||p.distanceToSquared(camera.position)<nearest.p.distanceToSquared(camera.position)))nearest={p,level};}
     sound.groundFire(effectsActive?nearest:null);
@@ -1978,7 +1978,7 @@ async function boot() {
   physics.timestep = 1 / 60;
   events = new R.EventQueue(true);
   fx = new Effects(scene, physics);
-  fx.slicks.onIgnite=(x,y,z,kind)=>{if(!studio&&!online?.active)recorder?.drip({time:elapsed,position:[x,y,z],kind:3,seed:0});sound.groundIgnite(new T.Vector3(x,y,z),kind);};
+  fx.slicks.onIgnite=(x,y,z,kind,owner)=>{if(!studio&&!online?.active){recorder?.drip({time:elapsed,position:[x,y,z],kind:3,seed:0});eventAwards.ignited(owner);}sound.groundIgnite(new T.Vector3(x,y,z),kind);};
   vehicleFire = new VehicleFire(scene,(p,n,type,force)=>fx.emit(p,n,type,force));
   vehicleFire.setQuality(adaptiveGraphics.quality);
   puddleSplashes=new PuddleSplashes(scene);puddleSplashes.setQuality(adaptiveGraphics.quality);

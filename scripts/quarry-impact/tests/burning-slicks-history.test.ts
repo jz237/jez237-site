@@ -1,6 +1,7 @@
+import {restoreFireAwardsBytes} from './fire-awards-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readBurningSlicksPrevious,restoreBurningSlicksBytes,verifyBurningSlicksRevision} from './burning-slicks-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreFireAwardsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('BurningSlicks preserves every prior fixture, vehicle asset, venue art and history input',verifyBurningSlicksRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/burning-slicks/revision.json').toString());
