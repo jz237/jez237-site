@@ -10,6 +10,7 @@ import {starterSamples} from './engine-stall';
 import {engineDamageLevel} from './engine-condition';
 import {classicEngineVoice,vehicleWheelRadius} from './classic-vehicle-specs';
 import {RATTLE,rattleRate,thumpRate,EventClock,synthClank,synthThump} from './damage-rattle';
+import {knockRate} from './oil-starvation';
 import {impactSoundLayers} from './impact-response';
 import { url } from './assets';
 import type { Vehicle } from './vehicle';
@@ -38,7 +39,7 @@ export class Sound {
   private crowdRoar?:CrowdRoar;
   private rattleClock=new EventClock();
   /** Damage sounds played so far (QA). */
-  readonly damageSounds={rattle:0,thump:0};
+  readonly damageSounds={rattle:0,thump:0,knock:0};
   private rainHiss?:{source:AudioBufferSourceNode;gain:GainNode};
   output:AudioOutput='speakers';
   setOutput(value:unknown){
@@ -419,6 +420,9 @@ export class Sound {
     let loose=0;for(const a of car.wreckParts.assemblies)if(a.loose>loose&&a.members.some(m=>m.mesh.visible))loose=a.loose;
     const rough=car.surface==='asphalt'?0:car.surface==='gravel'?1:.6,rattle=rattleRate(loose,car.speed,rough);
     const thumps=[0,1,2,3].map(i=>car.wreckParts.wheelLost[i]?0:car.wreckParts.wheelDamage[i]);
+    // A dry engine knocks with the revs: big-end bearings on their way out.
+    const knock=car.extendedDamage&&!car.seized&&car.health>0&&!(car.engineStall!>0)?knockRate(car.oilLevel,car.rpm):0;
+    if(knock>0&&this.damageBuffers())for(let n=clock.step(car.id+':knock',knock,dt,.05);n>0;n--){this.damageSounds.knock++;this.shot('rattle-3',car.current,volume*.45,{rate:1.9+clock.random()*.1,delay:0,duration:.08});}
     if(rattle<=0&&thumps.every(d=>thumpRate(d,car.speed,radius)<=0)){clock.step(car.id+':rattle',0,dt);for(let i=0;i<4;i++)clock.step(car.id+':thump'+i,0,dt);return;}
     if(!this.damageBuffers())return;
     for(let n=clock.step(car.id+':rattle',rattle,dt);n>0;n--){

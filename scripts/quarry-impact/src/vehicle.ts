@@ -42,6 +42,8 @@ import {wheelTearsOff} from './wheel-physics';
 import {EngineMisfire} from './engine-misfire';
 import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowoutImpulse,bentRimTyre,rimWobble} from './damage-handling';
 import {leakRates,dripInterval,FLAME,fuelSpacing} from './fluid-leaks';
+import {drainOil,starvationWear,seizes,OIL} from './oil-starvation';
+import {MAX_ENGINE_RESTART} from './engine-stall';
 /** A burning car cooks itself: glass damage per second at full heat (side windows burst at 24) and tyre damage per second. */
 export const COOK={glass:2.2,tyre:.02} as const;
 /** Panels hanging at least this loose build wind load above this speed (m/s) until they tear away. */
@@ -151,6 +153,10 @@ export class Vehicle {
   contactHeat = 0;
   /** Fuel leak severity 0..1 (offline): a burning car with a split tank blows up. */
   fuelLeak = 0;
+  /** Oil left in the sump (offline) and whether the engine has seized for good. */
+  oilLevel = 1;
+  seized = false;
+  onSeize?:(p:T.Vector3)=>void;
   /** This car's fire heat (0..1), set by VehicleFire each step. */
   fireHeat = 0;
   /** Called when heat shatters a window (sound hook). */
@@ -318,7 +324,7 @@ export class Vehicle {
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
-    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
+    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.seized=false;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
     if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
@@ -409,6 +415,18 @@ export class Vehicle {
     if(!contacts)return;
     const rearEngine=isRearEngineKind(this.kind),tank=(rearEngine?this.structuralDamage?.[0]:this.structuralDamage?.[1])??0;
     const rates=leakRates(this.structuralDamage?.[0]??0,this.engineDamage??0,tank);this.fuelLeak=rates.fuel;
+    // The oil that drips out is oil the engine no longer has: low on oil it knocks and wears, dry it seizes.
+    this.oilLevel=drainOil(this.oilLevel,rates.oil,dt);
+    if(!this.seized&&this.health>0&&!(this.engineStall!>0)&&this.engineDamage!==undefined){
+      this.engineDamage=Math.min(1,this.engineDamage+starvationWear(this.oilLevel,this.input.throttle,dt));
+      if(seizes(this.oilLevel,this.engineDamage)){
+        this.seized=true;this.engineStall=MAX_ENGINE_RESTART;this.rpm=0;
+        // The driven wheels lock for a moment: the car lurches as the engine stops dead.
+        const k=-Math.sign(this.speed)*this.specification.mass*Math.min(20,Math.abs(this.speed))*OIL.jolt;
+        this.body.applyImpulse({x:this.forward.x*k,y:0,z:this.forward.z*k},true);
+        this.onSeize?.(new T.Vector3(0,.6,(isRearEngineKind(this.kind)?-1:1)*DEFINITIONS[this.kind].halfLength*.55).applyQuaternion(this.previousQ).add(this.previous));
+      }
+    }
     const half=DEFINITIONS[this.kind].halfLength,ground=groundSum/contacts;
     // A hot engine boils the leaking coolant off the radiator: steam out of the grille while it runs.
     if(rates.coolant>0&&this.health>0&&!(this.engineStall!>0)){
@@ -455,6 +473,8 @@ export class Vehicle {
     this.gearLimit=this.extendedDamage?gearLimit(this.structuralDamage,isFrontDriveKind(this.kind)?'front':(this.kind==='coupe'||isClassicKind(this.kind)&&this.kind!=='trail')?'rear':'all'):5;
     for(let i=0;i<4;i++){this.brakeBias[i]=this.extendedDamage?brakeFactor(this.wreckParts.wheelDamage[i]):1;this.damperBias[i]=this.extendedDamage?damperFactor(this.wreckParts.wheelDamage[i]):1;}
     if(this.extendedDamage)this.fluids(dt);
+    // A seized engine never turns again: the starter can crank, but it will not catch.
+    if(this.seized)this.engineStall=MAX_ENGINE_RESTART;
     if(this.extendedDamage&&this.tyreDamage)for(let i=0;i<4;i++)if(!this.wreckParts.wheelLost[i])this.tyreDamage[i]=leakTyre(bentRimTyre(this.tyreDamage[i],this.wreckParts.wheelDamage[i]),this.speed,dt);
     if(this.extendedDamage&&this.tyreDamage)for(let i=0;i<4;i++){
       // Only a sudden failure (a hit) bursts; a slow puncture going flat just sags.

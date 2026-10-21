@@ -1,3 +1,4 @@
+import {restoreOilSeizeBytes} from './oil-seize-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readFireCookPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreFireCookBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreOilSeizeBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readFireCookPrevious(file);
 }
 export function verifyFireCookRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'8cbcde9591796f2d7f1c2ef897b7a57eef7dba27');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreOilSeizeBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreFireCookBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the FireCook release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreOilSeizeBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the FireCook release');
  assert.equal(manifest.previousFixtureCount,5488);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,5488);
 }

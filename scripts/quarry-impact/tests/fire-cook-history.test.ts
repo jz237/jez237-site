@@ -1,6 +1,7 @@
+import {restoreOilSeizeBytes} from './oil-seize-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readFireCookPrevious,restoreFireCookBytes,verifyFireCookRevision} from './fire-cook-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreOilSeizeBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('FireCook preserves every prior fixture, vehicle asset, venue art and history input',verifyFireCookRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/fire-cook/revision.json').toString());
