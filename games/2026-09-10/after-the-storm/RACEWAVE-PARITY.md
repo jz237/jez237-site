@@ -1,5 +1,24 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unreleased
+
+### Expert champion's ceremony flock, all ceremony scripts verified
+
+Winning the Expert cup now gets the original's own ending flock (801DB8F0):
+at frame 860 four leader gulls spawn around a base point with random offsets,
+wing-beat timers and speeds (a random few cruise faster with an endless
+timer), then steer every frame through the original sine table, turning by
+the square root of their distance from that point until frame 1500. From
+frame 800 a seven-bird DB284/DB430 flock (the verified introduction flock)
+follows its own template. All eleven rows are submitted each frame.
+
+All three main21 scripts (801DC0AC, 801DBF68 and 801DB8F0, with their spawn,
+wing-beat, flock, random and square-root callees) were executed from the
+original ROM for seven class and rank cases: 3,553 frames and 2.36 million
+instructions. The browser's port matches every frame's state, random stream
+and pool calls exactly. The public fixture holds only synthetic inputs and
+per-frame hashes.
+
 ## v2.46.0 — Original ending world, water option and a clean test suite
 
 The championship ending keeps the final race running under its overlay with
@@ -24,8 +43,7 @@ Expert 2nd and 3rd (801DBF68) fly four or three gulls from frame 800. Each is a
 type-3 presentation row spawned at its window's start point (DB0E4/DAFB8) and
 moved toward its end point every frame with the original wing-beat cycle
 (DB1DC/DB024), then submitted through AC098 and drawn by the course actors'
-gull model. Not reconstructed: the Expert champion's random flock (801DB8F0),
-the 9CD50 camera offsets, and rider engine sound during the ending (audio stays
+gull model. Not reconstructed: the 9CD50 camera offsets, and rider engine sound during the ending (audio stays
 with the ending's menu owner).
 
 ### original water option
