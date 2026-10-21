@@ -149,6 +149,10 @@ export class Vehicle {
   contactHeat = 0;
   /** Fuel leak severity 0..1 (offline): a burning car with a split tank blows up. */
   fuelLeak = 0;
+  /** This car's fire heat (0..1), set by VehicleFire each step. */
+  fireHeat = 0;
+  /** A part torn off while the car is burning hard keeps burning on the ground for 14–24 s. */
+  private burnDebris(){if(this.extendedDamage&&this.fireHeat>.4)this.fx.igniteLastDebris?.(14+((this.id*.37+this.rips*.13)%1)*10);}
   /** Set while two or more wheels splash through water; VehicleFire puts a burning car out. */
   douseRequest = false;
   onDoused?:()=>void;
@@ -617,7 +621,7 @@ export class Vehicle {
       if (group.damage <= threshold || damage <= (this.extendedDamage?DETACH.blow:7) || group.weight <= .18) continue;
       for (const panel of group.panels) {
         if (quiet) panel.visible = false;
-        else this.fx.detach(panel, this.velocity.clone().multiplyScalar(.65));
+        else {this.fx.detach(panel, this.velocity.clone().multiplyScalar(.65));this.burnDebris();}
       }
       if (!quiet) this.impactEffects.debris = true;
     }
@@ -674,7 +678,7 @@ export class Vehicle {
     this.model.updateWorldMatrix(true,true);
     for(const m of a.members){
       if(!m.mesh.visible)continue;
-      if(quiet)m.mesh.visible=false;else this.fx.detach(m.mesh,this.velocity.clone().multiplyScalar(.55).add(new T.Vector3(0,1.6,0)));
+      if(quiet)m.mesh.visible=false;else{this.fx.detach(m.mesh,this.velocity.clone().multiplyScalar(.55).add(new T.Vector3(0,1.6,0)));this.burnDebris();}
     }
     if(!quiet){this.impactEffects.debris=true;this.rips++;}
     return true;
@@ -689,7 +693,7 @@ export class Vehicle {
     if(!quiet){
       const outward=new T.Vector3(i%2?1:-1,.35,0).applyQuaternion(this.root.quaternion).multiplyScalar(2.4).addScaledVector(direction,1.2);
       const fx=this.fx as Effects&{detachWheel?:Effects['detachWheel']};
-      fx.detachWheel?.(w,this.velocity.clone().multiplyScalar(.85).add(outward),vehicleWheelRadius(this.kind),this.speed);
+      fx.detachWheel?.(w,this.velocity.clone().multiplyScalar(.85).add(outward),vehicleWheelRadius(this.kind),this.speed);this.burnDebris();
       this.fx.emit(w.getWorldPosition(new T.Vector3()),16,1,1.3);this.impactEffects.debris=true;this.onWheelLost?.(i);
     }
     w.visible=false;

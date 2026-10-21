@@ -3,7 +3,7 @@ import {landscapeHeight} from './quarry-layout';
 import * as T from 'three';
 import R from '@dimforge/rapier3d-compat';
 import {GroundEvidence} from './ground-evidence';
-import {FluidSlicks} from './fluid-leaks';
+import {FluidSlicks,type GroundFire} from './fluid-leaks';
 import {DAYLIGHT_DIRECTION} from './static-shadows';
 type Particle = {
   p: T.Vector3;
@@ -23,7 +23,7 @@ export class Effects {
   types: Float32Array;
   geometry: T.BufferGeometry;
   points: T.Points;
-  debris: { mesh: T.Object3D; body: R.RigidBody; age: number; shared?: boolean }[] = [];
+  debris: { mesh: T.Object3D; body: R.RigidBody; age: number; shared?: boolean; fire?: { start: number; end: number; seed: number } }[] = [];
   marks: T.InstancedMesh;
   markCursor = 0;
   readonly evidence:GroundEvidence;
@@ -234,6 +234,17 @@ void main(){
     const axle = new T.Vector3(1, 0, 0).applyQuaternion(quaternion).multiplyScalar(-speed / Math.max(0.1, radius));
     b.setAngvel({ x: axle.x, y: axle.y + 1.2, z: axle.z }, true);
     this.debris.push({ mesh: holder, body: b, age: 0, shared: true });
+  }
+  /** The part just torn off a burning car keeps burning where it lands (offline cars only call this). */
+  igniteLastDebris(seconds: number) {
+    const d = this.debris.at(-1);if (!d || d.fire) return;
+    const start = this.slicks.clock;d.fire = { start, end: start + seconds, seed: (this.debris.length * .618) % 1 };
+  }
+  /** Burning debris for the ground-fire renderer, at the parts' current positions. */
+  debrisFires(): GroundFire[] {
+    const t = this.slicks.clock, out: GroundFire[] = [];
+    for (const d of this.debris) if (d.fire && t < d.fire.end) { const p = d.body.translation(); out.push({ x: p.x, y: p.y - .1, z: p.z, radius: .32, start: d.fire.start, end: d.fire.end, kind: 0, seed: d.fire.seed }); }
+    return out;
   }
   removeDebris(i: number) {
     const d = this.debris[i];

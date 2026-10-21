@@ -1336,7 +1336,7 @@ const aiFires:{clock:number;list:GroundFire[]}={clock:-1,list:[]};let fireAvoida
 function ai(car: Vehicle, dt: number): Input {
   const input=aiCore(car,dt);
   if(!fireAvoidance||!car.extendedDamage||online?.active||car.health<=0)return input;
-  if(aiFires.clock!==fx.slicks.clock){aiFires.clock=fx.slicks.clock;aiFires.list=fx.slicks.burningCount()||propFires.burning.size?[...fx.slicks.fires(),...propFires.fires(fx.slicks.clock,propPoints(activeVenue.props))]:[];}
+  if(aiFires.clock!==fx.slicks.clock){aiFires.clock=fx.slicks.clock;aiFires.list=[...(fx.slicks.burningCount()?fx.slicks.fires():[]),...(propFires.burning.size?propFires.fires(fx.slicks.clock,propPoints(activeVenue.props)):[]),...fx.debrisFires()];}
   const fires=aiFires.list;
   return fires.length?avoidFires(car,input,fires,fx.slicks.clock,car.flameHeat):input;
 }
@@ -1862,7 +1862,8 @@ function frame(now: number) {
   const effectsActive=['playing','countdown','wrecked'].includes(state)||(demo&&state==='result');
   if(!studio&&vehicleFire){
     const props=propPoints(activeVenue.props);if(effectsActive&&!online?.active)for(const b of propFires.update(fx.slicks.clock,props,fx.slicks))drumBlast(new T.Vector3(b.p.x,b.p.y,b.p.z),b.index);
-    const groundFires=[...fx.slicks.fires(),...propFires.fires(fx.slicks.clock,props)];
+    const debrisFires=fx.debrisFires();for(const d of debrisFires)fx.slicks.igniteAt(d.x,d.z,.35,false);
+    const groundFires=[...fx.slicks.fires(),...propFires.fires(fx.slicks.clock,props),...debrisFires];
     vehicleFire.setGround(groundFires,fx.slicks.clock);vehicleFire.update(cars,effectsActive?dt:0,camera);
     // A burning car lights any oil or fuel it is standing in (offline cars only leak).
     for(const e of vehicleFire.emitters.values())if(e.car.extendedDamage&&e.state.heat>.45)fx.slicks.igniteAt(e.origin.x,e.origin.z,1,false,e.car.id);
@@ -2115,11 +2116,13 @@ async function boot() {
     igniteAt: (id: number, reach = 3) => { const c = cars.find(x => x.id === id); return c ? fx.slicks.igniteAt(c.current.x, c.current.z, reach, false) : 0; },
     get replaySlicks(){return replaySlicks?{...replaySlicks.slicks.stats,props:replaySlicks.props.burning.size}:null;},
     get propFires(){return propFires.burning.size;},
+    /** QA: tear a named part (front-bumper, hood, …) off a car as a hard hit would. */
+    ripPart: (id: number, name: string) => { const c = cars.find(x => x.id === id); if (!c) return false; c.ripAssembly(name, false); return true; },
     /** QA: set an offline car alight as if it had stood in flames. */
     setCarAlight: (id: number) => { const c = cars.find(x => x.id === id); if (c?.extendedDamage) c.igniteRequest = true; return !!c?.extendedDamage; },
     /** QA: switch AI fire avoidance off to compare. */
     setFireAvoidance: (on: boolean) => { fireAvoidance = !!on; },
-    get propFireState(){return{clock:fx.slicks.clock,burning:[...propFires.burning].map(([i,f])=>({i,...f}))};},
+    get propFireState(){return{clock:fx.slicks.clock,burning:[...propFires.burning].map(([i,f])=>({i,...f})),debris:fx.debrisFires().length};},
     /** QA: set loose prop i alight (offline); returns its position. */
     burnProp: (i: number) => { const p = propPoints(activeVenue.props)[i]; if (!p?.kind) return null; propFires.ignite(i, p.kind, fx.slicks.clock, p); return [p.x, p.y, p.z, p.kind]; },
     get surfaceState(){return{ground:fx.evidence.stats,cars:cars.map(c=>({id:c.id,...c.surfaceFinish.stats,scraping:c.scraping,paintVertices:c.panels.reduce((sum,p)=>sum+Array.from(p.geometry.attributes.transferPaint.array).filter((v,i)=>i%4===3&&v>0).length,0),wheels:Array.from(c.wreckParts.wheelDamage,(damage,i)=>({damage,rest:c.controller.wheelSuspensionRestLength(i),stiffness:c.controller.wheelSuspensionStiffness(i),brake:c.controller.wheelBrake(i),steering:c.controller.wheelSteering(i),contact:c.tireContacts[i].active.value,load:c.tireContacts[i].load.value}))}))};},
