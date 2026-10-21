@@ -186,6 +186,7 @@ export class VehicleFire {
       if(car.extendedDamage&&car.douseRequest){car.douseRequest=false;if(state.douse())car.onDoused?.();}
       if(car.extendedDamage&&car.fuelLeak>.3)state.primeFuelBlast();
       car.fireHeat=state.heat;
+      if(state.burning)car.cook?.(state.heat,dt,e.profile.engineZone==='rear');
       const ignition=state.advance(car.health,dt,impact,zones,e.profile.engineZone,e.profile.waterCooled,car.extendedDamage?car.engineDamage:undefined);e.impactSerial=car.impactSerial;
       car.wreckFinish?.advance(state.heat,dt);
       if(ignition){for(let j=0;j<16;j++)this.spawn(e,2,true);for(let j=0;j<8;j++)this.spawn(e,0,true);this.spark(e.origin,32,1,4.5);this.bursts.push({id:car.id,position:e.origin.clone(),heat:state.heat,burst:1});}

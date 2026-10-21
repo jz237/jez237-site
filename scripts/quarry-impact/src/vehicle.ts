@@ -42,6 +42,8 @@ import {wheelTearsOff} from './wheel-physics';
 import {EngineMisfire} from './engine-misfire';
 import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowoutImpulse,bentRimTyre,rimWobble} from './damage-handling';
 import {leakRates,dripInterval,FLAME,fuelSpacing} from './fluid-leaks';
+/** A burning car cooks itself: glass damage per second at full heat (side windows burst at 24) and tyre damage per second. */
+export const COOK={glass:2.2,tyre:.02} as const;
 /** Panels hanging at least this loose build wind load above this speed (m/s) until they tear away. */
 export const WIND_RIP={loose:.25,speed:16} as const;
 /** Deceleration (m/s²) from a part dragging along the ground at full scrape, applied where it drags. */
@@ -151,6 +153,23 @@ export class Vehicle {
   fuelLeak = 0;
   /** This car's fire heat (0..1), set by VehicleFire each step. */
   fireHeat = 0;
+  /** Called when heat shatters a window (sound hook). */
+  onGlassBreak?:(p:T.Vector3)=>void;
+  /** The car's own fire (offline): heat crazes the glass until side windows burst and the screens hang crazed,
+   * and cooks the tyres at the burning end. engineRear picks which axle sits over the fire. */
+  cook(heat:number,dt:number,engineRear:boolean){
+    if(!this.extendedDamage||!(heat>.3)||!(dt>0))return;
+    for(const glass of this.glass){
+      if(!glass.visible)continue;
+      const before=glass.userData.damage||0,after=before+heat*dt*COOK.glass;glass.userData.damage=after;
+      const state=(glass.material as T.Material).userData.glassState as GlassState|undefined;
+      if(state){state.damage.value=Math.min(1,after/24);if(before===0)state.impact.value.set(0,0,0);}
+      if(!/Windshield|Rearwindow/.test(glass.name)&&before<=24&&after>24){
+        glass.visible=false;const c=new T.Box3().setFromObject(glass).getCenter(new T.Vector3());this.fx.emit(c,12,3,1.2);this.onGlassBreak?.(c);
+      }
+    }
+    if(this.tyreDamage)for(const i of engineRear?[2,3]:[0,1])if(!this.wreckParts.wheelLost[i])this.tyreDamage[i]=Math.min(1,this.tyreDamage[i]+heat*dt*COOK.tyre);
+  }
   /** A part torn off while the car is burning hard keeps burning on the ground for 14–24 s. */
   private burnDebris(){if(this.extendedDamage&&this.fireHeat>.4)this.fx.igniteLastDebris?.(14+((this.id*.37+this.rips*.13)%1)*10);}
   /** Set while two or more wheels splash through water; VehicleFire puts a burning car out. */
