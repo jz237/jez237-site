@@ -6,6 +6,7 @@ import {classEngineLabel} from './class-engine';
 import {programWarmupView} from './program-warmup';
 import {ReplayPuddles} from './replay-puddles';
 import {ReplaySlicks} from './replay-slicks';
+import {PropFires,propKind} from './prop-fires';
 import {setSceneShadows,createPMREMGenerator} from './rendering';
 import {quarryReplayProps} from './quarry-tyres';
 import {colliderImpactMaterial,type ImpactMaterial} from './impact-material';
@@ -349,7 +350,9 @@ try{profile=readProfile(localStorage.getItem(PROFILE_KEY));}catch{}
 let profileStorageWarning='';
 let activeChallenge:Challenge|undefined;
 let rain:ReturnType<typeof createRain>|null=null,wetRoot:T.Object3D|undefined,wetOn=false;
-const eventAwards=new EventAwards();let slowMoUntil=0;
+const eventAwards=new EventAwards();const propFires=new PropFires();
+/** Loose props as fire sources: where they are now and whether they burn. */
+const propPoints=(props:readonly {mesh:T.Object3D}[])=>props.map(p=>({x:p.mesh.position.x,y:p.mesh.position.y,z:p.mesh.position.z,kind:propKind((p.mesh as T.Mesh).geometry?.type)}));let slowMoUntil=0;
 /** Brief Burnout-style slow motion when the player wrecks an opponent (local events only). */
 const TAKEDOWN_SLOWMO={scale:.3,seconds:.9};const carLights=new Map<Vehicle,CarLights>();let lastBadges:string[]=[];
 const badgeLine=()=>lastBadges.length?`<p class="badge-unlock">★ ACHIEVEMENT${lastBadges.length>1?'S':''} UNLOCKED · ${lastBadges.join(' · ')}</p>`:'';
@@ -473,7 +476,7 @@ let recorder:ReplayRecorder|null=null,lastReplay:ReplayDocument|null=null,replay
 let closeReplayLibrary:(()=>void)|null=null;
 let replayImpacts:ReplayImpactPlayback|null=null;
 let replayBursts:ReplayBurstPlayback|null=null;
-let replayPuddles:ReplayPuddles|null=null,replaySlicks:ReplaySlicks|null=null;
+let replayPuddles:ReplayPuddles|null=null,replaySlicks:ReplaySlicks|null=null,replayPropMeshes:T.Mesh[]=[];
 let replayFire:ReplayFire|null=null;
 let studio:ReplayStudio|null=null,studioRestore:(()=>void)|null=null;
 function captureReplay(force=false){if(recorder&&!studio&&!online?.active)recorder.capture(elapsed,()=>captureReplayFrame(cars,activeVenue.props,replayEpochs,recorder!.meta.tyreModel,recorder!.meta.engineModel,recorder!.meta.audioModel,id=>sound.contactScraping.level(id),recorder!.meta.thermalModel,vehicleFire?.audio??[]),force);}
@@ -507,7 +510,7 @@ function openStudio(photo=false,document?:ReplayDocument,savedName?:string):bool
   const hidden=new Map<T.Object3D,boolean>();let view:ReplayScene|null=null,restored=false;
   const hide=(o:T.Object3D|undefined)=>{if(o&&!hidden.has(o)){hidden.set(o,o.visible);o.visible=false;}};
   const restore=()=>{
-    if(restored)return;restored=true;replayThermal=[];replayFire?.dispose();replayFire=null;replayPuddles?.dispose();replayPuddles=null;replaySlicks?.dispose();replaySlicks=null;replayAudio.reset();view?.dispose();cars=oldCars;mode=returnMode;
+    if(restored)return;restored=true;replayThermal=[];replayFire?.dispose();replayFire=null;replayPuddles?.dispose();replayPuddles=null;replaySlicks?.dispose();replaySlicks=null;replayPropMeshes=[];replayAudio.reset();view?.dispose();cars=oldCars;mode=returnMode;
     quarryMode=oldQuarryMode;quarry.setMode(oldQuarryMode,false);quarryEnabled.forEach(([c,enabled])=>c.setEnabled(enabled));
     hidden.forEach((visible,o)=>o.visible=visible);quarryVisibility.forEach(([o,visible])=>o.visible=visible);
     activateVenue(returnVenue);refreshVenueLighting();
@@ -517,7 +520,7 @@ function openStudio(photo=false,document?:ReplayDocument,savedName?:string):bool
     lastFrame=performance.now();accumulator=0;sound.attach(oldCars);sound.pause(!['playing','countdown','menu'].includes(returnState));
   };
   try{
-    if(doc){view=new ReplayScene(doc,scene,targetVenue.physics,quarryReplayProps(targetVenue.props,doc.meta.props),targetVenue.course);replayThermal=view.thermalAudio;replayPuddles=new ReplayPuddles(doc,scene,targetVenue.puddles,view.cars);replaySlicks=doc.drips?.length?new ReplaySlicks(doc.drips,scene):null;if(doc.meta.thermalModel===1){replayFire=new ReplayFire(doc,scene);replayFire.fire.setQuality(adaptiveGraphics.quality);}}
+    if(doc){view=new ReplayScene(doc,scene,targetVenue.physics,quarryReplayProps(targetVenue.props,doc.meta.props),targetVenue.course);replayThermal=view.thermalAudio;replayPuddles=new ReplayPuddles(doc,scene,targetVenue.puddles,view.cars);replaySlicks=doc.drips?.length?new ReplaySlicks(doc.drips,scene):null;replayPropMeshes=view.props;if(replaySlicks)replaySlicks.propKinds=view.props.map(m=>propKind(m.geometry.type));if(doc.meta.thermalModel===1){replayFire=new ReplayFire(doc,scene);replayFire.fire.setQuality(adaptiveGraphics.quality);}}
     keys.clear();replayAudio.reset();if(doc&&!sound.ready)void sound.init().catch(error=>console.warn('Replay audio unavailable',error));state='studio';
     if(doc){
       for(const car of oldCars)hide(car.root);for(const prop of returnVenue.props)hide(prop.mesh);for(const prop of targetVenue.props)hide(prop.mesh);
@@ -867,7 +870,7 @@ function createCars(attract = false, previewSetup?:Setup) {
   archiveReplay();bankRun(false);
   drivers.difficulty=attract?'amateur':aiDifficulty();pursuit=null;pursuitDriving.reset();combat.reset(true);derbyFeed.reset();waypointRace=!attract&&mode==='race'&&raceFormat()!=='laps'?new WaypointRace(raceFormat() as 'ordered'|'free'|'random',raceLaps(),clubRound()?.seed??activeChallenge?.seed??Math.floor(Math.random()*0xffffffff),targetVenue.course.checkpoints,targetVenue.course.waypointStations):null;
   sound.clearCars();
-  vehicleFire?.reset();
+  vehicleFire?.reset();propFires.reset();
   puddleSplashes?.reset();
   for (const c of cars){carLights.get(c)?.dispose();carLights.delete(c);c.dispose();}
   cars = [];
@@ -1827,15 +1830,17 @@ function frame(now: number) {
   if(demo&&state==='result'){demoRestart=Math.max(0,demoRestart-dt);fx.update(dt);if(demoRestart===0){const next=nextDemoMode(mode,demoOptions.loop);if(next){mode=next;state='loading';void start(true);}}}
   updateTrialGhost();
   updateCamera(dt);
-  if(studio&&!studio.seeking){replaySlicks?.update(studio.time);replayFire?.fire.setGround(replaySlicks?.slicks.fires()??[],studio.time);replayFire?.update(studio.time,camera);replayPuddles?.update(studio.time);}
+  if(studio&&!studio.seeking){replaySlicks?.update(studio.time);replayFire?.fire.setGround(replaySlicks?[...replaySlicks.slicks.fires(),...replaySlicks.props.fires(studio.time,propPoints(replayPropMeshes.map(mesh=>({mesh}))))]:[],studio.time);replayFire?.update(studio.time,camera);replayPuddles?.update(studio.time);}
   if(!studio)for(const car of cars){car.wreckParts.pose(['playing','countdown'].includes(state)?dt:0,car.speed);car.wreckParts.wheelsPose();car.syncSuspension();}
   const effectsActive=['playing','countdown','wrecked'].includes(state)||(demo&&state==='result');
   if(!studio&&vehicleFire){
-    vehicleFire.setGround(fx.slicks.fires(),fx.slicks.clock);vehicleFire.update(cars,effectsActive?dt:0,camera);
+    const props=propPoints(activeVenue.props);if(effectsActive&&!online?.active)propFires.update(fx.slicks.clock,props,fx.slicks);
+    const groundFires=[...fx.slicks.fires(),...propFires.fires(fx.slicks.clock,props)];
+    vehicleFire.setGround(groundFires,fx.slicks.clock);vehicleFire.update(cars,effectsActive?dt:0,camera);
     // A burning car lights any oil or fuel it is standing in (offline cars only leak).
     for(const e of vehicleFire.emitters.values())if(e.car.extendedDamage&&e.state.heat>.45)fx.slicks.igniteAt(e.origin.x,e.origin.z,1,false,e.car.id);
     let nearest:{p:T.Vector3;level:number}|null=null;
-    for(const f of fx.slicks.fires()){const level=burnLevel(f,fx.slicks.clock)*Math.min(1.4,.6+f.radius),p=new T.Vector3(f.x,f.y,f.z);if(level>0&&(!nearest||p.distanceToSquared(camera.position)<nearest.p.distanceToSquared(camera.position)))nearest={p,level};}
+    for(const f of groundFires){const level=burnLevel(f,fx.slicks.clock)*Math.min(1.4,.6+f.radius),p=new T.Vector3(f.x,f.y,f.z);if(level>0&&(!nearest||p.distanceToSquared(camera.position)<nearest.p.distanceToSquared(camera.position)))nearest={p,level};}
     sound.groundFire(effectsActive?nearest:null);
   }
   if(!studio)puddleSplashes?.update(cars,activeVenue.puddles,effectsActive?dt:0,state==='playing');
@@ -1978,6 +1983,7 @@ async function boot() {
   physics.timestep = 1 / 60;
   events = new R.EventQueue(true);
   fx = new Effects(scene, physics);
+  propFires.onIgnite=(i,p)=>{if(!studio&&!online?.active)recorder?.drip({time:elapsed,position:[p.x,p.y,p.z],kind:4,seed:i/1000});sound.groundIgnite(new T.Vector3(p.x,p.y,p.z),2);};
   fx.slicks.onIgnite=(x,y,z,kind,owner)=>{if(!studio&&!online?.active){recorder?.drip({time:elapsed,position:[x,y,z],kind:3,seed:fx.slicks.wet?.5:0});eventAwards.ignited(owner);}sound.groundIgnite(new T.Vector3(x,y,z),kind);};
   vehicleFire = new VehicleFire(scene,(p,n,type,force)=>fx.emit(p,n,type,force));
   vehicleFire.setQuality(adaptiveGraphics.quality);
@@ -2074,7 +2080,10 @@ async function boot() {
     get slicks(){return fx.slicks.stats;},
     /** QA: light any oil or fuel within reach of a car. */
     igniteAt: (id: number, reach = 3) => { const c = cars.find(x => x.id === id); return c ? fx.slicks.igniteAt(c.current.x, c.current.z, reach, false) : 0; },
-    get replaySlicks(){return replaySlicks?.slicks.stats??null;},
+    get replaySlicks(){return replaySlicks?{...replaySlicks.slicks.stats,props:replaySlicks.props.burning.size}:null;},
+    get propFires(){return propFires.burning.size;},
+    /** QA: set loose prop i alight (offline); returns its position. */
+    burnProp: (i: number) => { const p = propPoints(activeVenue.props)[i]; if (!p?.kind) return null; propFires.ignite(i, p.kind, fx.slicks.clock, p); return [p.x, p.y, p.z, p.kind]; },
     get surfaceState(){return{ground:fx.evidence.stats,cars:cars.map(c=>({id:c.id,...c.surfaceFinish.stats,scraping:c.scraping,paintVertices:c.panels.reduce((sum,p)=>sum+Array.from(p.geometry.attributes.transferPaint.array).filter((v,i)=>i%4===3&&v>0).length,0),wheels:Array.from(c.wreckParts.wheelDamage,(damage,i)=>({damage,rest:c.controller.wheelSuspensionRestLength(i),stiffness:c.controller.wheelSuspensionStiffness(i),brake:c.controller.wheelBrake(i),steering:c.controller.wheelSteering(i),contact:c.tireContacts[i].active.value,load:c.tireContacts[i].load.value}))}))};},
     get puddles(){return quarry.puddles;},
     get arenaState(){return{...quarry.arenaLayout,expanded:quarry.arenaPhysics.expanded,enabledWalls:quarry.arenaPhysics.walls.filter(c=>c.isEnabled()).length};},

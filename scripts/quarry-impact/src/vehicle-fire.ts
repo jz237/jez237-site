@@ -220,9 +220,11 @@ export class VehicleFire {
           if(cursor>=cap)return;const p=this.ground[cursor++];used++;
           const seed=((Math.imul(tick+1,1664525)^Math.imul(Math.floor(f.seed*1e6)+kind*7919,1013904223))>>>0)/4294967296,angle=seed*Math.PI*14,reach=Math.sqrt((seed*13.7)%1)*(f.radius*1.05+.1);
           // Low, wide tongues of flame across the whole puddle, under a heavy sooty plume.
-          p.owner=-1;p.kind=kind;p.age=age;p.life=life;p.heat=level;p.soot=1;p.seed=seed*31;p.aspect=kind===1?1.2+seed*.5:.9;p.strength=level;
+          p.owner=-1;p.kind=kind;p.age=age;p.life=life;p.heat=level;p.soot=1;p.seed=seed*31;p.aspect=kind===1?1.2+seed*.5:.9;p.strength=level*(kind===1?1:.88);
           p.size=kind===1?(.16+.25*f.radius+seed*.1)*(f.kind===2?1.15:1):.55+.5*f.radius+seed*.2;
-          p.p.set(f.x+Math.cos(angle)*reach+(kind===0?age*.3:0),f.y+.05+age*(kind===1?1.1:1.4),f.z+Math.sin(angle)*reach);
+          // Smoke drifts downwind and billows apart as it climbs, rather than standing as a pillar.
+          const sway=kind===0?age*(.18+.16*Math.sin(seed*20)):0;
+          p.p.set(f.x+Math.cos(angle)*reach+(kind===0?age*.4+Math.cos(seed*20)*sway:0),f.y+.05+age*(kind===1?1.1:1.25),f.z+Math.sin(angle)*reach+Math.sin(seed*20)*sway);
         }
       }
     }
