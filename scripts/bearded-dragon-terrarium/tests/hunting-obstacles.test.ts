@@ -5,9 +5,12 @@ import * as THREE from 'three';
 import {Cricket} from '../lib/Insects';
 import {habitat,Audit,SkinAudit} from './locomotion-fixture';
 
-function restingCricket(x:number,y:number,z:number){
+function cricket(x:number,y:number,z:number){
   const g=new THREE.SphereGeometry(.001,4,2),m=new THREE.MeshBasicMaterial();
-  const c=new Cricket(new THREE.Vector3(x,y,z),{body:g,wing:g,eye:g,seg:g,femur:g,spines:g,antenna:g,cercus:g,ovipositor:g,mats:{body:m,femur:m,wing:m,eye:m,leg:m,dark:m}});
+  return new Cricket(new THREE.Vector3(x,y,z),{body:g,wing:g,eye:g,seg:g,femur:g,spines:g,antenna:g,cercus:g,ovipositor:g,mats:{body:m,femur:m,wing:m,eye:m,leg:m,dark:m}});
+}
+function restingCricket(x:number,y:number,z:number){
+  const c=cricket(x,y,z);
   c.airborne=false;c.heading=0;
   // Isolate obstacle negotiation from prey escape. The separate hunting tests
   // exercise the real moving/hopping controller; capture still needs contact.
@@ -23,6 +26,38 @@ test('a nearby cricket cannot interrupt the straight exit from the hide',()=>{
   assert.equal(b.caveExit,1);assert.equal(b.huntPhase,'approach');
   assert.ok(movement.speed>0,'clear the hind feet before fixation or a strike');
   assert.ok(Math.abs(movement.turn)<.05,'retain the doorway alignment');
+});
+
+test('a blocked final approach withdraws before choosing a new side of the prey',()=>{
+  const a=habitat(),b=a.brain as any,I=a.rig.inputs;
+  Object.assign(I,{x:.08,z:.35,heading:0});a.rig.reset();
+  const c=restingCricket(.24,a.surface.heightAt(.24,.35),.35);b.startHunt(c);
+  Object.assign(b,{huntPhase:'approach',path:[[.08,.35]],pathI:1,goal:[.08,.35],huntPrey:[.24,.35],stallT:2,speed:.1});
+  const movement=b.hunt(1/60);
+  assert.ok(movement.speed<0,'back out even after reaching the route endpoint');
+  assert.ok(b.retreatT>0);assert.equal(b.huntPrey,null,'plan a different approach after clearing the blocked stance');
+});
+
+test('a cricket dropped beside the basking ledge is chased from supported stances',{timeout:120000},()=>{
+  const random=Math.random;let seed=37;
+  Math.random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};
+  try{
+    const a=habitat(),b=a.brain as any,r=a.rig as any,I=r.inputs,audit=new Audit();b.boredom=1e6;
+    for(let i=0;i<180;i++)b.update(1/60);
+    const p=a.nav.nearestWalkable(r.snout.x+.09,r.snout.z+.065,a.nav.mainRegion)!;
+    const c=cricket(p[0],.61,p[1]);let started=false,seconds=0,maxSwing=0;const swings=[0,0,0,0];
+    for(let i=0;i<40*60&&!c.caught;i++){
+      c.update(1/60,a.surface,a.nav);
+      if(!started&&!c.airborne){b.startHunt(c);started=true;}
+      b.update(1/60);audit.sample(r,a.surface);seconds=(i+1)/60;
+      for(const [k,l] of r.legs.entries()){swings[k]=l.swing?swings[k]+1/60:0;maxSwing=Math.max(maxSwing,swings[k]);}
+      if(b.huntGoal){const [x,z]=b.huntGoal;assert.ok(!(x<-.20&&z>.105&&z<.27&&a.surface.heightAt(x,z)>.12),'do not turn or strike from the unsupported arch lip');}
+    }
+    assert.ok(c.caught&&seconds<30,'catch the moving cricket without getting stranded over the arch');
+    assert.ok(maxSwing<2.5,'a leg cannot remain suspended at the ledge');
+    assert.ok(audit.maxSlide<.0001&&audit.maxFloat<.0005&&audit.maxPenetration<.0005,'planted soles keep real contact');
+    assert.ok(audit.maxJump<.01&&audit.maxLimbError<.00015,'no body jumps or stretched limbs');
+  }finally{Math.random=random;}
 });
 
 test('hunts around the hide, log and ledges retain contact and upright forelegs',{timeout:300000},t=>{
@@ -49,7 +84,7 @@ test('hunts around the hide, log and ledges retain contact and upright forelegs'
     for(let i=0;i<60;i++)r.update(1/60);
     const [x,z]=a.nav.nearestWalkable(scenario.prey[0],scenario.prey[1],a.nav.mainRegion)!;
     const c=restingCricket(x,a.surface.heightAt(x,z),z);b.startHunt(c);
-    let seconds=0,still=0,maxStill=0,px=I.x,pz=I.z,maxSwing=0,minPalmUp=1,minElbow=1,maxRotation=0;
+    let seconds=0,still=0,maxStill=0,px=I.x,pz=I.z,maxSwing=0,maxFootStall=0,minPalmUp=1,minElbow=1,maxRotation=0;
     const swings=[0,0,0,0],rotations=new Map<number,THREE.Quaternion>();
     for(let frame=0;frame<60*60&&!c.caught&&b.mode==='hunt';frame++){
       b.update(1/60);audit.sample(r,a.surface);seconds=(frame+1)/60;
@@ -58,6 +93,7 @@ test('hunts around the hide, log and ledges retain contact and upright forelegs'
       maxStill=Math.max(maxStill,still);
       for(const [k,l] of r.legs.entries()){
         swings[k]=l.swing?swings[k]+1/60:0;maxSwing=Math.max(maxSwing,swings[k]);
+        maxFootStall=Math.max(maxFootStall,l.swingStall);
         if(!l.front)continue;
         const hand=a.lizard.bones[l.data.bones.hand].matrix;
         minPalmUp=Math.min(minPalmUp,new THREE.Vector3().setFromMatrixColumn(hand,1).normalize().y);
@@ -74,7 +110,7 @@ test('hunts around the hide, log and ledges retain contact and upright forelegs'
         }
       }
     }
-    const result={name:scenario.name,caught:c.caught,seconds,maxStill,maxSwing,minPalmUp,minElbow,maxRotation,audit:audit.report(),skin:{penetration:skin.maxPenetration,worst:skin.worst}};
+    const result={name:scenario.name,caught:c.caught,seconds,maxStill,maxSwing,maxFootStall,minPalmUp,minElbow,maxRotation,audit:audit.report(),skin:{penetration:skin.maxPenetration,worst:skin.worst}};
     results.push(result);t.diagnostic(JSON.stringify({name:scenario.name,caught:c.caught,seconds,maxStill,maxSwing,minPalmUp,minElbow,slide:audit.maxSlide}));
     if(process.env.OBSTACLE_REPORT)writeFileSync(process.env.OBSTACLE_REPORT,JSON.stringify({results},null,2));
     assert.ok(c.caught,`${scenario.name}: physically reaches and captures resting prey`);

@@ -417,6 +417,9 @@ export class LizardBrain {
       const dx = Math.cos(a), dz = Math.sin(a);
       const sx = target.x + dx * 0.12, sz = target.z + dz * 0.12;
       if(Math.abs(sx-.475)<.14&&sz<.26&&this.surface.heightAt(sx,sz)<.12)continue;
+      // A hunting stance needs turning room. Do not stop across the front lip
+      // of the basking arch; its usable descent follows the stone-step route.
+      if(sx<-.20&&sz>.105&&sz<.27&&this.surface.heightAt(sx,sz)>.12)continue;
       const ki = this.nav.idx(sx, sz);
       if (ki < 0 || this.nav.region[ki] !== region || this.nav.isWet(sx, sz)) continue;
       // the head must have room to reach in
@@ -1145,6 +1148,13 @@ export class LizardBrain {
         // Finish leaving a confined stance before fixation, steering or a
         // strike can take control. The tail and hind feet must clear it too.
         if(this.caveExit||this.bowlExit)return this.travel(dt);
+        // The last few centimetres still need contact recovery. Previously the
+        // end-of-route creep bypassed travel(), so a blocked ledge approach
+        // could keep pushing forever without withdrawing or choosing a new side.
+        if(this.retreatT>0||this.stallT>1.5){
+          if(this.retreatT<=0){this.standTries++;this.huntPrey=null;this.huntReplanT=0;}
+          return this.travel(dt);
+        }
         // Keep closing during a hop, aiming at the reachable landing area.
         // Contact checks still govern every step; only a grounded cricket can
         // trigger the final fixation and strike.
@@ -1193,7 +1203,8 @@ export class LizardBrain {
           if (!c.airborne && mouthD < 0.06) {this.huntPhase = 'fix'; this.phaseT = 0; return {speed: 0, turn: 0};}
           const ax=I.x+Math.cos(I.heading)*.02,az=I.z-Math.sin(I.heading)*.02;
           const doorway=Math.abs(ax-.475)<.14&&az<.26&&this.surface.heightAt(ax,az)<.12;
-          const ahead = !doorway && this.nav.walkable(ax,az) && this.pushedT < 0.3;
+          const perchLip=ax<-.20&&az>.105&&az<.27&&this.surface.heightAt(ax,az)>.12;
+          const ahead = !doorway && !perchLip && this.nav.walkable(ax,az) && this.pushedT < 0.3;
           if (ahead) return {speed: c.airborne&&flat<.06?0:.10, turn: clamp(err * 5, -2.5, 2.5)};
           this.standTries++;
           this.huntPrey = null; // forces a new stand-off spot on another side
