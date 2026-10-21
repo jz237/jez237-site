@@ -141,6 +141,8 @@ export class Vehicle {
   readonly springBias = [1,1,1,1];
   readonly sagBias = [1,1,1,1];
   readonly driveBias = [1,1,1,1];
+  /** How hard a sagging corner is dragging on the ground (0..1, fx rate); slows the car a little. */
+  private bellyDrag = 0;
   /** Fired the step a spring or driveshaft lets go, with the wheel index (sound/feed hook). */
   onBreak?:(what:'spring'|'shaft',wheel:number)=>void;
   /** Gears left after gearbox damage (offline only; 5 = intact). */
@@ -498,6 +500,7 @@ export class Vehicle {
         this.onBlowout?.(p);
       }
     }
+    if(this.extendedDamage&&this.bellyDrag>0&&Math.abs(this.speed)>1){const k=-Math.sign(this.speed)*this.specification.mass*.9*this.bellyDrag*dt;this.body.applyImpulse({x:this.forward.x*k,y:0,z:this.forward.z*k},true);this.bellyDrag=Math.max(0,this.bellyDrag-dt*2);}
     if(this.extendedDamage&&this.dragLoad>0&&Math.abs(this.speed)>1){
       // The dragging part acts as a brake where it touches the ground, so it also pulls to that side.
       const k=-Math.sign(this.speed)*this.specification.mass*PART_DRAG*this.dragLoad*dt;
@@ -559,6 +562,11 @@ export class Vehicle {
           const s=Math.min(1,Math.abs(this.speed)/18);this.scraping=Math.max(this.scraping,s*.55);this.fx.emit(p,Math.ceil(s*2),1,.7);
           // Offline the rim also cuts a groove into the tarmac, like a bare hub.
           if(this.extendedDamage)this.fx.evidence?.add(p,yaw,Math.abs(this.speed)*.08,s*.8,2);
+        }
+        // A corner down on its bump stops drags the sill and floorpan along the ground: sparks and a groove.
+        if(this.extendedDamage&&this.sagBias[i]<1&&Math.abs(this.speed)>3&&(this.controller.wheelSuspensionLength(i)??1)<.16){
+          const s=Math.min(1,Math.abs(this.speed)/16),at=p.clone().lerp(this.previous,.3);at.y=p.y;
+          this.scraping=Math.max(this.scraping,s*.7);this.fx.emit(at,Math.ceil(s*3),1,.8);this.fx.evidence?.add(at,yaw,Math.abs(this.speed)*.08,s*.7,2);this.bellyDrag=Math.max(this.bellyDrag,s);
         }
         if(this.wetWheels[i])continue;
         const feedback=tyreFeedback(this.surface,this.speed,this.wheelSlips[i],this.input.handbrake,i,true);
