@@ -23898,5 +23898,131 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-20-factual-infographic-factual-infographic-water-scorpion-brea",
+    "title": "Factual infographic: Water Scorpion — Breathing Through a Tail Tube",
+    "tests": "Four institutional sources fetched and read; all 168 factual archive entries scanned, no water-scorpion overlap. Seven supporting scientific studies; four large biological close-ups/cutaways. Explicit scheduled insect scientific-plate exception retained; internal breathing plan qualified as generalized.; archive_slot=2026-10-20T20:20; concept=nepa-cinerea-siphon-pond-ambush; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: bizarre-insect-life",
+    "prompt": "Create the finished educational natural-history scientific plate directly on the canvas: WATER SCORPION, with italic scientific name Nepa cinerea beneath, and subtitle “Breathing through a tail tube”. This is a rigorous detailed insect plate, not the artistic-atlas recomposition, not an app, poster photograph, room, specimen tray or museum case. Preserve a huge complete naturalistic macro hero plus SEVEN substantive supporting scientific studies/panels with fine precise leaders, strong readable hierarchy and substantial biological imagery. Scientific plate organization with clear distinct studies, not prose cards. No decorative filler. Render naturalistic macro-photography-level surface detail through refined technical illustration: wet dark brown flattened oval cuticle, subtly gritty surfaces, articulated six legs, correct insect segmentation, small head and folded forewings; avoid giant lobster pincers and a true scorpion tail. Restrained aquatic slate, olive and umber, pale neutral background, bright clean labels, directional soft light and believable shallow-depth-of-field texture. The specimen and explanatory biology occupy most of the image.\n\nThe whole adult hero dominates the upper-center, shown obliquely from above with all six legs anatomically accounted for, folded grasping front legs, two other pairs of slender walking legs, and long straight slender posterior siphon visible completely. Label “Flat body: concealment among leaves”, “Grasping forelegs”, “Breathing siphon — not a stinger”. Avoid depicting the siphon injecting prey. Include ample microtexture without adding imaginary spines.\n\nSEVEN supporting studies, each meaningful and visibly distinct, arranged asymmetrically around the hero rather than an equal tile grid:\n1. LARGE prominent translucent body cutaway focused on internal breathing anatomy, taking real visual space beside the hero. Exact heading “Breathing anatomy — simplified schematic”. Show a schematic branching tracheal network inside an adult body silhouette, connected functionally to the siphon air route. Label “Tracheae: branching air tubes”, “Tracheoles: gas exchange with tissues”, and a small conceptual spiracle detail labeled “Spiracle: air opening”. Print “Generalized insect tracheal plan; not a measured dissection”. Do NOT place a generic row of exposed lateral breathing holes all along the submerged water scorpion; do not invent exact spiracle locations, lung sacs, vertebrate organs, or unsupported organ geometry. A fine arrow key says “Oxygen to tissues / carbon dioxide out”. It is a schematic gas route, not a pumped liquid flow.\n2. Large enlarged siphon structural detail: two half-tubes alongside one another, then their joined cross-section, precisely labeled “Two half-tubes fit together”. Clearly mark “Enlarged schematic”. Three short mechanism steps read “Tip above surface → Air enters siphon → Air reaches respiratory system”. Show the waterline and atmospheric tip without making it a drinking straw, telescoping organ or stinger.\n3. Large raptorial foreleg macro, extended and folded around a small aquatic insect, with correct jointed insect leg rather than a crustacean claw. “Fold and grip”. Follow a concise prey-capture sequence “Wait among leaves → Seize prey → Feed with proboscis”. No gore.\n4. Head and mouthpart close-up, view angled ventrally to reveal the piercing proboscis in context; label “Proboscis draws up prey fluids”. Do not show jaws chewing or a mosquito needle detached from the head.\n5. Wing study showing protective front wing lifted to reveal one delicate membranous hindwing, remaining anatomy correct. “Protective front wings / Membranous hindwings”; secondary text “Adults can fly between watery habitats”. Distinct from the folded-wing hero.\n6. Development study: eggs in submerged plant tissue/vegetation near the surface, a small wingless adultlike nymph, and an adult connected with simple arrows. “Egg → Nymph → Adult”; “Nymphs grow through moults”. No caterpillar, maggot, chrysalis, metamorphosis cocoon or invented exact egg-horn count. Keep egg microstructure understated rather than fabricated.\n7. Habitat and scale context: realistic pond-bank water cross-section with muddy bottom, submerged dead leaves and vegetation, adult concealed below and siphon tip at surface. Readable text “Freshwater ambush predator”. Small isolated side silhouette beside a clear 20 mm body-length bracket excluding the siphon: “Body ≈20 mm; tube excluded”. Tiny range line “Found in Britain; also recorded in southern Norway”. Do not imply this is the entire global range.\n\nAt least three supporting studies must be genuinely LARGE biological macro/diagram views, not tiny icons. Favor the cutaway, siphon, foreleg and head for that purpose. Each panel has short explanatory labels, no paragraphs, no unsupported numerical timing or exaggerated claims. Keep the mechanism, internal breathing study, whole-body anatomy, development, habitat and scale intact. No bibliography, source URLs, watermarks or fake citations on-image. Request medium quality, auto size, opaque background.",
+    "image": "images/2026-10-20-factual-infographic-factual-infographic-water-scorpion-brea.jpg",
+    "thumb": "thumbs/2026-10-20-factual-infographic-factual-infographic-water-scorpion-brea.webp",
+    "color": "#b2aa99",
+    "date": "2026-10-20",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "nepa-cinerea-siphon-pond-ambush",
+      "imageSha256": "a543d9f86e1d43396d61ef7b17d9580278267c9becd33bf42ca4b18c3b7c71b9",
+      "imageDHash": "b2e1c953358c1c34"
+    },
+    "factualInfographic": {
+      "topic": "How the water scorpion (Nepa cinerea) breathes through a paired tail siphon while ambushing freshwater prey",
+      "description": "Detailed macro scientific plate of the water scorpion, paired siphon respiration and predatory biology, with explicitly generalized internal breathing anatomy.",
+      "sourceNote": "Hampshire Cultural Trust: https://collections.hampshireculture.org.uk/object/insect-hemiptera-water-scorpion; Natural History Museum, London: https://www.nhm.ac.uk/discover/pond-life-facts-about-habitats-plants-animals.html; North Carolina State University: https://genent.cals.ncsu.edu/bug-bytes/respiratory-system/; University of Bergen — Miljolare.no: https://www.miljolare.no/artstre/?or_id=559. Verified siphon structure and respiration, predation, development, wings, habitat, body scale and regional occurrence; internal tracheal anatomy explicitly generalized.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-21T00:21:44.573372+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Hampshire Cultural Trust",
+            "title": "Insect / Hemiptera / Water scorpion",
+            "sourceType": "museum",
+            "url": "https://collections.hampshireculture.org.uk/object/insect-hemiptera-water-scorpion"
+          },
+          {
+            "id": "S2",
+            "publisher": "Natural History Museum, London",
+            "title": "Pond life: facts about pond habitats, plants and animals",
+            "sourceType": "museum",
+            "url": "https://www.nhm.ac.uk/discover/pond-life-facts-about-habitats-plants-animals.html"
+          },
+          {
+            "id": "S3",
+            "publisher": "North Carolina State University",
+            "title": "Respiratory System — ENT 425 General Entomology",
+            "sourceType": "university",
+            "url": "https://genent.cals.ncsu.edu/bug-bytes/respiratory-system/"
+          },
+          {
+            "id": "S4",
+            "publisher": "University of Bergen — Miljolare.no",
+            "title": "Art: Vannskorpion (Nepa cinerea)",
+            "sourceType": "university",
+            "url": "https://www.miljolare.no/artstre/?or_id=559"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The water scorpion is Nepa cinerea, an insect in Hemiptera, family Nepidae, not a true scorpion.",
+            "sourceIds": [
+              "S1",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Its flattened body hides among submerged vegetation and dead leaves; it ambushes aquatic insects and small animals including tadpoles.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The long posterior breathing siphon comprises two half-tubes that fit together to conduct atmospheric air from above the water surface to the respiratory system; it is not a stinger.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The raptorial front legs fold over prey and grip it; the sharp proboscis draws up internal fluids. The remaining two pairs of legs crawl along the bottom.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The adult has two pairs of wings, protective front wings and membranous hindwings; the latter permit flight between watery habitats.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Eggs are laid in vegetation just below the water surface; wingless adultlike nymphs develop through moults to adulthood. No pupal stage is depicted.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The species occurs in Britain; in Norway it is recorded in the southeast and along the coast north to Bergen.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S4"
+            ]
+          },
+          {
+            "claim": "The body is approximately 20 mm long excluding the breathing tube. It lives near bank vegetation over mud or clay.",
+            "sourceIds": [
+              "S4"
+            ]
+          },
+          {
+            "claim": "In the generalized insect respiratory system, spiracles admit air to branching tracheal tubes and finer tracheoles; oxygen diffuses to tissues and carbon dioxide diffuses out. This is a simplified functional schematic, not a species-specific dissection or measured arrangement.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "This plate combines the source-supported water-scorpion siphon with an explicitly generalized internal insect tracheal network; no exact species-specific spiracle positions or other unsupported internal organs are claimed.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
