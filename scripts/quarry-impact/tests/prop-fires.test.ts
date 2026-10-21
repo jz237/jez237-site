@@ -35,3 +35,17 @@ test('replays apply recorded prop ignitions at their times and rebuild after see
   play.update(1);assert.equal(play.props.burning.size,0,'seeking back rebuilds');
  }finally{play.dispose();}
 });
+test('a burning drum blows up once at its own fixed time: a fireball, nearby puddles and props lit; replays show the same fireball',async()=>{
+ const {DRUM_BLAST,drumBlastTime}=await import('../src/prop-fires');
+ const s=new FluidSlicks(new T.Scene()),fires=new PropFires();
+ try{
+  const props:PropPoint[]=[{x:0,y:.44,z:0,kind:'drum'},{x:2,y:.13,z:0,kind:'tyre'}];s.drip(-2,0,1,0,.4);
+  fires.ignite(0,'drum',0,props[0]);const at=drumBlastTime(0,0);
+  assert.ok(at>=DRUM_BLAST.after&&at<=DRUM_BLAST.after+DRUM_BLAST.spread);
+  let blasts=0,t=0;for(;t<at+3;t+=.1){s.advance(.1);blasts+=fires.update(s.clock,props,s).length;if(Math.abs(s.clock-at-.5)<.06)assert.ok(fires.fires(s.clock,props).some(f=>f.radius===DRUM_BLAST.size),'fireball');}
+  assert.equal(blasts,1,'one blast');assert.ok(fires.burning.has(1),'the tyre beside it caught');assert.ok(s.stats.burning+s.stats.burnt>=1,'the oil 2 m away caught');
+  const replay=new PropFires();replay.simulate=false;replay.ignite(0,'drum',0);
+  assert.deepEqual(replay.update(at+.2,props,s),[],'replays never blow up on their own');
+  assert.ok(replay.fires(at+.5,props).some(f=>f.radius===DRUM_BLAST.size),'but draw the same fireball');
+ }finally{s.dispose();}
+});

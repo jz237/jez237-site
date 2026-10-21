@@ -228,6 +228,8 @@ export class Sound {
     if(nearest){l.pan.positionX.value=nearest.p.x;l.pan.positionY.value=nearest.p.y+.4;l.pan.positionZ.value=nearest.p.z;}
     l.gain.gain.setTargetAtTime(nearest?Math.min(.34,nearest.level*.24):0,now,.15);
   }
+  /** An oil drum blowing up: the burst sample, full and low. */
+  drumBlast(p:T.Vector3){this.shot('vehicle-burst',p,1,{rate:.8,delay:0,duration:1.4});}
   /** A puddle catching: a soft whoomph, bigger for fuel. */
   groundIgnite(p:T.Vector3,kind:number){this.shot('fire-roar',p,kind===2?.55:.35,{rate:kind===2?1.25:.95,delay:0,duration:.9,lowpass:1800});}
   /** A tyre bursting at speed: a sharp, full bang (the burst sample, less pitched up than a backfire). */

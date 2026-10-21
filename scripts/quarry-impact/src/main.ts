@@ -6,7 +6,7 @@ import {classEngineLabel} from './class-engine';
 import {programWarmupView} from './program-warmup';
 import {ReplayPuddles} from './replay-puddles';
 import {ReplaySlicks} from './replay-slicks';
-import {PropFires,propKind} from './prop-fires';
+import {PropFires,propKind,DRUM_BLAST} from './prop-fires';
 import {setSceneShadows,createPMREMGenerator} from './rendering';
 import {quarryReplayProps} from './quarry-tyres';
 import {colliderImpactMaterial,type ImpactMaterial} from './impact-material';
@@ -1375,6 +1375,18 @@ function partStates(c:Vehicle){const state=(name:string):'ok'|'loose'|'gone'|und
 /** An exploding car shoves everything near it: cars and loose props within SHOCKWAVE.radius are thrown
  * outward and up, harder the closer they are (offline only; replays show it through recorded poses). */
 const SHOCKWAVE={radius:9,speed:7,lift:3.5};
+/** A burning oil drum blows up: the blast throws cars and props, dents the bodywork facing it, and bangs. */
+function drumBlast(origin:T.Vector3,index:number){
+  shockwave(origin,-1);
+  // The drum itself rockets up, tumbling.
+  const drum=activeVenue.props[index]?.body;if(drum?.isEnabled()){const m=drum.mass(),a=index*2.399;drum.applyImpulse({x:Math.cos(a)*m*1.6,y:m*9,z:Math.sin(a)*m*1.6},true);drum.applyTorqueImpulse({x:m*.35,y:m*.1,z:-m*.25},true);}fx.emit(origin,24,1,3);fx.emit(origin,6,2,1.2);sound.drumBlast(origin);sound.crowd(.8);
+  recorder?.burst({time:elapsed,position:origin.toArray()});
+  for(const c of cars){
+    if(!c.extendedDamage||c.health<=0)continue;const to=c.current.clone().sub(origin),d=to.length();if(d>=DRUM_BLAST.radius)continue;
+    const dir=to.normalize(),at=c.current.clone().addScaledVector(dir,-.9);at.y=c.current.y+.3;
+    c.hit(at,dir,DRUM_BLAST.damage*(1-d/DRUM_BLAST.radius),elapsed,false);
+  }
+}
 function shockwave(origin:T.Vector3,source:number){
   const push=(body:R.RigidBody,mass:number)=>{const p=body.translation(),dx=p.x-origin.x,dz=p.z-origin.z,d=Math.hypot(dx,dz,p.y-origin.y);if(d>=SHOCKWAVE.radius)return;const k=(1-d/SHOCKWAVE.radius)*mass,len=Math.hypot(dx,dz)||1;body.applyImpulse({x:dx/len*SHOCKWAVE.speed*k,y:SHOCKWAVE.lift*k,z:dz/len*SHOCKWAVE.speed*k},true);body.applyTorqueImpulse({x:(Math.random()-.5)*k*1.5,y:(Math.random()-.5)*k,z:(Math.random()-.5)*k*1.5},true);};
   for(const c of cars)if(c.id!==source&&c.extendedDamage)push(c.body,c.specification.mass);
@@ -1834,7 +1846,7 @@ function frame(now: number) {
   if(!studio)for(const car of cars){car.wreckParts.pose(['playing','countdown'].includes(state)?dt:0,car.speed);car.wreckParts.wheelsPose();car.syncSuspension();}
   const effectsActive=['playing','countdown','wrecked'].includes(state)||(demo&&state==='result');
   if(!studio&&vehicleFire){
-    const props=propPoints(activeVenue.props);if(effectsActive&&!online?.active)propFires.update(fx.slicks.clock,props,fx.slicks);
+    const props=propPoints(activeVenue.props);if(effectsActive&&!online?.active)for(const b of propFires.update(fx.slicks.clock,props,fx.slicks))drumBlast(new T.Vector3(b.p.x,b.p.y,b.p.z),b.index);
     const groundFires=[...fx.slicks.fires(),...propFires.fires(fx.slicks.clock,props)];
     vehicleFire.setGround(groundFires,fx.slicks.clock);vehicleFire.update(cars,effectsActive?dt:0,camera);
     // A burning car lights any oil or fuel it is standing in (offline cars only leak).
@@ -2082,6 +2094,7 @@ async function boot() {
     igniteAt: (id: number, reach = 3) => { const c = cars.find(x => x.id === id); return c ? fx.slicks.igniteAt(c.current.x, c.current.z, reach, false) : 0; },
     get replaySlicks(){return replaySlicks?{...replaySlicks.slicks.stats,props:replaySlicks.props.burning.size}:null;},
     get propFires(){return propFires.burning.size;},
+    get propFireState(){return{clock:fx.slicks.clock,burning:[...propFires.burning].map(([i,f])=>({i,...f}))};},
     /** QA: set loose prop i alight (offline); returns its position. */
     burnProp: (i: number) => { const p = propPoints(activeVenue.props)[i]; if (!p?.kind) return null; propFires.ignite(i, p.kind, fx.slicks.clock, p); return [p.x, p.y, p.z, p.kind]; },
     get surfaceState(){return{ground:fx.evidence.stats,cars:cars.map(c=>({id:c.id,...c.surfaceFinish.stats,scraping:c.scraping,paintVertices:c.panels.reduce((sum,p)=>sum+Array.from(p.geometry.attributes.transferPaint.array).filter((v,i)=>i%4===3&&v>0).length,0),wheels:Array.from(c.wreckParts.wheelDamage,(damage,i)=>({damage,rest:c.controller.wheelSuspensionRestLength(i),stiffness:c.controller.wheelSuspensionStiffness(i),brake:c.controller.wheelBrake(i),steering:c.controller.wheelSteering(i),contact:c.tireContacts[i].active.value,load:c.tireContacts[i].load.value}))}))};},
