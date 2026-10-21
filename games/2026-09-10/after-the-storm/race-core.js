@@ -489,7 +489,9 @@ export function beginNativeChampionshipEnding(s){
 }
 function advanceNativeEndingFrame(s,raw){
  // One main21 frame: the physical world first, then the ending overlay.
- stepNativeRaceHost(s.nativeHost,.05,s.racers.map(r=>()=>aiInput(s,r)),{menuInputs:[]});
+ // Finished humans hand over to the source AI (selection countdown -1); until
+ // then they poll an idle controller, never the modern AI.
+ stepNativeRaceHost(s.nativeHost,.05,s.racers.map(r=>r.human?{}:()=>aiInput(s,r)),{menuInputs:[]});
  s.time=s.nativeHost.world.ticks*.01;s.weather=raceWeather(s);waterLevel.value=s.weather.seaLevel;
  if(s.courseDatum)s.courseDatum.value=s.weather.seaLevel;
  const menu=s.nativeEnding,q=s.nativeLaunch.advanceChampionshipEnding(raw);
