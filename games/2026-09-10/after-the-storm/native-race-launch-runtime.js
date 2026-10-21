@@ -22,9 +22,15 @@ import {nativeGraphicsCornerView} from './native-graphics-corner-state.js';
 import {prepareNativeRaceWaterInitialization} from './native-race-state.js';
 import {prepareNativeRaceWidgetAdvance,prepareNativeRaceFadeAdvance,prepareNativeRaceFadePropertiesUpdate} from './native-race-state.js';
 import {prepareNativeWidgetPresentation,nativeWidgetDrawView} from './native-widget-presentation.js';
-import {prepareNativeRaceMenuInputAdvance,nativeRaceMenuInputView} from './native-race-state.js';
+import {prepareNativeRaceMenuInputAdvance,nativeRaceMenuInputView,prepareNativeMenuReturnUpdate,prepareNativeChampionshipScoreUpdate} from './native-race-state.js';
+import {prepareNativeEndingMenuPhase,nativeEndingMenuView} from './native-ending-menu-runtime.js';
+import {NATIVE_ENDING_MENU_LOADED_WORDS} from './source-ending-menu-words.js';
+import {prepareNativeRaceMenuInitializationUpdate} from './native-race-state.js';
+import {NATIVE_RECORDS_MENU_DATA,createNativeRecordsMenuWords} from './native-records-menu-data.js';
+import {prepareNativeRecordsMenuPhase,nativeRecordsMenuView} from './native-records-menu-runtime.js';
+import {prepareNativeEndingCeremonyActors} from './native-ending-ceremony-actors.js';
 import {prepareNativeRaceResultCPUDisplayUpdate} from './native-race-state.js';
-import {prepareNativeNameMenuFrame,nativeNameMenuView} from './native-name-menu-runtime.js';
+import {prepareNativeNameMenuFrame,nativeNameMenuView,prepareNativeChampionshipNameMenuPhase,nativeChampionshipNameMenuView} from './native-name-menu-runtime.js';
 import {prepareNativeResultsMenuFrame,nativeResultsMenuView} from './native-results-menu-runtime.js';
 import {prepareNativeStuntResultsMenuFrame,nativeStuntResultsMenuView} from './native-stunt-results-menu-runtime.js';
 import {prepareNativeStuntRecordMenuFrame,nativeStuntRecordMenuView} from './native-stunt-record-menu-runtime.js';
@@ -311,6 +317,49 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
    advanceRaceWaterMenuFrame(water,prepared.waterOperations);current=prepared.state;
    return prepared;
   },
+  endingView:()=>nativeEndingMenuView(current),
+  /** A qualified final round's 802C7570 return102 enters ECB98 once, with
+   * ovl_i15 freshly loaded (tables plus zeroed BSS). Later calls run one
+   * original 20Hz ending frame each: menu input, then 5800/5470/AFB4/71A8 and
+   * the 5F50 draw. The main21 ceremony world (course7 podium) is not
+   * reconstructed, so no physical update precedes the phase here.
+   */
+  advanceChampionshipEnding(rawControllers=[]){
+   if(!championship)throw new Error('The ending follows a native championship');
+   const ids=racers.map(r=>r.id),g=current.scene;
+   if(g.gameStateAb24===45&&g.returnState630===102){
+    // The final round skips the standings, whose entry runs 94ACC. The ending
+    // reads that round's award slots and totals, so 94ACC runs once here; its
+    // exact caller inside the state45 wait is not reconstructed.
+    const scored=prepareNativeChampionshipScoreUpdate(current);
+    const loaded=createNativeRaceState({...scored.state,endingMenuWords6d50:[...NATIVE_ENDING_MENU_LOADED_WORDS]});
+    const entry=prepareNativeMenuReturnUpdate(loaded,'ending',{...NATIVE_CHAMPIONSHIP_SETUP_DATA,avatarsA9b0:ids});
+    current=entry.state;
+    return Object.freeze({entered:true,effects:[...scored.effects,...entry.effects],draw:null,view:nativeEndingMenuView(current),handoff:null});
+   }
+   if(g.main638!==21||![102,103].includes(g.gameStateAb24))throw new Error('No championship ending is active');
+   if(!Array.isArray(rawControllers)||rawControllers.length!==1)throw new RangeError('The ending reads the primary controller');
+   const sample=prepareNativeRaceMenuInputAdvance(current,{rawControllers,controllerCount4344:1,connectedMask4340:1,
+    controllerPorts4330:[0,1],neutralBytesAb10:Array(10).fill(0),thresholdXb400:35,thresholdYb401:35});
+   // 800EABB0 holds the 7/4/2/1 place points; i15 maps each round's points back to a place.
+   const prepared=prepareNativeEndingMenuPhase(sample.state,{...nativeChampionshipStandingsSourceViews(sample.state,ids),
+    courseOrderEac14:NATIVE_CHAMPIONSHIP_SETUP_DATA.courseOrderAc14,courseNameTokensAa10:NATIVE_RECORDS_MENU_DATA.courseNameTokensAa10,
+    racerOrderA9dc:sample.state.racerOrderA9dc,riderOrderEabb0:[7,4,2,1],connectedMask4340:1});
+   current=prepared.state;return prepared;
+  },
+  /** Camera type 8 during the ending (DDE48 -> DE32C): DD6B4's main21
+   * ceremony actors into the presentation pool, then the block frame counter.
+   * Runs inside the ceremony world frame, before the actor display. */
+  advanceEndingCamera(){
+   const g=current.scene,hud=current.hudWords7788;
+   if(!championship||g.main638!==21||![102,103].includes(g.gameStateAb24)||hud[(0x7c80-0x7788)/4]!==8)throw new Error('The ending camera runs in main21 with camera type 8');
+   const q=prepareNativeEndingCeremonyActors({hudWords7788:hud,rngState4640:g.rngState4640,actorWordsF060:current.actorWordsF060,
+    actorControlWords62c4:current.actorControlWords62c4,difficulty:current.profileWordsB330[2]|0,rank:current.raceWords1f94[(0x2c70-0x1f94)/4]|0});
+   const words=[...q.hudWords7788],counter=(0x8058+8-0x7788)/4;words[counter]=(words[counter]+1)>>>0;
+   current=createNativeRaceState({...current,hudWords7788:words,actorWordsF060:q.actorWordsF060,actorControlWords62c4:q.actorControlWords62c4,
+    scene:{...current.scene,rngState4640:q.rngState4640}});
+   return q.diagnostic;
+  },
   recordSessionSnapshot:()=>captureNativeRecordSession(current),
   nameEntryView:()=>nativeNameMenuView(current),
   resultsMenuView:()=>nativeResultsMenuView(current),
@@ -333,6 +382,44 @@ export function createNativeRaceLaunchRuntime({racers,courseIndex,players,initia
   resultsRecordView:()=>nativeResultsRecordView(current,{ridersBySlot:racers.map(r=>r.id)}),
   advanceResultsMenu(rawControllers){
    const prepared=prepareNativeResultsMenuFrame(current,rawControllers);current=prepared.state;return prepared;
+  },
+  championshipNameEntryView:()=>nativeChampionshipNameMenuView(current),
+  /** After the ending's records exit (state100, main6): one original 20Hz
+   * frame of championship initials. The main6 scene consumers before the
+   * phase are not reconstructed; the phase hands off to the records browser. */
+  advanceChampionshipNameEntry(rawController){
+   const g=current.scene;
+   if(!championship||g.mode608!==4||g.main638!==6||![100,101].includes(g.gameStateAb24))throw new Error('No championship name entry is active');
+   const sample=prepareNativeRaceMenuInputAdvance(current,{rawControllers:[rawController],controllerCount4344:1,connectedMask4340:1,
+    controllerPorts4330:[0,1],neutralBytesAb10:Array(10).fill(0),thresholdXb400:g.gameStateAb24===100?50:35,thresholdYb401:35});
+   const prepared=prepareNativeChampionshipNameMenuPhase(sample.state,{championshipCourseRowsAc14:NATIVE_CHAMPIONSHIP_SETUP_DATA.courseOrderAc14,
+    fadeTemplateWords6cc0:NATIVE_CHAMPIONSHIP_SETUP_DATA.fadeTemplateWords6cc0,slotTemplateWords6c50:NATIVE_CHAMPIONSHIP_SETUP_DATA.slotTemplateWords6c50});
+   current=prepared.state;
+   return Object.freeze({...prepared,operations:[...sample.operations,...prepared.operations],effects:[...sample.effects,...prepared.effects]});
+  },
+  /** Free browsing as from the original main menu: EC304 (menu60) then the
+   * records initializer EC500 (state66, main12, previous state60). The
+   * browser's exit then returns to menu60. Resource loads stay host effects. */
+  enterRecordsBrowser(){
+   if(championship)throw new Error('Championship records open after its initials');
+   const views={fadeTemplateWords6cc0:NATIVE_CHAMPIONSHIP_SETUP_DATA.fadeTemplateWords6cc0,slotTemplateWords6c50:NATIVE_CHAMPIONSHIP_SETUP_DATA.slotTemplateWords6c50};
+   const menu=prepareNativeRaceMenuInitializationUpdate(current,{consumer:'801ec304'},views);
+   const records=prepareNativeRaceMenuInitializationUpdate(menu.state,{consumer:'801ec500'},views);
+   current=records.state;return Object.freeze({effects:[...menu.effects,...records.effects],view:nativeRecordsMenuView(current)});
+  },
+  recordsBrowserView:()=>nativeRecordsMenuView(current),
+  /** One original 20Hz records-browser frame (state66/67, main12): menu input,
+   * then 5800/5470/AFB4/71A8 and the 5D24 draw. Entering state66 loads ovl_i9
+   * freshly; later frames keep the retained owner (slides, post-race context). */
+  advanceRecordsBrowser(rawController){
+   const g=current.scene;
+   if(g.main638!==12||![66,67].includes(g.gameStateAb24))throw new Error('No records browser is active');
+   if(g.gameStateAb24===66&&g.initLatch63c!==0)current=createNativeRaceState({...current,recordsBrowserWords80c0:createNativeRecordsMenuWords()});
+   const sample=prepareNativeRaceMenuInputAdvance(current,{rawControllers:[rawController],controllerCount4344:1,connectedMask4340:1,
+    controllerPorts4330:[0,1],neutralBytesAb10:Array(10).fill(0),thresholdXb400:35,thresholdYb401:35});
+   const prepared=prepareNativeRecordsMenuPhase(sample.state,{connectedMask4340:1});
+   current=prepared.state;
+   return Object.freeze({...prepared,operations:[...sample.operations,...prepared.operations],effects:[...sample.effects,...prepared.effects]});
   },
   advanceNameEntry(rawController){
    const prepared=prepareNativeNameMenuFrame(current,rawController);current=prepared.state;return prepared;
