@@ -245,3 +245,9 @@ export function frameBend(structure:readonly number[]|undefined){
   const b=Math.min(FRAME_BEND.max,Math.max(0,(worst-FRAME_BEND.onset)*FRAME_BEND.gain));return b>0?(right>=left?1:-1)*b:0;
 }
 export const frameWarning=(bend:number)=>bend!==0?'FRAME BENT':'';
+/** A huge hit (past DAZE.min damage) shakes the driver: for a moment the steering follows the wheel lazily (DAZE.follow per
+ * second instead of at once). Bigger hits, longer daze, up to DAZE.max seconds. */
+export const DAZE={min:24,gain:.05,base:.6,max:2.2,follow:3} as const;
+export const dazeFor=(damage:number)=>Number.isFinite(damage)&&damage>=DAZE.min?Math.min(DAZE.max,DAZE.base+(damage-DAZE.min)*DAZE.gain):0;
+export const dazedSteer=(current:number,wheel:number,dt:number)=>{const w=Number.isFinite(wheel)?wheel:0,c=Number.isFinite(current)?current:w;return dt>0?c+(w-c)*Math.min(1,DAZE.follow*dt):c;};
+export const dazeWarning=(seconds:number)=>seconds>0?'DAZED':'';

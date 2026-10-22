@@ -1,6 +1,7 @@
+import {restoreDriverDazeBytes} from './driver-daze-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readDiagramFaultsPrevious,restoreDiagramFaultsBytes,verifyDiagramFaultsRevision} from './diagram-faults-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreDriverDazeBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('DiagramFaults preserves every prior fixture, vehicle asset, venue art and history input',verifyDiagramFaultsRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/diagram-faults/revision.json').toString());
