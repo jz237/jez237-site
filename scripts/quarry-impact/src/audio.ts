@@ -10,7 +10,7 @@ import {audioListenerPosition,AudioListenerMotion,type AudioPerspective} from '.
 import {starterSamples} from './engine-stall';
 import {engineDamageLevel} from './engine-condition';
 import {classicEngineVoice,vehicleWheelRadius} from './classic-vehicle-specs';
-import {RATTLE,rattleRate,thumpRate,EventClock,synthClank,synthThump,hornStuck,synthHorn,synthGrowl} from './damage-rattle';
+import {RATTLE,rattleRate,thumpRate,EventClock,synthClank,synthThump,hornStuck,synthHorn,synthGrowl,synthWind} from './damage-rattle';
 import {knockRate} from './oil-starvation';
 /** Front compression past which the fan hits its shroud, and its clatter rate cap. */
 const FAN_CLATTER={onset:.35,max:12} as const;
@@ -249,6 +249,17 @@ export class Sound {
       l.pan.positionX.value=car.current.x;l.pan.positionY.value=car.current.y+.5;l.pan.positionZ.value=car.current.z;l.gain.gain.setTargetAtTime(.16,now,.05);
     }
     for(const [id,l] of this.horns)if(!live.has(id)){l.gain.gain.setTargetAtTime(0,now,.05);l.source.stop(now+.3);this.horns.delete(id);}
+  }
+  /** The wind roaring through the player's open wreck (level 0 = silent), pitched up with speed. */
+  private windLoop?:Loop;
+  cabinWind(level:number,p:T.Vector3,speed:number){
+    if(!this.ready||!this.fxBus)return;
+    if(!this.buffers.has('wind')){const c=this.ctx;if(!c||typeof c.createBuffer!=='function')return;const d=synthWind(c.sampleRate),b=c.createBuffer(1,d.length,c.sampleRate);b.copyToChannel(d,0);this.buffers.set('wind',b);}
+    const now=this.ctx!.currentTime;
+    if(!(level>.01)){if(this.windLoop){this.windLoop.gain.gain.setTargetAtTime(0,now,.15);this.windLoop.source.stop(now+.8);this.windLoop=undefined;}return;}
+    this.windLoop??=this.loop('wind',this.fxBus);const l=this.windLoop;if(!l)return;
+    l.pan.positionX.value=p.x;l.pan.positionY.value=p.y+1;l.pan.positionZ.value=p.z;
+    l.source.playbackRate.setTargetAtTime(.7+Math.min(.8,Math.abs(speed)/40),now,.2);l.gain.gain.setTargetAtTime(.45*level,now,.2);
   }
   /** Growling wheel bearings, by car id (offline, within earshot): the worst bearing on each car, pitched up with speed. */
   private growls=new Map<number,Loop>();

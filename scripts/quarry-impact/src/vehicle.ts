@@ -44,7 +44,7 @@ import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowo
 import {leakRates,dripInterval,FLAME,fuelSpacing} from './fluid-leaks';
 import {drainOil,starvationWear,seizes,OIL,drainCoolant,overheatWear,FUEL_TANK,drainFuel,fuelFeed,SUMP,crackSump,sumpLeak,drainSump} from './oil-starvation';
 import {MAX_ENGINE_RESTART,crankRequested} from './engine-stall';
-import {rollBarSnaps,rollTorque,hasPropshaft,propBend,propVibration,fatigueProp,BEARING,bearingCracks,wearBearing,bearingShimmy,bearingDrag,steerSkew} from './damage-handling';
+import {rollBarSnaps,rollTorque,hasPropshaft,propBend,propVibration,fatigueProp,BEARING,bearingCracks,wearBearing,bearingShimmy,bearingDrag,steerSkew,openness,openDrag} from './damage-handling';
 import {SHED,assemblyMass,glassMass,shedMassProperties,type ShedPart} from './shed-weight';
 import {DOOR_SWING,stepDoor,doorDrag,doorUnlatched,doorBase,lidKind,lidBase,stepLid,CARGO,cargoSpills,type LidKind} from './door-swing';
 /** Rear compression past which the exhaust hangs down and drags. */
@@ -252,6 +252,8 @@ export class Vehicle {
   exhaustGone = false;
   /** Kilograms of doors, lids, bumpers, wheels and glass the car has shed (SHED); the body is lighter by this much. */
   shedKg = 0;
+  /** How open the car is to the wind (AERO): 0 sealed … 1 windscreen, glass, doors and bonnet gone. */
+  openness = 0;
   /** Anti-roll bars, front then rear: 1 intact, 0 snapped (ROLL_BAR). */
   readonly rollBar=[1,1];
   /** Propshaft (PROPSHAFT): bend 0–1, fatigue 0–1, snapped, and the vibration it shakes the car with now. */
@@ -840,6 +842,9 @@ export class Vehicle {
       }
     }
     if(this.extendedDamage||this.shedKg>0)this.reweigh(dt);
+    // An open wreck catches the wind: drag with the square of speed.
+    if(this.extendedDamage&&this.openness>0&&Math.abs(this.speed)>1){const k=-Math.sign(this.speed)*openDrag(this.openness,this.speed)*dt;this.body.applyImpulse({x:this.forward.x*k,y:0,z:this.forward.z*k},true);}
+    else if(!this.extendedDamage)this.openness=0;
     const bars=2-this.rollBar[0]-this.rollBar[1];
     if(this.extendedDamage&&bars>0&&[0,1,2,3].every(i=>this.wreckParts.wheelLost[i]||this.controller.wheelIsInContact(i))){
       const v=this.body.linvel(),t=rollTorque(this.specification.mass,rotateVehicleVector({x:0,y:1,z:0},this.body.rotation()),v,this.body.angvel().y,bars);
@@ -1200,16 +1205,20 @@ export class Vehicle {
   private reweigh(dt:number){
     if((this.shedClock+=dt)<SHED.every)return;this.shedClock=0;
     const parts:ShedPart[]=[],c=new T.Vector3();
-    for(const a of this.wreckParts.assemblies)if(a.members.length&&a.members.every(m=>!m.mesh.visible)){a.bounds.getCenter(c);parts.push({kg:assemblyMass(a.name),x:c.x,y:c.y,z:c.z});}
+    let doors=0,lids=0,hood=false,panes=0,windscreen=false;
+    for(const a of this.wreckParts.assemblies)if(a.members.length&&a.members.every(m=>!m.mesh.visible)){a.bounds.getCenter(c);parts.push({kg:assemblyMass(a.name),x:c.x,y:c.y,z:c.z});
+      if(a.name.startsWith('door'))doors++;else if(a.name==='hood')hood=true;else if(/tailgate|hatch|engine-lid|cargo/.test(a.name))lids++;}
     for(let i=0;i<4;i++)if(this.wreckParts.wheelLost[i]){const p=this.controller.wheelChassisConnectionPointCs(i);if(p)parts.push({kg:SHED.kg.wheel,x:p.x,y:p.y,z:p.z});}
     // Door and tailgate windows go with their assembly and are already weighed in it.
     const carried=new Set(this.wreckParts.assemblies.flatMap(a=>a.members.map(m=>m.mesh)));
     for(const g of this.glass){
       if(g.visible||carried.has(g))continue;
+      if(GLASS_POP.front.test(g.name))windscreen=true;else panes++;
       if(!g.geometry.boundingBox)g.geometry.computeBoundingBox();const b=g.geometry.boundingBox!;
       b.getCenter(c);parts.push({kg:glassMass(b.getSize(new T.Vector3())),x:c.x,y:c.y,z:c.z});
     }
     if(this.exhaustGone)parts.push({kg:SHED.kg.exhaust,x:isRearEngineKind(this.kind)?.35:-.35,y:-.25,z:-DEFINITIONS[this.kind].halfLength});
+    this.openness=openness({windscreen,panes,doors,hood,lids});
     const kg=parts.reduce((n,p)=>n+(p.kg>0?p.kg:0),0);
     if(Math.abs(kg-this.shedKg)<SHED.step&&!(kg===0&&this.shedKg>0))return;
     const base=this.shedBase??={mass:this.body.mass(),com:this.body.localCom(),inertia:this.body.principalInertia(),frame:this.body.principalInertiaLocalFrame(),offset:this.collider.translationWrtParent()??{x:0,y:0,z:0}};

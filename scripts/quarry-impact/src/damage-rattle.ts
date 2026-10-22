@@ -75,3 +75,16 @@ export function synthGrowl(sampleRate:number):Float32Array<ArrayBuffer>{
   for(let i=0;i<256;i++){const g=i/256;out[i]*=g;out[length-1-i]*=g;}
   return out;
 }
+/** A two-second loop of wind buffeting an open cabin: low-passed noise swelling in slow gusts. */
+export function synthWind(sampleRate:number):Float32Array<ArrayBuffer>{
+  const length=Math.round(sampleRate*2),out=new Float32Array(length);let seed=777,lp=0,lp2=0;
+  for(let i=0;i<length;i++){
+    seed=(Math.imul(seed,1664525)+1013904223)>>>0;const n=seed/4294967296*2-1,t=i/sampleRate;
+    lp+=.06*(n-lp);lp2+=.3*(n-lp2);
+    // Gust rates are whole cycles per loop so the swell is seamless.
+    const gust=.65+.2*Math.sin(2*Math.PI*.5*t)+.15*Math.sin(2*Math.PI*1.5*t+1);
+    out[i]=Math.tanh((lp*2.4+(lp2-lp)*.35)*gust)*.55;
+  }
+  for(let i=0;i<512;i++){const g=i/512;out[i]*=g;out[length-1-i]*=g;}
+  return out;
+}

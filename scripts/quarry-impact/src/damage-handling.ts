@@ -345,3 +345,14 @@ export function steerSkew(frontLeft:number,frontRight:number){
 /** Multiplier on a steer input of this sign: short only toward the bent side. */
 export const skewFactor=(steer:number,skew:number)=>skew!==0&&Number.isFinite(skew)&&Math.sign(steer)===Math.sign(skew)?1-Math.min(1,Math.abs(skew)):1;
 export const skewWarning=(skew:number)=>Math.abs(Number.isFinite(skew)?skew:0)<STEER_SKEW.warn?'':`${skew>0?'RIGHT':'LEFT'} LOCK SHORT`;
+/** Wind through the wreck: a missing windscreen, side glass, doors or bonnet open the car to the air. Openness 0 (sealed) to 1
+ * drags the car with the square of its speed and lets a wind roar into the cabin. */
+export const AERO={windscreen:.4,pane:.06,panes:.3,door:.1,hood:.1,lid:.05,drag:2.4,roar:28} as const;
+export function openness(o:{windscreen?:boolean;panes?:number;doors?:number;hood?:boolean;lids?:number}){
+  const n=(v:number|undefined)=>Math.max(0,Number.isFinite(v)?v!:0);
+  return clamp01((o.windscreen?AERO.windscreen:0)+Math.min(AERO.panes,n(o.panes)*AERO.pane)+n(o.doors)*AERO.door+(o.hood?AERO.hood:0)+n(o.lids)*AERO.lid);
+}
+/** Extra drag force (N) at this speed and openness. */
+export const openDrag=(open:number,speed:number)=>{const v=Number.isFinite(speed)?speed:0;return clamp01(open)*AERO.drag*v*v;};
+/** Wind roar level 0..1 heard in the cabin. */
+export const windRoar=(open:number,speed:number)=>{const s=Math.abs(Number.isFinite(speed)?speed:0)/AERO.roar;return clamp01(open)*Math.min(1,s*s);};
