@@ -42,3 +42,16 @@ test('a crushed rear drops the exhaust: it drags and sparks at speed, offline on
  assert.ok(on.sparks>intact.sparks+3&&on.gouges>intact.gouges+3,'sparks and a scrape mark trail behind');
  assert.ok(off.gouges===0);
 });
+test('a car on its roof stalls and leaks fuel and oil; online-style cars do not leak',async()=>{
+ const {FluidSlicks}=await import('../src/fluid-leaks');
+ const run=async(extended:boolean)=>{
+  const scene=new T.Scene(),world=new R.World({x:0,y:-9.81,z:0}),slicks=new FluidSlicks(scene);world.createCollider(R.ColliderDesc.cuboid(80,.5,80).setTranslation(0,-.5,0));
+  const c=new Vehicle(0,'sedan',stockSetup('sedan').paint,scene,world,{emit(){},mark(){},detach(){},slicks} as never,stockSetup('sedan'),{height:()=>0,surface:()=>'asphalt'} as never,'angular-v1');
+  try{c.extendedDamage=extended;c.place(0,0,0);c.render(1);c.body.setTranslation({x:0,y:1.2,z:0},true);c.body.setRotation({x:0,y:0,z:1,w:0},true);
+   for(let k=0;k<60*4;k++){c.preStep(1/60);world.step();c.postStep(1/60,k/60);}
+   return{inverted:c.inverted,stall:c.engineStall??0,drips:c.drips.slice(),slicks:slicks.stats};}finally{c.dispose();world.free();slicks.dispose();}
+ };
+ const on=await run(true),off=await run(false);console.log(JSON.stringify({on,off}));
+ assert.ok(on.inverted>3&&on.stall>0&&on.drips[2]+on.drips[0]>=5&&on.slicks.count>=1,'stalled and leaking on its roof');
+ assert.ok(off.drips[0]+off.drips[2]===0);
+});

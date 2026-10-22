@@ -48,6 +48,8 @@ import {MAX_ENGINE_RESTART} from './engine-stall';
 export const EXHAUST_DROP=.2;
 /** Seconds a tyre that has just burst keeps throwing strips of rubber at speed. */
 export const SHRED_SECONDS=5;
+/** On its roof: seconds before the engine starves, the stall it holds (restartable once righted), seconds between drips. */
+export const INVERTED={after:1,stall:1.5,drip:.35} as const;
 /** A burning car cooks itself: glass damage per second at full heat (side windows burst at 24) and tyre damage per second. */
 export const COOK={glass:2.2,tyre:.02} as const;
 /** Roof compression at which the glass starts to craze, and at which side windows burst. */
@@ -179,6 +181,9 @@ export class Vehicle {
   fuelLeak = 0;
   /** Oil left in the sump (offline) and whether the engine has seized for good. */
   oilLevel = 1;
+  /** Seconds spent upside down, and the drip clock while inverted (offline). */
+  inverted = 0;
+  private invertedDrip = 0;
   /** Coolant left (offline): a leaking radiator drains it and the engine overheats. */
   coolantLevel = 1;
   seized = false;
@@ -365,7 +370,7 @@ export class Vehicle {
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
-    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.seized=false;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
+    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
     if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
@@ -453,6 +458,14 @@ export class Vehicle {
       if(this.health>0)this.health=Math.max(0,this.health-FLAME.damage*heat*dt);
       this.flameExposure+=dt*heat;if(this.flameExposure>=FLAME.ignite&&!this.igniteRequest){this.igniteRequest=true;this.flameExposure=-1e9;this.onSetAlight?.(by);}
     }else if(this.flameExposure>0)this.flameExposure=Math.max(0,this.flameExposure-dt*FLAME.cool);
+    // Upside down: the fuel feed starves the engine and the tank vent and sump leak onto the ground.
+    const up=new T.Vector3(0,1,0).applyQuaternion(this.previousQ).y;this.inverted=up<-.3?this.inverted+dt:0;
+    if(this.inverted>INVERTED.after&&this.health>0){
+      this.engineStall=Math.max(this.engineStall??0,INVERTED.stall);
+      this.invertedDrip+=dt;
+      if(this.invertedDrip>=INVERTED.drip){this.invertedDrip=0;this.dripSeed=(Math.imul(this.dripSeed,1664525)+1013904223)>>>0;const r=this.dripSeed/4294967296,kind=(r<.6?2:0) as 0|2;
+        const x=this.previous.x+(r-.5)*.8,z=this.previous.z+(r*7%1-.5)*1.4,y=this.ground.height(x,z);slicks?.drip(x,y,z,kind,r);this.drips[kind]++;this.onDrip?.(x,y,z,kind,r);}
+    }else this.invertedDrip=0;
     if(!contacts)return;
     const rearEngine=isRearEngineKind(this.kind),tank=(rearEngine?this.structuralDamage?.[0]:this.structuralDamage?.[1])??0;
     const rates=leakRates(this.structuralDamage?.[0]??0,this.engineDamage??0,tank);this.fuelLeak=rates.fuel;
