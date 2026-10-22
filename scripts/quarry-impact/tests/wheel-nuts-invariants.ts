@@ -1,3 +1,4 @@
+import {restoreExhaustBlowBytes} from './exhaust-blow-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readWheelNutsPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreWheelNutsBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreExhaustBlowBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readWheelNutsPrevious(file);
 }
 export function verifyWheelNutsRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'33b7e1edc109a12142ff2558d49f9460857c19ac');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreExhaustBlowBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreWheelNutsBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the WheelNuts release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreExhaustBlowBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the WheelNuts release');
  assert.equal(manifest.previousFixtureCount,5708);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,5708);
 }

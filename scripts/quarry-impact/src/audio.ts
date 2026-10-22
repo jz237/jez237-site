@@ -1,3 +1,4 @@
+import {exhaustLoudness} from './damage-handling';
 import {materialImpactProfile,type ImpactMaterial} from './impact-material';
 import {readAudioOutput,type AudioOutput} from './audio-output';
 import {TrackAcousticProbe,TrackReflections} from './track-acoustics';
@@ -375,7 +376,7 @@ export class Sound {
           high: 6500,
         };
         if (name in centers) {
-          v = Math.max(0, 1 - Math.abs(Math.min(rpm,6500) - centers[name]) / 2100) * level * cut;
+          v = Math.max(0, 1 - Math.abs(Math.min(rpm,6500) - centers[name]) / 2100) * level * cut * (car.extendedDamage ? exhaustLoudness(car.exhaustBlow) : 1);
           if (car.health === 0) v = 0;
           l.source.playbackRate.setTargetAtTime(
             Math.max(0.72, Math.min(1.4, (rpm / centers[name]) * doppler))*classicEngineVoice(car.kind).pitch,

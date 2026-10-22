@@ -146,3 +146,18 @@ export function loosenNuts(loose:number,wheelDamage:number,metres:number){
 /** Toe (radians) a loose wheel swings through at this point in its revolution. */
 export const nutShimmy=(loose:number,angle:number)=>clamp01(loose)*WHEEL_NUTS.shimmy*Math.sin(Number.isFinite(angle)?angle:0);
 export const nutWarning=(loose:ArrayLike<number>)=>Array.from(loose).some(v=>v>=WHEEL_NUTS.warn)?'WHEEL LOOSE':'';
+/** A rear crush past EXHAUST_BLOW.onset splits the exhaust: the engine gets louder and raspier, and lifting off at speed
+ * fires a crackle of pops with flame out of the tailpipe (which can light fuel on the ground). */
+export const EXHAUST_BLOW={onset:.15,span:.4,loud:.7,lift:.6,off:.2,minSpeed:8,minPops:2,maxPops:6,gap:.05,spread:.08} as const;
+export const exhaustBlow=(rear:number)=>clamp01((clamp01(rear)-EXHAUST_BLOW.onset)/EXHAUST_BLOW.span);
+/** Engine sound gain for a split exhaust: exactly 1 on a sound one. */
+export const exhaustLoudness=(severity:number)=>severity>0?1+EXHAUST_BLOW.loud*clamp01(severity):1;
+/** Pop times (seconds after the lift) for this lift: more the worse the split; varied by a per-lift seed. */
+export function liftPops(severity:number,seed:number){
+  const s=clamp01(severity);if(!(s>0))return[];
+  const h=(n:number)=>{const x=Math.sin(seed*12.9898+n*78.233)*43758.5453;return x-Math.floor(x);};
+  const n=Math.round(EXHAUST_BLOW.minPops+(EXHAUST_BLOW.maxPops-EXHAUST_BLOW.minPops)*s*h(0));const out:number[]=[];let t=0;
+  for(let i=0;i<n;i++){t+=EXHAUST_BLOW.gap+EXHAUST_BLOW.spread*h(i+1);out.push(t);}
+  return out;
+}
+export const exhaustWarning=(severity:number)=>severity>0?'EXHAUST BLOWING':'';

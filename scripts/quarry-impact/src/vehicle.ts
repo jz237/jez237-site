@@ -40,7 +40,7 @@ import {puddleDepth,type Puddle} from './puddle-splashes';
 import {wheelResponse,TireContact} from './wheel-mechanics';
 import {wheelTearsOff} from './wheel-physics';
 import {EngineMisfire} from './engine-misfire';
-import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowoutImpulse,bentRimTyre,rimWobble,springBias,sagBias,driveBias,thrustAngle,leakBrakeFluid,brakeFluidFactor,steerRate,throttleJams,jammedThrottle,CLUTCH,clutchGrip,clutchSlips,steerPlay,steerWander,tyreRub,rubWear,electricalFault,electricalCut,WHEEL_NUTS,loosenNuts,nutShimmy} from './damage-handling';
+import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowoutImpulse,bentRimTyre,rimWobble,springBias,sagBias,driveBias,thrustAngle,leakBrakeFluid,brakeFluidFactor,steerRate,throttleJams,jammedThrottle,CLUTCH,clutchGrip,clutchSlips,steerPlay,steerWander,tyreRub,rubWear,electricalFault,electricalCut,WHEEL_NUTS,loosenNuts,nutShimmy,EXHAUST_BLOW,exhaustBlow,liftPops} from './damage-handling';
 import {leakRates,dripInterval,FLAME,fuelSpacing} from './fluid-leaks';
 import {drainOil,starvationWear,seizes,OIL,drainCoolant,overheatWear,FUEL_TANK,drainFuel,fuelFeed} from './oil-starvation';
 import {MAX_ENGINE_RESTART} from './engine-stall';
@@ -182,6 +182,12 @@ export class Vehicle {
   readonly nutLoose = new Float32Array(4);
   readonly wheelShimmy = new Float32Array(4);
   wheelsShed = 0;
+  /** Split exhaust severity (offline events) and the lift-off pops fired so far (QA). */
+  exhaustBlow = 0;
+  exhaustPops = 0;
+  private popQueue: number[] = [];
+  private liftThrottle = 0;
+  private lifts = 0;
   private electricClock = 0;
   private rubClock = 0;
   steerWander = 0;
@@ -400,7 +406,7 @@ export class Vehicle {
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
-    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.clutchGrip=1;this.clutchBurn=0;this.clutchSmokeClock=0;this.clutchSmoke=0;this.steerPlay=0;this.steerWander=0;this.doorOpenTime=0;this.doorsTorn=0;this.doorSlams=0;this.rubDrag.fill(0);this.rubSmoke=0;this.rubClock=0;this.electricalFault=0;this.electricalCut=false;this.electricalCuts=0;this.electricClock=0;this.nutLoose.fill(0);this.wheelShimmy.fill(0);this.wheelsShed=0;this.wanderClock=0;this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.fuelLevel=FUEL_TANK.start;this.fuelClock=0;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
+    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.clutchGrip=1;this.clutchBurn=0;this.clutchSmokeClock=0;this.clutchSmoke=0;this.steerPlay=0;this.steerWander=0;this.doorOpenTime=0;this.doorsTorn=0;this.doorSlams=0;this.rubDrag.fill(0);this.rubSmoke=0;this.rubClock=0;this.electricalFault=0;this.electricalCut=false;this.electricalCuts=0;this.electricClock=0;this.nutLoose.fill(0);this.wheelShimmy.fill(0);this.wheelsShed=0;this.exhaustBlow=0;this.exhaustPops=0;this.popQueue.length=0;this.liftThrottle=0;this.lifts=0;this.wanderClock=0;this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.fuelLevel=FUEL_TANK.start;this.fuelClock=0;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
     if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
@@ -561,6 +567,14 @@ export class Vehicle {
     this.electricClock+=dt;this.electricalFault=this.extendedDamage?electricalFault((isRearEngineKind(this.kind)?this.structuralDamage?.[1]:this.structuralDamage?.[0])??0):0;
     const cut=this.health>0&&electricalCut(this.electricalFault,this.electricClock,this.id);if(cut&&!this.electricalCut)this.electricalCuts++;this.electricalCut=cut;
     if(cut&&running)this.misfireFactor=0;
+    // A split exhaust crackles on the overrun: lift off at speed and it pops, spitting flame out of the tailpipe.
+    this.exhaustBlow=this.extendedDamage?exhaustBlow(this.structuralDamage?.[1]??0):0;
+    if(this.exhaustBlow>0&&running&&this.liftThrottle>EXHAUST_BLOW.lift&&this.input.throttle<EXHAUST_BLOW.off&&Math.abs(this.speed)>EXHAUST_BLOW.minSpeed){
+      this.lifts++;this.popQueue=liftPops(this.exhaustBlow,this.id*31+this.lifts).map(t=>this.electricClock+t);}
+    this.liftThrottle=this.input.throttle;
+    while(this.popQueue.length&&this.popQueue[0]<=this.electricClock){this.popQueue.shift();if(!running)continue;
+      const exhaust=new T.Vector3(0,.32,-DEFINITIONS[this.kind].halfLength).applyQuaternion(this.previousQ).add(this.previous);
+      this.fx.emit(exhaust,5,1,.7);this.fx.emit(exhaust,1,2,.4);this.onBackfire?.(exhaust);this.exhaustPops++;this.fx.slicks?.igniteAt(exhaust.x,exhaust.z,.6,true,this.id);}
     this.steerLimit=this.extendedDamage?steeringLimit(this.structuralDamage):1;
     this.thrustAngle=this.extendedDamage?thrustAngle(this.structuralDamage):0;
     this.steerRate=this.extendedDamage?steerRate(this.structuralDamage?.[0]??0):1;
