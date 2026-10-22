@@ -380,3 +380,12 @@ export function batteryLights(level:number,clock:number,seed:number){
   return slotHash(Math.floor((Number.isFinite(clock)?clock:0)/.12),seed+7)<l/BELT.dim;
 }
 export const beltWarning=(slip:number,snapped:boolean,battery:number)=>snapped?(battery<=0?'BATTERY FLAT':battery<BELT.dim?'BATTERY LOW':'FAN BELT SNAPPED'):slip>=.3?'BELT SLIPPING':'';
+/** A badly worn engine (engineDamage past OVERHEAT_FIRE.damage) with nothing cooling it — a crushed radiator, the coolant
+ * gone or the fan belt snapped — run hard heats up; held hot for OVERHEAT_FIRE.after seconds it catches fire on some cars
+ * (OVERHEAT_FIRE.share, fixed per car). Easing off cools it again at OVERHEAT_FIRE.cool times the rate. */
+export const OVERHEAT_FIRE={damage:.6,throttle:.55,after:12,cool:.5,share:.5,warn:3} as const;
+export const runningHot=(engineDamage:number,cooling:boolean,throttle:number)=>!cooling&&Number.isFinite(engineDamage)&&engineDamage>=OVERHEAT_FIRE.damage&&Math.abs(Number.isFinite(throttle)?throttle:0)>=OVERHEAT_FIRE.throttle;
+/** Seconds held hot after dt: rises while hot, falls (slower) while not. */
+export const hotClock=(t:number,hot:boolean,dt:number)=>{const v=Math.max(0,Number.isFinite(t)?t:0);return dt>0?hot?v+dt:Math.max(0,v-dt*OVERHEAT_FIRE.cool):v;};
+export function overheatFire(t:number,carId:number){const x=Math.sin(carId*19.1+7.7)*43758.5453;return t>=OVERHEAT_FIRE.after&&x-Math.floor(x)<OVERHEAT_FIRE.share;}
+export const overheatWarning=(t:number)=>t>=OVERHEAT_FIRE.warn?'ENGINE OVERHEATING':'';
