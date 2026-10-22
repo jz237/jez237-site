@@ -227,3 +227,12 @@ export const mountsWarning=(broken:boolean)=>broken?'ENGINE MOUNTS BROKEN':'';
 export const BRAKE_FIRE={heat:.95,after:8,cool:2,drop:1.2,tyre:.08} as const;
 /** Seconds the disc has been white-hot: builds while hot, falls back twice as fast once it cools. */
 export const brakeFireClock=(clock:number,heat:number,dt:number)=>{const c=Number.isFinite(clock)?Math.max(0,clock):0;return dt>0?(heat>=BRAKE_FIRE.heat?c+dt:Math.max(0,c-dt*BRAKE_FIRE.cool)):c;};
+/** A crushed engine bay past STARTER.onset damages the starter: after a stall it cranks slower (part of each second of
+ * cranking is lost) and a crank can fail to catch — the engine coughs and the starter has to go again. Fixed per car and
+ * attempt, and always within MAX_ENGINE_RESTART so replays stay valid. */
+export const STARTER={onset:.55,span:.35,slow:.5,fail:.4,retry:1.2} as const;
+export const starterDamage=(engineEnd:number)=>clamp01((clamp01(engineEnd)-STARTER.onset)/STARTER.span);
+export function starterFails(severity:number,attempt:number,seed:number){
+  const s=clamp01(severity);if(!(s>0))return false;const x=Math.sin(attempt*17.17+seed*3.7)*43758.5453;return x-Math.floor(x)<STARTER.fail*s;
+}
+export const starterWarning=(severity:number)=>severity>0?'STARTER DAMAGED':'';

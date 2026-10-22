@@ -1,6 +1,7 @@
+import {restoreStarterBytes} from './starter-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readExhaustOffPrevious,restoreExhaustOffBytes,verifyExhaustOffRevision} from './exhaust-off-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreStarterBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('ExhaustOff preserves every prior fixture, vehicle asset, venue art and history input',verifyExhaustOffRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/exhaust-off/revision.json').toString());
