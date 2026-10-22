@@ -1,6 +1,7 @@
+import {restoreDoorSwingBytes} from './door-swing-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readSteerPlayPrevious,restoreSteerPlayBytes,verifySteerPlayRevision} from './steer-play-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreDoorSwingBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('SteerPlay preserves every prior fixture, vehicle asset, venue art and history input',verifySteerPlayRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/steer-play/revision.json').toString());

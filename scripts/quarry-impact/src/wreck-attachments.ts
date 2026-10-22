@@ -1,7 +1,8 @@
 import {damageWheels} from './component-damage';
 import * as T from 'three';
+import {doorBase} from './door-swing';
 type Member={mesh:T.Mesh;matrix:T.Matrix4;position:T.Vector3;quaternion:T.Quaternion;scale:T.Vector3;auto:boolean;toModel:T.Matrix4;fromParent:T.Matrix4};
-type Assembly={name:string;members:Member[];bounds:T.Box3;damage:number;side:number;loose:number};
+type Assembly={name:string;members:Member[];bounds:T.Box3;damage:number;side:number;loose:number;swing?:number;swingRate?:number};
 
 /** Extra bonnet lift (radians) from airflow: none below 14 m/s or for a barely loose bonnet. */
 export function hoodWindLift(speed:number,loose:number){
@@ -92,7 +93,7 @@ export class WreckAttachments {
         pivot.set(side<0?a.bounds.max.x:a.bounds.min.x,a.bounds.max.y-.01,pivot.z);euler.z=-side*a.loose*.55+flutter;
       }else if(a.name.startsWith('door')){
         const side=a.name.endsWith('left')?-1:1;
-        pivot.set(side*this.width,a.bounds.min.y+.45,a.bounds.max.z-.06);euler.y=-side*a.loose*.075;euler.x=-a.loose*.025;
+        pivot.set(side*this.width,a.bounds.min.y+.45,a.bounds.max.z-.06);euler.y=-side*((a.swing??0)>0?doorBase(a.loose)+a.swing!:a.loose*.075);euler.x=-a.loose*.025;
       }else{
         pivot.x=-a.side*this.width*.82;pivot.y=a.bounds.max.y-.07;
         euler.z=-a.side*a.loose*.3+flutter;euler.x=(a.name==='front-bumper'?-.18:.18)*a.loose;
@@ -125,7 +126,7 @@ export class WreckAttachments {
   reset(){
     this.time=this.wheelTravel=this.wheelSpeed=0;this.wheelDamage.fill(0);this.wheelShift.forEach(v=>v.set(0,0,0));
     for(const key of Object.keys(this.zones)as (keyof typeof this.zones)[])this.zones[key]=0;
-    for(const a of this.assemblies){a.damage=a.loose=0;for(const p of a.members){p.mesh.position.copy(p.position);p.mesh.quaternion.copy(p.quaternion);p.mesh.scale.copy(p.scale);p.mesh.matrix.copy(p.matrix);p.mesh.matrixAutoUpdate=p.auto;p.mesh.matrixWorldNeedsUpdate=true;}}
+    for(const a of this.assemblies){a.damage=a.loose=0;a.swing=a.swingRate=0;for(const p of a.members){p.mesh.position.copy(p.position);p.mesh.quaternion.copy(p.quaternion);p.mesh.scale.copy(p.scale);p.mesh.matrix.copy(p.matrix);p.mesh.matrixAutoUpdate=p.auto;p.mesh.matrixWorldNeedsUpdate=true;}}
     this.wheels.forEach((w,i)=>{if(this.wheelLost[i])w.visible=true;w.position.x=this.wheelRest[i].x;w.position.z=this.wheelRest[i].z;w.quaternion.copy(this.wheelBase[i]);this.wheelApplied[i].copy(w.quaternion);});
     this.wheelLost.fill(0);
   }
