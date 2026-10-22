@@ -66,8 +66,7 @@ export function discoveredCameras(doc) {
       media = { provider: 'EarthCam', url: p.url, previewKind: 'thumbnail',
         snapshot: `https://static.earthcam.com/camshots/512x288/${p.thumbnail}.jpg`,
         previewNote: 'Provider thumbnail · not a live frame. Open the camera page for live video.' };
-      const video = { 'found-franklin-institute': '9mMnqO1UuIU',
-        'found-liberty-bell': 'F1EQEDL4ddU' }[p.id];
+      const video = { 'found-liberty-bell': 'F1EQEDL4ddU' }[p.id];
       if (video && p.video === video) {
         media.player = `https://www.youtube-nocookie.com/embed/${video}`
           + '?autoplay=1&mute=1&playsinline=1&rel=0';
@@ -101,19 +100,26 @@ export function discoveredCameras(doc) {
         snapshot: 'https://www.ptztv.live/port-philly-webcam/images/ppw_preview.jpg',
         previewNote: 'Provider preview · capture time not verified. '
           + 'Open the full camera page for video.' };
+    } else if (p.source === 'perkasie-borough' && p.id === 'found-perkasie-covered-bridge'
+      && p.video === undefined) {
+      media = { provider: 'Perkasie Borough',
+        url: 'https://www.youtube.com/@perkasieborough5325/streams',
+        publisherUrl: 'https://www.youtube.com/@perkasieborough5325/streams',
+        notice: 'The previous construction broadcast has ended. '
+          + 'Check the borough’s channel for a replacement. '
+          + 'Pin marks the bridge worksite, not a surveyed camera mount.' };
     } else if ((p.source === 'dosbirds' && ['2oqJJvDzdFY', '1qhsPj4jDT4', 'I1cueV9veYw'].includes(p.video))
       || (p.source === 'ironrail' && p.video === 'F1lNwIEAXJU')
       || (p.source === 'willowgrove' && p.video === 'vIdA-SCcM68')
-      || (p.source === 'perkasie-borough' && p.id === 'found-perkasie-covered-bridge'
-        && p.video === 'xWUiE7m2PLQ')
+      || (p.source === 'igotview' && p.id === 'found-headhouse-square' && p.video === '5aIuyE5Hado')
       || (p.source === 'rescue-rescue' && {
-        'found-kensington-cam2': 'hlGz7Jq_BT0',
-        'found-kensington-cam3': 'aphvln5Zwv0',
-        'found-kensington-cam6': '6LtXdZJb-Kk',
+        'found-kensington-cam2': 'EPj-JLgivL4',
+        'found-kensington-cam3': 'lIyZBjlYvfc',
+        'found-kensington-cam6': 'F2mMFF9dgv0',
       }[p.id] === p.video && typeof p.video === 'string')) {
       const provider = p.source === 'ironrail' ? 'Iron Rail Cams'
         : p.source === 'willowgrove' ? 'Willow Grove Weather Center'
-          : p.source === 'perkasie-borough' ? 'Perkasie Borough'
+          : p.source === 'igotview' ? 'iGotView · Headhouse Square'
             : p.source === 'rescue-rescue' ? 'Rescue Rescue' : 'Delaware Ornithological Society';
       media = { provider, previewKind: 'thumbnail',
         url: `https://www.youtube.com/watch?v=${p.video}`,
@@ -124,10 +130,8 @@ export function discoveredCameras(doc) {
       if (p.source === 'rescue-rescue') {
         media.publisherUrl = 'https://www.youtube.com/channel/UCQ-V0JYSv1Ulme_daroQk7Q/streams';
       }
-      if (p.source === 'perkasie-borough') {
-        media.publisherUrl = 'https://www.youtube.com/@perkasieborough5325/streams';
-        media.notice = 'Borough construction camera · activity depends on the work schedule. '
-          + 'Pin marks the bridge worksite, not a surveyed camera mount.';
+      if (p.source === 'igotview') {
+        media.publisherUrl = 'https://www.youtube.com/channel/UC1ia-zIvH6uuHAEfdNUEVqA/streams';
       }
     }
     if (!media) return [];

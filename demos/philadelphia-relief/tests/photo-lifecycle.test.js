@@ -47,7 +47,7 @@ function fixture(t,options={}){
       this.rendering=false;
     }
   }
-  const C={Viewer,Ion:{},CustomDataSource:class{},
+  const C={Viewer,Ion:{},CustomDataSource:class{},Cartographic:class{},
     Color:{fromCssColorString:s=>s},Cartesian3:{fromDegrees:()=>({})},
     Matrix4:{IDENTITY:{}},HeadingPitchRange:class{},Math:{toRadians:n=>n*Math.PI/180},
     createGooglePhotorealistic3DTileset:()=>new Promise((resolve,reject)=>tileRequests.push({resolve,reject}))};
@@ -95,6 +95,14 @@ test('graphics initialization failure offers a lower-memory retry',async t=>{
   assert.equal(f.photo.aircraftViewer.tiles.maximumScreenSpaceError,16);
   // The first 180 ms retain the existing in-motion threshold before settling.
   f.update();assert.equal(f.photo.aircraftViewer.tiles.maximumScreenSpaceError,12);
+});
+
+test('choosing Diorama dismisses a failed photo session and its stale retry message',async t=>{
+  const f=fixture(t,{resourceError:new Error('unavailable')});
+  f.update();await flush();assert.equal(f.photo.stats().failed,true);
+  const select=f.nodes.get('photoMode');select.value='relief';select.onchange();f.update();
+  assert.equal(f.photo.stats().failed,false);assert.equal(f.nodes.get('photoRetry').hidden,true);
+  assert.equal(f.nodes.get('photoStatus').textContent,'Diorama · photographic detail off');
 });
 
 test('switching away during engine loading does not spend its foreground timeout',async t=>{

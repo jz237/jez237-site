@@ -22,18 +22,29 @@ def page_json(url, variable):
     return json.JSONDecoder().raw_decode(html[match.end():])[0]
 
 
+def playback_status(data):
+    status = data.get('playabilityStatus', {})
+    live = data.get('microformat', {}).get('playerMicroformatRenderer', {}).get('liveBroadcastDetails', {})
+    # Login challenges and missing metadata do not prove that a stream is down.
+    if status.get('status') == 'OK' and live.get('isLiveNow') is True:
+        return True
+    if live.get('endTimestamp') or status.get('reason') == 'This live stream recording is not available.':
+        return False
+    if status.get('status') == 'OK' and live.get('isLiveNow') is False:
+        return False
+    return None
+
+
 def check(camera):
     try:
         data = page_json('https://www.youtube.com/watch?v=' + camera['video'], 'ytInitialPlayerResponse')
         status = data.get('playabilityStatus', {})
-        live = data.get('microformat', {}).get('playerMicroformatRenderer', {}).get('liveBroadcastDetails', {})
-        good = status.get('status') == 'OK' and live.get('isLiveNow') is True
-        return {'id': camera['id'], 'video': camera['video'], 'live': good,
-                'embeddable': status.get('playableInEmbed', False),
+        return {'id': camera['id'], 'video': camera['video'], 'live': playback_status(data),
+                'embeddable': status.get('playableInEmbed'),
                 'title': data.get('videoDetails', {}).get('title'),
                 'reason': status.get('reason')}
     except Exception as error:
-        return {'id': camera['id'], 'live': False, 'reason': str(error)}
+        return {'id': camera['id'], 'live': None, 'reason': str(error)}
 
 
 def candidates(value):
@@ -70,7 +81,8 @@ if __name__ == '__main__':
         for url in urls:
             try:
                 for candidate in candidates(page_json(url, 'ytInitialData')):
-                    print(json.dumps({'candidate': candidate}))
+                    print(json.dumps({'publisher': url, 'candidate': candidate}))
             except Exception as error:
                 print(json.dumps({'discoveryError': str(error)}))
-    sys.exit(0 if all(p['live'] and p['embeddable'] for p in results) else 1)
+    sys.exit(1 if any(p['live'] is False for p in results)
+             else 0 if all(p['live'] and p['embeddable'] for p in results) else 2)

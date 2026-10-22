@@ -2422,6 +2422,7 @@ function showBanner(status) {
 
 function finishLoading() {
   setProgress(1, 'Ready');
+  document.body.classList.remove('map-loading');
   dom.loading?.classList.add('done');
   setTimeout(() => dom.loading?.remove(), 800);
 }

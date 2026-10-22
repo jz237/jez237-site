@@ -255,7 +255,8 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       if (C.Cartesian3.dot(delta, viewer.camera.directionWC) <= 0) return null;
       return C.SceneTransforms.worldToWindowCoordinates(viewer.scene, world);
     },
-    stats: () => ({ active, wanted, loading, failed, pending, firstViewReady, visibleTiles, detailTiles }),
+    stats: () => ({ active, wanted, loading, failed, pending, firstViewReady, visibleTiles, detailTiles,
+      traffic:photoTraffic?.stats() }),
     update(pose, state, w, h) {
       if(disposed)return false;
       lastPose = pose; width = w; height = h;
@@ -268,6 +269,9 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
         present(false);
         firstViewDeadline.cancel();
       }
+      // An explicit switch to Diorama dismisses a failed photo session too.
+      // Otherwise its stale error and Retry button cover the working mode.
+      if(failed&&state.photoMode==='relief')release();
       if (failed) return false;
       const preload = !isOverlayActive() && photoAllowed(state) && state.photoMode !== 'relief'
         && (wanted || pose.dist <= PHOTO_PRELOAD);
