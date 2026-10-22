@@ -1,6 +1,7 @@
+import {restoreRadiatorSprayBytes} from './radiator-spray-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readFailureCrowdPrevious,restoreFailureCrowdBytes,verifyFailureCrowdRevision} from './failure-crowd-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreRadiatorSprayBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('FailureCrowd preserves every prior fixture, vehicle asset, venue art and history input',verifyFailureCrowdRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/failure-crowd/revision.json').toString());
