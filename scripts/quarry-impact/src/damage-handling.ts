@@ -184,3 +184,13 @@ export function beadStress(stress:number,tyreDamage:number,lateral:number,outsid
   const soft=(d-LEAK.onset)/(.72-LEAK.onset),load=clamp01((Math.abs(Number.isFinite(lateral)?lateral:0)-DEBEAD.lateral)/DEBEAD.span)*(outside?1:DEBEAD.inside);
   return load>0?Math.min(1,clamp01(stress)+soft*load*DEBEAD.rate*dt):Math.max(0,clamp01(stress)-dt*.5);
 }
+/** A front wheel bashed past TIE_ROD.snap snaps its tie rod: that wheel no longer answers the steering — it flops, toed out
+ * and shimmying on its own with the road speed — so the car turns on the other front wheel and scrubs the loose one. */
+export const TIE_ROD={snap:.2,toe:.06,wobble:.05} as const;
+export const tieRodSnapped=(wheel:number,wheelDamage:number)=>wheel<2&&Number.isFinite(wheelDamage)&&wheelDamage>=TIE_ROD.snap;
+/** Toe (radians) the disconnected wheel flops to: out toward its own side, plus a wander that grows to 8 m/s. */
+export function flopToe(wheel:number,speed:number,time:number){
+  const side=wheel%2?1:-1,pace=Math.min(1,Math.abs(Number.isFinite(speed)?speed:0)/8),t=Number.isFinite(time)?time:0;
+  return side*TIE_ROD.toe+TIE_ROD.wobble*pace*(Math.sin(t*3.1+wheel)*.7+Math.sin(t*7.3+wheel*2)*.3);
+}
+export const tieRodWarning=(snapped:ArrayLike<number>)=>Array.from(snapped).some(v=>v===0)?'TIE ROD SNAPPED':'';
