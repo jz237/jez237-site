@@ -1,7 +1,7 @@
 import type {ThermalAudio} from './vehicle-fire';
 import {withWreckBatch} from './wreck-batch';
 import {ReplayCheckpointCache} from './replay-checkpoint';
-import {doorRest,doorUnlatched,doorBase} from './door-swing';
+import {doorRest,doorUnlatched,doorBase,lidKind,lidBase,lidRest} from './door-swing';
 import * as T from 'three';
 import R from '@dimforge/rapier3d-compat';
 import {Vehicle,type VehicleGround} from './vehicle';
@@ -83,7 +83,7 @@ export class ReplayScene {
       // Doors with broken latches settle where the recorded motion would hold them (replays seek, so no swinging state).
       if(this.doc.meta.damageModel===1){const span=b.time-a.time,ax=span>0?(bv[o+7]-av[o+7])/span:0,az=span>0?(bv[o+9]-av[o+9])/span:0;
         const forward=ax*c.forward.x+az*c.forward.z,lateral=ax*c.right.x+az*c.right.z;
-        for(const d of c.wreckParts.assemblies)if(d.name.startsWith('door'))d.swing=doorUnlatched(d.loose,d.damage)?doorRest(doorBase(d.loose),d.name.endsWith('left')?-1:1,forward,lateral,c.speed):0;}
+        for(const d of c.wreckParts.assemblies){const lid=lidKind(d.name);if(lid)d.swing=doorUnlatched(d.loose,d.damage)?lidRest(lid,lidBase(lid,d.loose),d.name.endsWith('left')?-1:1,forward,lateral,9.81):0;else if(d.name.startsWith('door'))d.swing=doorUnlatched(d.loose,d.damage)?doorRest(doorBase(d.loose),d.name.endsWith('left')?-1:1,forward,lateral,c.speed):0;}}
       c.wreckParts.poseAt(mix(55),c.speed);
       c.wheels.forEach((w,j)=>{const k=15+j*8;w.position.set(mix(k),mix(k+1),mix(k+2));w.quaternion.fromArray(av,o+k+3).slerp(q.fromArray(bv,o+k+3),t).multiply(spin.setFromAxisAngle(axis,-mix(k+7)));});
       c.syncSuspension();

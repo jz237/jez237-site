@@ -32,3 +32,35 @@ export const doorDrag=(angle:number,speed:number)=>DOOR_SWING.drag*speed*speed*M
 /** Has this door's latch gone, and the angle it hangs ajar at. */
 export const doorUnlatched=(loose:number,damage:number)=>loose>=DOOR_SWING.latch||damage>=DOOR_SWING.latchDamage;
 export const doorBase=(loose:number)=>Math.max(DOOR_SWING.ajar,loose*.075);
+/** Van barn doors, top-hinged tailgates and pickup drop-tailgates swing the same way once their latch goes. Barn doors
+ * (hinged at the rear corners) and tailgates open under acceleration — the barn doors also round the outside of a
+ * corner — and braking shuts them; gravity pulls a tailgate down shut, but tips a drop-tailgate open. A drop off a bump
+ * (less weight on the car) floats a tailgate open. `ajar` is how far a loose one already hangs open per unit looseness. */
+export type LidKind='cargo'|'tailgate'|'drop';
+export const LID={cargo:{max:1.5,ajar:.45},tailgate:{max:1.25,ajar:.38},drop:{max:1.55,ajar:1.05},friction:3} as const;
+export const lidKind=(name:string):LidKind|null=>name.startsWith('cargo-')?'cargo':name==='tailgate'?'tailgate':name==='drop-tailgate'?'drop':null;
+export const lidBase=(kind:LidKind,loose:number)=>Math.max(DOOR_SWING.ajar,clamp(loose,0,1)*LID[kind].ajar);
+/** Angular acceleration (rad/s²) at opening angle `angle`; `up` is the car's weight per unit mass along its own up axis
+ * (9.81 standing level, less in a drop, more on landing). */
+export function lidTorque(kind:LidKind,angle:number,side:number,forward:number,lateral:number,up:number){
+  const f=clamp(forward,-DOOR_SWING.accel,DOOR_SWING.accel),l=clamp(lateral,-DOOR_SWING.accel,DOOR_SWING.accel),g=clamp(up,-DOOR_SWING.accel,DOOR_SWING.accel);
+  const c=Math.cos(angle),s=Math.sin(angle);
+  return (kind==='cargo'?f*c-l*side*s:kind==='tailgate'?f*c-g*s:f*c+g*s)/DOOR_SWING.arm;
+}
+export function stepLid(kind:LidKind,lid:DoorState,base:number,side:number,forward:number,lateral:number,up:number,dt:number){
+  if(!(dt>0))return 0;
+  // Bent hinges bind: a lid at rest stays put until something shoves it harder than the friction.
+  const torque=lidTorque(kind,base+lid.swing,side,forward,lateral,up);
+  if(Math.abs(lid.rate)<.05&&Math.abs(torque)<=LID.friction){lid.rate=0;return 0;}
+  const accel=torque-DOOR_SWING.damp*lid.rate-Math.sign(lid.rate||torque)*LID.friction;
+  lid.rate+=accel*dt;lid.swing+=lid.rate*dt;
+  if(lid.swing<0){lid.swing=0;if(lid.rate<0)lid.rate=-lid.rate*DOOR_SWING.close;}
+  const top=LID[kind].max-base;
+  if(lid.swing>top){lid.swing=top;if(lid.rate>0){const hit=lid.rate;lid.rate=-lid.rate*DOOR_SWING.stop;return hit;}}
+  return 0;
+}
+export function lidRest(kind:LidKind,base:number,side:number,forward:number,lateral:number,up:number){
+  const top=LID[kind].max-base;if(lidTorque(kind,base,side,forward,lateral,up)<=LID.friction)return 0;
+  for(let i=1;i<=48;i++){const s=top*i/48;if(lidTorque(kind,base+s,side,forward,lateral,up)<=LID.friction)return s-top/96;}
+  return top;
+}

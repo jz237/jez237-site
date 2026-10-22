@@ -1,6 +1,6 @@
 import {damageWheels} from './component-damage';
 import * as T from 'three';
-import {doorBase} from './door-swing';
+import {doorBase,lidBase} from './door-swing';
 type Member={mesh:T.Mesh;matrix:T.Matrix4;position:T.Vector3;quaternion:T.Quaternion;scale:T.Vector3;auto:boolean;toModel:T.Matrix4;fromParent:T.Matrix4};
 type Assembly={name:string;members:Member[];bounds:T.Box3;damage:number;side:number;loose:number;swing?:number;swingRate?:number};
 
@@ -81,13 +81,13 @@ export class WreckAttachments {
         if(this.flipHood){const flip=hoodFlip(speed,a.loose);if(flip>0)euler.x+=(HOOD_FOLD-euler.x)*flip;}
       }else if(a.name.startsWith('cargo-')){
         const side=a.name.endsWith('left')?-1:1;
-        pivot.set(side<0?a.bounds.min.x:a.bounds.max.x,pivot.y,a.bounds.max.z);euler.y=-side*a.loose*.45+flutter;
+        pivot.set(side<0?a.bounds.min.x:a.bounds.max.x,pivot.y,a.bounds.max.z);euler.y=-side*((a.swing??0)>0?lidBase('cargo',a.loose)+a.swing!:a.loose*.45)+flutter;
       }else if(a.name==='engine-lid'){
         pivot.set(0,a.bounds.max.y-.02,a.bounds.max.z-.03);euler.x=a.loose*.48+flutter;
       }else if(a.name==='tailgate'){
-        pivot.set(0,a.bounds.max.y-.025,a.bounds.max.z-.025);euler.x=a.loose*.38+flutter;euler.z=a.side*a.loose*.018;
+        pivot.set(0,a.bounds.max.y-.025,a.bounds.max.z-.025);euler.x=((a.swing??0)>0?lidBase('tailgate',a.loose)+a.swing!:a.loose*.38)+flutter;euler.z=a.side*a.loose*.018;
       }else if(a.name==='drop-tailgate'){
-        pivot.set(0,a.bounds.min.y+.01,a.bounds.min.z+.02);euler.x=-a.loose*1.05+flutter;
+        pivot.set(0,a.bounds.min.y+.01,a.bounds.min.z+.02);euler.x=-((a.swing??0)>0?lidBase('drop',a.loose)+a.swing!:a.loose*1.05)+flutter;
       }else if(a.name==='hatch'){
         const side=pivot.x<0?-1:1;
         pivot.set(side<0?a.bounds.max.x:a.bounds.min.x,a.bounds.max.y-.01,pivot.z);euler.z=-side*a.loose*.55+flutter;

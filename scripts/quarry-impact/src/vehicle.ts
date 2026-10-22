@@ -44,7 +44,7 @@ import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowo
 import {leakRates,dripInterval,FLAME,fuelSpacing} from './fluid-leaks';
 import {drainOil,starvationWear,seizes,OIL,drainCoolant,overheatWear,FUEL_TANK,drainFuel,fuelFeed} from './oil-starvation';
 import {MAX_ENGINE_RESTART} from './engine-stall';
-import {DOOR_SWING,stepDoor,doorDrag,doorUnlatched,doorBase} from './door-swing';
+import {DOOR_SWING,stepDoor,doorDrag,doorUnlatched,doorBase,lidKind,lidBase,stepLid} from './door-swing';
 /** Rear compression past which the exhaust hangs down and drags. */
 export const EXHAUST_DROP=.2;
 /** Seconds a tyre that has just burst keeps throwing strips of rubber at speed. */
@@ -876,12 +876,22 @@ export class Vehicle {
       this.fx.impact?.(point, direction, damage);
     }
   }
-  /** Doors with a broken latch swing on their hinges with the car's motion (door-swing.ts); open ones catch the air,
+  /** Doors, barn doors and tailgates with a broken latch swing on their hinges with the car's motion (door-swing.ts); open doors catch the air,
    * and one slammed into its stop with the hinges half gone comes off. */
   private swingDoors(dt:number){
     const v=this.body.linvel(),ax=(v.x-this.velocity.x)/dt,az=(v.z-this.velocity.z)/dt,ay=(v.y-this.velocity.y)/dt;
     const forward=ax*this.forward.x+ay*this.forward.y+az*this.forward.z,lateral=ax*this.right.x+ay*this.right.y+az*this.right.z;
+    const upAxis=new T.Vector3(0,1,0).applyQuaternion(this.currentQ),up=9.81*upAxis.y+ax*upAxis.x+ay*upAxis.y+az*upAxis.z;
     for(const a of this.wreckParts.assemblies){
+      const lid=lidKind(a.name);
+      if(lid){
+        if(!doorUnlatched(a.loose,a.damage)||!a.members.some(m=>m.mesh.visible))continue;
+        const state={swing:a.swing??0,rate:a.swingRate??0},hit=stepLid(lid,state,lidBase(lid,a.loose),a.name.endsWith('left')?-1:1,forward,lateral,up,dt);a.swing=state.swing;a.swingRate=state.rate;
+        if(state.swing>.05)this.doorOpenTime+=dt;
+        if(hit>=DOOR_SWING.tear&&a.loose>=DOOR_SWING.tearLoose){this.doorsTorn++;this.ripAssembly(a.name);continue;}
+        if(hit>=DOOR_SWING.slam){a.loose=Math.min(1,a.loose+hit*DOOR_SWING.fatigue);this.doorSlams++;}
+        continue;
+      }
       if(!a.name.startsWith('door')||!doorUnlatched(a.loose,a.damage)||!a.members.some(m=>m.mesh.visible))continue;
       const side=a.name.endsWith('left')?-1:1,base=doorBase(a.loose),door={swing:a.swing??0,rate:a.swingRate??0};
       const hit=stepDoor(door,base,side,forward,lateral,this.speed,dt);a.swing=door.swing;a.swingRate=door.rate;
