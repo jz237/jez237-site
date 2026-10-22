@@ -1,3 +1,4 @@
+import {restoreDeadCarBytes} from './dead-car-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readPadDamagePrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restorePadDamageBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreDeadCarBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readPadDamagePrevious(file);
 }
 export function verifyPadDamageRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'9e2a41a073ad4ff89a64eedc497608de78973b05');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreDeadCarBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restorePadDamageBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the PadDamage release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreDeadCarBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the PadDamage release');
  assert.equal(manifest.previousFixtureCount,5923);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,5923);
 }
