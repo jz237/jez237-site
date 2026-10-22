@@ -40,7 +40,7 @@ import {puddleDepth,type Puddle} from './puddle-splashes';
 import {wheelResponse,TireContact} from './wheel-mechanics';
 import {wheelTearsOff} from './wheel-physics';
 import {EngineMisfire} from './engine-misfire';
-import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowoutImpulse,bentRimTyre,rimWobble,springBias,sagBias,driveBias,thrustAngle,leakBrakeFluid,brakeFluidFactor,steerRate,throttleJams,jammedThrottle,CLUTCH,clutchGrip,clutchSlips,steerPlay,steerWander,tyreRub,rubWear,electricalFault,electricalCut,WHEEL_NUTS,loosenNuts,nutShimmy,EXHAUST_BLOW,exhaustBlow,liftPops,DIFF,diffDamage,diffAxle,wearDiff,diffDrive,DEBEAD,beadStress,tieRodSnapped,flopToe,GEAR_POP,gearPop,CALIPER,caliperDrag,discHeat,discGlow,discFade,MOUNTS,mountsBroken,shuntThrottle,LEAK} from './damage-handling';
+import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowoutImpulse,bentRimTyre,rimWobble,springBias,sagBias,driveBias,thrustAngle,leakBrakeFluid,brakeFluidFactor,steerRate,throttleJams,jammedThrottle,CLUTCH,clutchGrip,clutchSlips,steerPlay,steerWander,tyreRub,rubWear,electricalFault,electricalCut,WHEEL_NUTS,loosenNuts,nutShimmy,EXHAUST_BLOW,exhaustBlow,liftPops,DIFF,diffDamage,diffAxle,wearDiff,diffDrive,DEBEAD,beadStress,tieRodSnapped,flopToe,GEAR_POP,gearPop,CALIPER,caliperDrag,discHeat,discGlow,discFade,MOUNTS,mountsBroken,shuntThrottle,BRAKE_FIRE,brakeFireClock,LEAK} from './damage-handling';
 import {leakRates,dripInterval,FLAME,fuelSpacing} from './fluid-leaks';
 import {drainOil,starvationWear,seizes,OIL,drainCoolant,overheatWear,FUEL_TANK,drainFuel,fuelFeed,SUMP,crackSump,sumpLeak,drainSump} from './oil-starvation';
 import {MAX_ENGINE_RESTART} from './engine-stall';
@@ -222,6 +222,11 @@ export class Vehicle {
   cargoSpilled = 0;
   /** Sump cracked by bottoming out (offline events, 0..1). */
   sumpCrack = 0;
+  /** Seconds each disc has been white-hot, and wheels whose tyre caught fire (offline events). */
+  readonly brakeFire = new Float32Array(4);
+  readonly tyreAlight = new Uint8Array(4);
+  private rubberDrop = 0;
+  brakeFires = 0;
   inNeutral = false;
   private popQueue: number[] = [];
   private liftThrottle = 0;
@@ -448,7 +453,7 @@ export class Vehicle {
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
-    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.clutchGrip=1;this.clutchBurn=0;this.clutchSmokeClock=0;this.clutchSmoke=0;this.steerPlay=0;this.steerWander=0;this.doorOpenTime=0;this.doorsTorn=0;this.doorSlams=0;this.rubDrag.fill(0);this.rubSmoke=0;this.rubClock=0;this.electricalFault=0;this.electricalCut=false;this.electricalCuts=0;this.electricClock=0;this.nutLoose.fill(0);this.wheelShimmy.fill(0);this.wheelsShed=0;this.exhaustBlow=0;this.exhaustPops=0;this.diffWear=0;this.beadStress.fill(0);this.debeads=0;this.steerLink.fill(1);this.linkClock=0;this.popUntil=0;this.popSlot=-1;this.gearPops=0;this.inNeutral=false;this.brakeDrag.fill(0);this.discHeat.fill(0);this.discSmokeClock=0;this.mountsBroken=false;this.shunt=0;this.lastPedal=0;this.lastJolt=-1;this.mountJolts=0;this.shuntInput=null;this.cargoLeft=-1;this.cargoClock=0;this.cargoSpilled=0;this.sumpCrack=0;for(const g of this.discGlows)if(g)g.visible=false;this.popQueue.length=0;this.liftThrottle=0;this.lifts=0;this.wanderClock=0;this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.fuelLevel=FUEL_TANK.start;this.fuelClock=0;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
+    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.clutchGrip=1;this.clutchBurn=0;this.clutchSmokeClock=0;this.clutchSmoke=0;this.steerPlay=0;this.steerWander=0;this.doorOpenTime=0;this.doorsTorn=0;this.doorSlams=0;this.rubDrag.fill(0);this.rubSmoke=0;this.rubClock=0;this.electricalFault=0;this.electricalCut=false;this.electricalCuts=0;this.electricClock=0;this.nutLoose.fill(0);this.wheelShimmy.fill(0);this.wheelsShed=0;this.exhaustBlow=0;this.exhaustPops=0;this.diffWear=0;this.beadStress.fill(0);this.debeads=0;this.steerLink.fill(1);this.linkClock=0;this.popUntil=0;this.popSlot=-1;this.gearPops=0;this.inNeutral=false;this.brakeDrag.fill(0);this.discHeat.fill(0);this.discSmokeClock=0;this.mountsBroken=false;this.shunt=0;this.lastPedal=0;this.lastJolt=-1;this.mountJolts=0;this.shuntInput=null;this.cargoLeft=-1;this.cargoClock=0;this.cargoSpilled=0;this.sumpCrack=0;this.brakeFire.fill(0);this.tyreAlight.fill(0);this.rubberDrop=0;this.brakeFires=0;for(const g of this.discGlows)if(g)g.visible=false;this.popQueue.length=0;this.liftThrottle=0;this.lifts=0;this.wanderClock=0;this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.fuelLevel=FUEL_TANK.start;this.fuelClock=0;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
     if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
@@ -695,7 +700,15 @@ export class Vehicle {
       if(this.discHeat[i]>.6)this.brakeBias[i]*=discFade(this.discHeat[i]);
       if(this.tyreDamage&&this.discHeat[i]>.7)this.tyreDamage[i]=Math.min(1,this.tyreDamage[i]+CALIPER.tyre*(this.discHeat[i]-.7)*dt);
       if(hottest<0||this.discHeat[i]>this.discHeat[hottest])hottest=i;
+      // Held white-hot long enough, the tyre catches: burning rubber drops, the tyre burns down, the car catches once.
+      this.brakeFire[i]=this.extendedDamage?brakeFireClock(this.brakeFire[i],this.discHeat[i],dt):0;
+      if(this.brakeFire[i]>=BRAKE_FIRE.after&&!this.tyreAlight[i]&&this.health>0){this.tyreAlight[i]=1;this.brakeFires++;this.igniteRequest=true;this.onSetAlight?.(this.id);}
+      if(this.tyreAlight[i]&&this.tyreDamage)this.tyreDamage[i]=Math.min(1,this.tyreDamage[i]+BRAKE_FIRE.tyre*dt);
     }
+    if(this.tyreAlight.some(Boolean)&&this.fx.slicks){this.rubberDrop+=dt;
+      if(this.rubberDrop>=BRAKE_FIRE.drop){this.rubberDrop=0;const i=this.tyreAlight.findIndex(Boolean),w=this.wheels[i];
+        if(w){const p=w.getWorldPosition(new T.Vector3()),g=this.ground.height(p.x,p.z);this.dripSeed=(Math.imul(this.dripSeed,1664525)+1013904223)>>>0;const r=this.dripSeed/4294967296;
+          this.fx.slicks.drip(p.x,g,p.z,0,r);this.drips[0]++;this.onDrip?.(p.x,g,p.z,0,r);this.fx.slicks.igniteAt(p.x,p.z,.5,false,this.id);}}}
     if(hottest>=0&&this.discHeat[hottest]>CALIPER.smoke){this.discSmokeClock+=dt*4*this.discHeat[hottest];
       if(this.discSmokeClock>=1){this.discSmokeClock-=1;const w=this.wheels[hottest];if(w)this.fx.emit(w.getWorldPosition(new T.Vector3()),1,2,.3);}}
     else this.discSmokeClock=0;

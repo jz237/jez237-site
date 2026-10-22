@@ -222,3 +222,8 @@ export const mountsBroken=(engineEnd:number)=>Number.isFinite(engineEnd)&&engine
 /** The throttle the drive actually gets this step: lagging the pedal on broken mounts, the pedal itself otherwise. */
 export const shuntThrottle=(effective:number,pedal:number,dt:number)=>{const p=Number.isFinite(pedal)?pedal:0,e=Number.isFinite(effective)?effective:p;return dt>0?e+(p-e)*Math.min(1,MOUNTS.lag*dt):e;};
 export const mountsWarning=(broken:boolean)=>broken?'ENGINE MOUNTS BROKEN':'';
+/** A disc held white-hot (past BRAKE_FIRE.heat) for BRAKE_FIRE.after seconds sets its tyre alight: burning rubber drops off the
+ * wheel (a small fire on the ground that can catch the car), the tyre burns down, and the car itself catches once. */
+export const BRAKE_FIRE={heat:.95,after:8,cool:2,drop:1.2,tyre:.08} as const;
+/** Seconds the disc has been white-hot: builds while hot, falls back twice as fast once it cools. */
+export const brakeFireClock=(clock:number,heat:number,dt:number)=>{const c=Number.isFinite(clock)?Math.max(0,clock):0;return dt>0?(heat>=BRAKE_FIRE.heat?c+dt:Math.max(0,c-dt*BRAKE_FIRE.cool)):c;};
