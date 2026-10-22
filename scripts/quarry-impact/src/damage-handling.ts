@@ -203,3 +203,14 @@ export function gearPop(gearLimit:number,time:number,seed:number){
   const slot=Math.floor(time/GEAR_POP.period),h=(n:number)=>{const x=Math.sin(slot*91.17+seed*12.13+n*45.7)*43758.5453;return x-Math.floor(x);};
   return h(0)<Math.min(GEAR_POP.cap,lost*GEAR_POP.odds)?GEAR_POP.minLength+(GEAR_POP.maxLength-GEAR_POP.minLength)*h(1):0;
 }
+/** A wheel knocked past CALIPER.bend bends its brake caliper: the brake binds and drags that corner (more the harder it
+ * was hit). Dragging heats the disc — it glows orange past CALIPER.glow and smokes — and a hot disc fades that brake
+ * and cooks the tyre. Cools when the car stops. */
+export const CALIPER={bend:.17,span:.25,min:.3,heat:.035,cool:.06,glow:.45,fade:.5,tyre:.012,smoke:.7} as const;
+export const caliperDrag=(wheelDamage:number)=>{const d=Number.isFinite(wheelDamage)?wheelDamage:0;return d<CALIPER.bend?0:CALIPER.min+(1-CALIPER.min)*clamp01((d-CALIPER.bend)/CALIPER.span);};
+export const discHeat=(heat:number,drag:number,speed:number,dt:number)=>dt>0?clamp01(clamp01(heat)+(clamp01(drag)*Math.abs(Number.isFinite(speed)?speed:0)*CALIPER.heat-CALIPER.cool*clamp01(heat))*dt):clamp01(heat);
+/** Glow 0..1 of a disc at this heat. */
+export const discGlow=(heat:number)=>{const t=clamp01((clamp01(heat)-CALIPER.glow)/(1-CALIPER.glow));return t*t*(3-2*t);};
+/** That wheel's brake force left as the disc overheats (exactly 1 below .6). */
+export const discFade=(heat:number)=>heat>.6?1-CALIPER.fade*clamp01((heat-.6)/.4):1;
+export const caliperWarning=(drag:ArrayLike<number>)=>Array.from(drag).some(v=>v>0)?'BRAKE BINDING':'';

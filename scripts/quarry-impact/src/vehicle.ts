@@ -40,7 +40,7 @@ import {puddleDepth,type Puddle} from './puddle-splashes';
 import {wheelResponse,TireContact} from './wheel-mechanics';
 import {wheelTearsOff} from './wheel-physics';
 import {EngineMisfire} from './engine-misfire';
-import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowoutImpulse,bentRimTyre,rimWobble,springBias,sagBias,driveBias,thrustAngle,leakBrakeFluid,brakeFluidFactor,steerRate,throttleJams,jammedThrottle,CLUTCH,clutchGrip,clutchSlips,steerPlay,steerWander,tyreRub,rubWear,electricalFault,electricalCut,WHEEL_NUTS,loosenNuts,nutShimmy,EXHAUST_BLOW,exhaustBlow,liftPops,DIFF,diffDamage,diffAxle,wearDiff,diffDrive,DEBEAD,beadStress,tieRodSnapped,flopToe,GEAR_POP,gearPop,LEAK} from './damage-handling';
+import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowoutImpulse,bentRimTyre,rimWobble,springBias,sagBias,driveBias,thrustAngle,leakBrakeFluid,brakeFluidFactor,steerRate,throttleJams,jammedThrottle,CLUTCH,clutchGrip,clutchSlips,steerPlay,steerWander,tyreRub,rubWear,electricalFault,electricalCut,WHEEL_NUTS,loosenNuts,nutShimmy,EXHAUST_BLOW,exhaustBlow,liftPops,DIFF,diffDamage,diffAxle,wearDiff,diffDrive,DEBEAD,beadStress,tieRodSnapped,flopToe,GEAR_POP,gearPop,CALIPER,caliperDrag,discHeat,discGlow,discFade,LEAK} from './damage-handling';
 import {leakRates,dripInterval,FLAME,fuelSpacing} from './fluid-leaks';
 import {drainOil,starvationWear,seizes,OIL,drainCoolant,overheatWear,FUEL_TANK,drainFuel,fuelFeed} from './oil-starvation';
 import {MAX_ENGINE_RESTART} from './engine-stall';
@@ -50,6 +50,13 @@ export const EXHAUST_DROP=.2;
 /** Seconds a tyre that has just burst keeps throwing strips of rubber at speed. */
 export const SHRED_SECONDS=5;
 /** On its roof: seconds before the engine starves, the stall it holds (restartable once righted), seconds between drips. */
+/** A soft radial glow (shared by every disc sprite); built from data, so it works without a DOM. */
+let glowTexture:T.DataTexture|null=null;
+function discGlowTexture(){
+  if(glowTexture)return glowTexture;const n=32,d=new Uint8Array(n*n*4);
+  for(let y=0;y<n;y++)for(let x=0;x<n;x++){const r=Math.hypot(x-n/2+.5,y-n/2+.5)/(n/2),a=Math.max(0,1-r);const k=(y*n+x)*4;d[k]=d[k+1]=d[k+2]=255;d[k+3]=Math.round(255*a*a);}
+  glowTexture=new T.DataTexture(d,n,n);glowTexture.needsUpdate=true;return glowTexture;
+}
 export const INVERTED={after:1,stall:1.5,drip:.35} as const;
 /** A burning car cooks itself: glass damage per second at full heat (side windows burst at 24) and tyre damage per second. */
 export const COOK={glass:2.2,tyre:.02} as const;
@@ -197,6 +204,11 @@ export class Vehicle {
   private popUntil = 0;
   private popSlot = -1;
   gearPops = 0;
+  /** Bent calipers (offline events): how hard each brake binds, its disc heat 0..1, and the glow sprites. */
+  readonly brakeDrag = new Float32Array(4);
+  readonly discHeat = new Float32Array(4);
+  private discGlows: (T.Sprite|null)[] = [null,null,null,null];
+  private discSmokeClock = 0;
   inNeutral = false;
   private popQueue: number[] = [];
   private liftThrottle = 0;
@@ -421,7 +433,7 @@ export class Vehicle {
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
-    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.clutchGrip=1;this.clutchBurn=0;this.clutchSmokeClock=0;this.clutchSmoke=0;this.steerPlay=0;this.steerWander=0;this.doorOpenTime=0;this.doorsTorn=0;this.doorSlams=0;this.rubDrag.fill(0);this.rubSmoke=0;this.rubClock=0;this.electricalFault=0;this.electricalCut=false;this.electricalCuts=0;this.electricClock=0;this.nutLoose.fill(0);this.wheelShimmy.fill(0);this.wheelsShed=0;this.exhaustBlow=0;this.exhaustPops=0;this.diffWear=0;this.beadStress.fill(0);this.debeads=0;this.steerLink.fill(1);this.linkClock=0;this.popUntil=0;this.popSlot=-1;this.gearPops=0;this.inNeutral=false;this.popQueue.length=0;this.liftThrottle=0;this.lifts=0;this.wanderClock=0;this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.fuelLevel=FUEL_TANK.start;this.fuelClock=0;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
+    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.clutchGrip=1;this.clutchBurn=0;this.clutchSmokeClock=0;this.clutchSmoke=0;this.steerPlay=0;this.steerWander=0;this.doorOpenTime=0;this.doorsTorn=0;this.doorSlams=0;this.rubDrag.fill(0);this.rubSmoke=0;this.rubClock=0;this.electricalFault=0;this.electricalCut=false;this.electricalCuts=0;this.electricClock=0;this.nutLoose.fill(0);this.wheelShimmy.fill(0);this.wheelsShed=0;this.exhaustBlow=0;this.exhaustPops=0;this.diffWear=0;this.beadStress.fill(0);this.debeads=0;this.steerLink.fill(1);this.linkClock=0;this.popUntil=0;this.popSlot=-1;this.gearPops=0;this.inNeutral=false;this.brakeDrag.fill(0);this.discHeat.fill(0);this.discSmokeClock=0;for(const g of this.discGlows)if(g)g.visible=false;this.popQueue.length=0;this.liftThrottle=0;this.lifts=0;this.wanderClock=0;this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.fuelLevel=FUEL_TANK.start;this.fuelClock=0;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
     if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
@@ -651,6 +663,18 @@ export class Vehicle {
       if(spring<this.springBias[i])this.onBreak?.('spring',i);if(drive<this.driveBias[i])this.onBreak?.('shaft',i);
       this.springBias[i]=spring;this.sagBias[i]=sagBias(d);this.driveBias[i]=drive;}
     if(this.extendedDamage&&this.diffWear>0){const front=diffAxle(this.structuralDamage,this.driveLayout())==='front',f=diffDrive(this.diffWear);for(const i of front?[0,1]:[2,3])this.driveBias[i]*=f;}
+    // A bent caliper drags its brake: the disc heats, glows, smokes, fades that brake and cooks the tyre.
+    let hottest=-1;
+    for(let i=0;i<4;i++){
+      const drag=this.extendedDamage&&!this.wreckParts.wheelLost[i]?caliperDrag(this.wreckParts.wheelDamage[i]):0;this.brakeDrag[i]=drag;
+      this.discHeat[i]=this.extendedDamage?discHeat(this.discHeat[i],drag,this.speed,dt):0;
+      if(this.discHeat[i]>.6)this.brakeBias[i]*=discFade(this.discHeat[i]);
+      if(this.tyreDamage&&this.discHeat[i]>.7)this.tyreDamage[i]=Math.min(1,this.tyreDamage[i]+CALIPER.tyre*(this.discHeat[i]-.7)*dt);
+      if(hottest<0||this.discHeat[i]>this.discHeat[hottest])hottest=i;
+    }
+    if(hottest>=0&&this.discHeat[hottest]>CALIPER.smoke){this.discSmokeClock+=dt*4*this.discHeat[hottest];
+      if(this.discSmokeClock>=1){this.discSmokeClock-=1;const w=this.wheels[hottest];if(w)this.fx.emit(w.getWorldPosition(new T.Vector3()),1,2,.3);}}
+    else this.discSmokeClock=0;
     if(this.extendedDamage)this.fluids(dt);
     // A seized engine never turns again: the starter can crank, but it will not catch.
     if(this.seized)this.engineStall=MAX_ENGINE_RESTART;
@@ -800,6 +824,7 @@ export class Vehicle {
       const coating=this.surfaceFinish.coating.value;
       this.tireContacts[i].update(this.controller,i,this.specification.mass,this.wreckParts.wheelDamage[i],i%2?coating.w:coating.z,tyre===undefined?undefined:{failure:tyreFailure(tyre),radius:corner.radius,baseRadius:wheelResponse(this.wreckParts.wheelDamage[i],i%2?1:-1,this.speed,vehicleWheelRadius(this.kind),0,vehicleFlatTyreRadius(this.kind)).radius});
     }
+    this.glowDiscs();
     this.syncSuspension();
   }
   private wreckPartsWidth(){return DEFINITIONS[this.kind].halfWidth*.62;}
@@ -959,6 +984,19 @@ export class Vehicle {
     return{x:Math.max(.5,Math.abs(box.min.x),Math.abs(box.max.x)),z:Math.max(1,Math.abs(box.min.z),Math.abs(box.max.z)),top:Math.max(.8,box.max.y)};
   }
   private driveLayout():'front'|'rear'|'all'{return isFrontDriveKind(this.kind)?'front':(this.kind==='coupe'||isClassicKind(this.kind)&&this.kind!=='trail')?'rear':'all';}
+  /** QA: where the disc glows are, next to their wheels (world positions). */
+  discGlowInfo(){return this.discGlows.map((g,i)=>({visible:!!g?.visible,glow:g?.getWorldPosition(new T.Vector3()).toArray(),wheel:this.wheels[i]?.getWorldPosition(new T.Vector3()).toArray(),parent:g?.parent?.name??null,opacity:g?(g.material as T.SpriteMaterial).opacity:0}));}
+  /** Hot discs glow through the wheel: an additive sprite between the hub and the rim face, so the disc glows through the spokes, brighter the hotter the disc. */
+  private glowDiscs(){
+    for(let i=0;i<4;i++){
+      const g=discGlow(this.discHeat[i]),w=this.wheels[i];let sprite=this.discGlows[i];
+      if(!(g>0)||!w||this.wreckParts.wheelLost[i]){if(sprite)sprite.visible=false;continue;}
+      if(!sprite){sprite=new T.Sprite(new T.SpriteMaterial({map:discGlowTexture(),color:0xff5a1a,blending:T.AdditiveBlending,transparent:true,depthWrite:false}));
+        const r=vehicleWheelRadius(this.kind);sprite.scale.set(r*1.15,r*1.15,1);(w.parent??this.root).add(sprite);this.discGlows[i]=sprite;}
+      sprite.visible=true;(sprite.material as T.SpriteMaterial).opacity=g*.85;
+      sprite.position.copy(w.position);sprite.position.x+=(i%2?1:-1)*.05;
+    }
+  }
   /** A wheel whose nuts have worked off leaves the car on the move; replays get it as a 'wheel-N' rip. */
   shedWheel(i:number,quiet=false){
     if(this.wreckParts.wheelLost[i]||!this.wheels[i])return false;
