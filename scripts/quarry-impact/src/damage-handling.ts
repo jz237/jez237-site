@@ -82,3 +82,16 @@ export const throttleJams=(frontCompression:number,carId:number)=>clamp01(frontC
 export const jammedThrottle=(throttle:number,jammed:boolean)=>jammed&&throttle>=0?Math.max(throttle,THROTTLE_JAM.hold):throttle;
 export const DAMPER_LOSS=.6;
 export function damperFactor(wheelDamage:number){return 1-DAMPER_LOSS*clamp01(wheelDamage);}
+/** A crushed engine end knocks the bellhousing out of line and the clutch starts to slip: its torque capacity
+ * falls, so at heavy throttle the engine flares and the car barely pulls, while gentle throttle still grips.
+ * Slipping burns the clutch further (CLUTCH.burn per second of slip), down to CLUTCH.floor. */
+export const CLUTCH={onset:.4,span:.4,min:.55,burn:.006,floor:.35,margin:1.25,warn:.8} as const;
+export function clutchGrip(engineEnd:number,burnt=0){
+  const c=clamp01(engineEnd),b=clamp01(burnt);
+  return Math.max(CLUTCH.floor,1-(1-CLUTCH.min)*clamp01((c-CLUTCH.onset)/CLUTCH.span)-b);
+}
+/** The clutch slips when the throttle asks for more torque than it can carry (a stock clutch carries 1.25× peak). */
+export const clutchSlips=(grip:number,throttle:number)=>grip<1&&Math.abs(Number.isFinite(throttle)?throttle:0)>grip*CLUTCH.margin;
+/** Drive force fraction a slipping clutch passes in the simple kernel: exactly 1 on a sound clutch. */
+export const clutchForce=(grip:number,throttle:number)=>grip>=1||!clutchSlips(grip,throttle)?1:grip*CLUTCH.margin/Math.abs(throttle);
+export const clutchWarning=(grip:number)=>grip<CLUTCH.warn?'CLUTCH SLIPPING':'';

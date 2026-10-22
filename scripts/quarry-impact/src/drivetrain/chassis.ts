@@ -37,7 +37,7 @@ export function createVehicleDrive(body:R.RigidBody,controller:R.DynamicRayCastV
   // Otherwise idle torque can keep the old gear creeping forever.
   const directionBrake=!state.input.transmission&&ratio===undefined&&!gear.allowThrottle?Math.abs(state.input.throttle):0;
   // Brake torque competes with drive at each wheel; braking must not cut combustion.
-  const drive=stepDrive(engine,wheels,[1.5,1.5,1.5,1.5],weights,gear.ratio,state.health>0&&gear.allowThrottle?(state.input.transmission?Math.max(0,state.input.throttle):Math.abs(state.input.throttle)):0,gear.clutch,dt,{...calibration.engine,peakTorque:calibration.engine.peakTorque*enginePowerFactor(state.health,condition.engineDamage)*(state.misfireFactor??1)},state.health>0&&!(state.engineStall!>0));
+  const drive=stepDrive(engine,wheels,[1.5,1.5,1.5,1.5],weights,gear.ratio,state.health>0&&gear.allowThrottle?(state.input.transmission?Math.max(0,state.input.throttle):Math.abs(state.input.throttle)):0,gear.clutch*(state.clutchGrip??1),dt,{...calibration.engine,peakTorque:calibration.engine.peakTorque*enginePowerFactor(state.health,condition.engineDamage)*(state.misfireFactor??1)},state.health>0&&!(state.engineStall!>0));
   for(const axle of [0,2])if(weights[axle]>0){const pair=axleTorques(wheels.slice(axle,axle+2),drive.torques.slice(axle,axle+2),[1.5,1.5],spec.differential,dt);drive.torques[axle]=pair[0];drive.torques[axle+1]=pair[1];}
   const q=body.rotation(),forward=rotateVehicleVector({x:0,y:0,z:1},q),right=rotateVehicleVector({x:1,y:0,z:0},q),radius=vehicleWheelRadius(kind),slips:number[]=[],contactSlips:number[]=[];
   for(let i=0;i<4;i++){

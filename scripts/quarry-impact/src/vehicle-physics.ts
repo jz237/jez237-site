@@ -1,3 +1,4 @@
+import {CLUTCH,clutchForce} from './damage-handling';
 import {engineOutput,type EngineRestriction} from './engine-packages';
 import {wheelContactMotion} from './wheel-contact-motion';
 import {steeringSpeedScale} from './countersteering';
@@ -16,7 +17,7 @@ import {vehicleArmorLayout,vehicleArmorCollisionHulls} from './vehicle-armor-spe
 type Vec={x:number;y:number;z:number};
 type Quat=Vec&{w:number};
 export type VehicleSpecification=ReturnType<typeof vehicleSpecification>;
-export type PhysicsState={health:number;engineStall?:number;misfireFactor?:number;steerLimit?:number;brakeBias?:ArrayLike<number>;damperBias?:ArrayLike<number>;springBias?:ArrayLike<number>;sagBias?:ArrayLike<number>;driveBias?:ArrayLike<number>;thrustAngle?:number;steerRate?:number;slickGrip?:ArrayLike<number>;gearLimit?:number;damageLeft:number;damageRight:number;steering:number;speed:number;slip:number;surface:DrivingSurface;gear:number;rpm:number;transmission?:TransmissionState;input:{throttle:number;steer:number;brake:number;handbrake:boolean;assists?:DrivingAssists;transmission?:TransmissionInput}};
+export type PhysicsState={health:number;engineStall?:number;misfireFactor?:number;steerLimit?:number;brakeBias?:ArrayLike<number>;damperBias?:ArrayLike<number>;springBias?:ArrayLike<number>;sagBias?:ArrayLike<number>;driveBias?:ArrayLike<number>;thrustAngle?:number;steerRate?:number;slickGrip?:ArrayLike<number>;gearLimit?:number;clutchGrip?:number;damageLeft:number;damageRight:number;steering:number;speed:number;slip:number;surface:DrivingSurface;gear:number;rpm:number;transmission?:TransmissionState;input:{throttle:number;steer:number;brake:number;handbrake:boolean;assists?:DrivingAssists;transmission?:TransmissionInput}};
 export function rotateVehicleVector(v:Vec,q:Quat):Vec{
  const tx=2*(q.y*v.z-q.z*v.y),ty=2*(q.z*v.x-q.x*v.z),tz=2*(q.x*v.y-q.y*v.x);
  return{x:v.x+q.w*tx+q.y*tz-q.z*ty,y:v.y+q.w*ty+q.z*tx-q.x*tz,z:v.z+q.w*tz+q.x*ty-q.y*tx};
@@ -183,7 +184,7 @@ export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastV
  const throttle=stepTransmission(state,spec,dt,running);
  // Brake priority also applies to manual pedals: Rapier ignores wheelBrake
  // whenever a wheel has engine force, even under full service braking.
- const force=running&&state.input.brake<=0?throttle*spec.force*enginePowerFactor(state.health,engineDamage)*(state.misfireFactor??1)*clamp((spec.speedLimit-Math.abs(state.speed))/10,0,1):0;
+ const force=running&&state.input.brake<=0?throttle*spec.force*enginePowerFactor(state.health,engineDamage)*(state.misfireFactor??1)*((state.clutchGrip??1)>=1?1:clutchForce(state.clutchGrip!,throttle))*clamp((spec.speedLimit-Math.abs(state.speed))/10,0,1):0;
  const engineBrake=running?manualEngineBrake(state,spec):0;
  const front=axleDrive(spec.differential,!!controller.wheelIsInContact(0),!!controller.wheelIsInContact(1)),rear=axleDrive(spec.differential,!!controller.wheelIsInContact(2),!!controller.wheelIsInContact(3));
  for(let i=0;i<4;i++){
@@ -216,7 +217,7 @@ export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastV
   // also leave more of the actual contact-induced yaw instead of cancelling it.
   const turnGrip=1-.7*frontFailure,yawAssist=1-.65*Math.max(frontFailure,rearFailure);
   body.applyTorqueImpulse({x:-av.x*spec.mass*.07*dt,y:(clamp(state.speed/def.wheelbase*Math.tan(state.steering)*.72*turnGrip,-1.7,1.7)-av.y)*spec.mass*2.6*dt*yawAssist*(state.input.assists?.stability??1),z:-av.z*spec.mass*.07*dt},true);}
- if(!state.input.transmission||!running)state.rpm=running?850+(Math.abs(state.speed)%spec.gearStep)/spec.gearStep*4600+Math.abs(state.input.throttle)*700:starterRPM(state.health,state.engineStall,state.input.throttle);
+ if(!state.input.transmission||!running)state.rpm=running?850+(Math.abs(state.speed)%spec.gearStep)/spec.gearStep*4600+Math.abs(state.input.throttle)*700+((state.clutchGrip??1)>=1?0:Math.max(0,Math.abs(state.input.throttle)-state.clutchGrip!*CLUTCH.margin)*3000):starterRPM(state.health,state.engineStall,state.input.throttle);
  return up.y;
 }
 

@@ -1,3 +1,4 @@
+import {restoreClutchSlipBytes} from './clutch-slip-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readFuelStarvePrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreFuelStarveBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreClutchSlipBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readFuelStarvePrevious(file);
 }
 export function verifyFuelStarveRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'ba6a467189452079b0c57ccb7109e26d72297f9f');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreClutchSlipBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreFuelStarveBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the FuelStarve release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreClutchSlipBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the FuelStarve release');
  assert.equal(manifest.previousFixtureCount,5634);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,5634);
 }
