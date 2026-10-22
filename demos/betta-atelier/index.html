@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#071617" />
+    <meta
+      name="description"
+      content="An intimate 3D study of a halfmoon Betta: iridescent individual scales, branching fin rays, breathing gills and flowing translucent fins."
+    />
+    <link rel="icon" href="data:," />
+    <title>Betta Atelier · Living Silk — Jez237</title>
+    <script type="module" crossorigin src="./assets/index-anAvOQIN.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-prgjqnEW.css">
+  </head>
+  <body>
+    <div id="stage" aria-label="Interactive three-dimensional Betta fish"></div>
+    <div id="loading">
+      <span class="loading-ring"></span>
+      <p>Bringing silk to life…</p>
+    </div>
+    <header>
+      <a class="back" href="../page-3.html">← Demonstrations</a>
+      <div class="edition">LIVING STUDIES <span>№ 024</span></div>
+      <button id="fullscreen" aria-label="Toggle fullscreen">⤢</button>
+    </header>
+    <section class="title">
+      <p class="eyebrow">BETTA SPLENDENS / HALFMOON</p>
+      <h1>Living <i>silk.</i></h1>
+      <p class="subtitle">A small life. An extraordinary universe.</p>
+    </section>
+    <aside class="specimen">
+      <span class="status-dot"></span
+      ><span id="scene-label">TURQUOISE × CRIMSON</span
+      ><span class="specimen-line"></span><span>3D STUDY · v1.0</span>
+    </aside>
+    <button
+      id="info-toggle"
+      class="info-toggle"
+      aria-expanded="false"
+      aria-controls="info"
+    >
+      About the fish <span>+</span>
+    </button>
+    <aside id="info" hidden>
+      <p class="eyebrow">THE ART OF LOOKING CLOSELY</p>
+      <h2>Colour made of light.</h2>
+      <p>
+        The shifting blues of a Betta are structural: microscopic layers reflect
+        different wavelengths as you move around it.
+      </p>
+      <dl>
+        <dt>Scales</dt>
+        <dd>
+          Individually modelled overlapping scales with angle-dependent
+          iridescence.
+        </dd>
+        <dt>Fins</dt>
+        <dd>
+          Thin, pleated membranes supported by branching rays. The trailing edge
+          follows the water.
+        </dd>
+        <dt>Life</dt>
+        <dd>
+          Breathing gill plates, beating pectoral fins, a flexing spine and
+          little changes of direction.
+        </dd>
+      </dl>
+      <p class="note">
+        An artistic anatomical study informed by three GPT-generated reference
+        photographs—not a scientific reconstruction.
+      </p>
+      <a href="references.html" target="_blank" rel="noopener"
+        >See the reference studies ↗</a
+      >
+    </aside>
+    <div class="hint" id="hint">
+      DRAG TO ORBIT <span>·</span> SCROLL / PINCH TO EXPLORE
+    </div>
+    <footer>
+      <div class="controls" role="toolbar" aria-label="Fish controls">
+        <button id="motion" aria-pressed="false">
+          <span class="button-icon">Ⅱ</span> Pause</button
+        ><button id="flare" aria-pressed="true">
+          <span class="button-icon">◒</span> Fins open</button
+        ><span class="divider"></span
+        ><label class="select-label"
+          >LOOK CLOSER<select id="view" aria-label="Camera view">
+            <option value="portrait">Whole fish</option>
+            <option value="head">Eye & gills</option>
+            <option value="scales">Iridescent scales</option>
+            <option value="fins">Fin filigree</option>
+          </select></label
+        ><button id="light" aria-pressed="false">
+          <span class="button-icon">☼</span> Studio light</button
+        ><button id="reset" aria-label="Reset view">↺</button>
+      </div>
+      <p class="footer-note">
+        <span>INTERACTIVE SPECIMEN</span
+        ><span id="detail-note">MOUSE & TOUCH · CREATED FOR JEZ237</span>
+      </p>
+    </footer>
+    <div id="error" hidden>
+      <h2>This aquarium needs WebGL 2.</h2>
+      <p>Try a recent browser with graphics acceleration enabled.</p>
+      <a href="../page-3.html">Return to Demonstrations</a>
+    </div>
+  </body>
+</html>

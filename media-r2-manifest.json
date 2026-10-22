@@ -8009,6 +8009,27 @@
       "sha256": "6e2d939da4576d74f81df80206fa19308868d197914f4cb1d792dc8f21d69b0e",
       "key": "multimedia/port-richmond-halloween-intro/hide-review-1080p-v2.mp4",
       "url": "https://media.jez237.com/multimedia/port-richmond-halloween-intro/hide-review-1080p-v2.mp4"
+    },
+    {
+      "path": "demos/betta-atelier/references/2026-10-22/01-profile.jpg",
+      "key": "demos/betta-atelier/references/2026-10-22/01-profile.jpg",
+      "url": "https://media.jez237.com/demos/betta-atelier/references/2026-10-22/01-profile.jpg?v=69e062016b32",
+      "size": 487756,
+      "sha256": "69e062016b32fb961b74bc1495e78044bf67d3943cfcbaf86bc040c2b17de48b"
+    },
+    {
+      "path": "demos/betta-atelier/references/2026-10-22/02-head-anatomy.jpg",
+      "key": "demos/betta-atelier/references/2026-10-22/02-head-anatomy.jpg",
+      "url": "https://media.jez237.com/demos/betta-atelier/references/2026-10-22/02-head-anatomy.jpg?v=580c77d1b054",
+      "size": 471296,
+      "sha256": "580c77d1b054b016b4f74bb0d01def5b188e2ab26aa090ef29d45d73ffde141d"
+    },
+    {
+      "path": "demos/betta-atelier/references/2026-10-22/03-fin-material.jpg",
+      "key": "demos/betta-atelier/references/2026-10-22/03-fin-material.jpg",
+      "url": "https://media.jez237.com/demos/betta-atelier/references/2026-10-22/03-fin-material.jpg?v=11641b5eba25",
+      "size": 557289,
+      "sha256": "11641b5eba25fb0895481dfa0221f71a9de5fbff8b34fc145daf31acaf67e7c5"
     }
   ]
 }

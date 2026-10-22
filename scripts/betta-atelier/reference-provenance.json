@@ -1,0 +1,44 @@
+{
+  "requestedModel": "openai/gpt-image-2",
+  "requestedQuality": "high",
+  "backendModelIndependentlyVerified": false,
+  "returnedQuality": "not reported",
+  "references": [
+    {
+      "path": "demos/betta-atelier/references/2026-10-22/01-profile.jpg",
+      "key": "demos/betta-atelier/references/2026-10-22/01-profile.jpg",
+      "url": "https://media.jez237.com/demos/betta-atelier/references/2026-10-22/01-profile.jpg?v=69e062016b32",
+      "size": 487756,
+      "sha256": "69e062016b32fb961b74bc1495e78044bf67d3943cfcbaf86bc040c2b17de48b",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "prompt": "Photorealistic natural-history reference for building a museum-quality anatomically credible 3D male halfmoon Betta splendens. Same fish identity: long streamlined but muscular body, slightly upturned small mouth, black eyes with a thin copper iris, dark petrol-blue head, jewel turquoise/teal overlapping iridescent scales on the flank, crimson-to-burgundy fins with turquoise rays and fine pale translucent edges. The fish must look alive, organic, elegantly proportioned, not plastic or a toy; realistic fin anatomy, branching rays and thin pleated membranes, subtle imperfections. No words, labels, watermark, decorative objects, or extra fish. Neutral dark aquatic background, soft physically credible lighting. Full-body left-facing exact side profile, the entire fish and every fin visible with generous margin. Broad 180-degree halfmoon caudal fan, separate dorsal and long sweeping anal fin, paired threadlike pelvic fins and small translucent pectoral fin behind the gill. Natural flowing pose, dorsal/anal/caudal remain separate rather than a single skirt. Scientific clarity of silhouette, countless clearly resolved individual scales, tangential light catching structural iridescence. High-end macro aquarium photography."
+    },
+    {
+      "path": "demos/betta-atelier/references/2026-10-22/02-head-anatomy.jpg",
+      "key": "demos/betta-atelier/references/2026-10-22/02-head-anatomy.jpg",
+      "url": "https://media.jez237.com/demos/betta-atelier/references/2026-10-22/02-head-anatomy.jpg?v=580c77d1b054",
+      "size": 471296,
+      "sha256": "580c77d1b054b016b4f74bb0d01def5b188e2ab26aa090ef29d45d73ffde141d",
+      "dimensions": [
+        1374,
+        1145
+      ],
+      "prompt": "Photorealistic natural-history reference for building a museum-quality anatomically credible 3D male halfmoon Betta splendens. Same fish identity: long streamlined but muscular body, slightly upturned small mouth, black eyes with a thin copper iris, dark petrol-blue head, jewel turquoise/teal overlapping iridescent scales on the flank, crimson-to-burgundy fins with turquoise rays and fine pale translucent edges. The fish must look alive, organic, elegantly proportioned, not plastic or a toy; realistic fin anatomy, branching rays and thin pleated membranes, subtle imperfections. No words, labels, watermark, decorative objects, or extra fish. Neutral dark aquatic background, soft physically credible lighting. Extreme macro three-quarter portrait with the head turned slightly toward camera. Include head, gill plates, shoulder and anterior fins; show the thickness of the fish in three dimensions. Explicit curved operculum seams, tiny upward-curving lips and jaw, real fish eye with convex clear cornea and black pupil, fine facial scale transition, delicate moving pectoral fin, fine gill-membrane edge. Shallow but sufficient depth of field to understand anatomy. No human expression, no oversized cartoon eye."
+    },
+    {
+      "path": "demos/betta-atelier/references/2026-10-22/03-fin-material.jpg",
+      "key": "demos/betta-atelier/references/2026-10-22/03-fin-material.jpg",
+      "url": "https://media.jez237.com/demos/betta-atelier/references/2026-10-22/03-fin-material.jpg?v=11641b5eba25",
+      "size": 557289,
+      "sha256": "11641b5eba25fb0895481dfa0221f71a9de5fbff8b34fc145daf31acaf67e7c5",
+      "dimensions": [
+        1225,
+        1284
+      ],
+      "prompt": "Photorealistic natural-history reference for building a museum-quality anatomically credible 3D male halfmoon Betta splendens. Same fish identity: long streamlined but muscular body, slightly upturned small mouth, black eyes with a thin copper iris, dark petrol-blue head, jewel turquoise/teal overlapping iridescent scales on the flank, crimson-to-burgundy fins with turquoise rays and fine pale translucent edges. The fish must look alive, organic, elegantly proportioned, not plastic or a toy; realistic fin anatomy, branching rays and thin pleated membranes, subtle imperfections. No words, labels, watermark, decorative objects, or extra fish. Neutral dark aquatic background, soft physically credible lighting. Macro material study concentrating on the broad halfmoon tail and trailing anal fin, with rear quarter of body and caudal peduncle visible for attachment reference. Backlight reveals thin crimson membranes, intricate repeatedly bifurcating turquoise fin rays, many narrow flowing folds and tiny scallops at the edge, interstitial translucent tissue and small irregular variations. Show the fin in a gentle three-dimensional wave rather than flat paper. Crisp microstructure, realistic softness and transmitted light, no opaque ribbon or fabric appearance."
+    }
+  ]
+}
