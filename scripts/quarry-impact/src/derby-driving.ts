@@ -40,6 +40,18 @@ function maneuver(car:DriverCar,cars:DriverCar[],m:DriverMemory,arena:ArenaLayou
 
 /** Derby-specific commitment and recovery. Make actual room after a low-speed
  * contact, then rebuild momentum before selecting the next attack. */
+/** Shielding (offline cars with a weak spot): a rival within SHIELD.range, closing faster than SHIELD.closing and pointed at
+ * this car (within SHIELD.aim) while the weak spot faces it (within SHIELD.facing) makes the driver turn the weak spot away. */
+export const SHIELD={range:14,closing:4,aim:.85,facing:.5,steer:1,throttle:.6} as const;
+export function weakSpotThreat(car:DriverCar,cars:DriverCar[]){
+  const w=car.weakSpot;if(!w)return null;const wx=w.x-car.current.x,wz=w.z-car.current.z,wl=Math.hypot(wx,wz);if(wl<.1)return null;
+  for(const o of cars){
+    if(o.id===car.id||o.health<=0)continue;const ax=o.current.x-car.current.x,az=o.current.z-car.current.z,d=Math.hypot(ax,az);if(d>SHIELD.range||d<.5)continue;
+    const closing=-((o.velocity.x-car.velocity.x)*ax+(o.velocity.z-car.velocity.z)*az)/d,pointed=-(o.forward.x*ax+o.forward.z*az)/d,facing=(wx*ax+wz*az)/(wl*d);
+    if(closing>SHIELD.closing&&pointed>SHIELD.aim&&facing>SHIELD.facing)return o;
+  }
+  return null;
+}
 /** Reverse ramming (protectFront cars): in range of the target they back into it at up to REVERSE_RAM.speed m/s. */
 export const REVERSE_RAM={range:30,speed:9} as const;
 export function driveDerby(car:DriverCar,cars:DriverCar[],m:DriverMemory,arena:ArenaLayout|null,dt:number,difficulty:{derbyPace:number;interceptLead:number}=AI_DIFFICULTIES.amateur,targetId?:number,attackPoint?:{x:number;z:number}):Input{
@@ -66,6 +78,11 @@ export function driveDerby(car:DriverCar,cars:DriverCar[],m:DriverMemory,arena:A
   const rear=Math.min(m.clear.rear,derbyTrafficClearance(car,cars,-car.forward.x,-car.forward.z));
   m.attempts++;m.derby=maneuver(car,cars,m,arena,rear>1.6);m.stalled=0;
  }
+ // Shield the broken corner: a rival closing fast and pointed at it gets a stronger part of the car instead.
+ if(car.weakSpot&&!m.derby){const threat=weakSpotThreat(car,cars);if(threat){
+  const wx=car.weakSpot.x-car.current.x,wz=car.weakSpot.z-car.current.z,ax=threat.current.x-car.current.x,az=threat.current.z-car.current.z;
+  const cross=wx*az-wz*ax,steer=clamp(-Math.sign(cross||1)*SHIELD.steer,-1,1);m.steer+=clamp(steer-m.steer,-dt*4,dt*4);m.phase='shield';
+  return{throttle:SHIELD.throttle,steer:m.steer,brake:0,handbrake:false};}}
  // A wrecked front: save the engine and ram in reverse, rear first (a real derby habit), when the target is in range.
  const aimAt=target.weakSpot??target.current;
  if(car.protectFront&&!m.derby&&dist(car.current,aimAt)<REVERSE_RAM.range){

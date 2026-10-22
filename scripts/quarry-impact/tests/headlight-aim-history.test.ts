@@ -1,6 +1,7 @@
+import {restoreShieldWeakBytes} from './shield-weak-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readHeadlightAimPrevious,restoreHeadlightAimBytes,verifyHeadlightAimRevision} from './headlight-aim-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreShieldWeakBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('HeadlightAim preserves every prior fixture, vehicle asset, venue art and history input',verifyHeadlightAimRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/headlight-aim/revision.json').toString());
