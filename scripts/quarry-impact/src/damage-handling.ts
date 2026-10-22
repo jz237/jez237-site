@@ -114,3 +114,13 @@ export function steerWander(play:number,speed:number,time:number,seed:number){
   return w*p/STEER_PLAY.max*STEER_PLAY.wander*pace;
 }
 export const playWarning=(play:number)=>play>=STEER_PLAY.warn?'STEERING LOOSE':'';
+/** A crushed wheel arch folds in onto the tyre: that corner drags (like a binding brake), the tyre scrubs itself down
+ * toward a blowout and smokes. Front or rear crush on the axle plus side crush on that flank, past RUB.onset. */
+export const RUB={onset:.35,span:.4,axle:.7,side:.9,kernel:14,drive:.1,torque:300,wear:.006,warn:.25} as const;
+export function tyreRub(structure:readonly number[]|undefined,wheel:number){
+  const axle=clamp01((wheel<2?structure?.[0]:structure?.[1])??0),side=clamp01((wheel%2?structure?.[3]:structure?.[2])??0);
+  return clamp01((axle*RUB.axle+side*RUB.side-RUB.onset)/RUB.span);
+}
+/** Tyre damage scrubbed off per step: with the rub and the road speed (full from 10 m/s). */
+export const rubWear=(rub:number,speed:number,dt:number)=>dt>0?clamp01(rub)*RUB.wear*Math.min(1,Math.abs(Number.isFinite(speed)?speed:0)/10)*dt:0;
+export const rubWarning=(rubs:ArrayLike<number>)=>Array.from(rubs).some(r=>r>=RUB.warn)?'TYRE RUBBING':'';

@@ -1,3 +1,4 @@
+import {RUB} from '../damage-handling';
 import {assistedWheelStep} from './assists';
 import {axleTorques} from './differential';
 import {createDriveCalibration} from './calibration';
@@ -49,7 +50,7 @@ export function createVehicleDrive(body:R.RigidBody,controller:R.DynamicRayCastV
    const load=Math.min(controller.wheelMaxSuspensionForce(i)??0,Math.max(0,controller.wheelSuspensionForce(i)??0));
    const rollingTorque=grounded?tyreFailure(condition.tyreDamage?.[i])*.08*load*corner.radius:0;
    const serviceBrake=Math.max(state.input.brake,directionBrake)*2000*(i<2?spec.frontBrake:spec.rearBrake)*(state.brakeBias?.[i]??1);
-   const parameters={dt,radius:corner.radius,inertia:1.5,driveTorque:drive.torques[i]*corner.power*(state.driveBias?.[i]??1),brakeTorque:rollingTorque+serviceBrake+(state.input.handbrake&&i>1?2500:0),grounded:grounded&&length>1e-8,speed:dot({x:v.x-g.x,y:v.y-g.y,z:v.z-g.z},d),inverseMass:point?effectiveInverseMass(body,point,d)+(ground?effectiveInverseMass(ground,point,d):0):0,normalLoad:load,friction:(state.surface==='asphalt'?.95:state.surface==='gravel'?.7:.55)*corner.grip*spec.grip*(state.slickGrip?.[i]??1),lateralImpulse:controller.wheelSideImpulse(i)??0};
+   const parameters={dt,radius:corner.radius,inertia:1.5,driveTorque:drive.torques[i]*corner.power*(state.driveBias?.[i]??1),brakeTorque:rollingTorque+serviceBrake+(state.input.handbrake&&i>1?2500:0)+(state.rubDrag?.[i]??0)*RUB.torque,grounded:grounded&&length>1e-8,speed:dot({x:v.x-g.x,y:v.y-g.y,z:v.z-g.z},d),inverseMass:point?effectiveInverseMass(body,point,d)+(ground?effectiveInverseMass(ground,point,d):0):0,normalLoad:load,friction:(state.surface==='asphalt'?.95:state.surface==='gravel'?.7:.55)*corner.grip*spec.grip*(state.slickGrip?.[i]??1),lateralImpulse:controller.wheelSideImpulse(i)??0};
    const result=stepWheel(wheels[i],assistedWheelStep(wheels[i],parameters,state.input.assists?.traction??0,state.input.assists?.abs??0,serviceBrake,state.input.handbrake));
    slips.push(result.slip);
    const side=normal?{x:d.y*normal.z-d.z*normal.y,y:d.z*normal.x-d.x*normal.z,z:d.x*normal.y-d.y*normal.x}:{x:0,y:0,z:0};

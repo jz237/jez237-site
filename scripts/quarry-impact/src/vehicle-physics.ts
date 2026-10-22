@@ -1,4 +1,4 @@
-import {CLUTCH,clutchForce,slackSteer} from './damage-handling';
+import {CLUTCH,clutchForce,slackSteer,RUB} from './damage-handling';
 import {engineOutput,type EngineRestriction} from './engine-packages';
 import {wheelContactMotion} from './wheel-contact-motion';
 import {steeringSpeedScale} from './countersteering';
@@ -17,7 +17,7 @@ import {vehicleArmorLayout,vehicleArmorCollisionHulls} from './vehicle-armor-spe
 type Vec={x:number;y:number;z:number};
 type Quat=Vec&{w:number};
 export type VehicleSpecification=ReturnType<typeof vehicleSpecification>;
-export type PhysicsState={health:number;engineStall?:number;misfireFactor?:number;steerLimit?:number;brakeBias?:ArrayLike<number>;damperBias?:ArrayLike<number>;springBias?:ArrayLike<number>;sagBias?:ArrayLike<number>;driveBias?:ArrayLike<number>;thrustAngle?:number;steerRate?:number;slickGrip?:ArrayLike<number>;gearLimit?:number;clutchGrip?:number;steerPlay?:number;steerWander?:number;damageLeft:number;damageRight:number;steering:number;speed:number;slip:number;surface:DrivingSurface;gear:number;rpm:number;transmission?:TransmissionState;input:{throttle:number;steer:number;brake:number;handbrake:boolean;assists?:DrivingAssists;transmission?:TransmissionInput}};
+export type PhysicsState={health:number;engineStall?:number;misfireFactor?:number;steerLimit?:number;brakeBias?:ArrayLike<number>;damperBias?:ArrayLike<number>;springBias?:ArrayLike<number>;sagBias?:ArrayLike<number>;driveBias?:ArrayLike<number>;thrustAngle?:number;steerRate?:number;slickGrip?:ArrayLike<number>;gearLimit?:number;clutchGrip?:number;steerPlay?:number;steerWander?:number;rubDrag?:ArrayLike<number>;damageLeft:number;damageRight:number;steering:number;speed:number;slip:number;surface:DrivingSurface;gear:number;rpm:number;transmission?:TransmissionState;input:{throttle:number;steer:number;brake:number;handbrake:boolean;assists?:DrivingAssists;transmission?:TransmissionInput}};
 export function rotateVehicleVector(v:Vec,q:Quat):Vec{
  const tx=2*(q.y*v.z-q.z*v.y),ty=2*(q.z*v.x-q.x*v.z),tz=2*(q.x*v.y-q.y*v.x);
  return{x:v.x+q.w*tx+q.y*tz-q.z*ty,y:v.y+q.w*ty+q.z*tx-q.x*tz,z:v.z+q.w*tz+q.x*ty-q.y*tx};
@@ -198,11 +198,13 @@ export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastV
   let wheelForce=state.input.handbrake&&i>1&&!isFrontDriveKind(kind)?0:force*corner.power*(state.driveBias?.[i]??1)*(isFrontDriveKind(kind)?(i<2?front[i%2]:0):(kind==='coupe'||isClassicKind(kind)&&kind!=='trail')?(i>1?rear[i%2]:0):.5*(i<2?front:rear)[i%2]);
   const contactMotion=state.input.assists?.traction||state.input.assists?.abs?wheelContactMotion(body,controller,i,forward,right):undefined;
   if(state.input.assists?.traction&&!state.input.handbrake)wheelForce=limitTractionForce(wheelForce,state.input.assists.traction,!!controller.wheelIsInContact(i),Math.min(corner.force,Math.max(0,controller.wheelSuspensionForce(i)??0)),contactMotion!.lateral,state.surface,corner.grip*spec.grip);
+  // Rapier ignores wheelBrake under engine force, so a rubbing arch on a driven wheel eats into its drive instead.
+  if((state.rubDrag?.[i]??0)>0&&wheelForce!==0)wheelForce-=Math.sign(state.speed||1)*state.rubDrag![i]*spec.force*RUB.drive;
   controller.setWheelEngineForce(i,externalLongitudinal?0:wheelForce);
   let serviceBrake=state.input.brake*90*(i<2?spec.frontBrake:spec.rearBrake)*(state.brakeBias?.[i]??1);
   if(alive&&state.input.assists?.abs&&!(state.input.handbrake&&i>1))serviceBrake=limitBrakeImpulse(serviceBrake,state.input.assists.abs,!!controller.wheelIsInContact(i),Math.min(corner.force,Math.max(0,controller.wheelSuspensionForce(i)??0)),surfaceGrip(state.surface)*corner.grip*spec.grip,controller.wheelSideImpulse(i)??0,controller.wheelIsInContact(i)?contactMotion!.longitudinal:state.speed,dt);
   const driven=isFrontDriveKind(kind)?i<2:(kind==='coupe'||isClassicKind(kind)&&kind!=='trail')?i>1:true;
-  controller.setWheelBrake(i,externalLongitudinal?0:!alive?18:serviceBrake+(state.input.handbrake&&i>1?100:0)+corner.drag+(driven?engineBrake:0));
+  controller.setWheelBrake(i,externalLongitudinal?0:!alive?18:serviceBrake+(state.input.handbrake&&i>1?100:0)+corner.drag+(state.rubDrag?.[i]??0)*RUB.kernel+(driven?engineBrake:0));
   controller.setWheelFrictionSlip(i,surfaceGrip(state.surface)*(state.input.handbrake&&i>1?.6:1)*corner.grip*spec.grip*(state.slickGrip?.[i]??1));
   controller.setWheelSuspensionStiffness(i,corner.stiffness*spec.spring*(kind==='utility'&&i>1?1.16:1)*(state.springBias?.[i]??1));
  }

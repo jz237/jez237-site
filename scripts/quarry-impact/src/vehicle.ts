@@ -40,7 +40,7 @@ import {puddleDepth,type Puddle} from './puddle-splashes';
 import {wheelResponse,TireContact} from './wheel-mechanics';
 import {wheelTearsOff} from './wheel-physics';
 import {EngineMisfire} from './engine-misfire';
-import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowoutImpulse,bentRimTyre,rimWobble,springBias,sagBias,driveBias,thrustAngle,leakBrakeFluid,brakeFluidFactor,steerRate,throttleJams,jammedThrottle,CLUTCH,clutchGrip,clutchSlips,steerPlay,steerWander} from './damage-handling';
+import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowoutImpulse,bentRimTyre,rimWobble,springBias,sagBias,driveBias,thrustAngle,leakBrakeFluid,brakeFluidFactor,steerRate,throttleJams,jammedThrottle,CLUTCH,clutchGrip,clutchSlips,steerPlay,steerWander,tyreRub,rubWear} from './damage-handling';
 import {leakRates,dripInterval,FLAME,fuelSpacing} from './fluid-leaks';
 import {drainOil,starvationWear,seizes,OIL,drainCoolant,overheatWear,FUEL_TANK,drainFuel,fuelFeed} from './oil-starvation';
 import {MAX_ENGINE_RESTART} from './engine-stall';
@@ -171,6 +171,10 @@ export class Vehicle {
   doorOpenTime = 0;
   doorsTorn = 0;
   doorSlams = 0;
+  /** How hard each crushed wheel arch rubs its tyre (offline events), and rubber smoke puffed (QA). */
+  readonly rubDrag = new Float32Array(4);
+  rubSmoke = 0;
+  private rubClock = 0;
   steerWander = 0;
   private wanderClock = 0;
   /** How hard a sagging corner is dragging on the ground (0..1, fx rate); slows the car a little. */
@@ -387,7 +391,7 @@ export class Vehicle {
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
-    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.clutchGrip=1;this.clutchBurn=0;this.clutchSmokeClock=0;this.clutchSmoke=0;this.steerPlay=0;this.steerWander=0;this.doorOpenTime=0;this.doorsTorn=0;this.doorSlams=0;this.wanderClock=0;this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.fuelLevel=FUEL_TANK.start;this.fuelClock=0;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
+    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.clutchGrip=1;this.clutchBurn=0;this.clutchSmokeClock=0;this.clutchSmoke=0;this.steerPlay=0;this.steerWander=0;this.doorOpenTime=0;this.doorsTorn=0;this.doorSlams=0;this.rubDrag.fill(0);this.rubSmoke=0;this.rubClock=0;this.wanderClock=0;this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.fuelLevel=FUEL_TANK.start;this.fuelClock=0;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
     if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
@@ -549,6 +553,15 @@ export class Vehicle {
     this.steerRate=this.extendedDamage?steerRate(this.structuralDamage?.[0]??0):1;
     this.steerPlay=this.extendedDamage?steerPlay(this.wreckParts.wheelDamage):0;this.wanderClock+=dt;
     this.steerWander=this.steerPlay>0?steerWander(this.steerPlay,this.speed,this.wanderClock,this.id):0;
+    // Crushed arches rub the tyres: drag on that corner, the tyre scrubbing down, rubber smoke and a squeal.
+    let rubbing=0;
+    for(let i=0;i<4;i++){const r=this.extendedDamage&&!this.wreckParts.wheelLost[i]?tyreRub(this.structuralDamage,i):0;this.rubDrag[i]=r;
+      if(r>0&&this.tyreDamage)this.tyreDamage[i]=Math.min(1,this.tyreDamage[i]+rubWear(r,this.speed,dt));if(r>rubbing)rubbing=r;}
+    if(rubbing>.15&&Math.abs(this.speed)>3&&this.health>0){
+      this.rubClock+=dt*rubbing*Math.min(1,Math.abs(this.speed)/12)*6;
+      if(this.rubClock>=1){this.rubClock-=1;this.rubSmoke++;const i=this.rubDrag.indexOf(rubbing),half=DEFINITIONS[this.kind];
+        const p=new T.Vector3((i%2?1:-1)*half.halfWidth*.85,.35,(i<2?1:-1)*half.wheelbase/2).applyQuaternion(this.previousQ).add(this.previous);this.fx.emit(p,1,2,.35);}
+    }else this.rubClock=0;
     // A slipping clutch burns: more slip, less grip, and a wisp of acrid smoke from the bellhousing.
     this.clutchGrip=this.extendedDamage?clutchGrip((isRearEngineKind(this.kind)?this.structuralDamage?.[1]:this.structuralDamage?.[0])??0,this.clutchBurn):1;
     if(running&&this.gear!==0&&clutchSlips(this.clutchGrip,this.input.throttle)){
