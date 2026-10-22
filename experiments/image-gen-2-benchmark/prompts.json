@@ -24152,5 +24152,153 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-22-factual-infographic-factual-infographic-atrial-fibrillation",
+    "title": "Factual infographic: Atrial Fibrillation — An Irregular Rhythm",
+    "tests": "artwork-led unboxed anatomical atlas; source-backed clinical context; no subjective review; archive_slot=2026-10-22T05:20; concept=atrial-fibrillation-irregular-atria-clot-stroke; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create the finished medical educational infographic directly on the canvas: a refined artwork-led anatomical atlas, NOT a photographed poster, book, framed print or screen. Main title in elegant readable lettering: “ATRIAL FIBRILLATION”. Subtitle: “When the upper chambers lose their coordinated beat”. Richly rendered anatomical gouache and precision ink on an opaque pale pearl ground, deep oxblood myocardium, violet atrial tissue, teal annotations and restrained amber accents. Asymmetric sweeping composition with generous breathing room, no boxed grid, detached cards or mandatory panels. No bibliography, citations, URLs, logos or watermark.\n\nA dominant large three-quarter opened human heart fills the center and left, with believable muscular walls, ventricular thickness, fine endocardial folds, valve leaflets, and realistic organic shading. Show all four chambers as an educational cutaway, with unambiguous fine leader lines labeling “Right atrium”, “Left atrium”, “Right ventricle”, “Left ventricle”. Orient patient right to viewer left and patient left to viewer right. Delicate irregular violet wavelets confined to atrial tissue are explicitly a schematic overlay, not literal sparks. Label them “Irregular atrial activity — schematic”. A flowing concise caption integrated above the atria: “Atria lose coordinated contraction; blood moves less efficiently into the ventricles.” No electrical waveform or invented numerical trace is needed. Keep the heart anatomically credible rather than turning it into a geometric symbol.\n\nFollowing the curve of the left atrium, a beautifully shaded open magnification shows the left atrial appendage as a small muscular pouch connected to the atrium. Label “Left atrial appendage”. A few slow curved flow arrows and a small dark-red clot illustrate “Slower flow can allow a clot to form”. From this study a fine dotted amber pathway, explicitly captioned “Possible complication, not inevitable”, travels past an understated vessel study toward a small brain silhouette with one arterial branch occluded. Label “A travelling clot can block a brain artery → ischemic stroke”. Do not imply every person forms a clot or that a venous clot crosses into the brain. No enormous decorative clots or gratuitous gore.\n\nOn the open upper-right margin, text follows the heart's contour: “What you may notice” with short separated phrases “Fluttering or pounding heartbeat”, “Fatigue • shortness of breath • lightheadedness”, and the clearly visible qualifier “Some people have no symptoms”. Beneath, an airy smaller note, “Risk is higher with age; high blood pressure, sleep apnea and excess alcohol can contribute.” These are risk factors, not inevitable causes.\n\nThe lower composition flows into an integrated clinician-care arc, with tiny fine-ink icons rather than rectangular tiles. Use exact concise headings and text: “Confirm the rhythm” / “Clinical assessment + ECG; longer monitoring may catch intermittent episodes.” Then “Care has different goals” with three organically spaced lines: “Control heart rate”; “Restore rhythm when appropriate: medicines, cardioversion or ablation”; “Reduce stroke risk: anticoagulants when indicated”. Adjacent qualifier in readable type: “Anticoagulants can cause bleeding. Treatment and stroke-risk assessment are individualized.” A soft teal annotation completes the arc: “Manage high blood pressure and sleep apnea; discuss alcohol use with your clinician.” These are general options, no doses, pill brands, self-treatment instructions, promised cure or guarantee that restoring rhythm removes stroke risk.\n\nAt the foot, integrate a clear restrained vermilion urgent-safety line, unboxed and easy to find: “CALL 911: sudden weakness or trouble speaking; chest pressure lasting minutes or returning.” Follow it with “Do not dismiss these as routine AFib.” Small final footer: “General education, not a diagnosis or personal treatment plan.” All typography must be real, legible and concise. Preserve the dominant anatomical artwork, elegant hierarchy, curved open annotations and strong clinical meaning. Omit decorative flourishes or redundant mini-studies if space is tight; do not omit the essential symptoms, management, stroke mechanism or urgent guidance. No unsupported statistics or additional medical claims.",
+    "image": "images/2026-10-22-factual-infographic-factual-infographic-atrial-fibrillation.jpg",
+    "thumb": "thumbs/2026-10-22-factual-infographic-factual-infographic-atrial-fibrillation.webp",
+    "color": "#d3bcb8",
+    "date": "2026-10-22",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "atrial-fibrillation-irregular-atria-clot-stroke",
+      "imageSha256": "58cffba0cabbe2b786b1a8fbd41e544e68c3deea7893e2694f8f5757f86a0710",
+      "imageDHash": "d482b4b0d7b450d0"
+    },
+    "factualInfographic": {
+      "topic": "How atrial fibrillation disrupts coordinated atrial contraction, increases clot-related stroke risk, and is evaluated and managed",
+      "description": "Artwork-led anatomical atlas of atrial fibrillation, reduced coordinated atrial contraction, possible clot-related stroke, symptoms, assessment and individualized care.",
+      "sourceNote": "Verified anatomy, AFib mechanism, symptoms, risk factors, diagnosis, individualized management and emergency context against NHLBI, National Institutes of Health: https://www.nhlbi.nih.gov/health/atrial-fibrillation; Centers for Disease Control and Prevention: https://www.cdc.gov/heart-disease/about/atrial-fibrillation.html; NHLBI, National Institutes of Health: https://www.nhlbi.nih.gov/health/atrial-fibrillation/treatment; NHLBI, National Institutes of Health: https://www.nhlbi.nih.gov/health/atrial-fibrillation/diagnosis; NHLBI, National Institutes of Health: https://www.nhlbi.nih.gov/health/atrial-fibrillation/causes; NHLBI, National Institutes of Health: https://www.nhlbi.nih.gov/health/atrial-fibrillation/living-with",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-22T09:21:54.909375+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NHLBI, National Institutes of Health",
+            "title": "What Is Atrial Fibrillation?",
+            "sourceType": "government-agency",
+            "url": "https://www.nhlbi.nih.gov/health/atrial-fibrillation"
+          },
+          {
+            "id": "S2",
+            "publisher": "Centers for Disease Control and Prevention",
+            "title": "About Atrial Fibrillation",
+            "sourceType": "government-agency",
+            "url": "https://www.cdc.gov/heart-disease/about/atrial-fibrillation.html"
+          },
+          {
+            "id": "S3",
+            "publisher": "NHLBI, National Institutes of Health",
+            "title": "Atrial Fibrillation — Treatment",
+            "sourceType": "government-agency",
+            "url": "https://www.nhlbi.nih.gov/health/atrial-fibrillation/treatment"
+          },
+          {
+            "id": "S4",
+            "publisher": "NHLBI, National Institutes of Health",
+            "title": "Atrial Fibrillation — Diagnosis",
+            "sourceType": "government-agency",
+            "url": "https://www.nhlbi.nih.gov/health/atrial-fibrillation/diagnosis"
+          },
+          {
+            "id": "S5",
+            "publisher": "NHLBI, National Institutes of Health",
+            "title": "Atrial Fibrillation — Causes and Risk Factors",
+            "sourceType": "government-agency",
+            "url": "https://www.nhlbi.nih.gov/health/atrial-fibrillation/causes"
+          },
+          {
+            "id": "S6",
+            "publisher": "NHLBI, National Institutes of Health",
+            "title": "Atrial Fibrillation — Living With",
+            "sourceType": "government-agency",
+            "url": "https://www.nhlbi.nih.gov/health/atrial-fibrillation/living-with"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Atrial fibrillation (AFib) is an irregular heart rhythm; the two upper chambers are the atria, and the two lower chambers are the ventricles.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "In AFib atrial beating is irregular and atria and ventricles do not work together as they should, reducing efficient blood flow from atria to ventricles.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Blood may pool and form clots in the heart; a clot can travel to and block an artery supplying the brain, causing ischemic stroke. This is a possible complication, not inevitable.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S6"
+            ]
+          },
+          {
+            "claim": "The left atrial appendage is a small sac in the wall of the left atrium where clots can form.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "AFib may cause fluttering or pounding palpitations, fatigue, shortness of breath, and lightheadedness, or no symptoms.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Risk increases with age; high blood pressure, sleep apnea and excess alcohol are among risk factors, not a single universal cause.",
+            "sourceIds": [
+              "S5"
+            ]
+          },
+          {
+            "claim": "Clinician assessment and an electrocardiogram (ECG/EKG) diagnose AFib; longer monitoring may detect intermittent episodes.",
+            "sourceIds": [
+              "S4"
+            ]
+          },
+          {
+            "claim": "Management can include heart-rate control, rhythm control with medicines, electrical cardioversion or catheter ablation in selected people, and management of underlying risk factors. Treatment is individualized.",
+            "sourceIds": [
+              "S3",
+              "S6"
+            ]
+          },
+          {
+            "claim": "Anticoagulants may lower stroke risk when indicated after clinical assessment, but carry bleeding risk; rhythm treatment does not mean stroke-risk assessment can be ignored.",
+            "sourceIds": [
+              "S3",
+              "S6"
+            ]
+          },
+          {
+            "claim": "Treating high blood pressure and sleep apnea and discussing alcohol use with a clinician are relevant elements of AFib care.",
+            "sourceIds": [
+              "S3",
+              "S6"
+            ]
+          },
+          {
+            "claim": "Call 911 immediately for sudden weakness or trouble speaking, or chest pressure lasting minutes or returning, which can indicate stroke or heart attack. Do not dismiss these as routine AFib symptoms.",
+            "sourceIds": [
+              "S6"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
