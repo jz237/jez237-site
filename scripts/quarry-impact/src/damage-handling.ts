@@ -124,3 +124,15 @@ export function tyreRub(structure:readonly number[]|undefined,wheel:number){
 /** Tyre damage scrubbed off per step: with the rub and the road speed (full from 10 m/s). */
 export const rubWear=(rub:number,speed:number,dt:number)=>dt>0?clamp01(rub)*RUB.wear*Math.min(1,Math.abs(Number.isFinite(speed)?speed:0)/10)*dt:0;
 export const rubWarning=(rubs:ArrayLike<number>)=>Array.from(rubs).some(r=>r>=RUB.warn)?'TYRE RUBBING':'';
+/** A crushed engine bay chafes through the wiring loom: the ignition cuts out in short, irregular bursts (the engine dies
+ * for a moment, no backfire) and the lights flicker with it. More crush, more and longer cuts. Fixed per car and time. */
+export const ELECTRICAL={onset:.45,span:.4,period:.6,odds:.85,minCut:.1,maxCut:.45} as const;
+export const electricalFault=(engineEnd:number)=>clamp01((clamp01(engineEnd)-ELECTRICAL.onset)/ELECTRICAL.span);
+export function electricalCut(severity:number,time:number,seed:number){
+  const s=clamp01(severity);if(!(s>0)||!Number.isFinite(time))return false;
+  const slot=Math.floor(time/ELECTRICAL.period),h=(n:number)=>{const x=Math.sin(slot*12.9898+seed*78.233+n*37.719)*43758.5453;return x-Math.floor(x);};
+  if(h(0)>=s*ELECTRICAL.odds)return false;
+  const length=ELECTRICAL.minCut+(ELECTRICAL.maxCut-ELECTRICAL.minCut)*s*h(1),start=(ELECTRICAL.period-length)*h(2),t=time-slot*ELECTRICAL.period;
+  return t>=start&&t<start+length;
+}
+export const electricalWarning=(severity:number)=>severity>0?'ELECTRICAL FAULT':'';
