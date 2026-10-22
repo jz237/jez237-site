@@ -15,3 +15,8 @@ test('the mechanical line lists what broke, worst first, capped; nothing broken 
  const all=mechanicalReport({seized:true,outOfFuel:true,diffBroken:true,tieRods:2,shafts:1,gearsLost:3,clutchSlipping:true,springs:1,exhaust:true,doorsTorn:2});
  assert.ok(all.startsWith('MECHANICAL · engine seized · out of fuel · diff broken · 2 tie rods snapped')&&all.endsWith(' · +4 more')&&all.split(' · ').length===MECHANICAL_LIMIT+2);
 });
+test('the mechanical line names a brake fire early and a burst radiator instead of plain overheating',async()=>{
+ const {mechanicalReport}=await import('../src/wreck-report');
+ assert.equal(mechanicalReport({brakeFire:true,overheating:true,radiatorBurst:true}),'MECHANICAL · brake fire · radiator burst');
+ assert.equal(mechanicalReport({overheating:true}),'MECHANICAL · overheating');
+});
