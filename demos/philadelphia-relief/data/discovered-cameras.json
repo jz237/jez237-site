@@ -1,6 +1,18 @@
 {
-  "checked": "2026-09-24",
+  "checked": "2026-10-22",
   "cameras": [
+    {
+      "id": "found-headhouse-square",
+      "name": "Headhouse Square · Shambles",
+      "source": "igotview",
+      "lon": -75.1476792,
+      "lat": 39.9430969,
+      "location": "The Shambles · 2nd & Pine · published viewed area",
+      "area": true,
+      "video": "5aIuyE5Hado",
+      "checked": "2026-10-22",
+      "channel": "UC1ia-zIvH6uuHAEfdNUEVqA"
+    },
     {
       "id": "found-perkasie-covered-bridge",
       "name": "Perkasie · covered bridge restoration",
@@ -9,7 +21,7 @@
       "lat": 40.3675,
       "location": "South Perkasie Covered Bridge · Lenape Park worksite",
       "area": true,
-      "video": "xWUiE7m2PLQ"
+      "checked": "2026-10-22"
     },
     {
       "id": "found-franklin-institute",
@@ -20,7 +32,7 @@
       "location": "The Franklin Institute · Benjamin Franklin Parkway",
       "url": "https://www.earthcam.com/cams/pennsylvania/philadelphia/",
       "thumbnail": "fc65c09a99e61ca67a3196f45ed48596",
-      "video": "9mMnqO1UuIU"
+      "checked": "2026-10-22"
     },
     {
       "id": "found-liberty-bell",
@@ -173,8 +185,8 @@
       "lat": 39.9965,
       "location": "Kensington & Allegheny / elevated railway corridor · approximate viewed area",
       "area": true,
-      "video": "hlGz7Jq_BT0",
-      "checked": "2026-09-24",
+      "video": "EPj-JLgivL4",
+      "checked": "2026-10-22",
       "channel": "UCQ-V0JYSv1Ulme_daroQk7Q"
     },
     {
@@ -185,8 +197,8 @@
       "lat": 39.9965,
       "location": "Kensington & Allegheny / elevated railway corridor · approximate viewed area",
       "area": true,
-      "video": "aphvln5Zwv0",
-      "checked": "2026-09-24",
+      "video": "lIyZBjlYvfc",
+      "checked": "2026-10-22",
       "channel": "UCQ-V0JYSv1Ulme_daroQk7Q"
     },
     {
@@ -197,8 +209,8 @@
       "lat": 39.9965,
       "location": "Kensington & Allegheny / elevated railway corridor · approximate viewed area",
       "area": true,
-      "video": "6LtXdZJb-Kk",
-      "checked": "2026-09-24",
+      "video": "F2mMFF9dgv0",
+      "checked": "2026-10-22",
       "channel": "UCQ-V0JYSv1Ulme_daroQk7Q"
     },
     {

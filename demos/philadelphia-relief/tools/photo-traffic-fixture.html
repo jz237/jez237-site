@@ -22,12 +22,18 @@ let tileError='',tileSeen=0;
 tiles.tileFailed.addEventListener(error=>{tileError=error.message;});
 tiles.tileVisible.addEventListener(()=>tileSeen++);
 viewer.camera.lookAt(C.Cartesian3.fromDegrees(-75.164,39.9502,30),new C.HeadingPitchRange(0,-.55,180));
-const traffic=createPhotoTraffic(C,viewer);let start=performance.now();
+const traffic=createPhotoTraffic(C,viewer);let start=performance.now(),frames=0;
+const count=new URLSearchParams(location.search).has('stress')?140:2;
 function frame(now){
+  frames++;
   const x=((now-start)/1000*7)%130-65;
-  traffic.update([{id:1,lon:-75.164+x/85000,lat:39.9502,angle:Math.PI/2,variant:5,van:false},
-    {id:2,lon:-75.164-x/85000,lat:39.9502+.00005,angle:-Math.PI/2,variant:3,van:true}]);
-  document.querySelector('#status').textContent=`Local road at 30 m · two cars · travel ${x.toFixed(1)} m`
+  const cars=count===2?[{id:1,lon:-75.164+x/85000,lat:39.9502,angle:Math.PI/2,variant:5,van:false},
+    {id:2,lon:-75.164-x/85000,lat:39.9502+.00005,angle:-Math.PI/2,variant:3,van:true}]
+    :Array.from({length:count},(_,i)=>({id:i,lon:-75.164+((x+65+i%20*6.5)%130-65)/85000,
+      lat:39.9502-Math.floor(i/20)*5/111000,angle:Math.PI/2,variant:i%7,van:i%9===0}));
+  traffic.update(cars);
+  document.querySelector('#status').textContent=`Local road at 30 m · ${count} cars · travel ${x.toFixed(1)} m`
+    +` · ${(frames*1000/(now-start)).toFixed(1)} fps`
     +` · tile seen ${tileSeen} · loaded ${tiles.tilesLoaded}`
     +` · height ${viewer.scene.getHeight(C.Cartographic.fromDegrees(-75.164,39.9502),C.HeightReference.RELATIVE_TO_3D_TILE)}`
     +` · ${tileError}`;
