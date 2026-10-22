@@ -2,15 +2,14 @@ import {createNativeNameMenuClock} from './native-name-menu-runtime.js';
 import {createNativeRecordsView} from './native-records-view.js';
 // D-pad and A/B masks of the original controller word.
 const codes={ArrowUp:0x800,ArrowDown:0x400,ArrowLeft:0x200,ArrowRight:0x100,Enter:0x8000,Space:0x8000,Backspace:0x4000,Escape:0x4000};
-// Course names come from the game's course list. The other ovl_i9 labels are
-// pre-rendered images that are not decoded; these authored words follow each
-// token's role in 6CC8/71AC within its font bank. Row classes and N/C tune
-// letters read the same record fields as the results screen.
+// The original's words, read from its pre-rendered label images: the shared
+// segment-1 bank (fonts 0 and 1) and the records screen's own bank (fonts 2
+// and 3). Course names come from the game's course list, which matches.
 const labels=[
  {3:'NORMAL',17:'HARD',18:'EXPERT',36:'REVERSE',13:'BEST LAP'},
- {3:'TIME',17:'CLASS',31:'RANK',32:'NAME',62:'SCORE',63:'REVERSE'},
- {7:'COURSE RECORDS'},
- {5:'TIME RECORDS',4:'STUNT RECORDS',32:'REVERSE RECORDS'}];
+ {3:'TIME',17:'LEVEL',31:'RANK',32:'RIDER',62:'SCORE',63:'END'},
+ {7:'VIEW RECORDS'},
+ {5:'TIME RANKS - TOP 3',4:'SCORE RANKS - TOP 3',32:'REVERSE - TOP TIMES'}];
 
 /** In-dialog presentation of the original records browser (state66/67). The
  * runtime frame owns input, slides, record tables and the exit destination;

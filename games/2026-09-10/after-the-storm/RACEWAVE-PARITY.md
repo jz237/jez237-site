@@ -1,5 +1,22 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unreleased
+
+### original label words
+
+The original's pre-rendered label images have been read. Segment 1 is the
+uncompressed ROM range from 0xF6090 that the boot code DMAs in two parts; its
+IA8 images are white with the glyph in the alpha nibble. Fonts 0 and 1 there
+give NORMAL, HARD, EXPERT, REVERSE, BEST LAP, TIME, LEVEL, RANK, RIDER, SCORE,
+END, POINTS, RETIRE, ROUND n, FINAL ROUND and the course names. The records
+screen's own segment-8 bank (MIO0 at ROM 0x338470) gives VIEW RECORDS, TIME
+RANKS - TOP 3, SCORE RANKS - TOP 3 and REVERSE - TOP TIMES. The records browser
+and ending now use these words: the overview's third option is END (its exit),
+not a reverse category; the records columns read LEVEL and RIDER; the ending
+reads RETIRE and FINAL ROUND. The ending's own segment-8 images (warm-up row,
+summary title, place words, record badge and class offer) are not located, so
+those words remain authored. No image data is shipped; only the words.
+
 ## v2.46.1 — Expert champion's ending flock
 
 Winning the Expert cup now gets the original ending flock; every ending gull

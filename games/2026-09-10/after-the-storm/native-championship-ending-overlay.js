@@ -1,12 +1,12 @@
 import {createNativeEndingView} from './native-ending-view.js';
-// RANK/RIDER/POINTS match the standings labels and course names come from the
-// game's course list. The remaining i15 labels are pre-rendered images that
-// are not decoded; these authored words follow each token's role in 602C:
-// round rows (the Normal warm-up row reads the word before round 1), the last
-// course, places by 7/4/2/1 award, no award, the record badge, the summary
-// title and the class-opening offer.
-const labels={0:'WARM-UP',31:'RANK',32:'RIDER',58:'POINTS',38:'CHAMPIONSHIP RESULTS',87:'FINAL',
- 93:'1ST',94:'2ND',95:'3RD',96:'4TH',49:'—',98:'NEW',99:'NEW CHALLENGE OPENED'};
+// RANK, RIDER, POINTS, RETIRE, ROUND n and FINAL ROUND are the original's words,
+// read from its shared segment-1 label images; course names come from the
+// game's course list. The ending's own segment-8 images (the warm-up row, the
+// summary title, places by 7/4/2/1 award, the record badge and the
+// class-opening offer) are not located, so those words follow each token's
+// role in 602C.
+const labels={0:'WARM-UP',31:'RANK',32:'RIDER',58:'POINTS',38:'CHAMPIONSHIP RESULTS',87:'FINAL ROUND',
+ 93:'1ST',94:'2ND',95:'3RD',96:'4TH',49:'RETIRE',98:'NEW',99:'NEW CHALLENGE OPENED'};
 for(let i=0;i<8;i++)labels[71+i]='ROUND '+(i+1);
 
 /** Authored high-resolution presentation of the original ending frames. The
