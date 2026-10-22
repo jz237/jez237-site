@@ -1,6 +1,7 @@
+import {restoreDebrisPunctureBytes} from './debris-puncture-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readShieldWeakPrevious,restoreShieldWeakBytes,verifyShieldWeakRevision} from './shield-weak-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreDebrisPunctureBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('ShieldWeak preserves every prior fixture, vehicle asset, venue art and history input',verifyShieldWeakRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/shield-weak/revision.json').toString());

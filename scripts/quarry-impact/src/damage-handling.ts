@@ -259,3 +259,8 @@ export function weakSpot(structure:readonly number[]|undefined,at:{x:number;z:nu
   const along=worst===0?halfLength:worst===1?-halfLength:0,side=worst===2?-halfWidth:worst===3?halfWidth:0;
   return{x:at.x+forward.x*along+right.x*side,z:at.z+forward.z*along+right.z*side};
 }
+/** Driving over broken-off debris can puncture a tyre: a wheel rolling over a piece faster than PUNCTURE.speed gets a slow
+ * leak (tyre damage raised to just past LEAK.onset — the slow-puncture chain does the rest) about PUNCTURE.odds of the time,
+ * at most once every PUNCTURE.gap seconds per wheel. */
+export const PUNCTURE={reach:.35,speed:6,odds:.15,gap:2,leak:.05} as const;
+export const punctures=(seed:number,count:number)=>{const x=Math.sin(seed*12.7+count*91.3)*43758.5453;return x-Math.floor(x)<PUNCTURE.odds;};

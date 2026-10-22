@@ -166,6 +166,11 @@ void main(){
     this.marks.setMatrixAt(this.markCursor++ % 1000, d.matrix);
     this.marks.instanceMatrix.needsUpdate = true;
   }
+  /** Is there a broken-off piece (glass, a panel, cargo — not a rolling wheel) lying within r of this point? */
+  sharpDebrisNear(x: number, z: number, r: number) {
+    for (const d of this.debris) { if (d.shared) continue; const p = d.body.translation(); if (Math.hypot(p.x - x, p.z - z) < r) return true; }
+    return false;
+  }
   detach(source: T.Mesh, velocity: T.Vector3) {
     if (this.debris.length >= 36) this.removeDebris(0);
     source.updateWorldMatrix(true, false);
