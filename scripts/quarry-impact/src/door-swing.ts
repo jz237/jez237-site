@@ -64,3 +64,8 @@ export function lidRest(kind:LidKind,base:number,side:number,forward:number,late
   for(let i=1;i<=48;i++){const s=top*i/48;if(lidTorque(kind,base+s,side,forward,lateral,up)<=LID.friction)return s-top/96;}
   return top;
 }
+/** Cargo spills out of a wide-open back (offline events): crates from a van's barn doors, luggage past a lifted tailgate,
+ * loose kit off a dropped pickup tailgate — one piece every CARGO.gap seconds while it stands open past `open`, until the
+ * load (`load` pieces) is gone. The pieces are real debris bodies, so other cars hit them. */
+export const CARGO={gap:.7,cargo:{open:.9,load:5,size:[.55,.45,.6],color:0x8a6a3e},tailgate:{open:.75,load:2,size:[.45,.3,.6],color:0x2e3b4c},drop:{open:1.2,load:3,size:[.5,.4,.5],color:0x6f5a3a}} as const;
+export const cargoSpills=(kind:LidKind,opening:number)=>Number.isFinite(opening)&&opening>=CARGO[kind].open;

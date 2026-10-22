@@ -1,6 +1,7 @@
+import {restoreCargoSpillBytes} from './cargo-spill-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readMirrorHangPrevious,restoreMirrorHangBytes,verifyMirrorHangRevision} from './mirror-hang-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreCargoSpillBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('MirrorHang preserves every prior fixture, vehicle asset, venue art and history input',verifyMirrorHangRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/mirror-hang/revision.json').toString());
