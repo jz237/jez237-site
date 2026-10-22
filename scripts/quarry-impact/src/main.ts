@@ -105,7 +105,7 @@ import {createBrackenWorld} from './bracken-world';
 import {createCinderbankWorld} from './cinderbank-world';
 import {tyreWarning} from './tyre-feedback';
 import {fluidWarning,leakRates,burnLevel,type GroundFire} from './fluid-leaks';
-import {gearboxWarning,brakeWarning,steerWarning,clutchWarning,playWarning,rubWarning,electricalWarning,nutWarning,exhaustWarning,diffWarning,tieRodWarning,caliperWarning,mountsWarning,starterWarning,frameWarning,discGlow,diffAxle,dazeWarning,nurseThrottle} from './damage-handling';
+import {gearboxWarning,brakeWarning,steerWarning,clutchWarning,playWarning,rubWarning,electricalWarning,nutWarning,exhaustWarning,diffWarning,tieRodWarning,caliperWarning,mountsWarning,starterWarning,frameWarning,discGlow,diffAxle,dazeWarning,nurseThrottle,STEER_PLAY} from './damage-handling';
 import {engineStatus} from './engine-condition';
 import {drivingObstacleClearance} from './driving-probe';
 import {vehicleContact,vehicleContactManifold} from './vehicle-contact';
@@ -1344,8 +1344,9 @@ const aiFires:{clock:number;list:GroundFire[]}={clock:-1,list:[]};let fireAvoida
 function ai(car: Vehicle, dt: number): Input {
   const core=aiCore(car,dt);
   if(car.seized&&car.extendedDamage)return{throttle:0,steer:core.steer,brake:.3,handbrake:false};
-  // A sick engine (low oil or coolant) is nursed: the AI holds the throttle back so it lasts.
-  const input=car.extendedDamage&&!online?.active?{...core,throttle:nurseThrottle(core.throttle,car.oilLevel<OIL.low||car.coolantLevel<COOLANT.low)}:core;
+  // A sick engine (low oil or coolant) is nursed, and broken steering (a snapped tie rod, loose steering) driven with care:
+  // the AI holds the throttle back.
+  const input=car.extendedDamage&&!online?.active?{...core,throttle:nurseThrottle(core.throttle,car.oilLevel<OIL.low||car.coolantLevel<COOLANT.low||car.steerLink.some(v=>v===0)||car.steerPlay>=STEER_PLAY.warn)}:core;
   if(!fireAvoidance||!car.extendedDamage||online?.active||car.health<=0)return input;
   if(aiFires.clock!==fx.slicks.clock){aiFires.clock=fx.slicks.clock;aiFires.list=[...(fx.slicks.burningCount()?fx.slicks.fires():[]),...(propFires.burning.size?propFires.fires(fx.slicks.clock,propPoints(activeVenue.props)):[]),...fx.debrisFires()];}
   const fires=aiFires.list;
