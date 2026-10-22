@@ -2,7 +2,8 @@
  * the biggest climber (for derbies, the toughest survivor). Pure bookkeeping; the caller
  * reports hits and the starting order and supplies names when rendering. */
 export type AwardCar={id:number;inflicted:number;health:number};
-export type EventMoment={kind:'hit'|'takedown'|'wheel'|'fire';attacker:number;victim:number;time:number;score:number};
+/** failure: a car's own mechanical failure (attacker = victim = that car), captioned by `label`. */
+export type EventMoment={kind:'hit'|'takedown'|'wheel'|'fire'|'failure';attacker:number;victim:number;time:number;score:number;label?:string};
 export type EventAward={key:'hit'|'destroyer'|'takedowns'|'climber'|'toughest'|'nemesis'|'wheels'|'scrap'|'firestarter';title:string;id:number;detail:string;victim?:number;value:number};
 export class EventAwards{
  private biggest:{attacker:number;victim:number;damage:number;time:number}|null=null;
@@ -20,6 +21,11 @@ export class EventAwards{
  setAlight(attacker:number,victim:number,time=0){
   if(!Number.isInteger(attacker)||attacker<0||attacker===victim)return;
   this.alight.set(attacker,(this.alight.get(attacker)??0)+1);this.moments.push({kind:'fire',attacker,victim,time:Number.isFinite(time)?time:0,score:34});
+ }
+ /** A dramatic mechanical failure (a seized engine, a diff letting go, a brake fire) is a highlight moment of its own. */
+ failure(car:number,label:string,time=0,score=26){
+  if(!Number.isInteger(car)||car<0||!label)return;
+  this.moments.push({kind:'failure',attacker:car,victim:car,time:Number.isFinite(time)?time:0,score:Number.isFinite(score)?score:26,label});
  }
  firesBy(id:number){return{puddles:this.puddles.get(id)??0,cars:this.alight.get(id)??0};}
  /** The most spectacular moments for a highlights reel: best first by score, at most `max`, at least

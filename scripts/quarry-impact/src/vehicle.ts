@@ -262,7 +262,7 @@ export class Vehicle {
   onGearClunk?:(out:boolean)=>void;
   /** The loose engine clunked against its broken mounts. */
   onMountClunk?:()=>void;
-  onBreak?:(what:'spring'|'shaft'|'diff'|'tierod'|'exhaust',wheel:number)=>void;
+  onBreak?:(what:'spring'|'shaft'|'diff'|'tierod'|'exhaust'|'brakefire',wheel:number)=>void;
   /** Gears left after gearbox damage (offline only; 5 = intact). */
   gearLimit = 5;
   /** Grip left under each tyre from oil or coolant on the ground (offline only). */
@@ -739,7 +739,7 @@ export class Vehicle {
       if(hottest<0||this.discHeat[i]>this.discHeat[hottest])hottest=i;
       // Held white-hot long enough, the tyre catches: burning rubber drops, the tyre burns down, the car catches once.
       this.brakeFire[i]=this.extendedDamage?brakeFireClock(this.brakeFire[i],this.discHeat[i],dt):0;
-      if(this.brakeFire[i]>=BRAKE_FIRE.after&&!this.tyreAlight[i]&&this.health>0){this.tyreAlight[i]=1;this.brakeFires++;this.igniteRequest=true;this.onSetAlight?.(this.id);}
+      if(this.brakeFire[i]>=BRAKE_FIRE.after&&!this.tyreAlight[i]&&this.health>0){this.tyreAlight[i]=1;this.brakeFires++;this.igniteRequest=true;this.onSetAlight?.(this.id);this.onBreak?.('brakefire',i);}
       if(this.tyreAlight[i]&&this.tyreDamage)this.tyreDamage[i]=Math.min(1,this.tyreDamage[i]+BRAKE_FIRE.tyre*dt);
     }
     if(this.tyreAlight.some(Boolean)&&this.fx.slicks){this.rubberDrop+=dt;
