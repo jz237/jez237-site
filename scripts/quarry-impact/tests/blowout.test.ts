@@ -40,3 +40,14 @@ test('a front-left blowout at speed snatches the car toward that corner once, of
  assert.ok(kick.yawRate>online.yawRate*1.5&&kick.yawRate>.15,'a sharp yaw at the moment of the burst');
  assert.ok(none.yawRate<.05,'straight without a burst');
 });
+test('a burst tyre throws rubber chunks and flails off strips for a few seconds at speed',async()=>{
+ const {SHRED_SECONDS}=await import('../src/vehicle');
+ const scene=new T.Scene(),world=new R.World({x:0,y:-9.81,z:0});world.createCollider(R.ColliderDesc.cuboid(2000,.5,2000).setTranslation(0,-.5,0).setFriction(1));let rubber=0;
+ const c=new Vehicle(0,'sedan',stockSetup('sedan').paint,scene,world,{emit(_p:T.Vector3,_n:number,type:number){if(type===4)rubber++;},mark(){},detach(){}} as never,stockSetup('sedan'),{height:()=>0,surface:()=>'asphalt'} as never,'angular-v1');
+ try{
+  c.extendedDamage=true;c.place(0,0,0);c.render(1);for(let k=0;k<30;k++){c.preStep(1/60);world.step();c.postStep(1/60,k/60);}
+  const f=new T.Vector3(0,0,1).applyQuaternion(c.body.rotation() as T.Quaternion);c.body.setLinvel({x:f.x*22,y:0,z:f.z*22},true);c.input.throttle=.7;if(c.tyreDamage)c.tyreDamage[0]=1;
+  for(let k=0;k<60*(SHRED_SECONDS+3);k++){c.preStep(1/60);world.step();c.postStep(1/60,1+k/60);}
+  assert.ok(rubber>10&&c.shredBits>3&&c.tyreShred[0]===0,`rubber thrown (${rubber}), strips (${c.shredBits}), then done`);
+ }finally{c.dispose();world.free();}
+});

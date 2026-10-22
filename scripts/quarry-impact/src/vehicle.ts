@@ -46,6 +46,8 @@ import {drainOil,starvationWear,seizes,OIL,drainCoolant,overheatWear} from './oi
 import {MAX_ENGINE_RESTART} from './engine-stall';
 /** Rear compression past which the exhaust hangs down and drags. */
 export const EXHAUST_DROP=.2;
+/** Seconds a tyre that has just burst keeps throwing strips of rubber at speed. */
+export const SHRED_SECONDS=5;
 /** A burning car cooks itself: glass damage per second at full heat (side windows burst at 24) and tyre damage per second. */
 export const COOK={glass:2.2,tyre:.02} as const;
 /** Roof compression at which the glass starts to craze, and at which side windows burst. */
@@ -239,6 +241,10 @@ export class Vehicle {
   /** Sound hook for a tyre bursting at speed. */
   onBlowout?:(p:T.Vector3)=>void;
   private readonly lastFailure=[0,0,0,0];
+  /** Seconds a burst tyre keeps flailing strips of rubber (offline). */
+  readonly tyreShred=[0,0,0,0];
+  /** Rubber strips thrown (QA). */
+  shredBits=0;
   private dragLoad=0;private readonly dragPoint=new T.Vector3();
   private crushFrame?:CrushFrame;
   private readonly poppedCaps:T.Mesh[]=[];
@@ -359,7 +365,7 @@ export class Vehicle {
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
-    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.seized=false;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
+    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.seized=false;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
     if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
@@ -522,6 +528,7 @@ export class Vehicle {
     // A seized engine never turns again: the starter can crank, but it will not catch.
     if(this.seized)this.engineStall=MAX_ENGINE_RESTART;
     if(this.extendedDamage&&this.tyreDamage)for(let i=0;i<4;i++)if(!this.wreckParts.wheelLost[i])this.tyreDamage[i]=leakTyre(bentRimTyre(this.tyreDamage[i],this.wreckParts.wheelDamage[i]),this.speed,dt);
+    for(let i=0;i<4;i++)if(this.tyreShred[i]>0)this.tyreShred[i]=Math.max(0,this.tyreShred[i]-dt);
     if(this.extendedDamage&&this.tyreDamage)for(let i=0;i<4;i++){
       // Only a sudden failure (a hit) bursts; a slow puncture going flat just sags.
       const failure=tyreFailure(this.tyreDamage[i]),was=this.lastFailure[i];this.lastFailure[i]=failure;
@@ -532,7 +539,7 @@ export class Vehicle {
       if(drag>0&&at){
         const p=new T.Vector3(at.x,at.y,at.z).applyQuaternion(this.previousQ).add(this.previous),back=-Math.sign(this.speed),out=i%2?1:-1;
         this.body.applyImpulseAtPoint({x:this.forward.x*back*drag+this.right.x*out*side,y:0,z:this.forward.z*back*drag+this.right.z*out*side},{x:p.x,y:p.y,z:p.z},true);
-        this.onBlowout?.(p);
+        this.onBlowout?.(p);this.fx.emit(p,10,4,1.6);this.tyreShred[i]=SHRED_SECONDS;
       }
     }
     if(this.extendedDamage&&this.bellyDrag>0&&Math.abs(this.speed)>1){const k=-Math.sign(this.speed)*this.specification.mass*.9*this.bellyDrag*dt;this.body.applyImpulse({x:this.forward.x*k,y:0,z:this.forward.z*k},true);this.bellyDrag=Math.max(0,this.bellyDrag-dt*2);}
@@ -593,7 +600,8 @@ export class Vehicle {
         const failure=tyreFailure(this.tyreDamage?.[i]);
         if(failure>=.9&&!this.tyreBurst[i]){this.tyreBurst[i]=true;this.fx.emit(p,10,4,1.1);}
         if(failure>=.9&&Math.abs(this.speed)>4&&this.surface==='asphalt'&&!this.wetWheels[i]){
-          // Running on the rim: a spray of sparks and a scrape.
+          // Running on the rim: a spray of sparks and a scrape; a freshly burst tyre flails off strips of rubber.
+          if(this.tyreShred[i]>0&&Math.abs(this.speed)>8){this.fx.emit(p,1,4,1.2);this.shredBits++;}
           const s=Math.min(1,Math.abs(this.speed)/18);this.scraping=Math.max(this.scraping,s*.55);this.fx.emit(p,Math.ceil(s*2),1,.7);
           // Offline the rim also cuts a groove into the tarmac, like a bare hub.
           if(this.extendedDamage)this.fx.evidence?.add(p,yaw,Math.abs(this.speed)*.08,s*.8,2);
