@@ -61,6 +61,9 @@ function discGlowTexture(){
 }
 /** Front crush past which a front-engined AI car starts ramming in reverse. */
 export const REVERSE_RAM_FRONT=.5;
+/** Screens and plates: a bonded windscreen (or rear screen) pops out whole once its end or the roof is crushed past `crush`
+ * (the body twists out from under it); a number plate drops off once its end is crushed past `plateCrush`. */
+export const GLASS_POP={crush:.7,plateCrush:.45,front:/windshield|^glass_front/i,rear:/rearwindow|^glass_rear$|tailgaterear/i,plate:/plate$/i} as const;
 export const INVERTED={after:1,stall:1.5,drip:.35} as const;
 /** A burning car cooks itself: glass damage per second at full heat (side windows burst at 24) and tyre damage per second. */
 export const COOK={glass:2.2,tyre:.02} as const;
@@ -246,6 +249,9 @@ export class Vehicle {
   deadTime = 0;
   /** Seconds the driver is still dazed by a huge hit (offline events), and the lazy steering it is giving. */
   dazed = 0;
+  /** Screens popped out and number plates knocked off (offline QA counters). */
+  glassPops = 0;
+  platesLost = 0;
   /** The world point of this car's most crushed corner, for derby rivals to aim at (offline events; null otherwise). */
   /** Front-engined and crushed past REVERSE_RAM_FRONT at the front (offline): the AI rams in reverse to save the engine. */
   get protectFront(){return this.extendedDamage&&this.health>0&&!isRearEngineKind(this.kind)&&(this.structuralDamage?.[0]??0)>=REVERSE_RAM_FRONT;}
@@ -479,7 +485,7 @@ export class Vehicle {
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
-    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.clutchGrip=1;this.clutchBurn=0;this.clutchSmokeClock=0;this.clutchSmoke=0;this.steerPlay=0;this.steerWander=0;this.doorOpenTime=0;this.doorsTorn=0;this.doorSlams=0;this.rubDrag.fill(0);this.rubSmoke=0;this.rubClock=0;this.electricalFault=0;this.electricalCut=false;this.electricalCuts=0;this.electricClock=0;this.nutLoose.fill(0);this.wheelShimmy.fill(0);this.wheelsShed=0;this.exhaustBlow=0;this.exhaustPops=0;this.diffWear=0;this.beadStress.fill(0);this.debeads=0;this.steerLink.fill(1);this.linkClock=0;this.popUntil=0;this.popSlot=-1;this.gearPops=0;this.inNeutral=false;this.brakeDrag.fill(0);this.discHeat.fill(0);this.discSmokeClock=0;this.mountsBroken=false;this.shunt=0;this.lastPedal=0;this.lastJolt=-1;this.mountJolts=0;this.rawInput=null;this.ownInput=null;this.cargoLeft=-1;this.cargoClock=0;this.cargoSpilled=0;this.sumpCrack=0;this.brakeFire.fill(0);this.tyreAlight.fill(0);this.rubberDrop=0;this.brakeFires=0;this.exhaustDragTime=0;this.exhaustGone=false;this.starterDamage=0;this.crankAttempt=0;this.starterFails=0;this.frameBend=0;this.deadTime=0;this.dazed=0;this.dazeSteer=0;for(const g of this.discGlows)if(g)g.visible=false;this.popQueue.length=0;this.liftThrottle=0;this.lifts=0;this.wanderClock=0;this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.fuelLevel=FUEL_TANK.start;this.fuelClock=0;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
+    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.clutchGrip=1;this.clutchBurn=0;this.clutchSmokeClock=0;this.clutchSmoke=0;this.steerPlay=0;this.steerWander=0;this.doorOpenTime=0;this.doorsTorn=0;this.doorSlams=0;this.rubDrag.fill(0);this.rubSmoke=0;this.rubClock=0;this.electricalFault=0;this.electricalCut=false;this.electricalCuts=0;this.electricClock=0;this.nutLoose.fill(0);this.wheelShimmy.fill(0);this.wheelsShed=0;this.exhaustBlow=0;this.exhaustPops=0;this.diffWear=0;this.beadStress.fill(0);this.debeads=0;this.steerLink.fill(1);this.linkClock=0;this.popUntil=0;this.popSlot=-1;this.gearPops=0;this.inNeutral=false;this.brakeDrag.fill(0);this.discHeat.fill(0);this.discSmokeClock=0;this.mountsBroken=false;this.shunt=0;this.lastPedal=0;this.lastJolt=-1;this.mountJolts=0;this.rawInput=null;this.ownInput=null;this.cargoLeft=-1;this.cargoClock=0;this.cargoSpilled=0;this.sumpCrack=0;this.brakeFire.fill(0);this.tyreAlight.fill(0);this.rubberDrop=0;this.brakeFires=0;this.exhaustDragTime=0;this.exhaustGone=false;this.starterDamage=0;this.crankAttempt=0;this.starterFails=0;this.frameBend=0;this.deadTime=0;this.dazed=0;this.dazeSteer=0;this.glassPops=0;this.platesLost=0;for(const g of this.discGlows)if(g)g.visible=false;this.popQueue.length=0;this.liftThrottle=0;this.lifts=0;this.wanderClock=0;this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.fuelLevel=FUEL_TANK.start;this.fuelClock=0;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
     if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
@@ -1026,6 +1032,7 @@ export class Vehicle {
       if(delta.some(d=>d>.002)){const frame=this.crushFrame??=this.measureCrushFrame();for(const mesh of [...this.panels,...this.glass])if(mesh.visible&&crushGeometry(mesh,delta,frame,!quiet)&&!quiet)this.crushPending.add(mesh);}
     }
     this.structure.update(this.structuralDamage,this.health);
+    if(this.extendedDamage)this.popGlassAndPlates(quiet);
     if (!quiet) {
       this.fx.impact?.(point, direction, damage);
     }
@@ -1070,6 +1077,26 @@ export class Vehicle {
     crate.position.set(((this.cargoSpilled*.37)%1-.5)*.6,-.05,-DEFINITIONS[this.kind].halfLength-l*.5-.15);this.root.add(crate);
     const out=this.velocity.clone().multiplyScalar(.85).addScaledVector(this.forward,-1.6).addScaledVector(this.right,((this.cargoSpilled*.61)%1-.5)*1.2);
     this.fx.detach(crate,out);crate.removeFromParent();crate.geometry.dispose();(crate.material as T.Material).dispose();
+  }
+  /** A heavy front or roof crush pops the windscreen out whole, a heavy rear crush the rear screen; a crushed end sheds its
+   * number plate. Replays (quiet) just hide them. */
+  private popGlassAndPlates(quiet:boolean){
+    const [front=0,rear=0,,,roof=0]=this.structuralDamage??[];
+    for(const glass of this.glass){
+      if(!glass.visible)continue;
+      const screen=GLASS_POP.front.test(glass.name)?front:GLASS_POP.rear.test(glass.name)?rear:-1;if(screen<0)continue;
+      if(Math.max(screen,roof)<GLASS_POP.crush)continue;
+      if(quiet){glass.visible=false;continue;}
+      const out=this.forward.clone().multiplyScalar(GLASS_POP.front.test(glass.name)?2:-2).add(new T.Vector3(0,1.6,0));
+      this.fx.detach(glass,this.velocity.clone().multiplyScalar(.7).add(out));this.glassPops++;this.onGlassBreak?.(glass.getWorldPosition(new T.Vector3()));
+    }
+    for(const plate of this.panels){
+      if(!plate.visible||!GLASS_POP.plate.test(plate.name))continue;
+      const rest=plate.userData.wreckRest as T.BufferAttribute|undefined,end=rest?new T.Box3().setFromBufferAttribute(rest).getCenter(new T.Vector3()).z:0;
+      if((end>=0?front:rear)<GLASS_POP.plateCrush)continue;
+      if(quiet){plate.visible=false;continue;}
+      this.fx.detach(plate,this.velocity.clone().multiplyScalar(.5));this.platesLost++;
+    }
   }
   /** Tear a whole loose assembly (hood, bumper, door, tailgate) away as debris. Replays pass quiet. */
   ripAssembly(name:string,quiet=false){
