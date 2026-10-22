@@ -42,7 +42,7 @@ import {wheelTearsOff} from './wheel-physics';
 import {EngineMisfire} from './engine-misfire';
 import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowoutImpulse,bentRimTyre,rimWobble,springBias,sagBias,driveBias,thrustAngle,leakBrakeFluid,brakeFluidFactor,steerRate,throttleJams,jammedThrottle} from './damage-handling';
 import {leakRates,dripInterval,FLAME,fuelSpacing} from './fluid-leaks';
-import {drainOil,starvationWear,seizes,OIL,drainCoolant,overheatWear} from './oil-starvation';
+import {drainOil,starvationWear,seizes,OIL,drainCoolant,overheatWear,FUEL_TANK,drainFuel,fuelFeed} from './oil-starvation';
 import {MAX_ENGINE_RESTART} from './engine-stall';
 /** Rear compression past which the exhaust hangs down and drags. */
 export const EXHAUST_DROP=.2;
@@ -186,6 +186,9 @@ export class Vehicle {
   private invertedDrip = 0;
   /** Coolant left (offline): a leaking radiator drains it and the engine overheats. */
   coolantLevel = 1;
+  /** Fuel left in the tank (offline events): a split tank drains it; low it coughs, empty the engine dies. */
+  fuelLevel: number = FUEL_TANK.start;
+  private fuelClock = 0;
   seized = false;
   onSeize?:(p:T.Vector3)=>void;
   /** This car's fire heat (0..1), set by VehicleFire each step. */
@@ -370,7 +373,7 @@ export class Vehicle {
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
-    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
+    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.fuelLevel=FUEL_TANK.start;this.fuelClock=0;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
     if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
@@ -466,9 +469,13 @@ export class Vehicle {
       if(this.invertedDrip>=INVERTED.drip){this.invertedDrip=0;this.dripSeed=(Math.imul(this.dripSeed,1664525)+1013904223)>>>0;const r=this.dripSeed/4294967296,kind=(r<.6?2:0) as 0|2;
         const x=this.previous.x+(r-.5)*.8,z=this.previous.z+(r*7%1-.5)*1.4,y=this.ground.height(x,z);slicks?.drip(x,y,z,kind,r);this.drips[kind]++;this.onDrip?.(x,y,z,kind,r);}
     }else this.invertedDrip=0;
+    // Short of fuel the pickup sucks air when it sloshes; dry, the engine dies and will not restart.
+    this.fuelClock+=dt;
+    if(this.health>0){const feed=fuelFeed(this.fuelLevel,this.slip,this.input.brake,this.fuelClock);
+      if(feed<=0)this.engineStall=Math.max(this.engineStall??0,MAX_ENGINE_RESTART);else this.misfireFactor*=feed;}
     if(!contacts)return;
     const rearEngine=isRearEngineKind(this.kind),tank=(rearEngine?this.structuralDamage?.[0]:this.structuralDamage?.[1])??0;
-    const rates=leakRates(this.structuralDamage?.[0]??0,this.engineDamage??0,tank);this.fuelLeak=rates.fuel;
+    const rates=leakRates(this.structuralDamage?.[0]??0,this.engineDamage??0,tank);if(this.fuelLevel<=FUEL_TANK.empty)rates.fuel=0;this.fuelLeak=rates.fuel;this.fuelLevel=drainFuel(this.fuelLevel,rates.fuel,dt);
     // The oil that drips out is oil the engine no longer has: low on oil it knocks and wears, dry it seizes.
     this.oilLevel=drainOil(this.oilLevel,rates.oil,dt);this.coolantLevel=drainCoolant(this.coolantLevel,rates.coolant,dt);
     if(!this.seized&&this.health>0&&!(this.engineStall!>0)&&this.engineDamage!==undefined){

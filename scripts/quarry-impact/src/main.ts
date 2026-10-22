@@ -8,7 +8,7 @@ import {ReplayPuddles} from './replay-puddles';
 import {ReplaySlicks} from './replay-slicks';
 import {PropFires,propKind,DRUM_BLAST} from './prop-fires';
 import {avoidFires,contactHeat,CAR_FIRE} from './fire-avoidance';
-import {oilWarning,coolantWarning} from './oil-starvation';
+import {oilWarning,coolantWarning,fuelWarning} from './oil-starvation';
 import {setSceneShadows,createPMREMGenerator} from './rendering';
 import {quarryReplayProps} from './quarry-tyres';
 import {colliderImpactMaterial,type ImpactMaterial} from './impact-material';
@@ -1085,7 +1085,7 @@ function updateHud() {
   document.getElementById('rpm-bar')!.style.width =
     clamp((player.rpm / 7000) * 100, 0, 100) + '%';
   text('surface', player.surface.toUpperCase());
-  text('engine-status', player.extendedDamage&&(oilWarning(player.oilLevel,player.seized)||coolantWarning(player.coolantLevel))?oilWarning(player.oilLevel,player.seized)||coolantWarning(player.coolantLevel):player.engineStall!>0&&player.health>0?'ENGINE STALLED':engineStatus(player.health,player.engineDamage));
+  text('engine-status', player.extendedDamage&&(oilWarning(player.oilLevel,player.seized)||fuelWarning(player.fuelLevel)||coolantWarning(player.coolantLevel))?oilWarning(player.oilLevel,player.seized)||fuelWarning(player.fuelLevel)||coolantWarning(player.coolantLevel):player.engineStall!>0&&player.health>0?'ENGINE STALLED':engineStatus(player.health,player.engineDamage));
   if(elapsed-damageDiagramAt>.2||elapsed<damageDiagramAt){damageDiagramAt=elapsed;const svg=damageDiagramSvg({zones:player.damageZones,structure:player.structuralDamage,wheelDamage:player.wreckParts.wheelDamage,wheelLost:player.wreckParts.wheelLost,tyreFailure:[0,1,2,3].map(i=>tyreFailureLevel(player.tyreDamage?.[i])),engine:player.engineDamage??Math.max(0,(40-player.health)/40),misfiring:player.misfireFactor<1,rearEngine:isRearEngineKind(player.kind),leaks:player.extendedDamage?leakRates(player.structuralDamage?.[0]??0,player.engineDamage??0,(isRearEngineKind(player.kind)?player.structuralDamage?.[0]:player.structuralDamage?.[1])??0):undefined,wrecked:player.health<=0,parts:partStates(player)});const el=document.getElementById('damage-diagram');if(el&&svg!==damageDiagramSvgLast){el.innerHTML=svg;damageDiagramSvgLast=svg;}}
   text('tyre-status', tyreWarning(player.tyreDamage,player.extendedDamage));
   text('fluid-status', player.extendedDamage?fluidWarning(leakRates(player.structuralDamage?.[0]??0,player.engineDamage??0,(isRearEngineKind(player.kind)?player.structuralDamage?.[0]:player.structuralDamage?.[1])??0),player.slickGrip,player.oily,player.flameHeat):'');
@@ -2274,7 +2274,7 @@ async function boot() {
         wheelLost: Array.from(c.wreckParts.wheelLost),
         rips: c.rips,
         backfires: c.backfires,
-        drips: c.drips.slice(), slickGrip: c.slickGrip.slice(), oily: c.oily.slice(), blownOut: c.blownOut.slice(), gearLimit: c.gearLimit, steamPuffs: c.steamPuffs, oilLevel: c.oilLevel, coolantLevel: c.coolantLevel, seized: c.seized, brakeFluid: c.brakeFluid, brokenSprings: c.springBias.filter(v=>v<1).length, brokenShafts: c.driveBias.filter(v=>v<1).length, flameHeat: c.flameHeat, oilSmoke: c.oilSmoke,
+        drips: c.drips.slice(), slickGrip: c.slickGrip.slice(), oily: c.oily.slice(), blownOut: c.blownOut.slice(), gearLimit: c.gearLimit, steamPuffs: c.steamPuffs, oilLevel: c.oilLevel, coolantLevel: c.coolantLevel, fuelLevel: c.fuelLevel, seized: c.seized, brakeFluid: c.brakeFluid, brokenSprings: c.springBias.filter(v=>v<1).length, brokenShafts: c.driveBias.filter(v=>v<1).length, flameHeat: c.flameHeat, oilSmoke: c.oilSmoke,
         engineDamage: c.engineDamage,
         tyreDamage: c.tyreDamage?.slice(), structure: c.structuralDamage?.slice(),
         partDamage: Object.fromEntries([...new Set(c.panels.map(m=>m.userData.detachAssembly as string|null).filter((v):v is string=>!!v))].map(n=>[n,Math.round(Math.max(0,...c.panels.filter(m=>m.userData.detachAssembly===n&&m.visible).map(m=>m.userData.damage??0)))])),

@@ -43,3 +43,29 @@ test('a leaking radiator drains the coolant; low on coolant the engine overheats
  assert.equal(overheatWear(.5,1,1),0);assert.ok(overheatWear(.05,1,1)>overheatWear(.2,1,1)&&overheatWear(.05,1,1)>overheatWear(.05,0,1));
  assert.equal(coolantWarning(.1),'ENGINE OVERHEATING');assert.equal(coolantWarning(COOLANT.low),'');
 });
+test('a split tank drains the fuel; low it coughs when it sloshes, empty the engine dies for good',async()=>{
+ const {FUEL_TANK,drainFuel,fuelFeed,fuelWarning}=await import('../src/oil-starvation');
+ assert.equal(drainFuel(1,0,10),1);assert.ok(drainFuel(1,1,10)<drainFuel(1,.3,10));assert.equal(drainFuel(.01,1,10),0);
+ assert.equal(fuelFeed(.5,8,1,3),1,'plenty of fuel never coughs');assert.equal(fuelFeed(0,0,0,3),0);
+ const coughs=(slip:number,brake:number)=>Array.from({length:400},(_,i)=>fuelFeed(.05,slip,brake,i*FUEL_TANK.cough)).filter(f=>f<1).length;
+ assert.ok(coughs(6,0)>coughs(0,0)&&coughs(0,1)>coughs(0,0)&&coughs(0,0)>0,'sliding and hard braking slosh it away from the pickup');
+ assert.ok(Array.from({length:400},(_,i)=>fuelFeed(.05,6,0,i*FUEL_TANK.cough)).every(f=>f===1||f===FUEL_TANK.cut));
+ assert.equal(fuelWarning(.1),'FUEL LOW');assert.equal(fuelWarning(0),'OUT OF FUEL');assert.equal(fuelWarning(FUEL_TANK.low),'');
+ const original=GLTFLoader.prototype.loadAsync;GLTFLoader.prototype.loadAsync=async url=>loadCarWithoutImages(/\/([\w-]+)\.glb$/.exec(String(url))![1] as never);try{await loadCars(()=>{});}finally{GLTFLoader.prototype.loadAsync=original;}
+ const run=async(extended:boolean,fuel:number)=>{
+  const scene=new T.Scene(),world=new R.World({x:0,y:-9.81,z:0});world.createCollider(R.ColliderDesc.cuboid(2000,.5,2000).setTranslation(0,-.5,0).setFriction(1));
+  const c=new Vehicle(0,'sedan',stockSetup('sedan').paint,scene,world,{emit(){},mark(){},detach(){}} as never,stockSetup('sedan'),{height:()=>0,surface:()=>'asphalt'} as never,'angular-v1');
+  try{
+   c.extendedDamage=extended;c.place(0,0,0);c.render(1);
+   for(let k=0;k<30;k++){c.preStep(1/60);world.step();c.postStep(1/60,k/60);}
+   c.fuelLevel=fuel;c.input.throttle=1;
+   for(let k=0;k<60*6;k++){c.preStep(1/60);world.step();c.postStep(1/60,.5+k/60);}
+   const speed=c.speed;c.input.throttle=1;for(let k=0;k<60*4;k++){c.preStep(1/60);world.step();c.postStep(1/60,7+k/60);}
+   return{speed,later:c.speed,stall:c.engineStall??0};
+  }finally{c.dispose();world.free();}
+ };
+ const full=await run(true,1),dry=await run(true,0),off=await run(false,0);console.log(JSON.stringify({full,dry,off}));
+ assert.ok(full.speed>10&&full.later>full.speed,'a full tank pulls');
+ assert.ok(dry.speed<2&&dry.stall>MAX_ENGINE_RESTART-.05,'an empty tank never fires, however long it cranks');
+ assert.ok(Math.abs(off.speed-full.speed)<.5,'online-style cars ignore the fuel level');
+});
