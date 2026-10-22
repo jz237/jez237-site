@@ -1,6 +1,10 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
-## Unreleased
+## v2.46.2 — Original label words
+
+The records browser and the championship ending use the original's own label
+words, read from its label images; the ending is confirmed silent of rider
+engines as in the original.
 
 ### original label words
 
