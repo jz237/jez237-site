@@ -251,3 +251,11 @@ export const DAZE={min:24,gain:.05,base:.6,max:2.2,follow:3} as const;
 export const dazeFor=(damage:number)=>Number.isFinite(damage)&&damage>=DAZE.min?Math.min(DAZE.max,DAZE.base+(damage-DAZE.min)*DAZE.gain):0;
 export const dazedSteer=(current:number,wheel:number,dt:number)=>{const w=Number.isFinite(wheel)?wheel:0,c=Number.isFinite(current)?current:w;return dt>0?c+(w-c)*Math.min(1,DAZE.follow*dt):c;};
 export const dazeWarning=(seconds:number)=>seconds>0?'DAZED':'';
+/** Where a derby rival aims (offline): the outside of this car's most crushed end or flank once it is crushed past
+ * WEAK_SPOT.onset, or null. Offsets are along the car's own axes (half length / half width). */
+export const WEAK_SPOT={onset:.3} as const;
+export function weakSpot(structure:readonly number[]|undefined,at:{x:number;z:number},forward:{x:number;z:number},right:{x:number;z:number},halfLength:number,halfWidth:number){
+  const z=[0,1,2,3].map(i=>clamp01(structure?.[i]??0)),worst=z.indexOf(Math.max(...z));if(!(z[worst]>=WEAK_SPOT.onset))return null;
+  const along=worst===0?halfLength:worst===1?-halfLength:0,side=worst===2?-halfWidth:worst===3?halfWidth:0;
+  return{x:at.x+forward.x*along+right.x*side,z:at.z+forward.z*along+right.z*side};
+}

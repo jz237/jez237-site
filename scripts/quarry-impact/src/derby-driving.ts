@@ -84,7 +84,9 @@ export function driveDerby(car:DriverCar,cars:DriverCar[],m:DriverMemory,arena:A
  }
  if(!m.derby){
   const d=dist(car.current,target.current),lead=clamp(d/(Math.abs(car.speed)+12),.12,.85)*difficulty.interceptLead;
-  tx=target.current.x+target.velocity.x*lead;tz=target.current.z+target.velocity.z*lead;if(attackPoint){tx=attackPoint.x;tz=attackPoint.z;}m.phase='intercept';
+  // Go for the rival's broken corner when it has one (offline): finish off what is already crushed.
+  const aim=target.weakSpot??target.current;
+  tx=aim.x+target.velocity.x*lead;tz=aim.z+target.velocity.z*lead;if(attackPoint){tx=attackPoint.x;tz=attackPoint.z;}m.phase='intercept';
  }
  if(arena){
  const radius=Math.hypot(tx-arena.x,tz-arena.z),limit=arena.radius-8;

@@ -40,7 +40,7 @@ import {puddleDepth,type Puddle} from './puddle-splashes';
 import {wheelResponse,TireContact} from './wheel-mechanics';
 import {wheelTearsOff} from './wheel-physics';
 import {EngineMisfire} from './engine-misfire';
-import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowoutImpulse,bentRimTyre,rimWobble,springBias,sagBias,driveBias,thrustAngle,leakBrakeFluid,brakeFluidFactor,steerRate,throttleJams,jammedThrottle,CLUTCH,clutchGrip,clutchSlips,steerPlay,steerWander,tyreRub,rubWear,electricalFault,electricalCut,WHEEL_NUTS,loosenNuts,nutShimmy,EXHAUST_BLOW,exhaustBlow,liftPops,DIFF,diffDamage,diffAxle,wearDiff,diffDrive,DEBEAD,beadStress,tieRodSnapped,flopToe,GEAR_POP,gearPop,CALIPER,caliperDrag,discHeat,discGlow,discFade,MOUNTS,mountsBroken,shuntThrottle,BRAKE_FIRE,brakeFireClock,STARTER,starterDamage,starterFails,frameBend,dazeFor,dazedSteer,LEAK} from './damage-handling';
+import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowoutImpulse,bentRimTyre,rimWobble,springBias,sagBias,driveBias,thrustAngle,leakBrakeFluid,brakeFluidFactor,steerRate,throttleJams,jammedThrottle,CLUTCH,clutchGrip,clutchSlips,steerPlay,steerWander,tyreRub,rubWear,electricalFault,electricalCut,WHEEL_NUTS,loosenNuts,nutShimmy,EXHAUST_BLOW,exhaustBlow,liftPops,DIFF,diffDamage,diffAxle,wearDiff,diffDrive,DEBEAD,beadStress,tieRodSnapped,flopToe,GEAR_POP,gearPop,CALIPER,caliperDrag,discHeat,discGlow,discFade,MOUNTS,mountsBroken,shuntThrottle,BRAKE_FIRE,brakeFireClock,STARTER,starterDamage,starterFails,frameBend,dazeFor,dazedSteer,weakSpot,LEAK} from './damage-handling';
 import {leakRates,dripInterval,FLAME,fuelSpacing} from './fluid-leaks';
 import {drainOil,starvationWear,seizes,OIL,drainCoolant,overheatWear,FUEL_TANK,drainFuel,fuelFeed,SUMP,crackSump,sumpLeak,drainSump} from './oil-starvation';
 import {MAX_ENGINE_RESTART,crankRequested} from './engine-stall';
@@ -244,6 +244,8 @@ export class Vehicle {
   deadTime = 0;
   /** Seconds the driver is still dazed by a huge hit (offline events), and the lazy steering it is giving. */
   dazed = 0;
+  /** The world point of this car's most crushed corner, for derby rivals to aim at (offline events; null otherwise). */
+  get weakSpot(){return this.extendedDamage&&this.health>0?weakSpot(this.structuralDamage,this.current,this.forward,this.right,DEFINITIONS[this.kind].halfLength,DEFINITIONS[this.kind].halfWidth):null;}
   private dazeSteer = 0;
   /** Wheels the engine drives for this layout. */
   get drivenWheels():readonly number[]{const l=this.driveLayout();return l==='front'?[0,1]:l==='rear'?[2,3]:[0,1,2,3];}

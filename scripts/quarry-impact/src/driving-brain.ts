@@ -6,7 +6,8 @@ import type {AIInput as Input} from './ai-input';
 import {LEGACY_ARENA,type ArenaLayout} from './derby-arena';
 
 type Point = {x:number;y:number;z:number};
-export type DriverCar = {id:number;kind?:CarKind;current:Point;velocity:Point;forward:Point;right:Point;speed:number;health:number;finished:boolean;nextCheckpoint:number;surface:string};
+/** weakSpot (offline cars only): the world point of the car's most crushed corner, where a derby rival aims to finish it. */
+export type DriverCar = {id:number;kind?:CarKind;current:Point;velocity:Point;forward:Point;right:Point;speed:number;health:number;finished:boolean;nextCheckpoint:number;surface:string;weakSpot?:{x:number;z:number}|null};
 export type Clearance = {front:number;left:number;right:number;rear:number};
 export type DriverMemory = {escapeTurn?:number;pass?:{target:number;side:number};derby?:DerbyManeuver;target:number;commit:number;stalled:number;reverse:number;escape:number;escapeSteer:number;attempts:number;steer:number;lane:number;phase:string;scan:number;clear:Clearance};
 const stop:Input={throttle:0,steer:0,brake:1,handbrake:false};
