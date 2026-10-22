@@ -175,3 +175,12 @@ export const wearDiff=(wear:number,damage:number,throttle:number,dt:number)=>dt>
 /** Drive fraction the damaged axle still gets: 1 healthy, fading as it grinds, 0 once broken. */
 export const diffDrive=(wear:number)=>wear>=1?0:1-DIFF.loss*clamp01(wear);
 export const diffWarning=(wear:number)=>wear>=1?'DIFF BROKEN':wear>0?'DIFF GRINDING':'';
+/** A soft tyre (leaking, past LEAK.onset, not yet failed) rolls off its rim under hard cornering: the outside tyres take
+ * the load, bead stress builds with how soft the tyre is and how hard the corner (lateral g past DEBEAD.lateral), and at 1
+ * the bead lets go — that corner drops flat on the spot with a smaller snatch than a blowout. */
+export const DEBEAD={lateral:5,span:6,rate:1.4,inside:.25,snatch:.55} as const;
+export function beadStress(stress:number,tyreDamage:number,lateral:number,outside:boolean,dt:number){
+  const d=Number.isFinite(tyreDamage)?tyreDamage:0;if(!(dt>0)||d<LEAK.onset||d>=.72)return 0;
+  const soft=(d-LEAK.onset)/(.72-LEAK.onset),load=clamp01((Math.abs(Number.isFinite(lateral)?lateral:0)-DEBEAD.lateral)/DEBEAD.span)*(outside?1:DEBEAD.inside);
+  return load>0?Math.min(1,clamp01(stress)+soft*load*DEBEAD.rate*dt):Math.max(0,clamp01(stress)-dt*.5);
+}

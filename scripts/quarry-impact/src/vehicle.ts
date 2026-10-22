@@ -40,7 +40,7 @@ import {puddleDepth,type Puddle} from './puddle-splashes';
 import {wheelResponse,TireContact} from './wheel-mechanics';
 import {wheelTearsOff} from './wheel-physics';
 import {EngineMisfire} from './engine-misfire';
-import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowoutImpulse,bentRimTyre,rimWobble,springBias,sagBias,driveBias,thrustAngle,leakBrakeFluid,brakeFluidFactor,steerRate,throttleJams,jammedThrottle,CLUTCH,clutchGrip,clutchSlips,steerPlay,steerWander,tyreRub,rubWear,electricalFault,electricalCut,WHEEL_NUTS,loosenNuts,nutShimmy,EXHAUST_BLOW,exhaustBlow,liftPops,DIFF,diffDamage,diffAxle,wearDiff,diffDrive} from './damage-handling';
+import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowoutImpulse,bentRimTyre,rimWobble,springBias,sagBias,driveBias,thrustAngle,leakBrakeFluid,brakeFluidFactor,steerRate,throttleJams,jammedThrottle,CLUTCH,clutchGrip,clutchSlips,steerPlay,steerWander,tyreRub,rubWear,electricalFault,electricalCut,WHEEL_NUTS,loosenNuts,nutShimmy,EXHAUST_BLOW,exhaustBlow,liftPops,DIFF,diffDamage,diffAxle,wearDiff,diffDrive,DEBEAD,beadStress,LEAK} from './damage-handling';
 import {leakRates,dripInterval,FLAME,fuelSpacing} from './fluid-leaks';
 import {drainOil,starvationWear,seizes,OIL,drainCoolant,overheatWear,FUEL_TANK,drainFuel,fuelFeed} from './oil-starvation';
 import {MAX_ENGINE_RESTART} from './engine-stall';
@@ -187,6 +187,9 @@ export class Vehicle {
   exhaustPops = 0;
   /** Differential wear (offline events; 1 = broken, no drive to that axle). */
   diffWear = 0;
+  /** Bead stress on each soft tyre (offline events) and tyres rolled off their rims (QA). */
+  readonly beadStress = new Float32Array(4);
+  debeads = 0;
   private popQueue: number[] = [];
   private liftThrottle = 0;
   private lifts = 0;
@@ -408,7 +411,7 @@ export class Vehicle {
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
-    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.clutchGrip=1;this.clutchBurn=0;this.clutchSmokeClock=0;this.clutchSmoke=0;this.steerPlay=0;this.steerWander=0;this.doorOpenTime=0;this.doorsTorn=0;this.doorSlams=0;this.rubDrag.fill(0);this.rubSmoke=0;this.rubClock=0;this.electricalFault=0;this.electricalCut=false;this.electricalCuts=0;this.electricClock=0;this.nutLoose.fill(0);this.wheelShimmy.fill(0);this.wheelsShed=0;this.exhaustBlow=0;this.exhaustPops=0;this.diffWear=0;this.popQueue.length=0;this.liftThrottle=0;this.lifts=0;this.wanderClock=0;this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.fuelLevel=FUEL_TANK.start;this.fuelClock=0;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
+    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.clutchGrip=1;this.clutchBurn=0;this.clutchSmokeClock=0;this.clutchSmoke=0;this.steerPlay=0;this.steerWander=0;this.doorOpenTime=0;this.doorsTorn=0;this.doorSlams=0;this.rubDrag.fill(0);this.rubSmoke=0;this.rubClock=0;this.electricalFault=0;this.electricalCut=false;this.electricalCuts=0;this.electricClock=0;this.nutLoose.fill(0);this.wheelShimmy.fill(0);this.wheelsShed=0;this.exhaustBlow=0;this.exhaustPops=0;this.diffWear=0;this.beadStress.fill(0);this.debeads=0;this.popQueue.length=0;this.liftThrottle=0;this.lifts=0;this.wanderClock=0;this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.fuelLevel=FUEL_TANK.start;this.fuelClock=0;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
     if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
@@ -628,6 +631,17 @@ export class Vehicle {
     if(this.seized)this.engineStall=MAX_ENGINE_RESTART;
     if(this.extendedDamage&&this.tyreDamage)for(let i=0;i<4;i++)if(!this.wreckParts.wheelLost[i])this.tyreDamage[i]=leakTyre(bentRimTyre(this.tyreDamage[i],this.wreckParts.wheelDamage[i]),this.speed,dt);
     for(let i=0;i<4;i++)if(this.tyreShred[i]>0)this.tyreShred[i]=Math.max(0,this.tyreShred[i]-dt);
+    // Soft tyres roll off their rims in hard corners: the outside ones, with the cornering load.
+    if(this.extendedDamage&&this.tyreDamage){const lateral=this.body.angvel().y*this.speed;
+      for(let i=0;i<4;i++){if(this.wreckParts.wheelLost[i]||this.blownOut[i])continue;
+        const outside=(i%2?1:-1)===-Math.sign(lateral);this.beadStress[i]=beadStress(this.beadStress[i],this.tyreDamage[i],lateral,outside,dt);
+        if(this.beadStress[i]<1)continue;
+        this.beadStress[i]=0;this.tyreDamage[i]=LEAK.flat;this.lastFailure[i]=1;this.blownOut[i]=true;this.debeads++;
+        const {drag,side}=blowoutImpulse(this.specification.mass,this.speed),at=this.controller.wheelChassisConnectionPointCs(i);
+        if(drag>0&&at){const p=new T.Vector3(at.x,at.y,at.z).applyQuaternion(this.previousQ).add(this.previous),back=-Math.sign(this.speed),out=i%2?1:-1,k=DEBEAD.snatch;
+          this.body.applyImpulseAtPoint({x:(this.forward.x*back*drag+this.right.x*out*side)*k,y:0,z:(this.forward.z*back*drag+this.right.z*out*side)*k},{x:p.x,y:p.y,z:p.z},true);
+          this.onBlowout?.(p);this.fx.emit(p,6,2,.6);}
+      }}
     if(this.extendedDamage&&this.tyreDamage)for(let i=0;i<4;i++){
       // Only a sudden failure (a hit) bursts; a slow puncture going flat just sags.
       const failure=tyreFailure(this.tyreDamage[i]),was=this.lastFailure[i];this.lastFailure[i]=failure;
