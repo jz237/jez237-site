@@ -14,9 +14,24 @@ export const DASHBOARD_EYES:Record<CarKind,readonly[number,number,number]>={
 };
 /** Rigid attachment prevents camera lag from carrying the eye through pillars
  * during turns. Follow body attitude so bumps/rolls cannot expose the roof skin. */
-export function dashboardComposition(kind:CarKind,model:T.Object3D){
+/** A crushed roof comes down on the driver: the eye ducks just under the dented roof so the cab view never ends up above
+ * it. The drop is measured from the actual crushed body: a ray cast up from below the eye finds the roof's underside. */
+export const ROOF_DUCK={probe:.45,skip:.2,margin:.07,max:.4} as const;
+export function dashboardEye(kind:CarKind,drop=0):[number,number,number]{
+ const [x,y,z]=DASHBOARD_EYES[kind],d=Math.max(0,Math.min(ROOF_DUCK.max,Number.isFinite(drop)?drop:0));
+ return d>0?[x,y-d,z]:[x,y,z];
+}
+/** How far the eye must duck (model units) to stay ROOF_DUCK.margin under the roof skin and glass as they are now. */
+export function roofDuckDrop(kind:CarKind,model:T.Object3D,body:readonly T.Mesh[]){
+ model.updateWorldMatrix(true,true);
+ const up=new T.Vector3(0,1,0).applyQuaternion(model.getWorldQuaternion(new T.Quaternion())),eye=new T.Vector3(...DASHBOARD_EYES[kind]).applyMatrix4(model.matrixWorld);
+ const hits=new T.Raycaster(eye.clone().addScaledVector(up,-ROOF_DUCK.probe),up,ROOF_DUCK.skip,ROOF_DUCK.probe+1).intersectObjects(body.filter(m=>m.visible),false);
+ if(!hits.length)return 0;
+ return Math.min(ROOF_DUCK.max,Math.max(0,ROOF_DUCK.margin-(hits[0].distance-ROOF_DUCK.probe)));
+}
+export function dashboardComposition(kind:CarKind,model:T.Object3D,drop=0){
  model.updateWorldMatrix(true,false);
- const position=new T.Vector3(...DASHBOARD_EYES[kind]).applyMatrix4(model.matrixWorld);
+ const position=new T.Vector3(...dashboardEye(kind,drop)).applyMatrix4(model.matrixWorld);
  const rotation=model.getWorldQuaternion(new T.Quaternion());
  return {position,target:position.clone().add(new T.Vector3(0,-.035,1).applyQuaternion(rotation).multiplyScalar(25)),up:new T.Vector3(0,1,0).applyQuaternion(rotation),fov:66,near:.035};
 }

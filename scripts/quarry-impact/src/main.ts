@@ -25,7 +25,8 @@ import {designGarageCallbacks} from './design-panel';
 import {armorWearWarning} from './armor-wear';
 import {showVenueBrowser,selectVenue,selectDemoVenue} from './venue-browser';
 import {readCameraSettings,playerChaseComposition,mountCameraSettings} from './camera-settings';
-import {dashboardComposition,nextDrivingCamera,DRIVING_CAMERA_LABELS,type DrivingCamera} from './driving-camera';
+import {dashboardComposition,roofDuckDrop,nextDrivingCamera,DRIVING_CAMERA_LABELS,type DrivingCamera} from './driving-camera';
+const roofDucks=new WeakMap<object,{roof:number;drop:number}>();
 import {DerbyEventFeed,derbyFeedMarkup} from './derby-event-feed';
 import {standingsTable,standingsKey,STANDINGS_KEYS,type StandingRow} from './standings-view';
 import {pursuitTerrainClear} from './pursuit-corridor';
@@ -1667,7 +1668,10 @@ function updateCamera(dt: number) {
     return;
   }
   if(drivingCamera==='dashboard'){
-    const view=dashboardComposition(p.kind,p.model);
+    // Re-measure the duck under a crushed roof only when the roof crush changes.
+    const roof=p.structuralDamage?.[4]??0;let duck=roofDucks.get(p);
+    if(!duck||Math.abs(duck.roof-roof)>.004){duck={roof,drop:roof>0?roofDuckDrop(p.kind,p.model,[...p.panels,...p.glass]):0};roofDucks.set(p,duck);}
+    const view=dashboardComposition(p.kind,p.model,duck.drop);
     cameraImpactOffset.set(0,0,0);
     camera.position.copy(view.position);camera.up.copy(view.up);camera.lookAt(view.target);
     // The rigid cabin must not translate through its own body after a hit.
@@ -2274,7 +2278,7 @@ async function boot() {
         wheelLost: Array.from(c.wreckParts.wheelLost),
         rips: c.rips,
         backfires: c.backfires,
-        drips: c.drips.slice(), slickGrip: c.slickGrip.slice(), oily: c.oily.slice(), blownOut: c.blownOut.slice(), gearLimit: c.gearLimit, steamPuffs: c.steamPuffs, oilLevel: c.oilLevel, coolantLevel: c.coolantLevel, fuelLevel: c.fuelLevel, clutchGrip: c.clutchGrip, clutchSmoke: c.clutchSmoke, steerPlay: c.steerPlay, doorOpenTime: c.doorOpenTime, doorsTorn: c.doorsTorn, doorSlams: c.doorSlams, rubDrag: Array.from(c.rubDrag), rubSmoke: c.rubSmoke, electricalFault: c.electricalFault, electricalCuts: c.electricalCuts, nutLoose: Array.from(c.nutLoose), wheelsShed: c.wheelsShed, exhaustBlow: c.exhaustBlow, exhaustPops: c.exhaustPops, diffWear: c.diffWear, doors: c.wreckParts.assemblies.filter(a=>a.name.startsWith('door')).map(a=>({name:a.name,loose:a.loose,swing:a.swing??0,damage:a.damage})), seized: c.seized, brakeFluid: c.brakeFluid, brokenSprings: c.springBias.filter(v=>v<1).length, brokenShafts: c.driveBias.filter(v=>v<1).length, flameHeat: c.flameHeat, oilSmoke: c.oilSmoke,
+        drips: c.drips.slice(), slickGrip: c.slickGrip.slice(), oily: c.oily.slice(), blownOut: c.blownOut.slice(), gearLimit: c.gearLimit, steamPuffs: c.steamPuffs, oilLevel: c.oilLevel, coolantLevel: c.coolantLevel, fuelLevel: c.fuelLevel, clutchGrip: c.clutchGrip, clutchSmoke: c.clutchSmoke, steerPlay: c.steerPlay, doorOpenTime: c.doorOpenTime, doorsTorn: c.doorsTorn, doorSlams: c.doorSlams, rubDrag: Array.from(c.rubDrag), rubSmoke: c.rubSmoke, electricalFault: c.electricalFault, electricalCuts: c.electricalCuts, nutLoose: Array.from(c.nutLoose), wheelsShed: c.wheelsShed, exhaustBlow: c.exhaustBlow, exhaustPops: c.exhaustPops, diffWear: c.diffWear, doors: c.wreckParts.assemblies.filter(a=>/door|cargo|tailgate/.test(a.name)).map(a=>({name:a.name,loose:a.loose,swing:a.swing??0,damage:a.damage})), seized: c.seized, brakeFluid: c.brakeFluid, brokenSprings: c.springBias.filter(v=>v<1).length, brokenShafts: c.driveBias.filter(v=>v<1).length, flameHeat: c.flameHeat, oilSmoke: c.oilSmoke,
         engineDamage: c.engineDamage,
         tyreDamage: c.tyreDamage?.slice(), structure: c.structuralDamage?.slice(),
         partDamage: Object.fromEntries([...new Set(c.panels.map(m=>m.userData.detachAssembly as string|null).filter((v):v is string=>!!v))].map(n=>[n,Math.round(Math.max(0,...c.panels.filter(m=>m.userData.detachAssembly===n&&m.visible).map(m=>m.userData.damage??0)))])),
