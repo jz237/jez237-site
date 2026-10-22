@@ -1,13 +1,13 @@
 {
   "version": 1,
   "esbuild": "0.28.2",
-  "sourceHash": "368102d363f1c3310be63a54a4e8486296682e2c261dec2d70645acb60f992be",
-  "entry": "load/app-U2ZMN552.js",
+  "sourceHash": "ed5b59eea2c3f6fde2b6dbed95334510f3eea0f29c1bab00d8b0e035a400504e",
+  "entry": "load/app-XUFT2G57.js",
   "css": "load/style-5069994f39b3.css",
   "startupRequests": 3,
-  "startupBytes": 1123150,
+  "startupBytes": 1123393,
   "files": {
-    "load/app-U2ZMN552.js": "2670ea25f15f94ab61612cd1118f16886ca531dbb6649f68d3278cdef1a59650",
+    "load/app-XUFT2G57.js": "c16d39b1be07acde5993321cc398ae3ef0dee1559ddf431e13301eb4ab3b8ed9",
     "load/chunk-PWR376B6.js": "06fd02e3abfe1bc60f8196a62377d5c612cfc8b00f3bcde1a38d2faa5ebd58ba",
     "load/chunk-AEXPLQJR.js": "0c4d5332763adcaa9b518d170efbd60d2d15529a694f6fa086f34c5c48a06d45",
     "load/chunk-JYXLTZYM.js": "7859b18ebc8e9993d33f8d298b6a8bb4d94bd39f1fa3b229df180351bb8197b8",

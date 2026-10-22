@@ -1,4 +1,6 @@
 /** Bounded, same-origin OSM neighborhood extracts. No arbitrary upstream URLs or queries. */
+import { snapshotCells, snapshotDate } from './_lib/neighborhood-snapshot.js';
+
 export function streetCell(params) {
   if (!params.has('lon') || !params.has('lat')) return null;
   const lon = Number(params.get('lon')), lat = Number(params.get('lat'));
@@ -50,7 +52,26 @@ export async function onRequest(context) {
   } catch { return fail(403, 'Forbidden'); }
   const cell = streetCell(url.searchParams);
   if (!cell) return fail(400, 'Invalid neighborhood');
-  const key = new Request(`${url.origin}${url.pathname}?cell=${cell.key}&v=2`);
+  // Published extracts cover the busiest views without depending on a query
+  // server. Only generated, verified cells are eligible; other areas retain the
+  // bounded provider fallback. Stream the asset without parsing geometry here.
+  if (snapshotCells.has(cell.key) && context.env?.ASSETS) {
+    const assetUrl = new URL(`data/neighborhoods/${snapshotDate}/${cell.key.replace(',', '_')}.json`, url);
+    try {
+      const asset = await context.env.ASSETS.fetch(assetUrl);
+      if (asset.ok && asset.headers.get('Content-Type')?.includes('application/json')) {
+        return new Response(asset.body, { headers: { ...headers,
+          'Cache-Control': 'public, max-age=604800',
+          'X-Neighborhood-Source': `snapshot-${snapshotDate}`,
+          ...(asset.headers.has('ETag') ? { ETag: asset.headers.get('ETag') } : {}),
+        } });
+      }
+      await asset.body?.cancel();
+    } catch {
+      console.warn('Published neighborhood asset unavailable; trying providers');
+    }
+  }
+  const key = new Request(`${url.origin}${url.pathname}?cell=${cell.key}&v=3`);
   const cached = await caches.default.match(key); if (cached) return cached;
   for (const endpoint of ['https://overpass.private.coffee/api/interpreter',
     'https://overpass-api.de/api/interpreter']) {

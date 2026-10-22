@@ -13,8 +13,9 @@ export function createNeighborhood({ onData }) {
     current = doc; onData(doc, neighborhoodLabels(doc));
   }
   return {
-    consider(pose, state) {
-      const enabled = state.era === 'present' && pose.dist < 3200
+    consider(pose, state, visible = true) {
+      if (disposed) return;
+      const enabled = visible && state.era === 'present' && pose.dist < 3200
         && state.layers.structures;
       if (!enabled) {
         cancelPending();
@@ -38,7 +39,7 @@ export function createNeighborhood({ onData }) {
       const controller = new AbortController(), revision = ++generation;
       const timer = setTimeout(() => controller.abort(), 55000);
       pending = { key, controller, timer };
-      fetch(`street-detail?lon=${lon.toFixed(4)}&lat=${lat.toFixed(4)}&v=2`, {
+      fetch(`street-detail?lon=${lon.toFixed(4)}&lat=${lat.toFixed(4)}&v=3`, {
         signal: controller.signal, credentials: 'same-origin',
       }).then(response => {
         if (!response.ok) throw new Error('Neighborhood detail unavailable');
@@ -56,6 +57,10 @@ export function createNeighborhood({ onData }) {
       const b = current?.bounds;
       return !!b && pose.lon > b.west && pose.lon < b.east && pose.lat > b.south && pose.lat < b.north;
     },
+    stats: () => ({ loading: !!pending, key: current?.key || null,
+      features: current?.elements.length || 0, cachedCells: cache.size,
+      source: current ? current.snapshotDate ? 'snapshot' : 'provider' : null,
+      snapshotDate: current?.snapshotDate || null }),
     dispose() { disposed = true; cancelPending(); generation++; cache.clear(); },
   };
 }

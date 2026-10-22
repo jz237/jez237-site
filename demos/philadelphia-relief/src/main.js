@@ -902,6 +902,7 @@ async function boot() {
   window.philadelphiaRelief = Object.freeze({
     stats: () => ({
       photographic: photographic.stats(),
+      neighborhood: neighborhood.stats(),
       bathymetry: bathymetry.stats(),
       cityFeatures: cityFeatures?.stats() || { mode: null, resources: 0 },
       rendering: { frames: renderedFrames, delay: scheduledDelay, saving: powerToggle.checked },
@@ -1037,6 +1038,7 @@ async function boot() {
       imageryClock += dt;
       if (imageryClock > .5) {
         imageryClock = 0;
+        neighborhood.consider(now, state, false);
         imageryDetail.consider(now, false, viewW, 1, effectiveQuality, state.imageryDetail, viewH);
       }
       ui.updateReadout({ pose: now, groundY: sampleElevation(now.lon, now.lat),
