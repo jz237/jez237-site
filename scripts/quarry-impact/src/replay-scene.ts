@@ -63,7 +63,7 @@ export class ReplayScene {
     while(this.eventIndex<this.doc.events.length&&this.doc.events[this.eventIndex].time<=time){
       const e=this.doc.events[this.eventIndex++],c=this.cars[e.car];
       c.current.fromArray(e.pose);c.currentQ.fromArray(e.pose,3).normalize();c.root.position.copy(c.current);c.root.quaternion.copy(c.currentQ);c.root.updateMatrixWorld(true);
-      if(e.kind==='rip')c.ripAssembly(e.part!,true);
+      if(e.kind==='rip'){const wheel=/^wheel-([0-3])$/.exec(e.part!);if(wheel)c.shedWheel(+wheel[1],true);else c.ripAssembly(e.part!,true);}
       if(e.kind==='repair'){c.repair();c.engineStall=this.doc.meta.engineModel===1?0:undefined;c.tyreDamage=this.doc.meta.tyreModel===1?[0,0,0,0]:undefined;}
       if(e.kind==='hit'){c.health=e.health!;const point=new T.Vector3().fromArray(e.point!).applyQuaternion(c.currentQ).add(c.current),direction=new T.Vector3().fromArray(e.direction!).applyQuaternion(c.currentQ),paint=e.paint===undefined?undefined:new T.Color(e.paint);if(e.scar)c.scar(point,direction,paint);else c.hit(point,direction,e.damage!,e.time,true,paint);}
       if(performance.now()-start>=budgetMs&&this.eventIndex<this.doc.events.length&&this.doc.events[this.eventIndex].time<=time){this.incomplete=true;this.show(false);return false;}

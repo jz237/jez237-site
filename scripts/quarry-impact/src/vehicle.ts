@@ -40,7 +40,7 @@ import {puddleDepth,type Puddle} from './puddle-splashes';
 import {wheelResponse,TireContact} from './wheel-mechanics';
 import {wheelTearsOff} from './wheel-physics';
 import {EngineMisfire} from './engine-misfire';
-import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowoutImpulse,bentRimTyre,rimWobble,springBias,sagBias,driveBias,thrustAngle,leakBrakeFluid,brakeFluidFactor,steerRate,throttleJams,jammedThrottle,CLUTCH,clutchGrip,clutchSlips,steerPlay,steerWander,tyreRub,rubWear,electricalFault,electricalCut} from './damage-handling';
+import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowoutImpulse,bentRimTyre,rimWobble,springBias,sagBias,driveBias,thrustAngle,leakBrakeFluid,brakeFluidFactor,steerRate,throttleJams,jammedThrottle,CLUTCH,clutchGrip,clutchSlips,steerPlay,steerWander,tyreRub,rubWear,electricalFault,electricalCut,WHEEL_NUTS,loosenNuts,nutShimmy} from './damage-handling';
 import {leakRates,dripInterval,FLAME,fuelSpacing} from './fluid-leaks';
 import {drainOil,starvationWear,seizes,OIL,drainCoolant,overheatWear,FUEL_TANK,drainFuel,fuelFeed} from './oil-starvation';
 import {MAX_ENGINE_RESTART} from './engine-stall';
@@ -178,6 +178,10 @@ export class Vehicle {
   electricalFault = 0;
   electricalCut = false;
   electricalCuts = 0;
+  /** How far each wheel's nuts have worked loose (offline events; 1 = off) and the toe it is shimmying by. */
+  readonly nutLoose = new Float32Array(4);
+  readonly wheelShimmy = new Float32Array(4);
+  wheelsShed = 0;
   private electricClock = 0;
   private rubClock = 0;
   steerWander = 0;
@@ -396,7 +400,7 @@ export class Vehicle {
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
-    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.clutchGrip=1;this.clutchBurn=0;this.clutchSmokeClock=0;this.clutchSmoke=0;this.steerPlay=0;this.steerWander=0;this.doorOpenTime=0;this.doorsTorn=0;this.doorSlams=0;this.rubDrag.fill(0);this.rubSmoke=0;this.rubClock=0;this.electricalFault=0;this.electricalCut=false;this.electricalCuts=0;this.electricClock=0;this.wanderClock=0;this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.fuelLevel=FUEL_TANK.start;this.fuelClock=0;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
+    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.clutchGrip=1;this.clutchBurn=0;this.clutchSmokeClock=0;this.clutchSmoke=0;this.steerPlay=0;this.steerWander=0;this.doorOpenTime=0;this.doorsTorn=0;this.doorSlams=0;this.rubDrag.fill(0);this.rubSmoke=0;this.rubClock=0;this.electricalFault=0;this.electricalCut=false;this.electricalCuts=0;this.electricClock=0;this.nutLoose.fill(0);this.wheelShimmy.fill(0);this.wheelsShed=0;this.wanderClock=0;this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.fuelLevel=FUEL_TANK.start;this.fuelClock=0;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
     if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
@@ -562,6 +566,13 @@ export class Vehicle {
     this.steerRate=this.extendedDamage?steerRate(this.structuralDamage?.[0]??0):1;
     this.steerPlay=this.extendedDamage?steerPlay(this.wreckParts.wheelDamage):0;this.wanderClock+=dt;
     this.steerWander=this.steerPlay>0?steerWander(this.steerPlay,this.speed,this.wanderClock,this.id):0;
+    // Knocked wheels work their nuts loose as they turn: a growing shimmy, then the wheel comes off on the move.
+    for(let i=0;i<4;i++){
+      if(!this.extendedDamage||this.wreckParts.wheelLost[i]){this.nutLoose[i]=this.extendedDamage?this.nutLoose[i]:0;this.wheelShimmy[i]=0;continue;}
+      this.nutLoose[i]=loosenNuts(this.nutLoose[i],this.wreckParts.wheelDamage[i],Math.abs(this.speed)*dt);
+      this.wheelShimmy[i]=this.nutLoose[i]>0?nutShimmy(this.nutLoose[i],this.wheelAngle(i)):0;
+      if(this.nutLoose[i]>=1)this.shedWheel(i);
+    }
     // Crushed arches rub the tyres: drag on that corner, the tyre scrubbing down, rubber smoke and a squeal.
     let rubbing=0;
     for(let i=0;i<4;i++){const r=this.extendedDamage&&!this.wreckParts.wheelLost[i]?tyreRub(this.structuralDamage,i):0;this.rubDrag[i]=r;
@@ -723,7 +734,7 @@ export class Vehicle {
       w.rotation.set(0,(i<2?this.steering:0)+corner.toe+(i>1?this.thrustAngle:0),0);
       w.rotateX(-this.wheelAngle(i));
       // A bent rim runs out of true: tilted in its own spinning frame, the wheel visibly wobbles as it turns.
-      if(this.extendedDamage)w.rotateZ(rimWobble(this.wreckParts.wheelDamage[i]));
+      if(this.extendedDamage)w.rotateZ(rimWobble(this.wreckParts.wheelDamage[i])+this.nutLoose[i]*WHEEL_NUTS.tilt);
       const coating=this.surfaceFinish.coating.value;
       this.tireContacts[i].update(this.controller,i,this.specification.mass,this.wreckParts.wheelDamage[i],i%2?coating.w:coating.z,tyre===undefined?undefined:{failure:tyreFailure(tyre),radius:corner.radius,baseRadius:wheelResponse(this.wreckParts.wheelDamage[i],i%2?1:-1,this.speed,vehicleWheelRadius(this.kind),0,vehicleFlatTyreRadius(this.kind)).radius});
     }
@@ -874,6 +885,12 @@ export class Vehicle {
   private measureCrushFrame():CrushFrame{
     const box=new T.Box3();for(const mesh of this.panels){const rest=mesh.userData.wreckRest as T.BufferAttribute|undefined;if(rest)box.union(new T.Box3().setFromBufferAttribute(rest));}
     return{x:Math.max(.5,Math.abs(box.min.x),Math.abs(box.max.x)),z:Math.max(1,Math.abs(box.min.z),Math.abs(box.max.z)),top:Math.max(.8,box.max.y)};
+  }
+  /** A wheel whose nuts have worked off leaves the car on the move; replays get it as a 'wheel-N' rip. */
+  shedWheel(i:number,quiet=false){
+    if(this.wreckParts.wheelLost[i]||!this.wheels[i])return false;
+    if(!quiet){this.onVisualEvent?.({kind:'rip',pose:this.visualPose(),part:`wheel-${i}`});this.wheelsShed++;}
+    this.wheelShimmy[i]=0;this.tearOffWheel(i,this.right.clone().multiplyScalar(i%2?1:-1),quiet);return true;
   }
   private tearOffWheel(i:number,direction:T.Vector3,quiet:boolean){
     const w=this.wheels[i],contact=this.tireContacts[i];this.wreckParts.wheelLost[i]=1;

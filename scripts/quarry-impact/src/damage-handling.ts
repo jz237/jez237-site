@@ -136,3 +136,13 @@ export function electricalCut(severity:number,time:number,seed:number){
   return t>=start&&t<start+length;
 }
 export const electricalWarning=(severity:number)=>severity>0?'ELECTRICAL FAULT':'';
+/** A wheel knocked past WHEEL_NUTS.onset starts working its nuts loose as it turns: the looser it gets the more it
+ * shimmies (toe swinging with each revolution) and wobbles, until at 1 it comes off on the move. */
+export const WHEEL_NUTS={onset:.12,rate:.01,shimmy:.035,tilt:.09,warn:.35} as const;
+export function loosenNuts(loose:number,wheelDamage:number,metres:number){
+  const d=clamp01(wheelDamage);if(d<=WHEEL_NUTS.onset||!(metres>0))return clamp01(loose);
+  return clamp01(clamp01(loose)+metres*(d-WHEEL_NUTS.onset)/(1-WHEEL_NUTS.onset)*WHEEL_NUTS.rate);
+}
+/** Toe (radians) a loose wheel swings through at this point in its revolution. */
+export const nutShimmy=(loose:number,angle:number)=>clamp01(loose)*WHEEL_NUTS.shimmy*Math.sin(Number.isFinite(angle)?angle:0);
+export const nutWarning=(loose:ArrayLike<number>)=>Array.from(loose).some(v=>v>=WHEEL_NUTS.warn)?'WHEEL LOOSE':'';
