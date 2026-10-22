@@ -59,6 +59,8 @@ function discGlowTexture(){
   for(let y=0;y<n;y++)for(let x=0;x<n;x++){const r=Math.hypot(x-n/2+.5,y-n/2+.5)/(n/2),a=Math.max(0,1-r);const k=(y*n+x)*4;d[k]=d[k+1]=d[k+2]=255;d[k+3]=Math.round(255*a*a);}
   glowTexture=new T.DataTexture(d,n,n);glowTexture.needsUpdate=true;return glowTexture;
 }
+/** Front crush past which a front-engined AI car starts ramming in reverse. */
+export const REVERSE_RAM_FRONT=.5;
 export const INVERTED={after:1,stall:1.5,drip:.35} as const;
 /** A burning car cooks itself: glass damage per second at full heat (side windows burst at 24) and tyre damage per second. */
 export const COOK={glass:2.2,tyre:.02} as const;
@@ -245,6 +247,8 @@ export class Vehicle {
   /** Seconds the driver is still dazed by a huge hit (offline events), and the lazy steering it is giving. */
   dazed = 0;
   /** The world point of this car's most crushed corner, for derby rivals to aim at (offline events; null otherwise). */
+  /** Front-engined and crushed past REVERSE_RAM_FRONT at the front (offline): the AI rams in reverse to save the engine. */
+  get protectFront(){return this.extendedDamage&&this.health>0&&!isRearEngineKind(this.kind)&&(this.structuralDamage?.[0]??0)>=REVERSE_RAM_FRONT;}
   get weakSpot(){return this.extendedDamage&&this.health>0?weakSpot(this.structuralDamage,this.current,this.forward,this.right,DEFINITIONS[this.kind].halfLength,DEFINITIONS[this.kind].halfWidth):null;}
   private dazeSteer = 0;
   /** Wheels the engine drives for this layout. */

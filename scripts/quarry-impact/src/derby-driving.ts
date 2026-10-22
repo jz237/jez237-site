@@ -40,6 +40,8 @@ function maneuver(car:DriverCar,cars:DriverCar[],m:DriverMemory,arena:ArenaLayou
 
 /** Derby-specific commitment and recovery. Make actual room after a low-speed
  * contact, then rebuild momentum before selecting the next attack. */
+/** Reverse ramming (protectFront cars): in range of the target they back into it at up to REVERSE_RAM.speed m/s. */
+export const REVERSE_RAM={range:30,speed:9} as const;
 export function driveDerby(car:DriverCar,cars:DriverCar[],m:DriverMemory,arena:ArenaLayout|null,dt:number,difficulty:{derbyPace:number;interceptLead:number}=AI_DIFFICULTIES.amateur,targetId?:number,attackPoint?:{x:number;z:number}):Input{
  const yaw=Math.atan2(car.forward.x,car.forward.z);
  let target=cars.find(c=>c.id===m.target&&c.health>0&&(targetId===undefined||c.id===targetId));
@@ -63,6 +65,13 @@ export function driveDerby(car:DriverCar,cars:DriverCar[],m:DriverMemory,arena:A
  if(!m.derby&&m.stalled>1.15){
   const rear=Math.min(m.clear.rear,derbyTrafficClearance(car,cars,-car.forward.x,-car.forward.z));
   m.attempts++;m.derby=maneuver(car,cars,m,arena,rear>1.6);m.stalled=0;
+ }
+ // A wrecked front: save the engine and ram in reverse, rear first (a real derby habit), when the target is in range.
+ const aimAt=target.weakSpot??target.current;
+ if(car.protectFront&&!m.derby&&dist(car.current,aimAt)<REVERSE_RAM.range){
+  const angle=wrap(Math.atan2(car.current.x-aimAt.x,car.current.z-aimAt.z)-yaw);
+  const steer=clamp(-angle*1.6,-.9,.9);m.steer+=clamp(steer-m.steer,-dt*3,dt*3);m.phase='reverse ram';
+  return{throttle:car.speed>-REVERSE_RAM.speed?-1:0,steer:m.steer,brake:0,handbrake:false};
  }
  let tx=0,tz=0,desired=19*difficulty.derbyPace;
  if(m.derby){
