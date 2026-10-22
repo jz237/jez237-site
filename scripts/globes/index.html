@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="data:," />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Globes · Water in Glass — Jez237</title>
+    <meta name="description" content="Tilt and stir five living glass globes in Will Waltz’s real-time WebGPU fluid simulation. Water, koi, kelp, coral reef and sea foam." />
+    <style>
+      /* (Until the app's stylesheet loads, and for a fatal error before the interface exists.) */
+      html, body { margin: 0; height: 100%; overflow: hidden; background: #020309; }
+      .globes-error {
+        position: fixed; inset: 0; display: grid; place-items: center; padding: 24px;
+        color: #c8d0ff; font: 15px/1.5 system-ui, sans-serif; text-align: center;
+      }
+      .site-links { position: fixed; z-index: 100; left: max(12px, env(safe-area-inset-left)); right: max(12px, env(safe-area-inset-right)); bottom: max(10px, env(safe-area-inset-bottom)); display: flex; justify-content: space-between; gap: 10px; pointer-events: none; font: 12px/1.4 system-ui, sans-serif; }
+      .site-links a { pointer-events: auto; color: #d9efff; text-decoration: none; padding: 8px 10px; border: 1px solid #8edcff33; border-radius: 20px; background: #03111dcc; touch-action: manipulation; }
+      .site-links a:hover, .site-links a:focus-visible { color: white; outline: 2px solid #8edcff; }
+    </style>
+  </head>
+  <body>
+    <div id="app"><div id="stage"></div></div>
+    <nav class="site-links" aria-label="Demo links"><a href="../page-3.html">← Demonstrations</a><a href="https://github.com/willwaltz/globes" title="Globes by Will Waltz · MIT license · Site build 1.0.0">Will Waltz · Source ↗</a></nav>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
