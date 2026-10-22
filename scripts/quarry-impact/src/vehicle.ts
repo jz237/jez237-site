@@ -282,7 +282,7 @@ export class Vehicle {
   onGearClunk?:(out:boolean)=>void;
   /** The loose engine clunked against its broken mounts. */
   onMountClunk?:()=>void;
-  onBreak?:(what:'spring'|'shaft'|'diff'|'tierod'|'exhaust'|'brakefire',wheel:number)=>void;
+  onBreak?:(what:'spring'|'shaft'|'diff'|'tierod'|'exhaust'|'brakefire'|'radiator',wheel:number)=>void;
   /** Gears left after gearbox damage (offline only; 5 = intact). */
   gearLimit = 5;
   /** Grip left under each tyre from oil or coolant on the ground (offline only). */
@@ -1048,7 +1048,7 @@ export class Vehicle {
     // The hit that first ruptures the radiator sprays coolant out of the grille in a burst of steam and splashes the ground.
     if(structureBefore&&this.structuralDamage&&!quiet&&(structureBefore[isRearEngineKind(this.kind)?1:0]??0)<RADIATOR.onset&&(this.structuralDamage[isRearEngineKind(this.kind)?1:0]??0)>=RADIATOR.onset){
       const end=isRearEngineKind(this.kind)?-1:1,half=DEFINITIONS[this.kind].halfLength,grille=new T.Vector3(0,.55,end*half*.85).applyQuaternion(this.previousQ).add(this.previous);
-      this.fx.emit(grille,RADIATOR_BURST.steam,5,1.2);this.radiatorBursts++;
+      this.fx.emit(grille,RADIATOR_BURST.steam,5,1.2);this.radiatorBursts++;this.onBreak?.('radiator',end>0?0:2);
       const g=this.ground.height(grille.x,grille.z);
       for(let k=0;k<RADIATOR_BURST.splash;k++){this.dripSeed=(Math.imul(this.dripSeed,1664525)+1013904223)>>>0;const r=this.dripSeed/4294967296,x=grille.x+(r-.5)*1.4,z=grille.z+(r*7%1-.5)*1.4;
         this.fx.slicks?.drip(x,g,z,1,r);this.drips[1]++;this.onDrip?.(x,g,z,1,r);}
