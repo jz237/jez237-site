@@ -71,5 +71,9 @@ export function leakBrakeFluid(fluid:number,frontCompression:number,dt:number){
 }
 export const brakeFluidFactor=(fluid:number)=>BRAKE_LINE.floor+(1-BRAKE_LINE.floor)*clamp01(fluid);
 export const brakeWarning=(fluid:number)=>clamp01(fluid)<BRAKE_LINE.warn?'BRAKES FADING':'';
+/** A front crushed past POWER_STEER.onset wrecks the power-steering pump: the wheel turns slowly and heavily. */
+export const POWER_STEER={onset:.5,rate:.4} as const;
+export const steerRate=(frontCompression:number)=>clamp01(frontCompression)>POWER_STEER.onset?POWER_STEER.rate:1;
+export const steerWarning=(rate:number)=>rate<1?'POWER STEERING FAILED':'';
 export const DAMPER_LOSS=.6;
 export function damperFactor(wheelDamage:number){return 1-DAMPER_LOSS*clamp01(wheelDamage);}
