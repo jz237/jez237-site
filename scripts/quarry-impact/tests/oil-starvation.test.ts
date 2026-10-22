@@ -37,3 +37,9 @@ test('a dry engine wears to a seizure under load, lurches the car and never rest
  assert.ok(on.later<on.speed&&on.later<3,'the car rolls to a stop');
  assert.ok(!off.seized&&(off.engine??0)<=.85+1e-9,'online-style engines do not starve');
 });
+test('a leaking radiator drains the coolant; low on coolant the engine overheats and wears under load',async()=>{
+ const {COOLANT,drainCoolant,overheatWear,coolantWarning}=await import('../src/oil-starvation');
+ assert.equal(drainCoolant(1,0,10),1);assert.ok(drainCoolant(1,1,10)<drainCoolant(1,.4,10));
+ assert.equal(overheatWear(.5,1,1),0);assert.ok(overheatWear(.05,1,1)>overheatWear(.2,1,1)&&overheatWear(.05,1,1)>overheatWear(.05,0,1));
+ assert.equal(coolantWarning(.1),'ENGINE OVERHEATING');assert.equal(coolantWarning(COOLANT.low),'');
+});
