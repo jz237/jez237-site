@@ -24563,5 +24563,132 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-22-factual-infographic-factual-infographic-hypothyroidism-a-sl",
+    "title": "Factual infographic: Hypothyroidism — A Slower Thyroid Signal",
+    "tests": "factual_subtype: medical-health-infographic; artwork-led unboxed anatomical atlas; source-backed clinical education; no subjective review; archive_slot=2026-10-22T17:20; concept=hypothyroidism-thyroid-hormone-deficiency-pituitary-signal; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished, richly detailed medical educational infographic, an original flowing anatomical atlas, directly on the image canvas. Subject: HYPOTHYROIDISM. Main title in elegant bold lettering: “HYPOTHYROIDISM”; subtitle directly beneath: “A slower thyroid signal”. Refined gouache, translucent watercolor and precise anatomical ink on a cool ivory ground, deep indigo annotations, warm coral thyroid tissue, sea-glass teal signal paths and restrained gold hormone particles. Artwork leads; organically integrated facts, no boxed grid, dashboard, detached cards, poster mockup, frame, photograph of paper, logos or watermarks. Asymmetric composition with generous breathing room and genuinely legible concise typography.\nDominant hero: a large exquisitely shaded anatomical illustration of the lower front of the neck, with the butterfly-shaped thyroid at its correct location. A gentle transparent anatomical window reveals the gland; finely differentiated lobes, subtle vessels and believable tissue shading, delicate unboxed leader lines. Do not imply that hypothyroidism always enlarges the gland or creates a visible lesion. Label “Thyroid gland” and “Makes too little thyroid hormone”. Let an elegant stream of sparse coral-gold hormone dots enter an illustrated vessel and curve across the page toward small, carefully rendered brain, heart and muscle studies. Label this pathway “Hormones travel in blood” and “Low levels slow many body functions”; concise integrated gloss “Energy use • warmth • organ function”. Do not depict literal dead organs, blocked vessels, molecular structures or numerical hormone concentrations.\nAbove and slightly left, a small schematic pituitary-to-thyroid signaling study, anatomically identified as schematic, connected to the neck hero by an indigo curved arrow: “Pituitary” → “TSH signal” → “Thyroid”. A slender return annotation reads “In primary thyroid failure, TSH usually rises”; nearby qualification “Pituitary disorders are an exception”. Do not fabricate an exact brain cross-section or other unlabeled endocrine pathways.\nTo the right of the hero, an organically nestled close-up concept study of immune cells approaching thyroid tissue, explicitly labeled “Hashimoto’s: immune attack on the thyroid” and “Most common cause”. No invented histopathology or bacterial infection. A short nearby line reads “Other causes: surgery, radiation, some medicines”.\nThe lower-left sweep carries open symptom callouts around a small dignified fictional man, late fifties, medium-brown skin, short salt-and-pepper curls, broad nose, stocky build, muted teal cardigan, sitting upright with hands around a warm mug; he is an illustrative person, not a sourced clinical case or diagnostic example. Labels in a loose curved path: “Fatigue”, “Feeling cold”, “Dry skin”, “Constipation”, “Slower heart rate”. Tie these together with “Symptoms vary — symptoms alone cannot diagnose it”. No body shaming, no dramatic distress.\nThe lower-right visual pathway integrates a realistically painted blood sample tube and a simple unbranded medicine bottle with a few tablets, not a prescription label and no dose: “Check: TSH + free T4”, “History + examination help find the cause”, “Levothyroxine replaces missing hormone”, “Clinician-guided dose + follow-up blood tests”, and a smaller clear line “Often rechecked 6–8 weeks after starting or changing a dose”. A delicate closing annotation reads “Do not stop or change medicine without your clinician”.\nAt the bottom, distinct readable open clinical notes, not alarmist boxes: “Pregnant? Contact your clinician promptly — hormone needs may change.” “Iodine or kelp supplements are not a universal fix; excess can worsen autoimmune thyroid disease.” A restrained coral emergency accent accompanies “Rare emergency: severe untreated hypothyroidism can cause myxedema coma — immediate medical treatment is essential.” Footer “General education, not a personal diagnosis”. Keep all essential anatomy, symptoms, evaluation, treatment and urgent context readable. Supporting studies should flow into the large neck artwork with varied scale, curving annotations and fine linework. Omit decorative flourishes before crowding clinical text. No bibliography, source URLs, invented statistics, cure claims, supplement recommendations, numerical lab thresholds or prescription dosing. Request medium quality, auto size, opaque background using the exact requested openai/gpt-image-2.5-sunburst model.",
+    "image": "images/2026-10-22-factual-infographic-factual-infographic-hypothyroidism-a-sl.jpg",
+    "thumb": "thumbs/2026-10-22-factual-infographic-factual-infographic-hypothyroidism-a-sl.webp",
+    "color": "#d7cec5",
+    "date": "2026-10-22",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "hypothyroidism-thyroid-hormone-deficiency-pituitary-signal",
+      "imageSha256": "d9688b228e447de46fac4167557ca0b3ad0c709cc7256e291e1e59ea78ffb3ee",
+      "imageDHash": "f8bab2960eac0ec3"
+    },
+    "factualInfographic": {
+      "topic": "How hypothyroidism reduces thyroid hormone availability, slows body functions, and is evaluated and managed",
+      "description": "Thyroid anatomy and hormone deficiency, primary TSH signaling, common causes and symptoms, evaluation and evidence-based management with essential clinical cautions.",
+      "sourceNote": "NIDDK: https://www.niddk.nih.gov/health-information/endocrine-diseases/hypothyroidism ; American Thyroid Association: https://www.thyroid.org/hypothyroidism/ . Verified thyroid anatomy and function, TSH feedback qualification, causes, variable symptoms, blood-test evaluation, levothyroxine monitoring, pregnancy, iodine caution and rare myxedema emergency.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-22T21:21:01.051637+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Diabetes and Digestive and Kidney Diseases",
+            "title": "Hypothyroidism (Underactive Thyroid)",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/endocrine-diseases/hypothyroidism"
+          },
+          {
+            "id": "S2",
+            "publisher": "American Thyroid Association",
+            "title": "Hypothyroidism",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.thyroid.org/hypothyroidism/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Hypothyroidism means the thyroid does not make enough thyroid hormones to meet body needs.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The thyroid is a butterfly-shaped gland in the lower front of the neck; it releases thyroid hormones into the blood to reach body tissues.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Thyroid hormones help regulate energy use and warmth and support the brain, heart, muscles and other organs; low levels slow many body functions.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The pituitary releases TSH, which signals the thyroid to work. In primary thyroid failure TSH usually rises as hormone output falls; pituitary disease is an exception.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Hashimoto autoimmune disease attacks the thyroid and is the most common cause of hypothyroidism; thyroid surgery, radiation and some medicines are other causes.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Possible symptoms include fatigue, feeling cold, dry skin, constipation and slowed heart rate; symptoms vary and are not diagnostic alone.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "TSH and free T4 blood tests help diagnose hypothyroidism; history and examination help find the cause.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Levothyroxine replaces missing thyroid hormone, with clinician-guided dosing and follow-up blood tests, commonly 6 to 8 weeks after starting or changing a dose.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Do not stop thyroid medicine or change its dose without consulting the clinician.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Excess iodine, including kelp or iodine supplements, can worsen autoimmune thyroid disease; supplements are not a universal fix.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Contact the clinician promptly if pregnant because thyroid hormone needs may change and untreated hypothyroidism can harm mother and baby.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Rare severe untreated hypothyroidism can progress to life-threatening myxedema coma, requiring immediate medical treatment.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
