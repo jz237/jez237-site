@@ -1306,3 +1306,16 @@ are visible. The ten-minute real-street endurance check runs at the new populati
 Photo traffic follow-up: the same street simulation now drives native Cesium vehicle models in photographic close-ups. Tile-relative heights and normal depth testing keep cars on loaded surfaces and behind buildings. The photo radius is bounded to 650/850 metres, with no hidden Three.js scenery uploads. Play/Pause and reduced motion apply in either view; the traffic shortcut preserves the selected renderer. Captured imagery cars remain stationary. The gallery and social preview now use a City Hall photographic capture with attribution preserved.
 
 Validation includes shared-simulation continuity, pause behavior, model lifetime and heading, GLB integrity, and tools/photo-traffic-fixture.html: an elevated local 3D Tiles road with a building for checking attachment and occlusion without a hosted imagery token.
+
+October 22 neighborhood resilience: 504 small, streamed OSM extracts cover
+Center City, University City, the museum district and the sports complex. They
+come from BBBike's October 18 Philadelphia extract and retain mapped buildings,
+streets, address points and individual trees. The public manifest records source,
+date, input checksum and each cell's checksum; editing-account metadata is omitted.
+`tools/build_neighborhoods.py` reproduces the cells from the downloaded XML gzip
+using Python's standard library. No source download is needed during a visit.
+The same-origin neighborhood Function serves these versioned static assets first;
+outside their coverage it retains bounded, cached provider queries. Photo mode
+cancels pending neighborhood work; returning to the diorama reuses loaded cells.
+Read-only diagnostics expose neighborhood source, date, feature count and pending
+state. Tests verify every cell and exercise unavailable assets and mode changes.

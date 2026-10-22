@@ -22,6 +22,21 @@ test('accepts complete Functions deployment', async () => {
   await checkPhillyLive('https://example.test', mock());
 });
 
+for (const failure of ['', 'missing', 'old data', 'provider fallback']) {
+  test(`neighborhood release check ${failure ? `rejects ${failure}` : 'verifies exact published map data'}`, async () => {
+    const body='{"key":"-75.1640,39.9490","snapshotDate":"2026-10-18","elements":[]}\n';
+    const expectedNeighborhoods=[{key:'-75.1640,39.9490',date:'2026-10-18',
+      sha256:createHash('sha256').update(body).digest('hex')}];
+    const fetcher=(url,options)=>url.pathname.endsWith('/street-detail')&&url.searchParams.has('lon')
+      ?Promise.resolve(new Response(failure==='old data'?'old neighborhood':body,{
+        status:failure==='missing'?503:200,
+        headers:failure==='provider fallback'?{}:{'X-Neighborhood-Source':'snapshot-2026-10-18'},
+      })):mock()(url,options);
+    const check=checkPhillyLive('https://example.test',fetcher,{expectedNeighborhoods});
+    if(failure)await assert.rejects(check,/neighborhood check failed/);else await check;
+  });
+}
+
 const releaseAssets = { 'load/app-CURRENT.js': 'import "./chunk-CURRENT.js";',
   'load/chunk-CURRENT.js': 'export const ready = true;', 'load/style-CURRENT.css': 'body { margin: 0; }' };
 const expectedBuild = { version: 1, sourceHash: 'current-source', entry: 'load/app-CURRENT.js',

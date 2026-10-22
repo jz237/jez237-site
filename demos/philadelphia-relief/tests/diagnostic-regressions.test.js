@@ -38,6 +38,29 @@ test('stalled neighborhood requests time out and back off instead of staying pen
   t.mock.timers.tick(60001);layer.consider(pose,state);assert.equal(calls,2);
 });
 
+test('photo handoff cancels hidden neighborhood work and returning to the diorama resumes it', async t=>{
+  const requests=[],installed=[];
+  t.mock.method(globalThis,'fetch',(url,{signal})=>new Promise(resolve=>requests.push({url,signal,resolve})));
+  const layer=createNeighborhood({onData:doc=>installed.push(doc)});
+  t.after(()=>layer.dispose());
+  layer.consider(pose,state,false);layer.consider(pose,state,false);
+  assert.equal(requests.length,0);
+  layer.consider(pose,state);layer.consider(pose,state);
+  assert.equal(layer.stats().loading,true);
+  layer.consider(pose,state,false);
+  assert.equal(requests[0].signal.aborted,true);
+  const doc={...streetCell(new URL(requests[0].url,'https://example.test/').searchParams),
+    snapshotDate:'2026-10-18',elements:[]};
+  requests[0].resolve(Response.json(doc));await settle();
+  assert.equal(installed.length,0);
+  layer.consider(pose,state);
+  requests[1].resolve(Response.json(doc));await settle();
+  assert.equal(installed.length,1);
+  assert.equal(layer.stats().snapshotDate,'2026-10-18');
+  layer.dispose();layer.consider({...pose,lon:-75.10},state);layer.consider({...pose,lon:-75.10},state);
+  assert.equal(requests.length,2);
+});
+
 test('historical imagery retries a failed tile without moving the camera and preserves loaded tiles', async t=>{
   let clock=0,calls=0,closed=0;
   t.mock.method(globalThis,'fetch',async()=>{calls++;return new Response('image',{status:calls===1?503:200});});

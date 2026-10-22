@@ -5,7 +5,7 @@ import { isDeepStrictEqual } from 'node:util';
 // Invalid requests exercise routing without downloading imagery or contacting
 // aircraft providers. Missing Functions otherwise look like a healthy HTML site.
 export async function checkPhillyLive(base, fetcher = fetch,
-  { requireAircraft = false, requireOutages = false, expectedBuild = null } = {}) {
+  { requireAircraft = false, requireOutages = false, expectedBuild = null, expectedNeighborhoods = [] } = {}) {
   const root = new URL('/demos/philadelphia-relief/', base);
   const request = async (path, method = 'GET') => {
     const url = new URL(path, root);
@@ -60,6 +60,15 @@ export async function checkPhillyLive(base, fetcher = fetch,
     const response = await request(path, method);
     if (response.status !== status || !(await response.text()).includes(text)) {
       throw new Error(`Philadelphia deployment blocked: ${path} Function is missing or incorrect (HTTP ${response.status}).`);
+    }
+  }
+  for (const cell of expectedNeighborhoods) {
+    const [lon, lat] = cell.key.split(',');
+    const response = await request(`street-detail?lon=${lon}&lat=${lat}`);
+    const hash = createHash('sha256').update(Buffer.from(await response.arrayBuffer())).digest('hex');
+    if (!response.ok || response.headers.get('X-Neighborhood-Source') !== `snapshot-${cell.date}`
+      || hash !== cell.sha256) {
+      throw new Error(`Philadelphia neighborhood check failed: ${cell.key} is missing or differs from the release.`);
     }
   }
   if (requireOutages) {

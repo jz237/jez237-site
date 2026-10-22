@@ -8,6 +8,8 @@ import { checkHiddenReefImages } from './check_hidden_reef_images.mjs';
 import { checkPondFilterLinks } from './check_pond_filter_links.mjs';
 import { checkOceanSnapshot, checkOpenSeaLive } from './check_open_sea_live.mjs';
 import { waitForProductionBuilds } from './wait_pages_builds.mjs';
+import { createHash } from 'node:crypto';
+import { snapshotDate } from '../functions/demos/philadelphia-relief/_lib/neighborhood-snapshot.js';
 
 // All commands use an explicit project root, even when invoked from a staging
 // directory. A static-only upload must never replace the live Functions bundle.
@@ -30,6 +32,16 @@ for (const path of ['_headers', 'index.html', 'demos/philadelphia-relief/index.h
 // Reject stale policy/storefront files before they can replace a repaired site.
 const phillyRoot = 'demos/philadelphia-relief/';
 const expectedBuild = JSON.parse(readFileSync(resolve(repo, phillyRoot, 'load/manifest.json'), 'utf8'));
+const neighborhoodRoot = `${phillyRoot}data/neighborhoods/${snapshotDate}/`;
+const neighborhoods = JSON.parse(readFileSync(resolve(repo, neighborhoodRoot, 'manifest.json'), 'utf8'));
+for (const cell of Object.values(neighborhoods.cells)) {
+  const path = resolve(stage, neighborhoodRoot, cell.file);
+  if (!existsSync(path) || createHash('sha256').update(readFileSync(path)).digest('hex') !== cell.sha256) {
+    throw new Error(`Stale upload snapshot: neighborhood ${cell.file} is missing or differs from the manifest.`);
+  }
+}
+const expectedNeighborhoods = ['-75.1640,39.9490','-75.1800,39.9670','-75.1920,39.9010'].map(key =>
+  ({ key, date: snapshotDate, sha256: neighborhoods.cells[key].sha256 }));
 for (const path of ['_headers', `${phillyRoot}index.html`, `${phillyRoot}load/manifest.json`,
   ...Object.keys(expectedBuild.files).map(path => `${phillyRoot}${path}`),
   'prototypes/hidden-reef/index.html',
@@ -63,7 +75,7 @@ async function verifyRelease(url) {
   // A later service may still be warming when Philadelphia first becomes ready.
   for (let attempt = 0; attempt < 10; attempt++) {
     try {
-      await checkPhillyLive(url, fetch, { requireAircraft, requireOutages, expectedBuild });
+      await checkPhillyLive(url, fetch, { requireAircraft, requireOutages, expectedBuild, expectedNeighborhoods });
       await checkHiddenReefImages(url);
       await checkPondFilterLinks(url);
       await checkOpenSeaLive(url,repo);
