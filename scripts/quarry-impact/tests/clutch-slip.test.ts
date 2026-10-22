@@ -27,7 +27,8 @@ test('a slipping clutch flares the revs and slows the car at full throttle, burn
   try{
    c.extendedDamage=extended;c.place(0,0,0);c.render(1);
    for(let k=0;k<30;k++){c.preStep(1/60);world.step();c.postStep(1/60,k/60);}
-   if(c.structuralDamage)c.structuralDamage[0]=front;c.input.throttle=1;let rpm=0;
+   // Wear the clutch itself (as if burnt) rather than crushing the front, so the front-crush faults (electrics, gearbox) stay out of it.
+   (c as unknown as {clutchBurn:number}).clutchBurn=front>0?1-clutchGrip(front):0;c.input.throttle=1;let rpm=0;
    for(let k=0;k<60*5;k++){c.preStep(1/60);world.step();c.postStep(1/60,.5+k/60);if(k>=60&&k<120)rpm=Math.max(rpm,c.rpm);}
    return{speed:c.speed,rpm,grip:c.clutchGrip,smoke:c.clutchSmoke,structure:!!c.structuralDamage};
   }finally{c.dispose();world.free();}

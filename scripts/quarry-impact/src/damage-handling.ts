@@ -194,3 +194,12 @@ export function flopToe(wheel:number,speed:number,time:number){
   return side*TIE_ROD.toe+TIE_ROD.wobble*pace*(Math.sin(t*3.1+wheel)*.7+Math.sin(t*7.3+wheel*2)*.3);
 }
 export const tieRodWarning=(snapped:ArrayLike<number>)=>Array.from(snapped).some(v=>v===0)?'TIE ROD SNAPPED':'';
+/** A stripped gearbox jumps out of gear under load: with the throttle hard down it pops into neutral now and then — the
+ * revs flare, the drive goes, and a moment later it clunks back in. More gears lost, more often. Fixed per car and time. */
+export const GEAR_POP={period:1.2,odds:.1,cap:.4,throttle:.7,minLength:.4,maxLength:.8} as const;
+/** Length (s) of a pop that starts in this time slot, or 0: at most one per slot, chance growing with each lost gear. */
+export function gearPop(gearLimit:number,time:number,seed:number){
+  const lost=5-Math.max(1,Math.min(5,Math.floor(Number.isFinite(gearLimit)?gearLimit:5)));if(lost<=0||!Number.isFinite(time))return 0;
+  const slot=Math.floor(time/GEAR_POP.period),h=(n:number)=>{const x=Math.sin(slot*91.17+seed*12.13+n*45.7)*43758.5453;return x-Math.floor(x);};
+  return h(0)<Math.min(GEAR_POP.cap,lost*GEAR_POP.odds)?GEAR_POP.minLength+(GEAR_POP.maxLength-GEAR_POP.minLength)*h(1):0;
+}
