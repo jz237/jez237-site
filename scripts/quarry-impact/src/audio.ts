@@ -10,7 +10,7 @@ import {audioListenerPosition,AudioListenerMotion,type AudioPerspective} from '.
 import {starterSamples} from './engine-stall';
 import {engineDamageLevel} from './engine-condition';
 import {classicEngineVoice,vehicleWheelRadius} from './classic-vehicle-specs';
-import {RATTLE,rattleRate,thumpRate,EventClock,synthClank,synthThump,hornStuck,synthHorn,synthGrowl,synthWind} from './damage-rattle';
+import {RATTLE,rattleRate,thumpRate,EventClock,synthClank,synthThump,hornStuck,synthHorn,synthGrowl,synthWind,synthSqueal} from './damage-rattle';
 import {knockRate} from './oil-starvation';
 /** Front compression past which the fan hits its shroud, and its clatter rate cap. */
 const FAN_CLATTER={onset:.35,max:12} as const;
@@ -249,6 +249,20 @@ export class Sound {
       l.pan.positionX.value=car.current.x;l.pan.positionY.value=car.current.y+.5;l.pan.positionZ.value=car.current.z;l.gain.gain.setTargetAtTime(.16,now,.05);
     }
     for(const [id,l] of this.horns)if(!live.has(id)){l.gain.gain.setTargetAtTime(0,now,.05);l.source.stop(now+.3);this.horns.delete(id);}
+  }
+  /** Slipping fan belts squealing under load, by car id (offline, within earshot), pitched with the revs. */
+  private squeals=new Map<number,Loop>();
+  beltSqueals(cars:readonly Vehicle[],listener:T.Vector3){
+    if(!this.ready||!this.fxBus)return;
+    if(!this.buffers.has('squeal')){const c=this.ctx;if(!c||typeof c.createBuffer!=='function')return;const d=synthSqueal(c.sampleRate),b=c.createBuffer(1,d.length,c.sampleRate);b.copyToChannel(d,0);this.buffers.set('squeal',b);}
+    const now=this.ctx!.currentTime,live=new Set<number>();
+    for(const car of cars){
+      if(!car.extendedDamage||car.health<=0||car.squeal<.02||car.current.distanceTo(listener)>RATTLE.hearing)continue;
+      live.add(car.id);let l=this.squeals.get(car.id);if(!l){l=this.loop('squeal',this.fxBus);if(!l)continue;this.squeals.set(car.id,l);}
+      l.pan.positionX.value=car.current.x;l.pan.positionY.value=car.current.y+.6;l.pan.positionZ.value=car.current.z;
+      l.source.playbackRate.setTargetAtTime(.8+Math.min(.6,(car.rpm??0)/9000),now,.06);l.gain.gain.setTargetAtTime(.2*car.squeal,now,.06);
+    }
+    for(const [id,l] of this.squeals)if(!live.has(id)){l.gain.gain.setTargetAtTime(0,now,.05);l.source.stop(now+.3);this.squeals.delete(id);}
   }
   /** The wind roaring through the player's open wreck (level 0 = silent), pitched up with speed. */
   private windLoop?:Loop;

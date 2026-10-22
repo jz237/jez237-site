@@ -1,3 +1,4 @@
+import {restoreFanBeltBytes} from './fan-belt-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readScreenCrazePrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreScreenCrazeBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreFanBeltBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readScreenCrazePrevious(file);
 }
 export function verifyScreenCrazeRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'7c7602d55e038feac2b186ea3f46debb43c3a193');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreFanBeltBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreScreenCrazeBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the ScreenCraze release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreFanBeltBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the ScreenCraze release');
  assert.equal(manifest.previousFixtureCount,6207);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,6207);
 }

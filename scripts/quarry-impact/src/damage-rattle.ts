@@ -88,3 +88,14 @@ export function synthWind(sampleRate:number):Float32Array<ArrayBuffer>{
   for(let i=0;i<512;i++){const g=i/512;out[i]*=g;out[length-1-i]*=g;}
   return out;
 }
+/** A one-second loop of a slipping fan belt: a shrill, warbling squeal (a few close harmonics, wavering). */
+export function synthSqueal(sampleRate:number):Float32Array<ArrayBuffer>{
+  const length=Math.round(sampleRate),out=new Float32Array(length);let ph=0;
+  for(let i=0;i<length;i++){
+    const t=i/sampleRate,f=2300+180*Math.sin(2*Math.PI*6*t)+90*Math.sin(2*Math.PI*17*t);ph+=2*Math.PI*f/sampleRate;
+    const chatter=.55+.45*Math.max(0,Math.sin(2*Math.PI*11*t));
+    out[i]=(Math.sin(ph)*.6+Math.sin(ph*2.01)*.25+Math.sin(ph*.5)*.15)*chatter*.4;
+  }
+  for(let i=0;i<256;i++){const g=i/256;out[i]*=g;out[length-1-i]*=g;}
+  return out;
+}

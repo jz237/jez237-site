@@ -356,3 +356,27 @@ export function openness(o:{windscreen?:boolean;panes?:number;doors?:number;hood
 export const openDrag=(open:number,speed:number)=>{const v=Number.isFinite(speed)?speed:0;return clamp01(open)*AERO.drag*v*v;};
 /** Wind roar level 0..1 heard in the cabin. */
 export const windRoar=(open:number,speed:number)=>{const s=Math.abs(Number.isFinite(speed)?speed:0)/AERO.roar;return clamp01(open)*Math.min(1,s*s);};
+/** The fan belt: a crushed front knocks the pulleys out of line, so the belt slips and squeals under load; past BELT.snap
+ * it snaps on most cars. Then the water pump stops (the engine heats whatever the radiator) and the alternator stops: the
+ * battery runs down over BELT.battery seconds, the lights flicker and die, the ignition sputters, and flat it stops the car. */
+export const BELT={slip:.14,snap:.28,share:.6,heat:.004,cap:.85,battery:75,dim:.35,sputter:.2,slot:.25,cutOdds:.7} as const;
+export const beltSlip=(front:number)=>clamp01(((Number.isFinite(front)?front:0)-BELT.slip)/(BELT.snap-BELT.slip));
+export function beltSnaps(front:number,carId:number){const x=Math.sin(carId*23.7+5.1)*43758.5453;return Number.isFinite(front)&&front>=BELT.snap&&x-Math.floor(x)<BELT.share;}
+/** Squeal level 0..1: a slipping belt under throttle. */
+export const beltSqueal=(slip:number,throttle:number)=>clamp01(slip)*clamp01((Math.abs(Number.isFinite(throttle)?throttle:0)-.3)/.7);
+/** Engine damage after dt seconds running with no water pump. */
+export const beltHeat=(engineDamage:number,throttle:number,dt:number)=>engineDamage>=BELT.cap||!(dt>0)?engineDamage:Math.min(BELT.cap,engineDamage+dt*BELT.heat*(.35+.65*clamp01(Math.abs(Number.isFinite(throttle)?throttle:0))));
+/** Battery charge after dt seconds running with no alternator. */
+export const drainBattery=(level:number,running:boolean,dt:number)=>running&&dt>0?Math.max(0,clamp01(level)-dt/BELT.battery):clamp01(level);
+const slotHash=(slot:number,seed:number)=>{const x=Math.sin(slot*12.9898+seed*78.233)*43758.5453;return x-Math.floor(x);};
+/** Whether a low battery cuts the ignition in this moment: never above BELT.sputter, more often as it drains, always when flat. */
+export function batteryCut(level:number,clock:number,seed:number){
+  const l=clamp01(level);if(l<=0)return true;if(l>=BELT.sputter)return false;
+  return slotHash(Math.floor((Number.isFinite(clock)?clock:0)/BELT.slot),seed)<(1-l/BELT.sputter)*BELT.cutOdds;
+}
+/** Whether the headlights are lit at this charge: full above BELT.dim, flickering below, dark when flat. */
+export function batteryLights(level:number,clock:number,seed:number){
+  const l=clamp01(level);if(l>=BELT.dim)return true;if(l<=0)return false;
+  return slotHash(Math.floor((Number.isFinite(clock)?clock:0)/.12),seed+7)<l/BELT.dim;
+}
+export const beltWarning=(slip:number,snapped:boolean,battery:number)=>snapped?(battery<=0?'BATTERY FLAT':battery<BELT.dim?'BATTERY LOW':'FAN BELT SNAPPED'):slip>=.3?'BELT SLIPPING':'';
