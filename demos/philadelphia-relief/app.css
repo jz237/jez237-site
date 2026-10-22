@@ -648,7 +648,7 @@ input[type="range"]:focus-visible::-webkit-slider-thumb { transform: scale(1.25)
 .play-btn:hover, .play-btn[aria-pressed="true"] { background: var(--accent); color: #12100c; }
 
 .timeline-track {
-  position: relative; flex: 1; height: 22px; cursor: pointer;
+  position: relative; flex: 1; height: 28px; margin-inline: 4px; cursor: pointer;
   display: flex; align-items: center;
 }
 .timeline-track::before {
@@ -662,15 +662,19 @@ input[type="range"]:focus-visible::-webkit-slider-thumb { transform: scale(1.25)
 .timeline-shots { position: absolute; inset: 0; }
 .timeline-shot {
   position: absolute; top: 50%;
-  width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px;
+  width: 24px; height: 24px; margin: -12px 0 0 -12px;
+  border: 0; background: transparent; padding: 0; cursor: pointer;
+  display: grid; place-items: center;
+}
+.timeline-shot::after {
+  content: ""; width: 9px; height: 9px; box-sizing: border-box;
   border-radius: 50%;
   border: 1px solid var(--line-strong);
   background: var(--bg);
-  padding: 0; cursor: pointer;
   transition: transform 160ms var(--ease), background-color 160ms var(--ease);
 }
-.timeline-shot:hover { transform: scale(1.35); }
-.timeline-shot[aria-current="true"] {
+.timeline-shot:hover::after { transform: scale(1.35); }
+.timeline-shot[aria-current="true"]::after {
   background: var(--accent); border-color: var(--accent); transform: scale(1.3);
 }
 .timeline-time {
@@ -1181,7 +1185,7 @@ body.hide-cursor .cinema-bar:focus-within { opacity: 1; }
 .readout-stats dt { font-size: 11px; }
 .readout-stats dd { font-size: 12px; }
 .timeline { flex: 0 1 660px; }
-.timeline-track { min-width: 80px; }
+.timeline-track { min-width: 220px; }
 .tour-select { font-size: 13px; max-width: 190px; }
 .scalebar { margin-left: auto; }
 .imagery-credit { font-size: 11px; bottom: 102px; }
@@ -1786,7 +1790,7 @@ body.sheet-open .camera-map-card, body.cinema .camera-map-card { display: none; 
 /* Collapsible map chrome: compact on phones, full controls on demand. */
 .page-tools-body { display: flex; gap: 6px; }
 #pageTools > summary { display: none; }
-.photo-controls { padding: 0; }
+.photo-controls { padding: 0; scroll-padding-top: 52px; }
 .map-controls-summary { list-style: none; cursor: pointer; padding: 13px 14px; font-size: 13px;
   font-weight: 650; position: sticky; top: 0; background: #152f3b; z-index: 2; border-radius: 13px; }
 .map-controls-summary::-webkit-details-marker, #pageTools > summary::-webkit-details-marker { display: none; }
@@ -1795,7 +1799,7 @@ body.sheet-open .camera-map-card, body.cinema .camera-map-card { display: none; 
 .map-controls-body { padding: 0 14px 12px; }
 .close-map-controls { display: block; width: 100%; min-height: 44px; margin-top: 12px;
   border: 1px solid #e5c58b66; border-radius: 9px; background: #294855; color: #fff1d4;
-  font: 600 13px var(--font); cursor: pointer; position: sticky; bottom: 0; z-index: 2; }
+  font: 600 13px var(--font); cursor: pointer; }
 .map-controls-summary:focus-visible, #pageTools > summary:focus-visible {
   outline: 2px solid #edbb70; outline-offset: -3px; }
 @media (max-width: 1024px) {
