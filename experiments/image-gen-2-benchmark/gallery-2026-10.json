@@ -1,5 +1,133 @@
 [
   {
+    "id": "2026-10-22-factual-infographic-factual-infographic-osteoporosis-when-t",
+    "title": "Factual infographic: Osteoporosis — When the Inner Scaffold Thins",
+    "tests": "factual_subtype: medical-health-infographic; artwork-led unboxed anatomical atlas; source-backed clinical education; no subjective review; archive_slot=2026-10-22T02:20; concept=osteoporosis-trabecular-thinning-fragility-fractures; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished artwork-led medical infographic directly on the canvas, an elegant richly shaded anatomical painting with precise fine technical ink. Title: \"OSTEOPOROSIS\"; subtitle: \"When the inner scaffold thins\". Warm ivory bone, muted petrol-blue annotation ink, soft slate background fading to clean light margins, subtle coral only for fracture emphasis. No boxes, cards, matrix, mockup, logos, bibliography or URLs. Use an asymmetric flowing composition with ample breathing room, exquisite specific anatomy and readable concise type, not a sparse title poster.\n\nThe dominant hero occupies the center and upper right: a large oblique cutaway of the proximal femur with the rounded head, narrowed neck and trochanter region, its outer cortical shell carefully sliced to reveal delicate interconnecting cancellous trabeculae. Beside it, organically nested within a sweeping magnification arc rather than a detached panel, show two equally scaled simplified bone cross-section studies labeled \"Stronger architecture\" and \"Osteoporotic architecture\". The first has a thicker cortex and connected internal struts; the second a thinner cortical shell, thinner struts and larger gaps with fewer connections. Label \"Cortical shell\" and \"Trabecular network\" with hairline leaders. Add the small qualifier \"Illustrative schematics — not diagnostic scans\". Make bone mineral matte, subtly pitted and biologically plausible, never a hollow pipe, sponge prop or crystalline lattice. A curved annotation reads \"Less bone + disrupted structure → lower strength\". Below the comparative studies a simple open two-arrow conceptual path reads \"Old bone removed\" and \"New bone formed\", with \"Bone is lost when removal outpaces replacement\". No invented cells or microscopic pathways.\n\nAt lower left, a beautifully rendered short lateral spine study with vertebral bodies and intervening discs flows upward into the femur composition. Compare an intact vertebral body with one whose anterior height has compressed into a wedge; do not depict disc disease or imply every vertebral fracture has this cause. Label \"Vertebral compression fracture\" and \"May cause back pain, height loss or stooped posture\"; smaller text: \"Not every spine fracture is osteoporosis\". A discreet secondary silhouette marks hip, spine and wrist with precise dots and the sentence \"Often silent until a fracture — even after a minor fall\". No dramatic breaking animation or gore.\n\nOn the open upper-left margin weave a short risk-factor branch into the bone's contour: \"Risk rises with age\", \"Estrogen decline after menopause\", \"Family history\", \"Long-term glucocorticoids\"; a concise note \"Men can develop osteoporosis too\". These are risk factors, not inevitable causes. Beneath, a delicate scanner-table line vignette and open caption explain \"Assessment: fracture and medical history + DXA bone-density scan\", with \"Hip and spine measurements help assess fracture risk\". No numerical diagnostic thresholds or invented scan results.\n\nAcross the lower arc integrate a small dignified fictional older man, around 68, medium-brown skin, broad face, short silver curls, average stocky build, rust polo and navy trousers, standing steadily with one hand near a chair for support; no exaggerated disability or assumption that he is a clinical case. The figure accompanies a flowing care pathway rather than demonstrating prescribed exercises: \"Care is individualized\"; \"Adequate calcium, vitamin D and protein\"; \"Appropriate weight-bearing, resistance and balance work\"; \"Reduce home fall hazards\"; \"Medicines may slow bone loss or build bone\". Small note \"Tailor activity to fracture risk; nutrition does not replace indicated medicine\". Do not promise a cure, make exercise universally safe, give doses or drug names, or imply supplements alone rebuild bone.\n\nA clearly readable restrained coral warning callout near the spine: \"New severe back pain or pain after a minor fall? Seek prompt medical assessment for a possible fracture.\" Footer: \"General education — not a diagnosis or personal treatment plan\". Keep the core mechanisms, symptoms, assessment, care and warning legible; omit decorative details before crowding text. Rich tactile bone microstructure, subtle depth and controlled lighting reward close inspection. Organic curved leaders connect studies to the hero; typography serves the anatomical artwork. Render one opaque image with auto size, requested medium quality using the specified stock model.",
+    "image": "images/2026-10-22-factual-infographic-factual-infographic-osteoporosis-when-t.jpg",
+    "thumb": "thumbs/2026-10-22-factual-infographic-factual-infographic-osteoporosis-when-t.webp",
+    "color": "#c8c0b5",
+    "date": "2026-10-22",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "osteoporosis-trabecular-thinning-fragility-fractures",
+      "imageSha256": "224820a6272b2b3e1c2565f45f3724951f784d2be97bfac2f1dd819f799772e0",
+      "imageDHash": "70787a9390189898"
+    },
+    "factualInfographic": {
+      "topic": "How osteoporosis weakens bone microarchitecture, increases fragility-fracture risk, and is evaluated and managed",
+      "description": "Artwork-led anatomical atlas showing loss of cortical and trabecular strength, vertebral compression and evidence-based fracture prevention and evaluation.",
+      "sourceNote": "NIAMS: https://www.niams.nih.gov/health-topics/osteoporosis; NIAMS diagnosis and treatment: https://www.niams.nih.gov/health-topics/osteoporosis/diagnosis-treatment-and-steps-to-take; AAOS: https://orthoinfo.aaos.org/en/diseases--conditions/osteoporosis/; AAOS spinal fractures: https://www.orthoinfo.org/diseases--conditions/osteoporosis-and-spinal-fractures/. Read and verified bone architecture/remodeling, fragility fractures, symptoms, risk factors, DXA evaluation, individualized prevention and treatment; schematic comparisons are educational, not diagnostic.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-22T06:21:52.047758+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Arthritis and Musculoskeletal and Skin Diseases",
+            "title": "Osteoporosis",
+            "sourceType": "government-agency",
+            "url": "https://www.niams.nih.gov/health-topics/osteoporosis"
+          },
+          {
+            "id": "S2",
+            "publisher": "National Institute of Arthritis and Musculoskeletal and Skin Diseases",
+            "title": "Osteoporosis: Diagnosis, Treatment, and Steps to Take",
+            "sourceType": "government-agency",
+            "url": "https://www.niams.nih.gov/health-topics/osteoporosis/diagnosis-treatment-and-steps-to-take"
+          },
+          {
+            "id": "S3",
+            "publisher": "American Academy of Orthopaedic Surgeons",
+            "title": "Osteoporosis",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://orthoinfo.aaos.org/en/diseases--conditions/osteoporosis/"
+          },
+          {
+            "id": "S4",
+            "publisher": "American Academy of Orthopaedic Surgeons",
+            "title": "Osteoporosis and Spinal Fractures",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.orthoinfo.org/diseases--conditions/osteoporosis-and-spinal-fractures/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Osteoporosis reduces bone mass and structural strength, increasing the risk of broken bones.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "With aging, the cortical outer shell thins and the inner trabecular architecture becomes thinner and less connected; comparative cutaways are illustrative schematics, not diagnostic scans.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Bone remodeling removes old bone and forms new bone; bone loss occurs when removal outpaces replacement.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Osteoporosis is often silent until a fracture; hip, spine and wrist are common fracture sites, sometimes after minor trauma.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Vertebral compression fractures may shorten the front of a vertebral body, causing back pain, height loss and a stooped posture; not every spinal fracture is due to osteoporosis.",
+            "sourceIds": [
+              "S1",
+              "S4"
+            ]
+          },
+          {
+            "claim": "New severe back pain or pain after a minor fall warrants prompt clinical assessment for a possible fracture rather than self-diagnosis.",
+            "sourceIds": [
+              "S1",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Risk factors include older age, estrogen decline after menopause, family history and long-term glucocorticoid use; men can also develop osteoporosis.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Evaluation combines fracture and medical history with bone-density testing; DXA measures bone mineral density, commonly at the hip and spine, and helps assess fracture risk.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Care may include adequate calcium, vitamin D and protein, individually appropriate weight-bearing and resistance exercise, balance work and home fall prevention. Exercise should be tailored to fracture risk.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Clinician-selected medicines can slow bone loss or build bone and reduce fracture risk; treatment is individualized, and nutrition alone is not a substitute for indicated medication.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-10-20-factual-infographic-factual-infographic-water-scorpion-brea",
     "title": "Factual infographic: Water Scorpion — Breathing Through a Tail Tube",
     "tests": "Four institutional sources fetched and read; all 168 factual archive entries scanned, no water-scorpion overlap. Seven supporting scientific studies; four large biological close-ups/cutaways. Explicit scheduled insect scientific-plate exception retained; internal breathing plan qualified as generalized.; archive_slot=2026-10-20T20:20; concept=nepa-cinerea-siphon-pond-ambush; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: bizarre-insect-life",
