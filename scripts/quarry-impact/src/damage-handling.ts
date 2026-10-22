@@ -54,5 +54,13 @@ export function blowoutImpulse(mass:number,speed:number){
   const v=Math.abs(Number.isFinite(speed)?speed:0);if(!(mass>0)||v<BLOWOUT.minSpeed)return{drag:0,side:0};
   const s=Math.min(30,v);return{drag:mass*s*BLOWOUT.drag,side:mass*s*BLOWOUT.side};
 }
+/** A rear end crushed past SUBFRAME.onset (natural derby rears reach ~0.26) bends the subframe: both rear wheels steer the same way (a thrust angle), so
+ * the car dog-tracks, crabbing down the road and pulling. It leans away from the more crushed flank. */
+export const SUBFRAME={onset:.15,gain:.25,max:.05} as const;
+export function thrustAngle(structure:readonly number[]|undefined){
+  const rear=clamp01(structure?.[1]??0);if(rear<=SUBFRAME.onset)return 0;
+  const left=clamp01(structure?.[2]??0),right=clamp01(structure?.[3]??0),side=right>left?1:right<left?-1:1;
+  return side*Math.min(SUBFRAME.max,(rear-SUBFRAME.onset)*SUBFRAME.gain);
+}
 export const DAMPER_LOSS=.6;
 export function damperFactor(wheelDamage:number){return 1-DAMPER_LOSS*clamp01(wheelDamage);}
