@@ -2,6 +2,23 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-10-22",
+      "historicDate": "1985-03-11",
+      "displayDate": "Week of March 11-17, 1985",
+      "edition": "Issue 137 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "A new commercial network address enters the register; Connecticut gets a packet-switched dial-up route.",
+      "leadHeadline": "Symbolics registers the first .com address",
+      "storyHeadlines": [
+        "Solo Flight makes the home computer a mail pilot’s cockpit",
+        "ConnNet opens Connecticut dial-up route to information services",
+        "SpeedScript 3.0 puts a substantial word processor in a magazine",
+        "Color printing moves below $300"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-03-11.jpg",
+      "thumb": "media/thumbs/1985-03-11.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-10-21",
       "historicDate": "1985-03-04",
       "displayDate": "Week of March 4-10, 1985",

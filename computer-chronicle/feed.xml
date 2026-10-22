@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Wed, 21 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 22 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of March 11-17, 1985 — Symbolics registers the first .com address</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-03-11</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-03-11</guid>
+      <pubDate>Thu, 22 Oct 2026 12:00:00 GMT</pubDate>
+      <description>The Lisp-workstation maker enters the domain register on March 15. Massachusetts workstation maker Symbolics registered symbolics.com on March 15, establishing the first registration under the .com domain. It is a small administrative entry in computer networking, rather than the opening of a new public information service. Also this week: Solo Flight makes the home computer a mail pilot’s cockpit · ConnNet opens Connecticut dial-up route to information services · SpeedScript 3.0 puts a substantial word processor in a magazine · Color printing moves below $300.</description>
+    </item>
     <item>
       <title>Week of March 4-10, 1985 — SSI sends strategy gamers into space and World War II</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-03-04</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-10-29</guid>
       <pubDate>Thu, 01 Oct 2026 12:00:00 GMT</pubDate>
       <description>Activision plans more than $1 million in holiday advertising as computer software takes a larger place in its business. Activision is putting Ghostbusters at the center of a holiday comeback bid. In the November 3 Billboard, Faye Zuckerman reports an advertising budget exceeding $1 million for the selling season. President James Levy says shipments are picking up after a slow summer, with David Crane’s newly shipped Ghostbusters and Designer’s Pencil carrying the company’s hopes for fresh hits. Also this week: The bulletin board becomes a neighborhood without borders · Shopping by modem: CompuServe’s Electronic Mall is open all night · Commodore’s Plus/4 trades game features for built-in office tools.</description>
-    </item>
-    <item>
-      <title>Week of October 22-28, 1984 — Ghostbusters Haunts the Commodore 64</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-10-22</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-10-22</guid>
-      <pubDate>Wed, 30 Sep 2026 12:00:00 GMT</pubDate>
-      <description>Activision turns the summer film sensation into an October home-computer game, giving the game shelf this week’s biggest name. Ghostbusters is crossing from the movie theater to the Commodore 64. Release listings place Activision’s North American C64 edition on Friday, October 26; a separate catalog confirms an October 1984 C64 release. The precise Friday date rests on the release listing rather than a contemporary day-of-sale advertisement, but the game plainly belongs on this October shelf. Also this week: Commodore Puts a $300 Office in the Plus/4 · The Neighborhood Bulletin Board Takes Shape · BYTE Measures the IBM PC/AT’s 6 MHz Pace.</description>
     </item>
   </channel>
 </rss>

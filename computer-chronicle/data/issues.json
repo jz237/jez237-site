@@ -4,6 +4,448 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+      },
+      "currentDate": "2026-10-22",
+      "historicDate": "1985-03-11",
+      "displayDate": "Week of March 11-17, 1985",
+      "edition": "Issue 137 - Weekly 1985 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Mail pilots and network pioneers",
+        "motifs": [
+          "propeller aircraft over a pixel landscape",
+          "Commodore keyboard and joystick",
+          "telephone modem"
+        ],
+        "layout": "Dense warm newsprint with red and blue headers"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Issue 137 - Weekly 1985 Computer & Culture Chronicle",
+        "dateline": "Week of March 11-17, 1985",
+        "price": "75 cents"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Symbolics network address leads; Solo Flight gets the largest halftone illustration",
+        "secondaryRail": "ConnNet, SpeedScript and printer bargains",
+        "archiveNavigation": "Weekly archive and previous/next controls"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1985-03-11.jpg",
+        "alt": "Computer Chronicle newspaper front page for March 11-17, 1985",
+        "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Network addresses, home cockpits and a word processor worth typing.",
+      "morningLine": "A new commercial network address enters the register; Connecticut gets a packet-switched dial-up route.",
+      "lead": {
+        "headline": "Symbolics registers the first .com address",
+        "body": [
+          "Massachusetts workstation maker Symbolics registered symbolics.com on March 15, establishing the first registration under the .com domain. It is a small administrative entry in computer networking, rather than the opening of a new public information service.",
+          "The company comes out of the Massachusetts Institute of Technology artificial-intelligence community and builds Lisp workstations for software development. Its 3600-series machines serve a specialized market, far from the home-computer cartridge counter.",
+          "The precise distinction is first .com registration, not first domain name of any kind. The new entry gives this commercial computer maker an address in the domain-name system; it should not be confused with a dial-up service such as CompuServe.",
+          "For readers watching the connections between computers, the register supplies this week’s noteworthy date. At the other end of the telephone line, Connecticut’s new ConnNet service offers a more immediate route to established information providers."
+        ],
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0
+        ],
+        "dek": "The Lisp-workstation maker enters the domain register on March 15."
+      },
+      "stories": [
+        {
+          "headline": "Solo Flight makes the home computer a mail pilot’s cockpit",
+          "body": [
+            "Solo Flight turns the joystick into a control column and the home screen into a cockpit. Arthur Leyenberger’s March COMPUTE! review examines Sid Meier’s MicroProse simulation for Commodore 64 and Atari computers with at least 48K, a disk drive and a joystick; the listed price is $34.95.",
+            "The flying includes takeoffs, landings, navigation and instrument work, with both a three-dimensional view and an instrument panel. Kansas is the gentlest territory, while Colorado’s mountains make a more demanding course; Washington is another available region.",
+            "Mail Pilot adds a working assignment: deliver five bags of mail while balancing fuel and payload. Its 21 airports and scoring for navigation, elapsed time, landings and delivered mail make the trip more than sightseeing. Worsening weather and, at higher difficulty, equipment failures keep the pilot occupied."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            7
+          ]
+        },
+        {
+          "headline": "ConnNet opens Connecticut dial-up route to information services",
+          "body": [
+            "Southern New England Telephone opened ConnNet on March 11, offering Connecticut customers a local public packet-switched route to established information services. CompuServe, NewsNet, Dow Jones News Retrieval and the National Library of Medicine are among the destinations.",
+            "Dial-up service runs at 300 to 1,200 bits per second. Dedicated business connections offer 4,800 to 56,000 bits per second, and employers can connect mainframes for remote employee access. ConnNet uses X.25 packet switching; it is not a new home-computer software package, and verified local access prices are not available here."
+          ],
+          "confidence": "exact-date",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "headline": "SpeedScript 3.0 puts a substantial word processor in a magazine",
+          "body": [
+            "Charles Brannon’s SpeedScript 3.0 gives the Commodore 64 a machine-language word processor in the March issue of COMPUTE!. About 6K of program leaves more than 43K for text, described as roughly 20 to 40 printed pages.",
+            "Word wrap, search and replace, copying and moving text, adjustable margins, headers and footers bring substantial editing tools to the keyboard. Files can go to disk or tape. The revision incorporates a year of enhancements and debugging since the original GAZETTE version.",
+            "Readers can enter the complete listing with MLX or order the C64 disk for $12.95 plus $2 domestic shipping and handling. An earlier version cannot simply be patched into 3.0. VIC-20, Atari and Apple II editions are promised for later issues, not supplied by this listing."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "headline": "Color printing moves below $300",
+          "body": [
+            "Okidata’s March product notices put two printer prices below $300: the $268 Okimate 20 and the $299 Microline 182. These are published product prices, with interface-kit costs not established.",
+            "The Okimate 20 uses thermal transfer for color screen dumps on IBM PCs and compatibles, with Learn to Print and Color Screen Print included. The notice rates it at 80 characters per second in draft and 40 in its letter-quality mode. The Microline 182 dot-matrix model is described for IBM and Apple machines, at 120 cps utility and 60 enhanced."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            12
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Okimate 20 and Microline 182",
+          "summary": "Okidata printer notice: $268 thermal-transfer color model; $299 dot-matrix model.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            12
+          ]
+        },
+        {
+          "title": "Covox Voice Master for Apple IIe",
+          "summary": "Expansion board records and plays up to ten seconds of natural speech; up to 64 numbered sounds, words or phrases recalled from BASIC. $89.95 includes microphone and software.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            11
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "SpeedScript 3.0",
+          "detail": "C64 machine-language word processor, magazine listing or $12.95 disk plus shipping; later platform editions promised.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            6
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games — March shelf selections",
+          "items": [
+            "Solo Flight — MicroProse, $34.95",
+            "Conan — Datasoft, $39.95",
+            "Mr. Do! — Datasoft, $39.95",
+            "Mancopter — Datasoft, $34.95",
+            "Lost Tomb — Datasoft, $34.95"
+          ],
+          "confidence": "same-month; editorial selections, not a sales chart",
+          "sourceRefs": [
+            7,
+            10
+          ]
+        },
+        {
+          "label": "Top 5 Movies — weekend beginning March 15",
+          "items": [
+            "1. Beverly Hills Cop",
+            "2. Witness",
+            "3. The Breakfast Club",
+            "4. The Sure Thing",
+            "5. Into the Night"
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "SpeedScript 3.0 disk",
+          "price": "$12.95",
+          "note": "Add $2 domestic shipping and handling; outside US/Canada add $3 as stated in notice.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "item": "Solo Flight",
+          "price": "$34.95",
+          "note": "Listed review price.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            7
+          ]
+        },
+        {
+          "item": "Okimate 20",
+          "price": "$268.00",
+          "note": "Published printer price; interface costs unverified.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            12
+          ]
+        },
+        {
+          "item": "Microline 182",
+          "price": "$299.00",
+          "note": "Published printer price.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            12
+          ]
+        },
+        {
+          "item": "Covox Voice Master",
+          "price": "$89.95",
+          "note": "Microphone and software included.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            11
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Datasoft brings arcade names home",
+          "summary": "Conan, Mr. Do!, Mancopter and Lost Tomb appear in the March product roundup, alongside Heathcliff learning games.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            10
+          ]
+        },
+        {
+          "headline": "Faster modems face a component bottleneck",
+          "summary": "Levitan reports QAM-chip supply constraints and forecasts limited 2400-bps availability until fall; preserve these as contemporary forecasts, not proven outcomes.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            8
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "artist": "REO Speedwagon",
+          "title": "Can’t Fight This Feeling",
+          "song": "Can’t Fight This Feeling",
+          "chart": "Cash Box Top 100 Singles",
+          "chartDate": "1985-03-16",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            13
+          ]
+        },
+        {
+          "rank": 2,
+          "artist": "Wham! Featuring George Michael",
+          "title": "Careless Whisper",
+          "song": "Careless Whisper",
+          "chart": "Cash Box Top 100 Singles",
+          "chartDate": "1985-03-16",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            13
+          ]
+        },
+        {
+          "rank": 3,
+          "artist": "David Lee Roth",
+          "title": "California Girls",
+          "song": "California Girls",
+          "chart": "Cash Box Top 100 Singles",
+          "chartDate": "1985-03-16",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            13
+          ]
+        },
+        {
+          "rank": 4,
+          "artist": "Glenn Frey",
+          "title": "The Heat Is On",
+          "song": "The Heat Is On",
+          "chart": "Cash Box Top 100 Singles",
+          "chartDate": "1985-03-16",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            13
+          ]
+        },
+        {
+          "rank": 5,
+          "artist": "Sheena Easton",
+          "title": "Sugar Walls",
+          "song": "Sugar Walls",
+          "chart": "Cash Box Top 100 Singles",
+          "chartDate": "1985-03-16",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            13
+          ]
+        }
+      ],
+      "periodAd": {
+        "headline": "A word processor in your magazine",
+        "summary": "SpeedScript 3.0 for Commodore 64: enter the listing with MLX or order the $12.95 disk, plus shipping.",
+        "tagline": "From blank screen to finished page.",
+        "sourceRefs": [
+          6
+        ]
+      },
+      "market": {
+        "headline": "Faster modems face a supply squeeze",
+        "summary": "March COMPUTE! reports $800–$900 prices for 2400-bps modems and a QAM-chip bottleneck. Its expectation of limited supply until fall is a contemporary forecast, not a confirmed outcome.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          8
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Gorbachev chosen to lead Soviet Communist Party",
+        "summary": "Mikhail Gorbachev was chosen to lead the Soviet Communist Party on March 11, succeeding Konstantin Chernenko. The Politburo minutes record Andrei Gromyko proposing him without dissenting voices.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          5
+        ]
+      },
+      "bbsNote": {
+        "headline": "2400-bps ambitions meet chip shortages and electronic junk mail",
+        "summary": "March 1985 COMPUTE! column by Arlan R. Levitan, The Race To Talk Fast: 2400-bps modems, growing commercial online communities, and complaints about paying connect time to retrieve unwanted advertisements. All posts below are editorial paraphrases of published reporting, not recovered BBS messages.",
+        "posts": [
+          {
+            "topic": "The speed race",
+            "platform": "COMPUTE! / modem market",
+            "text": "Hayes, Novation, U.S. Robotics, Racal-Vadic, Multitech, CTS Datacomm, Anderson Jacobson, Cermetek and Telenetics announced 2400-bps units at the previous November COMDEX. The column reports $800–$900 prices and a QAM-chip bottleneck; March/April online-service rollouts are forecasts."
+          },
+          {
+            "topic": "Fitness gets a forum",
+            "platform": "CompuServe Health Forum",
+            "text": "Bob Walter is identified as sysop of the new Health Forum, moderating fitness discussions."
+          },
+          {
+            "topic": "Comedy online",
+            "platform": "The Source / User Publishing Area",
+            "text": "Billiam Coronel’s Comedy By Wire offers computer humor, with back issues available."
+          },
+          {
+            "topic": "Advertising disputes and unwanted mail",
+            "platform": "CompuServe / American People-Link",
+            "text": "Levitan reports complaints about People/Link promotion. People/Link interpreted a removal statement as deletion of email; CompuServe denied deleting email and said it enforced its policy against commercial SIG messages. The distinction and dispute must be preserved."
+          },
+          {
+            "topic": "Cost of junk mail",
+            "platform": "Commercial online services",
+            "text": "Levitan objects that automatically retrieved unsolicited email consumes paid connection time. This is a dated complaint, not a claim to have identified the first spam message."
+          }
+        ]
+      },
+      "curiosity": {
+        "headline": "An $89.95 Apple board remembers ten seconds of your voice",
+        "summary": "Covox’s Voice Master brings small-scale recorded speech to the Apple IIe.",
+        "detail": "March COMPUTE! says the board can digitally record up to ten seconds and recall up to 64 numbered words, phrases or other sounds with BASIC commands. Vocabularies can be stored on disk or tape; microphone and software are included. It is recorded natural speech, not evidence of unlimited text-to-speech."
+      },
+      "accuracyLedger": {
+        "items": [
+          "Network dates verified through retrospective accounts; no website launch is claimed.",
+          "Home-computing reviews and product notices are March coverage, not exact-week releases.",
+          "Music uses the verified Cash Box March 16 singles chart, not an inferred Billboard rock ranking.",
+          "Game shelf is an editorial selection, not a ranked sales survey.",
+          "Movies use the weekend beginning March 15."
+        ]
+      },
+      "sources": [
+        {
+          "title": "Symbolics first .com retrospective",
+          "url": "https://www.wired.com/2010/03/0315-symbolics-first-dotcom/",
+          "date": "2010-03-15",
+          "datePrecision": "day"
+        },
+        {
+          "title": "ConnNet opening retrospective",
+          "url": "https://www.wired.com/2010/03/0311connnet-packet-switching/",
+          "date": "2010-03-11",
+          "datePrecision": "day"
+        },
+        {
+          "title": "Billboard dated chart landing page",
+          "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-03-16/",
+          "date": "1985-03-16",
+          "datePrecision": "day"
+        },
+        {
+          "title": "Historical Billboard rock number-one table",
+          "url": "https://en.wikipedia.org/wiki/List_of_Billboard_Mainstream_Rock_number-one_songs_of_the_1980s",
+          "date": "",
+          "datePrecision": "unknown"
+        },
+        {
+          "title": "Weekend domestic box office",
+          "url": "https://www.the-numbers.com/box-office-chart/weekend/1985/03/15",
+          "date": "1985-03-15",
+          "datePrecision": "day"
+        },
+        {
+          "title": "Politburo minutes / National Security Archive description",
+          "url": "https://nsarchive.gwu.edu/document/28321-document-1-minutes-cc-cpsu-politburo-session-gorbachevs-election-march-11-1985",
+          "date": "1985-03-11",
+          "datePrecision": "day"
+        },
+        {
+          "title": "COMPUTE! #58: SpeedScript 3.0 — Charles Brannon",
+          "url": "https://www.atarimagazines.com/compute/issue58/speed_script.html",
+          "date": "1985-03",
+          "datePrecision": "month"
+        },
+        {
+          "title": "COMPUTE! #58: Solo Flight — Arthur Leyenberger",
+          "url": "https://www.atarimagazines.com/compute/issue58/review_solo_flight.html",
+          "date": "1985-03",
+          "datePrecision": "month"
+        },
+        {
+          "title": "COMPUTE! #58: Telecomputing Today: The Race To Talk Fast — Arlan R. Levitan",
+          "url": "https://www.atarimagazines.com/compute/issue58/telecomputing_today.html",
+          "date": "1985-03",
+          "datePrecision": "month"
+        },
+        {
+          "title": "COMPUTE! #58: Commodore Baud Rates",
+          "url": "https://www.atarimagazines.com/compute/issue58/feedback_baud_rates.html",
+          "date": "1985-03",
+          "datePrecision": "month"
+        },
+        {
+          "title": "COMPUTE! #58: Datasoft Games, Educational Packages",
+          "url": "https://www.atarimagazines.com/compute/issue58/news_games_educational_packages.html",
+          "date": "1985-03",
+          "datePrecision": "month"
+        },
+        {
+          "title": "COMPUTE! #58: Apple Speech Synthesizer / Covox Voice Master",
+          "url": "https://www.atarimagazines.com/compute/issue58/news_apple_speech_synthesizer.html",
+          "date": "1985-03",
+          "datePrecision": "month"
+        },
+        {
+          "title": "COMPUTE! #58: New IBM, Apple Printers",
+          "url": "https://www.atarimagazines.com/compute/issue58/news_new_printers.html",
+          "date": "1985-03",
+          "datePrecision": "month"
+        },
+        {
+          "title": "Cash Box Top 100 Singles, March 16, 1985",
+          "url": "https://cashboxarchives.com/archives/80s_files/19850316.html",
+          "date": "1985-03-16",
+          "datePrecision": "day"
+        }
+      ]
+    },
+    {
       "currentDate": "2026-10-21",
       "historicDate": "1985-03-04",
       "displayDate": "Week of March 4-10, 1985",
