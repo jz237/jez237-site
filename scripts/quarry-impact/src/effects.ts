@@ -3,6 +3,7 @@ import {landscapeHeight} from './quarry-layout';
 import * as T from 'three';
 import R from '@dimforge/rapier3d-compat';
 import {GroundEvidence} from './ground-evidence';
+import {FluidSlicks,type GroundFire} from './fluid-leaks';
 import {DAYLIGHT_DIRECTION} from './static-shadows';
 type Particle = {
   p: T.Vector3;
@@ -22,16 +23,18 @@ export class Effects {
   types: Float32Array;
   geometry: T.BufferGeometry;
   points: T.Points;
-  debris: { mesh: T.Mesh; body: R.RigidBody; age: number }[] = [];
+  debris: { mesh: T.Object3D; body: R.RigidBody; age: number; shared?: boolean; fire?: { start: number; end: number; seed: number } }[] = [];
   marks: T.InstancedMesh;
   markCursor = 0;
   readonly evidence:GroundEvidence;
+  readonly slicks:FluidSlicks;
   constructor(
     public scene: T.Scene,
     public world: R.World,
     public groundHeight:(x:number,z:number)=>number = landscapeHeight,
   ) {
     this.evidence=new GroundEvidence(scene);
+    this.slicks=new FluidSlicks(scene);
     const count = 1800;
     this.positions = new Float32Array(count * 3);
     this.colors = new Float32Array(count * 3);
@@ -163,6 +166,11 @@ void main(){
     this.marks.setMatrixAt(this.markCursor++ % 1000, d.matrix);
     this.marks.instanceMatrix.needsUpdate = true;
   }
+  /** Is there a broken-off piece (glass, a panel, cargo — not a rolling wheel) lying within r of this point? */
+  sharpDebrisNear(x: number, z: number, r: number) {
+    for (const d of this.debris) { if (d.shared) continue; const p = d.body.translation(); if (Math.hypot(p.x - x, p.z - z) < r) return true; }
+    return false;
+  }
   detach(source: T.Mesh, velocity: T.Vector3) {
     if (this.debris.length >= 36) this.removeDebris(0);
     source.updateWorldMatrix(true, false);
@@ -207,16 +215,54 @@ void main(){
     b.setAngvel({ x: 2, y: 1, z: 3 }, true);
     this.debris.push({ mesh, body: b, age: 0 });
   }
+  /** A torn-off wheel rolls away on its own cylinder body. The visual is a clone sharing the
+   * car's wheel geometry and materials, so removal only detaches it. */
+  detachWheel(source: T.Object3D, velocity: T.Vector3, radius: number, speed = 0) {
+    if (this.debris.length >= 36) this.removeDebris(0);
+    source.updateWorldMatrix(true, true);
+    const position = new T.Vector3(), quaternion = new T.Quaternion(), scale = new T.Vector3();
+    source.matrixWorld.decompose(position, quaternion, scale);
+    const visual = source.clone(true), holder = new T.Group();
+    visual.position.set(0, 0, 0); visual.quaternion.identity(); visual.scale.copy(scale); visual.visible = true;
+    holder.add(visual); holder.position.copy(position); holder.quaternion.copy(quaternion); holder.name = 'torn_wheel';
+    this.scene.add(holder);
+    const b = this.world.createRigidBody(
+      R.RigidBodyDesc.dynamic().setTranslation(position.x, position.y, position.z).setRotation(quaternion)
+        .setLinvel(velocity.x, velocity.y + 1.5, velocity.z).setAngularDamping(0.15).setCcdEnabled(true),
+    );
+    // Rapier cylinders run along Y; the wheel's axle is its local X.
+    this.world.createCollider(
+      R.ColliderDesc.cylinder(Math.max(0.08, radius * 0.5), radius).setRotation({ x: 0, y: 0, z: Math.SQRT1_2, w: Math.SQRT1_2 })
+        .setMass(18).setRestitution(0.35).setFriction(0.9),
+      b,
+    );
+    const axle = new T.Vector3(1, 0, 0).applyQuaternion(quaternion).multiplyScalar(-speed / Math.max(0.1, radius));
+    b.setAngvel({ x: axle.x, y: axle.y + 1.2, z: axle.z }, true);
+    this.debris.push({ mesh: holder, body: b, age: 0, shared: true });
+  }
+  /** The part just torn off a burning car keeps burning where it lands (offline cars only call this). */
+  igniteLastDebris(seconds: number) {
+    const d = this.debris.at(-1);if (!d || d.fire) return;
+    const start = this.slicks.clock;d.fire = { start, end: start + seconds, seed: (this.debris.length * .618) % 1 };
+  }
+  /** Burning debris for the ground-fire renderer, at the parts' current positions. */
+  debrisFires(): GroundFire[] {
+    const t = this.slicks.clock, out: GroundFire[] = [];
+    for (const d of this.debris) if (d.fire && t < d.fire.end) { const p = d.body.translation(); out.push({ x: p.x, y: p.y - .1, z: p.z, radius: .32, start: d.fire.start, end: d.fire.end, kind: 0, seed: d.fire.seed }); }
+    return out;
+  }
   removeDebris(i: number) {
     const d = this.debris[i];
     this.world.removeRigidBody(d.body);
     this.scene.remove(d.mesh);
-    d.mesh.geometry.dispose();
-    (d.mesh.material as T.Material).dispose();
+    if (!d.shared && d.mesh instanceof T.Mesh) {
+      d.mesh.geometry.dispose();
+      (d.mesh.material as T.Material).dispose();
+    }
     this.debris.splice(i, 1);
   }
   update(dt: number) {
-    this.evidence.advance(dt);
+    this.evidence.advance(dt);this.slicks.advance(dt);
     (this.points.material as T.ShaderMaterial).uniforms.scale.value = window.innerHeight;
     for (let i = 0; i < this.particles.length; i++) {
       const p = this.particles[i];
@@ -242,7 +288,7 @@ void main(){
     }
   }
   reset() {
-    this.evidence.reset();
+    this.evidence.reset();this.slicks.reset();
     for (const p of this.particles) p.life = 0;
     // Menu frames do not advance this pool. Clear the uploaded attributes too,
     // otherwise the final sparks can remain visible over the new attract car.
