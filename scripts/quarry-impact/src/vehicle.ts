@@ -48,6 +48,8 @@ import {MAX_ENGINE_RESTART} from './engine-stall';
 export const EXHAUST_DROP=.2;
 /** A burning car cooks itself: glass damage per second at full heat (side windows burst at 24) and tyre damage per second. */
 export const COOK={glass:2.2,tyre:.02} as const;
+/** Roof compression at which the glass starts to craze, and at which side windows burst. */
+export const ROOF_GLASS={craze:.4,burst:.6} as const;
 /** Panels hanging at least this loose build wind load above this speed (m/s) until they tear away. */
 export const WIND_RIP={loose:.25,speed:16} as const;
 /** Deceleration (m/s²) from a part dragging along the ground at full scrape, applied where it drags. */
@@ -181,6 +183,17 @@ export class Vehicle {
   onSeize?:(p:T.Vector3)=>void;
   /** This car's fire heat (0..1), set by VehicleFire each step. */
   fireHeat = 0;
+  /** A roof crushed down buckles the pillars: the glass crazes in proportion, and past ROOF_GLASS.burst the side windows
+   * pop out (the screens stay in, crazed). Offline only; called every step, idempotent for a steady crush. */
+  stressGlass(){
+    const roof=this.structuralDamage?.[4]??0;if(!this.extendedDamage||roof<=ROOF_GLASS.craze)return;
+    const target=24*Math.min(1.2,(roof-ROOF_GLASS.craze)/(ROOF_GLASS.burst-ROOF_GLASS.craze));
+    for(const glass of this.glass){
+      if(!glass.visible)continue;const before=glass.userData.damage||0;if(before>=target)continue;
+      glass.userData.damage=target;const state=(glass.material as T.Material).userData.glassState as GlassState|undefined;if(state)state.damage.value=Math.min(1,target/24);
+      if(!/Windshield|Rearwindow/.test(glass.name)&&before<=24&&target>24){glass.visible=false;const c=new T.Box3().setFromObject(glass).getCenter(new T.Vector3());this.fx.emit(c,12,3,1.2);this.onGlassBreak?.(c);}
+    }
+  }
   /** Called when heat shatters a window (sound hook). */
   onGlassBreak?:(p:T.Vector3)=>void;
   /** The car's own fire (offline): heat crazes the glass until side windows burst and the screens hang crazed,
@@ -494,6 +507,7 @@ export class Vehicle {
     this.steerLimit=this.extendedDamage?steeringLimit(this.structuralDamage):1;
     this.thrustAngle=this.extendedDamage?thrustAngle(this.structuralDamage):0;
     this.steerRate=this.extendedDamage?steerRate(this.structuralDamage?.[0]??0):1;
+    this.stressGlass();
     this.throttleJammed=this.extendedDamage&&this.health>0&&throttleJams(this.structuralDamage?.[0]??0,this.id);
     if(this.throttleJammed)this.input.throttle=jammedThrottle(this.input.throttle,true);
     if(this.extendedDamage)this.brakeFluid=leakBrakeFluid(this.brakeFluid,this.structuralDamage?.[0]??0,dt);

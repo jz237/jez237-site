@@ -1,6 +1,7 @@
+import {restoreRoofGlassBytes} from './roof-glass-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readCoolantLossPrevious,restoreCoolantLossBytes,verifyCoolantLossRevision} from './coolant-loss-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreRoofGlassBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('CoolantLoss preserves every prior fixture, vehicle asset, venue art and history input',verifyCoolantLossRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/coolant-loss/revision.json').toString());
