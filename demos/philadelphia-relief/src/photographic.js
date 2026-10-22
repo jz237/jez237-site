@@ -45,6 +45,9 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
   let press, exhibitBounds, conservative=false,budget;
   const resourceDeadline=createVisibleTimeout(document,()=>unavailable(null,'timeout'),45000);
   const firstViewDeadline=createVisibleTimeout(document,()=>unavailable(null,'timeout'),90000);
+  // Keep a warm renderer through brief zoom/layer changes, then free its GPU
+  // resources if the user stays outside photographic coverage.
+  const idleRelease=createVisibleTimeout(document,()=>release(),30000);
   let resizedWidth = 0, resizedHeight = 0;
 
   function report(text) {
@@ -62,7 +65,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     if(disposed||failed)return;
     const ticket=++generation;
     failed = true; loading = false; present(false);
-    firstViewDeadline.cancel(); resourceDeadline.cancel();
+    firstViewDeadline.cancel(); resourceDeadline.cancel(); idleRelease.cancel();
     retry.hidden = false;
     report(`${photoFailure(error,phase)} Diorama still works.`);
     // renderError can fire inside Cesium's render traversal. Free the failed
@@ -204,7 +207,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     delete message.dataset.visibleTiles;delete message.dataset.detailTiles;delete message.dataset.bestError;
   }
   function release() {
-    generation++; firstViewDeadline.cancel(); resourceDeadline.cancel();
+    generation++; firstViewDeadline.cancel(); resourceDeadline.cancel(); idleRelease.cancel();
     destroyRenderer();failed=false;loading=false;
     present(false);
     retry.hidden = true;
@@ -264,21 +267,25 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
         if (viewer || loading || failed) release();
         wanted = false; report('Lighter graphics · photographic 3D paused'); return false;
       }
+      if (state.photoMode === 'relief') {
+        // Explicitly leaving Photo also cancels pending initialization. Its
+        // late promises must not recreate a hidden viewer or stale error.
+        if (viewer || loading || failed) release();
+        wanted = false; report('Diorama · photographic detail off'); return false;
+      }
       wanted = !isOverlayActive() && photoWanted(state, pose.dist, wanted);
       if (!wanted) {
         present(false);
         firstViewDeadline.cancel();
       }
-      // An explicit switch to Diorama dismisses a failed photo session too.
-      // Otherwise its stale error and Retry button cover the working mode.
-      if(failed&&state.photoMode==='relief')release();
       if (failed) return false;
-      const preload = !isOverlayActive() && photoAllowed(state) && state.photoMode !== 'relief'
+      const preload = !isOverlayActive() && photoAllowed(state)
         && (wanted || pose.dist <= PHOTO_PRELOAD);
+      if (preload) idleRelease.cancel();
       if (preload && !viewer) void start();
       if (!preload) {
-        report(photoAllowed(state) ? state.photoMode === 'relief' ? 'Diorama · photographic detail off'
-          : 'Diorama · zoom in for photographic 3D'
+        if (viewer || loading) idleRelease.start();
+        report(photoAllowed(state) ? 'Diorama · zoom in for photographic 3D'
           : 'Relief map · historical or map layers active');
         return false;
       }
@@ -355,7 +362,8 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       return canvas;
     },
     dispose() {
-      disposed = true; resourceDeadline.dispose(); firstViewDeadline.dispose(); unsubscribe();
+      disposed = true; resourceDeadline.dispose(); firstViewDeadline.dispose(); idleRelease.dispose();
+      unsubscribe();
       stage.removeEventListener('pointerdown', down); stage.removeEventListener('pointerup', up);
       destroyRenderer();present(false);host.remove();select.onchange=null;retry.onclick=null;
     },

@@ -32,8 +32,9 @@ function fixture(t,options={}){
     dataSources={add(){},remove(){}};
     scene={screenSpaceCameraController:{},postProcessStages:{fxaa:{}},
       requestRender(){},primitives:{add:tiles=>{this.tiles=tiles;}},renderError:new Signal()};
-    constructor(_host,settings){if(options.graphicsError)throw options.graphicsError;
-      this.settings=settings;viewers.push(this);}
+    constructor(host,settings){if(options.graphicsError)throw options.graphicsError;
+      this.settings=settings;viewers.push(this);
+      host.append(new Element());settings.creditContainer.append(new Element());}
     resize(){}
     isDestroyed(){return this.destroyed;}
     destroy(){
@@ -54,8 +55,9 @@ function fixture(t,options={}){
   globalThis.document=doc;globalThis.window={Cesium:C,devicePixelRatio:1};
   const store=createStore({photoMode:'photo'}),stage=new Element();
   const photo=createPhotographic({stage,store,sampleElevation:()=>4,
-    resources:async()=>{if(options.resourceError)throw options.resourceError;return [C,{ionToken:'test-fixture'}];}});
-  const update=()=>photo.update(pose,store.get(),1200,800);
+    resources:async()=>{await options.resourcesReady;
+      if(options.resourceError)throw options.resourceError;return [C,{ionToken:'test-fixture'}];}});
+  const update=(nextPose=pose)=>photo.update(nextPose,store.get(),1200,800);
   const makeTiles=()=>({tileVisible:new Signal(),loadProgress:new Signal(),tilesLoaded:true,
     destroyed:0,destroy(){this.destroyed++;}});
   const ready=async()=>{
@@ -63,7 +65,7 @@ function fixture(t,options={}){
     await flush();update();assert.equal(photo.active,true);return tiles;
   };
   t.after(()=>{photo.dispose();globalThis.document=oldDocument;globalThis.window=oldWindow;});
-  return {photo,viewers,tileRequests,nodes,update,ready,makeTiles,stage,doc};
+  return {photo,viewers,tileRequests,nodes,update,ready,makeTiles,stage,doc,store};
 }
 test('photo render errors fall back immediately and release the viewer after rendering returns',async t=>{
   const f=fixture(t),tiles=await f.ready(),viewer=f.viewers[0];
@@ -103,6 +105,68 @@ test('choosing Diorama dismisses a failed photo session and its stale retry mess
   const select=f.nodes.get('photoMode');select.value='relief';select.onchange();f.update();
   assert.equal(f.photo.stats().failed,false);assert.equal(f.nodes.get('photoRetry').hidden,true);
   assert.equal(f.nodes.get('photoStatus').textContent,'Diorama · photographic detail off');
+});
+
+test('choosing Diorama frees a healthy photo renderer, traffic, tiles and credits and can reopen',async t=>{
+  const f=fixture(t),tiles=await f.ready(),viewer=f.viewers[0];
+  assert.ok(f.photo.stats().traffic);assert.equal(f.stage.children[0].children.length,1);
+  f.store.set({photoMode:'relief'});assert.equal(f.update(),false);
+  assert.equal(viewer.destroyCount,1);assert.equal(tiles.destroyed,1);
+  assert.equal(f.photo.aircraftViewer,null);assert.equal(f.photo.stats().traffic,undefined);
+  assert.equal(f.photo.stats().firstViewReady,false);assert.equal(f.photo.stats().wanted,false);
+  assert.equal(f.stage.children[0].children.length,0);
+  assert.equal(f.nodes.get('photoCredits').children.length,0);
+  f.update();await flush();assert.equal(f.viewers.length,1);
+  f.store.set({photoMode:'photo'});await f.ready();
+  assert.equal(f.viewers.length,2);assert.equal(f.photo.aircraftViewer,f.viewers[1]);
+});
+
+test('choosing Diorama while engine resources load prevents a late hidden viewer',async t=>{
+  let resolve;
+  const f=fixture(t,{resourcesReady:new Promise(done=>{resolve=done;})});
+  f.update();f.store.set({photoMode:'relief'});f.update();resolve();await flush();
+  assert.equal(f.viewers.length,0);assert.equal(f.photo.stats().loading,false);
+  assert.equal(f.photo.stats().failed,false);assert.equal(f.photo.stats().wanted,false);
+  assert.equal(f.nodes.get('photoStatus').textContent,'Diorama · photographic detail off');
+  f.store.set({photoMode:'photo'});await f.ready();assert.equal(f.viewers.length,1);
+});
+
+for(const lateResult of ['resolve','reject']){
+  test(`a cancelled tile request cannot affect a reopened photo session when it ${lateResult}s`,async t=>{
+    const f=fixture(t);f.update();await flush();const old=f.viewers[0];
+    f.store.set({photoMode:'relief'});f.update();assert.equal(old.destroyCount,1);
+    f.store.set({photoMode:'photo'});await f.ready();const current=f.viewers[1],late=f.makeTiles();
+    if(lateResult==='resolve')f.tileRequests[0].resolve(late);
+    else f.tileRequests[0].reject(new Error('cancelled request failed'));
+    await flush();assert.equal(f.update(),true);
+    assert.equal(f.photo.aircraftViewer,current);assert.equal(current.destroyed,false);
+    assert.equal(f.photo.stats().failed,false);assert.equal(f.nodes.get('photoRetry').hidden,true);
+    assert.equal(late.destroyed,lateResult==='resolve'?1:0);
+  });
+}
+
+test('brief auto-mode zoom changes reuse the renderer; a sustained regional view releases it',async t=>{
+  t.mock.timers.enable({apis:['setTimeout']});
+  const f=fixture(t);await f.ready();const viewer=f.viewers[0],far={...pose,dist:30000};
+  f.store.set({photoMode:'auto'});f.update(far);
+  t.mock.timers.tick(29000);assert.equal(viewer.destroyed,false);
+  assert.equal(f.update(),true);t.mock.timers.tick(30000);assert.equal(viewer.destroyed,false);
+  f.update(far);
+  for(let i=0;i<3;i++){t.mock.timers.tick(9000);f.update(far);}
+  t.mock.timers.tick(3000);assert.equal(viewer.destroyCount,1);
+  assert.equal(f.photo.aircraftViewer,null);assert.equal(f.photo.stats().failed,false);
+  assert.equal(f.nodes.get('photoStatus').textContent,'Diorama · zoom in for photographic 3D');
+  f.update(far);await flush();assert.equal(f.viewers.length,1);
+  await f.ready();assert.equal(f.viewers.length,2);
+});
+
+test('leaving photographic coverage during tile loading cancels without a later timeout error',async t=>{
+  t.mock.timers.enable({apis:['setTimeout']});
+  const f=fixture(t);f.update();await flush();f.update({...pose,dist:30000});
+  t.mock.timers.tick(30000);assert.equal(f.viewers[0].destroyCount,1);
+  t.mock.timers.tick(90000);assert.equal(f.photo.stats().failed,false);
+  const late=f.makeTiles();f.tileRequests[0].resolve(late);await flush();
+  assert.equal(late.destroyed,1);assert.equal(f.photo.stats().loading,false);
 });
 
 test('switching away during engine loading does not spend its foreground timeout',async t=>{
