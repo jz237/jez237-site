@@ -40,7 +40,7 @@ import {puddleDepth,type Puddle} from './puddle-splashes';
 import {wheelResponse,TireContact} from './wheel-mechanics';
 import {wheelTearsOff} from './wheel-physics';
 import {EngineMisfire} from './engine-misfire';
-import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowoutImpulse,bentRimTyre,rimWobble,springBias,sagBias,driveBias,thrustAngle,leakBrakeFluid,brakeFluidFactor,steerRate,throttleJams,jammedThrottle,CLUTCH,clutchGrip,clutchSlips,steerPlay,steerWander,tyreRub,rubWear,electricalFault,electricalCut,WHEEL_NUTS,loosenNuts,nutShimmy,EXHAUST_BLOW,exhaustBlow,liftPops,DIFF,diffDamage,diffAxle,wearDiff,diffDrive,DEBEAD,beadStress,tieRodSnapped,flopToe,GEAR_POP,gearPop,CALIPER,caliperDrag,discHeat,discGlow,discFade,LEAK} from './damage-handling';
+import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowoutImpulse,bentRimTyre,rimWobble,springBias,sagBias,driveBias,thrustAngle,leakBrakeFluid,brakeFluidFactor,steerRate,throttleJams,jammedThrottle,CLUTCH,clutchGrip,clutchSlips,steerPlay,steerWander,tyreRub,rubWear,electricalFault,electricalCut,WHEEL_NUTS,loosenNuts,nutShimmy,EXHAUST_BLOW,exhaustBlow,liftPops,DIFF,diffDamage,diffAxle,wearDiff,diffDrive,DEBEAD,beadStress,tieRodSnapped,flopToe,GEAR_POP,gearPop,CALIPER,caliperDrag,discHeat,discGlow,discFade,MOUNTS,mountsBroken,shuntThrottle,LEAK} from './damage-handling';
 import {leakRates,dripInterval,FLAME,fuelSpacing} from './fluid-leaks';
 import {drainOil,starvationWear,seizes,OIL,drainCoolant,overheatWear,FUEL_TANK,drainFuel,fuelFeed} from './oil-starvation';
 import {MAX_ENGINE_RESTART} from './engine-stall';
@@ -209,6 +209,13 @@ export class Vehicle {
   readonly discHeat = new Float32Array(4);
   private discGlows: (T.Sprite|null)[] = [null,null,null,null];
   private discSmokeClock = 0;
+  /** Broken engine mounts (offline events): the lagging throttle the drive gets, the last pedal, jolts so far (QA). */
+  mountsBroken = false;
+  private shunt = 0;
+  private lastPedal = 0;
+  private lastJolt = -1;
+  private shuntInput: Vehicle['input']|null = null;
+  mountJolts = 0;
   inNeutral = false;
   private popQueue: number[] = [];
   private liftThrottle = 0;
@@ -222,6 +229,8 @@ export class Vehicle {
   /** Fired the step a spring or driveshaft lets go, with the wheel index (sound/feed hook). */
   /** Jumped out of gear (true) or clunked back in (false). */
   onGearClunk?:(out:boolean)=>void;
+  /** The loose engine clunked against its broken mounts. */
+  onMountClunk?:()=>void;
   onBreak?:(what:'spring'|'shaft'|'diff'|'tierod',wheel:number)=>void;
   /** Gears left after gearbox damage (offline only; 5 = intact). */
   gearLimit = 5;
@@ -433,7 +442,7 @@ export class Vehicle {
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
-    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.clutchGrip=1;this.clutchBurn=0;this.clutchSmokeClock=0;this.clutchSmoke=0;this.steerPlay=0;this.steerWander=0;this.doorOpenTime=0;this.doorsTorn=0;this.doorSlams=0;this.rubDrag.fill(0);this.rubSmoke=0;this.rubClock=0;this.electricalFault=0;this.electricalCut=false;this.electricalCuts=0;this.electricClock=0;this.nutLoose.fill(0);this.wheelShimmy.fill(0);this.wheelsShed=0;this.exhaustBlow=0;this.exhaustPops=0;this.diffWear=0;this.beadStress.fill(0);this.debeads=0;this.steerLink.fill(1);this.linkClock=0;this.popUntil=0;this.popSlot=-1;this.gearPops=0;this.inNeutral=false;this.brakeDrag.fill(0);this.discHeat.fill(0);this.discSmokeClock=0;for(const g of this.discGlows)if(g)g.visible=false;this.popQueue.length=0;this.liftThrottle=0;this.lifts=0;this.wanderClock=0;this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.fuelLevel=FUEL_TANK.start;this.fuelClock=0;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
+    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.clutchGrip=1;this.clutchBurn=0;this.clutchSmokeClock=0;this.clutchSmoke=0;this.steerPlay=0;this.steerWander=0;this.doorOpenTime=0;this.doorsTorn=0;this.doorSlams=0;this.rubDrag.fill(0);this.rubSmoke=0;this.rubClock=0;this.electricalFault=0;this.electricalCut=false;this.electricalCuts=0;this.electricClock=0;this.nutLoose.fill(0);this.wheelShimmy.fill(0);this.wheelsShed=0;this.exhaustBlow=0;this.exhaustPops=0;this.diffWear=0;this.beadStress.fill(0);this.debeads=0;this.steerLink.fill(1);this.linkClock=0;this.popUntil=0;this.popSlot=-1;this.gearPops=0;this.inNeutral=false;this.brakeDrag.fill(0);this.discHeat.fill(0);this.discSmokeClock=0;this.mountsBroken=false;this.shunt=0;this.lastPedal=0;this.lastJolt=-1;this.mountJolts=0;this.shuntInput=null;for(const g of this.discGlows)if(g)g.visible=false;this.popQueue.length=0;this.liftThrottle=0;this.lifts=0;this.wanderClock=0;this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.fuelLevel=FUEL_TANK.start;this.fuelClock=0;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
     if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
@@ -646,6 +655,15 @@ export class Vehicle {
     this.stressGlass();
     this.throttleJammed=this.extendedDamage&&this.health>0&&throttleJams(this.structuralDamage?.[0]??0,this.id);
     if(this.throttleJammed)this.input.throttle=jammedThrottle(this.input.throttle,true);
+    // Broken mounts: the engine rocks — a jolt and a clunk on a sharp throttle change, and the drive takes up late.
+    this.mountsBroken=this.extendedDamage&&this.health>0&&mountsBroken((isRearEngineKind(this.kind)?this.structuralDamage?.[1]:this.structuralDamage?.[0])??0);
+    if(this.mountsBroken){
+      // The driver's pedal is only read from a freshly assigned input; our own lagged copy never feeds back into it.
+      const pedal=this.input!==this.shuntInput?this.input.throttle:this.lastPedal,step=pedal-this.lastPedal;this.lastPedal=pedal;
+      if(Math.abs(step)>=MOUNTS.minStep&&!(this.engineStall!>0)&&this.linkClock-this.lastJolt>MOUNTS.gap){this.lastJolt=this.linkClock;this.mountJolts++;
+        const k=this.specification.mass*MOUNTS.jolt*step;this.body.applyTorqueImpulse({x:this.forward.x*k,y:this.forward.y*k,z:this.forward.z*k},true);this.onMountClunk?.();}
+      this.shunt=shuntThrottle(this.shunt,pedal,dt);this.shuntInput={...this.input,throttle:this.shunt};this.input=this.shuntInput;}
+    else{this.shunt=this.input.throttle;this.lastPedal=this.input.throttle;}
     if(this.extendedDamage)this.brakeFluid=leakBrakeFluid(this.brakeFluid,this.structuralDamage?.[0]??0,dt);
     this.wreckParts.flipHood=this.extendedDamage;
     this.gearLimit=this.extendedDamage?gearLimit(this.structuralDamage,isFrontDriveKind(this.kind)?'front':(this.kind==='coupe'||isClassicKind(this.kind)&&this.kind!=='trail')?'rear':'all'):5;

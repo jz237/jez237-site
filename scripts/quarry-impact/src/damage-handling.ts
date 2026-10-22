@@ -214,3 +214,11 @@ export const discGlow=(heat:number)=>{const t=clamp01((clamp01(heat)-CALIPER.glo
 /** That wheel's brake force left as the disc overheats (exactly 1 below .6). */
 export const discFade=(heat:number)=>heat>.6?1-CALIPER.fade*clamp01((heat-.6)/.4):1;
 export const caliperWarning=(drag:ArrayLike<number>)=>Array.from(drag).some(v=>v>0)?'BRAKE BINDING':'';
+/** A crushed engine bay past MOUNTS.onset breaks the engine mounts: the engine rocks in the bay, so every stab or lift of
+ * the throttle jolts the body over (torque reaction) with a clunk, and the drive takes up late as the engine shunts
+ * before it bites (the throttle follows the pedal at MOUNTS.lag per second instead of at once). */
+export const MOUNTS={onset:.5,lag:5,jolt:.25,minStep:.25,gap:.3} as const;
+export const mountsBroken=(engineEnd:number)=>Number.isFinite(engineEnd)&&engineEnd>=MOUNTS.onset;
+/** The throttle the drive actually gets this step: lagging the pedal on broken mounts, the pedal itself otherwise. */
+export const shuntThrottle=(effective:number,pedal:number,dt:number)=>{const p=Number.isFinite(pedal)?pedal:0,e=Number.isFinite(effective)?effective:p;return dt>0?e+(p-e)*Math.min(1,MOUNTS.lag*dt):e;};
+export const mountsWarning=(broken:boolean)=>broken?'ENGINE MOUNTS BROKEN':'';
