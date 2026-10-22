@@ -50,8 +50,10 @@ moved toward its end point every frame with the original wing-beat cycle
 gull model. The 9CD50 offsets that main21's camera also reads are the camera
 shake accumulators (801CEBE0, six vectors per camera, zeroed by 9C8xx, pushed by
 98E90 only on shake events and decayed by 98DE0); nothing in the ending raises
-one, so they add nothing to the held view. Not reconstructed: rider engine
-sound during the ending (audio stays with the ending's menu owner).
+one, so they add nothing to the held view. The ending is also silent of rider
+engines in the original: ECB98's audio call (C21F4 mode 11, the ending music)
+mutes both rider channels like every mode change, and engines play only in
+racing mode 7.
 
 ### original water option
 
