@@ -24300,5 +24300,155 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-22-factual-infographic-factual-infographic-celiac-disease-the-",
+    "title": "Factual infographic: Celiac Disease — The Intestinal Surface",
+    "tests": "factual_subtype: medical-health-infographic; artwork-led unboxed anatomical atlas; source-backed clinical context; no subjective review; archive_slot=2026-10-22T11:20; concept=celiac-disease-immune-villous-damage-nutrient-absorption; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create the finished artistic medical infographic itself, directly on canvas, not a poster mockup or book. Main title: “CELIAC DISEASE”. Subtitle: “When an immune reaction damages the intestinal surface”. Use a refined contemporary anatomical atlas: layered gouache, translucent watercolor and precise fine-ink contours on a soft ivory field, deep petrol-blue typography, warm coral mucosa, ochre grain accents and muted teal comparison tissue. Dramatic asymmetric composition with generous breathing room and readable editorial typography, not a rigid boxed grid, detached cards, numbered dashboard or stock template.\n\nThe dominant artwork is a sweeping, dimensional ribbon of small-intestinal wall curling diagonally through the center and right, its outer surface peeling back to reveal a carefully rendered mucosal surface. Nest a large magnified comparison naturally into the ribbon: tall closely spaced fingerlike villi on one open edge, noticeably blunted/flattened inflamed villi on the other. Exquisitely paint individual epithelial contours, delicate folds, soft wet highlights and tissue depth without inventing molecular machinery. Label the two studies “Normal villi” and “Celiac-damaged villi”, with a small note “Schematic comparison”. Connect magnification to a modest, anatomically plausible small-intestine silhouette at left using fine curved leader lines; label “Small intestine”. Open callout on the normal side: “Villi increase surface area”. Open callout by blunted surface: “Damage reduces nutrient absorption”. The disease comparison is conceptual, not a patient photograph or universal severity scale.\n\nFrom a small, precisely painted cluster of wheat, barley and rye near the upper left, weave a loose curved annotation pathway into the inflamed tissue. Label grain cluster “Gluten: wheat • barley • rye”; next annotations “In genetically susceptible people” then “Abnormal immune response” then “Inflammation and villous damage”. The pathway represents an immune process, not grains physically puncturing villi, toxins or an infection. Tiny secondary line “Family history raises risk; gluten alone does not cause disease in everyone”. Keep the mechanism informative without speculative receptors, invented cells or unsupported numbers.\n\nPlace short symptom phrases along the outside arc of the intestinal ribbon, linked by delicate open strokes: “Bloating / abdominal pain”, “Diarrhea”, “Fatigue”. Under them, clearly readable: “Some people have no symptoms”. An elegant smaller open branch reads “Poor absorption can contribute to iron-deficiency anemia and weak bones”. No distress caricature, no human protagonist necessary, no decorative symptom icons displacing anatomy.\n\nIn the lower-left breathing space integrate a fine ink blood-sample tube and a small folded tissue specimen as understated studies with text: “Diagnosis: antibody blood tests; often a small-intestinal biopsy”. Strong readable caution directly beneath: “Do not start a gluten-free diet before testing without medical advice — it can affect results.” Add “Symptoms alone cannot diagnose celiac disease”.\n\nAlong the lower sweep of the composition, a flowing teal annotation leads from inflamed tissue toward a small healthier-villus study, explicitly labeled “A gluten-free diet allows healing in most people”, with no guaranteed timeline or promise of complete recovery. Main management text: “Lifelong gluten-free diet + dietitian support”. Supporting concise lines: “Read labels and avoid hidden gluten”, “Follow-up checks symptoms and nutrient deficiencies”, “Persistent symptoms need reassessment”. Add the distinction “Not the same as wheat allergy or non-celiac gluten sensitivity”.\n\nAt the bottom, a restrained rust-red open caution line, not a box: “Seek urgent advice: cannot keep fluids down or bloody diarrhea. Sudden severe abdominal pain: emergency care.” Smaller contextual line: “General warning signs — do not assume these are celiac disease.” Footer “General education, not a diagnosis or personal treatment plan”.\n\nEvery fact and diagram must agree with these labels; do not add statistics, dosages, patient-specific advice, cure claims, extra anatomy labels, bibliography, URLs, citations, watermarks or logos. Prioritize the substantial anatomical hero and clear visual journey; omit ornamental grain duplicates or the optional tiny healing study if space is tight, never the essential mechanism, diagnosis caution, management or warning signs. Finish as an elegant richly detailed unboxed artwork with a clear title and highly legible concise facts. Request medium quality, auto size, opaque background.",
+    "image": "images/2026-10-22-factual-infographic-factual-infographic-celiac-disease-the-.jpg",
+    "thumb": "thumbs/2026-10-22-factual-infographic-factual-infographic-celiac-disease-the-.webp",
+    "color": "#e6cec0",
+    "date": "2026-10-22",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "celiac-disease-immune-villous-damage-nutrient-absorption",
+      "imageSha256": "a04cbfd0ec993b67326c3787bf3e12cb253f441136d4dfcd1404d2a2faa94ca9",
+      "imageDHash": "89a762f8729e9c70"
+    },
+    "factualInfographic": {
+      "topic": "How celiac disease triggers immune-mediated small-intestinal villous damage, impairs nutrient absorption, and is evaluated and managed",
+      "description": "An artwork-led clinical atlas of celiac disease, normal versus damaged villi, variable symptoms, testing before dietary change, and evidence-based management.",
+      "sourceNote": "Verified anatomy, immune mechanism, symptoms, diagnostic-diet caution, lifelong dietary management and general urgent GI warning signs. National Institute of Diabetes and Digestive and Kidney Diseases: https://www.niddk.nih.gov/health-information/digestive-diseases/celiac-disease/all-content; NHS: https://www.nhs.uk/conditions/coeliac-disease/; NHS: https://www.nhs.uk/conditions/coeliac-disease/causes/; National Institute of Diabetes and Digestive and Kidney Diseases: https://www.niddk.nih.gov/health-information/digestive-diseases/celiac-disease/treatment; NHS: https://www.nhs.uk/symptoms/diarrhoea-and-vomiting/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-22T15:21:59.628382+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Diabetes and Digestive and Kidney Diseases",
+            "title": "Celiac Disease — Definition, Symptoms and Diagnosis",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/digestive-diseases/celiac-disease/all-content"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Coeliac disease",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/coeliac-disease/"
+          },
+          {
+            "id": "S3",
+            "publisher": "NHS",
+            "title": "Coeliac disease — Causes",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/coeliac-disease/causes/"
+          },
+          {
+            "id": "S4",
+            "publisher": "National Institute of Diabetes and Digestive and Kidney Diseases",
+            "title": "Treatment for Celiac Disease",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/digestive-diseases/celiac-disease/treatment"
+          },
+          {
+            "id": "S5",
+            "publisher": "NHS",
+            "title": "Diarrhoea and vomiting",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/symptoms/diarrhoea-and-vomiting/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Celiac disease is an autoimmune condition: eating gluten triggers an abnormal immune reaction that damages the small intestine.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Gluten occurs in wheat, barley and rye.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Villi are projections of the small-intestinal lining that increase surface area; inflammation and damage can flatten them and impair nutrient absorption. Normal and celiac-damaged villi are schematic comparisons, not before-and-after images from a patient.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Symptoms may include bloating, abdominal pain, diarrhea and fatigue; some people have no symptoms.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Nutrient malabsorption can lead to iron-deficiency anemia and weakening of bones.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Celiac disease has genetic susceptibility and increased risk in close relatives; eating gluten alone does not mean someone will develop it.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Evaluation commonly uses antibody blood tests and small-intestinal biopsy; symptoms alone do not diagnose it. Do not start a gluten-free diet before diagnostic testing without medical advice because this can affect results.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Treatment is a lifelong gluten-free diet with dietitian support; for most people it improves symptoms and allows intestinal healing, but is not a cure.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Read food labels, avoid hidden gluten, and follow up with a clinician to assess symptoms and nutritional deficiencies and supplement only if needed.",
+            "sourceIds": [
+              "S4"
+            ]
+          },
+          {
+            "claim": "Persistent symptoms despite a gluten-free diet warrant clinical reassessment.",
+            "sourceIds": [
+              "S4"
+            ]
+          },
+          {
+            "claim": "With diarrhea or vomiting, inability to keep fluids down or bloody diarrhea requires urgent advice; sudden severe abdominal pain requires emergency care. These are general warning signs, not diagnostic signs of celiac disease.",
+            "sourceIds": [
+              "S5"
+            ]
+          },
+          {
+            "claim": "Celiac disease differs from wheat allergy and non-celiac gluten sensitivity.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
