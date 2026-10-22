@@ -481,6 +481,7 @@ export class Vehicle {
     this.misfireFactor=running?this.engineMisfire.update(dt,this.engineDamage??0,this.input.throttle):1;
     this.steerLimit=this.extendedDamage?steeringLimit(this.structuralDamage):1;
     this.thrustAngle=this.extendedDamage?thrustAngle(this.structuralDamage):0;
+    this.wreckParts.flipHood=this.extendedDamage;
     this.gearLimit=this.extendedDamage?gearLimit(this.structuralDamage,isFrontDriveKind(this.kind)?'front':(this.kind==='coupe'||isClassicKind(this.kind)&&this.kind!=='trail')?'rear':'all'):5;
     for(let i=0;i<4;i++){this.brakeBias[i]=this.extendedDamage?brakeFactor(this.wreckParts.wheelDamage[i]):1;this.damperBias[i]=this.extendedDamage?damperFactor(this.wreckParts.wheelDamage[i]):1;
       const d=this.extendedDamage?this.wreckParts.wheelDamage[i]:0,spring=springBias(d),drive=driveBias(d);

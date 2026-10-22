@@ -33,7 +33,7 @@ export class ReplayScene {
     for(const prop of sourceProps)if(!prop?.mesh)throw Error('This replay requires the recorded course prop set.');
     const silent={emit(){},mark(){},detach(){}} as unknown as Effects;
     try{
-      for(const c of doc.meta.cars){const car=new Vehicle(c.id,c.kind,c.setup.paint,scene,world,silent,c.setup,ground);this.cars.push(car);car.engineStall=doc.meta.engineModel===1?0:undefined;car.tyreDamage=doc.meta.tyreModel===1?[0,0,0,0]:undefined;car.extendedDamage=doc.meta.damageModel===1;car.body.setEnabled(false);}
+      for(const c of doc.meta.cars){const car=new Vehicle(c.id,c.kind,c.setup.paint,scene,world,silent,c.setup,ground);this.cars.push(car);car.wreckParts.flipHood=doc.meta.damageModel===1;car.engineStall=doc.meta.engineModel===1?0:undefined;car.tyreDamage=doc.meta.tyreModel===1?[0,0,0,0]:undefined;car.extendedDamage=doc.meta.damageModel===1;car.body.setEnabled(false);}
       for(const original of sourceProps){const mesh=original.mesh.clone();this.props.push(mesh);scene.add(mesh);}
     }catch(error){this.dispose();throw error;}
   }

@@ -8,8 +8,14 @@ export function hoodWindLift(speed:number,loose:number){
   const s=T.MathUtils.smoothstep(Math.abs(speed),14,30),l=T.MathUtils.smoothstep(loose,.3,.9);
   return .55*s*l;
 }
+/** How far (0..1) a nearly torn-off bonnet has been flipped back over the windscreen by the airflow: from loose 0.8
+ * and 20 m/s, fully folded (about 117°) by loose 0.95 at 28 m/s. Pure, so replays reproduce it from loose + speed. */
+export function hoodFlip(speed:number,loose:number){return T.MathUtils.smoothstep(loose,.8,.95)*T.MathUtils.smoothstep(Math.abs(speed),20,28);}
+export const HOOD_FOLD=-2.05;
 /** Visual hinge failures around the authored bodywork. No extra rigid bodies. */
 export class WreckAttachments {
+  /** Offline cars (and replays of offline events) let a loose bonnet flip back over the screen. */
+  flipHood=false;
   readonly assemblies:Assembly[]=[];
   readonly wheelDamage=new Float32Array(4);
   readonly wheelShift=Array.from({length:4},()=>new T.Vector3());
@@ -70,6 +76,8 @@ export class WreckAttachments {
         // At speed the airflow gets under a loose bonnet and lifts it, shaking, toward the screen.
         const lift=hoodWindLift(speed,a.loose);
         pivot.set(0,a.bounds.max.y-.04,a.bounds.min.z+.08);euler.x=-a.loose*.42-lift+flutter*(1+lift*4);euler.z=a.side*a.loose*.045;
+        // Nearly torn off at speed it folds right back against the windscreen (blinding a driver in the cab view).
+        if(this.flipHood){const flip=hoodFlip(speed,a.loose);if(flip>0)euler.x+=(HOOD_FOLD-euler.x)*flip;}
       }else if(a.name.startsWith('cargo-')){
         const side=a.name.endsWith('left')?-1:1;
         pivot.set(side<0?a.bounds.min.x:a.bounds.max.x,pivot.y,a.bounds.max.z);euler.y=-side*a.loose*.45+flutter;

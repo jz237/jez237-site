@@ -2118,6 +2118,8 @@ async function boot() {
     igniteAt: (id: number, reach = 3) => { const c = cars.find(x => x.id === id); return c ? fx.slicks.igniteAt(c.current.x, c.current.z, reach, false) : 0; },
     get replaySlicks(){return replaySlicks?{...replaySlicks.slicks.stats,props:replaySlicks.props.burning.size}:null;},
     get propFires(){return propFires.burning.size;},
+    /** QA: loosen a part's hinges (0..1) without tearing it off. */
+    loosen: (id: number, name: string, v: number) => { const a = cars.find(x => x.id === id)?.wreckParts.assemblies.find(x => x.name === name); if (a) a.loose = Math.max(0, Math.min(1, v)); return !!a; },
     /** QA: set a car's oil level (0..1). */
     setOil: (id: number, v: number) => { const c = cars.find(x => x.id === id); if (c && Number.isFinite(v)) c.oilLevel = Math.max(0, Math.min(1, v)); },
     /** QA: tear a named part (front-bumper, hood, …) off a car as a hard hit would. */
