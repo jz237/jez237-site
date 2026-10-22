@@ -25,6 +25,7 @@ import {designGarageCallbacks} from './design-panel';
 import {armorWearWarning} from './armor-wear';
 import {showVenueBrowser,selectVenue,selectDemoVenue} from './venue-browser';
 import {readCameraSettings,playerChaseComposition,mountCameraSettings} from './camera-settings';
+import {ScreenCraze,trackCraze,hull,type CrazeState} from './screen-craze';
 import {dashboardComposition,roofDuckDrop,nextDrivingCamera,DRIVING_CAMERA_LABELS,type DrivingCamera} from './driving-camera';
 const roofDucks=new WeakMap<object,{roof:number;drop:number}>();
 /** Mechanical failures as highlight moments: caption and how they rank against hits (a hit scores its damage). */
@@ -1660,6 +1661,28 @@ function step(dt: number) {
   fx.update(dt);
 }
 function cycleSpectator(direction:number){if(scoreSpectating())director.cycleCar(cars,direction);}
+// Windscreen crazing from the dashboard camera: cracks tracked on the player's screen every frame, drawn only in that view.
+const crazeCanvas=document.createElement('canvas');crazeCanvas.id='screen-craze';crazeCanvas.style.cssText='position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none';
+document.getElementById('game')?.after(crazeCanvas);
+const screenCraze=new ScreenCraze(crazeCanvas),crazeStates=new WeakMap<T.Mesh,CrazeState>(),crazePoint=new T.Vector3();
+function updateCraze(){
+  const p=cars[0],spots:{x:number;y:number;level:number;seed:number}[]=[],clip:{x:number;y:number}[]=[],show=!!p&&drivingCamera==='dashboard'&&!demo&&!studio&&['playing','countdown','paused','wrecked'].includes(state);
+  if(p)for(const g of p.glass){
+    if(!/windshield|^glass_front/i.test(g.name))continue;
+    const st=(g.material as T.Material).userData.glassState as {impact:{value:T.Vector3}}|undefined;if(!st)continue;
+    const imp=st.impact.value,before=crazeStates.get(g)??{centres:[],last:0};
+    const now=trackCraze(before,[imp.x,imp.y,imp.z],g.visible?Math.min(1,(g.userData.damage??0)/24):0,p.id*7919+before.centres.length*104729+1);crazeStates.set(g,now);
+    if(!show||!g.visible)continue;
+    camera.updateMatrixWorld();camera.matrixWorldInverse.copy(camera.matrixWorld).invert();g.updateWorldMatrix(true,false);
+    // Clip to the glass itself: the hull of (a sample of) its rest vertices on screen.
+    if(now.centres.length){const pos=(g.geometry.getAttribute('restPosition')??g.geometry.getAttribute('position')) as T.BufferAttribute,step=Math.max(1,Math.floor(pos.count/96)),pts:{x:number;y:number}[]=[];
+      for(let k=0;k<pos.count;k+=step){crazePoint.fromBufferAttribute(pos,k).applyMatrix4(g.matrixWorld).applyMatrix4(camera.matrixWorldInverse);if(crazePoint.z>-camera.near)continue;crazePoint.applyMatrix4(camera.projectionMatrix);pts.push({x:(crazePoint.x+1)/2*innerWidth,y:(1-crazePoint.y)/2*innerHeight});}
+      clip.push(...hull(pts));}
+    for(const c of now.centres){crazePoint.set(c.p[0],c.p[1],c.p[2]).applyMatrix4(g.matrixWorld).project(camera);if(Math.abs(crazePoint.z)>1)continue;
+      spots.push({x:(crazePoint.x+1)/2*innerWidth,y:(1-crazePoint.y)/2*innerHeight,level:c.level,seed:c.seed});}
+  }
+  screenCraze.draw(spots,clip);
+}
 function cycleDrivingCamera(){drivingCamera=nextDrivingCamera(drivingCamera);toast(DRIVING_CAMERA_LABELS[drivingCamera]+' CAMERA');}
 function updateCamera(dt: number) {
   if(scoreSpectating()){const current=cars.find(c=>c.id===director.followed);if(!current||current.health<=0)director.cycleCar(cars,1);else if(!director.manual)director.follow(current.id);}
@@ -1880,6 +1903,7 @@ function frame(now: number) {
   if(demo&&state==='result'){demoRestart=Math.max(0,demoRestart-dt);fx.update(dt);if(demoRestart===0){const next=nextDemoMode(mode,demoOptions.loop);if(next){mode=next;state='loading';void start(true);}}}
   updateTrialGhost();
   updateCamera(dt);
+  updateCraze();
   if(studio&&!studio.seeking){replaySlicks?.update(studio.time);replayFire?.fire.setGround(replaySlicks?[...replaySlicks.slicks.fires(),...replaySlicks.props.fires(studio.time,propPoints(replayPropMeshes.map(mesh=>({mesh}))))]:[],studio.time);replayFire?.update(studio.time,camera);replayPuddles?.update(studio.time);}
   if(!studio)for(const car of cars){car.wreckParts.pose(['playing','countdown'].includes(state)?dt:0,car.speed);car.wreckParts.wheelsPose();car.syncSuspension();}
   const effectsActive=['playing','countdown','wrecked'].includes(state)||(demo&&state==='result');
@@ -2150,6 +2174,8 @@ async function boot() {
     setDiscHeat: (id: number, wheel: number, v: number) => { const c = cars.find(x => x.id === id); if (c && Number.isInteger(wheel) && wheel >= 0 && wheel < 4 && Number.isFinite(v)) c.discHeat[wheel] = Math.max(0, Math.min(1, v)); },
     setOil: (id: number, v: number) => { const c = cars.find(x => x.id === id); if (c && Number.isFinite(v)) c.oilLevel = Math.max(0, Math.min(1, v)); },
     /** QA: tear a named part (front-bumper, hood, …) off a car as a hard hit would. */
+    /** QA: crack a car's windscreen to this damage (0–1 of the shatter sheet), centred on the screen. */
+    crackScreen: (id: number, level: number) => { const c = cars.find(x => x.id === id); if (!c) return 0; let n = 0; for (const g of c.glass) { if (!/windshield|^glass_front/i.test(g.name)) continue; const st = (g.material as T.Material).userData.glassState as {damage:{value:number};impact:{value:T.Vector3}} | undefined; if (!st) continue; g.geometry.computeBoundingBox(); st.damage.value = level; st.impact.value.copy(g.geometry.boundingBox!.getCenter(new T.Vector3())); g.userData.damage = level * 24; n++; } return n; },
     /** QA: knock an offline car's front-left wheel to this damage (bends its steering lock). */
     bendSteering: (id: number, damage: number) => { const c = cars.find(x => x.id === id); if (!c?.extendedDamage) return false; c.wreckParts.wheelDamage[0] = damage; return true; },
     /** QA: set a wheel bearing's wear on an offline car (BEARING.start cracked … 1 seized). */
