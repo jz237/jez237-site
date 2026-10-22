@@ -62,5 +62,14 @@ export function thrustAngle(structure:readonly number[]|undefined){
   const left=clamp01(structure?.[2]??0),right=clamp01(structure?.[3]??0),side=right>left?1:right<left?-1:1;
   return side*Math.min(SUBFRAME.max,(rear-SUBFRAME.onset)*SUBFRAME.gain);
 }
+/** A front crushed past BRAKE_LINE.onset splits a brake line: the fluid leaks away (faster the worse the crush) and the
+ * brakes fade on every wheel, down to BRAKE_LINE.floor of their force with the reservoir dry. */
+export const BRAKE_LINE={onset:.45,rate:.02,floor:.25,warn:.7} as const;
+export function leakBrakeFluid(fluid:number,frontCompression:number,dt:number){
+  const c=clamp01(frontCompression);if(c<=BRAKE_LINE.onset||!(dt>0))return clamp01(fluid);
+  return Math.max(0,clamp01(fluid)-(c-BRAKE_LINE.onset)/(1-BRAKE_LINE.onset)*BRAKE_LINE.rate*dt);
+}
+export const brakeFluidFactor=(fluid:number)=>BRAKE_LINE.floor+(1-BRAKE_LINE.floor)*clamp01(fluid);
+export const brakeWarning=(fluid:number)=>clamp01(fluid)<BRAKE_LINE.warn?'BRAKES FADING':'';
 export const DAMPER_LOSS=.6;
 export function damperFactor(wheelDamage:number){return 1-DAMPER_LOSS*clamp01(wheelDamage);}
