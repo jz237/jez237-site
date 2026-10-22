@@ -9,7 +9,7 @@ import {audioListenerPosition,AudioListenerMotion,type AudioPerspective} from '.
 import {starterSamples} from './engine-stall';
 import {engineDamageLevel} from './engine-condition';
 import {classicEngineVoice,vehicleWheelRadius} from './classic-vehicle-specs';
-import {RATTLE,rattleRate,thumpRate,EventClock,synthClank,synthThump} from './damage-rattle';
+import {RATTLE,rattleRate,thumpRate,EventClock,synthClank,synthThump,hornStuck,synthHorn} from './damage-rattle';
 import {knockRate} from './oil-starvation';
 /** Front compression past which the fan hits its shroud, and its clatter rate cap. */
 const FAN_CLATTER={onset:.35,max:12} as const;
@@ -223,6 +223,20 @@ export class Sound {
   /** A misfire's exhaust pop: the burst sample, pitched up, cut short and muffled. */
   backfire(p:T.Vector3){this.shot('vehicle-burst',p,.5,{rate:2.1,delay:0,duration:.17,lowpass:2400});}
   private groundFireLoop?:Loop;
+  /** Stuck horns blaring, by car id (offline, within earshot). */
+  private horns=new Map<number,Loop>();
+  /** Keep a horn loop going for each car with a shorted horn in earshot; silence the rest. */
+  stuckHorns(cars:readonly Vehicle[],listener:T.Vector3){
+    if(!this.ready||!this.fxBus)return;
+    if(!this.buffers.has('horn')){const c=this.ctx;if(!c||typeof c.createBuffer!=='function')return;const d=synthHorn(c.sampleRate),b=c.createBuffer(1,d.length,c.sampleRate);b.copyToChannel(d,0);this.buffers.set('horn',b);}
+    const now=this.ctx!.currentTime,live=new Set<number>();
+    for(const car of cars){
+      if(!car.extendedDamage||car.health<=0||!hornStuck(car.structuralDamage?.[0]??0,car.id)||car.current.distanceTo(listener)>RATTLE.hearing)continue;
+      live.add(car.id);let l=this.horns.get(car.id);if(!l){l=this.loop('horn',this.fxBus);if(!l)continue;this.horns.set(car.id,l);}
+      l.pan.positionX.value=car.current.x;l.pan.positionY.value=car.current.y+.5;l.pan.positionZ.value=car.current.z;l.gain.gain.setTargetAtTime(.16,now,.05);
+    }
+    for(const [id,l] of this.horns)if(!live.has(id)){l.gain.gain.setTargetAtTime(0,now,.05);l.source.stop(now+.3);this.horns.delete(id);}
+  }
   /** Burning oil or fuel on the ground: one crackling loop at the nearest fire (null = none). */
   groundFire(nearest:{p:T.Vector3;level:number}|null){
     if(!this.ready||!this.fxBus)return;

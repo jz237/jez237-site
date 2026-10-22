@@ -51,3 +51,12 @@ export function synthThump(sampleRate:number):Float32Array<ArrayBuffer>{
   }
   return out;
 }
+/** A front crushed past HORN.onset shorts the horn on about a third of the cars (fixed per car): it blares on. */
+export const HORN={onset:.55,share:.34} as const;
+export const hornStuck=(frontCompression:number,carId:number)=>clamp01(frontCompression)>HORN.onset&&((carId*.7548+.13)%1)<HORN.share;
+/** One second of a two-tone car horn (about 420 and 525 Hz, slightly harsh), loopable. */
+export function synthHorn(sampleRate:number):Float32Array<ArrayBuffer>{
+  const length=Math.round(sampleRate),out=new Float32Array(length);
+  for(let i=0;i<length;i++){const t=i/sampleRate;let v=0;for(const f of [420,525])for(let h=1;h<=5;h+=2)v+=Math.sin(2*Math.PI*f*h*t)/h;out[i]=Math.tanh(v*.9)*.35;}
+  return out;
+}

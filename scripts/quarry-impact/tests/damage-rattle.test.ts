@@ -30,3 +30,9 @@ test('synthesized clanks and thumps are short, finite, bounded and decay to sile
  }
  assert.notDeepEqual(synthClank(48000,0).slice(0,500),synthClank(48000,1).slice(0,500),'variants differ');
 });
+test('a crushed front shorts the horn on about a third of the cars; the horn is a loud, bounded two-tone loop',async()=>{
+ const {HORN,hornStuck,synthHorn}=await import('../src/damage-rattle');
+ const n=Array.from({length:24},(_,i)=>i).filter(i=>hornStuck(.7,i)).length;assert.ok(n>=5&&n<=12,`about a third (${n}/24)`);
+ assert.equal(Array.from({length:24},(_,i)=>i).filter(i=>hornStuck(HORN.onset,i)).length,0);
+ const h=synthHorn(48000);let peak=0;for(const v of h){assert.ok(Number.isFinite(v));peak=Math.max(peak,Math.abs(v));}assert.ok(h.length===48000&&peak>.2&&peak<=.36);
+});
