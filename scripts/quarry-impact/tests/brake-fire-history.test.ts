@@ -1,6 +1,7 @@
+import {restoreExhaustOffBytes} from './exhaust-off-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readBrakeFirePrevious,restoreBrakeFireBytes,verifyBrakeFireRevision} from './brake-fire-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreExhaustOffBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('BrakeFire preserves every prior fixture, vehicle asset, venue art and history input',verifyBrakeFireRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/brake-fire/revision.json').toString());

@@ -14,7 +14,7 @@ export function wreckReport(s:WreckState){
 /** What broke under the bodywork (offline events), worst first: the mechanical failures the car finished with. */
 export type MechanicalState={seized?:boolean;outOfFuel?:boolean;diffBroken?:boolean;tieRods?:number;gearsLost?:number;clutchSlipping?:boolean;
   shafts?:number;springs?:number;brakesBinding?:number;electrical?:boolean;exhaust?:boolean;wheelsLoose?:number;rubbing?:number;steeringFailed?:boolean;
-  brakeFluidLow?:boolean;overheating?:boolean;oilLow?:boolean;sumpCracked?:boolean;throttleJammed?:boolean;doorsTorn?:number};
+  brakeFluidLow?:boolean;overheating?:boolean;oilLow?:boolean;sumpCracked?:boolean;exhaustGone?:boolean;throttleJammed?:boolean;doorsTorn?:number};
 const plural=(n:number,one:string,many=one+'s')=>`${n} ${n===1?one:many}`;
 export const MECHANICAL_LIMIT=6;
 export function mechanicalReport(s:MechanicalState){
@@ -26,7 +26,7 @@ export function mechanicalReport(s:MechanicalState){
   add(s.steeringFailed,'power steering gone');add(s.brakeFluidLow,'brake fluid low');add((s.brakesBinding??0)>0,plural(s.brakesBinding??0,'brake')+' binding');
   add(s.throttleJammed,'throttle jammed');add(s.electrical,'wiring shorting');add(s.overheating,'overheating');add(s.sumpCracked,'sump cracked');add(s.oilLow,'oil low');
   add((s.wheelsLoose??0)>0,plural(s.wheelsLoose??0,'wheel')+' working loose');add((s.rubbing??0)>0,plural(s.rubbing??0,'tyre')+' rubbing');
-  add(s.exhaust,'exhaust blowing');add((s.doorsTorn??0)>0,plural(s.doorsTorn??0,'door')+' torn off');
+  add(s.exhaustGone,'exhaust torn off');add(s.exhaust&&!s.exhaustGone,'exhaust blowing');add((s.doorsTorn??0)>0,plural(s.doorsTorn??0,'door')+' torn off');
   if(!bits.length)return'';
   const shown=bits.slice(0,MECHANICAL_LIMIT),more=bits.length-shown.length;
   return'MECHANICAL · '+shown.join(' · ')+(more>0?` · +${more} more`:'');
