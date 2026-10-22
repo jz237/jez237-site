@@ -1,6 +1,7 @@
+import {restoreDazeHearingBytes} from './daze-hearing-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readDriverDazePrevious,restoreDriverDazeBytes,verifyDriverDazeRevision} from './driver-daze-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreDazeHearingBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('DriverDaze preserves every prior fixture, vehicle asset, venue art and history input',verifyDriverDazeRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/driver-daze/revision.json').toString());

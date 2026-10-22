@@ -23,11 +23,16 @@ type Loop = { source: AudioBufferSourceNode; gain: GainNode; pan: PannerNode };
 import {CrowdRoar} from './crowd-roar';
 /** Engine-layer level during a misfire cut. */
 export const MISFIRE_AUDIO=.3;
+/** Dazed hearing: the low-pass cutoff (Hz) slides from wide open down to a dull thud as the daze deepens. */
+export const DAZE_HEARING={open:22000,dull:550} as const;
+export const dazeHearing=(level:number)=>{const l=Math.max(0,Math.min(1,Number.isFinite(level)?level:0));return DAZE_HEARING.open*Math.pow(DAZE_HEARING.dull/DAZE_HEARING.open,l);};
 export class Sound {
   private acousticProbe=new TrackAcousticProbe();
   private reflections?:TrackReflections;
   ctx?: AudioContext;
   master?: GainNode;
+  private dazeFilter?: BiquadFilterNode;
+  private dazeLevel = 0;
   engineBus?: GainNode;
   fxBus?: GainNode;
   ambientBus?: GainNode;
@@ -94,7 +99,9 @@ export class Sound {
     compressor.threshold.value = -12;
     compressor.knee.value = 12;
     compressor.ratio.value = 8;
-    this.master.connect(compressor).connect(c.destination);
+    // A dazed driver hears the world muffled: a low-pass between the mix and the output (wide open otherwise).
+    this.dazeFilter=c.createBiquadFilter();this.dazeFilter.type='lowpass';this.dazeFilter.frequency.value=DAZE_HEARING.open;this.dazeFilter.Q.value=.5;
+    this.master.connect(this.dazeFilter).connect(compressor).connect(c.destination);
     this.engineBus = c.createGain();
     this.fxBus = c.createGain();
     this.ambientBus = c.createGain();
@@ -220,6 +227,11 @@ export class Sound {
       const body=layer.id.startsWith('impact-');
       this.shot(layer.id,p,layer.volume*(body?profile.gain:1),body?{...layer,rate:layer.rate*profile.rate,duration:layer.duration*profile.duration,lowpass:profile.lowpass}:layer);
     }
+  }
+  /** Muffle everything while the player is dazed (0 clear .. 1 fully dazed); eases in and out. */
+  daze(level:number){
+    const l=Math.max(0,Math.min(1,Number.isFinite(level)?level:0));if(!this.ctx||!this.dazeFilter||Math.abs(l-this.dazeLevel)<.01)return;
+    this.dazeLevel=l;this.dazeFilter.frequency.setTargetAtTime(dazeHearing(l),this.ctx.currentTime,.08);
   }
   /** A misfire's exhaust pop: the burst sample, pitched up, cut short and muffled. */
   backfire(p:T.Vector3){this.shot('vehicle-burst',p,.5,{rate:2.1,delay:0,duration:.17,lowpass:2400});}
