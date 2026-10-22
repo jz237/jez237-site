@@ -21,7 +21,7 @@ test('a car with a bent rear subframe crabs off a straight line with the wheel h
   const scene=new T.Scene(),world=new R.World({x:0,y:-9.81,z:0});world.createCollider(R.ColliderDesc.cuboid(2000,.5,2000).setTranslation(0,-.5,0).setFriction(1));
   const c=new Vehicle(0,'sedan',stockSetup('sedan').paint,scene,world,{emit(){},mark(){},detach(){}} as never,stockSetup('sedan'),{height:()=>0,surface:()=>'asphalt'} as never,'angular-v1');
   try{
-   c.extendedDamage=extended;c.place(0,0,0);c.render(1);c.structuralDamage=[0,rear,0,.2,0];
+   c.extendedDamage=extended;c.place(0,0,0);c.render(1);c.structuralDamage=[0,rear,0,.14,0];// side .14: picks the subframe's lean, below the frame-bend onset (r127) so only the subframe is under test
    for(let k=0;k<30;k++){c.preStep(1/60);world.step();c.postStep(1/60,k/60);}
    const start=c.body.translation(),q=c.body.rotation(),f=new T.Vector3(0,0,1).applyQuaternion(new T.Quaternion(q.x,q.y,q.z,q.w));
    c.input.throttle=.6;for(let k=0;k<60*5;k++){c.preStep(1/60);world.step();c.postStep(1/60,1+k/60);}

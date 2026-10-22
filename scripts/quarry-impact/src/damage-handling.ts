@@ -236,3 +236,12 @@ export function starterFails(severity:number,attempt:number,seed:number){
   const s=clamp01(severity);if(!(s>0))return false;const x=Math.sin(attempt*17.17+seed*3.7)*43758.5453;return x-Math.floor(x)<STARTER.fail*s;
 }
 export const starterWarning=(severity:number)=>severity>0?'STARTER DAMAGED':'';
+/** A big side hit (T-bone) past FRAME_BEND.onset bends the chassis like a banana: the front axle yaws toward the dented
+ * side and the rear axle the other way, so the car keeps turning toward the damage and needs countersteer to go straight.
+ * Returns the toe (radians) each wheel is knocked to: fronts +, rears −, signed toward the more crushed flank. */
+export const FRAME_BEND={onset:.15,gain:.17,max:.06} as const;
+export function frameBend(structure:readonly number[]|undefined){
+  const left=clamp01(structure?.[2]??0),right=clamp01(structure?.[3]??0),worst=Math.max(left,right);
+  const b=Math.min(FRAME_BEND.max,Math.max(0,(worst-FRAME_BEND.onset)*FRAME_BEND.gain));return b>0?(right>=left?1:-1)*b:0;
+}
+export const frameWarning=(bend:number)=>bend!==0?'FRAME BENT':'';
