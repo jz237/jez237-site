@@ -20,6 +20,8 @@ import type { Vehicle } from './vehicle';
 import * as T from 'three';
 import type { ThermalAudio } from './vehicle-fire';
 type Loop = { source: AudioBufferSourceNode; gain: GainNode; pan: PannerNode };
+/** Seconds a damage loop (squeal, growl) is kept, silent, after it falls quiet, before its nodes are released. */
+const LOOP_HOLD=2;
 import {CrowdRoar} from './crowd-roar';
 /** Engine-layer level during a misfire cut. */
 export const MISFIRE_AUDIO=.3;
@@ -252,6 +254,7 @@ export class Sound {
   }
   /** Slipping fan belts squealing under load, by car id (offline, within earshot), pitched with the revs. */
   private squeals=new Map<number,Loop>();
+  private readonly quietSince=new WeakMap<Loop,number>();
   beltSqueals(cars:readonly Vehicle[],listener:T.Vector3){
     if(!this.ready||!this.fxBus)return;
     if(!this.buffers.has('squeal')){const c=this.ctx;if(!c||typeof c.createBuffer!=='function')return;const d=synthSqueal(c.sampleRate),b=c.createBuffer(1,d.length,c.sampleRate);b.copyToChannel(d,0);this.buffers.set('squeal',b);}
@@ -262,7 +265,11 @@ export class Sound {
       l.pan.positionX.value=car.current.x;l.pan.positionY.value=car.current.y+.6;l.pan.positionZ.value=car.current.z;
       l.source.playbackRate.setTargetAtTime(.8+Math.min(.6,(car.rpm??0)/9000),now,.06);l.gain.gain.setTargetAtTime(.2*car.squeal,now,.06);
     }
-    for(const [id,l] of this.squeals)if(!live.has(id)){l.gain.gain.setTargetAtTime(0,now,.05);l.source.stop(now+.3);this.squeals.delete(id);}
+    // AI throttle flickers on and off many times a second: a loop that falls quiet is faded and kept for LOOP_HOLD seconds
+    // rather than torn down and rebuilt each time (that node churn cost frames).
+    for(const [id,l] of this.squeals)if(!live.has(id)){const q=this.quietSince.get(l)??now;this.quietSince.set(l,q);l.gain.gain.setTargetAtTime(0,now,.05);
+      if(now-q>LOOP_HOLD||!cars.some(c=>c.id===id)){l.source.stop(now+.3);this.squeals.delete(id);this.quietSince.delete(l);}}
+    for(const id of live){const l=this.squeals.get(id);if(l)this.quietSince.delete(l);}
   }
   /** The wind roaring through the player's open wreck (level 0 = silent), pitched up with speed. */
   private windLoop?:Loop;
@@ -288,7 +295,9 @@ export class Sound {
       l.pan.positionX.value=car.current.x;l.pan.positionY.value=car.current.y+.3;l.pan.positionZ.value=car.current.z;
       l.source.playbackRate.setTargetAtTime(.6+Math.min(1.2,Math.abs(car.speed)/25),now,.08);l.gain.gain.setTargetAtTime(.28*g,now,.08);
     }
-    for(const [id,l] of this.growls)if(!live.has(id)){l.gain.gain.setTargetAtTime(0,now,.05);l.source.stop(now+.3);this.growls.delete(id);}
+    for(const [id,l] of this.growls)if(!live.has(id)){const q=this.quietSince.get(l)??now;this.quietSince.set(l,q);l.gain.gain.setTargetAtTime(0,now,.05);
+      if(now-q>LOOP_HOLD||!cars.some(c=>c.id===id)){l.source.stop(now+.3);this.growls.delete(id);this.quietSince.delete(l);}}
+    for(const id of live){const l=this.growls.get(id);if(l)this.quietSince.delete(l);}
   }
   /** Burning oil or fuel on the ground: one crackling loop at the nearest fire (null = none). */
   groundFire(nearest:{p:T.Vector3;level:number}|null){
