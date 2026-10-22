@@ -14,7 +14,13 @@ function lightPool(){
  ctx.translate(64,26);ctx.scale(1,3.4);const g=ctx.createRadialGradient(0,0,2,0,0,60);g.addColorStop(0,'rgba(255,238,200,0.95)');g.addColorStop(.4,'rgba(255,228,175,0.42)');g.addColorStop(.75,'rgba(255,222,165,0.12)');g.addColorStop(1,'rgba(255,220,160,0)');
  ctx.fillStyle=g;ctx.fillRect(-64,-8,128,72);poolTexture=new T.CanvasTexture(c);poolTexture.colorSpace=T.SRGBColorSpace;return poolTexture;
 }
-export type CarLights={readonly head:number;readonly tail:number;readonly working:number;set(on:boolean,braking?:boolean):void;dispose():void};
+/** A crushed front knocks the lamps askew: the pool of light swings toward the more crushed corner and falls short. */
+export const HEADLIGHT_AIM={yaw:.4,short:.45} as const;
+export function headlightAim(front:number,left:number,right:number){
+ const c=(v:number)=>Math.max(0,Math.min(1,Number.isFinite(v)?v:0)),f=c(front);
+ return{yaw:(c(right)-c(left))*HEADLIGHT_AIM.yaw*(.5+f)+(f>0?HEADLIGHT_AIM.yaw*.25*f*(c(right)>=c(left)?1:-1):0),reach:1-HEADLIGHT_AIM.short*f};
+}
+export type CarLights={readonly head:number;readonly tail:number;readonly working:number;set(on:boolean,braking?:boolean):void;aim(yaw:number,reach:number):void;dispose():void};
 export function attachCarLights(root:T.Object3D,halfLength:number):CarLights{
  root.updateMatrixWorld(true);
  const inverse=root.matrixWorld.clone().invert(),centre=new T.Vector3(),box=new T.Box3();
@@ -43,6 +49,10 @@ export function attachCarLights(root:T.Object3D,halfLength:number):CarLights{
    poolMesh.visible=on&&!!pool&&intact>0;poolMaterial.opacity=on?.38*intact:0;
    tailMats.forEach((m,i)=>{m.emissiveIntensity=mask&1<<(i+16)?0:on?(braking?3.2:1.1):(braking?.8:0);});
    lit=on;brake=braking;broken=mask;
+  },
+  aim(yaw,reach){
+   const y=Number.isFinite(yaw)?yaw:0,r=Math.max(.3,Math.min(1,Number.isFinite(reach)?reach:1)),d=halfLength+5.2*r;
+   poolMesh.rotation.set(-Math.PI/2,0,y);poolMesh.scale.set(1,r,1);poolMesh.position.set(Math.sin(y)*(d-halfLength),.06,halfLength+Math.cos(y)*(d-halfLength));
   },
   dispose(){poolMesh.removeFromParent();poolGeometry.dispose();poolMaterial.dispose();for(const m of owned)m.dispose();}};
 }

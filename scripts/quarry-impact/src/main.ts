@@ -172,7 +172,7 @@ import { showDriverProfile, awardText, MEDALS } from './profile-ui';
 import {dailyChallenge,dailyLighting} from './daily-event';
 import {EventAwards,awardsHtml} from './event-awards';
 import {bankAchievements} from './achievements';
-import {attachCarLights,type CarLights} from './car-lights';
+import {attachCarLights,headlightAim,type CarLights} from './car-lights';
 import {createRain} from './rain';
 import {applyWetLook} from './wet-look';
 import {setWetness} from './driving-surface';
@@ -1519,7 +1519,8 @@ function step(dt: number) {
     }
     return;
   }
-  {const dusk=eventLighting==='dusk';for(const c of cars)carLights.get(c)?.set(dusk&&c.health>0&&!c.electricalCut,dusk&&c.health>0&&(c.input?.brake??0)>.2&&Math.abs(c.speed)>1);}
+  {const dusk=eventLighting==='dusk';for(const c of cars){const l=carLights.get(c);if(dusk&&l&&c.extendedDamage){const a=headlightAim(c.structuralDamage?.[0]??0,c.structuralDamage?.[2]??0,c.structuralDamage?.[3]??0);l.aim(a.yaw,a.reach);}}
+  for(const c of cars)carLights.get(c)?.set(dusk&&c.health>0&&!c.electricalCut,dusk&&c.health>0&&(c.input?.brake??0)>.2&&Math.abs(c.speed)>1);}
   if (state !== 'playing') return;
   elapsed += dt;
   if(mode==='race'&&!eventAwards.started&&elapsed>.5&&!online?.active)eventAwards.grid(rankRace().map(c=>c.id));
