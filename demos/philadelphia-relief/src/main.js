@@ -1,7 +1,7 @@
 import { wireWindowCollapse } from './window-collapse.js?v=philly-2026092205';
 import { createBathymetry } from './bathymetry.js?v=philly-2026092201';
 import { wireSavedViews } from './saved-views.js?v=philly-2026092121';
-import { frameDelay } from './render-policy.js?v=philly-2026092121';
+import { frameDelay, createFrameScheduler } from './render-policy.js?v=philly-2026092121';
 import { preferLightweight, districtAssets } from './startup-policy.js?v=philly-2026092121';
 import { updateImageryCredit, wireFieldNotes, wireMapChrome, timelineSeek, captureName, mapShortcutAllowed }
   from './experience.js?v=philly-2026092121';
@@ -982,21 +982,14 @@ async function boot() {
   let fpsFrames = 0;
   let running = true;
   let elapsed = 0;
-  let frameTicket, frameTimer, scheduledDelay = 0, renderedFrames = 0, lastInteraction = performance.now();
+  let scheduledDelay = 0, renderedFrames = 0, lastInteraction = performance.now();
   const powerToggle = $('powerSaving'), powerStatus = $('powerStatus');
   powerToggle.checked = !!store.value('lightweight')
     || window.matchMedia('(max-width: 1024px), (pointer: coarse)').matches;
   let powerText = '';
+  const frameScheduler = createFrameScheduler({ render: tick, canRender: () => running && !document.hidden });
   function queueFrame(delay = 0) {
-    if (!running || document.hidden) return;
-    // Input bursts share the already-scheduled frame instead of canceling it.
-    // A wake still interrupts an idle timeout immediately.
-    if (frameTicket !== undefined) return;
-    clearTimeout(frameTimer); frameTimer = undefined;
-    if (delay) frameTimer = setTimeout(() => {
-      frameTimer = undefined; frameTicket = requestAnimationFrame(tick);
-    }, delay);
-    else frameTicket = requestAnimationFrame(tick);
+    frameScheduler.request(delay);
   }
   function wake() { lastInteraction = performance.now(); queueFrame(); }
   wakeWater=wake;
@@ -1231,7 +1224,6 @@ async function boot() {
   }
 
   function tick(timestamp) {
-    frameTicket = undefined;
     if (!running) return;
     const intentionallyPaced = scheduledDelay > 0;
     const rawDt = (timestamp - last) / 1000;
@@ -1278,8 +1270,7 @@ async function boot() {
 
   function pauseLoop() {
     running = false;
-    cancelAnimationFrame(frameTicket); clearTimeout(frameTimer);
-    frameTicket = undefined; frameTimer = undefined;
+    frameScheduler.cancel();
   }
   function resumeLoop() {
     if (!running && !sceneDisposed) {
@@ -1331,7 +1322,7 @@ async function boot() {
     },
     dispose() {
     sceneDisposed = true;
-    running = false; cancelAnimationFrame(frameTicket); clearTimeout(frameTimer); wakeState();
+    running = false; frameScheduler.cancel(); wakeState();
     for (const type of wakeEvents) document.removeEventListener(type, wake);
     window.removeEventListener('resize', wake);
     explore?.dispose();
