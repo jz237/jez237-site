@@ -268,3 +268,28 @@ export const punctures=(seed:number,count:number)=>{const x=Math.sin(seed*12.7+c
  * reversing, braking and steering are left alone. Returns the throttle to use. */
 export const NURSE={throttle:.65} as const;
 export const nurseThrottle=(throttle:number,sick:boolean)=>sick&&throttle>NURSE.throttle?NURSE.throttle:throttle;
+/** An axle whose wheel is bashed past ROLL_BAR.snap snaps its anti-roll bar on about half the cars (ROLL_BAR.share, fixed per
+ * car and axle). That axle stops resisting body roll, so the car leans much further in corners — as if its weight sat
+ * ROLL_BAR.lift metres higher per snapped bar. The push fades out as the body tilts toward ROLL_BAR.fade (sine of the tilt, about
+ * 8°): once the springs are at their limit a missing bar changes nothing, so it never tips a car over by itself. */
+export const ROLL_BAR={snap:.07,share:.55,lift:1.3,lateral:12,fade:.14} as const;
+export function rollBarSnaps(axle:number,wheelDamage:ArrayLike<number>,carId:number){
+  const hit=Math.max(wheelDamage[axle*2]??0,wheelDamage[axle*2+1]??0);
+  const x=Math.sin(carId*31.9+axle*57.1+1.3)*43758.5453;
+  return Number.isFinite(hit)&&hit>=ROLL_BAR.snap&&x-Math.floor(x)<ROLL_BAR.share;
+}
+type Vec3={x:number;y:number;z:number};
+/** Extra roll torque (N·m, world frame) from `bars` snapped anti-roll bars: the cornering force (centripetal acceleration
+ * ω×v from the yaw rate, capped at ROLL_BAR.lateral) acting ROLL_BAR.lift·bars above the centre of mass, along the body's up,
+ * faded out by the body's tilt. */
+export function rollTorque(mass:number,up:Vec3,velocity:Vec3,yawRate:number,bars:number):Vec3{
+  const zero={x:0,y:0,z:0};
+  if(!(bars>0)||![mass,up.x,up.y,up.z,velocity.x,velocity.z,yawRate].every(Number.isFinite))return zero;
+  let ax=yawRate*velocity.z,az=-yawRate*velocity.x;const a=Math.hypot(ax,az);
+  if(a>ROLL_BAR.lateral){ax*=ROLL_BAR.lateral/a;az*=ROLL_BAR.lateral/a;}
+  // Centrifugal force F=-m·a applied at r=up·h: τ=r×F.
+  const fade=Math.max(0,1-Math.hypot(up.x,up.z)/ROLL_BAR.fade);if(fade<=0)return zero;
+  const h=ROLL_BAR.lift*Math.min(2,bars)*fade,fx=-mass*ax,fz=-mass*az,rx=up.x*h,ry=up.y*h,rz=up.z*h;
+  return {x:ry*fz,y:rz*fx-rx*fz,z:-ry*fx};
+}
+export const rollBarWarning=(intact:ArrayLike<number>)=>Array.from(intact).some(v=>v===0)?'ROLL BAR SNAPPED':'';
