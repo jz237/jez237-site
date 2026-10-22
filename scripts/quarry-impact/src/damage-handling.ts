@@ -315,3 +315,22 @@ export function fatigueProp(wear:number,vibration:number,dt:number){
   return Math.min(1,w+Math.max(0,v-PROPSHAFT.safe)*Math.max(0,dt)/PROPSHAFT.life);
 }
 export const propWarning=(bend:number,snapped:boolean)=>snapped?'PROPSHAFT SNAPPED':bend>=PROPSHAFT.bent?'PROPSHAFT BENT':'';
+/** A knocked wheel cracks its bearing on some cars (BEARING.share, fixed per car and wheel): it growls, louder and higher with
+ * speed, and wears with every metre. Past BEARING.play the wheel wobbles and the hub drags and heats; at 1 it seizes — the
+ * wheel all but locks, the car pulls hard toward it and the hub cooks (the drag runs through the brake-drag path). */
+export const BEARING={onset:.06,share:.4,start:.05,rate:.0014,play:.6,shimmy:.03,drag:.6,seize:8,growl:.2} as const;
+export function bearingCracks(wheel:number,wheelDamage:number,carId:number){
+  const x=Math.sin(carId*17.3+wheel*41.9+2.7)*43758.5453;
+  return Number.isFinite(wheelDamage)&&wheelDamage>=BEARING.onset&&x-Math.floor(x)<BEARING.share;
+}
+/** Wear after rolling `metres` (0 = sound bearing; a cracked one starts at BEARING.start). */
+export function wearBearing(wear:number,metres:number){
+  const w=clamp01(wear);return w<=0?0:Math.min(1,w+Math.max(0,Number.isFinite(metres)?metres:0)*BEARING.rate);
+}
+/** How loud the growl is: the wear, rising with speed. */
+export const bearingGrowl=(wear:number,speed:number)=>clamp01(wear)*Math.min(1,Math.abs(Number.isFinite(speed)?speed:0)/15);
+/** Extra toe (radians) from a bearing with play in it, swinging with the wheel's turn. */
+export const bearingShimmy=(wear:number,angle:number)=>{const p=clamp01((clamp01(wear)-BEARING.play)/(1-BEARING.play));return p*BEARING.shimmy*Math.sin(Number.isFinite(angle)?angle:0);};
+/** Drag on the hub (same units as caliper drag): none until play, growing to BEARING.drag, then BEARING.seize once seized. */
+export const bearingDrag=(wear:number)=>{const w=clamp01(wear);return w>=1?BEARING.seize:w<=BEARING.play?0:BEARING.drag*(w-BEARING.play)/(1-BEARING.play);};
+export const bearingWarning=(wear:ArrayLike<number>)=>{const a=Array.from(wear);return a.some(v=>v>=1)?'BEARING SEIZED':a.some(v=>v>=BEARING.growl)?'BEARING GROWLING':'';};

@@ -1,4 +1,4 @@
-import {exhaustLoudness} from './damage-handling';
+import {exhaustLoudness,bearingGrowl} from './damage-handling';
 import {materialImpactProfile,type ImpactMaterial} from './impact-material';
 import {readAudioOutput,type AudioOutput} from './audio-output';
 import {TrackAcousticProbe,TrackReflections} from './track-acoustics';
@@ -10,7 +10,7 @@ import {audioListenerPosition,AudioListenerMotion,type AudioPerspective} from '.
 import {starterSamples} from './engine-stall';
 import {engineDamageLevel} from './engine-condition';
 import {classicEngineVoice,vehicleWheelRadius} from './classic-vehicle-specs';
-import {RATTLE,rattleRate,thumpRate,EventClock,synthClank,synthThump,hornStuck,synthHorn} from './damage-rattle';
+import {RATTLE,rattleRate,thumpRate,EventClock,synthClank,synthThump,hornStuck,synthHorn,synthGrowl} from './damage-rattle';
 import {knockRate} from './oil-starvation';
 /** Front compression past which the fan hits its shroud, and its clatter rate cap. */
 const FAN_CLATTER={onset:.35,max:12} as const;
@@ -249,6 +249,21 @@ export class Sound {
       l.pan.positionX.value=car.current.x;l.pan.positionY.value=car.current.y+.5;l.pan.positionZ.value=car.current.z;l.gain.gain.setTargetAtTime(.16,now,.05);
     }
     for(const [id,l] of this.horns)if(!live.has(id)){l.gain.gain.setTargetAtTime(0,now,.05);l.source.stop(now+.3);this.horns.delete(id);}
+  }
+  /** Growling wheel bearings, by car id (offline, within earshot): the worst bearing on each car, pitched up with speed. */
+  private growls=new Map<number,Loop>();
+  bearingGrowls(cars:readonly Vehicle[],listener:T.Vector3){
+    if(!this.ready||!this.fxBus)return;
+    if(!this.buffers.has('growl')){const c=this.ctx;if(!c||typeof c.createBuffer!=='function')return;const d=synthGrowl(c.sampleRate),b=c.createBuffer(1,d.length,c.sampleRate);b.copyToChannel(d,0);this.buffers.set('growl',b);}
+    const now=this.ctx!.currentTime,live=new Set<number>();
+    for(const car of cars){
+      const g=car.extendedDamage&&car.health>0?bearingGrowl(Math.max(...car.bearingWear),car.speed):0;
+      if(g<.02||car.current.distanceTo(listener)>RATTLE.hearing)continue;
+      live.add(car.id);let l=this.growls.get(car.id);if(!l){l=this.loop('growl',this.fxBus);if(!l)continue;this.growls.set(car.id,l);}
+      l.pan.positionX.value=car.current.x;l.pan.positionY.value=car.current.y+.3;l.pan.positionZ.value=car.current.z;
+      l.source.playbackRate.setTargetAtTime(.6+Math.min(1.2,Math.abs(car.speed)/25),now,.08);l.gain.gain.setTargetAtTime(.28*g,now,.08);
+    }
+    for(const [id,l] of this.growls)if(!live.has(id)){l.gain.gain.setTargetAtTime(0,now,.05);l.source.stop(now+.3);this.growls.delete(id);}
   }
   /** Burning oil or fuel on the ground: one crackling loop at the nearest fire (null = none). */
   groundFire(nearest:{p:T.Vector3;level:number}|null){

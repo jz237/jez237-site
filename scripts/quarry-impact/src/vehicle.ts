@@ -44,7 +44,7 @@ import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowo
 import {leakRates,dripInterval,FLAME,fuelSpacing} from './fluid-leaks';
 import {drainOil,starvationWear,seizes,OIL,drainCoolant,overheatWear,FUEL_TANK,drainFuel,fuelFeed,SUMP,crackSump,sumpLeak,drainSump} from './oil-starvation';
 import {MAX_ENGINE_RESTART,crankRequested} from './engine-stall';
-import {rollBarSnaps,rollTorque,hasPropshaft,propBend,propVibration,fatigueProp} from './damage-handling';
+import {rollBarSnaps,rollTorque,hasPropshaft,propBend,propVibration,fatigueProp,BEARING,bearingCracks,wearBearing,bearingShimmy,bearingDrag} from './damage-handling';
 import {SHED,assemblyMass,glassMass,shedMassProperties,type ShedPart} from './shed-weight';
 import {DOOR_SWING,stepDoor,doorDrag,doorUnlatched,doorBase,lidKind,lidBase,stepLid,CARGO,cargoSpills,type LidKind} from './door-swing';
 /** Rear compression past which the exhaust hangs down and drags. */
@@ -219,6 +219,9 @@ export class Vehicle {
   gearPops = 0;
   /** Bent calipers (offline events): how hard each brake binds, its disc heat 0..1, and the glow sprites. */
   readonly brakeDrag = new Float32Array(4);
+  /** Wheel bearings (BEARING): wear 0 sound, BEARING.start cracked … 1 seized; and the drag each puts on its hub. */
+  readonly bearingWear = new Float32Array(4);
+  readonly hubDrag = new Float32Array(4);
   readonly discHeat = new Float32Array(4);
   private discGlows: (T.Sprite|null)[] = [null,null,null,null];
   private discSmokeClock = 0;
@@ -295,7 +298,7 @@ export class Vehicle {
   onGearClunk?:(out:boolean)=>void;
   /** The loose engine clunked against its broken mounts. */
   onMountClunk?:()=>void;
-  onBreak?:(what:'spring'|'shaft'|'diff'|'tierod'|'exhaust'|'brakefire'|'radiator'|'rollbar'|'propshaft',wheel:number)=>void;
+  onBreak?:(what:'spring'|'shaft'|'diff'|'tierod'|'exhaust'|'brakefire'|'radiator'|'rollbar'|'propshaft'|'bearing',wheel:number)=>void;
   /** Gears left after gearbox damage (offline only; 5 = intact). */
   gearLimit = 5;
   /** Grip left under each tyre from oil or coolant on the ground (offline only). */
@@ -506,7 +509,7 @@ export class Vehicle {
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
-    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.clutchGrip=1;this.clutchBurn=0;this.clutchSmokeClock=0;this.clutchSmoke=0;this.steerPlay=0;this.steerWander=0;this.doorOpenTime=0;this.doorsTorn=0;this.doorSlams=0;this.rubDrag.fill(0);this.rubSmoke=0;this.rubClock=0;this.electricalFault=0;this.electricalCut=false;this.electricalCuts=0;this.electricClock=0;this.nutLoose.fill(0);this.wheelShimmy.fill(0);this.wheelsShed=0;this.exhaustBlow=0;this.exhaustPops=0;this.diffWear=0;this.beadStress.fill(0);this.debeads=0;this.steerLink.fill(1);this.linkClock=0;this.popUntil=0;this.popSlot=-1;this.gearPops=0;this.inNeutral=false;this.brakeDrag.fill(0);this.discHeat.fill(0);this.discSmokeClock=0;this.mountsBroken=false;this.shunt=0;this.lastPedal=0;this.lastJolt=-1;this.mountJolts=0;this.rawInput=null;this.ownInput=null;this.cargoLeft=-1;this.cargoClock=0;this.cargoSpilled=0;this.sumpCrack=0;this.brakeFire.fill(0);this.tyreAlight.fill(0);this.rubberDrop=0;this.brakeFires=0;this.exhaustDragTime=0;this.exhaustGone=false;this.shedClock=SHED.every;this.rollBar.fill(1);this.propBend=this.propWear=this.propVibration=this.propFlail=0;this.propSnapped=false;this.starterDamage=0;this.crankAttempt=0;this.starterFails=0;this.frameBend=0;this.deadTime=0;this.dazed=0;this.dazeSteer=0;this.glassPops=0;this.platesLost=0;this.debrisRolls=0;this.debrisPunctures=0;this.radiatorBursts=0;this.punctureClock.fill(0);for(const g of this.discGlows)if(g)g.visible=false;this.popQueue.length=0;this.liftThrottle=0;this.lifts=0;this.wanderClock=0;this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.fuelLevel=FUEL_TANK.start;this.fuelClock=0;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
+    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.clutchGrip=1;this.clutchBurn=0;this.clutchSmokeClock=0;this.clutchSmoke=0;this.steerPlay=0;this.steerWander=0;this.doorOpenTime=0;this.doorsTorn=0;this.doorSlams=0;this.rubDrag.fill(0);this.rubSmoke=0;this.rubClock=0;this.electricalFault=0;this.electricalCut=false;this.electricalCuts=0;this.electricClock=0;this.nutLoose.fill(0);this.wheelShimmy.fill(0);this.wheelsShed=0;this.exhaustBlow=0;this.exhaustPops=0;this.diffWear=0;this.beadStress.fill(0);this.debeads=0;this.steerLink.fill(1);this.linkClock=0;this.popUntil=0;this.popSlot=-1;this.gearPops=0;this.inNeutral=false;this.brakeDrag.fill(0);this.discHeat.fill(0);this.discSmokeClock=0;this.mountsBroken=false;this.shunt=0;this.lastPedal=0;this.lastJolt=-1;this.mountJolts=0;this.rawInput=null;this.ownInput=null;this.cargoLeft=-1;this.cargoClock=0;this.cargoSpilled=0;this.sumpCrack=0;this.brakeFire.fill(0);this.tyreAlight.fill(0);this.rubberDrop=0;this.brakeFires=0;this.exhaustDragTime=0;this.exhaustGone=false;this.shedClock=SHED.every;this.rollBar.fill(1);this.bearingWear.fill(0);this.hubDrag.fill(0);this.propBend=this.propWear=this.propVibration=this.propFlail=0;this.propSnapped=false;this.starterDamage=0;this.crankAttempt=0;this.starterFails=0;this.frameBend=0;this.deadTime=0;this.dazed=0;this.dazeSteer=0;this.glassPops=0;this.platesLost=0;this.debrisRolls=0;this.debrisPunctures=0;this.radiatorBursts=0;this.punctureClock.fill(0);for(const g of this.discGlows)if(g)g.visible=false;this.popQueue.length=0;this.liftThrottle=0;this.lifts=0;this.wanderClock=0;this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.fuelLevel=FUEL_TANK.start;this.fuelClock=0;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
     if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
@@ -707,9 +710,14 @@ export class Vehicle {
     this.steerWander=this.steerPlay>0?steerWander(this.steerPlay,this.speed,this.wanderClock,this.id):0;
     // Knocked wheels work their nuts loose as they turn: a growing shimmy, then the wheel comes off on the move.
     for(let i=0;i<4;i++){
-      if(!this.extendedDamage||this.wreckParts.wheelLost[i]){this.nutLoose[i]=this.extendedDamage?this.nutLoose[i]:0;this.wheelShimmy[i]=0;continue;}
+      if(!this.extendedDamage||this.wreckParts.wheelLost[i]){this.nutLoose[i]=this.extendedDamage?this.nutLoose[i]:0;this.wheelShimmy[i]=0;this.bearingWear[i]=this.hubDrag[i]=0;continue;}
       this.nutLoose[i]=loosenNuts(this.nutLoose[i],this.wreckParts.wheelDamage[i],Math.abs(this.speed)*dt);
       this.wheelShimmy[i]=this.nutLoose[i]>0?nutShimmy(this.nutLoose[i],this.wheelAngle(i)):0;
+      // A knocked wheel can crack its bearing: it growls, wears with distance, wobbles and drags, then seizes.
+      if(this.bearingWear[i]===0&&bearingCracks(i,this.wreckParts.wheelDamage[i],this.id))this.bearingWear[i]=BEARING.start;
+      const worn=this.bearingWear[i];this.bearingWear[i]=wearBearing(worn,Math.abs(this.speed)*dt);
+      if(worn<1&&this.bearingWear[i]>=1)this.onBreak?.('bearing',i);
+      this.wheelShimmy[i]+=bearingShimmy(this.bearingWear[i],this.wheelAngle(i));this.hubDrag[i]=bearingDrag(this.bearingWear[i]);
       if(this.nutLoose[i]>=1)this.shedWheel(i);
     }
     // A bashed front wheel snaps its tie rod: it stops steering and flops on its own.
@@ -783,7 +791,7 @@ export class Vehicle {
     let hottest=-1;
     for(let i=0;i<4;i++){
       const drag=this.extendedDamage&&!this.wreckParts.wheelLost[i]?caliperDrag(this.wreckParts.wheelDamage[i]):0;this.brakeDrag[i]=drag;
-      this.discHeat[i]=this.extendedDamage?discHeat(this.discHeat[i],drag,this.speed,dt):0;
+      this.discHeat[i]=this.extendedDamage?discHeat(this.discHeat[i],Math.max(drag,Math.min(1,this.hubDrag[i])),this.speed,dt):0;
       if(this.discHeat[i]>.6)this.brakeBias[i]*=discFade(this.discHeat[i]);
       if(this.tyreDamage&&this.discHeat[i]>.7)this.tyreDamage[i]=Math.min(1,this.tyreDamage[i]+CALIPER.tyre*(this.discHeat[i]-.7)*dt);
       if(hottest<0||this.discHeat[i]>this.discHeat[hottest])hottest=i;

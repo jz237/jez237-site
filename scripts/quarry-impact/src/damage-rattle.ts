@@ -60,3 +60,18 @@ export function synthHorn(sampleRate:number):Float32Array<ArrayBuffer>{
   for(let i=0;i<length;i++){const t=i/sampleRate;let v=0;for(const f of [420,525])for(let h=1;h<=5;h+=2)v+=Math.sin(2*Math.PI*f*h*t)/h;out[i]=Math.tanh(v*.9)*.35;}
   return out;
 }
+/** A one-second loop of a failing wheel bearing: a gritty, rough-edged hum (noise through two resonances) that throbs with the
+ * wheel's turn. Played back faster with speed. */
+export function synthGrowl(sampleRate:number):Float32Array<ArrayBuffer>{
+  const length=Math.round(sampleRate),out=new Float32Array(length);let seed=12345,a=0,b=0,c=0,d=0;
+  const res=(f:number)=>2*Math.sin(Math.PI*f/sampleRate);const fa=res(180),fb=res(410),q=.08;
+  for(let i=0;i<length;i++){
+    seed=(Math.imul(seed,1664525)+1013904223)>>>0;const n=seed/4294967296*2-1,t=i/sampleRate;
+    a+=fa*b;b+=fa*(n-a-q*b);c+=fb*d;d+=fb*(n-c-q*d);
+    const throb=.6+.4*Math.sin(2*Math.PI*8*t);
+    out[i]=Math.tanh((a*.5+c*.35)*throb*.6)*.5;
+  }
+  // Fade the seam so the loop does not click.
+  for(let i=0;i<256;i++){const g=i/256;out[i]*=g;out[length-1-i]*=g;}
+  return out;
+}
