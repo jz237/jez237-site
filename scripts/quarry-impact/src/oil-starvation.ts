@@ -35,3 +35,10 @@ export function fuelFeed(level:number,slip:number,brake:number,time:number){
   return pulse-Math.floor(pulse)<odds?FUEL_TANK.cut:1;
 }
 export const fuelWarning=(level:number)=>clamp01(level)<=FUEL_TANK.empty?'OUT OF FUEL':clamp01(level)<FUEL_TANK.low?'FUEL LOW':'';
+/** A landing hard enough to bottom the car out (falling faster than SUMP.fall) cracks the sump: oil pours out whatever the
+ * state of the front, so a big jump can starve the engine on its own. Each further hard landing opens the crack wider. */
+export const SUMP={fall:8,span:6,leak:.8,splash:3,drain:.02} as const;
+export const crackSump=(crack:number,fall:number)=>Math.min(1,Math.max(0,Number.isFinite(crack)?crack:0)+Math.max(0,((Number.isFinite(fall)?fall:0)-SUMP.fall)/SUMP.span));
+export const sumpLeak=(crack:number)=>crack>0?Math.min(1,crack)*SUMP.leak:0;
+/** Oil left after a step with a cracked sump: it pours (a fully cracked sump empties in 1/SUMP.drain seconds). */
+export const drainSump=(level:number,crack:number,dt:number)=>crack>0&&dt>0?Math.max(0,level-Math.min(1,crack)*SUMP.drain*dt):level;

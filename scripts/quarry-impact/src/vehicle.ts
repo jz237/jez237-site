@@ -42,7 +42,7 @@ import {wheelTearsOff} from './wheel-physics';
 import {EngineMisfire} from './engine-misfire';
 import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowoutImpulse,bentRimTyre,rimWobble,springBias,sagBias,driveBias,thrustAngle,leakBrakeFluid,brakeFluidFactor,steerRate,throttleJams,jammedThrottle,CLUTCH,clutchGrip,clutchSlips,steerPlay,steerWander,tyreRub,rubWear,electricalFault,electricalCut,WHEEL_NUTS,loosenNuts,nutShimmy,EXHAUST_BLOW,exhaustBlow,liftPops,DIFF,diffDamage,diffAxle,wearDiff,diffDrive,DEBEAD,beadStress,tieRodSnapped,flopToe,GEAR_POP,gearPop,CALIPER,caliperDrag,discHeat,discGlow,discFade,MOUNTS,mountsBroken,shuntThrottle,LEAK} from './damage-handling';
 import {leakRates,dripInterval,FLAME,fuelSpacing} from './fluid-leaks';
-import {drainOil,starvationWear,seizes,OIL,drainCoolant,overheatWear,FUEL_TANK,drainFuel,fuelFeed} from './oil-starvation';
+import {drainOil,starvationWear,seizes,OIL,drainCoolant,overheatWear,FUEL_TANK,drainFuel,fuelFeed,SUMP,crackSump,sumpLeak,drainSump} from './oil-starvation';
 import {MAX_ENGINE_RESTART} from './engine-stall';
 import {DOOR_SWING,stepDoor,doorDrag,doorUnlatched,doorBase,lidKind,lidBase,stepLid,CARGO,cargoSpills,type LidKind} from './door-swing';
 /** Rear compression past which the exhaust hangs down and drags. */
@@ -220,6 +220,8 @@ export class Vehicle {
   private cargoLeft = -1;
   private cargoClock = 0;
   cargoSpilled = 0;
+  /** Sump cracked by bottoming out (offline events, 0..1). */
+  sumpCrack = 0;
   inNeutral = false;
   private popQueue: number[] = [];
   private liftThrottle = 0;
@@ -446,7 +448,7 @@ export class Vehicle {
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
-    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.clutchGrip=1;this.clutchBurn=0;this.clutchSmokeClock=0;this.clutchSmoke=0;this.steerPlay=0;this.steerWander=0;this.doorOpenTime=0;this.doorsTorn=0;this.doorSlams=0;this.rubDrag.fill(0);this.rubSmoke=0;this.rubClock=0;this.electricalFault=0;this.electricalCut=false;this.electricalCuts=0;this.electricClock=0;this.nutLoose.fill(0);this.wheelShimmy.fill(0);this.wheelsShed=0;this.exhaustBlow=0;this.exhaustPops=0;this.diffWear=0;this.beadStress.fill(0);this.debeads=0;this.steerLink.fill(1);this.linkClock=0;this.popUntil=0;this.popSlot=-1;this.gearPops=0;this.inNeutral=false;this.brakeDrag.fill(0);this.discHeat.fill(0);this.discSmokeClock=0;this.mountsBroken=false;this.shunt=0;this.lastPedal=0;this.lastJolt=-1;this.mountJolts=0;this.shuntInput=null;this.cargoLeft=-1;this.cargoClock=0;this.cargoSpilled=0;for(const g of this.discGlows)if(g)g.visible=false;this.popQueue.length=0;this.liftThrottle=0;this.lifts=0;this.wanderClock=0;this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.fuelLevel=FUEL_TANK.start;this.fuelClock=0;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
+    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.clutchGrip=1;this.clutchBurn=0;this.clutchSmokeClock=0;this.clutchSmoke=0;this.steerPlay=0;this.steerWander=0;this.doorOpenTime=0;this.doorsTorn=0;this.doorSlams=0;this.rubDrag.fill(0);this.rubSmoke=0;this.rubClock=0;this.electricalFault=0;this.electricalCut=false;this.electricalCuts=0;this.electricClock=0;this.nutLoose.fill(0);this.wheelShimmy.fill(0);this.wheelsShed=0;this.exhaustBlow=0;this.exhaustPops=0;this.diffWear=0;this.beadStress.fill(0);this.debeads=0;this.steerLink.fill(1);this.linkClock=0;this.popUntil=0;this.popSlot=-1;this.gearPops=0;this.inNeutral=false;this.brakeDrag.fill(0);this.discHeat.fill(0);this.discSmokeClock=0;this.mountsBroken=false;this.shunt=0;this.lastPedal=0;this.lastJolt=-1;this.mountJolts=0;this.shuntInput=null;this.cargoLeft=-1;this.cargoClock=0;this.cargoSpilled=0;this.sumpCrack=0;for(const g of this.discGlows)if(g)g.visible=false;this.popQueue.length=0;this.liftThrottle=0;this.lifts=0;this.wanderClock=0;this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.fuelLevel=FUEL_TANK.start;this.fuelClock=0;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
     if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
@@ -548,9 +550,9 @@ export class Vehicle {
       if(feed<=0)this.engineStall=Math.max(this.engineStall??0,MAX_ENGINE_RESTART);else this.misfireFactor*=feed;}
     if(!contacts)return;
     const rearEngine=isRearEngineKind(this.kind),tank=(rearEngine?this.structuralDamage?.[0]:this.structuralDamage?.[1])??0;
-    const rates=leakRates(this.structuralDamage?.[0]??0,this.engineDamage??0,tank);if(this.fuelLevel<=FUEL_TANK.empty)rates.fuel=0;this.fuelLeak=rates.fuel;this.fuelLevel=drainFuel(this.fuelLevel,rates.fuel,dt);
+    const rates=leakRates(this.structuralDamage?.[0]??0,this.engineDamage??0,tank);if(this.sumpCrack>0)rates.oil=Math.max(rates.oil,sumpLeak(this.sumpCrack));if(this.fuelLevel<=FUEL_TANK.empty)rates.fuel=0;this.fuelLeak=rates.fuel;this.fuelLevel=drainFuel(this.fuelLevel,rates.fuel,dt);
     // The oil that drips out is oil the engine no longer has: low on oil it knocks and wears, dry it seizes.
-    this.oilLevel=drainOil(this.oilLevel,rates.oil,dt);this.coolantLevel=drainCoolant(this.coolantLevel,rates.coolant,dt);
+    this.oilLevel=drainSump(drainOil(this.oilLevel,rates.oil,dt),this.sumpCrack,dt);this.coolantLevel=drainCoolant(this.coolantLevel,rates.coolant,dt);
     if(!this.seized&&this.health>0&&!(this.engineStall!>0)&&this.engineDamage!==undefined){
       this.engineDamage=Math.min(1,this.engineDamage+starvationWear(this.oilLevel,this.input.throttle,dt)+overheatWear(this.coolantLevel,this.input.throttle,dt));
       if(seizes(this.oilLevel,this.engineDamage)){
@@ -764,6 +766,9 @@ export class Vehicle {
       // A heavy landing bottoms out that corner: the suspension, wheel and underside take the blow.
       this.lastLanding=time;const p=this.controller.wheelContactPoint(landing)!,up=new T.Vector3(0,1,0).applyQuaternion(this.currentQ);
       this.hit(new T.Vector3(p.x,p.y,p.z).addScaledVector(up,.3),up,(fall-HARD_LANDING.speed)*HARD_LANDING.gain,time);
+      // Bottomed out hard enough, the sump cracks: an immediate splash, then a steady oil leak.
+      if(fall>SUMP.fall){const before=this.sumpCrack;this.sumpCrack=crackSump(this.sumpCrack,fall);
+        if(this.sumpCrack>before){const g=this.ground.height(this.current.x,this.current.z);for(let k=0;k<SUMP.splash;k++){this.dripSeed=(Math.imul(this.dripSeed,1664525)+1013904223)>>>0;const r=this.dripSeed/4294967296,x=this.current.x+(r-.5)*.6,z=this.current.z+(r*7%1-.5)*.9;this.fx.slicks?.drip(x,g,z,0,r);this.drips[0]++;this.onDrip?.(x,g,z,0,r);}}}
     }
     if (time - this.lastFx > 0.06) {
       this.lastFx = time;
