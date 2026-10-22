@@ -13,6 +13,13 @@ export function hoodWindLift(speed:number,loose:number){
  * and 20 m/s, fully folded (about 117°) by loose 0.95 at 28 m/s. Pure, so replays reproduce it from loose + speed. */
 export function hoodFlip(speed:number,loose:number){return T.MathUtils.smoothstep(loose,.8,.95)*T.MathUtils.smoothstep(Math.abs(speed),20,28);}
 export const HOOD_FOLD=-2.05;
+/** Dangling mirrors: they start to hang at MIRROR_HANG.start damage and hang fully by start + span (they detach near 5.9). */
+export const MIRROR_HANG={start:2.5,span:2.5,droop:1.15,flap:.22,sway:.08} as const;
+/** How far (radians) a hanging mirror has dropped: droop with a flap that grows with speed. Pure in time and speed, so replays match. */
+export function mirrorDroop(loose:number,time:number,speed:number,side:number){
+  const l=T.MathUtils.clamp(Number.isFinite(loose)?loose:0,0,1),pace=Math.min(1,Math.abs(Number.isFinite(speed)?speed:0)/15),t=Number.isFinite(time)?time:0;
+  return l*(MIRROR_HANG.droop+MIRROR_HANG.flap*pace*Math.sin(t*9.3+side*1.7)+MIRROR_HANG.sway*Math.sin(t*2.1+side));
+}
 /** Visual hinge failures around the authored bodywork. No extra rigid bodies. */
 export class WreckAttachments {
   /** Offline cars (and replays of offline events) let a loose bonnet flip back over the screen. */
@@ -44,7 +51,7 @@ export class WreckAttachments {
       const bounds=new T.Box3().setFromBufferAttribute(o.userData.wreckRest);
       const cargo=/^panel_cargodoorvan[lr]/.test(name);
       const group=/^panel_enginelidmarten/.test(name)?'engine-lid':cargo?('cargo-'+(name.includes('cargodoorvanl')?'left':'right')):door?`door-${rearDoor?'rear-':''}${bounds.getCenter(new T.Vector3()).x<0?'left':'right'}`:/^(?:panel_tailgate(?:estate|rearwindow|tern|trail|kite|alder|saber|ravenhill|fernleigh|cornet)|glass_tailgate(?:rear$|tern|trail|kite|alder|saber|ravenhill|fernleigh|cornet))/.test(name)?'tailgate':/^panel_servinghatchcornet/.test(name)?'hatch':o.userData.detachAssembly;
-      if(!group||group.startsWith('mirror'))return;
+      if(!group)return;
       let a=map.get(group);if(!a){a={name:group,members:[],bounds:new T.Box3(),damage:0,side:1,loose:0};map.set(group,a);}
       a.bounds.union(bounds);
       const parentToModel=new T.Matrix4().multiplyMatrices(inverse,o.parent!.matrixWorld);
@@ -58,8 +65,9 @@ export class WreckAttachments {
     for(const a of this.assemblies){
       const d=a.bounds.distanceToPoint(point);if(d>1.1)continue;
       a.damage+=damage*Math.pow(1-d/1.1,1.3);a.side=point.x<0?-1:1;
-      const threshold=a.name.startsWith('door')?18:a.name==='hood'?12:10;
-      a.loose=T.MathUtils.clamp((a.damage-threshold)/38,0,1);
+      // A knocked mirror hangs off on its wire long before it tears away.
+      const mirror=a.name.startsWith('mirror'),threshold=mirror?MIRROR_HANG.start:a.name.startsWith('door')?18:a.name==='hood'?12:10;
+      a.loose=T.MathUtils.clamp((a.damage-threshold)/(mirror?MIRROR_HANG.span:38),0,1);
     }
     damageWheels(this.wheelDamage,this.wheelShift,this.wheelRest,point,direction,damage);
     this.pose(0,0);
@@ -91,6 +99,10 @@ export class WreckAttachments {
       }else if(a.name==='hatch'){
         const side=pivot.x<0?-1:1;
         pivot.set(side<0?a.bounds.max.x:a.bounds.min.x,a.bounds.max.y-.01,pivot.z);euler.z=-side*a.loose*.55+flutter;
+      }else if(a.name.startsWith('mirror')){
+        // Hanging off the door by its wire: it swings down about its inner bottom edge (staying outside the skin), flapping harder the faster the car goes.
+        const side=a.name.endsWith('left')?-1:1;pivot.set(side<0?a.bounds.max.x:a.bounds.min.x,a.bounds.min.y,pivot.z);
+        euler.z=-side*mirrorDroop(a.loose,this.time,speed,side);euler.y=side*a.loose*.25*Math.min(1,Math.abs(speed)/20);
       }else if(a.name.startsWith('door')){
         const side=a.name.endsWith('left')?-1:1;
         pivot.set(side*this.width,a.bounds.min.y+.45,a.bounds.max.z-.06);euler.y=-side*((a.swing??0)>0?doorBase(a.loose)+a.swing!:a.loose*.075);euler.x=-a.loose*.025;
