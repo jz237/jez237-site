@@ -1,6 +1,7 @@
+import {restoreExhaustDragBytes} from './exhaust-drag-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readPowerSteeringPrevious,restorePowerSteeringBytes,verifyPowerSteeringRevision} from './power-steering-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreExhaustDragBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('PowerSteering preserves every prior fixture, vehicle asset, venue art and history input',verifyPowerSteeringRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/power-steering/revision.json').toString());

@@ -44,6 +44,8 @@ import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowo
 import {leakRates,dripInterval,FLAME,fuelSpacing} from './fluid-leaks';
 import {drainOil,starvationWear,seizes,OIL} from './oil-starvation';
 import {MAX_ENGINE_RESTART} from './engine-stall';
+/** Rear compression past which the exhaust hangs down and drags. */
+export const EXHAUST_DROP=.2;
 /** A burning car cooks itself: glass damage per second at full heat (side windows burst at 24) and tyre damage per second. */
 export const COOK={glass:2.2,tyre:.02} as const;
 /** Panels hanging at least this loose build wind load above this speed (m/s) until they tear away. */
@@ -143,6 +145,8 @@ export class Vehicle {
   readonly driveBias = [1,1,1,1];
   /** Rear wheels' shared steer from a bent subframe (offline; radians). */
   thrustAngle = 0;
+  /** Frames the dropped exhaust has spent dragging (QA). */
+  exhaustDrags = 0;
   /** Brake fluid left (offline): a split line drains it and the brakes fade. */
   brakeFluid = 1;
   /** Steering response scale (offline): 1 normal, lower with the power steering gone. */
@@ -586,6 +590,12 @@ export class Vehicle {
           if(this.surface==='asphalt')this.fx.mark(p,yaw,feedback.markLength);
           else this.fx.evidence?.add(p,yaw,Math.abs(this.speed)*.07,feedback.evidence,1);
         }
+      }
+      // A rear crushed past EXHAUST_DROP knocks the exhaust down: at speed it drags behind, sparking and scraping.
+      if(this.extendedDamage&&(this.structuralDamage?.[1]??0)>EXHAUST_DROP&&Math.abs(this.speed)>4&&this.health>0){
+        const tail=new T.Vector3(isRearEngineKind(this.kind)?.35:-.35,0,-DEFINITIONS[this.kind].halfLength*.8).applyQuaternion(this.previousQ).add(this.previous);
+        tail.y=this.ground.height(tail.x,tail.z)+.04;const s=Math.min(1,Math.abs(this.speed)/18);
+        this.scraping=Math.max(this.scraping,s*.45);this.fx.emit(tail,Math.ceil(s*2),1,.6);this.fx.evidence?.add(tail,Math.atan2(this.forward.x,this.forward.z),Math.abs(this.speed)*.06,s*.5,2);this.exhaustDrags++;
       }
       if(this.wreckParts.assemblies.some(a=>a.name.includes('bumper')&&a.loose>.55))this.model.updateWorldMatrix(true,true);
       for(const a of this.wreckParts.assemblies){

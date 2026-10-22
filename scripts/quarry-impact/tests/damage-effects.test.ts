@@ -35,3 +35,10 @@ test('a tyre running on its rim on tarmac cuts grooves offline as well as sparki
  assert.ok(on.gouges>=3&&on.sparks>0,'grooves and sparks offline');
  assert.ok(off.gouges===0&&off.sparks>0,'online-style rims spark but leave no groove');
 });
+test('a crushed rear drops the exhaust: it drags and sparks at speed, offline only',async()=>{
+ const {EXHAUST_DROP}=await import('../src/vehicle');
+ const run=async(extended:boolean,rear:number)=>{let n=0;const r=await drive(extended,c=>{c.structuralDamage=[0,rear,0,0,0];const f=new T.Vector3(0,0,1).applyQuaternion(c.body.rotation() as T.Quaternion);c.body.setLinvel({x:f.x*15,y:0,z:f.z*15},true);c.input.throttle=.5;n=0;},2);return r;};
+ const on=await run(true,EXHAUST_DROP+.1),intact=await run(true,0),off=await run(false,EXHAUST_DROP+.1);console.log(JSON.stringify({on,intact,off}));
+ assert.ok(on.sparks>intact.sparks+3&&on.gouges>intact.gouges+3,'sparks and a scrape mark trail behind');
+ assert.ok(off.gouges===0);
+});
