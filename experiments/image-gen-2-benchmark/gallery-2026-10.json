@@ -1,5 +1,118 @@
 [
   {
+    "id": "2026-10-22-factual-infographic-factual-infographic-psoriasis-skin-turn",
+    "title": "Factual infographic: Psoriasis — Skin Turnover and Inflammation",
+    "tests": "factual_subtype: medical-health-infographic; artwork-led unboxed anatomical atlas; source-backed clinical education; no subjective review; archive_slot=2026-10-22T14:20; concept=psoriasis-immune-overactivity-skin-cell-buildup-plaques; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished, artwork-led medical educational infographic directly on the canvas, not a photographed poster or framed print. Title: \"PSORIASIS\". Subtitle: \"Skin turnover & inflammation\". Elegant anatomical illustration in translucent gouache, finely stippled technical ink and softly luminous mineral pigments, cool ivory ground, muted teal shadows, warm rose and copper inflammation accents, dark charcoal typography. A dramatic sweeping ribbon of skin occupies the center and about half the image: the left end is a modest smooth ordinary-skin reference, then an open curved transition into a much larger psoriasis cross-section with densely accumulating surface skin cells and a thick, flaky, raised plaque. Show layered surface texture with small lifted pale scales, convincing tissue depth and irregular organic contours. This is a qualitative conceptual illustration, not a laboratory specimen: use label \"Conceptual skin cutaway — not to scale\". Avoid unsupported microscopic cell identities, named cytokines, numerical turnover times, or invented pathways. Clear open leaders label \"Ordinary skin\", \"Increased skin-cell production\", and \"Scaly, inflamed plaque\". A soft rose curved annotation leads from the words \"Immune overactivity\" to the increased cell buildup, then to the scaly surface, expressing the supported causal relationship without pretending to show molecular signaling.\n\nWeave a few beautifully rendered supporting studies around that central sweep, using asymmetry, varied scale and generous breathing room, never a rigid boxed grid or detached cards. At upper right an isolated bent elbow and small scalp silhouette identify \"Common sites: elbows, knees, scalp\". An open paired skin-surface study beneath shows pale skin with pink-red patches and light scales beside dark brown skin with grey-white raised scales, clearly labeled \"Appearance varies with skin tone\"; portray real skin, not pink coloration indiscriminately across all tones. Small handwritten-style leader captions identify \"Dry • itchy • sore\" and \"Flares may ease, then return\". No naked body or identifiable patient is needed. Give the flaking skin fine tactile detail without gore or sensationalism.\n\nAn airy explanatory curve at upper left reads \"Chronic immune-mediated disease\" and \"Not contagious\"; nearby a short line says \"Genes + environment contribute\" with two restrained labels \"Stress\" and \"Skin injury\" under \"Possible flare triggers\". Do not imply these factors explain every case. A flowing care pathway along the lower portion, integrated with delicate brushwork rather than outlined boxes, reads \"Care depends on type, severity & location\" then \"Moisturizers + prescribed topical care\" followed by \"Some cases need supervised light therapy or systemic medicines\". Show only generic, unbranded treatment symbols; no prescription names, doses, tanning advice, promises of cure, or universal treatment recommendations.\n\nInclude two concise, conspicuous clinical callouts woven into the lower margin, with enough space to remain readable: \"Seek assessment: suspected psoriasis, treatment problems, or recurring swollen, stiff, painful joints.\" And in a restrained rust-red accent, \"Emergency care: rapidly reddening skin with merging pus-filled bumps, especially with fever, shivering or a racing heart.\" Under it, smaller but readable: \"Redness may be less visible on darker skin.\" Do not depict emergency pustules as an inevitable progression of ordinary plaque psoriasis; they are a separate warning callout, not the end of the central mechanism arrow. End with \"General education — not a diagnosis\". Carefully hierarchical type: large confident subject title, strong main anatomical labels, short legible secondary phrases. No bibliography, URLs, citation numbers, logos, watermark, ornamental fake text or wall of prose. Rich anatomical material detail and painterly craft take priority; do not crowd the hero with extra trivia.",
+    "image": "images/2026-10-22-factual-infographic-factual-infographic-psoriasis-skin-turn.jpg",
+    "thumb": "thumbs/2026-10-22-factual-infographic-factual-infographic-psoriasis-skin-turn.webp",
+    "color": "#d2bbaf",
+    "date": "2026-10-22",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "psoriasis-immune-overactivity-skin-cell-buildup-plaques",
+      "imageSha256": "c1df8aad4e988f996a05eb1a65ea382d78f4e8bdc5da54c0bd41e55de37f9a7b",
+      "imageDHash": "6b0fec98d89a8ab0"
+    },
+    "factualInfographic": {
+      "topic": "How psoriasis accelerates skin-cell buildup through immune overactivity, causes scaly inflamed plaques, and is evaluated and managed",
+      "description": "Artwork-led clinical atlas explaining psoriasis, its immune-mediated mechanism, symptoms and individualized management, with essential clinical warning signs.",
+      "sourceNote": "NIAMS: https://www.niams.nih.gov/health-topics/psoriasis ; NHS: https://www.nhs.uk/conditions/psoriasis/ . Verified immune-mediated skin-cell buildup, plaque appearance, symptoms, triggers, individualized care, joint assessment and emergency warning signs.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-22T18:21:14.184130+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Arthritis and Musculoskeletal and Skin Diseases",
+            "title": "Psoriasis Symptoms, Causes, & Risk Factors",
+            "sourceType": "government-agency",
+            "url": "https://www.niams.nih.gov/health-topics/psoriasis"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Psoriasis",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/psoriasis/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Psoriasis is a chronic immune-mediated condition; immune overactivity causes skin cells to multiply too quickly, producing scaly inflamed patches.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Psoriasis is not contagious.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Dry, itchy, sore, flaky plaques commonly affect elbows, knees and scalp, although other sites may be affected.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Plaques may look pink or red with light scales on white skin, and grey, white, raised and scaly on dark brown skin.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Symptoms can flare and then improve or remit.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Genetics and environmental factors contribute; stress and skin injuries can trigger flares.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Treatment is individualized by type, severity and location; moisturizers and prescribed topical treatments can help, while more severe disease may need medically supervised light therapy or systemic medicines.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "See a clinician for suspected psoriasis, ineffective treatment or side effects; persistent recurrent joint pain, stiffness and swelling warrant assessment for possible psoriatic arthritis.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Seek emergency care for rapidly reddening skin with merging pus-filled bumps; fever, shivering or a fast heartbeat may accompany a serious condition or infection. Redness can be harder to see on darker skin.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "The conceptual skin cutaway contrasts ordinary skin with increased cell production and a thick scaly surface in psoriasis; it is a schematic rather than a diagnostic specimen.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-10-22-factual-infographic-factual-infographic-osteoporosis-when-t",
     "title": "Factual infographic: Osteoporosis — When the Inner Scaffold Thins",
     "tests": "factual_subtype: medical-health-infographic; artwork-led unboxed anatomical atlas; source-backed clinical education; no subjective review; archive_slot=2026-10-22T02:20; concept=osteoporosis-trabecular-thinning-fragility-fractures; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
