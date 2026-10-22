@@ -1,7 +1,9 @@
 import type {Pad} from './driving-controls';
 export type RumbleActuator=Pick<GamepadHapticActuator,'playEffect'|'reset'>;
 export type RumblePad=Pad&{vibrationActuator?:RumbleActuator};
-export type RumbleMotion={speed:number;slip:number;grounded:boolean;surface:string;scraping:number};
+/** wobble: worst wheel damage or loose-nut shimmy (bent wheels shake at speed); misfire: the engine is cutting out; rub: a
+ * crushed arch rubbing a tyre (a buzz that rises with speed). */
+export type RumbleMotion={speed:number;slip:number;grounded:boolean;surface:string;scraping:number;wobble?:number;misfire?:boolean;rub?:number};
 const unit=(n:number)=>Number.isFinite(n)?Math.max(0,Math.min(1,n)):0;
 
 /** Short, bounded effects never hold up the game loop. The strongest recent
@@ -40,8 +42,10 @@ export class ControllerRumble {
   const road=rolling&&(motion.surface==='gravel'||motion.surface==='mud')?Math.min(.16,speed*.004):0;
   const slip=rolling?unit((motion.slip-1.5)/8)*.35:0;
   const scrape=rolling?unit(motion.scraping)*.3:0;
+  const wobble=rolling?unit(motion.wobble??0)**1.5*Math.min(1,speed/20)*.28:0,misfire=motion.misfire?.32:0;
+  const rub=rolling?unit(motion.rub??0)*Math.min(1,speed/15)*.22:0;
   const impact=this.burst*unit((this.burstUntil-now)/180);
-  const strong=unit(strength)*Math.max(impact,road*.45,scrape),weak=unit(strength)*Math.max(impact*.65,road,slip);
+  const strong=unit(strength)*Math.max(impact,road*.45,scrape,misfire),weak=unit(strength)*Math.max(impact*.65,road,slip,wobble,rub);
   if(Math.max(strong,weak)<.015){this.cancel();return;}
   this.nextAt=now+60;this.running=true;
   const generation=this.generation;
