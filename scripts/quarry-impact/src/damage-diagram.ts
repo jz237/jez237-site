@@ -11,7 +11,9 @@ export type DiagramState={
   leaks?:{oil:number;coolant:number;fuel?:number};
   /** Mechanical faults drawn over the car: disc glow 0..1 per wheel, front steering links (0 = tie rod snapped), loose-nut
    * looseness per wheel, a broken diff's axle, a torn-off exhaust and a seized engine. */
-  faults?:{hotDiscs?:ArrayLike<number>;steerLink?:ArrayLike<number>;looseWheels?:ArrayLike<number>;diff?:'front'|'rear'|null;exhaustGone?:boolean;seized?:boolean};
+  faults?:{hotDiscs?:ArrayLike<number>;steerLink?:ArrayLike<number>;looseWheels?:ArrayLike<number>;diff?:'front'|'rear'|null;exhaustGone?:boolean;seized?:boolean;
+    /** Anti-roll bars front/rear (0 = snapped), propshaft state, wheel-bearing wear per wheel, fan belt and battery, short steering lock (signed). */
+    rollBar?:ArrayLike<number>;propshaft?:'bent'|'snapped'|null;bearings?:ArrayLike<number>;belt?:'slipping'|'snapped'|null;battery?:number;steerSkew?:number};
 };
 export type PartState='ok'|'loose'|'gone';
 const clamp01=(v:number)=>Math.max(0,Math.min(1,Number.isFinite(v)?v:0));
@@ -44,6 +46,20 @@ function faults(state:DiagramState){
     if(i<2&&f.steerLink&&f.steerLink[i]===0)out+=`<line class="dd-tierod" x1="${i?x:x+6}" y1="${y+11}" x2="${i?x-4:x+10}" y2="${y+14}" stroke="${DIAGRAM_COLORS[3]}" stroke-width="1.4" stroke-linecap="round"/>`;
   });
   if(f.diff){const y=f.diff==='front'?25:83;out+=`<path class="dd-diff" d="M26 ${y-4} L34 ${y+4} M34 ${y-4} L26 ${y+4}" stroke="${DIAGRAM_COLORS[3]}" stroke-width="1.6" stroke-linecap="round"/>`;}
+  // A snapped anti-roll bar: the bar across that axle, broken in the middle.
+  [25,83].forEach((y,a)=>{if(f.rollBar&&f.rollBar[a]===0)out+=`<path class="dd-rollbar" d="M12 ${y} L27 ${y-1.5} M33 ${y+1.5} L48 ${y}" stroke="${DIAGRAM_COLORS[2]}" stroke-width="1.1" stroke-linecap="round"/>`;});
+  // The propshaft down the middle: kinked when bent, broken when snapped.
+  if(f.propshaft==='bent')out+=`<path class="dd-prop dd-prop-bent" d="M30 ${state.rearEngine?30:26} L30 50 L32.5 55 L30 60 L30 82" fill="none" stroke="${DIAGRAM_COLORS[1]}" stroke-width="1.1" stroke-linejoin="round"/>`;
+  else if(f.propshaft==='snapped')out+=`<path class="dd-prop dd-prop-snapped" d="M30 26 L30 51 M31.5 59 L30 82" stroke="${DIAGRAM_COLORS[3]}" stroke-width="1.3" stroke-linecap="round"/>`;
+  // A failing bearing rings its wheel: amber while it growls, red once seized.
+  WHEEL_AT.forEach(([x,y],i)=>{const w=f.bearings?.[i]??0;if(state.wheelLost[i]||w<.2)return;
+    out+=`<rect class="dd-bearing${w>=1?' dd-bearing-seized':''}" x="${x-1.6}" y="${y-1.6}" width="9.2" height="19.2" rx="3" fill="none" stroke="${w>=1?DIAGRAM_COLORS[3]:DIAGRAM_COLORS[2]}" stroke-width="${w>=1?1.2:.8}"/>`;});
+  // The fan belt in front of the engine, and the battery beside it once the belt has gone.
+  if(f.belt){const ey=state.rearEngine?90:20,by=state.rearEngine?ey+6.5:ey-6.5;
+    out+=`<ellipse class="dd-belt dd-belt-${f.belt}" cx="30" cy="${by}" rx="4.2" ry="1.6" fill="none" stroke="${f.belt==='snapped'?DIAGRAM_COLORS[3]:DIAGRAM_COLORS[1]}" stroke-width=".9"${f.belt==='snapped'?' stroke-dasharray="2.2 1.4"':''}/>`;
+    if(f.belt==='snapped'){const b=clamp01(f.battery??1);out+=`<rect class="dd-battery" x="38" y="${state.rearEngine?92:12}" width="5" height="3.4" rx=".5" fill="${b<=0?DIAGRAM_COLORS[3]:b<.35?DIAGRAM_COLORS[2]:DIAGRAM_COLORS[1]}" stroke="#101410" stroke-width=".4"/>`;}}
+  // Short lock: a stop mark on the inside of the front wheel on the side that will not turn fully.
+  if(Math.abs(f.steerSkew??0)>=.15){const left=(f.steerSkew??0)<0,x=left?12.5:47.5;out+=`<line class="dd-short-lock" x1="${x}" y1="18" x2="${x}" y2="32" stroke="${DIAGRAM_COLORS[3]}" stroke-width="1.3" stroke-linecap="round"/>`;}
   if(f.exhaustGone)out+=`<line class="dd-exhaust-gone" x1="${state.rearEngine?36:24}" y1="104" x2="${state.rearEngine?36:24}" y2="109" stroke="${DIAGRAM_COLORS[3]}" stroke-width="1.2" stroke-dasharray="1.2 1"/>`;
   return out;
 }
