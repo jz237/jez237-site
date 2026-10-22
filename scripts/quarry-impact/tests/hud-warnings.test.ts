@@ -9,3 +9,6 @@ test('the warning line puts the urgent failures first and caps the list with a c
  assert.equal(warningLine(all,10).split(' · ').length,all.length);assert.equal(HUD_WARNINGS.max,3);
  assert.equal(warningLine(['SOMETHING NEW','EXHAUST BLOWING']),'EXHAUST BLOWING · SOMETHING NEW','unknown warnings go last, in order');
 });
+test('the countdown to elimination of a dead car comes first',()=>{
+ assert.ok(warningLine(['TYRE RUBBING','DAZED','CAR DEAD · OUT IN 5s']).startsWith('CAR DEAD · OUT IN 5s · DAZED'));
+});
