@@ -1,4 +1,4 @@
-import {CLUTCH,clutchForce} from './damage-handling';
+import {CLUTCH,clutchForce,slackSteer} from './damage-handling';
 import {engineOutput,type EngineRestriction} from './engine-packages';
 import {wheelContactMotion} from './wheel-contact-motion';
 import {steeringSpeedScale} from './countersteering';
@@ -17,7 +17,7 @@ import {vehicleArmorLayout,vehicleArmorCollisionHulls} from './vehicle-armor-spe
 type Vec={x:number;y:number;z:number};
 type Quat=Vec&{w:number};
 export type VehicleSpecification=ReturnType<typeof vehicleSpecification>;
-export type PhysicsState={health:number;engineStall?:number;misfireFactor?:number;steerLimit?:number;brakeBias?:ArrayLike<number>;damperBias?:ArrayLike<number>;springBias?:ArrayLike<number>;sagBias?:ArrayLike<number>;driveBias?:ArrayLike<number>;thrustAngle?:number;steerRate?:number;slickGrip?:ArrayLike<number>;gearLimit?:number;clutchGrip?:number;damageLeft:number;damageRight:number;steering:number;speed:number;slip:number;surface:DrivingSurface;gear:number;rpm:number;transmission?:TransmissionState;input:{throttle:number;steer:number;brake:number;handbrake:boolean;assists?:DrivingAssists;transmission?:TransmissionInput}};
+export type PhysicsState={health:number;engineStall?:number;misfireFactor?:number;steerLimit?:number;brakeBias?:ArrayLike<number>;damperBias?:ArrayLike<number>;springBias?:ArrayLike<number>;sagBias?:ArrayLike<number>;driveBias?:ArrayLike<number>;thrustAngle?:number;steerRate?:number;slickGrip?:ArrayLike<number>;gearLimit?:number;clutchGrip?:number;steerPlay?:number;steerWander?:number;damageLeft:number;damageRight:number;steering:number;speed:number;slip:number;surface:DrivingSurface;gear:number;rpm:number;transmission?:TransmissionState;input:{throttle:number;steer:number;brake:number;handbrake:boolean;assists?:DrivingAssists;transmission?:TransmissionInput}};
 export function rotateVehicleVector(v:Vec,q:Quat):Vec{
  const tx=2*(q.y*v.z-q.z*v.y),ty=2*(q.z*v.x-q.x*v.z),tz=2*(q.x*v.y-q.y*v.x);
  return{x:v.x+q.w*tx+q.y*tz-q.z*ty,y:v.y+q.w*ty+q.z*tx-q.x*tz,z:v.z+q.w*tz+q.x*ty-q.y*tx};
@@ -179,7 +179,7 @@ export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastV
  const q=body.rotation(),velocity=body.linvel(),forward=rotateVehicleVector({x:0,y:0,z:1},q),right=rotateVehicleVector({x:1,y:0,z:0},q),up=rotateVehicleVector({x:0,y:1,z:0},q),def=DEFINITIONS[kind],alive=state.health>0;
  const running=advanceEngineRestart(state,dt);
  state.speed=dot(velocity,forward);const lateralSpeed=dot(velocity,right);state.slip=Math.abs(lateralSpeed);
- const target=(alive?state.input.steer:0)*(.55*spec.steering*steeringSpeedScale(state.speed,lateralSpeed,state.input.steer,dot(body.angvel(),up)))*(state.steerLimit??1)+(state.damageRight-state.damageLeft)*.0007;
+ const target=(alive?((state.steerPlay??0)>0?slackSteer(state.input.steer,state.steerPlay!):state.input.steer):0)*(.55*spec.steering*steeringSpeedScale(state.speed,lateralSpeed,state.input.steer,dot(body.angvel(),up)))*(state.steerLimit??1)+(state.damageRight-state.damageLeft)*.0007+(state.steerWander??0);
  const alpha=1-Math.exp(-8*dt*(state.steerRate??1));state.steering=(1-alpha)*state.steering+alpha*target;
  const throttle=stepTransmission(state,spec,dt,running);
  // Brake priority also applies to manual pedals: Rapier ignores wheelBrake

@@ -95,3 +95,22 @@ export const clutchSlips=(grip:number,throttle:number)=>grip<1&&Math.abs(Number.
 /** Drive force fraction a slipping clutch passes in the simple kernel: exactly 1 on a sound clutch. */
 export const clutchForce=(grip:number,throttle:number)=>grip>=1||!clutchSlips(grip,throttle)?1:grip*CLUTCH.margin/Math.abs(throttle);
 export const clutchWarning=(grip:number)=>grip<CLUTCH.warn?'CLUTCH SLIPPING':'';
+/** Bent tie rods and worn rack bushes on a battered front wheel give the steering free play: small inputs do nothing
+ * (a dead band round centre) and the car wanders at speed as the slack rattles from side to side. */
+export const STEER_PLAY={onset:.12,gain:1.1,max:.3,wander:.035,warn:.12} as const;
+export function steerPlay(frontWheelDamage:ArrayLike<number>|undefined){
+  const d=Math.max(clamp01(frontWheelDamage?.[0]??0),clamp01(frontWheelDamage?.[1]??0));
+  return Math.min(STEER_PLAY.max,Math.max(0,(d-STEER_PLAY.onset)*STEER_PLAY.gain));
+}
+/** Steering input after the slack is taken up; full lock is still full lock. */
+export function slackSteer(steer:number,play:number){
+  const s=Math.max(-1,Math.min(1,Number.isFinite(steer)?steer:0)),p=clamp01(play);
+  if(!(p>0))return s;const a=Math.abs(s);return a<=p?0:Math.sign(s)*(a-p)/(1-p);
+}
+/** Wheel angle the slack wanders by (radians): two slow, unrelated swings, more at speed; fixed per car and time. */
+export function steerWander(play:number,speed:number,time:number,seed:number){
+  const p=clamp01(play),pace=Math.min(1,Math.abs(Number.isFinite(speed)?speed:0)/15);if(!(p>0&&pace>0))return 0;
+  const w=Math.sin(time*1.7+seed*2.1)*.6+Math.sin(time*.63+seed*5.3)*.4;
+  return w*p/STEER_PLAY.max*STEER_PLAY.wander*pace;
+}
+export const playWarning=(play:number)=>play>=STEER_PLAY.warn?'STEERING LOOSE':'';
