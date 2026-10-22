@@ -40,7 +40,7 @@ import {puddleDepth,type Puddle} from './puddle-splashes';
 import {wheelResponse,TireContact} from './wheel-mechanics';
 import {wheelTearsOff} from './wheel-physics';
 import {EngineMisfire} from './engine-misfire';
-import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowoutImpulse,bentRimTyre,rimWobble,springBias,sagBias,driveBias,thrustAngle,leakBrakeFluid,brakeFluidFactor,steerRate,throttleJams,jammedThrottle,CLUTCH,clutchGrip,clutchSlips,steerPlay,steerWander,tyreRub,rubWear,electricalFault,electricalCut,WHEEL_NUTS,loosenNuts,nutShimmy,EXHAUST_BLOW,exhaustBlow,liftPops} from './damage-handling';
+import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowoutImpulse,bentRimTyre,rimWobble,springBias,sagBias,driveBias,thrustAngle,leakBrakeFluid,brakeFluidFactor,steerRate,throttleJams,jammedThrottle,CLUTCH,clutchGrip,clutchSlips,steerPlay,steerWander,tyreRub,rubWear,electricalFault,electricalCut,WHEEL_NUTS,loosenNuts,nutShimmy,EXHAUST_BLOW,exhaustBlow,liftPops,DIFF,diffDamage,diffAxle,wearDiff,diffDrive} from './damage-handling';
 import {leakRates,dripInterval,FLAME,fuelSpacing} from './fluid-leaks';
 import {drainOil,starvationWear,seizes,OIL,drainCoolant,overheatWear,FUEL_TANK,drainFuel,fuelFeed} from './oil-starvation';
 import {MAX_ENGINE_RESTART} from './engine-stall';
@@ -185,6 +185,8 @@ export class Vehicle {
   /** Split exhaust severity (offline events) and the lift-off pops fired so far (QA). */
   exhaustBlow = 0;
   exhaustPops = 0;
+  /** Differential wear (offline events; 1 = broken, no drive to that axle). */
+  diffWear = 0;
   private popQueue: number[] = [];
   private liftThrottle = 0;
   private lifts = 0;
@@ -195,7 +197,7 @@ export class Vehicle {
   /** How hard a sagging corner is dragging on the ground (0..1, fx rate); slows the car a little. */
   private bellyDrag = 0;
   /** Fired the step a spring or driveshaft lets go, with the wheel index (sound/feed hook). */
-  onBreak?:(what:'spring'|'shaft',wheel:number)=>void;
+  onBreak?:(what:'spring'|'shaft'|'diff',wheel:number)=>void;
   /** Gears left after gearbox damage (offline only; 5 = intact). */
   gearLimit = 5;
   /** Grip left under each tyre from oil or coolant on the ground (offline only). */
@@ -406,7 +408,7 @@ export class Vehicle {
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
-    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.clutchGrip=1;this.clutchBurn=0;this.clutchSmokeClock=0;this.clutchSmoke=0;this.steerPlay=0;this.steerWander=0;this.doorOpenTime=0;this.doorsTorn=0;this.doorSlams=0;this.rubDrag.fill(0);this.rubSmoke=0;this.rubClock=0;this.electricalFault=0;this.electricalCut=false;this.electricalCuts=0;this.electricClock=0;this.nutLoose.fill(0);this.wheelShimmy.fill(0);this.wheelsShed=0;this.exhaustBlow=0;this.exhaustPops=0;this.popQueue.length=0;this.liftThrottle=0;this.lifts=0;this.wanderClock=0;this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.fuelLevel=FUEL_TANK.start;this.fuelClock=0;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
+    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.clutchGrip=1;this.clutchBurn=0;this.clutchSmokeClock=0;this.clutchSmoke=0;this.steerPlay=0;this.steerWander=0;this.doorOpenTime=0;this.doorsTorn=0;this.doorSlams=0;this.rubDrag.fill(0);this.rubSmoke=0;this.rubClock=0;this.electricalFault=0;this.electricalCut=false;this.electricalCuts=0;this.electricClock=0;this.nutLoose.fill(0);this.wheelShimmy.fill(0);this.wheelsShed=0;this.exhaustBlow=0;this.exhaustPops=0;this.diffWear=0;this.popQueue.length=0;this.liftThrottle=0;this.lifts=0;this.wanderClock=0;this.slickGrip.fill(1);this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.fuelLevel=FUEL_TANK.start;this.fuelClock=0;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
     if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
@@ -567,6 +569,12 @@ export class Vehicle {
     this.electricClock+=dt;this.electricalFault=this.extendedDamage?electricalFault((isRearEngineKind(this.kind)?this.structuralDamage?.[1]:this.structuralDamage?.[0])??0):0;
     const cut=this.health>0&&electricalCut(this.electricalFault,this.electricClock,this.id);if(cut&&!this.electricalCut)this.electricalCuts++;this.electricalCut=cut;
     if(cut&&running)this.misfireFactor=0;
+    // A cracked diff grinds itself up under load; when it lets go the gears jam for an instant and the car lurches.
+    if(this.extendedDamage){const before=this.diffWear;this.diffWear=wearDiff(this.diffWear,diffDamage(this.structuralDamage,this.driveLayout()),running?this.input.throttle:0,dt);
+      if(before<1&&this.diffWear>=1){const front=diffAxle(this.structuralDamage,this.driveLayout())==='front',k=-Math.sign(this.speed)*this.specification.mass*Math.min(15,Math.abs(this.speed))*DIFF.jolt;
+        this.body.applyImpulse({x:this.forward.x*k,y:0,z:this.forward.z*k},true);this.onBreak?.('diff',front?0:2);
+        this.fx.emit(new T.Vector3(0,.25,(front?1:-1)*DEFINITIONS[this.kind].halfLength*.5).applyQuaternion(this.previousQ).add(this.previous),10,1,1);}}
+    else this.diffWear=0;
     // A split exhaust crackles on the overrun: lift off at speed and it pops, spitting flame out of the tailpipe.
     this.exhaustBlow=this.extendedDamage?exhaustBlow(this.structuralDamage?.[1]??0):0;
     if(this.exhaustBlow>0&&running&&this.liftThrottle>EXHAUST_BLOW.lift&&this.input.throttle<EXHAUST_BLOW.off&&Math.abs(this.speed)>EXHAUST_BLOW.minSpeed){
@@ -614,6 +622,7 @@ export class Vehicle {
       const d=this.extendedDamage?this.wreckParts.wheelDamage[i]:0,spring=springBias(d),drive=driveBias(d);
       if(spring<this.springBias[i])this.onBreak?.('spring',i);if(drive<this.driveBias[i])this.onBreak?.('shaft',i);
       this.springBias[i]=spring;this.sagBias[i]=sagBias(d);this.driveBias[i]=drive;}
+    if(this.extendedDamage&&this.diffWear>0){const front=diffAxle(this.structuralDamage,this.driveLayout())==='front',f=diffDrive(this.diffWear);for(const i of front?[0,1]:[2,3])this.driveBias[i]*=f;}
     if(this.extendedDamage)this.fluids(dt);
     // A seized engine never turns again: the starter can crank, but it will not catch.
     if(this.seized)this.engineStall=MAX_ENGINE_RESTART;
@@ -900,6 +909,7 @@ export class Vehicle {
     const box=new T.Box3();for(const mesh of this.panels){const rest=mesh.userData.wreckRest as T.BufferAttribute|undefined;if(rest)box.union(new T.Box3().setFromBufferAttribute(rest));}
     return{x:Math.max(.5,Math.abs(box.min.x),Math.abs(box.max.x)),z:Math.max(1,Math.abs(box.min.z),Math.abs(box.max.z)),top:Math.max(.8,box.max.y)};
   }
+  private driveLayout():'front'|'rear'|'all'{return isFrontDriveKind(this.kind)?'front':(this.kind==='coupe'||isClassicKind(this.kind)&&this.kind!=='trail')?'rear':'all';}
   /** A wheel whose nuts have worked off leaves the car on the move; replays get it as a 'wheel-N' rip. */
   shedWheel(i:number,quiet=false){
     if(this.wreckParts.wheelLost[i]||!this.wheels[i])return false;

@@ -161,3 +161,17 @@ export function liftPops(severity:number,seed:number){
   return out;
 }
 export const exhaustWarning=(severity:number)=>severity>0?'EXHAUST BLOWING':'';
+/** A crushed driven end cracks the differential casing: the gears grind, wearing faster under load, and drive to that
+ * axle fades as they chew themselves up; worn through, the diff lets go with a bang (a jolt as the gears jam) and that
+ * axle gets no drive at all — a two-wheel-drive car can only coast, a four-wheel-drive one limps on its other axle. */
+export const DIFF={onset:.35,span:.35,wear:.02,loss:.35,jolt:.25} as const;
+export function diffDamage(structure:readonly number[]|undefined,drive:'front'|'rear'|'all'){
+  const front=clamp01(structure?.[0]??0),rear=clamp01(structure?.[1]??0),c=drive==='front'?front:drive==='rear'?rear:Math.max(front,rear)*.85;
+  return clamp01((c-DIFF.onset)/DIFF.span);
+}
+/** Which axle's differential takes the damage: the driven one, or for four-wheel drive the more crushed end. */
+export const diffAxle=(structure:readonly number[]|undefined,drive:'front'|'rear'|'all'):'front'|'rear'=>drive!=='all'?drive:(structure?.[0]??0)>(structure?.[1]??0)?'front':'rear';
+export const wearDiff=(wear:number,damage:number,throttle:number,dt:number)=>dt>0&&damage>0?clamp01(clamp01(wear)+damage*DIFF.wear*(.3+.7*clamp01(Math.abs(throttle)))*dt):clamp01(wear);
+/** Drive fraction the damaged axle still gets: 1 healthy, fading as it grinds, 0 once broken. */
+export const diffDrive=(wear:number)=>wear>=1?0:1-DIFF.loss*clamp01(wear);
+export const diffWarning=(wear:number)=>wear>=1?'DIFF BROKEN':wear>0?'DIFF GRINDING':'';
