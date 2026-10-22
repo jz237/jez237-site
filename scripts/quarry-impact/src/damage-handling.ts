@@ -293,3 +293,25 @@ export function rollTorque(mass:number,up:Vec3,velocity:Vec3,yawRate:number,bars
   return {x:ry*fz,y:rz*fx-rx*fz,z:-ry*fx};
 }
 export const rollBarWarning=(intact:ArrayLike<number>)=>Array.from(intact).some(v=>v===0)?'ROLL BAR SNAPPED':'';
+/** A propshaft (front-engined rear- and four-wheel-drive cars) bends in a hard landing or when the rear is crushed into it.
+ * A bent shaft vibrates with the square of road speed — the car shakes — and driven fast it fatigues until it snaps and
+ * the rear wheels lose drive. Gentle speeds never fatigue it. */
+export const PROPSHAFT={fall:8,landGain:.12,crush:.05,crushGain:6,speed:28,cap:1.5,safe:.15,life:8,bent:.12} as const;
+export const hasPropshaft=(layout:'front'|'rear'|'all',rearEngine:boolean)=>layout!=='front'&&!rearEngine;
+/** Bend after a landing at `fall` m/s (adds) and with this rear crush (a floor): 0 straight, 1 badly kinked. */
+export function propBend(bend:number,fall:number,rearCrush:number){
+  let b=Number.isFinite(bend)?bend:0;
+  if(Number.isFinite(fall)&&fall>PROPSHAFT.fall)b+=(fall-PROPSHAFT.fall)*PROPSHAFT.landGain;
+  if(Number.isFinite(rearCrush)&&rearCrush>PROPSHAFT.crush)b=Math.max(b,(rearCrush-PROPSHAFT.crush)*PROPSHAFT.crushGain);
+  return clamp01(b);
+}
+export function propVibration(bend:number,speed:number){
+  const s=Math.abs(Number.isFinite(speed)?speed:0)/PROPSHAFT.speed;
+  return Math.min(PROPSHAFT.cap,clamp01(bend)*s*s);
+}
+/** Fatigue after dt seconds at this vibration; the shaft snaps at 1. */
+export function fatigueProp(wear:number,vibration:number,dt:number){
+  const w=Number.isFinite(wear)?wear:0,v=Number.isFinite(vibration)?vibration:0;
+  return Math.min(1,w+Math.max(0,v-PROPSHAFT.safe)*Math.max(0,dt)/PROPSHAFT.life);
+}
+export const propWarning=(bend:number,snapped:boolean)=>snapped?'PROPSHAFT SNAPPED':bend>=PROPSHAFT.bent?'PROPSHAFT BENT':'';
