@@ -1,3 +1,4 @@
+import {exhaustLoudness,bearingGrowl} from './damage-handling';
 import {materialImpactProfile,type ImpactMaterial} from './impact-material';
 import {readAudioOutput,type AudioOutput} from './audio-output';
 import {TrackAcousticProbe,TrackReflections} from './track-acoustics';
@@ -8,19 +9,32 @@ import {gearboxGrindSamples} from './transmission';
 import {audioListenerPosition,AudioListenerMotion,type AudioPerspective} from './audio-perspective';
 import {starterSamples} from './engine-stall';
 import {engineDamageLevel} from './engine-condition';
-import {classicEngineVoice} from './classic-vehicle-specs';
+import {classicEngineVoice,vehicleWheelRadius} from './classic-vehicle-specs';
+import {RATTLE,rattleRate,thumpRate,EventClock,synthClank,synthThump,hornStuck,synthHorn,synthGrowl,synthWind,synthSqueal} from './damage-rattle';
+import {knockRate} from './oil-starvation';
+/** Front compression past which the fan hits its shroud, and its clatter rate cap. */
+const FAN_CLATTER={onset:.35,max:12} as const;
 import {impactSoundLayers} from './impact-response';
 import { url } from './assets';
 import type { Vehicle } from './vehicle';
 import * as T from 'three';
 import type { ThermalAudio } from './vehicle-fire';
 type Loop = { source: AudioBufferSourceNode; gain: GainNode; pan: PannerNode };
+/** Seconds a damage loop (squeal, growl) is kept, silent, after it falls quiet, before its nodes are released. */
+const LOOP_HOLD=2;
 import {CrowdRoar} from './crowd-roar';
+/** Engine-layer level during a misfire cut. */
+export const MISFIRE_AUDIO=.3;
+/** Dazed hearing: the low-pass cutoff (Hz) slides from wide open down to a dull thud as the daze deepens. */
+export const DAZE_HEARING={open:22000,dull:550} as const;
+export const dazeHearing=(level:number)=>{const l=Math.max(0,Math.min(1,Number.isFinite(level)?level:0));return DAZE_HEARING.open*Math.pow(DAZE_HEARING.dull/DAZE_HEARING.open,l);};
 export class Sound {
   private acousticProbe=new TrackAcousticProbe();
   private reflections?:TrackReflections;
   ctx?: AudioContext;
   master?: GainNode;
+  private dazeFilter?: BiquadFilterNode;
+  private dazeLevel = 0;
   engineBus?: GainNode;
   fxBus?: GainNode;
   ambientBus?: GainNode;
@@ -33,6 +47,9 @@ export class Sound {
   private activeShots = new Set<AudioBufferSourceNode>();
   private shotPanners=new Map<AudioBufferSourceNode,PannerNode>();
   private crowdRoar?:CrowdRoar;
+  private rattleClock=new EventClock();
+  /** Damage sounds played so far (QA). */
+  readonly damageSounds={rattle:0,thump:0,knock:0,fan:0};
   private rainHiss?:{source:AudioBufferSourceNode;gain:GainNode};
   output:AudioOutput='speakers';
   setOutput(value:unknown){
@@ -84,7 +101,9 @@ export class Sound {
     compressor.threshold.value = -12;
     compressor.knee.value = 12;
     compressor.ratio.value = 8;
-    this.master.connect(compressor).connect(c.destination);
+    // A dazed driver hears the world muffled: a low-pass between the mix and the output (wide open otherwise).
+    this.dazeFilter=c.createBiquadFilter();this.dazeFilter.type='lowpass';this.dazeFilter.frequency.value=DAZE_HEARING.open;this.dazeFilter.Q.value=.5;
+    this.master.connect(this.dazeFilter).connect(compressor).connect(c.destination);
     this.engineBus = c.createGain();
     this.fxBus = c.createGain();
     this.ambientBus = c.createGain();
@@ -211,6 +230,89 @@ export class Sound {
       this.shot(layer.id,p,layer.volume*(body?profile.gain:1),body?{...layer,rate:layer.rate*profile.rate,duration:layer.duration*profile.duration,lowpass:profile.lowpass}:layer);
     }
   }
+  /** Muffle everything while the player is dazed (0 clear .. 1 fully dazed); eases in and out. */
+  daze(level:number){
+    const l=Math.max(0,Math.min(1,Number.isFinite(level)?level:0));if(!this.ctx||!this.dazeFilter||Math.abs(l-this.dazeLevel)<.01)return;
+    this.dazeLevel=l;this.dazeFilter.frequency.setTargetAtTime(dazeHearing(l),this.ctx.currentTime,.08);
+  }
+  /** A misfire's exhaust pop: the burst sample, pitched up, cut short and muffled. */
+  backfire(p:T.Vector3){this.shot('vehicle-burst',p,.5,{rate:2.1,delay:0,duration:.17,lowpass:2400});}
+  private groundFireLoop?:Loop;
+  /** Stuck horns blaring, by car id (offline, within earshot). */
+  private horns=new Map<number,Loop>();
+  /** Keep a horn loop going for each car with a shorted horn in earshot; silence the rest. */
+  stuckHorns(cars:readonly Vehicle[],listener:T.Vector3){
+    if(!this.ready||!this.fxBus)return;
+    if(!this.buffers.has('horn')){const c=this.ctx;if(!c||typeof c.createBuffer!=='function')return;const d=synthHorn(c.sampleRate),b=c.createBuffer(1,d.length,c.sampleRate);b.copyToChannel(d,0);this.buffers.set('horn',b);}
+    const now=this.ctx!.currentTime,live=new Set<number>();
+    for(const car of cars){
+      if(!car.extendedDamage||car.health<=0||!hornStuck(car.structuralDamage?.[0]??0,car.id)||car.current.distanceTo(listener)>RATTLE.hearing)continue;
+      live.add(car.id);let l=this.horns.get(car.id);if(!l){l=this.loop('horn',this.fxBus);if(!l)continue;this.horns.set(car.id,l);}
+      l.pan.positionX.value=car.current.x;l.pan.positionY.value=car.current.y+.5;l.pan.positionZ.value=car.current.z;l.gain.gain.setTargetAtTime(.16,now,.05);
+    }
+    for(const [id,l] of this.horns)if(!live.has(id)){l.gain.gain.setTargetAtTime(0,now,.05);l.source.stop(now+.3);this.horns.delete(id);}
+  }
+  /** Slipping fan belts squealing under load, by car id (offline, within earshot), pitched with the revs. */
+  private squeals=new Map<number,Loop>();
+  private readonly quietSince=new WeakMap<Loop,number>();
+  beltSqueals(cars:readonly Vehicle[],listener:T.Vector3){
+    if(!this.ready||!this.fxBus)return;
+    if(!this.buffers.has('squeal')){const c=this.ctx;if(!c||typeof c.createBuffer!=='function')return;const d=synthSqueal(c.sampleRate),b=c.createBuffer(1,d.length,c.sampleRate);b.copyToChannel(d,0);this.buffers.set('squeal',b);}
+    const now=this.ctx!.currentTime,live=new Set<number>();
+    for(const car of cars){
+      if(!car.extendedDamage||car.health<=0||car.squeal<.02||car.current.distanceTo(listener)>RATTLE.hearing)continue;
+      live.add(car.id);let l=this.squeals.get(car.id);if(!l){l=this.loop('squeal',this.fxBus);if(!l)continue;this.squeals.set(car.id,l);}
+      l.pan.positionX.value=car.current.x;l.pan.positionY.value=car.current.y+.6;l.pan.positionZ.value=car.current.z;
+      l.source.playbackRate.setTargetAtTime(.8+Math.min(.6,(car.rpm??0)/9000),now,.06);l.gain.gain.setTargetAtTime(.2*car.squeal,now,.06);
+    }
+    // AI throttle flickers on and off many times a second: a loop that falls quiet is faded and kept for LOOP_HOLD seconds
+    // rather than torn down and rebuilt each time (that node churn cost frames).
+    for(const [id,l] of this.squeals)if(!live.has(id)){const q=this.quietSince.get(l)??now;this.quietSince.set(l,q);l.gain.gain.setTargetAtTime(0,now,.05);
+      if(now-q>LOOP_HOLD||!cars.some(c=>c.id===id)){l.source.stop(now+.3);this.squeals.delete(id);this.quietSince.delete(l);}}
+    for(const id of live){const l=this.squeals.get(id);if(l)this.quietSince.delete(l);}
+  }
+  /** The wind roaring through the player's open wreck (level 0 = silent), pitched up with speed. */
+  private windLoop?:Loop;
+  cabinWind(level:number,p:T.Vector3,speed:number){
+    if(!this.ready||!this.fxBus)return;
+    if(!this.buffers.has('wind')){const c=this.ctx;if(!c||typeof c.createBuffer!=='function')return;const d=synthWind(c.sampleRate),b=c.createBuffer(1,d.length,c.sampleRate);b.copyToChannel(d,0);this.buffers.set('wind',b);}
+    const now=this.ctx!.currentTime;
+    if(!(level>.01)){if(this.windLoop){this.windLoop.gain.gain.setTargetAtTime(0,now,.15);this.windLoop.source.stop(now+.8);this.windLoop=undefined;}return;}
+    this.windLoop??=this.loop('wind',this.fxBus);const l=this.windLoop;if(!l)return;
+    l.pan.positionX.value=p.x;l.pan.positionY.value=p.y+1;l.pan.positionZ.value=p.z;
+    l.source.playbackRate.setTargetAtTime(.7+Math.min(.8,Math.abs(speed)/40),now,.2);l.gain.gain.setTargetAtTime(.45*level,now,.2);
+  }
+  /** Growling wheel bearings, by car id (offline, within earshot): the worst bearing on each car, pitched up with speed. */
+  private growls=new Map<number,Loop>();
+  bearingGrowls(cars:readonly Vehicle[],listener:T.Vector3){
+    if(!this.ready||!this.fxBus)return;
+    if(!this.buffers.has('growl')){const c=this.ctx;if(!c||typeof c.createBuffer!=='function')return;const d=synthGrowl(c.sampleRate),b=c.createBuffer(1,d.length,c.sampleRate);b.copyToChannel(d,0);this.buffers.set('growl',b);}
+    const now=this.ctx!.currentTime,live=new Set<number>();
+    for(const car of cars){
+      const g=car.extendedDamage&&car.health>0?bearingGrowl(Math.max(...car.bearingWear),car.speed):0;
+      if(g<.02||car.current.distanceTo(listener)>RATTLE.hearing)continue;
+      live.add(car.id);let l=this.growls.get(car.id);if(!l){l=this.loop('growl',this.fxBus);if(!l)continue;this.growls.set(car.id,l);}
+      l.pan.positionX.value=car.current.x;l.pan.positionY.value=car.current.y+.3;l.pan.positionZ.value=car.current.z;
+      l.source.playbackRate.setTargetAtTime(.6+Math.min(1.2,Math.abs(car.speed)/25),now,.08);l.gain.gain.setTargetAtTime(.28*g,now,.08);
+    }
+    for(const [id,l] of this.growls)if(!live.has(id)){const q=this.quietSince.get(l)??now;this.quietSince.set(l,q);l.gain.gain.setTargetAtTime(0,now,.05);
+      if(now-q>LOOP_HOLD||!cars.some(c=>c.id===id)){l.source.stop(now+.3);this.growls.delete(id);this.quietSince.delete(l);}}
+    for(const id of live){const l=this.growls.get(id);if(l)this.quietSince.delete(l);}
+  }
+  /** Burning oil or fuel on the ground: one crackling loop at the nearest fire (null = none). */
+  groundFire(nearest:{p:T.Vector3;level:number}|null){
+    if(!this.ready||!this.fxBus)return;
+    this.groundFireLoop??=this.loop('fire-crackle',this.fxBus);const l=this.groundFireLoop;if(!l)return;
+    const now=this.ctx!.currentTime;
+    if(nearest){l.pan.positionX.value=nearest.p.x;l.pan.positionY.value=nearest.p.y+.4;l.pan.positionZ.value=nearest.p.z;}
+    l.gain.gain.setTargetAtTime(nearest?Math.min(.34,nearest.level*.24):0,now,.15);
+  }
+  /** An oil drum blowing up: the burst sample, full and low. */
+  drumBlast(p:T.Vector3){this.shot('vehicle-burst',p,1,{rate:.8,delay:0,duration:1.4});}
+  /** A puddle catching: a soft whoomph, bigger for fuel. */
+  groundIgnite(p:T.Vector3,kind:number){this.shot('fire-roar',p,kind===2?.55:.35,{rate:kind===2?1.25:.95,delay:0,duration:.9,lowpass:1800});}
+  /** A tyre bursting at speed: a sharp, full bang (the burst sample, less pitched up than a backfire). */
+  blowout(p:T.Vector3){this.shot('vehicle-burst',p,.85,{rate:1.45,delay:0,duration:.32});}
   shot(id: string, p: T.Vector3, volume = 1, options?:{rate:number;delay:number;duration:number;lowpass?:number}) {
     if (!this.ready || this.activeVoices >= 18) return;
     const c = this.ctx!,
@@ -302,6 +404,7 @@ export class Sound {
         if (grounded && !prior.grounded)
           this.shot('suspension', car.current, 0.22);
       }
+      if(!wreckInspection)this.damageRattle(car,p,dt,car===focused);
       this.history.set(car.id, {
         throttle: car.input.throttle,
         slip: car.slip,
@@ -319,6 +422,8 @@ export class Sound {
       const rpm = car.rpm,
         level = car === focused ? 0.38 : 0.22;
       const scrapeMix=scrapeSurfaceMix(car.scraping??0,this.contactScraping.level(car.id),car.surface,car.speed);
+      // A misfire cut drops the combustion layers and lets the damaged rattle through: an audible stutter.
+      const cut=(car.misfireFactor??1)<1?MISFIRE_AUDIO:1;
       for (const [name, l] of loops) {
         if(name.startsWith('fire-'))continue;
         l.pan.positionX.value = car.current.x;
@@ -332,7 +437,7 @@ export class Sound {
           high: 6500,
         };
         if (name in centers) {
-          v = Math.max(0, 1 - Math.abs(Math.min(rpm,6500) - centers[name]) / 2100) * level;
+          v = Math.max(0, 1 - Math.abs(Math.min(rpm,6500) - centers[name]) / 2100) * level * cut * (car.extendedDamage ? exhaustLoudness(car.exhaustBlow) : 1);
           if (car.health === 0) v = 0;
           l.source.playbackRate.setTargetAtTime(
             Math.max(0.72, Math.min(1.4, (rpm / centers[name]) * doppler))*classicEngineVoice(car.kind).pitch,
@@ -341,9 +446,9 @@ export class Sound {
           );
         } else if (name === 'gear-grind') v=car.health>0?.16*Math.min(1,(car.transmission?.grind??0)/.3):0;
         else if (name === 'starter') v=car.health>0&&car.engineStall!>0&&car.rpm>0?.13:0;
-        else if (name === 'load') v = Math.abs(car.input.throttle) * 0.07;
+        else if (name === 'load') v = Math.abs(car.input.throttle) * 0.07 * cut;
         else if (name === 'damaged')
-          v = engineDamageLevel(car.health,car.engineDamage) * 0.18;
+          v = engineDamageLevel(car.health,car.engineDamage) * 0.18 * (cut<1?1.6:1);
         else if (name === 'tires')
           v =
             Math.min(0.35, car.slip * 0.06) *
@@ -376,6 +481,40 @@ export class Sound {
       if(!this.paused)this.unlock();
     }
     else this.unlock();
+  }
+  /** Synthesized on first use, so they never count among (or delay) the decoded clips. */
+  private damageBuffers(){
+    if(this.buffers.has('thump'))return true;
+    const c=this.ctx;if(!c||typeof c.createBuffer!=='function')return false;
+    const synth=(id:string,data:Float32Array<ArrayBuffer>)=>{const b=c.createBuffer(1,data.length,c.sampleRate);b.copyToChannel(data,0);this.buffers.set(id,b);};
+    for(let k=0;k<RATTLE.variants;k++)synth('rattle-'+k,synthClank(c.sampleRate,k));
+    synth('thump',synthThump(c.sampleRate));
+    return true;
+  }
+  /** Loose panels clank and bent wheels thump, for cars within earshot. */
+  private damageRattle(car:Vehicle,listener:T.Vector3,dt:number,focused:boolean){
+    if(!car.wreckParts||!car.current||car.current.distanceTo(listener)>RATTLE.hearing)return;
+    const clock=this.rattleClock,volume=focused?.42:.26,radius=vehicleWheelRadius(car.kind);
+    let loose=0;for(const a of car.wreckParts.assemblies)if(a.loose>loose&&a.members.some(m=>m.mesh.visible))loose=a.loose;
+    const rough=car.surface==='asphalt'?0:car.surface==='gravel'?1:.6,rattle=rattleRate(loose,car.speed,rough);
+    const thumps=[0,1,2,3].map(i=>car.wreckParts.wheelLost[i]?0:car.wreckParts.wheelDamage[i]);
+    // A front crushed back into the cooling fan: its blades clatter on the shroud with the revs.
+    const fan=car.extendedDamage&&car.health>0&&!(car.engineStall!>0)&&(car.structuralDamage?.[0]??0)>FAN_CLATTER.onset?Math.min(FAN_CLATTER.max,car.rpm/60*.4):0;
+    if(fan>0&&this.damageBuffers())for(let n=clock.step(car.id+':fan',fan,dt,.2);n>0;n--){this.damageSounds.fan++;this.shot('rattle-1',car.current,volume*.32,{rate:2.3+clock.random()*.2,delay:0,duration:.06});}
+    // A dry engine knocks with the revs: big-end bearings on their way out.
+    const knock=car.extendedDamage&&!car.seized&&car.health>0&&!(car.engineStall!>0)?knockRate(car.oilLevel,car.rpm):0;
+    if(knock>0&&this.damageBuffers())for(let n=clock.step(car.id+':knock',knock,dt,.05);n>0;n--){this.damageSounds.knock++;this.shot('rattle-3',car.current,volume*.45,{rate:1.9+clock.random()*.1,delay:0,duration:.08});}
+    if(rattle<=0&&thumps.every(d=>thumpRate(d,car.speed,radius)<=0)){clock.step(car.id+':rattle',0,dt);for(let i=0;i<4;i++)clock.step(car.id+':thump'+i,0,dt);return;}
+    if(!this.damageBuffers())return;
+    for(let n=clock.step(car.id+':rattle',rattle,dt);n>0;n--){
+      this.damageSounds.rattle++;
+      this.shot('rattle-'+Math.floor(clock.random()*RATTLE.variants),car.current,volume*(.55+.45*clock.random()),{rate:.85+clock.random()*.35,delay:clock.random()*.03,duration:.26});
+    }
+    thumps.forEach((damage,i)=>{
+      for(let n=clock.step(car.id+':thump'+i,thumpRate(damage,car.speed,radius),dt,.08);n>0;n--){
+        this.damageSounds.thump++;this.shot('thump',car.current,volume*Math.min(1,.4+damage),{rate:.9+clock.random()*.2,delay:0,duration:.18});
+      }
+    });
   }
   mute() {
     this.muted = !this.muted;
