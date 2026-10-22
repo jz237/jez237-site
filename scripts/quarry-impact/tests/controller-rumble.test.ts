@@ -77,3 +77,9 @@ test('bent wheels shake the weak motor at speed and a misfiring engine pulses th
  r.update(f.pad,180,1,{...asphalt,misfire:true});assert.ok(f.effects.at(-1)!.strongMagnitude!>.25,'a misfire thumps');
  const g=fixture();g.rumble.update(g.pad,0,1,{...asphalt,wobble:1,grounded:false});assert.equal(g.effects.length,0,'nothing in the air');
 });
+test('a tyre rubbing on a crushed arch buzzes the weak motor, rising with speed',()=>{
+ const asphalt:RumbleMotion={...road,surface:'asphalt'};
+ const f=fixture(),r=f.rumble;r.update(f.pad,0,1,{...asphalt,rub:1});assert.ok(f.effects.at(-1)!.weakMagnitude!>.15,'a rubbing tyre buzzes at speed');
+ const g=fixture();g.rumble.update(g.pad,0,1,{...asphalt,rub:1,speed:3});assert.ok((g.effects.at(-1)?.weakMagnitude??0)<.06,'barely at a crawl');
+ const h=fixture();h.rumble.update(h.pad,0,1,{...asphalt,rub:0});assert.equal(h.effects.length,0,'no rub, no buzz');
+});
