@@ -44,7 +44,7 @@ import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowo
 import {leakRates,dripInterval,FLAME,fuelSpacing} from './fluid-leaks';
 import {drainOil,starvationWear,seizes,OIL,drainCoolant,overheatWear,FUEL_TANK,drainFuel,fuelFeed,SUMP,crackSump,sumpLeak,drainSump} from './oil-starvation';
 import {MAX_ENGINE_RESTART,crankRequested} from './engine-stall';
-import {rollBarSnaps,rollTorque,hasPropshaft,propBend,propVibration,fatigueProp,BEARING,bearingCracks,wearBearing,bearingShimmy,bearingDrag} from './damage-handling';
+import {rollBarSnaps,rollTorque,hasPropshaft,propBend,propVibration,fatigueProp,BEARING,bearingCracks,wearBearing,bearingShimmy,bearingDrag,steerSkew} from './damage-handling';
 import {SHED,assemblyMass,glassMass,shedMassProperties,type ShedPart} from './shed-weight';
 import {DOOR_SWING,stepDoor,doorDrag,doorUnlatched,doorBase,lidKind,lidBase,stepLid,CARGO,cargoSpills,type LidKind} from './door-swing';
 /** Rear compression past which the exhaust hangs down and drags. */
@@ -164,6 +164,8 @@ export class Vehicle {
   readonly engineMisfire:EngineMisfire;
   misfireFactor = 1;
   steerLimit = 1;
+  /** Share of lock lost steering toward a bent front corner, signed like the steer input (STEER_SKEW); 0 straight. */
+  steerSkew = 0;
   readonly brakeBias = [1,1,1,1];
   readonly damperBias = [1,1,1,1];
   /** Broken springs and driveshafts per wheel (offline): stiffness and rest-length scales, and drive on/off. */
@@ -704,6 +706,7 @@ export class Vehicle {
       const exhaust=new T.Vector3(0,.32,-DEFINITIONS[this.kind].halfLength).applyQuaternion(this.previousQ).add(this.previous);
       this.fx.emit(exhaust,5,1,.7);this.fx.emit(exhaust,1,2,.4);this.onBackfire?.(exhaust);this.exhaustPops++;this.fx.slicks?.igniteAt(exhaust.x,exhaust.z,.6,true,this.id);}
     this.steerLimit=this.extendedDamage?steeringLimit(this.structuralDamage):1;
+    this.steerSkew=this.extendedDamage?steerSkew(this.wreckParts.wheelDamage[0],this.wreckParts.wheelDamage[1]):0;
     this.thrustAngle=this.extendedDamage?thrustAngle(this.structuralDamage):0;
     this.steerRate=this.extendedDamage?steerRate(this.structuralDamage?.[0]??0):1;
     this.steerPlay=this.extendedDamage?steerPlay(this.wreckParts.wheelDamage):0;this.wanderClock+=dt;

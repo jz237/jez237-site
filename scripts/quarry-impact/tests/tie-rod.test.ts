@@ -26,7 +26,8 @@ test('with a snapped tie rod the car turns on one wheel and the loose one flops;
    c.extendedDamage=extended;c.place(0,0,0);c.render(1);
    for(let k=0;k<30;k++){c.preStep(1/60);world.step();c.postStep(1/60,k/60);}
    c.input.throttle=.8;for(let k=0;k<120;k++){c.preStep(1/60);world.step();c.postStep(1/60,.5+k/60);}
-   c.wreckParts.wheelDamage[1]=damage;c.input.throttle=.5;c.input.steer=.6;const yaw0=Math.atan2(c.forward.x,c.forward.z);let turned=0,last=yaw0,steer1=0;
+   c.wreckParts.wheelDamage[1]=damage;c.input.throttle=.5;c.input.steer=-.6;// toward the sound side, so a short lock (STEER_SKEW) on the knocked side does not mask the rod
+  const yaw0=Math.atan2(c.forward.x,c.forward.z);let turned=0,last=yaw0,steer1=0;
    for(let k=0;k<120;k++){c.preStep(1/60);world.step();c.postStep(1/60,2.5+k/60);const y=Math.atan2(c.forward.x,c.forward.z);let d=y-last;if(d>Math.PI)d-=2*Math.PI;if(d<-Math.PI)d+=2*Math.PI;turned+=d;last=y;
     steer1=Math.max(steer1,Math.abs((c.controller.wheelSteering(1)??0)-(c.controller.wheelSteering(0)??0)));}
    return{turned:Math.abs(turned),link:Array.from(c.steerLink),breaks,split:steer1};

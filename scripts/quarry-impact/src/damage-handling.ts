@@ -334,3 +334,14 @@ export const bearingShimmy=(wear:number,angle:number)=>{const p=clamp01((clamp01
 /** Drag on the hub (same units as caliper drag): none until play, growing to BEARING.drag, then BEARING.seize once seized. */
 export const bearingDrag=(wear:number)=>{const w=clamp01(wear);return w>=1?BEARING.seize:w<=BEARING.play?0:BEARING.drag*(w-BEARING.play)/(1-BEARING.play);};
 export const bearingWarning=(wear:ArrayLike<number>)=>{const a=Array.from(wear);return a.some(v=>v>=1)?'BEARING SEIZED':a.some(v=>v>=BEARING.growl)?'BEARING GROWLING':'';};
+/** A front corner knocked harder than the other bends that side's steering into the crushed arch: the wheels no longer turn
+ * fully toward the damaged side; the other way is untouched. Signed like the steer input (+ right, − left): the share of
+ * lock lost when steering that way. */
+export const STEER_SKEW={onset:.04,span:.12,max:.6,warn:.15} as const;
+export function steerSkew(frontLeft:number,frontRight:number){
+  const d=(Number.isFinite(frontRight)?frontRight:0)-(Number.isFinite(frontLeft)?frontLeft:0),m=Math.abs(d);
+  return m<=STEER_SKEW.onset?0:Math.sign(d)*STEER_SKEW.max*clamp01((m-STEER_SKEW.onset)/STEER_SKEW.span);
+}
+/** Multiplier on a steer input of this sign: short only toward the bent side. */
+export const skewFactor=(steer:number,skew:number)=>skew!==0&&Number.isFinite(skew)&&Math.sign(steer)===Math.sign(skew)?1-Math.min(1,Math.abs(skew)):1;
+export const skewWarning=(skew:number)=>Math.abs(Number.isFinite(skew)?skew:0)<STEER_SKEW.warn?'':`${skew>0?'RIGHT':'LEFT'} LOCK SHORT`;

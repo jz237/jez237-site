@@ -1,6 +1,7 @@
+import {restoreSteerSkewBytes} from './steer-skew-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readWheelBearingPrevious,restoreWheelBearingBytes,verifyWheelBearingRevision} from './wheel-bearing-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreSteerSkewBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('WheelBearing preserves every prior fixture, vehicle asset, venue art and history input',verifyWheelBearingRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/wheel-bearing/revision.json').toString());
