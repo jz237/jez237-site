@@ -75,5 +75,10 @@ export const brakeWarning=(fluid:number)=>clamp01(fluid)<BRAKE_LINE.warn?'BRAKES
 export const POWER_STEER={onset:.5,rate:.4} as const;
 export const steerRate=(frontCompression:number)=>clamp01(frontCompression)>POWER_STEER.onset?POWER_STEER.rate:1;
 export const steerWarning=(rate:number)=>rate<1?'POWER STEERING FAILED':'';
+/** A front crushed past THROTTLE_JAM.onset bends the throttle linkage on about half the cars (fixed per car): lifting off
+ * leaves the engine at THROTTLE_JAM.hold, so the car keeps pulling until the brakes cut the drive. */
+export const THROTTLE_JAM={onset:.6,hold:.35} as const;
+export const throttleJams=(frontCompression:number,carId:number)=>clamp01(frontCompression)>THROTTLE_JAM.onset&&((carId*.61803+.27)%1)<.5;
+export const jammedThrottle=(throttle:number,jammed:boolean)=>jammed&&throttle>=0?Math.max(throttle,THROTTLE_JAM.hold):throttle;
 export const DAMPER_LOSS=.6;
 export function damperFactor(wheelDamage:number){return 1-DAMPER_LOSS*clamp01(wheelDamage);}
