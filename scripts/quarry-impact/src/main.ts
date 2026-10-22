@@ -8,7 +8,7 @@ import {ReplayPuddles} from './replay-puddles';
 import {ReplaySlicks} from './replay-slicks';
 import {PropFires,propKind,DRUM_BLAST} from './prop-fires';
 import {avoidFires,contactHeat,CAR_FIRE} from './fire-avoidance';
-import {oilWarning,coolantWarning,fuelWarning} from './oil-starvation';
+import {oilWarning,coolantWarning,fuelWarning,OIL,COOLANT} from './oil-starvation';
 import {setSceneShadows,createPMREMGenerator} from './rendering';
 import {quarryReplayProps} from './quarry-tyres';
 import {colliderImpactMaterial,type ImpactMaterial} from './impact-material';
@@ -105,7 +105,7 @@ import {createBrackenWorld} from './bracken-world';
 import {createCinderbankWorld} from './cinderbank-world';
 import {tyreWarning} from './tyre-feedback';
 import {fluidWarning,leakRates,burnLevel,type GroundFire} from './fluid-leaks';
-import {gearboxWarning,brakeWarning,steerWarning,clutchWarning,playWarning,rubWarning,electricalWarning,nutWarning,exhaustWarning,diffWarning,tieRodWarning,caliperWarning,mountsWarning,starterWarning,frameWarning,discGlow,diffAxle,dazeWarning} from './damage-handling';
+import {gearboxWarning,brakeWarning,steerWarning,clutchWarning,playWarning,rubWarning,electricalWarning,nutWarning,exhaustWarning,diffWarning,tieRodWarning,caliperWarning,mountsWarning,starterWarning,frameWarning,discGlow,diffAxle,dazeWarning,nurseThrottle} from './damage-handling';
 import {engineStatus} from './engine-condition';
 import {drivingObstacleClearance} from './driving-probe';
 import {vehicleContact,vehicleContactManifold} from './vehicle-contact';
@@ -1342,8 +1342,10 @@ function input(): Input {
 const aiFires:{clock:number;list:GroundFire[]}={clock:-1,list:[]};let fireAvoidance=true;
 /** Offline AI drivers also steer round burning puddles and props, and drive out of flames. */
 function ai(car: Vehicle, dt: number): Input {
-  const input=aiCore(car,dt);
-  if(car.seized&&car.extendedDamage)return{throttle:0,steer:input.steer,brake:.3,handbrake:false};
+  const core=aiCore(car,dt);
+  if(car.seized&&car.extendedDamage)return{throttle:0,steer:core.steer,brake:.3,handbrake:false};
+  // A sick engine (low oil or coolant) is nursed: the AI holds the throttle back so it lasts.
+  const input=car.extendedDamage&&!online?.active?{...core,throttle:nurseThrottle(core.throttle,car.oilLevel<OIL.low||car.coolantLevel<COOLANT.low)}:core;
   if(!fireAvoidance||!car.extendedDamage||online?.active||car.health<=0)return input;
   if(aiFires.clock!==fx.slicks.clock){aiFires.clock=fx.slicks.clock;aiFires.list=[...(fx.slicks.burningCount()?fx.slicks.fires():[]),...(propFires.burning.size?propFires.fires(fx.slicks.clock,propPoints(activeVenue.props)):[]),...fx.debrisFires()];}
   const fires=aiFires.list;

@@ -264,3 +264,7 @@ export function weakSpot(structure:readonly number[]|undefined,at:{x:number;z:nu
  * at most once every PUNCTURE.gap seconds per wheel. */
 export const PUNCTURE={reach:.35,speed:6,odds:.15,gap:2,leak:.05} as const;
 export const punctures=(seed:number,count:number)=>{const x=Math.sin(seed*12.7+count*91.3)*43758.5453;return x-Math.floor(x)<PUNCTURE.odds;};
+/** An AI driver nursing a sick engine (oil or coolant low): forward throttle is held to NURSE.throttle so it lasts longer;
+ * reversing, braking and steering are left alone. Returns the throttle to use. */
+export const NURSE={throttle:.65} as const;
+export const nurseThrottle=(throttle:number,sick:boolean)=>sick&&throttle>NURSE.throttle?NURSE.throttle:throttle;
