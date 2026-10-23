@@ -29,7 +29,7 @@
     "category": "3D · Mechanics",
     "description": "Eight cylinders. One synchronized machine. Slice through a working cross-plane V8 and follow the motion from ignition to crankshaft.",
     "url": "v8-engine/",
-    "image": "assets/v8-engine-cover-20261006.png",
+    "image": "assets/v8-engine-cover-20261006.webp",
     "imageAlt": "Illustrated cutaway V8 engine with exposed pistons and crankshaft, metallic finishes and dramatic studio lighting",
     "source": "https://github.com/jz237/jez237-site/tree/main/scripts/v8-engine",
     "features": [
@@ -53,7 +53,7 @@
     "category": "3D · Sci-fi sculpture",
     "description": "Chrome armor. A glowing neural core. Explore an animated Cyberdyne Systems sculpture with mechanical rings, cinematic lighting, and a living network of signals.",
     "url": "skynet-3d/",
-    "image": "assets/skynet.png",
+    "image": "assets/skynet.webp",
     "imageAlt": "Chrome and red Cyberdyne Systems Skynet concept artwork that inspired the interactive sculpture",
     "source": "https://github.com/jz237/jez237-site/tree/main/demos/skynet-3d",
     "features": [

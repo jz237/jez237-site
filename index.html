@@ -54,6 +54,8 @@
   <link rel="stylesheet" href="assets/styles.css" />
   <link rel="stylesheet" href="assets/site-enhance.css" />
   <link rel="stylesheet" href="assets/design.css?v=galaxy-stars-20260705b" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/files/fraunces/v38/6NU78FyLNQOQZAnv9bYEvDiIdE9Ea92uemAk_WBq8U_9v0c2Wa0KxC9TeA.woff2" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/files/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2" />
   <link rel="preload" as="image" href="assets/galaxy-home-20260702.webp" />
   <link rel="preload" as="image" href="assets/home-cards/garden-center-thumb-20260530.webp" />
   <link rel="preload" as="image" href="assets/home-cards/05-weather-map-dragon-thumb-20260530.webp" />
@@ -376,7 +378,7 @@
             <span>Watch →</span>
           </a>
           <a class="hub-card" href="demos/">
-            <div class="hub-card-media" style="background-image:url('demos/assets/skynet.png')"></div>
+            <div class="hub-card-media" style="background-image:url('demos/assets/skynet.webp')"></div>
             <h2>Website Demos</h2>
             <p>Interactive web builds, from the exploded human body and Model S studios to the 3D V8 Engine Laboratory.</p>
             <span>Explore →</span>
@@ -585,7 +587,8 @@
           const localImage = item.image && !/^https?:\/\//i.test(item.image) ? item.image : '';
           if (localImage) {
             const image = document.createElement('img');
-            image.src = localImage;
+            // Feed image paths are relative to /ai-news/, not to this page.
+            image.src = new URL(localImage, new URL('ai-news/', document.baseURI)).href;
             image.alt = '';
             image.loading = 'lazy';
             image.referrerPolicy = 'no-referrer';

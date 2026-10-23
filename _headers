@@ -37,6 +37,12 @@
 /assets/nav.js
   Cache-Control: no-cache, must-revalidate
 
+# Self-hosted Google Fonts keep Google's versioned file names; a changed font
+# gets a new URL, so the files themselves never change.
+/assets/fonts/files/*
+  ! Cache-Control
+  Cache-Control: public, max-age=31536000, immutable
+
 # Ocean modules are versioned together; always revalidate their entry page.
 /demos/open-sea/
   Cache-Control: no-store
