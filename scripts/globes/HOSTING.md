@@ -152,6 +152,19 @@ self-collision is still approximate, not a full cloth/contact solver.
 Use `npm run web -- --host 127.0.0.1` for browser development (`npm run dev` starts
 Electron). `?qa` exposes the same local inspection object as a dev build.
 
+## Browser compatibility
+
+Firefox compiles WGSL with naga, which is stricter than Chrome's Tint. Builds up to
+1.6.0 failed there with `Abstract types may only appear in constant expressions` in
+the Koi `koi_map` function, because upstream called `mix()` with only literal
+arguments (`mix(0.0045, 0.0025, 0.5)`); naga cannot constant-fold `mix`, so the
+abstract result reached a runtime expression. It is now the literal `0.0035`, the
+identical value. Keep all-literal builtin calls (`mix`, `pow`, `smoothstep`, ...) out
+of runtime WGSL. Verified by driving stock Firefox 158 with WebGPU enabled
+(`geckodriver`) through all six scenes: no validation errors, and the scenes render.
+A cold first load there compiles shaders for roughly 30-60 s, so the loading
+screen lingers. This is a Firefox pipeline-compile cost, not a hang.
+
 The separate willwaltz/webgpu-ray-tracing project is an optional experimental
 browser patch, not a site dependency. No custom browser is installed or required.
 
