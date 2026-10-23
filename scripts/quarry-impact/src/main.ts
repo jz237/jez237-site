@@ -1173,6 +1173,15 @@ function updateHud() {
     clock < statusUntil ? `<div class="toast">${statusMessage}</div>` : '';
   if(activeClubRound!==null){const waiting=cars.filter(c=>!c.finished&&c.health>0&&!(c.id===0&&clubRetired)).length,remaining=mode==='race'?Math.max(0,Math.ceil(Math.min(300-elapsed,clubFirstFinish===null?300:clubFirstFinish+45-elapsed))):Math.max(0,Math.ceil(eventDuration()-elapsed));text('club-live',clubPlayerStopped?`${clubRetired?'RETIRED':cars[0].finished?'FINISHED':'WRECKED'} · ${mode==='race'?waiting+' drivers still racing':'Derby still running'} · ${remaining}s maximum remaining`:clubEngineLabel(clubCup?.enginePolicy,cars[0].kind,cars[0].setup)+' · '+GRID_LINEUPS[clubCup?.lineup??'mixed']+' · '+classLimitLabel(clubCup?.classLimit)+' · '+AI_DIFFICULTIES[aiDifficulty()].label+' · Championship points · '+(mode==='race'?'Field closes 45s after the first finish':eventDuration()+'-second survival derby'));}
   drawMap();
+  fitInstruments();
+}
+/** The status block grows upward as warnings pile up: lift the dial clear of the warning lines (measured only when they change). */
+let instrumentsKey='';
+function fitInstruments(){
+  const status=ui.querySelector('.status'),dial=document.getElementById('instruments');if(!status||!dial)return;
+  const lines=Array.from(status.querySelectorAll<HTMLElement>('.tyre-status')),key=lines.map(e=>e.textContent).join('|')+'|'+innerWidth+'x'+innerHeight;
+  if(key===instrumentsKey)return;instrumentsKey=key;
+  const extra=lines.reduce((h,e)=>h+e.offsetHeight,0);dial.style.transform=extra>0?`translateY(${-extra}px)`:'';
 }
 function drawMap() {
   const canvas=document.querySelector<HTMLCanvasElement>('#map');

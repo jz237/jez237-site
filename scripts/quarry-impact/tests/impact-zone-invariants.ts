@@ -1,3 +1,4 @@
+import {restoreDialLiftBytes} from './dial-lift-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readImpactZonePrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreImpactZoneBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreDialLiftBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readImpactZonePrevious(file);
 }
 export function verifyImpactZoneRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'23580c8163c534ee0c371ea669610dd78f61c231');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreDialLiftBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreImpactZoneBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the ImpactZone release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreDialLiftBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the ImpactZone release');
  assert.equal(manifest.previousFixtureCount,6357);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,6357);
 }
