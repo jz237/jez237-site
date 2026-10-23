@@ -1,3 +1,4 @@
+import {restoreFinalTwoBytes} from './final-two-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readTopSpeedPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreTopSpeedBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreFinalTwoBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readTopSpeedPrevious(file);
 }
 export function verifyTopSpeedRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'71aaba84c292cb21fc04a14da209765b7e92cbc5');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreFinalTwoBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreTopSpeedBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the TopSpeed release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreFinalTwoBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the TopSpeed release');
  assert.equal(manifest.previousFixtureCount,6411);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,6411);
 }

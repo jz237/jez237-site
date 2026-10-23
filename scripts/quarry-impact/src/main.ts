@@ -27,6 +27,7 @@ import {showVenueBrowser,selectVenue,selectDemoVenue} from './venue-browser';
 import {readCameraSettings,playerChaseComposition,mountCameraSettings} from './camera-settings';
 import {ScreenCraze,trackCraze,hull,type CrazeState} from './screen-craze';
 import {speedFov,smoothAccel,roadBuzz} from './speed-feel';
+import {FINAL_TWO,finalTwo,finalTwoBanner} from './derby-moments';
 import {syncInterval,syncDue} from './vehicle-draw-batch';
 let syncFrame=0;
 let feelAccel=0,feelSpeed=0;
@@ -979,7 +980,7 @@ async function start(watch=demo) {
     camera.position.copy(cars[0].current).add(new T.Vector3(0, 4, -8));
     hud();
     sound.pause(false);
-    eventAwards.reset();playerTopSpeed=0;bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
+    eventAwards.reset();playerTopSpeed=0;derbyAliveBefore=0;bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
     beginReplay();
     if(preparationInterrupted||document.hidden)pause();
     return true;
@@ -1072,6 +1073,8 @@ const SMASH_FLASHES=26,TAKEDOWN_FLASHES=18;
 function crowdFlashes(count:number){activeVenue.root.traverse(o=>{const flash=o.userData.crowdFlash;if(typeof flash==='function')flash(count);});}
 /** The player's top speed this event (m/s), shown in the derby results. */
 let playerTopSpeed=0;
+/** Cars alive at the last HUD update (for the final-two moment). */
+let derbyAliveBefore=0;
 /** Show a HUD message. A higher-priority message (a smash) is not overwritten by ordinary ones until it expires. */
 let statusPriority=0;
 function toast(t: string, duration = 3, priority = 0) {
@@ -1083,6 +1086,11 @@ function toast(t: string, duration = 3, priority = 0) {
 function updateHud() {
   if (!['playing', 'countdown'].includes(state)&&!(demo&&state==='result')) return;
   if(state==='playing'&&!demo&&cars[0])playerTopSpeed=Math.max(playerTopSpeed,Math.abs(cars[0].speed));
+  // The final two (offline derbies): a slow-motion beat, a banner naming them, the crowd.
+  if(mode==='derby'&&!online?.active&&state==='playing'){const alive=cars.filter(c=>c.health>0);
+    if(finalTwo(derbyAliveBefore,alive.length)){toast(finalTwoBanner({id:alive[0].id,name:DEFINITIONS[alive[0].kind].name},{id:alive[1].id,name:DEFINITIONS[alive[1].kind].name}),FINAL_TWO.toast,2);
+      sound.crowd(1);crowdFlashes(SMASH_FLASHES);if(clock>=slowMoUntil){slowMoUntil=clock+FINAL_TWO.slowmo;slowMoScale=FINAL_TWO.scale;}}
+    derbyAliveBefore=alive.length;}
   const spectator=scoreSpectating(),toolbar=document.getElementById('spectator-controls');
   if(toolbar){toolbar.hidden=!spectator;toolbar.style.display=spectator?'':'none';}
   if(spectator){const watched=cars.find(c=>c.id===director.followed),alive=cars.some(c=>c.health>0);text('spectator-name',alive&&watched?'SPECTATING · '+displayedDriver(watched)+' · YOUR CAR '+(cars[0].finished?'FINISHED':'OUT'):'NO SURVIVING CARS · WAITING FOR RESULTS');for(const id of ['spectator-prev','spectator-next']){const button=document.getElementById(id) as HTMLButtonElement|null;if(button)button.disabled=!alive;}}
