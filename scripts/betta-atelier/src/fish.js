@@ -1,6 +1,7 @@
 import * as T from "three";
 import { addMacroSurface } from "./surfaces.js";
-import { FinDynamics, water } from "./fin-dynamics.js";
+import { FinDynamics, water, waterVelocity } from "./fin-dynamics.js";
+import { BodyMotion, bodyGLSL, SPINE_COUNT } from "./body-motion.js";
 const PI = Math.PI,
   lerp = T.MathUtils.lerp,
   clamp = T.MathUtils.clamp;
@@ -15,18 +16,19 @@ export const uniforms = {
   uDrive: { value: 0.12 },
   uTurn: { value: 0 },
   uFold: { value: 0 },
+  uSpine: { value: null },
+  uMouth: { value: 0 },
+  uGill: { value: 0 },
 };
-const deform = `uniform float uTime,uFlare,uMotion,uPhase,uDrive,uTurn,uFold;
-vec3 swim(vec3 p){float a=smoothstep(-1.05,1.16,p.x);float w=sin(uPhase-p.x*2.35);p.z+=a*a*((.016+uDrive*.18)*w+uTurn*.21);p.y+=.008*a*a*sin(uPhase*.5-p.x);float gill=exp(-pow((p.x+1.02)/.115,2.))*exp(-pow((p.y+.06)/.29,2.));p.z+=sign(p.z)*gill*(.003+.004*sin(uTime*3.1));float jaw=1.-smoothstep(-1.65,-1.30,p.x);p.y-=jaw*(1.-smoothstep(-.14,.07,p.y))*.008*(.5+.5*sin(uTime*3.1+.3));return p;}
-`;
-function animate(mat, dynamics = null) {
+const deform = `uniform float uTime,uFlare,uMotion,uPhase,uDrive,uTurn,uFold;\n` + bodyGLSL;
+function animate(mat, dynamics = null, operculum = false) {
   mat.onBeforeCompile = (s) => {
     Object.assign(s.uniforms, uniforms);
     if (dynamics) {
       s.uniforms.uFinDisplacement = { value: dynamics.texture };
       s.uniforms.uFinGrid = { value: new T.Vector2(dynamics.columns, dynamics.rows) };
     }
-    s.vertexShader = deform + (dynamics ? `
+    s.vertexShader = deform + (operculum ? "attribute float coverLift;\n" : "") + (dynamics ? `
 attribute vec2 finUV;
 uniform sampler2D uFinDisplacement;
 uniform vec2 uFinGrid;
@@ -41,15 +43,16 @@ vec3 wetFin(vec2 uv) {
 ` : "") + s.vertexShader;
     s.vertexShader = s.vertexShader.replace(
       "#include <project_vertex>",
-      `vec4 mvPosition=vec4(swim(transformed)${dynamics ? '+wetFin(finUV)' : ''},1.);
+      `vec3 anatomical=transformed;${operculum ? "anatomical.z+=coverLift*uGill*.046;" : ""}
+       vec4 mvPosition=vec4(swim(anatomical)${dynamics ? '+wetFin(finUV)' : ''},1.);
        mvPosition=modelViewMatrix*mvPosition;gl_Position=projectionMatrix*mvPosition;`,
     );
-    if (dynamics) s.fragmentShader = s.fragmentShader.replace(
+    s.fragmentShader = s.fragmentShader.replace(
       "#include <normal_fragment_begin>",
       "#include <normal_fragment_begin>\nnormal=normalize(cross(dFdx(vViewPosition),dFdy(vViewPosition)))*faceDirection;",
     );
   };
-  mat.customProgramCacheKey = () => `wet-betta-1.3-${!!dynamics}`;
+  mat.customProgramCacheKey = () => `wet-betta-1.4-${!!dynamics}-${operculum}`;
   return mat;
 }
 // Anatomical silhouette measured in the unmodified lateral reference image.
@@ -120,7 +123,7 @@ function makeBody() {
         b = a + ny + 1;
       idx.push(a, b, a + 1, b, b + 1, a + 1);
     }
-  for (const end of [0, nx]) {
+  for (const end of [nx]) {
     const x = end ? 1010 : 155,
       [, top, bottom] = section(x),
       [wx, wy] = world([x, (top + bottom) / 2]),
@@ -139,6 +142,67 @@ function makeBody() {
   g.setIndex(idx);
   g.computeVertexNormals();
   return g;
+}
+function addBreathingAnatomy(fish, skin) {
+  const geometry = (p, uv, idx, lift = null) => {
+    const g = new T.BufferGeometry();
+    g.setAttribute('position', new T.Float32BufferAttribute(p, 3));
+    g.setAttribute('uv', new T.Float32BufferAttribute(uv, 2));
+    if (lift) g.setAttribute('coverLift', new T.Float32BufferAttribute(lift, 1));
+    g.setIndex(idx); g.computeVertexNormals(); return g;
+  };
+  const dark = animate(new T.MeshPhysicalMaterial({ color: 0x100a0c, roughness: 0.82, side: T.DoubleSide }));
+  // A real recessed mouth, not a painted black spot or a solid nose cap.
+  const p = [], uv = [], idx = [], rows = 12, around = 64;
+  for (let j = 0; j <= rows; j++) for (let i = 0; i <= around; i++) {
+    const u = j / rows, a = i / around * PI * 2;
+    p.push(-1.68 + u * 0.15, 0.0832 + lerp(0.0224, 0.012, u) * Math.cos(a), lerp(0.0256, 0.012, u) * Math.sin(a));
+    uv.push(i / around, u);
+    if (j < rows && i < around) { const n = j * (around + 1) + i; idx.push(n, n + 1, n + around + 1, n + 1, n + around + 2, n + around + 1); }
+  }
+  const end = p.length / 3; p.push(-1.53, 0.0832, 0); uv.push(0.5, 0.5);
+  for (let i = 0; i < around; i++) idx.push(end, rows * (around + 1) + i, rows * (around + 1) + i + 1);
+  const cavity = new T.Mesh(geometry(p, uv, idx), dark); cavity.name = 'Recessed breathing mouth'; fish.add(cavity);
+  const lp = [], lu = [], li = [], tube = 10;
+  for (let i = 0; i <= around; i++) for (let j = 0; j <= tube; j++) {
+    const a = i / around * PI * 2, b = j / tube * PI * 2, r = 0.0028;
+    const x = -1.68 + r * Math.sin(b), y = 0.0832 + (0.0224 + r * Math.cos(b)) * Math.cos(a), z = (0.0256 + r * Math.cos(b)) * Math.sin(a);
+    lp.push(x, y, z); lu.push(...texUV([x / SCALE + 680, 420 - y / SCALE]));
+    if (i < around && j < tube) { const n = i * (tube + 1) + j; li.push(n, n + tube + 1, n + 1, n + 1, n + tube + 1, n + tube + 2); }
+  }
+  const lips = new T.Mesh(geometry(lp, lu, li), skin); lips.name = 'Flexible upper and lower lips'; fish.add(lips);
+  for (const side of [-1, 1]) {
+    const cp = [], cu = [], ci = [], lift = [], gp = [], gu = [], gi = [];
+    const rows = 60, cols = 24;
+    for (let i = 0; i <= rows; i++) {
+      const u = i / rows, shape = Math.sin(PI * u), py = lerp(332, 502, u);
+      const hinge = 330 + 12 * shape, edge = 330 + 76 * shape;
+      const surface = (px, offset) => {
+        const [, top, bottom, thick] = section(px), q = (py - (top + bottom) / 2) / ((bottom - top) / 2);
+        return side * (thick * SCALE * Math.sqrt(Math.max(0, 1 - q * q)) + offset);
+      };
+      for (let j = 0; j <= cols; j++) {
+        const v = j / cols, px = lerp(hinge, edge, v), [x, y] = world([px, py]);
+        cp.push(x, y, surface(px, 0.0025)); cu.push(...texUV([px, py]));
+        lift.push(side * v * v * shape ** 0.7);
+        if (i < rows && j < cols) { const n = i * (cols + 1) + j; ci.push(n, n + 1, n + cols + 1, n + 1, n + cols + 2, n + cols + 1); }
+      }
+      // The narrow outlet is concealed beneath the closed cover, revealed on exhalation.
+      for (let j = 0; j < 2; j++) {
+        const px = edge - (j ? 0 : 5 * shape), [x, y] = world([px, py]);
+        gp.push(x, y, surface(px, 0.001)); gu.push(u, j);
+      }
+      if (i < rows) { const n = i * 2; gi.push(n, n + 1, n + 2, n + 1, n + 3, n + 2); }
+    }
+    // The row direction runs down the flank; reverse the near-side winding so
+    // both covers have outward normals, matching the underlying skin.
+    if (side > 0) for (let i = 0; i < ci.length; i += 3) [ci[i + 1], ci[i + 2]] = [ci[i + 2], ci[i + 1]];
+    const coverMaterial = addMacroSurface(animate(skin.clone(), null, true), fish.userData.macroTextures);
+    coverMaterial.side = T.DoubleSide;
+    const cover = new T.Mesh(geometry(cp, cu, ci, lift), coverMaterial);
+    cover.name = `Hinged operculum ${side > 0 ? 'left' : 'right'}`; fish.add(cover);
+    const slit = new T.Mesh(geometry(gp, gu, gi), dark); slit.name = `Gill outlet ${side}`; fish.add(slit);
+  }
 }
 function sample(points, t) {
   const f = clamp(t, 0, 1) * (points.length - 1),
@@ -271,6 +335,10 @@ function makeFin(fish, texture, roots, edge, kind = 0, side = 0, atlas = null) {
 export function createBetta() {
   const fish = new T.Group();
   const finDynamics = [];
+  const bodyMotion = new BodyMotion();
+  const spineTexture = new T.DataTexture(bodyMotion.data, SPINE_COUNT, 1, T.RGBAFormat, T.FloatType);
+  spineTexture.needsUpdate = true;
+  uniforms.uSpine.value = spineTexture;
   fish.userData.finDynamics = finDynamics;
   fish.name = "Betta splendens — volumetric reference-textured specimen";
   let resolveTexture, rejectTexture;
@@ -350,8 +418,9 @@ export function createBetta() {
     macroTextures,
   );
   const body = new T.Mesh(makeBody(), skin);
-  body.name = "Closed anatomical body with reference-projected pigmentation";
+  body.name = "Arc-length muscular trunk with open buccal cavity";
   fish.add(body);
+  addBreathingAnatomy(fish, skin);
   // Independent fins follow traced ray attachments and sampled membrane detail.
   makeFin(
     fish,
@@ -568,6 +637,8 @@ export function createBetta() {
   }
   let prev = 0,
     phase = 0,
+    breathPhase = 0,
+    effort = 0.18,
     pectoralPhase = 0,
     flowStrength = water.strength,
     drive = 0.1,
@@ -581,7 +652,8 @@ export function createBetta() {
     macroTextures,
     scaleCount: 0,
     finCount: 7,
-    revision: "1.3",
+    revision: "1.4",
+    bodyMotion,
     finDynamics,
     water,
     mode: "hover",
@@ -653,14 +725,7 @@ export function createBetta() {
       turn = T.MathUtils.damp(turn, dt ? (heading - old) / dt : 0, 4, dt);
       tx = T.MathUtils.damp(tx, targetX, 2, dt);
       ty = T.MathUtils.damp(ty, targetY, 2, dt);
-      // Integrate phase so changes in thrust never jump the fin animation.
-      phase += dt * (1.3 + drive * 15);
-      pectoralPhase += dt * (15.5 - drive * 12);
       flowStrength = T.MathUtils.damp(flowStrength, water.strength, 1.8, dt);
-      uniforms.uPhase.value = phase;
-      uniforms.uDrive.value = drive;
-      uniforms.uTurn.value = turn;
-      uniforms.uFold.value = drive;
       const previousPosition = fish.position.clone();
       fish.position.set(
         tx + 0.325 * (1 - Math.cos(heading)),
@@ -673,8 +738,24 @@ export function createBetta() {
         0.012 * Math.sin(t * 0.71) - drive * 0.025,
       );
       const velocity = dt ? fish.position.clone().sub(previousPosition).multiplyScalar(1 / dt).toArray() : [0, 0, 0];
+      const localFlow = waterVelocity(t, fish.position.x, fish.position.y, fish.position.z, flowStrength, water.direction, []);
+      const relativeFlow = Math.hypot(...localFlow.map((v, i) => v - velocity[i]));
+      effort = T.MathUtils.damp(effort, clamp(0.18 + drive * 1.2 + relativeFlow * 0.38, 0.18, 1), 2.5, dt);
+      // Fin drag costs effort even without imposed flow; currents add workload.
+      // Integrating cadence keeps changes smooth instead of jumping wave phase.
+      phase += dt * (3.4 + effort * 4.8);
+      breathPhase += dt * (3.6 + effort * 3.4);
+      pectoralPhase += dt * (12 + effort * 7);
+      bodyMotion.update(phase, effort, turn, breathPhase);
+      spineTexture.needsUpdate = dt > 0;
+      uniforms.uPhase.value = phase;
+      uniforms.uDrive.value = drive;
+      uniforms.uTurn.value = turn;
+      uniforms.uFold.value = drive;
+      uniforms.uMouth.value = bodyMotion.mouth;
+      uniforms.uGill.value = bodyMotion.gill;
       const state = {
-        time: t, phase, pectoralPhase, drive, turn, flare: uniforms.uFlare.value,
+        body: bodyMotion, time: t, phase, pectoralPhase, drive: effort * 0.55, turn, flare: uniforms.uFlare.value,
         heading, angularVelocity: turn, velocity, origin: fish.position.toArray(),
         strength: flowStrength, direction: water.direction,
         bodyRadius(x, y) {
@@ -693,6 +774,8 @@ export function createBetta() {
       fish.userData.flowStrength = flowStrength;
       fish.userData.mode = mode;
       fish.userData.drive = drive;
+      fish.userData.effort = effort;
+      fish.userData.breathPhase = breathPhase;
     },
   };
   return fish;

@@ -7,6 +7,7 @@ export function addMacroSurface(
   { fin = false, caudal = false, eye = false } = {},
 ) {
   const previous = material.onBeforeCompile;
+  const motionKey = material.customProgramCacheKey();
   material.onBeforeCompile = (shader) => {
     previous(shader);
     Object.assign(shader.uniforms, {
@@ -100,6 +101,6 @@ float microHeight(vec2 uv){return luminanceBetta(basePigment(uv))+luminanceBetta
 
   };
   material.customProgramCacheKey = () =>
-    `betta-macro-1.3-${fin}-${caudal}-${eye}`;
+    `betta-macro-1.4-${fin}-${caudal}-${eye}-${motionKey}`;
   return material;
 }

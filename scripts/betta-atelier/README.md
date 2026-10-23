@@ -1,4 +1,4 @@
-# Living Silk — Betta Atelier 1.3
+# Living Silk — Betta Atelier 1.4
 
 An interactive, genuinely volumetric male halfmoon Betta study for Jez237.
 Live: https://jez237.com/demos/betta-atelier/
@@ -31,11 +31,11 @@ Evo X2; generated image binaries do not belong in Git.
   branching rays and thin pale margins.
 
 Images are used unchanged as texture assets. This is not a billboard or a video:
-the body is closed 3D geometry with 220 longitudinal and 96 radial segments,
+the body is volumetric 3D geometry with 220 longitudinal and 96 radial segments,
 independent dorsal/ventral contours and varying lateral thickness. Both sides,
-the mouth cap and the seven folded fin meshes are rendered in real time. The eyes
-have separate textured convex irises and dark pupils. Geometry totals 183,744
-triangles. Iridescence, roughness, subtle bump and reflections respond to light.
+the recessed mouth and the seven folded fin meshes are rendered in real time. The eyes
+have separate textured convex irises and dark pupils. Iridescence, roughness,
+subtle bump and reflections respond to light.
 
 Version 1.1 replaces the first version's uniform scale instances and procedural
 fin stripes after Jez explicitly requested greater realism. The skin now uses
@@ -138,3 +138,34 @@ with `npm run build`. Browser QA must inspect both sides through the full turn,
 maximum currents, macro views, controls and mobile layout, plus real production
 texture delivery without the localhost fixture. Local verification receipts and
 screenshots: `/home/jez237/.openclaw/workspace/tmp/betta-water-fins-20261022/`.
+
+## Muscular body and breathing · revision 1.4 (2026-10-22)
+
+Jez requested a visibly less rigid trunk, swimming effort even in still water,
+and more pronounced mouth/gill respiration. `src/body-motion.js` integrates an
+arc-length spine from a head-to-tail bending wave. Cross-sections rotate along
+that curve instead of merely sliding sideways. The stable head, rearward-growing
+flex and turn curvature preserve the existing specimen proportions.
+
+- One 161-sample spine table drives both the skin shader and CPU fin insertions;
+  fin motor targets rotate with the local spine tangent. Attachment targets are
+  interpolated across the 120 Hz solver substeps to reduce frame-rate drift.
+- Baseline effort remains nonzero with Water Flow at Still. Relative water
+  velocity and locomotion increase effort smoothly; integrated swimming,
+  pectoral and breathing phases avoid discontinuities when flow changes.
+- The mouth has a recessed, closed-throat cavity and flexible lips/lower jaw.
+  Bilateral textured gill covers lift at the rear edge after mouth intake,
+  exposing a narrow outlet. Skin and cover normals follow their deformations;
+  matching outward winding avoids a false lighting seam on the near cover.
+- Pause freezes the spine, fins, mouth and gills. Inspection views keep a quiet
+  but clearly active swimmer. Existing texture files and flow controls are intact.
+
+Seven automated checks cover the previous fin invariants plus substantial
+low-effort trunk flex, approximate centerline-length preservation, mouth aperture
+and delayed gill opening. Browser QA includes desktop and touch-emulated phone
+controls, both sides/full turns, still/max/reversed currents, and paused close-ups
+at intake, outlet and closed-mouth phases. Verify production without texture
+fixtures. Evidence: `/home/jez237/.openclaw/workspace/tmp/betta-body-breathing-20261022/`.
+
+Effort, cadence and ventilation are artistic controls, not measured betta
+physiology or a fluid-volume simulation. Fin-to-fin collision remains approximate.

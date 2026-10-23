@@ -26,22 +26,6 @@ export function waterVelocity(t, x, y, z, strength, direction, out) {
   return out;
 }
 
-// Must match the skin shader; fin insertions cannot slip off the moving body.
-export function swimPoint(x, y, z, t, phase, drive, turn, out) {
-  let a = clamp((x + 1.05) / 2.21, 0, 1);
-  a = a * a * (3 - 2 * a);
-  const gill = Math.exp(-(((x + 1.02) / 0.115) ** 2)) * Math.exp(-(((y + 0.06) / 0.29) ** 2));
-  let jaw = clamp((x + 1.65) / 0.35, 0, 1);
-  jaw = 1 - jaw * jaw * (3 - 2 * jaw);
-  let mouth = clamp((y + 0.14) / 0.21, 0, 1);
-  mouth = 1 - mouth * mouth * (3 - 2 * mouth);
-  out[0] = x;
-  out[1] = y + 0.008 * a * a * Math.sin(phase * 0.5 - x) - jaw * mouth * 0.008 * (0.5 + 0.5 * Math.sin(t * 3.1 + 0.3));
-  out[2] = z + a * a * ((0.016 + drive * 0.18) * Math.sin(phase - x * 2.35) + turn * 0.21)
-    + Math.sign(z) * gill * (0.003 + 0.004 * Math.sin(t * 3.1));
-  return out;
-}
-
 export class FinDynamics {
   constructor({ point, kind, side, columns = 29, rows = 17 }) {
     Object.assign(this, { kind, side, columns, rows });
@@ -51,6 +35,8 @@ export class FinDynamics {
     this.position = new Float32Array(this.count * 3);
     this.previous = new Float32Array(this.count * 3);
     this.target = new Float32Array(this.count * 3);
+    this.lastTarget = new Float32Array(this.count * 3);
+    this.frameTarget = new Float32Array(this.count * 3);
     this.weights = new Float32Array(this.count);
     this.displacement = new Float32Array(this.count * 4);
     this.accumulator = 0;
@@ -84,11 +70,13 @@ export class FinDynamics {
   }
 
   makeTargets(state) {
-    const { time: t, phase, drive, turn, flare, pectoralPhase } = state;
+    const { time: t, phase, drive, turn, flare, pectoralPhase, body } = state;
     const { columns: w, rows: h, kind, side, rest, roots, target, scratch } = this;
     for (let i = 0; i < w; i++) {
       const u = i / (w - 1), r = i * 3;
-      swimPoint(roots[r], roots[r + 1], roots[r + 2], t, phase, drive, turn, scratch);
+      body.frame(roots[r], scratch);
+      const tangentCos = scratch[2], tangentSin = scratch[3];
+      body.transform(roots[r], roots[r + 1], roots[r + 2], scratch);
       const rx = scratch[0], ry = scratch[1], rz = scratch[2];
       for (let j = 0; j < h; j++) {
         const v = j / (h - 1), n = (j * w + i) * 3;
@@ -121,27 +109,38 @@ export class FinDynamics {
           y = x * Math.sin(angle) + y * Math.cos(angle); x = cx;
           z += side * v * v * 0.035 * Math.sin(t * 1.2 - v * 2 + side);
         }
-        target[n] = rx + x; target[n + 1] = ry + y; target[n + 2] = rz + z;
+        target[n] = rx + x * tangentCos - z * tangentSin;
+        target[n + 1] = ry + y; target[n + 2] = rz + x * tangentSin + z * tangentCos;
       }
     }
   }
 
   advance(dt, state) {
+    this.lastTarget.set(this.target);
     this.makeTargets(state);
     if (!this.initialized) {
       this.position.set(this.target); this.previous.set(this.target);
+      this.lastTarget.set(this.target);
       this.initialized = true;
     }
+    this.frameTarget.set(this.target);
     this.accumulator += Math.min(dt, 0.07);
     const step = 1 / 120;
-    while (this.accumulator >= step) {
+    const substeps = Math.floor((this.accumulator + 1e-10) / step);
+    let completed = 0;
+    while (completed < substeps) {
+      // Move insertions throughout the substeps, not in one frame-sized jump.
+      // This matters once the trunk has a substantial muscular stroke.
+      const blend = ++completed / substeps;
+      for (let i = 0; i < this.target.length; i++) this.target[i] = this.lastTarget[i] + (this.frameTarget[i] - this.lastTarget[i]) * blend;
       this.integrate(step, state);
-      this.accumulator -= step;
+      this.accumulator = Math.max(0, this.accumulator - step);
       this.steps++;
     }
+    this.target.set(this.frameTarget);
     const { position, rest, scratch, displacement } = this;
     for (let n = 0; n < this.count; n++) {
-      swimPoint(rest[n * 3], rest[n * 3 + 1], rest[n * 3 + 2], state.time, state.phase, state.drive, state.turn, scratch);
+      state.body.transform(rest[n * 3], rest[n * 3 + 1], rest[n * 3 + 2], scratch);
       for (let k = 0; k < 3; k++) displacement[n * 4 + k] = position[n * 3 + k] - scratch[k];
     }
   }
@@ -197,9 +196,16 @@ export class FinDynamics {
     }
     // Paired fins may fold along the flank, but must not pass through the fish.
     if (state.bodyRadius && this.side) for (let n = w; n < this.count; n++) {
-      const q = n * 3, radius = state.bodyRadius(p[q], p[q + 1]);
-      if (radius > 0 && p[q + 2] * this.side < radius + 0.009) {
-        p[q + 2] = this.side * (radius + 0.009);
+      const q = n * 3;
+      const rootX = this.roots[(n % w) * 3];
+      state.body.frame(rootX, this.scratch);
+      const [cx, cz, co, si] = this.scratch;
+      const localX = rootX + (p[q] - cx) * co + (p[q + 2] - cz) * si;
+      const radius = state.bodyRadius(localX, p[q + 1]);
+      state.body.frame(localX, this.scratch);
+      const centerZ = this.scratch[1];
+      if (radius > 0 && (p[q + 2] - centerZ) * this.side < radius + 0.009) {
+        p[q + 2] = centerZ + this.side * (radius + 0.009);
         old[q + 2] = p[q + 2];
       }
     }

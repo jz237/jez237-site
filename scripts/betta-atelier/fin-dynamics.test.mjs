@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import { BodyMotion } from './src/body-motion.js';
 import { FinDynamics, waterVelocity } from './src/fin-dynamics.js';
 
 const make = (kind = 0, side = 0) => new FinDynamics({
@@ -11,11 +12,13 @@ const make = (kind = 0, side = 0) => new FinDynamics({
     return [0.8 + Math.cos(angle) * v, Math.sin(angle) * v + (u - 0.5) * 0.12, 0.02 * Math.sin(u * 15) * v * v];
   },
 });
-const state = (t, strength = 0, direction = 'front') => ({
+const state = (t, strength = 0, direction = 'front') => {
+  const body = new BodyMotion(); body.update(t * 2.8, 0.3, 0, t * 4.5);
+  return ({ body,
   time: t, phase: t * 2.8, pectoralPhase: t * 15, drive: 0.1, turn: 0,
   flare: 1, heading: 0, velocity: [0, 0, 0], angularVelocity: 0,
   origin: [0, 0, 0], strength, direction,
-});
+}); };
 function run(fin, seconds, strength, direction, fps = 60) {
   for (let i = 1; i <= seconds * fps; i++) fin.advance(1 / fps, state(i / fps, strength, direction));
   return fin;
@@ -68,4 +71,38 @@ test('fixed physics steps keep 30/60/120fps results close', () => {
     const rms = Math.sqrt(f.position.reduce((sum, p, i) => sum + (p - reference.position[i]) ** 2, 0) / f.position.length);
     assert.ok(rms < 0.035, `${fps}fps RMS drift ${rms}`);
   }
+});
+
+
+test('spine bends substantially even at low effort without stretching its centerline', () => {
+  const body = new BodyMotion(), point = [], samples = [];
+  let min = Infinity, max = -Infinity;
+  for (let phase = 0; phase < Math.PI * 2; phase += 0.1) {
+    body.update(phase, 0.18, 0, 0);
+    body.transform(1.056, 0, 0, point);
+    min = Math.min(min, point[2]); max = Math.max(max, point[2]);
+    body.transform(-1.408, 0.064, 0.15, point);
+    assert.ok(Math.abs(point[0] + 1.408) < 0.00001, 'eye attachment moved');
+  }
+  assert.ok(max - min > 0.8, `insufficient trunk flex: ${max - min}`);
+  body.update(2.1, 1, 0.8, 0);
+  let length = 0;
+  for (let x = -1.22; x <= 1.056; x += 0.002) {
+    body.frame(x, point); samples.push([point[0], point[1]]);
+    if (samples.length > 1) { const before = samples.at(-2); length += Math.hypot(point[0] - before[0], point[1] - before[1]); }
+  }
+  assert.ok(Math.abs(length - 2.276) < 0.006, `centerline stretched: ${length}`);
+});
+test('mouth opens into a larger aperture before the gill covers open', () => {
+  const body = new BodyMotion(), upper = [], lower = [];
+  const gap = (phase) => {
+    body.update(0, 0.3, 0, phase);
+    body.transform(-1.68, 0.1056, 0, upper); body.transform(-1.68, 0.0608, 0, lower);
+    return upper[1] - lower[1];
+  };
+  const closed = gap(Math.PI * 1.5), open = gap(Math.PI * 0.5);
+  assert.ok(open > closed * 4 && open > 0.05, `mouth aperture ${closed} to ${open}`);
+  body.update(0, 0.3, 0, Math.PI * 0.5); const intake = body.mouth, firstGill = body.gill;
+  body.update(0, 0.3, 0, Math.PI * 0.5 + 1.05);
+  assert.ok(body.gill > firstGill && body.mouth < intake, 'gills should lag mouth intake');
 });
