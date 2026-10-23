@@ -27,7 +27,7 @@ import {showVenueBrowser,selectVenue,selectDemoVenue} from './venue-browser';
 import {readCameraSettings,playerChaseComposition,mountCameraSettings} from './camera-settings';
 import {ScreenCraze,trackCraze,hull,type CrazeState} from './screen-craze';
 import {speedFov,smoothAccel,roadBuzz} from './speed-feel';
-import {FINAL_TWO,finalTwo,finalTwoBanner,revenge,takedownChain,comboLabel} from './derby-moments';
+import {FINAL_TWO,finalTwo,finalTwoBanner,revenge,takedownChain,comboLabel,revengeReady} from './derby-moments';
 import {syncInterval,syncDue} from './vehicle-draw-batch';
 let syncFrame=0;
 let feelAccel=0,feelSpeed=0;
@@ -1083,6 +1083,11 @@ function playerTakedown(){
   if(online?.active||demo)return;takedownCombo=takedownChain(takedownCombo,lastTakedownAt,elapsed);lastTakedownAt=elapsed;
   const label=comboLabel(takedownCombo);if(label){toast(label,2,3);sound.crowd(1);crowdFlashes(SMASH_FLASHES);}
 }
+/** " · REVENGE READY ON #N NAME" while the player's nemesis is owed a hit (offline). */
+function revengeTag(){
+  if(online?.active||demo)return '';const r=eventAwards.rivalOf(0),c=r?cars.find(v=>v.id===r.id):undefined;
+  return c&&c.health>0&&revengeReady(r,revengeSettled.get(c.id))?` · REVENGE READY ON #${c.id+1} ${DEFINITIONS[c.kind].name}`.toUpperCase():'';
+}
 /** Show a HUD message. A higher-priority message (a smash) is not overwritten by ordinary ones until it expires. */
 let statusPriority=0;
 function toast(t: string, duration = 3, priority = 0) {
@@ -1145,12 +1150,12 @@ function updateHud() {
   if(settings.performance&&eventFrameTimes.length){const sample=eventFrameTimes.slice(-300).sort((a,b)=>a-b),mean=sample.reduce((a,b)=>a+b,0)/sample.length;text('performance-readout',`${cars.length} CARS · ${Math.round(1000/mean)} FPS · P95 ${Math.round(sample[Math.floor((sample.length-1)*.95)])} ms`);}
   if(mode==='race'&&!demo&&!online?.active&&!pursuit){const r=eventAwards.rivalOf(player.id),opponent=r?cars.find(c=>c.id===r.id):undefined;let label='';
     if(r&&opponent){const order=rankRace(),me=order.indexOf(player),them=order.indexOf(opponent),gap=Math.abs(me-them);label=`RIVAL · ${DEFINITIONS[opponent.kind].name} #${opponent.id+1} · ${opponent.health<=0?'WRECKED':gap===0?'LEVEL':them<me?`${gap} ${gap===1?'PLACE':'PLACES'} AHEAD`:`${gap} ${gap===1?'PLACE':'PLACES'} BEHIND`} · DEALT YOU ${Math.round(r.damage)}`;}
-    text('rival-status',label);}
+    text('rival-status',label+revengeTag());}
   if(teamRace()){const team=demo?undefined:teamOf(cars.indexOf(player));text('team-status',state==='result'?teamVerdict(currentTeamScores(),team):teamLine(currentTeamScores(),team));}
   if(mode==='derby'){
     const rival=combat.rival(player.id),opponent=cars.find(c=>c.id===rival),record=combat.get(player.id);
-    const label=opponent&&opponent.health>0?'RIVAL · '+DEFINITIONS[opponent.kind].name+' #'+opponent.id+' · +25 FOR ATTACKING HITS':combat.rivals?'RIVAL · WAITING FOR CONTACT':'';
-    text('rival-status',label+(!scoreDerby()&&combat.rivals?' · '+(record.bonus??0)+' BONUS PTS':''));
+    const label=opponent&&opponent.health>0?'RIVAL · '+DEFINITIONS[opponent.kind].name+' #'+(opponent.id+1)+' · +25 FOR ATTACKING HITS':combat.rivals?'RIVAL · WAITING FOR CONTACT':'';
+    text('rival-status',label+(!scoreDerby()&&combat.rivals?' · '+(record.bonus??0)+' BONUS PTS':'')+revengeTag());
     if(scoreDerby())text('event-label','SCORE / POSITION');
     const award=record.award;if(award&&elapsed-award.time<1.5&&elapsed>=award.time)toast(`${COMBAT_AWARDS[award.kind].label} +${award.points}`, .2);
     if(player.health<=0)toast(derbyWreckStatus(derbyFormat(),record.respawnAt,elapsed),.4);

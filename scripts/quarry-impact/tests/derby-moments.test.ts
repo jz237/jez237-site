@@ -24,3 +24,8 @@ test('takedowns close together chain into a combo; a pause resets it',async()=>{
  chain=takedownChain(chain,15,16);assert.equal(comboLabel(chain),'4x TAKEDOWN');
  assert.equal(takedownChain(chain,16,16+COMBO.window+.1),1,'too late: a fresh chain');assert.equal(takedownChain(2,10,NaN),1);
 });
+test('revenge is ready once the nemesis has hurt you enough and not been paid back since',async()=>{
+ const {revengeReady,REVENGE_READY}=await import('../src/derby-moments');
+ assert.ok(revengeReady({id:2,damage:REVENGE_READY},undefined));assert.equal(revengeReady({id:2,damage:REVENGE_READY-1},undefined),false);
+ assert.equal(revengeReady({id:2,damage:30},30),false,'paid back');assert.ok(revengeReady({id:2,damage:42},30),'hurt again');assert.equal(revengeReady(null,undefined),false);
+});

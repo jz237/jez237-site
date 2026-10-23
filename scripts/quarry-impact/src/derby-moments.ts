@@ -21,3 +21,7 @@ export function takedownChain(chain:number,last:number,time:number){
   return Number.isFinite(time)&&Number.isFinite(last)&&chain>0&&time-last<=COMBO.window&&time>=last?chain+1:1;
 }
 export const comboLabel=(chain:number)=>chain>=4?`${chain}x TAKEDOWN`:chain===3?'TRIPLE TAKEDOWN':chain===2?'DOUBLE TAKEDOWN':'';
+/** "REVENGE READY" on the HUD: the opponent who has hurt the player most (at least REVENGE.ready damage) has hurt them again since
+ * the last revenge (or never been paid back). */
+export const revengeReady=(rival:{id:number;damage:number}|null,settled:number|undefined)=>!!rival&&rival.damage>=REVENGE_READY&&rival.damage>(settled??0);
+export const REVENGE_READY=10;
