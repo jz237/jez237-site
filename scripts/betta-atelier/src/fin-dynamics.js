@@ -182,9 +182,17 @@ export class FinDynamics {
       } else waterVelocity(time, wx + origin[0], p[q + 1] + origin[1], wz + origin[2], strength, direction, flow);
       // Relative fluid includes translation, turning and each membrane's own speed.
       const fx = flow[0] - velocity[0], fz = flow[2] - velocity[2];
-      const rvx = co * fx - si * fz - angularVelocity * p[q + 2] - (p[q] - old[q]) / dt;
-      const rvy = flow[1] - velocity[1] - (p[q + 1] - old[q + 1]) / dt;
-      const rvz = si * fx + co * fz + angularVelocity * p[q] - (p[q + 2] - old[q + 2]) / dt;
+      let rvx = co * fx - si * fz - angularVelocity * p[q + 2] - (p[q] - old[q]) / dt;
+      let rvy = flow[1] - velocity[1] - (p[q + 1] - old[q + 1]) / dt;
+      let rvz = si * fx + co * fz + angularVelocity * p[q] - (p[q + 2] - old[q + 2]) / dt;
+      if (state.localHydrodynamics) {
+        // Host fish may pitch and roll in a turbulent globe. Use the full body
+        // frame and omega x radius, not a yaw-only approximation of fin drag.
+        const { flow: u, velocity: v, angular: w } = state.localHydrodynamics;
+        rvx = u[0] - v[0] - (w[1] * p[q + 2] - w[2] * p[q + 1]) - (p[q] - old[q]) / dt;
+        rvy = u[1] - v[1] - (w[2] * p[q] - w[0] * p[q + 2]) - (p[q + 1] - old[q + 1]) / dt;
+        rvz = u[2] - v[2] - (w[0] * p[q + 1] - w[1] * p[q]) - (p[q + 2] - old[q + 2]) / dt;
+      }
       const normalSpeed = clamp(rvx * nx + rvy * ny + rvz * nz, -2, 2);
       const pressure = normalSpeed * (2.0 + Math.abs(normalSpeed) * 3.5);
       // Ray stiffness falls steeply away from its muscular insertion.

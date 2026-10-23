@@ -2,6 +2,7 @@ import * as THREE from 'three/webgpu';
 import { createBetta } from '../../../betta-atelier/src/fish.js';
 import { TriangleBVH } from './triangleBVH.mjs';
 import { BettaSwim, BETTA_SCALE as SCALE } from './bettaSwim.mjs';
+import { BETTA_PROBES, readBettaWater } from './bettaWater.mjs';
 import type { KoiEnv, KoiSense } from './Koi';
 
 /** The actual Atelier specimen, evaluated on the CPU for the refracted rays.
@@ -19,6 +20,7 @@ export class Betta {
   private readonly probes = new Float32Array(16 * 4);
   private readonly flow = new THREE.Vector3();
   readonly swim = new BettaSwim();
+  waterState: ReturnType<typeof readBettaWater> | null = null;
   private time = 0;
   private loaded = false;
   active = false;
@@ -70,6 +72,7 @@ export class Betta {
       this.loaded = true;
     });
     this.updateVertices();
+    this.updateProbes();
   }
 
   update(dt: number, sense: KoiSense | null, env: KoiEnv): void {
@@ -79,40 +82,51 @@ export class Betta {
     }
     dt = Math.max(0, Math.min(dt, 0.07));
     this.time += dt;
-    // Mean of probes actually submerged. Currents are read from the fluid solver,
-    // not an unrelated sinusoid. Limit extreme shake impulses before the fin solver.
-    const target = new THREE.Vector3();
-    let count = 0;
-    if (sense) for (let i = 0; i < 16; i++) {
-      if (sense.probes[i * 4 + 3] < env.iso) continue;
-      target.x += sense.probes[i * 4]; target.y += sense.probes[i * 4 + 1]; target.z += sense.probes[i * 4 + 2]; count++;
-    }
-    if (count) target.multiplyScalar(1 / count);
-    target.clampLength(0, 0.6);
+    // Sample the actual current and its rotation across the moving anatomy.
+    this.waterState = readBettaWater(sense, this.probes, env);
+    const target = new THREE.Vector3().fromArray(this.waterState.flow);
     this.flow.lerp(target, 1 - Math.exp(-5 * dt));
-    this.swim.advance(dt, this.flow.toArray(), env, !sense || count >= 8);
+    this.swim.advance(dt, this.flow.toArray(), env, this.waterState.submerged > 0.99, this.waterState);
     this.fish.userData.locomotion = this.locomotion();
     this.fish.userData.externalFlow = this.flow.clone().multiplyScalar(1 / SCALE).toArray();
     // The same one-second opening as the standalone specimen.
     this.fish.userData.display.requested = this.flared;
     this.fish.userData.update(this.time);
     this.updateVertices();
-    // Keep the entire animated silhouette between the settled bed and surface.
-    // A conservative globe-space envelope also keeps fin tips away from glass.
-    const d = this.bvh.data;
-    const dy = Math.min(0, env.level - 0.06 - d[9]) + Math.max(0, env.sandLevel + 0.06 - d[5]);
-    if (Math.abs(dy) > 1e-5) {
-      this.swim.position[1] += dy;
-      this.fish.position.y += dy / SCALE;
-      for (let i = 1; i < this.vertices.length; i += 3) this.vertices[i] += dy;
-      this.bvh.refit(this.vertices);
+    // Contact against the glass and sampled bed, not a fixed waterline: sloshing
+    // can carry the fish vertically and the density probes guide its recovery.
+    for (let pass = 0; pass < 4; pass++) {
+      let worst = 0, dx = 0, dy = 0, dz = 0, bottom = Infinity;
+      for (let i = 0; i < this.vertices.length; i += 3) {
+        const x = this.vertices[i], y = this.vertices[i + 1], z = this.vertices[i + 2];
+        bottom = Math.min(bottom, y);
+        const r = Math.hypot(x, y, z), excess = r - env.radius + 0.012;
+        if (excess > worst) { worst = excess; dx = -x / r * excess; dy = -y / r * excess; dz = -z / r * excess; }
+      }
+      dy += Math.max(0, this.waterState.sand + 0.012 - bottom - dy);
+      if (Math.hypot(dx, dy, dz) < 1e-6) break;
+      const shift = [dx, dy, dz];
+      for (let k = 0; k < 3; k++) {
+        this.swim.position[k] += shift[k];
+        this.fish.position.setComponent(k, this.fish.position.getComponent(k) + shift[k] / SCALE);
+        if (shift[k] * this.swim.drift[k] < 0) this.swim.drift[k] = 0;
+      }
+      for (let i = 0; i < this.vertices.length; i++) this.vertices[i] += shift[i % 3];
     }
+    this.bvh.refit(this.vertices);
     this.bvh.data[3] = 1;
     this.texture.needsUpdate = true;
-    // Sixteen points covering the trunk and fins, in the same sim frame as the BVH.
+    this.updateProbes();
+  }
+
+  private updateProbes(): void {
+    this.rig.updateMatrixWorld(true);
+    const scratch = [0, 0, 0, 0], p = new THREE.Vector3();
     for (let i = 0; i < 16; i++) {
-      const f = i / 15;
-      this.probes.set([d[4] + (d[8] - d[4]) * f, (d[5] + d[9]) * 0.5, (d[6] + d[10]) * 0.5, 0], i * 4);
+      const local = BETTA_PROBES[i];
+      this.fish.userData.bodyMotion.transform(local[0], local[1], local[2], scratch);
+      p.set(scratch[0], scratch[1], scratch[2]).applyMatrix4(this.fish.matrixWorld);
+      this.probes.set([p.x, p.y, p.z, 0], i * 4);
     }
   }
 

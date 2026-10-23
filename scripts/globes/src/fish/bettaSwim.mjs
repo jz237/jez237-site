@@ -13,6 +13,8 @@ export class BettaSwim {
     this.target = [-0.34, -0.23, -0.18];
     this.heading = -0.35;
     this.pitch = this.angularVelocity = this.speed = this.time = 0;
+    this.steerRate = this.roll = this.rollRate = this.pitchRate = 0;
+    this.waterSpin = [0, 0, 0];
     this.drive = 0.045;
     this.mode = 'cruise';
     this.timer = 7;
@@ -49,18 +51,20 @@ export class BettaSwim {
     this.cruiseSpeed = 0.065 + this.random() * 0.045;
   }
 
-  advance(dt, flow, env, submerged = true) {
+  /** @param {any} [water] */
+  advance(dt, flow, env, submerged = true, water = null) {
     if (!(dt > 0)) return;
     // Bounded substeps keep tab stalls and different display rates stable.
     let remaining = Math.min(dt, 0.07);
     while (remaining > 1e-8) {
       const step = Math.min(1 / 60, remaining);
-      this.step(step, flow, env, submerged);
+      this.step(step, flow, env, submerged, water);
       remaining -= step;
     }
   }
 
-  step(dt, flow, env, submerged) {
+  /** @param {any} water */
+  step(dt, flow, env, submerged, water) {
     const b = this.bounds(env);
     if (!this.initialized) {
       this.position[1] = clamp(this.position[1], b.low, b.high);
@@ -87,31 +91,56 @@ export class BettaSwim {
     const nearWall = Math.hypot(...look) > b.radius;
     let goal = this.target;
     if (nearWall) goal = [-this.position[0] * 0.45, clamp(this.position[1], b.low, b.high), -this.position[2] * 0.45];
-    if (!submerged) goal = [this.position[0] * 0.6, b.low + 0.025, this.position[2] * 0.6];
+    const escaping = !submerged || (water?.airAbove ?? 0) > 0.25;
+    if (escaping) goal = water ? [water.centroid[0], water.centroid[1] - 0.06, water.centroid[2]] : [this.position[0] * 0.6, b.low + 0.025, this.position[2] * 0.6];
     const delta = goal.map((v, i) => v - this.position[i]);
     distance = Math.hypot(...delta);
     const yawError = wrap(Math.atan2(delta[2], -delta[0]) - this.heading);
-    const holding = this.mode === 'hover' && !nearWall && submerged;
+    const holding = this.mode === 'hover' && !nearWall && !escaping;
     const wantedRate = holding ? 0 : clamp(yawError * 2.5, -1.65, 1.65);
-    this.angularVelocity = damp(this.angularVelocity, wantedRate, dt, 4.5);
+    for (let k = 0; k < 3; k++) this.waterSpin[k] = damp(this.waterSpin[k], water?.angular[k] ?? 0, dt, 5);
+    this.steerRate = damp(this.steerRate, wantedRate, dt, 4.5);
+    this.angularVelocity = this.steerRate + this.waterSpin[1] * 0.8;
     this.heading += this.angularVelocity * dt;
-    const pitchTarget = holding ? 0 : clamp(Math.atan2(delta[1], Math.hypot(delta[0], delta[2])), -0.32, 0.32);
-    this.pitch = damp(this.pitch, pitchTarget, dt, 2.4);
+    const pitchTarget = holding ? 0 : clamp(Math.atan2(delta[1], Math.hypot(delta[0], delta[2])), escaping ? -0.6 : -0.32, 0.32);
+    const oldPitch = this.pitch, oldRoll = this.roll;
+    const pitchSpin = -this.waterSpin[2] * Math.cos(this.heading) - this.waterSpin[0] * Math.sin(this.heading);
+    this.pitch = clamp(damp(this.pitch, pitchTarget, dt, 2.4) + pitchSpin * dt * 0.8, -0.75, 0.75);
+    const rollSpin = this.waterSpin[0] * Math.cos(this.heading) - this.waterSpin[2] * Math.sin(this.heading);
+    this.roll = clamp(damp(this.roll, 0, dt, 2.6) + rollSpin * dt * 0.8, -0.65, 0.65);
+    this.pitchRate = (this.pitch - oldPitch) / dt;
+    this.rollRate = (this.roll - oldRoll) / dt;
     let desiredSpeed = this.mode === 'burst' ? 0.19 : this.mode === 'glide' ? 0.04 : this.cruiseSpeed;
     if (holding) desiredSpeed = 0;
     else desiredSpeed *= (0.12 + 0.88 * Math.max(0, Math.cos(yawError))) * clamp(distance / 0.14, 0.25, 1);
+    if (escaping) desiredSpeed = Math.max(desiredSpeed, 0.16);
     this.speed = damp(this.speed, desiredSpeed, dt, desiredSpeed > this.speed ? 2.8 : 3.5);
-    // Small water-carried drift remains; holding effort is computed from the
-    // actual relative flow by the shared gait/fin solver.
-    for (let k = 0; k < 3; k++) this.drift[k] = damp(this.drift[k], clamp(flow[k] * 0.28, -0.075, 0.075), dt, 2);
+    // Same neutral-buoyancy inertia and finite station-keeping as the koi:
+    // follow the full current with a 0.9s lag, not a capped 0.075-unit/s offset.
+    const wet = water?.submerged ?? (submerged ? 1 : 0);
+    if (wet > 0) for (let k = 0; k < 3; k++) this.drift[k] = damp(this.drift[k], flow[k], dt, 1 / 0.9);
+    const driftSpeed = Math.hypot(...this.drift), hold = Math.max(0, driftSpeed - 0.15 * 0.42);
+    if (wet > 0.99 && hold > 0) for (let k = 0; k < 3; k++) this.drift[k] *= 1 - Math.min(1, 1.6 * dt * hold / driftSpeed);
+    if (water) for (let k = 0; k < 3; k++) this.drift[k] += (env.gravity?.[k] ?? (k === 1 ? -24 : 0)) * (1 - wet) * dt;
+    const speedLimit = Math.hypot(...this.drift);
+    if (speedLimit > 1.2) for (let k = 0; k < 3; k++) this.drift[k] *= 1.2 / speedLimit;
     const direction = [-Math.cos(this.heading) * Math.cos(this.pitch), Math.sin(this.pitch), Math.sin(this.heading) * Math.cos(this.pitch)];
     const old = [...this.position];
     for (let k = 0; k < 3; k++) this.position[k] += (direction[k] * this.speed + this.drift[k]) * dt;
-    // Last-resort envelope for strong shaking. Normal travel is turned early.
-    this.position[1] = clamp(this.position[1], b.low, b.high);
+    // Real water has no fixed horizontal ceiling when the globe is tilted.
+    // Density probes steer it back into water; actual bed/glass contacts stop it.
+    const floor = water ? water.sand + 0.07 : b.low;
+    this.position[1] = clamp(this.position[1], floor, water ? env.radius - 0.25 : b.high);
+    if (this.position[1] <= floor && this.drift[1] < 0) this.drift[1] = 0;
     const horizontal = Math.hypot(this.position[0], this.position[2]);
-    const limit = Math.sqrt(Math.max(0, b.radius ** 2 - this.position[1] ** 2));
-    if (horizontal > limit) { this.position[0] *= limit / horizontal; this.position[2] *= limit / horizontal; }
+    const radius = water ? env.radius - 0.29 : b.radius;
+    this.position[1] = clamp(this.position[1], -radius, radius);
+    const limit = Math.sqrt(Math.max(0, radius ** 2 - this.position[1] ** 2));
+    if (horizontal > limit) {
+      this.position[0] *= limit / horizontal; this.position[2] *= limit / horizontal;
+      const n = Math.hypot(...this.position), outward = this.drift.reduce((sum, v, k) => sum + v * this.position[k] / n, 0);
+      if (outward > 0) for (let k = 0; k < 3; k++) this.drift[k] -= outward * this.position[k] / n;
+    }
     this.velocity = this.position.map((v, i) => (v - old[i]) / dt);
     this.drive = this.mode === 'glide' ? 0.065 : holding ? 0.045 : clamp(0.07 + this.speed * 1.4 + Math.abs(this.angularVelocity) * 0.06, 0.045, 0.40);
   }

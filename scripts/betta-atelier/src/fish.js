@@ -750,6 +750,7 @@ export function createBetta({ compact = false } = {}) {
       ty = T.MathUtils.damp(ty, targetY, 2, dt);
       flowStrength = T.MathUtils.damp(flowStrength, water.strength, 1.8, dt);
       const previousPosition = fish.position.clone();
+      const previousRotation = locomotion ? fish.quaternion.clone() : null;
       fish.position.set(
         tx + 0.325 * (1 - Math.cos(heading)),
         ty + 0.003 * Math.sin(t * 1.31),
@@ -762,10 +763,23 @@ export function createBetta({ compact = false } = {}) {
       );
       if (locomotion) {
         fish.position.fromArray(locomotion.position);
-        fish.rotation.set(0, heading, -locomotion.pitch, 'YXZ');
+        fish.rotation.set(locomotion.roll ?? 0, heading, -locomotion.pitch, 'YZX');
       }
       const velocity = locomotion ? locomotion.velocity : dt ? fish.position.clone().sub(previousPosition).multiplyScalar(1 / dt).toArray() : [0, 0, 0];
       const localFlow = fish.userData.externalFlow ?? waterVelocity(t, fish.position.x, fish.position.y, fish.position.z, flowStrength, water.direction, []);
+      let localHydrodynamics;
+      if (locomotion) {
+        const inverse = fish.quaternion.clone().invert();
+        const delta = inverse.clone().multiply(previousRotation).invert();
+        if (delta.w < 0) { delta.x *= -1; delta.y *= -1; delta.z *= -1; delta.w *= -1; }
+        const sine = Math.hypot(delta.x, delta.y, delta.z);
+        const factor = dt > 0 && sine > 1e-8 ? 2 * Math.atan2(sine, delta.w) / (sine * dt) : 0;
+        localHydrodynamics = {
+          flow: new T.Vector3().fromArray(localFlow).applyQuaternion(inverse).toArray(),
+          velocity: new T.Vector3().fromArray(velocity).applyQuaternion(inverse).toArray(),
+          angular: [delta.x * factor, delta.y * factor, delta.z * factor],
+        };
+      }
       const relativeFlow = Math.hypot(...localFlow.map((v, i) => v - velocity[i]));
       gait.advance(dt, drive, relativeFlow, turn);
       const { phase, effort, breathPhase, pectoralPhase } = gait;
@@ -780,6 +794,7 @@ export function createBetta({ compact = false } = {}) {
       const state = {
         body: bodyMotion, time: t, phase, pectoralPhase, drive: effort * 0.55, effort, turn, flare: uniforms.uFlare.value,
         heading, angularVelocity, velocity, origin: fish.position.toArray(),
+        localHydrodynamics,
         strength: flowStrength, direction: water.direction, externalFlow: fish.userData.externalFlow,
         bodyRadius(x, y) {
           const pixelX = x / SCALE + 680;

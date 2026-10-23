@@ -30,6 +30,20 @@ const edgeMean = (f, axis) => {
   return sum / f.columns;
 };
 
+test('whole-fish transport has no false fin drag; three-axis rotation creates membrane lag', () => {
+  const calm = make(), carried = make(), rolled = make();
+  for (let i = 1; i <= 120; i++) {
+    const a = state(i / 60, 0), b = state(i / 60, 0), c = state(i / 60, 0);
+    b.localHydrodynamics = { flow: [1.2, -0.7, 0.9], velocity: [1.2, -0.7, 0.9], angular: [0, 0, 0] };
+    c.localHydrodynamics = { flow: [0, 0, 0], velocity: [0, 0, 0], angular: [1.5, 0, 0.6] };
+    calm.advance(1 / 60, a); carried.advance(1 / 60, b); rolled.advance(1 / 60, c);
+  }
+  assert.deepEqual(carried.position, calm.position);
+  assert.equal(rolled.metrics().anchorError, 0);
+  const rms = Math.sqrt(rolled.position.reduce((sum, v, i) => sum + (v - calm.position[i]) ** 2, 0) / rolled.position.length);
+  assert.ok(rms > 0.015);
+});
+
 test('zero current is truly still; directional currents reverse without random frame noise', () => {
   assert.deepEqual(waterVelocity(2, 1, 2, 3, 0, 'changing', []), [0, 0, 0]);
   for (const [a, b, axis] of [['left', 'right', 0], ['down', 'up', 1], ['back', 'front', 2]]) {

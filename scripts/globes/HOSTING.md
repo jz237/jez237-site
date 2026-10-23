@@ -3,7 +3,7 @@
 Original: https://github.com/willwaltz/globes
 Author: Will Waltz · MIT License
 Upstream commit: 93c3b814bbca53463e8207b8e3c95fca8940dff5
-Imported: 2026-10-22 · Hosting build: 1.2.0
+Imported: 2026-10-22 · Hosting build: 1.3.0
 Public route: https://jez237.com/demos/globes/
 
 The upstream source and MIT attribution are retained. Hosting adds the gallery
@@ -39,24 +39,41 @@ original integration's linear size (`0.105` versus `0.25` model-to-globe scale).
 `bettaSwim.mjs` chooses destinations throughout the usable water volume, with
 slow cruises, short bursts, coasting and quiet hovering. Acceleration-limited
 heading and shallow pitch keep translation aligned with the nose; actual yaw
-rate drives the shared body/fin C-bend. Look-ahead steering avoids the glass;
-conservative full-silhouette envelopes keep fins above the bed and below the
-resting surface. Strong currents add damped drift and increase fin effort, and
-dry probes request a dive. The Atelier accepts optional host-owned `locomotion`
-(position/velocity in model units, heading/pitch in radians, angularVelocity,
-drive and mode); without it the standalone choreography is unchanged.
+rate drives the shared body/fin C-bend. Look-ahead steering avoids the glass.
+
+`bettaWater.mjs` samples sixteen **anatomically attached 3D probes**, including
+the trunk, back, tail, forward clearance and both flanks. The full solver current
+drives whole-fish translation with the koi's 0.9-second added-mass lag and finite
+station-keeping drag; the former 0.075-per-axis drift cap is removed. A
+least-squares fit to differences in velocity across the wet probes supplies
+water-driven yaw, pitch and roll. Uniform flow does not invent spin; opposing
+shear can rotate the body even with zero mean flow. Righting and steering recover
+as the disturbance subsides. There is no procedural turbulence/wobble source.
+
+The fixed resting-water-height clamp is also removed. Wetness and upper
+probes request escape toward the water's actual centroid; partial exposure adds
+effective gravity, as for the koi. The animated silhouette is constrained against
+the spherical glass and sampled sand bed, not an invisible horizontal ceiling.
+The shared fin solver uses full 3D body-relative fluid velocity and angular
+motion while pitching/rolling, so transported water does not create false drag.
+The Atelier accepts optional host-owned `locomotion`
+(position/velocity in model units, heading/pitch/roll in radians, angularVelocity,
+drive and mode); without it the standalone choreography and fin solver are unchanged.
 This is an artistic coupling, not a fully coupled
 fish/fluid solver or instantaneous collision against every turbulent wave. The
 betta does not eat the Koi scene's food. The **Flare fins / Relax fins** button controls the display; each opening
 takes one second, with partly open fins in the resting pose.
 
-Checks: `node --test bvh.test.mjs betta-swim.test.mjs`, `node --test
+Checks: `node --test bvh.test.mjs betta-swim.test.mjs betta-water.test.mjs`, `node --test
 ../betta-atelier/fin-dynamics.test.mjs`, `npm run build`, and real WebGPU browser
 checks of the betta, scene switching, current/tilt response and phone layout.
 The locomotion tests cover multi-minute 3D exploration, bounded nose-led travel,
 rest/burst variation, frame-rate independence, pause and strong reversing flow.
-Browser QA additionally checks every animated vertex against the glass and
-the rendered fin bounds against the bed and resting surface.
+Water tests separately cover uniform translation, three-axis differential flow,
+partial wetness, actual bed readings, stronger inertial transport, reversal,
+recovery, free vertical slosh and violent-flow containment. Browser QA uses real
+pointer-driven water agitation, compares the previous release's response, and
+checks animated vertex clearance, fin attachment, flare controls and phone layout.
 Use `npm run web -- --host 127.0.0.1` for browser development (`npm run dev` starts
 Electron). `?qa` exposes the same local inspection object as a dev build.
 
