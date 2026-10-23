@@ -439,3 +439,7 @@ export function pitStrength(point:{x:number;z:number},direction:{x:number;z:numb
 }
 /** Rear tyre grip left while sliding after a PIT shove. */
 export const pitGrip=(slide:number)=>1-PIT.loss*Math.max(0,Math.min(1,Number.isFinite(slide)?slide:0));
+/** A bare front wheel (offline): once a corner's wing has been torn off, a hit there does EXPOSED_WHEEL.tyre times as much to
+ * the tyre and `rim` times as much to the wheel, and nothing is left to rub on the tyre. */
+export const EXPOSED_WHEEL={tyre:1.8,rim:1.4} as const;
+export const exposedDamage=(before:number,after:number,factor:number)=>![before,after,factor].every(Number.isFinite)||after<=before?after:Math.min(1,before+(after-before)*factor);
