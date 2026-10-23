@@ -85,7 +85,7 @@ export class FinDynamics {
         let x = rest[n] - roots[r], y = rest[n + 1] - roots[r + 1], z = rest[n + 2] - roots[r + 2];
         // Fold by changing ray angle, not shortening or scaling the fin.
         if (kind < 3) {
-          const relaxed = kind === 0 ? 0.43 : kind === 1 ? 0.34 : 0.60;
+          const relaxed = kind === 0 ? 0.58 : kind === 1 ? 0.55 : 0.72;
           const spread = relaxed + (1 - relaxed) * flare - drive * 0.12;
           const angle = Math.atan2(y, x) * spread - (kind === 0 ? 0.10 * (1 - flare) : 0), length = Math.hypot(x, y);
           x = length * Math.cos(angle); y = length * Math.sin(angle);

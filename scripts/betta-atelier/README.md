@@ -216,6 +216,8 @@ Evidence: `/home/jez237/.openclaw/workspace/tmp/betta-gait-reference-20261022/`.
 
 ## Relaxed/display posture and socket gaze · revision 1.6 (2026-10-23)
 
+The quarter-second opening, resting angles and independent gaze below are superseded by v1.6.1.
+
 Jez requested the large relaxed-to-flared change and rapid opening, plus eye
 rotation. Reference comparison: LoveToKnow Pets, Kelly Roper's 2018 “Betta Fish
 Pictures”, **Halfmoon Butterfly Betta** photograph (caption identifies resting
@@ -249,3 +251,18 @@ local research evidence, not the public assets.
   opposite side, currents/reversals, desktop and touch-emulated phone controls.
 
 Evidence: `/home/jez237/.openclaw/workspace/tmp/betta-display-gaze-20261023/`.
+
+## Partly open resting fins and one-second flare · revision 1.6.1
+
+Jez clarified in `1563082328945860649` that still-water fins hang partly open,
+and explicitly requested a one-second flare rather than a quarter-second.
+The resting caudal/dorsal/anal fan factors are now 0.58/0.55/0.72 (previously
+0.43/0.34/0.60), retaining the tail's relaxed droop and water-driven flexible edges.
+`DisplayMotion` uses a one-second smoothstep from the current pose to full display,
+not a rapid exponential approach. Mid-transition reversals start at the current
+pose; pause still freezes the transition. Breathing and swimming are unchanged. Jez also clarified that both eyes look in
+the same direction simultaneously: they now share one gaze controller, advanced
+once per frame, with mirrored socket axes for matching forward/upward movement.
+The existing solver test now verifies an incomplete quarter-second opening and
+near-complete one-second opening at 30/60/120 fps, plus partly open resting posture.
+Evidence: `/home/jez237/.openclaw/workspace/tmp/betta-one-second-flare-20261023/`.

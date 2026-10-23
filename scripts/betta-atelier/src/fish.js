@@ -550,7 +550,7 @@ export function createBetta() {
     2,
   );
   const pectorals = [], eyes = [];
-  const display = new DisplayMotion();
+  const display = new DisplayMotion(), gaze = new EyeMotion();
   for (const side of [-1, 1]) {
     makeFin(
       fish,
@@ -625,7 +625,7 @@ export function createBetta() {
     const pivot = new T.Group();
     pivot.name = `Eye socket pivot ${side}`;
     pivot.position.set(ex, ey, side * 0.120);
-    const motion = new EyeMotion(side);
+    const motion = gaze;
     eyes.push({ pivot, motion, side });
     eye.position.set(0, 0, side * 0.020);
     eye.scale.set(1, 1, 0.5);
@@ -658,7 +658,7 @@ export function createBetta() {
     macroTextures,
     scaleCount: 0,
     finCount: 7,
-    revision: "1.6",
+    revision: "1.6.1",
     display, eyes,
     gait,
     bodyMotion,
@@ -670,8 +670,8 @@ export function createBetta() {
       prev = t;
       display.advance(dt);
       uniforms.uFlare.value = display.flare;
+      gaze.advance(dt, turn, display.flare);
       for (const { pivot, motion, side } of eyes) {
-        motion.advance(dt, turn, display.flare);
         pivot.rotation.set(-motion.pitch * side, motion.yaw * side, 0);
       }
       uniforms.uTime.value = t;

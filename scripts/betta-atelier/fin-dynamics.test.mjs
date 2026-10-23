@@ -169,31 +169,32 @@ test('a long fin with distributed body insertions does not stretch during fast t
 });
 
 // Test the rendered solver points, not only the fast display-control value.
-test('relaxed tail opens rapidly, closes again and keeps ray lengths at 30/60/120fps', async () => {
+test('partly open resting tail flares over one second, closes again and keeps ray lengths at 30/60/120fps', async () => {
   const { DisplayMotion } = await import('./src/display-motion.js');
   const span = f => { const ys=[]; for(let n=1;n<f.position.length;n+=3) ys.push(f.position[n]);return Math.max(...ys)-Math.min(...ys); };
   for (const fps of [30, 60, 120]) {
     const f=make(), display=new DisplayMotion(), s=state(0);
     s.body.update(0,0,0,0);s.drive=0;s.phase=0;
     const advance = seconds => {for(let i=0;i<Math.round(seconds*fps);i++){display.advance(1/fps);s.flare=display.flare;f.advance(1/fps,s)}};
-    advance(1);const relaxed=span(f);display.requested=true;advance(.267);const quick=span(f);advance(1);const open=span(f);
-    assert.ok(open>relaxed*1.5, `${fps}: fan lacks contrast`);
-    assert.ok((quick-relaxed)/(open-relaxed)>.8, `${fps}: visible opening too slow`);
+    advance(1);const relaxed=span(f);display.requested=true;advance(.267);const early=span(f);advance(.733);const atOneSecond=span(f);advance(1);const open=span(f);
+    assert.ok(open>relaxed*1.25 && open<relaxed*1.6, `${fps}: fan lacks contrast`);
+    assert.ok((early-relaxed)/(open-relaxed)<.35, `${fps}: still flares in a quarter-second`);
+    assert.ok((atOneSecond-relaxed)/(open-relaxed)>.85, `${fps}: not open after one second`);
     display.requested=false;advance(.4);assert.ok(span(f)<relaxed+(open-relaxed)*.3, `${fps}: relaxation too slow`);
     const before=f.position.slice(),held=display.flare;display.requested=true;display.advance(0);f.advance(0,s);assert.equal(display.flare,held);assert.deepEqual(f.position,before);
     advance(1);assert.equal(f.metrics().anchorError,0);assert.ok(f.metrics().maxRayStrain<.07);
   }
 });
 
-test('eye gaze has quiet fixations, short glances, bounded independent motion and pause', async () => {
+test('eye gaze has quiet fixations, short glances, bounded synchronized motion and pause', async () => {
   const { EyeMotion } = await import('./src/display-motion.js');
-  const left=new EyeMotion(1),right=new EyeMotion(-1),trace=[];
+  const left=new EyeMotion(),right=new EyeMotion(),trace=[];
   for(let i=0;i<1200;i++) {left.advance(1/120);right.advance(1/120);trace.push([left.yaw,left.pitch,right.yaw,right.pitch]);}
   assert.ok(Math.max(...trace.map(p=>p[0]))-Math.min(...trace.map(p=>p[0]))>.3,'gaze is static');
   assert.ok(trace.every(p=>Math.abs(p[0])<=.24&&Math.abs(p[2])<=.24&&Math.abs(p[1])<=.13&&Math.abs(p[3])<=.13));
   const changes=trace.slice(1).map((p,i)=>Math.hypot(p[0]-trace[i][0],p[1]-trace[i][1]));
   assert.ok(changes.filter(v=>v<.0001).length>changes.length*.65,'eyes continually rolling instead of fixating');
   assert.ok(Math.max(...changes)>.01&&Math.max(...changes)<.08,'glance should be brief but not teleport');
-  assert.ok(trace.some(p=>Math.abs(p[0]-p[2])>.1),'eyes mechanically locked together');
+  assert.ok(trace.every(p=>p[0]===p[2]&&p[1]===p[3]),'eyes must share glance direction and timing');
   const frozen=[left.time,left.yaw,left.pitch];left.advance(0,1,1);assert.deepEqual([left.time,left.yaw,left.pitch],frozen);
 });
