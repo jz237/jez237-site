@@ -28,14 +28,16 @@ import {impactWaves,impactGLSL} from './surface-impulses.js';
 import * as T from './vendor/three.module.js';
 import {waterDetail,waterFragment} from './water-detail.js';
 import {WAVES,ground,wave,ROCKS,craftFields,waterLevel} from './simulation.js';
+import {openSeaOceanGLSL,openSeaUniforms} from './open-sea-water.js';
 const nativeSurface=createNativeWaterSurface();
 let lastNativeWater=null,lastNativeRevision=-1,lastNativeDatum=null;
 function syncNativeSurface(){const state=currentRaceWater();if(!state){nativeSurface.setEnabled(false);lastNativeWater=null;return;}const field=state.field??state;if(lastNativeWater!==state||lastNativeRevision!==state.revision||lastNativeDatum!==field.datumNative){nativeSurface.uniforms.nativeWaterScale.value=state.scale;nativeSurface.uniforms.nativeWaterInverseScale.value=Math.fround(1/state.scale);nativeSurface.sync(field);lastNativeWater=state;lastNativeRevision=state.revision;lastNativeDatum=field.datumNative;}nativeSurface.setEnabled(true);}
-export const shared={...coastalDepthUniforms,...nativeSurface.uniforms,frontEnabled,...characterUniforms,...localWaterUniforms,boundaryWalls,boundaryCount,surfSeed,surfStrength,windSea,courseWaveTrain,seaLevel:waterLevel,time:{value:0},storm:{value:0}};
+export const shared={...coastalDepthUniforms,...nativeSurface.uniforms,...openSeaUniforms,frontEnabled,...characterUniforms,...localWaterUniforms,boundaryWalls,boundaryCount,surfSeed,surfStrength,windSea,courseWaveTrain,seaLevel:waterLevel,time:{value:0},storm:{value:0}};
 export const skyColors={skyNight:{value:0},skyHorizon:{value:new T.Color(.53,.64,.66)},skyZenith:{value:new T.Color(.10,.27,.43)},skySun:{value:new T.Vector3(-.35,.25,-.90).normalize()}};
 const common=`uniform float seaLevel;uniform float time;uniform float storm;uniform vec4 craft;uniform float craftTurn;uniform vec4 craftSources[4];
 ${nativeWaterSurfaceGLSL}
 ${coastalDepthGLSL}
+${openSeaOceanGLSL}
 ${impactGLSL}
 ${wakeGLSL}
 float jetWake(vec2 p){float total=0.;for(int i=0;i<4;i++){vec4 source=craftSources[i];if(source.w<=0.)continue;vec2 delta=p-source.xy;float along=dot(delta,vec2(sin(source.z),cos(source.z))),across=dot(delta,vec2(cos(source.z),-sin(source.z)));float h=exp(-((along-1.1)*(along-1.1)*2.5+across*across*.9))*.075;float aft=-along;if(aft>1.&&aft<36.){float edge=abs(across)-(.4+aft*.24);h+=cos(edge*4.2)*exp(-edge*edge*.9)*.095*exp(-aft*.035);h-=exp(-across*across*2.-(aft-2.4)*(aft-2.4))*.08;}total+=h*source.w;}return total;}
@@ -44,8 +46,10 @@ ${boundaryGLSL}
 ${hullContactGLSL}
 ${gustGLSL}
 ${localWaterGLSL}
-vec3 oceanSurface(vec2 p){if(nativeWaterActive!=0){vec3 h=nativeWaterSurface(p);return vec3(h.x-seaLevel,h.yz);}return coastalDepthSurface(p,waveSurface(p));}
-float height(vec2 p){if(nativeWaterActive!=0)return nativeWaterSurface(p).x;return seaLevel+coastalDepthSurface(p,vec3(localWaterHeight(p)+gustHeightAt(p,time,storm)+hullContactHeight(p)+boundaryHeight(p)+waveSurface(p).x+jetWake(p)+impactHeight(p)+wakeHeight(p),0.,0.)).x;}`;
+// Open sea: find the Lagrangian particle that the choppy displacement carries to p.
+vec3 fftSurfaceAt(vec2 p){vec2 g=p;for(int k=0;k<3;k++)g=p-fftDisplacement(g).xz;vec4 D=fftDisplacement(g);return vec3(D.y,fftSlopeLod(g,0.));}
+vec3 oceanSurface(vec2 p){if(fftActive!=0)return fftSurfaceAt(p);if(nativeWaterActive!=0){vec3 h=nativeWaterSurface(p);return vec3(h.x-seaLevel,h.yz);}return coastalDepthSurface(p,waveSurface(p));}
+float height(vec2 p){if(fftActive!=0)return seaLevel+fftSurfaceAt(p).x+hullContactHeight(p)+jetWake(p)+impactHeight(p)+wakeHeight(p);if(nativeWaterActive!=0)return nativeWaterSurface(p).x;return seaLevel+coastalDepthSurface(p,vec3(localWaterHeight(p)+gustHeightAt(p,time,storm)+hullContactHeight(p)+boundaryHeight(p)+waveSurface(p).x+jetWake(p)+impactHeight(p)+wakeHeight(p),0.,0.)).x;}`;
 export function makeSky(scene){const mat=new T.ShaderMaterial({side:T.BackSide,depthWrite:false,uniforms:{...panoramaUniforms,...shared,...skyColors,...weatherUniforms,cloudVolume:{value:cloudVolume},skySteps:{value:20}},vertexShader:`varying vec3 dir;void main(){dir=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,fragmentShader:atmosphereFragment});const sky=new T.Mesh(new T.SphereGeometry(1200,32,20),mat);scene.add(sky);return sky;}
 export function makeTerrain(scene,heightFn=ground,palette={},heights=null){
  const geo=new T.PlaneGeometry(920,920,360,360);geo.rotateX(-Math.PI/2);

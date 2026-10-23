@@ -20,7 +20,7 @@ uniform sampler2D refraction,reflection,depthMap,detailMap,foamMap;uniform vec2 
 uniform float night;uniform vec2 viewportOrigin,viewportSize;
 uniform sampler2D terrainMap;uniform float terrainSpan,customTerrain;
 uniform vec3 eye,sun,skyHorizon,skyZenith;uniform float near,far;uniform vec3 reefs[7];
-varying vec3 worldP;varying vec4 mirrorP;varying vec3 broadSurface;varying vec2 disturbanceSlope;varying float breakingCrest;uniform vec3 waterScatter,waterAbsorption;
+varying vec3 worldP;varying vec4 mirrorP;varying vec3 broadSurface;varying vec2 disturbanceSlope;varying float breakingCrest;varying vec2 fftG;uniform vec3 waterScatter,waterAbsorption;
 float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+1.),f.x),f.y);}
 ${foamDetailGLSL}
@@ -30,6 +30,8 @@ float floorH(vec2 p){float result=0.;if(customTerrain>.5){vec2 encodedHeight=tex
 void main(){
  vec2 p=worldP.xz;vec3 V=normalize(eye-worldP);float dist=length(eye-worldP);
  vec3 surface=broadSurface;vec2 wakeSlope=disturbanceSlope;
+ // Open sea: every cascade's slope per pixel (mipmapped, LEAN-filtered by distance).
+ if(fftActive!=0)surface.yz=fftSlopeLod(fftG,0.);
  vec2 flow=vec2(time*.013,-time*.009);vec2 r1=texture2D(detailMap,p*.145+flow).rg*2.-1.;
  vec2 rotated=mat2(.8,-.6,.6,.8)*p;vec2 r2=texture2D(detailMap,rotated*.37-flow*1.7).rg*2.-1.;
  vec3 localGust=gustAt(p,time,storm);
@@ -135,6 +137,7 @@ void main(){
  // Subsurface aeration persists after the white surface foam disperses.
  col=mix(col,mix(vec3(.10,.32,.30),vec3(.055,.15,.17),storm),clamp(bubbles,0.,.65)*(1.-fresnel));
  float cells=texture2D(detailMap,p*1.9+drift-flow*.6).b;
+ if(fftActive!=0)foam+=fftFoamAt(fftG)*mix(structure,1.,.45)*1.6;
  float cover=clamp(1.-exp(-foam*2.4),0.,.97);
  // Resolvable fine gaps in the froth, filtered naturally by texture mipmaps.
  float foamGrain=texture2D(foamDetailMap,(p-flow)*.19+drift*.03).g;

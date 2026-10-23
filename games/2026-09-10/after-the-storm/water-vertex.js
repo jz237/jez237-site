@@ -4,10 +4,25 @@
 export const waterVertex = `
 attribute float cell;
 varying vec3 worldP; varying vec4 mirrorP;
-varying vec3 broadSurface; varying vec2 disturbanceSlope; varying float breakingCrest;
+varying vec3 broadSurface; varying vec2 disturbanceSlope; varying float breakingCrest; varying vec2 fftG;
 uniform mat4 mirrorMatrix;
 void main(){
- vec2 q=position.xz+craft.xy;
+ vec2 q=position.xz+craft.xy;fftG=q;
+ if(fftActive!=0){
+  // Open sea: the grid point is a surface particle; the FFT carries it.
+  vec4 D=fftDisplacement(q);vec2 p=q+D.xz;
+  vec2 S=fftSlopeLod(q,0.)/max(.25,1.+D.w);
+  broadSurface=vec3(D.y,S);
+  breakingCrest=clamp(fftFoamAt(q),0.,1.);
+  vec3 wakeResponse=wakeSurface(p);float e=.14;
+  disturbanceSlope=vec2(
+   hullContactHeight(p+vec2(e,0))-hullContactHeight(p-vec2(e,0))+jetWake(p+vec2(e,0))+impactHeight(p+vec2(e,0))-jetWake(p-vec2(e,0))-impactHeight(p-vec2(e,0)),
+   hullContactHeight(p+vec2(0,e))-hullContactHeight(p-vec2(0,e))+jetWake(p+vec2(0,e))+impactHeight(p+vec2(0,e))-jetWake(p-vec2(0,e))-impactHeight(p-vec2(0,e)))/(2.*e)+wakeResponse.yz;
+  worldP=vec3(p.x,seaLevel+D.y+hullContactHeight(p)+jetWake(p)+impactHeight(p)+wakeResponse.x,p.y);
+  mirrorP=mirrorMatrix*vec4(worldP,1.);
+  gl_Position=projectionMatrix*viewMatrix*vec4(worldP,1.);
+  return;
+ }
  if(nativeWaterActive!=0){
   vec3 source=nativeWaterSurface(q);
   broadSurface=vec3(source.x-seaLevel,source.yz);

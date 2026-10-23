@@ -1,5 +1,44 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## Unreleased — Experimental open sea
+
+Free ride has an "Open sea · experimental" option on the title screen: the
+Open Sea demo's ocean with a new rigid-body jet ski. It is not part of the
+original's gameplay and keeps no records.
+
+### Water
+
+The demo's GPU ocean runs on the game's own WebGL 2 context: five Tessendorf
+FFT cascades (2.4 km to 4.7 m), JONSWAP wind sea plus swell, choppy
+displacement and Lagrangian whitecap foam. It drives the game's water mesh and
+water shading through a new branch, so reflections, refraction, wakes, hull
+contact and impact rings still apply. The sea state comes from the Sea select
+(calm 2, venue 3.5, chop 4.2, surf 5, storm 6.5). Waves calm over 5 m to 0.3 m
+of depth, identically on the GPU and the CPU. three.js state is reset around
+each simulation pass, and its texture unpack flags are cleared, since WebGL 2
+rejects 3D uploads under a canvas label's flipY.
+
+### Physics
+
+A CPU mirror regenerates the GPU's own spectrum: the same seeded noise,
+spreading, quantised dispersion and 400 s loop. Its three long cascades are
+inverse-transformed on 128/128/64 grids, together with each height's own rate of
+change; finer waves cannot be resolved by twelve hull points. It is rebuilt
+every 50 ms and extrapolated in between. Measured against GPU readback, the
+RMS height error is 4–5 cm on 35 cm RMS seas and 16–17 cm on 1.3–1.8 m RMS
+storm seas.
+
+The craft (380 kg with rider) samples twelve hull points at 120 Hz. Each point
+carries hydrostatic pressure, planing lift (whose angle of attack includes the
+surface's approach speed, damping heave and pitch) and slamming damping, with
+chine side force that grows with bank. A pump jet fed by the aft intake pushes
+through a steerable nozzle: no throttle, no steering. The pump stays primed
+through short skips. The rider banks into turns and trims the bow (Q/E).
+Buoyancy acts along the surface normal, so the ski runs down wave faces. On
+flat water it planes from about 15 km/h, reaches 90 km/h, and turns at an 18 m
+radius at 75 km/h. In waves it launches, lands with impacts, and wipes out on
+capsizes or nose-first landings.
+
 ## v2.46.2 — Original label words
 
 The records browser and the championship ending use the original's own label
