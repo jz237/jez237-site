@@ -44,7 +44,7 @@ import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowo
 import {leakRates,dripInterval,FLAME,fuelSpacing} from './fluid-leaks';
 import {drainOil,starvationWear,seizes,OIL,drainCoolant,overheatWear,FUEL_TANK,drainFuel,fuelFeed,SUMP,crackSump,sumpLeak,drainSump} from './oil-starvation';
 import {MAX_ENGINE_RESTART,crankRequested} from './engine-stall';
-import {rollBarSnaps,rollTorque,hasPropshaft,propBend,propVibration,fatigueProp,BEARING,bearingCracks,wearBearing,bearingShimmy,bearingDrag,steerSkew,openness,openDrag,debrisFling,smashFire,beltSlip,beltSnaps,beltSqueal,beltHeat,drainBattery,batteryCut,RADIATOR as RADIATOR_COOLING,runningHot,hotClock,overheatFire} from './damage-handling';
+import {rollBarSnaps,rollTorque,hasPropshaft,propBend,propVibration,fatigueProp,BEARING,bearingCracks,wearBearing,bearingShimmy,bearingDrag,steerSkew,openness,openDrag,debrisFling,smashFire,impactZoneFactor,beltSlip,beltSnaps,beltSqueal,beltHeat,drainBattery,batteryCut,RADIATOR as RADIATOR_COOLING,runningHot,hotClock,overheatFire} from './damage-handling';
 import {SHED,assemblyMass,glassMass,shedMassProperties,type ShedPart} from './shed-weight';
 import {DOOR_SWING,stepDoor,doorDrag,doorUnlatched,doorBase,lidKind,lidBase,stepLid,CARGO,cargoSpills,type LidKind} from './door-swing';
 /** Rear compression past which the exhaust hangs down and drags. */
@@ -1023,8 +1023,10 @@ export class Vehicle {
   collisionHit(point:T.Vector3,direction:T.Vector3,damage:number,time:number,otherPaint?:T.Color){
     const p=this.body.translation(),q=this.body.rotation(),inverse={x:-q.x,y:-q.y,z:-q.z,w:q.w};
     const local=rotateVehicleVector({x:point.x-p.x,y:point.y-p.y,z:point.z-p.z},inverse);
-    const factor=armorWearMultiplier(this.kind,this.structuralDamage,local,rotateVehicleVector(direction,inverse),this.specification.damageScale);
-    this.hit(point,direction,damage*factor,time,false,otherPaint);
+    const along=rotateVehicleVector(direction,inverse),factor=armorWearMultiplier(this.kind,this.structuralDamage,local,along,this.specification.damageScale);
+    // A T-bone into the doors hurts more than a nose-on hit into the crumple zone (offline).
+    const zone=this.extendedDamage?impactZoneFactor(local,along,DEFINITIONS[this.kind].halfWidth,DEFINITIONS[this.kind].halfLength):1;
+    this.hit(point,direction,damage*factor*zone,time,false,otherPaint);
   }
   hit(point: T.Vector3, direction: T.Vector3, damage: number, time: number, quiet = false,otherPaint?:T.Color) {
     damage *= this.specification.damageScale;

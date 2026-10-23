@@ -413,3 +413,17 @@ export function smashFire(damage:number,engineEnd:boolean,carId:number,hits:numb
   if(!engineEnd||!Number.isFinite(damage)||damage<SMASH_FIRE.damage)return false;
   const x=Math.sin(carId*41.3+hits*17.9+3.1)*43758.5453;return x-Math.floor(x)<SMASH_FIRE.odds;
 }
+/** Where a blow lands changes what it does (offline): a T-bone square into the doors (no crumple zone) hurts up to
+ * IMPACT_ZONE.side times as much, a nose-on hit into the crumple zone IMPACT_ZONE.nose times. point and direction are in
+ * the car's own frame (x right, z forward); halfWidth/halfLength are the body's. */
+export const IMPACT_ZONE={side:1.3,nose:.9,doors:.6,edge:.55} as const;
+export function impactZoneFactor(point:{x:number;z:number},direction:{x:number;z:number},halfWidth:number,halfLength:number){
+  const l=Math.hypot(direction.x,direction.z);
+  if(!(l>0)||![point.x,point.z,halfWidth,halfLength].every(Number.isFinite)||halfWidth<=0||halfLength<=0)return 1;
+  const lateral=Math.abs(direction.x)/l,along=Math.abs(direction.z)/l;
+  const doors=Math.abs(point.x)/halfWidth>=IMPACT_ZONE.edge&&Math.abs(point.z)/halfLength<=IMPACT_ZONE.doors;
+  const nose=point.z/halfLength>=1-IMPACT_ZONE.edge*.5;
+  if(doors)return 1+(IMPACT_ZONE.side-1)*lateral*lateral;
+  if(nose)return 1-(1-IMPACT_ZONE.nose)*along*along;
+  return 1;
+}
