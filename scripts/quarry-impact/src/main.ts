@@ -27,7 +27,7 @@ import {showVenueBrowser,selectVenue,selectDemoVenue} from './venue-browser';
 import {readCameraSettings,playerChaseComposition,mountCameraSettings} from './camera-settings';
 import {ScreenCraze,trackCraze,hull,type CrazeState} from './screen-craze';
 import {speedFov,smoothAccel,roadBuzz} from './speed-feel';
-import {FINAL_TWO,finalTwo,finalTwoBanner,revenge,takedownChain,comboLabel,revengeReady} from './derby-moments';
+import {FINAL_TWO,finalTwo,finalTwoBanner,revenge,takedownChain,comboLabel,revengeReady,lastGasp} from './derby-moments';
 import {syncInterval,syncDue} from './vehicle-draw-batch';
 let syncFrame=0;
 let feelAccel=0,feelSpeed=0;
@@ -1081,7 +1081,7 @@ const revengeSettled=new Map<number,number>();
 let takedownCombo=0,lastTakedownAt=-1e9;
 function playerTakedown(){
   if(online?.active||demo)return;takedownCombo=takedownChain(takedownCombo,lastTakedownAt,elapsed);lastTakedownAt=elapsed;
-  const label=comboLabel(takedownCombo);if(label){toast(label,2,3);sound.crowd(1);crowdFlashes(SMASH_FLASHES);}
+  const label=comboLabel(takedownCombo)||(lastGasp(cars[0]?.health??100)?'LAST GASP TAKEDOWN':'');if(label){toast(label,2,3);sound.crowd(1);crowdFlashes(SMASH_FLASHES);}
 }
 /** " · REVENGE READY ON #N NAME" while the player's nemesis is owed a hit (offline). */
 function revengeTag(){

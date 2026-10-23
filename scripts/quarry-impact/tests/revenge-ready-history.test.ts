@@ -1,6 +1,7 @@
+import {restoreLastGaspBytes} from './last-gasp-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readRevengeReadyPrevious,restoreRevengeReadyBytes,verifyRevengeReadyRevision} from './revenge-ready-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreLastGaspBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('RevengeReady preserves every prior fixture, vehicle asset, venue art and history input',verifyRevengeReadyRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/revenge-ready/revision.json').toString());

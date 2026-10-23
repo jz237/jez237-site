@@ -25,3 +25,6 @@ export const comboLabel=(chain:number)=>chain>=4?`${chain}x TAKEDOWN`:chain===3?
  * the last revenge (or never been paid back). */
 export const revengeReady=(rival:{id:number;damage:number}|null,settled:number|undefined)=>!!rival&&rival.damage>=REVENGE_READY&&rival.damage>(settled??0);
 export const REVENGE_READY=10;
+/** A takedown the player lands while their own car is hanging on (below LAST_GASP health, still alive). */
+export const LAST_GASP=15;
+export const lastGasp=(playerHealth:number)=>Number.isFinite(playerHealth)&&playerHealth>0&&playerHealth<LAST_GASP;

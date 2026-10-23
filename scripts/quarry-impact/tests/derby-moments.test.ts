@@ -29,3 +29,7 @@ test('revenge is ready once the nemesis has hurt you enough and not been paid ba
  assert.ok(revengeReady({id:2,damage:REVENGE_READY},undefined));assert.equal(revengeReady({id:2,damage:REVENGE_READY-1},undefined),false);
  assert.equal(revengeReady({id:2,damage:30},30),false,'paid back');assert.ok(revengeReady({id:2,damage:42},30),'hurt again');assert.equal(revengeReady(null,undefined),false);
 });
+test('a takedown while hanging on is a last gasp; healthy or wrecked is not',async()=>{
+ const {lastGasp,LAST_GASP}=await import('../src/derby-moments');
+ assert.ok(lastGasp(LAST_GASP-1));assert.equal(lastGasp(LAST_GASP),false);assert.equal(lastGasp(0),false);assert.equal(lastGasp(NaN),false);
+});
