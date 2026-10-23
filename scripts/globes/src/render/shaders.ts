@@ -954,7 +954,7 @@ fn globes_sandDetailNormal(pb: vec3f, nb: vec3f) -> vec3f {
 
 // Light leaving the top of the sand bed at p: sunlight that actually reached it through the
 // glass and the water (the photon-traced caustic map, tilted by the ripples) plus soft fill.
-fn globes_sandShade(p: vec3f, inWater: bool, rot: mat3x3f, sandTex: texture_2d<f32>, sandSamp: sampler, causticTex: texture_2d<f32>, causticSamp: sampler) -> vec3f {
+fn globes_sandShade(p: vec3f, inWater: bool, rot: mat3x3f, sandTex: texture_2d<f32>, sandSamp: sampler, causticTex: texture_2d<f32>, causticSamp: sampler, shadow: vec3f) -> vec3f {
   // Grain and ripples are fixed to the sand, which turns with the globe: texture it there.
   let rotT = transpose(rot);
   let n = globes_sandNormal(sandTex, sandSamp, p);
@@ -975,7 +975,7 @@ fn globes_sandShade(p: vec3f, inWater: bool, rot: mat3x3f, sandTex: texture_2d<f
   let towards = select(GLOBES_SUN_DIR, GLOBES_SUN_DIR_WATER, inWater);
   let tilt = clamp(max(dot(nd, towards), 0.0) / max(dot(n, towards), 0.12), 0.0, 2.0);
   let fill = select(GLOBES_SAND_AMBIENT_AIR, GLOBES_SAND_AMBIENT_WATER, inWater);
-  return albedo * (sun * tilt + fill) / 3.14159265;
+  return albedo * (sun * shadow * tilt + fill) / 3.14159265;
 }
 
 // The sand layer seen from outside, where it is pressed against the glass: lit through the
@@ -2052,7 +2052,11 @@ ${rt ? RT_MARCH : `    // The next sample is read with this one, where it will b
       // may see past it.)
       let qs = p + dir * t;
       if (GLOBES_EDGES && (length(qs) > GLOBES_R_IN - 0.05 || abs(dot(dir, globes_sandNormal(sandTex, sandSamp, qs))) < 0.15)) { globesEdge |= 8u; }
-      col += thr * globes_sandShade(qs, inWater, rot, sandTex, sandSamp, causticTex, causticSamp);
+      var bettaShadow = vec3f(1.0);
+      // The shadow is drawn by the second pass; flag bed pixels whose sun path crosses the fish.
+      if (!GLOBES_KOI && !globesKoiNear && betta_near(bettaTex, qs + vec3f(0.0, 0.003, 0.0), select(GLOBES_SUN_DIR, GLOBES_SUN_DIR_WATER, inWater), 4.0)) { globesKoiNear = true; }
+      if (GLOBES_KOI) { bettaShadow = betta_shadow(bettaTex, bettaAtlas, bettaSamp, qs + vec3f(0.0, 0.003, 0.0), select(GLOBES_SUN_DIR, GLOBES_SUN_DIR_WATER, inWater)); }
+      col += thr * globes_sandShade(qs, inWater, rot, sandTex, sandSamp, causticTex, causticSamp, bettaShadow);
       return col;
     }
     if (GLOBES_KELP && event == 4) {
@@ -2064,10 +2068,10 @@ ${rt ? RT_MARCH : `    // The next sample is read with this one, where it will b
       return col;
     }
     if (GLOBES_KOI && event == 8) {
-      let sh = betta_shade(bettaTex, bettaAtlas, bettaSamp, bh, dir, p + dir * t, inWater, lit, lightTex, lightSamp);
+      let sh = betta_shade(bettaTex, bettaAtlas, bettaSamp, bh, dir, p + dir * t, inWater, lit, lightTex, lightSamp, lit.z * pathLen); // (pathLen now reaches the hit)
       col += thr * sh.rgb * sh.a;
       if (sh.a > 0.99) { return col; }
-      thr *= 1.0 - sh.a;
+      thr *= (1.0 - sh.a) * sh.tint;
       p += dir * (t + 0.00005);
       continue;
     }

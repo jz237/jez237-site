@@ -3,7 +3,7 @@
 Original: https://github.com/willwaltz/globes
 Author: Will Waltz · MIT License
 Upstream commit: 93c3b814bbca53463e8207b8e3c95fca8940dff5
-Imported: 2026-10-22 · Hosting build: 1.4.0
+Imported: 2026-10-22 · Hosting build: 1.5.0
 Public route: https://jez237.com/demos/globes/
 
 The upstream source and MIT attribution are retained. Hosting adds the gallery
@@ -48,6 +48,30 @@ gentler pose springs and distributed billowing let the proximal/middle membrane
 bend under water pressure as well as the fringe. Display increases tension and
 transports existing folds with the one-second rest-fan opening; it does not erase
 flow-driven deformation. The paired-fin flank guard uses the curved local normal.
+
+Version 1.5 pulls the broad-fin compliance back from 1.4, which over-corrected:
+cross-ray shear/bend constants are about 0.45/0.15/0.15/0.075, billowing is
+`0.05 + drive*0.095`, turn-sweep is `0.30*turnBend*v`, and stiffness rises toward
+the root (`3.8 + 36*(1-v)^2.4`, plus a display-flare term). The root third now
+holds its shape under swimming load while the free edge still lags and flutters;
+pectoral/other fins (kind ≥ 3) are unchanged.
+
+The 1.5 realism pass is in the ray tracer, not the animation. Each triangle's
+fin `(u,v)` is stored in a one-texel-per-triangle side table appended after the
+triangle block (the 4-texel triangle stride is unchanged; height uses
+`order.length*5`). The shader uses it for:
+- **Fin rays**: fine ridges plus branching ray splits near the fringe, faded by
+  the actual pixel footprint so zoomed-out views do not shimmer.
+- **Translucent fins**: light passes through the membrane tinted by the fin hue,
+  more clear toward the fringe, with a lit back-face glow when the sun is behind.
+- **Sun occlusion**: up to four membrane hits darken a point by the fin hue, so
+  the body sits in the tinted shadow of its own dorsal/anal fins; skin and eye
+  block fully.
+- **Cast shadow on the sand**: a four-tap soft shadow of the whole fish. From
+  the near-overhead sun it is a thin sliver in side views; that is physical.
+- **Skin**: a restrained sheen and thin-film colour shift on scale tiles.
+These are rendering approximations, not a spectral or subsurface model. Desktop
+default (64³, one ray) still measured 60 fps on the host at 1200×900.
 
 The neck now leads the route, instead of rotating about the center of the fish.
 `BodyMotion.advanceTurn()` carries a history of local tangent angles down the

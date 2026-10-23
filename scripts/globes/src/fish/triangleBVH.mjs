@@ -3,8 +3,11 @@
 // Header: node count / triangle texel offset / triangle count / visible.
 // Node: min.xyz + escape index, max.xyz + (leaf start + 1, or 0).
 // Triangle: a.xyz + material, b.xyz + uv0.x, c.xyz + uv0.y, uv1.xy + uv2.xy.
+// After all triangles comes a side table, one texel per triangle: each xyz holds a
+// vertex's fin (u,v) as two 12-bit values packed into one exactly-representable
+// float (u * 4096 + v), so the shader can tell fin rays from membrane.
 export class TriangleBVH {
-  constructor(positions, indices, uv, materials) {
+  constructor(positions, indices, uv, materials, finUV) {
     this.indices = indices;
     this.order = [];
     this.nodes = [];
@@ -36,7 +39,7 @@ export class TriangleBVH {
     build(Array.from({ length: centroids.length }, (_, i) => i));
     this.triOffset = 1 + this.nodes.length * 2;
     this.width = 1024;
-    this.height = Math.ceil((this.triOffset + this.order.length * 4) / this.width);
+    this.height = Math.ceil((this.triOffset + this.order.length * 5) / this.width);
     this.data = new Float32Array(this.width * this.height * 4);
     this.data.set([this.nodes.length, this.triOffset, this.order.length, 0]);
     for (let n = 0; n < this.nodes.length; n++) {
@@ -50,6 +53,12 @@ export class TriangleBVH {
       this.data[o + 3] = materials[t];
       this.data[o + 7] = uv[a * 2]; this.data[o + 11] = uv[a * 2 + 1];
       this.data.set([uv[b * 2], uv[b * 2 + 1], uv[c * 2], uv[c * 2 + 1]], o + 12);
+    }
+    const pack = i => finUV ? Math.round(finUV[i * 2] * 4095) * 4096 + Math.round(finUV[i * 2 + 1] * 4095) : 0;
+    const side = (this.triOffset + this.order.length * 4) * 4;
+    for (let i = 0; i < this.order.length; i++) {
+      const t = this.order[i];
+      for (let v = 0; v < 3; v++) this.data[side + i * 4 + v] = pack(indices[t * 3 + v]);
     }
     this.refit(positions);
   }

@@ -7,8 +7,17 @@ test('packed leaves cover each triangle once; refits enclose every moving vertex
     const p = Float32Array.from({ length: count * 9 }, (_, i) => Math.sin(i * 1.43));
     const indices = Uint32Array.from({ length: count * 3 }, (_, i) => i);
     const uv = new Float32Array(count * 6);
-    const b = new TriangleBVH(p, indices, uv, Array(count).fill(2));
+    const finUV = Float32Array.from({ length: count * 6 }, (_, i) => (i % 7) / 6);
+    const b = new TriangleBVH(p, indices, uv, Array(count).fill(2), finUV);
     assert.equal(new Set(b.order).size, count);
+    for (let i = 0; i < count; i++) {
+      const t = b.order[i], side = (b.triOffset + count * 4 + i) * 4;
+      for (let v = 0; v < 3; v++) {
+        const packed = b.data[side + v], at = indices[t * 3 + v] * 2;
+        assert.equal(Math.floor(packed / 4096) / 4095, Math.round(finUV[at] * 4095) / 4095);
+        assert.equal((packed % 4096) / 4095, Math.round(finUV[at + 1] * 4095) / 4095);
+      }
+    }
     for (let pose = 0; pose < 3; pose++) {
       for (let i = 0; i < p.length; i++) p[i] = Math.sin(i * 1.43 + pose) * (pose + 1);
       b.refit(p);

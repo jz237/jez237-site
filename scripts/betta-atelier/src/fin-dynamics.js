@@ -61,12 +61,12 @@ export class FinDynamics {
     for (let j = 0; j < rows; j++) for (let i = 0; i < columns; i++) {
       const n = j * columns + i;
       if (j) add(n - columns, n, 0.96); // non-stretching fin rays
-      if (i) add(n - 1, n, kind < 3 ? 0.32 : 0.65, true); // membrane between rays
+      if (i) add(n - 1, n, kind < 3 ? 0.45 : 0.65, true); // membrane between rays
       if (j && i) {
-        add(n - columns - 1, n, kind < 3 ? 0.09 : 0.22, true);
-        add(n - columns, n - 1, kind < 3 ? 0.09 : 0.22, true);
+        add(n - columns - 1, n, kind < 3 ? 0.15 : 0.22, true);
+        add(n - columns, n - 1, kind < 3 ? 0.15 : 0.22, true);
       }
-      if (j > 1) add(n - columns * 2, n, kind < 3 ? 0.035 : 0.12); // ray bending, not ray stretching
+      if (j > 1) add(n - columns * 2, n, kind < 3 ? 0.075 : 0.12); // ray bending, not ray stretching
     }
     this.links = new Float32Array(links);
     this.folding = new Uint8Array(folding);
@@ -98,7 +98,7 @@ export class FinDynamics {
               + turnBend * (0.20 + u * 0.20);
           // Bend throughout the ray, not just a ruffled outer border. Phase
           // varies across the fan and along each ray, so the membrane billows.
-          const billow = (1 - flare * 0.7) * (0.065 + drive * 0.12)
+          const billow = (1 - flare * 0.7) * (0.05 + drive * 0.095)
             * Math.sin(t * 1.7 - u * 5.5 - v * 2.2 + kind * 1.8);
           const bend = (wave + billow) * (0.22 + 0.78 * v);
           // Bend about the ray's in-plane perpendicular; roots stay attached.
@@ -109,7 +109,7 @@ export class FinDynamics {
             // The broad caudal fan wraps behind the peduncle during a turn.
             // Rotate across its span, preserving ray length and vertical spread;
             // the membrane solver supplies the slower free-edge follow-through.
-            const sweep = turnBend * 0.25 * v;
+            const sweep = turnBend * 0.30 * v;
             const cx = x * Math.cos(sweep) - z * Math.sin(sweep);
             z = x * Math.sin(sweep) + z * Math.cos(sweep); x = cx;
           }
@@ -221,7 +221,7 @@ export class FinDynamics {
       // Resting/swimming membranes are soft even in their inner half. Display
       // adds muscular tension without pinning their positions against the water.
       const stiffness = this.kind < 3
-        ? 2.5 + 14 * (1 - v) ** 2 + state.flare * (5 + 22 * (1 - v) ** 2)
+        ? 3.8 + 36 * (1 - v) ** 2.4 + state.flare * (5 + 22 * (1 - v) ** 2)
         : (this.kind === 4 ? 2.0 : 5.0) + (this.kind === 3 ? 160 : 110) * (1 - v) ** 3;
       const dx = nx * pressure + rvx * 0.9, dy = ny * pressure + rvy * 0.9, dz = nz * pressure + rvz * 0.9;
       for (let k = 0; k < 3; k++) {

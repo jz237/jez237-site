@@ -2,8 +2,9 @@
 
 The standalone published build remains 1.7. Shared source also includes the globe
 1.4 motion revision: broad fins bend across their full span rather than pinning
-the inner half to a target; ray-length constraints, root attachment and the
-one-second display remain. Optional host locomotion supplies model-space speed
+the inner half to a target; globe 1.5 then stiffened the root third and trimmed
+shear/billow so the free edge flexes more than the base. Ray-length constraints,
+root attachment and the one-second display remain. Optional host locomotion supplies model-space speed
 and a separate voluntary `steerRate` for delayed head-to-tail tangent memory and
 deep, curvature-limited turns. The globe anchors its route at the neck and keeps
 passive fluid rotation separate from muscle flexion. See

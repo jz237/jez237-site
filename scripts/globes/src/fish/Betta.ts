@@ -32,7 +32,7 @@ export class Betta {
     this.fish.userData.locomotion = this.locomotion();
     this.fish.userData.update(0);
     this.rig.updateMatrixWorld(true);
-    const positions: number[] = [], indices: number[] = [], uv: number[] = [], materials: number[] = [];
+    const positions: number[] = [], indices: number[] = [], uv: number[] = [], finUV: number[] = [], materials: number[] = [];
     this.fish.traverse((object: THREE.Object3D) => {
       if (!(object as THREE.Mesh).isMesh) return;
       const mesh = object as THREE.Mesh, g = mesh.geometry;
@@ -41,6 +41,8 @@ export class Betta {
       for (let i = 0; i < g.attributes.position.count; i++) {
         positions.push(g.attributes.position.getX(i), g.attributes.position.getY(i), g.attributes.position.getZ(i));
         uv.push(g.attributes.uv.getX(i), g.attributes.uv.getY(i));
+        const fu = g.attributes.finUV;
+        finUV.push(fu ? fu.getX(i) : 0, fu ? fu.getY(i) : 0);
       }
       const mat = mesh.material as THREE.MeshPhysicalMaterial;
       // 0: skin; 1: caudal; 2: other fins; 3: eye; 4: dark mouth/pupil.
@@ -49,7 +51,7 @@ export class Betta {
       for (let i = 0; i < g.index!.count / 3; i++) materials.push(material);
     });
     this.vertices = new Float32Array(positions);
-    this.bvh = new TriangleBVH(this.vertices, new Uint32Array(indices), new Float32Array(uv), materials);
+    this.bvh = new TriangleBVH(this.vertices, new Uint32Array(indices), new Float32Array(uv), materials, new Float32Array(finUV));
     this.texture = new THREE.DataTexture(this.bvh.data, this.bvh.width, this.bvh.height, THREE.RGBAFormat, THREE.FloatType);
     this.texture.minFilter = this.texture.magFilter = THREE.NearestFilter;
     this.texture.generateMipmaps = false;
