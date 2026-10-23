@@ -24690,5 +24690,124 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-22-factual-infographic-factual-infographic-plantar-fasciitis-l",
+    "title": "Factual infographic: Plantar Fasciitis — Load at the Heel",
+    "tests": "factual_subtype: medical-health-infographic; artwork-led unboxed anatomical atlas; source-backed clinical education; no subjective review; archive_slot=2026-10-22T23:20; concept=plantar-fasciitis-fascia-loading-heel-pain; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished, artwork-led medical infographic, directly on the canvas, titled “PLANTAR FASCIITIS” with the subtitle “Load at the heel”. A richly shaded anatomical atlas in luminous graphite, ivory, muted indigo and warm coral, on a very pale cool background, with precise fine ink, tactile collagen fibers and restrained translucent watercolor shading. Compose asymmetrically around a large oblique medial cutaway of a human foot sweeping from lower left heel toward upper right toes. Accurately show the heel bone and arch bones in ivory, a fibrous plantar fascia running along the sole from heel to forefoot, and soft skin translucency. Emphasize the fascia's heel attachment with a small coral glow indicating the painful region, not a ruptured ligament. Delicate curved leader lines and freely placed readable labels: “Heel bone”, “Plantar fascia”, “Supports the arch”, and “Common pain site”. Show subtle tension arrows following the fascia, with the concise explanation “Excess load can irritate the fascia”. No unsupported microscopic lesions or exaggerated bone spurs. An organically nested enlarged study at the heel edge shows parallel fascia fibers meeting bone, schematic and labeled “Heel attachment · schematic”.\nLet the anatomy lead the entire composition; no rectangular cards, grids, boxed columns or dashboard. Follow the arch curve with an open walking rhythm study: a small dignified fictional 55-year-old man with medium-brown skin, close-cropped salt-and-pepper hair, stocky build, loose teal trousers and cream shirt rising from a chair, shown only as a light contextual vignette, and two small grounded foot silhouettes leading toward the main illustration. Caption this path “First steps after rest often hurt most” then “May ease at first; prolonged standing or walking can worsen pain”. Connect the context without implying every person follows exactly the same pattern.\nAbove the heel leave open white space for a concise risk-factor line: “Higher load • long standing • tight calves • poor shoe support”. Below the forefoot, integrate a finely rendered supportive shoe with cushioned heel and arch insert, and a small schematic calf-stretch pose: the same man at a wall, rear knee straight and rear heel grounded. Use the headings and exact short text “Reduce aggravating activity”, “Supportive shoes or inserts”, “Gentle calf and sole stretches” and “A physiotherapist can guide care”. Do not add repetitions, doses, timelines, cure guarantees, or extra treatments. Near the main heel place an elegant single clarification: “A heel spur is not the cause of plantar fasciitis pain.”\nUse the remaining open margin for clinically essential context in clear concise type, not tiny footnotes: “Assessment: symptoms + foot examination; imaging only when needed to rule out other causes.” “Get checked: persistent or worsening pain, numbness, or foot pain with diabetes.” A restrained coral open callout with a small warning symbol: “Urgent assessment: severe pain after injury, a snap/pop, or inability to walk — do not assume plantar fasciitis.” Footer: “General education, not a diagnosis.” Keep all text legible and correctly spelled. Main anatomy occupies most of the canvas and every smaller study grows naturally from its curves with generous breathing room. Detailed accurate foot structures, subtle bone texture, fascia striations and soft light, never gore. Avoid decorative fake anatomy, invented claims, statistics, bibliography, URLs, brands, logos, watermarks, photos of a poster, frames, book mockups or UI. Omit optional decorative flourishes if needed to retain spacious artistry and essential clinical text.",
+    "image": "images/2026-10-22-factual-infographic-factual-infographic-plantar-fasciitis-l.jpg",
+    "thumb": "thumbs/2026-10-22-factual-infographic-factual-infographic-plantar-fasciitis-l.webp",
+    "color": "#d7d5d3",
+    "date": "2026-10-22",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "plantar-fasciitis-fascia-loading-heel-pain",
+      "imageSha256": "ceee899efe0df7d9c4bc7b42e448100a3594129e4ceee7abc100fa673835aad7",
+      "imageDHash": "cb8ce28636c48ab0"
+    },
+    "factualInfographic": {
+      "topic": "How plantar fasciitis affects the arch-supporting fascia, causes load-related heel pain, and is evaluated and managed",
+      "description": "An artwork-led foot atlas explaining plantar fascia anatomy, load-related heel pain, assessment, supportive care and important alternative-injury warning signs.",
+      "sourceNote": "AAOS, https://www.orthoinfo.org/diseases--conditions/plantar-fasciitis-and-bone-spurs/ ; NHS, https://www.nhs.uk/conditions/plantar-fasciitis/ ; NHS heel-pain triage, https://www.nhs.uk/symptoms/foot-pain/heel-pain/ . Verified fascia anatomy, loading, symptom pattern, risk associations, assessment, conservative management, heel-spur distinction and warning signs.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-23T03:21:28.080650+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "American Academy of Orthopaedic Surgeons",
+            "title": "Plantar Fasciitis and Bone Spurs",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.orthoinfo.org/diseases--conditions/plantar-fasciitis-and-bone-spurs/"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Plantar fasciitis",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/plantar-fasciitis/"
+          },
+          {
+            "id": "S3",
+            "publisher": "NHS",
+            "title": "Heel pain",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/symptoms/foot-pain/heel-pain/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The plantar fascia is a strong band on the underside of the foot connecting the heel to the front of the foot and supporting the arch.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Excess loading can irritate and damage the plantar fascia, causing plantar heel pain; the cause is not always clear.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Pain typically occurs under the heel or arch, is worse on first steps after rest, may ease with initial movement, and can worsen with prolonged standing or walking.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Increased activity, long standing on hard surfaces, tight calves, and poor shoe support can increase risk.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "A clinician assesses symptoms and examines the foot; imaging may be used to exclude other causes but is not routinely needed.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Initial care includes reducing aggravating activity, cushioned supportive shoes or inserts, and gentle calf and plantar fascia stretching; a physiotherapist can guide exercises.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Heel spurs are not the cause of plantar fasciitis pain; many people with heel spurs have no pain.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Seek clinical assessment for worsening or persistent pain, tingling or loss of feeling, or foot pain with diabetes.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Severe heel pain after injury, a snap or pop during injury, or inability to walk warrants urgent assessment and may indicate a different injury rather than plantar fasciitis.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "This is general medical education and does not diagnose the cause of heel pain; people should not self-diagnose heel pain.",
+            "sourceIds": [
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
