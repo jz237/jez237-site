@@ -1,4 +1,4 @@
-# Living Silk — Betta Atelier 1.4
+# Living Silk — Betta Atelier 1.5
 
 An interactive, genuinely volumetric male halfmoon Betta study for Jez237.
 Live: https://jez237.com/demos/betta-atelier/
@@ -141,6 +141,9 @@ screenshots: `/home/jez237/.openclaw/workspace/tmp/betta-water-fins-20261022/`.
 
 ## Muscular body and breathing · revision 1.4 (2026-10-22)
 
+Historical behavior: the exaggerated low-effort swing described below is
+superseded by revision 1.5. The spine and breathing anatomy remain in use.
+
 Jez requested a visibly less rigid trunk, swimming effort even in still water,
 and more pronounced mouth/gill respiration. `src/body-motion.js` integrates an
 arc-length spine from a head-to-tail bending wave. Cross-sections rotate along
@@ -169,3 +172,44 @@ fixtures. Evidence: `/home/jez237/.openclaw/workspace/tmp/betta-body-breathing-2
 
 Effort, cadence and ventilation are artistic controls, not measured betta
 physiology or a fluid-volume simulation. Fin-to-fin collision remains approximate.
+
+
+## Reference-informed compact gait · revision 1.5 (2026-10-22)
+
+Jez corrected the movement: a resting betta holds almost still; propulsion uses
+quicker, narrower strokes, with much faster pectorals against a current. Still
+water is now the initial setting, with quiet trunk motion and less whole-body bob.
+The 32-second path now spends 20 seconds holding, with two short swimming bouts
+and separate turns. The visible mouth/gill pump remains.
+
+Reference: Colorsbetta Thailand, “Red Copper Halfmoon Male, Live Betta Fish
+Thailand”, https://www.youtube.com/watch?v=WDZqSs-VLXc (published 2019).
+Reviewed twelve overview frames and 36 usable dense samples: 4.30–5.00 seconds
+(turn, every 0.05 s) and 20.00–21.00 seconds (holding, every 0.05 s). The first six
+attempted samples at 4.00–4.25 showed the loading page and were excluded.
+The holding sequence has a relatively straight trunk, whereas the turn changes
+curvature and the trailing fin fan follows. This fish is displaying near another
+betta, not resting in a controlled current experiment. Capture timestamps are
+playback times, not calibrated biological beat-rate measurements. Current-related
+cadence follows Jez's observations; no flow rate was inferred from these images.
+The earlier Commons GIF was rejected as a tuning reference because its camera
+motion and blur obscured the body. Reference captures are local research evidence,
+not bundled assets, textures or replacements for the original artwork.
+
+`src/swim-gait.js` separates locomotor/current effort from excursion. The idle drive
+is below the propulsion threshold. Body cadence grows from approximately 0.55 to
+4.7 cycles/s and pectoral cadence from 1.6 to 7.4 cycles/s as effort rises; those are
+animation settings, not measurements of the reference fish. Peak trunk wave angle
+is limited to 0.246 radians (~14 degrees); turn curvature is separate. The large
+fins retain passive drag and inertia rather than all following a rigid sine wave.
+Pectoral rays have an actively driven proximal span and free outer membrane; extra
+constraint passes stabilize the pectorals during rapid strokes. A root-to-tip
+length limit prevents the tiny insertion segments of long fins from stretching
+during fast trunk motion. Merely increasing a
+weak spring's target frequency had filtered the visible beat into a slow sway.
+
+Ten tests cover fin anchoring/strain, direction response, frame-rate consistency,
+quiet-hover versus compact propulsion, breathing order, smooth effort changes and
+**actual simulated pectoral edge cadence**, including at 30 fps. Browser QA checks
+rendered behavior and original R2 textures on desktop and touch-emulated phone.
+Evidence: `/home/jez237/.openclaw/workspace/tmp/betta-gait-reference-20261022/`.

@@ -2,6 +2,7 @@ import * as T from "three";
 import { addMacroSurface } from "./surfaces.js";
 import { FinDynamics, water, waterVelocity } from "./fin-dynamics.js";
 import { BodyMotion, bodyGLSL, SPINE_COUNT } from "./body-motion.js";
+import { SwimGait } from "./swim-gait.js";
 const PI = Math.PI,
   lerp = T.MathUtils.lerp,
   clamp = T.MathUtils.clamp;
@@ -52,7 +53,7 @@ vec3 wetFin(vec2 uv) {
       "#include <normal_fragment_begin>\nnormal=normalize(cross(dFdx(vViewPosition),dFdy(vViewPosition)))*faceDirection;",
     );
   };
-  mat.customProgramCacheKey = () => `wet-betta-1.4-${!!dynamics}-${operculum}`;
+  mat.customProgramCacheKey = () => `wet-betta-1.5-${!!dynamics}-${operculum}`;
   return mat;
 }
 // Anatomical silhouette measured in the unmodified lateral reference image.
@@ -635,15 +636,12 @@ export function createBetta() {
     pupil.position.set(ex, ey + 0.006, side * 0.157);
     fish.add(pupil);
   }
+  const gait = new SwimGait();
   let prev = 0,
-    phase = 0,
-    breathPhase = 0,
-    effort = 0.18,
-    pectoralPhase = 0,
     flowStrength = water.strength,
-    drive = 0.1,
+    drive = 0.045,
     heading = 0.12,
-    tx = 0,
+    tx = 0.3,
     ty = 0,
     turn = 0;
   const cycle = 32;
@@ -652,7 +650,8 @@ export function createBetta() {
     macroTextures,
     scaleCount: 0,
     finCount: 7,
-    revision: "1.4",
+    revision: "1.5",
+    gait,
     bodyMotion,
     finDynamics,
     water,
@@ -669,38 +668,38 @@ export function createBetta() {
         targetY = 0,
         mode = "hover";
       const smooth = (a, b, x) => T.MathUtils.smoothstep(x, a, b);
-      if (q < 5) {
+      if (q < 10) {
         targetX = 0.3;
-        targetY = 0.025 * Math.sin(t * 0.8);
-      } else if (q < 11) {
-        const u = smooth(5, 11, q);
+        targetY = 0.004 * Math.sin(t * 0.8);
+      } else if (q < 13) {
+        const u = smooth(10, 13, q);
         desired = 0.36 * Math.sin(PI * u) + 0.07;
         targetX = lerp(0.3, -0.38, u);
         targetY = lerp(0, 0.09, u);
         targetHeading = 0.12 - 0.13 * Math.sin(PI * u);
         mode = "glide";
-      } else if (q < 17) {
-        const u = smooth(11, 17, q);
+      } else if (q < 16) {
+        const u = smooth(13, 16, q);
         targetX = -0.38;
         targetY = 0.09;
         targetHeading = 0.12 + PI * u;
         desired = 0.07 + 0.12 * Math.sin(PI * u);
         mode = "turn";
-      } else if (q < 20) {
+      } else if (q < 26) {
         targetX = -0.38;
         targetY = 0.09;
         targetHeading = PI + 0.12;
         desired = 0.045;
         mode = "hover";
-      } else if (q < 27) {
-        const u = smooth(20, 27, q);
+      } else if (q < 29) {
+        const u = smooth(26, 29, q);
         targetX = lerp(-0.38, 0.3, u);
         targetY = lerp(0.09, -0.03, u);
         targetHeading = PI + 0.12 - 0.12 * Math.sin(PI * u);
         desired = 0.32 * Math.sin(PI * u) + 0.07;
         mode = "glide";
       } else {
-        const u = smooth(27, 32, q);
+        const u = smooth(29, 32, q);
         targetX = 0.3;
         targetY = lerp(-0.03, 0, u);
         targetHeading = PI + 0.12 + PI * u;
@@ -729,23 +728,19 @@ export function createBetta() {
       const previousPosition = fish.position.clone();
       fish.position.set(
         tx + 0.325 * (1 - Math.cos(heading)),
-        ty + 0.009 * Math.sin(t * 1.31),
+        ty + 0.003 * Math.sin(t * 1.31),
         0.325 * Math.sin(heading),
       );
       fish.rotation.set(
-        0.012 * Math.sin(t * 0.57),
+        0.004 * Math.sin(t * 0.57),
         heading,
-        0.012 * Math.sin(t * 0.71) - drive * 0.025,
+        0.004 * Math.sin(t * 0.71) - drive * 0.025,
       );
       const velocity = dt ? fish.position.clone().sub(previousPosition).multiplyScalar(1 / dt).toArray() : [0, 0, 0];
       const localFlow = waterVelocity(t, fish.position.x, fish.position.y, fish.position.z, flowStrength, water.direction, []);
       const relativeFlow = Math.hypot(...localFlow.map((v, i) => v - velocity[i]));
-      effort = T.MathUtils.damp(effort, clamp(0.18 + drive * 1.2 + relativeFlow * 0.38, 0.18, 1), 2.5, dt);
-      // Fin drag costs effort even without imposed flow; currents add workload.
-      // Integrating cadence keeps changes smooth instead of jumping wave phase.
-      phase += dt * (3.4 + effort * 4.8);
-      breathPhase += dt * (3.6 + effort * 3.4);
-      pectoralPhase += dt * (12 + effort * 7);
+      gait.advance(dt, drive, relativeFlow, turn);
+      const { phase, effort, breathPhase, pectoralPhase } = gait;
       bodyMotion.update(phase, effort, turn, breathPhase);
       spineTexture.needsUpdate = dt > 0;
       uniforms.uPhase.value = phase;
@@ -755,7 +750,7 @@ export function createBetta() {
       uniforms.uMouth.value = bodyMotion.mouth;
       uniforms.uGill.value = bodyMotion.gill;
       const state = {
-        body: bodyMotion, time: t, phase, pectoralPhase, drive: effort * 0.55, turn, flare: uniforms.uFlare.value,
+        body: bodyMotion, time: t, phase, pectoralPhase, drive: effort * 0.55, effort, turn, flare: uniforms.uFlare.value,
         heading, angularVelocity: turn, velocity, origin: fish.position.toArray(),
         strength: flowStrength, direction: water.direction,
         bodyRadius(x, y) {

@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import { SwimGait } from './src/swim-gait.js';
 import { BodyMotion } from './src/body-motion.js';
 import { FinDynamics, waterVelocity } from './src/fin-dynamics.js';
 
@@ -50,7 +51,8 @@ test('water pushes each fin to the opposite side when the current reverses', () 
   for (const [kind, side] of [[0, 0], [1, 0], [2, 0], [3, -1], [3, 1], [4, -1], [4, 1]]) {
     const front = run(make(kind, side), 5, 0.8, 'front');
     const back = run(make(kind, side), 5, 0.8, 'back');
-    assert.ok(edgeMean(front, 2) - edgeMean(back, 2) > 0.06, `fin ${kind}/${side} ignored flow`);
+    // The small, actively braced pectorals deflect less than the broad trailing fins.
+    assert.ok(edgeMean(front, 2) - edgeMean(back, 2) > (kind === 3 ? 0.01 : 0.06), `fin ${kind}/${side} flow deflection ${edgeMean(front, 2) - edgeMean(back, 2)}`);
   }
 });
 test('muscular strokes continue in still water and pause freezes the membrane', () => {
@@ -74,17 +76,23 @@ test('fixed physics steps keep 30/60/120fps results close', () => {
 });
 
 
-test('spine bends substantially even at low effort without stretching its centerline', () => {
+test('hover has a quiet trunk, propulsion stays compact, and the spine preserves length', () => {
   const body = new BodyMotion(), point = [], samples = [];
   let min = Infinity, max = -Infinity;
   for (let phase = 0; phase < Math.PI * 2; phase += 0.1) {
-    body.update(phase, 0.18, 0, 0);
+    body.update(phase, 0, 0, 0);
     body.transform(1.056, 0, 0, point);
     min = Math.min(min, point[2]); max = Math.max(max, point[2]);
     body.transform(-1.408, 0.064, 0.15, point);
     assert.ok(Math.abs(point[0] + 1.408) < 0.00001, 'eye attachment moved');
   }
-  assert.ok(max - min > 0.8, `insufficient trunk flex: ${max - min}`);
+  assert.ok(max - min < 0.025, `hover trunk excursion: ${max - min}`);
+  min = Infinity; max = -Infinity;
+  for (let phase = 0; phase < Math.PI * 2; phase += 0.1) {
+    body.update(phase, 1, 0, 0); body.transform(1.056, 0, 0, point);
+    min = Math.min(min, point[2]); max = Math.max(max, point[2]);
+  }
+  assert.ok(max - min > 0.15 && max - min < 0.5, `propulsion excursion: ${max - min}`);
   body.update(2.1, 1, 0.8, 0);
   let length = 0;
   for (let x = -1.22; x <= 1.056; x += 0.002) {
@@ -105,4 +113,57 @@ test('mouth opens into a larger aperture before the gill covers open', () => {
   body.update(0, 0.3, 0, Math.PI * 0.5); const intake = body.mouth, firstGill = body.gill;
   body.update(0, 0.3, 0, Math.PI * 0.5 + 1.05);
   assert.ok(body.gill > firstGill && body.mouth < intake, 'gills should lag mouth intake');
+});
+
+
+test('flow and locomotion accelerate cadence without stopping quiet-hover breathing', () => {
+  const hover = new SwimGait(), current = new SwimGait(), swim = new SwimGait();
+  for (let i = 0; i < 600; i++) {
+    hover.advance(1 / 60, 0.045, 0); current.advance(1 / 60, 0.045, 0.9);
+    swim.advance(1 / 60, 0.38, 0);
+  }
+  assert.ok(hover.effort < 0.01 && hover.breathPhase > 30);
+  assert.ok(current.pectoralHz > hover.pectoralHz * 3);
+  assert.ok(current.bodyHz > 3 && swim.bodyHz > 3);
+  const before = structuredClone(current);
+  current.advance(0, 0, 0); assert.deepEqual({...current}, before);
+  current.advance(1 / 60, 0.045, 0);
+  assert.ok(current.effort > before.effort * 0.9, 'flow changes should ease, not snap');
+});
+
+test('actual pectoral membrane beats faster under load, stays attached and resolves at 30fps', () => {
+  function sample(load, fps = 60) {
+    const fin = make(3, 1), gait = new SwimGait(), trace = [];
+    for (let i = 1; i <= fps * 7; i++) {
+      const t = i / fps; gait.advance(1 / fps, 0.045, load);
+      const s = state(t, load, 'right');
+      Object.assign(s, {phase:gait.phase, pectoralPhase:gait.pectoralPhase, effort:gait.effort, drive:gait.effort * 0.55});
+      s.body.update(gait.phase, gait.effort, 0, gait.breathPhase);
+      fin.advance(1 / fps, s);
+      if (i > fps * 4) trace.push(edgeMean(fin, 2));
+    }
+    const mean = trace.reduce((a,b)=>a+b,0) / trace.length;
+    let best = {hz:0,power:0};
+    for (let hz = 0.8; hz <= 9; hz += 0.05) {
+      let c=0,s=0; trace.forEach((x,i)=>{c+=(x-mean)*Math.cos(i/fps*hz*Math.PI*2);s+=(x-mean)*Math.sin(i/fps*hz*Math.PI*2)});
+      const power=c*c+s*s; if(power>best.power)best={hz,power};
+    }
+    assert.equal(fin.metrics().anchorError, 0);
+    assert.ok(fin.metrics().maxRayStrain < 0.15, JSON.stringify(fin.metrics()));
+    assert.ok(Math.max(...trace)-Math.min(...trace) > 0.015, 'membrane beat must remain visible');
+    return best.hz;
+  }
+  const hover=sample(0), loaded=sample(0.9), phone=sample(0.9,30);
+  assert.ok(loaded > hover * 2.5, `rendered cadence ${hover} -> ${loaded}`);
+  assert.ok(Math.abs(loaded-phone)<0.35, `30fps alias/drift ${loaded} vs ${phone}`);
+});
+
+test('a long fin with distributed body insertions does not stretch during fast trunk strokes', () => {
+  const fin = new FinDynamics({kind:2,side:0,point:(u,v)=>[-0.7+u*1.7,-0.3-v*(0.2+u*1.1),0]});
+  for (let i=1;i<=240;i++) {
+    const s=state(i/60,1,'changing');s.phase=i/60*27;s.body.update(s.phase,1,0.4,s.time*5);
+    fin.advance(1/60,s);
+    assert.equal(fin.metrics().anchorError,0);
+    assert.ok(fin.metrics().maxRayStrain<0.07,JSON.stringify(fin.metrics()));
+  }
 });

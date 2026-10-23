@@ -7,7 +7,7 @@ export class BodyMotion {
   constructor() {
     this.data = new Float32Array(SPINE_COUNT * 4);
     this.mouth = this.gill = 0;
-    this.update(0, 0.18, 0, 0);
+    this.update(0, 0, 0, 0);
   }
   update(phase, effort, turn, breathPhase) {
     this.effort = effort;
@@ -19,7 +19,9 @@ export class BodyMotion {
     for (let i = 0; i < SPINE_COUNT; i++) {
       const u = clamp((SPINE_START + i * dx + 1.22) / 2.276, 0, 1);
       const envelope = u * u * (3 - 2 * u);
-      const angle = envelope * ((0.42 + effort * 0.74) * Math.sin(phase - u * 3.1) + clamp(turn, -1, 1) * 0.62);
+      // Compact propulsion strokes; turning curvature is a separate maneuver.
+      // Quiet holding has almost no trunk excursion, but breathing continues.
+      const angle = envelope * ((0.006 + effort * 0.24) * Math.sin(phase - u * 3.1) + clamp(turn, -1, 1) * 0.46);
       const c = Math.cos(angle), s = Math.sin(angle);
       if (i) { x += dx * (oldCos + c) * 0.5; z += dx * (oldSin + s) * 0.5; }
       this.data.set([x, z, c, s], i * 4);

@@ -1,7 +1,7 @@
 // A reduced-order wet membrane: stiff rays, compliant cross-ray tissue, anchored
 // insertions and velocity-dependent water drag. Not a CFD/biological calibration.
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
-export const water = { strength: 0.38, direction: 'changing' };
+export const water = { strength: 0, direction: 'changing' };
 
 // World-space current. All fins and suspended particles sample the same field.
 // Direction changes ease in at the caller; eddies vary in space, not per frame.
@@ -87,8 +87,8 @@ export class FinDynamics {
           const angle = Math.atan2(y, x) * spread, length = Math.hypot(x, y);
           x = length * Math.cos(angle); y = length * Math.sin(angle);
           const wave = kind === 0
-            ? (0.09 + drive * 0.54) * Math.sin(phase - 2.5 - v * 0.8) + turn * 0.12
-            : (0.09 + drive * 0.22) * Math.sin(phase * 0.8 - u * 3.7 - v * 0.7 + kind * 1.8);
+            ? (0.012 + drive * 0.20) * Math.sin(phase - 2.5 - v * 0.8) + turn * 0.12
+            : (0.025 + drive * 0.13) * Math.sin(phase * 0.8 - u * 3.7 - v * 0.7 + kind * 1.8);
           const bend = wave * v;
           // Bend about the ray's in-plane perpendicular; roots stay attached.
           const length3 = Math.hypot(x, y);
@@ -97,7 +97,8 @@ export class FinDynamics {
         } else if (kind === 3) {
           // Alternating rowing stroke, then feathered/cupped recovery.
           const beat = pectoralPhase + (side < 0 ? Math.PI : 0);
-          const stroke = side * (0.48 * Math.sin(beat) - 0.12 + 0.18 * Math.sin(beat - v * 1.5) * v);
+          const power = 0.55 + 0.45 * (state.effort ?? drive);
+          const stroke = side * (power * (0.48 * Math.sin(beat) + 0.18 * Math.sin(beat - v * 1.5) * v) - 0.12);
           const cx = x * Math.cos(stroke) - z * Math.sin(stroke);
           z = x * Math.sin(stroke) + z * Math.cos(stroke); x = cx;
           const feather = side * (0.18 + 0.72 * Math.max(0, Math.cos(beat))) * v;
@@ -182,7 +183,18 @@ export class FinDynamics {
       }
     }
     // Alternate constraint traversal to avoid a persistent preferred bend direction.
-    for (let pass = 0; pass < 4; pass++) {
+    for (let pass = 0; pass < (this.kind === 3 ? 12 : 4); pass++) {
+      // Pectoral rays are actively rotated by the muscular base, not merely
+      // pulled by a weak spring (which filters a rapid stroke into a slow sway).
+      // Actuation fades across the span; the outer membrane stays water-driven.
+      if (this.kind === 3 && pass < 4) for (let j = 1; j < h; j++) {
+        const v = j / (h - 1), u = clamp((v - 0.22) / 0.55, 0, 1);
+        const muscle = 0.5 * (1 - u * u * (3 - 2 * u));
+        for (let i = 0; i < w; i++) for (let k = 0; k < 3; k++) {
+          const q = (j * w + i) * 3 + k;
+          p[q] += (target[q] - p[q]) * muscle;
+        }
+      }
       for (let l = pass % 2 ? links.length - 4 : 0; l >= 0 && l < links.length; l += pass % 2 ? -4 : 4) {
         const a = links[l], b = links[l + 1], ai = a * 3, bi = b * 3;
         const dx = p[bi] - p[ai], dy = p[bi + 1] - p[ai + 1], dz = p[bi + 2] - p[ai + 2];
@@ -192,6 +204,19 @@ export class FinDynamics {
         const wa = correction * weights[a], wb = correction * weights[b];
         p[ai] += dx * wa; p[ai + 1] += dy * wa; p[ai + 2] += dz * wa;
         p[bi] -= dx * wb; p[bi + 1] -= dy * wb; p[bi + 2] -= dz * wb;
+      }
+    }
+    // Fast trunk strokes can otherwise stretch tiny insertion segments of the
+    // long fins before the iterative membrane constraints converge. A final
+    // root-to-tip ray limit carries that correction outward without moving roots.
+    if (this.kind < 3) for (let j = 1; j < h; j++) for (let i = 0; i < w; i++) {
+      const q = (j * w + i) * 3, a = q - w * 3;
+      const dx = p[q] - p[a], dy = p[q + 1] - p[a + 1], dz = p[q + 2] - p[a + 2];
+      const length = Math.hypot(dx, dy, dz);
+      const restLength = Math.hypot(this.rest[q] - this.rest[a], this.rest[q + 1] - this.rest[a + 1], this.rest[q + 2] - this.rest[a + 2]);
+      if (length > 1e-7 && restLength > 1e-7) {
+        const ratio = clamp(length, restLength * 0.94, restLength * 1.06) / length;
+        p[q] = p[a] + dx * ratio; p[q + 1] = p[a + 1] + dy * ratio; p[q + 2] = p[a + 2] + dz * ratio;
       }
     }
     // Paired fins may fold along the flank, but must not pass through the fish.
