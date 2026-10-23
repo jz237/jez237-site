@@ -8,3 +8,9 @@ export function finalTwoBanner(a:{id:number;name:string},b:{id:number;name:strin
   const [first,second]=b.id===playerId?[b,a]:[a,b],label=(c:{id:number;name:string})=>c.id===playerId?'YOU':`#${c.id+1} ${c.name}`;
   return `FINAL TWO · ${label(first)} VS ${label(second)}`.toUpperCase();
 }
+/** Revenge (offline): the player lands a hit of REVENGE.loss or more on the opponent who has dealt them the most damage. Once
+ * per grudge: it can fire again only after that rival has dealt the player more damage since. */
+export const REVENGE={loss:12} as const;
+export function revenge(rival:{id:number;damage:number}|null,victimId:number,loss:number,settled:number|undefined){
+  return !!rival&&rival.id===victimId&&Number.isFinite(loss)&&loss>=REVENGE.loss&&rival.damage>(settled??0);
+}

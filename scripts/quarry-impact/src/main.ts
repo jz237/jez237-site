@@ -27,7 +27,7 @@ import {showVenueBrowser,selectVenue,selectDemoVenue} from './venue-browser';
 import {readCameraSettings,playerChaseComposition,mountCameraSettings} from './camera-settings';
 import {ScreenCraze,trackCraze,hull,type CrazeState} from './screen-craze';
 import {speedFov,smoothAccel,roadBuzz} from './speed-feel';
-import {FINAL_TWO,finalTwo,finalTwoBanner} from './derby-moments';
+import {FINAL_TWO,finalTwo,finalTwoBanner,revenge} from './derby-moments';
 import {syncInterval,syncDue} from './vehicle-draw-batch';
 let syncFrame=0;
 let feelAccel=0,feelSpeed=0;
@@ -980,7 +980,7 @@ async function start(watch=demo) {
     camera.position.copy(cars[0].current).add(new T.Vector3(0, 4, -8));
     hud();
     sound.pause(false);
-    eventAwards.reset();playerTopSpeed=0;derbyAliveBefore=0;bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
+    eventAwards.reset();playerTopSpeed=0;derbyAliveBefore=0;revengeSettled.clear();bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
     beginReplay();
     if(preparationInterrupted||document.hidden)pause();
     return true;
@@ -1075,6 +1075,8 @@ function crowdFlashes(count:number){activeVenue.root.traverse(o=>{const flash=o.
 let playerTopSpeed=0;
 /** Cars alive at the last HUD update (for the final-two moment). */
 let derbyAliveBefore=0;
+/** Rival id -> the damage they had dealt the player when revenge was last taken on them. */
+const revengeSettled=new Map<number,number>();
 /** Show a HUD message. A higher-priority message (a smash) is not overwritten by ordinary ones until it expires. */
 let statusPriority=0;
 function toast(t: string, duration = 3, priority = 0) {
@@ -1601,6 +1603,8 @@ function step(dt: number) {
   for(const {contact:{a,b,point,point1,point2,va,vb,impulse,material,closing},damage,feedback} of impactAdjudicator.adjudicate(contacts,elapsed,collisionDamageMultiplier(mode==='race'&&!bangerRace(),damageRule()),online?.active?undefined:impactSpeedFactor,IMPACT_SPEED.cap)){
     // A feedback-only contact still clears stale glass/debris flags in hit().
     const smashLoss={a:0,b:0};
+    // Who had hurt the player most before this contact (a mutual crash must not count as revenge for itself).
+    const rivalBefore=!online?.active&&a&&b&&(a.id===0||b.id===0)?eventAwards.rivalOf(0):null;
     if(a){
       const before=a.health;
       const strippedA=stripCount(a);a.collisionHit(point1,vb.clone().sub(va).normalize(),damage,elapsed,b?.paintColor);if(b)creditStrip(b,a,strippedA);
@@ -1620,6 +1624,11 @@ function step(dt: number) {
     if(smashed){
       if(clock>=slowMoUntil){slowMoUntil=clock+SMASH.slowmo;slowMoScale=SMASH.scale;}
       toast(smashLabel(closing),1.4,2);recordRumbleImpact(1);sound.crowd(.85);crowdFlashes(SMASH_FLASHES);
+    }
+    // Revenge: the player's solid hit on the rival who has hurt them most (offline, once per grudge).
+    if(!online?.active&&!demo&&a&&b)for(const [victim,attacker,loss] of [[a,b,smashLoss.a],[b,a,smashLoss.b]] as const){
+      if(attacker.id!==0)continue;const rival=rivalBefore;
+      if(revenge(rival,victim.id,loss,revengeSettled.get(victim.id))){revengeSettled.set(victim.id,eventAwards.rivalOf(0)?.damage??rival!.damage);toast(`REVENGE · #${victim.id+1} ${DEFINITIONS[victim.kind].name}`,1.8,2);sound.crowd(.8);}
     }
     if(feedback){
       collisions++;
