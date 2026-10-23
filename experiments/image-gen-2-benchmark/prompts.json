@@ -25002,5 +25002,91 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-23-factual-infographic-factual-infographic-the-tapetum-a-secon",
+    "title": "Factual infographic: The Tapetum — A Second Pass for Light",
+    "tests": "Source-backed normal feline optics; explanatory ray colors and schematic layers; no sensitivity multiplier or disease profile; unboxed artistic nocturne; no subjective critic.; archive_slot=2026-10-23T08:20; concept=feline-tapetum-retina-reflected-light; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: extraordinary-senses",
+    "prompt": "Create a finished, elaborate scientific-art Cat Atlas infographic, artwork-led and organically integrated, not a boxed grid. Title in elegant large lettering: “THE TAPETUM”. Subtitle: “A second pass for light”. Small series line: “CAT ATLAS · EXTRAORDINARY SENSES”. Focus exclusively on the normal domestic cat’s retinal reflector; this is not a broad senses overview or disease chart.\n\nComposition: a sumptuous asymmetrical nocturne in midnight blue, mineral teal, warm copper and pale ivory. A dominant exquisitely rendered silver-and-black mackerel tabby in three-quarter head portrait rises from the lower left, attentive and relaxed, with anatomically credible rounded dim-light pupils, individual guard hairs, velvet nose and delicate whiskers. Gentle external illumination catches the eye; absolutely no eye beams, magical emission or neon glowing animal. Let the natural curve of the brow lead into a large beautiful scientific sagittal eye cutaway occupying the upper right. The cutaway is an explanatory study outside the intact portrait, not a literal wound. Use richly shaded gouache and precise fine technical ink on a deep blue softly textured ground, luminous translucent optical materials, selective copper foil-like annotation strokes. Render the artwork directly, not a photo of a poster or a book.\n\nEye study: show front cornea, iris opening/pupil, transparent lens, retina lining the inside rear wall, a distinctly thin tapetum lucidum behind the retina in the illustrated region, and outer wall; a short optic nerve exits posteriorly. Keep the retina in front of the reflector from the incoming light’s viewpoint. Trace one clear warm gold path from an external light source through pupil and lens, across the retina toward the tapetum; a contrasting cool turquoise arrow returns from the tapetum through that same retinal region. Arrowheads and precise leaders must make direction unmistakable. This is schematic ray geometry, not a promise of exact optical trajectories. Do not route reflection from the lens or imply the tapetum is in front of the retina. Use these short open labels only where anatomically appropriate: “Cornea”, “Pupil”, “Lens”, “Retina”, “Tapetum lucidum”, “Optic nerve”. Annotate the incoming path “Light enters” and return path “Unabsorbed light reflects back”. A nearby flowing sentence reads “A second chance for retinal absorption.” Another concise line reads “Greater sensitivity in dim light.” Do not add unsupported sensitivity multipliers, acuity claims, color-vision comparisons or disease information.\n\nBelow the cutaway, organically expand a small curved patch of the reflector into an intricate magnified microstructure study. Show stylized stacked cellular layers with aligned slender rodlets within cells, using scientific illustration rather than invented crystalline gems. Label “Ordered rodlets in tapetal cells” and “Layered structures reflect light”. Tiny honest qualifier: “Schematic layers and light paths · not to scale”. Avoid exact counts, exact dimensions and speculative chemical composition. Keep this a subordinate detail, not a competing large panel. Tie it to the tapetum with a delicate curved leader. Include a modest explanatory note in a generous area of negative space: “A reflector, not a light source.” All light is clearly supplied from outside the eye. Gold and teal distinguish incident and reflected rays, not natural tissue colors; include “Ray colors are explanatory.”\n\nReadable refined hierarchy, restrained text, genuine anatomy and clear optical mechanism. Weave labels into the open composition with fine leaders and curved pathways, no rigid cards, equal tiles or dashboard layout. Prioritize the extraordinary portrait, credible eye cutaway and clear two-pass mechanism; omit decorative microdetails if needed for breathing room without removing essential labels. No invented source quotations, no fake seals, no frame, no human figure, no unrelated factual filler. Opaque background. Request medium quality, auto size, one image.",
+    "image": "images/2026-10-23-factual-infographic-factual-infographic-the-tapetum-a-secon.jpg",
+    "thumb": "thumbs/2026-10-23-factual-infographic-factual-infographic-the-tapetum-a-secon.webp",
+    "color": "#3f3f3e",
+    "date": "2026-10-23",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1312x1199",
+    "dedup": {
+      "conceptKey": "feline-tapetum-retina-reflected-light",
+      "imageSha256": "e6d59ec89a9426914c3a8b3be8a5434b4d2fa695efffa8fec412bb399475178a",
+      "imageDHash": "33d5d5d31b333719"
+    },
+    "factualInfographic": {
+      "topic": "How the feline tapetum lucidum reflects unabsorbed light back through the retina",
+      "description": "Normal feline tapetal reflection, a second retinal pass, and schematic ordered rodlet microstructure.",
+      "sourceNote": "Read Cornell veterinary explanation and primary research abstracts; sourced normal anatomy and reflecting microstructure. Sources: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-vision-problems-host-possible-causes ; https://pmc.ncbi.nlm.nih.gov/articles/PMC1395665/ ; https://pmc.ncbi.nlm.nih.gov/articles/PMC2224636/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-23T12:21:33.053920+00:00",
+        "sources": [
+          {
+            "id": "cornell",
+            "publisher": "Cornell University College of Veterinary Medicine",
+            "title": "Feline Vision Problems: A Host of Possible Causes",
+            "sourceType": "university",
+            "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-vision-problems-host-possible-causes"
+          },
+          {
+            "id": "physiol",
+            "publisher": "The Journal of Physiology / The Physiological Society",
+            "title": "Some reflective properties of the tapetum lucidum of the cat’s eye",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1395665/"
+          },
+          {
+            "id": "jcb",
+            "publisher": "Journal of Biophysical and Biochemical Cytology / Rockefeller University Press",
+            "title": "Electron Microscopy of the Tapetum Lucidum of the Cat",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2224636/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The cornea admits light, the iris regulates entry through the pupil, and the lens focuses incoming light onto the retina; the optic nerve carries visual information toward the brain.",
+            "sourceIds": [
+              "cornell"
+            ]
+          },
+          {
+            "claim": "The tapetum lucidum lies behind the retina and reflects light that was not absorbed on its first passage, providing a second opportunity for retinal absorption and improving sensitivity in dim light.",
+            "sourceIds": [
+              "cornell"
+            ]
+          },
+          {
+            "claim": "The tapetum is a reflector of incoming light, not a light-producing organ; diagram arrows represent incident and reflected light rather than generated light.",
+            "sourceIds": [
+              "cornell",
+              "physiol"
+            ]
+          },
+          {
+            "claim": "Cat tapetal cells contain ordered groups of slender rodlets; multilayer reflecting domains account for reflection, with reflected wavelength depending on domain layer spacing. Schematic microscopic studies are not to scale.",
+            "sourceIds": [
+              "physiol",
+              "jcb"
+            ]
+          },
+          {
+            "claim": "A tapetal layer is part of the choroidal tissues behind the retina; schematic layers may be simplified and exaggerated for explanation, not represented as a full clinical histology section.",
+            "sourceIds": [
+              "jcb",
+              "cornell"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
