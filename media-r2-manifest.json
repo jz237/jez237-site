@@ -8030,6 +8030,27 @@
       "url": "https://media.jez237.com/demos/betta-atelier/references/2026-10-22/03-fin-material.jpg?v=11641b5eba25",
       "size": 557289,
       "sha256": "11641b5eba25fb0895481dfa0221f71a9de5fbff8b34fc145daf31acaf67e7c5"
+    },
+    {
+      "path": "demos/betta-atelier/macro-v1.2/04-head-macro.jpg",
+      "key": "demos/betta-atelier/macro-v1.2/04-head-macro.jpg",
+      "url": "https://media.jez237.com/demos/betta-atelier/macro-v1.2/04-head-macro.jpg?v=73e1f70901a5",
+      "size": 633905,
+      "sha256": "73e1f70901a5b6dcc999491620cb48e76c5bb4269d4b64f7399929c4a3048bd5"
+    },
+    {
+      "path": "demos/betta-atelier/macro-v1.2/05-scale-macro.jpg",
+      "key": "demos/betta-atelier/macro-v1.2/05-scale-macro.jpg",
+      "url": "https://media.jez237.com/demos/betta-atelier/macro-v1.2/05-scale-macro.jpg?v=63089308e453",
+      "size": 1070946,
+      "sha256": "63089308e453f6dc9c48da6484aeebbcf8aba60c41fc2f63b5b4c3b3078cc557"
+    },
+    {
+      "path": "demos/betta-atelier/macro-v1.2/06-membrane-macro.jpg",
+      "key": "demos/betta-atelier/macro-v1.2/06-membrane-macro.jpg",
+      "url": "https://media.jez237.com/demos/betta-atelier/macro-v1.2/06-membrane-macro.jpg?v=684f8aabab14",
+      "size": 825250,
+      "sha256": "684f8aabab14c0dd737c2f8da08d737b50c2fa30cb6e3f00b416fcf7ce789d31"
     }
   ]
 }

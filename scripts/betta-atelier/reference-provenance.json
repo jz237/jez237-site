@@ -39,6 +39,48 @@
         1284
       ],
       "prompt": "Photorealistic natural-history reference for building a museum-quality anatomically credible 3D male halfmoon Betta splendens. Same fish identity: long streamlined but muscular body, slightly upturned small mouth, black eyes with a thin copper iris, dark petrol-blue head, jewel turquoise/teal overlapping iridescent scales on the flank, crimson-to-burgundy fins with turquoise rays and fine pale translucent edges. The fish must look alive, organic, elegantly proportioned, not plastic or a toy; realistic fin anatomy, branching rays and thin pleated membranes, subtle imperfections. No words, labels, watermark, decorative objects, or extra fish. Neutral dark aquatic background, soft physically credible lighting. Macro material study concentrating on the broad halfmoon tail and trailing anal fin, with rear quarter of body and caudal peduncle visible for attachment reference. Backlight reveals thin crimson membranes, intricate repeatedly bifurcating turquoise fin rays, many narrow flowing folds and tiny scallops at the edge, interstitial translucent tissue and small irregular variations. Show the fin in a gentle three-dimensional wave rather than flat paper. Crisp microstructure, realistic softness and transmitted light, no opaque ribbon or fabric appearance."
+    },
+    {
+      "path": "demos/betta-atelier/macro-v1.2/04-head-macro.jpg",
+      "key": "demos/betta-atelier/macro-v1.2/04-head-macro.jpg",
+      "url": "https://media.jez237.com/demos/betta-atelier/macro-v1.2/04-head-macro.jpg?v=73e1f70901a5",
+      "size": 633905,
+      "sha256": "73e1f70901a5b6dcc999491620cb48e76c5bb4269d4b64f7399929c4a3048bd5",
+      "dimensions": [
+        1350,
+        1165
+      ],
+      "prompt": "Create a newly resolved extreme macro photographic section study of THIS SAME turquoise-and-crimson male Betta splendens. Use the supplied image as exact identity and pigment reference. This is a close-up texture source for a volumetric 3D model: a perpendicular side-on camera, no perspective skew, very soft broad neutral lighting, crisp focus throughout, no exaggerated specular streaks or baked directional shadows. Natural biological detail, not illustration, plastic, fabric, armor, or a CGI render. No words, numbers, borders, labels, watermarks, extra fish or decorative objects. Preserve the real scale of anatomical features relative to each other. Magnify only the head and gill cover region of the supplied 1536x1024 image: the rectangle from original pixel x145 to x435 and y300 to y550, filling the new image edge to edge. Reconstruct genuinely resolved macro detail rather than simply enlarging pixels. Keep the exact left-facing side profile and arrangement: small upturned mouth at the left, single black eye with thin copper iris, nostril, tiny irregular facial scales and skin pores, gill cover with natural curved edge on the right. Retain a little dark background around the silhouette exactly as the crop would. Do not change eye position or mouth proportions, do not include the pectoral fin except any tiny portion already inside that rectangle. The eye must have a deep black pupil and subtle corneal highlight, not a protruding bead.",
+      "inputReference": "01-profile.jpg",
+      "purpose": "Magnified section texture v1.2"
+    },
+    {
+      "path": "demos/betta-atelier/macro-v1.2/05-scale-macro.jpg",
+      "key": "demos/betta-atelier/macro-v1.2/05-scale-macro.jpg",
+      "url": "https://media.jez237.com/demos/betta-atelier/macro-v1.2/05-scale-macro.jpg?v=63089308e453",
+      "size": 1070946,
+      "sha256": "63089308e453f6dc9c48da6484aeebbcf8aba60c41fc2f63b5b4c3b3078cc557",
+      "dimensions": [
+        1665,
+        945
+      ],
+      "prompt": "Create a newly resolved extreme macro photographic section study of THIS SAME turquoise-and-crimson male Betta splendens. Use the supplied image as exact identity and pigment reference. This is a close-up texture source for a volumetric 3D model: a perpendicular side-on camera, no perspective skew, very soft broad neutral lighting, crisp focus throughout, no exaggerated specular streaks or baked directional shadows. Natural biological detail, not illustration, plastic, fabric, armor, or a CGI render. No words, numbers, borders, labels, watermarks, extra fish or decorative objects. Preserve the real scale of anatomical features relative to each other. Magnify a flat patch of the turquoise flank only, from original pixel x490 to x790 and y325 to y495. Fill the complete frame with this skin patch and reproduce the same scale rows and same count and arrangement visible in that rectangle. Fish faces left; posterior free scale edges point right. Resolve the fine concentric growth ridges, tiny melanophore specks, narrow dark inter-scale seams, translucent overlapping margins and irregular iridophore shimmer. Restrained natural teal-blue with petrol dark margins, individual differences, not a perfect repeated lattice. No head, eye, fins, belly silhouette or background. Flat even illumination suitable for a surface texture, no deep relief or giant metallic scales.",
+      "inputReference": "01-profile.jpg",
+      "purpose": "Magnified section texture v1.2"
+    },
+    {
+      "path": "demos/betta-atelier/macro-v1.2/06-membrane-macro.jpg",
+      "key": "demos/betta-atelier/macro-v1.2/06-membrane-macro.jpg",
+      "url": "https://media.jez237.com/demos/betta-atelier/macro-v1.2/06-membrane-macro.jpg?v=684f8aabab14",
+      "size": 825250,
+      "sha256": "684f8aabab14c0dd737c2f8da08d737b50c2fa30cb6e3f00b416fcf7ce789d31",
+      "dimensions": [
+        1177,
+        1336
+      ],
+      "prompt": "Create a newly resolved extreme macro photographic section study of THIS SAME turquoise-and-crimson male Betta splendens. Use the supplied image as exact identity and pigment reference. This is a close-up texture source for a volumetric 3D model: a perpendicular side-on camera, no perspective skew, very soft broad neutral lighting, crisp focus throughout, no exaggerated specular streaks or baked directional shadows. Natural biological detail, not illustration, plastic, fabric, armor, or a CGI render. No words, numbers, borders, labels, watermarks, extra fish or decorative objects. Preserve the real scale of anatomical features relative to each other. Magnify only the central tail-fin tissue rectangle of the supplied 1225x1284 image from original x700 to x1000 and y360 to y700. Fill the complete frame with this patch, preserving its ray directions and the pattern. Show exceptionally fine thin burgundy/crimson semi-translucent membrane between turquoise structural fin rays, tiny natural branching capillaries and pigment granules, hairline wrinkles and variation in tissue thickness. The fin rays progress from left toward right in this rectangle. Very thin biological tissue, never velvet or cloth, no thick rope ribs. No body scales, no background, no labels. Keep overall colour and pattern compatible with the input image while resolving fine new optical detail.",
+      "inputReference": "03-fin-material.jpg",
+      "purpose": "Magnified section texture v1.2"
     }
   ]
 }

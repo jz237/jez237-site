@@ -1,4 +1,5 @@
 import * as T from "three";
+import { addMacroSurface } from "./surfaces.js";
 const PI = Math.PI,
   lerp = T.MathUtils.lerp,
   clamp = T.MathUtils.clamp;
@@ -61,7 +62,20 @@ function section(x) {
   const a = sections[i],
     b = sections[i + 1],
     u = clamp((x - a[0]) / (b[0] - a[0]), 0, 1);
-  return a.map((v, j) => lerp(v, b[j], u));
+  const before = sections[Math.max(0, i - 1)],
+    after = sections[Math.min(sections.length - 1, i + 2)];
+  return a.map((v, j) => {
+    if (j === 0) return x;
+    const dx = b[0] - a[0],
+      m0 = ((b[j] - before[j]) / (b[0] - before[0])) * dx,
+      m1 = ((after[j] - a[j]) / (after[0] - a[0])) * dx;
+    return (
+      (2 * u ** 3 - 3 * u * u + 1) * v +
+      (u ** 3 - 2 * u * u + u) * m0 +
+      (-2 * u ** 3 + 3 * u * u) * b[j] +
+      (u ** 3 - u * u) * m1
+    );
+  });
 }
 function makeBody() {
   const p = [],
@@ -78,7 +92,11 @@ function makeBody() {
       const py = mid + (bottom - top) * 0.5 * Math.cos(a);
       const [wx, wy] = world([x, py]);
       p.push(wx, wy, Math.sin(a) * thick * SCALE);
-      uv.push(...texUV([x, py]));
+      // Blend toward arc-length skin coordinates around the flank so dorsal/ventral
+      // scales do not stretch into stripes when the specimen turns.
+      const arcY=mid+(bottom-top)*Math.asin(Math.cos(a))/PI;
+      const wrap=T.MathUtils.smoothstep(x,390,520)*.85;
+      uv.push(...texUV([x,lerp(py,arcY,wrap)]));
     }
   }
   for (let i = 0; i < nx; i++)
@@ -186,7 +204,7 @@ function makeFin(fish, texture, roots, edge, kind = 0, side = 0, atlas = null) {
     g.setAttribute(name, new T.Float32BufferAttribute(arr, n));
   g.setIndex(idx);
   g.computeVertexNormals();
-  const mat = animate(
+  const baseMat = animate(
     new T.MeshPhysicalMaterial({
       map: texture,
       color: 0xffffff,
@@ -206,6 +224,13 @@ function makeFin(fish, texture, roots, edge, kind = 0, side = 0, atlas = null) {
     true,
     kind,
   );
+  const mat =
+    kind < 3
+      ? addMacroSurface(baseMat, fish.userData.macroTextures, {
+          fin: true,
+          caudal: kind === 0,
+        })
+      : baseMat;
   const mesh = new T.Mesh(g, mat);
   mesh.frustumCulled = false;
   mesh.userData.kind = kind;
@@ -241,19 +266,55 @@ export function createBetta() {
   );
   finTexture.colorSpace = T.SRGBColorSpace;
   finTexture.anisotropy = 8;
-  const skin = animate(
-    new T.MeshPhysicalMaterial({
-      map: texture,
-      color: 0xffffff,
-      metalness: 0.08,
-      roughness: 0.64,
-      clearcoat: 0.12,
-      clearcoatRoughness: 0.35,
-      iridescence: 0.12,
-      iridescenceThicknessRange: [190, 300],
-      bumpMap: texture,
-      bumpScale: 0.008,
-    }),
+  const macroPending = [];
+  const macroUrls = {
+    "04-head-macro":
+      "https://media.jez237.com/demos/betta-atelier/macro-v1.2/04-head-macro.jpg?v=73e1f70901a5",
+    "05-scale-macro":
+      "https://media.jez237.com/demos/betta-atelier/macro-v1.2/05-scale-macro.jpg?v=63089308e453",
+    "06-membrane-macro":
+      "https://media.jez237.com/demos/betta-atelier/macro-v1.2/06-membrane-macro.jpg?v=684f8aabab14",
+  };
+  const loadMacro = (name) => {
+    let done, fail;
+    macroPending.push(
+      new Promise((res, rej) => {
+        done = res;
+        fail = rej;
+      }),
+    );
+    const m = new T.TextureLoader().load(
+      macroUrls[name],
+      done,
+      undefined,
+      fail,
+    );
+    m.colorSpace = T.SRGBColorSpace;
+    m.anisotropy = 8;
+    return m;
+  };
+  const macroTextures = {
+    head: loadMacro("04-head-macro"),
+    scales: loadMacro("05-scale-macro"),
+    fin: loadMacro("06-membrane-macro"),
+  };
+  fish.userData.macroTextures = macroTextures;
+  const skin = addMacroSurface(
+    animate(
+      new T.MeshPhysicalMaterial({
+        map: texture,
+        color: 0xffffff,
+        metalness: 0.03,
+        roughness: 0.72,
+        clearcoat: 0.06,
+        clearcoatRoughness: 0.35,
+        iridescence: 0.08,
+        iridescenceThicknessRange: [190, 300],
+        bumpMap: texture,
+        bumpScale: 0.011,
+      }),
+    ),
+    macroTextures,
   );
   const body = new T.Mesh(makeBody(), skin);
   body.name = "Closed anatomical body with reference-projected pigmentation";
@@ -440,30 +501,36 @@ export function createBetta() {
       );
     const eye = new T.Mesh(
       eyeGeo,
-      new T.MeshPhysicalMaterial({
-        map: texture,
-        roughness: 0.34,
-        metalness: 0,
-        clearcoat: 0.2,
-        clearcoatRoughness: 0.15,
-        envMapIntensity: 0.08,
-      }),
+      addMacroSurface(
+        new T.MeshPhysicalMaterial({
+          map: texture,
+          bumpMap: texture,
+          bumpScale: 0.0005,
+          roughness: 0.48,
+          metalness: 0,
+          clearcoat: 0.06,
+          clearcoatRoughness: 0.15,
+          envMapIntensity: 0.025,
+        }),
+        macroTextures,
+        { eye: true },
+      ),
     );
     const [ex, ey] = world([240, 400]);
     eye.position.set(ex, ey, side * 0.15);
-    eye.scale.set(1, 1, 0.36);
+    eye.scale.set(1, 1, 0.1);
     fish.add(eye);
     const pupil = new T.Mesh(
       new T.SphereGeometry(0.045, 40, 28),
       new T.MeshPhysicalMaterial({
         color: 0x010304,
         roughness: 0.22,
-        clearcoat: 0.12,
-        envMapIntensity: 0.08,
+        clearcoat: 0.06,
+        envMapIntensity: 0.025,
       }),
     );
-    pupil.scale.z = 0.15;
-    pupil.position.set(ex, ey + 0.006, side * 0.177);
+    pupil.scale.z = 0.1;
+    pupil.position.set(ex, ey + 0.006, side * 0.157);
     fish.add(pupil);
   }
   let prev = 0,
@@ -475,10 +542,11 @@ export function createBetta() {
     turn = 0;
   const cycle = 32;
   fish.userData = {
-    ready: Promise.all([loaded, finLoaded]),
+    ready: Promise.all([loaded, finLoaded, ...macroPending]),
+    macroTextures,
     scaleCount: 0,
     finCount: 7,
-    revision: "1.1",
+    revision: "1.2",
     mode: "hover",
     update(t, inspect = false) {
       const dt = clamp(t - prev, 0, 0.07);

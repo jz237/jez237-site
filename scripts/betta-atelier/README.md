@@ -1,4 +1,4 @@
-# Living Silk — Betta Atelier 1.1
+# Living Silk — Betta Atelier 1.2
 
 An interactive, genuinely volumetric male halfmoon Betta study for Jez237.
 Live: https://jez237.com/demos/betta-atelier/
@@ -18,7 +18,7 @@ Never deploy this sparse task worktree or run a static-only upload.
 
 ## Reference-driven construction
 
-Three separate GPT Image 2 studies were generated at explicitly requested quality
+Six separate GPT Image 2 studies were generated at explicitly requested quality
 high. Their prompts, actual dimensions, hashes, model-verification limitations and
 R2 URLs are retained in `reference-provenance.json`. Original JPEGs and returned
 metadata remain in GameMaster's `artifacts/betta-atelier-20261022/references/` on
@@ -56,25 +56,48 @@ starts paused.
 
 ## Runtime assets
 
-Two JPEG textures load from the existing public `media.jez237.com` R2 bucket.
+Five JPEG textures load from the existing public `media.jez237.com` R2 bucket.
 CORS for the production origin `https://jez237.com` was verified. Localhost is not
 an allowed bucket origin: local QA serves identical original JPEG bytes through
 Playwright route fixtures. Production QA must run **without** those fixtures and
 verify actual R2 delivery. A failed texture request shows an explicit retry message,
-not an indefinitely empty aquarium. The optional gallery displays all three images.
+not an indefinitely empty aquarium. The optional gallery displays all six images.
 
 ## Verification
 
 Task QA scripts and screenshots are retained under
-`artifacts/betta-atelier-20261022/qa-v1.1/` in the GameMaster workspace. Checks cover:
+`artifacts/betta-atelier-20261022/qa-v1.2/` in the GameMaster workspace. Checks cover:
 
 - Desktop 1440x1000 and touch-emulated 390x844 layouts and controls.
 - Pause/resume, fin relaxation, all cameras, light, info, reset and reverse side.
 - Integrated motion states, facing direction, thrust and finite positions.
 - Screenshot inspection of profile, head, fins, reverse side and full-turn stages.
-- Gallery preview/launch/back links, all three reference images, no-WebGL fallback.
+- Gallery preview/launch/back links, all six reference images, no-WebGL fallback.
 - Live bundle/asset hashes and production-origin texture loading without mocks.
 
 Approximately 60fps was observed on the host AMD GPU; this is not a physical-phone
 performance claim. The references include baked photographic lighting, so close-up
 and strongly oblique views remain an artistic real-time approximation.
+
+## Magnified section revision 1.2
+
+Three new GPT Image 2 / high section studies use the original profile or fin image
+as an input reference: head/gill (1350x1165), flank scales (1665x945), and membrane
+(1177x1336). All are retained unchanged, with original results and prompts in the
+workspace `artifacts/betta-atelier-20261022/macro-v1.2/`. No image was rerolled.
+
+`src/surfaces.js` blends a calibrated head projection into the original UVs.
+The scale study continues across the full flank with softened horizontal joins,
+keeping the scale-edge direction. Arc-aware body UVs reduce stretching over the
+back and belly; the facial mapping remains fixed. Colour, luminance-derived bump and roughness variation
+use the new detail. Fin microtexture separates fine spatial detail from the broad
+ray pattern through mip sampling, so enlarged reference markings do not become
+oversized rays. The pectoral and pelvic fins retain their original material.
+Animated fin normals are derived from the actual deformed surface. Body contour
+radii use smooth Hermite interpolation; iris/pupil geometry is more flush with
+the face; restrained lighting reduces the broad plastic-looking highlights.
+
+This improves close-up fidelity but does not establish scientifically measured
+microanatomy. The inputs remain AI-generated artwork and retain some baked light.
+Production textures are immutable R2 object URLs with checksum query keys.
+The versioned Demos preview avoids reusing the previous browser-cache key.

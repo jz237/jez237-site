@@ -26,7 +26,7 @@ try {
 renderer.setPixelRatio(Math.min(devicePixelRatio, small() ? 1.7 : 2));
 renderer.setSize(innerWidth, innerHeight);
 renderer.toneMapping = T.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.05;
+renderer.toneMappingExposure = 1.0;
 renderer.outputColorSpace = T.SRGBColorSpace;
 $("#stage").append(renderer.domElement);
 const scene = new T.Scene();
@@ -46,14 +46,14 @@ const pmrem = new T.PMREMGenerator(renderer);
 const envScene = new RoomEnvironment();
 const env = pmrem.fromScene(envScene, 0.025);
 scene.environment = env.texture;
-scene.environmentIntensity = 0.38;
+scene.environmentIntensity = 0.25;
 envScene.dispose();
 pmrem.dispose();
 const lights = {
-  key: new T.DirectionalLight(0xe3ffe9, 1.9),
-  rim: new T.DirectionalLight(0x79e8ff, 2.1),
-  warm: new T.DirectionalLight(0xffd1b0, 0.9),
-  fill: new T.HemisphereLight(0x8fcbd0, 0x102528, 0.65),
+  key: new T.DirectionalLight(0xe3ffe9, 1.35),
+  rim: new T.DirectionalLight(0x79e8ff, 1.1),
+  warm: new T.DirectionalLight(0xffd1b0, 0.35),
+  fill: new T.HemisphereLight(0x8fcbd0, 0x102528, 0.45),
 };
 lights.key.position.set(-3, 5, 5);
 lights.rim.position.set(2, 3, -4);
@@ -193,10 +193,10 @@ $("#light").onclick = () => {
     ? '<span class="button-icon">☼</span> Studio light'
     : '<span class="button-icon">☾</span> Ocean light';
   lights.key.color.set(cinematic ? 0xe3ffe9 : 0xffffff);
-  lights.key.intensity = cinematic ? 1.9 : 2.8;
-  lights.rim.intensity = cinematic ? 2.1 : 1.3;
-  lights.warm.intensity = cinematic ? 0.9 : 0.7;
-  scene.environmentIntensity = cinematic ? 0.38 : 0.65;
+  lights.key.intensity = cinematic ? 1.35 : 2.2;
+  lights.rim.intensity = cinematic ? 1.1 : 1.0;
+  lights.warm.intensity = cinematic ? 0.35 : 0.5;
+  scene.environmentIntensity = cinematic ? 0.25 : 0.45;
 };
 $("#fullscreen").onclick = async () => {
   try {

@@ -534,15 +534,15 @@
     "id": "024",
     "title": "Living Silk · Betta Atelier",
     "category": "3D · Living specimen",
-    "description": "Look closely at a halfmoon Betta in turquoise and crimson. Orbit its iridescent scales, follow the rippling fins, and explore the tiny details of its eyes, gills and branching fin rays. An intimate living study built with three GPT-generated reference images.",
+    "description": "Look closely at a halfmoon Betta in turquoise and crimson. Orbit its iridescent scales, follow the rippling fins, and explore the tiny details of its eyes, gills and branching fin rays. An intimate living study built with six GPT-generated reference images, including magnified head, scale and membrane studies.",
     "url": "betta-atelier/",
-    "image": "assets/betta-atelier.png",
+    "image": "assets/betta-atelier-v1-2.png",
     "imageAlt": "The actual Living Silk 3D showcase: an iridescent turquoise Betta with broad translucent crimson fins against dark water",
     "imageWidth": 1440,
     "imageHeight": 1000,
     "source": "https://github.com/jz237/jez237-site/tree/main/scripts/betta-atelier",
     "features": [
-      "Reference-textured iridescent skin",
+      "Magnified head, scale & fin textures",
       "Natural glides, hovering & full turns",
       "Four close-up inspection views",
       "Orbit, pause, relax fins & change light"
