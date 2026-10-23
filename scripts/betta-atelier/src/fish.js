@@ -784,7 +784,7 @@ export function createBetta({ compact = false } = {}) {
       gait.advance(dt, drive, relativeFlow, turn);
       const { phase, effort, breathPhase, pectoralPhase } = gait;
       if (locomotion) bodyMotion.advanceTurn(dt, locomotion.steerRate ?? angularVelocity, locomotion.speed ?? 0);
-      bodyMotion.update(phase, effort, turn, breathPhase);
+      bodyMotion.update(phase, effort, turn, breathPhase, locomotion?.gulp ?? 0, locomotion?.gulpGill ?? 0);
       spineTexture.needsUpdate = dt > 0;
       uniforms.uPhase.value = phase;
       uniforms.uDrive.value = drive;

@@ -2,7 +2,7 @@ import * as THREE from 'three/webgpu';
 import { createBetta } from '../../../betta-atelier/src/fish.js';
 import { TriangleBVH } from './triangleBVH.mjs';
 import { BettaSwim, BETTA_SCALE as SCALE } from './bettaSwim.mjs';
-import { BETTA_PROBES, readBettaWater } from './bettaWater.mjs';
+import { BETTA_PROBES, BETTA_SURFACE_COUNT, bettaSurfaceHeights, readBettaWater } from './bettaWater.mjs';
 import type { KoiEnv, KoiSense } from './Koi';
 
 /** The actual Atelier specimen, evaluated on the CPU for the refracted rays.
@@ -19,6 +19,9 @@ export class Betta {
   private readonly vertices: Float32Array;
   private readonly probes = new Float32Array(16 * 4);
   private readonly flow = new THREE.Vector3();
+  private readonly surface = new Float32Array(BETTA_SURFACE_COUNT * 4);
+  private readonly mouth = new THREE.Vector3();
+  private level = 0.18;
   readonly swim = new BettaSwim();
   waterState: ReturnType<typeof readBettaWater> | null = null;
   private time = 0;
@@ -84,6 +87,7 @@ export class Betta {
     }
     dt = Math.max(0, Math.min(dt, 0.07));
     this.time += dt;
+    this.level = env.level;
     // Sample the actual current and its rotation across the moving anatomy.
     this.waterState = readBettaWater(sense, this.probes, env);
     const target = new THREE.Vector3().fromArray(this.waterState.flow);
@@ -130,9 +134,19 @@ export class Betta {
       p.set(scratch[0], scratch[1], scratch[2]).applyMatrix4(this.fish.matrixWorld);
       this.probes.set([p.x, p.y, p.z, 0], i * 4);
     }
+    // The lips, where it would meet the surface.
+    this.fish.userData.bodyMotion.transform(-1.68, 0.0832, 0, scratch);
+    this.mouth.set(scratch[0], scratch[1], scratch[2]).applyMatrix4(this.fish.matrixWorld);
   }
 
   probePoints(): Float32Array { return this.probes; }
+
+  /** A vertical column of density probes through the free surface above the mouth. */
+  surfaceProbes(): Float32Array {
+    const heights = bettaSurfaceHeights(this.level);
+    for (let k = 0; k < BETTA_SURFACE_COUNT; k++) this.surface.set([this.mouth.x, heights[k], this.mouth.z, 0], k * 4);
+    return this.surface;
+  }
 
   private locomotion() {
     // The route belongs to the neck/head, not a pivot in the middle of the fish.

@@ -7,7 +7,10 @@ shear/billow so the free edge flexes more than the base. Ray-length constraints,
 root attachment and the one-second display remain. Optional host locomotion supplies model-space speed
 and a separate voluntary `steerRate` for delayed head-to-tail tangent memory and
 deep, curvature-limited turns. The globe anchors its route at the neck and keeps
-passive fluid rotation separate from muscle flexion. See
+passive fluid rotation separate from muscle flexion. Host `locomotion.gulp` and
+`locomotion.gulpGill` (0..1.1, default 0) drive the jaw opening and opercular pulse
+of the globe's surface air gulp; each replaces the breathing value only while larger.
+See
 [`../globes/HOSTING.md`](../globes/HOSTING.md) for the integration and verification
 procedure. Rebuilding this standalone directory would adopt the shared-source
 changes; the globe revision deliberately does not rebuild its compiled demo.

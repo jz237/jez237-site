@@ -3,7 +3,7 @@
 Original: https://github.com/willwaltz/globes
 Author: Will Waltz · MIT License
 Upstream commit: 93c3b814bbca53463e8207b8e3c95fca8940dff5
-Imported: 2026-10-22 · Hosting build: 1.5.0
+Imported: 2026-10-22 · Hosting build: 1.6.0
 Public route: https://jez237.com/demos/globes/
 
 The upstream source and MIT attribution are retained. Hosting adds the gallery
@@ -72,6 +72,27 @@ triangle block (the 4-texel triangle stride is unchanged; height uses
 - **Skin**: a restrained sheen and thin-film colour shift on scale tiles.
 These are rendering approximations, not a spectral or subsurface model. Desktop
 default (64³, one ray) still measured 60 fps on the host at 1200×900.
+
+Version 1.6 adds the betta's **surface air gulp** (bettas are labyrinth fish and
+really do take air at the surface). `bettaWater.mjs` reads the water surface under
+the snout from an eight-probe vertical density column (probe slots 16-23 of the
+64-probe fluid sensor, 0.016 globe units apart, centred on the resting level;
+slots 16+ are otherwise unused in this scene) and interpolates where the density
+crosses the sim's `iso`. It returns null with no crossing, so a missing or
+disturbed reading never triggers anything. `bettaSwim.mjs` then runs an
+independent `rise -> gulp -> dive` cycle: the first trip comes 22-36 s after
+load, later ones every 60-110 s, from its own random stream, so existing routes
+are unchanged. A trip starts only while the globe is upright (effective gravity
+within ~10 degrees of vertical), the measured surface is within 0.04 of the sim's
+level (calm, not sloshing), the whole body is wet, the betta is not bursting or
+turning sharply, and aborts to a dive if any of that is lost. The fish rises with
+its lips held ~3 mm under the measured surface and pitches to ~0.85 rad (~49
+degrees nose-up); the Atelier then opens the mouth (`gulp`) and pulses the gill
+cover (`gulpGill`) for 1.6 s before it dives. These host-driven values override
+the breathing rhythm only while larger. Limits: the fluid coupling is one-way
+(water -> fish), so there are no ripples or bubbles from the gulp; trips happen
+only in an upright globe; the surface is read once per frame with the sim's 1-2
+frame readback delay, so the lip height is held to within ~3 mm, not exactly.
 
 The neck now leads the route, instead of rotating about the center of the fish.
 `BodyMotion.advanceTurn()` carries a history of local tangent angles down the

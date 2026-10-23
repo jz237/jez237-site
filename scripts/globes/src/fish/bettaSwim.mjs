@@ -3,7 +3,18 @@
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const damp = (x, y, dt, rate) => x + (y - x) * (1 - Math.exp(-dt * rate));
 const wrap = x => Math.atan2(Math.sin(x), Math.cos(x));
+const smooth = (a, b, x) => { const u = clamp((x - a) / (b - a), 0, 1); return u * u * (3 - 2 * u); };
 export const BETTA_SCALE = 0.105;
+
+// Labyrinth fish gulp air at the free surface. The mouth sits MOUTH_AHEAD in front of
+// the neck (the route point) and MOUTH_UP above its axis, in globe units.
+export const GULP_PITCH = 0.85, GULP_LENGTH = 1.6, MOUTH_DEPTH = 0.003;
+const MOUTH_AHEAD = 0.048, MOUTH_UP = 0.0087;
+export const bettaMouthHeight = (y, pitch) => y + MOUTH_AHEAD * Math.sin(pitch) + MOUTH_UP * Math.cos(pitch);
+/** Jaw opening and then the opercular pulse at `e` seconds into the gulp. */
+export const gulpMouth = e => 1.1 * (smooth(0, 0.28, e) - smooth(0.62, 0.95, e));
+export const gulpGillCover = e => Math.sin(Math.PI * clamp((e - 0.8) / 0.8, 0, 1)) ** 1.2;
+const GULPING = new Set(['rise', 'gulp', 'dive']);
 
 export class BettaSwim {
   constructor(seed = 237) {
@@ -22,6 +33,21 @@ export class BettaSwim {
     this.cruiseSpeed = 0.09;
     this.drift = [0, 0, 0];
     this.initialized = false;
+    // Own random stream so the trips never perturb the swimming route.
+    this.gulpSeed = (seed ^ 0x9e3779b9) >>> 0;
+    this.nextGulp = 22 + this.gulpRandom() * 14;
+    this.gulpClock = 0;
+    this.gulp = this.gulpGill = 0;
+    this.surfaceY = NaN;
+  }
+
+  gulpRandom() {
+    const keep = this.seed;
+    this.seed = this.gulpSeed;
+    const value = this.random();
+    this.gulpSeed = this.seed;
+    this.seed = keep;
+    return value;
   }
 
   random() {
@@ -77,8 +103,36 @@ export class BettaSwim {
     }
     this.time += dt;
     this.timer -= dt;
+    // A trip to the surface needs a measured, calm, level free surface above an
+    // upright globe; without those readings (or in a tilted globe) it never starts.
+    const gravity = env.gravity ?? [0, -24, 0], g = Math.hypot(...gravity);
+    const surface = water?.surface;
+    const surfaceOk = Number.isFinite(surface) && Math.abs(surface - env.level) < 0.04 && g > 1 && -gravity[1] > 0.985 * g;
+    if (surfaceOk) this.surfaceY = Number.isFinite(this.surfaceY) ? damp(this.surfaceY, surface, dt, 6) : surface;
+    const wetNow = water?.submerged ?? (submerged ? 1 : 0);
+    let gulping = GULPING.has(this.mode);
+    if (!gulping && this.time >= this.nextGulp && surfaceOk && wetNow > 0.99 && (water.airAbove ?? 0) < 0.25 && this.mode !== 'burst' && !this.sharpTurn) {
+      this.mode = 'rise'; this.gulpClock = 0; this.timer = 9; gulping = true;
+    }
+    // The lips' height above the neck grows with the nose-up pitch, so the target tracks it.
+    const holdY = this.surfaceY - MOUTH_DEPTH - bettaMouthHeight(0, clamp(this.pitch, 0, GULP_PITCH));
+    let rise = holdY - this.position[1];
+    if (gulping) {
+      this.gulpClock += dt;
+      if (this.mode !== 'dive' && (!surfaceOk || wetNow < 0.5)) { this.mode = 'dive'; this.timer = 1.3; }
+      else if (this.mode === 'rise' && ((Math.abs(rise) < 0.012 && this.pitch > 0.7) || this.timer <= 0)) {
+        if (Math.abs(rise) < 0.04) { this.mode = 'gulp'; this.gulpClock = 0; }
+        else { this.mode = 'dive'; this.timer = 1.3; }
+      } else if (this.mode === 'gulp' && this.gulpClock >= GULP_LENGTH) { this.mode = 'dive'; this.timer = 1.3; }
+      else if (this.mode === 'dive' && this.timer <= 0) {
+        this.mode = 'glide'; this.timer = 1.0 + this.random() * 0.8;
+        this.nextGulp = this.time + 60 + this.gulpRandom() * 50;
+        this.chooseTarget(env);
+        gulping = false;
+      }
+    }
     let distance = Math.hypot(...this.target.map((v, i) => v - this.position[i]));
-    if (this.timer <= 0 || (this.mode !== 'hover' && distance < 0.075)) {
+    if (!gulping && (this.timer <= 0 || (this.mode !== 'hover' && distance < 0.075))) {
       if (this.mode === 'hover') {
         this.mode = this.random() < 0.18 ? 'burst' : 'cruise';
         this.timer = this.mode === 'burst' ? 0.65 + this.random() * 0.45 : 6 + this.random() * 5;
@@ -94,13 +148,17 @@ export class BettaSwim {
     const look = this.position.map((v, i) => v + (i === 0 ? fx : i === 2 ? fz : 0) * (0.10 + this.speed * 0.8));
     const nearWall = Math.hypot(...look) > b.radius;
     let goal = this.target;
+    const climbing = this.mode === 'rise' || this.mode === 'gulp';
+    if (climbing) goal = [this.position[0] + fx * 0.3, holdY, this.position[2] + fz * 0.3];
+    else if (this.mode === 'dive') goal = [this.position[0] + fx * 0.2, clamp(this.position[1] - 0.25, b.low, b.high), this.position[2] + fz * 0.2];
     if (nearWall) goal = [-this.position[0] * 0.45, clamp(this.position[1], b.low, b.high), -this.position[2] * 0.45];
-    const escaping = !submerged || (water?.airAbove ?? 0) > 0.25;
+    // The head is deliberately at the surface during a trip, so air above it is not an emergency.
+    const escaping = !climbing && (!submerged || (water?.airAbove ?? 0) > 0.25);
     if (escaping) goal = water ? [water.centroid[0], water.centroid[1] - 0.06, water.centroid[2]] : [this.position[0] * 0.6, b.low + 0.025, this.position[2] * 0.6];
     const delta = goal.map((v, i) => v - this.position[i]);
     distance = Math.hypot(...delta);
     const yawError = wrap(Math.atan2(delta[2], -delta[0]) - this.heading);
-    const holding = this.mode === 'hover' && !nearWall && !escaping;
+    const holding = (this.mode === 'hover' || this.mode === 'gulp') && !nearWall && !escaping;
     if (holding || Math.abs(yawError) < 0.3) this.sharpTurn = false;
     else if (Math.abs(yawError) > 1.9) this.sharpTurn = true;
     const maxRate = this.sharpTurn ? 3.0 : 0.9 + this.speed * 3;
@@ -110,10 +168,13 @@ export class BettaSwim {
     this.steerRate += clamp(wantedRate - this.steerRate, -angularAcceleration * dt, angularAcceleration * dt);
     this.angularVelocity = this.steerRate + this.waterSpin[1] * 0.8;
     this.heading += this.angularVelocity * dt;
-    const pitchTarget = holding ? 0 : clamp(Math.atan2(delta[1], Math.hypot(delta[0], delta[2])), escaping ? -0.6 : -0.32, 0.32);
+    let pitchTarget = holding ? 0 : clamp(Math.atan2(delta[1], Math.hypot(delta[0], delta[2])), escaping ? -0.6 : -0.32, 0.32);
+    if (this.mode === 'rise') pitchTarget = rise > 0.1 ? 0.62 : GULP_PITCH;
+    else if (this.mode === 'gulp') pitchTarget = GULP_PITCH;
+    else if (this.mode === 'dive') pitchTarget = -0.55;
     const oldPitch = this.pitch, oldRoll = this.roll;
     const pitchSpin = -this.waterSpin[2] * Math.cos(this.heading) - this.waterSpin[0] * Math.sin(this.heading);
-    this.pitch = clamp(damp(this.pitch, pitchTarget, dt, 2.4) + pitchSpin * dt * 0.8, -0.75, 0.75);
+    this.pitch = clamp(damp(this.pitch, pitchTarget, dt, 2.4) + pitchSpin * dt * 0.8, -0.75, gulping ? 0.95 : 0.75);
     const rollSpin = this.waterSpin[0] * Math.cos(this.heading) - this.waterSpin[2] * Math.sin(this.heading);
     this.roll = clamp(damp(this.roll, 0, dt, 2.6) + rollSpin * dt * 0.8, -0.65, 0.65);
     this.pitchRate = (this.pitch - oldPitch) / dt;
@@ -121,6 +182,9 @@ export class BettaSwim {
     let desiredSpeed = this.mode === 'burst' ? 0.19 : this.mode === 'glide' ? 0.04 : this.cruiseSpeed;
     if (holding) desiredSpeed = 0;
     else desiredSpeed *= (0.12 + 0.88 * Math.max(0, Math.cos(yawError))) * clamp(distance / 0.14, 0.25, 1);
+    if (this.mode === 'rise') desiredSpeed = clamp(rise * 2.5, 0.006, 0.2);
+    else if (this.mode === 'gulp') desiredSpeed = 0.006;
+    else if (this.mode === 'dive') desiredSpeed = 0.17;
     if (escaping) desiredSpeed = Math.max(desiredSpeed, 0.16);
     this.speed = damp(this.speed, desiredSpeed, dt, desiredSpeed > this.speed ? 2.8 : 3.5);
     // Same neutral-buoyancy inertia and finite station-keeping as the koi:
@@ -135,6 +199,11 @@ export class BettaSwim {
     const direction = [-Math.cos(this.heading) * Math.cos(this.pitch), Math.sin(this.pitch), Math.sin(this.heading) * Math.cos(this.pitch)];
     const old = [...this.position];
     for (let k = 0; k < 3; k++) this.position[k] += (direction[k] * this.speed + this.drift[k]) * dt;
+    // Sculling fins hold the lips at the film once the head is there.
+    if (climbing && Math.abs(rise) < 0.05) this.position[1] += clamp(rise * 6, -0.1, 0.1) * dt;
+    const open = this.mode === 'gulp' ? gulpMouth(this.gulpClock) : 0, pulse = this.mode === 'gulp' ? gulpGillCover(this.gulpClock) : 0;
+    this.gulp = damp(this.gulp, open, dt, 25);
+    this.gulpGill = damp(this.gulpGill, pulse, dt, 25);
     // Real water has no fixed horizontal ceiling when the globe is tilted.
     // Density probes steer it back into water; actual bed/glass contacts stop it.
     const floor = water ? water.sand + 0.07 : b.low;

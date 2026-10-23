@@ -34,15 +34,17 @@ export class BodyMotion {
       remaining -= h;
     }
   }
-  update(phase, effort, turn, breathPhase) {
+  // gulp / gulpGill: host-driven jaw opening and opercular pulse (a surface air
+  // gulp); they take over from the breathing rhythm only while they are larger.
+  update(phase, effort, turn, breathPhase, gulp = 0, gulpGill = 0) {
     this.effort = effort;
     // A maneuver is a sustained C-bend, not a wider propulsion oscillation.
     // Positive yaw leaves the rear trunk on the previous heading behind the head.
     // Soft saturation avoids a kink as the turn speeds up or changes direction.
     this.turnBend = this.turnAngles ? this.turnAngles.at(-1) / 2.95 : Math.tanh(turn * 0.8);
-    this.mouth = Math.max(0, Math.sin(breathPhase)) ** 1.4 * (0.8 + effort * 0.2);
+    this.mouth = Math.max(gulp, Math.max(0, Math.sin(breathPhase)) ** 1.4 * (0.8 + effort * 0.2));
     // Buccal intake precedes the opercular outlet: not two synchronous flaps.
-    this.gill = Math.max(0, Math.sin(breathPhase - 1.05)) ** 1.3 * (0.8 + effort * 0.2);
+    this.gill = Math.max(gulpGill, Math.max(0, Math.sin(breathPhase - 1.05)) ** 1.3 * (0.8 + effort * 0.2));
     const dx = (SPINE_END - SPINE_START) / (SPINE_COUNT - 1);
     let x = SPINE_START, z = 0, oldCos = 1, oldSin = 0;
     for (let i = 0; i < SPINE_COUNT; i++) {

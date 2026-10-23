@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { BETTA_PROBES, readBettaWater } from './src/fish/bettaWater.mjs';
+import { BETTA_PROBES, BETTA_SURFACE_AT, BETTA_SURFACE_COUNT, bettaSurfaceHeights, readBettaWater } from './src/fish/bettaWater.mjs';
 import { BettaSwim, BETTA_SCALE } from './src/fish/bettaSwim.mjs';
 
 const env = { radius: 0.95, sandLevel: -0.55, level: 0.246, iso: 0.5, gravity: [0, -24, 0] };
@@ -86,4 +86,27 @@ test('air exposure loses buoyancy, and violent reversing flow remains finite and
     assert.ok(Math.hypot(...s.position) <= env.radius - 0.29 + 1e-7);
     assert.ok(s.position[1] >= w.sand + 0.07 - 1e-7);
   }
+});
+
+test('the surface column recovers the free surface height from the density iso crossing', () => {
+  const heights = bettaSurfaceHeights(env.level);
+  assert.equal(heights.length, BETTA_SURFACE_COUNT);
+  assert.ok(Math.abs(heights[0] - (env.level - 0.056)) < 1e-6 && Math.abs(heights[7] - (env.level + 0.056)) < 1e-6);
+  // Smoothed interface: density falls linearly from 1 to 0 over 0.045 centred on `at`.
+  const sense = at => {
+    const s = sample([0, -0.17, 0]);
+    s.probes = new Float32Array(256);
+    s.probes.set(sample([0, -0.17, 0]).probes);
+    for (let k = 0; k < BETTA_SURFACE_COUNT; k++) s.probes[(BETTA_SURFACE_AT + k) * 4 + 3] = Math.max(0, Math.min(1, 0.5 - (heights[k] - at) / 0.045));
+    return s;
+  };
+  for (const at of [env.level - 0.03, env.level - 0.004, env.level, env.level + 0.02, env.level + 0.04]) {
+    const water = readBettaWater(sense(at), points, env);
+    assert.ok(Math.abs(water.surface - at) < 5e-4, `${at}: ${water.surface}`);
+  }
+  // Outside the window (slosh, a tilted globe, or no reading yet) there is no height at all.
+  assert.equal(readBettaWater(sense(env.level - 0.2), points, env).surface, null);
+  assert.equal(readBettaWater(sense(env.level + 0.2), points, env).surface, null);
+  assert.equal(readBettaWater(null, points, env).surface, null);
+  assert.equal(readBettaWater(sample([0, -0.17, 0]), points, env).surface, null);
 });

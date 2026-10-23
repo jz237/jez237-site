@@ -6,6 +6,7 @@ import { GLOBES, type GlobeEntry } from './app/catalog';
 import { applyUrlOverrides, fishConfig, globeConfig, lightConfig, simConfig, type GlobeConfig, type LightConfig, type SimConfig } from './config';
 import { DeskMapping, loadDesk, type DesktopHostApi } from './desktop/desktopScene';
 import { Betta } from './fish/Betta';
+import { BETTA_SURFACE_AT } from './fish/bettaWater.mjs';
 import { Koi, type KoiEnv } from './fish/Koi';
 import { CLOWN_PROBES, Clownfishes } from './fish/Clownfish';
 import { FishFood, type Feeder } from './fish/FishFood';
@@ -239,6 +240,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     koi.update(dt, sim.koiSense, koiEnv());
     betta.update(dt, sim.koiSense, koiEnv());
     sim.setKoiProbes(betta.active ? betta.probePoints() : koi.probePoints());
+    if (betta.active) sim.setProbes(BETTA_SURFACE_AT, betta.surfaceProbes());
     sim.koiVisible = koi.visible;
     if (reef.active) {
       // The clownfish (acting on what the water told them a frame or two ago), then the anemone,
