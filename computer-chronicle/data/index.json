@@ -2,6 +2,73 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-10-23",
+      "historicDate": "1985-03-18",
+      "displayDate": "Week of March 18-24, 1985",
+      "edition": "Issue 138 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "PCjr production to end in April after IBM’s March 19 announcement.",
+      "leadHeadline": "IBM pulls the plug on PCjr production",
+      "storyHeadlines": [
+        "Solo Flight puts the mail run in the pilot’s hands",
+        "A six-kilobyte word processor arrives in the magazine",
+        "The Print Shop makes the home printer earn its keep",
+        "One screen for the computer and the evening television"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-03-18.jpg",
+      "thumb": "media/thumbs/1985-03-18.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-10-22",
+      "historicDate": "1985-03-11",
+      "displayDate": "Week of March 11-17, 1985",
+      "edition": "Issue 137 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "A new commercial network address enters the register; Connecticut gets a packet-switched dial-up route.",
+      "leadHeadline": "Symbolics registers the first .com address",
+      "storyHeadlines": [
+        "Solo Flight makes the home computer a mail pilot’s cockpit",
+        "ConnNet opens Connecticut dial-up route to information services",
+        "SpeedScript 3.0 puts a substantial word processor in a magazine",
+        "Color printing moves below $300"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-03-11.jpg",
+      "thumb": "media/thumbs/1985-03-11.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-10-21",
+      "historicDate": "1985-03-04",
+      "displayDate": "Week of March 4-10, 1985",
+      "edition": "Issue 136 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "A galaxy to conquer, a company to command, and a word processor to type yourself.",
+      "leadHeadline": "SSI sends strategy gamers into space and World War II",
+      "storyHeadlines": [
+        "SpeedScript 3.0 brings a 6K word processor to magazine readers",
+        "Color printing breaks below $300",
+        "2400-bps modems promise speed, but supply and service costs loom"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-03-04.jpg",
+      "thumb": "media/thumbs/1985-03-04.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-10-20",
+      "historicDate": "1985-02-25",
+      "displayDate": "Week of February 25-March 3, 1985",
+      "edition": "Issue 135 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "A kingdom drawn one instruction at a time; PCs rented one month at a time.",
+      "leadHeadline": "Inside King’s Quest: $700,000 buys a new kind of adventure",
+      "storyHeadlines": [
+        "Rent a PC for a month—but whose software license goes with it?",
+        "Michael Crichton takes storytelling from the cinema to Amazon",
+        "PC-Write asks users to share the software—and pays registered referrers",
+        "Online rivals bring games and conversation below three dollars an hour"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-02-25.jpg",
+      "thumb": "media/thumbs/1985-02-25.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-10-19",
       "historicDate": "1985-02-18",
       "displayDate": "Week of February 18-24, 1985",

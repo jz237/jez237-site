@@ -1,0 +1,493 @@
+{
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+  },
+  "currentDate": "2026-10-23",
+  "historicDate": "1985-03-18",
+  "displayDate": "Week of March 18-24, 1985",
+  "edition": "Issue 138 - Weekly 1985 Computer & Culture Chronicle",
+  "visualProfile": {
+    "tone": "A home-computer strategy falters; home pilots keep flying",
+    "motifs": [
+      "IBM PCjr on a shop counter",
+      "Solo Flight cockpit and propeller plane",
+      "dot-matrix banner"
+    ],
+    "layout": "Dense warm newsprint, red and blue section headers"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Issue 138 - Weekly 1985 Computer & Culture Chronicle",
+    "dateline": "Week of March 18-24, 1985",
+    "price": "75 cents"
+  },
+  "layoutPlan": {
+    "leadPlacement": "IBM PCjr cancellation is the stronger historical lead; Solo Flight receives a large gaming halftone",
+    "secondaryRail": "SpeedScript, home printing, monitors and modems",
+    "archiveNavigation": "Weekly archive and previous/next controls"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1985-03-18.jpg",
+    "alt": "Computer Chronicle newspaper front page for March 18-24, 1985",
+    "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "IBM changes course in the living room; home pilots, writers and printer owners carry on.",
+  "morningLine": "PCjr production to end in April after IBM’s March 19 announcement.",
+  "lead": {
+    "headline": "IBM pulls the plug on PCjr production",
+    "dek": "March 19 announcement ends a bid for the mass-market home computer.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      0,
+      1
+    ],
+    "body": [
+      "IBM announced March 19 that production of its PCjr home computer would end in April. UPI’s Boca Raton dispatch attributes the decision to slack sales, bringing a sharp change of course for the company’s consumer-computer effort.",
+      "The announcement is not an immediate disappearance of the machines already in homes and shops. March 19 is the decision date; April is the planned production stop. Those two dates mark different stages of the withdrawal.",
+      "Michael Schrage’s March 20 Washington Post account describes the PCjr as IBM’s first attempt at a mass-market computer and calls the decision its first major failure in personal computers. The setback belongs to that particular bid for the home, not to IBM’s entire personal-computer business.",
+      "The contrast with this month’s home-computing pages is striking. COMPUTE! still answers a PCjr internal-modem question and surveys PCjr-compatible displays. Existing owners have practical uses for their machines even as the manufacturer ends production; those magazine items are not a promise of future support."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Solo Flight puts the mail run in the pilot’s hands",
+      "body": [
+        "Sid Meier’s MicroProse Solo Flight puts a mail route inside the home computer. Arthur Leyenberger’s March COMPUTE! review covers Commodore 64 and Atari machines with at least 48K RAM, disk drive and joystick; the listed price is $34.95.",
+        "Takeoffs and landings are only the beginning. Navigation, instrument flying and emergencies make demands on the pilot, while Kansas, Washington and Colorado offer different terrain challenges. The simulation includes 21 airports.",
+        "Mail Pilot asks the player to deliver five bags while choosing fuel and mail loads. Navigation, time, landings and delivered mail contribute to the score; deteriorating weather and higher-level mechanical failures complicate the assignment. Leyenberger judges the simulation excellent, while finding its graphics less impressive than Microsoft Flight Simulator on IBM PC and PCjr."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "headline": "A six-kilobyte word processor arrives in the magazine",
+      "body": [
+        "Charles Brannon’s SpeedScript 3.0 makes the magazine itself a software counter. The March Commodore 64 edition is an entirely machine-language word processor occupying about six kilobytes, with a year of enhancements, reader suggestions and debugging behind it.",
+        "Words, sentences and paragraphs can be inserted or deleted, and printing controls handle margins, centering, headers and footers. Readers enter the new listing with MLX support; an old version cannot simply be patched into this one.",
+        "A disk is offered for $12.95 plus $2 United States shipping and handling. VIC-20, Atari and Apple II versions are promised for future issues, not announced as already available this week."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "headline": "The Print Shop makes the home printer earn its keep",
+      "body": [
+        "Brøderbund’s The Print Shop gives the home printer a second occupation: signs, banners, greeting cards and letterheads. Karen G. McCullough’s March review lists $49.95 for Apple and $44.95 for Atari and Commodore 64.",
+        "Predrawn pictures, borders and eight fonts let a household compose its own printed pieces. A graphics editor adds room for original drawings, but supported printers and interfaces remain essential; this is not a universal printer driver.",
+        "The limits show up at the print head. Multiple colors cannot be printed at once, and complete cards and signs cannot be saved, although pictures can. Complex jobs take minutes; one long banner in the review took nearly half an hour."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "headline": "One screen for the computer and the evening television",
+      "body": [
+        "Kathy Yakal’s March COMPUTE! survey finds television and computer displays sharing more of the same cabinet. The Sears Total Video System combines television with composite color, RGB color and green-screen monochrome modes at a suggested $349.",
+        "Teknika lists the 13-inch MJ-10 composite/separated-video monitor at $299 and the composite/RGB MJ-22 at $439.95. Connections matter: the Sears RGB input directly suits PCjr, while PC use requires an adapter in the report.",
+        "For an existing composite monitor, Cardco’s $99.95 Monitor Tuner offers television reception, a computer/TV switch and audio output. These are March magazine prices and product descriptions, not claims of an unveiling during this particular week."
+      ],
+      "confidence": "same-month",
+      "sourceRefs": [
+        6
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "2400-bps modems race toward the home market",
+      "summary": "March COMPUTE! names Hayes, Novation, U.S. Robotics, Racal-Vadic, Multitech, CTS Datacomm, Anderson Jacobson, Cermetek, and Telenetics as November COMDEX announcers. Models support V.22 bis; columnist reports QAM-chip shortages and predicts tight supply into fall. Predictions are not verified outcomes.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        5
+      ]
+    },
+    {
+      "title": "TV/monitor convergence",
+      "summary": "Sears, Teknika, GE, Cardco, and Sakata illustrate the expanding display and accessory market.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        6
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "SpeedScript 3.0",
+      "detail": "C64 machine-language word processor distributed as a magazine listing or $12.95 disk plus shipping.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "name": "The Print Shop",
+      "detail": "Brøderbund home printing/design software; $49.95 Apple, $44.95 Atari/C64.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "name": "ETMODEM and AMODEM.835",
+      "detail": "Levitan identifies Jim Steinbrecher’s upload/download terminal programs for Atari 835/1030 use at $15 each, with further information on his ARCADE BBS.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        5
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games — March shelf selections",
+      "items": [
+        "Solo Flight — MicroProse, $34.95",
+        "Conan — Datasoft, $39.95",
+        "Mr. Do! — Datasoft, $39.95",
+        "Mancopter — Datasoft, $34.95",
+        "Lost Tomb — Datasoft, $34.95"
+      ],
+      "confidence": "same-month; editorial selections, not a sales chart",
+      "sourceRefs": [
+        3,
+        14
+      ]
+    },
+    {
+      "label": "Top 5 Movies — weekend beginning March 22",
+      "items": [
+        "1. Friday the 13th Part V: A New Beginning",
+        "2. Porky’s Revenge",
+        "3. Mask",
+        "4. The Last Dragon",
+        "5. Baby: Secret of the Lost Legend"
+      ],
+      "confidence": "same-week",
+      "sourceRefs": [
+        11
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Solo Flight",
+      "price": "$34.95 listed in review",
+      "note": "$34.95 listed in review; US dollars, not a launch-price claim.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "item": "SpeedScript disk",
+      "price": "$12.95 plus $2 US shipping/handling.",
+      "note": "$12.95 plus $2 US shipping/handling.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "item": "The Print Shop",
+      "price": "$49.95 Apple",
+      "note": "$49.95 Apple; $44.95 Atari and Commodore.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "item": "Teknika MJ-10 / MJ-22",
+      "price": "$299 / $439.95 suggested retail.",
+      "note": "$299 / $439.95 suggested retail.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "item": "Sears Total Video System",
+      "price": "$349 suggested retail.",
+      "note": "$349 suggested retail.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "item": "Cardco Monitor Tuner",
+      "price": "$99.95",
+      "note": "$99.95; remote-control version described only as slightly more expensive.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        6
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "PCjr users still have practical questions",
+      "summary": "March COMPUTE!’s telecom column answers a PCjr internal-modem question, while its video survey lists PCjr-compatible RGB displays. Useful contemporaneous contrast with the March 19 cancellation, not evidence of a post-cancellation support commitment.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        5,
+        6
+      ]
+    },
+    {
+      "headline": "Mouse-driven computing reaches preschoolers",
+      "summary": "Fred D’Ignazio recounts MicroStuf’s Owen Greeson teaching four-year-old daughter Mikalee MacPaint after she had resisted a keyboard-only computer. Present as an attributed anecdote, not a controlled study.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        7
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "artist": "REO Speedwagon",
+      "title": "Can’t Fight This Feeling",
+      "song": "Can’t Fight This Feeling",
+      "chart": "Cash Box Top 100 Singles",
+      "chartDate": "1985-03-23",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        13
+      ]
+    },
+    {
+      "rank": 2,
+      "artist": "Madonna",
+      "title": "Material Girl",
+      "song": "Material Girl",
+      "chart": "Cash Box Top 100 Singles",
+      "chartDate": "1985-03-23",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        13
+      ]
+    },
+    {
+      "rank": 3,
+      "artist": "Phil Collins",
+      "title": "One More Night",
+      "song": "One More Night",
+      "chart": "Cash Box Top 100 Singles",
+      "chartDate": "1985-03-23",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        13
+      ]
+    },
+    {
+      "rank": 4,
+      "artist": "Glenn Frey",
+      "title": "The Heat Is On",
+      "song": "The Heat Is On",
+      "chart": "Cash Box Top 100 Singles",
+      "chartDate": "1985-03-23",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        13
+      ]
+    },
+    {
+      "rank": 5,
+      "artist": "Wham! Featuring George Michael",
+      "title": "Careless Whisper",
+      "song": "Careless Whisper",
+      "chart": "Cash Box Top 100 Singles",
+      "chartDate": "1985-03-23",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        13
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "Give the printer a party job",
+    "summary": "The Print Shop: $49.95 Apple; $44.95 Atari and Commodore 64, as listed in March COMPUTE!.",
+    "tagline": "Cards, banners, signs and letterheads.",
+    "sourceRefs": [
+      4
+    ]
+  },
+  "market": {
+    "headline": "2400-bps modems carry an $800–$900 price range",
+    "summary": "March COMPUTE! reports a QAM-chip bottleneck and predicts tight supplies into fall. That is the columnist’s forecast, not an established outcome.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      5
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Police fire on funeral marchers near Uitenhage",
+    "summary": "South African police opened fire on people marching from Langa toward a funeral in KwaNobuhle on March 21. The event is recorded in the later Truth and Reconciliation Commission report.",
+    "confidence": "exact-date; retrospective corroboration",
+    "sourceRefs": [
+      12
+    ]
+  },
+  "bbsNote": {
+    "headline": "2400 bps beckons; online users already resent junk mail",
+    "summary": "Arlan R. Levitan’s March COMPUTE! column surveys modem speed and commercial online culture. These notes paraphrase published reporting, not recovered BBS posts.",
+    "posts": [
+      {
+        "topic": "The race to 2400 bps",
+        "platform": "V.22 bis modem market",
+        "text": "Column reports eight times the throughput of 300 bps and twice 1200 bps. Chip supply and early commercial-service orders could constrain availability; $800–$900 is a reported range. 2400 bps units operate at 600 baud, so do not conflate baud and bit rate."
+      },
+      {
+        "topic": "Paying to collect junk mail",
+        "platform": "Commercial online services",
+        "text": "Levitan complains that users pay connect-time charges to retrieve unsolicited sales pitches. This is a contemporary column summary, not a fabricated BBS post."
+      },
+      {
+        "topic": "Comedy By Wire",
+        "platform": "The Source",
+        "text": "Column recommends Billiam Coronel’s computer humor in the User Publishing Area, with back issues available."
+      },
+      {
+        "topic": "Health Forum",
+        "platform": "CompuServe",
+        "text": "Bob Walter is named as sysop of the fitness-oriented forum."
+      },
+      {
+        "topic": "People/Link promotion dispute",
+        "platform": "American People/Link / CompuServe",
+        "text": "Merrill Millman’s startup promoted itself through rival services. CompuServe objected to commercial messages in SIG message systems; the column explicitly distinguishes that policy from deletion of private email. The special Chicago free-connect promotion ended March 1, before this issue week."
+      },
+      {
+        "topic": "Atari modem help",
+        "platform": "ARCADE BBS",
+        "text": "Jim Steinbrecher’s ARCADE bulletin board is named as the contact for ETMODEM and AMODEM.835. No new March board launch is claimed."
+      }
+    ],
+    "sourceRefs": [
+      5
+    ]
+  },
+  "curiosity": {
+    "headline": "A birthday banner that takes half an hour to print",
+    "summary": "The home computer can make party decorations, but a dot-matrix printer tests the party planner’s patience.",
+    "detail": "McCullough’s March Print Shop review says a birthday banner with cake pictures at both ends exceeds six feet; one long banner took nearly half an hour to print. Do not claim these were necessarily the same printing job."
+  },
+  "accuracyLedger": {
+    "items": [
+      "PCjr announcement March 19; planned production stop April. No unit-sales, warranty or closeout-price claims.",
+      "March magazine features are not exact-week launches.",
+      "Music is Cash Box March 23 singles, not an inferred Billboard rock top five.",
+      "Games are editorial shelf selections, not sales rankings.",
+      "World anchor uses retrospective corroboration without importing later casualty totals."
+    ]
+  },
+  "sources": [
+    {
+      "title": "IBM to halt production of PC jr — UPI (search-index excerpt; full page blocked)",
+      "url": "https://www.upi.com/Archives/1985/03/19/IBM-to-halt-production-of-PC-jr/7659480056400/",
+      "date": "1985-03-19",
+      "datePrecision": "day"
+    },
+    {
+      "title": "IBM to Discontinue Production of PCjr Personal Computer — Michael Schrage, Washington Post (opening excerpt)",
+      "url": "https://www.washingtonpost.com/archive/business/1985/03/20/ibm-to-discontinue-production-of-pcjr-personal-computer/042e61c3-6579-4dd1-960d-d53148978792/",
+      "date": "1985-03-20",
+      "datePrecision": "day"
+    },
+    {
+      "title": "SpeedScript 3.0 — Charles Brannon, COMPUTE! 58",
+      "url": "https://www.atarimagazines.com/compute/issue58/speed_script.html",
+      "date": "1985-03",
+      "datePrecision": "month"
+    },
+    {
+      "title": "Solo Flight review — Arthur Leyenberger, COMPUTE! 58",
+      "url": "https://www.atarimagazines.com/compute/issue58/review_solo_flight.html",
+      "date": "1985-03",
+      "datePrecision": "month"
+    },
+    {
+      "title": "The Print Shop review — Karen G. McCullough, COMPUTE! 58",
+      "url": "https://www.atarimagazines.com/compute/issue58/review_print_shop.html",
+      "date": "1985-03",
+      "datePrecision": "month"
+    },
+    {
+      "title": "Telecomputing Today: The Race to Talk Fast — Arlan R. Levitan, COMPUTE! 58",
+      "url": "https://www.atarimagazines.com/compute/issue58/telecomputing_today.html",
+      "date": "1985-03",
+      "datePrecision": "month"
+    },
+    {
+      "title": "What’s New in Computer Video — Kathy Yakal, COMPUTE! 58",
+      "url": "https://www.atarimagazines.com/compute/issue58/computer_video.html",
+      "date": "1985-03",
+      "datePrecision": "month"
+    },
+    {
+      "title": "On the Road — Fred D’Ignazio, COMPUTE! 58",
+      "url": "https://www.atarimagazines.com/compute/issue58/on_the_road.html",
+      "date": "1985-03",
+      "datePrecision": "month"
+    },
+    {
+      "title": "TPUG Magazine 12, Telephreak Means Teletrouble, p.20 — Ken Cox",
+      "url": "https://www.tpug.ca/tpug-media/tpugmag/TPUG_Issue_12_1985_Mar.pdf",
+      "date": "1985-03",
+      "datePrecision": "month"
+    },
+    {
+      "title": "Billboard Top Rock Tracks issue archive",
+      "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-03-23/",
+      "date": "1985-03-23",
+      "datePrecision": "day"
+    },
+    {
+      "title": "Billboard Mainstream Rock number-one chronology — retrospective corroboration",
+      "url": "https://en.wikipedia.org/wiki/List_of_Billboard_Mainstream_Rock_number-one_songs_of_the_1980s",
+      "date": "retrospective; chart date 1985-03-23",
+      "datePrecision": "unknown"
+    },
+    {
+      "title": "The Numbers: Weekend Domestic Box Office",
+      "url": "https://www.the-numbers.com/box-office-chart/weekend/1985/03/22",
+      "date": "1985-03-22/1985-03-24",
+      "datePrecision": "unknown"
+    },
+    {
+      "title": "Truth and Reconciliation Commission Final Report, vol.3 ch.2 subsection17 — retrospective",
+      "url": "https://sabctrc.saha.org.za/reports/volume3/chapter2/subsection17.htm",
+      "date": "1998; event 1985-03-21",
+      "datePrecision": "unknown"
+    },
+    {
+      "title": "Cash Box Top 100 Singles, March 23, 1985",
+      "url": "https://cashboxarchives.com/archives/80s_files/19850323.html",
+      "date": "1985-03-23",
+      "datePrecision": "day"
+    },
+    {
+      "title": "COMPUTE! #58: Datasoft Games, Educational Packages",
+      "url": "https://www.atarimagazines.com/compute/issue58/news_games_educational_packages.html",
+      "date": "1985-03",
+      "datePrecision": "month"
+    }
+  ],
+  "gadgetWatch": {
+    "headline": "The television becomes a multi-input household display",
+    "summary": "March COMPUTE! reports TVs adding video/audio jacks for computers, VCRs, games, and videodisc equipment. Sears’s $349 Total Video System combines TV and several monitor modes; Cardco’s $99.95 tuner gives a composite monitor TV reception. Consumer-video trend, not an exact-week unveiling.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      6
+    ]
+  }
+}
