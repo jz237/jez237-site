@@ -22,12 +22,13 @@ export class ImpactAdjudicator{
   return Number.isFinite(time)&&(time-(this.damageTimes.get(key)??-Infinity)>=cooldown||time-(this.feedbackTimes.get(key)??-Infinity)>=cooldown);
  }
 
- adjudicate<T extends ImpactContact>(contacts:Iterable<T>,time:number,damageMultiplier=1):ImpactDecision<T>[] {
+ /** speedFactor (offline only) scales each contact's damage by its closing speed, capped at speedCap. */
+ adjudicate<T extends ImpactContact>(contacts:Iterable<T>,time:number,damageMultiplier=1,speedFactor?:(closing:number)=>number,speedCap=Infinity):ImpactDecision<T>[] {
   if(!Number.isFinite(time)||!Number.isFinite(damageMultiplier)||damageMultiplier<0)return[];
   const strongest=new Map<string,{contact:T;damage:number}>();
   for(const contact of contacts){
    if(!Number.isFinite(contact.impulse)||!Number.isFinite(contact.closing)||contact.closing<.65||contact.impulse<1500)continue;
-   const damage=structuralDamage(contact.impulse,contact.closing)*damageMultiplier,previous=strongest.get(contact.key);
+   const base=structuralDamage(contact.impulse,contact.closing)*damageMultiplier,damage=speedFactor?Math.min(speedCap,base*speedFactor(contact.closing)):base,previous=strongest.get(contact.key);
    if(!previous||damage>previous.damage||damage===previous.damage&&(contact.impulse>previous.contact.impulse||contact.impulse===previous.contact.impulse&&contact.closing>previous.contact.closing))strongest.set(contact.key,{contact,damage});
   }
   const result:ImpactDecision<T>[]=[];

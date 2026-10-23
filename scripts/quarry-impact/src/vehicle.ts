@@ -166,6 +166,12 @@ export class Vehicle {
   steerLimit = 1;
   /** Share of lock lost steering toward a bent front corner, signed like the steer input (STEER_SKEW); 0 straight. */
   steerSkew = 0;
+  /** Engine power multiplier for offline derbies (DERBY_PACE); undefined everywhere else, so physics is unchanged. */
+  powerScale?:number;
+  /** Drive/brake grip multiplier for offline derbies (DERBY_PACE); undefined elsewhere. */
+  tractionScale?:number;
+  /** Offline derby AI takes run-ups at its targets (CHARGE). */
+  charge=false;
   readonly brakeBias = [1,1,1,1];
   readonly damperBias = [1,1,1,1];
   /** Broken springs and driveshafts per wheel (offline): stiffness and rest-length scales, and drive on/off. */

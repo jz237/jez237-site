@@ -389,3 +389,12 @@ export const runningHot=(engineDamage:number,cooling:boolean,throttle:number)=>!
 export const hotClock=(t:number,hot:boolean,dt:number)=>{const v=Math.max(0,Number.isFinite(t)?t:0);return dt>0?hot?v+dt:Math.max(0,v-dt*OVERHEAT_FIRE.cool):v;};
 export function overheatFire(t:number,carId:number){const x=Math.sin(carId*19.1+7.7)*43758.5453;return t>=OVERHEAT_FIRE.after&&x-Math.floor(x)<OVERHEAT_FIRE.share;}
 export const overheatWarning=(t:number)=>t>=OVERHEAT_FIRE.warn?'ENGINE OVERHEATING':'';
+/** An AI driver whose engine is overheating backs off below OVERHEAT_FIRE.throttle so it cools (forward throttle only). */
+export const coolThrottle=(throttle:number,hot:boolean)=>hot&&throttle>OVERHEAT_FIRE.throttle-.1?OVERHEAT_FIRE.throttle-.1:throttle;
+/** An AI driver whose lock is short toward its target (STEER_SKEW at least LONG_WAY.skew) and has it well behind
+ * (past LONG_WAY.angle) turns the long way round on its good lock. Returns the steer to use, or null to steer as usual. */
+export const LONG_WAY={skew:.3,angle:1.9} as const;
+export function longWay(angle:number,skew:number){
+  if(!Number.isFinite(angle)||!Number.isFinite(skew)||Math.abs(skew)<LONG_WAY.skew||Math.abs(angle)<LONG_WAY.angle)return null;
+  return Math.sign(angle)===Math.sign(skew)?-Math.sign(angle):null;
+}

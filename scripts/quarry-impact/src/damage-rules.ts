@@ -17,3 +17,15 @@ export function collisionDamageMultiplier(race:boolean,rule:DamageRule):number{
 export function damageRecordKey(category:string,rule:DamageRule):string{
  return rule==='normal'?category:`${category}:damage:${rule}`;
 }
+/** Offline crashes hurt with speed: impulse-based damage is scaled by (closing speed / ref)^power, so a typical derby hit
+ * (closing about ref) is unchanged, a slow shove does a fraction and a flat-out smash does several times as much, up to cap.
+ * Online keeps the impulse-only balance. */
+export const IMPACT_SPEED={ref:8.5,power:1.5,min:.35,max:4.5,cap:70} as const;
+export function impactSpeedFactor(closing:number){
+ const c=Math.max(0,Number.isFinite(closing)?closing:0);
+ return Math.min(IMPACT_SPEED.max,Math.max(IMPACT_SPEED.min,(c/IMPACT_SPEED.ref)**IMPACT_SPEED.power));
+}
+/** Offline derbies give every car more power and more drive grip (derby arenas are loose: a rear-drive car was limited by
+ * tyre grip to about 3.9 m/s² whatever its power), so there is room to build up speed for a hit inside an arena. Derby
+ * results are scored, not timed, so no time records change. */
+export const DERBY_PACE={power:1.45,traction:1.45} as const;
