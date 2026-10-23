@@ -62,7 +62,7 @@ test('vertical turbulence is not clipped to the resting-water band', () => {
   assert.ok(s.position[1] > env.level - 0.2 + 0.10);
 });
 
-test('shear tips the fish and actual angular velocity drives the bend; it rights itself afterward', () => {
+test('shear tips and rotates the fish; it rights itself afterward', () => {
   const s = hover(), w = calm(); w.angular = [1.8, 0.8, 1.1];
   const yaw = s.heading;
   for (let i = 0; i < 45; i++) s.advance(1 / 60, [0, 0, 0], env, true, w);

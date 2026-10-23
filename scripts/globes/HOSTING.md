@@ -79,7 +79,9 @@ The shared fin solver uses full 3D body-relative fluid velocity and angular
 motion while pitching/rolling, so transported water does not create false drag.
 The Atelier accepts optional host-owned `locomotion`
 (position/velocity/speed in model units, heading/pitch/roll in radians, angularVelocity/steerRate,
-drive and mode); without it the standalone choreography and fin solver are unchanged.
+drive and mode); without it the standalone choreography still runs. The shared
+solver source includes the flexibility changes, but the standalone published
+bundle is deliberately not rebuilt by this globe release.
 This is an artistic coupling, not a fully coupled
 fish/fluid solver or instantaneous collision against every turbulent wave. The
 betta does not eat the Koi scene's food. The **Flare fins / Relax fins** button controls the display; each opening
