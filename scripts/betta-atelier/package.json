@@ -1,0 +1,16 @@
+{
+  "name": "betta-atelier",
+  "version": "1.7.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "test": "node --test fin-dynamics.test.mjs"
+  },
+  "dependencies": {
+    "three": "0.186.1",
+    "vite": "8.3.4"
+  },
+  "devDependencies": {}
+}
