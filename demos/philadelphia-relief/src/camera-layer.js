@@ -3,7 +3,7 @@ import { WEBCAMS, trafficCameras, regionalCameras, discoveredCameras, cameraMatc
   from './camera-data.js?v=philly-2026092203';
 import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092121';
 
-import { mountCameraMedia, mountCameraPlayer } from './camera-media.js?v=philly-2026092202';
+import { mountCameraMedia, mountCameraPlayer } from './camera-media.js?v=philly-2026102301';
 
 const element = (tag, className, text) => {
   const node = document.createElement(tag); node.className = className;

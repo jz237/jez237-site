@@ -6,15 +6,16 @@ const loadHls = () => hlsModule ||= import('https://cdn.jsdelivr.net/npm/hls.js@
 export function mountCameraMedia(host, item, {
   onStatus = () => {}, controls = false, loadRuntime = loadHls,
 } = {}) {
-  let disposed = false, failed = false, player, frame, video, image, timer, refresh, limit;
+  let disposed = false, failed = false, expired = false, player, frame, video, image, timer, refresh, limit;
+  const stopped = () => disposed || failed || expired;
   const status = message => { if (!disposed) onStatus(message); };
-  const ready = message => { if (failed) return; clearTimeout(timer); status(message); };
+  const ready = message => { if (stopped()) return; clearTimeout(timer); status(message); };
   const stopVideo = () => {
     player?.destroy(); player = undefined;
     if (video) { video.pause(); video.removeAttribute('src'); video.load(); }
   };
   const fail = () => {
-    if (disposed || failed) return;
+    if (stopped()) return;
     failed = true;
     clearTimeout(timer); clearTimeout(limit); clearInterval(refresh); stopVideo();
     if (image) image.removeAttribute('src');
@@ -43,31 +44,41 @@ export function mountCameraMedia(host, item, {
     video.controls = controls; video.setAttribute('aria-label', `${item.name} · DelDOT video`);
     video.addEventListener('playing', () => ready('DelDOT video · near-live, subject to provider delay.'));
     video.addEventListener('error', fail); host.append(video);
-    const play = () => video.play().catch(() => {
-      if (disposed) return;
-      video.controls = true; ready('Press Play to start the camera video.');
-    });
+    const play = () => {
+      if (stopped()) return;
+      return video.play().catch(() => {
+        if (stopped()) return;
+        video.controls = true; ready('Press Play to start the camera video.');
+      });
+    };
     const connect = async () => {
       try {
+        const native = video.canPlayType('application/vnd.apple.mpegurl');
+        // Prefer native playback on modern Safari and native-only browsers.
+        // Chrome also reports "maybe", but some DelDOT streams need HLS.js.
+        if (native && (globalThis.ManagedMediaSource || !globalThis.MediaSource)) {
+          video.src = item.stream; play(); return;
+        }
         const { default: Hls } = await loadRuntime();
-        if (disposed || failed) return;
+        if (stopped()) return;
         if (Hls.isSupported()) {
           player = new Hls({ maxBufferLength: 10, backBufferLength: 0, capLevelToPlayerSize: true });
           player.on(Hls.Events.MANIFEST_PARSED, play);
           player.on(Hls.Events.ERROR, (_, data) => {
-            if (data.fatal) { console.warn('Camera preview:', data.details); fail(); }
+            if (data.fatal && !stopped()) { console.warn('Camera preview:', data.details); fail(); }
           });
           player.loadSource(item.stream); player.attachMedia(video);
-        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        } else if (native) {
           video.src = item.stream; play();
         } else fail();
       } catch (error) {
-        if (!disposed) { console.warn('Camera preview:', error.message); fail(); }
+        if (!stopped()) { console.warn('Camera preview:', error.message); fail(); }
       }
     };
     void connect();
     // Match DelDOT's short viewing sessions; avoid an unattended stream running indefinitely.
     limit = setTimeout(() => {
+      expired = true;
       stopVideo(); clearTimeout(timer); status('Preview paused after one minute. Retry to watch again.');
     }, 60000);
   } else { clearTimeout(timer); status('Open the provider page to view this camera.'); }
