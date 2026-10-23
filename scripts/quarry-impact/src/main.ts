@@ -1067,6 +1067,9 @@ function text(id: string, t: string) {
   const e = document.getElementById(id);
   if (e) e.textContent = t;
 }
+/** Camera flashes across the stands of the active venue (after a smash or a player takedown). */
+const SMASH_FLASHES=26,TAKEDOWN_FLASHES=18;
+function crowdFlashes(count:number){activeVenue.root.traverse(o=>{const flash=o.userData.crowdFlash;if(typeof flash==='function')flash(count);});}
 /** Show a HUD message. A higher-priority message (a smash) is not overwritten by ordinary ones until it expires. */
 let statusPriority=0;
 function toast(t: string, duration = 3, priority = 0) {
@@ -1590,14 +1593,14 @@ function step(dt: number) {
     if(a){
       const before=a.health;
       const strippedA=stripCount(a);a.collisionHit(point1,vb.clone().sub(va).normalize(),damage,elapsed,b?.paintColor);if(b)creditStrip(b,a,strippedA);
-      if(b){b.inflicted+=before-a.health;const wreck=eventAwards.hit(b.id,a.id,before-a.health,before>0&&a.health<=0,elapsed,closing);if(wreck)sound.crowd(b.id===0?1:.7);if(wreck&&b.id===0&&!demo&&!online?.active){slowMoUntil=clock+TAKEDOWN_SLOWMO.seconds;slowMoScale=TAKEDOWN_SLOWMO.scale;}else if(before-a.health>=12)sound.crowd(b.id===0?.6:.4);if(wreck&&b.id===0)callout('TAKEDOWN',a);else if(b.id===0&&before-a.health>=12)callout('BIG HIT',a);combat.hit(b.id,a.id,before,a.health,elapsed);if(mode==='derby')combat.contact(scoreMotion[b.id],scoreMotion[a.id],before-a.health,elapsed);}
+      if(b){b.inflicted+=before-a.health;const wreck=eventAwards.hit(b.id,a.id,before-a.health,before>0&&a.health<=0,elapsed,closing);if(wreck)sound.crowd(b.id===0?1:.7);if(wreck&&b.id===0&&!demo&&!online?.active){slowMoUntil=clock+TAKEDOWN_SLOWMO.seconds;slowMoScale=TAKEDOWN_SLOWMO.scale;crowdFlashes(TAKEDOWN_FLASHES);}else if(before-a.health>=12)sound.crowd(b.id===0?.6:.4);if(wreck&&b.id===0)callout('TAKEDOWN',a);else if(b.id===0&&before-a.health>=12)callout('BIG HIT',a);combat.hit(b.id,a.id,before,a.health,elapsed);if(mode==='derby')combat.contact(scoreMotion[b.id],scoreMotion[a.id],before-a.health,elapsed);}
       if(b?.id===0)telemetry?.impact(a.id,before,a.health);
       smashLoss.a=before-a.health;
     }
     if(b){
       const before=b.health;
       const strippedB=stripCount(b);b.collisionHit(point2,va.clone().sub(vb).normalize(),damage,elapsed,a?.paintColor);if(a)creditStrip(a,b,strippedB);
-      if(a){a.inflicted+=before-b.health;const wreck=eventAwards.hit(a.id,b.id,before-b.health,before>0&&b.health<=0,elapsed,closing);if(wreck)sound.crowd(a.id===0?1:.7);if(wreck&&a.id===0&&!demo&&!online?.active){slowMoUntil=clock+TAKEDOWN_SLOWMO.seconds;slowMoScale=TAKEDOWN_SLOWMO.scale;}else if(before-b.health>=12)sound.crowd(a.id===0?.6:.4);if(wreck&&a.id===0)callout('TAKEDOWN',b);else if(a.id===0&&before-b.health>=12)callout('BIG HIT',b);combat.hit(a.id,b.id,before,b.health,elapsed);if(mode==='derby')combat.contact(scoreMotion[a.id],scoreMotion[b.id],before-b.health,elapsed);}
+      if(a){a.inflicted+=before-b.health;const wreck=eventAwards.hit(a.id,b.id,before-b.health,before>0&&b.health<=0,elapsed,closing);if(wreck)sound.crowd(a.id===0?1:.7);if(wreck&&a.id===0&&!demo&&!online?.active){slowMoUntil=clock+TAKEDOWN_SLOWMO.seconds;slowMoScale=TAKEDOWN_SLOWMO.scale;crowdFlashes(TAKEDOWN_FLASHES);}else if(before-b.health>=12)sound.crowd(a.id===0?.6:.4);if(wreck&&a.id===0)callout('TAKEDOWN',b);else if(a.id===0&&before-b.health>=12)callout('BIG HIT',b);combat.hit(a.id,b.id,before,b.health,elapsed);if(mode==='derby')combat.contact(scoreMotion[a.id],scoreMotion[b.id],before-b.health,elapsed);}
       if(a?.id===0)telemetry?.impact(b.id,before,b.health);
       smashLoss.b=before-b.health;
     }
@@ -1605,7 +1608,7 @@ function step(dt: number) {
     const smashed=!online?.active&&!demo&&!!a&&!!b&&(a.id===0||b.id===0)&&isSmash(Math.max(smashLoss.a,smashLoss.b));
     if(smashed){
       if(clock>=slowMoUntil){slowMoUntil=clock+SMASH.slowmo;slowMoScale=SMASH.scale;}
-      toast(smashLabel(closing),1.4,2);recordRumbleImpact(1);sound.crowd(.85);
+      toast(smashLabel(closing),1.4,2);recordRumbleImpact(1);sound.crowd(.85);crowdFlashes(SMASH_FLASHES);
     }
     if(feedback){
       collisions++;
@@ -2205,6 +2208,8 @@ async function boot() {
     setDiscHeat: (id: number, wheel: number, v: number) => { const c = cars.find(x => x.id === id); if (c && Number.isInteger(wheel) && wheel >= 0 && wheel < 4 && Number.isFinite(v)) c.discHeat[wheel] = Math.max(0, Math.min(1, v)); },
     setOil: (id: number, v: number) => { const c = cars.find(x => x.id === id); if (c && Number.isFinite(v)) c.oilLevel = Math.max(0, Math.min(1, v)); },
     /** QA: tear a named part (front-bumper, hood, …) off a car as a hard hit would. */
+    /** QA: pop camera flashes across the active venue's stands. */
+    crowdFlash: (count: number) => { let lit = 0; activeVenue.root.traverse(o => { const flash = o.userData.crowdFlash; if (typeof flash === 'function') lit += flash(count); }); return lit; },
     /** QA: set an offline car's engine power multiplier (undefined restores the stock engine). */
     setPower: (id: number, scale?: number, traction?: number) => { const c = cars.find(x => x.id === id); if (!c?.extendedDamage) return false; c.powerScale = scale; c.tractionScale = traction; return true; },
     /** QA: snap an offline car's fan belt with this much battery left. */

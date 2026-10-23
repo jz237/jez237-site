@@ -1,4 +1,6 @@
 import * as T from 'three';
+/** Camera flashes in the stands: at most CROWD_FLASH.max at once, each lasting about CROWD_FLASH.life seconds. */
+export const CROWD_FLASH={max:30,life:.14,size:2.2} as const;
 export type SpectatorPlace={x:number;y:number;z:number;yaw:number;seated?:boolean};
 /** Original low-poly spectators, batched by geometry rather than person or outfit.
  * Local +Z faces the event; y is the grandstand tread, not the seat top. */
@@ -32,8 +34,25 @@ export function createVenueCrowd(places:readonly SpectatorPlace[]){
  let triangles=0;for(const[shape,rows]of batches){const geo=geometries[shape],mesh=new T.InstancedMesh(geo,material,rows.length);mesh.name='crowd_'+shape;rows.forEach((row,i)=>{mesh.setMatrixAt(i,row.matrix);mesh.setColorAt(i,row.color)});meshes.set(shape,mesh);if(shape==='limb'||shape==='head')mesh.instanceMatrix.setUsage(T.DynamicDrawUsage);mesh.computeBoundingSphere();if(mesh.boundingSphere)mesh.boundingSphere.radius+=.35;mesh.castShadow=mesh.receiveShadow=true;root.add(mesh);triangles+=(geo.index?.count??geo.getAttribute('position').count)/3*rows.length;}
  root.userData.spectatorCount=places.length;root.userData.triangles=triangles;
  const rotation=new T.Matrix4(),posed=new T.Matrix4();let lastTick=-1;
+ // Camera flashes popping in the stands after a big hit: a small pool of additive sprites made on first use (browser only).
+ const flashes:{sprite:T.Sprite;until:number}[]=[];let flashTexture:T.Texture|null=null,now=0,flashSeed=1;
+ function flash(count:number){
+  if(disposed||!places.length||typeof document==='undefined')return 0;
+  if(!flashTexture){const c=document.createElement('canvas');c.width=c.height=32;const g=c.getContext('2d');if(!g)return 0;const r=g.createRadialGradient(16,16,0,16,16,16);r.addColorStop(0,'rgba(255,255,255,1)');r.addColorStop(.25,'rgba(240,246,255,.85)');r.addColorStop(1,'rgba(220,235,255,0)');g.fillStyle=r;g.fillRect(0,0,32,32);flashTexture=new T.CanvasTexture(c);}
+  let lit=0;
+  for(let k=0;k<Math.min(CROWD_FLASH.max,Math.max(0,Math.floor(count)));k++){
+   let f=flashes.find(x=>x.until<=now);
+   if(!f){if(flashes.length>=CROWD_FLASH.max)break;const sprite=new T.Sprite(new T.SpriteMaterial({map:flashTexture,color:0xffffff,blending:T.AdditiveBlending,transparent:true,depthWrite:false}));sprite.name='crowd_flash';sprite.visible=false;root.add(sprite);f={sprite,until:0};flashes.push(f);}
+   flashSeed=(Math.imul(flashSeed,1664525)+1013904223)>>>0;const p=places[flashSeed%places.length],life=CROWD_FLASH.life*(.6+(flashSeed>>>8)%100/100*.8);
+   f.sprite.position.set(p.x,p.y+(p.seated===false?1.6:1.15),p.z);f.sprite.scale.setScalar(CROWD_FLASH.size*(.7+(flashSeed>>>16)%100/100*.6));
+   f.until=now+life+(k%5)*.035;f.sprite.visible=true;lit++;
+  }
+  return lit;
+ }
+ root.userData.crowdFlash=flash;
  function update(time:number){
   if(disposed||!Number.isFinite(time)||time<0)return;
+  now=time;for(const f of flashes)if(f.sprite.visible&&f.until<=time)f.sprite.visible=false;
   const tick=Math.floor(time*30);if(tick===lastTick)return;lastTick=tick;
   for(const arm of arms){
    const angle=arm.amplitude*(Math.sin(tick/30*arm.speed+arm.phase)-Math.sin(arm.phase));
@@ -45,5 +64,5 @@ export function createVenueCrowd(places:readonly SpectatorPlace[]){
   }
   for(const shape of ['limb','head'] as const){const mesh=meshes.get(shape);if(mesh)mesh.instanceMatrix.needsUpdate=true;}
  }
- let disposed=false;return{root,update,dispose(){if(disposed)return;disposed=true;root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose()});Object.values(geometries).forEach(g=>g.dispose());material.dispose();root.clear();}};
+ let disposed=false;return{root,update,dispose(){if(disposed)return;disposed=true;for(const f of flashes)(f.sprite.material as T.Material).dispose();flashTexture?.dispose();root.removeFromParent();root.traverse(o=>{if(o instanceof T.InstancedMesh)o.dispose()});Object.values(geometries).forEach(g=>g.dispose());material.dispose();root.clear();}};
 }

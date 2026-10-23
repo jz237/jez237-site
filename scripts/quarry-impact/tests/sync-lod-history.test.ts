@@ -1,6 +1,7 @@
+import {restoreCrowdFlashBytes} from './crowd-flash-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readSyncLodPrevious,restoreSyncLodBytes,verifySyncLodRevision} from './sync-lod-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreCrowdFlashBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('SyncLod preserves every prior fixture, vehicle asset, venue art and history input',verifySyncLodRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/sync-lod/revision.json').toString());
