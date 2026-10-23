@@ -20,7 +20,7 @@ export function makeFoamField(renderer,common,uniforms){
  vec2 beachUV=(p-previousCenter)/previousSpan+.5;
  float beachInside=step(0.,beachUV.x)*step(beachUV.x,1.)*step(0.,beachUV.y)*step(beachUV.y,1.);
  vec2 oldBeach=texture2D(previousFoam,beachUV).ba*beachInside*foamReady;
- float compression=0.;if(nativeWaterActive==0){vec2 q=swellInverse(p);float legacyHeight;vec2 shift,grad;mat2 J;swellAt(q,legacyHeight,shift,grad,J);compression=1.-(J[0][0]*J[1][1]-J[0][1]*J[1][0]);}
+ float compression=0.;if(nativeWaterActive==0&&fftActive==0){vec2 q=swellInverse(p);float legacyHeight;vec2 shift,grad;mat2 J;swellAt(q,legacyHeight,shift,grad,J);compression=1.-(J[0][0]*J[1][1]-J[0][1]*J[1][0]);}
  // Include the same variable surf sets that lift the hulls and rendered water.
  vec3 surface=oceanSurface(p);float h=surface.x;
  vec2 direction=normalize(surface.yz+vec2(.001));
@@ -28,7 +28,7 @@ export function makeFoamField(renderer,common,uniforms){
  float crest=smoothstep(.018,.13,curvature)*smoothstep(.25,1.15,h)
   *smoothstep(.10,.32,length(surface.yz));
  // Whitecaps from compressed wind-sea crests leave short-lived patches downwind.
- float whitecap=(nativeWaterActive!=0?0.:1.)*smoothstep(.2,.32,compression)*smoothstep(-.1,.3,h);
+ float whitecap=(nativeWaterActive!=0||fftActive!=0?0.:1.)*smoothstep(.2,.32,compression)*smoothstep(-.1,.3,h);
  float bottom=floorDepth(p),depth=height(p)-bottom;
  float breaker=customTerrain*(1.-smoothstep(.3,2.1,depth))*smoothstep(.01,.18,depth)
   *(.28+.72*smoothstep(-.1,.7,h));
