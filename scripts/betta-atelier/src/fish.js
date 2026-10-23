@@ -658,7 +658,7 @@ export function createBetta() {
     macroTextures,
     scaleCount: 0,
     finCount: 7,
-    revision: "1.6.1",
+    revision: "1.7",
     display, eyes,
     gait,
     bodyMotion,
@@ -736,7 +736,8 @@ export function createBetta() {
           Math.cos(targetHeading - heading),
         ) *
         (1 - Math.exp(-3 * dt));
-      turn = T.MathUtils.damp(turn, dt ? (heading - old) / dt : 0, 4, dt);
+      const angularVelocity = dt ? (heading - old) / dt : 0;
+      turn = T.MathUtils.damp(turn, angularVelocity, 4, dt);
       tx = T.MathUtils.damp(tx, targetX, 2, dt);
       ty = T.MathUtils.damp(ty, targetY, 2, dt);
       flowStrength = T.MathUtils.damp(flowStrength, water.strength, 1.8, dt);
@@ -766,7 +767,7 @@ export function createBetta() {
       uniforms.uGill.value = bodyMotion.gill;
       const state = {
         body: bodyMotion, time: t, phase, pectoralPhase, drive: effort * 0.55, effort, turn, flare: uniforms.uFlare.value,
-        heading, angularVelocity: turn, velocity, origin: fish.position.toArray(),
+        heading, angularVelocity, velocity, origin: fish.position.toArray(),
         strength: flowStrength, direction: water.direction,
         bodyRadius(x, y) {
           const pixelX = x / SCALE + 680;
@@ -786,6 +787,7 @@ export function createBetta() {
       fish.userData.drive = drive;
       fish.userData.effort = effort;
       fish.userData.breathPhase = breathPhase;
+      fish.userData.turn = turn;
     },
   };
   return fish;

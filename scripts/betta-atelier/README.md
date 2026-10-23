@@ -1,4 +1,4 @@
-# Living Silk — Betta Atelier 1.5
+# Living Silk — Betta Atelier 1.7
 
 An interactive, genuinely volumetric male halfmoon Betta study for Jez237.
 Live: https://jez237.com/demos/betta-atelier/
@@ -266,3 +266,29 @@ once per frame, with mirrored socket axes for matching forward/upward movement.
 The existing solver test now verifies an incomplete quarter-second opening and
 near-complete one-second opening at 30/60/120 fps, plus partly open resting posture.
 Evidence: `/home/jez237/.openclaw/workspace/tmp/betta-one-second-flare-20261023/`.
+
+
+## Turning curvature and fin follow-through · revision 1.7
+
+Jez requested more body and fin bending specifically while turning
+(`1563118644097982515`). Re-reviewed the existing real Colorsbetta frames at
+4.30–5.00 seconds: the head leads the change of heading while the rear body and
+large fan remain curled, then unfold behind it. This is a qualitative oblique
+reference, not a calibrated angle measurement or a flow experiment.
+
+- Turning now produces a softly saturated, sustained C-curve through the trunk,
+  separate from the unchanged narrow propulsion stroke. It builds and releases
+  with smoothed yaw rate; head attachments remain steady and spine length is
+  preserved. Both turn directions use the same symmetric response.
+- The caudal fan wraps further behind its peduncle. Dorsal and anal rays cup
+  laterally along their distributed body insertions. These motor targets retain
+  ray length; the existing flexible membrane and rotational water drag provide
+  edge lag and recovery. Drag uses actual angular velocity, not the delayed
+  muscle response. No extra flaring or larger idle swing was introduced.
+- One-second display, partly open resting fins, synchronized gaze and breathing
+  are preserved. Fourteen tests cover existing behavior plus bilateral turns,
+  centerline length, rendered fin cupping/lag/recovery at 30 and 120 fps.
+
+Evidence: `/home/jez237/.openclaw/workspace/tmp/betta-turn-bend-20261023/`.
+The model remains an artistic reduced-order approximation; fin-to-fin
+self-collision is not simulated.

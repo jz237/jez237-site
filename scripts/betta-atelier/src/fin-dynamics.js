@@ -73,6 +73,7 @@ export class FinDynamics {
 
   makeTargets(state) {
     const { time: t, phase, drive, turn, flare, pectoralPhase, body } = state;
+    const turnBend = body.turnBend ?? Math.tanh(turn * 0.95);
     const { columns: w, rows: h, kind, side, rest, roots, target, scratch } = this;
     for (let i = 0; i < w; i++) {
       const u = i / (w - 1), r = i * 3;
@@ -90,13 +91,22 @@ export class FinDynamics {
           const angle = Math.atan2(y, x) * spread - (kind === 0 ? 0.10 * (1 - flare) : 0), length = Math.hypot(x, y);
           x = length * Math.cos(angle); y = length * Math.sin(angle);
           const wave = kind === 0
-            ? (0.012 + drive * 0.20) * Math.sin(phase - 2.5 - v * 0.8) + turn * 0.12
-            : (0.025 + drive * 0.13) * Math.sin(phase * 0.8 - u * 3.7 - v * 0.7 + kind * 1.8);
+            ? (0.012 + drive * 0.20) * Math.sin(phase - 2.5 - v * 0.8)
+            : (0.025 + drive * 0.13) * Math.sin(phase * 0.8 - u * 3.7 - v * 0.7 + kind * 1.8)
+              + turnBend * (0.20 + u * 0.20);
           const bend = wave * v;
           // Bend about the ray's in-plane perpendicular; roots stay attached.
           const length3 = Math.hypot(x, y);
           x *= Math.cos(bend); y *= Math.cos(bend);
           z += length3 * Math.sin(bend);
+          if (kind === 0) {
+            // The broad caudal fan wraps behind the peduncle during a turn.
+            // Rotate across its span, preserving ray length and vertical spread;
+            // the membrane solver supplies the slower free-edge follow-through.
+            const sweep = turnBend * 0.48 * v;
+            const cx = x * Math.cos(sweep) - z * Math.sin(sweep);
+            z = x * Math.sin(sweep) + z * Math.cos(sweep); x = cx;
+          }
         } else if (kind === 3) {
           // Alternating rowing stroke, then feathered/cupped recovery.
           const beat = pectoralPhase + (side < 0 ? Math.PI : 0);

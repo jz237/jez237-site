@@ -11,6 +11,10 @@ export class BodyMotion {
   }
   update(phase, effort, turn, breathPhase) {
     this.effort = effort;
+    // A maneuver is a sustained C-bend, not a wider propulsion oscillation.
+    // Positive yaw leaves the rear trunk on the previous heading behind the head.
+    // Soft saturation avoids a kink as the turn speeds up or changes direction.
+    this.turnBend = Math.tanh(turn * 0.95);
     this.mouth = Math.max(0, Math.sin(breathPhase)) ** 1.4 * (0.8 + effort * 0.2);
     // Buccal intake precedes the opercular outlet: not two synchronous flaps.
     this.gill = Math.max(0, Math.sin(breathPhase - 1.05)) ** 1.3 * (0.8 + effort * 0.2);
@@ -21,7 +25,8 @@ export class BodyMotion {
       const envelope = u * u * (3 - 2 * u);
       // Compact propulsion strokes; turning curvature is a separate maneuver.
       // Quiet holding has almost no trunk excursion, but breathing continues.
-      const angle = envelope * ((0.006 + effort * 0.24) * Math.sin(phase - u * 3.1) + clamp(turn, -1, 1) * 0.46);
+      const angle = envelope * (0.006 + effort * 0.24) * Math.sin(phase - u * 3.1)
+        + smooth(0.03, 1, u) * this.turnBend * 1.22;
       const c = Math.cos(angle), s = Math.sin(angle);
       if (i) { x += dx * (oldCos + c) * 0.5; z += dx * (oldSin + s) * 0.5; }
       this.data.set([x, z, c, s], i * 4);
