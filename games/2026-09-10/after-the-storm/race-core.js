@@ -80,8 +80,9 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
  if(!['modern','native'].includes(physics))throw new RangeError('Unknown race physics');
  // Experimental open sea: FFT ocean and rigid-body craft, numeric sea state 0..9.
  if(openSea!==null&&(physics!=='modern'||mode!=='practice'||!Number.isFinite(openSea)||openSea<0||openSea>9))throw new RangeError('The experimental open sea is a modern-physics solo Free ride with a sea state from 0 to 9');
- // Its own waves replace the venue's: the legacy water systems stay calm.
- if(openSea!==null)seaState='calm';
+ // Its own waves replace the venue's: the legacy water systems stay calm, and
+ // the chosen sea sets the weather (raceWeather).
+ const seaChoice=seaState;if(openSea!==null)seaState='calm';
  setOpenSeaField(null);
  if(nativeRecordSession!==undefined&&physics!=='native')throw new RangeError('Native record sessions require native physics');
  const nativePractice=physics==='native'&&mode==='practice'&&course.sourceWaterCourseIndex===0&&difficulty===0&&!course.reverse;
@@ -177,7 +178,7 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
  const sourceSphereGrid=!nativeLaunch?.canonicalObjects&&sourceFixedSpheres.length?createSourceFixedSphereGrid(sourceFixedSpheres,{scale:nativeScale}):null;
  const state={sourceSphereGrid,raceWater,courseDatum:createCourseDatum(course),breakables:createBreakableState(),localWater,waterObstacles:obstacles,fixedPiles:(course.crossbars||[]).flatMap(barrierPiles),waveSeed:surfSeed.value,swapColours:!!swapColours,passageOpenedAt:Infinity,mode,freeRide,seaState,handicap:!!handicap,phase:freeRide?'running':'countdown',countdown:freeRide?0:3,time:0,course,racers,laps:configuredLaps,difficulty,events:[],result:null,weather:conditions(course,0),finishWait:0,physics,nativeHost:null};
  if(nativeChampionshipSelection)state.nativeChampionshipSelection=nativeChampionshipSelection;
- if(openSea!==null){const field=createOpenSeaField({seaState:openSea});field.level=waterLevel.value;field.setTime(0);state.openSea=field;setOpenSeaField(field);}
+ if(openSea!==null){const field=createOpenSeaField({seaState:openSea});field.choice=seaChoice;field.level=waterLevel.value;field.setTime(0);state.openSea=field;setOpenSeaField(field);}
  if(waterChoice)state.waterChoice=waterChoice;
  if(physics==='native'){
   // Preview histories must not compete with saved modern-physics records.
@@ -469,7 +470,7 @@ export function handicapBoost(s,r){if(s.mode!=='versus'||s.freeRide||!s.handicap
  const progress=q=>{const g=s.course.gates[q.next],prev=s.course.gates[(q.next+s.course.gates.length-1)%s.course.gates.length];return q.passed-Math.hypot(g.x-q.x,g.z-q.z)/Math.max(1,Math.hypot(g.x-prev.x,g.z-prev.z));};
  const other=s.racers.find(q=>q!==r);if(!other||other.dq||other.finishTime!==null)return 0;return clamp((progress(other)-progress(r))*.075,0,.12);
 }
-export function raceWeather(s,time=s.time){const w=conditions(s.course,time,s.racers[0].lap);if(s.nativeHost)w.seaLevel=s.raceWater.field.datumNative*s.raceWater.scale;else if(s.courseDatum)w.seaLevel=s.courseDatum.value;if(s.seaState!=='course')w.storm=({calm:0,chop:.45,storm:.95})[s.seaState]??w.storm;return w;}
+export function raceWeather(s,time=s.time){const w=conditions(s.course,time,s.racers[0].lap);if(s.nativeHost)w.seaLevel=s.raceWater.field.datumNative*s.raceWater.scale;else if(s.courseDatum)w.seaLevel=s.courseDatum.value;const sea=s.openSea?.choice??s.seaState;if(sea!=='course')w.storm=({calm:0,chop:.45,storm:.95})[sea]??w.storm;return w;}
 /** The Normal cup's round0 selection (course0, the Dolphin Park warm-up),
  * stopped before 9345C. The original enters it through the championship
  * return and course introduction like every round; the browser plays that

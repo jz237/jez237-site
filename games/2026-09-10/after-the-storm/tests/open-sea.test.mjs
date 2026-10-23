@@ -4,7 +4,7 @@ import {createOpenSeaSpectrum} from '../open-sea-spectrum.js';
 import {createOpenSeaField,OPEN_SEA_STATES} from '../open-sea-field.js';
 import {stepOpenSeaCraft} from '../open-sea-craft.js';
 import {createHydro} from '../hydrodynamics.js';
-import {createRace,stepRace} from '../race-core.js';
+import {createRace,stepRace,raceWeather} from '../race-core.js';
 import {getCourse} from '../courses.js';
 import {wave} from '../simulation.js';
 
@@ -57,6 +57,9 @@ test('open sea is a modern solo Free ride whose waves replace the venue water',(
  for(let i=0;i<8*60;i++)stepRace(s,{throttle:1,steer:.3},1/60);
  assert.ok(r.speed>10,`speed ${r.speed}`);
  assert.ok(Math.abs(wave(r.x+3,r.z,s.time)-s.openSea.height(r.x+3,r.z))<.5,'wave() reports the open-sea surface');
+ const storm=createRace({mode:'practice',course:getCourse('tempest',0),openSea:OPEN_SEA_STATES.storm,seaState:'storm'});
+ assert.equal(raceWeather(storm).storm,.95,'a storm sea brings storm weather');
+ assert.equal(raceWeather(createRace({mode:'practice',course:getCourse('tempest',0),openSea:OPEN_SEA_STATES.calm,seaState:'calm'})).storm,0);
  const plain=createRace({mode:'practice',course:getCourse('tempest',0)});
  assert.equal(plain.openSea,undefined);
 });
