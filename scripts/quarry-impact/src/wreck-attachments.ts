@@ -50,7 +50,7 @@ export class WreckAttachments {
       const door=(rearDoor||/bodydoor[lr]/.test(name))&&!name.includes('mirror');
       const bounds=new T.Box3().setFromBufferAttribute(o.userData.wreckRest);
       const cargo=/^panel_cargodoorvan[lr]/.test(name);
-      const group=/^panel_enginelidmarten/.test(name)?'engine-lid':/^panel_(?:bodytrunk|boot|trunkmorrow)/.test(name)?'boot':cargo?('cargo-'+(name.includes('cargodoorvanl')?'left':'right')):door?`door-${rearDoor?'rear-':''}${bounds.getCenter(new T.Vector3()).x<0?'left':'right'}`:/^(?:panel_tailgate(?:estate|rearwindow|tern|trail|kite|alder|saber|ravenhill|fernleigh|cornet)|glass_tailgate(?:rear$|tern|trail|kite|alder|saber|ravenhill|fernleigh|cornet))/.test(name)?'tailgate':/^panel_servinghatchcornet/.test(name)?'hatch':o.userData.detachAssembly;
+      const group=/^panel_enginelidmarten/.test(name)?'engine-lid':/^panel_(?:bodytrunk|boot|trunkmorrow)/.test(name)?'boot':cargo?('cargo-'+(name.includes('cargodoorvanl')?'left':'right')):door?`door-${rearDoor?'rear-':''}${bounds.getCenter(new T.Vector3()).x<0?'left':'right'}`:/^(?:panel_tailgate(?:estate|rearwindow|tern|trail|kite|alder|saber|ravenhill|fernleigh|cornet)|glass_tailgate(?:rear$|tern|trail|kite|alder|saber|ravenhill|fernleigh|cornet))/.test(name)?'tailgate':/^panel_servinghatchcornet/.test(name)?'hatch':o.userData.detachAssembly?.startsWith('wing-')?null:o.userData.detachAssembly;
       if(!group)return;
       let a=map.get(group);if(!a){a={name:group,members:[],bounds:new T.Box3(),damage:0,side:1,loose:0};map.set(group,a);}
       a.bounds.union(bounds);

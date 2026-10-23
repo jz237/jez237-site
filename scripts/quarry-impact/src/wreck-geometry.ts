@@ -43,7 +43,9 @@ export function prepareWreckGeometry(root: T.Group) {
       : /bumper_front|bumper_grille|bumper_intake|bodyhoodunder/.test(name) ? 'front-bumper'
       : /bumper_rear/.test(name) ? 'rear-bumper'
       : /panel_hood\d*|bodyhood(topgrill|interior02)/.test(name) ? 'hood'
-      : /^panel_tailgatehollins/.test(name) ? 'drop-tailgate' : null;
+      : /^panel_tailgatehollins/.test(name) ? 'drop-tailgate'
+      // Bolt-on front wings (offline destruction only; see Vehicle).
+      : /^panel_(?:front_fender|frontfender|frontwing)/.test(name) ? (bounds.getCenter(new T.Vector3()).x < 0 ? 'wing-left' : 'wing-right') : null;
   });
 }
 
