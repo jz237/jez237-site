@@ -3,7 +3,7 @@ import { WEBCAMS, trafficCameras, regionalCameras, discoveredCameras, cameraMatc
   from './camera-data.js?v=philly-2026092203';
 import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092121';
 
-import { mountCameraMedia, mountCameraPlayer } from './camera-media.js?v=philly-2026092202';
+import { mountCameraMedia, mountCameraPlayer } from './camera-media.js?v=philly-2026102301';
 
 const element = (tag, className, text) => {
   const node = document.createElement(tag); node.className = className;
@@ -30,6 +30,16 @@ export function createCameraLayer(THREE, { stage, projection, sampleElevation, p
   let previewItem, minimizedPreview;
   let selected, selectionKey = '', closeTimer, previewTimer, mediaCleanup, request, pinned = false;
   let lastKey = '', lastUpdate = 0, viewWidth = 1, viewHeight = 1, lastDistance = 80000;
+  // Control panels can uncover or obscure cameras while the geographic view
+  // stays still. Refresh those changes without polling every marker each frame.
+  // Interactions inside a preview must not dismiss its media session.
+  const layoutEvents = ['click', 'input', 'change', 'toggle', 'scroll', 'transitionend',
+    'map-window-collapse', 'map-window-restore'];
+  const layoutChanged = event => {
+    if (root.contains(event.target) || card.contains(event.target)) return;
+    dirty = true;
+  };
+  for (const type of layoutEvents) document.addEventListener(type, layoutChanged, true);
 
   function prepare(list) {
     return list.map(p => ({ ...p, x: projection.lonToX(p.lon), z: projection.latToZ(p.lat),
@@ -62,7 +72,7 @@ export function createCameraLayer(THREE, { stage, projection, sampleElevation, p
     try {
       const sources = [['data/camera-locations.json?v=20260920-2', trafficCameras],
         ['data/regional-cameras.json?v=20260924-2', regionalCameras],
-        ['data/discovered-cameras.json?v=20260924-3', discoveredCameras]];
+        ['data/discovered-cameras.json?v=20261022-1', discoveredCameras]];
       const results = await Promise.allSettled(sources.map(async ([url, parse]) => {
         const response = await fetch(url, { signal: request.signal });
         if (!response.ok) throw new Error('Camera inventory unavailable');
@@ -299,6 +309,7 @@ export function createCameraLayer(THREE, { stage, projection, sampleElevation, p
       disposed = true; close(); request?.abort(); root.remove(); card.remove();
       document.body.classList.remove('camera-layer-enabled');
       toggle.removeEventListener('change', changed);
+      for (const type of layoutEvents) document.removeEventListener(type, layoutChanged, true);
       document.removeEventListener('keydown', escape, true);
       document.removeEventListener('pointerdown', background);
       document.removeEventListener('visibilitychange', visibility);
