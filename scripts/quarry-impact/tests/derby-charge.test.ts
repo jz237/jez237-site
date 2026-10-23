@@ -20,3 +20,9 @@ test('a charging car does not loop on run-ups: it waits CHARGE.cooldown before t
  (m as {derby?:unknown}).derby=undefined;const again=driveDerby(car(true,1) as never,[car(true,1) as never,rival(5) as never],m,null,1/60);
  assert.notEqual((m as {phase:string}).phase,'back out');assert.ok(again.throttle>=0);
 });
+test('when the run-up back-out ends, the car turns straight into its charge (no stale plan is read)',()=>{
+ const m=memory();driveDerby(car(true,1) as never,[car(true,1) as never,rival(5) as never],m,null,1/60);
+ // Now 20 m back from the rival, still facing it: the back-out is complete.
+ const out=driveDerby(car(true,-2,-15) as never,[car(true,-2,-15) as never,rival(5) as never],m,null,1/60);
+ assert.equal((m as {derby?:unknown}).derby,undefined);assert.ok(out.throttle>0,'it drives forward again');assert.equal((m as {phase:string}).phase,'charge');
+});

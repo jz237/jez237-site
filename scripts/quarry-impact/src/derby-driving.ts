@@ -115,10 +115,11 @@ export function driveDerby(car:DriverCar,cars:DriverCar[],m:DriverMemory,arena:A
     return{throttle:car.speed> -6.5?-.85:0,steer:m.steer,brake:car.speed< -7?.3:0,handbrake:false};
    }
   }
-  const run=m.derby!;
-  if(run.kind==='run up'&&(targetId!==undefined||dist(car.current,run)<3||run.time>3.2||run.slow>1.25)){
+  // A finished charge back-out clears the plan: go straight on to the charge below.
+  const run=m.derby;
+  if(run&&run.kind==='run up'&&(targetId!==undefined||dist(car.current,run)<3||run.time>3.2||run.slow>1.25)){
    m.derby=undefined;m.commit=0;m.stalled=0;
-  }else{tx=run.x;tz=run.z;desired=11;m.phase='run up';}
+  }else if(run){tx=run.x;tz=run.z;desired=11;m.phase='run up';}
  }
  if(!m.derby){
   const d=dist(car.current,target.current),lead=clamp(d/(Math.abs(car.speed)+12),.12,.85)*difficulty.interceptLead;
