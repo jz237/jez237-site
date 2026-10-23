@@ -2,6 +2,23 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-10-23",
+      "historicDate": "1985-03-18",
+      "displayDate": "Week of March 18-24, 1985",
+      "edition": "Issue 138 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "PCjr production to end in April after IBM’s March 19 announcement.",
+      "leadHeadline": "IBM pulls the plug on PCjr production",
+      "storyHeadlines": [
+        "Solo Flight puts the mail run in the pilot’s hands",
+        "A six-kilobyte word processor arrives in the magazine",
+        "The Print Shop makes the home printer earn its keep",
+        "One screen for the computer and the evening television"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-03-18.jpg",
+      "thumb": "media/thumbs/1985-03-18.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-10-22",
       "historicDate": "1985-03-11",
       "displayDate": "Week of March 11-17, 1985",

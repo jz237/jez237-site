@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Thu, 22 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 23 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of March 18-24, 1985 — IBM pulls the plug on PCjr production</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-03-18</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-03-18</guid>
+      <pubDate>Fri, 23 Oct 2026 12:00:00 GMT</pubDate>
+      <description>March 19 announcement ends a bid for the mass-market home computer. IBM announced March 19 that production of its PCjr home computer would end in April. UPI’s Boca Raton dispatch attributes the decision to slack sales, bringing a sharp change of course for the company’s consumer-computer effort. Also this week: Solo Flight puts the mail run in the pilot’s hands · A six-kilobyte word processor arrives in the magazine · The Print Shop makes the home printer earn its keep · One screen for the computer and the evening television.</description>
+    </item>
     <item>
       <title>Week of March 11-17, 1985 — Symbolics registers the first .com address</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-03-11</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-11-05</guid>
       <pubDate>Fri, 02 Oct 2026 12:00:00 GMT</pubDate>
       <description>The Tandy 1000 combines PC-compatible work with color, sound and bundled DeskMate applications. Radio Shack has a new contender for the home and small-office desk this week. The Tandy 1000 enters the IBM-compatible contest at an advertised $1,199 for the original 128K machine with a 360K floppy drive. A monitor is extra: the headline price is not a complete color-display system. Also this week: The bulletin board becomes a neighborhood without boundaries · Shopping from the keyboard enters the living room · KoalaPad gives the PCjr a drawing surface · WizType turns typing practice into a cartoon duel.</description>
-    </item>
-    <item>
-      <title>Week of October 29-November 4, 1984 — Ghostbusters leads Activision’s million-dollar holiday comeback bid</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-10-29</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-10-29</guid>
-      <pubDate>Thu, 01 Oct 2026 12:00:00 GMT</pubDate>
-      <description>Activision plans more than $1 million in holiday advertising as computer software takes a larger place in its business. Activision is putting Ghostbusters at the center of a holiday comeback bid. In the November 3 Billboard, Faye Zuckerman reports an advertising budget exceeding $1 million for the selling season. President James Levy says shipments are picking up after a slow summer, with David Crane’s newly shipped Ghostbusters and Designer’s Pencil carrying the company’s hopes for fresh hits. Also this week: The bulletin board becomes a neighborhood without borders · Shopping by modem: CompuServe’s Electronic Mall is open all night · Commodore’s Plus/4 trades game features for built-in office tools.</description>
     </item>
   </channel>
 </rss>
