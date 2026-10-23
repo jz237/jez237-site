@@ -1439,7 +1439,7 @@ function aiCore(car: Vehicle, dt: number): Input {
   return drivers.update(car,cars,practiceTraffic?'race':mode,dt,probe,raceRoute(car.id));
 }
 /** Diagram states for the bolt-on parts: gone when every panel has left, loose while it hangs. */
-function partStates(c:Vehicle){const state=(name:string):'ok'|'loose'|'gone'|undefined=>{const a=c.wreckParts.assemblies.find(x=>x.name===name);if(!a)return undefined;return a.members.every(m=>!m.mesh.visible)?'gone':a.loose>.05?'loose':'ok';};return{frontBumper:state('front-bumper'),rearBumper:state('rear-bumper'),hood:state('hood')};}
+function partStates(c:Vehicle){const state=(name:string):'ok'|'loose'|'gone'|undefined=>{const a=c.wreckParts.assemblies.find(x=>x.name===name);if(!a)return undefined;return a.members.every(m=>!m.mesh.visible)?'gone':a.loose>.05?'loose':'ok';};return{frontBumper:state('front-bumper'),rearBumper:state('rear-bumper'),hood:state('hood'),boot:state('boot'),doorLeft:state('door-left'),doorRight:state('door-right'),doorRearLeft:state('door-rear-left'),doorRearRight:state('door-rear-right'),wingLeft:c.wingGone[0]?'gone' as const:undefined,wingRight:c.wingGone[1]?'gone' as const:undefined};}
 /** An exploding car shoves everything near it: cars and loose props within SHOCKWAVE.radius are thrown
  * outward and up, harder the closer they are (offline only; replays show it through recorded poses). */
 const SHOCKWAVE={radius:9,speed:7,lift:3.5};

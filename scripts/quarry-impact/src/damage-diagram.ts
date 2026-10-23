@@ -6,7 +6,9 @@ export type DiagramState={
   wheelDamage:ArrayLike<number>;wheelLost:ArrayLike<number>;tyreFailure:readonly number[];
   engine:number;misfiring:boolean;rearEngine:boolean;wrecked:boolean;
   /** Bolt-on parts: intact, hanging loose or gone (omitted parts are not drawn). */
-  parts?:{frontBumper?:PartState;rearBumper?:PartState;hood?:PartState};
+  parts?:{frontBumper?:PartState;rearBumper?:PartState;hood?:PartState;
+    /** Front wings, the boot lid and the doors: drawn only once they hang loose or have gone. */
+    wingLeft?:PartState;wingRight?:PartState;boot?:PartState;doorLeft?:PartState;doorRight?:PartState;doorRearLeft?:PartState;doorRearRight?:PartState};
   /** Leak severity 0..1: drops under the radiator (coolant), the engine (oil) and the fuel tank (fuel). */
   leaks?:{oil:number;coolant:number;fuel?:number};
   /** Mechanical faults drawn over the car: disc glow 0..1 per wheel, front steering links (0 = tie rod snapped), loose-nut
@@ -34,8 +36,21 @@ function leaks(state:DiagramState){
 function parts(state:DiagramState){
   const p=state.parts;if(!p)return '';
   return partShape('dd-bumper-front','<rect x="17" y="2.5" width="26" height="4" rx="1.5"/>',p.frontBumper)+partShape('dd-bumper-rear','<rect x="17" y="103.5" width="26" height="4" rx="1.5"/>',p.rearBumper)+
-    (p.hood&&p.hood!=='ok'?partShape('dd-hood','<rect x="20" y="11" width="20" height="16" rx="2"/>',p.hood):'');
+    (p.hood&&p.hood!=='ok'?partShape('dd-hood','<rect x="20" y="11" width="20" height="16" rx="2"/>',p.hood):'')+
+    BODY_PARTS.map(([key,cls,shape])=>p[key]&&p[key]!=='ok'?bodyPartShape(cls,shape,p[key]):'').join('');
 }
+/** Parts drawn over the body zones: a gone one leaves a dark gap with a dashed edge, a loose one is outlined, so both read
+ * over a red zone. */
+function bodyPartShape(cls:string,shape:string,s:PartState){
+  return s==='gone'?shape.replace('/>',` class="${cls} dd-gone" fill="#151815" stroke="${DIAGRAM_COLORS[3]}" stroke-width=".7" stroke-dasharray="1.6 1.2"/>`)
+    :shape.replace('/>',` class="${cls} dd-loose" fill="${DIAGRAM_COLORS[1]}" stroke="#101410" stroke-width=".6"/>`);
+}
+const BODY_PARTS:readonly [keyof NonNullable<DiagramState['parts']>,string,string][]=[
+  ['wingLeft','dd-wing dd-wing-left','<rect x="15.5" y="11" width="3.5" height="18" rx="1"/>'],['wingRight','dd-wing dd-wing-right','<rect x="41" y="11" width="3.5" height="18" rx="1"/>'],
+  ['boot','dd-boot','<rect x="20" y="84" width="20" height="13" rx="2"/>'],
+  ['doorLeft','dd-door dd-door-left','<rect x="15.5" y="33" width="5" height="20" rx="1"/>'],['doorRight','dd-door dd-door-right','<rect x="39.5" y="33" width="5" height="20" rx="1"/>'],
+  ['doorRearLeft','dd-door dd-door-rear-left','<rect x="15.5" y="55" width="5" height="20" rx="1"/>'],['doorRearRight','dd-door dd-door-rear-right','<rect x="39.5" y="55" width="5" height="20" rx="1"/>'],
+];
 const WHEEL_AT=[[5,17],[49,17],[5,75],[49,75]] as const;
 function faults(state:DiagramState){
   const f=state.faults;if(!f)return '';let out='';
