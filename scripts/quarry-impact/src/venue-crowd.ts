@@ -1,6 +1,10 @@
 import * as T from 'three';
 /** Camera flashes in the stands: at most CROWD_FLASH.max at once, each lasting about CROWD_FLASH.life seconds. */
 export const CROWD_FLASH={max:30,life:.14,size:2.2} as const;
+/** After a big hit the whole crowd waves: arm swing rises to CROWD_SURGE.amplitude and eases back over CROWD_SURGE.seconds. */
+export const CROWD_SURGE={amplitude:.32,seconds:2.2} as const;
+/** Surge 0..1 at this many seconds after it started (eases out). */
+export const crowdSurge=(age:number)=>!Number.isFinite(age)||age<0||age>=CROWD_SURGE.seconds?0:1-(age/CROWD_SURGE.seconds)**2;
 export type SpectatorPlace={x:number;y:number;z:number;yaw:number;seated?:boolean};
 /** Original low-poly spectators, batched by geometry rather than person or outfit.
  * Local +Z faces the event; y is the grandstand tread, not the seat top. */
@@ -35,10 +39,11 @@ export function createVenueCrowd(places:readonly SpectatorPlace[]){
  root.userData.spectatorCount=places.length;root.userData.triangles=triangles;
  const rotation=new T.Matrix4(),posed=new T.Matrix4();let lastTick=-1;
  // Camera flashes popping in the stands after a big hit: a small pool of additive sprites made on first use (browser only).
- const flashes:{sprite:T.Sprite;until:number}[]=[];let flashTexture:T.Texture|null=null,now=0,flashSeed=1;
+ const flashes:{sprite:T.Sprite;until:number}[]=[];let flashTexture:T.Texture|null=null,now=0,flashSeed=1,surgeAt=-1e9;
  function flash(count:number){
   if(disposed||!places.length||typeof document==='undefined')return 0;
   if(!flashTexture){const c=document.createElement('canvas');c.width=c.height=32;const g=c.getContext('2d');if(!g)return 0;const r=g.createRadialGradient(16,16,0,16,16,16);r.addColorStop(0,'rgba(255,255,255,1)');r.addColorStop(.25,'rgba(240,246,255,.85)');r.addColorStop(1,'rgba(220,235,255,0)');g.fillStyle=r;g.fillRect(0,0,32,32);flashTexture=new T.CanvasTexture(c);}
+  surgeAt=now;
   let lit=0;
   for(let k=0;k<Math.min(CROWD_FLASH.max,Math.max(0,Math.floor(count)));k++){
    let f=flashes.find(x=>x.until<=now);
@@ -55,7 +60,9 @@ export function createVenueCrowd(places:readonly SpectatorPlace[]){
   now=time;for(const f of flashes)if(f.sprite.visible&&f.until<=time)f.sprite.visible=false;
   const tick=Math.floor(time*30);if(tick===lastTick)return;lastTick=tick;
   for(const arm of arms){
-   const angle=arm.amplitude*(Math.sin(tick/30*arm.speed+arm.phase)-Math.sin(arm.phase));
+   // Only the swing grows (changing speed would jump the phase late in an event).
+   const surge=crowdSurge(time-surgeAt),amplitude=arm.amplitude+(CROWD_SURGE.amplitude-arm.amplitude)*Math.max(0,surge);
+   const angle=amplitude*(Math.sin(tick/30*arm.speed+arm.phase)-Math.sin(arm.phase));
    rotation.makeRotationAxis(arm.axis,angle);
    // Rotate the complete arm about its shoulder, retaining connected joints.
    const e=rotation.elements,p=arm.pivot;
