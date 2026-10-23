@@ -745,7 +745,7 @@ export function createBetta({ compact = false } = {}) {
         (1 - Math.exp(-3 * dt));
       if (locomotion) heading = locomotion.heading;
       const angularVelocity = locomotion ? locomotion.angularVelocity : dt ? (heading - old) / dt : 0;
-      turn = T.MathUtils.damp(turn, angularVelocity, 4, dt);
+      turn = T.MathUtils.damp(turn, locomotion ? (locomotion.steerRate ?? angularVelocity) : angularVelocity, 4, dt);
       tx = T.MathUtils.damp(tx, targetX, 2, dt);
       ty = T.MathUtils.damp(ty, targetY, 2, dt);
       flowStrength = T.MathUtils.damp(flowStrength, water.strength, 1.8, dt);
@@ -783,6 +783,7 @@ export function createBetta({ compact = false } = {}) {
       const relativeFlow = Math.hypot(...localFlow.map((v, i) => v - velocity[i]));
       gait.advance(dt, drive, relativeFlow, turn);
       const { phase, effort, breathPhase, pectoralPhase } = gait;
+      if (locomotion) bodyMotion.advanceTurn(dt, locomotion.steerRate ?? angularVelocity, locomotion.speed ?? 0);
       bodyMotion.update(phase, effort, turn, breathPhase);
       spineTexture.needsUpdate = dt > 0;
       uniforms.uPhase.value = phase;

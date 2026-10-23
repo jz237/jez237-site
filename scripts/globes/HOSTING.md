@@ -3,7 +3,7 @@
 Original: https://github.com/willwaltz/globes
 Author: Will Waltz · MIT License
 Upstream commit: 93c3b814bbca53463e8207b8e3c95fca8940dff5
-Imported: 2026-10-22 · Hosting build: 1.3.0
+Imported: 2026-10-22 · Hosting build: 1.4.0
 Public route: https://jez237.com/demos/globes/
 
 The upstream source and MIT attribution are retained. Hosting adds the gallery
@@ -23,7 +23,8 @@ scenes keeps the grid chosen at startup, as in the upstream application.
 
 The specimen is imported from
 `../betta-atelier/src/fish.js` with optional compact tessellation. It keeps the
-shared v1.7 body, breathing, fin dynamics, one-second flare and synchronized gaze.
+shared anatomy, breathing, one-second flare and synchronized gaze, with the
+full-fin compliance and head-led turning revision described below.
 The Atelier's normal tessellation and standalone compiled demo are unchanged.
 
 `src/fish/Betta.ts` evaluates the same vertex deformations on the CPU, refits a
@@ -39,7 +40,27 @@ original integration's linear size (`0.105` versus `0.25` model-to-globe scale).
 `bettaSwim.mjs` chooses destinations throughout the usable water volume, with
 slow cruises, short bursts, coasting and quiet hovering. Acceleration-limited
 heading and shallow pitch keep translation aligned with the nose; actual yaw
-rate drives the shared body/fin C-bend. Look-ahead steering avoids the glass.
+rate drives the shared body/fin bend. Look-ahead steering avoids the glass.
+
+Version 1.4 removes the continuous positional pin over the inner half of each
+broad fin. Radial segments still resist stretching; reduced cross-ray shear,
+gentler pose springs and distributed billowing let the proximal/middle membrane
+bend under water pressure as well as the fringe. Display increases tension and
+transports existing folds with the one-second rest-fan opening; it does not erase
+flow-driven deformation. The paired-fin flank guard uses the curved local normal.
+
+The neck now leads the route, instead of rotating about the center of the fish.
+`BodyMotion.advanceTurn()` carries a history of local tangent angles down the
+trunk: the rear keeps the old direction while the head changes course, then
+uncoils progressively. This is a reduced-order head-following approximation,
+informed by the original koi's chain, not a verbatim copy of that chain.
+Integrated centerline length is preserved, local curvature is limited to prevent
+a hinge behind the skull, and sharp maneuvers can reach a 2.95-radian (~169°)
+head-to-tail change. That is an animation limit, not a measured biological angle.
+Ordinary destinations favor ahead-of-head exploration, with occasional reversals;
+explicit sharp-turn steering has a bounded acceleration and a separate rate
+limit. Only voluntary `steerRate` enters the muscle history. Fluid rotation still
+drives actual pose/relative drag but cannot alone trigger a muscular U-turn.
 
 `bettaWater.mjs` samples sixteen **anatomically attached 3D probes**, including
 the trunk, back, tail, forward clearance and both flanks. The full solver current
@@ -57,14 +78,14 @@ the spherical glass and sampled sand bed, not an invisible horizontal ceiling.
 The shared fin solver uses full 3D body-relative fluid velocity and angular
 motion while pitching/rolling, so transported water does not create false drag.
 The Atelier accepts optional host-owned `locomotion`
-(position/velocity in model units, heading/pitch/roll in radians, angularVelocity,
+(position/velocity/speed in model units, heading/pitch/roll in radians, angularVelocity/steerRate,
 drive and mode); without it the standalone choreography and fin solver are unchanged.
 This is an artistic coupling, not a fully coupled
 fish/fluid solver or instantaneous collision against every turbulent wave. The
 betta does not eat the Koi scene's food. The **Flare fins / Relax fins** button controls the display; each opening
 takes one second, with partly open fins in the resting pose.
 
-Checks: `node --test bvh.test.mjs betta-swim.test.mjs betta-water.test.mjs`, `node --test
+Checks: `node --test bvh.test.mjs betta-swim.test.mjs betta-water.test.mjs betta-flex.test.mjs`, `node --test
 ../betta-atelier/fin-dynamics.test.mjs`, `npm run build`, and real WebGPU browser
 checks of the betta, scene switching, current/tilt response and phone layout.
 The locomotion tests cover multi-minute 3D exploration, bounded nose-led travel,
@@ -74,6 +95,11 @@ partial wetness, actual bed readings, stronger inertial transport, reversal,
 recovery, free vertical slosh and violent-flow containment. Browser QA uses real
 pointer-driven water agitation, compares the previous release's response, and
 checks animated vertex clearance, fin attachment, flare controls and phone layout.
+The flexibility checks measure quarter-span and mid-span response, both signs of
+near-U flexion, arc length/curvature bounds, release without snapping, frame-rate
+independence and separation of passive spin from deliberate turning. Inspect
+actual WebGPU side/overhead turn sequences as well as scalar checks; fin-to-fin
+self-collision is still approximate, not a full cloth/contact solver.
 Use `npm run web -- --host 127.0.0.1` for browser development (`npm run dev` starts
 Electron). `?qa` exposes the same local inspection object as a dev build.
 

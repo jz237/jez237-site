@@ -133,7 +133,16 @@ export class Betta {
   probePoints(): Float32Array { return this.probes; }
 
   private locomotion() {
-    return { ...this.swim, position: this.swim.position.map(v => v / SCALE), velocity: this.swim.velocity.map(v => v / SCALE) };
+    // The route belongs to the neck/head, not a pivot in the middle of the fish.
+    // Offsetting the model origin lets the head lead while the rear curls behind.
+    const s = this.swim, h = s.heading, p = s.pitch, length = 1.22 * SCALE;
+    const offset = [length * Math.cos(h) * Math.cos(p), -length * Math.sin(p), -length * Math.sin(h) * Math.cos(p)];
+    const offsetVelocity = [
+      -length * (Math.sin(h) * Math.cos(p) * s.angularVelocity + Math.cos(h) * Math.sin(p) * s.pitchRate),
+      -length * Math.cos(p) * s.pitchRate,
+      length * (-Math.cos(h) * Math.cos(p) * s.angularVelocity + Math.sin(h) * Math.sin(p) * s.pitchRate),
+    ];
+    return { ...s, speed: s.speed / SCALE, position: s.position.map((v, k) => (v + offset[k]) / SCALE), velocity: s.velocity.map((v, k) => (v + offsetVelocity[k]) / SCALE) };
   }
 
   private updateVertices(): void {

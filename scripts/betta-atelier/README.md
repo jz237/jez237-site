@@ -1,5 +1,16 @@
 # Living Silk — Betta Atelier 1.7
 
+The standalone published build remains 1.7. Shared source also includes the globe
+1.4 motion revision: broad fins bend across their full span rather than pinning
+the inner half to a target; ray-length constraints, root attachment and the
+one-second display remain. Optional host locomotion supplies model-space speed
+and a separate voluntary `steerRate` for delayed head-to-tail tangent memory and
+deep, curvature-limited turns. The globe anchors its route at the neck and keeps
+passive fluid rotation separate from muscle flexion. See
+[`../globes/HOSTING.md`](../globes/HOSTING.md) for the integration and verification
+procedure. Rebuilding this standalone directory would adopt the shared-source
+changes; the globe revision deliberately does not rebuild its compiled demo.
+
 An interactive, genuinely volumetric male halfmoon Betta study for Jez237.
 Live: https://jez237.com/demos/betta-atelier/
 

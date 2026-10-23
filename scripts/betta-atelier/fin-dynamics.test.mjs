@@ -220,7 +220,7 @@ test('turns curl the trunk in either direction without widening straight swimmin
     body.update(0,0,direction*1.4,0);
     body.frame(1.056,point);
     const angle=Math.atan2(point[3],point[2]);
-    assert.ok(angle*direction>.95 && angle*direction<1.2, `turn too rigid or folded: ${angle}`);
+    assert.ok(angle*direction>2.2 && angle*direction<2.6, `turn too rigid or folded: ${angle}`);
     body.frame(-1.22,point);assert.deepEqual(point,[-1.22,0,1,0]);
     let length=0;
     for(let i=4;i<body.data.length;i+=4)length+=Math.hypot(body.data[i]-body.data[i-4],body.data[i+1]-body.data[i-3]);
@@ -229,7 +229,7 @@ test('turns curl the trunk in either direction without widening straight swimmin
   body.update(0,0,0,0);body.frame(1.056,point);
   assert.ok(Math.abs(point[1])<.01,'holding retained a turn curve');
   body.update(0,0,100,0);body.frame(1.056,point);
-  assert.ok(Math.atan2(point[3],point[2])<1.23,'extreme input overfolded body');
+  assert.ok(Math.atan2(point[3],point[2])<3.0,'extreme input overfolded body');
 });
 
 test('turning long fins cup with the trunk, retain free-edge lag, and recover at 30/120fps', () => {
@@ -237,7 +237,7 @@ test('turning long fins cup with the trunk, retain free-edge lag, and recover at
     const fin=kind===0?make():new FinDynamics({kind,side:0,columns:17,rows:13,
       point:(u,v)=>[-.65+u*1.65,(kind===1?1:-1)*(.28+v*(.25+u*.7)),0]});
     const s=state(0);s.drive=0;s.phase=0;s.flare=0;s.body.update(0,0,0,0);
-    for(let i=0;i<fps;i++)fin.advance(1/fps,s);
+    for(let i=0;i<fps*3;i++)fin.advance(1/fps,s);
     const rest=fin.position.slice();let peakLag=0,peakCurve=0;
     for(let i=1;i<=fps*2;i++) {
       const t=i/fps;s.turn=1.4*Math.sin(Math.PI*t/2);s.angularVelocity=s.turn;
@@ -252,7 +252,7 @@ test('turning long fins cup with the trunk, retain free-edge lag, and recover at
     assert.ok(peakCurve>.2,`${fps}fps fin ${kind} did not follow turn: ${peakCurve}`);
     assert.ok(peakLag>.015,`${fps}fps fin ${kind} is a rigid fan: ${peakLag}`);
     s.turn=0;s.angularVelocity=0;s.body.update(0,0,0,0);
-    for(let i=0;i<fps*3;i++)fin.advance(1/fps,s);
+    for(let i=0;i<fps*5;i++)fin.advance(1/fps,s);
     const rms=Math.sqrt(fin.position.reduce((sum,v,i)=>sum+(v-rest[i])**2,0)/rest.length);
     assert.ok(rms<.035,`${fps}fps fin ${kind} failed to settle: ${rms}`);
   }

@@ -1,4 +1,4 @@
-// A reduced-order wet membrane: stiff rays, compliant cross-ray tissue, anchored
+// A reduced-order wet membrane: inextensible but bendable rays, compliant tissue, anchored
 // insertions and velocity-dependent water drag. Not a CFD/biological calibration.
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 export const water = { strength: 0, direction: 'changing' };
@@ -37,6 +37,8 @@ export class FinDynamics {
     this.target = new Float32Array(this.count * 3);
     this.lastTarget = new Float32Array(this.count * 3);
     this.frameTarget = new Float32Array(this.count * 3);
+    this.displayTarget = new Float32Array(this.count * 3);
+    this.previousFlare = null;
     this.weights = new Float32Array(this.count);
     this.displacement = new Float32Array(this.count * 4);
     this.accumulator = 0;
@@ -59,12 +61,12 @@ export class FinDynamics {
     for (let j = 0; j < rows; j++) for (let i = 0; i < columns; i++) {
       const n = j * columns + i;
       if (j) add(n - columns, n, 0.96); // non-stretching fin rays
-      if (i) add(n - 1, n, 0.65, true); // membrane between rays
+      if (i) add(n - 1, n, kind < 3 ? 0.32 : 0.65, true); // membrane between rays
       if (j && i) {
-        add(n - columns - 1, n, 0.22, true);
-        add(n - columns, n - 1, 0.22, true);
+        add(n - columns - 1, n, kind < 3 ? 0.09 : 0.22, true);
+        add(n - columns, n - 1, kind < 3 ? 0.09 : 0.22, true);
       }
-      if (j > 1) add(n - columns * 2, n, 0.12); // soft ray bending
+      if (j > 1) add(n - columns * 2, n, kind < 3 ? 0.035 : 0.12); // ray bending, not ray stretching
     }
     this.links = new Float32Array(links);
     this.folding = new Uint8Array(folding);
@@ -94,7 +96,11 @@ export class FinDynamics {
             ? (0.012 + drive * 0.20) * Math.sin(phase - 2.5 - v * 0.8)
             : (0.025 + drive * 0.13) * Math.sin(phase * 0.8 - u * 3.7 - v * 0.7 + kind * 1.8)
               + turnBend * (0.20 + u * 0.20);
-          const bend = wave * v;
+          // Bend throughout the ray, not just a ruffled outer border. Phase
+          // varies across the fan and along each ray, so the membrane billows.
+          const billow = (1 - flare * 0.7) * (0.065 + drive * 0.12)
+            * Math.sin(t * 1.7 - u * 5.5 - v * 2.2 + kind * 1.8);
+          const bend = (wave + billow) * (0.22 + 0.78 * v);
           // Bend about the ray's in-plane perpendicular; roots stay attached.
           const length3 = Math.hypot(x, y);
           x *= Math.cos(bend); y *= Math.cos(bend);
@@ -103,7 +109,7 @@ export class FinDynamics {
             // The broad caudal fan wraps behind the peduncle during a turn.
             // Rotate across its span, preserving ray length and vertical spread;
             // the membrane solver supplies the slower free-edge follow-through.
-            const sweep = turnBend * 0.48 * v;
+            const sweep = turnBend * 0.25 * v;
             const cx = x * Math.cos(sweep) - z * Math.sin(sweep);
             z = x * Math.sin(sweep) + z * Math.cos(sweep); x = cx;
           }
@@ -131,7 +137,23 @@ export class FinDynamics {
 
   advance(dt, state) {
     this.lastTarget.set(this.target);
+    const opening = dt > 0 && this.initialized && this.kind < 3 && Math.abs(state.flare - this.previousFlare) > 1e-8;
+    if (opening) {
+      this.makeTargets({ ...state, flare: this.previousFlare });
+      this.displayTarget.set(this.target);
+    }
     this.makeTargets(state);
+    if (opening) {
+      // A deliberate display changes the ray fan over the controller's one
+      // second. Carry the existing folds/flow deflection with that rest-shape
+      // change; do not replace them with a continuously pinned target surface.
+      for (let q = this.columns * 3; q < this.position.length; q++) {
+        const shift = this.target[q] - this.displayTarget[q];
+        this.position[q] += shift; this.previous[q] += shift;
+        this.lastTarget[q] += shift;
+      }
+    }
+    if (dt > 0 || !this.initialized) this.previousFlare = state.flare;
     if (!this.initialized) {
       this.position.set(this.target); this.previous.set(this.target);
       this.lastTarget.set(this.target);
@@ -195,8 +217,12 @@ export class FinDynamics {
       }
       const normalSpeed = clamp(rvx * nx + rvy * ny + rvz * nz, -2, 2);
       const pressure = normalSpeed * (2.0 + Math.abs(normalSpeed) * 3.5);
-      // Ray stiffness falls steeply away from its muscular insertion.
-      const stiffness = (this.kind === 4 ? 2.0 : 5.0) + (this.kind === 3 ? 160 : 110) * (1 - v) ** 3;
+      // A fin ray resists stretching, not lateral bending like a rigid sail.
+      // Resting/swimming membranes are soft even in their inner half. Display
+      // adds muscular tension without pinning their positions against the water.
+      const stiffness = this.kind < 3
+        ? 2.5 + 14 * (1 - v) ** 2 + state.flare * (5 + 22 * (1 - v) ** 2)
+        : (this.kind === 4 ? 2.0 : 5.0) + (this.kind === 3 ? 160 : 110) * (1 - v) ** 3;
       const dx = nx * pressure + rvx * 0.9, dy = ny * pressure + rvy * 0.9, dz = nz * pressure + rvz * 0.9;
       for (let k = 0; k < 3; k++) {
         const current = p[q + k];
@@ -227,16 +253,8 @@ export class FinDynamics {
           p[q] += (target[q] - p[q]) * muscle;
         }
       }
-      // Muscles spread/lower the proximal rays rapidly. Soft margins still
-      // lag, ripple and react to currents instead of snapping to the pose.
-      if (this.kind < 3 && pass === 0) for (let j = 1; j < h; j++) {
-        const v = j / (h - 1), u = clamp((v - 0.45) / 0.5, 0, 1);
-        const muscle = 0.18 * (1 - u * u * (3 - 2 * u));
-        for (let i = 0; i < w; i++) for (let k = 0; k < 3; k++) {
-          const q = (j * w + i) * 3 + k;
-          p[q] += (target[q] - p[q]) * muscle;
-        }
-      }
+      // No permanent positional pin across the inner half of the broad fins.
+      // Only the insertion is fixed; ray/membrane constraints transmit tension.
       for (let l = pass % 2 ? links.length - 4 : 0; l >= 0 && l < links.length; l += pass % 2 ? -4 : 4) {
         const a = links[l], b = links[l + 1], ai = a * 3, bi = b * 3;
         const dx = p[bi] - p[ai], dy = p[bi + 1] - p[ai + 1], dz = p[bi + 2] - p[ai + 2];
@@ -270,10 +288,12 @@ export class FinDynamics {
       const localX = rootX + (p[q] - cx) * co + (p[q + 2] - cz) * si;
       const radius = state.bodyRadius(localX, p[q + 1]);
       state.body.frame(localX, this.scratch);
-      const centerZ = this.scratch[1];
-      if (radius > 0 && (p[q + 2] - centerZ) * this.side < radius + 0.009) {
-        p[q + 2] = centerZ + this.side * (radius + 0.009);
-        old[q + 2] = p[q + 2];
+      const [centerX, centerZ, c, s] = this.scratch;
+      const lateral = -(p[q] - centerX) * s + (p[q + 2] - centerZ) * c;
+      if (radius > 0 && lateral * this.side < radius + 0.009) {
+        const push = this.side * (radius + 0.009) - lateral;
+        p[q] -= s * push; p[q + 2] += c * push;
+        old[q] = p[q]; old[q + 2] = p[q + 2];
       }
     }
   }

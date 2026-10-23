@@ -6,15 +6,40 @@ export const SPINE_START = -1.22, SPINE_END = 2.65, SPINE_COUNT = 161;
 export class BodyMotion {
   constructor() {
     this.data = new Float32Array(SPINE_COUNT * 4);
+    this.turnAngles = null;
     this.mouth = this.gill = 0;
     this.update(0, 0, 0, 0);
+  }
+  // Tangent memory travels from neck to peduncle. A new head direction reaches
+  // the rear later, like the koi's head-following chain, instead of posing the
+  // entire trunk in the same C shape at once. Only voluntary steering enters
+  // here: water can rotate the whole fish without triggering a muscle U-turn.
+  advanceTurn(dt, rate, speed) {
+    this.turnAngles ??= new Float64Array(25);
+    if (!(dt > 0)) return;
+    const a = this.turnAngles, ds = 2.276 / (a.length - 1);
+    let remaining = Math.min(dt, 0.07);
+    while (remaining > 1e-9) {
+      const h = Math.min(remaining, 1 / 120);
+      const travel = 0.38 + Math.min(2.5, Math.abs(speed)) * 0.75;
+      const follow = 1 - Math.exp(-travel * h / ds);
+      const relax = Math.exp(-h * (Math.abs(rate) > 0.15 ? 0.12 : 1.5));
+      for (let i = a.length - 1; i > 0; i--) {
+        a[i] = clamp((a[i] + rate * h) * relax, -2.95, 2.95);
+        a[i] += (a[i - 1] - a[i]) * follow;
+      }
+      // Spread flexion along the trunk: a tight turn must not become a hinge
+      // immediately behind the skull or invert the thick flank's inner surface.
+      for (let i = 1; i < a.length; i++) a[i] = clamp(a[i], a[i - 1] - ds * 1.65, a[i - 1] + ds * 1.65);
+      remaining -= h;
+    }
   }
   update(phase, effort, turn, breathPhase) {
     this.effort = effort;
     // A maneuver is a sustained C-bend, not a wider propulsion oscillation.
     // Positive yaw leaves the rear trunk on the previous heading behind the head.
     // Soft saturation avoids a kink as the turn speeds up or changes direction.
-    this.turnBend = Math.tanh(turn * 0.95);
+    this.turnBend = this.turnAngles ? this.turnAngles.at(-1) / 2.95 : Math.tanh(turn * 0.8);
     this.mouth = Math.max(0, Math.sin(breathPhase)) ** 1.4 * (0.8 + effort * 0.2);
     // Buccal intake precedes the opercular outlet: not two synchronous flaps.
     this.gill = Math.max(0, Math.sin(breathPhase - 1.05)) ** 1.3 * (0.8 + effort * 0.2);
@@ -25,8 +50,13 @@ export class BodyMotion {
       const envelope = u * u * (3 - 2 * u);
       // Compact propulsion strokes; turning curvature is a separate maneuver.
       // Quiet holding has almost no trunk excursion, but breathing continues.
-      const angle = envelope * (0.006 + effort * 0.24) * Math.sin(phase - u * 3.1)
-        + smooth(0.03, 1, u) * this.turnBend * 1.22;
+      let maneuver = smooth(0.03, 1, u) * this.turnBend * 2.95;
+      if (this.turnAngles) {
+        const g = u * (this.turnAngles.length - 1), a = Math.floor(g), b = Math.min(a + 1, this.turnAngles.length - 1);
+        maneuver = this.turnAngles[a] + (this.turnAngles[b] - this.turnAngles[a]) * (g - a);
+      }
+      const angle = maneuver + envelope * (0.006 + effort * 0.24) * (1 - Math.abs(maneuver) / 3.2)
+        * Math.sin(phase - u * 3.1);
       const c = Math.cos(angle), s = Math.sin(angle);
       if (i) { x += dx * (oldCos + c) * 0.5; z += dx * (oldSin + s) * 0.5; }
       this.data.set([x, z, c, s], i * 4);

@@ -18,7 +18,7 @@ test('free swimming explores all three dimensions, rests and bursts without esca
       assert.ok(Math.hypot(...s.position) <= env.radius - 0.34 + 1e-8);
       assert.ok(s.position[1] >= env.sandLevel + 0.22 - 1e-8 && s.position[1] <= env.level - 0.20 + 1e-8);
       assert.ok(Math.hypot(...s.position.map((v, k) => v - before[k])) < 0.004);
-      assert.ok(Math.abs(wrap(s.heading - yaw)) < 1.66 / 60);
+      assert.ok(Math.abs(wrap(s.heading - yaw)) <= 3.01 / 60);
       if (Math.hypot(...s.velocity) < 0.004) still++;
       if (Math.abs(s.angularVelocity) > 0.5) turns++;
       for (let k = 0; k < 3; k++) { min[k] = Math.min(min[k], s.position[k]); max[k] = Math.max(max[k], s.position[k]); }

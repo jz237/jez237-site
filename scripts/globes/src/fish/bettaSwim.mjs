@@ -14,6 +14,7 @@ export class BettaSwim {
     this.heading = -0.35;
     this.pitch = this.angularVelocity = this.speed = this.time = 0;
     this.steerRate = this.roll = this.rollRate = this.pitchRate = 0;
+    this.sharpTurn = false;
     this.waterSpin = [0, 0, 0];
     this.drive = 0.045;
     this.mode = 'cruise';
@@ -37,16 +38,19 @@ export class BettaSwim {
 
   chooseTarget(env) {
     const b = this.bounds(env);
-    // Pick destinations within the water volume, not points on a circular track.
+    // Usually investigate water ahead, as the koi does; an occasional reversal
+    // is deliberate, not a fresh arbitrary spin at every waypoint.
+    const reverse = this.random() < 0.18;
+    let best = -Infinity;
     for (let attempt = 0; attempt < 16; attempt++) {
       const y = b.low + (b.high - b.low) * (0.08 + 0.84 * this.random());
       const r = Math.sqrt(Math.max(0, b.radius ** 2 - y * y)) * Math.sqrt(this.random()) * 0.86;
       const a = this.random() * Math.PI * 2;
       const candidate = [r * Math.cos(a), y, r * Math.sin(a)];
-      if (Math.hypot(...candidate.map((v, i) => v - this.position[i])) > 0.28 || attempt === 15) {
-        this.target = candidate;
-        break;
-      }
+      const delta = candidate.map((v, i) => v - this.position[i]), distance = Math.hypot(...delta);
+      const ahead = (-delta[0] * Math.cos(this.heading) + delta[2] * Math.sin(this.heading)) / Math.max(distance, 1e-6);
+      const score = ahead * (reverse ? -0.7 : 0.8) + this.random() * 0.45 - Math.abs(distance - 0.45) - (distance < 0.22 ? 2 : 0);
+      if (score > best) { best = score; this.target = candidate; }
     }
     this.cruiseSpeed = 0.065 + this.random() * 0.045;
   }
@@ -97,9 +101,13 @@ export class BettaSwim {
     distance = Math.hypot(...delta);
     const yawError = wrap(Math.atan2(delta[2], -delta[0]) - this.heading);
     const holding = this.mode === 'hover' && !nearWall && !escaping;
-    const wantedRate = holding ? 0 : clamp(yawError * 2.5, -1.65, 1.65);
+    if (holding || Math.abs(yawError) < 0.3) this.sharpTurn = false;
+    else if (Math.abs(yawError) > 1.9) this.sharpTurn = true;
+    const maxRate = this.sharpTurn ? 3.0 : 0.9 + this.speed * 3;
+    const wantedRate = holding ? 0 : clamp(yawError * (this.sharpTurn ? 3.5 : 1.8), -maxRate, maxRate);
     for (let k = 0; k < 3; k++) this.waterSpin[k] = damp(this.waterSpin[k], water?.angular[k] ?? 0, dt, 5);
-    this.steerRate = damp(this.steerRate, wantedRate, dt, 4.5);
+    const angularAcceleration = this.sharpTurn ? 9 : 3;
+    this.steerRate += clamp(wantedRate - this.steerRate, -angularAcceleration * dt, angularAcceleration * dt);
     this.angularVelocity = this.steerRate + this.waterSpin[1] * 0.8;
     this.heading += this.angularVelocity * dt;
     const pitchTarget = holding ? 0 : clamp(Math.atan2(delta[1], Math.hypot(delta[0], delta[2])), escaping ? -0.6 : -0.32, 0.32);
@@ -142,6 +150,6 @@ export class BettaSwim {
       if (outward > 0) for (let k = 0; k < 3; k++) this.drift[k] -= outward * this.position[k] / n;
     }
     this.velocity = this.position.map((v, i) => (v - old[i]) / dt);
-    this.drive = this.mode === 'glide' ? 0.065 : holding ? 0.045 : clamp(0.07 + this.speed * 1.4 + Math.abs(this.angularVelocity) * 0.06, 0.045, 0.40);
+    this.drive = this.mode === 'glide' ? 0.065 : holding ? 0.045 : clamp(0.07 + this.speed * 1.4 + Math.abs(this.steerRate) * 0.06, 0.045, 0.40);
   }
 }
