@@ -446,3 +446,6 @@ export const exposedDamage=(before:number,after:number,factor:number)=>![before,
 /** Bumpers soak up a hit (offline): once a bumper has been torn off, a hit on that end crumples it BUMPER_GONE.crush times as
  * fast, and at the engine end does `engine` times the engine damage, so radiator, fuel and exhaust trouble comes sooner. */
 export const BUMPER_GONE={crush:1.35,engine:1.25} as const;
+/** Doors and engine covers do their share too (offline): with a door gone that side crumples COVER_GONE.side times as fast;
+ * with the bonnet (or a rear engine's lid) gone the engine takes `engine` times the damage, on top of a missing bumper. */
+export const COVER_GONE={side:1.3,engine:1.2} as const;

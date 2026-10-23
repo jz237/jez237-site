@@ -44,7 +44,7 @@ import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowo
 import {leakRates,dripInterval,FLAME,fuelSpacing} from './fluid-leaks';
 import {drainOil,starvationWear,seizes,OIL,drainCoolant,overheatWear,FUEL_TANK,drainFuel,fuelFeed,SUMP,crackSump,sumpLeak,drainSump} from './oil-starvation';
 import {MAX_ENGINE_RESTART,crankRequested} from './engine-stall';
-import {rollBarSnaps,rollTorque,hasPropshaft,propBend,propVibration,fatigueProp,BEARING,bearingCracks,wearBearing,bearingShimmy,bearingDrag,steerSkew,openness,openDrag,debrisFling,smashFire,impactZoneFactor,pitStrength,pitGrip,PIT,EXPOSED_WHEEL,exposedDamage,BUMPER_GONE,beltSlip,beltSnaps,beltSqueal,beltHeat,drainBattery,batteryCut,RADIATOR as RADIATOR_COOLING,runningHot,hotClock,overheatFire} from './damage-handling';
+import {rollBarSnaps,rollTorque,hasPropshaft,propBend,propVibration,fatigueProp,BEARING,bearingCracks,wearBearing,bearingShimmy,bearingDrag,steerSkew,openness,openDrag,debrisFling,smashFire,impactZoneFactor,pitStrength,pitGrip,PIT,EXPOSED_WHEEL,exposedDamage,BUMPER_GONE,COVER_GONE,beltSlip,beltSnaps,beltSqueal,beltHeat,drainBattery,batteryCut,RADIATOR as RADIATOR_COOLING,runningHot,hotClock,overheatFire} from './damage-handling';
 import {SHED,assemblyMass,glassMass,shedMassProperties,type ShedPart} from './shed-weight';
 import {DOOR_SWING,DOOR_CATCH,doorTip,stepDoor,doorDrag,doorUnlatched,doorBase,lidKind,lidBase,stepLid,CARGO,cargoSpills,type LidKind} from './door-swing';
 /** Rear compression past which the exhaust hangs down and drags. */
@@ -1060,11 +1060,14 @@ export class Vehicle {
     const components={structure:this.structuralDamage,engineDamage:this.engineDamage,tyreDamage:this.tyreDamage,wheelDamage:Array.from(this.wreckParts.wheelDamage),wheelShift:this.wreckParts.wheelShift.map(v=>({x:v.x,y:v.y,z:v.z}))};
     const worn=Array.from(this.wreckParts.wheelDamage),structureBefore=this.extendedDamage?this.structuralDamage?.slice():undefined,tyreBefore=this.tyreDamage?.slice(),engineBefore=this.engineDamage;
     applyComponentImpact(components,this.kind,local,rotateVehicleVector(direction,inverse),damage);
-    // With a bumper gone, that end has nothing left to soak up the hit (offline).
-    if(this.extendedDamage&&structureBefore&&components.structure)for(const [end,name] of [[0,'front-bumper'],[1,'rear-bumper']] as const){
-      const bumper=this.wreckParts.assemblies.find(a=>a.name===name);if(!bumper||bumper.members.some(m=>m.mesh.visible))continue;
-      components.structure[end]=exposedDamage(structureBefore[end],components.structure[end],BUMPER_GONE.crush);
-      if(end===(isRearEngineKind(this.kind)?1:0)&&engineBefore!==undefined&&components.engineDamage!==undefined)components.engineDamage=exposedDamage(engineBefore,components.engineDamage,BUMPER_GONE.engine);
+    // With a bumper, a door or the bonnet gone, there is less left to soak up a hit there (offline).
+    if(this.extendedDamage&&structureBefore&&components.structure){
+      const gone=(name:string)=>{const a=this.wreckParts.assemblies.find(x=>x.name===name);return !!a&&a.members.every(m=>!m.mesh.visible);};
+      const engineEnd=isRearEngineKind(this.kind)?1:0,engineHit=(factor:number)=>{if(engineBefore!==undefined&&components.engineDamage!==undefined)components.engineDamage=exposedDamage(engineBefore,components.engineDamage,factor);};
+      for(const [end,name] of [[0,'front-bumper'],[1,'rear-bumper']] as const)if(gone(name)){
+        components.structure[end]=exposedDamage(structureBefore[end],components.structure[end],BUMPER_GONE.crush);if(end===engineEnd)engineHit(BUMPER_GONE.engine);}
+      for(const [side,doors] of [[2,['door-left','door-rear-left']],[3,['door-right','door-rear-right']]] as const)if(doors.some(gone))components.structure[side]=exposedDamage(structureBefore[side],components.structure[side],COVER_GONE.side);
+      if(gone(engineEnd?'engine-lid':'hood'))engineHit(COVER_GONE.engine);
     }
     // A front corner without its wing leaves the tyre and wheel bare: the hit does more to both (offline).
     if(this.extendedDamage)for(const i of [0,1])if(this.wingGone[i]){if(tyreBefore&&components.tyreDamage)components.tyreDamage[i]=exposedDamage(tyreBefore[i],components.tyreDamage[i],EXPOSED_WHEEL.tyre);components.wheelDamage[i]=exposedDamage(worn[i],components.wheelDamage[i],EXPOSED_WHEEL.rim);}

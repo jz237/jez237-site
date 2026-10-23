@@ -1,6 +1,7 @@
+import {restoreCoverGoneBytes} from './cover-gone-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readBumperGonePrevious,restoreBumperGoneBytes,verifyBumperGoneRevision} from './bumper-gone-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreCoverGoneBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('BumperGone preserves every prior fixture, vehicle asset, venue art and history input',verifyBumperGoneRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/bumper-gone/revision.json').toString());
