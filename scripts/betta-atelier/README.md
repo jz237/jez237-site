@@ -1,4 +1,4 @@
-# Living Silk — Betta Atelier 1.2
+# Living Silk — Betta Atelier 1.3
 
 An interactive, genuinely volumetric male halfmoon Betta study for Jez237.
 Live: https://jez237.com/demos/betta-atelier/
@@ -101,3 +101,40 @@ This improves close-up fidelity but does not establish scientifically measured
 microanatomy. The inputs remain AI-generated artwork and retain some baked light.
 Production textures are immutable R2 object URLs with checksum query keys.
 The versioned Demos preview avoids reusing the previous browser-cache key.
+
+## Water-driven fins · revision 1.3 (2026-10-22)
+
+Jez requested separate contributions from the fish's own power and water moving
+at different speeds/directions. `src/fin-dynamics.js` simulates all seven fins as
+anchored, wet membranes on 29 × 17 point grids, stepped at 120 Hz. Stiff radial
+links represent fin rays; softer cross-ray/diagonal links maintain the membrane;
+restoring force falls toward the flexible edge. The original high-resolution
+geometry/textures remain intact: a float displacement texture with explicit
+bilinear sampling transfers the solver motion to the display mesh. Lighting
+normals follow the deformed surface on all seven fins.
+
+- Caudal, dorsal and anal motor targets differ; paired pectorals row alternately
+  and feather on recovery; pelvic fins flex and trail independently.
+- Fluid force uses membrane normals and water velocity relative to fin motion,
+  body translation and yaw. Momentum persists after current/stroke changes.
+- The same world-space current and coherent eddies drive every fin and the
+  suspended particles. Turning the specimen changes its exposure to that current.
+- Water Flow 0–100% and the direction menu are independent of fin relaxation.
+  Directions are fixed in the scene: across left/right, toward/away from viewer,
+  up/down, or gradually changing currents. Zero disables imposed current, not
+  swimming. Percent is an artistic strength control, not a calibrated flow rate.
+- Roots follow the exact body deformation. Paired fins have a flank collision
+  guard. Fixed simulation substeps avoid frame-rate-dependent instability.
+- Pause freezes the solver; reduced-motion starts paused. Flow setting changes
+  take effect on resume. Strength eases in and direction reversals act through
+  forces rather than teleporting the mesh.
+
+This is a reduced-order interactive approximation, not a fluid-volume CFD solver
+or measured betta biomechanics. It does not add fin-to-fin self-collision.
+
+Run `npm test` for anchoring/stretch bounds, reversal response on all seven fins,
+self-powered strokes in still water, pause and 30/60/120-fps convergence. Build
+with `npm run build`. Browser QA must inspect both sides through the full turn,
+maximum currents, macro views, controls and mobile layout, plus real production
+texture delivery without the localhost fixture. Local verification receipts and
+screenshots: `/home/jez237/.openclaw/workspace/tmp/betta-water-fins-20261022/`.

@@ -7,6 +7,7 @@ import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js"
 import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 import { createBetta, uniforms } from "./fish.js";
+import { water, waterVelocity } from "./fin-dynamics.js";
 import "./style.css";
 const PI = Math.PI;
 const $ = (s) => document.querySelector(s);
@@ -185,6 +186,11 @@ $("#flare").onclick = () => {
     : '<span class="button-icon">◔</span> Fins relaxed';
 };
 $("#view").onchange = (e) => view(e.target.value);
+$("#flow").oninput = (e) => {
+  water.strength = Number(e.target.value) / 100;
+  $("#flow-value").value = e.target.value === "0" ? "Still" : `${e.target.value}%`;
+};
+$("#flow-direction").onchange = (e) => { water.direction = e.target.value; };
 $("#reset").onclick = () => view("portrait");
 $("#light").onclick = () => {
   cinematic = !cinematic;
@@ -254,6 +260,7 @@ fish.userData.ready
     $("#loading").style.display = "none";
   });
 let frame = 0;
+const particleFlow = [0, 0, 0];
 function draw(now) {
   const dt = Math.min((now - last) / 1000, 0.05);
   last = now;
@@ -265,6 +272,16 @@ function draw(now) {
     dt,
   );
   fish.userData.update(t, selected !== "portrait");
+  if (!paused) {
+    for (let i = 0; i < n; i++) {
+      const k = i * 3;
+      waterVelocity(t, pos[k], pos[k + 1], pos[k + 2], fish.userData.flowStrength, water.direction, particleFlow);
+      pos[k] = T.MathUtils.euclideanModulo(pos[k] + particleFlow[0] * dt + 9, 18) - 9;
+      pos[k + 1] = T.MathUtils.euclideanModulo(pos[k + 1] + particleFlow[1] * dt + 6, 12) - 6;
+      pos[k + 2] = T.MathUtils.euclideanModulo(pos[k + 2] + particleFlow[2] * dt + 9, 14) - 9;
+    }
+    dustGeo.attributes.position.needsUpdate = true;
+  }
   bg.material.uniforms.time.value = t;
   dustMat.uniforms.time.value = t;
   if (transition) {

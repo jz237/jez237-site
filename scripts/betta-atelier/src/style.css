@@ -208,7 +208,7 @@ h1 i {
 }
 .hint {
   position: fixed;
-  bottom: 146px;
+  bottom: 194px;
   left: 50%;
   transform: translateX(-50%);
   font-size: 9px;
@@ -229,6 +229,26 @@ footer {
   right: 5.5vw;
   z-index: 4;
 }
+.water-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin: 0 auto 10px;
+  padding: 10px 18px;
+  width: fit-content;
+  max-width: 100%;
+  border-radius: 24px;
+  background: #0c2424df;
+  border: 1px solid #91b2a82b;
+  backdrop-filter: blur(18px);
+}
+.flow-label { font-size: 9px; letter-spacing: .12em; white-space: nowrap; color: #9fbbae; }
+.flow-label output { display: inline-block; width: 32px; margin-left: 8px; color: #d3dfcc; }
+#flow { width: 120px; margin: 0; accent-color: #aad6c0; cursor: pointer; }
+#flow:focus-visible { outline: 2px solid #9fddcc; outline-offset: 5px; }
+#flow-direction { min-width: 146px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .controls {
   display: flex;
   align-items: center;
@@ -399,7 +419,7 @@ select option {
   }
   .hint {
     font-size: 7px;
-    bottom: 173px;
+    bottom: 218px;
     letter-spacing: 0.09em;
   }
   .hint span {
@@ -417,6 +437,11 @@ select option {
     flex-wrap: wrap;
     max-width: 440px;
   }
+  .water-controls { gap: 8px; padding: 12px 10px; width: 100%; }
+  .flow-label { font-size: 7px; letter-spacing: .06em; }
+  .flow-label output { width: 25px; margin-left: 3px; }
+  #flow { min-width: 50px; width: 75px; flex: 1; }
+  #flow-direction { min-width: 110px; max-width: 125px; font-size: 10px; }
   .controls button {
     font-size: 11px;
     padding: 10px;

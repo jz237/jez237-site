@@ -33,7 +33,7 @@
     <aside class="specimen">
       <span class="status-dot"></span
       ><span id="scene-label">TURQUOISE × CRIMSON</span
-      ><span class="specimen-line"></span><span>3D STUDY · v1.2</span>
+      ><span class="specimen-line"></span><span>3D STUDY · v1.3</span>
     </aside>
     <button
       id="info-toggle"
@@ -58,8 +58,8 @@
         </dd>
         <dt>Fins</dt>
         <dd>
-          Thin, pleated membranes supported by branching rays. The trailing edge
-          follows the water.
+          Seven flexible fins, supported by rays. The fish powers each stroke;
+          water bends the membranes and carries their trailing edges.
         </dd>
         <dt>Life</dt>
         <dd>
@@ -79,6 +79,20 @@
       DRAG TO ORBIT <span>·</span> SCROLL / PINCH TO EXPLORE
     </div>
     <footer>
+      <div class="water-controls" role="group" aria-label="Water current">
+        <label class="flow-label" for="flow">WATER FLOW <output id="flow-value" for="flow">38%</output></label>
+        <input id="flow" type="range" min="0" max="100" value="38" aria-label="Water flow strength" />
+        <label class="sr-only" for="flow-direction">Current direction</label>
+        <select id="flow-direction" aria-label="Current direction">
+          <option value="changing">Changing currents</option>
+          <option value="right">Across →</option>
+          <option value="left">Across ←</option>
+          <option value="front">Toward you</option>
+          <option value="back">Away from you</option>
+          <option value="up">Upwelling ↑</option>
+          <option value="down">Downward ↓</option>
+        </select>
+      </div>
       <div class="controls" role="toolbar" aria-label="Fish controls">
         <button id="motion" aria-pressed="false">
           <span class="button-icon">Ⅱ</span> Pause</button

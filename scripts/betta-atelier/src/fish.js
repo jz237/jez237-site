@@ -1,5 +1,6 @@
 import * as T from "three";
 import { addMacroSurface } from "./surfaces.js";
+import { FinDynamics, water } from "./fin-dynamics.js";
 const PI = Math.PI,
   lerp = T.MathUtils.lerp,
   clamp = T.MathUtils.clamp;
@@ -18,23 +19,37 @@ export const uniforms = {
 const deform = `uniform float uTime,uFlare,uMotion,uPhase,uDrive,uTurn,uFold;
 vec3 swim(vec3 p){float a=smoothstep(-1.05,1.16,p.x);float w=sin(uPhase-p.x*2.35);p.z+=a*a*((.016+uDrive*.18)*w+uTurn*.21);p.y+=.008*a*a*sin(uPhase*.5-p.x);float gill=exp(-pow((p.x+1.02)/.115,2.))*exp(-pow((p.y+.06)/.29,2.));p.z+=sign(p.z)*gill*(.003+.004*sin(uTime*3.1));float jaw=1.-smoothstep(-1.65,-1.30,p.x);p.y-=jaw*(1.-smoothstep(-.14,.07,p.y))*.008*(.5+.5*sin(uTime*3.1+.3));return p;}
 `;
-function animate(mat, fin = false, kind = 0) {
+function animate(mat, dynamics = null) {
   mat.onBeforeCompile = (s) => {
     Object.assign(s.uniforms, uniforms);
-    s.vertexShader =
-      deform +
-      (fin ? "attribute vec3 root;attribute vec2 finUV;\n" : "") +
-      s.vertexShader;
-    s.vertexShader = s.vertexShader.replace(
-      "#include <begin_vertex>",
-      `#include <begin_vertex>\n${fin ? `float v=finUV.y;float u=finUV.x;float trailing=pow(v,1.45);float openness=mix(1.,uFlare,${kind === 3 ? "0.12" : "0.65"});transformed=mix(root,transformed,openness);transformed.x+=trailing*uFold*.07;transformed.z+=trailing*(sin(u*12.+v*4.4-uTime*1.7)*.020+sin(u*27.-v*6.-uTime*2.8)*.008);transformed.z+=trailing*(-sin(uPhase-position.x*2.35-v*.9)*uDrive*.13);${kind === 3 ? `transformed.z=root.z+(transformed.z-root.z)*(0.6+.4*sin(uTime*(16.-uDrive*12.)+sign(root.z)*.85));transformed.x+=v*.06*sin(uTime*(16.-uDrive*12.)+sign(root.z)*.85);` : ""}` : ""}`,
-    );
+    if (dynamics) {
+      s.uniforms.uFinDisplacement = { value: dynamics.texture };
+      s.uniforms.uFinGrid = { value: new T.Vector2(dynamics.columns, dynamics.rows) };
+    }
+    s.vertexShader = deform + (dynamics ? `
+attribute vec2 finUV;
+uniform sampler2D uFinDisplacement;
+uniform vec2 uFinGrid;
+// Explicit bilinear interpolation works without float-linear texture extensions.
+vec3 wetFin(vec2 uv) {
+  vec2 grid=clamp(uv,0.,1.)*(uFinGrid-1.);
+  ivec2 a=ivec2(floor(grid)), b=min(a+ivec2(1),ivec2(uFinGrid)-1);
+  vec2 f=fract(grid);
+  return mix(mix(texelFetch(uFinDisplacement,a,0).xyz,texelFetch(uFinDisplacement,ivec2(b.x,a.y),0).xyz,f.x),
+             mix(texelFetch(uFinDisplacement,ivec2(a.x,b.y),0).xyz,texelFetch(uFinDisplacement,b,0).xyz,f.x),f.y);
+}
+` : "") + s.vertexShader;
     s.vertexShader = s.vertexShader.replace(
       "#include <project_vertex>",
-      `vec4 mvPosition=vec4(swim(transformed),1.);mvPosition=modelViewMatrix*mvPosition;gl_Position=projectionMatrix*mvPosition;`,
+      `vec4 mvPosition=vec4(swim(transformed)${dynamics ? '+wetFin(finUV)' : ''},1.);
+       mvPosition=modelViewMatrix*mvPosition;gl_Position=projectionMatrix*mvPosition;`,
+    );
+    if (dynamics) s.fragmentShader = s.fragmentShader.replace(
+      "#include <normal_fragment_begin>",
+      "#include <normal_fragment_begin>\nnormal=normalize(cross(dFdx(vViewPosition),dFdy(vViewPosition)))*faceDirection;",
     );
   };
-  mat.customProgramCacheKey = () => `textured-betta-2-${fin}-${kind}`;
+  mat.customProgramCacheKey = () => `wet-betta-1.3-${!!dynamics}`;
   return mat;
 }
 // Anatomical silhouette measured in the unmodified lateral reference image.
@@ -204,6 +219,22 @@ function makeFin(fish, texture, roots, edge, kind = 0, side = 0, atlas = null) {
     g.setAttribute(name, new T.Float32BufferAttribute(arr, n));
   g.setIndex(idx);
   g.computeVertexNormals();
+  const dynamics = new FinDynamics({
+    kind, side,
+    point(u, v) {
+      const r = sample(roots, u), e = sample(edge, u);
+      const vv = v * (1 - 0.004 * (0.5 + 0.5 * Math.sin(u * PI * 142)) - 0.002 * (0.5 + 0.5 * Math.sin(u * PI * 57)));
+      const [x, y] = world([lerp(r[0], e[0], vv), lerp(r[1], e[1], vv)]);
+      const ridges = Math.sin(u * PI * 56) * 0.006 + Math.sin(u * PI * 9 + v * 3) * 0.055;
+      let z = v ** 1.5 * ridges;
+      if (kind === 3) z = side * (0.267 + v * 0.19) + v * 0.006 * Math.sin(u * 70);
+      else if (kind === 4) z = side * (0.14 + v * 0.05) + v * ridges * 0.4;
+      return [x, y, z];
+    },
+  });
+  dynamics.texture = new T.DataTexture(dynamics.displacement, dynamics.columns, dynamics.rows, T.RGBAFormat, T.FloatType);
+  dynamics.texture.needsUpdate = true;
+  fish.userData.finDynamics.push(dynamics);
   const baseMat = animate(
     new T.MeshPhysicalMaterial({
       map: texture,
@@ -221,8 +252,7 @@ function makeFin(fish, texture, roots, edge, kind = 0, side = 0, atlas = null) {
       bumpMap: texture,
       bumpScale: 0.006,
     }),
-    true,
-    kind,
+    dynamics,
   );
   const mat =
     kind < 3
@@ -234,11 +264,14 @@ function makeFin(fish, texture, roots, edge, kind = 0, side = 0, atlas = null) {
   const mesh = new T.Mesh(g, mat);
   mesh.frustumCulled = false;
   mesh.userData.kind = kind;
+  mesh.name = ["Caudal", "Dorsal", "Anal", "Pectoral", "Pelvic"][kind] + (side ? (side > 0 ? " left" : " right") : "");
   fish.add(mesh);
   return mesh;
 }
 export function createBetta() {
   const fish = new T.Group();
+  const finDynamics = [];
+  fish.userData.finDynamics = finDynamics;
   fish.name = "Betta splendens — volumetric reference-textured specimen";
   let resolveTexture, rejectTexture;
   const loaded = new Promise((resolve, reject) => {
@@ -535,6 +568,8 @@ export function createBetta() {
   }
   let prev = 0,
     phase = 0,
+    pectoralPhase = 0,
+    flowStrength = water.strength,
     drive = 0.1,
     heading = 0.12,
     tx = 0,
@@ -546,7 +581,9 @@ export function createBetta() {
     macroTextures,
     scaleCount: 0,
     finCount: 7,
-    revision: "1.2",
+    revision: "1.3",
+    finDynamics,
+    water,
     mode: "hover",
     update(t, inspect = false) {
       const dt = clamp(t - prev, 0, 0.07);
@@ -618,10 +655,13 @@ export function createBetta() {
       ty = T.MathUtils.damp(ty, targetY, 2, dt);
       // Integrate phase so changes in thrust never jump the fin animation.
       phase += dt * (1.3 + drive * 15);
+      pectoralPhase += dt * (15.5 - drive * 12);
+      flowStrength = T.MathUtils.damp(flowStrength, water.strength, 1.8, dt);
       uniforms.uPhase.value = phase;
       uniforms.uDrive.value = drive;
       uniforms.uTurn.value = turn;
       uniforms.uFold.value = drive;
+      const previousPosition = fish.position.clone();
       fish.position.set(
         tx + 0.325 * (1 - Math.cos(heading)),
         ty + 0.009 * Math.sin(t * 1.31),
@@ -632,6 +672,25 @@ export function createBetta() {
         heading,
         0.012 * Math.sin(t * 0.71) - drive * 0.025,
       );
+      const velocity = dt ? fish.position.clone().sub(previousPosition).multiplyScalar(1 / dt).toArray() : [0, 0, 0];
+      const state = {
+        time: t, phase, pectoralPhase, drive, turn, flare: uniforms.uFlare.value,
+        heading, angularVelocity: turn, velocity, origin: fish.position.toArray(),
+        strength: flowStrength, direction: water.direction,
+        bodyRadius(x, y) {
+          const pixelX = x / SCALE + 680;
+          if (pixelX < 155 || pixelX > 1010) return 0;
+          const [, top, bottom, thick] = section(pixelX);
+          const mid = (420 - (top + bottom) / 2) * SCALE, radius = (bottom - top) * 0.5 * SCALE;
+          const q = (y - mid) / radius;
+          return Math.abs(q) >= 1 ? 0 : Math.sqrt(1 - q * q) * thick * SCALE;
+        },
+      };
+      for (const fin of finDynamics) {
+        fin.advance(dt, state);
+        fin.texture.needsUpdate = dt > 0;
+      }
+      fish.userData.flowStrength = flowStrength;
       fish.userData.mode = mode;
       fish.userData.drive = drive;
     },

@@ -97,13 +97,9 @@ float microHeight(vec2 uv){return luminanceBetta(basePigment(uv))+luminanceBetta
         "#include <roughnessmap_fragment>",
         `#include <roughnessmap_fragment>\nroughnessFactor=clamp(roughnessFactor+(1.-microHeight(vMapUv))*.10-.045,.28,.88);`,
       );
-    if (fin)
-      shader.fragmentShader = shader.fragmentShader.replace(
-        "#include <normal_fragment_begin>",
-        `#include <normal_fragment_begin>\nnormal=normalize(cross(dFdx(vViewPosition),dFdy(vViewPosition)))*faceDirection;`,
-      );
+
   };
   material.customProgramCacheKey = () =>
-    `betta-macro-1.2-${fin}-${caudal}-${eye}`;
+    `betta-macro-1.3-${fin}-${caudal}-${eye}`;
   return material;
 }
