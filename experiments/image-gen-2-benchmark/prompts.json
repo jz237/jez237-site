@@ -24919,5 +24919,88 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-23-factual-infographic-factual-infographic-feline-tongue-backw",
+    "title": "Factual infographic: Feline Tongue — Backward-Facing Papillae",
+    "tests": "Source-backed normal feline tongue anatomy; schematic saliva color and microanatomical enlargements; artwork-led unboxed atlas; no subjective critic.; archive_slot=2026-10-23T04:20; concept=feline-tongue-papillae-saliva-fur-grooming; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: inside-the-cat",
+    "prompt": "Create a finished, richly informative artistic feline anatomy infographic, not a photographed poster or mockup. Main title: “THE FELINE TONGUE”; subtitle immediately below: “Backward-facing papillae • A saliva-carrying comb”. A focused normal-anatomy plate, not a general cat overview or disease chart. Exquisite gouache and colored-pencil anatomical illustration with fine technical ink, luminous dusty-rose tongue tissue, graphite-gray and ivory fur, muted petrol-blue annotations on warm pale gray. Opaque background. Let the composition flow asymmetrically with varied scale, open callouts and generous breathing room; no boxes, panels, card matrix or rigid grid.\n\nVisually dominant hero: a healthy adult silver mackerel-tabby domestic shorthair curled in a natural three-quarter seated grooming pose, head bent gracefully toward one extended foreleg. Correct feline anatomy, finely individual guard hairs and soft undercoat, nuanced muzzle and whiskers, pink tongue visibly touching the foreleg. Rich soft directional lighting and believable mouth geometry. No human characters, costumes, props or anthropomorphism. The sweeping curve of the cat's body carries the viewer into the anatomical studies rather than occupying an unrelated vignette.\n\nAn elegant enlargement pathway grows out of the tongue with a delicate leader: a substantial oblique macro study of the dorsal tongue, tapering toward its tip. Explicitly label “Tongue tip” at the anterior narrow end and “Toward throat” at the posterior end. Show rows of small curved keratin spines pointing BACKWARD toward the throat, not forward. Main label “Filiform papillae”; short explanation “Backward-facing keratin spines”. These are stylized enlargements of real microanatomy, not enormous teeth on the actual cat. Differentiate soft pink tongue tissue from pale translucent keratin. Label “Schematic enlargement” unobtrusively.\n\nAlong the outer curve of this macro, a beautifully shaded single-papilla study becomes larger still, with a clearly visible open scoop-shaped U-shaped cavity at its tip. Show a tiny blue saliva meniscus occupying the groove. Label “U-shaped tip cavity” and “Surface tension draws saliva in”. Depict an open groove, NOT a closed tubular hypodermic needle, NOT a salivary gland duct, NOT a hole through the entire tongue. Use blue solely as a schematic saliva key, with tiny label “Blue = saliva (schematic)”.\n\nBelow, organically integrate a side-view tongue-to-fur contact study, with a few expertly rendered fur shafts rooted in a slim neutral skin line and passing around curved papillae. The tongue presses into and compresses the coat, papillae enter among the hairs, and small blue traces mark saliva released by contact onto hairs below the tongue surface. Labels: “Tongue compresses fur”, “Papillae reach between hairs”, “Saliva transfers on contact”. Make all leader lines terminate on the right structures; no piercing skin and no injection imagery. A small curved directional arrow indicates the grooming sweep without implying the papillae point forward. Add one open annotation adjacent to the tongue expansion study: “As the tongue expands, papillae stand more erect.” Represent it with a subtle two-position ghosted papilla at its soft-tissue base, not an invented joint or muscle inside the spine.\n\nOne concise closing line woven into negative space: “Normal grooming brings a comb and a fluid carrier together.” Substantial educational content should remain readable with clear hierarchy, crisp human-readable labels and no filler text. Preserve precise mechanism over decorative trivia. No statistics, scale bars, breed comparisons, taste-bud claims, cooling claims, treatment advice or additional unsourced functions. Tiny footer “Sources: Noel & Hu, PNAS (2018); Cornell Feline Health Center”. Deliver the flat finished artwork itself, sumptuous detail and calm visual breathing room.",
+    "image": "images/2026-10-23-factual-infographic-factual-infographic-feline-tongue-backw.jpg",
+    "thumb": "thumbs/2026-10-23-factual-infographic-factual-infographic-feline-tongue-backw.webp",
+    "color": "#b4a59e",
+    "date": "2026-10-23",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "feline-tongue-papillae-saliva-fur-grooming",
+      "imageSha256": "7e0f11f89f1880f647c583f77037631618f25cbefb758de5882bdfe4dc8f578e",
+      "imageDHash": "e6f6042402e0f8fc"
+    },
+    "factualInfographic": {
+      "topic": "How backward-facing feline tongue papillae wick saliva and deliver it into fur during grooming",
+      "description": "Focused normal feline tongue microanatomy and the capillary transfer of saliva during grooming.",
+      "sourceNote": "Read the primary PNAS paper and Cornell veterinary source. Claim-level evidence distinguishes normal grooming, keratin-spine orientation, open tip cavities, expansion and fur contact. Sources: https://pmc.ncbi.nlm.nih.gov/articles/PMC6298077/ ; https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/cats-lick-too-much",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-23T08:22:15.574971+00:00",
+        "sources": [
+          {
+            "id": "pnas",
+            "publisher": "Proceedings of the National Academy of Sciences",
+            "title": "Cats use hollow papillae to wick saliva into fur",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6298077/"
+          },
+          {
+            "id": "cornell",
+            "publisher": "Cornell University College of Veterinary Medicine",
+            "title": "Cats that Lick Too Much",
+            "sourceType": "university",
+            "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/cats-lick-too-much"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Licking is a normal feline grooming behavior; show a healthy domestic cat grooming its foreleg.",
+            "sourceIds": [
+              "cornell",
+              "pnas"
+            ]
+          },
+          {
+            "claim": "The feline tongue bears backward-facing keratin spines called filiform papillae; depict them pointing toward the throat, not toward the tongue tip.",
+            "sourceIds": [
+              "pnas"
+            ]
+          },
+          {
+            "claim": "The large grooming papillae have a scoop-shaped, U-shaped cavity at the tip which wicks saliva by surface tension; this is not a hollow syringe connected to a salivary duct.",
+            "sourceIds": [
+              "pnas"
+            ]
+          },
+          {
+            "claim": "During tongue expansion the grooming papillae rotate to stand more erect and increase contact with fur.",
+            "sourceIds": [
+              "pnas"
+            ]
+          },
+          {
+            "claim": "The tongue presses and compresses fur during the grooming stroke; papillae deliver saliva deeper into the coat than the tongue surface alone.",
+            "sourceIds": [
+              "pnas"
+            ]
+          },
+          {
+            "claim": "Saliva wicked into papilla cavities is released onto hairs by contact during grooming.",
+            "sourceIds": [
+              "pnas"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
