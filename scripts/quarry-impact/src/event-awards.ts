@@ -1,12 +1,16 @@
 /** End-of-event awards: the biggest single hit, the most destructive driver and, for races,
  * the biggest climber (for derbies, the toughest survivor). Pure bookkeeping; the caller
  * reports hits and the starting order and supplies names when rendering. */
+/** A FASTEST HIT card needs a hit of at least FASTEST_HIT.min m/s closing speed. */
+export const FASTEST_HIT={min:10} as const;
 export type AwardCar={id:number;inflicted:number;health:number};
 /** failure: a car's own mechanical failure (attacker = victim = that car), captioned by `label`. */
 export type EventMoment={kind:'hit'|'takedown'|'wheel'|'fire'|'failure';attacker:number;victim:number;time:number;score:number;label?:string};
-export type EventAward={key:'hit'|'destroyer'|'takedowns'|'climber'|'toughest'|'nemesis'|'wheels'|'scrap'|'firestarter';title:string;id:number;detail:string;victim?:number;value:number};
+export type EventAward={key:'hit'|'fastest'|'destroyer'|'takedowns'|'climber'|'toughest'|'nemesis'|'wheels'|'scrap'|'firestarter';title:string;id:number;detail:string;victim?:number;value:number};
 export class EventAwards{
  private biggest:{attacker:number;victim:number;damage:number;time:number}|null=null;
+ /** The fastest damaging hit (closing speed, m/s). */
+ private fastest:{attacker:number;victim:number;speed:number}|null=null;
  private start:number[]|null=null;
  private takedowns=new Map<number,number>();
  private dealt=new Map<string,number>();
@@ -14,7 +18,7 @@ export class EventAwards{
  private moments:EventMoment[]=[];
  private puddles=new Map<number,number>();
  private alight=new Map<number,number>();
- reset(){this.biggest=null;this.start=null;this.takedowns.clear();this.dealt.clear();this.stripping.clear();this.moments=[];this.puddles.clear();this.alight.clear();}
+ reset(){this.biggest=null;this.fastest=null;this.start=null;this.takedowns.clear();this.dealt.clear();this.stripping.clear();this.moments=[];this.puddles.clear();this.alight.clear();}
  /** A puddle of oil or fuel caught from this car's sparks or flames (spread included). */
  ignited(owner:number){if(Number.isInteger(owner)&&owner>=0)this.puddles.set(owner,(this.puddles.get(owner)??0)+1);}
  /** Flames lit by the attacker set the victim alight: a highlight and the firestarter's best credit. */
@@ -38,9 +42,10 @@ export class EventAwards{
   const s=this.stripping.get(attacker)??{wheels:0,parts:0};s.wheels+=Math.max(0,Math.floor(wheels));s.parts+=Math.max(0,Math.floor(parts));this.stripping.set(attacker,s);
  }
  strippedBy(id:number){return{...(this.stripping.get(id)??{wheels:0,parts:0})};}
- /** Returns true when this hit wrecked the victim (a takedown). */
- hit(attacker:number,victim:number,damage:number,wrecked=false,time=0){
+ /** Returns true when this hit wrecked the victim (a takedown). speed: the hit's closing speed (m/s), for FASTEST HIT. */
+ hit(attacker:number,victim:number,damage:number,wrecked=false,time=0,speed=0){
   if(!(damage>0)||!Number.isFinite(damage)||attacker===victim)return false;
+  if(Number.isFinite(speed)&&speed>(this.fastest?.speed??0))this.fastest={attacker,victim,speed};
   if(wrecked)this.takedowns.set(attacker,(this.takedowns.get(attacker)??0)+1);
   const pair=attacker+'>'+victim;this.dealt.set(pair,(this.dealt.get(pair)??0)+damage);
   if(!this.biggest||damage>this.biggest.damage)this.biggest={attacker,victim,damage,time:Number.isFinite(time)?time:0};
@@ -58,6 +63,7 @@ export class EventAwards{
  awards(mode:'race'|'derby'|string,cars:readonly AwardCar[],finishOrder:readonly number[]=[]):EventAward[]{
   const out:EventAward[]=[];
   if(this.biggest&&this.biggest.damage>=1)out.push({key:'hit',title:'BIGGEST HIT',id:this.biggest.attacker,victim:this.biggest.victim,value:this.biggest.damage,detail:`${Math.round(this.biggest.damage)} damage in one impact`});
+  if(this.fastest&&this.fastest.speed>=FASTEST_HIT.min)out.push({key:'fastest',title:'FASTEST HIT',id:this.fastest.attacker,victim:this.fastest.victim,value:this.fastest.speed,detail:`${Math.round(this.fastest.speed*3.6)} km/h impact`});
   const destroyer=[...cars].sort((a,b)=>b.inflicted-a.inflicted||a.id-b.id)[0];
   if(destroyer&&destroyer.inflicted>=1)out.push({key:'destroyer',title:'MOST DESTRUCTIVE',id:destroyer.id,value:destroyer.inflicted,detail:`${Math.round(destroyer.inflicted)} damage dealt`});
   const taker=[...this.takedowns].sort((a,b)=>b[1]-a[1]||a[0]-b[0])[0];
