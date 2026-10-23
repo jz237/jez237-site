@@ -15019,5 +15019,90 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-23-factual-infographic-factual-infographic-ear-positions-read-",
+    "title": "Factual infographic: Ear Positions — Read the Whole Cat",
+    "tests": "Two independent veterinary-university sources; contextual rather than deterministic signal interpretation; no disease profile; unboxed gouache and colored-pencil atlas; no subjective critic.; archive_slot=2026-10-23T12:20; concept=feline-ear-positions-contextual-communication; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: body-language",
+    "prompt": "Create a finished, richly detailed artistic feline communication infographic, rendered directly as artwork, not a photograph of a poster. Title: “EAR POSITIONS”. Subtitle: “Read the whole cat”. Focus on contextual ear postures, not a broad all-body-language survey. A flowing, asymmetrical colored-pencil and luminous gouache atlas on a muted midnight-teal ground with warm ivory lettering, copper accents and gently fading brush edges. The dominant hero is a beautifully observed short-haired blue-gray cat in three-quarter view, seated with a soft loose posture, upright ears and half-closed eyes; velvety fur, fine ear-edge hairs, natural whisker roots and anatomical proportions. Its head and ears are large enough to study, not humanized. Warm side lighting separates the cool fur from the background. Let the body dissolve into soft painted ground below, leaving generous negative space for readable type. No boxes, cards, even grid or infographic dashboard.\n\nAround the hero, arrange a curving visual pathway of smaller expressive head and upper-body studies of the SAME blue-gray cat, deliberately varying scale and viewpoint. Open delicate curved leader lines connect labels directly to the corresponding ear position and associated face/body cue. Do not change ear anatomy, invent muscles, show a hearing mechanism, or draw rigid numerical ear angles. Ears must remain physically attached and credible. Avoid an emotion meter or a guaranteed one-pose-to-one-emotion code.\n\nAt the hero, label “Upright + soft eyes” and explain “Can accompany relaxation.” The first floating head study has ears pointing forward and open attentive eyes; label “Forward + eyes open” and “Attention — or anxiety. Check the setting.” The next study merges into a small low-crouching silhouette with its tail tucked closely, ears flattened outward/down and whiskers drawn against the face; label “Flattened + withdrawn whiskers” and “Can accompany fear.” The final head study shows ears clearly back and flat with whiskers directed forward; label “Back + flat” and “Can accompany defensive signaling.” Keep the expressions subtle and real, not snarling cartoon faces. Connect this last study to a small, unobtrusive tapered tail-lashing motion trace, with label “During petting: ears back + tail lashing” and “Stop petting. Allow space and a cooling-down period.” No human hands touching a frightened cat; no punishment or forced handling.\n\nA confident open typographic line along the lower organic arc reads “Ears are one clue, not a verdict.” Beneath it, readable small text: “Read eyes, whiskers, posture, tail and context together.” Add a discreet source credit “Sources: Cornell Feline Health Center · University of Edinburgh”. These studies are illustrative examples, not a diagnosis or a promise of what any individual cat will do. Maintain room around the hero, elegant typographic hierarchy and crisp readable substantive labels. Prioritize the cat portrait, the four well-observed ear expressions and the contextual safety message over decorative extras. Rich scientific illustration, naturally integrated facts, no rigid panels, no fake statistics, no breed claims, no invented anatomy, no watermark, no photographed book, no frame, no UI. Opaque background. Request medium quality and auto size.",
+    "image": "images/2026-10-23-factual-infographic-factual-infographic-ear-positions-read-.jpg",
+    "thumb": "thumbs/2026-10-23-factual-infographic-factual-infographic-ear-positions-read-.webp",
+    "color": "#3d4038",
+    "date": "2026-10-23",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1214x1295",
+    "dedup": {
+      "conceptKey": "feline-ear-positions-contextual-communication",
+      "imageSha256": "cb0a1115eca3d286c6119232dd12772dcbecd7fa2daa46454c75bdc1d97567aa",
+      "imageDHash": "cfa6b7b3965a6b33"
+    },
+    "factualInfographic": {
+      "topic": "Interpreting feline ear positions with facial expression, posture and interaction context",
+      "description": "Focused feline ear-posture atlas with facial and body context; signals are qualified, never fixed emotional diagnoses.",
+      "sourceNote": "Read Cornell veterinary guidance and the full Edinburgh veterinary body-language handout. Sources: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-behavior-problems-aggression ; https://vet.ed.ac.uk/sites/default/files/2024-09/Feline%20body%20language.pdf",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-23T16:21:25.090301+00:00",
+        "sources": [
+          {
+            "id": "cornell",
+            "publisher": "Cornell University College of Veterinary Medicine",
+            "title": "Feline Behavior Problems: Aggression",
+            "sourceType": "university",
+            "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-behavior-problems-aggression"
+          },
+          {
+            "id": "edinburgh",
+            "publisher": "University of Edinburgh Royal (Dick) School of Veterinary Studies",
+            "title": "Feline body language (2019 v1)",
+            "sourceType": "university",
+            "url": "https://vet.ed.ac.uk/sites/default/files/2024-09/Feline%20body%20language.pdf"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Ear position is interpreted together with eyes, whiskers, posture, tail and context; these are contextual cues, not a guaranteed emotion or diagnosis.",
+            "sourceIds": [
+              "cornell",
+              "edinburgh"
+            ]
+          },
+          {
+            "claim": "Upright ears with half-closed eyes can accompany a relaxed expression.",
+            "sourceIds": [
+              "edinburgh"
+            ]
+          },
+          {
+            "claim": "Forward ears and open eyes can indicate attention or anxiety, rather than reliably meaning happiness.",
+            "sourceIds": [
+              "edinburgh"
+            ]
+          },
+          {
+            "claim": "Flattened ears with whiskers drawn against the face can accompany fear; fear can also involve a low crouch and a tucked or closely wrapped tail.",
+            "sourceIds": [
+              "cornell",
+              "edinburgh"
+            ]
+          },
+          {
+            "claim": "Ears back and flat with whiskers directed forward can accompany defensive or aggressive communication; ears moving backward with tail lashing can precede petting-induced aggression.",
+            "sourceIds": [
+              "cornell",
+              "edinburgh"
+            ]
+          },
+          {
+            "claim": "When ears move back and the tail lashes during petting, stop petting and allow a cooling-down period without physical contact. Avoid punishment, restraint or uninvited handling.",
+            "sourceIds": [
+              "cornell"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
