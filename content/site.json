@@ -19,7 +19,7 @@
       "name": "AI News Feed",
       "desc": "Curated AI model releases, tooling updates, and notable research.",
       "status": "live",
-      "link": "/news.html"
+      "link": "/ai-news/"
     },
     {
       "name": "Game Experiments",
@@ -59,7 +59,7 @@
       "name": "🌊 After the Storm: Coastal Racing",
       "desc": "TIDELINE v2.1: detailed racing riders and jet skis, animated weight shifts, rolling surf and a close-up demo tour across nine coasts. Phone controls, stunts and split screen.",
       "status": "live",
-      "link": "/games/2026-09-10/after-the-storm/race.html"
+      "link": "/games/2026-09-10/after-the-storm/race"
     },
     {
       "name": "👷 Hard Hat Mac",

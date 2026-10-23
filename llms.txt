@@ -282,6 +282,11 @@ Template for an existing plant page:
 </article>
 ```
 
+The first photo on a page is its largest visible image, so it loads at once:
+give that one `fetchpriority="high"` and no `loading="lazy"`. When a new
+entry goes in above it, move those two attributes to the new top photo and
+put `loading="lazy"` back on the old one.
+
 For a new plant page, copy the structure from an existing page such as
 `/plants/dwarf-peach-tree/index.html`, then add a directory card to
 `/plants/index.html`.

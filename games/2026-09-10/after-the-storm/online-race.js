@@ -45,7 +45,7 @@ function hostLink(){if(peer?.session)postHost('link',{connection:peer.session,co
 function makeHostFrame(){
  if(hostFrame){hostLink();return;}
  hostCapability=onlineToken();hostFrame=document.createElement('iframe');hostFrame.className='host-game';hostFrame.title='Player 1 online race';hostFrame.allow='autoplay; fullscreen; gamepad';hostFrame.style.visibility='hidden';
- const url=new URL('./race.html',location.href);url.searchParams.set('onlineHost','1');for(const key of ['qa','verify','nativePhysics'])if(new URLSearchParams(location.search).has(key))url.searchParams.set(key,'1');
+ const url=new URL('./race',location.href);url.searchParams.set('onlineHost','1');for(const key of ['qa','verify','nativePhysics'])if(new URLSearchParams(location.search).has(key))url.searchParams.set(key,'1');
  url.hash=new URLSearchParams({onlineBridge:hostCapability}).toString();hostFrame.src=url.href;document.body.append(hostFrame);
 }
 window.addEventListener('message',event=>{

@@ -107,7 +107,12 @@
     var img = document.createElement('img');
     img.src = p.src;
     img.alt = p.alt || p.caption || '';
-    img.loading = 'lazy';
+    if (index === 0) {
+      // The first photo is the page's largest visible image; fetch it at once.
+      img.fetchPriority = 'high';
+    } else {
+      img.loading = 'lazy';
+    }
     img.decoding = 'async';
     item.appendChild(img);
 
