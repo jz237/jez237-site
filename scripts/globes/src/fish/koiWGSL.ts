@@ -417,7 +417,7 @@ fn koi_map(pose: texture_2d<f32>, x: vec3f) -> vec2f {
   for (var i = 0; i < select(0, 4, c.u < 0.16 * lb); i++) {
     let a = koi_tex(pose, KOI_BARBELS + 2 * i);
     let b = koi_tex(pose, KOI_BARBELS + 2 * i + 1);
-    let dbb = koi_capsule(q, a.xyz, b.xyz, mix(0.0045, 0.0025, 0.5) * lb);
+    let dbb = koi_capsule(q, a.xyz, b.xyz, 0.0035 * lb);
     if (dbb < d) { d = dbb; m = 3.0; }
   }
 
