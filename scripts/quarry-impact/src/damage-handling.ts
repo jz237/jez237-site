@@ -443,3 +443,6 @@ export const pitGrip=(slide:number)=>1-PIT.loss*Math.max(0,Math.min(1,Number.isF
  * the tyre and `rim` times as much to the wheel, and nothing is left to rub on the tyre. */
 export const EXPOSED_WHEEL={tyre:1.8,rim:1.4} as const;
 export const exposedDamage=(before:number,after:number,factor:number)=>![before,after,factor].every(Number.isFinite)||after<=before?after:Math.min(1,before+(after-before)*factor);
+/** Bumpers soak up a hit (offline): once a bumper has been torn off, a hit on that end crumples it BUMPER_GONE.crush times as
+ * fast, and at the engine end does `engine` times the engine damage, so radiator, fuel and exhaust trouble comes sooner. */
+export const BUMPER_GONE={crush:1.35,engine:1.25} as const;
