@@ -104,7 +104,8 @@ export class Betta {
     this.waterState = readBettaWater(sense, this.probes, env);
     const target = new THREE.Vector3().fromArray(this.waterState.flow);
     this.flow.lerp(target, 1 - Math.exp(-5 * dt));
-    this.swim.advance(dt, this.flow.toArray(), env, this.waterState.submerged > 0.99, this.waterState);
+    // The tail's own working (read back from last frame's gait) is what lets the body gain speed.
+    this.swim.advance(dt, this.flow.toArray(), env, this.waterState.submerged > 0.99, this.waterState, this.fish.userData.stroke ?? null);
     this.fish.userData.locomotion = this.locomotion();
     this.fish.userData.externalFlow = this.flow.clone().multiplyScalar(1 / SCALE).toArray();
     // The same one-second opening as the standalone specimen.

@@ -10,7 +10,7 @@ const PI = Math.PI,
   clamp = T.MathUtils.clamp;
 export const SCALE = 0.0032;
 // Pectoral pose by locomotion mode: fan to hold station when still, fold in for the startle dart.
-export const POSES = { hover: { scull: 1 }, surface: { scull: 1 }, gulp: { scull: 1 }, rise: { scull: 0.7 }, glide: { scull: 0.3 }, startle: { tuck: 1 }, mirror: { scull: 1 }, lap: { scull: 0.15 }, rest: { scull: 0.25 } };
+export const POSES = { hover: { scull: 1 }, surface: { scull: 1 }, gulp: { scull: 1 }, rise: { scull: 0.7 }, dive: { scull: 0.5 }, glide: { scull: 0.3 }, startle: { tuck: 1 }, mirror: { scull: 1 }, lap: { scull: 0.15 }, rest: { scull: 0.25 } };
 const world = ([x, y]) => [(x - 680) * SCALE, (420 - y) * SCALE];
 const texUV = ([x, y]) => [x / 1536, 1 - y / 1024];
 export const uniforms = {
@@ -674,7 +674,7 @@ export function createBetta({ compact = false } = {}) {
     macroTextures,
     scaleCount: 0,
     finCount: 7,
-    revision: "1.10",
+    revision: "1.11",
     gulp: { lift: 0, phase: "none", clock: -1, lip: [0, 0, 0], surfaceY: SURFACE_Y },
     display, eyes,
     gait,
@@ -851,6 +851,7 @@ export function createBetta({ compact = false } = {}) {
       fish.userData.mode = mode;
       fish.userData.drive = drive;
       fish.userData.effort = effort;
+      fish.userData.stroke = gait.stroke;
       fish.userData.breathPhase = breathPhase;
       fish.userData.turn = turn;
     },

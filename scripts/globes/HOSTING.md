@@ -3,7 +3,7 @@
 Original: https://github.com/willwaltz/globes
 Author: Will Waltz · MIT License
 Upstream commit: 93c3b814bbca53463e8207b8e3c95fca8940dff5
-Imported: 2026-10-22 · Hosting build: 1.8.0
+Imported: 2026-10-22 · Hosting build: 1.9.0
 Public route: https://jez237.com/demos/globes/
 
 The upstream source and MIT attribution are retained. Hosting adds the gallery
@@ -151,6 +151,29 @@ Version 1.8 adds three behaviours and animated caustics (Atelier 1.10 shares the
 Limits: the push and bubbles are artistic, not a coupled free-surface solver; the
 Firefox check confirmed the new sim kernels compile under naga, with the betta itself
 checked on the published site.
+
+Version 1.9 (Atelier 1.11) makes the fish move only by swimming, and stops it chasing its tail:
+- **Stroke-limited speed.** `SwimGait.stroke` goes back into `BettaSwim.advance(..., stroke)`;
+  speed can rise by at most `STROKE_ACCEL = 1.1` x stroke per second. Slowing is drag and is not
+  limited. With no stroke reading (tests, a bare sim) there is no limit.
+- **Every move is along the body axis.** The hold at the film and the rest descent used to slide
+  the fish up and down while the tail was easy. The rise now creeps up the last millimetres on
+  the fins, the lips are trimmed by head tilt alone (`pitchForMouth`), the descent to the sand is
+  a nose-down swim, and the dive does not start its speed until the head has tipped over
+  (`smooth(0.1, -0.25, pitch)`). The old dive lunged up the water column while still nose-up.
+- **Gravity only for a fish that is out of the water.** It was applied in proportion to dryness,
+  so a tail that briefly cleared the film during the dive pitch-over shoved the whole fish down.
+  It is now `smooth(0.35, 0.9, dryness)`.
+- **No goals it can only circle.** `chooseTarget` rejects goals closer than `MIN_LEG = 0.22` in
+  plan or steeper than `MAX_SLOPE = 0.32`; the heading error fades as the goal gets nearer in
+  plan (`smooth(0.03, 0.12, ...)`) and a goal counts as reached when passed over. A failsafe
+  (`yawAccum`, 6 s decay, `SPIN_LIMIT = 1.6 pi`) abandons any goal it still turns about.
+- Headless numbers, 8 seeds x 600 s with a gulp trip every ~10 s: unexplained movement (faster
+  than its strongest recent stroke could drive) 0.00% in every mode (old: 37% burst, 11% rise,
+  8% dive); sideways slip 0.00% (old: 46% gulp, 30% rest). Net turn in any 8 s window: under 1
+  revolution in calm and turbulent water (old: 2.8-3.3). Tests: `node --test betta-swim.test.mjs`
+  runs 23 locomotion tests (16 before).
+
 
 The neck now leads the route, instead of rotating about the center of the fish.
 `BodyMotion.advanceTurn()` carries a history of local tangent angles down the

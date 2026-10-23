@@ -3,6 +3,9 @@
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const smooth = (a, b, x) => { const u = clamp((x - a) / (b - a), 0, 1); return u * u * (3 - 2 * u); };
 export const SCULL_HZ = 3.8;
+/** Peak tail-bend excursion (rad) at a given effort; the body-bend model uses the same curve. */
+export const tailAmplitude = effort => 0.006 + effort * 0.24;
+const FULL_STROKE = (0.55 + 4.15) * tailAmplitude(1);
 export class SwimGait {
   constructor() {
     this.effort = this.phase = this.pectoralPhase = this.breathPhase = 0;
@@ -28,5 +31,12 @@ export class SwimGait {
     this.phase += dt * Math.PI * 2 * this.bodyHz;
     this.pectoralPhase += dt * Math.PI * 2 * this.pectoralHz;
     this.breathPhase += dt * (3.6 + this.effort * 3.4);
+  }
+  /**
+   * How hard the propulsors are working, 0..1: tail excursion x beat rate, or the pectorals' fanning
+   * when the body is held still. Locomotion may not gain speed faster than this allows.
+   */
+  get stroke() {
+    return clamp(Math.max(this.bodyHz * tailAmplitude(this.effort) / FULL_STROKE, 0.15 * this.scull), 0, 1);
   }
 }

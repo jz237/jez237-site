@@ -1,7 +1,9 @@
-# Living Silk — Betta Atelier 1.10
+# Living Silk — Betta Atelier 1.11
 
-The standalone published build is 1.10. It adds the globe's mirror, lap and rest
-pectoral poses ([Atelier 1.10](#atelier-110-2026-10-23)) on top of 1.9, which added the pelvic-feeler attachment fix and
+The standalone published build is 1.11. It adds the gait's `stroke` reading, which the globe
+uses so the fish only gains speed while its tail is working ([Atelier 1.11](#atelier-111-2026-10-23)),
+on top of 1.10, which added the globe's mirror, lap and rest
+pectoral poses ([Atelier 1.10](#atelier-110-2026-10-23)) and 1.9, which added the pelvic-feeler attachment fix and
 the shared hover-sculling and startle-tuck pectoral behaviour described in
 [Atelier 1.9](#atelier-19-2026-10-23) below, on top of the 1.8 shared-source changes
 made for the globe: broad fins bend across their full span (globe 1.4) with a stiffer
@@ -380,4 +382,16 @@ benchmark).
   The host (Globes 1.8) supplies those modes; the standalone page never sets them.
 - Caustics on the body and fins are a Globes shader feature (`betta_dapple` in
   `scripts/globes/src/fish/bettaWGSL.ts`); the Atelier's own lighting is unchanged.
+- Tests: unchanged (`npm test` runs 27).
+
+## Atelier 1.11 (2026-10-23)
+
+- **Stroke reading.** `SwimGait.stroke` (0..1, also `fish.userData.stroke`) is how hard the
+  tail and pectorals are working: the tail's beat frequency times its amplitude
+  (`tailAmplitude(effort)` in `src/swim-gait.js`, shared with `body-motion.js` so the two cannot
+  drift apart), scaled to a full-effort stroke, with the pectoral sculling as a floor
+  (`0.15 * scull`). The globe passes it back into its locomotion, which can then only speed up
+  as fast as the stroke allows. Nothing in the standalone page reads it.
+- **Dive pose.** `POSES.dive` (`scull: 0.5`) keeps the pectorals working while the fish swims
+  back down from a gulp.
 - Tests: unchanged (`npm test` runs 27).

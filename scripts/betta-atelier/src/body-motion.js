@@ -1,5 +1,6 @@
 // Arc-length spine shared by the skin and all fin insertions. The head stays
 // steady; muscle waves travel down the trunk instead of shearing the tail.
+import { tailAmplitude } from './swim-gait.js';
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const smooth = (a, b, x) => { const u = clamp((x - a) / (b - a), 0, 1); return u * u * (3 - 2 * u); };
 export const SPINE_START = -1.22, SPINE_END = 2.65, SPINE_COUNT = 161;
@@ -57,7 +58,7 @@ export class BodyMotion {
         const g = u * (this.turnAngles.length - 1), a = Math.floor(g), b = Math.min(a + 1, this.turnAngles.length - 1);
         maneuver = this.turnAngles[a] + (this.turnAngles[b] - this.turnAngles[a]) * (g - a);
       }
-      const angle = maneuver + envelope * (0.006 + effort * 0.24) * (1 - Math.abs(maneuver) / 3.2)
+      const angle = maneuver + envelope * tailAmplitude(effort) * (1 - Math.abs(maneuver) / 3.2)
         * Math.sin(phase - u * 3.1);
       const c = Math.cos(angle), s = Math.sin(angle);
       if (i) { x += dx * (oldCos + c) * 0.5; z += dx * (oldSin + s) * 0.5; }
