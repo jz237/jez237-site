@@ -1,10 +1,14 @@
 import {AI_DIFFICULTIES} from './ai-difficulty';
 import {clamp,wrap,DEFINITIONS} from './rules';
+import {longWay} from './damage-handling';
 import type {ArenaLayout} from './derby-arena';
 import type {DriverCar,DriverMemory} from './driving-brain';
 import type {AIInput as Input} from './ai-input';
 
-export type DerbyManeuver={kind:'back out'|'run up';x:number;z:number;startX:number;startZ:number;time:number;slow:number};
+export type DerbyManeuver={kind:'back out'|'run up';x:number;z:number;startX:number;startZ:number;time:number;slow:number;charge?:boolean};
+/** Offline derby cars (car.charge) take a run at it: stuck slow against the target, they reverse straight away to CHARGE.room
+ * of run-up, then come back flat out once lined up instead of easing in. */
+export const CHARGE={close:9,slow:5,room:18,time:5,aim:.4,speed:40,minRun:4,cooldown:3.5} as const;
 const dist=(a:{x:number;z:number},b:{x:number;z:number})=>Math.hypot(a.x-b.x,a.z-b.z);
 
 /** Conservative swept-car clearance. Cars and wrecks matter when backing out,
@@ -40,6 +44,20 @@ function maneuver(car:DriverCar,cars:DriverCar[],m:DriverMemory,arena:ArenaLayou
 
 /** Derby-specific commitment and recovery. Make actual room after a low-speed
  * contact, then rebuild momentum before selecting the next attack. */
+/** Shielding (offline cars with a weak spot): a rival within SHIELD.range, closing faster than SHIELD.closing and pointed at
+ * this car (within SHIELD.aim) while the weak spot faces it (within SHIELD.facing) makes the driver turn the weak spot away. */
+export const SHIELD={range:14,closing:4,aim:.85,facing:.5,steer:1,throttle:.6} as const;
+export function weakSpotThreat(car:DriverCar,cars:DriverCar[]){
+  const w=car.weakSpot;if(!w)return null;const wx=w.x-car.current.x,wz=w.z-car.current.z,wl=Math.hypot(wx,wz);if(wl<.1)return null;
+  for(const o of cars){
+    if(o.id===car.id||o.health<=0)continue;const ax=o.current.x-car.current.x,az=o.current.z-car.current.z,d=Math.hypot(ax,az);if(d>SHIELD.range||d<.5)continue;
+    const closing=-((o.velocity.x-car.velocity.x)*ax+(o.velocity.z-car.velocity.z)*az)/d,pointed=-(o.forward.x*ax+o.forward.z*az)/d,facing=(wx*ax+wz*az)/(wl*d);
+    if(closing>SHIELD.closing&&pointed>SHIELD.aim&&facing>SHIELD.facing)return o;
+  }
+  return null;
+}
+/** Reverse ramming (protectFront cars): in range of the target they back into it at up to REVERSE_RAM.speed m/s. */
+export const REVERSE_RAM={range:30,speed:9} as const;
 export function driveDerby(car:DriverCar,cars:DriverCar[],m:DriverMemory,arena:ArenaLayout|null,dt:number,difficulty:{derbyPace:number;interceptLead:number}=AI_DIFFICULTIES.amateur,targetId?:number,attackPoint?:{x:number;z:number}):Input{
  const yaw=Math.atan2(car.forward.x,car.forward.z);
  let target=cars.find(c=>c.id===m.target&&c.health>0&&(targetId===undefined||c.id===targetId));
@@ -64,27 +82,50 @@ export function driveDerby(car:DriverCar,cars:DriverCar[],m:DriverMemory,arena:A
   const rear=Math.min(m.clear.rear,derbyTrafficClearance(car,cars,-car.forward.x,-car.forward.z));
   m.attempts++;m.derby=maneuver(car,cars,m,arena,rear>1.6);m.stalled=0;
  }
+ // Shield the broken corner: a rival closing fast and pointed at it gets a stronger part of the car instead.
+ if(car.weakSpot&&!m.derby){const threat=weakSpotThreat(car,cars);if(threat){
+  const wx=car.weakSpot.x-car.current.x,wz=car.weakSpot.z-car.current.z,ax=threat.current.x-car.current.x,az=threat.current.z-car.current.z;
+  const cross=wx*az-wz*ax,steer=clamp(-Math.sign(cross||1)*SHIELD.steer,-1,1);m.steer+=clamp(steer-m.steer,-dt*4,dt*4);m.phase='shield';
+  return{throttle:SHIELD.throttle,steer:m.steer,brake:0,handbrake:false};}}
+ // A wrecked front: save the engine and ram in reverse, rear first (a real derby habit), when the target is in range.
+ const aimAt=target.weakSpot??target.current;
+ if(car.protectFront&&!m.derby&&dist(car.current,aimAt)<REVERSE_RAM.range){
+  const angle=wrap(Math.atan2(car.current.x-aimAt.x,car.current.z-aimAt.z)-yaw);
+  const steer=clamp(-angle*1.6,-.9,.9);m.steer+=clamp(steer-m.steer,-dt*3,dt*3);m.phase='reverse ram';
+  return{throttle:car.speed>-REVERSE_RAM.speed?-1:0,steer:m.steer,brake:0,handbrake:false};
+ }
+ m.chargeCool=Math.max(0,(m.chargeCool??0)-dt);
+ // Stuck nose-to-nose at low speed: back straight off for a run-up (offline charge).
+ if(car.charge&&!m.derby&&targetId===undefined&&m.chargeCool===0&&dist(car.current,target.current)<CHARGE.close&&Math.abs(car.speed)<CHARGE.slow){
+  const dx=car.current.x-target.current.x,dz=car.current.z-target.current.z,d=Math.max(.1,Math.hypot(dx,dz));
+  let x=target.current.x+dx/d*CHARGE.room,z=target.current.z+dz/d*CHARGE.room;
+  if(arena){const r=Math.hypot(x-arena.x,z-arena.z),limit=arena.radius-8;if(r>limit){x=arena.x+(x-arena.x)*limit/r;z=arena.z+(z-arena.z)*limit/r;}}
+  m.derby={kind:'back out',x,z,startX:car.current.x,startZ:car.current.z,time:0,slow:0,charge:true};m.chargeCool=CHARGE.cooldown;m.stalled=0;
+ }
  let tx=0,tz=0,desired=19*difficulty.derbyPace;
  if(m.derby){
   const plan=m.derby;plan.time+=dt;plan.slow=Math.abs(car.speed)<.65?plan.slow+dt:0;
   const reached=dist(car.current,plan)<2.8,travel=Math.hypot(car.current.x-plan.startX,car.current.z-plan.startZ);
   if(plan.kind==='back out'){
    const rear=Math.min(m.clear.rear,derbyTrafficClearance(car,cars,-car.forward.x,-car.forward.z));
-   if(reached||travel>12||plan.time>3.7||plan.slow>1.5||rear<1.4){m.derby=maneuver(car,cars,m,arena,false);m.stalled=0;}
+   if(reached||travel>(plan.charge?CHARGE.room:12)||plan.time>(plan.charge?CHARGE.time:3.7)||plan.slow>1.5||rear<1.4){m.derby=plan.charge?undefined:maneuver(car,cars,m,arena,false);m.stalled=0;if(plan.charge)m.commit=Math.max(m.commit,2.5);}
    else{
     const angle=wrap(Math.atan2(car.current.x-plan.x,car.current.z-plan.z)-yaw);
     const steer=clamp(-angle*1.6,-.8,.8);m.steer+=clamp(steer-m.steer,-dt*3,dt*3);m.phase='back out';
     return{throttle:car.speed> -6.5?-.85:0,steer:m.steer,brake:car.speed< -7?.3:0,handbrake:false};
    }
   }
-  const run=m.derby!;
-  if(run.kind==='run up'&&(targetId!==undefined||dist(car.current,run)<3||run.time>3.2||run.slow>1.25)){
+  // A finished charge back-out clears the plan: go straight on to the charge below.
+  const run=m.derby;
+  if(run&&run.kind==='run up'&&(targetId!==undefined||dist(car.current,run)<3||run.time>3.2||run.slow>1.25)){
    m.derby=undefined;m.commit=0;m.stalled=0;
-  }else{tx=run.x;tz=run.z;desired=11;m.phase='run up';}
+  }else if(run){tx=run.x;tz=run.z;desired=11;m.phase='run up';}
  }
  if(!m.derby){
   const d=dist(car.current,target.current),lead=clamp(d/(Math.abs(car.speed)+12),.12,.85)*difficulty.interceptLead;
-  tx=target.current.x+target.velocity.x*lead;tz=target.current.z+target.velocity.z*lead;if(attackPoint){tx=attackPoint.x;tz=attackPoint.z;}m.phase='intercept';
+  // Go for the rival's broken corner when it has one (offline): finish off what is already crushed.
+  const aim=target.weakSpot??target.current;
+  tx=aim.x+target.velocity.x*lead;tz=aim.z+target.velocity.z*lead;if(attackPoint){tx=attackPoint.x;tz=attackPoint.z;}m.phase='intercept';
  }
  if(arena){
  const radius=Math.hypot(tx-arena.x,tz-arena.z),limit=arena.radius-8;
@@ -93,6 +134,10 @@ export function driveDerby(car:DriverCar,cars:DriverCar[],m:DriverMemory,arena:A
  }
  const angle=wrap(Math.atan2(tx-car.current.x,tz-car.current.z)-yaw);
  let steer=clamp(angle*1.75,-1,1);desired=Math.min(desired,clamp(23-Math.abs(angle)*12,4.5,23));
+ // Lined up with room to run: flat out (offline charge).
+ if(car.charge&&!m.derby&&Math.abs(angle)<CHARGE.aim&&dist(car.current,target.current)>CHARGE.minRun){desired=CHARGE.speed;m.phase='charge';}
+ // A short lock toward a target behind it: go the long way round on the good lock (offline cars carry steerSkew).
+ {const way=longWay(angle,car.steerSkew??0);if(way!==null){steer=way;m.phase='long way';}}
  for(const other of cars){
   if(other.id===car.id||(!m.derby&&other.id===target.id))continue;
   const dx=other.current.x-car.current.x,dz=other.current.z-car.current.z;
