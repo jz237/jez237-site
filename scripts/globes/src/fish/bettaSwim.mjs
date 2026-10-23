@@ -16,6 +16,13 @@ export const gulpMouth = e => 1.1 * (smooth(0, 0.28, e) - smooth(0.62, 0.95, e))
 export const gulpGillCover = e => Math.sin(Math.PI * clamp((e - 0.8) / 0.8, 0, 1)) ** 1.2;
 const GULPING = new Set(['rise', 'gulp', 'dive']);
 
+// Slow, deliberate episodes that interrupt the route: facing its reflection in the glass with the
+// fins flared, a lap round the globe, and settling on the sand. They need a measured, wet fish in an
+// upright globe, so they never run blind; a startle or a due gulp cuts any of them short.
+export const BEHAVIORS = new Set(['mirror', 'lap', 'rest']);
+export const REST_HEIGHT = 0.074, LAP_SPEED = 0.058;
+const MIRROR_REACH = 0.025, LAP_RADIUS = 0.78, LAP_LEAD = 0.55;
+
 // A knock on the glass: water that changes faster than the fish is used to. Measured with the
 // globe in hand, idle water reads 0, a gentle drag ~0.4, a brisk swipe ~1.3 and a flick 2+.
 export const STARTLE_JOLT = 1.25, STARTLE_LENGTH = 0.9, STARTLE_COOLDOWN = 10, STARTLE_SPEED = 0.5;
@@ -39,7 +46,17 @@ export class BettaSwim {
     this.initialized = false;
     // Own random stream so the trips never perturb the swimming route.
     this.gulpSeed = (seed ^ 0x9e3779b9) >>> 0;
+    this.behaviorSeed = (seed ^ 0x85ebca6b) >>> 0;
     this.nextGulp = 22 + this.gulpRandom() * 14;
+    this.mirrorReady = 30 + this.behaviorRandom() * 25;
+    this.lapReady = 70 + this.behaviorRandom() * 40;
+    this.restReady = 50 + this.behaviorRandom() * 35;
+    this.behaviorClock = this.holdClock = 0;
+    this.flaring = false;
+    this.mirrorPoint = [0, 0, 0];
+    this.mirrorFace = 0; this.mirrorSide = 1; this.mirrorHold = 5; this.mirrorArrived = false;
+    this.lapDir = 1; this.lapY = 0; this.lapAngle = this.lapTravelled = 0; this.lapLength = 2 * Math.PI;
+    this.restY = 0; this.restHold = 8; this.restSettled = false;
     this.gulpClock = 0;
     this.gulp = this.gulpGill = 0;
     this.surfaceY = NaN;
@@ -68,6 +85,7 @@ export class BettaSwim {
 
   /** C-start: bend away from the knock, then dart off along the new heading. */
   startStartle(env) {
+    this.closeBehavior();
     const b = this.bounds(env), [px, py, pz] = this.joltVector;
     const along = Math.hypot(px, pz) > 0.3 * Math.hypot(px, py, pz);
     let turn = wrap((along ? Math.atan2(pz, -px) : this.heading + (this.random() < 0.5 ? -1.4 : 1.4)) - this.heading);
@@ -87,13 +105,114 @@ export class BettaSwim {
     this.nextGulp = Math.max(this.nextGulp, this.time + 30 + this.gulpRandom() * 30);
   }
 
-  gulpRandom() {
+  streamRandom(key) {
     const keep = this.seed;
-    this.seed = this.gulpSeed;
+    this.seed = this[key];
     const value = this.random();
-    this.gulpSeed = this.seed;
+    this[key] = this.seed;
     this.seed = keep;
     return value;
+  }
+
+  gulpRandom() { return this.streamRandom('gulpSeed'); }
+  behaviorRandom() { return this.streamRandom('behaviorSeed'); }
+
+  /** Only a measured, wet fish in an upright globe takes part in these. */
+  behaviorOk(water, wet, upright) {
+    return !!water && upright && wet > 0.99 && (water.airAbove ?? 0) < 0.1 && Number.isFinite(water.sand);
+  }
+
+  /** Near the glass at the end of a leg, it stops to face its reflection with the fins flared. */
+  tryMirror(b, ok) {
+    if (!ok || this.time < this.mirrorReady) return false;
+    const [x, y, z] = this.position, horizontal = Math.hypot(x, z);
+    const reach = Math.sqrt(Math.max(0, (b.radius + MIRROR_REACH) ** 2 - y * y));
+    if (horizontal < 0.5 * reach || reach - horizontal > 0.22) return false;
+    const nx = x / horizontal, nz = z / horizontal;
+    if (nx * -Math.cos(this.heading) + nz * Math.sin(this.heading) < -0.5) return false;
+    if (this.behaviorRandom() > 0.6) return false;
+    this.mode = 'mirror'; this.timer = 99; this.sharpTurn = false;
+    this.behaviorClock = this.holdClock = 0; this.mirrorArrived = false;
+    this.mirrorPoint = [nx * reach, y, nz * reach];
+    this.mirrorFace = Math.atan2(nz, -nx);
+    this.mirrorSide = this.behaviorRandom() < 0.5 ? -1 : 1;
+    this.mirrorHold = 4.5 + this.behaviorRandom() * 3.5;
+    return true;
+  }
+
+  /** A slow circuit of the globe, as a fish makes of a place it is still getting to know. */
+  tryLap(b, ok) {
+    if (!ok || this.time < this.lapReady) return false;
+    const [x, y, z] = this.position;
+    if (Math.hypot(x, z) < 0.2 || this.behaviorRandom() > 0.5) return false;
+    this.mode = 'lap'; this.timer = 99; this.sharpTurn = false;
+    this.behaviorClock = 0; this.cruiseSpeed = LAP_SPEED;
+    this.lapDir = this.behaviorRandom() < 0.5 ? -1 : 1;
+    this.lapLength = Math.PI * (1.5 + this.behaviorRandom());
+    this.lapY = clamp(y, b.low + 0.02, b.high - 0.04);
+    this.lapAngle = Math.atan2(z, x); this.lapTravelled = 0;
+    return true;
+  }
+
+  /** Now and then it sinks to the sand and stays there, fins easy. */
+  tryRest(b, water, ok) {
+    if (!ok || this.time < this.restReady) return false;
+    const y = water.sand + REST_HEIGHT;
+    if (Math.hypot(this.position[0], this.position[2], y) > b.radius - 0.05 || this.behaviorRandom() > 0.5) return false;
+    this.mode = 'rest'; this.timer = 99; this.sharpTurn = false;
+    this.behaviorClock = this.holdClock = 0; this.restSettled = false;
+    this.restY = y; this.restHold = 7 + this.behaviorRandom() * 7;
+    return true;
+  }
+
+  lapGoal(b) {
+    const y = this.lapY + 0.035 * Math.sin(2 * Math.PI * this.behaviorClock / 11);
+    const rho = LAP_RADIUS * Math.sqrt(Math.max(0, b.radius ** 2 - y * y));
+    const a = Math.atan2(this.position[2], this.position[0]) + this.lapDir * LAP_LEAD;
+    return [rho * Math.cos(a), y, rho * Math.sin(a)];
+  }
+
+  /** Clocks and arrivals for the running episode; ends it when it is done or the water no longer allows it. */
+  stepBehavior(dt, env, water, wet, upright) {
+    if (!this.behaviorOk(water, wet, upright)) { this.endBehavior(env); return; }
+    this.behaviorClock += dt;
+    const [x, y, z] = this.position;
+    if (this.mode === 'mirror') {
+      const d = Math.hypot(...this.mirrorPoint.map((v, k) => v - this.position[k]));
+      if (d < 0.16) this.flaring = true;
+      if (!this.mirrorArrived && d < 0.05) { this.mirrorArrived = true; this.holdClock = 0; }
+      if (this.mirrorArrived) this.holdClock += dt;
+      if ((this.mirrorArrived && this.holdClock >= this.mirrorHold) || this.behaviorClock > 16) this.endBehavior(env);
+    } else if (this.mode === 'lap') {
+      const theta = Math.atan2(z, x);
+      this.lapTravelled += this.lapDir * wrap(theta - this.lapAngle);
+      this.lapAngle = theta;
+      if (this.lapTravelled >= this.lapLength || this.behaviorClock > 90) this.endBehavior(env);
+    } else if (this.mode === 'rest') {
+      this.restY = water.sand + REST_HEIGHT;
+      if (!this.restSettled && (y - this.restY < 0.012 || this.behaviorClock > 10)) { this.restSettled = true; this.holdClock = 0; }
+      if (this.restSettled) this.holdClock += dt;
+      if ((this.restSettled && this.holdClock >= this.restHold) || this.behaviorClock > 30) this.endBehavior(env);
+    }
+  }
+
+  /** Stops a running episode where it stands: cooldown for next time, fins relaxed. */
+  closeBehavior() {
+    if (!BEHAVIORS.has(this.mode)) return;
+    const wait = this.behaviorRandom();
+    if (this.mode === 'mirror') this.mirrorReady = this.time + 60 + wait * 60;
+    else if (this.mode === 'lap') this.lapReady = this.time + 120 + wait * 80;
+    else this.restReady = this.time + 70 + wait * 60;
+    this.mirrorReady = Math.max(this.mirrorReady, this.time + 15);
+    this.lapReady = Math.max(this.lapReady, this.time + 20);
+    this.restReady = Math.max(this.restReady, this.time + 20);
+    this.flaring = false; this.mirrorArrived = false;
+  }
+
+  endBehavior(env) {
+    this.closeBehavior();
+    this.mode = 'glide'; this.timer = 1.1 + this.random() * 0.8; this.sharpTurn = false;
+    this.chooseTarget(env);
   }
 
   random() {
@@ -153,7 +272,8 @@ export class BettaSwim {
     // upright globe; without those readings (or in a tilted globe) it never starts.
     const gravity = env.gravity ?? [0, -24, 0], g = Math.hypot(...gravity);
     const surface = water?.surface;
-    const surfaceOk = Number.isFinite(surface) && Math.abs(surface - env.level) < 0.04 && g > 1 && -gravity[1] > 0.985 * g;
+    const upright = g > 1 && -gravity[1] > 0.985 * g;
+    const surfaceOk = Number.isFinite(surface) && Math.abs(surface - env.level) < 0.04 && upright;
     if (surfaceOk) this.surfaceY = Number.isFinite(this.surfaceY) ? damp(this.surfaceY, surface, dt, 6) : surface;
     const wetNow = water?.submerged ?? (submerged ? 1 : 0);
     this.jolt = this.readJolt(dt, water, wetNow);
@@ -168,8 +288,13 @@ export class BettaSwim {
     const startling = this.mode === 'startle';
     let gulping = GULPING.has(this.mode);
     if (!gulping && this.time >= this.nextGulp && surfaceOk && wetNow > 0.99 && (water.airAbove ?? 0) < 0.25 && this.mode !== 'burst' && !this.sharpTurn) {
+      this.closeBehavior();
       this.mode = 'rise'; this.gulpClock = 0; this.timer = 9; gulping = true;
     }
+    if (BEHAVIORS.has(this.mode)) this.stepBehavior(dt, env, water, wetNow, upright);
+    const behaving = BEHAVIORS.has(this.mode), ok = this.behaviorOk(water, wetNow, upright);
+    // An episode that a due gulp would cut short does not start.
+    const free = surfaceOk ? this.nextGulp - this.time : Infinity;
     // The lips' height above the neck grows with the nose-up pitch, so the target tracks it.
     const holdY = this.surfaceY - MOUTH_DEPTH - bettaMouthHeight(0, clamp(this.pitch, 0, GULP_PITCH));
     let rise = holdY - this.position[1];
@@ -188,25 +313,31 @@ export class BettaSwim {
       }
     }
     let distance = Math.hypot(...this.target.map((v, i) => v - this.position[i]));
-    if (!gulping && !startling && (this.timer <= 0 || (this.mode !== 'hover' && distance < 0.075))) {
+    if (!gulping && !startling && !behaving && (this.timer <= 0 || (this.mode !== 'hover' && distance < 0.075))) {
       if (this.mode === 'hover') {
-        this.mode = this.random() < 0.18 ? 'burst' : 'cruise';
-        this.timer = this.mode === 'burst' ? 0.65 + this.random() * 0.45 : 6 + this.random() * 5;
-        this.chooseTarget(env);
+        if (!this.tryLap(b, ok && free > 25)) {
+          this.mode = this.random() < 0.18 ? 'burst' : 'cruise';
+          this.timer = this.mode === 'burst' ? 0.65 + this.random() * 0.45 : 6 + this.random() * 5;
+          this.chooseTarget(env);
+        }
       } else if (this.mode === 'burst') {
         this.mode = 'glide'; this.timer = 1.2 + this.random();
-      } else {
+      } else if (!this.tryMirror(b, ok && free > 16) && !this.tryRest(b, water, ok && free > 30)) {
         this.mode = 'hover'; this.timer = 1.8 + this.random() * 3;
       }
     }
     // Look ahead and steer away before the body/tail reach the glass or bed.
     const fx = -Math.cos(this.heading), fz = Math.sin(this.heading);
     const look = this.position.map((v, i) => v + (i === 0 ? fx : i === 2 ? fz : 0) * (0.10 + this.speed * 0.8));
-    const nearWall = Math.hypot(...look) > b.radius;
+    // Facing the glass or lying on the sand is deliberate, not a near miss.
+    const nearWall = this.mode !== 'mirror' && this.mode !== 'rest' && Math.hypot(...look) > b.radius;
     let goal = this.target;
     const climbing = this.mode === 'rise' || this.mode === 'gulp';
     if (climbing) goal = [this.position[0] + fx * 0.3, holdY, this.position[2] + fz * 0.3];
     else if (this.mode === 'dive') goal = [this.position[0] + fx * 0.2, clamp(this.position[1] - 0.25, b.low, b.high), this.position[2] + fz * 0.2];
+    else if (this.mode === 'mirror') goal = this.mirrorPoint;
+    else if (this.mode === 'lap') goal = this.lapGoal(b);
+    else if (this.mode === 'rest') goal = [this.position[0] + fx * 0.3, this.restY, this.position[2] + fz * 0.3];
     if (startling) goal = [this.position[0] - Math.cos(this.startleHeading) * 0.3, this.position[1], this.position[2] + Math.sin(this.startleHeading) * 0.3];
     else if (nearWall) goal = [-this.position[0] * 0.45, clamp(this.position[1], b.low, b.high), -this.position[2] * 0.45];
     // The head is deliberately at the surface during a trip, so air above it is not an emergency.
@@ -214,8 +345,12 @@ export class BettaSwim {
     if (escaping) goal = water ? [water.centroid[0], water.centroid[1] - 0.06, water.centroid[2]] : [this.position[0] * 0.6, b.low + 0.025, this.position[2] * 0.6];
     const delta = goal.map((v, i) => v - this.position[i]);
     distance = Math.hypot(...delta);
-    const yawError = wrap(Math.atan2(delta[2], -delta[0]) - this.heading);
-    const holding = (this.mode === 'hover' || this.mode === 'gulp') && !nearWall && !escaping;
+    let yawError = wrap(Math.atan2(delta[2], -delta[0]) - this.heading);
+    // Parked at the glass it works at its reflection: head turned a little off square, swaying to and fro.
+    const parked = this.mode === 'mirror' && this.mirrorArrived && !escaping;
+    if (parked) yawError = wrap(this.mirrorFace + this.mirrorSide * 0.5 + 0.2 * Math.sin(2 * Math.PI * 0.55 * this.holdClock) - this.heading);
+    const holding = (this.mode === 'hover' || this.mode === 'gulp' || this.mode === 'rest') && !nearWall && !escaping;
+    const still = holding || parked;
     if (startling) this.sharpTurn = false;
     else if (holding || Math.abs(yawError) < 0.3) this.sharpTurn = false;
     else if (Math.abs(yawError) > 1.9) this.sharpTurn = true;
@@ -226,7 +361,8 @@ export class BettaSwim {
     this.steerRate += clamp(wantedRate - this.steerRate, -angularAcceleration * dt, angularAcceleration * dt);
     this.angularVelocity = this.steerRate + this.waterSpin[1] * 0.8;
     this.heading += this.angularVelocity * dt;
-    let pitchTarget = holding ? 0 : clamp(Math.atan2(delta[1], Math.hypot(delta[0], delta[2])), escaping ? -0.6 : -0.32, 0.32);
+    let pitchTarget = still ? 0 : clamp(Math.atan2(delta[1], Math.hypot(delta[0], delta[2])), escaping ? -0.6 : -0.32, 0.32);
+    if (this.mode === 'rest' && holding) pitchTarget = -0.2 * clamp((this.position[1] - this.restY) / 0.1, 0, 1);
     if (this.mode === 'rise') pitchTarget = rise > 0.1 ? 0.62 : GULP_PITCH;
     else if (this.mode === 'gulp') pitchTarget = GULP_PITCH;
     else if (this.mode === 'dive') pitchTarget = -0.55;
@@ -240,7 +376,7 @@ export class BettaSwim {
     this.pitchRate = (this.pitch - oldPitch) / dt;
     this.rollRate = (this.roll - oldRoll) / dt;
     let desiredSpeed = this.mode === 'burst' ? 0.19 : this.mode === 'glide' ? 0.04 : this.cruiseSpeed;
-    if (holding) desiredSpeed = 0;
+    if (still) desiredSpeed = 0;
     else desiredSpeed *= (0.12 + 0.88 * Math.max(0, Math.cos(yawError))) * clamp(distance / 0.14, 0.25, 1);
     if (this.mode === 'rise') desiredSpeed = clamp(rise * 2.5, 0.006, 0.2);
     else if (this.mode === 'gulp') desiredSpeed = 0.006;
@@ -263,6 +399,11 @@ export class BettaSwim {
     for (let k = 0; k < 3; k++) this.position[k] += (direction[k] * this.speed + this.drift[k]) * dt;
     // Sculling fins hold the lips at the film once the head is there.
     if (climbing && Math.abs(rise) < 0.05) this.position[1] += clamp(rise * 6, -0.1, 0.1) * dt;
+    // Settling: sink onto the sand on slowly working fins, then let the current go by.
+    if (this.mode === 'rest') {
+      this.position[1] += clamp((this.restY - this.position[1]) * 1.5, -0.09, 0.09) * dt;
+      if (this.restSettled) for (let k = 0; k < 3; k++) this.drift[k] *= Math.exp(-4 * dt);
+    }
     const open = this.mode === 'gulp' ? gulpMouth(this.gulpClock) : 0, pulse = this.mode === 'gulp' ? gulpGillCover(this.gulpClock) : 0;
     this.gulp = damp(this.gulp, open, dt, 25);
     this.gulpGill = damp(this.gulpGill, pulse, dt, 25);
@@ -281,6 +422,6 @@ export class BettaSwim {
       if (outward > 0) for (let k = 0; k < 3; k++) this.drift[k] -= outward * this.position[k] / n;
     }
     this.velocity = this.position.map((v, i) => (v - old[i]) / dt);
-    this.drive = this.mode === 'glide' ? 0.065 : holding ? 0.045 : clamp(0.07 + this.speed * 1.4 + Math.abs(this.steerRate) * 0.06, 0.045, 0.40);
+    this.drive = this.mode === 'glide' ? 0.065 : parked ? 0.08 : this.mode === 'rest' ? 0.03 : holding ? 0.045 : clamp(0.07 + this.speed * 1.4 + Math.abs(this.steerRate) * 0.06, 0.045, 0.40);
   }
 }

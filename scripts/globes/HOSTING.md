@@ -3,7 +3,7 @@
 Original: https://github.com/willwaltz/globes
 Author: Will Waltz · MIT License
 Upstream commit: 93c3b814bbca53463e8207b8e3c95fca8940dff5
-Imported: 2026-10-22 · Hosting build: 1.7.0
+Imported: 2026-10-22 · Hosting build: 1.8.0
 Public route: https://jez237.com/demos/globes/
 
 The upstream source and MIT attribution are retained. Hosting adds the gallery
@@ -26,7 +26,7 @@ The specimen is imported from
 shared anatomy, breathing, one-second flare and synchronized gaze, with the
 full-fin compliance and head-led turning revision described below.
 The Atelier's normal tessellation is unchanged. The standalone compiled demo was
-rebuilt as Atelier 1.9 to adopt the shared motion and shader changes (see its
+rebuilt as Atelier 1.10 to adopt the shared motion and shader changes (see its
 README).
 
 `src/fish/Betta.ts` evaluates the same vertex deformations on the CPU, refits a
@@ -123,6 +123,31 @@ Version 1.7 adds four realism behaviours (Atelier 1.9 shares the fin changes):
 
 Frame time was unchanged: interleaved old/new Chrome WebGPU runs at 64³, one ray,
 1200×900 gave 58-60 fps in idle, full-gulp and strong-flick windows for both builds.
+
+Version 1.8 adds three behaviours and animated caustics (Atelier 1.10 shares the poses):
+- **Mirror display.** Every minute or two, at the end of a leg near the glass, it swims
+  to the wall, faces its reflection obliquely and flares its fins for 5-8 s
+  (`mirror` in `src/fish/bettaSwim.mjs`; `Betta.ts` turns `swim.flaring` into the display
+  request). The globe renders no true reflection of the fish; the behaviour implies one.
+- **Inspection lap.** A slow circuit of the globe (about 1.5-2.5 turns of arc at
+  `LAP_SPEED = 0.058`) in one direction, with a gentle vertical drift.
+- **Resting on the sand.** It sinks to the measured sand height plus `REST_HEIGHT` and
+  holds for 7-14 s with its fins easy, if it is near the middle of the bowl.
+- All three use their own seeded random stream and start only in measured, upright, wet
+  water with no gulp due soon; a startle, a flow knock or air above ends them early.
+  Cooldowns are 60-120 s (mirror), 120-200 s (lap) and 70-130 s (rest).
+- **Caustics.** `betta_dapple` (`bettaWGSL.ts`) projects each shaded point up the sun
+  direction to the surface and sums seven faint plane-wave ripples, giving a moving web of
+  bright and dark lines on the fish's skin and fins, with ambient light modulated a
+  little as well. The sand shader applies the same function while the betta is active, so
+  the sand under and around it matches in both render passes. It is analytic: the
+  simulated surface is flat in this globe's idle, so the real light volume has no caustic
+  structure to show; where the volume has structure (tilting, gulp ripples) the analytic
+  term fades out and the simulated light is used.
+- Frame time: interleaved old/new Chrome WebGPU runs at 64³, one ray, with frame-rate
+  limit off: about 82-87 fps at 1200×900 for both builds (idle and flick windows), and
+  about 4-7 fps lower at 1920×1440 (roughly +1 ms per frame, 56-64 fps against 61-63).
+
 Limits: the push and bubbles are artistic, not a coupled free-surface solver; the
 Firefox check confirmed the new sim kernels compile under naga, with the betta itself
 checked on the published site.

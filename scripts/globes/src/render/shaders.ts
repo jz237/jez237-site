@@ -2056,6 +2056,9 @@ ${rt ? RT_MARCH : `    // The next sample is read with this one, where it will b
       // The shadow is drawn by the second pass; flag bed pixels whose sun path crosses the fish.
       if (!GLOBES_KOI && !globesKoiNear && betta_near(bettaTex, qs + vec3f(0.0, 0.003, 0.0), select(GLOBES_SUN_DIR, GLOBES_SUN_DIR_WATER, inWater), 4.0)) { globesKoiNear = true; }
       if (GLOBES_KOI) { bettaShadow = betta_shadow(bettaTex, bettaAtlas, bettaSamp, qs + vec3f(0.0, 0.003, 0.0), select(GLOBES_SUN_DIR, GLOBES_SUN_DIR_WATER, inWater)); }
+      // The betta's globe: the bed shares the film's faint dapple (both passes, or the fish's
+      // pixels would stand out against the rest).
+      if (inWater && betta_tex(bettaTex, 0u).w > 0.5) { bettaShadow *= betta_dapple(qs + vec3f(0.0, 0.02, 0.0), lit, lightTex, lightSamp, koiTime); }
       col += thr * globes_sandShade(qs, inWater, rot, sandTex, sandSamp, causticTex, causticSamp, bettaShadow);
       return col;
     }
@@ -2068,7 +2071,7 @@ ${rt ? RT_MARCH : `    // The next sample is read with this one, where it will b
       return col;
     }
     if (GLOBES_KOI && event == 8) {
-      let sh = betta_shade(bettaTex, bettaAtlas, bettaSamp, bh, dir, p + dir * t, inWater, lit, lightTex, lightSamp, lit.z * pathLen); // (pathLen now reaches the hit)
+      let sh = betta_shade(bettaTex, bettaAtlas, bettaSamp, bh, dir, p + dir * t, inWater, lit, lightTex, lightSamp, lit.z * pathLen, koiTime); // (pathLen now reaches the hit)
       col += thr * sh.rgb * sh.a;
       if (sh.a > 0.99) { return col; }
       thr *= (1.0 - sh.a) * sh.tint;

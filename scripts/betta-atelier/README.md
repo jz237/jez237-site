@@ -1,6 +1,7 @@
-# Living Silk — Betta Atelier 1.9
+# Living Silk — Betta Atelier 1.10
 
-The standalone published build is 1.9. It adds the pelvic-feeler attachment fix and
+The standalone published build is 1.10. It adds the globe's mirror, lap and rest
+pectoral poses ([Atelier 1.10](#atelier-110-2026-10-23)) on top of 1.9, which added the pelvic-feeler attachment fix and
 the shared hover-sculling and startle-tuck pectoral behaviour described in
 [Atelier 1.9](#atelier-19-2026-10-23) below, on top of the 1.8 shared-source changes
 made for the globe: broad fins bend across their full span (globe 1.4) with a stiffer
@@ -371,3 +372,12 @@ benchmark).
   against the body (`tuck`) for the C-start and dart.
 - Tests: `pelvic-attachment.test.mjs` and the sculling/tuck cases in
   `fin-dynamics.test.mjs`; `npm test` runs 27 tests.
+
+## Atelier 1.10 (2026-10-23)
+
+- **Behaviour poses.** `POSES` in `src/fish.js` gains `mirror` (full sculling while it
+  faces the glass), `lap` (0.15, a slow patrol) and `rest` (0.25, easy fins on the sand).
+  The host (Globes 1.8) supplies those modes; the standalone page never sets them.
+- Caustics on the body and fins are a Globes shader feature (`betta_dapple` in
+  `scripts/globes/src/fish/bettaWGSL.ts`); the Atelier's own lighting is unchanged.
+- Tests: unchanged (`npm test` runs 27).

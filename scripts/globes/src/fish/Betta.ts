@@ -108,7 +108,7 @@ export class Betta {
     this.fish.userData.locomotion = this.locomotion();
     this.fish.userData.externalFlow = this.flow.clone().multiplyScalar(1 / SCALE).toArray();
     // The same one-second opening as the standalone specimen.
-    this.fish.userData.display.requested = this.flared;
+    this.fish.userData.display.requested = this.flared || this.swim.flaring;
     this.fish.userData.update(this.time);
     this.updateVertices();
     // Contact against the glass and sampled bed, not a fixed waterline: sloshing

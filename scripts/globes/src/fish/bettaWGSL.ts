@@ -114,8 +114,44 @@ fn betta_shadow(tex: texture_2d<f32>, atlas: texture_2d<f32>, smp: sampler, p: v
   }
   return T * 0.25;
 }
+// One faint wave on the film: its share (xx, xz, zz) of the surface's curvature, scaled by
+// how hard it bends the sun (per unit of depth). The beat is a whole number of cycles per
+// 1000 s, the length of the clock it is read from, so the pattern never jumps when that wraps.
+fn betta_ripple(u: vec2f, t: f32, dir: f32, wavelength: f32, cycles: f32, phase: f32, bend: f32) -> vec3f {
+  let c = vec2f(cos(dir), sin(dir));
+  let s = sin(6.2831853 * (dot(c, u) / wavelength - cycles * t * 0.001) + phase);
+  return -bend * s * vec3f(c.x * c.x, c.x * c.y, c.y * c.y);
+}
+// The sun on the water below a barely moving film: the film's faint ripples gather it into
+// a drifting web of bright lines and dim hollows (each bit of film is a weak lens; the light
+// at a point is 1/|det| of how the rays that arrive there were spread by the film above).
+// The real caustics (the light volume, the sand's map) come from the simulated surface, which
+// is dead flat in this globe until it is tipped, so this is the faint life of the film; it
+// gives way to them wherever the volume already holds structure.
+fn betta_dapple(x: vec3f, lit: vec4f, lightTex: texture_3d<f32>, lightSamp: sampler, time: f32) -> f32 {
+  let depth = lit.x - x.y;
+  if (depth < 0.02) { return 1.0; }
+  let f = textureSampleLevel(lightTex, lightSamp, x / (2.0 * GLOBES_R_IN) + vec3f(0.5), 0.0).r;
+  let calm = 1.0 - smoothstep(0.08, 0.35, abs(f - 1.0));
+  // (The film is a stand-in for a ripple a real one would not have, so the spread is exaggerated
+  // for a fish only a third of the way down, and capped for the bed.)
+  let d = min(depth * 1.3, 0.55);
+  let u = x.xz + GLOBES_SUN_DIR_WATER.xz * (d / max(GLOBES_SUN_DIR_WATER.y, 0.3));
+  var m = betta_ripple(u, time, 0.35, 0.075, 326.0, 0.0, 1.2);
+  m += betta_ripple(u, time, 1.95, 0.062, 435.0, 1.7, 1.0);
+  m += betta_ripple(u, time, 3.60, 0.100, 220.0, 4.1, 1.1);
+  m += betta_ripple(u, time, 5.05, 0.050, 545.0, 2.6, 0.8);
+  m += betta_ripple(u, time, 2.75, 0.070, 379.0, 5.3, 0.9);
+  m += betta_ripple(u, time, 4.30, 0.085, 267.0, 3.3, 0.9);
+  m += betta_ripple(u, time, 1.10, 0.056, 486.0, 0.9, 0.7);
+  let a = 1.0 + d * m.x; let c = 1.0 + d * m.z; let b = d * m.y;
+  let det = a * c - b * b;
+  // (Lines of 1/|det|, softened where the rays cross; the gain keeps the mean at one.)
+  let focus = 1.0 / ((0.97 + 1.3 * d) * sqrt(det * det + 0.0625));
+  return mix(1.0, focus, 0.9 * calm * smoothstep(0.02, 0.14, depth));
+}
 struct BettaShade { rgb: vec3f, a: f32, tint: vec3f };
-fn betta_shade(tex: texture_2d<f32>, atlas: texture_2d<f32>, smp: sampler, hit: BettaHit, rd: vec3f, x: vec3f, inWater: bool, lit: vec4f, lightTex: texture_3d<f32>, lightSamp: sampler, foot: f32) -> BettaShade {
+fn betta_shade(tex: texture_2d<f32>, atlas: texture_2d<f32>, smp: sampler, hit: BettaHit, rd: vec3f, x: vec3f, inWater: bool, lit: vec4f, lightTex: texture_3d<f32>, lightSamp: sampler, foot: f32, time: f32) -> BettaShade {
   let a = betta_tex(tex, hit.triangle); let b = betta_tex(tex, hit.triangle + 1u); let c = betta_tex(tex, hit.triangle + 2u);
   let uv = betta_uv(tex, hit);
   var n = normalize(cross(b.xyz - a.xyz, c.xyz - a.xyz));
@@ -141,11 +177,16 @@ fn betta_shade(tex: texture_2d<f32>, atlas: texture_2d<f32>, smp: sampler, hit: 
   if (mat == 4u) { albedo = vec3f(0.002, 0.004, 0.006); }
   let L = select(GLOBES_SUN_DIR, GLOBES_SUN_DIR_WATER, inWater);
   var E = GLOBES_SUN_IRR * 0.86;
-  if (inWater) { E = globes_sunIn(lightTex, lightSamp, x + n * 0.012, lit); }
+  var dapple = 1.0;
+  if (inWater) {
+    dapple = betta_dapple(x, lit, lightTex, lightSamp, time);
+    E = globes_sunIn(lightTex, lightSamp, x + n * 0.012, lit) * dapple;
+  }
   let ndl = dot(n, L);
   let ndv = clamp(dot(n, -rd), 0.0, 1.0);
   let fin = mat == 1u || mat == 2u;
-  let ambient = mix(vec3f(0.25, 0.30, 0.36), vec3f(0.55, 0.64, 0.72), n.y * 0.5 + 0.5);
+  // (The bright lines also light the water around them, a little: they reach the fish's flanks.)
+  let ambient = mix(vec3f(0.25, 0.30, 0.36), vec3f(0.55, 0.64, 0.72), n.y * 0.5 + 0.5) * (1.0 + 0.55 * (dapple - 1.0));
   let side = select(1.0, -1.0, ndl < 0.0);
   let sunVis = mix(vec3f(1.0), betta_occlusion(tex, atlas, smp, x + n * side * 0.0006, L), smoothstep(-0.1, 0.3, select(ndl, abs(ndl), fin)) * select(1.0, 0.6, fin));
   let direct = E * sunVis;
