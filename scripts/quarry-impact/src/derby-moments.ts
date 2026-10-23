@@ -14,3 +14,10 @@ export const REVENGE={loss:12} as const;
 export function revenge(rival:{id:number;damage:number}|null,victimId:number,loss:number,settled:number|undefined){
   return !!rival&&rival.id===victimId&&Number.isFinite(loss)&&loss>=REVENGE.loss&&rival.damage>(settled??0);
 }
+/** Takedown combos (offline): the player's takedowns within COMBO.window seconds of the previous one chain into DOUBLE, TRIPLE …
+ * Returns the chain length after a takedown at `time`, given the previous chain (0 = none) and its last time. */
+export const COMBO={window:4} as const;
+export function takedownChain(chain:number,last:number,time:number){
+  return Number.isFinite(time)&&Number.isFinite(last)&&chain>0&&time-last<=COMBO.window&&time>=last?chain+1:1;
+}
+export const comboLabel=(chain:number)=>chain>=4?`${chain}x TAKEDOWN`:chain===3?'TRIPLE TAKEDOWN':chain===2?'DOUBLE TAKEDOWN':'';

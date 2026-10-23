@@ -16,3 +16,11 @@ test('revenge: a solid hit on the rival who hurt you most, once per grudge',asyn
  assert.equal(revenge({id:3,damage:40},3,30,40),false,'already settled');assert.ok(revenge({id:3,damage:55},3,30,40),'they hurt you again');
  assert.equal(revenge(null,3,30,undefined),false);
 });
+test('takedowns close together chain into a combo; a pause resets it',async()=>{
+ const {takedownChain,comboLabel,COMBO}=await import('../src/derby-moments');
+ let chain=takedownChain(0,0,10);assert.equal(chain,1);assert.equal(comboLabel(chain),'');
+ chain=takedownChain(chain,10,12);assert.equal(comboLabel(chain),'DOUBLE TAKEDOWN');
+ chain=takedownChain(chain,12,15);assert.equal(comboLabel(chain),'TRIPLE TAKEDOWN');
+ chain=takedownChain(chain,15,16);assert.equal(comboLabel(chain),'4x TAKEDOWN');
+ assert.equal(takedownChain(chain,16,16+COMBO.window+.1),1,'too late: a fresh chain');assert.equal(takedownChain(2,10,NaN),1);
+});
