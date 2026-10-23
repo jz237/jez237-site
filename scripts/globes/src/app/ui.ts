@@ -6,9 +6,33 @@
 // globe; this file builds the elements, keeps the arrows under the globe, and keeps the
 // "coming soon" veil over the globe's outline.
 
+import type { SupportProblem } from '../gpu/device';
 import { GLOBES } from './catalog';
 
 export type UIMode = 'loading' | 'gallery';
+
+const NOTICES: Record<SupportProblem, { title: string; body: string; retry: boolean }> = {
+  'no-webgpu': {
+    title: 'This demo needs WebGPU',
+    body: 'This browser doesn’t offer WebGPU yet, which the live water simulation relies on. A recent Chrome or Edge works best; newer Firefox and Safari releases are adding WebGPU too.',
+    retry: false,
+  },
+  'no-gpu': {
+    title: 'No graphics device available',
+    body: 'WebGPU is here, but the browser couldn’t get a graphics device from it. Make sure hardware acceleration is turned on in the browser’s settings, then reload.',
+    retry: true,
+  },
+  shader: {
+    title: 'This browser can’t run the graphics yet',
+    body: 'Its WebGPU doesn’t accept every part of this simulation. Updating the browser, or opening this page in a recent Chrome or Edge, should get the globes running.',
+    retry: true,
+  },
+  other: {
+    title: 'The globes couldn’t start here',
+    body: 'Reloading sometimes helps. If it doesn’t, a recent Chrome or Edge with graphics acceleration turned on is the safest way to see them.',
+    retry: true,
+  },
+};
 
 export interface UIHandlers {
   select(index: number): void;
@@ -167,10 +191,28 @@ export class AppUI {
     this.splash.addEventListener('transitionend', () => this.splash.remove(), { once: true });
   }
 
-  /** Something went wrong before the globe could start. */
-  fail(message: string): void {
-    this.splash.classList.add('is-error');
-    this.splash.querySelector('.splash-bar')?.replaceWith(Object.assign(document.createElement('p'), { className: 'splash-error', textContent: message }));
+  /** The globes cannot run in this browser or on this graphics setup: a calm notice in place of
+   *  the loading bar. (The technical cause belongs in the console, not on the page.) */
+  unsupported(problem: SupportProblem): void {
+    const { title, body, retry } = NOTICES[problem];
+    const notice = document.createElement('div');
+    notice.className = 'splash-notice';
+    notice.innerHTML = '<h1 class="splash-notice-title"></h1><p class="splash-notice-body"></p>';
+    notice.querySelector('.splash-notice-title')!.textContent = title;
+    notice.querySelector('.splash-notice-body')!.textContent = body;
+    if (retry) {
+      const again = document.createElement('button');
+      again.type = 'button';
+      again.className = 'splash-notice-retry';
+      again.textContent = 'Try again';
+      again.addEventListener('click', () => location.reload());
+      notice.append(again);
+    }
+    this.stage.classList.add('is-unsupported');
+    this.splash.classList.add('is-notice');
+    this.splash.dataset.problem = problem;
+    this.splash.setAttribute('role', 'status');
+    this.splash.querySelector('.splash-bar')?.replaceWith(notice);
   }
 
   private setActive(index: number): void {

@@ -165,6 +165,15 @@ of runtime WGSL. Verified by driving stock Firefox 158 with WebGPU enabled
 A cold first load there compiles shaders for roughly 30-60 s, so the loading
 screen lingers. This is a Firefox pipeline-compile cost, not a hang.
 
+When the globes cannot start, the page shows a calm notice over the loading backdrop,
+never the raw browser error (the full error stays in the console as
+`[globes] could not start:`). `classifyFailure()` in `src/gpu/device.ts` picks one of
+four notices: `no-webgpu` (no `navigator.gpu`; no retry button), `no-gpu` (no adapter or
+the device could not be created), `shader` (the browser's WebGPU rejected generated
+WGSL or a pipeline, matched by message), and `other`. The splash carries
+`data-problem` for QA. Checked in Chrome by faking each failure at the WebGPU API, and
+in stock Firefox 158 with `dom.webgpu.enabled` off, which is the real no-WebGPU case.
+
 The separate willwaltz/webgpu-ray-tracing project is an optional experimental
 browser patch, not a site dependency. No custom browser is installed or required.
 

@@ -351,13 +351,59 @@ body {
   }
 }
 
-.splash-error {
-  max-width: 50cqh;
-  margin: 1.4cqh 0 0;
-  font-size: 1.6cqh;
-  line-height: 1.5;
+/* Where the globes cannot run (no WebGPU, or a graphics setup that cannot take it): a calm
+   notice over the same backdrop, never the raw error. */
+.splash.is-notice .splash-mark {
+  opacity: 0.7;
+}
+
+.splash-notice {
+  display: grid;
+  justify-items: center;
+  gap: 1.1cqh;
+  box-sizing: border-box;
+  width: min(54cqh, 90cqw);
+  margin-top: 1cqh;
+  padding: 2.4cqh 3cqh;
+  border-radius: 2cqh;
+  border: 1px solid var(--line);
+  background: rgba(2, 14, 26, 0.55);
+  backdrop-filter: blur(1.6cqh);
   text-align: center;
+}
+
+.splash-notice-title {
+  margin: 0;
+  font-size: max(1.9cqh, 15px);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.splash-notice-body {
+  margin: 0;
+  font-size: max(1.55cqh, 13px);
+  line-height: 1.55;
   color: var(--ink-2);
+}
+
+.splash-notice-retry {
+  margin-top: 0.8cqh;
+  padding: 0.9cqh 2.2cqh;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(2, 14, 26, 0.6);
+  font: inherit;
+  font-size: max(1.5cqh, 13px);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.splash-notice-retry:hover,
+.splash-notice-retry:focus-visible {
+  border-color: var(--accent);
+  outline: none;
 }
 
 /* ------------------------------------------------------------------ the pointer (cursor.ts) */
@@ -523,7 +569,7 @@ html.desktop #stage canvas.is-live {
 
 /* A small, scene-specific control for the living specimen. */
 .betta-controls { position: absolute; z-index: 5; top: 24px; right: 28px; display: flex; align-items: center; gap: 14px; color: #d2e9e8; font-size: 12px; }
-.betta-controls[hidden] { display: none; }
+.betta-controls[hidden], .is-unsupported .betta-controls { display: none; }
 .betta-controls span { letter-spacing: .12em; text-transform: uppercase; }
 .betta-controls button { color: inherit; background: #092d3bbd; border: 1px solid #94c9ce55; border-radius: 24px; padding: 12px 17px; font: inherit; cursor: pointer; min-height: 44px; }
 .betta-controls button:hover, .betta-controls button[aria-pressed="true"] { background: #235966dc; border-color: #a5e3e9aa; }

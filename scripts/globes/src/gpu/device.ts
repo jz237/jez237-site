@@ -2,20 +2,46 @@
 
 import { RT_FEATURE } from '../rt/rt';
 
+/** Why the globes cannot run here: no WebGPU in the browser, no usable graphics device behind it,
+ *  graphics code the browser's WebGPU rejects, or something else. */
+export type SupportProblem = 'no-webgpu' | 'no-gpu' | 'shader' | 'other';
+
+export class GpuUnsupportedError extends Error {
+  constructor(
+    readonly problem: SupportProblem,
+    message: string,
+  ) {
+    super(message);
+    this.name = 'GpuUnsupportedError';
+  }
+}
+
+const SHADER_FAILURE = /wgsl|shader|pipeline|naga|abstract types|fluid solver setup|validation/i;
+
+/** What a start-up failure means for the visitor (the full error stays in the console). */
+export function classifyFailure(err: unknown): SupportProblem {
+  if (err instanceof GpuUnsupportedError) return err.problem;
+  const named = err instanceof Error ? `${err.name} ${err.message}` : String(err);
+  return SHADER_FAILURE.test(named) ? 'shader' : 'other';
+}
+
 export async function createDevice(): Promise<GPUDevice> {
   if (!('gpu' in navigator)) {
-    throw new Error('WebGPU is not available. Open this demo in a recent Chrome or Edge browser with graphics acceleration enabled.');
+    throw new GpuUnsupportedError('no-webgpu', 'WebGPU is not available in this browser.');
   }
 
   // Hardware ray tracing where the browser offers it (?rt=0: trace in software anyway). A device
   // with it may fail to start (Chromium's GL interop on some setups): then one without it.
   const rt = new URLSearchParams(location.search).get('rt') !== '0';
   let device = await requestDevice(rt).catch((err: unknown) => {
-    if (!rt) throw err;
+    if (err instanceof GpuUnsupportedError || !rt) throw err;
     console.warn('[globes] no device with ray tracing, going without:', err);
     return null;
   });
-  device ??= await requestDevice(false);
+  device ??= await requestDevice(false).catch((err: unknown) => {
+    if (err instanceof GpuUnsupportedError) throw err;
+    throw new GpuUnsupportedError('no-gpu', `Could not create a WebGPU device: ${err instanceof Error ? err.message : String(err)}`);
+  });
 
   device.lost.then((info) => {
     if (info.reason === 'destroyed') return;
@@ -28,7 +54,7 @@ export async function createDevice(): Promise<GPUDevice> {
 
 async function requestDevice(rt: boolean): Promise<GPUDevice> {
   const adapter = await navigator.gpu.requestAdapter({ powerPreference: 'high-performance' });
-  if (!adapter) throw new Error('No WebGPU graphics adapter was found. Try a WebGPU-capable computer with graphics acceleration enabled.');
+  if (!adapter) throw new GpuUnsupportedError('no-gpu', 'No WebGPU graphics adapter was found.');
 
   // Like three.js, ask for every feature the adapter offers.
   const requiredFeatures = [...adapter.features].filter((f) => rt || f !== RT_FEATURE) as GPUFeatureName[];

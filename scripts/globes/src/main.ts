@@ -10,7 +10,7 @@ import { BETTA_SURFACE_AT } from './fish/bettaWater.mjs';
 import { Koi, type KoiEnv } from './fish/Koi';
 import { CLOWN_PROBES, Clownfishes } from './fish/Clownfish';
 import { FishFood, type Feeder } from './fish/FishFood';
-import { createDevice } from './gpu/device';
+import { classifyFailure, createDevice } from './gpu/device';
 import { GlobeController } from './interaction/GlobeController';
 import { KelpForest } from './kelp/KelpForest';
 import { REEF_PROBES, Reef } from './reef/Reef';
@@ -383,8 +383,8 @@ async function startApp(stage: HTMLElement, params: URLSearchParams, host: Deskt
       firstFrame: () => shell.start(),
     });
   } catch (err) {
-    console.error(err);
-    shell.ui.fail(err instanceof Error ? err.message : String(err));
+    console.error('[globes] could not start:', err);
+    shell.ui.unsupported(classifyFailure(err));
   }
 }
 
