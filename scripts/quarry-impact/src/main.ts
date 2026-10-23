@@ -27,7 +27,7 @@ import {showVenueBrowser,selectVenue,selectDemoVenue} from './venue-browser';
 import {readCameraSettings,playerChaseComposition,mountCameraSettings} from './camera-settings';
 import {ScreenCraze,trackCraze,hull,type CrazeState} from './screen-craze';
 import {speedFov,smoothAccel,roadBuzz} from './speed-feel';
-import {FINAL_TWO,finalTwo,finalTwoBanner,revenge,takedownChain,comboLabel,revengeReady,lastGasp} from './derby-moments';
+import {FINAL_TWO,finalTwo,finalTwoBanner,revenge,takedownChain,comboLabel,revengeReady,lastGasp,strippedLabel} from './derby-moments';
 import {syncInterval,syncDue} from './vehicle-draw-batch';
 let syncFrame=0;
 let feelAccel=0,feelSpeed=0;
@@ -980,7 +980,7 @@ async function start(watch=demo) {
     camera.position.copy(cars[0].current).add(new T.Vector3(0, 4, -8));
     hud();
     sound.pause(false);
-    eventAwards.reset();playerTopSpeed=0;derbyAliveBefore=0;revengeSettled.clear();takedownCombo=0;lastTakedownAt=-1e9;bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
+    eventAwards.reset();playerTopSpeed=0;derbyAliveBefore=0;revengeSettled.clear();takedownCombo=0;playerStripped=0;lastTakedownAt=-1e9;bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
     beginReplay();
     if(preparationInterrupted||document.hidden)pause();
     return true;
@@ -1079,6 +1079,10 @@ let derbyAliveBefore=0;
 const revengeSettled=new Map<number,number>();
 /** The player's takedown chain (offline): takedowns within COMBO.window seconds chain into DOUBLE, TRIPLE … */
 let takedownCombo=0,lastTakedownAt=-1e9;
+/** Major parts the player's car has shed (for the STRIPPED callouts). */
+let playerStripped=0;
+/** Major parts gone from a car: bumpers, bonnet, boot, tailgate, hatch or engine lid, doors, barn doors and front wings. */
+function majorPartsGone(c:Vehicle){let n=c.wingGone.filter(Boolean).length;for(const a of c.wreckParts.assemblies)if(/^(front-bumper|rear-bumper|hood|boot|tailgate|drop-tailgate|hatch|engine-lid|door-|cargo-)/.test(a.name)&&a.members.length&&a.members.every(m=>!m.mesh.visible))n++;return n;}
 function playerTakedown(){
   if(online?.active||demo)return;takedownCombo=takedownChain(takedownCombo,lastTakedownAt,elapsed);lastTakedownAt=elapsed;
   const label=comboLabel(takedownCombo)||(lastGasp(cars[0]?.health??100)?'LAST GASP TAKEDOWN':'');if(label){toast(label,2,3);sound.crowd(1);crowdFlashes(SMASH_FLASHES);}
@@ -1617,6 +1621,8 @@ function step(dt: number) {
       damageScale:Math.max(a&&a.health>0?a.specification.damageScale:0,b&&b.health>0?b.specification.damageScale:0)});
   });
   sound.contactScraping.sample(contacts,elapsed);
+  // The player's car stripped down to the shell and still running (offline).
+  if(!online?.active&&!demo&&cars[0]){const gone=majorPartsGone(cars[0]),label=cars[0].health>0?strippedLabel(playerStripped,gone):'';if(label){toast(label,2,2);sound.crowd(.7);}playerStripped=gone;}
   for(const {a,b,point1,point2,scarDirection,speed,material} of collisionScars.adjudicate(contacts,elapsed)){
     // Metal grinding on metal or concrete throws sparks along the scrape.
     if(speed>4&&(material==='metal'||material==='concrete'))fx.emit(point1,Math.min(4,Math.ceil(speed/6)),1,.85);

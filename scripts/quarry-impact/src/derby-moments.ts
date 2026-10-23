@@ -28,3 +28,7 @@ export const REVENGE_READY=10;
 /** A takedown the player lands while their own car is hanging on (below LAST_GASP health, still alive). */
 export const LAST_GASP=15;
 export const lastGasp=(playerHealth:number)=>Number.isFinite(playerHealth)&&playerHealth>0&&playerHealth<LAST_GASP;
+/** Stripped (offline): once the player's still-running car has shed STRIPPED.first major parts (bumpers, bonnet, boot or
+ * tailgate, doors, front wings), the crowd hears about it; again at STRIPPED.shell. */
+export const STRIPPED={first:5,shell:8} as const;
+export const strippedLabel=(before:number,now:number)=>!Number.isFinite(before)||!Number.isFinite(now)?'':now>=STRIPPED.shell&&before<STRIPPED.shell?`BARE SHELL · ${now} PARTS GONE`:now>=STRIPPED.first&&before<STRIPPED.first?`STRIPPED · ${now} PARTS GONE`:'';
