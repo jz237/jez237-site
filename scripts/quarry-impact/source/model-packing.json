@@ -2,6 +2,17 @@
   "version": 1,
   "method": "Lossless extraction/deduplication of image bytes; unchanged buffer-view bytes; gzip level 9. Original GLBs retained.",
   "models": {
+    "alder.glb": {
+      "source": "models/alder.glb",
+      "sourceBytes": 3606504,
+      "sourceSha256": "91067853d28dea2598256c5588e8f9a81ad4466483104705bd4fee2bbcb2efce",
+      "file": "models/packed/alder-ab48ebfccffc.glb.gz",
+      "bytes": 573881,
+      "sha256": "ab48ebfccffcadf8575d1656fa60bf18b2e77cb8b41831a15b291ed0a234ce2c",
+      "expandedBytes": 3606504,
+      "images": [],
+      "retainedBufferViews": 636
+    },
     "arena-escarpment.glb": {
       "source": "models/arena-escarpment.glb",
       "sourceBytes": 6269932,
@@ -23,6 +34,39 @@
       "expandedBytes": 571460,
       "images": [],
       "retainedBufferViews": 48
+    },
+    "buggy.glb": {
+      "source": "models/buggy.glb",
+      "sourceBytes": 2901188,
+      "sourceSha256": "467d35dee44cd40b5358be520b062c808e4a13d1e5491d66606f309135106e76",
+      "file": "models/packed/buggy-c10c6af9e006.glb.gz",
+      "bytes": 493448,
+      "sha256": "c10c6af9e0064d15a2282269f3b5aac10edd855239dc7a9fac507d46beebb743",
+      "expandedBytes": 2901188,
+      "images": [],
+      "retainedBufferViews": 807
+    },
+    "compact.glb": {
+      "source": "models/compact.glb",
+      "sourceBytes": 2298076,
+      "sourceSha256": "fc78037ae276f629104c738f9fb1ced6de64805ed66674c97803c4145357259e",
+      "file": "models/packed/compact-b26c0f0b87b3.glb.gz",
+      "bytes": 327777,
+      "sha256": "b26c0f0b87b3a02324ce61b027991d4f5fa27e4979639673a1aa7aae66b6adfc",
+      "expandedBytes": 2298076,
+      "images": [],
+      "retainedBufferViews": 819
+    },
+    "cornet.glb": {
+      "source": "models/cornet.glb",
+      "sourceBytes": 3903788,
+      "sourceSha256": "5b9dea0afd61e8baa3aff903484604215c781c028dbbc95ae4e00d5e03109984",
+      "file": "models/packed/cornet-812565dfc693.glb.gz",
+      "bytes": 593131,
+      "sha256": "812565dfc693928b5ad01f9ecfd1e80424432166990dcc2b227fd418223fb8b2",
+      "expandedBytes": 3903788,
+      "images": [],
+      "retainedBufferViews": 912
     },
     "coupe.glb": {
       "source": "models/coupe.glb",
@@ -100,6 +144,17 @@
         }
       ],
       "retainedBufferViews": 1178
+    },
+    "fernleigh.glb": {
+      "source": "models/fernleigh.glb",
+      "sourceBytes": 3793676,
+      "sourceSha256": "cf426bce54546d74bbd77f2203aaa48f75339b522a0fae5beabebe7f9f4b3467",
+      "file": "models/packed/fernleigh-d44821a4a9f0.glb.gz",
+      "bytes": 646754,
+      "sha256": "d44821a4a9f086b49792716e62c7ebe4ba973550c4fa1c5a068bf0725a82b812",
+      "expandedBytes": 3793676,
+      "images": [],
+      "retainedBufferViews": 699
     },
     "fir-medium-a.glb": {
       "source": "models/fir-medium-a.glb",
@@ -346,6 +401,118 @@
       ],
       "retainedBufferViews": 774
     },
+    "hollins.glb": {
+      "source": "models/hollins.glb",
+      "sourceBytes": 3098040,
+      "sourceSha256": "9038584c41a910466cd7b1d57103286b2bd97845b5f8b2ce2f28420e39352a9f",
+      "file": "models/packed/hollins-7195adc98912.glb.gz",
+      "bytes": 492612,
+      "sha256": "7195adc98912238e814aa16b7e8b9b58be04f18f51ce10966bdcd0828fd10fef",
+      "expandedBytes": 3098040,
+      "images": [],
+      "retainedBufferViews": 729
+    },
+    "kite.glb": {
+      "source": "models/kite.glb",
+      "sourceBytes": 3322224,
+      "sourceSha256": "8a28d777a42347e15123cb5b359baabb41edc79ac40f230e2868281970fcfd0d",
+      "file": "models/packed/kite-3e7b24122478.glb.gz",
+      "bytes": 571986,
+      "sha256": "3e7b24122478e27b3ffcb3baafa878bf0dda619982ab16bd7b7cbd0d440c04e7",
+      "expandedBytes": 3322224,
+      "images": [],
+      "retainedBufferViews": 552
+    },
+    "linnet.glb": {
+      "source": "models/linnet.glb",
+      "sourceBytes": 2927880,
+      "sourceSha256": "cd183de3689f03e483d0bfe0e994040ab0179c0570bf48ab3c5865d350b48a1c",
+      "file": "models/packed/linnet-447ae1334d2f.glb.gz",
+      "bytes": 469486,
+      "sha256": "447ae1334d2f8dc830cc24da0dac3b0f9c7e9593b083da45fb0c3ab8c96bd2eb",
+      "expandedBytes": 2927880,
+      "images": [],
+      "retainedBufferViews": 339
+    },
+    "marten.glb": {
+      "source": "models/marten.glb",
+      "sourceBytes": 3035168,
+      "sourceSha256": "5a31202fa007a82c2a4eb133fd20eb0d0a1971bd5ad948eab3406fbf7df3ebdd",
+      "file": "models/packed/marten-b2dacf6660c8.glb.gz",
+      "bytes": 545741,
+      "sha256": "b2dacf6660c82d65fcc96118e8fdac6bb0ab865ec23a8d5a90d6b66c16a456c1",
+      "expandedBytes": 3035168,
+      "images": [],
+      "retainedBufferViews": 741
+    },
+    "morrow.glb": {
+      "source": "models/morrow.glb",
+      "sourceBytes": 3377352,
+      "sourceSha256": "a3d00380de19cc5a64db04232ffab6a2bb5da068d5b6304b9d12ea82d2886f10",
+      "file": "models/packed/morrow-56087bc6e4f4.glb.gz",
+      "bytes": 545936,
+      "sha256": "56087bc6e4f419ed6f28b31032e9e0a5071bb2807e781ad785fd35a0829beb9b",
+      "expandedBytes": 3377352,
+      "images": [],
+      "retainedBufferViews": 540
+    },
+    "muscle.glb": {
+      "source": "models/muscle.glb",
+      "sourceBytes": 1288164,
+      "sourceSha256": "c6fc43c098850046e14b18819531f5442dcc2c2fac7c9b3cda78b08f36dc80dd",
+      "file": "models/packed/muscle-9adc04fd431d.glb.gz",
+      "bytes": 230984,
+      "sha256": "9adc04fd431dc2814c669882e0ddbb813ec5f2f9b51555bda93d313f6b9b3019",
+      "expandedBytes": 1159780,
+      "images": [
+        {
+          "file": "models/brightretro-muscle/Grille.png",
+          "bytes": 1308,
+          "sha256": "72432e88f061002c072110fa2c284c5d9d0465df59c6488fd05571b673a96083"
+        },
+        {
+          "file": "models/brightretro-muscle/Headlight.png",
+          "bytes": 12452,
+          "sha256": "971b2557b9fce3ca35b55a11b2d7bcab73e8ec45edee0d05e3332b83e4901ac1"
+        },
+        {
+          "file": "models/brightretro-muscle/RearLight.png",
+          "bytes": 9812,
+          "sha256": "71be53c46bfae450e1c75c39b28cbdd7419bfc49c81c1dd37bc84d833e9198d4"
+        },
+        {
+          "file": "models/brightretro-muscle/Interior.png",
+          "bytes": 23075,
+          "sha256": "e41731616360f950c496f3e65eb26b41e3d5031fb9d5e12025e63039c4814516"
+        },
+        {
+          "file": "models/brightretro-muscle/Badge.png",
+          "bytes": 6340,
+          "sha256": "867dfb0a0b81ce4162387d0fe7988ea846706d0cff30be36410583b49bc7aa72"
+        },
+        {
+          "file": "models/brightretro-muscle/License.png",
+          "bytes": 10430,
+          "sha256": "cba12c68beed45c22ee4ebebda0de67bd5f5bcb4469f2b489b4742484d65c364"
+        },
+        {
+          "file": "models/brightretro-muscle/Underside.png",
+          "bytes": 24571,
+          "sha256": "8542799fbef241888c354cc81cd62c73f959ae2eff7afce33e701a40dda6f399"
+        },
+        {
+          "file": "models/brightretro-muscle/Alloy_01.png",
+          "bytes": 31219,
+          "sha256": "96a4abcb82688a612479683f88bfda82a1de8428a85f4c135a27a5caa3a156c0"
+        },
+        {
+          "file": "models/brightretro-muscle/Tyre_Tile.png",
+          "bytes": 8819,
+          "sha256": "7dbca62fb38286d5717696a8145d89e2e8c61e0b6f95767776f05c7491bb36a3"
+        }
+      ],
+      "retainedBufferViews": 567
+    },
     "pine3d.glb": {
       "source": "models/pine3d.glb",
       "sourceBytes": 181604,
@@ -356,6 +523,17 @@
       "expandedBytes": 181604,
       "images": [],
       "retainedBufferViews": 8
+    },
+    "pipit.glb": {
+      "source": "models/pipit.glb",
+      "sourceBytes": 3490032,
+      "sourceSha256": "106ec1af855e99ee765ce7ca85144a66e1d8cbcd2bb3e5e555c4a6b5ed67fb67",
+      "file": "models/packed/pipit-8b27a14cc536.glb.gz",
+      "bytes": 647495,
+      "sha256": "8b27a14cc536fc002ce9483c3c8a1ed9e13456548a4fe6715d74563880cd4ca2",
+      "expandedBytes": 3490032,
+      "images": [],
+      "retainedBufferViews": 432
     },
     "quarry-cut.glb": {
       "source": "models/quarry-cut.glb",
@@ -478,6 +656,28 @@
       "images": [],
       "retainedBufferViews": 340
     },
+    "ravenhill.glb": {
+      "source": "models/ravenhill.glb",
+      "sourceBytes": 3820700,
+      "sourceSha256": "603f82f61963ca925920f6b278d6277c2ba7310029b76542b78a272959df6f43",
+      "file": "models/packed/ravenhill-f9cff36bb8bb.glb.gz",
+      "bytes": 676309,
+      "sha256": "f9cff36bb8bb2664883a38113bd96c2dddc0d471769859828e0f154f0358e751",
+      "expandedBytes": 3820700,
+      "images": [],
+      "retainedBufferViews": 537
+    },
+    "regent.glb": {
+      "source": "models/regent.glb",
+      "sourceBytes": 2799392,
+      "sourceSha256": "d9e13aa8c589e7561563a57d08361e2216667c080c3e9e0906ece06737dffc51",
+      "file": "models/packed/regent-86654fe34a58.glb.gz",
+      "bytes": 397879,
+      "sha256": "86654fe34a584da8837b08464e457b5d3009b03ff4c4e738e9d7265e36402a2d",
+      "expandedBytes": 2799392,
+      "images": [],
+      "retainedBufferViews": 618
+    },
     "rocks-lod.glb": {
       "source": "models/rocks-lod.glb",
       "sourceBytes": 2044060,
@@ -504,6 +704,17 @@
         }
       ],
       "retainedBufferViews": 24
+    },
+    "saber.glb": {
+      "source": "models/saber.glb",
+      "sourceBytes": 3453776,
+      "sourceSha256": "25ee9a84c0738a02bc685530ef45c354a1cca7199095a40f0f6d26a1e787d68b",
+      "file": "models/packed/saber-beb2efaf1323.glb.gz",
+      "bytes": 557931,
+      "sha256": "beb2efaf1323d33a6f8a48875ad40841b595c51942f633dc41e9e30a5d72f67f",
+      "expandedBytes": 3453776,
+      "images": [],
+      "retainedBufferViews": 567
     },
     "sedan.glb": {
       "source": "models/sedan.glb",
@@ -582,6 +793,17 @@
       ],
       "retainedBufferViews": 774
     },
+    "shuttle.glb": {
+      "source": "models/shuttle.glb",
+      "sourceBytes": 2439400,
+      "sourceSha256": "4d4172ba461244ca14419cfb972dd968a1ecc420bbf521a25fefdf185566b16d",
+      "file": "models/packed/shuttle-6f576f6390e7.glb.gz",
+      "bytes": 314247,
+      "sha256": "6f576f6390e7d56f0e4bed9b330b337b04b5f108d87f0915d07689d7cf8fa238",
+      "expandedBytes": 2439400,
+      "images": [],
+      "retainedBufferViews": 768
+    },
     "spruce3d.glb": {
       "source": "models/spruce3d.glb",
       "sourceBytes": 244084,
@@ -592,6 +814,150 @@
       "expandedBytes": 244084,
       "images": [],
       "retainedBufferViews": 8
+    },
+    "starfin.glb": {
+      "source": "models/starfin.glb",
+      "sourceBytes": 3780988,
+      "sourceSha256": "220e666a512ab59398b28b9480b2e4259879fb598e94f65f0238457037c4c668",
+      "file": "models/packed/starfin-4f7720a2d5e3.glb.gz",
+      "bytes": 598798,
+      "sha256": "4f7720a2d5e3d50b4589cc3438493920b01c32d37e8e690030767bac2d859237",
+      "expandedBytes": 3780988,
+      "images": [],
+      "retainedBufferViews": 453
+    },
+    "tern.glb": {
+      "source": "models/tern.glb",
+      "sourceBytes": 3295572,
+      "sourceSha256": "8ffed185ca086f75d46b5c8d7ebc05d5b65e3434c548efacb41c507485d94177",
+      "file": "models/packed/tern-15bcf1de4577.glb.gz",
+      "bytes": 573618,
+      "sha256": "15bcf1de4577806d7acd2d2a05b5c2411d175bb52044353652e971bbf534f4e8",
+      "expandedBytes": 3295572,
+      "images": [],
+      "retainedBufferViews": 786
+    },
+    "tordal.glb": {
+      "source": "models/tordal.glb",
+      "sourceBytes": 3487296,
+      "sourceSha256": "4abf162b15e97dc20840a17eb2f88aee6f3ae30ccd20cfa60479ec70d6123e70",
+      "file": "models/packed/tordal-3e776614fdb2.glb.gz",
+      "bytes": 549969,
+      "sha256": "3e776614fdb2a93fb959436b273d8e64fb323d85f3b8b47f51c4909ec7eff075",
+      "expandedBytes": 3487296,
+      "images": [],
+      "retainedBufferViews": 528
+    },
+    "trail.glb": {
+      "source": "models/trail.glb",
+      "sourceBytes": 2223936,
+      "sourceSha256": "a788dea3d4a6271a800256ac9d26b27210ae6af6b09bdfaeb5f3a634a7140c87",
+      "file": "models/packed/trail-bf1becebe62d.glb.gz",
+      "bytes": 284763,
+      "sha256": "bf1becebe62dbd31c9f5d09b8d943a91c5ca08ff81f45014e18ec9b159a44df0",
+      "expandedBytes": 2223936,
+      "images": [],
+      "retainedBufferViews": 588
+    },
+    "utility.glb": {
+      "source": "models/utility.glb",
+      "sourceBytes": 2641232,
+      "sourceSha256": "328a77c9e8f713fdc203f294e9bfc71e29844cf4ef8d08ed71cacc28280d0eed",
+      "file": "models/packed/utility-756e8ed025e2.glb.gz",
+      "bytes": 403569,
+      "sha256": "756e8ed025e241ab08fbe73b471b9c9fe7e3a423f51d110904237df56989da7c",
+      "expandedBytes": 2512908,
+      "images": [
+        {
+          "file": "models/brightretro-muscle/Grille.png",
+          "bytes": 1308,
+          "sha256": "72432e88f061002c072110fa2c284c5d9d0465df59c6488fd05571b673a96083"
+        },
+        {
+          "file": "models/brightretro-muscle/Headlight.png",
+          "bytes": 12452,
+          "sha256": "971b2557b9fce3ca35b55a11b2d7bcab73e8ec45edee0d05e3332b83e4901ac1"
+        },
+        {
+          "file": "models/brightretro-muscle/Interior.png",
+          "bytes": 23075,
+          "sha256": "e41731616360f950c496f3e65eb26b41e3d5031fb9d5e12025e63039c4814516"
+        },
+        {
+          "file": "models/brightretro-muscle/Badge.png",
+          "bytes": 6340,
+          "sha256": "867dfb0a0b81ce4162387d0fe7988ea846706d0cff30be36410583b49bc7aa72"
+        },
+        {
+          "file": "models/brightretro-muscle/RearLight.png",
+          "bytes": 9812,
+          "sha256": "71be53c46bfae450e1c75c39b28cbdd7419bfc49c81c1dd37bc84d833e9198d4"
+        },
+        {
+          "file": "models/brightretro-muscle/License.png",
+          "bytes": 10430,
+          "sha256": "cba12c68beed45c22ee4ebebda0de67bd5f5bcb4469f2b489b4742484d65c364"
+        },
+        {
+          "file": "models/brightretro-muscle/Underside.png",
+          "bytes": 24571,
+          "sha256": "8542799fbef241888c354cc81cd62c73f959ae2eff7afce33e701a40dda6f399"
+        },
+        {
+          "file": "models/brightretro-muscle/Alloy_01.png",
+          "bytes": 31219,
+          "sha256": "96a4abcb82688a612479683f88bfda82a1de8428a85f4c135a27a5caa3a156c0"
+        },
+        {
+          "file": "models/brightretro-muscle/Tyre_Tile.png",
+          "bytes": 8819,
+          "sha256": "7dbca62fb38286d5717696a8145d89e2e8c61e0b6f95767776f05c7491bb36a3"
+        }
+      ],
+      "retainedBufferViews": 648
+    },
+    "van.glb": {
+      "source": "models/van.glb",
+      "sourceBytes": 2293544,
+      "sourceSha256": "c290b9d0d9c4648dda0cc4a23b12d2e80a518473fe556f1b9b044df3c01310cc",
+      "file": "models/packed/van-d7af282b0910.glb.gz",
+      "bytes": 298118,
+      "sha256": "d7af282b0910a99af286333a20ba25c5327420a9212e9d95482783427c312a79",
+      "expandedBytes": 2293544,
+      "images": [],
+      "retainedBufferViews": 795
+    },
+    "wagon.glb": {
+      "source": "models/wagon.glb",
+      "sourceBytes": 2362128,
+      "sourceSha256": "97af294d71cf744fc97ee3813249fa237643cb28d5c4f9f980580e39506c1074",
+      "file": "models/packed/wagon-9600b2eb1ee2.glb.gz",
+      "bytes": 464924,
+      "sha256": "9600b2eb1ee219aa54e8f586a00a7426c36c314b7bf0b9fffdf72c6f50ac7ecd",
+      "expandedBytes": 2274312,
+      "images": [
+        {
+          "file": "models/brightretro-muscle/Interior.png",
+          "bytes": 23075,
+          "sha256": "e41731616360f950c496f3e65eb26b41e3d5031fb9d5e12025e63039c4814516"
+        },
+        {
+          "file": "models/brightretro-muscle/Underside.png",
+          "bytes": 24571,
+          "sha256": "8542799fbef241888c354cc81cd62c73f959ae2eff7afce33e701a40dda6f399"
+        },
+        {
+          "file": "models/brightretro-muscle/Alloy_01.png",
+          "bytes": 31219,
+          "sha256": "96a4abcb82688a612479683f88bfda82a1de8428a85f4c135a27a5caa3a156c0"
+        },
+        {
+          "file": "models/brightretro-muscle/Tyre_Tile.png",
+          "bytes": 8819,
+          "sha256": "7dbca62fb38286d5717696a8145d89e2e8c61e0b6f95767776f05c7491bb36a3"
+        }
+      ],
+      "retainedBufferViews": 759
     },
     "wheel-machining.glb": {
       "source": "models/wheel-machining.glb",
@@ -725,6 +1091,51 @@
       "file": "models/packed/textures/4f0b8e1269d047468105eacd.jpg",
       "bytes": 66948,
       "sha256": "4f0b8e1269d047468105eacd08660c04b45df6f26d884da5c76b5ec70885f218"
+    },
+    "models/brightretro-muscle/Grille.png": {
+      "file": "models/brightretro-muscle/Grille.png",
+      "bytes": 1308,
+      "sha256": "72432e88f061002c072110fa2c284c5d9d0465df59c6488fd05571b673a96083"
+    },
+    "models/brightretro-muscle/Headlight.png": {
+      "file": "models/brightretro-muscle/Headlight.png",
+      "bytes": 12452,
+      "sha256": "971b2557b9fce3ca35b55a11b2d7bcab73e8ec45edee0d05e3332b83e4901ac1"
+    },
+    "models/brightretro-muscle/RearLight.png": {
+      "file": "models/brightretro-muscle/RearLight.png",
+      "bytes": 9812,
+      "sha256": "71be53c46bfae450e1c75c39b28cbdd7419bfc49c81c1dd37bc84d833e9198d4"
+    },
+    "models/brightretro-muscle/Interior.png": {
+      "file": "models/brightretro-muscle/Interior.png",
+      "bytes": 23075,
+      "sha256": "e41731616360f950c496f3e65eb26b41e3d5031fb9d5e12025e63039c4814516"
+    },
+    "models/brightretro-muscle/Badge.png": {
+      "file": "models/brightretro-muscle/Badge.png",
+      "bytes": 6340,
+      "sha256": "867dfb0a0b81ce4162387d0fe7988ea846706d0cff30be36410583b49bc7aa72"
+    },
+    "models/brightretro-muscle/License.png": {
+      "file": "models/brightretro-muscle/License.png",
+      "bytes": 10430,
+      "sha256": "cba12c68beed45c22ee4ebebda0de67bd5f5bcb4469f2b489b4742484d65c364"
+    },
+    "models/brightretro-muscle/Underside.png": {
+      "file": "models/brightretro-muscle/Underside.png",
+      "bytes": 24571,
+      "sha256": "8542799fbef241888c354cc81cd62c73f959ae2eff7afce33e701a40dda6f399"
+    },
+    "models/brightretro-muscle/Alloy_01.png": {
+      "file": "models/brightretro-muscle/Alloy_01.png",
+      "bytes": 31219,
+      "sha256": "96a4abcb82688a612479683f88bfda82a1de8428a85f4c135a27a5caa3a156c0"
+    },
+    "models/brightretro-muscle/Tyre_Tile.png": {
+      "file": "models/brightretro-muscle/Tyre_Tile.png",
+      "bytes": 8819,
+      "sha256": "7dbca62fb38286d5717696a8145d89e2e8c61e0b6f95767776f05c7491bb36a3"
     },
     "models/rocks/textures/rock_moss_set_01_nor_gl_2k.jpg": {
       "file": "models/rocks/textures/rock_moss_set_01_nor_gl_2k.jpg",
