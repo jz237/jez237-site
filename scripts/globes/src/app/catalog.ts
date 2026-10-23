@@ -2,7 +2,7 @@
 
 import type { IdleMotion } from '../sim/IdleWater';
 
-export type GlobeId = 'water' | 'koi' | 'kelp' | 'reef' | 'foam';
+export type GlobeId = 'water' | 'betta' | 'koi' | 'kelp' | 'reef' | 'foam';
 
 export interface GlobeEntry {
   id: GlobeId;
@@ -10,6 +10,7 @@ export interface GlobeEntry {
   description: string;
   /** A koi swims in it. */
   koi: boolean;
+  betta?: boolean;
   /** A kelp forest grows in it. */
   kelp?: boolean;
   /** A slice of reef: a rock in the sand, an anemone on it, and its two clownfish. */
@@ -37,6 +38,16 @@ export const GLOBES: readonly GlobeEntry[] = [
       'A sealed glass sphere of water over a bed of sand. Tilt it and the water sloshes, settles and throws light across the sand.',
     koi: false,
     idle: 'wave',
+  },
+  {
+    id: 'betta',
+    name: 'Living Silk',
+    description: 'The Betta Atelier fish, breathing and looking around in quiet water. Tilt the globe to stir its flowing fins, or watch it spread them into a full display.',
+    koi: false,
+    betta: true,
+    clarity: 0.22,
+    water: 1.15,
+    idle: 'still',
   },
   {
     id: 'koi',

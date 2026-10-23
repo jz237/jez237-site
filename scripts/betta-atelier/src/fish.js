@@ -24,6 +24,7 @@ export const uniforms = {
 };
 const deform = `uniform float uTime,uFlare,uMotion,uPhase,uDrive,uTurn,uFold;\n` + bodyGLSL;
 function animate(mat, dynamics = null, operculum = false) {
+  mat.userData.bettaDeform = { dynamics, operculum };
   mat.onBeforeCompile = (s) => {
     Object.assign(s.uniforms, uniforms);
     if (dynamics) {
@@ -97,12 +98,12 @@ function section(x) {
     );
   });
 }
-function makeBody() {
+function makeBody(compact = false) {
   const p = [],
     uv = [],
     idx = [];
-  const nx = 220,
-    ny = 96;
+  const nx = compact ? 64 : 220,
+    ny = compact ? 24 : 96;
   for (let i = 0; i <= nx; i++) {
     const x = lerp(155, 1010, i / nx),
       [, top, bottom, thick] = section(x),
@@ -155,7 +156,8 @@ function addBreathingAnatomy(fish, skin) {
   };
   const dark = animate(new T.MeshPhysicalMaterial({ color: 0x100a0c, roughness: 0.82, side: T.DoubleSide }));
   // A real recessed mouth, not a painted black spot or a solid nose cap.
-  const p = [], uv = [], idx = [], rows = 12, around = 64;
+  const compact = fish.userData.compact;
+  const p = [], uv = [], idx = [], rows = compact ? 4 : 12, around = compact ? 24 : 64;
   for (let j = 0; j <= rows; j++) for (let i = 0; i <= around; i++) {
     const u = j / rows, a = i / around * PI * 2;
     p.push(-1.68 + u * 0.15, 0.0832 + lerp(0.0224, 0.012, u) * Math.cos(a), lerp(0.0256, 0.012, u) * Math.sin(a));
@@ -165,7 +167,7 @@ function addBreathingAnatomy(fish, skin) {
   const end = p.length / 3; p.push(-1.53, 0.0832, 0); uv.push(0.5, 0.5);
   for (let i = 0; i < around; i++) idx.push(end, rows * (around + 1) + i, rows * (around + 1) + i + 1);
   const cavity = new T.Mesh(geometry(p, uv, idx), dark); cavity.name = 'Recessed breathing mouth'; fish.add(cavity);
-  const lp = [], lu = [], li = [], tube = 10;
+  const lp = [], lu = [], li = [], tube = compact ? 4 : 10;
   for (let i = 0; i <= around; i++) for (let j = 0; j <= tube; j++) {
     const a = i / around * PI * 2, b = j / tube * PI * 2, r = 0.0028;
     const x = -1.68 + r * Math.sin(b), y = 0.0832 + (0.0224 + r * Math.cos(b)) * Math.cos(a), z = (0.0256 + r * Math.cos(b)) * Math.sin(a);
@@ -175,7 +177,7 @@ function addBreathingAnatomy(fish, skin) {
   const lips = new T.Mesh(geometry(lp, lu, li), skin); lips.name = 'Flexible upper and lower lips'; fish.add(lips);
   for (const side of [-1, 1]) {
     const cp = [], cu = [], ci = [], lift = [], gp = [], gu = [], gi = [];
-    const rows = 60, cols = 24;
+    const rows = compact ? 20 : 60, cols = compact ? 8 : 24;
     for (let i = 0; i <= rows; i++) {
       const u = i / rows, shape = Math.sin(PI * u), py = lerp(332, 502, u);
       const hinge = 330 + 12 * shape, edge = 330 + 76 * shape;
@@ -229,8 +231,8 @@ function makeFin(fish, texture, roots, edge, kind = 0, side = 0, atlas = null) {
     fuv = [],
     root = [],
     idx = [],
-    nu = 180,
-    nv = 52;
+    nu = fish.userData.compact ? 28 : 180,
+    nv = fish.userData.compact ? 16 : 52;
   for (let i = 0; i <= nu; i++) {
     const u = i / nu,
       r = sample(roots, u),
@@ -334,8 +336,9 @@ function makeFin(fish, texture, roots, edge, kind = 0, side = 0, atlas = null) {
   fish.add(mesh);
   return mesh;
 }
-export function createBetta() {
+export function createBetta({ compact = false } = {}) {
   const fish = new T.Group();
+  fish.userData.compact = compact;
   const finDynamics = [];
   const bodyMotion = new BodyMotion();
   const spineTexture = new T.DataTexture(bodyMotion.data, SPINE_COUNT, 1, T.RGBAFormat, T.FloatType);
@@ -419,7 +422,7 @@ export function createBetta() {
     ),
     macroTextures,
   );
-  const body = new T.Mesh(makeBody(), skin);
+  const body = new T.Mesh(makeBody(compact), skin);
   body.name = "Arc-length muscular trunk with open buccal cavity";
   fish.add(body);
   addBreathingAnatomy(fish, skin);
@@ -595,7 +598,7 @@ export function createBetta() {
       ),
     );
     // Volumetric iris and a dark convex pupil aligned with the lateral reference.
-    const eyeGeo = new T.SphereGeometry(0.083, 48, 32),
+    const eyeGeo = new T.SphereGeometry(0.083, compact ? 20 : 48, compact ? 12 : 32),
       ep = eyeGeo.attributes.position,
       eu = eyeGeo.attributes.uv;
     for (let i = 0; i < ep.count; i++)
@@ -631,7 +634,7 @@ export function createBetta() {
     eye.scale.set(1, 1, 0.5);
     pivot.add(eye);
     const pupil = new T.Mesh(
-      new T.SphereGeometry(0.045, 40, 28),
+      new T.SphereGeometry(0.045, compact ? 16 : 40, compact ? 10 : 28),
       new T.MeshPhysicalMaterial({
         color: 0x010304,
         roughness: 0.22,
@@ -753,7 +756,7 @@ export function createBetta() {
         0.004 * Math.sin(t * 0.71) - drive * 0.025,
       );
       const velocity = dt ? fish.position.clone().sub(previousPosition).multiplyScalar(1 / dt).toArray() : [0, 0, 0];
-      const localFlow = waterVelocity(t, fish.position.x, fish.position.y, fish.position.z, flowStrength, water.direction, []);
+      const localFlow = fish.userData.externalFlow ?? waterVelocity(t, fish.position.x, fish.position.y, fish.position.z, flowStrength, water.direction, []);
       const relativeFlow = Math.hypot(...localFlow.map((v, i) => v - velocity[i]));
       gait.advance(dt, drive, relativeFlow, turn);
       const { phase, effort, breathPhase, pectoralPhase } = gait;
@@ -768,7 +771,7 @@ export function createBetta() {
       const state = {
         body: bodyMotion, time: t, phase, pectoralPhase, drive: effort * 0.55, effort, turn, flare: uniforms.uFlare.value,
         heading, angularVelocity, velocity, origin: fish.position.toArray(),
-        strength: flowStrength, direction: water.direction,
+        strength: flowStrength, direction: water.direction, externalFlow: fish.userData.externalFlow,
         bodyRadius(x, y) {
           const pixelX = x / SCALE + 680;
           if (pixelX < 155 || pixelX > 1010) return 0;

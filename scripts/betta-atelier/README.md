@@ -292,3 +292,15 @@ reference, not a calibrated angle measurement or a flow experiment.
 Evidence: `/home/jez237/.openclaw/workspace/tmp/betta-turn-bend-20261023/`.
 The model remains an artistic reduced-order approximation; fin-to-fin
 self-collision is not simulated.
+
+
+### Reuse in Globes
+
+`createBetta({ compact: true })` keeps the same motion and reference textures with
+lower render tessellation for the globe ray tracer. The default is unchanged.
+Animated materials expose `userData.bettaDeform` so a CPU adapter can evaluate the
+same spine, cover lift and fin displacement used by the WebGL vertex shader.
+Optional `fish.userData.externalFlow` is a world-frame velocity in Atelier units;
+when present it replaces the artistic current for both effort and membrane drag.
+The globe adapter converts its solver units explicitly. These are additive hooks;
+the standalone v1.7 compiled demo is not changed by the integration release.

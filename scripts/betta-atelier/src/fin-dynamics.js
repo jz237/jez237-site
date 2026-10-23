@@ -177,7 +177,9 @@ export class FinDynamics {
       const len = Math.sqrt(nx * nx + ny * ny + nz * nz) || 1;
       nx /= len; ny /= len; nz /= len;
       const wx = co * p[q] + si * p[q + 2], wz = -si * p[q] + co * p[q + 2];
-      waterVelocity(time, wx + origin[0], p[q + 1] + origin[1], wz + origin[2], strength, direction, flow);
+      if (state.externalFlow) {
+        for (let k = 0; k < 3; k++) flow[k] = state.externalFlow[k];
+      } else waterVelocity(time, wx + origin[0], p[q + 1] + origin[1], wz + origin[2], strength, direction, flow);
       // Relative fluid includes translation, turning and each membrane's own speed.
       const fx = flow[0] - velocity[0], fz = flow[2] - velocity[2];
       const rvx = co * fx - si * fz - angularVelocity * p[q + 2] - (p[q] - old[q]) / dt;

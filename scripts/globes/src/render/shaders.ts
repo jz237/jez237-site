@@ -2,6 +2,7 @@
 // These are injected into three.js materials through TSL's wgsl()/wgslFn().
 
 import type { GlobeConfig, LightConfig } from '../config';
+import { bettaWGSL, BETTA_PARAMS, BETTA_ARGS } from '../fish/bettaWGSL';
 import { koiWGSL } from '../fish/koiWGSL';
 import { clownShadeWGSL, clownWGSL } from '../fish/clownWGSL';
 import { foodWGSL } from '../fish/FishFood';
@@ -689,9 +690,9 @@ fn globes_bubblesAlong(aerTex: texture_3d<f32>, aerSamp: sampler, lightTex: text
     let s = textureSampleLevel(aerTex, aerSamp, q / (2.0 * GLOBES_R_IN) + vec3f(0.5), 0.0).r;
     if (s <= 1e-3) { continue; }
     let dT = exp(-s * h);
-    let sky = GLOBES_BUBBLE_SKY * exp(-GLOBES_WATER_EXT * max(lit.x - q.y, 0.0));
+    let sky = GLOBES_BUBBLE_SKY * exp(-globesWaterExt * max(lit.x - q.y, 0.0));
     let E = globes_sunIn(lightTex, lightSamp, q, lit) + sky;
-    L += T * (1.0 - dT) * (0.85 / 3.14159) * E * exp(-GLOBES_WATER_EXT * tm);
+    L += T * (1.0 - dT) * (0.85 / 3.14159) * E * exp(-globesWaterExt * tm);
     T *= dT;
     if (T < 0.02) { break; }
   }
@@ -727,6 +728,7 @@ const GLOBES_IOR_GLASS: f32 = 1.5;
 const GLOBES_IOR_WATER: f32 = 1.333;
 const GLOBES_GLASS_ABS: vec3f = vec3f(0.30, 0.10, 0.12);
 const GLOBES_WATER_EXT: vec3f = ${v3(light.waterAbsorption.map((a, i) => a * clarity * (foam?.colour[i] ?? 1)))};
+var<private> globesWaterExt: vec3f;
 // The light the water sends back of what it scatters (its glow), and the deep it shows in the
 // surface from below: blue, or the sea foam globe's green.
 const GLOBES_WATER_GLOW: vec3f = ${foam ? 'vec3f(0.006, 0.050, 0.040)' : 'vec3f(0.010, 0.060, 0.150)'};
@@ -1158,7 +1160,7 @@ fn globes_koiFin(pose: texture_2d<f32>, x: vec3f) -> vec4f {
 fn globes_sunIn(lightTex: texture_3d<f32>, lightSamp: sampler, x: vec3f, lit: vec4f) -> vec3f {
   let f = textureSampleLevel(lightTex, lightSamp, x / (2.0 * GLOBES_R_IN) + vec3f(0.5), 0.0).r;
   let path = max(lit.x - x.y, 0.0) / max(abs(GLOBES_SUN_DIR_WATER.y), 0.3);
-  return GLOBES_SUN_IRR * f * exp(-GLOBES_WATER_EXT * path);
+  return GLOBES_SUN_IRR * f * exp(-globesWaterExt * path);
 }
 
 // Henyey-Greenstein phase function.
@@ -1196,7 +1198,7 @@ fn globes_motes(moteTex: texture_3d<f32>, cell: vec3i, p: vec3f, dir: vec3f, tMi
     // Flakes tumble as they drift: now and then one turns its face to the light and glints.
     let spin = fract(m.w * 137.31) * 6.283 + time * (0.7 + fract(m.w * 71.7) * 1.6);
     let glint = 0.18 + 3.0 * pow(max(sin(spin), 0.0), 12.0);
-    out += exp(-GLOBES_WATER_EXT * tc) * cover * vec3f(0.92, 0.9, 0.84) * (E * ph * 2.2 * glint + vec3f(0.03, 0.05, 0.06));
+    out += exp(-globesWaterExt * tc) * cover * vec3f(0.92, 0.9, 0.84) * (E * ph * 2.2 * glint + vec3f(0.03, 0.05, 0.06));
   }
   return out;
 }
@@ -1234,7 +1236,7 @@ fn globes_waterLight(p: vec3f, dir: vec3f, a: f32, b: f32, path0: f32, scat: f32
     let h = (b - a) / f32(n);
     for (var i = 0; i < n; i++) {
       let tm = a + (f32(i) + 0.5) * h;
-      acc += exp(-GLOBES_WATER_EXT * tm) * globes_sunIn(lightTex, lightSamp, p + dir * tm, lit);
+      acc += exp(-globesWaterExt * tm) * globes_sunIn(lightTex, lightSamp, p + dir * tm, lit);
     }
     acc *= scat * h;
   }
@@ -1290,7 +1292,7 @@ fn globes_sprayShade(bgTex: texture_2d<f32>, bgSamp: sampler, x: vec3f, n: vec3f
   let n2 = normalize(x2 - c);
   var d2 = refract(d1, -n2, GLOBES_IOR_WATER);
   if (dot(d2, d2) < 0.5) { d2 = reflect(d1, -n2); }
-  let thru = (1.0 - F) * (1.0 - F) * exp(-GLOBES_WATER_EXT * (2.0 * r)) * globes_airAround(bgTex, bgSamp, x2, d2);
+  let thru = (1.0 - F) * (1.0 - F) * exp(-globesWaterExt * (2.0 * r)) * globes_airAround(bgTex, bgSamp, x2, d2);
   let glint = GLOBES_SUN_IRR * (F * 4.0 * pow(max(dot(reflect(dir, n), GLOBES_SUN_DIR), 0.0), 60.0));
   return vec4f(F * globes_airAround(bgTex, bgSamp, x, reflect(dir, n)) + thru + glint, 0.0);
 }
@@ -1375,7 +1377,7 @@ fn globes_splashAlong(splashTex: texture_3d<f32>, p: vec3f, dir: vec3f, a: f32, 
         if (inWater) {
           let E = globes_sunIn(lightTex, lightSamp, s.xyz, lit);
           sh = mix(globes_bubbleShade(x, nrm, dir, E), globes_bubbleWhole(E), whole);
-          sh = vec4f(sh.rgb * exp(-GLOBES_WATER_EXT * tm), sh.a);
+          sh = vec4f(sh.rgb * exp(-globesWaterExt * tm), sh.a);
         } else if (spray) {
           sh = mix(globes_sprayShade(bgTex, bgSamp, x, nrm, dir, s.xyz, r), globes_sprayWhole(bgTex, bgSamp, s.xyz), whole);
         } else {
@@ -1628,6 +1630,8 @@ fn globes_koiShade(pose: texture_2d<f32>, x: vec3f, n: vec3f, rd: vec3f, mat: f3
   return vec4f(albedo * (E * diff + amb * (1.0 + rim)) / 3.14159265 + E * spec, 1.0);
 }
 
+${bettaWGSL}
+
 // ---- kelp ------------------------------------------------------------------------------
 ${kelpRenderWGSL()}
 
@@ -1717,7 +1721,7 @@ var<private> globesKoiNear: bool;
 
 // gather: whether this ray gathers the light scattered off the water (shafts, motes: smooth,
 // so one ray of a pixel's four gathers it for all of them).
-fn globes_trace(ro: vec3f, rd: vec3f, rot: mat3x3f, vol: vec4f, prm: vec4f, densTex: texture_3d<f32>, densSamp: sampler, sandTex: texture_2d<f32>, sandSamp: sampler, causticTex: texture_2d<f32>, causticSamp: sampler, poseTex: texture_2d<f32>, lit: vec4f, lightTex: texture_3d<f32>, lightSamp: sampler, moteTex: texture_3d<f32>, fieldTex: texture_3d<f32>, fieldSamp: sampler, gather: f32, bgTex: texture_2d<f32>, bgSamp: sampler, kelpCellTex: texture_3d<f32>, kelpRefTex: texture_2d<f32>, kelpPrimTex: texture_2d<f32>, splashTex: texture_3d<f32>, dropTex: texture_2d<f32>${rt ? ', tlas: acceleration_structure' : ''}${foam ? FOAM_PARAMS : ''}) -> vec3f {
+fn globes_trace(ro: vec3f, rd: vec3f, rot: mat3x3f, vol: vec4f, prm: vec4f, densTex: texture_3d<f32>, densSamp: sampler, sandTex: texture_2d<f32>, sandSamp: sampler, causticTex: texture_2d<f32>, causticSamp: sampler, poseTex: texture_2d<f32>, lit: vec4f, lightTex: texture_3d<f32>, lightSamp: sampler, moteTex: texture_3d<f32>, fieldTex: texture_3d<f32>, fieldSamp: sampler, gather: f32, bgTex: texture_2d<f32>, bgSamp: sampler, kelpCellTex: texture_3d<f32>, kelpRefTex: texture_2d<f32>, kelpPrimTex: texture_2d<f32>, splashTex: texture_3d<f32>, dropTex: texture_2d<f32>${BETTA_PARAMS}${rt ? ', tlas: acceleration_structure' : ''}${foam ? FOAM_PARAMS : ''}) -> vec3f {
   let iso = prm.x;
   let stepLen = prm.y;
   let normalEps = prm.z;
@@ -1819,7 +1823,7 @@ fn globes_trace(ro: vec3f, rd: vec3f, rot: mat3x3f, vol: vec4f, prm: vec4f, dens
   // notes rays that pass near it).
   let koiMisc = textureLoad(poseTex, vec2i(KOI_MISC, 0), 0);
   // (The reef globe binds its clownfish in the koi's place: there is no koi.)
-  let koiVisible = !GLOBES_REEF && koiMisc.y > 0.5;
+  let koiVisible = !GLOBES_REEF && koiMisc.y > 0.5 && betta_tex(bettaTex, 0u).w < 0.5;
   let koiOn = GLOBES_KOI && koiVisible;
   let koiTime = koiMisc.z;
 
@@ -1862,7 +1866,9 @@ fn globes_trace(ro: vec3f, rd: vec3f, rot: mat3x3f, vol: vec4f, prm: vec4f, dens
       // (Its outline: the pixel's other rays may miss it, or meet it.)
       if (foodHit.near) { globesEdge |= 16u; }
     }
-    let tStop = min(min(min(tWall, kh.body), kelpHit.t), min(min(reefHit.t, fishT), foodHit.t));
+    var bh = BettaHit(1e9, 0xffffffffu, vec2f(0.0));
+    if (GLOBES_KOI) { bh = betta_trace(bettaTex, p, dir, tWall); }
+    let tStop = min(bh.t, min(min(min(tWall, kh.body), kelpHit.t), min(min(reefHit.t, fishT), foodHit.t)));
 
     // The water march: air/water interfaces and the sand bed, up to the koi, the kelp or the glass.
     var t = 0.5 * stepLen;
@@ -1936,6 +1942,8 @@ ${rt ? RT_MARCH : `    // The next sample is read with this one, where it will b
         if (past) { b = m; } else { a = m; }
       }
       t = 0.5 * (a + b);
+    } else if (GLOBES_KOI && bh.triangle != 0xffffffffu && bh.t <= tStop) {
+      event = 8; t = bh.t;
     } else if (GLOBES_FOOD && foodHit.k >= 0) {
       event = 7;
       t = foodHit.t;
@@ -1954,6 +1962,7 @@ ${rt ? RT_MARCH : `    // The next sample is read with this one, where it will b
     } else {
       t = tWall;
     }
+    if (!GLOBES_KOI && !globesKoiNear && betta_near(bettaTex, p, dir, t)) { globesKoiNear = true; }
     if (!GLOBES_KOI && koiVisible && !globesKoiNear) {
       globesKoiNear = globes_koiNear(poseTex, fieldTex, fieldSamp, p, dir, t);
     }
@@ -1973,7 +1982,7 @@ ${rt ? RT_MARCH : `    // The next sample is read with this one, where it will b
       var Tf = vec3f(1.0);
       if (inWater) {
         if (gather > 0.0) { globesGathered += thr * globes_waterLight(p, dir, tA, tf, pathLen, scat, lit, lightTex, lightSamp, moteTex, koiTime); }
-        Tf = exp(-GLOBES_WATER_EXT * tf);
+        Tf = exp(-globesWaterExt * tf);
       }
       let qf = p + dir * tf;
       koiHint = -1; // (a new place along the ray: search the whole spine)
@@ -1992,7 +2001,7 @@ ${rt ? RT_MARCH : `    // The next sample is read with this one, where it will b
       let sp = globes_splashAlong(splashTex, p, dir, 0.0, t, true, pathLen, lit, lightTex, lightSamp, bgTex, bgSamp);
       col += thr * sp.rgb;
       thr *= sp.a;
-      let T = exp(-GLOBES_WATER_EXT * t);
+      let T = exp(-globesWaterExt * t);
       col += thr * GLOBES_WATER_GLOW * (1.0 - T);
       thr *= T;
     } else {
@@ -2053,6 +2062,14 @@ ${rt ? RT_MARCH : `    // The next sample is read with this one, where it will b
       if (!globesKelpSolid) { globesEdge |= 16u; }
       col += thr * kelp_shade(kelpPrimTex, kelpHit, p, dir, inWater, lit, lightTex, lightSamp, lit.z * pathLen); // (pathLen now reaches the hit)
       return col;
+    }
+    if (GLOBES_KOI && event == 8) {
+      let sh = betta_shade(bettaTex, bettaAtlas, bettaSamp, bh, dir, p + dir * t, inWater, lit, lightTex, lightSamp);
+      col += thr * sh.rgb * sh.a;
+      if (sh.a > 0.99) { return col; }
+      thr *= 1.0 - sh.a;
+      p += dir * (t + 0.00005);
+      continue;
     }
     if (GLOBES_FOOD && event == 7) {
       col += thr * food_shade(poseTex, foodHit.k, p + dir * t, dir, inWater, lit, lightTex, lightSamp);
@@ -2134,12 +2151,13 @@ ${rt ? RT_MARCH : `    // The next sample is read with this one, where it will b
  *  and koi passes do. */
 export function globeShadeWGSL(rt = false, foam = false, oneGather = false): string {
   return /* wgsl */ `
-fn globes_shade(camPos: vec3f, fragPos: vec3f, fragCenter: vec3f, center: vec3f, rot: mat3x3f, vol: vec4f, prm: vec4f, aaRight: vec3f, aaUp: vec3f, densTex: texture_3d<f32>, densSamp: sampler, sandTex: texture_2d<f32>, sandSamp: sampler, causticTex: texture_2d<f32>, causticSamp: sampler, poseTex: texture_2d<f32>, lit: vec4f, lightTex: texture_3d<f32>, lightSamp: sampler, moteTex: texture_3d<f32>, fieldTex: texture_3d<f32>, fieldSamp: sampler, bgTex: texture_2d<f32>, bgSamp: sampler, deskM: mat4x4f, deskPlane: vec4f, glow: vec3f, kelpCellTex: texture_3d<f32>, kelpRefTex: texture_2d<f32>, kelpPrimTex: texture_2d<f32>, splashTex: texture_3d<f32>, dropTex: texture_2d<f32>${rt ? `, ${TLAS_PARAM}: texture_3d<u32>` : ''}${foam ? FOAM_PARAMS : ''}) -> vec4f {
+fn globes_shade(camPos: vec3f, fragPos: vec3f, fragCenter: vec3f, center: vec3f, rot: mat3x3f, vol: vec4f, prm: vec4f, aaRight: vec3f, aaUp: vec3f, densTex: texture_3d<f32>, densSamp: sampler, sandTex: texture_2d<f32>, sandSamp: sampler, causticTex: texture_2d<f32>, causticSamp: sampler, poseTex: texture_2d<f32>, lit: vec4f, lightTex: texture_3d<f32>, lightSamp: sampler, moteTex: texture_3d<f32>, fieldTex: texture_3d<f32>, fieldSamp: sampler, bgTex: texture_2d<f32>, bgSamp: sampler, deskM: mat4x4f, deskPlane: vec4f, glow: vec3f, kelpCellTex: texture_3d<f32>, kelpRefTex: texture_2d<f32>, kelpPrimTex: texture_2d<f32>, splashTex: texture_3d<f32>, dropTex: texture_2d<f32>${BETTA_PARAMS}${rt ? `, ${TLAS_PARAM}: texture_3d<u32>` : ''}${foam ? FOAM_PARAMS : ''}) -> vec4f {
   globesGlow = glow;
   let ro = camPos - center;
   let rd = normalize(fragPos - camPos);
   globesGathered = vec3f(0.0);
   globesKelpSolid = false;
+  globesWaterExt = GLOBES_WATER_EXT * select(1.0, 0.22, betta_tex(bettaTex, 0u).w > 0.5);
   globesKoiNear = false;
   globesEdge = 0u;
   globesDeskM = deskM;
@@ -2165,7 +2183,7 @@ fn globes_shade(camPos: vec3f, fragPos: vec3f, fragCenter: vec3f, center: vec3f,
       if (sqrt(max(dot(ro, ro) - b * b, 0.0)) - GLOBES_R_OUT < 3.0 * lit.z * abs(b)) { globesEdge |= 1u; }
     }
   } else {
-    col = globes_trace(ro, rd, rot, vol, prm, densTex, densSamp, sandTex, sandSamp, causticTex, causticSamp, poseTex, lit, lightTex, lightSamp, moteTex, fieldTex, fieldSamp, select(0.0, 1.0, gatherW > 0.0), bgTex, bgSamp, kelpCellTex, kelpRefTex, kelpPrimTex, splashTex, dropTex${rt ? `, ${TLAS_PARAM}` : ''}${foam ? ', foamTex, foamSamp, aerTex, aerSamp, foamPart, foamBins' : ''});
+    col = globes_trace(ro, rd, rot, vol, prm, densTex, densSamp, sandTex, sandSamp, causticTex, causticSamp, poseTex, lit, lightTex, lightSamp, moteTex, fieldTex, fieldSamp, select(0.0, 1.0, gatherW > 0.0), bgTex, bgSamp, kelpCellTex, kelpRefTex, kelpPrimTex, splashTex, dropTex${BETTA_ARGS}${rt ? `, ${TLAS_PARAM}` : ''}${foam ? ', foamTex, foamSamp, aerTex, aerSamp, foamPart, foamBins' : ''});
     cover = 1.0;
   }
   // w: whether the globe covers the ray's sample (on the desktop: the MSAA resolve makes it the

@@ -20,7 +20,7 @@
 import type { Vec3 } from './FluidSim';
 
 /** What a globe's water does when it is left alone. */
-export type IdleMotion = 'wave' | 'swirl' | 'sea' | 'surge';
+export type IdleMotion = 'still' | 'wave' | 'swirl' | 'sea' | 'surge';
 
 /** The water's centre of mass, read back from the GPU, and the simulated time it was read at. */
 interface Reading {
@@ -122,6 +122,7 @@ export class IdleWater {
    * @param reading the water's centre of mass as last read back (a new object with each reading)
    */
   update(dt: number, handled: boolean, reading: Reading | null): void {
+    if (this.kind === 'still') { this.on = 0; this.clear(); return; }
     this.watch(reading);
     this.left = handled ? 0 : this.left + dt;
     this.on = this.left > IDLE_AFTER ? Math.min(1, this.on + dt / FADE_IN) : Math.max(0, this.on - dt / FADE_OUT);

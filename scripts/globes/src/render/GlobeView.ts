@@ -18,6 +18,7 @@ import {
   wgslFn,
 } from 'three/tsl';
 import type { GlobeConfig, LightConfig } from '../config';
+import type { Betta } from '../fish/Betta';
 import { KOI_FIELD } from '../fish/koiWGSL';
 import { CLOWN_FIELD, CLOWN_FISH } from '../fish/clownWGSL';
 import type { KelpForest } from '../kelp/KelpForest';
@@ -125,6 +126,7 @@ export class GlobeView {
     reefClarity = 1,
     /** The sea foam globe's water colour (catalog.ts waterColour). */
     foamColour: readonly number[] = [1, 1, 1],
+    betta: Betta,
   ) {
     const desktop = 'desktop' in outside ? outside.desktop : null;
     this.outerRadius = globe.outerRadius;
@@ -197,6 +199,9 @@ export class GlobeView {
       causticTex: texture(caustics),
       causticSamp: texture(caustics),
       poseTex: texture(pose),
+      bettaTex: texture(betta.texture),
+      bettaAtlas: texture(betta.atlas),
+      bettaSamp: texture(betta.atlas),
       lit: this.uLit,
       lightTex: texture3D(shafts),
       lightSamp: texture3D(shafts),

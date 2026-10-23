@@ -243,3 +243,15 @@ test('turning long fins cup with the trunk, retain free-edge lag, and recover at
     assert.ok(rms<.035,`${fps}fps fin ${kind} failed to settle: ${rms}`);
   }
 });
+
+test('external solver flow overrides the artistic current and reverses membrane drag', () => {
+  const forward = make(), backward = make();
+  for (let i = 1; i <= 240; i++) {
+    const s = state(i / 60, 0, 'changing');
+    forward.advance(1 / 60, { ...s, externalFlow: [0, 0, 0.8] });
+    backward.advance(1 / 60, { ...s, externalFlow: [0, 0, -0.8] });
+  }
+  assert.ok(edgeMean(forward, 2) - edgeMean(backward, 2) > 0.1);
+  assert.equal(forward.metrics().anchorError, 0);
+  assert.equal(backward.metrics().anchorError, 0);
+});

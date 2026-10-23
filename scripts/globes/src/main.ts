@@ -5,6 +5,7 @@ import { AppShell, type DesktopHost } from './app/AppShell';
 import { GLOBES, type GlobeEntry } from './app/catalog';
 import { applyUrlOverrides, fishConfig, globeConfig, lightConfig, simConfig, type GlobeConfig, type LightConfig, type SimConfig } from './config';
 import { DeskMapping, loadDesk, type DesktopHostApi } from './desktop/desktopScene';
+import { Betta } from './fish/Betta';
 import { Koi, type KoiEnv } from './fish/Koi';
 import { CLOWN_PROBES, Clownfishes } from './fish/Clownfish';
 import { FishFood, type Feeder } from './fish/FishFood';
@@ -98,7 +99,9 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   stage.prepend(renderer.domElement);
   await renderer.init();
 
-  const cfg = applyUrlOverrides(LITE ? { ...simConfig, gridRes: 48 } : simConfig);
+  // The articulated specimen needs cadence more than sub-pixel fluid detail.
+  // Preserve the original five scenes' defaults; explicit URL overrides still win.
+  const cfg = applyUrlOverrides(LITE ? { ...simConfig, gridRes: 48 } : o.start.betta ? { ...simConfig, gridRes: 64 } : simConfig);
   const R = o.globe.innerRadius;
   const fill = (g: GlobeEntry) => fillFor(cfg, R, g.water);
   const sim = new FluidSim(device, { ...cfg, fillFraction: fill(o.start) }, R, o.globe.outerRadius, o.light);
@@ -113,6 +116,24 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   });
   const koi = new Koi(device, fishConfig, koiEnv());
   sim.koiPose = koi.texture;
+  const betta = new Betta();
+  const bettaControls = document.createElement('div');
+  bettaControls.className = 'betta-controls';
+  bettaControls.innerHTML = '<span>Living Silk</span><button type="button" aria-pressed="false">Flare fins</button>';
+  const flareButton = bettaControls.querySelector('button')!;
+  flareButton.disabled = true;
+  void betta.ready.then(() => { flareButton.disabled = false; }).catch((error: unknown) => {
+    console.warn('[globes] betta textures:', error);
+    flareButton.textContent = 'Fish textures unavailable';
+    flareButton.title = 'Reload to retry loading the betta. The other globes remain available.';
+  });
+  bettaControls.addEventListener('pointerdown', e => e.stopPropagation());
+  flareButton.addEventListener('click', () => {
+    betta.flared = !betta.flared;
+    flareButton.setAttribute('aria-pressed', String(betta.flared));
+    flareButton.textContent = betta.flared ? 'Relax fins' : 'Flare fins';
+  });
+  stage.append(bettaControls);
   // The kelp forest, laid out for the kelp globe's water; simulated and drawn only there.
   const kelpGlobe = GLOBES.find((g) => g.kelp);
   const kelpLevel = -R + fillHeight(R, kelpGlobe ? fill(kelpGlobe) : cfg.fillFraction);
@@ -158,8 +179,8 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   new ResizeObserver(fit).observe(stage);
 
   // ?aa=1 traces one ray per pixel instead of four (cheaper, aliased waterline).
-  const samples = Number(params.get('aa') ?? (LITE ? 1 : 4));
-  const globe = new GlobeView(sim, o.globe, o.light, koi.texture, samples, ocean ? { ocean: ocean.map.texture } : { desktop: o.desk! }, kelp, reef, clowns.texture, GLOBES.find((g) => g.reef)?.clarity, GLOBES.find((g) => g.foam)?.waterColour);
+  const samples = Number(params.get('aa') ?? (LITE || o.start.betta ? 1 : 4));
+  const globe = new GlobeView(sim, o.globe, o.light, koi.texture, samples, ocean ? { ocean: ocean.map.texture } : { desktop: o.desk! }, kelp, reef, clowns.texture, GLOBES.find((g) => g.reef)?.clarity, GLOBES.find((g) => g.foam)?.waterColour, betta);
   scene.add(globe.mesh);
   // Before the first frame, behind the splash: the water settles, and meanwhile every globe's
   // pipelines are built (and the software tracers' where the device traces in hardware). Built
@@ -173,6 +194,9 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   let shown = o.start;
   const setScene = (g: GlobeEntry): void => {
     koi.visible = g.koi;
+    betta.active = !!g.betta;
+    bettaControls.hidden = !betta.active;
+    betta.update(0, sim.koiSense, koiEnv());
     const kelpOn = !!g.kelp;
     if (kelpOn && !kelp.active) kelp.reset();
     kelp.active = kelpOn;
@@ -186,6 +210,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     food.enabled = g.koi || reefOn;
     food.setReef(reefOn ? clowns.crown : null);
     sim.clarity = g.clarity ?? 1;
+    globe.uLit.value.y = o.light.shaftScatter * (g.betta ? 0.18 : 1);
     sim.waterColour = g.waterColour ?? [1, 1, 1];
     sim.foaming = !!g.foam;
     globe.setVariant(kelpOn ? 'kelp' : reefOn ? 'reef' : g.foam ? 'foam' : 'plain');
@@ -212,7 +237,8 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     const eaters = feeders();
     food.aim(eaters);
     koi.update(dt, sim.koiSense, koiEnv());
-    sim.setKoiProbes(koi.probePoints());
+    betta.update(dt, sim.koiSense, koiEnv());
+    sim.setKoiProbes(betta.active ? betta.probePoints() : koi.probePoints());
     sim.koiVisible = koi.visible;
     if (reef.active) {
       // The clownfish (acting on what the water told them a frame or two ago), then the anemone,
@@ -268,7 +294,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     return food.spawn([p.x, p.y, p.z], feeders().length);
   };
 
-  return { device, renderer, camera, scene, cfg, sim, controller, koi, kelp, reef, clowns, food, idle, globe, globeRadius: o.globe.outerRadius, ocean, specks, setScene, advance, spawnFood };
+  return { device, renderer, camera, scene, cfg, sim, controller, koi, betta, kelp, reef, clowns, food, idle, globe, globeRadius: o.globe.outerRadius, ocean, specks, setScene, advance, spawnFood };
 }
 
 type World = Awaited<ReturnType<typeof createWorld>>;
@@ -331,7 +357,7 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
     }
   });
 
-  if (import.meta.env.DEV) {
+  if (import.meta.env.DEV || params.has('qa')) {
     const tick = (dt: number) => advance(dt);
     const g = window as unknown as { __globes?: object };
     g.__globes = { ...g.__globes, THREE, ...world, tick, renderTimes };
