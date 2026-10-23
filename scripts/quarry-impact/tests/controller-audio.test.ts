@@ -4,6 +4,8 @@ import {Sound} from '../src/audio';
 
 class AudioNodeFixture {
   gain={value:0};
+  // Biquad filters (daze low-pass, fire loops) since release 132.
+  type='';frequency={value:0,setTargetAtTime(){}};Q={value:0};
   threshold={value:0};
   knee={value:0};
   ratio={value:0};
@@ -29,6 +31,7 @@ class AudioContextFixture {
   createGain(){return new AudioNodeFixture();}
   createDynamicsCompressor(){return new AudioNodeFixture();}
   createPanner(){return new AudioNodeFixture();}
+  createBiquadFilter(){return new AudioNodeFixture();}
   createBufferSource(){const source=new AudioNodeFixture();this.sources.push(source);return source;}
   async decodeAudioData(_data:ArrayBuffer){
     this.decodeCalls++;

@@ -20,6 +20,12 @@ import type { Vehicle } from './vehicle';
 import * as T from 'three';
 import type { ThermalAudio } from './vehicle-fire';
 type Loop = { source: AudioBufferSourceNode; gain: GainNode; pan: PannerNode };
+const ENGINE_CENTERS:{readonly [k:string]:number}={idle:850,low:2200,mid:4100,high:6500};
+/** The last gain/rate each engine-layer loop was sent: an unchanged (to within an inaudible step) value is not rescheduled
+ * every frame for every car. */
+const loopTargets=new WeakMap<Loop,{gain:number;rate:number}>();
+function setGain(l:Loop,v:number,time:number,tau:number){const t=loopTargets.get(l)??{gain:NaN,rate:NaN};if(!(Math.abs(t.gain-v)<=.002&&(v!==0||t.gain===0))){l.gain.gain.setTargetAtTime(v,time,tau);t.gain=v;loopTargets.set(l,t);}}
+function setRate(l:Loop,v:number,time:number,tau:number){const t=loopTargets.get(l)??{gain:NaN,rate:NaN};if(!(Math.abs(t.rate-v)<=.003)){l.source.playbackRate.setTargetAtTime(v,time,tau);t.rate=v;loopTargets.set(l,t);}}
 /** Seconds a damage loop (squeal, growl) is kept, silent, after it falls quiet, before its nodes are released. */
 const LOOP_HOLD=2;
 import {CrowdRoar} from './crowd-roar';
@@ -430,20 +436,11 @@ export class Sound {
         l.pan.positionY.value = car.current.y;
         l.pan.positionZ.value = car.current.z;
         let v = 0;
-        const centers: { [k: string]: number } = {
-          idle: 850,
-          low: 2200,
-          mid: 4100,
-          high: 6500,
-        };
+        const centers=ENGINE_CENTERS;
         if (name in centers) {
           v = Math.max(0, 1 - Math.abs(Math.min(rpm,6500) - centers[name]) / 2100) * level * cut * (car.extendedDamage ? exhaustLoudness(car.exhaustBlow) : 1);
           if (car.health === 0) v = 0;
-          l.source.playbackRate.setTargetAtTime(
-            Math.max(0.72, Math.min(1.4, (rpm / centers[name]) * doppler))*classicEngineVoice(car.kind).pitch,
-            c.currentTime,
-            0.13,
-          );
+          setRate(l,Math.max(0.72, Math.min(1.4, (rpm / centers[name]) * doppler))*classicEngineVoice(car.kind).pitch,c.currentTime,0.13);
         } else if (name === 'gear-grind') v=car.health>0?.16*Math.min(1,(car.transmission?.grind??0)/.3):0;
         else if (name === 'starter') v=car.health>0&&car.engineStall!>0&&car.rpm>0?.13:0;
         else if (name === 'load') v = Math.abs(car.input.throttle) * 0.07 * cut;
@@ -460,14 +457,14 @@ export class Sound {
               : 0;
         else if (name === 'scrape'||name==='scrape-loose'){
           const loose=name==='scrape-loose';v=loose?scrapeMix.looseGain:scrapeMix.metalGain;
-          l.source.playbackRate.setTargetAtTime((loose?scrapeMix.looseRate:scrapeMix.metalRate)*doppler,c.currentTime,.13);
+          setRate(l,(loose?scrapeMix.looseRate:scrapeMix.metalRate)*doppler,c.currentTime,.13);
         }
         if (!grounded && ['tires','gravel'].includes(name)) v=0;
         if (car.health <= 0 && !['tires', 'gravel', 'scrape', 'scrape-loose'].includes(name))
           v = 0;
         if(car.engineStall!>0&&['idle','low','mid','high','load','damaged'].includes(name))v=0;
         if(wreckInspection)v=0;
-        l.gain.gain.setTargetAtTime(v, c.currentTime, 0.08);
+        setGain(l,v,c.currentTime,0.08);
       }
     }
   }
