@@ -25,7 +25,9 @@ The specimen is imported from
 `../betta-atelier/src/fish.js` with optional compact tessellation. It keeps the
 shared anatomy, breathing, one-second flare and synchronized gaze, with the
 full-fin compliance and head-led turning revision described below.
-The Atelier's normal tessellation and standalone compiled demo are unchanged.
+The Atelier's normal tessellation is unchanged. The standalone compiled demo was
+rebuilt as Atelier 1.8 to adopt the shared motion and shader changes (see its
+README).
 
 `src/fish/Betta.ts` evaluates the same vertex deformations on the CPU, refits a
 stackless triangle BVH, and uploads it to an RGBA32F texture. `bettaWGSL.ts`
@@ -125,8 +127,8 @@ motion while pitching/rolling, so transported water does not create false drag.
 The Atelier accepts optional host-owned `locomotion`
 (position/velocity/speed in model units, heading/pitch/roll in radians, angularVelocity/steerRate,
 drive and mode); without it the standalone choreography still runs. The shared
-solver source includes the flexibility changes, but the standalone published
-bundle is deliberately not rebuilt by this globe release.
+solver source includes the flexibility changes; the standalone published bundle
+adopted them in Atelier 1.8.
 This is an artistic coupling, not a fully coupled
 fish/fluid solver or instantaneous collision against every turbulent wave. The
 betta does not eat the Koi scene's food. The **Flare fins / Relax fins** button controls the display; each opening

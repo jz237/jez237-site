@@ -1,19 +1,18 @@
-# Living Silk — Betta Atelier 1.7
+# Living Silk — Betta Atelier 1.8
 
-The standalone published build remains 1.7. Shared source also includes the globe
-1.4 motion revision: broad fins bend across their full span rather than pinning
-the inner half to a target; globe 1.5 then stiffened the root third and trimmed
-shear/billow so the free edge flexes more than the base. Ray-length constraints,
-root attachment and the one-second display remain. Optional host locomotion supplies model-space speed
+The standalone published build is 1.8, which adopts the shared-source changes made
+for the globe: broad fins bend across their full span (globe 1.4) with a stiffer
+root third and trimmed shear/billow so the free edge flexes more than the base
+(globe 1.5). Ray-length constraints, root attachment and the one-second display
+remain. Optional host locomotion supplies model-space speed
 and a separate voluntary `steerRate` for delayed head-to-tail tangent memory and
 deep, curvature-limited turns. The globe anchors its route at the neck and keeps
 passive fluid rotation separate from muscle flexion. Host `locomotion.gulp` and
 `locomotion.gulpGill` (0..1.1, default 0) drive the jaw opening and opercular pulse
 of the globe's surface air gulp; each replaces the breathing value only while larger.
-See
+See [Atelier 1.8](#atelier-18-2026-10-23) below for what the standalone itself gained, and
 [`../globes/HOSTING.md`](../globes/HOSTING.md) for the integration and verification
-procedure. Rebuilding this standalone directory would adopt the shared-source
-changes; the globe revision deliberately does not rebuild its compiled demo.
+procedure.
 
 An interactive, genuinely volumetric male halfmoon Betta study for Jez237.
 Live: https://jez237.com/demos/betta-atelier/
@@ -317,5 +316,41 @@ Animated materials expose `userData.bettaDeform` so a CPU adapter can evaluate t
 same spine, cover lift and fin displacement used by the WebGL vertex shader.
 Optional `fish.userData.externalFlow` is a world-frame velocity in Atelier units;
 when present it replaces the artistic current for both effort and membrane drag.
-The globe adapter converts its solver units explicitly. These are additive hooks;
-the standalone v1.7 compiled demo is not changed by the integration release.
+The globe adapter converts its solver units explicitly. These are additive hooks.
+
+## Atelier 1.8 (2026-10-23)
+
+Jez asked for the globe's betta realism improvements on the bowl-free Living Silk
+demo. Rebuilt from the shared source; the following are the standalone-specific
+parts.
+
+- **Head-led turns.** The standalone choreography now feeds its heading rate to
+  `BodyMotion.advanceTurn`, so the 180-degree pivot leads with the head and the
+  body uncoils behind it as a U-bend (the 1.7 build used a symmetric C-bend). The
+  uncoil takes about one second longer than the 1.7 swing.
+- **Surface air gulp.** `src/surface-gulp.js` schedules a labyrinth-fish breath:
+  during the second hover of every third 32-second cycle (t mod 96 in
+  [17.4, 25.2)) the betta climbs, pitches nose-up with its lip pinned just under the
+  surface, opens the jaw with a delayed gill-cover pulse, and dives back. The
+  climb waits 1.4 s so the preceding turn has uncoiled. It is scheduled, not
+  fluid-driven, runs only in the portrait view and not in inspection views, and is
+  frozen by pause and reduced-motion.
+- **Water surface.** A dark silvery rippled plane sits at the gulp height; a ripple
+  ring starts at the lip during the gulp. It is a shader approximation with no
+  true reflection of the fish.
+- **Fin rays and skin.** The membrane shader modulates opacity and normals with
+  anti-aliased two-level ray lines, adds a back-glow from the key lights, and the
+  skin gains a faint thin-film hue shift over the flank. The reference textures
+  already carry rays, so these changes are subtle.
+- **Not ported.** The globe's sun self-shadow and sand shadow (no sun or sand in
+  this scene).
+- `window.__betta.advance(seconds)` steps the simulation at 60 Hz for
+  deterministic QA captures.
+
+Tests: `npm test` runs the existing suites plus `surface-gulp.test.mjs`
+(window edges, monotone lift, gulp clock only at full lift, mouth/gill envelopes,
+periodicity, propulsion assist only during climb and dive). Browser QA covered the
+portrait overview, gulp sequence, both head-led turns, a 390-px phone portrait,
+flared/relaxed fins, water flow, reduced-motion start-paused and an interleaved
+old-vs-new frame-rate comparison (both ~58–60 fps on the host GPU; not a phone
+benchmark).

@@ -4,6 +4,7 @@ import { FinDynamics, water, waterVelocity } from "./fin-dynamics.js";
 import { BodyMotion, bodyGLSL, SPINE_COUNT } from "./body-motion.js";
 import { DisplayMotion, EyeMotion } from "./display-motion.js";
 import { SwimGait } from "./swim-gait.js";
+import { gulpState, gulpPresentation, SURFACE_Y, MOUTH_DEPTH, GULP_PITCH } from "./surface-gulp.js";
 const PI = Math.PI,
   lerp = T.MathUtils.lerp,
   clamp = T.MathUtils.clamp;
@@ -654,14 +655,19 @@ export function createBetta({ compact = false } = {}) {
     heading = 0.12,
     tx = 0.3,
     ty = 0,
-    turn = 0;
+    turn = 0,
+    lift = 0,
+    gulpOpen = 0,
+    gulpGill = 0;
   const cycle = 32;
+  const lipLocal = [0, 0, 0, 0], lipWorld = new T.Vector3();
   fish.userData = {
     ready: Promise.all([loaded, finLoaded, ...macroPending]),
     macroTextures,
     scaleCount: 0,
     finCount: 7,
-    revision: "1.7",
+    revision: "1.8",
+    gulp: { lift: 0, phase: "none", clock: -1, lip: [0, 0, 0], surfaceY: SURFACE_Y },
     display, eyes,
     gait,
     bodyMotion,
@@ -734,6 +740,14 @@ export function createBetta({ compact = false } = {}) {
       // Optional host-owned locomotion (e.g. the globe). Without it the
       // standalone Atelier keeps its original inspection choreography.
       const locomotion = fish.userData.locomotion;
+      // Standalone surface air gulp; a host with its own locomotion supplies its own.
+      const trip = locomotion || inspect ? null : gulpState(t);
+      lift = T.MathUtils.damp(lift, trip ? trip.lift : 0, 6, dt);
+      if (lift < 1e-4 && !trip?.lift) lift = 0;
+      const shown = gulpPresentation(trip, lift);
+      gulpOpen = T.MathUtils.damp(gulpOpen, shown.mouth, 25, dt);
+      gulpGill = T.MathUtils.damp(gulpGill, shown.gill, 25, dt);
+      if (trip && trip.phase !== "none") { desired += 0.14 * trip.swim; mode = "surface"; }
       if (locomotion) { desired = locomotion.drive; mode = locomotion.mode; }
       drive = T.MathUtils.damp(drive, desired, 3, dt);
       const old = heading;
@@ -759,8 +773,17 @@ export function createBetta({ compact = false } = {}) {
       fish.rotation.set(
         0.004 * Math.sin(t * 0.57),
         heading,
-        0.004 * Math.sin(t * 0.71) - drive * 0.025,
+        0.004 * Math.sin(t * 0.71) - drive * 0.025 - lift * GULP_PITCH,
       );
+      if (lift > 1e-4) {
+        // Hold the mouth just under the surface, blended in with the climb.
+        fish.updateMatrixWorld(true);
+        bodyMotion.transform(-1.68, 0.0832, 0, lipLocal);
+        fish.localToWorld(lipWorld.set(lipLocal[0], lipLocal[1], lipLocal[2]));
+        const shift = lift * (SURFACE_Y - MOUTH_DEPTH - lipWorld.y);
+        fish.position.y += shift;
+        lipWorld.y += shift;
+      }
       if (locomotion) {
         fish.position.fromArray(locomotion.position);
         fish.rotation.set(locomotion.roll ?? 0, heading, -locomotion.pitch, 'YZX');
@@ -783,8 +806,14 @@ export function createBetta({ compact = false } = {}) {
       const relativeFlow = Math.hypot(...localFlow.map((v, i) => v - velocity[i]));
       gait.advance(dt, drive, relativeFlow, turn);
       const { phase, effort, breathPhase, pectoralPhase } = gait;
-      if (locomotion) bodyMotion.advanceTurn(dt, locomotion.steerRate ?? angularVelocity, locomotion.speed ?? 0);
-      bodyMotion.update(phase, effort, turn, breathPhase, locomotion?.gulp ?? 0, locomotion?.gulpGill ?? 0);
+      // The standalone turn also leads with the neck; the rear follows the head's tangent.
+      bodyMotion.advanceTurn(dt, locomotion ? locomotion.steerRate ?? angularVelocity : turn, locomotion ? locomotion.speed ?? 0 : Math.hypot(...velocity));
+      bodyMotion.update(phase, effort, turn, breathPhase, locomotion?.gulp ?? gulpOpen, locomotion?.gulpGill ?? gulpGill);
+      if (lift > 0 || fish.userData.gulp.lift > 0) {
+        const g = fish.userData.gulp;
+        g.lift = lift; g.phase = shown.phase; g.clock = shown.clock;
+        lipWorld.toArray(g.lip);
+      }
       spineTexture.needsUpdate = dt > 0;
       uniforms.uPhase.value = phase;
       uniforms.uDrive.value = drive;

@@ -73,7 +73,43 @@ vec3 sectionPigment(vec2 uv){
  float grain=clamp(luminanceBetta(fineTissue(uv))*1.5,-.10,.10);return base*(1.+grain*edge);
 }
 float microHeight(vec2 uv){return luminanceBetta(basePigment(uv))+luminanceBetta(fineTissue(uv))*.20;}
+// Fin rays against the membrane between them: 0 membrane, 1 ray. One ray period is
+// 1/28 of u (matching the sculpted ridges); the pattern fades once a pixel spans a
+// fraction of it, so zoomed-out views do not shimmer. Branching rays near the fringe.
+float finRays(vec2 f){
+ float px=fwidth(f.x)*28.;
+ float r1=smoothstep(.7,1.,sin(f.x*175.929))*(1.-smoothstep(.25,.65,px));
+ float r2=smoothstep(.4,.85,f.y)*.65*smoothstep(.7,1.,sin(f.x*351.858+1.3))*(1.-smoothstep(.25,.65,px*2.));
+ return max(r1,r2);
+}
 `;
+    // Translucent membrane: clearer toward the fringe, more opaque along the rays,
+    // glowing in its own colour when a light shines through from behind.
+    const membraneLight = `
+ float rays=finRays(vMacroFinUV);
+ {
+  vec3 viewDir=normalize(vViewPosition);
+  float ndv=clamp(dot(normal,viewDir),0.,1.);
+  vec2 dH=vec2(dFdx(rays),dFdy(rays))*.0035;
+  normal=perturbNormalArb(-vViewPosition,normal,dH,faceDirection);
+  float shape=mix(.94,.74,smoothstep(.2,1.,vMacroFinUV.y));
+  shape=mix(shape,.97,rays);
+  diffuseColor.a=1.-pow(1.-shape,1./max(ndv,.34));
+  vec3 hue=pow(diffuseColor.rgb,vec3(.8));
+  vec3 through=vec3(0.);
+  #if NUM_DIR_LIGHTS > 0
+  for(int i=0;i<NUM_DIR_LIGHTS;i++) through+=directionalLights[i].color*max(-dot(normal,directionalLights[i].direction),0.);
+  #endif
+  totalEmissiveRadiance+=hue*through*.2*(1.-.55*rays)*(.55+.45*vMacroFinUV.y);
+ }`;
+    // Wet skin: a thin-film shift of hue with viewing angle on the flank scales.
+    const skinLight = `
+ {
+  float ndv=clamp(dot(normal,normalize(vViewPosition)),0.,1.);
+  float phase=(1.-ndv)*4.2+diffuseColor.b*.8;
+  vec3 irid=.5+.5*cos(6.2831853*(phase+vec3(0.,.33,.67)));
+  diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*(.6+.8*irid),.3*flankMask(vMapUv));
+ }`;
     // Insert after map sampler declarations, before the bump-gradient functions.
     shader.fragmentShader = shader.fragmentShader.replace(
       "#include <bumpmap_pars_fragment>",
@@ -102,9 +138,14 @@ float microHeight(vec2 uv){return luminanceBetta(basePigment(uv))+luminanceBetta
         "#include <roughnessmap_fragment>",
         `#include <roughnessmap_fragment>\nroughnessFactor=clamp(roughnessFactor+(1.-microHeight(vMapUv))*.10-.045,.28,.88);`,
       );
-
+    const light = fin ? membraneLight : eye ? "" : skinLight;
+    if (light)
+      shader.fragmentShader = shader.fragmentShader.replace(
+        "#include <emissivemap_fragment>",
+        "#include <emissivemap_fragment>\n" + light,
+      );
   };
   material.customProgramCacheKey = () =>
-    `betta-macro-1.6-${fin}-${caudal}-${eye}-${motionKey}`;
+    `betta-macro-1.8-${fin}-${caudal}-${eye}-${motionKey}`;
   return material;
 }

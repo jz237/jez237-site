@@ -75,6 +75,68 @@ float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}void 
 );
 bg.position.z = -7;
 scene.add(bg);
+// The water surface seen from below: a silvery rippled ceiling. Total internal
+// reflection makes it a mirror at the oblique angles of this view; it is a
+// shader-only approximation (it does not reflect the fish or other scene objects).
+const surface = new T.Mesh(
+  new T.PlaneGeometry(70, 50),
+  new T.ShaderMaterial({
+    transparent: true,
+    depthWrite: true,
+    uniforms: {
+      time: { value: 0 },
+      ripple: { value: -1 },
+      ripplePos: { value: new T.Vector2() },
+      fogColor: { value: scene.fog.color },
+      fogDensity: { value: scene.fog.density },
+    },
+    vertexShader:
+      "varying vec3 vW;void main(){vec4 w=modelMatrix*vec4(position,1.);vW=w.xyz;gl_Position=projectionMatrix*viewMatrix*w;}",
+    fragmentShader: `varying vec3 vW;uniform float time,ripple,fogDensity;uniform vec2 ripplePos;uniform vec3 fogColor;
+float wave(vec2 p){return sin(dot(p,vec2(1.3,.7))*2.1+time*.6)*.5+sin(dot(p,vec2(-.8,1.4))*3.3-time*.8)*.3+sin(dot(p,vec2(2.1,-1.1))*5.7+time*1.1)*.18+sin(dot(p,vec2(-2.7,-1.9))*9.1-time*1.5)*.1;}
+void main(){
+ vec2 p=vW.xz,e=vec2(.02,0.);
+ vec2 g=vec2(wave(p+e.xy)-wave(p-e.xy),wave(p+e.yx)-wave(p-e.yx))/(.04);
+ vec2 rv=p-ripplePos;float r=length(rv);float ring=0.;
+ if(ripple>=0.){float front=ripple*.85,k=(r-front);float env=exp(-25.*k*k)*exp(-ripple*.7)*smoothstep(0.,.3,ripple);ring=sin(k*30.)*env;g+=normalize(rv+1e-4)*cos(k*30.)*env*7.;}
+ vec3 n=normalize(vec3(g.x*.05,-1.,g.y*.05));
+ vec3 v=normalize(cameraPosition-vW);
+ float c=clamp(dot(n,v),0.,1.);
+ float refl=smoothstep(.62,.78,sqrt(1.-c*c));
+ float mottle=clamp(.5+.5*wave(p*1.7+vec2(time*.1,-time*.07)),0.,1.);
+ vec3 mirror=vec3(.006,.020,.021)*(.7+2.4*pow(mottle,3.))+vec3(.010,.022,.020)*pow(1.-c,3.);
+ vec3 window=vec3(.05,.15,.15)*(.7+.5*mottle);
+ vec3 col=mix(window,mirror,refl)+vec3(.55,.8,.75)*max(ring,0.)*.05;
+ float d=length(cameraPosition-vW);
+ col=mix(col,fogColor,1.-exp(-fogDensity*fogDensity*d*d));
+ // The ceiling dissolves into the dark water before it meets the backdrop plane.
+ float far=smoothstep(-6.2,1.5,vW.z);
+ gl_FragColor=vec4(col,.92*far);
+}`,
+  }),
+);
+// Drawn first among the transparents and writing depth, so dust above the water is
+// hidden by the surface while dust and fins in front of it still show.
+surface.renderOrder = -1;
+surface.rotation.x = Math.PI / 2;
+surface.position.y = fish.userData.gulp.surfaceY;
+scene.add(surface);
+let rippleAge = -1,
+  rippled = false;
+function stepSurface(dt, time) {
+  const g = fish.userData.gulp;
+  if (g.phase === "gulp" && !rippled) {
+    rippled = true;
+    rippleAge = 0;
+    surface.material.uniforms.ripplePos.value.set(g.lip[0], g.lip[2]);
+  } else if (g.phase === "none") rippled = false;
+  if (rippleAge >= 0) {
+    rippleAge += dt;
+    if (rippleAge > 7) rippleAge = -1;
+  }
+  surface.material.uniforms.ripple.value = rippleAge;
+  surface.material.uniforms.time.value = time;
+}
 let seed = 9273;
 const rand = () => {
   seed = (seed * 1664525 + 1013904223) >>> 0;
@@ -267,6 +329,7 @@ function draw(now) {
   last = now;
   if (!paused) t += dt;
   fish.userData.update(t, selected !== "portrait");
+  stepSurface(paused ? 0 : dt, t);
   if (!paused) {
     for (let i = 0; i < n; i++) {
       const k = i * 3;
@@ -306,6 +369,15 @@ window.__betta = {
   renderer,
   uniforms,
   view,
+  surface,
+  advance(seconds) {
+    const steps = Math.max(1, Math.round(seconds * 60));
+    for (let i = 0; i < steps; i++) {
+      t += 1 / 60;
+      fish.userData.update(t, selected !== "portrait");
+      stepSurface(1 / 60, t);
+    }
+  },
   get time() {
     return t;
   },
