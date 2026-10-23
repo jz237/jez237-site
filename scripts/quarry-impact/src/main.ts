@@ -93,7 +93,7 @@ import {loadGhostLibrary,saveGhostLibrary,findTrialGhost,raceTrialGhost,sharedTr
 import {TrialGhostView,createTrialGhostView} from './trial-ghost-view';
 import {formatTrialDelta} from './time-trial';
 import {createRedbankWorld} from './redbank-world';
-import {DAMAGE_RULES,sessionDamageRule,collisionDamageMultiplier,impactSpeedFactor,IMPACT_SPEED,DERBY_PACE,SMASH,isSmash,smashLabel,impactSoundScale,hangingOn,damageRecordKey} from './damage-rules';
+import {DAMAGE_RULES,sessionDamageRule,collisionDamageMultiplier,impactSpeedFactor,IMPACT_SPEED,DERBY_PACE,SMASH,isSmash,smashLabel,impactSoundScale,hangingOn,massShare,sharedDamage,damageRecordKey} from './damage-rules';
 import {eventGridSetup,eventPerformanceGrid} from './grid-setup';
 import {gridCarKind,gridRecordKey,GRID_LINEUPS,GRID_PERFORMANCE} from './grid-rules';
 import {timedRaceLimit,timedRaceFinished,timedRaceOrder,timedRaceResult,timedRaceRecordScore} from './timed-race';
@@ -1616,16 +1616,18 @@ function step(dt: number) {
     const smashLoss={a:0,b:0};
     // Who had hurt the player most before this contact (a mutual crash must not count as revenge for itself).
     const rivalBefore=!online?.active&&a&&b&&(a.id===0||b.id===0)?eventAwards.rivalOf(0):null;
+    // Weight matters (offline): the lighter car takes the larger share of a car-to-car crash.
+    const [shareA,shareB]=!online?.active&&a&&b?[massShare(a.body.mass(),b.body.mass()),massShare(b.body.mass(),a.body.mass())]:[1,1];
     if(a){
       const before=a.health;
-      const strippedA=stripCount(a);a.collisionHit(point1,vb.clone().sub(va).normalize(),damage,elapsed,b?.paintColor);if(b)creditStrip(b,a,strippedA);
+      const strippedA=stripCount(a);a.collisionHit(point1,vb.clone().sub(va).normalize(),sharedDamage(damage,shareA),elapsed,b?.paintColor);if(b)creditStrip(b,a,strippedA);
       if(b){b.inflicted+=before-a.health;const wreck=eventAwards.hit(b.id,a.id,before-a.health,before>0&&a.health<=0,elapsed,closing);if(wreck)sound.crowd(b.id===0?1:.7);if(wreck&&b.id===0&&!demo&&!online?.active){slowMoUntil=clock+TAKEDOWN_SLOWMO.seconds;slowMoScale=TAKEDOWN_SLOWMO.scale;crowdFlashes(TAKEDOWN_FLASHES);}else if(before-a.health>=12)sound.crowd(b.id===0?.6:.4);if(wreck&&b.id===0){callout('TAKEDOWN',a);playerTakedown();}else if(b.id===0&&before-a.health>=12)callout('BIG HIT',a);combat.hit(b.id,a.id,before,a.health,elapsed);if(mode==='derby')combat.contact(scoreMotion[b.id],scoreMotion[a.id],before-a.health,elapsed);}
       if(b?.id===0)telemetry?.impact(a.id,before,a.health);
       smashLoss.a=before-a.health;
     }
     if(b){
       const before=b.health;
-      const strippedB=stripCount(b);b.collisionHit(point2,va.clone().sub(vb).normalize(),damage,elapsed,a?.paintColor);if(a)creditStrip(a,b,strippedB);
+      const strippedB=stripCount(b);b.collisionHit(point2,va.clone().sub(vb).normalize(),sharedDamage(damage,shareB),elapsed,a?.paintColor);if(a)creditStrip(a,b,strippedB);
       if(a){a.inflicted+=before-b.health;const wreck=eventAwards.hit(a.id,b.id,before-b.health,before>0&&b.health<=0,elapsed,closing);if(wreck)sound.crowd(a.id===0?1:.7);if(wreck&&a.id===0&&!demo&&!online?.active){slowMoUntil=clock+TAKEDOWN_SLOWMO.seconds;slowMoScale=TAKEDOWN_SLOWMO.scale;crowdFlashes(TAKEDOWN_FLASHES);}else if(before-b.health>=12)sound.crowd(a.id===0?.6:.4);if(wreck&&a.id===0){callout('TAKEDOWN',b);playerTakedown();}else if(a.id===0&&before-b.health>=12)callout('BIG HIT',b);combat.hit(a.id,b.id,before,b.health,elapsed);if(mode==='derby')combat.contact(scoreMotion[a.id],scoreMotion[b.id],before-b.health,elapsed);}
       if(a?.id===0)telemetry?.impact(b.id,before,b.health);
       smashLoss.b=before-b.health;
