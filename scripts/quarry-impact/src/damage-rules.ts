@@ -29,3 +29,9 @@ export function impactSpeedFactor(closing:number){
  * tyre grip to about 3.9 m/s² whatever its power), so there is room to build up speed for a hit inside an arena. Derby
  * results are scored, not timed, so no time records change. */
 export const DERBY_PACE={power:1.45,traction:1.45} as const;
+/** A smash: an offline hit that takes SMASH.health or more off a car the player is in. A short slow-motion beat, a toast with
+ * the closing speed, the crowd. Crash sounds also grow heavier with closing speed (by the square root of impactSpeedFactor). */
+export const SMASH={health:25,slowmo:.5,scale:.35} as const;
+export const isSmash=(healthLoss:number)=>Number.isFinite(healthLoss)&&healthLoss>=SMASH.health;
+export const smashLabel=(closing:number)=>`SMASH · ${Math.round(Math.max(0,Number.isFinite(closing)?closing:0)*3.6)} KM/H`;
+export const impactSoundScale=(closing:number)=>Math.sqrt(impactSpeedFactor(closing));
