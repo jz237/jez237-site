@@ -54,7 +54,7 @@ const clips=['jab','ko','victory'];
 async function buildFighter(id,index){
  const highSource=true,variant="frames-study";
  const files={jez:'jez-59a6df17.glb',benny:'benny-a0579bf4.glb'};
- const g=await loader.loadAsync(`https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/games/final-blow-3d/v12/${files[id]}`,event=>{
+ const g=await loader.loadAsync(`https://media.jez237.com/games/final-blow-3d/v12/${files[id]}`,event=>{
   modelBytes[index]=event.loaded;
   $('#progress').textContent=`Downloading detailed fighters… ${Math.round(modelBytes.reduce((a,b)=>a+b,0)/1048576)} MB received`;
  });const model=g.scene;model.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;o.frustumCulled=false;const mats=Array.isArray(o.material)?o.material:[o.material];for(const m of mats){if(m.map)m.map.anisotropy=renderer.capabilities.getMaxAnisotropy();m.emissive?.set(0);if(!m.roughnessMap)m.roughness=.77;if(m.normalScale)m.normalScale.set(.35,.35);m.envMapIntensity=.65;m.onBeforeCompile=shader=>{shader.fragmentShader=shader.fragmentShader.replace('#include <roughnessmap_fragment>','#include <roughnessmap_fragment>\nfloat blueCloth=smoothstep(1.15,1.65,diffuseColor.b/max(diffuseColor.r,0.001));\nfloat darkCloth=1.0-smoothstep(0.05,0.14,max(max(diffuseColor.r,diffuseColor.g),diffuseColor.b));\nroughnessFactor=mix(roughnessFactor,max(roughnessFactor,0.78),max(blueCloth,darkCloth));');};}}});

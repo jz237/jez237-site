@@ -12,7 +12,7 @@
   const viewerImage = document.getElementById('collection-lightbox-image');
   const viewerTitle = document.getElementById('collection-lightbox-title');
   const closeButton = document.getElementById('collection-lightbox-close');
-  const IMAGE_BASE = 'https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/image-gen-2-benchmark/images/';
+  const IMAGE_BASE = 'https://media.jez237.com/image-gen-2-benchmark/images/';
 
   const escapeHtml = (value) => String(value || '').replace(/[&<>'"]/g, (char) => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'

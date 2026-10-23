@@ -27,7 +27,7 @@ const cards = demos.map((demo, i) => {
   <a class="preview" href="${d.url}" aria-label="Open ${d.title}"><span class="preview-label">EXPERIMENT / ${d.id}</span><img src="${d.image}" width="${imageWidth}" height="${imageHeight}" alt="${d.imageAlt}" ${i % pageSize === 0 ? 'fetchpriority="high"' : 'loading="lazy"'}><span class="preview-hint"><b aria-hidden="true">↗</b> OPEN INTERACTIVE DEMO</span></a>
   <div class="details"><div class="card-meta"><span>${d.category}</span><span class="live"><i class="signal"></i> LIVE DEMO</span></div><h2>${d.title}</h2><p class="description">${d.description}</p>
   <ul class="features">${demo.features.map(v => `<li>${escape(v)}</li>`).join('')}</ul>
-  <div class="actions"><a class="primary" href="${d.url}">Launch demo <span aria-hidden="true">→</span></a>${d.alternateUrl ? `<a href="${d.alternateUrl}">${d.alternateLabel}</a>` : ''}<a href="${d.source}">View source ↗</a></div>
+  <div class="actions"><a class="primary" href="${d.url}">Launch demo <span aria-hidden="true">→</span></a>${d.alternateUrl ? `<a href="${d.alternateUrl.replace(/(^|\/)index\.html$/, '$1').replace(/\.html$/, '')}">${d.alternateLabel}</a>` : ''}<a href="${d.source}">View source ↗</a></div>
   <p class="compatibility">${d.note}</p><div class="facts">${demo.facts.map(v => `<span>${escape(v)}</span>`).join('')}</div></div>
   </article>`;
 });
@@ -36,7 +36,9 @@ const html = readFileSync(page, 'utf8');
 if (!html.includes('<!-- CATALOG START -->') || !html.includes('<!-- CATALOG END -->')) throw new Error('Missing catalog markers');
 const pageCount = Math.ceil(cards.length / pageSize);
 const pageFile = number => number === 1 ? 'index.html' : `page-${number}.html`;
-const pageHref = number => number === 1 ? './#experiments' : `${pageFile(number)}#experiments`;
+// Link to the extensionless URLs Cloudflare Pages serves; `page-2.html` would cost a 308 redirect.
+const pageUrl = number => number === 1 ? './' : `page-${number}`;
+const pageHref = number => `${pageUrl(number)}#experiments`;
 const generatedMarker = '<!-- GENERATED DEMO PAGE: scripts/build-demos.mjs -->';
 for (let number = 1; number <= pageCount; number++) {
   const start = (number - 1) * pageSize;
@@ -50,7 +52,7 @@ for (let number = 1; number <= pageCount; number++) {
     .replace(/<!-- CATALOG START -->[\s\S]*?<!-- CATALOG END -->/, `<!-- CATALOG START -->\n${cards.slice(start, end).join('\n')}\n<!-- CATALOG END -->`)
     .replace(/data-demo-count>[^<]*/, `data-demo-count>${String(demos.length).padStart(2,'0')}`)
     .replace(/<title>[^<]*<\/title>/, `<title>Website Demos${number > 1 ? ` — Page ${number}` : ''} — Jez237</title>`)
-    .replace(/<link rel="canonical" href="[^"]*">/, `<link rel="canonical" href="https://jez237.com/demos/${number === 1 ? '' : pageFile(number)}">`);
+    .replace(/<link rel="canonical" href="[^"]*">/, `<link rel="canonical" href="https://jez237.com/demos/${number === 1 ? '' : pageUrl(number)}">`);
   for (const position of ['TOP', 'BOTTOM']) {
     // String.raw keeps the character class intact in the dynamic expression.
     const marker = new RegExp(String.raw`<!-- PAGINATION ${position} START -->[\s\S]*?<!-- PAGINATION ${position} END -->`);

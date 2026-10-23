@@ -3,12 +3,12 @@ const stops=[
  ['exterior','An electric silhouette.','Metallic silver, panoramic glazing and the low, sculpted body. Drag to orbit the complete vehicle.','./'],
  ['exploded','Every layer, revealed.','The vehicle separates into 308 visual groups: 297 artist surfaces and 11 added schematic battery pieces. These are visual groups, not a service-parts catalog.','./?view=parts'],
  ['battery','The foundation beneath the cabin.','A separate battery study reveals the cover, illustrative cell banks, cooling layer and protective tray. The internals are schematic, not manufacturer CAD.','./?view=battery'],
- ['driver','Take the driver’s seat.','Look past the yoke toward the instrument cluster and center display. The car is parked; all readings belong to the studio simulation.','cockpit.html'],
- ['seats','Shape, seams and support.','A close view of the front seat, headrest and upholstery seams in the artist model. Drag gently to inspect the contours.','cockpit.html?view=seats'],
- ['door','Details within reach.','Explore the driver’s door trim, armrest and layered interior surfaces from inside the cabin.','cockpit.html?view=door'],
- ['pedals','Down to the footwell.','Look below the dashboard at the modeled pedal surfaces and floor area. This is a visual inspection, not an operating or repair procedure.','cockpit.html?view=pedals'],
- ['console','The center of the cabin.','Inspect the console, armrest and storage surfaces between the front seats.','cockpit.html?view=console'],
- ['display','A display you can explore.','Try the touchscreen to preview navigation, climate, charging and vehicle controls. The software is an independent simulation with fictional routes and sample values.','cockpit.html?app=navigation']
+ ['driver','Take the driver’s seat.','Look past the yoke toward the instrument cluster and center display. The car is parked; all readings belong to the studio simulation.','cockpit'],
+ ['seats','Shape, seams and support.','A close view of the front seat, headrest and upholstery seams in the artist model. Drag gently to inspect the contours.','cockpit?view=seats'],
+ ['door','Details within reach.','Explore the driver’s door trim, armrest and layered interior surfaces from inside the cabin.','cockpit?view=door'],
+ ['pedals','Down to the footwell.','Look below the dashboard at the modeled pedal surfaces and floor area. This is a visual inspection, not an operating or repair procedure.','cockpit?view=pedals'],
+ ['console','The center of the cabin.','Inspect the console, armrest and storage surfaces between the front seats.','cockpit?view=console'],
+ ['display','A display you can explore.','Try the touchscreen to preview navigation, climate, charging and vehicle controls. The software is an independent simulation with fictional routes and sample values.','cockpit?app=navigation']
 ];
 let index=0,playing=false,timer=null,generation=0,loadedScene=null,busy=false;
 const frame=$('tour-frame');
@@ -23,7 +23,7 @@ async function show(next){
  const url=new URL(location.href);url.searchParams.set('stop',key);history.replaceState(null,'',url);
  try{
   const scene=sceneFor(index);
-  if(loadedScene!==scene){loadedScene=scene;const destination=scene==='exterior'?'./?tour=1':'cockpit.html?tour=1';
+  if(loadedScene!==scene){loadedScene=scene;const destination=scene==='exterior'?'./?tour=1':'cockpit?tour=1';
    await new Promise((resolve,reject)=>{const done=()=>{clearTimeout(timeout);resolve();};const timeout=setTimeout(()=>{frame.removeEventListener('load',done);reject(Error('Loading timed out'));},45000);frame.addEventListener('load',done,{once:true});frame.src=destination;});
    await new Promise((resolve,reject)=>{const start=performance.now();const poll=()=>{if(token!==generation)return resolve();try{const api=readyAPI();if(api?.getState().ready)return resolve();if(frame.contentDocument?.querySelector('#error:not([hidden]),#cockpit-error:not([hidden])'))return reject(Error('Scene unavailable'));}catch{}if(performance.now()-start>45000)return reject(Error('Loading timed out'));setTimeout(poll,100);};setTimeout(poll,100);});
   }

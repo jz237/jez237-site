@@ -1692,7 +1692,23 @@ But I&#x27;m all right tonight!
       lazyPlayers.push({ target: card, ensureWaveform });
     });
 
-    lazyPlayers.forEach(({ ensureWaveform }) => ensureWaveform());
+    // Each waveform downloads and decodes its whole MP3, so draw them as their
+    // cards come within about two screens of view instead of all at once
+    // (doing all 26 up front cost about 69 MB per visit). Play and the other
+    // controls still create a card's waveform immediately.
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const item = lazyPlayers.find((candidate) => candidate.target === entry.target);
+          if (item) item.ensureWaveform();
+          observer.unobserve(entry.target);
+        });
+      }, { rootMargin: "1600px 0px" });
+      lazyPlayers.forEach(({ target }) => observer.observe(target));
+    } else {
+      lazyPlayers.forEach(({ ensureWaveform }) => ensureWaveform());
+    }
   </script>
 </body>
 </html>

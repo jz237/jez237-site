@@ -1,11 +1,35 @@
 [
   {
+    "id": "022",
+    "title": "The Living Reef",
+    "category": "3D · Living systems",
+    "description": "Explore a living coral reef in 3D. Orbit the rimless tank, watch reef fish graze, school and shelter among branching corals, plate corals and swaying anemones, and add or remove fish of your own. Feed the tank, switch to blue-hour light, or open the water chemistry lab.",
+    "url": "reef-aquarium/",
+    "image": "assets/reef-aquarium.jpg",
+    "imageAlt": "The 3D reef aquarium: two coral-covered live rock islands in blue-lit water, a sand channel between them, with tangs, clownfish and a school of anthias",
+    "source": "https://github.com/jz237/jez237-site/tree/main/scripts/rotatable-aquascape/reef",
+    "features": [
+      "Drag to orbit & zoom",
+      "Add & remove fish",
+      "Feed fish & blue-hour light",
+      "Identify corals & fish"
+    ],
+    "facts": [
+      "22 fish at launch",
+      "14 species",
+      "Mouse & touch"
+    ],
+    "note": "WebGL 2 · Desktop & touch · Artistic reef study",
+    "imageWidth": 1440,
+    "imageHeight": 900
+  },
+  {
     "id": "001",
     "title": "V8 Engine Laboratory",
     "category": "3D · Mechanics",
     "description": "Eight cylinders. One synchronized machine. Slice through a working cross-plane V8 and follow the motion from ignition to crankshaft.",
     "url": "v8-engine/",
-    "image": "assets/v8-engine-cover-20261006.png",
+    "image": "assets/v8-engine-cover-20261006.webp",
     "imageAlt": "Illustrated cutaway V8 engine with exposed pistons and crankshaft, metallic finishes and dramatic studio lighting",
     "source": "https://github.com/jz237/jez237-site/tree/main/scripts/v8-engine",
     "features": [
@@ -29,7 +53,7 @@
     "category": "3D · Sci-fi sculpture",
     "description": "Chrome armor. A glowing neural core. Explore an animated Cyberdyne Systems sculpture with mechanical rings, cinematic lighting, and a living network of signals.",
     "url": "skynet-3d/",
-    "image": "assets/skynet.png",
+    "image": "assets/skynet.webp",
     "imageAlt": "Chrome and red Cyberdyne Systems Skynet concept artwork that inspired the interactive sculpture",
     "source": "https://github.com/jz237/jez237-site/tree/main/demos/skynet-3d",
     "features": [
@@ -416,7 +440,7 @@
     "category": "3D · Living desert habitat",
     "description": "A dry desert world for one living bearded dragon. Warm sandstone ledges, shaded rock hides, weathered driftwood and a mountain backdrop fill a wide black-framed enclosure. Watch the dragon bask, breathe, blink, explore, hunt crickets and graze greens, then settle into its cool hide when the lamps go out.",
     "url": "bearded-dragon-terrarium/",
-      "image": "assets/bearded-dragon-terrarium-v2.jpg",
+    "image": "assets/bearded-dragon-terrarium-v2.jpg",
     "imageAlt": "The actual desert terrarium with a bearded dragon on a sandstone ledge, overhead lamps, rock hides, driftwood, food and a shallow water dish",
     "imageWidth": 1440,
     "imageHeight": 900,
@@ -481,5 +505,53 @@
       "Mouse & touch"
     ],
     "note": "WebGL 2 · Best on desktop GPUs · Preview captured from the running demo"
+  },
+  {
+    "id": "023",
+    "title": "Globes · Water in Glass",
+    "category": "WebGPU · 3D fluid simulation",
+    "description": "Tilt a glass globe and watch water slosh, splash and cast rippling light across the sand. Explore five living scenes: clear water, a swimming koi, swaying kelp, an anemone reef and churning sea foam. Created by Will Waltz.",
+    "url": "globes/",
+    "image": "assets/globes.jpg",
+    "imageAlt": "A glass globe with turquoise water splashing above a bed of sand, supplied by the original Globes project",
+    "imageWidth": 1120,
+    "imageHeight": 630,
+    "source": "https://github.com/jz237/jez237-site/tree/main/scripts/globes",
+    "features": [
+      "Drag to tilt & stir the water",
+      "Five glass-globe scenes",
+      "Scroll or pinch to zoom",
+      "Right-click to feed the fish"
+    ],
+    "facts": [
+      "By Will Waltz",
+      "GPU fluid simulation",
+      "MIT licensed"
+    ],
+    "note": "Requires WebGPU · Best on a fast desktop GPU · Lighter settings on phones · Preview supplied by the original project"
+  },
+  {
+    "id": "024",
+    "title": "Living Silk · Betta Atelier",
+    "category": "3D · Living specimen",
+    "description": "Look closely at a halfmoon Betta in turquoise and crimson. Orbit its iridescent scales, follow the rippling fins, and explore the tiny details of its eyes, gills and branching fin rays. An intimate living study built with six GPT-generated reference images, including magnified head, scale and membrane studies.",
+    "url": "betta-atelier/",
+    "image": "assets/betta-atelier-v1-2.png",
+    "imageAlt": "The actual Living Silk 3D showcase: an iridescent turquoise Betta with broad translucent crimson fins against dark water",
+    "imageWidth": 1440,
+    "imageHeight": 1000,
+    "source": "https://github.com/jz237/jez237-site/tree/main/scripts/betta-atelier",
+    "features": [
+      "Magnified head, scale & fin textures",
+      "Natural glides, hovering & full turns",
+      "Four close-up inspection views",
+      "Orbit, pause, relax fins & change light"
+    ],
+    "facts": [
+      "Seven separate fins",
+      "Interactive 3D",
+      "Mouse & touch"
+    ],
+    "note": "WebGL 2 · Best on a recent GPU · Artistic anatomical study · Preview captured from the running showcase"
   }
 ]
