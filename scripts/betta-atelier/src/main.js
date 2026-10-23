@@ -130,7 +130,7 @@ let transition = null,
   selected = "portrait",
   paused = matchMedia("(prefers-reduced-motion: reduce)").matches,
   cinematic = true,
-  flare = true,
+  flare = false,
   t = 0,
   last = performance.now(),
   ready = false;
@@ -180,9 +180,10 @@ $("#motion").onclick = () => {
 };
 $("#flare").onclick = () => {
   flare = !flare;
+  fish.userData.display.requested = flare;
   $("#flare").setAttribute("aria-pressed", String(flare));
   $("#flare").innerHTML = flare
-    ? '<span class="button-icon">◒</span> Fins open'
+    ? '<span class="button-icon">◒</span> Display flared'
     : '<span class="button-icon">◔</span> Fins relaxed';
 };
 $("#view").onchange = (e) => view(e.target.value);
@@ -265,12 +266,6 @@ function draw(now) {
   const dt = Math.min((now - last) / 1000, 0.05);
   last = now;
   if (!paused) t += dt;
-  uniforms.uFlare.value = T.MathUtils.damp(
-    uniforms.uFlare.value,
-    flare ? 1 : 0.68,
-    3,
-    dt,
-  );
   fish.userData.update(t, selected !== "portrait");
   if (!paused) {
     for (let i = 0; i < n; i++) {

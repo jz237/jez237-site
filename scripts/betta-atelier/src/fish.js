@@ -2,6 +2,7 @@ import * as T from "three";
 import { addMacroSurface } from "./surfaces.js";
 import { FinDynamics, water, waterVelocity } from "./fin-dynamics.js";
 import { BodyMotion, bodyGLSL, SPINE_COUNT } from "./body-motion.js";
+import { DisplayMotion, EyeMotion } from "./display-motion.js";
 import { SwimGait } from "./swim-gait.js";
 const PI = Math.PI,
   lerp = T.MathUtils.lerp,
@@ -11,7 +12,7 @@ const world = ([x, y]) => [(x - 680) * SCALE, (420 - y) * SCALE];
 const texUV = ([x, y]) => [x / 1536, 1 - y / 1024];
 export const uniforms = {
   uTime: { value: 0 },
-  uFlare: { value: 1 },
+  uFlare: { value: 0 },
   uMotion: { value: 1 },
   uPhase: { value: 0 },
   uDrive: { value: 0.12 },
@@ -44,7 +45,7 @@ vec3 wetFin(vec2 uv) {
 ` : "") + s.vertexShader;
     s.vertexShader = s.vertexShader.replace(
       "#include <project_vertex>",
-      `vec3 anatomical=transformed;${operculum ? "anatomical.z+=coverLift*uGill*.046;" : ""}
+      `vec3 anatomical=transformed;${operculum ? "anatomical.z+=coverLift*(uGill*.046+uFlare*.085);" : ""}
        vec4 mvPosition=vec4(swim(anatomical)${dynamics ? '+wetFin(finUV)' : ''},1.);
        mvPosition=modelViewMatrix*mvPosition;gl_Position=projectionMatrix*mvPosition;`,
     );
@@ -53,7 +54,7 @@ vec3 wetFin(vec2 uv) {
       "#include <normal_fragment_begin>\nnormal=normalize(cross(dFdx(vViewPosition),dFdy(vViewPosition)))*faceDirection;",
     );
   };
-  mat.customProgramCacheKey = () => `wet-betta-1.5-${!!dynamics}-${operculum}`;
+  mat.customProgramCacheKey = () => `wet-betta-1.6-${!!dynamics}-${operculum}`;
   return mat;
 }
 // Anatomical silhouette measured in the unmodified lateral reference image.
@@ -548,7 +549,8 @@ export function createBetta() {
     ],
     2,
   );
-  const pectorals = [];
+  const pectorals = [], eyes = [];
+  const display = new DisplayMotion();
   for (const side of [-1, 1]) {
     makeFin(
       fish,
@@ -620,9 +622,14 @@ export function createBetta() {
       ),
     );
     const [ex, ey] = world([240, 400]);
-    eye.position.set(ex, ey, side * 0.15);
-    eye.scale.set(1, 1, 0.1);
-    fish.add(eye);
+    const pivot = new T.Group();
+    pivot.name = `Eye socket pivot ${side}`;
+    pivot.position.set(ex, ey, side * 0.120);
+    const motion = new EyeMotion(side);
+    eyes.push({ pivot, motion, side });
+    eye.position.set(0, 0, side * 0.020);
+    eye.scale.set(1, 1, 0.5);
+    pivot.add(eye);
     const pupil = new T.Mesh(
       new T.SphereGeometry(0.045, 40, 28),
       new T.MeshPhysicalMaterial({
@@ -633,8 +640,9 @@ export function createBetta() {
       }),
     );
     pupil.scale.z = 0.1;
-    pupil.position.set(ex, ey + 0.006, side * 0.157);
-    fish.add(pupil);
+    pupil.position.set(0, 0.006, side * 0.063);
+    pivot.add(pupil);
+    fish.add(pivot);
   }
   const gait = new SwimGait();
   let prev = 0,
@@ -650,7 +658,8 @@ export function createBetta() {
     macroTextures,
     scaleCount: 0,
     finCount: 7,
-    revision: "1.5",
+    revision: "1.6",
+    display, eyes,
     gait,
     bodyMotion,
     finDynamics,
@@ -659,6 +668,12 @@ export function createBetta() {
     update(t, inspect = false) {
       const dt = clamp(t - prev, 0, 0.07);
       prev = t;
+      display.advance(dt);
+      uniforms.uFlare.value = display.flare;
+      for (const { pivot, motion, side } of eyes) {
+        motion.advance(dt, turn, display.flare);
+        pivot.rotation.set(-motion.pitch * side, motion.yaw * side, 0);
+      }
       uniforms.uTime.value = t;
       // A burst-and-coast swimmer: stabilize, accelerate, glide, brake, investigate.
       const q = t % cycle;

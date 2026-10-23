@@ -51,22 +51,24 @@ export class FinDynamics {
       if (j === 0) this.roots.set(p, i * 3);
       this.weights[n] = j === 0 ? 0 : 0.25 + 0.75 * j / (rows - 1);
     }
-    const links = [];
-    const add = (a, b, stiffness) => {
+    const links = [], folding = [];
+    const add = (a, b, stiffness, folds = false) => {
       const length = Math.hypot(...[0, 1, 2].map(k => this.rest[a * 3 + k] - this.rest[b * 3 + k]));
-      if (length > 0.00001) links.push(a, b, length, stiffness);
+      if (length > 0.00001) { links.push(a, b, length, stiffness); folding.push(folds ? 1 : 0); }
     };
     for (let j = 0; j < rows; j++) for (let i = 0; i < columns; i++) {
       const n = j * columns + i;
       if (j) add(n - columns, n, 0.96); // non-stretching fin rays
-      if (i) add(n - 1, n, 0.65); // membrane between rays
+      if (i) add(n - 1, n, 0.65, true); // membrane between rays
       if (j && i) {
-        add(n - columns - 1, n, 0.22);
-        add(n - columns, n - 1, 0.22);
+        add(n - columns - 1, n, 0.22, true);
+        add(n - columns, n - 1, 0.22, true);
       }
       if (j > 1) add(n - columns * 2, n, 0.12); // soft ray bending
     }
     this.links = new Float32Array(links);
+    this.folding = new Uint8Array(folding);
+    this.linkLengths = new Float32Array(folding.length);
   }
 
   makeTargets(state) {
@@ -83,8 +85,9 @@ export class FinDynamics {
         let x = rest[n] - roots[r], y = rest[n + 1] - roots[r + 1], z = rest[n + 2] - roots[r + 2];
         // Fold by changing ray angle, not shortening or scaling the fin.
         if (kind < 3) {
-          const spread = 1 - (1 - flare) * 0.62 - drive * 0.16;
-          const angle = Math.atan2(y, x) * spread, length = Math.hypot(x, y);
+          const relaxed = kind === 0 ? 0.43 : kind === 1 ? 0.34 : 0.60;
+          const spread = relaxed + (1 - relaxed) * flare - drive * 0.12;
+          const angle = Math.atan2(y, x) * spread - (kind === 0 ? 0.10 * (1 - flare) : 0), length = Math.hypot(x, y);
           x = length * Math.cos(angle); y = length * Math.sin(angle);
           const wave = kind === 0
             ? (0.012 + drive * 0.20) * Math.sin(phase - 2.5 - v * 0.8) + turn * 0.12
@@ -105,7 +108,7 @@ export class FinDynamics {
           const cy = y * Math.cos(feather) - z * Math.sin(feather);
           z = y * Math.sin(feather) + z * Math.cos(feather); y = cy;
         } else {
-          const angle = -0.12 - drive * 0.40 + 0.055 * Math.sin(phase * 0.55 + side);
+          const angle = -0.02 - flare * 0.16 - drive * 0.40 + 0.055 * Math.sin(phase * 0.55 + side);
           const cx = x * Math.cos(angle) - y * Math.sin(angle);
           y = x * Math.sin(angle) + y * Math.cos(angle); x = cx;
           z += side * v * v * 0.035 * Math.sin(t * 1.2 - v * 2 + side);
@@ -182,8 +185,17 @@ export class FinDynamics {
         old[q + k] = current;
       }
     }
+    // Cross-ray chord spacing folds with the ray fan. Fin-ray lengths stay
+    // fixed; unresolved accordion pleats are represented by shorter chords,
+    // not by shrinking the rays. Keeping open-fan chords here would fight closure.
+    for (let l = 0; l < links.length; l += 4) {
+      const a = links[l] * 3, b = links[l + 1] * 3;
+      this.linkLengths[l / 4] = this.kind < 3 && this.folding[l / 4]
+        ? Math.hypot(target[b] - target[a], target[b + 1] - target[a + 1], target[b + 2] - target[a + 2])
+        : links[l + 2];
+    }
     // Alternate constraint traversal to avoid a persistent preferred bend direction.
-    for (let pass = 0; pass < (this.kind === 3 ? 12 : 4); pass++) {
+    for (let pass = 0; pass < (this.kind === 3 ? 12 : this.kind < 3 ? 8 : 4); pass++) {
       // Pectoral rays are actively rotated by the muscular base, not merely
       // pulled by a weak spring (which filters a rapid stroke into a slow sway).
       // Actuation fades across the span; the outer membrane stays water-driven.
@@ -195,12 +207,22 @@ export class FinDynamics {
           p[q] += (target[q] - p[q]) * muscle;
         }
       }
+      // Muscles spread/lower the proximal rays rapidly. Soft margins still
+      // lag, ripple and react to currents instead of snapping to the pose.
+      if (this.kind < 3 && pass === 0) for (let j = 1; j < h; j++) {
+        const v = j / (h - 1), u = clamp((v - 0.45) / 0.5, 0, 1);
+        const muscle = 0.18 * (1 - u * u * (3 - 2 * u));
+        for (let i = 0; i < w; i++) for (let k = 0; k < 3; k++) {
+          const q = (j * w + i) * 3 + k;
+          p[q] += (target[q] - p[q]) * muscle;
+        }
+      }
       for (let l = pass % 2 ? links.length - 4 : 0; l >= 0 && l < links.length; l += pass % 2 ? -4 : 4) {
         const a = links[l], b = links[l + 1], ai = a * 3, bi = b * 3;
         const dx = p[bi] - p[ai], dy = p[bi + 1] - p[ai + 1], dz = p[bi + 2] - p[ai + 2];
         const length = Math.sqrt(dx * dx + dy * dy + dz * dz), weight = weights[a] + weights[b];
         if (length < 1e-7 || !weight) continue;
-        const correction = (length - links[l + 2]) / length * links[l + 3] / weight;
+        const correction = (length - this.linkLengths[l / 4]) / length * links[l + 3] / weight;
         const wa = correction * weights[a], wb = correction * weights[b];
         p[ai] += dx * wa; p[ai + 1] += dy * wa; p[ai + 2] += dz * wa;
         p[bi] -= dx * wb; p[bi + 1] -= dy * wb; p[bi + 2] -= dz * wb;

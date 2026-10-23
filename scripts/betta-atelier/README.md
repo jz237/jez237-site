@@ -213,3 +213,39 @@ quiet-hover versus compact propulsion, breathing order, smooth effort changes an
 **actual simulated pectoral edge cadence**, including at 30 fps. Browser QA checks
 rendered behavior and original R2 textures on desktop and touch-emulated phone.
 Evidence: `/home/jez237/.openclaw/workspace/tmp/betta-gait-reference-20261022/`.
+
+## Relaxed/display posture and socket gaze · revision 1.6 (2026-10-23)
+
+Jez requested the large relaxed-to-flared change and rapid opening, plus eye
+rotation. Reference comparison: LoveToKnow Pets, Kelly Roper's 2018 “Betta Fish
+Pictures”, **Halfmoon Butterfly Betta** photograph (caption identifies resting
+fins), https://www.lovetoknowpets.com/aquariums/betta-fish-pictures; and the
+Colorsbetta Thailand footage above, including its 21-second display frame.
+The resting photo is not fully closed: its caudal fan is narrower, gill covers
+are not displaying, and the dorsal/anal fins still retain area. The display
+footage shows a much broader tail/dorsal/anal silhouette near another betta.
+These are different fish/angles, qualitative references, not a measured paired
+experiment or proof of a particular transition time. Reference files stay in
+local research evidence, not the public assets.
+
+- Starts relaxed. The fin button toggles **Fins relaxed / Display flared**.
+  Caudal, dorsal and anal rays have different resting angles; their rays retain
+  length. Cross-ray/diagonal chord lengths follow the fan pose to represent
+  unresolved accordion folds; this is not a material-area-conserving cloth model.
+- `DisplayMotion` drives a fast opening and slightly softer closing, independent
+  of the v1.5 swimming effort. Proximal ray actuation gives the visible fin a fast
+  response while flexible edges retain water-driven lag. Local rendered-solver
+  QA measured >80% of the tail's opening in 0.25 seconds. This is an animation
+  response, not a biological measurement. Gill covers also widen for display,
+  with the breathing cycle retained underneath.
+- Each iris and pupil share a fixed socket pivot. Bounded, short glances alternate
+  with quiet fixations; the eyes have slightly different timing. Display favors
+  a forward gaze. The face shader masks the static painted pupil under the moving
+  globe, without changing the original JPEGs. Pause/reduced-motion freezes gaze
+  and display too; changes requested while paused wait for resume.
+- Twelve tests cover previous gait/physics invariants plus actual fan opening,
+  closure, anchoring and ray lengths at 30/60/120 fps, and gaze bounds/fixations/
+  saccades/independence/pause. Browser QA checks both silhouettes, close-up gaze,
+  opposite side, currents/reversals, desktop and touch-emulated phone controls.
+
+Evidence: `/home/jez237/.openclaw/workspace/tmp/betta-display-gaze-20261023/`.

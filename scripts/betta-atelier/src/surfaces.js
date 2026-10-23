@@ -48,6 +48,10 @@ vec3 sectionPigment(vec2 uv){
  float headMask=patchMask(h,.13);base=mix(base,head,headMask*.97);
  vec3 scales=scalePigment(uv);
  base=mix(base,scales,flankMask(uv)*.98);
+ ${eye ? "" : `// Conceal the painted eye beneath the moving globe so a glance cannot
+ // reveal a second stationary pupil. The original source texture is unchanged.
+ vec2 socket=(vec2(uv.x*1536.,(1.-uv.y)*1024.)-vec2(240.,400.))*.0032;
+ base=mix(base,vec3(.018,.025,.027),1.-smoothstep(.062,.082,length(socket)));`}
  return base;
 }
 float microHeight(vec2 uv){
@@ -101,6 +105,6 @@ float microHeight(vec2 uv){return luminanceBetta(basePigment(uv))+luminanceBetta
 
   };
   material.customProgramCacheKey = () =>
-    `betta-macro-1.4-${fin}-${caudal}-${eye}-${motionKey}`;
+    `betta-macro-1.6-${fin}-${caudal}-${eye}-${motionKey}`;
   return material;
 }
