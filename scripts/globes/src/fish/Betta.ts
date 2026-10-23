@@ -1,9 +1,8 @@
 import * as THREE from 'three/webgpu';
 import { createBetta } from '../../../betta-atelier/src/fish.js';
 import { TriangleBVH } from './triangleBVH.mjs';
+import { BettaSwim, BETTA_SCALE as SCALE } from './bettaSwim.mjs';
 import type { KoiEnv, KoiSense } from './Koi';
-
-const SCALE = 0.25;
 
 /** The actual Atelier specimen, evaluated on the CPU for the refracted rays.
  * No screenshot/billboard: skin, seven membranes, mouth, covers and both eye
@@ -19,7 +18,7 @@ export class Betta {
   private readonly vertices: Float32Array;
   private readonly probes = new Float32Array(16 * 4);
   private readonly flow = new THREE.Vector3();
-  private readonly drift = new THREE.Vector3();
+  readonly swim = new BettaSwim();
   private time = 0;
   private loaded = false;
   active = false;
@@ -28,7 +27,7 @@ export class Betta {
   constructor() {
     this.rig.add(this.fish);
     this.rig.scale.setScalar(SCALE);
-    this.rig.position.set(-0.08, -0.18, 0);
+    this.fish.userData.locomotion = this.locomotion();
     this.fish.userData.update(0);
     this.rig.updateMatrixWorld(true);
     const positions: number[] = [], indices: number[] = [], uv: number[] = [], materials: number[] = [];
@@ -78,6 +77,7 @@ export class Betta {
       if (this.bvh.data[3]) { this.bvh.data[3] = 0; this.texture.needsUpdate = true; }
       return;
     }
+    dt = Math.max(0, Math.min(dt, 0.07));
     this.time += dt;
     // Mean of probes actually submerged. Currents are read from the fluid solver,
     // not an unrelated sinusoid. Limit extreme shake impulses before the fin solver.
@@ -90,18 +90,20 @@ export class Betta {
     if (count) target.multiplyScalar(1 / count);
     target.clampLength(0, 0.6);
     this.flow.lerp(target, 1 - Math.exp(-5 * dt));
+    this.swim.advance(dt, this.flow.toArray(), env, !sense || count >= 8);
+    this.fish.userData.locomotion = this.locomotion();
     this.fish.userData.externalFlow = this.flow.clone().multiplyScalar(1 / SCALE).toArray();
     // The same one-second opening as the standalone specimen.
     this.fish.userData.display.requested = this.flared;
     this.fish.userData.update(this.time);
-    this.drift.addScaledVector(this.flow, dt * 0.22).multiplyScalar(Math.exp(-dt * 1.4)).clampLength(0, 0.08);
-    this.rig.position.set(-0.08 + this.drift.x, -0.18 + this.drift.y, this.drift.z);
     this.updateVertices();
     // Keep the entire animated silhouette between the settled bed and surface.
     // A conservative globe-space envelope also keeps fin tips away from glass.
     const d = this.bvh.data;
     const dy = Math.min(0, env.level - 0.06 - d[9]) + Math.max(0, env.sandLevel + 0.06 - d[5]);
     if (Math.abs(dy) > 1e-5) {
+      this.swim.position[1] += dy;
+      this.fish.position.y += dy / SCALE;
       for (let i = 1; i < this.vertices.length; i += 3) this.vertices[i] += dy;
       this.bvh.refit(this.vertices);
     }
@@ -115,6 +117,10 @@ export class Betta {
   }
 
   probePoints(): Float32Array { return this.probes; }
+
+  private locomotion() {
+    return { ...this.swim, position: this.swim.position.map(v => v / SCALE), velocity: this.swim.velocity.map(v => v / SCALE) };
+  }
 
   private updateVertices(): void {
     this.rig.updateMatrixWorld(true);

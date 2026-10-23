@@ -42,7 +42,7 @@ export const GLOBES: readonly GlobeEntry[] = [
   {
     id: 'betta',
     name: 'Living Silk',
-    description: 'The Betta Atelier fish, breathing and looking around in quiet water. Tilt the globe to stir its flowing fins, or watch it spread them into a full display.',
+    description: 'A small betta explores the globe, gliding between quiet pauses and curling into turns. Tilt the water through its flowing fins, or watch its one-second display.',
     koi: false,
     betta: true,
     clarity: 0.22,

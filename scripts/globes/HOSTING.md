@@ -3,7 +3,7 @@
 Original: https://github.com/willwaltz/globes
 Author: Will Waltz · MIT License
 Upstream commit: 93c3b814bbca53463e8207b8e3c95fca8940dff5
-Imported: 2026-10-22 · Hosting build: 1.1.0
+Imported: 2026-10-22 · Hosting build: 1.2.0
 Public route: https://jez237.com/demos/globes/
 
 The upstream source and MIT attribution are retained. Hosting adds the gallery
@@ -34,16 +34,29 @@ a WebGL canvas overlaid on the globe. A compact atlas reuses the existing skin,
 caudal and macro photographs; it does not publish a new copy of those assets.
 
 The water starts still. Sixteen solver probes supply the water velocity used by
-the membrane drag and swimming-effort model. A limited drift keeps the fish near
-the globe's centre; a conservative vertical envelope keeps fins above the bed
-and below the resting surface. This is an artistic coupling, not a fully coupled
+the membrane drag and swimming-effort model. The specimen is now 42% of the
+original integration's linear size (`0.105` versus `0.25` model-to-globe scale).
+`bettaSwim.mjs` chooses destinations throughout the usable water volume, with
+slow cruises, short bursts, coasting and quiet hovering. Acceleration-limited
+heading and shallow pitch keep translation aligned with the nose; actual yaw
+rate drives the shared body/fin C-bend. Look-ahead steering avoids the glass;
+conservative full-silhouette envelopes keep fins above the bed and below the
+resting surface. Strong currents add damped drift and increase fin effort, and
+dry probes request a dive. The Atelier accepts optional host-owned `locomotion`
+(position/velocity in model units, heading/pitch in radians, angularVelocity,
+drive and mode); without it the standalone choreography is unchanged.
+This is an artistic coupling, not a fully coupled
 fish/fluid solver or instantaneous collision against every turbulent wave. The
 betta does not eat the Koi scene's food. The **Flare fins / Relax fins** button controls the display; each opening
 takes one second, with partly open fins in the resting pose.
 
-Checks: `node --test bvh.test.mjs`, `node --test
+Checks: `node --test bvh.test.mjs betta-swim.test.mjs`, `node --test
 ../betta-atelier/fin-dynamics.test.mjs`, `npm run build`, and real WebGPU browser
 checks of the betta, scene switching, current/tilt response and phone layout.
+The locomotion tests cover multi-minute 3D exploration, bounded nose-led travel,
+rest/burst variation, frame-rate independence, pause and strong reversing flow.
+Browser QA additionally checks every animated vertex against the glass and
+the rendered fin bounds against the bed and resting surface.
 Use `npm run web -- --host 127.0.0.1` for browser development (`npm run dev` starts
 Electron). `?qa` exposes the same local inspection object as a dev build.
 

@@ -731,6 +731,10 @@ export function createBetta({ compact = false } = {}) {
         desired = 0.045;
         mode = "hover";
       }
+      // Optional host-owned locomotion (e.g. the globe). Without it the
+      // standalone Atelier keeps its original inspection choreography.
+      const locomotion = fish.userData.locomotion;
+      if (locomotion) { desired = locomotion.drive; mode = locomotion.mode; }
       drive = T.MathUtils.damp(drive, desired, 3, dt);
       const old = heading;
       heading +=
@@ -739,7 +743,8 @@ export function createBetta({ compact = false } = {}) {
           Math.cos(targetHeading - heading),
         ) *
         (1 - Math.exp(-3 * dt));
-      const angularVelocity = dt ? (heading - old) / dt : 0;
+      if (locomotion) heading = locomotion.heading;
+      const angularVelocity = locomotion ? locomotion.angularVelocity : dt ? (heading - old) / dt : 0;
       turn = T.MathUtils.damp(turn, angularVelocity, 4, dt);
       tx = T.MathUtils.damp(tx, targetX, 2, dt);
       ty = T.MathUtils.damp(ty, targetY, 2, dt);
@@ -755,7 +760,11 @@ export function createBetta({ compact = false } = {}) {
         heading,
         0.004 * Math.sin(t * 0.71) - drive * 0.025,
       );
-      const velocity = dt ? fish.position.clone().sub(previousPosition).multiplyScalar(1 / dt).toArray() : [0, 0, 0];
+      if (locomotion) {
+        fish.position.fromArray(locomotion.position);
+        fish.rotation.set(0, heading, -locomotion.pitch, 'YXZ');
+      }
+      const velocity = locomotion ? locomotion.velocity : dt ? fish.position.clone().sub(previousPosition).multiplyScalar(1 / dt).toArray() : [0, 0, 0];
       const localFlow = fish.userData.externalFlow ?? waterVelocity(t, fish.position.x, fish.position.y, fish.position.z, flowStrength, water.direction, []);
       const relativeFlow = Math.hypot(...localFlow.map((v, i) => v - velocity[i]));
       gait.advance(dt, drive, relativeFlow, turn);
