@@ -35,3 +35,6 @@ export const SMASH={health:25,slowmo:.5,scale:.35} as const;
 export const isSmash=(healthLoss:number)=>Number.isFinite(healthLoss)&&healthLoss>=SMASH.health;
 export const smashLabel=(closing:number)=>`SMASH · ${Math.round(Math.max(0,Number.isFinite(closing)?closing:0)*3.6)} KM/H`;
 export const impactSoundScale=(closing:number)=>Math.sqrt(impactSpeedFactor(closing));
+/** A smash the player survives with their own car at HANGING_ON health or less (still running). */
+export const HANGING_ON=20;
+export const hangingOn=(playerHealth:number)=>Number.isFinite(playerHealth)&&playerHealth>0&&playerHealth<=HANGING_ON;

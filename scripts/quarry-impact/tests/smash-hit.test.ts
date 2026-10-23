@@ -10,3 +10,7 @@ test('crash sounds grow with speed, gentler than the damage does',()=>{
  assert.ok(Math.abs(impactSoundScale(IMPACT_SPEED.ref)-1)<1e-12);
  assert.ok(impactSoundScale(20)>1&&impactSoundScale(20)<impactSpeedFactor(20));assert.ok(impactSoundScale(4)<1);
 });
+test('a smash survived on the last fifth of the car is HANGING ON',async()=>{
+ const {hangingOn,HANGING_ON}=await import('../src/damage-rules');
+ assert.ok(hangingOn(HANGING_ON));assert.ok(hangingOn(3));assert.equal(hangingOn(HANGING_ON+1),false);assert.equal(hangingOn(0),false);assert.equal(hangingOn(NaN),false);
+});

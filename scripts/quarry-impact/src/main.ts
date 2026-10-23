@@ -93,7 +93,7 @@ import {loadGhostLibrary,saveGhostLibrary,findTrialGhost,raceTrialGhost,sharedTr
 import {TrialGhostView,createTrialGhostView} from './trial-ghost-view';
 import {formatTrialDelta} from './time-trial';
 import {createRedbankWorld} from './redbank-world';
-import {DAMAGE_RULES,sessionDamageRule,collisionDamageMultiplier,impactSpeedFactor,IMPACT_SPEED,DERBY_PACE,SMASH,isSmash,smashLabel,impactSoundScale,damageRecordKey} from './damage-rules';
+import {DAMAGE_RULES,sessionDamageRule,collisionDamageMultiplier,impactSpeedFactor,IMPACT_SPEED,DERBY_PACE,SMASH,isSmash,smashLabel,impactSoundScale,hangingOn,damageRecordKey} from './damage-rules';
 import {eventGridSetup,eventPerformanceGrid} from './grid-setup';
 import {gridCarKind,gridRecordKey,GRID_LINEUPS,GRID_PERFORMANCE} from './grid-rules';
 import {timedRaceLimit,timedRaceFinished,timedRaceOrder,timedRaceResult,timedRaceRecordScore} from './timed-race';
@@ -1634,7 +1634,7 @@ function step(dt: number) {
     const smashed=!online?.active&&!demo&&!!a&&!!b&&(a.id===0||b.id===0)&&isSmash(Math.max(smashLoss.a,smashLoss.b));
     if(smashed){
       if(clock>=slowMoUntil){slowMoUntil=clock+SMASH.slowmo;slowMoScale=SMASH.scale;}
-      toast(smashLabel(closing),1.4,2);recordRumbleImpact(1);sound.crowd(.85);crowdFlashes(SMASH_FLASHES);
+      toast(smashLabel(closing)+(hangingOn(cars[0]?.health??100)?' · HANGING ON':''),1.4,2);recordRumbleImpact(1);sound.crowd(.85);crowdFlashes(SMASH_FLASHES);
     }
     // Revenge: the player's solid hit on the rival who has hurt them most (offline, once per grudge).
     if(!online?.active&&!demo&&a&&b)for(const [victim,attacker,loss] of [[a,b,smashLoss.a],[b,a,smashLoss.b]] as const){
