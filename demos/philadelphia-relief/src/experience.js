@@ -42,7 +42,7 @@ export function wireFieldNotes(button) {
   const set = collapsed => {
     document.body.classList.toggle('notes-collapsed', collapsed);
     button.textContent = collapsed ? '+ Show field notes' : '− Collapse';
-    button.setAttribute('aria-label', collapsed ? 'Expand field notes' : 'Collapse field notes');
+    button.setAttribute('aria-label', collapsed ? 'Show field notes' : 'Collapse field notes');
     button.setAttribute('aria-expanded', String(!collapsed));
   };
   const click=() => {
