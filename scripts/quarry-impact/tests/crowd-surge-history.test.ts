@@ -1,6 +1,7 @@
+import {restoreTopSpeedBytes} from './top-speed-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readCrowdSurgePrevious,restoreCrowdSurgeBytes,verifyCrowdSurgeRevision} from './crowd-surge-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreTopSpeedBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('CrowdSurge preserves every prior fixture, vehicle asset, venue art and history input',verifyCrowdSurgeRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/crowd-surge/revision.json').toString());
