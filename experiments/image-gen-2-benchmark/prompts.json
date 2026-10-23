@@ -25173,5 +25173,95 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-23-factual-infographic-factual-infographic-head-bunting-contac",
+    "title": "Factual infographic: Head Bunting — Contact and Scent",
+    "tests": "Two independent university sources; invisible scent shown schematically; social meaning qualified; flowing unboxed gouache and pencil atlas; no subjective critic.; archive_slot=2026-10-23T16:20; concept=feline-head-bunting-cheek-scent-social-contact; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: curious-behaviors",
+    "prompt": "Create a richly illustrated, factual Cat Atlas infographic, finished artwork directly edge to edge, not a photographed print or mockup. Artwork-led asymmetrical composition in soft charcoal, translucent warm gouache and exquisitely resolved colored pencil, on pale celadon paper with burnt-sienna and deep teal accents. Large graceful silver-and-white shorthaired domestic cat in three-quarter side view fills the central diagonal: its forehead and cheek gently contacting a relaxed human hand at the edge of the composition. Only hand and a little forearm are visible; the cat initiates contact. Beautiful believable muzzle anatomy, layered individual fur, naturally placed whiskers, softly narrowed eyes, grounded paws and subtle warm side lighting. No costume, no speech bubbles, no anthropomorphic thoughts. The hero occupies most of the visual space, accompanied by meaningful airy studies, not a rigid grid or detached cards.\n\nTitle near the upper left in elegant highly legible dark typography: \"HEAD BUNTING\". Subtitle immediately beneath: \"Contact and scent\". Small series line \"CAT ATLAS / CURIOUS BEHAVIORS\". Weave concise factual annotations organically along the curve of the cat's head, shoulder and back. A curved leader from the cheek goes to a beautifully drawn larger head profile off to the upper right. Mark broad cheek, lip and forehead REGIONS with delicate ochre stippling and the labels \"Cheeks\", \"Lips\", \"Forehead\"; these are schematic regions, not invented visible organs. Text alongside: \"Facial scent glands\" and \"Rubbing deposits chemical signals.\" Beneath that: \"Pheromones: chemical messages between cats.\" Ochre stippling is a diagrammatic key only; explicitly label \"Scent shown schematically; invisible in life.\" No visible scent clouds, glowing beams, molecular structures or claims about exact gland shapes.\n\nIn the lower left negative space integrate a smaller naturally posed study of the same cat gently rubbing its cheek along a simple door jamb, with a thin curved contact arrow and a small label \"Familiar places\". Caption: \"Cats also rub their faces on objects.\" Let a few finely drawn wood grain lines merge softly with the surrounding paper, no full room scene. At lower right, smaller than the hero and clearly separated by scale and open space, draw two believable cats making gentle forehead contact, one charcoal gray and the other warm ginger. Label \"Social contact\" and caption \"Bunting can be part of friendly interaction.\" Do not imply every cat pair or every head movement is friendly. A short open note between studies reads \"Bunting: rubbing the head against another individual.\" A tiny supplementary contour study, only if it fits without crowding, may show the two cats brushing flanks, labeled \"Allorubbing: body-to-body rubbing\"; omit this optional study if space is tight.\n\nAn open typographic footer, not a warning box: \"Scent marking is established. A cat's exact motivation is inferred.\" Follow with \"Read the interaction and the whole cat—not one gesture alone.\" Avoid definitive translations such as 'I love you', ownership slogans, universal happiness, territory defense or medical claims. All text must be concise, accurate and readable with tasteful hierarchy. Maintain ample breathing room, curved delicate leader lines, fur-rich hero art and varied scale, no boxed panels, numeric facts, decorative data, fake citations or filler. Small source credit at bottom: \"Sources: Washington State University; Cornell University\". Retain the essential head-contact behavior, facial scent explanation and uncertainty distinction even if the optional body-rubbing study is omitted. Opaque background; automatic canvas size. Request medium quality with openai/gpt-image-2.5-sunburst.",
+    "image": "images/2026-10-23-factual-infographic-factual-infographic-head-bunting-contac.jpg",
+    "thumb": "thumbs/2026-10-23-factual-infographic-factual-infographic-head-bunting-contac.webp",
+    "color": "#bbc0ac",
+    "date": "2026-10-23",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "feline-head-bunting-cheek-scent-social-contact",
+      "imageSha256": "d9870153fd25659d6c43276d8dd2ed03cfc6c6c757b206f6682719bc355c6fd7",
+      "imageDHash": "041a84058348888f"
+    },
+    "factualInfographic": {
+      "topic": "How feline head bunting and cheek rubbing deposit facial scent and participate in social communication",
+      "description": "Facial scent marking and the contextual social interpretation of head bunting, with scent-region and contact studies.",
+      "sourceNote": "Read WSU veterinary explanation and Cornell Feline Health Center director interview; social motivation qualified as interpretation. Sources: https://askdruniverse.wsu.edu/2023/11/09/7411/ ; https://alumni.cornell.edu/cornellians/abcs-of-cats/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-23T20:21:18.458343+00:00",
+        "sources": [
+          {
+            "id": "wsu",
+            "publisher": "Washington State University",
+            "title": "Why do cats rub their cheeks on stuff?",
+            "sourceType": "university",
+            "url": "https://askdruniverse.wsu.edu/2023/11/09/7411/"
+          },
+          {
+            "id": "cornell",
+            "publisher": "Cornell University",
+            "title": "The ABCs of C-A-Ts",
+            "sourceType": "university",
+            "url": "https://alumni.cornell.edu/cornellians/abcs-of-cats/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Bunting is a cat approaching and rubbing its head on a person; cats can also bunt one another.",
+            "sourceIds": [
+              "wsu",
+              "cornell"
+            ]
+          },
+          {
+            "claim": "Cats have scent glands around their cheeks, lips and forehead; facial rubbing deposits chemical signals.",
+            "sourceIds": [
+              "wsu"
+            ]
+          },
+          {
+            "claim": "Pheromones are chemical signals used in communication between members of the same species.",
+            "sourceIds": [
+              "wsu"
+            ]
+          },
+          {
+            "claim": "Cats rub their faces on familiar objects including doorways; facial scent marking occurs in places where cats are comfortable.",
+            "sourceIds": [
+              "wsu"
+            ]
+          },
+          {
+            "claim": "Bunting toward people is interpreted as social affiliation and scent marking, not proof of a specific thought or a universal emotional meaning.",
+            "sourceIds": [
+              "cornell",
+              "wsu"
+            ]
+          },
+          {
+            "claim": "We cannot directly know a cat's thoughts; engagement, seeking company and other behavior provide context for interpreting contentment.",
+            "sourceIds": [
+              "cornell"
+            ]
+          },
+          {
+            "claim": "Allorubbing is when two cats rub their bodies against each other; this is related to but distinct from a head bunt.",
+            "sourceIds": [
+              "wsu"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
