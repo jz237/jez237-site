@@ -54,9 +54,13 @@ test('open sea is a modern solo Free ride whose waves replace the venue water',(
  assert.equal(s.seaState,'calm');assert.equal(s.openSea.seaState,OPEN_SEA_STATES.chop);assert.equal(s.raceWater,null);
  assert.ok(!(s.course.ramps?.length),'no ramps float on the open sea');
  const r=s.racers[0];
- for(let i=0;i<8*60;i++)stepRace(s,{throttle:1,steer:.3},1/60);
- assert.ok(r.speed>10,`speed ${r.speed}`);
+ for(let i=0;i<8*60;i++)stepRace(s,{throttle:1},1/60);
+ assert.ok(r.speed>15,`speed ${r.speed}`);
  assert.ok(Math.abs(wave(r.x+3,r.z,s.time)-s.openSea.height(r.x+3,r.z))<.5,'wave() reports the open-sea surface');
+ // The race's own collisions still apply: Tempest's coral reef stops the ski.
+ const reef=createRace({mode:'practice',course:getCourse('tempest',0),openSea:OPEN_SEA_STATES.chop,seaState:'surf'});
+ for(let i=0;i<5*60;i++)stepRace(reef,{throttle:1,steer:.3},1/60);
+ assert.ok(reef.events.some(e=>e.text==='IMPACT'),'the reef is solid');assert.ok(reef.racers[0].x>60,'the ski stops at the reef');
  const storm=createRace({mode:'practice',course:getCourse('tempest',0),openSea:OPEN_SEA_STATES.storm,seaState:'storm'});
  assert.equal(raceWeather(storm).storm,.95,'a storm sea brings storm weather');
  assert.equal(raceWeather(createRace({mode:'practice',course:getCourse('tempest',0),openSea:OPEN_SEA_STATES.calm,seaState:'calm'})).storm,0);
