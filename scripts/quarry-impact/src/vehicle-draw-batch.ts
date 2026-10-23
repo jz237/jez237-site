@@ -125,3 +125,9 @@ export class VehicleDrawBatch {
     this.root.removeFromParent();
   }
 }
+/** Distant cars resync their batched parts less often while driving: swinging doors and fresh dents a long way off can lag a
+ * frame or three unseen. Returns the frame interval for a car this far (m) from the camera. */
+export const SYNC_LOD={mid:40,far:80} as const;
+export function syncInterval(distance:number){return!Number.isFinite(distance)||distance<=SYNC_LOD.mid?1:distance<=SYNC_LOD.far?2:4;}
+/** Whether a car with this id syncs on this frame (staggered so the skipped work spreads across frames). */
+export const syncDue=(frame:number,id:number,interval:number)=>interval<=1||((frame+id)%interval)===0;

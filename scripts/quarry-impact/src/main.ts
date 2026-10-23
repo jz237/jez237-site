@@ -27,6 +27,8 @@ import {showVenueBrowser,selectVenue,selectDemoVenue} from './venue-browser';
 import {readCameraSettings,playerChaseComposition,mountCameraSettings} from './camera-settings';
 import {ScreenCraze,trackCraze,hull,type CrazeState} from './screen-craze';
 import {speedFov,smoothAccel,roadBuzz} from './speed-feel';
+import {syncInterval,syncDue} from './vehicle-draw-batch';
+let syncFrame=0;
 let feelAccel=0,feelSpeed=0;
 import {dashboardComposition,roofDuckDrop,nextDrivingCamera,DRIVING_CAMERA_LABELS,type DrivingCamera} from './driving-camera';
 const roofDucks=new WeakMap<object,{roof:number;drop:number}>();
@@ -1967,7 +1969,8 @@ function frame(now: number) {
     activeVenue.checkpoint.position.set(p.x,activeVenue===quarryVenue?terrainHeight(p.x,p.z):activeVenue.course.height(p.x,p.z),p.z);
     activeVenue.checkpoint.rotation.y=Math.atan2(ahead.x-p.x,ahead.z-p.z);
   }
-  for(const car of cars)car.syncDrawBatch();
+  // Distant cars resync their batched parts every 2nd or 4th frame while driving (SYNC_LOD); everything else every frame.
+  syncFrame++;{const live=!studio&&['playing','countdown'].includes(state);for(const car of cars)if(!live||syncDue(syncFrame,car.id,syncInterval(car.current.distanceTo(camera.position))))car.syncDrawBatch();}
   renderer.info.reset();
   if (staticShadows) {
     for (const car of cars) staticShadows.bindReceivers(car.root);

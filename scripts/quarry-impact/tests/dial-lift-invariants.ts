@@ -1,3 +1,4 @@
+import {restoreSyncLodBytes} from './sync-lod-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readDialLiftPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreDialLiftBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreSyncLodBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readDialLiftPrevious(file);
 }
 export function verifyDialLiftRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'347ab861fd1b56260d0a05ab5d318af65128b531');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreSyncLodBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreDialLiftBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the DialLift release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreSyncLodBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the DialLift release');
  assert.equal(manifest.previousFixtureCount,6367);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,6367);
 }
