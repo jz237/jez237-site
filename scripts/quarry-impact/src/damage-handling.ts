@@ -427,3 +427,15 @@ export function impactZoneFactor(point:{x:number;z:number},direction:{x:number;z
   if(nose)return 1-(1-IMPACT_ZONE.nose)*along*along;
   return 1;
 }
+/** PIT spin (offline): a sideways shove behind a moving car's rear axle line pushes its rear tyres past their peak grip, and a
+ * sliding tyre grips less than a rolling one. For a moment the rear tyres keep only 1-loss·strength of their grip, fading over
+ * `fade` seconds, so the car can spin out as in a real PIT manoeuvre. Strength grows with the closing speed up to `full`. */
+export const PIT={speed:7,behind:.3,lateral:.6,closing:1.2,full:5,loss:.75,fade:1.2} as const;
+export function pitStrength(point:{x:number;z:number},direction:{x:number;z:number},halfLength:number,speed:number,closing:number){
+  const l=Math.hypot(direction.x,direction.z);
+  if(!(l>0)||![point.x,point.z,halfLength,speed,closing].every(Number.isFinite)||halfLength<=0)return 0;
+  if(Math.abs(speed)<PIT.speed||point.z>-PIT.behind*halfLength||Math.abs(direction.x)/l<PIT.lateral)return 0;
+  return Math.max(0,Math.min(1,(closing-PIT.closing)/(PIT.full-PIT.closing)));
+}
+/** Rear tyre grip left while sliding after a PIT shove. */
+export const pitGrip=(slide:number)=>1-PIT.loss*Math.max(0,Math.min(1,Number.isFinite(slide)?slide:0));
