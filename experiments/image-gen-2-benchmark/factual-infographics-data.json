@@ -14740,5 +14740,115 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-23-factual-infographic-factual-infographic-lily-exposure-polle",
+    "title": "Factual infographic: Lily Exposure — Pollen, Petals and Vase Water",
+    "tests": "Source-backed feline hazard education; no safe dose or home treatment; flowing unboxed botanical atlas; no subjective critic.; archive_slot=2026-10-23T00:20; concept=cat-lily-pollen-vase-water-kidney-hazard; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: household-hazards",
+    "prompt": "Create a finished, elaborate artistic feline safety infographic, directly rendered edge-to-edge, not a photograph of a poster. Title: “LILIES & CATS” with subtitle “A beautiful flower. A veterinary emergency.” Small series line “CAT ATLAS • HOUSEHOLD HAZARDS”. Use refined watercolor, luminous gouache and precise botanical ink on cool ivory paper, deep evergreen stems, cream petals, muted saffron pollen and restrained vermilion warning accents. Asymmetric organically flowing atlas composition, no boxed grid, no dashboard cards. Beautiful dominant illustration: a richly detailed short-haired charcoal-and-white adult domestic cat in three-quarter profile, seated with its white front paw raised, alert eyes, believable whiskers and anatomy. Beside it, an exquisitely drawn Easter lily, Lilium longiflorum: white trumpet flower, six tepals, six pollen-bearing stamens, green lanceolate leaves. The plant and feline illustrations dominate; separate them with generous open space, no cute cat actually chewing a flower and no implication that supervised contact is safe. Soft botanical arcs and delicate curved leader lines guide the eye through meaningful supporting studies around this hero.\n\nAbove the flower use the precise labels “TRUE LILIES — Lilium” and, beside a smaller distinct orange daylily botanical study, “DAYLILIES — Hemerocallis”. Main warning, highly readable: “These plants can cause fatal kidney failure in cats.” Include open labels “Flowers • leaves • stems • pollen” and “Vase water is hazardous too.” Weave three exposure studies into the flowing plant-to-cat pathway, not equal-sized panels: a close-up of a nibbled leaf labelled “Chewing plant material”; a magnified tuft of cat fur carrying yellow pollen, with a small grooming silhouette labelled “Pollen on fur → swallowed during grooming”; a transparent vase with waterline labelled “Drinking vase water”. These are schematic routes of exposure, not an invitation to demonstrate contact. Do not draw human-dose numbers, safe thresholds, toxin molecules or molecular mechanisms. A small softly shaded anatomical study of a paired feline kidney silhouette can sit along the pathway, with the text “Acute kidney injury” and “The specific toxin remains unidentified”; clearly label the study “Schematic”, not a literal visible lesion or a whole anatomy lesson.\n\nIn the lower natural sweep of foliage and white space, prominent urgent guidance in elegant readable typography: “SUSPECTED EXPOSURE? CONTACT A VET IMMEDIATELY.” Below: “Do not wait for symptoms. Call your veterinarian, emergency clinic or pet poison control.” Smaller: “Vomiting, drooling, poor appetite or low activity can be early signs.” Next to a tiny plant-photo illustration: “Bring a photo or sample for identification.” A brief prevention line: “Keep true lilies and daylilies out of cat homes.” A modest final safety line: “Do not induce vomiting unless a veterinary professional tells you to.” In a small open margin note, not a competing diagram, add “Names can mislead: peace and calla lilies cause different irritation—not this lily kidney toxicity. They are not safe to chew.” This is general hazard education, not home treatment. Source footer in subtle legible text: “Sources: U.S. FDA • Cornell Feline Health Center”. All substantive wording must stay within these verified claims; do not add dramatic symptom timelines, fatality percentages, cure promises or decorative fake labels. Keep botanical and feline textures exquisite, light directional and gentle, type sharply readable, the urgent call to action unmissable and the artwork spacious. Supporting studies may be reduced in decorative complexity for breathing room, never lose the three exposure routes or immediate veterinary guidance. Opaque background, auto size, requested medium quality.",
+    "image": "images/2026-10-23-factual-infographic-factual-infographic-lily-exposure-polle.jpg",
+    "thumb": "thumbs/2026-10-23-factual-infographic-factual-infographic-lily-exposure-polle.webp",
+    "color": "#c6c0a9",
+    "date": "2026-10-23",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "cat-lily-pollen-vase-water-kidney-hazard",
+      "imageSha256": "43137e73ee686de13af2dc894fa43930b08135ebee617b2b0a48b27a2e7a41bd",
+      "imageDHash": "731e3c28b233a622"
+    },
+    "factualInfographic": {
+      "topic": "How true lilies and daylilies expose cats through plant material, pollen and vase water and can cause acute kidney failure",
+      "description": "A botanical feline hazard atlas connecting three lily-exposure routes to kidney risk and urgent veterinary contact.",
+      "sourceNote": "Verified against U.S. FDA and Cornell Feline Health Center: https://www.fda.gov/animal-veterinary/animal-health-literacy/lovely-lilies-and-curious-cats-dangerous-combination ; https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/cat-health-news/easter-peril-look-out-lilies-and-other-items",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-23T04:21:38.041578+00:00",
+        "sources": [
+          {
+            "id": "FDA",
+            "publisher": "U.S. Food and Drug Administration",
+            "title": "Lovely Lilies and Curious Cats: A Dangerous Combination",
+            "sourceType": "government-agency",
+            "url": "https://www.fda.gov/animal-veterinary/animal-health-literacy/lovely-lilies-and-curious-cats-dangerous-combination"
+          },
+          {
+            "id": "Cornell",
+            "publisher": "Cornell University College of Veterinary Medicine",
+            "title": "Easter Peril: Look Out for Lilies and Other Items",
+            "sourceType": "university",
+            "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/cat-health-news/easter-peril-look-out-lilies-and-other-items"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "True lilies (Lilium species) and daylilies (Hemerocallis species) can cause potentially fatal kidney failure in cats.",
+            "sourceIds": [
+              "FDA",
+              "Cornell"
+            ]
+          },
+          {
+            "claim": "All parts of these plants are hazardous, including stems, leaves, flowers and pollen; vase water is also hazardous.",
+            "sourceIds": [
+              "FDA"
+            ]
+          },
+          {
+            "claim": "Cats can be poisoned by chewing plant material, licking pollen from fur while grooming, or drinking lily vase water; small exposures can cause severe harm.",
+            "sourceIds": [
+              "FDA"
+            ]
+          },
+          {
+            "claim": "The specific kidney-toxic substance has not been identified; do not depict a known molecule or a specific molecular mechanism.",
+            "sourceIds": [
+              "FDA"
+            ]
+          },
+          {
+            "claim": "Early signs may include vomiting, drooling, loss of appetite and reduced activity; do not wait for signs before seeking help.",
+            "sourceIds": [
+              "FDA",
+              "Cornell"
+            ]
+          },
+          {
+            "claim": "Suspected ingestion of lily material, pollen or vase water warrants immediate veterinary or pet poison control contact; early veterinary treatment improves prognosis.",
+            "sourceIds": [
+              "FDA",
+              "Cornell"
+            ]
+          },
+          {
+            "claim": "Keep these lilies out of cat households; bring a plant photograph or sample to help identification when seeking veterinary care.",
+            "sourceIds": [
+              "FDA",
+              "Cornell"
+            ]
+          },
+          {
+            "claim": "Do not induce vomiting unless specifically directed by a veterinarian or poison control professional.",
+            "sourceIds": [
+              "Cornell"
+            ]
+          },
+          {
+            "claim": "An Easter lily (Lilium longiflorum) is a dangerous true lily; daylilies belong to Hemerocallis, a distinct genus.",
+            "sourceIds": [
+              "FDA"
+            ]
+          },
+          {
+            "claim": "Not every plant called lily has the same toxin or risk: peace lilies and calla lilies cause calcium-oxalate irritation rather than this true-lily kidney toxicity; they are not safe to chew.",
+            "sourceIds": [
+              "FDA"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
