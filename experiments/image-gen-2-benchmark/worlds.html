@@ -410,7 +410,7 @@
           </article>`;
       }
 
-      function heroHtml(world) {
+      function heroHtml(world, first) {
         const item = world.items.find((candidate) => /first view/i.test(candidate.title || '') || /^(world|manual)-0?1$/i.test(candidate.slot || '')) || world.items[0];
         const src = imageUrl(item.image);
         const sizeMatch = String(item.size || '').match(/^(\d+)x(\d+)$/);
@@ -419,7 +419,7 @@
         const subtitle = world.description || item.world?.entryDescription || item.tests || '';
         return `
           <div class="world-hero${portrait ? ' portrait' : landscape ? ' landscape' : ''}">
-            <img src="${escapeHtml(src)}" alt="${escapeHtml(item.title)}" loading="lazy">
+            <img src="${escapeHtml(src)}" alt="${escapeHtml(item.title)}" ${first ? 'fetchpriority="high"' : 'loading="lazy"'}>
             <div class="world-hero-content">
               <div class="world-hero-kicker">Fictional world</div>
               <h2>${escapeHtml(world.name)}</h2>
@@ -434,8 +434,8 @@
 
       function render(items) {
         const storyLinks = {
-          'Aureline Shelf': { href: 'aureline-shelf-story.html', label: 'Watch The Orchard That Turned Upwind' },
-          'Mirthcap Lookingglass Village': { href: 'mirthcap-story.html', label: 'Watch The Heartglass Rue' }
+          'Aureline Shelf': { href: 'aureline-shelf-story', label: 'Watch The Orchard That Turned Upwind' },
+          'Mirthcap Lookingglass Village': { href: 'mirthcap-story', label: 'Watch The Heartglass Rue' }
         };
         const groups = new Map();
         items.forEach((item) => {
@@ -459,9 +459,9 @@
         worldCountPill.textContent = `Worlds: ${worlds.length}`;
         imageCountPill.textContent = `Images: ${items.length}`;
         worldPicker.innerHTML = '<option value="">Choose a world...</option>' + worlds.map((world) => `<option value="${escapeHtml(world.slug)}">${escapeHtml(world.name)} (${world.items.length})</option>`).join('');
-        worldsRoot.innerHTML = Array.from(groups.values()).map((world) => `
+        worldsRoot.innerHTML = Array.from(groups.values()).map((world, index) => `
           <section class="world" id="${escapeHtml(slugify(world.name))}">
-            ${heroHtml(world)}
+            ${heroHtml(world, index === 0)}
             <div class="world-head">
               <div>
                 <h2>${escapeHtml(world.name)}</h2>

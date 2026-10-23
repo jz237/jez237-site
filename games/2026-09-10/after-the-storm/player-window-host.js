@@ -42,7 +42,7 @@ export function createPlayerWindowHost({window:win=globalThis.window,now=()=>per
   // Only call from a real in-product click/keyboard activation.
   open(){
    if(child&&!child.closed){child.focus();if(!port||!ready)requestHandshake();return !!child;}
-   const url=new URL('./player-window.html',win.location.href);url.hash=new URLSearchParams({session,capability}).toString();
+   const url=new URL('./player-window',win.location.href);url.hash=new URLSearchParams({session,capability}).toString();
    try{child=win.open(url.href,'after-storm-p2-'+session,'popup,width=1280,height=720');}catch{child=null;}
    if(!child){status='Player 2 window was blocked. Allow it, then use Open Player 2.';onChange();return false;}
    openedAt=now();lastPing=openedAt;status='Preparing Player 2…';onChange();requestHandshake();return !!child;
