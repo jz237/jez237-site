@@ -1708,7 +1708,10 @@ function step(dt: number) {
     const alive = cars.filter((c) => c.health > 0&&!(activeClubRound!==null&&clubRetired&&c.id===0));
     if(scoreDerby()){const end=derbyEndReason(derbyFormat(),cars,elapsed,eventDuration());if(end)finish(end==='time'?'TIME’S UP':'SCORE DERBY COMPLETE');}
     else if (!demo && activeClubRound===null && cars[0].health <= 0) finish('WRECKED OUT');
-    else if (alive.length <= 1 && activeChallenge?.metric!=='condition') finish('LAST CAR STANDING');
+    else if (alive.length <= 1 && activeChallenge?.metric!=='condition'){
+      // The player outlasted the field (offline): the stands go up as the results come in.
+      if(!online?.active&&!demo&&alive[0]?.id===0){sound.crowd(1);crowdFlashes(SMASH_FLASHES+8);}
+      finish('LAST CAR STANDING');}
     else if (elapsed >= eventDuration()) finish('TIME’S UP');
   }
   if(activeClubRound!==null&&state==='playing'){
