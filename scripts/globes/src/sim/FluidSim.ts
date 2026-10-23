@@ -67,7 +67,9 @@ interface Kernel {
   bindGroups: GPUBindGroup[];
 }
 
-const PARAMS_SIZE = 416;
+const PARAMS_SIZE = 448;
+/** The most speed a fish's pushes can add to the water in one frame (see push()). */
+const MAX_PUSH = 0.15;
 /** Points the water is sampled at for the creatures every frame (see probe.wgsl): the koi's
  *  first (KOI_PROBES), then the clownfish's and the anemone's (setProbes). */
 export const PROBES = 64;
@@ -329,6 +331,10 @@ export class FluidSim {
    *  globe coming in (startOver) costs the CPU next to nothing. */
   private readonly plans = new Map<string, SeedPlan>();
 
+  private pushAt: [number, number, number] = [0, 0, 0];
+  private pushSpeed = 0;
+  private pushRadius = 0.05;
+
   private readonly paramsBuffer: GPUBuffer;
   private readonly paramsData = new ArrayBuffer(PARAMS_SIZE);
   private readonly pf = new Float32Array(this.paramsData);
@@ -439,6 +445,16 @@ export class FluidSim {
       addressModeU: 'clamp-to-edge',
       addressModeV: 'clamp-to-edge',
     });
+  }
+
+  /** A fish's push on the water, in the next frame's first substep (grid_update.wgsl fishPush): a
+   *  soft ball of radius `radius` at `at` given `speed` (world units/s) along the water's weight.
+   *  Pushes made in one frame add up, bounded. */
+  push(at: ArrayLike<number>, speed: number, radius: number): void {
+    if (!(speed > 0) || !(radius > 0)) return;
+    if (this.pushSpeed === 0) this.pushAt = [at[0], at[1], at[2]];
+    this.pushSpeed = Math.min(this.pushSpeed + speed, MAX_PUSH);
+    this.pushRadius = radius;
   }
 
   /** Where to sample the water for the koi this frame (KOI_PROBES points, xyz + pad). */
@@ -1366,6 +1382,10 @@ export class FluidSim {
     f.set([this.foaming ? ww.foamRate : 0, this.foaming ? ww.bubbleRate : 0, ww.m, c.gravity], 96);
     const sp = this.splash;
     f.set([this.splashing ? sp.bubbleRate : 0, this.splashing ? sp.sprayRate : 0, 0, 0], 100);
+    // A fish's push on the water: once, in the first substep after it was made.
+    f.set([...this.pushAt, this.pushSpeed], 104);
+    f.set([this.pushRadius, 0, 0, 0], 108);
+    this.pushSpeed = 0;
     f[67] = left;
     f[24] = this.frameIndex;
     f[35] = this.lightN;

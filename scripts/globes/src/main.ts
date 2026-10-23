@@ -5,7 +5,7 @@ import { AppShell, type DesktopHost } from './app/AppShell';
 import { GLOBES, type GlobeEntry } from './app/catalog';
 import { applyUrlOverrides, fishConfig, globeConfig, lightConfig, simConfig, type GlobeConfig, type LightConfig, type SimConfig } from './config';
 import { DeskMapping, loadDesk, type DesktopHostApi } from './desktop/desktopScene';
-import { Betta } from './fish/Betta';
+import { Betta, BUBBLE_RADIUS, RIPPLE_RADIUS } from './fish/Betta';
 import { BETTA_SURFACE_AT } from './fish/bettaWater.mjs';
 import { Koi, type KoiEnv } from './fish/Koi';
 import { CLOWN_PROBES, Clownfishes } from './fish/Clownfish';
@@ -240,7 +240,13 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     koi.update(dt, sim.koiSense, koiEnv());
     betta.update(dt, sim.koiSense, koiEnv());
     sim.setKoiProbes(betta.active ? betta.probePoints() : koi.probePoints());
-    if (betta.active) sim.setProbes(BETTA_SURFACE_AT, betta.surfaceProbes());
+    if (betta.active) {
+      sim.setProbes(BETTA_SURFACE_AT, betta.surfaceProbes());
+      // Its lips dimple the film as it gulps; diving, it lets bubbles go.
+      const d = betta.takeDisturbance();
+      if (d.push > 0) sim.push(d.pushAt.toArray(), d.push, RIPPLE_RADIUS);
+      if (d.bubbles > 0) sim.splash.emit(d.bubblesAt.toArray(), d.bubbles, BUBBLE_RADIUS);
+    }
     sim.koiVisible = koi.visible;
     if (reef.active) {
       // The clownfish (acting on what the water told them a frame or two ago), then the anemone,

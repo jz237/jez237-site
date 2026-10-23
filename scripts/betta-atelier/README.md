@@ -1,7 +1,9 @@
-# Living Silk — Betta Atelier 1.8
+# Living Silk — Betta Atelier 1.9
 
-The standalone published build is 1.8, which adopts the shared-source changes made
-for the globe: broad fins bend across their full span (globe 1.4) with a stiffer
+The standalone published build is 1.9. It adds the pelvic-feeler attachment fix and
+the shared hover-sculling and startle-tuck pectoral behaviour described in
+[Atelier 1.9](#atelier-19-2026-10-23) below, on top of the 1.8 shared-source changes
+made for the globe: broad fins bend across their full span (globe 1.4) with a stiffer
 root third and trimmed shear/billow so the free edge flexes more than the base
 (globe 1.5). Ray-length constraints, root attachment and the one-second display
 remain. Optional host locomotion supplies model-space speed
@@ -354,3 +356,18 @@ portrait overview, gulp sequence, both head-led turns, a 390-px phone portrait,
 flared/relaxed fins, water flow, reduced-motion start-paused and an interleaved
 old-vs-new frame-rate comparison (both ~58–60 fps on the host GPU; not a phone
 benchmark).
+
+## Atelier 1.9 (2026-10-23)
+
+- **Pelvic feelers stay attached.** The two ventral feelers (fin kind 4) are rooted
+  at a computed insertion point on the belly (`pelvicInsertion`, `PELVIC_*` in
+  `src/fish.js`) instead of floating off the body at some poses. Kind 4 now uses 8
+  constraint passes and kind 3 uses 12, and the final ray clamp is skipped for kind 3,
+  so the root cannot detach under strong flow or turning.
+- **Hover sculling.** `locomotion.mode` hover/surface/gulp now drives a continuous
+  alternating pectoral fanning stroke (`scull`, `SCULL_HZ = 3.8` in
+  `src/swim-gait.js`). Rise scales it to 0.7 and glide to 0.3.
+- **Startle tuck.** Mode `startle` (supplied by the globe host) folds both pectorals
+  against the body (`tuck`) for the C-start and dart.
+- Tests: `pelvic-attachment.test.mjs` and the sculling/tuck cases in
+  `fin-dynamics.test.mjs`; `npm test` runs 27 tests.

@@ -62,6 +62,8 @@ struct SimParams {
   water: vec4f,           // xyz: the water's absorption, against lightConfig's (its clarity and colour)
   foam: vec4f,            // the sea foam globe's white water (g2p.wgsl SHED): x, y the foam's and the bubbles' rates' scales (0: none); z, world units per metre of the surf's (Foam.ts); w, gravity
   shed: vec4f,            // every globe's splash (g2p.wgsl SHED, Splash.ts): x, y the clear bubbles' and the spray's rates' scales (0: none)
+  poke: vec4f,            // a push a fish gives the water, this substep (grid_update.wgsl): xyz where, w the speed it adds along the water's weight (0: none)
+  pokeK: vec4f,           // x: the push's radius (world units)
 };
 
 @group(0) @binding(0) var<uniform> P: SimParams;

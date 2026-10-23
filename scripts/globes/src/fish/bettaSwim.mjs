@@ -16,6 +16,10 @@ export const gulpMouth = e => 1.1 * (smooth(0, 0.28, e) - smooth(0.62, 0.95, e))
 export const gulpGillCover = e => Math.sin(Math.PI * clamp((e - 0.8) / 0.8, 0, 1)) ** 1.2;
 const GULPING = new Set(['rise', 'gulp', 'dive']);
 
+// A knock on the glass: water that changes faster than the fish is used to. Measured with the
+// globe in hand, idle water reads 0, a gentle drag ~0.4, a brisk swipe ~1.3 and a flick 2+.
+export const STARTLE_JOLT = 1.25, STARTLE_LENGTH = 0.9, STARTLE_COOLDOWN = 10, STARTLE_SPEED = 0.5;
+
 export class BettaSwim {
   constructor(seed = 237) {
     this.seed = seed;
@@ -39,6 +43,48 @@ export class BettaSwim {
     this.gulpClock = 0;
     this.gulp = this.gulpGill = 0;
     this.surfaceY = NaN;
+    // The water the fish has got used to, to tell a sudden shove from a steady current or spin.
+    this.flowRef = this.spinRef = null;
+    this.jolt = 0;
+    this.joltVector = [0, 0, 0];
+    this.startleReady = 4;
+    this.startleClock = 0;
+    this.startleHeading = 0;
+    this.startleDive = false;
+  }
+
+  /** How sharply the water just changed, against what it has been doing for the last second. */
+  readJolt(dt, water, wet) {
+    const flow = water?.flow, spin = water?.angular;
+    if (!flow || !spin || wet < 0.9) { this.flowRef = this.spinRef = null; this.joltVector = [0, 0, 0]; return 0; }
+    if (!this.flowRef) { this.flowRef = [...flow]; this.spinRef = [...spin]; }
+    const push = flow.map((v, k) => v - this.flowRef[k]);
+    const twist = Math.hypot(...spin.map((v, k) => v - this.spinRef[k]));
+    const follow = 1 - Math.exp(-1.5 * dt);
+    for (let k = 0; k < 3; k++) { this.flowRef[k] += push[k] * follow; this.spinRef[k] += (spin[k] - this.spinRef[k]) * follow; }
+    this.joltVector = push;
+    return Math.max(Math.hypot(...push), 0.5 * twist);
+  }
+
+  /** C-start: bend away from the knock, then dart off along the new heading. */
+  startStartle(env) {
+    const b = this.bounds(env), [px, py, pz] = this.joltVector;
+    const along = Math.hypot(px, pz) > 0.3 * Math.hypot(px, py, pz);
+    let turn = wrap((along ? Math.atan2(pz, -px) : this.heading + (this.random() < 0.5 ? -1.4 : 1.4)) - this.heading);
+    if (Math.abs(turn) < 0.8) turn = (turn < 0 ? -1 : 1) * 0.8;
+    turn = clamp(turn, -2.6, 2.6);
+    // Keep the dart clear of the glass: try the other headings around the first choice.
+    let chosen = null;
+    for (const offset of [0, 0.45, -0.45, 0.9, -0.9, 1.35, -1.35]) {
+      const h = this.heading + turn + offset;
+      const x = this.position[0] - Math.cos(h) * 0.32, z = this.position[2] + Math.sin(h) * 0.32;
+      if (Math.hypot(x, this.position[1], z) <= b.radius) { chosen = h; break; }
+    }
+    this.startleHeading = wrap(chosen ?? Math.atan2(-this.position[2], this.position[0]));
+    this.startleDive = Number.isFinite(this.surfaceY) && this.surfaceY - this.position[1] < 0.1;
+    this.mode = 'startle'; this.startleClock = 0; this.timer = 99; this.sharpTurn = false;
+    this.startleReady = this.time + STARTLE_COOLDOWN;
+    this.nextGulp = Math.max(this.nextGulp, this.time + 30 + this.gulpRandom() * 30);
   }
 
   gulpRandom() {
@@ -110,6 +156,16 @@ export class BettaSwim {
     const surfaceOk = Number.isFinite(surface) && Math.abs(surface - env.level) < 0.04 && g > 1 && -gravity[1] > 0.985 * g;
     if (surfaceOk) this.surfaceY = Number.isFinite(this.surfaceY) ? damp(this.surfaceY, surface, dt, 6) : surface;
     const wetNow = water?.submerged ?? (submerged ? 1 : 0);
+    this.jolt = this.readJolt(dt, water, wetNow);
+    if (this.mode !== 'startle' && this.jolt > STARTLE_JOLT && this.time >= this.startleReady && (water.airAbove ?? 0) < 0.6) this.startStartle(env);
+    if (this.mode === 'startle') {
+      this.startleClock += dt;
+      if (this.startleClock >= STARTLE_LENGTH) {
+        this.mode = 'glide'; this.timer = 1.2 + this.random() * 0.8; this.sharpTurn = false;
+        this.chooseTarget(env);
+      }
+    }
+    const startling = this.mode === 'startle';
     let gulping = GULPING.has(this.mode);
     if (!gulping && this.time >= this.nextGulp && surfaceOk && wetNow > 0.99 && (water.airAbove ?? 0) < 0.25 && this.mode !== 'burst' && !this.sharpTurn) {
       this.mode = 'rise'; this.gulpClock = 0; this.timer = 9; gulping = true;
@@ -132,7 +188,7 @@ export class BettaSwim {
       }
     }
     let distance = Math.hypot(...this.target.map((v, i) => v - this.position[i]));
-    if (!gulping && (this.timer <= 0 || (this.mode !== 'hover' && distance < 0.075))) {
+    if (!gulping && !startling && (this.timer <= 0 || (this.mode !== 'hover' && distance < 0.075))) {
       if (this.mode === 'hover') {
         this.mode = this.random() < 0.18 ? 'burst' : 'cruise';
         this.timer = this.mode === 'burst' ? 0.65 + this.random() * 0.45 : 6 + this.random() * 5;
@@ -151,7 +207,8 @@ export class BettaSwim {
     const climbing = this.mode === 'rise' || this.mode === 'gulp';
     if (climbing) goal = [this.position[0] + fx * 0.3, holdY, this.position[2] + fz * 0.3];
     else if (this.mode === 'dive') goal = [this.position[0] + fx * 0.2, clamp(this.position[1] - 0.25, b.low, b.high), this.position[2] + fz * 0.2];
-    if (nearWall) goal = [-this.position[0] * 0.45, clamp(this.position[1], b.low, b.high), -this.position[2] * 0.45];
+    if (startling) goal = [this.position[0] - Math.cos(this.startleHeading) * 0.3, this.position[1], this.position[2] + Math.sin(this.startleHeading) * 0.3];
+    else if (nearWall) goal = [-this.position[0] * 0.45, clamp(this.position[1], b.low, b.high), -this.position[2] * 0.45];
     // The head is deliberately at the surface during a trip, so air above it is not an emergency.
     const escaping = !climbing && (!submerged || (water?.airAbove ?? 0) > 0.25);
     if (escaping) goal = water ? [water.centroid[0], water.centroid[1] - 0.06, water.centroid[2]] : [this.position[0] * 0.6, b.low + 0.025, this.position[2] * 0.6];
@@ -159,12 +216,13 @@ export class BettaSwim {
     distance = Math.hypot(...delta);
     const yawError = wrap(Math.atan2(delta[2], -delta[0]) - this.heading);
     const holding = (this.mode === 'hover' || this.mode === 'gulp') && !nearWall && !escaping;
-    if (holding || Math.abs(yawError) < 0.3) this.sharpTurn = false;
+    if (startling) this.sharpTurn = false;
+    else if (holding || Math.abs(yawError) < 0.3) this.sharpTurn = false;
     else if (Math.abs(yawError) > 1.9) this.sharpTurn = true;
-    const maxRate = this.sharpTurn ? 3.0 : 0.9 + this.speed * 3;
-    const wantedRate = holding ? 0 : clamp(yawError * (this.sharpTurn ? 3.5 : 1.8), -maxRate, maxRate);
+    const maxRate = startling ? 9 : this.sharpTurn ? 3.0 : 0.9 + this.speed * 3;
+    const wantedRate = holding ? 0 : clamp(yawError * (startling ? 10 : this.sharpTurn ? 3.5 : 1.8), -maxRate, maxRate);
     for (let k = 0; k < 3; k++) this.waterSpin[k] = damp(this.waterSpin[k], water?.angular[k] ?? 0, dt, 5);
-    const angularAcceleration = this.sharpTurn ? 9 : 3;
+    const angularAcceleration = startling ? 80 : this.sharpTurn ? 9 : 3;
     this.steerRate += clamp(wantedRate - this.steerRate, -angularAcceleration * dt, angularAcceleration * dt);
     this.angularVelocity = this.steerRate + this.waterSpin[1] * 0.8;
     this.heading += this.angularVelocity * dt;
@@ -172,9 +230,11 @@ export class BettaSwim {
     if (this.mode === 'rise') pitchTarget = rise > 0.1 ? 0.62 : GULP_PITCH;
     else if (this.mode === 'gulp') pitchTarget = GULP_PITCH;
     else if (this.mode === 'dive') pitchTarget = -0.55;
+    // Fleeing from the film, it dives so the snout never breaks the surface on the way out.
+    if (startling && this.startleDive) pitchTarget = -0.45;
     const oldPitch = this.pitch, oldRoll = this.roll;
     const pitchSpin = -this.waterSpin[2] * Math.cos(this.heading) - this.waterSpin[0] * Math.sin(this.heading);
-    this.pitch = clamp(damp(this.pitch, pitchTarget, dt, 2.4) + pitchSpin * dt * 0.8, -0.75, gulping ? 0.95 : 0.75);
+    this.pitch = clamp(damp(this.pitch, pitchTarget, dt, startling ? 8 : 2.4) + pitchSpin * dt * 0.8, -0.75, gulping ? 0.95 : 0.75);
     const rollSpin = this.waterSpin[0] * Math.cos(this.heading) - this.waterSpin[2] * Math.sin(this.heading);
     this.roll = clamp(damp(this.roll, 0, dt, 2.6) + rollSpin * dt * 0.8, -0.65, 0.65);
     this.pitchRate = (this.pitch - oldPitch) / dt;
@@ -185,8 +245,10 @@ export class BettaSwim {
     if (this.mode === 'rise') desiredSpeed = clamp(rise * 2.5, 0.006, 0.2);
     else if (this.mode === 'gulp') desiredSpeed = 0.006;
     else if (this.mode === 'dive') desiredSpeed = 0.17;
+    // The dart starts once the head has swung round, then the speed decays into a glide.
+    if (startling) desiredSpeed = STARTLE_SPEED * Math.max(0, Math.cos(yawError)) ** 2 * Math.exp(-Math.max(0, this.startleClock - 0.12) / 0.45);
     if (escaping) desiredSpeed = Math.max(desiredSpeed, 0.16);
-    this.speed = damp(this.speed, desiredSpeed, dt, desiredSpeed > this.speed ? 2.8 : 3.5);
+    this.speed = damp(this.speed, desiredSpeed, dt, startling ? 14 : desiredSpeed > this.speed ? 2.8 : 3.5);
     // Same neutral-buoyancy inertia and finite station-keeping as the koi:
     // follow the full current with a 0.9s lag, not a capped 0.075-unit/s offset.
     const wet = water?.submerged ?? (submerged ? 1 : 0);

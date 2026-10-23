@@ -29,11 +29,24 @@ fn gridUpdate(@builtin(global_invocation_id) gid: vec3u) {
   if (w > 1e-4) { u = m / w; }
   velOld[t] = u;
   var f = P.accel[comp];
+  let x = P.origin + (vec3f(f32(gid.x), f32(gid.y), f32(k)) + faceOffset(comp)) * P.h;
   if (P.scene.x > 0.5) {
-    let x = P.origin + (vec3f(f32(gid.x), f32(gid.y), f32(k)) + faceOffset(comp)) * P.h;
     f += ownMotion(x)[comp];
   }
-  velNew[t] = u + P.dt * f;
+  velNew[t] = u + P.dt * f + fishPush(x)[comp];
+}
+
+// A fish's push on the water (the betta's lips meeting the film): a soft ball of added speed along
+// the water's weight, once, in a frame's first substep. It sinks the surface into a dimple that
+// then rings outwards.
+fn fishPush(x: vec3f) -> vec3f {
+  if (P.poke.w == 0.0) { return vec3f(0.0); }
+  let d = x - P.poke.xyz;
+  let r = max(P.pokeK.x, 1e-3);
+  let q = dot(d, d) / (r * r);
+  if (q > 6.25) { return vec3f(0.0); }
+  let down = P.accel / max(length(P.accel), 1e-4);
+  return down * (P.poke.w * exp(-q));
 }
 
 fn ownMotion(x: vec3f) -> vec3f {

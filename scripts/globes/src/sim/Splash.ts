@@ -35,8 +35,10 @@ export const DROP_ROW = 512;
 /** The wet map's texels a side (where the water covers the glass: splash.wgsl spWet). */
 const WET_N = 256;
 const MAP_K = 4;
-const S_WORDS = 28;
+const S_WORDS = 36;
 const CTRL_WORDS = 24;
+/** The most bubbles a fish can let go in a frame (emit()). */
+const EMIT_MAX = 16;
 /** How many clear bubbles, and how much spray, the churned water sheds (g2p.wgsl), against the
  *  sea foam globe's rates (the surf's, by the water a particle stands for: Foam.share). */
 const BUBBLE_RATE = 0.3;
@@ -81,6 +83,10 @@ export class Splash {
   private readonly wetK = WET_K.slice();
   private readonly dropK = DROP_K.slice();
   private kernels: Record<string, SplashKernel> | null = null;
+  private emitAt: [number, number, number] = [0, 0, 0];
+  private emitCount = 0;
+  private emitRadius = 0.004;
+  private emitSpread = 0.006;
   private frame = 0;
   private cur = 0;
 
@@ -166,6 +172,7 @@ export class Splash {
     // (Each kernel's bindings, as it uses them.)
     const entries: [string, number[]][] = [
       ['spSpawn', [0, 1, 4, 5, 6, 7, 8, 18, 19, 20]],
+      ['spEmit', [0, 4, 6, 7, 18, 19, 20]],
       ['spBubbles', [0, 2, 3, 4, 6, 7, 8, 18, 19, 20]],
       ['spSpray', [0, 4, 6, 7, 8, 9, 18, 19, 20, 22]],
       ['spWet', [0, 4, 6, 9, 11, 18, 19, 20, 22]],
@@ -193,6 +200,17 @@ export class Splash {
     this.kernels = Object.fromEntries(entries.map(([name], i) => [name, built[i]]));
   }
 
+  /** Bubbles a fish lets go, in the next frame: `count` (at most EMIT_MAX) about `at` (the water's
+   *  frame), each of about `radius`, spread `spread` about it. */
+  emit(at: ArrayLike<number>, count: number, radius = 0.004, spread = 0.006): void {
+    const n = Math.min(Math.floor(count), EMIT_MAX);
+    if (n < 1) return;
+    this.emitAt = [at[0], at[1], at[2]];
+    this.emitCount = n;
+    this.emitRadius = radius;
+    this.emitSpread = spread;
+  }
+
   private writeUniform(dt: number, time: number): void {
     const f = new Float32Array(this.u);
     const u = new Uint32Array(this.u);
@@ -214,6 +232,8 @@ export class Splash {
     f.set(BUBBLE_K, 16);
     f.set(this.wetK, 20);
     f.set(this.dropK, 24);
+    f.set([this.emitAt[0], this.emitAt[1], this.emitAt[2], this.emitCount], 28);
+    f.set([this.emitRadius, this.emitSpread, 0, 0], 32);
     this.device.queue.writeBuffer(this.uniform, 0, this.u);
   }
 
@@ -237,6 +257,8 @@ export class Splash {
     enc.clearBuffer(b.bins);
     const pass = beginPass(enc, 'splash');
     this.run(pass, 'spSpawn', g(FOAM_QUEUE, 64));
+    if (this.emitCount > 0) this.run(pass, 'spEmit', g(this.emitCount, 16));
+    this.emitCount = 0;
     this.run(pass, 'spBubbles', g(BUBBLE_CAP));
     this.run(pass, 'spSpray', g(SPRAY_CAP));
     const wg = Math.ceil(WET_N / 8);

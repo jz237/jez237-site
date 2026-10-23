@@ -5,6 +5,13 @@ import { BettaSwim, BETTA_SCALE as SCALE } from './bettaSwim.mjs';
 import { BETTA_PROBES, BETTA_SURFACE_COUNT, bettaSurfaceHeights, readBettaWater } from './bettaWater.mjs';
 import type { KoiEnv, KoiSense } from './Koi';
 
+/** The dimple the lips make at the film: for how long (s into the gulp), at what rate it adds speed
+ *  to the water under them (world units/s per s), over what radius; the bubbles let go diving
+ *  from the film and darting off it (per second), their radius. */
+export const RIPPLE_TIME = 0.34, RIPPLE_RATE = 6, RIPPLE_RADIUS = 0.045;
+const DIVE_BUBBLES = 14, STARTLE_BUBBLES = 36;
+export const BUBBLE_RADIUS = 0.0035;
+
 /** The actual Atelier specimen, evaluated on the CPU for the refracted rays.
  * No screenshot/billboard: skin, seven membranes, mouth, covers and both eye
  * sockets remain separate animated three-dimensional surfaces. */
@@ -22,6 +29,11 @@ export class Betta {
   private readonly surface = new Float32Array(BETTA_SURFACE_COUNT * 4);
   private readonly mouth = new THREE.Vector3();
   private level = 0.18;
+  private readonly rippleAt = new THREE.Vector3();
+  private readonly bubbleAt = new THREE.Vector3();
+  private ripple = 0;
+  private bubbleDebt = 0;
+  private bubbleCount = 0;
   readonly swim = new BettaSwim();
   waterState: ReturnType<typeof readBettaWater> | null = null;
   private time = 0;
@@ -123,6 +135,37 @@ export class Betta {
     this.bvh.data[3] = 1;
     this.texture.needsUpdate = true;
     this.updateProbes();
+    this.disturb(dt);
+  }
+
+  /** What the fish did to the water at the film this frame, for the sim to take once (main.ts):
+   *  a push down at the lips (speed to add along the water's weight; where) and bubbles let go
+   *  (how many; where). Both reset. */
+  takeDisturbance(): { push: number; pushAt: THREE.Vector3; bubbles: number; bubblesAt: THREE.Vector3 } {
+    const out = { push: this.ripple, pushAt: this.rippleAt, bubbles: this.bubbleCount, bubblesAt: this.bubbleAt };
+    this.ripple = 0;
+    this.bubbleCount = 0;
+    return out;
+  }
+
+  private disturb(dt: number): void {
+    const s = this.swim, surface = this.waterState?.surface ?? this.level, lip = this.mouth;
+    // Opening its mouth at the film, the lips draw the water in: the surface dimples, then rings.
+    if (s.mode === 'gulp' && s.gulpClock < RIPPLE_TIME && Math.abs(lip.y - surface) < 0.03) {
+      this.rippleAt.set(lip.x, surface, lip.z);
+      this.ripple += RIPPLE_RATE * dt * Math.sin(Math.PI * Math.min(1, s.gulpClock / RIPPLE_TIME));
+    }
+    // Diving from the film (and darting off it), the air it took in leaves as a few small bubbles.
+    const bubbling = (s.mode === 'dive' && s.timer > 0.55) ? DIVE_BUBBLES : (s.mode === 'startle' && s.startleDive && s.startleClock < 0.4) ? STARTLE_BUBBLES : 0;
+    if (bubbling > 0 && surface - lip.y < 0.09) {
+      this.bubbleDebt += bubbling * dt;
+      const n = Math.floor(this.bubbleDebt);
+      if (n > 0) {
+        this.bubbleDebt -= n;
+        this.bubbleCount += n;
+        this.bubbleAt.set(lip.x, lip.y - 0.004, lip.z);
+      }
+    } else this.bubbleDebt = 0;
   }
 
   private updateProbes(): void {

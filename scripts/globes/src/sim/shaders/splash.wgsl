@@ -55,6 +55,10 @@ struct SplashParams {
   // Bond number), how fast they run once moving (world units/s, by that ratio over 1 to the 3/4),
   // how fast they dry (their base's radius squared, world units^2/s), -).
   dropK: vec4f,
+  // Bubbles a fish lets go (spEmit): (where (xyz), how many), (their radius (world units), how far
+  // they spread about where, -, -).
+  emit: vec4f,
+  emitK: vec4f,
 };
 @group(0) @binding(20) var<uniform> S: SplashParams;
 
@@ -453,6 +457,23 @@ fn spSpawn(@builtin(global_invocation_id) gid: vec3u) {
     let r = 0.0012 * pow(8.0, pow(ww_rnd(&s), 1.5));
     sp_addSpray(S.cur, at + u * (0.004 / max(length(u), 1e-4)), -r, u, sp_info(ww_hash(s, 77u + k)));
   }
+}
+
+// A fish's bubbles (the air the betta lets go as it dives from the film): S.emit.w of them, about
+// S.emit.xyz, in the water, before spBubbles carries them on.
+@compute @workgroup_size(16)
+fn spEmit(@builtin(global_invocation_id) gid: vec3u) {
+  let k = gid.x;
+  if (k >= u32(S.emit.w)) { return; }
+  var s = ww_hash(k * 0x2c1b3c6du + 0x7f4a7c15u, S.frame * 0x9e3779b9u + 0x1b873593u);
+  let up = sp_up();
+  let rMax = P.radius - 0.01;
+  var p = S.emit.xyz + ww_gauss3(&s) * S.emitK.y;
+  if (length(p) > rMax) { p *= rMax / length(p); }
+  let w = sp_intoWater(p, up);
+  if (w.w < 0.5) { return; }
+  let r = S.emitK.x * mix(0.7, 1.5, ww_rnd(&s));
+  sp_addBubble(S.cur, w.xyz, r, sp_info(ww_hash(s, 131u + k)));
 }
 
 // A bubble bursting at the surface: the jet its hollow closes into throws up a drop or two (the

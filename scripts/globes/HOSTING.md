@@ -3,7 +3,7 @@
 Original: https://github.com/willwaltz/globes
 Author: Will Waltz · MIT License
 Upstream commit: 93c3b814bbca53463e8207b8e3c95fca8940dff5
-Imported: 2026-10-22 · Hosting build: 1.6.0
+Imported: 2026-10-22 · Hosting build: 1.7.0
 Public route: https://jez237.com/demos/globes/
 
 The upstream source and MIT attribution are retained. Hosting adds the gallery
@@ -26,7 +26,7 @@ The specimen is imported from
 shared anatomy, breathing, one-second flare and synchronized gaze, with the
 full-fin compliance and head-led turning revision described below.
 The Atelier's normal tessellation is unchanged. The standalone compiled demo was
-rebuilt as Atelier 1.8 to adopt the shared motion and shader changes (see its
+rebuilt as Atelier 1.9 to adopt the shared motion and shader changes (see its
 README).
 
 `src/fish/Betta.ts` evaluates the same vertex deformations on the CPU, refits a
@@ -91,10 +91,41 @@ turning sharply, and aborts to a dive if any of that is lost. The fish rises wit
 its lips held ~3 mm under the measured surface and pitches to ~0.85 rad (~49
 degrees nose-up); the Atelier then opens the mouth (`gulp`) and pulses the gill
 cover (`gulpGill`) for 1.6 s before it dives. These host-driven values override
-the breathing rhythm only while larger. Limits: the fluid coupling is one-way
-(water -> fish), so there are no ripples or bubbles from the gulp; trips happen
+the breathing rhythm only while larger. Limits: trips happen
 only in an upright globe; the surface is read once per frame with the sim's 1-2
 frame readback delay, so the lip height is held to within ~3 mm, not exactly.
+
+Version 1.7 adds four realism behaviours (Atelier 1.9 shares the fin changes):
+- **Attached pelvic feelers.** The two ventral feelers are rooted at a computed
+  belly insertion point and solved with extra constraint passes, so they read as
+  attached in every pose (`pelvicInsertion` in `../betta-atelier/src/fish.js`).
+- **Gulp ripples and bubbles.** The fish makes a small, bounded push into the
+  water (the coupling was one-way before). `Betta.takeDisturbance()` reports it once
+  per frame; `main.ts` forwards it to `FluidSim.push(at, speed, radius)` (a downward
+  Gaussian velocity delta in `grid_update.wgsl`'s `fishPush`, capped at
+  `MAX_PUSH = 0.15`) and to `Splash.emit(...)`, a new `spEmit` kernel that spawns
+  bubbles. While its lip is within 0.03 of the film, the first 0.34 s of the gulp
+  dimples the surface (about 10 mm, with a ring ripple). On the dive, while the dive
+  timer is above 0.55, bubbles leave the lip at 14 per second (about ten). The fish
+  senses the push only through its existing flow probes, and the jolt reference
+  smoothing keeps it from startling at its own ripple.
+- **Hover sculling.** `hover`, `surface` and `gulp` modes drive continuous alternating
+  pectoral fanning (`SCULL_HZ = 3.8` in `swim-gait.js`).
+- **Startle response.** A sudden flow or rotation change (jolt, measured against a
+  1.5 /s-smoothed reference so steady swirling does not trigger it) above
+  `STARTLE_JOLT = 1.25`, at most once per 10 s, starts a 0.9 s `startle`: a C-bend
+  away from the disturbance, a dart at about 4x cruise speed, pectorals tucked,
+  then a glide. A startle within 0.1 of the film also dives and releases about
+  fourteen bubbles in its first 0.4 s. It sets a heading target and the voluntary
+  `steerRate`, so head-led turn history and the separation of passive spin from
+  deliberate turning are preserved. Idle water reads 0, a gentle drag ~0.4, a brisk
+  swipe ~1.3 and a flick above 2.
+
+Frame time was unchanged: interleaved old/new Chrome WebGPU runs at 64³, one ray,
+1200×900 gave 58-60 fps in idle, full-gulp and strong-flick windows for both builds.
+Limits: the push and bubbles are artistic, not a coupled free-surface solver; the
+Firefox check confirmed the new sim kernels compile under naga, with the betta itself
+checked on the published site.
 
 The neck now leads the route, instead of rotating about the center of the fish.
 `BodyMotion.advanceTurn()` carries a history of local tangent angles down the

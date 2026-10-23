@@ -8,7 +8,9 @@ import { gulpState, gulpPresentation, SURFACE_Y, MOUTH_DEPTH, GULP_PITCH } from 
 const PI = Math.PI,
   lerp = T.MathUtils.lerp,
   clamp = T.MathUtils.clamp;
-const SCALE = 0.0032;
+export const SCALE = 0.0032;
+// Pectoral pose by locomotion mode: fan to hold station when still, fold in for the startle dart.
+export const POSES = { hover: { scull: 1 }, surface: { scull: 1 }, gulp: { scull: 1 }, rise: { scull: 0.7 }, glide: { scull: 0.3 }, startle: { tuck: 1 } };
 const world = ([x, y]) => [(x - 680) * SCALE, (420 - y) * SCALE];
 const texUV = ([x, y]) => [x / 1536, 1 - y / 1024];
 export const uniforms = {
@@ -78,7 +80,7 @@ const sections = [
   [960, 392, 482, 26],
   [1010, 409, 471, 20],
 ];
-function section(x) {
+export function section(x) {
   let i = 0;
   while (i < sections.length - 2 && sections[i + 1][0] < x) i++;
   const a = sections[i],
@@ -226,6 +228,56 @@ function sample(points, t) {
         (-a[j] + 3 * v - 3 * c[j] + d[j]) * u * u * u),
   );
 }
+// The pelvic rays rise out of the belly skin beside the ventral midline. The reference
+// outline starts a little below the belly, so the 3D insertion sinks into the flank
+// (texture coordinates still follow the reference footprint) and the feelers never
+// show a gap at the root.
+export const PELVIC_ROOTS = [
+    [361, 523],
+    [378, 529],
+    [400, 534],
+  ],
+  PELVIC_EDGE = [
+    [369, 543],
+    [385, 610],
+    [403, 685],
+    [444, 775],
+    [483, 860],
+    [535, 917],
+  ];
+const PELVIC_BASE_Z = 0.045,
+  PELVIC_TIP_Z = 0.19,
+  PELVIC_SINK = 0.014;
+function pelvicInsertion(r) {
+  const [, top, bottom, thick] = section(r[0]),
+    q = Math.sqrt(Math.max(0, 1 - (PELVIC_BASE_Z / (thick * SCALE)) ** 2));
+  return [r[0], (top + bottom) / 2 + ((bottom - top) / 2) * q - PELVIC_SINK / SCALE];
+}
+export function finGrid(roots, edge, kind, side, u, v) {
+  const r = sample(roots, u),
+    e = sample(edge, u),
+    g = kind === 4 ? pelvicInsertion(r) : r,
+    edgeInset =
+      1 -
+      0.004 * (0.5 + 0.5 * Math.sin(u * PI * 142)) -
+      0.002 * (0.5 + 0.5 * Math.sin(u * PI * 57)),
+    vv = v * edgeInset;
+  const [x, y] = world([lerp(g[0], e[0], vv), lerp(g[1], e[1], vv)]);
+  const ridges =
+    Math.sin(u * PI * 56) * 0.006 + Math.sin(u * PI * 9 + v * 3) * 0.055;
+  let z = Math.pow(v, 1.5) * ridges;
+  if (kind === 3) z = side * (0.267 + v * 0.19) + v * 0.006 * Math.sin(u * 70);
+  else if (kind === 4)
+    z = side * lerp(PELVIC_BASE_Z, PELVIC_TIP_Z, v) + v * ridges * 0.4;
+  const [rx, ry] = world(g);
+  return {
+    x, y, z, rx, ry,
+    rz: kind === 3 ? side * 0.267 : kind === 4 ? side * PELVIC_BASE_Z : 0,
+    px: lerp(r[0], e[0], vv),
+    py: lerp(r[1], e[1], vv),
+    vv,
+  };
+}
 function makeFin(fish, texture, roots, edge, kind = 0, side = 0, atlas = null) {
   const p = [],
     uv = [],
@@ -235,32 +287,12 @@ function makeFin(fish, texture, roots, edge, kind = 0, side = 0, atlas = null) {
     nu = fish.userData.compact ? 28 : 180,
     nv = fish.userData.compact ? 16 : 52;
   for (let i = 0; i <= nu; i++) {
-    const u = i / nu,
-      r = sample(roots, u),
-      e = sample(edge, u);
+    const u = i / nu;
     for (let j = 0; j <= nv; j++) {
       const v = j / nv,
-        edgeInset =
-          1 -
-          0.004 * (0.5 + 0.5 * Math.sin(u * PI * 142)) -
-          0.002 * (0.5 + 0.5 * Math.sin(u * PI * 57)),
-        vv = v * edgeInset,
-        px = lerp(r[0], e[0], vv),
-        py = lerp(r[1], e[1], vv),
-        [x, y] = world([px, py]),
-        [rx, ry] = world(r);
-      const ridges =
-        Math.sin(u * PI * 56) * 0.006 + Math.sin(u * PI * 9 + v * 3) * 0.055;
-      let z = Math.pow(v, 1.5) * ridges;
-      if (kind === 3)
-        z = side * (0.267 + v * 0.19) + v * 0.006 * Math.sin(u * 70);
-      else if (kind === 4) z = side * (0.14 + v * 0.05) + v * ridges * 0.4;
+        { x, y, z, rx, ry, rz, px, py, vv } = finGrid(roots, edge, kind, side, u, v);
       p.push(x, y, z);
-      root.push(
-        rx,
-        ry,
-        kind === 3 ? side * 0.267 : kind === 4 ? side * 0.14 : 0,
-      );
+      root.push(rx, ry, rz);
       if (atlas) {
         const ar = sample(atlas.roots, u),
           ae = sample(atlas.edge, u);
@@ -291,13 +323,7 @@ function makeFin(fish, texture, roots, edge, kind = 0, side = 0, atlas = null) {
   const dynamics = new FinDynamics({
     kind, side,
     point(u, v) {
-      const r = sample(roots, u), e = sample(edge, u);
-      const vv = v * (1 - 0.004 * (0.5 + 0.5 * Math.sin(u * PI * 142)) - 0.002 * (0.5 + 0.5 * Math.sin(u * PI * 57)));
-      const [x, y] = world([lerp(r[0], e[0], vv), lerp(r[1], e[1], vv)]);
-      const ridges = Math.sin(u * PI * 56) * 0.006 + Math.sin(u * PI * 9 + v * 3) * 0.055;
-      let z = v ** 1.5 * ridges;
-      if (kind === 3) z = side * (0.267 + v * 0.19) + v * 0.006 * Math.sin(u * 70);
-      else if (kind === 4) z = side * (0.14 + v * 0.05) + v * ridges * 0.4;
+      const { x, y, z } = finGrid(roots, edge, kind, side, u, v);
       return [x, y, z];
     },
   });
@@ -556,25 +582,7 @@ export function createBetta({ compact = false } = {}) {
   const pectorals = [], eyes = [];
   const display = new DisplayMotion(), gaze = new EyeMotion();
   for (const side of [-1, 1]) {
-    makeFin(
-      fish,
-      texture,
-      [
-        [361, 523],
-        [378, 529],
-        [400, 534],
-      ],
-      [
-        [369, 543],
-        [385, 610],
-        [403, 685],
-        [444, 775],
-        [483, 860],
-        [535, 917],
-      ],
-      4,
-      side,
-    );
+    makeFin(fish, texture, PELVIC_ROOTS, PELVIC_EDGE, 4, side);
     pectorals.push(
       makeFin(
         fish,
@@ -666,7 +674,7 @@ export function createBetta({ compact = false } = {}) {
     macroTextures,
     scaleCount: 0,
     finCount: 7,
-    revision: "1.8",
+    revision: "1.9",
     gulp: { lift: 0, phase: "none", clock: -1, lip: [0, 0, 0], surfaceY: SURFACE_Y },
     display, eyes,
     gait,
@@ -804,8 +812,8 @@ export function createBetta({ compact = false } = {}) {
         };
       }
       const relativeFlow = Math.hypot(...localFlow.map((v, i) => v - velocity[i]));
-      gait.advance(dt, drive, relativeFlow, turn);
-      const { phase, effort, breathPhase, pectoralPhase } = gait;
+      gait.advance(dt, drive, relativeFlow, turn, POSES[mode] ?? {});
+      const { phase, effort, breathPhase, pectoralPhase, scull, tuck } = gait;
       // The standalone turn also leads with the neck; the rear follows the head's tangent.
       bodyMotion.advanceTurn(dt, locomotion ? locomotion.steerRate ?? angularVelocity : turn, locomotion ? locomotion.speed ?? 0 : Math.hypot(...velocity));
       bodyMotion.update(phase, effort, turn, breathPhase, locomotion?.gulp ?? gulpOpen, locomotion?.gulpGill ?? gulpGill);
@@ -822,7 +830,7 @@ export function createBetta({ compact = false } = {}) {
       uniforms.uMouth.value = bodyMotion.mouth;
       uniforms.uGill.value = bodyMotion.gill;
       const state = {
-        body: bodyMotion, time: t, phase, pectoralPhase, drive: effort * 0.55, effort, turn, flare: uniforms.uFlare.value,
+        body: bodyMotion, time: t, phase, pectoralPhase, scull, tuck, drive: effort * 0.55, effort, turn, flare: uniforms.uFlare.value,
         heading, angularVelocity, velocity, origin: fish.position.toArray(),
         localHydrodynamics,
         strength: flowStrength, direction: water.direction, externalFlow: fish.userData.externalFlow,

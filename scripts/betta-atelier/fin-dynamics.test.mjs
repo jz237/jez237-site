@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { SwimGait } from './src/swim-gait.js';
+import { SwimGait, SCULL_HZ } from './src/swim-gait.js';
 import { BodyMotion } from './src/body-motion.js';
 import { FinDynamics, waterVelocity } from './src/fin-dynamics.js';
 
@@ -170,6 +170,36 @@ test('actual pectoral membrane beats faster under load, stays attached and resol
   const hover=sample(0), loaded=sample(0.9), phone=sample(0.9,30);
   assert.ok(loaded > hover * 2.5, `rendered cadence ${hover} -> ${loaded}`);
   assert.ok(Math.abs(loaded-phone)<0.35, `30fps alias/drift ${loaded} vs ${phone}`);
+});
+
+test('hover sculling fans the pectorals continuously and a startle tucks them to the flanks', () => {
+  function pectoral(pose, fps = 60) {
+    const fin = make(3, 1), gait = new SwimGait(), trace = [];
+    for (let i = 1; i <= fps * 8; i++) {
+      gait.advance(1 / fps, 0.045, 0, 0, pose);
+      const s = state(i / fps, 0, 'right');
+      Object.assign(s, { phase: gait.phase, pectoralPhase: gait.pectoralPhase, effort: gait.effort, drive: 0.045, scull: gait.scull, tuck: gait.tuck });
+      s.body.update(gait.phase, gait.effort, 0, gait.breathPhase);
+      fin.advance(1 / fps, s);
+      if (i > fps * 5) trace.push(edgeMean(fin, 2));
+    }
+    assert.equal(fin.metrics().anchorError, 0);
+    assert.ok(fin.metrics().maxRayStrain < 0.15, JSON.stringify(fin.metrics()));
+    const mean = trace.reduce((a, b) => a + b, 0) / trace.length;
+    let crossings = 0;
+    for (let i = 1; i < trace.length; i++) if ((trace[i - 1] - mean) * (trace[i] - mean) < 0) crossings++;
+    return { gait, mean, swing: Math.max(...trace) - Math.min(...trace), hz: crossings / 2 / (trace.length / fps) };
+  }
+  const idle = pectoral({}), scull = pectoral({ scull: 1 }), tucked = pectoral({ tuck: 1 });
+  assert.ok(idle.gait.pectoralHz < 2 && Math.abs(scull.gait.pectoralHz - SCULL_HZ) < 0.05);
+  assert.ok(scull.swing > idle.swing * 1.3, `sculling swing ${scull.swing} vs idle ${idle.swing}`);
+  assert.ok(scull.hz > 2.5 && scull.hz < 5, `sculling beats at ${scull.hz} Hz`);
+  assert.ok(tucked.mean < idle.mean - 0.05, `tucked mean ${tucked.mean} vs ${idle.mean}`);
+  assert.ok(tucked.swing < idle.swing * 0.5, 'a tucked fin barely beats');
+  const quick = new SwimGait(); for (let i = 0; i < 6; i++) quick.advance(1 / 60, 0.045, 0, 0, { tuck: 1 });
+  assert.ok(quick.tuck > 0.7, 'the tuck closes within a tenth of a second');
+  for (let i = 0; i < 120; i++) quick.advance(1 / 60, 0.045, 0, 0, {});
+  assert.ok(quick.tuck < 0.05 && quick.scull === 0, 'it opens again afterwards');
 });
 
 test('a long fin with distributed body insertions does not stretch during fast trunk strokes', () => {

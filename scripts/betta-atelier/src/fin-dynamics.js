@@ -116,8 +116,9 @@ export class FinDynamics {
         } else if (kind === 3) {
           // Alternating rowing stroke, then feathered/cupped recovery.
           const beat = pectoralPhase + (side < 0 ? Math.PI : 0);
-          const power = 0.55 + 0.45 * (state.effort ?? drive);
-          const stroke = side * (power * (0.48 * Math.sin(beat) + 0.18 * Math.sin(beat - v * 1.5) * v) - 0.12);
+          // Sculling fans a little wider than slow swimming; a startle folds the fins to the flanks.
+          const tuck = state.tuck ?? 0, power = (0.55 + 0.45 * (state.effort ?? drive) + 0.12 * (state.scull ?? 0)) * (1 - 0.85 * tuck);
+          const stroke = side * (power * (0.48 * Math.sin(beat) + 0.18 * Math.sin(beat - v * 1.5) * v) - 0.12 - 0.40 * tuck);
           const cx = x * Math.cos(stroke) - z * Math.sin(stroke);
           z = x * Math.sin(stroke) + z * Math.cos(stroke); x = cx;
           const feather = side * (0.18 + 0.72 * Math.max(0, Math.cos(beat))) * v;
@@ -241,7 +242,7 @@ export class FinDynamics {
         : links[l + 2];
     }
     // Alternate constraint traversal to avoid a persistent preferred bend direction.
-    for (let pass = 0; pass < (this.kind === 3 ? 12 : this.kind < 3 ? 8 : 4); pass++) {
+    for (let pass = 0; pass < (this.kind === 3 ? 12 : 8); pass++) {
       // Pectoral rays are actively rotated by the muscular base, not merely
       // pulled by a weak spring (which filters a rapid stroke into a slow sway).
       // Actuation fades across the span; the outer membrane stays water-driven.
@@ -269,7 +270,8 @@ export class FinDynamics {
     // Fast trunk strokes can otherwise stretch tiny insertion segments of the
     // long fins before the iterative membrane constraints converge. A final
     // root-to-tip ray limit carries that correction outward without moving roots.
-    if (this.kind < 3) for (let j = 1; j < h; j++) for (let i = 0; i < w; i++) {
+    // The pelvic feelers need it most: it keeps every ray joined to its pinned insertion.
+    if (this.kind !== 3) for (let j = 1; j < h; j++) for (let i = 0; i < w; i++) {
       const q = (j * w + i) * 3, a = q - w * 3;
       const dx = p[q] - p[a], dy = p[q + 1] - p[a + 1], dz = p[q + 2] - p[a + 2];
       const length = Math.hypot(dx, dy, dz);
