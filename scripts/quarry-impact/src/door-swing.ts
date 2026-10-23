@@ -32,6 +32,13 @@ export const doorDrag=(angle:number,speed:number)=>DOOR_SWING.drag*speed*speed*M
 /** Has this door's latch gone, and the angle it hangs ajar at. */
 export const doorUnlatched=(loose:number,damage:number)=>loose>=DOOR_SWING.latch||damage>=DOOR_SWING.latchDamage;
 export const doorBase=(loose:number)=>Math.max(DOOR_SWING.ajar,loose*.075);
+/** Caught open (offline events): a door swung out past DOOR_CATCH.open that meets another car, a wall or a prop along its
+ * length is torn off its hinges. */
+export const DOOR_CATCH={open:.5} as const;
+/** The trailing edge of a front-hinged door opened by `open` radians, in the car's frame: `side` −1 left, +1 right. */
+export function doorTip(hinge:{x:number;y:number;z:number},side:number,length:number,open:number){
+  return{x:hinge.x+side*length*Math.sin(open),y:hinge.y,z:hinge.z-length*Math.cos(open)};
+}
 /** Van barn doors, top-hinged tailgates and pickup drop-tailgates swing the same way once their latch goes. Barn doors
  * (hinged at the rear corners) and tailgates open under acceleration — the barn doors also round the outside of a
  * corner — and braking shuts them; gravity pulls a tailgate down shut, but tips a drop-tailgate open. A drop off a bump
