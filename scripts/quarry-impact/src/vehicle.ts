@@ -44,7 +44,7 @@ import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowo
 import {leakRates,dripInterval,FLAME,fuelSpacing} from './fluid-leaks';
 import {drainOil,starvationWear,seizes,OIL,drainCoolant,overheatWear,FUEL_TANK,drainFuel,fuelFeed,SUMP,crackSump,sumpLeak,drainSump} from './oil-starvation';
 import {MAX_ENGINE_RESTART,crankRequested} from './engine-stall';
-import {rollBarSnaps,rollTorque,hasPropshaft,propBend,propVibration,fatigueProp,BEARING,bearingCracks,wearBearing,bearingShimmy,bearingDrag,steerSkew,openness,openDrag,beltSlip,beltSnaps,beltSqueal,beltHeat,drainBattery,batteryCut,RADIATOR as RADIATOR_COOLING,runningHot,hotClock,overheatFire} from './damage-handling';
+import {rollBarSnaps,rollTorque,hasPropshaft,propBend,propVibration,fatigueProp,BEARING,bearingCracks,wearBearing,bearingShimmy,bearingDrag,steerSkew,openness,openDrag,debrisFling,beltSlip,beltSnaps,beltSqueal,beltHeat,drainBattery,batteryCut,RADIATOR as RADIATOR_COOLING,runningHot,hotClock,overheatFire} from './damage-handling';
 import {SHED,assemblyMass,glassMass,shedMassProperties,type ShedPart} from './shed-weight';
 import {DOOR_SWING,stepDoor,doorDrag,doorUnlatched,doorBase,lidKind,lidBase,stepLid,CARGO,cargoSpills,type LidKind} from './door-swing';
 /** Rear compression past which the exhaust hangs down and drags. */
@@ -1052,6 +1052,8 @@ export class Vehicle {
     const dentDamage=bodyworkDentDamage(damage);
     const impactDirection = direction.clone().transformDirection(this.model.matrixWorld.clone().invert());
     const assemblies = new Map<string, { panels: T.Mesh[]; damage: number; weight: number }>();
+    // Big hits throw what they break off along the blow (offline); slow knocks let parts drop.
+    const fling=this.extendedDamage?new T.Vector3().copy(debrisFling(direction,damage)):new T.Vector3();
     for (const panel of this.panels) {
       if (!panel.visible) continue;
       const maximum = dentGeometry(panel, contact, impactDirection, dentDamage);
@@ -1074,7 +1076,7 @@ export class Vehicle {
       if (group.damage <= threshold || damage <= (this.extendedDamage?DETACH.blow:7) || group.weight <= .18) continue;
       for (const panel of group.panels) {
         if (quiet) panel.visible = false;
-        else {this.fx.detach(panel, this.velocity.clone().multiplyScalar(.65));this.burnDebris();}
+        else {this.fx.detach(panel, this.velocity.clone().multiplyScalar(.65).add(fling));this.burnDebris();}
       }
       if (!quiet) this.impactEffects.debris = true;
     }
@@ -1113,7 +1115,7 @@ export class Vehicle {
       w.traverse(o=>{if(!(o instanceof T.Mesh)||!o.visible||!HUBCAP.test(o.name))return;this.poppedCaps.push(o);
         if(quiet)o.visible=false;else{const out=new T.Vector3(i%2?1:-1,.4,0).applyQuaternion(this.root.quaternion).multiplyScalar(3);this.fx.detach(o,this.velocity.clone().multiplyScalar(.8).add(out));}});
     }
-    if(this.extendedDamage)for(let i=0;i<4;i++){const w=this.wheels[i];if(w&&!this.wreckParts.wheelLost[i]&&wheelTearsOff(worn[i],damage,this.wreckParts.wheelReach(i,contact)))this.tearOffWheel(i,direction,quiet);}
+    if(this.extendedDamage)for(let i=0;i<4;i++){const w=this.wheels[i];if(w&&!this.wreckParts.wheelLost[i]&&wheelTearsOff(worn[i],damage,this.wreckParts.wheelReach(i,contact)))this.tearOffWheel(i,direction.clone().multiplyScalar(1+fling.length()*.5),quiet);}
     if(structureBefore&&this.structuralDamage){
       // Whole-body crush grows with structural compression, on top of the local dents.
       const delta=this.structuralDamage.map((v,i)=>Math.max(0,v-structureBefore[i]));

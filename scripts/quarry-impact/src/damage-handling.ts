@@ -398,3 +398,11 @@ export function longWay(angle:number,skew:number){
   if(!Number.isFinite(angle)||!Number.isFinite(skew)||Math.abs(skew)<LONG_WAY.skew||Math.abs(angle)<LONG_WAY.angle)return null;
   return Math.sign(angle)===Math.sign(skew)?-Math.sign(angle):null;
 }
+/** Big hits throw what they break off: parts released by a blow leave along the blow's direction at DEBRIS_FLING.per m/s per
+ * point of damage (up to DEBRIS_FLING.max), with a lift; a slow knock just lets them drop. Returns the extra velocity. */
+export const DEBRIS_FLING={per:.22,max:12,lift:.3} as const;
+export function debrisFling(direction:{x:number;y:number;z:number},damage:number){
+  const l=Math.hypot(direction.x,direction.y,direction.z),s=Math.min(DEBRIS_FLING.max,Math.max(0,Number.isFinite(damage)?damage:0)*DEBRIS_FLING.per);
+  if(!(l>0)||!Number.isFinite(l)||s<=0)return{x:0,y:0,z:0};
+  return{x:direction.x/l*s,y:Math.max(0,direction.y/l*s)+s*DEBRIS_FLING.lift,z:direction.z/l*s};
+}
