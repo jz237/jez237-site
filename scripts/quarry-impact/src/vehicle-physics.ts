@@ -218,7 +218,9 @@ export function stepVehiclePhysics(body:R.RigidBody,controller:R.DynamicRayCastV
  if(up.y>.5){const av=body.angvel(),frontFailure=(tyreFailure(tyreDamage?.[0])+tyreFailure(tyreDamage?.[1]))/2,rearFailure=(tyreFailure(tyreDamage?.[2])+tyreFailure(tyreDamage?.[3]))/2;
   // A flat front tyre cannot receive the intact steering assist; rear failures
   // also leave more of the actual contact-induced yaw instead of cancelling it.
-  const turnGrip=1-.7*frontFailure,yawAssist=1-.65*Math.max(frontFailure,rearFailure);
+  // Rear tyres sliding on oil or after a PIT shove (offline slickGrip below 1) do the same.
+  const rearSlide=1-Math.min(state.slickGrip?.[2]??1,state.slickGrip?.[3]??1);
+  const turnGrip=1-.7*frontFailure,yawAssist=1-.65*(rearSlide>0?Math.max(frontFailure,rearFailure,rearSlide):Math.max(frontFailure,rearFailure));
   body.applyTorqueImpulse({x:-av.x*spec.mass*.07*dt,y:(clamp(state.speed/def.wheelbase*Math.tan(state.steering)*.72*turnGrip,-1.7,1.7)-av.y)*spec.mass*2.6*dt*yawAssist*(state.input.assists?.stability??1),z:-av.z*spec.mass*.07*dt},true);}
  if(!state.input.transmission||!running)state.rpm=running?850+(Math.abs(state.speed)%spec.gearStep)/spec.gearStep*4600+Math.abs(state.input.throttle)*700+((state.clutchGrip??1)>=1?0:Math.max(0,Math.abs(state.input.throttle)-state.clutchGrip!*CLUTCH.margin)*3000):starterRPM(state.health,state.engineStall,state.input.throttle);
  return up.y;
