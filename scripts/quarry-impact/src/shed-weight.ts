@@ -1,7 +1,7 @@
 /** Shedding weight (offline destruction only): every door, lid, bumper, wheel and screen that leaves the car takes its mass
  * with it, so a stripped wreck accelerates harder and its balance moves toward the end that still carries its parts. */
 export const SHED={
-  kg:{door:24,'door-rear':20,hood:16,'engine-lid':14,tailgate:16,'drop-tailgate':20,hatch:10,cargo:18,bumper:9,mirror:1.5,wheel:21,exhaust:9},
+  kg:{door:24,'door-rear':20,hood:16,'engine-lid':14,tailgate:16,'drop-tailgate':20,boot:14,hatch:10,cargo:18,bumper:9,mirror:1.5,wheel:21,exhaust:9},
   /** Laminated/toughened screen glass, kg per square metre. */
   glassPerM2:12,
   /** A stripped car never loses more than this share of its mass (the shell, engine and axles stay). */

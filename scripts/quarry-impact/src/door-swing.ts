@@ -36,21 +36,26 @@ export const doorBase=(loose:number)=>Math.max(DOOR_SWING.ajar,loose*.075);
  * (hinged at the rear corners) and tailgates open under acceleration — the barn doors also round the outside of a
  * corner — and braking shuts them; gravity pulls a tailgate down shut, but tips a drop-tailgate open. A drop off a bump
  * (less weight on the car) floats a tailgate open. `ajar` is how far a loose one already hangs open per unit looseness. */
-export type LidKind='cargo'|'tailgate'|'drop';
-export const LID={cargo:{max:1.5,ajar:.45},tailgate:{max:1.25,ajar:.38},drop:{max:1.55,ajar:1.05},friction:3} as const;
-export const lidKind=(name:string):LidKind|null=>name.startsWith('cargo-')?'cargo':name==='tailgate'?'tailgate':name==='drop-tailgate'?'drop':null;
+export type LidKind='cargo'|'tailgate'|'drop'|'boot';
+export const LID={cargo:{max:1.5,ajar:.45},tailgate:{max:1.25,ajar:.38},drop:{max:1.55,ajar:1.05},boot:{max:1.25,ajar:.3},friction:3} as const;
+/** A saloon's boot lid, hinged at its front edge: gravity and acceleration hold it down, braking and a drop lift it, and at
+ * speed the air flowing over it lifts it (`lift`·v²) while the flow onto a raised lid pushes it back (`push`·v²), so an
+ * unlatched lid flaps open above about 80 km/h. */
+export const BOOT_AIR={lift:.06,push:.025} as const;
+export const lidKind=(name:string):LidKind|null=>name.startsWith('cargo-')?'cargo':name==='tailgate'?'tailgate':name==='drop-tailgate'?'drop':name==='boot'?'boot':null;
 export const lidBase=(kind:LidKind,loose:number)=>Math.max(DOOR_SWING.ajar,clamp(loose,0,1)*LID[kind].ajar);
 /** Angular acceleration (rad/s²) at opening angle `angle`; `up` is the car's weight per unit mass along its own up axis
  * (9.81 standing level, less in a drop, more on landing). */
-export function lidTorque(kind:LidKind,angle:number,side:number,forward:number,lateral:number,up:number){
+export function lidTorque(kind:LidKind,angle:number,side:number,forward:number,lateral:number,up:number,speed=0){
   const f=clamp(forward,-DOOR_SWING.accel,DOOR_SWING.accel),l=clamp(lateral,-DOOR_SWING.accel,DOOR_SWING.accel),g=clamp(up,-DOOR_SWING.accel,DOOR_SWING.accel);
   const c=Math.cos(angle),s=Math.sin(angle);
+  if(kind==='boot'){const v=Math.min(60,Math.abs(Number.isFinite(speed)?speed:0));return (-f*s-g*c)/DOOR_SWING.arm+(BOOT_AIR.lift*c-BOOT_AIR.push*s)*v*v;}
   return (kind==='cargo'?f*c-l*side*s:kind==='tailgate'?f*c-g*s:f*c+g*s)/DOOR_SWING.arm;
 }
-export function stepLid(kind:LidKind,lid:DoorState,base:number,side:number,forward:number,lateral:number,up:number,dt:number){
+export function stepLid(kind:LidKind,lid:DoorState,base:number,side:number,forward:number,lateral:number,up:number,dt:number,speed=0){
   if(!(dt>0))return 0;
   // Bent hinges bind: a lid at rest stays put until something shoves it harder than the friction.
-  const torque=lidTorque(kind,base+lid.swing,side,forward,lateral,up);
+  const torque=lidTorque(kind,base+lid.swing,side,forward,lateral,up,speed);
   if(Math.abs(lid.rate)<.05&&Math.abs(torque)<=LID.friction){lid.rate=0;return 0;}
   const accel=torque-DOOR_SWING.damp*lid.rate-Math.sign(lid.rate||torque)*LID.friction;
   lid.rate+=accel*dt;lid.swing+=lid.rate*dt;
@@ -59,13 +64,13 @@ export function stepLid(kind:LidKind,lid:DoorState,base:number,side:number,forwa
   if(lid.swing>top){lid.swing=top;if(lid.rate>0){const hit=lid.rate;lid.rate=-lid.rate*DOOR_SWING.stop;return hit;}}
   return 0;
 }
-export function lidRest(kind:LidKind,base:number,side:number,forward:number,lateral:number,up:number){
-  const top=LID[kind].max-base;if(lidTorque(kind,base,side,forward,lateral,up)<=LID.friction)return 0;
-  for(let i=1;i<=48;i++){const s=top*i/48;if(lidTorque(kind,base+s,side,forward,lateral,up)<=LID.friction)return s-top/96;}
+export function lidRest(kind:LidKind,base:number,side:number,forward:number,lateral:number,up:number,speed=0){
+  const top=LID[kind].max-base;if(lidTorque(kind,base,side,forward,lateral,up,speed)<=LID.friction)return 0;
+  for(let i=1;i<=48;i++){const s=top*i/48;if(lidTorque(kind,base+s,side,forward,lateral,up,speed)<=LID.friction)return s-top/96;}
   return top;
 }
 /** Cargo spills out of a wide-open back (offline events): crates from a van's barn doors, luggage past a lifted tailgate,
  * loose kit off a dropped pickup tailgate — one piece every CARGO.gap seconds while it stands open past `open`, until the
  * load (`load` pieces) is gone. The pieces are real debris bodies, so other cars hit them. */
-export const CARGO={gap:.7,cargo:{open:.9,load:5,size:[.55,.45,.6],color:0x8a6a3e},tailgate:{open:.75,load:2,size:[.45,.3,.6],color:0x2e3b4c},drop:{open:1.2,load:3,size:[.5,.4,.5],color:0x6f5a3a}} as const;
+export const CARGO={gap:.7,cargo:{open:.9,load:5,size:[.55,.45,.6],color:0x8a6a3e},tailgate:{open:.75,load:2,size:[.45,.3,.6],color:0x2e3b4c},drop:{open:1.2,load:3,size:[.5,.4,.5],color:0x6f5a3a},boot:{open:.8,load:2,size:[.5,.28,.68],color:0x5c3b2e}} as const;
 export const cargoSpills=(kind:LidKind,opening:number)=>Number.isFinite(opening)&&opening>=CARGO[kind].open;

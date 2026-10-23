@@ -1156,7 +1156,7 @@ export class Vehicle {
       const lid=lidKind(a.name);
       if(lid){
         if(!doorUnlatched(a.loose,a.damage)||!a.members.some(m=>m.mesh.visible))continue;
-        const state={swing:a.swing??0,rate:a.swingRate??0},hit=stepLid(lid,state,lidBase(lid,a.loose),a.name.endsWith('left')?-1:1,forward,lateral,up,dt);a.swing=state.swing;a.swingRate=state.rate;
+        const state={swing:a.swing??0,rate:a.swingRate??0},hit=stepLid(lid,state,lidBase(lid,a.loose),a.name.endsWith('left')?-1:1,forward,lateral,up,dt,this.speed);a.swing=state.swing;a.swingRate=state.rate;
         if(state.swing>.05)this.doorOpenTime+=dt;
         // Wide open, the load starts to fall out of the back.
         if(cargoSpills(lid,lidBase(lid,a.loose)+state.swing))this.spillCargo(lid,dt);
