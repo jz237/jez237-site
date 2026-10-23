@@ -23345,5 +23345,1748 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-20-factual-infographic-factual-infographic-coral-bleaching-the",
+    "title": "Factual infographic: Coral Bleaching — The Partnership Comes Apart",
+    "tests": "Two independent institutional sources fetched and read; no numerical thresholds; educational generalized comparison.; archive_slot=2026-10-20T00:20; concept=coral-bleaching-symbiosis-reef; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: factual-infographic",
+    "prompt": "Create a finished artwork-led scientific infographic, directly on the canvas, entitled \"CORAL BLEACHING\" with the subtitle \"When a living partnership comes apart\". A refined underwater gouache and translucent watercolor illustration with fine scientific ink lines, luminous sea-glass blue negative space, umber and ochre living coral, ivory bleached skeleton, and restrained warm coral-red annotations. No photographed print, frame, UI, grid of cards, bibliography, logos or watermarks. Make the dominant subject an exquisitely detailed reef-building branching coral colony sweeping diagonally from lower left toward upper right. Its subtly colored living branch and separate pale bleached branch form a comparative illustration, not a claim that bleaching literally travels along this branch. Distinct small polyp cups, delicate tentacles and finely textured skeleton reward close viewing, while an open blue-water background allows readable annotations. Do not add unsourced species names, species-specific claims, numbers, or unrelated reef animals.\n\nWeave the science into the coral contours, with asymmetrical nested magnifications connected by hairline curved leaders, not detached boxes. Near the lower living branch, show a magnified living polyp seated on its white skeletal cup: transparent tissue containing many tiny golden-brown algal cells, with clear labels \"Coral polyp — an animal\", \"Symbiotic algae in living tissue\", and \"Hard skeleton\". Make the cells inside tissue, not living inside the skeleton. A second more intimate tissue enlargement floats in surrounding blue negative space; a sunbeam and understated arrows explain the partnership with exact concise labels \"Algae: sunlight → food\" and \"Coral: a place to live\". Treat this as a conceptual relationship study, not fabricated cell ultrastructure; omit chloroplast organelle detail.\n\nAn airy warm-water current arcs behind the central colony with the annotation \"Heat stress can disrupt the partnership\". Continue the visual journey to a comparative magnification at the pale branch, showing the same thin living tissue with markedly fewer golden algal cells over the now-visible white skeleton. Label \"Algae and/or their pigments are lost\" and \"White skeleton shows through transparent tissue\". Do not depict tissue turning into bone, a chemical bleach bottle, acid dissolving skeleton, or a literal temperature threshold. Small unobtrusive line below the current: \"Heat is not the only stressor.\"\n\nAlong the lower open-water margin, a forked organic annotation path makes outcomes unmistakable: one short curved route points to a small returning golden-brown algal study beside a recoloring living coral tip, captioned \"Stress eases + algae return: recovery is possible\"; the other fades toward a bare skeletal twig, captioned \"Prolonged stress + algae loss: coral may die\". Dominant readable statement beside the large bleached branch: \"BLEACHED ≠ DEAD\" with the small explanation \"Still alive, but missing a major food source\". Do not suggest every coral recovers, that bleaching always kills, or that a bleached skeleton by itself proves death. This is a generalized explanatory comparison, not a quantified time course. Include only the described source-backed claims. Arrange graceful type hierarchies, short legible labels, generous breathing room, natural visual pathways and accurate text. Render rich coral material and tissue detail without clutter or detached equal-size panels. Request medium quality, auto size, opaque background.",
+    "image": "images/2026-10-20-factual-infographic-factual-infographic-coral-bleaching-the.jpg",
+    "thumb": "thumbs/2026-10-20-factual-infographic-factual-infographic-coral-bleaching-the.webp",
+    "color": "#6a8786",
+    "date": "2026-10-20",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "coral-bleaching-symbiosis-reef",
+      "imageSha256": "beb034e5c9b1852548801d6eb548a16340d3ee8f5a35252be8a196dcf53c79ff",
+      "imageDHash": "7f15a7cf4c4ebb19"
+    },
+    "factualInfographic": {
+      "topic": "How coral bleaching disrupts the partnership between reef-building coral polyps and their symbiotic algae",
+      "description": "Artwork-led comparison of coral–algal symbiosis, heat stress, bleaching, and conditional recovery or mortality.",
+      "sourceNote": "NOAA National Ocean Service: https://oceanservice.noaa.gov/facts/coral_bleach.html ; Woods Hole Oceanographic Institution: https://www.whoi.edu/ocean-learning-hub/ocean-facts/why-do-corals-bleach/ . Verified polyp/skeleton anatomy, algal food and pigmentation, stress-related bleaching and conditional outcomes.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-20T04:21:13.943460+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NOAA National Ocean Service",
+            "title": "What is coral bleaching?",
+            "sourceType": "government-agency",
+            "url": "https://oceanservice.noaa.gov/facts/coral_bleach.html"
+          },
+          {
+            "id": "S2",
+            "publisher": "Woods Hole Oceanographic Institution",
+            "title": "Why do corals bleach?",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.whoi.edu/ocean-learning-hub/ocean-facts/why-do-corals-bleach/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Reef-building coral is an animal colony of tiny tentacled polyps that build and cover a hard skeleton.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Microscopic symbiotic algae called zooxanthellae live within coral tissue; they provide much of its color and a major food source.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Algae use sunlight, carbon dioxide and water for photosynthesis; much of the food they produce feeds the coral, while coral provides a place to live.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Heat stress can disrupt the symbiosis and cause loss of algae and/or their coloration; bleaching is not limited to warm-water stress.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Loss of algae and their pigments leaves white skeleton visible through nearly transparent living coral tissue.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Bleached coral is not necessarily dead but has lost a major source of food and is vulnerable.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Recovery is possible if stress eases and algae return, but prolonged stress and algae loss can lead to death.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-10-20-factual-infographic-factual-infographic-eyed-click-beetle-f",
+    "title": "Factual infographic: Eyed Click Beetle — False Eyes and a Loaded Hinge",
+    "tests": "Three independent university sources fetched and read; seven supporting studies, three-plus biological macros; general hinge schematic qualified; full factual archive scanned for uniqueness.; archive_slot=2026-10-20T04:20; concept=alaus-oculatus-click-hinge-hardwood; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: bizarre-insect-life",
+    "prompt": "Render a finished direct-canvas substantial scientific entomological plate, never a photographed poster, tray, room, book or mockup. Title “EYED CLICK BEETLE”, italic scientific subtitle “Alaus oculatus”, thematic line “False eyes • a loaded hinge • a hunter in dead wood”. Naturalistic macro-photography detail blended with precise scientific illustration, warm opaque ivory background, charcoal chitin, chalk-white scales, amber-brown wood and larva, graphite leaders, selective rust-orange arrows. Crisp typography, short readable captions, clear hierarchy, sophisticated structure, no tiny paragraphs, citations, logos or watermarks.\nDOMINANT WHOLE-INSECT HERO: enormous dorsal three-quarter adult centered slightly left, almost half the canvas. Show entire elongated body, complete head, two antennae, six jointed thoracic legs, paired elytra, fine scale texture and believable macro light. Black body mottled white; two white-ringed velvet-black eyespots sit on pronotum BEHIND the small head, not on the head. True eyes are much smaller, on the head. Realistic anatomy, surface grooves, fine claws and tactile scales. Keep the insect and its close-up biology the main visual mass, controlled depth of field preserving detail.\nArrange EXACTLY SEVEN substantial supporting panels around it as a richly illustrated structured scientific plate, with ample readable gutters and varied study sizes. Preserve all studies; do not recompose into a sparse artistic atlas. At least three additional large close-ups/cutaways plus process sequence, developmental comparison, habitat and scale:\n1 “FALSE EYES / TRUE EYES”: large oblique macro of head and pronotum, separate leaders label “True eye” on small head eye and “Eyespot — not an eye” on giant pronotal spot. Do not assert predator-deterrence as proven.\n2 “WHITE IN MINIATURE”: large texture magnification of minute pale scales over black cuticle; label “Minute scales create the mottling”. No invented cellular ultrastructure.\n3 “THE THORACIC LATCH”: large simplified side cutaway just behind head; peg latched against lip, deformable soft tissue region. Exact labels “Peg”, “Lip”, “Deforming soft tissue”; caption “General click-beetle mechanism — schematic”. It is conceptual family-level mechanics, not measured Alaus-specific geometry. Never draw metal springs, gears or pistons.\n4 “LATCH → LOAD → RELEASE”: three-stage inverted-beetle side-view strip. Labels “Latch holds” → “Soft tissue deforms” → “Release + elastic recoil”. Restrained launch arc, “Click!” near rapid unbending thorax. Show body-powered launch, not leg-powered takeoff. No numerical acceleration, height, or guaranteed upright landing.\n5 “LARVA: ARMORED HUNTER”: substantial whole segmented sclerotized yellowish-brown larva, nearly black head, dark rear segments, short appropriate thoracic legs. Additional LARGE terminal-abdomen macro with conical tubercles and paired forked terminal teeth; label “Forked terminal teeth”. A discreet larva/adult comparison line reads “Larval form / Adult form”. No invented egg, pupa, duration or relative growth ratio.\n6 “IN THE ROTTING HARDWOOD”: ecological oak-stump cutaway vignette with damp fibrous decomposing wood and galleries; Alaus larva approaching generic wood-boring beetle larva. Label “Predator of wood-boring larvae”. Believable relative scale, no gore or crop-pest claim. This is a scientific habitat cutaway, not the surrounding prop composition.\n7 “WOODLAND SCALE & RANGE”: small adult side silhouette against inch ruler, caption “Adult: about 1–1¾ inches”. Scale applies only to this small silhouette, not enlarged studies. Plain geographic label “Eastern U.S. • southern Ontario & Quebec”, a subdued hardwood bark swatch, “Wooded habitats”. No invented precise range boundaries.\nPrecise leaders connect diagrams to hero anatomy. Maintain the seven distinct substantive panels, the three-plus prominent biological close-ups, mechanism sequence, larval comparison, habitat interaction and scale. White-ringed false eyes and the distinction from real eyes must be unmistakable. Fine macro textures and sophisticated editorial balance, not generic school graphics. No unsupported claims, sensational monsters, extra legs, filler paragraphs or invented statistics. Medium quality, auto size, opaque background.",
+    "image": "images/2026-10-20-factual-infographic-factual-infographic-eyed-click-beetle-f.jpg",
+    "thumb": "thumbs/2026-10-20-factual-infographic-factual-infographic-eyed-click-beetle-f.webp",
+    "color": "#afa18d",
+    "date": "2026-10-20",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "alaus-oculatus-click-hinge-hardwood",
+      "imageSha256": "e97075063937ea85d2c5219305f0a2ca455b064b0d4d4eeec6961311e8b3d47f",
+      "imageDHash": "8c8ee49595a89e96"
+    },
+    "factualInfographic": {
+      "topic": "How the eyed click beetle (Alaus oculatus) combines false eyespots, a click-jump thoracic hinge, and predatory larvae in decaying hardwood",
+      "description": "Species-specific false eyes, scale patterns, range and larval ecology, with explicitly schematic family-level click-jump mechanics.",
+      "sourceNote": "University of Florida IFAS https://ask.ifas.ufl.edu/publication/IN242; University of Minnesota Extension https://apps.extension.umn.edu/garden/diagnose/insect/general-curiosity-insects/beetles/large/eyed-click-beetle.html; University of Illinois https://news.illinois.edu/latch-load-and-release-elastic-motion-makes-click-beetles-click-study-finds/. Directly fetched and read; species facts distinguished from general click-beetle mechanics; no jump-performance quantities.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-20T08:22:47.274153+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "University of Florida IFAS",
+            "title": "Click Beetles, Alaus spp.",
+            "sourceType": "university",
+            "url": "https://ask.ifas.ufl.edu/publication/IN242"
+          },
+          {
+            "id": "S2",
+            "publisher": "University of Minnesota Extension",
+            "title": "Eyed click beetle",
+            "sourceType": "university",
+            "url": "https://apps.extension.umn.edu/garden/diagnose/insect/general-curiosity-insects/beetles/large/eyed-click-beetle.html"
+          },
+          {
+            "id": "S3",
+            "publisher": "University of Illinois Urbana-Champaign",
+            "title": "Latch, load and release: Elastic motion makes click beetles click",
+            "sourceType": "university",
+            "url": "https://news.illinois.edu/latch-load-and-release-elastic-motion-makes-click-beetles-click-study-finds/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Eyed click beetle is Alaus oculatus, family Elateridae, with elongated black adult body, white scale mottling, six legs, antennae and paired elytra.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Large white-ringed black eyespots sit on the prothorax behind the head; they are not eyes. The much smaller true eyes are on the head.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Minute scales form the mottled surface pattern.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The species occurs in eastern United States and southern Ontario and Quebec, in wooded habitats associated with hardwoods.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Adults are about 1 to 1 3/4 inches long.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Larvae are sclerotized, yellowish to dark brown, with nearly black head and dark terminal abdominal segments. The last dorsal abdominal segment has conical tubercles and paired forked teeth.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Larvae prey on wood-boring beetle larvae in decaying hardwood, including rotting oak, cherry and apple stumps.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Larval and adult forms are documented; no duration or intermediate morphology is claimed.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "General click-beetle mechanics: a thoracic hinge behind the head allows jumping without leg-powered takeoff. A peg holds against a lip while soft tissue deforms; release causes elastic recoil, rapid unbending and an audible click. Diagram is a family-level schematic, not measured species-specific internal geometry.",
+            "sourceIds": [
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-10-20-factual-infographic-factual-infographic-ferrofluid-a-liquid",
+    "title": "Factual infographic: Ferrofluid — A Liquid Shaped by Fields",
+    "tests": "Two independent university pages fetched and read; all 165 factual archive entries scanned with no ferrofluid overlap; coating studies qualified as one formulation and enlarged schematic.; archive_slot=2026-10-20T08:20; concept=ferrofluid-magnetic-spikes-colloidal-suspension; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: factual-infographic",
+    "prompt": "Create the finished factual science infographic directly on the canvas, not a photographed poster, mockup, book, exhibition or UI. Title: “FERROFLUID” in confident elegant large typography, subtitle “A liquid shaped by fields”. An artwork-led magnetic-materials atlas: luminous technical ink and exquisitely shaded naturalistic macro illustration, cool ivory negative space, obsidian-black liquid, restrained copper and teal annotations. Asymmetric organic composition with readable open callouts, no framed panels, grids, detached cards, boxes or bibliography.\n\nDominant central-to-lower hero: a shallow transparent circular dish in oblique macro view holding glossy black oil-based ferrofluid, a sweeping forest of tapered smooth conical spikes rising from one continuous wet liquid surface. Describe convincingly the dark menisci, tiny silver edge highlights, reflected copper rim light, broad fluid valleys and precise surface reflections. Let a few broad overlapping rows of peaks suggest a regular approximately hexagonal arrangement, not random stalagmites or solid metal crystals. A small clean partial side cutaway beneath one edge reveals a simple magnet below the dish, labelled “Magnet beneath the dish”. Sparse teal curved field lines through the diagram are explicitly labelled “Magnetic field — schematic”; they must read as explanatory ink, not real threads inside the liquid. The hero should occupy more than half of the canvas with generous quiet areas around its silhouette.\n\nA fine curved leader from the liquid opens into a large freely integrated particle magnification at upper left. Show just a few separated round dark magnetite cores with sparse outward brushlike molecular tails, suspended against a pale amber wash of carrier oil. Label “Magnetite nanoparticles”, “Surfactant coating”, and “Carrier oil”. The short explanation reads “Magnetic solid particles suspended in liquid.” One larger coating study connects naturally below it: dark spherical core, polar heads at its surface, flexible hydrocarbon tails extending outward. Exact labels: “Magnetite (Fe₃O₄)”, “Oleic-acid heads attach to the surface”, “Tails extend into oil”, and “The coating helps keep particles apart.” Caption this study “One oil-based formulation • enlarged schematic”. Do not show atomic lattices, invented chemistry, visible micron-sized grains in the hero, or a numerical scale.\n\nAcross the open upper-right space, a delicate curved two-stage process follows a flowing ink path: a small flat liquid profile labelled “Weaker field”, then a peaked profile labelled “Sufficiently strong vertical field”. Title the pathway “NORMAL-FIELD INSTABILITY” and secondary line “Also called Rosensweig instability”. Beneath in two concise readable lines: “Magnetic effects favor surface peaks.” / “Gravity and surface tension resist deformation.” A leader returns to the central forest with the short label “Spikes form along the field”. At a quiet margin show a small top-view patch of rounded peak tips in an approximately hexagonal arrangement, label “A regular spike pattern can be hexagonal”. Keep this a light integrated observation, not an extra card.\n\nMake the main labels large and short; supporting type remains clean, purposeful and legible. Use fine varied line weights and delicate curved leaders that never obscure the surface details. Footnote only “Studies are schematic; scales differ.” Retain the liquid/particle distinction and scientifically faithful mechanism. No preparation instructions, safety claims, applications, exact particle sizes, or unsupported numerical thresholds. No URLs, citations, logos, watermarks or filler text. The result is a beautiful, information-rich science artwork with breathing room rather than a rigid classroom chart. Request medium quality, auto size, opaque background.",
+    "image": "images/2026-10-20-factual-infographic-factual-infographic-ferrofluid-a-liquid.jpg",
+    "thumb": "thumbs/2026-10-20-factual-infographic-factual-infographic-ferrofluid-a-liquid.webp",
+    "color": "#a6a196",
+    "date": "2026-10-20",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "ferrofluid-magnetic-spikes-colloidal-suspension",
+      "imageSha256": "becc37db4fac42b052bdb397d9000360acb37b434c26bcc85073e9bf0f3344df",
+      "imageDHash": "e48a9a83f8eae8cc"
+    },
+    "factualInfographic": {
+      "topic": "How magnetic nanoparticles suspended in a carrier liquid respond to magnetic fields",
+      "description": "An oil-based magnetite suspension and the normal-field instability that creates surface spikes.",
+      "sourceNote": "University of Wisconsin–Madison: https://education.mrsec.wisc.edu/ferrofluids-background/ ; University of California, Santa Cruz: https://ucscphysicsdemo.sites.ucsc.edu/physics-5c6c-demos/magnetism/ferrofluid/ . Fetched and read both sources; verified suspension, example surfactant structure and normal-field spike mechanism. No numerical thresholds; enlarged studies explicitly schematic.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-20T12:21:34.195916+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "University of Wisconsin–Madison",
+            "title": "Ferrofluids – MRSEC Education Group",
+            "sourceType": "university",
+            "url": "https://education.mrsec.wisc.edu/ferrofluids-background/"
+          },
+          {
+            "id": "S2",
+            "publisher": "University of California, Santa Cruz",
+            "title": "Ferrofluid | UCSC Physics Demonstration Room",
+            "sourceType": "university",
+            "url": "https://ucscphysicsdemo.sites.ucsc.edu/physics-5c6c-demos/magnetism/ferrofluid/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Ferrofluid contains tiny magnetic solid particles suspended in a liquid carrier.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "An oil-based magnetite ferrofluid can contain magnetite (Fe3O4) nanoparticles coated with an oleic-acid surfactant in oil.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The surfactant polar heads attach to magnetite surfaces and hydrocarbon tails extend into the oil; the coating helps keep particles apart and prevents clumping.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "A magnet beneath a shallow dish can cause the ferrofluid surface to rise into spikes oriented along the magnetic field.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Normal-field instability is also called Rosensweig instability.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "In a sufficiently strong vertical magnetic field, magnetic effects overcome the stabilizing effects of gravity and surface tension and the flat surface develops spikes.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "A regular spike pattern may have hexagonal arrangement.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Field lines and enlarged particles in the illustration are explanatory schematics, not visible structures or a shared physical scale.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-10-20-factual-infographic-factual-infographic-meadow-spittlebug-a",
+    "title": "Factual infographic: Meadow Spittlebug — A Nymph Inside a Bubble Shelter",
+    "tests": "Four authoritative sources fetched and read; complete 166-entry factual archive scan found no spittlebug/froghopper overlap. Seven supporting scientific studies, three-plus biological close-ups, anatomy qualified as generalized. Scheduled explicit insect plate exception retained.; archive_slot=2026-10-20T12:20; concept=philaenus-spumarius-nymph-xylem-foam-shelter; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: bizarre-insect-life",
+    "prompt": "Create a finished, deeply detailed natural-history scientific plate about the meadow spittlebug, Philaenus spumarius. Main title: “A NYMPH INSIDE A BUBBLE SHELTER”; subtitle “Meadow spittlebug · Philaenus spumarius”. A sophisticated adult science-museum graphic, direct canvas, no room, frame, desk, specimen tray or mockup. Follow the scheduled restored scientific-plate insect exception: one enormous naturalistic whole-insect macro hero plus SEVEN substantive supporting studies/panels. These are scientific studies, not sparse fact cards. Strong typographic hierarchy, airy margins, precise fine leaders, short genuinely readable labels. Highly realistic macro textures, moist translucent skin, glistening foam membranes, amber-green plant tissues, credible lighting and six-legged segmented anatomy. Cream-white background with sage green, pearly white, fine charcoal drawing and restrained coral-red eyes; subtle watercolor habitat pigment with crisp naturalistic specimen rendering. The whole insect and biological studies occupy most of the area, not prose. Never fabricate extra organs or decorative diagrams.\n\nHERO: a spectacular enlarged pale lime-green wingless nymph, reddish eyes, squat soft segmented body, six finely jointed legs gripping a fresh clover stem head downward; one side of its froth parted so the entire insect remains visible. Show a wet foam mound of differently sized pearly bubbles on the stem, with realistic thin-film reflections, not soap-bath props. Distinguish this magnified specimen from the small habitat scene. Label “Nymph — sheltered in foam”.\n\nSEVEN SUPPORTING SCIENTIFIC STUDIES, artfully balanced around the hero with varied dimensions, subtle fine open boundaries rather than a rigid equal-cell dashboard. Keep all seven substantial and explanatory, including the large internal-anatomy study and at least three large biological close-ups.\n1. PROMINENT INTERNAL ANATOMY: a large translucent lateral nymph silhouette with a deliberately simplified continuous digestive tract from mouth to anus, clearly distinguished from the opaque hero. Exact heading “Digestive route — generalized insect schematic”; readable labels “Foregut”, “Midgut — nutrient absorption”, “Hindgut”, “Anus”. Arrow for ingested sap toward the tract, then excess fluid leaving the rear, never exiting the mouth. Keep geometry visibly diagrammatic rather than a claimed exact dissection of this species. Do NOT invent filter-chamber geometry, vertebrate lungs, mammalian stomach, unnamed glands, a detailed nervous system or a false precise organ map.\n2. LARGE FEEDING CLOSE-UP: underside of head and downward-pointing piercing-sucking mouthparts on a translucent plant-stem detail, enlarged plant water-conducting tissue labelled “Xylem — water-carrying tissue”. Fine leader “Piercing-sucking mouthparts”. Caption “Dilute sap means high fluid throughput”. Diagram explicitly simplified; no invented exact stylet trajectory or vessel counts, no chewing teeth.\n3. LARGE FOAM-ORIGIN CLOSE-UP: rear abdomen at the foam boundary; fluid appearing at the anus, tiny air bubbles joining the fluid as the abdomen moves. Caption “Excess sap + stabilizing secretions + air”. Label “Not saliva”. Depict secretions as a conceptual mixing arrow, not as an unsupported anatomical gland dissection.\n4. MECHANISM SEQUENCE in three clear small but detailed sequential poses: “1 Excrete excess sap” → “2 Mix with air” → “3 Pull bubbles over the body”. Show abdominal movement and legs sweeping bubbles forward in the last pose. Keep stages nymphs, not adult beetles, no invented machinery. This sequence counts as one substantive supporting study.\n5. LARGE SHELTER CLOSE-UP: a side section of the foam showing a protected green nymph silhouette within wet bubbles, labelled “Concealment”, “Temperature buffer”, “Helps prevent drying”. Soft arrows showing environmental exposure around foam, not an impermeable force field or absolute protection claim.\n6. DEVELOPMENT STUDY: “Temperate seasonal cycle” with detailed small images of egg in a plant stem, green wingless nymph in foam, and compact tan-brown adult with folded wings. Concise progression “Overwintering eggs → Spring nymphs → Winged adults → Eggs”. Nymphs grow through molts; no pupa, cocoon or larval caterpillar. Do not give unsupported instar numbers or universal calendar dates.\n7. HABITAT AND SCALE: a small botanically believable clover-and-strawberry meadow margin with actual-scale foam on stems and a tiny tan-brown adult beside the same stem for intuitive scale. Caption “Herbaceous plants · including clover and strawberries”; “Common in the North American Midwest”; small adult label “Adult: under ¼ inch long”. Make clear this is the adult measurement, not a nymph scale bar. It is a tiny insect, not a monster. No map asserting an exhaustive range.\n\nKeep the macro hero, anatomy and close-ups exceptionally detailed: credible segment joints, tiny leg contact points, soft cuticle folds, clover veins and highlights on transparent bubble films. Every small diagram has a biological purpose. Use only the stated facts and labels, omit unrelated pest-control advice, jumping-record statistics, disease claims, unsupported foam chemistry, citations, URLs, logos or watermarks. Make all text accurate, concise and elegantly typeset; no wall of prose. Requested rendering: openai/gpt-image-2.5-sunburst, quality medium, automatic size, opaque background. Exactly one finished image.",
+    "image": "images/2026-10-20-factual-infographic-factual-infographic-meadow-spittlebug-a.jpg",
+    "thumb": "thumbs/2026-10-20-factual-infographic-factual-infographic-meadow-spittlebug-a.webp",
+    "color": "#c6c9a9",
+    "date": "2026-10-20",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "philaenus-spumarius-nymph-xylem-foam-shelter",
+      "imageSha256": "da0fcca9c47c0b43f61653fb9f74b60f79987be0a818def23bdf37030c0c854f",
+      "imageDHash": "989a3231c2c6dcc2"
+    },
+    "factualInfographic": {
+      "topic": "How meadow spittlebug (Philaenus spumarius) nymphs turn excess xylem sap into a protective foam shelter",
+      "description": "Macro scientific plate of nymph foam production with seven biological studies and a clearly qualified generalized digestive cutaway.",
+      "sourceNote": "Verified nymph foam production, xylem feeding, protection, temperate development, habitat and adult scale; internal gut explicitly generalized. University of Wisconsin–Madison: https://hort.extension.wisc.edu/articles/spittlebugs/; Washington State University: https://news.wsu.edu/press-release/2018/06/13/bubble-pooping-high-jumping-superhero-bug-yard-near/; North Carolina State University: https://genent.cals.ncsu.edu/bug-bytes/digestive-system/; CSIRO: https://www.ento.csiro.au/education/insects/hemiptera.html",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-20T16:21:49.878332+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "University of Wisconsin–Madison",
+            "title": "Spittlebugs",
+            "sourceType": "university",
+            "url": "https://hort.extension.wisc.edu/articles/spittlebugs/"
+          },
+          {
+            "id": "S2",
+            "publisher": "Washington State University",
+            "title": "Bubble-pooping, high-jumping superhero bug in a yard near you",
+            "sourceType": "university",
+            "url": "https://news.wsu.edu/press-release/2018/06/13/bubble-pooping-high-jumping-superhero-bug-yard-near/"
+          },
+          {
+            "id": "S3",
+            "publisher": "North Carolina State University",
+            "title": "Digestive and Excretory Systems",
+            "sourceType": "university",
+            "url": "https://genent.cals.ncsu.edu/bug-bytes/digestive-system/"
+          },
+          {
+            "id": "S4",
+            "publisher": "CSIRO",
+            "title": "Hemiptera: bugs, aphids and cicadas",
+            "sourceType": "government-agency",
+            "url": "https://www.ento.csiro.au/education/insects/hemiptera.html"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The meadow spittlebug, Philaenus spumarius, is a hemipteran; its adult is also called a froghopper.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Meadow spittlebug nymphs are pale green or yellow; lime-green nymphs can have red eyes. Adults are generally tan to brown or gray.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The meadow spittlebug occurs in the North American Midwest and feeds on many herbaceous plants including clover and strawberries.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Both adults and nymphs feed on water-carrying xylem sap; its low nutrient concentration requires processing large quantities.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Hemipteran piercing-sucking mouthparts extend below the head; hoppers have a down-and-back-pointing proboscis. A simplified feeding study can show mouthparts reaching plant sap tissues.",
+            "sourceIds": [
+              "S4",
+              "S1"
+            ]
+          },
+          {
+            "claim": "Nymphs feed head downward and excrete excess sap through the anus, not the mouth.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Epidermal gland secretions stabilize foam; air is mixed with excreted fluid as abdominal movements form bubbles.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Nymphs use their legs to pull forming bubbles forward over the body.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The foam conceals nymphs from predators, buffers temperature extremes and helps prevent drying. It is protective, not an invulnerable shield.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "In the described temperate life cycle eggs overwinter in plant stems, nymphs hatch in spring, molt as they grow, and become winged adults; females lay eggs in late summer to fall. There is no pupal stage in hemipteran incomplete metamorphosis.",
+            "sourceIds": [
+              "S1",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Adult spittlebugs are tiny, under a quarter inch long, and hop between plants; adult wings must not appear on the young nymph.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S4"
+            ]
+          },
+          {
+            "claim": "General insect digestive anatomy has a tube-like alimentary canal running mouth to anus with foregut, midgut and hindgut; midgut nutrient absorption is a generalized function, not a species-specific measured dissection.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "The insect body plan has six legs and distinct head, thorax and abdomen; small wingless hemipteran nymphs differ from winged adults.",
+            "sourceIds": [
+              "S4"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-10-20-factual-infographic-factual-infographic-cave-pearls-stone-g",
+    "title": "Factual infographic: Cave Pearls — Stone Grown Around a Grain",
+    "tests": "Both independent institutional sources fetched and read; NSS PDF extracted with pdftotext. All 167 factual entries scanned, no cave-pearl overlap. Generalized texture labeled; no growth-rate or annual-band claims.; archive_slot=2026-10-20T16:20; concept=cave-pearls-carbonate-pool-growth; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: factual-infographic",
+    "prompt": "Create a finished artwork-led factual geology infographic, directly on the canvas, titled “CAVE PEARLS” with the elegant subtitle “Stone grown around a grain”. A luminous mineralogical painting with fine technical-ink annotations, smoky charcoal cave shadows, ivory calcite, pale amber banding and restrained aquamarine water. Opaque background. Asymmetric, flowing composition with generous quiet space and a confident readable type hierarchy. No rigid boxed grid, detached cards, poster photograph, book mockup, frame, logos, URLs or bibliography. Make the geology tactile and unusually beautiful without inventing features.\n\nThe dominant illustration fills the lower center and right: an intimate low oblique view of a shallow cave pool containing a nest of creamy rounded mineral concretions, a few irregular ones, and a carbonate-coated scalloped floor. Individual pearl surfaces vary subtly from dull chalk to softly lustrous wet stone; fine laminar mineral texture, meniscus, reflected light, crisp wet rock edges. A descending droplet and a few modest ripples at the far left establish incoming water; no spinning or tumbling arrows. Cave ceiling is only a dark suggestion, not an elaborate cavern panorama. The surrounding darkness opens into light neutral areas for readable explanatory labels.\n\nA large artistically integrated sectional study rises above the pool on the right, joined to one representative pearl by a delicate curved magnification leader. Show a small irregular sand-grain nucleus surrounded by many continuous nested ivory and pale-tan mineral growth bands. This is a generalized cut section, not an implied exact specimen. Label “Sand-grain nucleus” and “Concentric mineral layers” with precise fine leaders. In a small enlarged wedge of this cut section, show subtle radial calcite crystal growth texture; label “Crystals grow outward” and directly beneath it “Generalized calcite texture”. Keep the crystal texture secondary to the convincing concentric bands. No annual dates, no years-per-band, no numerical scale or growth-rate claim.\n\nAcross the upper left, weave a short causal explanation through an open curved water-to-stone pathway, not separate panels: a painted droplet labeled “Mineral-bearing water”; a delicate upward arrow at the pool air–water boundary labeled “CO₂ escapes to cave air”; then an arrow to the growth bands labeled “Carbonate precipitates around a particle”. These annotations show dissolved material becoming solid mineral, not bubbles trapped in the pearl. A lower open leader points to the cupped mineral floor with the label “Excess deposit builds a nest”. All the pool pearls are small geological concretions, never oysters, eggs, gemstones or living organisms.\n\nLet a graceful sequence of three progressively larger cut-section silhouettes follow the pool edge, each with the same tiny central grain and additional concentric layers. Label the sequence once: “Layer upon layer”. This is conceptual accretion, explicitly not a time scale. Integrate a concise fact beside this sequence: “Shallow cave pools can grow banded mineral pearls.” Preserve breathing room around the hero and the cut section.\n\nA final open note in a clean margin reads “Rounded by growth — not polished by tumbling” with the smaller qualification “Drips can agitate the pool; mineral growth builds the pearl.” Use no circular motion arrows, abrasive grinding, mollusks, exposed biological tissue, metal apparatus or unsupported chemistry equations. Shapes may vary; not every pearl is a perfect sphere. Render text cleanly and sparingly, readable main labels and short secondary lines, no filler microtext. The visual journey is incoming water → loss of CO₂ → mineral deposition → concentric pearl growth, grounded in a plausible shallow mineral pool. Richly rendered scientific illustration and clear source-backed explanation should feel like one cohesive artwork.",
+    "image": "images/2026-10-20-factual-infographic-factual-infographic-cave-pearls-stone-g.jpg",
+    "thumb": "thumbs/2026-10-20-factual-infographic-factual-infographic-cave-pearls-stone-g.webp",
+    "color": "#736550",
+    "date": "2026-10-20",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "cave-pearls-carbonate-pool-growth",
+      "imageSha256": "ae8c16f986cd615c69f1537b2af29b6fb958da304262bb43161a5ab41e614edb",
+      "imageDHash": "b3e7e69f861327e9"
+    },
+    "factualInfographic": {
+      "topic": "How concentric mineral deposits form cave pearls",
+      "description": "An artwork-led cave-pool study of particle nuclei, carbonate deposition, concentric bands and radial calcite growth texture.",
+      "sourceNote": "National Park Service https://www.nps.gov/subjects/caves/speleothems.htm ; National Speleological Society, Self and Hill (2003) https://www.caves.org/wp-content/uploads/Publications/JCKS/v65/v65n2-Self.pdf . Verified shallow-pool deposition, nuclei, bands, nest growth and generalized radial crystal texture; no annual chronology or polishing mechanism.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-20T20:21:20.534972+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "U.S. National Park Service",
+            "title": "Speleothems — Cave pearls",
+            "sourceType": "government-agency",
+            "url": "https://www.nps.gov/subjects/caves/speleothems.htm"
+          },
+          {
+            "id": "S2",
+            "publisher": "National Speleological Society",
+            "title": "How speleothems grow: An introduction to the ontogeny of cave minerals (Self and Hill, 2003)",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.caves.org/wp-content/uploads/Publications/JCKS/v65/v65n2-Self.pdf"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Cave pearls are concentrically banded mineral concretions that form in shallow cave pools.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Water dripping from above or slowly flowing into shallow pools supplies dissolved material for cave-pearl growth.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Loss of carbon dioxide to cave air promotes carbonate precipitation around particles in a cave pool.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "A grain of sand can act as the nucleus of a cave pearl.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Successive mineral deposits form concentric bands around the nucleus.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "A cave-pearl cross section can show crystals arranged radially outward from a central nucleus; the illustrated calcite texture is a generalized schematic.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Excess carbonate precipitate can coat the pool floor and build cups or nests around cave pearls.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Cave pearls vary in shape; some are rounded while others are irregular.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "In the NPS explanation, roundness results from growth of the outer layer in all directions in supersaturated water, not polishing by rotation.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Dripping water can agitate cave pearls; agitation is not equivalent to tumbling them smooth.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-10-20-factual-infographic-factual-infographic-water-scorpion-brea",
+    "title": "Factual infographic: Water Scorpion — Breathing Through a Tail Tube",
+    "tests": "Four institutional sources fetched and read; all 168 factual archive entries scanned, no water-scorpion overlap. Seven supporting scientific studies; four large biological close-ups/cutaways. Explicit scheduled insect scientific-plate exception retained; internal breathing plan qualified as generalized.; archive_slot=2026-10-20T20:20; concept=nepa-cinerea-siphon-pond-ambush; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: bizarre-insect-life",
+    "prompt": "Create the finished educational natural-history scientific plate directly on the canvas: WATER SCORPION, with italic scientific name Nepa cinerea beneath, and subtitle “Breathing through a tail tube”. This is a rigorous detailed insect plate, not the artistic-atlas recomposition, not an app, poster photograph, room, specimen tray or museum case. Preserve a huge complete naturalistic macro hero plus SEVEN substantive supporting scientific studies/panels with fine precise leaders, strong readable hierarchy and substantial biological imagery. Scientific plate organization with clear distinct studies, not prose cards. No decorative filler. Render naturalistic macro-photography-level surface detail through refined technical illustration: wet dark brown flattened oval cuticle, subtly gritty surfaces, articulated six legs, correct insect segmentation, small head and folded forewings; avoid giant lobster pincers and a true scorpion tail. Restrained aquatic slate, olive and umber, pale neutral background, bright clean labels, directional soft light and believable shallow-depth-of-field texture. The specimen and explanatory biology occupy most of the image.\n\nThe whole adult hero dominates the upper-center, shown obliquely from above with all six legs anatomically accounted for, folded grasping front legs, two other pairs of slender walking legs, and long straight slender posterior siphon visible completely. Label “Flat body: concealment among leaves”, “Grasping forelegs”, “Breathing siphon — not a stinger”. Avoid depicting the siphon injecting prey. Include ample microtexture without adding imaginary spines.\n\nSEVEN supporting studies, each meaningful and visibly distinct, arranged asymmetrically around the hero rather than an equal tile grid:\n1. LARGE prominent translucent body cutaway focused on internal breathing anatomy, taking real visual space beside the hero. Exact heading “Breathing anatomy — simplified schematic”. Show a schematic branching tracheal network inside an adult body silhouette, connected functionally to the siphon air route. Label “Tracheae: branching air tubes”, “Tracheoles: gas exchange with tissues”, and a small conceptual spiracle detail labeled “Spiracle: air opening”. Print “Generalized insect tracheal plan; not a measured dissection”. Do NOT place a generic row of exposed lateral breathing holes all along the submerged water scorpion; do not invent exact spiracle locations, lung sacs, vertebrate organs, or unsupported organ geometry. A fine arrow key says “Oxygen to tissues / carbon dioxide out”. It is a schematic gas route, not a pumped liquid flow.\n2. Large enlarged siphon structural detail: two half-tubes alongside one another, then their joined cross-section, precisely labeled “Two half-tubes fit together”. Clearly mark “Enlarged schematic”. Three short mechanism steps read “Tip above surface → Air enters siphon → Air reaches respiratory system”. Show the waterline and atmospheric tip without making it a drinking straw, telescoping organ or stinger.\n3. Large raptorial foreleg macro, extended and folded around a small aquatic insect, with correct jointed insect leg rather than a crustacean claw. “Fold and grip”. Follow a concise prey-capture sequence “Wait among leaves → Seize prey → Feed with proboscis”. No gore.\n4. Head and mouthpart close-up, view angled ventrally to reveal the piercing proboscis in context; label “Proboscis draws up prey fluids”. Do not show jaws chewing or a mosquito needle detached from the head.\n5. Wing study showing protective front wing lifted to reveal one delicate membranous hindwing, remaining anatomy correct. “Protective front wings / Membranous hindwings”; secondary text “Adults can fly between watery habitats”. Distinct from the folded-wing hero.\n6. Development study: eggs in submerged plant tissue/vegetation near the surface, a small wingless adultlike nymph, and an adult connected with simple arrows. “Egg → Nymph → Adult”; “Nymphs grow through moults”. No caterpillar, maggot, chrysalis, metamorphosis cocoon or invented exact egg-horn count. Keep egg microstructure understated rather than fabricated.\n7. Habitat and scale context: realistic pond-bank water cross-section with muddy bottom, submerged dead leaves and vegetation, adult concealed below and siphon tip at surface. Readable text “Freshwater ambush predator”. Small isolated side silhouette beside a clear 20 mm body-length bracket excluding the siphon: “Body ≈20 mm; tube excluded”. Tiny range line “Found in Britain; also recorded in southern Norway”. Do not imply this is the entire global range.\n\nAt least three supporting studies must be genuinely LARGE biological macro/diagram views, not tiny icons. Favor the cutaway, siphon, foreleg and head for that purpose. Each panel has short explanatory labels, no paragraphs, no unsupported numerical timing or exaggerated claims. Keep the mechanism, internal breathing study, whole-body anatomy, development, habitat and scale intact. No bibliography, source URLs, watermarks or fake citations on-image. Request medium quality, auto size, opaque background.",
+    "image": "images/2026-10-20-factual-infographic-factual-infographic-water-scorpion-brea.jpg",
+    "thumb": "thumbs/2026-10-20-factual-infographic-factual-infographic-water-scorpion-brea.webp",
+    "color": "#b2aa99",
+    "date": "2026-10-20",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "nepa-cinerea-siphon-pond-ambush",
+      "imageSha256": "a543d9f86e1d43396d61ef7b17d9580278267c9becd33bf42ca4b18c3b7c71b9",
+      "imageDHash": "b2e1c953358c1c34"
+    },
+    "factualInfographic": {
+      "topic": "How the water scorpion (Nepa cinerea) breathes through a paired tail siphon while ambushing freshwater prey",
+      "description": "Detailed macro scientific plate of the water scorpion, paired siphon respiration and predatory biology, with explicitly generalized internal breathing anatomy.",
+      "sourceNote": "Hampshire Cultural Trust: https://collections.hampshireculture.org.uk/object/insect-hemiptera-water-scorpion; Natural History Museum, London: https://www.nhm.ac.uk/discover/pond-life-facts-about-habitats-plants-animals.html; North Carolina State University: https://genent.cals.ncsu.edu/bug-bytes/respiratory-system/; University of Bergen — Miljolare.no: https://www.miljolare.no/artstre/?or_id=559. Verified siphon structure and respiration, predation, development, wings, habitat, body scale and regional occurrence; internal tracheal anatomy explicitly generalized.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-21T00:21:44.573372+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Hampshire Cultural Trust",
+            "title": "Insect / Hemiptera / Water scorpion",
+            "sourceType": "museum",
+            "url": "https://collections.hampshireculture.org.uk/object/insect-hemiptera-water-scorpion"
+          },
+          {
+            "id": "S2",
+            "publisher": "Natural History Museum, London",
+            "title": "Pond life: facts about pond habitats, plants and animals",
+            "sourceType": "museum",
+            "url": "https://www.nhm.ac.uk/discover/pond-life-facts-about-habitats-plants-animals.html"
+          },
+          {
+            "id": "S3",
+            "publisher": "North Carolina State University",
+            "title": "Respiratory System — ENT 425 General Entomology",
+            "sourceType": "university",
+            "url": "https://genent.cals.ncsu.edu/bug-bytes/respiratory-system/"
+          },
+          {
+            "id": "S4",
+            "publisher": "University of Bergen — Miljolare.no",
+            "title": "Art: Vannskorpion (Nepa cinerea)",
+            "sourceType": "university",
+            "url": "https://www.miljolare.no/artstre/?or_id=559"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The water scorpion is Nepa cinerea, an insect in Hemiptera, family Nepidae, not a true scorpion.",
+            "sourceIds": [
+              "S1",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Its flattened body hides among submerged vegetation and dead leaves; it ambushes aquatic insects and small animals including tadpoles.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The long posterior breathing siphon comprises two half-tubes that fit together to conduct atmospheric air from above the water surface to the respiratory system; it is not a stinger.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The raptorial front legs fold over prey and grip it; the sharp proboscis draws up internal fluids. The remaining two pairs of legs crawl along the bottom.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The adult has two pairs of wings, protective front wings and membranous hindwings; the latter permit flight between watery habitats.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Eggs are laid in vegetation just below the water surface; wingless adultlike nymphs develop through moults to adulthood. No pupal stage is depicted.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The species occurs in Britain; in Norway it is recorded in the southeast and along the coast north to Bergen.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S4"
+            ]
+          },
+          {
+            "claim": "The body is approximately 20 mm long excluding the breathing tube. It lives near bank vegetation over mud or clay.",
+            "sourceIds": [
+              "S4"
+            ]
+          },
+          {
+            "claim": "In the generalized insect respiratory system, spiracles admit air to branching tracheal tubes and finer tracheoles; oxygen diffuses to tissues and carbon dioxide diffuses out. This is a simplified functional schematic, not a species-specific dissection or measured arrangement.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "This plate combines the source-supported water-scorpion siphon with an explicitly generalized internal insect tracheal network; no exact species-specific spiracle positions or other unsupported internal organs are claimed.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-10-22-factual-infographic-factual-infographic-osteoporosis-when-t",
+    "title": "Factual infographic: Osteoporosis — When the Inner Scaffold Thins",
+    "tests": "factual_subtype: medical-health-infographic; artwork-led unboxed anatomical atlas; source-backed clinical education; no subjective review; archive_slot=2026-10-22T02:20; concept=osteoporosis-trabecular-thinning-fragility-fractures; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished artwork-led medical infographic directly on the canvas, an elegant richly shaded anatomical painting with precise fine technical ink. Title: \"OSTEOPOROSIS\"; subtitle: \"When the inner scaffold thins\". Warm ivory bone, muted petrol-blue annotation ink, soft slate background fading to clean light margins, subtle coral only for fracture emphasis. No boxes, cards, matrix, mockup, logos, bibliography or URLs. Use an asymmetric flowing composition with ample breathing room, exquisite specific anatomy and readable concise type, not a sparse title poster.\n\nThe dominant hero occupies the center and upper right: a large oblique cutaway of the proximal femur with the rounded head, narrowed neck and trochanter region, its outer cortical shell carefully sliced to reveal delicate interconnecting cancellous trabeculae. Beside it, organically nested within a sweeping magnification arc rather than a detached panel, show two equally scaled simplified bone cross-section studies labeled \"Stronger architecture\" and \"Osteoporotic architecture\". The first has a thicker cortex and connected internal struts; the second a thinner cortical shell, thinner struts and larger gaps with fewer connections. Label \"Cortical shell\" and \"Trabecular network\" with hairline leaders. Add the small qualifier \"Illustrative schematics — not diagnostic scans\". Make bone mineral matte, subtly pitted and biologically plausible, never a hollow pipe, sponge prop or crystalline lattice. A curved annotation reads \"Less bone + disrupted structure → lower strength\". Below the comparative studies a simple open two-arrow conceptual path reads \"Old bone removed\" and \"New bone formed\", with \"Bone is lost when removal outpaces replacement\". No invented cells or microscopic pathways.\n\nAt lower left, a beautifully rendered short lateral spine study with vertebral bodies and intervening discs flows upward into the femur composition. Compare an intact vertebral body with one whose anterior height has compressed into a wedge; do not depict disc disease or imply every vertebral fracture has this cause. Label \"Vertebral compression fracture\" and \"May cause back pain, height loss or stooped posture\"; smaller text: \"Not every spine fracture is osteoporosis\". A discreet secondary silhouette marks hip, spine and wrist with precise dots and the sentence \"Often silent until a fracture — even after a minor fall\". No dramatic breaking animation or gore.\n\nOn the open upper-left margin weave a short risk-factor branch into the bone's contour: \"Risk rises with age\", \"Estrogen decline after menopause\", \"Family history\", \"Long-term glucocorticoids\"; a concise note \"Men can develop osteoporosis too\". These are risk factors, not inevitable causes. Beneath, a delicate scanner-table line vignette and open caption explain \"Assessment: fracture and medical history + DXA bone-density scan\", with \"Hip and spine measurements help assess fracture risk\". No numerical diagnostic thresholds or invented scan results.\n\nAcross the lower arc integrate a small dignified fictional older man, around 68, medium-brown skin, broad face, short silver curls, average stocky build, rust polo and navy trousers, standing steadily with one hand near a chair for support; no exaggerated disability or assumption that he is a clinical case. The figure accompanies a flowing care pathway rather than demonstrating prescribed exercises: \"Care is individualized\"; \"Adequate calcium, vitamin D and protein\"; \"Appropriate weight-bearing, resistance and balance work\"; \"Reduce home fall hazards\"; \"Medicines may slow bone loss or build bone\". Small note \"Tailor activity to fracture risk; nutrition does not replace indicated medicine\". Do not promise a cure, make exercise universally safe, give doses or drug names, or imply supplements alone rebuild bone.\n\nA clearly readable restrained coral warning callout near the spine: \"New severe back pain or pain after a minor fall? Seek prompt medical assessment for a possible fracture.\" Footer: \"General education — not a diagnosis or personal treatment plan\". Keep the core mechanisms, symptoms, assessment, care and warning legible; omit decorative details before crowding text. Rich tactile bone microstructure, subtle depth and controlled lighting reward close inspection. Organic curved leaders connect studies to the hero; typography serves the anatomical artwork. Render one opaque image with auto size, requested medium quality using the specified stock model.",
+    "image": "images/2026-10-22-factual-infographic-factual-infographic-osteoporosis-when-t.jpg",
+    "thumb": "thumbs/2026-10-22-factual-infographic-factual-infographic-osteoporosis-when-t.webp",
+    "color": "#c8c0b5",
+    "date": "2026-10-22",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "osteoporosis-trabecular-thinning-fragility-fractures",
+      "imageSha256": "224820a6272b2b3e1c2565f45f3724951f784d2be97bfac2f1dd819f799772e0",
+      "imageDHash": "70787a9390189898"
+    },
+    "factualInfographic": {
+      "topic": "How osteoporosis weakens bone microarchitecture, increases fragility-fracture risk, and is evaluated and managed",
+      "description": "Artwork-led anatomical atlas showing loss of cortical and trabecular strength, vertebral compression and evidence-based fracture prevention and evaluation.",
+      "sourceNote": "NIAMS: https://www.niams.nih.gov/health-topics/osteoporosis; NIAMS diagnosis and treatment: https://www.niams.nih.gov/health-topics/osteoporosis/diagnosis-treatment-and-steps-to-take; AAOS: https://orthoinfo.aaos.org/en/diseases--conditions/osteoporosis/; AAOS spinal fractures: https://www.orthoinfo.org/diseases--conditions/osteoporosis-and-spinal-fractures/. Read and verified bone architecture/remodeling, fragility fractures, symptoms, risk factors, DXA evaluation, individualized prevention and treatment; schematic comparisons are educational, not diagnostic.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-22T06:21:52.047758+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Arthritis and Musculoskeletal and Skin Diseases",
+            "title": "Osteoporosis",
+            "sourceType": "government-agency",
+            "url": "https://www.niams.nih.gov/health-topics/osteoporosis"
+          },
+          {
+            "id": "S2",
+            "publisher": "National Institute of Arthritis and Musculoskeletal and Skin Diseases",
+            "title": "Osteoporosis: Diagnosis, Treatment, and Steps to Take",
+            "sourceType": "government-agency",
+            "url": "https://www.niams.nih.gov/health-topics/osteoporosis/diagnosis-treatment-and-steps-to-take"
+          },
+          {
+            "id": "S3",
+            "publisher": "American Academy of Orthopaedic Surgeons",
+            "title": "Osteoporosis",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://orthoinfo.aaos.org/en/diseases--conditions/osteoporosis/"
+          },
+          {
+            "id": "S4",
+            "publisher": "American Academy of Orthopaedic Surgeons",
+            "title": "Osteoporosis and Spinal Fractures",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.orthoinfo.org/diseases--conditions/osteoporosis-and-spinal-fractures/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Osteoporosis reduces bone mass and structural strength, increasing the risk of broken bones.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "With aging, the cortical outer shell thins and the inner trabecular architecture becomes thinner and less connected; comparative cutaways are illustrative schematics, not diagnostic scans.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Bone remodeling removes old bone and forms new bone; bone loss occurs when removal outpaces replacement.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Osteoporosis is often silent until a fracture; hip, spine and wrist are common fracture sites, sometimes after minor trauma.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Vertebral compression fractures may shorten the front of a vertebral body, causing back pain, height loss and a stooped posture; not every spinal fracture is due to osteoporosis.",
+            "sourceIds": [
+              "S1",
+              "S4"
+            ]
+          },
+          {
+            "claim": "New severe back pain or pain after a minor fall warrants prompt clinical assessment for a possible fracture rather than self-diagnosis.",
+            "sourceIds": [
+              "S1",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Risk factors include older age, estrogen decline after menopause, family history and long-term glucocorticoid use; men can also develop osteoporosis.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Evaluation combines fracture and medical history with bone-density testing; DXA measures bone mineral density, commonly at the hip and spine, and helps assess fracture risk.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Care may include adequate calcium, vitamin D and protein, individually appropriate weight-bearing and resistance exercise, balance work and home fall prevention. Exercise should be tailored to fracture risk.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Clinician-selected medicines can slow bone loss or build bone and reduce fracture risk; treatment is individualized, and nutrition alone is not a substitute for indicated medication.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-10-22-factual-infographic-factual-infographic-atrial-fibrillation",
+    "title": "Factual infographic: Atrial Fibrillation — An Irregular Rhythm",
+    "tests": "artwork-led unboxed anatomical atlas; source-backed clinical context; no subjective review; archive_slot=2026-10-22T05:20; concept=atrial-fibrillation-irregular-atria-clot-stroke; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create the finished medical educational infographic directly on the canvas: a refined artwork-led anatomical atlas, NOT a photographed poster, book, framed print or screen. Main title in elegant readable lettering: “ATRIAL FIBRILLATION”. Subtitle: “When the upper chambers lose their coordinated beat”. Richly rendered anatomical gouache and precision ink on an opaque pale pearl ground, deep oxblood myocardium, violet atrial tissue, teal annotations and restrained amber accents. Asymmetric sweeping composition with generous breathing room, no boxed grid, detached cards or mandatory panels. No bibliography, citations, URLs, logos or watermark.\n\nA dominant large three-quarter opened human heart fills the center and left, with believable muscular walls, ventricular thickness, fine endocardial folds, valve leaflets, and realistic organic shading. Show all four chambers as an educational cutaway, with unambiguous fine leader lines labeling “Right atrium”, “Left atrium”, “Right ventricle”, “Left ventricle”. Orient patient right to viewer left and patient left to viewer right. Delicate irregular violet wavelets confined to atrial tissue are explicitly a schematic overlay, not literal sparks. Label them “Irregular atrial activity — schematic”. A flowing concise caption integrated above the atria: “Atria lose coordinated contraction; blood moves less efficiently into the ventricles.” No electrical waveform or invented numerical trace is needed. Keep the heart anatomically credible rather than turning it into a geometric symbol.\n\nFollowing the curve of the left atrium, a beautifully shaded open magnification shows the left atrial appendage as a small muscular pouch connected to the atrium. Label “Left atrial appendage”. A few slow curved flow arrows and a small dark-red clot illustrate “Slower flow can allow a clot to form”. From this study a fine dotted amber pathway, explicitly captioned “Possible complication, not inevitable”, travels past an understated vessel study toward a small brain silhouette with one arterial branch occluded. Label “A travelling clot can block a brain artery → ischemic stroke”. Do not imply every person forms a clot or that a venous clot crosses into the brain. No enormous decorative clots or gratuitous gore.\n\nOn the open upper-right margin, text follows the heart's contour: “What you may notice” with short separated phrases “Fluttering or pounding heartbeat”, “Fatigue • shortness of breath • lightheadedness”, and the clearly visible qualifier “Some people have no symptoms”. Beneath, an airy smaller note, “Risk is higher with age; high blood pressure, sleep apnea and excess alcohol can contribute.” These are risk factors, not inevitable causes.\n\nThe lower composition flows into an integrated clinician-care arc, with tiny fine-ink icons rather than rectangular tiles. Use exact concise headings and text: “Confirm the rhythm” / “Clinical assessment + ECG; longer monitoring may catch intermittent episodes.” Then “Care has different goals” with three organically spaced lines: “Control heart rate”; “Restore rhythm when appropriate: medicines, cardioversion or ablation”; “Reduce stroke risk: anticoagulants when indicated”. Adjacent qualifier in readable type: “Anticoagulants can cause bleeding. Treatment and stroke-risk assessment are individualized.” A soft teal annotation completes the arc: “Manage high blood pressure and sleep apnea; discuss alcohol use with your clinician.” These are general options, no doses, pill brands, self-treatment instructions, promised cure or guarantee that restoring rhythm removes stroke risk.\n\nAt the foot, integrate a clear restrained vermilion urgent-safety line, unboxed and easy to find: “CALL 911: sudden weakness or trouble speaking; chest pressure lasting minutes or returning.” Follow it with “Do not dismiss these as routine AFib.” Small final footer: “General education, not a diagnosis or personal treatment plan.” All typography must be real, legible and concise. Preserve the dominant anatomical artwork, elegant hierarchy, curved open annotations and strong clinical meaning. Omit decorative flourishes or redundant mini-studies if space is tight; do not omit the essential symptoms, management, stroke mechanism or urgent guidance. No unsupported statistics or additional medical claims.",
+    "image": "images/2026-10-22-factual-infographic-factual-infographic-atrial-fibrillation.jpg",
+    "thumb": "thumbs/2026-10-22-factual-infographic-factual-infographic-atrial-fibrillation.webp",
+    "color": "#d3bcb8",
+    "date": "2026-10-22",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "atrial-fibrillation-irregular-atria-clot-stroke",
+      "imageSha256": "58cffba0cabbe2b786b1a8fbd41e544e68c3deea7893e2694f8f5757f86a0710",
+      "imageDHash": "d482b4b0d7b450d0"
+    },
+    "factualInfographic": {
+      "topic": "How atrial fibrillation disrupts coordinated atrial contraction, increases clot-related stroke risk, and is evaluated and managed",
+      "description": "Artwork-led anatomical atlas of atrial fibrillation, reduced coordinated atrial contraction, possible clot-related stroke, symptoms, assessment and individualized care.",
+      "sourceNote": "Verified anatomy, AFib mechanism, symptoms, risk factors, diagnosis, individualized management and emergency context against NHLBI, National Institutes of Health: https://www.nhlbi.nih.gov/health/atrial-fibrillation; Centers for Disease Control and Prevention: https://www.cdc.gov/heart-disease/about/atrial-fibrillation.html; NHLBI, National Institutes of Health: https://www.nhlbi.nih.gov/health/atrial-fibrillation/treatment; NHLBI, National Institutes of Health: https://www.nhlbi.nih.gov/health/atrial-fibrillation/diagnosis; NHLBI, National Institutes of Health: https://www.nhlbi.nih.gov/health/atrial-fibrillation/causes; NHLBI, National Institutes of Health: https://www.nhlbi.nih.gov/health/atrial-fibrillation/living-with",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-22T09:21:54.909375+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NHLBI, National Institutes of Health",
+            "title": "What Is Atrial Fibrillation?",
+            "sourceType": "government-agency",
+            "url": "https://www.nhlbi.nih.gov/health/atrial-fibrillation"
+          },
+          {
+            "id": "S2",
+            "publisher": "Centers for Disease Control and Prevention",
+            "title": "About Atrial Fibrillation",
+            "sourceType": "government-agency",
+            "url": "https://www.cdc.gov/heart-disease/about/atrial-fibrillation.html"
+          },
+          {
+            "id": "S3",
+            "publisher": "NHLBI, National Institutes of Health",
+            "title": "Atrial Fibrillation — Treatment",
+            "sourceType": "government-agency",
+            "url": "https://www.nhlbi.nih.gov/health/atrial-fibrillation/treatment"
+          },
+          {
+            "id": "S4",
+            "publisher": "NHLBI, National Institutes of Health",
+            "title": "Atrial Fibrillation — Diagnosis",
+            "sourceType": "government-agency",
+            "url": "https://www.nhlbi.nih.gov/health/atrial-fibrillation/diagnosis"
+          },
+          {
+            "id": "S5",
+            "publisher": "NHLBI, National Institutes of Health",
+            "title": "Atrial Fibrillation — Causes and Risk Factors",
+            "sourceType": "government-agency",
+            "url": "https://www.nhlbi.nih.gov/health/atrial-fibrillation/causes"
+          },
+          {
+            "id": "S6",
+            "publisher": "NHLBI, National Institutes of Health",
+            "title": "Atrial Fibrillation — Living With",
+            "sourceType": "government-agency",
+            "url": "https://www.nhlbi.nih.gov/health/atrial-fibrillation/living-with"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Atrial fibrillation (AFib) is an irregular heart rhythm; the two upper chambers are the atria, and the two lower chambers are the ventricles.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "In AFib atrial beating is irregular and atria and ventricles do not work together as they should, reducing efficient blood flow from atria to ventricles.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Blood may pool and form clots in the heart; a clot can travel to and block an artery supplying the brain, causing ischemic stroke. This is a possible complication, not inevitable.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S6"
+            ]
+          },
+          {
+            "claim": "The left atrial appendage is a small sac in the wall of the left atrium where clots can form.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "AFib may cause fluttering or pounding palpitations, fatigue, shortness of breath, and lightheadedness, or no symptoms.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Risk increases with age; high blood pressure, sleep apnea and excess alcohol are among risk factors, not a single universal cause.",
+            "sourceIds": [
+              "S5"
+            ]
+          },
+          {
+            "claim": "Clinician assessment and an electrocardiogram (ECG/EKG) diagnose AFib; longer monitoring may detect intermittent episodes.",
+            "sourceIds": [
+              "S4"
+            ]
+          },
+          {
+            "claim": "Management can include heart-rate control, rhythm control with medicines, electrical cardioversion or catheter ablation in selected people, and management of underlying risk factors. Treatment is individualized.",
+            "sourceIds": [
+              "S3",
+              "S6"
+            ]
+          },
+          {
+            "claim": "Anticoagulants may lower stroke risk when indicated after clinical assessment, but carry bleeding risk; rhythm treatment does not mean stroke-risk assessment can be ignored.",
+            "sourceIds": [
+              "S3",
+              "S6"
+            ]
+          },
+          {
+            "claim": "Treating high blood pressure and sleep apnea and discussing alcohol use with a clinician are relevant elements of AFib care.",
+            "sourceIds": [
+              "S3",
+              "S6"
+            ]
+          },
+          {
+            "claim": "Call 911 immediately for sudden weakness or trouble speaking, or chest pressure lasting minutes or returning, which can indicate stroke or heart attack. Do not dismiss these as routine AFib symptoms.",
+            "sourceIds": [
+              "S6"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-10-22-factual-infographic-factual-infographic-celiac-disease-the-",
+    "title": "Factual infographic: Celiac Disease — The Intestinal Surface",
+    "tests": "factual_subtype: medical-health-infographic; artwork-led unboxed anatomical atlas; source-backed clinical context; no subjective review; archive_slot=2026-10-22T11:20; concept=celiac-disease-immune-villous-damage-nutrient-absorption; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create the finished artistic medical infographic itself, directly on canvas, not a poster mockup or book. Main title: “CELIAC DISEASE”. Subtitle: “When an immune reaction damages the intestinal surface”. Use a refined contemporary anatomical atlas: layered gouache, translucent watercolor and precise fine-ink contours on a soft ivory field, deep petrol-blue typography, warm coral mucosa, ochre grain accents and muted teal comparison tissue. Dramatic asymmetric composition with generous breathing room and readable editorial typography, not a rigid boxed grid, detached cards, numbered dashboard or stock template.\n\nThe dominant artwork is a sweeping, dimensional ribbon of small-intestinal wall curling diagonally through the center and right, its outer surface peeling back to reveal a carefully rendered mucosal surface. Nest a large magnified comparison naturally into the ribbon: tall closely spaced fingerlike villi on one open edge, noticeably blunted/flattened inflamed villi on the other. Exquisitely paint individual epithelial contours, delicate folds, soft wet highlights and tissue depth without inventing molecular machinery. Label the two studies “Normal villi” and “Celiac-damaged villi”, with a small note “Schematic comparison”. Connect magnification to a modest, anatomically plausible small-intestine silhouette at left using fine curved leader lines; label “Small intestine”. Open callout on the normal side: “Villi increase surface area”. Open callout by blunted surface: “Damage reduces nutrient absorption”. The disease comparison is conceptual, not a patient photograph or universal severity scale.\n\nFrom a small, precisely painted cluster of wheat, barley and rye near the upper left, weave a loose curved annotation pathway into the inflamed tissue. Label grain cluster “Gluten: wheat • barley • rye”; next annotations “In genetically susceptible people” then “Abnormal immune response” then “Inflammation and villous damage”. The pathway represents an immune process, not grains physically puncturing villi, toxins or an infection. Tiny secondary line “Family history raises risk; gluten alone does not cause disease in everyone”. Keep the mechanism informative without speculative receptors, invented cells or unsupported numbers.\n\nPlace short symptom phrases along the outside arc of the intestinal ribbon, linked by delicate open strokes: “Bloating / abdominal pain”, “Diarrhea”, “Fatigue”. Under them, clearly readable: “Some people have no symptoms”. An elegant smaller open branch reads “Poor absorption can contribute to iron-deficiency anemia and weak bones”. No distress caricature, no human protagonist necessary, no decorative symptom icons displacing anatomy.\n\nIn the lower-left breathing space integrate a fine ink blood-sample tube and a small folded tissue specimen as understated studies with text: “Diagnosis: antibody blood tests; often a small-intestinal biopsy”. Strong readable caution directly beneath: “Do not start a gluten-free diet before testing without medical advice — it can affect results.” Add “Symptoms alone cannot diagnose celiac disease”.\n\nAlong the lower sweep of the composition, a flowing teal annotation leads from inflamed tissue toward a small healthier-villus study, explicitly labeled “A gluten-free diet allows healing in most people”, with no guaranteed timeline or promise of complete recovery. Main management text: “Lifelong gluten-free diet + dietitian support”. Supporting concise lines: “Read labels and avoid hidden gluten”, “Follow-up checks symptoms and nutrient deficiencies”, “Persistent symptoms need reassessment”. Add the distinction “Not the same as wheat allergy or non-celiac gluten sensitivity”.\n\nAt the bottom, a restrained rust-red open caution line, not a box: “Seek urgent advice: cannot keep fluids down or bloody diarrhea. Sudden severe abdominal pain: emergency care.” Smaller contextual line: “General warning signs — do not assume these are celiac disease.” Footer “General education, not a diagnosis or personal treatment plan”.\n\nEvery fact and diagram must agree with these labels; do not add statistics, dosages, patient-specific advice, cure claims, extra anatomy labels, bibliography, URLs, citations, watermarks or logos. Prioritize the substantial anatomical hero and clear visual journey; omit ornamental grain duplicates or the optional tiny healing study if space is tight, never the essential mechanism, diagnosis caution, management or warning signs. Finish as an elegant richly detailed unboxed artwork with a clear title and highly legible concise facts. Request medium quality, auto size, opaque background.",
+    "image": "images/2026-10-22-factual-infographic-factual-infographic-celiac-disease-the-.jpg",
+    "thumb": "thumbs/2026-10-22-factual-infographic-factual-infographic-celiac-disease-the-.webp",
+    "color": "#e6cec0",
+    "date": "2026-10-22",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "celiac-disease-immune-villous-damage-nutrient-absorption",
+      "imageSha256": "a04cbfd0ec993b67326c3787bf3e12cb253f441136d4dfcd1404d2a2faa94ca9",
+      "imageDHash": "89a762f8729e9c70"
+    },
+    "factualInfographic": {
+      "topic": "How celiac disease triggers immune-mediated small-intestinal villous damage, impairs nutrient absorption, and is evaluated and managed",
+      "description": "An artwork-led clinical atlas of celiac disease, normal versus damaged villi, variable symptoms, testing before dietary change, and evidence-based management.",
+      "sourceNote": "Verified anatomy, immune mechanism, symptoms, diagnostic-diet caution, lifelong dietary management and general urgent GI warning signs. National Institute of Diabetes and Digestive and Kidney Diseases: https://www.niddk.nih.gov/health-information/digestive-diseases/celiac-disease/all-content; NHS: https://www.nhs.uk/conditions/coeliac-disease/; NHS: https://www.nhs.uk/conditions/coeliac-disease/causes/; National Institute of Diabetes and Digestive and Kidney Diseases: https://www.niddk.nih.gov/health-information/digestive-diseases/celiac-disease/treatment; NHS: https://www.nhs.uk/symptoms/diarrhoea-and-vomiting/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-22T15:21:59.628382+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Diabetes and Digestive and Kidney Diseases",
+            "title": "Celiac Disease — Definition, Symptoms and Diagnosis",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/digestive-diseases/celiac-disease/all-content"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Coeliac disease",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/coeliac-disease/"
+          },
+          {
+            "id": "S3",
+            "publisher": "NHS",
+            "title": "Coeliac disease — Causes",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/coeliac-disease/causes/"
+          },
+          {
+            "id": "S4",
+            "publisher": "National Institute of Diabetes and Digestive and Kidney Diseases",
+            "title": "Treatment for Celiac Disease",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/digestive-diseases/celiac-disease/treatment"
+          },
+          {
+            "id": "S5",
+            "publisher": "NHS",
+            "title": "Diarrhoea and vomiting",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/symptoms/diarrhoea-and-vomiting/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Celiac disease is an autoimmune condition: eating gluten triggers an abnormal immune reaction that damages the small intestine.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Gluten occurs in wheat, barley and rye.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Villi are projections of the small-intestinal lining that increase surface area; inflammation and damage can flatten them and impair nutrient absorption. Normal and celiac-damaged villi are schematic comparisons, not before-and-after images from a patient.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Symptoms may include bloating, abdominal pain, diarrhea and fatigue; some people have no symptoms.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Nutrient malabsorption can lead to iron-deficiency anemia and weakening of bones.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Celiac disease has genetic susceptibility and increased risk in close relatives; eating gluten alone does not mean someone will develop it.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Evaluation commonly uses antibody blood tests and small-intestinal biopsy; symptoms alone do not diagnose it. Do not start a gluten-free diet before diagnostic testing without medical advice because this can affect results.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Treatment is a lifelong gluten-free diet with dietitian support; for most people it improves symptoms and allows intestinal healing, but is not a cure.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Read food labels, avoid hidden gluten, and follow up with a clinician to assess symptoms and nutritional deficiencies and supplement only if needed.",
+            "sourceIds": [
+              "S4"
+            ]
+          },
+          {
+            "claim": "Persistent symptoms despite a gluten-free diet warrant clinical reassessment.",
+            "sourceIds": [
+              "S4"
+            ]
+          },
+          {
+            "claim": "With diarrhea or vomiting, inability to keep fluids down or bloody diarrhea requires urgent advice; sudden severe abdominal pain requires emergency care. These are general warning signs, not diagnostic signs of celiac disease.",
+            "sourceIds": [
+              "S5"
+            ]
+          },
+          {
+            "claim": "Celiac disease differs from wheat allergy and non-celiac gluten sensitivity.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-10-22-factual-infographic-factual-infographic-psoriasis-skin-turn",
+    "title": "Factual infographic: Psoriasis — Skin Turnover and Inflammation",
+    "tests": "factual_subtype: medical-health-infographic; artwork-led unboxed anatomical atlas; source-backed clinical education; no subjective review; archive_slot=2026-10-22T14:20; concept=psoriasis-immune-overactivity-skin-cell-buildup-plaques; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished, artwork-led medical educational infographic directly on the canvas, not a photographed poster or framed print. Title: \"PSORIASIS\". Subtitle: \"Skin turnover & inflammation\". Elegant anatomical illustration in translucent gouache, finely stippled technical ink and softly luminous mineral pigments, cool ivory ground, muted teal shadows, warm rose and copper inflammation accents, dark charcoal typography. A dramatic sweeping ribbon of skin occupies the center and about half the image: the left end is a modest smooth ordinary-skin reference, then an open curved transition into a much larger psoriasis cross-section with densely accumulating surface skin cells and a thick, flaky, raised plaque. Show layered surface texture with small lifted pale scales, convincing tissue depth and irregular organic contours. This is a qualitative conceptual illustration, not a laboratory specimen: use label \"Conceptual skin cutaway — not to scale\". Avoid unsupported microscopic cell identities, named cytokines, numerical turnover times, or invented pathways. Clear open leaders label \"Ordinary skin\", \"Increased skin-cell production\", and \"Scaly, inflamed plaque\". A soft rose curved annotation leads from the words \"Immune overactivity\" to the increased cell buildup, then to the scaly surface, expressing the supported causal relationship without pretending to show molecular signaling.\n\nWeave a few beautifully rendered supporting studies around that central sweep, using asymmetry, varied scale and generous breathing room, never a rigid boxed grid or detached cards. At upper right an isolated bent elbow and small scalp silhouette identify \"Common sites: elbows, knees, scalp\". An open paired skin-surface study beneath shows pale skin with pink-red patches and light scales beside dark brown skin with grey-white raised scales, clearly labeled \"Appearance varies with skin tone\"; portray real skin, not pink coloration indiscriminately across all tones. Small handwritten-style leader captions identify \"Dry • itchy • sore\" and \"Flares may ease, then return\". No naked body or identifiable patient is needed. Give the flaking skin fine tactile detail without gore or sensationalism.\n\nAn airy explanatory curve at upper left reads \"Chronic immune-mediated disease\" and \"Not contagious\"; nearby a short line says \"Genes + environment contribute\" with two restrained labels \"Stress\" and \"Skin injury\" under \"Possible flare triggers\". Do not imply these factors explain every case. A flowing care pathway along the lower portion, integrated with delicate brushwork rather than outlined boxes, reads \"Care depends on type, severity & location\" then \"Moisturizers + prescribed topical care\" followed by \"Some cases need supervised light therapy or systemic medicines\". Show only generic, unbranded treatment symbols; no prescription names, doses, tanning advice, promises of cure, or universal treatment recommendations.\n\nInclude two concise, conspicuous clinical callouts woven into the lower margin, with enough space to remain readable: \"Seek assessment: suspected psoriasis, treatment problems, or recurring swollen, stiff, painful joints.\" And in a restrained rust-red accent, \"Emergency care: rapidly reddening skin with merging pus-filled bumps, especially with fever, shivering or a racing heart.\" Under it, smaller but readable: \"Redness may be less visible on darker skin.\" Do not depict emergency pustules as an inevitable progression of ordinary plaque psoriasis; they are a separate warning callout, not the end of the central mechanism arrow. End with \"General education — not a diagnosis\". Carefully hierarchical type: large confident subject title, strong main anatomical labels, short legible secondary phrases. No bibliography, URLs, citation numbers, logos, watermark, ornamental fake text or wall of prose. Rich anatomical material detail and painterly craft take priority; do not crowd the hero with extra trivia.",
+    "image": "images/2026-10-22-factual-infographic-factual-infographic-psoriasis-skin-turn.jpg",
+    "thumb": "thumbs/2026-10-22-factual-infographic-factual-infographic-psoriasis-skin-turn.webp",
+    "color": "#d2bbaf",
+    "date": "2026-10-22",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "psoriasis-immune-overactivity-skin-cell-buildup-plaques",
+      "imageSha256": "c1df8aad4e988f996a05eb1a65ea382d78f4e8bdc5da54c0bd41e55de37f9a7b",
+      "imageDHash": "6b0fec98d89a8ab0"
+    },
+    "factualInfographic": {
+      "topic": "How psoriasis accelerates skin-cell buildup through immune overactivity, causes scaly inflamed plaques, and is evaluated and managed",
+      "description": "Artwork-led clinical atlas explaining psoriasis, its immune-mediated mechanism, symptoms and individualized management, with essential clinical warning signs.",
+      "sourceNote": "NIAMS: https://www.niams.nih.gov/health-topics/psoriasis ; NHS: https://www.nhs.uk/conditions/psoriasis/ . Verified immune-mediated skin-cell buildup, plaque appearance, symptoms, triggers, individualized care, joint assessment and emergency warning signs.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-22T18:21:14.184130+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Arthritis and Musculoskeletal and Skin Diseases",
+            "title": "Psoriasis Symptoms, Causes, & Risk Factors",
+            "sourceType": "government-agency",
+            "url": "https://www.niams.nih.gov/health-topics/psoriasis"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Psoriasis",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/psoriasis/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Psoriasis is a chronic immune-mediated condition; immune overactivity causes skin cells to multiply too quickly, producing scaly inflamed patches.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Psoriasis is not contagious.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Dry, itchy, sore, flaky plaques commonly affect elbows, knees and scalp, although other sites may be affected.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Plaques may look pink or red with light scales on white skin, and grey, white, raised and scaly on dark brown skin.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Symptoms can flare and then improve or remit.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Genetics and environmental factors contribute; stress and skin injuries can trigger flares.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Treatment is individualized by type, severity and location; moisturizers and prescribed topical treatments can help, while more severe disease may need medically supervised light therapy or systemic medicines.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "See a clinician for suspected psoriasis, ineffective treatment or side effects; persistent recurrent joint pain, stiffness and swelling warrant assessment for possible psoriatic arthritis.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Seek emergency care for rapidly reddening skin with merging pus-filled bumps; fever, shivering or a fast heartbeat may accompany a serious condition or infection. Redness can be harder to see on darker skin.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "The conceptual skin cutaway contrasts ordinary skin with increased cell production and a thick scaly surface in psoriasis; it is a schematic rather than a diagnostic specimen.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-10-22-factual-infographic-factual-infographic-hypothyroidism-a-sl",
+    "title": "Factual infographic: Hypothyroidism — A Slower Thyroid Signal",
+    "tests": "factual_subtype: medical-health-infographic; artwork-led unboxed anatomical atlas; source-backed clinical education; no subjective review; archive_slot=2026-10-22T17:20; concept=hypothyroidism-thyroid-hormone-deficiency-pituitary-signal; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished, richly detailed medical educational infographic, an original flowing anatomical atlas, directly on the image canvas. Subject: HYPOTHYROIDISM. Main title in elegant bold lettering: “HYPOTHYROIDISM”; subtitle directly beneath: “A slower thyroid signal”. Refined gouache, translucent watercolor and precise anatomical ink on a cool ivory ground, deep indigo annotations, warm coral thyroid tissue, sea-glass teal signal paths and restrained gold hormone particles. Artwork leads; organically integrated facts, no boxed grid, dashboard, detached cards, poster mockup, frame, photograph of paper, logos or watermarks. Asymmetric composition with generous breathing room and genuinely legible concise typography.\nDominant hero: a large exquisitely shaded anatomical illustration of the lower front of the neck, with the butterfly-shaped thyroid at its correct location. A gentle transparent anatomical window reveals the gland; finely differentiated lobes, subtle vessels and believable tissue shading, delicate unboxed leader lines. Do not imply that hypothyroidism always enlarges the gland or creates a visible lesion. Label “Thyroid gland” and “Makes too little thyroid hormone”. Let an elegant stream of sparse coral-gold hormone dots enter an illustrated vessel and curve across the page toward small, carefully rendered brain, heart and muscle studies. Label this pathway “Hormones travel in blood” and “Low levels slow many body functions”; concise integrated gloss “Energy use • warmth • organ function”. Do not depict literal dead organs, blocked vessels, molecular structures or numerical hormone concentrations.\nAbove and slightly left, a small schematic pituitary-to-thyroid signaling study, anatomically identified as schematic, connected to the neck hero by an indigo curved arrow: “Pituitary” → “TSH signal” → “Thyroid”. A slender return annotation reads “In primary thyroid failure, TSH usually rises”; nearby qualification “Pituitary disorders are an exception”. Do not fabricate an exact brain cross-section or other unlabeled endocrine pathways.\nTo the right of the hero, an organically nestled close-up concept study of immune cells approaching thyroid tissue, explicitly labeled “Hashimoto’s: immune attack on the thyroid” and “Most common cause”. No invented histopathology or bacterial infection. A short nearby line reads “Other causes: surgery, radiation, some medicines”.\nThe lower-left sweep carries open symptom callouts around a small dignified fictional man, late fifties, medium-brown skin, short salt-and-pepper curls, broad nose, stocky build, muted teal cardigan, sitting upright with hands around a warm mug; he is an illustrative person, not a sourced clinical case or diagnostic example. Labels in a loose curved path: “Fatigue”, “Feeling cold”, “Dry skin”, “Constipation”, “Slower heart rate”. Tie these together with “Symptoms vary — symptoms alone cannot diagnose it”. No body shaming, no dramatic distress.\nThe lower-right visual pathway integrates a realistically painted blood sample tube and a simple unbranded medicine bottle with a few tablets, not a prescription label and no dose: “Check: TSH + free T4”, “History + examination help find the cause”, “Levothyroxine replaces missing hormone”, “Clinician-guided dose + follow-up blood tests”, and a smaller clear line “Often rechecked 6–8 weeks after starting or changing a dose”. A delicate closing annotation reads “Do not stop or change medicine without your clinician”.\nAt the bottom, distinct readable open clinical notes, not alarmist boxes: “Pregnant? Contact your clinician promptly — hormone needs may change.” “Iodine or kelp supplements are not a universal fix; excess can worsen autoimmune thyroid disease.” A restrained coral emergency accent accompanies “Rare emergency: severe untreated hypothyroidism can cause myxedema coma — immediate medical treatment is essential.” Footer “General education, not a personal diagnosis”. Keep all essential anatomy, symptoms, evaluation, treatment and urgent context readable. Supporting studies should flow into the large neck artwork with varied scale, curving annotations and fine linework. Omit decorative flourishes before crowding clinical text. No bibliography, source URLs, invented statistics, cure claims, supplement recommendations, numerical lab thresholds or prescription dosing. Request medium quality, auto size, opaque background using the exact requested openai/gpt-image-2.5-sunburst model.",
+    "image": "images/2026-10-22-factual-infographic-factual-infographic-hypothyroidism-a-sl.jpg",
+    "thumb": "thumbs/2026-10-22-factual-infographic-factual-infographic-hypothyroidism-a-sl.webp",
+    "color": "#d7cec5",
+    "date": "2026-10-22",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "hypothyroidism-thyroid-hormone-deficiency-pituitary-signal",
+      "imageSha256": "d9688b228e447de46fac4167557ca0b3ad0c709cc7256e291e1e59ea78ffb3ee",
+      "imageDHash": "f8bab2960eac0ec3"
+    },
+    "factualInfographic": {
+      "topic": "How hypothyroidism reduces thyroid hormone availability, slows body functions, and is evaluated and managed",
+      "description": "Thyroid anatomy and hormone deficiency, primary TSH signaling, common causes and symptoms, evaluation and evidence-based management with essential clinical cautions.",
+      "sourceNote": "NIDDK: https://www.niddk.nih.gov/health-information/endocrine-diseases/hypothyroidism ; American Thyroid Association: https://www.thyroid.org/hypothyroidism/ . Verified thyroid anatomy and function, TSH feedback qualification, causes, variable symptoms, blood-test evaluation, levothyroxine monitoring, pregnancy, iodine caution and rare myxedema emergency.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-22T21:21:01.051637+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Diabetes and Digestive and Kidney Diseases",
+            "title": "Hypothyroidism (Underactive Thyroid)",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/endocrine-diseases/hypothyroidism"
+          },
+          {
+            "id": "S2",
+            "publisher": "American Thyroid Association",
+            "title": "Hypothyroidism",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.thyroid.org/hypothyroidism/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Hypothyroidism means the thyroid does not make enough thyroid hormones to meet body needs.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The thyroid is a butterfly-shaped gland in the lower front of the neck; it releases thyroid hormones into the blood to reach body tissues.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Thyroid hormones help regulate energy use and warmth and support the brain, heart, muscles and other organs; low levels slow many body functions.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The pituitary releases TSH, which signals the thyroid to work. In primary thyroid failure TSH usually rises as hormone output falls; pituitary disease is an exception.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Hashimoto autoimmune disease attacks the thyroid and is the most common cause of hypothyroidism; thyroid surgery, radiation and some medicines are other causes.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Possible symptoms include fatigue, feeling cold, dry skin, constipation and slowed heart rate; symptoms vary and are not diagnostic alone.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "TSH and free T4 blood tests help diagnose hypothyroidism; history and examination help find the cause.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Levothyroxine replaces missing thyroid hormone, with clinician-guided dosing and follow-up blood tests, commonly 6 to 8 weeks after starting or changing a dose.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Do not stop thyroid medicine or change its dose without consulting the clinician.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Excess iodine, including kelp or iodine supplements, can worsen autoimmune thyroid disease; supplements are not a universal fix.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Contact the clinician promptly if pregnant because thyroid hormone needs may change and untreated hypothyroidism can harm mother and baby.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Rare severe untreated hypothyroidism can progress to life-threatening myxedema coma, requiring immediate medical treatment.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-10-22-factual-infographic-factual-infographic-plantar-fasciitis-l",
+    "title": "Factual infographic: Plantar Fasciitis — Load at the Heel",
+    "tests": "factual_subtype: medical-health-infographic; artwork-led unboxed anatomical atlas; source-backed clinical education; no subjective review; archive_slot=2026-10-22T23:20; concept=plantar-fasciitis-fascia-loading-heel-pain; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: medical-health-infographic",
+    "prompt": "Create a finished, artwork-led medical infographic, directly on the canvas, titled “PLANTAR FASCIITIS” with the subtitle “Load at the heel”. A richly shaded anatomical atlas in luminous graphite, ivory, muted indigo and warm coral, on a very pale cool background, with precise fine ink, tactile collagen fibers and restrained translucent watercolor shading. Compose asymmetrically around a large oblique medial cutaway of a human foot sweeping from lower left heel toward upper right toes. Accurately show the heel bone and arch bones in ivory, a fibrous plantar fascia running along the sole from heel to forefoot, and soft skin translucency. Emphasize the fascia's heel attachment with a small coral glow indicating the painful region, not a ruptured ligament. Delicate curved leader lines and freely placed readable labels: “Heel bone”, “Plantar fascia”, “Supports the arch”, and “Common pain site”. Show subtle tension arrows following the fascia, with the concise explanation “Excess load can irritate the fascia”. No unsupported microscopic lesions or exaggerated bone spurs. An organically nested enlarged study at the heel edge shows parallel fascia fibers meeting bone, schematic and labeled “Heel attachment · schematic”.\nLet the anatomy lead the entire composition; no rectangular cards, grids, boxed columns or dashboard. Follow the arch curve with an open walking rhythm study: a small dignified fictional 55-year-old man with medium-brown skin, close-cropped salt-and-pepper hair, stocky build, loose teal trousers and cream shirt rising from a chair, shown only as a light contextual vignette, and two small grounded foot silhouettes leading toward the main illustration. Caption this path “First steps after rest often hurt most” then “May ease at first; prolonged standing or walking can worsen pain”. Connect the context without implying every person follows exactly the same pattern.\nAbove the heel leave open white space for a concise risk-factor line: “Higher load • long standing • tight calves • poor shoe support”. Below the forefoot, integrate a finely rendered supportive shoe with cushioned heel and arch insert, and a small schematic calf-stretch pose: the same man at a wall, rear knee straight and rear heel grounded. Use the headings and exact short text “Reduce aggravating activity”, “Supportive shoes or inserts”, “Gentle calf and sole stretches” and “A physiotherapist can guide care”. Do not add repetitions, doses, timelines, cure guarantees, or extra treatments. Near the main heel place an elegant single clarification: “A heel spur is not the cause of plantar fasciitis pain.”\nUse the remaining open margin for clinically essential context in clear concise type, not tiny footnotes: “Assessment: symptoms + foot examination; imaging only when needed to rule out other causes.” “Get checked: persistent or worsening pain, numbness, or foot pain with diabetes.” A restrained coral open callout with a small warning symbol: “Urgent assessment: severe pain after injury, a snap/pop, or inability to walk — do not assume plantar fasciitis.” Footer: “General education, not a diagnosis.” Keep all text legible and correctly spelled. Main anatomy occupies most of the canvas and every smaller study grows naturally from its curves with generous breathing room. Detailed accurate foot structures, subtle bone texture, fascia striations and soft light, never gore. Avoid decorative fake anatomy, invented claims, statistics, bibliography, URLs, brands, logos, watermarks, photos of a poster, frames, book mockups or UI. Omit optional decorative flourishes if needed to retain spacious artistry and essential clinical text.",
+    "image": "images/2026-10-22-factual-infographic-factual-infographic-plantar-fasciitis-l.jpg",
+    "thumb": "thumbs/2026-10-22-factual-infographic-factual-infographic-plantar-fasciitis-l.webp",
+    "color": "#d7d5d3",
+    "date": "2026-10-22",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "plantar-fasciitis-fascia-loading-heel-pain",
+      "imageSha256": "ceee899efe0df7d9c4bc7b42e448100a3594129e4ceee7abc100fa673835aad7",
+      "imageDHash": "cb8ce28636c48ab0"
+    },
+    "factualInfographic": {
+      "topic": "How plantar fasciitis affects the arch-supporting fascia, causes load-related heel pain, and is evaluated and managed",
+      "description": "An artwork-led foot atlas explaining plantar fascia anatomy, load-related heel pain, assessment, supportive care and important alternative-injury warning signs.",
+      "sourceNote": "AAOS, https://www.orthoinfo.org/diseases--conditions/plantar-fasciitis-and-bone-spurs/ ; NHS, https://www.nhs.uk/conditions/plantar-fasciitis/ ; NHS heel-pain triage, https://www.nhs.uk/symptoms/foot-pain/heel-pain/ . Verified fascia anatomy, loading, symptom pattern, risk associations, assessment, conservative management, heel-spur distinction and warning signs.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-23T03:21:28.080650+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "American Academy of Orthopaedic Surgeons",
+            "title": "Plantar Fasciitis and Bone Spurs",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.orthoinfo.org/diseases--conditions/plantar-fasciitis-and-bone-spurs/"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Plantar fasciitis",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/conditions/plantar-fasciitis/"
+          },
+          {
+            "id": "S3",
+            "publisher": "NHS",
+            "title": "Heel pain",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/symptoms/foot-pain/heel-pain/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The plantar fascia is a strong band on the underside of the foot connecting the heel to the front of the foot and supporting the arch.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Excess loading can irritate and damage the plantar fascia, causing plantar heel pain; the cause is not always clear.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Pain typically occurs under the heel or arch, is worse on first steps after rest, may ease with initial movement, and can worsen with prolonged standing or walking.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Increased activity, long standing on hard surfaces, tight calves, and poor shoe support can increase risk.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "A clinician assesses symptoms and examines the foot; imaging may be used to exclude other causes but is not routinely needed.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Initial care includes reducing aggravating activity, cushioned supportive shoes or inserts, and gentle calf and plantar fascia stretching; a physiotherapist can guide exercises.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Heel spurs are not the cause of plantar fasciitis pain; many people with heel spurs have no pain.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Seek clinical assessment for worsening or persistent pain, tingling or loss of feeling, or foot pain with diabetes.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Severe heel pain after injury, a snap or pop during injury, or inability to walk warrants urgent assessment and may indicate a different injury rather than plantar fasciitis.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "This is general medical education and does not diagnose the cause of heel pain; people should not self-diagnose heel pain.",
+            "sourceIds": [
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-10-23-factual-infographic-factual-infographic-lily-exposure-polle",
+    "title": "Factual infographic: Lily Exposure — Pollen, Petals and Vase Water",
+    "tests": "Source-backed feline hazard education; no safe dose or home treatment; flowing unboxed botanical atlas; no subjective critic.; archive_slot=2026-10-23T00:20; concept=cat-lily-pollen-vase-water-kidney-hazard; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: household-hazards",
+    "prompt": "Create a finished, elaborate artistic feline safety infographic, directly rendered edge-to-edge, not a photograph of a poster. Title: “LILIES & CATS” with subtitle “A beautiful flower. A veterinary emergency.” Small series line “CAT ATLAS • HOUSEHOLD HAZARDS”. Use refined watercolor, luminous gouache and precise botanical ink on cool ivory paper, deep evergreen stems, cream petals, muted saffron pollen and restrained vermilion warning accents. Asymmetric organically flowing atlas composition, no boxed grid, no dashboard cards. Beautiful dominant illustration: a richly detailed short-haired charcoal-and-white adult domestic cat in three-quarter profile, seated with its white front paw raised, alert eyes, believable whiskers and anatomy. Beside it, an exquisitely drawn Easter lily, Lilium longiflorum: white trumpet flower, six tepals, six pollen-bearing stamens, green lanceolate leaves. The plant and feline illustrations dominate; separate them with generous open space, no cute cat actually chewing a flower and no implication that supervised contact is safe. Soft botanical arcs and delicate curved leader lines guide the eye through meaningful supporting studies around this hero.\n\nAbove the flower use the precise labels “TRUE LILIES — Lilium” and, beside a smaller distinct orange daylily botanical study, “DAYLILIES — Hemerocallis”. Main warning, highly readable: “These plants can cause fatal kidney failure in cats.” Include open labels “Flowers • leaves • stems • pollen” and “Vase water is hazardous too.” Weave three exposure studies into the flowing plant-to-cat pathway, not equal-sized panels: a close-up of a nibbled leaf labelled “Chewing plant material”; a magnified tuft of cat fur carrying yellow pollen, with a small grooming silhouette labelled “Pollen on fur → swallowed during grooming”; a transparent vase with waterline labelled “Drinking vase water”. These are schematic routes of exposure, not an invitation to demonstrate contact. Do not draw human-dose numbers, safe thresholds, toxin molecules or molecular mechanisms. A small softly shaded anatomical study of a paired feline kidney silhouette can sit along the pathway, with the text “Acute kidney injury” and “The specific toxin remains unidentified”; clearly label the study “Schematic”, not a literal visible lesion or a whole anatomy lesson.\n\nIn the lower natural sweep of foliage and white space, prominent urgent guidance in elegant readable typography: “SUSPECTED EXPOSURE? CONTACT A VET IMMEDIATELY.” Below: “Do not wait for symptoms. Call your veterinarian, emergency clinic or pet poison control.” Smaller: “Vomiting, drooling, poor appetite or low activity can be early signs.” Next to a tiny plant-photo illustration: “Bring a photo or sample for identification.” A brief prevention line: “Keep true lilies and daylilies out of cat homes.” A modest final safety line: “Do not induce vomiting unless a veterinary professional tells you to.” In a small open margin note, not a competing diagram, add “Names can mislead: peace and calla lilies cause different irritation—not this lily kidney toxicity. They are not safe to chew.” This is general hazard education, not home treatment. Source footer in subtle legible text: “Sources: U.S. FDA • Cornell Feline Health Center”. All substantive wording must stay within these verified claims; do not add dramatic symptom timelines, fatality percentages, cure promises or decorative fake labels. Keep botanical and feline textures exquisite, light directional and gentle, type sharply readable, the urgent call to action unmissable and the artwork spacious. Supporting studies may be reduced in decorative complexity for breathing room, never lose the three exposure routes or immediate veterinary guidance. Opaque background, auto size, requested medium quality.",
+    "image": "images/2026-10-23-factual-infographic-factual-infographic-lily-exposure-polle.jpg",
+    "thumb": "thumbs/2026-10-23-factual-infographic-factual-infographic-lily-exposure-polle.webp",
+    "color": "#c6c0a9",
+    "date": "2026-10-23",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "cat-lily-pollen-vase-water-kidney-hazard",
+      "imageSha256": "43137e73ee686de13af2dc894fa43930b08135ebee617b2b0a48b27a2e7a41bd",
+      "imageDHash": "731e3c28b233a622"
+    },
+    "factualInfographic": {
+      "topic": "How true lilies and daylilies expose cats through plant material, pollen and vase water and can cause acute kidney failure",
+      "description": "A botanical feline hazard atlas connecting three lily-exposure routes to kidney risk and urgent veterinary contact.",
+      "sourceNote": "Verified against U.S. FDA and Cornell Feline Health Center: https://www.fda.gov/animal-veterinary/animal-health-literacy/lovely-lilies-and-curious-cats-dangerous-combination ; https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/cat-health-news/easter-peril-look-out-lilies-and-other-items",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-23T04:21:38.041578+00:00",
+        "sources": [
+          {
+            "id": "FDA",
+            "publisher": "U.S. Food and Drug Administration",
+            "title": "Lovely Lilies and Curious Cats: A Dangerous Combination",
+            "sourceType": "government-agency",
+            "url": "https://www.fda.gov/animal-veterinary/animal-health-literacy/lovely-lilies-and-curious-cats-dangerous-combination"
+          },
+          {
+            "id": "Cornell",
+            "publisher": "Cornell University College of Veterinary Medicine",
+            "title": "Easter Peril: Look Out for Lilies and Other Items",
+            "sourceType": "university",
+            "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/cat-health-news/easter-peril-look-out-lilies-and-other-items"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "True lilies (Lilium species) and daylilies (Hemerocallis species) can cause potentially fatal kidney failure in cats.",
+            "sourceIds": [
+              "FDA",
+              "Cornell"
+            ]
+          },
+          {
+            "claim": "All parts of these plants are hazardous, including stems, leaves, flowers and pollen; vase water is also hazardous.",
+            "sourceIds": [
+              "FDA"
+            ]
+          },
+          {
+            "claim": "Cats can be poisoned by chewing plant material, licking pollen from fur while grooming, or drinking lily vase water; small exposures can cause severe harm.",
+            "sourceIds": [
+              "FDA"
+            ]
+          },
+          {
+            "claim": "The specific kidney-toxic substance has not been identified; do not depict a known molecule or a specific molecular mechanism.",
+            "sourceIds": [
+              "FDA"
+            ]
+          },
+          {
+            "claim": "Early signs may include vomiting, drooling, loss of appetite and reduced activity; do not wait for signs before seeking help.",
+            "sourceIds": [
+              "FDA",
+              "Cornell"
+            ]
+          },
+          {
+            "claim": "Suspected ingestion of lily material, pollen or vase water warrants immediate veterinary or pet poison control contact; early veterinary treatment improves prognosis.",
+            "sourceIds": [
+              "FDA",
+              "Cornell"
+            ]
+          },
+          {
+            "claim": "Keep these lilies out of cat households; bring a plant photograph or sample to help identification when seeking veterinary care.",
+            "sourceIds": [
+              "FDA",
+              "Cornell"
+            ]
+          },
+          {
+            "claim": "Do not induce vomiting unless specifically directed by a veterinarian or poison control professional.",
+            "sourceIds": [
+              "Cornell"
+            ]
+          },
+          {
+            "claim": "An Easter lily (Lilium longiflorum) is a dangerous true lily; daylilies belong to Hemerocallis, a distinct genus.",
+            "sourceIds": [
+              "FDA"
+            ]
+          },
+          {
+            "claim": "Not every plant called lily has the same toxin or risk: peace lilies and calla lilies cause calcium-oxalate irritation rather than this true-lily kidney toxicity; they are not safe to chew.",
+            "sourceIds": [
+              "FDA"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-10-23-factual-infographic-factual-infographic-feline-tongue-backw",
+    "title": "Factual infographic: Feline Tongue — Backward-Facing Papillae",
+    "tests": "Source-backed normal feline tongue anatomy; schematic saliva color and microanatomical enlargements; artwork-led unboxed atlas; no subjective critic.; archive_slot=2026-10-23T04:20; concept=feline-tongue-papillae-saliva-fur-grooming; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: inside-the-cat",
+    "prompt": "Create a finished, richly informative artistic feline anatomy infographic, not a photographed poster or mockup. Main title: “THE FELINE TONGUE”; subtitle immediately below: “Backward-facing papillae • A saliva-carrying comb”. A focused normal-anatomy plate, not a general cat overview or disease chart. Exquisite gouache and colored-pencil anatomical illustration with fine technical ink, luminous dusty-rose tongue tissue, graphite-gray and ivory fur, muted petrol-blue annotations on warm pale gray. Opaque background. Let the composition flow asymmetrically with varied scale, open callouts and generous breathing room; no boxes, panels, card matrix or rigid grid.\n\nVisually dominant hero: a healthy adult silver mackerel-tabby domestic shorthair curled in a natural three-quarter seated grooming pose, head bent gracefully toward one extended foreleg. Correct feline anatomy, finely individual guard hairs and soft undercoat, nuanced muzzle and whiskers, pink tongue visibly touching the foreleg. Rich soft directional lighting and believable mouth geometry. No human characters, costumes, props or anthropomorphism. The sweeping curve of the cat's body carries the viewer into the anatomical studies rather than occupying an unrelated vignette.\n\nAn elegant enlargement pathway grows out of the tongue with a delicate leader: a substantial oblique macro study of the dorsal tongue, tapering toward its tip. Explicitly label “Tongue tip” at the anterior narrow end and “Toward throat” at the posterior end. Show rows of small curved keratin spines pointing BACKWARD toward the throat, not forward. Main label “Filiform papillae”; short explanation “Backward-facing keratin spines”. These are stylized enlargements of real microanatomy, not enormous teeth on the actual cat. Differentiate soft pink tongue tissue from pale translucent keratin. Label “Schematic enlargement” unobtrusively.\n\nAlong the outer curve of this macro, a beautifully shaded single-papilla study becomes larger still, with a clearly visible open scoop-shaped U-shaped cavity at its tip. Show a tiny blue saliva meniscus occupying the groove. Label “U-shaped tip cavity” and “Surface tension draws saliva in”. Depict an open groove, NOT a closed tubular hypodermic needle, NOT a salivary gland duct, NOT a hole through the entire tongue. Use blue solely as a schematic saliva key, with tiny label “Blue = saliva (schematic)”.\n\nBelow, organically integrate a side-view tongue-to-fur contact study, with a few expertly rendered fur shafts rooted in a slim neutral skin line and passing around curved papillae. The tongue presses into and compresses the coat, papillae enter among the hairs, and small blue traces mark saliva released by contact onto hairs below the tongue surface. Labels: “Tongue compresses fur”, “Papillae reach between hairs”, “Saliva transfers on contact”. Make all leader lines terminate on the right structures; no piercing skin and no injection imagery. A small curved directional arrow indicates the grooming sweep without implying the papillae point forward. Add one open annotation adjacent to the tongue expansion study: “As the tongue expands, papillae stand more erect.” Represent it with a subtle two-position ghosted papilla at its soft-tissue base, not an invented joint or muscle inside the spine.\n\nOne concise closing line woven into negative space: “Normal grooming brings a comb and a fluid carrier together.” Substantial educational content should remain readable with clear hierarchy, crisp human-readable labels and no filler text. Preserve precise mechanism over decorative trivia. No statistics, scale bars, breed comparisons, taste-bud claims, cooling claims, treatment advice or additional unsourced functions. Tiny footer “Sources: Noel & Hu, PNAS (2018); Cornell Feline Health Center”. Deliver the flat finished artwork itself, sumptuous detail and calm visual breathing room.",
+    "image": "images/2026-10-23-factual-infographic-factual-infographic-feline-tongue-backw.jpg",
+    "thumb": "thumbs/2026-10-23-factual-infographic-factual-infographic-feline-tongue-backw.webp",
+    "color": "#b4a59e",
+    "date": "2026-10-23",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "feline-tongue-papillae-saliva-fur-grooming",
+      "imageSha256": "7e0f11f89f1880f647c583f77037631618f25cbefb758de5882bdfe4dc8f578e",
+      "imageDHash": "e6f6042402e0f8fc"
+    },
+    "factualInfographic": {
+      "topic": "How backward-facing feline tongue papillae wick saliva and deliver it into fur during grooming",
+      "description": "Focused normal feline tongue microanatomy and the capillary transfer of saliva during grooming.",
+      "sourceNote": "Read the primary PNAS paper and Cornell veterinary source. Claim-level evidence distinguishes normal grooming, keratin-spine orientation, open tip cavities, expansion and fur contact. Sources: https://pmc.ncbi.nlm.nih.gov/articles/PMC6298077/ ; https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/cats-lick-too-much",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-23T08:22:15.574971+00:00",
+        "sources": [
+          {
+            "id": "pnas",
+            "publisher": "Proceedings of the National Academy of Sciences",
+            "title": "Cats use hollow papillae to wick saliva into fur",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6298077/"
+          },
+          {
+            "id": "cornell",
+            "publisher": "Cornell University College of Veterinary Medicine",
+            "title": "Cats that Lick Too Much",
+            "sourceType": "university",
+            "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/cats-lick-too-much"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Licking is a normal feline grooming behavior; show a healthy domestic cat grooming its foreleg.",
+            "sourceIds": [
+              "cornell",
+              "pnas"
+            ]
+          },
+          {
+            "claim": "The feline tongue bears backward-facing keratin spines called filiform papillae; depict them pointing toward the throat, not toward the tongue tip.",
+            "sourceIds": [
+              "pnas"
+            ]
+          },
+          {
+            "claim": "The large grooming papillae have a scoop-shaped, U-shaped cavity at the tip which wicks saliva by surface tension; this is not a hollow syringe connected to a salivary duct.",
+            "sourceIds": [
+              "pnas"
+            ]
+          },
+          {
+            "claim": "During tongue expansion the grooming papillae rotate to stand more erect and increase contact with fur.",
+            "sourceIds": [
+              "pnas"
+            ]
+          },
+          {
+            "claim": "The tongue presses and compresses fur during the grooming stroke; papillae deliver saliva deeper into the coat than the tongue surface alone.",
+            "sourceIds": [
+              "pnas"
+            ]
+          },
+          {
+            "claim": "Saliva wicked into papilla cavities is released onto hairs by contact during grooming.",
+            "sourceIds": [
+              "pnas"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "2026-10-23-factual-infographic-factual-infographic-the-tapetum-a-secon",
+    "title": "Factual infographic: The Tapetum — A Second Pass for Light",
+    "tests": "Source-backed normal feline optics; explanatory ray colors and schematic layers; no sensitivity multiplier or disease profile; unboxed artistic nocturne; no subjective critic.; archive_slot=2026-10-23T08:20; concept=feline-tapetum-retina-reflected-light; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: extraordinary-senses",
+    "prompt": "Create a finished, elaborate scientific-art Cat Atlas infographic, artwork-led and organically integrated, not a boxed grid. Title in elegant large lettering: “THE TAPETUM”. Subtitle: “A second pass for light”. Small series line: “CAT ATLAS · EXTRAORDINARY SENSES”. Focus exclusively on the normal domestic cat’s retinal reflector; this is not a broad senses overview or disease chart.\n\nComposition: a sumptuous asymmetrical nocturne in midnight blue, mineral teal, warm copper and pale ivory. A dominant exquisitely rendered silver-and-black mackerel tabby in three-quarter head portrait rises from the lower left, attentive and relaxed, with anatomically credible rounded dim-light pupils, individual guard hairs, velvet nose and delicate whiskers. Gentle external illumination catches the eye; absolutely no eye beams, magical emission or neon glowing animal. Let the natural curve of the brow lead into a large beautiful scientific sagittal eye cutaway occupying the upper right. The cutaway is an explanatory study outside the intact portrait, not a literal wound. Use richly shaded gouache and precise fine technical ink on a deep blue softly textured ground, luminous translucent optical materials, selective copper foil-like annotation strokes. Render the artwork directly, not a photo of a poster or a book.\n\nEye study: show front cornea, iris opening/pupil, transparent lens, retina lining the inside rear wall, a distinctly thin tapetum lucidum behind the retina in the illustrated region, and outer wall; a short optic nerve exits posteriorly. Keep the retina in front of the reflector from the incoming light’s viewpoint. Trace one clear warm gold path from an external light source through pupil and lens, across the retina toward the tapetum; a contrasting cool turquoise arrow returns from the tapetum through that same retinal region. Arrowheads and precise leaders must make direction unmistakable. This is schematic ray geometry, not a promise of exact optical trajectories. Do not route reflection from the lens or imply the tapetum is in front of the retina. Use these short open labels only where anatomically appropriate: “Cornea”, “Pupil”, “Lens”, “Retina”, “Tapetum lucidum”, “Optic nerve”. Annotate the incoming path “Light enters” and return path “Unabsorbed light reflects back”. A nearby flowing sentence reads “A second chance for retinal absorption.” Another concise line reads “Greater sensitivity in dim light.” Do not add unsupported sensitivity multipliers, acuity claims, color-vision comparisons or disease information.\n\nBelow the cutaway, organically expand a small curved patch of the reflector into an intricate magnified microstructure study. Show stylized stacked cellular layers with aligned slender rodlets within cells, using scientific illustration rather than invented crystalline gems. Label “Ordered rodlets in tapetal cells” and “Layered structures reflect light”. Tiny honest qualifier: “Schematic layers and light paths · not to scale”. Avoid exact counts, exact dimensions and speculative chemical composition. Keep this a subordinate detail, not a competing large panel. Tie it to the tapetum with a delicate curved leader. Include a modest explanatory note in a generous area of negative space: “A reflector, not a light source.” All light is clearly supplied from outside the eye. Gold and teal distinguish incident and reflected rays, not natural tissue colors; include “Ray colors are explanatory.”\n\nReadable refined hierarchy, restrained text, genuine anatomy and clear optical mechanism. Weave labels into the open composition with fine leaders and curved pathways, no rigid cards, equal tiles or dashboard layout. Prioritize the extraordinary portrait, credible eye cutaway and clear two-pass mechanism; omit decorative microdetails if needed for breathing room without removing essential labels. No invented source quotations, no fake seals, no frame, no human figure, no unrelated factual filler. Opaque background. Request medium quality, auto size, one image.",
+    "image": "images/2026-10-23-factual-infographic-factual-infographic-the-tapetum-a-secon.jpg",
+    "thumb": "thumbs/2026-10-23-factual-infographic-factual-infographic-the-tapetum-a-secon.webp",
+    "color": "#3f3f3e",
+    "date": "2026-10-23",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1312x1199",
+    "dedup": {
+      "conceptKey": "feline-tapetum-retina-reflected-light",
+      "imageSha256": "e6d59ec89a9426914c3a8b3be8a5434b4d2fa695efffa8fec412bb399475178a",
+      "imageDHash": "33d5d5d31b333719"
+    },
+    "factualInfographic": {
+      "topic": "How the feline tapetum lucidum reflects unabsorbed light back through the retina",
+      "description": "Normal feline tapetal reflection, a second retinal pass, and schematic ordered rodlet microstructure.",
+      "sourceNote": "Read Cornell veterinary explanation and primary research abstracts; sourced normal anatomy and reflecting microstructure. Sources: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-vision-problems-host-possible-causes ; https://pmc.ncbi.nlm.nih.gov/articles/PMC1395665/ ; https://pmc.ncbi.nlm.nih.gov/articles/PMC2224636/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-23T12:21:33.053920+00:00",
+        "sources": [
+          {
+            "id": "cornell",
+            "publisher": "Cornell University College of Veterinary Medicine",
+            "title": "Feline Vision Problems: A Host of Possible Causes",
+            "sourceType": "university",
+            "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feline-vision-problems-host-possible-causes"
+          },
+          {
+            "id": "physiol",
+            "publisher": "The Journal of Physiology / The Physiological Society",
+            "title": "Some reflective properties of the tapetum lucidum of the cat’s eye",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1395665/"
+          },
+          {
+            "id": "jcb",
+            "publisher": "Journal of Biophysical and Biochemical Cytology / Rockefeller University Press",
+            "title": "Electron Microscopy of the Tapetum Lucidum of the Cat",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2224636/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The cornea admits light, the iris regulates entry through the pupil, and the lens focuses incoming light onto the retina; the optic nerve carries visual information toward the brain.",
+            "sourceIds": [
+              "cornell"
+            ]
+          },
+          {
+            "claim": "The tapetum lucidum lies behind the retina and reflects light that was not absorbed on its first passage, providing a second opportunity for retinal absorption and improving sensitivity in dim light.",
+            "sourceIds": [
+              "cornell"
+            ]
+          },
+          {
+            "claim": "The tapetum is a reflector of incoming light, not a light-producing organ; diagram arrows represent incident and reflected light rather than generated light.",
+            "sourceIds": [
+              "cornell",
+              "physiol"
+            ]
+          },
+          {
+            "claim": "Cat tapetal cells contain ordered groups of slender rodlets; multilayer reflecting domains account for reflection, with reflected wavelength depending on domain layer spacing. Schematic microscopic studies are not to scale.",
+            "sourceIds": [
+              "physiol",
+              "jcb"
+            ]
+          },
+          {
+            "claim": "A tapetal layer is part of the choroidal tissues behind the retina; schematic layers may be simplified and exaggerated for explanation, not represented as a full clinical histology section.",
+            "sourceIds": [
+              "jcb",
+              "cornell"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
