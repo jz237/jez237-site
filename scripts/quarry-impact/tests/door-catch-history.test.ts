@@ -1,6 +1,7 @@
+import {restoreSpareWheelBytes} from './spare-wheel-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readDoorCatchPrevious,restoreDoorCatchBytes,verifyDoorCatchRevision} from './door-catch-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreSpareWheelBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('DoorCatch preserves every prior fixture, vehicle asset, venue art and history input',verifyDoorCatchRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/door-catch/revision.json').toString());

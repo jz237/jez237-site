@@ -23,7 +23,7 @@ test('the other lids are untouched by the new speed argument',()=>{
 });
 test('an open boot spills luggage and a torn-off lid weighs something',()=>{
  assert.ok(cargoSpills('boot',CARGO.boot.open));assert.ok(!cargoSpills('boot',CARGO.boot.open-.1));
- assert.ok(CARGO.boot.load>0);assert.equal(assemblyMass('boot'),14);
+ assert.equal(CARGO.boot.load,3,'the spare wheel, then two cases');assert.equal(assemblyMass('boot'),14);
 });
 test('saloon boot panels hinge as one lid along their front edge',()=>{
  for(const build of [buildTordalAsset,buildCompactAsset]){
