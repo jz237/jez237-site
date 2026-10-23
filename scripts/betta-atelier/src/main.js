@@ -120,7 +120,7 @@ const grade = new ShaderPass({
 composer.addPass(grade);
 composer.addPass(new OutputPass());
 const views = {
-  portrait: { target: [0.35, -0.13, 0], pos: [-0.05, 0.45, 9.15] },
+  portrait: { target: [0.35, -0.13, 0], pos: [-0.05, 0.45, 9.8] },
   head: { target: [-1.31, 0.08, 0], pos: [-2.65, 0.65, 2.5] },
   scales: { target: [-0.4, 0.12, 0.2], pos: [-0.5, 0.55, 1.9] },
   fins: { target: [1.4, 0.07, 0], pos: [1.8, 0.45, 4.4] },
@@ -241,6 +241,18 @@ renderer.domElement.addEventListener("webglcontextlost", (e) => {
   $("#error h2").textContent = "The graphics context was interrupted.";
   $("#error p").textContent = "Reload this page to return to the aquarium.";
 });
+let textureReady = false;
+fish.userData.ready
+  .then(() => {
+    textureReady = true;
+  })
+  .catch(() => {
+    $("#error").hidden = false;
+    $("#error h2").textContent = "The fish textures could not load.";
+    $("#error p").textContent =
+      "Check your connection and reload to try again.";
+    $("#loading").style.display = "none";
+  });
 let frame = 0;
 function draw(now) {
   const dt = Math.min((now - last) / 1000, 0.05);
@@ -252,7 +264,7 @@ function draw(now) {
     3,
     dt,
   );
-  fish.userData.update(t);
+  fish.userData.update(t, selected !== "portrait");
   bg.material.uniforms.time.value = t;
   dustMat.uniforms.time.value = t;
   if (transition) {
@@ -264,7 +276,7 @@ function draw(now) {
   }
   controls.update();
   composer.render();
-  if (!ready && ++frame > 3) {
+  if (!ready && textureReady && ++frame > 3) {
     ready = true;
     $("#loading").classList.add("done");
     setTimeout(() => $("#loading").remove(), 1200);

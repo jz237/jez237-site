@@ -1,7 +1,7 @@
-# Living Silk — Betta Atelier
+# Living Silk — Betta Atelier 1.1
 
-An original interactive 3D male halfmoon Betta study for Jez237, built 2026-10-22.
-Live route: https://jez237.com/demos/betta-atelier/
+An interactive, genuinely volumetric male halfmoon Betta study for Jez237.
+Live: https://jez237.com/demos/betta-atelier/
 
 ## Build
 
@@ -12,64 +12,69 @@ npm ci --ignore-scripts --no-audit --no-fund
 npm run build
 ```
 
-Vite writes the static build to `../../demos/betta-atelier/`. `public/` contains
-its reference-study page and the Three.js license. Do not put generated reference
-image binaries into Git; `reference-provenance.json` retains prompts, hashes,
-dimensions, exact requested model/quality and verified R2 URLs. The three original
-JPEGs and raw returned metadata are retained in GameMaster's
-`artifacts/betta-atelier-20261022/references/` on Evo X2.
+Vite writes to `../../demos/betta-atelier/`. Publish only with the existing guarded
+full-site Cloudflare workflow from a complete committed/pushed publishing tree.
+Never deploy this sparse task worktree or run a static-only upload.
 
 ## Reference-driven construction
 
-Three separately generated GPT Image 2 studies guide the model, not a projected
-fish photograph. Their use is documented rather than presented as real specimens:
+Three separate GPT Image 2 studies were generated at explicitly requested quality
+high. Their prompts, actual dimensions, hashes, model-verification limitations and
+R2 URLs are retained in `reference-provenance.json`. Original JPEGs and returned
+metadata remain in GameMaster's `artifacts/betta-atelier-20261022/references/` on
+Evo X2; generated image binaries do not belong in Git.
 
-- **Profile:** body taper, caudal peduncle, separate dorsal/anal/caudal fins,
-  halfmoon outline and paired pelvic filaments.
-- **Head:** small upturned mouth, convex black eyes with copper irises, curved
-  operculum seams and the transition to small facial scales.
-- **Fins:** branching ray colour channels, radial pleats, thin membranes and
-  fine pale trailing edges.
+- The lateral profile supplies measured body contours and UV-projected scale,
+  face, dorsal/anal and pectoral pigmentation.
+- The head study guides the mouth, gills, thickness and inset eye construction.
+- The fin macro supplies the caudal membrane texture and guides radial folds,
+  branching rays and thin pale margins.
 
-GPT was explicitly requested at quality high. The stock response identifies the
-request as gpt-image-2 but supplies no independent backend-model or actual-quality
-attestation. We do not infer verification from the echoed model. No model fallback,
-image reroll, resizing or subjective rejection was performed.
+Images are used unchanged as texture assets. This is not a billboard or a video:
+the body is closed 3D geometry with 220 longitudinal and 96 radial segments,
+independent dorsal/ventral contours and varying lateral thickness. Both sides,
+the mouth cap and the seven folded fin meshes are rendered in real time. The eyes
+have separate textured convex irises and dark pupils. Geometry totals 183,744
+triangles. Iridescence, roughness, subtle bump and reflections respond to light.
 
-## Geometry and materials
+Version 1.1 replaces the first version's uniform scale instances and procedural
+fin stripes after Jez explicitly requested greater realism. The skin now uses
+irregular reference pigmentation instead of a repeating geometric scale pattern.
+The images are artwork, not photographs of a real specimen. This remains an
+artistic reconstruction, not a scientific digital twin.
 
-- Continuous capped body with 150 longitudinal sections and 80 radial segments.
-- 2,646 individual overlapping flank scales and 900 smaller facial scales.
-- Seven separate fins (caudal, dorsal, anal, two pelvic, two pectoral), with
-  radial pleats and scalloped contour geometry, branching shader rays,
-  transparent membranes and independently moving pectorals.
-- Sculpted mouth/lips, eye sockets, copper irises, black pupils, clear corneas,
-  nostril pores and body-surface-projected gill seams.
-- Shared spine deformation, fin travel waves and breathing gills.
-- Physical iridescent materials, local procedural environment, three-point
-  lighting, subtle bloom, water light shafts and drifting motes.
+## Motion
 
-The fish contains 706,808 triangles including all scale instances. The rendering
-is an artistic anatomical study, not a scientific digital twin. No claim is made
-that AI-generated anatomy is authoritative. Runtime code and environment are
-self-contained; only the optional reference gallery fetches R2 images.
+The deterministic 32-second behavior cycle alternates stabilization, acceleration,
+gliding, braking and full turns. Integrated tail phase changes frequency/amplitude
+with thrust, rather than jumping when speed changes. Caudal motion lags the spine;
+fin-edge ripples, alternating pectoral beats, small jaw/gill respiration and gentle
+pitch/roll continue during hovering. The frame is compensated around the specimen
+center so turns do not clip the opposite side on phones. Inspection views ease
+back to quiet hovering. Pause freezes simulation time; reduced-motion preference
+starts paused.
 
-## Interaction and accessibility
+## Runtime assets
 
-Orbit by dragging, scroll/pinch to zoom, pause (also Space), open/relax fins,
-choose whole fish/head/scales/fin views, change light, reset, fullscreen. Buttons
-are semantic and labelled; pointer/touch handling belongs to OrbitControls and
-never blocks the HTML controls. Reduced-motion preference pauses the fish at
-startup. No WebGL 2 or lost context produces a readable route back to Demos.
+Two JPEG textures load from the existing public `media.jez237.com` R2 bucket.
+CORS for the production origin `https://jez237.com` was verified. Localhost is not
+an allowed bucket origin: local QA serves identical original JPEG bytes through
+Playwright route fixtures. Production QA must run **without** those fixtures and
+verify actual R2 delivery. A failed texture request shows an explicit retry message,
+not an indefinitely empty aquarium. The optional gallery displays all three images.
 
 ## Verification
 
-`/tmp/betta-qa/check.mjs` (retained with task artifacts) checks desktop and
-phone-sized layouts, no horizontal overflow, animation pause/resume, fin-state
-transition, all inspection cameras, lighting, information panel, reset and the
-reverse side, plus page/console/network failures. Actual AMD-GPU rendering at
-1440x1000 and emulated touch 390x844 measured approximately 60 frames per second;
-that is not a performance claim for physical phones.
+Task QA scripts and screenshots are retained under
+`artifacts/betta-atelier-20261022/qa-v1.1/` in the GameMaster workspace. Checks cover:
 
-Publish only through the existing guarded full-site Cloudflare workflow from a
-complete committed/pushed publishing checkout, never from this sparse task tree.
+- Desktop 1440x1000 and touch-emulated 390x844 layouts and controls.
+- Pause/resume, fin relaxation, all cameras, light, info, reset and reverse side.
+- Integrated motion states, facing direction, thrust and finite positions.
+- Screenshot inspection of profile, head, fins, reverse side and full-turn stages.
+- Gallery preview/launch/back links, all three reference images, no-WebGL fallback.
+- Live bundle/asset hashes and production-origin texture loading without mocks.
+
+Approximately 60fps was observed on the host AMD GPU; this is not a physical-phone
+performance claim. The references include baked photographic lighting, so close-up
+and strongly oblique views remain an artistic real-time approximation.
