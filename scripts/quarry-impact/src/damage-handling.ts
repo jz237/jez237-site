@@ -449,3 +449,7 @@ export const BUMPER_GONE={crush:1.35,engine:1.25} as const;
 /** Doors and engine covers do their share too (offline): with a door gone that side crumples COVER_GONE.side times as fast;
  * with the bonnet (or a rear engine's lid) gone the engine takes `engine` times the damage, on top of a missing bumper. */
 export const COVER_GONE={side:1.3,engine:1.2} as const;
+/** Engine out (offline): with the engine mounts already broken and the engine past ENGINE_DROP.engine damage, a hit of
+ * `damage` or more at the engine end tears the block loose and it drops out of the car: the car is finished on the spot. */
+export const ENGINE_DROP={damage:22,engine:.5} as const;
+export const engineDrops=(mountsBroken:boolean,engineDamage:number|undefined,damage:number,atEngineEnd:boolean)=>mountsBroken&&atEngineEnd&&(engineDamage??0)>=ENGINE_DROP.engine&&Number.isFinite(damage)&&damage>=ENGINE_DROP.damage;
