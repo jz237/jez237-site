@@ -1,3 +1,4 @@
+import {restoreWindRainBytes} from './wind-rain-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readWreckBurstPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreWreckBurstBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreWindRainBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readWreckBurstPrevious(file);
 }
 export function verifyWreckBurstRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'c4e49522cdae6a2a0a681b32bd85f6f239639c5a');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreWindRainBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreWreckBurstBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the WreckBurst release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreWindRainBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the WreckBurst release');
  assert.equal(manifest.previousFixtureCount,7394);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,7394);
 }

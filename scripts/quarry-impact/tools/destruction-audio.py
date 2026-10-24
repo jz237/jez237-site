@@ -46,6 +46,9 @@ jobs = [
  ('rattle-2', 'Hollow knock: one short bang of a loose car bonnet bouncing on its latch, very short and dry, then silence. No music, no voices, no speech.', .5, False),
  ('rattle-3', 'Sharp metallic tick: one short ping of a loose exhaust heat shield rattling against the car floor, very short and dry, then silence. No music, no voices, no speech.', .5, False),
  ('thump', 'Dull rubbery thump: one short heavy knock of a bent car wheel and flat-spotted tyre hitting the road, very short and dry, then silence. No music, no voices, no speech.', .5, False),
+ # The open-cabin wind roar (synthWind's id) and the rain, recorded.
+ ('wind', 'Wind roaring through the shattered open windscreen of a fast moving car: a continuous turbulent rush of air buffeting the cabin, steady. Isolated, no engine, no music, no voices, no speech.', 3.0, True),
+ ('rain', 'Steady rain falling on a dirt arena and on car roofs: a continuous even rain hiss with soft patter, no thunder. No music, no voices, no speech.', 4.0, True),
 ]
 # Seconds cut from the start of a raw clip: metal-groan dips to silence early (it would drop out every loop) and
 # debris-2 opens with half a second of near silence (the layer would land late).
@@ -55,7 +58,7 @@ TRIM = {'metal-groan':.7,'debris-2':.45,'growl':.6,'thump':.11}
 KEEP = {'rattle-0':.3,'rattle-1':.3,'rattle-2':.18,'rattle-3':.3,'thump':.22}
 # Clips that replace a synthesized sound are brought to that synth's RMS (dBFS), so the gains the game already plays
 # them at stay right: the stuck horn (synthHorn), the starter, the gearbox grind, the belt squeal and the bearing growl.
-MATCH = {'horn-stuck':-13.2,'starter':-13.5,'gear-grind':-14.3,'squeal':-17.4,'growl':-29.1,'rattle-0':-18.3,'rattle-1':-18.2,'rattle-2':-18.2,'rattle-3':-18.3,'thump':-15.4}
+MATCH = {'horn-stuck':-13.2,'starter':-13.5,'gear-grind':-14.3,'squeal':-17.4,'growl':-29.1,'rattle-0':-18.3,'rattle-1':-18.2,'rattle-2':-18.2,'rattle-3':-18.3,'thump':-15.4,'wind':-20.3,'rain':-17.7}
 def rms_db(path):
     import array, math
     pcm = array.array('h', subprocess.run(['ffmpeg','-v','error','-i',str(path),'-f','s16le','-ac','1','-'],capture_output=True,check=True).stdout)

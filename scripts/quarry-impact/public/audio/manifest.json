@@ -995,5 +995,33 @@
     "sha256": "9fdba6967787d3345079fc534b83a1a9e802af14b9e96cb93a5ab78acd57382b",
     "runtimeSha256": "ab766b179f34ce37bda41b2dc14081231be4a1483082f8aa3391c71c66d69641",
     "processing": "0.22s kept, first 0.11s cut, loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 66ms tail fade, Vorbis q5, RMS matched to -15.4 dBFS (the synthesized sound it replaces), limited at -0.4 dBFS"
+  },
+  {
+    "id": "wind",
+    "file": "wind.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Wind roaring through the shattered open windscreen of a fast moving car: a continuous turbulent rush of air buffeting the cabin, steady. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 3.0,
+      "loop": true,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "ad3a61625487e25f0df154261e6596ede7840c526e4b62423169a38f1c7253e1",
+    "runtimeSha256": "4fc8f3d7e57a15a7f9737d139d0605db4ac9d585281f7ae27b43a3f58c705c68",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5, RMS matched to -20.3 dBFS (the synthesized sound it replaces), limited at -0.4 dBFS"
+  },
+  {
+    "id": "rain",
+    "file": "rain.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Steady rain falling on a dirt arena and on car roofs: a continuous even rain hiss with soft patter, no thunder. No music, no voices, no speech.",
+      "duration_seconds": 4.0,
+      "loop": true,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "a61500d15fff4ee213817dd763f2ebef4780ab4d3a0aa98ddd776ebe0a166fc1",
+    "runtimeSha256": "5c7b972f2573b8ca009547128e9bc50530e4b173cb5dcec9d91cf62c3ae7e2e3",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5, RMS matched to -17.7 dBFS (the synthesized sound it replaces), limited at -0.4 dBFS"
   }
 ]

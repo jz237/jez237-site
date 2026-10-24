@@ -171,6 +171,9 @@ export class Sound {
   rain(on:boolean){
     const c=this.ctx;if(!c||!this.ambientBus||!this.ready)return;
     if(on&&!this.rainHiss){
+      // The recorded rain when it loaded (level-matched to this hiss after its high-pass); the synthesized hiss otherwise.
+      const recorded=this.buffers.get('rain');
+      if(recorded){const source=c.createBufferSource();source.buffer=recorded;source.loop=true;const gain=c.createGain();gain.gain.value=0;gain.gain.setTargetAtTime(.16,c.currentTime,.8);source.connect(gain);gain.connect(this.ambientBus);source.start(0,Math.random()*recorded.duration);this.rainHiss={source,gain};return;}
       const length=c.sampleRate*3,buffer=c.createBuffer(1,length,c.sampleRate),data=buffer.getChannelData(0);let b=0;for(let i=0;i<length;i++){b=.6*b+(Math.random()*2-1)*.4;data[i]=b*.5;}
       const source=c.createBufferSource();source.buffer=buffer;source.loop=true;const high=c.createBiquadFilter();high.type='highpass';high.frequency.value=900;const gain=c.createGain();gain.gain.value=0;gain.gain.setTargetAtTime(.16,c.currentTime,.8);
       source.connect(high);high.connect(gain);gain.connect(this.ambientBus);source.start();this.rainHiss={source,gain};
