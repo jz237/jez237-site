@@ -3,10 +3,14 @@
  * reports hits and the starting order and supplies names when rendering. */
 /** A FASTEST HIT card needs a hit of at least FASTEST_HIT.min m/s closing speed. */
 export const FASTEST_HIT={min:10} as const;
-export type AwardCar={id:number;inflicted:number;health:number};
+export type AwardCar={id:number;inflicted:number;health:number;
+ /** Major parts the car has lost (bumpers, bonnet, boot, doors, wings), when known. */
+ partsGone?:number};
 /** failure: a car's own mechanical failure (attacker = victim = that car), captioned by `label`. */
 export type EventMoment={kind:'hit'|'takedown'|'wheel'|'fire'|'failure';attacker:number;victim:number;time:number;score:number;label?:string};
-export type EventAward={key:'hit'|'fastest'|'destroyer'|'takedowns'|'climber'|'toughest'|'nemesis'|'wheels'|'scrap'|'firestarter'|'roller';title:string;id:number;detail:string;victim?:number;value:number};
+export type EventAward={key:'hit'|'fastest'|'destroyer'|'takedowns'|'climber'|'toughest'|'nemesis'|'wheels'|'scrap'|'firestarter'|'roller'|'standing';title:string;id:number;detail:string;victim?:number;value:number};
+/** STILL STANDING goes to a car that finishes still running with at least this many major parts gone. */
+export const STILL_STANDING=5;
 export class EventAwards{
  private biggest:{attacker:number;victim:number;damage:number;time:number}|null=null;
  /** The fastest damaging hit (closing speed, m/s). */
@@ -82,6 +86,9 @@ export class EventAwards{
   const roller=[...this.rolls].sort((a,b)=>b[1]-a[1]||a[0]-b[0])[0];
   if(roller)out.push({key:'roller',title:'ROLL MASTER',id:roller[0],value:roller[1],detail:`rolled ${roller[1]} ${roller[1]===1?'car':'cars'}`});
   if(fire)out.push({key:'firestarter',title:'FIRESTARTER',id:fire.id,value:fire.cars*10+fire.puddles,detail:fire.cars?`set ${fire.cars} ${fire.cars===1?'car':'cars'} alight · ${fire.puddles} puddles lit`:`${fire.puddles} puddles lit`});
+  // Still running with the most of itself gone (at least STILL_STANDING parts).
+  const standing=[...cars].filter(c=>c.health>0&&(c.partsGone??0)>=STILL_STANDING).sort((a,b)=>(b.partsGone??0)-(a.partsGone??0)||a.id-b.id)[0];
+  if(standing)out.push({key:'standing',title:'STILL STANDING',id:standing.id,value:standing.partsGone!,detail:`finished with ${standing.partsGone} parts gone`});
   if(mode==='race'&&this.start&&finishOrder.length){
    let bestId=-1,bestGain=0;
    finishOrder.forEach((id,place)=>{const from=this.start!.indexOf(id),gain=from<0?0:from-place;if(gain>bestGain||(gain===bestGain&&gain>0&&id<bestId)){bestId=id;bestGain=gain;}});
