@@ -10,10 +10,10 @@ export type AwardCar={id:number;inflicted:number;health:number;
 export type EventMoment={kind:'hit'|'takedown'|'wheel'|'fire'|'failure';attacker:number;victim:number;time:number;score:number;label?:string};
 export type EventAward={key:'hit'|'fastest'|'destroyer'|'takedowns'|'climber'|'toughest'|'nemesis'|'wheels'|'scrap'|'firestarter'|'roller'|'standing'|'pinner'|'slammer'|'crowd';title:string;id:number;detail:string;victim?:number;value:number};
 /** STILL STANDING goes to a car that finishes still running with at least this many major parts gone. */
-export type Stunts={rolled:number;pins:number;slams:number;dominoes:number;pileUps:number;alight:number;wheels:number;parts:number};
+export type Stunts={rolled:number;pins:number;slams:number;dominoes:number;pileUps:number;tanks:number;alight:number;wheels:number;parts:number};
 /** The results line of a driver's stunts, biggest kinds first, zeros left out; empty when there were none. */
 export function stuntsText(t:Stunts){
-  const kinds:[keyof Stunts,string,string][]=[['rolled','CAR ROLLED','CARS ROLLED'],['pins','PIN','PINS'],['slams','WALL SLAM','WALL SLAMS'],['dominoes','DOMINO','DOMINOES'],['pileUps','PILE-UP','PILE-UPS'],['alight','CAR ALIGHT','CARS ALIGHT'],['wheels','WHEEL OFF','WHEELS OFF'],['parts','PART OFF','PARTS OFF']];
+  const kinds:[keyof Stunts,string,string][]=[['rolled','CAR ROLLED','CARS ROLLED'],['pins','PIN','PINS'],['slams','WALL SLAM','WALL SLAMS'],['dominoes','DOMINO','DOMINOES'],['pileUps','PILE-UP','PILE-UPS'],['tanks','TANK DROPPED','TANKS DROPPED'],['alight','CAR ALIGHT','CARS ALIGHT'],['wheels','WHEEL OFF','WHEELS OFF'],['parts','PART OFF','PARTS OFF']];
   const out=kinds.filter(([k])=>t[k]>0).map(([k,one,many])=>`${t[k]} ${t[k]===1?one:many}`);
   return out.length?`YOUR STUNTS · ${out.join(' · ')}`:'';
 }
@@ -61,6 +61,11 @@ export class EventAwards{
   if(!Number.isInteger(attacker)||attacker<0||attacker===victim)return;
   this.slams.set(attacker,(this.slams.get(attacker)??0)+1);this.moments.push({kind:'hit',attacker,victim,time:Number.isFinite(time)?time:0,score:30,label:'WALL SLAM'});
  }
+ /** The attacker's hit dropped the victim's fuel tank (TANK DOWN): a highlight moment and a stunt. */
+ tanked(attacker:number,victim:number,time=0){
+  if(!Number.isInteger(attacker)||attacker<0||attacker===victim)return;
+  this.moments.push({kind:'hit',attacker,victim,time:Number.isFinite(time)?time:0,score:26,label:'TANK DOWN'});
+ }
  /** The attacker knocked a car into the victim (a DOMINO): a highlight moment. */
  dominoed(attacker:number,victim:number,time=0){
   if(!Number.isInteger(attacker)||attacker<0||attacker===victim)return;
@@ -78,10 +83,10 @@ export class EventAwards{
  }
  firesBy(id:number){return{puddles:this.puddles.get(id)??0,cars:this.alight.get(id)??0};}
  /** A driver's stunts this event, for the results: cars rolled, pins, wall slams, dominoes, pile-ups set off, cars set alight,
-  * wheels and parts torn off. */
+  * fuel tanks dropped, wheels and parts torn off. */
  stunts(id:number):Stunts{
   const label=(l:string)=>this.moments.filter(m=>m.attacker===id&&m.label!==undefined&&m.label.startsWith(l)).length,strip=this.stripping.get(id);
-  return{rolled:this.rolls.get(id)??0,pins:this.pins.get(id)??0,slams:this.slams.get(id)??0,dominoes:label('DOMINO'),pileUps:label('PILE-UP'),alight:this.alight.get(id)??0,wheels:strip?.wheels??0,parts:strip?.parts??0};
+  return{rolled:this.rolls.get(id)??0,pins:this.pins.get(id)??0,slams:this.slams.get(id)??0,dominoes:label('DOMINO'),pileUps:label('PILE-UP'),tanks:label('TANK DOWN'),alight:this.alight.get(id)??0,wheels:strip?.wheels??0,parts:strip?.parts??0};
  }
  /** The most spectacular moments for a highlights reel: best first by score, at most `max`, at least
   * two seconds apart, then in the order they happened. */

@@ -1885,7 +1885,7 @@ function step(dt: number) {
         if(mode==='derby'){derbyFeed.note(starter.id,displayedDriver(starter),'pileup',elapsed,call.size);if(scoreDerby())scoreStunt(starter.id,PILEUP.points*call.size);}
         if(!demo&&call.cars.includes(cars[0]?.id??-1)){toast(`PILE-UP ×${call.size}`+(starter.id===cars[0].id?pointsTag(PILEUP.points*call.size):''),2,3);if(clock>=slowMoUntil){slowMoUntil=clock+SMASH.slowmo;slowMoScale=SMASH.scale;}}}}
     // Fuel tank down: the rival whose hit dropped it is credited, and a car later out of fuel is theirs (offline).
-    if(!online?.active&&a&&b)for(const [victim,attacker,was] of [[a,b,tankInA],[b,a,tankInB]] as const){if(!was||!victim.tankDown)continue;tankBy.set(victim.id,attacker.id);
+    if(!online?.active&&a&&b)for(const [victim,attacker,was] of [[a,b,tankInA],[b,a,tankInB]] as const){if(!was||!victim.tankDown)continue;tankBy.set(victim.id,attacker.id);eventAwards.tanked(attacker.id,victim.id,elapsed);
       if(mode==='derby'){derbyFeed.note(attacker.id,displayedDriver(attacker),'tank',elapsed);if(scoreDerby())scoreStunt(attacker.id,DESTRUCTION_POINTS.tank);}
       if(!demo&&attacker.id===0)toast(`TANK DOWN · #${victim.id+1} ${DEFINITIONS[victim.kind].name}`+pointsTag(DESTRUCTION_POINTS.tank),2,2);}
     // Domino: knocked by a rival into a third car hard; the rival gets the credit for the chain (offline).
