@@ -987,7 +987,7 @@ async function start(watch=demo) {
     camera.position.copy(cars[0].current).add(new T.Vector3(0, 4, -8));
     hud();
     sound.pause(false);
-    eventAwards.reset();playerTopSpeed=0;derbyAliveBefore=0;revengeSettled.clear();takedownCombo=0;playerStripped=0;strippedNoted.clear();pinNoted.clear();pinFed.clear();pinCounted.clear();pinScoring.clear();pinEscapes=0;sandwiches=0;wallSlams=0;finalStuntsCalled=false;mirrorsClipped=0;bumpStarts=0;aiBurn.clear();aiFireOuts=0;rideAt.clear();rideUps=0;onTop.clear();mounts=0;shrapnelAt.clear();shrapnelHits=0;blowUps=0;blowUpHold=-1;dominoes=0;knockedBy.clear();tankBy.clear();targetToastAt=-Infinity;clearLocks();pileUp.reset();pileUps=biggestPileUp=0;wreckCauses.clear();lastHitBy.clear();rollArmed.clear();wreckedBy.clear();alightBy.clear();lastTakedownAt=-1e9;bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
+    eventAwards.reset();playerTopSpeed=0;derbyAliveBefore=0;revengeSettled.clear();takedownCombo=0;playerStripped=0;strippedNoted.clear();pinNoted.clear();pinFed.clear();pinCounted.clear();pinScoring.clear();pinEscapes=0;sandwiches=0;wallSlams=0;finalStuntsCalled=false;mirrorsClipped=0;bumpStarts=0;aiBurn.clear();aiFireOuts=0;rideAt.clear();rideUps=0;onTop.clear();mounts=0;shrapnelAt.clear();shrapnelHits=0;blowUps=0;blowUpHold=-1;chainIgnitions=0;dominoes=0;knockedBy.clear();tankBy.clear();targetToastAt=-Infinity;clearLocks();pileUp.reset();pileUps=biggestPileUp=0;wreckCauses.clear();lastHitBy.clear();rollArmed.clear();wreckedBy.clear();alightBy.clear();lastTakedownAt=-1e9;bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
     beginReplay();
     if(preparationInterrupted||document.hidden)pause();
     return true;
@@ -1215,7 +1215,7 @@ const tankBy=new Map<number,number>();
 /** Wing mirrors clipped off by passing cars this event (offline QA counter). */
 let mirrorsClipped=0;
 let bumpStarts=0;
-const shrapnelAt=new Map<number,number>();let shrapnelHits=0;let blowUps=0,blowUpHold=-1;
+const shrapnelAt=new Map<number,number>();let shrapnelHits=0;let blowUps=0,blowUpHold=-1,chainIgnitions=0;
 const rideAt=new Map<number,number>();let rideUps=0;const onTop=new Map<number,{t:number;dent:number;credited:boolean}>();let mounts=0;
 const aiBurn=new Map<number,number>();let aiFireOuts=0;
 /** DOMINOs credited this event (offline QA counter), and who last knocked each car with a real hit, and when. */
@@ -1682,6 +1682,8 @@ function carBlowsUp(car:Vehicle,at:T.Vector3){
   if(!demo&&(car.id===0||near)){if(clock>=slowMoUntil){slowMoUntil=clock+BOOM.slowmo;slowMoScale=BOOM.scale;}recordRumbleImpact(1);}
   const by=alightBy.get(car.id),credit=by!==undefined&&by!==car.id?cars.find(c=>c.id===by):undefined;
   if(credit)wreckedBy.set(car.id,credit.id);
+  // The fireball sets cars close by alight: whoever lit the first fire is credited down the chain.
+  for(const o of cars){if(o===car||!o.extendedDamage||o.current.distanceTo(at)>BOOM.ignite)continue;o.igniteRequest=true;chainIgnitions++;alightBy.set(o.id,credit?.id??car.id);}
   if(!demo)toast(car.id===0?'YOUR CAR BLEW UP':credit?.id===0?`YOU BLEW UP #${car.id+1} ${DEFINITIONS[car.kind].name}`+pointsTag(DESTRUCTION_POINTS.boom):`#${car.id+1} ${DEFINITIONS[car.kind].name} BLEW UP`,2.6,3);
   if(mode==='derby'){derbyFeed.note(credit?.id??car.id,displayedDriver(credit??car),'boom',elapsed);if(credit&&scoreDerby())scoreStunt(credit.id,DESTRUCTION_POINTS.boom);}
 }
@@ -2678,7 +2680,7 @@ async function boot() {
         p95: times[Math.floor(times.length * 0.95)],
         audio: sound.buffers.size,
         activeParticles: fx.particles.filter(p=>p.life>0).length,
-        debris: fx.debris.length, wallSlams, mirrorsClipped, bumpStarts, aiFireOuts, rideUps, mounts, shrapnelHits, blowUps, slowMo: +Math.max(0, slowMoUntil - clock).toFixed(2), dominoes, pinEscapes, sandwiches, huntLeader: drivers.leader, bumperLocks: {made: locksMade, torn: locksTorn, active: bumperLocks.length}, tethers: {made: tethersMade, active: bumperTethers.length}, pileUps, biggestPileUp, debrisAt: fx.debris.map(d=>{const p=d.body.translation();return [+p.x.toFixed(2),+p.y.toFixed(2),+p.z.toFixed(2),+d.body.mass().toFixed(1),+d.age.toFixed(2)];}),
+        debris: fx.debris.length, wallSlams, mirrorsClipped, bumpStarts, aiFireOuts, rideUps, mounts, shrapnelHits, blowUps, chainIgnitions, slowMo: +Math.max(0, slowMoUntil - clock).toFixed(2), dominoes, pinEscapes, sandwiches, huntLeader: drivers.leader, bumperLocks: {made: locksMade, torn: locksTorn, active: bumperLocks.length}, tethers: {made: tethersMade, active: bumperTethers.length}, pileUps, biggestPileUp, debrisAt: fx.debris.map(d=>{const p=d.body.translation();return [+p.x.toFixed(2),+p.y.toFixed(2),+p.z.toFixed(2),+d.body.mass().toFixed(1),+d.age.toFixed(2)];}),
         voices: sound.activeVoices,
         loops: sound.loops.size,
         thermal: vehicleFire?.stats,
