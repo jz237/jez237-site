@@ -51,6 +51,8 @@ export class CombatScoreboard {
   private frameRivals=new Map<number,number|null>();
   enableRivals(count:number){this.rivals=new DerbyRivals(count);this.living.clear();this.frameRivals.clear();}
   rival(id:number){return this.rivals?.selected(id)??null;}
+  /** Offline scored derbies: bonus points for wrecking a rival's car outright (an engine dropped, a roll, a PIT, a wing torn off). */
+  destruction(id:number,points:number){if(!Number.isFinite(points)||points<=0)return;const r=this.get(id);r.bonus=(r.bonus??0)+points;}
   award(id:number,award:CombatAward){const r=this.get(id);r.bonus=(r.bonus??0)+award.points;r.award={...award};if(award.kind==='rival')r.rivalHits=(r.rivalHits??0)+1;else if(award.kind==='spin')r.spins=(r.spins??0)+1;else if(award.kind==='spin180')r.spins180=(r.spins180??0)+1;else if(award.kind==='spin360')r.spins360=(r.spins360??0)+1;else{r.impacts??=[0,0,0];r.impacts[['solid','heavy','massive'].indexOf(award.kind)]++;}}
   contact(attacker:CombatMotion,victim:CombatMotion,damage:number,time:number){const award=this.feats.contact(attacker,victim,damage,time);if(award)this.award(attacker.id,award);const points=this.rivals?.hit(attacker,victim,damage,time,this.living,this.frameRivals.get(attacker.id)??null)??0;if(points)this.award(attacker.id,{kind:'rival',points,time});}
   sample(cars:readonly CombatMotion[],time:number){this.living=new Set(cars.filter(c=>c.health>0).map(c=>c.id));this.frameRivals.clear();if(this.rivals)for(const c of cars)this.frameRivals.set(c.id,this.rivals.rival(c.id,this.living));for(const {id,award}of this.feats.sample(cars,time))this.award(id,award);}
