@@ -25,3 +25,19 @@ export function rammer(closing:number,a:{c:V;f:V;v:V;half:number},b:{c:V;f:V;v:V
   return alongCar(point,s.c,s.f,s.half)>=RIDE.front&&Math.abs(alongCar(point,o.c,o.f,o.half))>=RIDE.end?id:-1;
 }
 export function ridesUp(seed:number){const x=Math.sin(seed*45.164+7.7)*43758.5453;return x-Math.floor(x)<RIDE.chance;}
+
+/** Tipping over (offline): a nose-first T-bone into another car's side (within TIP.side of its middle) at TIP.closing or more
+ * lifts the struck side (an upward impulse of tipLift(closing) of its mass at that side's sill), so the car rolls away from the hit
+ * — sometimes onto its side or roof. A share of such hits (TIP.chance, fixed per pair and second), once per TIP.gap per car. */
+export const TIP={closing:11,toward:6,front:.45,side:.55,lift:4.2,perMs:.3,maxLift:5.6,chance:.45,gap:2.5} as const;
+/** The struck side's lift (a share of the car's mass) for a T-bone at this closing speed: harder hits roll it further. */
+export const tipLift=(closing:number)=>Math.min(TIP.maxLift,TIP.lift+Math.max(0,closing-TIP.closing)*TIP.perMs);
+/** The rammer of a T-bone (its nose into the other's flank), or -1. */
+export function tBoner(closing:number,a:{c:V;f:V;v:V;half:number},b:{c:V;f:V;v:V;half:number},point:V){
+  if(!(closing>=TIP.closing))return -1;
+  const toward=(s:{c:V;v:V},o:{c:V})=>{const dx=o.c.x-s.c.x,dz=o.c.z-s.c.z,d=Math.hypot(dx,dz)||1;return (s.v.x*dx+s.v.z*dz)/d;};
+  const ta=toward(a,b),tb=toward(b,a),[s,o,id]=ta>=tb?[a,b,0]:[b,a,1];
+  if(Math.max(ta,tb)<TIP.toward)return -1;
+  return alongCar(point,s.c,s.f,s.half)>=TIP.front&&Math.abs(alongCar(point,o.c,o.f,o.half))<TIP.side?id:-1;
+}
+export function tipsOver(seed:number){const x=Math.sin(seed*63.71+3.3)*43758.5453;return x-Math.floor(x)<TIP.chance;}
