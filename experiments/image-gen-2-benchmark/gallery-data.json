@@ -25593,5 +25593,120 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-24-factual-infographic-factual-infographic-specific-phobia-hor",
+    "title": "Factual infographic: Specific Phobia — Horses",
+    "tests": "factual_subtype: phobia-infographic; phobia: Specific phobia involving horses; established clinical category; distinct fictional casting; no subjective review; no rerolls; archive_slot=2026-10-24T08:08; concept=horses-fear-sunlit-paddock-avoidance; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create a finished, richly illustrated factual phobia infographic directly on the canvas, an artwork-led portrait composition in luminous gouache, translucent watercolor washes and precise colored-pencil/ink detail. Do not show a photographed sheet, frame, book, UI or mockup. Use an airy sunlit paddock landscape with warm ochre meadow grass, weathered silver timber rails, mauve distant trees, long soft morning shadows and finely painted chestnut coat hair. A calm realistically proportioned horse occupies the broad upper-right field, behind a continuous fence, clearly separated from the viewer; do not depict an attack or make it monstrous. The horse scene is an illustrative example, not a sourced patient or a promise that every horse is safe.\n\nAt the upper left set the exact text line “Specific phobia” in prominent bold display lettering, without literal asterisks. Directly underneath, in clearly readable plain type, place the exact definition “Intense fear of horses that disrupts daily life”. Add the short subordinate clarification “Clinical category; horses are the feared animal.” The term and its definition must be the primary typographic hierarchy, not displaced by a poetic subtitle.\n\nThe main human is explicitly a fictional nonbinary adult in their forties, pale skin, angular face, long auburn braid, broad build, indigo coat, round glasses, charcoal trousers and sturdy closed boots. Show them three-quarter full figure on the public side of the wide paddock fence, shoulders slightly raised, hands held near the torso, dignified and quietly apprehensive rather than screaming. No hands or arms through the rails, no feeding, no touching, no entry into the paddock, no riding. Keep this exact protagonist consistent in the small explanatory echoes within this one artwork, not a recurring generic anxious woman.\n\nIntegrate the teaching through a flowing S-shaped path made from the fence line, grass stems, delicate curved ink leaders and open washes. No boxed panels, rigid grid, cards or dashboard. Give the hero scene room while retaining substantial readable information. Near a small translucent thought-outline of the distant horse, write “Anticipatory anxiety” and below “Worry before an encounter”. Link that to the person, then to a small elegant open torso silhouette with a heartbeat motif, not a speculative brain circuit or literal anatomical lesion. Label “Fight-or-flight arousal” with the gloss “The body prepares for perceived danger”. Use three clear short symptom leaders: “Fast heartbeat”, “Shaking”, “Tense muscles”, plus “Symptoms vary”. These are possible responses, not universal symptoms.\n\nLow in the landscape, let a curved path double back in a delicate open loop: “Avoidance → short-term relief → fear persists”. Add the concise explanation “Fewer chances to learn what is safe and what you can handle”. Show only a small echo of the same adult turning away on the public path; do not equate this with abandoning necessary horse safety. In a generous patch of pale meadow write “Alarm is not a danger meter” followed by “Fear may exceed the actual risk. Horses still require real safety precautions.” A small unobtrusive line adds “Respect distance; use knowledgeable supervision”. No claims that horses are harmless and no instructions to approach, handle, ride or stand behind a horse.\n\nEnd the organic visual journey with an airy human-support vignette: the same adult seated comfortably with a clinician in a softly suggested consultation space, a few unobtrusive plant leaves blending into the meadow. Label “Evidence-based help” with “CBT + graded exposure” and the brief explanation “With a qualified clinician, plan small, manageable steps—not forced confrontation.” Below, “Seek help when fear affects daily life.” This is general education, not diagnosis or an individual exposure plan. No step-by-step animal encounter exercises, guaranteed cures, invented statistics, diagnostic codes, Greek/Latin invented names, gore, monsters or scare tactics.\n\nUse elegant high-contrast typography, expressive but accurate human posture, woven coat fabric, fence grain, individual grass seed heads and layered natural light. Keep text concise and legible, varied scale and generous negative space, with annotations visually grown from the subject instead of pasted on. Omit extra secondary studies if needed, never the title/definition, body alarm, avoidance, actual-risk distinction or evidence-based help. Do not include bibliography, URLs, tiny citations, logos or watermarks. All factual content is limited to the specified source-verified labels. Request settings: openai/gpt-image-2.5-sunburst, quality medium, size auto, opaque background, one image.",
+    "image": "images/2026-10-24-factual-infographic-factual-infographic-specific-phobia-hor.jpg",
+    "thumb": "thumbs/2026-10-24-factual-infographic-factual-infographic-specific-phobia-hor.webp",
+    "color": "#c3b297",
+    "date": "2026-10-24",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "horses-fear-sunlit-paddock-avoidance",
+      "imageSha256": "cc7271ef06b38c912fb75e241fb64817f89bfe46a4ad5f592b6d850b3b5b2a0e",
+      "imageDHash": "b7bf97818109b1b1"
+    },
+    "factualInfographic": {
+      "topic": "Specific phobia involving horses: anticipatory anxiety, fight-or-flight arousal, avoidance, realistic animal safety, and evidence-based help",
+      "description": "An artwork-led clinical education chart about intense fear of horses, illustrated with a distinct fictional adult beside a sunlit paddock.",
+      "sourceNote": "University of Pennsylvania: https://www.med.upenn.edu/ctsa/phobias.html; NHS inform (NHS 24): https://www.nhsinform.scot/illnesses-and-conditions/mental-health/mental-health-self-help-guides/phobias-self-help-guide/; NHS: https://www.nhs.uk/mental-health/conditions/phobias/; Mississippi State University Extension: https://extension.msstate.edu/publications/working-safely-around-horses. Verified scope: clinical terminology, anticipatory anxiety, variable body alarm, avoidance maintenance, CBT/graded exposure and realistic horse safety.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-24T12:09:40.229257+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "University of Pennsylvania",
+            "title": "Specific Phobias",
+            "sourceType": "university",
+            "url": "https://www.med.upenn.edu/ctsa/phobias.html"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS inform (NHS 24)",
+            "title": "Phobias self-help guide",
+            "sourceType": "government-agency",
+            "url": "https://www.nhsinform.scot/illnesses-and-conditions/mental-health/mental-health-self-help-guides/phobias-self-help-guide/"
+          },
+          {
+            "id": "S3",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          },
+          {
+            "id": "S4",
+            "publisher": "Mississippi State University Extension",
+            "title": "Working Safely Around Horses",
+            "sourceType": "university",
+            "url": "https://extension.msstate.edu/publications/working-safely-around-horses"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Specific phobia is the clinical category used here, not a separately invented horse-specific diagnosis; the displayed subject-specific definition is: Intense fear of horses that disrupts daily life.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Phobic fear can be triggered by encountering or thinking about the feared animal; the horse and imagined horse in this fictional illustration represent those triggers.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Anticipatory anxiety means worry before an encounter; thoughts about the feared animal can trigger anxiety and physical symptoms.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Fight-or-flight arousal is the body preparing for perceived danger; fast heartbeat, shaking and tense muscles can occur, but symptoms vary.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Avoidance can quickly reduce anxiety but maintain fear by preventing learning about the feared situation and ability to cope.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Perceived danger can exceed actual danger; ordinary animal-handling precautions remain important. Horses are powerful and can kick, so fear treatment must not be confused with ignoring real safety.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S4"
+            ]
+          },
+          {
+            "claim": "CBT can help with phobias; graded exposure involves small manageable steps, not forced confrontation. Seeking a qualified clinician is appropriate when symptoms affect life.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Realistic horse safety includes respecting distance and obtaining knowledgeable supervision rather than attempting unsupervised horse handling.",
+            "sourceIds": [
+              "S4"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
