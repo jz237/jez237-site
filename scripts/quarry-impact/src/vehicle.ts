@@ -72,6 +72,9 @@ export const RADIATOR_BURST={steam:18,splash:5} as const;
 export const INVERTED={after:1,stall:1.5,drip:.35} as const;
 /** A burning car cooks itself: glass damage per second at full heat (side windows burst at 24) and tyre damage per second. */
 export const COOK={glass:2.2,tyre:.02} as const;
+/** Fire spread (offline): a car left burning (heat over 0.3) for FIRE_SPREAD.tyres seconds sets the tyres at its engine end
+ * alight; the clock starts again once the fire is out. */
+export const FIRE_SPREAD={tyres:8} as const;
 /** Roof compression at which the glass starts to craze, and at which side windows burst. */
 export const ROOF_GLASS={craze:.4,burst:.6} as const;
 /** Panels hanging at least this loose build wind load above this speed (m/s) until they tear away. */
@@ -217,6 +220,9 @@ export class Vehicle {
   extinguishRequest = false;
   /** The car itself is burning (set by the fire update). */
   onFire = false;
+  /** Seconds burning since the fire last went out, and tyres the fire has spread to (offline events). */
+  burnTime = 0;
+  fireSpreads = 0;
   /** Wiring fault severity (offline events), whether the ignition is cut right now, and cuts so far (QA). */
   electricalFault = 0;
   electricalCut = false;
@@ -350,7 +356,7 @@ export class Vehicle {
   onMountClunk?:()=>void;
   /** A shove or a roll turned the stalled engine over and it caught. */
   onBumpStart?:()=>void;
-  onBreak?:(what:'spring'|'shaft'|'diff'|'tierod'|'exhaust'|'brakefire'|'radiator'|'rollbar'|'propshaft'|'bearing'|'belt'|'enginefire'|'smashfire'|'tank'|'tankoff'|'cable'|'handbrake'|'battery'|'rod'|'rubfire',wheel:number)=>void;
+  onBreak?:(what:'spring'|'shaft'|'diff'|'tierod'|'exhaust'|'brakefire'|'radiator'|'rollbar'|'propshaft'|'bearing'|'belt'|'enginefire'|'smashfire'|'tank'|'tankoff'|'cable'|'handbrake'|'battery'|'rod'|'rubfire'|'tyrefire',wheel:number)=>void;
   /** Gears left after gearbox damage (offline only; 5 = intact). */
   gearLimit = 5;
   /** Grip left under each tyre from oil or coolant on the ground (offline only). */
@@ -434,6 +440,9 @@ export class Vehicle {
       }
     }
     if(this.tyreDamage)for(const i of engineRear?[2,3]:[0,1])if(!this.wreckParts.wheelLost[i])this.tyreDamage[i]=Math.min(1,this.tyreDamage[i]+heat*dt*COOK.tyre);
+    // Left burning, the fire reaches the tyres at the engine end: they catch like a brake fire.
+    this.burnTime+=dt;
+    if(this.burnTime>=FIRE_SPREAD.tyres&&this.health>0)for(const i of engineRear?[2,3]:[0,1])if(!this.tyreAlight[i]&&!this.wreckParts.wheelLost[i]){this.tyreAlight[i]=1;this.fireSpreads++;this.onBreak?.('tyrefire',i);}
   }
   /** A part torn off while the car is burning hard keeps burning on the ground for 14–24 s. */
   private burnDebris(){if(this.extendedDamage&&this.fireHeat>.4)this.fx.igniteLastDebris?.(14+((this.id*.37+this.rips*.13)%1)*10);}
@@ -590,7 +599,7 @@ export class Vehicle {
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
-    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.clutchGrip=1;this.clutchBurn=0;this.clutchStrain=0;this.clutchSmokeClock=0;this.clutchSmoke=0;this.steerPlay=0;this.steerWander=0;this.doorOpenTime=0;this.doorsTorn=0;this.doorSlams=0;this.rubDrag.fill(0);this.rubSmoke=0;this.rubClock=0;this.electricalFault=0;this.electricalCut=false;this.electricalCuts=0;this.electricClock=0;this.nutLoose.fill(0);this.wheelShimmy.fill(0);this.wheelsShed=0;this.exhaustBlow=0;this.exhaustPops=0;this.diffWear=0;this.beadStress.fill(0);this.debeads=0;this.steerLink.fill(1);this.linkClock=0;this.popUntil=0;this.popSlot=-1;this.gearPops=0;this.inNeutral=false;this.brakeDrag.fill(0);this.discHeat.fill(0);this.discSmokeClock=0;this.mountsBroken=false;this.shunt=0;this.lastPedal=0;this.lastJolt=-1;this.mountJolts=0;this.rawInput=null;this.ownInput=null;this.cargoLeft=-1;this.cargoClock=0;this.cargoSpilled=0;this.sumpCrack=0;this.brakeFire.fill(0);this.tyreAlight.fill(0);this.rubberDrop=0;this.brakeFires=0;this.exhaustDragTime=0;this.exhaustGone=false;this.tankDown=this.tankGone=false;this.tankDragTime=0;this.disposeTank();this.throttleCable=this.handbrakeCable=false;this.shedClock=SHED.every;this.rollBar.fill(1);this.beltSlip=this.squeal=0;this.beltSnapped=false;this.battery=1;this.hotTime=0;this.engineFires=0;this.hotFired=false;this.bigHits=0;this.smashFires=0;this.bearingWear.fill(0);this.hubDrag.fill(0);this.propBend=this.propWear=this.propVibration=this.propFlail=0;this.propSnapped=false;this.starterDamage=0;this.crankAttempt=0;this.starterFails=0;this.stallTime=this.bumpRolled=this.bumpStarts=0;this.batteryOut=false;this.rodStress=0;this.rodThrown=false;this.rubHeat.fill(0);this.rubFires=0;this.extinguishers=EXTINGUISHER.charges;this.extinguished=0;this.extinguishRequest=false;this.onFire=false;this.frameBend=0;this.deadTime=0;this.dazed=0;this.dazeSteer=0;this.glassPops=0;this.platesLost=0;this.debrisRolls=0;this.debrisPunctures=0;this.radiatorBursts=0;this.punctureClock.fill(0);for(const g of this.discGlows)if(g)g.visible=false;this.popQueue.length=0;this.liftThrottle=0;this.lifts=0;this.wanderClock=0;this.slickGrip.fill(1);this.rearSlide=0;this.pitSpins=0;this.wingsTorn=0;this.wingGone.fill(false);this.engineOut=false;this.roofSlideTime=0;this.sideSlideTime=0;this.roofSparkClock=0;this.rollShed=0;this.rollShedDone=false;this.rolls=0;this.rollPops=this.popRolls=0;this.pinTime=this.pinTick=this.pins=this.tetherRolls=0;this.spareWheels=0;this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.fuelLevel=FUEL_TANK.start;this.fuelClock=0;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
+    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.clutchGrip=1;this.clutchBurn=0;this.clutchStrain=0;this.clutchSmokeClock=0;this.clutchSmoke=0;this.steerPlay=0;this.steerWander=0;this.doorOpenTime=0;this.doorsTorn=0;this.doorSlams=0;this.rubDrag.fill(0);this.rubSmoke=0;this.rubClock=0;this.electricalFault=0;this.electricalCut=false;this.electricalCuts=0;this.electricClock=0;this.nutLoose.fill(0);this.wheelShimmy.fill(0);this.wheelsShed=0;this.exhaustBlow=0;this.exhaustPops=0;this.diffWear=0;this.beadStress.fill(0);this.debeads=0;this.steerLink.fill(1);this.linkClock=0;this.popUntil=0;this.popSlot=-1;this.gearPops=0;this.inNeutral=false;this.brakeDrag.fill(0);this.discHeat.fill(0);this.discSmokeClock=0;this.mountsBroken=false;this.shunt=0;this.lastPedal=0;this.lastJolt=-1;this.mountJolts=0;this.rawInput=null;this.ownInput=null;this.cargoLeft=-1;this.cargoClock=0;this.cargoSpilled=0;this.sumpCrack=0;this.brakeFire.fill(0);this.tyreAlight.fill(0);this.rubberDrop=0;this.brakeFires=0;this.exhaustDragTime=0;this.exhaustGone=false;this.tankDown=this.tankGone=false;this.tankDragTime=0;this.disposeTank();this.throttleCable=this.handbrakeCable=false;this.shedClock=SHED.every;this.rollBar.fill(1);this.beltSlip=this.squeal=0;this.beltSnapped=false;this.battery=1;this.hotTime=0;this.engineFires=0;this.hotFired=false;this.bigHits=0;this.smashFires=0;this.bearingWear.fill(0);this.hubDrag.fill(0);this.propBend=this.propWear=this.propVibration=this.propFlail=0;this.propSnapped=false;this.starterDamage=0;this.crankAttempt=0;this.starterFails=0;this.stallTime=this.bumpRolled=this.bumpStarts=0;this.batteryOut=false;this.rodStress=0;this.rodThrown=false;this.rubHeat.fill(0);this.rubFires=0;this.extinguishers=EXTINGUISHER.charges;this.extinguished=0;this.extinguishRequest=false;this.onFire=false;this.burnTime=0;this.fireSpreads=0;this.frameBend=0;this.deadTime=0;this.dazed=0;this.dazeSteer=0;this.glassPops=0;this.platesLost=0;this.debrisRolls=0;this.debrisPunctures=0;this.radiatorBursts=0;this.punctureClock.fill(0);for(const g of this.discGlows)if(g)g.visible=false;this.popQueue.length=0;this.liftThrottle=0;this.lifts=0;this.wanderClock=0;this.slickGrip.fill(1);this.rearSlide=0;this.pitSpins=0;this.wingsTorn=0;this.wingGone.fill(false);this.engineOut=false;this.roofSlideTime=0;this.sideSlideTime=0;this.roofSparkClock=0;this.rollShed=0;this.rollShedDone=false;this.rolls=0;this.rollPops=this.popRolls=0;this.pinTime=this.pinTick=this.pins=this.tetherRolls=0;this.spareWheels=0;this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.fuelLevel=FUEL_TANK.start;this.fuelClock=0;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
     if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
@@ -934,7 +943,7 @@ export class Vehicle {
     if(hottest>=0&&this.discHeat[hottest]>CALIPER.smoke){this.discSmokeClock+=dt*4*this.discHeat[hottest];
       if(this.discSmokeClock>=1){this.discSmokeClock-=1;const w=this.wheels[hottest];if(w)this.fx.emit(w.getWorldPosition(new T.Vector3()),1,2,.3);}}
     else this.discSmokeClock=0;
-    if(this.extendedDamage){this.fluids(dt);if(this.rearSlide>0)this.rearSlide=Math.max(0,this.rearSlide-dt/PIT.fade);}
+    if(this.extendedDamage){this.fluids(dt);if(this.rearSlide>0)this.rearSlide=Math.max(0,this.rearSlide-dt/PIT.fade);if(!this.onFire)this.burnTime=0;}
     // A seized engine never turns again: the starter can crank, but it will not catch.
     if(this.seized)this.engineStall=MAX_ENGINE_RESTART;
     if(this.extendedDamage&&this.tyreDamage)for(let i=0;i<4;i++)if(!this.wreckParts.wheelLost[i])this.tyreDamage[i]=leakTyre(bentRimTyre(this.tyreDamage[i],this.wreckParts.wheelDamage[i]),this.speed,dt);
@@ -1410,7 +1419,7 @@ export class Vehicle {
    * fire update (the douse path), burning tyres at once, and the heat comes out of the brakes' and rubbing tyres' fire clocks. */
   extinguish(){
     if(!this.extendedDamage||this.health<=0||this.extinguishers<=0||!this.burning)return false;
-    this.extinguishers--;this.extinguished++;this.extinguishRequest=true;this.tyreAlight.fill(0);this.brakeFire.fill(0);this.rubHeat.fill(0);
+    this.extinguishers--;this.extinguished++;this.extinguishRequest=true;this.tyreAlight.fill(0);this.brakeFire.fill(0);this.rubHeat.fill(0);this.burnTime=0;
     const p=this.current.clone();p.y+=.6;this.fx.emit(p,26,5,1.6);return true;
   }
   /** A rod goes through the block (offline): the engine dies on the spot, a chunk of block flies out under the car, the

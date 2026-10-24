@@ -39,7 +39,7 @@ const BREAK_CLIPS:Record<string,{id:string;volume:number;rate:number;duration:nu
   spring:{id:'spring-snap',volume:.8,rate:1,duration:.8},shaft:{id:'shaft-snap',volume:.8,rate:1,duration:1},propshaft:{id:'shaft-snap',volume:.85,rate:.9,duration:1.1},
   diff:{id:'shaft-snap',volume:.9,rate:.8,duration:1.2},tierod:{id:'spring-snap',volume:.6,rate:1.25,duration:.65},cable:{id:'spring-snap',volume:.5,rate:1.5,duration:.55},
   handbrake:{id:'spring-snap',volume:.5,rate:1.4,duration:.6},rod:{id:'rod-bang',volume:1,rate:1,duration:1.8},battery:{id:'battery-rip',volume:.8,rate:1,duration:1},
-  bearing:{id:'engine-seize',volume:.5,rate:1.3,duration:1.2}};
+  bearing:{id:'engine-seize',volume:.5,rate:1.3,duration:1.2},tyrefire:{id:'vehicle-burst',volume:.45,rate:.8,duration:.9}};
 /** Clips with extra recorded takes (id-2, id-3) that shot() rotates between: the impacts and the glass and debris layers. */
 const TAKES=/^(impact-(light|medium|heavy)|glass|debris)$/;
 /** A tyre rubbing a crushed arch (0–1): the hardest rub on the car, with road speed (full from 10 m/s), louder still once
