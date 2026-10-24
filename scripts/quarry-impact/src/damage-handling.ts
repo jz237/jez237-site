@@ -456,4 +456,6 @@ export const engineDrops=(mountsBroken:boolean,engineDamage:number|undefined,dam
 /** Sliding on its roof (offline): above ROOF_SLIDE.speed an upside-down car throws sparks and scrapes off its roof line, gouges
  * the ground, and crushes its roof by up to `crush` per second at `full` speed. */
 export const ROOF_SLIDE={speed:3,full:15,crush:.05,gap:.05} as const;
+/** On its side: a car tilted so its up axis is within SIDE_SLIDE.up of level slides on a door, and crushes that side the same way. */
+export const SIDE_SLIDE={up:.4} as const;
 export const roofSlide=(slideSpeed:number)=>Number.isFinite(slideSpeed)&&slideSpeed>ROOF_SLIDE.speed?Math.min(1,slideSpeed/ROOF_SLIDE.full):0;
