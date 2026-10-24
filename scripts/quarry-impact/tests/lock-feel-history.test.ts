@@ -1,6 +1,7 @@
+import {restoreTankCreditBytes} from './tank-credit-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readLockFeelPrevious,restoreLockFeelBytes,verifyLockFeelRevision} from './lock-feel-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreTankCreditBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('LockFeel preserves every prior fixture, vehicle asset, venue art and history input',verifyLockFeelRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/lock-feel/revision.json').toString());

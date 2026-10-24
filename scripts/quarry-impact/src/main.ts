@@ -985,7 +985,7 @@ async function start(watch=demo) {
     camera.position.copy(cars[0].current).add(new T.Vector3(0, 4, -8));
     hud();
     sound.pause(false);
-    eventAwards.reset();playerTopSpeed=0;derbyAliveBefore=0;revengeSettled.clear();takedownCombo=0;playerStripped=0;strippedNoted.clear();pinNoted.clear();pinFed.clear();pinCounted.clear();pinScoring.clear();pinEscapes=0;wallSlams=0;dominoes=0;knockedBy.clear();targetToastAt=-Infinity;clearLocks();pileUp.reset();pileUps=biggestPileUp=0;wreckCauses.clear();lastHitBy.clear();rollArmed.clear();wreckedBy.clear();alightBy.clear();lastTakedownAt=-1e9;bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
+    eventAwards.reset();playerTopSpeed=0;derbyAliveBefore=0;revengeSettled.clear();takedownCombo=0;playerStripped=0;strippedNoted.clear();pinNoted.clear();pinFed.clear();pinCounted.clear();pinScoring.clear();pinEscapes=0;wallSlams=0;dominoes=0;knockedBy.clear();tankBy.clear();targetToastAt=-Infinity;clearLocks();pileUp.reset();pileUps=biggestPileUp=0;wreckCauses.clear();lastHitBy.clear();rollArmed.clear();wreckedBy.clear();alightBy.clear();lastTakedownAt=-1e9;bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
     beginReplay();
     if(preparationInterrupted||document.hidden)pause();
     return true;
@@ -1199,6 +1199,8 @@ function stepLocks(dt:number){
 const pileUp=new PileUp();let pileUps=0,biggestPileUp=0;
 /** When the player was last told they lead a scored derby and everyone is after them, and how often at most (seconds). */
 let targetToastAt=-Infinity;const HUNT_TOAST=15;
+/** Who dropped each car's fuel tank (offline): a car that then runs dry was finished by them. */
+const tankBy=new Map<number,number>();
 /** DOMINOs credited this event (offline QA counter), and who last knocked each car with a real hit, and when. */
 let dominoes=0;const knockedBy=new Map<number,{by:number;at:number}>();
 /** WALL SLAMs credited this event (offline QA counter). */
@@ -1835,6 +1837,7 @@ function step(dt: number) {
     const [shareA,shareB]=!online?.active&&a&&b?[massShare(a.body.mass(),b.body.mass()),massShare(b.body.mass(),a.body.mass())]:[1,1];
     // Who had last knocked each car (a real hit) before this contact (for DOMINO: knocked into a third car).
     const priorA=a?knockedBy.get(a.id):undefined,priorB=b?knockedBy.get(b.id):undefined;
+    const tankInA=!a?.tankDown,tankInB=!b?.tankDown;
     const pitsA=a?.pitSpins??0,pitsB=b?.pitSpins??0,engineInA=!a?.engineOut,engineInB=!b?.engineOut,wingsA=a?.wingsTorn??0,wingsB=b?.wingsTorn??0;
     if(a){
       const before=a.health;
@@ -1859,6 +1862,10 @@ function step(dt: number) {
       if(call&&starter){pileUps++;biggestPileUp=Math.max(biggestPileUp,call.size);eventAwards.pileUp(starter.id,call.size,elapsed);sound.crowd(1);crowdFlashes(SMASH_FLASHES);
         if(mode==='derby'){derbyFeed.note(starter.id,displayedDriver(starter),'pileup',elapsed,call.size);if(scoreDerby())combat.destruction(starter.id,PILEUP.points*call.size);}
         if(!demo&&call.cars.includes(cars[0]?.id??-1)){toast(`PILE-UP ×${call.size}`+(starter.id===cars[0].id?pointsTag(PILEUP.points*call.size):''),2,3);if(clock>=slowMoUntil){slowMoUntil=clock+SMASH.slowmo;slowMoScale=SMASH.scale;}}}}
+    // Fuel tank down: the rival whose hit dropped it is credited, and a car later out of fuel is theirs (offline).
+    if(!online?.active&&a&&b)for(const [victim,attacker,was] of [[a,b,tankInA],[b,a,tankInB]] as const){if(!was||!victim.tankDown)continue;tankBy.set(victim.id,attacker.id);
+      if(mode==='derby'){derbyFeed.note(attacker.id,displayedDriver(attacker),'tank',elapsed);if(scoreDerby())combat.destruction(attacker.id,DESTRUCTION_POINTS.tank);}
+      if(!demo&&attacker.id===0)toast(`TANK DOWN · #${victim.id+1} ${DEFINITIONS[victim.kind].name}`+pointsTag(DESTRUCTION_POINTS.tank),2,2);}
     // Domino: knocked by a rival into a third car hard; the rival gets the credit for the chain (offline).
     if(!online?.active&&a&&b)for(const [mover,struck,prior,loss] of [[a,b,priorA,smashLoss.b],[b,a,priorB,smashLoss.a]] as const){
       const by=loss>=DOMINO.big&&closing>=DOMINO.closing?dominoBy(prior,mover.id,struck.id,elapsed):-1,starter=by>=0?cars.find(c=>c.id===by):undefined;if(!starter)continue;dominoes++;eventAwards.dominoed(starter.id,struck.id,elapsed);
@@ -1955,7 +1962,11 @@ function step(dt: number) {
     if(!c.extendedDamage||!(c.health>0))continue;
     const reason=deadReason({health:c.health,seized:c.seized,batteryFlat:c.beltSnapped&&c.battery<=0,fuelLevel:c.fuelLevel,driveBias:c.driveBias,wheelLost:c.wreckParts.wheelLost,driven:c.drivenWheels});
     c.deadTime=deadTime(c.deadTime,!!reason,dt);
-    if(c.deadTime>=DNF.after){c.health=0;c.deadTime=0;if(c.id===0)toast('OUT · '+reason,2.4);}
+    if(c.deadTime>=DNF.after){const before=c.health;c.health=0;c.deadTime=0;if(c.id===0)toast('OUT · '+reason,2.4);
+      // Run dry after a rival dropped its tank: that rival finished it (offline).
+      const by=reason==='OUT OF FUEL'?cars.find(v=>v.id===tankBy.get(c.id)):undefined;
+      if(by&&by!==c){wreckedBy.set(c.id,by.id);eventAwards.hit(by.id,c.id,0,true,elapsed,0);combat.hit(by.id,c.id,before,0,elapsed);if(mode==='derby'){derbyFeed.note(by.id,displayedDriver(by),'dry',elapsed);if(scoreDerby())combat.destruction(by.id,DESTRUCTION_POINTS.dry);}
+        if(!demo&&by.id===0){toast(`RAN DRY · #${c.id+1} ${DEFINITIONS[c.kind].name}`+pointsTag(DESTRUCTION_POINTS.dry),2,2);sound.crowd(.8);playerTakedown();}}}
   }
   if (mode === 'derby') {
     const alive = cars.filter((c) => c.health > 0&&!(activeClubRound!==null&&clubRetired&&c.id===0));
