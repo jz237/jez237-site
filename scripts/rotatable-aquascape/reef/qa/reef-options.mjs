@@ -51,12 +51,13 @@ for (const seed of [23, 5150, 77001]) seeded(seed, () => {
   let threatHidden = false;
   for (let frame = 0; frame < 21600; frame++) {
     const night = frame > 18000;
-    // Midway, send a fast large fish straight past each watchman's burrow.
+    // Midway, send a fast large fish straight past each watchman, wherever it is
+    // around its burrow.
     // Only into clear water, so the test itself never places fish inside each other.
     if (frame === 9000) for (const w of tank.fish.filter(f => f.species === 'cinctus')) {
       const tang = tank.fish.find(f => f.species === 'tang');
       for (const [dx, dy] of [[.55, .35], [-.55, .35], [.6, .45], [-.6, .45], [.5, .5], [-.5, .5]]) {
-        const p = new T.Vector3(w.home.x + dx, w.home.y + dy, w.home.z);
+        const p = new T.Vector3(w.position.x + dx, w.position.y + dy, w.position.z);
         if (tank.free(p, tang.radius) && tank.fish.every(o => o === tang || p.distanceTo(o.position) > tang.radius + o.radius + .05)) {tang.position.copy(p); tang.group.position.copy(p); tang.velocity.set(-Math.sign(dx) * 2.2, 0, 0); tang.recoverUntil = tank.clock + 2; break;}
       }
     }

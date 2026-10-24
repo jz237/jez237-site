@@ -71,10 +71,10 @@ for(const o of glassObjects)if(o instanceof T.Mesh&&(o.material as T.Material).n
   const line=new T.Mesh(mergeGeometries(parts),new T.MeshBasicMaterial({color,transparent:opacity<1,opacity,blending:opacity<1?T.AdditiveBlending:T.NormalBlending,depthWrite:opacity===1,side:T.DoubleSide}));
   for(const g of parts)g.dispose();line.name='Actinic glass edge glow';line.renderOrder=9;scene.add(line);
  }}
-// The black tang and fish stocking run in the gallery and in Hidden Reef alike.
+// The black tang, the threadfin and fish stocking run in the gallery and in Hidden Reef alike.
 const stockLimit=36;
-const fishSpecies:MarineSpecies[]=[...baseMarineSpecies,'rostratum'];
-const population:[MarineSpecies,number][]=[defaultPopulation[0],['rostratum',1],...defaultPopulation.slice(1)];
+const fishSpecies:MarineSpecies[]=[...baseMarineSpecies,'rostratum','auriga'];
+const population:[MarineSpecies,number][]=[defaultPopulation[0],['rostratum',1],...defaultPopulation.slice(1),['auriga',1]];
 const fishModelsPending=loadMarineModels(fishSpecies);
 const cleanerModelPending=loadCleanerModel();
 const reefAssets=loadReefAssets();

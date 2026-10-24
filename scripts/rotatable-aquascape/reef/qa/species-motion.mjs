@@ -60,7 +60,7 @@ for (const seed of [419, 98237, 731]) seeded(seed, () => {
   const obstacles = [-1.5, 1.5].map(x => ({center: new T.Vector3(x, 1.1, -.35), radius: .65}));
   const tank = world(obstacles);
   assert.deepEqual([...new Set(tank.fish.map(f => f.species))].sort(), [...species].sort());
-  assert.equal(tank.fish.length, 21, 'retain all existing inhabitants');
+  assert.equal(tank.fish.length, 18, 'retain all existing inhabitants');
   const records = tank.fish.map(f => ({species: f.species, modes: new Set(), speeds: [], points: [], homeDistances: [], quiet: 0, coasts: 0}));
   let previous = tank.fish.map(f => f.yaw);
   for (let frame = 0; frame < 7200; frame++) {
