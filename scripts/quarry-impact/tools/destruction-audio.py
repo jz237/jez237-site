@@ -39,13 +39,23 @@ jobs = [
  ('gear-grind', 'Loud continuous gear crunch: a manual gearbox grinding hard and steadily the whole time, a dense harsh metallic rasp of clashing gear teeth with no pauses. Isolated, no engine revving, no music, no voices, no speech.', 1.5, True),
  ('squeal', 'Fan belt slipping in a car engine bay: a continuous steady high pitched rubber belt squeal. Isolated, no music, no voices, no speech.', 2.0, True),
  ('growl', 'Wheel bearing worn out on a moving car: a continuous low rumbling metallic growl and hum that stays steady. Isolated, no engine, no music, no voices, no speech.', 2.0, True),
+ # Loose-panel clanks (four variants, also the fan clatter and the dry-engine knock) and the bent-wheel thump, in place
+ # of synthClank/synthThump: all five must be present, or audio.damageBuffers() would leave the rattles silent.
+ ('rattle-0', 'Single loose car body panel clank: one short metallic rattle hit of a dented door panel, very short and dry, then silence. No music, no voices, no speech.', .5, False),
+ ('rattle-1', 'Tinny clatter: one short hit of a loose plastic bumper trim slapping against car metal, very short and dry, then silence. No music, no voices, no speech.', .5, False),
+ ('rattle-2', 'Hollow knock: one short bang of a loose car bonnet bouncing on its latch, very short and dry, then silence. No music, no voices, no speech.', .5, False),
+ ('rattle-3', 'Sharp metallic tick: one short ping of a loose exhaust heat shield rattling against the car floor, very short and dry, then silence. No music, no voices, no speech.', .5, False),
+ ('thump', 'Dull rubbery thump: one short heavy knock of a bent car wheel and flat-spotted tyre hitting the road, very short and dry, then silence. No music, no voices, no speech.', .5, False),
 ]
 # Seconds cut from the start of a raw clip: metal-groan dips to silence early (it would drop out every loop) and
 # debris-2 opens with half a second of near silence (the layer would land late).
-TRIM = {'metal-groan':.7,'debris-2':.45,'growl':.6}
+TRIM = {'metal-groan':.7,'debris-2':.45,'growl':.6,'thump':.11}
+# Seconds kept (after any trim): the game plays the clanks for 0.26 s and the thump for 0.18 s, so the clips are cut to
+# about that (rattle-2 before its second bounce) and level-matched over what is heard.
+KEEP = {'rattle-0':.3,'rattle-1':.3,'rattle-2':.18,'rattle-3':.3,'thump':.22}
 # Clips that replace a synthesized sound are brought to that synth's RMS (dBFS), so the gains the game already plays
 # them at stay right: the stuck horn (synthHorn), the starter, the gearbox grind, the belt squeal and the bearing growl.
-MATCH = {'horn-stuck':-13.2,'starter':-13.5,'gear-grind':-14.3,'squeal':-17.4,'growl':-29.1}
+MATCH = {'horn-stuck':-13.2,'starter':-13.5,'gear-grind':-14.3,'squeal':-17.4,'growl':-29.1,'rattle-0':-18.3,'rattle-1':-18.2,'rattle-2':-18.2,'rattle-3':-18.3,'thump':-15.4}
 def rms_db(path):
     import array, math
     pcm = array.array('h', subprocess.run(['ffmpeg','-v','error','-i',str(path),'-f','s16le','-ac','1','-'],capture_output=True,check=True).stdout)
@@ -63,7 +73,8 @@ for name, prompt, duration, loop in jobs:
     if not raw.exists(): raise SystemExit(f'missing raw clip {raw} (generate it first)')
     base = WORK/(name+'-normalized.wav')
     trim = TRIM.get(name, 0)
-    subprocess.run(['ffmpeg','-y','-v','error','-ss',str(trim),'-i',str(raw),'-af','loudnorm=I=-23:TP=-3:LRA=7','-ar','44100','-ac','1',str(base)],check=True)
+    keep = ['-t',str(KEEP[name])] if name in KEEP else []
+    subprocess.run(['ffmpeg','-y','-v','error','-ss',str(trim),*keep,'-i',str(raw),'-af','loudnorm=I=-23:TP=-3:LRA=7','-ar','44100','-ac','1',str(base)],check=True)
     if name in MATCH:
         gain = MATCH[name]-rms_db(base); matched = WORK/(name+'-matched.wav')
         subprocess.run(['ffmpeg','-y','-v','error','-i',str(base),'-af',f'volume={gain:.2f}dB,alimiter=limit=0.95:level=disabled','-ar','44100','-ac','1',str(matched)],check=True)
@@ -78,9 +89,11 @@ for name, prompt, duration, loop in jobs:
         subprocess.run(['ffmpeg','-y','-v','error','-i',str(base),'-filter_complex',graph,'-map','[out]','-c:a','libvorbis','-q:a','5',str(OUT/(name+'.ogg'))],check=True)
         processing = 'loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5'
     else:
-        subprocess.run(['ffmpeg','-y','-v','error','-i',str(base),'-af',f'afade=t=in:d=0.005,afade=t=out:st={max(0,real-.1):.3f}:d=0.1','-c:a','libvorbis','-q:a','5',str(OUT/(name+'.ogg'))],check=True)
-        processing = 'loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5'
+        fade = min(.1, real*.3)
+        subprocess.run(['ffmpeg','-y','-v','error','-i',str(base),'-af',f'afade=t=in:d=0.005,afade=t=out:st={max(0,real-fade):.3f}:d={fade:.3f}','-c:a','libvorbis','-q:a','5',str(OUT/(name+'.ogg'))],check=True)
+        processing = f'loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / {round(fade*1000)}ms tail fade, Vorbis q5'
     if trim: processing = f'first {trim}s cut, '+processing
+    if name in KEEP: processing = f'{KEEP[name]}s kept, '+processing
     if name in MATCH: processing += f', RMS matched to {MATCH[name]} dBFS (the synthesized sound it replaces), limited at -0.4 dBFS'
     params = {'text':prompt,'duration_seconds':duration,'loop':loop,'source':'ElevenLabs connector text_to_sound_effects (default model), 2026-10-24'}
     manifest.append({'id':name,'file':name+'.ogg','provider':'ElevenLabs','params':params,'sha256':hashlib.sha256(raw.read_bytes()).hexdigest(),

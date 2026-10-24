@@ -1,6 +1,7 @@
+import {restoreRattleClipsBytes} from './rattle-clips-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readSoundLevelsPrevious,restoreSoundLevelsBytes,verifySoundLevelsRevision} from './sound-levels-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreRattleClipsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('SoundLevels preserves every prior fixture, vehicle asset, venue art and history input',verifySoundLevelsRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/sound-levels/revision.json').toString());

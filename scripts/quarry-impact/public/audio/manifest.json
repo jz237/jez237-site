@@ -925,5 +925,75 @@
     "sha256": "6c68215e126a5f4ecf7f06f1883fc9454f195510cce884789ac42646ebf09a5c",
     "runtimeSha256": "a1107d90705241df182390249e3c86ee9a029e3a9ddfa72cb9672c363b27f120",
     "processing": "first 0.6s cut, loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5, RMS matched to -29.1 dBFS (the synthesized sound it replaces), limited at -0.4 dBFS"
+  },
+  {
+    "id": "rattle-0",
+    "file": "rattle-0.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Single loose car body panel clank: one short metallic rattle hit of a dented door panel, very short and dry, then silence. No music, no voices, no speech.",
+      "duration_seconds": 0.5,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "3d0e138f640f692cfd92fd8ac7a0ba6049a7ee1fcb6530ce39e14c5fd5954bc6",
+    "runtimeSha256": "62f0838299a4a1f040f23898352b2dc5f8066563aab05506b5502cb38e0b1473",
+    "processing": "0.3s kept, loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 90ms tail fade, Vorbis q5, RMS matched to -18.3 dBFS (the synthesized sound it replaces), limited at -0.4 dBFS"
+  },
+  {
+    "id": "rattle-1",
+    "file": "rattle-1.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Tinny clatter: one short hit of a loose plastic bumper trim slapping against car metal, very short and dry, then silence. No music, no voices, no speech.",
+      "duration_seconds": 0.5,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "1916d91796bd221ff15fd5887c60137cb61151b52fb303e2629aeaa24e497fba",
+    "runtimeSha256": "28701109a3517b0a301e0be680866b0caa771964e1ad9931d72f707d7186a4de",
+    "processing": "0.3s kept, loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 90ms tail fade, Vorbis q5, RMS matched to -18.2 dBFS (the synthesized sound it replaces), limited at -0.4 dBFS"
+  },
+  {
+    "id": "rattle-2",
+    "file": "rattle-2.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Hollow knock: one short bang of a loose car bonnet bouncing on its latch, very short and dry, then silence. No music, no voices, no speech.",
+      "duration_seconds": 0.5,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "203e95f79176d8ff0ace72bb89532adb792639fc9974a6c5f2783758ac789810",
+    "runtimeSha256": "fc0e835a1734a990e71ee030b84d5bad845f1cd6c8bfe124b9133bdfe2c9d1d9",
+    "processing": "0.18s kept, loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 54ms tail fade, Vorbis q5, RMS matched to -18.2 dBFS (the synthesized sound it replaces), limited at -0.4 dBFS"
+  },
+  {
+    "id": "rattle-3",
+    "file": "rattle-3.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Sharp metallic tick: one short ping of a loose exhaust heat shield rattling against the car floor, very short and dry, then silence. No music, no voices, no speech.",
+      "duration_seconds": 0.5,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "1231948f7d8e3cea1d27d81f529fecb17ba08346eaf61f7cdaf16ea7647167fb",
+    "runtimeSha256": "3b92d8c892249961d4ac6d48c7d022143d11820c258734bcc2b784818564f6f9",
+    "processing": "0.3s kept, loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 90ms tail fade, Vorbis q5, RMS matched to -18.3 dBFS (the synthesized sound it replaces), limited at -0.4 dBFS"
+  },
+  {
+    "id": "thump",
+    "file": "thump.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Dull rubbery thump: one short heavy knock of a bent car wheel and flat-spotted tyre hitting the road, very short and dry, then silence. No music, no voices, no speech.",
+      "duration_seconds": 0.5,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "9fdba6967787d3345079fc534b83a1a9e802af14b9e96cb93a5ab78acd57382b",
+    "runtimeSha256": "ab766b179f34ce37bda41b2dc14081231be4a1483082f8aa3391c71c66d69641",
+    "processing": "0.22s kept, first 0.11s cut, loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 66ms tail fade, Vorbis q5, RMS matched to -15.4 dBFS (the synthesized sound it replaces), limited at -0.4 dBFS"
   }
 ]
