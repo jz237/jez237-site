@@ -1,5 +1,17 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## v2.47.2 — The open-sea jet ski marks the water
+
+The open sea's jet ski now leaves a white jet-wash trail with unbroken
+Kelvin wake arms, and it throws spray, splashes and hull displacement at the
+normal ride's strength. Those effects all scale with the hull's reported
+wetness. The strip-theory hull had reported its wetted bottom area (0.23
+while planing, against the modern hull's 0.80); it now reports keel contact
+in the modern meaning: a metre or more of planing keel in the water counts
+as full contact. The open sea also lays wake packets every 1.6 m of travel
+instead of every 0.24 s, so at speed they overlap into one trail of about
+150 m.
+
 ## v2.47.1 — A realistic open-sea jet ski
 
 The open sea's jet ski is rebuilt on planing strip theory. The earlier
