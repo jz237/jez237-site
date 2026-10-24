@@ -25362,5 +25362,116 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-24-factual-infographic-factual-infographic-coulrophobia-behind",
+    "title": "Factual infographic: Coulrophobia — Behind the Painted Smile",
+    "tests": "factual_subtype: phobia-infographic; phobia: Coulrophobia; terminology and distinct casting planned; source-backed education; no subjective critic; archive_slot=2026-10-24T00:08; concept=coulrophobia-clown-cues-community-fair; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create the finished artwork directly: an elegant, richly illustrated educational phobia infographic, artwork-led and organically integrated, portrait-oriented composition if suitable. Refined gouache, colored pencil and precise ink on a subtle matte ivory ground; petrol blue, saffron, brick red and muted sage palette. Not a photographed page, framed poster, slide, UI, rigid grid or detached-card dashboard. No bibliography, URLs, tiny citations, watermarks or logos.\n\nAt the top, place the exact term \"COULROPHOBIA\" in prominent BOLD lettering. Directly underneath it in readable plain type place the exact meaning \"Fear of clowns\". A much smaller secondary subtitle may read \"Behind the painted smile\". Add a clear short terminology note: \"Established name, not a separate DSM diagnosis.\" Do not print literal Markdown asterisks.\n\nDominant scene fills the middle: Fictional man in his early sixties, deep brown skin, broad round face with a salt-and-pepper moustache, bald crown and short silver side hair, stocky build, mustard knitted cardigan over a navy shirt and charcoal trousers; seen in three-quarter profile with shoulders slightly tense and an open hand at his chest, standing at the spacious edge of a daylight community fair. The same man appears coherently in a small lower help vignette, not a recurring series protagonist. Give the scene tactile brick paving, tiny sunlit dust flecks, woven cardigan stitches, natural skin texture, soft fairground fabric awnings and a sparse string of paper pennants. At a respectful distance an ordinary non-threatening adult clown performs a simple mime gesture: faded red round nose, modest white cheek makeup, painted mouth, blue checked waistcoat, ordinary expressive human eyes and soft shoes. No monstrous face, sharp teeth, horror imagery, coercion, gore, looming distorted threat or surreal brain anatomy. The illustration shows felt discomfort in an ordinary public setting, not evidence that the performer is dangerous.\n\nUse one graceful red paintstroke, like the curve of a painted smile, to guide the eye from a small naturalistic study of the clown's face at upper left, across the protagonist's posture, down a gently narrowing path of avoided activities, and into a brighter open-ended conversation scene at the bottom. Open callouts and delicate leaders follow the artwork; vary scale, leave breathing room, no even box matrix.\n\nAt the face detail use the heading \"Ambiguous social cues\" and brief gloss \"Makeup can conceal emotional cues\". Beside the mime gesture use \"Unpredictability\" with \"Not knowing what happens next\". In smaller text near these details state \"Research suggests possible contributors—not one universal cause.\" A small abstract film-strip motif may carry \"Frightening media portrayals may contribute\" without depicting a horror character.\n\nNear the man's head use \"Anticipatory anxiety\" and the gloss \"Anxiety before an encounter\". At his chest and open hand, restrained delicate annotation threads label \"Palpitations\", \"Trembling\" and \"Nausea\" under the shared heading \"Body alarm—symptoms vary\". No invented physiological circuitry, brain scan or exact heart-rate numbers.\n\nThe narrowing path contains faint fair-ticket and calendar motifs, not extra crowded people: heading \"Avoidance\" and text \"Life can shrink around avoiding the fear\". Link this to the thought/anticipation motif with an open curved pathway rather than a claimed neurological diagram. Across a quiet patch of sky place \"Strong alarm ≠ actual danger\" and the short clarification \"In specific phobia, fear can exceed the danger present.\" Never imply every clown or every situation is safe.\n\nThe bottom opens into a warm, dignified vignette of this man seated with a mental-health professional, ordinary chairs, a small plant and an unmarked notebook. Heading \"Evidence-based help\"; main readable labels \"CBT—work on fearful thoughts and responses\" and \"Gradual exposure—planned, paced steps with professional support\". Do not show or prescribe a self-directed exposure challenge, surprise confrontation, touching a stranger, forced encounter or a universal treatment ladder. Include \"Seek help when fear interferes with daily life\" and a small readable footer \"Education, not a personal diagnosis.\" Keep the composition visually rich without squeezing in additional facts; essential definition, source-qualified triggers, anticipation/body alarm, avoidance, actual-danger distinction and support must remain legible. No statistics or diagnostic codes. Deliver a polished finished infographic with substantial illustration and concise, correctly spelled text.",
+    "image": "images/2026-10-24-factual-infographic-factual-infographic-coulrophobia-behind.jpg",
+    "thumb": "thumbs/2026-10-24-factual-infographic-factual-infographic-coulrophobia-behind.webp",
+    "color": "#b29e83",
+    "date": "2026-10-24",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "coulrophobia-clown-cues-community-fair",
+      "imageSha256": "f2e713041ce6b3eafa636706780269958ee1fa5ed36d210c928749cdd20d77d7",
+      "imageDHash": "3a53f3bb3b26c6c6"
+    },
+    "factualInfographic": {
+      "topic": "Coulrophobia: fear of clowns, ambiguous facial cues, anticipatory anxiety, avoidance, and evidence-based help",
+      "description": "An artwork-led clinical-education chart distinguishing the established clown-fear term from a separate diagnosis, qualifying proposed triggers and explaining phobia symptoms, avoidance and evidence-based help.",
+      "sourceNote": "Frontiers in Psychology https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2023.1109466/full; NHS https://www.nhs.uk/mental-health/conditions/phobias/; NHS inform https://www.nhsinform.scot/illnesses-and-conditions/mental-health/phobias/; NIMH https://www.nimh.nih.gov/health/statistics/specific-phobia. Verified term/status, source-qualified contributors, anticipatory anxiety, variable symptoms, avoidance, danger context, CBT and gradual supported exposure.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-24T04:10:06.266984+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Frontiers in Psychology",
+            "title": "Fear of clowns: An investigation into the aetiology of coulrophobia",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2023.1109466/full"
+          },
+          {
+            "id": "S2",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          },
+          {
+            "id": "S3",
+            "publisher": "NHS inform",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhsinform.scot/illnesses-and-conditions/mental-health/phobias/"
+          },
+          {
+            "id": "S4",
+            "publisher": "National Institute of Mental Health",
+            "title": "Specific Phobia",
+            "sourceType": "government-agency",
+            "url": "https://www.nimh.nih.gov/health/statistics/specific-phobia"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Coulrophobia is an established term for fear of clowns, not a separately named DSM diagnosis.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Clown-fear research suggests concealed emotional cues, unpredictable behaviour and frightening media portrayals may contribute; these are proposed contributors, not a universal cause.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Anticipatory anxiety means anxiety before an encounter; even thinking about a feared object can provoke anxiety.",
+            "sourceIds": [
+              "S3",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Phobia symptoms can include palpitations, trembling and feeling sick; symptoms vary between people.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Avoidance can limit daily activities and lead people to organise their lives around avoiding the feared object.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "In specific phobia, intense fear may occur when the object presents little or no actual danger; a strong alarm is not a measurement of danger.",
+            "sourceIds": [
+              "S4"
+            ]
+          },
+          {
+            "claim": "CBT is a treatment for phobias; gradual exposure is used for simple phobias, with a plan adapted to the person and specialist help available.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Seek professional help if fear interferes with daily life; general education is not a personal diagnosis.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
