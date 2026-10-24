@@ -1199,6 +1199,8 @@ let targetToastAt=-Infinity;const HUNT_TOAST=15;
 let dominoes=0;const knockedBy=new Map<number,{by:number;at:number}>();
 /** WALL SLAMs credited this event (offline QA counter). */
 let wallSlams=0;
+/** How a pin feels (offline): crunch pitch, rumble when pinned and when pinning, and the escape hint shown while the player is pinned. */
+const PIN_FEEL={rate:.55,pinned:.4,pinning:.22,hint:'PINNED · ROCK IT · REVERSE / FORWARD'} as const;
 /** Cars already counted as pinned, and already called PINNED in the derby feed, this time they were held (cleared once free). */
 const pinNoted=new Set<number>(),pinFed=new Set<number>();
 /** When each car last counted as pinned, and the cars whose present pin counts (offline). */
@@ -1229,6 +1231,9 @@ function pinCars(contacts:readonly {a?:Vehicle;b?:Vehicle;point1:T.Vector3;point
     c.hit(at,c.current.clone().sub(at).setY(0).normalize(),crush,elapsed,true,by.paintColor);
     c.hit(wall,c.current.clone().sub(wall).setY(0).normalize(),crush*PIN.wall,elapsed,true);
     fx.emit(at,2,1,.85);fx.emit(wall,2,1,.85);
+    // Felt and heard: a low crunch of metal giving way each tick, a rumble for the player in it, and how to get out when pinned.
+    sound.shot('impact-heavy',at,c.id===0||by.id===0?.55:.3,{rate:PIN_FEEL.rate,delay:0,duration:.45});
+    if(!demo&&c.id===0){recordRumbleImpact(PIN_FEEL.pinned);toast(PIN_FEEL.hint,PIN.gap+.25,1);}else if(!demo&&by.id===0)recordRumbleImpact(PIN_FEEL.pinning);
     const lost=before-c.health;if(!(lost>0))continue;
     by.inflicted+=lost;lastHitBy.set(c.id,{by:by.id,at:elapsed});
     const wreck=eventAwards.hit(by.id,c.id,lost,before>0&&c.health<=0,elapsed,0);combat.hit(by.id,c.id,before,c.health,elapsed);
