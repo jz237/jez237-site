@@ -1682,6 +1682,7 @@ function step(dt: number) {
       smashLoss.b=before-b.health;
     }
     // Engine out: the block dropped out of a car in this crash (offline).
+    if(!online?.active)for(const [car,was] of [[a,engineInA],[b,engineInB]] as const)if(car&&was&&car.engineOut)eventAwards.failure(car.id,'ENGINE OUT',elapsed,34);
     if(!online?.active&&!demo)for(const [car,was,other] of [[a,engineInA,b],[b,engineInB,a]] as const)if(car&&was&&car.engineOut&&(car.id===0||other?.id===0)){toast(car.id===0?'ENGINE OUT':`ENGINE OUT · #${car.id+1} ${DEFINITIONS[car.kind].name}`+pointsTag(DESTRUCTION_POINTS.engine),2.6,3);sound.crowd(1);crowdFlashes(SMASH_FLASHES);}
     if(damage>0&&a&&b){lastHitBy.set(a.id,{by:b.id,at:elapsed});lastHitBy.set(b.id,{by:a.id,at:elapsed});}
     // The derby feed credits whoever dropped an engine, tore a wing off or PITed a rival (offline).
