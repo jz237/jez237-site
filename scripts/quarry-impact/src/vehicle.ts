@@ -41,7 +41,7 @@ import {wheelResponse,TireContact} from './wheel-mechanics';
 import {wheelTearsOff} from './wheel-physics';
 import {EngineMisfire} from './engine-misfire';
 import {tethers,tetherKind,tetherMount,TETHER_CHANCE} from './bumper-lock';
-import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowoutImpulse,bentRimTyre,rimWobble,springBias,sagBias,driveBias,thrustAngle,leakBrakeFluid,brakeFluidFactor,steerRate,throttleJams,jammedThrottle,CLUTCH,clutchGrip,clutchSlips,steerPlay,steerWander,tyreRub,rubWear,electricalFault,electricalCut,WHEEL_NUTS,loosenNuts,nutShimmy,EXHAUST_BLOW,exhaustBlow,liftPops,DIFF,diffDamage,diffAxle,wearDiff,diffDrive,DEBEAD,beadStress,tieRodSnapped,flopToe,GEAR_POP,gearPop,CALIPER,caliperDrag,discHeat,discGlow,discFade,MOUNTS,mountsBroken,shuntThrottle,BRAKE_FIRE,brakeFireClock,STARTER,starterDamage,starterFails,BUMP_START,bumpRoll,bumpCatches,frameBend,dazeFor,dazedSteer,weakSpot,PUNCTURE,punctures,RADIATOR,LEAK} from './damage-handling';
+import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowoutImpulse,bentRimTyre,rimWobble,springBias,sagBias,driveBias,thrustAngle,leakBrakeFluid,brakeFluidFactor,steerRate,throttleJams,jammedThrottle,CLUTCH,clutchGrip,clutchSlips,steerPlay,steerWander,tyreRub,rubWear,electricalFault,electricalCut,WHEEL_NUTS,loosenNuts,nutShimmy,EXHAUST_BLOW,exhaustBlow,liftPops,DIFF,diffDamage,diffAxle,wearDiff,diffDrive,DEBEAD,beadStress,tieRodSnapped,flopToe,GEAR_POP,gearPop,CALIPER,caliperDrag,discHeat,discGlow,discFade,MOUNTS,mountsBroken,shuntThrottle,BRAKE_FIRE,brakeFireClock,STARTER,starterDamage,starterFails,BUMP_START,bumpRoll,bumpCatches,BATTERY_OUT,batteryThrown,frameBend,dazeFor,dazedSteer,weakSpot,PUNCTURE,punctures,RADIATOR,LEAK} from './damage-handling';
 import {leakRates,dripInterval,FLAME,fuelSpacing} from './fluid-leaks';
 import {drainOil,starvationWear,seizes,OIL,drainCoolant,overheatWear,FUEL_TANK,drainFuel,fuelFeed,SUMP,crackSump,sumpLeak,drainSump} from './oil-starvation';
 import {MAX_ENGINE_RESTART,crankRequested} from './engine-stall';
@@ -296,6 +296,8 @@ export class Vehicle {
   stallTime = 0;
   bumpRolled = 0;
   bumpStarts = 0;
+  /** The battery was thrown out of the bay (offline events): no starter and no lights. */
+  batteryOut = false;
   /** Toe the bent frame knocks the wheels to (offline events; fronts +, rears −). */
   frameBend = 0;
   /** Seconds this car has been unable to drive itself (offline events; main eliminates it at DNF.after). */
@@ -335,7 +337,7 @@ export class Vehicle {
   onMountClunk?:()=>void;
   /** A shove or a roll turned the stalled engine over and it caught. */
   onBumpStart?:()=>void;
-  onBreak?:(what:'spring'|'shaft'|'diff'|'tierod'|'exhaust'|'brakefire'|'radiator'|'rollbar'|'propshaft'|'bearing'|'belt'|'enginefire'|'smashfire'|'tank'|'tankoff'|'cable'|'handbrake',wheel:number)=>void;
+  onBreak?:(what:'spring'|'shaft'|'diff'|'tierod'|'exhaust'|'brakefire'|'radiator'|'rollbar'|'propshaft'|'bearing'|'belt'|'enginefire'|'smashfire'|'tank'|'tankoff'|'cable'|'handbrake'|'battery',wheel:number)=>void;
   /** Gears left after gearbox damage (offline only; 5 = intact). */
   gearLimit = 5;
   /** Grip left under each tyre from oil or coolant on the ground (offline only). */
@@ -575,7 +577,7 @@ export class Vehicle {
     this.engineDamage = 0;
     this.transmission=undefined;this.gear=1;
     this.engineStall = 0;
-    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.clutchGrip=1;this.clutchBurn=0;this.clutchStrain=0;this.clutchSmokeClock=0;this.clutchSmoke=0;this.steerPlay=0;this.steerWander=0;this.doorOpenTime=0;this.doorsTorn=0;this.doorSlams=0;this.rubDrag.fill(0);this.rubSmoke=0;this.rubClock=0;this.electricalFault=0;this.electricalCut=false;this.electricalCuts=0;this.electricClock=0;this.nutLoose.fill(0);this.wheelShimmy.fill(0);this.wheelsShed=0;this.exhaustBlow=0;this.exhaustPops=0;this.diffWear=0;this.beadStress.fill(0);this.debeads=0;this.steerLink.fill(1);this.linkClock=0;this.popUntil=0;this.popSlot=-1;this.gearPops=0;this.inNeutral=false;this.brakeDrag.fill(0);this.discHeat.fill(0);this.discSmokeClock=0;this.mountsBroken=false;this.shunt=0;this.lastPedal=0;this.lastJolt=-1;this.mountJolts=0;this.rawInput=null;this.ownInput=null;this.cargoLeft=-1;this.cargoClock=0;this.cargoSpilled=0;this.sumpCrack=0;this.brakeFire.fill(0);this.tyreAlight.fill(0);this.rubberDrop=0;this.brakeFires=0;this.exhaustDragTime=0;this.exhaustGone=false;this.tankDown=this.tankGone=false;this.tankDragTime=0;this.disposeTank();this.throttleCable=this.handbrakeCable=false;this.shedClock=SHED.every;this.rollBar.fill(1);this.beltSlip=this.squeal=0;this.beltSnapped=false;this.battery=1;this.hotTime=0;this.engineFires=0;this.hotFired=false;this.bigHits=0;this.smashFires=0;this.bearingWear.fill(0);this.hubDrag.fill(0);this.propBend=this.propWear=this.propVibration=this.propFlail=0;this.propSnapped=false;this.starterDamage=0;this.crankAttempt=0;this.starterFails=0;this.stallTime=this.bumpRolled=this.bumpStarts=0;this.frameBend=0;this.deadTime=0;this.dazed=0;this.dazeSteer=0;this.glassPops=0;this.platesLost=0;this.debrisRolls=0;this.debrisPunctures=0;this.radiatorBursts=0;this.punctureClock.fill(0);for(const g of this.discGlows)if(g)g.visible=false;this.popQueue.length=0;this.liftThrottle=0;this.lifts=0;this.wanderClock=0;this.slickGrip.fill(1);this.rearSlide=0;this.pitSpins=0;this.wingsTorn=0;this.wingGone.fill(false);this.engineOut=false;this.roofSlideTime=0;this.sideSlideTime=0;this.roofSparkClock=0;this.rollShed=0;this.rollShedDone=false;this.rolls=0;this.rollPops=this.popRolls=0;this.pinTime=this.pinTick=this.pins=this.tetherRolls=0;this.spareWheels=0;this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.fuelLevel=FUEL_TANK.start;this.fuelClock=0;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
+    this.engineMisfire.reset();this.misfireFactor=1;this.windLoad.clear();this.tyreBurst.fill(false);this.blownOut.fill(false);this.lastFailure.fill(0);this.tyreShred.fill(0);this.dragLoad=0;this.lastLanding=-10;this.crushPending.clear();for(const cap of this.poppedCaps)cap.visible=true;this.poppedCaps.length=0;this.wasGrounded.fill(true);this.steerLimit=1;this.gearLimit=5;this.brakeBias.fill(1);this.damperBias.fill(1);this.springBias.fill(1);this.sagBias.fill(1);this.driveBias.fill(1);this.thrustAngle=0;this.brakeFluid=1;this.steerRate=1;this.throttleJammed=false;this.clutchGrip=1;this.clutchBurn=0;this.clutchStrain=0;this.clutchSmokeClock=0;this.clutchSmoke=0;this.steerPlay=0;this.steerWander=0;this.doorOpenTime=0;this.doorsTorn=0;this.doorSlams=0;this.rubDrag.fill(0);this.rubSmoke=0;this.rubClock=0;this.electricalFault=0;this.electricalCut=false;this.electricalCuts=0;this.electricClock=0;this.nutLoose.fill(0);this.wheelShimmy.fill(0);this.wheelsShed=0;this.exhaustBlow=0;this.exhaustPops=0;this.diffWear=0;this.beadStress.fill(0);this.debeads=0;this.steerLink.fill(1);this.linkClock=0;this.popUntil=0;this.popSlot=-1;this.gearPops=0;this.inNeutral=false;this.brakeDrag.fill(0);this.discHeat.fill(0);this.discSmokeClock=0;this.mountsBroken=false;this.shunt=0;this.lastPedal=0;this.lastJolt=-1;this.mountJolts=0;this.rawInput=null;this.ownInput=null;this.cargoLeft=-1;this.cargoClock=0;this.cargoSpilled=0;this.sumpCrack=0;this.brakeFire.fill(0);this.tyreAlight.fill(0);this.rubberDrop=0;this.brakeFires=0;this.exhaustDragTime=0;this.exhaustGone=false;this.tankDown=this.tankGone=false;this.tankDragTime=0;this.disposeTank();this.throttleCable=this.handbrakeCable=false;this.shedClock=SHED.every;this.rollBar.fill(1);this.beltSlip=this.squeal=0;this.beltSnapped=false;this.battery=1;this.hotTime=0;this.engineFires=0;this.hotFired=false;this.bigHits=0;this.smashFires=0;this.bearingWear.fill(0);this.hubDrag.fill(0);this.propBend=this.propWear=this.propVibration=this.propFlail=0;this.propSnapped=false;this.starterDamage=0;this.crankAttempt=0;this.starterFails=0;this.stallTime=this.bumpRolled=this.bumpStarts=0;this.batteryOut=false;this.frameBend=0;this.deadTime=0;this.dazed=0;this.dazeSteer=0;this.glassPops=0;this.platesLost=0;this.debrisRolls=0;this.debrisPunctures=0;this.radiatorBursts=0;this.punctureClock.fill(0);for(const g of this.discGlows)if(g)g.visible=false;this.popQueue.length=0;this.liftThrottle=0;this.lifts=0;this.wanderClock=0;this.slickGrip.fill(1);this.rearSlide=0;this.pitSpins=0;this.wingsTorn=0;this.wingGone.fill(false);this.engineOut=false;this.roofSlideTime=0;this.sideSlideTime=0;this.roofSparkClock=0;this.rollShed=0;this.rollShedDone=false;this.rolls=0;this.rollPops=this.popRolls=0;this.pinTime=this.pinTick=this.pins=this.tetherRolls=0;this.spareWheels=0;this.oily.fill(0);this.dripClock.fill(0);this.fuelTravel=0;this.drips.fill(0);this.flameHeat=this.flameExposure=this.contactHeat=this.fuelLeak=0;this.oilLevel=1;this.coolantLevel=1;this.fuelLevel=FUEL_TANK.start;this.fuelClock=0;this.seized=false;this.inverted=0;this.invertedDrip=0;this.douseRequest=false;this.contactBy=-1;this.igniteRequest=false;this.steamClock=0;this.steamPuffs=0;this.oilSmokeClock=0;this.oilSmoke=0;this.dripSeed=this.id*7919+1;
     if(this.drivetrain){const v=this.body.linvel(),f=rotateVehicleVector({x:0,y:0,z:1},this.body.rotation());this.drivetrain.reset(v.x*f.x+v.y*f.y+v.z*f.z);this.rpm=850;}
     this.tyreDamage = [0,0,0,0];
     this.tireContacts.forEach(contact=>contact.reset());
@@ -763,7 +765,9 @@ export class Vehicle {
     this.misfireFactor=running?this.engineMisfire.update(dt,this.engineDamage??0,this.input.throttle):1;
     // A damaged starter cranks slowly and sometimes fails to catch: the engine coughs and it has to go again.
     this.starterDamage=this.extendedDamage?starterDamage((isRearEngineKind(this.kind)?this.structuralDamage?.[1]:this.structuralDamage?.[0])??0):0;
-    if(this.starterDamage>0&&!this.seized&&this.fuelLevel>FUEL_TANK.empty&&crankRequested(this.health,this.engineStall,this.input.throttle)){
+    // No battery, no starter: holding the throttle cranks nothing (the physics step's restart is given straight back).
+    if(this.batteryOut&&crankRequested(this.health,this.engineStall,this.input.throttle))this.engineStall=Math.min(MAX_ENGINE_RESTART,this.engineStall!+dt);
+    else if(this.starterDamage>0&&!this.seized&&this.fuelLevel>FUEL_TANK.empty&&crankRequested(this.health,this.engineStall,this.input.throttle)){
       this.engineStall=Math.min(MAX_ENGINE_RESTART,this.engineStall!+dt*STARTER.slow*this.starterDamage);
       if(this.engineStall!<=dt*1.05){this.crankAttempt++;
         if(starterFails(this.starterDamage,this.crankAttempt,this.id)){this.engineStall=Math.min(MAX_ENGINE_RESTART,STARTER.retry);this.starterFails++;
@@ -1151,6 +1155,9 @@ export class Vehicle {
     if(this.extendedDamage&&!quiet&&this.health>0&&engineDrops(this.mountsBroken,this.engineDamage,damage,zone===(isRearEngineKind(this.kind)?'rear':'front')))this.dropEngine();
     // A big hit at the engine end of a battered engine can part the throttle cable: the car limps on (offline).
     if(this.extendedDamage&&!quiet&&this.health>0&&!this.throttleCable&&cableSnaps(this.engineDamage,damage,zone===(isRearEngineKind(this.kind)?'rear':'front'),this.id*17+this.bigHits)){this.throttleCable=true;this.onBreak?.('cable',0);}
+    // With the bonnet gone or the bay crushed, a big hit at the engine end can throw the battery clean out (offline).
+    if(this.extendedDamage&&!quiet&&this.health>0&&!this.batteryOut){const lid=this.wreckParts.assemblies.find(x=>x.name===(isRearEngineKind(this.kind)?'engine-lid':'hood'));
+      if(batteryThrown(!!lid&&lid.members.every(m=>!m.mesh.visible),(isRearEngineKind(this.kind)?this.structuralDamage?.[1]:this.structuralDamage?.[0])??0,damage,zone===(isRearEngineKind(this.kind)?'rear':'front'),this.id*23+this.bigHits))this.throwBattery();}
     // A big hit on a crushed rear can part the handbrake cables: no more handbrake turns (offline).
     if(this.extendedDamage&&!quiet&&this.health>0&&!this.handbrakeCable&&handbrakeSnaps(this.structuralDamage?.[1]??0,damage,zone==='rear',this.id*19+this.bigHits)){this.handbrakeCable=true;this.onBreak?.('handbrake',0);}
     // A big hit on a crushed tank end snaps the fuel tank's straps: it drops and drags on its filler neck (offline).
@@ -1377,6 +1384,16 @@ export class Vehicle {
     const pivot=new T.Group();pivot.name='fuel_tank';pivot.position.set(0,floor+z*Math.sin(TANK_DROP.hang)+y*.5,neck.z);pivot.rotation.x=end*TANK_DROP.hang;
     const tank=new T.Mesh(new T.BoxGeometry(x,y,z),new T.MeshStandardMaterial({color:0x2e2b27,roughness:.6,metalness:.65}));tank.position.z=end*z/2;tank.castShadow=true;pivot.add(tank);
     this.root.add(pivot);this.tankMesh=pivot;this.onBreak?.('tank',0);
+  }
+  /** The battery flies out of the open engine bay and lands on the track as a loose part (offline). */
+  throwBattery(){
+    if(this.batteryOut)return;this.batteryOut=true;
+    const end=isRearEngineKind(this.kind)?-1:1,half=DEFINITIONS[this.kind].halfLength,{x,y,z}=BATTERY_OUT.size;
+    const battery=new T.Mesh(new T.BoxGeometry(x,y,z),new T.MeshStandardMaterial({color:0x1f2328,roughness:.55,metalness:.2}));
+    battery.position.set(DEFINITIONS[this.kind].halfWidth*.4,.25,end*half*.72);this.root.add(battery);this.root.updateMatrixWorld(true);
+    const out=new T.Vector3(.4,0,end).applyQuaternion(this.previousQ).multiplyScalar(BATTERY_OUT.kick);
+    this.fx.detach(battery,this.velocity.clone().multiplyScalar(.6).add(out).setY(this.velocity.y+BATTERY_OUT.lift));
+    battery.removeFromParent();battery.geometry.dispose();(battery.material as T.Material).dispose();this.onBreak?.('battery',0);
   }
   /** Take the hanging tank off the car and free its geometry and material (a reset with the tank still down). */
   private disposeTank(){const tank=this.tankMesh?.children[0] as T.Mesh|undefined;this.tankMesh?.removeFromParent();if(tank){tank.geometry.dispose();(tank.material as T.Material).dispose();}this.tankMesh=null;}

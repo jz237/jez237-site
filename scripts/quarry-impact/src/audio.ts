@@ -442,7 +442,7 @@ export class Sound {
           if (car.health === 0) v = 0;
           setRate(l,Math.max(0.72, Math.min(1.4, (rpm / centers[name]) * doppler))*classicEngineVoice(car.kind).pitch,c.currentTime,0.13);
         } else if (name === 'gear-grind') v=car.health>0?.16*Math.min(1,(car.transmission?.grind??0)/.3):0;
-        else if (name === 'starter') v=car.health>0&&car.engineStall!>0&&car.rpm>0?.13:0;
+        else if (name === 'starter') v=car.health>0&&car.engineStall!>0&&car.rpm>0&&!car.batteryOut?.13:0;
         else if (name === 'load') v = Math.abs(car.input.throttle) * 0.07 * cut;
         else if (name === 'damaged')
           v = engineDamageLevel(car.health,car.engineDamage) * 0.18 * (cut<1?1.6:1);

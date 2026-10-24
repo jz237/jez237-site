@@ -261,6 +261,16 @@ export const bumpRoll=(roll:number,speed:number,throttle:number,dt:number)=>Numb
 export const bumpCatches=(stallTime:number,roll:number)=>stallTime>=BUMP_START.after&&roll>=BUMP_START.hold;
 /** The rival whose hit in the last BUMP_START.credit seconds shoved the engine back into life, or -1. */
 export const bumpStartedBy=(last:{by:number;at:number}|undefined,self:number,time:number)=>last&&last.by!==self&&last.by>=0&&time-last.at<=BUMP_START.credit?last.by:-1;
+/** Battery out (offline): with the bonnet (or a rear engine's lid) gone or the engine bay crushed past BATTERY_OUT.crush,
+ * a hit of BATTERY_OUT.damage or more at the engine end throws the battery out of the bay (BATTERY_OUT.chance, fixed per car
+ * and hit). The engine runs on, but the lights die and a stalled engine has nothing to crank it: only a bump start brings it back. */
+export const BATTERY_OUT={damage:9,crush:.6,chance:.5,size:{x:.32,y:.22,z:.2},lift:3,kick:2.5} as const;
+export function batteryThrown(coverGone:boolean,engineEnd:number,damage:number,atEngineEnd:boolean,seed:number){
+  if(!(coverGone||engineEnd>=BATTERY_OUT.crush)||!atEngineEnd||!Number.isFinite(damage)||damage<BATTERY_OUT.damage)return false;const x=Math.sin(seed*12.9898+4.1)*43758.5453;return x-Math.floor(x)<BATTERY_OUT.chance;
+}
+export const batteryOutWarning=(out:boolean)=>out?'BATTERY GONE · NO STARTER':'';
+/** The stalled-engine hint with no battery to crank it. */
+export const noBatteryHint=(out:boolean,health:number,stall:number|undefined)=>out&&health>0&&(stall??0)>0?'NO BATTERY · GET SHOVED TO BUMP START':'';
 /** A big side hit (T-bone) past FRAME_BEND.onset bends the chassis like a banana: the front axle yaws toward the dented
  * side and the rear axle the other way, so the car keeps turning toward the damage and needs countersteer to go straight.
  * Returns the toe (radians) each wheel is knocked to: fronts +, rears −, signed toward the more crushed flank. */
