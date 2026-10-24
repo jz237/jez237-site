@@ -1641,7 +1641,9 @@ function step(dt: number) {
   // Rolled onto its roof by the last car to hit it (offline).
   if(!online?.active)for(const c of cars){if(c.inverted===0){rollArmed.add(c.id);continue;}
     const by=rolledBy(c.inverted,rollArmed.has(c.id),lastHitBy.get(c.id),elapsed);if(by<0)continue;rollArmed.delete(c.id);const attacker=cars.find(x=>x.id===by);if(!attacker)continue;
+    eventAwards.rolled(attacker.id,c.id,elapsed);
     if(attacker.id===0&&!demo){toast(`ROLLED IT · #${c.id+1} ${DEFINITIONS[c.kind].name}`,2,2);sound.crowd(.9);crowdFlashes(SMASH_FLASHES);}
+    else if(c.id===0&&!demo){toast(`ROLLED BY #${attacker.id+1} ${DEFINITIONS[attacker.kind].name}`,2,2);sound.crowd(.7);}
     if(mode==='derby')derbyFeed.note(attacker.id,displayedDriver(attacker),'rolled',elapsed);}
   // The player's car stripped down to the shell and still running (offline).
   if(!online?.active&&!demo&&cars[0]){const gone=majorPartsGone(cars[0]),label=cars[0].health>0?strippedLabel(playerStripped,gone):'';if(label){toast(label,2,2);sound.crowd(.7);}playerStripped=gone;}

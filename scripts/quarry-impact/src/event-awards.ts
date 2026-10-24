@@ -6,7 +6,7 @@ export const FASTEST_HIT={min:10} as const;
 export type AwardCar={id:number;inflicted:number;health:number};
 /** failure: a car's own mechanical failure (attacker = victim = that car), captioned by `label`. */
 export type EventMoment={kind:'hit'|'takedown'|'wheel'|'fire'|'failure';attacker:number;victim:number;time:number;score:number;label?:string};
-export type EventAward={key:'hit'|'fastest'|'destroyer'|'takedowns'|'climber'|'toughest'|'nemesis'|'wheels'|'scrap'|'firestarter';title:string;id:number;detail:string;victim?:number;value:number};
+export type EventAward={key:'hit'|'fastest'|'destroyer'|'takedowns'|'climber'|'toughest'|'nemesis'|'wheels'|'scrap'|'firestarter'|'roller';title:string;id:number;detail:string;victim?:number;value:number};
 export class EventAwards{
  private biggest:{attacker:number;victim:number;damage:number;time:number}|null=null;
  /** The fastest damaging hit (closing speed, m/s). */
@@ -18,13 +18,19 @@ export class EventAwards{
  private moments:EventMoment[]=[];
  private puddles=new Map<number,number>();
  private alight=new Map<number,number>();
- reset(){this.biggest=null;this.fastest=null;this.start=null;this.takedowns.clear();this.dealt.clear();this.stripping.clear();this.moments=[];this.puddles.clear();this.alight.clear();}
+ private rolls=new Map<number,number>();
+ reset(){this.biggest=null;this.fastest=null;this.start=null;this.takedowns.clear();this.dealt.clear();this.stripping.clear();this.moments=[];this.puddles.clear();this.alight.clear();this.rolls.clear();}
  /** A puddle of oil or fuel caught from this car's sparks or flames (spread included). */
  ignited(owner:number){if(Number.isInteger(owner)&&owner>=0)this.puddles.set(owner,(this.puddles.get(owner)??0)+1);}
  /** Flames lit by the attacker set the victim alight: a highlight and the firestarter's best credit. */
  setAlight(attacker:number,victim:number,time=0){
   if(!Number.isInteger(attacker)||attacker<0||attacker===victim)return;
   this.alight.set(attacker,(this.alight.get(attacker)??0)+1);this.moments.push({kind:'fire',attacker,victim,time:Number.isFinite(time)?time:0,score:34});
+ }
+ /** The attacker rolled the victim onto its roof: a highlight and the roll master's credit. */
+ rolled(attacker:number,victim:number,time=0){
+  if(!Number.isInteger(attacker)||attacker<0||attacker===victim)return;
+  this.rolls.set(attacker,(this.rolls.get(attacker)??0)+1);this.moments.push({kind:'hit',attacker,victim,time:Number.isFinite(time)?time:0,score:32,label:'ROLLOVER'});
  }
  /** A dramatic mechanical failure (a seized engine, a diff letting go, a brake fire) is a highlight moment of its own. */
  failure(car:number,label:string,time=0,score=26){
@@ -73,6 +79,8 @@ export class EventAwards{
   const scrap=best('parts');if(scrap&&scrap[1].parts>=3)out.push({key:'scrap',title:'SCRAP MERCHANT',id:scrap[0],value:scrap[1].parts,detail:`${scrap[1].parts} parts knocked off`});
   // Cars set alight count far more than puddles lit.
   const fire=[...new Set([...this.puddles.keys(),...this.alight.keys()])].map(id=>({id,...this.firesBy(id)})).filter(f=>f.cars>0||f.puddles>=3).sort((a,b)=>b.cars-a.cars||b.puddles-a.puddles||a.id-b.id)[0];
+  const roller=[...this.rolls].sort((a,b)=>b[1]-a[1]||a[0]-b[0])[0];
+  if(roller)out.push({key:'roller',title:'ROLL MASTER',id:roller[0],value:roller[1],detail:`rolled ${roller[1]} ${roller[1]===1?'car':'cars'}`});
   if(fire)out.push({key:'firestarter',title:'FIRESTARTER',id:fire.id,value:fire.cars*10+fire.puddles,detail:fire.cars?`set ${fire.cars} ${fire.cars===1?'car':'cars'} alight · ${fire.puddles} puddles lit`:`${fire.puddles} puddles lit`});
   if(mode==='race'&&this.start&&finishOrder.length){
    let bestId=-1,bestGain=0;
