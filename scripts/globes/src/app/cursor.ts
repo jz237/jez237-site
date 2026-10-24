@@ -17,7 +17,14 @@ export interface CursorHost {
 type CursorState = 'free' | 'press' | 'globe' | 'hold';
 
 /** How quickly the ring catches up with the pointer (1/s). */
-const FOLLOW_RATE = 24;
+const FOLLOW_RATE = 40;
+/** The drawn pointer can only move once per frame, so when frames come slower than this (s,
+ *  smoothed) for a while it gives way to the system's own pointer, which never lags; it returns
+ *  once frames are quick again. */
+const SLOW_FRAME = 0.034;
+const QUICK_FRAME = 0.022;
+const SLOW_AFTER = 1;
+const QUICK_AFTER = 3;
 /** Stretch per pixel the ring trails by, and the most it stretches. */
 const STRETCH_PER_PX = 0.006;
 const STRETCH_MAX = 0.28;
@@ -44,6 +51,10 @@ export class Cursor {
   /** Ctrl is held: a drag on the globe would turn it, not tip it. */
   private ctrl = false;
   private turn = false;
+  /** The system's pointer is showing instead (frames too slow for the drawn one). */
+  private native = false;
+  private frameTime = 0;
+  private stateFor = 0;
 
   constructor(private readonly host: CursorHost) {
     this.root = document.createElement('div');
@@ -82,6 +93,7 @@ export class Cursor {
 
   /** Per frame: the ring follows, and the pointer shows what it is over. */
   frame(dt: number): void {
+    this.watchFrames(dt);
     if (!this.shown) return;
     const a = 1 - Math.exp(-FOLLOW_RATE * dt);
     this.ringX += (this.x - this.ringX) * a;
@@ -109,6 +121,17 @@ export class Cursor {
       this.turn = turn;
       this.root.classList.toggle('is-turn', turn);
     }
+  }
+
+  private watchFrames(dt: number): void {
+    this.frameTime = this.frameTime === 0 ? dt : this.frameTime + (dt - this.frameTime) * 0.1;
+    const wrong = this.native ? this.frameTime < QUICK_FRAME : this.frameTime > SLOW_FRAME;
+    this.stateFor = wrong ? this.stateFor + dt : 0;
+    if (this.stateFor < (this.native ? QUICK_AFTER : SLOW_AFTER)) return;
+    this.stateFor = 0;
+    this.native = !this.native;
+    this.root.classList.toggle('is-native', this.native);
+    document.documentElement.classList.toggle('custom-cursor', !this.native);
   }
 
   private show(on: boolean): void {
