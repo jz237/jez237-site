@@ -17,5 +17,5 @@ test('the damage diagram marks the empty battery tray in the engine bay, front o
  assert.ok(!svg({}).includes('dd-battery-out'));
  const main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');
  assert.ok(main.includes('throttleCable:p.throttleCable,handbrakeCable:p.handbrakeCable,batteryOut:p.batteryOut,'),'in the end-of-event report');
- assert.ok(main.includes('throttleCable:player.throttleCable,handbrakeCable:player.handbrakeCable,batteryOut:player.batteryOut}'),'on the live diagram');
+ assert.ok(main.includes('throttleCable:player.throttleCable,handbrakeCable:player.handbrakeCable,batteryOut:player.batteryOut'),'on the live diagram');
 });

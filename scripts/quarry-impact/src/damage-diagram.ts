@@ -17,7 +17,9 @@ export type DiagramState={
     /** Anti-roll bars front/rear (0 = snapped), propshaft state, wheel-bearing wear per wheel, fan belt and battery, short steering lock (signed). */
     rollBar?:ArrayLike<number>;propshaft?:'bent'|'snapped'|null;bearings?:ArrayLike<number>;belt?:'slipping'|'snapped'|null;battery?:number;steerSkew?:number;
     /** The fuel tank dragging on its neck or torn off, parted throttle and handbrake cables, and the battery thrown out. */
-    tank?:'down'|'gone'|null;throttleCable?:boolean;handbrakeCable?:boolean;batteryOut?:boolean};
+    tank?:'down'|'gone'|null;throttleCable?:boolean;handbrakeCable?:boolean;batteryOut?:boolean;
+    /** A rod thrown through the block, and the tyres alight (a brake fire or a rubbing tyre), 1 per burning wheel. */
+    rodThrown?:boolean;tyresAlight?:ArrayLike<number>};
 };
 export type PartState='ok'|'loose'|'gone';
 const clamp01=(v:number)=>Math.max(0,Math.min(1,Number.isFinite(v)?v:0));
@@ -85,6 +87,11 @@ function faults(state:DiagramState){
   // The battery thrown out: an empty crossed-out box in the engine bay where it sat (dark, to show on any zone colour).
   if(f.batteryOut){const by=state.rearEngine?86:20;out+=`<rect class="dd-battery-out" x="16" y="${by}" width="6" height="4" rx=".6" fill="none" stroke="#141210" stroke-width=".8" stroke-dasharray=".9 .8"/><path d="M16 ${by} L22 ${by+4} M22 ${by} L16 ${by+4}" stroke="#141210" stroke-width=".7"/>`;}
   if(f.handbrakeCable)out+=`<path class="dd-handbrake-cable" d="M26.5 62 L26.5 70 M26.5 73 L26.5 81" stroke="${DIAGRAM_COLORS[3]}" stroke-width="1.1" stroke-linecap="round"/>`;
+  // Tyres on fire: a flame beside each burning wheel.
+  if(f.tyresAlight)WHEEL_AT.forEach(([x,y],i)=>{if(!f.tyresAlight![i])return;const cx=x<30?2.6:57.4,cy=y+8;
+    out+=`<path class="dd-tyre-fire" d="M${cx} ${cy+3.5} Q${cx-2.3} ${cy} ${cx} ${cy-3.5} Q${cx+2.3} ${cy} ${cx} ${cy+3.5} Z" fill="#ff8a1a"/><path d="M${cx} ${cy+2.5} Q${cx-1} ${cy+.5} ${cx} ${cy-1.2} Q${cx+1} ${cy+.5} ${cx} ${cy+2.5} Z" fill="#ffd34a"/>`;});
+  // A rod through the block: a crack across the engine and the chunk it threw out.
+  if(f.rodThrown){const ey=state.rearEngine?90:20;out+=`<path class="dd-rod" d="M27.4 ${ey-3} L30.4 ${ey-.6} L28.8 ${ey+.8} L32.4 ${ey+3.4}" stroke="${DIAGRAM_COLORS[3]}" stroke-width=".9" fill="none" stroke-linejoin="round"/><circle class="dd-rod-chunk" cx="35" cy="${ey-4.2}" r="1.1" fill="#141210" stroke="${DIAGRAM_COLORS[3]}" stroke-width=".45"/>`;}
   if(f.exhaustGone)out+=`<line class="dd-exhaust-gone" x1="${state.rearEngine?36:24}" y1="104" x2="${state.rearEngine?36:24}" y2="109" stroke="${DIAGRAM_COLORS[3]}" stroke-width="1.2" stroke-dasharray="1.2 1"/>`;
   return out;
 }

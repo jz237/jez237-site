@@ -1,6 +1,7 @@
+import {restoreDiagramRodFireBytes} from './diagram-rod-fire-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readRattleClipsPrevious,restoreRattleClipsBytes,verifyRattleClipsRevision} from './rattle-clips-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreDiagramRodFireBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('RattleClips preserves every prior fixture, vehicle asset, venue art and history input',verifyRattleClipsRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/rattle-clips/revision.json').toString());
