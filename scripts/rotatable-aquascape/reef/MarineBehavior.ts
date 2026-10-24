@@ -25,6 +25,8 @@ export const marineBehavior:Record<MarineSpecies,MarineBehavior>={
  bispinosa:{cruiseBL:[.35,.8],burstBL:2.6,finHz:2.4,tailHz:1.3,rest:[.6,1.6],restChance:.5,night:.35,turnRate:2.4,curve:1.2,wave:.7,perceptionBL:3.6,stroke:[.8,2],coast:[.4,.9],schooling:null},
  loricula:{cruiseBL:[.35,.8],burstBL:2.6,finHz:2.4,tailHz:1.3,rest:[.6,1.6],restChance:.5,night:.35,turnRate:2.4,curve:1.2,wave:.7,perceptionBL:3.6,stroke:[.8,2],coast:[.4,.9],schooling:null},
  hexataenia:{cruiseBL:[.5,1.1],burstBL:3.2,finHz:2.9,tailHz:1.5,rest:[.3,.9],restChance:.45,night:.3,turnRate:3,curve:1.5,wave:.8,perceptionBL:3.4,stroke:[.5,1.4],coast:[.3,.7],schooling:null},
+ // A butterflyfish that roams a little more than the golden butterflyfish.
+ auriga:{cruiseBL:[.4,.82],burstBL:1.9,finHz:1.85,tailHz:.9,rest:[1.2,3.2],restChance:.55,night:.4,turnRate:1.75,curve:1,wave:.85,perceptionBL:3.8,stroke:[1.4,3.4],coast:[.6,1.3],schooling:null},
  cinctus:{cruiseBL:[.3,.7],burstBL:3,finHz:2.2,tailHz:1.6,rest:[3,8],restChance:.9,night:.5,turnRate:2,curve:1.4,wave:1,perceptionBL:3.2,stroke:[.4,.9],coast:[.5,1.2],schooling:null},
 };
 /** Species habits beyond the shared swimming profile. Species without an entry
@@ -49,10 +51,12 @@ export const marineHabits:Partial<Record<MarineSpecies,MarineHabits>>={
  // Blue tangs scrape algae from rock and take drifting plankton; meeting other
  // tangs they spar with brief broadside displays.
  tang:{graze:{chance:.5,bites:[2,5],interval:[.6,1.2],stroke:.3,surface:'rock'},plankton:{interval:[7,15],reach:[.3,.7]},rivals:['tang','rostratum','strigosus'],display:'broadside',displayCooldown:[30,55]},
+ // Threadfin butterflyfish pick worms, crustaceans, polyps and algae from rock and coral alike.
+ auriga:{graze:{chance:.72,bites:[3,6],interval:[.65,1.3],stroke:.3,labels:['inspecting the reef','picking at the reef']}},
  // Golden butterflyfish work slowly over coral heads, nipping polyps.
  semilarvatus:{graze:{chance:.75,bites:[3,6],interval:[.75,1.5],stroke:.3,surface:'coral',labels:['inspecting coral','picking at coral']}},
  // Clownfish charge fish that come into their anemone, then return to it.
- clown:{rivals:['tang','rostratum','semilarvatus','anthias','chromis','gramma','strigosus','vulpinus','bispinosa','loricula','hexataenia'],display:'chase',displayGap:.3,displayCooldown:[14,28],guard:1.1,chaseLabel:'defending its anemone'},
+ clown:{rivals:['tang','rostratum','semilarvatus','anthias','chromis','gramma','strigosus','vulpinus','bispinosa','loricula','hexataenia','auriga'],display:'chase',displayGap:.3,displayCooldown:[14,28],guard:1.1,chaseLabel:'defending its anemone'},
  // Anthias and chromis hover near the reef and strike single drifting prey.
  anthias:{plankton:{interval:[2.2,5.5],reach:[.4,.9]}},
  chromis:{plankton:{interval:[3,8],reach:[.35,.8]}},

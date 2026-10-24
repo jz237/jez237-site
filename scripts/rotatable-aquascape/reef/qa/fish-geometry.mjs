@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import * as T from 'three';
 const metadata=JSON.parse(fs.readFileSync(new URL('../assets/fish/model-info.json',import.meta.url)));
-const species=['tang','rostratum','semilarvatus','clown','anthias','chromis','gramma','goby','strigosus','vulpinus','bispinosa','loricula','hexataenia','cinctus'];
+const species=['tang','rostratum','semilarvatus','clown','anthias','chromis','gramma','goby','strigosus','vulpinus','bispinosa','loricula','hexataenia','cinctus','auriga'];
 let totalTriangles=0;
 for(const s of species){
  const buffer=fs.readFileSync(new URL(`../assets/fish/${s}.glb`,import.meta.url));assert.equal(buffer.readUInt32LE(0),0x46546c67);assert.equal(buffer.readUInt32LE(4),2);
@@ -14,14 +14,16 @@ for(const s of species){
  const bodyImage=imageFor(bodyPrimitive);
  const nodes=gltf.nodes.map(n=>n.name);assert.ok(nodes.includes(s+'__body'));assert.equal(nodes.filter(n=>n.startsWith(s+'__gill')).length,2);assert.equal(nodes.filter(n=>n.startsWith(s+'__pectoral')).length,2);
  if(s==='goby'){assert.equal(metadata[s].reference,'mandarin.png');assert.equal(nodes.filter(n=>n.startsWith(s+'__pelvic')).length,2,'mandarin has two independent pelvic fans');}
- if(['strigosus','vulpinus','bispinosa','loricula','hexataenia','cinctus'].includes(s)){assert.equal(metadata[s].reference,s+'.png');assert.equal(nodes.filter(n=>n.startsWith(s+'__pelvic')).length,2,s+' has independent paired pelvic fins');}
+ if(['strigosus','vulpinus','bispinosa','loricula','hexataenia','cinctus','auriga'].includes(s)){assert.equal(metadata[s].reference,s+'.png');assert.equal(nodes.filter(n=>n.startsWith(s+'__pelvic')).length,2,s+' has independent paired pelvic fins');}
  if(s==='rostratum'){assert.equal(metadata[s].reference,'rostratum.png');assert.equal(nodes.filter(n=>n.startsWith(s+'__pelvic')).length,2,'black tang has independent paired pelvic fins');}
  if(s==='semilarvatus'){assert.equal(metadata[s].reference,'semilarvatus.png');assert.equal(nodes.filter(n=>n.startsWith(s+'__pelvic')).length,2,'butterflyfish retains independent paired pelvic fins');assert.ok(!metadata.yellow,'the retired yellow tang is not an active species');}
  // Median fins of the gallery species must stay attached to the body: along
  // the anal fin, its highest vertex reaches the belly at every sampled x.
- if(['rostratum','strigosus','vulpinus','bispinosa','loricula','hexataenia','cinctus'].includes(s)){
+ if(['rostratum','strigosus','vulpinus','bispinosa','loricula','hexataenia','cinctus','auriga'].includes(s)){
   const verts=name=>{const p=read(gltf.meshes.find(m=>m.name===name).primitives[0].attributes.POSITION),out=[];for(let i=0;i<p.length;i+=3)out.push([p[i],p[i+1]]);return out;};
-  const body=verts(s+'__body'),anal=verts(s+'__fin_2'),xs=anal.map(v=>v[0]),lo=Math.min(...xs)+.01,hi=Math.min(Math.max(...xs),.3)-.01;
+  // The threadfin's soft anal lobe overhangs open water above the peduncle
+  // (analOver); measure attachment forward of that lobe.
+  const body=verts(s+'__body'),anal=verts(s+'__fin_2'),xs=anal.map(v=>v[0]),lo=Math.max(Math.min(...xs)+.01,s==='auriga'?-.4:-Infinity),hi=Math.min(Math.max(...xs),.3)-.01;
   for(let k=0;k<=20;k++){const x=lo+(hi-lo)*k/20,near=(list)=>list.filter(v=>Math.abs(v[0]-x)<.006).map(v=>v[1]),b=near(body),f=near(anal);
    if(b.length&&f.length)assert.ok(Math.min(...b)-Math.max(...f)<.005,`${s} anal fin attached to the belly at x=${x.toFixed(2)}`);}
  }

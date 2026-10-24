@@ -3,7 +3,7 @@ import {bodyEdge,finField} from './MarineFinFlex.ts';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 import metadata from './assets/fish/model-info.json';
-export type MarineSpecies='tang'|'rostratum'|'semilarvatus'|'clown'|'anthias'|'chromis'|'gramma'|'goby'|'strigosus'|'vulpinus'|'bispinosa'|'loricula'|'hexataenia'|'cinctus';
+export type MarineSpecies='tang'|'rostratum'|'semilarvatus'|'clown'|'anthias'|'chromis'|'gramma'|'goby'|'strigosus'|'vulpinus'|'bispinosa'|'loricula'|'hexataenia'|'cinctus'|'auriga';
 const urls:Record<MarineSpecies,string>={
  tang:new URL('./assets/fish/tang.glb',import.meta.url).href,
  rostratum:new URL('./assets/fish/rostratum.glb',import.meta.url).href,
@@ -18,10 +18,11 @@ const urls:Record<MarineSpecies,string>={
  bispinosa:new URL('./assets/fish/bispinosa.glb',import.meta.url).href,
  loricula:new URL('./assets/fish/loricula.glb',import.meta.url).href,
  hexataenia:new URL('./assets/fish/hexataenia.glb',import.meta.url).href,
+ auriga:new URL('./assets/fish/auriga.glb',import.meta.url).href,
  cinctus:new URL('./assets/fish/cinctus.glb',import.meta.url).href
 };
 /** Gallery options, downloaded only when a visitor first adds one. */
-export const optionalMarineSpecies:MarineSpecies[]=['strigosus','vulpinus','bispinosa','loricula','hexataenia','cinctus'];
+export const optionalMarineSpecies:MarineSpecies[]=['strigosus','vulpinus','bispinosa','loricula','hexataenia','cinctus','auriga'];
 /** Tangent-space normals for small imbricate scales, laid out over the whole
  * reference plate at half resolution: offset rows of scales whose free rear
  * margin (toward the tail, -u) stands above the scale behind it. Relief fades
@@ -164,7 +165,26 @@ export async function loadMarineModels(species:MarineSpecies[]=baseMarineSpecies
      }
     }
    }
-   if(label.startsWith('fin')&&(species==='vulpinus'||species==='bispinosa'||species==='loricula'||species==='strigosus')){
+   if(species==='auriga'){
+    if(label.startsWith('eye')){
+     // A wet, rounded dark eye inside the black eye band, with a crisp highlight.
+     material.color.setScalar(1);material.roughness=.12;material.clearcoat=.55;material.clearcoatRoughness=.05;material.envMapIntensity=.28;
+    }else{
+     // Silvery-white flanks and golden fins: a little more reflected light than
+     // the default so the white reads white and the yellow stays golden under
+     // the blue-white reef light. Fine scales (about 10 plate px) in shallow
+     // relief and a cool silver sheen on the skin.
+     material.color.setScalar(.84);
+     // Nearly clear pectoral fans: the striped flank shows through them.
+     if(label.startsWith('pectoral'))material.opacity=.55;
+     if((label==='body'||label.startsWith('gill'))&&material.map){
+      const {width,height}=material.map.image as {width:number;height:number},tile=scaleNormalTile(16);
+      tile.repeat.set(width/(16*10),height/(16*10));material.normalMap=tile;material.normalScale.set(.09,.09);
+      material.roughness=.5;material.sheen=.25;material.sheenRoughness=.4;material.sheenColor.set('#8c96aa');
+     }
+    }
+   }
+   if(label.startsWith('fin')&&(species==='vulpinus'||species==='bispinosa'||species==='loricula'||species==='strigosus'||species==='auriga')){
     // Unpaired fins centred in the peduncle (finDepth 0): at the export's 0.9
     // opacity the dark water dimmed the tail fin against the body and left a
     // seam where they meet. They still draw after the body, as before.
