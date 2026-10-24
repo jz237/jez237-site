@@ -31,6 +31,11 @@ export function doorRest(base:number,side:number,forward:number,lateral:number,s
 export const doorDrag=(angle:number,speed:number)=>DOOR_SWING.drag*speed*speed*Math.max(0,Math.sin(clamp(angle,0,Math.PI/2)));
 /** Has this door's latch gone, and the angle it hangs ajar at. */
 export const doorUnlatched=(loose:number,damage:number)=>loose>=DOOR_SWING.latch||damage>=DOOR_SWING.latchDamage;
+/** Rolled over (offline): the shell twists and the latches let go. Each door, boot lid or tailgate still latched springs on a roll
+ * ROLL_POP.chance of the time (its dice): its latch broken (damage up to DOOR_SWING.latchDamage) and kicked open at ROLL_POP.kick
+ * rad/s, after which it swings like any sprung door, there to be caught by a passing car. */
+export const ROLL_POP={chance:.5,kick:3} as const;
+export const rollPops=(seed:number)=>Number.isFinite(seed)&&((seed*.6180339887+.31)%1+1)%1<ROLL_POP.chance;
 export const doorBase=(loose:number)=>Math.max(DOOR_SWING.ajar,loose*.075);
 /** Caught open (offline events): a door swung out past DOOR_CATCH.open that meets another car, a wall or a prop along its
  * length is torn off its hinges. */
