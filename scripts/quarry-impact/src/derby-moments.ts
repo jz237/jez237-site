@@ -37,8 +37,13 @@ export const FINAL_FOUR={toast:2.2} as const;
 export const finalFour=(before:number,now:number)=>Number.isFinite(before)&&before>=5&&now===4;
 export const finalFourBanner=(playerIn:boolean)=>playerIn?`FINAL FOUR · YOU'RE STILL IN IT`:'FINAL FOUR';
 /** Destruction points (offline scored derbies), credited to the driver who did it. */
-export const DESTRUCTION_POINTS={engine:40,rolled:30,pit:15,wing:10,door:10,burnt:35,pin:20} as const;
+export const DESTRUCTION_POINTS={engine:40,rolled:30,pit:15,wing:10,door:10,burnt:35,pin:20,slam:15} as const;
 /** Rolled (offline): a car that has stayed upside down for ROLLED.sustain seconds within ROLLED.window of being hit was rolled by
  * that hitter. Once per roll: it counts again only after the car has been back on its wheels. */
 export const ROLLED={sustain:.3,window:2.5} as const;
 export const rolledBy=(inverted:number,armed:boolean,hit:{by:number;at:number}|undefined,time:number)=>armed&&Number.isFinite(inverted)&&inverted>=ROLLED.sustain&&!!hit&&time-hit.at>=0&&time-hit.at<=ROLLED.window?hit.by:-1;
+/** Wall slam (offline): damage a car takes from the scenery within SLAM.window seconds of a rival's damaging hit is credited
+ * to that rival (wreck included); SLAM.big health or more of it is called a WALL SLAM. */
+export const SLAM={window:2,big:8} as const;
+export const slamBy=(last:{by:number;at:number}|undefined,victim:number,time:number)=>!last||last.by<0||last.by===victim||!(time-last.at>=0&&time-last.at<=SLAM.window)?-1:last.by;
+export const isSlam=(lost:number)=>Number.isFinite(lost)&&lost>=SLAM.big;

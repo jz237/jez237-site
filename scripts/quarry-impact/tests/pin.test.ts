@@ -29,6 +29,7 @@ test('the pin clock counts up while held and bleeds off faster once free, so a f
  for(let i=0;i<60;i++)t=pinClock(t,false,1/60);assert.equal(t,0);
  assert.equal(pinClock(NaN,true,1/60),0);assert.equal(pinClock(.4,true,0),0);
  assert.ok(PIN.wall>0&&PIN.wall<1&&PIN.gap>0);
+ assert.ok(PIN.feed>PIN.hold,'only a pin held a while longer makes the derby feed');
  assert.ok(bodyworkDentDamage(PIN.rate*PIN.gap*PIN.wall)>0,'every tick dents the panels, even on the wall side');
  const structure=[0,0,0,0,0];accumulateStructure(structure,'sedan',{x:0,y:.5,z:-2.2},{x:0,y:0,z:1},PIN.rate*PIN.gap*PIN.wall);assert.ok(structure[1]>0,'and crumples the structure');
 });

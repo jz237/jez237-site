@@ -27,7 +27,7 @@ import {showVenueBrowser,selectVenue,selectDemoVenue} from './venue-browser';
 import {readCameraSettings,playerChaseComposition,mountCameraSettings} from './camera-settings';
 import {ScreenCraze,trackCraze,hull,type CrazeState} from './screen-craze';
 import {speedFov,smoothAccel,roadBuzz} from './speed-feel';
-import {FINAL_TWO,finalTwo,finalTwoBanner,revenge,takedownChain,comboLabel,revengeReady,lastGasp,strippedLabel,STRIPPED,FINAL_FOUR,finalFour,finalFourBanner,rolledBy,DESTRUCTION_POINTS} from './derby-moments';
+import {FINAL_TWO,finalTwo,finalTwoBanner,revenge,takedownChain,comboLabel,revengeReady,lastGasp,strippedLabel,STRIPPED,FINAL_FOUR,finalFour,finalFourBanner,rolledBy,DESTRUCTION_POINTS,slamBy,isSlam} from './derby-moments';
 import {wreckCause} from './wreck-cause';
 import {frenzyFactor} from './derby-driving';
 import {syncInterval,syncDue} from './vehicle-draw-batch';
@@ -982,7 +982,7 @@ async function start(watch=demo) {
     camera.position.copy(cars[0].current).add(new T.Vector3(0, 4, -8));
     hud();
     sound.pause(false);
-    eventAwards.reset();playerTopSpeed=0;derbyAliveBefore=0;revengeSettled.clear();takedownCombo=0;playerStripped=0;strippedNoted.clear();pinNoted.clear();wreckCauses.clear();lastHitBy.clear();rollArmed.clear();wreckedBy.clear();alightBy.clear();lastTakedownAt=-1e9;bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
+    eventAwards.reset();playerTopSpeed=0;derbyAliveBefore=0;revengeSettled.clear();takedownCombo=0;playerStripped=0;strippedNoted.clear();pinNoted.clear();pinFed.clear();wallSlams=0;wreckCauses.clear();lastHitBy.clear();rollArmed.clear();wreckedBy.clear();alightBy.clear();lastTakedownAt=-1e9;bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
     beginReplay();
     if(preparationInterrupted||document.hidden)pause();
     return true;
@@ -1095,22 +1095,25 @@ const lastHitBy=new Map<number,{by:number;at:number}>(),rollArmed=new Set<number
 const wreckedBy=new Map<number,number>();
 /** Who set each car alight (offline), to credit a burn-out. */
 const alightBy=new Map<number,number>();
-/** Cars the derby feed has already called PINNED this time they were held (cleared once a car is free again). */
-const pinNoted=new Set<number>();
+/** WALL SLAMs credited this event (offline QA counter). */
+let wallSlams=0;
+/** Cars already counted as pinned, and already called PINNED in the derby feed, this time they were held (cleared once free). */
+const pinNoted=new Set<number>(),pinFed=new Set<number>();
 /** Pinned (offline): a car shoved hard against a wall or a second car crushes in at both contacts while it is held there,
  * credited to the car doing the shoving. */
 function pinCars(contacts:readonly {a?:Vehicle;b?:Vehicle;point1:T.Vector3;point2:T.Vector3;normal:T.Vector3;impulse:number}[],dt:number){
   const scale=collisionDamageMultiplier(mode==='race'&&!bangerRace(),damageRule());
   for(const c of cars){
-    if(c.health<=0||!c.extendedDamage){c.pinTime=c.pinTick=0;pinNoted.delete(c.id);continue;}
+    if(c.health<=0||!c.extendedDamage){c.pinTime=c.pinTick=0;pinNoted.delete(c.id);pinFed.delete(c.id);continue;}
     const pushes:PinPush[]=[],points:T.Vector3[]=[];
     for(const k of contacts){const mine=k.a===c?k.point1:k.b===c?k.point2:null;if(!mine||Math.abs(k.normal.y)>.6)continue;
       const other=k.a===c?k.b:k.a;pushes.push({x:mine.x,z:mine.z,force:k.impulse/dt,by:other?other.id:-1});points.push(mine);}
     const pin=pinnedBy(c.current.x,c.current.z,pushes);c.pinTime=pinClock(c.pinTime,!!pin,dt);
-    if(c.pinTime===0){c.pinTick=0;pinNoted.delete(c.id);}
+    if(c.pinTime===0){c.pinTick=0;pinNoted.delete(c.id);pinFed.delete(c.id);}
     const by=pin&&c.pinTime>=PIN.hold?cars.find(v=>v.id===pushes[pin.push].by):undefined;if(!pin||!by)continue;
+    if(mode==='derby'&&c.pinTime>=PIN.feed&&!pinFed.has(c.id)){pinFed.add(c.id);derbyFeed.note(by.id,displayedDriver(by),'pinned',elapsed);}
     if(!pinNoted.has(c.id)){pinNoted.add(c.id);c.pins++;
-      if(mode==='derby'){derbyFeed.note(by.id,displayedDriver(by),'pinned',elapsed);if(scoreDerby())combat.destruction(by.id,DESTRUCTION_POINTS.pin);}
+      if(scoreDerby())combat.destruction(by.id,DESTRUCTION_POINTS.pin);
       if(!demo&&by.id===0){toast(`PINNED · #${c.id+1} ${DEFINITIONS[c.kind].name}`+pointsTag(DESTRUCTION_POINTS.pin),2,2);sound.crowd(.8);}
       else if(!demo&&c.id===0)toast(`PINNED BY #${by.id+1} ${DEFINITIONS[by.kind].name}`,2,2);}
     c.pinTick+=dt;if(c.pinTick<PIN.gap||!(scale>0))continue;c.pinTick-=PIN.gap;
@@ -1728,6 +1731,14 @@ function step(dt: number) {
     if(!online?.active)for(const [car,was] of [[a,engineInA],[b,engineInB]] as const)if(car&&was&&car.engineOut)eventAwards.failure(car.id,'ENGINE OUT',elapsed,34);
     if(!online?.active&&!demo)for(const [car,was,other] of [[a,engineInA,b],[b,engineInB,a]] as const)if(car&&was&&car.engineOut&&(car.id===0||other?.id===0)){toast(car.id===0?'ENGINE OUT':`ENGINE OUT · #${car.id+1} ${DEFINITIONS[car.kind].name}`+pointsTag(DESTRUCTION_POINTS.engine),2.6,3);sound.crowd(1);crowdFlashes(SMASH_FLASHES);}
     if(damage>0&&a&&b){lastHitBy.set(a.id,{by:b.id,at:elapsed});lastHitBy.set(b.id,{by:a.id,at:elapsed});}
+    // Wall slam: a car knocked into the scenery just after a rival hit it; the rival is credited with that damage (offline).
+    if(!online?.active&&!!a!==!!b){const victim=(a??b)!,lost=a?smashLoss.a:smashLoss.b,by=slamBy(lastHitBy.get(victim.id),victim.id,elapsed),attacker=by>=0?cars.find(c=>c.id===by):undefined;
+      if(attacker&&lost>0){const after=victim.health,before=after+lost;attacker.inflicted+=lost;
+        const wreck=eventAwards.hit(attacker.id,victim.id,lost,before>0&&after<=0,elapsed,0);combat.hit(attacker.id,victim.id,before,after,elapsed);
+        if(wreck){wreckedBy.set(victim.id,attacker.id);sound.crowd(attacker.id===0?1:.7);if(attacker.id===0&&!demo){callout('TAKEDOWN',victim);playerTakedown();}}
+        if(isSlam(lost)){wallSlams++;if(mode==='derby'){derbyFeed.note(attacker.id,displayedDriver(attacker),'slam',elapsed);if(scoreDerby())combat.destruction(attacker.id,DESTRUCTION_POINTS.slam);}
+          if(!demo&&attacker.id===0){toast(`WALL SLAM · #${victim.id+1} ${DEFINITIONS[victim.kind].name}`+pointsTag(DESTRUCTION_POINTS.slam),1.8,2);sound.crowd(.8);}
+          else if(!demo&&victim.id===0)toast(`SLAMMED BY #${attacker.id+1} ${DEFINITIONS[attacker.kind].name}`,1.8,2);}}}
     // The derby feed credits whoever dropped an engine, tore a wing off or PITed a rival (offline).
     if(!online?.active&&mode==='derby'&&a&&b)for(const [victim,attacker,pits,wings,engineWas] of [[a,b,pitsA,wingsA,engineInA],[b,a,pitsB,wingsB,engineInB]] as const){
       const score=(points:number)=>{if(scoreDerby())combat.destruction(attacker.id,points);};
@@ -2420,7 +2431,7 @@ async function boot() {
         p95: times[Math.floor(times.length * 0.95)],
         audio: sound.buffers.size,
         activeParticles: fx.particles.filter(p=>p.life>0).length,
-        debris: fx.debris.length, debrisAt: fx.debris.map(d=>{const p=d.body.translation();return [+p.x.toFixed(2),+p.y.toFixed(2),+p.z.toFixed(2),+d.body.mass().toFixed(1),+d.age.toFixed(2)];}),
+        debris: fx.debris.length, wallSlams, debrisAt: fx.debris.map(d=>{const p=d.body.translation();return [+p.x.toFixed(2),+p.y.toFixed(2),+p.z.toFixed(2),+d.body.mass().toFixed(1),+d.age.toFixed(2)];}),
         voices: sound.activeVoices,
         loops: sound.loops.size,
         thermal: vehicleFire?.stats,
