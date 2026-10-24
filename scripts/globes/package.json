@@ -18,6 +18,7 @@
     "dev": "electron .",
     "web": "vite",
     "build": "tsc --noEmit && vite build",
+    "build:betta": "tsc --noEmit && vite build --mode betta",
     "start": "npm run build && GLOBES_DIST=1 electron .",
     "typecheck": "tsc --noEmit"
   },
