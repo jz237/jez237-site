@@ -90,6 +90,11 @@ export function clutchGrip(engineEnd:number,burnt=0){
   const c=clamp01(engineEnd),b=clamp01(burnt);
   return Math.max(CLUTCH.floor,1-(1-CLUTCH.min)*clamp01((c-CLUTCH.onset)/CLUTCH.span)-b);
 }
+/** Pushing burns the clutch (offline): holding PUSH_BURN.throttle or more against a car that will not move (pinning it, under
+ * PUSH_BURN.speed m/s) cooks the clutch PUSH_BURN.rate a second, so long or repeated pins leave the pusher's clutch slipping at
+ * full throttle once its burnt grip falls under 1/CLUTCH.margin. */
+export const PUSH_BURN={throttle:.8,speed:2,rate:.02} as const;
+export const pushBurn=(throttle:number,speed:number,dt:number)=>Number.isFinite(throttle)&&Number.isFinite(speed)&&dt>0&&Math.abs(throttle)>=PUSH_BURN.throttle&&Math.abs(speed)<PUSH_BURN.speed?PUSH_BURN.rate*dt:0;
 /** The clutch slips when the throttle asks for more torque than it can carry (a stock clutch carries 1.25× peak). */
 export const clutchSlips=(grip:number,throttle:number)=>grip<1&&Math.abs(Number.isFinite(throttle)?throttle:0)>grip*CLUTCH.margin;
 /** Drive force fraction a slipping clutch passes in the simple kernel: exactly 1 on a sound clutch. */
