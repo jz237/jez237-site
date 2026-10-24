@@ -100,6 +100,7 @@ import {eventGridSetup,eventPerformanceGrid} from './grid-setup';
 import {gridCarKind,gridRecordKey,GRID_LINEUPS,GRID_PERFORMANCE} from './grid-rules';
 import {timedRaceLimit,timedRaceFinished,timedRaceOrder,timedRaceResult,timedRaceRecordScore} from './timed-race';
 import {RaceRecovery,freeRecoverySlot} from './race-recovery';
+import {RIDE,ON_TOP,rammer,ridesUp,alongCar,crushedFace} from './ride-up';
 import {stallHint,MAX_ENGINE_RESTART} from './engine-stall';
 import {PursuitSession} from './pursuit';
 import {PursuitDriving} from './pursuit-driving';
@@ -985,7 +986,7 @@ async function start(watch=demo) {
     camera.position.copy(cars[0].current).add(new T.Vector3(0, 4, -8));
     hud();
     sound.pause(false);
-    eventAwards.reset();playerTopSpeed=0;derbyAliveBefore=0;revengeSettled.clear();takedownCombo=0;playerStripped=0;strippedNoted.clear();pinNoted.clear();pinFed.clear();pinCounted.clear();pinScoring.clear();pinEscapes=0;sandwiches=0;wallSlams=0;finalStuntsCalled=false;mirrorsClipped=0;bumpStarts=0;aiBurn.clear();aiFireOuts=0;dominoes=0;knockedBy.clear();tankBy.clear();targetToastAt=-Infinity;clearLocks();pileUp.reset();pileUps=biggestPileUp=0;wreckCauses.clear();lastHitBy.clear();rollArmed.clear();wreckedBy.clear();alightBy.clear();lastTakedownAt=-1e9;bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
+    eventAwards.reset();playerTopSpeed=0;derbyAliveBefore=0;revengeSettled.clear();takedownCombo=0;playerStripped=0;strippedNoted.clear();pinNoted.clear();pinFed.clear();pinCounted.clear();pinScoring.clear();pinEscapes=0;sandwiches=0;wallSlams=0;finalStuntsCalled=false;mirrorsClipped=0;bumpStarts=0;aiBurn.clear();aiFireOuts=0;rideAt.clear();rideUps=0;onTop.clear();mounts=0;dominoes=0;knockedBy.clear();tankBy.clear();targetToastAt=-Infinity;clearLocks();pileUp.reset();pileUps=biggestPileUp=0;wreckCauses.clear();lastHitBy.clear();rollArmed.clear();wreckedBy.clear();alightBy.clear();lastTakedownAt=-1e9;bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
     beginReplay();
     if(preparationInterrupted||document.hidden)pause();
     return true;
@@ -1213,6 +1214,7 @@ const tankBy=new Map<number,number>();
 /** Wing mirrors clipped off by passing cars this event (offline QA counter). */
 let mirrorsClipped=0;
 let bumpStarts=0;
+const rideAt=new Map<number,number>();let rideUps=0;const onTop=new Map<number,{t:number;dent:number;credited:boolean}>();let mounts=0;
 const aiBurn=new Map<number,number>();let aiFireOuts=0;
 /** DOMINOs credited this event (offline QA counter), and who last knocked each car with a real hit, and when. */
 let dominoes=0;const knockedBy=new Map<number,{by:number;at:number}>();
@@ -1843,6 +1845,19 @@ function step(dt: number) {
     if(by&&mode==='derby'){derbyFeed.note(by.id,displayedDriver(by),'burnt',elapsed);if(scoreDerby())scoreStunt(by.id,DESTRUCTION_POINTS.burnt);}
     if(by?.id===0&&!demo)toast(`BURNT OUT · #${c.id+1} ${DEFINITIONS[c.kind].name}`+pointsTag(DESTRUCTION_POINTS.burnt),2,2);}
   for(const c of cars)if(c.health<=0)causeOf(c);
+  // A car sitting on top of another (after a ride-up) crushes it under its weight; the one on top is credited once (offline).
+  if(!online?.active)for(const s of cars){if(!s.extendedDamage||s.health<=0||s.inverted>0)continue;
+    for(const o of cars){if(o===s||!o.extendedDamage||o.health<=0)continue;const key=s.id*64+o.id;
+      const up=s.current.y-o.current.y,apart=Math.hypot(s.current.x-o.current.x,s.current.z-o.current.z);
+      if(!(up>ON_TOP.above&&apart<ON_TOP.reach)){onTop.delete(key);continue;}
+      const st=onTop.get(key)??{t:0,dent:0,credited:false};st.t+=dt;st.dent+=dt;onTop.set(key,st);
+      const face=crushedFace(alongCar(s.current,o.current,o.forward,DEFINITIONS[o.kind].halfLength));
+      if(o.structuralDamage)o.structuralDamage[face]=Math.min(1,o.structuralDamage[face]+ON_TOP.crush*dt);
+      if(st.dent>=ON_TOP.dent){st.dent=0;const under=s.current.clone();under.y-=.35;o.hit(under,new T.Vector3(0,-1,0),ON_TOP.dentDamage,elapsed,true);lastHitBy.set(o.id,{by:s.id,at:elapsed});}
+      if(st.t>=ON_TOP.credit&&!st.credited){st.credited=true;mounts++;
+        if(s.id===0&&!demo){toast(`ON TOP · #${o.id+1} ${DEFINITIONS[o.kind].name}`+pointsTag(DESTRUCTION_POINTS.ontop),2,2);sound.crowd(.8);crowdFlashes(SMASH_FLASHES);}
+        else if(o.id===0&&!demo){toast(`#${s.id+1} IS ON TOP OF YOU · ROCK IT OFF`,2,2);sound.crowd(.6);}
+        if(mode==='derby'&&scoreDerby())scoreStunt(s.id,DESTRUCTION_POINTS.ontop);}}}
   // Rolled onto its roof by the last car to hit it (offline).
   if(!online?.active)for(const c of cars){if(c.inverted===0){rollArmed.add(c.id);continue;}
     const by=rolledBy(c.inverted,rollArmed.has(c.id),lastHitBy.get(c.id),elapsed);if(by<0)continue;rollArmed.delete(c.id);const attacker=cars.find(x=>x.id===by);if(!attacker)continue;
@@ -1863,6 +1878,11 @@ function step(dt: number) {
   for(const {contact:{a,b,point,point1,point2,va,vb,impulse,material,closing},damage,feedback} of impactAdjudicator.adjudicate(contacts,elapsed,collisionDamageMultiplier(mode==='race'&&!bangerRace(),damageRule()),online?.active?undefined:impactSpeedFactor,IMPACT_SPEED.cap)){
     // A feedback-only contact still clears stale glass/debris flags in hit().
     const smashLoss={a:0,b:0};
+    // A fast ram nose-first into the end of another car climbs onto it (offline).
+    if(!online?.active&&a&&b&&a.extendedDamage&&b.extendedDamage&&a.health>0&&b.health>0){const side=(c:Vehicle)=>({c:c.current,f:c.forward,v:c.velocity,half:DEFINITIONS[c.kind].halfLength});
+      const who=rammer(closing,side(a),side(b),point);const s=who===0?a:who===1?b:null;
+      if(s&&elapsed-(rideAt.get(s.id)??-1e9)>=RIDE.gap&&ridesUp(s.id*131+(who===0?b.id:a.id)*17+Math.floor(elapsed))){rideAt.set(s.id,elapsed);rideUps++;
+        const nose=s.forward.clone().multiplyScalar(DEFINITIONS[s.kind].halfLength*.7).add(s.current);s.body.applyImpulseAtPoint({x:0,y:s.body.mass()*RIDE.lift,z:0},{x:nose.x,y:nose.y,z:nose.z},true);}}
     // Who had hurt the player most before this contact (a mutual crash must not count as revenge for itself).
     const rivalBefore=!online?.active&&a&&b&&(a.id===0||b.id===0)?eventAwards.rivalOf(0):null;
     // Weight matters (offline): the lighter car takes the larger share of a car-to-car crash.
@@ -2630,7 +2650,7 @@ async function boot() {
         p95: times[Math.floor(times.length * 0.95)],
         audio: sound.buffers.size,
         activeParticles: fx.particles.filter(p=>p.life>0).length,
-        debris: fx.debris.length, wallSlams, mirrorsClipped, bumpStarts, aiFireOuts, dominoes, pinEscapes, sandwiches, huntLeader: drivers.leader, bumperLocks: {made: locksMade, torn: locksTorn, active: bumperLocks.length}, tethers: {made: tethersMade, active: bumperTethers.length}, pileUps, biggestPileUp, debrisAt: fx.debris.map(d=>{const p=d.body.translation();return [+p.x.toFixed(2),+p.y.toFixed(2),+p.z.toFixed(2),+d.body.mass().toFixed(1),+d.age.toFixed(2)];}),
+        debris: fx.debris.length, wallSlams, mirrorsClipped, bumpStarts, aiFireOuts, rideUps, mounts, dominoes, pinEscapes, sandwiches, huntLeader: drivers.leader, bumperLocks: {made: locksMade, torn: locksTorn, active: bumperLocks.length}, tethers: {made: tethersMade, active: bumperTethers.length}, pileUps, biggestPileUp, debrisAt: fx.debris.map(d=>{const p=d.body.translation();return [+p.x.toFixed(2),+p.y.toFixed(2),+p.z.toFixed(2),+d.body.mass().toFixed(1),+d.age.toFixed(2)];}),
         voices: sound.activeVoices,
         loops: sound.loops.size,
         thermal: vehicleFire?.stats,
