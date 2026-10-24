@@ -8,9 +8,9 @@ import {LEGACY_ARENA,type ArenaLayout} from './derby-arena';
 type Point = {x:number;y:number;z:number};
 /** weakSpot (offline cars only): the world point of the car's most crushed corner, where a derby rival aims to finish it.
  * protectFront (offline): the engine end is badly crushed, so the driver rams in reverse to save it. */
-export type DriverCar = {id:number;kind?:CarKind;current:Point;velocity:Point;forward:Point;right:Point;speed:number;health:number;finished:boolean;nextCheckpoint:number;surface:string;weakSpot?:{x:number;z:number}|null;protectFront?:boolean;steerSkew?:number;charge?:boolean};
+export type DriverCar = {id:number;kind?:CarKind;current:Point;velocity:Point;forward:Point;right:Point;speed:number;health:number;finished:boolean;nextCheckpoint:number;surface:string;weakSpot?:{x:number;z:number}|null;protectFront?:boolean;steerSkew?:number;charge?:boolean;pinTime?:number};
 export type Clearance = {front:number;left:number;right:number;rear:number};
-export type DriverMemory = {escapeTurn?:number;chargeCool?:number;pass?:{target:number;side:number};derby?:DerbyManeuver;target:number;commit:number;stalled:number;reverse:number;escape:number;escapeSteer:number;attempts:number;steer:number;lane:number;phase:string;scan:number;clear:Clearance};
+export type DriverMemory = {escapeTurn?:number;chargeCool?:number;pinHold?:number;rock?:number;pass?:{target:number;side:number};derby?:DerbyManeuver;target:number;commit:number;stalled:number;reverse:number;escape:number;escapeSteer:number;attempts:number;steer:number;lane:number;phase:string;scan:number;clear:Clearance};
 const stop:Input={throttle:0,steer:0,brake:1,handbrake:false};
 const route=Array.from({length:128},(_,i)=>trackPoint(i/128));
 
@@ -43,6 +43,10 @@ function startingLane(car:DriverCar,checkpoints:readonly {x:number;z:number}[]){
 /** Solo driving decisions. Vehicle simulation and the online authority stay separate. */
 export class DrivingBrain {
   constructor(public arena:ArenaLayout=LEGACY_ARENA,public difficulty:AIDifficulty='amateur'){}
+  /** Late-derby frenzy multiplier (derby-driving FRENZY); 1 = off. */
+  frenzy=1;
+  /** The car leading a scored derby on points (derby-driving HUNT), or -1. */
+  leader=-1;
   readonly memory=new Map<number,DriverMemory>();
   reset(){this.memory.clear();}
   update(car:DriverCar,cars:DriverCar[],mode:Mode,dt:number,probe?:()=>Clearance,checkpoints:readonly {x:number;z:number}[]=CHECKPOINTS,attack?:{id:number;point:{x:number;z:number}}):Input {
@@ -60,7 +64,8 @@ export class DrivingBrain {
     let tx=0,tz=0,desiredSpeed=18;
     const encounters=mode==='race'?cars.map(other=>oncomingEncounter(car,other)).filter((value):value is Encounter=>value!==null):[];
     if(mode==='derby'){
-      return driveDerby(car,cars,m,this.arena,dt,AI_DIFFICULTIES[this.difficulty]);
+      const d=AI_DIFFICULTIES[this.difficulty];
+      return driveDerby(car,cars,m,this.arena,dt,this.frenzy===1&&this.leader<0?d:{...d,derbyPace:d.derbyPace*this.frenzy,frenzy:this.frenzy,leader:this.leader});
     }else{
       let prev:{x:number;z:number},next:{x:number;z:number},after:{x:number;z:number};
       if(mode==='race'){
