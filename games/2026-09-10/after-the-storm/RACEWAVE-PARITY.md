@@ -28,16 +28,25 @@ every 50 ms and extrapolated in between. Measured against GPU readback, the
 RMS height error is 4–5 cm on 35 cm RMS seas and 16–17 cm on 1.3–1.8 m RMS
 storm seas.
 
-The craft (380 kg with rider) samples twelve hull points at 120 Hz. Each point
-carries hydrostatic pressure, planing lift (whose angle of attack includes the
-surface's approach speed, damping heave and pitch) and slamming damping, with
-chine side force that grows with bank. A pump jet fed by the aft intake pushes
-through a steerable nozzle: no throttle, no steering. The pump stays primed
-through short skips. The rider banks into turns and trims the bow (Q/E).
-Buoyancy acts along the surface normal, so the ski runs down wave faces. On
-flat water it planes from about 15 km/h, reaches 90 km/h, and turns at an 18 m
-radius at 75 km/h. In waves it launches, lands with impacts, and wipes out on
-capsizes or nose-first landings.
+The craft (380 kg with rider) uses nonlinear planing strip theory (after
+Zarnick). The V hull (21° deadrise aft, 40° at a rockered bow) is cut into 24
+sections, each with port and starboard halves. Each half carries buoyancy,
+Wagner wedge added-mass momentum and crossflow drag. Its lift is the rate at
+which the section's added mass grows as it sinks into the surface, so it acts
+only while the water closes on the hull and impacts lose their energy. The
+entrained water's acceleration damps pitch aft of the centre of gravity, and
+the narrow bow gets 3D relief. Heave and pitch are solved together, linearly
+implicitly, at 240 Hz.
+
+Trim and ride height come out of that balance: 3° stern-down at rest, a
+bow-high hole shot, then about 4° at 30 km/h easing to 1.5° at the top speed
+of 95 km/h, with no porpoising. A steerable pump jet drives it; off the
+throttle it barely steers, and the idling pump drags it off the plane.
+Banking tilts the planing lift into the turn and the inside chine carves:
+about a 12 m radius at 33 km/h and 28 m at 70 km/h, at up to 1.3 g with the
+rider leaning about 35°. In the air the rider shifts weight to hold attitude.
+In waves it skims and hops off crests rather than following troughs, as a
+real ski must at speed, and lands with impacts of a few metres per second.
 
 The race's own collisions still apply (reefs, walls, moored boats, barriers,
 piles and land), along with shore recovery. The chosen sea sets the weather, and
