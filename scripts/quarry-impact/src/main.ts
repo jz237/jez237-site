@@ -126,7 +126,7 @@ import {frameGarage} from './garage-camera';
 import type {LiveryFace} from './livery';
 import * as T from 'three';
 import R from '@dimforge/rapier3d-compat';
-import {LOCK,bumperAt,hooks,pullsAway,lockStrain,lockEnd,type LockedBumper} from './bumper-lock';
+import {LOCK,bumperAt,hooks,pullsAway,lockStrain,lockEnd,type LockedBumper,TETHER,tetherLife,tetherAge} from './bumper-lock';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
@@ -919,6 +919,7 @@ function createCars(attract = false, previewSetup?:Setup) {
     const car = new Vehicle(i, type, team?.color ?? setup?.paint ?? colors[i%colors.length], scene, physics, fx, teamSetup,activeVenue.course,online?.active?'legacy':'angular-v1');
     carLights.set(car,attachCarLights(car.root,DEFINITIONS[type].halfLength));
     car.extendedDamage=!attract&&!online?.active;{const derbyPace=car.extendedDamage&&mode==='derby';car.powerScale=derbyPace?DERBY_PACE.power:undefined;car.tractionScale=derbyPace?DERBY_PACE.traction:undefined;car.charge=derbyPace;}if(car.extendedDamage){car.onBackfire=p=>sound.backfire(p);car.onBlowout=p=>sound.blowout(p);car.onSetAlight=by=>{eventAwards.setAlight(by,car.id,elapsed);if(by>=0&&by!==car.id)alightBy.set(car.id,by);};car.onGlassBreak=p=>sound.shot('glass',p,.55);car.onMountClunk=()=>{if(i===0)recordRumbleImpact(.3);sound.shot('impact-light',car.current,.4,{rate:.8,delay:0,duration:.3,lowpass:1400});};car.onGearClunk=out=>{if(i===0)recordRumbleImpact(out?.25:.35);sound.shot(out?'impact-light':'suspension',car.current,out?.45:.35,{rate:out?1.3:1.6,delay:0,duration:.25});};car.onBreak=(what,w)=>{if(i===0)recordRumbleImpact(what==='spring'?.4:.55);{const f=FAILURE_MOMENTS[what];eventAwards.failure(car.id,f.label,elapsed,f.score);}if(f2crowd(what))sound.crowd(i===0?.7:.45);const corner=['FRONT LEFT','FRONT RIGHT','REAR LEFT','REAR RIGHT'][w];sound.shot(what==='spring'?'suspension':what==='diff'?'impact-heavy':'impact-light',car.current,.7,{rate:what==='spring'?.7:what==='diff'?.9:1.7,delay:0,duration:.5});if(car.id===0&&!demo)toast(what==='spring'?`SPRING BROKEN · ${corner}`:what==='diff'?`DIFF BROKEN · ${w<2?'FRONT':'REAR'} AXLE`:what==='tierod'?`TIE ROD SNAPPED · ${corner}`:what==='exhaust'?'EXHAUST TORN OFF':what==='brakefire'?`BRAKE FIRE · ${corner}`:what==='radiator'?'RADIATOR BURST':what==='propshaft'?'PROPSHAFT SNAPPED':what==='bearing'?`WHEEL BEARING SEIZED · ${corner}`:what==='belt'?'FAN BELT SNAPPED':what==='enginefire'?'ENGINE FIRE · OVERHEATED':what==='smashfire'?'ENGINE BAY ALIGHT':what==='rollbar'?`ANTI-ROLL BAR SNAPPED · ${w<2?'FRONT':'REAR'}`:`DRIVESHAFT SNAPPED · ${corner}`,3,what==='smashfire'?3:0);};car.onSeize=p=>{eventAwards.failure(car.id,'ENGINE SEIZED',elapsed,32);sound.crowd(i===0?.7:.45);fx.emit(p,10,2,.9);sound.shot('impact-heavy',p,.5,{rate:.6,delay:0,duration:.6,lowpass:900});if(car.id===0&&!demo)toast('ENGINE SEIZED');};car.onDoused=()=>{const p=car.current.clone();p.y+=.4;fx.emit(p,14,5,1.4);if(car.id===0&&!demo)toast('FIRE OUT');};}
+    if(car.extendedDamage)car.onTether=(_part,debris,anchor)=>tetherBumper(car,debris,anchor);
     if(car.extendedDamage)car.onWheelLost=w=>{sound.crowd(i===0?.8:.55);if(i===0&&!demo)toast(`WHEEL GONE · ${['FRONT LEFT','FRONT RIGHT','REAR LEFT','REAR RIGHT'][w]}`,1.6);};
     car.waters=activeVenue.puddles;
     if(mode==='derby'&&!online?.active&&activeVenue===quarryVenue)car.arenaSurface=DERBY_ARENA;
@@ -1104,7 +1105,44 @@ const bodyQuaternion=(c:Vehicle)=>{const q=c.body.rotation();return new T.Quater
 const toBody=(c:Vehicle,p:T.Vector3)=>{const t=c.body.translation();return p.clone().sub(new T.Vector3(t.x,t.y,t.z)).applyQuaternion(bodyQuaternion(c).invert());};
 const fromBody=(c:Vehicle,l:T.Vector3)=>{const t=c.body.translation();return l.clone().applyQuaternion(bodyQuaternion(c)).add(new T.Vector3(t.x,t.y,t.z));};
 function releaseLock(lock:BumperLock){if(physics.getImpulseJoint(lock.joint.handle))physics.removeImpulseJoint(lock.joint,true);}
-function clearLocks(){for(const lock of bumperLocks)releaseLock(lock);bumperLocks=[];lockRolls=locksMade=locksTorn=0;}
+/** Torn-off bumpers dragged behind their cars on a wire (offline). */
+/** anchor: body-local on the car; hang: body-local on the bumper piece, its point nearest the car when it tore off. */
+type Tether={car:Vehicle;debris:R.RigidBody;joint:R.ImpulseJoint;anchor:T.Vector3;hang:T.Vector3;wire:T.Line;length:number;age:number;life:number;spark:number};
+const wireMaterial=new T.LineBasicMaterial({color:0x1c1a18});
+let bumperTethers:Tether[]=[],tethersMade=0;
+const releaseJoint=(joint:R.ImpulseJoint)=>{if(physics.getImpulseJoint(joint.handle))physics.removeImpulseJoint(joint,true);};
+const dropWire=(t:Tether)=>{t.wire.removeFromParent();t.wire.geometry.dispose();};
+function clearLocks(){for(const lock of bumperLocks)releaseLock(lock);for(const t of bumperTethers){releaseJoint(t.joint);dropWire(t);}bumperLocks=[];bumperTethers=[];lockRolls=locksMade=locksTorn=tethersMade=0;}
+/** Tie a torn-off bumper to its car on a wire (offline). */
+function tetherBumper(car:Vehicle,debris:R.RigidBody,anchor:{x:number;y:number;z:number}){
+  const piece=fx.debris.find(d=>d.body===debris);if(!(piece?.mesh instanceof T.Mesh))return;
+  const from=fromBody(car,new T.Vector3(anchor.x,anchor.y,anchor.z)),q=debris.rotation(),turn=new T.Quaternion(q.x,q.y,q.z,q.w),p=debris.translation(),centre=new T.Vector3(p.x,p.y,p.z);
+  // Hang the wire from the piece's own metal nearest the car: a wrap-round bumper's centre is empty air between its ends.
+  const local=turn.clone().invert(),near=from.clone().sub(centre).applyQuaternion(local),position=piece.mesh.geometry.attributes.position as T.BufferAttribute,hang=new T.Vector3(),v=new T.Vector3();let best=Infinity;
+  for(let i=0;i<position.count;i++){v.fromBufferAttribute(position,i).multiply(piece.mesh.scale);const d=v.distanceToSquared(near);if(d<best){best=d;hang.copy(v);}}
+  const end=hang.clone().applyQuaternion(turn).add(centre),length=Math.max(TETHER.length,from.distanceTo(end)+.1);
+  const wire=new T.Line(new T.BufferGeometry().setFromPoints([from,end]),wireMaterial);wire.frustumCulled=false;scene.add(wire);
+  bumperTethers.push({car,debris,joint:physics.createImpulseJoint(R.JointData.rope(length,anchor,hang),car.body,debris,true),anchor:new T.Vector3(anchor.x,anchor.y,anchor.z),hang,wire,length,age:0,life:tetherLife(car.id*7+tethersMade),spark:0});tethersMade++;
+}
+/** Draw each wire from where the car is shown to where its bumper is shown (debris meshes follow their bodies each frame). */
+function drawTetherWires(){
+  for(const t of bumperTethers){const piece=fx.debris.find(d=>d.body===t.debris);if(!piece)continue;
+    const from=t.anchor.clone().applyQuaternion(t.car.root.quaternion).add(t.car.root.position),position=t.wire.geometry.attributes.position as T.BufferAttribute;
+    const end=t.hang.clone().applyQuaternion(piece.mesh.quaternion).add(piece.mesh.position);position.setXYZ(0,from.x,from.y,from.z);position.setXYZ(1,end.x,end.y,end.z);position.needsUpdate=true;}
+}
+/** Dragged bumpers spark where they scrape the ground; the wire snaps in time, sooner at speed (offline). */
+function stepTethers(dt:number){
+  bumperTethers=bumperTethers.filter(t=>{
+    if(!physics.getImpulseJoint(t.joint.handle)){dropWire(t);return false;}
+    const p=t.debris.translation(),at=new T.Vector3(p.x,p.y,p.z);t.age=tetherAge(t.age,t.car.speed,dt);
+    if(t.age>=t.life||at.distanceTo(t.car.current)>t.length+TETHER.snap){releaseJoint(t.joint);dropWire(t);fx.emit(at,4,1,.9);return false;}
+    {const q=t.debris.rotation(),end=t.hang.clone().applyQuaternion(new T.Quaternion(q.x,q.y,q.z,q.w)).add(at),from=fromBody(t.car,t.anchor),position=t.wire.geometry.attributes.position as T.BufferAttribute;
+      position.setXYZ(0,from.x,from.y,from.z);position.setXYZ(1,end.x,end.y,end.z);position.needsUpdate=true;}
+    const v=t.debris.linvel(),speed=Math.hypot(v.x,v.z),ground=t.car.groundAt(p.x,p.z);t.spark+=dt;
+    if(speed>=TETHER.spark&&p.y-ground<TETHER.low&&t.spark>=TETHER.gap){t.spark=0;at.y=ground+.04;fx.emit(at,2,1,.8);fx.evidence?.add(at,Math.atan2(v.x,v.z),speed*.06,.5,2);t.car.scraping=Math.max(t.car.scraping,Math.min(1,speed/14)*.5);}
+    return true;
+  });
+}
 const lockedTo=(id:number)=>{const lock=bumperLocks.find(l=>l.hooker.id===id||l.caught.id===id);return !lock?-1:lock.hooker.id===id?lock.caught.id:lock.hooker.id;};
 /** A hit with a car's hanging bumper may hook the two cars together (offline). */
 function tryLock(a:Vehicle,b:Vehicle,point1:T.Vector3,point2:T.Vector3,closing:number){
@@ -1724,7 +1762,7 @@ function step(dt: number) {
       damageScale:Math.max(a&&a.health>0?a.specification.damageScale:0,b&&b.health>0?b.specification.damageScale:0)});
   });
   sound.contactScraping.sample(contacts,elapsed);
-  if(!online?.active){pinCars(contacts,dt);stepLocks(dt);}
+  if(!online?.active){pinCars(contacts,dt);stepLocks(dt);stepTethers(dt);}
   for(const c of cars)if(c.health<=0&&!wreckCauses.has(c.id)&&c.extendedDamage&&causeOf(c)==='BURNT OUT'){const by=cars.find(v=>v.id===alightBy.get(c.id));
     if(by&&mode==='derby'){derbyFeed.note(by.id,displayedDriver(by),'burnt',elapsed);if(scoreDerby())combat.destruction(by.id,DESTRUCTION_POINTS.burnt);}
     if(by?.id===0&&!demo)toast(`BURNT OUT · #${c.id+1} ${DEFINITIONS[c.kind].name}`+pointsTag(DESTRUCTION_POINTS.burnt),2,2);}
@@ -2120,6 +2158,7 @@ function frame(now: number) {
     }
     });
     for (const c of cars) c.render(state === 'wrecked' ? 1 : accumulator / (1 / 60));
+    if(bumperTethers.length)drawTetherWires();
   }
   if (state === 'wrecked') {
     fx.update(dt);
@@ -2474,7 +2513,7 @@ async function boot() {
         p95: times[Math.floor(times.length * 0.95)],
         audio: sound.buffers.size,
         activeParticles: fx.particles.filter(p=>p.life>0).length,
-        debris: fx.debris.length, wallSlams, bumperLocks: {made: locksMade, torn: locksTorn, active: bumperLocks.length}, debrisAt: fx.debris.map(d=>{const p=d.body.translation();return [+p.x.toFixed(2),+p.y.toFixed(2),+p.z.toFixed(2),+d.body.mass().toFixed(1),+d.age.toFixed(2)];}),
+        debris: fx.debris.length, wallSlams, bumperLocks: {made: locksMade, torn: locksTorn, active: bumperLocks.length}, tethers: {made: tethersMade, active: bumperTethers.length}, debrisAt: fx.debris.map(d=>{const p=d.body.translation();return [+p.x.toFixed(2),+p.y.toFixed(2),+p.z.toFixed(2),+d.body.mass().toFixed(1),+d.age.toFixed(2)];}),
         voices: sound.activeVoices,
         loops: sound.loops.size,
         thermal: vehicleFire?.stats,

@@ -12,9 +12,10 @@ export function bumperAt(localZ:number,halfLength:number):LockedBumper|null{
   return localZ>=LOCK.end*halfLength?'front-bumper':localZ<=-LOCK.end*halfLength?'rear-bumper':null;
 }
 /** Whether a hit hooks the cars: a bumper hanging loose at the contact, a moderate closing speed, and the pair's dice (seed). */
+const dice=(seed:number)=>((seed*.6180339887+.17)%1+1)%1;
 export function hooks(loose:number,closing:number,seed:number){
-  const dice=((seed*.6180339887+.17)%1+1)%1;
-  return loose>=LOCK.loose&&closing>=LOCK.minClosing&&closing<=LOCK.maxClosing&&Number.isFinite(dice)&&dice<LOCK.chance;
+  const roll=dice(seed);
+  return loose>=LOCK.loose&&closing>=LOCK.minClosing&&closing<=LOCK.maxClosing&&Number.isFinite(roll)&&roll<LOCK.chance;
 }
 /** A car drives away from the hook: throttle past LOCK.pull (either way) with the car pointed within LOCK.aim of away. */
 export function pullsAway(forward:{x:number;z:number},away:{x:number;z:number},throttle:number){
@@ -28,3 +29,11 @@ export const lockStrain=(strain:number,taut:boolean,pulling:number,dt:number)=>!
 export function lockEnd(strain:number,age:number,gap:number,length:number):'torn'|'slipped'|'snapped'|null{
   return gap>length+LOCK.snap?'snapped':strain>=LOCK.strain?'torn':age>=LOCK.max?'slipped':null;
 }
+/** Dragged on its wire (offline): about TETHER.chance of torn-off bumpers stay tied to the car by a wire at least TETHER.length
+ * m long and are dragged along behind, sparking where they scrape the ground (moving TETHER.spark m/s or more, within
+ * TETHER.low m of it, every TETHER.gap s), until the wire snaps after TETHER.min..TETHER.min+TETHER.span seconds (the bumper's
+ * dice) — time runs TETHER.fastRate times faster above TETHER.fast m/s — or the car ends up more than TETHER.snap m beyond it. */
+export const TETHER={chance:.5,length:1.2,min:1.5,span:2.5,fast:14,fastRate:2,spark:3,low:.35,gap:.08,snap:3} as const;
+export const tethers=(seed:number)=>Number.isFinite(seed)&&dice(seed+.5)<TETHER.chance;
+export const tetherLife=(seed:number)=>Number.isFinite(seed)?TETHER.min+TETHER.span*dice(seed*3+1):TETHER.min;
+export const tetherAge=(age:number,speed:number,dt:number)=>!Number.isFinite(age)||!(dt>0)?age:age+dt*(Math.abs(speed)>TETHER.fast?TETHER.fastRate:1);
