@@ -296,13 +296,13 @@ export class Sound {
     }
     for(const [id,l] of this.horns)if(!live.has(id)){l.gain.gain.setTargetAtTime(0,now,.05);l.source.stop(now+.3);this.horns.delete(id);}
   }
-  /** Damage loops by car id (offline, within earshot): tyres rubbing crushed arches, and steel groaning on pinned cars. */
+  /** Damage loops by car id (offline, within earshot): tyres rubbing crushed arches, and steel groaning on cars pinned or sat on. */
   private rubs=new Map<number,Loop>();
   private groans=new Map<number,Loop>();
   damageLoops(cars:readonly Vehicle[],listener:T.Vector3){
     if(!this.ready||!this.fxBus)return;const now=this.ctx!.currentTime;
     this.driveLoops(this.rubs,'tyre-rub',cars,listener,now,car=>rubLoopLevel(car.rubDrag,car.speed,Math.max(...car.rubHeat)),car=>.85+.4*Math.min(1,Math.abs(car.speed)/25),.22);
-    this.driveLoops(this.groans,'metal-groan',cars,listener,now,car=>groanLevel(car.pinTime),()=>1,.3);
+    this.driveLoops(this.groans,'metal-groan',cars,listener,now,car=>Math.max(groanLevel(car.pinTime),groanLevel(car.underWeight)),()=>1,.3);
   }
   /** Keep one loop per car at its level; a loop that falls quiet fades and is held LOOP_HOLD seconds before it is stopped. */
   private driveLoops(map:Map<number,Loop>,id:string,cars:readonly Vehicle[],listener:T.Vector3,now:number,level:(car:Vehicle)=>number,rate:(car:Vehicle)=>number,gain:number){

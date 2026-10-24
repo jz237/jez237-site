@@ -11,5 +11,5 @@ test('the damage diagram shows a thrown rod across the engine and flames beside 
  assert.ok(fire.includes('M2.6 28.5 ')&&fire.includes('M57.4 86.5 '),'beside the front-left and rear-right wheels');
  const none=svg({});assert.ok(!none.includes('dd-rod')&&!none.includes('dd-tyre-fire'));
  const main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');
- assert.ok(main.includes('batteryOut:player.batteryOut,rodThrown:player.rodThrown,tyresAlight:player.tyreAlight}'));
+ assert.ok(main.includes('batteryOut:player.batteryOut,rodThrown:player.rodThrown,tyresAlight:player.tyreAlight'));
 });

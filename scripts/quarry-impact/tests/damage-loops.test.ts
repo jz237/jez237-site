@@ -14,7 +14,7 @@ test('a rubbing tyre is heard with the rub and the road speed, louder once it sm
 test('the rub and groan loops run per car on demand, offline, and glass and debris rotate takes too',()=>{
  const audio=readFileSync(new URL('../src/audio.ts',import.meta.url),'utf8'),main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');
  assert.ok(audio.includes("this.driveLoops(this.rubs,'tyre-rub',cars,listener,now,car=>rubLoopLevel(car.rubDrag,car.speed,Math.max(...car.rubHeat))"));
- assert.ok(audio.includes("this.driveLoops(this.groans,'metal-groan',cars,listener,now,car=>groanLevel(car.pinTime)"));
+ assert.ok(audio.includes("this.driveLoops(this.groans,'metal-groan',cars,listener,now,car=>Math.max(groanLevel(car.pinTime),groanLevel(car.underWeight))"),'pinned, or with a car on top');
  assert.ok(audio.includes('if(!car.extendedDamage||car.health<=0||car.current.distanceTo(listener)>RATTLE.hearing)continue;const v=level(car);if(!(v>0))continue;'),'offline, in earshot, only when heard');
  assert.ok(audio.includes('if(now-q>LOOP_HOLD||!cars.some(c=>c.id===cid)){l.source.stop(now+.3);map.delete(cid);this.quietSince.delete(l);}'),'quiet loops are held then stopped');
  assert.ok(main.includes('sound.damageLoops(effectsActive&&!online?.active?cars:[],camera.position);'));

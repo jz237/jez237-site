@@ -19,7 +19,9 @@ export type DiagramState={
     /** The fuel tank dragging on its neck or torn off, parted throttle and handbrake cables, and the battery thrown out. */
     tank?:'down'|'gone'|null;throttleCable?:boolean;handbrakeCable?:boolean;batteryOut?:boolean;
     /** A rod thrown through the block, and the tyres alight (a brake fire or a rubbing tyre), 1 per burning wheel. */
-    rodThrown?:boolean;tyresAlight?:ArrayLike<number>};
+    rodThrown?:boolean;tyresAlight?:ArrayLike<number>;
+    /** The tailpipe flattened (still on). */
+    exhaustCrushed?:boolean};
 };
 export type PartState='ok'|'loose'|'gone';
 const clamp01=(v:number)=>Math.max(0,Math.min(1,Number.isFinite(v)?v:0));
@@ -92,6 +94,8 @@ function faults(state:DiagramState){
     out+=`<path class="dd-tyre-fire" d="M${cx} ${cy+3.5} Q${cx-2.3} ${cy} ${cx} ${cy-3.5} Q${cx+2.3} ${cy} ${cx} ${cy+3.5} Z" fill="#ff8a1a"/><path d="M${cx} ${cy+2.5} Q${cx-1} ${cy+.5} ${cx} ${cy-1.2} Q${cx+1} ${cy+.5} ${cx} ${cy+2.5} Z" fill="#ffd34a"/>`;});
   // A rod through the block: a crack across the engine and the chunk it threw out.
   if(f.rodThrown){const ey=state.rearEngine?90:20;out+=`<path class="dd-rod" d="M27.4 ${ey-3} L30.4 ${ey-.6} L28.8 ${ey+.8} L32.4 ${ey+3.4}" stroke="${DIAGRAM_COLORS[3]}" stroke-width=".9" fill="none" stroke-linejoin="round"/><circle class="dd-rod-chunk" cx="35" cy="${ey-4.2}" r="1.1" fill="#141210" stroke="${DIAGRAM_COLORS[3]}" stroke-width=".45"/>`;}
+  // A flattened tailpipe: the stub of the pipe with its pinched tip, amber while it is still on.
+  if(f.exhaustCrushed&&!f.exhaustGone){const x=state.rearEngine?36:24;out+=`<path class="dd-exhaust-crushed" d="M${x} 103 L${x} 106.4 M${x-1.7} 106.4 L${x+1.7} 108.4" stroke="${DIAGRAM_COLORS[2]}" stroke-width="1.2" stroke-linecap="round" fill="none"/>`;}
   if(f.exhaustGone)out+=`<line class="dd-exhaust-gone" x1="${state.rearEngine?36:24}" y1="104" x2="${state.rearEngine?36:24}" y2="109" stroke="${DIAGRAM_COLORS[3]}" stroke-width="1.2" stroke-dasharray="1.2 1"/>`;
   return out;
 }
