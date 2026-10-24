@@ -113,7 +113,7 @@ import {createBrackenWorld} from './bracken-world';
 import {createCinderbankWorld} from './cinderbank-world';
 import {tyreWarning} from './tyre-feedback';
 import {fluidWarning,leakRates,burnLevel,type GroundFire} from './fluid-leaks';
-import {gearboxWarning,brakeWarning,steerWarning,clutchWarning,playWarning,rubWarning,electricalWarning,nutWarning,exhaustWarning,diffWarning,tieRodWarning,rollBarWarning,propWarning,bearingWarning,bearingGrowl,skewWarning,windRoar,beltWarning,batteryLights,overheatWarning,coolThrottle,OVERHEAT_FIRE,caliperWarning,mountsWarning,starterWarning,frameWarning,discGlow,diffAxle,dazeWarning,nurseThrottle,STEER_PLAY} from './damage-handling';
+import {gearboxWarning,brakeWarning,steerWarning,clutchWarning,playWarning,rubWarning,electricalWarning,nutWarning,exhaustWarning,diffWarning,tieRodWarning,rollBarWarning,propWarning,bearingWarning,bearingGrowl,skewWarning,windRoar,beltWarning,batteryLights,overheatWarning,coolThrottle,OVERHEAT_FIRE,caliperWarning,mountsWarning,starterWarning,frameWarning,discGlow,diffAxle,dazeWarning,nurseThrottle,STEER_PLAY,PIN,pinnedBy,pinClock,type PinPush} from './damage-handling';
 import {engineStatus} from './engine-condition';
 import {drivingObstacleClearance} from './driving-probe';
 import {vehicleContact,vehicleContactManifold} from './vehicle-contact';
@@ -982,7 +982,7 @@ async function start(watch=demo) {
     camera.position.copy(cars[0].current).add(new T.Vector3(0, 4, -8));
     hud();
     sound.pause(false);
-    eventAwards.reset();playerTopSpeed=0;derbyAliveBefore=0;revengeSettled.clear();takedownCombo=0;playerStripped=0;strippedNoted.clear();wreckCauses.clear();lastHitBy.clear();rollArmed.clear();wreckedBy.clear();alightBy.clear();lastTakedownAt=-1e9;bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
+    eventAwards.reset();playerTopSpeed=0;derbyAliveBefore=0;revengeSettled.clear();takedownCombo=0;playerStripped=0;strippedNoted.clear();pinNoted.clear();wreckCauses.clear();lastHitBy.clear();rollArmed.clear();wreckedBy.clear();alightBy.clear();lastTakedownAt=-1e9;bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
     beginReplay();
     if(preparationInterrupted||document.hidden)pause();
     return true;
@@ -1095,6 +1095,35 @@ const lastHitBy=new Map<number,{by:number;at:number}>(),rollArmed=new Set<number
 const wreckedBy=new Map<number,number>();
 /** Who set each car alight (offline), to credit a burn-out. */
 const alightBy=new Map<number,number>();
+/** Cars the derby feed has already called PINNED this time they were held (cleared once a car is free again). */
+const pinNoted=new Set<number>();
+/** Pinned (offline): a car shoved hard against a wall or a second car crushes in at both contacts while it is held there,
+ * credited to the car doing the shoving. */
+function pinCars(contacts:readonly {a?:Vehicle;b?:Vehicle;point1:T.Vector3;point2:T.Vector3;normal:T.Vector3;impulse:number}[],dt:number){
+  const scale=collisionDamageMultiplier(mode==='race'&&!bangerRace(),damageRule());
+  for(const c of cars){
+    if(c.health<=0||!c.extendedDamage){c.pinTime=c.pinTick=0;pinNoted.delete(c.id);continue;}
+    const pushes:PinPush[]=[],points:T.Vector3[]=[];
+    for(const k of contacts){const mine=k.a===c?k.point1:k.b===c?k.point2:null;if(!mine||Math.abs(k.normal.y)>.6)continue;
+      const other=k.a===c?k.b:k.a;pushes.push({x:mine.x,z:mine.z,force:k.impulse/dt,by:other?other.id:-1});points.push(mine);}
+    const pin=pinnedBy(c.current.x,c.current.z,pushes);c.pinTime=pinClock(c.pinTime,!!pin,dt);
+    if(c.pinTime===0){c.pinTick=0;pinNoted.delete(c.id);}
+    const by=pin&&c.pinTime>=PIN.hold?cars.find(v=>v.id===pushes[pin.push].by):undefined;if(!pin||!by)continue;
+    if(!pinNoted.has(c.id)){pinNoted.add(c.id);c.pins++;
+      if(mode==='derby'){derbyFeed.note(by.id,displayedDriver(by),'pinned',elapsed);if(scoreDerby())combat.destruction(by.id,DESTRUCTION_POINTS.pin);}
+      if(!demo&&by.id===0){toast(`PINNED · #${c.id+1} ${DEFINITIONS[c.kind].name}`+pointsTag(DESTRUCTION_POINTS.pin),2,2);sound.crowd(.8);}
+      else if(!demo&&c.id===0)toast(`PINNED BY #${by.id+1} ${DEFINITIONS[by.kind].name}`,2,2);}
+    c.pinTick+=dt;if(c.pinTick<PIN.gap||!(scale>0))continue;c.pinTick-=PIN.gap;
+    const before=c.health,at=points[pin.push],wall=points[pin.against],crush=PIN.rate*PIN.gap*scale;
+    c.hit(at,c.current.clone().sub(at).setY(0).normalize(),crush,elapsed,true,by.paintColor);
+    c.hit(wall,c.current.clone().sub(wall).setY(0).normalize(),crush*PIN.wall,elapsed,true);
+    fx.emit(at,2,1,.85);fx.emit(wall,2,1,.85);
+    const lost=before-c.health;if(!(lost>0))continue;
+    by.inflicted+=lost;lastHitBy.set(c.id,{by:by.id,at:elapsed});
+    const wreck=eventAwards.hit(by.id,c.id,lost,before>0&&c.health<=0,elapsed,0);combat.hit(by.id,c.id,before,c.health,elapsed);
+    if(wreck){wreckedBy.set(c.id,by.id);sound.crowd(by.id===0?1:.7);if(by.id===0){callout('TAKEDOWN',c);playerTakedown();}}
+  }
+}
 /** The results line naming the rivals the player finished, and how (offline). */
 function victimsLine(){if(demo||online?.active)return '';const me=cars[0]?.id,list=[...wreckedBy].filter(([,by])=>by===me).map(([id])=>{const c=cars.find(v=>v.id===id),cause=c?causeOf(c):undefined;return c?`#${id+1} ${DEFINITIONS[c.kind].name}${cause&&cause!=='WRECKED'?` (${cause})`:''}`:'';}).filter(Boolean);return list.length?`<p class="victims-line">YOU FINISHED · ${list.join(' · ')}</p>`:'';}
 /** A finished car's cause: as fixed the moment it went out, or read now when this very step finished it (offline). */
@@ -1635,7 +1664,7 @@ function step(dt: number) {
   for (const c of cars) c.postStep(dt, elapsed);
   if(!online?.active)catchOpenDoors();
   if(activeTimeTrial)trialGhostRecorder?.sample(elapsed,cars[0].current,cars[0].currentQ);
-  const contacts: (ImpactContact & {a?:Vehicle;b?:Vehicle;point:T.Vector3;point1:T.Vector3;point2:T.Vector3;va:T.Vector3;vb:T.Vector3;scarDirection:T.Vector3;speed:number;material:ImpactMaterial})[]=[];
+  const contacts: (ImpactContact & {a?:Vehicle;b?:Vehicle;point:T.Vector3;point1:T.Vector3;point2:T.Vector3;normal:T.Vector3;va:T.Vector3;vb:T.Vector3;scarDirection:T.Vector3;speed:number;material:ImpactMaterial})[]=[];
   events.drainContactForceEvents((e) => {
     const h1=e.collider1(),h2=e.collider2(),{a,b,key}=vehicleContact(physics,cars,h1,h2);
     if(!a&&!b)return;
@@ -1647,10 +1676,11 @@ function step(dt: number) {
     const relative=vb.clone().sub(va),closing=normal.lengthSq()>.5?Math.abs(relative.dot(normal)):relative.length();
     const scarDirection=relative.clone(),speed=scarDirection.length();
     scarDirection.normalize();
-    contacts.push({key,point,point1,point2,va,vb,a,b,scarDirection,speed,closing,material:a&&b?'metal':colliderImpactMaterial(physics,a?h2:h1,activeVenue.root.userData.solidRecords),impulse:e.totalForceMagnitude()*dt,
+    contacts.push({key,point,point1,point2,normal,va,vb,a,b,scarDirection,speed,closing,material:a&&b?'metal':colliderImpactMaterial(physics,a?h2:h1,activeVenue.root.userData.solidRecords),impulse:e.totalForceMagnitude()*dt,
       damageScale:Math.max(a&&a.health>0?a.specification.damageScale:0,b&&b.health>0?b.specification.damageScale:0)});
   });
   sound.contactScraping.sample(contacts,elapsed);
+  if(!online?.active)pinCars(contacts,dt);
   for(const c of cars)if(c.health<=0&&!wreckCauses.has(c.id)&&c.extendedDamage&&causeOf(c)==='BURNT OUT'){const by=cars.find(v=>v.id===alightBy.get(c.id));
     if(by&&mode==='derby'){derbyFeed.note(by.id,displayedDriver(by),'burnt',elapsed);if(scoreDerby())combat.destruction(by.id,DESTRUCTION_POINTS.burnt);}
     if(by?.id===0&&!demo)toast(`BURNT OUT · #${c.id+1} ${DEFINITIONS[c.kind].name}`+pointsTag(DESTRUCTION_POINTS.burnt),2,2);}
@@ -2489,7 +2519,7 @@ async function boot() {
         wheelLost: Array.from(c.wreckParts.wheelLost),
         rips: c.rips,
         backfires: c.backfires,
-        drips: c.drips.slice(), fov: c.id === 0 ? +camera.fov.toFixed(2) : undefined, status: c.id === 0 && clock < statusUntil ? statusMessage : '', gear: c.gear, rpm: c.rpm, slip: c.slip, wheelSlips: Array.from(c.wheelSlips), drivetrain: !!c.drivetrain, powerScale: c.powerScale, rollBar: c.rollBar.slice(), steerSkew: c.steerSkew, openness: c.openness, hotTime: c.hotTime, engineFires: c.engineFires, smashFires: c.smashFires, beltSlip: c.beltSlip, beltSnapped: c.beltSnapped, squeal: c.squeal, battery: c.battery, bearingWear: Array.from(c.bearingWear), hubDrag: Array.from(c.hubDrag), propBend: c.propBend, propWear: c.propWear, propSnapped: c.propSnapped, propVibration: c.propVibration, roll: Math.asin(Math.max(-1,Math.min(1,c.right.y))), shedKg: c.shedKg, bodyMass: c.body.mass(), bodyCom: c.body.localCom(), slickGrip: c.slickGrip.slice(), rearSlide: c.rearSlide, pitSpins: c.pitSpins, engineOut: c.engineOut, inverted: c.inverted, roofSlideTime: c.roofSlideTime, sideSlideTime: c.sideSlideTime, rollShed: c.rollShed, wreckCause: wreckCauses.get(c.id), wingsTorn: c.wingsTorn, spareWheels: c.spareWheels, openDoors: c.openDoorSpans().map(d=>({name:d.name,from:d.from.toArray().map(v=>+v.toFixed(2)),to:d.to.toArray().map(v=>+v.toFixed(2))})), oily: c.oily.slice(), blownOut: c.blownOut.slice(), gearLimit: c.gearLimit, steamPuffs: c.steamPuffs, oilLevel: c.oilLevel, coolantLevel: c.coolantLevel, fuelLevel: c.fuelLevel, clutchGrip: c.clutchGrip, clutchSmoke: c.clutchSmoke, steerPlay: c.steerPlay, doorOpenTime: c.doorOpenTime, doorsTorn: c.doorsTorn, doorSlams: c.doorSlams, rubDrag: Array.from(c.rubDrag), rubSmoke: c.rubSmoke, electricalFault: c.electricalFault, electricalCuts: c.electricalCuts, nutLoose: Array.from(c.nutLoose), wheelsShed: c.wheelsShed, exhaustBlow: c.exhaustBlow, exhaustPops: c.exhaustPops, diffWear: c.diffWear, debeads: c.debeads, steerLink: Array.from(c.steerLink), gearPops: c.gearPops, brakeDrag: Array.from(c.brakeDrag), discHeat: Array.from(c.discHeat), mountsBroken: c.mountsBroken, mountJolts: c.mountJolts, cargoSpilled: c.cargoSpilled, sumpCrack: c.sumpCrack, brakeFires: c.brakeFires, exhaustGone: c.exhaustGone, starterDamage: c.starterDamage, starterFails: c.starterFails, frameBend: c.frameBend, deadTime: c.deadTime, dazed: c.dazed, glassPops: c.glassPops, platesLost: c.platesLost, debrisPunctures: c.debrisPunctures, beadStress: Array.from(c.beadStress), doors: c.wreckParts.assemblies.filter(a=>/door|cargo|tailgate|mirror|boot|bumper/.test(a.name)).map(a=>({name:a.name,loose:a.loose,swing:a.swing??0,damage:a.damage,gone:a.members.every(m=>!m.mesh.visible)})), seized: c.seized, brakeFluid: c.brakeFluid, brokenSprings: c.springBias.filter(v=>v<1).length, brokenShafts: c.driveBias.filter(v=>v<1).length, flameHeat: c.flameHeat, oilSmoke: c.oilSmoke,
+        drips: c.drips.slice(), fov: c.id === 0 ? +camera.fov.toFixed(2) : undefined, status: c.id === 0 && clock < statusUntil ? statusMessage : '', gear: c.gear, rpm: c.rpm, slip: c.slip, wheelSlips: Array.from(c.wheelSlips), drivetrain: !!c.drivetrain, powerScale: c.powerScale, rollBar: c.rollBar.slice(), steerSkew: c.steerSkew, openness: c.openness, hotTime: c.hotTime, engineFires: c.engineFires, smashFires: c.smashFires, beltSlip: c.beltSlip, beltSnapped: c.beltSnapped, squeal: c.squeal, battery: c.battery, bearingWear: Array.from(c.bearingWear), hubDrag: Array.from(c.hubDrag), propBend: c.propBend, propWear: c.propWear, propSnapped: c.propSnapped, propVibration: c.propVibration, roll: Math.asin(Math.max(-1,Math.min(1,c.right.y))), shedKg: c.shedKg, bodyMass: c.body.mass(), bodyCom: c.body.localCom(), slickGrip: c.slickGrip.slice(), rearSlide: c.rearSlide, pitSpins: c.pitSpins, engineOut: c.engineOut, inverted: c.inverted, roofSlideTime: c.roofSlideTime, sideSlideTime: c.sideSlideTime, rollShed: c.rollShed, pinTime: c.pinTime, pins: c.pins, aiPhase: drivers.memory.get(c.id)?.phase, wreckCause: wreckCauses.get(c.id), wingsTorn: c.wingsTorn, spareWheels: c.spareWheels, openDoors: c.openDoorSpans().map(d=>({name:d.name,from:d.from.toArray().map(v=>+v.toFixed(2)),to:d.to.toArray().map(v=>+v.toFixed(2))})), oily: c.oily.slice(), blownOut: c.blownOut.slice(), gearLimit: c.gearLimit, steamPuffs: c.steamPuffs, oilLevel: c.oilLevel, coolantLevel: c.coolantLevel, fuelLevel: c.fuelLevel, clutchGrip: c.clutchGrip, clutchSmoke: c.clutchSmoke, steerPlay: c.steerPlay, doorOpenTime: c.doorOpenTime, doorsTorn: c.doorsTorn, doorSlams: c.doorSlams, rubDrag: Array.from(c.rubDrag), rubSmoke: c.rubSmoke, electricalFault: c.electricalFault, electricalCuts: c.electricalCuts, nutLoose: Array.from(c.nutLoose), wheelsShed: c.wheelsShed, exhaustBlow: c.exhaustBlow, exhaustPops: c.exhaustPops, diffWear: c.diffWear, debeads: c.debeads, steerLink: Array.from(c.steerLink), gearPops: c.gearPops, brakeDrag: Array.from(c.brakeDrag), discHeat: Array.from(c.discHeat), mountsBroken: c.mountsBroken, mountJolts: c.mountJolts, cargoSpilled: c.cargoSpilled, sumpCrack: c.sumpCrack, brakeFires: c.brakeFires, exhaustGone: c.exhaustGone, starterDamage: c.starterDamage, starterFails: c.starterFails, frameBend: c.frameBend, deadTime: c.deadTime, dazed: c.dazed, glassPops: c.glassPops, platesLost: c.platesLost, debrisPunctures: c.debrisPunctures, beadStress: Array.from(c.beadStress), doors: c.wreckParts.assemblies.filter(a=>/door|cargo|tailgate|mirror|boot|bumper/.test(a.name)).map(a=>({name:a.name,loose:a.loose,swing:a.swing??0,damage:a.damage,gone:a.members.every(m=>!m.mesh.visible)})), seized: c.seized, brakeFluid: c.brakeFluid, brokenSprings: c.springBias.filter(v=>v<1).length, brokenShafts: c.driveBias.filter(v=>v<1).length, flameHeat: c.flameHeat, oilSmoke: c.oilSmoke,
         engineDamage: c.engineDamage,
         tyreDamage: c.tyreDamage?.slice(), structure: c.structuralDamage?.slice(),
         partDamage: Object.fromEntries([...new Set(c.panels.map(m=>m.userData.detachAssembly as string|null).filter((v):v is string=>!!v))].map(n=>[n,Math.round(Math.max(0,...c.panels.filter(m=>m.userData.detachAssembly===n&&m.visible).map(m=>m.userData.damage??0)))])),

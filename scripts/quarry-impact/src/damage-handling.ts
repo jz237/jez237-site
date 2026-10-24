@@ -439,6 +439,26 @@ export function pitStrength(point:{x:number;z:number},direction:{x:number;z:numb
 }
 /** Rear tyre grip left while sliding after a PIT shove. */
 export const pitGrip=(slide:number)=>1-PIT.loss*Math.max(0,Math.min(1,Number.isFinite(slide)?slide:0));
+/** Pinned (offline): a car shoved by another car with at least PIN.force newtons while a wall or a second car pushes back
+ * from the far side (horizontal contact directions from its centre at a cosine below PIN.opposed) is held there. After
+ * PIN.hold seconds pinned it crushes in at both contacts, PIN.rate health a second (the wall side `wall` of that), in
+ * ticks of PIN.gap seconds, each big enough on both sides to dent the panels and crumple the structure. Breaking contact
+ * bleeds the clock off at PIN.decay times real time, so a shove that flickers between solver steps stays one pin. */
+export const PIN={force:2500,opposed:-.3,hold:.5,decay:2,gap:.5,rate:8,wall:.6} as const;
+/** A horizontal shove on a car: where it lands, how hard, and from which car (by<0: a wall or other scenery). */
+export type PinPush={x:number;z:number;force:number;by:number};
+/** The strongest car push on a car centred at (x,z) that something on the far side pushes back against: indices of the
+ * pusher and of the push it is squeezed against, or null when the car is not pinned. */
+export function pinnedBy(x:number,z:number,pushes:readonly PinPush[]):{push:number;against:number}|null{
+  const dir=(p:PinPush)=>{const dx=p.x-x,dz=p.z-z,l=Math.hypot(dx,dz);return Number.isFinite(l)&&l>1e-6&&p.force>=PIN.force?{x:dx/l,z:dz/l}:null;};
+  let best:{push:number;against:number}|null=null;
+  pushes.forEach((p,i)=>{const a=p.by>=0?dir(p):null;if(!a||best&&pushes[best.push].force>=p.force)return;
+    let against=-1;pushes.forEach((o,j)=>{const b=o.by!==p.by?dir(o):null;if(b&&a.x*b.x+a.z*b.z<PIN.opposed&&(against<0||o.force>pushes[against].force))against=j;});
+    if(against>=0)best={push:i,against};});
+  return best;
+}
+/** Seconds pinned after a step of dt: counts up while pinned and bleeds off at PIN.decay times real time once free. */
+export const pinClock=(time:number,pinned:boolean,dt:number)=>!Number.isFinite(time)||!(dt>0)?0:pinned?time+dt:Math.max(0,time-dt*PIN.decay);
 /** A bare front wheel (offline): once a corner's wing has been torn off, a hit there does EXPOSED_WHEEL.tyre times as much to
  * the tyre and `rim` times as much to the wheel, and nothing is left to rub on the tyre. */
 export const EXPOSED_WHEEL={tyre:1.8,rim:1.4} as const;
