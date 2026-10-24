@@ -1,22 +1,19 @@
 // The betta bowl's lid (render/bowl.ts): seated on the rim, or lifted off and carried up out of
 // sight (and brought back down onto it). Its pose goes to the globe's shader every frame
-// (GlobeView.setBowlLid). It comes off only from an upright bowl, and from then until it is back
-// on, the bowl tips less far: its water would pour out of the open mouth.
+// (GlobeView.setBowlLid). It comes off only to feed the fish, from a bowl standing still, which
+// stays put until the lid is back on (Feeding.ts): its water would pour out of the open mouth.
 
 import * as THREE from 'three/webgpu';
 import { BOWL, type BowlShape } from '../render/bowl';
 
 /** How long the lid takes to come off, or to go back on (s). */
-const LIFT_SECONDS = 2.6;
+const LIFT_SECONDS = 2.2;
 /** First it rises along the bowl's axis until its collar is clear of the mouth... */
 const CLEAR = 0.07;
 /** ...then a hand carries it up and away to the right, tipping it as it goes (the translating
  *  frame: from where it cleared the mouth, and a turn of it, in radians). */
 const AWAY = new THREE.Vector3(1.2, 2.7, 0.45);
 const AWAY_TIP = new THREE.Euler(0.35, 0.25, -0.6);
-/** It comes off only once the bowl stands within this of upright (radians), so the tighter tilt
- *  limit never snaps it. */
-const UPRIGHT = 0.12;
 
 const smooth = (a: number, b: number, x: number): number => {
   const t = THREE.MathUtils.clamp((x - a) / (b - a), 0, 1);
@@ -39,7 +36,7 @@ export class BowlLid {
   private readonly ray = new THREE.Ray();
 
   constructor(private readonly shape: BowlShape) {
-    this.update(0, new THREE.Matrix3(), true);
+    this.update(0, new THREE.Matrix3());
   }
 
   /** It is on, or on its way back on. */
@@ -57,24 +54,24 @@ export class BowlLid {
     return this.at.length() + this.shape.reach;
   }
 
-  /** How far the bowl may tip now (radians): less from the moment the lid starts to come off. */
-  get tiltLimit(): number {
-    return this.u > 0 ? BOWL.openTilt : Infinity;
+  /** On the rim, still. */
+  get seated(): boolean {
+    return this.u === 0;
+  }
+
+  /** Out of the way of the open mouth (food can go in). */
+  get clear(): boolean {
+    return this.u > 0.45;
   }
 
   set(on: boolean): void {
     this.wantOn = on;
   }
 
-  toggle(): void {
-    this.wantOn = !this.wantOn;
-  }
-
-  /** rotation: the globe's turn; upright: it stands within UPRIGHT of upright (see uprightOf). */
-  update(dt: number, rotation: THREE.Matrix3, upright: boolean): void {
+  /** rotation: the globe's turn. */
+  update(dt: number, rotation: THREE.Matrix3): void {
     const step = dt / LIFT_SECONDS;
-    if (this.wantOn) this.u = Math.max(0, this.u - step);
-    else if (this.u > 0 || upright) this.u = Math.min(1, this.u + step);
+    this.u = this.wantOn ? Math.max(0, this.u - step) : Math.min(1, this.u + step);
 
     const go = smooth(0.24, 1, this.u);
     // Seated (and rising out of the mouth) it turns with the globe; then the hand's way.
@@ -91,18 +88,6 @@ export class BowlLid {
     if (!this.shown) return false;
     const r = this.ray.set(origin, dir).applyMatrix4(this.toLid);
     return this.span(r, BOWL.lidRadius + 0.01, -BOWL.collarDepth, this.shape.top + 0.01);
-  }
-
-  /** A ray (the globe's translating frame) meets the open mouth (rotation: the globe's turn). */
-  hitsMouth(origin: THREE.Vector3, dir: THREE.Vector3, rotation: THREE.Matrix3): boolean {
-    const toGlobe = this.tmp.setFromMatrix3(rotation).transpose();
-    const r = this.ray.set(origin, dir).applyMatrix4(toGlobe);
-    return this.span(r, this.shape.bead + BOWL.beadRadius, BOWL.mouth - 0.02, this.shape.seat + 0.04);
-  }
-
-  /** The globe stands near enough upright for the lid to come off (tilt and lean, radians). */
-  static uprightOf(theta: number, lean: number): boolean {
-    return Math.abs(theta) < UPRIGHT && Math.abs(lean) < UPRIGHT;
   }
 
   /** The ray passes through the upright cylinder r <= rad, lo <= y <= hi. */

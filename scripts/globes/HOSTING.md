@@ -3,7 +3,7 @@
 Original: https://github.com/willwaltz/globes
 Author: Will Waltz · MIT License
 Upstream commit: 93c3b814bbca53463e8207b8e3c95fca8940dff5
-Imported: 2026-10-22 · Hosting build: 1.12.0
+Imported: 2026-10-22 · Hosting build: 1.13.0
 Public routes: https://jez237.com/demos/globes/ (the five original globes) and
 https://jez237.com/demos/betta-bowl/ (the **Living Silk** betta bowl, on its own)
 
@@ -285,7 +285,7 @@ off, and gives it a page of its own:
   light round and read darker, as thick glass does). Its geometry is a sphere grown to take in the
   lid wherever it is; pixels where a ray meets none of the bowl are left to the backdrop
   (`maskNode`).
-- **Lift lid / Replace lid** (or a click on the lid, or on the open mouth). It comes off only from
+- **Lift lid / Replace lid** (1.12 only: see 1.13) (or a click on the lid, or on the open mouth). It came off only from
   an upright bowl: it rises until its collar clears the mouth, then is carried up and away out of
   sight (`src/interaction/BowlLid.ts`, 2.6 s). While it is off, the bowl tips at most 25 degrees
   (`GlobeController.tiltLimit`): from ~47 degrees the water would pour out of the mouth.
@@ -299,6 +299,30 @@ off, and gives it a page of its own:
   coming off and going back on. Limits: the lid casts no shadow or caustic of its own into the
   water, the spray above the water still meets the glass's whole sphere, and the lid is not
   physically simulated (it is carried on a fixed path).
+
+Version 1.13 (Atelier unchanged) makes feeding the only reason the lid comes off, and feeds the fish:
+- **Feed** (or a click on the lid) replaces Lift lid / Replace lid. The solver cannot let water
+  leave the bowl, so instead of a realistic spill an open bowl is never moved: `Feeding.ts` locks
+  the bowl (`GlobeController.locked`: no hold starts, one under way is let go) and waits for it to
+  stand still (`GlobeController.settled`), lifts the lid (2.2 s), lets four pellets go one at a time
+  through the mouth, and puts the lid back on 1.8 s after the last is eaten, or after 30 s
+  whatever is left. The bowl is freed once the lid is seated. **Close lid** ends it early. The 1.12
+  tilt limit for an open bowl is gone (it can no longer be tipped open).
+- **Pellets** (`FishFood.pellets`, the betta's page only): ~1 mm reddish-brown balls that fall
+  through the air, dimple the film where they land (`FluidSim.push`), float held at the film (the
+  water's density at their centre kept at the surface's level) and are carried along it, kept
+  within 0.72 of the axis, and sink after 45-90 s. The koi and reef globes keep their flakes; the
+  pellet shading is compiled into the bowl's shader only (`foodWGSL(round)`).
+- **The betta eats** (`Betta` is now a `Feeder`; `feed` mode in `bettaSwim.mjs`): it takes a
+  pellet off the film from below as bettas do, lining up under the film a rise's length short of
+  it (`FEED_RISE` ground per unit of height), turning to it, then rising lips first with the head
+  tipped up, and sucks it in from 5.5 mm. A strike that ends at the film without it is a miss: it
+  drops back and comes round again. Swallowing it holds still; then it tips down off the film.
+- Tests: `node --test betta-swim.test.mjs` adds a feeding test (24 in all): three seeds reach a
+  pellet on the film lips first without the lips breaking the surface, swallow, and leave off. A
+  headless sweep of 80 seeds and pellet spots reached every pellet (median 6.0 s from anywhere in
+  the bowl, slowest 9.3 s) with no breach. In the browser (manual stepping) the whole cycle ran:
+  lid off, four pellets in, all eaten, lid back on, bowl free.
 
 ## Browser compatibility
 

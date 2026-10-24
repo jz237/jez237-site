@@ -3,6 +3,7 @@ import { createBetta } from '../../../betta-atelier/src/fish.js';
 import { TriangleBVH } from './triangleBVH.mjs';
 import { BettaSwim, BETTA_SCALE as SCALE } from './bettaSwim.mjs';
 import { BETTA_PROBES, BETTA_SURFACE_COUNT, bettaSurfaceHeights, readBettaWater } from './bettaWater.mjs';
+import type { Feeder, FoodAim } from './FishFood';
 import type { KoiEnv, KoiSense } from './Koi';
 
 /** The dimple the lips make at the film: for how long (s into the gulp), at what rate it adds speed
@@ -15,7 +16,7 @@ export const BUBBLE_RADIUS = 0.0035;
 /** The actual Atelier specimen, evaluated on the CPU for the refracted rays.
  * No screenshot/billboard: skin, seven membranes, mouth, covers and both eye
  * sockets remain separate animated three-dimensional surfaces. */
-export class Betta {
+export class Betta implements Feeder {
   readonly fish = createBetta({ compact: true });
   readonly rig = new THREE.Group();
   readonly atlas: THREE.CanvasTexture;
@@ -40,6 +41,11 @@ export class Betta {
   private loaded = false;
   active = false;
   flared = false;
+  /** Feeding (FishFood): the pellet it is after and how wide to open for it, set each frame; how
+   *  far from its lips it can take one. */
+  food: FoodAim | null = null;
+  gapeWant = 0;
+  readonly reach = 0.055;
 
   constructor() {
     this.rig.add(this.fish);
@@ -104,6 +110,8 @@ export class Betta {
     this.waterState = readBettaWater(sense, this.probes, env);
     const target = new THREE.Vector3().fromArray(this.waterState.flow);
     this.flow.lerp(target, 1 - Math.exp(-5 * dt));
+    this.swim.food = this.food ? this.food.pos : null;
+    this.swim.gape = this.gapeWant;
     // The tail's own working (read back from last frame's gait) is what lets the body gain speed.
     this.swim.advance(dt, this.flow.toArray(), env, this.waterState.submerged > 0.99, this.waterState, this.fish.userData.stroke ?? null);
     this.fish.userData.locomotion = this.locomotion();
@@ -184,6 +192,19 @@ export class Betta {
   }
 
   probePoints(): Float32Array { return this.probes; }
+
+  mouthAt(): [number, number, number] {
+    return [this.mouth.x, this.mouth.y, this.mouth.z];
+  }
+
+  ahead(): [number, number, number] {
+    const s = this.swim;
+    return [-Math.cos(s.heading) * Math.cos(s.pitch), Math.sin(s.pitch), Math.sin(s.heading) * Math.cos(s.pitch)];
+  }
+
+  busy(): boolean {
+    return !this.active || !this.loaded || this.swim.mode === 'startle';
+  }
 
   /** A vertical column of density probes through the free surface above the mouth. */
   surfaceProbes(): Float32Array {

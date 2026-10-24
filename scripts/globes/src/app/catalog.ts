@@ -44,7 +44,7 @@ const ALL: readonly GlobeEntry[] = [
   {
     id: 'betta',
     name: 'Living Silk',
-    description: 'A small betta explores its glass bowl, gliding between quiet pauses and curling into turns. Lift the lid off its open mouth, tilt the water through its flowing fins, or watch its one-second display.',
+    description: 'A small betta explores its glass bowl, gliding between quiet pauses and curling into turns. Feed it through the lid, tilt the water through its flowing fins, or watch its one-second display.',
     koi: false,
     betta: true,
     clarity: 0.22,

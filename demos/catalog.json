@@ -534,7 +534,7 @@
     "id": "025",
     "title": "Betta Bowl · Living Silk",
     "category": "WebGPU · Living aquarium",
-    "description": "A betta lives in a glass bowl of real simulated water. Lift the glass lid off its open mouth and set it back, tilt the bowl and watch the water and its flowing fins answer, or wait for it to rest on the sand, flare at its reflection and rise to gulp air at the surface.",
+    "description": "A betta lives in a glass bowl of real simulated water. Feed it: the glass lid lifts off, pellets drop onto the water and the betta rises to take them from the surface. Tilt the bowl and watch the water and its flowing fins answer, or wait for it to rest on the sand, flare at its reflection and gulp air.",
     "url": "betta-bowl/",
     "image": "assets/betta-bowl.jpg",
     "imageAlt": "A glass betta bowl with a clear lid and knob, a turquoise and crimson betta swimming above a bed of sand",
@@ -542,7 +542,7 @@
     "imageHeight": 630,
     "source": "https://github.com/jz237/jez237-site/tree/main/scripts/globes",
     "features": [
-      "Lift & replace the glass lid",
+      "Feed it pellets through the lid",
       "Drag to tilt the bowl & its water",
       "Flare fins on request",
       "Air gulps, resting & mirror displays"

@@ -9,6 +9,10 @@
 // Flakes live in the sim frame (the fish's: world axes, the globe's centre at the origin); one
 // that has settled keeps its place in the globe frame (it turns with the globe). The renderer
 // traces them from the fish's pose texture (row 0, texels FOOD_TEXEL on: see foodWGSL).
+//
+// The betta's bowl is fed pellets instead (pellets: dropped in through the open mouth by
+// Feeding.ts): small round ones that float, held at the film where they land and carried along it,
+// until after a minute or so they have soaked up enough water to sink.
 
 import { KOI_TEX_WIDTH } from './koiWGSL';
 import type { Crown } from './Clownfish';
@@ -32,6 +36,14 @@ const SINK = 0.011;
 const FOLLOW = 0.3;
 /** Falling through the air: how fast at most (units/s). */
 const AIR_FALL = 1.4;
+/** A pellet's radius (~1 mm), and how long it floats (s, at least, plus up to as long again). How
+ *  hard the film holds it (its upward speed, units/s, per unit of the water's density above the
+ *  surface's level at its centre), and how near the middle it stays (horizontally: the water is
+ *  stiller there than the glass's meniscus, which it is kept clear of). */
+const PELLET_RADIUS = 0.0085;
+const PELLET_FLOAT = 45;
+const PELLET_LIFT = 0.6;
+const PELLET_RANGE = 0.72;
 
 /** A fish that eats flakes. */
 export interface Feeder {
@@ -76,6 +88,8 @@ interface Flake {
   eaten: number;
   /** A slowly wandering spin it tends to (flutter). */
   wander: Vec3;
+  /** (A pellet) the age at which it has soaked enough to sink. */
+  soak: number;
 }
 
 export interface FoodEnv {
@@ -175,6 +189,11 @@ export class FishFood {
   enabled = false;
   /** Flakes eaten so far (for testing). */
   eatenCount = 0;
+  /** Floating pellets rather than flakes (the betta's bowl). */
+  pellets = false;
+  /** Where pellets have dropped into the water since this was last emptied (the page dimples the
+   *  surface there). */
+  readonly splashes: Vec3[] = [];
 
   /** In the reef globe, flakes also settle on the anemone's crown, the rock and the corals. */
   setReef(crown: Crown | null): void {
@@ -199,22 +218,25 @@ export class FishFood {
     if (!this.enabled || slot < 0) return false;
     const kick = mul(randUnit(), 0.05);
     kick[1] = Math.abs(kick[1]) * 0.6 + 0.01;
+    // (A pellet is let go from above the water: it falls in.)
+    if (this.pellets) kick[1] = -0.05;
     this.slots[slot] = {
       pos: [...p],
       vel: kick,
       normal: randUnit(),
       turn: Math.random() * Math.PI * 2,
       spin: mul(randUnit(), 7),
-      size: 0.8 + 0.45 * Math.random(),
+      size: this.pellets ? 0.85 + 0.3 * Math.random() : 0.8 + 0.45 * Math.random(),
       seed: Math.random(),
       age: 0,
-      wet: true,
+      wet: !this.pellets,
       landed: null,
       // (Almost always within a second or two; now and then one takes a little longer.)
       notice: Array.from({ length: fish }, () => (Math.random() < 0.9 ? 0.35 + 1.1 * Math.random() : 1.5 + 2.5 * Math.random())),
       eater: -1,
       eaten: 0,
       wander: mul(randUnit(), 0.8),
+      soak: PELLET_FLOAT * (1 + Math.random()),
     };
     return true;
   }
@@ -329,14 +351,27 @@ export class FishFood {
 
       let water: Vec3 = [0, 0, 0];
       let wet = f.wet;
+      let density = f.wet ? 1 : 0;
       if (sample >= 0 && probes) {
-        wet = probes[sample + 3] > env.iso;
+        density = probes[sample + 3];
+        wet = density > env.iso;
         water = [probes[sample], probes[sample + 1], probes[sample + 2]];
       }
-      if (wet && !f.wet) f.vel = mul(f.vel, 0.3); // (into the water: it all but stops)
-      f.wet = wet;
+      // A pellet floats: once at the film, it is held there (where the water's density at its
+      // centre is the surface's), carried along it by the water, until it has soaked.
+      const floating = this.pellets && f.age < f.soak && (wet || (f.wet && density > 0.04));
+      if (wet && !f.wet) {
+        f.vel = mul(f.vel, 0.3); // (into the water: it all but stops)
+        if (this.pellets) this.splashes.push([...f.pos]);
+      }
+      f.wet = wet || floating;
 
-      if (wet) {
+      if (floating) {
+        const along = sub(water, mul(up, dot(water, up)));
+        const want = add(along, mul(up, PELLET_LIFT * (density - env.iso)));
+        f.vel = add(f.vel, mul(sub(want, f.vel), 1 - Math.exp(-dt / 0.12)));
+        f.spin = mul(f.spin, Math.exp(-dt * 2));
+      } else if (wet) {
         // Carried by the water, sinking very slowly; fluttering as it goes (a thin flake slips
         // sideways, the way its face leans).
         const lean = sub(f.normal, mul(up, dot(f.normal, up)));
@@ -363,8 +398,18 @@ export class FishFood {
         f.normal = norm(rotate(f.normal, axis, w * dt), f.normal);
       }
 
-      // The glass.
-      const r = RADIUS * f.size;
+      // The glass (a floating pellet is kept nearer the middle).
+      const r = (this.pellets ? PELLET_RADIUS : RADIUS) * f.size;
+      if (floating) {
+        const h = sub(f.pos, mul(up, dot(f.pos, up)));
+        const hl = len(h);
+        if (hl > PELLET_RANGE) {
+          f.pos = add(f.pos, mul(h, PELLET_RANGE / hl - 1));
+          const n = mul(h, 1 / hl);
+          const out = dot(f.vel, n);
+          if (out > 0) f.vel = sub(f.vel, mul(n, out));
+        }
+      }
       const pr = len(f.pos);
       const lim = env.radius - r - 0.004;
       if (pr > lim) {
@@ -393,9 +438,9 @@ export class FishFood {
     this.flakes.forEach((f, k) => {
       // Pop: from nothing, overshooting a little, settling (a quick spring); a little smaller as
       // it goes into a mouth.
-      const pop = 1 - Math.exp(-f.age / 0.06) * Math.cos(f.age * 19);
+      const pop = this.pellets ? 1 : 1 - Math.exp(-f.age / 0.06) * Math.cos(f.age * 19);
       const gulp = f.eater >= 0 ? 1 - 0.3 * Math.min(f.eaten / 0.3, 1) : 1;
-      const r = RADIUS * f.size * pop * gulp;
+      const r = (this.pellets ? PELLET_RADIUS : RADIUS) * f.size * pop * gulp;
       const o = 4 * (1 + 2 * k);
       d.set([f.pos[0], f.pos[1], f.pos[2], Math.max(r, 1e-5)], o);
       // (Normal scaled by 1 + its turn as a fraction of a full turn: the shader takes both apart.)
@@ -410,8 +455,9 @@ export class FishFood {
 // FOOD_TEXEL.. must fit in the pose row.
 if (FOOD_TEXEL + FOOD_TEXELS > KOI_TEX_WIDTH) throw new Error('fish food: no room in the pose texture');
 
-/** The flakes for the renderer: food_trace (the nearest flake a ray meets) and food_shade. */
-export function foodWGSL(): string {
+/** The flakes for the renderer: food_trace (the nearest flake a ray meets) and food_shade. round:
+ *  they are the betta's pellets (FishFood.pellets), little balls. */
+export function foodWGSL(round = false): string {
   return /* wgsl */ `
 const FOOD_TEXEL: i32 = ${FOOD_TEXEL};
 const FOOD_MAX: i32 = ${FOOD_MAX};
@@ -452,7 +498,14 @@ fn food_trace(pose: texture_2d<f32>, p: vec3f, dir: vec3f, tMax: f32, foot: f32,
     let miss2 = max(dot(oc, oc) - tc * tc, 0.0);
     let px = foot * (path0 + max(tc, 0.0));
     if (miss2 > (r + 2.0 * px) * (r + 2.0 * px)) { continue; }
-    hit.near = true;
+    hit.near = true;${round ? `
+    // (A pellet: a ball.)
+    let tb = tc - sqrt(max(r * r - miss2, 0.0));
+    if (miss2 < r * r && tb > 0.0 && tb < min(tMax, hit.t)) {
+      hit.t = tb;
+      hit.k = k;
+    }
+    continue;` : ''}
     let bl = length(B.xyz);
     let nrm = B.xyz / bl;
     let dn = dot(dir, nrm);
@@ -489,7 +542,18 @@ fn food_colour(seed: f32) -> vec3f {
 // The flake k's light at x (on it), seen along dir.
 fn food_shade(pose: texture_2d<f32>, k: i32, x: vec3f, dir: vec3f, inWater: bool, lit: vec4f, lightTex: texture_3d<f32>, lightSamp: sampler) -> vec3f {
   let A = food_tex(pose, FOOD_TEXEL + 1 + 2 * k);
-  let B = food_tex(pose, FOOD_TEXEL + 2 + 2 * k);
+  let B = food_tex(pose, FOOD_TEXEL + 2 + 2 * k);${round ? `
+  // A pellet: a glossy little ball of pressed meal, reddish brown, flecked.
+  let nb = normalize(x - A.xyz);
+  let qb = nb * 3.0 + vec3f(B.w * 23.0);
+  var pc = mix(vec3f(0.30, 0.075, 0.03), vec3f(0.42, 0.16, 0.05), fract(B.w * 7.3)) * (0.8 + 0.35 * globes_noise3(qb * 2.0));
+  pc = mix(pc, vec3f(0.55, 0.38, 0.16), 0.6 * smoothstep(0.8, 0.92, globes_noise3(qb * 5.0)));
+  let Lb = select(GLOBES_SUN_DIR, GLOBES_SUN_DIR_WATER, inWater);
+  var Eb = GLOBES_SUN_IRR * 0.86;
+  if (inWater) { Eb = globes_sunIn(lightTex, lightSamp, x + Lb * 0.02, lit); }
+  let ab = select(vec3f(0.42, 0.42, 0.46), mix(vec3f(0.035, 0.05, 0.045), vec3f(0.15, 0.25, 0.28), 0.5 + 0.5 * nb.y), inWater);
+  let hb = normalize(Lb - dir);
+  return pc * (Eb * max(dot(nb, Lb), 0.0) + ab) / 3.14159265 + Eb * 0.06 * pow(max(dot(nb, hb), 0.0), 40.0);` : `
   var n = B.xyz / length(B.xyz);
   if (dot(n, dir) > 0.0) { n = -n; }
   // Mottled: the crumbs it is pressed from, darker and lighter, a few pale specks.
@@ -511,7 +575,7 @@ fn food_shade(pose: texture_2d<f32>, k: i32, x: vec3f, dir: vec3f, inWater: bool
   // A faint waxy sheen.
   let hv = normalize(L - dir);
   c += E * 0.04 * pow(max(dot(n, hv), 0.0), 24.0) * max(ndl, 0.0);
-  return c;
+  return c;`}
 }
 `;
 }

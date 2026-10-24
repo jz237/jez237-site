@@ -1268,7 +1268,7 @@ ${clownWGSL()}
 ${clownShadeWGSL()}
 
 // ---- fish food ---------------------------------------------------------------------
-${foodWGSL()}
+${foodWGSL(bowl !== null)}
 
 fn globes_koiPatch(s: f32, ang: f32, nz: f32, s0: f32, a0: f32, rs: f32, ra: f32) -> f32 {
   let d = length(vec2f((s - s0) / rs, (ang - a0) / ra));

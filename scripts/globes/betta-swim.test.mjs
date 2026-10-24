@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { BEHAVIORS, BETTA_SCALE, BettaSwim, GULP_LENGTH, MAX_SLOPE, MIN_LEG, MOUTH_DEPTH, REST_HEIGHT, STARTLE_COOLDOWN, STARTLE_LENGTH, STROKE_ACCEL, bettaMouthHeight, gulpGillCover, gulpMouth } from './src/fish/bettaSwim.mjs';
+import { BEHAVIORS, BETTA_SCALE, BettaSwim, GULP_LENGTH, MAX_SLOPE, MIN_LEG, MOUTH_DEPTH, REST_HEIGHT, STARTLE_COOLDOWN, STARTLE_LENGTH, STROKE_ACCEL, bettaMouth, bettaMouthHeight, gulpGillCover, gulpMouth } from './src/fish/bettaSwim.mjs';
 import { SwimGait } from '../betta-atelier/src/swim-gait.js';
 
 const env = { radius: 0.95, sandLevel: -0.55, level: 0.181, iso: 0.5 };
@@ -418,5 +418,33 @@ test('a knock or a dry film ends an episode on the spot', () => {
     for (let i = 0; i < 6; i++) s.advance(1 / 60, [0, 0, 0], upright, true, { ...calm(), ...cut });
     assert.ok(!BEHAVIORS.has(s.mode) && !s.flaring, `${mode} went on after ${JSON.stringify(cut)}`);
     assert.ok(cut.flow ? s.mode === 'startle' : true);
+  }
+});
+
+test('food on the film: it swims to the pellet lips first, without breaching, then leaves off', () => {
+  for (const [seed, pellet] of [[237, [-0.25, env.level, 0.2]], [42, [0.3, env.level, -0.15]], [901, [0.05, env.level, 0.4]]]) {
+    const s = new BettaSwim(seed);
+    for (let i = 0; i < 600; i++) s.advance(1 / 60, [0, 0, 0], upright, true, calm());
+    s.food = pellet;
+    let reached = 0;
+    for (let i = 0; i < 60 * 20 && !reached; i++) {
+      s.advance(1 / 60, [0, 0, 0], upright, true, calm());
+      assert.equal(s.mode, 'feed');
+      const lips = bettaMouth(s.position, s.heading, s.pitch);
+      assert.ok(lips[1] < env.level + 0.006, 'the lips stay at the film');
+      if (Math.hypot(...lips.map((v, k) => v - pellet[k])) < 0.04) reached = i / 60; // (inside Betta.reach, which sucks it in from 0.055)
+    }
+    assert.ok(reached > 0, `seed ${seed} never reached the pellet`);
+    // Swallowing: the pellet is on its way in (no aim left), the mouth still wide.
+    s.food = null;
+    s.gape = 1;
+    for (let i = 0; i < 27; i++) {
+      s.advance(1 / 60, [0, 0, 0], upright, true, calm());
+      assert.equal(s.mode, 'feed');
+      assert.ok(s.speed < 0.2);
+    }
+    s.gape = 0;
+    for (let i = 0; i < 120; i++) s.advance(1 / 60, [0, 0, 0], upright, true, calm());
+    assert.notEqual(s.mode, 'feed');
   }
 });

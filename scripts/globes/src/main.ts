@@ -13,6 +13,7 @@ import { CLOWN_PROBES, Clownfishes } from './fish/Clownfish';
 import { FishFood, type Feeder } from './fish/FishFood';
 import { classifyFailure, createDevice } from './gpu/device';
 import { BowlLid } from './interaction/BowlLid';
+import { Feeding } from './interaction/Feeding';
 import { GlobeController } from './interaction/GlobeController';
 import { KelpForest } from './kelp/KelpForest';
 import { REEF_PROBES, Reef } from './reef/Reef';
@@ -54,6 +55,11 @@ function fillFor(cfg: SimConfig, radius: number, water = 1): number {
   const standard = (cfg.fillFraction * sphere - sand) * water + sand;
   return Math.min(standard / sphere, 0.95);
 }
+
+/** A pellet dropping into the betta's bowl: the push it gives the film (world units/s along the
+ *  water's weight, once) and over what radius. */
+const PELLET_DIMPLE = 0.4;
+const PELLET_DIMPLE_RADIUS = 0.02;
 
 /** Where the creatures' probes of the water sit in FluidSim's list (PROBES): the koi's first,
  *  then the two clownfish's, then the anemone's. */
@@ -126,22 +132,27 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   const koi = new Koi(device, fishConfig, koiEnv());
   sim.koiPose = koi.texture;
   const betta = new Betta();
-  // The betta's globe is a bowl, open at the mouth, with a lid (where the page shows it).
+  // The betta's globe is a bowl, open at the mouth, with a lid (where the page shows it), which
+  // comes off only to feed the fish.
   const bowl = GLOBES.some((g) => g.betta) ? bowlShape(o.globe) : null;
   const lid = bowl ? new BowlLid(bowl) : null;
+  const feeding = lid ? new Feeding(lid, controller) : null;
   const bettaControls = document.createElement('div');
   bettaControls.className = 'betta-controls';
-  bettaControls.innerHTML = '<span>Living Silk</span><button type="button" data-action="lid" aria-pressed="false">Lift lid</button><button type="button" data-action="flare" aria-pressed="false">Flare fins</button>';
+  bettaControls.innerHTML = '<span>Living Silk</span><button type="button" data-action="feed">Feed</button><button type="button" data-action="flare" aria-pressed="false">Flare fins</button>';
   const flareButton = bettaControls.querySelector<HTMLButtonElement>('[data-action="flare"]')!;
-  const lidButton = bettaControls.querySelector<HTMLButtonElement>('[data-action="lid"]')!;
-  lidButton.hidden = !lid;
-  const toggleLid = (): void => {
-    if (!lid) return;
-    lid.toggle();
-    lidButton.setAttribute('aria-pressed', String(!lid.on));
-    lidButton.textContent = lid.on ? 'Lift lid' : 'Replace lid';
-  };
-  lidButton.addEventListener('click', toggleLid);
+  const feedButton = bettaControls.querySelector<HTMLButtonElement>('[data-action="feed"]')!;
+  feedButton.hidden = !feeding;
+  if (feeding) {
+    feeding.onChange = () => {
+      const s = feeding.state;
+      feedButton.textContent = s === 'idle' ? 'Feed' : s === 'closing' ? 'Closing lid' : 'Close lid';
+      feedButton.disabled = s === 'closing';
+      feedButton.title = s === 'idle' ? 'Lift the lid and drop in a few pellets (the bowl is held still until the lid is back on)' : '';
+    };
+    feeding.onChange();
+    feedButton.addEventListener('click', () => feeding.request());
+  }
   // (Shown with the betta: none on a page without it.)
   bettaControls.hidden = true;
   flareButton.disabled = true;
@@ -241,7 +252,8 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     }
     reef.active = reefOn;
     food.clear();
-    food.enabled = g.koi || reefOn;
+    food.enabled = g.koi || reefOn || !!g.betta;
+    food.pellets = !!g.betta;
     food.setReef(reefOn ? clowns.crown : null);
     sim.clarity = g.clarity ?? 1;
     globe.uLit.value.y = o.light.shaftScatter * (g.betta ? 0.18 : 1);
@@ -261,18 +273,17 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   // One frame of the world: the globe's motion, the koi (acting on what the water told it a
   // frame or two ago), the water's own motion, then the water (and the kelp with it).
   // The fish that eat the food in the globe shown.
-  const feeders = (): Feeder[] => (reef.active ? clowns.fish : koi.visible ? [koi] : []);
+  const feeders = (): Feeder[] => (reef.active ? clowns.fish : koi.visible ? [koi] : betta.active ? [betta] : []);
   const advance = (dt: number): void => {
-    // (How far the betta bowl may tip, with its lid as it is.)
-    if (lid) controller.tiltLimit = betta.active ? lid.tiltLimit : Infinity;
     controller.update(dt, cfg.gravity);
-    if (lid) {
-      // The lid, turning with the bowl (it comes off only while the bowl stands upright).
-      lid.update(dt, controller.rotation, BowlLid.uprightOf(controller.theta, controller.lean) && !controller.holding);
+    if (lid && feeding) {
+      // Feeding (the lid comes off, the pellets go in), and the lid, turning with the bowl.
+      feeding.update(dt, (p) => food.spawn(p, feeders().length), food.count);
+      lid.update(dt, controller.rotation);
       globe.setBowlLid(lid.toLid, lid.shown, lid.reach);
     }
     // What each fish is after (before they move).
-    for (const f of [koi, ...clowns.fish]) {
+    for (const f of [koi, betta, ...clowns.fish]) {
       f.food = null;
       f.gapeWant = 0;
     }
@@ -286,6 +297,10 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
       // Its lips dimple the film as it gulps; diving, it lets bubbles go.
       const d = betta.takeDisturbance();
       if (d.push > 0) sim.push(d.pushAt.toArray(), d.push, RIPPLE_RADIUS);
+      // (A pellet dropping in dimples the film too, a little.)
+      const dropped = food.splashes.shift();
+      food.splashes.length = 0;
+      if (dropped && !(d.push > 0)) sim.push(dropped, PELLET_DIMPLE, PELLET_DIMPLE_RADIUS);
       if (d.bubbles > 0) sim.splash.emit(d.bubblesAt.toArray(), d.bubbles, BUBBLE_RADIUS);
     }
     sim.koiVisible = koi.visible;
@@ -316,7 +331,8 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   // middle as that passes (well inside the glass). Above the water it falls in.
   const raycaster = new THREE.Raycaster();
   const spawnFood = (clientX: number, clientY: number): boolean => {
-    if (!food.enabled) return false;
+    // (The betta's bowl is fed through its mouth, the lid off: Feeding.)
+    if (!food.enabled || betta.active) return false;
     const r = renderer.domElement.getBoundingClientRect();
     raycaster.setFromCamera(new THREE.Vector2(((clientX - r.left) / r.width) * 2 - 1, 1 - ((clientY - r.top) / r.height) * 2), camera);
     // Into a sphere of radius rad (from outside): where, or null.
@@ -343,15 +359,15 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     return food.spawn([p.x, p.y, p.z], feeders().length);
   };
 
-  // A click on the betta bowl's lid lifts it off; on its open mouth, puts it back.
+  // A click on the betta bowl's lid feeds the fish (it lifts the lid).
   const clickLid = (clientX: number, clientY: number): boolean => {
-    if (!lid || !betta.active) return false;
+    if (!lid || !feeding || !betta.active || feeding.state !== 'idle') return false;
     const r = renderer.domElement.getBoundingClientRect();
     raycaster.setFromCamera(new THREE.Vector2(((clientX - r.left) / r.width) * 2 - 1, 1 - ((clientY - r.top) / r.height) * 2), camera);
     const ro = raycaster.ray.origin.clone().sub(controller.center);
     const rd = raycaster.ray.direction;
-    if (!(lid.on ? lid.hits(ro, rd) : lid.hitsMouth(ro, rd, controller.rotation))) return false;
-    toggleLid();
+    if (!lid.hits(ro, rd)) return false;
+    feeding.request();
     return true;
   };
 

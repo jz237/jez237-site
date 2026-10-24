@@ -34,9 +34,6 @@ export const BOWL = {
   ventRadius: 0.013,
   /** The water stays under this plane (along the axis), just under the collar's foot. */
   waterCeiling: 0.85,
-  /** How far the globe may tip with the lid off (radians): its water stays well inside the mouth
-   *  (it would pour out of the mouth's low side at ~47 degrees). */
-  openTilt: (25 * Math.PI) / 180,
 } as const;
 
 export interface BowlShape {
