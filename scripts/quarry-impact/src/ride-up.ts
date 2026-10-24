@@ -7,6 +7,9 @@ export const RIDE={closing:11,toward:6,front:.45,end:.5,lift:2.6,chance:.5,gap:2
  * weight: ON_TOP.crush of structure a second at the end or roof beneath, and a real dent every ON_TOP.dent seconds; after
  * ON_TOP.credit seconds the car on top is credited once. */
 export const ON_TOP={above:.45,reach:2.6,crush:.12,dent:.3,dentDamage:2.5,credit:.4} as const;
+/** The player's own ride-ups (riding up, or being ridden up on) run in slow motion for RIDE_SLOWMO.seconds at RIDE_SLOWMO.scale,
+ * with a steel crunch, the way a big smash does. */
+export const RIDE_SLOWMO={seconds:.7,scale:.35} as const;
 /** The face of the car underneath that takes the weight: 0 front, 1 rear, 4 roof. */
 export const crushedFace=(along:number)=>along>.35?0:along<-.35?1:4;
 type V={x:number;z:number};

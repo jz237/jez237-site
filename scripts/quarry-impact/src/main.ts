@@ -100,7 +100,7 @@ import {eventGridSetup,eventPerformanceGrid} from './grid-setup';
 import {gridCarKind,gridRecordKey,GRID_LINEUPS,GRID_PERFORMANCE} from './grid-rules';
 import {timedRaceLimit,timedRaceFinished,timedRaceOrder,timedRaceResult,timedRaceRecordScore} from './timed-race';
 import {RaceRecovery,freeRecoverySlot} from './race-recovery';
-import {RIDE,ON_TOP,rammer,ridesUp,alongCar,crushedFace} from './ride-up';
+import {RIDE,ON_TOP,RIDE_SLOWMO,rammer,ridesUp,alongCar,crushedFace} from './ride-up';
 import {stallHint,MAX_ENGINE_RESTART} from './engine-stall';
 import {PursuitSession} from './pursuit';
 import {PursuitDriving} from './pursuit-driving';
@@ -1884,7 +1884,9 @@ function step(dt: number) {
     if(!online?.active&&a&&b&&a.extendedDamage&&b.extendedDamage&&a.health>0&&b.health>0){const side=(c:Vehicle)=>({c:c.current,f:c.forward,v:c.velocity,half:DEFINITIONS[c.kind].halfLength});
       const who=rammer(closing,side(a),side(b),point);const s=who===0?a:who===1?b:null;
       if(s&&elapsed-(rideAt.get(s.id)??-1e9)>=RIDE.gap&&ridesUp(s.id*131+(who===0?b.id:a.id)*17+Math.floor(elapsed))){rideAt.set(s.id,elapsed);rideUps++;
-        const nose=s.forward.clone().multiplyScalar(DEFINITIONS[s.kind].halfLength*.7).add(s.current);s.body.applyImpulseAtPoint({x:0,y:s.body.mass()*RIDE.lift,z:0},{x:nose.x,y:nose.y,z:nose.z},true);}}
+        const nose=s.forward.clone().multiplyScalar(DEFINITIONS[s.kind].halfLength*.7).add(s.current);s.body.applyImpulseAtPoint({x:0,y:s.body.mass()*RIDE.lift,z:0},{x:nose.x,y:nose.y,z:nose.z},true);
+        // The player's own ride-up plays out in slow motion with the steel grinding, like a big smash.
+        if(!demo&&(a.id===0||b.id===0)){if(clock>=slowMoUntil){slowMoUntil=clock+RIDE_SLOWMO.seconds;slowMoScale=RIDE_SLOWMO.scale;}sound.clip('metal-groan',nose,.8,1.2);recordRumbleImpact(.8);}}}
     // Who had hurt the player most before this contact (a mutual crash must not count as revenge for itself).
     const rivalBefore=!online?.active&&a&&b&&(a.id===0||b.id===0)?eventAwards.rivalOf(0):null;
     // Weight matters (offline): the lighter car takes the larger share of a car-to-car crash.
@@ -2652,7 +2654,7 @@ async function boot() {
         p95: times[Math.floor(times.length * 0.95)],
         audio: sound.buffers.size,
         activeParticles: fx.particles.filter(p=>p.life>0).length,
-        debris: fx.debris.length, wallSlams, mirrorsClipped, bumpStarts, aiFireOuts, rideUps, mounts, dominoes, pinEscapes, sandwiches, huntLeader: drivers.leader, bumperLocks: {made: locksMade, torn: locksTorn, active: bumperLocks.length}, tethers: {made: tethersMade, active: bumperTethers.length}, pileUps, biggestPileUp, debrisAt: fx.debris.map(d=>{const p=d.body.translation();return [+p.x.toFixed(2),+p.y.toFixed(2),+p.z.toFixed(2),+d.body.mass().toFixed(1),+d.age.toFixed(2)];}),
+        debris: fx.debris.length, wallSlams, mirrorsClipped, bumpStarts, aiFireOuts, rideUps, mounts, slowMo: +Math.max(0, slowMoUntil - clock).toFixed(2), dominoes, pinEscapes, sandwiches, huntLeader: drivers.leader, bumperLocks: {made: locksMade, torn: locksTorn, active: bumperLocks.length}, tethers: {made: tethersMade, active: bumperTethers.length}, pileUps, biggestPileUp, debrisAt: fx.debris.map(d=>{const p=d.body.translation();return [+p.x.toFixed(2),+p.y.toFixed(2),+p.z.toFixed(2),+d.body.mass().toFixed(1),+d.age.toFixed(2)];}),
         voices: sound.activeVoices,
         loops: sound.loops.size,
         thermal: vehicleFire?.stats,
