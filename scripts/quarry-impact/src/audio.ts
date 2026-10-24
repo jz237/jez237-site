@@ -34,6 +34,14 @@ export const MISFIRE_AUDIO=.3;
 /** Dazed hearing: the low-pass cutoff (Hz) slides from wide open down to a dull thud as the daze deepens. */
 export const DAZE_HEARING={open:22000,dull:550} as const;
 export const dazeHearing=(level:number)=>{const l=Math.max(0,Math.min(1,Number.isFinite(level)?level:0));return DAZE_HEARING.open*Math.pow(DAZE_HEARING.dull/DAZE_HEARING.open,l);};
+/** Recorded clips for parts letting go (ElevenLabs, tools/destruction-audio.py): clip id, volume, rate and length to play. */
+const BREAK_CLIPS:Record<string,{id:string;volume:number;rate:number;duration:number}>={
+  spring:{id:'spring-snap',volume:.8,rate:1,duration:.8},shaft:{id:'shaft-snap',volume:.8,rate:1,duration:1},propshaft:{id:'shaft-snap',volume:.85,rate:.9,duration:1.1},
+  diff:{id:'shaft-snap',volume:.9,rate:.8,duration:1.2},tierod:{id:'spring-snap',volume:.6,rate:1.25,duration:.65},cable:{id:'spring-snap',volume:.5,rate:1.5,duration:.55},
+  handbrake:{id:'spring-snap',volume:.5,rate:1.4,duration:.6},rod:{id:'rod-bang',volume:1,rate:1,duration:1.8},battery:{id:'battery-rip',volume:.8,rate:1,duration:1},
+  bearing:{id:'engine-seize',volume:.5,rate:1.3,duration:1.2}};
+/** The recorded grandstand roar answers moments of CROWD_CHEER.min intensity or more, at most once every CROWD_CHEER.gap seconds. */
+export const CROWD_CHEER={min:.5,gap:3.5,level:.45} as const;
 export class Sound {
   private acousticProbe=new TrackAcousticProbe();
   private reflections?:TrackReflections;
@@ -140,8 +148,13 @@ export class Sound {
     }).catch(()=>{});
   }
   /** Crowd reaction to a big moment (0..1); silent until audio is unlocked, and when muted or paused. */
+  private cheerAt=-10;
   crowd(intensity:number){
     if(!this.ready||this.muted||this.paused||!this.ctx||!this.ambientBus||this.ctx.state!=='running')return false;
+    const cheer=this.buffers.get('crowd-cheer'),now=this.ctx.currentTime;
+    if(cheer&&intensity>=CROWD_CHEER.min&&now-this.cheerAt>=CROWD_CHEER.gap){this.cheerAt=now;
+      const source=this.ctx.createBufferSource(),gain=this.ctx.createGain();source.buffer=cheer;source.playbackRate.value=.95+Math.random()*.1;
+      gain.gain.value=Math.min(1,CROWD_CHEER.level*intensity);source.connect(gain).connect(this.ambientBus);source.start();return true;}
     this.crowdRoar??=new CrowdRoar(this.ctx,this.ambientBus);
     return this.crowdRoar.roar(intensity);
   }
@@ -242,18 +255,27 @@ export class Sound {
     this.dazeLevel=l;this.dazeFilter.frequency.setTargetAtTime(dazeHearing(l),this.ctx.currentTime,.08);
   }
   /** A misfire's exhaust pop: the burst sample, pitched up, cut short and muffled. */
-  backfire(p:T.Vector3){this.shot('vehicle-burst',p,.5,{rate:2.1,delay:0,duration:.17,lowpass:2400});}
+  backfire(p:T.Vector3){if(this.buffers.has('backfire'))this.shot('backfire',p,.6,{rate:1,delay:0,duration:.7});else this.shot('vehicle-burst',p,.5,{rate:2.1,delay:0,duration:.17,lowpass:2400});}
+  /** A part letting go (offline events): its own recorded clip where there is one, the pitched impact clip otherwise. */
+  breakage(what:string,p:T.Vector3){
+    const clip=BREAK_CLIPS[what];
+    if(clip&&this.buffers.has(clip.id)){this.shot(clip.id,p,clip.volume,{rate:clip.rate,delay:0,duration:clip.duration});return;}
+    this.shot(what==='spring'?'suspension':what==='diff'||what==='rod'?'impact-heavy':'impact-light',p,.7,{rate:what==='spring'?.7:what==='diff'?.9:what==='rod'?.55:1.7,delay:0,duration:.5});
+  }
+  /** A recorded one-shot by id when it loaded (extinguisher, bump start, mirror snap, engine seize); false if it is missing. */
+  clip(id:string,p:T.Vector3,volume:number,duration:number){if(!this.buffers.has(id))return false;this.shot(id,p,volume,{rate:1,delay:0,duration});return true;}
   private groundFireLoop?:Loop;
   /** Stuck horns blaring, by car id (offline, within earshot). */
   private horns=new Map<number,Loop>();
   /** Keep a horn loop going for each car with a shorted horn in earshot; silence the rest. */
   stuckHorns(cars:readonly Vehicle[],listener:T.Vector3){
     if(!this.ready||!this.fxBus)return;
-    if(!this.buffers.has('horn')){const c=this.ctx;if(!c||typeof c.createBuffer!=='function')return;const d=synthHorn(c.sampleRate),b=c.createBuffer(1,d.length,c.sampleRate);b.copyToChannel(d,0);this.buffers.set('horn',b);}
+    const hornId=this.buffers.has('horn-stuck')?'horn-stuck':'horn';
+    if(hornId==='horn'&&!this.buffers.has('horn')){const c=this.ctx;if(!c||typeof c.createBuffer!=='function')return;const d=synthHorn(c.sampleRate),b=c.createBuffer(1,d.length,c.sampleRate);b.copyToChannel(d,0);this.buffers.set('horn',b);}
     const now=this.ctx!.currentTime,live=new Set<number>();
     for(const car of cars){
       if(!car.extendedDamage||car.health<=0||!hornStuck(car.structuralDamage?.[0]??0,car.id)||car.current.distanceTo(listener)>RATTLE.hearing)continue;
-      live.add(car.id);let l=this.horns.get(car.id);if(!l){l=this.loop('horn',this.fxBus);if(!l)continue;this.horns.set(car.id,l);}
+      live.add(car.id);let l=this.horns.get(car.id);if(!l){l=this.loop(hornId,this.fxBus);if(!l)continue;this.horns.set(car.id,l);}
       l.pan.positionX.value=car.current.x;l.pan.positionY.value=car.current.y+.5;l.pan.positionZ.value=car.current.z;l.gain.gain.setTargetAtTime(.16,now,.05);
     }
     for(const [id,l] of this.horns)if(!live.has(id)){l.gain.gain.setTargetAtTime(0,now,.05);l.source.stop(now+.3);this.horns.delete(id);}
@@ -318,7 +340,7 @@ export class Sound {
   /** A puddle catching: a soft whoomph, bigger for fuel. */
   groundIgnite(p:T.Vector3,kind:number){this.shot('fire-roar',p,kind===2?.55:.35,{rate:kind===2?1.25:.95,delay:0,duration:.9,lowpass:1800});}
   /** A tyre bursting at speed: a sharp, full bang (the burst sample, less pitched up than a backfire). */
-  blowout(p:T.Vector3){this.shot('vehicle-burst',p,.85,{rate:1.45,delay:0,duration:.32});}
+  blowout(p:T.Vector3){if(this.buffers.has('tyre-blowout'))this.shot('tyre-blowout',p,.9,{rate:1,delay:0,duration:1});else this.shot('vehicle-burst',p,.85,{rate:1.45,delay:0,duration:.32});}
   shot(id: string, p: T.Vector3, volume = 1, options?:{rate:number;delay:number;duration:number;lowpass?:number}) {
     if (!this.ready || this.activeVoices >= 18) return;
     const c = this.ctx!,

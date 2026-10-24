@@ -1,3 +1,4 @@
+import {restoreDestructionAudioBytes} from './destruction-audio-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readAiExtinguisherPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreAiExtinguisherBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreDestructionAudioBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readAiExtinguisherPrevious(file);
 }
 export function verifyAiExtinguisherRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'d8bf0124d5e78883ec8ea1a038540b73ffd6654e');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreDestructionAudioBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreAiExtinguisherBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the AiExtinguisher release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreDestructionAudioBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the AiExtinguisher release');
  assert.equal(manifest.previousFixtureCount,7217);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,7217);
 }

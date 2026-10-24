@@ -130,6 +130,8 @@ All 38 runtime sound effects: **ElevenLabs**, generated September 27–28, 2026 
 
 The vehicle-fire update adds three dedicated recordings: sustained flame roar, irregular burning-material crackle and a short fuel-vapor burst. These used 170 included credits with overages disabled and no additional spending. Fire and smoke volume shading, local noise, buoyancy and emission placement are original game code; no third-party VFX image or video was used. See `source/vehicle-fire.md` and `tools/fire-audio.py`.
 
+The destruction-sound update (October 24, 2026) adds twelve more **ElevenLabs** recordings generated from original Quarry Impact prompts on the user's account, included allowance only with overages disabled: exhaust backfire, tyre blowout, thrown rod, engine seizure, fire extinguisher, bump start, coil spring snap, driveshaft snap, wing mirror snap, battery torn out, grandstand crowd roar and a stuck horn loop. They replace the pitched generic impacts and the synthesized horn and crowd for those events (the old sounds remain as fallbacks). Prompts, hashes and processing are in `public/audio/manifest.json`; see `tools/destruction-audio.py`. That makes 50 runtime sound effects in all.
+
 ## Software and typography
 
 - Three.js — MIT.

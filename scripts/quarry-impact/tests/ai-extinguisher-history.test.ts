@@ -1,6 +1,7 @@
+import {restoreDestructionAudioBytes} from './destruction-audio-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readAiExtinguisherPrevious,restoreAiExtinguisherBytes,verifyAiExtinguisherRevision} from './ai-extinguisher-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreDestructionAudioBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('AiExtinguisher preserves every prior fixture, vehicle asset, venue art and history input',verifyAiExtinguisherRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/ai-extinguisher/revision.json').toString());

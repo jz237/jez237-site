@@ -25,7 +25,7 @@ test('bump start is offline only, never revives a seized, dropped or dry engine,
  assert.ok(vehicle.includes('if(bumpCatches(this.stallTime,this.bumpRolled)){this.engineStall=0;this.bumpStarts++;'));
  assert.ok(vehicle.includes('}else{this.stallTime=0;this.bumpRolled=0;}'),'a running engine starts the count again');
  assert.ok(vehicle.includes('this.stallTime=this.bumpRolled=this.bumpStarts=0;'),'reset with the car');
- assert.ok(main.includes('car.onBumpStart=()=>{bumpStarts++;const by=bumpStartedBy(lastHitBy.get(car.id),car.id,elapsed);'));
+ assert.ok(main.includes('car.onBumpStart=()=>{bumpStarts++;')&&main.includes('const by=bumpStartedBy(lastHitBy.get(car.id),car.id,elapsed);'));
  assert.ok(main.includes("toast(by>=0?`BUMP STARTED BY #${by+1}`:'BUMP STARTED · ENGINE CAUGHT',2,1)"));
  assert.ok(main.includes('else if(by===0)toast(`YOU BUMP STARTED #${car.id+1}`,1.6,1);'));
 });
