@@ -1,6 +1,7 @@
+import {restoreWingToastBytes} from './wing-toast-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readPointsTagPrevious,restorePointsTagBytes,verifyPointsTagRevision} from './points-tag-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreWingToastBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('PointsTag preserves every prior fixture, vehicle asset, venue art and history input',verifyPointsTagRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/points-tag/revision.json').toString());

@@ -1683,7 +1683,7 @@ function step(dt: number) {
     // The derby feed credits whoever dropped an engine, tore a wing off or PITed a rival (offline).
     if(!online?.active&&mode==='derby'&&a&&b)for(const [victim,attacker,pits,wings,engineWas] of [[a,b,pitsA,wingsA,engineInA],[b,a,pitsB,wingsB,engineInB]] as const){
       const score=(points:number)=>{if(scoreDerby())combat.destruction(attacker.id,points);};
-      if(engineWas&&victim.engineOut){derbyFeed.note(attacker.id,displayedDriver(attacker),'engine',elapsed);score(DESTRUCTION_POINTS.engine);}else if(victim.wingsTorn>wings){derbyFeed.note(attacker.id,displayedDriver(attacker),'wing',elapsed);score(DESTRUCTION_POINTS.wing*(victim.wingsTorn-wings));}
+      if(engineWas&&victim.engineOut){derbyFeed.note(attacker.id,displayedDriver(attacker),'engine',elapsed);score(DESTRUCTION_POINTS.engine);}else if(victim.wingsTorn>wings){derbyFeed.note(attacker.id,displayedDriver(attacker),'wing',elapsed);score(DESTRUCTION_POINTS.wing*(victim.wingsTorn-wings));if(attacker.id===0&&!demo)toast(`WING OFF · #${victim.id+1} ${DEFINITIONS[victim.kind].name}`+pointsTag(DESTRUCTION_POINTS.wing*(victim.wingsTorn-wings)),1.3,1);}
       if(victim.pitSpins>pits){derbyFeed.note(attacker.id,displayedDriver(attacker),'pit',elapsed);score(DESTRUCTION_POINTS.pit);}
     }
     // PIT: the player's shove sent a rival's rear tyres sliding (offline).
