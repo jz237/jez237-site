@@ -1,3 +1,4 @@
+import {restoreRubFireBytes} from './rub-fire-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readThrownRodPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreThrownRodBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreRubFireBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readThrownRodPrevious(file);
 }
 export function verifyThrownRodRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'baccde707c67270693c1529440947d65d6f3ae02');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreRubFireBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreThrownRodBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the ThrownRod release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreRubFireBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the ThrownRod release');
  assert.equal(manifest.previousFixtureCount,7172);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,7172);
 }

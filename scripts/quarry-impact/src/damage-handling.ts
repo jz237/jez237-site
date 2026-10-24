@@ -140,6 +140,16 @@ export function tyreRub(structure:readonly number[]|undefined,wheel:number){
 /** Tyre damage scrubbed off per step: with the rub and the road speed (full from 10 m/s). */
 export const rubWear=(rub:number,speed:number,dt:number)=>dt>0?clamp01(rub)*RUB.wear*Math.min(1,Math.abs(Number.isFinite(speed)?speed:0)/10)*dt:0;
 export const rubWarning=(rubs:ArrayLike<number>)=>Array.from(rubs).some(r=>r>=RUB.warn)?'TYRE RUBBING':'';
+/** Rub fire (offline): a tyre rubbing hard (RUB_FIRE.rub or more) on crushed bodywork at RUB_FIRE.speed or faster heats
+ * up, quicker the harder (above RUB_FIRE.base) and faster it rubs; at RUB_FIRE.after it catches like a brake fire (the tyre burns down, burning
+ * rubber drops, the car catches once). Slower or lighter, it cools at RUB_FIRE.cool per second; past RUB_FIRE.warn it
+ * smokes hard and the HUD says to ease off. */
+export const RUB_FIRE={rub:.75,base:.5,speed:12,after:12,cool:.5,warn:6,max:2} as const;
+export function rubHeat(heat:number,rub:number,speed:number,dt:number){
+  const h=Number.isFinite(heat)?Math.max(0,heat):0,v=Math.abs(Number.isFinite(speed)?speed:0);if(!(dt>0))return h;
+  return rub>=RUB_FIRE.rub&&v>=RUB_FIRE.speed?Math.min(RUB_FIRE.after*1.5,h+dt*Math.min(RUB_FIRE.max,(Math.min(1,rub)-RUB_FIRE.base)/(1-RUB_FIRE.base)*(v/RUB_FIRE.speed))):Math.max(0,h-dt*RUB_FIRE.cool);
+}
+export const rubHeatWarning=(heat:ArrayLike<number>,alight:ArrayLike<number>)=>Array.from(heat).some((h,i)=>h>=RUB_FIRE.warn&&!alight[i])?'TYRE SMOKING · EASE OFF':'';
 /** A crushed engine bay chafes through the wiring loom: the ignition cuts out in short, irregular bursts (the engine dies
  * for a moment, no backfire) and the lights flicker with it. More crush, more and longer cuts. Fixed per car and time. */
 export const ELECTRICAL={onset:.45,span:.4,period:.6,odds:.85,minCut:.1,maxCut:.45} as const;
