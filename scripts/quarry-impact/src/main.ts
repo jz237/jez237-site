@@ -1586,7 +1586,11 @@ function catchOpenDoors(){
     if(!hit)continue;
     // Not the ground under a door on a bank or a bump.
     const at=from.clone().addScaledVector(dir,hit.timeOfImpact);if(at.y-c.groundAt(at.x,at.z)<.25)continue;
-    if(c.ripAssembly(name)){c.doorsTorn++;sound.impact(7,at,false,true,'metal');}
+    if(c.ripAssembly(name)){c.doorsTorn++;sound.impact(7,at,false,true,'metal');
+      // Torn off by another car: that driver gets the credit.
+      const by=cars.find(v=>v!==c&&v.body.handle===hit.collider.parent()?.handle);
+      if(by){if(mode==='derby'){derbyFeed.note(by.id,displayedDriver(by),'door',elapsed);if(scoreDerby())combat.destruction(by.id,DESTRUCTION_POINTS.door);}
+        if(by.id===0&&!demo)toast(`DOOR OFF · #${c.id+1} ${DEFINITIONS[c.kind].name}`+pointsTag(DESTRUCTION_POINTS.door),1.3,1);}}
   }
 }
 /** QA: force the late-derby frenzy factor (undefined = by the cars left running). */

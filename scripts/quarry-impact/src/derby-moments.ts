@@ -37,7 +37,7 @@ export const FINAL_FOUR={toast:2.2} as const;
 export const finalFour=(before:number,now:number)=>Number.isFinite(before)&&before>=5&&now===4;
 export const finalFourBanner=(playerIn:boolean)=>playerIn?`FINAL FOUR · YOU'RE STILL IN IT`:'FINAL FOUR';
 /** Destruction points (offline scored derbies), credited to the driver who did it. */
-export const DESTRUCTION_POINTS={engine:40,rolled:30,pit:15,wing:10} as const;
+export const DESTRUCTION_POINTS={engine:40,rolled:30,pit:15,wing:10,door:10} as const;
 /** Rolled (offline): a car that has stayed upside down for ROLLED.sustain seconds within ROLLED.window of being hit was rolled by
  * that hitter. Once per roll: it counts again only after the car has been back on its wheels. */
 export const ROLLED={sustain:.3,window:2.5} as const;

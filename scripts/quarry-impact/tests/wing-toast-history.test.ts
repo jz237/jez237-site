@@ -1,6 +1,7 @@
+import {restoreDoorCreditBytes} from './door-credit-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readWingToastPrevious,restoreWingToastBytes,verifyWingToastRevision} from './wing-toast-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreDoorCreditBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('WingToast preserves every prior fixture, vehicle asset, venue art and history input',verifyWingToastRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/wing-toast/revision.json').toString());

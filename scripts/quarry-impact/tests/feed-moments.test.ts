@@ -9,3 +9,8 @@ test('the derby feed tells of a dropped engine, a torn-off wing and a PIT, credi
  assert.ok(/class="feed-followed"><strong>PIT/.test(markup),'the followed driver is marked');
  assert.equal(feed.visible(25).length,0,'entries fade after eight seconds');
 });
+test('a door torn off by a passing car is credited to that driver as DOOR OFF',async()=>{
+ const {DESTRUCTION_POINTS}=await import('../src/derby-moments');
+ const feed=new DerbyEventFeed();feed.note(2,'KESSLER R6 #3','door',4);assert.ok(derbyFeedMarkup(feed.visible(4),0).includes('DOOR OFF'));
+ assert.ok(DESTRUCTION_POINTS.door>0&&DESTRUCTION_POINTS.door<=DESTRUCTION_POINTS.pit);
+});
