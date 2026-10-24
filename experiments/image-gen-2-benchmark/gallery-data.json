@@ -25825,5 +25825,117 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-24-factual-infographic-factual-infographic-trypophobia-cluster",
+    "title": "Factual infographic: Trypophobia — Clusters of Holes",
+    "tests": "factual_subtype: phobia-infographic; phobia: Trypophobia; source-supported descriptive research term; verified name and definition; distinct fictional older woman casting; general phobia treatment explicitly qualified; no subjective critic or rerolls; archive_slot=2026-10-24T16:08; concept=trypophobia-lotus-pattern-conservatory-avoidance; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create a finished, richly illustrated factual phobia infographic directly on the canvas. Artwork-led flowing composition in luminous gouache, translucent watercolor washes and precise graphite/technical ink; warm apricot sunlight, sage foliage, deep plum type, ivory breathing space. Portrait framing if suited, size auto, opaque background, medium quality. No photographed page, frame, mockup, rigid grid, detached cards, logos, URLs, citations or watermark.\n\nEXACT TITLE LINES: At the top, prominent bold typographic headline \"TRYPOPHOBIA\". Directly beneath it, the exact plain-English line \"Fear or aversion to clusters of holes\". Do not print quotation marks or Markdown asterisks. Never substitute Specific Phobia or another generic category as the headline.\n\nDominant environmental illustration: a sunlit botanical conservatory patio with a beautifully observed dried lotus seed pod in a shallow ceramic specimen bowl on a low bench. Render its woody tawny receptacle and naturally spaced seed cavities accurately, with gentle rather than aggressively high contrast. Behind and beside it, a fictional woman in her seventies, warm brown skin, long oval face, short wavy white hair, petite build, lilac linen blouse and wide trousers, seated with a supportive adult friend. She has a subtly tense posture and an open hand near her upper chest; dignified, ordinary, not caricatured. Her companion listens without pushing an object toward her. Leaf shadows, ribbed ceramic glaze, linen weave, weathered wood and softly veined leaves give exquisite surface detail. This is a fictional educational scene, not a clinical case portrait. Keep the pod and people as the cohesive hero, not isolated panels. No lizards, snakes, clowns, bats, oceans, monsters, gore, disease imagery or holes on skin.\n\nWeave the explanation around the curved stem and leaf edges through open ink callouts and delicate asymmetrical paths. Give the following concise exact labels generous legibility, not a wall of text:\nNear the pod: \"Visual triggers\" / \"Lotus seed pods, bubbles, aerated chocolate\". Include a small naturalistic open study of soap bubbles dissolving into the margin; chocolate can remain a text example to protect breathing room.\nA small enlarged pattern detail nested near the pod, not a separate card, with fine graphite contrast marks: \"Pattern sensitivity\" / \"Research links visual discomfort to contrast at midrange spatial frequencies.\" Under it, a smaller caveat: \"A finding about image structure—not a diagnostic test or proven cause for everyone.\" Do not invent a brain pathway, spectral data chart, numerical scale or evolutionary certainty.\nA flowing delicate line from the visual cue toward the woman's silhouette: \"Body alarm\" / \"Some people experience sweating, panic or a racing heart.\" Nearby: \"Fight-or-flight: an alarm can be stronger than the actual danger.\" Keep this a schematic explanatory association, not a literal anatomical pathway. Small nearby line: \"Distress does not make an ordinary pictured seed pod dangerous.\"\nAlong an unobtrusive curved arrow loop in an open floor area: \"Avoidance → brief relief → fear can persist\". Beneath: \"Negative reinforcement: relief can maintain avoidance.\" Label this a general fear-maintenance pattern, not a claim that all people with trypophobia experience it.\nToward the lighter lower margin, a small listening/conversation vignette integrated into the same conservatory setting and cast: \"Help is available\" / \"If symptoms affect daily life, seek a clinician's assessment.\" / \"CBT and gradual exposure can help phobias; support should be planned, not forced.\" In smaller clearly readable type: \"Evidence here is for phobias generally—not a proven trypophobia-specific treatment.\" No do-it-yourself exposure steps, no demand to stare at triggers.\nA restrained footer: \"Trypophobia is a descriptive research term. A label alone is not a diagnosis. General education, not individual medical advice.\"\n\nCreate a clear visual journey from named definition to trigger, pattern detail, body response, avoidance loop and compassionate help. Preserve substantial educational depth and artistic flow; omit extra decorative studies before crowding these essential facts. Do not add unsupported statistics, diagnostic thresholds, guarantees or additional claims.",
+    "image": "images/2026-10-24-factual-infographic-factual-infographic-trypophobia-cluster.jpg",
+    "thumb": "thumbs/2026-10-24-factual-infographic-factual-infographic-trypophobia-cluster.webp",
+    "color": "#c1ac8f",
+    "date": "2026-10-24",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "trypophobia-lotus-pattern-conservatory-avoidance",
+      "imageSha256": "ce21592e9d14fccf2a814f634f8214453eb100e99c4f7f98952c25a78df38312",
+      "imageDHash": "6d6dc7871b139233"
+    },
+    "factualInfographic": {
+      "topic": "Trypophobia: fear or aversion to clusters of holes, visual discomfort, body alarm, avoidance, and evidence-based support",
+      "description": "Artwork-led botanical explanation of trypophobia, supported visual-pattern findings, fear maintenance and carefully qualified general phobia support.",
+      "sourceNote": "Association for Psychological Science: https://www.psychologicalscience.org/journals/psychological-science/0956797613484937/; University of Essex: https://www1.essex.ac.uk/news/event.aspx?e_id=5424; NHS: https://www.nhs.uk/mental-health/conditions/phobias/; NHS: https://www.nhs.uk/every-mind-matters/mental-wellbeing-tips/self-help-cbt-techniques/facing-your-fears/ — verifies term/definition, examples, visual-pattern research, symptoms and general phobia help; no causal certainty or trypophobia-specific treatment guarantee.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-24T20:10:03.039402+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Association for Psychological Science",
+            "title": "Fear of Holes",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.psychologicalscience.org/journals/psychological-science/0956797613484937/"
+          },
+          {
+            "id": "S2",
+            "publisher": "University of Essex",
+            "title": "The most common phobia you have never heard of",
+            "sourceType": "university",
+            "url": "https://www1.essex.ac.uk/news/event.aspx?e_id=5424"
+          },
+          {
+            "id": "S3",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          },
+          {
+            "id": "S4",
+            "publisher": "NHS",
+            "title": "Facing your fears",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/every-mind-matters/mental-wellbeing-tips/self-help-cbt-techniques/facing-your-fears/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Trypophobia is a name used in scientific research for fear or aversion to images of clusters of holes.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "A lotus seed pod, soap bubbles and aerated chocolate are examples of visual triggers; responses vary between people.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Research found relatively high contrast energy at midrange spatial frequencies in triggering images; this describes visual pattern structure, not a proven universal cause or a diagnostic test.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Some people report sweating, panic and increased heart rate when viewing clustered holes.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Fear can activate a heightened fight-or-flight response even in situations that are not really dangerous; an alarm response does not establish that an ordinary pictured seed pod is dangerous.",
+            "sourceIds": [
+              "S4"
+            ]
+          },
+          {
+            "claim": "Avoiding feared situations can bring short-term relief while maintaining or increasing fear over time; negative reinforcement is the technical label for this relief-maintained avoidance loop.",
+            "sourceIds": [
+              "S4"
+            ]
+          },
+          {
+            "claim": "For phobias in general, CBT and gradual exposure can help; trypophobia-specific treatment benefit is not established by these sources. A clinician can assess symptoms and life impact and plan appropriate support.",
+            "sourceIds": [
+              "S3",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Seek help when symptoms affect daily life; triggering images online may be distressing and people should not be pushed into viewing them.",
+            "sourceIds": [
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
