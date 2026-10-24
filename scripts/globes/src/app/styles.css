@@ -427,6 +427,10 @@ html.custom-cursor * {
   opacity: 0;
 }
 
+.cursor.is-native {
+  display: none;
+}
+
 .cursor.is-idle {
   transition: opacity 0.8s ease;
 }

@@ -2,6 +2,7 @@ import '@fontsource-variable/inter';
 import './app/styles.css';
 import * as THREE from 'three/webgpu';
 import { AppShell, type DesktopHost } from './app/AppShell';
+import { AdaptiveScale, ratioAt } from './app/adaptiveScale.mjs';
 import { GLOBES, type GlobeEntry } from './app/catalog';
 import { applyUrlOverrides, fishConfig, globeConfig, lightConfig, simConfig, type GlobeConfig, type LightConfig, type SimConfig } from './config';
 import { DeskMapping, loadDesk, type DesktopHostApi } from './desktop/desktopScene';
@@ -167,10 +168,13 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
 
   // The picture takes the stage's shape and size, whatever they are: as many pixels as the
   // screen has (up to twice the CSS pixels), but no wider or taller than the GPU's textures go.
+  // (If frames come too slowly for the pointer to be followed, run() lowers the sharpness a step
+  // at a time, and offers it back when they are quick again.)
+  let sharpness = 0;
   const fit = (): void => {
     const [w, h] = stageSize();
     const most = device.limits.maxTextureDimension2D;
-    renderer.setPixelRatio(Math.min(LITE ? 1 : Math.min(window.devicePixelRatio, 2), most / w, most / h));
+    renderer.setPixelRatio(Math.min(ratioAt(LITE ? 1 : Math.min(window.devicePixelRatio, 2), sharpness), most / w, most / h));
     renderer.setSize(w, h);
     camera.aspect = w / h;
     camera.fov = (2 * Math.atan(Math.tan((FOV * Math.PI) / 360) * Math.max(1, NARROWEST / camera.aspect)) * 180) / Math.PI;
@@ -178,6 +182,11 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   };
   fit();
   new ResizeObserver(fit).observe(stage);
+  const setSharpness = (level: number): void => {
+    if (level === sharpness) return;
+    sharpness = level;
+    fit();
+  };
 
   // ?aa=1 traces one ray per pixel instead of four (cheaper, aliased waterline).
   const samples = Number(params.get('aa') ?? (LITE || o.start.betta ? 1 : 4));
@@ -302,14 +311,16 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     return food.spawn([p.x, p.y, p.z], feeders().length);
   };
 
-  return { device, renderer, camera, scene, cfg, sim, controller, koi, betta, kelp, reef, clowns, food, idle, globe, globeRadius: o.globe.outerRadius, ocean, specks, setScene, advance, spawnFood };
+  return { device, renderer, camera, scene, cfg, sim, controller, koi, betta, kelp, reef, clowns, food, idle, globe, globeRadius: o.globe.outerRadius, ocean, specks, setScene, advance, spawnFood, setSharpness };
 }
 
 type World = Awaited<ReturnType<typeof createWorld>>;
 
 /** Runs the world every frame. beforeRender: after the world moves, before it is drawn. */
 function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () => void; firstFrame?: () => void }): void {
-  const { renderer, camera, scene, sim, controller, globe, ocean, specks, advance } = world;
+  const { renderer, camera, scene, sim, controller, globe, ocean, specks, advance, setSharpness } = world;
+  // ?adapt=0 keeps the picture at full sharpness however slowly it draws (profiling).
+  const adaptive = params.get('adapt') === '0' ? null : new AdaptiveScale(performance.now());
   const globeMotion = { center: controller.center, velocity: controller.velocity, radius: world.globeRadius };
   let jumps = controller.panJumps;
   // ?stats logs frame rate and solver load to the console (no on-screen HUD).
@@ -329,6 +340,8 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
     const dt = Math.min((now - last) / 1000, STALL);
     last = now;
 
+    const level = adaptive?.frame(now) ?? null;
+    if (level !== null) setSharpness(level);
     if (!manual) advance(dt);
     hooks.beforeRender?.();
     const heightPx = renderer.getDrawingBufferSize(drawSize).y;
@@ -368,7 +381,7 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
   if (import.meta.env.DEV || params.has('qa')) {
     const tick = (dt: number) => advance(dt);
     const g = window as unknown as { __globes?: object };
-    g.__globes = { ...g.__globes, THREE, ...world, tick, renderTimes };
+    g.__globes = { ...g.__globes, THREE, ...world, tick, renderTimes, adaptive };
   }
 }
 

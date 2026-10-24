@@ -3,7 +3,7 @@
 Original: https://github.com/willwaltz/globes
 Author: Will Waltz · MIT License
 Upstream commit: 93c3b814bbca53463e8207b8e3c95fca8940dff5
-Imported: 2026-10-22 · Hosting build: 1.9.0
+Imported: 2026-10-22 · Hosting build: 1.10.0
 Public route: https://jez237.com/demos/globes/
 
 The upstream source and MIT attribution are retained. Hosting adds the gallery
@@ -173,6 +173,29 @@ Version 1.9 (Atelier 1.11) makes the fish move only by swimming, and stops it ch
   8% dive); sideways slip 0.00% (old: 46% gulp, 30% rest). Net turn in any 8 s window: under 1
   revolution in calm and turbulent water (old: 2.8-3.3). Tests: `node --test betta-swim.test.mjs`
   runs 23 locomotion tests (16 before).
+
+Version 1.10 (Atelier unchanged) makes the pointer follow-through quicker when you hold and
+move the globe:
+- **Stiffer grab spring.** While held, the globe follows the hand through a critically damped
+  spring at 26 rad/s (was 12 rad/s), so it trails a steady drag by about 77 ms instead of 160 ms.
+  Container acceleration is still capped at 3 g, which bounds how hard a quick flick can slosh the
+  water; a sweep measured the same ~3 g side acceleration ceiling and a lower peak solver speed
+  than before (17.9 vs 20.5).
+- **Quicker custom cursor.** The software ring follows at rate 40 (was 24). A drawn cursor can
+  only move once per rendered frame, so if frames stay slower than ~34 ms for a second the system
+  pointer takes over (`html.custom-cursor` is removed), and the drawn one returns after three
+  seconds of quick frames.
+- **Adaptive sharpness** (`src/app/adaptiveScale.mjs`, `?adapt=0` turns it off). Frame time
+  scales with canvas pixels, so on hi-dpi or large windows the canvas drops 0.8x per level (to a
+  floor of 0.6 px per CSS px, at most 5 levels) when frames average over 22 ms, in jumps of 1-3
+  levels depending on how slow. A step that does not make frames at least 8% quicker (the screen
+  itself is the limit) is taken back and held for 64 s; sharpness is offered back after 8 s of
+  quick frames, and a failed offer doubles the wait. Tests: `node --test adaptive-scale.test.mjs`.
+- Measured on the loaded host (Chrome WebGPU, real mouse drag): 1080p at 1x, lag behind the hand
+  p50 147 to 59 ms, p95 205 to 90 ms at ~54 fps; 1440p at 2x, 25.8 to ~40 fps and lag 114/203 to
+  ~51/90 ms (p50/p95), with the canvas settling at 2100-2600 px wide.
+- Limits: numbers are from a shared, loaded machine; Firefox and a physical phone were not
+  re-measured; a quick flick sloshes a little more than before (still capped).
 
 
 The neck now leads the route, instead of rotating about the center of the fish.

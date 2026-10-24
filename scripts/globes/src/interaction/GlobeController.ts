@@ -20,10 +20,12 @@ import * as THREE from 'three/webgpu';
 import type { GlobeConfig } from '../config';
 import type { Vec3 } from '../sim/FluidSim';
 
-// While held, the globe follows the hand through a critically damped spring (~0.1 s): tilts
-// ease in and out smoothly instead of snapping to the pointer.
-const GRAB_STIFFNESS = 150; // rad/s^2 per rad
-const GRAB_DAMPING = 24.5; // 2 * sqrt(stiffness)
+// While held, the globe follows the hand through a critically damped spring (natural frequency
+// 26 rad/s: it trails a steady drag by 2/26 = ~77 ms): tilts ease in and out instead of snapping
+// to the pointer, yet the globe still feels attached to the hand. (The container's acceleration
+// is capped, so a quick flick cannot slosh the water past MAX_FRAME_ACCEL_G.)
+const GRAB_STIFFNESS = 676; // rad/s^2 per rad
+const GRAB_DAMPING = 52; // 2 * sqrt(stiffness)
 const SETTLE_STIFFNESS = 14; // weighted-base restoring spring after release
 const SETTLE_DAMPING = 1.4;
 const MAX_FRAME_ACCEL_G = 3; // cap on the container acceleration, in g
