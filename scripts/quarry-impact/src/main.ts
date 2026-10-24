@@ -127,6 +127,7 @@ import type {LiveryFace} from './livery';
 import * as T from 'three';
 import R from '@dimforge/rapier3d-compat';
 import {LOCK,bumperAt,hooks,pullsAway,lockStrain,lockEnd,type LockedBumper,TETHER,tetherLife,tetherAge} from './bumper-lock';
+import {PILEUP,PileUp} from './pile-up';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
@@ -984,7 +985,7 @@ async function start(watch=demo) {
     camera.position.copy(cars[0].current).add(new T.Vector3(0, 4, -8));
     hud();
     sound.pause(false);
-    eventAwards.reset();playerTopSpeed=0;derbyAliveBefore=0;revengeSettled.clear();takedownCombo=0;playerStripped=0;strippedNoted.clear();pinNoted.clear();pinFed.clear();wallSlams=0;clearLocks();wreckCauses.clear();lastHitBy.clear();rollArmed.clear();wreckedBy.clear();alightBy.clear();lastTakedownAt=-1e9;bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
+    eventAwards.reset();playerTopSpeed=0;derbyAliveBefore=0;revengeSettled.clear();takedownCombo=0;playerStripped=0;strippedNoted.clear();pinNoted.clear();pinFed.clear();wallSlams=0;clearLocks();pileUp.reset();pileUps=biggestPileUp=0;wreckCauses.clear();lastHitBy.clear();rollArmed.clear();wreckedBy.clear();alightBy.clear();lastTakedownAt=-1e9;bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
     beginReplay();
     if(preparationInterrupted||document.hidden)pause();
     return true;
@@ -1139,7 +1140,7 @@ function stepTethers(dt:number){
     {const q=t.debris.rotation(),end=t.hang.clone().applyQuaternion(new T.Quaternion(q.x,q.y,q.z,q.w)).add(at),from=fromBody(t.car,t.anchor),position=t.wire.geometry.attributes.position as T.BufferAttribute;
       position.setXYZ(0,from.x,from.y,from.z);position.setXYZ(1,end.x,end.y,end.z);position.needsUpdate=true;}
     const v=t.debris.linvel(),speed=Math.hypot(v.x,v.z),ground=t.car.groundAt(p.x,p.z);t.spark+=dt;
-    if(speed>=TETHER.spark&&p.y-ground<TETHER.low&&t.spark>=TETHER.gap){t.spark=0;at.y=ground+.04;fx.emit(at,2,1,.8);fx.evidence?.add(at,Math.atan2(v.x,v.z),speed*.06,.5,2);t.car.scraping=Math.max(t.car.scraping,Math.min(1,speed/14)*.5);}
+    if(speed>=TETHER.spark&&p.y-ground<TETHER.low&&t.spark>=TETHER.gap){t.spark=0;at.y=ground+.04;fx.emit(at,2,1,.8);fx.slicks.igniteAt(at.x,at.z,.25,true,t.car.id);fx.evidence?.add(at,Math.atan2(v.x,v.z),speed*.06,.5,2);t.car.scraping=Math.max(t.car.scraping,Math.min(1,speed/14)*.5);}
     return true;
   });
 }
@@ -1174,6 +1175,8 @@ function stepLocks(dt:number){
     return false;
   });
 }
+/** Pile-ups (offline): impacts linked through shared cars; pileUps counts the calls this event (QA). */
+const pileUp=new PileUp();let pileUps=0,biggestPileUp=0;
 /** WALL SLAMs credited this event (offline QA counter). */
 let wallSlams=0;
 /** Cars already counted as pinned, and already called PINNED in the derby feed, this time they were held (cleared once free). */
@@ -1810,6 +1813,11 @@ function step(dt: number) {
     if(!online?.active)for(const [car,was] of [[a,engineInA],[b,engineInB]] as const)if(car&&was&&car.engineOut)eventAwards.failure(car.id,'ENGINE OUT',elapsed,34);
     if(!online?.active&&!demo)for(const [car,was,other] of [[a,engineInA,b],[b,engineInB,a]] as const)if(car&&was&&car.engineOut&&(car.id===0||other?.id===0)){toast(car.id===0?'ENGINE OUT':`ENGINE OUT · #${car.id+1} ${DEFINITIONS[car.kind].name}`+pointsTag(DESTRUCTION_POINTS.engine),2.6,3);sound.crowd(1);crowdFlashes(SMASH_FLASHES);}
     if(damage>0&&a&&b){lastHitBy.set(a.id,{by:b.id,at:elapsed});lastHitBy.set(b.id,{by:a.id,at:elapsed});}
+    // Four or more cars into each other at once: a PILE-UP, credited to whoever went in fastest first (offline).
+    if(!online?.active&&a&&b){const call=pileUp.note(a.id,b.id,elapsed,point.x,point.z,Math.abs(a.speed)>=Math.abs(b.speed)?a.id:b.id,closing),starter=call?cars.find(c=>c.id===call.starter):undefined;
+      if(call&&starter){pileUps++;biggestPileUp=Math.max(biggestPileUp,call.size);sound.crowd(1);crowdFlashes(SMASH_FLASHES);
+        if(mode==='derby'){derbyFeed.note(starter.id,displayedDriver(starter),'pileup',elapsed,call.size);if(scoreDerby())combat.destruction(starter.id,PILEUP.points*call.size);}
+        if(!demo&&call.cars.includes(cars[0]?.id??-1)){toast(`PILE-UP ×${call.size}`+(starter.id===cars[0].id?pointsTag(PILEUP.points*call.size):''),2,3);if(clock>=slowMoUntil){slowMoUntil=clock+SMASH.slowmo;slowMoScale=SMASH.scale;}}}}
     // A hanging bumper can hook the two cars together (offline).
     if(!online?.active&&a&&b)tryLock(a,b,point1,point2,closing);
     // Wall slam: a car knocked into the scenery just after a rival hit it; the rival is credited with that damage (offline).
@@ -2513,7 +2521,7 @@ async function boot() {
         p95: times[Math.floor(times.length * 0.95)],
         audio: sound.buffers.size,
         activeParticles: fx.particles.filter(p=>p.life>0).length,
-        debris: fx.debris.length, wallSlams, bumperLocks: {made: locksMade, torn: locksTorn, active: bumperLocks.length}, tethers: {made: tethersMade, active: bumperTethers.length}, debrisAt: fx.debris.map(d=>{const p=d.body.translation();return [+p.x.toFixed(2),+p.y.toFixed(2),+p.z.toFixed(2),+d.body.mass().toFixed(1),+d.age.toFixed(2)];}),
+        debris: fx.debris.length, wallSlams, bumperLocks: {made: locksMade, torn: locksTorn, active: bumperLocks.length}, tethers: {made: tethersMade, active: bumperTethers.length}, pileUps, biggestPileUp, debrisAt: fx.debris.map(d=>{const p=d.body.translation();return [+p.x.toFixed(2),+p.y.toFixed(2),+p.z.toFixed(2),+d.body.mass().toFixed(1),+d.age.toFixed(2)];}),
         voices: sound.activeVoices,
         loops: sound.loops.size,
         thermal: vehicleFire?.stats,
