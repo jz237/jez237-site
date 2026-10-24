@@ -1,4 +1,4 @@
-import {exhaustLoudness,bearingGrowl} from './damage-handling';
+import {exhaustLoudness,bearingGrowl,RUB,RUB_FIRE} from './damage-handling';
 import {materialImpactProfile,type ImpactMaterial} from './impact-material';
 import {readAudioOutput,type AudioOutput} from './audio-output';
 import {TrackAcousticProbe,TrackReflections} from './track-acoustics';
@@ -40,8 +40,14 @@ const BREAK_CLIPS:Record<string,{id:string;volume:number;rate:number;duration:nu
   diff:{id:'shaft-snap',volume:.9,rate:.8,duration:1.2},tierod:{id:'spring-snap',volume:.6,rate:1.25,duration:.65},cable:{id:'spring-snap',volume:.5,rate:1.5,duration:.55},
   handbrake:{id:'spring-snap',volume:.5,rate:1.4,duration:.6},rod:{id:'rod-bang',volume:1,rate:1,duration:1.8},battery:{id:'battery-rip',volume:.8,rate:1,duration:1},
   bearing:{id:'engine-seize',volume:.5,rate:1.3,duration:1.2}};
-/** Clips with extra recorded takes (impact-x-2, impact-x-3) that shot() rotates between. */
-const IMPACT_TAKES=/^impact-(light|medium|heavy)$/;
+/** Clips with extra recorded takes (id-2, id-3) that shot() rotates between: the impacts and the glass and debris layers. */
+const TAKES=/^(impact-(light|medium|heavy)|glass|debris)$/;
+/** A tyre rubbing a crushed arch (0–1): the hardest rub on the car, with road speed (full from 10 m/s), louder still once
+ * the tyre is smoking; silent below RUB.warn or at a crawl. */
+export const rubLoopLevel=(rubs:ArrayLike<number>,speed:number,heat:number)=>{const r=Math.max(0,...Array.from(rubs)),v=Math.abs(Number.isFinite(speed)?speed:0);
+  return r<RUB.warn||v<1.5?0:Math.min(1,r*Math.min(1,v/10)*(heat>=RUB_FIRE.warn?1.4:1));};
+/** Steel groaning on a pinned car (0–1): from the moment it is pinned, building over two seconds. */
+export const groanLevel=(pinTime:number)=>Number.isFinite(pinTime)&&pinTime>0?.55+.45*Math.min(1,pinTime/2):0;
 /** The recorded grandstand roar answers moments of CROWD_CHEER.min intensity or more, at most once every CROWD_CHEER.gap seconds. */
 export const CROWD_CHEER={min:.5,gap:3.5,level:.45} as const;
 export class Sound {
@@ -252,7 +258,7 @@ export class Sound {
     }
   }
   private readonly lastTake=new Map<string,number>();
-  /** One of the recorded takes of an impact clip (impact-x, impact-x-2, impact-x-3), never the same take twice running. */
+  /** One of the recorded takes of a clip (id, id-2, id-3), never the same take twice running. */
   private impactTake(id:string){
     const takes=[id,id+'-2',id+'-3'].filter(t=>this.buffers.has(t));if(takes.length<2)return id;
     const last=this.lastTake.get(id)??-1;let i=Math.floor(Math.random()*(last<0?takes.length:takes.length-1));if(last>=0&&i>=last)i++;
@@ -288,6 +294,27 @@ export class Sound {
       l.pan.positionX.value=car.current.x;l.pan.positionY.value=car.current.y+.5;l.pan.positionZ.value=car.current.z;l.gain.gain.setTargetAtTime(.16,now,.05);
     }
     for(const [id,l] of this.horns)if(!live.has(id)){l.gain.gain.setTargetAtTime(0,now,.05);l.source.stop(now+.3);this.horns.delete(id);}
+  }
+  /** Damage loops by car id (offline, within earshot): tyres rubbing crushed arches, and steel groaning on pinned cars. */
+  private rubs=new Map<number,Loop>();
+  private groans=new Map<number,Loop>();
+  damageLoops(cars:readonly Vehicle[],listener:T.Vector3){
+    if(!this.ready||!this.fxBus)return;const now=this.ctx!.currentTime;
+    this.driveLoops(this.rubs,'tyre-rub',cars,listener,now,car=>rubLoopLevel(car.rubDrag,car.speed,Math.max(...car.rubHeat)),car=>.85+.4*Math.min(1,Math.abs(car.speed)/25),.22);
+    this.driveLoops(this.groans,'metal-groan',cars,listener,now,car=>groanLevel(car.pinTime),()=>1,.3);
+  }
+  /** Keep one loop per car at its level; a loop that falls quiet fades and is held LOOP_HOLD seconds before it is stopped. */
+  private driveLoops(map:Map<number,Loop>,id:string,cars:readonly Vehicle[],listener:T.Vector3,now:number,level:(car:Vehicle)=>number,rate:(car:Vehicle)=>number,gain:number){
+    if(!this.buffers.has(id))return;const live=new Set<number>();
+    for(const car of cars){
+      if(!car.extendedDamage||car.health<=0||car.current.distanceTo(listener)>RATTLE.hearing)continue;const v=level(car);if(!(v>0))continue;
+      live.add(car.id);let l=map.get(car.id);if(!l){l=this.loop(id,this.fxBus!);if(!l)continue;map.set(car.id,l);}
+      l.pan.positionX.value=car.current.x;l.pan.positionY.value=car.current.y+.4;l.pan.positionZ.value=car.current.z;
+      l.source.playbackRate.setTargetAtTime(rate(car),now,.08);l.gain.gain.setTargetAtTime(gain*v,now,.08);
+    }
+    for(const [cid,l] of map)if(!live.has(cid)){const q=this.quietSince.get(l)??now;this.quietSince.set(l,q);l.gain.gain.setTargetAtTime(0,now,.08);
+      if(now-q>LOOP_HOLD||!cars.some(c=>c.id===cid)){l.source.stop(now+.3);map.delete(cid);this.quietSince.delete(l);}}
+    for(const cid of live){const l=map.get(cid);if(l)this.quietSince.delete(l);}
   }
   /** Slipping fan belts squealing under load, by car id (offline, within earshot), pitched with the revs. */
   private squeals=new Map<number,Loop>();
@@ -352,9 +379,9 @@ export class Sound {
   blowout(p:T.Vector3){if(this.buffers.has('tyre-blowout'))this.shot('tyre-blowout',p,.9,{rate:1,delay:0,duration:1});else this.shot('vehicle-burst',p,.85,{rate:1.45,delay:0,duration:.32});}
   shot(id: string, p: T.Vector3, volume = 1, options?:{rate:number;delay:number;duration:number;lowpass?:number;group?:string}) {
     if (!this.ready || this.activeVoices >= 18) return;
-    // Every use of an impact clip picks one of its recorded takes; the takes share a key, so two cannot both play one hit.
+    // Every use of an impact, glass or debris clip picks one of its recorded takes; they share a key, so two cannot both play one hit.
     const group = options?.group ?? id;
-    if (IMPACT_TAKES.test(id)) id = this.impactTake(id);
+    if (TAKES.test(id)) id = this.impactTake(id);
     const c = this.ctx!,
       buf = this.buffers.get(id);
     if (!buf) return;

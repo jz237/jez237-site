@@ -27,7 +27,17 @@ jobs = [
  ('impact-medium-3', 'Crunching car side impact starting instantly: from the very first moment a deep metal crump as a door caves in, glass cracking and debris skittering, then fading. No lead-in, no explosion. No music, no voices, no speech.', 3.0, False),
  ('impact-heavy-2', 'Violent head-on collision of two heavy cars at high speed: an enormous low impact boom, steel crushing and tearing, a windscreen bursting and debris raining down. No explosion. No music, no voices, no speech.', 4.0, False),
  ('impact-heavy-3', 'Brutal high speed T-bone smash in a demolition derby: a massive metallic slam, a car body folding around the impact, glass showering and parts clattering away. No explosion. No music, no voices, no speech.', 4.0, False),
+ # Damage loops (audio.damageLoops) and more takes of the glass and debris layers.
+ ('tyre-rub', 'Tyre rubbing against a crushed steel wheel arch on a moving car: a continuous rhythmic rubber scrubbing squeal and grinding with a faint thump on each wheel turn. Isolated, no engine, no music, no voices, no speech.', 3.0, True),
+ ('metal-groan', 'Metal groaning as two crashed cars are pressed together: continuous deep creaking and moaning of stressed steel body panels under heavy load, with small metallic pops. Isolated, no engine, no music, no voices, no speech.', 3.0, True),
+ ('glass-2', 'Rear window of a car bursting in a crash: a sharp crack and a shower of small tempered glass cubes pattering onto dirt. No music, no voices, no speech.', 2.0, False),
+ ('glass-3', 'Car windscreen and headlight glass breaking: a crisp shatter and small glass fragments tinkling down onto asphalt. No music, no voices, no speech.', 2.0, False),
+ ('debris-2', 'Torn-off car door hitting hard ground and skidding along it with a scraping metal clatter. No music, no voices, no speech.', 2.0, False),
+ ('debris-3', 'Pieces of plastic car trim and a hubcap falling onto gravel, rolling and rattling to a stop. No music, no voices, no speech.', 2.0, False),
 ]
+# Seconds cut from the start of a raw clip: metal-groan dips to silence early (it would drop out every loop) and
+# debris-2 opens with half a second of near silence (the layer would land late).
+TRIM = {'metal-groan':.7,'debris-2':.45}
 def length(path):
     return float(subprocess.run(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0',str(path)],capture_output=True,text=True,check=True).stdout)
 manifest = json.loads((OUT/'manifest.json').read_text())
@@ -37,7 +47,8 @@ for name, prompt, duration, loop in jobs:
     raw = RAW/(name+'.mp3')
     if not raw.exists(): raise SystemExit(f'missing raw clip {raw} (generate it first)')
     base = WORK/(name+'-normalized.wav')
-    subprocess.run(['ffmpeg','-y','-v','error','-i',str(raw),'-af','loudnorm=I=-23:TP=-3:LRA=7','-ar','44100','-ac','1',str(base)],check=True)
+    trim = TRIM.get(name, 0)
+    subprocess.run(['ffmpeg','-y','-v','error','-ss',str(trim),'-i',str(raw),'-af','loudnorm=I=-23:TP=-3:LRA=7','-ar','44100','-ac','1',str(base)],check=True)
     real = length(base)
     if loop:
         # Rotate the seam: blend the final 180 ms into the first 180 ms, then the middle (as tools/fire-audio.py).
@@ -50,6 +61,7 @@ for name, prompt, duration, loop in jobs:
     else:
         subprocess.run(['ffmpeg','-y','-v','error','-i',str(base),'-af',f'afade=t=in:d=0.005,afade=t=out:st={max(0,real-.1):.3f}:d=0.1','-c:a','libvorbis','-q:a','5',str(OUT/(name+'.ogg'))],check=True)
         processing = 'loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5'
+    if trim: processing = f'first {trim}s cut, '+processing
     params = {'text':prompt,'duration_seconds':duration,'loop':loop,'source':'ElevenLabs connector text_to_sound_effects (default model), 2026-10-24'}
     manifest.append({'id':name,'file':name+'.ogg','provider':'ElevenLabs','params':params,'sha256':hashlib.sha256(raw.read_bytes()).hexdigest(),
                      'runtimeSha256':hashlib.sha256((OUT/(name+'.ogg')).read_bytes()).hexdigest(),'processing':processing})

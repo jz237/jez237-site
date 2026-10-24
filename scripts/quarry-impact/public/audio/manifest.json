@@ -785,5 +785,89 @@
     "sha256": "6052c032d7e24ed26208f23ba801cb5b3fd16b909ef6175bda862f3ab49437fc",
     "runtimeSha256": "3cd2dfe5ab4ec394242694280e08c5694b1789e9474655fd069cc5dfdd984e39",
     "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "tyre-rub",
+    "file": "tyre-rub.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Tyre rubbing against a crushed steel wheel arch on a moving car: a continuous rhythmic rubber scrubbing squeal and grinding with a faint thump on each wheel turn. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 3.0,
+      "loop": true,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "a9d7b782aab8d94af837173efac7187c4ffd090e29e8468ee9bb3e65c6ee6810",
+    "runtimeSha256": "5af902d02f2b69ba7355ac154193afca19637ae08b941aaf72186ac039c6e53b",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5"
+  },
+  {
+    "id": "metal-groan",
+    "file": "metal-groan.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Metal groaning as two crashed cars are pressed together: continuous deep creaking and moaning of stressed steel body panels under heavy load, with small metallic pops. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 3.0,
+      "loop": true,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "a221d8d42316ab8f092a1a738fbd8a0db8516728ea2bada5b239cab6a75b942c",
+    "runtimeSha256": "4027896965f6787b44995f6449249f4a5b4429f105321e11cbfc77bb9b433211",
+    "processing": "first 0.7s cut, loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5"
+  },
+  {
+    "id": "glass-2",
+    "file": "glass-2.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Rear window of a car bursting in a crash: a sharp crack and a shower of small tempered glass cubes pattering onto dirt. No music, no voices, no speech.",
+      "duration_seconds": 2.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "6143eddde644724a80630c8c7b614cc1951f97f8b8afb6b4bf346169e120f880",
+    "runtimeSha256": "9ea39936884c2cc46d5116745cbf64a4fc24909427dcd102e237131d6f5f66fc",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "glass-3",
+    "file": "glass-3.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Car windscreen and headlight glass breaking: a crisp shatter and small glass fragments tinkling down onto asphalt. No music, no voices, no speech.",
+      "duration_seconds": 2.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "7cd6811776454994ea8490930e60543f708824f494e797bd3166dbc0b7026ecf",
+    "runtimeSha256": "25feca97bd7369d27fb4382705ba9a3bf01cd900c1fcebd31fbbadbfcfc63523",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "debris-2",
+    "file": "debris-2.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Torn-off car door hitting hard ground and skidding along it with a scraping metal clatter. No music, no voices, no speech.",
+      "duration_seconds": 2.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "2d5ddcfc010f365ddc4433872f88e00bfdc5770945d635d268863c507c5866e7",
+    "runtimeSha256": "50cbbf7f6402c02c826c8ee897a46f9f4c6ab4b1ef01d8688cadc859315373a0",
+    "processing": "first 0.45s cut, loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "debris-3",
+    "file": "debris-3.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Pieces of plastic car trim and a hubcap falling onto gravel, rolling and rattling to a stop. No music, no voices, no speech.",
+      "duration_seconds": 2.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "589ee1dc6c7ec55994e381fde3936f8c5895d7602e3af51e24790ff4a4f31667",
+    "runtimeSha256": "29efd3edf103d54d5a5f3a2157e1f406e2c4421edfd46196913e936c70e055fe",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
   }
 ]

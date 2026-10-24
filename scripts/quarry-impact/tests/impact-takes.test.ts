@@ -12,8 +12,8 @@ test('each impact clip has two more recorded takes, bundled and hash-checked',()
 });
 test('every use of an impact clip rotates through its takes and never plays one take twice running',()=>{
  const audio=read('src/audio.ts').toString();
- assert.ok(audio.includes('const IMPACT_TAKES=/^impact-(light|medium|heavy)$/;'));
- assert.ok(audio.includes('if (IMPACT_TAKES.test(id)) id = this.impactTake(id);'),'in shot(), so direct uses rotate too');
+ assert.ok(audio.includes('const TAKES=/^(impact-(light|medium|heavy)|glass|debris)$/;'));
+ assert.ok(audio.includes('if (TAKES.test(id)) id = this.impactTake(id);'),'in shot(), so direct uses rotate too');
  assert.ok(audio.includes('const key = group + Math.round(p.x / 5) + Math.round(p.z / 5);'),'takes of one hit share the repeat guard');
  assert.ok(audio.includes("const takes=[id,id+'-2',id+'-3'].filter(t=>this.buffers.has(t));if(takes.length<2)return id;"));
  assert.ok(audio.includes('let i=Math.floor(Math.random()*(last<0?takes.length:takes.length-1));if(last>=0&&i>=last)i++;'),'skips the take just played');
