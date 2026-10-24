@@ -126,6 +126,7 @@ import {frameGarage} from './garage-camera';
 import type {LiveryFace} from './livery';
 import * as T from 'three';
 import R from '@dimforge/rapier3d-compat';
+import {LOCK,bumperAt,hooks,pullsAway,lockStrain,lockEnd,type LockedBumper} from './bumper-lock';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
@@ -982,7 +983,7 @@ async function start(watch=demo) {
     camera.position.copy(cars[0].current).add(new T.Vector3(0, 4, -8));
     hud();
     sound.pause(false);
-    eventAwards.reset();playerTopSpeed=0;derbyAliveBefore=0;revengeSettled.clear();takedownCombo=0;playerStripped=0;strippedNoted.clear();pinNoted.clear();pinFed.clear();wallSlams=0;wreckCauses.clear();lastHitBy.clear();rollArmed.clear();wreckedBy.clear();alightBy.clear();lastTakedownAt=-1e9;bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
+    eventAwards.reset();playerTopSpeed=0;derbyAliveBefore=0;revengeSettled.clear();takedownCombo=0;playerStripped=0;strippedNoted.clear();pinNoted.clear();pinFed.clear();wallSlams=0;clearLocks();wreckCauses.clear();lastHitBy.clear();rollArmed.clear();wreckedBy.clear();alightBy.clear();lastTakedownAt=-1e9;bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
     beginReplay();
     if(preparationInterrupted||document.hidden)pause();
     return true;
@@ -1095,6 +1096,46 @@ const lastHitBy=new Map<number,{by:number;at:number}>(),rollArmed=new Set<number
 const wreckedBy=new Map<number,number>();
 /** Who set each car alight (offline), to credit a burn-out. */
 const alightBy=new Map<number,number>();
+/** Cars hooked together by a hanging bumper (offline): the hooker (whose bumper it is), the car it caught, the rope between
+ * the two hook points (body-local), and the lock's age and strain. */
+type BumperLock={hooker:Vehicle;caught:Vehicle;bumper:LockedBumper;joint:R.ImpulseJoint;hookerAnchor:T.Vector3;caughtAnchor:T.Vector3;length:number;age:number;strain:number};
+let bumperLocks:BumperLock[]=[],lockRolls=0,locksMade=0,locksTorn=0;
+const bodyQuaternion=(c:Vehicle)=>{const q=c.body.rotation();return new T.Quaternion(q.x,q.y,q.z,q.w);};
+const toBody=(c:Vehicle,p:T.Vector3)=>{const t=c.body.translation();return p.clone().sub(new T.Vector3(t.x,t.y,t.z)).applyQuaternion(bodyQuaternion(c).invert());};
+const fromBody=(c:Vehicle,l:T.Vector3)=>{const t=c.body.translation();return l.clone().applyQuaternion(bodyQuaternion(c)).add(new T.Vector3(t.x,t.y,t.z));};
+function releaseLock(lock:BumperLock){if(physics.getImpulseJoint(lock.joint.handle))physics.removeImpulseJoint(lock.joint,true);}
+function clearLocks(){for(const lock of bumperLocks)releaseLock(lock);bumperLocks=[];lockRolls=locksMade=locksTorn=0;}
+const lockedTo=(id:number)=>{const lock=bumperLocks.find(l=>l.hooker.id===id||l.caught.id===id);return !lock?-1:lock.hooker.id===id?lock.caught.id:lock.hooker.id;};
+/** A hit with a car's hanging bumper may hook the two cars together (offline). */
+function tryLock(a:Vehicle,b:Vehicle,point1:T.Vector3,point2:T.Vector3,closing:number){
+  if(a.health<=0||b.health<=0||lockedTo(a.id)>=0||lockedTo(b.id)>=0)return;
+  for(const [hooker,caught,at,other] of [[a,b,point1,point2],[b,a,point2,point1]] as const){
+    const local=toBody(hooker,at),bumper=bumperAt(local.z,DEFINITIONS[hooker.kind].halfLength),part=bumper&&hooker.wreckParts.assemblies.find(x=>x.name===bumper);
+    if(!bumper||!part||!part.members.some(m=>m.mesh.visible)||part.loose<LOCK.loose)continue;
+    if(!hooks(part.loose,closing,hooker.id*13+caught.id*7+lockRolls++))return;
+    const caughtLocal=toBody(caught,other),length=Math.max(.3,at.distanceTo(other)+LOCK.slack);
+    const joint=physics.createImpulseJoint(R.JointData.rope(length,local,caughtLocal),hooker.body,caught.body,true);
+    bumperLocks.push({hooker,caught,bumper,joint,hookerAnchor:local,caughtAnchor:caughtLocal,length,age:0,strain:0});locksMade++;
+    if(!demo&&(hooker.id===0||caught.id===0)){const rival=hooker.id===0?caught:hooker;toast(`LOCKED TOGETHER · #${rival.id+1} ${DEFINITIONS[rival.kind].name}`,2,2);sound.crowd(.6);}
+    return;
+  }
+}
+/** Hooked cars drag each other about; pulling apart on a taut rope tears the hooked bumper off (offline). */
+function stepLocks(dt:number){
+  const away=(from:Vehicle,to:Vehicle)=>({x:from.current.x-to.current.x,z:from.current.z-to.current.z});
+  bumperLocks=bumperLocks.filter(lock=>{
+    const {hooker,caught}=lock,part=hooker.wreckParts.assemblies.find(x=>x.name===lock.bumper);
+    if(!physics.getImpulseJoint(lock.joint.handle)||!part||!part.members.some(m=>m.mesh.visible)){releaseLock(lock);return false;}
+    const at=fromBody(hooker,lock.hookerAnchor),gap=at.distanceTo(fromBody(caught,lock.caughtAnchor));
+    const pulling=(pullsAway(hooker.forward,away(hooker,caught),hooker.input.throttle)?1:0)+(pullsAway(caught.forward,away(caught,hooker),caught.input.throttle)?1:0);
+    lock.age+=dt;lock.strain=lockStrain(lock.strain,gap>=lock.length-.03,pulling,dt);
+    const end=lockEnd(lock.strain,lock.age,gap,lock.length);if(!end)return true;
+    releaseLock(lock);
+    if(end==='torn'){hooker.ripAssembly(lock.bumper);locksTorn++;fx.emit(at,8,1,1);
+      if(!demo&&(hooker.id===0||caught.id===0)){toast(hooker.id===0?'BUMPER TORN OFF':`BUMPER TORN OFF · #${hooker.id+1} ${DEFINITIONS[hooker.kind].name}`,2,2);sound.crowd(.8);}}
+    return false;
+  });
+}
 /** WALL SLAMs credited this event (offline QA counter). */
 let wallSlams=0;
 /** Cars already counted as pinned, and already called PINNED in the derby feed, this time they were held (cleared once free). */
@@ -1683,7 +1724,7 @@ function step(dt: number) {
       damageScale:Math.max(a&&a.health>0?a.specification.damageScale:0,b&&b.health>0?b.specification.damageScale:0)});
   });
   sound.contactScraping.sample(contacts,elapsed);
-  if(!online?.active)pinCars(contacts,dt);
+  if(!online?.active){pinCars(contacts,dt);stepLocks(dt);}
   for(const c of cars)if(c.health<=0&&!wreckCauses.has(c.id)&&c.extendedDamage&&causeOf(c)==='BURNT OUT'){const by=cars.find(v=>v.id===alightBy.get(c.id));
     if(by&&mode==='derby'){derbyFeed.note(by.id,displayedDriver(by),'burnt',elapsed);if(scoreDerby())combat.destruction(by.id,DESTRUCTION_POINTS.burnt);}
     if(by?.id===0&&!demo)toast(`BURNT OUT · #${c.id+1} ${DEFINITIONS[c.kind].name}`+pointsTag(DESTRUCTION_POINTS.burnt),2,2);}
@@ -1731,6 +1772,8 @@ function step(dt: number) {
     if(!online?.active)for(const [car,was] of [[a,engineInA],[b,engineInB]] as const)if(car&&was&&car.engineOut)eventAwards.failure(car.id,'ENGINE OUT',elapsed,34);
     if(!online?.active&&!demo)for(const [car,was,other] of [[a,engineInA,b],[b,engineInB,a]] as const)if(car&&was&&car.engineOut&&(car.id===0||other?.id===0)){toast(car.id===0?'ENGINE OUT':`ENGINE OUT · #${car.id+1} ${DEFINITIONS[car.kind].name}`+pointsTag(DESTRUCTION_POINTS.engine),2.6,3);sound.crowd(1);crowdFlashes(SMASH_FLASHES);}
     if(damage>0&&a&&b){lastHitBy.set(a.id,{by:b.id,at:elapsed});lastHitBy.set(b.id,{by:a.id,at:elapsed});}
+    // A hanging bumper can hook the two cars together (offline).
+    if(!online?.active&&a&&b)tryLock(a,b,point1,point2,closing);
     // Wall slam: a car knocked into the scenery just after a rival hit it; the rival is credited with that damage (offline).
     if(!online?.active&&!!a!==!!b){const victim=(a??b)!,lost=a?smashLoss.a:smashLoss.b,by=slamBy(lastHitBy.get(victim.id),victim.id,elapsed),attacker=by>=0?cars.find(c=>c.id===by):undefined;
       if(attacker&&lost>0){const after=victim.health,before=after+lost;attacker.inflicted+=lost;
@@ -2431,7 +2474,7 @@ async function boot() {
         p95: times[Math.floor(times.length * 0.95)],
         audio: sound.buffers.size,
         activeParticles: fx.particles.filter(p=>p.life>0).length,
-        debris: fx.debris.length, wallSlams, debrisAt: fx.debris.map(d=>{const p=d.body.translation();return [+p.x.toFixed(2),+p.y.toFixed(2),+p.z.toFixed(2),+d.body.mass().toFixed(1),+d.age.toFixed(2)];}),
+        debris: fx.debris.length, wallSlams, bumperLocks: {made: locksMade, torn: locksTorn, active: bumperLocks.length}, debrisAt: fx.debris.map(d=>{const p=d.body.translation();return [+p.x.toFixed(2),+p.y.toFixed(2),+p.z.toFixed(2),+d.body.mass().toFixed(1),+d.age.toFixed(2)];}),
         voices: sound.activeVoices,
         loops: sound.loops.size,
         thermal: vehicleFire?.stats,
@@ -2530,7 +2573,7 @@ async function boot() {
         wheelLost: Array.from(c.wreckParts.wheelLost),
         rips: c.rips,
         backfires: c.backfires,
-        drips: c.drips.slice(), fov: c.id === 0 ? +camera.fov.toFixed(2) : undefined, status: c.id === 0 && clock < statusUntil ? statusMessage : '', gear: c.gear, rpm: c.rpm, slip: c.slip, wheelSlips: Array.from(c.wheelSlips), drivetrain: !!c.drivetrain, powerScale: c.powerScale, rollBar: c.rollBar.slice(), steerSkew: c.steerSkew, openness: c.openness, hotTime: c.hotTime, engineFires: c.engineFires, smashFires: c.smashFires, beltSlip: c.beltSlip, beltSnapped: c.beltSnapped, squeal: c.squeal, battery: c.battery, bearingWear: Array.from(c.bearingWear), hubDrag: Array.from(c.hubDrag), propBend: c.propBend, propWear: c.propWear, propSnapped: c.propSnapped, propVibration: c.propVibration, roll: Math.asin(Math.max(-1,Math.min(1,c.right.y))), shedKg: c.shedKg, bodyMass: c.body.mass(), bodyCom: c.body.localCom(), slickGrip: c.slickGrip.slice(), rearSlide: c.rearSlide, pitSpins: c.pitSpins, engineOut: c.engineOut, inverted: c.inverted, roofSlideTime: c.roofSlideTime, sideSlideTime: c.sideSlideTime, rollShed: c.rollShed, pinTime: c.pinTime, pins: c.pins, aiPhase: drivers.memory.get(c.id)?.phase, wreckCause: wreckCauses.get(c.id), wingsTorn: c.wingsTorn, spareWheels: c.spareWheels, openDoors: c.openDoorSpans().map(d=>({name:d.name,from:d.from.toArray().map(v=>+v.toFixed(2)),to:d.to.toArray().map(v=>+v.toFixed(2))})), oily: c.oily.slice(), blownOut: c.blownOut.slice(), gearLimit: c.gearLimit, steamPuffs: c.steamPuffs, oilLevel: c.oilLevel, coolantLevel: c.coolantLevel, fuelLevel: c.fuelLevel, clutchGrip: c.clutchGrip, clutchSmoke: c.clutchSmoke, steerPlay: c.steerPlay, doorOpenTime: c.doorOpenTime, doorsTorn: c.doorsTorn, doorSlams: c.doorSlams, rubDrag: Array.from(c.rubDrag), rubSmoke: c.rubSmoke, electricalFault: c.electricalFault, electricalCuts: c.electricalCuts, nutLoose: Array.from(c.nutLoose), wheelsShed: c.wheelsShed, exhaustBlow: c.exhaustBlow, exhaustPops: c.exhaustPops, diffWear: c.diffWear, debeads: c.debeads, steerLink: Array.from(c.steerLink), gearPops: c.gearPops, brakeDrag: Array.from(c.brakeDrag), discHeat: Array.from(c.discHeat), mountsBroken: c.mountsBroken, mountJolts: c.mountJolts, cargoSpilled: c.cargoSpilled, sumpCrack: c.sumpCrack, brakeFires: c.brakeFires, exhaustGone: c.exhaustGone, starterDamage: c.starterDamage, starterFails: c.starterFails, frameBend: c.frameBend, deadTime: c.deadTime, dazed: c.dazed, glassPops: c.glassPops, platesLost: c.platesLost, debrisPunctures: c.debrisPunctures, beadStress: Array.from(c.beadStress), doors: c.wreckParts.assemblies.filter(a=>/door|cargo|tailgate|mirror|boot|bumper/.test(a.name)).map(a=>({name:a.name,loose:a.loose,swing:a.swing??0,damage:a.damage,gone:a.members.every(m=>!m.mesh.visible)})), seized: c.seized, brakeFluid: c.brakeFluid, brokenSprings: c.springBias.filter(v=>v<1).length, brokenShafts: c.driveBias.filter(v=>v<1).length, flameHeat: c.flameHeat, oilSmoke: c.oilSmoke,
+        drips: c.drips.slice(), fov: c.id === 0 ? +camera.fov.toFixed(2) : undefined, status: c.id === 0 && clock < statusUntil ? statusMessage : '', gear: c.gear, rpm: c.rpm, slip: c.slip, wheelSlips: Array.from(c.wheelSlips), drivetrain: !!c.drivetrain, powerScale: c.powerScale, rollBar: c.rollBar.slice(), steerSkew: c.steerSkew, openness: c.openness, hotTime: c.hotTime, engineFires: c.engineFires, smashFires: c.smashFires, beltSlip: c.beltSlip, beltSnapped: c.beltSnapped, squeal: c.squeal, battery: c.battery, bearingWear: Array.from(c.bearingWear), hubDrag: Array.from(c.hubDrag), propBend: c.propBend, propWear: c.propWear, propSnapped: c.propSnapped, propVibration: c.propVibration, roll: Math.asin(Math.max(-1,Math.min(1,c.right.y))), shedKg: c.shedKg, bodyMass: c.body.mass(), bodyCom: c.body.localCom(), slickGrip: c.slickGrip.slice(), rearSlide: c.rearSlide, pitSpins: c.pitSpins, engineOut: c.engineOut, inverted: c.inverted, roofSlideTime: c.roofSlideTime, sideSlideTime: c.sideSlideTime, rollShed: c.rollShed, pinTime: c.pinTime, pins: c.pins, lockedTo: lockedTo(c.id), aiPhase: drivers.memory.get(c.id)?.phase, wreckCause: wreckCauses.get(c.id), wingsTorn: c.wingsTorn, spareWheels: c.spareWheels, openDoors: c.openDoorSpans().map(d=>({name:d.name,from:d.from.toArray().map(v=>+v.toFixed(2)),to:d.to.toArray().map(v=>+v.toFixed(2))})), oily: c.oily.slice(), blownOut: c.blownOut.slice(), gearLimit: c.gearLimit, steamPuffs: c.steamPuffs, oilLevel: c.oilLevel, coolantLevel: c.coolantLevel, fuelLevel: c.fuelLevel, clutchGrip: c.clutchGrip, clutchSmoke: c.clutchSmoke, steerPlay: c.steerPlay, doorOpenTime: c.doorOpenTime, doorsTorn: c.doorsTorn, doorSlams: c.doorSlams, rubDrag: Array.from(c.rubDrag), rubSmoke: c.rubSmoke, electricalFault: c.electricalFault, electricalCuts: c.electricalCuts, nutLoose: Array.from(c.nutLoose), wheelsShed: c.wheelsShed, exhaustBlow: c.exhaustBlow, exhaustPops: c.exhaustPops, diffWear: c.diffWear, debeads: c.debeads, steerLink: Array.from(c.steerLink), gearPops: c.gearPops, brakeDrag: Array.from(c.brakeDrag), discHeat: Array.from(c.discHeat), mountsBroken: c.mountsBroken, mountJolts: c.mountJolts, cargoSpilled: c.cargoSpilled, sumpCrack: c.sumpCrack, brakeFires: c.brakeFires, exhaustGone: c.exhaustGone, starterDamage: c.starterDamage, starterFails: c.starterFails, frameBend: c.frameBend, deadTime: c.deadTime, dazed: c.dazed, glassPops: c.glassPops, platesLost: c.platesLost, debrisPunctures: c.debrisPunctures, beadStress: Array.from(c.beadStress), doors: c.wreckParts.assemblies.filter(a=>/door|cargo|tailgate|mirror|boot|bumper/.test(a.name)).map(a=>({name:a.name,loose:a.loose,swing:a.swing??0,damage:a.damage,gone:a.members.every(m=>!m.mesh.visible)})), seized: c.seized, brakeFluid: c.brakeFluid, brokenSprings: c.springBias.filter(v=>v<1).length, brokenShafts: c.driveBias.filter(v=>v<1).length, flameHeat: c.flameHeat, oilSmoke: c.oilSmoke,
         engineDamage: c.engineDamage,
         tyreDamage: c.tyreDamage?.slice(), structure: c.structuralDamage?.slice(),
         partDamage: Object.fromEntries([...new Set(c.panels.map(m=>m.userData.detachAssembly as string|null).filter((v):v is string=>!!v))].map(n=>[n,Math.round(Math.max(0,...c.panels.filter(m=>m.userData.detachAssembly===n&&m.visible).map(m=>m.userData.damage??0)))])),
