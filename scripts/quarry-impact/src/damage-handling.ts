@@ -90,6 +90,12 @@ export function clutchGrip(engineEnd:number,burnt=0){
   const c=clamp01(engineEnd),b=clamp01(burnt);
   return Math.max(CLUTCH.floor,1-(1-CLUTCH.min)*clamp01((c-CLUTCH.onset)/CLUTCH.span)-b);
 }
+/** Throttle cable snapped (offline): a hit of CABLE.blow or more at the engine end of an engine already CABLE.engine damaged can
+ * part the throttle cable (about CABLE.chance of such hits, the car's dice): from then on the engine only sees CABLE.limp of the
+ * pedal either way, and the car limps on. */
+export const CABLE={engine:.5,blow:12,chance:.35,limp:.6} as const;
+export const cableSnaps=(engineDamage:number|undefined,damage:number,atEngineEnd:boolean,seed:number)=>atEngineEnd&&(engineDamage??0)>=CABLE.engine&&damage>=CABLE.blow&&Number.isFinite(seed)&&((seed*.6180339887+.41)%1+1)%1<CABLE.chance;
+export const cableThrottle=(throttle:number)=>Number.isFinite(throttle)?Math.max(-CABLE.limp,Math.min(CABLE.limp,throttle)):0;
 /** Pushing burns the clutch (offline): holding PUSH_BURN.throttle or more against a car that will not move (pinning it, under
  * PUSH_BURN.speed m/s) cooks the clutch PUSH_BURN.rate a second, so long or repeated pins leave the pusher's clutch slipping at
  * full throttle once its burnt grip falls under 1/CLUTCH.margin. */
