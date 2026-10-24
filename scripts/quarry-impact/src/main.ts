@@ -1151,7 +1151,7 @@ function stepTethers(dt:number){
   bumperTethers=bumperTethers.filter(t=>{
     if(!jointLive(physics,t.joint)){dropWire(t);return false;}
     const p=t.debris.translation(),at=new T.Vector3(p.x,p.y,p.z);t.age=tetherAge(t.age,t.car.speed,dt);
-    if(t.age>=t.life||at.distanceTo(t.car.current)>t.length+TETHER.snap){releaseJoint(t.joint);dropWire(t);fx.emit(at,4,1,.9);return false;}
+    if(t.age>=t.life||at.distanceTo(t.car.current)>t.length+TETHER.snap){releaseJoint(t.joint);dropWire(t);fx.emit(at,4,1,.9);sound.shot('impact-light',at,.35,{rate:1.9,delay:0,duration:.2});return false;}
     {const q=t.debris.rotation(),end=t.hang.clone().applyQuaternion(new T.Quaternion(q.x,q.y,q.z,q.w)).add(at),from=fromBody(t.car,t.anchor),position=t.wire.geometry.attributes.position as T.BufferAttribute;
       position.setXYZ(0,from.x,from.y,from.z);position.setXYZ(1,end.x,end.y,end.z);position.needsUpdate=true;}
     const v=t.debris.linvel(),speed=Math.hypot(v.x,v.z),ground=t.car.groundAt(p.x,p.z);t.spark+=dt;
@@ -1171,6 +1171,8 @@ function tryLock(a:Vehicle,b:Vehicle,point1:T.Vector3,point2:T.Vector3,closing:n
     const caughtLocal=toBody(caught,other),length=Math.max(.3,at.distanceTo(other)+LOCK.slack);
     const joint=physics.createImpulseJoint(R.JointData.rope(length,local,caughtLocal),hooker.body,caught.body,true);
     bumperLocks.push({hooker,caught,bumper,joint,hookerAnchor:local,caughtAnchor:caughtLocal,length,age:0,strain:0});locksMade++;
+    // A clunk as the bumper snags, felt by the player in it.
+    sound.shot('impact-heavy',at,.5,{rate:.8,delay:0,duration:.5});if(!demo&&(hooker.id===0||caught.id===0))recordRumbleImpact(.3);
     if(!demo&&(hooker.id===0||caught.id===0)){const rival=hooker.id===0?caught:hooker;toast(`${caught.health<=0?'HOOKED THE WRECK':'LOCKED TOGETHER'} · #${rival.id+1} ${DEFINITIONS[rival.kind].name}`,2,2);sound.crowd(.6);}
     return;
   }
@@ -1187,6 +1189,8 @@ function stepLocks(dt:number){
     const end=lockEnd(lock.strain,lock.age,gap,lock.length);if(!end)return true;
     releaseLock(lock);
     if(end==='torn'){hooker.ripAssembly(lock.bumper);locksTorn++;fx.emit(at,8,1,1);
+      // The bumper tearing away: a sharp crack over a metal groan.
+      sound.shot('impact-light',at,.7,{rate:1.35,delay:0,duration:.4});sound.shot('suspension',at,.5,{rate:1.6,delay:.05,duration:.3});if(!demo&&(hooker.id===0||caught.id===0))recordRumbleImpact(.35);
       if(!demo&&(hooker.id===0||caught.id===0)){toast(hooker.id===0?'BUMPER TORN OFF':`BUMPER TORN OFF · #${hooker.id+1} ${DEFINITIONS[hooker.kind].name}`,2,2);sound.crowd(.8);}}
     return false;
   });
