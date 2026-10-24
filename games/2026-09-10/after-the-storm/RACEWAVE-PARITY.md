@@ -1,6 +1,6 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
-## Unreleased — Experimental open sea
+## v2.47.0 — Experimental open sea
 
 Free ride has an "Open sea · experimental" option on the title screen: the
 Open Sea demo's ocean with a new rigid-body jet ski. It is not part of the
@@ -38,6 +38,10 @@ Buoyancy acts along the surface normal, so the ski runs down wave faces. On
 flat water it planes from about 15 km/h, reaches 90 km/h, and turns at an 18 m
 radius at 75 km/h. In waves it launches, lands with impacts, and wipes out on
 capsizes or nose-first landings.
+
+The race's own collisions still apply (reefs, walls, moored boats, barriers,
+piles and land), along with shore recovery. The chosen sea sets the weather, and
+instant replay rewinds the sea together with the riders.
 
 ## v2.46.2 — Original label words
 
