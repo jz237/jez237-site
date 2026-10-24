@@ -1,6 +1,7 @@
+import {restoreRollShedBytes} from './roll-shed-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readSideSlidePrevious,restoreSideSlideBytes,verifySideSlideRevision} from './side-slide-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreRollShedBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('SideSlide preserves every prior fixture, vehicle asset, venue art and history input',verifySideSlideRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/side-slide/revision.json').toString());

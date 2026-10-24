@@ -459,3 +459,6 @@ export const ROOF_SLIDE={speed:3,full:15,crush:.05,gap:.05} as const;
 /** On its side: a car tilted so its up axis is within SIDE_SLIDE.up of level slides on a door, and crushes that side the same way. */
 export const SIDE_SLIDE={up:.4} as const;
 export const roofSlide=(slideSpeed:number)=>Number.isFinite(slideSpeed)&&slideSpeed>ROOF_SLIDE.speed?Math.min(1,slideSpeed/ROOF_SLIDE.full):0;
+/** A roll shakes things off (offline): the moment a car has been upside down for ROLL_SHED.at seconds, every hinged part already
+ * hanging loose past `loose` (doors, bonnet, boot, bumpers, mirrors) is torn away. Once per roll. */
+export const ROLL_SHED={at:.3,loose:.4} as const;

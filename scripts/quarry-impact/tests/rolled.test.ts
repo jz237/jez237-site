@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {ROLLED,rolledBy} from '../src/derby-moments';
 import {wreckCause} from '../src/wreck-cause';
-import {ROOF_SLIDE,SIDE_SLIDE,roofSlide} from '../src/damage-handling';
+import {ROOF_SLIDE,SIDE_SLIDE,ROLL_SHED,roofSlide} from '../src/damage-handling';
 import {DerbyEventFeed,derbyFeedMarkup} from '../src/derby-event-feed';
 test('a car left on its roof soon after a hit was rolled by that hitter, once per roll',()=>{
  const hit={by:3,at:10};
@@ -24,4 +24,7 @@ test('a car sliding on its roof scrapes harder the faster it goes, and not at al
 });
 test('a car counts as on its side only when tipped well past upright',()=>{
  assert.ok(SIDE_SLIDE.up>0&&SIDE_SLIDE.up<.5,'tilted past about 66 degrees');
+});
+test('a roll sheds only what was already hanging loose, at the same moment a roll is credited',()=>{
+ assert.equal(ROLL_SHED.at,ROLLED.sustain);assert.ok(ROLL_SHED.loose>0&&ROLL_SHED.loose<1);
 });
