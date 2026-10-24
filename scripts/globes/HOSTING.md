@@ -3,18 +3,21 @@
 Original: https://github.com/willwaltz/globes
 Author: Will Waltz · MIT License
 Upstream commit: 93c3b814bbca53463e8207b8e3c95fca8940dff5
-Imported: 2026-10-22 · Hosting build: 1.11.0
-Public route: https://jez237.com/demos/globes/
+Imported: 2026-10-22 · Hosting build: 1.12.0
+Public routes: https://jez237.com/demos/globes/ (the five original globes) and
+https://jez237.com/demos/betta-bowl/ (the **Living Silk** betta bowl, on its own)
 
 The upstream source and MIT attribution are retained. Hosting adds the gallery
-return link, clearer WebGPU messages, and a sixth **Living Silk** betta globe.
-The five original scenes and their solver quality defaults are preserved. Fonts and
-runtime dependencies are local; the betta uses its existing immutable R2 texture
-references (not newly generated art).
+return link, clearer WebGPU messages, and the **Living Silk** betta bowl, built from
+the same source as a page of its own (`betta.html`). The five original scenes and
+their solver quality defaults are preserved. Fonts and runtime dependencies are
+local; the betta uses its existing immutable R2 texture references (not newly
+generated art).
 
 ## Living Silk — Betta Atelier integration
 
-Direct link: `?globe=betta`. A desktop launch into this scene defaults to a
+Direct link: https://jez237.com/demos/betta-bowl/ (`../globes/?globe=betta`, the
+link before 1.12, is sent there). A desktop launch into this scene defaults to a
 64³ water grid and one ray per pixel (60 fps observed on the host Radeon 8060S
 at 1200×900, versus 11 fps at the original 128³/four-ray setting). Phones retain
 the original 48³ default; this is touch-emulated layout validation, not a physical
@@ -263,6 +266,40 @@ Version 1.11 (Atelier 1.12) stops the pectoral fins changing size when the swim 
 - Limits: the glide-to-hover change that remains (0.04-0.05) is the trunk straightening after a
   turn; the startle fold is now subtle rather than a dramatic tuck.
 
+Version 1.12 (Atelier unchanged) makes the betta's globe a real betta bowl, with a lid that comes
+off, and gives it a page of its own:
+- **Its own page.** `betta.html` (`<html data-globes="betta">`) shows the betta alone, and
+  `index.html` the five original globes (`src/app/catalog.ts`). `npm run build:betta` builds it as a
+  standalone folder (`dist-betta/index.html` and its assets) for `demos/betta-bowl/`. Each page
+  builds only its own globe shaders before the first frame (`GlobeView.precompile`'s variants),
+  so the bowl starts sooner and the globes' page no longer builds the betta's.
+- **An open mouth** (`src/render/bowl.ts`). The glass is cut off at 0.88 along the globe's axis
+  (a mouth ~11 cm across on the ~24 cm bowl), and a rolled bead of glass (a torus, ~2 mm tube)
+  runs round it. The bowl variant of the globe shader (`bowlEntryWGSL`, `bowlTraceWGSL` in
+  `shaders.ts`; the other globes' shaders are unchanged) lets rays in and out of the mouth with no
+  glass and hands them on to the bead and the lid.
+- **The lid**, solid glass ~3.8 mm thick with a bullnose edge, a mushroom knob, eight 3 mm air
+  vents (a betta breathes at the surface) and a collar under it that drops into the mouth so it
+  cannot slide off. The bead and the lid are marched as distance fields and refract, reflect and
+  absorb like the bowl's own glass, with total internal reflection inside them (the edges carry
+  light round and read darker, as thick glass does). Its geometry is a sphere grown to take in the
+  lid wherever it is; pixels where a ray meets none of the bowl are left to the backdrop
+  (`maskNode`).
+- **Lift lid / Replace lid** (or a click on the lid, or on the open mouth). It comes off only from
+  an upright bowl: it rises until its collar clears the mouth, then is carried up and away out of
+  sight (`src/interaction/BowlLid.ts`, 2.6 s). While it is off, the bowl tips at most 25 degrees
+  (`GlobeController.tiltLimit`): from ~47 degrees the water would pour out of the mouth.
+- **The water stays in.** `FluidSim.mouth` holds the particles under a plane at 0.85 along the
+  globe's axis (`g2p.wgsl`), as under the lid and its collar, treated like the glass.
+- **Development.** The betta's R2 textures allow only `https://jez237.com` (CORS), so
+  `npm run web` serves them through the dev server (`vite.config.ts`). A copy of the page on any
+  other site (Hidden Reef included) would load the bowl but not the fish's textures unless R2's
+  CORS allows that origin, or the page is embedded from jez237.com.
+- Measured in Chrome WebGPU on the RTX 5090 host: 60 fps (the display's limit) with the lid on,
+  coming off and going back on. Limits: the lid casts no shadow or caustic of its own into the
+  water, the spray above the water still meets the glass's whole sphere, and the lid is not
+  physically simulated (it is carried on a fixed path).
+
 ## Browser compatibility
 
 Firefox compiles WGSL with naga, which is stricter than Chrome's Tint. Builds up to
@@ -299,6 +336,11 @@ rsync -a --delete dist/ ../../demos/globes/
 cp LICENSE ../../demos/globes/LICENSE
 cp node_modules/three/LICENSE ../../demos/globes/THREE-LICENSE.txt
 cp node_modules/@fontsource-variable/inter/LICENSE ../../demos/globes/INTER-LICENSE.txt
+npm run build:betta
+rsync -a --delete dist-betta/ ../../demos/betta-bowl/
+cp LICENSE ../../demos/betta-bowl/LICENSE
+cp node_modules/three/LICENSE ../../demos/betta-bowl/THREE-LICENSE.txt
+cp node_modules/@fontsource-variable/inter/LICENSE ../../demos/betta-bowl/INTER-LICENSE.txt
 ```
 
 Then regenerate the gallery from the repository root with

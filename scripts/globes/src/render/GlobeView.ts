@@ -27,6 +27,7 @@ import { FluidSim, SURFACE_ISO } from '../sim/FluidSim';
 import { AERATION_N, FOAM_MAP_N } from '../sim/Foam';
 import { TLAS_PARAM } from '../rt/rt';
 import { TlasBinding } from '../rt/tlasBinding';
+import type { BowlShape } from './bowl';
 import { envWGSL, globeHelpersWGSL, globeShadeWGSL } from './shaders';
 
 /** Where the backdrop's soft glow lies (a direction from the camera): behind the globe, where
@@ -76,8 +77,8 @@ function densityTexture(sim: FluidSim): THREE.Texture {
 
 
 /** Which globe shader is drawn: the plain one (and the koi's pass), the kelp globe's, the reef's,
- *  the sea foam globe's. */
-export type GlobeVariant = 'plain' | 'kelp' | 'reef' | 'foam';
+ *  the sea foam globe's, the betta bowl's (bowl.ts: open at the mouth, with a rim and a lid). */
+export type GlobeVariant = 'plain' | 'kelp' | 'reef' | 'foam' | 'bowl';
 
 export class GlobeView {
   readonly mesh: THREE.Group;
@@ -92,6 +93,13 @@ export class GlobeView {
   private readonly reefAAMesh: THREE.Mesh;
   /** The sea foam globe's pass (the plain pass's, with its own water and its foam). */
   private readonly foamMesh: THREE.Mesh;
+  /** The betta bowl's two (the plain pass's and the koi's, with the bowl's glass), where the page
+   *  shows it: drawn on a sphere grown to take in the lid wherever it is (GlobeView.setBowlLid). */
+  private readonly bowlMesh: THREE.Mesh | null = null;
+  private readonly bowlKoiMesh: THREE.Mesh | null = null;
+  private readonly uBowlLid = uniform(new THREE.Matrix4());
+  /** x: the lid is there. */
+  private readonly uBowlState = uniform(new THREE.Vector4(1, 0, 0, 0));
   /** MSAA is on and a pixel's rays can run one per sample (else one ray per pixel throughout). */
   private readonly perSample: boolean;
   private readonly uCenter = uniform(new THREE.Vector3());
@@ -127,6 +135,8 @@ export class GlobeView {
     /** The sea foam globe's water colour (catalog.ts waterColour). */
     foamColour: readonly number[] = [1, 1, 1],
     betta: Betta,
+    /** The betta bowl's shape, where the page shows it (else it has no passes). */
+    bowl: BowlShape | null = null,
   ) {
     const desktop = 'desktop' in outside ? outside.desktop : null;
     this.outerRadius = globe.outerRadius;
@@ -286,25 +296,28 @@ export class GlobeView {
     // where there are any); 'reef' and 'reefAA' likewise for the reef globe.
     // 'foam': the sea foam globe (the plain pass's, with its water and its foam).
     // hardware: trace with the ray tracing hardware (where the device has it).
-    type Pass = 'main' | 'koi' | 'kelp' | 'kelpAA' | 'reef' | 'reefAA' | 'foam';
+    // 'bowl' and 'bowlKoi': the betta bowl's, as 'main' and 'koi' with the bowl's glass.
+    type Pass = 'main' | 'koi' | 'kelp' | 'kelpAA' | 'reef' | 'reefAA' | 'foam' | 'bowl' | 'bowlKoi';
     const makeMaterial = (pass: Pass, hardware = rt !== null): THREE.MeshBasicNodeMaterial => {
-      const withKoi = pass === 'koi';
+      const withKoi = pass === 'koi' || pass === 'bowlKoi';
       const withKelp = pass === 'kelp' || pass === 'kelpAA';
       const withReef = pass === 'reef' || pass === 'reefAA';
       const withClown = pass === 'reefAA';
       const foam = pass === 'foam' ? { colour: foamColour, ...ww.look } : null;
+      const withBowl = pass === 'bowl' || pass === 'bowlKoi';
       // (The plain and sea foam passes, with MSAA: one ray an invocation, run once per sample, as
       // the redrawing passes are. One of a pixel's samples gathers the water's light for all, in
       // the koi's pass as in the plain one: a pixel the koi's pass draws in part gathers it once.)
-      const perSampleWater = perSample && (pass === 'main' || pass === 'foam');
-      const oneGather = perSampleWater || (perSample && pass === 'koi');
-      const shade = wgslFn(globeShadeWGSL(hardware, foam !== null, oneGather), [wgsl(envWGSL(light)), wgsl(globeHelpersWGSL(globe, light, withKoi, onDesktop, withKelp, withReef, withReef ? reefClarity : 1, withClown, hardware, foam))]);
+      const perSampleWater = perSample && (pass === 'main' || pass === 'foam' || pass === 'bowl');
+      const oneGather = perSampleWater || (perSample && withKoi);
+      const shade = wgslFn(globeShadeWGSL(hardware, foam !== null, oneGather, withBowl), [wgsl(envWGSL(light)), wgsl(globeHelpersWGSL(globe, light, withKoi, onDesktop, withKelp, withReef, withReef ? reefClarity : 1, withClown, hardware, foam, withBowl ? bowl : null))]);
       const m = new THREE.MeshBasicNodeMaterial();
-      const redraw = pass === 'koi' || pass === 'kelpAA' || pass === 'reefAA';
+      const redraw = pass === 'koi' || pass === 'kelpAA' || pass === 'reefAA' || pass === 'bowlKoi';
       const edges = pass === 'kelp' || pass === 'reef';
       let passInputs = redraw || perSampleWater ? koiInputs : inputs;
       if (withReef) passInputs = { ...passInputs, ...reefGrid };
       if (foam) passInputs = { ...passInputs, ...foamInputs };
+      if (withBowl) passInputs = Object.assign({}, passInputs, { bowlLid: this.uBowlLid, bowlState: this.uBowlState });
       if (!hardware) passInputs = Object.fromEntries(Object.entries(passInputs).filter(([k]) => k !== TLAS_PARAM)) as typeof passInputs;
       // (One variable: the depth and the colour both read the same trace.) Its w carries the
       // pixel's coverage, plus 2 where the second pass must redraw it.
@@ -312,7 +325,9 @@ export class GlobeView {
       const marked = traced.w.greaterThan(1.5);
       const alpha = traced.w.sub(select(marked, float(2.0), float(0.0)));
       m.colorNode = vec4(traced.xyz, onDesktop ? alpha : 1.0) as unknown as typeof m.colorNode;
-      if (pass === 'main' || edges) m.depthNode = select(marked, float(1.0), float(0.0)) as unknown as typeof m.depthNode;
+      if (pass === 'main' || pass === 'bowl' || edges) m.depthNode = select(marked, float(1.0), float(0.0)) as unknown as typeof m.depthNode;
+      // (The bowl's: a ray that meets none of it leaves the pixel to the backdrop.)
+      if (withBowl) m.maskNode = traced.w.greaterThan(-0.5) as unknown as typeof m.maskNode;
       if (redraw) {
         m.depthFunc = THREE.LessDepth;
         m.depthWrite = false;
@@ -341,10 +356,24 @@ export class GlobeView {
     this.reefAAMesh.renderOrder = 1;
     this.perSample = perSample;
     this.mesh.add(this.mainMesh, this.koiMesh, this.kelpMesh, this.kelpAAMesh, this.reefMesh, this.reefAAMesh, this.foamMesh);
+    const passes: [THREE.Mesh, Pass][] = [[this.mainMesh, 'main'], [this.koiMesh, 'koi'], [this.kelpMesh, 'kelp'], [this.kelpAAMesh, 'kelpAA'], [this.reefMesh, 'reef'], [this.reefAAMesh, 'reefAA'], [this.foamMesh, 'foam']];
+    if (bowl) {
+      // (A unit sphere, scaled to the lid's reach each frame.)
+      const reach = new THREE.SphereGeometry(1, 128, 96);
+      this.bowlMesh = new THREE.Mesh(reach, makeMaterial('bowl'));
+      this.bowlKoiMesh = new THREE.Mesh(reach, makeMaterial('bowlKoi'));
+      this.bowlMesh.frustumCulled = false;
+      this.bowlKoiMesh.frustumCulled = false;
+      this.bowlKoiMesh.renderOrder = 1;
+      this.mesh.add(this.bowlMesh, this.bowlKoiMesh);
+      passes.push([this.bowlMesh, 'bowl'], [this.bowlKoiMesh, 'bowlKoi']);
+      this.bowlReach = globe.outerRadius * 1.012;
+      this.bowlMesh.scale.setScalar(this.bowlReach);
+      this.bowlKoiMesh.scale.setScalar(this.bowlReach);
+    }
     this.setVariant('plain');
     if (rt) {
       // Each pass's software twin, drawn while the water churns (RtScene.tracing).
-      const passes: [THREE.Mesh, Pass][] = [[this.mainMesh, 'main'], [this.koiMesh, 'koi'], [this.kelpMesh, 'kelp'], [this.kelpAAMesh, 'kelpAA'], [this.reefMesh, 'reef'], [this.reefAAMesh, 'reefAA'], [this.foamMesh, 'foam']];
       this.tracers = {
         meshes: passes.map(([mesh]) => mesh),
         hardware: passes.map(([mesh]) => mesh.material as THREE.Material),
@@ -382,8 +411,8 @@ export class GlobeView {
     t.meshes.forEach((mesh, i) => (mesh.material = hardware ? t.hardware[i] : t.software[i]));
   }
 
-  /** Draws the kelp globe (its passes), the reef globe (its passes), the sea foam globe (its pass)
-   *  or the others (the plain pass, and the koi's). */
+  /** Draws the kelp globe (its passes), the reef globe (its passes), the sea foam globe (its pass),
+   *  the betta bowl (its two) or the others (the plain pass, and the koi's). */
   setVariant(v: GlobeVariant): void {
     this.foamMesh.visible = v === 'foam';
     this.kelpMesh.visible = v === 'kelp';
@@ -393,15 +422,43 @@ export class GlobeView {
     this.reefAAMesh.visible = v === 'reef';
     this.mainMesh.visible = v === 'plain';
     this.koiMesh.visible = v === 'plain';
+    if (this.bowlMesh) this.bowlMesh.visible = v === 'bowl';
+    if (this.bowlKoiMesh) this.bowlKoiMesh.visible = v === 'bowl';
   }
 
+  /** The betta bowl's lid: where it is (the globe's translating frame to the lid's), whether it is
+   *  in sight, and how far from the globe's centre it reaches (its passes' sphere takes it in). */
+  setBowlLid(toLid: THREE.Matrix4, shown: boolean, reach: number): void {
+    this.uBowlLid.value.copy(toLid);
+    this.uBowlState.value.x = shown ? 1 : 0;
+    const r = Math.max(this.outerRadius * 1.012, shown ? reach * 1.01 : 0);
+    if (r !== this.bowlReach) {
+      this.bowlReach = r;
+      this.bowlMesh?.scale.setScalar(r);
+      this.bowlKoiMesh?.scale.setScalar(r);
+    }
+  }
+
+  private bowlReach = 1;
+
   /** Builds pipelines ahead of time (their shaders are large), so no switch stalls: every
-   *  globe's (the app opens on whichever was shown last), and where the device traces in
-   *  hardware, every pass's software twin (only then may the renderer switch to them). */
-  async precompile(renderer: THREE.WebGPURenderer, camera: THREE.Camera, scene: THREE.Scene): Promise<void> {
+   *  globe's the page shows (variants; the app opens on whichever was shown last), and where the
+   *  device traces in hardware, every pass's software twin (only then may the renderer switch to
+   *  them). */
+  async precompile(renderer: THREE.WebGPURenderer, camera: THREE.Camera, scene: THREE.Scene, variants: readonly GlobeVariant[]): Promise<void> {
     const t = this.tracers;
-    const jobs = [this.mainMesh, this.koiMesh, this.kelpMesh, this.kelpAAMesh, this.reefMesh, this.reefAAMesh, this.foamMesh].map((mesh): [THREE.Mesh, THREE.Material] => [mesh, mesh.material as THREE.Material]);
-    t?.meshes.forEach((mesh, i) => jobs.push([mesh, t.software[i]]));
+    const meshes: Record<GlobeVariant, (THREE.Mesh | null)[]> = {
+      plain: [this.mainMesh, this.koiMesh],
+      kelp: [this.kelpMesh, this.kelpAAMesh],
+      reef: [this.reefMesh, this.reefAAMesh],
+      foam: [this.foamMesh],
+      bowl: [this.bowlMesh, this.bowlKoiMesh],
+    };
+    const wanted = new Set(variants.flatMap((v) => meshes[v]).filter((m) => m !== null));
+    const jobs = [...wanted].map((mesh): [THREE.Mesh, THREE.Material] => [mesh, mesh.material as THREE.Material]);
+    t?.meshes.forEach((mesh, i) => {
+      if (wanted.has(mesh)) jobs.push([mesh, t.software[i]]);
+    });
     for (const [mesh, material] of jobs) {
       const shown = mesh.visible;
       const drawn = mesh.material;

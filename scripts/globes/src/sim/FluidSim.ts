@@ -67,7 +67,7 @@ interface Kernel {
   bindGroups: GPUBindGroup[];
 }
 
-const PARAMS_SIZE = 448;
+const PARAMS_SIZE = 464;
 /** The most speed a fish's pushes can add to the water in one frame (see push()). */
 const MAX_PUSH = 0.15;
 /** Points the water is sampled at for the creatures every frame (see probe.wgsl): the koi's
@@ -306,6 +306,9 @@ export class FluidSim {
   rock = false;
   /** How clear the water is (its absorption times this, for the light on its way down). */
   clarity = 1;
+  /** The betta bowl's open mouth (render/bowl.ts): the water stays under this height along the
+   *  globe's axis (g2p.wgsl), as under its lid. Null for a sealed globe. */
+  mouth: number | null = null;
   /** The water's colour: its absorption of red, green and blue, each against the usual water's
    *  (catalog.ts waterColour). */
   waterColour: readonly [number, number, number] = [1, 1, 1];
@@ -1386,6 +1389,7 @@ export class FluidSim {
     f.set([...this.pushAt, this.pushSpeed], 104);
     f.set([this.pushRadius, 0, 0, 0], 108);
     this.pushSpeed = 0;
+    f.set([this.mouth ?? 0, this.mouth === null ? 0 : 1, 0, 0], 112);
     f[67] = left;
     f[24] = this.frameIndex;
     f[35] = this.lightN;

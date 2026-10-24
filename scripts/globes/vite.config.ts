@@ -1,7 +1,35 @@
-import { defineConfig } from 'vite';
+import { resolve } from 'node:path';
+import { defineConfig, type Plugin } from 'vite';
 
-// Relative base so the built app also loads from file:// inside Electron.
-export default defineConfig({
+/** The betta's textures' host (betta-atelier/src/fish.js), whose CORS lets only jez237.com read
+ *  them: in development the dev server fetches them for the page. */
+const MEDIA = 'https://media.jez237.com/';
+
+const mediaThroughDevServer: Plugin = {
+  name: 'betta-media-through-dev-server',
+  apply: 'serve',
+  transform(code, id) {
+    if (id.replaceAll('\\', '/').endsWith('betta-atelier/src/fish.js')) return code.replaceAll(MEDIA, '/__media/');
+  },
+};
+
+/** The betta bowl's page, built on its own, is its folder's index.html. */
+const bettaPageAsIndex: Plugin = {
+  name: 'betta-page-as-index',
+  enforce: 'post',
+  generateBundle(_, bundle) {
+    const page = bundle['betta.html'];
+    if (page) page.fileName = 'index.html';
+  },
+};
+
+// Relative base so the built app also loads from file:// inside Electron. `--mode betta` builds
+// the betta bowl's page on its own (betta.html, as dist-betta/index.html): a folder that stands
+// alone, for jez237.com/demos/betta-bowl/.
+export default defineConfig(({ mode }) => ({
   base: './',
   resolve: { dedupe: ['three'] },
-});
+  server: { proxy: { '/__media/': { target: MEDIA, changeOrigin: true, rewrite: (p) => p.replace(/^\/__media\//, '/') } } },
+  plugins: [mediaThroughDevServer, ...(mode === 'betta' ? [bettaPageAsIndex] : [])],
+  ...(mode === 'betta' ? { build: { outDir: 'dist-betta', rollupOptions: { input: resolve(import.meta.dirname, 'betta.html') } } } : {}),
+}));

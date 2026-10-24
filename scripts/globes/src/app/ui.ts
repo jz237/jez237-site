@@ -116,6 +116,8 @@ export class AppUI {
     this.nextBtn = q('[data-action="next"]');
     this.announce = q('.sr-only');
 
+    // (A page with one globe, the betta bowl's, has nowhere to move to.)
+    if (GLOBES.length < 2) this.nav.remove();
     this.desktopBtn.addEventListener('click', () => this.handlers.addToDesktop());
     this.prevBtn.addEventListener('click', () => this.handlers.select(this.active - 1));
     this.nextBtn.addEventListener('click', () => this.handlers.select(this.active + 1));

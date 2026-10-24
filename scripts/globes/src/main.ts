@@ -3,7 +3,7 @@ import './app/styles.css';
 import * as THREE from 'three/webgpu';
 import { AppShell, type DesktopHost } from './app/AppShell';
 import { AdaptiveScale, ratioAt } from './app/adaptiveScale.mjs';
-import { GLOBES, type GlobeEntry } from './app/catalog';
+import { elsewhere, GLOBES, type GlobeEntry } from './app/catalog';
 import { applyUrlOverrides, fishConfig, globeConfig, lightConfig, simConfig, type GlobeConfig, type LightConfig, type SimConfig } from './config';
 import { DeskMapping, loadDesk, type DesktopHostApi } from './desktop/desktopScene';
 import { Betta, BUBBLE_RADIUS, RIPPLE_RADIUS } from './fish/Betta';
@@ -12,11 +12,13 @@ import { Koi, type KoiEnv } from './fish/Koi';
 import { CLOWN_PROBES, Clownfishes } from './fish/Clownfish';
 import { FishFood, type Feeder } from './fish/FishFood';
 import { classifyFailure, createDevice } from './gpu/device';
+import { BowlLid } from './interaction/BowlLid';
 import { GlobeController } from './interaction/GlobeController';
 import { KelpForest } from './kelp/KelpForest';
 import { REEF_PROBES, Reef } from './reef/Reef';
 import { Specks } from './ocean/Specks';
-import { GlobeView } from './render/GlobeView';
+import { BOWL, bowlShape } from './render/bowl';
+import { GlobeView, type GlobeVariant } from './render/GlobeView';
 import { OceanBackdrop } from './render/OceanBackdrop';
 import { sunInWater } from './render/shaders';
 import { FluidSim, SURFACE_ISO, fillHeight } from './sim/FluidSim';
@@ -59,6 +61,11 @@ const CLOWN_PROBE_AT = 16;
 const REEF_PROBE_AT = CLOWN_PROBE_AT + 2 * CLOWN_PROBES;
 /** ...then the flakes of fish food (FOOD_MAX). */
 const FOOD_PROBE_AT = REEF_PROBE_AT + REEF_PROBES;
+
+/** The globe shader a globe is drawn with. */
+function variantOf(g: GlobeEntry): GlobeVariant {
+  return g.kelp ? 'kelp' : g.reef ? 'reef' : g.foam ? 'foam' : g.betta ? 'bowl' : 'plain';
+}
 
 /** The water flowing round the anemone's crown: the mean velocity at its probes that are in the
  *  water (sim frame), or null before the first reading. */
@@ -119,10 +126,24 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   const koi = new Koi(device, fishConfig, koiEnv());
   sim.koiPose = koi.texture;
   const betta = new Betta();
+  // The betta's globe is a bowl, open at the mouth, with a lid (where the page shows it).
+  const bowl = GLOBES.some((g) => g.betta) ? bowlShape(o.globe) : null;
+  const lid = bowl ? new BowlLid(bowl) : null;
   const bettaControls = document.createElement('div');
   bettaControls.className = 'betta-controls';
-  bettaControls.innerHTML = '<span>Living Silk</span><button type="button" aria-pressed="false">Flare fins</button>';
-  const flareButton = bettaControls.querySelector('button')!;
+  bettaControls.innerHTML = '<span>Living Silk</span><button type="button" data-action="lid" aria-pressed="false">Lift lid</button><button type="button" data-action="flare" aria-pressed="false">Flare fins</button>';
+  const flareButton = bettaControls.querySelector<HTMLButtonElement>('[data-action="flare"]')!;
+  const lidButton = bettaControls.querySelector<HTMLButtonElement>('[data-action="lid"]')!;
+  lidButton.hidden = !lid;
+  const toggleLid = (): void => {
+    if (!lid) return;
+    lid.toggle();
+    lidButton.setAttribute('aria-pressed', String(!lid.on));
+    lidButton.textContent = lid.on ? 'Lift lid' : 'Replace lid';
+  };
+  lidButton.addEventListener('click', toggleLid);
+  // (Shown with the betta: none on a page without it.)
+  bettaControls.hidden = true;
   flareButton.disabled = true;
   void betta.ready.then(() => { flareButton.disabled = false; }).catch((error: unknown) => {
     console.warn('[globes] betta textures:', error);
@@ -190,13 +211,16 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
 
   // ?aa=1 traces one ray per pixel instead of four (cheaper, aliased waterline).
   const samples = Number(params.get('aa') ?? (LITE || o.start.betta ? 1 : 4));
-  const globe = new GlobeView(sim, o.globe, o.light, koi.texture, samples, ocean ? { ocean: ocean.map.texture } : { desktop: o.desk! }, kelp, reef, clowns.texture, GLOBES.find((g) => g.reef)?.clarity, GLOBES.find((g) => g.foam)?.waterColour, betta);
+  const globe = new GlobeView(sim, o.globe, o.light, koi.texture, samples, ocean ? { ocean: ocean.map.texture } : { desktop: o.desk! }, kelp, reef, clowns.texture, GLOBES.find((g) => g.reef)?.clarity, GLOBES.find((g) => g.foam)?.waterColour, betta, bowl);
   scene.add(globe.mesh);
+  if (lid) globe.setBowlLid(lid.toLid, lid.shown, lid.reach);
   // Before the first frame, behind the splash: the water settles, and meanwhile every globe's
   // pipelines are built (and the software tracers' where the device traces in hardware). Built
   // after it, each held up a frame or more as the first globe slid in, and a switch to a globe
-  // not built yet stalled until it was.
-  await Promise.all([sim.settle(), globe.precompile(renderer, camera, scene).catch((err: unknown) => console.warn('[globes] precompile:', err))]);
+  // not built yet stalled until it was. (Only the page's own globes': the betta bowl's page
+  // builds the bowl's alone.)
+  const variants = [...new Set(GLOBES.map(variantOf))];
+  await Promise.all([sim.settle(), globe.precompile(renderer, camera, scene, variants).catch((err: unknown) => console.warn('[globes] precompile:', err))]);
 
   // What lives in the globe (the koi, or the kelp forest) and what its water does when left
   // alone. Another globe comes in with its own water, level and still (the switch happens out
@@ -223,7 +247,8 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     globe.uLit.value.y = o.light.shaftScatter * (g.betta ? 0.18 : 1);
     sim.waterColour = g.waterColour ?? [1, 1, 1];
     sim.foaming = !!g.foam;
-    globe.setVariant(kelpOn ? 'kelp' : reefOn ? 'reef' : g.foam ? 'foam' : 'plain');
+    sim.mouth = g.betta && bowl ? BOWL.waterCeiling : null;
+    globe.setVariant(variantOf(g));
     if (g.id !== shown.id) {
       sim.startOver(fill(g), !!g.reef, controller.rotation.elements);
       idle.motion = g.idle;
@@ -238,7 +263,14 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   // The fish that eat the food in the globe shown.
   const feeders = (): Feeder[] => (reef.active ? clowns.fish : koi.visible ? [koi] : []);
   const advance = (dt: number): void => {
+    // (How far the betta bowl may tip, with its lid as it is.)
+    if (lid) controller.tiltLimit = betta.active ? lid.tiltLimit : Infinity;
     controller.update(dt, cfg.gravity);
+    if (lid) {
+      // The lid, turning with the bowl (it comes off only while the bowl stands upright).
+      lid.update(dt, controller.rotation, BowlLid.uprightOf(controller.theta, controller.lean) && !controller.holding);
+      globe.setBowlLid(lid.toLid, lid.shown, lid.reach);
+    }
     // What each fish is after (before they move).
     for (const f of [koi, ...clowns.fish]) {
       f.food = null;
@@ -311,7 +343,19 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     return food.spawn([p.x, p.y, p.z], feeders().length);
   };
 
-  return { device, renderer, camera, scene, cfg, sim, controller, koi, betta, kelp, reef, clowns, food, idle, globe, globeRadius: o.globe.outerRadius, ocean, specks, setScene, advance, spawnFood, setSharpness };
+  // A click on the betta bowl's lid lifts it off; on its open mouth, puts it back.
+  const clickLid = (clientX: number, clientY: number): boolean => {
+    if (!lid || !betta.active) return false;
+    const r = renderer.domElement.getBoundingClientRect();
+    raycaster.setFromCamera(new THREE.Vector2(((clientX - r.left) / r.width) * 2 - 1, 1 - ((clientY - r.top) / r.height) * 2), camera);
+    const ro = raycaster.ray.origin.clone().sub(controller.center);
+    const rd = raycaster.ray.direction;
+    if (!(lid.on ? lid.hits(ro, rd) : lid.hitsMouth(ro, rd, controller.rotation))) return false;
+    toggleLid();
+    return true;
+  };
+
+  return { device, renderer, camera, scene, cfg, sim, controller, koi, betta, lid, kelp, reef, clowns, food, idle, globe, globeRadius: o.globe.outerRadius, ocean, specks, setScene, advance, spawnFood, clickLid, setSharpness };
 }
 
 type World = Awaited<ReturnType<typeof createWorld>>;
@@ -387,6 +431,15 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
 
 /** The app: the collection, one globe at a time. */
 async function startApp(stage: HTMLElement, params: URLSearchParams, host: DesktopHost | null): Promise<void> {
+  // A globe that lives on the other page (the betta bowl has its own): go there.
+  const away = elsewhere(params.get('globe') ?? '');
+  if (away) {
+    const rest = new URLSearchParams(params);
+    rest.delete('globe');
+    const query = rest.toString();
+    location.replace(away + (query ? (away.includes('?') ? '&' : '?') + query : ''));
+    return;
+  }
   const start = AppShell.startIndex(params);
   const shell = new AppShell(stage, host, start);
   if (import.meta.env.DEV) Object.assign(window, { __globes: { shell } });
@@ -396,6 +449,15 @@ async function startApp(stage: HTMLElement, params: URLSearchParams, host: Deskt
     // A right-click on the koi's or the reef's globe drops in a flake of food.
     world.renderer.domElement.addEventListener('pointerdown', (e) => {
       if (e.button === 2) world.spawnFood(e.clientX, e.clientY);
+    });
+    // A click (a press let go where it began, without a drag) on the betta bowl's lid lifts it.
+    let press: { x: number; y: number; t: number } | null = null;
+    world.renderer.domElement.addEventListener('pointerdown', (e) => {
+      press = e.button === 0 ? { x: e.clientX, y: e.clientY, t: performance.now() } : null;
+    });
+    world.renderer.domElement.addEventListener('pointerup', (e) => {
+      if (press && e.button === 0 && Math.hypot(e.clientX - press.x, e.clientY - press.y) < 6 && performance.now() - press.t < 450) world.clickLid(e.clientX, e.clientY);
+      press = null;
     });
     run(world, params, {
       beforeRender: () => shell.frame(),

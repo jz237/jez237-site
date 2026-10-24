@@ -157,6 +157,18 @@ fn g2pMove(p: u32) -> vec3f {
     if (vn > 0.0) { vNew -= vn * nrm; }
     hitGlass = max(vn, 0.0);
   }
+  // The betta bowl's mouth (and its lid): a ceiling across the globe's axis, treated the same way.
+  if (P.mouth.y > 0.5) {
+    let ax = P.globeY.xyz;
+    let top = P.mouth.x - P.particleRadius;
+    let hy = dot(xNew, ax);
+    if (hy > top) {
+      xNew -= ax * (hy - max(2.0 * top - hy, top - 0.5 * P.h));
+      let vn = dot(vNew, ax);
+      if (vn > 0.0) { vNew -= vn * ax; }
+      hitGlass = max(hitGlass, vn);
+    }
+  }
 
   // The sand bed (carried round with the globe): the same treatment against its surface,
   // along the vertical, with velocity into the bed taken relative to the bed's own motion.

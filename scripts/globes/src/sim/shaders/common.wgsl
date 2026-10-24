@@ -64,6 +64,7 @@ struct SimParams {
   shed: vec4f,            // every globe's splash (g2p.wgsl SHED, Splash.ts): x, y the clear bubbles' and the spray's rates' scales (0: none)
   poke: vec4f,            // a push a fish gives the water, this substep (grid_update.wgsl): xyz where, w the speed it adds along the water's weight (0: none)
   pokeK: vec4f,           // x: the push's radius (world units)
+  mouth: vec4f,           // the betta bowl's open mouth: x, the water's ceiling along the globe's axis (globeY); y, 1 where there is one
 };
 
 @group(0) @binding(0) var<uniform> P: SimParams;

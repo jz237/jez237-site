@@ -7,6 +7,7 @@ import { koiWGSL } from '../fish/koiWGSL';
 import { clownShadeWGSL, clownWGSL } from '../fish/clownWGSL';
 import { foodWGSL } from '../fish/FishFood';
 import { kelpRenderWGSL } from '../kelp/kelpWGSL';
+import { BOWL_PARAMS, bowlWGSL, type BowlShape } from './bowl';
 import { MENISCUS_WGSL } from './meniscus';
 import { reefRenderWGSL } from '../reef/reefWGSL';
 import { rtTraceWGSL } from '../rt/rtWGSL';
@@ -701,12 +702,278 @@ fn globes_bubblesAlong(aerTex: texture_3d<f32>, aerSamp: sampler, lightTex: text
 `;
 }
 
+/** globes_trace from the camera through the glass into the cavity (the betta bowl has its own,
+ *  open at the mouth: bowlEntryWGSL). */
+const GLASS_ENTRY = /* wgsl */ `  let hitO = globes_sphere(ro, rd, GLOBES_R_OUT);
+  if (hitO.x <= 0.0) {
+    // (Kelp globe: just past the rim, the pixel's other rays may meet the glass.)
+    if (GLOBES_EDGES) {
+      let b = dot(ro, rd);
+      if (sqrt(max(dot(ro, ro) - b * b, 0.0)) - GLOBES_R_OUT < 3.0 * lit.z * abs(b)) { globesEdge |= 1u; }
+    }
+    return globes_bg(bgTex, bgSamp, ro, rd);
+  }
+
+  var col = vec3f(0.0);
+  var thr = vec3f(1.0);
+
+  // Outer glass surface.
+  var p = ro + rd * hitO.x;
+  let nO = normalize(p);
+  if (GLOBES_EDGES && -dot(rd, nO) < 0.3) { globesEdge |= 1u; } // (towards the rim)
+  let F0 = globes_fresnel(clamp(-dot(rd, nO), 0.0, 1.0), 1.0, GLOBES_IOR_GLASS);
+  col += F0 * globes_bg(bgTex, bgSamp, p, reflect(rd, nO));
+  thr *= 1.0 - F0;
+  var dir = refract(rd, nO, 1.0 / GLOBES_IOR_GLASS);
+  if (dot(dir, dir) < 0.5) { dir = rd; }
+
+  // Through the glass wall. Rays near the rim never reach the cavity.
+  let hitI = globes_sphere(p, dir, GLOBES_R_IN);
+  if (hitI.x <= 0.0) {
+    globesEdge |= 1u;
+    let tOut = globes_sphere(p, dir, GLOBES_R_OUT).y;
+    thr *= exp(-GLOBES_GLASS_ABS * tOut);
+    col += thr * globes_exitGlass(p + dir * tOut, dir, bgTex, bgSamp);
+    return col;
+  }
+  thr *= exp(-GLOBES_GLASS_ABS * hitI.x);
+  p = p + dir * hitI.x;
+  var pathLen = hitO.x + hitI.x; // camera to here, for the motes' pixel footprint
+
+  // Sand pressed against the glass: we see the side of the sand layer.
+  let nI = normalize(p);
+  if (globes_sandAgainstGlass(sandTex, sandSamp, p)) {
+    // (Kelp globe: near the line where the sand leaves the glass, the pixel's other rays may see
+    // past it.)
+    if (GLOBES_EDGES) {
+      let hr = length(p.xz);
+      let k = 1.0 - min(0.02, 0.5 * hr) / max(hr, 1e-5);
+      if (globes_sandTop(sandTex, sandSamp, vec3f(p.x * k, p.y, p.z * k)) - p.y < 4.0 * lit.z * pathLen) { globesEdge |= 8u; }
+    }
+    col += thr * globes_sandAtGlass(p, rot);
+    return col;
+  }
+
+  // Into the cavity: water below the line, air above.
+  // (The lift at the glass itself: the water meets the glass at the top of its meniscus.)
+  var inWater = globes_densRaw(densTex, densSamp, p - nI * probe - vec3f(0.0, globes_meniscus(p).x, 0.0), vol) > iso;
+  var nMed = select(1.0, GLOBES_IOR_WATER, inWater);
+  // A drop on the glass here (above the water: the splash's): the ray passes into its water and
+  // out through its cap into the air, bent as by a lens.
+  var drop = GlobesDrop(vec3f(0.0), vec3f(0.0), 0.0, 1.0, 0.0, 0.0, 1e9);
+  if (!inWater) {
+    drop = globes_dropAt(dropTex, rot, p);
+    if (GLOBES_EDGES && abs(drop.edge) < 2.0 * lit.z * pathLen) { globesEdge |= 128u; }
+  }
+  if (drop.w > 0.0) {
+    let FW = globes_fresnel(clamp(-dot(dir, nI), 0.0, 1.0), GLOBES_IOR_GLASS, GLOBES_IOR_WATER);
+    col += thr * FW * globes_bg(bgTex, bgSamp, p, reflect(dir, nI));
+    thr *= 1.0 - FW;
+    let lens = globes_dropOut(drop, rot, p, refract(dir, nI, GLOBES_IOR_GLASS / GLOBES_IOR_WATER));
+    if (lens.F >= 1.0) {
+      // (Towards its edge the surface turns the ray back, out through the glass: the room behind
+      // us, dimmed.)
+      col += thr * 0.8 * globes_bg(bgTex, bgSamp, p, lens.dir);
+      return col;
+    }
+    col += thr * lens.F * globes_bg(bgTex, bgSamp, p, reflect(dir, nI));
+    thr *= 1.0 - lens.F;
+    p = lens.p;
+    dir = lens.dir;
+  } else {
+    let inDir = refract(dir, nI, GLOBES_IOR_GLASS / nMed);
+    if (dot(inDir, inDir) < 0.5) {
+      // Total internal reflection inside the wall: the ray skims round the shell.
+      globesEdge |= 1u;
+      let rdir = reflect(dir, nI);
+      let tOut = globes_sphere(p, rdir, GLOBES_R_OUT).y;
+      thr *= exp(-GLOBES_GLASS_ABS * tOut);
+      col += thr * globes_exitGlass(p + rdir * tOut, rdir, bgTex, bgSamp);
+      return col;
+    }
+    let FI = globes_fresnel(clamp(-dot(dir, nI), 0.0, 1.0), GLOBES_IOR_GLASS, nMed);
+    col += thr * FI * globes_bg(bgTex, bgSamp, p, reflect(dir, nI));
+    thr *= 1.0 - FI;
+    dir = inDir;
+  }
+`;
+
+/** GLASS_ENTRY for the betta bowl (bowl.ts), whose glass is cut open at the mouth. The ray may
+ *  come in through the glass as in the globes, through the open mouth (no glass: straight on into
+ *  the air in the bowl), or start in the bowl already, having come down through the lid or the
+ *  rim's bead (globes_bowlTrace). */
+function bowlEntryWGSL(): string {
+  return /* wgsl */ `  var col = vec3f(0.0);
+  var thr = vec3f(1.0);
+  var p = ro;
+  var dir = rd;
+  var pathLen = globesBowlPath; // camera to here, for the motes' pixel footprint
+  var inWater = false;
+  var nMed = 1.0;
+  if (dot(ro, ro) < GLOBES_R_IN * GLOBES_R_IN) {
+    inWater = globes_densRaw(densTex, densSamp, ro - vec3f(0.0, globes_meniscus(ro).x, 0.0), vol) > iso;
+    nMed = select(1.0, GLOBES_IOR_WATER, inWater);
+  } else {
+    var tO = 0.0;
+    if (dot(ro, ro) > GLOBES_R_OUT * GLOBES_R_OUT) {
+      let hitO = globes_sphere(ro, rd, GLOBES_R_OUT);
+      if (hitO.x <= 0.0) { return globes_bg(bgTex, bgSamp, ro, rd); }
+      tO = hitO.x;
+    }
+    p = ro + rd * tO;
+    pathLen += tO;
+    if (bowl_inMouth(p)) {
+      // The open mouth: on through the air into the bowl, or past it. (A ray that would cross the
+      // cut face of the wall meets the rim's bead first.)
+      let hitM = globes_sphere(p, rd, GLOBES_R_IN);
+      if (hitM.y <= 0.0) { return globes_bg(bgTex, bgSamp, p, rd); }
+      let tM = max(hitM.x, 0.0);
+      p += rd * tM;
+      pathLen += tM;
+      inWater = globes_densRaw(densTex, densSamp, p - vec3f(0.0, globes_meniscus(p).x, 0.0), vol) > iso;
+      nMed = select(1.0, GLOBES_IOR_WATER, inWater);
+    } else if (tO == 0.0) {
+      // (In the wall's glass, out of the bead: on out into the room.)
+      return globes_bg(bgTex, bgSamp, p, rd);
+    } else {
+      // Outer glass surface.
+      let nO = normalize(p);
+      let F0 = globes_fresnel(clamp(-dot(rd, nO), 0.0, 1.0), 1.0, GLOBES_IOR_GLASS);
+      col += F0 * globes_bg(bgTex, bgSamp, p, reflect(rd, nO));
+      thr *= 1.0 - F0;
+      dir = refract(rd, nO, 1.0 / GLOBES_IOR_GLASS);
+      if (dot(dir, dir) < 0.5) { dir = rd; }
+
+      // Through the glass wall. Rays near the rim never reach the cavity.
+      let hitI = globes_sphere(p, dir, GLOBES_R_IN);
+      if (hitI.x <= 0.0) {
+        let tOut = globes_sphere(p, dir, GLOBES_R_OUT).y;
+        thr *= exp(-GLOBES_GLASS_ABS * tOut);
+        col += thr * globes_exitGlass(p + dir * tOut, dir, bgTex, bgSamp);
+        return col;
+      }
+      thr *= exp(-GLOBES_GLASS_ABS * hitI.x);
+      p = p + dir * hitI.x;
+      pathLen += hitI.x;
+
+      // Sand pressed against the glass: we see the side of the sand layer.
+      let nI = normalize(p);
+      if (globes_sandAgainstGlass(sandTex, sandSamp, p)) {
+        col += thr * globes_sandAtGlass(p, rot);
+        return col;
+      }
+
+      // Into the cavity: water below the line, air above.
+      // (The lift at the glass itself: the water meets the glass at the top of its meniscus.)
+      inWater = globes_densRaw(densTex, densSamp, p - nI * probe - vec3f(0.0, globes_meniscus(p).x, 0.0), vol) > iso;
+      nMed = select(1.0, GLOBES_IOR_WATER, inWater);
+      // A drop on the glass here (above the water: the splash's): the ray passes into its water and
+      // out through its cap into the air, bent as by a lens.
+      var drop = GlobesDrop(vec3f(0.0), vec3f(0.0), 0.0, 1.0, 0.0, 0.0, 1e9);
+      if (!inWater) { drop = globes_dropAt(dropTex, rot, p); }
+      if (drop.w > 0.0) {
+        let FW = globes_fresnel(clamp(-dot(dir, nI), 0.0, 1.0), GLOBES_IOR_GLASS, GLOBES_IOR_WATER);
+        col += thr * FW * globes_bg(bgTex, bgSamp, p, reflect(dir, nI));
+        thr *= 1.0 - FW;
+        let lens = globes_dropOut(drop, rot, p, refract(dir, nI, GLOBES_IOR_GLASS / GLOBES_IOR_WATER));
+        if (lens.F >= 1.0) {
+          col += thr * 0.8 * globes_bg(bgTex, bgSamp, p, lens.dir);
+          return col;
+        }
+        col += thr * lens.F * globes_bg(bgTex, bgSamp, p, reflect(dir, nI));
+        thr *= 1.0 - lens.F;
+        p = lens.p;
+        dir = lens.dir;
+      } else {
+        let inDir = refract(dir, nI, GLOBES_IOR_GLASS / nMed);
+        if (dot(inDir, inDir) < 0.5) {
+          // Total internal reflection inside the wall: the ray skims round the shell.
+          let rdir = reflect(dir, nI);
+          let tOut = globes_sphere(p, rdir, GLOBES_R_OUT).y;
+          thr *= exp(-GLOBES_GLASS_ABS * tOut);
+          col += thr * globes_exitGlass(p + rdir * tOut, rdir, bgTex, bgSamp);
+          return col;
+        }
+        let FI = globes_fresnel(clamp(-dot(dir, nI), 0.0, 1.0), GLOBES_IOR_GLASS, nMed);
+        col += thr * FI * globes_bg(bgTex, bgSamp, p, reflect(dir, nI));
+        thr *= 1.0 - FI;
+        dir = inDir;
+      }
+    }
+  }
+`;
+}
+
+/** The betta bowl's whole trace (bowl.ts), in place of globes_trace: the camera's ray through the
+ *  rim's bead and the lid where it meets them, into the bowl (globes_trace, through its glass or
+ *  in by the mouth), and on, if it leaves by the mouth, through the lid and the bead above. w: 1
+ *  where it met any of the bowl (else the pixel is the backdrop's). */
+function bowlTraceWGSL(params: string, args: string): string {
+  return /* wgsl */ `
+// Set by globes_trace (the bowl's) where its ray leaves the bowl by the open mouth: where, which
+// way, and what is left of its light; and, going in, how far the ray has come (bowl.ts's glass).
+var<private> globesBowlOut: bool;
+var<private> globesBowlP: vec3f;
+var<private> globesBowlDir: vec3f;
+var<private> globesBowlThr: vec3f;
+var<private> globesBowlPath: f32;
+
+fn globes_bowlTrace(${params}) -> vec4f {
+  var col = vec3f(0.0);
+  var thr = vec3f(1.0);
+  var o = ro;
+  var d = rd;
+  var traces = 0;
+  var met = false;
+  globesBowlPath = 0.0;
+  for (var i = 0; i < 8; i++) {
+    let h = bowl_hit(o, d);
+    var tS = 1e9;
+    if (traces < 2) {
+      let s = globes_sphere(o, d, GLOBES_R_OUT);
+      if (s.y > 0.0) { tS = max(s.x, 0.0); }
+    }
+    if (h.t < tS) {
+      met = true;
+      let g = bowl_through(h, bgTex, bgSamp);
+      col += thr * g.col;
+      thr *= g.T;
+      globesBowlPath += h.t + distance(g.p, o + d * h.t);
+      o = g.p;
+      d = g.d;
+      if (max(thr.x, max(thr.y, thr.z)) < 0.003) { return vec4f(col, 1.0); }
+      continue;
+    }
+    if (tS >= 1e9) { break; }
+    met = true;
+    globesBowlOut = false;
+    // (The light the water scatters, gathered on the way, comes through the glass before it too.)
+    let gathered = globesGathered;
+    col += thr * globes_trace(${args});
+    globesGathered = gathered + thr * (globesGathered - gathered);
+    traces++;
+    if (!globesBowlOut) { return vec4f(col, 1.0); }
+    thr *= globesBowlThr;
+    o = globesBowlP;
+    d = globesBowlDir;
+  }
+  col += thr * globes_bg(bgTex, bgSamp, o, d);
+  return vec4f(col, select(0.0, 1.0, met));
+}
+`;
+}
+
 /** rt: the device has hardware ray tracing (src/rt): the water march finds with it where along
  *  the way it may meet the water's surface or the bed, and takes its steps only there (else
  *  every step). */
 /** foam: the sea foam globe's variant (its water froths, and it holds bubbles and foam): its
  *  water's colour (catalog.ts waterColour). */
-export function globeHelpersWGSL(globe: GlobeConfig, light: LightConfig, withKoi: boolean, desktop = false, withKelp = false, withReef = false, clarity = 1, withClown = false, rt = false, foam: FoamLook | null = null): string {
+/** bowl: the betta bowl's variant (bowl.ts: open at the mouth, a rim and a lid of glass): its
+ *  shape. */
+export function globeHelpersWGSL(globe: GlobeConfig, light: LightConfig, withKoi: boolean, desktop = false, withKelp = false, withReef = false, clarity = 1, withClown = false, rt = false, foam: FoamLook | null = null, bowl: BowlShape | null = null): string {
+  // globes_trace's parameters, and the arguments the bowl's trace passes them on with.
+  const traceParams = `ro: vec3f, rd: vec3f, rot: mat3x3f, vol: vec4f, prm: vec4f, densTex: texture_3d<f32>, densSamp: sampler, sandTex: texture_2d<f32>, sandSamp: sampler, causticTex: texture_2d<f32>, causticSamp: sampler, poseTex: texture_2d<f32>, lit: vec4f, lightTex: texture_3d<f32>, lightSamp: sampler, moteTex: texture_3d<f32>, fieldTex: texture_3d<f32>, fieldSamp: sampler, gather: f32, bgTex: texture_2d<f32>, bgSamp: sampler, kelpCellTex: texture_3d<f32>, kelpRefTex: texture_2d<f32>, kelpPrimTex: texture_2d<f32>, splashTex: texture_3d<f32>, dropTex: texture_2d<f32>${BETTA_PARAMS}${rt ? ', tlas: acceleration_structure' : ''}${foam ? FOAM_PARAMS : ''}`;
+  const traceArgs = traceParams.replace(/: [^,]+(?:<[^>]*>)?/g, '').replace(/^ro, rd,/, 'o, d,');
   return /* wgsl */ `
 const GLOBES_SUN_DIR_WATER: vec3f = ${v3(sunInWater(normalised(light.sunDirection)))};
 const GLOBES_SAND_AMBIENT_WATER: vec3f = ${foam ? 'vec3f(0.07, 0.16, 0.12)' : 'vec3f(0.10, 0.19, 0.22)'};
@@ -862,7 +1129,7 @@ fn globes_leaveCavity(p: vec3f, dir: vec3f, nMed: f32, bgTex: texture_2d<f32>, b
   let T = exp(-GLOBES_GLASS_ABS * tOut);
   return (1.0 - F) * T * globes_exitGlass(p + gdir * tOut, gdir, bgTex, bgSamp);
 }
-
+${bowl ? bowlWGSL(bowl) : ''}
 // ---- sand ---------------------------------------------------------------------------
 
 fn globes_hash3(p: vec3f) -> f32 {
@@ -1721,104 +1988,12 @@ var<private> globesKoiNear: bool;
 
 // gather: whether this ray gathers the light scattered off the water (shafts, motes: smooth,
 // so one ray of a pixel's four gathers it for all of them).
-fn globes_trace(ro: vec3f, rd: vec3f, rot: mat3x3f, vol: vec4f, prm: vec4f, densTex: texture_3d<f32>, densSamp: sampler, sandTex: texture_2d<f32>, sandSamp: sampler, causticTex: texture_2d<f32>, causticSamp: sampler, poseTex: texture_2d<f32>, lit: vec4f, lightTex: texture_3d<f32>, lightSamp: sampler, moteTex: texture_3d<f32>, fieldTex: texture_3d<f32>, fieldSamp: sampler, gather: f32, bgTex: texture_2d<f32>, bgSamp: sampler, kelpCellTex: texture_3d<f32>, kelpRefTex: texture_2d<f32>, kelpPrimTex: texture_2d<f32>, splashTex: texture_3d<f32>, dropTex: texture_2d<f32>${BETTA_PARAMS}${rt ? ', tlas: acceleration_structure' : ''}${foam ? FOAM_PARAMS : ''}) -> vec3f {
+fn globes_trace(${traceParams}) -> vec3f {
   let iso = prm.x;
   let stepLen = prm.y;
   let normalEps = prm.z;
   let probe = prm.w;
-  let hitO = globes_sphere(ro, rd, GLOBES_R_OUT);
-  if (hitO.x <= 0.0) {
-    // (Kelp globe: just past the rim, the pixel's other rays may meet the glass.)
-    if (GLOBES_EDGES) {
-      let b = dot(ro, rd);
-      if (sqrt(max(dot(ro, ro) - b * b, 0.0)) - GLOBES_R_OUT < 3.0 * lit.z * abs(b)) { globesEdge |= 1u; }
-    }
-    return globes_bg(bgTex, bgSamp, ro, rd);
-  }
-
-  var col = vec3f(0.0);
-  var thr = vec3f(1.0);
-
-  // Outer glass surface.
-  var p = ro + rd * hitO.x;
-  let nO = normalize(p);
-  if (GLOBES_EDGES && -dot(rd, nO) < 0.3) { globesEdge |= 1u; } // (towards the rim)
-  let F0 = globes_fresnel(clamp(-dot(rd, nO), 0.0, 1.0), 1.0, GLOBES_IOR_GLASS);
-  col += F0 * globes_bg(bgTex, bgSamp, p, reflect(rd, nO));
-  thr *= 1.0 - F0;
-  var dir = refract(rd, nO, 1.0 / GLOBES_IOR_GLASS);
-  if (dot(dir, dir) < 0.5) { dir = rd; }
-
-  // Through the glass wall. Rays near the rim never reach the cavity.
-  let hitI = globes_sphere(p, dir, GLOBES_R_IN);
-  if (hitI.x <= 0.0) {
-    globesEdge |= 1u;
-    let tOut = globes_sphere(p, dir, GLOBES_R_OUT).y;
-    thr *= exp(-GLOBES_GLASS_ABS * tOut);
-    col += thr * globes_exitGlass(p + dir * tOut, dir, bgTex, bgSamp);
-    return col;
-  }
-  thr *= exp(-GLOBES_GLASS_ABS * hitI.x);
-  p = p + dir * hitI.x;
-  var pathLen = hitO.x + hitI.x; // camera to here, for the motes' pixel footprint
-
-  // Sand pressed against the glass: we see the side of the sand layer.
-  let nI = normalize(p);
-  if (globes_sandAgainstGlass(sandTex, sandSamp, p)) {
-    // (Kelp globe: near the line where the sand leaves the glass, the pixel's other rays may see
-    // past it.)
-    if (GLOBES_EDGES) {
-      let hr = length(p.xz);
-      let k = 1.0 - min(0.02, 0.5 * hr) / max(hr, 1e-5);
-      if (globes_sandTop(sandTex, sandSamp, vec3f(p.x * k, p.y, p.z * k)) - p.y < 4.0 * lit.z * pathLen) { globesEdge |= 8u; }
-    }
-    col += thr * globes_sandAtGlass(p, rot);
-    return col;
-  }
-
-  // Into the cavity: water below the line, air above.
-  // (The lift at the glass itself: the water meets the glass at the top of its meniscus.)
-  var inWater = globes_densRaw(densTex, densSamp, p - nI * probe - vec3f(0.0, globes_meniscus(p).x, 0.0), vol) > iso;
-  var nMed = select(1.0, GLOBES_IOR_WATER, inWater);
-  // A drop on the glass here (above the water: the splash's): the ray passes into its water and
-  // out through its cap into the air, bent as by a lens.
-  var drop = GlobesDrop(vec3f(0.0), vec3f(0.0), 0.0, 1.0, 0.0, 0.0, 1e9);
-  if (!inWater) {
-    drop = globes_dropAt(dropTex, rot, p);
-    if (GLOBES_EDGES && abs(drop.edge) < 2.0 * lit.z * pathLen) { globesEdge |= 128u; }
-  }
-  if (drop.w > 0.0) {
-    let FW = globes_fresnel(clamp(-dot(dir, nI), 0.0, 1.0), GLOBES_IOR_GLASS, GLOBES_IOR_WATER);
-    col += thr * FW * globes_bg(bgTex, bgSamp, p, reflect(dir, nI));
-    thr *= 1.0 - FW;
-    let lens = globes_dropOut(drop, rot, p, refract(dir, nI, GLOBES_IOR_GLASS / GLOBES_IOR_WATER));
-    if (lens.F >= 1.0) {
-      // (Towards its edge the surface turns the ray back, out through the glass: the room behind
-      // us, dimmed.)
-      col += thr * 0.8 * globes_bg(bgTex, bgSamp, p, lens.dir);
-      return col;
-    }
-    col += thr * lens.F * globes_bg(bgTex, bgSamp, p, reflect(dir, nI));
-    thr *= 1.0 - lens.F;
-    p = lens.p;
-    dir = lens.dir;
-  } else {
-    let inDir = refract(dir, nI, GLOBES_IOR_GLASS / nMed);
-    if (dot(inDir, inDir) < 0.5) {
-      // Total internal reflection inside the wall: the ray skims round the shell.
-      globesEdge |= 1u;
-      let rdir = reflect(dir, nI);
-      let tOut = globes_sphere(p, rdir, GLOBES_R_OUT).y;
-      thr *= exp(-GLOBES_GLASS_ABS * tOut);
-      col += thr * globes_exitGlass(p + rdir * tOut, rdir, bgTex, bgSamp);
-      return col;
-    }
-    let FI = globes_fresnel(clamp(-dot(dir, nI), 0.0, 1.0), GLOBES_IOR_GLASS, nMed);
-    col += thr * FI * globes_bg(bgTex, bgSamp, p, reflect(dir, nI));
-    thr *= 1.0 - FI;
-    dir = inDir;
-  }
-
+${bowl ? bowlEntryWGSL() : GLASS_ENTRY}
   // The koi: the box its shape is baked into (the koi pass traces it; the main pass only
   // notes rays that pass near it).
   let koiMisc = textureLoad(poseTex, vec2i(KOI_MISC, 0), 0);
@@ -2014,7 +2189,16 @@ ${rt ? RT_MARCH : `    // The next sample is read with this one, where it will b
 
     if (event == 0) {
       if (GLOBES_EDGES && dot(dir, normalize(p + dir * tWall)) < 0.3) { globesEdge |= 1u; } // (leaving towards the rim)
-      let qw = p + dir * tWall;
+      let qw = p + dir * tWall;${bowl ? `
+      if (bowl_inMouth(qw)) {
+        // Out by the open mouth: globes_bowlTrace takes it on (the lid, the rim, the room).
+        globesBowlOut = true;
+        globesBowlP = qw;
+        globesBowlDir = dir;
+        globesBowlThr = thr;
+        globesBowlPath = pathLen;
+        return col;
+      }` : ''}
       if (!inWater) {
         // A drop on the glass where the ray leaves (on the far side, seen through the cavity): into
         // its water where the ray comes down to its surface, through it, and out through the glass
@@ -2145,7 +2329,7 @@ ${rt ? RT_MARCH : `    // The next sample is read with this one, where it will b
   col += thr * globes_bg(bgTex, bgSamp, p, dir);
   return col;
 }
-`;
+${bowl ? bowlTraceWGSL(traceParams, traceArgs) : ''}`;
 }
 
 /** Entry point called from TSL: traces one ray. The waterline, glass rim and refracted edges
@@ -2155,10 +2339,13 @@ ${rt ? RT_MARCH : `    // The next sample is read with this one, where it will b
  *  reads). rt: it traces on the ray tracing hardware (globeHelpersWGSL's rt): it takes the top
  *  level too (through its stand-in, src/rt/tlasBinding.ts). oneGather: the pass runs per sample
  *  and its samples share the water's light (one gathers it for the pixel), as the plain, sea foam
- *  and koi passes do. */
-export function globeShadeWGSL(rt = false, foam = false, oneGather = false): string {
+ *  and koi passes do. bowl: the betta bowl's (bowl.ts; globeHelpersWGSL's bowl): it traces the
+ *  bowl's glass too, and where a ray meets none of it, w is -1 (GlobeView leaves the pixel to the
+ *  backdrop: its geometry reaches out round the lid). */
+export function globeShadeWGSL(rt = false, foam = false, oneGather = false, bowl = false): string {
+  const traceArgs = `rot, vol, prm, densTex, densSamp, sandTex, sandSamp, causticTex, causticSamp, poseTex, lit, lightTex, lightSamp, moteTex, fieldTex, fieldSamp, select(0.0, 1.0, gatherW > 0.0), bgTex, bgSamp, kelpCellTex, kelpRefTex, kelpPrimTex, splashTex, dropTex${BETTA_ARGS}${rt ? `, ${TLAS_PARAM}` : ''}${foam ? ', foamTex, foamSamp, aerTex, aerSamp, foamPart, foamBins' : ''}`;
   return /* wgsl */ `
-fn globes_shade(camPos: vec3f, fragPos: vec3f, fragCenter: vec3f, center: vec3f, rot: mat3x3f, vol: vec4f, prm: vec4f, aaRight: vec3f, aaUp: vec3f, densTex: texture_3d<f32>, densSamp: sampler, sandTex: texture_2d<f32>, sandSamp: sampler, causticTex: texture_2d<f32>, causticSamp: sampler, poseTex: texture_2d<f32>, lit: vec4f, lightTex: texture_3d<f32>, lightSamp: sampler, moteTex: texture_3d<f32>, fieldTex: texture_3d<f32>, fieldSamp: sampler, bgTex: texture_2d<f32>, bgSamp: sampler, deskM: mat4x4f, deskPlane: vec4f, glow: vec3f, kelpCellTex: texture_3d<f32>, kelpRefTex: texture_2d<f32>, kelpPrimTex: texture_2d<f32>, splashTex: texture_3d<f32>, dropTex: texture_2d<f32>${BETTA_PARAMS}${rt ? `, ${TLAS_PARAM}: texture_3d<u32>` : ''}${foam ? FOAM_PARAMS : ''}) -> vec4f {
+fn globes_shade(camPos: vec3f, fragPos: vec3f, fragCenter: vec3f, center: vec3f, rot: mat3x3f, vol: vec4f, prm: vec4f, aaRight: vec3f, aaUp: vec3f, densTex: texture_3d<f32>, densSamp: sampler, sandTex: texture_2d<f32>, sandSamp: sampler, causticTex: texture_2d<f32>, causticSamp: sampler, poseTex: texture_2d<f32>, lit: vec4f, lightTex: texture_3d<f32>, lightSamp: sampler, moteTex: texture_3d<f32>, fieldTex: texture_3d<f32>, fieldSamp: sampler, bgTex: texture_2d<f32>, bgSamp: sampler, deskM: mat4x4f, deskPlane: vec4f, glow: vec3f, kelpCellTex: texture_3d<f32>, kelpRefTex: texture_2d<f32>, kelpPrimTex: texture_2d<f32>, splashTex: texture_3d<f32>, dropTex: texture_2d<f32>${BETTA_PARAMS}${rt ? `, ${TLAS_PARAM}: texture_3d<u32>` : ''}${foam ? FOAM_PARAMS : ''}${bowl ? BOWL_PARAMS : ''}) -> vec4f {
   globesGlow = glow;
   let ro = camPos - center;
   let rd = normalize(fragPos - camPos);
@@ -2180,7 +2367,16 @@ fn globes_shade(camPos: vec3f, fragPos: vec3f, fragCenter: vec3f, center: vec3f,
     if (abs(ox) + abs(oy) > 0.05) { gatherW = select(0.0, 4.0, ox > 0.0 && abs(oy) > 0.25); }
   }
   var col = vec3f(0.0);
-  var cover = 0.0;
+  var cover = 0.0;${bowl ? `
+  bowlRot = rot;
+  bowlM = bowlLid;
+  bowlLidOn = bowlState.x > 0.5;
+  let traced = globes_bowlTrace(ro, rd, ${traceArgs});
+  col = traced.xyz;
+  cover = traced.w;
+  // (Where the ray meets none of the bowl, the backdrop shows: -1.)
+  return select(vec4f(col + globesGathered * gatherW, select(1.0, cover, GLOBES_DESKTOP) + select(0.0, 2.0, globesKoiNear)), vec4f(0.0, 0.0, 0.0, -1.0), cover < 0.5);
+}` : `
   // On the desktop a ray that misses the glass shows the desktop itself: the window is clear there.
   if (GLOBES_DESKTOP && globes_sphere(ro, rd, GLOBES_R_OUT).x <= 0.0) {
     // (Kelp globe, one ray a pixel: just past the rim, the pixel's other rays may meet the
@@ -2190,13 +2386,13 @@ fn globes_shade(camPos: vec3f, fragPos: vec3f, fragCenter: vec3f, center: vec3f,
       if (sqrt(max(dot(ro, ro) - b * b, 0.0)) - GLOBES_R_OUT < 3.0 * lit.z * abs(b)) { globesEdge |= 1u; }
     }
   } else {
-    col = globes_trace(ro, rd, rot, vol, prm, densTex, densSamp, sandTex, sandSamp, causticTex, causticSamp, poseTex, lit, lightTex, lightSamp, moteTex, fieldTex, fieldSamp, select(0.0, 1.0, gatherW > 0.0), bgTex, bgSamp, kelpCellTex, kelpRefTex, kelpPrimTex, splashTex, dropTex${BETTA_ARGS}${rt ? `, ${TLAS_PARAM}` : ''}${foam ? ', foamTex, foamSamp, aerTex, aerSamp, foamPart, foamBins' : ''});
+    col = globes_trace(ro, rd, ${traceArgs});
     cover = 1.0;
   }
   // w: whether the globe covers the ray's sample (on the desktop: the MSAA resolve makes it the
   // pixel's coverage; 1 in the app), plus 2 in the main pass where the koi pass must redraw it.
   let alpha = select(1.0, cover, GLOBES_DESKTOP);
   return vec4f(col + globesGathered * gatherW, alpha + select(0.0, 2.0, globesKoiNear || (GLOBES_EDGES && globesEdge != 0u)));
-}
+}`}
 `;
 }

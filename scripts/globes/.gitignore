@@ -1,5 +1,6 @@
 node_modules
 dist
+dist-betta
 *.log
 
 # Local notes and settings, kept out of the repository

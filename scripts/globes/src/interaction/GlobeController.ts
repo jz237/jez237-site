@@ -95,6 +95,13 @@ export class GlobeController {
   private targetDistance = 6.6;
   /** Wheel and pinch zoom (off while the interface frames the globe itself). */
   zoomEnabled = true;
+  /** How far it may tilt or lean now, at most (radians), within the globe's own maxTilt: the betta
+   *  bowl tips less with its lid off (interaction/BowlLid.ts). */
+  tiltLimit = Infinity;
+
+  private get maxTilt(): number {
+    return Math.min(this.cfg.maxTilt, this.tiltLimit);
+  }
 
   /** The globe's place along the stage (world x) and how fast it is moving there. */
   private stageX = 0;
@@ -283,7 +290,7 @@ export class GlobeController {
     const h = dt / steps;
     const tilting = this.grabbing && !this.spinning;
     const turning = this.grabbing && this.spinning;
-    const max = this.cfg.maxTilt;
+    const max = this.maxTilt;
     const friction = Math.exp(-SPIN_FRICTION * h);
     for (let i = 0; i < steps; i++) {
       let acc: number;
@@ -473,7 +480,7 @@ export class GlobeController {
         // Turning it about its centre, as if by its glass: across spins it about its own axis, up
         // and down leans it (a drag of the globe's radius turns it a radian).
         const r = this.globeScreenRadius(this.toScreen(this.center, new THREE.Vector2()));
-        const max = this.cfg.maxTilt;
+        const max = this.maxTilt;
         this.targetTwist = THREE.MathUtils.clamp(this.targetTwist + (p.x - this.last.x) / r, this.twist - SPIN_LEAD, this.twist + SPIN_LEAD);
         this.targetLean = THREE.MathUtils.clamp(this.targetLean + (p.y - this.last.y) / r, -max, max);
         this.last.copy(p);
@@ -489,7 +496,7 @@ export class GlobeController {
       const centerPx = this.toScreen(this.center, new THREE.Vector2());
       const minArm = 0.6 * this.globeScreenRadius(centerPx);
       const arm2 = Math.max(rx * rx + ry * ry, minArm * minArm);
-      const max = this.cfg.maxTilt;
+      const max = this.maxTilt;
       this.targetTheta = THREE.MathUtils.clamp(this.targetTheta + (rx * dy - ry * dx) / arm2, -max, max);
       this.last.copy(p);
       return;

@@ -531,6 +531,30 @@
     "note": "Requires WebGPU · Best on a fast desktop GPU · Lighter settings on phones · Preview supplied by the original project"
   },
   {
+    "id": "025",
+    "title": "Betta Bowl · Living Silk",
+    "category": "WebGPU · Living aquarium",
+    "description": "A betta lives in a glass bowl of real simulated water. Lift the glass lid off its open mouth and set it back, tilt the bowl and watch the water and its flowing fins answer, or wait for it to rest on the sand, flare at its reflection and rise to gulp air at the surface.",
+    "url": "betta-bowl/",
+    "image": "assets/betta-bowl.jpg",
+    "imageAlt": "A glass betta bowl with a clear lid and knob, a turquoise and crimson betta swimming above a bed of sand",
+    "imageWidth": 1120,
+    "imageHeight": 630,
+    "source": "https://github.com/jz237/jez237-site/tree/main/scripts/globes",
+    "features": [
+      "Lift & replace the glass lid",
+      "Drag to tilt the bowl & its water",
+      "Flare fins on request",
+      "Air gulps, resting & mirror displays"
+    ],
+    "facts": [
+      "GPU fluid simulation",
+      "Ray-traced glass",
+      "Built on Globes by Will Waltz"
+    ],
+    "note": "Requires WebGPU · Best on a fast desktop GPU · Lighter settings on phones · Preview captured from the running bowl"
+  },
+  {
     "id": "024",
     "title": "Living Silk · Betta Atelier",
     "category": "3D · Living specimen",
