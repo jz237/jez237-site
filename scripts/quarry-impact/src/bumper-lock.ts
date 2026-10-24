@@ -49,3 +49,8 @@ export function tetherMount(name:string,min:{x:number;y:number;z:number},max:{x:
 }
 export const tetherLife=(seed:number)=>Number.isFinite(seed)?TETHER.min+TETHER.span*dice(seed*3+1):TETHER.min;
 export const tetherAge=(age:number,speed:number,dt:number)=>!Number.isFinite(age)||!(dt>0)?age:age+dt*(Math.abs(speed)>TETHER.fast?TETHER.fastRate:1);
+/** Rapier's joint table resolves a handle by its slot alone (no generation check): once a joint is removed — with a body, when
+ * debris is culled or a car disposed — the next joint created takes its slot, and the old handle then resolves to that new joint.
+ * A stale record must be recognised by identity (the table hands back the very object it created), never by its handle resolving,
+ * or it reads a removed body (a WASM panic that kills the physics) or removes someone else's joint. */
+export const jointLive=(world:{getImpulseJoint(handle:number):unknown},joint:{handle:number})=>world.getImpulseJoint(joint.handle)===joint;

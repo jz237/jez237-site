@@ -1,6 +1,7 @@
+import {restoreJointSlotBytes} from './joint-slot-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readJointGuardPrevious,restoreJointGuardBytes,verifyJointGuardRevision} from './joint-guard-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreJointSlotBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('JointGuard preserves every prior fixture, vehicle asset, venue art and history input',verifyJointGuardRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/joint-guard/revision.json').toString());

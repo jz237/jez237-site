@@ -126,7 +126,7 @@ import {frameGarage} from './garage-camera';
 import type {LiveryFace} from './livery';
 import * as T from 'three';
 import R from '@dimforge/rapier3d-compat';
-import {LOCK,bumperAt,hooks,pullsAway,lockStrain,lockEnd,type LockedBumper,TETHER,tetherLife,tetherAge} from './bumper-lock';
+import {LOCK,bumperAt,hooks,pullsAway,lockStrain,lockEnd,type LockedBumper,TETHER,tetherLife,tetherAge,jointLive} from './bumper-lock';
 import {PILEUP,PileUp} from './pile-up';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
@@ -1105,13 +1105,13 @@ let bumperLocks:BumperLock[]=[],lockRolls=0,locksMade=0,locksTorn=0;
 const bodyQuaternion=(c:Vehicle)=>{const q=c.body.rotation();return new T.Quaternion(q.x,q.y,q.z,q.w);};
 const toBody=(c:Vehicle,p:T.Vector3)=>{const t=c.body.translation();return p.clone().sub(new T.Vector3(t.x,t.y,t.z)).applyQuaternion(bodyQuaternion(c).invert());};
 const fromBody=(c:Vehicle,l:T.Vector3)=>{const t=c.body.translation();return l.clone().applyQuaternion(bodyQuaternion(c)).add(new T.Vector3(t.x,t.y,t.z));};
-function releaseLock(lock:BumperLock){if(physics.getImpulseJoint(lock.joint.handle))physics.removeImpulseJoint(lock.joint,true);}
+function releaseLock(lock:BumperLock){if(jointLive(physics,lock.joint))physics.removeImpulseJoint(lock.joint,true);}
 /** Torn-off bumpers dragged behind their cars on a wire (offline). */
 /** anchor: body-local on the car; hang: body-local on the bumper piece, its point nearest the car when it tore off. */
 type Tether={car:Vehicle;debris:R.RigidBody;joint:R.ImpulseJoint;anchor:T.Vector3;hang:T.Vector3;wire:T.Line;length:number;age:number;life:number;spark:number};
 const wireMaterial=new T.LineBasicMaterial({color:0x1c1a18});
 let bumperTethers:Tether[]=[],tethersMade=0;
-const releaseJoint=(joint:R.ImpulseJoint)=>{if(physics.getImpulseJoint(joint.handle))physics.removeImpulseJoint(joint,true);};
+const releaseJoint=(joint:R.ImpulseJoint)=>{if(jointLive(physics,joint))physics.removeImpulseJoint(joint,true);};
 const dropWire=(t:Tether)=>{t.wire.removeFromParent();t.wire.geometry.dispose();};
 function clearLocks(){for(const lock of bumperLocks)releaseLock(lock);for(const t of bumperTethers){releaseJoint(t.joint);dropWire(t);}bumperLocks=[];bumperTethers=[];lockRolls=locksMade=locksTorn=tethersMade=0;}
 /** Tie a torn-off bumper to its car on a wire (offline). */
@@ -1130,12 +1130,12 @@ function tetherBumper(car:Vehicle,debris:R.RigidBody,anchor:{x:number;y:number;z
  * where the teleport put them (Vehicle.current only catches up in postStep). */
 function guardJoints(){
   bumperLocks=bumperLocks.filter(lock=>{
-    if(!physics.getImpulseJoint(lock.joint.handle))return false;
+    if(!jointLive(physics,lock.joint))return false;
     const gap=fromBody(lock.hooker,lock.hookerAnchor).distanceTo(fromBody(lock.caught,lock.caughtAnchor));
     if(Number.isFinite(gap)&&gap<=lock.length+LOCK.snap)return true;releaseLock(lock);return false;
   });
   bumperTethers=bumperTethers.filter(t=>{
-    if(!physics.getImpulseJoint(t.joint.handle)){dropWire(t);return false;}
+    if(!jointLive(physics,t.joint)){dropWire(t);return false;}
     const p=t.debris.translation(),gap=fromBody(t.car,t.anchor).distanceTo(new T.Vector3(p.x,p.y,p.z));
     if(Number.isFinite(gap)&&gap<=t.length+TETHER.snap)return true;releaseJoint(t.joint);dropWire(t);return false;
   });
@@ -1149,7 +1149,7 @@ function drawTetherWires(){
 /** Dragged bumpers spark where they scrape the ground; the wire snaps in time, sooner at speed (offline). */
 function stepTethers(dt:number){
   bumperTethers=bumperTethers.filter(t=>{
-    if(!physics.getImpulseJoint(t.joint.handle)){dropWire(t);return false;}
+    if(!jointLive(physics,t.joint)){dropWire(t);return false;}
     const p=t.debris.translation(),at=new T.Vector3(p.x,p.y,p.z);t.age=tetherAge(t.age,t.car.speed,dt);
     if(t.age>=t.life||at.distanceTo(t.car.current)>t.length+TETHER.snap){releaseJoint(t.joint);dropWire(t);fx.emit(at,4,1,.9);return false;}
     {const q=t.debris.rotation(),end=t.hang.clone().applyQuaternion(new T.Quaternion(q.x,q.y,q.z,q.w)).add(at),from=fromBody(t.car,t.anchor),position=t.wire.geometry.attributes.position as T.BufferAttribute;
@@ -1180,7 +1180,7 @@ function stepLocks(dt:number){
   const away=(from:Vehicle,to:Vehicle)=>({x:from.current.x-to.current.x,z:from.current.z-to.current.z});
   bumperLocks=bumperLocks.filter(lock=>{
     const {hooker,caught}=lock,part=hooker.wreckParts.assemblies.find(x=>x.name===lock.bumper);
-    if(!physics.getImpulseJoint(lock.joint.handle)||!part||!part.members.some(m=>m.mesh.visible)){releaseLock(lock);return false;}
+    if(!jointLive(physics,lock.joint)||!part||!part.members.some(m=>m.mesh.visible)){releaseLock(lock);return false;}
     const at=fromBody(hooker,lock.hookerAnchor),gap=at.distanceTo(fromBody(caught,lock.caughtAnchor));
     const pulling=(pullsAway(hooker.forward,away(hooker,caught),hooker.input.throttle)?1:0)+(pullsAway(caught.forward,away(caught,hooker),caught.input.throttle)?1:0);
     lock.age+=dt;lock.strain=lockStrain(lock.strain,gap>=lock.length-.03,pulling,dt);
