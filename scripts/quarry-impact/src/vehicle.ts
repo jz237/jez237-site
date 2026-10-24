@@ -46,7 +46,7 @@ import {drainOil,starvationWear,seizes,OIL,drainCoolant,overheatWear,FUEL_TANK,d
 import {MAX_ENGINE_RESTART,crankRequested} from './engine-stall';
 import {rollBarSnaps,rollTorque,hasPropshaft,propBend,propVibration,fatigueProp,BEARING,bearingCracks,wearBearing,bearingShimmy,bearingDrag,steerSkew,openness,openDrag,debrisFling,smashFire,impactZoneFactor,pitStrength,pitGrip,PIT,EXPOSED_WHEEL,exposedDamage,BUMPER_GONE,COVER_GONE,engineDrops,ROOF_SLIDE,SIDE_SLIDE,ROLL_SHED,roofSlide,beltSlip,beltSnaps,beltSqueal,beltHeat,drainBattery,batteryCut,RADIATOR as RADIATOR_COOLING,runningHot,hotClock,overheatFire} from './damage-handling';
 import {SHED,assemblyMass,glassMass,shedMassProperties,type ShedPart} from './shed-weight';
-import {DOOR_SWING,DOOR_CATCH,doorTip,stepDoor,doorDrag,doorUnlatched,doorBase,lidKind,lidBase,stepLid,CARGO,cargoSpills,type LidKind} from './door-swing';
+import {DOOR_SWING,DOOR_CATCH,doorTip,barnDoorTip,stepDoor,doorDrag,doorUnlatched,doorBase,lidKind,lidBase,stepLid,CARGO,cargoSpills,type LidKind} from './door-swing';
 /** Rear compression past which the exhaust hangs down and drags. */
 export const EXHAUST_DROP=.2;
 /** A dragged exhaust tears off after EXHAUST_OFF.after seconds of scraping and is left on the track: the car runs open-pipe. */
@@ -1258,14 +1258,18 @@ export class Vehicle {
   /** Tear a whole loose assembly (hood, bumper, door, tailgate) away as debris. Replays pass quiet. */
   /** Height of this car's venue ground at (x, z). */
   groundAt(x:number,z:number){return this.ground.height(x,z);}
-  /** Doors swung open past DOOR_CATCH.open, each as a line from its hinge to its trailing edge in world space (offline). */
+  /** Doors (and a van's barn doors) swung open past DOOR_CATCH.open, each as a line from its hinge to its free edge in world space (offline). */
   openDoorSpans(){
     const out:{name:string;from:T.Vector3;to:T.Vector3}[]=[];if(!this.extendedDamage)return out;
+    const world=(p:{x:number;y:number;z:number})=>new T.Vector3(p.x,p.y,p.z).applyMatrix4(this.model.matrix).applyQuaternion(this.currentQ).add(this.current);
     for(const a of this.wreckParts.assemblies){
+      // A van's barn doors swing out behind it from the rear corners.
+      if(a.name.startsWith('cargo-')&&a.members.some(m=>m.mesh.visible)){const side=a.name.endsWith('left')?-1:1,open=(a.swing??0)>0?lidBase('cargo',a.loose)+a.swing!:a.loose*.45;if(open<DOOR_CATCH.open)continue;
+        const hinge={x:side<0?a.bounds.min.x:a.bounds.max.x,y:(a.bounds.min.y+a.bounds.max.y)/2,z:a.bounds.max.z};out.push({name:a.name,from:world(hinge),to:world(barnDoorTip(hinge,side,a.bounds.max.x-a.bounds.min.x,open))});continue;}
       if(!a.name.startsWith('door')||!((a.swing??0)>0)||!a.members.some(m=>m.mesh.visible))continue;
       const open=doorBase(a.loose)+a.swing!;if(open<DOOR_CATCH.open)continue;
       const side=a.name.endsWith('left')?-1:1,hinge={x:side*DEFINITIONS[this.kind].halfWidth,y:(a.bounds.min.y+a.bounds.max.y)/2,z:a.bounds.max.z-.06};
-      const tip=doorTip(hinge,side,a.bounds.max.z-a.bounds.min.z-.06,open),world=(p:{x:number;y:number;z:number})=>new T.Vector3(p.x,p.y,p.z).applyMatrix4(this.model.matrix).applyQuaternion(this.currentQ).add(this.current);
+      const tip=doorTip(hinge,side,a.bounds.max.z-a.bounds.min.z-.06,open);
       out.push({name:a.name,from:world(hinge),to:world(tip)});
     }
     return out;

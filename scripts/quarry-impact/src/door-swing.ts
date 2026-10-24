@@ -39,6 +39,10 @@ export const DOOR_CATCH={open:.5} as const;
 export function doorTip(hinge:{x:number;y:number;z:number},side:number,length:number,open:number){
   return{x:hinge.x+side*length*Math.sin(open),y:hinge.y,z:hinge.z-length*Math.cos(open)};
 }
+/** The free edge of a van's barn door hinged at a rear corner, `width` across, opened by `open` radians: it swings out behind. */
+export function barnDoorTip(hinge:{x:number;y:number;z:number},side:number,width:number,open:number){
+  return{x:hinge.x-side*width*Math.cos(open),y:hinge.y,z:hinge.z-width*Math.sin(open)};
+}
 /** Van barn doors, top-hinged tailgates and pickup drop-tailgates swing the same way once their latch goes. Barn doors
  * (hinged at the rear corners) and tailgates open under acceleration — the barn doors also round the outside of a
  * corner — and braking shuts them; gravity pulls a tailgate down shut, but tips a drop-tailgate open. A drop off a bump

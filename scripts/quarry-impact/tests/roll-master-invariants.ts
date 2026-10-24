@@ -1,3 +1,4 @@
+import {restoreBarnDoorsBytes} from './barn-doors-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readRollMasterPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreRollMasterBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreBarnDoorsBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readRollMasterPrevious(file);
 }
 export function verifyRollMasterRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'8c02a36b4d4bf8901510877c5f8cbd76b9767bba');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreBarnDoorsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreRollMasterBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the RollMaster release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreBarnDoorsBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the RollMaster release');
  assert.equal(manifest.previousFixtureCount,6685);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,6685);
 }
