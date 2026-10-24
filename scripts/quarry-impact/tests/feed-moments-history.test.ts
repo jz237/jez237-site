@@ -1,6 +1,7 @@
+import {restoreWreckNoteBytes} from './wreck-note-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readFeedMomentsPrevious,restoreFeedMomentsBytes,verifyFeedMomentsRevision} from './feed-moments-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreWreckNoteBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('FeedMoments preserves every prior fixture, vehicle asset, venue art and history input',verifyFeedMomentsRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/feed-moments/revision.json').toString());

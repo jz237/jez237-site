@@ -29,6 +29,7 @@ import {ScreenCraze,trackCraze,hull,type CrazeState} from './screen-craze';
 import {speedFov,smoothAccel,roadBuzz} from './speed-feel';
 import {FINAL_TWO,finalTwo,finalTwoBanner,revenge,takedownChain,comboLabel,revengeReady,lastGasp,strippedLabel} from './derby-moments';
 import {wreckCause} from './wreck-cause';
+import {frenzyFactor} from './derby-driving';
 import {syncInterval,syncDue} from './vehicle-draw-batch';
 let syncFrame=0;
 let feelAccel=0,feelSpeed=0;
@@ -1084,6 +1085,9 @@ let takedownCombo=0,lastTakedownAt=-1e9;
 let playerStripped=0;
 /** How each finished car went out (offline), fixed at the moment it was wrecked. */
 const wreckCauses=new Map<number,string>();
+/** A finished car's cause: as fixed the moment it went out, or read now when this very step finished it (offline). */
+function causeOf(c:Vehicle){if(!c.extendedDamage||c.health>0)return wreckCauses.get(c.id);let cause=wreckCauses.get(c.id);
+  if(!cause){cause=wreckCause({engineOut:c.engineOut,fireHeat:c.fireHeat,wheelsLost:c.wreckParts.wheelLost.reduce((n,v)=>n+v,0),seized:c.seized,fuel:c.fuelLevel});wreckCauses.set(c.id,cause);}return cause;}
 /** Major parts gone from a car: bumpers, bonnet, boot, tailgate, hatch or engine lid, doors, barn doors and front wings. */
 function majorPartsGone(c:Vehicle){let n=c.wingGone.filter(Boolean).length;for(const a of c.wreckParts.assemblies)if(/^(front-bumper|rear-bumper|hood|boot|tailgate|drop-tailgate|hatch|engine-lid|door-|cargo-)/.test(a.name)&&a.members.length&&a.members.every(m=>!m.mesh.visible))n++;return n;}
 function playerTakedown(){
@@ -1550,7 +1554,8 @@ function finish(title: string) {
     camera.position.y=Math.max(camera.position.y,activeVenue.course.height(camera.position.x,camera.position.z)+1.2);
     camera.fov = 52; camera.updateProjectionMatrix();
     orbit.target.copy(player.current); orbit.enabled = true; orbit.update();
-    ui.innerHTML = '<div class="wreck-note"><strong>WRECKED OUT</strong><span>DRAG TO LOOK AROUND &middot; SCROLL TO ZOOM</span><span>RETURNING TO QUARRY IN <b id="wreck-count">5</b></span></div>';
+    const cause=causeOf(player);
+    ui.innerHTML = '<div class="wreck-note"><strong>WRECKED OUT'+(cause&&cause!=='WRECKED'?' · '+cause:'')+'</strong><span>DRAG TO LOOK AROUND &middot; SCROLL TO ZOOM</span><span>RETURNING TO QUARRY IN <b id="wreck-count">5</b></span></div>';
     return;
   }
   ui.innerHTML = `<div class="overlay"><div class="dialog"><div class="eyebrow">${pursuit?'CHASE · ':''}${eventLabel()} / RESULTS${customEvent()&&mode!=='playground'?' · '+AI_DIFFICULTIES[drivers.difficulty].label.toUpperCase()+' AI':''}</div><h2>${title}</h2>${customEvent()&&mode!=='playground'?`<p>${GRID_LINEUPS[eventOptions.lineup??'mixed']} · ${GRID_PERFORMANCE[eventOptions.performance??'open']} · ${classLimitLabel(eventOptions.classLimit)} · ${DAMAGE_RULES[damageRule()].label}</p>`:''}<p>${pursuit?(pursuitTeamWon(pursuit,cars[0].id)?'YOUR TEAM WINS':'YOUR TEAM LOSES'):'Placed '+rank+' of '+cars.length} · ${Math.ceil(cars[0].health)}% condition<br>${pursuit?formatTime(elapsed)+' chase · No recoveries':mode === 'derby' ? scoreDerby()?combat.points(cars[0].id)+' points · '+combat.get(cars[0].id).knockouts+' knockouts · '+(combat.get(cars[0].id).spins??0)+' spin-outs · '+(combat.get(cars[0].id).bonus??0)+' bonus points'+(combat.get(cars[0].id).rivalHits?' · '+combat.get(cars[0].id).rivalHits+' rival hits':''):Math.round(cars[0].inflicted) + ' damage inflicted'+(!online?.active&&playerTopSpeed>=1?' · top speed '+Math.round(playerTopSpeed*3.6)+' km/h':'')+(combat.rivals?' · '+(combat.get(cars[0].id).bonus??0)+' bonus points · '+(combat.get(cars[0].id).rivalHits??0)+' rival hits':'') : raceTimeLimit()?timedRaceResult(cars[0])+' · '+formatTime(raceTimeLimit())+' timed race':cars[0].finished?formatTime(cars[0].finishTime)+' including recovery penalties':cars[0].health<=0?'RETIRED · CAR WRECKED':'DNF · RACE NOT FINISHED'}</p>${ordered.map((c, i) => `<div class="results-row ${isPlayer(c) ? 'player' : ''}"><span>${pursuit?(pursuit.role(c.id)==='runner'?'RUNNER':'PURSUER'):String(i + 1).padStart(2, '0')} &nbsp; ${resultDriverLabel(displayedDriver(c),isPlayer(c))}</span><span>${pursuit?(pursuit.role(c.id)==='runner'?(pursuit.result(c.id)?.outcome==='escaped'?'ESCAPED · '+formatTime(c.finishTime):c.health<=0?'WRECKED':'TIME EXPIRED'):Math.ceil(c.health)+'% CONDITION'):mode === 'derby' ? scoreDerby()?combat.points(c.id)+' PTS':c.health<=0&&wreckCauses.has(c.id)?wreckCauses.get(c.id):Math.ceil(c.health) + '%' : raceTimeLimit()?timedRaceResult(c):c.finished ? formatTime(c.finishTime) : (c.health<=0?wreckCauses.get(c.id)??'RETIRED':'DNF')+' · '+(waypointRace?'STATIONS '+c.passed:'LAP '+Math.min(raceLaps(), c.lap))}</span></div>`).join('')}<p class="award-summary">${awardText(lastAward)}</p>${badgeLine()}<button class="primary" id="again">RUN IT BACK ↗</button><button class="small-button" id="back">RETURN TO QUARRY</button></div></div>`;
@@ -1578,8 +1583,12 @@ function catchOpenDoors(){
     if(c.ripAssembly(name)){c.doorsTorn++;sound.impact(7,at,false,true,'metal');}
   }
 }
+/** QA: force the late-derby frenzy factor (undefined = by the cars left running). */
+let frenzyOverride:number|undefined;
 function step(dt: number) {
   if(online?.active)return;
+  // The last few cars running go at it harder (offline derbies).
+  drivers.frenzy=mode==='derby'&&cars[0]?.extendedDamage?frenzyOverride??frenzyFactor(cars.filter(c=>c.health>0).length):1;
   if (state === 'countdown') {
     countdown -= dt;
     if (countdown <= 0) {
@@ -1624,7 +1633,7 @@ function step(dt: number) {
       damageScale:Math.max(a&&a.health>0?a.specification.damageScale:0,b&&b.health>0?b.specification.damageScale:0)});
   });
   sound.contactScraping.sample(contacts,elapsed);
-  for(const c of cars)if(c.health<=0&&c.extendedDamage&&!wreckCauses.has(c.id))wreckCauses.set(c.id,wreckCause({engineOut:c.engineOut,fireHeat:c.fireHeat,wheelsLost:c.wreckParts.wheelLost.reduce((n,v)=>n+v,0),seized:c.seized,fuel:c.fuelLevel}));
+  for(const c of cars)if(c.health<=0)causeOf(c);
   // The player's car stripped down to the shell and still running (offline).
   if(!online?.active&&!demo&&cars[0]){const gone=majorPartsGone(cars[0]),label=cars[0].health>0?strippedLabel(playerStripped,gone):'';if(label){toast(label,2,2);sound.crowd(.7);}playerStripped=gone;}
   for(const {a,b,point1,point2,scarDirection,speed,material} of collisionScars.adjudicate(contacts,elapsed)){
@@ -2293,6 +2302,8 @@ async function boot() {
     /** QA: snap an offline car's anti-roll bar (0 front, 1 rear). */
     snapRollBar: (id: number, axle: number) => { const c = cars.find(x => x.id === id); if (!c?.extendedDamage) return false; c.rollBar[axle] = 0; return true; },
     ripPart: (id: number, name: string, quiet = false) => { const c = cars.find(x => x.id === id); if (!c) return false; c.ripAssembly(name, quiet); return true; },
+    /** QA: force the late-derby frenzy factor, or pass nothing to restore the automatic one. */
+    frenzy: (factor?: number) => { frenzyOverride = factor; return drivers.frenzy; },
     /** QA: break a door's latch and swing it open by `swing` radians. */
     springDoor: (id: number, name: string, swing = .8) => { const a = cars.find(x => x.id === id)?.wreckParts.assemblies.find(x => x.name === name); if (!a) return false; a.damage = Math.max(a.damage, 12); a.loose = Math.max(a.loose, .55); a.swing = swing; a.swingRate = 0; return true; },
     /** QA: set an offline car alight as if it had stood in flames. */

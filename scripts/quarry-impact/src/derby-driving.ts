@@ -9,6 +9,10 @@ export type DerbyManeuver={kind:'back out'|'run up';x:number;z:number;startX:num
 /** Offline derby cars (car.charge) take a run at it: stuck slow against the target, they reverse straight away to CHARGE.room
  * of run-up, then come back flat out once lined up instead of easing in. */
 export const CHARGE={close:9,slow:5,room:18,time:5,aim:.4,speed:40,minRun:4,cooldown:3.5} as const;
+/** Late-derby frenzy (offline): with FRENZY.alive or fewer cars left running, the drivers go FRENZY.factor times harder: faster
+ * between hits and back for another charge sooner. */
+export const FRENZY={alive:4,factor:1.25} as const;
+export const frenzyFactor=(alive:number)=>Number.isFinite(alive)&&alive>=2&&alive<=FRENZY.alive?FRENZY.factor:1;
 const dist=(a:{x:number;z:number},b:{x:number;z:number})=>Math.hypot(a.x-b.x,a.z-b.z);
 
 /** Conservative swept-car clearance. Cars and wrecks matter when backing out,
@@ -58,7 +62,7 @@ export function weakSpotThreat(car:DriverCar,cars:DriverCar[]){
 }
 /** Reverse ramming (protectFront cars): in range of the target they back into it at up to REVERSE_RAM.speed m/s. */
 export const REVERSE_RAM={range:30,speed:9} as const;
-export function driveDerby(car:DriverCar,cars:DriverCar[],m:DriverMemory,arena:ArenaLayout|null,dt:number,difficulty:{derbyPace:number;interceptLead:number}=AI_DIFFICULTIES.amateur,targetId?:number,attackPoint?:{x:number;z:number}):Input{
+export function driveDerby(car:DriverCar,cars:DriverCar[],m:DriverMemory,arena:ArenaLayout|null,dt:number,difficulty:{derbyPace:number;interceptLead:number;frenzy?:number}=AI_DIFFICULTIES.amateur,targetId?:number,attackPoint?:{x:number;z:number}):Input{
  const yaw=Math.atan2(car.forward.x,car.forward.z);
  let target=cars.find(c=>c.id===m.target&&c.health>0&&(targetId===undefined||c.id===targetId));
  if(!target||m.commit<=0){
@@ -100,7 +104,7 @@ export function driveDerby(car:DriverCar,cars:DriverCar[],m:DriverMemory,arena:A
   const dx=car.current.x-target.current.x,dz=car.current.z-target.current.z,d=Math.max(.1,Math.hypot(dx,dz));
   let x=target.current.x+dx/d*CHARGE.room,z=target.current.z+dz/d*CHARGE.room;
   if(arena){const r=Math.hypot(x-arena.x,z-arena.z),limit=arena.radius-8;if(r>limit){x=arena.x+(x-arena.x)*limit/r;z=arena.z+(z-arena.z)*limit/r;}}
-  m.derby={kind:'back out',x,z,startX:car.current.x,startZ:car.current.z,time:0,slow:0,charge:true};m.chargeCool=CHARGE.cooldown;m.stalled=0;
+  m.derby={kind:'back out',x,z,startX:car.current.x,startZ:car.current.z,time:0,slow:0,charge:true};m.chargeCool=CHARGE.cooldown/(difficulty.frenzy??1);m.stalled=0;
  }
  let tx=0,tz=0,desired=19*difficulty.derbyPace;
  if(m.derby){
