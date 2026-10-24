@@ -1304,6 +1304,17 @@ export class Vehicle {
   /** Height of this car's venue ground at (x, z). */
   groundAt(x:number,z:number){return this.ground.height(x,z);}
   /** Doors (and a van's barn doors) swung open past DOOR_CATCH.open, each as a line from its hinge to its free edge in world space (offline). */
+  /** Wing mirrors stand out from the doors (offline): each still on, from the body side out to its tip, for a passing car to clip. */
+  mirrorSpans(){
+    const out:{name:string;from:T.Vector3;to:T.Vector3}[]=[];if(!this.extendedDamage)return out;
+    const world=(p:{x:number;y:number;z:number})=>new T.Vector3(p.x,p.y,p.z).applyMatrix4(this.model.matrix).applyQuaternion(this.currentQ).add(this.current);
+    for(const a of this.wreckParts.assemblies){
+      if(!a.name.startsWith('mirror')||!a.members.some(m=>m.mesh.visible))continue;
+      const side=a.name.endsWith('left')?-1:1,y=(a.bounds.min.y+a.bounds.max.y)/2,z=(a.bounds.min.z+a.bounds.max.z)/2,tip=side<0?a.bounds.min.x:a.bounds.max.x;
+      out.push({name:a.name,from:world({x:side*DEFINITIONS[this.kind].halfWidth*.85,y,z}),to:world({x:tip+side*.04,y,z})});
+    }
+    return out;
+  }
   openDoorSpans(){
     const out:{name:string;from:T.Vector3;to:T.Vector3}[]=[];if(!this.extendedDamage)return out;
     const world=(p:{x:number;y:number;z:number})=>new T.Vector3(p.x,p.y,p.z).applyMatrix4(this.model.matrix).applyQuaternion(this.currentQ).add(this.current);
