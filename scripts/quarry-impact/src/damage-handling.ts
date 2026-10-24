@@ -252,6 +252,15 @@ export function starterFails(severity:number,attempt:number,seed:number){
   const s=clamp01(severity);if(!(s>0))return false;const x=Math.sin(attempt*17.17+seed*3.7)*43758.5453;return x-Math.floor(x)<STARTER.fail*s;
 }
 export const starterWarning=(severity:number)=>severity>0?'STARTER DAMAGED':'';
+/** Bump start (offline): a stalled engine that has been dead for BUMP_START.after seconds catches once the car has rolled
+ * at BUMP_START.speed or more with the throttle held for BUMP_START.hold seconds — a shove from a rival or a slope turns
+ * it over, starter or no starter. Catching drags the car back by BUMP_START.jolt of its speed (compression). */
+export const BUMP_START={after:1.2,speed:3.5,hold:.25,jolt:.08,credit:3} as const;
+/** Seconds rolled fast enough with the throttle held; anything else starts the count again. */
+export const bumpRoll=(roll:number,speed:number,throttle:number,dt:number)=>Number.isFinite(speed)&&Math.abs(speed)>=BUMP_START.speed&&Math.abs(throttle)>.2&&dt>0?(Number.isFinite(roll)?Math.max(0,roll):0)+dt:0;
+export const bumpCatches=(stallTime:number,roll:number)=>stallTime>=BUMP_START.after&&roll>=BUMP_START.hold;
+/** The rival whose hit in the last BUMP_START.credit seconds shoved the engine back into life, or -1. */
+export const bumpStartedBy=(last:{by:number;at:number}|undefined,self:number,time:number)=>last&&last.by!==self&&last.by>=0&&time-last.at<=BUMP_START.credit?last.by:-1;
 /** A big side hit (T-bone) past FRAME_BEND.onset bends the chassis like a banana: the front axle yaws toward the dented
  * side and the rear axle the other way, so the car keeps turning toward the damage and needs countersteer to go straight.
  * Returns the toe (radians) each wheel is knocked to: fronts +, rears −, signed toward the more crushed flank. */
