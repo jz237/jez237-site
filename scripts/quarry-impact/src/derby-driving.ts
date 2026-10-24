@@ -29,6 +29,13 @@ export function rockInput(rocked:number,carId:number):Input{
 /** The hold after a step that did not hold: spent (-1) while the target is still pinned after one, otherwise reset to 0. */
 export const pinHoldAfter=(pinTime:number|undefined,held:number)=>held!==0&&(pinTime??0)>0?-1:0;
 export const frenzyFactor=(alive:number)=>Number.isFinite(alive)&&alive>=2&&alive<=FRENZY.alive?FRENZY.factor:1;
+/** Hunt the leader (offline scored derbies): the car leading on points weighs HUNT.bonus more as a target to every other driver, so
+ * a lead has to be defended. A leader counts once ahead by HUNT.margin points or more. */
+export const HUNT={bonus:8,margin:1} as const;
+export function pointsLeader(points:readonly {id:number;points:number;running:boolean}[]){
+  const live=points.filter(p=>p.running&&Number.isFinite(p.points)).sort((a,b)=>b.points-a.points);
+  return live.length>=2&&live[0].points-live[1].points>=HUNT.margin?live[0].id:-1;
+}
 const dist=(a:{x:number;z:number},b:{x:number;z:number})=>Math.hypot(a.x-b.x,a.z-b.z);
 
 /** Conservative swept-car clearance. Cars and wrecks matter when backing out,
@@ -78,7 +85,7 @@ export function weakSpotThreat(car:DriverCar,cars:DriverCar[]){
 }
 /** Reverse ramming (protectFront cars): in range of the target they back into it at up to REVERSE_RAM.speed m/s. */
 export const REVERSE_RAM={range:30,speed:9} as const;
-export function driveDerby(car:DriverCar,cars:DriverCar[],m:DriverMemory,arena:ArenaLayout|null,dt:number,difficulty:{derbyPace:number;interceptLead:number;frenzy?:number}=AI_DIFFICULTIES.amateur,targetId?:number,attackPoint?:{x:number;z:number}):Input{
+export function driveDerby(car:DriverCar,cars:DriverCar[],m:DriverMemory,arena:ArenaLayout|null,dt:number,difficulty:{derbyPace:number;interceptLead:number;frenzy?:number;leader?:number}=AI_DIFFICULTIES.amateur,targetId?:number,attackPoint?:{x:number;z:number}):Input{
  const yaw=Math.atan2(car.forward.x,car.forward.z);
  let target=cars.find(c=>c.id===m.target&&c.health>0&&(targetId===undefined||c.id===targetId));
  if(!target||m.commit<=0){
@@ -89,7 +96,7 @@ export function driveDerby(car:DriverCar,cars:DriverCar[],m:DriverMemory,arena:A
    const angle=Math.abs(wrap(Math.atan2(dx,dz)-yaw));
    const flank=Math.abs((dx*other.right.x+dz*other.right.z)/Math.max(1,d));
    let crowded=0;for(const c of cars)if(c.id!==car.id&&c.id!==other.id&&dist(c.current,other.current)<7)crowded++;
-   const score=32-Math.abs(d-19)*.58-angle*9+flank*7+(100-other.health)*.045+(other.id===m.target?5:0)-crowded*3;
+   const score=32-Math.abs(d-19)*.58-angle*9+flank*7+(100-other.health)*.045+(other.id===m.target?5:0)-crowded*3+(other.id===difficulty.leader?HUNT.bonus:0);
    if(score>best){best=score;target=other;}
   }
   m.target=target?.id??-1;m.commit=2.2+(car.id%4)*.35;
