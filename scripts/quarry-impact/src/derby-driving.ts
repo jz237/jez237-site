@@ -9,6 +9,43 @@ export type DerbyManeuver={kind:'back out'|'run up';x:number;z:number;startX:num
 /** Offline derby cars (car.charge) take a run at it: stuck slow against the target, they reverse straight away to CHARGE.room
  * of run-up, then come back flat out once lined up instead of easing in. */
 export const CHARGE={close:9,slow:5,room:18,time:5,aim:.4,speed:40,minRun:4,cooldown:3.5} as const;
+/** Late-derby frenzy (offline): with FRENZY.alive or fewer cars left running, the drivers go FRENZY.factor times harder: faster
+ * between hits and back for another charge sooner. */
+export const FRENZY={alive:4,factor:1.25} as const;
+/** Hold the pin (offline charge cars): nose-in, within PIN_HOLD.close m of a target that is being pinned (pinTime>0) and
+ * pointed within PIN_HOLD.aim radians of it, keep the throttle down for up to PIN_HOLD.time seconds instead of backing off.
+ * `held` is the hold so far: 0 not holding (starts only on a pinned target), negative spent until the target is free again. */
+export const PIN_HOLD={time:2.5,aim:.6,close:7} as const;
+export const holdingPin=(pinTime:number|undefined,held:number,angle:number,gap:number)=>(held>0||held===0&&(pinTime??0)>0)&&held<PIN_HOLD.time&&Math.abs(angle)<PIN_HOLD.aim&&gap<PIN_HOLD.close;
+/** Rock free (offline charge cars): pinned PIN_ESCAPE.after seconds (past the point the pin starts crushing), the driver rocks the
+ * car, full reverse then full throttle on opposite locks, swapping every PIN_ESCAPE.swing seconds, and keeps at it until the car
+ * is free (pinTime back to 0), so easing the pressure for a moment does not stop the wriggling. */
+export const PIN_ESCAPE={after:1.2,swing:.7} as const;
+export const rocking=(pinTime:number|undefined,already:boolean)=>{const t=pinTime??0;return t>=PIN_ESCAPE.after||already&&t>0;};
+export function rockInput(rocked:number,carId:number):Input{
+  const back=Math.floor(Math.max(0,rocked)/PIN_ESCAPE.swing)%2===0,lock=carId%2?1:-1;
+  return{throttle:back?-1:1,steer:back?lock:-lock,brake:0,handbrake:false};
+}
+/** The hold after a step that did not hold: spent (-1) while the target is still pinned after one, otherwise reset to 0. */
+export const pinHoldAfter=(pinTime:number|undefined,held:number)=>held!==0&&(pinTime??0)>0?-1:0;
+export const frenzyFactor=(alive:number)=>Number.isFinite(alive)&&alive>=2&&alive<=FRENZY.alive?FRENZY.factor:1;
+/** Hunt the leader (offline scored derbies): the car leading on points weighs HUNT.bonus more as a target to every other driver, so
+ * a lead has to be defended. A leader counts once ahead by HUNT.margin points or more, with HUNT.field or more cars running (two
+ * cars left are already after each other). */
+export const HUNT={bonus:8,margin:1,field:3} as const;
+/** Wall work (offline charge cars): a target within WALL_WORK.near m of the arena wall, with this car coming at it from the inside
+ * (heading out past WALL_WORK.inside of straight at the wall), so a hit drives it into the wall, weighs WALL_WORK.bonus more as a
+ * target: a real derby habit, and where pins and wall slams come from. */
+export const WALL_WORK={near:8,bonus:6,inside:.3} as const;
+export function wallWork(from:{x:number;z:number},target:{x:number;z:number},arena:{x:number;z:number;radius:number}|null){
+  if(!arena)return 0;const ox=target.x-arena.x,oz=target.z-arena.z,r=Math.hypot(ox,oz),ax=target.x-from.x,az=target.z-from.z,a=Math.hypot(ax,az);
+  if(!(r>1e-6)||!(a>1e-6)||!(arena.radius-r<WALL_WORK.near))return 0;
+  return (ax*ox+az*oz)/(a*r)>WALL_WORK.inside?WALL_WORK.bonus:0;
+}
+export function pointsLeader(points:readonly {id:number;points:number;running:boolean}[]){
+  const live=points.filter(p=>p.running&&Number.isFinite(p.points)).sort((a,b)=>b.points-a.points);
+  return live.length>=HUNT.field&&live[0].points-live[1].points>=HUNT.margin?live[0].id:-1;
+}
 const dist=(a:{x:number;z:number},b:{x:number;z:number})=>Math.hypot(a.x-b.x,a.z-b.z);
 
 /** Conservative swept-car clearance. Cars and wrecks matter when backing out,
@@ -58,7 +95,7 @@ export function weakSpotThreat(car:DriverCar,cars:DriverCar[]){
 }
 /** Reverse ramming (protectFront cars): in range of the target they back into it at up to REVERSE_RAM.speed m/s. */
 export const REVERSE_RAM={range:30,speed:9} as const;
-export function driveDerby(car:DriverCar,cars:DriverCar[],m:DriverMemory,arena:ArenaLayout|null,dt:number,difficulty:{derbyPace:number;interceptLead:number}=AI_DIFFICULTIES.amateur,targetId?:number,attackPoint?:{x:number;z:number}):Input{
+export function driveDerby(car:DriverCar,cars:DriverCar[],m:DriverMemory,arena:ArenaLayout|null,dt:number,difficulty:{derbyPace:number;interceptLead:number;frenzy?:number;leader?:number}=AI_DIFFICULTIES.amateur,targetId?:number,attackPoint?:{x:number;z:number}):Input{
  const yaw=Math.atan2(car.forward.x,car.forward.z);
  let target=cars.find(c=>c.id===m.target&&c.health>0&&(targetId===undefined||c.id===targetId));
  if(!target||m.commit<=0){
@@ -69,7 +106,7 @@ export function driveDerby(car:DriverCar,cars:DriverCar[],m:DriverMemory,arena:A
    const angle=Math.abs(wrap(Math.atan2(dx,dz)-yaw));
    const flank=Math.abs((dx*other.right.x+dz*other.right.z)/Math.max(1,d));
    let crowded=0;for(const c of cars)if(c.id!==car.id&&c.id!==other.id&&dist(c.current,other.current)<7)crowded++;
-   const score=32-Math.abs(d-19)*.58-angle*9+flank*7+(100-other.health)*.045+(other.id===m.target?5:0)-crowded*3;
+   const score=32-Math.abs(d-19)*.58-angle*9+flank*7+(100-other.health)*.045+(other.id===m.target?5:0)-crowded*3+(other.id===difficulty.leader?HUNT.bonus:0)+(car.charge?wallWork(car.current,other.current,arena):0);
    if(score>best){best=score;target=other;}
   }
   m.target=target?.id??-1;m.commit=2.2+(car.id%4)*.35;
@@ -78,6 +115,12 @@ export function driveDerby(car:DriverCar,cars:DriverCar[],m:DriverMemory,arena:A
  let nearest=Infinity;for(const c of cars)if(c.id!==car.id)nearest=Math.min(nearest,dist(c.current,car.current));
  const stalled=Math.abs(car.speed)<.9||(nearest<7&&Math.abs(car.speed)<3.2);
  m.stalled=stalled?m.stalled+dt:Math.max(0,m.stalled-dt*2);
+ // Pinned: rock the car to wriggle free (offline charge).
+ if(car.charge){if(rocking(car.pinTime,(m.rock??-1)>=0)){m.rock=(m.rock??-1)<0?0:m.rock!+dt;m.derby=undefined;m.stalled=0;m.phase='rock free';const rock=rockInput(m.rock,car.id);m.steer=rock.steer;return rock;}m.rock=-1;}
+ // Hold the pin: pressed into a target that is pinned against a wall or another car, keep shoving (offline charge).
+ if(car.charge&&(!m.derby||m.derby.charge)){const angle=wrap(Math.atan2(target.current.x-car.current.x,target.current.z-car.current.z)-yaw);
+  if(holdingPin(target.pinTime,m.pinHold??0,angle,dist(car.current,target.current))){m.pinHold=(m.pinHold??0)+dt;m.derby=undefined;m.stalled=0;m.steer+=clamp(clamp(angle*1.75,-1,1)-m.steer,-dt*4.5,dt*4.5);m.phase='pin';return{throttle:1,steer:m.steer,brake:0,handbrake:false};}
+  m.pinHold=pinHoldAfter(target.pinTime,m.pinHold??0);}
  if(!m.derby&&m.stalled>1.15){
   const rear=Math.min(m.clear.rear,derbyTrafficClearance(car,cars,-car.forward.x,-car.forward.z));
   m.attempts++;m.derby=maneuver(car,cars,m,arena,rear>1.6);m.stalled=0;
@@ -100,7 +143,7 @@ export function driveDerby(car:DriverCar,cars:DriverCar[],m:DriverMemory,arena:A
   const dx=car.current.x-target.current.x,dz=car.current.z-target.current.z,d=Math.max(.1,Math.hypot(dx,dz));
   let x=target.current.x+dx/d*CHARGE.room,z=target.current.z+dz/d*CHARGE.room;
   if(arena){const r=Math.hypot(x-arena.x,z-arena.z),limit=arena.radius-8;if(r>limit){x=arena.x+(x-arena.x)*limit/r;z=arena.z+(z-arena.z)*limit/r;}}
-  m.derby={kind:'back out',x,z,startX:car.current.x,startZ:car.current.z,time:0,slow:0,charge:true};m.chargeCool=CHARGE.cooldown;m.stalled=0;
+  m.derby={kind:'back out',x,z,startX:car.current.x,startZ:car.current.z,time:0,slow:0,charge:true};m.chargeCool=CHARGE.cooldown/(difficulty.frenzy??1);m.stalled=0;
  }
  let tx=0,tz=0,desired=19*difficulty.derbyPace;
  if(m.derby){
