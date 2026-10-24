@@ -1,4 +1,4 @@
-import {exhaustLoudness,bearingGrowl,RUB,RUB_FIRE} from './damage-handling';
+import {exhaustLoudness,bearingGrowl,RUB,RUB_FIRE,EXHAUST_CRUSH} from './damage-handling';
 import {materialImpactProfile,type ImpactMaterial} from './impact-material';
 import {readAudioOutput,type AudioOutput} from './audio-output';
 import {TrackAcousticProbe,TrackReflections} from './track-acoustics';
@@ -39,7 +39,7 @@ const BREAK_CLIPS:Record<string,{id:string;volume:number;rate:number;duration:nu
   spring:{id:'spring-snap',volume:.8,rate:1,duration:.8},shaft:{id:'shaft-snap',volume:.8,rate:1,duration:1},propshaft:{id:'shaft-snap',volume:.85,rate:.9,duration:1.1},
   diff:{id:'shaft-snap',volume:.9,rate:.8,duration:1.2},tierod:{id:'spring-snap',volume:.6,rate:1.25,duration:.65},cable:{id:'spring-snap',volume:.5,rate:1.5,duration:.55},
   handbrake:{id:'spring-snap',volume:.5,rate:1.4,duration:.6},rod:{id:'rod-bang',volume:1,rate:1,duration:1.8},battery:{id:'battery-rip',volume:.8,rate:1,duration:1},
-  bearing:{id:'engine-seize',volume:.5,rate:1.3,duration:1.2},tyrefire:{id:'vehicle-burst',volume:.45,rate:.8,duration:.9}};
+  bearing:{id:'engine-seize',volume:.5,rate:1.3,duration:1.2},tyrefire:{id:'vehicle-burst',volume:.45,rate:.8,duration:.9},exhaustcrush:{id:'impact-medium',volume:.6,rate:1.25,duration:.6}};
 /** Clips with extra recorded takes (id-2, id-3) that shot() rotates between: the impacts and the glass and debris layers. */
 const TAKES=/^(impact-(light|medium|heavy)|glass|debris)$/;
 /** A tyre rubbing a crushed arch (0–1): the hardest rub on the car, with road speed (full from 10 m/s), louder still once
@@ -500,7 +500,7 @@ export class Sound {
         let v = 0;
         const centers=ENGINE_CENTERS;
         if (name in centers) {
-          v = Math.max(0, 1 - Math.abs(Math.min(rpm,6500) - centers[name]) / 2100) * level * cut * (car.extendedDamage ? exhaustLoudness(car.exhaustBlow) : 1);
+          v = Math.max(0, 1 - Math.abs(Math.min(rpm,6500) - centers[name]) / 2100) * level * cut * (car.extendedDamage ? exhaustLoudness(car.exhaustBlow)*(car.exhaustCrushed&&!car.exhaustGone?EXHAUST_CRUSH.sound:1) : 1);
           if (car.health === 0) v = 0;
           setRate(l,Math.max(0.72, Math.min(1.4, (rpm / centers[name]) * doppler))*classicEngineVoice(car.kind).pitch,c.currentTime,0.13);
         } else if (name === 'gear-grind') v=car.health>0?.16*Math.min(1,(car.transmission?.grind??0)/.3):0;

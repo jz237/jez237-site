@@ -182,6 +182,15 @@ export const nutShimmy=(loose:number,angle:number)=>clamp01(loose)*WHEEL_NUTS.sh
 export const nutWarning=(loose:ArrayLike<number>)=>Array.from(loose).some(v=>v>=WHEEL_NUTS.warn)?'WHEEL LOOSE':'';
 /** A rear crush past EXHAUST_BLOW.onset splits the exhaust: the engine gets louder and raspier, and lifting off at speed
  * fires a crackle of pops with flame out of the tailpipe (which can light fuel on the ground). */
+/** Crushed exhaust (offline): a hit of EXHAUST_CRUSH.damage or more on a rear crushed past EXHAUST_CRUSH.rear flattens the
+ * tailpipe (EXHAUST_CRUSH.chance, fixed per car and hit) while the exhaust is still on: back pressure leaves the engine
+ * EXHAUST_CRUSH.power of its pull, black smoke puffs out under throttle and the engine note is choked to EXHAUST_CRUSH.sound.
+ * Tearing the pipe off clears it all. */
+export const EXHAUST_CRUSH={damage:9,rear:.45,chance:.5,power:.8,sound:.7,puff:.3} as const;
+export function exhaustCrushes(rear:number,damage:number,atRear:boolean,gone:boolean,seed:number){
+  if(gone||!atRear||!(rear>=EXHAUST_CRUSH.rear)||!Number.isFinite(damage)||damage<EXHAUST_CRUSH.damage)return false;const x=Math.sin(seed*91.7+2.3)*43758.5453;return x-Math.floor(x)<EXHAUST_CRUSH.chance;
+}
+export const exhaustCrushWarning=(crushed:boolean,gone:boolean)=>crushed&&!gone?'EXHAUST CRUSHED · LOSING POWER':'';
 export const EXHAUST_BLOW={onset:.15,span:.4,loud:.7,lift:.6,off:.2,minSpeed:8,minPops:2,maxPops:6,gap:.05,spread:.08} as const;
 export const exhaustBlow=(rear:number)=>clamp01((clamp01(rear)-EXHAUST_BLOW.onset)/EXHAUST_BLOW.span);
 /** Engine sound gain for a split exhaust: exactly 1 on a sound one. */
