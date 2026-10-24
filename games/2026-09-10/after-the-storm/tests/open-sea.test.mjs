@@ -33,7 +33,8 @@ test('the craft floats at its draft, planes trimmed bow-up past 85 km/h and stee
  assert.ok(-rest.hydro.pitch>.02,'sits slightly stern-down with its rider');
  const run=ride({throttle:1},10);
  assert.ok(run.speed*3.6>85&&run.speed*3.6<100,`top speed ${run.speed*3.6}`);
- assert.ok(run.hydro.y>.15&&run.hydro.sternWet>run.hydro.bowWet,'planes on its aft bottom');
+ assert.ok(run.hydro.y>.15&&run.openSea.depth[0]>run.openSea.depth[23]&&run.openSea.depth[23]<0,'planes on its aft bottom with the bow clear');
+ assert.ok(run.hydro.wet>.9,'a planing keel reports full contact to the wake and spray effects');
  assert.ok(-run.hydro.pitch>.015&&-run.hydro.pitch<.07,`running trim ${-run.hydro.pitch*57.3} degrees`);
  const turn=ride(t=>({throttle:1,steer:t>8?1:0}),14);
  assert.ok(turn.openSea.yawRate>.5,'full lock turns hard at speed');

@@ -171,7 +171,13 @@ function substep(r,q,h,c,at,surface,stats){
  if(Math.abs(h.pitch)===1.4)h.pitchVelocity=0;
  r.x+=r.vx*dt;r.z+=r.vz*dt;
  h.waterVelocity+=((water-h.waterHeight)/dt-h.waterVelocity)*(1-Math.exp(-dt*12));h.waterHeight=water;
- h.wet=wetSum;h.bowWet=bow;h.sternWet=stern;h.portWet=port;h.starboardWet=starboard;h.load=lift/(C.mass*G);
+ // The view's wake, spray and hull-displacement effects read contact the way the
+ // modern hull reports it: how much of the keel is in the water (a metre or
+ // more of planing keel counts as full contact), not the wetted bottom area.
+ let keelBow=0,keelStern=0;for(let i=0;i<STATIONS.length;i++){const st=STATIONS[i],c=clamp(q.depth[i]/.04,0,1)*st.dz;if(st.z>0)keelBow+=c;else keelStern+=c;}
+ const contact=clamp((keelBow+keelStern)/1,0,1),lowSide=clamp(h.roll*2,-.6,.6);// positive roll lifts starboard
+ h.wet=contact;h.bowWet=clamp(keelBow/.5,0,1);h.sternWet=clamp(keelStern/.6,0,1);h.portWet=clamp(contact*(1+lowSide),0,1);h.starboardWet=clamp(contact*(1-lowSide),0,1);
+ q.wetted=wetSum;h.load=lift/(C.mass*G);
  q.thrust=thrust;q.lift=dynamic;q.support=lift;q.slip=sway;
  // The twelve classic hull patches mirror the sections for the view's effects.
  for(let i=0;i<HULL_PATCHES.length;i++){
