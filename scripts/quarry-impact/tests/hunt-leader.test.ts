@@ -6,8 +6,9 @@ const at=(id:number,x:number,z:number)=>({id,current:{x,y:0,z},velocity:{x:0,y:0
 const memory=()=>({target:-1,commit:0,stalled:0,reverse:0,escape:0,escapeSteer:0,attempts:0,steer:0,lane:0,phase:'approach',scan:0,clear:{front:30,left:30,right:30,rear:30}}) as never;
 test('the points leader is the running car ahead by HUNT.margin or more; a tie, a lone car or a wreck in front is no leader',()=>{
  assert.equal(pointsLeader([{id:0,points:120,running:true},{id:3,points:80,running:true},{id:5,points:10,running:true}]),0);
- assert.equal(pointsLeader([{id:0,points:80,running:true},{id:3,points:80+HUNT.margin-.5,running:true}]),-1,'too close to call');
- assert.equal(pointsLeader([{id:0,points:300,running:false},{id:3,points:80,running:true},{id:5,points:20,running:true}]),3,'a wreck leads no one');
+ assert.equal(pointsLeader([{id:0,points:80,running:true},{id:3,points:80+HUNT.margin-.5,running:true},{id:5,points:10,running:true}]),-1,'too close to call');
+ assert.equal(pointsLeader([{id:0,points:300,running:false},{id:3,points:80,running:true},{id:5,points:20,running:true},{id:6,points:5,running:true}]),3,'a wreck leads no one');
+ assert.equal(pointsLeader([{id:0,points:300,running:true},{id:3,points:80,running:true}]),-1,'two cars left are after each other already');
  assert.equal(pointsLeader([{id:3,points:80,running:true}]),-1);assert.equal(pointsLeader([]),-1);
 });
 test('two rivals placed alike: a driver goes for the one leading on points',()=>{

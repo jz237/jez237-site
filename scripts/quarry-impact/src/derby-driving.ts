@@ -30,11 +30,12 @@ export function rockInput(rocked:number,carId:number):Input{
 export const pinHoldAfter=(pinTime:number|undefined,held:number)=>held!==0&&(pinTime??0)>0?-1:0;
 export const frenzyFactor=(alive:number)=>Number.isFinite(alive)&&alive>=2&&alive<=FRENZY.alive?FRENZY.factor:1;
 /** Hunt the leader (offline scored derbies): the car leading on points weighs HUNT.bonus more as a target to every other driver, so
- * a lead has to be defended. A leader counts once ahead by HUNT.margin points or more. */
-export const HUNT={bonus:8,margin:1} as const;
+ * a lead has to be defended. A leader counts once ahead by HUNT.margin points or more, with HUNT.field or more cars running (two
+ * cars left are already after each other). */
+export const HUNT={bonus:8,margin:1,field:3} as const;
 export function pointsLeader(points:readonly {id:number;points:number;running:boolean}[]){
   const live=points.filter(p=>p.running&&Number.isFinite(p.points)).sort((a,b)=>b.points-a.points);
-  return live.length>=2&&live[0].points-live[1].points>=HUNT.margin?live[0].id:-1;
+  return live.length>=HUNT.field&&live[0].points-live[1].points>=HUNT.margin?live[0].id:-1;
 }
 const dist=(a:{x:number;z:number},b:{x:number;z:number})=>Math.hypot(a.x-b.x,a.z-b.z);
 

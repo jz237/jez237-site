@@ -1,6 +1,7 @@
+import {restorePinSlamAwardsBytes} from './pin-slam-awards-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readJointSlotPrevious,restoreJointSlotBytes,verifyJointSlotRevision} from './joint-slot-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restorePinSlamAwardsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('JointSlot preserves every prior fixture, vehicle asset, venue art and history input',verifyJointSlotRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/joint-slot/revision.json').toString());

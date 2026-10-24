@@ -8,9 +8,11 @@ export type AwardCar={id:number;inflicted:number;health:number;
  partsGone?:number};
 /** failure: a car's own mechanical failure (attacker = victim = that car), captioned by `label`. */
 export type EventMoment={kind:'hit'|'takedown'|'wheel'|'fire'|'failure';attacker:number;victim:number;time:number;score:number;label?:string};
-export type EventAward={key:'hit'|'fastest'|'destroyer'|'takedowns'|'climber'|'toughest'|'nemesis'|'wheels'|'scrap'|'firestarter'|'roller'|'standing';title:string;id:number;detail:string;victim?:number;value:number};
+export type EventAward={key:'hit'|'fastest'|'destroyer'|'takedowns'|'climber'|'toughest'|'nemesis'|'wheels'|'scrap'|'firestarter'|'roller'|'standing'|'pinner'|'slammer';title:string;id:number;detail:string;victim?:number;value:number};
 /** STILL STANDING goes to a car that finishes still running with at least this many major parts gone. */
 export const STILL_STANDING=5;
+/** Counted pins it takes to be PIN MASTER. */
+export const PIN_MASTER=2;
 export class EventAwards{
  private biggest:{attacker:number;victim:number;damage:number;time:number}|null=null;
  /** The fastest damaging hit (closing speed, m/s). */
@@ -23,7 +25,9 @@ export class EventAwards{
  private puddles=new Map<number,number>();
  private alight=new Map<number,number>();
  private rolls=new Map<number,number>();
- reset(){this.biggest=null;this.fastest=null;this.start=null;this.takedowns.clear();this.dealt.clear();this.stripping.clear();this.moments=[];this.puddles.clear();this.alight.clear();this.rolls.clear();}
+ private pins=new Map<number,number>();
+ private slams=new Map<number,number>();
+ reset(){this.biggest=null;this.fastest=null;this.start=null;this.takedowns.clear();this.dealt.clear();this.stripping.clear();this.moments=[];this.puddles.clear();this.alight.clear();this.rolls.clear();this.pins.clear();this.slams.clear();}
  /** A puddle of oil or fuel caught from this car's sparks or flames (spread included). */
  ignited(owner:number){if(Number.isInteger(owner)&&owner>=0)this.puddles.set(owner,(this.puddles.get(owner)??0)+1);}
  /** Flames lit by the attacker set the victim alight: a highlight and the firestarter's best credit. */
@@ -35,6 +39,21 @@ export class EventAwards{
  rolled(attacker:number,victim:number,time=0){
   if(!Number.isInteger(attacker)||attacker<0||attacker===victim)return;
   this.rolls.set(attacker,(this.rolls.get(attacker)??0)+1);this.moments.push({kind:'hit',attacker,victim,time:Number.isFinite(time)?time:0,score:32,label:'ROLLOVER'});
+ }
+ /** The attacker pinned the victim against a wall or another car (a counted pin): a highlight and the pin master's credit. */
+ pinned(attacker:number,victim:number,time=0){
+  if(!Number.isInteger(attacker)||attacker<0||attacker===victim)return;
+  this.pins.set(attacker,(this.pins.get(attacker)??0)+1);this.moments.push({kind:'hit',attacker,victim,time:Number.isFinite(time)?time:0,score:28,label:'PINNED'});
+ }
+ /** The attacker knocked the victim into the wall hard (a WALL SLAM): a highlight and the wall slammer's credit. */
+ slammed(attacker:number,victim:number,time=0){
+  if(!Number.isInteger(attacker)||attacker<0||attacker===victim)return;
+  this.slams.set(attacker,(this.slams.get(attacker)??0)+1);this.moments.push({kind:'hit',attacker,victim,time:Number.isFinite(time)?time:0,score:30,label:'WALL SLAM'});
+ }
+ /** A pile-up the starter set off: a highlight on its own (the bigger, the better). */
+ pileUp(starter:number,size:number,time=0){
+  if(!Number.isInteger(starter)||starter<0||!(size>=2))return;
+  this.moments.push({kind:'hit',attacker:starter,victim:starter,time:Number.isFinite(time)?time:0,score:Math.min(40,24+2*size),label:`PILE-UP ×${Math.floor(size)}`});
  }
  /** A dramatic mechanical failure (a seized engine, a diff letting go, a brake fire) is a highlight moment of its own. */
  failure(car:number,label:string,time=0,score=26){
@@ -85,6 +104,11 @@ export class EventAwards{
   const fire=[...new Set([...this.puddles.keys(),...this.alight.keys()])].map(id=>({id,...this.firesBy(id)})).filter(f=>f.cars>0||f.puddles>=3).sort((a,b)=>b.cars-a.cars||b.puddles-a.puddles||a.id-b.id)[0];
   const roller=[...this.rolls].sort((a,b)=>b[1]-a[1]||a[0]-b[0])[0];
   if(roller)out.push({key:'roller',title:'ROLL MASTER',id:roller[0],value:roller[1],detail:`rolled ${roller[1]} ${roller[1]===1?'car':'cars'}`});
+  // Pins take two to count as a speciality; one good wall slam is worth its own award.
+  const pinner=[...this.pins].filter(([,n])=>n>=PIN_MASTER).sort((a,b)=>b[1]-a[1]||a[0]-b[0])[0];
+  if(pinner)out.push({key:'pinner',title:'PIN MASTER',id:pinner[0],value:pinner[1],detail:`pinned ${pinner[1]} cars`});
+  const slammer=[...this.slams].sort((a,b)=>b[1]-a[1]||a[0]-b[0])[0];
+  if(slammer)out.push({key:'slammer',title:'WALL SLAMMER',id:slammer[0],value:slammer[1],detail:`slammed ${slammer[1]} ${slammer[1]===1?'car':'cars'} into the wall`});
   if(fire)out.push({key:'firestarter',title:'FIRESTARTER',id:fire.id,value:fire.cars*10+fire.puddles,detail:fire.cars?`set ${fire.cars} ${fire.cars===1?'car':'cars'} alight · ${fire.puddles} puddles lit`:`${fire.puddles} puddles lit`});
   // Still running with the most of itself gone (at least STILL_STANDING parts).
   const standing=[...cars].filter(c=>c.health>0&&(c.partsGone??0)>=STILL_STANDING).sort((a,b)=>(b.partsGone??0)-(a.partsGone??0)||a.id-b.id)[0];

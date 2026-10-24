@@ -1218,7 +1218,7 @@ function pinCars(contacts:readonly {a?:Vehicle;b?:Vehicle;point1:T.Vector3;point
     if(mode==='derby'&&c.pinTime>=PIN.feed&&pinScoring.has(c.id)&&!pinFed.has(c.id)){pinFed.add(c.id);derbyFeed.note(by.id,displayedDriver(by),'pinned',elapsed);}
     // The first crush lands as the pin takes hold; the same car counts as pinned once every PIN.recount seconds at most.
     if(!pinNoted.has(c.id)){pinNoted.add(c.id);c.pinTick=PIN.gap;
-      if(pinCounts(pinCounted.get(c.id),elapsed)){pinCounted.set(c.id,elapsed);pinScoring.add(c.id);c.pins++;
+      if(pinCounts(pinCounted.get(c.id),elapsed)){pinCounted.set(c.id,elapsed);pinScoring.add(c.id);c.pins++;eventAwards.pinned(by.id,c.id,elapsed);
         if(scoreDerby())combat.destruction(by.id,DESTRUCTION_POINTS.pin);
         if(!demo&&by.id===0){toast(`PINNED · #${c.id+1} ${DEFINITIONS[c.kind].name}`+pointsTag(DESTRUCTION_POINTS.pin),2,2);sound.crowd(.8);}
         else if(!demo&&c.id===0)toast(`PINNED BY #${by.id+1} ${DEFINITIONS[by.kind].name}`,2,2);}}
@@ -1843,7 +1843,7 @@ function step(dt: number) {
     if(damage>0&&a&&b){lastHitBy.set(a.id,{by:b.id,at:elapsed});lastHitBy.set(b.id,{by:a.id,at:elapsed});}
     // Four or more cars into each other at once: a PILE-UP, credited to whoever went in fastest first (offline).
     if(!online?.active&&a&&b){const call=pileUp.note(a.id,b.id,elapsed,point.x,point.z,Math.abs(a.speed)>=Math.abs(b.speed)?a.id:b.id,closing),starter=call?cars.find(c=>c.id===call.starter):undefined;
-      if(call&&starter){pileUps++;biggestPileUp=Math.max(biggestPileUp,call.size);sound.crowd(1);crowdFlashes(SMASH_FLASHES);
+      if(call&&starter){pileUps++;biggestPileUp=Math.max(biggestPileUp,call.size);eventAwards.pileUp(starter.id,call.size,elapsed);sound.crowd(1);crowdFlashes(SMASH_FLASHES);
         if(mode==='derby'){derbyFeed.note(starter.id,displayedDriver(starter),'pileup',elapsed,call.size);if(scoreDerby())combat.destruction(starter.id,PILEUP.points*call.size);}
         if(!demo&&call.cars.includes(cars[0]?.id??-1)){toast(`PILE-UP ×${call.size}`+(starter.id===cars[0].id?pointsTag(PILEUP.points*call.size):''),2,3);if(clock>=slowMoUntil){slowMoUntil=clock+SMASH.slowmo;slowMoScale=SMASH.scale;}}}}
     // A hanging bumper can hook the two cars together (offline).
@@ -1853,7 +1853,7 @@ function step(dt: number) {
       if(attacker&&lost>0){const after=victim.health,before=after+lost;attacker.inflicted+=lost;
         const wreck=eventAwards.hit(attacker.id,victim.id,lost,before>0&&after<=0,elapsed,0);combat.hit(attacker.id,victim.id,before,after,elapsed);
         if(wreck){wreckedBy.set(victim.id,attacker.id);sound.crowd(attacker.id===0?1:.7);if(attacker.id===0&&!demo){callout('TAKEDOWN',victim);playerTakedown();}}
-        if(isSlam(lost)){wallSlams++;if(mode==='derby'){derbyFeed.note(attacker.id,displayedDriver(attacker),'slam',elapsed);if(scoreDerby())combat.destruction(attacker.id,DESTRUCTION_POINTS.slam);}
+        if(isSlam(lost)){wallSlams++;eventAwards.slammed(attacker.id,victim.id,elapsed);if(mode==='derby'){derbyFeed.note(attacker.id,displayedDriver(attacker),'slam',elapsed);if(scoreDerby())combat.destruction(attacker.id,DESTRUCTION_POINTS.slam);}
           if(!demo&&attacker.id===0){toast(`WALL SLAM · #${victim.id+1} ${DEFINITIONS[victim.kind].name}`+pointsTag(DESTRUCTION_POINTS.slam),1.8,2);sound.crowd(.8);}
           else if(!demo&&victim.id===0)toast(`SLAMMED BY #${attacker.id+1} ${DEFINITIONS[attacker.kind].name}`,1.8,2);}}}
     // The derby feed credits whoever dropped an engine, tore a wing off or PITed a rival (offline).
