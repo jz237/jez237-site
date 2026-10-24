@@ -17,7 +17,12 @@ not source storage. Do not run `scripts/restore_legacy_media.py` for Cloudflare.
 
 For new media: upload to R2 without overwriting different existing objects,
 verify full public-download checksums and playback, add a manifest entry, and
-update the relevant catalog/player URL and exact legacy mapping if needed.
+update the relevant catalog/player URL. Canonical redirects are derived directly
+from the manifest by `shared/media-redirects.mjs`; do not duplicate those entries
+in a separate map. Only retired URL aliases and separately hosted masters need
+explicit legacy mappings. Version parameters in manifest URLs and incoming
+query strings are both retained. Run `node --test scripts/media-r2.test.mjs`
+before publishing manifest or redirect changes.
 Never delete a source copy until verification and an independent backup exist.
 
 The separate `jz237/multimedia` repository holds full-resolution-master pointers

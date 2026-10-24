@@ -19,8 +19,32 @@ test('old public URLs redirect to exact objects without losing query strings', (
     const response = migratedMediaResponse(new Request('https://jez237.com/' + encodeURI(object.path) + '?download=1'));
     assert.ok(response, `Missing media redirect for ${object.path}`);
     assert.equal(response.status, 301);
-    assert.equal(response.headers.get('location'), object.url + '?download=1');
+    const separator = new URL(object.url).search ? '&' : '?';
+    assert.equal(response.headers.get('location'), object.url + separator + 'download=1');
     assert.match(object.sha256, /^[a-f0-9]{64}$/);
+  }
+});
+test('versioned reference images retain their cache key for GET and HEAD', () => {
+  const object = manifest.objects.find(o => o.path === 'demos/betta-atelier/references/2026-10-22/01-profile.jpg');
+  assert.ok(object);
+  assert.ok(new URL(object.url).searchParams.has('v'));
+  for (const method of ['GET', 'HEAD']) {
+    for (const query of ['', '?download=1&tag=first&tag=second&name=a%20b%2Bc']) {
+      const response = migratedMediaResponse(new Request('https://jez237.com/' + object.path + query, { method }));
+      assert.equal(response.status, 301);
+      assert.equal(response.headers.get('location'), object.url + (query ? '&' + query.slice(1) : ''));
+    }
+  }
+});
+test('retired video aliases and separately hosted masters still redirect', () => {
+  const cases = [
+    ['multimedia/port-richmond-title-loop/preview-b8.mp4', 'multimedia/port-richmond-title-loop/preview-b10.mp4'],
+    ['multimedia/port-richmond-aramingo-walk/port-richmond-aramingo-walk-b13-1080p.mp4', 'multimedia/port-richmond-aramingo-walk/port-richmond-aramingo-walk-b13-1080p.mp4']
+  ];
+  for (const [path, target] of cases) {
+    const response = migratedMediaResponse(new Request('https://jez237.com/' + path + '?download=1'));
+    assert.equal(response.status, 301);
+    assert.equal(response.headers.get('location'), 'https://media.jez237.com/' + target + '?download=1');
   }
 });
 test('unknown, malformed and non-read requests do not redirect', () => {
