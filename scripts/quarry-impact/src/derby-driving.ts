@@ -33,6 +33,15 @@ export const frenzyFactor=(alive:number)=>Number.isFinite(alive)&&alive>=2&&aliv
  * a lead has to be defended. A leader counts once ahead by HUNT.margin points or more, with HUNT.field or more cars running (two
  * cars left are already after each other). */
 export const HUNT={bonus:8,margin:1,field:3} as const;
+/** Wall work (offline charge cars): a target within WALL_WORK.near m of the arena wall, with this car coming at it from the inside
+ * (heading out past WALL_WORK.inside of straight at the wall), so a hit drives it into the wall, weighs WALL_WORK.bonus more as a
+ * target: a real derby habit, and where pins and wall slams come from. */
+export const WALL_WORK={near:8,bonus:6,inside:.3} as const;
+export function wallWork(from:{x:number;z:number},target:{x:number;z:number},arena:{x:number;z:number;radius:number}|null){
+  if(!arena)return 0;const ox=target.x-arena.x,oz=target.z-arena.z,r=Math.hypot(ox,oz),ax=target.x-from.x,az=target.z-from.z,a=Math.hypot(ax,az);
+  if(!(r>1e-6)||!(a>1e-6)||!(arena.radius-r<WALL_WORK.near))return 0;
+  return (ax*ox+az*oz)/(a*r)>WALL_WORK.inside?WALL_WORK.bonus:0;
+}
 export function pointsLeader(points:readonly {id:number;points:number;running:boolean}[]){
   const live=points.filter(p=>p.running&&Number.isFinite(p.points)).sort((a,b)=>b.points-a.points);
   return live.length>=HUNT.field&&live[0].points-live[1].points>=HUNT.margin?live[0].id:-1;
@@ -97,7 +106,7 @@ export function driveDerby(car:DriverCar,cars:DriverCar[],m:DriverMemory,arena:A
    const angle=Math.abs(wrap(Math.atan2(dx,dz)-yaw));
    const flank=Math.abs((dx*other.right.x+dz*other.right.z)/Math.max(1,d));
    let crowded=0;for(const c of cars)if(c.id!==car.id&&c.id!==other.id&&dist(c.current,other.current)<7)crowded++;
-   const score=32-Math.abs(d-19)*.58-angle*9+flank*7+(100-other.health)*.045+(other.id===m.target?5:0)-crowded*3+(other.id===difficulty.leader?HUNT.bonus:0);
+   const score=32-Math.abs(d-19)*.58-angle*9+flank*7+(100-other.health)*.045+(other.id===m.target?5:0)-crowded*3+(other.id===difficulty.leader?HUNT.bonus:0)+(car.charge?wallWork(car.current,other.current,arena):0);
    if(score>best){best=score;target=other;}
   }
   m.target=target?.id??-1;m.commit=2.2+(car.id%4)*.35;
