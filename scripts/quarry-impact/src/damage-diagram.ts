@@ -15,7 +15,9 @@ export type DiagramState={
    * looseness per wheel, a broken diff's axle, a torn-off exhaust and a seized engine. */
   faults?:{hotDiscs?:ArrayLike<number>;steerLink?:ArrayLike<number>;looseWheels?:ArrayLike<number>;diff?:'front'|'rear'|null;exhaustGone?:boolean;seized?:boolean;
     /** Anti-roll bars front/rear (0 = snapped), propshaft state, wheel-bearing wear per wheel, fan belt and battery, short steering lock (signed). */
-    rollBar?:ArrayLike<number>;propshaft?:'bent'|'snapped'|null;bearings?:ArrayLike<number>;belt?:'slipping'|'snapped'|null;battery?:number;steerSkew?:number};
+    rollBar?:ArrayLike<number>;propshaft?:'bent'|'snapped'|null;bearings?:ArrayLike<number>;belt?:'slipping'|'snapped'|null;battery?:number;steerSkew?:number;
+    /** The fuel tank dragging on its neck or torn off, and parted throttle and handbrake cables. */
+    tank?:'down'|'gone'|null;throttleCable?:boolean;handbrakeCable?:boolean};
 };
 export type PartState='ok'|'loose'|'gone';
 const clamp01=(v:number)=>Math.max(0,Math.min(1,Number.isFinite(v)?v:0));
@@ -75,6 +77,12 @@ function faults(state:DiagramState){
     if(f.belt==='snapped'){const b=clamp01(f.battery??1);out+=`<rect class="dd-battery" x="38" y="${state.rearEngine?92:12}" width="5" height="3.4" rx=".5" fill="${b<=0?DIAGRAM_COLORS[3]:b<.35?DIAGRAM_COLORS[2]:DIAGRAM_COLORS[1]}" stroke="#101410" stroke-width=".4"/>`;}}
   // Short lock: a stop mark on the inside of the front wheel on the side that will not turn fully.
   if(Math.abs(f.steerSkew??0)>=.15){const left=(f.steerSkew??0)<0,x=left?12.5:47.5;out+=`<line class="dd-short-lock" x1="${x}" y1="18" x2="${x}" y2="32" stroke="${DIAGRAM_COLORS[3]}" stroke-width="1.3" stroke-linecap="round"/>`;}
+  // The fuel tank under the tank end: an amber dashed box while it drags, a red crossed-out box once it has torn off.
+  if(f.tank){const ty=state.rearEngine?9:96,gone=f.tank==='gone';out+=`<rect class="dd-tank dd-tank-${f.tank}" x="25" y="${ty}" width="10" height="5" rx="1" fill="none" stroke="${gone?DIAGRAM_COLORS[3]:DIAGRAM_COLORS[2]}" stroke-width=".9" stroke-dasharray="${gone?'.8 1.2':'1.6 1'}"/>`;
+    if(gone)out+=`<path class="dd-tank-gone" d="M25 ${ty} L35 ${ty+5} M35 ${ty} L25 ${ty+5}" stroke="${DIAGRAM_COLORS[3]}" stroke-width=".7"/>`;}
+  // A parted throttle cable: broken from the engine towards the cabin; parted handbrake cables: broken towards the rear axle.
+  if(f.throttleCable){const ey=state.rearEngine?90:20,d=state.rearEngine?-1:1;out+=`<path class="dd-throttle-cable" d="M33.5 ${ey+5*d} L33.5 ${ey+9*d} M33.5 ${ey+11*d} L33.5 ${ey+15*d}" stroke="${DIAGRAM_COLORS[3]}" stroke-width="1.1" stroke-linecap="round"/>`;}
+  if(f.handbrakeCable)out+=`<path class="dd-handbrake-cable" d="M26.5 62 L26.5 70 M26.5 73 L26.5 81" stroke="${DIAGRAM_COLORS[3]}" stroke-width="1.1" stroke-linecap="round"/>`;
   if(f.exhaustGone)out+=`<line class="dd-exhaust-gone" x1="${state.rearEngine?36:24}" y1="104" x2="${state.rearEngine?36:24}" y2="109" stroke="${DIAGRAM_COLORS[3]}" stroke-width="1.2" stroke-dasharray="1.2 1"/>`;
   return out;
 }
