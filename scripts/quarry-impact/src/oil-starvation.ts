@@ -9,6 +9,15 @@ export function starvationWear(level:number,throttle:number,dt:number){
   return (OIL.low-l)/OIL.low*OIL.wear*(.4+.6*clamp01(Math.abs(throttle)))*dt;
 }
 export const seizes=(level:number,engineDamage:number)=>clamp01(level)<=OIL.empty&&engineDamage>=OIL.seize;
+/** Thrown rod: short of oil (below OIL.low) with the engine past ROD.engine damage, holding ROD.rpm or more on the throttle
+ * builds stress; at ROD.after seconds a rod goes through the block (the engine is dead, like a seize, but loudly). Lifting
+ * off bleeds the stress away at ROD.ease per second. An engine that seizes at those revs throws a rod instead (rodAtSeize). */
+export const ROD={engine:.85,rpm:4000,throttle:.6,after:1.5,ease:.5,splash:6,kick:5} as const;
+export const rodAtSeize=(rpm:number,throttle:number)=>rpm>=ROD.rpm&&throttle>=ROD.throttle;
+export function rodStress(stress:number,level:number,engineDamage:number,rpm:number,throttle:number,dt:number){
+  const s=Number.isFinite(stress)?Math.max(0,stress):0;if(!(dt>0))return s;
+  return clamp01(level)<OIL.low&&engineDamage>=ROD.engine&&rpm>=ROD.rpm&&throttle>=ROD.throttle?s+dt:Math.max(0,s-dt*ROD.ease);
+}
 /** Bearing knocks per second: with the revs, louder the drier, silent with oil in it. */
 export function knockRate(level:number,rpm:number){const l=clamp01(level);return l>=OIL.low||!(rpm>300)?0:Math.min(OIL.knockRate,rpm/120)*(OIL.low-l)/OIL.low;}
 export const oilWarning=(level:number,seized:boolean)=>seized?'ENGINE SEIZED':clamp01(level)<OIL.low?'OIL PRESSURE LOW':'';
