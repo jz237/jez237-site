@@ -1,5 +1,104 @@
 [
   {
+    "id": "2026-10-23-factual-infographic-factual-infographic-water-in-the-bowl-a",
+    "title": "Factual infographic: Water in the Bowl and the Food",
+    "tests": "Source-backed focused hydration education; no disease profile, daily water prescription or treatment; organically integrated watercolor atlas; no subjective critic.; archive_slot=2026-10-23T20:20; concept=cat-dietary-moisture-drinking-water-intake; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: food-and-hydration",
+    "prompt": "Create a finished, richly artistic feline science infographic titled “WATER IN THE BOWL & THE FOOD”, with subtitle “Two routes into a cat’s daily water intake”. Render the composition directly, not as a photographed poster. Opaque background, auto size, medium quality. A flowing artwork-led atlas in translucent watercolor, exquisitely controlled colored pencil and fine scientific ink on a luminous pale celadon ground. Deep teal typography, amber accents and glints of aquatic blue; generous negative space and asymmetrical scale. No rigid grid, fact cards, ornamental borders or fake interface.\n\nThe dominant hero is a beautifully observed shorthaired cinnamon-and-white adult domestic cat in three-quarter profile, bending gracefully to lap from a clear ceramic bowl in the lower center. Realistic cat anatomy, delicate whiskers, amber eyes, individually modeled fur, reflected light and tiny water ripples. The cat’s curved body and tail carry the eye across the page; it occupies nearly half the canvas. Do not show internal anatomy or any organ pathology. Above and to the left, a large open watercolor study of moist canned cat food with believable tender texture; to the upper right a smaller exquisitely drawn dry-kibble study. These are format examples, not prescribed portions. Food and drinking-water studies flow toward the main cat with two spare blue curved leader paths labeled “Water in food” and “Water from drinking”. Paths are explicitly explanatory graphics, not literal pipes or water pouring onto the animal. Use loose blue pigment washes within magnified food textures to communicate moisture, not literal water compartments.\n\nIntegrate these exact readable facts into open space close to their relevant illustration, using clean typographic hierarchy and delicate leader lines rather than boxes: beside the wet-food study, “Canned food: at least 75% water”; beside kibble, “Dry food: about 6–10% water”. A small explanatory line underneath: “Typical food-format moisture, not feeding proportions.” No equal-size food portions, percentage pie chart, invented nutrient figures or daily drinking targets. Near the water surface: “Fresh, clean water — always available”. Along the upward sweep of the tail, elegantly set two short lines: “Wet-food eaters may drink less.” and “The bowl is only part of the picture.” Below them, smaller: “Food moisture also counts toward water intake.” One modest closing line in open space: “Choose complete, balanced food; individual needs vary.” A quiet footer: “Concerned about dehydration? Contact your veterinarian promptly.” Small source credit: “Sources: Cornell Feline Health Center • University of Illinois Veterinary Medicine”. The Illinois source supports water access and wet food contributing hydration; do not introduce its disease subject. No disease profile, treatment illustration, recipe, health guarantee or implication that dry food is automatically harmful. No human figure needed.\n\nPreserve all essential facts and the beautiful feline focal point. Use realistic natural food colors, legible labels and refined blue water motifs; factual comparison embedded organically within a painterly composition, substantial educational content without crowding. No supplemental trivia or additional claims.",
+    "image": "images/2026-10-23-factual-infographic-factual-infographic-water-in-the-bowl-a.jpg",
+    "thumb": "thumbs/2026-10-23-factual-infographic-factual-infographic-water-in-the-bowl-a.webp",
+    "color": "#c3bda4",
+    "date": "2026-10-23",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "cat-dietary-moisture-drinking-water-intake",
+      "imageSha256": "22ce079d31c333d07a45334e88939a146c29982497076885f21b85a18a6f8830",
+      "imageDHash": "968cc5b3324841e0"
+    },
+    "factualInfographic": {
+      "topic": "How dietary moisture and drinking both contribute to a cat’s water intake",
+      "description": "Dietary moisture versus drinking water, with typical food-format moisture and fresh-water access; no intake prescription.",
+      "sourceNote": "Read Cornell Hydration and Feeding Your Cat plus independent University of Illinois veterinary guidance. Sources: https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/hydration ; https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feeding-your-cat ; https://vetmed.illinois.edu/pet-health-columns/blocked-cats-an-emergency-for-male-cats/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-24T00:21:19.088468+00:00",
+        "sources": [
+          {
+            "id": "C1",
+            "publisher": "Cornell University College of Veterinary Medicine",
+            "title": "Hydration",
+            "sourceType": "university",
+            "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/hydration"
+          },
+          {
+            "id": "C2",
+            "publisher": "Cornell University College of Veterinary Medicine",
+            "title": "Feeding Your Cat",
+            "sourceType": "university",
+            "url": "https://www.vet.cornell.edu/departments-centers-and-institutes/cornell-feline-health-center/health-information/feline-health-topics/feeding-your-cat"
+          },
+          {
+            "id": "I1",
+            "publisher": "University of Illinois College of Veterinary Medicine",
+            "title": "Blocked Cats: An Emergency for Male Cats",
+            "sourceType": "university",
+            "url": "https://vetmed.illinois.edu/pet-health-columns/blocked-cats-an-emergency-for-male-cats/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Cats take in water both by drinking and through moisture in their food.",
+            "sourceIds": [
+              "C1"
+            ]
+          },
+          {
+            "claim": "Wet food can contain up to 80% water; cats eating wet food may drink less, while dry-fed cats generally obtain more water by drinking.",
+            "sourceIds": [
+              "C1"
+            ]
+          },
+          {
+            "claim": "Dry cat food contains 6–10% water; canned food contains at least 75% water. These are typical food-format values, not feeding ratios.",
+            "sourceIds": [
+              "C2"
+            ]
+          },
+          {
+            "claim": "Cats should always have access to clean fresh water, even when eating wet food.",
+            "sourceIds": [
+              "C1",
+              "C2",
+              "I1"
+            ]
+          },
+          {
+            "claim": "Wet food can help increase water intake; a diet should still be complete and balanced.",
+            "sourceIds": [
+              "C1",
+              "C2",
+              "I1"
+            ]
+          },
+          {
+            "claim": "The bowl alone does not measure total water intake because food contributes water.",
+            "sourceIds": [
+              "C1"
+            ]
+          },
+          {
+            "claim": "If dehydration is suspected, contact a veterinarian promptly; this is general education rather than an individualized intake prescription.",
+            "sourceIds": [
+              "C1"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-10-23-factual-infographic-factual-infographic-the-tapetum-a-secon",
     "title": "Factual infographic: The Tapetum — A Second Pass for Light",
     "tests": "Source-backed normal feline optics; explanatory ray colors and schematic layers; no sensitivity multiplier or disease profile; unboxed artistic nocturne; no subjective critic.; archive_slot=2026-10-23T08:20; concept=feline-tapetum-retina-reflected-light; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: cat-infographic; cat_category: extraordinary-senses",
