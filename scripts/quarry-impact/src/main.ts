@@ -27,7 +27,7 @@ import {showVenueBrowser,selectVenue,selectDemoVenue} from './venue-browser';
 import {readCameraSettings,playerChaseComposition,mountCameraSettings} from './camera-settings';
 import {ScreenCraze,trackCraze,hull,type CrazeState} from './screen-craze';
 import {speedFov,smoothAccel,roadBuzz} from './speed-feel';
-import {FINAL_TWO,finalTwo,finalTwoBanner,revenge,takedownChain,comboLabel,revengeReady,lastGasp,strippedLabel} from './derby-moments';
+import {FINAL_TWO,finalTwo,finalTwoBanner,revenge,takedownChain,comboLabel,revengeReady,lastGasp,strippedLabel,FINAL_FOUR,finalFour,finalFourBanner} from './derby-moments';
 import {wreckCause} from './wreck-cause';
 import {frenzyFactor} from './derby-driving';
 import {syncInterval,syncDue} from './vehicle-draw-batch';
@@ -1114,6 +1114,8 @@ function updateHud() {
   if(mode==='derby'&&!online?.active&&state==='playing'){const alive=cars.filter(c=>c.health>0);
     if(finalTwo(derbyAliveBefore,alive.length)){toast(finalTwoBanner({id:alive[0].id,name:DEFINITIONS[alive[0].kind].name},{id:alive[1].id,name:DEFINITIONS[alive[1].kind].name}),FINAL_TWO.toast,2);
       sound.crowd(1);crowdFlashes(SMASH_FLASHES);if(clock>=slowMoUntil){slowMoUntil=clock+FINAL_TWO.slowmo;slowMoScale=FINAL_TWO.scale;}}
+    // The final four: from here the drivers go at it harder (derby-driving FRENZY).
+    else if(finalFour(derbyAliveBefore,alive.length)){toast(finalFourBanner(!demo&&(cars[0]?.health??0)>0),FINAL_FOUR.toast,1);sound.crowd(.8);}
     derbyAliveBefore=alive.length;}
   const spectator=scoreSpectating(),toolbar=document.getElementById('spectator-controls');
   if(toolbar){toolbar.hidden=!spectator;toolbar.style.display=spectator?'':'none';}

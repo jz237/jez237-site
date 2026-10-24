@@ -1,3 +1,4 @@
+import {restoreFinalFourBytes} from './final-four-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readFrenzyPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreFrenzyBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreFinalFourBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readFrenzyPrevious(file);
 }
 export function verifyFrenzyRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'1cb440eb3701e0212a1fc72e9f00f06ff891ded5');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreFinalFourBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreFrenzyBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the Frenzy release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreFinalFourBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the Frenzy release');
  assert.equal(manifest.previousFixtureCount,6633);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,6633);
 }

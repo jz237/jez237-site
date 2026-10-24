@@ -32,3 +32,7 @@ export const lastGasp=(playerHealth:number)=>Number.isFinite(playerHealth)&&play
  * tailgate, doors, front wings), the crowd hears about it; again at STRIPPED.shell. */
 export const STRIPPED={first:5,shell:8} as const;
 export const strippedLabel=(before:number,now:number)=>!Number.isFinite(before)||!Number.isFinite(now)?'':now>=STRIPPED.shell&&before<STRIPPED.shell?`BARE SHELL · ${now} PARTS GONE`:now>=STRIPPED.first&&before<STRIPPED.first?`STRIPPED · ${now} PARTS GONE`:'';
+/** Final four (offline): the step a field of five or more comes down to four, when the late-derby frenzy starts. */
+export const FINAL_FOUR={toast:2.2} as const;
+export const finalFour=(before:number,now:number)=>Number.isFinite(before)&&before>=5&&now===4;
+export const finalFourBanner=(playerIn:boolean)=>playerIn?`FINAL FOUR · YOU'RE STILL IN IT`:'FINAL FOUR';
