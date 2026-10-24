@@ -15,3 +15,4 @@ test('a door torn off by a passing car is credited to that driver as DOOR OFF',a
  assert.ok(DESTRUCTION_POINTS.door>0&&DESTRUCTION_POINTS.door<=DESTRUCTION_POINTS.pit);
 });
 test('the feed calls a car STRIPPED',()=>{const feed=new DerbyEventFeed();feed.note(5,'TERN 1400 #6','stripped',7);assert.ok(derbyFeedMarkup(feed.visible(7),0).includes('STRIPPED'));});
+test('a burn-out is credited as BURNT OUT, worth more than a roll',async()=>{const {DESTRUCTION_POINTS}=await import('../src/derby-moments');const feed=new DerbyEventFeed();feed.note(1,'TERN 1400 #2','burnt',9);assert.ok(derbyFeedMarkup(feed.visible(9),0).includes('BURNT OUT'));assert.ok(DESTRUCTION_POINTS.burnt>DESTRUCTION_POINTS.rolled&&DESTRUCTION_POINTS.burnt<DESTRUCTION_POINTS.engine);});

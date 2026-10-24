@@ -1,6 +1,7 @@
+import {restoreBurntCreditBytes} from './burnt-credit-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readFeedStrippedPrevious,restoreFeedStrippedBytes,verifyFeedStrippedRevision} from './feed-stripped-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreBurntCreditBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('FeedStripped preserves every prior fixture, vehicle asset, venue art and history input',verifyFeedStrippedRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/feed-stripped/revision.json').toString());
