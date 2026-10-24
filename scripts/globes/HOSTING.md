@@ -3,7 +3,7 @@
 Original: https://github.com/willwaltz/globes
 Author: Will Waltz · MIT License
 Upstream commit: 93c3b814bbca53463e8207b8e3c95fca8940dff5
-Imported: 2026-10-22 · Hosting build: 1.13.0
+Imported: 2026-10-22 · Hosting build: 1.14.0
 Public routes: https://jez237.com/demos/globes/ (the five original globes) and
 https://jez237.com/demos/betta-bowl/ (the **Living Silk** betta bowl, on its own)
 
@@ -323,6 +323,43 @@ Version 1.13 (Atelier unchanged) makes feeding the only reason the lid comes off
   headless sweep of 80 seeds and pellet spots reached every pellet (median 6.0 s from anywhere in
   the bowl, slowest 9.3 s) with no breach. In the browser (manual stepping) the whole cycle ran:
   lid off, four pellets in, all eaten, lid back on, bowl free.
+
+Version 1.14 (Atelier unchanged) furnishes the bowl (`src/render/bowlScape.ts`, compiled into the
+bowl's shader only; the other globes' shaders are unchanged):
+- **Gravel, as interactive as the sand.** The bed is river gravel (~5 mm pebbles with smaller ones
+  between them, a shallower bed than the sand's: `GRAVEL.level`). It flows exactly as the sand
+  does (the same solver and settings), and the pebbles go with it: `FluidSim.gravel` keeps, for
+  each column of the bed, how far its surface's pebbles have been carried from where they lay at
+  rest (`gravel_gather.wgsl` adds up the flow each sand substep, `gravel_drift.wgsl` carries the
+  offsets along it, semi-Lagrangian; `gravel_carry.wgsl` turns them with the glass). The sand
+  texture publishes them (`sand_extend.wgsl`, its b and a), and the shader draws each pebble where
+  the flow has taken it: tip the bowl and the pebbles visibly slide downhill and pile up. Pebbles are
+  2D cells across the bed with a rounded top, a lean of their own and dark crevices between them,
+  shaded by the plant's and the leaf's shadows and the caustics; those against the glass are drawn
+  there too.
+- **Driftwood and anubias.** A bark-textured branch with a side branch, an anubias rhizome along it
+  and eleven broad leaves on stalks (round cones, capsules and curved blades, traced exactly). They
+  cast shadows on the gravel and darken it where the wood touches it.
+- **An Indian almond leaf** floats on the water (`src/interaction/BowlLife.ts`): columns of density
+  probes under it find the film's height and slope, so it bobs and tilts with the surface; it is
+  carried by the water at the film and slowly drawn to the glass by the meniscus, where it turns to
+  lie along it, as a floating leaf does.
+- **The bubble nest** on the glass at the waterline (front right, turning with the bowl): up to
+  170 small bubbles in two layers, thin-film tinted with a glint. A gentle tilt leaves it be; a hard
+  shake breaks it up (bubbles lost for each rad/s the bowl turns faster than 1.2). The betta rebuilds
+  it: each trip to the film for air adds bubbles, and it goes up sooner while the nest is broken
+  (`bettaSwim.mjs gulpUrge`).
+- **The fish swims round the wood** (`bettaSwim.mjs` obstacles): it does not choose a place to go,
+  rest or display that the wood blocks, steers off it when near, and its body is held out of the
+  wood's core.
+- Tests: `node --test betta-swim.test.mjs` adds an obstacle test (25 in all). In the browser
+  (manual stepping): after a 57 degree tilt the pebbles have been carried up to 0.6-0.8 of a world
+  unit where the bed slid, the leaf drifts to the glass, the nest keeps 142 of its 145 bubbles
+  through a gentle tilt and 86 through a hard 3 s shake. Limits: the leaf and nest are drawn, not
+  simulated as particles (they follow the probed surface); the wood and plant do not move.
+- Measured with GPU timestamps on the RTX 5090 host: the first gravel (3D cells and noise) cost
+  ~8 ms a frame; as 2D cells with no noise its cost is lost in the frame-to-frame variation of the
+  shared GPU. The other globes' pages are unchanged.
 
 ## Browser compatibility
 

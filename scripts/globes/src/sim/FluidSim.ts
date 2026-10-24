@@ -21,6 +21,10 @@ import { CLOWN_FIELD, CLOWN_FISH, clownWGSL } from '../fish/clownWGSL';
 import type { KoiSense } from '../fish/Koi';
 import sandRotateWGSL from './shaders/sand_rotate.wgsl?raw';
 import sandScaleWGSL from './shaders/sand_scale.wgsl?raw';
+import gravelGatherWGSL from './shaders/gravel_gather.wgsl?raw';
+import gravelDriftWGSL from './shaders/gravel_drift.wgsl?raw';
+import gravelCarryWGSL from './shaders/gravel_carry.wgsl?raw';
+import gravelCopyWGSL from './shaders/gravel_copy.wgsl?raw';
 import rockBedWGSL from './shaders/rock_bed.wgsl?raw';
 import solidFacesWGSL from './shaders/init.wgsl?raw';
 import initCellsWGSL from './shaders/init_cells.wgsl?raw';
@@ -309,6 +313,9 @@ export class FluidSim {
   /** The betta bowl's open mouth (render/bowl.ts): the water stays under this height along the
    *  globe's axis (g2p.wgsl), as under its lid. Null for a sealed globe. */
   mouth: number | null = null;
+  /** The bed is the betta bowl's gravel: it flows as the sand does, and the pebbles' pattern is
+   *  carried along with it (gravel_*.wgsl; published in the sand texture's b and a). */
+  gravel = false;
   /** The water's colour: its absorption of red, green and blue, each against the usual water's
    *  (catalog.ts waterColour). */
   waterColour: readonly [number, number, number] = [1, 1, 1];
@@ -545,6 +552,8 @@ export class FluidSim {
     this.drift = 0;
     q.writeBuffer(b.sandT, 0, plan.sand);
     q.writeBuffer(b.motes, 0, plan.motes);
+    // (New water, a fresh bed: its pebbles where they lie at rest.)
+    q.writeBuffer(b.gravelO, 0, new Float32Array(this.sandN * this.sandN * 2));
     // (The kernels below see the new count and the rock; the next step writes the rest.)
     this.pu[3] = this.particleCount;
     this.pf[76] = this.rock ? 1 : 0;
@@ -655,6 +664,7 @@ export class FluidSim {
         // container the water sees (glass + sand bed).
         const turned = Math.abs(this.back[0] - 1) + Math.abs(this.back[4] - 1) + Math.abs(this.back[8] - 1) > 1e-9;
         enc.clearBuffer(b.sandSum);
+        if (this.gravel) enc.clearBuffer(b.gravelD);
         // (The rock, where the globe's turn has carried it; the sand on it goes round with it.)
         enc.copyBufferToBuffer(b.rockTop, 0, b.rockPrev, 0, b.rockTop.size);
         const geo = this.beginPass(enc, 'sand + container');
@@ -662,10 +672,19 @@ export class FluidSim {
         if (turned) {
           this.run(geo, 'sandRotate', this.sandGroups());
           this.run(geo, 'sandScale', this.sandGroups());
+          if (this.gravel) {
+            this.run(geo, 'gravelCarry', this.sandGroups());
+            this.run(geo, 'gravelCopy', this.sandGroups());
+          }
         }
         for (let k = 0; k < cfg.sandSubsteps; k++) {
           this.run(geo, 'sandFlux', this.sandGroups());
+          if (this.gravel) this.run(geo, 'gravelGather', this.sandGroups());
           this.run(geo, 'sandApply', this.sandGroups());
+        }
+        if (this.gravel) {
+          this.run(geo, 'gravelDrift', this.sandGroups());
+          this.run(geo, 'gravelCopy', this.sandGroups());
         }
         this.run(geo, 'sandSurface', this.sandGroups());
         this.run(geo, 'sandExtend', this.sandGroups());
@@ -1077,6 +1096,9 @@ export class FluidSim {
       rockTop: make('rock top', this.sandN * this.sandN * 4),
       rockPrev: make('rock top before', this.sandN * this.sandN * 4),
       sandRest: make('sand at rest', this.sandN * this.sandN * 4),
+      gravelO: make('gravel offsets', this.sandN * this.sandN * 8),
+      gravelO2: make('gravel offsets (next)', this.sandN * this.sandN * 8),
+      gravelD: make('gravel steps', this.sandN * this.sandN * 8),
       causticAcc: make('caustic photons', this.causticN * this.causticN * 12),
       causticPrev: make('caustic history', this.causticN * this.causticN * 16),
       probePos: make('probes', PROBES * 16, STORAGE | GPUBufferUsage.COPY_DST),
@@ -1128,7 +1150,11 @@ export class FluidSim {
       ['sandFlux', sandFluxWGSL, 'sandFlux', [[b.sandT, b.sandOut, b.rockTop, b.sandRest]]],
       ['sandApply', sandApplyWGSL, 'sandApply', [[b.sandT, b.sandOut]]],
       ['sandSurface', sandSurfaceWGSL, 'sandSurface', [[b.sandT, b.sandS, b.rockTop]]],
-      ['sandExtend', sandExtendWGSL, 'sandExtend', [[b.sandS, sandView, b.rockTop, b.sandT]]],
+      ['sandExtend', sandExtendWGSL, 'sandExtend', [[b.sandS, sandView, b.rockTop, b.sandT, b.gravelO]]],
+      ['gravelGather', gravelGatherWGSL, 'gravelGather', [[b.sandT, b.sandOut, b.gravelD]]],
+      ['gravelDrift', gravelDriftWGSL, 'gravelDrift', [[b.gravelD, b.gravelO, b.gravelO2]]],
+      ['gravelCarry', gravelCarryWGSL, 'gravelCarry', [[b.sandT, b.rockTop, b.gravelO, b.gravelO2]]],
+      ['gravelCopy', gravelCopyWGSL, 'gravelCopy', [[b.gravelO2, b.gravelO]]],
       ['solidFaces', solidFacesWGSL, 'solidFaces', [[b.faceW, ...sand]]],
       ['initCells', initCellsWGSL, 'initCells', [[b.faceW, b.cellFaceW, ...sand]]],
       ['seedWater', seedWGSL, 'seedWater', [[b.pos, b.seedColumns]], { SUB: this.seedSub, JITTER: this.cfg.seedJitter }],

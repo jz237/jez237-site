@@ -13,12 +13,14 @@ import { CLOWN_PROBES, Clownfishes } from './fish/Clownfish';
 import { FishFood, type Feeder } from './fish/FishFood';
 import { classifyFailure, createDevice } from './gpu/device';
 import { BowlLid } from './interaction/BowlLid';
+import { BowlLife, LIFE_PROBE_AT } from './interaction/BowlLife';
 import { Feeding } from './interaction/Feeding';
 import { GlobeController } from './interaction/GlobeController';
 import { KelpForest } from './kelp/KelpForest';
 import { REEF_PROBES, Reef } from './reef/Reef';
 import { Specks } from './ocean/Specks';
 import { BOWL, bowlShape } from './render/bowl';
+import { GRAVEL, PLANT_OBSTACLES } from './render/bowlScape';
 import { GlobeView, type GlobeVariant } from './render/GlobeView';
 import { OceanBackdrop } from './render/OceanBackdrop';
 import { sunInWater } from './render/shaders';
@@ -116,7 +118,9 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
 
   // The articulated specimen needs cadence more than sub-pixel fluid detail.
   // Preserve the original five scenes' defaults; explicit URL overrides still win.
-  const cfg = applyUrlOverrides(LITE ? { ...simConfig, gridRes: 48 } : o.start.betta ? { ...simConfig, gridRes: 64 } : simConfig);
+  // (The betta's bowl has a shallower bed, of gravel: bowlScape.ts GRAVEL.)
+  const base = o.start.betta ? { ...simConfig, sandLevel: GRAVEL.level } : simConfig;
+  const cfg = applyUrlOverrides(LITE ? { ...base, gridRes: 48 } : o.start.betta ? { ...base, gridRes: 64 } : base);
   const R = o.globe.innerRadius;
   const fill = (g: GlobeEntry) => fillFor(cfg, R, g.water);
   const sim = new FluidSim(device, { ...cfg, fillFraction: fill(o.start) }, R, o.globe.outerRadius, o.light);
@@ -137,6 +141,8 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   const bowl = GLOBES.some((g) => g.betta) ? bowlShape(o.globe) : null;
   const lid = bowl ? new BowlLid(bowl) : null;
   const feeding = lid ? new Feeding(lid, controller) : null;
+  // What floats in it: an almond leaf, and the betta's bubble nest.
+  const life = bowl ? new BowlLife(o.globe.innerRadius) : null;
   const bettaControls = document.createElement('div');
   bettaControls.className = 'betta-controls';
   bettaControls.innerHTML = '<span>Living Silk</span><button type="button" data-action="feed">Feed</button><button type="button" data-action="flare" aria-pressed="false">Flare fins</button>';
@@ -185,6 +191,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   sim.clownPose = clowns.texture;
   sim.rock = !!o.start.reef;
   sim.glass = o.globe;
+  sim.gravel = !!o.start.betta;
   // Fish food (the koi's and the reef's globes): flakes dropped in with a right-click.
   const food = new FishFood();
   const idle = new IdleWater();
@@ -290,10 +297,18 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     const eaters = feeders();
     food.aim(eaters);
     koi.update(dt, sim.koiSense, koiEnv());
+    // (The bowl's driftwood and plant, where the bowl's turn has carried them.)
+    if (bowl) betta.obstacles = PLANT_OBSTACLES.map((o) => ({ a: new THREE.Vector3(...o.a).applyMatrix3(controller.rotation).toArray(), b: new THREE.Vector3(...o.b).applyMatrix3(controller.rotation).toArray(), r: o.r, solid: o.solid }));
     betta.update(dt, sim.koiSense, koiEnv());
     sim.setKoiProbes(betta.active ? betta.probePoints() : koi.probePoints());
     if (betta.active) {
       sim.setProbes(BETTA_SURFACE_AT, betta.surfaceProbes());
+      if (life) {
+        life.update(dt, sim.koiSense, sim.restLevel, SURFACE_ISO, controller.rotation.elements, Math.hypot(...controller.omega), betta.swim.mode);
+        betta.swim.gulpUrge = life.nestNeed;
+        sim.setProbes(LIFE_PROBE_AT, life.probePoints());
+        globe.setBowlLife(life.matrix);
+      }
       // Its lips dimple the film as it gulps; diving, it lets bubbles go.
       const d = betta.takeDisturbance();
       if (d.push > 0) sim.push(d.pushAt.toArray(), d.push, RIPPLE_RADIUS);
@@ -371,7 +386,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     return true;
   };
 
-  return { device, renderer, camera, scene, cfg, sim, controller, koi, betta, lid, kelp, reef, clowns, food, idle, globe, globeRadius: o.globe.outerRadius, ocean, specks, setScene, advance, spawnFood, clickLid, setSharpness };
+  return { device, renderer, camera, scene, cfg, sim, controller, koi, betta, lid, life, kelp, reef, clowns, food, idle, globe, globeRadius: o.globe.outerRadius, ocean, specks, setScene, advance, spawnFood, clickLid, setSharpness };
 }
 
 type World = Awaited<ReturnType<typeof createWorld>>;

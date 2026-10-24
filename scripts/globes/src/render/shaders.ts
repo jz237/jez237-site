@@ -8,6 +8,7 @@ import { clownShadeWGSL, clownWGSL } from '../fish/clownWGSL';
 import { foodWGSL } from '../fish/FishFood';
 import { kelpRenderWGSL } from '../kelp/kelpWGSL';
 import { BOWL_PARAMS, bowlWGSL, type BowlShape } from './bowl';
+import { bowlScapeWGSL } from './bowlScape';
 import { MENISCUS_WGSL } from './meniscus';
 import { reefRenderWGSL } from '../reef/reefWGSL';
 import { rtTraceWGSL } from '../rt/rtWGSL';
@@ -859,7 +860,7 @@ function bowlEntryWGSL(): string {
       // Sand pressed against the glass: we see the side of the sand layer.
       let nI = normalize(p);
       if (globes_sandAgainstGlass(sandTex, sandSamp, p)) {
-        col += thr * globes_sandAtGlass(p, rot);
+        col += thr * scape_gravelAtGlass(p, rot, sandTex, sandSamp);
         return col;
       }
 
@@ -1129,7 +1130,7 @@ fn globes_leaveCavity(p: vec3f, dir: vec3f, nMed: f32, bgTex: texture_2d<f32>, b
   let T = exp(-GLOBES_GLASS_ABS * tOut);
   return (1.0 - F) * T * globes_exitGlass(p + gdir * tOut, gdir, bgTex, bgSamp);
 }
-${bowl ? bowlWGSL(bowl) : ''}
+${bowl ? bowlWGSL(bowl) + bowlScapeWGSL(globe.innerRadius) : ''}
 // ---- sand ---------------------------------------------------------------------------
 
 fn globes_hash3(p: vec3f) -> f32 {
@@ -2042,8 +2043,10 @@ ${bowl ? bowlEntryWGSL() : GLASS_ENTRY}
       if (foodHit.near) { globesEdge |= 16u; }
     }
     var bh = BettaHit(1e9, 0xffffffffu, vec2f(0.0));
-    if (GLOBES_KOI) { bh = betta_trace(bettaTex, p, dir, tWall); }
-    let tStop = min(bh.t, min(min(min(tWall, kh.body), kelpHit.t), min(min(reefHit.t, fishT), foodHit.t)));
+    if (GLOBES_KOI) { bh = betta_trace(bettaTex, p, dir, tWall); }${bowl ? `
+    // The bowl's driftwood, its plant and the leaf floating on the water.
+    let sc = scape_trace(p, dir, tWall);` : ''}
+    let tStop = min(${bowl ? 'min(bh.t, sc.t)' : 'bh.t'}, min(min(min(tWall, kh.body), kelpHit.t), min(min(reefHit.t, fishT), foodHit.t)));
 
     // The water march: air/water interfaces and the sand bed, up to the koi, the kelp or the glass.
     var t = 0.5 * stepLen;
@@ -2118,7 +2121,9 @@ ${rt ? RT_MARCH : `    // The next sample is read with this one, where it will b
       }
       t = 0.5 * (a + b);
     } else if (GLOBES_KOI && bh.triangle != 0xffffffffu && bh.t <= tStop) {
-      event = 8; t = bh.t;
+      event = 8; t = bh.t;${bowl ? `
+    } else if (sc.kind != 0u && sc.t <= tStop) {
+      event = 9; t = sc.t;` : ''}
     } else if (GLOBES_FOOD && foodHit.k >= 0) {
       event = 7;
       t = foodHit.t;
@@ -2183,7 +2188,11 @@ ${rt ? RT_MARCH : `    // The next sample is read with this one, where it will b
       // (The spray in the air, and the bubbles' domes over the water.)
       let sp = globes_splashAlong(splashTex, p, dir, 0.0, t, false, pathLen, lit, lightTex, lightSamp, bgTex, bgSamp);
       col += thr * sp.rgb;
-      thr *= sp.a;
+      thr *= sp.a;${bowl ? `
+      // (The betta's bubble nest on the film.)
+      let nest = scape_nestAlong(p, dir, t, bgTex, bgSamp);
+      col += thr * nest.rgb;
+      thr *= nest.a;` : ''}
     }
     pathLen += t;
 
@@ -2243,7 +2252,7 @@ ${rt ? RT_MARCH : `    // The next sample is read with this one, where it will b
       // The betta's globe: the bed shares the film's faint dapple (both passes, or the fish's
       // pixels would stand out against the rest).
       if (inWater && betta_tex(bettaTex, 0u).w > 0.5) { bettaShadow *= betta_dapple(qs + vec3f(0.0, 0.02, 0.0), lit, lightTex, lightSamp, koiTime); }
-      col += thr * globes_sandShade(qs, inWater, rot, sandTex, sandSamp, causticTex, causticSamp, bettaShadow);
+      col += thr * ${bowl ? 'scape_gravelShade(qs, inWater, rot, sandTex, sandSamp, causticTex, causticSamp, bettaShadow, lit.z * pathLen, dir)' : 'globes_sandShade(qs, inWater, rot, sandTex, sandSamp, causticTex, causticSamp, bettaShadow)'};
       return col;
     }
     if (GLOBES_KELP && event == 4) {
@@ -2254,7 +2263,11 @@ ${rt ? RT_MARCH : `    // The next sample is read with this one, where it will b
       col += thr * kelp_shade(kelpPrimTex, kelpHit, p, dir, inWater, lit, lightTex, lightSamp, lit.z * pathLen); // (pathLen now reaches the hit)
       return col;
     }
-    if (GLOBES_KOI && event == 8) {
+${bowl ? `    if (event == 9) {
+      col += thr * scape_shade(sc, p + dir * t, dir, inWater, lit, lightTex, lightSamp, koiTime, bgTex, bgSamp, lit.z * pathLen);
+      return col;
+    }
+` : ''}    if (GLOBES_KOI && event == 8) {
       let sh = betta_shade(bettaTex, bettaAtlas, bettaSamp, bh, dir, p + dir * t, inWater, lit, lightTex, lightSamp, lit.z * pathLen, koiTime); // (pathLen now reaches the hit)
       col += thr * sh.rgb * sh.a;
       if (sh.a > 0.99) { return col; }
@@ -2369,6 +2382,8 @@ fn globes_shade(camPos: vec3f, fragPos: vec3f, fragCenter: vec3f, center: vec3f,
   var col = vec3f(0.0);
   var cover = 0.0;${bowl ? `
   bowlRot = rot;
+  scapeRot = rot;
+  scapeLife = bowlLife;
   bowlM = bowlLid;
   bowlLidOn = bowlState.x > 0.5;
   let traced = globes_bowlTrace(ro, rd, ${traceArgs});

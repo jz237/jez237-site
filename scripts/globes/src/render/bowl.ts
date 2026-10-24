@@ -69,7 +69,7 @@ export function bowlShape(globe: GlobeConfig): BowlShape {
 
 /** The bowl's uniforms, as globes_shade takes them: the lid's pose (the globe's translating frame
  *  to the lid's: its underside's middle at the origin, its axis y) and x: the lid is there. */
-export const BOWL_PARAMS = ', bowlLid: mat4x4f, bowlState: vec4f';
+export const BOWL_PARAMS = ', bowlLid: mat4x4f, bowlState: vec4f, bowlLife: mat4x4f';
 
 const f = (x: number) => x.toFixed(6);
 

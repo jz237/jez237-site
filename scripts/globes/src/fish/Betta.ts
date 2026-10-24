@@ -46,6 +46,9 @@ export class Betta implements Feeder {
   food: FoodAim | null = null;
   gapeWant = 0;
   readonly reach = 0.055;
+  /** What else is in the water (the bowl's driftwood and plant: sim frame), set by the host. Its
+   *  route keeps round them (bettaSwim.mjs), and its body out of their solid parts. */
+  obstacles: { a: number[]; b: number[]; r: number; solid: number }[] = [];
 
   constructor() {
     this.rig.add(this.fish);
@@ -111,6 +114,7 @@ export class Betta implements Feeder {
     const target = new THREE.Vector3().fromArray(this.waterState.flow);
     this.flow.lerp(target, 1 - Math.exp(-5 * dt));
     this.swim.food = this.food ? this.food.pos : null;
+    this.swim.obstacles = this.obstacles;
     this.swim.gape = this.gapeWant;
     // The tail's own working (read back from last frame's gait) is what lets the body gain speed.
     this.swim.advance(dt, this.flow.toArray(), env, this.waterState.submerged > 0.99, this.waterState, this.fish.userData.stroke ?? null);
@@ -129,6 +133,14 @@ export class Betta implements Feeder {
         bottom = Math.min(bottom, y);
         const r = Math.hypot(x, y, z), excess = r - env.radius + 0.012;
         if (excess > worst) { worst = excess; dx = -x / r * excess; dy = -y / r * excess; dz = -z / r * excess; }
+        for (const o of this.obstacles) {
+          if (o.solid <= 0) continue;
+          const ab = [o.b[0] - o.a[0], o.b[1] - o.a[1], o.b[2] - o.a[2]];
+          const t = Math.max(0, Math.min(1, ((x - o.a[0]) * ab[0] + (y - o.a[1]) * ab[1] + (z - o.a[2]) * ab[2]) / (ab[0] ** 2 + ab[1] ** 2 + ab[2] ** 2)));
+          const ox = x - o.a[0] - ab[0] * t, oy = y - o.a[1] - ab[1] * t, oz = z - o.a[2] - ab[2] * t, l = Math.hypot(ox, oy, oz);
+          const into = o.solid - l;
+          if (into > worst && l > 1e-9) { worst = into; dx = ox / l * into; dy = oy / l * into; dz = oz / l * into; }
+        }
       }
       dy += Math.max(0, this.waterState.sand + 0.012 - bottom - dy);
       if (Math.hypot(dx, dy, dz) < 1e-6) break;

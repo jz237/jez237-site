@@ -4,6 +4,12 @@ const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const damp = (x, y, dt, rate) => x + (y - x) * (1 - Math.exp(-dt * rate));
 const wrap = x => Math.atan2(Math.sin(x), Math.cos(x));
 const smooth = (a, b, x) => { const u = clamp((x - a) / (b - a), 0, 1); return u * u * (3 - 2 * u); };
+/** The point of segment a-b nearest p. */
+const nearestOn = (p, a, b) => {
+  const ab = [b[0] - a[0], b[1] - a[1], b[2] - a[2]];
+  const t = clamp(((p[0] - a[0]) * ab[0] + (p[1] - a[1]) * ab[1] + (p[2] - a[2]) * ab[2]) / Math.max(ab[0] ** 2 + ab[1] ** 2 + ab[2] ** 2, 1e-12), 0, 1);
+  return [a[0] + ab[0] * t, a[1] + ab[1] * t, a[2] + ab[2] * t];
+};
 export const BETTA_SCALE = 0.105;
 
 // Labyrinth fish gulp air at the free surface. The mouth sits MOUTH_AHEAD in front of
@@ -99,6 +105,33 @@ export class BettaSwim {
     this.gape = 0;
     this.feedHold = 0;
     this.feedRetry = 0;
+    // What else is in the water (set by the host: the betta bowl's driftwood and plant), to keep
+    // clear of: capsules { a, b, r }, sim frame.
+    this.obstacles = [];
+    // How much it has to do at the film (set by the host: the betta bowl's nest wanting rebuilding,
+    // 0..1): it goes up for air sooner after each trip.
+    this.gulpUrge = 0;
+  }
+
+  /** How far p is outside the nearest obstacle (Infinity with none), and the way out from it. */
+  obstacleGap(p) {
+    let gap = Infinity, away = [0, 0, 0];
+    for (const o of this.obstacles) {
+      const q = nearestOn(p, o.a, o.b);
+      const d = [p[0] - q[0], p[1] - q[1], p[2] - q[2]], l = Math.hypot(...d);
+      if (l - o.r < gap) { gap = l - o.r; away = l > 1e-9 ? d.map(v => v / l) : [0, 1, 0]; }
+    }
+    return { gap, away };
+  }
+
+  /** The straight way from here to p keeps `margin` clear of every obstacle. */
+  clearWay(p, margin) {
+    if (!this.obstacles.length) return true;
+    for (let k = 1; k <= 6; k++) {
+      const t = k / 6;
+      if (this.obstacleGap(this.position.map((v, i) => v + (p[i] - v) * t)).gap < margin) return false;
+    }
+    return true;
   }
 
   /** How sharply the water just changed, against what it has been doing for the last second. */
@@ -163,6 +196,7 @@ export class BettaSwim {
     if (horizontal < 0.5 * reach || reach - horizontal > 0.22) return false;
     const nx = x / horizontal, nz = z / horizontal;
     if (nx * -Math.cos(this.heading) + nz * Math.sin(this.heading) < -0.5) return false;
+    if (!this.clearWay([nx * reach, y, nz * reach], 0.05)) return false;
     if (this.behaviorRandom() > 0.6) return false;
     this.mode = 'mirror'; this.timer = 99; this.sharpTurn = false;
     this.behaviorClock = this.holdClock = 0; this.mirrorArrived = false;
@@ -192,6 +226,7 @@ export class BettaSwim {
     if (!ok || this.time < this.restReady) return false;
     const y = water.sand + REST_HEIGHT;
     if (Math.hypot(this.position[0], this.position[2], y) > b.radius - 0.05 || this.behaviorRandom() > 0.5) return false;
+    if (this.obstacleGap([this.position[0], y, this.position[2]]).gap < 0.1) return false;
     this.mode = 'rest'; this.timer = 99; this.sharpTurn = false;
     this.behaviorClock = this.holdClock = 0; this.restSettled = false;
     this.restY = y; this.restHold = 7 + this.behaviorRandom() * 7;
@@ -277,6 +312,7 @@ export class BettaSwim {
       // A goal almost overhead or underfoot cannot be reached by turning; it only makes the fish circle it.
       const leg = Math.hypot(delta[0], delta[2]);
       if (leg < MIN_LEG || Math.abs(delta[1]) > MAX_SLOPE * leg + 0.05) continue;
+      if (!this.clearWay(candidate, 0.06)) continue;
       if (score > best) { best = score; this.target = candidate; found = true; }
     }
     if (!found) this.target = this.targetAhead(b, 0.4);
@@ -400,7 +436,7 @@ export class BettaSwim {
       } else if (this.mode === 'gulp' && this.gulpClock >= GULP_LENGTH) { this.mode = 'dive'; this.timer = DIVE_LENGTH; }
       else if (this.mode === 'dive' && this.timer <= 0) {
         this.mode = 'glide'; this.timer = 1.0 + this.random() * 0.8;
-        this.nextGulp = this.time + 60 + this.gulpRandom() * 50;
+        this.nextGulp = this.time + (60 + this.gulpRandom() * 50) * (1 - 0.75 * clamp(this.gulpUrge, 0, 1));
         this.chooseTarget(env);
         gulping = false;
       }
@@ -440,6 +476,9 @@ export class BettaSwim {
     const descent = this.mode === 'rest' ? this.position[1] - this.restY : 0;
     const sinking = this.mode === 'rest' && !escaping && descent > 0.007;
     const nearWall = this.mode !== 'mirror' && !feeding && (this.mode !== 'rest' || sinking) && Math.hypot(...look) > b.radius;
+    // (Nose for an obstacle ahead: it veers off, out from it and on round.)
+    const ahead = this.obstacles.length && !escaping && this.mode !== 'rest' ? this.obstacleGap(look) : null;
+    const nearThing = !!ahead && ahead.gap < 0.04 && !nearWall;
     let goal = this.target;
     if (feed) goal = feed.goal;
     else if (swallowing) goal = [...this.position];
@@ -450,6 +489,7 @@ export class BettaSwim {
     else if (this.mode === 'rest') goal = [this.position[0] + fx * 0.3, this.restY, this.position[2] + fz * 0.3];
     if (startling) goal = [this.position[0] - Math.cos(this.startleHeading) * 0.3, this.position[1], this.position[2] + Math.sin(this.startleHeading) * 0.3];
     else if (nearWall) goal = [-this.position[0] * 0.45, clamp(this.position[1], b.low, b.high), -this.position[2] * 0.45];
+    else if (nearThing) goal = [this.position[0] + ahead.away[0] * 0.3 + fx * 0.1, this.position[1] + Math.max(ahead.away[1], 0) * 0.15, this.position[2] + ahead.away[2] * 0.3 + fz * 0.1];
     if (escaping) goal = water ? [water.centroid[0], water.centroid[1] - 0.06, water.centroid[2]] : [this.position[0] * 0.6, b.low + 0.025, this.position[2] * 0.6];
     const delta = goal.map((v, i) => v - this.position[i]);
     distance = Math.hypot(...delta);
@@ -557,6 +597,17 @@ export class BettaSwim {
       this.position[0] *= limit / horizontal; this.position[2] *= limit / horizontal;
       const n = Math.hypot(...this.position), outward = this.drift.reduce((sum, v, k) => sum + v * this.position[k] / n, 0);
       if (outward > 0) for (let k = 0; k < 3; k++) this.drift[k] -= outward * this.position[k] / n;
+    }
+    // (Never into one: the neck is held out of its core, as it is off the glass.)
+    for (const o of this.obstacles) {
+      const q = nearestOn(this.position, o.a, o.b);
+      const d = this.position.map((v, k) => v - q[k]), l = Math.hypot(...d), r = o.r * 0.6;
+      if (l >= r || l < 1e-9) continue;
+      const n = d.map(v => v / l), into = this.drift.reduce((sum, v, k) => sum + v * n[k], 0);
+      for (let k = 0; k < 3; k++) {
+        this.position[k] = q[k] + n[k] * r;
+        if (into < 0) this.drift[k] -= into * n[k];
+      }
     }
     this.velocity = this.position.map((v, i) => (v - old[i]) / dt);
     // The tail follows what the fish means to do, not the speed it has reached: it leads a start and

@@ -100,6 +100,8 @@ export class GlobeView {
   private readonly uBowlLid = uniform(new THREE.Matrix4());
   /** x: the lid is there. */
   private readonly uBowlState = uniform(new THREE.Vector4(1, 0, 0, 0));
+  /** What floats in the bowl: its leaf and its bubble nest (bowlScape.ts scapeLife). */
+  private readonly uBowlLife = uniform(new THREE.Matrix4().set(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
   /** MSAA is on and a pixel's rays can run one per sample (else one ray per pixel throughout). */
   private readonly perSample: boolean;
   private readonly uCenter = uniform(new THREE.Vector3());
@@ -317,7 +319,7 @@ export class GlobeView {
       let passInputs = redraw || perSampleWater ? koiInputs : inputs;
       if (withReef) passInputs = { ...passInputs, ...reefGrid };
       if (foam) passInputs = { ...passInputs, ...foamInputs };
-      if (withBowl) passInputs = Object.assign({}, passInputs, { bowlLid: this.uBowlLid, bowlState: this.uBowlState });
+      if (withBowl) passInputs = Object.assign({}, passInputs, { bowlLid: this.uBowlLid, bowlState: this.uBowlState, bowlLife: this.uBowlLife });
       if (!hardware) passInputs = Object.fromEntries(Object.entries(passInputs).filter(([k]) => k !== TLAS_PARAM)) as typeof passInputs;
       // (One variable: the depth and the colour both read the same trace.) Its w carries the
       // pixel's coverage, plus 2 where the second pass must redraw it.
@@ -440,6 +442,11 @@ export class GlobeView {
   }
 
   private bowlReach = 1;
+
+  /** What floats in the betta bowl (interaction/BowlLife.ts: its leaf and its nest). */
+  setBowlLife(life: THREE.Matrix4): void {
+    this.uBowlLife.value.copy(life);
+  }
 
   /** Builds pipelines ahead of time (their shaders are large), so no switch stalls: every
    *  globe's the page shows (variants; the app opens on whichever was shown last), and where the

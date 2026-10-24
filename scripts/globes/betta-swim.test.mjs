@@ -448,3 +448,22 @@ test('food on the film: it swims to the pellet lips first, without breaching, th
     assert.notEqual(s.mode, 'feed');
   }
 });
+
+test('it keeps clear of things in the water (the bowl\'s driftwood): routes round them, never into them', () => {
+  const log = { a: [-0.35, -0.28, -0.05], b: [0.3, -0.26, 0.08], r: 0.12 };
+  for (const seed of [237, 42, 901]) {
+    const s = new BettaSwim(seed);
+    s.obstacles = [log];
+    let inside = 0, steps = 0, closest = Infinity;
+    for (let i = 0; i < 60 * 240; i++) {
+      s.advance(1 / 60, [0, 0, 0], env);
+      const g = s.obstacleGap(s.position).gap;
+      closest = Math.min(closest, g + log.r);
+      if (g < 0) inside++;
+      steps++;
+      assert.ok([...s.position, s.heading].every(Number.isFinite));
+    }
+    assert.ok(closest >= 0.6 * log.r - 1e-6, `seed ${seed} reached the log's core (${closest.toFixed(3)})`);
+    assert.ok(inside / steps < 0.03, `seed ${seed} spent ${(100 * inside / steps).toFixed(1)}% inside the log's margin`);
+  }
+});
