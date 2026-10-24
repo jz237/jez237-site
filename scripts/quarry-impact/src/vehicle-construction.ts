@@ -5,6 +5,8 @@ export type ConstructionRole='skin'|'engine'|'rail'|'radiator';
 export function constructionRole(name:string):ConstructionRole{
   name=name.replace(/[_-]+/g,' ');
   if(/Structure engine (block|sump|cover|valve cover|casting rib|air cleaner)|Structure (valve cover|air cleaner|intake runner)/i.test(name))return 'engine';
+  // The hand-built classics name their engines after the car: Structure Tordal inline four, Structure Hollins V8 block ...
+  if(/^Structure [A-Za-z]+ (?:(?:longitudinal|transverse) )?(?:inline (?:four|six)|V8(?: bank| block| cover)?|four|engine|rear twin|twin cam inline four|air cleaner)\s*$/i.test(name))return 'engine';
   if(/Structure .*rail|Structure .*beam|Structure .*crash mount|Structure strut brace/i.test(name))return 'rail';
   if(/Structure radiator|Structure .*radiator support/i.test(name))return 'radiator';
   return 'skin';
