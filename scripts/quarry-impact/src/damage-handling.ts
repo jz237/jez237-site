@@ -155,6 +155,9 @@ export const rubHeatWarning=(heat:ArrayLike<number>,alight:ArrayLike<number>)=>A
  * away; it is only spent on a fire. */
 export const EXTINGUISHER={charges:2,key:'KeyG'} as const;
 export const extinguisherHint=(burning:boolean,charges:number)=>burning&&charges>0?`ON FIRE · G EXTINGUISHER ×${charges}`:'';
+/** AI drivers use their extinguishers too, after a reaction time fixed per car: AI_EXTINGUISH.after to after+spread seconds alight. */
+export const AI_EXTINGUISH={after:1.5,spread:2} as const;
+export const aiExtinguishAfter=(id:number)=>{const x=Math.sin(id*7.31+1.7)*43758.5453;return AI_EXTINGUISH.after+AI_EXTINGUISH.spread*(x-Math.floor(x));};
 /** A crushed engine bay chafes through the wiring loom: the ignition cuts out in short, irregular bursts (the engine dies
  * for a moment, no backfire) and the lights flicker with it. More crush, more and longer cuts. Fixed per car and time. */
 export const ELECTRICAL={onset:.45,span:.4,period:.6,odds:.85,minCut:.1,maxCut:.45} as const;

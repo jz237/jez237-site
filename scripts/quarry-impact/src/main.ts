@@ -113,7 +113,7 @@ import {createBrackenWorld} from './bracken-world';
 import {createCinderbankWorld} from './cinderbank-world';
 import {tyreWarning} from './tyre-feedback';
 import {fluidWarning,leakRates,burnLevel,type GroundFire} from './fluid-leaks';
-import {gearboxWarning,brakeWarning,steerWarning,clutchWarning,playWarning,rubWarning,electricalWarning,nutWarning,exhaustWarning,diffWarning,tieRodWarning,rollBarWarning,propWarning,bearingWarning,bearingGrowl,skewWarning,windRoar,beltWarning,batteryLights,overheatWarning,coolThrottle,OVERHEAT_FIRE,caliperWarning,mountsWarning,starterWarning,frameWarning,discGlow,diffAxle,dazeWarning,nurseThrottle,STEER_PLAY,rubHeatWarning,EXTINGUISHER,extinguisherHint,PIN,pinnedBy,pinClock,pinCounts,type PinPush,bumpStartedBy,batteryOutWarning,noBatteryHint} from './damage-handling';
+import {gearboxWarning,brakeWarning,steerWarning,clutchWarning,playWarning,rubWarning,electricalWarning,nutWarning,exhaustWarning,diffWarning,tieRodWarning,rollBarWarning,propWarning,bearingWarning,bearingGrowl,skewWarning,windRoar,beltWarning,batteryLights,overheatWarning,coolThrottle,OVERHEAT_FIRE,caliperWarning,mountsWarning,starterWarning,frameWarning,discGlow,diffAxle,dazeWarning,nurseThrottle,STEER_PLAY,rubHeatWarning,EXTINGUISHER,extinguisherHint,aiExtinguishAfter,PIN,pinnedBy,pinClock,pinCounts,type PinPush,bumpStartedBy,batteryOutWarning,noBatteryHint} from './damage-handling';
 import {engineStatus} from './engine-condition';
 import {drivingObstacleClearance} from './driving-probe';
 import {vehicleContact,vehicleContactManifold} from './vehicle-contact';
@@ -985,7 +985,7 @@ async function start(watch=demo) {
     camera.position.copy(cars[0].current).add(new T.Vector3(0, 4, -8));
     hud();
     sound.pause(false);
-    eventAwards.reset();playerTopSpeed=0;derbyAliveBefore=0;revengeSettled.clear();takedownCombo=0;playerStripped=0;strippedNoted.clear();pinNoted.clear();pinFed.clear();pinCounted.clear();pinScoring.clear();pinEscapes=0;sandwiches=0;wallSlams=0;finalStuntsCalled=false;mirrorsClipped=0;bumpStarts=0;dominoes=0;knockedBy.clear();tankBy.clear();targetToastAt=-Infinity;clearLocks();pileUp.reset();pileUps=biggestPileUp=0;wreckCauses.clear();lastHitBy.clear();rollArmed.clear();wreckedBy.clear();alightBy.clear();lastTakedownAt=-1e9;bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
+    eventAwards.reset();playerTopSpeed=0;derbyAliveBefore=0;revengeSettled.clear();takedownCombo=0;playerStripped=0;strippedNoted.clear();pinNoted.clear();pinFed.clear();pinCounted.clear();pinScoring.clear();pinEscapes=0;sandwiches=0;wallSlams=0;finalStuntsCalled=false;mirrorsClipped=0;bumpStarts=0;aiBurn.clear();aiFireOuts=0;dominoes=0;knockedBy.clear();tankBy.clear();targetToastAt=-Infinity;clearLocks();pileUp.reset();pileUps=biggestPileUp=0;wreckCauses.clear();lastHitBy.clear();rollArmed.clear();wreckedBy.clear();alightBy.clear();lastTakedownAt=-1e9;bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
     beginReplay();
     if(preparationInterrupted||document.hidden)pause();
     return true;
@@ -1213,6 +1213,7 @@ const tankBy=new Map<number,number>();
 /** Wing mirrors clipped off by passing cars this event (offline QA counter). */
 let mirrorsClipped=0;
 let bumpStarts=0;
+const aiBurn=new Map<number,number>();let aiFireOuts=0;
 /** DOMINOs credited this event (offline QA counter), and who last knocked each car with a real hit, and when. */
 let dominoes=0;const knockedBy=new Map<number,{by:number;at:number}>();
 /** Whether this event's final-stunts call has been made. */
@@ -1988,6 +1989,11 @@ function step(dt: number) {
   }
   if(pursuit){pursuit.update(cars,elapsed);if(pursuit.complete){finish(pursuitTeamTitle(pursuit,0));return;}}
   if (!pursuit && !demo && activeClubRound===null && mode === 'race' && cars[0].health <= 0 && !(raceTimeLimit()&&cars[0].finished)) finish('RETIRED · DAMAGE');
+  // AI drivers use their extinguishers too, after a moment's reaction (offline only).
+  for(const c of cars){if(!c.extendedDamage||c.health<=0||c.id===0&&!demo)continue;
+    if(!c.burning||c.extinguishers<=0){aiBurn.delete(c.id);continue;}
+    const t=(aiBurn.get(c.id)??0)+dt;aiBurn.set(c.id,t);
+    if(t>=aiExtinguishAfter(c.id)&&c.extinguish()){aiBurn.delete(c.id);aiFireOuts++;sound.shot('impact-light',c.current,.25,{rate:2.4,delay:0,duration:.4,lowpass:7000});}}
   // A car that can no longer drive itself (seized, empty tank, no drive left) is out after a few seconds (offline only).
   if(!demo&&(mode==='derby'||mode==='race'))for(const c of cars){
     if(!c.extendedDamage||!(c.health>0))continue;
@@ -2623,7 +2629,7 @@ async function boot() {
         p95: times[Math.floor(times.length * 0.95)],
         audio: sound.buffers.size,
         activeParticles: fx.particles.filter(p=>p.life>0).length,
-        debris: fx.debris.length, wallSlams, mirrorsClipped, bumpStarts, dominoes, pinEscapes, sandwiches, huntLeader: drivers.leader, bumperLocks: {made: locksMade, torn: locksTorn, active: bumperLocks.length}, tethers: {made: tethersMade, active: bumperTethers.length}, pileUps, biggestPileUp, debrisAt: fx.debris.map(d=>{const p=d.body.translation();return [+p.x.toFixed(2),+p.y.toFixed(2),+p.z.toFixed(2),+d.body.mass().toFixed(1),+d.age.toFixed(2)];}),
+        debris: fx.debris.length, wallSlams, mirrorsClipped, bumpStarts, aiFireOuts, dominoes, pinEscapes, sandwiches, huntLeader: drivers.leader, bumperLocks: {made: locksMade, torn: locksTorn, active: bumperLocks.length}, tethers: {made: tethersMade, active: bumperTethers.length}, pileUps, biggestPileUp, debrisAt: fx.debris.map(d=>{const p=d.body.translation();return [+p.x.toFixed(2),+p.y.toFixed(2),+p.z.toFixed(2),+d.body.mass().toFixed(1),+d.age.toFixed(2)];}),
         voices: sound.activeVoices,
         loops: sound.loops.size,
         thermal: vehicleFire?.stats,
