@@ -2,9 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
-import { migratedMediaResponse } from '../shared/media-redirects.mjs';
+import { createMediaRedirectHandler } from '../shared/media-redirect-handler.mjs';
 
 const manifest = JSON.parse(fs.readFileSync(new URL('../media-r2-manifest.json', import.meta.url)));
+const migratedMediaResponse = createMediaRedirectHandler(manifest);
 test('all catalog tracks are in the verified R2 manifest', () => {
   const context = { window: {} };
   vm.runInNewContext(fs.readFileSync(new URL('../experiments/amiga-mod-player/tracks.js', import.meta.url), 'utf8'), context);
@@ -46,6 +47,14 @@ test('retired video aliases and separately hosted masters still redirect', () =>
     assert.equal(response.status, 301);
     assert.equal(response.headers.get('location'), 'https://media.jez237.com/' + target + '?download=1');
   }
+});
+test('new manifest entries receive redirects without another hardcoded mapping', () => {
+  const responseFor = createMediaRedirectHandler({ objects: [
+    { path: 'example/new-reference.jpg', url: 'https://media.jez237.com/example/new-reference.jpg?v=release-2' }
+  ] });
+  const response = responseFor(new Request('https://jez237.com/example/new-reference.jpg?download=1'));
+  assert.equal(response.status, 301);
+  assert.equal(response.headers.get('location'), 'https://media.jez237.com/example/new-reference.jpg?v=release-2&download=1');
 });
 test('unknown, malformed and non-read requests do not redirect', () => {
   for (const path of ['/index.html', '/multimedia/unknown.mp4', '/%E0%A4%A', '/__proto__']) {

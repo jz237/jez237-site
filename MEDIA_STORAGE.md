@@ -23,6 +23,9 @@ in a separate map. Only retired URL aliases and separately hosted masters need
 explicit legacy mappings. Version parameters in manifest URLs and incoming
 query strings are both retained. Run `node --test scripts/media-r2.test.mjs`
 before publishing manifest or redirect changes.
+The Pages entry point uses a bundler-compatible JSON import; the portable
+handler is tested directly. Verify Functions compilation against the hosted
+Pages compiler (currently Wrangler 3.114.17), not only the newer local CLI.
 Never delete a source copy until verification and an independent backup exist.
 
 The separate `jz237/multimedia` repository holds full-resolution-master pointers
