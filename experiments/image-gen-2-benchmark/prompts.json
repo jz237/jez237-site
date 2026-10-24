@@ -25708,5 +25708,122 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-24-factual-infographic-factual-infographic-chiroptophobia-fear",
+    "title": "Factual infographic: Chiroptophobia — Fear of Bats",
+    "tests": "factual_subtype: phobia-infographic; phobia: Chiroptophobia; Monash-supported descriptive name; distinct fictional casting; source-backed clinical context; no subjective critic or rerolls; archive_slot=2026-10-24T12:08; concept=chiroptophobia-bat-encounter-dusk-park-avoidance; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create the finished, richly illustrated factual phobia infographic directly on the canvas, portrait-oriented composition, opaque background. Request openai/gpt-image-2.5-sunburst, quality medium, size auto. No photographed page, mockup, framing, app interface, bibliography, logos or watermark.\n\nEXACT TITLE TEXT, top of artwork: CHIROPTOPHOBIA\nSet that verified phobia name in prominent bold editorial lettering, no literal asterisks.\nEXACT SECOND LINE, directly beneath the title: Fear of bats\nNever headline this image 'Specific Phobia' or 'animal-type phobia'. Keep classification subordinate.\n\nArt direction: luminous gouache and fine colored-pencil environmental illustration, midnight-indigo and muted sage foliage with copper dusk sunlight along bark, russet clothing and pale moonlit lettering. A sweeping open park path curves from lower left toward an airy canopy at upper right; a few small naturalistic bats fly high above the path, never attacking or exaggerated into monsters. Let a dominant environmental hero occupy most of the composition. Fine leaf veins, rough tree bark, stitched fleece, gravel and soft evening sky gradients reward close viewing. No caves, ocean, horror, gore or enclosing tunnels. Preserve open sky and negative space for readable typography, not an even matrix of boxed panels. Organic curved leader lines and asymmetric annotations connect the person, distant bats and a modest consultation vignette at the foot of the path.\n\nThe fictional protagonist is a man in his thirties, medium tan skin, square jaw, short curly black hair, slim build, rust fleece and hiking trousers, viewed mostly from behind with a slight three-quarter glimpse of his face beside a park path at dusk. His shoulders are tense and one hand rests near his chest, showing ordinary anxiety with dignity. Maintain this same man in the small consultation vignette with a clinician, seated in a calm well-lit room; no live bat is present there. This is illustrative fiction, not a sourced patient's portrait.\n\nIntegrate these concise exact annotations into the scene, with clear legible lettering and generous breathing room:\nNear a bat silhouette and the open path: 'Anticipatory anxiety' / 'Worry about encountering bats can start before an encounter.'\nBeside the protagonist, a delicate non-anatomical line ribbon from chest to hand: 'Body alarm' / 'Palpitations • chest tightness • trembling' / 'Symptoms vary.'\nA curved path branch turns away from the canopy, labeled 'Avoidance' / 'Fear may lead someone to avoid places or endure them with intense anxiety.' Do not label a causal reinforcement loop or invent brain circuitry.\nAn open contrast annotation at the sky edge: 'Fear and real-world risk' / 'Phobic fear is out of proportion to actual danger. Ordinary wildlife caution still matters.'\nKeep bats distant from the man and give the safety text a readable place along the lower landscape: 'Bats usually avoid people. Do not touch bats. If contact may have occurred, seek medical or public-health advice promptly; bites or scratches need medical help right away.'\nThe supportive consultation vignette merges into a soft pool of warm light at the bottom: 'Evidence-based help' / 'CBT can help. Exposure therapy is an effective CBT method for phobias.' / 'A qualified professional can tailor treatment—never handle bats as an exposure exercise.'\nPlace the small subordinate terminology line beneath the explanatory artwork, not as the headline: 'Chiroptophobia is a descriptive fear name; clinically significant animal fears can fall under specific phobia.'\nFooter: 'General education, not diagnosis. Seek help when fear affects daily life.'\n\nUse precise restrained mechanism language without diagnosing the pictured person. No statistics, universal symptoms, diagnostic codes, brain diagrams, imagined pathways, cure promises, or unverified bat anatomy labels. Keep every statement readable, artwork-led and clinically grounded. The dusk landscape is an illustrative trigger context, not a claim that all people fear dusk. Omit decorative secondary mini-studies before crowding these core explanations. The title must remain the bold named fear with its exact plain-English meaning immediately underneath.",
+    "image": "images/2026-10-24-factual-infographic-factual-infographic-chiroptophobia-fear.jpg",
+    "thumb": "thumbs/2026-10-24-factual-infographic-factual-infographic-chiroptophobia-fear.webp",
+    "color": "#4c4544",
+    "date": "2026-10-24",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "chiroptophobia-bat-encounter-dusk-park-avoidance",
+      "imageSha256": "931658d08b39ba9b505bde68ab9d7fec4611f19099b6cace4420a23306c23f89",
+      "imageDHash": "155147cd031fb92f"
+    },
+    "factualInfographic": {
+      "topic": "Chiroptophobia: fear of bats, anticipatory anxiety, body alarm, avoidance, realistic wildlife safety, and evidence-based help",
+      "description": "Source-backed educational illustration of bat fear, symptoms, avoidance, treatment and real wildlife safety; established descriptive terminology rather than a separate named diagnosis.",
+      "sourceNote": "Monash University: https://lens.monash.edu/bats-are-mostly-associated-with-death-and-darkness-but-the-bad-rap-they-get-is-undeserved/; National Institute of Mental Health: https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders; NHS: https://www.nhs.uk/mental-health/conditions/phobias/; Centers for Disease Control and Prevention: https://www.cdc.gov/rabies/prevention/bats.html — Verified fear-name definition, general clinical context and safe bat-contact guidance.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-24T16:09:39.705848+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Monash University",
+            "title": "Bats are mostly associated with death and darkness, but the bad rap they get is undeserved",
+            "sourceType": "university",
+            "url": "https://lens.monash.edu/bats-are-mostly-associated-with-death-and-darkness-but-the-bad-rap-they-get-is-undeserved/"
+          },
+          {
+            "id": "S2",
+            "publisher": "National Institute of Mental Health",
+            "title": "Phobias and Phobia-Related Disorders",
+            "sourceType": "government-agency",
+            "url": "https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders"
+          },
+          {
+            "id": "S3",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          },
+          {
+            "id": "S4",
+            "publisher": "Centers for Disease Control and Prevention",
+            "title": "Preventing Rabies from Bats",
+            "sourceType": "government-agency",
+            "url": "https://www.cdc.gov/rabies/prevention/bats.html"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "CHIROPTOPHOBIA means fear of bats; Monash uses the spelling chiroptophobia.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Chiroptophobia is used here as a descriptive fear name; clinically significant animal fears can fall under specific phobia, not a separately named bat diagnosis.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "A phobia involves fear out of proportion to actual danger, not simply ordinary caution around wildlife.",
+            "sourceIds": [
+              "S2",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Encountering a feared animal can trigger immediate intense anxiety; anticipating an encounter can bring excessive worry and avoidance. The dusk park is an illustrative example, not a universal trigger.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Body alarm can include palpitations, chest tightness, trembling and dizziness; symptoms differ between people.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Avoidance can lead people to avoid feared objects and situations or endure them with intense anxiety; avoiding a park path is an illustrative example.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "CBT is an effective psychological treatment; exposure therapy is a particularly effective CBT method for phobias. Seek a qualified mental-health professional for a tailored plan; the illustration shows a consultation rather than unsupervised wildlife exposure.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Bats usually avoid humans. Do not touch bats. If contact may have occurred, seek medical or public-health advice promptly; bites or scratches require medical help right away.",
+            "sourceIds": [
+              "S4"
+            ]
+          },
+          {
+            "claim": "The image is general education, not diagnosis; consult a healthcare professional when fear affects daily life.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
