@@ -49,16 +49,18 @@ jobs = [
  # The open-cabin wind roar (synthWind's id) and the rain, recorded.
  ('wind', 'Wind roaring through the shattered open windscreen of a fast moving car: a continuous turbulent rush of air buffeting the cabin, steady. Isolated, no engine, no music, no voices, no speech.', 3.0, True),
  ('rain', 'Steady rain falling on a dirt arena and on car roofs: a continuous even rain hiss with soft patter, no thunder. No music, no voices, no speech.', 4.0, True),
+ # A car's fuel tank going up (BLOW UP).
+ ('car-explosion', 'Car fuel tank explosion in an outdoor arena: a massive deep boom and fireball whoosh, metal panels tearing and flying, then debris clattering down and fire crackling. No music, no voices, no speech.', 3.5, False),
 ]
 # Seconds cut from the start of a raw clip: metal-groan dips to silence early (it would drop out every loop) and
 # debris-2 opens with half a second of near silence (the layer would land late).
-TRIM = {'metal-groan':.7,'debris-2':.45,'growl':.6,'thump':.11}
+TRIM = {'metal-groan':.7,'debris-2':.45,'growl':.6,'thump':.11,'car-explosion':.5}
 # Seconds kept (after any trim): the game plays the clanks for 0.26 s and the thump for 0.18 s, so the clips are cut to
 # about that (rattle-2 before its second bounce) and level-matched over what is heard.
 KEEP = {'rattle-0':.3,'rattle-1':.3,'rattle-2':.18,'rattle-3':.3,'thump':.22}
 # Clips that replace a synthesized sound are brought to that synth's RMS (dBFS), so the gains the game already plays
 # them at stay right: the stuck horn (synthHorn), the starter, the gearbox grind, the belt squeal and the bearing growl.
-MATCH = {'horn-stuck':-13.2,'starter':-13.5,'gear-grind':-14.3,'squeal':-17.4,'growl':-29.1,'rattle-0':-18.3,'rattle-1':-18.2,'rattle-2':-18.2,'rattle-3':-18.3,'thump':-15.4,'wind':-20.3,'rain':-17.7}
+MATCH = {'horn-stuck':-13.2,'starter':-13.5,'gear-grind':-14.3,'squeal':-17.4,'growl':-29.1,'rattle-0':-18.3,'rattle-1':-18.2,'rattle-2':-18.2,'rattle-3':-18.3,'thump':-15.4,'wind':-20.3,'rain':-17.7,'car-explosion':-15}
 def rms_db(path):
     import array, math
     pcm = array.array('h', subprocess.run(['ffmpeg','-v','error','-i',str(path),'-f','s16le','-ac','1','-'],capture_output=True,check=True).stdout)

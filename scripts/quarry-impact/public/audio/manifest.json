@@ -1023,5 +1023,19 @@
     "sha256": "a61500d15fff4ee213817dd763f2ebef4780ab4d3a0aa98ddd776ebe0a166fc1",
     "runtimeSha256": "5c7b972f2573b8ca009547128e9bc50530e4b173cb5dcec9d91cf62c3ae7e2e3",
     "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5, RMS matched to -17.7 dBFS (the synthesized sound it replaces), limited at -0.4 dBFS"
+  },
+  {
+    "id": "car-explosion",
+    "file": "car-explosion.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Car fuel tank explosion in an outdoor arena: a massive deep boom and fireball whoosh, metal panels tearing and flying, then debris clattering down and fire crackling. No music, no voices, no speech.",
+      "duration_seconds": 3.5,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "a9c62b49a3a218af44935a0e5af133cc64a629f9a7fed06c75db48f521d45fb3",
+    "runtimeSha256": "895af83c5a17e4268f93f4b5eef56190c04f668c8eb792f11c9f1b552dd45fba",
+    "processing": "first 0.5s cut, loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5, RMS matched to -15 dBFS (the synthesized sound it replaces), limited at -0.4 dBFS"
   }
 ]

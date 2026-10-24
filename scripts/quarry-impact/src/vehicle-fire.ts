@@ -1,3 +1,4 @@
+import {primesTank} from './blow-up';
 import * as T from 'three';
 import type { Vehicle } from './vehicle';
 import { VehicleThermalState } from './vehicle-thermal-state';
@@ -184,7 +185,8 @@ export class VehicleFire {
       if(car.extendedDamage&&car.igniteRequest){car.igniteRequest=false;state.ignite();}
       // Driving through water, or the fire extinguisher, puts the fire out.
       if(car.extendedDamage&&(car.douseRequest||car.extinguishRequest)){car.douseRequest=false;car.extinguishRequest=false;if(state.douse())car.onDoused?.();}
-      if(car.extendedDamage&&car.fuelLeak>.3)state.primeFuelBlast();
+      // Leaking fuel, a dropped tank or a long fire primes the tank to go up (offline).
+      if(car.extendedDamage&&state.burning&&primesTank(car.fuelLeak,car.tankDown,state.burnTime))state.primeFuelBlast();
       car.fireHeat=state.heat;car.onFire=state.burning;
       if(state.burning)car.cook?.(state.heat,dt,e.profile.engineZone==='rear');
       const ignition=state.advance(car.health,dt,impact,zones,e.profile.engineZone,e.profile.waterCooled,car.extendedDamage?car.engineDamage:undefined);e.impactSerial=car.impactSerial;
