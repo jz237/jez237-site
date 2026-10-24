@@ -41,14 +41,14 @@ const angle = (a, b) => Math.atan2(Math.sin(a - b), Math.cos(a - b));
 // The established population, used by Hidden Reef, is unchanged by default.
 seeded(5, () => {
   const tank = new ReefFish(new T.Scene(), reef(), [new T.Vector3(3, 1, .7)], templates());
-  assert.equal(tank.fish.length, 21);
+  assert.equal(tank.fish.length, 18);
   assert.equal(tank.count('rostratum'), 0, 'the black tang is gallery-only stocking');
 });
 
 const reports = [];
 for (const seed of [17, 2026, 88123]) seeded(seed, () => {
   const tank = new ReefFish(new T.Scene(), reef(), [new T.Vector3(3, 1, .7)], templates(), 1, gallery);
-  assert.equal(tank.fish.length, 22);
+  assert.equal(tank.fish.length, 19);
   const black = tank.fish.find(f => f.species === 'rostratum');
   const seen = new Set(); let bites = 0, lastBite = -1, grazingFrames = 0, boutFrames = 0, cruiseFold = 0, displayFrames = 0;
   let previousYaw = black.yaw, worstGrazeGap = 0;

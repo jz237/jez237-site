@@ -71,10 +71,10 @@ for(const o of glassObjects)if(o instanceof T.Mesh&&(o.material as T.Material).n
   const line=new T.Mesh(mergeGeometries(parts),new T.MeshBasicMaterial({color,transparent:opacity<1,opacity,blending:opacity<1?T.AdditiveBlending:T.NormalBlending,depthWrite:opacity===1,side:T.DoubleSide}));
   for(const g of parts)g.dispose();line.name='Actinic glass edge glow';line.renderOrder=9;scene.add(line);
  }}
-// The black tang and fish stocking run in the gallery and in Hidden Reef alike.
+// The black tang, the threadfin and fish stocking run in the gallery and in Hidden Reef alike.
 const stockLimit=36;
-const fishSpecies:MarineSpecies[]=[...baseMarineSpecies,'rostratum'];
-const population:[MarineSpecies,number][]=[defaultPopulation[0],['rostratum',1],...defaultPopulation.slice(1)];
+const fishSpecies:MarineSpecies[]=[...baseMarineSpecies,'rostratum','auriga'];
+const population:[MarineSpecies,number][]=[defaultPopulation[0],['rostratum',1],...defaultPopulation.slice(1),['auriga',1]];
 const fishModelsPending=loadMarineModels(fishSpecies);
 const cleanerModelPending=loadCleanerModel();
 const reefAssets=loadReefAssets();
@@ -167,8 +167,8 @@ const inspectReef=(subject:string)=>{
  const methods:Record<string,string>={anemones:'inspectAnemones',corals:'inspectCorals',outcrops:'inspectOutcrops',sand:'inspectSand',water:'inspectWater',polyps:'inspectPolyps',plates:'inspectPlates'};
  if(methods[subject])qa[methods[subject]]();else if(subject in fishNames&&fish.count(subject as MarineSpecies))qa.inspectFish(subject);wake();
 };
-const fishNames:Record<MarineSpecies,string>={rostratum:'Black tang',strigosus:'Kole tang',vulpinus:'Foxface rabbitfish',bispinosa:'Coral beauty angelfish',loricula:'Flame angelfish',hexataenia:'Six-line wrasse',cinctus:'Yellow watchman goby',tang:'Blue tang',semilarvatus:'Golden butterflyfish',clown:'Clownfish',anthias:'Anthias',chromis:'Blue-green chromis',gramma:'Royal gramma',goby:'Mandarin dragonet'};
-const stockInfo:[MarineSpecies,string,number][]=[['rostratum','Zebrasoma rostratum',3],['strigosus','Ctenochaetus strigosus',3],['vulpinus','Siganus vulpinus',2],['bispinosa','Centropyge bispinosa',2],['loricula','Centropyge loricula',2],['hexataenia','Pseudocheilinus hexataenia',3],['cinctus','Cryptocentrus cinctus',2],['tang','Paracanthurus hepatus',3],['semilarvatus','Chaetodon semilarvatus',3],['clown','Amphiprion ocellaris',4],['anthias','Pseudanthias squamipinnis',12],['chromis','Chromis viridis',14],['gramma','Gramma loreto',3],['goby','Synchiropus splendidus',2]];
+const fishNames:Record<MarineSpecies,string>={rostratum:'Black tang',strigosus:'Kole tang',vulpinus:'Foxface rabbitfish',bispinosa:'Coral beauty angelfish',loricula:'Flame angelfish',hexataenia:'Six-line wrasse',cinctus:'Yellow watchman goby',auriga:'Threadfin butterflyfish',tang:'Blue tang',semilarvatus:'Golden butterflyfish',clown:'Clownfish',anthias:'Anthias',chromis:'Blue-green chromis',gramma:'Royal gramma',goby:'Mandarin dragonet'};
+const stockInfo:[MarineSpecies,string,number][]=[['rostratum','Zebrasoma rostratum',3],['strigosus','Ctenochaetus strigosus',3],['vulpinus','Siganus vulpinus',2],['bispinosa','Centropyge bispinosa',2],['loricula','Centropyge loricula',2],['hexataenia','Pseudocheilinus hexataenia',3],['cinctus','Cryptocentrus cinctus',2],['auriga','Chaetodon auriga',2],['tang','Paracanthurus hepatus',3],['semilarvatus','Chaetodon semilarvatus',3],['clown','Amphiprion ocellaris',4],['anthias','Pseudanthias squamipinnis',12],['chromis','Chromis viridis',14],['gramma','Gramma loreto',3],['goby','Synchiropus splendidus',2]];
 /** New animals join every per-scene system the original stocking was wired into. */
 function restock(){
  anemoneVisitors.splice(0,anemoneVisitors.length,...fish.fish.filter(f=>f.species==='clown'));

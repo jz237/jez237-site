@@ -18,8 +18,11 @@ const originalRandom=Math.random;let seed=seedValue;Math.random=()=>{seed=(Math.
 try{
 const world=new ReefFish(new T.Scene(),obstacles,[new T.Vector3(3,1,1),new T.Vector3(-3,1,1)],models);
 const f=world.fish.find(f=>f.species===species);world.fish.splice(0,world.fish.length,f);f.position.set(0,1,.4);f.group.position.copy(f.position);f.progressPosition.copy(f.position);f.goal.set(0,1,-1.7);f.until=20;f.yaw=Math.PI/2;
-const samples=[];for(let i=0;i<7200;i++){world.update(1/60,false);if(i%60===0){const s=world.snapshot();assert.equal(s.obstacleOverlaps,0);assert.equal(s.fishOverlaps,0);samples.push(s.positions[0]);}}
-let minRange=Infinity;for(let i=10;i<samples.length;i++){const w=samples.slice(i-10,i+1),range=Math.hypot(...['x','y','z'].map(k=>Math.max(...w.map(p=>p[k]))-Math.min(...w.map(p=>p[k]))));minRange=Math.min(minRange,range);}
+const samples=[];for(let i=0;i<7200;i++){world.update(1/60,false);if(i%60===0){const s=world.snapshot();assert.equal(s.obstacleOverlaps,0);assert.equal(s.fishOverlaps,0);samples.push({...s.positions[0],held:f.holdUntil>world.clock});}}
+// A rest is stillness by choice; quivering is time spent trying to move without
+// getting anywhere, so only the active (not resting) seconds are measured.
+const active=samples.filter(p=>!p.held);assert.ok(active.length>30,species+' spends much of the run moving');
+let minRange=Infinity;for(let i=10;i<active.length;i++){const w=active.slice(i-10,i+1),range=Math.hypot(...['x','y','z'].map(k=>Math.max(...w.map(p=>p[k]))-Math.min(...w.map(p=>p[k]))));minRange=Math.min(minRange,range);}
 console.log({minRange,start:samples[0],end:samples.at(-1)});assert.ok(minRange>.25,species+' escapes a blocked goal and does not stay quivering');
 
 }finally{Math.random=originalRandom;}

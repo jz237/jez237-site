@@ -51,12 +51,13 @@ for (const seed of [23, 5150, 77001]) seeded(seed, () => {
   let threatHidden = false;
   for (let frame = 0; frame < 21600; frame++) {
     const night = frame > 18000;
-    // Midway, send a fast large fish straight past each watchman's burrow.
+    // Midway, send a fast large fish straight past each watchman, wherever it is
+    // around its burrow.
     // Only into clear water, so the test itself never places fish inside each other.
     if (frame === 9000) for (const w of tank.fish.filter(f => f.species === 'cinctus')) {
       const tang = tank.fish.find(f => f.species === 'tang');
       for (const [dx, dy] of [[.55, .35], [-.55, .35], [.6, .45], [-.6, .45], [.5, .5], [-.5, .5]]) {
-        const p = new T.Vector3(w.home.x + dx, w.home.y + dy, w.home.z);
+        const p = new T.Vector3(w.position.x + dx, w.position.y + dy, w.position.z);
         if (tank.free(p, tang.radius) && tank.fish.every(o => o === tang || p.distanceTo(o.position) > tang.radius + o.radius + .05)) {tang.position.copy(p); tang.group.position.copy(p); tang.velocity.set(-Math.sign(dx) * 2.2, 0, 0); tang.recoverUntil = tank.clock + 2; break;}
       }
     }
@@ -101,6 +102,24 @@ for (const seed of [23, 5150, 77001]) seeded(seed, () => {
   assert.ok(w.burrow && w.burrow.parent === scene && tank.notes.includes(w.burrow), 'the burrow is rendered and identifiable');
   assert.ok(Math.abs(w.home.y - sandHeight(w.home.x, w.home.z)) < .01, 'the burrow opens in the sand');
   reports[seed] = Object.fromEntries(options.map(s => [s, {modes: [...seen[s]].length, bites: stats[s].bites, displays: stats[s].displays}]));
+});
+
+// The threadfin butterflyfish (added later than the six above, in its own runs
+// so their established scenarios are unchanged): it picks at the reef by day,
+// stays upright and collision-free, and shelters beside the reef at night.
+for (const seed of [23, 5150, 77001]) seeded(seed, () => {
+  const tank = new ReefFish(new T.Scene(), reef(), [new T.Vector3(3, 1, .7)], templates([...all, 'auriga']), 1, gallery);
+  const f = tank.add('auriga'); assert.ok(f, 'the threadfin butterflyfish can be added');
+  const seen = new Set(); let bites = 0, last = -1;
+  for (let frame = 0; frame < 9000; frame++) {
+    const night = frame > 7200; tank.update(1 / 60, night); seen.add(f.mode);
+    assert.ok([...f.position.toArray(), f.yaw, f.pitch].every(Number.isFinite) && Math.abs(f.pitch) < .75, 'the threadfin stays finite and upright');
+    if (f.graze && f.graze.biteAt >= 0 && f.graze.biteAt !== last) {bites++; last = f.graze.biteAt;}
+    if (frame % 120 === 0) {const snap = tank.snapshot(); assert.equal(snap.obstacleOverlaps, 0); assert.equal(snap.fishOverlaps, 0);}
+  }
+  assert.ok(seen.has('picking at the reef') && bites >= 4, `the threadfin picks at the reef (${bites} bites)`);
+  assert.ok(seen.has('seeking shelter') || seen.has('resting near shelter'), 'the threadfin shelters at night');
+  reports['auriga-' + seed] = {modes: [...seen], bites};
 });
 
 // Rival encounters, set up directly: dwarf angels chase each other, the foxface

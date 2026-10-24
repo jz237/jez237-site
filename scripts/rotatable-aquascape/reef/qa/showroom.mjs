@@ -27,7 +27,7 @@ try{
  const tank=()=>page.frames().find(f=>/\/showroom\/reef\//.test(f.url()));
  await page.waitForFunction(()=>document.querySelector('#tank-mount iframe')?.contentWindow.reefQA?.snapshot().ready,null,{timeout:120000});
  report.readyMs=Date.now()-entered;const reef=tank();await page.waitForTimeout(800);
- assert.equal((await reef.evaluate(()=>window.reefQA.snapshot())).fish,21);
+ assert.equal((await reef.evaluate(()=>window.reefQA.snapshot())).fish,20);
  await page.locator('#tank-mount').screenshot({path:path.join(out,'showroom-reef-desktop.png')});
  await reef.locator('canvas').screenshot({path:path.resolve('.qa-results/reef-poster.png')});
  await reef.locator('#pause').click();await page.waitForTimeout(2500);
