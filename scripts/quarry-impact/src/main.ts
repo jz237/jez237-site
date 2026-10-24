@@ -1081,6 +1081,8 @@ let derbyAliveBefore=0;
 const revengeSettled=new Map<number,number>();
 /** The player's takedown chain (offline): takedowns within COMBO.window seconds chain into DOUBLE, TRIPLE … */
 let takedownCombo=0,lastTakedownAt=-1e9;
+/** In a score derby, the points a destruction callout earned (" +40"); nothing otherwise. */
+const pointsTag=(points:number)=>scoreDerby()?` +${points}`:'';
 /** Major parts the player's car has shed (for the STRIPPED callouts). */
 let playerStripped=0;
 /** How each finished car went out (offline), fixed at the moment it was wrecked. */
@@ -1642,7 +1644,7 @@ function step(dt: number) {
   if(!online?.active)for(const c of cars){if(c.inverted===0){rollArmed.add(c.id);continue;}
     const by=rolledBy(c.inverted,rollArmed.has(c.id),lastHitBy.get(c.id),elapsed);if(by<0)continue;rollArmed.delete(c.id);const attacker=cars.find(x=>x.id===by);if(!attacker)continue;
     eventAwards.rolled(attacker.id,c.id,elapsed);
-    if(attacker.id===0&&!demo){toast(`ROLLED IT · #${c.id+1} ${DEFINITIONS[c.kind].name}`,2,2);sound.crowd(.9);crowdFlashes(SMASH_FLASHES);}
+    if(attacker.id===0&&!demo){toast(`ROLLED IT · #${c.id+1} ${DEFINITIONS[c.kind].name}`+pointsTag(DESTRUCTION_POINTS.rolled),2,2);sound.crowd(.9);crowdFlashes(SMASH_FLASHES);}
     else if(c.id===0&&!demo){toast(`ROLLED BY #${attacker.id+1} ${DEFINITIONS[attacker.kind].name}`,2,2);sound.crowd(.7);}
     if(mode==='derby'){derbyFeed.note(attacker.id,displayedDriver(attacker),'rolled',elapsed);if(scoreDerby())combat.destruction(attacker.id,DESTRUCTION_POINTS.rolled);}}
   // The player's car stripped down to the shell and still running (offline).
@@ -1676,7 +1678,7 @@ function step(dt: number) {
       smashLoss.b=before-b.health;
     }
     // Engine out: the block dropped out of a car in this crash (offline).
-    if(!online?.active&&!demo)for(const [car,was,other] of [[a,engineInA,b],[b,engineInB,a]] as const)if(car&&was&&car.engineOut&&(car.id===0||other?.id===0)){toast(car.id===0?'ENGINE OUT':`ENGINE OUT · #${car.id+1} ${DEFINITIONS[car.kind].name}`,2.6,3);sound.crowd(1);crowdFlashes(SMASH_FLASHES);}
+    if(!online?.active&&!demo)for(const [car,was,other] of [[a,engineInA,b],[b,engineInB,a]] as const)if(car&&was&&car.engineOut&&(car.id===0||other?.id===0)){toast(car.id===0?'ENGINE OUT':`ENGINE OUT · #${car.id+1} ${DEFINITIONS[car.kind].name}`+pointsTag(DESTRUCTION_POINTS.engine),2.6,3);sound.crowd(1);crowdFlashes(SMASH_FLASHES);}
     if(damage>0&&a&&b){lastHitBy.set(a.id,{by:b.id,at:elapsed});lastHitBy.set(b.id,{by:a.id,at:elapsed});}
     // The derby feed credits whoever dropped an engine, tore a wing off or PITed a rival (offline).
     if(!online?.active&&mode==='derby'&&a&&b)for(const [victim,attacker,pits,wings,engineWas] of [[a,b,pitsA,wingsA,engineInA],[b,a,pitsB,wingsB,engineInB]] as const){
@@ -1685,7 +1687,7 @@ function step(dt: number) {
       if(victim.pitSpins>pits){derbyFeed.note(attacker.id,displayedDriver(attacker),'pit',elapsed);score(DESTRUCTION_POINTS.pit);}
     }
     // PIT: the player's shove sent a rival's rear tyres sliding (offline).
-    if(!online?.active&&!demo&&a&&b)for(const [victim,attacker,before] of [[a,b,pitsA],[b,a,pitsB]] as const)if(attacker.id===0&&victim.pitSpins>before)toast(`PIT · #${victim.id+1} ${DEFINITIONS[victim.kind].name}`,1.4,1);
+    if(!online?.active&&!demo&&a&&b)for(const [victim,attacker,before] of [[a,b,pitsA],[b,a,pitsB]] as const)if(attacker.id===0&&victim.pitSpins>before)toast(`PIT · #${victim.id+1} ${DEFINITIONS[victim.kind].name}`+pointsTag(DESTRUCTION_POINTS.pit),1.4,1);
     // A smash with the player in it: a short slow-motion beat, a toast with the closing speed, the crowd (offline).
     const smashed=!online?.active&&!demo&&!!a&&!!b&&(a.id===0||b.id===0)&&isSmash(Math.max(smashLoss.a,smashLoss.b));
     if(smashed){
