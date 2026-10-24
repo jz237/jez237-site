@@ -1,6 +1,7 @@
+import {restoreWreckByYouBytes} from './wreck-by-you-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readWreckedByPrevious,restoreWreckedByBytes,verifyWreckedByRevision} from './wrecked-by-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreWreckByYouBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('WreckedBy preserves every prior fixture, vehicle asset, venue art and history input',verifyWreckedByRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/wrecked-by/revision.json').toString());
