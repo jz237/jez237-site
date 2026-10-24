@@ -1,6 +1,7 @@
+import {restoreBumperRippedBytes} from './bumper-ripped-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readTankStuntPrevious,restoreTankStuntBytes,verifyTankStuntRevision} from './tank-stunt-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreBumperRippedBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('TankStunt preserves every prior fixture, vehicle asset, venue art and history input',verifyTankStuntRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/tank-stunt/revision.json').toString());

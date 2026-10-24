@@ -1190,11 +1190,14 @@ function stepLocks(dt:number){
     const {hooker,caught}=lock,part=hooker.wreckParts.assemblies.find(x=>x.name===lock.bumper);
     if(!jointLive(physics,lock.joint)||!part||!part.members.some(m=>m.mesh.visible)){releaseLock(lock);return false;}
     const at=fromBody(hooker,lock.hookerAnchor),gap=at.distanceTo(fromBody(caught,lock.caughtAnchor));
-    const pulling=(pullsAway(hooker.forward,away(hooker,caught),hooker.input.throttle)?1:0)+(pullsAway(caught.forward,away(caught,hooker),caught.input.throttle)?1:0);
+    const hookerPulls=pullsAway(hooker.forward,away(hooker,caught),hooker.input.throttle),caughtPulls=pullsAway(caught.forward,away(caught,hooker),caught.input.throttle),pulling=(hookerPulls?1:0)+(caughtPulls?1:0);
     lock.age+=dt;lock.strain=lockStrain(lock.strain,gap>=lock.length-.03,pulling,dt);
     const end=lockEnd(lock.strain,lock.age,gap,lock.length);if(!end)return true;
     releaseLock(lock);
     if(end==='torn'){hooker.ripAssembly(lock.bumper);locksTorn++;fx.emit(at,8,1,1);
+      // Torn off by the caught car driving away: that driver ripped it, and is credited like a door catch.
+      if(caughtPulls&&!hookerPulls&&caught.health>0){eventAwards.stripped(caught.id,hooker.id,0,1,elapsed);if(mode==='derby'){derbyFeed.note(caught.id,displayedDriver(caught),'ripped',elapsed);if(scoreDerby())scoreStunt(caught.id,DESTRUCTION_POINTS.ripped);}
+        if(!demo&&caught.id===0)toast(`BUMPER RIPPED · #${hooker.id+1} ${DEFINITIONS[hooker.kind].name}`+pointsTag(DESTRUCTION_POINTS.ripped),2,2);}
       // The bumper tearing away: a sharp crack over a metal groan.
       sound.shot('impact-light',at,.7,{rate:1.35,delay:0,duration:.4});sound.shot('suspension',at,.5,{rate:1.6,delay:.05,duration:.3});if(!demo&&(hooker.id===0||caught.id===0))recordRumbleImpact(.35);
       if(!demo&&(hooker.id===0||caught.id===0)){toast(hooker.id===0?'BUMPER TORN OFF':`BUMPER TORN OFF · #${hooker.id+1} ${DEFINITIONS[hooker.kind].name}`,2,2);sound.crowd(.8);}}
