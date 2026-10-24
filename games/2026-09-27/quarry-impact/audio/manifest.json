@@ -689,20 +689,6 @@
     "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
   },
   {
-    "id": "horn-stuck",
-    "file": "horn-stuck.ogg",
-    "provider": "ElevenLabs",
-    "params": {
-      "text": "Stuck car horn: one continuous steady slightly weak old car horn blare with no variation. Isolated, no music, no voices, no speech.",
-      "duration_seconds": 2.0,
-      "loop": true,
-      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
-    },
-    "sha256": "db68647cdb3788bfc3712cac53a6e5c2a883974b3a8ca01a16727dd6c8e7d933",
-    "runtimeSha256": "93e96a3cb0b0784311ec374232242870d48aa53a7b7edd3e2724f3e776c8bc77",
-    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5"
-  },
-  {
     "id": "impact-light-2",
     "file": "impact-light-2.ogg",
     "provider": "ElevenLabs",
@@ -869,5 +855,75 @@
     "sha256": "589ee1dc6c7ec55994e381fde3936f8c5895d7602e3af51e24790ff4a4f31667",
     "runtimeSha256": "29efd3edf103d54d5a5f3a2157e1f406e2c4421edfd46196913e936c70e055fe",
     "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "horn-stuck",
+    "file": "horn-stuck.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Stuck car horn: one continuous steady slightly weak old car horn blare with no variation. Isolated, no music, no voices, no speech.",
+      "duration_seconds": 2.0,
+      "loop": true,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "db68647cdb3788bfc3712cac53a6e5c2a883974b3a8ca01a16727dd6c8e7d933",
+    "runtimeSha256": "671b2e1de0176cbb12f60d6f0b5e32661b86b4aeb0fbd701af86ed4b1db63401",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5, RMS matched to -13.2 dBFS (the synthesized sound it replaces), limited at -0.4 dBFS"
+  },
+  {
+    "id": "starter",
+    "file": "starter.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Starter motor cranking a car engine that will not start: continuous rhythmic whirring and chugging of the starter with steady compression pulses, the engine never catching. Isolated, no music, no voices, no speech.",
+      "duration_seconds": 2.0,
+      "loop": true,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "0fcaea70146dbbd8dbd715fc989a327766b2c9c74a5ef45f4d701523ee5104c6",
+    "runtimeSha256": "9b6d3bbd829351169da989da0add37421f22f8d46abe94bbfd3276ca0b19b497",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5, RMS matched to -13.5 dBFS (the synthesized sound it replaces), limited at -0.4 dBFS"
+  },
+  {
+    "id": "gear-grind",
+    "file": "gear-grind.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Loud continuous gear crunch: a manual gearbox grinding hard and steadily the whole time, a dense harsh metallic rasp of clashing gear teeth with no pauses. Isolated, no engine revving, no music, no voices, no speech.",
+      "duration_seconds": 1.5,
+      "loop": true,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "8e182cbd130002dab978aa53427dd0388421145a6556e96a5f223732451a08fc",
+    "runtimeSha256": "7f986f3dee629eb1ce59de0d77fb7f520648ccb5030b0dcfdf2edd90207e6cf0",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5, RMS matched to -14.3 dBFS (the synthesized sound it replaces), limited at -0.4 dBFS"
+  },
+  {
+    "id": "squeal",
+    "file": "squeal.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Fan belt slipping in a car engine bay: a continuous steady high pitched rubber belt squeal. Isolated, no music, no voices, no speech.",
+      "duration_seconds": 2.0,
+      "loop": true,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "29d58919d4562a78828e3bbea91fdddc0bfa93704b6db8c566d4f80647a0fca9",
+    "runtimeSha256": "0beac990b15c51abfdd08dec10cf32004f6cab51da60b8b25d40f8dc8b293c31",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5, RMS matched to -17.4 dBFS (the synthesized sound it replaces), limited at -0.4 dBFS"
+  },
+  {
+    "id": "growl",
+    "file": "growl.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Wheel bearing worn out on a moving car: a continuous low rumbling metallic growl and hum that stays steady. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 2.0,
+      "loop": true,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "6c68215e126a5f4ecf7f06f1883fc9454f195510cce884789ac42646ebf09a5c",
+    "runtimeSha256": "a1107d90705241df182390249e3c86ee9a029e3a9ddfa72cb9672c363b27f120",
+    "processing": "first 0.6s cut, loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5, RMS matched to -29.1 dBFS (the synthesized sound it replaces), limited at -0.4 dBFS"
   }
 ]

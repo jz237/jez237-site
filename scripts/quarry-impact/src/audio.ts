@@ -48,8 +48,9 @@ export const rubLoopLevel=(rubs:ArrayLike<number>,speed:number,heat:number)=>{co
   return r<RUB.warn||v<1.5?0:Math.min(1,r*Math.min(1,v/10)*(heat>=RUB_FIRE.warn?1.4:1));};
 /** Steel groaning on a pinned car (0–1): from the moment it is pinned, building over two seconds. */
 export const groanLevel=(pinTime:number)=>Number.isFinite(pinTime)&&pinTime>0?.55+.45*Math.min(1,pinTime/2):0;
-/** The recorded grandstand roar answers moments of CROWD_CHEER.min intensity or more, at most once every CROWD_CHEER.gap seconds. */
-export const CROWD_CHEER={min:.5,gap:3.5,level:.45} as const;
+/** The recorded grandstand roar answers moments of CROWD_CHEER.min intensity or more, at most once every CROWD_CHEER.gap seconds,
+ * at CROWD_CHEER.level × intensity (full level puts it level with the synthesized roar it stands in for). */
+export const CROWD_CHEER={min:.5,gap:3.5,level:1} as const;
 export class Sound {
   private acousticProbe=new TrackAcousticProbe();
   private reflections?:TrackReflections;
