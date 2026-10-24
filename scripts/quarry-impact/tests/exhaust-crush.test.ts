@@ -16,7 +16,7 @@ test('a big hit on a crushed rear can flatten the tailpipe while the exhaust is 
 });
 test('the crushed pipe costs power, coughs smoke and chokes the note until it is torn off, offline only',()=>{
  const vehicle=readFileSync(new URL('../src/vehicle.ts',import.meta.url),'utf8'),main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8'),audio=readFileSync(new URL('../src/audio.ts',import.meta.url),'utf8');
- assert.ok(vehicle.includes("if(this.extendedDamage&&!quiet&&this.health>0&&!this.exhaustCrushed&&exhaustCrushes(this.structuralDamage?.[1]??0,damage,zone==='rear',this.exhaustGone,this.id*29+this.bigHits))"));
+ assert.ok(vehicle.includes("if(this.extendedDamage&&!quiet&&this.health>0&&!this.exhaustCrushed&&exhaustCrushes(this.structuralDamage?.[1]??0,crash(EXHAUST_CRUSH.damage),zone==='rear',this.exhaustGone,this.id*29+this.bigHits))"));
  assert.ok(vehicle.includes('if(this.exhaustCrushed&&!this.exhaustGone&&running)this.misfireFactor*=EXHAUST_CRUSH.power;'));
  assert.ok(vehicle.includes('if(this.extendedDamage&&this.exhaustCrushed&&!this.exhaustGone&&this.health>0&&!(this.engineStall!>0)&&this.input.throttle>.4){this.crushPuff+=fxGap;'));
  assert.ok(vehicle.includes('this.exhaustCrushed=false;this.crushPuff=0;'),'reset with the car');
