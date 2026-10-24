@@ -182,6 +182,10 @@ export const nutShimmy=(loose:number,angle:number)=>clamp01(loose)*WHEEL_NUTS.sh
 export const nutWarning=(loose:ArrayLike<number>)=>Array.from(loose).some(v=>v>=WHEEL_NUTS.warn)?'WHEEL LOOSE':'';
 /** A rear crush past EXHAUST_BLOW.onset splits the exhaust: the engine gets louder and raspier, and lifting off at speed
  * fires a crackle of pops with flame out of the tailpipe (which can light fuel on the ground). */
+/** Shrapnel (offline): a piece of debris striking a car at SHRAPNEL.min m/s or more dents and damages it, kg × speed² ×
+ * SHRAPNEL.k (capped at SHRAPNEL.max), at most once every SHRAPNEL.gap seconds per piece and car. */
+export const SHRAPNEL={min:8,k:.0011,max:12,gap:.5,toast:3} as const;
+export const shrapnelDamage=(kg:number,speed:number)=>Number.isFinite(kg)&&Number.isFinite(speed)&&kg>0&&speed>=SHRAPNEL.min?Math.min(SHRAPNEL.max,kg*speed*speed*SHRAPNEL.k):0;
 /** Crushed exhaust (offline): a hit of EXHAUST_CRUSH.damage or more on a rear crushed past EXHAUST_CRUSH.rear flattens the
  * tailpipe (EXHAUST_CRUSH.chance, fixed per car and hit) while the exhaust is still on: back pressure leaves the engine
  * EXHAUST_CRUSH.power of its pull, black smoke puffs out under throttle and the engine note is choked to EXHAUST_CRUSH.sound.

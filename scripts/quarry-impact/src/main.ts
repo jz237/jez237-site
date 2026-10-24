@@ -114,7 +114,7 @@ import {createBrackenWorld} from './bracken-world';
 import {createCinderbankWorld} from './cinderbank-world';
 import {tyreWarning} from './tyre-feedback';
 import {fluidWarning,leakRates,burnLevel,type GroundFire} from './fluid-leaks';
-import {gearboxWarning,brakeWarning,steerWarning,clutchWarning,playWarning,rubWarning,electricalWarning,nutWarning,exhaustWarning,diffWarning,tieRodWarning,rollBarWarning,propWarning,bearingWarning,bearingGrowl,skewWarning,windRoar,beltWarning,batteryLights,overheatWarning,coolThrottle,OVERHEAT_FIRE,caliperWarning,mountsWarning,starterWarning,frameWarning,discGlow,diffAxle,dazeWarning,nurseThrottle,STEER_PLAY,rubHeatWarning,EXTINGUISHER,extinguisherHint,aiExtinguishAfter,exhaustCrushWarning,PIN,pinnedBy,pinClock,pinCounts,type PinPush,bumpStartedBy,batteryOutWarning,noBatteryHint} from './damage-handling';
+import {gearboxWarning,brakeWarning,steerWarning,clutchWarning,playWarning,rubWarning,electricalWarning,nutWarning,exhaustWarning,diffWarning,tieRodWarning,rollBarWarning,propWarning,bearingWarning,bearingGrowl,skewWarning,windRoar,beltWarning,batteryLights,overheatWarning,coolThrottle,OVERHEAT_FIRE,caliperWarning,mountsWarning,starterWarning,frameWarning,discGlow,diffAxle,dazeWarning,nurseThrottle,STEER_PLAY,rubHeatWarning,EXTINGUISHER,extinguisherHint,aiExtinguishAfter,exhaustCrushWarning,SHRAPNEL,shrapnelDamage,PIN,pinnedBy,pinClock,pinCounts,type PinPush,bumpStartedBy,batteryOutWarning,noBatteryHint} from './damage-handling';
 import {engineStatus} from './engine-condition';
 import {drivingObstacleClearance} from './driving-probe';
 import {vehicleContact,vehicleContactManifold} from './vehicle-contact';
@@ -986,7 +986,7 @@ async function start(watch=demo) {
     camera.position.copy(cars[0].current).add(new T.Vector3(0, 4, -8));
     hud();
     sound.pause(false);
-    eventAwards.reset();playerTopSpeed=0;derbyAliveBefore=0;revengeSettled.clear();takedownCombo=0;playerStripped=0;strippedNoted.clear();pinNoted.clear();pinFed.clear();pinCounted.clear();pinScoring.clear();pinEscapes=0;sandwiches=0;wallSlams=0;finalStuntsCalled=false;mirrorsClipped=0;bumpStarts=0;aiBurn.clear();aiFireOuts=0;rideAt.clear();rideUps=0;onTop.clear();mounts=0;dominoes=0;knockedBy.clear();tankBy.clear();targetToastAt=-Infinity;clearLocks();pileUp.reset();pileUps=biggestPileUp=0;wreckCauses.clear();lastHitBy.clear();rollArmed.clear();wreckedBy.clear();alightBy.clear();lastTakedownAt=-1e9;bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
+    eventAwards.reset();playerTopSpeed=0;derbyAliveBefore=0;revengeSettled.clear();takedownCombo=0;playerStripped=0;strippedNoted.clear();pinNoted.clear();pinFed.clear();pinCounted.clear();pinScoring.clear();pinEscapes=0;sandwiches=0;wallSlams=0;finalStuntsCalled=false;mirrorsClipped=0;bumpStarts=0;aiBurn.clear();aiFireOuts=0;rideAt.clear();rideUps=0;onTop.clear();mounts=0;shrapnelAt.clear();shrapnelHits=0;dominoes=0;knockedBy.clear();tankBy.clear();targetToastAt=-Infinity;clearLocks();pileUp.reset();pileUps=biggestPileUp=0;wreckCauses.clear();lastHitBy.clear();rollArmed.clear();wreckedBy.clear();alightBy.clear();lastTakedownAt=-1e9;bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
     beginReplay();
     if(preparationInterrupted||document.hidden)pause();
     return true;
@@ -1214,6 +1214,7 @@ const tankBy=new Map<number,number>();
 /** Wing mirrors clipped off by passing cars this event (offline QA counter). */
 let mirrorsClipped=0;
 let bumpStarts=0;
+const shrapnelAt=new Map<number,number>();let shrapnelHits=0;
 const rideAt=new Map<number,number>();let rideUps=0;const onTop=new Map<number,{t:number;dent:number;credited:boolean}>();let mounts=0;
 const aiBurn=new Map<number,number>();let aiFireOuts=0;
 /** DOMINOs credited this event (offline QA counter), and who last knocked each car with a real hit, and when. */
@@ -1836,6 +1837,12 @@ function step(dt: number) {
     const relative=vb.clone().sub(va),closing=normal.lengthSq()>.5?Math.abs(relative.dot(normal)):relative.length();
     const scarDirection=relative.clone(),speed=scarDirection.length();
     scarDirection.normalize();
+    // Flying parts hurt what they hit (offline): a piece of debris striking a car fast enough dents and damages it.
+    if(!online?.active&&!!a!==!!b){const car=(a??b)!,parent=physics.getCollider(a?h2:h1)?.parent(),piece=parent?fx.debris.find(d=>d.body.handle===parent.handle):undefined;
+      if(piece&&car.extendedDamage&&car.health>0){const damage=shrapnelDamage(piece.body.mass(),speed),k=car.id*65536+parent!.handle;
+        if(damage>0&&elapsed-(shrapnelAt.get(k)??-1e9)>=SHRAPNEL.gap){shrapnelAt.set(k,elapsed);shrapnelHits++;
+          car.hit(point.clone(),(a?scarDirection.clone():scarDirection.clone().negate()),damage,elapsed,false);
+          if(car.id===0&&!demo&&damage>=SHRAPNEL.toast)toast('HIT BY FLYING DEBRIS',1.2,1);}}}
     contacts.push({key,point,point1,point2,normal,va,vb,a,b,scarDirection,speed,closing,material:a&&b?'metal':colliderImpactMaterial(physics,a?h2:h1,activeVenue.root.userData.solidRecords),impulse:e.totalForceMagnitude()*dt,
       damageScale:Math.max(a&&a.health>0?a.specification.damageScale:0,b&&b.health>0?b.specification.damageScale:0)});
   });
@@ -2600,6 +2607,7 @@ async function boot() {
     /** QA: drop an offline car's fuel tank onto its filler neck. */
     dropTank: (id: number) => { const c = cars.find(x => x.id === id); if (!c?.extendedDamage) return false; c.dropTank(); return true; },
     setStructure: (id: number, face: number, v: number) => { const c = cars.find(x => x.id === id); if (!c?.structuralDamage || !Number.isInteger(face) || face < 0 || face > 4 || !Number.isFinite(v)) return false; c.structuralDamage[face] = Math.max(0, Math.min(1, v)); return true; },
+    placeDebris: (index: number, x: number, y: number, z: number, vx: number, vy: number, vz: number) => { const d = fx.debris[index < 0 ? fx.debris.length + index : index]; if (!d) return false; d.body.setTranslation({ x, y, z }, true); d.body.setLinvel({ x: vx, y: vy, z: vz }, true); return true; },
     setExhaustCrushed: (id: number, crushed: boolean) => { const c = cars.find(x => x.id === id); if (!c?.extendedDamage) return false; c.exhaustCrushed = !!crushed; return true; },
     setAlight: (id: number) => { const c = cars.find(x => x.id === id); if (!c?.extendedDamage || c.health <= 0) return false; c.igniteRequest = true; return true; },
     extinguish: (id: number) => { const c = cars.find(x => x.id === id); return !!c?.extinguish(); },
@@ -2654,7 +2662,7 @@ async function boot() {
         p95: times[Math.floor(times.length * 0.95)],
         audio: sound.buffers.size,
         activeParticles: fx.particles.filter(p=>p.life>0).length,
-        debris: fx.debris.length, wallSlams, mirrorsClipped, bumpStarts, aiFireOuts, rideUps, mounts, slowMo: +Math.max(0, slowMoUntil - clock).toFixed(2), dominoes, pinEscapes, sandwiches, huntLeader: drivers.leader, bumperLocks: {made: locksMade, torn: locksTorn, active: bumperLocks.length}, tethers: {made: tethersMade, active: bumperTethers.length}, pileUps, biggestPileUp, debrisAt: fx.debris.map(d=>{const p=d.body.translation();return [+p.x.toFixed(2),+p.y.toFixed(2),+p.z.toFixed(2),+d.body.mass().toFixed(1),+d.age.toFixed(2)];}),
+        debris: fx.debris.length, wallSlams, mirrorsClipped, bumpStarts, aiFireOuts, rideUps, mounts, shrapnelHits, slowMo: +Math.max(0, slowMoUntil - clock).toFixed(2), dominoes, pinEscapes, sandwiches, huntLeader: drivers.leader, bumperLocks: {made: locksMade, torn: locksTorn, active: bumperLocks.length}, tethers: {made: tethersMade, active: bumperTethers.length}, pileUps, biggestPileUp, debrisAt: fx.debris.map(d=>{const p=d.body.translation();return [+p.x.toFixed(2),+p.y.toFixed(2),+p.z.toFixed(2),+d.body.mass().toFixed(1),+d.age.toFixed(2)];}),
         voices: sound.activeVoices,
         loops: sound.loops.size,
         thermal: vehicleFire?.stats,
