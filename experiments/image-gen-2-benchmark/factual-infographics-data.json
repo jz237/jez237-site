@@ -15404,5 +15404,125 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-24-factual-infographic-factual-infographic-specific-phobia-mic",
+    "title": "Factual infographic: Specific Phobia — Mice and Rats",
+    "tests": "factual_subtype: phobia-infographic; phobia: Specific phobia involving mice and rats; source-backed clinical terminology; distinct fictional casting; no subjective review; no rerolls; archive_slot=2026-10-24T04:08; concept=mice-rats-fear-garden-shed-avoidance; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create the finished factual phobia infographic directly on the canvas, artwork-led and organically integrated, not a photographed poster, book, room display, UI, boxed grid or detached dashboard. Request medium quality, auto size, opaque background. A refined gouache and fine technical-ink environmental illustration, vertically flowing composition if suitable, in pale sage, teal, honey sunlight and restrained vermilion annotation accents. Rich naturalistic detail and dignified emotional storytelling, not horror or comedy.\n\nAt the upper left in prominent BOLD lettering put exactly: \"Specific phobia\". Directly underneath in readable plain type put exactly: \"Intense, disproportionate fear of mice and rats\". No literal Markdown asterisks. Small secondary artistic subtitle: \"When the alarm feels larger than the animal\". This is the clinical category applied to an animal-related fear, not a claim of a separate named diagnosis. Include the brief contextual line \"Animal-related fear • Clinical assessment considers its impact on daily life\". Do not invent a Greek or Latin label.\n\nDominant hero: a sunlit garden shed seen from a low ground-level perspective, with believable wood grain, terracotta rims, coiled twine, enamel watering can, folded gardening gloves and translucent dust in a shaft of morning light. Keep these details subordinate to the meaningful scene and leave airy cream/sage areas for type. One small, anatomically plausible brown-gray mouse near a pot on the far lower left, whiskers and delicate feet visible, normal scale, not approaching the person. The shed has an open doorway and plenty of space, not a claustrophobia scene. Fictional woman in her late twenties, light olive skin, narrow freckled face, dark pixie cut, tall lean build, teal work overalls, paused side-on in the garden shed, one hand near her upper chest, shoulders gently raised and feet angled toward the doorway. Respectful ordinary posture, no caricature, screaming, looming rats or monstrous distortion. A tiny naturalistic rat silhouette beside the subtitle may distinguish the second feared animal, not an additional frightening scene. No reaching toward rodents, barehanded handling, traps, droppings, injury or contaminated food. The pictured shed encounter is an illustrative scenario, not a universal clinical trigger.\n\nWeave a clear explanatory journey around the illustrated person and through the negative space using curved open leader lines and a thin broken ochre path. Place a short open callout close to her sightline: \"Encounter or anticipation\" / \"Seeing the animal — or worrying it may appear\". An airy thought-arc toward the doorway carries \"Anticipatory anxiety\" / \"Worry before an encounter\". Beside the torso, a delicate abstract pulse mark and lightly repeated hand contour, explicitly illustrative rather than anatomical imaging, carry \"Autonomic arousal\" / \"Body alarm: a pounding heart or trembling\". Small qualifier: \"Responses vary\". Do not draw invented brain pathways, neural circuitry, ECG diagnoses or measured physiology.\n\nLet the broken path curl toward the doorway, loop softly back, and integrate the labels \"Avoidance → short-term relief → avoidance becomes more likely\" and \"Negative reinforcement\" / \"Relief can keep the avoidance loop going\". This is a possible maintenance mechanism, not a universal origin story; do not imply every phobia begins in trauma. Make this loop legible without enclosing it in a box. Its visual weight is secondary to the hero.\n\nA sunlit quieter margin near the bottom differentiates alarm from real-world risk with \"Fear can exceed the actual danger\" and underneath \"Ordinary caution still matters: rodents can carry germs and can bite\". A tiny open handwashing motif carries \"Wash hands after handling small mammals or their supplies\". This is balanced safety context, not a promise that rodents are harmless or a directive to interact with wild animals.\n\nAt the bottom right, seamlessly blending into the wash, a small calm collaborative vignette shows the SAME protagonist seated with a clinician, looking at an ordinary mouse photograph on a card across the table. No live animal is present in this vignette. Text: \"Evidence-based help\" / \"CBT, including clinician-guided exposure therapy\" / \"Plan appropriate steps together; do not force contact with wild rodents\". Brief closing line \"Seek professional support if fear disrupts daily life\" and understated footer \"Educational illustration — not a diagnosis\". This scene is help-seeking, not a mandatory exposure ladder or individualized treatment prescription.\n\nUse elegant type hierarchy, crisp readable labels, asymmetry, variable illustration scale and curved paths, with breathing room. Preserve the definition, triggers, body alarm, avoidance feedback, actual-risk distinction and evidence-based help; omit secondary decorative props before crowding these essentials. All factual text is supplied above; no statistics, extra medical claims, diagnostic codes, bibliographies, URLs, tiny citations, branding or watermarks. Keep the detailed shed and protagonist visually dominant rather than reducing this to a text poster.",
+    "image": "images/2026-10-24-factual-infographic-factual-infographic-specific-phobia-mic.jpg",
+    "thumb": "thumbs/2026-10-24-factual-infographic-factual-infographic-specific-phobia-mic.webp",
+    "color": "#b9ad8f",
+    "date": "2026-10-24",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "mice-rats-fear-garden-shed-avoidance",
+      "imageSha256": "7401b87186d3257be6a767b1dbedc703c8c26b2ca4dae7d355592bd9e632c0bb",
+      "imageDHash": "731bd39393970d09"
+    },
+    "factualInfographic": {
+      "topic": "Specific phobia involving mice and rats: anticipatory anxiety, autonomic arousal, avoidance, realistic safety, and evidence-based help",
+      "description": "An illustrated explanation of animal-related specific phobia, separating disproportionate fear from ordinary caution and outlining clinician-guided evidence-based help.",
+      "sourceNote": "Verified definitions, symptoms and treatment: NIMH https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders ; NHS https://www.nhs.uk/mental-health/conditions/phobias/ ; avoidance learning: Behaviour Therapy https://pmc.ncbi.nlm.nih.gov/articles/PMC5879019/ ; animal safety: CDC https://www.cdc.gov/healthy-pets/about/small-mammals.html",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-24T08:10:12.596449+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Mental Health",
+            "title": "Phobias and Phobia-Related Disorders",
+            "sourceType": "government-agency",
+            "url": "https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders"
+          },
+          {
+            "id": "S2",
+            "publisher": "National Health Service",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          },
+          {
+            "id": "S3",
+            "publisher": "Behaviour Therapy",
+            "title": "Rethinking Avoidance: Toward a Balanced Approach to Avoidance in Treating Anxiety Disorders",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5879019/"
+          },
+          {
+            "id": "S4",
+            "publisher": "Centers for Disease Control and Prevention",
+            "title": "Small Mammals | Healthy Pets, Healthy People",
+            "sourceType": "government-agency",
+            "url": "https://www.cdc.gov/healthy-pets/about/small-mammals.html"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Display term: Specific phobia. Plain-English subtitle: Intense, disproportionate fear of mice and rats. This uses the clinical category of specific phobia for an animal-related fear, not a separate invented diagnosis.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Encountering the feared animal or anticipating an encounter may provoke intense fear, anxiety and active avoidance; the shed encounter is an illustrative fictional example, not a clinical case or universal trigger.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Anticipatory anxiety means worry before an encounter; even thinking about feared situations can cause anxiety and avoidance.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Autonomic arousal is the body alarm associated with fear; noticeable heartbeat and trembling can occur, but symptoms vary.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Negative reinforcement can maintain avoidance: short-term relief after avoiding a feared situation can make avoidance more likely again; this is a possible learning mechanism, not an explanation of every case.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Specific phobia involves fear out of proportion to actual danger; ordinary caution around animals is distinct from disabling phobic fear.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Mice and rats can carry germs and small mammals can bite. Be cautious with unfamiliar animals; wash hands after handling small mammals or their supplies. Therapy does not mean ignoring genuine animal-related hazards.",
+            "sourceIds": [
+              "S4"
+            ]
+          },
+          {
+            "claim": "CBT is evidence-based treatment; exposure therapy is a particularly effective CBT method for phobias, with a clinician and patient able to plan work on avoided situations. Seek professional help when fear affects daily life.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Illustrated help is a collaborative conversation about an animal photograph, not instructions to approach or handle wild rodents; treatment can help and is individualized.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
