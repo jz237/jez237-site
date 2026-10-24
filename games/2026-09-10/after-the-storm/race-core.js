@@ -52,6 +52,8 @@ import {courseResistance,polygonDistance} from './classic-courses.js';
 import {quickTurn,rocketStart,beginWipeout,stepWipeout,collideRiders} from './rider-actions.js';
 import {clearWakeTrail,recordWake,wakeGradient,wakeContact} from './wake-field.js';
 import {shoreRecovery} from './shore-recovery.js';
+import {createOpenSeaField,setOpenSeaField} from './open-sea-field.js';
+import {stepOpenSeaCraft,rightOpenSeaCraft} from './open-sea-craft.js';
 import {lapComparison} from './race-feedback.js';
 import {passageAim,passageTarget,passageOpening,passageDistance,passageCollision} from './course-passages.js';
 import {obstaclePosition} from './course-environment.js';
@@ -74,8 +76,14 @@ export const angleDelta=a=>Math.atan2(Math.sin(a),Math.cos(a));
 export function makeCoveCourse(){return getCourse('greyhaven');}
 export const COVE=makeCoveCourse();
 export function settings(rider=0,tune={}){const r=RIDERS[rider];const engine=clamp(Number(tune.engine)||0,-1,1),grip=clamp(Number(tune.grip)||0,-1,1),handling=clamp(Number(tune.handling)||0,-1,1);return {...r,speed:r.speed+engine*1.4-grip*.7,accel:r.accel-engine*.8,grip:r.grip+grip*1.4,handling:r.handling+handling*.35};}
-export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,difficulty=0,course=COVE,gridOrder=null,seaState='course',secondRider=1,secondTune={},handicap=false,swapColours=false,physics='modern',nativeTunes=[],nativeTuneModes=[],nativeInitialRaceState,nativeRecordSession,nativeObjectLayout='source',nativeCourseActors,nativeSceneEffects,nativeChampionshipContinuation,nativeChampionshipIntroduction=false,waterChoice=0}={}){
+export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,difficulty=0,course=COVE,gridOrder=null,seaState='course',secondRider=1,secondTune={},handicap=false,swapColours=false,physics='modern',nativeTunes=[],nativeTuneModes=[],nativeInitialRaceState,nativeRecordSession,nativeObjectLayout='source',nativeCourseActors,nativeSceneEffects,nativeChampionshipContinuation,nativeChampionshipIntroduction=false,waterChoice=0,openSea=null}={}){
  if(!['modern','native'].includes(physics))throw new RangeError('Unknown race physics');
+ // Experimental open sea: FFT ocean and rigid-body craft, numeric sea state 0..9.
+ if(openSea!==null&&(physics!=='modern'||mode!=='practice'||!Number.isFinite(openSea)||openSea<0||openSea>9))throw new RangeError('The experimental open sea is a modern-physics solo Free ride with a sea state from 0 to 9');
+ // Its own waves replace the venue's: the legacy water systems stay calm, and
+ // the chosen sea sets the weather (raceWeather).
+ const seaChoice=seaState;if(openSea!==null)seaState='calm';
+ setOpenSeaField(null);
  if(nativeRecordSession!==undefined&&physics!=='native')throw new RangeError('Native record sessions require native physics');
  const nativePractice=physics==='native'&&mode==='practice'&&course.sourceWaterCourseIndex===0&&difficulty===0&&!course.reverse;
  // Startup runs AC184 for every scene; mode11's 71E70 branch selects only primary routes.
@@ -99,7 +107,9 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
  const freeRide=mode==='practice'||mode==='versus'&&course.id==='practice';
  if(physics!=='native'&&['race','championship'].includes(mode))course=racingStuntCourse(course);
  frontEnabled.value=seaState==='surf'||seaState==='storm'?1:0;setWaterCharacter(course);surfSeed.value=((Math.floor(waveSeed)%997)+997)%997;surfStrength.value=seaState==='surf'?1:0;windSea.value=seaState==='chop'||seaState==='storm'?1:0;setCourseWaveTrain(course.waveTrain);setBoundaryWaves(course);clearImpacts();clearWakeTrail();waterLevel.value=conditions(course,0).seaLevel;
- if(mode==='stunt'||freeRide&&!nativePractice)course=stuntCourse(course,{freeRide});
+ if(mode==='stunt'||freeRide&&!nativePractice&&openSea===null)course=stuntCourse(course,{freeRide});
+ // Fixed ramps cannot ride the open sea's swell; the open water is the course.
+ if(openSea!==null)course={...course,ramps:[]};
  if(course.geometryForPlayers)course={...course,...course.geometryForPlayers(mode==='versus'?2:1)};
  if(course.sourceObjectSelection){const playerCount=mode==='versus'?2:1;course={...course,playerCount,rocks:course.hazardsForPlayers(playerCount),sourceDecorations:course.decorationsForPlayers?course.decorationsForPlayers(playerCount):course.sourceDecorations};}
  if(course.contactVolumesForRamps)course={...course,contactVolumes:course.contactVolumesForRamps(course.ramps)};
@@ -168,6 +178,7 @@ export function createRace({waveSeed=17,mode='race',rider=0,tune={},laps=3,diffi
  const sourceSphereGrid=!nativeLaunch?.canonicalObjects&&sourceFixedSpheres.length?createSourceFixedSphereGrid(sourceFixedSpheres,{scale:nativeScale}):null;
  const state={sourceSphereGrid,raceWater,courseDatum:createCourseDatum(course),breakables:createBreakableState(),localWater,waterObstacles:obstacles,fixedPiles:(course.crossbars||[]).flatMap(barrierPiles),waveSeed:surfSeed.value,swapColours:!!swapColours,passageOpenedAt:Infinity,mode,freeRide,seaState,handicap:!!handicap,phase:freeRide?'running':'countdown',countdown:freeRide?0:3,time:0,course,racers,laps:configuredLaps,difficulty,events:[],result:null,weather:conditions(course,0),finishWait:0,physics,nativeHost:null};
  if(nativeChampionshipSelection)state.nativeChampionshipSelection=nativeChampionshipSelection;
+ if(openSea!==null){const field=createOpenSeaField({seaState:openSea});field.choice=seaChoice;field.level=waterLevel.value;field.setTime(0);state.openSea=field;setOpenSeaField(field);}
  if(waterChoice)state.waterChoice=waterChoice;
  if(physics==='native'){
   // Preview histories must not compete with saved modern-physics records.
@@ -459,7 +470,7 @@ export function handicapBoost(s,r){if(s.mode!=='versus'||s.freeRide||!s.handicap
  const progress=q=>{const g=s.course.gates[q.next],prev=s.course.gates[(q.next+s.course.gates.length-1)%s.course.gates.length];return q.passed-Math.hypot(g.x-q.x,g.z-q.z)/Math.max(1,Math.hypot(g.x-prev.x,g.z-prev.z));};
  const other=s.racers.find(q=>q!==r);if(!other||other.dq||other.finishTime!==null)return 0;return clamp((progress(other)-progress(r))*.075,0,.12);
 }
-export function raceWeather(s,time=s.time){const w=conditions(s.course,time,s.racers[0].lap);if(s.nativeHost)w.seaLevel=s.raceWater.field.datumNative*s.raceWater.scale;else if(s.courseDatum)w.seaLevel=s.courseDatum.value;if(s.seaState!=='course')w.storm=({calm:0,chop:.45,storm:.95})[s.seaState]??w.storm;return w;}
+export function raceWeather(s,time=s.time){const w=conditions(s.course,time,s.racers[0].lap);if(s.nativeHost)w.seaLevel=s.raceWater.field.datumNative*s.raceWater.scale;else if(s.courseDatum)w.seaLevel=s.courseDatum.value;const sea=s.openSea?.choice??s.seaState;if(sea!=='course')w.storm=({calm:0,chop:.45,storm:.95})[sea]??w.storm;return w;}
 /** The Normal cup's round0 selection (course0, the Dolphin Park warm-up),
  * stopped before 9345C. The original enters it through the championship
  * return and course introduction like every round; the browser plays that
@@ -507,7 +518,7 @@ export function fastForwardNativeEnding(s,maxFrames=1200){
  return frames;
 }
 export function stepRace(s,input,dt,options={}){if(s.phase==='paused'||s.phase==='results')return;dt=clamp(dt,0,1/30);
- setRaceWater(s.raceWater??null);setCoastalDepth(s.seaState==='course'?null:s.course);
+ setRaceWater(s.raceWater??null);setCoastalDepth(s.seaState==='course'?null:s.course);setOpenSeaField(s.openSea??null);
  if(s.phase==='ending'){
   const menu=s.nativeEnding;menu.remainder+=dt;
   while(menu.remainder+1e-12>=.05&&s.phase==='ending'){
@@ -551,13 +562,17 @@ export function stepRace(s,input,dt,options={}){if(s.phase==='paused'||s.phase==
    return;
  }
  frontEnabled.value=s.seaState==='surf'||s.seaState==='storm'?1:0;setWaterCharacter(s.course);setLocalWater(s.localWater);s.time+=dt;if(s.course.passage?.enabled&&s.racers.some(r=>r.lap>1)&&s.passageOpenedAt===Infinity){s.passageOpenedAt=s.time;if(s.course.passage.kind==='gate')s.racers.forEach(r=>announce(r,s,'SLUICE OPENING · INNER CHANNEL AVAILABLE'));}stepCourseDatum(s,dt);s.weather=raceWeather(s);for(const q of s.course.rocks||[])if(q.followsWaterDatum)q.y=s.weather.seaLevel;surfSeed.value=s.waveSeed;surfStrength.value=s.seaState==='surf'?1:0;windSea.value=s.seaState==='chop'||s.seaState==='storm'?1:0;setCourseWaveTrain(s.course.waveTrain);setBoundaryWaves(s.course);waterLevel.value=s.weather.seaLevel;
+ if(s.openSea){s.openSea.level=waterLevel.value;s.openSea.setTime(s.time);}
  craftFields.forEach((c,i)=>{const r=s.racers[i];Object.assign(c,r?{x:r.x,z:r.z,heading:r.heading,turn:r.turn,bowWet:r.hydro.bowWet,sternWet:r.hydro.sternWet,power:Math.min(1,r.speed/18)*r.hydro.wet}:{power:0});});
  for(const r of s.racers){if(r.finishTime!==null||r.dq)continue;let c=r.human?(Array.isArray(input)?input[r.player]||{}:r.player===0?input:{}):aiInput(s,r),stats=r.stats;const ox=r.x,oz=r.z,oldY=r.hydro.y,oldPose={pitch:r.hydro.pitch,roll:r.hydro.roll,heading:r.heading};r.raceTime=s.time;if(r.human&&rocketStart(r,c.throttle||0,s.time))announce(r,s,'ROCKET START · MAX POWER');if(stepWipeout(r,c,dt,s.time))announce(r,s,'BACK ABOARD');if(r.wipeout)c={throttle:0};r.collision=Math.max(0,r.collision-dt);r.recover=Math.max(0,r.recover-dt);
  if(s.mode==='stunt'&&r.stunt.remaining<=0)c={...c,throttle:0};
- const ice=iceContact(s.course,r);r.onIce=ice?.id||'';if(ice&&!ice.triangles)supportOnIce(r,ice,0);r.turn+=((c.steer||0)-r.turn)*(1-Math.exp(-dt*7));r.throttle=clamp(c.throttle||0,0,1);r.riderLean=clamp(c.lean||0,-1,1);
+ // The open sea's craft moves itself; every collision below still applies.
+ let ice=null,fx,fz;
+ if(s.openSea){stepOpenSeaRacer(s,r,c,dt);fx=Math.sin(r.heading);fz=Math.cos(r.heading);}else{
+ ice=iceContact(s.course,r);r.onIce=ice?.id||'';if(ice&&!ice.triangles)supportOnIce(r,ice,0);r.turn+=((c.steer||0)-r.turn)*(1-Math.exp(-dt*7));r.throttle=clamp(c.throttle||0,0,1);r.riderLean=clamp(c.lean||0,-1,1);
  r.handicapBoost=handicapBoost(s,r);const rated=2*stats.speed*(s.seaState==='surf'?1.27:1.10)*(.64+r.power*.072)*(1+r.handicapBoost),velocity=Math.hypot(r.vx,r.vz),steering=stats.handling*r.turn*clamp(Math.max(velocity,2*Math.sqrt(r.throttle)*Math.min(1,r.hydro.intake+(r.collision>0?1:0)))/4,0,1);
  const gust=gustAt(r.x,r.z,s.time,s.weather.storm);r.gust=gust.strength;const windForce=.003*(1-r.hydro.wet*.8);r.vx+=gust.x*windForce*dt;r.vz+=gust.z*windForce*dt;
-   const contact=contactHandling(r,c,dt);r.quickTurn=quickTurn(c,velocity,r.hydro.wet);r.yawVelocity??=0;const targetYaw=steering*contact.yaw*(1+r.quickTurn*.65)*(c.slide?1.35:1)*(.78+.22*r.throttle);r.yawVelocity+=(targetYaw-r.yawVelocity)*(1-Math.exp(-dt*7*(ice?.triangles?Math.max(r.throttle,r.hydro.wet):r.hydro.wet)));r.yawVelocity*=Math.exp(-dt*.18*(1-r.hydro.wet));if(ice&&!ice.triangles)r.yawVelocity*=Math.exp(-dt*9);r.heading+=r.yawVelocity*dt;const fx=Math.sin(r.heading),fz=Math.cos(r.heading),forward=r.vx*fx+r.vz*fz;
+   const contact=contactHandling(r,c,dt);r.quickTurn=quickTurn(c,velocity,r.hydro.wet);r.yawVelocity??=0;const targetYaw=steering*contact.yaw*(1+r.quickTurn*.65)*(c.slide?1.35:1)*(.78+.22*r.throttle);r.yawVelocity+=(targetYaw-r.yawVelocity)*(1-Math.exp(-dt*7*(ice?.triangles?Math.max(r.throttle,r.hydro.wet):r.hydro.wet)));r.yawVelocity*=Math.exp(-dt*.18*(1-r.hydro.wet));if(ice&&!ice.triangles)r.yawVelocity*=Math.exp(-dt*9);r.heading+=r.yawVelocity*dt;fx=Math.sin(r.heading);fz=Math.cos(r.heading);const forward=r.vx*fx+r.vz*fz;
  // Source HUD launch samples: 16/68/95 km/h at .3/1.3/2.3 seconds.
  // Planing craft retain thrust through mid speed, then approach their existing
  // rated maximum, now doubled. Intake contact still gates propulsion on waves and in air.
@@ -577,14 +592,16 @@ export function stepRace(s,input,dt,options={}){if(s.phase==='paused'||s.phase==
  if(!ice&&r.speed>5&&r.hydro.wet>.05){const cross=wakeContact(wakeGradient(r.x,r.z,s.time,s.weather.storm,r,1.4),r.heading,r.speed,r.hydro.wet*(c.dampen?.2:1));r.vx+=cross.x*dt;r.vz+=cross.z*dt;r.hydro.rollVelocity+=cross.roll*dt;}
  if(waterResponse.landing){addImpact(r.x,r.z,s.time,r.hydro.impact);const cleanSkim=s.seaState==='surf'&&r.hydro.entry?.style==='level'&&Math.abs(r.hydro.entry.slip)<2&&r.hydro.impact<6?.8:1;const loss=Math.exp(-Math.max(0,r.hydro.impact-2)*contact.landingLoss*cleanSkim-(r.hydro.entry?.loss||0));r.yawVelocity+=r.hydro.entry?.yaw||0;r.vx*=loss;r.vz*=loss;announce(r,s,r.hydro.impact>5?'HARD LANDING':'Wave landing');if(r.hydro.impact>8&&!c.dampen)r.recover=.65;}
 
- r.x+=r.vx*dt;r.z+=r.vz*dt;
+ r.x+=r.vx*dt;r.z+=r.vz*dt;}
  const floorContact=constrainIceFloors(s.course,r,ox,oz,oldY,oldPose,(x,z)=>wave(x,z,s.time,s.weather.storm));
  if(floorContact?.landing){announce(r,s,s.course.theme==='ice'?'Ice landing':'Surface landing');if(floorContact.impact>8&&!c.dampen)r.recover=.65;}
  const volumeContact=constrainClippedVolumes(s.course.contactVolumes,r);
  r.sourceRampContact=volumeContact?.volume.rampId||null;if(r.sourceRampContact)r.hydro.rampId=r.sourceRampContact;
  const wallImpact=Math.max(constrainTriangleWalls(s.course.contactWalls,r,ox,oz,oldY,oldPose),constrainShoreLines(s.course.shoreContacts,r,ox,oz,oldPose),volumeContact?.impact||0);
  if(wallImpact>3&&!r.collision){r.collision=.65;announce(r,s,'IMPACT');if(wallImpact>12+stats.stability&&beginWipeout(r,s.time,wallImpact))announce(r,s,'WIPEOUT · TAP THROTTLE TO REMOUNT');}
- const arrivedIce=iceContact(s.course,r);if(arrivedIce&&!arrivedIce.triangles){supportOnIce(r,arrivedIce,0);r.onIce=arrivedIce.id;}else if(ice&&!ice.triangles){const next=iceSurfaceAt(s.course,r.x,r.z);if(next&&next.id===ice.id&&(next.heightAt?next.heightAt(r.x,r.z):next.height)>=r.hydro.waterHeight-.22)supportOnIce(r,next,0);}r.speed=Math.hypot(r.vx,r.vz);if(r.hydro.wet>.15&&r.speed>3&&s.time>=(r.nextWake||0)){recordWake(r.x-fx*1.9,r.z-fz*1.9,s.time,r.heading,Math.min(1.4,r.speed/18)*r.hydro.wet*(s.seaState==='surf'?1.5:1),r,s.seaState==='surf'?96:64);r.nextWake=s.time+(s.seaState==='surf'?.20:.24);}applyRamp(r,s.course.ramps,ox,oz,c.lean||0,s.time,s.weather.storm);
+ const arrivedIce=s.openSea?null:iceContact(s.course,r);if(arrivedIce&&!arrivedIce.triangles){supportOnIce(r,arrivedIce,0);r.onIce=arrivedIce.id;}else if(ice&&!ice.triangles){const next=iceSurfaceAt(s.course,r.x,r.z);if(next&&next.id===ice.id&&(next.heightAt?next.heightAt(r.x,r.z):next.height)>=r.hydro.waterHeight-.22)supportOnIce(r,next,0);}r.speed=Math.hypot(r.vx,r.vz);if(r.hydro.wet>.15&&r.speed>3&&s.time>=(r.nextWake||0)){recordWake(r.x-fx*1.9,r.z-fz*1.9,s.time,r.heading,Math.min(1.4,r.speed/18)*r.hydro.wet*(s.seaState==='surf'?1.5:1),r,s.seaState==='surf'||s.openSea?96:64);
+ // The open sea lays packets by distance so they overlap into one unbroken jet-wash trail.
+ r.nextWake=s.time+(s.openSea?clamp(1.6/r.speed,.05,.24):s.seaState==='surf'?.20:.24);}applyRamp(r,s.course.ramps,ox,oz,c.lean||0,s.time,s.weather.storm);
  const fixedSphereContact=s.sourceSphereGrid?constrainSourceSphereRace(s.sourceSphereGrid,r):null;
  let breakableImpact=!!fixedSphereContact?.contacts;
  for(const q of s.course.rocks||[]){
@@ -597,9 +614,9 @@ export function stepRace(s,input,dt,options={}){if(s.phase==='paused'||s.phase==
   break;
  }
  const rock=(s.course.rocks||ROCKS).find(q=>{if(q.breakable||q.fixedSphere)return false;const p=obstaclePosition(q,s.time);return Math.hypot(r.x-p.x,r.z-p.z)<q.r+1&&r.hydro.y<r.hydro.waterHeight+(q.type==='ice'?2.5:1.1);});const pile=(s.fixedPiles||[]).find(p=>Math.hypot(r.x-p.x,r.z-p.z)<p.radius+.85&&r.hydro.y<p.top&&r.hydro.y+1.1>p.bottom);const bed=(s.course.landGround||s.course.ground||ground)(r.x,r.z),landHit=bed>waterLevel.value-.4&&r.hydro.y-.2<bed;if(breakableImpact||landHit||rock||mooredBoatCollision(s.course.mooredBoats,r.x,r.hydro.y,r.z,s.time,s.weather.storm)||barrierCollision(s.course.crossbars,r.x,r.hydro.y,r.z)||passageCollision(s.course.passage,r.x,r.hydro.y,r.z,s.time,s.passageOpenedAt)){if(breakableImpact){}else if((rock||pile)&&!landHit){const p=rock?obstaclePosition(rock,s.time):pile,radius=rock?rock.r+1.03:pile.radius+.88,dx=r.x-p.x,dz=r.z-p.z,length=Math.hypot(dx,dz),nx=length>1e-6?dx/length:-fx,nz=length>1e-6?dz/length:-fz;r.x=p.x+nx*radius;r.z=p.z+nz*radius;const into=r.vx*nx+r.vz*nz;if(into<0){r.vx-=nx*into*1.25;r.vz-=nz*into*1.25;}}else if(ice&&landHit){const floor=s.course.ground,nx=floor(r.x+.3,r.z)-floor(r.x-.3,r.z),nz=floor(r.x,r.z+.3)-floor(r.x,r.z-.3),length=Math.hypot(nx,nz)||1,into=(r.vx*nx+r.vz*nz)/length;r.x=ox;r.z=oz;if(into>0){r.vx-=nx/length*into;r.vz-=nz/length*into;}}else{const exit=!landHit&&barrierCollision(s.course.crossbars,ox,r.hydro.y,oz)?barrierOverlapExit(s.course.crossbars,ox,r.hydro.y,oz):null;r.x=exit?.x??ox;r.z=exit?.z??oz;r.vx*=-.25;r.vz*=-.25;}if(!r.collision){r.collision=1;announce(r,s,'IMPACT');if((fixedSphereContact?.contacts?fixedSphereContact.impact:r.speed)>12+stats.stability){beginWipeout(r,s.time,fixedSphereContact?.contacts?fixedSphereContact.impact:r.speed);announce(r,s,'WIPEOUT · TAP THROTTLE TO REMOUNT');}}}
- if(shoreRecovery(s,r,landHit,!!c.rescue,dt)){announce(r,s,'BACK IN THE WATER');continue;}
+ if(shoreRecovery(s,r,landHit,!!c.rescue,dt)){if(s.openSea){rightOpenSeaCraft(r);r.vx=r.vz=r.speed=0;}announce(r,s,'BACK IN THE WATER');continue;}
  if(s.mode!=='stunt'&&!s.freeRide)stepRaceFlip(r,c,dt);
- if(s.mode==='stunt'||s.freeRide){stepStunt(r.stunt,r,s.course,c,dt,ox,oz,oldY,s.weather.storm);if(r.stunt.eventId!==r.stuntEventId){r.stuntEventId=r.stunt.eventId;if(r.stunt.event){r.event=r.stunt.event;r.eventTime=s.time;}}}
+ if(s.mode==='stunt'||s.freeRide&&!s.openSea){stepStunt(r.stunt,r,s.course,c,dt,ox,oz,oldY,s.weather.storm);if(r.stunt.eventId!==r.stuntEventId){r.stuntEventId=r.stunt.eventId;if(r.stunt.event){r.event=r.stunt.event;r.eventTime=s.time;}}}
  if(r.stunt.crashes>(r.lastCrashes||0)){r.lastCrashes=r.stunt.crashes;beginWipeout(r,s.time,12);}
  if(!s.freeRide){if(r.sourceBuoys)adjudicateSourceGate(s,r,dt);else adjudicateGate(s,r,ox,oz);const p=s.course.passage,insidePassage=p&&passageOpening(p,s.time,s.passageOpenedAt)>.98&&passageDistance(p,r.x,r.z)<p.width;r.out=outsideCourse(s.course,r.x,r.z)&&!insidePassage?r.out+dt:0;if(r.out>=5){r.dq='Outside course for five seconds';announce(r,s,'DISQUALIFIED');}}
  }
@@ -609,6 +626,16 @@ export function stepRace(s,input,dt,options={}){if(s.phase==='paused'||s.phase==
  const canSeparate=(r,x,z)=>!passageCollision(s.course.passage,x,r.hydro.y,z,s.time,s.passageOpenedAt)&&!barrierCollision(s.course.crossbars,x,r.hydro.y,z);
  for(let i=0;i<s.racers.length;i++)for(let j=i+1;j<s.racers.length;j++){const a=s.racers[i],b=s.racers[j],impact=collideRiders(a,b,canSeparate);if(impact>9)for(const r of [a,b])if(impact>10+r.stats.stability*1.3&&beginWipeout(r,s.time,impact))announce(r,s,'WIPEOUT · TAP THROTTLE TO REMOUNT');}
  finishRaceStep(s,dt);
+}
+// Experimental open sea: the rigid-body craft (open-sea-craft.js) moves the
+// racer; the race loop's collisions, shore recovery and wake then apply as usual.
+function stepOpenSeaRacer(s,r,c,dt){
+ if(r.openSea?.wasWipeout&&!r.wipeout)rightOpenSeaCraft(r);
+ r.turn+=((c.steer||0)-r.turn)*(1-Math.exp(-dt*7));r.throttle=clamp(c.throttle||0,0,1);r.riderLean=clamp(c.lean||0,-1,1);r.quickTurn=0;r.onIce='';r.weedDrag=0;
+ const step=stepOpenSeaCraft(r,{...c,steer:r.turn},dt,s.time,s.openSea,r.stats);
+ r.openSea.wasWipeout=!!r.wipeout;r.yawVelocity=r.openSea.yawRate;
+ if(step.landing){addImpact(r.x,r.z,s.time,r.hydro.impact);announce(r,s,r.hydro.impact>6?'HARD LANDING':'Wave landing');}
+ if(step.capsized&&beginWipeout(r,s.time,12))announce(r,s,'WIPEOUT · TAP THROTTLE TO REMOUNT');
 }
 function finishRaceStep(s,dt){
  if(s.freeRide)return;
