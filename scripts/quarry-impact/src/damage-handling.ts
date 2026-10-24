@@ -173,6 +173,13 @@ export const electricalWarning=(severity:number)=>severity>0?'ELECTRICAL FAULT':
 /** A wheel knocked past WHEEL_NUTS.onset starts working its nuts loose as it turns: the looser it gets the more it
  * shimmies (toe swinging with each revolution) and wobbles, until at 1 it comes off on the move. */
 export const WHEEL_NUTS={onset:.12,rate:.01,shimmy:.035,tilt:.09,warn:.35} as const;
+/** Wheel torn off (offline): a blow of WHEEL_RIP.damage or more (the hits landing within WHEEL_RIP.reach of one wheel inside
+ * WHEEL_RIP.window seconds, since one crash arrives as several contacts) on a wheel already battered to WHEEL_RIP.wheel tears
+ * it clean off (WHEEL_RIP.chance, rolled once per blow), thrown along the blow. */
+export const WHEEL_RIP={damage:12,wheel:.1,reach:1.4,window:.25,chance:.4} as const;
+export function wheelRips(distance:number,wheelDamage:number,damage:number,seed:number){
+  if(!(distance<=WHEEL_RIP.reach)||!(wheelDamage>=WHEEL_RIP.wheel)||!Number.isFinite(damage)||damage<WHEEL_RIP.damage)return false;const x=Math.sin(seed*29.31+5.1)*43758.5453;return x-Math.floor(x)<WHEEL_RIP.chance;
+}
 export function loosenNuts(loose:number,wheelDamage:number,metres:number){
   const d=clamp01(wheelDamage);if(d<=WHEEL_NUTS.onset||!(metres>0))return clamp01(loose);
   return clamp01(clamp01(loose)+metres*(d-WHEEL_NUTS.onset)/(1-WHEEL_NUTS.onset)*WHEEL_NUTS.rate);
