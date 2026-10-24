@@ -9,6 +9,523 @@
         "secondary": "royal blue",
         "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
       },
+      "currentDate": "2026-10-24",
+      "historicDate": "1985-03-25",
+      "displayDate": "Week of March 25-31, 1985",
+      "edition": "Issue 139 - Weekly 1985 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Home pilots carry the mail",
+        "motifs": [
+          "Solo Flight cockpit",
+          "Commodore 64 joystick",
+          "mail plane halftone"
+        ],
+        "layout": "Dense warm newsprint with red and blue section headers"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Issue 139 - Weekly 1985 Computer & Culture Chronicle",
+        "dateline": "Week of March 25-31, 1985",
+        "price": "75 cents"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Solo Flight receives the biggest headline and gaming halftone",
+        "secondaryRail": "PCjr owner follow-up, SpeedScript and delayed Jazz",
+        "archiveNavigation": "Weekly archive and previous/next controls"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1985-03-25.jpg",
+        "alt": "Computer Chronicle newspaper front page for March 25-31, 1985, with Solo Flight cockpit coverage",
+        "caption": "Newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "A week on the home-computer beat: flying the mail, making words move and watching the software shelf.",
+      "morningLine": "Home pilots take the mail route; Macintosh owners wait for Jazz.",
+      "lead": {
+        "headline": "Solo Flight puts a mail route inside a home-computer cockpit",
+        "dek": "Best sourced gaming feature; a March review, not a newly verified release.",
+        "body": [
+          "A mail route gives the home pilot a reason to take off. MicroProse’s Solo Flight, reviewed in this month’s COMPUTE!, puts navigation, weather and delivery decisions inside a light-airplane simulation. Sid Meier’s program is listed for the Commodore 64 and Atari computers with at least 48K, a disk drive and joystick, at a publisher price of $34.95.",
+          "The screen joins a three-dimensional outside view to an instrument panel. Takeoffs and landings are only the beginning: the pilot must navigate, fly on instruments and cope with emergency procedures. Cursor-key views let the player look left, right and behind the cabin.",
+          "Mail Pilot turns the flight into a working journey. Destinations need planning, and every load creates a trade-off between fuel and mail. Navigation accuracy, elapsed time, landing performance and mail delivered all enter the score; worsening weather and higher difficulty make the route less forgiving.",
+          "For home-computer owners, the attraction is a game that asks for judgment as well as reflexes. The March review establishes contemporary availability, not a new release this week. The cockpit is already a place to work, explore and play."
+        ],
+        "confidence": "same-month",
+        "sourceRefs": [
+          15
+        ]
+      },
+      "stories": [
+        {
+          "headline": "After IBM’s PCjr retreat, home-computer owners weigh compatibility and support",
+          "dek": "Recommended lead: the month’s consequential home-computing business story; explicitly a follow-up, not a new March 25 announcement.",
+          "body": [
+            "IBM’s announced retreat from the PCjr leaves owners with practical questions about software and expansion. The March 19 announcement calls for production to end in April; it is not a notice that support has already ceased.",
+            "March COMPUTE! describes snap-on 128K expansion modules that can bring the machine to 512K, together with a replacement typewriter-style keyboard. Yet memory size alone does not make this home computer interchangeable with an IBM PC.",
+            "Charles Brannon identifies memory-layout and DOS 2.1 configuration problems. In some configurations, even a 512K PCjr cannot run a program designed for a 128K PCjr. Buyers weighing remaining stock have more to investigate than the number on a memory label."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            0,
+            16,
+            15
+          ]
+        },
+        {
+          "headline": "A $12.95 disk challenges the commercial word processor",
+          "dek": "Practical consumer-software story with verified pricing.",
+          "body": [
+            "A magazine listing is making an unusually direct challenge to the word-processing shelf. Charles Brannon’s SpeedScript 3.0 appears in March COMPUTE!, with an optional Commodore 64 disk priced at $12.95 plus $2 shipping and handling in the United States and Canada.",
+            "The machine-language program occupies approximately 6K. Insertion, deletion, screen editing, margins, centering, headers and footers turn it into a practical writing tool. Readers may enter the published listing through MLX instead of ordering the disk.",
+            "The update draws on roughly a year of enhancements, suggestions and debugging. VIC-20, Atari and Apple II versions are promised for future issues; they are not supplied by this installment. The magazine calls the companion disk an experiment, not a public-domain distribution."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            15
+          ]
+        },
+        {
+          "headline": "Jazz misses its late-March date as Macintosh waits for office software",
+          "dek": "Owner-focused follow-up to a March 19 announcement, documented in a fully retrieved contemporary newspaper report. Not a new announcement this week.",
+          "body": [
+            "The Macintosh office-software shelf must wait longer for Lotus Jazz. Kathleen Day’s March 20 report says Lotus moved its expected late-March shipment to May 27 after notifying authorized dealers.",
+            "Lotus and Apple describe the problems as minor, but the delay matters to an installed base awaiting integrated office software. May 27 remains a projected shipment date, not evidence that copies have shipped.",
+            "Apple chief John Sculley’s estimate that half of Macintosh purchasers would buy Jazz is a forecast, not measured adoption. Dealers and owners face the simpler question of when a finished product will reach the counter."
+          ],
+          "confidence": "same-month",
+          "sourceRefs": [
+            24
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Enhanced Apple IIe",
+          "summary": "Four-chip refresh; 65C02 CPU, revised system ROMs, MouseText; March introduction.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            17,
+            18
+          ]
+        },
+        {
+          "title": "Atari ST remains an announced challenger",
+          "summary": "Richard Mansfield’s March editorial discusses the CES-announced $599 512K ST with 68000, mouse, GEM and MIDI. This is advance coverage, not proof of March retail shipment; 512 refers to palette size, not simultaneous colors.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            15
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "SpeedScript 3.0",
+          "detail": "C64 machine-language word processor, roughly 6K; listing and optional disk, March issue p.123.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            15
+          ]
+        },
+        {
+          "name": "The Print Shop",
+          "detail": "March review pp.74–75 covers Broderbund printing of signs, banners, cards and letterheads; eight type fonts, supplied art, graphics editor and kaleidoscope images. Review lists Apple II, Atari and C64 requirements. Printing may be slow: one long banner took almost half an hour.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            15
+          ]
+        },
+        {
+          "name": "Lotus Jazz delayed",
+          "detail": "The late-March target moves to an announced May 27 shipment date, per March 20 reporting. An expected date, not verified release.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            24
+          ]
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games — March shelf selections",
+          "items": [
+            "Solo Flight — MicroProse, $34.95",
+            "Conan — Datasoft, $39.95",
+            "Mr. Do! — Datasoft, $39.95",
+            "Mancopter — Datasoft, $34.95",
+            "Lost Tomb — Datasoft, $34.95"
+          ],
+          "confidence": "same-month; editorial selections, not a sales chart",
+          "sourceRefs": [
+            3,
+            14
+          ]
+        },
+        {
+          "label": "Top 5 Movies — March 29-31 weekend",
+          "items": [
+            "1. Police Academy 2: Their First Assignment",
+            "2. Mask",
+            "3. Friday the 13th: A New Beginning",
+            "4. The Care Bears Movie",
+            "5. Porky’s Revenge"
+          ],
+          "confidence": "same-week",
+          "sourceRefs": [
+            20
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Solo Flight",
+          "price": "$34.95, publisher price in review; not a sale quote.",
+          "note": "March 1985 period pricing; not a new launch claim.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            15
+          ]
+        },
+        {
+          "item": "SpeedScript disk",
+          "price": "$12.95 plus $2 domestic/Canada shipping and handling as stated in March article; distinguish software/disk price from magazine cover price.",
+          "note": "March 1985 period pricing; not a new launch claim.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            15
+          ]
+        },
+        {
+          "item": "Taxan Model 305 TV tuner",
+          "price": "$99.95 advertised for converting an existing color composite monitor into a television; monitor not included.",
+          "note": "March 1985 period pricing; not a new launch claim.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            15
+          ]
+        },
+        {
+          "item": "2400-bps modem market",
+          "price": "Arlon R. Levitan reports a narrow $800–$900 range for newly announced V.22bis-class modems; a market range, not a model-specific retailer quote.",
+          "note": "March 1985 period pricing; not a new launch claim.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            15
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Amadeus wins eight Oscars",
+          "summary": "March 25 ceremony: 11 nominations and eight wins for Amadeus, including Best Picture, director Milos Forman and lead actor F. Murray Abraham. Sally Field wins lead actress for Places in the Heart.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            21
+          ]
+        },
+        {
+          "headline": "Atari Games cuts 30 jobs amid slow arcade sales",
+          "summary": "UPI Business Briefs dated March 28 reports that officials said Wednesday (March 27) Atari Games Inc. laid off 30 workers and ordered management pay cuts because of slow coin-operated-game sales.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            26
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "artist": "Don Henley",
+          "title": "All She Wants to Do Is Dance",
+          "song": "All She Wants to Do Is Dance",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-03-30",
+          "confidence": "same-week",
+          "sourceRefs": [
+            27
+          ]
+        },
+        {
+          "rank": 2,
+          "artist": "Eric Clapton",
+          "title": "Forever Man",
+          "song": "Forever Man",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-03-30",
+          "confidence": "same-week",
+          "sourceRefs": [
+            27
+          ]
+        },
+        {
+          "rank": 3,
+          "artist": "The Firm",
+          "title": "Radioactive",
+          "song": "Radioactive",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-03-30",
+          "confidence": "same-week",
+          "sourceRefs": [
+            27
+          ]
+        },
+        {
+          "rank": 4,
+          "artist": "Bruce Springsteen",
+          "title": "I’m on Fire",
+          "song": "I’m on Fire",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-03-30",
+          "confidence": "same-week",
+          "sourceRefs": [
+            27
+          ]
+        },
+        {
+          "rank": 5,
+          "artist": "Tom Petty",
+          "title": "Don’t Come Around Here No More",
+          "song": "Don’t Come Around Here No More",
+          "chart": "Billboard Top Rock Tracks",
+          "chartDate": "1985-03-30",
+          "confidence": "same-week",
+          "sourceRefs": [
+            27
+          ]
+        }
+      ],
+      "periodAd": {
+        "headline": "A television hiding in your monitor",
+        "summary": "Taxan Model 305 TV tuner: $99.95 in a March magazine advertisement. Color composite monitor not included.",
+        "tagline": "One display, another job.",
+        "sourceRefs": [
+          15
+        ]
+      },
+      "market": {
+        "headline": "The faster modem carries a premium",
+        "summary": "March COMPUTE! reports $800–$900 pricing for newly announced 2400-bps modems and warns of QAM-chip constraints. Supply predictions remain the columnist’s forecasts.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          15
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Geneva negotiators begin detailed medium-range nuclear talks",
+        "summary": "U.S. and Soviet negotiators held their first detailed medium-range nuclear-arms session in Geneva on March 28. A secrecy agreement kept negotiating details private as the resumed arms talks continued.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          25
+        ]
+      },
+      "bbsNote": {
+        "headline": "The race to 2400 bps meets a chip bottleneck",
+        "summary": "Arlon R. Levitan, Telecomputing Today: The Race To Talk Fast, COMPUTE! March 1985, pp.87–88. Period analysis and reported forecasts, not independently confirmed delivery schedules.",
+        "posts": [
+          {
+            "topic": "2400-bps supply and prices",
+            "platform": "Modem market",
+            "text": "Hayes, Novation, U.S. Robotics, Racal-Vadic and other firms announced 2400-bps units at the preceding November COMDEX. Levitan reports $800–$900 pricing and warns of QAM-chip constraints; projected availability is a columnist’s forecast. 2400 bps is eight times 300 bps and twice 1200 bps."
+          },
+          {
+            "topic": "Health Forum and its sysop",
+            "platform": "CompuServe",
+            "text": "The column identifies the Health Forum as a new special-interest group, moderated by sysop Bob Walter, for fitness-related discussions."
+          },
+          {
+            "topic": "Comedy By Wire",
+            "platform": "The Source",
+            "text": "Billiam Coronel’s computer humor appears in the User Publishing Area; the column notes that back issues are available."
+          },
+          {
+            "topic": "People/Link promotional dispute",
+            "platform": "American People/Link / CompuServe",
+            "text": "The column reports a dispute over promotional messages. People/Link interpreted removal language as deletion of its email; CompuServe denied deleting email and said it enforced its policy against commercial SIG messages. Do not repeat the Chicago free-access promotion as current: it was scheduled to end March 1."
+          }
+        ],
+        "sourceRefs": [
+          15
+        ]
+      },
+      "curiosity": {
+        "headline": "Your computer monitor wants to watch the soaps",
+        "summary": "Taxan advertises a TV-tuner add-on for an existing monitor in the March COMPUTE! issue.",
+        "detail": "The Model 305 costs $99.95 and is advertised as turning a color composite monitor into a TV with a switch. This is a period ad, not a verified launch date or a claim that the price includes a display.",
+        "sourceRefs": [
+          15
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "March magazine coverage is not an exact-week launch.",
+          "Game shelf is editorial selection, not sales ranking.",
+          "PCjr production end is planned for April; Jazz May 27 is a projected ship date.",
+          "Music is Billboard Top Rock Tracks, March 30; films use March 29-31 weekend.",
+          "No unsupported Enhanced IIe price or new gadget launch claimed."
+        ]
+      },
+      "sources": [
+        {
+          "title": "IBM to halt production of PC jr — UPI (search-index excerpt; full page blocked)",
+          "url": "https://www.upi.com/Archives/1985/03/19/IBM-to-halt-production-of-PC-jr/7659480056400/",
+          "date": "1985-03-19",
+          "datePrecision": "day"
+        },
+        {
+          "title": "IBM to Discontinue Production of PCjr Personal Computer — Michael Schrage, Washington Post (opening excerpt)",
+          "url": "https://www.washingtonpost.com/archive/business/1985/03/20/ibm-to-discontinue-production-of-pcjr-personal-computer/042e61c3-6579-4dd1-960d-d53148978792/",
+          "date": "1985-03-20",
+          "datePrecision": "day"
+        },
+        {
+          "title": "SpeedScript 3.0 — Charles Brannon, COMPUTE! 58",
+          "url": "https://www.atarimagazines.com/compute/issue58/speed_script.html",
+          "date": "1985-03",
+          "datePrecision": "month"
+        },
+        {
+          "title": "Solo Flight review — Arthur Leyenberger, COMPUTE! 58",
+          "url": "https://www.atarimagazines.com/compute/issue58/review_solo_flight.html",
+          "date": "1985-03",
+          "datePrecision": "month"
+        },
+        {
+          "title": "The Print Shop review — Karen G. McCullough, COMPUTE! 58",
+          "url": "https://www.atarimagazines.com/compute/issue58/review_print_shop.html",
+          "date": "1985-03",
+          "datePrecision": "month"
+        },
+        {
+          "title": "Telecomputing Today: The Race to Talk Fast — Arlan R. Levitan, COMPUTE! 58",
+          "url": "https://www.atarimagazines.com/compute/issue58/telecomputing_today.html",
+          "date": "1985-03",
+          "datePrecision": "month"
+        },
+        {
+          "title": "What’s New in Computer Video — Kathy Yakal, COMPUTE! 58",
+          "url": "https://www.atarimagazines.com/compute/issue58/computer_video.html",
+          "date": "1985-03",
+          "datePrecision": "month"
+        },
+        {
+          "title": "On the Road — Fred D’Ignazio, COMPUTE! 58",
+          "url": "https://www.atarimagazines.com/compute/issue58/on_the_road.html",
+          "date": "1985-03",
+          "datePrecision": "month"
+        },
+        {
+          "title": "TPUG Magazine 12, Telephreak Means Teletrouble, p.20 — Ken Cox",
+          "url": "https://www.tpug.ca/tpug-media/tpugmag/TPUG_Issue_12_1985_Mar.pdf",
+          "date": "1985-03",
+          "datePrecision": "month"
+        },
+        {
+          "title": "Billboard Top Rock Tracks issue archive",
+          "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-03-23/",
+          "date": "1985-03-23",
+          "datePrecision": "day"
+        },
+        {
+          "title": "Billboard Mainstream Rock number-one chronology — retrospective corroboration",
+          "url": "https://en.wikipedia.org/wiki/List_of_Billboard_Mainstream_Rock_number-one_songs_of_the_1980s",
+          "date": "retrospective; chart date 1985-03-23",
+          "datePrecision": "unknown"
+        },
+        {
+          "title": "The Numbers: Weekend Domestic Box Office",
+          "url": "https://www.the-numbers.com/box-office-chart/weekend/1985/03/22",
+          "date": "1985-03-22/1985-03-24",
+          "datePrecision": "unknown"
+        },
+        {
+          "title": "Truth and Reconciliation Commission Final Report, vol.3 ch.2 subsection17 — retrospective",
+          "url": "https://sabctrc.saha.org.za/reports/volume3/chapter2/subsection17.htm",
+          "date": "1998; event 1985-03-21",
+          "datePrecision": "unknown"
+        },
+        {
+          "title": "Cash Box Top 100 Singles, March 23, 1985",
+          "url": "https://cashboxarchives.com/archives/80s_files/19850323.html",
+          "date": "1985-03-23",
+          "datePrecision": "day"
+        },
+        {
+          "title": "COMPUTE! #58: Datasoft Games, Educational Packages",
+          "url": "https://www.atarimagazines.com/compute/issue58/news_games_educational_packages.html",
+          "date": "1985-03",
+          "datePrecision": "month"
+        },
+        {
+          "title": "COMPUTE! issue 58, March 1985: editorial p.6; Solo Flight pp.70–71; SPA letter p.72; Print Shop pp.74–75; telecom pp.87–88; PCjr p.104; SpeedScript p.123",
+          "url": "https://archive.org/stream/1985-03-compute-magazine/Compute_Issue_058_1985_Mar_djvu.txt",
+          "date": "1985-03"
+        },
+        {
+          "title": "I.B.M. Drops PCjr Production — Andrew Pollack (search excerpt verified)",
+          "url": "https://www.nytimes.com/1985/03/20/business/ibm-drops-pcjr-production.html",
+          "date": "1985-03-20"
+        },
+        {
+          "title": "Apple II History: The Apple IIe",
+          "url": "https://www.apple2history.org/history/ah07/",
+          "date": null
+        },
+        {
+          "title": "Chronology of Personal Computers, 1985",
+          "url": "http://kpolsson.com/comphist/comp1985.htm",
+          "date": null
+        },
+        {
+          "title": "Billboard rock chart week March 30, 1985 — rankings unavailable in extraction",
+          "url": "https://www.billboard.com/charts/hot-mainstream-rock-tracks/1985-03-30/",
+          "date": "1985-03-30"
+        },
+        {
+          "title": "Box Office Mojo domestic weekend 13",
+          "url": "https://www.boxofficemojo.com/weekend/1985W13/",
+          "date": "1985-03-29/1985-03-31"
+        },
+        {
+          "title": "Academy: 57th Academy Awards",
+          "url": "https://www.oscars.org/oscars/ceremonies/1985",
+          "date": "1985-03-25"
+        },
+        {
+          "title": "Mikhail Gorbachev began his rule — John Iams, UPI (search excerpt)",
+          "url": "https://www.upi.com/Archives/1985/03/11/Mikhail-Gorbachev-began-his-rule-as-Soviet-leader-Monday/4258479365200/",
+          "date": "1985-03-11"
+        },
+        {
+          "title": "Computers: Bugs, Glitches, and Syntax Errors — Stephen Miller, UPI (metadata only)",
+          "url": "https://www.upi.com/Archives/1985/03/26/Computers-Computers-Bugs-Glitches-and-Syntax-Errors/5956480661200/",
+          "date": "1985-03-26"
+        },
+        {
+          "title": "Kathleen Day: Problems at Lotus May Be Setback for Apple’s Macintosh: Delivery of Jazz Software Delayed — Los Angeles Times (full article retrieved)",
+          "url": "https://www.latimes.com/archives/la-xpm-1985-03-20-fi-22821-story.html",
+          "date": "1985-03-20"
+        },
+        {
+          "title": "U.S., Soviets Hold First Session on Medium-Range Nuclear Arms — Los Angeles Times (full article retrieved)",
+          "url": "https://www.latimes.com/archives/la-xpm-1985-03-29-mn-20395-story.html",
+          "date": "1985-03-29"
+        },
+        {
+          "title": "Business Briefs — UPI (search excerpt only; full fetch blocked)",
+          "url": "https://www.upi.com/Archives/1985/03/28/Business-Briefs/8180480834000/",
+          "date": "1985-03-28"
+        },
+        {
+          "title": "Billboard March 30, 1985 — Top Rock Tracks, printed page 22 (primary scan retrieved and text extracted)",
+          "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1985/BB-1985-03-30.pdf",
+          "date": "1985-03-30"
+        }
+      ]
+    },
+    {
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "royal blue",
+        "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+      },
       "currentDate": "2026-10-23",
       "historicDate": "1985-03-18",
       "displayDate": "Week of March 18-24, 1985",

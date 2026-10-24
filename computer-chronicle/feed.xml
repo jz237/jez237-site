@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Fri, 23 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 24 Oct 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of March 25-31, 1985 — Solo Flight puts a mail route inside a home-computer cockpit</title>
+      <link>https://jez237.com/computer-chronicle/?date=1985-03-25</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1985-03-25</guid>
+      <pubDate>Sat, 24 Oct 2026 12:00:00 GMT</pubDate>
+      <description>Best sourced gaming feature; a March review, not a newly verified release. A mail route gives the home pilot a reason to take off. MicroProse’s Solo Flight, reviewed in this month’s COMPUTE!, puts navigation, weather and delivery decisions inside a light-airplane simulation. Sid Meier’s program is listed for the Commodore 64 and Atari computers with at least 48K, a disk drive and joystick, at a publisher price of $34.95. Also this week: After IBM’s PCjr retreat, home-computer owners weigh compatibility and support · A $12.95 disk challenges the commercial word processor · Jazz misses its late-March date as Macintosh waits for office software.</description>
+    </item>
     <item>
       <title>Week of March 18-24, 1985 — IBM pulls the plug on PCjr production</title>
       <link>https://jez237.com/computer-chronicle/?date=1985-03-18</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-11-12</guid>
       <pubDate>Mon, 05 Oct 2026 12:00:00 GMT</pubDate>
       <description>Radio Shack’s November newcomer combines an 8088 with colorful graphics, three-voice sound and bundled DeskMate. Radio Shack has a new contender for the home-computer desk this November. The Tandy 1000 puts an Intel 8088 inside a machine intended to offer compatibility with most IBM PC software, while retaining the enhanced graphics and sound associated with the PCjr. It is a practical pitch to households that want work and play in the same cabinet. Also this week: A shopping mall arrives on the home-computer screen · KoalaPad gives PCjr owners a drawing surface in their laps · Copy protection must not punish the buyer.</description>
-    </item>
-    <item>
-      <title>Week of November 5-11, 1984 — Tandy brings a $1,199 IBM-compatible into Radio Shack</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-11-05</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-11-05</guid>
-      <pubDate>Fri, 02 Oct 2026 12:00:00 GMT</pubDate>
-      <description>The Tandy 1000 combines PC-compatible work with color, sound and bundled DeskMate applications. Radio Shack has a new contender for the home and small-office desk this week. The Tandy 1000 enters the IBM-compatible contest at an advertised $1,199 for the original 128K machine with a 360K floppy drive. A monitor is extra: the headline price is not a complete color-display system. Also this week: The bulletin board becomes a neighborhood without boundaries · Shopping from the keyboard enters the living room · KoalaPad gives the PCjr a drawing surface · WizType turns typing practice into a cartoon duel.</description>
     </item>
   </channel>
 </rss>

@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-10-24",
+      "historicDate": "1985-03-25",
+      "displayDate": "Week of March 25-31, 1985",
+      "edition": "Issue 139 - Weekly 1985 Computer & Culture Chronicle",
+      "morningLine": "Home pilots take the mail route; Macintosh owners wait for Jazz.",
+      "leadHeadline": "Solo Flight puts a mail route inside a home-computer cockpit",
+      "storyHeadlines": [
+        "After IBM’s PCjr retreat, home-computer owners weigh compatibility and support",
+        "A $12.95 disk challenges the commercial word processor",
+        "Jazz misses its late-March date as Macintosh waits for office software"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1985-03-25.jpg",
+      "thumb": "media/thumbs/1985-03-25.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-10-23",
       "historicDate": "1985-03-18",
       "displayDate": "Week of March 18-24, 1985",
