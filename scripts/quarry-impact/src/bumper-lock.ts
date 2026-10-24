@@ -34,6 +34,18 @@ export function lockEnd(strain:number,age:number,gap:number,length:number):'torn
  * TETHER.low m of it, every TETHER.gap s), until the wire snaps after TETHER.min..TETHER.min+TETHER.span seconds (the bumper's
  * dice) — time runs TETHER.fastRate times faster above TETHER.fast m/s — or the car ends up more than TETHER.snap m beyond it. */
 export const TETHER={chance:.5,length:1.2,min:1.5,span:2.5,fast:14,fastRate:2,spark:3,low:.35,gap:.08,snap:3} as const;
-export const tethers=(seed:number)=>Number.isFinite(seed)&&dice(seed+.5)<TETHER.chance;
+export const tethers=(seed:number,chance:number=TETHER.chance)=>Number.isFinite(seed)&&dice(seed+.5)<chance;
+/** Which torn-off parts can hang on by a wire (bumpers; doors by their wiring, bonnets and boot lids by a stay or cable) and how
+ * often (TETHER_CHANCE), and where on the part the wire is fixed, as a point of its bounds: the edge it was hinged on. */
+export const TETHER_CHANCE={bumper:TETHER.chance,door:.35,lid:.3} as const;
+export function tetherKind(name:string):keyof typeof TETHER_CHANCE|null{
+  return name==='front-bumper'||name==='rear-bumper'?'bumper':/^door-/.test(name)?'door':name==='hood'||name==='boot'||name==='tailgate'||name==='engine-lid'?'lid':null;
+}
+/** The hinge point (on the part's model-space bounds) a torn-off part hangs from: doors from their front edge, a bonnet from its
+ * back edge under the windscreen, a boot lid or engine lid from its front edge, a tailgate from its top. */
+export function tetherMount(name:string,min:{x:number;y:number;z:number},max:{x:number;y:number;z:number}){
+  const c={x:(min.x+max.x)/2,y:(min.y+max.y)/2,z:(min.z+max.z)/2};
+  return /^door-/.test(name)?{x:c.x,y:c.y,z:max.z}:name==='hood'?{x:c.x,y:max.y,z:min.z}:name==='boot'||name==='engine-lid'?{x:c.x,y:max.y,z:max.z}:name==='tailgate'?{x:c.x,y:max.y,z:c.z}:c;
+}
 export const tetherLife=(seed:number)=>Number.isFinite(seed)?TETHER.min+TETHER.span*dice(seed*3+1):TETHER.min;
 export const tetherAge=(age:number,speed:number,dt:number)=>!Number.isFinite(age)||!(dt>0)?age:age+dt*(Math.abs(speed)>TETHER.fast?TETHER.fastRate:1);

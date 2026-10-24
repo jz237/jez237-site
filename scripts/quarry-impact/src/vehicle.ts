@@ -40,7 +40,7 @@ import {puddleDepth,type Puddle} from './puddle-splashes';
 import {wheelResponse,TireContact} from './wheel-mechanics';
 import {wheelTearsOff} from './wheel-physics';
 import {EngineMisfire} from './engine-misfire';
-import {tethers} from './bumper-lock';
+import {tethers,tetherKind,tetherMount,TETHER_CHANCE} from './bumper-lock';
 import {steeringLimit,brakeFactor,overheat,leakTyre,damperFactor,gearLimit,blowoutImpulse,bentRimTyre,rimWobble,springBias,sagBias,driveBias,thrustAngle,leakBrakeFluid,brakeFluidFactor,steerRate,throttleJams,jammedThrottle,CLUTCH,clutchGrip,clutchSlips,steerPlay,steerWander,tyreRub,rubWear,electricalFault,electricalCut,WHEEL_NUTS,loosenNuts,nutShimmy,EXHAUST_BLOW,exhaustBlow,liftPops,DIFF,diffDamage,diffAxle,wearDiff,diffDrive,DEBEAD,beadStress,tieRodSnapped,flopToe,GEAR_POP,gearPop,CALIPER,caliperDrag,discHeat,discGlow,discFade,MOUNTS,mountsBroken,shuntThrottle,BRAKE_FIRE,brakeFireClock,STARTER,starterDamage,starterFails,frameBend,dazeFor,dazedSteer,weakSpot,PUNCTURE,punctures,RADIATOR,LEAK} from './damage-handling';
 import {leakRates,dripInterval,FLAME,fuelSpacing} from './fluid-leaks';
 import {drainOil,starvationWear,seizes,OIL,drainCoolant,overheatWear,FUEL_TANK,drainFuel,fuelFeed,SUMP,crackSump,sumpLeak,drainSump} from './oil-starvation';
@@ -1335,11 +1335,16 @@ export class Vehicle {
     const tank=this.tankMesh.children[0] as T.Mesh;this.root.updateMatrixWorld(true);this.fx.detach(tank,this.velocity.clone().multiplyScalar(.5));
     this.tankMesh.removeFromParent();tank.geometry.dispose();(tank.material as T.Material).dispose();this.tankMesh=null;this.onBreak?.('tankoff',0);
   }
-  /** Now and then a torn-off bumper stays on its wire (offline): the last piece detached is handed to onTether. */
+  /** Now and then a torn-off part stays on its wire (offline): the last piece detached is handed to onTether with the body-local
+   * point it hangs from (a bumper from its mount, a door or lid from the edge it was hinged on). */
   private tetherPart(name:string){
-    if(!this.extendedDamage||!this.onTether||(name!=='front-bumper'&&name!=='rear-bumper'))return;
-    const piece=this.fx.debris[this.fx.debris.length-1];if(!piece||!tethers(this.id*11+this.tetherRolls++))return;
-    this.onTether(name,piece.body,{x:0,y:.1,z:(name==='front-bumper'?1:-1)*DEFINITIONS[this.kind].halfLength*.9});
+    const kind=tetherKind(name);if(!this.extendedDamage||!this.onTether||!kind)return;
+    const piece=this.fx.debris[this.fx.debris.length-1];if(!piece||!tethers(this.id*11+this.tetherRolls++,TETHER_CHANCE[kind]))return;
+    if(kind==='bumper'){this.onTether(name,piece.body,{x:0,y:.1,z:(name==='front-bumper'?1:-1)*DEFINITIONS[this.kind].halfLength*.9});return;}
+    const part=this.wreckParts.assemblies.find(a=>a.name===name);if(!part)return;
+    const mount=tetherMount(name,part.bounds.min,part.bounds.max),world=this.model.localToWorld(new T.Vector3(mount.x,mount.y,mount.z));
+    const t=this.body.translation(),q=this.body.rotation(),local=world.sub(new T.Vector3(t.x,t.y,t.z)).applyQuaternion(new T.Quaternion(q.x,q.y,q.z,q.w).invert());
+    this.onTether(name,piece.body,{x:local.x,y:local.y,z:local.z});
   }
   private measureCrushFrame():CrushFrame{
     const box=new T.Box3();for(const mesh of this.panels){const rest=mesh.userData.wreckRest as T.BufferAttribute|undefined;if(rest)box.union(new T.Box3().setFromBufferAttribute(rest));}
