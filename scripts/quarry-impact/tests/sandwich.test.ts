@@ -11,6 +11,6 @@ test('a car squeezed between two cars is a SANDWICH: one feed line, credited to 
 });
 test('the car on the far side shares the credit only if it is driving in too; a parked car or a wreck gets nothing',()=>{
  assert.ok(body.includes('const shares=!!other&&Math.abs(other.input.throttle)>=PIN_FEEL.partner;'));
- assert.ok(body.includes('if(shares){eventAwards.pinned(other.id,c.id,elapsed);if(scoreDerby())combat.destruction(other.id,DESTRUCTION_POINTS.sandwich);}'));
+ assert.ok(body.includes('if(shares){eventAwards.pinned(other.id,c.id,elapsed);if(scoreDerby())scoreStunt(other.id,DESTRUCTION_POINTS.sandwich);}'));
  assert.ok(DESTRUCTION_POINTS.sandwich>0&&DESTRUCTION_POINTS.sandwich<DESTRUCTION_POINTS.pin,'the partner\'s share is less than the pin');
 });

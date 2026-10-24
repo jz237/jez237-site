@@ -53,3 +53,8 @@ export const isSlam=(lost:number)=>Number.isFinite(lost)&&lost>=SLAM.big;
  * someone a moment ago. */
 export const DOMINO={knock:10,big:4,closing:5} as const;
 export const dominoBy=(last:{by:number;at:number}|undefined,mover:number,struck:number,time:number)=>{const by=slamBy(last,mover,time);return by===struck?-1:by;};
+/** Final stunts (offline scored derbies): in the last FINAL_STUNTS.window seconds every stunt bonus (pins, slams, dominoes, rolls,
+ * pile-ups, burn-outs and the rest) is worth FINAL_STUNTS.factor times as much, called out once as the window opens. */
+export const FINAL_STUNTS={window:30,factor:2} as const;
+export const finalStunts=(remaining:number)=>Number.isFinite(remaining)&&remaining>0&&remaining<=FINAL_STUNTS.window;
+export const stuntValue=(points:number,remaining:number)=>finalStunts(remaining)?points*FINAL_STUNTS.factor:points;
