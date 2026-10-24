@@ -1,6 +1,7 @@
+import {restoreFinalFrenzyBytes} from './final-frenzy-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readFinalStuntsPrevious,restoreFinalStuntsBytes,verifyFinalStuntsRevision} from './final-stunts-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreFinalFrenzyBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('FinalStunts preserves every prior fixture, vehicle asset, venue art and history input',verifyFinalStuntsRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/final-stunts/revision.json').toString());

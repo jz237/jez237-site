@@ -29,7 +29,7 @@ import {ScreenCraze,trackCraze,hull,type CrazeState} from './screen-craze';
 import {speedFov,smoothAccel,roadBuzz} from './speed-feel';
 import {FINAL_TWO,finalTwo,finalTwoBanner,revenge,takedownChain,comboLabel,revengeReady,lastGasp,strippedLabel,STRIPPED,FINAL_FOUR,finalFour,finalFourBanner,rolledBy,DESTRUCTION_POINTS,slamBy,isSlam,DOMINO,dominoBy,FINAL_STUNTS,finalStunts,stuntValue} from './derby-moments';
 import {wreckCause} from './wreck-cause';
-import {frenzyFactor,pointsLeader} from './derby-driving';
+import {frenzyFactor,pointsLeader,FRENZY} from './derby-driving';
 import {syncInterval,syncDue} from './vehicle-draw-batch';
 let syncFrame=0;
 let feelAccel=0,feelSpeed=0;
@@ -1777,7 +1777,7 @@ let frenzyOverride:number|undefined;
 function step(dt: number) {
   if(online?.active)return;
   // The last few cars running go at it harder (offline derbies).
-  drivers.frenzy=mode==='derby'&&cars[0]?.extendedDamage?frenzyOverride??frenzyFactor(cars.filter(c=>c.health>0).length):1;
+  drivers.frenzy=mode==='derby'&&cars[0]?.extendedDamage?frenzyOverride??Math.max(frenzyFactor(cars.filter(c=>c.health>0).length),scoreDerby()&&finalStunts(eventRemaining())?FRENZY.factor:1):1;
   // Scored derbies (offline): the last seconds score stunts double, called out once.
   if(scoreDerby()&&cars[0]?.extendedDamage&&!finalStuntsCalled&&finalStunts(eventRemaining())){finalStuntsCalled=true;if(!demo){toast(`FINAL ${FINAL_STUNTS.window} · STUNTS SCORE DOUBLE`,2.4,3);sound.crowd(1);crowdFlashes(SMASH_FLASHES);}}
   // Scored derbies (offline): everyone goes for the points leader; the player hears about it on taking the lead.
