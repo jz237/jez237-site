@@ -13,14 +13,14 @@ export function wreckReport(s:WreckState){
   return 'WRECK REPORT · '+bits.join(' · ');
 }
 /** What broke under the bodywork (offline events), worst first: the mechanical failures the car finished with. */
-export type MechanicalState={seized?:boolean;outOfFuel?:boolean;diffBroken?:boolean;tieRods?:number;gearsLost?:number;clutchSlipping?:boolean;
+export type MechanicalState={engineOut?:boolean;seized?:boolean;outOfFuel?:boolean;diffBroken?:boolean;tieRods?:number;gearsLost?:number;clutchSlipping?:boolean;
   shafts?:number;springs?:number;brakesBinding?:number;electrical?:boolean;exhaust?:boolean;wheelsLoose?:number;rubbing?:number;steeringFailed?:boolean;
   brakeFluidLow?:boolean;overheating?:boolean;oilLow?:boolean;sumpCracked?:boolean;exhaustGone?:boolean;frameBent?:boolean;radiatorBurst?:boolean;brakeFire?:boolean;throttleJammed?:boolean;doorsTorn?:number;rollBars?:number;propshaft?:'bent'|'snapped';bearing?:'worn'|'seized';steerSkew?:number;belt?:'slipping'|'snapped'|'flat';engineFire?:boolean};
 const plural=(n:number,one:string,many=one+'s')=>`${n} ${n===1?one:many}`;
 export const MECHANICAL_LIMIT=6;
 export function mechanicalReport(s:MechanicalState){
   const bits:string[]=[];const add=(on:unknown,text:string)=>{if(on)bits.push(text);};
-  add(s.seized,'engine seized');add(s.engineFire,'engine fire');add(s.brakeFire,'brake fire');add(s.outOfFuel,'out of fuel');add(s.diffBroken,'diff broken');
+  add(s.engineOut,'engine dropped out');add(s.seized&&!s.engineOut,'engine seized');add(s.engineFire,'engine fire');add(s.brakeFire,'brake fire');add(s.outOfFuel,'out of fuel');add(s.diffBroken,'diff broken');
   add((s.tieRods??0)>0,(s.tieRods??0)>1?`${s.tieRods} tie rods snapped`:'tie rod snapped');
   add((s.shafts??0)>0,plural(s.shafts??0,'driveshaft')+' snapped');add((s.gearsLost??0)>0,`${plural(s.gearsLost??0,'gear')} stripped`);
   add(s.propshaft==='snapped','propshaft snapped');add(s.frameBent,'frame bent');add(s.propshaft==='bent','propshaft bent');add(s.bearing==='seized','wheel bearing seized');add(s.bearing==='worn','wheel bearing growling');add((s.rollBars??0)>0,(s.rollBars??0)>1?'both roll bars snapped':'roll bar snapped');add(s.clutchSlipping,'clutch slipping');add((s.springs??0)>0,plural(s.springs??0,'spring')+' broken');
