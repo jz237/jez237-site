@@ -1,5 +1,78 @@
 # RaceWave46 / Wave Race 64 gameplay reconstruction
 
+## v2.47.2 — The open-sea jet ski marks the water
+
+The open sea's jet ski now leaves a white jet-wash trail with unbroken
+Kelvin wake arms, and it throws spray, splashes and hull displacement at the
+normal ride's strength. Those effects all scale with the hull's reported
+wetness. The strip-theory hull had reported its wetted bottom area (0.23
+while planing, against the modern hull's 0.80); it now reports keel contact
+in the modern meaning: a metre or more of planing keel in the water counts
+as full contact. The open sea also lays wake packets every 1.6 m of travel
+instead of every 0.24 s, so at speed they overlap into one trail of about
+150 m.
+
+## v2.47.1 — A realistic open-sea jet ski
+
+The open sea's jet ski is rebuilt on planing strip theory. The earlier
+twelve-spring hull was too elastic: on a calm sea it flew 38% of the time with
+8–20 g spikes, planed dead flat and barely leaned in turns.
+
+The craft (380 kg with rider) now uses nonlinear planing strip theory (after
+Zarnick). The V hull (21° deadrise aft, 40° at a rockered bow) is cut into 24
+sections, each with port and starboard halves. Each half carries buoyancy,
+Wagner wedge added-mass momentum and crossflow drag. Its lift is the rate at
+which the section's added mass grows as it sinks into the surface, so it acts
+only while the water closes on the hull and impacts lose their energy. The
+entrained water's acceleration damps pitch aft of the centre of gravity, and
+the narrow bow gets 3D relief. Heave and pitch are solved together, linearly
+implicitly, at 240 Hz.
+
+Trim and ride height come out of that balance: 3° stern-down at rest, a
+bow-high hole shot, then about 4° at 30 km/h easing to 1.5° at the top speed
+of 95 km/h, with no porpoising. A steerable pump jet drives it; off the
+throttle it barely steers, and the idling pump drags it off the plane.
+Banking tilts the planing lift into the turn and the inside chine carves:
+about a 12 m radius at 33 km/h and 28 m at 70 km/h, at up to 1.3 g with the
+rider leaning about 35°. In the air the rider shifts weight to hold attitude.
+In waves it skims and hops off crests rather than following troughs, as a
+real ski must at speed, and lands with impacts of a few metres per second.
+
+## v2.47.0 — Experimental open sea
+
+Free ride has an "Open sea · experimental" option on the title screen: the
+Open Sea demo's ocean with a new rigid-body jet ski. It is not part of the
+original's gameplay and keeps no records.
+
+### Water
+
+The demo's GPU ocean runs on the game's own WebGL 2 context: five Tessendorf
+FFT cascades (2.4 km to 4.7 m), JONSWAP wind sea plus swell, choppy
+displacement and Lagrangian whitecap foam. It drives the game's water mesh and
+water shading through a new branch, so reflections, refraction, wakes, hull
+contact and impact rings still apply. The sea state comes from the Sea select
+(calm 2, venue 3.5, chop 4.2, surf 5, storm 6.5). Waves calm over 5 m to 0.3 m
+of depth, identically on the GPU and the CPU. three.js state is reset around
+each simulation pass, and its texture unpack flags are cleared, since WebGL 2
+rejects 3D uploads under a canvas label's flipY.
+
+### Physics
+
+A CPU mirror regenerates the GPU's own spectrum: the same seeded noise,
+spreading, quantised dispersion and 400 s loop. Its three long cascades are
+inverse-transformed on 128/128/64 grids, together with each height's own rate of
+change; finer waves cannot be resolved by twelve hull points. It is rebuilt
+every 50 ms and extrapolated in between. Measured against GPU readback, the
+RMS height error is 4–5 cm on 35 cm RMS seas and 16–17 cm on 1.3–1.8 m RMS
+storm seas.
+
+The craft (380 kg with rider) first used twelve sprung hull points; v2.47.1
+replaced them with planing strip theory.
+
+The race's own collisions still apply (reefs, walls, moored boats, barriers,
+piles and land), along with shore recovery. The chosen sea sets the weather, and
+instant replay rewinds the sea together with the riders.
+
 ## v2.46.2 — Original label words
 
 The records browser and the championship ending use the original's own label
