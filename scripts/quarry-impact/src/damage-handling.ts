@@ -95,6 +95,11 @@ export function clutchGrip(engineEnd:number,burnt=0){
  * pedal either way, and the car limps on. */
 export const CABLE={engine:.5,blow:12,chance:.35,limp:.6} as const;
 export const cableSnaps=(engineDamage:number|undefined,damage:number,atEngineEnd:boolean,seed:number)=>atEngineEnd&&(engineDamage??0)>=CABLE.engine&&damage>=CABLE.blow&&Number.isFinite(seed)&&((seed*.6180339887+.41)%1+1)%1<CABLE.chance;
+/** Handbrake cable snapped (offline): a hit of HANDBRAKE_CABLE.blow or more at the rear of a car whose rear is crushed
+ * HANDBRAKE_CABLE.crush or more can part the handbrake cables to the rear wheels (about HANDBRAKE_CABLE.chance of such hits, the
+ * car's dice): the handbrake does nothing from then on, so no more handbrake turns. */
+export const HANDBRAKE_CABLE={crush:.4,blow:12,chance:.35} as const;
+export const handbrakeSnaps=(rearCrush:number,damage:number,atRear:boolean,seed:number)=>atRear&&Number.isFinite(rearCrush)&&rearCrush>=HANDBRAKE_CABLE.crush&&damage>=HANDBRAKE_CABLE.blow&&Number.isFinite(seed)&&((seed*.6180339887+.53)%1+1)%1<HANDBRAKE_CABLE.chance;
 export const cableThrottle=(throttle:number)=>Number.isFinite(throttle)?Math.max(-CABLE.limp,Math.min(CABLE.limp,throttle)):0;
 /** Pushing burns the clutch (offline): holding PUSH_BURN.throttle or more against a car that will not move (pinning it, under
  * PUSH_BURN.speed m/s) cooks the clutch PUSH_BURN.rate a second, so long or repeated pins leave the pusher's clutch slipping at

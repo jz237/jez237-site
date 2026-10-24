@@ -15,5 +15,6 @@ test('with the cable parted the engine sees at most CABLE.limp of the pedal eith
 test('a parted cable is a failure moment with its own toast, and caps the throttle after every other pedal modifier',async()=>{
  const fs=await import('node:fs'),main=fs.readFileSync(new URL('../src/main.ts',import.meta.url),'utf8'),vehicle=fs.readFileSync(new URL('../src/vehicle.ts',import.meta.url),'utf8');
  assert.ok(main.includes("cable:{label:'THROTTLE CABLE SNAPPED',score:22}")&&main.includes("what==='cable'?'THROTTLE CABLE SNAPPED · LIMPING':"));
- assert.ok(vehicle.includes('if(this.throttleCable)throttle=cableThrottle(throttle);\n    if(steer!==raw.steer||throttle!==raw.throttle)'));
+ const cap=vehicle.indexOf('if(this.throttleCable)throttle=cableThrottle(throttle);'),assemble=vehicle.indexOf('this.ownInput={...raw,steer,throttle');
+ assert.ok(cap>0&&assemble>cap,'the cap is applied before the modified input is assembled');
 });
