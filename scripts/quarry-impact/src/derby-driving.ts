@@ -17,6 +17,15 @@ export const FRENZY={alive:4,factor:1.25} as const;
  * `held` is the hold so far: 0 not holding (starts only on a pinned target), negative spent until the target is free again. */
 export const PIN_HOLD={time:2.5,aim:.6,close:7} as const;
 export const holdingPin=(pinTime:number|undefined,held:number,angle:number,gap:number)=>(held>0||held===0&&(pinTime??0)>0)&&held<PIN_HOLD.time&&Math.abs(angle)<PIN_HOLD.aim&&gap<PIN_HOLD.close;
+/** Rock free (offline charge cars): pinned PIN_ESCAPE.after seconds (past the point the pin starts crushing), the driver rocks the
+ * car, full reverse then full throttle on opposite locks, swapping every PIN_ESCAPE.swing seconds, and keeps at it until the car
+ * is free (pinTime back to 0), so easing the pressure for a moment does not stop the wriggling. */
+export const PIN_ESCAPE={after:1.2,swing:.7} as const;
+export const rocking=(pinTime:number|undefined,already:boolean)=>{const t=pinTime??0;return t>=PIN_ESCAPE.after||already&&t>0;};
+export function rockInput(rocked:number,carId:number):Input{
+  const back=Math.floor(Math.max(0,rocked)/PIN_ESCAPE.swing)%2===0,lock=carId%2?1:-1;
+  return{throttle:back?-1:1,steer:back?lock:-lock,brake:0,handbrake:false};
+}
 /** The hold after a step that did not hold: spent (-1) while the target is still pinned after one, otherwise reset to 0. */
 export const pinHoldAfter=(pinTime:number|undefined,held:number)=>held!==0&&(pinTime??0)>0?-1:0;
 export const frenzyFactor=(alive:number)=>Number.isFinite(alive)&&alive>=2&&alive<=FRENZY.alive?FRENZY.factor:1;
@@ -89,6 +98,8 @@ export function driveDerby(car:DriverCar,cars:DriverCar[],m:DriverMemory,arena:A
  let nearest=Infinity;for(const c of cars)if(c.id!==car.id)nearest=Math.min(nearest,dist(c.current,car.current));
  const stalled=Math.abs(car.speed)<.9||(nearest<7&&Math.abs(car.speed)<3.2);
  m.stalled=stalled?m.stalled+dt:Math.max(0,m.stalled-dt*2);
+ // Pinned: rock the car to wriggle free (offline charge).
+ if(car.charge){if(rocking(car.pinTime,(m.rock??-1)>=0)){m.rock=(m.rock??-1)<0?0:m.rock!+dt;m.derby=undefined;m.stalled=0;m.phase='rock free';const rock=rockInput(m.rock,car.id);m.steer=rock.steer;return rock;}m.rock=-1;}
  // Hold the pin: pressed into a target that is pinned against a wall or another car, keep shoving (offline charge).
  if(car.charge&&(!m.derby||m.derby.charge)){const angle=wrap(Math.atan2(target.current.x-car.current.x,target.current.z-car.current.z)-yaw);
   if(holdingPin(target.pinTime,m.pinHold??0,angle,dist(car.current,target.current))){m.pinHold=(m.pinHold??0)+dt;m.derby=undefined;m.stalled=0;m.steer+=clamp(clamp(angle*1.75,-1,1)-m.steer,-dt*4.5,dt*4.5);m.phase='pin';return{throttle:1,steer:m.steer,brake:0,handbrake:false};}

@@ -443,9 +443,12 @@ export const pitGrip=(slide:number)=>1-PIT.loss*Math.max(0,Math.min(1,Number.isF
  * from the far side (horizontal contact directions from its centre at a cosine below PIN.opposed) is held there. After
  * PIN.hold seconds pinned it crushes in at both contacts, PIN.rate health a second (the wall side `wall` of that), in
  * ticks of PIN.gap seconds, each big enough on both sides to dent the panels and crumple the structure. Breaking contact
- * bleeds the clock off at PIN.decay times real time, so a shove that flickers between solver steps stays one pin. A pin held
- * PIN.feed seconds makes the derby feed. */
-export const PIN={force:2500,opposed:-.3,hold:.5,decay:2,gap:.5,rate:8,wall:.6,feed:1.5} as const;
+ * bleeds the clock off at PIN.decay times real time, so a shove that flickers between solver steps stays one pin. The first
+ * crush lands as the pin takes hold. A pin held PIN.feed seconds makes the derby feed; the same car counts as pinned (points,
+ * calls) at most once every PIN.recount seconds, however often it is pinned again. */
+export const PIN={force:2500,opposed:-.3,hold:.5,decay:2,gap:.5,rate:8,wall:.6,feed:1.5,recount:6} as const;
+/** Whether a pin on a car last counted at `last` (or never) counts again at `time`. */
+export const pinCounts=(last:number|undefined,time:number)=>last===undefined||!(time-last<PIN.recount);
 /** A horizontal shove on a car: where it lands, how hard, and from which car (by<0: a wall or other scenery). */
 export type PinPush={x:number;z:number;force:number;by:number};
 /** The strongest car push on a car centred at (x,z) that something on the far side pushes back against: indices of the

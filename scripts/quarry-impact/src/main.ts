@@ -113,7 +113,7 @@ import {createBrackenWorld} from './bracken-world';
 import {createCinderbankWorld} from './cinderbank-world';
 import {tyreWarning} from './tyre-feedback';
 import {fluidWarning,leakRates,burnLevel,type GroundFire} from './fluid-leaks';
-import {gearboxWarning,brakeWarning,steerWarning,clutchWarning,playWarning,rubWarning,electricalWarning,nutWarning,exhaustWarning,diffWarning,tieRodWarning,rollBarWarning,propWarning,bearingWarning,bearingGrowl,skewWarning,windRoar,beltWarning,batteryLights,overheatWarning,coolThrottle,OVERHEAT_FIRE,caliperWarning,mountsWarning,starterWarning,frameWarning,discGlow,diffAxle,dazeWarning,nurseThrottle,STEER_PLAY,PIN,pinnedBy,pinClock,type PinPush} from './damage-handling';
+import {gearboxWarning,brakeWarning,steerWarning,clutchWarning,playWarning,rubWarning,electricalWarning,nutWarning,exhaustWarning,diffWarning,tieRodWarning,rollBarWarning,propWarning,bearingWarning,bearingGrowl,skewWarning,windRoar,beltWarning,batteryLights,overheatWarning,coolThrottle,OVERHEAT_FIRE,caliperWarning,mountsWarning,starterWarning,frameWarning,discGlow,diffAxle,dazeWarning,nurseThrottle,STEER_PLAY,PIN,pinnedBy,pinClock,pinCounts,type PinPush} from './damage-handling';
 import {engineStatus} from './engine-condition';
 import {drivingObstacleClearance} from './driving-probe';
 import {vehicleContact,vehicleContactManifold} from './vehicle-contact';
@@ -985,7 +985,7 @@ async function start(watch=demo) {
     camera.position.copy(cars[0].current).add(new T.Vector3(0, 4, -8));
     hud();
     sound.pause(false);
-    eventAwards.reset();playerTopSpeed=0;derbyAliveBefore=0;revengeSettled.clear();takedownCombo=0;playerStripped=0;strippedNoted.clear();pinNoted.clear();pinFed.clear();wallSlams=0;clearLocks();pileUp.reset();pileUps=biggestPileUp=0;wreckCauses.clear();lastHitBy.clear();rollArmed.clear();wreckedBy.clear();alightBy.clear();lastTakedownAt=-1e9;bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
+    eventAwards.reset();playerTopSpeed=0;derbyAliveBefore=0;revengeSettled.clear();takedownCombo=0;playerStripped=0;strippedNoted.clear();pinNoted.clear();pinFed.clear();pinCounted.clear();pinScoring.clear();pinEscapes=0;wallSlams=0;clearLocks();pileUp.reset();pileUps=biggestPileUp=0;wreckCauses.clear();lastHitBy.clear();rollArmed.clear();wreckedBy.clear();alightBy.clear();lastTakedownAt=-1e9;bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
     beginReplay();
     if(preparationInterrupted||document.hidden)pause();
     return true;
@@ -1145,17 +1145,18 @@ function stepTethers(dt:number){
   });
 }
 const lockedTo=(id:number)=>{const lock=bumperLocks.find(l=>l.hooker.id===id||l.caught.id===id);return !lock?-1:lock.hooker.id===id?lock.caught.id:lock.hooker.id;};
-/** A hit with a car's hanging bumper may hook the two cars together (offline). */
+/** A hit with a car's hanging bumper may hook the two cars together (offline); a running car can hook a wreck and tow it off. */
 function tryLock(a:Vehicle,b:Vehicle,point1:T.Vector3,point2:T.Vector3,closing:number){
-  if(a.health<=0||b.health<=0||lockedTo(a.id)>=0||lockedTo(b.id)>=0)return;
+  if(lockedTo(a.id)>=0||lockedTo(b.id)>=0)return;
   for(const [hooker,caught,at,other] of [[a,b,point1,point2],[b,a,point2,point1]] as const){
+    if(hooker.health<=0)continue;
     const local=toBody(hooker,at),bumper=bumperAt(local.z,DEFINITIONS[hooker.kind].halfLength),part=bumper&&hooker.wreckParts.assemblies.find(x=>x.name===bumper);
     if(!bumper||!part||!part.members.some(m=>m.mesh.visible)||part.loose<LOCK.loose)continue;
     if(!hooks(part.loose,closing,hooker.id*13+caught.id*7+lockRolls++))return;
     const caughtLocal=toBody(caught,other),length=Math.max(.3,at.distanceTo(other)+LOCK.slack);
     const joint=physics.createImpulseJoint(R.JointData.rope(length,local,caughtLocal),hooker.body,caught.body,true);
     bumperLocks.push({hooker,caught,bumper,joint,hookerAnchor:local,caughtAnchor:caughtLocal,length,age:0,strain:0});locksMade++;
-    if(!demo&&(hooker.id===0||caught.id===0)){const rival=hooker.id===0?caught:hooker;toast(`LOCKED TOGETHER · #${rival.id+1} ${DEFINITIONS[rival.kind].name}`,2,2);sound.crowd(.6);}
+    if(!demo&&(hooker.id===0||caught.id===0)){const rival=hooker.id===0?caught:hooker;toast(`${caught.health<=0?'HOOKED THE WRECK':'LOCKED TOGETHER'} · #${rival.id+1} ${DEFINITIONS[rival.kind].name}`,2,2);sound.crowd(.6);}
     return;
   }
 }
@@ -1181,23 +1182,29 @@ const pileUp=new PileUp();let pileUps=0,biggestPileUp=0;
 let wallSlams=0;
 /** Cars already counted as pinned, and already called PINNED in the derby feed, this time they were held (cleared once free). */
 const pinNoted=new Set<number>(),pinFed=new Set<number>();
+/** When each car last counted as pinned, and the cars whose present pin counts (offline). */
+const pinCounted=new Map<number,number>(),pinScoring=new Set<number>();
+/** Pins a car came out of still running (offline QA counter). */
+let pinEscapes=0;
 /** Pinned (offline): a car shoved hard against a wall or a second car crushes in at both contacts while it is held there,
  * credited to the car doing the shoving. */
 function pinCars(contacts:readonly {a?:Vehicle;b?:Vehicle;point1:T.Vector3;point2:T.Vector3;normal:T.Vector3;impulse:number}[],dt:number){
   const scale=collisionDamageMultiplier(mode==='race'&&!bangerRace(),damageRule());
   for(const c of cars){
-    if(c.health<=0||!c.extendedDamage){c.pinTime=c.pinTick=0;pinNoted.delete(c.id);pinFed.delete(c.id);continue;}
+    if(c.health<=0||!c.extendedDamage){c.pinTime=c.pinTick=0;pinNoted.delete(c.id);pinFed.delete(c.id);pinScoring.delete(c.id);continue;}
     const pushes:PinPush[]=[],points:T.Vector3[]=[];
     for(const k of contacts){const mine=k.a===c?k.point1:k.b===c?k.point2:null;if(!mine||Math.abs(k.normal.y)>.6)continue;
       const other=k.a===c?k.b:k.a;pushes.push({x:mine.x,z:mine.z,force:k.impulse/dt,by:other?other.id:-1});points.push(mine);}
     const pin=pinnedBy(c.current.x,c.current.z,pushes);c.pinTime=pinClock(c.pinTime,!!pin,dt);
-    if(c.pinTime===0){c.pinTick=0;pinNoted.delete(c.id);pinFed.delete(c.id);}
+    if(c.pinTime===0){if(pinScoring.has(c.id)){pinEscapes++;if(c.id===0&&!demo){toast('BROKE FREE',1.4,2);sound.crowd(.6);}}c.pinTick=0;pinNoted.delete(c.id);pinFed.delete(c.id);pinScoring.delete(c.id);}
     const by=pin&&c.pinTime>=PIN.hold?cars.find(v=>v.id===pushes[pin.push].by):undefined;if(!pin||!by)continue;
-    if(mode==='derby'&&c.pinTime>=PIN.feed&&!pinFed.has(c.id)){pinFed.add(c.id);derbyFeed.note(by.id,displayedDriver(by),'pinned',elapsed);}
-    if(!pinNoted.has(c.id)){pinNoted.add(c.id);c.pins++;
-      if(scoreDerby())combat.destruction(by.id,DESTRUCTION_POINTS.pin);
-      if(!demo&&by.id===0){toast(`PINNED · #${c.id+1} ${DEFINITIONS[c.kind].name}`+pointsTag(DESTRUCTION_POINTS.pin),2,2);sound.crowd(.8);}
-      else if(!demo&&c.id===0)toast(`PINNED BY #${by.id+1} ${DEFINITIONS[by.kind].name}`,2,2);}
+    if(mode==='derby'&&c.pinTime>=PIN.feed&&pinScoring.has(c.id)&&!pinFed.has(c.id)){pinFed.add(c.id);derbyFeed.note(by.id,displayedDriver(by),'pinned',elapsed);}
+    // The first crush lands as the pin takes hold; the same car counts as pinned once every PIN.recount seconds at most.
+    if(!pinNoted.has(c.id)){pinNoted.add(c.id);c.pinTick=PIN.gap;
+      if(pinCounts(pinCounted.get(c.id),elapsed)){pinCounted.set(c.id,elapsed);pinScoring.add(c.id);c.pins++;
+        if(scoreDerby())combat.destruction(by.id,DESTRUCTION_POINTS.pin);
+        if(!demo&&by.id===0){toast(`PINNED · #${c.id+1} ${DEFINITIONS[c.kind].name}`+pointsTag(DESTRUCTION_POINTS.pin),2,2);sound.crowd(.8);}
+        else if(!demo&&c.id===0)toast(`PINNED BY #${by.id+1} ${DEFINITIONS[by.kind].name}`,2,2);}}
     c.pinTick+=dt;if(c.pinTick<PIN.gap||!(scale>0))continue;c.pinTick-=PIN.gap;
     const before=c.health,at=points[pin.push],wall=points[pin.against],crush=PIN.rate*PIN.gap*scale;
     c.hit(at,c.current.clone().sub(at).setY(0).normalize(),crush,elapsed,true,by.paintColor);
@@ -2442,7 +2449,8 @@ async function boot() {
     get replaySlicks(){return replaySlicks?{...replaySlicks.slicks.stats,props:replaySlicks.props.burning.size}:null;},
     get propFires(){return propFires.burning.size;},
     /** QA: loosen a part's hinges (0..1) without tearing it off. */
-    loosen: (id: number, name: string, v: number) => { const a = cars.find(x => x.id === id)?.wreckParts.assemblies.find(x => x.name === name); if (a) a.loose = Math.max(0, Math.min(1, v)); return !!a; },
+    /** withDamage also gives the part the accumulated damage that looseness implies, so a later hit does not recompute it away. */
+    loosen: (id: number, name: string, v: number, withDamage = false) => { const a = cars.find(x => x.id === id)?.wreckParts.assemblies.find(x => x.name === name); if (a) { a.loose = Math.max(0, Math.min(1, v)); if (withDamage) a.damage = Math.max(a.damage, 10 + a.loose * 38); } return !!a; },
     /** QA: set a car's oil level (0..1). */
     partBox: (id: number, name: string) => { const c = cars.find(x => x.id === id), a = c?.wreckParts.assemblies.find(x => x.name === name); if (!c || !a) return null; c.root.updateMatrixWorld(true); const b = new T.Box3(); for (const m of a.members) if (m.mesh.visible) b.expandByObject(m.mesh); return { loose: a.loose, min: b.min.toArray(), max: b.max.toArray(), members: a.members.map(m => m.mesh.name + (m.mesh.visible ? '' : '(hidden)')) }; },
     discGlowInfo: (id: number) => cars.find(x => x.id === id)?.discGlowInfo(),
@@ -2523,7 +2531,7 @@ async function boot() {
         p95: times[Math.floor(times.length * 0.95)],
         audio: sound.buffers.size,
         activeParticles: fx.particles.filter(p=>p.life>0).length,
-        debris: fx.debris.length, wallSlams, bumperLocks: {made: locksMade, torn: locksTorn, active: bumperLocks.length}, tethers: {made: tethersMade, active: bumperTethers.length}, pileUps, biggestPileUp, debrisAt: fx.debris.map(d=>{const p=d.body.translation();return [+p.x.toFixed(2),+p.y.toFixed(2),+p.z.toFixed(2),+d.body.mass().toFixed(1),+d.age.toFixed(2)];}),
+        debris: fx.debris.length, wallSlams, pinEscapes, bumperLocks: {made: locksMade, torn: locksTorn, active: bumperLocks.length}, tethers: {made: tethersMade, active: bumperTethers.length}, pileUps, biggestPileUp, debrisAt: fx.debris.map(d=>{const p=d.body.translation();return [+p.x.toFixed(2),+p.y.toFixed(2),+p.z.toFixed(2),+d.body.mass().toFixed(1),+d.age.toFixed(2)];}),
         voices: sound.activeVoices,
         loops: sound.loops.size,
         thermal: vehicleFire?.stats,

@@ -1,6 +1,7 @@
+import {restorePinEscapeBytes} from './pin-escape-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readTankDropPrevious,restoreTankDropBytes,verifyTankDropRevision} from './tank-drop-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restorePinEscapeBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('TankDrop preserves every prior fixture, vehicle asset, venue art and history input',verifyTankDropRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/tank-drop/revision.json').toString());
