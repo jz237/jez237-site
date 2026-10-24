@@ -1125,6 +1125,21 @@ function tetherBumper(car:Vehicle,debris:R.RigidBody,anchor:{x:number;y:number;z
   const wire=new T.Line(new T.BufferGeometry().setFromPoints([from,end]),wireMaterial);wire.frustumCulled=false;scene.add(wire);
   bumperTethers.push({car,debris,joint:physics.createImpulseJoint(R.JointData.rope(length,anchor,hang),car.body,debris,true),anchor:new T.Vector3(anchor.x,anchor.y,anchor.z),hang,wire,length,age:0,life:tetherLife(car.id*7+tethersMade),spark:0});tethersMade++;
 }
+/** Joints must never yank: a car recovered, respawned or teleported far from what it is tied to lets go before the next solver
+ * step, which would otherwise drag the other end across the arena in one step (offline). Read from the bodies, which are already
+ * where the teleport put them (Vehicle.current only catches up in postStep). */
+function guardJoints(){
+  bumperLocks=bumperLocks.filter(lock=>{
+    if(!physics.getImpulseJoint(lock.joint.handle))return false;
+    const gap=fromBody(lock.hooker,lock.hookerAnchor).distanceTo(fromBody(lock.caught,lock.caughtAnchor));
+    if(Number.isFinite(gap)&&gap<=lock.length+LOCK.snap)return true;releaseLock(lock);return false;
+  });
+  bumperTethers=bumperTethers.filter(t=>{
+    if(!physics.getImpulseJoint(t.joint.handle)){dropWire(t);return false;}
+    const p=t.debris.translation(),gap=fromBody(t.car,t.anchor).distanceTo(new T.Vector3(p.x,p.y,p.z));
+    if(Number.isFinite(gap)&&gap<=t.length+TETHER.snap)return true;releaseJoint(t.joint);dropWire(t);return false;
+  });
+}
 /** Draw each wire from where the car is shown to where its bumper is shown (debris meshes follow their bodies each frame). */
 function drawTetherWires(){
   for(const t of bumperTethers){const piece=fx.debris.find(d=>d.body===t.debris);if(!piece)continue;
@@ -1757,6 +1772,7 @@ function step(dt: number) {
   const scoreMotion=mode==='derby'?cars.map(c=>combatMotion(c.id,c.current,c.currentQ,c.velocity,c.body.angvel().y,c.health,[0,1,2,3].filter(i=>c.controller.wheelIsInContact(i)).length)):[];
   if(mode==='derby')combat.sample(scoreMotion,elapsed);
   const collisionMotion=captureCollisionMotion(physics);
+  if(bumperLocks.length||bumperTethers.length)guardJoints();
   physics.step(events);
   for (const c of cars) c.postStep(dt, elapsed);
   if(!online?.active)catchOpenDoors();
