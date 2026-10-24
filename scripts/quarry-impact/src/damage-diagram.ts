@@ -16,8 +16,8 @@ export type DiagramState={
   faults?:{hotDiscs?:ArrayLike<number>;steerLink?:ArrayLike<number>;looseWheels?:ArrayLike<number>;diff?:'front'|'rear'|null;exhaustGone?:boolean;seized?:boolean;
     /** Anti-roll bars front/rear (0 = snapped), propshaft state, wheel-bearing wear per wheel, fan belt and battery, short steering lock (signed). */
     rollBar?:ArrayLike<number>;propshaft?:'bent'|'snapped'|null;bearings?:ArrayLike<number>;belt?:'slipping'|'snapped'|null;battery?:number;steerSkew?:number;
-    /** The fuel tank dragging on its neck or torn off, and parted throttle and handbrake cables. */
-    tank?:'down'|'gone'|null;throttleCable?:boolean;handbrakeCable?:boolean};
+    /** The fuel tank dragging on its neck or torn off, parted throttle and handbrake cables, and the battery thrown out. */
+    tank?:'down'|'gone'|null;throttleCable?:boolean;handbrakeCable?:boolean;batteryOut?:boolean};
 };
 export type PartState='ok'|'loose'|'gone';
 const clamp01=(v:number)=>Math.max(0,Math.min(1,Number.isFinite(v)?v:0));
@@ -82,6 +82,8 @@ function faults(state:DiagramState){
     if(gone)out+=`<path class="dd-tank-gone" d="M25 ${ty} L35 ${ty+5} M35 ${ty} L25 ${ty+5}" stroke="${DIAGRAM_COLORS[3]}" stroke-width=".7"/>`;}
   // A parted throttle cable: broken from the engine towards the cabin; parted handbrake cables: broken towards the rear axle.
   if(f.throttleCable){const ey=state.rearEngine?90:20,d=state.rearEngine?-1:1;out+=`<path class="dd-throttle-cable" d="M33.5 ${ey+5*d} L33.5 ${ey+9*d} M33.5 ${ey+11*d} L33.5 ${ey+15*d}" stroke="${DIAGRAM_COLORS[3]}" stroke-width="1.1" stroke-linecap="round"/>`;}
+  // The battery thrown out: an empty crossed-out box in the engine bay where it sat (dark, to show on any zone colour).
+  if(f.batteryOut){const by=state.rearEngine?86:20;out+=`<rect class="dd-battery-out" x="16" y="${by}" width="6" height="4" rx=".6" fill="none" stroke="#141210" stroke-width=".8" stroke-dasharray=".9 .8"/><path d="M16 ${by} L22 ${by+4} M22 ${by} L16 ${by+4}" stroke="#141210" stroke-width=".7"/>`;}
   if(f.handbrakeCable)out+=`<path class="dd-handbrake-cable" d="M26.5 62 L26.5 70 M26.5 73 L26.5 81" stroke="${DIAGRAM_COLORS[3]}" stroke-width="1.1" stroke-linecap="round"/>`;
   if(f.exhaustGone)out+=`<line class="dd-exhaust-gone" x1="${state.rearEngine?36:24}" y1="104" x2="${state.rearEngine?36:24}" y2="109" stroke="${DIAGRAM_COLORS[3]}" stroke-width="1.2" stroke-dasharray="1.2 1"/>`;
   return out;
