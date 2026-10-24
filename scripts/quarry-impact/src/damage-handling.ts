@@ -150,6 +150,11 @@ export function rubHeat(heat:number,rub:number,speed:number,dt:number){
   return rub>=RUB_FIRE.rub&&v>=RUB_FIRE.speed?Math.min(RUB_FIRE.after*1.5,h+dt*Math.min(RUB_FIRE.max,(Math.min(1,rub)-RUB_FIRE.base)/(1-RUB_FIRE.base)*(v/RUB_FIRE.speed))):Math.max(0,h-dt*RUB_FIRE.cool);
 }
 export const rubHeatWarning=(heat:ArrayLike<number>,alight:ArrayLike<number>)=>Array.from(heat).some((h,i)=>h>=RUB_FIRE.warn&&!alight[i])?'TYRE SMOKING · EASE OFF':'';
+/** Fire extinguisher (offline events): EXTINGUISHER.charges a car per event. G puts the car's fire and any burning tyre
+ * out at once (a white cloud) and takes the heat out of rubbing or white-hot tyres so they do not catch again straight
+ * away; it is only spent on a fire. */
+export const EXTINGUISHER={charges:2,key:'KeyG'} as const;
+export const extinguisherHint=(burning:boolean,charges:number)=>burning&&charges>0?`ON FIRE · G EXTINGUISHER ×${charges}`:'';
 /** A crushed engine bay chafes through the wiring loom: the ignition cuts out in short, irregular bursts (the engine dies
  * for a moment, no backfire) and the lights flicker with it. More crush, more and longer cuts. Fixed per car and time. */
 export const ELECTRICAL={onset:.45,span:.4,period:.6,odds:.85,minCut:.1,maxCut:.45} as const;
