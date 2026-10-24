@@ -460,6 +460,12 @@ export function pinnedBy(x:number,z:number,pushes:readonly PinPush[]):{push:numb
 }
 /** Seconds pinned after a step of dt: counts up while pinned and bleeds off at PIN.decay times real time once free. */
 export const pinClock=(time:number,pinned:boolean,dt:number)=>!Number.isFinite(time)||!(dt>0)?0:pinned?time+dt:Math.max(0,time-dt*PIN.decay);
+/** Fuel tank down (offline): with the tank's end crushed to TANK_DROP.crush or more, a hit there of TANK_DROP.blow or more snaps
+ * the straps. The tank hangs from its filler neck and drags along the ground: sparks at TANK_DROP.speed m/s or more (hot enough
+ * above TANK_DROP.hot to light its own fuel), the fuel leaking at TANK_DROP.leak. Dragged TANK_DROP.after seconds it tears off,
+ * leaving TANK_DROP.reserve of fuel to run out of the open lines: the car is on fumes. */
+export const TANK_DROP={crush:.5,blow:9,leak:.6,speed:3,hot:11,after:5,reserve:.06,size:{x:.72,y:.2,z:.5},hang:.6} as const;
+export const tankDrops=(crush:number,damage:number,atTankEnd:boolean)=>atTankEnd&&Number.isFinite(crush)&&crush>=TANK_DROP.crush&&Number.isFinite(damage)&&damage>=TANK_DROP.blow;
 /** A bare front wheel (offline): once a corner's wing has been torn off, a hit there does EXPOSED_WHEEL.tyre times as much to
  * the tyre and `rim` times as much to the wheel, and nothing is left to rub on the tyre. */
 export const EXPOSED_WHEEL={tyre:1.8,rim:1.4} as const;
