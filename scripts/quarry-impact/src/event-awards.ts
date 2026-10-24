@@ -8,11 +8,15 @@ export type AwardCar={id:number;inflicted:number;health:number;
  partsGone?:number};
 /** failure: a car's own mechanical failure (attacker = victim = that car), captioned by `label`. */
 export type EventMoment={kind:'hit'|'takedown'|'wheel'|'fire'|'failure';attacker:number;victim:number;time:number;score:number;label?:string};
-export type EventAward={key:'hit'|'fastest'|'destroyer'|'takedowns'|'climber'|'toughest'|'nemesis'|'wheels'|'scrap'|'firestarter'|'roller'|'standing'|'pinner'|'slammer';title:string;id:number;detail:string;victim?:number;value:number};
+export type EventAward={key:'hit'|'fastest'|'destroyer'|'takedowns'|'climber'|'toughest'|'nemesis'|'wheels'|'scrap'|'firestarter'|'roller'|'standing'|'pinner'|'slammer'|'crowd';title:string;id:number;detail:string;victim?:number;value:number};
 /** STILL STANDING goes to a car that finishes still running with at least this many major parts gone. */
 export const STILL_STANDING=5;
 /** Counted pins it takes to be PIN MASTER. */
 export const PIN_MASTER=2;
+/** CROWD FAVOURITE: the driver with the best showpiece moments (rolls, pins, slams, dominoes, pile-ups, fires, wheels off,
+ * takedowns; not plain hits, which MOST DESTRUCTIVE already counts, nor their own breakdowns), from CROWD_FAVOURITE of them. */
+export const CROWD_FAVOURITE=3;
+const showpiece=(m:EventMoment)=>m.kind==='fire'||m.kind==='wheel'||m.kind==='takedown'||m.kind==='hit'&&!!m.label;
 export class EventAwards{
  private biggest:{attacker:number;victim:number;damage:number;time:number}|null=null;
  /** The fastest damaging hit (closing speed, m/s). */
@@ -112,6 +116,9 @@ export class EventAwards{
   // Pins take two to count as a speciality; one good wall slam is worth its own award.
   const pinner=[...this.pins].filter(([,n])=>n>=PIN_MASTER).sort((a,b)=>b[1]-a[1]||a[0]-b[0])[0];
   if(pinner)out.push({key:'pinner',title:'PIN MASTER',id:pinner[0],value:pinner[1],detail:`pinned ${pinner[1]} cars`});
+  const crowd=new Map<number,{n:number;score:number}>();for(const m of this.moments)if(showpiece(m)&&m.attacker>=0){const c=crowd.get(m.attacker)??{n:0,score:0};c.n++;c.score+=m.score;crowd.set(m.attacker,c);}
+  const favourite=[...crowd].filter(([,c])=>c.n>=CROWD_FAVOURITE).sort((a,b)=>b[1].score-a[1].score||a[0]-b[0])[0];
+  if(favourite)out.push({key:'crowd',title:'CROWD FAVOURITE',id:favourite[0],value:favourite[1].n,detail:`${favourite[1].n} moments the crowd loved`});
   const slammer=[...this.slams].sort((a,b)=>b[1]-a[1]||a[0]-b[0])[0];
   if(slammer)out.push({key:'slammer',title:'WALL SLAMMER',id:slammer[0],value:slammer[1],detail:`slammed ${slammer[1]} ${slammer[1]===1?'car':'cars'} into the wall`});
   if(fire)out.push({key:'firestarter',title:'FIRESTARTER',id:fire.id,value:fire.cars*10+fire.puddles,detail:fire.cars?`set ${fire.cars} ${fire.cars===1?'car':'cars'} alight · ${fire.puddles} puddles lit`:`${fire.puddles} puddles lit`});
