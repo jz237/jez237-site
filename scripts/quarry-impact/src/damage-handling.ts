@@ -481,7 +481,7 @@ export function debrisFling(direction:{x:number;y:number;z:number},damage:number
 }
 /** A smash into the engine end (SMASH_FIRE.damage or more in one blow, offline) splits a fuel or oil line on some hits
  * (SMASH_FIRE.odds, decided per car and hit count) and the engine bay goes up at once. */
-export const SMASH_FIRE={damage:45,odds:.25} as const;
+export const SMASH_FIRE={damage:24,odds:.25} as const;
 export function smashFire(damage:number,engineEnd:boolean,carId:number,hits:number){
   if(!engineEnd||!Number.isFinite(damage)||damage<SMASH_FIRE.damage)return false;
   const x=Math.sin(carId*41.3+hits*17.9+3.1)*43758.5453;return x-Math.floor(x)<SMASH_FIRE.odds;

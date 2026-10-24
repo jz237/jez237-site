@@ -46,7 +46,7 @@ import {leakRates,dripInterval,FLAME,fuelSpacing} from './fluid-leaks';
 import {drainOil,starvationWear,seizes,ROD,rodStress,rodAtSeize,OIL,drainCoolant,overheatWear,FUEL_TANK,drainFuel,fuelFeed,SUMP,crackSump,sumpLeak,drainSump} from './oil-starvation';
 import {MAX_ENGINE_RESTART,crankRequested} from './engine-stall';
 import {BOOM} from './blow-up';
-import {RUB_FIRE,rubHeat,EXTINGUISHER,EXHAUST_CRUSH,exhaustCrushes,wheelRips,WHEEL_RIP,CABLE,HANDBRAKE_CABLE,ENGINE_DROP,rollBarSnaps,rollTorque,hasPropshaft,propBend,propVibration,fatigueProp,BEARING,bearingCracks,wearBearing,bearingShimmy,bearingDrag,steerSkew,openness,openDrag,debrisFling,smashFire,impactZoneFactor,pitStrength,pitGrip,PIT,EXPOSED_WHEEL,exposedDamage,BUMPER_GONE,COVER_GONE,engineDrops,ROOF_SLIDE,SIDE_SLIDE,ROLL_SHED,roofSlide,TANK_DROP,tankDrops,pushBurn,cableSnaps,cableThrottle,handbrakeSnaps,beltSlip,beltSnaps,beltSqueal,beltHeat,drainBattery,batteryCut,RADIATOR as RADIATOR_COOLING,runningHot,hotClock,overheatFire} from './damage-handling';
+import {RUB_FIRE,rubHeat,EXTINGUISHER,EXHAUST_CRUSH,exhaustCrushes,wheelRips,WHEEL_RIP,CABLE,HANDBRAKE_CABLE,ENGINE_DROP,SMASH_FIRE,rollBarSnaps,rollTorque,hasPropshaft,propBend,propVibration,fatigueProp,BEARING,bearingCracks,wearBearing,bearingShimmy,bearingDrag,steerSkew,openness,openDrag,debrisFling,smashFire,impactZoneFactor,pitStrength,pitGrip,PIT,EXPOSED_WHEEL,exposedDamage,BUMPER_GONE,COVER_GONE,engineDrops,ROOF_SLIDE,SIDE_SLIDE,ROLL_SHED,roofSlide,TANK_DROP,tankDrops,pushBurn,cableSnaps,cableThrottle,handbrakeSnaps,beltSlip,beltSnaps,beltSqueal,beltHeat,drainBattery,batteryCut,RADIATOR as RADIATOR_COOLING,runningHot,hotClock,overheatFire} from './damage-handling';
 import {SHED,assemblyMass,glassMass,shedMassProperties,type ShedPart} from './shed-weight';
 import {DOOR_SWING,DOOR_CATCH,ROLL_POP,rollPops,doorTip,barnDoorTip,stepDoor,doorDrag,doorUnlatched,doorBase,lidKind,lidBase,stepLid,CARGO,cargoSpills,type LidKind} from './door-swing';
 /** Rear compression past which the exhaust hangs down and drags. */
@@ -1236,7 +1236,7 @@ export class Vehicle {
     // A big hit on a crushed tank end snaps the fuel tank's straps: it drops and drags on its filler neck (offline).
     if(this.extendedDamage&&!quiet&&this.health>0&&!this.tankDown&&tankDrops((isRearEngineKind(this.kind)?this.structuralDamage?.[0]:this.structuralDamage?.[1])??0,crash(TANK_DROP.blow),zone===(isRearEngineKind(this.kind)?'front':'rear')))this.dropTank();
     // A smash into the engine end can split a line and light the engine bay at once (offline).
-    if(this.extendedDamage&&!quiet&&this.health>0){this.bigHits++;if(smashFire(damage,zone===(isRearEngineKind(this.kind)?'rear':'front'),this.id,this.bigHits)&&!this.igniteRequest){this.igniteRequest=true;this.smashFires++;this.onSetAlight?.(this.id);this.onBreak?.('smashfire',0);}}
+    if(this.extendedDamage&&!quiet&&this.health>0){this.bigHits++;if(smashFire(crash(SMASH_FIRE.damage),zone===(isRearEngineKind(this.kind)?'rear':'front'),this.id,this.bigHits)&&!this.igniteRequest){this.igniteRequest=true;this.smashFires++;this.onSetAlight?.(this.id);this.onBreak?.('smashfire',0);}}
     const dentDamage=bodyworkDentDamage(damage);
     const impactDirection = direction.clone().transformDirection(this.model.matrixWorld.clone().invert());
     const assemblies = new Map<string, { panels: T.Mesh[]; damage: number; weight: number }>();

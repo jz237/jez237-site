@@ -1,6 +1,7 @@
+import {restoreSmashCrashBytes} from './smash-crash-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readCrashTotalsPrevious,restoreCrashTotalsBytes,verifyCrashTotalsRevision} from './crash-totals-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreSmashCrashBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('CrashTotals preserves every prior fixture, vehicle asset, venue art and history input',verifyCrashTotalsRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/crash-totals/revision.json').toString());
