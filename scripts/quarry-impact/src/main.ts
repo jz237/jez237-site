@@ -985,7 +985,7 @@ async function start(watch=demo) {
     camera.position.copy(cars[0].current).add(new T.Vector3(0, 4, -8));
     hud();
     sound.pause(false);
-    eventAwards.reset();playerTopSpeed=0;derbyAliveBefore=0;revengeSettled.clear();takedownCombo=0;playerStripped=0;strippedNoted.clear();pinNoted.clear();pinFed.clear();pinCounted.clear();pinScoring.clear();pinEscapes=0;wallSlams=0;dominoes=0;knockedBy.clear();tankBy.clear();targetToastAt=-Infinity;clearLocks();pileUp.reset();pileUps=biggestPileUp=0;wreckCauses.clear();lastHitBy.clear();rollArmed.clear();wreckedBy.clear();alightBy.clear();lastTakedownAt=-1e9;bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
+    eventAwards.reset();playerTopSpeed=0;derbyAliveBefore=0;revengeSettled.clear();takedownCombo=0;playerStripped=0;strippedNoted.clear();pinNoted.clear();pinFed.clear();pinCounted.clear();pinScoring.clear();pinEscapes=0;sandwiches=0;wallSlams=0;dominoes=0;knockedBy.clear();tankBy.clear();targetToastAt=-Infinity;clearLocks();pileUp.reset();pileUps=biggestPileUp=0;wreckCauses.clear();lastHitBy.clear();rollArmed.clear();wreckedBy.clear();alightBy.clear();lastTakedownAt=-1e9;bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
     beginReplay();
     if(preparationInterrupted||document.hidden)pause();
     return true;
@@ -1205,14 +1205,15 @@ const tankBy=new Map<number,number>();
 let dominoes=0;const knockedBy=new Map<number,{by:number;at:number}>();
 /** WALL SLAMs credited this event (offline QA counter). */
 let wallSlams=0;
-/** How a pin feels (offline): crunch pitch, rumble when pinned and when pinning, and the escape hint shown while the player is pinned. */
-const PIN_FEEL={rate:.55,pinned:.4,pinning:.22,hint:'PINNED · ROCK IT · REVERSE / FORWARD'} as const;
+/** How a pin feels (offline): crunch pitch, rumble when pinned and when pinning, the escape hint shown while the player is pinned,
+ * and the throttle a sandwich's far car needs to share the credit. */
+const PIN_FEEL={rate:.55,pinned:.4,pinning:.22,hint:'PINNED · ROCK IT · REVERSE / FORWARD',partner:.3} as const;
 /** Cars already counted as pinned, and already called PINNED in the derby feed, this time they were held (cleared once free). */
 const pinNoted=new Set<number>(),pinFed=new Set<number>();
 /** When each car last counted as pinned, and the cars whose present pin counts (offline). */
 const pinCounted=new Map<number,number>(),pinScoring=new Set<number>();
-/** Pins a car came out of still running (offline QA counter). */
-let pinEscapes=0;
+/** Pins a car came out of still running, and pins between two cars (offline QA counters). */
+let pinEscapes=0,sandwiches=0;
 /** Pinned (offline): a car shoved hard against a wall or a second car crushes in at both contacts while it is held there,
  * credited to the car doing the shoving. */
 function pinCars(contacts:readonly {a?:Vehicle;b?:Vehicle;point1:T.Vector3;point2:T.Vector3;normal:T.Vector3;impulse:number}[],dt:number){
@@ -1222,7 +1223,10 @@ function pinCars(contacts:readonly {a?:Vehicle;b?:Vehicle;point1:T.Vector3;point
     const pushes:PinPush[]=[],points:T.Vector3[]=[];
     for(const k of contacts){const mine=k.a===c?k.point1:k.b===c?k.point2:null;if(!mine||Math.abs(k.normal.y)>.6)continue;
       const other=k.a===c?k.b:k.a;pushes.push({x:mine.x,z:mine.z,force:k.impulse/dt,by:other?other.id:-1});points.push(mine);}
-    const pin=pinnedBy(c.current.x,c.current.z,pushes);c.pinTime=pinClock(c.pinTime,!!pin,dt);
+    let pin=pinnedBy(c.current.x,c.current.z,pushes);
+    // Between two cars, the one driving into it is the pinner (the reaction from a parked car can read the stronger push).
+    if(pin&&pushes[pin.against].by>=0){const strong=cars.find(v=>v.id===pushes[pin!.push].by),far=cars.find(v=>v.id===pushes[pin!.against].by);if(strong&&far&&Math.abs(far.input.throttle)>Math.abs(strong.input.throttle))pin={push:pin.against,against:pin.push};}
+    c.pinTime=pinClock(c.pinTime,!!pin,dt);
     if(c.pinTime===0){if(pinScoring.has(c.id)){pinEscapes++;if(c.id===0&&!demo){toast('BROKE FREE',1.4,2);sound.crowd(.6);}}c.pinTick=0;pinNoted.delete(c.id);pinFed.delete(c.id);pinScoring.delete(c.id);}
     const by=pin&&c.pinTime>=PIN.hold?cars.find(v=>v.id===pushes[pin.push].by):undefined;if(!pin||!by)continue;
     by.strainClutch(dt);
@@ -1231,8 +1235,13 @@ function pinCars(contacts:readonly {a?:Vehicle;b?:Vehicle;point1:T.Vector3;point
     if(!pinNoted.has(c.id)){pinNoted.add(c.id);c.pinTick=PIN.gap;
       if(pinCounts(pinCounted.get(c.id),elapsed)){pinCounted.set(c.id,elapsed);pinScoring.add(c.id);c.pins++;eventAwards.pinned(by.id,c.id,elapsed);
         if(scoreDerby())combat.destruction(by.id,DESTRUCTION_POINTS.pin);
-        if(!demo&&by.id===0){toast(`PINNED · #${c.id+1} ${DEFINITIONS[c.kind].name}`+pointsTag(DESTRUCTION_POINTS.pin),2,2);sound.crowd(.8);}
-        else if(!demo&&c.id===0)toast(`PINNED BY #${by.id+1} ${DEFINITIONS[by.kind].name}`,2,2);}}
+        // Squeezed between two cars rather than against a wall: a SANDWICH (one feed line, not a PINNED one too); the car on the
+        // far side shares the credit if it is driving in too (not a parked car or a wreck).
+        const other=pushes[pin.against].by>=0?cars.find(v=>v.id===pushes[pin.against].by):undefined;
+        const shares=!!other&&Math.abs(other.input.throttle)>=PIN_FEEL.partner;
+        if(other){sandwiches++;pinFed.add(c.id);if(mode==='derby')derbyFeed.note(by.id,displayedDriver(by),'sandwich',elapsed);if(shares){eventAwards.pinned(other.id,c.id,elapsed);if(scoreDerby())combat.destruction(other.id,DESTRUCTION_POINTS.sandwich);}}
+        if(!demo&&(by.id===0||shares&&other?.id===0)){const pts=by.id===0?DESTRUCTION_POINTS.pin:DESTRUCTION_POINTS.sandwich;toast(`${other?'SANDWICH':'PINNED'} · #${c.id+1} ${DEFINITIONS[c.kind].name}`+pointsTag(pts),2,2);sound.crowd(.8);}
+        else if(!demo&&c.id===0)toast(other?`SANDWICHED · #${by.id+1} & #${other.id+1}`:`PINNED BY #${by.id+1} ${DEFINITIONS[by.kind].name}`,2,2);}}
     c.pinTick+=dt;if(c.pinTick<PIN.gap||!(scale>0))continue;c.pinTick-=PIN.gap;
     const before=c.health,at=points[pin.push],wall=points[pin.against],crush=PIN.rate*PIN.gap*scale;
     c.hit(at,c.current.clone().sub(at).setY(0).normalize(),crush,elapsed,true,by.paintColor);
@@ -2587,7 +2596,7 @@ async function boot() {
         p95: times[Math.floor(times.length * 0.95)],
         audio: sound.buffers.size,
         activeParticles: fx.particles.filter(p=>p.life>0).length,
-        debris: fx.debris.length, wallSlams, dominoes, pinEscapes, huntLeader: drivers.leader, bumperLocks: {made: locksMade, torn: locksTorn, active: bumperLocks.length}, tethers: {made: tethersMade, active: bumperTethers.length}, pileUps, biggestPileUp, debrisAt: fx.debris.map(d=>{const p=d.body.translation();return [+p.x.toFixed(2),+p.y.toFixed(2),+p.z.toFixed(2),+d.body.mass().toFixed(1),+d.age.toFixed(2)];}),
+        debris: fx.debris.length, wallSlams, dominoes, pinEscapes, sandwiches, huntLeader: drivers.leader, bumperLocks: {made: locksMade, torn: locksTorn, active: bumperLocks.length}, tethers: {made: tethersMade, active: bumperTethers.length}, pileUps, biggestPileUp, debrisAt: fx.debris.map(d=>{const p=d.body.translation();return [+p.x.toFixed(2),+p.y.toFixed(2),+p.z.toFixed(2),+d.body.mass().toFixed(1),+d.age.toFixed(2)];}),
         voices: sound.activeVoices,
         loops: sound.loops.size,
         thermal: vehicleFire?.stats,
