@@ -14,3 +14,4 @@ test('a door torn off by a passing car is credited to that driver as DOOR OFF',a
  const feed=new DerbyEventFeed();feed.note(2,'KESSLER R6 #3','door',4);assert.ok(derbyFeedMarkup(feed.visible(4),0).includes('DOOR OFF'));
  assert.ok(DESTRUCTION_POINTS.door>0&&DESTRUCTION_POINTS.door<=DESTRUCTION_POINTS.pit);
 });
+test('the feed calls a car STRIPPED',()=>{const feed=new DerbyEventFeed();feed.note(5,'TERN 1400 #6','stripped',7);assert.ok(derbyFeedMarkup(feed.visible(7),0).includes('STRIPPED'));});

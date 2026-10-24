@@ -2,8 +2,8 @@ import type {CombatRecord} from './event-rules';
 export type DerbyFeedDriver={id:number;name:string;record:CombatRecord};
 export type DerbyFeedEntry={id:number;driver:number;name:string;kind:'massive'|'rival'|'spin'|'spin180'|'spin360'|'knockout'|LocalFeedKind;count:number;time:number};
 /** Offline moments the feed is told about directly. */
-export type LocalFeedKind='wheel'|'wing'|'engine'|'pit'|'rolled'|'door';
-const labels={massive:'MASSIVE HIT',rival:'RIVAL HIT',spin:'90° SPIN ★',spin180:'180° SPIN ★★',spin360:'360° SPIN ★★★',knockout:'KNOCKOUT',wheel:'WHEEL OFF',wing:'WING OFF',engine:'ENGINE OUT',pit:'PIT',rolled:'ROLLED',door:'DOOR OFF'} as const;
+export type LocalFeedKind='wheel'|'wing'|'engine'|'pit'|'rolled'|'door'|'stripped';
+const labels={massive:'MASSIVE HIT',rival:'RIVAL HIT',spin:'90° SPIN ★',spin180:'180° SPIN ★★',spin360:'360° SPIN ★★★',knockout:'KNOCKOUT',wheel:'WHEEL OFF',wing:'WING OFF',engine:'ENGINE OUT',pit:'PIT',rolled:'ROLLED',door:'DOOR OFF',stripped:'STRIPPED'} as const;
 const counts=(r:CombatRecord)=>({massive:r.impacts?.[2]??0,rival:r.rivalHits??0,spin:r.spins??0,spin180:r.spins180??0,spin360:r.spins360??0,knockout:r.knockouts});
 const escape=(s:string)=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 /** Observe cumulative awarded counters, never infer awards from vehicle damage.

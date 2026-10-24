@@ -27,7 +27,7 @@ import {showVenueBrowser,selectVenue,selectDemoVenue} from './venue-browser';
 import {readCameraSettings,playerChaseComposition,mountCameraSettings} from './camera-settings';
 import {ScreenCraze,trackCraze,hull,type CrazeState} from './screen-craze';
 import {speedFov,smoothAccel,roadBuzz} from './speed-feel';
-import {FINAL_TWO,finalTwo,finalTwoBanner,revenge,takedownChain,comboLabel,revengeReady,lastGasp,strippedLabel,FINAL_FOUR,finalFour,finalFourBanner,rolledBy,DESTRUCTION_POINTS} from './derby-moments';
+import {FINAL_TWO,finalTwo,finalTwoBanner,revenge,takedownChain,comboLabel,revengeReady,lastGasp,strippedLabel,STRIPPED,FINAL_FOUR,finalFour,finalFourBanner,rolledBy,DESTRUCTION_POINTS} from './derby-moments';
 import {wreckCause} from './wreck-cause';
 import {frenzyFactor} from './derby-driving';
 import {syncInterval,syncDue} from './vehicle-draw-batch';
@@ -982,7 +982,7 @@ async function start(watch=demo) {
     camera.position.copy(cars[0].current).add(new T.Vector3(0, 4, -8));
     hud();
     sound.pause(false);
-    eventAwards.reset();playerTopSpeed=0;derbyAliveBefore=0;revengeSettled.clear();takedownCombo=0;playerStripped=0;wreckCauses.clear();lastHitBy.clear();rollArmed.clear();wreckedBy.clear();lastTakedownAt=-1e9;bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
+    eventAwards.reset();playerTopSpeed=0;derbyAliveBefore=0;revengeSettled.clear();takedownCombo=0;playerStripped=0;strippedNoted.clear();wreckCauses.clear();lastHitBy.clear();rollArmed.clear();wreckedBy.clear();lastTakedownAt=-1e9;bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
     beginReplay();
     if(preparationInterrupted||document.hidden)pause();
     return true;
@@ -1085,6 +1085,8 @@ let takedownCombo=0,lastTakedownAt=-1e9;
 const pointsTag=(points:number)=>scoreDerby()?` +${points}`:'';
 /** Major parts the player's car has shed (for the STRIPPED callouts). */
 let playerStripped=0;
+/** Cars the derby feed has already called STRIPPED. */
+const strippedNoted=new Set<number>();
 /** How each finished car went out (offline), fixed at the moment it was wrecked. */
 const wreckCauses=new Map<number,string>();
 /** Who last damaged each car and when, and which cars can count as rolled again (back on their wheels since). */
@@ -1655,6 +1657,8 @@ function step(dt: number) {
     if(attacker.id===0&&!demo){toast(`ROLLED IT · #${c.id+1} ${DEFINITIONS[c.kind].name}`+pointsTag(DESTRUCTION_POINTS.rolled),2,2);sound.crowd(.9);crowdFlashes(SMASH_FLASHES);}
     else if(c.id===0&&!demo){toast(`ROLLED BY #${attacker.id+1} ${DEFINITIONS[attacker.kind].name}`,2,2);sound.crowd(.7);}
     if(mode==='derby'){derbyFeed.note(attacker.id,displayedDriver(attacker),'rolled',elapsed);if(scoreDerby())combat.destruction(attacker.id,DESTRUCTION_POINTS.rolled);}}
+  // The derby feed calls out every car shed down to STRIPPED.first major parts (offline).
+  if(!online?.active&&mode==='derby')for(const c of cars)if(c.health>0&&!strippedNoted.has(c.id)&&majorPartsGone(c)>=STRIPPED.first){strippedNoted.add(c.id);derbyFeed.note(c.id,displayedDriver(c),'stripped',elapsed);}
   // The player's car stripped down to the shell and still running (offline).
   if(!online?.active&&!demo&&cars[0]){const gone=majorPartsGone(cars[0]),label=cars[0].health>0?strippedLabel(playerStripped,gone):'';if(label){toast(label,2,2);sound.crowd(.7);}playerStripped=gone;}
   for(const {a,b,point1,point2,scarDirection,speed,material} of collisionScars.adjudicate(contacts,elapsed)){
