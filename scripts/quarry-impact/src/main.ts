@@ -27,7 +27,7 @@ import {showVenueBrowser,selectVenue,selectDemoVenue} from './venue-browser';
 import {readCameraSettings,playerChaseComposition,mountCameraSettings} from './camera-settings';
 import {ScreenCraze,trackCraze,hull,type CrazeState} from './screen-craze';
 import {speedFov,smoothAccel,roadBuzz} from './speed-feel';
-import {FINAL_TWO,finalTwo,finalTwoBanner,revenge,takedownChain,comboLabel,revengeReady,lastGasp,strippedLabel,STRIPPED,FINAL_FOUR,finalFour,finalFourBanner,rolledBy,DESTRUCTION_POINTS,slamBy,isSlam} from './derby-moments';
+import {FINAL_TWO,finalTwo,finalTwoBanner,revenge,takedownChain,comboLabel,revengeReady,lastGasp,strippedLabel,STRIPPED,FINAL_FOUR,finalFour,finalFourBanner,rolledBy,DESTRUCTION_POINTS,slamBy,isSlam,DOMINO,dominoBy} from './derby-moments';
 import {wreckCause} from './wreck-cause';
 import {frenzyFactor,pointsLeader} from './derby-driving';
 import {syncInterval,syncDue} from './vehicle-draw-batch';
@@ -985,7 +985,7 @@ async function start(watch=demo) {
     camera.position.copy(cars[0].current).add(new T.Vector3(0, 4, -8));
     hud();
     sound.pause(false);
-    eventAwards.reset();playerTopSpeed=0;derbyAliveBefore=0;revengeSettled.clear();takedownCombo=0;playerStripped=0;strippedNoted.clear();pinNoted.clear();pinFed.clear();pinCounted.clear();pinScoring.clear();pinEscapes=0;wallSlams=0;targetToastAt=-Infinity;clearLocks();pileUp.reset();pileUps=biggestPileUp=0;wreckCauses.clear();lastHitBy.clear();rollArmed.clear();wreckedBy.clear();alightBy.clear();lastTakedownAt=-1e9;bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
+    eventAwards.reset();playerTopSpeed=0;derbyAliveBefore=0;revengeSettled.clear();takedownCombo=0;playerStripped=0;strippedNoted.clear();pinNoted.clear();pinFed.clear();pinCounted.clear();pinScoring.clear();pinEscapes=0;wallSlams=0;dominoes=0;knockedBy.clear();targetToastAt=-Infinity;clearLocks();pileUp.reset();pileUps=biggestPileUp=0;wreckCauses.clear();lastHitBy.clear();rollArmed.clear();wreckedBy.clear();alightBy.clear();lastTakedownAt=-1e9;bangerAggression.reset();lastBadges=[];slowMoUntil=0;nextEliminationAt=ELIMINATION_INTERVAL;eliminatedOrder=[];telemetry=watch?null:new SessionTelemetry();stuntProgress=activeChallenge?.stunt?new StuntChallengeProgress(activeChallenge.stunt):null;runId=crypto.randomUUID();runSettled=false;lastAward=null;
     beginReplay();
     if(preparationInterrupted||document.hidden)pause();
     return true;
@@ -1195,6 +1195,8 @@ function stepLocks(dt:number){
 const pileUp=new PileUp();let pileUps=0,biggestPileUp=0;
 /** When the player was last told they lead a scored derby and everyone is after them, and how often at most (seconds). */
 let targetToastAt=-Infinity;const HUNT_TOAST=15;
+/** DOMINOs credited this event (offline QA counter), and who last knocked each car with a real hit, and when. */
+let dominoes=0;const knockedBy=new Map<number,{by:number;at:number}>();
 /** WALL SLAMs credited this event (offline QA counter). */
 let wallSlams=0;
 /** Cars already counted as pinned, and already called PINNED in the derby feed, this time they were held (cleared once free). */
@@ -1822,6 +1824,8 @@ function step(dt: number) {
     const rivalBefore=!online?.active&&a&&b&&(a.id===0||b.id===0)?eventAwards.rivalOf(0):null;
     // Weight matters (offline): the lighter car takes the larger share of a car-to-car crash.
     const [shareA,shareB]=!online?.active&&a&&b?[massShare(a.body.mass(),b.body.mass()),massShare(b.body.mass(),a.body.mass())]:[1,1];
+    // Who had last knocked each car (a real hit) before this contact (for DOMINO: knocked into a third car).
+    const priorA=a?knockedBy.get(a.id):undefined,priorB=b?knockedBy.get(b.id):undefined;
     const pitsA=a?.pitSpins??0,pitsB=b?.pitSpins??0,engineInA=!a?.engineOut,engineInB=!b?.engineOut,wingsA=a?.wingsTorn??0,wingsB=b?.wingsTorn??0;
     if(a){
       const before=a.health;
@@ -1846,6 +1850,12 @@ function step(dt: number) {
       if(call&&starter){pileUps++;biggestPileUp=Math.max(biggestPileUp,call.size);eventAwards.pileUp(starter.id,call.size,elapsed);sound.crowd(1);crowdFlashes(SMASH_FLASHES);
         if(mode==='derby'){derbyFeed.note(starter.id,displayedDriver(starter),'pileup',elapsed,call.size);if(scoreDerby())combat.destruction(starter.id,PILEUP.points*call.size);}
         if(!demo&&call.cars.includes(cars[0]?.id??-1)){toast(`PILE-UP ×${call.size}`+(starter.id===cars[0].id?pointsTag(PILEUP.points*call.size):''),2,3);if(clock>=slowMoUntil){slowMoUntil=clock+SMASH.slowmo;slowMoScale=SMASH.scale;}}}}
+    // Domino: knocked by a rival into a third car hard; the rival gets the credit for the chain (offline).
+    if(!online?.active&&a&&b)for(const [mover,struck,prior,loss] of [[a,b,priorA,smashLoss.b],[b,a,priorB,smashLoss.a]] as const){
+      const by=loss>=DOMINO.big&&closing>=DOMINO.closing?dominoBy(prior,mover.id,struck.id,elapsed):-1,starter=by>=0?cars.find(c=>c.id===by):undefined;if(!starter)continue;dominoes++;eventAwards.dominoed(starter.id,struck.id,elapsed);
+      if(mode==='derby'){derbyFeed.note(starter.id,displayedDriver(starter),'domino',elapsed);if(scoreDerby())combat.destruction(starter.id,DESTRUCTION_POINTS.domino);}
+      if(!demo&&starter.id===0){toast(`DOMINO · #${mover.id+1} INTO #${struck.id+1}`+pointsTag(DESTRUCTION_POINTS.domino),1.8,2);sound.crowd(.8);}}
+    if(!online?.active&&a&&b){if(smashLoss.a>=DOMINO.knock)knockedBy.set(a.id,{by:b.id,at:elapsed});if(smashLoss.b>=DOMINO.knock)knockedBy.set(b.id,{by:a.id,at:elapsed});}
     // A hanging bumper can hook the two cars together (offline).
     if(!online?.active&&a&&b)tryLock(a,b,point1,point2,closing);
     // Wall slam: a car knocked into the scenery just after a rival hit it; the rival is credited with that damage (offline).
@@ -2554,7 +2564,7 @@ async function boot() {
         p95: times[Math.floor(times.length * 0.95)],
         audio: sound.buffers.size,
         activeParticles: fx.particles.filter(p=>p.life>0).length,
-        debris: fx.debris.length, wallSlams, pinEscapes, huntLeader: drivers.leader, bumperLocks: {made: locksMade, torn: locksTorn, active: bumperLocks.length}, tethers: {made: tethersMade, active: bumperTethers.length}, pileUps, biggestPileUp, debrisAt: fx.debris.map(d=>{const p=d.body.translation();return [+p.x.toFixed(2),+p.y.toFixed(2),+p.z.toFixed(2),+d.body.mass().toFixed(1),+d.age.toFixed(2)];}),
+        debris: fx.debris.length, wallSlams, dominoes, pinEscapes, huntLeader: drivers.leader, bumperLocks: {made: locksMade, torn: locksTorn, active: bumperLocks.length}, tethers: {made: tethersMade, active: bumperTethers.length}, pileUps, biggestPileUp, debrisAt: fx.debris.map(d=>{const p=d.body.translation();return [+p.x.toFixed(2),+p.y.toFixed(2),+p.z.toFixed(2),+d.body.mass().toFixed(1),+d.age.toFixed(2)];}),
         voices: sound.activeVoices,
         loops: sound.loops.size,
         thermal: vehicleFire?.stats,

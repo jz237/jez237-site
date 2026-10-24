@@ -50,6 +50,11 @@ export class EventAwards{
   if(!Number.isInteger(attacker)||attacker<0||attacker===victim)return;
   this.slams.set(attacker,(this.slams.get(attacker)??0)+1);this.moments.push({kind:'hit',attacker,victim,time:Number.isFinite(time)?time:0,score:30,label:'WALL SLAM'});
  }
+ /** The attacker knocked a car into the victim (a DOMINO): a highlight moment. */
+ dominoed(attacker:number,victim:number,time=0){
+  if(!Number.isInteger(attacker)||attacker<0||attacker===victim)return;
+  this.moments.push({kind:'hit',attacker,victim,time:Number.isFinite(time)?time:0,score:27,label:'DOMINO'});
+ }
  /** A pile-up the starter set off: a highlight on its own (the bigger, the better). */
  pileUp(starter:number,size:number,time=0){
   if(!Number.isInteger(starter)||starter<0||!(size>=2))return;

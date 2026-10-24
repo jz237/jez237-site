@@ -2,8 +2,8 @@ import type {CombatRecord} from './event-rules';
 export type DerbyFeedDriver={id:number;name:string;record:CombatRecord};
 export type DerbyFeedEntry={id:number;driver:number;name:string;kind:'massive'|'rival'|'spin'|'spin180'|'spin360'|'knockout'|LocalFeedKind;count:number;time:number};
 /** Offline moments the feed is told about directly. */
-export type LocalFeedKind='wheel'|'wing'|'engine'|'pit'|'rolled'|'door'|'stripped'|'burnt'|'pinned'|'slam'|'pileup';
-const labels={massive:'MASSIVE HIT',rival:'RIVAL HIT',spin:'90° SPIN ★',spin180:'180° SPIN ★★',spin360:'360° SPIN ★★★',knockout:'KNOCKOUT',wheel:'WHEEL OFF',wing:'WING OFF',engine:'ENGINE OUT',pit:'PIT',rolled:'ROLLED',door:'DOOR OFF',stripped:'STRIPPED',burnt:'BURNT OUT',pinned:'PINNED',slam:'WALL SLAM',pileup:'PILE-UP'} as const;
+export type LocalFeedKind='wheel'|'wing'|'engine'|'pit'|'rolled'|'door'|'stripped'|'burnt'|'pinned'|'slam'|'pileup'|'domino';
+const labels={massive:'MASSIVE HIT',rival:'RIVAL HIT',spin:'90° SPIN ★',spin180:'180° SPIN ★★',spin360:'360° SPIN ★★★',knockout:'KNOCKOUT',wheel:'WHEEL OFF',wing:'WING OFF',engine:'ENGINE OUT',pit:'PIT',rolled:'ROLLED',door:'DOOR OFF',stripped:'STRIPPED',burnt:'BURNT OUT',pinned:'PINNED',slam:'WALL SLAM',pileup:'PILE-UP',domino:'DOMINO'} as const;
 const counts=(r:CombatRecord)=>({massive:r.impacts?.[2]??0,rival:r.rivalHits??0,spin:r.spins??0,spin180:r.spins180??0,spin360:r.spins360??0,knockout:r.knockouts});
 const escape=(s:string)=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 /** Observe cumulative awarded counters, never infer awards from vehicle damage.
@@ -23,9 +23,14 @@ export class DerbyEventFeed{
   this.ready=true;this.entries=this.entries.filter(entry=>time-entry.time<8).slice(-4);
  }
  /** Local (offline-only) moments that no combat counter carries: a wheel or wing torn off, an engine dropped out, a PIT. */
+ /** A repeat of the same moment by the same driver while its line is still up adds to that line (×N) and brings it back to the
+  * top, rather than filling the feed; a pile-up's count is its size, so each pile-up keeps a line of its own. */
  note(driver:number,name:string,kind:LocalFeedKind,time:number,count=1){
   if(!Number.isFinite(time)||time<0)return;
-  this.entries.push({id:++this.sequence,driver,name,kind,count:Number.isFinite(count)&&count>1?Math.floor(count):1,time});this.entries=this.entries.filter(entry=>time-entry.time<8).slice(-4);
+  const n=Number.isFinite(count)&&count>1?Math.floor(count):1,same=kind==='pileup'?undefined:this.entries.find(entry=>entry.driver===driver&&entry.kind===kind&&time-entry.time<8&&time>=entry.time);
+  if(same){same.count+=n;same.time=time;same.id=++this.sequence;this.entries=[...this.entries.filter(entry=>entry!==same),same];}
+  else this.entries.push({id:++this.sequence,driver,name,kind,count:n,time});
+  this.entries=this.entries.filter(entry=>time-entry.time<8).slice(-4);
  }
  visible(time:number){return this.entries.filter(entry=>time>=entry.time&&time-entry.time<8).slice().reverse().map(entry=>({...entry}));}
 }

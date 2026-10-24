@@ -37,7 +37,7 @@ export const FINAL_FOUR={toast:2.2} as const;
 export const finalFour=(before:number,now:number)=>Number.isFinite(before)&&before>=5&&now===4;
 export const finalFourBanner=(playerIn:boolean)=>playerIn?`FINAL FOUR · YOU'RE STILL IN IT`:'FINAL FOUR';
 /** Destruction points (offline scored derbies), credited to the driver who did it. */
-export const DESTRUCTION_POINTS={engine:40,rolled:30,pit:15,wing:10,door:10,burnt:35,pin:20,slam:15} as const;
+export const DESTRUCTION_POINTS={engine:40,rolled:30,pit:15,wing:10,door:10,burnt:35,pin:20,slam:15,domino:10} as const;
 /** Rolled (offline): a car that has stayed upside down for ROLLED.sustain seconds within ROLLED.window of being hit was rolled by
  * that hitter. Once per roll: it counts again only after the car has been back on its wheels. */
 export const ROLLED={sustain:.3,window:2.5} as const;
@@ -47,3 +47,9 @@ export const rolledBy=(inverted:number,armed:boolean,hit:{by:number;at:number}|u
 export const SLAM={window:2,big:8} as const;
 export const slamBy=(last:{by:number;at:number}|undefined,victim:number,time:number)=>!last||last.by<0||last.by===victim||!(time-last.at>=0&&time-last.at<=SLAM.window)?-1:last.by;
 export const isSlam=(lost:number)=>Number.isFinite(lost)&&lost>=SLAM.big;
+/** Domino (offline): a car knocked by a rival (a hit costing it DOMINO.knock health or more) into a third car within SLAM.window
+ * seconds, arriving at DOMINO.closing m/s or more and doing the third car DOMINO.big or more damage, is a DOMINO for that rival (the
+ * damage stays credited to the car that hit). Only a real knock starts a chain: in a crowded melee every car has been touched by
+ * someone a moment ago. */
+export const DOMINO={knock:10,big:4,closing:5} as const;
+export const dominoBy=(last:{by:number;at:number}|undefined,mover:number,struck:number,time:number)=>{const by=slamBy(last,mover,time);return by===struck?-1:by;};
