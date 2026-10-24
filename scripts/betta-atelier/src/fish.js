@@ -245,6 +245,21 @@ export const PELVIC_ROOTS = [
     [483, 860],
     [535, 917],
   ];
+export const PECTORAL_ROOTS = [
+    [397, 439],
+    [399, 454],
+    [401, 468],
+  ],
+  PECTORAL_EDGE = [
+    [410, 406],
+    [445, 393],
+    [482, 400],
+    [504, 430],
+    [505, 467],
+    [493, 500],
+    [461, 525],
+    [435, 524],
+  ];
 const PELVIC_BASE_Z = 0.045,
   PELVIC_TIP_Z = 0.19,
   PELVIC_SINK = 0.014;
@@ -583,29 +598,7 @@ export function createBetta({ compact = false } = {}) {
   const display = new DisplayMotion(), gaze = new EyeMotion();
   for (const side of [-1, 1]) {
     makeFin(fish, texture, PELVIC_ROOTS, PELVIC_EDGE, 4, side);
-    pectorals.push(
-      makeFin(
-        fish,
-        texture,
-        [
-          [397, 439],
-          [399, 454],
-          [401, 468],
-        ],
-        [
-          [410, 406],
-          [445, 393],
-          [482, 400],
-          [504, 430],
-          [505, 467],
-          [493, 500],
-          [461, 525],
-          [435, 524],
-        ],
-        3,
-        side,
-      ),
-    );
+    pectorals.push(makeFin(fish, texture, PECTORAL_ROOTS, PECTORAL_EDGE, 3, side));
     // Volumetric iris and a dark convex pupil aligned with the lateral reference.
     const eyeGeo = new T.SphereGeometry(0.083, compact ? 20 : 48, compact ? 12 : 32),
       ep = eyeGeo.attributes.position,
@@ -674,7 +667,7 @@ export function createBetta({ compact = false } = {}) {
     macroTextures,
     scaleCount: 0,
     finCount: 7,
-    revision: "1.11",
+    revision: "1.12",
     gulp: { lift: 0, phase: "none", clock: -1, lip: [0, 0, 0], surfaceY: SURFACE_Y },
     display, eyes,
     gait,
@@ -813,7 +806,7 @@ export function createBetta({ compact = false } = {}) {
       }
       const relativeFlow = Math.hypot(...localFlow.map((v, i) => v - velocity[i]));
       gait.advance(dt, drive, relativeFlow, turn, POSES[mode] ?? {});
-      const { phase, effort, breathPhase, pectoralPhase, scull, tuck } = gait;
+      const { phase, effort, breathPhase, pectoralPhase, scull, tuck, pectoralEffort, pectoralScull } = gait;
       // The standalone turn also leads with the neck; the rear follows the head's tangent.
       bodyMotion.advanceTurn(dt, locomotion ? locomotion.steerRate ?? angularVelocity : turn, locomotion ? locomotion.speed ?? 0 : Math.hypot(...velocity));
       bodyMotion.update(phase, effort, turn, breathPhase, locomotion?.gulp ?? gulpOpen, locomotion?.gulpGill ?? gulpGill);
@@ -830,7 +823,7 @@ export function createBetta({ compact = false } = {}) {
       uniforms.uMouth.value = bodyMotion.mouth;
       uniforms.uGill.value = bodyMotion.gill;
       const state = {
-        body: bodyMotion, time: t, phase, pectoralPhase, scull, tuck, drive: effort * 0.55, effort, turn, flare: uniforms.uFlare.value,
+        body: bodyMotion, time: t, phase, pectoralPhase, scull, tuck, pectoralEffort, pectoralScull, drive: effort * 0.55, effort, turn, flare: uniforms.uFlare.value,
         heading, angularVelocity, velocity, origin: fish.position.toArray(),
         localHydrodynamics,
         strength: flowStrength, direction: water.direction, externalFlow: fish.userData.externalFlow,

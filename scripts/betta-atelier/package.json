@@ -1,12 +1,12 @@
 {
   "name": "betta-atelier",
-  "version": "1.11.0",
+  "version": "1.12.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
-    "test": "node --test fin-dynamics.test.mjs surface-gulp.test.mjs pelvic-attachment.test.mjs"
+    "test": "node --test fin-dynamics.test.mjs surface-gulp.test.mjs pelvic-attachment.test.mjs pectoral-transitions.test.mjs"
   },
   "dependencies": {
     "three": "0.186.1",

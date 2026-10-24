@@ -3,7 +3,7 @@
 Original: https://github.com/willwaltz/globes
 Author: Will Waltz · MIT License
 Upstream commit: 93c3b814bbca53463e8207b8e3c95fca8940dff5
-Imported: 2026-10-22 · Hosting build: 1.10.0
+Imported: 2026-10-22 · Hosting build: 1.11.0
 Public route: https://jez237.com/demos/globes/
 
 The upstream source and MIT attribution are retained. Hosting adds the gallery
@@ -253,6 +253,15 @@ actual WebGPU side/overhead turn sequences as well as scalar checks; fin-to-fin
 self-collision is still approximate, not a full cloth/contact solver.
 Use `npm run web -- --host 127.0.0.1` for browser development (`npm run dev` starts
 Electron). `?qa` exposes the same local inspection object as a dev build.
+Version 1.11 (Atelier 1.12) stops the pectoral fins changing size when the swim mode changes:
+- The startle tuck is a soft spring and a gentler fold, and the fin's beat power and cadence
+  follow slow filtered copies of the tail's effort (`pectoralEffort`, `pectoralScull`) instead
+  of the tail itself. See Atelier 1.12 in `../betta-atelier/README.md` for the numbers.
+- Headless replay of the live 1.10 behaviour (56 mode changes): worst fin-size jump 0.18 to 0.055
+  of rest area; cruise to startle +0.09..0.18 to under 0.015. Synthetic chain on the real fin
+  geometry: 0.21 to 0.03.
+- Limits: the glide-to-hover change that remains (0.04-0.05) is the trunk straightening after a
+  turn; the startle fold is now subtle rather than a dramatic tuck.
 
 ## Browser compatibility
 

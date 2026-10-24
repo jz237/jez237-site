@@ -137,7 +137,8 @@ test('flow and locomotion accelerate cadence without stopping quiet-hover breath
     swim.advance(1 / 60, 0.38, 0);
   }
   assert.ok(hover.effort < 0.01 && hover.breathPhase > 30);
-  assert.ok(current.pectoralHz > hover.pectoralHz * 3);
+  // The pectoral cadence follows load over a narrow band, so a change of swim mode never reads as a new gait.
+  assert.ok(current.pectoralHz > hover.pectoralHz + 1 && current.pectoralHz < hover.pectoralHz * 2, `${hover.pectoralHz} -> ${current.pectoralHz}`);
   assert.ok(current.bodyHz > 3 && swim.bodyHz > 3);
   const before = structuredClone(current);
   current.advance(0, 0, 0); assert.deepEqual({...current}, before);
@@ -168,7 +169,7 @@ test('actual pectoral membrane beats faster under load, stays attached and resol
     return best.hz;
   }
   const hover=sample(0), loaded=sample(0.9), phone=sample(0.9,30);
-  assert.ok(loaded > hover * 2.5, `rendered cadence ${hover} -> ${loaded}`);
+  assert.ok(loaded > hover + 1 && loaded < hover * 2, `rendered cadence ${hover} -> ${loaded}`);
   assert.ok(Math.abs(loaded-phone)<0.35, `30fps alias/drift ${loaded} vs ${phone}`);
 });
 
@@ -191,14 +192,18 @@ test('hover sculling fans the pectorals continuously and a startle tucks them to
     return { gait, mean, swing: Math.max(...trace) - Math.min(...trace), hz: crossings / 2 / (trace.length / fps) };
   }
   const idle = pectoral({}), scull = pectoral({ scull: 1 }), tucked = pectoral({ tuck: 1 });
-  assert.ok(idle.gait.pectoralHz < 2 && Math.abs(scull.gait.pectoralHz - SCULL_HZ) < 0.05);
-  assert.ok(scull.swing > idle.swing * 1.3, `sculling swing ${scull.swing} vs idle ${idle.swing}`);
-  assert.ok(scull.hz > 2.5 && scull.hz < 5, `sculling beats at ${scull.hz} Hz`);
-  assert.ok(tucked.mean < idle.mean - 0.05, `tucked mean ${tucked.mean} vs ${idle.mean}`);
-  assert.ok(tucked.swing < idle.swing * 0.5, 'a tucked fin barely beats');
+  assert.ok(idle.gait.pectoralHz < 3 && Math.abs(scull.gait.pectoralHz - SCULL_HZ) < 0.05);
+  // Sculling differs from idle swimming by a quicker fan, not by a bigger fin: the swing must not shrink or grow much.
+  assert.ok(scull.swing > idle.swing * 0.9 && scull.swing < idle.swing * 1.3, `sculling swing ${scull.swing} vs idle ${idle.swing}`);
+  assert.ok(scull.hz > idle.hz + 0.5 && scull.hz < 5, `sculling beats at ${scull.hz} Hz vs idle ${idle.hz}`);
+  // The tuck draws the fins in and stills them, but gently: a deep fold reads as the fin changing size.
+  assert.ok(tucked.mean < idle.mean - 0.01, `tucked mean ${tucked.mean} vs ${idle.mean}`);
+  assert.ok(tucked.swing < idle.swing * 0.6, 'a tucked fin beats much less');
   const quick = new SwimGait(); for (let i = 0; i < 6; i++) quick.advance(1 / 60, 0.045, 0, 0, { tuck: 1 });
-  assert.ok(quick.tuck > 0.7, 'the tuck closes within a tenth of a second');
-  for (let i = 0; i < 120; i++) quick.advance(1 / 60, 0.045, 0, 0, {});
+  assert.ok(quick.tuck > 0.15 && quick.tuck < 0.5, `the tuck accelerates into the fold instead of snapping (${quick.tuck})`);
+  for (let i = 0; i < 24; i++) quick.advance(1 / 60, 0.045, 0, 0, { tuck: 1 });
+  assert.ok(quick.tuck > 0.9, 'the tuck is closed within about half a second');
+  for (let i = 0; i < 180; i++) quick.advance(1 / 60, 0.045, 0, 0, {});
   assert.ok(quick.tuck < 0.05 && quick.scull === 0, 'it opens again afterwards');
 });
 

@@ -1,8 +1,9 @@
-# Living Silk — Betta Atelier 1.11
+# Living Silk — Betta Atelier 1.12
 
-The standalone published build is 1.11. It adds the gait's `stroke` reading, which the globe
-uses so the fish only gains speed while its tail is working ([Atelier 1.11](#atelier-111-2026-10-23)),
-on top of 1.10, which added the globe's mirror, lap and rest
+The standalone published build is 1.12. It makes the pectoral fins keep their size when the swim
+mode changes ([Atelier 1.12](#atelier-112-2026-10-23)), on top of 1.11, which added the gait's
+`stroke` reading, which the globe uses so the fish only gains speed while its tail is working
+([Atelier 1.11](#atelier-111-2026-10-23)), and 1.10, which added the globe's mirror, lap and rest
 pectoral poses ([Atelier 1.10](#atelier-110-2026-10-23)) and 1.9, which added the pelvic-feeler attachment fix and
 the shared hover-sculling and startle-tuck pectoral behaviour described in
 [Atelier 1.9](#atelier-19-2026-10-23) below, on top of the 1.8 shared-source changes
@@ -395,3 +396,29 @@ benchmark).
 - **Dive pose.** `POSES.dive` (`scull: 0.5`) keeps the pectorals working while the fish swims
   back down from a gulp.
 - Tests: unchanged (`npm test` runs 27).
+
+## Atelier 1.12 (2026-10-23)
+
+- **Pectoral fins keep their size across swim-mode changes.** The fin's beat-averaged side-view
+  area used to jump at each mode change, worst at a startle (about a quarter of the fin's rest
+  area in the browser). Three causes, three fixes:
+  - The startle tuck was a 30/s snap in, 6/s out, folding the fin about 0.85 of its beat power
+    and 0.40 of its stroke offset. It is now a critically damped spring (11/s in, 4.5/s out) and
+    a gentler fold (`1 - 0.25 * tuck` power, `0.10 * tuck` offset in `fin-dynamics.js`).
+  - The fin's beat power and cadence followed the tail's `effort` directly (cadence
+    `1.6 + 5.8 * effort` Hz). `SwimGait` now exposes `pectoralEffort` (effort filtered at 1.1/s) and
+    `pectoralScull` (scull filtered at 2.2/s); cadence is `2.8 + 1.8 * pectoralEffort` Hz, rising
+    to `SCULL_HZ` with `pectoralScull`, and beat power is `0.62 + 0.36 * pectoralEffort`
+    (+ `0.05 * pectoralScull`). The body, tail and breath still use the fast `effort`.
+  - The pectoral roots and edge (`PECTORAL_ROOTS`, `PECTORAL_EDGE`) are exported from `fish.js`
+    so tests drive the real fin geometry.
+- Measured on a 56-transition recorded run (headless replay of the live behaviour, area as a
+  fraction of rest area, +/-0.5 s of a 0.8 s boxcar): worst change 0.18 to 0.055, cruise to startle
+  +0.09..0.18 to under 0.015. In a synthetic cruise/startle/glide chain on the real fin geometry
+  the cruise-to-startle change is 0.21 before and 0.03 now. The remaining 0.04-0.05 at glide to
+  hover is the trunk straightening after a turn and is slow.
+- Flow response is kept: mean edge deflection under a +/-0.6 cross-current is 0.008 hover,
+  0.015 glide, 0.006 cruise (1.11: 0.007, 0.026, 0.005).
+- Tests: `pectoral-transitions.test.mjs` (new, drives chains of mode changes through the real
+  pectoral fin); `fin-dynamics.test.mjs` now expects the narrower cadence band and the gentler
+  tuck. `npm test` runs 29 tests.

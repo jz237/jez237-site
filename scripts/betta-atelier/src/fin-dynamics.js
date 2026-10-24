@@ -116,9 +116,12 @@ export class FinDynamics {
         } else if (kind === 3) {
           // Alternating rowing stroke, then feathered/cupped recovery.
           const beat = pectoralPhase + (side < 0 ? Math.PI : 0);
-          // Sculling fans a little wider than slow swimming; a startle folds the fins to the flanks.
-          const tuck = state.tuck ?? 0, power = (0.55 + 0.45 * (state.effort ?? drive) + 0.12 * (state.scull ?? 0)) * (1 - 0.85 * tuck);
-          const stroke = side * (power * (0.48 * Math.sin(beat) + 0.18 * Math.sin(beat - v * 1.5) * v) - 0.12 - 0.40 * tuck);
+          // Sculling fans a little wider than slow swimming; a startle draws the fins in toward the flanks.
+          // The fan keeps beating and keeps most of its span, so the fold reads as a change of pose
+          // and not as the fin shrinking. Power follows the gait's slow pectoral effort, not the tail's.
+          const tuck = state.tuck ?? 0,
+            power = (0.62 + 0.36 * (state.pectoralEffort ?? state.effort ?? drive) + 0.05 * (state.pectoralScull ?? state.scull ?? 0)) * (1 - 0.25 * tuck);
+          const stroke = side * (power * (0.48 * Math.sin(beat) + 0.18 * Math.sin(beat - v * 1.5) * v) - 0.12 - 0.1 * tuck);
           const cx = x * Math.cos(stroke) - z * Math.sin(stroke);
           z = x * Math.sin(stroke) + z * Math.cos(stroke); x = cx;
           const feather = side * (0.18 + 0.72 * Math.max(0, Math.cos(beat))) * v;
