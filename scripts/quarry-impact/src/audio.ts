@@ -40,6 +40,8 @@ const BREAK_CLIPS:Record<string,{id:string;volume:number;rate:number;duration:nu
   diff:{id:'shaft-snap',volume:.9,rate:.8,duration:1.2},tierod:{id:'spring-snap',volume:.6,rate:1.25,duration:.65},cable:{id:'spring-snap',volume:.5,rate:1.5,duration:.55},
   handbrake:{id:'spring-snap',volume:.5,rate:1.4,duration:.6},rod:{id:'rod-bang',volume:1,rate:1,duration:1.8},battery:{id:'battery-rip',volume:.8,rate:1,duration:1},
   bearing:{id:'engine-seize',volume:.5,rate:1.3,duration:1.2}};
+/** Clips with extra recorded takes (impact-x-2, impact-x-3) that shot() rotates between. */
+const IMPACT_TAKES=/^impact-(light|medium|heavy)$/;
 /** The recorded grandstand roar answers moments of CROWD_CHEER.min intensity or more, at most once every CROWD_CHEER.gap seconds. */
 export const CROWD_CHEER={min:.5,gap:3.5,level:.45} as const;
 export class Sound {
@@ -249,6 +251,13 @@ export class Sound {
       this.shot(layer.id,p,layer.volume*(body?profile.gain:1),body?{...layer,rate:layer.rate*profile.rate,duration:layer.duration*profile.duration,lowpass:profile.lowpass}:layer);
     }
   }
+  private readonly lastTake=new Map<string,number>();
+  /** One of the recorded takes of an impact clip (impact-x, impact-x-2, impact-x-3), never the same take twice running. */
+  private impactTake(id:string){
+    const takes=[id,id+'-2',id+'-3'].filter(t=>this.buffers.has(t));if(takes.length<2)return id;
+    const last=this.lastTake.get(id)??-1;let i=Math.floor(Math.random()*(last<0?takes.length:takes.length-1));if(last>=0&&i>=last)i++;
+    this.lastTake.set(id,i);return takes[i];
+  }
   /** Muffle everything while the player is dazed (0 clear .. 1 fully dazed); eases in and out. */
   daze(level:number){
     const l=Math.max(0,Math.min(1,Number.isFinite(level)?level:0));if(!this.ctx||!this.dazeFilter||Math.abs(l-this.dazeLevel)<.01)return;
@@ -341,12 +350,15 @@ export class Sound {
   groundIgnite(p:T.Vector3,kind:number){this.shot('fire-roar',p,kind===2?.55:.35,{rate:kind===2?1.25:.95,delay:0,duration:.9,lowpass:1800});}
   /** A tyre bursting at speed: a sharp, full bang (the burst sample, less pitched up than a backfire). */
   blowout(p:T.Vector3){if(this.buffers.has('tyre-blowout'))this.shot('tyre-blowout',p,.9,{rate:1,delay:0,duration:1});else this.shot('vehicle-burst',p,.85,{rate:1.45,delay:0,duration:.32});}
-  shot(id: string, p: T.Vector3, volume = 1, options?:{rate:number;delay:number;duration:number;lowpass?:number}) {
+  shot(id: string, p: T.Vector3, volume = 1, options?:{rate:number;delay:number;duration:number;lowpass?:number;group?:string}) {
     if (!this.ready || this.activeVoices >= 18) return;
+    // Every use of an impact clip picks one of its recorded takes; the takes share a key, so two cannot both play one hit.
+    const group = options?.group ?? id;
+    if (IMPACT_TAKES.test(id)) id = this.impactTake(id);
     const c = this.ctx!,
       buf = this.buffers.get(id);
     if (!buf) return;
-    const key = id + Math.round(p.x / 5) + Math.round(p.z / 5);
+    const key = group + Math.round(p.x / 5) + Math.round(p.z / 5);
     if (c.currentTime - (this.lastShot.get(key) ?? -10) < 0.15) return;
     this.lastShot.set(key, c.currentTime);
     if (this.lastShot.size > 200) this.lastShot.clear();

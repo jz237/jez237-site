@@ -20,6 +20,13 @@ jobs = [
  ('battery-rip', 'Battery torn out of a car engine bay in a crash: cables snapping with a crackle of electrical sparks and a heavy plastic box thudding onto dirt.'+NO, 1.0, False),
  ('crowd-cheer', 'Grandstand crowd at an outdoor demolition derby erupting into a big roar and cheer after a huge crash, then settling. Wordless crowd noise only, no announcer, no music, no individual words or speech.', 4.0, False),
  ('horn-stuck', 'Stuck car horn: one continuous steady slightly weak old car horn blare with no variation.'+NO, 2.0, True),
+ # Extra takes of the three impact clips so repeated hits do not all sound the same (audio.impactTake).
+ ('impact-light-2', 'Light car body knock at low speed: a hollow sheet metal bang with a short plastic trim crack and a faint rattle. Dry close recording. No music, no voices, no speech.', 2.0, False),
+ ('impact-light-3', 'Low speed bumper-to-door car tap: a dull metallic thump, a crunch of plastic and a light panel flex. Dry close recording. No music, no voices, no speech.', 2.0, False),
+ ('impact-medium-2', 'Medium speed demolition derby car crash: a hard crunch of folding steel panels, a cracking bumper and a few bits of trim falling. No explosion. No music, no voices, no speech.', 3.0, False),
+ ('impact-medium-3', 'Crunching car side impact starting instantly: from the very first moment a deep metal crump as a door caves in, glass cracking and debris skittering, then fading. No lead-in, no explosion. No music, no voices, no speech.', 3.0, False),
+ ('impact-heavy-2', 'Violent head-on collision of two heavy cars at high speed: an enormous low impact boom, steel crushing and tearing, a windscreen bursting and debris raining down. No explosion. No music, no voices, no speech.', 4.0, False),
+ ('impact-heavy-3', 'Brutal high speed T-bone smash in a demolition derby: a massive metallic slam, a car body folding around the impact, glass showering and parts clattering away. No explosion. No music, no voices, no speech.', 4.0, False),
 ]
 def length(path):
     return float(subprocess.run(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0',str(path)],capture_output=True,text=True,check=True).stdout)

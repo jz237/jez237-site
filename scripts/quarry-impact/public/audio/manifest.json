@@ -701,5 +701,89 @@
     "sha256": "db68647cdb3788bfc3712cac53a6e5c2a883974b3a8ca01a16727dd6c8e7d933",
     "runtimeSha256": "93e96a3cb0b0784311ec374232242870d48aa53a7b7edd3e2724f3e776c8bc77",
     "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5"
+  },
+  {
+    "id": "impact-light-2",
+    "file": "impact-light-2.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Light car body knock at low speed: a hollow sheet metal bang with a short plastic trim crack and a faint rattle. Dry close recording. No music, no voices, no speech.",
+      "duration_seconds": 2.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "ae01b1f7c7e4f4168963da0c40031c497988c4483da0d7ece070fb880ddfaa7b",
+    "runtimeSha256": "4c5d4ac69f32138ff99bd501d5c9302e01f59fdeb235ac41f54256e6ceb5bbb0",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "impact-light-3",
+    "file": "impact-light-3.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Low speed bumper-to-door car tap: a dull metallic thump, a crunch of plastic and a light panel flex. Dry close recording. No music, no voices, no speech.",
+      "duration_seconds": 2.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "306868648d674e541f1380c1d4011a108de9ecdf3be2556b36ba8a5742c169cb",
+    "runtimeSha256": "eec628a2196b817eb8cd98cb853397c374059279aadb823da230c68181183dd5",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "impact-medium-2",
+    "file": "impact-medium-2.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Medium speed demolition derby car crash: a hard crunch of folding steel panels, a cracking bumper and a few bits of trim falling. No explosion. No music, no voices, no speech.",
+      "duration_seconds": 3.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "7fe156f8264b7e937f4f6710ea6dd84a745077b8d2dc5c5f986bc7fddf454001",
+    "runtimeSha256": "4e33da75aad095d6e05a06441d22a996aaba539d474e69d5b13324f33d7efbe2",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "impact-medium-3",
+    "file": "impact-medium-3.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Crunching car side impact starting instantly: from the very first moment a deep metal crump as a door caves in, glass cracking and debris skittering, then fading. No lead-in, no explosion. No music, no voices, no speech.",
+      "duration_seconds": 3.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "a243fa6f3accbc422c1c963819b6bf855a7ecb0d484020580a1bab8a2aac1517",
+    "runtimeSha256": "77e3493b75a14cbfabf7bc27f3fd322768fa7e414ef16b272367c4425b332782",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "impact-heavy-2",
+    "file": "impact-heavy-2.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Violent head-on collision of two heavy cars at high speed: an enormous low impact boom, steel crushing and tearing, a windscreen bursting and debris raining down. No explosion. No music, no voices, no speech.",
+      "duration_seconds": 4.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "7197753e8d467e76f4dfdb3ae88c8670110d388c36b94d65c285e6f5b2e5b75c",
+    "runtimeSha256": "a7633732075f5f0da0c2686cd119d0d02512e51579a0715f7b020504a97823b9",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "impact-heavy-3",
+    "file": "impact-heavy-3.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Brutal high speed T-bone smash in a demolition derby: a massive metallic slam, a car body folding around the impact, glass showering and parts clattering away. No explosion. No music, no voices, no speech.",
+      "duration_seconds": 4.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "6052c032d7e24ed26208f23ba801cb5b3fd16b909ef6175bda862f3ab49437fc",
+    "runtimeSha256": "3cd2dfe5ab4ec394242694280e08c5694b1789e9474655fd069cc5dfdd984e39",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
   }
 ]
