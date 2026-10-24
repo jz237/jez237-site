@@ -103,6 +103,24 @@ for (const seed of [23, 5150, 77001]) seeded(seed, () => {
   reports[seed] = Object.fromEntries(options.map(s => [s, {modes: [...seen[s]].length, bites: stats[s].bites, displays: stats[s].displays}]));
 });
 
+// The threadfin butterflyfish (added later than the six above, in its own runs
+// so their established scenarios are unchanged): it picks at the reef by day,
+// stays upright and collision-free, and shelters beside the reef at night.
+for (const seed of [23, 5150, 77001]) seeded(seed, () => {
+  const tank = new ReefFish(new T.Scene(), reef(), [new T.Vector3(3, 1, .7)], templates([...all, 'auriga']), 1, gallery);
+  const f = tank.add('auriga'); assert.ok(f, 'the threadfin butterflyfish can be added');
+  const seen = new Set(); let bites = 0, last = -1;
+  for (let frame = 0; frame < 9000; frame++) {
+    const night = frame > 7200; tank.update(1 / 60, night); seen.add(f.mode);
+    assert.ok([...f.position.toArray(), f.yaw, f.pitch].every(Number.isFinite) && Math.abs(f.pitch) < .75, 'the threadfin stays finite and upright');
+    if (f.graze && f.graze.biteAt >= 0 && f.graze.biteAt !== last) {bites++; last = f.graze.biteAt;}
+    if (frame % 120 === 0) {const snap = tank.snapshot(); assert.equal(snap.obstacleOverlaps, 0); assert.equal(snap.fishOverlaps, 0);}
+  }
+  assert.ok(seen.has('picking at the reef') && bites >= 4, `the threadfin picks at the reef (${bites} bites)`);
+  assert.ok(seen.has('seeking shelter') || seen.has('resting near shelter'), 'the threadfin shelters at night');
+  reports['auriga-' + seed] = {modes: [...seen], bites};
+});
+
 // Rival encounters, set up directly: dwarf angels chase each other, the foxface
 // raises its spines toward a crowding tang and darkens, the kole tang turns
 // broadside. Each ends and starts a cooldown.

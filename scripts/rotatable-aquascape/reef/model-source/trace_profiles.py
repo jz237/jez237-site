@@ -54,6 +54,11 @@ def trace(k):
     if 'tailDistance' in spec:
         # Translucent caudal rays fade into the backdrop; trace them more finely.
         near, x1 = spec['tailDistance']; mask[:, :x1] |= fish_mask(side, None, near)[:, :x1]
+    for cut in spec.get('maskOut', []):
+        # A thread outside the outline (a threadfin's dorsal filament) is built as
+        # its own mesh; kept in the silhouette it would pass for the tail tip.
+        band = Image.new('L', side.size, 0); ImageDraw.Draw(band).line([tuple(q) for q in cut['line']], fill=255, width=cut['width'], joint='curve')
+        mask &= ~(np.asarray(band) > 0)
     begin, end = spec['range']
     top = merged_edge(mask, 'top', spec['top'], 'top'); bottom = merged_edge(mask, 'bottom', spec['bottom'], 'bottom')
     top = [p for p in top if begin <= p[0] <= end]; bottom = [p for p in bottom if begin <= p[0] <= end]
@@ -103,6 +108,7 @@ def trace(k):
     anal += [[x, e[1]] for x in range(a1, a0 - 1, -40) if (e := column_edges(mask, x)) and e[1] > interp(bottom, x) + 6]
     # Width along the body from the top view.
     top_view = Image.open(REF / f'{k}-dorsal.jpg').convert('RGB'); tm = fish_mask(top_view, None, spec.get('dorsalDistance', 40))
+    for x0, y0, x1, y1 in spec.get('dorsalMaskOut', []): tm[y0:y1, x0:x1] = False
     txs = np.where(tm.any(0))[0]; t_tail, t_snout = int(txs.min()), int(txs.max()); snout = int(xs.max())
     # Spread pectorals and eyes begin a little outside the hand-read spans: a
     # sample there makes a one-column spike, a ridge across the flank.
@@ -140,7 +146,7 @@ def trace(k):
     # The build roots the anal fin as a ribbon along the belly (see analRibbon).
     edge = sorted(p for p in anal if p[1] > interp(bottom, p[0]) + 6)
     profile['analRibbon'] = [[a0, round(interp(bottom, a0))]] + edge + [[a1, round(interp(bottom, a1))]]
-    for key in ('eyeTop', 'perch', 'lipRings', 'finDepth', 'analFade'):
+    for key in ('eyeTop', 'perch', 'lipRings', 'finDepth', 'analFade', 'filament', 'dorsalUnder', 'analOver'):
         if key in spec: profile[key] = spec[key]
     data = json.loads((ROOT / 'profiles.json').read_bytes().decode('utf-8')); data[k] = profile
     (ROOT / 'profiles.json').write_bytes((json.dumps(data, indent=2) + '\n').replace('\n', '\r\n').encode('utf-8'))

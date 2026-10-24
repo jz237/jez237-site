@@ -110,16 +110,16 @@ try{
  await page.getByRole('button',{name:'Explore & identify'}).click();assert.equal(await page.locator('#reef-subject option[value="rostratum"]').count(),0,'absent species leave the close-up list');
  // Gallery options start empty; the first add downloads that model only.
  await page.getByRole('button',{name:/Add & remove fish/}).click();
- const options=[['strigosus','kole tang'],['vulpinus','foxface rabbitfish'],['bispinosa','coral beauty angelfish'],['loricula','flame angelfish'],['hexataenia','six-line wrasse'],['cinctus','yellow watchman goby']];
+ const options=[['strigosus','kole tang'],['vulpinus','foxface rabbitfish'],['bispinosa','coral beauty angelfish'],['loricula','flame angelfish'],['hexataenia','six-line wrasse'],['cinctus','yellow watchman goby'],['auriga','threadfin butterflyfish']];
  for(const [id] of options)assert.equal(await stockCount(id),0,`${id} is not stocked by default`);
  for(const [id,name] of options){
   const download=page.waitForResponse(r=>r.url().includes(`/${id}-`)&&r.url().endsWith('.glb'));
   await page.getByRole('button',{name:`Add a ${name}`}).click();assert.equal((await download).status(),200,`${id} model downloads on first use`);
   await page.locator('.reef-stock-total').filter({hasText:/Added a|Look for/}).waitFor({timeout:30000});assert.equal(await stockCount(id),1,`${id} added`);
  }
- report.options=await page.evaluate(()=>window.reefQA.snapshot().positions.filter(p=>['strigosus','vulpinus','bispinosa','loricula','hexataenia','cinctus'].includes(p.species)).map(p=>p.species+':'+p.mode));
+ report.options=await page.evaluate(()=>window.reefQA.snapshot().positions.filter(p=>['strigosus','vulpinus','bispinosa','loricula','hexataenia','cinctus','auriga'].includes(p.species)).map(p=>p.species+':'+p.mode));
  await page.getByRole('button',{name:'Close reef guide'}).click();await page.getByRole('button',{name:'Resume',exact:true}).click();await page.waitForTimeout(12000);await page.getByRole('button',{name:'Pause',exact:true}).click();
- stocked=await page.evaluate(()=>window.reefQA.snapshot());assert.equal(stocked.fish,28,"22 original, an extra chromis, both black tangs removed, six options added");assert.equal(stocked.obstacleOverlaps,0,'options stay clear of the reef');assert.equal(stocked.fishOverlaps,0,'options stay clear of other fish');
+ stocked=await page.evaluate(()=>window.reefQA.snapshot());assert.equal(stocked.fish,29,"22 original, an extra chromis, both black tangs removed, seven options added");assert.equal(stocked.obstacleOverlaps,0,'options stay clear of the reef');assert.equal(stocked.fishOverlaps,0,'options stay clear of other fish');
  await page.screenshot({path:resolve(out,'options-tank.png')});
  for(const [id] of options){await page.evaluate(s=>window.reefQA.inspectFish(s),id);await page.waitForTimeout(400);await page.screenshot({path:resolve(out,`fish-${id}.png`)});}
  await page.getByRole('button',{name:'Front',exact:true}).click();await page.waitForTimeout(1500);

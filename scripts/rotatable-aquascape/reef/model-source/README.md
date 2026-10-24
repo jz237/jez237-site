@@ -1,5 +1,22 @@
 # Marine fish reference and Blender sources
 
+## Threadfin butterflyfish — October 24, 2026
+
+`auriga` (*Chaetodon auriga*) is a seventh Add & remove fish option, built from
+the user's multi-view sheet with four fal GPT Image plates
+(`references/auriga-prompts.md`). It uses the reef-options route plus four
+optional keys that other species leave unset: `filament` (the dorsal thread,
+a tapering tube exported as `fin_3`, flexing with the fin wave), `maskOut`
+and `dorsalMaskOut` (keep the thread out of silhouette tracing), and
+`dorsalUnder`/`analOver` (rear lobes that overhang the peduncle root on their
+own margins). Rebuild it:
+
+```powershell
+python reef/model-source/prepare_plates.py auriga --membrane-pectoral   # add --edit <raw> after a new clean-flank edit
+python reef/model-source/trace_profiles.py auriga
+& 'C:/Program Files/Blender Foundation/Blender 5.2/blender.exe' --background --python reef/model-source/build_marine_fish.py -- --only auriga
+```
+
 ## Reef options — October 19, 2026
 
 Six more species (`strigosus`, `vulpinus`, `bispinosa`, `loricula`,

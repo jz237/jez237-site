@@ -114,6 +114,26 @@ def extend_patch(img, x0, x1, y0, y1, strip=28, feather=6):
     alpha = np.clip(inside / feather, 0, 1)[..., None]
     return Image.fromarray((a * (1 - alpha) + patch * alpha).clip(0, 255).astype(np.uint8))
 
+def membrane_pectoral(img, polygon, color=(236, 230, 196), radius=3):
+    """A translucent pectoral photographed over a boldly striped flank carries the
+    stripes in its texture. Inside the traced fan, keep the fin's own fine rays
+    (thin bright lines: positive fine-scale detail, tinted yellow) and its
+    saturated yellow base, and replace the gray, black and white flank seen
+    through it with a pale membrane; stripe edges do not carry over."""
+    from PIL import ImageDraw
+    a = np.asarray(img, dtype=np.float32); h, w, _ = a.shape
+    region = Image.new('L', (w, h), 0); ImageDraw.Draw(region).polygon([tuple(q) for q in polygon], fill=255)
+    region = np.asarray(region.filter(ImageFilter.GaussianBlur(4)), dtype=np.float32) / 255
+    luma = a @ [.299, .587, .114]
+    low = np.asarray(Image.fromarray(luma.clip(0, 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(radius)), dtype=np.float32)
+    detail = np.clip(luma - low, 0, 40)
+    saturation = (a.max(2) - a.min(2)) / np.maximum(a.max(2), 1)
+    keep = np.clip((saturation - .25) / .3, 0, 1)
+    membrane = np.array(color, np.float32)[None, None, :] + 1.4 * detail[..., None] * np.array([1.05, .95, .35], np.float32)
+    out = a * keep[..., None] + membrane * (1 - keep[..., None])
+    weight = region[..., None]
+    return Image.fromarray((a * (1 - weight) + out * weight).clip(0, 255).astype(np.uint8))
+
 def saturate(img, amount):
     """Scale color saturation (HSV), for plates whose colors read dull under the
     aquarium's blue light."""
@@ -129,6 +149,7 @@ if __name__ == '__main__':
     parser.add_argument('--saturation', type=float, help='scale the color saturation of both textures by this factor')
     parser.add_argument('--tint-fins', action='store_true', help="tint the skin texture's dorsal, anal and caudal fins yellow (needs the species in profiles.json)")
     parser.add_argument('--extend-patch', help='x0,x1,y0,y1: repeat the skin just behind x0 forward over this box in the skin texture')
+    parser.add_argument('--membrane-pectoral', action='store_true', help="rebuild the pectoral fan of the plate texture as a pale membrane (needs the species' pec outline in trace-specs.json)")
     args = parser.parse_args(); k = args.species
     if args.edit:
         original = Image.open(REF / f'{k}.png').convert('RGB')
@@ -144,5 +165,8 @@ if __name__ == '__main__':
             profile = json.loads((REF.parent / 'profiles.json').read_bytes().decode('utf-8'))[k]
             out = tint_fins(out, profile)
         if args.extend_patch and target.endswith('-skin-texture.png'): out = extend_patch(out, *map(float, args.extend_patch.split(',')))
+        if args.membrane_pectoral and target == f'{k}-texture.png':
+            import json
+            out = membrane_pectoral(out, json.loads((REF / 'trace-specs.json').read_text(encoding='utf-8'))[k]['pec'])
         out.save(REF / target, optimize=True)
     print(f'Prepared {k}: clean flank and padded textures.')

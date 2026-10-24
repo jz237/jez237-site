@@ -153,6 +153,10 @@ for species,s in DATA.items():
  for i in range(cols+1):
   px=dorsal[0][0]+(dorsal[-1][0]-dorsal[0][0])*i/cols
   lower=interp(s['top'],px)+3
+  # A soft rear lobe overhanging open water above the peduncle roots on its
+  # own inner margin there (dorsalUnder), not across the gap to the body.
+  under=s.get('dorsalUnder')
+  if under and under[0][0]<=px<=under[-1][0]:lower=min(lower,float(np.interp(px,[p[0] for p in under],[p[1] for p in under])))
   upper=float(np.interp(px,[p[0] for p in dorsal],[p[1] for p in dorsal]))
   # A rear lobe that overhangs the peduncle needs a shorter rear fade.
   rearFade,frontFade=s.get('dorsalFade',[.045,.045])
@@ -171,6 +175,8 @@ for species,s in DATA.items():
   for i in range(cols+1):
    px=anal[0][0]+(anal[-1][0]-anal[0][0])*i/cols
    root=interp(s['bottom'],px)-3
+   over=s.get('analOver')
+   if over and over[0][0]<=px<=over[-1][0]:root=max(root,float(np.interp(px,[p[0] for p in over],[p[1] for p in over])))
    edge=float(np.interp(px,[p[0] for p in anal],[p[1] for p in anal]))
    fade=min(1,i/cols/rearFade,(1-i/cols)/frontFade);fade=fade*fade*(3-2*fade);edge=root+(edge-root)*fade
    for j in range(rows+1):
@@ -180,6 +186,26 @@ for species,s in DATA.items():
   objects.append(make_mesh('fin_2',v,f,tex,fin))
  for i,polygon in enumerate(s['fins']):
   if i!=1 and not (i==2 and 'analRibbon' in s):objects.append(fin_mesh('fin_'+str(i),polygon))
+ if 'filament' in s:
+  # A dorsal filament (threadfin butterflyfish): a slender tapering tube along
+  # the traced centre line from inside the soft dorsal fin, textured from the
+  # plate's own thread. Named as a fin, it flexes with the fin wave at runtime.
+  pts=[Vector((float(x),float(y),0)) for x,y in s['filament']['points']];r0,r1=s['filament']['radius'];path=[]
+  for i in range(len(pts)-1):
+   a,b,c,d=[pts[max(0,min(len(pts)-1,q))] for q in [i-1,i,i+1,i+2]]
+   for k in range(10):t=k/10;path.append((2*b+(c-a)*t+(2*a-5*b+4*c-d)*t*t+(-a+3*b-3*c+d)*t*t*t)*.5)
+  path.append(pts[-1]);v=[];tex=[];f=[];ring=8;n=len(path)
+  for i,p in enumerate(path):
+   q=path[min(n-1,i+1)]-path[max(0,i-1)];q.normalize();normal=Vector((-q.y,q.x,0))
+   u=i/(n-1);r=(r0+(r1-r0)*u**.8)*(.55+.45*min(1,u/.06))
+   for j in range(ring):
+    a=2*math.pi*j/ring;off=normal*(r*math.cos(a))
+    v.append(pos(p.x+off.x,p.y+off.y,r*math.sin(a)/length));tex.append(uv(p.x+off.x*.6,p.y+off.y*.6))
+    if i<n-1:m=i*ring+j;mm=i*ring+(j+1)%ring;f.append((m,m+ring,mm+ring,mm))
+  for end,step in ((0,1),(n-1,-1)):
+   c=len(v);v.append(pos(path[end].x,path[end].y));tex.append(uv(path[end].x,path[end].y))
+   for j in range(ring):f.append((c,end*ring+(j+1)%ring,end*ring+j) if step>0 else (c,end*ring+j,end*ring+(j+1)%ring))
+  objects.append(make_mesh('fin_3',v,f,tex,fin))
  for side in [-1,1]:
   objects.append(fin_mesh('pectoral_'+str(side),s['pec'],side,s['pec'][0]))
   if 'pelvic' in s:objects.append(fin_mesh('pelvic_'+str(side),s['pelvic'],side,s['pelvic'][0],s.get('pelvicTexture')))

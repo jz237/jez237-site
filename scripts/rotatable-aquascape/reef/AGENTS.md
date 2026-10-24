@@ -18,3 +18,5 @@ Reef options (October 19, 2026): kole tang, foxface, coral beauty, flame angel,
 six-line wrasse and yellow watchman goby are Add & remove fish
 options, loaded on demand. Their 44 fal generations were made at the user's
 request ("full set, highest quality"); that does not authorize further spending.
+
+Threadfin butterflyfish (October 24, 2026): `auriga` is a seventh Add & remove fish option, built from the user's reference sheet. Its four fal generations were made at the user's request ("create more images if you need them"); that does not authorize further spending.
