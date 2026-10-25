@@ -109,6 +109,7 @@ import {CROWD_BOO,ROOF_RAIN} from './audio';
 import {LITTER,SHRED_TRAIL} from './crash-litter';
 import {derbyFlag,waveFlag,FLAG_COLOURS} from './derby-flag';
 import {CRUNCH,crunchVolume} from './litter-crunch';
+import {SPLASH_SOUND,splashVolume} from './puddle-splash-sound';
 import {SHRED_SECONDS} from './vehicle';
 import {shouldBail,bailOut,strollAway,BAIL} from './driver-bail';
 import {cabinSmoke} from './cabin-smoke';
@@ -2215,6 +2216,7 @@ function updateCraze(){
 function cycleDrivingCamera(){drivingCamera=nextDrivingCamera(drivingCamera);toast(DRIVING_CAMERA_LABELS[drivingCamera]+' CAMERA');}
 const lookLocal=new T.Vector3(),lookTurn=new T.Quaternion();
 const crunchAt=new T.Vector3(),crunchClock=new WeakMap<object,number>();let crunchTake=0;
+const splashAt=new T.Vector3(),splashClock=new WeakMap<object,number>(),wheelsWet=new WeakMap<object,boolean[]>();let splashTake=0,splashes=0;
 let hornHeats=0,endHorns=0;
 const bailClock=new WeakMap<object,number>(),bailed:T.Object3D[]=[];
 const BAIL_CHEER=.75;
@@ -2333,6 +2335,10 @@ function updateCamera(dt: number) {
   if(state==='playing')for(const c of cars){if(!c.extendedDamage||Math.abs(c.speed)<SHRED_TRAIL.speed||clock-(shredClock.get(c)??-9)<SHRED_TRAIL.gap)continue;const w=c.wheels[c.tyreShred.findIndex(t=>t>0)];if(!w?.visible)continue;w.getWorldPosition(crunchAt);fx.scatterLitter(crunchAt,'rubber',c.id*151+(++shredChunks),undefined,undefined,SHRED_TRAIL.chips);shredClock.set(c,clock);}
   // Tyres crunch over the glass and lens chips on the floor (offline), the two recorded takes in turn.
   if(state==='playing'&&fx.litter.mesh.count)for(const c of cars){if(!c.extendedDamage||clock-(crunchClock.get(c)??-9)<CRUNCH.gap)continue;for(const w of c.wheels){if(!w.visible)continue;w.getWorldPosition(crunchAt);const v=crunchVolume(fx.litter.under(crunchAt.x,crunchAt.z,CRUNCH.radius),c.speed);if(v>0){sound.clip(crunchTake++%2?'glass-crunch-2':'glass-crunch',crunchAt,v,CRUNCH.duration);crunchClock.set(c,clock);break;}}}
+  // A tyre ploughing into standing water at speed splashes, front wheels then back (offline).
+  if(state==='playing')for(const c of cars){if(!c.extendedDamage)continue;const before=wheelsWet.get(c)??[false,false,false,false];wheelsWet.set(c,before);
+    for(let i=0;i<4;i++){const wet=c.waterDrag[i]>0,hit=wet&&!before[i];before[i]=wet;if(!hit||clock-(splashClock.get(c)??-9)<SPLASH_SOUND.gap)continue;
+      const v=splashVolume(c.waterDrag[i]/AQUA.drag,c.speed),w=c.wheels[i];if(v<=0||!w)continue;w.getWorldPosition(splashAt);sound.clip(SPLASH_SOUND.clips[splashTake++%2],splashAt,v,SPLASH_SOUND.duration);splashClock.set(c,clock);splashes++;}}
   // Roof signs fold flat when a car goes over and tear off on a second roll, a crushed roof or a blow-up.
   if(state!=='paused')for(const c of cars){const sign=c.root.children.find(o=>o.name==='roof_sign');if(sign)knockRoofSign(c,sign,dt);}
   if(scoreSpectating()){const current=cars.find(c=>c.id===director.followed);if(!current||current.health<=0)director.cycleCar(cars,1);else if(!director.manual)director.follow(current.id);}
@@ -2947,6 +2953,7 @@ async function boot() {
     litSpray: () => puddleSplashes?.litDrops ?? 0,
     heatHaze: (on?: boolean) => { if (on !== undefined) hazeOff = !on; const u = heatHaze.material.uniforms; return { columns: heatHaze.columns, enabled: heatHaze.enabled, sources: hazeSources.length, boxes: (u.boxes.value as T.Vector4[]).slice(0, heatHaze.columns).map((b, i) => [...b.toArray(), ...(u.info.value as T.Vector4[])[i].toArray()].map((n) => +n.toFixed(3))) }; },
     lensRain: () => ({ drops: lensRain.drops.length, landed: lensRain.landed, splashed: lensRain.splashed, enabled: lensRainPass.enabled, view: drivingCamera }),
+    puddleSplashes: () => splashes,
     aquaplane: (id = 0, on?: boolean) => { if (on !== undefined) aquaplaning = on; const c = cars.find((x) => x.id === id); return c ? { grip: c.waterGrip.map((v) => +v.toFixed(3)), drag: c.waterDrag.map((v) => +v.toFixed(0)), on: aquaplaning, puddles: activeVenue.puddles.map((p) => [p.x, p.z, p.radius].map((n) => +n.toFixed(2))) } : null; },
     rainPuddles: () => rainPuddles ? { count: rainPuddles.list.length, fill: +rainPuddles.fill.toFixed(3), venue: activeVenue.puddles.length, at: rainPuddles.list.map((p) => [p.x, p.z, p.radius, p.level].map((n) => +n.toFixed(2))) } : null,
     lampDamage: (id: number, kind: 'head' | 'tail', index: number, damage: number) => { const c = cars.find(x => x.id === id), m = c && carLights.get(c)?.lamp(kind, index); if (!m) return false; m.userData.damage = damage; return true; },

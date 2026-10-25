@@ -1247,5 +1247,33 @@
     "sha256": "aa2dfce088caf9fddb941eae6f0f16b4a3b11c0027dfb46cf829ed7912db7e53",
     "runtimeSha256": "ae772ad846b77860f98556bbcaa9af2ee85ecc96b71a94ddafec2b5a95f95732",
     "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "puddle-splash-0",
+    "file": "puddle-splash-0.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "A car tyre hitting a deep puddle at speed: a single sharp heavy splash and whoosh of water thrown up and sheeting off to the side, then droplets pattering down. Outdoors on asphalt, close to the wheel. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 1.3,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "7da71f9566ef6b36a5fb0a48c3c3039e8c168dd80e6b03f4d9efbb9216beefe0",
+    "runtimeSha256": "7bc7d1c19e97d84687bd0397d8ad1adeb345ef4f23785cffa286c55882d6fa15",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "puddle-splash-1",
+    "file": "puddle-splash-1.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "A fast car driving straight through a big rain puddle: one loud slapping water splash as the tyre ploughs through it, spray hissing out and falling back. Outdoors, heard from close beside the car. Isolated, no engine, no music, no voices, no speech.",
+      "duration_seconds": 1.3,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "bbe64c49b0f89641c2c79e7f5142db867d42aac6c151ef73c11e9e4640402a0e",
+    "runtimeSha256": "46fa5260291e68030fa3503a0832bc772684ffdbc37e71af17d7cc6e1e03b26b",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
   }
 ]

@@ -76,6 +76,9 @@ jobs = [
  ('thunder-near', 'Close thunder: a sharp loud crack of nearby lightning splitting the air, then a heavy booming rumble of thunder that rolls away. Outdoors in rain. Isolated, no music, no voices, no speech.', 5.0, False),
  # Tyres swishing over a wet road in the rain (a loop, louder and brighter with speed).
  ('wet-tyres', 'Constant road noise of car tyres on a flooded wet asphalt road at speed, recorded from beside the wheel: a steady unchanging loud hiss and swish of spraying water at one constant level from start to end, no fade in, no pass-by, no engine. Isolated, no music, no voices, no speech.', 3.0, True),
+ # A tyre ploughing through standing water at speed (two takes, one-shots).
+ ('puddle-splash-0', 'A car tyre hitting a deep puddle at speed: a single sharp heavy splash and whoosh of water thrown up and sheeting off to the side, then droplets pattering down. Outdoors on asphalt, close to the wheel. Isolated, no engine, no music, no voices, no speech.', 1.3, False),
+ ('puddle-splash-1', 'A fast car driving straight through a big rain puddle: one loud slapping water splash as the tyre ploughs through it, spray hissing out and falling back. Outdoors, heard from close beside the car. Isolated, no engine, no music, no voices, no speech.', 1.3, False),
 ]
 # Seconds cut from the start of a raw clip: metal-groan dips to silence early (it would drop out every loop) and
 # debris-2 opens with half a second of near silence (the layer would land late).
