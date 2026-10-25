@@ -306,8 +306,27 @@ body {
   place-content: center;
   justify-items: center;
   gap: 1.6cqh;
-  background: radial-gradient(ellipse at 50% 38%, #0b3350 0%, #031321 58%, #010810 100%);
+  isolation: isolate;
   transition: opacity 0.9s ease;
+}
+
+/* (Its backdrop, under its mark and bar: thinned to a veil once the betta bowl's studio is drawn
+   behind it, while the rest loads.) */
+.splash::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(ellipse at 50% 38%, #0b3350 0%, #031321 58%, #010810 100%);
+  transition: opacity 0.6s ease;
+}
+
+.splash.is-veil::before {
+  opacity: 0.5;
+}
+
+.splash.is-veil.is-notice::before {
+  opacity: 1;
 }
 
 .splash.is-done {
@@ -340,6 +359,15 @@ body {
   border-radius: 2px;
   background: var(--accent);
   animation: splash-slide 1.25s var(--ease) infinite;
+}
+
+/* (How far along the load is, once the page can say: main.ts LOAD.) */
+.splash.is-measured .splash-bar::after {
+  width: 100%;
+  transform-origin: left;
+  transform: scaleX(var(--progress, 0));
+  animation: none;
+  transition: transform var(--progress-time, 0.3s) linear;
 }
 
 @keyframes splash-slide {

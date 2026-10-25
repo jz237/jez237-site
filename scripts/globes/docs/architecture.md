@@ -1317,3 +1317,87 @@ byte for byte.
   the lattice at 1. For the ladder: the picture is the drawing buffer (the pixel ratio the scaler
   picks is the picture's sharpness: a step starts the picture afresh), `BowlRender.setMode` picks how
   it is drawn, `tracedShare()` says how many rays a pixel costs.
+
+## Phase 2: a phone's picture steered by the GPU's time (src/app/quality)
+
+The phone's scaler (app/adaptiveScale.mjs) stepped the pixel ratio by the frames' pace and the main
+thread's time. On the S25 Ultra the GPU is the limit, and it slows as it warms (30-40% within a
+minute at the same settings), so phones now step along a quality ladder by what the GPU measurably
+spends on a frame (desktops keep the scaler; `?quality=0` gives phones the scaler back).
+
+- **The ladder** (quality/ladder.mjs, data): the sharpest level, at the screen's ratio up to 2;
+  then the table's mirror redrawn every other frame while nothing moves (a frozen frame is the
+  same to the pixel); then the ratio down in steps of 0.9, through 1, to the floor of 0.6; then the
+  water march's step at 0.75 and 0.9 voxels (a few pixels of the water's edge seen from below
+  move: at 0.75, 2% of a portrait frame's pixels, 0.2% by more than 8/255). Every knob is a canvas
+  size, a uniform, a pass skipped or a dispatch put off: no level builds a pipeline (none built
+  after the first frame across ratio, mirror and march switches, in phone emulation), and a switch
+  costs its frame about 1 ms. On phones the march band (marchBand.ts) is worked out for the longest
+  step a level takes, so it holds at each (a band for a longer step leaves out no more reads: the
+  frame is the same). Tried and left out: fewer samples of the lamp's haze (bowl.ts, through
+  uBowlDetail.x): at 3, a hot spot under the lamp and moire through the haze; at 2, coarser
+  streaks. The plants every third frame, then 30 fps, are the main thread's ladder (CPU_RUNGS). A
+  later rung (the interleaved bowl, ?up=2) is a rung of its own knobs, `{ up: 2 }`, in PHONE.rungs,
+  with an applier of that name in main.ts's `knobs`.
+- **What it measures** (quality/pageQuality.ts, GpuClock): three's render passes (trackTimestamp,
+  now on in production on phones) and the sim's compute passes (FluidSim.setProfiling), one resolve
+  in flight at a time, so a frame's times come in a few frames late, about every other frame; on a
+  device without timestamp queries, the queue's pace. And the bowl's area on screen (its outline,
+  1.15x for the lid, clipped to the stage), now and at rest in this view.
+- **The cost model** (CostModel): the sim as measured, plus a fixed part (the mirror, the backdrop,
+  the output) and a cost per traced bowl pixel (area x ratio squared, by the march step's share),
+  fitted by least squares to its windows (older ones counting less: a warming GPU drifts), the fixed
+  part drawn towards about 0.006 million pixels' worth where the windows cannot tell the two apart.
+  A level's cost is the model's prediction scaled to what the current level measures, so a zoom in,
+  a turn of the phone or the bowl coming into view keep the traced pixels about the same.
+- **The controller** (quality/controller.mjs, pure; quality.test.mjs): 1 s windows, trimmed means.
+  Over the 14.5 ms budget (or frames slow with the GPU over 12.5): straight down to the sharpest
+  level expected at 13 ms or under (one to three rungs), then a dwell of 2 s. Up one rung after 8 s
+  held, if expected at 12 ms or under; taken back at once if it does not hold, the next try twice as
+  late (to 64 s). Slow frames that neither the GPU nor the main thread explain: a rung after three
+  windows, taken back if it bought nothing. The main thread over 11 ms moves only its own ladder.
+  While the bowl moves (its pose, the lid, the camera, or water sloshing: more substeps than a calm
+  frame takes), a rung down at once if the GPU goes over, put back 1.5 s after it is still; those
+  frames teach nothing. At the lowest level, with frames that cannot come at 60 (over 15.5 ms) for
+  three windows, 30 fps (FramePace.frameMs), said so in ?stats; back to 60 once the lowest level at
+  60 is expected to hold for 20 s. Calibration: as the bowl comes into view in the entrance, every
+  timed frame is a point of the model, then straight to the sharpest level that fits; and in its
+  first window at rest, up to the sharpest expected at 12 ms if that is sharper (a try). Thermal
+  memory: the level held longest over the last two minutes.
+- **Where a view starts** (quality/record.mjs): localStorage `betta.quality.v1` (every access in
+  try/catch), for the device (its GPU's name and its screen) and each way up: the level held
+  longest (written every 30 s and as the page is hidden; a rung lower in another build), and how
+  long the bowl's pipelines took to build (the splash's bar). With nothing kept, the GPU's name
+  (PRIORS: its speed against the S25's Adreno 830) and the S25's measured costs pick the level.
+- **Switches**: `?quality=0` (the scaler), `?level=n` (held at level n), `?adapt=0` and `?bench`
+  (the sharpest knobs at 1 CSS px, as before). `?stats` shows the level, its knobs, the GPU's time
+  against the budget, the prediction, the level held longest and how much more a pixel costs than
+  when the GPU was coolest, and the last move and why.
+- Measured on this desktop only (the 5090; the Radeon iGPU through `--use-adapter-luid`): the 5090
+  holds the sharpest level at a phone's size (the old scaler, in headless emulation, stepped down
+  to 0.9 for frames the compositor paced at about 20 ms); the iGPU, about a tenth of the S25, sits at
+  the lowest level at 30 fps. A model of the S25 (bench 3's costs, 35% slower as it warms) settles
+  at the floor's ratio with the march's longer steps: its sim and its bowl are what must get
+  cheaper.
+
+## Phase 2: the studio while the bowl builds (L2)
+
+The betta page showed its splash until the bowl's pipelines were built (10.7 s on the S25; about
+8 s of it the two compiling side by side). Now, right after the renderer is up, the studio
+(backdrop, table and its mirror; the camera where the entrance starts, the bowl out of sight) has
+its small pipelines built, is drawn once (and again whenever the stage changes size: nothing in it
+moves), and shows through the splash, thinned to a veil, while the rest loads. The splash's bar is
+determinate (main.ts LOAD: the load's steps, the bowl's build filling it over the time it took on
+this device last time). The studio's first frame is drawn before the sim is set up, so three's
+error scopes never close among the sim's; the globe is kept out of its frames until its pipelines
+are built. Cold, in phone emulation (384x693 at dpr 2.81, 2.75x CPU; two sets of three runs
+interleaved with the build before): the first picture at 0.89-1.09 s (it was the splash lifting,
+at 8.8-10.3 s); compiled no later (8.7-10.0 s, against 8.7-10.2); the splash lifts 0.06-0.08 s after
+it (0.12-0.15: the backdrop's 3 pipelines were built in the bowl's first frame; now none); no frame
+of the entrance over twice the median, no long task in it, none built after the first frame.
+
+The betta's atlas is composed as before (Betta.ts: drawImage of its five photographs as they load).
+Decoded off the page's thread by createImageBitmap of their files, its pixels differ by up to 14/255
+(the browser decodes them otherwise); by createImageBitmap of the images themselves, the decode stays
+on the page's thread. It costs the page's thread about 120 ms at 2.75x CPU as the photographs come
+in, about a second into the load: behind the studio, which does not move.

@@ -4,6 +4,9 @@ import * as THREE from 'three/webgpu';
 import { AppShell, type DesktopHost } from './app/AppShell';
 import { AdaptiveScale, DESKTOP, keepLevel, keptLevel, levelAt, lowestLevel, PHONE, ratioAt } from './app/adaptiveScale.mjs';
 import { FramePace } from './app/framePace.mjs';
+import { QualityController } from './app/quality/controller.mjs';
+import { buildLadder } from './app/quality/ladder.mjs';
+import { bowlArea, GpuClock, PoseWatch, QualityRecord } from './app/quality/pageQuality';
 import { Bench, describeDevice, registerBenchRows } from './app/bench';
 import { describe, describeLoad, FrameProfile, wrap } from './app/frameProfile';
 import { BETTA_PAGE, elsewhere, GLOBES, type GlobeEntry } from './app/catalog';
@@ -14,7 +17,7 @@ import { BETTA_SURFACE_AT } from './fish/bettaWater.mjs';
 import { Koi, type KoiEnv } from './fish/Koi';
 import { CLOWN_PROBES, Clownfishes } from './fish/Clownfish';
 import { FishFood, type Feeder } from './fish/FishFood';
-import { classifyFailure, createDevice } from './gpu/device';
+import { classifyFailure, createDevice, deviceInfo } from './gpu/device';
 import { describePipelines, pipelineMarks, pipelineSnapshot, pipelinesFirstFrame } from './gpu/pipelineCount';
 import { BowlLid } from './interaction/BowlLid';
 import { BowlLife, LIFE_PROBE_AT } from './interaction/BowlLife';
@@ -48,6 +51,15 @@ const LITE = ((q) => (q === '1' ? true : q === '0' ? false : matchMedia('(pointe
 /** How the picture's sharpness steps (app/adaptiveScale.mjs), from the screen's own pixel ratio
  *  (up to 2) down: phones' steps are finer, and their frames held to 60 a second (FramePace). */
 const TIER = LITE ? PHONE : DESKTOP;
+/** Phones step their picture with the quality controller (app/quality: its sharpness, then what a
+ *  ray or a frame can do without, by what the GPU measurably spends on a frame); ?quality=0 with
+ *  the scaler instead (app/adaptiveScale.mjs: the pixel ratio alone, by the frames' pace). */
+const QUALITY = LITE && new URLSearchParams(location.search).get('quality') !== '0';
+/** The splash's bar (the app): how far along each step of the load puts it. The bowl's pipelines,
+ *  most of a phone's load, fill it from `sim` to `building` over the time they took on this device
+ *  last time (or COMPILE_GUESS_MS): nothing else can say how far along they are. */
+const LOAD = { device: 0.08, studio: 0.14, furnishings: 0.2, sim: 0.28, building: 0.96 };
+const COMPILE_GUESS_MS = LITE ? 8000 : 3000;
 const screenRatio = (): number => Math.min(window.devicePixelRatio, 2);
 /** The sharpness (a level: app/adaptiveScale.mjs) a view starts at: on phones 1 canvas pixel a
  *  CSS pixel, elsewhere the sharpest. */
@@ -122,6 +134,9 @@ interface WorldOptions {
   globe: GlobeConfig;
   /** The wallpaper behind a globe on the desktop; null in the app. */
   desk: THREE.Texture | null;
+  /** The app's shell, while the world loads: it puts the camera where the entrance starts, and its
+   *  splash shows how far along the load is (over the studio, drawn as soon as it can be). */
+  shell?: AppShell;
 }
 
 /** The globe, its water and its koi, drawn into the stage. */
@@ -130,12 +145,17 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   const furnishing = GLOBES.some((g) => g.betta) ? furnish(BED_SOLIDS_N, o.globe.innerRadius, BED_SOLIDS_NONE, LITE ? 0.5 : 1) : null;
   const device = await createDevice();
   PROF.mark('device');
+  o.shell?.progress(LOAD.device);
+  // (What the page keeps of this device's picture: a phone's quality level, the bowl's build time.)
+  const record = new QualityRecord(deviceInfo());
 
-  // (Dev builds time the render pass on the GPU, for profiling.)
+  // (Dev builds time the render pass on the GPU, for profiling; ?stats and ?bench; and phones, for
+  // their quality controller, where it steers.)
   // ?aa=1 traces one ray per pixel instead of four (cheaper, aliased waterline); one is all phones and
   // the betta's page draw, and phones have no multisampled canvas unless asked for four.
   const samples = Number(params.get('aa') ?? (LITE || o.start.betta ? 1 : 4));
-  const renderer = new THREE.WebGPURenderer({ device, antialias: !LITE || samples >= 4, alpha: o.alpha, trackTimestamp: import.meta.env.DEV || PROF.on });
+  const steered = QUALITY && params.get('adapt') !== '0' && !params.has('level');
+  const renderer = new THREE.WebGPURenderer({ device, antialias: !LITE || samples >= 4, alpha: o.alpha, trackTimestamp: import.meta.env.DEV || PROF.on || steered });
   const stageSize = (): [number, number] => {
     const r = stage.getBoundingClientRect();
     return [Math.max(1, Math.round(r.width)), Math.max(1, Math.round(r.height))];
@@ -146,6 +166,101 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   stage.prepend(renderer.domElement);
   await renderer.init();
   PROF.mark('renderer');
+  const camera = new THREE.PerspectiveCamera(FOV, 1, 0.05, 100);
+  const controller = new GlobeController(renderer.domElement, camera, o.globe);
+  // The betta's globe is a bowl, open at the mouth, with a lid (where the page shows it), which
+  // comes off only to feed the fish.
+  const bowl = GLOBES.some((g) => g.betta) ? bowlShape(o.globe, LITE, bowlDebug(params.get('debug'))) : null;
+  // (Phones draw it on a 2x2 lattice a frame, made whole again, in its studio: render/bowlRender.ts.
+  // Its passes then write what each ray ended on. ?up=0 draws it straight into the frame, as desktops
+  // do.)
+  const up = upSettings(params, LITE);
+  if (bowl) bowl.ids = up.mode > 0 && !o.desk;
+
+  // In the app the globe stands in the deep ocean, specks drifting round it; on the desktop, in
+  // front of the wallpaper.
+  const scene = new THREE.Scene();
+  // (The betta's bowl stands on a table in a photographer's studio instead: studio.ts.)
+  const studio = bowl && !o.desk ? new StudioBackdrop() : null;
+  const ocean = o.desk || studio ? null : new OceanBackdrop(o.light);
+  if (ocean) scene.backgroundNode = ocean.background as unknown as typeof scene.backgroundNode;
+  if (studio) {
+    scene.backgroundNode = studio.background as unknown as typeof scene.backgroundNode;
+    scene.add(studio.table, studio.mirror);
+    controller.rolling = true;
+    // (The fish's own pass: drawn, but not again in the table's mirror, where it is a blur.)
+    camera.layers.enable(BOWL_KOI_LAYER);
+    studio.leaveOut(camera, BOWL_KOI_LAYER);
+    // (Depth is cleared to 0 for the bowl's two passes: GlobeView.)
+    renderer.setClearDepth(0);
+  }
+  const specks = ocean ? new Specks(SPECKS, o.light, ocean.time) : null;
+  if (specks) scene.add(specks.mesh);
+
+  // The picture takes the stage's shape and size, whatever they are: as many pixels as the
+  // screen has (up to twice the CSS pixels), but no wider or taller than the GPU's textures go.
+  // (If frames come too slowly for the pointer to be followed, run() lowers the sharpness a step
+  // at a time, and offers it back when they are quick again. Phones step more finely, from 1
+  // canvas pixel a CSS pixel to begin with: TIER.)
+  let sharpness = startLevel();
+  // (?bench: a pixel ratio of its own choosing, for a while. A phone's quality level's, from its
+  // first frame: setKnobs.)
+  let ratioOverride: number | null = null;
+  let knobRatio: number | null = null;
+  // (Only what changed is set: the canvas is cleared and made anew whenever it is given a size,
+  // the same or not.)
+  let fitted = [0, 0];
+  const fit = (): void => {
+    const [w, h] = stageSize();
+    const most = device.limits.maxTextureDimension2D;
+    renderer.setPixelRatio(Math.min(ratioOverride ?? knobRatio ?? ratioAt(screenRatio(), sharpness, TIER), most / w, most / h));
+    // (A phone's table mirror stays as sharp as at its lowest ratio, 0.3 texels to a CSS pixel,
+    // however sharp the picture: faint and blurred as it is, it traces the bowl again.)
+    studio?.setMirrorScale(LITE ? Math.min(0.5, 0.3 / renderer.getPixelRatio()) : 0.5);
+    if (w === fitted[0] && h === fitted[1]) return;
+    fitted = [w, h];
+    renderer.setSize(w, h);
+    camera.aspect = w / h;
+    camera.fov = (2 * Math.atan(Math.tan((FOV * Math.PI) / 360) * Math.max(1, NARROWEST / camera.aspect)) * 180) / Math.PI;
+    camera.updateProjectionMatrix();
+  };
+  fit();
+  new ResizeObserver(fit).observe(stage);
+  const setSharpness = (level: number): void => {
+    if (level === sharpness) return;
+    sharpness = level;
+    fit();
+  };
+  const setRatio = (ratio: number | null): void => {
+    ratioOverride = ratio;
+    fit();
+  };
+
+  // The betta bowl's studio, live, while the rest loads: its small pipelines built first, the camera
+  // where the entrance starts (the bowl out of sight), drawn behind the splash (again whenever the
+  // stage changes size: nothing in it moves). Its first frame is drawn before the sim is set up (its
+  // last pipelines, the mirror's and the output's, are built in it: three's error scopes must not
+  // close among the sim's, below).
+  if (studio && o.shell) {
+    const shell = o.shell;
+    shell.place(controller);
+    studio.update(controller.center);
+    await renderer.compileAsync(scene, camera);
+    let drawn = [0, 0];
+    await new Promise<void>((shown) => {
+      renderer.setAnimationLoop(() => {
+        if (fitted[0] === drawn[0] && fitted[1] === drawn[1]) return;
+        drawn = [...fitted];
+        renderer.render(scene, camera);
+        shown();
+      });
+    });
+    void device.queue.onSubmittedWorkDone().then(() => {
+      PROF.mark('studio');
+      shell.studio();
+      shell.progress(LOAD.studio);
+    });
+  }
 
   // The articulated specimen needs cadence more than sub-pixel fluid detail.
   // Preserve the original five scenes' defaults; explicit URL overrides still win.
@@ -158,8 +273,6 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   const fill = (g: GlobeEntry) => fillFor(cfg, R, g.water);
   const sim = new FluidSim(device, { ...cfg, fillFraction: fill(o.start) }, R, o.globe.outerRadius, o.light);
   if (LITE) sim.runtime = phoneRuntime(params.get('simq'));
-  const camera = new THREE.PerspectiveCamera(FOV, 1, 0.05, 100);
-  const controller = new GlobeController(renderer.domElement, camera, o.globe);
   const koiEnv = (): KoiEnv => ({
     radius: o.globe.innerRadius,
     level: sim.restLevel,
@@ -174,14 +287,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   // in step with them, unless asked.)
   const worker = params.get('worker');
   const betta = new Betta(device, GLOBES.some((g) => g.betta) && (worker === null ? LITE && !params.has('manual') && navigator.hardwareConcurrency >= 4 : worker === '1'));
-  // The betta's globe is a bowl, open at the mouth, with a lid (where the page shows it), which
-  // comes off only to feed the fish.
-  const bowl = GLOBES.some((g) => g.betta) ? bowlShape(o.globe, LITE, bowlDebug(params.get('debug'))) : null;
-  // (Phones draw it on a 2x2 lattice a frame, made whole again, in its studio: render/bowlRender.ts.
-  // Its passes then write what each ray ended on. ?up=0 draws it straight into the frame, as desktops
-  // do.)
-  const up = upSettings(params, LITE);
-  if (bowl) bowl.ids = up.mode > 0 && !o.desk;
+  // (The betta's bowl's lid, which comes off only to feed the fish.)
   const lid = bowl ? new BowlLid(bowl) : null;
   const feeding = lid ? new Feeding(lid, controller) : null;
   // What floats in it: an almond leaf, and the betta's bubble nest.
@@ -251,6 +357,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   if (furnishing) {
     const f = await furnishing;
     PROF.mark('furnishings');
+    o.shell?.progress(LOAD.furnishings);
     setScapeShader(f.wgsl);
     const bvh = device.createTexture({ label: 'furnishings BVH', size: [f.width, f.height], format: 'rgba32float', usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.STORAGE_BINDING | GPUTextureUsage.COPY_DST });
     device.queue.writeTexture({ texture: bvh }, f.data as unknown as BufferSource, { bytesPerRow: f.width * 16, rowsPerImage: f.height }, [f.width, f.height]);
@@ -259,10 +366,12 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     sim.bedSolids = { map: f.map, extent: R };
     scapeObstacles = f.obstacles;
   }
-  // (The plants' clock, and on phones every other frame of their motion: it is slow enough.)
+  // (The plants' clock, and on phones every other frame of their motion, or fewer at a lower quality
+  // level: it is slow enough.)
   let plantClock = 0;
   let plantDue = 0;
   let plantFrame = 0;
+  let plantEvery = LITE ? 2 : 1;
   // (Where the bowl's turn has carried them, each frame: the sim frame.)
   const turnedObstacles = scapeObstacles.map((o) => ({ a: [0, 0, 0], b: [0, 0, 0], r: o.r, solid: o.solid }));
   // (Set up before the globe's pipelines are begun, not alongside them: three holds a WebGPU
@@ -271,66 +380,31 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   // it could be set up, which ends the page with a message where not, would be no check.)
   await sim.init(Math.max(...GLOBES.map(fill)), GLOBES.map((g) => ({ fill: fill(g), rock: !!g.reef })));
   PROF.mark('sim');
-
-  // In the app the globe stands in the deep ocean, specks drifting round it; on the desktop, in
-  // front of the wallpaper.
-  const scene = new THREE.Scene();
-  // (The betta's bowl stands on a table in a photographer's studio instead: studio.ts.)
-  const studio = bowl && !o.desk ? new StudioBackdrop() : null;
-  const ocean = o.desk || studio ? null : new OceanBackdrop(o.light);
-  if (ocean) scene.backgroundNode = ocean.background as unknown as typeof scene.backgroundNode;
-  if (studio) {
-    scene.backgroundNode = studio.background as unknown as typeof scene.backgroundNode;
-    scene.add(studio.table, studio.mirror);
-    controller.rolling = true;
-    // (The fish's own pass: drawn, but not again in the table's mirror, where it is a blur.)
-    camera.layers.enable(BOWL_KOI_LAYER);
-    studio.leaveOut(camera, BOWL_KOI_LAYER);
-    // (Depth is cleared to 0 for the bowl's two passes: GlobeView.)
-    renderer.setClearDepth(0);
-  }
-  const specks = ocean ? new Specks(SPECKS, o.light, ocean.time) : null;
-  if (specks) scene.add(specks.mesh);
-
-  // The picture takes the stage's shape and size, whatever they are: as many pixels as the
-  // screen has (up to twice the CSS pixels), but no wider or taller than the GPU's textures go.
-  // (If frames come too slowly for the pointer to be followed, run() lowers the sharpness a step
-  // at a time, and offers it back when they are quick again. Phones step more finely, from 1
-  // canvas pixel a CSS pixel to begin with: TIER.)
-  let sharpness = startLevel();
-  // (?bench: a pixel ratio of its own choosing, for a while.)
-  let ratioOverride: number | null = null;
-  // (Only what changed is set: the canvas is cleared and made anew whenever it is given a size,
-  // the same or not.)
-  let fitted = [0, 0];
-  const fit = (): void => {
-    const [w, h] = stageSize();
-    const most = device.limits.maxTextureDimension2D;
-    renderer.setPixelRatio(Math.min(ratioOverride ?? ratioAt(screenRatio(), sharpness, TIER), most / w, most / h));
-    // (A phone's table mirror stays as sharp as at its lowest ratio, 0.3 texels to a CSS pixel,
-    // however sharp the picture: faint and blurred as it is, it traces the bowl again.)
-    studio?.setMirrorScale(LITE ? Math.min(0.5, 0.3 / renderer.getPixelRatio()) : 0.5);
-    if (w === fitted[0] && h === fitted[1]) return;
-    fitted = [w, h];
-    renderer.setSize(w, h);
-    camera.aspect = w / h;
-    camera.fov = (2 * Math.atan(Math.tan((FOV * Math.PI) / 360) * Math.max(1, NARROWEST / camera.aspect)) * 180) / Math.PI;
-    camera.updateProjectionMatrix();
-  };
-  fit();
-  new ResizeObserver(fit).observe(stage);
-  const setSharpness = (level: number): void => {
-    if (level === sharpness) return;
-    sharpness = level;
-    fit();
-  };
-  const setRatio = (ratio: number | null): void => {
-    ratioOverride = ratio;
-    fit();
-  };
+  o.shell?.progress(LOAD.sim);
 
   const globe = new GlobeView(sim, o.globe, o.light, koi.texture, samples, ocean ? { ocean: ocean.map.texture } : studio ? { ocean: studio.map } : { desktop: o.desk! }, kelp, reef, clowns.texture, GLOBES.find((g) => g.reef)?.clarity, GLOBES.find((g) => g.foam)?.waterColour, betta, bowl, scapeTex);
+  // A phone's quality level's knobs (app/quality/ladder.mjs), each set by its name; none builds a
+  // pipeline. (Its fps is run()'s.)
+  const knobs: Record<string, (v: number) => void> = {
+    ratio: (r) => {
+      knobRatio = r;
+      fit();
+    },
+    mirrorEvery: (n) => {
+      if (studio) studio.mirrorEvery = n;
+    },
+    plantEvery: (n) => {
+      plantEvery = n;
+    },
+    march: (voxels) => globe.setMarchStep(voxels),
+  };
+  const setKnobs = (k: Record<string, number>): void => {
+    for (const [name, v] of Object.entries(k)) knobs[name]?.(v);
+  };
   scene.add(globe.mesh);
+  // (Out of the studio's frames until its pipelines are built: drawn, three would build them there
+  // and then, a phone's frame held up for seconds.)
+  globe.mesh.visible = false;
   if (lid) globe.setBowlLid(lid.toLid, lid.shown, lid.reach, lid.lamp);
   // (?updebug paints its resolve; ?uptau and ?upwide set its change test's thresholds, for tuning.)
   const tuning = (k: string): number | undefined => (params.has(k) ? Number(params.get(k)) : undefined);
@@ -344,7 +418,19 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   const variants = [...new Set(GLOBES.map(variantOf))];
   // (Phones settle in frames of 1/30 s, four queued at a time: half the steps, few waits.)
   const settled = LITE ? sim.settle(2.5, 1 / 30, 4) : sim.settle();
-  await Promise.all([settled.then(() => PROF.mark('settled')), Promise.all([globe.precompile(renderer, camera, scene, variants), bowlRender?.precompile(renderer, camera, scene)]).then(() => PROF.mark('compiled')).catch((err: unknown) => console.warn('[globes] precompile:', err))]);
+  const building = performance.now();
+  o.shell?.progress(LOAD.building, (record.compileMs ?? COMPILE_GUESS_MS) / 1000);
+  await Promise.all([
+    settled.then(() => PROF.mark('settled')),
+    Promise.all([globe.precompile(renderer, camera, scene, variants), bowlRender?.precompile(renderer, camera, scene)])
+      .then(() => {
+        PROF.mark('compiled');
+        record.compileMs = performance.now() - building;
+      })
+      .catch((err: unknown) => console.warn('[globes] precompile:', err)),
+  ]);
+  o.shell?.progress(1);
+  globe.mesh.visible = true;
 
   // What lives in the globe (the koi, or the kelp forest) and what its water does when left
   // alone. Another globe comes in with its own water, level and still (the switch happens out
@@ -436,11 +522,11 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
       PROF.lap('betta');
       if (plants) {
         // The plants: their leaves' probes where the bowl's turn has carried them, and their
-        // motion (each frame; every other one on phones).
+        // motion (each frame; every other one on phones, or fewer: plantEvery).
         sim.setProbes(PLANT_PROBE_AT, plants.probePoints(controller.rotation.elements));
         plantClock += dt;
         plantDue += dt;
-        if (!LITE || (++plantFrame & 1) === 0) {
+        if (++plantFrame % plantEvery === 0) {
           plants.update(plantClock, plantDue, sim.koiSense, controller.rotation.elements, controller.omega, SURFACE_ISO);
           plantDue = 0;
         }
@@ -532,18 +618,20 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     return true;
   };
 
-  return { device, renderer, camera, scene, cfg, sim, controller, koi, betta, lid, life, kelp, reef, clowns, food, idle, globe, globeRadius: o.globe.outerRadius, ocean, studio, specks, bowlRender, setScene, advance, spawnFood, clickLid, setSharpness, setRatio };
+  return { device, renderer, camera, scene, cfg, sim, controller, koi, betta, lid, life, kelp, reef, clowns, food, idle, globe, globeRadius: o.globe.outerRadius, ocean, studio, specks, bowlRender, setScene, advance, spawnFood, clickLid, setSharpness, setRatio, setKnobs, record };
 }
 
 type World = Awaited<ReturnType<typeof createWorld>>;
 
 /** Runs the world every frame. beforeRender: after the world moves, before it is drawn. */
 function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () => void; firstFrame?: () => void }): void {
-  const { renderer, camera, scene, sim, controller, globe, ocean, studio, specks, bowlRender, advance, setSharpness, setRatio } = world;
+  const { renderer, camera, scene, sim, controller, globe, ocean, studio, specks, bowlRender, advance, setSharpness, setRatio, setKnobs, record, lid, cfg } = world;
   // ?adapt=0 keeps the picture at the sharpness it starts at, however slowly it draws (profiling;
-  // ?bench too). Phones step their own way (PHONE), down to the first level at the floor, from
-  // where frames last held (keptLevel).
-  const adaptive = params.get('adapt') === '0' || params.has('bench') ? null : new AdaptiveScale(performance.now(), LITE ? { tier: PHONE, level: keptLevel(wayUp(), startLevel()) ?? startLevel(), lowest: lowestLevel(screenRatio(), PHONE) } : {});
+  // ?bench too). Desktops step by the frames' pace (app/adaptiveScale.mjs); so do phones with
+  // ?quality=0, their own way (PHONE), down to the first level at the floor, from where frames last
+  // held (keptLevel).
+  const held0 = params.get('adapt') === '0' || params.has('bench');
+  const adaptive = held0 || QUALITY ? null : new AdaptiveScale(performance.now(), LITE ? { tier: PHONE, level: keptLevel(wayUp(), startLevel()) ?? startLevel(), lowest: lowestLevel(screenRatio(), PHONE) } : {});
   if (adaptive) setSharpness(adaptive.level);
   // Phones: frames held to 60 a second (app/framePace.mjs; ?pace=0, as fast as they come, for
   // profiling, and ?bench, which measures how fast they can come), the scaler told what each one
@@ -551,6 +639,44 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
   // of the phone (measured afresh, from the level held that way up).
   const pace = LITE && params.get('pace') !== '0' && !params.has('bench') ? new FramePace() : null;
   const scale = LITE ? adaptive : null;
+  // Phones (app/quality): the quality controller, from the level this device held longest on its
+  // last visit (record.mjs; or one its GPU's name suggests), steered by the GPU's measured time on
+  // a frame (GpuClock). ?level=n holds the picture at level n; ?adapt=0 and ?bench at the sharpest
+  // knobs, 1 canvas pixel a CSS pixel (as before the ladder).
+  const levels = QUALITY ? buildLadder(screenRatio()) : null;
+  const stage = renderer.domElement;
+  // (The bowl's area on the stage, CSS px^2: in view now, and at rest in this view.)
+  const areaNow = (): number => bowlArea(controller.screenOutline(), stage.clientWidth, stage.clientHeight);
+  const areaAtRest = (): number => {
+    const c = controller.restCircle();
+    return bowlArea({ x: c.x, y: c.y, rx: c.r, ry: c.r, angle: 0 }, stage.clientWidth, stage.clientHeight);
+  };
+  const pinned = params.get('level');
+  const quality = levels && !held0 && pinned === null ? new QualityController(levels, { level: record.start(levels, wayUp(), areaAtRest()), now: performance.now() }) : null;
+  const clock = quality ? new GpuClock(renderer, sim, world.device) : null;
+  const applyKnobs = (k: { fps: number } & Record<string, number>): void => {
+    setKnobs(k);
+    if (pace) pace.frameMs = 1000 / k.fps;
+  };
+  if (levels) applyKnobs(quality?.knobs ?? (pinned !== null ? levels[Math.min(Math.max(Math.round(Number(pinned)) || 0, 0), levels.length - 1)] : { ...levels[0], ratio: ratioAt(screenRatio(), startLevel(), PHONE) }));
+  // (Whether anything moved since the last frame: the table's mirror may skip a frame then, and the
+  // controller learns only from frames at rest.)
+  const pose = new PoseWatch();
+  const centre: number[] = [];
+  let way = wayUp();
+  let turned = 0;
+  if (quality && levels) {
+    // (The level held longest, kept for the next visit: now and then, and as the page is hidden.)
+    const keep = (): void => {
+      const h = quality.heldLongest;
+      if (h) record.keep(way, h.fps30 ? levels.length - 1 : h.level);
+    };
+    setInterval(keep, 30000);
+    addEventListener('pagehide', keep);
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) keep();
+    });
+  }
   let held: number | null = null;
   if (scale) {
     let way = wayUp();
@@ -601,7 +727,8 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
     const now = LITE && time !== undefined ? time : performance.now();
     if (pace && !pace.draw(now)) return;
     const gap = now - last;
-    const dt = Math.min(Math.max(gap, 0) / 1000, STALL);
+    // (At 30 frames a second, a stall is two of theirs.)
+    const dt = Math.min(Math.max(gap, 0) / 1000, Math.max(STALL, (2 * (pace?.frameMs ?? 0)) / 1000));
     last = now;
     const start = performance.now();
 
@@ -619,7 +746,8 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
     bowlRender?.frame(renderer, camera, controller.center, controller.rotation, world.lid, gap);
     globe.update(controller.center, controller.rotation, camera, bowlRender?.tracedHeightPx() ?? heightPx);
     ocean?.update(renderer, now / 1000);
-    studio?.update(controller.center);
+    const still = levels !== null && pose.still(camera.matrixWorld.elements, controller.center.toArray(centre), controller.rotation.elements, lid?.toLid.elements ?? [], lid ? [Number(lid.shown), lid.lamp] : []);
+    studio?.update(controller.center, still);
     if (specks) {
       specks.update(dt, camera, heightPx, controller.panJumps - jumps, globeMotion);
       jumps = controller.panJumps;
@@ -629,7 +757,24 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
     renderer.render(scene, camera);
     PROF.lap('draw');
     PROF.end(world.device.queue);
-    scale?.work(performance.now() - start);
+    const work = performance.now() - start;
+    scale?.work(work);
+    if (quality && clock && levels) {
+      clock.frame(start);
+      // (Turned: measured afresh, two frames on, once the picture has the new shape, from the level
+      // kept for that way, or where the model puts it.)
+      if (wayUp() !== way && ++turned >= 2) {
+        const h = quality.heldLongest;
+        if (h) record.keep(way, h.fps30 ? levels.length - 1 : h.level);
+        way = wayUp();
+        turned = 0;
+        applyKnobs(quality.restart(now, record.kept(levels, way), { area: areaNow(), restArea: areaAtRest() }));
+      }
+      // (Water sloshing - more substeps than a calm frame takes - is the bowl moving too.)
+      const calm = Math.min(cfg.maxSubsteps, Math.max(cfg.minSubsteps, Math.ceil(dt / cfg.maxSubstepDt - 1e-6)));
+      const knobs = quality.frame(now, { cpu: work, gpu: clock.take(), queue: clock.takeQueue(), area: areaNow(), restArea: areaAtRest(), moving: !still || sim.lastSubsteps > calm });
+      if (knobs) applyKnobs(knobs);
+    }
     if (first) {
       first = false;
       PROF.mark('first frame');
@@ -675,6 +820,7 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
           const m = PROF.minute();
           hud.textContent = [
             describe(s, renderer.getPixelRatio(), [...(LITE ? ['phone tier'] : []), `${sim.lastSubsteps} substeps`, `${sim.particleCount} particles`]),
+            ...(quality ? quality.describe(now) : []),
             `gpu, last minute: sim ${m.sim?.toFixed(1) ?? '-'} · draw ${m.draw?.toFixed(1) ?? '-'} ms`,
             ...device,
             ...(bowlRender ? [bowlRender.describe()] : []),
@@ -693,7 +839,7 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
     const tick = (dt: number) => advance(dt);
     const g = window as unknown as { __globes?: object };
     // (three.js itself only in development: held here, none of it could be left out of a build.)
-    g.__globes = { ...g.__globes, ...(import.meta.env.DEV ? { THREE } : {}), ...world, tick, renderTimes, adaptive, prof: PROF, bench, pipelines: pipelineSnapshot };
+    g.__globes = { ...g.__globes, ...(import.meta.env.DEV ? { THREE } : {}), ...world, tick, renderTimes, adaptive, quality, prof: PROF, bench, pipelines: pipelineSnapshot };
   }
 }
 
@@ -718,7 +864,7 @@ async function startApp(stage: HTMLElement, params: URLSearchParams, host: Deskt
     // (Phones: the fins solved in coarser steps.)
     if (LITE) Object.assign(FIN_QUALITY, { step: 1 / 60, passScale: 0.5, maxFrame: 1 / 30 });
     const globe = BETTA_PAGE ? { ...globeConfig, maxTilt: (40 * Math.PI) / 180 } : globeConfig;
-    const world = await createWorld(stage, params, { start: GLOBES[start], alpha: false, light, globe, desk: null });
+    const world = await createWorld(stage, params, { start: GLOBES[start], alpha: false, light, globe, desk: null, shell });
     shell.attach(world.controller, world.setScene, world.specks);
     // A right-click on the koi's or the reef's globe drops in a flake of food.
     world.renderer.domElement.addEventListener('pointerdown', (e) => {

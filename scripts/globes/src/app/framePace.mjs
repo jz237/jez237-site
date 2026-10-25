@@ -4,7 +4,9 @@
 // fast as the phone could draw them, unevenly, and each worked the water out in as many substeps
 // as a whole sixtieth's frame does (FluidSim's least), for nothing the eye could see. A frame
 // drawn late (the work took longer than a refresh, and a refresh that was due went by unseen)
-// starts the timeline again from itself, so the next frames are not drawn early to catch up.
+// starts the timeline again from itself, so the next frames are not drawn early to catch up. (A
+// phone whose GPU cannot hold 60 at its lowest quality level is held to 30 instead: frameMs,
+// app/quality/controller.mjs.)
 // (Late is told by the refreshes seen, not by how far past its time a frame is: on a 75 Hz
 // screen a frame on time falls up to 6.7 ms past it, on a 120 Hz one a late frame 8.3, and a
 // little unevenness in the refreshes' times blurs any line drawn between.)
@@ -25,6 +27,8 @@ export class FramePace {
   /** The screen's refresh, as near as the refreshes seen tell (ms): the shortest time between
    *  two, let grow a little at each in case the screen slows. */
   refresh = FRAME_MS;
+  /** The pace: ms a frame (FRAME_MS, or twice it). */
+  frameMs = FRAME_MS;
 
   /** A refresh at `now` (its animation frame's time, ms): whether to draw it. */
   draw(now) {
@@ -34,8 +38,8 @@ export class FramePace {
     if (now < this.due - EARLY_MS) return false;
     // (Late: a whole frame behind, or the refresh before this one went by unseen, the page busy,
     // though it would have been drawn.)
-    const late = now - this.due > FRAME_MS || (gap > 1.5 * this.refresh && now - this.refresh >= this.due - EARLY_MS);
-    this.due = (late ? now : this.due) + FRAME_MS;
+    const late = now - this.due > this.frameMs || (gap > 1.5 * this.refresh && now - this.refresh >= this.due - EARLY_MS);
+    this.due = (late ? now : this.due) + this.frameMs;
     return true;
   }
 }

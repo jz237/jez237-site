@@ -80,11 +80,10 @@ export class AppShell {
     return i >= 0 ? i : 0;
   }
 
-  /** The world is ready (before the first frame; it already shows the first globe). */
-  attach(controller: GlobeController, setScene: (g: GlobeEntry) => void, specks: Specks | null): void {
+  /** Puts the camera where the entrance starts, the globe out of sight (the betta bowl's page draws
+   *  its studio from there while the rest loads: main.ts). */
+  place(controller: GlobeController): void {
     this.controller = controller;
-    this.setScene = setScene;
-    this.specks = specks;
     // (The betta's bowl, alone on its table, is shot a little closer.)
     controller.zoomTo(controller.rolling ? 5.6 : START_ZOOM, true);
     // Out of sight on the right; it slides in when the interface appears (sharing the way with
@@ -95,7 +94,24 @@ export class AppShell {
     // would skid across the table.)
     if (controller.rolling) controller.placeAt(0, -way / 2);
     else controller.placeAt((share * way) / 2, (-(1 - share) * way) / 2);
+  }
+
+  /** The world is ready (before the first frame; it already shows the first globe). */
+  attach(controller: GlobeController, setScene: (g: GlobeEntry) => void, specks: Specks | null): void {
+    this.setScene = setScene;
+    this.specks = specks;
+    this.place(controller);
     this.applyGlobe();
+  }
+
+  /** How far along the load is (0..1; the bar gets there in `seconds`: main.ts LOAD). */
+  progress(fraction: number, seconds?: number): void {
+    this.ui.progress(fraction, seconds);
+  }
+
+  /** The studio is drawn behind the splash. */
+  studio(): void {
+    this.ui.veil();
   }
 
   /** The first frame is on screen: lift the splash and slide the globe in. */

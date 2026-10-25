@@ -506,6 +506,17 @@ third of the time (232 -> 76 ms), less than it took at half the sharpness before
 `?bench=up` times the two side by side. Details: docs/architecture.md, "Phase 2: the bowl on a
 lattice". Tests: `upsample-resolve.test.mjs` (9).
 
+Phase 2, a phone's picture steered by the GPU's time: phones step along a quality ladder (the
+mirror at half rate while still, the pixel ratio from the screen's own down to 0.6, the water
+march's longer steps, and 30 fps as the floor of a GPU too slow for the lowest level) by what the
+GPU measurably spends on a frame (timestamp queries, now on in production on phones) against a
+sustained 14.5 ms, starting where the device held longest last time (localStorage
+`betta.quality.v1`). `?quality=0` brings back the scaler, `?level=n` holds a level; `?stats` shows
+the controller. Desktops keep the scaler. And the betta page's studio is drawn behind a veil, with a
+determinate bar, about a second into the load, while the bowl builds. Details:
+docs/architecture.md, the two Phase 2 sections at its end (quality, and the studio while the bowl
+builds).
+
 ## Browser compatibility
 
 Firefox compiles WGSL with naga, which is stricter than Chrome's Tint. Builds up to

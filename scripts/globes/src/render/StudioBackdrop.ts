@@ -24,6 +24,11 @@ export class StudioBackdrop {
   /** Where the bowl stands (its centre, world). */
   private readonly bowl = uniform(new THREE.Vector3());
   private readonly mirrorNode: ReturnType<typeof reflector>;
+  /** The mirror redrawn every frame (1), or every other one while nothing moves (2: a phone's
+   *  quality level, app/quality/ladder.mjs; what it shows is a blur, and still). */
+  mirrorEvery = 1;
+  private still = false;
+  private mirrorFrame = 0;
 
   constructor() {
     const includes = [wgsl(STUDIO_WGSL)];
@@ -56,6 +61,10 @@ export class StudioBackdrop {
     mirror.target.position.y = STUDIO_TABLE_Y;
     this.mirror = mirror.target;
     this.mirrorNode = mirror;
+    // (A frame it is not redrawn in, its last picture stays bound.)
+    const r = mirror.reflector;
+    const redraw = r.updateBefore.bind(r);
+    r.updateBefore = (frame) => (this.still && ++this.mirrorFrame % this.mirrorEvery !== 0 ? undefined : redraw(frame));
     const tableShade = wgslFn(
       `fn studio_tableWithMirror(x: vec3f, cam: vec3f, bowl: vec3f, mirror: vec4f) -> vec4f {
         studioBowl = bowl;
@@ -105,8 +114,10 @@ export class StudioBackdrop {
     this.mirrorNode.reflector.resolutionScale = scale;
   }
 
-  /** Follows the bowl (its centre, world). */
-  update(center: THREE.Vector3): void {
+  /** Follows the bowl (its centre, world); still: nothing has moved since the last frame (the
+   *  bowl, its lid, the camera). */
+  update(center: THREE.Vector3, still = false): void {
     this.bowl.value.copy(center);
+    this.still = still;
   }
 }

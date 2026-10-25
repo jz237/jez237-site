@@ -297,3 +297,15 @@ test('a late frame is not caught up on with early ones', () => {
     }
   }
 });
+
+test('held to 30 (a phone quality level that says so), frames come at 30 on 60, 90, 120 and 144 Hz screens', () => {
+  for (const hz of [60, 90, 120, 144]) {
+    for (const jitter of [0, 0.3, 0.6]) {
+      const pace = new FramePace();
+      pace.frameMs = 1000 / 30;
+      let drawn = 0;
+      for (let k = 0; k < hz * 10; k++) if (pace.draw((k * 1000) / hz + uneven(k, jitter))) drawn++;
+      assert.ok(drawn >= 298 && drawn <= 301, `${hz} Hz, ±${jitter} ms: ${drawn} frames in 10 s`);
+    }
+  }
+});

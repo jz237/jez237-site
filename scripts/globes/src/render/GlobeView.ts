@@ -30,6 +30,7 @@ import { FluidSim, SURFACE_ISO } from '../sim/FluidSim';
 import { AERATION_N, FOAM_MAP_N } from '../sim/Foam';
 import { TLAS_PARAM } from '../rt/rt';
 import { TlasBinding } from '../rt/tlasBinding';
+import { longestMarch } from '../app/quality/ladder.mjs';
 import type { BowlShape } from './bowl';
 import { MarchBand } from './marchBand';
 import { BOWL_HIT_ID_WGSL, envWGSL, globeHelpersWGSL, globeShadeWGSL } from './shaders';
@@ -219,9 +220,14 @@ export class GlobeView {
     // simulation's scene, its top level bound through a stand-in texture.
     const rt = sim.rt;
     rt?.setMarch(prm.value.y);
+    this.setMarchStep = (voxels) => {
+      prm.value.y = voxels * v;
+      rt?.setMarch(prm.value.y);
+    };
     // (The bowl's water: where a phone's march, and the sim's photons, can find nothing, worked out
-    // each frame in the sim's.)
-    const marchBand = bowl ? new MarchBand(sim, globe.innerRadius, globe.capillaryLength, SURFACE_ISO, prm.value.y) : null;
+    // each frame in the sim's: on a phone for the longest step its quality levels take, so it
+    // holds at each, app/quality/ladder.mjs.)
+    const marchBand = bowl ? new MarchBand(sim, globe.innerRadius, globe.capillaryLength, SURFACE_ISO, bowl.lite ? longestMarch() * v : prm.value.y) : null;
     const band = bowl?.lite && marchBand ? { kelpRefTex: texture(texelTexture(marchBand.texture)) } : {};
     const tlas = rt ? new TlasBinding(sim.device, rt.tlas) : null;
     // Two passes over the same sphere. The main one has no koi code at all, so it stays lean;
@@ -535,6 +541,10 @@ export class GlobeView {
     this.uBowlDetail.value.x = lampSamples;
     this.uBowlDetail.value.y = lidSteps;
   }
+
+  /** The water march's step, in voxels of the density map (0.6; a phone's quality level may take
+   *  longer ones, app/quality/ladder.mjs). */
+  readonly setMarchStep: (voxels: number) => void;
 
   /** What floats in the betta bowl (interaction/BowlLife.ts: its leaf and its nest). */
   setBowlLife(life: THREE.Matrix4): void {

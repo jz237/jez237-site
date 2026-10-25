@@ -192,10 +192,31 @@ export class AppUI {
     this.toastTimer = window.setTimeout(() => this.toastEl.classList.remove('is-on'), ms);
   }
 
+  /** How far along the load is (0..1): the bar fills to it, steadily, in `seconds` (the bowl's
+   *  build, which nothing else measures, fills it over the time it is expected to take). */
+  progress(fraction: number, seconds = 0.3): void {
+    const s = this.splash;
+    s.classList.add('is-measured');
+    s.style.setProperty('--progress', String(fraction));
+    s.style.setProperty('--progress-time', `${seconds}s`);
+  }
+
+  /** What the splash covers is being drawn (the betta bowl's studio, while the rest loads): it
+   *  thins to a veil over it. */
+  veil(): void {
+    this.splash.classList.add('is-veil');
+  }
+
   /** The first frame is up: lift the splash. */
   ready(): void {
     this.splash.classList.add('is-done');
-    this.splash.addEventListener('transitionend', () => this.splash.remove(), { once: true });
+    // (Once it has faded: not as its bar's last stretch ends, a moment after it began to.)
+    const faded = (e: TransitionEvent): void => {
+      if (e.target !== this.splash) return;
+      this.splash.removeEventListener('transitionend', faded);
+      this.splash.remove();
+    };
+    this.splash.addEventListener('transitionend', faded);
   }
 
   /** The globes cannot run in this browser or on this graphics setup: a calm notice in place of
