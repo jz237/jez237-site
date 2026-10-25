@@ -19,16 +19,22 @@ const PIECES = [
 /** The open water the betta keeps (the bowl's frame): no wood or rock in it, at most a leaf's tip. */
 export const SCAPE_WATER = { lo: [-0.35, -0.15, -0.2], hi: [0.35, 0.6, 0.6] };
 
-/** Each piece built on its own (deterministic: the same on every call).
+/** Each piece built on its own (deterministic: the same on every call). detail scales every
+ *  piece's tessellation (1; 0.5, for phones: about a quarter of the triangles), each the same
+ *  shape in the same place, with the same obstacles, at any detail.
+ *  @param {{ detail?: number }} [options]
  *  @returns {(import('./mesh.mjs').ScapePiece & { name: string })[]} */
-export function buildScapePieces() {
-  return PIECES.map(([name, piece]) => ({ name, ...piece.build() }));
+export function buildScapePieces(options = { detail: 1 }) {
+  // (Anything but a finite number, or no options at all, is full detail.)
+  const detail = Number.isFinite(options?.detail) ? Math.min(Math.max(options.detail, 0.25), 2) : 1;
+  return PIECES.map(([name, piece]) => ({ name, ...piece.build({ detail }) }));
 }
 
 /** All the furnishings: every piece's meshes, and the room the fish leaves round each.
+ *  @param {{ detail?: number }} [options]
  *  @returns {import('./mesh.mjs').ScapePiece} */
-export function buildScape() {
-  const pieces = buildScapePieces();
+export function buildScape(options = { detail: 1 }) {
+  const pieces = buildScapePieces(options);
   return { meshes: pieces.flatMap((p) => p.meshes), obstacles: pieces.flatMap((p) => p.obstacles) };
 }
 

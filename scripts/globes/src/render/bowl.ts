@@ -56,9 +56,14 @@ export interface BowlShape {
   rimIn: number;
   /** The lid's reach from its underside's middle (for the geometry the bowl is drawn on). */
   reach: number;
+  /** A phone's lighter bowl: its shader leaves out what is costly and hardly seen at that size
+   *  (the fish's self-shadow and its shadow on the bed, the furnishings' shadows, the motes and
+   *  shafts in the water), follows a ray through the lid's glass for fewer steps and samples the
+   *  lamp's haze more sparsely. */
+  lite: boolean;
 }
 
-export function bowlShape(globe: GlobeConfig): BowlShape {
+export function bowlShape(globe: GlobeConfig, lite = false): BowlShape {
   const h = BOWL.mouth;
   const outer = Math.sqrt(globe.outerRadius ** 2 - h * h);
   const inner = Math.sqrt(globe.innerRadius ** 2 - h * h);
@@ -72,6 +77,7 @@ export function bowlShape(globe: GlobeConfig): BowlShape {
     collar: bead - BOWL.beadRadius - BOWL.collarClearance - BOWL.collarWall / 2,
     top,
     rimIn: BOWL.lidRadius - BOWL.rimWidth,
+    lite,
     reach: Math.hypot(BOWL.lidRadius + BOWL.rimProud, Math.max(top, BOWL.collarDepth)),
   };
 }
@@ -302,7 +308,7 @@ fn bowl_lampAt(x: vec3f) -> f32 {
 // the medium scatters; T: how much it lets through a unit of path). The rays.
 fn bowl_lampAlong(p: vec3f, dir: vec3f, tEnd: f32, sigma: f32, ext: vec3f) -> vec3f {
   if (bowlLamp <= 0.0) { return vec3f(0.0); }
-  let n = 10;
+  let n = ${s.lite ? 4 : 10};
   let dt = tEnd / f32(n);
   var s = vec3f(0.0);
   let side = normalize(cross(bowlLampD, select(vec3f(1.0, 0.0, 0.0), vec3f(0.0, 0.0, 1.0), abs(bowlLampD.x) > 0.9)));
@@ -348,7 +354,7 @@ fn bowl_through(h: BowlHit, bgTex: texture_2d<f32>, bgSamp: sampler) -> BowlPass
   }
   var len = 0.0;
   var turns = 0;
-  for (var i = 0; i < 128; i++) {
+  for (var i = 0; i < ${s.lite ? 64 : 128}; i++) {
     let s = -bowl_sdf(part, q);
     if (s < BOWL_EPS) {
       // A face, from inside: out through it, or back in.

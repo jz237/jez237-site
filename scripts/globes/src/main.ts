@@ -22,12 +22,14 @@ import { Specks } from './ocean/Specks';
 import { BOWL, bowlShape } from './render/bowl';
 import { BED, setScapeShader } from './render/bowlScape';
 import { furnish } from './render/scape/furnishings';
-import { BOWL_KOI_LAYER, GlobeView, type GlobeVariant } from './render/GlobeView';
+import { BOWL_KOI_LAYER, GlobeView, texelTexture, type GlobeVariant } from './render/GlobeView';
+import { MovingPlants, PLANT_PROBE_AT } from './render/scape/MovingPlants';
 import { OceanBackdrop } from './render/OceanBackdrop';
 import { StudioBackdrop } from './render/StudioBackdrop';
 import { sunInWater } from './render/shaders';
 import { BED_SOLIDS_N, BED_SOLIDS_NONE, FluidSim, SURFACE_ISO, fillHeight } from './sim/FluidSim';
 import { IdleWater } from './sim/IdleWater';
+import { FIN_QUALITY } from '../../betta-atelier/src/fin-dynamics.js';
 
 /** The camera's field of view, top to bottom (degrees). A view narrower than this (width over
  *  height) widens it instead, so the globe keeps clear of the sides (a phone held upright). */
@@ -38,8 +40,9 @@ const NARROWEST = 0.75;
 const LITE = matchMedia('(pointer: coarse)').matches && Math.min(screen.width, screen.height) < 1000;
 /** A frame longer than this (s) is a stall (the window hidden, a pipeline built, the debugger):
  *  the time past it is skipped. Every shorter frame is simulated in full, so the motion keeps
- *  real time however few frames the GPU manages. */
-const STALL = 0.1;
+ *  real time however few frames the GPU manages. (On phones a slow frame is not caught up on in
+ *  full: a frame that simulates more takes longer, and the next more again.) */
+const STALL = LITE ? 1 / 30 : 0.1;
 /** Specks drifting in the water around the globe (the app only; fewer on phones). */
 const SPECKS = LITE ? 800 : 2000;
 /** On the desktop: how much of its window's height the globe fills, and how far it may tilt
@@ -105,11 +108,14 @@ interface WorldOptions {
 /** The globe, its water and its koi, drawn into the stage. */
 async function createWorld(stage: HTMLElement, params: URLSearchParams, o: WorldOptions) {
   // The betta bowl's furnishings are built meanwhile, in a worker (render/scape/furnishings.ts).
-  const furnishing = GLOBES.some((g) => g.betta) ? furnish(BED_SOLIDS_N, o.globe.innerRadius, BED_SOLIDS_NONE) : null;
+  const furnishing = GLOBES.some((g) => g.betta) ? furnish(BED_SOLIDS_N, o.globe.innerRadius, BED_SOLIDS_NONE, LITE ? 0.5 : 1) : null;
   const device = await createDevice();
 
   // (Dev builds time the render pass on the GPU, for profiling.)
-  const renderer = new THREE.WebGPURenderer({ device, antialias: true, alpha: o.alpha, trackTimestamp: import.meta.env.DEV });
+  // ?aa=1 traces one ray per pixel instead of four (cheaper, aliased waterline); one is all phones and
+  // the betta's page draw, and phones have no multisampled canvas unless asked for four.
+  const samples = Number(params.get('aa') ?? (LITE || o.start.betta ? 1 : 4));
+  const renderer = new THREE.WebGPURenderer({ device, antialias: !LITE || samples >= 4, alpha: o.alpha, trackTimestamp: import.meta.env.DEV });
   const stageSize = (): [number, number] => {
     const r = stage.getBoundingClientRect();
     return [Math.max(1, Math.round(r.width)), Math.max(1, Math.round(r.height))];
@@ -124,7 +130,8 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   // Preserve the original five scenes' defaults; explicit URL overrides still win.
   // (The betta's bowl has a bed of its own depth: bowlScape.ts BED.)
   const base = o.start.betta ? { ...simConfig, sandLevel: BED.level } : simConfig;
-  const cfg = applyUrlOverrides(LITE ? { ...base, gridRes: 48 } : o.start.betta ? { ...base, gridRes: 64 } : base);
+  // (Phones: a coarser grid, fewer substeps a frame and solver sweeps.)
+  const cfg = applyUrlOverrides(LITE ? { ...base, gridRes: 40, maxSubsteps: 3, pressureIterations: 24, sandSubsteps: 6 } : o.start.betta ? { ...base, gridRes: 64 } : base);
   const R = o.globe.innerRadius;
   const fill = (g: GlobeEntry) => fillFor(cfg, R, g.water);
   const sim = new FluidSim(device, { ...cfg, fillFraction: fill(o.start) }, R, o.globe.outerRadius, o.light);
@@ -142,7 +149,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   const betta = new Betta();
   // The betta's globe is a bowl, open at the mouth, with a lid (where the page shows it), which
   // comes off only to feed the fish.
-  const bowl = GLOBES.some((g) => g.betta) ? bowlShape(o.globe) : null;
+  const bowl = GLOBES.some((g) => g.betta) ? bowlShape(o.globe, LITE) : null;
   const lid = bowl ? new BowlLid(bowl) : null;
   const feeding = lid ? new Feeding(lid, controller) : null;
   // What floats in it: an almond leaf, and the betta's bubble nest.
@@ -198,26 +205,26 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   // Fish food (the koi's and the reef's globes): flakes dropped in with a right-click.
   const food = new FishFood();
   const idle = new IdleWater();
-  // The betta bowl's furnishings, built by now: their BVH for the shader (its copy here let go once
-  // it is on the GPU), where they stand in the sand for the sim (the sand rests on them and flows
-  // round them), and where the fish keeps clear of them.
-  let scapeTex: THREE.DataTexture | null = null;
+  // The betta bowl's furnishings, built by now: their BVH for the shader (on the GPU, where the
+  // plants' motion rewrites it each frame), where they stand in the sand for the sim (the sand
+  // rests on them and flows round them), and where the fish keeps clear of them.
+  let scapeTex: THREE.Texture | null = null;
   let scapeObstacles: { a: number[]; b: number[]; r: number; solid: number }[] = [];
+  let plants: MovingPlants | null = null;
   if (furnishing) {
     const f = await furnishing;
     setScapeShader(f.wgsl);
-    scapeTex = new THREE.DataTexture(f.data, f.width, f.height, THREE.RGBAFormat, THREE.FloatType);
-    scapeTex.minFilter = THREE.NearestFilter;
-    scapeTex.magFilter = THREE.NearestFilter;
-    scapeTex.generateMipmaps = false;
-    scapeTex.onUpdate = (t: THREE.Texture) => {
-      (t.image as { data: unknown }).data = null;
-      t.onUpdate = null;
-    };
-    scapeTex.needsUpdate = true;
+    const bvh = device.createTexture({ label: 'furnishings BVH', size: [f.width, f.height], format: 'rgba32float', usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.STORAGE_BINDING | GPUTextureUsage.COPY_DST });
+    device.queue.writeTexture({ texture: bvh }, f.data as unknown as BufferSource, { bytesPerRow: f.width * 16, rowsPerImage: f.height }, [f.width, f.height]);
+    scapeTex = texelTexture(bvh);
+    plants = new MovingPlants(device, bvh, f.motion, f.phases);
     sim.bedSolids = { map: f.map, extent: R };
     scapeObstacles = f.obstacles;
   }
+  // (The plants' clock, and on phones every other frame of their motion: it is slow enough.)
+  let plantClock = 0;
+  let plantDue = 0;
+  let plantFrame = 0;
   // (Where the bowl's turn has carried them, each frame: the sim frame.)
   const turnedObstacles = scapeObstacles.map((o) => ({ a: [0, 0, 0], b: [0, 0, 0], r: o.r, solid: o.solid }));
   await sim.init(Math.max(...GLOBES.map(fill)), GLOBES.map((g) => ({ fill: fill(g), rock: !!g.reef })));
@@ -236,6 +243,8 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     // (The fish's own pass: drawn, but not again in the table's mirror, where it is a blur.)
     camera.layers.enable(BOWL_KOI_LAYER);
     studio.leaveOut(camera, BOWL_KOI_LAYER);
+    // (Depth is cleared to 0 for the bowl's two passes: GlobeView.)
+    renderer.setClearDepth(0);
   }
   const specks = ocean ? new Specks(SPECKS, o.light, ocean.time) : null;
   if (specks) scene.add(specks.mesh);
@@ -262,8 +271,6 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     fit();
   };
 
-  // ?aa=1 traces one ray per pixel instead of four (cheaper, aliased waterline).
-  const samples = Number(params.get('aa') ?? (LITE || o.start.betta ? 1 : 4));
   const globe = new GlobeView(sim, o.globe, o.light, koi.texture, samples, ocean ? { ocean: ocean.map.texture } : studio ? { ocean: studio.map } : { desktop: o.desk! }, kelp, reef, clowns.texture, GLOBES.find((g) => g.reef)?.clarity, GLOBES.find((g) => g.foam)?.waterColour, betta, bowl, scapeTex);
   scene.add(globe.mesh);
   if (lid) globe.setBowlLid(lid.toLid, lid.shown, lid.reach, lid.lamp);
@@ -349,6 +356,17 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     sim.setKoiProbes(betta.active ? betta.probePoints() : koi.probePoints());
     if (betta.active) {
       sim.setProbes(BETTA_SURFACE_AT, betta.surfaceProbes());
+      if (plants) {
+        // The plants: their leaves' probes where the bowl's turn has carried them, and their
+        // motion (each frame; every other one on phones).
+        sim.setProbes(PLANT_PROBE_AT, plants.probePoints(controller.rotation.elements));
+        plantClock += dt;
+        plantDue += dt;
+        if (!LITE || (++plantFrame & 1) === 0) {
+          plants.update(plantClock, plantDue, sim.koiSense, controller.rotation.elements, controller.omega, SURFACE_ISO);
+          plantDue = 0;
+        }
+      }
       if (life) {
         life.update(dt, sim.koiSense, sim.restLevel, SURFACE_ISO, controller.rotation.elements, Math.hypot(...controller.omega), betta.swim.mode);
         betta.swim.gulpUrge = life.nestNeed;
@@ -444,8 +462,16 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
   const adaptive = params.get('adapt') === '0' ? null : new AdaptiveScale(performance.now());
   const globeMotion = { center: controller.center, velocity: controller.velocity, radius: world.globeRadius };
   let jumps = controller.panJumps;
-  // ?stats logs frame rate and solver load to the console (no on-screen HUD).
+  // ?stats logs frame rate and solver load to the console, and shows it in a corner (a phone has
+  // no console to read): frames a second, the main thread's time a frame on the world, the sim's
+  // substeps, the pixel ratio.
   const logStats = params.has('stats');
+  const hud = logStats ? document.createElement('div') : null;
+  if (hud) {
+    hud.style.cssText = 'position:fixed;left:8px;bottom:8px;z-index:99;padding:6px 8px;border-radius:6px;background:rgba(0,0,0,.6);color:#cfe;font:12px/1.3 ui-monospace,monospace;pointer-events:none;white-space:pre';
+    document.body.append(hud);
+  }
+  let cpuMs = 0;
   // ?manual (dev testing): the sim only advances through __globes.tick().
   const manual = params.has('manual');
   const drawSize = new THREE.Vector2();
@@ -463,7 +489,9 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
 
     const level = adaptive?.frame(now) ?? null;
     if (level !== null) setSharpness(level);
+    const cpu0 = performance.now();
     if (!manual) advance(dt);
+    if (hud) cpuMs = cpuMs * 0.9 + (performance.now() - cpu0) * 0.1;
     hooks.beforeRender?.();
     const heightPx = renderer.getDrawingBufferSize(drawSize).y;
     globe.update(controller.center, controller.rotation, camera, heightPx);
@@ -495,6 +523,7 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
         `[globes] ${fps.toFixed(1)} fps · ${sim.particleCount} particles · ` +
           `${sim.lastSubsteps} substeps · max speed ${sim.maxSpeed.toFixed(2)}`,
       );
+      if (hud) hud.textContent = `${fps.toFixed(1)} fps\nworld ${cpuMs.toFixed(1)} ms a frame (main thread)\n${sim.lastSubsteps} substeps · ${sim.particleCount} particles\npixel ratio ${renderer.getPixelRatio().toFixed(2)}${LITE ? ' · phone tier' : ''}`;
       frames = 0;
       statsStart = now;
     }
@@ -524,7 +553,9 @@ async function startApp(stage: HTMLElement, params: URLSearchParams, host: Deskt
   try {
     // (The betta's bowl is lit by the lamp in its lid, straight down, and tips less far than a
     // sealed globe: it rolls on its table.)
-    const light = BETTA_PAGE ? { ...lightConfig, sunDirection: [0, 1, 0] as [number, number, number] } : lightConfig;
+    const light = { ...(BETTA_PAGE ? { ...lightConfig, sunDirection: [0, 1, 0] as [number, number, number] } : lightConfig), ...(LITE ? { causticRays: 512 } : {}) };
+    // (Phones: the fins solved in coarser steps.)
+    if (LITE) Object.assign(FIN_QUALITY, { step: 1 / 60, passScale: 0.5, maxFrame: 1 / 30 });
     const globe = BETTA_PAGE ? { ...globeConfig, maxTilt: (40 * Math.PI) / 180 } : globeConfig;
     const world = await createWorld(stage, params, { start: GLOBES[start], alpha: false, light, globe, desk: null });
     shell.attach(world.controller, world.setScene, world.specks);

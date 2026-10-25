@@ -49,7 +49,7 @@ function mapTexture(gpuTexture: GPUTexture, size: number): THREE.Texture {
 
 /** Wraps a float texture the shader only reads texel by texel (textureLoad: no filtering, so
  *  three.js binds it unfilterable and with no sampler). */
-function texelTexture(gpuTexture: GPUTexture, depth = 0): THREE.Texture {
+export function texelTexture(gpuTexture: GPUTexture, depth = 0): THREE.Texture {
   const tex = new THREE.ExternalTexture(gpuTexture);
   if (depth > 0) (tex as unknown as { is3DTexture: boolean }).is3DTexture = true;
   (tex as unknown as { image: object }).image = { width: gpuTexture.width, height: gpuTexture.height, ...(depth > 0 ? { depth } : {}) };
@@ -344,6 +344,10 @@ export class GlobeView {
         m.depthFunc = THREE.LessDepth;
         m.depthWrite = false;
       }
+      // (The bowl's main pass writes its mark wherever it draws, over a depth cleared to 0
+      // (main.ts), so the fish's pass runs only where it marked, not also where its rays met
+      // nothing and it drew nothing.)
+      if (pass === 'bowl') m.depthFunc = THREE.AlwaysDepth;
       if (onDesktop) {
         // Clear around the globe: the colour is already weighted by coverage, written as is.
         m.transparent = true;

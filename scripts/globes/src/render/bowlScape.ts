@@ -87,7 +87,7 @@ const f = (x: number) => x.toFixed(6);
 /** The bowl's contents, for the globe's shader (after bowlWGSL; needs globes_bg, globes_fresnel,
  *  globes_noise3, globes_hash3, globes_sunIn, betta_dapple and the sky/sun constants). The ray
  *  functions take points and directions in the translating frame; scapeRot is the bowl's turn. */
-export function bowlScapeWGSL(radius: number): string {
+export function bowlScapeWGSL(radius: number, lite = false): string {
   if (meshWGSL === null) throw new Error("bowlScape: the furnishings' shader is not loaded (setScapeShader)");
   const nest = NEST.map((b) => `vec4f(${f(b[0])}, ${f(b[1])}, ${f(b[2])}, ${f(b[3])})`).join(',\n  ');
   return /* wgsl */ `
@@ -326,7 +326,7 @@ fn scape_nestAlong(p: vec3f, dir: vec3f, tEnd: f32, bgTex: texture_2d<f32>, bgSa
 fn scape_bedShadow(tex: texture_2d<f32>, x: vec3f, inWater: bool) -> vec3f {
   let towards = select(GLOBES_SUN_DIR, GLOBES_SUN_DIR_WATER, inWater);
   let rotT = transpose(scapeRot);
-  return scape_meshShadow(tex, rotT * (x + vec3f(0.0, 0.003, 0.0)), rotT * towards, 3.0) * scape_leafShadow(x, towards);
+  return ${lite ? '' : 'scape_meshShadow(tex, rotT * (x + vec3f(0.0, 0.003, 0.0)), rotT * towards, 3.0) * '}scape_leafShadow(x, towards);
 }
 
 // ---- tracing and shading ------------------------------------------------------------------
@@ -366,7 +366,7 @@ fn scape_shadeMesh(tex: texture_2d<f32>, h: ScapeHit, x: vec3f, dir: vec3f, inWa
   // shadowed by itself.)
   let ndl = dot(n, L);
   let off = x + select(-n, n, ndl > 0.0) * 0.0015;
-  let S = scape_meshShadow(tex, rotT * off, rotT * L, 3.0) * scape_leafShadow(off, L);
+  let S = ${lite ? '' : 'scape_meshShadow(tex, rotT * off, rotT * L, 3.0) * '}scape_leafShadow(off, L);
   let up = n.y * 0.5 + 0.5;
   let ambient = select(vec3f(0.30, 0.31, 0.34), mix(vec3f(0.045, 0.06, 0.075), vec3f(0.15, 0.18, 0.21), up), inWater) * mat.ao;
   let hv = normalize(L - dir);

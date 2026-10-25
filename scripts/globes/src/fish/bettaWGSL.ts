@@ -2,7 +2,7 @@
 // glass. The BVH is refitted to the animated Atelier geometry every frame.
 export const BETTA_PARAMS = ', bettaTex: texture_2d<f32>, bettaAtlas: texture_2d<f32>, bettaSamp: sampler';
 export const BETTA_ARGS = ', bettaTex, bettaAtlas, bettaSamp';
-export const bettaWGSL = /* wgsl */ `
+const bettaFullWGSL = /* wgsl */ `
 fn betta_tex(tex: texture_2d<f32>, i: u32) -> vec4f {
   return textureLoad(tex, vec2i(i32(i % 1024u), i32(i / 1024u)), 0);
 }
@@ -222,3 +222,20 @@ fn betta_shade(tex: texture_2d<f32>, atlas: texture_2d<f32>, smp: sampler, hit: 
   return BettaShade(albedo * lightIn / 3.14159265 + direct * spec, 1.0, vec3f(1.0));
 }
 `;
+
+export const bettaWGSL = bettaFullWGSL;
+
+/** The same for a phone's lighter bowl (bowl.ts lite): the fish neither shadows itself nor the bed
+ *  (its shadow rays were most of the fish's cost there). */
+export const bettaLiteWGSL = (() => {
+  const from = bettaFullWGSL.indexOf('fn betta_occlusion(');
+  const to = bettaFullWGSL.indexOf('// One faint wave on the film');
+  if (from < 0 || to < 0) throw new Error('bettaWGSL: betta_occlusion or betta_shadow moved');
+  return bettaFullWGSL.slice(0, from) + `fn betta_occlusion(tex: texture_2d<f32>, atlas: texture_2d<f32>, smp: sampler, p: vec3f, L: vec3f) -> vec3f {
+  return vec3f(1.0);
+}
+fn betta_shadow(tex: texture_2d<f32>, atlas: texture_2d<f32>, smp: sampler, p: vec3f, L: vec3f) -> vec3f {
+  return vec3f(1.0);
+}
+` + bettaFullWGSL.slice(to);
+})();

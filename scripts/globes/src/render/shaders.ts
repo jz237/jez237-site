@@ -2,7 +2,7 @@
 // These are injected into three.js materials through TSL's wgsl()/wgslFn().
 
 import type { GlobeConfig, LightConfig } from '../config';
-import { bettaWGSL, BETTA_PARAMS, BETTA_ARGS } from '../fish/bettaWGSL';
+import { bettaLiteWGSL, bettaWGSL, BETTA_PARAMS, BETTA_ARGS } from '../fish/bettaWGSL';
 import { koiWGSL } from '../fish/koiWGSL';
 import { clownShadeWGSL, clownWGSL } from '../fish/clownWGSL';
 import { foodWGSL } from '../fish/FishFood';
@@ -1145,7 +1145,7 @@ fn globes_leaveCavity(p: vec3f, dir: vec3f, nMed: f32, bgTex: texture_2d<f32>, b
   let T = exp(-GLOBES_GLASS_ABS * tOut);
   return (1.0 - F) * T * globes_exitGlass(p + gdir * tOut, gdir, bgTex, bgSamp);
 }
-${bowl ? STUDIO_WGSL + bowlWGSL(bowl) + bowlScapeWGSL(globe.innerRadius) + `
+${bowl ? STUDIO_WGSL + bowlWGSL(bowl) + bowlScapeWGSL(globe.innerRadius, bowl.lite) + `
 // A pixel's size where the sand is being shaded (world units: its finest grains fade out there).
 var<private> globesSandFoot: f32 = 0.0;
 ` : ''}
@@ -1928,7 +1928,7 @@ fn globes_koiShade(pose: texture_2d<f32>, x: vec3f, n: vec3f, rd: vec3f, mat: f3
   return vec4f(albedo * (E * diff + amb * (1.0 + rim)) / 3.14159265 + E * spec, 1.0);
 }
 
-${bettaWGSL}
+${bowl?.lite ? bettaLiteWGSL : bettaWGSL}
 
 // ---- kelp ------------------------------------------------------------------------------
 ${kelpRenderWGSL()}
@@ -2202,7 +2202,7 @@ ${rt ? RT_MARCH : `    // The next sample is read with this one, where it will b
       if (tf >= t) { break; }
       var Tf = vec3f(1.0);
       if (inWater) {
-        if (gather > 0.0) { globesGathered += thr * globes_waterLight(p, dir, tA, tf, pathLen, scat, lit, lightTex, lightSamp, moteTex, koiTime); }
+        ${bowl?.lite ? '' : 'if (gather > 0.0) { globesGathered += thr * globes_waterLight(p, dir, tA, tf, pathLen, scat, lit, lightTex, lightSamp, moteTex, koiTime); }'}
         Tf = exp(-globesWaterExt * tf);
       }
       let qf = p + dir * tf;
@@ -2213,7 +2213,7 @@ ${rt ? RT_MARCH : `    // The next sample is read with this one, where it will b
       tA = tf;
     }
     if (inWater) {
-      if (gather > 0.0) { globesGathered += thr * globes_waterLight(p, dir, tA, t, pathLen, scat, lit, lightTex, lightSamp, moteTex, koiTime); }${foam ? `
+      ${bowl?.lite ? '// (The lighter bowl: no motes or shafts.)' : 'if (gather > 0.0) { globesGathered += thr * globes_waterLight(p, dir, tA, t, pathLen, scat, lit, lightTex, lightSamp, moteTex, koiTime); }'}${foam ? `
       // (The sea foam globe: the bubbles churned into it.)
       let bub = globes_bubblesAlong(aerTex, aerSamp, lightTex, lightSamp, lit, p, dir, 0.0, t);
       col += thr * bub.rgb;
@@ -2292,9 +2292,9 @@ ${rt ? RT_MARCH : `    // The next sample is read with this one, where it will b
       if (GLOBES_EDGES && (length(qs) > GLOBES_R_IN - 0.05 || abs(dot(dir, globes_sandNormal(sandTex, sandSamp, qs))) < 0.15)) { globesEdge |= 8u; }
       var bettaShadow = vec3f(1.0);
       // The shadow is drawn by the second pass; flag bed pixels whose sun path crosses the fish.
-      if (!GLOBES_KOI && !globesKoiNear && betta_near(bettaTex, qs + vec3f(0.0, 0.003, 0.0), select(GLOBES_SUN_DIR, GLOBES_SUN_DIR_WATER, inWater), 4.0)) { globesKoiNear = true; }
+${bowl?.lite ? '' : `      if (!GLOBES_KOI && !globesKoiNear && betta_near(bettaTex, qs + vec3f(0.0, 0.003, 0.0), select(GLOBES_SUN_DIR, GLOBES_SUN_DIR_WATER, inWater), 4.0)) { globesKoiNear = true; }
       if (GLOBES_KOI) { bettaShadow = betta_shadow(bettaTex, bettaAtlas, bettaSamp, qs + vec3f(0.0, 0.003, 0.0), select(GLOBES_SUN_DIR, GLOBES_SUN_DIR_WATER, inWater)); }
-      // The betta's globe: the bed shares the film's faint dapple (both passes, or the fish's
+`}      // The betta's globe: the bed shares the film's faint dapple (both passes, or the fish's
       // pixels would stand out against the rest).
       if (inWater && betta_tex(bettaTex, 0u).w > 0.5) { bettaShadow *= betta_dapple(qs + vec3f(0.0, 0.02, 0.0), lit, lightTex, lightSamp, koiTime); }
 ${bowl ? `      globesSandFoot = lit.z * pathLen;

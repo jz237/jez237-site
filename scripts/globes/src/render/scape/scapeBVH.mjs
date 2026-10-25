@@ -1,7 +1,8 @@
 // The betta bowl's furnishings traced as triangles (its page only): every triangle of every piece
 // (wood.mjs, rocks.mjs, plants.mjs; their mesh format in mesh.mjs) in one static BVH, packed into a
 // 1024-wide rgba32float texture the bowl's shader reads with textureLoad, like the betta's mesh
-// (src/fish/triangleBVH.mjs). Built once at load (binned SAH); never refitted.
+// (src/fish/triangleBVH.mjs). Built once at load (binned SAH); only the moving plants' triangles
+// and the boxes over them are refitted in place, every frame (scapeRefit.mjs).
 //
 // The texture, in texels (rgba32float, row-major, 1024 a row; index i is at (i % 1024, i / 1024)).
 // Every integer is stored as an exactly representable float (all stay below 2^24):
@@ -703,6 +704,20 @@ export function shadowCPU(packed, o, d, tEnd, opts = {}) {
     return true;
   }, () => tE, opts.stats, opts.variant ?? 'stack', true);
   return T;
+}
+
+const triTexels = new Float32Array(12);
+/** The tracer's triangle test on its own (scape_meshTri, as walkCPU meets each triangle), for
+ *  checking a walk against every triangle: the ray (o, d) against the corners a, b, c (each [x, y,
+ *  z], taken as f32); its distance t along the ray when its line meets the triangle (t not yet held
+ *  to any range), else null. exact: the shadow's mode (see triCPU). */
+export function triangleCPU(o, d, a, b, c, exact = false) {
+  for (let k = 0; k < 3; k++) {
+    triTexels[k] = a[k];
+    triTexels[4 + k] = b[k];
+    triTexels[8 + k] = c[k];
+  }
+  return triCPU(makeRay(o, d), triTexels, 0, exact) ? triOut[0] : null;
 }
 
 /** What scape_meshSurface reads for a hit: { n, ng, attrs, material, vertices: [va, vb, vc] }. */

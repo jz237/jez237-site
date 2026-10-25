@@ -49,7 +49,7 @@ const ALL: readonly GlobeEntry[] = [
     betta: true,
     clarity: 0.22,
     water: 1.15,
-    idle: 'still',
+    idle: 'filter',
   },
   {
     id: 'koi',

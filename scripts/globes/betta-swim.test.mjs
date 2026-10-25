@@ -196,10 +196,10 @@ test('a startle while gulping air abandons the trip and closes the mouth', () =>
 });
 
 // Slow episodes: facing its reflection, a lap of the globe, resting on the sand.
-function runBehaviors(seconds, { seed = 237, water = () => calm(), environment = upright } = {}) {
+function runBehaviors(seconds, { seed = 237, water = () => calm(), environment = upright, flow = () => [0, 0, 0] } = {}) {
   const s = new BettaSwim(seed), log = [];
   for (let i = 0; i < seconds * 60; i++) {
-    s.advance(1 / 60, [0, 0, 0], environment, true, water(i / 60));
+    s.advance(1 / 60, flow(i / 60), environment, true, water(i / 60));
     log.push({ t: i / 60, mode: s.mode, flaring: s.flaring, position: [...s.position], heading: s.heading, speed: s.speed, pitch: s.pitch, drive: s.drive });
   }
   return log;
@@ -467,3 +467,24 @@ test('it keeps clear of things in the water (the bowl\'s driftwood): routes roun
     assert.ok(inside / steps < 0.03, `seed ${seed} spent ${(100 * inside / steps).toFixed(1)}% inside the log's margin`);
   }
 });
+
+test("in the bowl's slow current it holds station while it hovers or displays, and still goes about", () => {
+  // (About what the bowl's filter current does near the fish: IdleWater 'filter'.)
+  const current = (t) => [0.04 * Math.cos(t / 23), 0, 0.03 * Math.sin(t / 23)];
+  for (const seed of [237, 42]) {
+    const log = runBehaviors(600, { seed, flow: current, water: (t) => ({ ...calm(), flow: current(t) }) });
+    for (const mode of ['hover', 'mirror']) {
+      for (const ep of episodes(log, mode)) {
+        // (Once it has stopped: the second half of the hold.)
+        const hold = ep.slice(ep.length >> 1).filter((r) => r.speed < 0.01);
+        if (hold.length < 60) continue;
+        const from = hold[0].position;
+        const travel = Math.max(...hold.map((r) => Math.hypot(r.position[0] - from[0], r.position[1] - from[1], r.position[2] - from[2])));
+        assert.ok(travel < (mode === 'mirror' ? 0.06 : 0.04), `seed ${seed}: drifted ${travel.toFixed(3)} while holding (${mode})`);
+      }
+    }
+    assert.ok(episodes(log, 'mirror').length >= 2, `seed ${seed}: it still displays at the glass`);
+    assert.ok(log.every((r) => r.position.every(Number.isFinite) && Math.hypot(...r.position) <= env.radius - 0.29 + 1e-8));
+  }
+});
+

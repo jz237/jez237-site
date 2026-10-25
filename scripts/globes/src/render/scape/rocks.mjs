@@ -16,17 +16,17 @@ import { BED_LEVEL, MAT, MeshBuilder, fbm3, noise3, stream } from './mesh.mjs';
 /**
  * One stone. at: where it sits on the bed (x, z); size: along its long axis, its height above the
  * sand, across; sink: the share of its whole height below the sand; yaw (about y) and lean (about
- * x, then z); freq: its geodesic sphere's (20 f^2 triangles). Its body: exp, the superquadric's
- * exponents (round its sides, and up and down); taper: how much narrower it is at the top; ends:
- * each semi-axis' factor on its - and + side (the lower one short, so the body's heart lies below
- * the sand and its sides lean in above it); lumps: how lumpy. planes: where it split (a normal,
- * where the cut lies as a share of the body's reach that way, and how worn its edge is, a share of
- * the stone's size); facets: how many smaller, more worn ones it has besides. dents: broad shallow
- * hollows (a direction, an angular radius, a depth as a share of its reach). cracks: a direction
- * from its heart, the way the crack runs there (radians), its length (a share of the stone's size)
- * and depth (1 a full crack); or a branch off an earlier crack (where along it, as a share of its
- * length, and how far it turns off it). pits and bedding: how pitted and how layered it is (0..1),
- * and the layers' normal.
+ * x, then z); freq: its geodesic sphere's at full detail (20 f^2 triangles). Its body: exp, the
+ * superquadric's exponents (round its sides, and up and down); taper: how much narrower it is at
+ * the top; ends: each semi-axis' factor on its - and + side (the lower one short, so the body's
+ * heart lies below the sand and its sides lean in above it); lumps: how lumpy. planes: where it
+ * split (a normal, where the cut lies as a share of the body's reach that way, and how worn its
+ * edge is, a share of the stone's size); facets: how many smaller, more worn ones it has besides.
+ * dents: broad shallow hollows (a direction, an angular radius, a depth as a share of its reach).
+ * cracks: a direction from its heart, the way the crack runs there (radians), its length (a share
+ * of the stone's size) and depth (1 a full crack); or a branch off an earlier crack (where along
+ * it, as a share of its length, and how far it turns off it). pits and bedding: how pitted and how
+ * layered it is (0..1), and the layers' normal.
  */
 const ROCKS = [
   {
@@ -273,7 +273,8 @@ const crackWide = (c, along) => 0.6 + 0.6 * smoothstep(-0.5, 0.5, 0.7 * Math.sin
 /**
  * Everything about a stone but its mesh: its body (sizes, cuts, dents), the factors that stretch
  * the body to its size, where it stands (turned, and lifted so its top stands its height above
- * the sand) and its cracks. Cheap, so the material's constants come from the same numbers.
+ * the sand), its cracks and the room the fish leaves it. Cheap, so the material's constants come
+ * from the same numbers.
  */
 function prepare(spec) {
   const rock = { ...spec };
@@ -328,6 +329,30 @@ function prepare(spec) {
     top = Math.max(top, rot([u[0] * r, u[1] * r, u[2] * r])[1]);
   }
   rock.shift = [rock.at[0], BED_LEVEL + hAbove - top, rock.at[1]];
+
+  // The room the fish leaves it: a capsule along its long axis, low over the sand, round its body
+  // where that stands above the sand (measured on the probe's sphere, so it is the same at any
+  // detail).
+  const axis = [Math.cos(rock.yaw), 0, -Math.sin(rock.yaw)];
+  const across = [Math.sin(rock.yaw), 0, Math.cos(rock.yaw)];
+  let reach = 0, depth = 0;
+  for (const u of probe) {
+    const [r] = surface(rock, u);
+    const [x, y, z] = rot([u[0] * r, u[1] * r, u[2] * r]);
+    if (y + rock.shift[1] < BED_LEVEL) continue;
+    reach = Math.max(reach, Math.abs(x * axis[0] + z * axis[2]));
+    depth = Math.max(depth, Math.abs(x * across[0] + z * across[2]));
+  }
+  const solid = Math.max(depth, 0.5 * hAbove);
+  const yc = BED_LEVEL + Math.max(hAbove - solid, 0);
+  const halfLen = Math.max(reach - solid, 0);
+  /** @type {Obstacle} */
+  rock.obstacle = {
+    a: [rock.at[0] - axis[0] * halfLen, yc, rock.at[1] - axis[2] * halfLen],
+    b: [rock.at[0] + axis[0] * halfLen, yc, rock.at[1] + axis[2] * halfLen],
+    r: solid + 0.05,
+    solid,
+  };
 
   // Cracks: through the surface point in a direction, running the way asked; or branching off an
   // earlier one, from a point along it.
@@ -386,33 +411,38 @@ function prepare(spec) {
 }
 
 /** The relief cut into the surface at a point (its own frame, world units; positive raises it),
- *  how deep a crack lies there, and the relief without its finest grain. */
+ *  how deep a crack lies there, and the relief without its finest grain. Its finest parts follow
+ *  the mesh's spacing (pits, grain, cracks); on a coarser mesh (rock.coarse: its spacing over full
+ *  detail's) the scallops and the split faces' ripples are broader (and as steep), the bigger pits
+ *  broader, the creases and bedding lines wider and the pits' ragged rims smooth, so the mesh
+ *  holds them all. */
 function relief(rock, p, face) {
   const [ox, oy, oz] = rock.off;
   const x = p[0] + ox, y = p[1] + oy, z = p[2] + oz;
-  const sp = rock.spacing;
+  const sp = rock.spacing, co = rock.coarse, k = Math.sqrt(co);
   // Broad water-worn undulation, gentler on the split faces.
   let h = 0.0065 * (1 - 0.8 * face) * fbm3(x * 16, y * 16, z * 16, 3);
   // Shallow dishes the water scoured, soft ridges between; and on the worn body (not the split
   // faces) smaller scallops inside them.
   const [d1] = cells(x / 0.04, y / 0.04, z / 0.04);
   h += 0.0035 * (1 - 0.8 * face) * (d1 * d1 - 0.35);
-  const [s1] = cells(x / 0.012 + 4.4, y / 0.012, z / 0.012);
-  h += 0.0012 * (1 - face) * (s1 * s1 - 0.3);
+  const sc = 0.012 * k;
+  const [s1] = cells(x / sc + 4.4, y / sc, z / sc);
+  h += 0.0012 * k * (1 - face) * (s1 * s1 - 0.3);
   // The split faces' own low steps and ripples, where the stone broke.
-  if (face > 0) h += 0.0012 * face * fbm3(x * 70 + 1.7, y * 70, z * 70, 2);
+  if (face > 0) h += 0.0012 * k * face * fbm3((x * 70) / k + 1.7, (y * 70) / k, (z * 70) / k, 2);
   // Weathering creases: thin wandering grooves, in patches.
   const crease = 1 - Math.abs(noise3(x * 24 + 5.1, y * 24, z * 24) + 0.2 * noise3(x * 70, y * 70, z * 70 + 2.3));
-  h -= 0.001 * (1 - 0.6 * face) * smoothstep(0.05, 0.55, noise3(x * 5, y * 5 + 7.7, z * 5)) * crease ** 6;
+  h -= 0.001 * (1 - 0.6 * face) * smoothstep(0.05, 0.55, noise3(x * 5, y * 5 + 7.7, z * 5)) * crease ** (6 / co);
   // Bedding: faint grooves along the layers it formed in.
   if (rock.bedding > 0) {
     const s = dot(p, rock.layers) * 52 + 1.6 * fbm3(x * 6, y * 6, z * 6, 2);
-    h -= 0.0007 * rock.bedding * (1 - Math.abs(Math.sin(Math.PI * s))) ** 3 * (0.5 + 0.5 * noise3(x * 11, y * 11, z * 11 + 4));
+    h -= 0.0007 * rock.bedding * (1 - Math.abs(Math.sin(Math.PI * s))) ** (3 / co) * (0.5 + 0.5 * noise3(x * 11, y * 11, z * 11 + 4));
   }
   // Pits, as small as the mesh shapes well: many in patches, and a few bigger and shallower with
   // ragged rims.
   const patch = smoothstep(-0.35, 0.45, noise3(x * 8 + 3.1, y * 8, z * 8));
-  for (const [cell, share, r0, r1, deep, rag] of [[Math.max(0.01, 6 * sp), rock.pits * (0.2 + 0.7 * patch), 0.25, 0.45, 0.3, 0], [0.032, 0.04 * rock.pits, 0.16, 0.3, 0.2, 0.35]]) {
+  for (const [cell, share, r0, r1, deep, rag] of [[Math.max(0.01, 6 * sp), rock.pits * (0.2 + 0.7 * patch), 0.25, 0.45, 0.3, 0], [0.032 * k, 0.04 * rock.pits, 0.16, 0.3, 0.2, 0.35 * clamp01(2 - co)]]) {
     const [pd, , pid, pr] = cells(x / cell + 9.1, y / cell, z / cell);
     const rr = (r0 + (r1 - r0) * pr) * (1 + rag * noise3(x * 180, y * 180 + 2.2, z * 180));
     if (pid < share && pd < rr) {
@@ -449,6 +479,9 @@ function relief(rock, p, face) {
 // ---- one stone's mesh -------------------------------------------------------------------------
 function buildStone(rock, index, sphere) {
   const { nb } = sphere;
+  // (density: the mesh's vertices along a line over full detail's; coarse: its spacing over full
+  // detail's, never less than 1, for relief().)
+  rock.coarse = Math.max(1, 1 / rock.density);
   const vc = sphere.dirs.length;
   const hAbove = rock.size[1];
   // On the surface, then relaxed: each vertex drawn towards its neighbours' middle and put back on
@@ -510,11 +543,14 @@ function buildStone(rock, index, sphere) {
   // Cavity: how far the relief lies below its surroundings, near (smoothed once more, so single
   // vertices do not show) and broad; and the cracks.
   const near = smoothScalar(coarse, nb, 2);
-  const broad = smoothScalar(coarse, nb, 12);
+  // (The broad cavity over as much of the surface at any detail.)
+  const broad = smoothScalar(coarse, nb, Math.max(2, Math.round(12 * rock.density * rock.density)));
   const fine = smoothScalar(Array.from(coarse, (h, v) => near[v] - h), nb, 1);
   const attrs = new Float64Array(vc * 4);
   for (let v = 0; v < vc; v++) {
-    const cav = clamp01(Math.max(fine[v] / (0.25 * rock.spacing) * 0.25 + (broad[v] - coarse[v]) / 0.004 * 0.6, crack[v] / (2 * rock.spacing)));
+    // (A crack's groove is as many times wider as the mesh is coarser, so its darkening is spread
+    // over it, the same in all.)
+    const cav = clamp01(Math.max(fine[v] / (0.25 * rock.spacing) * 0.25 + (broad[v] - coarse[v]) / 0.004 * 0.6, crack[v] / (2 * rock.spacing * rock.coarse)));
     // Occlusion: its cavities, and the sand: darker towards the line where it sinks in, darkest
     // under its overhang there.
     const above = world[v * 3 + 1] - BED_LEVEL;
@@ -527,53 +563,39 @@ function buildStone(rock, index, sphere) {
     const wood = 1 - 0.45 * Math.exp(-Math.max(gap, 0) / 0.015);
     attrs.set([index, cav, 0, clamp01((1 - 0.65 * cav) * sandLine * under * sky * wood)], v * 4);
   }
-
-  // The room the fish leaves it: a capsule along its long axis, low over the sand.
-  const axis = [Math.cos(rock.yaw), 0, -Math.sin(rock.yaw)];
-  const across = [Math.sin(rock.yaw), 0, Math.cos(rock.yaw)];
-  let reach = 0, depth = 0;
-  for (let v = 0; v < vc; v++) {
-    if (world[v * 3 + 1] < BED_LEVEL) continue;
-    const dx = world[v * 3] - rock.at[0], dz = world[v * 3 + 2] - rock.at[1];
-    reach = Math.max(reach, Math.abs(dx * axis[0] + dz * axis[2]));
-    depth = Math.max(depth, Math.abs(dx * across[0] + dz * across[2]));
-  }
-  const solid = Math.max(depth, 0.5 * hAbove);
-  const yc = BED_LEVEL + Math.max(hAbove - solid, 0);
-  const halfLen = Math.max(reach - solid, 0);
-  /** @type {Obstacle} */
-  const obstacle = {
-    a: [rock.at[0] - axis[0] * halfLen, yc, rock.at[1] - axis[2] * halfLen],
-    b: [rock.at[0] + axis[0] * halfLen, yc, rock.at[1] + axis[2] * halfLen],
-    r: solid + 0.05,
-    solid,
-  };
-  return { world, attrs, obstacle };
+  return { world, attrs };
 }
 
 const STONES = ROCKS.map(prepare);
 
 /** The four stones as one mesh (attrs.x: which stone), and the room the fish leaves round each.
+ *  detail scales their geodesic spheres' frequency (1: ~108k triangles; 0.5, for phones: about a
+ *  quarter) and with it the finest relief; their shapes, places, materials' attributes and
+ *  obstacles are the same at any detail.
  *  @returns {import('./mesh.mjs').ScapePiece} */
-export function build() {
+export function build(options = { detail: 1 }) {
+  // (Anything but a finite number, or no options at all, is full detail.)
+  const detail = Number.isFinite(options?.detail) ? Math.min(Math.max(options.detail, 0.25), 2) : 1;
   const mb = new MeshBuilder('rocks');
   /** @type {Obstacle[]} */
   const obstacles = [];
   const spheres = new Map();
   STONES.forEach((stone, index) => {
-    let sphere = spheres.get(stone.freq);
+    const freq = detail === 1 ? stone.freq : Math.max(6, Math.round(stone.freq * detail));
+    let sphere = spheres.get(freq);
     if (!sphere) {
-      const g = geodesic(stone.freq);
+      const g = geodesic(freq);
       sphere = { ...g, nb: neighbours(g.dirs.length, g.tris) };
-      spheres.set(stone.freq, sphere);
+      spheres.set(freq, sphere);
     }
-    const { world, attrs, obstacle } = buildStone({ ...stone }, index, sphere);
+    const { world, attrs } = buildStone({ ...stone, density: freq / stone.freq }, index, sphere);
     const base = mb.vertexCount;
     for (let v = 0; v < sphere.dirs.length; v++) {
       mb.vertex([world[v * 3], world[v * 3 + 1], world[v * 3 + 2]], [attrs[v * 4], attrs[v * 4 + 1], attrs[v * 4 + 2], attrs[v * 4 + 3]]);
     }
     for (let t = 0; t < sphere.tris.length; t += 3) mb.tri(base + sphere.tris[t], base + sphere.tris[t + 1], base + sphere.tris[t + 2], MAT.ROCK);
-    obstacles.push(obstacle);
+    const o = stone.obstacle;
+    obstacles.push({ a: o.a.slice(), b: o.b.slice(), r: o.r, solid: o.solid });
   });
   return { meshes: [mb.finish()], obstacles };
 }

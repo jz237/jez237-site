@@ -112,7 +112,7 @@ const PARAMS_SIZE = 464;
 const MAX_PUSH = 0.15;
 /** Points the water is sampled at for the creatures every frame (see probe.wgsl): the koi's
  *  first (KOI_PROBES), then the clownfish's and the anemone's (setProbes). */
-export const PROBES = 64;
+export const PROBES = 128;
 /** Readback: stats (16 B), probe samples, water centroid (16 B), the ray tracing regions' counts
  *  (16 B). */
 const READBACK_RT = 16 + PROBES * 32 + 16;
@@ -801,7 +801,7 @@ export class FluidSim {
         const sp = this.beginPass(enc, 'shift + probes');
         // (Every other frame, at twice the strength: it is a slow regulariser.)
         if (cfg.particleShift > 0 && this.frameIndex % 2 === 0) this.run(sp, 'shift', this.particleGroups(), this.cur);
-        this.run(sp, 'probe', [1, 1, 1]);
+        this.run(sp, 'probe', [Math.ceil(PROBES / 64), 1, 1]);
         this.run(sp, 'centroid', this.particleGroups(), this.cur);
         sp.end();
         // The motes drift with the water; bin them for the renderer.

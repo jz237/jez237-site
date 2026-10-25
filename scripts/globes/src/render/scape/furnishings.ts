@@ -14,13 +14,29 @@ export interface Furnishings {
   obstacles: { a: number[]; b: number[]; r: number; solid: number }[];
   /** Their shader code (scapeShader.mjs). */
   wgsl: string;
+  /** The plants' motion (scapeBuild.mjs, scapeRefit.mjs): its kernels, their buffers (to upload
+   *  once), the counts and refit levels they are dispatched by, the leaves' table and tips. */
+  motion: {
+    wgsl: { skin: string; tris: string; refit: string };
+    buffers: Record<string, { data: ArrayBufferView | null; size: number; usage: 'uniform' | 'storage' }>;
+    moving: number;
+    slotCount: number;
+    levels: { depth: number; first: number; count: number }[];
+    leafCount: number;
+    leaves: Float32Array;
+    leafTips: Float32Array;
+  };
+  /** The leaves' phases at a time (plantMotion.mjs leafPhases), each frame. */
+  phases: (leaves: Float32Array, t: number, out: Float32Array | null) => Float32Array;
 }
 
-type Built = Omit<Furnishings, 'wgsl'>;
+type Built = Omit<Furnishings, 'wgsl' | 'phases'>;
 
-/** n, extent, none: the bed's map (FluidSim's BED_SOLIDS_N, its radius, BED_SOLIDS_NONE). */
-export function furnish(n: number, extent: number, none: number): Promise<Furnishings> {
+/** n, extent, none: the bed's map (FluidSim's BED_SOLIDS_N, its radius, BED_SOLIDS_NONE); detail:
+ *  how finely they are made (1; phones 0.5: about a quarter of the triangles). */
+export function furnish(n: number, extent: number, none: number, detail = 1): Promise<Furnishings> {
   const wgsl = import('./scapeShader.mjs').then((m) => m.scapeShaderWGSL() as string);
+  const phases = import('./plantMotion.mjs').then((m) => m.leafPhases as Furnishings['phases']);
   const built = new Promise<Built>((resolve, reject) => {
     const worker = new Worker(new URL('./scapeWorker.mjs', import.meta.url), { type: 'module' });
     worker.onmessage = (e: MessageEvent<Built>) => {
@@ -31,11 +47,11 @@ export function furnish(n: number, extent: number, none: number): Promise<Furnis
       worker.terminate();
       reject(new Error(e.message || 'the furnishings worker failed'));
     };
-    worker.postMessage({ n, extent, none });
+    worker.postMessage({ n, extent, none, detail });
   }).catch(async (err: unknown) => {
     console.warn('[globes] furnishings built on the main thread:', err);
     const m = await import('./scapeBuild.mjs');
-    return m.buildFurnishings(n, extent, none) as Built;
+    return m.buildFurnishings(n, extent, none, detail) as Built;
   });
-  return Promise.all([built, wgsl]).then(([b, w]) => ({ ...b, wgsl: w }));
+  return Promise.all([built, wgsl, phases]).then(([b, w, p]) => ({ ...b, wgsl: w, phases: p }));
 }

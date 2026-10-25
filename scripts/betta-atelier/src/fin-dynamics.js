@@ -26,6 +26,10 @@ export function waterVelocity(t, x, y, z, strength, direction, out) {
   return out;
 }
 
+/** How finely the fins are solved: the step (s), the share of the constraint passes, and the most
+ *  of a frame that is caught up on (s). A host on a slow device may lighten it (Globes on phones). */
+export const FIN_QUALITY = { step: 1 / 120, passScale: 1, maxFrame: 0.07 };
+
 export class FinDynamics {
   constructor({ point, kind, side, columns = 29, rows = 17 }) {
     Object.assign(this, { kind, side, columns, rows });
@@ -164,8 +168,8 @@ export class FinDynamics {
       this.initialized = true;
     }
     this.frameTarget.set(this.target);
-    this.accumulator += Math.min(dt, 0.07);
-    const step = 1 / 120;
+    this.accumulator += Math.min(dt, FIN_QUALITY.maxFrame);
+    const step = FIN_QUALITY.step;
     const substeps = Math.floor((this.accumulator + 1e-10) / step);
     let completed = 0;
     while (completed < substeps) {
@@ -178,6 +182,9 @@ export class FinDynamics {
       this.steps++;
     }
     this.target.set(this.frameTarget);
+    // (A frame too short for a step, the step being coarse (FIN_QUALITY) and the screen quick: the
+    // last solved shape, relative to the body, is carried with it as it is.)
+    if (!completed && this.steps) return;
     const { position, rest, scratch, displacement } = this;
     for (let n = 0; n < this.count; n++) {
       state.body.transform(rest[n * 3], rest[n * 3 + 1], rest[n * 3 + 2], scratch);
@@ -245,7 +252,8 @@ export class FinDynamics {
         : links[l + 2];
     }
     // Alternate constraint traversal to avoid a persistent preferred bend direction.
-    for (let pass = 0; pass < (this.kind === 3 ? 12 : 8); pass++) {
+    const passes = Math.max(3, Math.round((this.kind === 3 ? 12 : 8) * FIN_QUALITY.passScale));
+    for (let pass = 0; pass < passes; pass++) {
       // Pectoral rays are actively rotated by the muscular base, not merely
       // pulled by a weak spring (which filters a rapid stroke into a slow sway).
       // Actuation fades across the span; the outer membrane stays water-driven.

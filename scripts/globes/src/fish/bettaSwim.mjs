@@ -44,6 +44,8 @@ export const STARTLE_JOLT = 1.25, STARTLE_LENGTH = 0.9, STARTLE_COOLDOWN = 10, S
 // The fish only gains speed as fast as its tail (or sculling pectorals) is working: `stroke`, 0..1,
 // is the host's measure of that, and speed can rise by at most STROKE_ACCEL x stroke per second. A
 // still tail therefore cannot accelerate the body. Without a reading (headless runs) it is unlimited.
+/** The slowest current a holding fish lets carry it (units/s): slower, it keeps its station. */
+const HOLD_AGAINST = 0.12;
 export const STROKE_ACCEL = 1.1;
 
 // Goals are a real stride away across the water and within the slope the fish can climb, so it never
@@ -579,8 +581,11 @@ export class BettaSwim {
     const direction = [-Math.cos(this.heading) * Math.cos(this.pitch), Math.sin(this.pitch), Math.sin(this.heading) * Math.cos(this.pitch)];
     const old = [...this.position];
     for (let k = 0; k < 3; k++) this.position[k] += (direction[k] * this.speed + this.drift[k]) * dt;
-    // Once settled on the sand, let the current go by.
+    // Once settled on the sand, let the current go by; holding still in the water (hovering,
+    // taking air, swallowing, displaying at the glass), work against a slow one (a bowl's gentle
+    // circulation, not a slosh, which carries it) and keep station.
     if (this.mode === 'rest' && this.restSettled) for (let k = 0; k < 3; k++) this.drift[k] *= Math.exp(-4 * dt);
+    else if (still && wet > 0.99 && Math.hypot(...flow) < HOLD_AGAINST) for (let k = 0; k < 3; k++) this.drift[k] *= Math.exp(-3 * dt);
     const open = this.mode === 'gulp' ? gulpMouth(this.gulpClock) : feeding ? this.gape : 0, pulse = this.mode === 'gulp' ? gulpGillCover(this.gulpClock) : 0;
     this.gulp = damp(this.gulp, open, dt, 25);
     this.gulpGill = damp(this.gulpGill, pulse, dt, 25);

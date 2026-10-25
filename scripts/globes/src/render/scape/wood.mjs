@@ -9,7 +9,8 @@
 // cross-cracks, knots with the grain swirling round them, worn smoother patches) is modelled in the
 // geometry along them. The side limbs start inside the arch and are blended into it by a smooth
 // fillet; the broken limb ends in jagged, splintered bare wood. Occlusion is baked from the
-// relief's cavities, from the sand and from the other limbs.
+// relief's cavities, from the sand and from the other limbs. At a lower detail (phones) the tubes
+// have fewer rings and columns along the same spines, the relief eased to what they can hold.
 
 import { BED_LEVEL, MAT, MeshBuilder, fbm3, noise3, stream } from './mesh.mjs';
 
@@ -65,12 +66,12 @@ function cells(u, v, period, seed) {
 
 // The fissures between cells on a strip that wraps round (u repeats every `period` cells; a cell is
 // wu wide and lv long in world units). Every border near the point cuts its own fissure (its depth
-// and width its own, those across the grain shallower and narrower) and the deepest is kept, so the
-// relief is continuous; also how far the point is from the nearest border (world) and a hash of
-// its cell.
+// and width its own, those across the grain shallower and narrower, by crossWidth wider) and the
+// deepest is kept, so the relief is continuous; also how far the point is from the nearest border
+// (world) and a hash of its cell.
 const FIS = { depth: 0, shoulder: 0, e: 0, cell: 0 };
 const FU = new Float64Array(25), FV = new Float64Array(25), FK = new Int32Array(25);
-function fissures(u, v, period, seed, wu, lv, width, crossDepth) {
+function fissures(u, v, period, seed, wu, lv, width, crossDepth, crossWidth = 1) {
   const iu = Math.floor(u), iv = Math.floor(v);
   let best = 1e9, n1 = 12;
   for (let dv = -2, k = 0; dv <= 2; dv++) {
@@ -101,11 +102,11 @@ function fissures(u, v, period, seed, wu, lv, width, crossDepth) {
     const ml = Math.sqrt(mx * mx + my * my);
     const e = ec / ml;
     if (e < emin) emin = e;
-    if (e > width * 3.6) continue;
+    if (e > width * 3.6 * crossWidth) continue;
     const pair = hash3(Math.min(k1, FK[k]), Math.max(k1, FK[k]), seed + 77);
     const across = smoothstep(0.35, 0.8, Math.abs(my) / ml);
     const strength = (0.5 + 0.7 * pair) * (1 - (1 - crossDepth) * across);
-    const w = width * (0.7 + 0.6 * ((pair * 977) % 1)) * (1 - 0.15 * across);
+    const w = width * (0.7 + 0.6 * ((pair * 977) % 1)) * (1 - 0.15 * across) * (1 + (crossWidth - 1) * across);
     const p = e / w;
     if (p < 1) depth = Math.max(depth, strength * Math.pow(1 - smoothstep(0, 1, p), 1.6));
     shoulder = Math.max(shoulder, strength * (1 - smoothstep(w, w * 3.2, e)));
@@ -238,6 +239,50 @@ function spineAt(sp, s) {
   AT.tz = sp.t[i * 3 + 2] * g + sp.t[j * 3 + 2] * f;
   AT.tau = sp.tau[i] * g + sp.tau[j] * f;
   return AT;
+}
+
+/** The spine resampled every ~ds of its length, along the same curve (for a coarser tube). */
+function resampleSpine(sp, ds) {
+  const count = Math.max(3, Math.round(sp.L / ds) + 1);
+  const step = sp.L / (count - 1);
+  const c = new Float64Array(count * 3), t = new Float64Array(count * 3);
+  const r = new Float64Array(count * 3), b = new Float64Array(count * 3);
+  const tau = new Float64Array(count);
+  for (let i = 0; i < count; i++) {
+    const a = spineAt(sp, i * step);
+    const tl = Math.hypot(a.tx, a.ty, a.tz);
+    const tx = a.tx / tl, ty = a.ty / tl, tz = a.tz / tl;
+    // (The frame made square again.)
+    const d = a.rx * tx + a.ry * ty + a.rz * tz;
+    let rx = a.rx - d * tx, ry = a.ry - d * ty, rz = a.rz - d * tz;
+    const rl = Math.hypot(rx, ry, rz);
+    rx /= rl;
+    ry /= rl;
+    rz /= rl;
+    c.set([a.cx, a.cy, a.cz], i * 3);
+    t.set([tx, ty, tz], i * 3);
+    r.set([rx, ry, rz], i * 3);
+    b.set([ty * rz - tz * ry, tz * rx - tx * rz, tx * ry - ty * rx], i * 3);
+    tau[i] = a.tau;
+  }
+  return { count, step, L: sp.L, c, t, r, b, tau };
+}
+
+/** A tube's rings along limb L's spine sp, N columns round: how many, and how far along the spine
+ *  ring i lies in column j (the broken limb's last few rings stretch, column by column, to the
+ *  jagged rim of its break). */
+function tubeRings(L, sp, N) {
+  if (L.caps[1] !== 'broken') return { rings: sp.count, sOf: (i) => i * sp.step };
+  const sb = L.sBreak, sb0 = sb - 0.025;
+  const i0 = Math.floor(sb0 / sp.step);
+  const last = Math.round(sb / sp.step);
+  const sOf = (i, j) => {
+    if (i <= i0) return i * sp.step;
+    const f = (i - i0) / (last - i0);
+    const s0 = i0 * sp.step;
+    return s0 + f * (sb + L.brk.rim((TAU * j) / N) - s0);
+  };
+  return { rings: last + 1, sOf };
 }
 
 /** The spine's height at s. */
@@ -385,22 +430,38 @@ const LIMBS = [
 
 /** The limbs as laid out for one build (or for the shader): each LIMBS entry copied (the table
  *  itself is never changed) with its spine, where a side limb joins its parent (junction: how far
- *  along the parent), its knuckles and knots placed along it and its channels. */
-function layout() {
+ *  along the parent), its knuckles and knots placed along it and its channels. detail scales the
+ *  tube's rings and columns (1: as LIMBS has them); everything is placed on the spine drawn as at
+ *  full detail (ref), so it lands in the same places at any detail. */
+function layout(detail = 1) {
   const limbs = [];
   for (const [index, C] of LIMBS.entries()) {
     const L = { ...C, index, pts: C.pts.map((p) => p.slice()) };
     if (L.parent !== undefined) {
       // (A side limb's spine starts on its parent's, and it is thinner there, inside the parent,
       // so it does not show through its far side.)
-      const P = limbs[L.parent].spine;
+      const P = limbs[L.parent].ref;
       const s = nearestS(P, L.pts[0]);
       const a = spineAt(P, s);
       L.pts[0] = [a.cx, a.cy, a.cz];
       L.junction = s;
       L.shrink = (s) => 0.6 + 0.4 * smoothstep(0, 0.0525, s);
     }
-    const sp = (L.spine = makeSpine(L.pts, L.ds, L.twist, L.seed, L.wiggle));
+    const sp = (L.ref = makeSpine(L.pts, L.ds, L.twist, L.seed, L.wiggle));
+    // (At a lower detail fewer columns go round and the rings lie further apart, the rings more so:
+    // the bark's fissures run along the grain, so they need the columns more. coarse, coarseAlong:
+    // how much further apart than at full detail, round and along.)
+    L.roundScale = detail ** 0.75;
+    L.alongScale = detail ** 1.25;
+    L.coarse = Math.max(1, 1 / L.roundScale);
+    L.coarseAlong = Math.max(1, 1 / L.alongScale);
+    L.refAround = C.around;
+    L.around = detail === 1 ? C.around : Math.max(16, Math.round(C.around * L.roundScale));
+    L.spine = detail === 1 ? sp : resampleSpine(sp, C.ds / L.alongScale);
+    if (L.caps[1] === 'broken') {
+      L.brk = breakShape(L.seed + 5);
+      L.sBreak = sp.L - L.breakAt;
+    }
     L.knuckleS = L.knuckles.map(([p, amp, w]) => [nearestS(sp, p), amp, w]);
     L.knotS = L.knots.map(([p, eye, spread, height, kind], k) => {
       const s = nearestS(sp, p);
@@ -458,8 +519,9 @@ function crossSection(L, s, phi) {
     RING.b4 = 2.2 * noise3(s * 1.9, q, 7.7);
     RING.a5 = L.lobe * 0.5 * (0.4 + 0.8 * noise3(s * 4.3, q, 8.8));
     RING.b5 = 2.2 * noise3(s * 2.2, q, 9.9);
-    // (Lobed like roots where it goes into the sand.)
-    RING.foot = 1 + 0.9 * Math.exp(-(((spineY(L.spine, s) - BED_LEVEL) / 0.07) ** 2));
+    // (Lobed like roots where it goes into the sand; measured on the spine as drawn at full detail,
+    // so the shape is the same at any detail.)
+    RING.foot = 1 + 0.9 * Math.exp(-(((spineY(L.ref, s) - BED_LEVEL) / 0.07) ** 2));
     RING.fc = L.flutes.map((f) => f.phi + f.drift * s + 0.5 * noise3(s * 2.6, f.seed, 0.2));
     RING.fd = L.flutes.map((f) => f.depth * smoothstep(-0.25, 0.35, noise3(s * f.freq, f.seed, 3.3)));
   }
@@ -478,10 +540,15 @@ function crossSection(L, s, phi) {
  *  whose lumpy surface lies rl out from the spine there: how deep the point lies below the bark's
  *  crests (world units; negative where it stands proud, on a burl or a knot's lip) and how deep in
  *  a fissure (0..1). The plates and fissures scale with rl, so in the hollows, where the columns
- *  crowd, they are narrower and shallower, never steeper. */
+ *  crowd, they are narrower and shallower, never steeper. On a coarser grid (L.coarse and
+ *  L.coarseAlong) the fissures and the knots' lips are wider, the checks within the plates fewer,
+ *  the ridges between them broader and the roughness fainter, so the grid holds what is left
+ *  without aliasing it (and the bark's shading keeps its tone). */
 const BARK = { d: 0, z: 0 };
 function bark(L, s, phi, cphi, sphi, r0, rl) {
   const Nc = L.plates, Lc = L.plateLength;
+  const wide = Math.sqrt(L.coarse), wideAlong = Math.sqrt(L.coarseAlong), fine = clamp01(2 - L.coarse);
+  const width = L.width * wide, crossWidth = wideAlong / wide;
   const rs = Math.min(Math.max(rl, 0.6 * r0), 1.3 * r0);
   const Wu = (TAU * rs) / Nc; // a plate's width round the limb (world)
   const q = L.seed * 0.71;
@@ -514,7 +581,7 @@ function bark(L, s, phi, cphi, sphi, r0, rl) {
     const ang = Math.atan2(dv, du);
     rho *= 1 + 0.3 * noise3(Math.cos(ang) * 2, Math.sin(ang) * 2, k.s * 5);
     eye = Math.max(eye, 1 - smoothstep(k.eye * 0.9, k.eye * 1.7, rho));
-    const lip = 0.45 * k.height * Math.exp(-(((rho - k.eye) / (0.35 * k.eye)) ** 2));
+    const lip = 0.45 * k.height * Math.exp(-(((rho - k.eye) / (0.35 * k.eye * wide)) ** 2));
     // A shallow pit where a twig rotted out, or the stub of one sheared off: tapering to 0.7 of
     // its foot's radius, its top torn like the broken limb's end (at the knot's scale).
     let core;
@@ -536,39 +603,43 @@ function bark(L, s, phi, cphi, sphi, r0, rl) {
   // them and the plates stand at different heights (meeting at the fissures, so there is no step
   // where one dies out).
   const fade = 0.6 + 0.4 * noise3(cphi * 2.1, sphi * 2.1 + q, s * 7.3);
-  fissures(u, v, Nc, L.seed, Wu, Lc, L.width, 0.2);
+  fissures(u, v, Nc, L.seed, Wu, Lc, width, 0.2, crossWidth);
   let fissure = fade * FIS.depth;
   const shoulder = 0.25 * fade * FIS.shoulder;
-  const plateDrop = (0.26 * FIS.cell + 0.1 * noise3(u * 1.7, v * 2.3, q)) * smoothstep(0, L.width * 3, FIS.e);
+  const plateDrop = (0.26 * FIS.cell + 0.1 * noise3(u * 1.7, v * 2.3, q)) * smoothstep(0, width * 3, FIS.e);
 
-  // Finer checks within the plates, here and there.
+  // Finer checks within the plates, here and there (fewer on a coarser grid).
   const mask2 = smoothstep(-0.35, 0.2, noise3(cphi * 1.6 + 5, sphi * 1.6, s * 3.1 + q));
   if (mask2 > 0) {
-    fissures(u * 2.27 + 0.5, v * 1.9 + 0.3, Math.round(Nc * 2.27), L.seed + 3, Wu / 2.27, Lc / 1.9, L.width * 0.8, 0.25);
+    const ku = 2.27 / wide, kv = 1.9 / wideAlong;
+    fissures(u * ku + 0.5, v * kv + 0.3, Math.round(Nc * ku), L.seed + 3, Wu / ku, Lc / kv, width * 0.8, 0.25, crossWidth);
     fissure = Math.max(fissure, 0.55 * mask2 * FIS.depth);
   }
 
-  // Stringy ridges along the grain on the plates (narrow grooves between them), and a little
-  // roughness.
+  // Stringy ridges along the grain on the plates (narrow grooves between them; broader on a coarser
+  // grid), and a little roughness.
   const rp = u * 1.7 + 0.35 * noise3(cphi * 3.1, sphi * 3.1 + q, s * 6.1);
-  const ridge = 0.2 * Math.pow(0.5 + 0.5 * Math.cos(TAU * rp), 3) * fade;
-  const rough = 0.1 * noise3(cphi * 16 + q, sphi * 16, s * 22);
+  const ridge = 0.2 * Math.pow(0.5 + 0.5 * Math.cos(TAU * rp), 3 / L.coarse) * fade;
+  const rough = fine > 0 ? 0.1 * noise3(cphi * 16 + q, sphi * 16, s * 22) * fine : 0;
 
   const keep = (1 - 0.5 * worn) * (1 - eye);
   const depth01 = (fissure + (shoulder + plateDrop + ridge + rough) * (1 - 0.6 * worn)) * keep;
-  BARK.z = clamp01(depth01 / 0.85);
+  // (On a coarser grid the wider fissures, shoulders and ridges cover more of the bark, so their
+  // shading is drawn in towards the fissures' floors, by as much as keeps the bark's tone, its dark
+  // fissures and pale crests, as at full detail: measured.)
+  const z = clamp01(depth01 / (0.85 * L.coarse ** 0.075));
+  BARK.z = L.coarse > 1 ? z ** (L.coarse ** 0.13) : z;
   BARK.d = depth01 * Dn - raise;
   return BARK;
 }
 
 // ---- building ----------------------------------------------------------------------------------
 
-/** The base surface (lumpy cross-section, no bark) of limb L at s, column j: its centre, outward
- *  direction and radius, into BASE. */
+/** The base surface (lumpy cross-section, no bark) of limb L at s, grain angle phi: its centre,
+ *  outward direction and radius, into BASE. */
 const BASE = { cx: 0, cy: 0, cz: 0, dx: 0, dy: 0, dz: 0, r0: 0, rb: 0 };
-function basePoint(L, sp, s, j) {
+function basePoint(L, sp, s, phi) {
   const a = spineAt(sp, s);
-  const phi = (TAU * j) / L.around;
   const th = phi + a.tau;
   const ct = Math.cos(th), st = Math.sin(th);
   let dx = ct * a.rx + st * a.bx, dy = ct * a.ry + st * a.by, dz = ct * a.rz + st * a.bz;
@@ -597,7 +668,7 @@ function basePoint(L, sp, s, j) {
  *  ring i at i spine steps along (b0, for measuring distances to it) and as swept (bs), and the
  *  bark's surface as swept (r0). */
 function sweep(L, sp, sOf) {
-  const N = L.around, rings = L.rings ?? sp.count;
+  const N = L.around, rings = L.rings;
   const n = rings * N;
   const g = {
     L, sp, N, rings,
@@ -618,8 +689,9 @@ function sweep(L, sp, sOf) {
     for (let j = 0; j < N; j++) {
       const v = i * N + j;
       const s = sOf(i, j);
-      const p = basePoint(L, sp, s, j);
-      const br = bark(L, s, (TAU * j) / N, cphi[j], sphi[j], p.r0, p.rb);
+      const phi = (TAU * j) / N;
+      const p = basePoint(L, sp, s, phi);
+      const br = bark(L, s, phi, cphi[j], sphi[j], p.r0, p.rb);
       const rr = p.rb - br.d;
       g.px[v] = p.cx + p.dx * rr;
       g.py[v] = p.cy + p.dy * rr;
@@ -634,7 +706,7 @@ function sweep(L, sp, sOf) {
       g.rad[v] = rr;
       g.s[v] = s;
       g.z[v] = br.z;
-      g.b0[v] = s === i * sp.step ? p.rb : basePoint(L, sp, i * sp.step, j).rb;
+      g.b0[v] = s === i * sp.step ? p.rb : basePoint(L, sp, i * sp.step, phi).rb;
     }
   }
   // No fissure wall steeper than SLOPE (its depth over the distance between neighbouring points,
@@ -770,8 +842,8 @@ function fillet(x, y, k0, lo, hi, near, sinkDepth, child, reach) {
     Dx /= Dl;
     Dy /= Dl;
     Dz /= Dl;
-    const ring = Math.floor(v / N);
-    const xlo = Math.max(0, ring - 50), xhi = Math.min(rings - 1, ring + 50);
+    const ring = Math.floor(v / N), win = Math.max(10, Math.round(50 * x.L.alongScale));
+    const xlo = Math.max(0, ring - win), xhi = Math.min(rings - 1, ring + win);
     const T = { a: 0, b: 0, k: k, ia: 0, ib: 0 };
     const f = (d) => {
       const px = qx + Dx * d, py = qy + Dy * d, pz = qz + Dz * d;
@@ -870,29 +942,19 @@ function breakShape(seed) {
 
 // ---- the piece ---------------------------------------------------------------------------------
 
-/** @returns {import('./mesh.mjs').ScapePiece} */
-export function build() {
-  const limbs = layout();
+/** The driftwood. detail scales its tessellation (1: ~200k triangles; 0.5, for phones: about a
+ *  quarter, the bark's finest relief smoothed into what the coarser grid holds); its shape, its
+ *  place, its materials' attributes and its obstacles are the same at any detail.
+ *  @returns {import('./mesh.mjs').ScapePiece} */
+export function build(options = { detail: 1 }) {
+  // (Anything but a finite number, or no options at all, is full detail.)
+  const detail = Number.isFinite(options?.detail) ? Math.min(Math.max(options.detail, 0.25), 2) : 1;
+  const limbs = layout(detail);
   const grids = [];
   for (const L of limbs) {
-    const sp = L.spine;
-    let sOf = (i) => i * sp.step;
-    if (L.caps[1] === 'broken') {
-      // The last few rings stretch, column by column, to the jagged rim of the break.
-      L.brk = breakShape(L.seed + 5);
-      const sb = sp.L - L.breakAt, sb0 = sb - 0.025;
-      const i0 = Math.floor(sb0 / sp.step);
-      const last = Math.round(sb / sp.step);
-      L.rings = last + 1;
-      L.sBreak = sb;
-      sOf = (i, j) => {
-        if (i <= i0) return i * sp.step;
-        const f = (i - i0) / (last - i0);
-        const s0 = i0 * sp.step;
-        return s0 + f * (sb + L.brk.rim((TAU * j) / L.around) - s0);
-      };
-    }
-    grids.push(sweep(L, sp, sOf));
+    const { rings, sOf } = tubeRings(L, L.spine, L.around);
+    L.rings = rings;
+    grids.push(sweep(L, L.spine, sOf));
   }
 
   // Blend the side limbs into the arch, each surface carried onto the fillet from its own side.
@@ -916,6 +978,15 @@ export function build() {
   const obstacles = [];
   for (const g of grids) obstaclesFor(g, obstacles);
   return { meshes: [mb.finish()], obstacles };
+}
+
+/** A limb's base surface's radius as swept at full detail (ring i, column j of its full-detail
+ *  grid): the swept grid's own at detail 1, else found again. */
+function fullDetailRadius(g) {
+  const L = g.L;
+  if (L.spine === L.ref) return (i, j) => g.bs[i * g.N + j];
+  const N = L.refAround, { sOf } = tubeRings(L, L.ref, N);
+  return (i, j) => basePoint(L, L.ref, sOf(i, j), (TAU * j) / N).rb;
 }
 
 /** The grid's normals, from its neighbours round and along. */
@@ -970,8 +1041,10 @@ function occlusion(grids) {
   const packed = spheres.map((list) => Float64Array.from(list.flat()));
   for (const [gi, g] of grids.entries()) {
     const { N, rings, L } = g;
-    const fine = boxBlur(g.rad, rings, N, 2, 4);
-    const broad = boxBlur(g.base, rings, N, 9, 14);
+    // (Over as much of the surface at any detail.)
+    const along = (k) => Math.max(1, Math.round(k * L.alongScale)), round = (k) => Math.max(1, Math.round(k * L.roundScale));
+    const fine = boxBlur(g.rad, rings, N, along(2), round(4));
+    const broad = boxBlur(g.base, rings, N, along(9), round(14));
     for (let v = 0; v < rings * N; v++) {
       const r0 = g.base[v] || 0.07;
       const cav = Math.max(0, fine[v] - g.rad[v]) / (L.depth * 0.6 * r0);
@@ -1084,7 +1157,7 @@ function emitTube(mb, g) {
  *  middle). */
 function emitBreak(mb, g) {
   const { N, rings, L, sp } = g;
-  const K = 22;
+  const K = Math.max(6, Math.round(22 * L.roundScale));
   const i = rings - 1;
   let mean = 0;
   for (let j = 0; j < N; j++) mean += g.rad[i * N + j];
@@ -1122,11 +1195,14 @@ function emitBreak(mb, g) {
 }
 
 /** Capsules along a limb where it stands above the sand: solid to about its radius, the fish's
- *  margin 0.05 beyond. */
+ *  margin 0.05 beyond (measured on the limb as made at full detail, so they are the same at any
+ *  detail). */
 function obstaclesFor(g, out) {
-  const { sp, N, rings } = g;
+  const sp = g.L.ref, N = g.L.refAround;
+  const { rings, sOf } = tubeRings(g.L, sp, N);
+  const radius = fullDetailRadius(g);
   const step = 0.1;
-  const end = g.s[(rings - 1) * N];
+  const end = sOf(rings - 1, 0);
   const n = Math.max(1, Math.round(end / step));
   for (let k = 0; k < n; k++) {
     const s0 = (k / n) * end, s1 = ((k + 1) / n) * end;
@@ -1138,7 +1214,7 @@ function obstaclesFor(g, out) {
     if (g.L.parent !== undefined && s1 < 0.05) continue;
     let r = 0;
     for (let i = Math.floor(s0 / sp.step); i <= Math.min(rings - 1, Math.ceil(s1 / sp.step)); i++) {
-      for (let j = 0; j < N; j += 4) r = Math.max(r, g.bs[i * N + j]);
+      for (let j = 0; j < N; j += 4) r = Math.max(r, radius(i, j));
     }
     const solid = Math.round(r * 0.9 * 1000) / 1000;
     out.push({ a: A.map((x) => Math.round(x * 1000) / 1000), b: B.map((x) => Math.round(x * 1000) / 1000), r: Math.round((solid + 0.05) * 1000) / 1000, solid });

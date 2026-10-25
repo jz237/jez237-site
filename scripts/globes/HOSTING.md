@@ -3,7 +3,7 @@
 Original: https://github.com/willwaltz/globes
 Author: Will Waltz · MIT License
 Upstream commit: 93c3b814bbca53463e8207b8e3c95fca8940dff5
-Imported: 2026-10-22 · Hosting build: 1.15.0
+Imported: 2026-10-22 · Hosting build: 1.16.0
 Public routes: https://jez237.com/demos/globes/ (the five original globes) and
 https://jez237.com/demos/betta-bowl/ (the **Living Silk** betta bowl, on its own)
 
@@ -423,6 +423,50 @@ lamp in its lid, with a driftwood arch, dark rocks and two plants on pale sand.
   and the water must pass under it); the reflection is a second render of the scene at half
   resolution; the bowl stays a sphere (the reference's is wider than tall); Firefox's WGSL compiler
   has not been tried on the new shader code.
+
+Version 1.16 (Atelier source: an optional lighter fin solver, its defaults unchanged, and fins that
+stay on the body on a frame too short for a fin step; its built demo is not rebuilt) makes the plants
+flexible, gives the water a gentle current, and makes the page run on phones:
+- **The plants move with the water**, like the kelp globe's kelp and the plants of the Living
+  Aquascape. Every frame their 35,000 vertices are moved on the GPU (`src/render/scape/
+  plantMotion.mjs`): each leaf sways on its stalk (bending from its foot, the blade carried on its
+  tip and turned with it, its length kept), its blade flutters in a wave running out to its tip and
+  twists about its midrib (the Aquascape's motion, its constants scaled to the bowl), the plant sways
+  as a whole on slow, unrelated periods, and each leaf leans with the water round it: a probe at its
+  tip (`FluidSim` probes 64-127) reads the water's velocity less the glass's own turn, followed with
+  a 0.4 s lag. Leaves are kept out of the wood, the rocks and the glass, and calmed where they would
+  touch them; leaves crowded against a neighbour move with it. The furnishings' BVH is refitted over
+  them on the GPU (`scapeRefit.mjs`: skin, triangles, then the boxes level by level, about 0.1 ms;
+  `src/render/scape/MovingPlants.ts`), so they are traced, lit and shadowed where they are.
+- **A gentle current** (`IdleWater` 'filter'): left alone for a few seconds the water turns over
+  slowly, as a small filter keeps a bowl's water moving: a swirl round the glass and rolls whose
+  heading turns all the way round every couple of minutes, with no push on the surface (the floating
+  leaf drifts, the nest stays). The betta keeps station against so slow a current while it hovers,
+  takes air or displays at the glass (`bettaSwim.mjs` HOLD_AGAINST), and is still carried by a
+  slosh.
+- **Phones** (`LITE`: a coarse pointer and a small screen). The page fell to a few frames a second
+  there because a slow frame made the next one simulate more (up to 8 substeps of the water and the
+  fins), and because of work a phone's screen does not show. On phones now: a slow frame is not
+  caught up on in full (1/30 s at most), the water has a coarser grid (40) with at most 3 substeps
+  and fewer solver sweeps, the fins are solved at 60 Hz with half the passes (`FIN_QUALITY` in
+  `../betta-atelier/src/fin-dynamics.js`), the furnishings are built at half the detail (a quarter of
+  the triangles, 7.8 MB of BVH), the bowl's shader leaves out the fish's shadows, the furnishings'
+  shadows and the motes and shafts, and marches the glass in fewer steps, and the canvas has no
+  multisampling. Measured on this desktop at a phone's 0.3 MP: the render pass 2.5 -> 0.85 ms, the
+  main thread's work a frame 8.3 -> 6.1 ms. `?stats` now also shows the frame rate and the main
+  thread's time in a corner of the page.
+- **Fixed for everyone:** the fish's redraw pass ran on every pixel of the bowl's (large) proxy that
+  its rays missed; the depth is now cleared to 0 for the bowl's passes and its main pass always
+  writes its mark, so the fish's pass runs only where it is needed (22x fewer pixels). The fish's
+  BVH is refitted once a frame instead of twice.
+- A second independent review (three reviewers, each finding checked by a sceptic) confirmed nine
+  problems, all fixed here (among them: the lighter bowl's lid march, its needless fish redraws, the
+  fish drifting while it held still, the current never turning round).
+- Tests: `plant-motion.test.mjs` (12), `scape-refit.test.mjs` (6) and `idle-water.test.mjs` (1), and
+  a slow-current test in `betta-swim.test.mjs`, besides the others (91 in all):
+  stalk feet fixed, tips moving, travel bounded, no leaf through the wood, a rock, the glass or
+  another leaf over minutes of motion, normals, the refit against brute force; the GPU kernels were
+  checked against their CPU mirror on the RTX 5090.
 
 ## Browser compatibility
 

@@ -151,7 +151,8 @@ export class Betta implements Feeder {
     // The same one-second opening as the standalone specimen.
     this.fish.userData.display.requested = this.flared || this.swim.flaring;
     this.fish.userData.update(this.time);
-    this.updateVertices();
+    // (Its BVH is refitted once, after the contact passes have moved it.)
+    this.updateVertices(false);
     // Contact against the glass and sampled bed, not a fixed waterline: sloshing
     // can carry the fish vertically and the density probes guide its recovery.
     const near = this.solidsNear();
@@ -265,7 +266,7 @@ export class Betta implements Feeder {
     return { ...s, speed: s.speed / SCALE, position: s.position.map((v, k) => (v + offset[k]) / SCALE), velocity: s.velocity.map((v, k) => (v + offsetVelocity[k]) / SCALE) };
   }
 
-  private updateVertices(): void {
+  private updateVertices(refit = true): void {
     this.rig.updateMatrixWorld(true);
     const body = this.fish.userData.bodyMotion;
     const scratch = [0, 0, 0, 0], p = new THREE.Vector3();
@@ -294,6 +295,6 @@ export class Betta implements Feeder {
         p.toArray(this.vertices, (offset + i) * 3);
       }
     }
-    this.bvh.refit(this.vertices);
+    if (refit) this.bvh.refit(this.vertices);
   }
 }

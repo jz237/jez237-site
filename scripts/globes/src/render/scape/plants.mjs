@@ -6,8 +6,13 @@
 // Every blade is one thin two-sided sheet with its true relief: arched along, cupped across, a
 // slight twist, a gently wavy margin, the midrib a groove on top and a ridge beneath (its stalk
 // run on under it), the lateral veins a faint quilting between them.
+// Each plant's mesh carries how it moves in the water (mesh.motion: plantMotion.mjs has the model
+// and the layout): every leaf, stalk and blade, a flexible chain from its foot, at its full motion
+// (the BVH's refit calms the leaves that would swing into the driftwood, a rock or the glass, once
+// it has their real obstacles: scapeRefit.mjs's refitPlan).
 
 import { BED_LEVEL, GLASS_CLEAR, MAT, MeshBuilder, noise3, stream } from './mesh.mjs';
+import { LEAF_STRIDE, MOTION_VERTEX_STRIDE, WAVE_K, frameQuat, leafRow } from './plantMotion.mjs';
 
 /** @typedef {import('./mesh.mjs').V3} V3 */
 
@@ -139,7 +144,7 @@ function bladeShape(/** @type {BladeSpec} */ b) {
 }
 
 /** Adds a blade's sheet to mb: nu rows along (finer at its ends), nv across (finer at the midrib),
- *  a single point at its base and its tip. */
+ *  a single point at its base and its tip. Returns its vertices, each [index, u, x]. */
 function bladeMesh(mb, shape, nu, nv, mat) {
   const { b, L, at, frame, half } = shape;
   const normalAt = (u, x) => {
@@ -154,22 +159,28 @@ function bladeMesh(mb, shape, nu, nv, mat) {
     const t = -1 + (2 * j) / nv;
     vs.push(Math.sign(t) * Math.abs(t) ** 1.3);
   }
+  const out = [];
   const base = mb.vertex(at(0, 0), [0, 0, b.id, 1], frame(0).N);
+  out.push([base, 0, 0]);
   const rows = [];
   for (let i = 1; i < nu; i++) {
     const t = i / nu;
     const u = 0.6 * t + 0.4 * (0.5 - 0.5 * Math.cos(Math.PI * t));
     rows.push(vs.map((v) => {
       const x = v * half(u, v >= 0);
-      return mb.vertex(at(u, x), [u, v, b.id, 1], normalAt(u, x));
+      const k = mb.vertex(at(u, x), [u, v, b.id, 1], normalAt(u, x));
+      out.push([k, u, x]);
+      return k;
     }));
   }
   const tip = mb.vertex(at(1, 0), [1, 0, b.id, 1], frame(1).N);
+  out.push([tip, 1, 0]);
   for (let j = 0; j < nv; j++) {
     mb.tri(base, rows[0][j], rows[0][j + 1], mat);
     for (let i = 0; i + 1 < rows.length; i++) mb.quad(rows[i][j], rows[i + 1][j], rows[i + 1][j + 1], rows[i][j + 1], mat);
     mb.tri(rows[rows.length - 1][j], tip, rows[rows.length - 1][j + 1], mat);
   }
+  return out;
 }
 
 // ---- tubes ----------------------------------------------------------------------------------
@@ -191,7 +202,8 @@ function carry(pts, ref) {
 /** A tube round the centre line pts (radius rad[k] at pts[k]), `sides` round, its frame carried
  *  along from ref (see carry); an end whose radius is 0 closes to a point. prof(k, a), if given,
  *  shapes its section: the radius's factor at pts[k] and angle a round it (0 on U's side). attrs:
- *  the distance along it, the angle round it, id. */
+ *  the distance along it, the angle round it, id. Returns its rings (each a vertex's index, or a
+ *  ring's indices) and its frame (see carry). */
 function tube(mb, pts, rad, sides, mat, id, ref, prof = null) {
   const n = pts.length;
   const { T, U: Us } = carry(pts, ref);
@@ -232,6 +244,7 @@ function tube(mb, pts, rad, sides, mat, id, ref, prof = null) {
       else mb.quad(A[j], A[j + 1], B[j + 1], B[j], mat);
     }
   }
+  return { rings, T, U: Us };
 }
 
 /** Points along a cubic Bezier, closer together where t is near 1 (a stalk's bend to its blade). */
@@ -272,13 +285,12 @@ function stalkPath(shape, from, rise, segs, rMid) {
 }
 
 /**
- * A leaf's stalk: its petiole (see stalkPath), run on under the blade's midrib as its ridge,
- * tapering out. o: rBase, rTop (the petiole's radius at its foot and top), sides, segs, midrib
- * (how far along the blade the ridge runs), midribSegs, sheath (how much its foot flares),
- * sheathLen (over how long) and groove (how deep the channel down its upper side is, of its radius;
- * it fades out where the blade begins, the ridge under the blade being round).
+ * A leaf's stalk's centre line and radii: its petiole (see stalkPath, o.segs segments), run on
+ * under the blade's midrib as its ridge (o.midribSegs more), tapering out. o: rBase, rTop (the
+ * petiole's radius at its foot and top), segs, midrib (how far along the blade the ridge runs),
+ * midribSegs, sheath (how much its foot flares) and sheathLen (over how long).
  */
-function leafStalk(mb, shape, from, rise, o, id) {
+function stalkLine(shape, from, rise, o, id) {
   const rMid = o.rTop * 1.12;
   const pts = stalkPath(shape, from, rise, o.segs, rMid);
   const D = len(sub(pts[pts.length - 1], from));
@@ -300,14 +312,141 @@ function leafStalk(mb, shape, from, rise, o, id) {
     pts.push(add(shape.at(u, 0), mul(shape.frame(u).N, -0.8 * r)));
     rad.push(r);
   }
+  return { pts, rad, segs: o.segs, n, midrib: o.midrib };
+}
+
+/**
+ * A leaf's stalk's tube round its line (stalkLine), o.sides round; o.groove: how deep the channel
+ * down its upper side is (of its radius), fading out over the last `fade` of the petiole, where
+ * the blade begins (the ridge under the blade being round). Returns the tube's rings and frame.
+ */
+function leafStalk(mb, shape, line, o, id, fade) {
+  const { pts, rad, segs } = line;
   // (Its channel faces the way the blade's face does where they meet.)
   const N0 = shape.frame(0).N;
   const { T, U } = carry(pts, N0);
-  const a0 = Math.atan2(dot(N0, cross(T[o.segs], U[o.segs])), dot(N0, U[o.segs]));
-  const groove = (k, a) => 1 - o.groove * (1 - smooth(o.segs - 3, o.segs, k)) * Math.max(0, Math.cos(a - a0)) ** 3;
-  tube(mb, pts, rad, o.sides, MAT.STEM, id, N0, groove);
-  return pts;
+  const a0 = Math.atan2(dot(N0, cross(T[segs], U[segs])), dot(N0, U[segs]));
+  const groove = (k, a) => 1 - o.groove * (1 - smooth(1 - fade, 1, k / segs)) * Math.max(0, Math.cos(a - a0)) ** 3;
+  return tube(mb, pts, rad, o.sides, MAT.STEM, id, N0, groove);
 }
+
+// ---- how a leaf moves (plantMotion.mjs) -------------------------------------------------------
+
+const dsmooth = (e0, e1, x) => {
+  const t = (x - e0) / (e1 - e0);
+  return t <= 0 || t >= 1 ? 0 : (6 * t * (1 - t)) / (e1 - e0);
+};
+
+/** A blade's midrib's turn along it (its arch and droop, radians a unit of u: see bladeShape),
+ *  and the wave's integrals over it from its base: Kc(u), Ks(u) of cos and sin(WAVE_K u) u^2
+ *  (2 - u) by that turn. */
+function bladeTurn(b) {
+  const turn = (u) => 1.6 * b.arch * Math.max(u, 0) ** 0.6 + b.droop * dsmooth(0.7, 1, u);
+  const M = 512;
+  const Kc = new Float64Array(M + 1), Ks = new Float64Array(M + 1);
+  for (let k = 1; k <= M; k++) {
+    const u = (k - 0.5) / M, g = (u * u * (2 - u) * turn(u)) / M;
+    Kc[k] = Kc[k - 1] + Math.cos(WAVE_K * u) * g;
+    Ks[k] = Ks[k - 1] + Math.sin(WAVE_K * u) * g;
+  }
+  const at = (A, u) => {
+    const x = Math.min(Math.max(u, 0), 1) * M, k = Math.min(Math.floor(x), M - 1);
+    return A[k] + (A[k + 1] - A[k]) * (x - k);
+  };
+  return { turn, Kc: (u) => at(Kc, u), Ks: (u) => at(Ks, u) };
+}
+
+/** The frame (T, X, N) of the blade at u, made orthonormal. */
+function bladeFrame(shape, u) {
+  const fr = shape.frame(u);
+  const T = norm(fr.T), N = square(fr.N, T);
+  return [T, cross(N, T), N];
+}
+
+/**
+ * A leaf's motion (plantMotion.mjs): its row of the table (leaves, at li) and its vertices'
+ * entries (mv[vertex], each MOTION_VERTEX_STRIDE numbers): its blade's (bv: bladeMesh's [index, u,
+ * x]) and its stalk's (line, the mesh's stalkLine, and rings, its tube's). full: the stalk's line
+ * at full detail (its length and its tip's direction, alike at any detail). g: what leafRow needs
+ * besides (crown, plant, young), and (g.with) the leaf placed before it that it moves in step with.
+ */
+function leafMotion(mb, mv, leaves, li, shape, bv, line, rings, full, g) {
+  const segs = full.segs;
+  let Ls = 0;
+  for (let k = 1; k <= segs; k++) Ls += len(sub(full.pts[k], full.pts[k - 1]));
+  const S = norm(sub(full.pts[segs], full.pts[segs - 1]));
+  const N0 = shape.frame(0).N;
+  const Lb = shape.L;
+  const P = square(N0, S), Q = cross(S, P);
+  // What keeps the bent stalk its length: the integrals from its foot of (T . P) w'(q) T and
+  // (T . Q) w'(q) T along its line (w' = q (4 - 3 q), T its direction), at full detail.
+  const fs = [0];
+  for (let k = 1; k <= segs; k++) fs.push(fs[k - 1] + len(sub(full.pts[k], full.pts[k - 1])));
+  const along = (k) => {
+    const T = norm(sub(full.pts[Math.min(k + 1, segs)], full.pts[Math.max(k - 1, 0)]));
+    const q = fs[k] / fs[segs], w1 = q * (4 - 3 * q);
+    return [mul(T, dot(T, P) * w1), mul(T, dot(T, Q) * w1)];
+  };
+  const JP = [[0, 0, 0]], JQ = [[0, 0, 0]];
+  for (let k = 1; k <= segs; k++) {
+    const [a0, b0] = along(k - 1), [a1, b1] = along(k), h = (0.5 * (fs[k] - fs[k - 1])) / fs[segs];
+    JP.push(add(JP[k - 1], mul(add(a0, a1), h)));
+    JQ.push(add(JQ[k - 1], mul(add(b0, b1), h)));
+  }
+  const jAt = (q) => {
+    let k = 1;
+    while (k < segs && fs[k] / fs[segs] < q) k++;
+    const t = Math.min(Math.max((q * fs[segs] - fs[k - 1]) / (fs[k] - fs[k - 1]), 0), 1);
+    return [...mix3(JP[k - 1], JP[k], t), 0, ...mix3(JQ[k - 1], JQ[k], t), 0];
+  };
+  leafRow(leaves, li * LEAF_STRIDE, { ...g, foot: full.pts[0], base: full.pts[segs], S, P, Ls, Lb, tip: shape.at(1, 0), dir: shape.b.dir, jP: JP[segs], jQ: JQ[segs] });
+  // (In step with its neighbour: its phase and rate.)
+  if (g.with !== undefined) for (const k of [16, 17]) leaves[li * LEAF_STRIDE + k] = leaves[g.with * LEAF_STRIDE + k];
+  const vb = Ls / (Ls + Lb);
+  const turn = bladeTurn(shape.b);
+  // (A blade's vertex: where along it, its frame there, and where it lies off the midrib: across
+  // it and off its plane.)
+  const blade = (k, u) => {
+    const [T, X, N] = bladeFrame(shape, u);
+    const o = sub([mb.p[k * 3], mb.p[k * 3 + 1], mb.p[k * 3 + 2]], shape.frame(u).c);
+    mv[k] = [li, vb + (1 - vb) * u, u, dot(o, X), ...frameQuat(T, X, N), turn.turn(u) / Lb, turn.Kc(u), turn.Ks(u), dot(o, N), 0, 0, 0, 0, 0, 0, 0, 0];
+  };
+  for (const [k, u] of bv) blade(k, u);
+  // The stalk: its petiole by its length along (q, 0..1), its ridge under the blade as the blade.
+  const s = [0];
+  for (let k = 1; k <= line.segs; k++) s.push(s[k - 1] + len(sub(line.pts[k], line.pts[k - 1])));
+  rings.rings.forEach((ring, k) => {
+    const ids = typeof ring === 'number' ? [ring] : ring;
+    if (k <= line.segs) {
+      const T = rings.T[k], U = square(rings.U[k], T);
+      const q = frameQuat(T, U, cross(T, U));
+      const c = line.pts[k], j = jAt(s[k] / s[line.segs]);
+      for (const i of ids) mv[i] = [li, (s[k] / s[line.segs]) * vb, -1, 0, ...q, ...sub([mb.p[i * 3], mb.p[i * 3 + 1], mb.p[i * 3 + 2]], c), 0, ...j];
+      return;
+    }
+    const u = ((k - line.segs) / line.n) * line.midrib;
+    for (const i of ids) blade(i, u);
+  });
+}
+
+/** The mesh's motion (mesh.motion): its vertices' entries (mv, by vertex; the still ones, leaf -1)
+ *  and its leaves' table. */
+function motionOf(vertexCount, mv, leaves) {
+  const vertex = new Float32Array(vertexCount * MOTION_VERTEX_STRIDE);
+  for (let v = 0; v < vertexCount; v++) {
+    if (mv[v]) vertex.set(mv[v], v * MOTION_VERTEX_STRIDE);
+    else {
+      vertex[v * MOTION_VERTEX_STRIDE] = -1;
+      vertex[v * MOTION_VERTEX_STRIDE + 7] = 1;
+    }
+  }
+  return { vertex, leaves };
+}
+
+/** A tessellation count at detail d (n at 1), no fewer than lo. */
+const tess = (n, d, lo) => Math.max(lo, Math.round(n * d));
+/** An even one (a blade's columns keep one on its midrib). */
+const tessEven = (n, d, lo) => Math.max(lo, 2 * Math.round((n * d) / 2));
 
 /** Pulls p in from the glass (round the bowl's axis) to keep it clear. */
 function offGlass(p, clear = GLASS_CLEAR - 0.01) {
@@ -318,20 +457,23 @@ function offGlass(p, clear = GLASS_CLEAR - 0.01) {
 }
 
 /** A root from inside a crown at c (of radius rc): out along the sand's top, only its back showing,
- *  for `run`, then down into the sand, wavering, tapering to a point; kept clear of the glass. */
-function root(mb, c, out, rc, run, r0, id, rand) {
+ *  for `run`, then down into the sand, wavering, tapering to a point; kept clear of the glass.
+ *  detail: its tessellation (see build). */
+function root(mb, c, out, rc, run, r0, id, rand, detail) {
   const sunk = BED_LEVEL - 0.9 * r0;
   const side = norm(cross(out, UP));
   const bend = 0.3 * (rand() - 0.5);
   const at = (d, y, w = 0) => [c[0] + out[0] * d + side[0] * w, y, c[2] + out[2] * d + side[2] * w];
   const key = [c, at(0.9 * rc, sunk + 0.7 * r0), at(rc + 0.5 * run, sunk, bend * run), at(rc + run, sunk, 1.6 * bend * run),
     at(rc + run + 0.012, sunk - 0.03, 2 * bend * run), at(rc + run + 0.018, sunk - 0.07, 2.2 * bend * run)];
-  const pts = catmull(key, 5).map((p, i) => {
-    const w = i > 6 ? 0.0025 : 0;
-    return offGlass(add(p, [w * noise3(i * 0.35, id, 1.1), 0.4 * w * noise3(i * 0.35, id, 4.2), w * noise3(i * 0.35, id, 7.3)]));
+  const per = tess(5, detail, 2);
+  const pts = catmull(key, per).map((p, i) => {
+    const e = (i * 5) / per;
+    const w = e > 6 ? 0.0025 : 0;
+    return offGlass(add(p, [w * noise3(e * 0.35, id, 1.1), 0.4 * w * noise3(e * 0.35, id, 4.2), w * noise3(e * 0.35, id, 7.3)]));
   });
   const rad = pts.map((_, i) => (i === pts.length - 1 ? 0 : r0 * (1.1 - 0.65 * (i / pts.length))));
-  tube(mb, pts, rad, 6, MAT.ROOT, id, UP);
+  tube(mb, pts, rad, tess(6, detail, 4), MAT.ROOT, id, UP);
 }
 
 // ---- where the neighbours lie (the layout's, roughly: for keeping clear of them) --------------
@@ -443,8 +585,10 @@ function bladeSamples(shape, nu, nv) {
  * rise}; each round tries every move (a change to q, then what it costs) and takes the one that
  * helps most, until the leaf keeps clear of the glass, its neighbours and bounds, and (o.crowd) the
  * blades placed before it by o.gap and their stalks by o.stalkGap, or it stops getting better.
- * Still not clear, it tries the wider changes o.wide (as the moves) from the best. Returns the best
- * leaf found and its shape.
+ * Still not clear, it tries the wider changes o.wide (as the moves) from the best; and still not
+ * clear, the widest o.wider (cheapest first), taking the first that clears it, else the one that
+ * comes nearest for what it costs (its shortfall counting three times). Returns the best leaf found
+ * and its shape.
  */
 function fit(make, moves, o) {
   const score = (leaf) => {
@@ -483,6 +627,18 @@ function fit(make, moves, o) {
       const l2 = make(q2), s2 = score(l2);
       const cost = s2.w + d[d.length - 1];
       if (s2.w < best.s.w && (!found || cost < found.cost)) found = { cost, q: q2, leaf: l2, s: s2 };
+    }
+    if (found) best = found;
+  }
+  if (best.s.w > 0 && o.wider) {
+    const from = best;
+    let found = null;
+    for (const d of o.wider) {
+      const q2 = from.q.map((x, i) => x + d[i]);
+      const l2 = make(q2), s2 = score(l2);
+      const cost = 3 * s2.w + d[d.length - 1];
+      if (s2.w < from.s.w && (!found || cost < found.cost)) found = { cost, q: q2, leaf: l2, s: s2 };
+      if (s2.w <= 0) break;
     }
     if (found) best = found;
   }
@@ -554,8 +710,9 @@ const TALL_BOUNDS = { lo: [0.06, -0.7, -0.64], hi: [0.92, 0.2, 0.24] };
 
 /** Its leaves, placed in this order: the petiole's top (where the blade starts), the blade's first
  *  direction, length, width over length, arch, where along the rhizome its petiole rises (0..1),
- *  how far its face turns to the viewer (as well as up), and a young leaf's furl. Larger higher up;
- *  the highest arches out over the driftwood's right half. */
+ *  how far its face turns to the viewer (as well as up), a young leaf's furl, and the leaf it moves
+ *  in step with (see SMALL_MOVE_WITH). Larger higher up; the highest arches out over the
+ *  driftwood's right half. */
 const TALL_LEAVES = [
   { top: [0.42, -0.06, -0.46], dir: [-0.66, 0.6, 0.25], length: 0.44, ratio: 0.5, arch: 0.85, at: 0.24, toward: 1.0 },
   { top: [0.64, -0.1, -0.3], dir: [0.4, 0.75, 0.3], length: 0.41, ratio: 0.48, arch: 0.8, at: 0.74, toward: 0.8 },
@@ -564,7 +721,7 @@ const TALL_LEAVES = [
   { top: [0.56, -0.17, -0.22], dir: [0.55, 0.55, 0.6], length: 0.31, ratio: 0.5, arch: 0.75, at: 0.53, toward: 0.9 },
   { top: [0.67, -0.26, -0.43], dir: [0.1, 0.8, -0.4], length: 0.32, ratio: 0.48, arch: 0.6, at: 0.82, toward: 0.6 },
   { top: [0.64, -0.32, -0.13], dir: [0.75, 0.3, 0.55], length: 0.29, ratio: 0.51, arch: 0.6, at: 0.66, toward: 0.9 },
-  { top: [0.4, -0.2, -0.43], dir: [-0.85, 0.35, -0.05], length: 0.28, ratio: 0.49, arch: 0.6, at: 0.15, toward: 1.0 },
+  { top: [0.4, -0.2, -0.43], dir: [-0.85, 0.35, -0.05], length: 0.28, ratio: 0.49, arch: 0.6, at: 0.15, toward: 1.0, with: 3 },
   { top: [0.72, -0.4, -0.26], dir: [0.45, 0.75, 0.4], length: 0.24, ratio: 0.5, arch: 0.6, at: 0.92, toward: 0.5 },
   { top: [0.575, -0.38, -0.345], dir: [0.05, 0.97, 0.1], length: 0.16, ratio: 0.42, arch: 0.15, at: 0.58, furl: 0.6, toward: 0.5 },
   { top: [0.47, -0.48, -0.3], dir: [-0.1, 0.95, 0.12], length: 0.1, ratio: 0.4, arch: 0.08, at: 0.37, furl: 0.8, toward: 0.5 },
@@ -578,15 +735,17 @@ function steer(dir, turn, raise) {
   return norm(rot(d, norm(k), Math.min(raise, Math.acos(Math.min(d[1], 1)) - 0.05)));
 }
 
-function tallPlant(rand, rootRand) {
+function tallPlant(rand, rootRand, detail) {
   const mb = new MeshBuilder('plantTall');
   const owners = [];
   const patches = [];
   const obstacles = [];
+  const mv = [];
+  const leaves = new Float32Array(TALL_LEAVES.length * LEAF_STRIDE);
   // The rhizome: a short thick creeping stem on the sand, ringed with the crescent scars of old
   // leaves (deepest on the side each grew from, the sides alternating) and wrinkled along its
-  // length. (Sampled evenly along it, five rings to a scar's spacing and one on each scar, so every
-  // scar is cut alike; its rounded ends more finely.)
+  // length. (Sampled evenly along it, five rings to a scar's spacing at full detail and one on each
+  // scar, so every scar is cut alike; its rounded ends more finely.)
   const ra = [0.4, BED_LEVEL + 0.004, -0.285], rb = [0.6, BED_LEVEL + 0.004, -0.36];
   const R = 0.024, SCAR = 0.016;
   const rhizome = (t) => add(mix3(ra, rb, t), [0, 0.006 * Math.sin(Math.PI * t), 0.008 * Math.sin(2 * Math.PI * t)]);
@@ -599,10 +758,14 @@ function tallPlant(rand, rootRand) {
       while (i < 400 && arc[i] < s) i++;
       return (i - 1 + (s - arc[i - 1]) / (arc[i] - arc[i - 1])) / 400;
     };
-    const ss = [];
-    for (let i = 0; i < 8; i++) ss.push(R * (1 - Math.cos((i / 8) * 0.5 * Math.PI)));
-    for (let i = Math.ceil(R / (SCAR / 5)); (i * SCAR) / 5 < rlen - R - 0.001; i++) ss.push((i * SCAR) / 5);
-    for (let i = 8; i >= 0; i--) ss.push(rlen - R * (1 - Math.cos((i / 8) * 0.5 * Math.PI)));
+    const rings = (per, cap) => {
+      const ss = [];
+      for (let i = 0; i < cap; i++) ss.push(R * (1 - Math.cos((i / cap) * 0.5 * Math.PI)));
+      for (let i = Math.ceil(R / (SCAR / per)); (i * SCAR) / per < rlen - R - 0.001; i++) ss.push((i * SCAR) / per);
+      for (let i = cap; i >= 0; i--) ss.push(rlen - R * (1 - Math.cos((i / cap) * 0.5 * Math.PI)));
+      return ss;
+    };
+    const ss = rings(tess(5, detail, 2), tess(8, detail, 3));
     const pts = [], rad = [];
     ss.forEach((s, k) => {
       const end = Math.min(s, rlen - s);
@@ -616,9 +779,10 @@ function tallPlant(rand, rootRand) {
       return 1 - 0.16 * ring * (0.3 + 0.7 * (0.5 + 0.5 * Math.cos(a - side * 1.1)) ** 1.5);
     };
     const wrinkle = (k, a) => scar(k, a) * (1 + 0.04 * noise3(ss[k] * 14, 0.7 * Math.cos(a) + 2.3, 0.7 * Math.sin(a) + 7.1));
-    tube(mb, pts, rad, 18, MAT.ROOT, 0, UP, wrinkle);
+    tube(mb, pts, rad, tess(18, detail, 8), MAT.ROOT, 0, UP, wrinkle);
     mark(mb, owners, 0, 900);
-    tubePatches(pts, R, 900, patches);
+    // (Its shade from where its rings lie at full detail, the same at any detail.)
+    tubePatches(rings(5, 8).map((s) => rhizome(tAt(s))), R, 900, patches);
   }
   // Its roots: a few short thick ones from its underside out along the sand a little (backwards
   // and to the sides, the driftwood's foot being in front), then down into it.
@@ -628,7 +792,7 @@ function tallPlant(rand, rootRand) {
     const start = mb.vertexCount;
     const t = 0.1 + (0.8 * k) / 3 + 0.05 * (rootRand() - 0.5);
     const out = norm(add(mul(back, 0.6 + 0.4 * rootRand()), mul(axis, 1.2 * (rootRand() - 0.5) + (k === 0 ? -1 : k === 3 ? 1 : 0))));
-    root(mb, rhizome(t), out, R, 0.015 + 0.02 * rootRand(), 0.0045 + 0.0015 * rootRand(), 2 + k, rootRand);
+    root(mb, rhizome(t), out, R, 0.015 + 0.02 * rootRand(), 0.0045 + 0.0015 * rootRand(), 2 + k, rootRand, detail);
     mark(mb, owners, start, 901 + k);
   }
   // The leaves, each fitted round the ones before it.
@@ -657,17 +821,19 @@ function tallPlant(rand, rootRand) {
     };
     const { leaf, shape } = fit(make, moves, { margin: 0.02, bounds: TALL_BOUNDS, crowd, gap: 0.02, stalkGap: 0.015, samples });
     const start = mb.vertexCount;
-    bladeMesh(mb, shape, young ? 36 : 90, young ? 20 : 22, MAT.LEAF_BIG);
+    const bv = bladeMesh(mb, shape, tess(young ? 36 : 90, detail, 8), tessEven(young ? 20 : 22, detail, 6), MAT.LEAF_BIG);
     mark(mb, owners, start, i);
     bladePatches(shape, i, patches);
-    // Its petiole.
+    // Its petiole (its line at full detail places the next leaves, its obstacles and shade).
     const s0 = mb.vertexCount;
     const segs = Math.max(14, Math.round(len(sub(l.top, foot)) / 0.012));
-    const pts = leafStalk(mb, shape, leaf.from, rise, {
-      rBase: young ? 0.0072 : 0.0085, rTop: young ? 0.0055 : 0.0062, sides: 8, segs,
-      midrib: young ? 0.4 : 0.6, midribSegs: young ? 10 : 20, sheath: 0.6, sheathLen: 0.045, groove: 0.2,
-    }, i);
+    const o = { rBase: young ? 0.0072 : 0.0085, rTop: young ? 0.0055 : 0.0062, segs, midrib: young ? 0.4 : 0.6, midribSegs: young ? 10 : 20, sheath: 0.6, sheathLen: 0.045 };
+    const full = stalkLine(shape, leaf.from, rise, o, i);
+    const line = detail === 1 ? full : stalkLine(shape, leaf.from, rise, { ...o, segs: tess(segs, detail, 4), midribSegs: tess(o.midribSegs, detail, 3) }, i);
+    const rings = leafStalk(mb, shape, line, { sides: tess(8, detail, 4), groove: 0.2 }, i, 3 / segs);
     mark(mb, owners, s0, 1000 + i);
+    leafMotion(mb, mv, leaves, i, shape, bv, line, rings, full, { crown: TALL_CROWN, plant: 'tall', young, with: l.with });
+    const pts = full.pts;
     tubePatches(pts.slice(0, segs + 1), 0.007, 1000 + i, patches);
     crowdIn(crowd, shape, pts, samples);
     // (Round its petiole above the crown, and its blade; a young furled leaf, stalk and all.)
@@ -680,54 +846,73 @@ function tallPlant(rand, rootRand) {
   });
   obstacles.push({ a: TALL_CROWN, b: add(TALL_CROWN, [0, 0.14, 0]), r: 0.07, solid: 0.03 });
   occlude(mb, owners, patches, 0.2, 1.6);
-  return { mesh: mb.finish(), obstacles };
+  const mesh = mb.finish();
+  mesh.motion = motionOf(mb.vertexCount, mv, leaves);
+  return { mesh, obstacles };
 }
 
 // ---- the small plant ------------------------------------------------------------------------
 
 const SMALL_CROWN = [-0.6, BED_LEVEL, 0.06];
+/** A leaf lying so close to one placed before it that, flapping out of step, the two would pass
+ *  through each other moves in step with it (as leaves crowded in the same water do), found by
+ *  sweeping the motion for blades through one another (plant-motion.test.mjs holds them clear):
+ *  the small plant's, by the order its leaves are placed in (the tall plant's in its table). */
+const SMALL_MOVE_WITH = { 5: 3, 10: 9, 11: 8, 12: 9, 14: 9, 18: 16 };
 /** Where its leaves stay (about). */
 const SMALL_BOUNDS = { lo: [-0.88, BED_LEVEL + 0.012, -0.22], hi: [-0.3, -0.2, 0.4] };
 
-function smallPlant(rand) {
+function smallPlant(rand, detail) {
   const mb = new MeshBuilder('plantSmall');
   const owners = [];
   const patches = [];
   const obstacles = [];
+  const mv = [];
+  const count = 20;
+  const leaves = new Float32Array(count * LEAF_STRIDE);
   // Its crown: a low dome on the sand, the leaves' bases crowded round it.
   {
     const pts = [], rad = [];
-    const K = 20, Rc = 0.0145;
+    const K = tess(20, detail, 6), Rc = 0.0145;
     for (let k = 0; k <= K; k++) {
       const t = k / K;
       pts.push(add(SMALL_CROWN, [0.002 * Math.sin(3 * t), -0.03 + 0.062 * t, 0]));
       const capT = smooth(0.72, 1, t);
       rad.push(k === K ? 0 : Rc * (1 - 0.25 * t) * Math.sqrt(Math.max(1 - capT * capT, 0)) * (1 + 0.06 * noise3(t * 5, 3.3, 1)));
     }
-    tube(mb, pts, rad, 16, MAT.ROOT, 1, [1, 0, 0]);
+    tube(mb, pts, rad, tess(16, detail, 8), MAT.ROOT, 1, [1, 0, 0]);
     mark(mb, owners, 0, 900);
   }
   // (Its roots go out to the open side, away from the driftwood's foot.)
   for (let k = 0; k < 3; k++) {
     const start = mb.vertexCount;
     const a = 1.6 + (k / 2) * 2.4 + 0.3 * (rand() - 0.5);
-    root(mb, add(SMALL_CROWN, [0, 0.004, 0]), [Math.cos(a), 0, Math.sin(a)], 0.012, 0.015 + 0.035 * rand(), 0.0024 + 0.0008 * rand(), 10 + k, rand);
+    root(mb, add(SMALL_CROWN, [0, 0.004, 0]), [Math.cos(a), 0, Math.sin(a)], 0.012, 0.015 + 0.035 * rand(), 0.0024 + 0.0008 * rand(), 10 + k, rand, detail);
     mark(mb, owners, start, 901 + k);
   }
-  const count = 20;
   const tips = [];
   const deg = Math.PI / 180;
   const crowd = new Crowd(0.012);
   const samples = [18, 7];
   const moves = [[0.12, 0, 0, 0, 0], [-0.12, 0, 0, 0, 0], [0.3, 0, 0, 0, 0.001], [-0.3, 0, 0, 0, 0.001], [0, 0.06, 0, 0, 0.0005], [0, -0.06, 0, 0, 0.0005],
     [0, 0, 0.05, 0, 0.002], [0, 0, 0, 0.25, 0.0005], [0, 0, 0, -0.25, 0.0005]];
-  // (Where a leaf finds no room by those, it looks further round, up and down, and rolled.)
-  const wide = [];
+  // (Where a leaf finds no room by those, it looks further round, up and down, and rolled; and an
+  // old outer one, the broadest, the last placed, further still, lower and shorter if it must, so
+  // that no blade passes through another.)
+  const wide = [], wider = [];
   for (let t = -3; t <= 3; t++) {
     for (const up of [-0.15, 0, 0.15]) {
       for (const roll of [-0.4, 0, 0.4]) wide.push([0.15 * t, up, 0, roll, 0.004 * Math.abs(0.15 * t) + 0.006 * Math.abs(up) + 0.003 * Math.abs(roll)]);
     }
   }
+  for (let t = -4; t <= 4; t++) {
+    for (const up of [-0.45, -0.15, 0.15]) {
+      for (const roll of [-0.4, 0, 0.4]) {
+        for (const shrink of [0, 0.15, 0.3]) wider.push([0.3 * t, up, shrink, roll, 0.004 * Math.abs(0.3 * t) + 0.006 * Math.abs(up) + 0.003 * Math.abs(roll) + 0.003 * shrink]);
+      }
+    }
+  }
+  wider.sort((a, b) => a[4] - b[4]);
   // (The young inner leaves are placed first, the outer ones fitted round them.)
   for (let n = 0; n < count; n++) {
     const k = count - 1 - n;
@@ -757,20 +942,22 @@ function smallPlant(rand) {
         furl: 0, veins: 9, id: k, small: true,
       }) };
     };
-    const { leaf, shape } = fit(make, moves, { margin: 0.012, bounds: SMALL_BOUNDS, crowd, gap: 0.009, stalkGap: 0.007, samples, wide });
+    const { leaf, shape } = fit(make, moves, { margin: 0.012, bounds: SMALL_BOUNDS, crowd, gap: 0.009, stalkGap: 0.007, samples, wide, wider: age > 0.9 ? wider : null });
     const start = mb.vertexCount;
-    bladeMesh(mb, shape, 24, 12, MAT.LEAF_SMALL);
+    // (Coarser, it keeps more rows along than across, so its margin stays smooth.)
+    const bv = bladeMesh(mb, shape, tess(24, Math.sqrt(detail), 12), tessEven(12, detail, 6), MAT.LEAF_SMALL);
     mark(mb, owners, start, k);
     bladePatches(shape, k, patches);
     const s0 = mb.vertexCount;
     const segs = Math.max(8, Math.round(len(sub(leaf.b.base, leaf.from)) / 0.008));
-    const pts = leafStalk(mb, shape, leaf.from, leaf.rise, {
-      rBase: 0.0026 + 0.0009 * age, rTop: 0.0021 + 0.0006 * age, sides: 8, segs, midrib: 0.5, midribSegs: 8, sheath: 0.3, sheathLen: 0.02,
-      groove: 0.2,
-    }, 11 + k);
+    const o = { rBase: 0.0026 + 0.0009 * age, rTop: 0.0021 + 0.0006 * age, segs, midrib: 0.5, midribSegs: 8, sheath: 0.3, sheathLen: 0.02 };
+    const full = stalkLine(shape, leaf.from, leaf.rise, o, 11 + k);
+    const line = detail === 1 ? full : stalkLine(shape, leaf.from, leaf.rise, { ...o, segs: tess(segs, detail, 4), midribSegs: tess(8, detail, 3) }, 11 + k);
+    const rings = leafStalk(mb, shape, line, { sides: tess(8, detail, 4), groove: 0.2 }, 11 + k, 3 / segs);
     mark(mb, owners, s0, 1000 + k);
-    tubePatches(pts.slice(0, segs + 1), 0.003, 1000 + k, patches);
-    crowdIn(crowd, shape, pts, samples);
+    leafMotion(mb, mv, leaves, n, shape, bv, line, rings, full, { crown: SMALL_CROWN, plant: 'small', young: false, with: SMALL_MOVE_WITH[n] });
+    tubePatches(full.pts.slice(0, segs + 1), 0.003, 1000 + k, patches);
+    crowdIn(crowd, shape, full.pts, samples);
     tips.push({ tip: shape.at(0.85, 0), pts: bladeSamples(shape, 6, 2) });
   }
   obstacles.push({ a: SMALL_CROWN, b: add(SMALL_CROWN, [0, 0.07, 0]), r: 0.08, solid: 0.02 });
@@ -785,26 +972,43 @@ function smallPlant(rand) {
   }
   // (Its many small leaves crowd close: each shades less than the tall plant's.)
   occlude(mb, owners, patches, 0.12, 0.9);
-  return { mesh: mb.finish(), obstacles };
+  const mesh = mb.finish();
+  mesh.motion = motionOf(mb.vertexCount, mv, leaves);
+  return { mesh, obstacles };
 }
 
-/** @returns {import('./mesh.mjs').ScapePiece} */
-export function build() {
+/**
+ * The plants, each mesh with its motion (mesh.motion: plantMotion.mjs). detail scales their
+ * tessellation (1; 0.5, for phones: about a quarter of the triangles): blade grids, stalk segments
+ * and tube sides. Their leaves, shapes, places, materials' attributes, motion and obstacles are the
+ * same at any detail.
+ * @returns {import('./mesh.mjs').ScapePiece}
+ */
+export function build(options = { detail: 1 }) {
+  // (Anything but a finite number, or no options at all, is full detail.)
+  const detail = Number.isFinite(options?.detail) ? Math.min(Math.max(options.detail, 0.25), 2) : 1;
   // (The tall plant's leaves draw from where its stream stood once its roots, which now have their
   // own, had drawn from it: stream(4111) 36 draws on, so the leaves keep their fitted places.)
-  const tall = tallPlant(stream(1511863939), stream(4127));
-  const small = smallPlant(stream(5227));
+  const tall = tallPlant(stream(1511863939), stream(4127), detail);
+  const small = smallPlant(stream(5227), detail);
   return { meshes: [tall.mesh, small.mesh], obstacles: [...tall.obstacles, ...small.obstacles] };
 }
 
 // ---- materials --------------------------------------------------------------------------------
 
-/** A leaf's material: o.length, a typical blade's (world units), sizes the veins in pixels; o.ratio
- *  its width over its length; o.veins, lateral veins a side; o.young, the first id of the young
- *  furled leaves (paler, yellower); o.tint, its green (sRGB, lit side); o.net and o.bump, how fine
- *  the veinlets' net and the cells' relief are (a world unit); o.rough; o.salt, its leaves' own
- *  random shades; o.small, a small plant's leaves (see outlineOf). */
-const leafWGSL = (name, o) => /* wgsl */ `
+/** A leaf's material: o.length, a typical blade's (world units), sizes the veins in pixels; o.lengths
+ *  (optional), each blade's by its id; o.ratio its width over its length; o.veins, lateral veins a
+ *  side; o.young, the first id of the young furled leaves (paler, yellower); o.tint, its green
+ *  (sRGB, lit side); o.net and o.bump, how fine the veinlets' net and the cells' relief are (a world
+ *  unit); o.rough; o.salt, its leaves' own random shades; o.small, a small plant's leaves (see
+ *  outlineOf). Its patterns are laid on the blade's own chart (along it and across it), not on the
+ *  point in the bowl, so they stay on it as it moves. */
+const leafWGSL = (name, o) => /* wgsl */ `${o.lengths ? `
+fn scape_${name}_length(id: i32) -> f32 {
+  var l = array<f32, ${o.lengths.length}>(${o.lengths.map((x) => x.toFixed(3)).join(', ')});
+  return l[clamp(id, 0i, ${o.lengths.length - 1}i)];
+}
+` : ''}
 fn scape_mat_${name}(attrs: vec4f, p: vec3f, n: vec3f, foot: f32, front: bool) -> ScapeMat {
   let u = clamp(attrs.x, 0.0, 1.0);
   let v = clamp(attrs.y, -1.0, 1.0);
@@ -826,6 +1030,9 @@ fn scape_mat_${name}(attrs: vec4f, p: vec3f, n: vec3f, foot: f32, front: bool) -
   }
   // Across from the midrib in the blade's own length (its length 1).
   let x = av * hw * ${(o.ratio / 2).toFixed(3)};
+  // Where on the blade (world units along and across it, and a plane of its own).
+  let len = ${o.lengths ? `scape_${name}_length(id)` : o.length.toFixed(3)};
+  let ch = vec3f(u * len, v * hw * ${(o.ratio / 2).toFixed(3)} * len, f32(id) * 0.37 + ${(o.salt * 5.1).toFixed(1)});
   // The midrib: drawn no narrower than about a pixel, fainter by as much, so it stays on the midrib.
   let midW = 0.005 + 0.009 * (1.0 - u);
   let midPx = max(midW, 0.9 / px);
@@ -837,7 +1044,7 @@ fn scape_mat_${name}(attrs: vec4f, p: vec3f, n: vec3f, foot: f32, front: bool) -
   var lateral = (1.0 - smoothstep(0.025, 0.08, dv)) * smoothstep(0.03, 0.14, av) * (1.0 - smoothstep(0.8, 0.97, av)) * smoothstep(0.02, 0.1, u);
   lateral = mix(0.08, lateral, smoothstep(1.0, 2.5, 0.1 * px / ${o.veins.toFixed(1)}));
   // The fine net of veinlets between them (its cells warped, so the areoles are irregular).
-  let q = p * ${o.net.toFixed(1)};
+  let q = ch * ${o.net.toFixed(1)};
   let cell = scape_cells3(q + 0.6 * vec3f(scape_noise3(q * 0.35), scape_noise3(q * 0.35 + vec3f(7.1)), scape_noise3(q * 0.35 + vec3f(13.7))));
   var net = 1.0 - smoothstep(0.015, 0.07, cell.y - cell.x);
   net = mix(0.15, net, smoothstep(8.0, 20.0, ${(1 / o.net).toFixed(4)} / max(foot, 1e-6)));
@@ -851,12 +1058,12 @@ fn scape_mat_${name}(attrs: vec4f, p: vec3f, n: vec3f, foot: f32, front: bool) -
   // Darker towards the base and the margins; a living leaf's faint mottling.
   c = mix(c, deep, 0.3 * (1.0 - smoothstep(0.0, 0.3, u)));
   c = mix(c, deep, 0.2 * smoothstep(0.7, 1.0, av));
-  c *= 0.9 + 0.2 * scape_fbm3(p * 35.0 + rnd * 10.0, 2);
+  c *= 0.9 + 0.2 * scape_fbm3(ch * 35.0 + rnd * 10.0, 2);
   c = mix(c, pale, 0.7 * vein);
   c = mix(c, pale, 0.15 * net * (1.0 - vein));
   let young = id >= ${o.young};
   if (young) { c = mix(c, scape_linear(vec3f(0.58, 0.76, 0.2)), 0.55); }
-  var rough = ${o.rough.toFixed(2)} + 0.06 * scape_noise3(p * 20.0);
+  var rough = ${o.rough.toFixed(2)} + 0.06 * scape_noise3(ch * 20.0);
   var spec = 0.04;
   if (!front) {
     // Beneath: paler, matte, its veins standing out.
@@ -867,12 +1074,13 @@ fn scape_mat_${name}(attrs: vec4f, p: vec3f, n: vec3f, foot: f32, front: bool) -
   // Light through the blade: bright yellow-green, less through the veins and the thicker base.
   var trans = scape_linear(vec3f(0.45, 0.65, 0.12)) * (1.0 - 0.55 * vein) * (0.55 + 0.45 * smoothstep(0.0, 0.25, u)) * (1.0 - 0.15 * net);
   if (young) { trans *= 1.25; }
-  // Fine relief: the blade's cells, faded below a few pixels.
+  // Fine relief: the blade's cells, faded below a few pixels (their slopes taken in its chart and
+  // laid square to the normal).
   let k = ${o.bump.toFixed(1)};
   let e = 0.35 / k;
-  let b0 = scape_noise3(p * k);
-  let g = vec3f(scape_noise3((p + vec3f(e, 0.0, 0.0)) * k) - b0, scape_noise3((p + vec3f(0.0, e, 0.0)) * k) - b0,
-    scape_noise3((p + vec3f(0.0, 0.0, e)) * k) - b0) / (e * k);
+  let b0 = scape_noise3(ch * k);
+  let g = vec3f(scape_noise3((ch + vec3f(e, 0.0, 0.0)) * k) - b0, scape_noise3((ch + vec3f(0.0, e, 0.0)) * k) - b0,
+    scape_noise3((ch + vec3f(0.0, 0.0, e)) * k) - b0) / (e * k);
   let relief = 0.04 * smoothstep(2.0, 6.0, 1.0 / (k * max(foot, 1e-6)));
   let nn = normalize(n - (g - n * dot(n, g)) * relief);
   let ao = attrs.w * (1.0 - select(0.0, 0.2 * midrib, front));
@@ -883,7 +1091,7 @@ fn scape_mat_${name}(attrs: vec4f, p: vec3f, n: vec3f, foot: f32, front: bool) -
 /** The tall plant's leaves, the small plant's (a touch brighter), the stalks (paler green, browner
  *  at their sheathing feet) and the rhizome, crown and roots (tan to olive brown). */
 export const WGSL = [
-  leafWGSL('leafBig', { salt: 3, length: 0.34, ratio: 0.46, veins: 13, young: 9, tint: '0.35, 0.62, 0.12', net: 280, bump: 110, rough: 0.36 }),
+  leafWGSL('leafBig', { salt: 3, length: 0.34, lengths: TALL_LEAVES.map((l) => l.length), ratio: 0.46, veins: 13, young: 9, tint: '0.35, 0.62, 0.12', net: 280, bump: 110, rough: 0.36 }),
   leafWGSL('leafSmall', { salt: 5, length: 0.19, ratio: 0.44, veins: 9, young: 99, tint: '0.38, 0.66, 0.13', net: 420, bump: 180, rough: 0.4, small: true }),
   /* wgsl */ `
 fn scape_mat_stem(attrs: vec4f, p: vec3f, n: vec3f, foot: f32, front: bool) -> ScapeMat {
@@ -893,8 +1101,10 @@ fn scape_mat_stem(attrs: vec4f, p: vec3f, n: vec3f, foot: f32, front: bool) -> S
   var c = scape_linear(vec3f(0.5, 0.7, 0.27)) * (0.9 + 0.2 * rnd.y);
   // Its sheathing foot: browner, darker (a short way up the small plant's short stems, ids 11 on).
   c = mix(scape_linear(vec3f(0.36, 0.38, 0.17)), c, smoothstep(0.0, select(0.05, 0.015, id >= 11), s));
-  // Fine ridges along it (faded below a few pixels), and faint flecks.
-  var stria = 0.5 + 0.5 * sin(attrs.y * 9.0 + 3.0 * scape_noise3(p * 40.0));
+  // Fine ridges along it (faded below a few pixels), and faint flecks: on its own chart (along it,
+  // and round it), so they stay on it as it moves.
+  let ch = vec3f(s + f32(id) * 1.37, 0.006 * cos(attrs.y), 0.006 * sin(attrs.y));
+  var stria = 0.5 + 0.5 * sin(attrs.y * 9.0 + 3.0 * scape_noise3(ch * 40.0));
   stria = mix(0.5, stria, smoothstep(1.0, 3.0, 0.004 / max(foot, 1e-6)));
   c *= (0.93 + 0.12 * stria) * (0.94 + 0.12 * scape_noise3(vec3f(s * 60.0, f32(id) * 3.1, 0.5)));
   let trans = scape_linear(vec3f(0.4, 0.6, 0.15)) * 0.4;
