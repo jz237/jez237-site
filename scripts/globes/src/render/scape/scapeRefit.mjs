@@ -42,9 +42,10 @@ export const PLANT_VERT_FLOATS = 8 + MOTION_VERTEX_STRIDE;
 export const PLANT_NODE_U32 = 12;
 /** Bytes between the refit's passes' uniforms (a dynamic offset must be a multiple of 256). */
 export const PLANT_LEVEL_STRIDE = 256;
-/** The workgroup size of the skin and tris kernels; and of the refit's (a level of no more nodes is
- *  refitted by one workgroup, in a run with the levels next to it). */
+/** The workgroup size of the skin and tris kernels. */
 export const PLANT_WORKGROUP = 64;
+/** The refit's: a level of no more nodes is refitted by one workgroup, in a run with the levels
+ *  next to it. */
 export const PLANT_REFIT_WORKGROUP = 256;
 /** The most levels a run of the refit takes (its uniform lists them after its 16 bytes). */
 export const PLANT_RUN_LEVELS = PLANT_LEVEL_STRIDE / 16 - 1;
@@ -93,12 +94,12 @@ const bitsOf = (x) => {
  *   statics   Float32Array, eight a box that does not move (one of zeros if none) -> plantStatic
  *   dPos      Float32Array, four a vertex of the whole BVH (its rest position) -> dPos's start
  * and moving, leafCount, slotCount, touched (the slots with a moving corner), nodeCount, levels
- * ([{ depth, first, count }], deepest first), passes (refitPasses(levels)), ids (each moving vertex's id), rest (their rest
- * positions, xyz each: for plantMotionWGSL), solids (plantSolids(obstacles, rest): what
- * plantMotionWGSL(obstacles, rest) bakes), scales (each leaf's calming, 1 for none), leafTips
- * (Float32Array, four a leaf: its blade's tip at rest and the blade's length; where to sample the
- * water for its lean), triBase, vertBase, vertexCount, meshLeaves (each moving mesh's { mesh,
- * first, count } of the leaves).
+ * ([{ depth, first, count }], deepest first), passes (refitPasses(levels)), ids (each moving
+ * vertex's id), rest (their rest positions, xyz each: for plantMotionWGSL), solids
+ * (plantSolids(obstacles, rest): what plantMotionWGSL(obstacles, rest) bakes), scales (each leaf's
+ * calming, 1 for none), leafTips (Float32Array, four a leaf: its blade's tip at rest and the
+ * blade's length; where to sample the water for its lean), triBase, vertBase, vertexCount,
+ * meshLeaves (each moving mesh's { mesh, first, count } of the leaves).
  */
 export function refitPlan(packed, meshes, isMoving = (m) => !!m.motion, options = {}) {
   const D = packed.data;
