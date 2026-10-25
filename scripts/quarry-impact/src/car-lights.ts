@@ -7,6 +7,8 @@ import * as T from 'three';
 export const LAMP_BREAK=10;
 /** Tail lamp glow: lit for the mood (running) or braking with the lamps on, and braking in daylight, bright enough to read in sun. */
 export const TAIL_GLOW={running:1.1,braking:3.2,daylightBraking:3} as const;
+/** Reversing lamps glow white at REVERSE_GLOW while the car backs up faster than REVERSE_SPEED m/s (offline), day or night. */
+export const REVERSE_GLOW=2.6,REVERSE_SPEED=.6;
 /** A smashed lamp's lens goes dark (its colour times shade) and dull (roughness at least rough): an empty socket and shards. */
 export const BROKEN_LENS={shade:.3,rough:.85} as const;
 /** Rain (offline): drivers run their lamps in the gloom, lenses and tails lit as at dusk, but the pool of light on the
@@ -19,7 +21,7 @@ export const RAIN_BEAMS={length:9,spread:1.1,dip:.06,strength:.3} as const;
 /** A lens reaching past LAMP_BAR.span m either side of the middle is a pair of lamps under one cover: it shines from both
  * ends, LAMP_BAR.inset m in from each. */
 export const LAMP_BAR={span:.25,inset:.18} as const;
-const HEAD=/headlight|(^|\s)lens$/i,TAIL=/brakelight|tail lens/i,NOT_HEAD=/tail|amber|reverse|indicator|signal|brake/i;
+const HEAD=/headlight|(^|\s)lens$/i,TAIL=/brakelight|tail lens/i,NOT_HEAD=/tail|amber|reverse|indicator|signal|brake/i,REVERSE=/reverse/i;
 let poolTexture:T.Texture|null=null;
 function lightPool(){
  if(poolTexture||typeof document==='undefined')return poolTexture;
@@ -37,7 +39,9 @@ export function headlightAim(front:number,left:number,right:number){
  const c=(v:number)=>Math.max(0,Math.min(1,Number.isFinite(v)?v:0)),f=c(front);
  return{yaw:(c(right)-c(left))*HEADLIGHT_AIM.yaw*(.5+f)+(f>0?HEADLIGHT_AIM.yaw*.25*f*(c(right)>=c(left)?1:-1):0),reach:1-HEADLIGHT_AIM.short*f};
 }
-export type CarLights={readonly head:number;readonly tail:number;readonly working:number;readonly lit:boolean;
+export type CarLights={readonly head:number;readonly tail:number;readonly reverse:number;readonly working:number;readonly lit:boolean;
+ /** Reversing lamps on while the car backs up. */
+ reversing(on:boolean):void;readonly backing:boolean;
  /** Lamps on or off, braking, and the road pool's strength 0–1 (1 at dusk). */
  set(on:boolean,braking?:boolean,pool?:number,beam?:number):void;aim(yaw:number,reach:number):void;dispose():void;
  /** Told where a lamp is when it first breaks (its lens centre in the world), head or tail. */
@@ -47,22 +51,26 @@ export type CarLights={readonly head:number;readonly tail:number;readonly workin
  /** Push where this car's lamps are shining from now (world space): each side's lit, unsmashed headlamps, and tail lamps
   * while lit or braking, with the way each faces on the ground (dx, dz) and whether the tails are braking. */
  glows(out:{x:number;y:number;z:number;tail:boolean;brake?:boolean;dx?:number;dz?:number}[],root:T.Object3D):void};
-export function attachCarLights(root:T.Object3D,halfLength:number):CarLights{
+/** Lens fitted inboard of each tail lamp on a car built without reversing lamps (offline): REVERSE_FIT m across and
+ * high, REVERSE_FIT.inset m in from the tail lamp's middle. */
+export const REVERSE_FIT={width:.1,height:.05,depth:.012,inset:.14,drop:.015,proud:.006,minX:.3} as const;
+export function attachCarLights(root:T.Object3D,halfLength:number,options:{fitReverse?:boolean}={}):CarLights{
  root.updateMatrixWorld(true);
  const inverse=root.matrixWorld.clone().invert(),centre=new T.Vector3(),box=new T.Box3();
  // The road under the car (its lowest point, the tyres) in the root's space: the pool of light lies just above it.
  const floor=new T.Box3().setFromObject(root).min.y-root.getWorldPosition(new T.Vector3()).y,poolY=(Number.isFinite(floor)?floor:0)+.06;
- const heads:T.Mesh[]=[],tails:T.Mesh[]=[];
+ const heads:T.Mesh[]=[],tails:T.Mesh[]=[],reverses:T.Mesh[]=[];
  root.traverse(o=>{
   if(!(o instanceof T.Mesh)||Array.isArray(o.material))return;const name=(o.material as T.Material).name??'';
   box.setFromObject(o).getCenter(centre);centre.applyMatrix4(inverse);
   if(HEAD.test(name)&&!NOT_HEAD.test(name)&&centre.z>halfLength*.35)heads.push(o);
   else if(TAIL.test(name)&&centre.z< -halfLength*.35)tails.push(o);
+  else if(REVERSE.test(name)&&centre.z< -halfLength*.35)reverses.push(o);
  });
  // Each car gets its own lamp materials so one car's lights never switch another's.
  const owned:T.Material[]=[];
  const own=(mesh:T.Mesh,color:number)=>{const m=(mesh.material as T.MeshStandardMaterial).clone();m.emissive=new T.Color(color);m.emissiveIntensity=0;mesh.material=m;owned.push(m);return m;};
- const headMats=heads.map(m=>own(m,0xfff1d0)),tailMats=tails.map(m=>own(m,0xff2a1a));
+ const headMats=heads.map(m=>own(m,0xfff1d0)),tailMats=tails.map(m=>own(m,0xff2a1a)),reverseMats=reverses.map(m=>own(m,0xfff6ea));
  const pool=lightPool(),poolMaterial=new T.MeshBasicMaterial({map:pool,color:0xffffff,transparent:true,opacity:0,blending:T.AdditiveBlending,depthWrite:false,toneMapped:false}),poolGeometry=new T.PlaneGeometry(4.6,11);
  const poolMesh=new T.Mesh(poolGeometry,poolMaterial);poolMesh.name='car_light_pool';poolMesh.rotation.x=-Math.PI/2;poolMesh.position.set(0,poolY,halfLength+5.2);poolMesh.renderOrder=2;poolMesh.visible=false;poolMesh.frustumCulled=true;
  if(pool&&heads.length)root.add(poolMesh);
@@ -82,10 +90,23 @@ export function attachCarLights(root:T.Object3D,halfLength:number):CarLights{
  // Each side's lamps and their middle, for the light they throw.
  const sidesOf=(list:T.Mesh[])=>([-1,1] as const).map(side=>{const ls=lampPoints(list).filter(l=>Math.sign(l.c.x||1)===side);
   return ls.length?{at:ls.reduce((sum,l)=>sum.add(l.c),new T.Vector3()).multiplyScalar(1/ls.length),lamps:ls.map(l=>l.i)}:null;}).filter(b=>b!==null);
- const headSides=sidesOf(heads),tailSides=sidesOf(tails),glowAt=new T.Vector3(),facing=new T.Vector3();
+ const headSides=sidesOf(heads),tailSides=sidesOf(tails),glowAt=new T.Vector3(),facing=new T.Vector3();let backing=false;
+ // A car built without reversing lamps gets a small clear lens fitted inboard of each tail lamp; it goes with that lamp.
+ const fitted=new Map<T.Mesh,{tail:T.Mesh;parent:T.Object3D|null}>(),fitGeometry=new T.BoxGeometry(REVERSE_FIT.width,REVERSE_FIT.height,REVERSE_FIT.depth);
+ if(options.fitReverse&&!reverses.length)for(const side of tailSides){
+  if(Math.abs(side.at.x)<REVERSE_FIT.minX)continue;const tail=tails[side.lamps[0]];let rear=Infinity;
+  for(const i of side.lamps){box.setFromObject(tails[i]);for(const z of [box.min.z,box.max.z])rear=Math.min(rear,new T.Vector3(0,0,z).applyMatrix4(inverse).z);}
+  const material=new T.MeshStandardMaterial({name:'Reverse lens (fitted)',color:0xd9dcdf,roughness:.15,metalness:.1,emissive:new T.Color(0xfff6ea),emissiveIntensity:0});owned.push(material);reverseMats.push(material);
+  const lens=new T.Mesh(fitGeometry,material);lens.name='reverse_lens_fitted';lens.position.set(side.at.x-Math.sign(side.at.x)*REVERSE_FIT.inset,side.at.y-REVERSE_FIT.drop,(Number.isFinite(rear)?rear:side.at.z)-REVERSE_FIT.proud);
+  root.add(lens);reverses.push(lens);fitted.set(lens,{tail,parent:tail.parent});
+ }
+ const reverseSides=sidesOf(reverses);
+ // A fitted lens is gone with its tail lamp: smashed, knocked off or left hanging.
+ const reverseOut=(m:T.Mesh)=>{const f=fitted.get(m);return f?!f.tail.visible||f.tail.parent!==f.parent||(f.tail.userData.damage??0)>LAMP_BREAK:smashed(m);};
  let lit=false,brake=false,broken=-1,level=1,beamLevel=0;
  const smashed=(m:T.Mesh)=>!m.visible||(m.userData.damage??0)>LAMP_BREAK;
- const api:CarLights={head:heads.length,tail:tails.length,get working(){return heads.filter(m=>!smashed(m)).length;},get lit(){return lit;},
+ const api:CarLights={head:heads.length,tail:tails.length,reverse:reverses.length,get backing(){return backing;},
+  reversing(on){const lit=!!on;for(const [lens,f] of fitted)lens.visible=f.tail.visible&&f.tail.parent===f.parent;if(lit===backing&&!lit)return;backing=lit;reverseMats.forEach((m,i)=>{m.emissiveIntensity=lit&&!reverseOut(reverses[i])?REVERSE_GLOW:0;});},get working(){return heads.filter(m=>!smashed(m)).length;},get lit(){return lit;},
   set(on,braking=false,poolLevel=1,beam=0){
    const strength=Number.isFinite(poolLevel)?Math.max(0,Math.min(1,poolLevel)):1,shine=Number.isFinite(beam)?Math.max(0,Math.min(1,beam)):0;
    let mask=0;heads.forEach((m,i)=>{if(smashed(m))mask|=1<<i;});tails.forEach((m,i)=>{if(smashed(m))mask|=1<<(i+16);});
@@ -108,10 +129,12 @@ export function attachCarLights(root:T.Object3D,halfLength:number):CarLights{
   },
   lamp(kind,index){return (kind==='head'?heads:tails)[index];},
   glows(out,root){
-   if(!lit&&!brake)return;root.updateMatrixWorld();facing.set(0,0,1).transformDirection(root.matrixWorld).setY(0);if(facing.lengthSq()<1e-6)facing.set(0,0,1);facing.normalize();
+   if(!lit&&!brake&&!backing)return;root.updateMatrixWorld();facing.set(0,0,1).transformDirection(root.matrixWorld).setY(0);if(facing.lengthSq()<1e-6)facing.set(0,0,1);facing.normalize();
    if(lit)for(const side of headSides)if(side.lamps.some(i=>!(broken&1<<i))){glowAt.copy(side.at).applyMatrix4(root.matrixWorld);out.push({x:glowAt.x,y:glowAt.y,z:glowAt.z,tail:false,dx:facing.x,dz:facing.z});}
-   for(const side of tailSides)if(side.lamps.some(i=>!(broken&1<<(i+16)))){glowAt.copy(side.at).applyMatrix4(root.matrixWorld);out.push({x:glowAt.x,y:glowAt.y,z:glowAt.z,tail:true,brake,dx:-facing.x,dz:-facing.z});}
+   if(lit||brake)for(const side of tailSides)if(side.lamps.some(i=>!(broken&1<<(i+16)))){glowAt.copy(side.at).applyMatrix4(root.matrixWorld);out.push({x:glowAt.x,y:glowAt.y,z:glowAt.z,tail:true,brake,dx:-facing.x,dz:-facing.z});}
+   // Backing up, the reversing lamps shine white behind the car.
+   if(backing)for(const side of reverseSides)if(side.lamps.some(i=>!reverseOut(reverses[i]))){glowAt.copy(side.at).applyMatrix4(root.matrixWorld);out.push({x:glowAt.x,y:glowAt.y,z:glowAt.z,tail:false,dx:-facing.x,dz:-facing.z});}
   },
-  dispose(){poolMesh.removeFromParent();poolGeometry.dispose();poolMaterial.dispose();for(const b of beams)b.mesh.removeFromParent();beamGeometry.dispose();beamMaterial.dispose();for(const m of owned)m.dispose();}};
+  dispose(){for(const lens of fitted.keys())lens.removeFromParent();fitGeometry.dispose();poolMesh.removeFromParent();poolGeometry.dispose();poolMaterial.dispose();for(const b of beams)b.mesh.removeFromParent();beamGeometry.dispose();beamMaterial.dispose();for(const m of owned)m.dispose();}};
  return api;
 }
