@@ -1,6 +1,7 @@
+import {primesTank} from './blow-up';
 import * as T from 'three';
 import type { Vehicle } from './vehicle';
-import { VehicleThermalState } from './vehicle-thermal-state';
+import { VehicleThermalState, RAIN_FIRE } from './vehicle-thermal-state';
 import {fireProfile} from './vehicle-fire-profile';
 import {fireNoise} from './fire-noise';
 import {bakedVehicleFX,prepareBakedVehicleFX} from './baked-vehicle-fx';
@@ -8,12 +9,20 @@ import {DAYLIGHT_DIRECTION} from './static-shadows';
 import {burnLevel,type GroundFire} from './fluid-leaks';
 
 type Puff = {p:T.Vector3;v:T.Vector3;anchor:T.Vector3;site:number;age:number;life:number;size:number;seed:number;kind:number;owner:number;strength:number;depth:number;heat:number;aspect:number;soot:number};
-type Emitter = {car:Vehicle;state:VehicleThermalState;origin:T.Vector3;smoke:number;flame:number;embers:number;impactSerial:number;profile:ReturnType<typeof fireProfile>;sites:{position:T.Vector3;weight:number;name:string}[]};
+type Emitter = {car:Vehicle;state:VehicleThermalState;origin:T.Vector3;smoke:number;flame:number;embers:number;steam?:number;impactSerial:number;profile:ReturnType<typeof fireProfile>;sites:{position:T.Vector3;weight:number;name:string}[]};
 export type ThermalAudio = {id:number;position:T.Vector3;heat:number;burst:number};
 
 /** Bounded, sorted volumetric billboards. Each fragment integrates a turbulent
  * density field through the puff instead of drawing a flat opaque texture. */
 export class VehicleFire {
+  /** Where fire smoke leans (m/s): car fires' smoke and burning puddles' plumes, with gusts on both axes once an event's
+   * breeze is set (setWind); the old fixed lean otherwise. */
+  private smokeDrift={x:.5,z:-.2};private plumeDrift={x:.4,z:0};private gustBoth=false;
+  /** Raining on the event (offline): fires catch less, burn out sooner and hiss steam (RAIN_FIRE). */
+  wet=false;
+  /** Steam puffs hissed off fires by the rain (QA). */
+  rainSteam=0;
+  setWind(w:{x:number;z:number}|null,share=1){if(w){this.smokeDrift={x:w.x*share,z:w.z*share};this.plumeDrift={x:w.x*share,z:w.z*share};this.gustBoth=true;}else{this.smokeDrift={x:.5,z:-.2};this.plumeDrift={x:.4,z:0};this.gustBoth=false;}}
   static loadBaked=prepareBakedVehicleFX;
   readonly capacity = 640;
   /** Burning oil and fuel on the ground: rebuilt from the slick burn state every frame, live and in replays. */
@@ -182,12 +191,16 @@ export class VehicleFire {
       const impact=car.impactSerial!==e.impactSerial?car.lastDamage:Math.max(0,state.health-car.health);
       // A car left standing in burning oil or fuel catches fire itself (offline only).
       if(car.extendedDamage&&car.igniteRequest){car.igniteRequest=false;state.ignite();}
-      // Driving through water puts the fire out.
-      if(car.extendedDamage&&car.douseRequest){car.douseRequest=false;if(state.douse())car.onDoused?.();}
-      if(car.extendedDamage&&car.fuelLeak>.3)state.primeFuelBlast();
-      car.fireHeat=state.heat;
+      // Driving through water, or the fire extinguisher, puts the fire out.
+      if(car.extendedDamage&&(car.douseRequest||car.extinguishRequest)){car.douseRequest=false;car.extinguishRequest=false;if(state.douse())car.onDoused?.();}
+      // Leaking fuel, a dropped tank or a long fire primes the tank to go up (offline).
+      if(car.extendedDamage&&state.burning&&primesTank(car.fuelLeak,car.tankDown,state.burnTime))state.primeFuelBlast();
+      car.fireHeat=state.heat;car.onFire=state.burning;
       if(state.burning)car.cook?.(state.heat,dt,e.profile.engineZone==='rear');
+      state.wet=this.wet&&car.extendedDamage;
       const ignition=state.advance(car.health,dt,impact,zones,e.profile.engineZone,e.profile.waterCooled,car.extendedDamage?car.engineDamage:undefined);e.impactSerial=car.impactSerial;
+      // Rain on the flames hisses off in steam.
+      if(state.wet&&state.burning&&state.heat>.1){e.steam=(e.steam??0)+dt*RAIN_FIRE.steam*state.heat;while(e.steam>=1){e.steam--;this.rainSteam++;this.spark(new T.Vector3(0,.9,0).add(e.origin),1,5,.6);}}
       car.wreckFinish?.advance(state.heat,dt);
       if(ignition){for(let j=0;j<16;j++)this.spawn(e,2,true);for(let j=0;j<8;j++)this.spawn(e,0,true);this.spark(e.origin,32,1,4.5);this.bursts.push({id:car.id,position:e.origin.clone(),heat:state.heat,burst:1});}
       const scale=this.quality==='medium'?.6:1;
@@ -200,7 +213,7 @@ export class VehicleFire {
     for(const p of this.particles){if(p.life<=0)continue;p.age+=dt;if(p.age>=p.life){p.life=0;continue;}
       if(p.kind===1){const site=this.emitters.get(p.owner)?.sites[p.site];if(site){p.p.add(site.position).sub(p.anchor);p.anchor.copy(site.position);}}
       p.p.addScaledVector(p.v,dt);
-      if(p.kind===0){const gust=.5+Math.sin(this.time*.31)*.23;p.v.x+=(gust+Math.sin(p.age*1.8+p.seed)*.45-p.v.x)*dt*.65;p.v.z+=(-.2+Math.cos(p.age*1.6+p.seed)*.38-p.v.z)*dt*.6;p.v.y+=(1.3+p.heat*.55-p.v.y)*dt*.5;}
+      if(p.kind===0){const g=1+Math.sin(this.time*.31)*.46;p.v.x+=(this.smokeDrift.x*g+Math.sin(p.age*1.8+p.seed)*.45-p.v.x)*dt*.65;p.v.z+=(this.smokeDrift.z*(this.gustBoth?g:1)+Math.cos(p.age*1.6+p.seed)*.38-p.v.z)*dt*.6;p.v.y+=(1.3+p.heat*.55-p.v.y)*dt*.5;}
       else {p.v.x*=Math.exp(-dt*.6);p.v.z*=Math.exp(-dt*.6);p.v.y+=dt*.45;}
     }
   }
@@ -229,7 +242,7 @@ export class VehicleFire {
           p.size=kind===1?(.16+.25*f.radius+seed*.1)*(f.kind===2?1.15:1):.55+.5*f.radius+seed*.2;
           // Smoke drifts downwind and billows apart as it climbs, rather than standing as a pillar.
           const sway=kind===0?age*(.18+.16*Math.sin(seed*20)):0;
-          p.p.set(f.x+Math.cos(angle)*reach+(kind===0?age*.4+Math.cos(seed*20)*sway:0),f.y+.05+age*(kind===1?1.1:1.25),f.z+Math.sin(angle)*reach+Math.sin(seed*20)*sway);
+          p.p.set(f.x+Math.cos(angle)*reach+(kind===0?age*this.plumeDrift.x+Math.cos(seed*20)*sway:0),f.y+.05+age*(kind===1?1.1:1.25),f.z+Math.sin(angle)*reach+(kind===0?age*this.plumeDrift.z:0)+Math.sin(seed*20)*sway);
         }
       }
     }

@@ -2,12 +2,18 @@ import {unitNoise} from './vehicle-fire-profile';
 export const FIRE_CHANCE=.24,EXPLOSION_CHANCE=.12;
 /** Engine-bay smoke from engine damage: none below onset, rising to max. */
 export const ENGINE_SMOKE={onset:.4,gain:.75,max:.42} as const;
+/** Rain on a car fire (offline rain, `wet`): a wrecked engine catches RAIN_FIRE.chance as often, and a fire burns through its
+ * fuel RAIN_FIRE.burn times as fast, so it dies down sooner (a primed fuel tank still goes up on time); the rain hitting the
+ * flames hisses off in steam, up to RAIN_FIRE.steam puffs a second at full heat. */
+export const RAIN_FIRE={chance:.6,burn:1.6,steam:7} as const;
 export type DamageZones={front:number;rear:number;left:number;right:number;roof:number};
 const noDamage:DamageZones={front:0,rear:0,left:0,right:0,roof:0};
 /** One ignition assessment per severe engine/fuel damage episode. */
 export class VehicleThermalState {
   health=100;heat=0;smoke=0;soot=0;burst=0;exploded=false;age=0;criticalTime=0;
   burning=false;burnTime=0;ignitionTime=0;
+  /** Raining on the car (offline): see RAIN_FIRE. */
+  wet=false;
   private episode=0;private eligible=false;private assessed=false;private explosive=false;
   private delay=5;private burstDelay=18;private fuelTime=40;
   /** Seconds into the burn when a ruptured fuel tank goes up (undefined = no leaking tank). */
@@ -19,10 +25,10 @@ export class VehicleThermalState {
     health=Math.max(0,Math.min(100,Number.isFinite(health)?health:this.health));
     if(health>this.health+1)this.reset(health);
     const severe=health<=18&&(zones[engineZone]>=30||zones[engineZone==='front'?'rear':'front']>=36),n=(offset:number)=>unitNoise(this.seed+this.episode*1.173+offset);
-    if(severe&&!this.assessed){this.assessed=true;this.eligible=n(0)<FIRE_CHANCE;this.explosive=n(9.37)<EXPLOSION_CHANCE;this.delay=3+n(4.71)*8;this.burstDelay=12+n(7.28)*15;this.fuelTime=30+n(12.19)*40;}
+    if(severe&&!this.assessed){this.assessed=true;this.eligible=n(0)<FIRE_CHANCE*(this.wet?RAIN_FIRE.chance:1);this.explosive=n(9.37)<EXPLOSION_CHANCE;this.delay=3+n(4.71)*8;this.burstDelay=12+n(7.28)*15;this.fuelTime=30+n(12.19)*40;}
     if(this.eligible&&severe&&!this.burning){this.ignitionTime+=dt;if(this.ignitionTime+1e-9>=this.delay)this.burning=true;}
     if(this.burning)this.burnTime+=dt;
-    const fuel=this.burning?Math.min(1,Math.max(0,(this.fuelTime-this.burnTime)/9)):0,target=fuel*(.62+n(2.13)*.32);
+    const fuel=this.burning?Math.min(1,Math.max(0,(this.fuelTime-this.burnTime*(this.wet?RAIN_FIRE.burn:1))/9)):0,target=fuel*(.62+n(2.13)*.32);
     this.heat+=(target-this.heat)*(1-Math.exp(-dt*(target>this.heat?1.45:.6)));
     if(this.burning&&this.heat>.65&&health<=6&&fuel>.5)this.criticalTime+=dt;
     const burst=(this.explosive&&!this.exploded&&this.criticalTime+1e-9>=this.burstDelay)||(this.burning&&!this.exploded&&this.fuelBlast!==undefined&&this.burnTime+1e-9>=this.fuelBlast);
