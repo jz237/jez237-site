@@ -95,6 +95,12 @@ test('a reset, or a view that moved, keeps nothing traced before it (four frames
   assert.deepEqual([0, 1, 2, 3].map((i) => s.valid(i)), [0, 1, 2, 3].map((i) => i === phase));
 });
 
+test('while the view moves the lattice holds its place, and goes on from the next phase once still', () => {
+  const s = new Schedule(2);
+  const phases = [true, true, false, false, false, true, true, true].map((still) => s.next(still).phase);
+  assert.deepEqual(phases, [0, 1, 2, 2, 2, 3, 0, 1]);
+});
+
 test('the change test: light that changes by more than tau, or a hit that changes with its colour', () => {
   const a = [1, 1, 1, 1 + HIT.SAND];
   assert.equal(changed(a, a), false);

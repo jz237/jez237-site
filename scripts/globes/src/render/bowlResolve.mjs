@@ -72,6 +72,10 @@ export class Schedule {
     this.k = k;
     this.phases = PHASES[k];
     this.frame = -1;
+    /** The lattice's place: it moves on a phase with each still frame (and holds while the view
+     *  moves: held). */
+    this.step = 0;
+    this.held = false;
     this.restSince = 0;
     /** The frame each phase was last traced in. */
     this.tracedAt = this.phases.map(() => -Infinity);
@@ -88,7 +92,16 @@ export class Schedule {
   next(still) {
     this.frame++;
     if (!still || this.restSince === Infinity) this.restSince = this.frame;
-    const phase = this.frame % this.phases.length;
+    // (While the view moves the lattice stays where it is: nothing traced then is kept, so moving it
+    // on would only fill each frame in from another place, and every edge would buzz with the cycle.
+    // Still again, it goes on from the phase after the one it held, that one just traced.)
+    if (still && this.held) {
+      this.step++;
+      this.held = false;
+    }
+    const phase = this.step % this.phases.length;
+    if (still) this.step++;
+    else this.held = true;
     const oldValid = this.tracedAt[phase] >= this.restSince;
     this.tracedAt[phase] = this.frame;
     return { phase, oldValid };

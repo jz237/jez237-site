@@ -155,7 +155,8 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   // the betta's page draw, and phones have no multisampled canvas unless asked for four.
   const samples = Number(params.get('aa') ?? (LITE || o.start.betta ? 1 : 4));
   const steered = QUALITY && params.get('adapt') !== '0' && !params.has('level');
-  const renderer = new THREE.WebGPURenderer({ device, antialias: !LITE || samples >= 4, alpha: o.alpha, trackTimestamp: import.meta.env.DEV || PROF.on || steered });
+  const multisampled = !LITE || samples >= 4;
+  const renderer = new THREE.WebGPURenderer({ device, antialias: multisampled, alpha: o.alpha, trackTimestamp: import.meta.env.DEV || PROF.on || steered });
   const stageSize = (): [number, number] => {
     const r = stage.getBoundingClientRect();
     return [Math.max(1, Math.round(r.width)), Math.max(1, Math.round(r.height))];
@@ -175,7 +176,9 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   // Its passes then write what each ray ended on. ?up=0 draws it straight into the frame, as desktops
   // do.)
   const up = upSettings(params, LITE);
-  if (bowl) bowl.ids = up.mode > 0 && !o.desk;
+  // (Not into a multisampled frame buffer - a desktop's, ?aa=4 - whose bowl passes would be built
+  // again for its samples, unused.)
+  if (bowl) bowl.ids = up.mode > 0 && !o.desk && !multisampled;
 
   // In the app the globe stands in the deep ocean, specks drifting round it; on the desktop, in
   // front of the wallpaper.

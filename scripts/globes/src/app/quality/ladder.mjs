@@ -21,10 +21,11 @@
 // floor's ratio: they move a few pixels of the water's edge seen from below (0.75: 2% of a portrait
 // frame's pixels, 0.2% by more than 8/255). (Fewer samples of the lamp's haze, the plan's other
 // cheap knob, were left out: at 3 a hot spot under the lamp and moire through the haze, at 2
-// coarser streaks, plain at a phone's size.) (A rung a later package adds - the
-// bowl traced on an interleaved lattice, ?up=2, say - is a rung of its own knobs, { up: 2 } before
-// 'ratio'; main.ts applies each knob a level sets by its name (applyKnobs), so its knob needs an
-// applier there too: up and the output's ratio to world.setRenderMode({ up, output }).)
+// coarser streaks, plain at a phone's size.) (The bowl traced on an interleaved lattice, a quarter
+// of its pixels a frame - render/bowlRender.ts, ?up=2 - is not a rung: phones always draw it so, at
+// every level, and the cost model's cost of a traced pixel takes it in, a steady share. A rung that
+// changes it would be a rung of its own knobs; main.ts applies each knob a level sets by its name,
+// applyKnobs.)
 
 import { FLOOR_RATIO, PHONE as PHONE_STEPS, ratioAt } from '../adaptiveScale.mjs';
 

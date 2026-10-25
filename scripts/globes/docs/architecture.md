@@ -1284,13 +1284,18 @@ byte for byte.
   "an id still beside it" test went too: lines thinner than the lattice (the water's line against the
   glass) never had their id beside them, and were never kept. And drops on the glass and the nest are
   kept like anything else (the plan had them never kept, so wet glass would never be sharp).
-- **Moving.** A frame whose view moved the bowl's picture by more than 0.01 pixel (the camera's turn
+- **Moving.** A frame whose view moved the bowl's picture by more than 0.05 pixel (the camera's turn
   and travel, the bowl's, its lid's; any change of projection, of the lid being there, of its lamp)
   keeps nothing traced before it, nor does the first still frame after (traced with the lattice's
   footprint: while the view moves, `lit.z` is the lattice's, so a picture filled in does not sparkle);
   so a roll, a zoom or the entrance glide is drawn at the lattice's sharpness, filled in, and is sharp
-  again four frames after it stops. A new size or pixel ratio, a new mode, a gap of 250 ms between
-  frames and the first frame start afresh.
+  again four frames after it stops. While it moves the lattice holds its place (Schedule): moved on,
+  each frame was filled in from another place and every edge buzzed with the four-frame cycle
+  (a camera drifting 0.04 px a frame: 17.5k pixels off by more than 8/255 from one grab to the next,
+  against 3.3k drawn straight; held, 5.0k). The bowl rocking back upright after a roll stops dead
+  under a ten-thousandth of a radian (GlobeController), and under 0.05 pixel a frame counts as still,
+  so the long settle after a roll is not drawn at the lattice's sharpness. A new size or pixel ratio,
+  a new mode, a gap of 250 ms between frames and the first frame start afresh.
 - **Measured** (phone emulation at the S25 Ultra's 384x693 CSS px, the RTX 5090; frozen frames:
   `?manual`, seeded, 200 ticks, the same page drawn in each mode, so the same shaders and the same
   world). At rest the picture is the full trace's, pixel for pixel: 0 of 2.1M pixels differ, upright
@@ -1336,9 +1341,10 @@ spends on a frame (desktops keep the scaler; `?quality=0` gives phones the scale
   step a level takes, so it holds at each (a band for a longer step leaves out no more reads: the
   frame is the same). Tried and left out: fewer samples of the lamp's haze (bowl.ts, through
   uBowlDetail.x): at 3, a hot spot under the lamp and moire through the haze; at 2, coarser
-  streaks. The plants every third frame, then 30 fps, are the main thread's ladder (CPU_RUNGS). A
-  later rung (the interleaved bowl, ?up=2) is a rung of its own knobs, `{ up: 2 }`, in PHONE.rungs,
-  with an applier of that name in main.ts's `knobs`.
+  streaks. The plants every third frame, then 30 fps, are the main thread's ladder (CPU_RUNGS).
+  The interleaved bowl (?up=2) is not a rung: phones draw it so at every level, and the cost model
+  takes its steady share of traced pixels into its cost of one. (The march rungs' saving it then
+  overstates a little: the resolve and the composite do not march.)
 - **What it measures** (quality/pageQuality.ts, GpuClock): three's render passes (trackTimestamp,
   now on in production on phones) and the sim's compute passes (FluidSim.setProfiling), one resolve
   in flight at a time, so a frame's times come in a few frames late, about every other frame; on a

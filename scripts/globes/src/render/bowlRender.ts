@@ -63,9 +63,12 @@ const COMPOSITE_LAYER = 3;
 const RESOLVE_LAYER = 4;
 
 /** A frame whose view moved the bowl's picture by less than this (pixels, at most) is still: the
- *  samples traced before it are kept. (The bowl settling after a roll, or the camera after a zoom,
- *  comes to rest slowly, never quite still.) */
-const STILL_PX = 0.01;
+ *  samples traced before it are kept (the change test still takes what moved by more). The bowl
+ *  rocking back upright after a roll, or the camera easing after a zoom, comes to rest slowly, for
+ *  seconds at a fraction of a pixel a frame: counted as moving, all that while it was drawn at the
+ *  lattice's sharpness. (A fifth of a pixel over the four frames a sample is kept; more combed the
+ *  waterline.) */
+const STILL_PX = 0.05;
 /** A gap between frames longer than this (ms: the page hidden, a stall) keeps nothing. */
 const STALL_MS = 250;
 
