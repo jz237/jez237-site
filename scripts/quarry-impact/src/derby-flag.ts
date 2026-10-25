@@ -36,16 +36,17 @@ const now=new T.Vector3(),speed=new T.Vector3(),local=new T.Vector3(),turn=new T
 /** Moves a flag on car (the car's root group) for dt: bends the whip from the root's own motion, streams and flutters the pennant,
  * and snaps the whip for good when out is true. Frames without movement (the simulation frozen) hold it; a jump of teleport metres
  * restarts it. */
-export function waveFlag(flag:T.Object3D,car:T.Object3D,dt:number,out:boolean){
+export function waveFlag(flag:T.Object3D,car:T.Object3D,dt:number,out:boolean,wind?:{x:number;z:number}){
   const s:FlagState=flag.userData.wave??=newFlagState(),whip=flag.getObjectByName('flag_whip'),top=flag.getObjectByName('flag_top'),cloth=flag.getObjectByName('flag_cloth');
   if(!whip||!top||!cloth||!(dt>0))return;
   if(out&&!s.snapped){s.snapped=true;top.rotation.z=FLAG.snap;}
   car.getWorldPosition(now);
   if(s.frames===0||now.distanceTo(s.position)>FLAG.teleport){s.position.copy(now);s.frames=1;return;}
-  if(now.equals(s.position))return;
+  if(now.equals(s.position)&&!wind)return;
   speed.copy(now).sub(s.position).divideScalar(dt);local.copy(speed).sub(s.velocity).divideScalar(dt);s.velocity.copy(speed);s.position.copy(now);
   if(s.frames++<2)return;
-  car.getWorldQuaternion(turn);turn.invert();local.applyQuaternion(turn);const flow=speed.applyQuaternion(turn);
+  // The flag feels the car's speed through the air: its own motion less any breeze.
+  car.getWorldQuaternion(turn);turn.invert();local.applyQuaternion(turn);if(wind)speed.x-=wind.x,speed.z-=wind.z;const flow=speed.applyQuaternion(turn);
   stepFlag(s,local.x+FLAG.drag*flow.x*Math.abs(flow.x),local.z+FLAG.drag*flow.z*Math.abs(flow.z),dt);
   whip.rotation.set(-s.bendZ,0,s.bendX);
   // The pennant streams back from the way the car is going (and idles out to the side), fluttering faster the quicker it goes.

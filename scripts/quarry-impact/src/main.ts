@@ -116,6 +116,7 @@ import {WiperRig,wiperArms,windscreen,wipeStep} from './windscreen-wipers';
 import {steerArms} from './driver-arms';
 import {BONNET_STEAM,bonnetHeat,steamRate} from './bonnet-steam';
 import {vapourRate} from './exhaust-vapour';
+import {WIND,eventWind,gusting} from './wind';
 import {HEAD_GASKET} from './damage-handling';
 const HEAD_GASKET_AFTER=HEAD_GASKET.after;
 import {LEAK as TYRE_LEAK_RANGE} from './damage-handling';
@@ -760,6 +761,8 @@ function activateVenue(venue:VenueContext){
 let staticShadows: StaticQuarryShadows | undefined;
 /** Chosen per event; 'random' never repeats the previous mood. */
 let eventLighting: LightingMood | null = null;
+/** The event's breeze (offline): its base and, gusting, now. */
+const breezeBase={x:0,z:0},breeze={x:0,z:0};let windy=false;
 let clearSky: T.Texture | null = null, overcastSky: T.Texture | null = null;
 function applyEventLighting(fresh: boolean, choice = settings.lighting) {
   if (fresh || !eventLighting) eventLighting = resolveLighting(choice, eventLighting);
@@ -1009,6 +1012,8 @@ async function start(watch=demo) {
   if(watch){activeChallenge=undefined;activeTimeTrial=null;}
   timeTrialOpen=false;timeTrialInvalidReason='';timeTrialResult=null;
   applyEventLighting(true, watch ? demoOptions.lighting ?? settings.lighting : isDailyChallenge(activeChallenge) ? dailyLighting(activeChallenge!.id.slice(DAILY_PREFIX.length)) : settings.lighting);
+  // Each offline event gets its own breeze (stronger in the rain).
+  windy=!online?.active;Object.assign(breezeBase,windy?eventWind(Math.random,eventLighting==='rain'):{x:0,z:0});
   demo=watch;demoRestart=0;director.reset();if(watch)director.select(demoOptions.camera);keys.clear();testInput=null;
   wreckHold = 0;
   if(online?.active) {if(online.network.isHost){online.network.start(mode);return true;}return false;}
@@ -2218,7 +2223,7 @@ function updateCamera(dt: number) {
   // Their hands ride round the wheel as they steer (offline).
   if(state!=='paused')for(const c of cars){if(!c.extendedDamage)continue;const d=c.root.children.find(o=>o.name==='driver');if(d)steerArms(d,c.steering);}
   // Derby flags whip about with their cars and snap once a car is out or upside down.
-  if(state!=='paused')for(const c of cars){const f=c.root.children.find(o=>o.name==='derby_flag');if(f)waveFlag(f,c.root,dt,c.health<=0||c.inverted>.3);}
+  if(state!=='paused')for(const c of cars){const f=c.root.children.find(o=>o.name==='derby_flag');if(f)waveFlag(f,c.root,dt,c.health<=0||c.inverted>.3,windy&&!online?.active?breeze:undefined);}
   // Drivers get out of wrecked cars that are burning or blown up once they have stopped, and walk clear to watch (offline).
   if(state==='playing'||state==='wrecked'){for(const c of cars){if(!c.extendedDamage)continue;const d=c.root.children.find(o=>o.name==='driver');if(!d)continue;
     const t=(c.onFire||c.blownUp)&&c.health<=0&&Math.abs(c.speed)<BAIL.speed?(bailClock.get(c)??0)+dt:0;bailClock.set(c,t);
@@ -2443,6 +2448,9 @@ function frame(now: number) {
     const t=(vapourClocks.get(c)??0)+vapourRate(bonnetHeats.get(c)??BONNET_STEAM.start,c.input?.throttle??0)*dt;vapourClocks.set(c,t%1);if(t<1)continue;vapourPuffs++;
     // From the tailpipe, where a crushed one hangs (vehicle.ts exhaust_pipe).
     steamAt.set(isRearEngineKind(c.kind)?.35:-.35,-.25,-DEFINITIONS[c.kind].halfLength-.1).applyQuaternion(c.root.quaternion).add(c.root.position);fx.emit(steamAt,1,5,.25);}
+  // The event's breeze, gusting: smoke, steam and vapour drift on it, fire smoke leans with it, the rain slants (offline).
+  if(windy&&!online?.active){gusting(breezeBase,clock,breeze);fx.wind.set(breeze.x,breeze.z);vehicleFire?.setWind(breeze,WIND.fire);rain?.setWind(breeze);}
+  else if(fx.wind.x||fx.wind.y){fx.wind.set(0,0);vehicleFire?.setWind(null);rain?.setWind(null);}
   // Up go the umbrellas in the stands when it rains (offline).
   {const up=eventLighting==='rain'&&!online?.active;if(up!==umbrellasUp||activeVenue.root!==umbrellaRoot){umbrellaRoot?.traverse(o=>o.userData.umbrellas?.(false));umbrellaRoot=activeVenue.root;umbrellasUp=up;umbrellaRoot?.traverse(o=>o.userData.umbrellas?.(up));}}
   // The cars are soaked in the rain too: darker paint and mud, a film of water on top (offline).
@@ -2822,6 +2830,7 @@ async function boot() {
     umbrellas: () => { let n = 0; activeVenue.root?.traverse(o => { if (o.name === 'crowd_umbrella' && o.visible) n += (o as T.InstancedMesh).count; }); return n; },
     carWet: (v?: number | null) => { if (v !== undefined) carWetOverride = v; return CAR_WET.value; },
     vapour: () => vapourPuffs,
+    wind: () => windy && !online?.active ? { x: +breeze.x.toFixed(3), z: +breeze.z.toFixed(3), base: { ...breezeBase } } : null,
     headGasket: (id = 0) => { const c = cars[id]; return c ? { clock: +c.gasketClock.toFixed(2), blown: c.gasketBlown, smoke: c.gasketSmoke, coolant: +c.coolantLevel.toFixed(3), misfire: +c.misfireFactor.toFixed(3) } : null; },
     blowGasket: (id = 0) => { const c = cars[id]; if (!c?.extendedDamage) return false; c.gasketClock = HEAD_GASKET_AFTER; return true; },
     bonnetSteam: (id?: number) => { if (id === undefined) return bonnetPuffs; const c = cars[id]; return c ? +(bonnetHeats.get(c) ?? 0).toFixed(3) : null; },

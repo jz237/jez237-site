@@ -293,6 +293,8 @@ void main(){
     }
     this.debris.splice(i, 1);
   }
+  /** The breeze (m/s, x and z) smoke, steam and vapour drift with; still air when zero. */
+  readonly wind = new T.Vector2();
   update(dt: number) {
     this.evidence.advance(dt);this.slicks.advance(dt);
     (this.points.material as T.ShaderMaterial).uniforms.scale.value = window.innerHeight;
@@ -304,6 +306,8 @@ void main(){
         const solid = p.type === 1 || p.type === 3 || p.type === 4;
         p.v.y += (solid ? -9 : p.type === 2 ? .6 : .18) * dt;
         p.v.multiplyScalar(Math.exp(-dt * 0.6));
+        // Smoke, steam and vapour are carried off downwind.
+        if (!solid && (this.wind.x || this.wind.y)) { const k = 1 - Math.exp(-dt * 1.5); p.v.x += (this.wind.x - p.v.x) * k; p.v.z += (this.wind.y - p.v.z) * k; }
         this.positions.set(p.p.toArray(), i * 3);
         this.sizes[i] =
           p.size * (solid ? 1 : 1 + (p.max - p.life) * 1.5);

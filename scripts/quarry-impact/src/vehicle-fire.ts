@@ -15,6 +15,10 @@ export type ThermalAudio = {id:number;position:T.Vector3;heat:number;burst:numbe
 /** Bounded, sorted volumetric billboards. Each fragment integrates a turbulent
  * density field through the puff instead of drawing a flat opaque texture. */
 export class VehicleFire {
+  /** Where fire smoke leans (m/s): car fires' smoke and burning puddles' plumes, with gusts on both axes once an event's
+   * breeze is set (setWind); the old fixed lean otherwise. */
+  private smokeDrift={x:.5,z:-.2};private plumeDrift={x:.4,z:0};private gustBoth=false;
+  setWind(w:{x:number;z:number}|null,share=1){if(w){this.smokeDrift={x:w.x*share,z:w.z*share};this.plumeDrift={x:w.x*share,z:w.z*share};this.gustBoth=true;}else{this.smokeDrift={x:.5,z:-.2};this.plumeDrift={x:.4,z:0};this.gustBoth=false;}}
   static loadBaked=prepareBakedVehicleFX;
   readonly capacity = 640;
   /** Burning oil and fuel on the ground: rebuilt from the slick burn state every frame, live and in replays. */
@@ -202,7 +206,7 @@ export class VehicleFire {
     for(const p of this.particles){if(p.life<=0)continue;p.age+=dt;if(p.age>=p.life){p.life=0;continue;}
       if(p.kind===1){const site=this.emitters.get(p.owner)?.sites[p.site];if(site){p.p.add(site.position).sub(p.anchor);p.anchor.copy(site.position);}}
       p.p.addScaledVector(p.v,dt);
-      if(p.kind===0){const gust=.5+Math.sin(this.time*.31)*.23;p.v.x+=(gust+Math.sin(p.age*1.8+p.seed)*.45-p.v.x)*dt*.65;p.v.z+=(-.2+Math.cos(p.age*1.6+p.seed)*.38-p.v.z)*dt*.6;p.v.y+=(1.3+p.heat*.55-p.v.y)*dt*.5;}
+      if(p.kind===0){const g=1+Math.sin(this.time*.31)*.46;p.v.x+=(this.smokeDrift.x*g+Math.sin(p.age*1.8+p.seed)*.45-p.v.x)*dt*.65;p.v.z+=(this.smokeDrift.z*(this.gustBoth?g:1)+Math.cos(p.age*1.6+p.seed)*.38-p.v.z)*dt*.6;p.v.y+=(1.3+p.heat*.55-p.v.y)*dt*.5;}
       else {p.v.x*=Math.exp(-dt*.6);p.v.z*=Math.exp(-dt*.6);p.v.y+=dt*.45;}
     }
   }
@@ -231,7 +235,7 @@ export class VehicleFire {
           p.size=kind===1?(.16+.25*f.radius+seed*.1)*(f.kind===2?1.15:1):.55+.5*f.radius+seed*.2;
           // Smoke drifts downwind and billows apart as it climbs, rather than standing as a pillar.
           const sway=kind===0?age*(.18+.16*Math.sin(seed*20)):0;
-          p.p.set(f.x+Math.cos(angle)*reach+(kind===0?age*.4+Math.cos(seed*20)*sway:0),f.y+.05+age*(kind===1?1.1:1.25),f.z+Math.sin(angle)*reach+Math.sin(seed*20)*sway);
+          p.p.set(f.x+Math.cos(angle)*reach+(kind===0?age*this.plumeDrift.x+Math.cos(seed*20)*sway:0),f.y+.05+age*(kind===1?1.1:1.25),f.z+Math.sin(angle)*reach+(kind===0?age*this.plumeDrift.z:0)+Math.sin(seed*20)*sway);
         }
       }
     }

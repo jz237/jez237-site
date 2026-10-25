@@ -31,7 +31,7 @@ test('on a moving car the pennant streams back and the whip leans back into the 
 test('offline derby rivals carry a flag set on their roof skin, waved every frame, snapped when out or upside down, freed with the car',()=>{
  const main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8'),vehicle=readFileSync(new URL('../src/vehicle.ts',import.meta.url),'utf8');
  assert.ok(main.includes("const hit=new T.Raycaster(from,down,0,1.6).intersectObjects([...car.panels,...car.glass],false)[0];")&&main.includes("if(hit){const flag=derbyFlag(FLAG_COLOURS[i%FLAG_COLOURS.length]);flag.position.copy(car.root.worldToLocal(hit.point.clone()));car.root.add(flag);}"));
- assert.ok(main.includes("if(state!=='paused')for(const c of cars){const f=c.root.children.find(o=>o.name==='derby_flag');if(f)waveFlag(f,c.root,dt,c.health<=0||c.inverted>.3);}"));
+ assert.ok(main.includes("if(state!=='paused')for(const c of cars){const f=c.root.children.find(o=>o.name==='derby_flag');if(f)waveFlag(f,c.root,dt,c.health<=0||c.inverted>.3,windy&&!online?.active?breeze:undefined);}"));
  assert.ok(main.includes("'roll_cage', 'derby_flag'].includes(o.name)"),'part of the dressing hook');
  assert.ok(vehicle.includes("{const flag=this.root.children.find(o=>o.name==='derby_flag');if(flag)disposeDerbyFlag(flag);}"));
 });
