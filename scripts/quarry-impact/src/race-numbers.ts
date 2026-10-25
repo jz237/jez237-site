@@ -18,3 +18,14 @@ export function withRaceNumbers(livery:readonly LiveryLayer[]|undefined,number:n
  for(const [face,x] of [['left',d.x],['right',1-d.x]] as const)add.push({...layer(face,'circle',x,d.y,d.width+.03,d.height*1.15,RACE_NUMBER.disc),shape:'stripe',name:'SPONSOR PANEL'},{...layer(face,'number',x,d.y,d.width,d.height,RACE_NUMBER.ink,sponsor),shape:'text',name:'SPONSOR'});
  return own.length+add.length>LIVERY_LIMIT?null:[...own,...add];
 }
+/** Spray-painted slogans across a derby rival's bonnet (fictional, chosen by car number, 16 letters at most), read by whoever it is
+ * coming at: the top face runs rear-to-front down its canvas, so the bonnet is its foot. SLOGAN places it (top-face units). */
+export const SLOGANS=['HIT ME','SORRY MOM','LAST RIDE','NO BRAKES','TRY ME','NOT A RENTAL','SEE YA','BUMPER CARS','WIDE LOAD','BYE BYE'] as const;
+export const SLOGAN={x:.5,y:.84,width:.46,height:.075,rotation:0,dark:0x161616,light:0xffe24a} as const;
+/** The livery with a slogan added on the bonnet, in spray yellow on dark paint and black on light paint; null if it has lettering of its
+ * own on the roof face already, the number is bad or no room is left. */
+export function withSlogan(livery:readonly LiveryLayer[]|undefined,number:number,paint:number){
+  const own=livery??[];if(!Number.isInteger(number)||number<1||own.some(l=>!l.hidden&&l.face==='top'&&l.shape==='text')||own.length+1>LIVERY_LIMIT)return null;
+  const light=(.2126*(paint>>16&255)+.7152*(paint>>8&255)+.0722*(paint&255))/255>.5,s=SLOGAN;
+  return [...own,{...layer('top','number',s.x,s.y,s.width,s.height,light?s.dark:s.light,SLOGANS[(number-1)%SLOGANS.length]),shape:'text' as const,name:'SLOGAN',rotation:s.rotation}];
+}

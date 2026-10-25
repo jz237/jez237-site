@@ -114,6 +114,7 @@ import {cabinSmoke} from './cabin-smoke';
 import type {GlassState} from './car-materials';
 import {disposeDriver} from './driver-figure';
 import {roofSign} from './roof-sign';
+import {withSlogan} from './race-numbers';
 import {roofSignFate,foldRoofSign,roofSignBox,disposeRoofSign,type RoofSignFate} from './roof-sign';
 import {withRaceNumbers} from './race-numbers';
 import {BOOM} from './blow-up';
@@ -947,6 +948,9 @@ function createCars(attract = false, previewSetup?:Setup) {
       if(!attract&&!online?.active&&mode==='derby')car.root.add(rollCage(figure.position,Math.abs(Math.min(min.x,max.x))));}
     // Derby rivals carry their car number on the doors and roof, unless their livery already has one (offline).
     if(!attract&&!online?.active&&i>0&&mode==='derby'){const numbered=withRaceNumbers(car.setup.livery,i+1);if(numbered)car.livery.set(numbered);
+      // and a slogan sprayed across the bonnet.
+      {const sloganed=withSlogan(numbered??car.setup.livery,i+1,car.paintColor.getHex());if(sloganed)car.livery.set(sloganed);}
+     
       // and a number board standing on the roof, read from any side.
       car.root.updateMatrixWorld(true);const box=new T.Box3().setFromObject(car.model),top=car.root.worldToLocal(new T.Vector3((box.min.x+box.max.x)/2,box.max.y,(box.min.z+box.max.z)/2));
       const sign=roofSign(i+1);sign.position.set(0,top.y-.02,top.z*.5);car.root.add(sign);}
