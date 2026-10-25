@@ -10,6 +10,11 @@
 // World units (the glass's outer radius is 1, ~12 cm); the bowl's own frame, its axis up.
 
 import { BED_LEVEL } from './scape/mesh.mjs';
+import { nest } from './scape/nest.mjs';
+
+/** The nest's bubbles (scape/nest.mjs), made as the page loads, while the furnishings' worker is
+ *  busy: the page counts them, and writes them into the furnishings' texture (furnishings.ts). */
+export const NEST = nest();
 
 let meshWGSL: string | null = null;
 
@@ -20,67 +25,12 @@ export function setScapeShader(wgsl: string): void {
   meshWGSL = wgsl;
 }
 
-/** A small seeded random stream (the nest is the same on every load). */
-function stream(seed: number): () => number {
-  let s = seed >>> 0;
-  return () => {
-    s = (s + 0x6d2b79f5) >>> 0;
-    let t = Math.imul(s ^ (s >>> 15), 1 | s);
-    t ^= t + Math.imul(t ^ (t >>> 7), 61 | t);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
 /** The bed: the sand's height at rest (FluidSim's sandLevel on this page; scape/mesh.mjs). */
 export const BED = { level: BED_LEVEL };
 
 /** The floating Indian almond (catappa) leaf: a small dried one, ~5 cm, brown, its widest part
  *  towards its tip; its length and half-width, how its sides and ends curl up out of the water. */
 export const LEAF = { length: 0.42, width: 0.115, cup: 0.012, arch: 0.016 };
-
-/** The nest: up to NEST_MAX bubbles (0.7 to 2 mm), in a raft against the glass at the waterline,
- *  NEST_SPAN along the glass and NEST_DEEP out from it, piled two deep in its middle. Its bubbles
- *  in the order the fish builds them (heart first): along the glass, out from it (centre), the
- *  height of its centre over the film, radius. */
-export const NEST_MAX = 170;
-const NEST_SPAN = 0.22;
-const NEST_DEEP = 0.14;
-
-function buildNest(): [number, number, number, number][] {
-  const rand = stream(9013);
-  const out: [number, number, number, number][] = [];
-  for (let tries = 0; tries < 40000 && out.length < NEST_MAX; tries++) {
-    const u = (rand() * 2 - 1) * NEST_SPAN;
-    const v = rand() * NEST_DEEP;
-    // Densest against the glass in the middle; thinning out at the raft's edge.
-    const edge = (u / NEST_SPAN) ** 2 + (v / NEST_DEEP) ** 2;
-    if (edge > 1 || rand() > 1.1 - edge) continue;
-    const r = 0.006 + 0.011 * rand() ** 2.2;
-    const vc = v + r + 0.002;
-    if (out.some(([bu, bv, bh, br]) => bh === 0 && Math.hypot(bu - u, bv - vc) < (br + r) * 0.92)) continue;
-    out.push([u, vc, 0, r]);
-  }
-  // The second layer, on the first in the middle.
-  const first = out.length;
-  for (let tries = 0; tries < 20000 && out.length < NEST_MAX; tries++) {
-    const u = (rand() * 2 - 1) * NEST_SPAN * 0.55;
-    const v = rand() * NEST_DEEP * 0.55;
-    const r = 0.006 + 0.008 * rand() ** 2;
-    const vc = v + r + 0.002;
-    const below = out.slice(0, first).filter(([bu, bv, , br]) => Math.hypot(bu - u, bv - vc) < br + r);
-    if (below.length < 2) continue;
-    if (out.slice(first).some(([bu, bv, , br]) => Math.hypot(bu - u, bv - vc) < (br + r) * 0.92)) continue;
-    const h = Math.max(...below.map(([bu, bv, , br]) => Math.sqrt(Math.max(0, (br + r) ** 2 - (bu - u) ** 2 - (bv - vc) ** 2)) - 0.25 * br));
-    out.push([u, vc, h, r]);
-  }
-  // Heart first (the fish builds from the middle out), shuffled a little.
-  return out
-    .map((b) => ({ b, key: Math.hypot(b[0] / NEST_SPAN, b[1] / NEST_DEEP) + (b[2] > 0 ? 0.35 : 0) + 0.25 * rand() }))
-    .sort((x, y) => x.key - y.key)
-    .map((x) => x.b);
-}
-
-export const NEST = buildNest();
 
 const f = (x: number) => x.toFixed(6);
 
@@ -89,7 +39,6 @@ const f = (x: number) => x.toFixed(6);
  *  functions take points and directions in the translating frame; scapeRot is the bowl's turn. */
 export function bowlScapeWGSL(radius: number, lite = false): string {
   if (meshWGSL === null) throw new Error("bowlScape: the furnishings' shader is not loaded (setScapeShader)");
-  const nest = NEST.map((b) => `vec4f(${f(b[0])}, ${f(b[1])}, ${f(b[2])}, ${f(b[3])})`).join(',\n  ');
   return /* wgsl */ `
 // ---- the betta bowl's contents (src/render/bowlScape.ts) -------------------------------------
 const SCAPE_LEAF_L: f32 = ${f(LEAF.length)};
@@ -97,8 +46,6 @@ const SCAPE_LEAF_W: f32 = ${f(LEAF.width)};
 const SCAPE_LEAF_CUP: f32 = ${f(LEAF.cup)};
 const SCAPE_LEAF_ARCH: f32 = ${f(LEAF.arch)};
 const SCAPE_NEST_N: u32 = ${NEST.length}u;
-const SCAPE_NEST: array<vec4f, ${NEST.length}> = array<vec4f, ${NEST.length}>(
-  ${nest});
 const SCAPE_R: f32 = ${f(radius)};
 
 // Set by globes_shade: the bowl's turn, and what moves (BowlLife.ts): columns 0 and 1 the leaf (its
@@ -273,8 +220,10 @@ fn scape_leafShadow(x: vec3f, L: vec3f) -> vec3f {
 
 // ---- the nest -----------------------------------------------------------------------------
 // Its bubbles along a stretch of ray in the air (p, dir, t in [0, tEnd)): their films reflect a
-// little of the sky to it, each crossing (rgb), and let the rest through (a, the share).
-fn scape_nestAlong(p: vec3f, dir: vec3f, tEnd: f32, bgTex: texture_2d<f32>, bgSamp: sampler) -> vec4f {
+// little of the sky to it, each crossing (rgb), and let the rest through (a, the share). (tex: the
+// furnishings' texture, where its bubbles are rows: scape/nest.mjs. Read there rather than from a
+// constant array, which the loop's index would make a private copy of in every invocation.)
+fn scape_nestAlong(tex: texture_2d<f32>, p: vec3f, dir: vec3f, tEnd: f32, bgTex: texture_2d<f32>, bgSamp: sampler) -> vec4f {
   let count = min(u32(scapeLife[3].x + 0.5), SCAPE_NEST_N);
   if (count == 0u) { return vec4f(0.0, 0.0, 0.0, 1.0); }
   let heart = scapeLife[2].xyz;
@@ -286,8 +235,9 @@ fn scape_nestAlong(p: vec3f, dir: vec3f, tEnd: f32, bgTex: texture_2d<f32>, bgSa
   if (!scape_box(p, dir, lo, hi, tEnd)) { return vec4f(0.0, 0.0, 0.0, 1.0); }
   var col = vec3f(0.0);
   var thr = vec3f(1.0);
+  let rows = u32(scape_meshTexel(tex, 3u).w);
   for (var k = 0u; k < count; k++) {
-    let b = SCAPE_NEST[k];
+    let b = scape_meshTexel(tex, rows + k);
     // (Its heart sits a little in the film: a floating bubble is a little less than half a sphere.)
     let c = heart + along * b.x - out * b.y + vec3f(0.0, b.z - 0.3 * b.w, 0.0);
     let oc = p - c;

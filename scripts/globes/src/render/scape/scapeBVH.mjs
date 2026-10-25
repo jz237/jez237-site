@@ -9,7 +9,7 @@
 //   0          internal node count, triangle base texel, triangle count, the root's child word
 //   1          the whole tree's box lo.xyz (padded), vertex base texel
 //   2          its hi.xyz, vertex count
-//   3          layout (2: the shader's), depth (root 0), leaf count, 0
+//   3          layout (2: the shader's), depth (root 0), leaf count, the first row's texel (0: none)
 //   4 + 4k     internal node k (depth-first preorder): its two children's boxes, nearest-first
 //              friendly (the parent holds them, so a node is read only when its box is met):
 //                [lo0.xyz, word0] [hi0.xyz, word1] [lo1.xyz, 0] [hi1.xyz, 0]
@@ -19,6 +19,7 @@
 //              corners bit-identical, so the watertight test leaves no cracks):
 //                [a.xyz, va * 8 + material] [b.xyz, vb] [c.xyz, vc]     (va, vb, vc: vertex ids)
 //   vb + 2v    vertex v, for shading: [n.xyz, attrs.x] [attrs.yzw, 0]
+//   rb + r     row r of what the shader reads alongside (packScape's rows: the bubble nest's, nest.mjs)
 //
 // (A second layout, 1, the betta's stackless escape-link preorder, two texels a node with its own
 // box, is built only to measure it against layout 2 on the CPU: see scape-bvh.test.mjs. The shader
@@ -31,6 +32,14 @@
 // entry's distance saves another ~6% of loads but was slower on the GPU (a second private array);
 // handling leaf children at once changed nothing. On an RTX 5090 (WebGPU in Chromium, 1M
 // incoherent rays) the short stack ran 270-290 M nearest-hit rays/s against 180-230 M stackless.
+// On the phones' pieces (detail 0.5: ~98k triangles, 20 deep), per walk of the bowl's own rays (a
+// CPU model of the phone's camera through the bowl, 445k walks, those missing the whole box
+// included), the short stack reads 8.3 nodes and 41 texels in 9.9 dependent rounds, its stack at
+// most 11 deep. Walks without its array (every one the same nearest hit on 845k rays): a bit trail
+// of the levels left to visit, climbing parent links on a pop, 46 texels in 15.3 rounds; the same
+// re-descending from the root (Laine's restart trail), 52.5 in 21.4; escape links ordered by the
+// ray's octant (eight layouts: eight times the node texels), 40 in 17.9. On a Radeon iGPU (RDNA 2,
+// D3D12) the restart trail drew the phone's bowl in the same time as the stack, at every ratio.
 //
 // Triangles are met with Woop, Benthin & Wald's watertight test (2013) in f32: no ray aimed at a
 // shared edge or corner of a closed mesh slips through (where f32 Moller-Trumbore with a 1e-6
@@ -257,8 +266,9 @@ function buildTree(box, cen, N, maxDepth, binsLarge, binsSmall) {
 /**
  * Packs the furnishings' meshes into one BVH texture (see the top of this file).
  * @param {import('./mesh.mjs').ScapeMesh[]} meshes
- * @param {{ layout?: 'stack' | 'stackless', bins?: number, maxDepth?: number }} [options]
+ * @param {{ layout?: 'stack' | 'stackless', bins?: number, maxDepth?: number, rows?: Float32Array }} [options]
  *   layout 'stackless' only for measuring on the CPU (the shader reads 'stack', the default).
+ *   rows: texels to append after the vertices, 4 floats each (room for the nest's: nest.mjs).
  *   maxDepth: the deepest a leaf may sit (a whole number; above SCAPE_MAX_DEPTH it is that). It
  *   throws when halving the triangles down to leaves of 4 needs more levels than that.
  */
@@ -335,7 +345,10 @@ export function packScape(meshes, options = {}) {
   const nodeBase = 4;
   const triBase = nodeBase + recs * (layout === LAYOUT_STACK ? 4 : 2);
   const vertBase = triBase + N * 3;
-  const texels = vertBase + V * 2;
+  const rows = options.rows ?? new Float32Array(0);
+  if (rows.length % 4 !== 0) throw new Error(`packScape: rows of ${rows.length} floats (4 a texel)`);
+  const rowBase = vertBase + V * 2;
+  const texels = rowBase + rows.length / 4;
   const width = SCAPE_TEX_WIDTH;
   const height = Math.max(1, Math.ceil(texels / width));
   if (height > SCAPE_MAX_HEIGHT) throw new Error(`packScape: ${height} rows (at most ${SCAPE_MAX_HEIGHT})`);
@@ -364,7 +377,7 @@ export function packScape(meshes, options = {}) {
   data.set([recs, triBase, N, layout === LAYOUT_STACK && N > 0 ? word(0) : 0], 0);
   data[7] = vertBase;
   data[11] = V;
-  data.set([layout, tree.depth, tree.leaves, 0], 12);
+  data.set([layout, tree.depth, tree.leaves, rows.length ? rowBase : 0], 12);
   if (layout === LAYOUT_STACK) {
     for (const n of order) {
       const at = nodeBase + id[n] * 4;
@@ -410,6 +423,7 @@ export function packScape(meshes, options = {}) {
     data[o + 5] = att[v * 4 + 2];
     data[o + 6] = att[v * 4 + 3];
   }
+  data.set(rows, rowBase * 4);
   return {
     data,
     width,
@@ -423,6 +437,8 @@ export function packScape(meshes, options = {}) {
     depth: tree.depth,
     lo,
     hi,
+    /** The first texel of the rows (packScape's options.rows), if any. */
+    rowBase: rows.length ? rowBase : 0,
     /** The original triangle (all the meshes' triangles in turn) of each packed slot. */
     order: tree.idx,
     layout: layout === LAYOUT_STACK ? 'stack' : 'stackless',

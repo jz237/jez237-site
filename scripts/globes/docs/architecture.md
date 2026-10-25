@@ -969,3 +969,35 @@ across, it spins about its own axis (and keeps spinning when let go, slowing at 
 let go, as its weighted bed swings under it.
 
 Units: R_outer = 1, g = 24 units/s² (≈1 s fundamental slosh).
+
+## Phase 2: the bowl's rays, trimmed exactly (WP-H)
+
+The phone runs the bowl at about 1% of its arithmetic peak: it waits on its reads, its registers
+and its lanes' divergence. These trims leave every frame as it was, to the pixel (frozen frames,
+`?manual`, seeded, 400 ticks, phone and desktop tiers, portrait and landscape, ratios 0.6 and 1;
+the page has more than one frozen state run to run, so a build is compared with every state the
+one before was seen in).
+
+- No array is indexed by a variable in the bowl's shader but the furnishings' walk's stack. On
+  Android, Chrome translates the shader to SPIR-V (Tint), where a const array indexed by a
+  variable becomes a private array per invocation, filled from the constant: the nest's 170
+  bubbles were 2.7 KB of it. They are rows of the furnishings' texture now (scape/nest.mjs,
+  after the vertices; texel 3's w says where), and the big leaves' lengths a switch. The worker
+  only leaves room for them: the page has made the nest as it loaded, and writes it in
+  (furnishings.ts). Made in the worker too, it held the furnishings up (about 12 ms on a desktop
+  CPU, more on a phone). On Windows (HLSL, DXC) the same arrays became constant tables, which is
+  why a Radeon iGPU drew them no faster.
+- The walks look only as far as the stretch can end: the glass, a flake of food (a tie with it
+  is the walk's), and the furnishings no further than the fish. In the air the march comes
+  first and the walks look only as far as it got: what lies straight ahead there is mostly
+  under the film, past where the ray bends (a CPU model of the phone's camera: ~9% of the BVH's
+  reads). Where they meet something short of the march's last sample (the floating leaf, a
+  leaf above the water) the march is taken again, stopping there, so its samples are the ones
+  it would have taken. Each walk and the march are still inlined once. The Radeon iGPU drew the
+  bowl in the same time, within 1%, at ratios 0.6 to 2 (phone tier upright and on its side,
+  desktop tier). `?walks=0` has the walks come first again (the same picture), to time the two
+  on a phone, where lanes in the air and in the water mixed in a wave may cost more than this
+  saves.
+- The desk's matrices are left out of the bowl's shader (it stands in its studio).
+- The furnishings' walk keeps its stack: walks without one read more and wait on more of their
+  reads in turn (see scapeBVH.mjs), and the one tried drew no faster on the iGPU.

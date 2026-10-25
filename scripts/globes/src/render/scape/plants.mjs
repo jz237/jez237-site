@@ -1005,8 +1005,12 @@ export function build(options = { detail: 1 }) {
  *  point in the bowl, so they stay on it as it moves. */
 const leafWGSL = (name, o) => /* wgsl */ `${o.lengths ? `
 fn scape_${name}_length(id: i32) -> f32 {
-  var l = array<f32, ${o.lengths.length}>(${o.lengths.map((x) => x.toFixed(3)).join(', ')});
-  return l[clamp(id, 0i, ${o.lengths.length - 1}i)];
+  // (A case each rather than an array indexed by id, which would be a copy of itself in each
+  // invocation's private memory.)
+  switch (clamp(id, 0i, ${o.lengths.length - 1}i)) {
+${o.lengths.slice(0, -1).map((x, i) => `    case ${i}i: { return ${x.toFixed(3)}; }`).join('\n')}
+    default: { return ${o.lengths[o.lengths.length - 1].toFixed(3)}; }
+  }
 }
 ` : ''}
 fn scape_mat_${name}(attrs: vec4f, p: vec3f, n: vec3f, foot: f32, front: bool) -> ScapeMat {

@@ -257,6 +257,11 @@ const RT_MARCH = /* wgsl */ `    // (The same march, its samples taken only wher
       nearBed = marched.nearBed;
     }`;
 
+// The betta bowl traced in software: in the air its walks come after the march and look only as
+// far as it got (globes_trace). ?walks=0 has them walk first, as on the ray tracing hardware: the
+// same picture, for timing the two against each other on a phone.
+const WALKS_LAST = new URLSearchParams(globalThis.location?.search).get('walks') !== '0';
+
 /** Constants and helpers for the globe shader. */
 /** withKoi: the koi pass's variant (traces the fish); the main pass leaves it out entirely, so
  *  the fish's (large) code costs nothing where it is not on screen. */
@@ -1230,12 +1235,12 @@ fn globes_boundarySliver(densTex: texture_3d<f32>, densSamp: sampler, sandTex: t
   return globes_dens(densTex, densSamp, q + normalize(away) * (2.5 * probe), vol) > iso;
 }
 
-// ---- what lies outside -----------------------------------------------------------------
+// ---- what lies outside -----------------------------------------------------------------${bowl ? '' : `
 // On the desktop: the desktop is a plane behind the globe (globesDeskPlane: its normal, away
 // from the camera, and offset, in globe space), and globesDeskM takes a point on it to where it
 // shows on the screen, as coordinates in the wallpaper texture.
 var<private> globesDeskM: mat4x4f;
-var<private> globesDeskPlane: vec4f;
+var<private> globesDeskPlane: vec4f;`}
 // Rays heading back out into the room see the studio's light, dimmer (nobody knows the room).
 const GLOBES_DESK_ROOM: f32 = 0.55;
 ${ACES_INVERSE_WGSL}
@@ -2262,7 +2267,12 @@ var<private> globesEdge: u32;
 // (Main pass) whether the ray came near the koi (the koi pass draws its sample again).
 var<private> globesKoiNear: bool;
 
-// gather: whether this ray gathers the light scattered off the water (shafts, motes: smooth,
+${bowl && !rt && WALKS_LAST ? `// The next f32 above x (x finite, not negative).
+fn globes_nextUp(x: f32) -> f32 {
+  return bitcast<f32>(bitcast<u32>(x) + 1u);
+}
+
+` : ''}// gather: whether this ray gathers the light scattered off the water (shafts, motes: smooth,
 // so one ray of a pixel's four gathers it for all of them).
 fn globes_trace(${traceParams}) -> vec3f {
   let iso = prm.x;
@@ -2331,17 +2341,43 @@ ${bowl?.lite && !rt ? `  // (The phone's bowl: where its march can find nothing 
       // (Its outline: the pixel's other rays may miss it, or meet it.)
       if (foodHit.near) { globesEdge |= 16u; }
     }
-    var bh = BettaHit(1e9, 0xffffffffu, vec2f(0.0));
+    var bh = BettaHit(1e9, 0xffffffffu, vec2f(0.0));${bowl && !rt && WALKS_LAST ? `
+    // The fish (in its own pass), and the bowl's driftwood, its plants and the leaf floating on the
+    // water: each walk looks only as far as the stretch can end (the glass; a tie with a flake of
+    // food is the walk's), the second no further than what the first met.
+    var reach = min(tWall, globes_nextUp(min(min(kh.body, kelpHit.t), min(min(reefHit.t, fishT), foodHit.t))));
+    var sc = ScapeHit(1e9, 0u, 0u, vec2f(0.0), vec3f(0.0, 1.0, 0.0));
+    var tStop = min(min(min(tWall, kh.body), kelpHit.t), min(min(reefHit.t, fishT), foodHit.t));` : `
     if (GLOBES_KOI) { bh = betta_trace(bettaTex, p, dir, tWall); }${bowl ? `
     // The bowl's driftwood, its plant and the leaf floating on the water.
     let sc = scape_trace(kelpPrimTex, p, dir, tWall);` : ''}
-    let tStop = min(${bowl ? 'min(bh.t, sc.t)' : 'bh.t'}, min(min(min(tWall, kh.body), kelpHit.t), min(min(reefHit.t, fishT), foodHit.t)));
+    let tStop = min(${bowl ? 'min(bh.t, sc.t)' : 'bh.t'}, min(min(min(tWall, kh.body), kelpHit.t), min(min(reefHit.t, fishT), foodHit.t)));`}
 
     // The water march: air/water interfaces and the sand bed, up to the koi, the kelp or the glass.
     var t = 0.5 * stepLen;
     var tPrev = 0.0;
     var event = 0; // 1: water surface, 2: sand, 3: koi
-    var nearBed = false;
+    var nearBed = false;${bowl && !rt && WALKS_LAST ? `
+    // (In the water: the walks, then the march, which stops where they met something. In the air:
+    // the march, then the walks, only as far as it got, as what lies straight ahead there is mostly
+    // under the film, past where the ray bends. What they meet there changes nothing if the
+    // march's last sample lies short of it by the stop's margin, as it would then have taken the
+    // same samples; else the march is taken again, stopping at it.)
+    for (var step = select(0, 1, inWater); step < 3; step++) {
+      if (step == 1) {
+        if (!inWater && event != 0) { reach = min(reach, t + 2e-4); }
+        if (GLOBES_KOI) { bh = betta_trace(bettaTex, p, dir, reach); }
+        sc = scape_trace(kelpPrimTex, p, dir, min(reach, bh.t));
+        let met = min(select(1e9, bh.t, bh.triangle != 0xffffffffu), sc.t);
+        // (The stop takes it in either way: past the march, it judges which the ray ends on.)
+        tStop = min(tStop, met);
+        if (!inWater && t <= met - 1e-4) { break; }
+        t = 0.5 * stepLen;
+        tPrev = 0.0;
+        event = 0;
+        nearBed = false;
+        continue;
+      }` : ''}
 ${rt ? RT_MARCH : `    // The next sample is read with this one, where it will be if this one is far enough above
     // the sand for a whole step (it nearly always is), so the two reads wait together rather
     // than in turn; it is used only if so. (The same samples, in the same order: the march waits
@@ -2416,7 +2452,8 @@ ${bowl?.lite ? `      // (The phone's bowl: where a sample could find nothing, i
       // Close to the sand, step by a fraction of the height above it so thin edges of the bed
       // (where it thins out against the glass) are not stepped over.
       t += clamp(0.5 * above, 0.2 * stepLen, stepLen);
-    }`}
+    }`}${bowl && !rt && WALKS_LAST ? `
+    }` : ''}
     // (Passing close by the bed without landing on it: the pixel's other rays may meet it.)
     if (GLOBES_EDGES && nearBed && event != 2) { globesEdge |= 8u; }
     if (event == 1 || event == 2) {
@@ -2506,7 +2543,7 @@ ${bowl?.lite ? `      // (The phone's bowl: where a sample could find nothing, i
       col += thr * sp.rgb;
       thr *= sp.a;${bowl ? `
       // (The betta's bubble nest on the film.)
-      let nest = scape_nestAlong(p, dir, t, bgTex, bgSamp);
+      let nest = scape_nestAlong(kelpPrimTex, p, dir, t, bgTex, bgSamp);
       col += thr * nest.rgb;
       thr *= nest.a;
       // (And the lamp's cone in the air under the lid.)
@@ -2691,9 +2728,9 @@ fn globes_shade(camPos: vec3f, fragPos: vec3f, fragCenter: vec3f, center: vec3f,
   globesWaterExt = GLOBES_WATER_EXT * select(1.0, 0.22, betta_tex(bettaTex, 0u).w > 0.5);
   globesKoiNear = false;
   globesEdge = 0u;
-  globesDeskM = deskM;
+${bowl ? '' : `  globesDeskM = deskM;
   globesDeskPlane = deskPlane;
-  // (A pass run per sample, each invocation one MSAA sample: just one of the four, the one an
+`}  // (A pass run per sample, each invocation one MSAA sample: just one of the four, the one an
   // eighth of a pixel right and three eighths below centre, gathers the water's light for the
   // whole pixel.)
   var gatherW = 1.0;

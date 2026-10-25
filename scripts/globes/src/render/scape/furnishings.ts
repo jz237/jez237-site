@@ -3,6 +3,8 @@
 // the bed's solids and the fish's obstacles, with their shader code. Their modules load only on
 // this page.
 
+import { withNest } from './nest.mjs';
+
 export interface Furnishings {
   /** The BVH (scapeBVH.mjs packScape): rgba32float texels, width x height. */
   data: Float32Array;
@@ -75,5 +77,7 @@ export function furnish(n: number, extent: number, none: number, detail = 1): Pr
     const m = await import('./scapeBuild.mjs');
     return m.buildFurnishings(n, extent, none, detail) as Built;
   });
-  return Promise.all([built, wgsl, phases]).then(([b, w, p]) => ({ ...b, wgsl: w, phases: p }));
+  // (The bubble nest's rows are written into their texture here, as the page has made the nest
+  // already: nest.mjs.)
+  return Promise.all([built, wgsl, phases]).then(([b, w, p]) => ({ ...b, data: withNest(b.data), wgsl: w, phases: p }));
 }

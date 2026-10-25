@@ -642,6 +642,11 @@ test('the shader: the API, the pieces\' materials and stand-ins for those missin
   const code = wgsl.replace(/\/\/[^\n]*/g, '');
   for (const [a, b] of [['{', '}'], ['(', ')'], ['[', ']']]) assert.equal(code.split(a).length, code.split(b).length, `${a}${b}`);
   assert.throws(() => scapeMeshWGSL(['fn scape_mat_rock() {}', 'fn scape_mat_rock() {}']), /twice|2 times/);
+  // (No array but the walk's stack: translated to SPIR-V, as on Android, an array indexed by a
+  // variable, a const one too, is a copy in each invocation's private memory. The nest's bubbles,
+  // for one, are rows of the texture: nest.mjs.)
+  const arrays = [...code.matchAll(/\b(\w+)\s*(?::|=)\s*array<[^>]*>/g)].map((x) => x[1]);
+  assert.deepEqual([...new Set(arrays)], ['stack']);
   const stubbed = scapeMeshWGSL([]);
   assert.ok(stubbed.includes('Stand-ins'));
   console.log(`  shader: ${wgsl.length} characters with the pieces present (${pieces.map((p) => p.name).join(', ') || 'none'}); ${stubbed.length} with none`);
@@ -896,6 +901,25 @@ test('the mirror tests the root box against tEnd rounded to f32, as the shader d
   const st = scapeStats();
   assert.equal(traceCPU(P, o, [1, 0, 0], tEnd, { stats: st }).tri, NONE);
   assert.ok(st.nodes >= 1, 'the root box refused against the f64 tEnd');
+});
+
+test('rows packed after the vertices, found from texel 3, leave the tree and its walk as they were', () => {
+  const meshes = soup(500, 11, 2);
+  const plain = packScape(meshes);
+  const rows = Float32Array.from({ length: 12 * 4 }, (_, i) => fr(i * 0.37 - 5));
+  const P = packScape(meshes, { rows });
+  assert.equal(plain.rowBase, 0);
+  assert.equal(plain.data[15], 0);
+  assert.equal(P.rowBase, P.data[7] + P.vertices * 2);
+  assert.equal(P.data[15], P.rowBase);
+  assert.deepEqual(Array.from(P.data.subarray(P.rowBase * 4, P.rowBase * 4 + rows.length)), Array.from(rows));
+  // (Everything before them the same, texel for texel, but texel 3's w.)
+  const before = P.rowBase * 4;
+  const a = Array.from(plain.data.subarray(0, before)), b = Array.from(P.data.subarray(0, before));
+  a[15] = b[15] = 0;
+  assert.deepEqual(b, a);
+  for (const r of boxRays(P.lo, P.hi, 500, 100, 3)) assert.deepEqual(traceCPU(P, r.o, r.d, r.tEnd), traceCPU(plain, r.o, r.d, r.tEnd));
+  assert.throws(() => packScape(meshes, { rows: new Float32Array(6) }), /rows/);
 });
 
 test('the real pieces, if present: sound, agree with brute force; and the measurements that chose the traversal', async () => {
