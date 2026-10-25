@@ -2478,7 +2478,8 @@ function frame(now: number) {
     sound.damageLoops(effectsActive&&!online?.active?cars:[],camera.position);sound.stuckHorns(effectsActive&&!online?.active?cars:[],camera.position);sound.bearingGrowls(effectsActive&&!online?.active?cars:[],camera.position);sound.beltSqueals(effectsActive&&!online?.active?cars:[],camera.position);{const p=cars[0];sound.cabinWind(p&&effectsActive&&!online?.active&&!demo&&p.extendedDamage?windRoar(p.openness,p.speed):0,p?.current??camera.position,p?.speed??0);}
     sound.runningLoops(effectsActive&&!online?.active?cars:[],camera.position);
   }
-  if(!studio)puddleSplashes?.update(cars,activeVenue.puddles,effectsActive?dt:0,state==='playing');
+  // In the rain (offline) every wheel on the wet road throws a fine spray too.
+  if(!studio)puddleSplashes?.update(cars,activeVenue.puddles,effectsActive?dt:0,state==='playing',true,eventLighting==='rain'&&!online?.active?1:0);
   if(!studio&&state==='playing'){for(const burst of vehicleFire?.bursts??[]){recorder?.burst({time:elapsed,position:burst.position.toArray()});if(!online?.active){shockwave(burst.position,burst.id);blastDamage(burst.position,burst.id,CAR_BLAST.radius,CAR_BLAST.damage);const car=cars.find(c=>c.id===burst.id);if(car)carBlowsUp(car,burst.position);}}captureReplay();}
   if(studio?.playing&&!studio.seeking){sound.update(cars,camera,dt,false,{id:cars[studio.follow]?.id??0,view:studio.view==='hood'?'hood':studio.view==='chase'?'chase':'orbit'},(from,to)=>cameraObstruction(physics,from,to,undefined,true));sound.thermal(replayThermal,[]);}
   {const p=cars[0];sound.daze(state==='playing'&&!demo&&!studio&&p?.extendedDamage?Math.min(1,p.dazed/1.2):0);}

@@ -9,12 +9,16 @@ export function puddleDepth(p:Puddle,x:number,y:number,z:number){
   const edge=1+Math.sin(a*3+n[0]*6.28)*.105+Math.sin(a*5+n[1]*6.28)*.066+Math.sin(a*11+n[2]*6.28)*.025+Math.sin(a*23+n[3]*6.28)*.008;
   return T.MathUtils.clamp((edge-Math.hypot(dx,dz)/p.radius)*6,0,1);
 }
-type Drop={p:T.Vector3;v:T.Vector3;age:number;life:number;size:number;level:number};
+type Drop={p:T.Vector3;v:T.Vector3;age:number;life:number;size:number;level:number;alpha:number};
+/** Rain spray (offline rain, film 0–1): every grounded wheel off the puddles, past RAIN_SPRAY.from m/s, throws a fine,
+ * faint spray off the wet road, up and trailing behind (thrown at a fraction of the car's speed): RAIN_SPRAY.rate drops a
+ * second per m/s, up to RAIN_SPRAY.max, per wheel. Shares the puddle drops' pool. */
+export const RAIN_SPRAY={from:4,rate:3,max:48,alpha:.3,trail:[.2,.4],lift:[.6,2],life:[.4,.7],size:[.05,.11]} as const;
 type Ripple={p:T.Vector3;water:Puddle|null;age:number;life:number;radius:number;strength:number};
 export type SplashSource=Pick<Vehicle,'id'|'velocity'|'health'|'right'|'remoteContactPoints'>&{controller?:Pick<Vehicle['controller'],'wheelIsInContact'|'wheelContactPoint'>};
 export class PuddleSplashes {
   readonly capacity=768;
-  readonly drops:Drop[]=Array.from({length:this.capacity},()=>({p:new T.Vector3(),v:new T.Vector3(),age:0,life:0,size:0,level:0}));
+  readonly drops:Drop[]=Array.from({length:this.capacity},()=>({p:new T.Vector3(),v:new T.Vector3(),age:0,life:0,size:0,level:0,alpha:1}));
   readonly ripples:Ripple[]=Array.from({length:48},()=>({p:new T.Vector3(),water:null,age:0,life:0,radius:0,strength:0}));
   readonly spray:T.Mesh<T.InstancedBufferGeometry,T.ShaderMaterial>;
   readonly rings:T.Mesh<T.InstancedBufferGeometry,T.ShaderMaterial>;
@@ -28,6 +32,8 @@ export class PuddleSplashes {
   private budgets=new Map<string,{spray:number;ring:number}>();
   private cursor=0;private ringCursor=0;private accumulator=0;private quality=1;
   emitted=0;wetWheels=0;maxSpeed=0;
+  /** Rain spray drops thrown so far and wheels throwing it this step (QA). */
+  sprayed=0;sprayWheels=0;
   constructor(scene:T.Scene,private random=()=>Math.random()){
     const geometry=(attributes:Record<string,[Float32Array,number]>)=>{const p=new T.PlaneGeometry(2,2),g=new T.InstancedBufferGeometry();g.index=p.index;g.attributes.position=p.attributes.position;g.attributes.uv=p.attributes.uv;for(const [name,[data,size]]of Object.entries(attributes))g.setAttribute(name,new T.InstancedBufferAttribute(data,size).setUsage(T.DynamicDrawUsage));g.instanceCount=0;return g;};
     this.spray=new T.Mesh(geometry({offset:[this.offset,3],movement:[this.movement,3],drop:[this.data,2]}),new T.ShaderMaterial({transparent:true,depthWrite:false,uniforms:{},
@@ -47,19 +53,21 @@ export class PuddleSplashes {
     this.rings.name='puddle-wheel-ripples';this.rings.frustumCulled=false;this.rings.renderOrder=2;scene.add(this.rings);
   }
   setQuality(quality:string){this.quality=quality==='medium'?.55:quality==='high'?.8:1;}
-  update(cars:readonly SplashSource[],waters:Puddle[],dt:number,emit:boolean,render=true){
+  update(cars:readonly SplashSource[],waters:Puddle[],dt:number,emit:boolean,render=true,film=0){
     this.accumulator+=Number.isFinite(dt)?Math.min(.05,Math.max(0,dt)):0;
-    while(this.accumulator+1e-9>=1/60){this.step(cars,waters,1/60,emit);this.accumulator=Math.max(0,this.accumulator-1/60);}
+    while(this.accumulator+1e-9>=1/60){this.step(cars,waters,1/60,emit,film);this.accumulator=Math.max(0,this.accumulator-1/60);}
     if(render)this.prepare();
   }
-  private step(cars:readonly SplashSource[],waters:Puddle[],dt:number,emit:boolean){
-    this.wetWheels=0;
+  private step(cars:readonly SplashSource[],waters:Puddle[],dt:number,emit:boolean,film:number){
+    this.wetWheels=0;this.sprayWheels=0;
+    const wet=Number.isFinite(film)?Math.max(0,Math.min(1,film)):0;
     const used=new Set<string>();
     if(emit)for(const car of cars){
       const speed=Math.hypot(car.velocity.x,car.velocity.z);if(speed<.45||car.health<=0)continue;
       for(let wheel=0;wheel<4;wheel++){
         const p=car.remoteContactPoints?car.remoteContactPoints[wheel]:car.controller?.wheelIsInContact(wheel)?car.controller.wheelContactPoint(wheel):null;if(!p)continue;
-        const water=waters.find(w=>puddleDepth(w,p.x,p.y,p.z)>.02);if(!water)continue;
+        const water=waters.find(w=>puddleDepth(w,p.x,p.y,p.z)>.02);
+        if(!water){if(wet>0&&speed>=RAIN_SPRAY.from)this.sprayFrom(car,wheel,p,speed,wet,dt,used);continue;}
         const depth=puddleDepth(water,p.x,p.y,p.z),key=car.id+':'+wheel+':'+water.id;used.add(key);this.wetWheels++;this.maxSpeed=Math.max(this.maxSpeed,speed);
         let b=this.budgets.get(key);if(!b){b={spray:1,ring:1};this.budgets.set(key,b);}
         b.spray+=dt*Math.min(155,6+speed*8)*depth*this.quality;b.ring+=dt*(2+Math.min(8,speed*.4));
@@ -68,7 +76,7 @@ export class PuddleSplashes {
           const d=this.drops[this.cursor++%this.capacity],spread=.4+this.random()*.7;
           d.p.set(p.x+(this.random()-.5)*.10,water.level+.035,p.z+(this.random()-.5)*.14);d.v.copy(car.velocity).multiplyScalar(.15+this.random()*.1);
           d.v.addScaledVector(car.right,side*(.8+speed*.19)*spread);d.v.y=.6+Math.min(4.5,speed*.18)*(.4+this.random()*.8);
-          d.age=0;d.life=.5+this.random()*.55;d.level=water.level;d.size=(.007+this.random()*.016)*(1+Math.min(.6,speed/30));this.emitted++;b.spray--;
+          d.age=0;d.life=.5+this.random()*.55;d.level=water.level;d.size=(.007+this.random()*.016)*(1+Math.min(.6,speed/30));d.alpha=1;this.emitted++;b.spray--;
         }
         while(b.ring>=1){const r=this.ripples[this.ringCursor++%48];r.p.set(p.x,water.level+.012,p.z);r.water=water;r.age=0;r.life=.6+this.random()*.5;r.radius=.3+Math.min(1.5,speed*.05);r.strength=.14+Math.min(.20,speed*.015);b.ring--;}
       }
@@ -77,12 +85,24 @@ export class PuddleSplashes {
     for(const d of this.drops)if(d.life>0){d.age+=dt;d.v.y-=9.81*dt;d.v.x*=Math.exp(-dt*.65);d.v.z*=Math.exp(-dt*.65);d.p.addScaledVector(d.v,dt);if(d.age>=d.life||d.p.y<d.level)d.life=0;}
     for(const r of this.ripples)if(r.life>0){r.age+=dt;if(r.age>=r.life)r.life=0;}
   }
+  private sprayFrom(car:SplashSource,wheel:number,p:{x:number;y:number;z:number},speed:number,wet:number,dt:number,used:Set<string>){
+    const key=car.id+':'+wheel+':rain';used.add(key);this.sprayWheels++;
+    let b=this.budgets.get(key);if(!b){b={spray:0,ring:0};this.budgets.set(key,b);}
+    const r=RAIN_SPRAY,between=(range:readonly number[])=>range[0]+this.random()*(range[1]-range[0]),side=wheel%2?1:-1;
+    b.spray+=dt*Math.min(r.max,r.rate*speed)*wet*this.quality;
+    while(b.spray>=1){
+      const d=this.drops[this.cursor++%this.capacity];
+      d.p.set(p.x+(this.random()-.5)*.12,p.y+.04,p.z+(this.random()-.5)*.12);d.v.copy(car.velocity).multiplyScalar(between(r.trail));
+      d.v.addScaledVector(car.right,side*(.2+this.random()*.5));d.v.y=between(r.lift)*Math.min(1,speed/12);
+      d.age=0;d.life=between(r.life);d.level=p.y-.02;d.size=between(r.size)*(1+Math.min(.6,speed/30));d.alpha=r.alpha;this.sprayed++;b.spray--;
+    }
+  }
   private prepare(){
-    let i=0;for(const d of this.drops)if(d.life>0){d.p.toArray(this.offset,i*3);d.v.toArray(this.movement,i*3);this.data[i*2]=d.size;this.data[i*2+1]=Math.min(1,d.age*45)*Math.pow(1-d.age/d.life,.35);i++;}
+    let i=0;for(const d of this.drops)if(d.life>0){d.p.toArray(this.offset,i*3);d.v.toArray(this.movement,i*3);this.data[i*2]=d.size;this.data[i*2+1]=Math.min(1,d.age*45)*Math.pow(1-d.age/d.life,.35)*d.alpha;i++;}
     this.spray.geometry.instanceCount=i;this.spray.visible=i>0;for(const a of Object.values(this.spray.geometry.attributes))if(a instanceof T.InstancedBufferAttribute)a.needsUpdate=true;
     i=0;for(const r of this.ripples)if(r.life>0&&r.water){r.p.toArray(this.ringOffset,i*3);const t=r.age/r.life;this.ringData.set([r.radius*(.18+t),r.strength*(1-t),0,0],i*4);this.shapes.set([r.water.x,r.water.z,r.water.radius,r.water.aspect],i*4);this.phases.set(r.water.phases,i*4);i++;}
     this.rings.geometry.instanceCount=i;this.rings.visible=i>0;for(const a of Object.values(this.rings.geometry.attributes))if(a instanceof T.InstancedBufferAttribute)a.needsUpdate=true;
   }
-  get stats(){return{active:this.drops.filter(d=>d.life>0).length,ripples:this.ripples.filter(r=>r.life>0).length,capacity:this.capacity,emitted:this.emitted,wetWheels:this.wetWheels,maxSpeed:this.maxSpeed};}
-  reset(){for(const d of this.drops)d.life=0;for(const r of this.ripples)r.life=0;this.budgets.clear();this.cursor=this.ringCursor=this.accumulator=this.emitted=this.wetWheels=this.maxSpeed=0;this.prepare();}
+  get stats(){return{active:this.drops.filter(d=>d.life>0).length,ripples:this.ripples.filter(r=>r.life>0).length,capacity:this.capacity,emitted:this.emitted,wetWheels:this.wetWheels,maxSpeed:this.maxSpeed,sprayed:this.sprayed,sprayWheels:this.sprayWheels};}
+  reset(){for(const d of this.drops)d.life=0;for(const r of this.ripples)r.life=0;this.budgets.clear();this.cursor=this.ringCursor=this.accumulator=this.emitted=this.wetWheels=this.maxSpeed=this.sprayed=this.sprayWheels=0;this.prepare();}
 }
