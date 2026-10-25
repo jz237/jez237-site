@@ -2877,6 +2877,7 @@ async function boot() {
     vapour: () => vapourPuffs,
     brakeSteam: () => brakePuffs,
     reflections: () => wetReflections?.mesh.count ?? 0,
+    lampBeams: () => cars.map((c) => c.root.children.filter((o) => o.name === 'car_light_beam').map((b) => +b.position.x.toFixed(2))),
     heatDiscs: (id = 0, heat = 1) => { const c = cars[id]; if (!c?.extendedDamage) return false; c.discHeat.fill(heat); return true; },
     storm: () => storm ? { strikes: storm.strikes, claps: storm.claps, thunders: sound.thunders, flash: +lightning.intensity.toFixed(3) } : null,
     strike: () => { if (!storm) return false; storm.strikeNow(); return true; },

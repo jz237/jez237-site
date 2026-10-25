@@ -16,6 +16,9 @@ export const RAIN_LIGHTS={pool:.45} as const;
  * RAIN_BEAMS.spread m across at its far end, dipped RAIN_BEAMS.dip rad, fading along its length and at its edges, at the
  * strength the caller gives (RAIN_BEAMS.strength in rain, 0 hides it); a side with every lamp smashed throws none. */
 export const RAIN_BEAMS={length:9,spread:1.1,dip:.06,strength:.3} as const;
+/** A lens reaching past LAMP_BAR.span m either side of the middle is a pair of lamps under one cover: it shines from both
+ * ends, LAMP_BAR.inset m in from each. */
+export const LAMP_BAR={span:.25,inset:.18} as const;
 const HEAD=/headlight|(^|\s)lens$/i,TAIL=/brakelight|tail lens/i,NOT_HEAD=/tail|amber|reverse|indicator|signal|brake/i;
 let poolTexture:T.Texture|null=null;
 function lightPool(){
@@ -63,18 +66,21 @@ export function attachCarLights(root:T.Object3D,halfLength:number):CarLights{
  const pool=lightPool(),poolMaterial=new T.MeshBasicMaterial({map:pool,color:0xffffff,transparent:true,opacity:0,blending:T.AdditiveBlending,depthWrite:false,toneMapped:false}),poolGeometry=new T.PlaneGeometry(4.6,11);
  const poolMesh=new T.Mesh(poolGeometry,poolMaterial);poolMesh.name='car_light_pool';poolMesh.rotation.x=-Math.PI/2;poolMesh.position.set(0,poolY,halfLength+5.2);poolMesh.renderOrder=2;poolMesh.visible=false;poolMesh.frustumCulled=true;
  if(pool&&heads.length)root.add(poolMesh);
+ // Where each lamp shines from (root space): its middle, or both ends when one lens spans the car.
+ const lampPoints=(list:T.Mesh[])=>list.flatMap((m,i)=>{box.setFromObject(m);const lo=box.min.clone().applyMatrix4(inverse),hi=box.max.clone().applyMatrix4(inverse),c=box.getCenter(new T.Vector3()).applyMatrix4(inverse),minX=Math.min(lo.x,hi.x),maxX=Math.max(lo.x,hi.x);
+  return minX< -LAMP_BAR.span&&maxX>LAMP_BAR.span?[{i,c:new T.Vector3(minX+LAMP_BAR.inset,c.y,c.z)},{i,c:new T.Vector3(maxX-LAMP_BAR.inset,c.y,c.z)}]:[{i,c}];});
  // A beam per side of the car from its headlamps' middle, for the rain.
  const beamGeometry=new T.ConeGeometry(RAIN_BEAMS.spread,RAIN_BEAMS.length,16,1,true).rotateX(-Math.PI/2).translate(0,0,RAIN_BEAMS.length/2);
  const beamMaterial=new T.ShaderMaterial({uniforms:{strength:{value:0},color:{value:new T.Color(0xfff1d0)}},transparent:true,depthWrite:false,blending:T.AdditiveBlending,side:T.DoubleSide,
   vertexShader:`varying float vAlong;varying vec3 vNormal2;varying vec3 vView;void main(){vAlong=position.z/${RAIN_BEAMS.length}.;vec4 mv=modelViewMatrix*vec4(position,1.);vNormal2=normalize(normalMatrix*normal);vView=normalize(-mv.xyz);gl_Position=projectionMatrix*mv;}`,
   fragmentShader:`uniform float strength;uniform vec3 color;varying float vAlong;varying vec3 vNormal2;varying vec3 vView;void main(){float t=clamp(vAlong,0.,1.),a=strength*pow(1.-t,1.6)*smoothstep(0.,.06,t)*pow(abs(dot(normalize(vNormal2),normalize(vView))),1.3);gl_FragColor=vec4(color*a,a);}`});
  const beams=([-1,1] as const).map(side=>{
-  const lamps=heads.map((m,i)=>({i,c:box.setFromObject(m).getCenter(new T.Vector3()).applyMatrix4(inverse)})).filter(l=>Math.sign(l.c.x||1)===side);if(!lamps.length)return null;
+  const lamps=lampPoints(heads).filter(l=>Math.sign(l.c.x||1)===side);if(!lamps.length)return null;
   const mesh=new T.Mesh(beamGeometry,beamMaterial);mesh.name='car_light_beam';mesh.position.copy(lamps.reduce((s,l)=>s.add(l.c),new T.Vector3()).multiplyScalar(1/lamps.length));
   mesh.rotation.order='YXZ';mesh.rotation.x=RAIN_BEAMS.dip;mesh.renderOrder=2;mesh.visible=false;root.add(mesh);return {mesh,lamps:lamps.map(l=>l.i)};
  }).filter(b=>b!==null);
  // Each side's lamps and their middle, for the light they throw.
- const sidesOf=(list:T.Mesh[])=>([-1,1] as const).map(side=>{const ls=list.map((m,i)=>({i,c:box.setFromObject(m).getCenter(new T.Vector3()).applyMatrix4(inverse)})).filter(l=>Math.sign(l.c.x||1)===side);
+ const sidesOf=(list:T.Mesh[])=>([-1,1] as const).map(side=>{const ls=lampPoints(list).filter(l=>Math.sign(l.c.x||1)===side);
   return ls.length?{at:ls.reduce((sum,l)=>sum.add(l.c),new T.Vector3()).multiplyScalar(1/ls.length),lamps:ls.map(l=>l.i)}:null;}).filter(b=>b!==null);
  const headSides=sidesOf(heads),tailSides=sidesOf(tails),glowAt=new T.Vector3();
  let lit=false,brake=false,broken=-1,level=1,beamLevel=0;

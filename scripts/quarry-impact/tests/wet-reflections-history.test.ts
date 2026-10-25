@@ -1,6 +1,7 @@
+import {restoreLampPairsBytes} from './lamp-pairs-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readWetReflectionsPrevious,restoreWetReflectionsBytes,verifyWetReflectionsRevision} from './wet-reflections-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreLampPairsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('WetReflections preserves every prior fixture, vehicle asset, venue art and history input',verifyWetReflectionsRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/wet-reflections/revision.json').toString());
