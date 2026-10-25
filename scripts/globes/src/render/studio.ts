@@ -18,6 +18,13 @@ const STUDIO_WALL_Z: f32 = ${STUDIO_WALL_Z.toFixed(4)};
 // the glass follow it.
 var<private> studioBowl: vec3f = vec3f(0.0);
 
+// atan2(y, x), given an angle where both are 0 (straight up; right under the bowl's middle): a GPU
+// that follows SPIR-V's rules need not give a number there. (Nor for a smoothstep whose edges run
+// the wrong way round: those falling here are 1 - a rising one.)
+fn studio_atan2(y: f32, x: f32) -> f32 {
+  return atan2(y, select(x, 1e-20, x == 0.0 && y == 0.0));
+}
+
 // The backdrop: blue paper, lit brightest behind the bowl a little above it, falling off to the
 // sides and darker towards the top.
 fn studio_wall(x: vec3f) -> vec3f {
@@ -42,7 +49,7 @@ fn studio_softbox(d: vec3f, axis: vec3f, half: vec2f) -> f32 {
   let right = normalize(cross(axis, vec3f(0.0, 1.0, 0.0)));
   let up = cross(right, axis);
   let q = vec2f(dot(d, right), dot(d, up)) / ahead;
-  return smoothstep(half.x, half.x * 0.45, abs(q.x)) * smoothstep(half.y, half.y * 0.45, abs(q.y));
+  return (1.0 - smoothstep(half.x * 0.45, half.x, abs(q.x))) * (1.0 - smoothstep(half.y * 0.45, half.y, abs(q.y)));
 }
 
 // The studio round the set, away from the backdrop: dim blue, with the soft boxes whose
@@ -52,8 +59,8 @@ fn studio_room(d: vec3f) -> vec3f {
   var c = mix(vec3f(0.010, 0.026, 0.046), vec3f(0.020, 0.045, 0.075), clamp(d.y * 0.5 + 0.5, 0.0, 1.0));
   c += vec3f(1.00, 0.97, 0.92) * (2.6 * studio_softbox(d, normalize(vec3f(-0.6, 0.7, 0.4)), vec2f(0.12, 0.2)) + 0.08 * pow(max(dot(d, normalize(vec3f(-0.55, 0.62, 0.56))), 0.0), 8.0));
   // (The strip: a narrow band of bearing on the right towards the front, most of the way up.)
-  let bearing = atan2(d.x, d.z);
-  c += vec3f(0.85, 0.92, 1.0) * 1.8 * smoothstep(0.07, 0.035, abs(bearing - 1.15)) * smoothstep(0.75, 0.55, abs(d.y - 0.1));
+  let bearing = studio_atan2(d.x, d.z);
+  c += vec3f(0.85, 0.92, 1.0) * 1.8 * (1.0 - smoothstep(0.035, 0.07, abs(bearing - 1.15))) * (1.0 - smoothstep(0.55, 0.75, abs(d.y - 0.1)));
   let top = max(d.y, 0.0);
   c += vec3f(0.9, 0.92, 0.95) * 0.45 * pow(top, 24.0);
   return c;
@@ -65,7 +72,7 @@ fn studio_room(d: vec3f) -> vec3f {
 fn studio_tableLight(x: vec3f) -> vec3f {
   let d = x.xz - studioBowl.xz;
   let r = length(d);
-  let a = atan2(d.y, d.x);
+  let a = studio_atan2(d.y, d.x);
   let mottle = 0.85 + 0.15 * sin(a * 5.0 + 2.0 * sin(r * 9.0)) * sin(r * 13.0 - a * 3.0);
   let k = (r - 0.6) / 0.26;
   let ring = exp(-k * k);
@@ -83,7 +90,7 @@ fn studio_table(x: vec3f, d: vec3f, gloss: bool) -> vec3f {
   let albedo = vec3f(0.034, 0.040, 0.050);
   var c = albedo * studio_tableLight(x) / 3.14159265;
   // (Its far edge, where it meets the backdrop, catches a thin line of light.)
-  c += vec3f(0.05, 0.08, 0.11) * smoothstep(0.06, 0.0, x.z - STUDIO_WALL_Z);
+  c += vec3f(0.05, 0.08, 0.11) * (1.0 - smoothstep(0.0, 0.06, x.z - STUDIO_WALL_Z));
   if (gloss) {
     let cosI = clamp(-d.y, 0.0, 1.0);
     let F = 0.04 + 0.96 * pow(1.0 - cosI, 5.0);

@@ -467,6 +467,19 @@ flexible, gives the water a gentle current, and makes the page run on phones:
   stalk feet fixed, tips moving, travel bounded, no leaf through the wood, a rock, the glass or
   another leaf over minutes of motion, normals, the refit against brute force; the GPU kernels were
   checked against their CPU mirror on the RTX 5090.
+- **No more dark specks on phones' glass** (phase 2). After the bowl was rolled, the drops the water
+  leaves on the dome showed on phones as hard dark dots: most are narrower than a phone's pixel,
+  and a ray through a sliver of one took its whole lens, often black. On phones a drop narrower than
+  the pixel, or one whose edge crosses it, is now drawn by how much of the pixel it covers, so wet
+  glass reads as fine droplets (docs/architecture.md, Splash). The bowl's shaders also guard every
+  piece of maths a phone's GPU need not define (a colour that is not a number shows the backdrop,
+  never black). The desktop's picture is unchanged.
+- **Measuring a phone**: `?bench` (about two minutes, one screenshot held upright) times the frame at
+  a run of pixel ratios, with each part of it left out, and the sim's own passes; it names the GPU
+  and its features, the pipelines built and the load (reload once: a sooner "compiled" is the
+  browser's shader cache). `?stats&debug=specks` paints what makes a speck (`?debug=nan`: where a
+  colour stopped being a number); it builds its own shaders, so it loads slowly. Tests:
+  `bowl-nan.test.mjs` (8), `bench-rows.test.mjs` (4) and `pipeline-count.test.mjs` (1), 127 in all.
 
 ## Browser compatibility
 

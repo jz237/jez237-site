@@ -706,6 +706,25 @@ globe's own frame (they turn with the glass), the rest in the water's.
   and once it is laid). A ray through the glass is bent into and out of a drop's water
   (`globes_dropOut`; towards its edge the surface turns it back wholly: the dark outline and
   bright crescents of drops on a window).
+- **Drops on a phone** (the betta bowl's `LITE` shader): one ray a pixel at a ratio of 0.6-1, and
+  most drops are narrower than a pixel there (at 1, 70% of them; the median half a pixel). A ray
+  through a sliver of one took its whole lens for the pixel, often black where the rim turns the
+  light back to the dim room: rolled, the dome filled with hard dark specks. Now a drop narrower
+  than 0.6 of the pixel's footprint on the glass (`lit.z` x the path, drawn out along the way the
+  glass slants from the eye), and any whose edge crosses the pixel, is drawn by how much of the
+  pixel it covers (`globes_dropCover`: its area spread over the pixel's width so that the pixels
+  round it take just its area between them), taking its share of the light by its contact angle
+  (`globes_dropLoss`: where its surface stands past water's critical angle, 0.75 / sin of the
+  angle of the way out, the light is turned back); only a ray well inside a drop goes through its
+  lens. Against the same frozen state rendered at 4x the ratio and box-filtered (2026-10-25,
+  14,000 drops after four rolls): pixels darker than half the reference 605 -> 76 at ratio 0.6,
+  1650 -> 345 at 1, 3763 -> 1039 at 1.5 (what is left: the dark rims of the larger drops, which
+  are drawn through their lens), the mean within 2%. It is cheaper too, where the glass is wet
+  (fewer lenses, and no wavering edge worked out for a drop narrower than a pixel): the render
+  pass 1.4 -> 1.3 ms at ratio 2, 2.6 -> 2.4 at 4 (RTX 5090); dry, the same. The desktop's shader
+  is as it was. A trail's water (a trail line, and the line a running drop draws behind it)
+  stands too low to turn any light back, and takes only what its surface reflects, whatever the
+  drop's own angle; and a trail narrower than the pixel covers it only up to its far edge.
 - **Cost**: a hard slosh at the usual zoom (1712x963) leaves ~18,000 drops on the glass: 93 fps
   (median 10.9 ms), against ~100 before the trails (2026-10-19).
 - Lessons (tuned live against photos of rain on a window): drops that were perfect circles,
@@ -800,6 +819,29 @@ current.
   load compares.
 - Indirect dispatch (`dispatchWorkgroupsIndirect`) proved slow in Dawn here: dispatch for the
   capacity and let the threads past the live count return at once.
+- Phones run Vulkan, where maths D3D12 forgives is undefined: `atan2(0, 0)`, a `smoothstep`
+  whose edges run the wrong way round, `min`/`max` with a NaN. The betta bowl's passes give every
+  `atan2` its angle at the origin and write every falling smoothstep as 1 - a rising one
+  (`bowl-nan.test.mjs` holds them to it, as GlobeView builds them), shade no splash sphere that
+  covers none of the pixel (0 x NaN is NaN), and at their end test the colour's bits (a compiler
+  may take `x != x` for always false): a NaN or an infinity shows the backdrop instead of black,
+  and no colour goes past 60000 (the HDR target's float16 tops out at 65504). `?debug=specks`
+  and `?debug=nan` build the bowl's passes painting what each ray met that can make a speck, or
+  where its light stopped being a number (the colours in the `?stats` HUD).
+- Measuring a phone (`?bench`, `app/bench.ts`): one page, about two minutes, sized for a
+  screenshot held upright. The frame at pixel ratios 0.6, 1, 0.8, 1.25, 0.6, 1.5, 2, 1 (coming
+  back to some shows a phone slowing as it warms), then at 0.6 and 1 with a part left out (the
+  table and its mirror, the fish's pass, the bowl, the sim's step: what each costs, by what it
+  saves), then the sim at 0.6 (its passes' times, the pressure solve at 8, 24 and 40 sweeps, a
+  shaken bowl at 2 and at 3 substeps) and the GPU's own cost of a dispatch
+  (`gpu/dispatchProbe.ts`); and the adapter, its features (timestamps, f16, subgroups, tier-1
+  formats), the pipelines built (`gpu/pipelineCount.ts`: the bowl's two large ones, timed, and
+  any of them built at once, 'sync', untimed, the first frame that draws with it waiting for it;
+  how many were built in the first frame; and any after it, each a hitch, a large one many
+  seconds, the first three named) and the load. Other code adds rows with `registerBenchRows`;
+  `?bench=<group>` runs one group alone. `?stats` shows the adapter, the pipelines, the splash's
+  counts and the last minute's GPU times (a soak), and `?gpu=low` asks for a laptop's integrated
+  GPU (Chrome on Windows ignores it).
 - Never answer a slow frame with more substeps (see Real time above).
 - Nothing heavy on the main thread once frames are running: what can be planned is done
   behind the splash. Each globe's seed (above); every globe's pipelines (each `compileAsync`'s

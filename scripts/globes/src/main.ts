@@ -4,7 +4,8 @@ import * as THREE from 'three/webgpu';
 import { AppShell, type DesktopHost } from './app/AppShell';
 import { AdaptiveScale, DESKTOP, keepLevel, keptLevel, levelAt, lowestLevel, PHONE, ratioAt } from './app/adaptiveScale.mjs';
 import { FramePace } from './app/framePace.mjs';
-import { describe, describeLoad, FrameProfile, type Sample } from './app/frameProfile';
+import { Bench, describeDevice } from './app/bench';
+import { describe, describeLoad, FrameProfile, wrap } from './app/frameProfile';
 import { BETTA_PAGE, elsewhere, GLOBES, type GlobeEntry } from './app/catalog';
 import { applyUrlOverrides, fishConfig, globeConfig, lightConfig, simConfig, type GlobeConfig, type LightConfig, type SimConfig } from './config';
 import { DeskMapping, loadDesk, type DesktopHostApi } from './desktop/desktopScene';
@@ -14,6 +15,7 @@ import { Koi, type KoiEnv } from './fish/Koi';
 import { CLOWN_PROBES, Clownfishes } from './fish/Clownfish';
 import { FishFood, type Feeder } from './fish/FishFood';
 import { classifyFailure, createDevice } from './gpu/device';
+import { describePipelines, pipelineMarks, pipelineSnapshot, pipelinesFirstFrame } from './gpu/pipelineCount';
 import { BowlLid } from './interaction/BowlLid';
 import { BowlLife, LIFE_PROBE_AT } from './interaction/BowlLife';
 import { Feeding } from './interaction/Feeding';
@@ -21,14 +23,14 @@ import { GlobeController } from './interaction/GlobeController';
 import { KelpForest } from './kelp/KelpForest';
 import { REEF_PROBES, Reef } from './reef/Reef';
 import { Specks } from './ocean/Specks';
-import { BOWL, bowlShape } from './render/bowl';
+import { BOWL, bowlDebug, bowlShape } from './render/bowl';
 import { BED, setScapeShader } from './render/bowlScape';
 import { furnish } from './render/scape/furnishings';
 import { BOWL_KOI_LAYER, GlobeView, texelTexture, type GlobeVariant } from './render/GlobeView';
 import { MovingPlants, PLANT_PROBE_AT } from './render/scape/MovingPlants';
 import { OceanBackdrop } from './render/OceanBackdrop';
 import { StudioBackdrop } from './render/StudioBackdrop';
-import { sunInWater } from './render/shaders';
+import { BOWL_DEBUG_LEGEND, sunInWater } from './render/shaders';
 import { BED_SOLIDS_N, BED_SOLIDS_NONE, FluidSim, SURFACE_ISO, fillHeight } from './sim/FluidSim';
 import { IdleWater } from './sim/IdleWater';
 import { FIN_QUALITY } from '../../betta-atelier/src/fin-dynamics.js';
@@ -167,7 +169,7 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   const betta = new Betta(device);
   // The betta's globe is a bowl, open at the mouth, with a lid (where the page shows it), which
   // comes off only to feed the fish.
-  const bowl = GLOBES.some((g) => g.betta) ? bowlShape(o.globe, LITE) : null;
+  const bowl = GLOBES.some((g) => g.betta) ? bowlShape(o.globe, LITE, bowlDebug(params.get('debug'))) : null;
   const lid = bowl ? new BowlLid(bowl) : null;
   const feeding = lid ? new Feeding(lid, controller) : null;
   // What floats in it: an almond leaf, and the betta's bubble nest.
@@ -545,38 +547,17 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
     // (The GPU's time on the sim's passes, where the device can time them.)
     sim.setProfiling(true);
   }
-  // ?bench: after a few seconds, the picture at each pixel ratio in turn (up to the screen's own),
-  // a moment to settle and three seconds measured, then a table of them; then the usual ratio.
-  const ratios = [0.6, 0.8, 1, 1.25, 1.5, 2].filter((r) => r <= window.devicePixelRatio + 0.01);
-  const bench = params.has('bench') ? { k: -1, measuring: false, at: performance.now() + 5000, rows: [] as [number, Sample][] } : null;
-  const benchNext = (b: NonNullable<typeof bench>, now: number): void => {
-    if (b.measuring) {
-      const s = PROF.take();
-      if (s) b.rows.push([renderer.getPixelRatio(), s]);
-      b.measuring = false;
-      b.k++;
-    } else if (b.k >= 0) {
-      PROF.take();
-      b.measuring = true;
-      b.at = now + 3000;
-      return;
-    } else b.k = 0;
-    if (b.k < ratios.length) {
-      setRatio(ratios[b.k]);
-      b.at = now + 1500;
-    } else {
-      setRatio(null);
-      b.at = Infinity;
-    }
-  };
-  const f1 = (v: number | null): string => (v === null ? '  -' : v.toFixed(1).padStart(4));
-  const benchText = (b: NonNullable<typeof bench>): string => {
-    const head = `bench${LITE ? ' · phone tier' : ''} · ${innerWidth}x${innerHeight} css px · dpr ${window.devicePixelRatio.toFixed(2)}\nratio   fps  frame ms   cpu  gpu sim/draw (queue)`;
-    const rows = b.rows.map(([r, s]) => `${r.toFixed(2)}  ${s.fps.toFixed(1).padStart(4)}  ${f1(s.p50)}/${f1(s.p90)}  ${f1(s.cpuTotal)}  ${f1(s.gpuSim)}/${f1(s.gpuDraw)} (${f1(s.gpuQueue)})`);
-    const now = b.k < ratios.length ? [`... ratio ${ratios[Math.max(0, b.k)].toFixed(2)}${b.measuring ? ' measuring' : ''}`] : [];
-    const parts = b.rows[0] ? [describe(b.rows[0][1], b.rows[0][0]).split('\n')[1]] : [];
-    return [head, ...rows, ...now, ...parts, describeLoad(PROF.load)].join('\n');
-  };
+  // ?bench (app/bench.ts): after a few seconds, row by row, the frame measured at each pixel ratio
+  // in turn, with a part of it left out, with the sim set otherwise; then a table of them, the
+  // device and the load. (The page's own ratio after.)
+  const bench = params.has('bench') ? new Bench(world, PROF, setRatio, params.get('bench') ?? '', LITE) : null;
+  // ?stats: the device's report; and, every two seconds, what the splash holds (the drops on the
+  // glass, the spray: a readback of its counts).
+  const device = describeDevice();
+  let splash = '';
+  let splashAt = 0;
+  // (And under ?debug, what its colours are: render/shaders.ts.)
+  const legend = GLOBES.some((g) => g.betta) ? BOWL_DEBUG_LEGEND[bowlDebug(params.get('debug'))] : [];
   // ?manual (dev testing): the sim only advances through __globes.tick().
   const manual = params.has('manual');
   const drawSize = new THREE.Vector2();
@@ -620,11 +601,17 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
     if (first) {
       first = false;
       PROF.mark('first frame');
+      // (A pipeline built from here on is a late one, those since start the first frame's own:
+      // gpu/pipelineCount.ts.)
+      pipelinesFirstFrame(start);
       // (Once the GPU has drawn the first frame: the pipelines first used in it - the backdrop's,
       // the specks' - are built as it runs, which held up the frames after it as the globe began
       // to slide in.)
       const firstFrame = hooks.firstFrame;
-      if (firstFrame) void world.device.queue.onSubmittedWorkDone().then(() => requestAnimationFrame(firstFrame));
+      void world.device.queue.onSubmittedWorkDone().then(() => {
+        PROF.mark('drawn');
+        if (firstFrame) requestAnimationFrame(firstFrame);
+      });
     }
     if ((import.meta.env.DEV && renderTimes.on) || hud) {
       void renderer.resolveTimestampsAsync('render').then((ms) => {
@@ -638,16 +625,31 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
       const simMs = Object.values(sim.gpuTimes).reduce((a, b) => a + b, 0);
       if (simMs > 0) PROF.gpuSim(simMs);
       if (bench) {
-        if (now >= bench.at) benchNext(bench, now);
+        bench.frame(now);
         if (now - statsStart >= 500) {
           statsStart = now;
-          hud.textContent = benchText(bench);
+          hud.textContent = bench.text(PROF.load);
         }
       } else if (now - statsStart >= 1000) {
         statsStart = now;
+        if (now - splashAt >= 2000) {
+          splashAt = now;
+          void sim.splash.stats().then((c) => {
+            splash = wrap('splash:', [`drops ${c.drops}`, `spray ${c.spray}`, `onto glass ${c.sprayOntoGlass}`, `left by water ${c.dropsLeftByWater}`]);
+          });
+        }
         const s = PROF.take();
         if (s) {
-          hud.textContent = `${describe(s, renderer.getPixelRatio(), `${LITE ? ' · phone tier' : ''} · ${sim.lastSubsteps} substeps · ${sim.particleCount} particles`)}\n${describeLoad(PROF.load)}`;
+          const m = PROF.minute();
+          hud.textContent = [
+            describe(s, renderer.getPixelRatio(), [...(LITE ? ['phone tier'] : []), `${sim.lastSubsteps} substeps`, `${sim.particleCount} particles`]),
+            `gpu, last minute: sim ${m.sim?.toFixed(1) ?? '-'} · draw ${m.draw?.toFixed(1) ?? '-'} ms`,
+            ...device,
+            describePipelines(),
+            ...(splash ? [splash] : []),
+            ...legend,
+            describeLoad([...PROF.load, ...pipelineMarks()]),
+          ].join('\n');
           console.log(`[globes] ${hud.textContent}`);
         }
       }
@@ -658,7 +660,7 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
     const tick = (dt: number) => advance(dt);
     const g = window as unknown as { __globes?: object };
     // (three.js itself only in development: held here, none of it could be left out of a build.)
-    g.__globes = { ...g.__globes, ...(import.meta.env.DEV ? { THREE } : {}), ...world, tick, renderTimes, adaptive, prof: PROF, bench };
+    g.__globes = { ...g.__globes, ...(import.meta.env.DEV ? { THREE } : {}), ...world, tick, renderTimes, adaptive, prof: PROF, bench, pipelines: pipelineSnapshot };
   }
 }
 

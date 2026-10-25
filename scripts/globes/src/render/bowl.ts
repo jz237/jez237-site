@@ -59,9 +59,21 @@ export interface BowlShape {
    *  shafts in the water), follows a ray through the lid's glass for fewer steps and samples the
    *  lamp's haze more sparsely. */
   lite: boolean;
+  /** ?debug (bowlDebug): its shader paints what each pixel's ray met that could make a speck
+   *  (specks), or where on the way its light stopped being a number (nan): shaders.ts
+   *  globesDebugWGSL. 0: neither, the bowl as it is. */
+  debug: BowlDebug;
 }
 
-export function bowlShape(globe: GlobeConfig, lite = false): BowlShape {
+/** 0: no debug view; 1: ?debug=specks; 2: ?debug=nan. */
+export type BowlDebug = 0 | 1 | 2;
+
+/** The debug view a page's ?debug asks for (BowlShape.debug). */
+export function bowlDebug(param: string | null): BowlDebug {
+  return param === 'specks' ? 1 : param === 'nan' ? 2 : 0;
+}
+
+export function bowlShape(globe: GlobeConfig, lite = false, debug: BowlDebug = 0): BowlShape {
   const h = BOWL.mouth;
   const outer = Math.sqrt(globe.outerRadius ** 2 - h * h);
   const inner = Math.sqrt(globe.innerRadius ** 2 - h * h);
@@ -76,6 +88,7 @@ export function bowlShape(globe: GlobeConfig, lite = false): BowlShape {
     top,
     rimIn: BOWL.lidRadius - BOWL.rimWidth,
     lite,
+    debug,
   };
 }
 
@@ -169,7 +182,8 @@ fn bowl_lidSdf(q: vec3f) -> f32 {
   // (It runs a little way into the rim, so no face of it shows there.)
   d = max(d, r - (BOWL_RIM_IN + 0.003));
   let sector = 6.2831853 / BOWL_VENTS;
-  let a = (fract(atan2(q.z, q.x) / sector + 0.5) - 0.5) * sector;
+  // (atan2 given an angle on the axis too, where a GPU that follows SPIR-V's rules need not.)
+  let a = (fract(atan2(q.z, select(q.x, 1e-20, q.x == 0.0 && q.z == 0.0)) / sector + 0.5) - 0.5) * sector;
   return max(d, BOWL_VENT_R - length(vec2f(r * cos(a) - BOWL_VENT_RING, r * sin(a))));
 }
 
@@ -305,7 +319,7 @@ fn bowl_blackShade(h: BowlHit, bgTex: texture_2d<f32>, bgSamp: sampler) -> vec3f
   let r = length(q.xz);
   if (nl.y < -0.7 && r < BOWL_PUCK_R - 0.003 && q.y < -BOWL_PUCK_D + 0.002) {
     // (Its diffuser: brightest in its middle, a dimmer ring round it.)
-    return BOWL_LAMP * bowlLamp * (0.6 + 0.4 * smoothstep(BOWL_PUCK_R, 0.25 * BOWL_PUCK_R, r)) + vec3f(0.02);
+    return BOWL_LAMP * bowlLamp * (1.0 - 0.4 * smoothstep(0.25 * BOWL_PUCK_R, BOWL_PUCK_R, r)) + vec3f(0.02);
   }
   let n = bowl_toWorld(3u, nl);
   let d = bowl_toWorld(3u, h.d);
@@ -340,12 +354,14 @@ fn bowl_lampAlong(p: vec3f, dir: vec3f, tEnd: f32, sigma: f32, ext: vec3f) -> ve
   for (var i = 0; i < n; i++) {
     let x = p + dir * ((f32(i) + 0.5) * dt);
     let v = x - bowlLampP;
-    let a = atan2(dot(v, side2), dot(v, side));
+    let ay = dot(v, side2);
+    let ax = dot(v, side);
+    let a = atan2(ay, select(ax, 1e-20, ax == 0.0 && ay == 0.0));
     let rays = 0.55 + 0.45 * sin(a * 17.0 + 1.7 * sin(a * 5.0)) * sin(a * 29.0 + 0.6);
     s += bowl_lampAt(x) * rays * T;
     T *= Tstep;
   }
-  return vec3f(1.0, 0.88, 0.70) * s * sigma * dt;
+  return ${s.debug ? 'dbg_chk(' : ''}vec3f(1.0, 0.88, 0.70) * s * sigma * dt${s.debug ? ', select(DBG_LAMP_WATER, DBG_LAMP_AIR, sigma < 0.3))' : ''};
 }
 
 // Through the piece a ray has met (h): the light its face reflects to the ray, how much of the

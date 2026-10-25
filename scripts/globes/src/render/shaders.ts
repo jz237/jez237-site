@@ -7,7 +7,7 @@ import { KOI_TEXEL, koiWGSL } from '../fish/koiWGSL';
 import { CLOWN_FISH, clownShadeWGSL, clownWGSL } from '../fish/clownWGSL';
 import { foodWGSL } from '../fish/FishFood';
 import { kelpRenderWGSL } from '../kelp/kelpWGSL';
-import { BOWL_PARAMS, bowlWGSL, type BowlShape } from './bowl';
+import { BOWL_PARAMS, bowlWGSL, type BowlDebug, type BowlShape } from './bowl';
 import { bowlScapeWGSL } from './bowlScape';
 import { MENISCUS_WGSL } from './meniscus';
 import { STUDIO_WGSL } from './studio';
@@ -804,7 +804,8 @@ const GLASS_ENTRY = /* wgsl */ `  let hitO = globes_sphere(ro, rd, GLOBES_R_OUT)
  *  come in through the glass as in the globes, through the open mouth (no glass: straight on into
  *  the air in the bowl), or start in the bowl already, having come down through the lid or the
  *  rim's bead (globes_bowlTrace). */
-function bowlEntryWGSL(): string {
+function bowlEntryWGSL(bowl: BowlShape): string {
+  const { lite, debug } = bowl;
   return /* wgsl */ `  var col = vec3f(0.0);
   var thr = vec3f(1.0);
   var p = ro;
@@ -871,15 +872,22 @@ function bowlEntryWGSL(): string {
       inWater = globes_densRaw(densTex, densSamp, p - nI * probe - vec3f(0.0, globes_meniscus(p).x, 0.0), vol) > iso;
       nMed = select(1.0, GLOBES_IOR_WATER, inWater);
       // A drop on the glass here (above the water: the splash's): the ray passes into its water and
-      // out through its cap into the air, bent as by a lens.
-      var drop = GlobesDrop(vec3f(0.0), vec3f(0.0), 0.0, 1.0, 0.0, 0.0, 1e9);
-      if (!inWater) { drop = globes_dropAt(dropTex, rot, p); }
-      if (drop.w > 0.0) {
+      // out through its cap into the air, bent as by a lens.${lite ? `
+      // (The phone's: the pixel's footprint on the glass, across and drawn out along the way it is
+      // seen aslant, for the drops drawn by how much of it they cover.)` : ''}
+      var drop = GlobesDrop(vec3f(0.0), vec3f(0.0), 0.0, 1.0, 0.0, 0.0, 1e9${lite ? ', 1.0' : ''});
+      if (!inWater) { drop = globes_dropAt(dropTex, rot, p${lite ? ', lit.z * pathLen * vec2f(1.0, 1.0 / max(-dot(rd, nO), 0.05))' : ''}); }${lite ? `
+      thr *= drop.seen;` : ''}${debug && lite ? `
+      if (drop.seen < 0.9) { globesDbg |= DBG_MET_COVER; }` : ''}
+      if (drop.w > 0.0) {${debug ? `
+        globesDbg |= DBG_MET_DROP;` : ''}
         let FW = globes_fresnel(clamp(-dot(dir, nI), 0.0, 1.0), GLOBES_IOR_GLASS, GLOBES_IOR_WATER);
         col += thr * FW * globes_bg(bgTex, bgSamp, p, reflect(dir, nI));
         thr *= 1.0 - FW;
-        let lens = globes_dropOut(drop, rot, p, refract(dir, nI, GLOBES_IOR_GLASS / GLOBES_IOR_WATER));
-        if (lens.F >= 1.0) {
+        let lens = globes_dropOut(drop, rot, p, refract(dir, nI, GLOBES_IOR_GLASS / GLOBES_IOR_WATER));${debug ? `
+        if (dbg_bad(lens.p + lens.dir * lens.F)) { globesDbg |= DBG_NEAR_DROP; }` : ''}
+        if (lens.F >= 1.0) {${debug ? `
+          globesDbg |= DBG_MET_TIR;` : ''}
           col += thr * 0.8 * globes_bg(bgTex, bgSamp, p, lens.dir);
           return col;
         }
@@ -911,7 +919,7 @@ function bowlEntryWGSL(): string {
  *  rim's bead and the lid where it meets them, into the bowl (globes_trace, through its glass or
  *  in by the mouth), and on, if it leaves by the mouth, through the lid and the bead above. w: 1
  *  where it met any of the bowl (else the pixel is the backdrop's). */
-function bowlTraceWGSL(params: string, args: string): string {
+function bowlTraceWGSL(params: string, args: string, debug: BowlDebug): string {
   return /* wgsl */ `
 // Set by globes_trace (the bowl's) where its ray leaves the bowl by the open mouth: where, which
 // way, and what is left of its light; and, going in, how far the ray has come (bowl.ts's glass).
@@ -921,7 +929,7 @@ var<private> globesBowlDir: vec3f;
 var<private> globesBowlThr: vec3f;
 var<private> globesBowlPath: f32;
 
-fn globes_bowlTrace(${params}) -> vec4f {
+fn globes_bowlTrace${debug ? 'Plain' : ''}(${params}) -> vec4f {
   var col = vec3f(0.0);
   var thr = vec3f(1.0);
   var o = ro;
@@ -975,7 +983,16 @@ fn globes_bowlTrace(${params}) -> vec4f {
   if (!met) { return vec4f(0.0); }
   col += thr * globes_bg(bgTex, bgSamp, o, d);
   return vec4f(col, 1.0);
-}
+}${debug ? `
+
+// (?debug: the trace, its pixel painted for what its ray met: globesDebugWGSL.)
+fn globes_bowlTrace(${params}) -> vec4f {
+  globesDbg = 0u;
+  let traced = globes_bowlTracePlain(${params.replace(/: [^,]+(?:<[^>]*>)?/g, '')});
+  if (dbg_bad(traced.xyz)) { globesDbg |= DBG_OUT; }
+  if (GLOBES_KOI) { globesDbg |= DBG_MET_FISH; }
+  return vec4f(dbg_paint(traced.xyz), traced.w);
+}` : ''}
 `;
 }
 
@@ -1019,6 +1036,82 @@ fn reef_rockNormal(pb: vec3f, nb: vec3f) -> vec3f { return nb; }
 `;
 }
 
+/** ?debug (BowlShape.debug, the betta bowl's page only): its pixels painted for what their rays
+ *  met that could make a speck (1: ?debug=specks), or for where on the way their light stopped
+ *  being a number, or went infinite (2: ?debug=nan; specks paints any such pixel magenta). A
+ *  separate pipeline, built only when asked for: without the flag the bowl's WGSL is as ever. The
+ *  HUD shows the legend (main.ts). */
+function globesDebugWGSL(debug: BowlDebug): string {
+  return /* wgsl */ `
+// Where the light stopped being a number (each place its own colour under ?debug=nan, where more
+// than one the first of these: magenta the lamp's haze in the air, purple in the water, red the
+// spray and bubbles, orange a drop's lens on the near side, yellow one on the far side; white
+// elsewhere, found only at the end - the water's surface, the glass, the backdrop, the furnishings
+// and the fish, not told apart) ...
+const DBG_LAMP_AIR: u32 = 1u;
+const DBG_LAMP_WATER: u32 = 2u;
+const DBG_SPLASH: u32 = 4u;
+const DBG_NEAR_DROP: u32 = 8u;
+const DBG_FAR_DROP: u32 = 16u;
+const DBG_OUT: u32 = 32u;
+// ... and (?debug=specks) what the ray met: blue a drop's rim turning the light back, cyan a drop's
+// lens on the near side, green drops drawn by how much of the pixel they cover (phones: they took
+// a tenth of its light or more), yellow a drop on the far side, orange spray or a bubble's dome
+// over half the pixel, white the fish's own pass. (Water the march finds alone in the air is not
+// marked: the HUD's splash counts tell of it.)
+const DBG_MET_TIR: u32 = 256u;
+const DBG_MET_DROP: u32 = 512u;
+const DBG_MET_COVER: u32 = 1024u;
+const DBG_MET_FAR: u32 = 2048u;
+const DBG_MET_SPRAY: u32 = 4096u;
+const DBG_MET_FISH: u32 = 8192u;
+var<private> globesDbg: u32;
+
+// Not a number, or infinite: tested on its bits, which no compiler can take for always false.
+fn dbg_bad(v: vec3f) -> bool {
+  return any((bitcast<vec3u>(v) & vec3u(0x7fffffffu)) >= vec3u(0x7f800000u));
+}
+
+// v, or 0 where it is not a number (noted: bit).
+fn dbg_chk(v: vec3f, bit: u32) -> vec3f {
+  if (dbg_bad(v)) {
+    globesDbg |= bit;
+    return vec3f(0.0);
+  }
+  return v;
+}
+
+// The pixel's colour as the debug view paints it (HDR: each stays saturated, tone mapped).
+fn dbg_paint(col: vec3f) -> vec3f {
+  let b = globesDbg;
+  if ((b & 255u) != 0u) {${debug === 1 ? `
+    return vec3f(1.0, 0.0, 1.0);` : `
+    let first = b & (~b + 1u);
+    if (first == DBG_LAMP_AIR) { return vec3f(1.0, 0.0, 1.0); }
+    if (first == DBG_LAMP_WATER) { return vec3f(0.35, 0.0, 1.0); }
+    if (first == DBG_SPLASH) { return vec3f(1.0, 0.0, 0.0); }
+    if (first == DBG_NEAR_DROP) { return vec3f(1.0, 0.25, 0.0); }
+    if (first == DBG_FAR_DROP) { return vec3f(0.6, 0.55, 0.0); }
+    return vec3f(1.5);`}
+  }${debug === 1 ? `
+  if ((b & DBG_MET_TIR) != 0u) { return vec3f(0.0, 0.0, 1.0); }
+  if ((b & DBG_MET_DROP) != 0u) { return vec3f(0.0, 0.45, 0.5); }
+  if ((b & DBG_MET_COVER) != 0u) { return vec3f(0.0, 0.5, 0.0); }
+  if ((b & DBG_MET_FAR) != 0u) { return vec3f(0.6, 0.55, 0.0); }
+  if ((b & DBG_MET_SPRAY) != 0u) { return vec3f(1.0, 0.25, 0.0); }
+  if ((b & DBG_MET_FISH) != 0u) { return vec3f(1.5); }` : ''}
+  return col;
+}
+`;
+}
+
+/** The ?debug views' colours, for the HUD (lines a phone's screen holds upright). */
+export const BOWL_DEBUG_LEGEND: Record<BowlDebug, string[]> = {
+  0: [],
+  1: ["debug specks: blue, a drop's rim turns light back", "cyan a drop's lens · green drops by their cover", 'yellow a far drop · orange spray · white the fish', 'magenta: not a number'],
+  2: ["debug nan: not a number in magenta the lamp's haze", 'in air, purple in water · red spray · orange near', 'drop · yellow far drop · white elsewhere (water,', 'glass, backdrop, furnishings, fish: not told apart)'],
+};
+
 /** WGSL without its comments (the betta bowl's passes: a quarter of their code is comments, and
  *  every pipeline built from it parses them again). */
 function withoutComments(code: string): string {
@@ -1036,7 +1129,7 @@ export function globeHelpersWGSL(globe: GlobeConfig, light: LightConfig, withKoi
   // globes_trace's parameters, and the arguments the bowl's trace passes them on with.
   const traceParams = `ro: vec3f, rd: vec3f, rot: mat3x3f, vol: vec4f, prm: vec4f, densTex: texture_3d<f32>, densSamp: sampler, sandTex: texture_2d<f32>, sandSamp: sampler, causticTex: texture_2d<f32>, causticSamp: sampler, poseTex: texture_2d<f32>, lit: vec4f, lightTex: texture_3d<f32>, lightSamp: sampler, moteTex: texture_3d<f32>, fieldTex: texture_3d<f32>, fieldSamp: sampler, gather: f32, bgTex: texture_2d<f32>, bgSamp: sampler, kelpCellTex: texture_3d<f32>, kelpRefTex: texture_2d<f32>, kelpPrimTex: texture_2d<f32>, splashTex: texture_3d<f32>, dropTex: texture_2d<f32>${BETTA_PARAMS}${rt ? ', tlas: acceleration_structure' : ''}${foam ? FOAM_PARAMS : ''}`;
   const traceArgs = traceParams.replace(/: [^,]+(?:<[^>]*>)?/g, '').replace(/^ro, rd,/, 'o, d,');
-  const code = /* wgsl */ `
+  const code = /* wgsl */ `${bowl?.debug ? globesDebugWGSL(bowl.debug) : ''}
 const GLOBES_SUN_DIR_WATER: vec3f = ${v3(sunInWater(normalised(light.sunDirection)))};
 const GLOBES_SAND_AMBIENT_WATER: vec3f = ${foam ? 'vec3f(0.07, 0.16, 0.12)' : 'vec3f(0.10, 0.19, 0.22)'};
 const GLOBES_SAND_AMBIENT_AIR: vec3f = vec3f(0.32, 0.32, 0.36);
@@ -1715,7 +1808,10 @@ fn globes_splashAlong(splashTex: texture_3d<f32>, p: vec3f, dir: vec3f, a: f32, 
         if (tm < a || tm >= b) { continue; }
         let x = p + dir * tm;
         if (any(vec3i(floor((x + vec3f(GLOBES_R_IN)) / cs)) != v)) { continue; }
-        let cover = smoothstep(r + 0.5 * pix, r - 0.5 * pix, d) * min(1.0, 3.14159 * r * r / (pix * pix));
+        let cover = (1.0 - smoothstep(r - 0.5 * pix, r + 0.5 * pix, d)) * min(1.0, 3.14159 * r * r / (pix * pix));
+        // (One it misses by a pixel adds nothing: not shaded, so a shade that is not a number,
+        // times 0, cannot spoil the pixel.)
+        if (cover <= 0.0) { continue; }
         let nrm = normalize(x - s.xyz);
         // (Smaller than the pixel, it shows as it does on the whole: a speck.)
         let whole = clamp(pix / (2.0 * r) - 0.25, 0.0, 1.0);
@@ -1728,7 +1824,9 @@ fn globes_splashAlong(splashTex: texture_3d<f32>, p: vec3f, dir: vec3f, a: f32, 
           sh = mix(globes_sprayShade(bgTex, bgSamp, x, nrm, dir, s.xyz, r), globes_sprayWhole(bgTex, bgSamp, s.xyz), whole);
         } else {
           sh = globes_domeShade(bgTex, bgSamp, x, nrm, dir);
-        }
+        }${bowl?.debug ? `
+        sh = vec4f(dbg_chk(sh.rgb, DBG_SPLASH), sh.a);
+        if (!inWater && cover > 0.5) { globesDbg |= DBG_MET_SPRAY; }` : ''}
         out = vec4f(out.rgb + out.a * cover * sh.rgb, out.a * (1.0 - cover * (1.0 - sh.a)));
       }
     }
@@ -1744,7 +1842,9 @@ fn globes_splashAlong(splashTex: texture_3d<f32>, p: vec3f, dir: vec3f, a: f32, 
 // (round, its tail is its head), its width (half, at its head; 0: none), its contact angle's
 // cosine, a seed for its edge's wavering; running, the width of the trail it draws behind it
 // (against its own; its tail where the trail starts; -1: it is a trail line, laid down); and how
-// far the point it was found for is inside its edge (negative outside).
+// far the point it was found for is inside its edge (negative outside).${bowl?.lite ? `
+// (The phone's bowl: and seen, the share of the pixel's light that comes on as through bare glass,
+// past the drops drawn by how much of the pixel they cover: globes_dropAt.)` : ''}
 struct GlobesDrop {
   c: vec3f,
   t: vec3f,
@@ -1752,17 +1852,22 @@ struct GlobesDrop {
   cosT: f32,
   seed: f32,
   line: f32,
-  edge: f32,
+  edge: f32,${bowl?.lite ? `
+  seen: f32,` : ''}
 };
 
 // A drop's water over the glass at x (the globe's frame): its depth there (0 off it), the slope
 // of its surface along the glass, and how far x is inside its edge. Across the streak the water
 // stands as a cap at the drop's contact angle; its edge wavers (pinned on the glass here and
-// there) - into lobes, for a larger drop; a small one stays nearly round.
+// there) - into lobes, for a larger drop; a small one stays nearly round.${bowl?.lite ? `
+// (The phone's bowl: and that water's width there, half, and its contact angle's cosine - the
+// drop's or its trail's, whichever reaches further past x: globes_dropAt.)` : ''}
 struct GlobesDropH {
   h: f32,
   slope: vec3f,
-  inside: f32,
+  inside: f32,${bowl?.lite ? `
+  we: f32,
+  cosT: f32,` : ''}
 };
 
 // The water at xs of a streak from p0 to p1, we wide (half) there, standing as a cap at the
@@ -1772,7 +1877,7 @@ fn globes_capH(xs: vec3f, p0: vec3f, p1: vec3f, we: f32, cosT: f32) -> GlobesDro
   let k = clamp(dot(xs - p0, seg) / max(dot(seg, seg), 1e-12), 0.0, 1.0);
   let off = xs - (p0 + seg * k);
   let dist = length(off);
-  var out = GlobesDropH(0.0, vec3f(0.0), we - dist);
+  var out = GlobesDropH(0.0, vec3f(0.0), we - dist${bowl?.lite ? ', we, cosT' : ''});
   if (dist >= we) { return out; }
   let rho = dist / we;
   let rc = 1.0 / sqrt(max(1.0 - cosT * cosT, 1e-4));
@@ -1803,22 +1908,34 @@ fn globes_dropH(d: GlobesDrop, x: vec3f) -> GlobesDropH {
   // one down.)
   let blob = globes_capH(xs, d.c, d.c, we, d.cosT);
   var out = globes_capH(xs, d.t, d.c, d.w * d.line * globes_trailW(xs), GLOBES_TRAIL_COS);
-  let inside = max(out.inside, blob.inside);
+  let inside = max(out.inside, blob.inside);${bowl?.lite ? `
+  var wide = out;
+  if (blob.inside >= out.inside) { wide = blob; }` : ''}
   if (blob.h >= out.h) { out = blob; }
-  out.inside = inside;
+  out.inside = inside;${bowl?.lite ? `
+  out.we = wide.we;
+  out.cosT = wide.cosT;` : ''}
   return out;
 }
 
 // The drop on the glass at p (on its inner face, the sim frame), if any: the one whose water
-// stands deepest there; and how far p is from the nearest drop's edge.
-fn globes_dropAt(dropTex: texture_2d<f32>, rot: mat3x3f, p: vec3f) -> GlobesDrop {
-  let pb = transpose(rot) * p;
+// stands deepest there; and how far p is from the nearest drop's edge.${bowl?.lite ? `
+// (The phone's bowl, one ray to a pixel, foot the pixel's footprint on the glass - across, and
+// along the way the glass slants from the eye, the longer: a drop narrower than the pixel, or one
+// whose edge crosses it, is not drawn through its lens - a ray through a sliver of it would paint
+// the whole pixel with it, often black where its rim turns the light back - but by how much of the
+// pixel it covers, its water taking its share of the light: seen. A ray well inside a drop still
+// goes through its lens.)` : ''}
+fn globes_dropAt(dropTex: texture_2d<f32>, rot: mat3x3f, p: vec3f${bowl?.lite ? ', foot: vec2f' : ''}) -> GlobesDrop {
+  let pb = transpose(rot) * p;${bowl?.lite ? `
+  let pix = sqrt(foot.x * foot.y);` : ''}
   let uv = globes_oct(normalize(pb)) * 0.5 + 0.5;
   let tx = clamp(vec2i(floor(uv * f32(GLOBES_DROP_N))), vec2i(0), vec2i(GLOBES_DROP_N - 1));
   let ids = textureLoad(dropTex, tx, 0);
-  var out = GlobesDrop(vec3f(0.0), vec3f(0.0), 0.0, 1.0, 0.0, 0.0, 1e9);
+  var out = GlobesDrop(vec3f(0.0), vec3f(0.0), 0.0, 1.0, 0.0, 0.0, 1e9${bowl?.lite ? ', 1.0' : ''});
   var edge = 1e9;
-  var deepest = 0.0;
+  var deepest = 0.0;${bowl?.lite ? `
+  var seen = 1.0;` : ''}
   for (var k = 0; k < 4; k++) {
     let id = i32(ids[k] + 0.5) - 1;
     if (id < 0) { break; }
@@ -1827,17 +1944,60 @@ fn globes_dropAt(dropTex: texture_2d<f32>, rot: mat3x3f, p: vec3f) -> GlobesDrop
     let w = fract(r0.w);
     if (w <= 0.0) { continue; }
     let r1 = textureLoad(dropTex, at + vec2i(0, 1), 0);
-    let d = GlobesDrop(r0.xyz, r1.xyz, w, cos(radians(floor(r0.w))), fract(r1.w), floor(r1.w) / 100.0, 0.0);
+    let d = GlobesDrop(r0.xyz, r1.xyz, w, cos(radians(floor(r0.w))), fract(r1.w), floor(r1.w) / 100.0, 0.0${bowl?.lite ? ', 1.0' : ''});${bowl?.lite ? `
+    if (w < 0.6 * foot.y) {
+      // (The drop's own water and its streak's, each taking its share: a trail's edge stands lower,
+      // all along a trail line and behind a running drop.)
+      let cover = globes_dropCover(d, normalize(pb) * length(d.c), pix);
+      seen *= 1.0 - globes_dropLoss(select(d.cosT, GLOBES_TRAIL_COS, d.line < 0.0)) * cover.x - globes_dropLoss(select(d.cosT, GLOBES_TRAIL_COS, d.line != 0.0)) * cover.y;
+      continue;
+    }` : ''}
     let H = globes_dropH(d, pb);
-    if (abs(H.inside) < abs(edge)) { edge = H.inside; }
+    if (abs(H.inside) < abs(edge)) { edge = H.inside; }${bowl?.lite ? `
+    if (H.inside < 0.5 * foot.y) {
+      // (Its edge crosses the pixel, or passes near: the share of the pixel inside it, short of its
+      // other edge, where a trail is narrower than the pixel.)
+      seen *= 1.0 - globes_dropLoss(H.cosT) * (smoothstep(-0.5 * pix, 0.5 * pix, H.inside) - smoothstep(-0.5 * pix, 0.5 * pix, H.inside - 2.0 * H.we));
+      continue;
+    }` : ''}
     if (H.h > deepest) {
       deepest = H.h;
       out = d;
     }
   }
-  out.edge = edge;
+  out.edge = edge;${bowl?.lite ? `
+  out.seen = seen;` : ''}
   return out;
+}${bowl?.lite ? `
+
+// How much of a pixel (pix across on the whole, its middle at xs on the glass, the globe's frame)
+// a drop narrower than it covers. Its water is spread over the pixel's width round it (as
+// globes_splashAlong's spheres are), so that, summed over the pixels round it, it covers just its
+// own area: the pixel taken as a disc as large (radius 0.5642 pix), a smoothstep falling over
+// [m - h, m + h] spreads it over pi (m^2 + 0.2 h^2). A streak adds its length across the pixel,
+// spread as over a line (a running drop's trail is narrower than the drop). The drop's own share,
+// and its streak's past that.
+fn globes_dropCover(d: GlobesDrop, xs: vec3f, pix: f32) -> vec2f {
+  let r0 = 0.5642 * pix;
+  let m = max(d.w, r0);
+  let h = min(d.w, r0);
+  let head = d.w * d.w / (m * m + 0.2 * h * h) * (1.0 - smoothstep(m - h, m + h, distance(xs, d.c)));
+  let seg = d.c - d.t;
+  let k = clamp(dot(xs - d.t, seg) / max(dot(seg, seg), 1e-12), 0.0, 1.0);
+  let ws = d.w * select(1.0, d.line, d.line > 0.0);
+  let ml = max(ws, 0.5 * pix);
+  let hl = min(ws, 0.5 * pix);
+  let streak = ws / ml * min(length(seg) / pix, 1.0) * (1.0 - smoothstep(ml - hl, ml + hl, distance(xs, d.t + seg * k)));
+  return vec2f(head, min(streak, 1.0 - head));
 }
+
+// The share of the light a drop's water takes from what is seen through it, on the whole (c its
+// contact angle's cosine): where its surface stands steeper than water's critical angle (from the
+// middle out, past 0.75 of the way to its edge over the sine of its contact angle), it turns the
+// light back, to the dim room behind the camera; and a little is reflected off the rest.
+fn globes_dropLoss(c: f32) -> f32 {
+  return 0.03 + 0.9 * max(1.0 - 0.5625 / max(1.0 - c * c, 1e-4), 0.0);
+}` : ''}
 
 // Out of a drop on the glass: the ray in its water at q (heading away from the glass, d), up to
 // its surface (where the water over the glass stands as high as the ray has risen) and out. Where
@@ -2072,7 +2232,7 @@ fn globes_trace(${traceParams}) -> vec3f {
   let stepLen = prm.y;
   let normalEps = prm.z;
   let probe = prm.w;
-${bowl ? bowlEntryWGSL() : GLASS_ENTRY}
+${bowl ? bowlEntryWGSL(bowl) : GLASS_ENTRY}
   // The koi: the box its shape is baked into (the koi pass traces it; the main pass only
   // notes rays that pass near it).
   let koiMisc = textureLoad(poseTex, vec2i(KOI_MISC, 0), 0);
@@ -2333,8 +2493,10 @@ ${bowl?.lite ? `      // (The phone's bowl: where a sample could find nothing, i
         // A drop on the glass where the ray leaves (on the far side, seen through the cavity): into
         // its water where the ray comes down to its surface, through it, and out through the glass
         // under it.
-        let far = globes_dropAt(dropTex, rot, qw);
-        if (GLOBES_EDGES && abs(far.edge) < 2.0 * lit.z * pathLen) { globesEdge |= 128u; }
+        let far = globes_dropAt(dropTex, rot, qw${bowl?.lite ? ', lit.z * pathLen * vec2f(1.0, 1.0 / max(dot(dir, normalize(qw)), 0.05))' : ''});
+        if (GLOBES_EDGES && abs(far.edge) < 2.0 * lit.z * pathLen) { globesEdge |= 128u; }${bowl?.lite ? `
+        thr *= far.seen;` : ''}${bowl?.debug && bowl.lite ? `
+        if (far.seen < 0.9) { globesDbg |= DBG_MET_COVER; }` : ''}
         if (far.w > 0.0) {
           let nIn = -normalize(qw);
           let fall = max(-dot(dir, nIn), 0.05);
@@ -2348,7 +2510,9 @@ ${bowl?.lite ? `      // (The phone's bowl: where a sample could find nothing, i
           }
           if (H.h > 0.0) {
             let x = qw - dir * h;
-            let n = normalize(nIn - rot * H.slope);
+            let n = normalize(nIn - rot * H.slope);${bowl?.debug ? `
+            globesDbg |= DBG_MET_FAR;
+            if (dbg_bad(n * h)) { globesDbg |= DBG_FAR_DROP; }` : ''}
             let F = globes_fresnel(clamp(-dot(dir, n), 0.0, 1.0), 1.0, GLOBES_IOR_WATER);
             col += thr * F * globes_bg(bgTex, bgSamp, x, reflect(dir, n));
             thr *= 1.0 - F;
@@ -2464,7 +2628,7 @@ ${bowl ? `    if (event == 9) {
   col += thr * globes_bg(bgTex, bgSamp, p, dir);
   return col;
 }
-${bowl ? bowlTraceWGSL(traceParams, traceArgs) : ''}`;
+${bowl ? bowlTraceWGSL(traceParams, traceArgs, bowl.debug) : ''}`;
   return bowl ? withoutComments(code) : code;
 }
 
@@ -2514,10 +2678,14 @@ fn globes_shade(camPos: vec3f, fragPos: vec3f, fragCenter: vec3f, center: vec3f,
   bowlLampP = bowl_pointToWorld(2u, vec3f(0.0, -BOWL_PUCK_D, 0.0));
   bowlLampD = normalize(bowl_toWorld(2u, vec3f(0.0, -1.0, 0.0)));
   let traced = globes_bowlTrace(ro, rd, ${traceArgs});
-  col = traced.xyz;
+  col = traced.xyz + globesGathered * gatherW;
   cover = traced.w;
-  // (Where the ray meets none of the bowl, the backdrop shows: -1.)
-  return select(vec4f(col + globesGathered * gatherW, select(1.0, cover, GLOBES_DESKTOP) + select(0.0, 2.0, globesKoiNear)), vec4f(0.0, 0.0, 0.0, -1.0), cover < 0.5);
+  // (Where the ray meets none of the bowl, the backdrop shows: -1. So it does where the light it
+  // brings back is not a number, or infinite - maths a GPU need not define, met somewhere on the
+  // way - rather than a black speck: its bits tested, which no compiler can take for always false.
+  // And none brighter than the HDR target holds.)
+  let bad = any((bitcast<vec3u>(col) & vec3u(0x7fffffffu)) >= vec3u(0x7f800000u));
+  return select(vec4f(min(col, vec3f(60000.0)), select(1.0, cover, GLOBES_DESKTOP) + select(0.0, 2.0, globesKoiNear)), vec4f(0.0, 0.0, 0.0, -1.0), cover < 0.5 || bad);
 }` : `
   // On the desktop a ray that misses the glass shows the desktop itself: the window is clear there.
   if (GLOBES_DESKTOP && globes_sphere(ro, rd, GLOBES_R_OUT).x <= 0.0) {
