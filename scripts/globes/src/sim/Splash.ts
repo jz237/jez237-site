@@ -118,7 +118,8 @@ export class Splash {
       drops: make('drops', 2 * DROP_CAP * 32),
       gain: make('drops run together', DROP_CAP * 16),
       wet: make('wet glass', WET_N * WET_N * 4),
-      dropMap: make('drop map', DROP_MAP_N * DROP_MAP_N * (1 + MAP_K) * 4),
+      // (Per texel its count, its drops, and how many the renderer's map holds: splash.wgsl.)
+      dropMap: make('drop map', DROP_MAP_N * DROP_MAP_N * (2 + MAP_K) * 4),
       bins: make('splash bins', (SPLASH_GRID ** 3 + 12) * 4),
     };
     this.uniform = device.createBuffer({ label: 'splash params', size: S_WORDS * 4, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
