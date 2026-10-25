@@ -10,7 +10,6 @@ import sandExtendWGSL from './shaders/sand_extend.wgsl?raw';
 import sandSurfaceWGSL from './shaders/sand_surface.wgsl?raw';
 import shiftWGSL from './shaders/shift.wgsl?raw';
 import probeWGSL from './shaders/probe.wgsl?raw';
-import centroidWGSL from './shaders/centroid.wgsl?raw';
 import lightResolveWGSL from './shaders/light_resolve.wgsl?raw';
 import motesWGSL from './shaders/motes.wgsl?raw';
 import motesGridWGSL from './shaders/motes_grid.wgsl?raw';
@@ -30,6 +29,7 @@ import gridUpdateWGSL from './shaders/grid_update.wgsl?raw';
 import cellClassifyWGSL from './shaders/cell_classify.wgsl?raw';
 import cellPrepWGSL from './shaders/cell_prep.wgsl?raw';
 import pressureWGSL from './shaders/pressure.wgsl?raw';
+import pressureFusedWGSL from './shaders/pressure_fused.wgsl?raw';
 import projectWGSL from './shaders/project.wgsl?raw';
 import extrapolateWGSL from './shaders/extrapolate.wgsl?raw';
 import constrainWGSL from './shaders/constrain.wgsl?raw';
@@ -43,6 +43,79 @@ import kelpBuildWGSL from './shaders/kelp_build.wgsl?raw';
 import type { KelpForest } from '../kelp/KelpForest';
 import { KELP_GRID, KELP_SHADE_GRID, kelpSharedWGSL } from '../kelp/kelpShared';
 import { rockHeight, rockWGSL, sandRestHeight } from '../reef/rock';
+
+/** bedSolids' height map: its size a side, and its value where nothing stands. */
+export const BED_SOLIDS_N = 256;
+export const BED_SOLIDS_NONE = -1.2;
+
+/** reef_rockHeight and reef_sandRest for rock_bed.wgsl when bedSolids stand in a level bed: the
+ *  map's tops (binding 3), and the level. */
+/** sand_rotate.wgsl for bedSolids: their tops stop at the edge of their footprints (no rock
+ *  below the glass, as the reef's has), so what is blended between columns is how far each
+ *  column's solid stands above its own glass (none where there is none), and the old floor is the
+ *  glass where it is wanted, exactly, plus that. (Blended as heights, the solids' edges sagged to
+ *  the glass and their sand was lost; blended with the glass in them, the floor rose above the
+ *  glass near the wall, where it curves up, and every frame the bowl turned the sand there was
+ *  rebuilt a little too deep: the volume pass took it back from everywhere, and the sand drifted
+ *  into a heap against the glass.) */
+function bedSolidsRotateWGSL(code: string): string {
+  const a = 'return rockOld[u32(i + n * j)];';
+  const b = 'return max(-glassHalf(xz), r) + t;';
+  const off = '{ return -10.0; }';
+  if (!code.includes(a) || code.split(off).length !== 2) throw new Error('sand_rotate.wgsl: columnRock changed');
+  if (!code.includes(b)) throw new Error('sand_rotate.wgsl: oldTop changed');
+  return code
+    .replace(off, '{ return 0.0; }')
+    .replace(a, `let xz = ((vec2f(f32(i), f32(j)) + vec2f(0.5)) * P.sandMap.y * 2.0 - vec2f(1.0)) * P.radius;
+  return max(rockOld[u32(i + n * j)] + glassHalf(xz), 0.0);`)
+    .replace(b, 'return -glassHalf(xz) + r + t;');
+}
+
+/** rock_bed.wgsl for bedSolids: no point above their highest top is in any of them (the map is
+ *  not read there). */
+function bedSolidsRockBedWGSL(code: string, map: Float32Array): string {
+  const a = 'return g.y < reef_rockHeight(g.xz);';
+  if (!code.includes(a)) throw new Error('rock_bed.wgsl: insideRock changed');
+  // (A little over it: the blend of the map's texels may round past the highest.)
+  const top = map.reduce((m, h) => Math.max(m, h), BED_SOLIDS_NONE) + 1e-3;
+  return code.replace(a, `return g.y < ${top.toFixed(6)} && g.y < reef_rockHeight(g.xz);`);
+}
+
+function bedSolidsWGSL(solids: { map: Float32Array; extent: number }, level: number): string {
+  // (Outside the map's texels round the solids, a texel more for the blend, nothing stands: it
+  // is not read there.)
+  const n = BED_SOLIDS_N;
+  const lo = [n, n];
+  const hi = [-1, -1];
+  solids.map.forEach((h, k) => {
+    if (h <= BED_SOLIDS_NONE) return;
+    const at = [k % n, Math.floor(k / n)];
+    for (let a = 0; a < 2; a++) {
+      lo[a] = Math.min(lo[a], Math.max(at[a] - 1, 0));
+      hi[a] = Math.max(hi[a], Math.min(at[a], n - 2));
+    }
+  });
+  return /* wgsl */ `
+@group(0) @binding(3) var<storage, read> bedMap: array<f32>;
+
+fn reef_rockHeight(xz: vec2f) -> f32 {
+  let n = ${n};
+  let g = (xz / ${(2 * solids.extent).toFixed(6)} + vec2f(0.5)) * f32(n) - vec2f(0.5);
+  let b = floor(g);
+  let f = g - b;
+  let i = vec2i(b);
+  if (i.x < ${lo[0]} || i.y < ${lo[1]} || i.x > ${hi[0]} || i.y > ${hi[1]}) { return -10.0; }
+  let at = u32(i.x + n * i.y);
+  let row = u32(n);
+  let h = mix(mix(bedMap[at], bedMap[at + 1u], f.x), mix(bedMap[at + row], bedMap[at + row + 1u], f.x), f.y);
+  return select(h, -10.0, h < ${(BED_SOLIDS_NONE + 0.1).toFixed(3)});
+}
+
+fn reef_sandRest(xz: vec2f) -> f32 {
+  return ${level.toFixed(6)};
+}
+`;
+}
 import reefSimWGSL from './shaders/reef_sim.wgsl?raw';
 import reefBuildWGSL from './shaders/reef_build.wgsl?raw';
 import type { Reef } from '../reef/Reef';
@@ -50,14 +123,17 @@ import { BODY_VERTS } from '../reef/anemone';
 import { FISH_POINTS, MAX_FISH, REEF_GRID, reefSharedWGSL } from '../reef/reefShared';
 import rtRegionsWGSL from './shaders/rt_regions.wgsl?raw';
 import { Foam, FOAM_CTRL_QUEUE, FOAM_QUEUE } from './Foam';
-import { Splash } from './Splash';
+import { Splash, SPLASH_COUNTS } from './Splash';
 import { meniscusConstsWGSL } from '../render/meniscus';
 import { hasRayTracing } from '../rt/rt';
+import type { SimRuntime } from './simTier';
 import { RtScene } from '../rt/RtScene';
 
 export type Vec3 = readonly [number, number, number];
 type Dispatch = [number, number, number];
 type Resource = GPUBuffer | GPUTextureView | GPUSampler;
+/** Opens a compute pass, timed with the sim's own when profiling is on (setProfiling). */
+export type BeginPass = (enc: GPUCommandEncoder, label: string) => GPUComputePassEncoder;
 /** 3x3 rotation, column-major (three.js Matrix3.elements): the globe's frame in the sim frame. */
 export type Rotation = ArrayLike<number>;
 const IDENTITY: Rotation = [1, 0, 0, 0, 1, 0, 0, 0, 1];
@@ -67,14 +143,17 @@ interface Kernel {
   bindGroups: GPUBindGroup[];
 }
 
-const PARAMS_SIZE = 416;
+const PARAMS_SIZE = 480;
+/** The most speed a fish's pushes can add to the water in one frame (see push()). */
+const MAX_PUSH = 0.15;
 /** Points the water is sampled at for the creatures every frame (see probe.wgsl): the koi's
  *  first (KOI_PROBES), then the clownfish's and the anemone's (setProbes). */
-export const PROBES = 64;
+export const PROBES = 128;
 /** Readback: stats (16 B), probe samples, water centroid (16 B), the ray tracing regions' counts
- *  (16 B). */
+ *  (16 B), the splash's counts. */
 const READBACK_RT = 16 + PROBES * 32 + 16;
-const READBACK_SIZE = READBACK_RT + 16;
+const READBACK_SPLASH = READBACK_RT + 16;
+const READBACK_SIZE = READBACK_SPLASH + SPLASH_COUNTS;
 /** Density level of the water surface, shared by the solver and the renderer. */
 export const SURFACE_ISO = 0.5;
 /** The fastest the water may go, world units/s: about twice the fastest jets a hard shake
@@ -88,12 +167,33 @@ const PROFILE_PASSES = 256;
 const SORT_BLOCK = 4;
 /** The pressure solve's tiles' y and z (common.wgsl: PRESSURE_TILE_Y, PRESSURE_TILE_Z). */
 const PRESSURE_TILE = [8, 4];
+/** The largest grid that has the pressure solve's fused sweeps (pressure_fused.wgsl: a sweep in one
+ *  dispatch, where the two colours take two), for a phone's ?bench=sim to time against the two
+ *  colours (fusedSweeps). They pay only where a launch costs more than the work they add, which no
+ *  GPU measured so far shows: on the 5090 (launches of 1-2 us) they took 0.22 ms a frame against
+ *  0.16 at 40^3, and 0.72 against 0.52 at 64^3; on this desktop's Radeon iGPU (2 CUs, a small GPU
+ *  as a phone's is) 3.56 against 1.10 at 40^3. The S25 Ultra's sim took ~40 us a dispatch, work
+ *  and all; what the launch alone costs there is for the bench to say. (Dev: ?fused=1.) */
+const FUSED_MAX_N = 48;
 /** Floats a particle's position takes, and its velocity: three each, packed (a fourth would
  *  carry nothing, and every pass over the particles, bound by the memory's bandwidth, would read
  *  and write a third more). */
 export const PARTICLE_FLOATS = 3;
 /** The particles are sorted again once the fastest may have gone this many cells. */
 const SORT_DRIFT = 1;
+/** How much the water moves (FluidSim.agitation, for its runtime): a hard shake once its fastest
+ *  goes faster than SHAKE_SPEED (world units/s; a hard roll's go 10-20); calm once, the bowl
+ *  standing still (spinning slower than STILL_SPIN, rad/s, its acceleration off gravity by less
+ *  than STILL_ACCEL of it), the fastest has gone slower than CALM_SPEED for CALM_AFTER s (left
+ *  alone, its odd particle near the glass goes up to ~1.6; the filter's current far slower). */
+const SHAKE_SPEED = 6;
+const CALM_SPEED = 2;
+const CALM_AFTER = 3;
+const STILL_SPIN = 0.01;
+const STILL_ACCEL = 0.02;
+/** And the bowl standing still this long, the bed it shows may be built a few frames at a time
+ *  (SimRuntime.stillBedEvery). */
+const STILL_BED_AFTER = 0.5;
 
 /** How a globe's water is seeded (FluidSim.seedPlan): per column of the particle lattice (x
  *  fastest, then z), its first particle's place in the list, and its lowest point (low 16 bits)
@@ -117,23 +217,31 @@ interface Particles {
 /** The density grid blurred by a separable 7-tap binomial ([1 6 15 20 15 6 1] / 64), from the
  *  splat's sums, into `field` (the solver's free surface), and on a frame's last substep into the
  *  3D texture too (the renderer's, and the frame's other readers'). In one pass: a workgroup walks
- *  a 16 x 16 column BLUR_RUN voxels along z, blurring each z slice of it along x and y (a tile of
+ *  a 16 x 16 column blurRun() voxels along z, blurring each z slice of it along x and y (a tile of
  *  the slice in workgroup memory), and along z the last seven of those, each thread keeping its
  *  own. (In two passes, along x and y into a grid and then along z out of it, it took twice as
  *  long: the grid between went out to memory and came back.) */
 const BLUR_TAPS = `(a(-3) + a(3)) * 0.015625 + (a(-2) + a(2)) * 0.09375 + (a(-1) + a(1)) * 0.234375 + a(0) * 0.3125`;
-/** Voxels along z a workgroup of the blur walks. */
-const BLUR_RUN = 64;
+/** Voxels along z a workgroup of the blur walks, for a density map of m a side: as many as it can
+ *  (at most 64, at least 16) and still give the dispatch 512 workgroups. Its slices are walked one
+ *  after another, two barriers each, so on a small map a long run waited on its few workgroups
+ *  (at 80 a side, 64 to a run made 50 of them, each 70 slices long: 16 to a run took a third of the
+ *  time); a short one reads the 6 slices round it again in each. */
+function blurRun(m: number): number {
+  let run = 64;
+  while (run > 16 && Math.ceil(m / 16) ** 2 * Math.ceil(m / run) < 512) run /= 2;
+  return run;
+}
 
-/** format: the density texture's, where the blur writes it too. */
-function blurWGSL(format: GPUTextureFormat | null): string {
+/** format: the density texture's, where the blur writes it too; run: blurRun(). */
+function blurWGSL(format: GPUTextureFormat | null, run: number): string {
   const along = (f: string) => BLUR_TAPS.replace(/a\((-?\d)\)/g, (_, d: string) => f.replace('D', d));
   return /* wgsl */ `
 @group(0) @binding(1) var<storage, read> src: array<u32>;
 @group(0) @binding(2) var<storage, read_write> field: array<f32>;
 ${format !== null ? `@group(0) @binding(3) var dst: texture_storage_3d<${format}, write>;` : ''}
 
-const BLUR_RUN: i32 = ${BLUR_RUN};
+const BLUR_RUN: i32 = ${run};
 
 // A 16 x 16 tile of a z slice with 3 voxels round it, then that blurred along x (all its rows).
 var<workgroup> tileIn: array<f32, 484>;
@@ -221,6 +329,41 @@ function mulberry32(seed: number) {
   };
 }
 
+/** What the page's globes show that the sim serves only them (FluidSim.shows). */
+interface Shows {
+  /** The koi (its shadow in the photons). */
+  koi: boolean;
+  /** The kelp's or the anemone's shade on the light (the photons). */
+  shade: boolean;
+  /** The sea foam (its cover on the water, in the photons). */
+  foam: boolean;
+  /** The motes (moved and binned for the renderer every frame). */
+  motes: boolean;
+}
+
+/** caustics.wgsl without what no globe of the page shows: the koi's shadow, the kelp's or the
+ *  reef's shade, the foam's cover (code compiled in costs even where it never runs:
+ *  docs/architecture.md). Their bindings are still named, so the pipeline's layout keeps them. */
+function photonsWGSL(code: string, shows: Shows): string {
+  const cut = (on: boolean, from: string, to: string): void => {
+    if (on) return;
+    if (!code.includes(from)) throw new Error(`caustics.wgsl: no "${from}"`);
+    code = code.replace(from, to);
+  };
+  cut(shows.koi, 'let koiOn = textureLoad(koiPose, vec2i(KOI_MISC, 0), 0).y > 0.5;', 'let koiOn = false;');
+  cut(shows.shade, 'let kelpOn = P.scene.y > 0.5;', 'let kelpOn = false;');
+  cut(shows.foam, 'event == 1 && P.foam.x > 0.0', 'event == 1 && false');
+  return code;
+}
+
+/** light_resolve.wgsl writing the light volume in its texture's format (r16float where the
+ *  device can write that). */
+function lightResolveFormatWGSL(format: GPUTextureFormat): string {
+  const a = '<rgba16float, write>';
+  if (!lightResolveWGSL.includes(a)) throw new Error('light_resolve.wgsl: lightOut changed');
+  return lightResolveWGSL.replace(a, `<${format}, write>`);
+}
+
 export class FluidSim {
   readonly device: GPUDevice;
   readonly cfg: SimConfig;
@@ -235,6 +378,13 @@ export class FluidSim {
   readonly h: number;
   readonly renderN: number;
   readonly renderVoxel: number;
+  /** Whether the pressure sweeps go in one dispatch each (FUSED_MAX_N), from the next step on,
+   *  where the grid has their kernel (canFuse): off unless ?fused=1, for a bench to switch and
+   *  time. Either leaves the water as the other does, to the bit. */
+  fusedSweeps: boolean;
+  /** Whether the grid has the fused sweeps' kernel and their other buffer: grids of FUSED_MAX_N
+   *  and under, and any with ?fused=1. */
+  readonly canFuse: boolean;
   /** 3D texture, r16float (rgba16float where the device can't write that): r = smoothed water
    *  density (~1 inside, 0 in air). (The renderer's march leans on its fetches: texels a quarter
    *  the size drew a shaking globe 10% faster.) */
@@ -244,9 +394,15 @@ export class FluidSim {
   readonly sandTexture: GPUTexture;
   /** Sun irradiance on the sand surface (rgb), same map as the sand: the caustics. */
   readonly causticTexture: GPUTexture;
-  /** Light-shaft volume over [-R, R]^3: r = fluence of sunlight in the water (~1 unfocused). */
+  /** Light-shaft volume over [-R, R]^3: r = fluence of sunlight in the water (~1 unfocused).
+   *  r16float (rgba16float where the device can't write that), as the density. */
   readonly lightTexture: GPUTexture;
   readonly lightN: number;
+  /** Where no sample of the renderer's march can find the water's surface or the sand, so that it
+   *  steps over its samples there unread (x: in the air over them, where the photons step over
+   *  theirs too): a texel (rgba32float) that render/marchBand.ts works out, where there is one
+   *  (onWaterBuilt). Till then, and without one, it leaves nothing out. */
+  readonly marchBand: GPUTexture;
   /** Motes (fine suspended particles), binned for ray tracing: a (G*(K+1)) x G x G grid of
    *  rgba32float texels, per cell K mote positions (w: size) then the count. */
   readonly moteTexture: GPUTexture;
@@ -259,6 +415,10 @@ export class FluidSim {
   koiPose: GPUTexture | null = null;
   /** Whether the koi is in the water (its shape is baked each frame only then). */
   koiVisible = true;
+  /** What the page's globes show (main.ts) that the sim serves only them: what none of them shows
+   *  is left out (compiled out of the photon tracer; the motes neither moved nor binned). Set
+   *  before init(). */
+  shows: Shows = { koi: true, shade: true, foam: true, motes: true };
   /** The koi's shape baked over the box round it, every frame (koi_bake.wgsl): rgba16float,
    *  x = distance, y = fin, z = nearest spine segment. */
   readonly koiField: GPUTexture;
@@ -302,8 +462,17 @@ export class FluidSim {
   /** The reef rock is part of the bed (src/reef/rock.ts): the water, the sand and the light meet
    *  it. Set before init() or startOver(). */
   rock = false;
+  /** What else stands in the sand, fixed to the glass (the betta bowl's rocks and the feet of its
+   *  driftwood: render/scape/bedSolids.mjs): a height map of their tops (globe frame,
+   *  BED_SOLIDS_N square over [-extent, extent], BED_SOLIDS_NONE where there are none). It is
+   *  part of the bed as the reef's rock is: the sand rests on it and flows round it, and the
+   *  water and the light meet it. Set before init(). */
+  bedSolids: { map: Float32Array; extent: number } | null = null;
   /** How clear the water is (its absorption times this, for the light on its way down). */
   clarity = 1;
+  /** The betta bowl's open mouth (render/bowl.ts): the water stays under this height along the
+   *  globe's axis (g2p.wgsl), as under its lid. Null for a sealed globe. */
+  mouth: number | null = null;
   /** The water's colour: its absorption of red, green and blue, each against the usual water's
    *  (catalog.ts waterColour). */
   waterColour: readonly [number, number, number] = [1, 1, 1];
@@ -316,6 +485,25 @@ export class FluidSim {
   readonly splash: Splash;
   /** Whether the splash runs, and the water sheds it (dev: ?splash=0, none). */
   splashing = new URLSearchParams(location.search).get('splash') !== '0';
+  /** What the sim lightens by what the water is doing (a phone's: simTier.ts), or null: its
+   *  config's, every frame. Set before init() for the photons' halves to have their room; it may be
+   *  changed between frames after (none of it changes a pipeline). */
+  runtime: SimRuntime | null = null;
+  /** How much the water moves, by the last readings and the bowl's motion: 0 calm, 1 moving, 2 a
+   *  hard shake (with a runtime). */
+  agitation = 1;
+  /** The pressure sweeps a substep the last step took. */
+  lastSweeps = 0;
+
+  /** How long the water has been calm, and the bowl still (s). */
+  private calmFor = 0;
+  private stillFor = 0;
+  /** The frames since the bed was last built (SimRuntime.stillBedEvery). */
+  private bedWaited = 0;
+  /** Whether the photon maps have two halves (photonHalves), and whether the last frame traced
+   *  them so. */
+  private photonRoom = false;
+  private photonHalvesWere = false;
   /** Particles the buffers have room for (the most water any globe holds). */
   private capacity = 0;
   /** Which set of particle buffers holds the particles now (the sort moves them to the other). */
@@ -329,10 +517,22 @@ export class FluidSim {
    *  globe coming in (startOver) costs the CPU next to nothing. */
   private readonly plans = new Map<string, SeedPlan>();
 
+  private pushAt: [number, number, number] = [0, 0, 0];
+  private pushSpeed = 0;
+  private pushRadius = 0.05;
+
   private readonly paramsBuffer: GPUBuffer;
   private readonly paramsData = new ArrayBuffer(PARAMS_SIZE);
   private readonly pf = new Float32Array(this.paramsData);
   private readonly pu = new Uint32Array(this.paramsData);
+  private readonly pb = new Uint8Array(this.paramsData);
+  /** A frame's substeps' params, one after another (uploaded once), each copied into paramsBuffer
+   *  as its substep begins: the whole frame is one command buffer. */
+  private readonly paramsStage: GPUBuffer;
+  private readonly frameParams: Uint8Array;
+  /** Where the probes sample the water (setKoiProbes, setProbes): uploaded with the next step. */
+  private readonly probePoints = new Float32Array(PROBES * 4);
+  private probesDue = false;
   private buffers: Record<string, GPUBuffer> = {};
   private kernels: Record<string, Kernel> = {};
   private staging: { buffer: GPUBuffer; busy: boolean; time: number }[] = [];
@@ -347,6 +547,14 @@ export class FluidSim {
   /** And now (the reef rock turns with it). */
   private readonly globeRotation = new Float32Array(IDENTITY as ArrayLike<number>);
   private readonly back = new Float32Array(9);
+  /** The globe's orientation the rock's and the bed solids' tops were last worked out for
+   *  (rock_bed.wgsl reads nothing else that changes but on new water): while the globe holds it,
+   *  they are as they were. Null: to be worked out. And whether the tops before them (rockPrev) are
+   *  these too. */
+  private rockFor: Float32Array | null = null;
+  private rockPrevSame = false;
+  /** What reads the water and the bed for the frame once they are built (onWaterBuilt). */
+  private readonly waterBuilt: ((enc: GPUCommandEncoder, beginPass: BeginPass) => void)[] = [];
 
   constructor(device: GPUDevice, cfg: SimConfig, radius: number, outerRadius: number, light: LightConfig) {
     this.device = device;
@@ -362,6 +570,8 @@ export class FluidSim {
     this.h = (2 * this.halfSize) / this.n;
     this.renderN = this.n * cfg.renderScale;
     this.renderVoxel = (2 * this.halfSize) / this.renderN;
+    this.fusedSweeps = new URLSearchParams(location.search).get('fused') === '1';
+    this.canFuse = this.n <= FUSED_MAX_N || this.fusedSweeps;
     this.fill = cfg.fillFraction;
     this.restLevel = -radius + fillHeight(radius, this.fill);
     this.whitewater = new Foam(device, radius, cfg.gravity, this.h, cfg.particlesPerCell);
@@ -371,6 +581,12 @@ export class FluidSim {
       label: 'sim params',
       size: PARAMS_SIZE,
       usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
+    });
+    this.frameParams = new Uint8Array(cfg.maxSubsteps * PARAMS_SIZE);
+    this.paramsStage = device.createBuffer({
+      label: 'sim params (a frame)',
+      size: this.frameParams.byteLength,
+      usage: GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST,
     });
     this.densityTexture = device.createTexture({
       label: 'water density',
@@ -398,9 +614,16 @@ export class FluidSim {
       label: 'light shafts',
       dimension: '3d',
       size: [this.lightN, this.lightN, this.lightN],
-      format: 'rgba16float',
+      format: device.features.has('texture-formats-tier1') ? 'r16float' : 'rgba16float',
       usage: GPUTextureUsage.STORAGE_BINDING | GPUTextureUsage.TEXTURE_BINDING,
     });
+    this.marchBand = device.createTexture({
+      label: 'march band',
+      size: [1, 1],
+      format: 'rgba32float',
+      usage: GPUTextureUsage.STORAGE_BINDING | GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST,
+    });
+    device.queue.writeTexture({ texture: this.marchBand }, new Float32Array([1e9, -1e9, 1e9, 0]), { bytesPerRow: 16 }, [1, 1]);
     this.koiField = device.createTexture({
       label: 'koi shape',
       dimension: '3d',
@@ -441,15 +664,33 @@ export class FluidSim {
     });
   }
 
+  /** A fish's push on the water, in the next frame's first substep (grid_update.wgsl fishPush): a
+   *  soft ball of radius `radius` at `at` given `speed` (world units/s) along the water's weight.
+   *  Pushes made in one frame add up, bounded. */
+  push(at: ArrayLike<number>, speed: number, radius: number): void {
+    if (!(speed > 0) || !(radius > 0)) return;
+    if (this.pushSpeed === 0) this.pushAt = [at[0], at[1], at[2]];
+    this.pushSpeed = Math.min(this.pushSpeed + speed, MAX_PUSH);
+    this.pushRadius = radius;
+  }
+
   /** Where to sample the water for the koi this frame (KOI_PROBES points, xyz + pad). */
   setKoiProbes(points: Float32Array): void {
-    this.device.queue.writeBuffer(this.buffers.probePos, 0, points);
+    this.setProbes(0, points);
   }
 
   /** The same for other creatures: points (xyz + pad) from probe `first` on (their samples come
    *  back in koiSense.probes and .sand at the same places). */
   setProbes(first: number, points: Float32Array): void {
-    this.device.queue.writeBuffer(this.buffers.probePos, first * 16, points);
+    this.probePoints.set(points, first * 4);
+    this.probesDue = true;
+  }
+
+  /** encode: run in the sim's encoder whenever the water's density map and the bed are built anew
+   *  (a frame's last substep, before the photons, which may step over what it finds; new water).
+   *  It opens its passes with beginPass. */
+  onWaterBuilt(encode: (enc: GPUCommandEncoder, beginPass: BeginPass) => void): void {
+    this.waterBuilt.push(encode);
   }
 
   /** Min corner of the simulation domain in the globe's (translating) frame. */
@@ -475,11 +716,13 @@ export class FluidSim {
     await this.createKernels();
     await this.whitewater.init(this.paramsBuffer, this.buffers.velTmp, this.buffers.velOld, this.buffers.field, this.sandTexture.createView(), this.sandSampler);
     if (this.glass) this.splash.capillaryLength = this.glass.capillaryLength;
-    await this.splash.init(this.paramsBuffer, this.buffers.velTmp, this.buffers.velOld, this.buffers.field, this.sandTexture.createView(), this.sandSampler, this.whitewater.queue, this.whitewater.ctrl);
+    await this.splash.init(this.paramsBuffer, this.buffers.velTmp, this.buffers.velOld, this.buffers.field, this.sandTexture.createView(), this.sandSampler, this.whitewater.queue, this.whitewater.ctrl, this.marchBand.createView());
 
     this.writeParams(1 / 120, [0, -this.cfg.gravity, 0], [0, 0, 0], IDENTITY, 1);
+    this.device.queue.writeBuffer(this.paramsBuffer, 0, this.paramsData);
     const enc = this.device.createCommandEncoder({ label: 'sim init' });
     this.encodeSeed(enc, plan);
+    if (this.bedSolids) this.device.queue.writeBuffer(this.buffers.bedMap, 0, this.bedSolids.map);
     const pass = enc.beginComputePass({ label: 'container geometry' });
     this.run(pass, 'rockBed', this.sandGroups());
     pass.end();
@@ -528,7 +771,7 @@ export class FluidSim {
     q.writeBuffer(b.motes, 0, plan.motes);
     // (The kernels below see the new count and the rock; the next step writes the rest.)
     this.pu[3] = this.particleCount;
-    this.pf[76] = this.rock ? 1 : 0;
+    this.pf[76] = this.rock || this.bedSolids ? 1 : 0;
     this.pf[78] = this.rock ? 1 : 0;
     q.writeBuffer(this.paramsBuffer, 0, this.paramsData);
     const enc = this.device.createCommandEncoder({ label: 'sim restart' });
@@ -549,24 +792,28 @@ export class FluidSim {
     this.run(pass, 'initCells', this.cellGroups());
     pass.end();
     this.encodeDensity(enc);
+    for (const encode of this.waterBuilt) encode(enc, (e, label) => this.beginPass(e, label));
     q.submit([enc.finish()]);
     this.prevDt = 0;
     this.maxSpeed = 0;
+    this.rockFor = null;
   }
 
   /**
    * Lets freshly seeded water come to rest before the first frame: the lattice start
    * otherwise sends a few faint ripples and stray droplets across the surface. (Once, after
-   * init: main.ts builds the renderer's pipelines meanwhile.)
+   * init: main.ts builds the renderer's pipelines meanwhile.) In frames of `frame` s, the GPU
+   * waited on after every `batch` of them.
    */
-  async settle(seconds = 2.5): Promise<void> {
-    const dt = 1 / 60;
+  async settle(seconds = 2.5, frame = 1 / 60, batch = 1): Promise<void> {
     const still: Vec3 = [0, 0, 0];
     const gravity: Vec3 = [0, -this.cfg.gravity, 0];
-    for (let t = 0; t < seconds; t += dt) {
-      this.step(dt, gravity, still, IDENTITY, 8);
-      await this.device.queue.onSubmittedWorkDone();
+    let k = 0;
+    for (let t = 0; t < seconds; t += frame) {
+      this.step(frame, gravity, still, IDENTITY, 8);
+      if (++k % batch === 0) await this.device.queue.onSubmittedWorkDone();
     }
+    if (k % batch !== 0) await this.device.queue.onSubmittedWorkDone();
     this.maxSpeed = 0;
   }
 
@@ -583,6 +830,17 @@ export class FluidSim {
     const dt = frameDt;
     if (!(dt > 0)) return;
     const cfg = this.cfg;
+
+    // How much the water moves (with a runtime: its sweeps; and whether the bed is built this
+    // frame).
+    const rt = this.runtime;
+    const still = Math.hypot(omega[0], omega[1], omega[2]) < STILL_SPIN && Math.hypot(bodyAccel[0], bodyAccel[1] + cfg.gravity, bodyAccel[2]) < STILL_ACCEL * cfg.gravity;
+    this.stillFor = still ? this.stillFor + dt : 0;
+    this.calmFor = still && this.maxSpeed < CALM_SPEED ? this.calmFor + dt : 0;
+    this.agitation = this.maxSpeed > SHAKE_SPEED ? 2 : this.calmFor >= CALM_AFTER ? 0 : 1;
+    this.lastSweeps = rt ? rt.sweeps[this.agitation] : cfg.pressureIterations;
+    const bedNow = !rt || this.stillFor < STILL_BED_AFTER || ++this.bedWaited >= rt.stillBedEvery;
+    if (bedNow) this.bedWaited = 0;
 
     // Substeps: as many as the max substep length and a CFL estimate (built from the last
     // measured speed plus what the body force can add this frame) ask, but no shorter than
@@ -622,24 +880,34 @@ export class FluidSim {
     if (kelp) kelp.update(frameDt, rotation);
     const reef = this.reef?.active ? this.reef : null;
 
+    const enc = this.device.createCommandEncoder({ label: 'sim' });
     for (let i = 0; i < steps; i++) {
       this.writeParams(sdt, bodyAccel, omega, this.back, this.prevDt > 0 ? sdt / this.prevDt : 1, extraDamping, dt, (steps - 1 - i) * sdt);
       this.prevDt = sdt;
+      this.frameParams.set(this.pb, i * PARAMS_SIZE);
+      enc.copyBufferToBuffer(this.paramsStage, i * PARAMS_SIZE, this.paramsBuffer, 0, PARAMS_SIZE);
 
-      const enc = this.device.createCommandEncoder({ label: 'sim substep' });
       enc.clearBuffer(b.accum);
       enc.clearBuffer(b.cellCount);
       if (i === 0) enc.clearBuffer(b.stats);
 
       if (i === 0) {
         // Once per frame: carry the sand round with the glass, let it creep, then rebuild the
-        // container the water sees (glass + sand bed).
+        // container the water sees (glass + sand bed). (With a runtime, while the bowl stands
+        // still, the bed is built every few frames: the sand creeps far less than a texel a
+        // second.)
         const turned = Math.abs(this.back[0] - 1) + Math.abs(this.back[4] - 1) + Math.abs(this.back[8] - 1) > 1e-9;
         enc.clearBuffer(b.sandSum);
-        // (The rock, where the globe's turn has carried it; the sand on it goes round with it.)
-        enc.copyBufferToBuffer(b.rockTop, 0, b.rockPrev, 0, b.rockTop.size);
+        // (The rock, where the globe's turn has carried it; the sand on it goes round with it.
+        // Where the globe has not turned at all, its tops are as they were.)
+        const rockNow = !this.rockFor || this.globeRotation.some((v, k) => v !== this.rockFor![k]);
+        if (rockNow || !this.rockPrevSame) enc.copyBufferToBuffer(b.rockTop, 0, b.rockPrev, 0, b.rockTop.size);
+        this.rockPrevSame = !rockNow;
         const geo = this.beginPass(enc, 'sand + container');
-        this.run(geo, 'rockBed', this.sandGroups());
+        if (rockNow) {
+          this.run(geo, 'rockBed', this.sandGroups());
+          this.rockFor = new Float32Array(this.globeRotation);
+        }
         if (turned) {
           this.run(geo, 'sandRotate', this.sandGroups());
           this.run(geo, 'sandScale', this.sandGroups());
@@ -648,10 +916,12 @@ export class FluidSim {
           this.run(geo, 'sandFlux', this.sandGroups());
           this.run(geo, 'sandApply', this.sandGroups());
         }
-        this.run(geo, 'sandSurface', this.sandGroups());
-        this.run(geo, 'sandExtend', this.sandGroups());
-        this.run(geo, 'solidFaces', fg);
-        this.run(geo, 'initCells', cg);
+        if (bedNow) {
+          this.run(geo, 'sandSurface', this.sandGroups());
+          this.run(geo, 'sandExtend', this.sandGroups());
+          this.run(geo, 'solidFaces', fg);
+          this.run(geo, 'initCells', cg);
+        }
         geo.end();
       }
 
@@ -671,17 +941,33 @@ export class FluidSim {
       } else {
         this.run(pass, 'p2g', pg, this.cur);
       }
-      stage('grid update');
-      this.run(pass, 'gridUpdate', fg);
-      stage('classify');
-      this.run(pass, 'cellClassify', cg);
+      stage('grid update + classify');
+      // (The faces' workgroups, then the cells': grid_update.wgsl.)
+      this.run(pass, 'gridUpdate', [fg[0], fg[1], fg[2] + cg[2]]);
       stage('cell prep');
       this.run(pass, 'cellPrep', cg);
       stage('pressure');
       const rb = this.redBlackGroups();
-      for (let it = 0; it < cfg.pressureIterations; it++) {
-        this.run(pass, 'pressureRed', rb);
-        this.run(pass, 'pressureBlack', rb);
+      let sweeps = this.lastSweeps;
+      if (this.fusedSweeps && this.canFuse) {
+        // (In pairs: from psi into the other buffer, and back. One left over goes as two colours.)
+        const fusedSweep = this.kernels.pressureFused;
+        pass.setPipeline(fusedSweep.pipeline);
+        for (; sweeps >= 2; sweeps -= 2) {
+          for (const group of fusedSweep.bindGroups) {
+            pass.setBindGroup(0, group);
+            pass.dispatchWorkgroups(rb[0], rb[1], rb[2]);
+          }
+        }
+      }
+      const red = this.kernels.pressureRed;
+      const black = this.kernels.pressureBlack.pipeline;
+      if (sweeps > 0) pass.setBindGroup(0, red.bindGroups[0]);
+      for (let it = 0; it < sweeps; it++) {
+        pass.setPipeline(red.pipeline);
+        pass.dispatchWorkgroups(rb[0], rb[1], rb[2]);
+        pass.setPipeline(black);
+        pass.dispatchWorkgroups(rb[0], rb[1], rb[2]);
       }
       stage('project');
       this.run(pass, 'project', fg);
@@ -726,6 +1012,7 @@ export class FluidSim {
       // Rebuild the density field from the new positions: it is both the rendered water and
       // the free surface the next substep's pressure solve sees.
       this.encodeDensity(enc, i === steps - 1);
+      if (i === steps - 1) for (const encode of this.waterBuilt) encode(enc, (e, label) => this.beginPass(e, label));
       if (i === steps - 1 && this.koiVisible) this.encodeKoiBake(enc);
       if (i === steps - 1 && reef && this.clownPose) this.encodeClownBake(enc);
       if (i === steps - 1 && !this.devSkip.includes('frame')) {
@@ -733,20 +1020,23 @@ export class FluidSim {
         // water for the koi.
         enc.clearBuffer(b.centroidAcc);
         const sp = this.beginPass(enc, 'shift + probes');
-        // (Every other frame, at twice the strength: it is a slow regulariser.)
-        if (cfg.particleShift > 0 && this.frameIndex % 2 === 0) this.run(sp, 'shift', this.particleGroups(), this.cur);
-        this.run(sp, 'probe', [1, 1, 1]);
-        this.run(sp, 'centroid', this.particleGroups(), this.cur);
+        // (Every other frame, at twice the strength: it is a slow regulariser. The water's centre
+        // is found with it, and on its own between.)
+        const shiftNow = cfg.particleShift > 0 && this.frameIndex % 2 === 0;
+        this.run(sp, shiftNow ? 'shift' : 'centroid', this.particleGroups(), this.cur);
+        this.run(sp, 'probe', [Math.ceil(PROBES / 64), 1, 1]);
         sp.end();
         // The motes drift with the water; bin them for the renderer.
-        enc.clearBuffer(b.moteCount);
-        const mp = this.beginPass(enc, 'motes');
-        const mg = Math.ceil(this.moteCount / 64);
-        this.run(mp, 'motesUpdate', [mg, 1, 1]);
-        this.run(mp, 'motesGrid', [mg, 1, 1]);
-        const cg4 = Math.ceil(this.moteN / 4);
-        this.run(mp, 'motesCount', [cg4, cg4, cg4]);
-        mp.end();
+        if (this.shows.motes) {
+          enc.clearBuffer(b.moteCount);
+          const mp = this.beginPass(enc, 'motes');
+          const mg = Math.ceil(this.moteCount / 64);
+          this.run(mp, 'motesUpdate', [mg, 1, 1]);
+          this.run(mp, 'motesGrid', [mg, 1, 1]);
+          const cg4 = Math.ceil(this.moteN / 4);
+          this.run(mp, 'motesCount', [cg4, cg4, cg4]);
+          mp.end();
+        }
         // The sea foam globe's bubbles and foam (before the photons, which its foam shades).
         if (this.foaming) this.whitewater.encode(enc, frameDt, this.time, (e, label) => this.beginPass(e, label));
         // Every globe's splash (it takes its share of the queue after the foam), and the queue
@@ -765,8 +1055,13 @@ export class FluidSim {
         this.encodeReadback(enc);
         this.encodeProfile(enc);
       }
-      this.device.queue.submit([enc.finish()]);
     }
+    // (The queue's writes land before the frame's commands run, whenever they were made.)
+    const q = this.device.queue;
+    q.writeBuffer(this.paramsStage, 0, this.frameParams, 0, steps * PARAMS_SIZE);
+    if (this.probesDue) q.writeBuffer(b.probePos, 0, this.probePoints);
+    this.probesDue = false;
+    q.submit([enc.finish()]);
 
     this.startReadback();
     this.startProfile();
@@ -833,11 +1128,14 @@ export class FluidSim {
     const labels = p.pending;
     if (!labels) return;
     p.pending = null;
+    // (Timed with the stages split or not: a reading that comes back once that has changed is
+    // let go, or its stages' times would stay on after them.)
+    const fine = p.fine;
     p.staging.mapAsync(GPUMapMode.READ).then(() => {
       const t = new BigInt64Array(p.staging.getMappedRange(0, labels.length * 16));
       const sums: Record<string, number> = {};
       labels.forEach((l, k) => { sums[l] = (sums[l] ?? 0) + Number(t[2 * k + 1] - t[2 * k]) / 1e6; });
-      for (const [l, ms] of Object.entries(sums)) this.gpuTimes[l] = this.gpuTimes[l] === undefined ? ms : this.gpuTimes[l] * 0.9 + ms * 0.1;
+      if (p.fine === fine) for (const [l, ms] of Object.entries(sums)) this.gpuTimes[l] = this.gpuTimes[l] === undefined ? ms : this.gpuTimes[l] * 0.9 + ms * 0.1;
       p.staging.unmap();
       p.busy = false;
     }).catch(() => { p.busy = false; });
@@ -985,7 +1283,27 @@ export class FluidSim {
   /** The bed at rest under the floor point (x, z): the sand's level (cfg.sandLevel), or in the
    *  reef the sand's resting shape or the rock, whichever is higher. */
   private bedAt(x: number, z: number, rock = this.rock): number {
-    return rock ? Math.max(sandRestHeight(x, z), rockHeight(x, z)) : this.cfg.sandLevel;
+    if (rock) return Math.max(sandRestHeight(x, z), rockHeight(x, z));
+    return this.bedSolids ? Math.max(this.cfg.sandLevel, this.solidTop(x, z)) : this.cfg.sandLevel;
+  }
+
+  /** The top of bedSolids over the floor point (x, z), globe frame (bilinear; far below where
+   *  there are none), as rock_bed.wgsl reads it. */
+  private solidTop(x: number, z: number): number {
+    const s = this.bedSolids;
+    if (!s) return -10;
+    const n = BED_SOLIDS_N;
+    const gx = (x / (2 * s.extent) + 0.5) * n - 0.5;
+    const gz = (z / (2 * s.extent) + 0.5) * n - 0.5;
+    const i = Math.floor(gx);
+    const j = Math.floor(gz);
+    if (i < 0 || j < 0 || i >= n - 1 || j >= n - 1) return -10;
+    const fx = gx - i;
+    const fz = gz - j;
+    const m = s.map;
+    const at = i + n * j;
+    const h = (m[at] * (1 - fx) + m[at + 1] * fx) * (1 - fz) + (m[at + n] * (1 - fx) + m[at + n + 1] * fx) * fz;
+    return h < BED_SOLIDS_NONE + 0.1 ? -10 : h;
   }
 
   /** The sand at rest: a level bed at cfg.sandLevel (in the reef, its resting shape): thickness
@@ -1001,7 +1319,7 @@ export class FluidSim {
         const z = (((j + 0.5) / N) * 2 - 1) * R;
         const r2 = x * x + z * z;
         if (r2 >= R * R) continue;
-        const bottom = Math.max(-Math.sqrt(R * R - r2), rock ? rockHeight(x, z) : -10);
+        const bottom = Math.max(-Math.sqrt(R * R - r2), rock ? rockHeight(x, z) : this.solidTop(x, z));
         const top = rock ? sandRestHeight(x, z) : this.cfg.sandLevel;
         thickness[i + N * j] = Math.min(Math.max(top - bottom, 0), this.cfg.sandMaxThickness);
       }
@@ -1021,6 +1339,9 @@ export class FluidSim {
 
     // (The affine velocities only where the particles carry them.)
     const affine = this.cfg.affineStrength > 0 ? P * 48 : 16;
+    // (The photons' maps in two halves where they may be traced so: SimRuntime.photonHalves.)
+    this.photonRoom = !!this.runtime?.photonHalves;
+    const halves = this.photonRoom ? 2 : 1;
     const blocks = Math.ceil(this.n / SORT_BLOCK) ** 3;
     const pressureTiles = this.redBlackGroups().reduce((a, b) => a * b, 1);
     this.buffers = {
@@ -1045,6 +1366,8 @@ export class FluidSim {
       cellFaceW: make('cell face weights', C * 8),
       cellType: make('cell type', C * 4),
       psi: make('pressure', C * 4),
+      // (The fused sweeps' other buffer, only where they may run: pressure_fused.wgsl.)
+      psi2: make('pressure (other)', this.canFuse ? C * 4 : 16),
       rhs: make('pressure rhs', C * 8),
       pressureTiles: make('pressure tiles', pressureTiles * 4),
       stats: make('stats', 16),
@@ -1056,14 +1379,15 @@ export class FluidSim {
       sandOut: make('sand flux', this.sandN * this.sandN * 32),
       sandS: make('sand surface', this.sandN * this.sandN * 4),
       rockTop: make('rock top', this.sandN * this.sandN * 4),
+      bedMap: make('bed solids', BED_SOLIDS_N * BED_SOLIDS_N * 4),
       rockPrev: make('rock top before', this.sandN * this.sandN * 4),
       sandRest: make('sand at rest', this.sandN * this.sandN * 4),
-      causticAcc: make('caustic photons', this.causticN * this.causticN * 12),
+      causticAcc: make('caustic photons', halves * this.causticN * this.causticN * 12),
       causticPrev: make('caustic history', this.causticN * this.causticN * 16),
       probePos: make('probes', PROBES * 16, STORAGE | GPUBufferUsage.COPY_DST),
       probeOut: make('probe samples', PROBES * 32),
       centroidAcc: make('water centroid', 16),
-      lightAcc: make('light photons', this.lightN ** 3 * 4),
+      lightAcc: make('light photons', halves * this.lightN ** 3 * 4),
       motes: make('motes', this.moteCount * 16),
       seedColumns: make('seed columns', (this.n * this.seedSub) ** 2 * 8),
       moteCount: make('mote counts', this.moteN ** 3 * 4),
@@ -1102,9 +1426,14 @@ export class FluidSim {
     const sand = [sandView, this.sandSampler];
     // (g2p binds the white water's queue in every globe: only its SHED variant writes it.)
     const g2pSets = parts((q) => [q.pos, q.vel, q.affine, b.velTmp, b.velOld, b.stats, ...sand, ww.queue, ww.ctrl, b.field, b.sortSlot, b.blockCount]);
-    const defs: [string, string, string, Resource[][], Record<string, number>?][] = [
-      ['rockBed', `${rockWGSL()}\n${rockBedWGSL}`, 'rockBed', [[b.rockTop, b.sandRest]]],
-      ['sandRotate', sandRotateWGSL, 'sandRotate', [[b.sandT, b.sandT2, b.sandSum, b.rockTop, b.rockPrev]]],
+    // (pressure.wgsl's bindings: the params, then cellFaceW, rhs, psi and pressureTiles.)
+    const pressureLayout = this.device.createBindGroupLayout({
+      label: 'pressure',
+      entries: (['uniform', 'read-only-storage', 'read-only-storage', 'storage', 'read-only-storage'] as const).map((type, binding) => ({ binding, visibility: GPUShaderStage.COMPUTE, buffer: { type } })),
+    });
+    const defs: [string, string, string, Resource[][], Record<string, number>?, GPUBindGroupLayout?][] = [
+      ['rockBed', this.bedSolids ? `${bedSolidsWGSL(this.bedSolids, this.cfg.sandLevel)}\n${bedSolidsRockBedWGSL(rockBedWGSL, this.bedSolids.map)}` : `${rockWGSL()}\n${rockBedWGSL}`, 'rockBed', [[b.rockTop, b.sandRest, ...(this.bedSolids ? [b.bedMap] : [])]]],
+      ['sandRotate', this.bedSolids ? bedSolidsRotateWGSL(sandRotateWGSL) : sandRotateWGSL, 'sandRotate', [[b.sandT, b.sandT2, b.sandSum, b.rockTop, b.rockPrev]]],
       ['sandScale', sandScaleWGSL, 'sandScale', [[b.sandT2, b.sandT, b.sandSum]]],
       ['sandFlux', sandFluxWGSL, 'sandFlux', [[b.sandT, b.sandOut, b.rockTop, b.sandRest]]],
       ['sandApply', sandApplyWGSL, 'sandApply', [[b.sandT, b.sandOut]]],
@@ -1115,16 +1444,14 @@ export class FluidSim {
       ['seedWater', seedWGSL, 'seedWater', [[b.pos, b.seedColumns]], { SUB: this.seedSub, JITTER: this.cfg.seedJitter }],
       ['p2g', p2gWGSL, 'p2g', parts((q) => [q.pos, q.vel, q.affine, b.accum, b.cellCount]), { AFFINE }],
       ['p2gBlock', p2gWGSL, 'p2gBlock', parts((q) => [q.pos, q.vel, q.affine, b.accum, b.cellCount, b.blockStart]), { AFFINE }],
-      ['gridUpdate', gridUpdateWGSL, 'gridUpdate', [[b.accum, b.velNew, b.velOld]]],
-      [
-        'cellClassify',
-        cellClassifyWGSL,
-        'cellClassify',
-        [[b.field, b.cellFaceW, b.cellType, b.cellRho, b.cellCount]],
-      ],
-      ['cellPrep', cellPrepWGSL, 'cellPrep', [[b.cellType, b.cellRho, b.cellFaceW, b.velNew, b.psi, b.rhs, b.pressureTiles]]],
-      ['pressureRed', pressureWGSL, 'pressure', [[b.cellFaceW, b.rhs, b.psi, b.pressureTiles]], { COLOR: 0 }],
-      ['pressureBlack', pressureWGSL, 'pressure', [[b.cellFaceW, b.rhs, b.psi, b.pressureTiles]], { COLOR: 1 }],
+      ['gridUpdate', `${cellClassifyWGSL}\n${gridUpdateWGSL}`, 'gridUpdate', [[b.accum, b.velNew, b.velOld, b.field, b.cellFaceW, b.cellType, b.cellRho, b.cellCount]]],
+      ['cellPrep', cellPrepWGSL, 'cellPrep', [[b.cellType, b.cellRho, b.cellFaceW, b.velNew, b.psi, b.rhs, b.pressureTiles, b.psi2]], { PING_PONG: this.canFuse ? 1 : 0 }],
+      // (The two colours share a layout, and so one bind group: step() binds it once a substep.)
+      ['pressureRed', pressureWGSL, 'pressure', [[b.cellFaceW, b.rhs, b.psi, b.pressureTiles]], { COLOR: 0 }, pressureLayout],
+      ['pressureBlack', pressureWGSL, 'pressure', [], { COLOR: 1 }, pressureLayout],
+      ...(this.canFuse
+        ? [['pressureFused', pressureFusedWGSL, 'pressureFused', [[b.cellFaceW, b.rhs, b.psi, b.pressureTiles, b.psi2], [b.cellFaceW, b.rhs, b.psi2, b.pressureTiles, b.psi]]] as [string, string, string, Resource[][]]]
+        : []),
       ['project', projectWGSL, 'project', [[b.faceW, b.cellType, b.psi, b.cellRho, b.velNew, b.valid]]],
       [
         'extrapolate',
@@ -1143,34 +1470,37 @@ export class FluidSim {
       ['sortScatter', sortWGSL, 'sortScatter', sort, { SORT_BLOCK, AFFINE }],
       ['splat', splatWGSL, 'splat', parts((q) => [q.pos, b.dens, ...sand])],
       ['splatBlock', splatWGSL, 'splatBlock', parts((q) => [q.pos, b.dens, ...sand, b.blockStart])],
-      ['shift', shiftWGSL, 'shift', parts((q) => [q.pos, densityView, this.densitySampler, ...sand])],
+      ['shift', shiftWGSL, 'shift', parts((q) => [q.pos, b.centroidAcc, densityView, this.densitySampler, ...sand])],
+      ['centroid', shiftWGSL, 'centroid', parts((q) => [q.pos, b.centroidAcc])],
       ['probe', probeWGSL, 'probe', [[b.probePos, b.probeOut, b.velTmp, b.field, ...sand]]],
-      ['centroid', centroidWGSL, 'centroid', parts((q) => [q.pos, b.centroidAcc])],
       [
         'caustics',
-        `${koiWGSL()}\n${causticsWGSL.replace(/const WATER_EXT: vec3f = [^;]*;/, `const WATER_EXT: vec3f = vec3f(${this.light.waterAbsorption.join(', ')});`)}`,
+        `${koiWGSL()}\n${photonsWGSL(causticsWGSL.replace(/const WATER_EXT: vec3f = [^;]*;/, `const WATER_EXT: vec3f = vec3f(${this.light.waterAbsorption.join(', ')});`), this.shows)}`,
         'caustics',
-        [[densityView, this.densitySampler, ...sand, b.causticAcc, b.lightAcc, this.koiPose!.createView(), this.koiField.createView(), this.kelpShadeView(), ww.map.createView(), this.sandSampler]],
+        [[densityView, this.densitySampler, ...sand, b.causticAcc, b.lightAcc, this.koiPose!.createView(), this.koiField.createView(), this.kelpShadeView(), ww.map.createView(), this.sandSampler, this.marchBand.createView()]],
       ],
       ['koiBake', `${koiWGSL()}\n${koiBakeWGSL}`, 'koiBake', [[this.koiPose!.createView(), this.koiField.createView()]]],
       ...(this.clownPose
         ? [['clownBake', `${koiWGSL()}\n${clownWGSL()}\n${clownBakeWGSL}`, 'clownBake', [[this.clownPose.createView(), this.clownField.createView()]]] as [string, string, string, Resource[][]]]
         : []),
-      ['lightResolve', lightResolveWGSL, 'lightResolve', [[b.lightAcc, b.lightPrev, this.lightTexture.createView()]]],
-      ['motesUpdate', `${koiWGSL()}\n${motesWGSL}`, 'motesUpdate', [[b.motes, b.velTmp, b.field, ...sand, this.koiPose!.createView()]]],
-      ['motesGrid', motesGridWGSL, 'motesGrid', [[b.motes, b.moteCount, this.moteTexture.createView()]]],
-      ['motesCount', motesGridWGSL, 'motesCount', [[b.motes, b.moteCount, this.moteTexture.createView()]]],
+      ...(this.shows.motes
+        ? ([
+            ['motesUpdate', `${koiWGSL()}\n${motesWGSL}`, 'motesUpdate', [[b.motes, b.velTmp, b.field, ...sand, this.koiPose!.createView()]]],
+            ['motesGrid', motesGridWGSL, 'motesGrid', [[b.motes, b.moteCount, this.moteTexture.createView()]]],
+            ['motesCount', motesGridWGSL, 'motesCount', [[b.motes, b.moteCount, this.moteTexture.createView()]]],
+          ] as [string, string, string, Resource[][]][])
+        : []),
       [
         'causticResolve',
-        causticResolveWGSL,
+        `${causticResolveWGSL}\n${lightResolveFormatWGSL(this.lightTexture.format)}`,
         'causticResolve',
-        [[b.causticAcc, b.causticPrev, this.causticTexture.createView(), ...sand]],
+        [[b.causticAcc, b.causticPrev, this.causticTexture.createView(), ...sand, b.lightAcc, b.lightPrev, this.lightTexture.createView()]],
       ],
       ...this.kelpKernels(),
       ...this.reefKernels(),
       ...this.rtKernels(sandView),
-      ['blur', blurWGSL(null), 'blur', [[b.dens, b.field]]],
-      ['blurTex', blurWGSL(this.densityTexture.format), 'blur', [[b.dens, b.field, densityView]]],
+      ['blur', blurWGSL(null, blurRun(this.renderN)), 'blur', [[b.dens, b.field]]],
+      ['blurTex', blurWGSL(this.densityTexture.format, blurRun(this.renderN)), 'blur', [[b.dens, b.field, densityView]]],
     ];
     await Promise.all(defs.map((def) => this.createKernel(...def)));
   }
@@ -1250,6 +1580,8 @@ export class FluidSim {
     entryPoint: string,
     bindingSets: Resource[][],
     constants?: Record<string, number>,
+    /** Its bind groups' layout, where kernels share one (else the pipeline's own). */
+    shared?: GPUBindGroupLayout,
   ): Promise<void> {
     const prelude = body.includes('sandTex:') ? `${commonWGSL}\n${sandSampleWGSL}` : commonWGSL;
     const module = this.device.createShaderModule({ label: name, code: `${prelude}\n${body}` });
@@ -1261,10 +1593,10 @@ export class FluidSim {
     }
     const pipeline = await this.device.createComputePipelineAsync({
       label: name,
-      layout: 'auto',
+      layout: shared ? this.device.createPipelineLayout({ label: name, bindGroupLayouts: [shared] }) : 'auto',
       compute: { module, entryPoint, constants },
     });
-    const layout = pipeline.getBindGroupLayout(0);
+    const layout = shared ?? pipeline.getBindGroupLayout(0);
     const bindGroups = bindingSets.map((set, i) =>
       this.device.createBindGroup({
         label: `${name} #${i}`,
@@ -1283,6 +1615,7 @@ export class FluidSim {
 
   // ---------------------------------------------------------------- per frame
 
+  /** A substep's params (or new water's), into paramsData. */
   private writeParams(
     dt: number,
     accel: Vec3,
@@ -1354,7 +1687,7 @@ export class FluidSim {
     f.set(cur ?? [0, 0, 0, 0], 72);
     // The bed: the reef rock in it or not (and the sand's resting shape round it); the globe's
     // orientation (the rock turns with it).
-    f[76] = this.rock ? 1 : 0;
+    f[76] = this.rock || this.bedSolids ? 1 : 0;
     f[77] = this.clarity;
     f[78] = this.rock ? 1 : 0;
     const g = this.globeRotation;
@@ -1366,6 +1699,11 @@ export class FluidSim {
     f.set([this.foaming ? ww.foamRate : 0, this.foaming ? ww.bubbleRate : 0, ww.m, c.gravity], 96);
     const sp = this.splash;
     f.set([this.splashing ? sp.bubbleRate : 0, this.splashing ? sp.sprayRate : 0, 0, 0], 100);
+    // A fish's push on the water: once, in the first substep after it was made.
+    f.set([...this.pushAt, this.pushSpeed], 104);
+    f.set([this.pushRadius, 0, 0, 0], 108);
+    this.pushSpeed = 0;
+    f.set([this.mouth ?? 0, this.mouth === null ? 0 : 1, 0, 0], 112);
     f[67] = left;
     f[24] = this.frameIndex;
     f[35] = this.lightN;
@@ -1375,7 +1713,14 @@ export class FluidSim {
     const sl = Math.hypot(sun[0], sun[1], sun[2]);
     f.set([sun[0] / sl, sun[1] / sl, sun[2] / sl, this.light.causticRays], 56);
     f.set([...this.light.sunIrradiance, this.causticN], 60);
-    this.device.queue.writeBuffer(this.paramsBuffer, 0, this.paramsData);
+    const half = this.photonHalf();
+    f.set([half, half === 2 ? 3 * this.causticN ** 2 : 0, half === 2 ? this.lightN ** 3 : 0, this.photonRoom && half > 0 ? 1 : 0], 116);
+  }
+
+  /** The photons' rows this frame: 0 all of them, else 1 the even, 2 the odd (in turn, frame by
+   *  frame: SimRuntime.photonHalves). */
+  private photonHalf(): number {
+    return this.photonRoom && this.runtime?.photonHalves ? 1 + (this.frameIndex & 1) : 0;
   }
 
   /** texture: into the 3D texture too (a frame's last substep, and new water). */
@@ -1394,7 +1739,7 @@ export class FluidSim {
       pass = this.beginPass(enc, 'density blur');
     }
     const m = this.renderN;
-    this.run(pass, texture ? 'blurTex' : 'blur', [Math.ceil(m / 16), Math.ceil(m / 16), Math.ceil(m / BLUR_RUN)]);
+    this.run(pass, texture ? 'blurTex' : 'blur', [Math.ceil(m / 16), Math.ceil(m / 16), Math.ceil(m / blurRun(m))]);
     pass.end();
   }
 
@@ -1471,17 +1816,27 @@ export class FluidSim {
     rt.encodeBuilds(enc);
   }
 
-  /** Sun photons through glass and the final water surface of the frame, onto the sand. */
+  /** Sun photons through glass and the final water surface of the frame, onto the sand: all of
+   *  them, or half (photonHalf), their maps' halves added (the half not traced this frame holds
+   *  the last frame's: emptied once traced whole again, and once more as the halves begin). */
   private encodeCaustics(enc: GPUCommandEncoder): void {
-    enc.clearBuffer(this.buffers.causticAcc);
-    enc.clearBuffer(this.buffers.lightAcc);
+    const b = this.buffers;
+    const half = this.photonHalf();
+    const map = this.causticN ** 2 * 12;
+    const volume = this.lightN ** 3 * 4;
+    const at = Math.max(half - 1, 0);
+    enc.clearBuffer(b.causticAcc, at * map, map);
+    enc.clearBuffer(b.lightAcc, at * volume, volume);
+    if (this.photonRoom && (half > 0) !== this.photonHalvesWere) {
+      enc.clearBuffer(b.causticAcc, (1 - at) * map, map);
+      enc.clearBuffer(b.lightAcc, (1 - at) * volume, volume);
+    }
+    this.photonHalvesWere = half > 0;
     const pass = this.beginPass(enc, 'photons');
     const rays = Math.ceil(this.light.causticRays / 16);
-    this.run(pass, 'caustics', [rays, rays, 1]);
-    const cg = Math.ceil(this.causticN / 16);
-    this.run(pass, 'causticResolve', [cg, cg, 1]);
-    const lg = Math.ceil(this.lightN / 4);
-    this.run(pass, 'lightResolve', [lg, lg, lg]);
+    this.run(pass, 'caustics', [rays, half > 0 ? Math.ceil(this.light.causticRays / 32) : rays, 1]);
+    // (The map's texels' workgroups, then the volume's voxels': caustic_resolve.wgsl.)
+    this.run(pass, 'causticResolve', [Math.ceil(this.causticN ** 2 / 256) + Math.ceil(this.lightN ** 3 / 256), 1, 1]);
     pass.end();
   }
 
@@ -1494,6 +1849,7 @@ export class FluidSim {
     enc.copyBufferToBuffer(this.buffers.probeOut, 0, slot.buffer, 16, PROBES * 32);
     enc.copyBufferToBuffer(this.buffers.centroidAcc, 0, slot.buffer, 16 + PROBES * 32, 16);
     if (this.rt) enc.copyBufferToBuffer(this.rt.regions.counts, 0, slot.buffer, READBACK_RT, 16);
+    this.splash.encodeCounts(enc, slot.buffer, READBACK_SPLASH);
     this.pendingReadback = slot;
   }
 
@@ -1519,6 +1875,7 @@ export class FluidSim {
         this.koiSense = { probes, sand: sandH, centroid: [ca[0] / 256 / count, ca[1] / 256 / count, ca[2] / 256 / count], time: slot.time };
         // (counts[2]: the frame's whole count, rt_regions.wgsl.)
         this.rt?.observe(new Uint32Array(all, READBACK_RT, 4)[2]);
+        this.splash.observe(new Uint32Array(all, READBACK_SPLASH, SPLASH_COUNTS / 4));
         slot.buffer.unmap();
         slot.busy = false;
       })
