@@ -259,21 +259,15 @@ export class BettaRemote {
     this.spareRun = waiting.length > 1 ? this.spareRun + 1 : 0;
     if (this.spareRun >= CATCH_UP) {
       this.spareRun = 0;
-      this.absorb(waiting.shift());
-      this.turnedFree.push(this.turnedAt.shift());
+      this.absorb(this.carried(waiting.shift()));
     }
-    const pose = waiting.shift(), buffer = this.absorb(pose), at = this.turnedAt.shift();
+    const pose = this.carried(waiting.shift()), buffer = this.absorb(pose);
     const head = new Float64Array(buffer, 0, POSE_HEAD), floats = new Float32Array(buffer, POSE_HEAD * 8);
     const s = this.swim, since = this.turnSince;
-    if (at) {
-      for (let k = 0; k < 3; k++) since[k] = this.turned[k] - at[k];
-      this.turnedFree.push(at);
-    } else since.fill(0);
     s.mode = pose.mode;
     s.heading = head[P.heading] + since[1];
     s.pitch = head[P.pitch];
     this.level = head[P.level];
-    turnPoints(head, since, P.mouth, P.mouth + 3);
     this.mouth.fromArray(head, P.mouth);
     this.probes.set(floats.subarray(0, PROBE_FLOATS));
     turnPoints(this.probes, since, 0, PROBE_FLOATS, 4);
@@ -281,6 +275,19 @@ export class BettaRemote {
     const vertices = floats.subarray(PROBE_FLOATS, PROBE_FLOATS + this.vertexFloats);
     turnPoints(vertices, since);
     return vertices;
+  }
+
+  /** A pose carried on by the bowl's turns since its step was sent (turnSince, from its step's
+   *  record): its mouth, and where it dimpled the film and let bubbles go. Returns the pose. */
+  carried(pose) {
+    const at = this.turnedAt.shift(), since = this.turnSince;
+    if (at) {
+      for (let k = 0; k < 3; k++) since[k] = this.turned[k] - at[k];
+      this.turnedFree.push(at);
+    } else since.fill(0);
+    const head = new Float64Array(pose.pose, 0, POSE_HEAD);
+    for (const at of [P.mouth, P.rippleAt, P.bubbleAt]) turnPoints(head, since, at, at + 3);
+    return pose;
   }
 
   /** A pose's disturbance of the water added to what the page has yet to take; its buffer to go back. */

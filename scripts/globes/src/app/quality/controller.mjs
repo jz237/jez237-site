@@ -25,12 +25,13 @@
 //   Those frames teach nothing (the model, the holds, the tries up leave them out).
 // - The main thread has its own ladder (CPU_RUNGS): when it is the limit, fewer pixels would not
 //   help, so only that ladder moves.
-// - 30 fps: a GPU that cannot come near 60 at the lowest level (over 23 ms, or frames slower than
-//   about 37 a second) for three windows is held to 30 frames a second (twice the budget, so it
-//   climbs again), and back to 60 once the lowest level at 60 is predicted to hold for 20 s.
-//   (Between, as a warm phone can be at its lowest level, frames as they come - 40-60 a second on a
-//   fast screen, which does not round a late frame up to two 60ths - look better than 30 held: it
-//   stays.)
+// - 30 fps: frames at the lowest level slower than about 37 a second (27 ms apart) for three
+//   windows are held to 30 a second (twice the budget, so it climbs again); back to 60 once the
+//   lowest level at 60 is predicted to come every 25 ms or sooner on this screen (its refresh, as
+//   FramePace sees it), for 20 s. Both by the frames' spacing, not the GPU's time: a late frame
+//   lands on the screen's next refresh, so on a fast screen (120 Hz) 18-24 ms of GPU is 40 frames a
+//   second, better than 30 held (and a frame that late takes a third substep, which would read as
+//   the GPU's own slowness).
 // - Thermal memory: the level held longest over the last two minutes (heldLongest), which the page
 //   keeps for its next visit (record.mjs).
 // (Pure: no DOM, no GPU. main.ts feeds it each frame and applies the knobs it returns.)
@@ -71,9 +72,10 @@ const RELIEF_MS = 250;
 const RESTORE_MS = 1500;
 const SLOW_WINDOWS = 3;
 const FLOOR_WINDOWS = 3;
-const FLOOR_MS = 23;
-/** ...or frames further apart than this (typical, ms: under about 37 a second). */
+/** Frames further apart than this at the lowest level (typical, ms: under about 37 a second). */
 const FLOOR_SLOW_MS = 27;
+/** Back to 60 once the lowest level there is predicted to come this often or more (ms). */
+const LEAVE_30_INTERVAL_MS = 25;
 const LEAVE_30_MS = 20000;
 /** Thermal memory: time held at a level counts for less the longer ago (half as much 80 s on: the
  *  last two minutes, about). */
@@ -194,6 +196,8 @@ export class QualityController {
     this.relief = null;
     this.movedAt = -Infinity;
     this.held = new Map();
+    // (The screen's refresh, ms: frame() is told it.)
+    this.refresh = 1000 / 60;
     this.area = 0;
     this.restArea = 0;
     this.xs = [];
@@ -276,21 +280,25 @@ export class QualityController {
 
   /** One frame, at `now` (ms): what it took the main thread (cpu, ms), the GPU's times of a frame
    *  if new ones came in since the last ({ sim, draw } ms) or else the queue's pace of one (queue,
-   *  ms), the bowl's area on screen now and at rest in this view (CSS px^2), and whether the bowl,
-   *  its lid or the camera moved. Returns the knobs when they change, else null.
+   *  ms), the bowl's area on screen now and at rest in this view (CSS px^2), whether the bowl, its
+   *  lid or the camera moved, the sim's substeps that frame, and the screen's refresh (ms). Returns
+   *  the knobs when they change, else null.
    *  @param {number} now
-   *  @param {{ cpu?: number | null, gpu?: { sim: number, draw: number } | null, queue?: number | null, area?: number, restArea?: number, moving?: boolean }} [sample] */
-  frame(now, { cpu = null, gpu = null, queue = null, area = 0, restArea = 0, moving = false } = {}) {
+   *  @param {{ cpu?: number | null, gpu?: { sim: number, draw: number } | null, queue?: number | null, area?: number, restArea?: number, moving?: boolean, substeps?: number, refresh?: number }} [sample] */
+  frame(now, { cpu = null, gpu = null, queue = null, area = 0, restArea = 0, moving = false, substeps = 0, refresh = 1000 / 60 } = {}) {
     const dt = this.lastAt < 0 ? 0 : now - this.lastAt;
     this.lastAt = now;
     this.area = area;
     this.restArea = restArea;
+    this.refresh = refresh;
     // (The bowl's traced pixels at each frame, to match the GPU's times, a few frames late.)
     this.xs.push(tracedPx(this.knobs, area));
     if (this.xs.length > LAG + 1) this.xs.shift();
     const x = this.xs[0];
     if (gpu) {
-      const sim60 = gpu.sim / simCost(this.knobs);
+      // (The sim's work at 60, from the substeps it took: half of it by the frame, half by the
+      // substep, two a frame at 60. A frame late takes three, and is not the GPU's slowness.)
+      const sim60 = gpu.sim / (substeps > 0 ? 0.5 + 0.25 * substeps : simCost(this.knobs));
       this.sim60 = this.sim60 === null ? sim60 : 0.8 * this.sim60 + 0.2 * sim60;
       this.last = { ...this.last, gpu: gpu.sim + gpu.draw, sim: gpu.sim, draw: gpu.draw, timed: true };
     } else if (queue !== null && !this.timed) {
@@ -408,7 +416,7 @@ export class QualityController {
     }
     if (this.leaving30) {
       this.leaving30 = false;
-      if (over || slow) {
+      if (interval > FLOOR_SLOW_MS) {
         this.leave30Ms = Math.min(2 * this.leave30Ms, 8 * LEAVE_30_MS);
         return this.to30(now, 'back to 30 fps');
       }
@@ -455,9 +463,10 @@ export class QualityController {
       this.slowWindows = 0;
       if (now < this.dwellUntil) return null;
       if (this.level >= this.lowest) {
-        // The lowest level, and frames that cannot come near 60: 30 frames a second.
-        const short = interval > FLOOR_SLOW_MS || (gpu !== null && gpu > FLOOR_MS);
-        this.floorWindows = short ? this.floorWindows + 1 : 0;
+        // The lowest level (held there, for the thermal memory), and frames that cannot come near
+        // 60: 30 frames a second.
+        this.hold(w.span);
+        this.floorWindows = interval > FLOOR_SLOW_MS ? this.floorWindows + 1 : 0;
         if (!fps30 && this.floorWindows >= FLOOR_WINDOWS) return this.to30(now, 'lowest level too slow', gpu);
         return null;
       }
@@ -484,9 +493,9 @@ export class QualityController {
     this.hold(w.span);
     this.quickFor += w.span;
     if (fps30) {
-      // (Back to 60 once its lowest level is predicted to hold there, for a while.)
+      // (Back to 60 once its lowest level is predicted to come often enough there, for a while.)
       const p = this.expect(this.lowest, gpu, false);
-      this.floor30For = p !== null && p <= UP_MS ? this.floor30For + w.span : 0;
+      this.floor30For = p !== null && this.spacing(p) <= LEAVE_30_INTERVAL_MS ? this.floor30For + w.span : 0;
       if (this.floor30For >= this.leave30Ms) {
         const to = this.best(TARGET_MS, gpu, false);
         this.floor30For = 0;
@@ -503,6 +512,13 @@ export class QualityController {
     const p = this.expect(this.level - 1, gpu);
     if (p !== null && p > pace * UP_MS) return null;
     return this.probe(this.level - 1, now, 'trying sharper');
+  }
+
+  /** How far apart frames of `gpu` ms come at 60 on this screen (ms): a late one lands on its next
+   *  refresh. */
+  spacing(gpu) {
+    const r = this.refresh;
+    return Math.max(1000 / 60, Math.ceil(gpu / r - 1e-9) * r);
   }
 
   /** A try up, to `level`: back where it was at once if it does not hold. */
@@ -564,6 +580,8 @@ export class QualityController {
     this.probing = false;
     this.before = null;
     this.lastAt = -1;
+    // (What it held the other way is kept for that way, by the page: record.keep.)
+    this.held.clear();
     const to = level ?? (this.trained ? this.best(this.pace * TARGET_MS) : this.level);
     this.level = Math.min(Math.max(to, 0), this.lowest);
     this.skipUntil = now + SETTLE_MS;

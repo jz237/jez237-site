@@ -44,7 +44,16 @@ export class GpuClock {
       void this.renderer.resolveTimestampsAsync('render').then((ms) => {
         this.pending = false;
         if (!(ms && ms > 0)) return;
-        this.sample = { sim: Object.values(this.sim.gpuTimes).reduce((a, b) => a + b, 0), draw: ms };
+        // (Every frame the resolve took in, averaged: the last alone, at a steady cadence, could
+        // always be a frame the table's mirror is drawn in, or always one it is not.)
+        const pool = (this.renderer.backend as unknown as { timestampQueryPool?: Record<string, { timestamps: Map<string, number>; frames: number[] } | undefined> }).timestampQueryPool?.render;
+        let draw = ms;
+        if (pool && pool.frames.length > 1) {
+          let sum = 0;
+          for (const d of pool.timestamps.values()) sum += d;
+          draw = sum / pool.frames.length;
+        }
+        this.sample = { sim: Object.values(this.sim.gpuTimes).reduce((a, b) => a + b, 0), draw };
       });
       return;
     }
@@ -84,7 +93,11 @@ export function bowlArea(o: { x: number; y: number; rx: number; ry: number; angl
 }
 
 /** Whether anything the picture's motion follows has moved since the last frame (the camera, the
- *  bowl's place and turn, its lid): numbers compared with last frame's. */
+ *  bowl's place and turn, its lid): numbers compared with those last seen moved, to within STILL
+ *  (a millionth: far under a pixel; a spring easing a let-go bowl back upright creeps on through
+ *  ever smaller numbers for minutes, and would read as moving all that while). */
+const STILL = 1e-6;
+
 export class PoseWatch {
   private readonly last = new Float64Array(64);
 
@@ -93,7 +106,7 @@ export class PoseWatch {
     let k = 0;
     for (const p of parts) {
       for (let i = 0; i < p.length; i++, k++) {
-        if (this.last[k] !== p[i]) {
+        if (Math.abs(this.last[k] - p[i]) > STILL) {
           same = false;
           this.last[k] = p[i];
         }

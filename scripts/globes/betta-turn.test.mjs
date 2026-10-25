@@ -50,6 +50,8 @@ function remoteWith(vertexFloats) {
     const m = posted[posted.length - 1], pose = new ArrayBuffer(poseBytes(vertexFloats));
     const head = new Float64Array(pose, 0, 16), floats = new Float32Array(pose, 16 * 8);
     head.set([1, 0, 0], 3);
+    head.set([1, 1, 0, 0], 6);
+    head.set([1, 0, 0], 11);
     for (let i = 0; i < 16; i++) floats.set([1, 0, 0, 0], i * 4);
     for (let i = 64; i < floats.length; i += 3) floats.set([1, 0, 0], i);
     remote.receive({ pose, step: m.step, mode: 'cruise' });
@@ -77,6 +79,9 @@ test('a pose is drawn carried on by the turns since its step; each step carries 
   want.forEach((w, k) => near(remote.probes[k], w, 1e-6));
   near(remote.mouth.x, want[0], 1e-12); near(remote.mouth.z, want[2], 1e-12);
   near(remote.swim.heading, 0.03, 1e-12);
+  // (Where it dimpled the film, carried on too.)
+  const d = remote.takeDisturbance();
+  near(d.pushAt.x, want[0], 1e-12); near(d.pushAt.z, want[2], 1e-12);
   remote.post(dt, null, ENV, HOST, turns[1].map((x) => x / dt), turns[1]);
   // (A pure turn about its own axis does not lead the furnishings: the fish turns with them.)
   const step2 = readStep(posted[2].step, fish, scratch);

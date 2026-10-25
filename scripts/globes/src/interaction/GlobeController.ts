@@ -39,6 +39,9 @@ const TABLE_SPIN_FRICTION = 4;
 const MAX_SPIN = 6;
 /** How far a spin may run ahead of the globe while held (rad): a fast drag turns it no faster. */
 const SPIN_LEAD = 1.5;
+/** Let go, a tilt or lean this small (rad) and this slow (rad/s), or a spin this slow, has stopped. */
+const SNAP_ANGLE = 1e-4;
+const SNAP_RATE = 1e-3;
 
 // Minimum-jerk position profile (rest to rest) and its derivative, over u = 0..1.
 const mj = (u: number): number => u * u * u * (10 - 15 * u + 6 * u * u);
@@ -357,6 +360,13 @@ export class GlobeController {
       this.twistVel = THREE.MathUtils.clamp(this.twistVel, -MAX_SPIN, MAX_SPIN);
       this.twist += this.twistVel * h;
     }
+    // (Let go and nearly settled, it stops: the springs otherwise ease it on through ever smaller
+    // angles for minutes, and everything that waits for it to be still - the sim's bed, the quality
+    // controller, the mirror at half rate - would wait that long. A ten-thousandth of a radian is
+    // a fraction of a pixel.)
+    if (!tilting && Math.abs(this.theta) < SNAP_ANGLE && Math.abs(this.thetaVel) < SNAP_RATE) this.theta = this.thetaVel = 0;
+    if (!turning && Math.abs(this.lean) < SNAP_ANGLE && Math.abs(this.leanVel) < SNAP_RATE) this.lean = this.leanVel = 0;
+    if (!twisting && Math.abs(this.twistVel) < SNAP_RATE) this.twistVel = 0;
     if (!tilting) this.targetTheta = this.theta;
     if (!turning) this.targetLean = this.lean;
     if (!twisting) this.targetTwist = this.twist;

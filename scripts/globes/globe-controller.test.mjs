@@ -118,3 +118,20 @@ test('a right-button drag across turns it as a Ctrl-drag does', () => {
   ev('pointerup', 7, x + r * 0.5, y, mouse);
   assert.equal(c.holding, false);
 });
+
+test('let go after a roll, it comes to rest exactly (not creeping on through ever smaller angles)', () => {
+  const { c, centre, ev, run } = setup();
+  const { x, y, r } = centre;
+  const mouse = { pointerType: 'mouse', button: 0 };
+  ev('pointerdown', 3, x, y + r * 0.3, mouse);
+  ev('pointermove', 3, x + r * 0.6, y + r * 0.3, mouse);
+  run(0.5);
+  ev('pointerup', 3, x + r * 0.6, y + r * 0.3, mouse);
+  assert.ok(Math.abs(c.theta) > 0.05, 'rolled');
+  run(20);
+  assert.equal(c.theta, 0);
+  assert.equal(c.lean, 0);
+  const before = [...c.rotation.elements];
+  run(1);
+  assert.deepEqual([...c.rotation.elements], before, 'the same to the bit from frame to frame');
+});

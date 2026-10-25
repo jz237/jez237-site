@@ -246,14 +246,14 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
     shell.place(controller);
     studio.update(controller.center);
     await renderer.compileAsync(scene, camera);
-    let drawn = [0, 0];
-    await new Promise<void>((shown) => {
-      renderer.setAnimationLoop(() => {
-        if (fitted[0] === drawn[0] && fitted[1] === drawn[1]) return;
-        drawn = [...fitted];
-        renderer.render(scene, camera);
-        shown();
-      });
+    // (Its first frame drawn here and now, not waiting for an animation frame: a page loading in a
+    // tab out of sight gets none, and would not go on to build the bowl until it was shown.)
+    renderer.render(scene, camera);
+    let drawn = [...fitted];
+    renderer.setAnimationLoop(() => {
+      if (fitted[0] === drawn[0] && fitted[1] === drawn[1]) return;
+      drawn = [...fitted];
+      renderer.render(scene, camera);
     });
     void device.queue.onSubmittedWorkDone().then(() => {
       PROF.mark('studio');
@@ -772,7 +772,7 @@ function run(world: World, params: URLSearchParams, hooks: { beforeRender?: () =
       }
       // (Water sloshing - more substeps than a calm frame takes - is the bowl moving too.)
       const calm = Math.min(cfg.maxSubsteps, Math.max(cfg.minSubsteps, Math.ceil(dt / cfg.maxSubstepDt - 1e-6)));
-      const knobs = quality.frame(now, { cpu: work, gpu: clock.take(), queue: clock.takeQueue(), area: areaNow(), restArea: areaAtRest(), moving: !still || sim.lastSubsteps > calm });
+      const knobs = quality.frame(now, { cpu: work, gpu: clock.take(), queue: clock.takeQueue(), area: areaNow(), restArea: areaAtRest(), moving: !still || sim.lastSubsteps > calm, substeps: sim.lastSubsteps, refresh: pace?.refresh });
       if (knobs) applyKnobs(knobs);
     }
     if (first) {

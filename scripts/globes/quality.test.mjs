@@ -48,6 +48,7 @@ function run(c, dev, seconds) {
       area: dev.area,
       restArea: dev.restArea,
       moving,
+      refresh: dev.refresh ?? REFRESH,
     });
     if (r) moves.push({ t: dev.t, level: c.level, cpu: c.cpuLevel, fps: r.fps, why: c.lastMove.why });
   }
@@ -319,6 +320,20 @@ test('a warm phone on a fast screen whose lowest level misses 60 by a little kee
   assert.equal(c.level, LEVELS.length - 1);
   assert.equal(c.knobs.fps, 60);
   assert.ok(!c.fps30);
+});
+
+test('held to 30 by a hot spell, a phone on a fast screen goes back to 60 once its frames would come every 25 ms', () => {
+  // (Its lowest level 18 ms when cool, 1.4 times that for 15 s: 25 ms, four 120ths apart, 30 a
+  // second; then cool again, three 120ths, 40 a second, better than 30 held.)
+  const low = LEVELS[LEVELS.length - 1];
+  const dev = phone({ simMs: 7.6, refresh: 1000 / 120, heat: (t) => (t < 15000 ? 1.4 : 1) });
+  dev.msPerMpx = (18 - 7.6 - fixedCost(low)) / tracedPx(low, AREA);
+  const c = new QualityController(LEVELS, { level: 0 });
+  const hot = run(c, dev, 15);
+  assert.ok(hot.some((m) => m.fps === 30), JSON.stringify(hot));
+  const cool = run(c, dev, 90);
+  assert.ok(cool.some((m) => m.why === 'back to 60 fps'), JSON.stringify(cool));
+  assert.equal(c.knobs.fps, 60);
 });
 
 test('without timestamps it steers by the queue\'s pace', () => {
