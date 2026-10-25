@@ -416,7 +416,7 @@ let activeChallenge:Challenge|undefined;
 let rain:ReturnType<typeof createRain>|null=null,wetRoot:T.Object3D|undefined,wetOn=false;
 let rainSplashes:ReturnType<typeof createRainSplashes>|undefined;
 // This event's showers: their seed and how hard it is raining now (1 when not an offline rain event).
-let showerSeed=0,shower=1;
+let showerSeed=0,shower=1,showerForce:number|null=null;
 const eventAwards=new EventAwards();const propFires=new PropFires();
 /** Loose props as fire sources: where they are now and whether they burn. */
 const propPoints=(props:readonly {mesh:T.Object3D}[])=>props.map(p=>({x:p.mesh.position.x,y:p.mesh.position.y,z:p.mesh.position.z,kind:propKind((p.mesh as T.Mesh).geometry?.type)}));let slowMoUntil=0,slowMoScale=.3;
@@ -2342,7 +2342,7 @@ function updateCamera(dt: number) {
     for(const g of c.glass){const st=(g.material as T.Material).userData.glassState as GlassState|undefined;if(st)st.smoke.value=now;}}
   // Wipers sweep in the rain and park when it is dry; dead electrics stop them, and a big front hit bends them up off the glass (offline).
   if(state==='countdown'||state==='playing'||state==='wrecked'){const wet=eventLighting==='rain';for(const c of cars){if(!c.extendedDamage)continue;let rig=wiperRigs.get(c);if(!rig){rig=new WiperRig(wiperArms(c.model),c.id);wiperRigs.set(c,rig);}
-    rig.update(dt,wet,c.health>0&&!c.electricalCut&&!c.batteryOut,c.structuralDamage?.[0]??0,c.structuralDamage?.[1]??0);
+    rig.update(dt,wet,c.health>0&&!c.electricalCut&&!c.batteryOut,c.structuralDamage?.[0]??0,c.structuralDamage?.[1]??0,shower);
     // and keep the windscreen clear of rain while they work; stopped, it beads over again.
     if(!wiperScreens.has(c))wiperScreens.set(c,rig.arms.length?((windscreen(c.glass,c.root)?.material as T.Material|undefined)?.userData.glassState as GlassState|undefined):undefined);
     const screen=wiperScreens.get(c);if(screen)screen.wiped.value=wipeStep(screen.wiped.value,rig.moving,dt);}}
@@ -2545,7 +2545,7 @@ function frame(now: number) {
   clock += dt;
   if (!physics || state === 'loading'||preparingOnline) return;
   // Offline the rain comes and goes in showers: the streaks, their hiss, the lens drops and the puddles follow it.
-  shower=eventLighting==='rain'&&!online?.active?showerLevel(elapsed,showerSeed):1;rain?.setIntensity(shower);sound.rainLevel(shower);
+  shower=eventLighting==='rain'&&!online?.active?(showerForce??showerLevel(elapsed,showerSeed)):1;rain?.setIntensity(shower);sound.rainLevel(shower);
   rain?.update(camera,state==='paused'?0:dt);
   // Raindrops landing round the camera (offline rain).
   rainSplashes?.update(camera,activeVenue.course.height,state==='paused'?0:dt);
@@ -2978,7 +2978,7 @@ async function boot() {
     heatHaze: (on?: boolean) => { if (on !== undefined) hazeOff = !on; const u = heatHaze.material.uniforms; return { columns: heatHaze.columns, enabled: heatHaze.enabled, sources: hazeSources.length, boxes: (u.boxes.value as T.Vector4[]).slice(0, heatHaze.columns).map((b, i) => [...b.toArray(), ...(u.info.value as T.Vector4[])[i].toArray()].map((n) => +n.toFixed(3))) }; },
     lensRain: () => ({ drops: lensRain.drops.length, landed: lensRain.landed, splashed: lensRain.splashed, enabled: lensRainPass.enabled, view: drivingCamera }),
     puddleSplashes: () => splashes,
-    shower: () => ({ level: +shower.toFixed(3), drops: rain?.drops ?? 0 }),
+    shower: (force?: number | null) => { if (force !== undefined) showerForce = force; return { level: +shower.toFixed(3), drops: rain?.drops ?? 0 }; },
     shatterWindows: (id = 0) => { const c = cars.find((x) => x.id === id); return c ? { shattered: c.shatterSideWindows(), rims: c.glassRimCount } : null; },
     standby: () => standby ? { count: standby.count, names: standby.group.children.map((o) => o.name) } : null,
     bloom: (on?: boolean) => { if (on !== undefined) bloomOff = !on; return { enabled: lampBloom.enabled, threshold: lampBloom.threshold, strength: lampBloom.strength }; },

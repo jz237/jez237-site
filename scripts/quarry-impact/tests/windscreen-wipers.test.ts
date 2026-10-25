@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import * as T from 'three';
-import {WIPERS,WiperRig,strokeAngle,wiperArms} from '../src/windscreen-wipers';
+import {WIPERS,WIPE_RATE,wipeRate,WiperRig,strokeAngle,wiperArms} from '../src/windscreen-wipers';
 const H=.113;
 // A Linnet-like pair of bar wipers on a raked screen, a tailgate wiper, and meshes that are not arms.
 const car=()=>{
@@ -48,5 +48,17 @@ test('a big front hit bends the front arms up off the glass, jammed; a tailgate 
 test('main runs the rigs in the rain from the battery and the structure, offline cars only',()=>{
   const main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');
   assert.ok(main.includes("if(state==='countdown'||state==='playing'||state==='wrecked'){const wet=eventLighting==='rain';for(const c of cars){if(!c.extendedDamage)continue;let rig=wiperRigs.get(c);if(!rig){rig=new WiperRig(wiperArms(c.model),c.id);wiperRigs.set(c,rig);}"));
-  assert.ok(main.includes('rig.update(dt,wet,c.health>0&&!c.electricalCut&&!c.batteryOut,c.structuralDamage?.[0]??0,c.structuralDamage?.[1]??0);'));
+  assert.ok(main.includes('rig.update(dt,wet,c.health>0&&!c.electricalCut&&!c.batteryOut,c.structuralDamage?.[0]??0,c.structuralDamage?.[1]??0,shower);'));
+});
+test('the wipers keep time with the rain: resting between strokes in a light shower, fast in a downpour',()=>{
+  assert.deepEqual(wipeRate(1),{speed:WIPE_RATE.fastSpeed,pause:0});assert.deepEqual(wipeRate(.65),{speed:1,pause:0});
+  assert.ok(wipeRate(.2).pause>wipeRate(.45).pause&&wipeRate(.45).pause>0&&wipeRate(.2).speed===1,'the lighter, the longer the rest');assert.deepEqual(wipeRate(NaN),wipeRate(1));
+  const sweep=(level:number,seconds:number)=>{const rig=new WiperRig([],0);let strokes=0,last=0;
+    const armed=new WiperRig([{mesh:new T.Mesh(),parent:null,position:new T.Vector3(),rest:new T.Quaternion(),pivot:new T.Vector3(),axis:new T.Vector3(0,0,1),lean:new T.Vector3(),sign:1,tilt:0,rear:false,angle:0,bent:0}],0);
+    for(let i=0;i<seconds*60;i++){armed.update(1/60,true,true,0,0,level);if(Math.floor(armed.phase)>last){strokes++;last=Math.floor(armed.phase);}}void rig;return {strokes,rig:armed};};
+  const heavy=sweep(1,10),normal=sweep(.65,10),light=sweep(.25,10);
+  assert.ok(heavy.strokes>normal.strokes&&normal.strokes>light.strokes,`${heavy.strokes} > ${normal.strokes} > ${light.strokes}`);
+  assert.ok(Math.abs(normal.strokes-10/WIPERS.period)<=1,'the normal rate');
+  const resting=sweep(.25,WIPERS.period+.1).rig;assert.ok(resting.rest>0&&resting.phase%1===0&&!resting.moving,'parked, resting, between strokes');
+  const main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');assert.ok(main.includes(',c.structuralDamage?.[1]??0,shower);'),'driven by the shower');
 });

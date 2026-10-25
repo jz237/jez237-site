@@ -21,8 +21,8 @@ test('the falling rain draws as many streaks as the shower calls for, fainter wh
 test('drops land on the lens as hard as it rains; main drives the rain, its hiss, the lens and the puddles from the shower',()=>{
   assert.ok(Math.abs(lensRate(true,'chase',0,.5)-LENS_RAIN.rate.chase/2)<1e-9&&lensRate(true,'chase',0)===LENS_RAIN.rate.chase);
   const main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');
-  assert.ok(main.includes("  shower=eventLighting==='rain'&&!online?.active?showerLevel(elapsed,showerSeed):1;rain?.setIntensity(shower);sound.rainLevel(shower);"),'offline rain only');
-  assert.ok(main.indexOf('let showerSeed=0,shower=1;')<main.indexOf('async function start('),'declared before start() can run');
+  assert.ok(main.includes("  shower=eventLighting==='rain'&&!online?.active?(showerForce??showerLevel(elapsed,showerSeed)):1;rain?.setIntensity(shower);sound.rainLevel(shower);"),'offline rain only');
+  assert.ok(main.indexOf('let showerSeed=0,shower=1')<main.indexOf('async function start('),'declared before start() can run');
   assert.ok(main.includes('  showerSeed=Math.random();\n'),'each event its own');
   const audio=readFileSync(new URL('../src/audio.ts',import.meta.url),'utf8');assert.ok(audio.includes('h.gain.gain.setTargetAtTime(.16*(.45+.55*l),c.currentTime,1.2);'),'the hiss follows');
 });

@@ -6,6 +6,12 @@ import * as T from 'three';
  * WIPERS.lift radians, and a bent arm is jammed where it was. Arms are the separate wiper meshes (bars along their
  * longest axis) pivoting at their lower end; cars whose wipers are one fused mesh keep them still. */
 export const WIPERS={period:1.4,sweep:1.1,bend:.42,step:.14,lift:.9} as const;
+/** How hard it rains sets the wiper speed: below WIPE_RATE.intermittent they make a stroke and rest parked WIPE_RATE.pause
+ * s (longer the lighter the shower); above WIPE_RATE.fast they run WIPE_RATE.fastSpeed times as fast. */
+export const WIPE_RATE={intermittent:.5,pause:2.4,fast:.8,fastSpeed:1.6} as const;
+/** Stroke speed (times the normal rate) and the rest after each stroke (s) for a shower of this strength (0–1). */
+export function wipeRate(level:number){const l=Number.isFinite(level)?Math.max(0,Math.min(1,level)):1;
+  return {speed:l>WIPE_RATE.fast?WIPE_RATE.fastSpeed:1,pause:l<WIPE_RATE.intermittent?WIPE_RATE.pause*(1.5-l/WIPE_RATE.intermittent):0};}
 export const WIPER_NAME=/^panel_.*Wiper/i;
 const unit=(n:number)=>{const s=Math.sin(n*12.9898)*43758.5453;return s-Math.floor(s);};
 const X=new T.Vector3(1,0,0),q=new T.Quaternion(),bendQ=new T.Quaternion(),v=new T.Vector3(),lean=new T.Vector3();
@@ -35,21 +41,26 @@ export class WiperRig{
   phase=0;
   /** The wipers moved on the last update: powered, with an arm still working, raining or finishing a stroke. */
   moving=false;
+  /** Seconds left resting parked between intermittent strokes. */
+  rest=0;
   constructor(readonly arms:WiperArm[],private readonly seed=0){}
   get sweeping(){return this.arms.some(a=>!a.bent&&a.angle>1e-4);}
   get bentArms(){return this.arms.filter(a=>a.bent>0).length;}
   /** Advance dt: raining, powered (battery and wiring alive), front and rear structural damage 0–1. */
-  update(dt:number,raining:boolean,powered:boolean,front:number,rear:number){
+  update(dt:number,raining:boolean,powered:boolean,front:number,rear:number,level?:number){
     if(!(dt>0)||!this.arms.length){this.moving=false;return;}
     let changed=false;
     this.arms.forEach((arm,i)=>{
       if(arm.bent)return;const hit=arm.rear?rear:front;
       if(Number.isFinite(hit)&&hit>=WIPERS.bend+i*WIPERS.step){arm.bent=WIPERS.lift*(.55+.45*unit(this.seed+i));changed=true;}
     });
-    this.moving=powered&&(raining||this.phase%1>0)&&this.arms.some(a=>!a.bent);
+    const rate=level===undefined?{speed:1,pause:0}:wipeRate(level);
+    this.moving=powered&&(raining&&this.rest<=0||this.phase%1>0)&&this.arms.some(a=>!a.bent);
     if(powered){
       const was=this.phase;
-      if(raining)this.phase+=dt/WIPERS.period;
+      // In a light shower they rest parked between strokes; in a downpour they run fast.
+      if(raining&&this.rest>0)this.rest-=dt;
+      else if(raining){const stroke=Math.floor(this.phase);this.phase+=dt/WIPERS.period*rate.speed;if(rate.pause>0&&Math.floor(this.phase)>stroke){this.phase=stroke+1;this.rest=rate.pause;}}
       else if(this.phase%1>0)this.phase=Math.min(Math.floor(this.phase)+1,this.phase+dt/WIPERS.period);
       if(this.phase!==was)changed=true;
     }
