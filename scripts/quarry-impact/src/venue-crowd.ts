@@ -8,7 +8,9 @@ export const crowdSurge=(age:number)=>!Number.isFinite(age)||age<0||age>=CROWD_S
 export type SpectatorPlace={x:number;y:number;z:number;yaw:number;seated?:boolean};
 /** Rain (offline): every UMBRELLAS.every-th spectator (from UMBRELLAS.offset) holds up an umbrella, its canopy
  * UMBRELLAS.radius wide just above the head, tipped back a little. Built on the first shower, two batches, hidden when dry. */
-export const UMBRELLAS={every:3,offset:1,radius:.66,height:.3,above:1.3,tilt:.16,colours:[0x1b1d22,0x9d2b2b,0x24406b,0xd8c24a,0xe8e6df,0x2f6b46,0x6b3b6e]} as const;
+/** In a breeze (UmbrellaWind, m/s) each umbrella is angled into it, UMBRELLAS.leanPer radians per m/s up to UMBRELLAS.lean; from
+ * UMBRELLAS.gale m/s, UMBRELLAS.inside of them have blown inside out. */
+export const UMBRELLAS={leanPer:.14,lean:.5,gale:2.6,inside:.05,every:3,offset:1,radius:.66,height:.3,above:1.3,tilt:.16,colours:[0x1b1d22,0x9d2b2b,0x24406b,0xd8c24a,0xe8e6df,0x2f6b46,0x6b3b6e]} as const;
 /** Original low-poly spectators, batched by geometry rather than person or outfit.
  * Local +Z faces the event; y is the grandstand tread, not the seat top. */
 export function createVenueCrowd(places:readonly SpectatorPlace[]){
@@ -68,15 +70,28 @@ export function createVenueCrowd(places:readonly SpectatorPlace[]){
   const m=new T.Matrix4(),local=new T.Object3D(),colour=new T.Color(),top=new T.Vector3(),hand=new T.Vector3();
   held.forEach((p,k)=>{
    base.makeRotationY(p.yaw);base.setPosition(p.x,p.y,p.z);const hip=p.seated!==false?.48:.88,i=k*UMBRELLAS.every+UMBRELLAS.offset;
-   top.set(0,hip+u.above,-.04);local.position.copy(top);local.rotation.set(-u.tilt,0,((i*7)%5-2)*.05);local.scale.setScalar(1);local.updateMatrix();
-   canopy.setMatrixAt(k,m.multiplyMatrices(base,local.matrix));canopy.setColorAt(k,colour.setHex(u.colours[(i*5+Math.floor(i/4))%u.colours.length]));
+   top.set(0,hip+u.above,-.04);canopy.setColorAt(k,colour.setHex(u.colours[(i*5+Math.floor(i/4))%u.colours.length]));
    hand.set(.1,hip+.25,.2);local.position.copy(hand).add(top).multiplyScalar(.5);local.quaternion.setFromUnitVectors(up,top.clone().sub(hand).normalize());local.scale.set(1,top.distanceTo(hand),1);local.updateMatrix();
    shaft.setMatrixAt(k,m.multiplyMatrices(base,local.matrix));
   });
   for(const mesh of [canopy,shaft]){mesh.castShadow=false;mesh.visible=false;root.add(mesh);}
   return [canopy,shaft];
  }
- root.userData.umbrellas=(on:boolean)=>{if(disposed||!places.length)return;if(on&&!umbrellaMeshes)umbrellaMeshes=buildUmbrellas();for(const mesh of umbrellaMeshes??[])mesh.visible=on;};
+ // Each canopy just above its holder, tipped back a little; angled into a breeze, and in a gale a few blown inside out.
+ function poseUmbrellas(canopy:T.InstancedMesh,wind?:{x:number;z:number}){
+  const held=places.filter((_,i)=>i%UMBRELLAS.every===UMBRELLAS.offset),u=UMBRELLAS,m=new T.Matrix4(),local=new T.Object3D();
+  const wx=Number.isFinite(wind?.x)?wind!.x:0,wz=Number.isFinite(wind?.z)?wind!.z:0,speed=Math.hypot(wx,wz),lean=Math.min(u.lean,speed*u.leanPer);
+  held.forEach((p,k)=>{
+   base.makeRotationY(p.yaw);base.setPosition(p.x,p.y,p.z);const hip=p.seated!==false?.48:.88,i=k*UMBRELLAS.every+UMBRELLAS.offset;
+   // Upwind in the holder's own frame.
+   const c=Math.cos(p.yaw),sn=Math.sin(p.yaw),dx=speed?-(wx*c-wz*sn)/speed:0,dz=speed?-(wx*sn+wz*c)/speed:0;
+   const flipped=speed>=u.gale&&(Math.sin(i*78.233)*43758.5453%1+1)%1<u.inside,into=flipped?-lean*1.4:lean;
+   local.position.set(0,hip+u.above,-.04);local.rotation.set(-u.tilt+into*dz,0,((i*7)%5-2)*.05-into*dx);local.scale.set(1,flipped?-1:1,1);local.updateMatrix();
+   canopy.setMatrixAt(k,m.multiplyMatrices(base,local.matrix));
+  });
+  canopy.instanceMatrix.needsUpdate=true;canopy.userData.inside=speed>=u.gale?held.filter((_,k)=>(Math.sin((k*UMBRELLAS.every+UMBRELLAS.offset)*78.233)*43758.5453%1+1)%1<u.inside).length:0;
+ }
+ root.userData.umbrellas=(on:boolean,wind?:{x:number;z:number})=>{if(disposed||!places.length)return;if(on&&!umbrellaMeshes)umbrellaMeshes=buildUmbrellas();if(on&&umbrellaMeshes)poseUmbrellas(umbrellaMeshes[0],wind);for(const mesh of umbrellaMeshes??[])mesh.visible=on;};
  function update(time:number){
   if(disposed||!Number.isFinite(time)||time<0)return;
   now=time;for(const f of flashes)if(f.sprite.visible&&f.until<=time)f.sprite.visible=false;

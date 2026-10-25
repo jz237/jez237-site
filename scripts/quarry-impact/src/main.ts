@@ -2461,7 +2461,7 @@ function frame(now: number) {
   if(windy&&!online?.active){gusting(breezeBase,clock,breeze);fx.wind.set(breeze.x,breeze.z);vehicleFire?.setWind(breeze,WIND.fire);rain?.setWind(breeze);}
   else if(fx.wind.x||fx.wind.y){fx.wind.set(0,0);vehicleFire?.setWind(null);rain?.setWind(null);}
   // Up go the umbrellas in the stands when it rains (offline).
-  {const up=eventLighting==='rain'&&!online?.active;if(up!==umbrellasUp||activeVenue.root!==umbrellaRoot){umbrellaRoot?.traverse(o=>o.userData.umbrellas?.(false));umbrellaRoot=activeVenue.root;umbrellasUp=up;umbrellaRoot?.traverse(o=>o.userData.umbrellas?.(up));}}
+  {const up=eventLighting==='rain'&&!online?.active;if(up!==umbrellasUp||activeVenue.root!==umbrellaRoot){umbrellaRoot?.traverse(o=>o.userData.umbrellas?.(false));umbrellaRoot=activeVenue.root;umbrellasUp=up;umbrellaRoot?.traverse(o=>o.userData.umbrellas?.(up,windy?breezeBase:undefined));}}
   // The cars are soaked in the rain too: darker paint and mud, a film of water on top (offline).
   CAR_WET.value=carWetOverride??(eventLighting==='rain'&&state!=='menu'&&!garageOpen&&!online?.active?1:0);
   // Loose arena props are local physics: switch them off whenever this client is in an online event.

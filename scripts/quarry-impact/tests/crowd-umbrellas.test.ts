@@ -20,5 +20,5 @@ test('in the rain every third spectator puts up an umbrella over their head; dry
 });
 test('main raises the umbrellas in an offline rain event, once per change of weather or venue',()=>{
   const main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');
-  assert.ok(main.includes("{const up=eventLighting==='rain'&&!online?.active;if(up!==umbrellasUp||activeVenue.root!==umbrellaRoot){umbrellaRoot?.traverse(o=>o.userData.umbrellas?.(false));umbrellaRoot=activeVenue.root;umbrellasUp=up;umbrellaRoot?.traverse(o=>o.userData.umbrellas?.(up));}}"));
+  assert.ok(main.includes("{const up=eventLighting==='rain'&&!online?.active;if(up!==umbrellasUp||activeVenue.root!==umbrellaRoot){umbrellaRoot?.traverse(o=>o.userData.umbrellas?.(false));umbrellaRoot=activeVenue.root;umbrellasUp=up;umbrellaRoot?.traverse(o=>o.userData.umbrellas?.(up,windy?breezeBase:undefined));}}"));
 });
