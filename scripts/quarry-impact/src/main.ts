@@ -2452,6 +2452,8 @@ function frame(now: number) {
     // From the tailpipe, where a crushed one hangs (vehicle.ts exhaust_pipe).
     steamAt.set(isRearEngineKind(c.kind)?.35:-.35,-.25,-DEFINITIONS[c.kind].halfLength-.1).applyQuaternion(c.root.quaternion).add(c.root.position);fx.emit(steamAt,1,5,.25);}
   // The event's breeze, gusting: smoke, steam and vapour drift on it, fire smoke leans with it, the rain slants (offline).
+  // Rain damps car fires (offline): they catch less, burn out sooner and hiss steam.
+  if(vehicleFire)vehicleFire.wet=eventLighting==='rain'&&!online?.active;
   if(windy&&!online?.active){gusting(breezeBase,clock,breeze);fx.wind.set(breeze.x,breeze.z);vehicleFire?.setWind(breeze,WIND.fire);rain?.setWind(breeze);}
   else if(fx.wind.x||fx.wind.y){fx.wind.set(0,0);vehicleFire?.setWind(null);rain?.setWind(null);}
   // Up go the umbrellas in the stands when it rains (offline).
@@ -2833,6 +2835,7 @@ async function boot() {
     umbrellas: () => { let n = 0; activeVenue.root?.traverse(o => { if (o.name === 'crowd_umbrella' && o.visible) n += (o as T.InstancedMesh).count; }); return n; },
     carWet: (v?: number | null) => { if (v !== undefined) carWetOverride = v; return CAR_WET.value; },
     vapour: () => vapourPuffs,
+    rainSteam: () => vehicleFire?.rainSteam ?? 0,
     wind: () => windy && !online?.active ? { x: +breeze.x.toFixed(3), z: +breeze.z.toFixed(3), base: { ...breezeBase } } : null,
     headGasket: (id = 0) => { const c = cars[id]; return c ? { clock: +c.gasketClock.toFixed(2), blown: c.gasketBlown, smoke: c.gasketSmoke, coolant: +c.coolantLevel.toFixed(3), misfire: +c.misfireFactor.toFixed(3) } : null; },
     blowGasket: (id = 0) => { const c = cars[id]; if (!c?.extendedDamage) return false; c.gasketClock = HEAD_GASKET_AFTER; return true; },
