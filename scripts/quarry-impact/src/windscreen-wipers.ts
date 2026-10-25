@@ -33,17 +33,20 @@ export function wiperArms(model:T.Object3D):WiperArm[]{
 export class WiperRig{
   /** Stroke phase in cycles (whole numbers are parked). */
   phase=0;
+  /** The wipers moved on the last update: powered, with an arm still working, raining or finishing a stroke. */
+  moving=false;
   constructor(readonly arms:WiperArm[],private readonly seed=0){}
   get sweeping(){return this.arms.some(a=>!a.bent&&a.angle>1e-4);}
   get bentArms(){return this.arms.filter(a=>a.bent>0).length;}
   /** Advance dt: raining, powered (battery and wiring alive), front and rear structural damage 0–1. */
   update(dt:number,raining:boolean,powered:boolean,front:number,rear:number){
-    if(!(dt>0)||!this.arms.length)return;
+    if(!(dt>0)||!this.arms.length){this.moving=false;return;}
     let changed=false;
     this.arms.forEach((arm,i)=>{
       if(arm.bent)return;const hit=arm.rear?rear:front;
       if(Number.isFinite(hit)&&hit>=WIPERS.bend+i*WIPERS.step){arm.bent=WIPERS.lift*(.55+.45*unit(this.seed+i));changed=true;}
     });
+    this.moving=powered&&(raining||this.phase%1>0)&&this.arms.some(a=>!a.bent);
     if(powered){
       const was=this.phase;
       if(raining)this.phase+=dt/WIPERS.period;
@@ -62,4 +65,14 @@ export class WiperRig{
       arm.mesh.position.copy(arm.position).sub(arm.pivot).applyQuaternion(q).add(arm.pivot);
     }
   }
+}
+/** A windscreen's wiped state, 0 beaded with rain to 1 clear (GlassState.wiped): working wipers clear it at WIPED.clear a
+ * second; once they stop, the rain beads it over again at WIPED.fill a second. */
+export const WIPED={clear:2,fill:.1} as const;
+export const wipeStep=(wiped:number,sweeping:boolean,dt:number)=>{const w=Number.isFinite(wiped)?wiped:0;return dt>0?w+((sweeping?1:0)-w)*Math.min(1,dt*(sweeping?WIPED.clear:WIPED.fill)):w;};
+/** The windscreen among a car's glass: the most forward pane across the middle of the car (in the root's space). */
+export function windscreen(glass:readonly T.Mesh[],root:T.Object3D){
+  root.updateMatrixWorld(true);const inverse=root.matrixWorld.clone().invert(),box=new T.Box3(),c=new T.Vector3();let best:T.Mesh|undefined,z=0;
+  for(const g of glass){box.setFromObject(g).getCenter(c).applyMatrix4(inverse);if(Math.abs(c.x)<.35&&c.z>z){z=c.z;best=g;}}
+  return best;
 }

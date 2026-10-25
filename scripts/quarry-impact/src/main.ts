@@ -112,7 +112,7 @@ import {CRUNCH,crunchVolume} from './litter-crunch';
 import {SHRED_SECONDS} from './vehicle';
 import {shouldBail,bailOut,strollAway,BAIL} from './driver-bail';
 import {cabinSmoke} from './cabin-smoke';
-import {WiperRig,wiperArms} from './windscreen-wipers';
+import {WiperRig,wiperArms,windscreen,wipeStep} from './windscreen-wipers';
 import {steerArms} from './driver-arms';
 import {LEAK as TYRE_LEAK_RANGE} from './damage-handling';
 import type {GlassState} from './car-materials';
@@ -2175,6 +2175,8 @@ const honkTarget=new WeakMap<object,number>(),honkAt=new WeakMap<object,number>(
 function hitTheWreck(closing:number){if(online?.active||demo||closing<CROWD_BOO.closing)return;if(sound.crowdBoo()){boos++;toast('THE CROWD BOOS · THAT CAR WAS OUT',1.4);}}
 const smokeIn=new WeakMap<object,number>();
 const wiperRigs=new WeakMap<object,WiperRig>();
+/** Each car's windscreen glass, when it has wiper arms to clear it (rain beads it over otherwise). */
+const wiperScreens=new WeakMap<object,GlassState|undefined>();
 let carWetOverride:number|null=null;
 let umbrellasUp=false,umbrellaRoot:T.Object3D|undefined;
 /** A driver watches the car their driving brain is hunting, if it is still running (see lookYaw). */
@@ -2221,7 +2223,10 @@ function updateCamera(dt: number) {
     for(const g of c.glass){const st=(g.material as T.Material).userData.glassState as GlassState|undefined;if(st)st.smoke.value=now;}}
   // Wipers sweep in the rain and park when it is dry; dead electrics stop them, and a big front hit bends them up off the glass (offline).
   if(state==='countdown'||state==='playing'||state==='wrecked'){const wet=eventLighting==='rain';for(const c of cars){if(!c.extendedDamage)continue;let rig=wiperRigs.get(c);if(!rig){rig=new WiperRig(wiperArms(c.model),c.id);wiperRigs.set(c,rig);}
-    rig.update(dt,wet,c.health>0&&!c.electricalCut&&!c.batteryOut,c.structuralDamage?.[0]??0,c.structuralDamage?.[1]??0);}}
+    rig.update(dt,wet,c.health>0&&!c.electricalCut&&!c.batteryOut,c.structuralDamage?.[0]??0,c.structuralDamage?.[1]??0);
+    // and keep the windscreen clear of rain while they work; stopped, it beads over again.
+    if(!wiperScreens.has(c))wiperScreens.set(c,rig.arms.length?((windscreen(c.glass,c.root)?.material as T.Material|undefined)?.userData.glassState as GlassState|undefined):undefined);
+    const screen=wiperScreens.get(c);if(screen)screen.wiped.value=wipeStep(screen.wiped.value,rig.moving,dt);}}
   // Rivals taunt with the horn: now and then, a driver picking a new car to hunt gives it a honk (offline, each car spaced out).
   if(state==='playing'&&!online?.active)for(const c of cars){if(c.id===0&&!demo||c.health<=0)continue;const t=drivers.memory.get(c.id)?.target??-1,was=honkTarget.get(c);honkTarget.set(c,t);
     if(was!==undefined&&t>=0&&t!==was&&clock-(honkAt.get(c)??-99)>=RIVAL_HONK.gap&&Math.random()<RIVAL_HONK.chance&&sound.clip('horn-stuck',c.current,RIVAL_HONK.volume,RIVAL_HONK.length)){honkAt.set(c,clock);rivalHonks++;}}
@@ -2796,6 +2801,7 @@ async function boot() {
     driverArms: (id = 0) => { const c = cars[id], d = c?.root.children.find(o => o.name === 'driver'); return d ? { steering: +c.steering.toFixed(3), tilts: d.children.filter(o => o instanceof T.Mesh && o.geometry instanceof T.CylinderGeometry).sort((a, b) => a.position.x - b.position.x).map(o => +o.rotation.x.toFixed(3)) } : null; },
     umbrellas: () => { let n = 0; activeVenue.root?.traverse(o => { if (o.name === 'crowd_umbrella' && o.visible) n += (o as T.InstancedMesh).count; }); return n; },
     carWet: (v?: number | null) => { if (v !== undefined) carWetOverride = v; return CAR_WET.value; },
+    screenWiped: (id = 0) => { const c = cars[id], st = c && wiperScreens.get(c); return st ? +st.wiped.value.toFixed(3) : null; },
     wipers: (id = 0) => { const c = cars[id], r = c && wiperRigs.get(c); return r ? { arms: r.arms.length, phase: +r.phase.toFixed(3), sweeping: r.sweeping, bent: r.bentArms, angles: r.arms.map(a => +a.angle.toFixed(3)), names: r.arms.map(a => a.mesh.name) } : null; },
     cabinSmoke: (id: number) => { const c = cars.find(x => x.id === id); return c ? smokeIn.get(c) ?? 0 : null; },
     /** QA: set a tyre shredding, as a blowout does. */
