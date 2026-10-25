@@ -47,6 +47,7 @@ import {drainOil,starvationWear,seizes,ROD,rodStress,rodAtSeize,OIL,drainCoolant
 import {MAX_ENGINE_RESTART,crankRequested} from './engine-stall';
 import {disposeDriver,disposeWindowNet} from './driver-figure';
 import {disposeRollCage} from './roll-cage';
+import {disposeDerbyFlag} from './derby-flag';
 import {disposeRoofSign} from './roof-sign';
 import {BOOM} from './blow-up';
 import {RUB_FIRE,rubHeat,EXTINGUISHER,EXHAUST_CRUSH,exhaustCrushes,wheelRips,WHEEL_RIP,CABLE,HANDBRAKE_CABLE,ENGINE_DROP,SMASH_FIRE,rollBarSnaps,rollTorque,hasPropshaft,propBend,propVibration,fatigueProp,BEARING,bearingCracks,wearBearing,bearingShimmy,bearingDrag,steerSkew,openness,openDrag,debrisFling,smashFire,impactZoneFactor,pitStrength,pitGrip,PIT,EXPOSED_WHEEL,exposedDamage,BUMPER_GONE,COVER_GONE,engineDrops,ROOF_SLIDE,SIDE_SLIDE,ROLL_SHED,roofSlide,TANK_DROP,tankDrops,pushBurn,cableSnaps,cableThrottle,handbrakeSnaps,beltSlip,beltSnaps,beltSqueal,beltHeat,drainBattery,batteryCut,RADIATOR as RADIATOR_COOLING,runningHot,hotClock,overheatFire} from './damage-handling';
@@ -1608,6 +1609,7 @@ export class Vehicle {
     {const driver=this.root.children.find(o=>o.name==='driver');if(driver)disposeDriver(driver);}
     {const net=this.root.children.find(o=>o.name==='window_net');if(net)disposeWindowNet(net);}
     {const cage=this.root.children.find(o=>o.name==='roll_cage');if(cage)disposeRollCage(cage);}
+    {const flag=this.root.children.find(o=>o.name==='derby_flag');if(flag)disposeDerbyFlag(flag);}
     this.tireContacts.forEach(contact=>contact.dispose());
     this.world.removeVehicleController(this.controller);
     this.world.removeRigidBody(this.body);
