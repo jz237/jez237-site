@@ -36,7 +36,7 @@ const LIGHT_FP: f32 = 268435456.0;
 fn lightAdd(v: vec3i, amount: f32) {
   let n = i32(P.lightN);
   if (any(v < vec3i(0)) || any(v >= vec3i(n)) || amount <= 0.0) { return; }
-  atomicAdd(&lightAcc[u32(v.x + n * (v.y + n * v.z))], u32(amount * LIGHT_FP));
+  atomicAdd(&lightAcc[u32(P.photons.z) + u32(v.x + n * (v.y + n * v.z))], u32(amount * LIGHT_FP));
 }
 
 // Light carried through the water along a straight step (from a, direction d, length len):
@@ -133,7 +133,7 @@ fn deposit(q: vec3f, flux: vec3f) {
     let t = b + o;
     if (any(t < vec2i(0)) || any(t >= vec2i(n))) { continue; }
     let w = select(1.0 - f.x, f.x, o.x == 1) * select(1.0 - f.y, f.y, o.y == 1);
-    let idx = 3u * u32(t.x + n * t.y);
+    let idx = u32(P.photons.y) + 3u * u32(t.x + n * t.y);
     atomicAdd(&causticAcc[idx], u32(flux.r * w * CAUSTIC_FP));
     atomicAdd(&causticAcc[idx + 1u], u32(flux.g * w * CAUSTIC_FP));
     atomicAdd(&causticAcc[idx + 2u], u32(flux.b * w * CAUSTIC_FP));
@@ -143,11 +143,14 @@ fn deposit(q: vec3f, flux: vec3f) {
 @compute @workgroup_size(16, 16)
 fn caustics(@builtin(global_invocation_id) gid: vec3u) {
   let N = u32(P.sun.w);
-  if (gid.x >= N || gid.y >= N) { return; }
+  // (Its row: all of them a frame, or every other, the even and the odd in turn.)
+  let half = u32(P.photons.x);
+  let row = select(gid.y, 2u * gid.y + half - 1u, half > 0u);
+  if (gid.x >= N || row >= N) { return; }
   // Jittered within its cell, differently every frame: no fixed moire against the grids.
-  let jit = hash2(gid.xy, u32(P.frame));
+  let jit = hash2(vec2u(gid.x, row), u32(P.frame));
   let a = (f32(gid.x) + jit.x) / f32(N) * 2.0 - 1.0;
-  let b = (f32(gid.y) + jit.y) / f32(N) * 2.0 - 1.0;
+  let b = (f32(row) + jit.y) / f32(N) * 2.0 - 1.0;
   if (a * a + b * b >= 1.0) { return; }
 
   let toSun = normalize(P.sun.xyz);
@@ -159,7 +162,8 @@ fn caustics(@builtin(global_invocation_id) gid: vec3u) {
   let cell = 2.0 * rOut / f32(N);
   var flux = P.sunColor.rgb * cell * cell;
   // White (colourless) share of the photon's power, for the light volume: the renderer applies
-  // the water's colour from the depth. One photon in eight lays it down, carrying 8x.
+  // the water's colour from the depth. One photon in eight lays it down, carrying 8x (in halves,
+  // as many of each half's: by its own rows).
   let volPhoton = (gid.x & 1u) == 0u && (gid.y & 3u) == 0u;
   var white = 8.0 * cell * cell;
 

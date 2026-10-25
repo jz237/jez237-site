@@ -34,8 +34,23 @@ export const DROP_MAP_N = 512;
 export const DROP_ROW = 512;
 /** The wet map's texels a side (where the water covers the glass: splash.wgsl spWet). */
 const WET_N = 256;
+/** The drop map's drops a texel, and its tiles' texels a side (splash.wgsl MAP_K, TILE). */
 const MAP_K = 4;
+const MAP_TILE = 16;
+/** The drop map's kernels walk the drops in turn, as many as there are: with many on the glass a
+ *  thread a drop (spDropMap, spDropMerge, a thread for every drop the pool has room for), with
+ *  fewer than TEAM_DROPS (as last read back: FluidSim's readback, a frame or two late) splash.wgsl
+ *  LANES threads a drop, TEAMS drops a workgroup (spDropMapTeams, spDropMergeTeams), workgroups
+ *  for twice as many and a few over. (A thread a drop, a few drops' long loops held the kernels
+ *  up, most of the GPU idle; with many, sharing each drop's texels among its threads took longer
+ *  than a thread a drop.) */
+const TEAM_DROPS = 1024;
+const DROP_TEAMS = 16;
+/** The pools' counts the readback takes (bubbles, spray, drops: two halves each), bytes. */
+export const SPLASH_COUNTS = 32;
 const S_WORDS = 36;
+/** Where the drops' counts are in the counts (splash.wgsl DROP). */
+const DROP_HALVES = 4;
 const CTRL_WORDS = 24;
 /** The most bubbles a fish can let go in a frame (emit()). */
 const EMIT_MAX = 16;
@@ -89,10 +104,12 @@ export class Splash {
   private emitSpread = 0.006;
   private frame = 0;
   private cur = 0;
-  /** spMapResolve's workgroups (16 x 16 texels each), and spBinCount's (8 x 8 x 4 cells). (Every
-   *  kernel but spEmit is 256 wide: the narrower ones launched four times the workgroups, most of
-   *  them with nothing to do.) */
-  private readonly mapGroups: [number, number, number] = [Math.ceil(DROP_MAP_N / 16), Math.ceil(DROP_MAP_N / 16), 1];
+  /** The drops on the glass, as last read back (observe). */
+  private seenDrops = 0;
+  /** spMapResolve's workgroups (a tile of the drop map each, MAP_TILE texels a side), and
+   *  spBinCount's (8 x 8 x 4 cells). (Every kernel but spEmit is 256 wide: the narrower ones
+   *  launched four times the workgroups, most of them with nothing to do.) */
+  private readonly mapGroups: [number, number, number] = [Math.ceil(DROP_MAP_N / MAP_TILE), Math.ceil(DROP_MAP_N / MAP_TILE), 1];
   private readonly binGroups: [number, number, number] = [Math.ceil(SPLASH_GRID / 8), Math.ceil(SPLASH_GRID / 8), Math.ceil(SPLASH_GRID / 4)];
 
   constructor(
@@ -123,8 +140,9 @@ export class Splash {
       drops: make('drops', 2 * DROP_CAP * 32),
       gain: make('drops run together', DROP_CAP * 16),
       wet: make('wet glass', WET_N * WET_N * 4),
-      dropMap: make('drop map', DROP_MAP_N * DROP_MAP_N * (1 + MAP_K) * 4),
-      mapHeld: make('drop map held', DROP_MAP_N * DROP_MAP_N * 4),
+      // (Two frames' counts, then the drops.)
+      dropMap: make('drop map', DROP_MAP_N * DROP_MAP_N * (2 + MAP_K) * 4),
+      mapTiles: make('drop map tiles', 2 * Math.ceil(DROP_MAP_N / MAP_TILE) ** 2 * 4),
       bins: make('splash bins', (SPLASH_GRID ** 3 + 12) * 4),
     };
     this.uniform = device.createBuffer({ label: 'splash params', size: S_WORDS * 4, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
@@ -145,9 +163,10 @@ export class Splash {
   }
 
   /** The kernels, bound to the water's: its parameters, its grid's velocities (projected, and
-   *  before the forces), its density field, the sand; and the queue g2p.wgsl fills, with its count
-   *  (Foam.ts's). */
-  async init(params: GPUBuffer, gridVel: GPUBuffer, gridVelOld: GPUBuffer, field: GPUBuffer, sand: GPUTextureView, sandSampler: GPUSampler, queue: GPUBuffer, queueCount: GPUBuffer): Promise<void> {
+   *  before the forces), its density field, the sand; the queue g2p.wgsl fills, with its count
+   *  (Foam.ts's); and the march band (FluidSim.marchBand: the wet map's glass over all the water,
+   *  dry, is left as it was). */
+  async init(params: GPUBuffer, gridVel: GPUBuffer, gridVelOld: GPUBuffer, field: GPUBuffer, sand: GPUTextureView, sandSampler: GPUSampler, queue: GPUBuffer, queueCount: GPUBuffer, band: GPUTextureView): Promise<void> {
     const d = this.device;
     const b = this.buffers;
     const module = d.createShaderModule({ label: 'splash', code: `${commonWGSL}\n${sandSampleWGSL}\n${wwCommonWGSL}\n${splashWGSL}` });
@@ -169,12 +188,13 @@ export class Splash {
       11: b.wet,
       12: b.dropMap,
       13: b.bins,
-      14: b.mapHeld,
+      14: b.mapTiles,
       18: sand,
       19: sandSampler,
       20: this.uniform,
       21: this.grid.createView(),
       22: this.drops.createView(),
+      23: band,
     };
     // (Each kernel's bindings, as it uses them.)
     const entries: [string, number[]][] = [
@@ -182,10 +202,12 @@ export class Splash {
       ['spEmit', [0, 4, 6, 7, 18, 19, 20]],
       ['spBubbles', [0, 2, 3, 4, 6, 7, 8, 18, 19, 20]],
       ['spSpray', [0, 4, 6, 7, 8, 9, 18, 19, 20, 22]],
-      ['spWet', [0, 4, 6, 9, 11, 18, 19, 20, 22]],
+      ['spWet', [0, 4, 6, 9, 11, 18, 19, 20, 22, 23]],
       ['spDrops', [0, 4, 6, 8, 9, 10, 20, 22]],
-      ['spDropMap', [0, 6, 9, 12, 20]],
+      ['spDropMap', [0, 6, 9, 12, 14, 20]],
+      ['spDropMapTeams', [0, 6, 9, 12, 14, 20]],
       ['spDropMerge', [0, 6, 9, 10, 12, 20, 22]],
+      ['spDropMergeTeams', [0, 6, 9, 10, 12, 20, 22]],
       ['spMapResolve', [12, 14, 20, 22]],
       ['spBin', [0, 6, 7, 8, 13, 20, 21]],
       ['spBinCount', [6, 13, 20, 21]],
@@ -259,7 +281,7 @@ export class Splash {
     this.writeUniform(dt, time);
     const b = this.buffers;
     const g = (n: number, w = 256): [number, number, number] => [Math.ceil(n / w), 1, 1];
-    enc.clearBuffer(b.dropMap, 0, DROP_MAP_N * DROP_MAP_N * 4);
+    // (The drop map's counts are emptied where they were made, by spMapResolve a frame later.)
     enc.clearBuffer(b.bins);
     const pass = beginPass(enc, 'splash');
     this.run(pass, 'spSpawn', g(FOAM_QUEUE));
@@ -270,8 +292,14 @@ export class Splash {
     const wg = Math.ceil(WET_N / 16);
     this.run(pass, 'spWet', [wg, wg, 1]);
     this.run(pass, 'spDrops', g(DROP_CAP));
-    this.run(pass, 'spDropMap', g(DROP_CAP));
-    this.run(pass, 'spDropMerge', g(DROP_CAP));
+    if (this.seenDrops < TEAM_DROPS) {
+      const tg = g(2 * this.seenDrops + 8 * DROP_TEAMS, DROP_TEAMS);
+      this.run(pass, 'spDropMapTeams', tg);
+      this.run(pass, 'spDropMergeTeams', tg);
+    } else {
+      this.run(pass, 'spDropMap', g(DROP_CAP));
+      this.run(pass, 'spDropMerge', g(DROP_CAP));
+    }
     this.run(pass, 'spMapResolve', this.mapGroups);
     this.run(pass, 'spBin', g(BUBBLE_CAP + SPRAY_CAP));
     this.run(pass, 'spBinCount', this.binGroups);
@@ -282,17 +310,33 @@ export class Splash {
    *  globe, or the water started over). */
   clear(enc: GPUCommandEncoder): void {
     const b = this.buffers;
-    enc.clearBuffer(this.ctrl);
     enc.clearBuffer(b.wet);
     enc.clearBuffer(b.gain);
-    enc.clearBuffer(b.dropMap, 0, DROP_MAP_N * DROP_MAP_N * 4);
+    enc.clearBuffer(b.dropMap, 0, 2 * DROP_MAP_N * DROP_MAP_N * 4);
     enc.clearBuffer(b.bins);
-    if (!this.kernels) return;
-    this.writeUniform(0, 0);
-    const pass = enc.beginComputePass({ label: 'splash clear' });
-    this.run(pass, 'spMapResolve', this.mapGroups);
-    this.run(pass, 'spBinCount', this.binGroups);
-    pass.end();
+    if (this.kernels) {
+      // (The map's tiles drawn last are resolved again, from counts of none; then no tile is
+      // marked.)
+      this.writeUniform(0, 0);
+      const pass = enc.beginComputePass({ label: 'splash clear' });
+      this.run(pass, 'spMapResolve', this.mapGroups);
+      this.run(pass, 'spBinCount', this.binGroups);
+      pass.end();
+    }
+    enc.clearBuffer(b.mapTiles);
+    enc.clearBuffer(this.ctrl);
+  }
+
+  /** The pools' counts into a readback (SPLASH_COUNTS bytes at offset), once the frame's splash
+   *  is encoded; observe() takes them when they are read. */
+  encodeCounts(enc: GPUCommandEncoder, buffer: GPUBuffer, offset: number): void {
+    enc.copyBufferToBuffer(this.ctrl, 0, buffer, offset, SPLASH_COUNTS);
+  }
+
+  /** The counts encodeCounts() copied, read back. (By then the frame's pools are emptied, the
+   *  next frame's hold them: each kind's two halves add up to its count.) */
+  observe(counts: Uint32Array): void {
+    this.seenDrops = counts[DROP_HALVES] + counts[DROP_HALVES + 1];
   }
 
   /** Dev: how many of each there are now, and what became of them (counted since the pools were

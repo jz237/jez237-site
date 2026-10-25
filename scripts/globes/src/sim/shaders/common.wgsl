@@ -65,6 +65,7 @@ struct SimParams {
   poke: vec4f,            // a push a fish gives the water, this substep (grid_update.wgsl): xyz where, w the speed it adds along the water's weight (0: none)
   pokeK: vec4f,           // x: the push's radius (world units)
   mouth: vec4f,           // the betta bowl's open mouth: x, the water's ceiling along the globe's axis (globeY); y, 1 where there is one
+  photons: vec4f,         // the photons' rows this frame (caustics.wgsl): x, 0 all of them, 1 the even, 2 the odd (in two halves, a frame each); y, z where this frame's half lays its deposits in the caustic map's and the light volume's (0 for the first); w, 1 where the maps have two halves (their resolves add both)
 };
 
 @group(0) @binding(0) var<uniform> P: SimParams;

@@ -9,18 +9,23 @@
 @group(0) @binding(8) var lightOut: texture_storage_3d<rgba16float, write>;
 
 const LIGHT_INV: f32 = 1.0 / 268435456.0;
+// (As the caustic map's blend: caustic_resolve.wgsl.)
+const LIGHT_BLEND: f32 = 0.35;
+const LIGHT_BLEND_HALVES: f32 = 0.42;
 
 // Voxel i (x fastest, then y, then z).
 fn lightResolve(i: u32) {
   let n = u32(P.lightN);
   if (i >= n * n * n) { return; }
-  let acc = lightAcc[i];
+  var acc = lightAcc[i];
+  // (And the volume's other half, where it has two: caustic_resolve.wgsl fluxAt.)
+  if (P.photons.w > 0.0) { acc += lightAcc[i + n * n * n]; }
   let prev = lightPrev[i];
   // (No light here, now or before - the air, outside the glass: its texel holds 0 already.)
   if (acc == 0u && prev == 0.0) { return; }
   let vox = 2.0 * P.radius / f32(n);
   let fluence = f32(acc) * LIGHT_INV / (vox * vox * vox);
-  let smoothed = mix(prev, fluence, 0.35);
+  let smoothed = mix(prev, fluence, select(LIGHT_BLEND, LIGHT_BLEND_HALVES, P.photons.w > 0.0));
   lightPrev[i] = smoothed;
   textureStore(lightOut, vec3u(i % n, (i / n) % n, i / (n * n)), vec4f(smoothed, 0.0, 0.0, 1.0));
 }

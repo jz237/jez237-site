@@ -835,8 +835,10 @@ current.
   screenshot held upright. The frame at pixel ratios 0.6, 1, 0.8, 1.25, 0.6, 1.5, 2, 1 (coming
   back to some shows a phone slowing as it warms), then at 0.6 and 1 with a part left out (the
   table and its mirror, the fish's pass, the bowl, the sim's step: what each costs, by what it
-  saves), then the sim at 0.6 (its passes' times, the pressure solve at 8, 24 and 40 sweeps, a
-  shaken bowl at 2 and at 3 substeps) and the GPU's own cost of a dispatch
+  saves), then the sim at 0.6 (as the page runs it and, on a phone, as round 2 did: `simq 0`;
+  each stage of its substeps in a timed pass of its own, the line of its passes from that row;
+  the pressure solve at 8 and 40 sweeps; a shaken bowl at 2 substeps) and the GPU's own cost of a
+  dispatch
   (`gpu/dispatchProbe.ts`); and the adapter, its features (timestamps, f16, subgroups, tier-1
   formats), the pipelines built (`gpu/pipelineCount.ts`: the bowl's two large ones, timed, and
   any of them built at once, 'sync', untimed, the first frame that draws with it waiting for it;
@@ -1076,6 +1078,87 @@ update or constrain, whose velNew there changes every substep, dt times the body
 extrapolate, which reaches two faces further), and none while the water moves. And what they
 leave as it was is right only while nothing they read changes over the water: sand carried up the
 glass by a tilt does (the cells' faces). About 0.1 ms on the S25 at rest, by the model.
+
+## Phase 2: the sim's work by what there is to do (S2)
+
+The S25 Ultra's ?bench (round 2) took 6-8.7 ms a frame for the sim, at rest: flip substeps 4.36
+(two), the splash 1.70, the density field 0.90, the photons 0.89, sand and container 0.70. It is
+not bound by launching its dispatches (0.8 us each there). Two kinds of change: the same water,
+less work; and, on phones only, lighter settings while the water moves little (`sim/simTier.ts`,
+`FluidSim.runtime`), with `?simq=0` running a phone's sim as round 2 did.
+
+The same water, every globe (the det harnesses: the particles, the grids, the field, the sand,
+the caustics and every texture the renderer reads hash as before on the phone's tier with
+`?simq=0` and on the desktop's; the splash's own pools follow the atomics' order run to run, as
+before):
+- **The splash's counts** are loaded once a workgroup (`sp_poolCount`): every thread of a pool's
+  kernel loading the one count from the same word took its turn at it (spBin, its pools empty,
+  0.09 -> 0.007 ms on the Radeon iGPU; spDrops with 380 drops 0.13 -> 0.03).
+- **The drop map's kernels by the drops there are.** At rest a few hundred drops lie on the glass;
+  a thread a drop walking its texels in turn, spDropMap and spDropMerge waited on a few long loops
+  with most of the GPU idle. While fewer than 1024 are on the glass (as last read back), LANES (16)
+  threads take each drop's texels between them (`spDropMapTeams`, `spDropMergeTeams`), the drop's
+  reach worked out once, by its first lane; a lane passes over any drop smaller than one its team
+  has found, and the drop goes into the largest found, of that size the first listed (as one
+  thread finds it: drop-map.test.mjs, with the lanes' steps in random orders). With many, a
+  thread a drop as before (shared among lanes, 12,000 drops took 2.8 against 1.7 ms). Two more
+  small pipelines.
+- **The map resolved over the tiles drops reach.** spDropMap marks each 16x16 tile of the map a
+  drop reaches; spMapResolve works the tiles marked this frame or the last (the rest hold none,
+  as they did) and empties last frame's counts there: the counts are kept for two frames (by
+  S.cur), and the 1 MB clear a frame is gone.
+- **The wet map** leaves the glass that was dry and lies over all the water (over the march
+  band's x, where no read blends a voxel of the water; FluidSim.marchBand, also bound where a page
+  has no band: it then leaves nothing out) as it was: most of the dome, at rest.
+- **The rock's and the bed solids' tops** (rock_bed.wgsl, 80 steps down each column) are worked out
+  again only when the globe has turned (its orientation's floats changed); rockPrev is copied once
+  more after, so the sand's rotation reads what it read before.
+
+On the Radeon iGPU (the betta's sim alone, the phone's tier, 2 substeps; `?simq=0` here, so these
+alone): the splash at rest with 380 drops 1.01 -> 0.36 ms, with 13,000 drops 3.53 -> 3.30; the
+whole sim at rest 14.9 -> 14.2.
+
+**The phone's runtime** (`PHONE_SIMQ1`; none of it a pipeline: `?bench`'s rows switch it between
+frames):
+- Pressure sweeps by how much the water moves (`FluidSim.agitation`, from the bowl's motion and
+  the fastest particle read back): 12 a substep calm (the bowl still and the fastest under 2 for
+  3 s), 20 moving, 24 in a hard shake (fastest over 6). Measured on the sim alone, scripted
+  (rest, a tilt held and let go, a hard shake, rest; and fish gulps at the film every 2.5 s, as
+  the betta's): the resting divergence 1.6e-3 against 1.1e-3 at 24, the slosh's kinetic energy
+  falling to half in the same 1.5 s, the ripples' roughness the same (2.5e-4). Any change at all
+  (20 against 24) leaves the gulps' ripple fields 15% apart in a few seconds; 12, 21%.
+- The photons in two halves of their rows, the even and the odd a frame each, each half laying its
+  deposits into its own half of the caustic map and the light volume; the resolves add both (all
+  the rays of the last two frames) and, half of the flux being a frame old, take more of the new
+  each frame (0.75 for 0.6, 0.42 for 0.35). The caustics' mean the same, their contrast within
+  0.1% at rest and 1.5% in motion, their change frame to frame within 4-9% of the full trace's
+  (taking 0.6, in motion 15-20% less).
+- While the bowl stands still (0.5 s), the bed the water, the light and the picture see (the
+  sand's surface, extended, and the container's faces and cells) is built every fourth frame; the
+  sand still flows every frame (the sand's thickness the same, to the bit, after a tilt and a
+  shake).
+
+On the iGPU, all of it against round 2: at rest 14.9 -> 12.0 ms (the flip substeps 6.5 -> 6.2, the
+photons 3.2 -> 2.1, the splash 1.0 -> 0.37, sand and container 2.1 -> 1.3), with 13,000 drops on
+the glass 18.5 -> 15.7, a hard shake (3 substeps) 25.8 -> 23.8. In phone emulation on the 5090
+(latency-bound, as a phone's sim is much of the time): at rest 0.61 -> 0.38 ms (the splash 0.17
+-> 0.05), shaken hard the same (1.12). The sim's dispatches a frame at rest 147 -> 95.
+
+Dead ends, measured on the sim alone:
+- One substep a frame while calm (1/60 s, the FLIP blend made as much a frame as two took): the
+  resting water four to six times as lively, with flicks of divergence (a particle flung at the
+  film), at 12, 24 and 40 sweeps alike.
+- The sand every fourth frame for four frames' time: its slides are capped a substep, so they
+  slowed (the bed 0.016 apart, RMS, after a shake). Fewer sand substeps once the bowl had stood
+  still 3 s: still 0.01 apart.
+- Extrapolation from a tile read into workgroup memory with two faces round it (most faces
+  outside the water read 42 neighbours from memory): no faster on the iGPU (1.62 against 1.54 ms),
+  and slower with the validity in bits (2.35).
+
+Left for the phone's own numbers: `?bench`'s `sim fine` row times each stage of the substeps
+(p2g, grid update, cell prep, pressure, project, extrapolate, constrain, g2p, the density field's
+splat and blur) where the S25 has only ever shown the flip substep whole; and `simq 0` against
+`sim` is what this costs and saves there.
 
 ## The betta in a worker (src/fish/Betta.ts, bettaSpecimen.mjs, bettaLink.mjs, bettaWorker.mjs)
 

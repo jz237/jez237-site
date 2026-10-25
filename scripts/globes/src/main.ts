@@ -33,6 +33,7 @@ import { StudioBackdrop } from './render/StudioBackdrop';
 import { BOWL_DEBUG_LEGEND, sunInWater } from './render/shaders';
 import { BED_SOLIDS_N, BED_SOLIDS_NONE, FluidSim, SURFACE_ISO, fillHeight } from './sim/FluidSim';
 import { IdleWater } from './sim/IdleWater';
+import { PHONE_SIM, phoneRuntime } from './sim/simTier';
 import { FIN_QUALITY } from '../../betta-atelier/src/fin-dynamics.js';
 
 /** The camera's field of view, top to bottom (degrees). A view narrower than this (width over
@@ -150,11 +151,12 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   // (The betta's bowl has a bed of its own depth: bowlScape.ts BED.)
   const base = o.start.betta ? { ...simConfig, sandLevel: BED.level } : simConfig;
   // (Phones: a coarser grid, fewer substeps a frame - two at 60 fps, of up to 1/100 s - and solver
-  // sweeps.)
-  const cfg = applyUrlOverrides(LITE ? { ...base, gridRes: 40, maxSubsteps: 3, maxSubstepDt: 1 / 100, pressureIterations: 24, sandSubsteps: 6 } : o.start.betta ? { ...base, gridRes: 64 } : base);
+  // sweeps; and lighter still while the water moves little, ?simq=0 as round 2 ran it: simTier.ts.)
+  const cfg = applyUrlOverrides(LITE ? { ...base, ...PHONE_SIM } : o.start.betta ? { ...base, gridRes: 64 } : base);
   const R = o.globe.innerRadius;
   const fill = (g: GlobeEntry) => fillFor(cfg, R, g.water);
   const sim = new FluidSim(device, { ...cfg, fillFraction: fill(o.start) }, R, o.globe.outerRadius, o.light);
+  if (LITE) sim.runtime = phoneRuntime(params.get('simq'));
   const camera = new THREE.PerspectiveCamera(FOV, 1, 0.05, 100);
   const controller = new GlobeController(renderer.domElement, camera, o.globe);
   const koiEnv = (): KoiEnv => ({

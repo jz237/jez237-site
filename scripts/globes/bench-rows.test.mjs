@@ -38,7 +38,16 @@ function standIn() {
     cfg = { pressureIterations: 24, minSubsteps: 2, maxSubsteps: 3, minSubstepDt: 1 / 240 };
     // (The phone's passes, as bench #2 timed them.)
     gpuTimes = { ...PHONE_PASSES };
-    step() {}
+    // (The phone's runtime, as simTier.ts makes it; and whether its stages are timed one by one,
+    // when a stage's own pass times too.)
+    runtime = { sweeps: [12, 20, 24], photonHalves: true, stillBedEvery: 4 };
+    fine = false;
+    step() {
+      if (this.fine) this.gpuTimes.pressure = 0.5;
+    }
+    setProfiling(on) {
+      this.fine = on === 'fine';
+    }
   }
   const layers = new Set([0, 1]);
   const world = {
@@ -92,7 +101,7 @@ function run(bench, s, limit = 600) {
     const simMs = Object.values(world.sim.gpuTimes).reduce((a, b) => a + b, 0);
     if (simMs > 0) prof.gpuSim(simMs);
     bench.frame(now);
-    seen.push({ table: world.studio.table.visible, fish: world.layers.has(1), bowl: world.globe.mesh.visible, sim: Object.hasOwn(world.sim, 'step'), iters: world.sim.cfg.pressureIterations });
+    seen.push({ table: world.studio.table.visible, fish: world.layers.has(1), bowl: world.globe.mesh.visible, sim: Object.hasOwn(world.sim, 'step'), iters: world.sim.cfg.pressureIterations, sweeps: world.sim.runtime.sweeps.join(), fine: world.sim.fine });
   }
   return { seconds: (now - t0) / 1000, seen };
 }
@@ -122,8 +131,13 @@ test('every row is run in turn, put back, and the whole is done in about two min
   assert.deepEqual(s.world.sim.gpuTimes, PHONE_PASSES);
   assert.deepEqual([...new Set(seen.map((f) => f.iters))].sort((a, b) => a - b), [8, 24, 40]);
   assert.deepEqual(s.world.sim.cfg, { pressureIterations: 24, minSubsteps: 2, maxSubsteps: 3, minSubstepDt: 1 / 240 });
-  // (The shaken rows roll the bowl, and set it back in the middle.)
-  assert.ok(s.log.filter((l) => l === 'glide 0.5').length >= 6 && s.log.at(-1) === 'glide 0');
+  // (Its runtime: round 2's, the sweeps set, and the page's again; its stages timed a while, and
+  // their times let go after.)
+  assert.deepEqual([...new Set(seen.map((f) => f.sweeps))], ['12,20,24', '24,24,24', '8,8,8', '40,40,40']);
+  assert.deepEqual(s.world.sim.runtime, { sweeps: [12, 20, 24], photonHalves: true, stillBedEvery: 4 });
+  assert.ok(seen.some((f) => f.fine) && !s.world.sim.fine);
+  // (The shaken row rolls the bowl, and sets it back in the middle.)
+  assert.ok(s.log.filter((l) => l === 'glide 0.5').length >= 3 && s.log.at(-1) === 'glide 0');
   // A take before each row is measured (dropping the settling frames), one at its end.
   assert.equal(s.takes(), 2 * 22);
 });
@@ -196,7 +210,8 @@ test("its text fits a phone's screen held upright", async () => {
   assert.match(text, /^-bowl {5}0\.60  60\.0 16\.7\/17\.1 10\.3  6\.1\/ 1\.6  5\.8$/m);
   assert.match(text, /^-sim {6}0\.60  60\.0 16\.7\/17\.1 10\.3   -\/ 7\.6 -0\.2$/m);
   assert.match(text, /^-sim {6}1\.00  60\.0 16\.7\/17\.1 10\.3   -\/ 7\.6  0\.0$/m);
-  assert.match(text, /sim passes \(ms\): flip substep 2\.40 · splash 1\.60\n {2}sand \+ container 0\.90 · density field 0\.70\n {2}photons 0\.40 · shift \+ probes 0\.10$/m);
+  // (The fine row's: each stage of the substeps on its own, the pressure solve's here.)
+  assert.match(text, /sim passes \(ms\): flip 2\.40 · splash 1\.60 · sand 0\.90\n {2}splat 0\.70 · pressure 0\.50 · photons 0\.40\n {2}shift 0\.10$/m);
   assert.match(text, /a dispatch: no timestamps/);
   assert.match(text, /^pipelines: 82 built · bowl \d\.\d s · bowlKoi \d\.\d s\n {2}3 in the first frame · 0 late$/m);
   // (The bowl's compiles among the load's milestones, in the order they came.)

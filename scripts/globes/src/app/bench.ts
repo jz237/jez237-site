@@ -12,6 +12,7 @@ import { DispatchProbe } from '../gpu/dispatchProbe';
 import { describePipelines, pipelineMarks } from '../gpu/pipelineCount';
 import type { GlobeController } from '../interaction/GlobeController';
 import type { FluidSim } from '../sim/FluidSim';
+import { PHONE_SIMQ0, type SimRuntime } from '../sim/simTier';
 import { describeLoad, FrameProfile, median, PARTS, type Sample, wrap } from './frameProfile';
 
 /** What rows reach into (main.ts's world). */
@@ -95,20 +96,42 @@ registerBenchRows('split', [
   }),
 ]);
 
-/** The sim's settings a row changes, and puts back. */
-function simRow(label: string, set: Partial<Pick<FluidSim['cfg'], 'pressureIterations' | 'minSubsteps' | 'maxSubsteps' | 'minSubstepDt'>>, shake = false): BenchRow {
-  let kept: typeof set = {};
+/** The sim's settings a row changes, and puts back: its config's; its runtime's (where it has
+ *  one: a phone's, simTier.ts), or round 2's (?simq=0); and its passes timed stage by stage. */
+interface SimSet {
+  cfg?: Partial<Pick<FluidSim['cfg'], 'pressureIterations' | 'minSubsteps' | 'maxSubsteps' | 'minSubstepDt'>>;
+  runtime?: Partial<SimRuntime> | 'simq 0';
+  fine?: boolean;
+}
+
+function simRow(label: string, set: SimSet, shake = false): BenchRow {
+  let kept: SimSet['cfg'] = {};
+  let runtime: SimRuntime | null = null;
+  let passes: string[] = [];
   let half = -1;
   return {
     label,
     ratio: 0.6,
     apply: (w) => {
-      kept = Object.fromEntries(Object.keys(set).map((k) => [k, w.sim.cfg[k as keyof typeof set]]));
-      Object.assign(w.sim.cfg, set);
+      const cfg = set.cfg ?? {};
+      kept = Object.fromEntries(Object.keys(cfg).map((k) => [k, w.sim.cfg[k as keyof typeof cfg]]));
+      Object.assign(w.sim.cfg, cfg);
+      runtime = w.sim.runtime;
+      if (runtime && set.runtime) w.sim.runtime = set.runtime === 'simq 0' ? PHONE_SIMQ0 : { ...runtime, ...set.runtime };
+      if (set.fine) {
+        passes = Object.keys(w.sim.gpuTimes);
+        w.sim.setProfiling('fine');
+      }
       half = -1;
     },
     restore: (w) => {
       Object.assign(w.sim.cfg, kept);
+      w.sim.runtime = runtime;
+      if (set.fine) {
+        // (Its stages' times let go: main.ts would count them every frame.)
+        w.sim.setProfiling(true);
+        for (const l of Object.keys(w.sim.gpuTimes)) if (!passes.includes(l)) delete w.sim.gpuTimes[l];
+      }
       if (shake) w.controller.glideTo(0, 0.45);
     },
     // (Shaken: the bowl rolled one way and back across the table, a roll each half second.)
@@ -122,15 +145,35 @@ function simRow(label: string, set: Partial<Pick<FluidSim['cfg'], 'pressureItera
   };
 }
 
+/** Two substeps a frame, however short the frame (FluidSim.step). */
+const TWO_SUBSTEPS = { minSubsteps: 2, maxSubsteps: 2, minSubstepDt: 1e-6 };
+
+// The sim as the page runs it, and as round 2 ran it on phones (where it has a runtime: simTier.ts);
+// its stages timed one by one; its pressure solve at 8 and 40 sweeps; shaken.
 registerBenchRows('sim', [
   simRow('sim', {}),
-  simRow('iters 8', { pressureIterations: 8 }),
-  simRow('iters 24', { pressureIterations: 24 }),
-  simRow('iters 40', { pressureIterations: 40 }),
-  // (So many substeps a frame, however short the frame: FluidSim.step.)
-  simRow('shake 2', { minSubsteps: 2, maxSubsteps: 2, minSubstepDt: 1e-6 }, true),
-  simRow('shake 3', { minSubsteps: 3, maxSubsteps: 3, minSubstepDt: 1e-6 }, true),
+  simRow('simq 0', { runtime: 'simq 0' }),
+  simRow('sim fine', { fine: true }),
+  simRow('iters 8', { cfg: { pressureIterations: 8 }, runtime: { sweeps: [8, 8, 8] } }),
+  simRow('iters 40', { cfg: { pressureIterations: 40 }, runtime: { sweeps: [40, 40, 40] } }),
+  simRow('shake', { cfg: TWO_SUBSTEPS }, true),
 ]);
+
+/** The sim's passes and stages as the HUD names them (it has room for three lines of them). */
+const SHORT: Record<string, string> = {
+  'flip substep': 'flip',
+  'grid update + classify': 'grid',
+  'cell prep': 'prep',
+  extrapolate: 'extrap',
+  constrain: 'constr',
+  'sort scan': 'scan',
+  'sort scatter': 'sort',
+  'density field': 'splat',
+  'density blur': 'blur',
+  'sand + container': 'sand',
+  'shift + probes': 'shift',
+  'march band': 'band',
+};
 
 const f1 = (v: number | null): string => (v === null ? '  -' : v.toFixed(1).padStart(4));
 
@@ -240,8 +283,10 @@ export class Bench {
     // (The main thread's parts, at the first row's ratio.)
     const first = this.done[0];
     if (first) lines.push(wrap(`cpu ${first.s.cpuTotal.toFixed(1)} ms at ${first.ratio.toFixed(2)}:`, PARTS.map((p) => `${p} ${first.s.cpu[p].toFixed(1)}`)));
-    const sim = this.done.find((m) => m.row.label === 'sim');
-    if (sim) lines.push(wrap('sim passes (ms):', Object.entries(sim.passes).sort((a, b) => b[1] - a[1]).map(([l, ms]) => `${l} ${ms.toFixed(2)}`)));
+    // (The sim's passes, each stage of its substeps on its own once the fine row has run: those
+    // over 0.01 ms.)
+    const sim = this.done.find((m) => m.row.label === 'sim fine') ?? this.done.find((m) => m.row.label === 'sim');
+    if (sim) lines.push(wrap('sim passes (ms):', Object.entries(sim.passes).filter(([, ms]) => ms >= 0.01).sort((a, b) => b[1] - a[1]).map(([l, ms]) => `${SHORT[l] ?? l} ${ms.toFixed(2)}`)));
     if (this.dispatchUs !== undefined) lines.push(`a dispatch: ${this.dispatchUs === null ? 'no timestamps' : `${this.dispatchUs.toFixed(1)} µs`}`);
     const row = this.rows[this.k];
     if (this.k < 0) lines.push('... starting');

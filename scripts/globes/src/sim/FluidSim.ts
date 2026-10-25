@@ -123,9 +123,10 @@ import { BODY_VERTS } from '../reef/anemone';
 import { FISH_POINTS, MAX_FISH, REEF_GRID, reefSharedWGSL } from '../reef/reefShared';
 import rtRegionsWGSL from './shaders/rt_regions.wgsl?raw';
 import { Foam, FOAM_CTRL_QUEUE, FOAM_QUEUE } from './Foam';
-import { Splash } from './Splash';
+import { Splash, SPLASH_COUNTS } from './Splash';
 import { meniscusConstsWGSL } from '../render/meniscus';
 import { hasRayTracing } from '../rt/rt';
+import type { SimRuntime } from './simTier';
 import { RtScene } from '../rt/RtScene';
 
 export type Vec3 = readonly [number, number, number];
@@ -142,16 +143,17 @@ interface Kernel {
   bindGroups: GPUBindGroup[];
 }
 
-const PARAMS_SIZE = 464;
+const PARAMS_SIZE = 480;
 /** The most speed a fish's pushes can add to the water in one frame (see push()). */
 const MAX_PUSH = 0.15;
 /** Points the water is sampled at for the creatures every frame (see probe.wgsl): the koi's
  *  first (KOI_PROBES), then the clownfish's and the anemone's (setProbes). */
 export const PROBES = 128;
 /** Readback: stats (16 B), probe samples, water centroid (16 B), the ray tracing regions' counts
- *  (16 B). */
+ *  (16 B), the splash's counts. */
 const READBACK_RT = 16 + PROBES * 32 + 16;
-const READBACK_SIZE = READBACK_RT + 16;
+const READBACK_SPLASH = READBACK_RT + 16;
+const READBACK_SIZE = READBACK_SPLASH + SPLASH_COUNTS;
 /** Density level of the water surface, shared by the solver and the renderer. */
 export const SURFACE_ISO = 0.5;
 /** The fastest the water may go, world units/s: about twice the fastest jets a hard shake
@@ -179,6 +181,19 @@ const FUSED_MAX_N = 48;
 export const PARTICLE_FLOATS = 3;
 /** The particles are sorted again once the fastest may have gone this many cells. */
 const SORT_DRIFT = 1;
+/** How much the water moves (FluidSim.agitation, for its runtime): a hard shake once its fastest
+ *  goes faster than SHAKE_SPEED (world units/s; a hard roll's go 10-20); calm once, the bowl
+ *  standing still (spinning slower than STILL_SPIN, rad/s, its acceleration off gravity by less
+ *  than STILL_ACCEL of it), the fastest has gone slower than CALM_SPEED for CALM_AFTER s (left
+ *  alone, its odd particle near the glass goes up to ~1.6; the filter's current far slower). */
+const SHAKE_SPEED = 6;
+const CALM_SPEED = 2;
+const CALM_AFTER = 3;
+const STILL_SPIN = 0.01;
+const STILL_ACCEL = 0.02;
+/** And the bowl standing still this long, the bed it shows may be built a few frames at a time
+ *  (SimRuntime.stillBedEvery). */
+const STILL_BED_AFTER = 0.5;
 
 /** How a globe's water is seeded (FluidSim.seedPlan): per column of the particle lattice (x
  *  fastest, then z), its first particle's place in the list, and its lowest point (low 16 bits)
@@ -470,6 +485,25 @@ export class FluidSim {
   readonly splash: Splash;
   /** Whether the splash runs, and the water sheds it (dev: ?splash=0, none). */
   splashing = new URLSearchParams(location.search).get('splash') !== '0';
+  /** What the sim lightens by what the water is doing (a phone's: simTier.ts), or null: its
+   *  config's, every frame. Set before init() for the photons' halves to have their room; it may be
+   *  changed between frames after (none of it changes a pipeline). */
+  runtime: SimRuntime | null = null;
+  /** How much the water moves, by the last readings and the bowl's motion: 0 calm, 1 moving, 2 a
+   *  hard shake (with a runtime). */
+  agitation = 1;
+  /** The pressure sweeps a substep the last step took. */
+  lastSweeps = 0;
+
+  /** How long the water has been calm, and the bowl still (s). */
+  private calmFor = 0;
+  private stillFor = 0;
+  /** The frames since the bed was last built (SimRuntime.stillBedEvery). */
+  private bedWaited = 0;
+  /** Whether the photon maps have two halves (photonHalves), and whether the last frame traced
+   *  them so. */
+  private photonRoom = false;
+  private photonHalvesWere = false;
   /** Particles the buffers have room for (the most water any globe holds). */
   private capacity = 0;
   /** Which set of particle buffers holds the particles now (the sort moves them to the other). */
@@ -513,6 +547,12 @@ export class FluidSim {
   /** And now (the reef rock turns with it). */
   private readonly globeRotation = new Float32Array(IDENTITY as ArrayLike<number>);
   private readonly back = new Float32Array(9);
+  /** The globe's orientation the rock's and the bed solids' tops were last worked out for
+   *  (rock_bed.wgsl reads nothing else that changes but on new water): while the globe holds it,
+   *  they are as they were. Null: to be worked out. And whether the tops before them (rockPrev) are
+   *  these too. */
+  private rockFor: Float32Array | null = null;
+  private rockPrevSame = false;
   /** What reads the water and the bed for the frame once they are built (onWaterBuilt). */
   private readonly waterBuilt: ((enc: GPUCommandEncoder, beginPass: BeginPass) => void)[] = [];
 
@@ -676,7 +716,7 @@ export class FluidSim {
     await this.createKernels();
     await this.whitewater.init(this.paramsBuffer, this.buffers.velTmp, this.buffers.velOld, this.buffers.field, this.sandTexture.createView(), this.sandSampler);
     if (this.glass) this.splash.capillaryLength = this.glass.capillaryLength;
-    await this.splash.init(this.paramsBuffer, this.buffers.velTmp, this.buffers.velOld, this.buffers.field, this.sandTexture.createView(), this.sandSampler, this.whitewater.queue, this.whitewater.ctrl);
+    await this.splash.init(this.paramsBuffer, this.buffers.velTmp, this.buffers.velOld, this.buffers.field, this.sandTexture.createView(), this.sandSampler, this.whitewater.queue, this.whitewater.ctrl, this.marchBand.createView());
 
     this.writeParams(1 / 120, [0, -this.cfg.gravity, 0], [0, 0, 0], IDENTITY, 1);
     this.device.queue.writeBuffer(this.paramsBuffer, 0, this.paramsData);
@@ -756,6 +796,7 @@ export class FluidSim {
     q.submit([enc.finish()]);
     this.prevDt = 0;
     this.maxSpeed = 0;
+    this.rockFor = null;
   }
 
   /**
@@ -789,6 +830,17 @@ export class FluidSim {
     const dt = frameDt;
     if (!(dt > 0)) return;
     const cfg = this.cfg;
+
+    // How much the water moves (with a runtime: its sweeps; and whether the bed is built this
+    // frame).
+    const rt = this.runtime;
+    const still = Math.hypot(omega[0], omega[1], omega[2]) < STILL_SPIN && Math.hypot(bodyAccel[0], bodyAccel[1] + cfg.gravity, bodyAccel[2]) < STILL_ACCEL * cfg.gravity;
+    this.stillFor = still ? this.stillFor + dt : 0;
+    this.calmFor = still && this.maxSpeed < CALM_SPEED ? this.calmFor + dt : 0;
+    this.agitation = this.maxSpeed > SHAKE_SPEED ? 2 : this.calmFor >= CALM_AFTER ? 0 : 1;
+    this.lastSweeps = rt ? rt.sweeps[this.agitation] : cfg.pressureIterations;
+    const bedNow = !rt || this.stillFor < STILL_BED_AFTER || ++this.bedWaited >= rt.stillBedEvery;
+    if (bedNow) this.bedWaited = 0;
 
     // Substeps: as many as the max substep length and a CFL estimate (built from the last
     // measured speed plus what the body force can add this frame) ask, but no shorter than
@@ -841,13 +893,21 @@ export class FluidSim {
 
       if (i === 0) {
         // Once per frame: carry the sand round with the glass, let it creep, then rebuild the
-        // container the water sees (glass + sand bed).
+        // container the water sees (glass + sand bed). (With a runtime, while the bowl stands
+        // still, the bed is built every few frames: the sand creeps far less than a texel a
+        // second.)
         const turned = Math.abs(this.back[0] - 1) + Math.abs(this.back[4] - 1) + Math.abs(this.back[8] - 1) > 1e-9;
         enc.clearBuffer(b.sandSum);
-        // (The rock, where the globe's turn has carried it; the sand on it goes round with it.)
-        enc.copyBufferToBuffer(b.rockTop, 0, b.rockPrev, 0, b.rockTop.size);
+        // (The rock, where the globe's turn has carried it; the sand on it goes round with it.
+        // Where the globe has not turned at all, its tops are as they were.)
+        const rockNow = !this.rockFor || this.globeRotation.some((v, k) => v !== this.rockFor![k]);
+        if (rockNow || !this.rockPrevSame) enc.copyBufferToBuffer(b.rockTop, 0, b.rockPrev, 0, b.rockTop.size);
+        this.rockPrevSame = !rockNow;
         const geo = this.beginPass(enc, 'sand + container');
-        this.run(geo, 'rockBed', this.sandGroups());
+        if (rockNow) {
+          this.run(geo, 'rockBed', this.sandGroups());
+          this.rockFor = new Float32Array(this.globeRotation);
+        }
         if (turned) {
           this.run(geo, 'sandRotate', this.sandGroups());
           this.run(geo, 'sandScale', this.sandGroups());
@@ -856,10 +916,12 @@ export class FluidSim {
           this.run(geo, 'sandFlux', this.sandGroups());
           this.run(geo, 'sandApply', this.sandGroups());
         }
-        this.run(geo, 'sandSurface', this.sandGroups());
-        this.run(geo, 'sandExtend', this.sandGroups());
-        this.run(geo, 'solidFaces', fg);
-        this.run(geo, 'initCells', cg);
+        if (bedNow) {
+          this.run(geo, 'sandSurface', this.sandGroups());
+          this.run(geo, 'sandExtend', this.sandGroups());
+          this.run(geo, 'solidFaces', fg);
+          this.run(geo, 'initCells', cg);
+        }
         geo.end();
       }
 
@@ -886,7 +948,7 @@ export class FluidSim {
       this.run(pass, 'cellPrep', cg);
       stage('pressure');
       const rb = this.redBlackGroups();
-      let sweeps = cfg.pressureIterations;
+      let sweeps = this.lastSweeps;
       if (this.fusedSweeps && this.canFuse) {
         // (In pairs: from psi into the other buffer, and back. One left over goes as two colours.)
         const fusedSweep = this.kernels.pressureFused;
@@ -1066,11 +1128,14 @@ export class FluidSim {
     const labels = p.pending;
     if (!labels) return;
     p.pending = null;
+    // (Timed with the stages split or not: a reading that comes back once that has changed is
+    // let go, or its stages' times would stay on after them.)
+    const fine = p.fine;
     p.staging.mapAsync(GPUMapMode.READ).then(() => {
       const t = new BigInt64Array(p.staging.getMappedRange(0, labels.length * 16));
       const sums: Record<string, number> = {};
       labels.forEach((l, k) => { sums[l] = (sums[l] ?? 0) + Number(t[2 * k + 1] - t[2 * k]) / 1e6; });
-      for (const [l, ms] of Object.entries(sums)) this.gpuTimes[l] = this.gpuTimes[l] === undefined ? ms : this.gpuTimes[l] * 0.9 + ms * 0.1;
+      if (p.fine === fine) for (const [l, ms] of Object.entries(sums)) this.gpuTimes[l] = this.gpuTimes[l] === undefined ? ms : this.gpuTimes[l] * 0.9 + ms * 0.1;
       p.staging.unmap();
       p.busy = false;
     }).catch(() => { p.busy = false; });
@@ -1274,6 +1339,9 @@ export class FluidSim {
 
     // (The affine velocities only where the particles carry them.)
     const affine = this.cfg.affineStrength > 0 ? P * 48 : 16;
+    // (The photons' maps in two halves where they may be traced so: SimRuntime.photonHalves.)
+    this.photonRoom = !!this.runtime?.photonHalves;
+    const halves = this.photonRoom ? 2 : 1;
     const blocks = Math.ceil(this.n / SORT_BLOCK) ** 3;
     const pressureTiles = this.redBlackGroups().reduce((a, b) => a * b, 1);
     this.buffers = {
@@ -1314,12 +1382,12 @@ export class FluidSim {
       bedMap: make('bed solids', BED_SOLIDS_N * BED_SOLIDS_N * 4),
       rockPrev: make('rock top before', this.sandN * this.sandN * 4),
       sandRest: make('sand at rest', this.sandN * this.sandN * 4),
-      causticAcc: make('caustic photons', this.causticN * this.causticN * 12),
+      causticAcc: make('caustic photons', halves * this.causticN * this.causticN * 12),
       causticPrev: make('caustic history', this.causticN * this.causticN * 16),
       probePos: make('probes', PROBES * 16, STORAGE | GPUBufferUsage.COPY_DST),
       probeOut: make('probe samples', PROBES * 32),
       centroidAcc: make('water centroid', 16),
-      lightAcc: make('light photons', this.lightN ** 3 * 4),
+      lightAcc: make('light photons', halves * this.lightN ** 3 * 4),
       motes: make('motes', this.moteCount * 16),
       seedColumns: make('seed columns', (this.n * this.seedSub) ** 2 * 8),
       moteCount: make('mote counts', this.moteN ** 3 * 4),
@@ -1645,6 +1713,14 @@ export class FluidSim {
     const sl = Math.hypot(sun[0], sun[1], sun[2]);
     f.set([sun[0] / sl, sun[1] / sl, sun[2] / sl, this.light.causticRays], 56);
     f.set([...this.light.sunIrradiance, this.causticN], 60);
+    const half = this.photonHalf();
+    f.set([half, half === 2 ? 3 * this.causticN ** 2 : 0, half === 2 ? this.lightN ** 3 : 0, this.photonRoom && half > 0 ? 1 : 0], 116);
+  }
+
+  /** The photons' rows this frame: 0 all of them, else 1 the even, 2 the odd (in turn, frame by
+   *  frame: SimRuntime.photonHalves). */
+  private photonHalf(): number {
+    return this.photonRoom && this.runtime?.photonHalves ? 1 + (this.frameIndex & 1) : 0;
   }
 
   /** texture: into the 3D texture too (a frame's last substep, and new water). */
@@ -1740,13 +1816,25 @@ export class FluidSim {
     rt.encodeBuilds(enc);
   }
 
-  /** Sun photons through glass and the final water surface of the frame, onto the sand. */
+  /** Sun photons through glass and the final water surface of the frame, onto the sand: all of
+   *  them, or half (photonHalf), their maps' halves added (the half not traced this frame holds
+   *  the last frame's: emptied once traced whole again, and once more as the halves begin). */
   private encodeCaustics(enc: GPUCommandEncoder): void {
-    enc.clearBuffer(this.buffers.causticAcc);
-    enc.clearBuffer(this.buffers.lightAcc);
+    const b = this.buffers;
+    const half = this.photonHalf();
+    const map = this.causticN ** 2 * 12;
+    const volume = this.lightN ** 3 * 4;
+    const at = Math.max(half - 1, 0);
+    enc.clearBuffer(b.causticAcc, at * map, map);
+    enc.clearBuffer(b.lightAcc, at * volume, volume);
+    if (this.photonRoom && (half > 0) !== this.photonHalvesWere) {
+      enc.clearBuffer(b.causticAcc, (1 - at) * map, map);
+      enc.clearBuffer(b.lightAcc, (1 - at) * volume, volume);
+    }
+    this.photonHalvesWere = half > 0;
     const pass = this.beginPass(enc, 'photons');
     const rays = Math.ceil(this.light.causticRays / 16);
-    this.run(pass, 'caustics', [rays, rays, 1]);
+    this.run(pass, 'caustics', [rays, half > 0 ? Math.ceil(this.light.causticRays / 32) : rays, 1]);
     // (The map's texels' workgroups, then the volume's voxels': caustic_resolve.wgsl.)
     this.run(pass, 'causticResolve', [Math.ceil(this.causticN ** 2 / 256) + Math.ceil(this.lightN ** 3 / 256), 1, 1]);
     pass.end();
@@ -1761,6 +1849,7 @@ export class FluidSim {
     enc.copyBufferToBuffer(this.buffers.probeOut, 0, slot.buffer, 16, PROBES * 32);
     enc.copyBufferToBuffer(this.buffers.centroidAcc, 0, slot.buffer, 16 + PROBES * 32, 16);
     if (this.rt) enc.copyBufferToBuffer(this.rt.regions.counts, 0, slot.buffer, READBACK_RT, 16);
+    this.splash.encodeCounts(enc, slot.buffer, READBACK_SPLASH);
     this.pendingReadback = slot;
   }
 
@@ -1786,6 +1875,7 @@ export class FluidSim {
         this.koiSense = { probes, sand: sandH, centroid: [ca[0] / 256 / count, ca[1] / 256 / count, ca[2] / 256 / count], time: slot.time };
         // (counts[2]: the frame's whole count, rt_regions.wgsl.)
         this.rt?.observe(new Uint32Array(all, READBACK_RT, 4)[2]);
+        this.splash.observe(new Uint32Array(all, READBACK_SPLASH, SPLASH_COUNTS / 4));
         slot.buffer.unmap();
         slot.busy = false;
       })

@@ -89,8 +89,20 @@ test('every splash kernel is launched in workgroups of its own size', () => {
   assert.match(splash, /const g = \(n: number, w = 256\)/);
   assert.deepEqual(size(code, 'spWet'), ['16', '16']);
   assert.match(splash, /const wg = Math\.ceil\(WET_N \/ 16\);/);
+  // (The team kernels: TEAMS drops a workgroup at a time, walking all there are however few the
+  // workgroups.)
+  for (const entry of ['spDropMapTeams', 'spDropMergeTeams']) {
+    assert.deepEqual(size(code, entry), ['256'], entry);
+    assert.match(code, new RegExp(`fn ${entry}\\([^]*?let n = sp_poolCount\\(DROP \\+ pool, S\\.dropCap, li\\);[^]*?for \\(var first = wid\\.x \\* TEAMS; first < n; first \\+= groups\\.x \\* TEAMS\\) \\{\\s+let i = first \\+ team;`), entry);
+    assert.match(splash, new RegExp(`this\\.run\\(pass, '${entry}', tg\\);`), entry);
+  }
+  assert.match(splash, /const tg = g\(2 \* this\.seenDrops \+ 8 \* DROP_TEAMS, DROP_TEAMS\);/);
+  // (The drop map's tiles, a workgroup each, as the shader lays them out.)
   assert.deepEqual(size(code, 'spMapResolve'), ['16', '16']);
-  assert.match(splash, /mapGroups: \[number, number, number\] = \[Math\.ceil\(DROP_MAP_N \/ 16\), Math\.ceil\(DROP_MAP_N \/ 16\), 1\];/);
+  assert.match(code, /^const TILE: u32 = 16u;$/m);
+  assert.match(splash, /^const MAP_TILE = 16;$/m);
+  assert.match(splash, /mapGroups: \[number, number, number\] = \[Math\.ceil\(DROP_MAP_N \/ MAP_TILE\), Math\.ceil\(DROP_MAP_N \/ MAP_TILE\), 1\];/);
+  assert.match(code, /let tiles = \(N \+ TILE - 1u\) \/ TILE;\s+let tile = wid\.x \+ tiles \* wid\.y;/);
   assert.deepEqual(size(code, 'spBinCount'), ['8', '8', '4']);
   assert.match(splash, /binGroups: \[number, number, number\] = \[Math\.ceil\(SPLASH_GRID \/ 8\), Math\.ceil\(SPLASH_GRID \/ 8\), Math\.ceil\(SPLASH_GRID \/ 4\)\];/);
 });
