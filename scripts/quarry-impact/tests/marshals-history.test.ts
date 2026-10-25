@@ -1,6 +1,7 @@
+import {restoreThunderBytes} from './thunder-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readMarshalsPrevious,restoreMarshalsBytes,verifyMarshalsRevision} from './marshals-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreThunderBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('Marshals preserves every prior fixture, vehicle asset, venue art and history input',verifyMarshalsRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/marshals/revision.json').toString());

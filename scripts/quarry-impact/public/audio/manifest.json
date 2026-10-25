@@ -1219,5 +1219,33 @@
     "sha256": "439c4bcd0714c5c129d098cad2f66f835478e710a0e778b004ca0cf973525482",
     "runtimeSha256": "d8f3bf23efd6efe74f5f359d5bae35e3965aa462ea84c52b83f80b0f9623cb2a",
     "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5"
+  },
+  {
+    "id": "thunder-far",
+    "file": "thunder-far.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Distant thunder: a long low rolling rumble of thunder far away across open country in heavy rain, slowly fading out. Isolated, no music, no voices, no speech.",
+      "duration_seconds": 5.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "72a013810b32ab66f3b0c3344faee916d23f751a160846bf30380177258d47af",
+    "runtimeSha256": "3f414998a2797ef121f8d1be46718f6e3c45706d62799eef60c41870a1782d9c",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "thunder-near",
+    "file": "thunder-near.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Close thunder: a sharp loud crack of nearby lightning splitting the air, then a heavy booming rumble of thunder that rolls away. Outdoors in rain. Isolated, no music, no voices, no speech.",
+      "duration_seconds": 5.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "aa2dfce088caf9fddb941eae6f0f16b4a3b11c0027dfb46cf829ed7912db7e53",
+    "runtimeSha256": "ae772ad846b77860f98556bbcaa9af2ee85ecc96b71a94ddafec2b5a95f95732",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
   }
 ]

@@ -214,6 +214,15 @@ export class Sound {
     const source=this.ctx.createBufferSource(),gain=this.ctx.createGain();source.buffer=this.buffers.get(ids[Math.abs(Math.floor(Number.isFinite(heat)?heat:0))%ids.length])!;
     gain.gain.value=ARENA_HORN.level;source.connect(gain).connect(this.ambientBus);source.start();return true;
   }
+  /** A thunderclap over the arena (ambience): the close crack or the distant rumble, at its volume. */
+  thunder(near:boolean,volume:number){
+    if(!this.ready||this.muted||this.paused||!this.ctx||!this.ambientBus||this.ctx.state!=='running')return false;
+    const id=near?'thunder-near':'thunder-far';if(!this.buffers.has(id))return false;
+    const source=this.ctx.createBufferSource(),gain=this.ctx.createGain();source.buffer=this.buffers.get(id)!;
+    gain.gain.value=Math.max(0,Math.min(1,Number.isFinite(volume)?volume:0));source.connect(gain).connect(this.ambientBus);source.start();this.thunders++;return true;
+  }
+  /** Thunderclaps played (QA). */
+  thunders=0;
   crowdGasp(){
     if(!this.ready||this.muted||this.paused||!this.ctx||!this.ambientBus||this.ctx.state!=='running')return false;
     const ids=CROWD_GASP.ids.filter(id=>this.buffers.has(id)),now=this.ctx.currentTime;if(!ids.length||now-this.gaspAt<CROWD_GASP.gap)return false;this.gaspAt=now;

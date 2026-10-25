@@ -117,6 +117,7 @@ import {steerArms,handReach,newHandState,type HandState} from './driver-arms';
 import {BONNET_STEAM,bonnetHeat,steamRate} from './bonnet-steam';
 import {vapourRate} from './exhaust-vapour';
 import {WIND,eventWind,gusting} from './wind';
+import {Storm,THUNDER} from './thunder';
 import {marshalPosts,marshalFigure,poseMarshal,marshalFlag,type Post} from './arena-marshals';
 import {HEAD_GASKET} from './damage-handling';
 const HEAD_GASKET_AFTER=HEAD_GASKET.after;
@@ -766,6 +767,8 @@ let staticShadows: StaticQuarryShadows | undefined;
 let eventLighting: LightingMood | null = null;
 /** The event's breeze (offline): its base and, gusting, now. */
 const breezeBase={x:0,z:0},breeze={x:0,z:0};let windy=false;
+/** The thunderstorm over an offline rain event, and the light its lightning flashes. */
+let storm:Storm|null=null;const lightning=new T.AmbientLight(0xdfe8ff,0);
 /** Flag marshals standing round an offline derby arena. */
 let marshals:{figure:T.Group;post:Post}[]=[];
 function clearMarshals(){for(const m of marshals){m.figure.removeFromParent();m.figure.traverse(o=>{if(o instanceof T.Mesh){o.geometry.dispose();(o.material as T.Material).dispose();}});}marshals=[];}
@@ -1023,6 +1026,8 @@ async function start(watch=demo) {
   applyEventLighting(true, watch ? demoOptions.lighting ?? settings.lighting : isDailyChallenge(activeChallenge) ? dailyLighting(activeChallenge!.id.slice(DAILY_PREFIX.length)) : settings.lighting);
   // Each offline event gets its own breeze (stronger in the rain).
   windy=!online?.active;Object.assign(breezeBase,windy?eventWind(Math.random,eventLighting==='rain'):{x:0,z:0});
+  // An offline rain event is a thunderstorm.
+  storm=!online?.active&&eventLighting==='rain'?new Storm(Math.random):null;lightning.intensity=0;
   demo=watch;demoRestart=0;director.reset();if(watch)director.select(demoOptions.camera);keys.clear();testInput=null;
   wreckHold = 0;
   if(online?.active) {if(online.network.isHost){online.network.start(mode);return true;}return false;}
@@ -2469,6 +2474,9 @@ function frame(now: number) {
   else if(fx.wind.x||fx.wind.y){fx.wind.set(0,0);vehicleFire?.setWind(null);rain?.setWind(null);}
   // The marshals wave green as a heat starts and yellow for a wreck or a rolled car near them.
   if(state==='countdown'||state==='playing'||state==='wrecked')for(const m of marshals)poseMarshal(m.figure,marshalFlag(m.post,elapsed,cars),clock);
+  // Lightning flashes over a rain event, and its thunder follows as far behind as the strike is away (offline).
+  if(storm&&(state==='countdown'||state==='playing'||state==='wrecked')){if(!lightning.parent)scene.add(lightning);const s=storm.step(dt);lightning.intensity=s.flash*THUNDER.light;if(s.clap)sound.thunder(s.clap.near,s.clap.volume);}
+  else if(lightning.intensity)lightning.intensity=0;
   // Up go the umbrellas in the stands when it rains (offline).
   {const up=eventLighting==='rain'&&!online?.active;if(up!==umbrellasUp||activeVenue.root!==umbrellaRoot){umbrellaRoot?.traverse(o=>o.userData.umbrellas?.(false));umbrellaRoot=activeVenue.root;umbrellasUp=up;umbrellaRoot?.traverse(o=>o.userData.umbrellas?.(up,windy?breezeBase:undefined));}}
   // The cars are soaked in the rain too: darker paint and mud, a film of water on top (offline).
@@ -2848,6 +2856,8 @@ async function boot() {
     umbrellas: () => { let n = 0; activeVenue.root?.traverse(o => { if (o.name === 'crowd_umbrella' && o.visible) n += (o as T.InstancedMesh).count; }); return n; },
     carWet: (v?: number | null) => { if (v !== undefined) carWetOverride = v; return CAR_WET.value; },
     vapour: () => vapourPuffs,
+    storm: () => storm ? { strikes: storm.strikes, claps: storm.claps, thunders: sound.thunders, flash: +lightning.intensity.toFixed(3) } : null,
+    strike: () => { if (!storm) return false; storm.strikeNow(); return true; },
     marshals: () => marshals.map(m => ({ flag: m.figure.userData.flag ?? 'down', at: [m.post.x, m.post.y, m.post.z].map(v => +v.toFixed(1)) })),
     rainSteam: () => vehicleFire?.rainSteam ?? 0,
     splashes: () => rainSplashes?.landed ?? 0,
