@@ -1,6 +1,7 @@
+import {restoreRainPuddlesBytes} from './rain-puddles-invariants';
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
 import {readLampDanglePrevious,restoreLampDangleBytes,verifyLampDangleRevision} from './lamp-dangle-invariants';
-const source=(file:string)=>readFileSync(new URL('../'+file,import.meta.url));
+const source=(file:string)=>restoreRainPuddlesBytes(file,readFileSync(new URL('../'+file,import.meta.url)));
 test('LampDangle preserves every prior fixture, vehicle asset, venue art and history input',verifyLampDangleRevision);
 test('the successor bridge restores full predecessors and does not conceal later or corrupt edits',()=>{
  const manifest=JSON.parse(source('tests/fixtures/lamp-dangle/revision.json').toString());

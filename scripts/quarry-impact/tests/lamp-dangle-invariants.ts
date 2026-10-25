@@ -1,3 +1,4 @@
+import {restoreRainPuddlesBytes} from './rain-puddles-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readLampDanglePrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreLampDangleBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreRainPuddlesBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readLampDanglePrevious(file);
 }
 export function verifyLampDangleRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'2a68ce52866a4499a68e24fa6a303d4af35dd2e9');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreRainPuddlesBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreLampDangleBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the LampDangle release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreRainPuddlesBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the LampDangle release');
  assert.equal(manifest.previousFixtureCount,8275);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,8275);
 }

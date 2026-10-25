@@ -182,7 +182,8 @@ import {drawInstruments} from './instruments';
 import {OffroadMarker} from './offroad-marker';
 import {drawQuarryMap} from './quarry-minimap';
 import { prepareCircuitSurface } from './scenery-circuit-material';
-import { Quarry } from './world';
+import { Quarry, puddleGeometry, softShoreMaterial } from './world';
+import {RainPuddles,layRainPuddles} from './rain-puddles';
 import { Vehicle, WRECK_BURST, type Input } from './vehicle';
 import { Effects } from './effects';
 import { VehicleFire } from './vehicle-fire';
@@ -970,6 +971,8 @@ function createCars(attract = false, previewSetup?:Setup) {
   const ratedGrid=!attract&&activeClubRound===null&&!activeTimeTrial&&(demo?demoOptions.classLimit:customEvent()&&mode!=='playground'&&eventOptions.classLimit)?(demo?demoPerformanceGrid(kind,demoOptions,garage):eventPerformanceGrid(kind,eventOptions,garage)):null;
   // Marshals take their posts round an offline derby arena (the event's venue is active by now).
   if(!attract&&mode==='derby'&&!online?.active&&!demo)marshals=marshalPosts(activeVenue.arena??DERBY_ARENA,activeVenue.course.height).map(post=>{const figure=marshalFigure();figure.position.set(post.x,post.y,post.z);figure.rotation.y=post.yaw;scene.add(figure);return {figure,post,flinchFor:0,flinch:0};});
+  // Standing water on the arena floor in an offline rain event (none on the menu's car).
+  layEventPuddles(!attract);
   for (let i = 0; i < count; i++) {
     const type =
       ratedGrid?ratedGrid.at(i):!attract&&activeClubRound!==null?clubCup!.roster[i].kind:demo&&!attract?demoCarKind(i,kind,demoOptions.lineup):i === 0 ? kind : activeChallenge?(['coupe','sedan','hatch']as CarKind[])[i%3]:!attract&&customEvent()&&mode!=='playground'?gridCarKind(i,kind,eventOptions.lineup):CAR_KINDS[i%CAR_KINDS.length];
@@ -2236,6 +2239,17 @@ function updateLensRain(dt:number){
   const live=['countdown','playing','wrecked'].includes(state);
   lensRain.step(state==='paused'||state==='inspect'?0:dt,live&&eventLighting==='rain',drivingCamera,Math.abs(cars[0]?.speed??0));lensRainPass.setDrops(lensRain.drops);
 }
+// An offline rain event on an arena floor lays standing puddles, cleared again for the next event; they join the venue's
+// own puddles so wheels splash and ripple through them.
+let rainPuddles:RainPuddles|undefined,puddleVenue:VenueContext|undefined;
+function layEventPuddles(lay=true){
+  if(puddleVenue&&rainPuddles){const mine=new Set(rainPuddles.list);for(let i=puddleVenue.puddles.length;i--;)if(mine.has(puddleVenue.puddles[i]))puddleVenue.puddles.splice(i,1);}
+  rainPuddles?.clear();puddleVenue=undefined;
+  if(!lay||eventLighting!=='rain'||online?.active||!activeVenue.arena)return;
+  rainPuddles??=new RainPuddles(scene,puddleGeometry,softShoreMaterial(new T.MeshPhysicalMaterial({color:0x7d8580,metalness:.05,roughness:.06,clearcoat:1,clearcoatRoughness:.09,ior:1.33,transparent:true,opacity:.8,envMapIntensity:1,depthWrite:false})),
+    softShoreMaterial(new T.MeshStandardMaterial({color:0x26282a,roughness:.3,transparent:true,opacity:.45,depthWrite:false})));
+  rainPuddles.lay(layRainPuddles(activeVenue.arena,activeVenue.course.height,Math.random()*1e9));activeVenue.puddles.push(...rainPuddles.list);puddleVenue=activeVenue;
+}
 function updateHeatHaze(){
   hazeSources.length=0;const wet=eventLighting==='rain';
   if(!hazeOff&&!online?.active&&!studio&&['countdown','playing','paused','wrecked','result','inspect'].includes(state))for(const c of cars){if(!c.extendedDamage)continue;
@@ -2505,6 +2519,8 @@ function frame(now: number) {
   // The rain sounds for as long as the event's weather says so (applyEventLighting runs while still in the menu, when it
   // could only switch the rain off).
   sound.rain(eventLighting==='rain'&&state!=='menu');
+  // Puddles on the arena floor fill out as the rain goes on (offline).
+  rainPuddles?.update(dt,eventLighting==='rain'&&state==='playing');
   // Engines heat up as they work and cool once stopped; in the rain a hot bonnet boils it off in wisps of steam (offline).
   if(state==='countdown'||state==='playing'||state==='wrecked'){const wet=eventLighting==='rain';for(const c of cars){if(!c.extendedDamage)continue;
     const heat=bonnetHeat(bonnetHeats.get(c)??BONNET_STEAM.start,c.health>0&&!(c.engineStall!>0)&&!c.engineOut,c.input?.throttle??0,c.rpm??0,dt);bonnetHeats.set(c,heat);if(!wet)continue;
@@ -2923,6 +2939,7 @@ async function boot() {
     litSpray: () => puddleSplashes?.litDrops ?? 0,
     heatHaze: (on?: boolean) => { if (on !== undefined) hazeOff = !on; const u = heatHaze.material.uniforms; return { columns: heatHaze.columns, enabled: heatHaze.enabled, sources: hazeSources.length, boxes: (u.boxes.value as T.Vector4[]).slice(0, heatHaze.columns).map((b, i) => [...b.toArray(), ...(u.info.value as T.Vector4[])[i].toArray()].map((n) => +n.toFixed(3))) }; },
     lensRain: () => ({ drops: lensRain.drops.length, landed: lensRain.landed, enabled: lensRainPass.enabled, view: drivingCamera }),
+    rainPuddles: () => rainPuddles ? { count: rainPuddles.list.length, fill: +rainPuddles.fill.toFixed(3), venue: activeVenue.puddles.length, at: rainPuddles.list.map((p) => [p.x, p.z, p.radius, p.level].map((n) => +n.toFixed(2))) } : null,
     lampDamage: (id: number, kind: 'head' | 'tail', index: number, damage: number) => { const c = cars.find(x => x.id === id), m = c && carLights.get(c)?.lamp(kind, index); if (!m) return false; m.userData.damage = damage; return true; },
     lampDangle: (id = 0) => { const c = cars.find(x => x.id === id), d = c && lampDangles.get(c); const l = c && carLights.get(c), box = new T.Box3(); return d && l ? { kind: c!.kind, hanging: d.count, popped: d.popped, torn: d.torn, swings: d.swings, heads: Array.from({ length: l.head }, (_, j) => +box.setFromObject(l.lamp('head', j)!).getSize(new T.Vector3()).x.toFixed(2)), damage: [...Array.from({ length: l.head }, (_, j) => l.lamp('head', j)), ...Array.from({ length: l.tail }, (_, j) => l.lamp('tail', j))].map((m) => +(m?.userData.damage ?? 0).toFixed(1)) } : null; },
     lampBeams: () => cars.map((c) => c.root.children.filter((o) => o.name === 'car_light_beam').map((b) => +b.position.x.toFixed(2))),

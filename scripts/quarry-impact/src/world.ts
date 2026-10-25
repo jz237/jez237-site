@@ -50,7 +50,7 @@ function claddingUV(mesh: T.Mesh<T.BoxGeometry>) {
 }
 // A narrow translucent shoreline keeps shallow water embedded in the aggregate.
 // Vertex opacity fades both the water edge and the wider damp margin in-place.
-function softShoreMaterial(material: T.MeshStandardMaterial) {
+export function softShoreMaterial(material: T.MeshStandardMaterial) {
   material.onBeforeCompile = shader => {
     shader.vertexShader = 'attribute float shoreAlpha; varying float vShoreAlpha;\n' + shader.vertexShader;
     shader.vertexShader = shader.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\nvShoreAlpha = shoreAlpha;');
@@ -60,7 +60,7 @@ function softShoreMaterial(material: T.MeshStandardMaterial) {
   material.customProgramCacheKey = () => 'soft-quarry-shore-v1';
   return material;
 }
-function puddleGeometry(radius: number, variations: number[], wet: boolean) {
+export function puddleGeometry(radius: number, variations: number[], wet: boolean) {
   const segments = 192;
   const rings = wet ? [[0, .65], [.9, .75], [1, .65], [1.1, .24], [1.23, 0]] : [[0, 1], [.88, 1], [.965, .82], [1, 0]];
   const positions: number[] = [], uv: number[] = [], alpha: number[] = [], indices: number[] = [];
