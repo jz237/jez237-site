@@ -51,7 +51,7 @@ export class Betta implements Feeder {
   /** Its BVH for the shader (triangleBVH.mjs's layout), on the GPU, where it is refitted round the
    *  moving fish each frame (bettaRefit.mjs). */
   readonly texture: THREE.Texture;
-  /** (As built and fitted round the first pose: the texture's first contents.) */
+  /** (As built round the first pose: the texture's first contents.) */
   readonly bvh: TriangleBVH;
   readonly ready: Promise<void>;
   private readonly meshes: { mesh: THREE.Mesh; offset: number }[] = [];
@@ -172,6 +172,8 @@ export class Betta implements Feeder {
       }
       return part;
     });
+    // (Its tree is split round the first pose, in the bowl's frame, where the shader traces it.)
+    this.updateVertices();
     this.bvh = new TriangleBVH(this.vertices, new Uint32Array(indices), new Float32Array(uv), materials, new Float32Array(finUV));
     this.header = this.bvh.data.slice(0, 4);
     this.gpu = this.refitter();
@@ -187,7 +189,8 @@ export class Betta implements Feeder {
     // Raw shader samples explicitly decode sRGB; no implicit colour-space node.
     this.atlas.colorSpace = THREE.NoColorSpace;
     this.atlas.flipY = false;
-    this.atlas.generateMipmaps = true;
+    // (No mipmaps: betta_sample reads level 0 only, bettaWGSL.ts.)
+    this.atlas.generateMipmaps = false;
     this.ready = this.fish.userData.ready.then(() => {
       const body = this.meshes.find(({ mesh }) => mesh.name.startsWith('Arc-length'))!.mesh;
       const tail = this.meshes.find(({ mesh }) => mesh.userData.kind === 0)!.mesh;
@@ -198,8 +201,6 @@ export class Betta implements Feeder {
       this.atlas.needsUpdate = true;
       this.loaded = true;
     });
-    this.updateVertices();
-    this.bvh.refit(this.vertices);
     // (The whole texture once; hidden until it swims.)
     device.queue.writeTexture({ texture: this.gpu.texture }, this.bvh.data as unknown as BufferSource, { bytesPerRow: this.bvh.width * 16, rowsPerImage: this.bvh.height }, [this.bvh.width, this.bvh.height]);
     this.updateProbes();
