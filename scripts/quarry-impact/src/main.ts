@@ -112,6 +112,7 @@ import {CRUNCH,crunchVolume} from './litter-crunch';
 import {SHRED_SECONDS} from './vehicle';
 import {shouldBail,bailOut,strollAway,BAIL} from './driver-bail';
 import {cabinSmoke} from './cabin-smoke';
+import {WiperRig,wiperArms} from './windscreen-wipers';
 import {LEAK as TYRE_LEAK_RANGE} from './damage-handling';
 import type {GlassState} from './car-materials';
 import {disposeDriver} from './driver-figure';
@@ -2170,6 +2171,7 @@ const honkTarget=new WeakMap<object,number>(),honkAt=new WeakMap<object,number>(
 /** The player rammed a car that was already out: bad form at a derby, and the crowd lets them know (offline, a real hit). */
 function hitTheWreck(closing:number){if(online?.active||demo||closing<CROWD_BOO.closing)return;if(sound.crowdBoo()){boos++;toast('THE CROWD BOOS · THAT CAR WAS OUT',1.4);}}
 const smokeIn=new WeakMap<object,number>();
+const wiperRigs=new WeakMap<object,WiperRig>();
 /** A driver watches the car their driving brain is hunting, if it is still running (see lookYaw). */
 function lookDriver(c:Vehicle,figure:T.Object3D,dt:number){
   const t=drivers.memory.get(c.id)?.target,prey=t!==undefined&&t>=0&&t!==c.id?cars.find(x=>x.id===t&&x.health>0):undefined;
@@ -2210,6 +2212,9 @@ function updateCamera(dt: number) {
   // A burning car's cabin fills with smoke, murking its glass, and stays sooty after (offline).
   if(state==='playing'||state==='wrecked')for(const c of cars){if(!c.extendedDamage)continue;const was=smokeIn.get(c)??0,now=cabinSmoke(was,c.onFire,dt);if(now===was)continue;smokeIn.set(c,now);
     for(const g of c.glass){const st=(g.material as T.Material).userData.glassState as GlassState|undefined;if(st)st.smoke.value=now;}}
+  // Wipers sweep in the rain and park when it is dry; dead electrics stop them, and a big front hit bends them up off the glass (offline).
+  if(state==='countdown'||state==='playing'||state==='wrecked'){const wet=eventLighting==='rain';for(const c of cars){if(!c.extendedDamage)continue;let rig=wiperRigs.get(c);if(!rig){rig=new WiperRig(wiperArms(c.model),c.id);wiperRigs.set(c,rig);}
+    rig.update(dt,wet,c.health>0&&!c.electricalCut&&!c.batteryOut,c.structuralDamage?.[0]??0,c.structuralDamage?.[1]??0);}}
   // Rivals taunt with the horn: now and then, a driver picking a new car to hunt gives it a honk (offline, each car spaced out).
   if(state==='playing'&&!online?.active)for(const c of cars){if(c.id===0&&!demo||c.health<=0)continue;const t=drivers.memory.get(c.id)?.target??-1,was=honkTarget.get(c);honkTarget.set(c,t);
     if(was!==undefined&&t>=0&&t!==was&&clock-(honkAt.get(c)??-99)>=RIVAL_HONK.gap&&Math.random()<RIVAL_HONK.chance&&sound.clip('horn-stuck',c.current,RIVAL_HONK.volume,RIVAL_HONK.length)){honkAt.set(c,clock);rivalHonks++;}}
@@ -2771,6 +2776,7 @@ async function boot() {
     rivalHonks: () => rivalHonks,
     /** QA: puncture a tyre as rolling over sharp debris does (it starts going down). */
     puncture: (id: number, wheel: number) => { const c = cars.find(x => x.id === id); if (!c?.tyreDamage || !(wheel >= 0 && wheel < 4)) return false; c.tyreDamage[wheel] = Math.max(c.tyreDamage[wheel], TYRE_LEAK_RANGE.onset + .05); return true; },
+    wipers: (id = 0) => { const c = cars[id], r = c && wiperRigs.get(c); return r ? { arms: r.arms.length, phase: +r.phase.toFixed(3), sweeping: r.sweeping, bent: r.bentArms, angles: r.arms.map(a => +a.angle.toFixed(3)), names: r.arms.map(a => a.mesh.name) } : null; },
     cabinSmoke: (id: number) => { const c = cars.find(x => x.id === id); return c ? smokeIn.get(c) ?? 0 : null; },
     /** QA: set a tyre shredding, as a blowout does. */
     shredTyre: (id: number, wheel: number) => { const c = cars.find(x => x.id === id); if (!c || !(wheel >= 0 && wheel < 4)) return false; c.tyreShred[wheel] = SHRED_SECONDS; return true; },
