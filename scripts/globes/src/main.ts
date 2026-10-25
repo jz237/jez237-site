@@ -136,8 +136,9 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   // Preserve the original five scenes' defaults; explicit URL overrides still win.
   // (The betta's bowl has a bed of its own depth: bowlScape.ts BED.)
   const base = o.start.betta ? { ...simConfig, sandLevel: BED.level } : simConfig;
-  // (Phones: a coarser grid, fewer substeps a frame and solver sweeps.)
-  const cfg = applyUrlOverrides(LITE ? { ...base, gridRes: 40, maxSubsteps: 3, pressureIterations: 24, sandSubsteps: 6 } : o.start.betta ? { ...base, gridRes: 64 } : base);
+  // (Phones: a coarser grid, fewer substeps a frame - two at 60 fps, of up to 1/100 s - and solver
+  // sweeps.)
+  const cfg = applyUrlOverrides(LITE ? { ...base, gridRes: 40, maxSubsteps: 3, maxSubstepDt: 1 / 100, pressureIterations: 24, sandSubsteps: 6 } : o.start.betta ? { ...base, gridRes: 64 } : base);
   const R = o.globe.innerRadius;
   const fill = (g: GlobeEntry) => fillFor(cfg, R, g.water);
   const sim = new FluidSim(device, { ...cfg, fillFraction: fill(o.start) }, R, o.globe.outerRadius, o.light);
@@ -296,7 +297,9 @@ async function createWorld(stage: HTMLElement, params: URLSearchParams, o: World
   // not built yet stalled until it was. (Only the page's own globes': the betta bowl's page
   // builds the bowl's alone.)
   const variants = [...new Set(GLOBES.map(variantOf))];
-  await Promise.all([sim.settle().then(() => PROF.mark('settled')), globe.precompile(renderer, camera, scene, variants).then(() => PROF.mark('compiled')).catch((err: unknown) => console.warn('[globes] precompile:', err))]);
+  // (Phones settle in frames of 1/30 s, four queued at a time: half the steps, few waits.)
+  const settled = LITE ? sim.settle(2.5, 1 / 30, 4) : sim.settle();
+  await Promise.all([settled.then(() => PROF.mark('settled')), globe.precompile(renderer, camera, scene, variants).then(() => PROF.mark('compiled')).catch((err: unknown) => console.warn('[globes] precompile:', err))]);
 
   // What lives in the globe (the koi, or the kelp forest) and what its water does when left
   // alone. Another globe comes in with its own water, level and still (the switch happens out

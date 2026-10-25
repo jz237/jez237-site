@@ -694,16 +694,18 @@ export class FluidSim {
   /**
    * Lets freshly seeded water come to rest before the first frame: the lattice start
    * otherwise sends a few faint ripples and stray droplets across the surface. (Once, after
-   * init: main.ts builds the renderer's pipelines meanwhile.)
+   * init: main.ts builds the renderer's pipelines meanwhile.) In frames of `frame` s, the GPU
+   * waited on after every `batch` of them.
    */
-  async settle(seconds = 2.5): Promise<void> {
-    const dt = 1 / 60;
+  async settle(seconds = 2.5, frame = 1 / 60, batch = 1): Promise<void> {
     const still: Vec3 = [0, 0, 0];
     const gravity: Vec3 = [0, -this.cfg.gravity, 0];
-    for (let t = 0; t < seconds; t += dt) {
-      this.step(dt, gravity, still, IDENTITY, 8);
-      await this.device.queue.onSubmittedWorkDone();
+    let k = 0;
+    for (let t = 0; t < seconds; t += frame) {
+      this.step(frame, gravity, still, IDENTITY, 8);
+      if (++k % batch === 0) await this.device.queue.onSubmittedWorkDone();
     }
+    if (k % batch !== 0) await this.device.queue.onSubmittedWorkDone();
     this.maxSpeed = 0;
   }
 
