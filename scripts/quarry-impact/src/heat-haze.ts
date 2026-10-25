@@ -2,18 +2,32 @@ import * as T from 'three';
 import {Pass,FullScreenQuad} from 'three/addons/postprocessing/Pass.js';
 /** Heat haze (offline): hot air shimmers whatever is seen through it. Each heat source is a column of rising air over a
  * base point: a burning car (HAZE.fire), a running engine's tailpipe (HAZE.exhaust, HAZE.exhaust.idle at tickover and full
- * at full throttle, HAZE.exhaust.rain of that in the rain) and a hot bonnet past HAZE.bonnet.from of heat. One full-screen
+ * at full throttle, HAZE.exhaust.rain of that in the rain), a hot bonnet past HAZE.bonnet.from of heat and anything burning on
+ * the ground (HAZE.ground: oil and fuel slicks, props, debris; its width clamped to HAZE.ground.radius, fires closer than
+ * HAZE.ground.merge m sharing one column). One full-screen
  * pass bends the picture inside each column with noise rising at HAZE.rate, by up to `pixels` on a 1080-line screen and
  * fading out by HAZE.far m; anything standing in front of a column stays sharp (scene depth). At most HAZE.max columns,
  * nearest the camera first. */
 export const HAZE={max:12,far:60,rate:3.2,fire:{radius:1.7,rise:5,pixels:9},exhaust:{radius:.3,rise:1.2,pixels:2.4,idle:.3,rain:.3},
-  bonnet:{radius:.8,rise:1.3,pixels:1.8,from:.55,rain:.3}} as const;
+  bonnet:{radius:.8,rise:1.3,pixels:1.8,from:.55,rain:.3},ground:{radius:[.5,2.4],rise:3.4,pixels:6,merge:.6}} as const;
 export type HeatSource={x:number;y:number;z:number;radius:number;rise:number;pixels:number};
 const clamp01=(n:number)=>Number.isFinite(n)?Math.max(0,Math.min(1,n)):0;
 /** How hard a tailpipe shimmers (pixels): HAZE.exhaust.idle at tickover up to full at full throttle; none from a dead engine. */
 export const exhaustHaze=(throttle:number,running:boolean,wet:boolean)=>running?HAZE.exhaust.pixels*(HAZE.exhaust.idle+(1-HAZE.exhaust.idle)*clamp01(throttle))*(wet?HAZE.exhaust.rain:1):0;
 /** How hard a hot bonnet shimmers (pixels): nothing below HAZE.bonnet.from of heat, full when the engine is at its hottest. */
 export const bonnetHaze=(heat:number,wet:boolean)=>HAZE.bonnet.pixels*clamp01((heat-HAZE.bonnet.from)/(1-HAZE.bonnet.from))*(wet?HAZE.bonnet.rain:1);
+/** A ground fire's column (burning slick, prop or debris) at its burn level 0–1, or null once it has burnt out. */
+export function groundHaze(f:{x:number;y:number;z:number;radius:number},level:number):HeatSource|null{
+  const l=clamp01(level);if(l<=0)return null;
+  return{x:f.x,y:f.y,z:f.z,radius:Math.max(HAZE.ground.radius[0],Math.min(HAZE.ground.radius[1],Number.isFinite(f.radius)?f.radius:0)),rise:HAZE.ground.rise,pixels:HAZE.ground.pixels*l};
+}
+/** Add a heat source, folding it into one already within `gap` m across the ground (a burning stack of tyres is one
+ * column, at the strongest of its fires, from the lowest of them). */
+export function addHeat(list:HeatSource[],s:HeatSource,gap=HAZE.ground.merge){
+  const near=list.find(o=>Math.hypot(o.x-s.x,o.z-s.z)<gap);
+  if(!near){list.push(s);return;}
+  near.pixels=Math.max(near.pixels,s.pixels);near.radius=Math.max(near.radius,s.radius);near.rise=Math.max(near.rise,s.rise);near.y=Math.min(near.y,s.y);
+}
 /** How hard a car fire shimmers (pixels), with its heat 0–1. */
 export const fireHaze=(heat:number,burning:boolean)=>burning?HAZE.fire.pixels*Math.max(.35,clamp01(heat)):0;
 export type HazeColumn={u:number;v:number;width:number;height:number;pixels:number;depth:number;radius:number};

@@ -116,7 +116,7 @@ import {WiperRig,wiperArms,windscreen,wipeStep} from './windscreen-wipers';
 import {steerArms,handReach,newHandState,type HandState} from './driver-arms';
 import {BONNET_STEAM,bonnetHeat,steamRate} from './bonnet-steam';
 import {vapourRate} from './exhaust-vapour';
-import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,type HeatSource} from './heat-haze';
+import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,type HeatSource} from './heat-haze';
 import {brakeSteamRate} from './brake-steam';
 import {createWetReflections,type Glow} from './wet-reflections';
 import {WIND,eventWind,gusting} from './wind';
@@ -1673,6 +1673,12 @@ function input(): Input {
 }
 const aiFires:{clock:number;list:GroundFire[]}={clock:-1,list:[]};let fireAvoidance=true;
 /** Offline AI drivers also steer round burning puddles and props, and drive out of flames. */
+/** Everything burning on the ground: slicks, props and debris (rebuilt as the slick clock moves on). The AI steers round
+ * them and the heat haze rises off them. */
+function burningGround(){
+  if(aiFires.clock!==fx.slicks.clock){aiFires.clock=fx.slicks.clock;aiFires.list=[...(fx.slicks.burningCount()?fx.slicks.fires():[]),...(propFires.burning.size?propFires.fires(fx.slicks.clock,propPoints(activeVenue.props)):[]),...fx.debrisFires()];}
+  return aiFires.list;
+}
 function ai(car: Vehicle, dt: number): Input {
   const core=aiCore(car,dt);
   if(car.seized&&car.extendedDamage)return{throttle:0,steer:core.steer,brake:.3,handbrake:false};
@@ -1681,8 +1687,7 @@ function ai(car: Vehicle, dt: number): Input {
   // An overheating engine is eased right off so it cools.
   const input=car.extendedDamage&&!online?.active?{...core,throttle:coolThrottle(nurseThrottle(core.throttle,car.oilLevel<OIL.low||car.coolantLevel<COOLANT.low||car.steerLink.some(v=>v===0)||car.steerPlay>=STEER_PLAY.warn),car.hotTime>=OVERHEAT_FIRE.warn)}:core;
   if(!fireAvoidance||!car.extendedDamage||online?.active||car.health<=0)return input;
-  if(aiFires.clock!==fx.slicks.clock){aiFires.clock=fx.slicks.clock;aiFires.list=[...(fx.slicks.burningCount()?fx.slicks.fires():[]),...(propFires.burning.size?propFires.fires(fx.slicks.clock,propPoints(activeVenue.props)):[]),...fx.debrisFires()];}
-  const fires=aiFires.list;
+  const fires=burningGround();
   return fires.length?avoidFires(car,input,fires,fx.slicks.clock,car.flameHeat):input;
 }
 function aiCore(car: Vehicle, dt: number): Input {
@@ -2226,6 +2231,7 @@ function updateHeatHaze(){
     if(running&&!c.exhaustGone){at(rear?.35:-.35,-.25,-half-.1);hazeSources.push({x:hazeAt.x,y:hazeAt.y,z:hazeAt.z,radius:HAZE.exhaust.radius,rise:HAZE.exhaust.rise,pixels:exhaustHaze(c.input?.throttle??0,true,wet)});}
     const hot=bonnetHaze(bonnetHeats.get(c)??0,wet);if(hot>0&&!c.onFire){at(0,.6,(rear?-1:1)*half*.45);hazeSources.push({x:hazeAt.x,y:hazeAt.y,z:hazeAt.z,radius:HAZE.bonnet.radius,rise:HAZE.bonnet.rise,pixels:hot});}
   }
+  if(!hazeOff&&!online?.active&&!studio&&['playing','paused','wrecked','result','inspect'].includes(state)){const ground:HeatSource[]=[];for(const f of burningGround()){const h=groundHaze(f,burnLevel(f,fx.slicks.clock));if(h)addHeat(ground,h);}hazeSources.push(...ground);}
   heatHaze.setSources(hazeSources,camera,elapsed);
 }
 const bonnetHeats=new WeakMap<object,number>(),bonnetClocks=new WeakMap<object,number>(),steamAt=new T.Vector3();let bonnetPuffs=0;

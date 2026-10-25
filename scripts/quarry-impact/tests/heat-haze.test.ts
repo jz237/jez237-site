@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import * as T from 'three';
-import {HAZE,exhaustHaze,bonnetHaze,fireHaze,hazeColumn,HeatHazePass,type HeatSource} from '../src/heat-haze';
+import {HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,hazeColumn,HeatHazePass,type HeatSource} from '../src/heat-haze';
 const camera=()=>{const c=new T.PerspectiveCamera(52,16/9,.1,850);c.position.set(0,1,0);c.lookAt(0,1,-1);c.updateMatrixWorld(true);return c;};
 const fire=(z:number,x=0):HeatSource=>({x,y:.8,z,radius:HAZE.fire.radius,rise:HAZE.fire.rise,pixels:HAZE.fire.pixels});
 test('tailpipes shimmer harder under throttle and faintly in the rain; hot bonnets past their threshold; fires strongest',()=>{
@@ -36,10 +36,20 @@ test('the pass lays out the nearest columns, switches off with nothing hot in vi
   assert.ok(pass.material.fragmentShader.includes('float behind=smoothstep(')&&pass.material.fragmentShader.includes('perspectiveDepthToViewZ'),'things in front stay sharp');
   pass.dispose();
 });
-test('main runs the haze after ambient occlusion, from fires, tailpipes and hot bonnets, offline only',()=>{
+test('anything burning on the ground raises a column as wide as the fire within limits; a stack of fires is one column',()=>{
+  const slick=groundHaze({x:1,y:0,z:2,radius:1.5},1)!;assert.ok(slick.radius===1.5&&slick.rise===HAZE.ground.rise&&slick.pixels===HAZE.ground.pixels);
+  assert.equal(groundHaze({x:0,y:0,z:0,radius:9},1)!.radius,HAZE.ground.radius[1]);assert.equal(groundHaze({x:0,y:0,z:0,radius:.1},.5)!.radius,HAZE.ground.radius[0]);
+  assert.ok(Math.abs(groundHaze({x:0,y:0,z:0,radius:1},.5)!.pixels-HAZE.ground.pixels/2)<1e-9,'grows and dies with the burn');
+  assert.equal(groundHaze({x:0,y:0,z:0,radius:1},0),null);assert.equal(groundHaze({x:0,y:0,z:0,radius:1},NaN),null);
+  const list:HeatSource[]=[];for(const [y,level] of [[.6,.4],[.1,1],[.35,.7]] as const)addHeat(list,groundHaze({x:5,y,z:5,radius:.4},level)!);
+  assert.equal(list.length,1,'one column for the stack');assert.ok(list[0].y===.1&&list[0].pixels===HAZE.ground.pixels,'from the lowest, at the strongest');
+  addHeat(list,groundHaze({x:5+HAZE.ground.merge+.1,y:0,z:5,radius:.4},1)!);assert.equal(list.length,2,'a fire further off is its own column');
+});
+test('main runs the haze after ambient occlusion, from fires, tailpipes, hot bonnets and the burning ground, offline only',()=>{
   const main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');
   assert.ok(main.includes('composer.addPass(ao);\ncomposer.addPass(heatHaze);\ncomposer.addPass(new OutputPass());'));
   assert.ok(main.includes('  updateHeatHaze();\n  composer.render();'));
   assert.ok(main.includes("if(!hazeOff&&!online?.active&&!studio&&['countdown','playing','paused','wrecked','result','inspect'].includes(state))for(const c of cars){if(!c.extendedDamage)continue;"));
+  assert.ok(main.includes('for(const f of burningGround()){const h=groundHaze(f,burnLevel(f,fx.slicks.clock));if(h)addHeat(ground,h);}hazeSources.push(...ground);')&&main.includes('  const fires=burningGround();\n'),'ground fires shared with the AI');
   assert.ok(main.includes('pixels:fireHaze(c.fireHeat??1,true)')&&main.includes('pixels:exhaustHaze(c.input?.throttle??0,true,wet)')&&main.includes('const hot=bonnetHaze(bonnetHeats.get(c)??0,wet);'));
 });
