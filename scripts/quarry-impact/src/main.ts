@@ -103,6 +103,7 @@ import {RaceRecovery,freeRecoverySlot} from './race-recovery';
 import {driverFigure,DRIVER,windowNet,WINDOW_NET} from './driver-figure';
 import {swayDriver} from './driver-sway';
 import {duckDriver} from './driver-sway';
+import {rollCage,bendCage} from './roll-cage';
 import {roofSign} from './roof-sign';
 import {roofSignFate,foldRoofSign,roofSignBox,disposeRoofSign,type RoofSignFate} from './roof-sign';
 import {withRaceNumbers} from './race-numbers';
@@ -930,7 +931,9 @@ function createCars(attract = false, previewSetup?:Setup) {
     {car.root.updateMatrixWorld(true);const box=new T.Box3().setFromObject(car.model),min=car.root.worldToLocal(box.min.clone()),max=car.root.worldToLocal(box.max.clone());
       const figure=driverFigure([0xd23a2a,0xf1bd42,0x2f6fd8,0xe8e8e8,0x2fa35a][i%5]);figure.position.set(Math.min(min.x,max.x)*DRIVER.side*2,Math.max(min.y,max.y)-DRIVER.headroom-DRIVER.head,(min.z+max.z)/2-Math.abs(max.z-min.z)*DRIVER.back);car.root.add(figure);
       // Derby cars carry a net over the driver's window (offline events).
-      if(!attract&&!online?.active&&mode==='derby'){const net=windowNet();net.position.set(Math.min(min.x,max.x)*WINDOW_NET.inset,figure.position.y+.02,figure.position.z);car.root.add(net);}}
+      if(!attract&&!online?.active&&mode==='derby'){const net=windowNet();net.position.set(Math.min(min.x,max.x)*WINDOW_NET.inset,figure.position.y+.02,figure.position.z);car.root.add(net);}
+      // and a roll cage: a hoop behind the seat and X bars in the doors, seen through the glass and wherever a door has gone.
+      if(!attract&&!online?.active&&mode==='derby')car.root.add(rollCage(figure.position,Math.abs(Math.min(min.x,max.x))));}
     // Derby rivals carry their car number on the doors and roof, unless their livery already has one (offline).
     if(!attract&&!online?.active&&i>0&&mode==='derby'){const numbered=withRaceNumbers(car.setup.livery,i+1);if(numbered)car.livery.set(numbered);
       // and a number board standing on the roof, read from any side.
@@ -2138,6 +2141,8 @@ function updateCamera(dt: number) {
   // Drivers slump under a crushed roof (measured on the first frame, then only when the roof crush changes) so a helmet never
   // shows through it.
   for(const c of cars){const d=c.root.children.find(o=>o.name==='driver'),roof=c.structuralDamage?.[4]??0;if(d&&(d.userData.roofSeen===undefined||Math.abs(d.userData.roofSeen-roof)>.004)){d.userData.roofSeen=roof;duckDriver(d,c.root,[...c.panels,...c.glass],roof);}}
+  // A roll cage bends down with the roof by the driver's slump.
+  for(const c of cars){const cage=c.root.children.find(o=>o.name==='roll_cage'),d=cage&&c.root.children.find(o=>o.name==='driver');if(cage&&d?.userData.seatBase){const drop=d.userData.seatBase.y-d.userData.seat.y;if(drop!==(cage.userData.drop??0)){cage.userData.drop=drop;bendCage(cage,d.userData.seatBase,drop);}}}
   if(state!=='paused')for(const c of cars){const d=c.root.children.find(o=>o.name==='driver');if(d)swayDriver(d,c.root,dt);}
   // Roof signs fold flat when a car goes over and tear off on a second roll, a crushed roof or a blow-up.
   if(state!=='paused')for(const c of cars){const sign=c.root.children.find(o=>o.name==='roof_sign');if(sign)knockRoofSign(c,sign,dt);}
