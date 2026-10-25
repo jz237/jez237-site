@@ -118,6 +118,7 @@ import {BONNET_STEAM,bonnetHeat,steamRate} from './bonnet-steam';
 import {vapourRate} from './exhaust-vapour';
 import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,type HeatSource} from './heat-haze';
 import {LensRain,LensRainPass} from './lens-rain';
+import {LampDangle} from './lamp-dangle';
 import {brakeSteamRate} from './brake-steam';
 import {createWetReflections,type Glow} from './wet-reflections';
 import {WIND,eventWind,gusting} from './wind';
@@ -411,7 +412,7 @@ const eventAwards=new EventAwards();const propFires=new PropFires();
 /** Loose props as fire sources: where they are now and whether they burn. */
 const propPoints=(props:readonly {mesh:T.Object3D}[])=>props.map(p=>({x:p.mesh.position.x,y:p.mesh.position.y,z:p.mesh.position.z,kind:propKind((p.mesh as T.Mesh).geometry?.type)}));let slowMoUntil=0,slowMoScale=.3;
 /** Brief Burnout-style slow motion when the player wrecks an opponent (local events only). */
-const TAKEDOWN_SLOWMO={scale:.3,seconds:.9};const carLights=new Map<Vehicle,CarLights>();let lastBadges:string[]=[];
+const TAKEDOWN_SLOWMO={scale:.3,seconds:.9};const carLights=new Map<Vehicle,CarLights>(),lampDangles=new Map<Vehicle,LampDangle>();let lastBadges:string[]=[];
 const badgeLine=()=>lastBadges.length?`<p class="badge-unlock">★ ACHIEVEMENT${lastBadges.length>1?'S':''} UNLOCKED · ${lastBadges.join(' · ')}</p>`:'';
 /** Race feedback for the player's own impacts; derbies already have their score feed. */
 function callout(kind:'TAKEDOWN'|'BIG HIT',victim:Vehicle){if(mode!=='race'||demo||online?.active||pursuit)return;toast(kind==='TAKEDOWN'?`TAKEDOWN · #${victim.id+1} ${DEFINITIONS[victim.kind].name}`:`BIG HIT · #${victim.id+1} ${DEFINITIONS[victim.kind].name}`,kind==='TAKEDOWN'?2.5:1.2);}
@@ -944,7 +945,7 @@ function createCars(attract = false, previewSetup?:Setup) {
   sound.clearCars();
   vehicleFire?.reset();propFires.reset();
   puddleSplashes?.reset();
-  for (const c of cars){carLights.get(c)?.dispose();carLights.delete(c);c.dispose();}
+  for (const c of cars){lampDangles.get(c)?.dispose();lampDangles.delete(c);carLights.get(c)?.dispose();carLights.delete(c);c.dispose();}
   clearMarshals();
   for(const f of bailed)disposeDriver(f);bailed.length=0;
   cars = [];
@@ -998,6 +999,9 @@ function createCars(attract = false, previewSetup?:Setup) {
     carLights.set(car,attachCarLights(car.root,DEFINITIONS[type].halfLength));
     car.extendedDamage=!attract&&!online?.active;{const derbyPace=car.extendedDamage&&mode==='derby';car.powerScale=derbyPace?DERBY_PACE.power:undefined;car.tractionScale=derbyPace?DERBY_PACE.traction:undefined;car.charge=derbyPace;}if(car.extendedDamage){car.onBackfire=p=>sound.backfire(p);car.onBlowout=p=>sound.blowout(p);car.onSetAlight=by=>{eventAwards.setAlight(by,car.id,elapsed);if(by>=0&&by!==car.id)alightBy.set(car.id,by);};car.onGlassBreak=p=>sound.shot('glass',p,.55);car.onMountClunk=()=>{if(i===0)recordRumbleImpact(.3);sound.shot('impact-light',car.current,.4,{rate:.8,delay:0,duration:.3,lowpass:1400});};car.onBumpStart=()=>{bumpStarts++;sound.clip('bump-start',car.current,.7,1.8);const by=bumpStartedBy(lastHitBy.get(car.id),car.id,elapsed);if(demo)return;if(car.id===0)toast(by>=0?`BUMP STARTED BY #${by+1}`:'BUMP STARTED · ENGINE CAUGHT',2,1);else if(by===0)toast(`YOU BUMP STARTED #${car.id+1}`,1.6,1);};car.onGearClunk=out=>{if(i===0)recordRumbleImpact(out?.25:.35);sound.shot(out?'impact-light':'suspension',car.current,out?.45:.35,{rate:out?1.3:1.6,delay:0,duration:.25});};car.onBreak=(what,w)=>{if(i===0)recordRumbleImpact(what==='spring'?.4:.55);{const f=FAILURE_MOMENTS[what];eventAwards.failure(car.id,f.label,elapsed,f.score);}if(f2crowd(what))sound.crowd(i===0?.7:.45);const corner=['FRONT LEFT','FRONT RIGHT','REAR LEFT','REAR RIGHT'][w];sound.breakage(what,car.current);if(car.id===0&&!demo)toast(what==='spring'?`SPRING BROKEN · ${corner}`:what==='diff'?`DIFF BROKEN · ${w<2?'FRONT':'REAR'} AXLE`:what==='tierod'?`TIE ROD SNAPPED · ${corner}`:what==='exhaust'?'EXHAUST TORN OFF':what==='brakefire'?`BRAKE FIRE · ${corner}`:what==='radiator'?'RADIATOR BURST':what==='propshaft'?'PROPSHAFT SNAPPED':what==='bearing'?`WHEEL BEARING SEIZED · ${corner}`:what==='belt'?'FAN BELT SNAPPED':what==='cable'?'THROTTLE CABLE SNAPPED · LIMPING':what==='handbrake'?'HANDBRAKE CABLE SNAPPED':what==='battery'?'BATTERY THROWN OUT · NO STARTER':what==='rod'?'ROD THROUGH THE BLOCK':what==='rubfire'?`TYRE ON FIRE · ${corner}`:what==='tyrefire'?`FIRE SPREADING · ${corner} TYRE ALIGHT`:what==='exhaustcrush'?'EXHAUST CRUSHED · LOSING POWER':what==='gasket'?'HEAD GASKET BLOWN · WHITE SMOKE':what==='tank'?'FUEL TANK DOWN':what==='tankoff'?'FUEL TANK GONE · ON FUMES':what==='enginefire'?'ENGINE FIRE · OVERHEATED':what==='smashfire'?'ENGINE BAY ALIGHT':what==='rollbar'?`ANTI-ROLL BAR SNAPPED · ${w<2?'FRONT':'REAR'}`:`DRIVESHAFT SNAPPED · ${corner}`,3,what==='smashfire'?3:what==='battery'||what==='rod'||what==='exhaustcrush'?1:0);};car.onSeize=p=>{eventAwards.failure(car.id,'ENGINE SEIZED',elapsed,32);sound.crowd(i===0?.7:.45);fx.emit(p,10,2,.9);if(!sound.clip('engine-seize',p,.8,1.6))sound.shot('impact-heavy',p,.5,{rate:.6,delay:0,duration:.6,lowpass:900});if(car.id===0&&!demo)toast('ENGINE SEIZED');};car.onDoused=()=>{const p=car.current.clone();p.y+=.4;fx.emit(p,14,5,1.4);if(car.id===0&&!demo)toast('FIRE OUT');};}
     if(car.extendedDamage)car.onTether=(_part,debris,anchor)=>tetherBumper(car,debris,anchor);
+    // A lamp smashed hard enough hangs out of its socket on its wiring; a harder knock tears it away (offline).
+    if(car.extendedDamage){const lights=carLights.get(car)!,lamps=[...Array.from({length:lights.head},(_,j)=>({mesh:lights.lamp('head',j)!,end:1})),...Array.from({length:lights.tail},(_,j)=>({mesh:lights.lamp('tail',j)!,end:-1}))].filter(l=>l.mesh);
+      lampDangles.set(car,new LampDangle(car.root,lamps,mesh=>fx.detach(mesh,car.velocity.clone().multiplyScalar(.65))));}
     // Broken glass and smashed lamps leave their pieces on the floor (offline).
     if(car.extendedDamage){const glassSound=car.onGlassBreak,lights=carLights.get(car);let n=0;car.onGlassBreak=p=>{glassSound?.(p);fx.scatterLitter(p,'glass',car.id*131+(++n),car.current);};if(lights)lights.onSmash=(p,kind)=>fx.scatterLitter(p,kind,car.id*137+(++n),car.current);}
     // A big hit knocks flakes of the car's paint off, a blowout leaves lumps of tyre (offline).
@@ -2283,6 +2287,8 @@ function updateCamera(dt: number) {
     steerArms(d,c.steering,handReach(h,!!c.input?.handbrake,c.gear,dt));}
   // Derby flags whip about with their cars and snap once a car is out or upside down.
   if(state!=='paused')for(const c of cars){const f=c.root.children.find(o=>o.name==='derby_flag');if(f)waveFlag(f,c.root,dt,c.health<=0||c.inverted>.3,windy&&!online?.active?breeze:undefined);}
+  // Smashed lamps hang and swing on their wiring as the car brakes, accelerates and turns (offline).
+  if(state==='playing'||state==='wrecked'||state==='result'||state==='countdown')for(const c of cars)lampDangles.get(c)?.update(c.velocity,dt);
   // Drivers get out of wrecked cars that are burning or blown up once they have stopped, and walk clear to watch (offline).
   if(state==='playing'||state==='wrecked'){for(const c of cars){if(!c.extendedDamage)continue;const d=c.root.children.find(o=>o.name==='driver');if(!d)continue;
     const t=(c.onFire||c.blownUp)&&c.health<=0&&Math.abs(c.speed)<BAIL.speed?(bailClock.get(c)??0)+dt:0;bailClock.set(c,t);
@@ -2917,6 +2923,8 @@ async function boot() {
     litSpray: () => puddleSplashes?.litDrops ?? 0,
     heatHaze: (on?: boolean) => { if (on !== undefined) hazeOff = !on; const u = heatHaze.material.uniforms; return { columns: heatHaze.columns, enabled: heatHaze.enabled, sources: hazeSources.length, boxes: (u.boxes.value as T.Vector4[]).slice(0, heatHaze.columns).map((b, i) => [...b.toArray(), ...(u.info.value as T.Vector4[])[i].toArray()].map((n) => +n.toFixed(3))) }; },
     lensRain: () => ({ drops: lensRain.drops.length, landed: lensRain.landed, enabled: lensRainPass.enabled, view: drivingCamera }),
+    lampDamage: (id: number, kind: 'head' | 'tail', index: number, damage: number) => { const c = cars.find(x => x.id === id), m = c && carLights.get(c)?.lamp(kind, index); if (!m) return false; m.userData.damage = damage; return true; },
+    lampDangle: (id = 0) => { const c = cars.find(x => x.id === id), d = c && lampDangles.get(c); const l = c && carLights.get(c), box = new T.Box3(); return d && l ? { kind: c!.kind, hanging: d.count, popped: d.popped, torn: d.torn, swings: d.swings, heads: Array.from({ length: l.head }, (_, j) => +box.setFromObject(l.lamp('head', j)!).getSize(new T.Vector3()).x.toFixed(2)), damage: [...Array.from({ length: l.head }, (_, j) => l.lamp('head', j)), ...Array.from({ length: l.tail }, (_, j) => l.lamp('tail', j))].map((m) => +(m?.userData.damage ?? 0).toFixed(1)) } : null; },
     lampBeams: () => cars.map((c) => c.root.children.filter((o) => o.name === 'car_light_beam').map((b) => +b.position.x.toFixed(2))),
     heatDiscs: (id = 0, heat = 1) => { const c = cars[id]; if (!c?.extendedDamage) return false; c.discHeat.fill(heat); return true; },
     storm: () => storm ? { strikes: storm.strikes, claps: storm.claps, thunders: sound.thunders, flash: +lightning.intensity.toFixed(3) } : null,
