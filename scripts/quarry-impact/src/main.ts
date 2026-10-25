@@ -118,6 +118,7 @@ import {steerArms,handReach,newHandState,type HandState} from './driver-arms';
 import {BONNET_STEAM,bonnetHeat,steamRate} from './bonnet-steam';
 import {TYRE_STEAM,tyreSteamRate} from './tyre-heat';
 import {DUST,dustRate} from './dust-trails';
+import {COLD_START,coldStartPuffs,crankStarts} from './cold-start';
 import {vapourRate} from './exhaust-vapour';
 import {HeatHazePass,HAZE,exhaustHaze,bonnetHaze,fireHaze,groundHaze,addHeat,type HeatSource} from './heat-haze';
 import {LensRain,LensRainPass} from './lens-rain';
@@ -419,6 +420,8 @@ let rain:ReturnType<typeof createRain>|null=null,wetRoot:T.Object3D|undefined,we
 let rainSplashes:ReturnType<typeof createRainSplashes>|undefined;
 // This event's showers: their seed and how hard it is raining now (1 when not an offline rain event).
 let showerSeed=0,shower=1,showerForce:number|null=null;
+// Seconds since this event's countdown began, for the engines starting up (cold start).
+let coldStart:number=COLD_START.done;
 const eventAwards=new EventAwards();const propFires=new PropFires();
 /** Loose props as fire sources: where they are now and whether they burn. */
 const propPoints=(props:readonly {mesh:T.Object3D}[])=>props.map(p=>({x:p.mesh.position.x,y:p.mesh.position.y,z:p.mesh.position.z,kind:propKind((p.mesh as T.Mesh).geometry?.type)}));let slowMoUntil=0,slowMoScale=.3;
@@ -1091,6 +1094,7 @@ async function start(watch=demo) {
     countdown = mode === 'playground' ? 0 : 3.5;
     accumulator = 0;
     state = countdown ? 'countdown' : 'playing';
+    coldStart = 0;
     orbit.enabled = false;
     setQuarryMode();
     cameraImpactOffset.set(0,0,0);
@@ -2294,7 +2298,7 @@ function updateHeatHaze(){
 }
 const bonnetHeats=new WeakMap<object,number>(),bonnetClocks=new WeakMap<object,number>(),steamAt=new T.Vector3();let bonnetPuffs=0;
 const vapourClocks=new WeakMap<object,number>();let vapourPuffs=0;
-const brakeSteamClocks=new WeakMap<object,number[]>(),tyreSteamClocks=new WeakMap<object,number[]>(),dustClocks=new WeakMap<object,number[]>();const dustTint=new T.Color();let brakePuffs=0,tyrePuffs=0,dustPuffs=0;
+const brakeSteamClocks=new WeakMap<object,number[]>(),tyreSteamClocks=new WeakMap<object,number[]>(),dustClocks=new WeakMap<object,number[]>();const dustTint=new T.Color();let brakePuffs=0,tyrePuffs=0,dustPuffs=0,coldPuffs=0;
 let wetReflections:ReturnType<typeof createWetReflections>|undefined;const glowList:Glow[]=[];
 /** A driver watches the car their driving brain is hunting, if it is still running (see lookYaw). */
 function lookDriver(c:Vehicle,figure:T.Object3D,dt:number){
@@ -2587,6 +2591,14 @@ function frame(now: number) {
   // Rain on a hot brake disc boils off in steam at the wheel (offline).
   if(eventLighting==='rain'&&(state==='playing'||state==='wrecked'))for(const c of cars){if(!c.extendedDamage)continue;const clocks=brakeSteamClocks.get(c)??[0,0,0,0];brakeSteamClocks.set(c,clocks);
     for(let i=0;i<4;i++){const w=c.wheels[i];if(!w||c.wreckParts.wheelLost[i])continue;clocks[i]+=brakeSteamRate(c.discHeat[i])*dt;if(clocks[i]<1)continue;clocks[i]%=1;brakePuffs++;fx.emit(w.getWorldPosition(steamAt),1,5,.25);}}
+  // The countdown begins: every engine cranks over and fires with a puff of smoke from its tailpipe (offline).
+  // (The effects only step in play, so they are moved on here while the countdown runs, or the smoke would hang until the off.)
+  if(coldStart<COLD_START.done&&state==='countdown')fx.update(dt);
+  if(coldStart<COLD_START.done&&(state==='countdown'||state==='playing')){const before=coldStart;coldStart+=dt;for(const c of cars){if(!c.extendedDamage||c.health<=0||c.exhaustGone)continue;
+    const tail=()=>steamAt.set(isRearEngineKind(c.kind)?.35:-.35,-.25,-DEFINITIONS[c.kind].halfLength-.1).applyQuaternion(c.root.quaternion).add(c.root.position);
+    if(crankStarts(coldStart,before,c.id))sound.clip('starter',tail(),COLD_START.volume,COLD_START.crank);
+    const n=coldStartPuffs(coldStart,before,c.id);if(n){const start=fx.cursor;fx.emit(tail(),n*2,0,COLD_START.size);coldPuffs+=n;
+      for(let j=start;j<fx.cursor;j++){const k=j%fx.particles.length,p=fx.particles[k];p.size=COLD_START.puff[0]+Math.random()*(COLD_START.puff[1]-COLD_START.puff[0]);p.max=p.life=COLD_START.life[0]+Math.random()*(COLD_START.life[1]-COLD_START.life[0]);dustTint.setHex(COLD_START.tint).multiplyScalar(.9+Math.random()*.15).toArray(fx.colors,k*3);}}}}
   // Dry gravel kicks up a dust plume behind a fast car's rear tyres (offline; none in the rain).
   if(state==='playing')for(const c of cars){if(!c.extendedDamage)continue;const rate=dustRate(c.speed,c.surface,eventLighting==='rain');if(rate<=0)continue;const clocks=dustClocks.get(c)??[0,0];dustClocks.set(c,clocks);
     for(const k of [0,1]){const i=2+k,w=c.wheels[i];if(!w||c.wreckParts.wheelLost[i]||!c.controller.wheelIsInContact(i))continue;clocks[k]+=rate*dt;if(clocks[k]<1)continue;clocks[k]%=1;dustPuffs++;
@@ -2991,6 +3003,7 @@ async function boot() {
     puddleSplashes: () => splashes,
     tyreSteam: () => tyrePuffs,
     dust: () => dustPuffs,
+    coldStart: () => ({ puffs: coldPuffs, age: +coldStart.toFixed(2) }),
     tyres: (id = 0, temp?: number) => { const c = cars.find((x) => x.id === id); if (!c) return null; if (temp !== undefined) c.tyreTemp.fill(temp); return { temp: c.tyreTemp.map((v) => +v.toFixed(3)), grip: c.tyreGrip.map((v) => +v.toFixed(3)) }; },
     discs: (id = 0) => { const c = cars.find((x) => x.id === id); return c ? Array.from(c.discHeat, (v) => +v.toFixed(3)) : null; },
     shower: (force?: number | null) => { if (force !== undefined) showerForce = force; return { level: +shower.toFixed(3), drops: rain?.drops ?? 0 }; },
