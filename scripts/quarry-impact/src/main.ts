@@ -1851,6 +1851,8 @@ function step(dt: number) {
     if (countdown <= 0) {
       state = 'playing';
       toast(mode === 'derby' ? 'MAKE AN IMPACT' : 'GREEN LIGHT', 2);
+      // The arena horn sounds the start of a derby heat.
+      if(mode==='derby'&&!demo){if(sound.arenaHorn(hornHeats))hornHeats++;}
     }
     return;
   }
@@ -2139,6 +2141,7 @@ function updateCraze(){
 function cycleDrivingCamera(){drivingCamera=nextDrivingCamera(drivingCamera);toast(DRIVING_CAMERA_LABELS[drivingCamera]+' CAMERA');}
 const lookLocal=new T.Vector3(),lookTurn=new T.Quaternion();
 const crunchAt=new T.Vector3(),crunchClock=new WeakMap<object,number>();let crunchTake=0;
+let hornHeats=0;
 /** A driver watches the car their driving brain is hunting, if it is still running (see lookYaw). */
 function lookDriver(c:Vehicle,figure:T.Object3D,dt:number){
   const t=drivers.memory.get(c.id)?.target,prey=t!==undefined&&t>=0&&t!==c.id?cars.find(x=>x.id===t&&x.health>0):undefined;
@@ -2705,6 +2708,7 @@ async function boot() {
     dressing: (on: boolean) => { let n = 0; for (const c of cars) for (const o of c.root.children) if (['driver', 'roof_sign', 'window_net', 'roll_cage', 'derby_flag'].includes(o.name)) { o.visible = on; o.traverse(m => { if ((m as T.Mesh).isMesh) n++; }); } return n; },
     /** QA: chips of glass and lamp lens on the floor, and the breaks that left them by kind. */
     litter: () => ({ chips: fx.litter.mesh.count, ...fx.litter.breaks, last: fx.litter.last.toArray(), crunches: crunchTake }),
+    horns: () => hornHeats,
     /** QA: scatter litter of a kind at a world point (thrown out from from, when given; paint takes colour). */
     scatterLitter: (at: number[], kind: 'glass' | 'head' | 'tail' | 'paint' | 'rubber', seed = 1, from?: number[], colour?: number) => fx.scatterLitter(new T.Vector3().fromArray(at), kind, seed, from ? new T.Vector3().fromArray(from) : undefined, colour),
     /** QA: smash one lamp as a hard knock would (it goes dark, its lens dulls and its pieces fall). */

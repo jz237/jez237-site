@@ -1065,5 +1065,33 @@
     "sha256": "335d0de55231465a4e009baee4c4f434ac45c7b444e50f69c6d9178e18de80be",
     "runtimeSha256": "f7b7be055e2ea5ec52f32e1c52fd69b110476d8b95ff54cc245aee54f31ea320",
     "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "air-horn",
+    "file": "air-horn.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Airhorn blast at an outdoor stadium: one long loud pneumatic air horn blast over a public address system, echoing around a dirt arena, then fading. Isolated, no music, no voices, no speech, no crowd.",
+      "duration_seconds": 2.2,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "64efc2ba2806be6a092d8d9993010dad55ac91b6b12d60aa3cc9a00ec80d5269",
+    "runtimeSha256": "2eb35c114500f168681f0bf0079a4e38a65033277ff3326edd267187935faf47",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "air-horn-end",
+    "file": "air-horn-end.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Pneumatic stadium horn sounding twice: two long loud air horn blasts in a row over arena loudspeakers, echoing outdoors, then fading. Isolated, no music, no voices, no speech, no crowd.",
+      "duration_seconds": 3.0,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "95535ab3499e551a25c468b914933918e26ba0451759188a49681a0969289531",
+    "runtimeSha256": "52fe361dbea55bca8130d0e61244aa3e33b8e66b6f55b75a09e6caa6948f5261",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
   }
 ]

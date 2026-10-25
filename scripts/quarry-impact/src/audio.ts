@@ -42,6 +42,8 @@ const BREAK_CLIPS:Record<string,{id:string;volume:number;rate:number;duration:nu
   bearing:{id:'engine-seize',volume:.5,rate:1.3,duration:1.2},tyrefire:{id:'vehicle-burst',volume:.45,rate:.8,duration:.9},exhaustcrush:{id:'impact-medium',volume:.6,rate:1.25,duration:.6}};
 /** Clips with extra recorded takes (id-2, id-3) that shot() rotates between: the impacts and the glass and debris layers. */
 const TAKES=/^(impact-(light|medium|heavy)|glass|debris)$/;
+/** The arena air horn over the PA as a derby heat starts: the recorded takes in turn, one per heat, at gain level (not placed in the world). */
+export const ARENA_HORN={level:.45,ids:['air-horn','air-horn-end']} as const;
 /** A tyre rubbing a crushed arch (0–1): the hardest rub on the car, with road speed (full from 10 m/s), louder still once
  * the tyre is smoking; silent below RUB.warn or at a crawl. */
 export const rubLoopLevel=(rubs:ArrayLike<number>,speed:number,heat:number)=>{const r=Math.max(0,...Array.from(rubs)),v=Math.abs(Number.isFinite(speed)?speed:0);
@@ -166,6 +168,12 @@ export class Sound {
       gain.gain.value=Math.min(1,CROWD_CHEER.level*intensity);source.connect(gain).connect(this.ambientBus);source.start();return true;}
     this.crowdRoar??=new CrowdRoar(this.ctx,this.ambientBus);
     return this.crowdRoar.roar(intensity);
+  }
+  arenaHorn(heat:number){
+    if(!this.ready||this.muted||this.paused||!this.ctx||!this.ambientBus||this.ctx.state!=='running')return false;
+    const ids=ARENA_HORN.ids.filter(id=>this.buffers.has(id));if(!ids.length)return false;
+    const source=this.ctx.createBufferSource(),gain=this.ctx.createGain();source.buffer=this.buffers.get(ids[Math.abs(Math.floor(Number.isFinite(heat)?heat:0))%ids.length])!;
+    gain.gain.value=ARENA_HORN.level;source.connect(gain).connect(this.ambientBus);source.start();return true;
   }
   /** A soft looping rain hiss on the ambience bus while it rains. */
   rain(on:boolean){

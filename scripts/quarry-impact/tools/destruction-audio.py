@@ -54,6 +54,9 @@ jobs = [
  # Tyres rolling over the crash litter (crunch takes, alternated).
  ('glass-crunch', 'Crunching broken glass under a car tyre: a car rolling slowly over scattered tempered glass crumbs on asphalt, a short gritty crackle and crunch. Isolated, no engine, no music, no voices, no speech.', 1.0, False),
  ('glass-crunch-2', 'Gritty crackle of glass fragments and plastic chips being crushed under a slowly rolling rubber tyre on a hard floor, short and dry. Isolated, no engine, no music, no voices, no speech.', 1.0, False),
+ # The arena air horn over the PA as a derby heat starts (two takes, one per heat in turn).
+ ('air-horn', 'Airhorn blast at an outdoor stadium: one long loud pneumatic air horn blast over a public address system, echoing around a dirt arena, then fading. Isolated, no music, no voices, no speech, no crowd.', 2.2, False),
+ ('air-horn-end', 'Pneumatic stadium horn sounding twice: two long loud air horn blasts in a row over arena loudspeakers, echoing outdoors, then fading. Isolated, no music, no voices, no speech, no crowd.', 3.0, False),
 ]
 # Seconds cut from the start of a raw clip: metal-groan dips to silence early (it would drop out every loop) and
 # debris-2 opens with half a second of near silence (the layer would land late).
