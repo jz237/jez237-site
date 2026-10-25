@@ -101,6 +101,7 @@ import {gridCarKind,gridRecordKey,GRID_LINEUPS,GRID_PERFORMANCE} from './grid-ru
 import {timedRaceLimit,timedRaceFinished,timedRaceOrder,timedRaceResult,timedRaceRecordScore} from './timed-race';
 import {RaceRecovery,freeRecoverySlot} from './race-recovery';
 import {driverFigure,DRIVER,windowNet,WINDOW_NET} from './driver-figure';
+import {swayDriver} from './driver-sway';
 import {roofSign} from './roof-sign';
 import {withRaceNumbers} from './race-numbers';
 import {BOOM} from './blow-up';
@@ -2121,6 +2122,8 @@ function updateCamera(dt: number) {
   // The driver of the car the camera sits in (hood or dashboard view) is hidden, so the view stays clear.
   {const spectating=demo||scoreSpectating(),viewed=spectating?cars.find(c=>c.id===director.followed):cars[0],inside=spectating?director.activeView==='hood':drivingCamera!=='chase';
     for(const c of cars){const d=c.root.children.find(o=>o.name==='driver');if(d)d.visible=!(inside&&c===viewed);}}
+  // Drivers sway in their seats with the car's own motion (cosmetic; frozen while paused so resuming does not jolt them).
+  if(state!=='paused')for(const c of cars){const d=c.root.children.find(o=>o.name==='driver');if(d)swayDriver(d,c.root,dt);}
   if(scoreSpectating()){const current=cars.find(c=>c.id===director.followed);if(!current||current.health<=0)director.cycleCar(cars,1);else if(!director.manual)director.follow(current.id);}
   const p = demo||scoreSpectating()?(cars.find(c=>c.id===director.followed)??cars[0]):cars[0];
   if (!p) return;
@@ -2648,6 +2651,7 @@ async function boot() {
     dropTank: (id: number) => { const c = cars.find(x => x.id === id); if (!c?.extendedDamage) return false; c.dropTank(); return true; },
     setStructure: (id: number, face: number, v: number) => { const c = cars.find(x => x.id === id); if (!c?.structuralDamage || !Number.isInteger(face) || face < 0 || face > 4 || !Number.isFinite(v)) return false; c.structuralDamage[face] = Math.max(0, Math.min(1, v)); return true; },
     blowUp: (id: number) => { const c = cars.find(x => x.id === id); if (!c?.extendedDamage) return false; carBlowsUp(c, c.current.clone()); return c.blownUp; },
+    driverSway: (id: number) => { const s = cars.find(x => x.id === id)?.root.children.find(o => o.name === 'driver')?.userData.sway; return s ? { roll: s.roll, pitch: s.pitch } : null; },
     placeDebris: (index: number, x: number, y: number, z: number, vx: number, vy: number, vz: number) => { const d = fx.debris[index < 0 ? fx.debris.length + index : index]; if (!d) return false; d.body.setTranslation({ x, y, z }, true); d.body.setLinvel({ x: vx, y: vy, z: vz }, true); return true; },
     setExhaustCrushed: (id: number, crushed: boolean) => { const c = cars.find(x => x.id === id); if (!c?.extendedDamage) return false; c.exhaustCrushed = !!crushed; return true; },
     setAlight: (id: number) => { const c = cars.find(x => x.id === id); if (!c?.extendedDamage || c.health <= 0) return false; c.igniteRequest = true; return true; },
