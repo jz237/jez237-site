@@ -51,14 +51,24 @@ export const BED_SOLIDS_NONE = -1.2;
 /** reef_rockHeight and reef_sandRest for rock_bed.wgsl when bedSolids stand in a level bed: the
  *  map's tops (binding 3), and the level. */
 /** sand_rotate.wgsl for bedSolids: their tops stop at the edge of their footprints (no rock
- *  below the glass, as the reef's has), so a column's floor is taken as no lower than its own
- *  glass before the columns are blended, or the old surface rebuilt between a solid and the sand
- *  next to it sags to the glass, and the sand there is lost each frame the bowl turns. */
+ *  below the glass, as the reef's has), so what is blended between columns is how far each
+ *  column's solid stands above its own glass (none where there is none), and the old floor is the
+ *  glass where it is wanted, exactly, plus that. (Blended as heights, the solids' edges sagged to
+ *  the glass and their sand was lost; blended with the glass in them, the floor rose above the
+ *  glass near the wall, where it curves up, and every frame the bowl turned the sand there was
+ *  rebuilt a little too deep: the volume pass took it back from everywhere, and the sand drifted
+ *  into a heap against the glass.) */
 function bedSolidsRotateWGSL(code: string): string {
   const a = 'return rockOld[u32(i + n * j)];';
-  if (!code.includes(a)) throw new Error('sand_rotate.wgsl: columnRock changed');
-  return code.replace(a, `let xz = ((vec2f(f32(i), f32(j)) + vec2f(0.5)) * P.sandMap.y * 2.0 - vec2f(1.0)) * P.radius;
-  return max(rockOld[u32(i + n * j)], -glassHalf(xz));`);
+  const b = 'return max(-glassHalf(xz), r) + t;';
+  const off = '{ return -10.0; }';
+  if (!code.includes(a) || code.split(off).length !== 2) throw new Error('sand_rotate.wgsl: columnRock changed');
+  if (!code.includes(b)) throw new Error('sand_rotate.wgsl: oldTop changed');
+  return code
+    .replace(off, '{ return 0.0; }')
+    .replace(a, `let xz = ((vec2f(f32(i), f32(j)) + vec2f(0.5)) * P.sandMap.y * 2.0 - vec2f(1.0)) * P.radius;
+  return max(rockOld[u32(i + n * j)] + glassHalf(xz), 0.0);`)
+    .replace(b, 'return -glassHalf(xz) + r + t;');
 }
 
 /** rock_bed.wgsl for bedSolids: no point above their highest top is in any of them (the map is
