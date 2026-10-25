@@ -1,3 +1,4 @@
+import {restoreDustTrailsBytes} from './dust-trails-invariants';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
@@ -10,15 +11,15 @@ export function readTyreSteamPrevious(file:string):Buffer{
  const bytes=gunzipSync(read(entry.snapshot));assert.equal(hash(bytes),entry.before,file);return bytes;
 }
 export function restoreTyreSteamBytes(file:string,bytes:Buffer):Buffer{
- const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
+ bytes=restoreDustTrailsBytes(file,bytes);const entry=revision().files[file];if(!entry||hash(bytes)!==entry.after)return bytes;
  return readTyreSteamPrevious(file);
 }
 export function verifyTyreSteamRevision(){
  const manifest=revision();assert.equal(manifest.baseline,'3cce3f4665c34bc0c953b699020542308fa62455');
  for(const [file,entry]of Object.entries<any>(manifest.files)){
-  const bytes=readFileSync(new URL('../'+file,import.meta.url));assert.equal(hash(bytes),entry.after,file);
+  const bytes=restoreDustTrailsBytes(file,readFileSync(new URL('../'+file,import.meta.url)));assert.equal(hash(bytes),entry.after,file);
   assert.equal(hash(restoreTyreSteamBytes(file,bytes)),entry.before,file);
  }
- for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(readFileSync(new URL('../'+file,import.meta.url))),expected,file+' is outside the TyreSteam release');
+ for(const [file,expected]of Object.entries<string>(manifest.protected))assert.equal(hash(restoreDustTrailsBytes(file,readFileSync(new URL('../'+file,import.meta.url)))),expected,file+' is outside the TyreSteam release');
  assert.equal(manifest.previousFixtureCount,8457);assert.equal(Object.keys(manifest.protected).filter(file=>file.startsWith('tests/fixtures/')).length,8457);
 }
