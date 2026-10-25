@@ -27,8 +27,8 @@ function cost(dev, k, moving) {
 }
 
 /** Runs the controller on the phone for `seconds`: frames come at whole refreshes (held to the
- *  knobs' fps), as long as the slower of the GPU and the main thread takes (or `interval`). Returns
- *  the moves. */
+ *  knobs' fps; the screen's refreshes, 60 a second unless dev.refresh says), as long as the slower
+ *  of the GPU and the main thread takes (or `interval`). Returns the moves. */
 function run(c, dev, seconds) {
   const moves = [];
   const end = dev.t + seconds * 1000;
@@ -38,7 +38,8 @@ function run(c, dev, seconds) {
     const { sim, draw } = cost(dev, k, moving);
     const busy = Math.max(sim + draw, dev.cpuMs);
     const pace = 1000 / k.fps;
-    dev.t += Math.max(pace, Math.ceil(busy / REFRESH - 1e-9) * REFRESH, dev.extra(dev.t));
+    const refresh = dev.refresh ?? REFRESH;
+    dev.t += Math.max(pace, Math.ceil(busy / refresh - 1e-9) * refresh, dev.extra(dev.t));
     const timedNow = dev.timed && ++dev.n % dev.every === 0;
     const r = c.frame(dev.t, {
       cpu: dev.cpuMs,
@@ -300,6 +301,19 @@ test('over the budget at the lowest level but quick enough for 60, it stays at 6
   const low = LEVELS[LEVELS.length - 1];
   const dev = phone({ simMs: 6 });
   dev.msPerMpx = (15 - 6 - fixedCost(low)) / tracedPx(low, AREA);
+  const c = new QualityController(LEVELS, { level: 0 });
+  run(c, dev, 60);
+  assert.equal(c.level, LEVELS.length - 1);
+  assert.equal(c.knobs.fps, 60);
+  assert.ok(!c.fps30);
+});
+
+test('a warm phone on a fast screen whose lowest level misses 60 by a little keeps its frames as they come, not 30', () => {
+  // (The lowest level at about 18 ms, as the S25 Ultra's was warm at 0.6: on its 120 Hz screen frames
+  // land at 25 ms, 40 a second, which is better than 30 held.)
+  const low = LEVELS[LEVELS.length - 1];
+  const dev = phone({ simMs: 7.6, refresh: 1000 / 120 });
+  dev.msPerMpx = (18 - 7.6 - fixedCost(low)) / tracedPx(low, AREA);
   const c = new QualityController(LEVELS, { level: 0 });
   run(c, dev, 60);
   assert.equal(c.level, LEVELS.length - 1);

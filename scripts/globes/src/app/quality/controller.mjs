@@ -25,10 +25,12 @@
 //   Those frames teach nothing (the model, the holds, the tries up leave them out).
 // - The main thread has its own ladder (CPU_RUNGS): when it is the limit, fewer pixels would not
 //   help, so only that ladder moves.
-// - 30 fps: a GPU that cannot hold 60 at the lowest level (over 15.5 ms, or frames slow) for three
-//   windows is held to 30 frames a second (twice the budget, so it climbs again), and back to 60
-//   once the lowest level at 60 is predicted to hold for 20 s. (Over the budget but under 15.5 ms,
-//   frames still come at 60: it stays.)
+// - 30 fps: a GPU that cannot come near 60 at the lowest level (over 23 ms, or frames slower than
+//   about 37 a second) for three windows is held to 30 frames a second (twice the budget, so it
+//   climbs again), and back to 60 once the lowest level at 60 is predicted to hold for 20 s.
+//   (Between, as a warm phone can be at its lowest level, frames as they come - 40-60 a second on a
+//   fast screen, which does not round a late frame up to two 60ths - look better than 30 held: it
+//   stays.)
 // - Thermal memory: the level held longest over the last two minutes (heldLongest), which the page
 //   keeps for its next visit (record.mjs).
 // (Pure: no DOM, no GPU. main.ts feeds it each frame and applies the knobs it returns.)
@@ -69,7 +71,9 @@ const RELIEF_MS = 250;
 const RESTORE_MS = 1500;
 const SLOW_WINDOWS = 3;
 const FLOOR_WINDOWS = 3;
-const FLOOR_MS = 15.5;
+const FLOOR_MS = 23;
+/** ...or frames further apart than this (typical, ms: under about 37 a second). */
+const FLOOR_SLOW_MS = 27;
 const LEAVE_30_MS = 20000;
 /** Thermal memory: time held at a level counts for less the longer ago (half as much 80 s on: the
  *  last two minutes, about). */
@@ -451,8 +455,8 @@ export class QualityController {
       this.slowWindows = 0;
       if (now < this.dwellUntil) return null;
       if (this.level >= this.lowest) {
-        // The lowest level, and frames that cannot come at 60: 30 frames a second.
-        const short = slow || gpu === null || gpu > FLOOR_MS;
+        // The lowest level, and frames that cannot come near 60: 30 frames a second.
+        const short = interval > FLOOR_SLOW_MS || (gpu !== null && gpu > FLOOR_MS);
         this.floorWindows = short ? this.floorWindows + 1 : 0;
         if (!fps30 && this.floorWindows >= FLOOR_WINDOWS) return this.to30(now, 'lowest level too slow', gpu);
         return null;
