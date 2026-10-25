@@ -90,6 +90,22 @@ export function clutchGrip(engineEnd:number,burnt=0){
   const c=clamp01(engineEnd),b=clamp01(burnt);
   return Math.max(CLUTCH.floor,1-(1-CLUTCH.min)*clamp01((c-CLUTCH.onset)/CLUTCH.span)-b);
 }
+/** Throttle cable snapped (offline): a hit of CABLE.blow or more at the engine end of an engine already CABLE.engine damaged can
+ * part the throttle cable (about CABLE.chance of such hits, the car's dice): from then on the engine only sees CABLE.limp of the
+ * pedal either way, and the car limps on. */
+export const CABLE={engine:.5,blow:12,chance:.35,limp:.6} as const;
+export const cableSnaps=(engineDamage:number|undefined,damage:number,atEngineEnd:boolean,seed:number)=>atEngineEnd&&(engineDamage??0)>=CABLE.engine&&damage>=CABLE.blow&&Number.isFinite(seed)&&((seed*.6180339887+.41)%1+1)%1<CABLE.chance;
+/** Handbrake cable snapped (offline): a hit of HANDBRAKE_CABLE.blow or more at the rear of a car whose rear is crushed
+ * HANDBRAKE_CABLE.crush or more can part the handbrake cables to the rear wheels (about HANDBRAKE_CABLE.chance of such hits, the
+ * car's dice): the handbrake does nothing from then on, so no more handbrake turns. */
+export const HANDBRAKE_CABLE={crush:.4,blow:12,chance:.35} as const;
+export const handbrakeSnaps=(rearCrush:number,damage:number,atRear:boolean,seed:number)=>atRear&&Number.isFinite(rearCrush)&&rearCrush>=HANDBRAKE_CABLE.crush&&damage>=HANDBRAKE_CABLE.blow&&Number.isFinite(seed)&&((seed*.6180339887+.53)%1+1)%1<HANDBRAKE_CABLE.chance;
+export const cableThrottle=(throttle:number)=>Number.isFinite(throttle)?Math.max(-CABLE.limp,Math.min(CABLE.limp,throttle)):0;
+/** Pushing burns the clutch (offline): holding PUSH_BURN.throttle or more against a car that will not move (pinning it, under
+ * PUSH_BURN.speed m/s) cooks the clutch PUSH_BURN.rate a second, so long or repeated pins leave the pusher's clutch slipping at
+ * full throttle once its burnt grip falls under 1/CLUTCH.margin. */
+export const PUSH_BURN={throttle:.8,speed:2,rate:.02} as const;
+export const pushBurn=(throttle:number,speed:number,dt:number)=>Number.isFinite(throttle)&&Number.isFinite(speed)&&dt>0&&Math.abs(throttle)>=PUSH_BURN.throttle&&Math.abs(speed)<PUSH_BURN.speed?PUSH_BURN.rate*dt:0;
 /** The clutch slips when the throttle asks for more torque than it can carry (a stock clutch carries 1.25× peak). */
 export const clutchSlips=(grip:number,throttle:number)=>grip<1&&Math.abs(Number.isFinite(throttle)?throttle:0)>grip*CLUTCH.margin;
 /** Drive force fraction a slipping clutch passes in the simple kernel: exactly 1 on a sound clutch. */
@@ -124,6 +140,24 @@ export function tyreRub(structure:readonly number[]|undefined,wheel:number){
 /** Tyre damage scrubbed off per step: with the rub and the road speed (full from 10 m/s). */
 export const rubWear=(rub:number,speed:number,dt:number)=>dt>0?clamp01(rub)*RUB.wear*Math.min(1,Math.abs(Number.isFinite(speed)?speed:0)/10)*dt:0;
 export const rubWarning=(rubs:ArrayLike<number>)=>Array.from(rubs).some(r=>r>=RUB.warn)?'TYRE RUBBING':'';
+/** Rub fire (offline): a tyre rubbing hard (RUB_FIRE.rub or more) on crushed bodywork at RUB_FIRE.speed or faster heats
+ * up, quicker the harder (above RUB_FIRE.base) and faster it rubs; at RUB_FIRE.after it catches like a brake fire (the tyre burns down, burning
+ * rubber drops, the car catches once). Slower or lighter, it cools at RUB_FIRE.cool per second; past RUB_FIRE.warn it
+ * smokes hard and the HUD says to ease off. */
+export const RUB_FIRE={rub:.75,base:.5,speed:12,after:12,cool:.5,warn:6,max:2} as const;
+export function rubHeat(heat:number,rub:number,speed:number,dt:number){
+  const h=Number.isFinite(heat)?Math.max(0,heat):0,v=Math.abs(Number.isFinite(speed)?speed:0);if(!(dt>0))return h;
+  return rub>=RUB_FIRE.rub&&v>=RUB_FIRE.speed?Math.min(RUB_FIRE.after*1.5,h+dt*Math.min(RUB_FIRE.max,(Math.min(1,rub)-RUB_FIRE.base)/(1-RUB_FIRE.base)*(v/RUB_FIRE.speed))):Math.max(0,h-dt*RUB_FIRE.cool);
+}
+export const rubHeatWarning=(heat:ArrayLike<number>,alight:ArrayLike<number>)=>Array.from(heat).some((h,i)=>h>=RUB_FIRE.warn&&!alight[i])?'TYRE SMOKING · EASE OFF':'';
+/** Fire extinguisher (offline events): EXTINGUISHER.charges a car per event. G puts the car's fire and any burning tyre
+ * out at once (a white cloud) and takes the heat out of rubbing or white-hot tyres so they do not catch again straight
+ * away; it is only spent on a fire. */
+export const EXTINGUISHER={charges:2,key:'KeyG'} as const;
+export const extinguisherHint=(burning:boolean,charges:number)=>burning&&charges>0?`ON FIRE · G EXTINGUISHER ×${charges}`:'';
+/** AI drivers use their extinguishers too, after a reaction time fixed per car: AI_EXTINGUISH.after to after+spread seconds alight. */
+export const AI_EXTINGUISH={after:1.5,spread:2} as const;
+export const aiExtinguishAfter=(id:number)=>{const x=Math.sin(id*7.31+1.7)*43758.5453;return AI_EXTINGUISH.after+AI_EXTINGUISH.spread*(x-Math.floor(x));};
 /** A crushed engine bay chafes through the wiring loom: the ignition cuts out in short, irregular bursts (the engine dies
  * for a moment, no backfire) and the lights flicker with it. More crush, more and longer cuts. Fixed per car and time. */
 export const ELECTRICAL={onset:.45,span:.4,period:.6,odds:.85,minCut:.1,maxCut:.45} as const;
@@ -139,6 +173,13 @@ export const electricalWarning=(severity:number)=>severity>0?'ELECTRICAL FAULT':
 /** A wheel knocked past WHEEL_NUTS.onset starts working its nuts loose as it turns: the looser it gets the more it
  * shimmies (toe swinging with each revolution) and wobbles, until at 1 it comes off on the move. */
 export const WHEEL_NUTS={onset:.12,rate:.01,shimmy:.035,tilt:.09,warn:.35} as const;
+/** Wheel torn off (offline): a blow of WHEEL_RIP.damage or more (the hits landing within WHEEL_RIP.reach of one wheel inside
+ * WHEEL_RIP.window seconds, since one crash arrives as several contacts) on a wheel already battered to WHEEL_RIP.wheel tears
+ * it clean off (WHEEL_RIP.chance, rolled once per blow), thrown along the blow. */
+export const WHEEL_RIP={damage:12,wheel:.1,reach:1.4,window:.25,chance:.4} as const;
+export function wheelRips(distance:number,wheelDamage:number,damage:number,seed:number){
+  if(!(distance<=WHEEL_RIP.reach)||!(wheelDamage>=WHEEL_RIP.wheel)||!Number.isFinite(damage)||damage<WHEEL_RIP.damage)return false;const x=Math.sin(seed*29.31+5.1)*43758.5453;return x-Math.floor(x)<WHEEL_RIP.chance;
+}
 export function loosenNuts(loose:number,wheelDamage:number,metres:number){
   const d=clamp01(wheelDamage);if(d<=WHEEL_NUTS.onset||!(metres>0))return clamp01(loose);
   return clamp01(clamp01(loose)+metres*(d-WHEEL_NUTS.onset)/(1-WHEEL_NUTS.onset)*WHEEL_NUTS.rate);
@@ -148,6 +189,19 @@ export const nutShimmy=(loose:number,angle:number)=>clamp01(loose)*WHEEL_NUTS.sh
 export const nutWarning=(loose:ArrayLike<number>)=>Array.from(loose).some(v=>v>=WHEEL_NUTS.warn)?'WHEEL LOOSE':'';
 /** A rear crush past EXHAUST_BLOW.onset splits the exhaust: the engine gets louder and raspier, and lifting off at speed
  * fires a crackle of pops with flame out of the tailpipe (which can light fuel on the ground). */
+/** Shrapnel (offline): a piece of debris striking a car at SHRAPNEL.min m/s or more dents and damages it, kg × speed² ×
+ * SHRAPNEL.k (capped at SHRAPNEL.max), at most once every SHRAPNEL.gap seconds per piece and car. */
+export const SHRAPNEL={min:8,k:.0011,max:12,gap:.5,toast:3} as const;
+export const shrapnelDamage=(kg:number,speed:number)=>Number.isFinite(kg)&&Number.isFinite(speed)&&kg>0&&speed>=SHRAPNEL.min?Math.min(SHRAPNEL.max,kg*speed*speed*SHRAPNEL.k):0;
+/** Crushed exhaust (offline): a hit of EXHAUST_CRUSH.damage or more on a rear crushed past EXHAUST_CRUSH.rear flattens the
+ * tailpipe (EXHAUST_CRUSH.chance, fixed per car and hit) while the exhaust is still on: back pressure leaves the engine
+ * EXHAUST_CRUSH.power of its pull, black smoke puffs out under throttle and the engine note is choked to EXHAUST_CRUSH.sound.
+ * Tearing the pipe off clears it all. */
+export const EXHAUST_CRUSH={damage:9,rear:.45,chance:.5,power:.8,sound:.7,puff:.3} as const;
+export function exhaustCrushes(rear:number,damage:number,atRear:boolean,gone:boolean,seed:number){
+  if(gone||!atRear||!(rear>=EXHAUST_CRUSH.rear)||!Number.isFinite(damage)||damage<EXHAUST_CRUSH.damage)return false;const x=Math.sin(seed*91.7+2.3)*43758.5453;return x-Math.floor(x)<EXHAUST_CRUSH.chance;
+}
+export const exhaustCrushWarning=(crushed:boolean,gone:boolean)=>crushed&&!gone?'EXHAUST CRUSHED · LOSING POWER':'';
 export const EXHAUST_BLOW={onset:.15,span:.4,loud:.7,lift:.6,off:.2,minSpeed:8,minPops:2,maxPops:6,gap:.05,spread:.08} as const;
 export const exhaustBlow=(rear:number)=>clamp01((clamp01(rear)-EXHAUST_BLOW.onset)/EXHAUST_BLOW.span);
 /** Engine sound gain for a split exhaust: exactly 1 on a sound one. */
@@ -236,6 +290,25 @@ export function starterFails(severity:number,attempt:number,seed:number){
   const s=clamp01(severity);if(!(s>0))return false;const x=Math.sin(attempt*17.17+seed*3.7)*43758.5453;return x-Math.floor(x)<STARTER.fail*s;
 }
 export const starterWarning=(severity:number)=>severity>0?'STARTER DAMAGED':'';
+/** Bump start (offline): a stalled engine that has been dead for BUMP_START.after seconds catches once the car has rolled
+ * at BUMP_START.speed or more with the throttle held for BUMP_START.hold seconds — a shove from a rival or a slope turns
+ * it over, starter or no starter. Catching drags the car back by BUMP_START.jolt of its speed (compression). */
+export const BUMP_START={after:1.2,speed:3.5,hold:.25,jolt:.08,credit:3} as const;
+/** Seconds rolled fast enough with the throttle held; anything else starts the count again. */
+export const bumpRoll=(roll:number,speed:number,throttle:number,dt:number)=>Number.isFinite(speed)&&Math.abs(speed)>=BUMP_START.speed&&Math.abs(throttle)>.2&&dt>0?(Number.isFinite(roll)?Math.max(0,roll):0)+dt:0;
+export const bumpCatches=(stallTime:number,roll:number)=>stallTime>=BUMP_START.after&&roll>=BUMP_START.hold;
+/** The rival whose hit in the last BUMP_START.credit seconds shoved the engine back into life, or -1. */
+export const bumpStartedBy=(last:{by:number;at:number}|undefined,self:number,time:number)=>last&&last.by!==self&&last.by>=0&&time-last.at<=BUMP_START.credit?last.by:-1;
+/** Battery out (offline): with the bonnet (or a rear engine's lid) gone or the engine bay crushed past BATTERY_OUT.crush,
+ * a hit of BATTERY_OUT.damage or more at the engine end throws the battery out of the bay (BATTERY_OUT.chance, fixed per car
+ * and hit). The engine runs on, but the lights die and a stalled engine has nothing to crank it: only a bump start brings it back. */
+export const BATTERY_OUT={damage:9,crush:.6,chance:.5,size:{x:.32,y:.22,z:.2},lift:3,kick:2.5} as const;
+export function batteryThrown(coverGone:boolean,engineEnd:number,damage:number,atEngineEnd:boolean,seed:number){
+  if(!(coverGone||engineEnd>=BATTERY_OUT.crush)||!atEngineEnd||!Number.isFinite(damage)||damage<BATTERY_OUT.damage)return false;const x=Math.sin(seed*12.9898+4.1)*43758.5453;return x-Math.floor(x)<BATTERY_OUT.chance;
+}
+export const batteryOutWarning=(out:boolean)=>out?'BATTERY GONE · NO STARTER':'';
+/** The stalled-engine hint with no battery to crank it. */
+export const noBatteryHint=(out:boolean,health:number,stall:number|undefined)=>out&&health>0&&(stall??0)>0?'NO BATTERY · GET SHOVED TO BUMP START':'';
 /** A big side hit (T-bone) past FRAME_BEND.onset bends the chassis like a banana: the front axle yaws toward the dented
  * side and the rear axle the other way, so the car keeps turning toward the damage and needs countersteer to go straight.
  * Returns the toe (radians) each wheel is knocked to: fronts +, rears −, signed toward the more crushed flank. */
@@ -387,6 +460,13 @@ export const OVERHEAT_FIRE={damage:.6,throttle:.55,after:12,cool:.5,share:.5,war
 export const runningHot=(engineDamage:number,cooling:boolean,throttle:number)=>!cooling&&Number.isFinite(engineDamage)&&engineDamage>=OVERHEAT_FIRE.damage&&Math.abs(Number.isFinite(throttle)?throttle:0)>=OVERHEAT_FIRE.throttle;
 /** Seconds held hot after dt: rises while hot, falls (slower) while not. */
 export const hotClock=(t:number,hot:boolean,dt:number)=>{const v=Math.max(0,Number.isFinite(t)?t:0);return dt>0?hot?v+dt:Math.max(0,v-dt*OVERHEAT_FIRE.cool):v;};
+/** A head gasket blows on an engine run hard (HEAD_GASKET.throttle or more) with nothing cooling it — coolant gone, a snapped
+ * fan belt or a crushed radiator — for HEAD_GASKET.after seconds (the clock runs down at HEAD_GASKET.cool a second
+ * otherwise). From then on the engine burns its coolant (HEAD_GASKET.burn a second), makes HEAD_GASKET.power of its power
+ * and blows thick white smoke out of the exhaust, HEAD_GASKET.smoke puffs a second on full throttle, a third of that idling. */
+export const HEAD_GASKET={after:8,cool:.5,throttle:.3,burn:.02,power:.82,smoke:5} as const;
+export const gasketClock=(t:number,hot:boolean,dt:number)=>{const v=Math.max(0,Number.isFinite(t)?t:0);return dt>0?hot?v+dt:Math.max(0,v-dt*HEAD_GASKET.cool):v;};
+export const gasketWarning=(blown:boolean)=>blown?'HEAD GASKET BLOWN':'';
 export function overheatFire(t:number,carId:number){const x=Math.sin(carId*19.1+7.7)*43758.5453;return t>=OVERHEAT_FIRE.after&&x-Math.floor(x)<OVERHEAT_FIRE.share;}
 export const overheatWarning=(t:number)=>t>=OVERHEAT_FIRE.warn?'ENGINE OVERHEATING':'';
 /** An AI driver whose engine is overheating backs off below OVERHEAT_FIRE.throttle so it cools (forward throttle only). */
@@ -406,3 +486,89 @@ export function debrisFling(direction:{x:number;y:number;z:number},damage:number
   if(!(l>0)||!Number.isFinite(l)||s<=0)return{x:0,y:0,z:0};
   return{x:direction.x/l*s,y:Math.max(0,direction.y/l*s)+s*DEBRIS_FLING.lift,z:direction.z/l*s};
 }
+/** A smash into the engine end (SMASH_FIRE.damage or more in one blow, offline) splits a fuel or oil line on some hits
+ * (SMASH_FIRE.odds, decided per car and hit count) and the engine bay goes up at once. */
+export const SMASH_FIRE={damage:24,odds:.25} as const;
+export function smashFire(damage:number,engineEnd:boolean,carId:number,hits:number){
+  if(!engineEnd||!Number.isFinite(damage)||damage<SMASH_FIRE.damage)return false;
+  const x=Math.sin(carId*41.3+hits*17.9+3.1)*43758.5453;return x-Math.floor(x)<SMASH_FIRE.odds;
+}
+/** Where a blow lands changes what it does (offline): a T-bone square into the doors (no crumple zone) hurts up to
+ * IMPACT_ZONE.side times as much, a nose-on hit into the crumple zone IMPACT_ZONE.nose times. point and direction are in
+ * the car's own frame (x right, z forward); halfWidth/halfLength are the body's. */
+export const IMPACT_ZONE={side:1.3,nose:.9,doors:.6,edge:.55} as const;
+export function impactZoneFactor(point:{x:number;z:number},direction:{x:number;z:number},halfWidth:number,halfLength:number){
+  const l=Math.hypot(direction.x,direction.z);
+  if(!(l>0)||![point.x,point.z,halfWidth,halfLength].every(Number.isFinite)||halfWidth<=0||halfLength<=0)return 1;
+  const lateral=Math.abs(direction.x)/l,along=Math.abs(direction.z)/l;
+  const doors=Math.abs(point.x)/halfWidth>=IMPACT_ZONE.edge&&Math.abs(point.z)/halfLength<=IMPACT_ZONE.doors;
+  const nose=point.z/halfLength>=1-IMPACT_ZONE.edge*.5;
+  if(doors)return 1+(IMPACT_ZONE.side-1)*lateral*lateral;
+  if(nose)return 1-(1-IMPACT_ZONE.nose)*along*along;
+  return 1;
+}
+/** PIT spin (offline): a sideways shove behind a moving car's rear axle line pushes its rear tyres past their peak grip, and a
+ * sliding tyre grips less than a rolling one. For a moment the rear tyres keep only 1-loss·strength of their grip, fading over
+ * `fade` seconds, so the car can spin out as in a real PIT manoeuvre. Strength grows with the closing speed up to `full`. */
+export const PIT={speed:7,behind:.3,lateral:.6,closing:1.2,full:5,loss:.75,fade:1.2} as const;
+export function pitStrength(point:{x:number;z:number},direction:{x:number;z:number},halfLength:number,speed:number,closing:number){
+  const l=Math.hypot(direction.x,direction.z);
+  if(!(l>0)||![point.x,point.z,halfLength,speed,closing].every(Number.isFinite)||halfLength<=0)return 0;
+  if(Math.abs(speed)<PIT.speed||point.z>-PIT.behind*halfLength||Math.abs(direction.x)/l<PIT.lateral)return 0;
+  return Math.max(0,Math.min(1,(closing-PIT.closing)/(PIT.full-PIT.closing)));
+}
+/** Rear tyre grip left while sliding after a PIT shove. */
+export const pitGrip=(slide:number)=>1-PIT.loss*Math.max(0,Math.min(1,Number.isFinite(slide)?slide:0));
+/** Pinned (offline): a car shoved by another car with at least PIN.force newtons while a wall or a second car pushes back
+ * from the far side (horizontal contact directions from its centre at a cosine below PIN.opposed) is held there. After
+ * PIN.hold seconds pinned it crushes in at both contacts, PIN.rate health a second (the wall side `wall` of that), in
+ * ticks of PIN.gap seconds, each big enough on both sides to dent the panels and crumple the structure. Breaking contact
+ * bleeds the clock off at PIN.decay times real time, so a shove that flickers between solver steps stays one pin. The first
+ * crush lands as the pin takes hold. A pin held PIN.feed seconds makes the derby feed; the same car counts as pinned (points,
+ * calls) at most once every PIN.recount seconds, however often it is pinned again. */
+export const PIN={force:2500,opposed:-.3,hold:.5,decay:2,gap:.5,rate:8,wall:.6,feed:1.5,recount:6} as const;
+/** Whether a pin on a car last counted at `last` (or never) counts again at `time`. */
+export const pinCounts=(last:number|undefined,time:number)=>last===undefined||!(time-last<PIN.recount);
+/** A horizontal shove on a car: where it lands, how hard, and from which car (by<0: a wall or other scenery). */
+export type PinPush={x:number;z:number;force:number;by:number};
+/** The strongest car push on a car centred at (x,z) that something on the far side pushes back against: indices of the
+ * pusher and of the push it is squeezed against, or null when the car is not pinned. */
+export function pinnedBy(x:number,z:number,pushes:readonly PinPush[]):{push:number;against:number}|null{
+  const dir=(p:PinPush)=>{const dx=p.x-x,dz=p.z-z,l=Math.hypot(dx,dz);return Number.isFinite(l)&&l>1e-6&&p.force>=PIN.force?{x:dx/l,z:dz/l}:null;};
+  let best:{push:number;against:number}|null=null;
+  pushes.forEach((p,i)=>{const a=p.by>=0?dir(p):null;if(!a||best&&pushes[best.push].force>=p.force)return;
+    let against=-1;pushes.forEach((o,j)=>{const b=o.by!==p.by?dir(o):null;if(b&&a.x*b.x+a.z*b.z<PIN.opposed&&(against<0||o.force>pushes[against].force))against=j;});
+    if(against>=0)best={push:i,against};});
+  return best;
+}
+/** Seconds pinned after a step of dt: counts up while pinned and bleeds off at PIN.decay times real time once free. */
+export const pinClock=(time:number,pinned:boolean,dt:number)=>!Number.isFinite(time)||!(dt>0)?0:pinned?time+dt:Math.max(0,time-dt*PIN.decay);
+/** Fuel tank down (offline): with the tank's end crushed to TANK_DROP.crush or more, a hit there of TANK_DROP.blow or more snaps
+ * the straps. The tank hangs from its filler neck and drags along the ground: sparks at TANK_DROP.speed m/s or more (hot enough
+ * above TANK_DROP.hot to light its own fuel), the fuel leaking at TANK_DROP.leak. Dragged TANK_DROP.after seconds it tears off,
+ * leaving TANK_DROP.reserve of fuel to run out of the open lines: the car is on fumes. */
+export const TANK_DROP={crush:.5,blow:9,leak:.6,speed:3,hot:11,after:5,reserve:.06,size:{x:.72,y:.2,z:.5},hang:.6} as const;
+export const tankDrops=(crush:number,damage:number,atTankEnd:boolean)=>atTankEnd&&Number.isFinite(crush)&&crush>=TANK_DROP.crush&&Number.isFinite(damage)&&damage>=TANK_DROP.blow;
+/** A bare front wheel (offline): once a corner's wing has been torn off, a hit there does EXPOSED_WHEEL.tyre times as much to
+ * the tyre and `rim` times as much to the wheel, and nothing is left to rub on the tyre. */
+export const EXPOSED_WHEEL={tyre:1.8,rim:1.4} as const;
+export const exposedDamage=(before:number,after:number,factor:number)=>![before,after,factor].every(Number.isFinite)||after<=before?after:Math.min(1,before+(after-before)*factor);
+/** Bumpers soak up a hit (offline): once a bumper has been torn off, a hit on that end crumples it BUMPER_GONE.crush times as
+ * fast, and at the engine end does `engine` times the engine damage, so radiator, fuel and exhaust trouble comes sooner. */
+export const BUMPER_GONE={crush:1.35,engine:1.25} as const;
+/** Doors and engine covers do their share too (offline): with a door gone that side crumples COVER_GONE.side times as fast;
+ * with the bonnet (or a rear engine's lid) gone the engine takes `engine` times the damage, on top of a missing bumper. */
+export const COVER_GONE={side:1.3,engine:1.2} as const;
+/** Engine out (offline): with the engine mounts already broken and the engine past ENGINE_DROP.engine damage, a hit of
+ * `damage` or more at the engine end tears the block loose and it drops out of the car: the car is finished on the spot. */
+export const ENGINE_DROP={damage:22,engine:.5} as const;
+export const engineDrops=(mountsBroken:boolean,engineDamage:number|undefined,damage:number,atEngineEnd:boolean)=>mountsBroken&&atEngineEnd&&(engineDamage??0)>=ENGINE_DROP.engine&&Number.isFinite(damage)&&damage>=ENGINE_DROP.damage;
+/** Sliding on its roof (offline): above ROOF_SLIDE.speed an upside-down car throws sparks and scrapes off its roof line, gouges
+ * the ground, and crushes its roof by up to `crush` per second at `full` speed. */
+export const ROOF_SLIDE={speed:3,full:15,crush:.05,gap:.05} as const;
+/** On its side: a car tilted so its up axis is within SIDE_SLIDE.up of level slides on a door, and crushes that side the same way. */
+export const SIDE_SLIDE={up:.4} as const;
+export const roofSlide=(slideSpeed:number)=>Number.isFinite(slideSpeed)&&slideSpeed>ROOF_SLIDE.speed?Math.min(1,slideSpeed/ROOF_SLIDE.full):0;
+/** A roll shakes things off (offline): the moment a car has been upside down for ROLL_SHED.at seconds, every hinged part already
+ * hanging loose past `loose` (doors, bonnet, boot, bumpers, mirrors) is torn away. Once per roll. */
+export const ROLL_SHED={at:.3,loose:.4} as const;
