@@ -111,6 +111,7 @@ import {CRUNCH,crunchVolume} from './litter-crunch';
 import {SHRED_SECONDS} from './vehicle';
 import {shouldBail,bailOut,strollAway,BAIL} from './driver-bail';
 import {cabinSmoke} from './cabin-smoke';
+import {LEAK as TYRE_LEAK_RANGE} from './damage-handling';
 import type {GlassState} from './car-materials';
 import {disposeDriver} from './driver-figure';
 import {roofSign} from './roof-sign';
@@ -2742,6 +2743,9 @@ async function boot() {
     whining: () => sound.whining,
     flapping: () => sound.flapping,
     hissing: () => sound.hissing,
+    leaking: () => sound.leaking,
+    /** QA: puncture a tyre as rolling over sharp debris does (it starts going down). */
+    puncture: (id: number, wheel: number) => { const c = cars.find(x => x.id === id); if (!c?.tyreDamage || !(wheel >= 0 && wheel < 4)) return false; c.tyreDamage[wheel] = Math.max(c.tyreDamage[wheel], TYRE_LEAK_RANGE.onset + .05); return true; },
     cabinSmoke: (id: number) => { const c = cars.find(x => x.id === id); return c ? smokeIn.get(c) ?? 0 : null; },
     /** QA: set a tyre shredding, as a blowout does. */
     shredTyre: (id: number, wheel: number) => { const c = cars.find(x => x.id === id); if (!c || !(wheel >= 0 && wheel < 4)) return false; c.tyreShred[wheel] = SHRED_SECONDS; return true; },

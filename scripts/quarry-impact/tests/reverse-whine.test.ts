@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {REVERSE_WHINE,TYRE_FLAP,STEAM_HISS} from '../src/audio';
+import {REVERSE_WHINE,TYRE_FLAP,STEAM_HISS,TYRE_HISS} from '../src/audio';
 const read=(p:string)=>readFileSync(new URL('../'+p,import.meta.url));
-test('running-gear loops: reverse gears whine, blown tyres flap and burst radiators hiss, offline, recorded only',()=>{
+test('running-gear loops: reverse gears whine, blown tyres flap, burst radiators and punctured tyres hiss, offline, recorded only',()=>{
  const audio=read('src/audio.ts').toString(),main=read('src/main.ts').toString(),manifest=JSON.parse(read('public/audio/manifest.json').toString()) as {id:string;file:string;provider:string;params:{loop:boolean}}[];
  for(const k of [REVERSE_WHINE,TYRE_FLAP,STEAM_HISS])assert.ok(k.level>0&&k.level<.5,'quiet beside the impacts');
  assert.ok(REVERSE_WHINE.full>REVERSE_WHINE.from&&TYRE_FLAP.full>TYRE_FLAP.from&&STEAM_HISS.hold>0);
@@ -11,5 +11,8 @@ test('running-gear loops: reverse gears whine, blown tyres flap and burst radiat
  assert.ok(audio.includes("this.driveLoops(this.whines,'reverse-whine',cars,listener,now,car=>{const back=-car.speed;return back>=REVERSE_WHINE.from&&Math.abs(car.input?.throttle??0)>=REVERSE_WHINE.throttle?"),'backing up under power');
  assert.ok(audio.includes("car.blownOut.some((b,i)=>(b||car.tyreShred[i]>0)&&!car.wreckParts.wheelLost[i])?Math.min(1,v/TYRE_FLAP.full):0;"),'a blown or shredding tyre still on the car, at speed');
  assert.ok(audio.includes("this.driveLoops(this.hisses,'steam-hiss',cars,listener,now,car=>now-(this.steamSeen.get(car.id)?.at??-99)<STEAM_HISS.hold?1:0,()=>1,STEAM_HISS.level);"),'while the radiator is steaming');
+ assert.ok(TYRE_HISS.rate>1&&TYRE_HISS.level<STEAM_HISS.level,'a punctured tyre hisses higher and quieter than a radiator');
+ assert.ok(audio.includes("this.driveLoops(this.leaks,'steam-hiss',cars,listener,now,car=>car.tyreDamage?.some((d,i)=>d>=TYRE_LEAK.onset&&d<TYRE_LEAK.flat&&!car.blownOut[i]&&!car.wreckParts.wheelLost[i])?1:0,()=>TYRE_HISS.rate,TYRE_HISS.level);"),'while a tyre still on the car goes down');
+ assert.ok(main.includes("c.tyreDamage[wheel] = Math.max(c.tyreDamage[wheel], TYRE_LEAK_RANGE.onset + .05); return true;"),'__quarry.puncture for QA');
  assert.ok(main.includes("    sound.runningLoops(effectsActive&&!online?.active?cars:[],camera.position);")&&main.includes("  if(studio)sound.runningLoops([],camera.position);"),'every frame offline, silenced in the garage');
 });
