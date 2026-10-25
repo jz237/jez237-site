@@ -64,6 +64,9 @@ jobs = [
  ('steam-hiss', 'Steam hissing out of a burst car radiator: a continuous steady hiss of escaping hot steam with a faint bubbling gurgle under the bonnet. Isolated, no engine, no music, no voices, no speech.', 2.0, True),
  # Old brakes squealing as a car slows to a stop (a loop).
  ('brake-squeal', 'Squealing brakes on an old car slowing down: a continuous loud high pitched metallic brake squeal, steady, without tyre skid. Isolated, no engine, no music, no voices, no speech.', 2.0, True),
+ # The crowd gasping as a car rolls over or blows up (two takes, in turn).
+ ('crowd-gasp', 'Gasping grandstand crowd at an outdoor demolition derby: a big shocked collective oooh as a car rolls over, rising and falling. Wordless crowd reaction only, no announcer, no music, no individual words or speech.', 2.5, False),
+ ('crowd-gasp-2', 'Shocked outdoor stadium crowd: a sharp loud collective gasp and whoa as a car explodes in a demolition derby arena, then excited murmuring. Wordless crowd reaction only, no announcer, no music, no individual words or speech.', 2.5, False),
 ]
 # Seconds cut from the start of a raw clip: metal-groan dips to silence early (it would drop out every loop) and
 # debris-2 opens with half a second of near silence (the layer would land late).

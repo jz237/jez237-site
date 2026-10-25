@@ -2158,6 +2158,7 @@ let hornHeats=0,endHorns=0;
 const bailClock=new WeakMap<object,number>(),bailed:T.Object3D[]=[];
 const BAIL_CHEER=.75;
 const shredClock=new WeakMap<object,number>();let shredChunks=0;
+const gaspSeen=new WeakMap<object,{rolls:number;blown:boolean}>();let gasps=0;
 const smokeIn=new WeakMap<object,number>();
 /** A driver watches the car their driving brain is hunting, if it is still running (see lookYaw). */
 function lookDriver(c:Vehicle,figure:T.Object3D,dt:number){
@@ -2199,6 +2200,8 @@ function updateCamera(dt: number) {
   // A burning car's cabin fills with smoke, murking its glass, and stays sooty after (offline).
   if(state==='playing'||state==='wrecked')for(const c of cars){if(!c.extendedDamage)continue;const was=smokeIn.get(c)??0,now=cabinSmoke(was,c.onFire,dt);if(now===was)continue;smokeIn.set(c,now);
     for(const g of c.glass){const st=(g.material as T.Material).userData.glassState as GlassState|undefined;if(st)st.smoke.value=now;}}
+  // The crowd gasps when a car rolls over or blows up (offline).
+  if(state==='playing')for(const c of cars){if(!c.extendedDamage)continue;const seen=gaspSeen.get(c)??{rolls:c.rolls,blown:c.blownUp};if((c.rolls>seen.rolls||c.blownUp&&!seen.blown)&&sound.crowdGasp())gasps++;seen.rolls=c.rolls;seen.blown=c.blownUp;gaspSeen.set(c,seen);}
   // A shredding tyre sheds lumps of rubber at its wheel as the car goes (offline).
   if(state==='playing')for(const c of cars){if(!c.extendedDamage||Math.abs(c.speed)<SHRED_TRAIL.speed||clock-(shredClock.get(c)??-9)<SHRED_TRAIL.gap)continue;const w=c.wheels[c.tyreShred.findIndex(t=>t>0)];if(!w?.visible)continue;w.getWorldPosition(crunchAt);fx.scatterLitter(crunchAt,'rubber',c.id*151+(++shredChunks),undefined,undefined,SHRED_TRAIL.chips);shredClock.set(c,clock);}
   // Tyres crunch over the glass and lens chips on the floor (offline), the two recorded takes in turn.
@@ -2746,6 +2749,7 @@ async function boot() {
     leaking: () => sound.leaking,
     squealing: () => sound.squealing,
     creaking: () => sound.creaking,
+    gasps: () => gasps,
     /** QA: puncture a tyre as rolling over sharp debris does (it starts going down). */
     puncture: (id: number, wheel: number) => { const c = cars.find(x => x.id === id); if (!c?.tyreDamage || !(wheel >= 0 && wheel < 4)) return false; c.tyreDamage[wheel] = Math.max(c.tyreDamage[wheel], TYRE_LEAK_RANGE.onset + .05); return true; },
     cabinSmoke: (id: number) => { const c = cars.find(x => x.id === id); return c ? smokeIn.get(c) ?? 0 : null; },

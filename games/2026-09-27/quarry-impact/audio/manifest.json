@@ -1149,5 +1149,33 @@
     "sha256": "9d6ede087d05b5f2dc2b5d6ebd55c0509d67ad3804c1471f3c604da129ad7d75",
     "runtimeSha256": "386d9b7b58d96890e9b90389fd7d703d48b8f3be9267f3942e56286293f83f9f",
     "processing": "1.0s kept, first 0.95s cut, loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 180ms rotated seam crossfade, Vorbis q5"
+  },
+  {
+    "id": "crowd-gasp",
+    "file": "crowd-gasp.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Gasping grandstand crowd at an outdoor demolition derby: a big shocked collective oooh as a car rolls over, rising and falling. Wordless crowd reaction only, no announcer, no music, no individual words or speech.",
+      "duration_seconds": 2.5,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "675ac262c6e0d79daf7281dc74530708da1989f130fde131d6f4831e0032c8cc",
+    "runtimeSha256": "40a8e79ea0141913b17136817b469d840e21e8314c2e0bfa7616f8b43b138000",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
+  },
+  {
+    "id": "crowd-gasp-2",
+    "file": "crowd-gasp-2.ogg",
+    "provider": "ElevenLabs",
+    "params": {
+      "text": "Shocked outdoor stadium crowd: a sharp loud collective gasp and whoa as a car explodes in a demolition derby arena, then excited murmuring. Wordless crowd reaction only, no announcer, no music, no individual words or speech.",
+      "duration_seconds": 2.5,
+      "loop": false,
+      "source": "ElevenLabs connector text_to_sound_effects (default model), 2026-10-24"
+    },
+    "sha256": "a4e70d87c3e9103ac34af4d2ef1e702e6b18d9ab483aa38ffdd8d48974d37ab7",
+    "runtimeSha256": "2637ee669122370b902ab4f3bf1e9c1d3aa221a30c8d6c85b685d1c4aa4936f2",
+    "processing": "loudnorm -23 LUFS/-3 dBTP, mono 44.1kHz, 5ms attack / 100ms tail fade, Vorbis q5"
   }
 ]
