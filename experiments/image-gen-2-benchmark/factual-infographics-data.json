@@ -15868,5 +15868,117 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-10-24-factual-infographic-factual-infographic-masklophobia-fear-o",
+    "title": "Factual infographic: Masklophobia — Fear of Masks and Costumed Characters",
+    "tests": "factual_subtype: phobia-infographic; phobia: Masklophobia; verified name and exact plain-English definition; preliminary mechanisms qualified; distinct fictional male casting; no subjective critic or rerolls; archive_slot=2026-10-24T20:08; concept=masklophobia-costume-cues-theatrical-workshop; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-sunburst\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": []}; Requested GPT Image 2.5; exact backend version not independently verified.; stock OpenClaw GPT OAuth provider; requested quality=medium, size=auto; factual_subtype: phobia-infographic",
+    "prompt": "Create the finished artwork directly: a richly illustrated, artwork-led educational phobia infographic, portrait-oriented composition at automatic size, opaque background. Use luminous gouache and colored pencil with precise fine ink annotations, sage green, warm cream, brass and muted vermilion. No photographed poster, mockup, page on a desk, UI, frames, rigid fact-box grid, bibliography, URLs, logos or watermarks.\n\nREQUIRED EXACT TITLE LINES: At the very top put the prominent bold headline \"MASKLOPHOBIA\". Directly beneath it, in clearly readable smaller type, put \"Fear of masks and costumed characters\". Do not render Markdown asterisks. Never substitute a diagnostic umbrella as the title. Below these lines add a modest subordinate note: \"Descriptive term, not a standalone DSM diagnosis\".\n\nBuild a dominant asymmetrical scene in a bright theatrical costume workshop: ordinary nonthreatening papier-mache and fabric theatrical masks lie on a wooden workbench, with visible paper fibers, layered paint, cotton ties, stitched hems, scattered gentle daylight and worn wood grain. No clown masks, horror faces, monsters, gore, threatening wearer or jump scares. These are ordinary theatrical props, not magical or alive. Their loosely curved ties guide the eye across the composition as a purely graphic organizational motif, never touching or restraining the person.\n\nInclude this exact distinct fictional casting: fictional young adult man, fair freckled skin, soft triangular face, shoulder-length blond hair, heavyset build, green jacket and cream shirt, leaning back slightly in a bright costume workshop. Show him with dignity, worried but not grotesquely panicking, near the open edge of the room with comfortable space and no forced encounter. A small open contour study of an unoccupied soft mascot head and draped costume reinforces the costume trigger without introducing an additional protagonist or frightening wearer. Keep facial identity consistent within the chart.\n\nWeave a few purposeful studies into the generous open spaces, not detached cards. An open magnified ink study of an ordinary mask's face opening with a delicate leader line is labeled \"Concealed facial cues\" and qualified immediately: \"May contribute to fear; early research\". This is preliminary questionnaire evidence, not a proven cause or a claim about everyone's fear. Near the protagonist's upper torso use fine leader lines, not an anatomical cutaway or invented brain pathway, with the heading \"Body alarm\" and short labels \"Racing heart\", \"Trembling\", \"Worry\". Add \"Symptoms vary\". Do not add unverified physiology or statistics.\n\nA graceful vermilion ink path, curling through the room's open negative space, carries the concise sequence \"Mask or costume cue → Anxiety → Avoidance → Restricted activities\". Make these readable text stations on the path, not four boxes. It depicts a possible behavior pattern, not a universal causal model. A small grounded comparison beside the actual props reads \"Feeling threatened is not proof of danger\" and beneath, \"Fear can persist even when a costume is known to be harmless\". Do not imply every mask or every encounter is safe.\n\nLet warm green illustration and an open lower-margin conversation vignette transition to evidence-based help. Show the same fictional man talking comfortably with a professional at a distance from the props, no exposure experiment. Readable heading \"Help can change the pattern\". Supporting concise text: \"CBT and therapist-supported gradual exposure are established phobia treatments\". Immediately qualify: \"General phobia care; not masklophobia-specific trial evidence\". Include \"Seek help when fear disrupts daily life\" and a small readable footer \"Education, not a diagnosis. No forced exposure.\" Do not give step-by-step exposure instructions, recommend surprising someone, or promise a cure.\n\nPrioritize the immersive workshop illustration, beautifully drawn materials, distinct protagonist and clear title/definition. Use organically integrated facts, curved callouts, varied study scales and breathing room. Keep all essential claims above; omit decorative extras if needed. No additional diagnoses, prevalence, dates, thresholds or neuroscience. Generate one image using requested openai/gpt-image-2.5-sunburst, medium quality, auto size and opaque background.",
+    "image": "images/2026-10-24-factual-infographic-factual-infographic-masklophobia-fear-o.jpg",
+    "thumb": "thumbs/2026-10-24-factual-infographic-factual-infographic-masklophobia-fear-o.webp",
+    "color": "#aa926f",
+    "date": "2026-10-24",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "masklophobia-costume-cues-theatrical-workshop",
+      "imageSha256": "6492a98980a5e9db9793e7e2f1a669072322cfb1c052b57621552d3b7b3453e0",
+      "imageDHash": "39dbc6c7e78b2727"
+    },
+    "factualInfographic": {
+      "topic": "Masklophobia: fear of masks and costumed characters, concealed facial cues, body alarm, avoidance, and evidence-based help",
+      "description": "Source-backed educational chart separating a descriptive fear name and preliminary cognitive research from general phobia symptoms and treatment.",
+      "sourceNote": "Japanese Cognitive Science Society: https://www.jcss.gr.jp/meetings/jcss2025/proceedings/pdf/JCSS2025_P1-18.pdf ; University of North Dakota: https://commons.und.edu/features-archive/364/ ; NHS: https://www.nhs.uk/mental-health/conditions/phobias/ . Verified descriptive terminology, preliminary concealed-cue research, possible symptoms, avoidance and general phobia help; no separately named diagnosis or masklophobia-specific treatment efficacy claimed.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-10-25T00:09:49.205579+00:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Japanese Cognitive Science Society",
+            "title": "Masklophobia and related cognitive factors — Shirai and Watanabe, Waseda University (2025 conference proceedings)",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.jcss.gr.jp/meetings/jcss2025/proceedings/pdf/JCSS2025_P1-18.pdf"
+          },
+          {
+            "id": "S2",
+            "publisher": "University of North Dakota",
+            "title": "The Science of fear",
+            "sourceType": "university",
+            "url": "https://commons.und.edu/features-archive/364/"
+          },
+          {
+            "id": "S3",
+            "publisher": "NHS",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "MASKLOPHOBIA is a descriptive term used in cognitive-science research for fear of costumed characters; fear of masks is a related documented presentation. Display definition: Fear of masks and costumed characters.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Masklophobia is not listed as a separately named DSM-5 disorder in the cited research; a descriptive name is not a standalone diagnosis.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Masks and costumed characters can be fear triggers; imagined encounters with masked people, occupied costumes and unoccupied costumes were examined in the research. Responses vary.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Preliminary questionnaire research suggests face concealment and movement may contribute to fear of costumed characters; these are possible contributors, not a proven universal cause.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Phobia symptoms can include severe anxiety and worry, palpitations, trembling, chest tightness and nausea. The chart shows racing heart, trembling and worry as possible symptoms, not universal ones.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Phobic fear can lead to avoidance, including avoiding places where feared objects may be encountered; avoidance can restrict daily life. The chart path is cue, anxiety, avoidance, and restricted activities, not a claimed brain circuit.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "A person can know a costume is not actually dangerous and still feel fear; the feeling of alarm does not establish that the object is a threat.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "CBT is a treatment for phobias. Therapist-supported gradual exposure is a general phobia treatment, not a masklophobia-specific trial result or a self-directed exposure prescription.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Seek professional help when phobia symptoms affect everyday life; educational information does not diagnose an individual.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
