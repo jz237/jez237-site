@@ -313,6 +313,14 @@ function photonsWGSL(code: string, shows: Shows): string {
   return code;
 }
 
+/** light_resolve.wgsl writing the light volume in its texture's format (r16float where the
+ *  device can write that). */
+function lightResolveFormatWGSL(format: GPUTextureFormat): string {
+  const a = '<rgba16float, write>';
+  if (!lightResolveWGSL.includes(a)) throw new Error('light_resolve.wgsl: lightOut changed');
+  return lightResolveWGSL.replace(a, `<${format}, write>`);
+}
+
 export class FluidSim {
   readonly device: GPUDevice;
   readonly cfg: SimConfig;
@@ -1336,7 +1344,7 @@ export class FluidSim {
       ...(this.clownPose
         ? [['clownBake', `${koiWGSL()}\n${clownWGSL()}\n${clownBakeWGSL}`, 'clownBake', [[this.clownPose.createView(), this.clownField.createView()]]] as [string, string, string, Resource[][]]]
         : []),
-      ['lightResolve', lightResolveWGSL.replace('<rgba16float, write>', `<${this.lightTexture.format}, write>`), 'lightResolve', [[b.lightAcc, b.lightPrev, this.lightTexture.createView()]]],
+      ['lightResolve', lightResolveFormatWGSL(this.lightTexture.format), 'lightResolve', [[b.lightAcc, b.lightPrev, this.lightTexture.createView()]]],
       ...(this.shows.motes
         ? ([
             ['motesUpdate', `${koiWGSL()}\n${motesWGSL}`, 'motesUpdate', [[b.motes, b.velTmp, b.field, ...sand, this.koiPose!.createView()]]],
