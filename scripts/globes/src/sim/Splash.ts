@@ -89,6 +89,11 @@ export class Splash {
   private emitSpread = 0.006;
   private frame = 0;
   private cur = 0;
+  /** spMapResolve's workgroups (16 x 16 texels each), and spBinCount's (8 x 8 x 4 cells). (Every
+   *  kernel but spEmit is 256 wide: the narrower ones launched four times the workgroups, most of
+   *  them with nothing to do.) */
+  private readonly mapGroups: [number, number, number] = [Math.ceil(DROP_MAP_N / 16), Math.ceil(DROP_MAP_N / 16), 1];
+  private readonly binGroups: [number, number, number] = [Math.ceil(SPLASH_GRID / 8), Math.ceil(SPLASH_GRID / 8), Math.ceil(SPLASH_GRID / 4)];
 
   constructor(
     private readonly device: GPUDevice,
@@ -183,8 +188,7 @@ export class Splash {
       ['spDropMerge', [0, 6, 9, 10, 12, 20, 22]],
       ['spMapResolve', [12, 14, 20, 22]],
       ['spBin', [0, 6, 7, 8, 13, 20, 21]],
-      ['spBinCount', [13, 20, 21]],
-      ['spCommit', [6, 20]],
+      ['spBinCount', [6, 13, 20, 21]],
     ];
     const make = async (name: string, used: number[]): Promise<SplashKernel> => {
       const pipeline = await d.createComputePipelineAsync({ label: name, layout: 'auto', compute: { module, entryPoint: name } });
@@ -258,22 +262,19 @@ export class Splash {
     enc.clearBuffer(b.dropMap, 0, DROP_MAP_N * DROP_MAP_N * 4);
     enc.clearBuffer(b.bins);
     const pass = beginPass(enc, 'splash');
-    this.run(pass, 'spSpawn', g(FOAM_QUEUE, 64));
+    this.run(pass, 'spSpawn', g(FOAM_QUEUE));
     if (this.emitCount > 0) this.run(pass, 'spEmit', g(this.emitCount, 16));
     this.emitCount = 0;
     this.run(pass, 'spBubbles', g(BUBBLE_CAP));
     this.run(pass, 'spSpray', g(SPRAY_CAP));
-    const wg = Math.ceil(WET_N / 8);
+    const wg = Math.ceil(WET_N / 16);
     this.run(pass, 'spWet', [wg, wg, 1]);
     this.run(pass, 'spDrops', g(DROP_CAP));
-    this.run(pass, 'spDropMap', g(DROP_CAP, 64));
-    this.run(pass, 'spDropMerge', g(DROP_CAP, 64));
-    const mg = Math.ceil(DROP_MAP_N / 8);
-    this.run(pass, 'spMapResolve', [mg, mg, 1]);
+    this.run(pass, 'spDropMap', g(DROP_CAP));
+    this.run(pass, 'spDropMerge', g(DROP_CAP));
+    this.run(pass, 'spMapResolve', this.mapGroups);
     this.run(pass, 'spBin', g(BUBBLE_CAP + SPRAY_CAP));
-    const cg = Math.ceil(SPLASH_GRID / 4);
-    this.run(pass, 'spBinCount', [cg, cg, cg]);
-    this.run(pass, 'spCommit', [1, 1, 1]);
+    this.run(pass, 'spBinCount', this.binGroups);
     pass.end();
   }
 
@@ -289,10 +290,8 @@ export class Splash {
     if (!this.kernels) return;
     this.writeUniform(0, 0);
     const pass = enc.beginComputePass({ label: 'splash clear' });
-    const mg = Math.ceil(DROP_MAP_N / 8);
-    this.run(pass, 'spMapResolve', [mg, mg, 1]);
-    const cg = Math.ceil(SPLASH_GRID / 4);
-    this.run(pass, 'spBinCount', [cg, cg, cg]);
+    this.run(pass, 'spMapResolve', this.mapGroups);
+    this.run(pass, 'spBinCount', this.binGroups);
     pass.end();
   }
 

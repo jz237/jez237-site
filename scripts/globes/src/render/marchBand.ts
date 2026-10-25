@@ -1,10 +1,12 @@
-// The betta bowl on a phone (its lighter shader, bowl.ts lite): where its water march can meet
-// nothing, worked out once a frame from what it reads (the water's density, FluidSim's
-// densityTexture, and the sand's height), so that it can step over its samples there at once
-// (shaders.ts, the march). It steps on by whole steps, so the samples it does take are where they
-// were and it finds the same surfaces in the same places: only the reads that would have found
-// nothing are left out. A texel the bowl's passes read in the kelp's slot (the bowl has no kelp),
-// heights in the translating frame:
+// The betta bowl's march band: where a march through its water can meet nothing, worked out once a
+// frame from what the march reads (the water's density, FluidSim's densityTexture, and the sand's
+// height), so that it can step over its samples there at once. Every bowl's photons step over
+// theirs in the air over x (caustics.wgsl, through FluidSim.marchBand), so it is worked out in the
+// sim's frame, once the water and the bed are built and before the photons; a phone's bowl (its
+// lighter shader, bowl.ts lite) steps its march over all of it (shaders.ts, the march). Both step
+// on by whole steps, so the samples they do take are where they were and find the same surfaces in
+// the same places: only the reads that would have found nothing are left out. A texel (bound to a
+// phone's bowl in the kelp's slot: the bowl has no kelp), heights in the translating frame:
 // - x: over all the water, and two of the march's steps over the bed: a sample from there up (the
 //   meniscus' lift and all) blends no voxel over the surface's level, so is in the air, meets no
 //   sand, and the march's next step is a whole one;
@@ -18,7 +20,7 @@
 // (meniscus.ts: between 0 and two capillary lengths, and none more than six from the glass); and
 // a whole step from two steps over the sand on (shaders.ts, the march's step).
 
-import type { FluidSim } from '../sim/FluidSim';
+import type { BeginPass, FluidSim } from '../sim/FluidSim';
 
 /** How far from the glass, and over the bed, the open water starts (in voxels of the density
  *  map): the density dips nearer them than this. */
@@ -27,7 +29,8 @@ const CLEAR_VOXELS = 3;
 const FIXED = 65536;
 
 export class MarchBand {
-  /** The band's texel (rgba32float, 1x1). */
+  /** The band's texel (rgba32float, 1x1): the sim's (FluidSim.marchBand), which its photons step
+   *  over too. */
   readonly texture: GPUTexture;
   private readonly bed: GPUComputePipeline;
   private readonly columns: GPUComputePipeline;
@@ -37,7 +40,7 @@ export class MarchBand {
   private readonly bedGroups: number;
 
   constructor(
-    private readonly sim: FluidSim,
+    sim: FluidSim,
     innerRadius: number,
     capillaryLength: number,
     iso: number,
@@ -153,12 +156,11 @@ fn bandFinish() {
     this.bed = pipe('bandBed');
     this.columns = pipe('bandColumns');
     this.finish = pipe('bandFinish');
-    // (Until the first frame's: a band that leaves nothing out.)
     const found = device.createBuffer({ label: 'march band: found', size: 16, usage: GPUBufferUsage.STORAGE, mappedAtCreation: true });
     new Int32Array(found.getMappedRange()).set([-1, n, -1e9, -1e9]);
     found.unmap();
-    this.texture = device.createTexture({ label: 'march band', size: [1, 1], format: 'rgba32float', usage: GPUTextureUsage.STORAGE_BINDING | GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST });
-    device.queue.writeTexture({ texture: this.texture }, new Float32Array([1e9, -1e9, 1e9, 0]), { bytesPerRow: 16 }, [1, 1]);
+    // (Until the first frame's, it leaves nothing out.)
+    this.texture = sim.marchBand;
     this.group = device.createBindGroup({
       layout,
       entries: [
@@ -170,13 +172,12 @@ fn bandFinish() {
     });
     this.groups = Math.ceil(n / 8);
     this.bedGroups = Math.ceil(sim.sandN / 8);
+    sim.onWaterBuilt((enc, beginPass) => this.encode(enc, beginPass));
   }
 
-  /** The band from the water and the bed as they now are (after the frame's sim step, before it
-   *  is drawn). */
-  update(): void {
-    const enc = this.sim.device.createCommandEncoder({ label: 'march band' });
-    const pass = enc.beginComputePass({ label: 'march band' });
+  /** The band from the water and the bed as they now are (in the sim's frame, before its photons). */
+  private encode(enc: GPUCommandEncoder, beginPass: BeginPass): void {
+    const pass = beginPass(enc, 'march band');
     pass.setBindGroup(0, this.group);
     pass.setPipeline(this.bed);
     pass.dispatchWorkgroups(this.bedGroups, this.bedGroups);
@@ -185,6 +186,5 @@ fn bandFinish() {
     pass.setPipeline(this.finish);
     pass.dispatchWorkgroups(1);
     pass.end();
-    this.sim.device.queue.submit([enc.finish()]);
   }
 }

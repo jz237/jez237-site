@@ -80,9 +80,11 @@ Per substep:
    Symmetric volume-drift correction in cells clear of the surface.
 5. **Pressure** — red-black Gauss–Seidel SOR (ω 1.85, 50 sweeps), warm-started and
    rescaled by dt ratio. cellPrep flags each 16x8x4 tile of cells that holds any water; the
-   sweeps skip the rest (most of the grid: the air, the glass's corners) at once. (Measured by
-   the residual left after the sweeps, ω 1.85 with 50 left a hard shake's equations a third
-   nearer solved than 1.7 with 60, the worst cell too; above ~1.875 the worst cells ring.)
+   sweeps skip the rest (most of the grid: the air, the glass's corners) at once. On grids of
+   48 and under (phones) a whole sweep can go in one dispatch (pressure_fused.wgsl, below), once a
+   phone's bench shows that it pays. (Measured by the residual left after the sweeps, ω 1.85 with
+   50 left a hard shake's equations a third nearer solved than 1.7 with 60, the worst cell too;
+   above ~1.875 the worst cells ring.)
 6. **Project** — ghost pressure ψc(1 − 1/θ) on liquid/air faces; SPRAY faces keep their
    ballistic velocity. Faces less than 60% open (`minOpenFace`) are left for extrapolation:
    the solve barely constrains them and their velocity is noise.
@@ -801,7 +803,8 @@ current.
 - `clearBuffer` is far cheaper than zeroing from a kernel: grid update zeroing the p2g sums it
   had read went from 0.06 to 0.47 ms, classify zeroing the splat's voxels from 0.11 to 0.21.
 - WebGPU usage scopes: a buffer bound both read-only and read_write in one dispatch fails
-  validation, even on disjoint ranges (two read_write bindings are fine).
+  validation, even on disjoint ranges. Chrome now fails two read_write bindings of one buffer
+  too, where their ranges overlap ("writable storage buffer binding aliasing").
 - The marches (render and photons) wait on their reads: reading the next sample with each one
   took a third off a shaking globe's render and a sixth off the photons. Then a second read
   dropped from a step saves little (the photons' sand test above the bed: 5%), and anything a
@@ -1001,3 +1004,75 @@ one before was seen in).
 - The desk's matrices are left out of the bowl's shader (it stands in its studio).
 - The furnishings' walk keeps its stack: walks without one read more and wait on more of their
   reads in turn (see scapeBVH.mjs), and the one tried drew no faster on the iGPU.
+
+## Phase 2: the sim's dispatches, fewer and cheaper (S1)
+
+The plan's model takes a phone's sim to be bound by launching its dispatches more than by their
+work: the S25 Ultra took about 6.1 ms for 151 a frame at 2 substeps, ~40 us each, work and all,
+where the 5090 takes ~5 us. What a launch alone costs on a phone is for its ?bench=sim to say; the
+GPUs here say little for it (the fused sweeps, below). These leave the water exactly as it was: the
+determinism harnesses (a scripted tilt, roll and spin, every readback waited on) hash the
+particles, the density field and texture, psi, the face and cell grids, the sand, the caustics, the
+light volume and the march band to the same bits on the phone and desktop tiers, on the betta page
+and the globes page (kelp, reef, koi, foam; what differs between their runs, the koi's light and
+the probes, differs between runs of the same build too).
+
+- **Fused pressure sweeps** (pressure_fused.wgsl, built for grids of 48 and under, run only with
+  `?fused=1` or when FluidSim.fusedSweeps is switched on, which a bench may do between frames to
+  time both in one load). A workgroup reads its 16x8x4 tile with two cells round it into workgroup
+  memory, relaxes the red cells of the tile and one round it (those round it are its neighbours'
+  too, worked out the same way from the same black cells), then the tile's black cells, and writes
+  the tile into the other of two psi buffers: 24 dispatches a substep where the two colours take 48.
+  The sums are pressure.wgsl's, in its order (pressure-sweep.test.mjs runs both walks over the
+  cells and holds the shader to them). cellPrep holds the second buffer at nought off the water
+  too (while the sweeps go as two colours as well), so dry tiles (which stop at once) are right in
+  both, and the sweeps can switch from one step to the next (the hashes are the same with them on,
+  and with them switched every seventh frame); they go in pairs, so the solve ends in psi (an odd
+  one left over goes as two colours). They pay only where a launch costs more than the
+  work they add, and no GPU here is such: on the 5090 (launches of 1-2 us) they took 0.72 against
+  0.52 ms a frame at 64^3, and 0.22 against 0.16 at 40^3; on this desktop's Radeon iGPU (2 CUs,
+  reached with Chrome's `--use-adapter-luid`: on Windows it ignores powerPreference), the betta's
+  sim alone at 40^3, switched back and forth in one load, 3.56 against 1.10 (the whole sim 22.1
+  against 19.6), most likely for a fused workgroup's long chain (its box loaded, the red cells of a
+  ring round the tile relaxed, then the black, a barrier between each), which a small GPU waits
+  on. So they wait for a phone's own numbers.
+- **The density blur's run** from the map's size (blurRun: at most 64, at least 16, the longest
+  that still gives the dispatch 512 workgroups). At 80 a side 64 made 50 workgroups each walking
+  70 slices in turn; 16 makes 125 walking 22: 0.094 -> 0.033 ms a frame on the 5090, and at 128 a
+  side (the betta's desktop) 0.140 -> 0.059.
+- **Two jobs a dispatch** where neither reads what the other writes: grid update and the cells'
+  classification (the cells' workgroups after the faces'), the caustic map's resolve and the light
+  volume's (the voxels' after the texels'), the water's centre gathered in the shift's threads
+  (on its own between shifts). sim-dispatch.test.mjs holds each dispatch to where its shader
+  looks for the second job.
+- **The march band in the sim's frame** (FluidSim.onWaterBuilt): render/marchBand.ts works it
+  out in the sim's encoder once the last substep's water is built (and for new water), for every
+  bowl, and the photons coming in through the air step over their samples over its x by whole
+  steps, unread (caustics.wgsl): 0.172 -> 0.144 ms at 64^3, 0.296 -> 0.223 at 128^3 on the page.
+  (Skipping the open water's samples as well, as the renderer's march does, was slower: the test
+  at every step cost more than the reads it saved.) The band's own encoder and submit are gone. Its
+  pass is timed with the sim's: on a desktop it is new work, and on the 5090 about even (0.016 ms
+  for the band at 64^3, against 0.028 saved in the photons on the page, and 0.010 in the sim alone
+  with the band and without), while a small GPU gains (the Radeon iGPU, the sim alone: 0.20 against
+  1.55 at 64^3; at 40^3, where phones had the band already, 0.05 against 0.15-0.21).
+- **The splash's kernels 256 wide** (spSpawn, the wet map, the drop map and merge, the map
+  resolve, the bins' counts): a quarter of the workgroups, most of which had nothing to do; and
+  this frame's pools' counts emptied by the bins' counts' first thread, not a dispatch of their
+  own. (Its pools follow the atomics' order, which varies run to run; the water does not read
+  them.)
+- **sandExtend** works out each column's surface (bare glass looks up to four columns away for
+  sand) once for its workgroup, in workgroup memory, and smooths from that, instead of nine
+  times: sand + container 0.124 -> 0.112 ms (64^3), 0.074 -> 0.062 (40^3).
+
+Phone tier, 2 substeps: 150 -> 146 of the sim's dispatches a frame (with the march band's 3, now
+in the sim's encoder: 153 -> 149), and the sim's encoder's WebGPU calls 398 -> 394; with the fused
+sweeps, 98 dispatches and 298 calls. Left for the phone's own numbers (?bench=sim, with a row that
+switches FluidSim.fusedSweeps): whether the fused sweeps pay there, and only then two sweeps a
+dispatch (a 24x16x12 box, 18 KB of workgroup memory, a longer chain still). Not done:
+the particle band (the grid kernels' workgroups over the water left alone). At 40^3 those
+workgroups are 8 cells tall: over the betta's water at rest a dispatch could leave only the top
+row of them, a fifth of the cells, and only in classify, cellPrep, project and the blur (not in grid
+update or constrain, whose velNew there changes every substep, dt times the body force; nor in
+extrapolate, which reaches two faces further), and none while the water moves. And what they
+leave as it was is right only while nothing they read changes over the water: sand carried up the
+glass by a tilt does (the cells' faces). About 0.1 ms on the S25 at rest, by the model.

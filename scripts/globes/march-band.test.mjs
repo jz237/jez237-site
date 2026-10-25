@@ -5,7 +5,10 @@
 // meniscus' lift between 0 and two capillary lengths, and none at all more than six from the glass
 // (meniscus.ts: the kernels for the ray tracing hardware take that too, rt_regions.wgsl); the
 // density read from its red channel, through that lift; and a whole step from two steps over the
-// sand on. A change to any of them must go to marchBand.ts as well.
+// sand on. A change to any of them must go to marchBand.ts as well. The sim's photons step over
+// their samples in the air over the band's x too (caustics.wgsl), on every bowl: they read the
+// density and the sand as the band does, and the band is worked out from the frame's water before
+// them.
 // Run: node --test march-band.test.mjs
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -16,6 +19,9 @@ import { globeConfig } from './src/config.ts';
 const source = (path) => readFileSync(new URL(path, import.meta.url), 'utf8');
 const shaders = source('./src/render/shaders.ts');
 const band = source('./src/render/marchBand.ts');
+const photons = source('./src/sim/shaders/caustics.wgsl');
+const sandSample = source('./src/sim/shaders/sand_sample.wgsl');
+const sim = source('./src/sim/FluidSim.ts');
 const clamp = (x, a, b) => Math.min(Math.max(x, a), b);
 
 /** A WGSL function's code, from its signature to its closing brace. */
@@ -90,4 +96,24 @@ test('the march takes whole steps from two steps over the sand on, and never lon
       assert.ok(step(above, stepLen, clamp) <= stepLen, `step ${step(above, stepLen, clamp)} at ${above} over the sand (step ${stepLen})`);
     }
   }
+});
+
+test('the photons read the density and the sand as the band does, and step over whole steps in the air over it', () => {
+  // (The density at the sample, no lift: the march's lifted reads, which the band allows for, read
+  // lower down.)
+  assert.match(wgslFn(photons, 'dens'), /let uvw = \(p - P\.origin\) \/ \(P\.renderVoxel \* f32\(P\.renderN\)\);\s+return textureSampleLevel\(densTex, densSamp, uvw, 0\.0\)\.r;/);
+  assert.match(wgslFn(sandSample, 'sandTop'), /return textureSampleLevel\(sandTex, sandSamp, sandUV\(x\), 0\.0\)\.r;/);
+  assert.match(wgslFn(sandSample, 'inSand'), /return x\.y < sandTop\(x\);/);
+  const march = wgslFn(photons, 'caustics');
+  assert.match(march, /sand = inSand\(q\);\s+d = dens\(q\);/);
+  assert.match(march, /if \(\(d > P\.iso\) != inWater\) \{ event = 1; break; \}/);
+  // (Only in the air it comes in through, over the band's x, and not through the kelp, which dims
+  // every step; by the march's own steps, so the samples after are where they were.)
+  assert.match(march, /if \(seg == 0 && !inWater && !kelpOn\) \{\s+let over = textureLoad\(marchBand, vec2i\(0\), 0\)\.x;\s+while \(t < tStop && \(p \+ dir \* t\)\.y >= over\) \{\s+tPrev = t;\s+t \+= stepLen;\s+\}\s+\}/);
+  assert.deepEqual([...march.matchAll(/^\s*t \+= (.+);$/gm)].map((m) => m[1]), ['stepLen', 'stepLen']);
+  // The band is worked out in the sim's frame from its last substep's water, before the photons.
+  assert.match(band, /sim\.onWaterBuilt\(\(enc, beginPass\) => this\.encode\(enc, beginPass\)\);/);
+  const step = sim.slice(sim.indexOf('  step(frameDt'), sim.indexOf('  // ------------------------------------------------------------------ dev GPU profiling'));
+  const built = step.indexOf('if (i === steps - 1) for (const encode of this.waterBuilt) encode(enc, (e, label) => this.beginPass(e, label));');
+  assert.ok(built > step.indexOf('this.encodeDensity(enc, i === steps - 1);') && built < step.indexOf('this.encodeCaustics(enc);'));
 });

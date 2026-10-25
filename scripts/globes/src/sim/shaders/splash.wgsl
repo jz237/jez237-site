@@ -9,7 +9,7 @@
 // spBubbles, spSpray, spWet (where the water has drawn back from the glass: drops), spDrops,
 // spDropMap and spDropMerge (drops that touch run together), spMapResolve (the drop map, for the
 // renderer: shaders.ts globes_dropAt), spBin and spBinCount (the bubbles and the spray into a grid
-// for the renderer: shaders.ts globes_splashAlong), spCommit.
+// for the renderer: shaders.ts globes_splashAlong; and this frame's pools' counts emptied).
 //
 // The pools, as foam.wgsl's: each particle is two vec4u (floats as their bits), in one of its
 // pool's two halves, this frame's (in) and the next's (out): every frame each survivor is written
@@ -418,7 +418,7 @@ fn sp_window(c: vec3f, reach: f32) -> SpWindow {
 
 // The queue into the clear bubbles and the spray (its counts: what, foam.wgsl's aside, each entry
 // sheds of them), at where it will be at the frame's end.
-@compute @workgroup_size(64)
+@compute @workgroup_size(256)
 fn spSpawn(@builtin(global_invocation_id) gid: vec3u) {
   let q = gid.x;
   let n = min(shedCount[CTRL_QUEUE], S.queueCap);
@@ -632,7 +632,7 @@ fn spSpray(@builtin(global_invocation_id) gid: vec3u) {
 // whether the water covers the glass there, or lies close under it; where it no longer does, so
 // many drops, here and there in the texel, most small, a few large. (The glass under the sand
 // never dries.)
-@compute @workgroup_size(8, 8)
+@compute @workgroup_size(16, 16)
 fn spWet(@builtin(global_invocation_id) gid: vec3u) {
   let N = S.wetN;
   if (gid.x >= N || gid.y >= N) { return; }
@@ -857,7 +857,7 @@ fn spDrops(@builtin(global_invocation_id) gid: vec3u) {
 
 // Each of the next frame's drops into the drop map: every texel it reaches (as far as its edge
 // wavers, and a texel more, so a point anywhere under it finds it in the texel under it).
-@compute @workgroup_size(64)
+@compute @workgroup_size(256)
 fn spDropMap(@builtin(global_invocation_id) gid: vec3u) {
   let i = gid.x;
   let pool = 1u - S.cur;
@@ -897,7 +897,7 @@ fn spDropMap(@builtin(global_invocation_id) gid: vec3u) {
 // of the other; one running into another as another runs into it loses what it took.) A trail
 // line stays where it was laid: it goes only into a drop running into it (one it lies ahead of -
 // not the drop that laid it, nor one come to rest on it), and no drop goes into it.
-@compute @workgroup_size(64)
+@compute @workgroup_size(256)
 fn spDropMerge(@builtin(global_invocation_id) gid: vec3u) {
   let i = gid.x;
   let pool = 1u - S.cur;
@@ -968,7 +968,7 @@ fn spDropMerge(@builtin(global_invocation_id) gid: vec3u) {
 
 // The drop map for the renderer: per texel, up to MAP_K drops (index + 1; 0, none). (A texel with
 // none, as it had none - most of the glass - is left as it is.)
-@compute @workgroup_size(8, 8)
+@compute @workgroup_size(16, 16)
 fn spMapResolve(@builtin(global_invocation_id) gid: vec3u) {
   let N = S.mapN;
   if (gid.x >= N || gid.y >= N) { return; }
@@ -1028,7 +1028,8 @@ fn spBin(@builtin(global_invocation_id) gid: vec3u) {
 
 // The grid's counts (each cell's texel past its spheres'), and the two boxes (the bubbles', the
 // spray's: their low and high corners, in the texels past the grid's row; empty, low above high).
-@compute @workgroup_size(4, 4, 4)
+// And this frame's pools, written on, have their counts emptied (nothing after reads them).
+@compute @workgroup_size(8, 8, 4)
 fn spBinCount(@builtin(global_invocation_id) gid: vec3u) {
   let G = S.gridN;
   if (any(gid >= vec3u(G))) { return; }
@@ -1043,13 +1044,8 @@ fn spBinCount(@builtin(global_invocation_id) gid: vec3u) {
       textureStore(gridOut, vec3i(row + 2 * i32(k), 0, 0), vec4f(lo, 0.0));
       textureStore(gridOut, vec3i(row + 2 * i32(k) + 1, 0, 0), vec4f(hi, 0.0));
     }
+    atomicStore(&ctrl[BUB + S.cur], 0u);
+    atomicStore(&ctrl[SPRAY + S.cur], 0u);
+    atomicStore(&ctrl[DROP + S.cur], 0u);
   }
-}
-
-// This frame's pools are written on: their counts emptied.
-@compute @workgroup_size(1)
-fn spCommit() {
-  atomicStore(&ctrl[BUB + S.cur], 0u);
-  atomicStore(&ctrl[SPRAY + S.cur], 0u);
-  atomicStore(&ctrl[DROP + S.cur], 0u);
 }

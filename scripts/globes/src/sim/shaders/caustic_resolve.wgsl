@@ -10,19 +10,27 @@
 
 const CAUSTIC_INV: f32 = 1.0 / 268435456.0;
 
+// The light volume is resolved in the same dispatch (light_resolve.wgsl, appended: neither reads
+// what the other writes), by the workgroups past the map's.
+
 fn fluxAt(i: i32, j: i32) -> vec3f {
   let n = i32(P.sunColor.w);
   let c = 3u * u32(clamp(i, 0, n - 1) + n * clamp(j, 0, n - 1));
   return vec3f(f32(causticAcc[c]), f32(causticAcc[c + 1u]), f32(causticAcc[c + 2u])) * CAUSTIC_INV;
 }
 
-@compute @workgroup_size(16, 16)
+@compute @workgroup_size(256)
 fn causticResolve(@builtin(global_invocation_id) gid: vec3u) {
   let n = i32(P.sunColor.w);
-  let i = i32(gid.x);
-  let j = i32(gid.y);
-  if (i >= n || j >= n) { return; }
-  let c = u32(i + n * j);
+  let texels = (u32(n * n) + 255u) / 256u * 256u;
+  if (gid.x >= texels) {
+    lightResolve(gid.x - texels);
+    return;
+  }
+  let c = gid.x;
+  if (c >= u32(n * n)) { return; }
+  let i = i32(c) % n;
+  let j = i32(c) / n;
   let flux = fluxAt(i, j) * 0.25
            + (fluxAt(i - 1, j) + fluxAt(i + 1, j) + fluxAt(i, j - 1) + fluxAt(i, j + 1)) * 0.125
            + (fluxAt(i - 1, j - 1) + fluxAt(i + 1, j - 1) + fluxAt(i - 1, j + 1) + fluxAt(i + 1, j + 1)) * 0.0625;
@@ -38,5 +46,5 @@ fn causticResolve(@builtin(global_invocation_id) gid: vec3u) {
 
   let smoothed = mix(causticPrev[c].rgb, irradiance, 0.6);
   causticPrev[c] = vec4f(smoothed, 1.0);
-  textureStore(causticOut, gid.xy, vec4f(smoothed, 1.0));
+  textureStore(causticOut, vec2i(i, j), vec4f(smoothed, 1.0));
 }

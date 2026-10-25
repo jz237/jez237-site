@@ -10,7 +10,6 @@ import sandExtendWGSL from './shaders/sand_extend.wgsl?raw';
 import sandSurfaceWGSL from './shaders/sand_surface.wgsl?raw';
 import shiftWGSL from './shaders/shift.wgsl?raw';
 import probeWGSL from './shaders/probe.wgsl?raw';
-import centroidWGSL from './shaders/centroid.wgsl?raw';
 import lightResolveWGSL from './shaders/light_resolve.wgsl?raw';
 import motesWGSL from './shaders/motes.wgsl?raw';
 import motesGridWGSL from './shaders/motes_grid.wgsl?raw';
@@ -30,6 +29,7 @@ import gridUpdateWGSL from './shaders/grid_update.wgsl?raw';
 import cellClassifyWGSL from './shaders/cell_classify.wgsl?raw';
 import cellPrepWGSL from './shaders/cell_prep.wgsl?raw';
 import pressureWGSL from './shaders/pressure.wgsl?raw';
+import pressureFusedWGSL from './shaders/pressure_fused.wgsl?raw';
 import projectWGSL from './shaders/project.wgsl?raw';
 import extrapolateWGSL from './shaders/extrapolate.wgsl?raw';
 import constrainWGSL from './shaders/constrain.wgsl?raw';
@@ -121,6 +121,8 @@ import { RtScene } from '../rt/RtScene';
 export type Vec3 = readonly [number, number, number];
 type Dispatch = [number, number, number];
 type Resource = GPUBuffer | GPUTextureView | GPUSampler;
+/** Opens a compute pass, timed with the sim's own when profiling is on (setProfiling). */
+export type BeginPass = (enc: GPUCommandEncoder, label: string) => GPUComputePassEncoder;
 /** 3x3 rotation, column-major (three.js Matrix3.elements): the globe's frame in the sim frame. */
 export type Rotation = ArrayLike<number>;
 const IDENTITY: Rotation = [1, 0, 0, 0, 1, 0, 0, 0, 1];
@@ -153,6 +155,14 @@ const PROFILE_PASSES = 256;
 const SORT_BLOCK = 4;
 /** The pressure solve's tiles' y and z (common.wgsl: PRESSURE_TILE_Y, PRESSURE_TILE_Z). */
 const PRESSURE_TILE = [8, 4];
+/** The largest grid that has the pressure solve's fused sweeps (pressure_fused.wgsl: a sweep in one
+ *  dispatch, where the two colours take two), for a phone's ?bench=sim to time against the two
+ *  colours (fusedSweeps). They pay only where a launch costs more than the work they add, which no
+ *  GPU measured so far shows: on the 5090 (launches of 1-2 us) they took 0.22 ms a frame against
+ *  0.16 at 40^3, and 0.72 against 0.52 at 64^3; on this desktop's Radeon iGPU (2 CUs, a small GPU
+ *  as a phone's is) 3.56 against 1.10 at 40^3. The S25 Ultra's sim took ~40 us a dispatch, work
+ *  and all; what the launch alone costs there is for the bench to say. (Dev: ?fused=1.) */
+const FUSED_MAX_N = 48;
 /** Floats a particle's position takes, and its velocity: three each, packed (a fourth would
  *  carry nothing, and every pass over the particles, bound by the memory's bandwidth, would read
  *  and write a third more). */
@@ -182,23 +192,31 @@ interface Particles {
 /** The density grid blurred by a separable 7-tap binomial ([1 6 15 20 15 6 1] / 64), from the
  *  splat's sums, into `field` (the solver's free surface), and on a frame's last substep into the
  *  3D texture too (the renderer's, and the frame's other readers'). In one pass: a workgroup walks
- *  a 16 x 16 column BLUR_RUN voxels along z, blurring each z slice of it along x and y (a tile of
+ *  a 16 x 16 column blurRun() voxels along z, blurring each z slice of it along x and y (a tile of
  *  the slice in workgroup memory), and along z the last seven of those, each thread keeping its
  *  own. (In two passes, along x and y into a grid and then along z out of it, it took twice as
  *  long: the grid between went out to memory and came back.) */
 const BLUR_TAPS = `(a(-3) + a(3)) * 0.015625 + (a(-2) + a(2)) * 0.09375 + (a(-1) + a(1)) * 0.234375 + a(0) * 0.3125`;
-/** Voxels along z a workgroup of the blur walks. */
-const BLUR_RUN = 64;
+/** Voxels along z a workgroup of the blur walks, for a density map of m a side: as many as it can
+ *  (at most 64, at least 16) and still give the dispatch 512 workgroups. Its slices are walked one
+ *  after another, two barriers each, so on a small map a long run waited on its few workgroups
+ *  (at 80 a side, 64 to a run made 50 of them, each 70 slices long: 16 to a run took a third of the
+ *  time); a short one reads the 6 slices round it again in each. */
+function blurRun(m: number): number {
+  let run = 64;
+  while (run > 16 && Math.ceil(m / 16) ** 2 * Math.ceil(m / run) < 512) run /= 2;
+  return run;
+}
 
-/** format: the density texture's, where the blur writes it too. */
-function blurWGSL(format: GPUTextureFormat | null): string {
+/** format: the density texture's, where the blur writes it too; run: blurRun(). */
+function blurWGSL(format: GPUTextureFormat | null, run: number): string {
   const along = (f: string) => BLUR_TAPS.replace(/a\((-?\d)\)/g, (_, d: string) => f.replace('D', d));
   return /* wgsl */ `
 @group(0) @binding(1) var<storage, read> src: array<u32>;
 @group(0) @binding(2) var<storage, read_write> field: array<f32>;
 ${format !== null ? `@group(0) @binding(3) var dst: texture_storage_3d<${format}, write>;` : ''}
 
-const BLUR_RUN: i32 = ${BLUR_RUN};
+const BLUR_RUN: i32 = ${run};
 
 // A 16 x 16 tile of a z slice with 3 voxels round it, then that blurred along x (all its rows).
 var<workgroup> tileIn: array<f32, 484>;
@@ -335,6 +353,13 @@ export class FluidSim {
   readonly h: number;
   readonly renderN: number;
   readonly renderVoxel: number;
+  /** Whether the pressure sweeps go in one dispatch each (FUSED_MAX_N), from the next step on,
+   *  where the grid has their kernel (canFuse): off unless ?fused=1, for a bench to switch and
+   *  time. Either leaves the water as the other does, to the bit. */
+  fusedSweeps: boolean;
+  /** Whether the grid has the fused sweeps' kernel and their other buffer: grids of FUSED_MAX_N
+   *  and under, and any with ?fused=1. */
+  readonly canFuse: boolean;
   /** 3D texture, r16float (rgba16float where the device can't write that): r = smoothed water
    *  density (~1 inside, 0 in air). (The renderer's march leans on its fetches: texels a quarter
    *  the size drew a shaking globe 10% faster.) */
@@ -348,6 +373,11 @@ export class FluidSim {
    *  r16float (rgba16float where the device can't write that), as the density. */
   readonly lightTexture: GPUTexture;
   readonly lightN: number;
+  /** Where no sample of the renderer's march can find the water's surface or the sand, so that it
+   *  steps over its samples there unread (x: in the air over them, where the photons step over
+   *  theirs too): a texel (rgba32float) that render/marchBand.ts works out, where there is one
+   *  (onWaterBuilt). Till then, and without one, it leaves nothing out. */
+  readonly marchBand: GPUTexture;
   /** Motes (fine suspended particles), binned for ray tracing: a (G*(K+1)) x G x G grid of
    *  rgba32float texels, per cell K mote positions (w: size) then the count. */
   readonly moteTexture: GPUTexture;
@@ -473,6 +503,8 @@ export class FluidSim {
   /** And now (the reef rock turns with it). */
   private readonly globeRotation = new Float32Array(IDENTITY as ArrayLike<number>);
   private readonly back = new Float32Array(9);
+  /** What reads the water and the bed for the frame once they are built (onWaterBuilt). */
+  private readonly waterBuilt: ((enc: GPUCommandEncoder, beginPass: BeginPass) => void)[] = [];
 
   constructor(device: GPUDevice, cfg: SimConfig, radius: number, outerRadius: number, light: LightConfig) {
     this.device = device;
@@ -488,6 +520,8 @@ export class FluidSim {
     this.h = (2 * this.halfSize) / this.n;
     this.renderN = this.n * cfg.renderScale;
     this.renderVoxel = (2 * this.halfSize) / this.renderN;
+    this.fusedSweeps = new URLSearchParams(location.search).get('fused') === '1';
+    this.canFuse = this.n <= FUSED_MAX_N || this.fusedSweeps;
     this.fill = cfg.fillFraction;
     this.restLevel = -radius + fillHeight(radius, this.fill);
     this.whitewater = new Foam(device, radius, cfg.gravity, this.h, cfg.particlesPerCell);
@@ -533,6 +567,13 @@ export class FluidSim {
       format: device.features.has('texture-formats-tier1') ? 'r16float' : 'rgba16float',
       usage: GPUTextureUsage.STORAGE_BINDING | GPUTextureUsage.TEXTURE_BINDING,
     });
+    this.marchBand = device.createTexture({
+      label: 'march band',
+      size: [1, 1],
+      format: 'rgba32float',
+      usage: GPUTextureUsage.STORAGE_BINDING | GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST,
+    });
+    device.queue.writeTexture({ texture: this.marchBand }, new Float32Array([1e9, -1e9, 1e9, 0]), { bytesPerRow: 16 }, [1, 1]);
     this.koiField = device.createTexture({
       label: 'koi shape',
       dimension: '3d',
@@ -593,6 +634,13 @@ export class FluidSim {
   setProbes(first: number, points: Float32Array): void {
     this.probePoints.set(points, first * 4);
     this.probesDue = true;
+  }
+
+  /** encode: run in the sim's encoder whenever the water's density map and the bed are built anew
+   *  (a frame's last substep, before the photons, which may step over what it finds; new water).
+   *  It opens its passes with beginPass. */
+  onWaterBuilt(encode: (enc: GPUCommandEncoder, beginPass: BeginPass) => void): void {
+    this.waterBuilt.push(encode);
   }
 
   /** Min corner of the simulation domain in the globe's (translating) frame. */
@@ -694,6 +742,7 @@ export class FluidSim {
     this.run(pass, 'initCells', this.cellGroups());
     pass.end();
     this.encodeDensity(enc);
+    for (const encode of this.waterBuilt) encode(enc, (e, label) => this.beginPass(e, label));
     q.submit([enc.finish()]);
     this.prevDt = 0;
     this.maxSpeed = 0;
@@ -820,18 +869,29 @@ export class FluidSim {
       } else {
         this.run(pass, 'p2g', pg, this.cur);
       }
-      stage('grid update');
-      this.run(pass, 'gridUpdate', fg);
-      stage('classify');
-      this.run(pass, 'cellClassify', cg);
+      stage('grid update + classify');
+      // (The faces' workgroups, then the cells': grid_update.wgsl.)
+      this.run(pass, 'gridUpdate', [fg[0], fg[1], fg[2] + cg[2]]);
       stage('cell prep');
       this.run(pass, 'cellPrep', cg);
       stage('pressure');
       const rb = this.redBlackGroups();
+      let sweeps = cfg.pressureIterations;
+      if (this.fusedSweeps && this.canFuse) {
+        // (In pairs: from psi into the other buffer, and back. One left over goes as two colours.)
+        const fusedSweep = this.kernels.pressureFused;
+        pass.setPipeline(fusedSweep.pipeline);
+        for (; sweeps >= 2; sweeps -= 2) {
+          for (const group of fusedSweep.bindGroups) {
+            pass.setBindGroup(0, group);
+            pass.dispatchWorkgroups(rb[0], rb[1], rb[2]);
+          }
+        }
+      }
       const red = this.kernels.pressureRed;
       const black = this.kernels.pressureBlack.pipeline;
-      pass.setBindGroup(0, red.bindGroups[0]);
-      for (let it = 0; it < cfg.pressureIterations; it++) {
+      if (sweeps > 0) pass.setBindGroup(0, red.bindGroups[0]);
+      for (let it = 0; it < sweeps; it++) {
         pass.setPipeline(red.pipeline);
         pass.dispatchWorkgroups(rb[0], rb[1], rb[2]);
         pass.setPipeline(black);
@@ -880,6 +940,7 @@ export class FluidSim {
       // Rebuild the density field from the new positions: it is both the rendered water and
       // the free surface the next substep's pressure solve sees.
       this.encodeDensity(enc, i === steps - 1);
+      if (i === steps - 1) for (const encode of this.waterBuilt) encode(enc, (e, label) => this.beginPass(e, label));
       if (i === steps - 1 && this.koiVisible) this.encodeKoiBake(enc);
       if (i === steps - 1 && reef && this.clownPose) this.encodeClownBake(enc);
       if (i === steps - 1 && !this.devSkip.includes('frame')) {
@@ -887,10 +948,11 @@ export class FluidSim {
         // water for the koi.
         enc.clearBuffer(b.centroidAcc);
         const sp = this.beginPass(enc, 'shift + probes');
-        // (Every other frame, at twice the strength: it is a slow regulariser.)
-        if (cfg.particleShift > 0 && this.frameIndex % 2 === 0) this.run(sp, 'shift', this.particleGroups(), this.cur);
+        // (Every other frame, at twice the strength: it is a slow regulariser. The water's centre
+        // is found with it, and on its own between.)
+        const shiftNow = cfg.particleShift > 0 && this.frameIndex % 2 === 0;
+        this.run(sp, shiftNow ? 'shift' : 'centroid', this.particleGroups(), this.cur);
         this.run(sp, 'probe', [Math.ceil(PROBES / 64), 1, 1]);
-        this.run(sp, 'centroid', this.particleGroups(), this.cur);
         sp.end();
         // The motes drift with the water; bin them for the renderer.
         if (this.shows.motes) {
@@ -1226,6 +1288,8 @@ export class FluidSim {
       cellFaceW: make('cell face weights', C * 8),
       cellType: make('cell type', C * 4),
       psi: make('pressure', C * 4),
+      // (The fused sweeps' other buffer, only where they may run: pressure_fused.wgsl.)
+      psi2: make('pressure (other)', this.canFuse ? C * 4 : 16),
       rhs: make('pressure rhs', C * 8),
       pressureTiles: make('pressure tiles', pressureTiles * 4),
       stats: make('stats', 16),
@@ -1302,17 +1366,14 @@ export class FluidSim {
       ['seedWater', seedWGSL, 'seedWater', [[b.pos, b.seedColumns]], { SUB: this.seedSub, JITTER: this.cfg.seedJitter }],
       ['p2g', p2gWGSL, 'p2g', parts((q) => [q.pos, q.vel, q.affine, b.accum, b.cellCount]), { AFFINE }],
       ['p2gBlock', p2gWGSL, 'p2gBlock', parts((q) => [q.pos, q.vel, q.affine, b.accum, b.cellCount, b.blockStart]), { AFFINE }],
-      ['gridUpdate', gridUpdateWGSL, 'gridUpdate', [[b.accum, b.velNew, b.velOld]]],
-      [
-        'cellClassify',
-        cellClassifyWGSL,
-        'cellClassify',
-        [[b.field, b.cellFaceW, b.cellType, b.cellRho, b.cellCount]],
-      ],
-      ['cellPrep', cellPrepWGSL, 'cellPrep', [[b.cellType, b.cellRho, b.cellFaceW, b.velNew, b.psi, b.rhs, b.pressureTiles]]],
+      ['gridUpdate', `${cellClassifyWGSL}\n${gridUpdateWGSL}`, 'gridUpdate', [[b.accum, b.velNew, b.velOld, b.field, b.cellFaceW, b.cellType, b.cellRho, b.cellCount]]],
+      ['cellPrep', cellPrepWGSL, 'cellPrep', [[b.cellType, b.cellRho, b.cellFaceW, b.velNew, b.psi, b.rhs, b.pressureTiles, b.psi2]], { PING_PONG: this.canFuse ? 1 : 0 }],
       // (The two colours share a layout, and so one bind group: step() binds it once a substep.)
       ['pressureRed', pressureWGSL, 'pressure', [[b.cellFaceW, b.rhs, b.psi, b.pressureTiles]], { COLOR: 0 }, pressureLayout],
       ['pressureBlack', pressureWGSL, 'pressure', [], { COLOR: 1 }, pressureLayout],
+      ...(this.canFuse
+        ? [['pressureFused', pressureFusedWGSL, 'pressureFused', [[b.cellFaceW, b.rhs, b.psi, b.pressureTiles, b.psi2], [b.cellFaceW, b.rhs, b.psi2, b.pressureTiles, b.psi]]] as [string, string, string, Resource[][]]]
+        : []),
       ['project', projectWGSL, 'project', [[b.faceW, b.cellType, b.psi, b.cellRho, b.velNew, b.valid]]],
       [
         'extrapolate',
@@ -1331,20 +1392,19 @@ export class FluidSim {
       ['sortScatter', sortWGSL, 'sortScatter', sort, { SORT_BLOCK, AFFINE }],
       ['splat', splatWGSL, 'splat', parts((q) => [q.pos, b.dens, ...sand])],
       ['splatBlock', splatWGSL, 'splatBlock', parts((q) => [q.pos, b.dens, ...sand, b.blockStart])],
-      ['shift', shiftWGSL, 'shift', parts((q) => [q.pos, densityView, this.densitySampler, ...sand])],
+      ['shift', shiftWGSL, 'shift', parts((q) => [q.pos, b.centroidAcc, densityView, this.densitySampler, ...sand])],
+      ['centroid', shiftWGSL, 'centroid', parts((q) => [q.pos, b.centroidAcc])],
       ['probe', probeWGSL, 'probe', [[b.probePos, b.probeOut, b.velTmp, b.field, ...sand]]],
-      ['centroid', centroidWGSL, 'centroid', parts((q) => [q.pos, b.centroidAcc])],
       [
         'caustics',
         `${koiWGSL()}\n${photonsWGSL(causticsWGSL.replace(/const WATER_EXT: vec3f = [^;]*;/, `const WATER_EXT: vec3f = vec3f(${this.light.waterAbsorption.join(', ')});`), this.shows)}`,
         'caustics',
-        [[densityView, this.densitySampler, ...sand, b.causticAcc, b.lightAcc, this.koiPose!.createView(), this.koiField.createView(), this.kelpShadeView(), ww.map.createView(), this.sandSampler]],
+        [[densityView, this.densitySampler, ...sand, b.causticAcc, b.lightAcc, this.koiPose!.createView(), this.koiField.createView(), this.kelpShadeView(), ww.map.createView(), this.sandSampler, this.marchBand.createView()]],
       ],
       ['koiBake', `${koiWGSL()}\n${koiBakeWGSL}`, 'koiBake', [[this.koiPose!.createView(), this.koiField.createView()]]],
       ...(this.clownPose
         ? [['clownBake', `${koiWGSL()}\n${clownWGSL()}\n${clownBakeWGSL}`, 'clownBake', [[this.clownPose.createView(), this.clownField.createView()]]] as [string, string, string, Resource[][]]]
         : []),
-      ['lightResolve', lightResolveFormatWGSL(this.lightTexture.format), 'lightResolve', [[b.lightAcc, b.lightPrev, this.lightTexture.createView()]]],
       ...(this.shows.motes
         ? ([
             ['motesUpdate', `${koiWGSL()}\n${motesWGSL}`, 'motesUpdate', [[b.motes, b.velTmp, b.field, ...sand, this.koiPose!.createView()]]],
@@ -1354,15 +1414,15 @@ export class FluidSim {
         : []),
       [
         'causticResolve',
-        causticResolveWGSL,
+        `${causticResolveWGSL}\n${lightResolveFormatWGSL(this.lightTexture.format)}`,
         'causticResolve',
-        [[b.causticAcc, b.causticPrev, this.causticTexture.createView(), ...sand]],
+        [[b.causticAcc, b.causticPrev, this.causticTexture.createView(), ...sand, b.lightAcc, b.lightPrev, this.lightTexture.createView()]],
       ],
       ...this.kelpKernels(),
       ...this.reefKernels(),
       ...this.rtKernels(sandView),
-      ['blur', blurWGSL(null), 'blur', [[b.dens, b.field]]],
-      ['blurTex', blurWGSL(this.densityTexture.format), 'blur', [[b.dens, b.field, densityView]]],
+      ['blur', blurWGSL(null, blurRun(this.renderN)), 'blur', [[b.dens, b.field]]],
+      ['blurTex', blurWGSL(this.densityTexture.format, blurRun(this.renderN)), 'blur', [[b.dens, b.field, densityView]]],
     ];
     await Promise.all(defs.map((def) => this.createKernel(...def)));
   }
@@ -1593,7 +1653,7 @@ export class FluidSim {
       pass = this.beginPass(enc, 'density blur');
     }
     const m = this.renderN;
-    this.run(pass, texture ? 'blurTex' : 'blur', [Math.ceil(m / 16), Math.ceil(m / 16), Math.ceil(m / BLUR_RUN)]);
+    this.run(pass, texture ? 'blurTex' : 'blur', [Math.ceil(m / 16), Math.ceil(m / 16), Math.ceil(m / blurRun(m))]);
     pass.end();
   }
 
@@ -1677,10 +1737,8 @@ export class FluidSim {
     const pass = this.beginPass(enc, 'photons');
     const rays = Math.ceil(this.light.causticRays / 16);
     this.run(pass, 'caustics', [rays, rays, 1]);
-    const cg = Math.ceil(this.causticN / 16);
-    this.run(pass, 'causticResolve', [cg, cg, 1]);
-    const lg = Math.ceil(this.lightN / 4);
-    this.run(pass, 'lightResolve', [lg, lg, lg]);
+    // (The map's texels' workgroups, then the volume's voxels': caustic_resolve.wgsl.)
+    this.run(pass, 'causticResolve', [Math.ceil(this.causticN ** 2 / 256) + Math.ceil(this.lightN ** 3 / 256), 1, 1]);
     pass.end();
   }
 

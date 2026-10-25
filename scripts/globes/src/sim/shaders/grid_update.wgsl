@@ -11,6 +11,9 @@
 // up; k > 0: at depth 0.5^(1/k) of the way up, so k = 2 keeps the lower two thirds flowing one
 // way, the reef's surge past its anemone).
 
+// The cells are classified in the same dispatch (cell_classify.wgsl, prepended: neither reads what
+// the other writes), by the workgroups past the faces'.
+
 @group(0) @binding(1) var<storage, read> accum: array<i32>;
 @group(0) @binding(2) var<storage, read_write> velNew: array<f32>;
 @group(0) @binding(3) var<storage, read_write> velOld: array<f32>;
@@ -18,6 +21,11 @@
 @compute @workgroup_size(8, 8, 4)
 fn gridUpdate(@builtin(global_invocation_id) gid: vec3u) {
   let s = P.s;
+  let faces = 4u * ((3u * s + 3u) / 4u);
+  if (gid.z >= faces) {
+    cellClassify(vec3u(gid.xy, gid.z - faces));
+    return;
+  }
   if (gid.x >= s || gid.y >= s || gid.z >= 3u * s) { return; }
   let comp = gid.z / s;
   let k = gid.z % s;

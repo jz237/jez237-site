@@ -23,6 +23,9 @@
 // The sea foam globe's foam map (Foam.ts: g, how much of a texel its foam covers).
 @group(0) @binding(10) var foamMap: texture_2d<f32>;
 @group(0) @binding(11) var foamSamp: sampler;
+// x: a height over the water and the bed, where no sample can find either (FluidSim.marchBand,
+// worked out by render/marchBand.ts).
+@group(0) @binding(12) var marchBand: texture_2d<f32>;
 
 const IOR_GLASS: f32 = 1.5;
 const IOR_WATER: f32 = 1.333;
@@ -233,6 +236,17 @@ fn caustics(@builtin(global_invocation_id) gid: vec3u) {
     var ahead = false;
     var aheadSand = false;
     var aheadDens = 0.0;
+    // (Coming in through the air, the samples over the band are stepped over unread: none could
+    // meet the water or the sand. The same steps, so the samples after are where they were. In
+    // the open water too, as the renderer's march does, it was slower: the test at every step
+    // cost more than the reads it saved.)
+    if (seg == 0 && !inWater && !kelpOn) {
+      let over = textureLoad(marchBand, vec2i(0), 0).x;
+      while (t < tStop && (p + dir * t).y >= over) {
+        tPrev = t;
+        t += stepLen;
+      }
+    }
     for (var it = 0; it < 400; it++) {
       if (t >= tStop) { break; }
       let q = p + dir * t;

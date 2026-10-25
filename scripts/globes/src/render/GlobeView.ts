@@ -201,9 +201,10 @@ export class GlobeView {
     // simulation's scene, its top level bound through a stand-in texture.
     const rt = sim.rt;
     rt?.setMarch(prm.value.y);
-    // (A phone's bowl: where its march can find nothing, worked out each frame.)
-    this.band = bowl?.lite ? new MarchBand(sim, globe.innerRadius, globe.capillaryLength, SURFACE_ISO, prm.value.y) : null;
-    const band = this.band ? { kelpRefTex: texture(texelTexture(this.band.texture)) } : {};
+    // (The bowl's water: where a phone's march, and the sim's photons, can find nothing, worked out
+    // each frame in the sim's.)
+    const marchBand = bowl ? new MarchBand(sim, globe.innerRadius, globe.capillaryLength, SURFACE_ISO, prm.value.y) : null;
+    const band = bowl?.lite && marchBand ? { kelpRefTex: texture(texelTexture(marchBand.texture)) } : {};
     const tlas = rt ? new TlasBinding(sim.device, rt.tlas) : null;
     // Two passes over the same sphere. The main one has no koi code at all, so it stays lean;
     // it notes the pixels where any ray comes near the fish, in the depth buffer (1 there, 0
@@ -471,7 +472,6 @@ export class GlobeView {
   }
 
   private bowlReach = 1;
-  private readonly band: MarchBand | null;
 
   /** What floats in the betta bowl (interaction/BowlLife.ts: its leaf and its nest). */
   setBowlLife(life: THREE.Matrix4): void {
@@ -533,7 +533,6 @@ export class GlobeView {
     this.uLit.value.x = this.sim.restLevel; // (it changes with the globe's water)
     // (A ray's path: to the globe, through it, and through it again after a turn at the surface.)
     this.sim.rt?.setView(pixel, camera.position.distanceTo(center) + 5 * this.outerRadius);
-    this.band?.update();
     this.chooseTracers();
   }
 }
