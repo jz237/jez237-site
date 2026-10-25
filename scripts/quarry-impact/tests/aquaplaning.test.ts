@@ -32,7 +32,7 @@ test('an AI driver aquaplaning lifts off and keeps off the brakes until the fron
 });
 test('the car loses grip and feels the water on the tyres in the water, offline, and is told it is aquaplaning',()=>{
   const physics=readFileSync(new URL('../src/vehicle-physics.ts',import.meta.url),'utf8'),vehicle=readFileSync(new URL('../src/vehicle.ts',import.meta.url),'utf8'),main=readFileSync(new URL('../src/main.ts',import.meta.url),'utf8');
-  assert.ok(physics.includes('corner.sideGrip*(state.slickGrip?.[i]??1)*(state.waterGrip?.[i]??1)')&&physics.includes('*(state.slickGrip?.[i]??1)*(state.waterGrip?.[i]??1)*(state.tractionScale??1)'),'sideways and along');
+  assert.ok(physics.includes('corner.sideGrip*(state.slickGrip?.[i]??1)*(state.waterGrip?.[i]??1)')&&physics.includes('*corner.grip*spec.grip*(state.slickGrip?.[i]??1)*(state.waterGrip?.[i]??1)*'),'sideways and along');
   assert.ok(physics.includes('body.applyImpulseAtPoint({x:-v.x/moving*water*dt,y:0,z:-v.z/moving*water*dt},p,true)'),'pushed back at the tyre');
   assert.ok(vehicle.includes('const water=this.extendedDamage&&this.waterAt?this.waterAt(point.x,point.y,point.z):0;this.waterGrip[i]=aquaGrip(water,this.speed);this.waterDrag[i]=waterDrag(water,this.speed);'));
   assert.ok(vehicle.includes('{this.slickGrip[i]=1;this.waterGrip[i]=1;this.waterDrag[i]=0;continue;}'),'off the ground, none');

@@ -19,6 +19,8 @@ import {createVehiclePhysics,stepVehiclePhysics,rotateVehicleVector} from './veh
 import {aquaGrip,waterDrag} from './aquaplaning';
 import {glassRim} from './glass-rim';
 import {brakeWork} from './brake-heat';
+import {TYRE_HEAT,tyreHeatStep,tyreHeatGrip} from './tyre-heat';
+import {currentWetness} from './driving-surface';
 import {LiveryPaint} from './livery-paint';
 import type {VisualEvent} from './replay-data';
 import {ImpactResponse} from './impact-response';
@@ -401,6 +403,8 @@ export class Vehicle {
   /** Offline: how deep in standing water a tyre at a point is (0–1), and each tyre's grip kept and drag from it. */
   waterAt?:(x:number,y:number,z:number)=>number;
   readonly waterGrip=[1,1,1,1];readonly waterDrag=[0,0,0,0];
+  /** Offline: each tyre's temperature (0 cold – 1 overcooked) and the grip it leaves (tyre-heat). */
+  readonly tyreTemp:number[]=[TYRE_HEAT.start,TYRE_HEAT.start,TYRE_HEAT.start,TYRE_HEAT.start];readonly tyreGrip=[1,1,1,1];
   /** How far the rear tyres are sliding after a PIT shove (0..1, fading); they grip less while it lasts (offline). */
   rearSlide=0;
   pitSpins=0;
@@ -709,6 +713,8 @@ export class Vehicle {
       const grip=slicks?slicks.gripAt(point.x,point.z):1;this.slickGrip[i]=i>1&&this.rearSlide>0?grip*pitGrip(this.rearSlide):grip;
       // Through standing water at speed the tyre rides up on it, and the water drags at it (offline).
       const water=this.extendedDamage&&this.waterAt?this.waterAt(point.x,point.y,point.z):0;this.waterGrip[i]=aquaGrip(water,this.speed);this.waterDrag[i]=waterDrag(water,this.speed);
+      // Tyres warm as they roll and slide, and cool toward the air: cold or overcooked, they grip less (offline).
+      if(this.extendedDamage){this.tyreTemp[i]=tyreHeatStep(this.tyreTemp[i],this.speed,this.wheelSlips[i],currentWetness()>.5,dt);this.tyreGrip[i]=tyreHeatGrip(this.tyreTemp[i]);}
       // Rolling over broken-off debris can puncture this tyre.
       this.punctureClock[i]=Math.max(0,this.punctureClock[i]-dt);
       if(this.punctureClock[i]<=0&&Math.abs(this.speed)>PUNCTURE.speed&&this.tyreDamage&&this.tyreDamage[i]<LEAK.onset&&this.fx.sharpDebrisNear?.(point.x,point.z,PUNCTURE.reach)){
