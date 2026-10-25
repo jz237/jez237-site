@@ -28,7 +28,7 @@ test('battery out is offline only, cranks nothing, darkens the lights and silenc
  assert.ok(vehicle.includes("this.fx.detach(battery,"),'thrown out as a loose part');
  assert.ok(vehicle.includes('battery.removeFromParent();battery.geometry.dispose();(battery.material as T.Material).dispose();'),'the source mesh is freed');
  assert.ok(vehicle.includes('this.batteryOut=false;'),'reset with the car');
- assert.ok(main.includes('carLights.get(c)?.set(dusk&&c.health>0&&!c.electricalCut&&!c.batteryOut&&'));
+ assert.ok(main.includes('carLights.get(c)?.set((dusk||wet&&c.extendedDamage)&&c.health>0&&!c.electricalCut&&!c.batteryOut&&'));
  assert.ok(main.includes('noBattery:c.batteryOut&&c.engineStall!>0,'));
  assert.ok(main.includes("what==='battery'?'BATTERY THROWN OUT · NO STARTER':"));
  assert.ok(main.includes("battery:{label:'BATTERY THROWN OUT',score:22}"));
